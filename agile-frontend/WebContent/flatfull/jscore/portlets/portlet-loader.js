@@ -1899,6 +1899,7 @@ function minicalendar(el)
 {
 	var totalEvents = 0;
 	var eventsCount = 0;
+	var jso=[];
 	head
 			.js(
 				
@@ -1910,10 +1911,9 @@ function minicalendar(el)
 							selectable: true,
 							header : { left : 'prev', center : 'title', right : 'next' },
 							weekMode:'liquid',
-								 events : function(start, end, callback)
+						    events : function(start, end, callback)
 								{
-									var top=parseInt($(el).find('.fc-widget-content').css('height'))/2-7;
-									$(el).find('.fc-day-number').css('top',top);  
+									jso=[];
 									var date=new Date();
 									   var todayDate=new Date(date.getFullYear(), date.getMonth(), date.getDate(),00,00,00);
 									   var endDate=new Date(date.getFullYear(), date.getMonth(), date.getDate(),23,59,59);
@@ -1921,9 +1921,15 @@ function minicalendar(el)
 												$(el).find('.events_show').empty().append('<div class="show p-t-xs text-md p-l-xs text-center">Today </div><ul class="list"></ul>');
 									
 									   }
+									
+										
+										var top=parseInt($(el).find('.fc-widget-content').css('height'))/2-7;
+									$(el).find('.fc-day-number').css('top',top);  
+									
 									var eventsURL = '/core/api/events?start=' + start.getTime() / 1000 + "&end=" + end.getTime() / 1000 + "&owner_id=" +CURRENT_AGILE_USER.id;
-									var jso=[];
-									$.getJSON(eventsURL, function(doc)
+									
+									
+										$.getJSON(eventsURL, function(doc)
 									{
 										$.each(doc, function(index, data)
 										{
@@ -1935,15 +1941,11 @@ function minicalendar(el)
 											else if (data.color == 'green' || data.color == '#bbb')
 												data.color='#23b7e5'
 											
-											if(data.start >= (todayDate.getTime()/1000) && data.start < (endDate.getTime()/1000)) {	
-											var e_date= new Date(data.start*1000);
-											$(el).find('.list').append('<li class="p-t-xs p-r-xs" style="color:'+data.color+'"><span style="color : black">'+data.title+'<br><small class="block">'+ e_date.format('HH:MM') + ' </small></span></li>');
-									
-									   }
+											
 									   var e_date= new Date(data.start*1000);
 											var end_date=new Date(data.end*1000);
-											var a=Math.round((end_date-e_date)/(1000*60*60*24));
-											
+											//var a=Math.round((end_date-e_date)/(1000*60*60*24));
+											var a=(end_date.getMonth()-e_date.getMonth())+(end_date.getDate()-e_date.getDate());
 												if(a==0){
 													var new_json1=JSON.parse(JSON.stringify(data));
 													jso.push(new_json1);
@@ -1953,29 +1955,45 @@ function minicalendar(el)
 														var new_json={};
 														new_json=JSON.parse(JSON.stringify(data));
 													if(i==0){
-														new_json.start=e_date;
-														new_json.end=new Date(e_date.getFullYear(),e_date.getMonth(),e_date.getDate()+i,23,59,59);
+														new_json.start=e_date.getTime()/1000;
+														new_json.end=new Date(e_date.getFullYear(),e_date.getMonth(),e_date.getDate()+i,23,59,59).getTime()/1000;
 														}
 													else if(i<a){		
-														new_json.start=new Date(e_date.getFullYear(),e_date.getMonth(),e_date.getDate()+i,00,00,00);
-														new_json.end=new Date(e_date.getFullYear(),e_date.getMonth(),e_date.getDate()+i,23,59,59);
+														new_json.start=new Date(e_date.getFullYear(),e_date.getMonth(),e_date.getDate()+i,00,00,00).getTime()/1000;
+														new_json.end=new Date(e_date.getFullYear(),e_date.getMonth(),e_date.getDate()+i,23,59,59).getTime()/1000;
 														}
 													else{
-														new_json.start=new Date(e_date.getFullYear(),e_date.getMonth(),e_date.getDate()+i,00,00,00);
-														new_json.end=new Date(end_date.getFullYear(),end_date.getMonth(),end_date.getDate())
+														new_json.start=new Date(e_date.getFullYear(),e_date.getMonth(),e_date.getDate()+i,00,00,00).getTime()/1000;
+														new_json.end=end_date.getTime()/1000;
 														}
 												jso.push(new_json);
 												} }
 											});
-											
-
-										if (doc)
+											loadingGoogleEvents(start.getTime()/1000,end.getTime()/1000,function(g_event)
+									{
+										$.each(g_event,function(index)
 										{
+										jso.push(g_event[index]);
+										});
+									//});
 
+										if (jso)
+										{
+											console.log(jso);
+											$.each(jso,function(index,ev){
+											if(ev.start >= (todayDate.getTime()/1000) && ev.start < (endDate.getTime()/1000)) {	
+											var e_date= new Date(ev.start*1000);
+											$(el).find('.list').append('<li class="p-t-xs p-r-xs" style="color:'+ev.color+'"><span style="color : black" class="text-cap">'+ev.title+'<br><small class="block">'+ e_date.format('HH:MM') + ' </small></span></li>');
+											}
+											});
 											callback(jso);
-
-										}
+									   }
+											
 									});
+										
+									});
+									
+									
 								},  
 							  
 							  
@@ -2006,6 +2024,7 @@ function minicalendar(el)
 		 if(eventsCount==totalEvents || eventsCount==(2*totalEvents)){
 											totalEvents = 0;
 											eventsCount = 0;
+											jso=[];
           var classNamesArray = [];
          $(el).find('#calendar_container').find('.fc-event').each(function(index){
           if($.inArray($(this).attr('class').split(" ")[$(this).attr('class').split(" ").length-1], classNamesArray)==-1){
@@ -2046,7 +2065,7 @@ function minicalendar(el)
            });
 		   if($('.'+this,el).length>3){
            var icon_pos = pos.left+(3*6);
-           $('.'+this,el).eq(eventsLength-1).after('<div class="plus-button pos-abs c-p" style="top: '+(pos.top-7)+'px;left: '+icon_pos+'px;" title="'+(eventsLength-3)+' more">&nbsp;</div>');
+           $('.'+this,el).eq(eventsLength-1).after('<div class="plus-button pos-abs c-p" style="top: '+(pos.top-7)+'px;left: '+icon_pos+'px; color:lightgray;" title="'+(eventsLength-3)+' more">&nbsp;</div>');
           }
          });
          }
@@ -2107,3 +2126,93 @@ $('.portlet_body_calendar').live('mouseout',function(e){
 	$(this).find('.portlet_header_icons').addClass('vis-hide');
 	$(this).find('.fc-button').css('visibility','hidden');
 });
+
+function loadingGoogleEvents(startTime,endTime,callback){
+	
+	$.getJSON('core/api/calendar-prefs/get', function(response)
+	{
+		
+		console.log(response);
+		if (response)
+		{
+			//createCookie('google_event_token', response.access_token);
+
+			head.js('https://apis.google.com/js/client.js', '/lib/calendar/gapi-helper.js', function()
+			{
+				setupGC(function()
+				{
+
+					gapi.auth.setToken({ access_token : response.access_token, state : "https://www.googleapis.com/auth/calendar" });
+
+					var current_date = new Date();
+					var timezone_offset = current_date.getTimezoneOffset();
+					var startDate = new Date((startTime * 1000)-(timezone_offset*60*1000));
+       				var gDateStart = startDate.toISOString();
+       				var endDate = new Date((endTime * 1000)-(timezone_offset*60*1000));
+       				var gDateEnd = endDate.toISOString();
+					// Retrieve the events from primary
+					var request = gapi.client.calendar.events
+								.list({ 'calendarId' : 'primary', maxResults : 25, singleEvents : true, orderBy : 'startTime', timeMin : gDateStart, timeMax : gDateEnd });
+						request.execute(function(resp)
+						{
+							var events = new Array();
+							console.log(resp);
+							for (var i = 0; i < resp.items.length; i++)
+							{
+								var fc_event = google2fcEvent(resp.items[i]);
+								  fc_event.startDate=new Date(fc_event.start);
+								  fc_event.end=new Date(fc_event.end);
+								  fc_event.color='green';
+								  fc_event.backgroundColor='green';
+								 /*  if(fc_event.allDay==true){
+									  fc_event.start=fc_event.startDate;
+									  var end=new Date(fc_event.google.end.date);
+										//var a= new Date(fc_event.google.end.date).getDate()-1;
+									// end.setDate(a);
+									  fc_event.end=end;
+									 // events.push(fc_event);
+								  } */
+								  
+								//var a=Math.round((fc_event.end-fc_event.start)/(1000*60*60*24));
+								var a=(fc_event.end.getMonth()-fc_event.startDate.getMonth())+(fc_event.end.getDate()-fc_event.startDate.getDate());
+											
+												if(a==0){
+													fc_event.start=fc_event.startDate.getTime()/1000;
+													fc_event.end=fc_event.end.getTime()/1000;
+													events.push(fc_event);
+												}
+												else{
+													for(var i=0;i<=a;i++){
+														var new_json={};
+														new_json=JSON.parse(JSON.stringify(fc_event));
+													if(i==0){
+														new_json.start=fc_event.startDate.getTime()/1000;
+														new_json.end=new Date(fc_event.startDate.getFullYear(),fc_event.startDate.getMonth(),fc_event.startDate.getDate()+i,23,59,59).getTime()/1000;
+														}
+													else if(i<a){		
+														new_json.start=new Date(fc_event.startDate.getFullYear(),fc_event.startDate.getMonth(),fc_event.startDate.getDate()+i,00,00,00).getTime()/1000;
+														new_json.end=new Date(fc_event.startDate.getFullYear(),fc_event.startDate.getMonth(),fc_event.startDate.getDate()+i,23,59,59).getTime()/1000;
+														}
+													else{
+														new_json.start=new Date(fc_event.startDate.getFullYear(),fc_event.startDate.getMonth(),fc_event.startDate.getDate()+i,00,00,00).getTime()/1000;
+														new_json.end=new Date(fc_event.end.getFullYear(),fc_event.end.getMonth(),fc_event.end.getDate()).getTime()/1000;
+														}
+														console.log(new_json);
+														events.push(new_json);
+													}
+												}
+								  
+								//fc_event.startEpoch = new Date(fc_event.start).getTime()/1000;
+								//fc_event.endEpoch = new Date(fc_event.end).getTime()/1000;
+								
+
+							}
+							callback(events);
+							//return;
+						});
+				});
+			});
+		}
+	});
+	
+}

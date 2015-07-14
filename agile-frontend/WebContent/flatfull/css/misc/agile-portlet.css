@@ -751,6 +751,7 @@ border-radius: 2px;
 .portlet_body_calendar>#calendar_container>.fc-content>.fc-view div>.fc-event{
 	width : 4px!important;
 	z-index: auto!important;
+	border-left:0;
 }
 
 .portlet_body_calendar>#calendar_container>.fc-content>.fc-view>.fc-border-separate th, .portlet_body_calendar>#calendar_container>.fc-content>.fc-view>.fc-border-separate td
