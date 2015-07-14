@@ -479,7 +479,7 @@ function testMailButton(button){
     
     if($(button).is(':disabled'))
     return;
-   
+
     $(button).css('color','gray');
     $(button).attr('disabled', 'disabled');
     
@@ -510,6 +510,28 @@ function testMailButton(button){
     				  $(button).css('color','');
     	    	return;
     	    }
+    	 
+    // Verify email message
+    if($("#from_email").val() == "{{owner.email}}")
+    {
+    	if(button == "#button_email")
+    		margin = "margin:-6px 24px;";
+    	else
+    	    margin = "margin:-44px 29px 0px;";
+
+    	$(button).before("<span class='clearfix' id='confirmation-text'style='top: -49px;"+margin+"display: inline-block;text-align: center;float: left;width: 75%; color: red;font-style: italic;'>Test email cannot be sent to Contact's Owner. Please select any verified email.</span>");
+    	
+    	// Hide message
+    	$("#confirmation-text").fadeOut(8000,function(){
+				
+				  $("#confirmation-text").remove();
+				  $(button).removeAttr('disabled', 'disabled');
+				$(button).css('color','');
+    	});
+    	
+    	return;
+    }
+    	 
     	var margin;
         var jsonValues = serializeNodeForm();
         $(button).css('color','gray');
