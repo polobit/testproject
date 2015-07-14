@@ -88,7 +88,7 @@ function getOptions()
 	// to 1375727400000
 	//var start_time = Date.parse($.trim(range[0])).valueOf();
 	//Get the GMT start time
-	var start_time = getGMTEpochFromDate(new Date(range[0]));
+	var start_time = getUTCMidNightEpochFromDate(new Date(range[0]));
 
 	var end_value = $.trim(range[1]);
 	
@@ -99,7 +99,7 @@ function getOptions()
 	// Returns milliseconds from end date.
 	//var end_time = Date.parse(end_value).valueOf();
 	//Get the GMT end time
-	var end_time = getGMTEpochFromDate(new Date(end_value));
+	var end_time = getUTCMidNightEpochFromDate(new Date(end_value));
 
 	end_time += (((23*60*60)+(59*60)+59)*1000);
 

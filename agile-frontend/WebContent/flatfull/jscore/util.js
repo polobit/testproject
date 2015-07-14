@@ -463,3 +463,16 @@ $('.modal:visible').die().live('shown.bs.modal', function()
 			$('.modal-backdrop', $('.modal:visible')).height($('.modal-dialog', $('.modal:visible')).height() + 70);
 	}, 500);
 });
+/**
+ * Returns UTC mid night time.
+ * 
+ * @param date
+ * @returns
+ */
+function getUTCMidNightEpochFromDate(date)
+{
+	date = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate(), 0, 0, 0));
+
+	// returns UTC mid night time
+	return date.getTime();
+}
