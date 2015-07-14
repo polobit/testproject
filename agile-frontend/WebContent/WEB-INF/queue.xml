@@ -92,8 +92,8 @@
   </queue>
    <queue>
     <name>bulk-actions-queue</name>
-    <rate>2/s</rate>
-    <max-concurrent-requests>5</max-concurrent-requests>
+    <rate>5/s</rate>
+    <max-concurrent-requests>10</max-concurrent-requests>
     <retry-parameters>
 		<task-retry-limit>0</task-retry-limit>
 	</retry-parameters>
@@ -153,8 +153,8 @@
   
    <queue>
   	<name>campaign-subscribe-subtask-queue</name>
-    <rate>5/s</rate>
-    <max-concurrent-requests>15</max-concurrent-requests>
+    <rate>10/s</rate>
+    <max-concurrent-requests>50</max-concurrent-requests>
     <retry-parameters>
 		<task-retry-limit>1</task-retry-limit>
 	</retry-parameters>
@@ -162,8 +162,8 @@
   
    <queue>
   	<name>bulk-tags-queue</name>
-    <rate>5/s</rate>
-    <max-concurrent-requests>10</max-concurrent-requests>
+    <rate>10/s</rate>
+    <max-concurrent-requests>50</max-concurrent-requests>
     <retry-parameters>
 		<task-retry-limit>1</task-retry-limit>
 	</retry-parameters>

@@ -68,6 +68,8 @@ import com.google.appengine.api.files.AppEngineFile;
 import com.google.appengine.api.files.FileService;
 import com.google.appengine.api.files.FileServiceFactory;
 import com.google.appengine.api.files.FileWriteChannel;
+import com.google.appengine.tools.cloudstorage.GcsService;
+import com.google.appengine.tools.cloudstorage.GcsServiceFactory;
 import com.googlecode.objectify.Key;
 
 /**
@@ -1345,6 +1347,8 @@ public class CSVUtil
 	String path = null;
 	try
 	{
+	    GcsService service = GcsServiceFactory.createGcsService();
+
 	    // Get a file service
 	    FileService fileService = FileServiceFactory.getFileService();
 
