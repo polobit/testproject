@@ -1105,6 +1105,7 @@ function getSelectionCriteria()
  */
 function postBulkOperationData(url, data, form, contentType, callback, error_message)
 {
+	var count = data.contact_ids.length;
 	var dynamic_filter = getDynamicFilters();
 	if (dynamic_filter != null)
 	{
@@ -1162,7 +1163,8 @@ function postBulkOperationData(url, data, form, contentType, callback, error_mes
 			showNotyPopUp('information', "Task scheduled", "top", 5000);
 			return;
 		}
-		showNotyPopUp('information', error_message, "top", 5000);
+		if(count > 10)
+			showNotyPopUp('information', error_message, "top", 5000);
 	} });
 }
 
