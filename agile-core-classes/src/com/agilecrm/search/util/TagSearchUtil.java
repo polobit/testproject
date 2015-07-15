@@ -118,10 +118,10 @@ public class TagSearchUtil
 	JSONObject tagsCountJSONObject = new JSONObject();
 	UserPrefs userPrefs = UserPrefsUtil.getCurrentUserPrefs();
 	String timezone = "UTC";
-	/*if (userPrefs != null && userPrefs.timezone != null)
+	if (userPrefs != null && userPrefs.timezone != null)
 	{
 		timezone = userPrefs.timezone;
-	}*/
+	}
 
 	// Sets calendar with start time.
 	Calendar startCalendar = Calendar.getInstance(TimeZone.getTimeZone(timezone));
