@@ -403,7 +403,7 @@ function getStyleAttribute(styleAttributes)
 function loadTinyMCE(name)
 {
 	var strWindowFeatures = "height=650, width=800,menubar=no,location=yes,resizable=yes,scrollbars=yes,status=yes";
-	var newwindow = window.open('cd_tiny_mce.jsp?id=' + name,'name',strWindowFeatures);
+	var newwindow = window.open('summernote.jsp?id=' + name,'name',strWindowFeatures);
 	if (window.focus)
 	{
 		newwindow.focus();
