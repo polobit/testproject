@@ -18,7 +18,7 @@
 
 <style>
 body {
-  background-image: url('../flatfull/images/flatfull/agile-registration.png');
+  background-image: url('../flatfull/images/flatfull/agile-registration1.png');
   background-repeat: no-repeat;
   background-position: center center;
   background-size: 100% 100%;
@@ -382,7 +382,7 @@ if(isSafari && isWin)
 </form>
 					
 </div>
-<div class="container">
+<div class="container hide">
 	<div class="row">
 		<div class="agile-testimonial panel">
  <div id="myCarousel" class="carousel slide">
@@ -413,99 +413,11 @@ if(isSafari && isWin)
 
 
 </div>
- <div class="item">
- <div class="pull-left tweet-img-pricing"><img title="Ron Kaplan" src="../../img/testimonial-ron.png"></div>
-<div class="pull-left tweet-txt"><span class="tweet-arrow"></span>
-<div class="tweet-head">
-<span class="tweet-authname">Ron Kaplan</span><span class="tweet-authdesc">Sales and Business Development - Espresso Logic</span></div>
-</div>
-<div class="clearfix"></div>
-<div class="tweet-info">
- Agile CRM is an exciting and powerful system. The capability to create complex workflows is immensely useful and easy - simply a matter of drag and drop.  </div>
-</div>
-
- 
- 
- 
-  <div class="item">
-  <div class="pull-left tweet-img-pricing"><img title="Gary Tramer" src="../../img/testimonial-gary.png"></div>
-<div class="pull-left tweet-txt"><span class="tweet-arrow"></span>
-<div class="tweet-head">
-<span class="tweet-authname">Gary Tramer</span><span class="tweet-authdesc">Head of Strategy - WebReception</span></div>
-</div>
-<div class="clearfix"></div>
-<div class="tweet-info">
- Agile CRM is the coolest, easiest and by far the most productive CRM I've ever used. Within 20 minutes we had customized the CRM and sent out a complex outbound email campaign. We're already converting our leads. Insane!   </div>
-
-    </div>
-    
-   <div class="item"> 
- <div class="pull-left tweet-img-pricing"><img title="Mark Valles" src="../../img/testimonial-mark.png"></div>
-<div class="pull-left tweet-txt"><span class="tweet-arrow"></span>
-<div class="tweet-head">
-<span class="tweet-authname">Mark Valles
-</span><span class="tweet-authdesc">Sales Acceleration Expert - Infusion-4</span></div>
-
-</div>
-<div class="clearfix"></div>
-<div class="tweet-info">
-Brilliant! I literally made 3 clicks and I was able to connect and immediately place calls, get actionable social media information, and view my emails in a stunningly nice way.  
-</div>
-</div>
-   <div class="item"> 
-   <div class="pull-left tweet-img-pricing"><img title="Paul Singh" src="../../img/testimonial-paulsingh.png"></div>
-<div class="pull-left tweet-txt"><span class="tweet-arrow"></span>
-<div class="tweet-head">
-<span class="tweet-authname">Paul Singh
-</span><span class="tweet-authdesc">CEO, Espresso Logic (Venture Backed)
-</span></div>
-
-</div>
-<div class="clearfix"></div>
-<div class="tweet-info">
-For a startup that relies a lot on on-line business, Agile CRM has been an invaluable team to our sales team as it integrates many capabilities out-of-the-box. 
-</div>
-</div>
   </div>
   
   <a class="carousel-control left" href="#myCarousel" data-slide="prev">‹</a>
   <a class="carousel-control right" href="#myCarousel" data-slide="next">›</a>
 </div>
-
- 
-<!-- <li>
-
-</li> -->
-<!-- <li>
-<div class="pull-left tweet-img-pricing"><img title="Ron Kaplan" src="../../img/testimonial-ron.png"></div>
-<div class="pull-left tweet-txt"><span class="tweet-arrow"></span>
-<div class="tweet-head">
-<span class="tweet-authname">Ron Kaplan</span><span class="tweet-authdesc">Sales and Business Development - Espresso Logic</span></div>
-<div class="tweet-info">
- Agile CRM is an exciting and powerful system. The capability to create complex workflows is immensely useful and easy - simply a matter of drag and drop.  </div>
-</div>
-<div class="clearfix"></div>
-</li>
-<li>
-<div class="pull-left tweet-img-pricing"><img title="Gary Tramer" src="../../img/testimonial-gary.png"></div>
-<div class="pull-left tweet-txt"><span class="tweet-arrow"></span>
-<div class="tweet-head">
-<span class="tweet-authname">Gary Tramer</span><span class="tweet-authdesc">Head of Strategy - WebReception</span></div>
-<div class="tweet-info">
- Agile CRM is the coolest, easiest and by far the most productive CRM I've ever used. Within 20 minutes we had customized the CRM and sent out a complex outbound email campaign. We're already converting our leads. Insane!   </div>
-</div>
-<div class="clearfix"></div>
-</li> -->
-
-
-
-<!-- <li>
-
-</li>
-<li>
-
-</li> -->
-
 </div>
 </div>
 </div>

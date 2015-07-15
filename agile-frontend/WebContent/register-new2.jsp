@@ -75,7 +75,7 @@ if(isSafari && isWin)
 <div class="panel-heading text-center"> Below details will be help us to understand your business </div>
 <div class="panel-body">
 <div class="form-group m-t m-b-lg">
-<label class="col-sm-3 control-label">Company</label>
+<label class="col-sm-3 control-label">&nbsp;</label>
 <div class="col-sm-6">
 	<div class="input-prepend input-append input-group">
 	<input id='subdomain' type="text" required placeholder="Company" title="Name should be between 4-20 characters in length. Both letters and numbers are allowed but it should start with a letter."  name="subdomain" minlength="4" class="required  domainLength commonDomain domainCharacters domain_input_field form-control" autocapitalize="off" pattern="^[a-zA-Z][a-zA-Z0-9-_\.]{4,20}$"> <span class="add-on field_domain_add_on input-group-addon regpage-domain" 
@@ -86,8 +86,8 @@ if(isSafari && isWin)
 </div>
 <div class="line line-dashed b-b line-lg"></div>
 <div class="form-group">
-<label class="col-sm-3 control-label">Choose Plan & Users</label>
-<div class="col-sm-3">
+<label class="col-sm-3 control-label">Choose Plan</label>
+<div class="col-sm-6">
 	<select class="form-control required" required  name="plan_type" data-width="100%" >
 											<option value="" selected disabled>Choose Plan</option>
 											<option value="Free">Free</option>
@@ -96,14 +96,22 @@ if(isSafari && isWin)
 											<option value="pro">Pro</option>
 								 	 </select>
 </div>
-<div class="col-sm-3">
-<input class="field required form-control number" name="users_count" required type="number" pattern="\d*" min="1" placeholder="Users" autocapitalize="off">
-</div>
 </div>
 
 <div class="form-group">
-<label class="col-sm-3 control-label">Company Type</label>
+<label class="col-sm-3 control-label">Users</label>
 <div class="col-sm-6">
+<input class="field required form-control number" name="users_count" required type="number" pattern="\d*" min="1" placeholder="Users" autocapitalize="off">
+
+</div>
+</div>
+
+<div class="form-group m-b-xs" style="margin-top: 18px;">
+<div class="col-sm-offset-3 col-sm-9 text-base"> We will create unique experience based on your company and role</div>
+</div>
+<div class="form-group">
+<label class="col-sm-3 control-label">Company Type & Role</label>
+<div class="col-sm-3">
 	<select class="form-control required"  name="company_type" required  data-width="100%">
 											<option value="" selected disabled>Company Type</option>
 											<option value="B2B">B2B</option>
@@ -117,11 +125,7 @@ if(isSafari && isWin)
 											<option value="Other">Other</option>
 								  </select>
 </div>
-</div>
-
-<div class="form-group">
-<label class="col-sm-3 control-label">Role</label>
-<div class="col-sm-6">
+<div class="col-sm-3">
 <select class="form-control required" required  name="role">
 											<option value="" selected disabled>Role</option>
 											<option value="CEO">CEO</option>
