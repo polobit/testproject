@@ -752,6 +752,7 @@ border-radius: 2px;
 	width : 4px!important;
 	z-index: auto!important;
 	border-left:0;
+	min-height:0;
 }
 
 .portlet_body_calendar>#calendar_container>.fc-content>.fc-view>.fc-border-separate th, .portlet_body_calendar>#calendar_container>.fc-content>.fc-view>.fc-border-separate td

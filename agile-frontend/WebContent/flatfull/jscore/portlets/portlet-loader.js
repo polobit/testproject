@@ -1976,8 +1976,7 @@ function minicalendar(el)
 										jso.push(g_event[index]);
 										});
 									//});
-
-										if (jso)
+								if (jso.length!=0)
 										{
 											console.log(jso);
 											$.each(jso,function(index,ev){
@@ -1990,6 +1989,9 @@ function minicalendar(el)
 									   }
 											
 									});
+									
+										
+									
 										
 									});
 									
@@ -2128,13 +2130,14 @@ $('.portlet_body_calendar').live('mouseout',function(e){
 });
 
 function loadingGoogleEvents(startTime,endTime,callback){
-	
+	//var events = new Array();
 	$.getJSON('core/api/calendar-prefs/get', function(response)
 	{
 		
 		console.log(response);
 		if (response)
 		{
+			
 			//createCookie('google_event_token', response.access_token);
 
 			head.js('https://apis.google.com/js/client.js', '/lib/calendar/gapi-helper.js', function()
@@ -2157,22 +2160,45 @@ function loadingGoogleEvents(startTime,endTime,callback){
 						{
 							var events = new Array();
 							console.log(resp);
-							for (var i = 0; i < resp.items.length; i++)
+							for (var j = 0; j < resp.items.length; j++)
 							{
-								var fc_event = google2fcEvent(resp.items[i]);
+								var fc_event = google2fcEvent(resp.items[j]);
 								  fc_event.startDate=new Date(fc_event.start);
 								  fc_event.end=new Date(fc_event.end);
 								  fc_event.color='green';
 								  fc_event.backgroundColor='green';
-								 /*  if(fc_event.allDay==true){
-									  fc_event.start=fc_event.startDate;
-									  var end=new Date(fc_event.google.end.date);
-										//var a= new Date(fc_event.google.end.date).getDate()-1;
-									// end.setDate(a);
-									  fc_event.end=end;
-									 // events.push(fc_event);
-								  } */
-								  
+								   if(fc_event.allDay==true){
+									  fc_event.start = new Date(fc_event.startDate.getTime()+fc_event.startDate.getTimezoneOffset()*60*1000);
+									  fc_event.end= new Date(new Date(fc_event.google.end.date).getTime()+fc_event.startDate.getTimezoneOffset()*60*1000);
+									  var a=(fc_event.end.getMonth()-fc_event.startDate.getMonth())+(fc_event.end.getDate()-fc_event.start.getDate());
+									  if(a==1){
+										  fc_event.start=fc_event.start.getTime()/1000;
+										  fc_event.end=(fc_event.end.getTime()-1)/1000;
+											events.push(fc_event);
+									  }
+									  else{
+													for(var i=0;i<a;i++){
+														var new_json={};
+														new_json=JSON.parse(JSON.stringify(fc_event));
+													if(i==0){
+														new_json.start=fc_event.start.getTime()/1000;
+														new_json.end=new Date(fc_event.start.getFullYear(),fc_event.startDate.getMonth(),fc_event.startDate.getDate()+i,23,59,59).getTime()/1000;
+														}
+													else if(i<a){		
+														new_json.start=new Date(fc_event.start.getFullYear(),fc_event.start.getMonth(),fc_event.start.getDate()+i,00,00,00).getTime()/1000;
+														new_json.end=new Date(fc_event.start.getFullYear(),fc_event.start.getMonth(),fc_event.start.getDate()+i,23,59,59).getTime()/1000;
+														}
+													else{
+														new_json.start=new Date(fc_event.start.getFullYear(),fc_event.start.getMonth(),fc_event.start.getDate()+i,00,00,00).getTime()/1000;
+														new_json.end=fc_event.end.getTime()/1000;
+														}
+														console.log(new_json);
+														events.push(new_json);
+													}
+												}
+									  
+								  } 
+								  else{
 								//var a=Math.round((fc_event.end-fc_event.start)/(1000*60*60*24));
 								var a=(fc_event.end.getMonth()-fc_event.startDate.getMonth())+(fc_event.end.getDate()-fc_event.startDate.getDate());
 											
@@ -2195,13 +2221,13 @@ function loadingGoogleEvents(startTime,endTime,callback){
 														}
 													else{
 														new_json.start=new Date(fc_event.startDate.getFullYear(),fc_event.startDate.getMonth(),fc_event.startDate.getDate()+i,00,00,00).getTime()/1000;
-														new_json.end=new Date(fc_event.end.getFullYear(),fc_event.end.getMonth(),fc_event.end.getDate()).getTime()/1000;
+														new_json.end=fc_event.end.getTime()/1000;
 														}
 														console.log(new_json);
 														events.push(new_json);
 													}
 												}
-								  
+								  }
 								//fc_event.startEpoch = new Date(fc_event.start).getTime()/1000;
 								//fc_event.endEpoch = new Date(fc_event.end).getTime()/1000;
 								
@@ -2209,7 +2235,7 @@ function loadingGoogleEvents(startTime,endTime,callback){
 							}
 							callback(events);
 							//return;
-						});
+						});return;
 				});
 			});
 		}
