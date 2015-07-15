@@ -1039,12 +1039,15 @@ function showDealAreaSpline(url, selector, name, yaxis_name, show_loading)
 			        min: 0
 			    },
 			    //Tooltip to show details,
-			    ongraphtooltip: {
-			        formatter: function(){
-			            return'<b>'+this.series.name+'</b><br/>'+Highcharts.dateFormat('%e.%b',
-			            this.x)+': '+this.y.toFixed(2);
-			        }
-			    },
+			    tooltip: {
+	    			formatter: function(){
+		        		return '<div>' + 
+		        		        '<div class="p-n">'+this.x+'</div>' + 
+		        		        '<div class="p-n"><font color='+this.series.color+'>'+this.series.name+'</font> : '+getCurrencySymbolForCharts()+''+getNumberWithCommasForCharts(this.y)+'</div>' +
+		        		        '</div>';
+		        	},
+		        	useHTML: true
+	        	},
 			    legend: {
 			        layout: 'vertical',
 			        align: 'right',
@@ -1062,4 +1065,18 @@ function showDealAreaSpline(url, selector, name, yaxis_name, show_loading)
 			});
 		});
 	});
+}
+function getCurrencySymbolForCharts(){
+	var value = ((CURRENT_USER_PREFS.currency != null) ? CURRENT_USER_PREFS.currency : "USD-$");
+	var symbol = ((value.length < 4) ? "$" : value.substring(4, value.length));
+	return symbol;
+}
+function getNumberWithCommasForCharts(value){
+	value = parseFloat(value);
+	value = Math.round(value);
+	if(value==0)
+		return value;
+
+	if (value)
+		return value.toFixed(2).toString().replace(/\B(?=(?:\d{3})+(?!\d))/g, ",").replace('.00', '');
 }

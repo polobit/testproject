@@ -2194,8 +2194,11 @@ function portletDealRevenueGraph(selector,series,base_model,categories){
 						color : '#EFEFEF'
 					},
 					formatter: function(){
-						return Highcharts.dateFormat('%b',this.x)+'<br/><font color='+this.series.color+'>'+this.series.name+':</font>'+this.y;
-					},
+		        		return '<div>' + 
+		        		        '<div class="p-n">'+Highcharts.dateFormat('%b',this.x)+'</div>' + 
+		        		        '<div class="p-n"><font color='+this.series.color+'>'+this.series.name+'</font> : '+getPortletsCurrencySymbol()+''+getNumberWithCommasForPortlets(this.y)+'</div>' +
+		        		        '</div>';
+		        	},
 					useHTML: true
 				},
 				legend : {
