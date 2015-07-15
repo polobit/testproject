@@ -1347,7 +1347,7 @@ min-width:50%;
 
 /* ending hack for new ui contact details big tag will come down  */
 
-.getting-started-header {
+/*.getting-started-header {
   background: #7BA9D0;
   border-left: 6px solid #409AB3;
   border-right: 6px solid #409AB3;
@@ -1356,15 +1356,15 @@ min-width:50%;
   margin-bottom: 2px;
   padding: 10px;
 
-}
+}*/
 
 .getting-started-body > div  {
-background: #f3f3f4;
+/*background: #f3f3f4;
   border-left: 6px solid #e7eaec;
   border-right: 6px solid #e7eaec;
   border-radius: 4px;
   color: inherit;
-  margin-bottom: 2px;
+  margin-bottom: 2px;*/
   padding: 10px;
   word-wrap: break-word;
 }
@@ -1379,8 +1379,13 @@ background: #f3f3f4;
   color: rgb(124, 124, 124);
   font-size: 14px;
 }
+
+
+
 .portlet_header h4 span {
   padding-bottom: 1px;
+  font-weight: 300;
+color: #98a6ad;
 }
 
 
