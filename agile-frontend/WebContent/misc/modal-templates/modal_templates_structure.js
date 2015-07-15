@@ -243,6 +243,32 @@
                 }
             ]
         },
+        
+        {
+
+            "label": "Schedule Meeting",
+            "category": "schedule",
+            "themes": [
+                {
+                    "label": "Popout",
+                    "title": "popout-schedule",
+                    "theme_preview": {
+                        "theme_small": "/misc/modal-templates/schedule/popout/images/pop-out.jpg",
+                        "theme_big": "/misc/modal-templates/schedule/popout/images/pop-out.jpg"
+                    },
+                    "layouts": [
+                        {
+                            "title": "popout-schedule",
+                            "href": "/misc/modal-templates/schedule/popout/images/pop-out.jpg",
+                            "link": "/misc/modal-templates/schedule/popout/pop-out.html"
+                        }
+                    ]
+                }
+            ]
+        
+        },
+        
+        
         {
             "label": "Survey",
             "category": "survey",
