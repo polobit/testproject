@@ -18,7 +18,7 @@
 
 <style>
 body {
-  background-image: url('../flatfull/images/flatfull/agile-registration1.png');
+  background-image: url('../flatfull/images/flatfull/buildings.jpg');
   background-repeat: no-repeat;
   background-position: center center;
   background-size: 100% 100%;
@@ -374,8 +374,8 @@ if(isSafari && isWin)
 
 <div class="text-white m-b-md text-left text-xs">
      By clicking sign up, I agree to Agile CRM's <a
-											href="https://www.agilecrm.com/terms.html" target="_blank"
-											style="color:#00B5FF;">Terms of Service</a>
+											href="https://www.agilecrm.com/terms.html" class="text-u-l" target="_blank"
+											style="color:#fff;">Terms of Service</a>
 									</div> 		
 
 <input type='submit' id="register_account" value="Sign Up" class='btn btn-lg btn-primary btn-block'>
