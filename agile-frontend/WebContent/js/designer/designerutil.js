@@ -573,28 +573,9 @@ function openVerifyEmailModal(el)
   
   					var given_email = $(this).find('input').val();
   					
-  					// Make send email node from email empty
-					$('#from_email').empty();
-  					
-  					var options =   {
-                						"Contact's Owner": "{{owner.email}}",
-                						"+ Add new": "verify_email"
-            						};
-
-  					fetchAndFillSelect('core/api/account-prefs/verified-emails/all', "email", "email", undefined, options, $('#from_email'), "prepend", function($select, data){
-  						
-  						if(given_email)
-  							$select.val(given_email).attr("selected", "selected");
-
-  						rearrange_from_email_options($select, data);
-  					});
-
+  					resetAndFillFromSelect(given_email);
 				});
-
-			}
-
-
-			);
+			});
 }
 
 function rearrange_from_email_options($select, data)
@@ -631,8 +612,39 @@ function rearrange_from_email_options($select, data)
   			}
   	});
 
-
-  		// Add only if more than 3 options
+ // Add only if more than 3 options
 //  	if($select.children('option').length > 3)
 //  		$select.find("option:last").before("<option disabled>________________</option>");
 }
+
+function resetAndFillFromSelect(selected_val)
+{
+	// Make send email node from email empty
+	$('#from_email').empty();
+		
+		var options =   {
+						"Contact's Owner": "{{owner.email}}",
+						"+ Add new": "verify_email"
+					};
+
+		fetchAndFillSelect('core/api/account-prefs/verified-emails/all', "email", "email", undefined, options, $('#from_email'), "prepend", function($select, data){
+			
+			if(selected_val)
+				$select.val(selected_val).attr("selected", "selected");
+
+			rearrange_from_email_options($select, data);
+		});
+}
+
+// On Click, fetch verified emails and update
+$('#from_email').die().live('click', function(e){
+		
+		e.preventDefault();
+		
+		// current value selected
+		var selected_val = $(this).val();
+		
+		resetAndFillFromSelect(selected_val);
+});
+
+
