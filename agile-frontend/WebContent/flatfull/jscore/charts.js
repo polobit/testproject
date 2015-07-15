@@ -871,7 +871,7 @@ function showAreaSpline(url, selector, name, yaxis_name, show_loading)
 						else
 						{
 							var end_date = new Date(Date.parse($.trim($('#range').html().split("-")[1])).valueOf());
-							categories.push(Highcharts.dateFormat('%e.%b', Date.UTC(dte.getUTCFullYear(), dte.getUTCMonth(), dte.getUTCDate()))+' - '+Highcharts.dateFormat('%e.%b', Date.UTC(end_date.getUTCFullYear(), end_date.getUTCMonth(), end_date.getUTCDate())));
+							categories.push(Highcharts.dateFormat('%e.%b', Date.UTC(dte.getUTCFullYear(), dte.getUTCMonth(), dte.getUTCDate()))+' - '+Highcharts.dateFormat('%e.%b', Date.UTC(end_date.getFullYear(), end_date.getMonth(), end_date.getDate())));
 						}
 					}
 					else if(frequency=="monthly")
@@ -926,12 +926,12 @@ function showAreaSpline(url, selector, name, yaxis_name, show_loading)
 							if(current_date.getUTCFullYear()!=dte.getUTCFullYear())
 							{
 								from_date = Highcharts.dateFormat('%e.%b.%Y', Date.UTC(dte.getUTCFullYear(), dte.getUTCMonth(), dte.getUTCDate()));
-								to_date = Highcharts.dateFormat('%e.%b.%Y', Date.UTC(end_date.getUTCFullYear(), end_date.getUTCMonth(), end_date.getUTCDate()));
+								to_date = Highcharts.dateFormat('%e.%b.%Y', Date.UTC(end_date.getFullYear(), end_date.getMonth(), end_date.getDate()));
 							}
 							else
 							{
 								from_date = Highcharts.dateFormat('%e.%b', Date.UTC(dte.getUTCFullYear(), dte.getUTCMonth(), dte.getUTCDate()));
-								to_date = Highcharts.dateFormat('%e.%b', Date.UTC(end_date.getUTCFullYear(), end_date.getUTCMonth(), end_date.getUTCDate()));
+								to_date = Highcharts.dateFormat('%e.%b', Date.UTC(end_date.getFullYear(), end_date.getMonth(), end_date.getDate()));
 								
 							}
 							categories.push(from_date+' - '+to_date);
