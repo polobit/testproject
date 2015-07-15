@@ -74,14 +74,14 @@ if(isSafari && isWin)
 <div class="panel panel-default">
 <div class="panel-heading text-center"> Below details will be help us to understand your business </div>
 <div class="panel-body">
-<div class="form-group m-t m-b-lg">
+<div class="form-group m-t" style="margin-bottom:25px;">
 <label class="col-sm-3 control-label">&nbsp;</label>
 <div class="col-sm-6">
 	<div class="input-prepend input-append input-group">
-	<input id='subdomain' type="text" required placeholder="Company" title="Name should be between 4-20 characters in length. Both letters and numbers are allowed but it should start with a letter."  name="subdomain" minlength="4" class="required  domainLength commonDomain domainCharacters domain_input_field form-control" autocapitalize="off" pattern="^[a-zA-Z][a-zA-Z0-9-_\.]{4,20}$"> <span class="add-on field_domain_add_on input-group-addon regpage-domain" 
+	<input id='subdomain' type="text" required placeholder="Domain" title="Name should be between 4-20 characters in length. Both letters and numbers are allowed but it should start with a letter."  name="subdomain" minlength="4" class="required  domainLength commonDomain domainCharacters domain_input_field form-control" autocapitalize="off" pattern="^[a-zA-Z][a-zA-Z0-9-_\.]{4,20}$"> <span class="add-on field_domain_add_on input-group-addon regpage-domain" 
 	id="app_address">.agilecrm.com</span>
 	</div>
-	<span class="help-block m-b-none">Your dedicated portal to login from next time</span>
+	<span class="help-block m-b-none">Choose your Agile CRM domain</span>
 </div>
 </div>
 <div class="line line-dashed b-b line-lg"></div>
@@ -113,7 +113,7 @@ if(isSafari && isWin)
 <label class="col-sm-3 control-label">Company Type & Role</label>
 <div class="col-sm-3">
 	<select class="form-control required"  name="company_type" required  data-width="100%">
-											<option value="" selected disabled>Company Type</option>
+											<option value="" selected disabled>Select Type</option>
 											<option value="B2B">B2B</option>
 											<option value="SaaS">SaaS</option>
 											<option value="Ecommerce">Ecommerce</option>
