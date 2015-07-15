@@ -194,7 +194,7 @@ function render_theme_previews()
 	 html_link = '<span style="display:inline; float: right; margin-top: -32px;">'
 					+'<a class="btn" href="summernote.jsp?id='+textarea_id+'">'
 						+'Create your own'
-					+'</a></span>'
+					+'</a></span>' 
 	
 	$('#preview-container-title').html(title + html_link);
 	
@@ -259,11 +259,12 @@ function show_fancy_box(content_array, type)
      	    },
      	    beforeLoad: function() {
 
-     	    	if(type==='email')
-     	    			    	this.title = (this.index + 1) + ' of ' + this.group.length + '<br/> <a style="color: white; text-decoration: underline;" href="summernote.jsp?id='+t_id+'&url='+this.link+'">Load in Editor</a>';
-     	    		     	    else if (type==='web_rules')
-     	    		     	    	this.title = (this.index + 1) + ' of ' + this.group.length + '<br/> <a style="color: white; text-decoration: underline;" href="cd_tiny_mce.jsp?id='+t_id+'&url='+this.link+'">Load in Editor</a>';
- },
+     	    this.href = location.origin + this.href;
+     	    
+     	   this.title = (type==='email') ? (this.index + 1) + ' of ' + this.group.length + '<br/> <a style="color: white; text-decoration: underline;" href="summernote.jsp?id='+t_id+'&url='+this.link+'">Load in Editor</a>' :
+     		  (type==='web_rules') ? this.title = (this.index + 1) + ' of ' + this.group.length + '<br/> <a style="color: white; text-decoration: underline;" href="cd_tiny_mce.jsp?id='+t_id+'&url='+this.link+'">Load in Editor</a>' : '';
+     	    	
+         },
          afterLoad: function()
          {
         	 // Title on top
