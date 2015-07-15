@@ -274,6 +274,12 @@ function init_summernote()
   $('#content').summernote({
         height: 775,
         enterHtml: '<p><br></p>',
+        
+        onChange: function ($editable, sHtml) {
+        	
+        	  var isWarning = should_warn($editable);
+              showWarning(isWarning);
+        	},
         onImageUpload: function(files, editor, welEditable) {
         sendFile(files[0],editor,welEditable);
         },
@@ -381,7 +387,6 @@ function getExtention(name){
 }
 
 function sendFile(file,editor,layoutInfo) {
-    
 	formData = new FormData();
     
     var domain = "";
@@ -411,8 +416,7 @@ function sendFile(file,editor,layoutInfo) {
         // getting the url of the file from amazon and insert it into the editor
         var url = $(data).find('Location').text();
         var img = $('<img src="'+ decodeURIComponent(url)+'"/>');
-        var editor = $.summernote.eventHandler.getModule();
-        editor.insertImage($('.note-editable'),decodeURIComponent(url),$(data).find('Key').text());
+        $("#content").summernote("insertImage", decodeURIComponent(url),$(data).find('Key').text()); 
       }
     });
   }
