@@ -18,7 +18,7 @@
 
 <style>
 body {
-  background-image: url('../flatfull/images/flatfull/buildings.jpg');
+  background-image: url('../flatfull/images/flatfull/agile-registration-page.png');
   background-repeat: no-repeat;
   background-position: center center;
   background-size: 100% 100%;

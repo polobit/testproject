@@ -32,8 +32,6 @@ body {
 	  height: 31px!important;
 }
 
-
-
 </style>
 <link rel="stylesheet" type="text/css" href="/flatfull/css/bootstrap.v3.min.css" />
 <link rel="stylesheet" type="text/css" href="/flatfull/css/font.css" />
@@ -72,17 +70,22 @@ if(isSafari && isWin)
 		<div class="col-md-6 col-md-offset-3 col-sm-offset-3 col-sm-6 col-xs-12">
 	<form class="form-horizontal" method="post" onsubmit="return isValid();">
 <div class="panel panel-default">
-<div class="panel-heading text-center"> Configure your Agile CRM Account </div>
+<div class="panel-heading text-center"> It's time to configure your account </div>
 <div class="panel-body">
-<div class="form-group m-t" style="margin-bottom:25px;">
+<div class="form-group m-t m-b-none">
 <label class="col-sm-3 control-label">&nbsp;</label>
 <div class="col-sm-6">
 	<div class="input-prepend input-append input-group">
 	<input id='subdomain' type="text" required placeholder="Domain" title="Name should be between 4-20 characters in length. Both letters and numbers are allowed but it should start with a letter."  name="subdomain"  class="required  domainLength commonDomain domainCharacters domain_input_field form-control" autocapitalize="off" minlength="4" maxlength="20" pattern="^[a-zA-Z][a-zA-Z0-9-_\.]{3,20}$"> <span class="add-on field_domain_add_on input-group-addon regpage-domain" 
 	id="app_address">.agilecrm.com</span>
 	</div>
-	<span class="help-block m-b-none">Choose your Agile CRM domain</span>
+	
 </div>
+</div>
+<div class="form-group" style="margin-bottom:25px;">
+<div class="col-sm-offset-3 col-sm-8 m-t-xs">	
+This is where you and your users will log in to your account
+	</div>
 </div>
 <div class="line line-dashed b-b line-lg"></div>
 <div class="form-group">
