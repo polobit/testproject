@@ -710,7 +710,7 @@ function dealsLineChart()
  */
 function dealsLineChartByPipeline(pipeline_id)
 {
-	showDealAreaSpline('core/api/opportunity/stats/details/'+pipeline_id+'?min=0&max=1543842319', 'total-pipeline-chart', 'Monthly Deals', 'Total Value');
+	showDealAreaSpline('core/api/opportunity/stats/details/'+pipeline_id+'?min=0&max=1543842319', 'total-pipeline-chart', 'Monthly Revenue - All Deals', 'Total Value');
 }
 
 /**
@@ -1012,7 +1012,10 @@ function showDealAreaSpline(url, selector, name, yaxis_name, show_loading)
 			    },
 			    title: {
 			        text: name,
-			        x: -20//center
+			        x: -20,//center
+			        style : {
+						textTransform : 'normal'
+					}
 			    },
 			    xAxis: {
 			        //type: 'datetime',
