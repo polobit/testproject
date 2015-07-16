@@ -133,14 +133,19 @@ function generateDynamicSelectUI(uiFieldDefinition, url, keyField, valField)
 	if(uiFieldDefinition.id == "from_email" && uiFieldDefinition.name == "from_email")
 	{
 		// Remove Contact's owner
-		delete uiFieldDefinition.options["Contact's Owner"];
+		// delete uiFieldDefinition.options["Contact's Owner"];
 
 		fetchAndFillSelect(url,keyField, valField, appendNameField, uiFieldDefinition.options, selectContainer, arrange_type, function($selectContainer, data){
 
-		  		$selectContainer.find("option:first").before("<option value='{{owner.email}}'>Contact's Owner</option>");
+		  		// $selectContainer.find("option:first").before("<option value='{{owner.email}}'>Contact's Owner</option>");
 
+				// Make Contact's owner selected
+				// $selectContainer.val("Contact's Owner").attr('selected', 'selected');
+				
 				// Rearranges options
 				rearrange_from_email_options($selectContainer, data);
+
+				$selectContainer.find('option:last').after("<option value='verify_email'>+ Add new</option>");
 				
 		});
 
