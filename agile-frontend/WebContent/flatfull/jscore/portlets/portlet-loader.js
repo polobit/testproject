@@ -1894,24 +1894,28 @@ function getDurationForPortlets(duration){
 		
 		return time_period;
 }
-
+var jso=[];
 function minicalendar(el)
 {
+	init_cal(el);
 	var totalEvents = 0;
 	var eventsCount = 0;
-	var jso=[];
-	head
-			.js(
+	
+	//head
+			//.js(
 				
-					 LIB_PATH + 'lib/jquery-ui.min.js', 'lib/fullcalendar.min.js', function()
-							{
+					 //LIB_PATH + 'lib/jquery-ui.min.js', 'lib/fullcalendar.min.js', function()
+							//{
 						$('#calendar_container',el).fullCalendar({
 								
 							height:get_calendar_height($(el).find('#calendar_container')),
 							selectable: true,
 							header : { left : 'prev', center : 'title', right : 'next' },
 							weekMode:'liquid',
-						    events : function(start, end, callback)
+							
+							eventSources :[
+							{
+							events : function(start, end, callback)
 								{
 									jso=[];
 									var date=new Date();
@@ -1935,11 +1939,11 @@ function minicalendar(el)
 										{
 					
 											if (data.color == 'red' || data.color == '#f05050')
-												data.color='#f05050'
+												data.color='#f05050';
 											else if (data.color == '#36C' || data.color == '#23b7e5' || data.color == 'blue')
-												data.color='#fad733';
+												data.color='#23b7e5';
 											else if (data.color == 'green' || data.color == '#bbb')
-												data.color='#23b7e5'
+												data.color='#fad733';
 											
 											
 									   var e_date= new Date(data.start*1000);
@@ -1969,34 +1973,33 @@ function minicalendar(el)
 												jso.push(new_json);
 												} }
 											});
-											loadingGoogleEvents(start.getTime()/1000,end.getTime()/1000,function(g_event)
-									{
-										$.each(g_event,function(index)
-										{
-										jso.push(g_event[index]);
-										});
-									//});
-								if (jso.length!=0)
+										
+									if (doc)
 										{
 											console.log(jso);
-											$.each(jso,function(index,ev){
-											if(ev.start >= (todayDate.getTime()/1000) && ev.start < (endDate.getTime()/1000)) {	
+											 $.each(jso,function(index,ev){
+											if(ev.start >= (todayDate.getTime()/1000) && ev.start <= (endDate.getTime()/1000)) {	
 											var e_date= new Date(ev.start*1000);
 											$(el).find('.list').append('<li class="p-t-xs p-r-xs" style="color:'+ev.color+'"><span style="color : black" class="text-cap">'+ev.title+'<br><small class="block">'+ e_date.format('HH:MM') + ' </small></span></li>');
 											}
-											});
+											}); 
+											if($(el).find('.list').find('li').length==0 && $(el).find('.portlet-error-message').length==0 )
+											{
+												$(el).find('.events_show').append('<div class="portlet-error-message" style="display:block">No appointments for the day</div>');
+											}
 											callback(jso);
 									   }
-											
-									});
-									
 										
 									
 										
 									});
 									
 									
-								},  
+						} },{dataType :'agile-events'}
+							
+						
+							],
+						    
 							  
 							  
 							     eventRender: function (event, element, view) { 
@@ -2084,7 +2087,7 @@ function minicalendar(el)
 							else if (event.start.getDay() == 0 || event.start.getDay() == 1 || event.start.getDay() == 2)
 									leftorright = 'left';
 								pullupornot = 'pull-up';
-								var popoverElement = '<div class="fc-overlay ' + leftorright + '">' + '<div class="panel bg-white b-a pos-rlt p-sm">' + '<span class="arrow ' + leftorright + ' ' + pullupornot + '"></span>' + '<div class="h4 font-thin m-b-sm"><div class="pull-left text-ellipsis" style="width:140px">' + event.title + '</div><div class="pull-right"><img class="r-2x" src="' + event.ownerPic + '" height="20px" width="20px"/></div></div>' + '<div class="line b-b b-light"></div>' + '<div><i class="icon-clock text-muted m-r-xs"></i>' + event.start
+								var popoverElement = '<div class="fc-overlay ' + leftorright + '">' + '<div class="panel bg-white b-a pos-rlt p-sm">' + '<span class="arrow ' + leftorright + ' ' + pullupornot + '"></span>' + '<div class="h4 font-thin m-b-sm"><div class="pull-left text-ellipsis" style="width:140px">' + event.title + '</div></div>' + '<div class="line b-b b-light"></div>' + '<div><i class="icon-clock text-muted m-r-xs"></i>' + event.start
 									.format('dd-mmm-yyyy HH:MM') + '</div>' + '</div>' + '</div>';
 							$(this).append(popoverElement);
 							$(this).find('.fc-overlay').show();
@@ -2099,20 +2102,25 @@ function minicalendar(el)
 								
 								dayClick : function(date,allDay,jsEvent,view){
 									var days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
-									$(el).find('.events_show').empty().append('<div class="show p-t-xs text-md p-l-xs text-center">'+days[date.getDay()]+' , ' +date.format('dd mmm')+' </div><ul class="list"></ul>');
+									$(el).find('.events_show').empty().append('<div class="show p-t-xs text-md p-l-xs text-center">'+days[date.getDay()]+', ' +date.format('dd mmm')+' </div><ul class="list"></ul>');
 									var endDate = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 23, 59, 59);
 									var array= $('#calendar_container',el).fullCalendar('clientEvents', function(event) {
 										return (event.start >= date && event.start < endDate);
 								});
+								if(array.length!=0){
 								$.each(array,function(index){
 									$(el).find('.list').append('<li class="p-t-xs p-r-xs" style="color : '+array[index].color+'"><span style="color : black" class="text-cap">'+array[index].title+'<br><small class="block">'+ array[index].start.format('HH:MM') + ' </small></span></li>');
 									
 								});
 								}
+								else{
+									$(el).find('.events_show').append('<div class="portlet-error-message">No appointments for the day</div>');
+								}
+								}
 							    	
 						}); 
 
-							});
+							
 }
 
    function get_calendar_height(el) {
@@ -2129,23 +2137,48 @@ $('.portlet_body_calendar').live('mouseout',function(e){
 	$(this).find('.fc-button').css('visibility','hidden');
 });
 
-function loadingGoogleEvents(startTime,endTime,callback){
-	//var events = new Array();
+function loadingGoogleEvents(el,startTime,endTime){
+	
 	$.getJSON('core/api/calendar-prefs/get', function(response)
 	{
 		
 		console.log(response);
 		if (response)
 		{
-			
-			//createCookie('google_event_token', response.access_token);
+			if(typeof gapi != "undefined" && isDefined(gapi) && isDefined(gapi.client) && isDefined(gapi.client.calendar)) 
+			{googledata(el,response,startTime,endTime);
+				return;
+			}
+		
 
 			head.js('https://apis.google.com/js/client.js', '/lib/calendar/gapi-helper.js', function()
 			{
 				setupGC(function()
 				{
 
-					gapi.auth.setToken({ access_token : response.access_token, state : "https://www.googleapis.com/auth/calendar" });
+					googledata(el,response,startTime,endTime);
+					return;
+				});
+			});
+		}
+	});
+	
+}
+
+function init_cal(el){
+	var fc = $.fullCalendar;
+	fc.sourceFetchers = [];
+	// Transforms the event sources to Google Calendar Events
+	fc.sourceFetchers.push(function(sourceOptions, start, end) {
+		if (sourceOptions.dataType == 'agile-events')
+		 loadingGoogleEvents(el,start.getTime()/1000,end.getTime()/1000);
+	});
+	
+}
+
+function googledata(el,response,startTime,endTime)
+{
+	gapi.auth.setToken({ access_token : response.access_token, state : "https://www.googleapis.com/auth/calendar" });
 
 					var current_date = new Date();
 					var timezone_offset = current_date.getTimezoneOffset();
@@ -2165,8 +2198,8 @@ function loadingGoogleEvents(startTime,endTime,callback){
 								var fc_event = google2fcEvent(resp.items[j]);
 								  fc_event.startDate=new Date(fc_event.start);
 								  fc_event.end=new Date(fc_event.end);
-								  fc_event.color='green';
-								  fc_event.backgroundColor='green';
+								  fc_event.color='darkgray';
+								  fc_event.backgroundColor='darkgray';
 								   if(fc_event.allDay==true){
 									  fc_event.start = new Date(fc_event.startDate.getTime()+fc_event.startDate.getTimezoneOffset()*60*1000);
 									  fc_event.end= new Date(new Date(fc_event.google.end.date).getTime()+fc_event.startDate.getTimezoneOffset()*60*1000);
@@ -2174,6 +2207,7 @@ function loadingGoogleEvents(startTime,endTime,callback){
 									  if(a==1){
 										  fc_event.start=fc_event.start.getTime()/1000;
 										  fc_event.end=(fc_event.end.getTime()-1)/1000;
+										  $('#calendar_container',el).fullCalendar('renderEvent',fc_event);
 											events.push(fc_event);
 									  }
 									  else{
@@ -2193,6 +2227,7 @@ function loadingGoogleEvents(startTime,endTime,callback){
 														new_json.end=fc_event.end.getTime()/1000;
 														}
 														console.log(new_json);
+														$('#calendar_container',el).fullCalendar('renderEvent',new_json);
 														events.push(new_json);
 													}
 												}
@@ -2205,6 +2240,7 @@ function loadingGoogleEvents(startTime,endTime,callback){
 												if(a==0){
 													fc_event.start=fc_event.startDate.getTime()/1000;
 													fc_event.end=fc_event.end.getTime()/1000;
+													$('#calendar_container',el).fullCalendar('renderEvent',fc_event);
 													events.push(fc_event);
 												}
 												else{
@@ -2224,21 +2260,24 @@ function loadingGoogleEvents(startTime,endTime,callback){
 														new_json.end=fc_event.end.getTime()/1000;
 														}
 														console.log(new_json);
+														$('#calendar_container',el).fullCalendar('renderEvent',new_json);
 														events.push(new_json);
 													}
 												}
 								  }
-								//fc_event.startEpoch = new Date(fc_event.start).getTime()/1000;
-								//fc_event.endEpoch = new Date(fc_event.end).getTime()/1000;
 								
 
 							}
-							callback(events);
-							//return;
-						});return;
-				});
-			});
-		}
-	});
-	
+							 $.each(events,function(index,ev){
+											var date=new Date();
+											 var todayDate=new Date(date.getFullYear(), date.getMonth(), date.getDate(),00,00,00);
+									   var endDate=new Date(date.getFullYear(), date.getMonth(), date.getDate(),23,59,59);
+											if(ev.start.getTime() >= (todayDate.getTime()) && ev.start.getTime() <= (endDate.getTime())) {	
+											$(el).find('.events_show').find('.portlet-error-message').css("display","none")
+											$(el).find('.list').append('<li class="p-t-xs p-r-xs" style="color:'+ev.color+'"><span style="color : black" class="text-cap">'+ev.title+'<br><small class="block">'+ ev.start.format('HH:MM') + ' </small></span></li>');
+											}
+											});
+											
+							
+						});
 }
