@@ -9,15 +9,16 @@
 body {
 	background: #fff;
 	width: 310px;
-	height: 228px;
+	height: 235px;
 }
 
 #popup {
-	background: #f9a937;
-	-webkit-border-radius: 8px 8px 0 0;
-	-moz-border-radius: 8px 8px 0 0;
-	border-radius: 8px 8px 0 0;
-	box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.25);
+	background: #FCFCFC;;
+	  border: 1px solid #f6f6f6;
+	-webkit-border-radius: 5px 5px 0 0;
+	-moz-border-radius: 5px 5px 0 0;
+	border-radius: 5px 5px 0 0;
+	/*box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.25); */
 	color: #333 !important;
 	font: 13px/19px "Varela", Arial, Helvetica, sans-serif !important;
 	letter-spacing: 0;
@@ -46,12 +47,11 @@ body {
 }
 
 #popup-body {
-	background: #fff;
 	-webkit-border-radius: 8px;
 	-moz-border-radius: 8px;
 	border-radius: 8px;
 	margin: 5px;
-	padding: 20px 15px 5px;
+	padding: 20px 20px 20px;
 	position: relative;
 }
 
@@ -86,11 +86,10 @@ body {
 }
 
 #popup-title {
-	color: #7c5553 !important;
-	font: bold 18px/24px "Montserrat", Arial, Helvetica,
+	color: #505653 !important;
+	font: bold 20px/24px "Montserrat", Arial, Helvetica,
 		sans-serif !important;
-	padding-right: 60px;
-	  padding-top: 10px;
+	  padding-top: 5px;
 }
 
 #popup-body p {
@@ -99,6 +98,13 @@ body {
 
 #popup-form p:last-child {
 	margin-top: -5px;
+	margin-bottom: 20px;
+}
+
+#popup-content p:first-child {
+	  font-size: 11px!important;
+  margin-bottom: 20px;
+  line-height: 1.5;
 }
 
 #popup-form input.popup-text {
@@ -118,8 +124,12 @@ body {
 	color: #c00;
 }
 
+#popup-form p:first-child {
+  margin-bottom: 10px;
+}
 #popup-form .popup-button {
-	background: #7c5553;
+	/*background: #7c5553; */
+	background: #65DAA5;
 	border: 0;
 	-webkit-border-radius: 5px;
 	-moz-border-radius: 5px;
@@ -133,13 +143,15 @@ body {
     padding-top: 10px;
     padding-bottom: 10px;
     width: 100%;
-  display: block;
-  box-sizing: border-box;
+    display: block;
+    box-sizing: border-box;
     text-align: center;
+    font-size: 15px!important;
 }
 
 #popup-form .popup-button:hover {
-	background: #6b403d;
+	/*background: #6b403d; */
+	background: #5ECF9C;
 }
 
 #popup-footer {
@@ -188,13 +200,11 @@ margin-bottom: 5px!important;
 	<div id="opened">
 		<div id="popup">
 			<div id="popup-body">
-				<div id="popup-title">Schedule Meeting</div>
+				<div id="popup-title">Contact Us</div>
 				<div id="popup-content">
-					<p>Schedule your meeting by booking your slot. Click below to confirm your time slot.</p>
+					<p>Looking to talk to our friendly reps? Please schedule a slot. We look forward to talking to you soon.</p>
 					<form id="popup-form">
-					    <div class="m-t-sm"></div>
-						<p><a class="popup-button" href="https://user_domain.agilecrm.com/calendar/user_name" target="_blank">Schedule Now</a></a></p>
-						<p>&nbsp;&nbsp;</p>
+						<p><a class="popup-button" href="https://user_domain.agilecrm.com/calendar/user_name" target="_blank">Contact</a></a></p>
 					</form>
 				</div>
 				<div id="popup-close">x</div>
