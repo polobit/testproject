@@ -426,7 +426,7 @@ $(function()
 	 */
 	Handlebars.registerHelper('contactShortName', function()
 	{
-		if (App_Contacts.contactDetailView && App_Contacts.contactDetailView.model)
+		if (App_Contacts.contactDetailView && App_Contacts.contactDetailView.model && !company_util.isCompany())
 		{
 
 			var contact_properties = App_Contacts.contactDetailView.model.get('properties');
