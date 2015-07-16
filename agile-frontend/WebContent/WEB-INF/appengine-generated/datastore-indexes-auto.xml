@@ -287,5 +287,10 @@
         <property name="status" direction="asc"/>
         <property name="task_completed_time" direction="asc"/>
     </datastore-index>
+    
+    <datastore-index kind="Opportunity" ancestor="false" source="auto">
+        <property name="pipeline" direction="asc"/>
+        <property name="close_date" direction="asc"/>
+    </datastore-index>
 
 </datastore-indexes>

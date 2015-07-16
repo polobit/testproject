@@ -125,8 +125,10 @@ function addNewPortlet(portlet_type,p_name){
 		json['category']=categoryJson;
 		obj.size_y=2;
 		obj.size_x=2;
-	}else if(portlet_type=="DEALS" && p_name=="RevenueGraph")
+	}else if(portlet_type=="DEALS" && p_name=="RevenueGraph"){
 		json['duration']="this-quarter";
+		json['track']="anyTrack";
+	}
 	var portlet = new BaseModel();
 	portlet.url = 'core/api/portlets/addPortlet';
 	portlet.set({ "prefs" : JSON.stringify(json) }, { silent : true });

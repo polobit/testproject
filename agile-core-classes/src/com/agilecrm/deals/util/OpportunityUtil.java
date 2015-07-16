@@ -626,8 +626,16 @@ public class OpportunityUtil
     {
 	UserAccessControlUtil.checkReadAccessAndModifyQuery("Opportunity", null);
 
-	return dao.ofy().query(Opportunity.class).filter("pipeline", new Key<Milestone>(Milestone.class, pipelineId))
-		.filter("close_date >= ", minTime).filter("close_date <= ", maxTime).list();
+	if (pipelineId == null)
+	{
+		return dao.ofy().query(Opportunity.class)
+				.filter("close_date >= ", minTime).filter("close_date <= ", maxTime).list();
+	}
+	else
+	{
+		return dao.ofy().query(Opportunity.class).filter("pipeline", new Key<Milestone>(Milestone.class, pipelineId))
+				.filter("close_date >= ", minTime).filter("close_date <= ", maxTime).list();
+	}
     }
 
     /**
@@ -653,10 +661,16 @@ public class OpportunityUtil
 	// Deals Object
 	JSONObject dealsObject = new JSONObject();
 
-	if (pipelineId == null || pipelineId == 0L)
-	    pipelineId = MilestoneUtil.getMilestones().id;
+	/*if (pipelineId == null || pipelineId == 0L)
+	    pipelineId = MilestoneUtil.getMilestones().id;*/
 
 	// Returns month (key) and total and pipeline
+	//If request comes from deals list view or request comes from dashboard and pipeline id is 0, 
+	//we'll assign null to pipeline id to get all tracks data
+	if (minTime == 0 || pipelineId == 0)
+	{
+		pipelineId = null;
+	}
 	List<Opportunity> opportunitiesList = getOpportunitiesByPipeline(pipelineId, minTime, maxTime);
 	if (opportunitiesList != null && opportunitiesList.size() > 0)
 	{

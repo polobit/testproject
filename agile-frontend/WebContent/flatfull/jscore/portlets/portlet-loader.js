@@ -660,6 +660,23 @@ function showPortletSettings(el){
 		$("#portlet-name",$('#portletsDealsRevenueGraphSettingsModal')).val(base_model.get('name'));
 		
 		elData = $('#portletsDealsRevenueGraphSettingsForm');
+		var options = '';
+		if(base_model.get('settings').track=="anyTrack"){
+			options += '<option value="anyTrack" selected="selected">Any</option>';
+		}else{
+			options += '<option value="anyTrack">Any</option>';
+		}
+		$.ajax({ type : 'GET', url : '/core/api/milestone/pipelines', async : false, dataType : 'json',
+				success: function(data){
+					$.each(data,function(index,trackObj){
+						if(base_model.get('settings').track==trackObj.id)
+							options+="<option value="+trackObj.id+" selected='selected'>"+trackObj.name+"</option>";
+						else
+							options+="<option value="+trackObj.id+">"+trackObj.name+"</option>";
+					});
+				} });
+		$('#track', elData).html(options);
+		$('.loading-img').hide();
 		$("#duration", elData).find('option[value='+ base_model.get("settings").duration +']').attr("selected", "selected");
 	}
 	
@@ -1520,6 +1537,9 @@ $('.portlet-settings-save-modal').live('click', function(e){
 
 					var selector=idVal;;
 					var pipeline_id = 0;
+					if(data.get('settings').track!=undefined && data.get('settings').track!="anyTrack"){
+						pipeline_id = data.get('settings').track;
+					}
 					var url='core/api/opportunity/stats/details/'+pipeline_id+'?min='+getStartAndEndDatesEpochForPortlets(start_date_str)+'&max='+(getStartAndEndDatesEpochForPortlets(end_date_str)-1)+'';
 
 					fetchPortletsGraphData(url,function(data1){

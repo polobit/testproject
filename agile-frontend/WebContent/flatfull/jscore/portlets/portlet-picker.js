@@ -919,6 +919,9 @@ function set_p_portlets(base_model){
 
 			var selector=$(this).attr('id');
 			var pipeline_id = 0;
+			if(base_model.get('settings').track!=undefined && base_model.get('settings').track!="anyTrack"){
+				pipeline_id = base_model.get('settings').track;
+			}
 			var url='core/api/opportunity/stats/details/'+pipeline_id+'?min='+getStartAndEndDatesEpochForPortlets(start_date_str)+'&max='+(getStartAndEndDatesEpochForPortlets(end_date_str)-1)+'';
 
 			fetchPortletsGraphData(url,function(data){
