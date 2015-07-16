@@ -198,7 +198,7 @@ function fill_slate(id, el, key) {
 			$("#" + id, el).html(
 					getTemplate("empty-collection-model",
 							CONTENT_JSON["companies"]));
-		else if((route_path == "filter_results") && readCookie('company_filter'))
+		else if((route_path == "filter_results") && company_util.isCompany())
 			$("#" + id, el).html(
 					getTemplate("empty-collection-model",
 							CONTENT_JSON["filter_results_companies"]));
