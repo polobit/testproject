@@ -229,7 +229,12 @@ $(function()
 		var json = documentsView.collection.get(id).toJSON();
 
 		// To get the contact id and converting into string
-		var contact_id = App_Contacts.contactDetailView.model.id + "";
+		var contact_id = "";
+		
+		if(company_util.isCompany())
+			contact_id = App_Companies.companyDetailView.model.id + "";
+		else
+			contact_id = App_Contacts.contactDetailView.model.id + "";
 
 		// Removes the contact id from related to contacts
 		json.contact_ids.splice(json.contact_ids.indexOf(contact_id), 1);
@@ -357,6 +362,7 @@ function existing_document_attach(document_id, saveBtn)
 	{
 		saveBtn.closest("span").find(".save-status").html("<span style='color:red;margin-left:10px;'>Linked Already</span>");
 		saveBtn.closest("span").find('span.save-status').find("span").fadeOut(5000);
+		hideTransitionBar();
 		return;
 	}
 }

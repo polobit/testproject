@@ -564,7 +564,10 @@ $(function(){
 		if(islocalStorageHasSpace()){
 			localStorage.setItem('MAP_VIEW','enabled');
 		}
-		show_map();
+		if(company_util.isCompany())
+			company_util.show_map();
+		else
+			show_map();
 		
 		
 	});

@@ -185,7 +185,7 @@ var CompaniesRouter = Backbone.Router
 			postData = readData('dynamic_company_filter');
 		}
 
-		var slateKey = getContactPadcontentKey(url);
+		var slateKey = getCompanyPadcontentKey(url);
 		if (is_lhs_filter)
 		{
 			template_key = "companies-custom-view-table";

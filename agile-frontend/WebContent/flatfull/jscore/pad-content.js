@@ -224,6 +224,21 @@ function getContactPadcontentKey(url)
 		
 }
 
+function getCompanyPadcontentKey(url)
+{
+	if(!url)
+		return;
+	
+	if(url.indexOf('tag') > 0)
+		return "tag_results";
+	
+	if(url.indexOf('filter') > 0)
+		return "filter_results";
+	
+	return "contacts";
+		
+}
+
 /**
  * Show modal if add entity form is modal, it is used for contacts (adding new contact)
  */
