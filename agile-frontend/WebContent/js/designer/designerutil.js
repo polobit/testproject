@@ -581,14 +581,6 @@ function openVerifyEmailModal(el)
 function rearrange_from_email_options($select, data)
 {
 
-	var last_index = $select.find("option:last").index();
-  	var prev_index = parseInt(last_index-1);
-  					    
-  	// Remove Contact's Owner option inorder to make it first option
-    $select.find("option:eq("+prev_index+")").remove();
-  	
-  	$select.find("option:first").before("<option value='{{owner.email}}'>Contact's Owner</option>");
-
 	if(!data)
 		return;
 
@@ -612,9 +604,6 @@ function rearrange_from_email_options($select, data)
   			}
   	});
 
- // Add only if more than 3 options
-//  	if($select.children('option').length > 3)
-//  		$select.find("option:last").before("<option disabled>________________</option>");
 }
 
 function resetAndFillFromSelect(selected_val)
@@ -623,12 +612,13 @@ function resetAndFillFromSelect(selected_val)
 	$('#from_email').empty();
 		
 		var options =   {
-						"Contact's Owner": "{{owner.email}}",
 						"+ Add new": "verify_email"
 					};
 
 		fetchAndFillSelect('core/api/account-prefs/verified-emails/all', "email", "email", undefined, options, $('#from_email'), "prepend", function($select, data){
-			
+		  	
+			$select.find("option:first").before("<option value='{{owner.email}}'>Contact's Owner</option>");
+
 			if(selected_val)
 				$select.val(selected_val).attr("selected", "selected");
 

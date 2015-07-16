@@ -35,7 +35,6 @@
             "fieldType": "dynamicselect",
              "type": "verified_email",
              "options": {
-                "Contact's Owner": "{{owner.email}}",
                 "+ Add new": "verify_email"
             }, 
             "event": "onchange",
