@@ -4,36 +4,18 @@
 */   
 function gmap_add_marker(Locations){
   
-
-	//gmap_delete_marker();
-	//This holds previous infowindow object .
-	var previousInfoWindow=undefined;
 	var markerCluster;
 	if(markerCluster)
 	markerCluster.setMap(null);
-	
+	//Single instance will be used for all the marker infowindow's
+	var infowindow = new google.maps.InfoWindow();
 	
 	 var myLatlng = [];
-	 var infowindow = [];
 	 var marker = [];
 	 for (var i=0; i<marker.length; i++) {
 	        marker[i].setMap(null);
 	    }
-
-	                  function MakeInfoWindowEvent(map, infowindow, marker) {  
-	                     return function() {
-	                    	if(previousInfoWindow != undefined && previousInfoWindow != "")
-	                    	 previousInfoWindow.close();
-	                        infowindow.open(map, marker);
-	                        previousInfoWindow=infowindow;
-	                     };  
-	                  }
-	                  
-	                  function CloseInfoWindowEvent(map,infowindow){
-	                	  return function(){
-	                		  infowindow.close();
-	                	  }
-	                  }
+	 var oms = new OverlappingMarkerSpiderfier(map, {keepSpiderfied:true});
 
 	                  for (var i=0;i < Locations.length;i++)
 	                  {   
@@ -93,26 +75,57 @@ function gmap_add_marker(Locations){
 	                         marker[i] = new google.maps.Marker({
 	                              position: myLatlng[i],
 	                              map: map,
-	                              icon:icon
+	                              icon:icon,
+	                              content:strVar
 	                          });
-		                        infowindow[i] = new google.maps.InfoWindow({
-		                                 content: strVar
-		                             });
-	                       
-	                           google.maps.event.addListener(marker[i], 'click', MakeInfoWindowEvent(map, infowindow[i], marker[i]));
-	                           google.maps.event.addListener(map, 'click', CloseInfoWindowEvent(map, infowindow[i]));
-	                               
+	                         
+	                          oms.addMarker(marker[i]);
+	                          google.maps.event.addListener(marker[i], 'click', function() {
+	                        	    infowindow.setContent(this.content);
+	                        	    infowindow.open(map,this); // or this instead of marker
+	                        	});
 
 	                  }
-	                  var mcOptions = {gridSize: 50, maxZoom: 15};
-	                  markerCluster = new MarkerClusterer(map, marker,mcOptions);
-	                
+	                  //var mcOptions = {gridSize: 50, maxZoom: 15};
+	                  markerCluster = new MarkerClusterer(map, marker, {clusterClass: 'poiCluster', maxZoom:15});
+	                  
+	                  //Listener to show the spiderify markers on clicking the clusterer count directly 
+	                  google.maps.event.addListener(markerCluster, 'click', function(cluster) {
 
+	                      var markers = cluster.getMarkers();
+
+	                      if(prepareMarkers(markers)){
+	                           //to wait for map update
+	                          setTimeout(function(){
+	                              google.maps.event.trigger(markers[markers.length-1], 'click');
+	                          },1000)
+	                      }
+	                      return true;
+	                  });
+
+	                  function prepareMarkers(markers){
+	                  var cont=0;
+	                  var latitudMaster=markers[0].getPosition().lat();
+	                  var longitudMaster=markers[0].getPosition().lng();
+	                  for(var i=0;i<markers.length;i++){
+	                      if(markers[i].getPosition().lat() === latitudMaster & markers[i].getPosition().lng() === longitudMaster ){
+	                          cont++;
+	                      }else{
+	                          return false;
+	                      }
+	                  }
+	                  if(cont==markers.length){
+	                      return true;
+	                  }else if(cont<markers.length){
+	                      return false;
+	                  }
+	              }
 }
 
 function gmap_set_icons(email,width){
 	
-	var backup_image = "&d=" + DEFAULT_GRAVATAR_url + "\" ";
+	var DEFAULT_GRAVATAR_url_gmap = window.location.origin.indexOf("localhost:") >= 0 ? "https://dpm72z3r2fvl4.cloudfront.net/css/images/user-default.png" : (window.location.origin + "/" + LIB_PATH_FLATFULL + "images/flatfull/anonymous_visitor.png");
+	var backup_image = "&d=" + DEFAULT_GRAVATAR_url_gmap + "\" ";
 	var data_name = '';
 
 	if (email == undefined || email == "")
