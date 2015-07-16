@@ -102,7 +102,7 @@ var CompaniesRouter = Backbone.Router
 		{
 			sort_key = '-created_time';
 			// Saves Sort By in cookie
-			createCookie('sort_by_name', sort_key);
+			createCookie('company_sort_field', sort_key);
 		}
 
 		// Checks if user is using custom view. It check for grid view

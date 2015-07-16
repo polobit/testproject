@@ -323,6 +323,7 @@
 		{
 			var el = getTemplate("company-view-collection");
 			$("#view-list", cel).html(el);
+			updateSelectedSortKey($("#view-list", cel));
 			/*$("#view-list", cel).find('.dropdown-menu').find(".dropdown-submenu").on("click",function(e){
 			    e.stopImmediatePropagation();
 			});*/
@@ -498,7 +499,6 @@
 		initEvents();
 		setupCompanyFilterList(cel);
 		setupCompanyViews(cel);
-		updateSelectedSortKey(cel);
 	};
 	
 }(window.company_list_view = window.company_list_view || {}, $));
