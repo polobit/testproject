@@ -555,7 +555,8 @@ public class Contact extends Cursor
 	if (contact.tags.size() != currentContactTags.size() || contact.properties.size() != properties.size()
 		|| contact.star_value != star_value
 		|| (contact.lead_score != null ? !contact.lead_score.equals(lead_score) : false)
-		|| contact.campaignStatus.size() != campaignStatus.size())
+		|| contact.campaignStatus.size() != campaignStatus.size()
+		|| contact.emailBounceStatus.size() != emailBounceStatus.size())
 
 	    return true;
 

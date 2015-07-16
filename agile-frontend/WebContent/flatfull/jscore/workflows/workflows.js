@@ -68,7 +68,7 @@ $(function(){
            
     	// Check if the form is valid
     	if (!isValidForm('#workflowform')) {
-  		$('#workflowform').find("input.required").focus();
+    		$('#workflowform').find("span.help-inline").not(':hidden').prev('input').focus();
     		return false;
     	}
     	
@@ -79,10 +79,12 @@ $(function(){
         
         var unsubscribe_tag = $('#unsubscribe-tag').val().trim();
         var unsubscribe_action = $('#unsubscribe-action').val();
+        var unsubscribe_email = $('#unsubscribe-email').val().trim();
         
         var unsubscribe_json ={
         		               		"tag":unsubscribe_tag,
-        		               		"action":unsubscribe_action
+        		               		"action":unsubscribe_action,
+        		               		"unsubscribe_email": unsubscribe_email
         		               }
         
         // Check for valid name
@@ -214,16 +216,15 @@ $(function(){
 	
 	$('#workflow-unsubscribe-option').die().live('click', function(e){
 		e.preventDefault();
-		//$(this).css('display','none');
-		//$('#workflow-unsubscribe-block').show('slow');
-	});
-	
-	$('#workflow-unsubscribe-block').live('shown', function(){
-		$('#workflow-unsubscribe-option').html('<span><i class="icon-minus"></i></span> Manage Unsubscription');
-	});
-	
-	$('#workflow-unsubscribe-block').live('hidden', function(){
-		$('#workflow-unsubscribe-option').html('<span><i class="icon-plus"></i></span> Manage Unsubscription');
+
+		if($(this).hasClass('collapsed'))
+		{
+			$('#workflow-unsubscribe-option').html('<span><i class="icon-plus"></i></span> Manage Unsubscription');
+			return;
+		}
+		
+		$('#workflow-unsubscribe-option').html('<span><i class="icon-minus"></i></span> Manage Unsubscription')
+		
 	});
 	
 	$('#unsubscribe-action').die().live('change', function(e){

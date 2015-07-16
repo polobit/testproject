@@ -1,116 +1,111 @@
 package com.agilecrm.bulkaction.deferred;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
+import com.agilecrm.bulkaction.BulkActionAdaptor;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.session.UserInfo;
 import com.agilecrm.user.DomainUser;
+import com.agilecrm.workflows.status.util.CampaignStatusUtil;
 import com.agilecrm.workflows.util.WorkflowSubscribeUtil;
+import com.agilecrm.workflows.util.WorkflowUtil;
+import com.campaignio.tasklets.agile.util.AgileTaskletUtil;
+import com.campaignio.tasklets.util.TaskCore;
 import com.google.appengine.api.NamespaceManager;
-import com.google.appengine.api.taskqueue.DeferredTask;
 import com.googlecode.objectify.Key;
+import com.thirdparty.Mailgun;
 
-public class CampaignSubscriberDeferredTask implements DeferredTask
+public class CampaignSubscriberDeferredTask extends BulkActionAdaptor
 {
+    private Long campaignId;
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	private Key<DomainUser> key;
-	private Long campaignId;
-	private String namespace;
-	private Set<Key<Contact>> contactKeySet;
-	private UserInfo info;
+    CampaignSubscriberDeferredTask()
+    {
 
-	CampaignSubscriberDeferredTask()
+    }
+
+    public CampaignSubscriberDeferredTask(Long domainUserId, Long campaignId, String namespace,
+	    Set<Key<Contact>> contactKeySet, UserInfo info)
+    {
+	this.key = new Key<DomainUser>(DomainUser.class, domainUserId);
+	this.campaignId = campaignId;
+	this.namespace = namespace;
+	this.contactKeySet = contactKeySet;
+	this.info = info;
+    }
+
+    public boolean isValidTask()
+    {
+	if (StringUtils.isEmpty(namespace))
+	    return false;
+
+	if (campaignId == null)
+	    return false;
+	if (key == null)
+	    return false;
+
+	return true;
+
+    }
+
+    protected void performAction()
+    {
+	List<Contact> contacts = fetchContacts();
+
+	WorkflowSubscribeUtil.subscribeDeferred(contacts, campaignId);
+    }
+
+    @Deprecated
+    private void runCampaign(List<Contact> contacts)
+    {
+	try
 	{
+	    System.out.println("Executing tasklet in namespace " + NamespaceManager.get());
 
-	}
+	    JSONObject campaignJSON = WorkflowUtil.getWorkflowJSON(campaignId);
+	    String campaignName = AgileTaskletUtil.getCampaignNameFromJSON(campaignJSON);
 
-	public CampaignSubscriberDeferredTask(Long domainUserId, Long campaignId, String namespace,
-			Set<Key<Contact>> contactKeySet, UserInfo info)
-	{
-		this.key = new Key<DomainUser>(DomainUser.class, domainUserId);
-		this.campaignId = campaignId;
-		this.namespace = namespace;
-		this.contactKeySet = contactKeySet;
-		this.info = info;
-	}
+	    // Convert Contacts into JSON Array
+	    JSONArray subscriberJSONArray = AgileTaskletUtil.getSubscriberJSONArray(contacts, campaignId, null);
 
-	public void run()
-	{
-		// TODO Auto-generated method stub
-		if (!isValidTask())
-			return;
+	    for (Contact contact : contacts)
+	    {
+		CampaignStatusUtil.setActiveCampaignStatus(contact, String.valueOf(campaignId), campaignName);
+	    }
 
-		String oldNamespace = NamespaceManager.get();
-
+	    for (int i = 0; i < subscriberJSONArray.length(); i++)
+	    {
 		try
 		{
-			NamespaceManager.set(namespace);
-			subscribeToCampaign();
+		    JSONObject subscriberJSON = subscriberJSONArray.getJSONObject(i);
+		    // To avoid setting status in Start Node again
+		    subscriberJSON.put(TaskCore._ACTIVE_STATUS_SET, true);
+
+		    TaskCore.executeWorkflow(campaignJSON, subscriberJSON);
+
 		}
 		catch (Exception e)
 		{
-			System.out.println("Error in subscribing campaign " + contactKeySet);
-			e.printStackTrace();
+		    e.printStackTrace();
 		}
-		finally
-		{
-			NamespaceManager.set(oldNamespace);
-		}
+	    }
 
 	}
-
-	public boolean isValidTask()
+	catch (Exception e)
 	{
-		if (StringUtils.isEmpty(namespace))
-			return false;
-		if (campaignId == null)
-			return false;
-		if (key == null)
-			return false;
+	    Mailgun.sendMail("campaigns@agile.com", "Campaign Error Observer", "yaswanth@agilecrm.com", null, null,
+		    "Campaign Initiated in " + NamespaceManager.get() + " , " + campaignId, null,
+		    "Hi Naresh,<br><br> Campaign Initiated:<br><br> User id: " + info.getEmail()
+			    + "<br><br>Campaign-id: " + campaignId + "<br>", null);
 
-		return true;
-
+	    System.err.println("Exception occured in TaskletUtilDeferredTask " + e.getMessage());
+	    e.printStackTrace();
 	}
 
-	private void subscribeToCampaign()
-	{
-		WorkflowSubscribeUtil.subscribeDeferred(fetchContacts(), campaignId);
-	}
-
-	private List<Contact> fetchContacts()
-	{
-		List<Contact> contacts = null;
-
-		try
-		{
-			contacts = Contact.dao.fetchAllByKeys(new ArrayList<Key<Contact>>(contactKeySet));
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-			contacts = new ArrayList<Contact>();
-			for (Key<Contact> contactKey : contactKeySet)
-			{
-				try
-				{
-					contacts.add(Contact.dao.get(contactKey));
-				}
-				catch (Exception e1)
-				{
-					e.printStackTrace();
-				}
-			}
-		}
-
-		return contacts;
-
-	}
+    }
 }

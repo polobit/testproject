@@ -999,11 +999,12 @@ public class ContactUtil
 	int i = 0;
 	for (Contact contact : contacts_list)
 	{
-	    contact.setContactOwner(newOwnerKey);
+
 	    Key<DomainUser> userKey = contact.getContactOwnerKey();
 
 	    if (!new_owner.equals(userKey))
 	    {
+		contact.setContactOwner(newOwnerKey);
 		builderObjects.add(contactDocuments.buildDocument(contact));
 		// docs[i] = contactDocuments.buildDocument(contact);
 		++i;

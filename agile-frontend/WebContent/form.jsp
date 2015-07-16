@@ -15,6 +15,7 @@ String domain = request.getParameter("d");
 	</style>
 	<script>
 		var formNumber = <%=formId%>;
+		var formLoadDomain = '<%=domain%>';
 	</script>
    </head>
    <body>

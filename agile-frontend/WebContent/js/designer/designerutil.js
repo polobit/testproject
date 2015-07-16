@@ -556,3 +556,9 @@ function getMergeFieldsWithOptGroups(uiFieldDefinition, selectEventHandler)
 	console.log(selectoption);
 	return selectoption;
 }
+
+function get_domain_user()
+{
+	return window.parent.CURRENT_DOMAIN_USER;
+}
+
