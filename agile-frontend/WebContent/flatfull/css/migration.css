@@ -584,6 +584,8 @@ left:0;
 
 /*animation for search box field*/
 
+@media all and (min-width: 768px) {
+
 #searchText
 {
 	border-top-right-radius: 0px;
@@ -599,6 +601,25 @@ left:0;
 	width:200px;
 }
 
+}
+
+@media all and (max-width: 767px) {
+
+#searchText {
+  border-top-right-radius: 0px;
+  border-bottom-right-radius: 0px;
+  width: 100%;
+}
+
+#searchForm .typeahead {
+  width: 100%!important;
+}
+
+#searchForm {
+display: block!important;
+}
+
+}
 
 
 /*.app-aside-folded .navi > ul > li::after {
