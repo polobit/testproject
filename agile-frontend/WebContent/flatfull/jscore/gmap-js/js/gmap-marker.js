@@ -7,14 +7,16 @@ function gmap_add_marker(Locations){
 	var markerCluster;
 	if(markerCluster)
 	markerCluster.setMap(null);
-	//Single instance will be used for all the marker infowindow's
-	var infowindow = new google.maps.InfoWindow();
+	/**Single instance will be used for all the marker infowindow's
+*/	var infowindow = new google.maps.InfoWindow();
 	
 	 var myLatlng = [];
 	 var marker = [];
 	 for (var i=0; i<marker.length; i++) {
 	        marker[i].setMap(null);
 	    }
+	 
+	 /**Intializing spiderifier */
 	 var oms = new OverlappingMarkerSpiderfier(map, {keepSpiderfied:true,nearbyDistance:40,legWeight:2});
 
 	                  for (var i=0;i < Locations.length;i++)
@@ -76,16 +78,18 @@ function gmap_add_marker(Locations){
 	                          });
 	                         
 	                          oms.addMarker(marker[i]);
+	                          
+	                          /**Marker click event*/ 
 	                          google.maps.event.addListener(marker[i], 'click', function() {
 	                        	    infowindow.setContent(this.content);
 	                        	    infowindow.open(map,this);
 	                        	});
 
 	                  }
-	                  //var mcOptions = {gridSize: 50, maxZoom: 15};
+	                  /**Initializing marker clusterer*/ 
 	                  markerCluster = new MarkerClusterer(map, marker, {clusterClass: 'poiCluster', maxZoom:15});
 	                  
-	                  //Listener to show the spiderify markers on clicking the clusterer count directly 
+	                  /**Listener to show the spiderify markers on clicking the clusterer count directly*/ 
 	                  google.maps.event.addListener(markerCluster, 'click', function(cluster) {
 
 	                      var markers = cluster.getMarkers();
@@ -118,6 +122,7 @@ function gmap_add_marker(Locations){
 	                  }
 	              }
 	                  
+	                  /**Listener to close the infowindow if opened on clicking a map*/ 
 	                  google.maps.event.addListener(map, 'click', function(){
 	                	  if(infowindow){
 	                		  infowindow.close();
@@ -125,24 +130,21 @@ function gmap_add_marker(Locations){
 	                  });
 }
 
-
+/**It just formats the first letter of a string with capital letter ,Only used here for city.*/ 
 function capitalizeFirstLetter(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
+/**Function which returns either a default image or an SVG image based on the email*/
 function gmap_set_icons(email,width){
 	
-	var DEFAULT_GRAVATAR_url_gmap = window.location.origin.indexOf("localhost:") >= 0 ? LIB_PATH_FLATFULL + 'images/flatfull/anonymous_visitor.png' : (window.location.origin + "/" + LIB_PATH_FLATFULL + "images/flatfull/anonymous_visitor.png");
-	var backup_image = "&d=" + DEFAULT_GRAVATAR_url_gmap + "\" ";
-	var data_name = '';
-
 	if (email == undefined || email == "")
-		return 'https://secure.gravatar.com/avatar/' + Agile_MD5("") + '.jpg?s=' + width + '' + backup_image + data_name;
-
+		return LIB_PATH_FLATFULL + 'images/flatfull/anonymous_visitor.png';
 	return prepareLettergravatar(email);
 	
 }
 
+/**Formats the device,OS and Browser to a required format*/ 
 function normalize_os(data){
 	
 	if (data === undefined || data.indexOf('_') === -1)
@@ -152,17 +154,8 @@ function normalize_os(data){
 	return data.split('_')[0];
 }
 
-function gmap_set_map(map){
-	for(var Loop=0; Loop < window.gmap_marker_list.length; Loop++){
-		window.gmap_marker_list[Loop].setMap(map);
-	}
-}
 
-function gmap_delete_marker(){
-	gmap_set_map(null);
-	window.gmap_marker_list = [];
-}
-
+/**This is a slight modification to the existing "initial" plugin used in the application ,could not reuse that but had to use as an another function*/
 function prepareLettergravatar(email){
 
 	var colors = ["#1abc9c", "#16a085", "#f1c40f", "#f39c12", "#2ecc71", "#27ae60", "#e67e22", "#d35400", "#3498db", "#2980b9", "#e74c3c", "#c0392b", "#9b59b6", "#8e44ad", "#bdc3c7", "#34495e", "#2c3e50", "#95a5a6", "#7f8c8d", "#ec87bf", "#d870ad", "#f69785", "#9ba37e", "#b49255", "#b49255", "#a94136"];
@@ -221,6 +214,7 @@ function prepareLettergravatar(email){
 	}
 }
 
+/**Formats the given  date to "time Ago"*/
 function timeSince(dateStr) {
 	var date=new Date();
 	 try
