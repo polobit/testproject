@@ -647,7 +647,6 @@ $('#from_email').die('click').live('click', function(e){
 
 		$.getJSON('core/api/account-prefs/verified-emails/'+ selected_val, function(data){
 
-				data["verified"] = "YES";
 				if(data && data["verified"] == "YES")
 					$('#from_email').find('option[value="'+selected_val+'"]').attr("selected", "selected").removeAttr("unverified").text(""+selected_val+"");
 
