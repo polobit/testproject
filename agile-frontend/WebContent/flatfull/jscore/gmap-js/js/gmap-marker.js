@@ -15,7 +15,7 @@ function gmap_add_marker(Locations){
 	 for (var i=0; i<marker.length; i++) {
 	        marker[i].setMap(null);
 	    }
-	 var oms = new OverlappingMarkerSpiderfier(map, {keepSpiderfied:true});
+	 var oms = new OverlappingMarkerSpiderfier(map, {keepSpiderfied:true,nearbyDistance:40,legWeight:2});
 
 	                  for (var i=0;i < Locations.length;i++)
 	                  {   
@@ -37,11 +37,7 @@ function gmap_add_marker(Locations){
 	                        var markerImageUrl=gmap_set_icons(email,30);
 	                        
 	                        var icon = {
-	                        	     url: markerImageUrl, // url
-	                        	     size: new google.maps.Size(40, 40),
-	                        	     origin: new google.maps.Point(0,0),
-	                        	     scaledSize: new google.maps.Size(30,30),
-	                        	     anchor: new google.maps.Point(0, 32)
+	                        	     url: markerImageUrl
 	                        	 };
 	                        
 	                         if(email == undefined || email == "")
@@ -61,7 +57,7 @@ function gmap_add_marker(Locations){
 	                         strVar += "    width: 100%;";
 	                         strVar += "    overflow: hidden;";
 	                         strVar += "    color: #363f44;";
-	                         strVar += "\">"+email+"<br>"+timeSince(Locations[i].visit_time)+"<br>"+Locations[i].city+","+Locations[i].country+"<\/div>";
+	                         strVar += "\">"+email+"<br>"+timeSince(Locations[i].visit_time)+"<br>"+capitalizeFirstLetter(Locations[i].city)+" , "+Locations[i].country+"<\/div>";
 	                         strVar += "    <p style=\"";
 	                         strVar += "    margin: 3px 0 0px;float:right"; 
 	                         strVar += "\"><a href=\"#\" style=\"";
@@ -82,7 +78,7 @@ function gmap_add_marker(Locations){
 	                          oms.addMarker(marker[i]);
 	                          google.maps.event.addListener(marker[i], 'click', function() {
 	                        	    infowindow.setContent(this.content);
-	                        	    infowindow.open(map,this); // or this instead of marker
+	                        	    infowindow.open(map,this);
 	                        	});
 
 	                  }
@@ -102,6 +98,7 @@ function gmap_add_marker(Locations){
 	                      }
 	                      return true;
 	                  });
+	                  
 
 	                  function prepareMarkers(markers){
 	                  var cont=0;
@@ -120,11 +117,22 @@ function gmap_add_marker(Locations){
 	                      return false;
 	                  }
 	              }
+	                  
+	                  google.maps.event.addListener(map, 'click', function(){
+	                	  if(infowindow){
+	                		  infowindow.close();
+	                	  }
+	                  });
+}
+
+
+function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
 function gmap_set_icons(email,width){
 	
-	var DEFAULT_GRAVATAR_url_gmap = window.location.origin.indexOf("localhost:") >= 0 ? "https://dpm72z3r2fvl4.cloudfront.net/css/images/user-default.png" : (window.location.origin + "/" + LIB_PATH_FLATFULL + "images/flatfull/anonymous_visitor.png");
+	var DEFAULT_GRAVATAR_url_gmap = window.location.origin.indexOf("localhost:") >= 0 ? LIB_PATH_FLATFULL + 'images/flatfull/anonymous_visitor.png' : (window.location.origin + "/" + LIB_PATH_FLATFULL + "images/flatfull/anonymous_visitor.png");
 	var backup_image = "&d=" + DEFAULT_GRAVATAR_url_gmap + "\" ";
 	var data_name = '';
 
@@ -164,10 +172,10 @@ function prepareLettergravatar(email){
 			        "name":email,
 			        "charCount": 1,
 			        "textColor": "#ffffff",
-			        "height": 100,
-			        "width": 100,
-			        "fontSize": 60,
-			        "fontWeight": 400,
+			        "height": 32,
+			        "width": 32,
+			        "fontSize": 18,
+			        "fontWeight": 170,
 			        "fontFamily": "HelveticaNeue-Light,Helvetica Neue Light,Helvetica Neue,Helvetica, Arial,Lucida Grande, sans-serif"
 			    };
 
