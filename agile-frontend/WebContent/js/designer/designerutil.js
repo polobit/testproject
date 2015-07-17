@@ -611,15 +611,13 @@ function resetAndFillFromSelect(selected_val)
 	// Make send email node from email empty
 	$('#from_email').empty();
 		
-		// var options =   {
-		// 				"+ Add new": "verify_email"
-		// 			};
+		var options =   {
+						"+ Add new": "verify_email"
+					};
 
-		fetchAndFillSelect('core/api/account-prefs/verified-emails/all', "email", "email", undefined, undefined, $('#from_email'), "prepend", function($select, data){
+		fetchAndFillSelect('core/api/account-prefs/verified-emails/all', "email", "email", undefined, options, $('#from_email'), "prepend", function($select, data){
 		  	
 			$select.find("option:first").before("<option value='{{owner.email}}'>Contact's Owner</option>");
-
-			$select.find('option:last').after("<option value='verify_email'>+ Add new</option>");
 
 			if(selected_val)
 				$select.val(selected_val).attr("selected", "selected");
