@@ -569,6 +569,12 @@ function openVerifyEmailModal(el)
 
 			,function(modal){
 
+				// Focus on input
+				modal.on('shown.bs.modal', function () {
+  					$(this).find('input').focus();
+				});
+
+				// On hidden
 				modal.on('hidden.bs.modal', function (e) {
   
   					var given_email = $(this).find('input').val();
