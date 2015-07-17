@@ -6,8 +6,11 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+
+import org.apache.commons.lang.StringUtils;
 
 import com.agilecrm.account.AccountPrefs;
 import com.agilecrm.account.VerifiedEmails;
@@ -59,5 +62,16 @@ public class AccountPrefsAPI
     public List<VerifiedEmails> getVerifiedEmails()
     {
 	return VerifiedEmailsUtil.getAllEmails();
+    }
+    
+    @Path("/verified-emails/{email}")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public VerifiedEmails getVerifiedEmailsByEmail(@PathParam("email") String email)
+    {
+    	if(StringUtils.isBlank(email))
+    		return null;
+    	
+	return VerifiedEmailsUtil.getVerifiedEmailsByEmail(email);
     }
 }

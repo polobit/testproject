@@ -611,13 +611,15 @@ function resetAndFillFromSelect(selected_val)
 	// Make send email node from email empty
 	$('#from_email').empty();
 		
-		var options =   {
-						"+ Add new": "verify_email"
-					};
+		// var options =   {
+		// 				"+ Add new": "verify_email"
+		// 			};
 
-		fetchAndFillSelect('core/api/account-prefs/verified-emails/all', "email", "email", undefined, options, $('#from_email'), "prepend", function($select, data){
+		fetchAndFillSelect('core/api/account-prefs/verified-emails/all', "email", "email", undefined, undefined, $('#from_email'), "prepend", function($select, data){
 		  	
 			$select.find("option:first").before("<option value='{{owner.email}}'>Contact's Owner</option>");
+
+			$select.find('option:last').after("<option value='verify_email'>+ Add new</option>");
 
 			if(selected_val)
 				$select.val(selected_val).attr("selected", "selected");
@@ -627,14 +629,29 @@ function resetAndFillFromSelect(selected_val)
 }
 
 // On Click, fetch verified emails and update
-$('#from_email').die().live('click', function(e){
+$('#from_email').die('click').live('click', function(e){
 		
 		e.preventDefault();
 		
 		// current value selected
 		var selected_val = $(this).val();
 		
-		resetAndFillFromSelect(selected_val);
+		if(selected_val == "{{owner.email}}" || selected_val == "verify_email")
+			return;
+
+		// If not unverified, no need to check
+		if(!($('#from_email').find('option[value="'+selected_val+'"]').attr("unverified")))
+			return;
+
+		// resetAndFillFromSelect(selected_val);
+
+		$.getJSON('core/api/account-prefs/verified-emails/'+ selected_val, function(data){
+
+				data["verified"] = "YES";
+				if(data && data["verified"] == "YES")
+					$('#from_email').find('option[value="'+selected_val+'"]').attr("selected", "selected").removeAttr("unverified").text(""+selected_val+"");
+
+		});
 });
 
 
