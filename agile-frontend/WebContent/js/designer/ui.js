@@ -133,20 +133,17 @@ function generateDynamicSelectUI(uiFieldDefinition, url, keyField, valField)
 	if(uiFieldDefinition.id == "from_email" && uiFieldDefinition.name == "from_email")
 	{
 		// Remove Contact's owner
-		// delete uiFieldDefinition.options["Contact's Owner"];
+		delete uiFieldDefinition.options["Contact's Owner"];
 
 		fetchAndFillSelect(url,keyField, valField, appendNameField, uiFieldDefinition.options, selectContainer, arrange_type, function($selectContainer, data){
 
-		  		// $selectContainer.find("option:first").before("<option value='{{owner.email}}'>Contact's Owner</option>");
+		  		$selectContainer.find("option:first").before("<option value='{{owner.email}}'>Contact's Owner</option>");
 
 				// Make Contact's owner selected
-				// $selectContainer.val("Contact's Owner").attr('selected', 'selected');
+				 $selectContainer.val("Contact's Owner").attr('selected', 'selected');
 				
 				// Rearranges options
-				rearrange_from_email_options($selectContainer, data);
-
-				$selectContainer.find('option:last').after("<option value='verify_email'>+ Add new</option>");
-				
+				rearrange_from_email_options($selectContainer, data);				
 		});
 
 		return selectContainer;
@@ -453,7 +450,7 @@ function getStyleAttribute(styleAttributes)
 function loadTinyMCE(name)
 {
 	var strWindowFeatures = "height=650, width=800,menubar=no,location=yes,resizable=yes,scrollbars=yes,status=yes";
-	var newwindow = window.open('cd_tiny_mce.jsp?id=' + name,'name',strWindowFeatures);
+	var newwindow = window.open('summernote.jsp?id=' + name,'name',strWindowFeatures);
 	if (window.focus)
 	{
 		newwindow.focus();
@@ -942,6 +939,7 @@ function resetUI(selector)
 	
 }
 
+//checks if the given string contains a string
 function contains(string, substring){
 	
 	if(string == undefined || string.length == 0)
