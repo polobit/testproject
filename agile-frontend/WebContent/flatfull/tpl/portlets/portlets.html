@@ -798,6 +798,7 @@
 		</div>
 	</div>
 	<div class="portlet_body  text-lg getting-started-body bg-white ">
+	<div style="font-size: 15px;margin: 10px 0px 7px;" class="text-muted">Here are few steps to kick start your new CRM. </div>
 		<div>
 			{{#if settings.addUsers.done}}
 				<label class="i-checks i-checks-sm m-b-none   onboarding-check" value="addUsers">
@@ -809,12 +810,12 @@
 				</label>
 			{{/if}}
 			{{#if settings.addUsers.done}}
-				<span class="text-muted inline-block v-text-bottom" style="text-decoration:line-through;"><a  href="#users-add">Add users</a></span>
+				<span class="text-muted inline-block v-text-bottom" style="text-decoration:line-through;"><a  href="#users-add">Invite Users</a></span>
 			{{else}}
-				<span class="inline-block v-text-bottom"><a href="#users-add">Add users</a></span>
+				<span class="inline-block v-text-bottom"><a href="#users-add">Invite Users</a></span>
 			{{/if}}
 			<div class="text-muted text-base m-t-n-xs m-b-n-sm m-l-lg">
-				<p>Invite co-workers to Agile and start collaborating on sales.</p>
+				<p>Agile is more fun with your colleagues. Invite them now.</p>
 			</div>
 		</div>
 		<div>
@@ -841,7 +842,7 @@
 				<span class="inline-block v-text-bottom"><a href="#import">Import Contacts</a></span>
 			{{/if}}
 			<div class="text-muted text-base m-t-n-xs m-b-n-sm m-l-lg">
-				<p>Bulk Contact lists can be as a CSV files from your database or any other CRM.</p>
+				<p>Start your list from CSV, Google Contacts, Stripe or other CRMs.</p>
 			</div>
 		</div>
 		<div>
@@ -860,7 +861,7 @@
 				<span class="inline-block v-text-bottom"><a href="#integrations">Setup Integrations</a></span>
 			{{/if}}
 			<div class="text-muted text-base m-t-n-xs m-b-n-sm m-l-lg">
-				<p>Leverage on our huge set of integrations to make the most out of the app - Email/SMS Gateway, Web Forms, E-Commerce, Payments and more.</p>
+				<p>Configure Agile with your CMS, eCommerce, SMS and email gateways.</p>
 			</div>
 		</div>
 		<div>
@@ -874,12 +875,12 @@
 				</label>
 			{{/if}}
 			{{#if settings.createCampaign.done}}
-				<span class="text-muted inline-block v-text-bottom" style="text-decoration:line-through;"><a  href="#workflow-templates">Create a campaign</a></span>
+				<span class="text-muted inline-block v-text-bottom" style="text-decoration:line-through;"><a  href="#workflow-templates">Marketing Automation</a></span>
 			{{else}}
-				<span class="inline-block v-text-bottom"><a href="#workflow-templates">Create a campaign</a></span>
+				<span class="inline-block v-text-bottom"><a href="#workflow-templates">Marketing Automation</a></span>
 			{{/if}}
 			<div class="text-muted text-base m-t-n-xs m-b-n-sm m-l-lg">
-				<p>Engage your contacts with beautifully designed campaigns. Send email/SMS, score leads based on behaviour and much more.</p>
+				<p>Engage your customers with the world's easiest visual designer.</p>
 			</div>
 		</div>
 		<div>
@@ -893,12 +894,12 @@
 				</label>
 			{{/if}}
 			{{#if settings.setupTrackingCode.done}}
-				<span class="text-muted inline-block v-text-bottom" style="text-decoration:line-through;"><a  href="#analytics-code">Setup tracking code</a></span>
+				<span class="text-muted inline-block v-text-bottom" style="text-decoration:line-through;"><a  href="#analytics-code">Add Tracking Code to your site</a></span>
 			{{else}}
-				<span inline-block v-text-bottom"><a href="#analytics-code">Setup tracking code</a></span>
+				<span inline-block v-text-bottom"><a href="#analytics-code">Add Tracking Code to your site</a></span>
 			{{/if}}
 			<div class="text-muted text-base m-t-n-xs m-b-n-sm m-l-lg">
-				<p>Track your contacts when they browse through your website. Score and followup hot leads.</p>
+				<p>Track who is visiting and get real-time notifications.</p>
 			</div>
 		</div>
 		<div>
@@ -912,12 +913,12 @@
 				</label>
 			{{/if}}
 			{{#if settings.addWebrule.done}}
-				<span class="text-muted inline-block v-text-bottom" style="text-decoration:line-through;"><a  href="#webrules-add">Add a Webrule</a></span>
+				<span class="text-muted inline-block v-text-bottom" style="text-decoration:line-through;"><a  href="#webrules-add">Web Engagement</a></span>
 			{{else}}
-				<span class="inline-block v-text-bottom"><a href="#webrules-add">Add a Webrule</a></span>
+				<span class="inline-block v-text-bottom"><a href="#webrules-add">Web Engagement</a></span>
 			{{/if}}
 			<div class="text-muted text-base m-t-n-xs m-b-n-sm m-l-lg">
-				<p>Turn web visitors into contacts with personalised, timely popup messages.</p>
+				<p>Show those personalized popup messages to your visitors to keep them coming back.</p>
 			</div>
 		</div>
 		<div>
@@ -931,9 +932,9 @@
 				</label>
 			{{/if}}
 			{{#if settings.upgradePlan.done}}
-				<span class="text-muted inline-block v-text-bottom" style="text-decoration:line-through;"><a  href="#subscribe-plan">Upgrade plan</a></span>
+				<span class="text-muted inline-block v-text-bottom" style="text-decoration:line-through;"><a  href="#subscribe-plan">Show some love</a></span>
 			{{else}}
-				<span class="inline-block v-text-bottom"><a href="#subscribe-plan">Upgrade plan</a></span>
+				<span class="inline-block v-text-bottom"><a href="#subscribe-plan">Show some love</a></span>
 			{{/if}}
 			<!-- {{#if settings.upgradePlan.done}}
 				<small class="p-l-sm onboarding-undo c-p">(undo)</small>
@@ -949,7 +950,7 @@
 				{{/if}}
 			{{/if}} -->
 			<div class="text-muted text-base m-t-n-xs m-b-n-sm m-l-lg">
-				<p>Get the best out of Agile with more automation (campaigns, triggers), access control, telephony, advanced reporting and much more.</p>
+				<p>Support Agile's development by upgrading your account.</p>
 			</div>
 		</div>
 	</div>
@@ -960,13 +961,14 @@
 <script id="portlets-user-onboarding-model-template" type="text/html">
 	<div class="portlet_header portlet_edit_icons panel-heading b-b-none" style="background:#7BA9D0!important;" onmouseover="showPortletIcons(this); return false;" onmouseout="hidePortletIcons(this); return false;">
 		<h4 class="h4 text-ellipsis">
-			<span class="pull-left inline-block text-ellipsis" style="width:90%;">Getting started</span>
+			<span class="pull-left inline-block text-ellipsis" style="width:90%;">Getting Started</span>
 		</h4>
 		<div class="portlet_header_icons pull-right clear-fix text-muted p-t-xs pos-abs pos-r-0 pos-t-xs vis-hide">
 			<i id="{{id}}-close" class="c-p icon-close {{remove_spaces name}}-close p-r-sm" onclick="deletePortlet(this);"></i>
 		</div>
 	</div>
 	<div class="portlet_body m-l text-lg">
+	<div style="font-size: 15px;margin: 10px 0px 7px;" class="text-muted">Here are few steps to kick start your new CRM. </div>
 		<div>
 			{{#if settings.setupProfile.done}}
 				<label class="fa fa-check-square-o ob-portlet-font-check onboarding-check c-p text-muted" value="setupProfile">
@@ -978,12 +980,12 @@
 				</label>
 			{{/if}}
 			{{#if settings.setupProfile.done}}
-				<span class="text-muted inline-block v-text-bottom" style="text-decoration:line-through;"><a class="text-muted" href="#user-prefs">Setup profile</a></span>
+				<span class="text-muted inline-block v-text-bottom" style="text-decoration:line-through;"><a class="text-muted" href="#user-prefs">Setup your profile</a></span>
 			{{else}}
-				<span class="inline-block v-text-bottom"><a href="#user-prefs">Setup profile</a></span>
+				<span class="inline-block v-text-bottom"><a href="#user-prefs">Setup your profile</a></span>
 			{{/if}}
 			<div class="text-muted text-base m-t-n-xs m-b-n-sm m-l-lg">
-				<p>Get set with your profile, add an avatar, email signature and get going with Agile.</p>
+				<p>Update your pic, email signature and reminders.</p>
 			</div>
 		</div>
 		<div>
@@ -997,12 +999,12 @@
 				</label>
 			{{/if}}
 			{{#if settings.linkEmailAccount.done}}
-				<span class="text-muted inline-block v-text-bottom" style="text-decoration:line-through;"><a class="text-muted" href="#email">Link email account</a></span>
+				<span class="text-muted inline-block v-text-bottom" style="text-decoration:line-through;"><a class="text-muted" href="#email">Bring your emails</a></span>
 			{{else}}
-				<span class="inline-block v-text-bottom"><a href="#email">Link email account</a></span>
+				<span class="inline-block v-text-bottom"><a href="#email">Bring your emails</a></span>
 			{{/if}}
 			<div class="text-muted text-base m-t-n-xs m-b-n-sm m-l-lg">
-				<p>No more BCC'ing emails. Just link your email account and  see entire email history of a contact automatically.</p>
+				<p>No more tedious cc' emails. Agile will pull your emails automatically.</p>
 			</div>
 		</div>
 		<div>
@@ -1021,7 +1023,7 @@
 				<span class="inline-block v-text-bottom"><a href="#add-widget">Add widgets</a></span>
 			{{/if}}
 			<div class="text-muted text-base m-t-n-xs m-b-n-sm m-l-lg">
-				<p>Get a 360 view of your contact with social data, billing history, support tickets, call history and much more.</p>
+				<p>Setup telephony, social, helpdesk, billing and enhance your contact view.</p>
 			</div>
 		</div>
 		<div>
@@ -1040,7 +1042,7 @@
 				<span class="inline-block v-text-bottom"><a href="#import">Import Contacts</a></span>
 			{{/if}}
 			<div class="text-muted text-base m-t-n-xs m-b-n-sm m-l-lg">
-				<p>Bulk Contact lists can be as a CSV files from your database or any other CRM.</p>
+				<p>Start your list from CSV, Google Contacts, Stripe or other CRMs.</p>
 			</div>
 		</div>
 		<div>
@@ -1054,12 +1056,12 @@
 				</label>
 			{{/if}}
 			{{#if settings.createCampaign.done}}
-				<span class="text-muted inline-block v-text-bottom" style="text-decoration:line-through;"><a class="text-muted" href="#workflow-templates">Create a campaign</a></span>
+				<span class="text-muted inline-block v-text-bottom" style="text-decoration:line-through;"><a class="text-muted" href="#workflow-templates">Marketing Automation</a></span>
 			{{else}}
-				<span class="inline-block v-text-bottom"><a href="#workflow-templates">Create a campaign</a></span>
+				<span class="inline-block v-text-bottom"><a href="#workflow-templates">Marketing Automation</a></span>
 			{{/if}}
 			<div class="text-muted text-base m-t-n-xs m-b-n-sm m-l-lg">
-				<p>Automate your sales & marketing processes with awesome campaign workflows using drag-drop visual designer tool.</p>
+				<p>Engage your customers with the world's easiest visual designer.</p>
 			</div>
 		</div>
 	</div>
