@@ -764,6 +764,15 @@
 		<servlet-name>Confirmation</servlet-name>
 		<url-pattern>/confirmation</url-pattern>
 	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>FromEmailVerification</servlet-name>
+		<jsp-file>/verify_from_email.jsp</jsp-file>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>FromEmailVerification</servlet-name>
+		<url-pattern>/verify-email</url-pattern>
+	</servlet-mapping>
 
 	<servlet>
 		<servlet-name>Resubscribe</servlet-name>
