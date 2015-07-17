@@ -1980,13 +1980,10 @@ function minicalendar(el)
 											 $.each(jso,function(index,ev){
 											if(ev.start >= (todayDate.getTime()/1000) && ev.start <= (endDate.getTime()/1000)) {	
 											var e_date= new Date(ev.start*1000);
-											$(el).find('.list').append('<li class="p-t-xs p-r-xs" style="color:'+ev.color+'"><span style="color : black" class="text-cap">'+ev.title+'<br><small class="block">'+ e_date.format('HH:MM') + ' </small></span></li>');
+											$(el).find('.list').append('<li class="p-t-xs p-r-xs" style="color:'+ev.color+'"><span style="color : black" class="text-cap">'+ev.title+'<br><small class="block m-t-n-xxs">'+ e_date.format('HH:MM') + ' </small></span></li>');
 											}
 											}); 
-											if($(el).find('.list').find('li').length==0 && $(el).find('.portlet-error-message').length==0 )
-											{
-												$(el).find('.events_show').append('<div class="portlet-error-message" style="display:block">No appointments for the day</div>');
-											}
+											
 											callback(jso);
 									   }
 										
@@ -2109,7 +2106,7 @@ function minicalendar(el)
 								});
 								if(array.length!=0){
 								$.each(array,function(index){
-									$(el).find('.list').append('<li class="p-t-xs p-r-xs" style="color : '+array[index].color+'"><span style="color : black" class="text-cap">'+array[index].title+'<br><small class="block">'+ array[index].start.format('HH:MM') + ' </small></span></li>');
+									$(el).find('.list').append('<li class="p-t-xs p-r-xs" style="color : '+array[index].color+'"><span style="color : black" class="text-cap">'+array[index].title+'<br><small class="block m-t-n-xxs">'+ array[index].start.format('HH:MM') + ' </small></span></li>');
 									
 								});
 								}
@@ -2141,7 +2138,13 @@ function loadingGoogleEvents(el,startTime,endTime){
 	
 	$.getJSON('core/api/calendar-prefs/get', function(response)
 	{
-		
+		if(response==undefined)
+		{
+			if($(el).find('.list').find('li').length==0 && $(el).find('.portlet-error-message').length==0 )
+											{
+												$(el).find('.events_show').append('<div class="portlet-error-message" style="display:block">No appointments for the day</div>');
+											}
+		}
 		console.log(response);
 		if (response)
 		{
@@ -2273,10 +2276,13 @@ function googledata(el,response,startTime,endTime)
 											 var todayDate=new Date(date.getFullYear(), date.getMonth(), date.getDate(),00,00,00);
 									   var endDate=new Date(date.getFullYear(), date.getMonth(), date.getDate(),23,59,59);
 											if(ev.start.getTime() >= (todayDate.getTime()) && ev.start.getTime() <= (endDate.getTime())) {	
-											$(el).find('.events_show').find('.portlet-error-message').css("display","none")
-											$(el).find('.list').append('<li class="p-t-xs p-r-xs" style="color:'+ev.color+'"><span style="color : black" class="text-cap">'+ev.title+'<br><small class="block">'+ ev.start.format('HH:MM') + ' </small></span></li>');
+											$(el).find('.list').append('<li class="p-t-xs p-r-xs" style="color:'+ev.color+'"><span style="color : black" class="text-cap">'+ev.title+'<br><small class="block m-t-n-xxs">'+ ev.start.format('HH:MM') + ' </small></span></li>');
 											}
 											});
+											if($(el).find('.list').find('li').length==0 && $(el).find('.portlet-error-message').length==0 )
+											{
+												$(el).find('.events_show').append('<div class="portlet-error-message" style="display:block">No appointments for the day</div>');
+											}
 											
 							
 						});

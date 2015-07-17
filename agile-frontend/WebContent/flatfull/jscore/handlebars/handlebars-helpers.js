@@ -6380,5 +6380,7 @@ Handlebars.registerHelper('trialDateFormat', function()
 		description = 'See a timeline of user actions in Agile CRM.';
 	else if (p_name== 'Account Details')
 		description = 'Find current plan information, number of users and more.';
+	else if (p_name== 'Mini Calendar')
+		description = 'A mini calendar with an overview of your agenda for the day.'
 	return description;
 			});

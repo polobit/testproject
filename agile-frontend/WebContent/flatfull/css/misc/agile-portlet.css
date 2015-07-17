@@ -845,3 +845,10 @@ top:68px!important;
   content: '+';
   font-size: 10px;
 }
+
+.portlet_body_calendar .fc-header-title h2 {
+ text-transform: lowercase; 
+ }
+.portlet_body_calendar .fc-header-title h2:first-letter { 
+text-transform: uppercase;
+ }
