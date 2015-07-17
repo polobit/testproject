@@ -113,21 +113,7 @@ This is where you and your users will log in to your account
 <div class="col-sm-offset-3 col-sm-9 text-base"> We will create unique experience based on your company and role</div>
 </div>
 <div class="form-group">
-<label class="col-sm-3 control-label">Company Type & Role</label>
-<div class="col-sm-3">
-	<select class="form-control required"  name="company_type" required  data-width="100%">
-											<option value="" selected disabled>Select Type</option>
-											<option value="B2B">B2B</option>
-											<option value="SaaS">SaaS</option>
-											<option value="Ecommerce">Ecommerce</option>
-											<option value="Marketing Agency">Marketing Agency</option>
-											<option value="Contact Centers">Contact Centers</option>
-											<option value="Realty">Realty</option>
-											<option value="Media">Media</option>
-											<option value="Technology Consulting">Technology Consulting</option>
-											<option value="Other">Other</option>
-								  </select>
-</div>
+<label class="col-sm-3 control-label"> Role & Company</label>
 <div class="col-sm-3">
 <select class="form-control required" required  name="role">
 											<option value="" selected disabled>Role</option>
@@ -145,6 +131,21 @@ This is where you and your users will log in to your account
 											<option value="Other">Other</option>
 								  </select>
 </div>
+<div class="col-sm-3">
+	<select class="form-control required"  name="company_type" required  data-width="100%">
+											<option value="" selected disabled>Select Type</option>
+											<option value="B2B">B2B</option>
+											<option value="SaaS">SaaS</option>
+											<option value="Ecommerce">Ecommerce</option>
+											<option value="Marketing Agency">Marketing Agency</option>
+											<option value="Contact Centers">Contact Centers</option>
+											<option value="Realty">Realty</option>
+											<option value="Media">Media</option>
+											<option value="Technology Consulting">Technology Consulting</option>
+											<option value="Other">Other</option>
+								  </select>
+</div>
+
 </div>
 
 <div class="form-group">

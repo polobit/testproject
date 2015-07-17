@@ -335,7 +335,7 @@ if(isSafari && isWin)
 						<i class="fa fa-cloud m-r-xs"></i>Agile CRM
 					</a>
 <div class="wrapper text-center text-white">
-      				<strong>Register your free Agile CRM account</strong>
+      				<strong>Register your FREE account</strong>
    				</div>
 
 <form name='agile' id="agile" method='post'
