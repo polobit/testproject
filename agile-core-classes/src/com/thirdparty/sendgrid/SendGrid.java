@@ -162,6 +162,7 @@ public class SendGrid
 	catch (Exception e)
 	{
 	    e.printStackTrace();
+	    System.err.println("Exception occured while sending email from sendgrid..." + e.getMessage());
 	    return e.getMessage();
 	}
 
