@@ -472,7 +472,10 @@ var ContactsRouter = Backbone.Router.extend({
 				model.id = id;
 				model.fetch({ success : function(data)
 				{
-					
+					if(data.type == 'COMPANY'){
+						App_Companies.companyDetails(id);
+						return;
+					}
 					// Call Contact Details again
 					App_Contacts.contactDetails(id, model);
 
@@ -506,45 +509,7 @@ var ContactsRouter = Backbone.Router.extend({
 		// If contact is of type company , go to company details page
 		if (contact.get('type') == 'COMPANY')
 		{			
-			this.contactDetailView = new Base_Model_View({ model : contact, isNew : true, template : "company-detail",
-				postRenderCallback : function(el)
-				{
-				//	contactInnerTabsInvoke(el);  hiding the prev,next arrows when viewport suits
-					fill_company_related_contacts(id, 'company-contacts');
-					// Clone contact model, to avoid render and
-					// post-render fell in to
-					// loop while changing attributes of contact
-					var recentViewedTime = new Backbone.Model();
-					recentViewedTime.url = "core/api/contacts/viewed-at/" + contact.get('id');
-					recentViewedTime.save();
-
-					if (App_Contacts.contactsListView && App_Contacts.contactsListView.collection && App_Contacts.contactsListView.collection.get(id))
-						App_Contacts.contactsListView.collection.get(id).attributes = contact.attributes;
-
-					starify(el);
-					show_map(el);
-					//fill_owners(el, contact.toJSON());
-					// loadWidgets(el, contact.toJSON());
-					
-					// For sip
-					if (Sip_Stack != undefined && Sip_Register_Session != undefined && Sip_Start == true)
-					{
-						$(".contact-make-sip-call",el).show();
-						$(".contact-make-twilio-call",el).hide();
-						$(".contact-make-call",el).hide();
-					}
-					//else if (Twilio.Device.status() == "ready" || Twilio.Device.status() == "busy")
-					else if(Twilio_Start == true)
-					{
-						$(".contact-make-sip-call",el).hide();
-						$(".contact-make-twilio-call",el).show();
-						$(".contact-make-call",el).hide();
-					}
-				} });
-
-			var el = this.contactDetailView.render(true).el;
-			$('#content').html(el);
-			fill_company_related_contacts(id, 'company-contacts');
+			Backbone.history.navigate( "company/"+id, { trigger : true });
 			return;
 		}
 

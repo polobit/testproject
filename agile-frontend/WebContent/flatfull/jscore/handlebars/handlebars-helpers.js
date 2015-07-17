@@ -469,6 +469,14 @@ $(function()
 			return "Company";
 		}
 	});
+	
+	Handlebars.registerHelper("isCompany", function(options)
+			{
+				if (company_util.isCompany())
+					return options.fn(this);
+
+				return options.inverse(this);
+			});
 
 	/**
 	 * Returns workflow name surrounded by quotations if exists, otherwise this
