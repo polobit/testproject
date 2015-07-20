@@ -745,7 +745,7 @@ $.validator.setDefaults({
 		}
 
 		function preload_dashlet_libs(){
-			setTimeout(function(){head.load(<%=flatfull_path%> + 'lib/lib-all.js')}, 5000);
+			setTimeout(function(){head.load('<%=flatfull_path%>lib/lib-all.js')}, 5000);
 		}
 
 		</script>

@@ -1,4 +1,3 @@
-
 var Portlets_View;
 var portlet_template_loaded_map = {};
 
