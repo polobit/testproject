@@ -27,6 +27,18 @@ body {
 
 /*hack for phone number plugin*/
 
+.error-top-view {
+  position: fixed;
+  background-color: rgb(199, 73, 73);
+  width: 100%;
+  top: 0;
+  height: 50px;
+  color: #fff;
+  text-align: center;
+  padding-top: 15px;
+  display: none;
+}
+
 .intl-tel-input {
 
 	  width: 100%;
@@ -66,6 +78,7 @@ if(isSafari && isWin)
 
 </head>
 <body>
+	<div id="error-area" class="error-top-view"></div>
 	<div class="app-content-body">
 		<div class="bg-light lter b-b wrapper-md text-center">
 <h1 class="m-n font-thin h3" style="font-weight:400;"> Agile CRM <small></small></h1>

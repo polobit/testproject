@@ -156,19 +156,25 @@ function initializeSubmitHandler(form, emailField, subdomainField, submit_button
 function hideEmailErrorMessage()
 {
 
+$("#error-area").slideUp("slow");
+
+
 }
 
 function hideDomainErrorMessage()
 {
+
+$("#error-area").slideUp("slow");
 
 }
 
 function showEmailErrorMessage(error)
 {
 	console.log(error);
+	$("#error-area").slideDown("slow").text(error.error);
 }
 
 function showDomainErrorMessage(error)
 {
-	console.log(error);
+	$("#error-area").slideDown("slow").slideDown().text(error.error);
 }

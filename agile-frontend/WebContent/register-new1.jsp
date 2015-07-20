@@ -43,6 +43,19 @@ body {
   background-size: 100% 100%;
   background-attachment: fixed;
 }
+
+.error-top-view {
+  position: fixed;
+  background-color: rgb(199, 73, 73);
+  width: 100%;
+  top: 0;
+  height: 50px;
+  color: #fff;
+  text-align: center;
+  padding-top: 15px;
+  display: none;
+}
+
 .text-white
 {
 color:#fff!important;
@@ -348,6 +361,7 @@ if(isSafari && isWin)
 
 </head>
 <body>
+  <div id="error-area" class="error-top-view"></div>
 <div class="app app-header-fixed app-aside-fixed">
 <div class="container w-xxl w-auto-xs">
 <a href="https://www.agilecrm.com/" class="navbar-brand block m-t text-white">
