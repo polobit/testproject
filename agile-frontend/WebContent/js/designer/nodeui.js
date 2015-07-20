@@ -110,11 +110,14 @@ function constructNodeFromDefinition(nodeJSONDefinition, jsonData, nodeId) {
             	// Triggers change events of of URL Visited select
             	$(this).find("form #type-select").trigger('change');
             	
-            	
             	// Disables 'text' required property if html is given and text is empty 
             	disable_text_required_property($(this));
                 
-            	$(this).find("form").trigger('submit');
+            	var $form = $(this).find('form');
+            	
+            	// Check Validity
+            	if($form.data("validator").checkValidity())
+            		$form.trigger('submit');
             }
         }
     });

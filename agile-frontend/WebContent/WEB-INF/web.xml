@@ -657,6 +657,15 @@
 		<servlet-name>AgileForm</servlet-name>
 		<url-pattern>/formsubmit</url-pattern>
 	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>AgileFormRedirect</servlet-name>
+		<servlet-class>com.thirdparty.forms.AgileFormRedirect</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>AgileFormRedirect</servlet-name>
+		<url-pattern>/agileformredirect</url-pattern>
+	</servlet-mapping>
 
 	<servlet>
 		<servlet-name>ShopifyWebhookTrigger</servlet-name>
@@ -763,6 +772,15 @@
 	<servlet-mapping>
 		<servlet-name>Confirmation</servlet-name>
 		<url-pattern>/confirmation</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>FromEmailVerification</servlet-name>
+		<jsp-file>/verify_from_email.jsp</jsp-file>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>FromEmailVerification</servlet-name>
+		<url-pattern>/verify-email</url-pattern>
 	</servlet-mapping>
 
 	<servlet>
