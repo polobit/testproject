@@ -1081,6 +1081,10 @@ function getSelectionCriteria()
 	{
 		return filter_id;
 	}
+	
+	if(_BULK_CONTACTS == "#companies"){
+		return 'Companies';
+	}
 
 	// If filter cookie is not available then it returns either '#contacts' of
 	// '#tags/{tag}' according to current window hash

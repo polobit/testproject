@@ -235,7 +235,7 @@ function getCompanyPadcontentKey(url)
 	if(url.indexOf('filter') > 0)
 		return "filter_results";
 	
-	return "contacts";
+	return "companies";
 		
 }
 
