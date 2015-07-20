@@ -3,6 +3,11 @@
 <%@page import="com.google.appengine.api.utils.SystemProperty"%>
 <%@page contentType="text/html; charset=UTF-8" %>
 
+<%
+if (request.getAttribute("javax.servlet.forward.request_uri") == null) {
+    response.sendRedirect("/register");
+}
+%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -68,7 +73,7 @@ if(isSafari && isWin)
 <div class="wrapper-md">
 	<div class="row">
 		<div class="col-md-6 col-md-offset-3 col-sm-offset-3 col-sm-6 col-xs-12">
-	<form class="form-horizontal" method="post" onsubmit="return isValid();">
+	<form class="form-horizontal" method="post" onsubmit="return isValid(this);">
 <div class="panel panel-default">
 <div class="panel-heading text-center"> It's time to configure your account </div>
 <div class="panel-body">
@@ -158,6 +163,9 @@ This is where you and your users will log in to your account
 </div>
 </div>
 
+<input type='hidden' id="login_email" name='email' value=<%=request.getParameter("email")%>></input>
+<input type='hidden' id="" name='name' value=<%=request.getParameter("name")%>></input>
+<input type="password" class="hide" id="password"></input>
 <div class="line line-lg b-b" style="margin-top:25px;"></div>
 
 <div class="row">
@@ -176,4 +184,11 @@ This is where you and your users will log in to your account
 </div>
 </div>
 </div>
+
+<script src="/flatfull/registration/register.js" type="text/javascript"></script>
+<script type="text/javascript">
+var version = <%="\"" + VersioningUtil.getAppVersion(request) + "\""%>;
+  var applicationId = <%="\"" + SystemProperty.applicationId.get() + "\""%>;
+	$("#password").value = "<%=request.getParameter("password")%>"
+</script>
 </body>

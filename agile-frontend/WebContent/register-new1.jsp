@@ -1,7 +1,26 @@
+<%@page import="com.agilecrm.user.RegisterVerificationServlet"%>
 <%@page import="org.apache.commons.lang.StringUtils"%>
 <%@page import="com.agilecrm.util.VersioningUtil"%>
 <%@page import="com.google.appengine.api.utils.SystemProperty"%>
 <%@page contentType="text/html; charset=UTF-8" %>
+<%
+
+	if (request.getAttribute("javax.servlet.forward.request_uri") == null) {
+		response.sendRedirect("/register");
+		return;
+	}
+
+  String _source = request.getParameter("_source");
+  
+  String registered_email = request.getParameter("email");
+
+  if(registered_email != null)
+  {
+    request.getRequestDispatcher("/register-new2.jsp").forward(request, response);
+    return;
+  }
+
+%>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -339,10 +358,11 @@ if(isSafari && isWin)
    				</div>
 
 <form name='agile' id="agile" method='post'
-					onsubmit="return isValid();">
+					onsubmit="return isValid(this);">
 
 <div id="openid_btns">
 <input type='hidden' name='type' value='agile'></input>
+<input type='hidden' name='step' id="step" value="1"></input>
 <input type='hidden' name='account_timezone' id='account_timezone' value=''></input>
 
 <div class="list-group list-group-sm" style="margin-bottom:4px;">
@@ -422,5 +442,22 @@ if(isSafari && isWin)
 </div>
 </div>
 </div>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jstimezonedetect/1.0.4/jstz.min.js" type="text/javascript"></script>
+<script src="/flatfull/registration/register.js" type="text/javascript"></script>
+  <script type="text/javascript">
+  var version = <%="\"" + VersioningUtil.getAppVersion(request) + "\""%>;
+  var applicationId = <%="\"" + SystemProperty.applicationId.get() + "\""%>;
+$(document).ready(function() {
+  $('#account_timezone').val(jstz.determine().name());
+});
+
+
+
+  </script>
+
+  <!-- Clicky code -->
+  <script src="//static.getclicky.com/js" type="text/javascript"></script>
+  <script type="text/javascript">try{ clicky.init(100729733); }catch(e){}</script>
+
 	</body>
 	</html>
