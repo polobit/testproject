@@ -855,8 +855,8 @@ $(function()
 												// hide bulk actions button.
 												$('body').find('#bulk-actions').css('display', 'none');
 												$('body').find('#bulk-select').css('display', 'none');
-												$('table#companies').find('.thead_check').removeAttr('checked');
-												$('table#companies').find('.tbody_check').removeAttr('checked');
+												$('table#companies,table#contacts-table').find('.thead_check').removeAttr('checked');
+												$('table#companies,table#contacts-table').find('.tbody_check').removeAttr('checked');
 
 											}, "no_noty");
 										});
@@ -1070,7 +1070,12 @@ function getSelectionCriteria()
 {
 	// Reads filter cookie$('.filter-criteria'
 
-	var filter_id = $('.filter-criteria', $(App_Contacts.contactsListView.el)).attr("_filter");
+	var filter_id = undefined;
+	
+	if(company_util.isCompany())
+		filter_id = $('.filter-criteria', $(App_Companies.companiesListView.el)).attr("_filter");
+	else
+		filter_id = $('.filter-criteria', $(App_Contacts.contactsListView.el)).attr("_filter");
 
 	if (filter_id && _BULK_CONTACTS == "#contacts")
 	{
