@@ -15,6 +15,9 @@
 			else
 				error = "";
 			
+			//flatfull path
+			String flatfull_path="/flatfull";
+			
 %>
 
 <!DOCTYPE html>
