@@ -263,6 +263,11 @@ function generateSelectUI(uiFieldDefinition, selectEventHandler) {
     	
     }
     
+    if(uiFieldDefinition.fieldType == "categories")
+    {
+    	options = getTaskCategories("categories");
+    }
+
     if(options == null)
     	options = "";
     
@@ -795,6 +800,17 @@ function _generateUIFields(selector, ui) {
         	continue;
         }
         
+        if(uiFieldType == "categories")
+        {
+           addLabel(uiFieldDefinition.label, container);
+          
+           
+           uiField = generateSelectUI(uiFieldDefinition);
+           
+           $(uiField).appendTo(container);
+           continue;
+        }
+
         
         // Else Input, textarea,		                
         addLabel(uiFieldDefinition.label, container);
