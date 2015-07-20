@@ -167,6 +167,13 @@ var CONTENT_JSON = {
 	"contact-activities/Email_Soft_Bounced" : {
 		"title" : "No soft bounces recorded yet.",
 		"image" : "/img/clipboard.png"
+	},
+	"webpages" : {
+		"title" : "You do not have any Webpages currently.",
+		"description" : "You can create a page easily by using our smart builder.",
+		"button_text" : "Add Webpage",
+		"route" : "#webpage-add",
+		"image" : "/img/clipboard.png"
 	}
 	/*"web-rules" : {/All_Activities
 		

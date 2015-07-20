@@ -2,512 +2,660 @@
  * Creates backbone router to access preferences of the user portlets
  */
 var PortletsRouter = Backbone.Router
-								.extend({
+		.extend({
+			routes : {
+				// "portlets" : "portlets",
+				"add-dashlet" : "adddashlet"
+			},
+			adddashlet : function() {
+				if (gridster == undefined) {
+					App_Portlets.navigate("dashboard", {
+						trigger : true
+					});
+				} else {
+					head
+							.js(
+									LIB_PATH
+											+ 'jscore/handlebars/handlebars-helpers.js',
+									LIB_PATH + 'lib/jquery.gridster.js',
+									function() {
+										this.Catalog_Portlets_View = new Base_Collection_View(
+												{
+													url : '/core/api/portlets/default',
+													templateKey : "portlets-add",
+													sort_collection : false,
+													individual_tag_name : 'div',
+													postRenderCallback : function(
+															el) {
 
-												routes : {
-												//"portlets" 		: "portlets",
-													"add-dashlet" :"adddashlet"
-												},
-											adddashlet : function()
-											{
-												if(gridster==undefined){
-													App_Portlets.navigate("dashboard", { trigger : true });	
-												}
-												else{
-												head.js(LIB_PATH + 'jscore/handlebars/handlebars-helpers.js',
-															LIB_PATH + 'lib/jquery.gridster.js', LIB_PATH+'css/misc/agile-portlet.css',FLAT_FULL_UI + "css/jquery.gridster.css",
-															function()
-											{this.Catalog_Portlets_View = new Base_Collection_View({ url : '/core/api/portlets/default', templateKey : "portlets-add",
-												sort_collection : false, individual_tag_name : 'div', postRenderCallback : function(el){
-													
-												} });
-											
-											
-											this.Catalog_Portlets_View.appendItem = organize_portlets;
+													}
+												});
 
-											// 
-											this.Catalog_Portlets_View.collection.fetch();
-											$('#content').html(this.Catalog_Portlets_View.render().el);
-											
-											});
-												}
-											} ,
-											// Show form modal
-											//$('#portletStreamModal').modal('show');
+										this.Catalog_Portlets_View.appendItem = organize_portlets;
 
-											// Add social network types template
-											//$("#portletstreamDetails",$('#portletStreamModal')).html(this.Catalog_Portlets_View.el);},
-												
-												portlets : function(){
-													head.js(LIB_PATH + 'jscore/handlebars/handlebars-helpers.js?='+ _AGILE_VERSION, LIB_PATH + 'lib/jquery.gridster.js',function(){
-														var el = $(getTemplate('portlets', {}));
-														$("#content").html(el);
-														if (IS_FLUID){
-															$('#content').find('div.row').removeClass('row').addClass('row-fluid');
-														}
-														loadPortlets(el);
-													});
-												}
-								});
-//For adding new portlets
-function addNewPortlet(portlet_type,p_name){
-	var obj={};
-	var json={};
-	var curDate=new Date();
-	if(p_name=="FilterBased")
-		obj.name="Filter Based";
-	else if(p_name=="EmailsOpened")
-		obj.name="Emails Opened";
-	else if(p_name=="EmailsSent")
-		obj.name="Emails Sent";
-	else if(p_name=="PendingDeals")
-		obj.name="Pending Deals";
-	else if(p_name=="Agenda")
-		obj.name="Agenda";
-	else if(p_name=="TodayTasks")
-		obj.name="Today Tasks";
-	else if(p_name=="DealsByMilestone")
-		obj.name="Deals By Milestone";
-	else if(p_name=="ClosuresPerPerson")
-		obj.name="Closures Per Person";
-	else if(p_name=="DealsWon")
-		obj.name="Deals Won";
-	else if(p_name=="DealsFunnel")
-		obj.name="Deals Funnel";
-	else if(p_name=="GrowthGraph")
-		obj.name="Growth Graph";
-	else if(p_name=="DealsAssigned")
-		obj.name="Deals Assigned";
-	else if(p_name=="CallsPerPerson")
-		obj.name="Calls Per Person";
-	else if(p_name=="AgileCRMBlog")
-		obj.name="Agile CRM Blog";
-	else if(p_name=="TaskReport")
-		obj.name="Task Report";
-	else if(p_name=="StatsReport")
-		obj.name="Stats Report";
-	else if(p_name=="Leaderboard")
-		obj.name="Leaderboard";
-	obj.portlet_type=portlet_type;
-	var max_row_position=0;
-	if(gridster!=undefined)
-		/*gridster.$widgets.each(function(){
-			if(parseInt($(this).attr("data-row"))>max_row_position)
-				max_row_position = parseInt($(this).attr("data-row")) * parseInt($(this).attr("data-sizey"));
-		});*/
-		var next_position = gridster.next_position(1,1);
-	obj.column_position=next_position.col;
-	obj.row_position=next_position.row;
-	obj.size_x=next_position.size_x;
-	obj.size_y=next_position.size_y;
-	if(portlet_type=="CONTACTS" && p_name=="FilterBased")
-		json['filter']="myContacts";
-	else if(portlet_type=="CONTACTS" && p_name=="EmailsOpened")
-		json['duration']="2-days";
-	else if(portlet_type=="USERACTIVITY" && p_name=="EmailsSent")
-		json['duration']="1-day";
-	else if(portlet_type=="CONTACTS" && p_name=="GrowthGraph"){
-		json['tags']="";
-		json['frequency']='daily';
-		//json['start-date']=new Date(curDate.getFullYear(),curDate.getMonth(),curDate.getDate()-6,0,0,0).getTime();
-		//json['end-date']=new Date(curDate.getFullYear(),curDate.getMonth(),curDate.getDate(),0,0,0).getTime();
-		json['duration']="1-week";
-	}
-	else if(portlet_type=="DEALS" && p_name=="PendingDeals"){
-		json['deals']="my-deals";
-	}
-	else if(portlet_type=="DEALS" && (p_name=="DealsByMilestone" || p_name=="DealsFunnel")){
-		json['deals']="my-deals";
-		json['track']=0;
-		//json['due-date']=Math.round((new Date()).getTime()/1000);
-	}else if(portlet_type=="DEALS" && p_name=="ClosuresPerPerson"){
-		json['group-by']="number-of-deals";
-		json['due-date']=Math.round((new Date()).getTime()/1000);
-	}else if(portlet_type=="DEALS" && p_name=="DealsWon")
-		json['duration']="1-week";
-	else if(portlet_type=="DEALS" && p_name=="DealsAssigned")
-		json['duration']="1-day";
-	else if(portlet_type=="USERACTIVITY" && p_name=="CallsPerPerson"){
-		json['group-by']="number-of-calls";
-		json['duration']="1-day";
-	}else if(portlet_type=="TASKSANDEVENTS" && p_name=="TaskReport"){
-		json['group-by']="user";
-		json['split-by']="category";
-		json['duration']="1-week";
-		json['tasks']="all-tasks";
-	}else if(portlet_type=="USERACTIVITY" && p_name=="StatsReport"){
-		json['duration']="yesterday";
-	}else if(portlet_type=="TASKSANDEVENTS" && p_name=="Agenda")
-		json['duration']="today-and-tomorrow";
-	else if(portlet_type=="TASKSANDEVENTS" && p_name=="TodayTasks")
-		json['duration']="today-and-tomorrow";
-	else if(portlet_type=="RSS" && p_name=="AgileCRMBlog")
-		obj.size_y=2;
-	else if(portlet_type=="USERACTIVITY" && p_name=="Leaderboard"){
-		json['duration']="this-month";
-		var categoryJson={};
-		categoryJson['revenue']=true;
-		categoryJson['dealsWon']=true;
-		categoryJson['calls']=true;
-		categoryJson['tasks']=true;
-		json['category']=categoryJson;
-		obj.size_y=2;
-		obj.size_x=2;
+										// 
+										this.Catalog_Portlets_View.collection
+												.fetch();
+										$('#content').html(
+												this.Catalog_Portlets_View
+														.render().el);
+
+									});
+				}
+			},
+			// Show form modal
+			// $('#portletStreamModal').modal('show');
+
+			// Add social network types template
+			// $("#portletstreamDetails",$('#portletStreamModal')).html(this.Catalog_Portlets_View.el);},
+
+			portlets : function() {
+				head.js(LIB_PATH + 'jscore/handlebars/handlebars-helpers.js?='
+						+ _AGILE_VERSION, LIB_PATH + 'lib/jquery.gridster.js',
+						function() {
+							var el = $(getTemplate('portlets', {}));
+							$("#content").html(el);
+							if (IS_FLUID) {
+								$('#content').find('div.row')
+										.removeClass('row').addClass(
+												'row-fluid');
+							}
+							loadPortlets(el);
+						});
+			}
+		});
+// For adding new portlets
+function addNewPortlet(portlet_type, p_name) {
+	var obj = {};
+	var json = {};
+	var curDate = new Date();
+	if (p_name == "FilterBased")
+		obj.name = "Filter Based";
+	else if (p_name == "EmailsOpened")
+		obj.name = "Emails Opened";
+	else if (p_name == "EmailsSent")
+		obj.name = "Emails Sent";
+	else if (p_name == "PendingDeals")
+		obj.name = "Pending Deals";
+	else if (p_name == "Agenda")
+		obj.name = "Agenda";
+	else if (p_name == "TodayTasks")
+		obj.name = "Today Tasks";
+	else if (p_name == "DealsByMilestone")
+		obj.name = "Deals By Milestone";
+	else if (p_name == "ClosuresPerPerson")
+		obj.name = "Closures Per Person";
+	else if (p_name == "DealsWon")
+		obj.name = "Deals Won";
+	else if (p_name == "DealsFunnel")
+		obj.name = "Deals Funnel";
+	else if (p_name == "GrowthGraph")
+		obj.name = "Growth Graph";
+	else if (p_name == "DealsAssigned")
+		obj.name = "Deals Assigned";
+	else if (p_name == "CallsPerPerson")
+		obj.name = "Calls Per Person";
+	else if (p_name == "AgileCRMBlog")
+		obj.name = "Agile CRM Blog";
+	else if (p_name == "TaskReport")
+		obj.name = "Task Report";
+	else if (p_name == "StatsReport")
+		obj.name = "Stats Report";
+	else if (p_name == "Leaderboard")
+		obj.name = "Leaderboard";
+	obj.portlet_type = portlet_type;
+	var max_row_position = 0;
+	if (gridster != undefined)
+		/*
+		 * gridster.$widgets.each(function(){
+		 * if(parseInt($(this).attr("data-row"))>max_row_position)
+		 * max_row_position = parseInt($(this).attr("data-row")) *
+		 * parseInt($(this).attr("data-sizey")); });
+		 */
+		var next_position = gridster.next_position(1, 1);
+	obj.column_position = next_position.col;
+	obj.row_position = next_position.row;
+	obj.size_x = next_position.size_x;
+	obj.size_y = next_position.size_y;
+	if (portlet_type == "CONTACTS" && p_name == "FilterBased")
+		json['filter'] = "myContacts";
+	else if (portlet_type == "CONTACTS" && p_name == "EmailsOpened")
+		json['duration'] = "2-days";
+	else if (portlet_type == "USERACTIVITY" && p_name == "EmailsSent")
+		json['duration'] = "1-day";
+	else if (portlet_type == "CONTACTS" && p_name == "GrowthGraph") {
+		json['tags'] = "";
+		json['frequency'] = 'daily';
+		// json['start-date']=new
+		// Date(curDate.getFullYear(),curDate.getMonth(),curDate.getDate()-6,0,0,0).getTime();
+		// json['end-date']=new
+		// Date(curDate.getFullYear(),curDate.getMonth(),curDate.getDate(),0,0,0).getTime();
+		json['duration'] = "1-week";
+	} else if (portlet_type == "DEALS" && p_name == "PendingDeals") {
+		json['deals'] = "my-deals";
+	} else if (portlet_type == "DEALS"
+			&& (p_name == "DealsByMilestone" || p_name == "DealsFunnel")) {
+		json['deals'] = "my-deals";
+		json['track'] = 0;
+		// json['due-date']=Math.round((new Date()).getTime()/1000);
+	} else if (portlet_type == "DEALS" && p_name == "ClosuresPerPerson") {
+		json['group-by'] = "number-of-deals";
+		json['due-date'] = Math.round((new Date()).getTime() / 1000);
+	} else if (portlet_type == "DEALS" && p_name == "DealsWon")
+		json['duration'] = "1-week";
+	else if (portlet_type == "DEALS" && p_name == "DealsAssigned")
+		json['duration'] = "1-day";
+	else if (portlet_type == "USERACTIVITY" && p_name == "CallsPerPerson") {
+		json['group-by'] = "number-of-calls";
+		json['duration'] = "1-day";
+	} else if (portlet_type == "TASKSANDEVENTS" && p_name == "TaskReport") {
+		json['group-by'] = "user";
+		json['split-by'] = "category";
+		json['duration'] = "1-week";
+		json['tasks'] = "all-tasks";
+	} else if (portlet_type == "USERACTIVITY" && p_name == "StatsReport") {
+		json['duration'] = "yesterday";
+	} else if (portlet_type == "TASKSANDEVENTS" && p_name == "Agenda")
+		json['duration'] = "today-and-tomorrow";
+	else if (portlet_type == "TASKSANDEVENTS" && p_name == "TodayTasks")
+		json['duration'] = "today-and-tomorrow";
+	else if (portlet_type == "RSS" && p_name == "AgileCRMBlog")
+		obj.size_y = 2;
+	else if (portlet_type == "USERACTIVITY" && p_name == "Leaderboard") {
+		json['duration'] = "this-month";
+		var categoryJson = {};
+		categoryJson['revenue'] = true;
+		categoryJson['dealsWon'] = true;
+		categoryJson['calls'] = true;
+		categoryJson['tasks'] = true;
+		json['category'] = categoryJson;
+		obj.size_y = 2;
+		obj.size_x = 2;
 	}
 	var portlet = new BaseModel();
 	portlet.url = 'core/api/portlets/addPortlet';
-	portlet.set({ "prefs" : JSON.stringify(json) }, { silent : true });
+	portlet.set({
+		"prefs" : JSON.stringify(json)
+	}, {
+		silent : true
+	});
 	var model;
 	var scrollPosition;
-	portlet.save(obj, {
-        success: function (data) {
-        	//hidePortletsPopup();
-        	model=new BaseModel(data.toJSON());
-//        	var el = $(getTemplate('portlets-collection',model));
-        	if($('#zero-portlets').is(':visible'))
-        		$('#zero-portlets').hide();
-        	if($('#no-portlets').is(':visible'))
-    			$('#no-portlets').hide();
-        	App_Portlets.navigate("dashboard", { trigger : true });	
-        	//Portlets_View.collection.add(model);
-        	
-//        	scrollPosition = ((parseInt($('#ui-id-'+model.column_position+'-'+model.row_position).attr('data-row'))-1)*200)+5;
-//        	//move the scroll bar for showing the newly added portlet
-//        	window.scrollTo(0,scrollPosition);
-//        	//scrollPosition = 0;
-        },
-        error: function (model, response) {
-        	hidePortletsPopup();
-        	var model=data.toJSON();
-        	//var el = $(getTemplate('portlets-model', model));
-        	if($('#zero-portlets').is(':visible'))
-        		$('#zero-portlets').hide();
-        	if($('#no-portlets').is(':visible'))
-    			$('#no-portlets').hide();
-        	Portlets_View.collection.add(model);
-        	scrollPosition = ((parseInt($('#ui-id-'+model.column_position+'-'+model.row_position).attr('data-row'))-1)*200)+5;
-        	//move the scroll bar for showing the newly added portlet
-        	window.scrollTo(0,scrollPosition);
-        	scrollPosition = 0;
-        }});
-	
-		
-	
+	portlet
+			.save(obj,
+					{
+						success : function(data) {
+							// hidePortletsPopup();
+							model = new BaseModel(data.toJSON());
+							// var el =
+							// $(getTemplate('portlets-collection',model));
+							if ($('#zero-portlets').is(':visible'))
+								$('#zero-portlets').hide();
+							if ($('#no-portlets').is(':visible'))
+								$('#no-portlets').hide();
+							App_Portlets.navigate("dashboard", {
+								trigger : true
+							});
+							// Portlets_View.collection.add(model);
+
+							// scrollPosition =
+							// ((parseInt($('#ui-id-'+model.column_position+'-'+model.row_position).attr('data-row'))-1)*200)+5;
+							// //move the scroll bar for showing the newly added
+							// portlet
+							// window.scrollTo(0,scrollPosition);
+							// //scrollPosition = 0;
+						},
+						error : function(model, response) {
+							hidePortletsPopup();
+							var model = data.toJSON();
+							// var el = $(getTemplate('portlets-model', model));
+							if ($('#zero-portlets').is(':visible'))
+								$('#zero-portlets').hide();
+							if ($('#no-portlets').is(':visible'))
+								$('#no-portlets').hide();
+							Portlets_View.collection.add(model);
+							scrollPosition = ((parseInt($(
+									'#ui-id-' + model.column_position + '-'
+											+ model.row_position).attr(
+									'data-row')) - 1) * 200) + 5;
+							// move the scroll bar for showing the newly added
+							// portlet
+							window.scrollTo(0, scrollPosition);
+							scrollPosition = 0;
+						}
+					});
+
 }
-function hidePortletsPopup(){
+function hidePortletsPopup() {
 	$('#portletStreamModal').modal('hide');
 	$('.modal-backdrop').hide();
 }
-function deletePortlet(el){
+function deletePortlet(el) {
 	var p_id = el.id.split("-close")[0];
 	$('#portletDeleteModal').modal('show');
-	$('#portletDeleteModal > .modal-dialog > .modal-content > .modal-footer > .save-modal').attr('id',p_id);
+	$(
+			'#portletDeleteModal > .modal-dialog > .modal-content > .modal-footer > .save-modal')
+			.attr('id', p_id);
 	var model = Portlets_View.collection.get(p_id);
-	var header_text = $('#'+p_id).parent().find('.portlet_header > h4 > span').text();
-	var header_sub_text = $('#'+p_id).parent().find('.portlet_header > h4 > small').text();
-	if(header_text!=undefined && header_text.trim()!="" && header_text.trim()!="Getting started")
-		$('#portletDeleteModal > .modal-dialog > .modal-content > .modal-body').html("Are you sure you want to delete Dashlet - "+header_text.trim()+" "+header_sub_text.trim()+"?");
-	else if(header_text!=undefined && header_text.trim()=="Getting started")
-		$('#portletDeleteModal > .modal-dialog > .modal-content > .modal-body').html("Are you sure you want to delete Dashlet - "+header_text.trim()+"?<br/>This dashlet can't be added back again.");
-	else if(model.get("name")=="Leaderboard")
-		$('#portletDeleteModal > .modal-dialog > .modal-content > .modal-body').html("Are you sure you want to delete Dashlet - Leaderboard "+getDurationForPortlets(model.get("settings").duration)+"?");
+	var header_text = $('#' + p_id).parent()
+			.find('.portlet_header > h4 > span').text();
+	var header_sub_text = $('#' + p_id).parent().find(
+			'.portlet_header > h4 > small').text();
+	if (header_text != undefined && header_text.trim() != ""
+			&& header_text.trim() != "Getting started")
+		$('#portletDeleteModal > .modal-dialog > .modal-content > .modal-body')
+				.html(
+						"Are you sure you want to delete Dashlet - "
+								+ header_text.trim() + " "
+								+ header_sub_text.trim() + "?");
+	else if (header_text != undefined
+			&& header_text.trim() == "Getting started")
+		$('#portletDeleteModal > .modal-dialog > .modal-content > .modal-body')
+				.html(
+						"Are you sure you want to delete Dashlet - "
+								+ header_text.trim()
+								+ "?<br/>This dashlet can't be added back again.");
+	else if (model.get("name") == "Leaderboard")
+		$('#portletDeleteModal > .modal-dialog > .modal-content > .modal-body')
+				.html(
+						"Are you sure you want to delete Dashlet - Leaderboard "
+								+ getDurationForPortlets(model.get("settings").duration)
+								+ "?");
 	else
-		$('#portletDeleteModal > .modal-dialog > .modal-content > .modal-body').html("Are you sure you want to delete Dashlet - Activity Overview "+getDurationForPortlets(model.get("settings").duration)+"?");
+		$('#portletDeleteModal > .modal-dialog > .modal-content > .modal-body')
+				.html(
+						"Are you sure you want to delete Dashlet - Activity Overview "
+								+ getDurationForPortlets(model.get("settings").duration)
+								+ "?");
 }
-$('.portlet-delete-modal').live("click", function(e){
-	e.preventDefault();
-	var portlet = Portlets_View.collection.get($(this).attr('id'));
-	/*
-	 * Sends Delete request with portlet name as path parameter, and on
-	 * success fetches the portlets to reflect the changes is_added, to show
-	 * add portlet in the view instead of delete option
-	 */
-	$.ajax({ type : 'DELETE', url : '/core/api/portlets/' + portlet.get("id"), contentType : "application/json; charset=utf-8",
+$('.portlet-delete-modal').live(
+		"click",
+		function(e) {
+			e.preventDefault();
+			var portlet = Portlets_View.collection.get($(this).attr('id'));
+			/*
+			 * Sends Delete request with portlet name as path parameter, and on
+			 * success fetches the portlets to reflect the changes is_added, to
+			 * show add portlet in the view instead of delete option
+			 */
+			$.ajax({
+				type : 'DELETE',
+				url : '/core/api/portlets/' + portlet.get("id"),
+				contentType : "application/json; charset=utf-8",
 
-	success : function(data){
-		Portlets_View.collection.remove(portlet);
-		//$('#'+el.parentNode.parentNode.parentNode.parentNode.parentNode.id).remove();
-		gridster.remove_widget($('#'+portlet.get("id")).parent(),false);
-		setTimeout(function(){
-			gridster.$changed.attr('id','ui-id-'+gridster.$changed.attr('data-col')+'-'+gridster.$changed.attr('data-row'));
-		},500);
-		$('#'+portlet.get("id")).parent().remove();
-		
-		
-		if($('.gridster-portlets > div').length==0)
-			$('#no-portlets').show();
-		$('#portletDeleteModal').modal('hide');
-	}, dataType : 'json' });
-});
-/*$("#add-portlet").live("click", function(e){
-	e.preventDefault();
-	this.Catalog_Portlets_View = new Base_Collection_View({ url : '/core/api/portlets/default', restKey : "portlet", templateKey : "portlets-add",
-		sort_collection : false, individual_tag_name : 'div', postRenderCallback : function(el){
-			if($('#deals',$('#portletStreamModal')).children().length==0)
-				$('#deals',$('#portletStreamModal')).parent().hide();
-			if($('#taksAndEvents',$('#portletStreamModal')).children().length==0)
-				$('#taksAndEvents',$('#portletStreamModal')).parent().hide();
-			if($('#userActivity',$('#portletStreamModal')).children().length==0)
-				$('#userActivity',$('#portletStreamModal')).parent().hide();
-		} });
+				success : function(data) {
+					Portlets_View.collection.remove(portlet);
+					// $('#'+el.parentNode.parentNode.parentNode.parentNode.parentNode.id).remove();
+					gridster.remove_widget($('#' + portlet.get("id")).parent(),
+							false);
+					setTimeout(function() {
+						gridster.$changed.attr('id', 'ui-id-'
+								+ gridster.$changed.attr('data-col') + '-'
+								+ gridster.$changed.attr('data-row'));
+					}, 500);
+					$('#' + portlet.get("id")).parent().remove();
 
-	this.Catalog_Portlets_View.appendItem = organize_portlets;
-
-	// 
-	this.Catalog_Portlets_View.collection.fetch();
-	
-	// Show form modal
-	$('#portletStreamModal').modal('show');
-
-	// Add social network types template
-	$("#portletstreamDetails",$('#portletStreamModal')).html(this.Catalog_Portlets_View.el);
-	
-});*/
-$('#portlets-contacts-model-list > tr, #portlets-companies-model-list > tr, #portlets-contacts-email-opens-model-list > tr').live('click', function(e){
-	var id = $(this).find(".data").attr("data");
-	App_Contacts.navigate("contact/" + id, { trigger : true });
-});
-$('#portlets-opportunities-model-list > tr').live('click', function(e) {
-	/*if(e.target.attributes[0].name!="href"){
-		e.preventDefault();
-		App_Portlets.currentPosition = ''+$(this).parents('.gs-w').find('.column_position').text().trim()+''+$(this).parents('.gs-w').find('.row_position').text().trim();
-		updateDeal($(this).data());
-	}*/
-	var hrefFlag = false;
-	if(e.target.attributes!=undefined && e.target.attributes!=null && e.target.attributes.length==0)
-		hrefFlag = true;
-	$.each(e.target.attributes,function(){
-		if(this.name=="href")
-			hrefFlag = true;
-	});
-	if(!hrefFlag){
-		//code for navigating deal details page
-		var id = $(this).find(".data").attr("data");
-		App_Deal_Details.navigate("deal/" + id, { trigger : true });
-	}
-});
-$('#portlets-events-model-list > tr').live('click', function(e){
-	var hrefFlag = false;
-	if(e.target.attributes!=undefined && e.target.attributes!=null && e.target.attributes.length==0)
-		hrefFlag = true;
-	$.each(e.target.attributes,function(){
-		if(this.name=="href")
-			hrefFlag = true;
-	});
-	if(!hrefFlag){
-		App_Portlets.currentPosition = ''+$(this).parents('.gs-w').find('.column_position').text().trim()+''+$(this).parents('.gs-w').find('.row_position').text().trim();
-		var id = $(this).find(".data").attr("data");
-		var model = $(this).data().collection.get(id);
-	   	if(isNaN(id))
-	   		return;
-	   	// Deserialize
-	   	deserializeForm(model.toJSON(), $("#updateActivityForm"));
-	   	
-	   	// Set time for update Event
-	    $('#update-event-time-1').val((new Date(model.get('start')*1000).getHours() < 10 ? "0" : "") + new Date(model.get('start')*1000).getHours() + ":" + (new Date(model.get('start')*1000).getMinutes() < 10 ? "0" : "") +new Date(model.get('start')*1000).getMinutes());
-	    $('#update-event-time-2').val((new Date(model.get('end')*1000).getHours() < 10 ? "0" : "") + new Date(model.get('end')*1000).getHours() + ":" + (new Date(model.get('end')*1000).getMinutes() < 10 ? "0" : "") + new Date(model.get('end')*1000).getMinutes());
-	   
-	 // Set date for update Event
-	    var dateFormat = 'mm/dd/yyyy';
-	    $("#update-event-date-1").val((new Date(model.get('start')*1000)).format(dateFormat));
-	    $("#update-event-date-2").val((new Date(model.get('end')*1000)).format(dateFormat));
-	    
-	   	// hide end date & time for all day events
-	    if(model.toJSON().allDay)
-	    {
-	    	$("#update-event-date-2").closest('.row').hide();
-	    	$('#update-event-time-1').closest('.control-group').hide();
-	    }
-	    else 
-	    {
-	    	$('#update-event-time-1').closest('.control-group').show();
-	    	$("#update-event-date-2").closest('.row').show();
-	    }
-	    if (model.toJSON().type == "WEB_APPOINTMENT" && parseInt(model.toJSON().start) > parseInt(new Date().getTime() / 1000))
-		{
-			$("[id='event_delete']").attr("id", "delete_web_event");
-			web_event_title = model.toJSON().title;
-			if (model.toJSON().contacts.length > 0)
-			{
-				var firstname = getPropertyValue(model.toJSON().contacts[0].properties, "first_name");
-				if (firstname == undefined)
-					firstname = "";
-				var lastname = getPropertyValue(model.toJSON().contacts[0].properties, "last_name");
-				if (lastname == undefined)
-					lastname = "";
-				web_event_contact_name = firstname + " " + lastname;
-			}
-		}
-		else
-		{
-			$("[id='delete_web_event']").attr("id", "event_delete");
-		}
-	    // Fills owner select element 
-		populateUsersInUpdateActivityModal(model.toJSON());
-		if (model.toJSON().description)
-		{
-			var description = '<label class="control-label"><b>Description </b></label><div class="controls"><textarea id="description" name="description" rows="3" class="input form-control" placeholder="Add Description"></textarea></div>'
-			$("#event_desc").html(description);
-			$("textarea#description").val(model.toJSON().description);
-		}
-		else
-		{
-			var desc = '<div class="row-fluid">' + '<div class="control-group form-group m-b-none">' + '<a href="#" id="add_event_desctiption"><i class="icon-plus"></i> Add Description </a>' + '<div class="controls event_discription hide">' + '<textarea id="description" name="description" rows="3" class="input form-control w-full col-md-8" placeholder="Add Description"></textarea>' + '</div></div></div>'
-			$("#event_desc").html(desc);
-		}
-	 // Show edit modal for the event
-	    $("#updateActivityModal").modal('show');
-	   	return false;
-	}
-});
-$('#portlets-tasks-model-list > tr').live('click', function(e) {
-	/*App_Portlets.currentPosition = ''+$(this).parents('.gs-w').find('.column_position').text().trim()+''+$(this).parents('.gs-w').find('.row_position').text().trim();
-	var value = $(this).data().toJSON();
-	deserializeForm(value, $("#updateTaskForm"));
-	$("#updateTaskModal").modal('show');
-	// Fills owner select element
-	populateUsers("owners-list", $("#updateTaskForm"), value, 'taskOwner',
-			function(data) {
-				$("#updateTaskForm").find("#owners-list").html(data);
-				if (value.taskOwner) {
-					$("#owners-list", $("#updateTaskForm")).find(
-							'option[value=' + value['taskOwner'].id + ']')
-							.attr("selected", "selected");
-				}
-				$("#owners-list", $("#updateTaskForm")).closest('div').find('.loading-img').hide();
+					if ($('.gridster-portlets > div').length == 0)
+						$('#no-portlets').show();
+					$('#portletDeleteModal').modal('hide');
+				},
+				dataType : 'json'
 			});
-	
-	// Add notes in task modal
-	showNoteOnForm("updateTaskForm", value.notes);*/
-	var hrefFlag = false;
-	if(e.target.tagName.toLowerCase()=="a" || e.target.tagName.toLowerCase()=="i")
-		hrefFlag = true;
-	/*if(e.target.tagName.toLowerCase()=="a")
-		hrefFlag = true;*/
-	$.each(e.target.attributes,function(){
-		if(this.name=="href")
-			hrefFlag = true;
-	});
-	if(!hrefFlag){
-		var id = $(this).find(".data").attr("data");
-		App_Tasks.navigate("task/" + id, { trigger : true });
-	}
-});
+		});
+/*
+ * $("#add-portlet").live("click", function(e){ e.preventDefault();
+ * this.Catalog_Portlets_View = new Base_Collection_View({ url :
+ * '/core/api/portlets/default', restKey : "portlet", templateKey :
+ * "portlets-add", sort_collection : false, individual_tag_name : 'div',
+ * postRenderCallback : function(el){
+ * if($('#deals',$('#portletStreamModal')).children().length==0)
+ * $('#deals',$('#portletStreamModal')).parent().hide();
+ * if($('#taksAndEvents',$('#portletStreamModal')).children().length==0)
+ * $('#taksAndEvents',$('#portletStreamModal')).parent().hide();
+ * if($('#userActivity',$('#portletStreamModal')).children().length==0)
+ * $('#userActivity',$('#portletStreamModal')).parent().hide(); } });
+ * 
+ * this.Catalog_Portlets_View.appendItem = organize_portlets; //
+ * this.Catalog_Portlets_View.collection.fetch(); // Show form modal
+ * $('#portletStreamModal').modal('show'); // Add social network types template
+ * $("#portletstreamDetails",$('#portletStreamModal')).html(this.Catalog_Portlets_View.el);
+ * 
+ * });
+ */
+$(
+		'#portlets-contacts-model-list > tr, #portlets-companies-model-list > tr, #portlets-contacts-email-opens-model-list > tr')
+		.live('click', function(e) {
+			var id = $(this).find(".data").attr("data");
+			App_Contacts.navigate("contact/" + id, {
+				trigger : true
+			});
+		});
+$('#portlets-opportunities-model-list > tr').live(
+		'click',
+		function(e) {
+			/*
+			 * if(e.target.attributes[0].name!="href"){ e.preventDefault();
+			 * App_Portlets.currentPosition =
+			 * ''+$(this).parents('.gs-w').find('.column_position').text().trim()+''+$(this).parents('.gs-w').find('.row_position').text().trim();
+			 * updateDeal($(this).data()); }
+			 */
+			var hrefFlag = false;
+			if (e.target.attributes != undefined && e.target.attributes != null
+					&& e.target.attributes.length == 0)
+				hrefFlag = true;
+			$.each(e.target.attributes, function() {
+				if (this.name == "href")
+					hrefFlag = true;
+			});
+			if (!hrefFlag) {
+				// code for navigating deal details page
+				var id = $(this).find(".data").attr("data");
+				App_Deal_Details.navigate("deal/" + id, {
+					trigger : true
+				});
+			}
+		});
+$('#portlets-events-model-list > tr')
+		.live(
+				'click',
+				function(e) {
+					var hrefFlag = false;
+					if (e.target.attributes != undefined
+							&& e.target.attributes != null
+							&& e.target.attributes.length == 0)
+						hrefFlag = true;
+					$.each(e.target.attributes, function() {
+						if (this.name == "href")
+							hrefFlag = true;
+					});
+					if (!hrefFlag) {
+						App_Portlets.currentPosition = ''
+								+ $(this).parents('.gs-w').find(
+										'.column_position').text().trim()
+								+ ''
+								+ $(this).parents('.gs-w')
+										.find('.row_position').text().trim();
+						var id = $(this).find(".data").attr("data");
+						var model = $(this).data().collection.get(id);
+						if (isNaN(id))
+							return;
+						// Deserialize
+						deserializeForm(model.toJSON(),
+								$("#updateActivityForm"));
+
+						// Set time for update Event
+						$('#update-event-time-1')
+								.val(
+										(new Date(model.get('start') * 1000)
+												.getHours() < 10 ? "0" : "")
+												+ new Date(
+														model.get('start') * 1000)
+														.getHours()
+												+ ":"
+												+ (new Date(
+														model.get('start') * 1000)
+														.getMinutes() < 10 ? "0"
+														: "")
+												+ new Date(
+														model.get('start') * 1000)
+														.getMinutes());
+						$('#update-event-time-2')
+								.val(
+										(new Date(model.get('end') * 1000)
+												.getHours() < 10 ? "0" : "")
+												+ new Date(
+														model.get('end') * 1000)
+														.getHours()
+												+ ":"
+												+ (new Date(
+														model.get('end') * 1000)
+														.getMinutes() < 10 ? "0"
+														: "")
+												+ new Date(
+														model.get('end') * 1000)
+														.getMinutes());
+
+						// Set date for update Event
+						var dateFormat = 'mm/dd/yyyy';
+						$("#update-event-date-1").val(
+								(new Date(model.get('start') * 1000))
+										.format(dateFormat));
+						$("#update-event-date-2").val(
+								(new Date(model.get('end') * 1000))
+										.format(dateFormat));
+
+						// hide end date & time for all day events
+						if (model.toJSON().allDay) {
+							$("#update-event-date-2").closest('.row').hide();
+							$('#update-event-time-1').closest('.control-group')
+									.hide();
+						} else {
+							$('#update-event-time-1').closest('.control-group')
+									.show();
+							$("#update-event-date-2").closest('.row').show();
+						}
+						if (model.toJSON().type == "WEB_APPOINTMENT"
+								&& parseInt(model.toJSON().start) > parseInt(new Date()
+										.getTime() / 1000)) {
+							$("[id='event_delete']").attr("id",
+									"delete_web_event");
+							web_event_title = model.toJSON().title;
+							if (model.toJSON().contacts.length > 0) {
+								var firstname = getPropertyValue(
+										model.toJSON().contacts[0].properties,
+										"first_name");
+								if (firstname == undefined)
+									firstname = "";
+								var lastname = getPropertyValue(
+										model.toJSON().contacts[0].properties,
+										"last_name");
+								if (lastname == undefined)
+									lastname = "";
+								web_event_contact_name = firstname + " "
+										+ lastname;
+							}
+						} else {
+							$("[id='delete_web_event']").attr("id",
+									"event_delete");
+						}
+						// Fills owner select element
+						populateUsersInUpdateActivityModal(model.toJSON());
+						if (model.toJSON().description) {
+							var description = '<label class="control-label"><b>Description </b></label><div class="controls"><textarea id="description" name="description" rows="3" class="input form-control" placeholder="Add Description"></textarea></div>'
+							$("#event_desc").html(description);
+							$("textarea#description").val(
+									model.toJSON().description);
+						} else {
+							var desc = '<div class="row-fluid">'
+									+ '<div class="control-group form-group m-b-none">'
+									+ '<a href="#" id="add_event_desctiption"><i class="icon-plus"></i> Add Description </a>'
+									+ '<div class="controls event_discription hide">'
+									+ '<textarea id="description" name="description" rows="3" class="input form-control w-full col-md-8" placeholder="Add Description"></textarea>'
+									+ '</div></div></div>'
+							$("#event_desc").html(desc);
+						}
+						// Show edit modal for the event
+						$("#updateActivityModal").modal('show');
+						return false;
+					}
+				});
+$('#portlets-tasks-model-list > tr').live(
+		'click',
+		function(e) {
+			/*
+			 * App_Portlets.currentPosition =
+			 * ''+$(this).parents('.gs-w').find('.column_position').text().trim()+''+$(this).parents('.gs-w').find('.row_position').text().trim();
+			 * var value = $(this).data().toJSON(); deserializeForm(value,
+			 * $("#updateTaskForm")); $("#updateTaskModal").modal('show'); //
+			 * Fills owner select element populateUsers("owners-list",
+			 * $("#updateTaskForm"), value, 'taskOwner', function(data) {
+			 * $("#updateTaskForm").find("#owners-list").html(data); if
+			 * (value.taskOwner) { $("#owners-list", $("#updateTaskForm")).find(
+			 * 'option[value=' + value['taskOwner'].id + ']') .attr("selected",
+			 * "selected"); } $("#owners-list",
+			 * $("#updateTaskForm")).closest('div').find('.loading-img').hide();
+			 * }); // Add notes in task modal showNoteOnForm("updateTaskForm",
+			 * value.notes);
+			 */
+			var hrefFlag = false;
+			if (e.target.tagName.toLowerCase() == "a"
+					|| e.target.tagName.toLowerCase() == "i")
+				hrefFlag = true;
+			/*
+			 * if(e.target.tagName.toLowerCase()=="a") hrefFlag = true;
+			 */
+			$.each(e.target.attributes, function() {
+				if (this.name == "href")
+					hrefFlag = true;
+			});
+			if (!hrefFlag) {
+				var id = $(this).find(".data").attr("data");
+				App_Tasks.navigate("task/" + id, {
+					trigger : true
+				});
+			}
+		});
 /**
  * Makes the pending task as completed by calling complete_task function
  */
-$('.portlets-tasks-select').live('click', function(e) {
-			e.stopPropagation();
-			if ($(this).is(':checked')) {
-				// Complete
-				var taskId = $(this).attr('data');
-				//var itemListView = new Base_Collection_View({ data : Portlets_View.collection.get($(this).parents('.portlet_container').find('.portlets').attr('id')).get('tasksList'), templateKey : 'portlets-tasks', individual_tag_name : 'tr' });
-				// complete_task(taskId, $(this));
-				var column_pos = $(this).parentsUntil('.gs-w').last().parent().find('.column_position').text().trim();
-				var row_pos = $(this).parentsUntil('.gs-w').last().parent().find('.row_position').text().trim();
-				var pos = column_pos+''+row_pos;
-				complete_task(taskId,App_Portlets.tasksCollection[parseInt(pos)].collection,$(this).closest('tr'));
-				
-				if($(this).parentsUntil('table').last().find('tr:visible').length==1){
-					$(this).parentsUntil('table').parent().parent().html('<div class="portlet-error-message">No tasks found.</div>');
-				}
-			}
-});
-function hidePortletErrors(ele){
-	if($('#'+ele.id).next().is(':visible'))
-		$('#'+ele.id).next().hide();
+$('.portlets-tasks-select')
+		.live(
+				'click',
+				function(e) {
+					e.stopPropagation();
+					if ($(this).is(':checked')) {
+						// Complete
+						var taskId = $(this).attr('data');
+						// var itemListView = new Base_Collection_View({ data :
+						// Portlets_View.collection.get($(this).parents('.portlet_container').find('.portlets').attr('id')).get('tasksList'),
+						// templateKey : 'portlets-tasks', individual_tag_name :
+						// 'tr' });
+						// complete_task(taskId, $(this));
+						var column_pos = $(this).parentsUntil('.gs-w').last()
+								.parent().find('.column_position').text()
+								.trim();
+						var row_pos = $(this).parentsUntil('.gs-w').last()
+								.parent().find('.row_position').text().trim();
+						var pos = column_pos + '' + row_pos;
+						complete_task(
+								taskId,
+								App_Portlets.tasksCollection[parseInt(pos)].collection,
+								$(this).closest('tr'));
+
+						if ($(this).parentsUntil('table').last().find(
+								'tr:visible').length == 1) {
+							$(this)
+									.parentsUntil('table')
+									.parent()
+									.parent()
+									.html(
+											'<div class="portlet-error-message">No tasks found.</div>');
+						}
+					}
+				});
+function hidePortletErrors(ele) {
+	if ($('#' + ele.id).next().is(':visible'))
+		$('#' + ele.id).next().hide();
 }
-$('.portlet-settings').live('click',function(e){
+$('.portlet-settings').live('click', function(e) {
 	e.preventDefault();
 	showPortletSettings(this.id);
 });
-function addWidgetToGridster(base_model){
+function addWidgetToGridster(base_model) {
 	var add_flag = true;
-	if(gridster!=undefined){
-		gridster.$widgets.each(function(index,widget){
-			if(widget.id=='ui-id-'+base_model.get("column_position")+'-'+base_model.get("row_position")+'')
-				add_flag=false;
+	if (gridster != undefined) {
+		gridster.$widgets.each(function(index, widget) {
+			if (widget.id == 'ui-id-' + base_model.get("column_position") + '-'
+					+ base_model.get("row_position") + '')
+				add_flag = false;
 		});
-		if(add_flag){
-			gridster.add_widget($('#ui-id-'+base_model.get("column_position")+'-'+base_model.get("row_position")),base_model.get("size_x"),base_model.get("size_y"),base_model.get("column_position"),base_model.get("row_position"));
+		if (add_flag) {
+			gridster.add_widget($('#ui-id-' + base_model.get("column_position")
+					+ '-' + base_model.get("row_position")), base_model
+					.get("size_x"), base_model.get("size_y"), base_model
+					.get("column_position"), base_model.get("row_position"));
 			gridster.set_dom_grid_height();
-			window.scrollTo(0,((parseInt($('#ui-id-'+base_model.get("column_position")+'-'+base_model.get("row_position")).attr('data-row'))-1)*200)+5);
+			window.scrollTo(0,
+					((parseInt($(
+							'#ui-id-' + base_model.get("column_position") + '-'
+									+ base_model.get("row_position")).attr(
+							'data-row')) - 1) * 200) + 5);
 		}
 	}
 }
-function getStartAndEndDatesOnDue(duration){
+function getStartAndEndDatesOnDue(duration) {
 	var d = new Date();
 
-	//Last 24 Hrs
-	if(duration == "24-hours"){
-		var hrs = (d.setMilliseconds(0)/1000)-(24*60*60);
+	// Last 24 Hrs
+	if (duration == "24-hours") {
+		var hrs = (d.setMilliseconds(0) / 1000) - (24 * 60 * 60);
 		return hrs;
 	}
-	//Current time
-	if(duration == "now")
-		return (d.setMilliseconds(0)/1000);
+	// Current time
+	if (duration == "now")
+		return (d.setMilliseconds(0) / 1000);
 	// Today
 	if (duration == "1-day" || duration == "today")
 		console.log(getGMTTimeFromDate(d) / 1000);
-	
+
 	// This week
-	if (duration == "this-week" || duration == "this-week-start"){
-		if(new Date().getDay()!=0)
-			d.setDate(d.getDate() - (new Date().getDay()-1));
+	if (duration == "this-week" || duration == "this-week-start") {
+		if (new Date().getDay() != 0)
+			d.setDate(d.getDate() - (new Date().getDay() - 1));
 		else
-			d.setDate(d.getDate() - (new Date().getDay()+6));
+			d.setDate(d.getDate() - (new Date().getDay() + 6));
 	}
 	// This week end
-	if (duration == "this-week-end"){
-		if(new Date().getDay()!=0)
-			d.setDate((d.getDate() - (new Date().getDay()-1))+7);
+	if (duration == "this-week-end") {
+		if (new Date().getDay() != 0)
+			d.setDate((d.getDate() - (new Date().getDay() - 1)) + 7);
 		else
-			d.setDate((d.getDate() - (new Date().getDay()+6))+7);
+			d.setDate((d.getDate() - (new Date().getDay() + 6)) + 7);
 	}
-	//Last week start
-	if(duration == "last-week" || duration == "last-week-start")
-		d.setDate(d.getDate()-d.getDay()-6);
-	
-	//Lats week end
-	if(duration == "last-week-end")
-		d.setDate((d.getDate()-d.getDay())+1);
-	
+	// Last week start
+	if (duration == "last-week" || duration == "last-week-start")
+		d.setDate(d.getDate() - d.getDay() - 6);
+
+	// Lats week end
+	if (duration == "last-week-end")
+		d.setDate((d.getDate() - d.getDay()) + 1);
+
 	// 1 Week ago
 	if (duration == "1-week")
 		d.setDate(d.getDate() - 6);
-	
+
 	// 1 Month ago
 	if (duration == "1-month")
 		d.setDate(d.getDate() - 29);
-	
+
 	// This month
 	if (duration == "this-month" || duration == "this-month-start")
 		d.setDate(1);
-	
-	//Last month start
-	if(duration == "last-month" || duration == "last-month-start"){
+
+	// Last month start
+	if (duration == "last-month" || duration == "last-month-start") {
 		d.setDate(1);
-		d.setMonth(d.getMonth()-1);
+		d.setMonth(d.getMonth() - 1);
 	}
-	
-	//Lats month end
-	if(duration == "last-month-end"){
-		d.setDate((d.getDate()-d.getDate())+1);
+
+	// Lats month end
+	if (duration == "last-month-end") {
+		d.setDate((d.getDate() - d.getDate()) + 1);
 		d.setMonth(d.getMonth());
 	}
 
 	// Tomorrow
 	if (duration == "TOMORROW")
 		d.setDate(d.getDate() + 1);
-	
+
 	// Yesterday
 	if (duration == "yesterday")
 		d.setDate(d.getDate() - 1);
-	
+
 	// Last 2 days
 	if (duration == "2-days")
 		d.setDate(d.getDate() - 1);
-	
+
 	// next 7 days
 	if (duration == "next-7-days")
 		d.setDate(d.getDate() + 8);
@@ -515,60 +663,59 @@ function getStartAndEndDatesOnDue(duration){
 	// next 7 days
 	if (duration == "today-and-tomorrow")
 		d.setDate(d.getDate() + 2);
-	
-	//this quarter start
-	if(duration=="this-quarter-start"){
+
+	// this quarter start
+	if (duration == "this-quarter-start") {
 		var currentMonth = d.getMonth();
-		var qtrMonth = currentMonth%3;
-		if(qtrMonth==0)
-			qtrMonth=3;
-		d.setMonth((currentMonth-qtrMonth)+1);
+		var qtrMonth = currentMonth % 3;
+		if (qtrMonth == 0)
+			qtrMonth = 3;
+		d.setMonth((currentMonth - qtrMonth) + 1);
 		d.setDate(1);
 	}
-	
-	//this quarter end
-	if(duration=="this-quarter-end"){
+
+	// this quarter end
+	if (duration == "this-quarter-end") {
 		var currentMonth = d.getMonth();
-		var qtrMonth = currentMonth%3;
-		if(qtrMonth==0)
-			qtrMonth=3;
-		d.setMonth((currentMonth-qtrMonth)+4);
+		var qtrMonth = currentMonth % 3;
+		if (qtrMonth == 0)
+			qtrMonth = 3;
+		d.setMonth((currentMonth - qtrMonth) + 4);
 		d.setDate(1);
 	}
-	
-	//last quarter start
-	if(duration=="last-quarter-start"){
+
+	// last quarter start
+	if (duration == "last-quarter-start") {
 		var currentMonth = d.getMonth();
-		var qtrMonth = currentMonth%3;
-		if(qtrMonth==0)
-			qtrMonth=3;
-		if(currentMonth<=3){
+		var qtrMonth = currentMonth % 3;
+		if (qtrMonth == 0)
+			qtrMonth = 3;
+		if (currentMonth <= 3) {
 			d.setMonth(10);
-			dt.setFullYear(dt.getFullYear()-1);
-		}else{
-			d.setMonth((currentMonth-qtrMonth)-2);
+			dt.setFullYear(dt.getFullYear() - 1);
+		} else {
+			d.setMonth((currentMonth - qtrMonth) - 2);
 		}
 		d.setDate(1);
 	}
-	
-	//last quarter end
-	if(duration=="last-quarter-end"){
+
+	// last quarter end
+	if (duration == "last-quarter-end") {
 		var currentMonth = d.getMonth();
-		var qtrMonth = currentMonth%3;
-		if(currentMonth<=3){
+		var qtrMonth = currentMonth % 3;
+		if (currentMonth <= 3) {
 			d.setMonth(1);
-		}else{
-			d.setMonth((currentMonth-qtrMonth)+1);
+		} else {
+			d.setMonth((currentMonth - qtrMonth) + 1);
 		}
 		d.setDate(1);
 	}
-	
+
 	// This month end
-	if (duration == "this-month-end"){
+	if (duration == "this-month-end") {
 		d.setDate(1);
-		d.setMonth(d.getMonth()+1);
+		d.setMonth(d.getMonth() + 1);
 	}
-		
 
 	console.log((getGMTTimeFromDate(d) / 1000));
 

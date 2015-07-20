@@ -86,24 +86,8 @@ content="<%=domainUser.getInfo(DomainUser.LAST_LOGGED_IN_TIME)%>" />
 //String CSS_PATH = "//cdnapp.agilecrm.com/";
 %>
 
-<link rel="stylesheet" type="text/css" href="<%=FLAT_FULL_PATH%>css/agilecrm.css?_=<%=_AGILE_VERSION%>" />
-
-<!-- Unified CSS for All Lib -->
-
-<link rel="stylesheet" type="text/css" href="<%=FLAT_FULL_PATH%>css/misc/agile-tasks.css?_=<%=_AGILE_VERSION%>"></link>
-<link rel="stylesheet" type="text/css" href="<%=FLAT_FULL_PATH%>css/misc/agile-social-suite.css"></link>
- <link rel="stylesheet" type="text/css" href="<%=FLAT_FULL_PATH%>css/misc/agile-timline.css"></link>
- <link rel="stylesheet" type="text/css" href="<%=FLAT_FULL_PATH%>css/misc/agile-widgets.css?_=<%=_AGILE_VERSION%>"></link>
- <link rel="stylesheet" type="text/css" href="<%=FLAT_FULL_PATH%>css/chrome-extension-check.css"></link>
- <link rel="stylesheet" type="text/css" href="<%=FLAT_FULL_PATH%>css/bootstrap_submenu.css?_=<%=_AGILE_VERSION%>"></link>
-  <link rel="stylesheet" type="text/css" href="<%=FLAT_FULL_PATH%>css/lib/timepicker-min.css"></link>
-
-<!-- <link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/misc/date-picker.css"></link> -->
-
-
+<!-- <link rel="stylesheet" type="text/css" href="<%=FLAT_FULL_PATH%>css/agile-all.css?_=<%=_AGILE_VERSION%>" />  -->
 <link rel="stylesheet" type="text/css" href="<%=FLAT_FULL_PATH%>css/lib.css"></link>
-<link rel="stylesheet" type="text/css" href="<%=FLAT_FULL_PATH%>css/contacts-new-ui.css">
-
 
 
 <!--  bootstrap 3 files -->
@@ -134,36 +118,14 @@ content="<%=domainUser.getInfo(DomainUser.LAST_LOGGED_IN_TIME)%>" />
 %>
 
 <%=cssLink %>
- <link rel="stylesheet" type="text/css" href="<%=FLAT_FULL_PATH%>css/typeahead.css">
-
-<!--  font awesome files -->
-
- <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet"> 
-<link rel="stylesheet" href="<%=FLAT_FULL_PATH%>css/flatfull/font-awesome.min.css" type="text/css" />
-
- 
-<!--  agile app framework  -->
-<link rel="stylesheet" href="<%=FLAT_FULL_PATH%>css/flatfull/animate.css" type="text/css" />
-<link rel="stylesheet" href="<%=FLAT_FULL_PATH%>css/flatfull/font-awesome.min.css" type="text/css" />
-<link rel="stylesheet" href="<%=FLAT_FULL_PATH%>css/flatfull/simple-line-icons.css" type="text/css" />
-<link rel="stylesheet" type="text/css" href="<%=FLAT_FULL_PATH%>css/font.css">
-<link rel="stylesheet" type="text/css" href="<%=FLAT_FULL_PATH%>css/app.css">
-<link rel="stylesheet" type="text/css" href="<%=FLAT_FULL_PATH%>css/agile-css-framework.css">
-<link rel="stylesheet" type="text/css" href="<%=FLAT_FULL_PATH%>css/migration.css" />
-
-
-<!-- <link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/bootstrap-<%=template%>.min.css" /> -->
-<!-- <link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/bootstrap-responsive.min.css" /> -->
+<link rel="stylesheet" type="text/css" href="<%=FLAT_FULL_PATH%>css/agile-app-framework.css">
 
 <style>
 .clickdesk_bubble {
 	display: none !important;
 }
 </style>
- <!-- <script src='http://cdnjs.cloudflare.com/ajax/libs/headjs/1.0.3/head.load.min.js'></script> -->
-<script src='//cdnjs.cloudflare.com/ajax/libs/headjs/1.0.3/head.js'></script>
 <!--  responsive table js -->
-
 <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
 <!--[if lt IE 9]>
 <script src="lib/ie/html5.js"></script>
@@ -177,213 +139,6 @@ content="<%=domainUser.getInfo(DomainUser.LAST_LOGGED_IN_TIME)%>" />
 
 
 <body class='<%if(!currentUserPrefs.animations) out.print("disable-anim");%>'>
-
- <!-- <div  class="settings panel panel-default ">
-  <button class="btn btn-default no-shadow pos-abt ng-scope toggle-inactive" ui-toggle-class="active" target=".settings">
-    <i class="fa fa-spin fa-gear"></i>
-  </button>
-  <div class="panel-heading ">
-    Settings
-  </div>
-  <div class="panel-body ng-scope"> 
-    <div class="m-b-sm">
-      <label class="i-checks i-checks i-checks-sm pull-right"><input type="checkbox" id="check-fix-head" class="tbody_check" value=""><i></i></label>
-      Fixed header 
-    </div>
-    <div class="m-b-sm">
-      <label class="i-checks i-checks i-checks-sm pull-right"><input type="checkbox" id="check-fix-aside" class="tbody_check" value=""><i></i></label>
-      Fixed aside 
-    </div>
-    <div class="m-b-sm">
-      <label class="i-checks i-checks i-checks-sm pull-right"><input type="checkbox" id="check-fold-aside" class="tbody_check" value=""><i></i></label>
-      Folded aside 
-    </div>
-    <div class="m-b-sm">
-      <label class="i-checks i-checks i-checks-sm pull-right"><input type="checkbox" id="check-dock-aside" class="tbody_check" value=""><i></i></label>
-      Dock aside
-    </div>
-    <div>
-      <label class="i-checks i-checks i-checks-sm pull-right"><input type="checkbox" id="check-box-layout" class="tbody_check" value=""><i></i></label>
-      Boxed layout
-    </div>
-  </div>
-  <div class="wrapper b-t b-light bg-light lter r-b magicMenu">
-    <div class="row row-sm">
-      <div class="col-xs-6">
-        <label class="i-checks i-checks-sm block m-b">
-          <input type="radio" name="a" target-aside-class="bg-black" target-logo-class="bg-black" target-topbar-class="bg-white-only" value="1" class="ng-valid ng-dirty ng-touched ng-valid-parse">
-          <span class="block bg-light clearfix pos-rlt">
-            <span class="active pos-abt w-full h-full bg-black-opacity text-center">
-              <i class="glyphicon glyphicon-ok text-white m-t-xs"></i>
-            </span>
-            <b class="bg-black header"></b>
-            <b class="bg-white header"></b>
-            <b class="bg-black"></b>
-          </span>
-        </label>
-
-        <label class="i-checks i-checks-sm block m-b">
-          <input type="radio" name="a" target-aside-class="bg-dark" target-logo-class="bg-dark" target-topbar-class="bg-white-only"  value="13" class="ng-valid ng-dirty ng-touched">
-          <span class="block bg-light clearfix pos-rlt">
-            <span class="active pos-abt w-full h-full bg-black-opacity text-center">
-              <i class="glyphicon glyphicon-ok text-white m-t-xs"></i>
-            </span>
-            <b class="bg-dark header"></b>
-            <b class="bg-white header"></b>
-            <b class="bg-dark"></b>
-          </span>
-        </label>
-
-        <label class="i-checks i-checks-sm block m-b">
-          <input type="radio"  name="a" target-aside-class="bg-black" target-logo-class="bg-white-only" target-topbar-class="bg-white-only" value="2">
-          <span class="block bg-light clearfix pos-rlt">
-            <span class="active pos-abt w-full h-full bg-black-opacity text-center">
-              <i class="glyphicon glyphicon-ok text-white m-t-xs"></i>
-            </span>
-            <b class="bg-white header"></b>
-            <b class="bg-white header"></b>
-            <b class="bg-black"></b>
-          </span>
-        </label>
-
-        <label class="i-checks block m-b">
-          <input type="radio"  name="a" target-aside-class="bg-dark" target-logo-class="bg-primary" target-topbar-class="bg-white-only"  value="3" >
-          <span class="block bg-light clearfix pos-rlt">
-            <span class="active pos-abt w-full h-full bg-black-opacity text-center">
-              <i class="glyphicon glyphicon-ok text-white m-t-xs"></i>
-            </span>
-            <b class="bg-primary header"></b>
-            <b class="bg-white header"></b>
-            <b class="bg-dark"></b>
-          </span>
-        </label>
-
-        <label class="i-checks i-checks-sm block m-b">
-          <input type="radio" name="a" target-aside-class="bg-black" target-logo-class="bg-info" target-topbar-class="bg-white-only"  value="4">
-          <span class="block bg-light clearfix pos-rlt">
-            <span class="active pos-abt w-full h-full bg-black-opacity text-center">
-              <i class="glyphicon glyphicon-ok text-white m-t-xs"></i>
-            </span>
-            <b class="bg-info header"></b>
-            <b class="bg-white header"></b>
-            <b class="bg-black"></b>
-          </span>
-        </label>
-
-        <label class="i-checks i-checks-sm block m-b">
-          <input type="radio" name="a" target-aside-class="bg-dark" target-logo-class="bg-success" target-topbar-class="bg-white-only"  value="5" >
-          <span class="block bg-light clearfix pos-rlt">
-            <span class="active pos-abt w-full h-full bg-black-opacity text-center">
-              <i class="glyphicon glyphicon-ok text-white m-t-xs"></i>
-            </span>
-            <b class="bg-success header"></b>
-            <b class="bg-white header"></b>
-            <b class="bg-dark"></b>
-          </span>
-        </label>
-
-        <label class="i-checks i-checks-sm block">
-          <input type="radio" name="a" target-aside-class="bg-dark" target-logo-class="bg-danger" target-topbar-class="bg-white-only"  name="39">
-          <span class="block bg-light clearfix pos-rlt">
-            <span class="active pos-abt w-full h-full bg-black-opacity text-center">
-              <i class="glyphicon glyphicon-ok text-white m-t-xs"></i>
-            </span>
-            <b class="bg-danger header"></b>
-            <b class="bg-white header"></b>
-            <b class="bg-dark"></b>
-          </span>
-        </label>
-      </div>
-      <div class="col-xs-6">
-        <label class="i-checks i-checks-sm block m-b">
-          <input type="radio" name="a" target-aside-class="bg-white" target-logo-class="bg-black" target-topbar-class="bg-black"  value="7" class="ng-valid ng-dirty ng-touched">
-          <span class="block bg-light clearfix pos-rlt">
-            <span class="active pos-abt w-full h-full bg-black-opacity text-center">
-              <i class="glyphicon glyphicon-ok text-white m-t-xs"></i>
-            </span>
-            <b class="bg-black header"></b>
-            <b class="bg-black header"></b>
-            <b class="bg-white"></b>
-          </span>
-        </label>
-
-        <label class="i-checks i-checks-sm block m-b">
-          <input type="radio" name="a" target-aside-class="bg-light" target-logo-class="bg-dark" target-topbar-class="bg-dark"  value="14" >
-          <span class="block bg-light clearfix pos-rlt">
-            <span class="active pos-abt w-full h-full bg-black-opacity text-center">
-              <i class="glyphicon glyphicon-ok text-white m-t-xs"></i>
-            </span>
-            <b class="bg-dark header"></b>
-            <b class="bg-dark header"></b>
-            <b class="bg-light"></b>
-          </span>
-        </label>
-
-        <label class="i-checks i-checks-sm block m-b">
-          <input type="radio" name="a" target-aside-class="bg-light-dker" target-logo-class="bg-info-dker" target-topbar-class="bg-info-dker"  value="8">
-          <span class="block bg-light clearfix pos-rlt">
-            <span class="active pos-abt w-full h-full bg-black-opacity text-center">
-              <i class="glyphicon glyphicon-ok text-white m-t-xs"></i>
-            </span>
-            <b class="bg-info dker header"></b>
-            <b class="bg-info dker header"></b>
-            <b class="bg-light dker"></b>
-          </span>
-        </label>
-
-        <label class="i-checks i-checks-sm block m-b">
-          <input type="radio" name="a" target-aside-class="bg-dark" target-logo-class="bg-primary" target-topbar-class="bg-primary"  value="9">
-          <span class="block bg-light clearfix pos-rlt">
-            <span class="active pos-abt w-full h-full bg-black-opacity text-center">
-              <i class="glyphicon glyphicon-ok text-white m-t-xs"></i>
-            </span>
-            <b class="bg-primary header"></b>
-            <b class="bg-primary header"></b>
-            <b class="bg-dark"></b>
-          </span>
-        </label>
-
-        <label class="i-checks i-checks-sm block m-b">
-          <input type="radio" name="a" target-aside-class="bg-black" target-logo-class="bg-info-dker" target-topbar-class="bg-info-dk"  value="10">
-          <span class="block bg-light clearfix pos-rlt">
-            <span class="active pos-abt w-full h-full bg-black-opacity text-center">
-              <i class="glyphicon glyphicon-ok text-white m-t-xs"></i>
-            </span>
-            <b class="bg-info dker header"></b>
-            <b class="bg-info dk header"></b>
-            <b class="bg-black"></b>
-          </span>
-        </label>
-
-        <label class="i-checks i-checks-sm block m-b">
-          <input type="radio"  name="a" target-aside-class="bg-dark" target-logo-class="bg-success" target-topbar-class="bg-success" value="11">
-          <span class="block bg-light clearfix pos-rlt">
-            <span class="active pos-abt w-full h-full bg-black-opacity text-center">
-              <i class="glyphicon glyphicon-ok text-white m-t-xs"></i>
-            </span>
-            <b class="bg-success header"></b>
-            <b class="bg-success header"></b>
-            <b class="bg-dark"></b>
-          </span>
-        </label>
-        
-        <label class="i-checks i-checks-sm block">
-          <input type="radio"  name="a" target-aside-class="bg-dark" target-logo-class="bg-danger-dker" target-topbar-class="bg-danger-dker" value="12">
-          <span class="block bg-light clearfix pos-rlt">
-            <span class="active pos-abt w-full h-full bg-black-opacity text-center">
-              <i class="glyphicon glyphicon-ok text-white m-t-xs"></i>
-            </span>
-            <b class="bg-danger dker header"></b>
-            <b class="bg-danger dker header"></b>
-            <b class="bg-dark"></b>
-          </span>
-        </label>
-      </div>
-    </div>
-  </div>
-</div>  -->
-
-
 
 <div id="wrap" class="app app-aside-folded-inactive app-header-fixed app-aside-fixed 
 <% 
@@ -493,6 +248,12 @@ if(currentUserPrefs.menuPosition.equals("top")){
       <span>Web Rules</span>
     </a>
   </li>
+  <li id="web-pages-menu">
+    <a href="#webpages">
+      <i class="fa fa-file-code-o"></i>
+      <span>Web Pages</span>
+    </a>
+  </li>
     <li id="activitiesmenu">
     <a  href="#activities">
       <i class="icon-cogs icon-white"></i>
@@ -529,22 +290,7 @@ src="img/21-0.gif"></img> -->
 <div class='notifications bottom-right'></div>
 
 <div id='templates'></div>
-<!-- <script type="text/javascript">
-function loadTpl()
-{
-var tpl;
-if (window.XMLHttpRequest)tpl=new XMLHttpRequest(); //for IE 6 & earlier
-else tpl=new ActiveXObject("Microsoft.XMLHTTP"); //for chrome & newer IEs
-tpl.open("GET","tpl/min/tpl.js",false); //script load from browser
-tpl.send();
-document.getElementById('templates').innerHTML=tpl.responseText; //insert in dummy div
-}
-</script>-->
 
-<!-- Templates
-Use = [<]%@ include file="tpl/min/tpl.js" %[>] -->
-		
-	
 
 <!-- Determine Console.logging - we log in local boxes -->
 <%
@@ -563,20 +309,13 @@ if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Produ
 
  <%@ include file="tpl/min/precompiled/flatfull/tpl.html"%>  
  
-                   
-
-
 </div>
 <!-- Including Footer page -->
 <jsp:include page="flatfull/footer.jsp" />
 
-
-<!-- <script src='https://dpm72z3r2fvl4.cloudfront.net/js/lib/headjs-min.js'></script> -->
-<!-- <script src='/lib/headjs-min.js'></script> -->
-
-
-
+<script src='//cdnjs.cloudflare.com/ajax/libs/headjs/1.0.3/head.js'></script>
 <script>
+
 //var LIB_PATH = "//dpm72z3r2fvl4.cloudfront.net/js/";
 //var LIB_PATH = "//cdnapp.agilecrm.com/";
 var LIB_PATH = "";
@@ -587,7 +326,7 @@ var FLAT_FULL_PATH = LIB_PATH_FLATFULL;
 
 LIB_PATH = LIB_PATH_FLATFULL;
 
-var FLAT_FULL_UI = "flatfull/";
+var FLAT_FULL_UI = "flatfull/";  
 
 var _AGILE_VERSION = <%="\"" + _AGILE_VERSION + "\""%>;
 
@@ -632,29 +371,12 @@ var JQUERY_LIB_PATH = "//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.j
 
 <!-- JQUery Core and UI CDN -->	
 <!-- The same ajax libraries are used by designer - if you are changing the version here, change in designer too -->
-head.load("https://code.jquery.com/jquery-1.10.2.min.js", "//code.jquery.com/jquery-migrate-1.2.1.min.js", LIB_PATH_FLATFULL + "/lib/agile/agile-jquery-migration.js", LIB_PATH_FLATFULL + "lib/bootstrap.js", LIB_PATH_FLATFULL + 'lib/bootstrap3-typeahead.js', LIB_PATH_FLATFULL + 'lib/jquery.validate.min.js', LIB_PATH_FLATFULL + 'lib/bootstrap-datepicker-min.js',LIB_PATH_FLATFULL + 'lib/date-formatter.js', LIB_PATH_FLATFULL + 'lib/bootstrap-timepicker-min.js');
-
-<!-- Backbone -->
-head.js(LIB_PATH + 'lib/underscore-min.js', LIB_PATH + 'lib/backbone-min.js', LIB_PATH + 'lib/infiniscroll.js');
-
-<!-- Handle bars -->
+head.load("https://code.jquery.com/jquery-1.10.2.min.js", LIB_PATH + 'lib/lib-all.js');
 
 if(HANDLEBARS_PRECOMPILATION)
-head.js(HANDLEBARS_LIB,   "tpl/min/precompiled/" + FLAT_FULL_PATH + "tpl.js" + "?_=" + _AGILE_VERSION);
+head.js(HANDLEBARS_LIB, "tpl/min/precompiled/" + FLAT_FULL_PATH + "tpl.js" + "?_=" + _AGILE_VERSION);
 else
 head.js(HANDLEBARS_LIB);
-
-
-// head.js("//cdnjs.cloudflare.com/ajax/libs/handlebars.js/1.3.0/handlebars.min.js", "tpl/min/tpl.js");
-
-<!-- Country Names from country codes -->
-head.js(LIB_PATH + 'lib/country-from-code.js');
-
-<!-- Inital.js Text avatars -->
-head.js(LIB_PATH + 'lib/text-avatar/initial.min.js');
-
-<!-- mustache.js -->
-head.js('//cdnjs.cloudflare.com/ajax/libs/mustache.js/0.8.1/mustache.min.js');
 
 // Fetch/Create contact from our domain
 var Agile_Contact = {};
@@ -671,24 +393,9 @@ head.ready(["core", "stats"], function(){
 	if(!HANDLEBARS_PRECOMPILATION)
 		downloadTemplate("tpl.js");
 });
-});
+}); 
 
 </script>
-
-<!--  <script type="text/javascript" src="js/flatfull/app.min.js"></script>  -->
-
-
-
-
-
-<!--  responsive table -->
-
-<!-- <link rel="stylesheet" type="text/css" href="/css/responsive-table/responsive-tables.css"> -->
-
-
-
-<!-- Google analytics code -->
-
 
 <!-- Google analytics code -->
 <script>
@@ -700,7 +407,6 @@ head.ready(["core", "stats"], function(){
   ga('send', 'pageview');
  
 </script>
-
 
 <!-- ClickDesk Live Chat Service for websites -->
 <script type='text/javascript'>

@@ -22,18 +22,20 @@ function loadPortlets(el){
 	 * sorted based on position i.e., set when sorted using jquery ui sortable
 	 */
 	if (!Portlets_View){
-		head.load(FLAT_FULL_UI + "css/misc/agile-portlet.css" + "?_=" + _AGILE_VERSION);
+
+		// head.load(FLAT_FULL_UI + "css/misc/agile-portlet.css" + "?_=" + _AGILE_VERSION);
+
 		// This flag is used to ensure portlet script are loaded only once in
 		// postrender. It is set to false after portlet setup is initialized
 		is_portlet_view_new = true;
 		Portlets_View = new Base_Collection_View({ url : '/core/api/portlets', sortKey : "row_position",sort_collection : false, restKey : "portlet", templateKey : "portlets", individual_tag_name : 'div',
 			postRenderCallback : function(portlets_el){
-				head.load(FLAT_FULL_UI + "css/jquery.gridster.css", function(){
+				// head.load(FLAT_FULL_UI + "css/jquery.gridster.css", function(){
 					// If scripts aren't loaded earlier, setup is initialized
 					set_up_portlets(el, portlets_el);
 					if(Portlets_View.collection.length==0)
 						$('.gridster > div:visible > div',el).removeClass('gs-w');
-				});
+				// });
 			} });
 		this.Portlets_View.appendItem = set_p_portlets;
 
