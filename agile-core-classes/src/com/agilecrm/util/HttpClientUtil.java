@@ -10,6 +10,7 @@ import org.apache.http.conn.ClientConnectionManager;
 import org.apache.http.conn.scheme.PlainSocketFactory;
 import org.apache.http.conn.scheme.Scheme;
 import org.apache.http.conn.scheme.SchemeRegistry;
+import org.apache.http.conn.ssl.SSLSocketFactory;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
@@ -33,6 +34,7 @@ public class HttpClientUtil
 
 	SchemeRegistry schemeRegistry = new SchemeRegistry();
 	schemeRegistry.register(new Scheme("http", PlainSocketFactory.getSocketFactory(), 80));
+	schemeRegistry.register(new Scheme("https",SSLSocketFactory.getSocketFactory(),443));
 
 	ClientConnectionManager connManager = new ThreadSafeClientConnManager(httpParams, schemeRegistry);
 
