@@ -959,7 +959,7 @@
 	<div class="row_position" style="display:none">{{row_position}}</div>	
 </script>
 <script id="portlets-user-onboarding-model-template" type="text/html">
-	<div class="portlet_header portlet_edit_icons panel-heading b-b-none" style="background:#7BA9D0!important;" onmouseover="showPortletIcons(this); return false;" onmouseout="hidePortletIcons(this); return false;">
+	<div class="portlet_header portlet_edit_icons panel-heading b-b" onmouseover="showPortletIcons(this); return false;" onmouseout="hidePortletIcons(this); return false;">
 		<h4 class="h4 text-ellipsis">
 			<span class="pull-left inline-block text-ellipsis" style="width:90%;">Getting Started</span>
 		</h4>
@@ -967,16 +967,18 @@
 			<i id="{{id}}-close" class="c-p icon-close {{remove_spaces name}}-close p-r-sm" onclick="deletePortlet(this);"></i>
 		</div>
 	</div>
-	<div class="portlet_body m-l text-lg">
+	<div class="portlet_body m-l text-lg getting-started-body bg-white">
 	<div style="font-size: 15px;margin: 10px 0px 7px;" class="text-muted">Here are few steps to kick start your new CRM. </div>
 		<div>
 			{{#if settings.setupProfile.done}}
-				<label class="fa fa-check-square-o ob-portlet-font-check onboarding-check c-p text-muted" value="setupProfile">
-					<input class="ob-portlet-check" type="checkbox" checked="checked"><i></i>
+				<label class="i-checks i-checks-sm m-b-none onboarding-check" value="setupProfile">
+					<input class="thead_check" type="checkbox" checked="checked"><i></i>
 				</label>
+
+			
 			{{else}}
-				<label class="fa fa-square-o ob-portlet-font-check onboarding-check c-p" value="setupProfile">
-					<input class="ob-portlet-no-check" type="checkbox"><i></i>
+				<label class="i-checks i-checks-sm m-b-none onboarding-check" value="setupProfile">
+					<input class="thead_check" type="checkbox"><i></i>
 				</label>
 			{{/if}}
 			{{#if settings.setupProfile.done}}
@@ -990,12 +992,12 @@
 		</div>
 		<div>
 			{{#if settings.linkEmailAccount.done}}
-				<label class="fa fa-check-square-o ob-portlet-font-check onboarding-check c-p text-muted" value="linkEmailAccount">
-					<input class="ob-portlet-check" type="checkbox" checked="checked"><i></i>
+				<label class="i-checks i-checks-sm m-b-none onboarding-check" value="linkEmailAccount">
+					<input class="thead_check" type="checkbox" checked="checked"><i></i>
 				</label>
 			{{else}}
-				<label class="fa fa-square-o ob-portlet-font-check onboarding-check c-p" value="linkEmailAccount">
-					<input class="ob-portlet-no-check" type="checkbox"><i></i>
+				<label class="i-checks i-checks-sm m-b-none onboarding-check" value="linkEmailAccount">
+					<input class="thead_check" type="checkbox"><i></i>
 				</label>
 			{{/if}}
 			{{#if settings.linkEmailAccount.done}}
@@ -1009,12 +1011,12 @@
 		</div>
 		<div>
 			{{#if settings.addWidgets.done}}
-				<label class="fa fa-check-square-o ob-portlet-font-check onboarding-check c-p text-muted" value="addWidgets">
-					<input class="ob-portlet-check" type="checkbox" checked="checked"><i></i>
+				<label class="i-checks i-checks-sm m-b-none onboarding-check" value="addWidgets">
+					<input class="thead_check" type="checkbox" checked="checked"><i></i>
 				</label>
 			{{else}}
-				<label class="fa fa-square-o ob-portlet-font-check onboarding-check c-p" value="addWidgets">
-					<input class="ob-portlet-no-check" type="checkbox"><i></i>
+				<label class="i-checks i-checks-sm m-b-none onboarding-check" value="addWidgets">
+					<input class="thead_check" type="checkbox"><i></i>
 				</label>
 			{{/if}}
 			{{#if settings.addWidgets.done}}
@@ -1028,12 +1030,12 @@
 		</div>
 		<div>
 			{{#if settings.importContacts.done}}
-				<label class="fa fa-check-square-o ob-portlet-font-check onboarding-check c-p text-muted" value="importContacts">
-					<input class="ob-portlet-check" type="checkbox" checked="checked"><i></i>
+				<label class="i-checks i-checks-sm m-b-none onboarding-check" value="importContacts">
+					<input class="thead_check" type="checkbox" checked="checked"><i></i>
 				</label>
 			{{else}}
-				<label class="fa fa-square-o ob-portlet-font-check onboarding-check c-p" value="importContacts">
-					<input class="ob-portlet-no-check" type="checkbox"><i></i>
+				<label class="i-checks i-checks-sm m-b-none onboarding-check" value="importContacts">
+					<input class="thead_check" type="checkbox"><i></i>
 				</label>
 			{{/if}}
 			{{#if settings.importContacts.done}}
@@ -1047,12 +1049,12 @@
 		</div>
 		<div>
 			{{#if settings.createCampaign.done}}
-				<label class="fa fa-check-square-o ob-portlet-font-check onboarding-check c-p text-muted" value="createCampaign">
-					<input class="ob-portlet-check" type="checkbox" checked="checked"><i></i>
+				<label class="i-checks i-checks-sm m-b-none onboarding-check" value="createCampaign">
+					<input class="thead_check" type="checkbox" checked="checked"><i></i>
 				</label>
 			{{else}}
-				<label class="fa fa-square-o ob-portlet-font-check onboarding-check c-p" value="createCampaign">
-					<input class="ob-portlet-no-check" type="checkbox"><i></i>
+				<label class="i-checks i-checks-sm m-b-none onboarding-check" value="createCampaign">
+					<input class="thead_check" type="checkbox"><i></i>
 				</label>
 			{{/if}}
 			{{#if settings.createCampaign.done}}
