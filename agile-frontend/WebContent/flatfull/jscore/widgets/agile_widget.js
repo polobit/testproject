@@ -112,7 +112,13 @@ function agile_crm_get_contact_properties_list(propertyName)
 function agile_crm_update_contact(propertyName, value, callback)
 {
 	// Gets current contact model from the contactDetailView object
-	var contact_model = App_Contacts.contactDetailView.model;
+	var contact_model = null;
+	
+	if(company_util.isCompany()){
+		contact_model = App_Companies.companyDetailView.model;
+	} else {
+		contact_model = App_Contacts.contactDetailView.model;
+	}
 
 	// Reads properties fied from the contact
 	var properties = contact_model.toJSON()['properties'];

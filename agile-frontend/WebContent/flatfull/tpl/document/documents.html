@@ -85,7 +85,7 @@
         		<a href="#contact/{{id}}" class="activate-link thumb-sm"><img class="img-inital r r-2x" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}" title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}" /></a>
         	{{/if_contact_type}}
 			{{#if_contact_type "COMPANY"}}
-        		<a href="#contact/{{id}}" class="activate-link thumb-sm"><img class="r r-2x" {{getCompanyImage "40" "display:inline;"}} title="{{getPropertyValue properties "name"}}"/></a>
+        		<a href="#company/{{id}}" class="activate-link thumb-sm"><img class="r r-2x" {{getCompanyImage "40" "display:inline;"}} title="{{getPropertyValue properties "name"}}"/></a>
         	{{/if_contact_type}}
         {{/each}}
 	</div>
