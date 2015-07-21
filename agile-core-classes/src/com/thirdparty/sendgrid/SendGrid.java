@@ -241,7 +241,7 @@ public class SendGrid
 	if (attachmentData != null && attachmentData.length != 0)
 	    queryString += "&" + getAttachmentQueryString(attachmentData);
 
-	System.out.println("QueryString  \n" + queryString + "\n\n");
+//	System.out.println("QueryString  \n" + queryString + "\n\n");
 
 	return queryString;
     }

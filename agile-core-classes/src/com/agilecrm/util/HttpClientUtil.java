@@ -64,8 +64,9 @@ public class HttpClientUtil
 	    
 	    postRequest.setEntity(input);
 	    
-
+	    long startTime = System.currentTimeMillis();
 	    HttpResponse response = httpClient.execute(postRequest);
+	    System.out.println("Request time taken..." + (System.currentTimeMillis() - startTime));
 
 	    BufferedReader br = new BufferedReader(new InputStreamReader((response.getEntity().getContent())));
 
