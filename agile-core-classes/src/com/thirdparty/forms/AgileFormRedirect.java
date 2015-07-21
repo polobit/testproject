@@ -39,10 +39,13 @@ public class AgileFormRedirect extends HttpServlet
 	}
 	String urlParameters = sb.toString();
 	URL url = new URL(req.getAttribute("url").toString() + "&" + urlParameters);
-	
 	HttpURLConnection con = (HttpURLConnection) url.openConnection();
+
 	if (StringUtils.equalsIgnoreCase("GET", req.getMethod()))
+	{
 	    con.setRequestMethod("GET");
+	    res.sendRedirect(url.toString());
+	}
 	else if (StringUtils.equalsIgnoreCase("POST", req.getMethod()))
 	{
 	    con.setRequestMethod("POST");
@@ -52,19 +55,18 @@ public class AgileFormRedirect extends HttpServlet
 	    wr.writeBytes(urlParameters);
 	    wr.flush();
 	    wr.close();
-	}
 
-	BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream(), StandardCharsets.UTF_8));
-	String inputLine;
-	StringBuffer response = new StringBuffer();
-
-	ServletOutputStream sout = res.getOutputStream();
-	while ((inputLine = in.readLine()) != null)
-	{
-	    response.append(inputLine);
-	    sout.write(inputLine.getBytes());
+	    BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream(), StandardCharsets.UTF_8));
+	    String inputLine;
+	    StringBuffer response = new StringBuffer();
+	    ServletOutputStream sout = res.getOutputStream();
+	    while ((inputLine = in.readLine()) != null)
+	    {
+		response.append(inputLine);
+		sout.write(inputLine.getBytes());
+	    }
+	    in.close();
+	    sout.flush();
 	}
-	in.close();
-	sout.flush();
     }
 }
