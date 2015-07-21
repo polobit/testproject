@@ -603,7 +603,7 @@ public class JSAPI
 	    List<ContactField> properties = contact.properties;
 
 	    for (int i = 0; i < contact.properties.size(); i++)
-	        if(obj.getString("name") == contact.properties.get(i).name && obj.getString("subtype") == contact.properties.get(i).subtype)
+	        if(StringUtils.equals(contact.properties.get(i).name, obj.getString("name")) && StringUtils.equals(contact.properties.get(i).subtype, obj.getString("subtype")))
 	            properties.remove(i);
 
 	    properties.add(new ContactField(obj.getString("name"), obj.getString("value"), obj.getString("subtype")));
