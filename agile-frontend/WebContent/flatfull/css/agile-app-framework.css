@@ -9405,7 +9405,6 @@ border-collapse: separate;
 	color:#333;
 }
 
-
 @charset "utf-8";
 /* CSS Document */
 
@@ -9881,12 +9880,6 @@ box-shadow: 0 1px 1px rgba(0, 0, 0, .05); 03/30/2015 */
   left: 50%;
   margin-left: -150px;
   z-index: 1000;
-}
-.fc-overlay.bottom {
-  left: -75%;
-  top: -80px;
-  padding: 0 10px;
-  margin: 0;
 }
 .fc-overlay.right {
   left: auto;
@@ -10604,10 +10597,8 @@ color:#1f2427!important;
 
 .tagsinput .close
 {
-	 float: none;
-  position: relative;
-  top: -2px;
-  vertical-align: middle;
+	float:none;
+	vertical-align:middle;
 }
 
 /*hack for same grid */
@@ -10732,6 +10723,46 @@ display:none;
 #noty_bottomCenter_layout_container li {
   width:389px!important;
 }
+
+
+
+
+
+
+/* starting css app mobile compatibility */
+
+@media (min-width:768px){
+.app-details-width {
+	width:299px;
+}
+}
+
+@media (max-width:767px){
+
+	.app-details-width {
+	width:100%;
+	}
+
+ .fixedicons,.dockedicons {
+ position:static!important;
+ }
+ 
+ .table-layout-mob-view {
+ table-layout:auto;
+ }
+ 
+ .agile-table td > div.table-resp {
+  width: 15em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.activity_time {
+  position: static;
+}
+}
+
+
 .email-attchment-bg {
 background-color: #f5f5f5;
 border: 1px solid #dcdcdc;
@@ -10764,20 +10795,23 @@ min-width:50%;
   font-family: 'Source Sans Pro';
   font-style: normal;
   font-weight: 300;
-  src: local('Source Sans Pro Light'), local('SourceSansPro-Light'), url('../font/sourcesanspro/sourcesanspro-light.woff') format('woff');
+  /*src: local('Source Sans Pro Light'), local('SourceSansPro-Light'), url('../font/sourcesanspro/sourcesanspro-light.woff') format('woff'); */
+  src: local('Source Sans Pro Light'), local('SourceSansPro-Light'), url(https://fonts.gstatic.com/s/sourcesanspro/v9/toadOcfmlt9b38dHJxOBGD_j0nMiB9fPhg_k1wdK2h0.woff2) format('woff2');
 }
 @font-face {
   font-family: 'Source Sans Pro';
   font-style: normal;
   font-weight: 400;
-  src: local('Source Sans Pro'), local('SourceSansPro-Regular'), url('../font/sourcesanspro/sourcesanspro.woff') format('woff');
-}
+  /* src: local('Source Sans Pro'), local('SourceSansPro-Regular'), url('../font/sourcesanspro/sourcesanspro.woff') format('woff');\ */
+  src: local('Source Sans Pro'), local('SourceSansPro-Regular'), url(https://fonts.gstatic.com/s/sourcesanspro/v9/ODelI1aHBYDBqgeIAH2zlNOAHFN6BivSraYkjhveRHY.woff2) format('woff2');
+ }
 @font-face {
   font-family: 'Source Sans Pro';
   font-style: normal;
   font-weight: 700;
-  src: local('Source Sans Pro Bold'), local('SourceSansPro-Bold'), url('../font/sourcesanspro/sourcesanspro-bold.woff') format('woff');
-}
+  /*src: local('Source Sans Pro Bold'), local('SourceSansPro-Bold'), url('../font/sourcesanspro/sourcesanspro-bold.woff') format('woff');*/
+  src: local('Source Sans Pro Bold'), local('SourceSansPro-Bold'), url(http://fonts.gstatic.com/s/sourcesanspro/v9/toadOcfmlt9b38dHJxOBGFzONuGKG1DnNuYnL34Jwfo.woff2) format('woff2');
+ }
 
 html {
   background-color: #f0f3f4;

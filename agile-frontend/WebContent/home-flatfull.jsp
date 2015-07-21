@@ -368,7 +368,7 @@ var _billing_restriction = <%=mapper.writeValueAsString(restriction)%>;
 var JQUERY_LIB_PATH = "//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js";
 //var JQUERY_LIB_PATH = LIB_PATH + 'lib/jquery.min.js';
 
-head.load("https://cdnjs.cloudflare.com/ajax/libs/jquery/1.10.2/jquery.min.js", LIB_PATH + 'lib/lib-all-min.js');
+head.load("https://cdnjs.cloudflare.com/ajax/libs/jquery/1.10.2/jquery.min.js", LIB_PATH + 'lib/lib-all-min.js', LIB_PATH + 'lib/backbone-route-filter.js');
 
 if(HANDLEBARS_PRECOMPILATION)
 head.js(HANDLEBARS_LIB, "tpl/min/precompiled/" + FLAT_FULL_PATH + "tpl.js" + "?_=" + _AGILE_VERSION);
