@@ -274,8 +274,7 @@ function saveDocument(form_id, modal_id, saveBtn, isUpdate, json)
 							return false;
 					}
 				});
-			}
-			if (company_util.isCompany()){
+			} else if (company_util.isCompany()){
 				company_util.updateDocumentsList(document,true);
 			}
 			else if (Current_Route == 'documents') {
