@@ -115,7 +115,7 @@ public abstract class BulkActionAdaptor implements DeferredTask
 	    return;
 	}
 
-	if (info == null && key != null)
+	if (key != null)
 	{
 	    user = DomainUserUtil.getDomainUser(key.getId());
 	    if (user == null)
