@@ -56,6 +56,9 @@ public class ContactAccessControl extends UserAccessControl
 
     public boolean canCreate()
     {
+	if (skipCheck)
+	    return true;
+
 	// If contact is defined it checks for update operation if owner in the
 	// contact and current owner is different
 	if (!isNew() && !checkOwner())
@@ -71,6 +74,9 @@ public class ContactAccessControl extends UserAccessControl
 
     public boolean canDelete()
     {
+	if (skipCheck)
+	    return true;
+
 	// Delete condition is checked only if current user is not owner of the
 	// contact
 	if (!isNew() && !checkOwner())
@@ -86,6 +92,9 @@ public class ContactAccessControl extends UserAccessControl
      */
     public boolean canRead()
     {
+	if (skipCheck)
+	    return true;
+
 	// If contact is defined it checks for update operation if owner in the
 	// contact and current owner is different
 	if (!checkOwner() || contact.getContactOwnerKey() == null)
@@ -101,6 +110,9 @@ public class ContactAccessControl extends UserAccessControl
      */
     public boolean checkOwner()
     {
+	if (skipCheck)
+	    return true;
+
 	if (contact == null || contact.getContactOwnerKey() == null)
 	    return true;
 
@@ -134,11 +146,17 @@ public class ContactAccessControl extends UserAccessControl
 
     public boolean canImport()
     {
+	if (skipCheck)
+	    return true;
+
 	return hasScope(UserAccessScopes.IMPORT_CONTACTS);
     }
 
     public boolean canExport()
     {
+	if (skipCheck)
+	    return true;
+
 	return hasScope(UserAccessScopes.EXPORT_CONTACTS);
     }
 

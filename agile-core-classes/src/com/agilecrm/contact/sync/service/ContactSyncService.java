@@ -65,7 +65,7 @@ public abstract class ContactSyncService implements SyncService
     /** total_synced_contact. */
     protected int total_synced_contact;
 
-    private UserAccessControl accessControl = UserAccessControl.getAccessControl(AccessControlClasses.Contact, null);
+    private UserAccessControl accessControl = null;
 
     /**
      * creates ContactSyncService Instance at runtime follows Dynamic
@@ -82,6 +82,8 @@ public abstract class ContactSyncService implements SyncService
 	DomainUser user = DomainUserUtil.getDomainUser(key.getId());
 	if (user == null)
 	    return null;
+
+	accessControl = UserAccessControl.getAccessControl(AccessControlClasses.Contact, null, user);
 	UserInfo info = new UserInfo("agilecrm.com", user.email, user.name);
 	SessionManager.set(info);
 	return this;
@@ -312,8 +314,8 @@ public abstract class ContactSyncService implements SyncService
     private Contact saveContact(Contact contact)
     {
 	addTagToContact(contact);
-	//Temporary fix for stripe sync merging contacts
-	if (ContactUtil.isDuplicateContact(contact) && prefs.type!=null && !prefs.type.equals(Type.STRIPE))
+	// Temporary fix for stripe sync merging contacts
+	if (ContactUtil.isDuplicateContact(contact) && prefs.type != null && !prefs.type.equals(Type.STRIPE))
 	{
 	    contact = ContactUtil.mergeContactFields(contact);
 

@@ -91,18 +91,20 @@ public class CSVUtil
 
     private static final int MAX_ALLOWED_FIELD_VALUE_SIZE = 490;
 
-    private UserAccessControl accessControl = UserAccessControl.getAccessControl(AccessControlClasses.Contact, null);
+    private static UserAccessControl accessControl = null;
 
     private CSVUtil()
     {
 
     }
 
-    public CSVUtil(BillingRestriction billingRestriction)
+    public CSVUtil(BillingRestriction billingRestriction, UserAccessControl accessControl)
     {
 	this.billingRestriction = billingRestriction;
 	dBbillingRestriction = (ContactBillingRestriction) DaoBillingRestriction.getInstace(
 		Contact.class.getSimpleName(), this.billingRestriction);
+
+	this.accessControl = accessControl;
 
     }
 
