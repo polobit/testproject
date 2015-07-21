@@ -159,6 +159,7 @@ public abstract class UserAccessControl
 	try
 	{
 
+	    System.out.println("*********************");
 	    if (user == null)
 	    {
 		boolean skipCheck = VersioningUtil.isBackgroundThread();

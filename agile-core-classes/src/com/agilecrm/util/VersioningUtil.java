@@ -125,7 +125,9 @@ public class VersioningUtil
 	if (service == null)
 	    return false;
 
-	if ("agile-frontend".equals(service.getCurrentModule()))
+	String module = service.getCurrentModule();
+	System.out.println("current module : " + module);
+	if ("agile-frontend".equals(module))
 	{
 	    return true;
 	}
