@@ -59,7 +59,6 @@ import com.agilecrm.subscription.restrictions.exception.PlanRestrictedException;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.access.UserAccessControl;
-import com.agilecrm.user.access.UserAccessControl.AccessControlClasses;
 import com.agilecrm.user.access.exception.AccessDeniedException;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.email.SendMail;
@@ -91,7 +90,7 @@ public class CSVUtil
 
     private static final int MAX_ALLOWED_FIELD_VALUE_SIZE = 490;
 
-    private static UserAccessControl accessControl = null;
+    private UserAccessControl accessControl = null;
 
     private CSVUtil()
     {

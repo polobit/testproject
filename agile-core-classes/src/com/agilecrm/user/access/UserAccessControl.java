@@ -158,13 +158,18 @@ public abstract class UserAccessControl
     {
 	try
 	{
+
+	    if (user == null)
+	    {
+		boolean skipCheck = VersioningUtil.isBackgroundThread();
+		if (skipCheck)
+		    return new WildcardAccessControl();
+	    }
+
 	    UserAccessControl accessControl = access.clazz.newInstance();
 	    accessControl.entityObject = entityObject;
 	    accessControl.user = user;
-	    if (accessControl.user == null)
-	    {
-		accessControl.skipCheck = VersioningUtil.isBackgroundThread();
-	    }
+
 	    accessControl.init();
 	    System.out.println("---------fd---------" + accessControl.canRead());
 	    return accessControl;
