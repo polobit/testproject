@@ -163,7 +163,11 @@ public abstract class UserAccessControl
 	    {
 		boolean skipCheck = VersioningUtil.isBackgroundThread();
 		if (skipCheck)
+		{
+		    System.out.println("skipping access check");
 		    return new WildcardAccessControl();
+		}
+
 	    }
 
 	    UserAccessControl accessControl = access.clazz.newInstance();

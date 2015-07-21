@@ -40,14 +40,14 @@ public class WildcardAccessControl extends UserAccessControl
     public boolean canRead()
     {
 	// TODO Auto-generated method stub
-	return false;
+	return true;
     }
 
     @Override
     public <T> Query<T> modifyQuery(Query<T> query)
     {
 	// TODO Auto-generated method stub
-	return null;
+	return query;
     }
 
     @Override
