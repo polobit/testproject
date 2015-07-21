@@ -3,6 +3,7 @@ package com.agilecrm.util;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
@@ -16,6 +17,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpParams;
+
 
 /**
  * <code>HttpClientUtil</code> is the utility class that handles URL requests
@@ -35,7 +37,7 @@ public class HttpClientUtil
 	SchemeRegistry schemeRegistry = new SchemeRegistry();
 	schemeRegistry.register(new Scheme("http", PlainSocketFactory.getSocketFactory(), 80));
 	schemeRegistry.register(new Scheme("https",SSLSocketFactory.getSocketFactory(),443));
-
+	
 	ClientConnectionManager connManager = new ThreadSafeClientConnManager(httpParams, schemeRegistry);
 
 	httpClient = new DefaultHttpClient(connManager, httpParams);
@@ -49,15 +51,19 @@ public class HttpClientUtil
      * @param postData
      *            - post data
      */
-    public static void accessPostURLUsingHttpClient(String url, String postData)
+    public static void accessPostURLUsingHttpClient(String url, String contentType, String postData)
     {
 	try
 	{
 	    HttpPost postRequest = new HttpPost(url);
 
 	    StringEntity input = new StringEntity(postData, "UTF-8");
-	    input.setContentType("application/json");
+	    
+	    if(StringUtils.isNotBlank(contentType))
+	    	input.setContentType(contentType);
+	    
 	    postRequest.setEntity(input);
+	    
 
 	    HttpResponse response = httpClient.execute(postRequest);
 

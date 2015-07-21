@@ -166,7 +166,7 @@ public class SendGridUtil
 						SendGridSubVars.HTML.getString(), SendGridSubVars.TEXT.getString(),
 						getSMTPJSON(tempArray.getJSONObject(i), firstSendGridDefferedTask).toString());
 
-				HttpClientUtil.accessPostURLUsingHttpClient(SendGrid.SENDGRID_API_POST_URL, postData);
+				HttpClientUtil.accessPostURLUsingHttpClient(SendGrid.SENDGRID_API_POST_URL, "application/x-www-form-urlencoded", postData);
 			}
 
 		}
