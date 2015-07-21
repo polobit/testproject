@@ -482,7 +482,10 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
 								// Removes disabled attribute of save button
 								enable_save_button($(saveBtn));
 
-								add_contact_to_view(App_Contacts.contactsListView, data, obj.id);
+								if(is_person)
+									add_contact_to_view(App_Contacts.contactsListView, data, obj.id);
+								else
+									add_contact_to_view(App_Companies.companiesListView, data, obj.id);
 
 								// Adds the tags to tags collection
 								if (tags != undefined && tags.length != 0)
@@ -814,11 +817,11 @@ function add_contact_to_view(appView, model, isUpdate)
 				{
 								if (appView.collection.get(model.id) != null) // update existing model
 												appView.collection.get(model.id).set(model);
-								else if (readCookie('company_filter')) // add model only if its in
+								else if (company_util.isCompany()) // add model only if its in
 												// company view
 												add_model_cursor(appView.collection, model);
 								else if (isUpdate)
-												CONTACTS_HARD_RELOAD = true; // reload contacts next time,
+									COMPANIES_HARD_RELOAD = true; // reload contacts next time,
 								// because we may have updated
 								// Company, so reflect in Contact
 				}
