@@ -1,6 +1,5 @@
 package com.agilecrm.util;
 
-
 /**
  * <code>VersioningUitl</code> class checks request version and builds login
  * URLs accordingly.
@@ -118,7 +117,7 @@ public class VersioningUtil
 
 	String module = service.getCurrentModule();
 	System.out.println("current module : " + module);
-	if (!"agile-frontend".equals(module))
+	if (!"default".equals(module))
 	{
 	    return true;
 	}
