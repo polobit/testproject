@@ -732,6 +732,7 @@ border-radius: 2px;
 	font-size:14px;
 	line-height : 15px;
 	padding-right:	5px;
+	 text-transform: lowercase; 
 }
 
 .portlet_body_calendar>#calendar_container>.fc-content>.fc-view>.fc-border-separate>tbody>tr>td>div>.fc-day-number
@@ -848,12 +849,10 @@ top:68px!important;
   font-size: 10px;
 }
 
-.portlet_body_calendar .fc-header-title h2 {
- text-transform: lowercase; 
+.portlet_body_calendar .fc-header-title  {
+	padding-top:5px
  }
 .portlet_body_calendar .fc-header-title h2:first-letter { 
 text-transform: uppercase;
  }
- 
-
  
