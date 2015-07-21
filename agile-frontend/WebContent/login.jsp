@@ -198,16 +198,8 @@ if(isSafari && isWin)
 	</div>
 	
 	<!-- JQUery Core and UI CDN -->
-<!-- <script type='text/javascript'
-	src='https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js'></script>
-	<script type="text/javascript" src="/lib/bootstrap.min.js"></script>
-	<script type='text/javascript' src='<%=flatfull_path%>/lib/jquery-new/jquery-2.1.1.min.js'></script>
-    <script type="text/javascript" src="<%=flatfull_path%>/lib/bootstrap.v3.min.js"></script> 
-	-->
-	
-	<!-- JQuery Lib -->
-	<script type='text/javascript' src='https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js'></script>
-	<script src='//cdnjs.cloudflare.com/ajax/libs/headjs/1.0.3/head.js'></script>
+	<script type='text/javascript' src='//cdnjs.cloudflare.com/ajax/libs/jquery/1.10.2/jquery.min.js'></script>
+	<script src='//cdnjs.cloudflare.com/ajax/libs/headjs/1.0.3/head.min.js'></script>
 	<script src="//cdnjs.cloudflare.com/ajax/libs/jstimezonedetect/1.0.4/jstz.min.js" type="text/javascript"></script>
 	<script type="text/javascript">
 		$(document).ready(function()
@@ -240,7 +232,7 @@ if(isSafari && isWin)
 		}
 
 		function preload_dashlet_libs(){
-			setTimeout(function(){head.load('<%=flatfull_path%>lib/lib-all.js')}, 5000);
+			setTimeout(function(){head.load('<%=flatfull_path%>/lib/lib-all.js')}, 5000);
 		}
 	</script>
 	<!-- Clicky code -->

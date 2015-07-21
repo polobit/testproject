@@ -87,7 +87,7 @@ content="<%=domainUser.getInfo(DomainUser.LAST_LOGGED_IN_TIME)%>" />
 %>
 
 <!-- <link rel="stylesheet" type="text/css" href="<%=FLAT_FULL_PATH%>css/agile-all.css?_=<%=_AGILE_VERSION%>" />  -->
-<link rel="stylesheet" type="text/css" href="<%=FLAT_FULL_PATH%>css/lib.css"></link>
+<link rel="stylesheet" type="text/css" href="<%=FLAT_FULL_PATH%>css/lib-min.css"></link>
 
 
 <!--  bootstrap 3 files -->
@@ -101,7 +101,7 @@ content="<%=domainUser.getInfo(DomainUser.LAST_LOGGED_IN_TIME)%>" />
 	
 	System.out.println(CSS_PATH + "css/bootstrap.css />");
 	
-	String cssLink = "<link rel=\"stylesheet\" type=\"text/css\" href=\"" + FLAT_FULL_PATH + "css/bootstrap.css\" />";
+	String cssLink = "<link rel=\"stylesheet\" type=\"text/css\" href=\"" + FLAT_FULL_PATH + "css/bootstrap-min.css\" />";
 	
 	System.out.println(cssLink);
 	if(ui != null)
@@ -313,7 +313,7 @@ if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Produ
 <!-- Including Footer page -->
 <jsp:include page="flatfull/footer.jsp" />
 
-<script src='//cdnjs.cloudflare.com/ajax/libs/headjs/1.0.3/head.js'></script>
+<script src='//cdnjs.cloudflare.com/ajax/libs/headjs/1.0.3/head.min.js'></script>
 <script>
 
 //var LIB_PATH = "//dpm72z3r2fvl4.cloudfront.net/js/";
@@ -368,10 +368,7 @@ var _billing_restriction = <%=mapper.writeValueAsString(restriction)%>;
 var JQUERY_LIB_PATH = "//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js";
 //var JQUERY_LIB_PATH = LIB_PATH + 'lib/jquery.min.js';
 
-
-<!-- JQUery Core and UI CDN -->	
-<!-- The same ajax libraries are used by designer - if you are changing the version here, change in designer too -->
-head.load("https://code.jquery.com/jquery-1.10.2.min.js", LIB_PATH + 'lib/lib-all.js');
+head.load("https://cdnjs.cloudflare.com/ajax/libs/jquery/1.10.2/jquery.min.js", LIB_PATH + 'lib/lib-all-min.js');
 
 if(HANDLEBARS_PRECOMPILATION)
 head.js(HANDLEBARS_LIB, "tpl/min/precompiled/" + FLAT_FULL_PATH + "tpl.js" + "?_=" + _AGILE_VERSION);
