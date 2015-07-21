@@ -729,10 +729,11 @@ border-radius: 2px;
 }
 .portlet_body_calendar>#calendar_container>.fc-header>tbody>tr>.fc-header-center h2
 {
-	font-size:14px;
+	font-size:16px;
 	line-height : 15px;
 	padding-right:	5px;
 	 text-transform: lowercase; 
+	 color:#58666e
 }
 
 .portlet_body_calendar>#calendar_container>.fc-content>.fc-view>.fc-border-separate>tbody>tr>td>div>.fc-day-number

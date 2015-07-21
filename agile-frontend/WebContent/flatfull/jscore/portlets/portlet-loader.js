@@ -1955,7 +1955,7 @@ function minicalendar(el)
 									   var todayDate=new Date(date.getFullYear(), date.getMonth(), date.getDate(),00,00,00);
 									   var endDate=new Date(date.getFullYear(), date.getMonth(), date.getDate(),23,59,59);
 									   if(start<todayDate &&  todayDate<end){
-												$(el).find('.events_show').empty().append('<div class="show p-t-xs text-md p-l-sm">Today </div><ul class="list"></ul>');
+												$(el).find('.events_show').empty().append('<div class="show p-t-xs text-md p-l-sm text-center">Today </div><ul class="list"></ul>');
 												if($(el).parent().attr('data-sizey')==2)
 											   $(el).find('.show').css('padding-top','70px');
 										   else if($(el).parent().attr('data-sizey')==3)
@@ -2016,7 +2016,7 @@ function minicalendar(el)
 											 $.each(jso,function(index,ev){
 											if(ev.start >= (todayDate.getTime()/1000) && ev.start <= (endDate.getTime()/1000)) {	
 											var e_date= new Date(ev.start*1000);
-											$(el).find('.list').append('<li class="p-t-xs p-r-xs" style="color:'+ev.color+'"><span style="color : black" class="text-cap">'+ev.title+'<br><small class="block m-t-n-xxs">'+ e_date.format('HH:MM') + ' </small></span></li>');
+											$(el).find('.list').append('<li class="p-t-xs p-r-xs" style="color:'+ev.color+'"><span style="color : #58666e" class="text-cap">'+ev.title+'<br><small class="block m-t-n-xxs">'+ e_date.format('HH:MM') + ' </small></span></li>');
 											}
 											}); 
 											
@@ -2135,7 +2135,7 @@ function minicalendar(el)
 								
 								dayClick : function(date,allDay,jsEvent,view){
 									var days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
-									$(el).find('.events_show').empty().append('<div class="show p-t-xs text-md p-l-sm">'+days[date.getDay()]+', ' +date.format('dd mmm')+' </div><ul class="list"></ul>');
+									$(el).find('.events_show').empty().append('<div class="show p-t-xs text-md p-l-sm text-center">'+days[date.getDay()]+', ' +date.format('dd mmm')+' </div><ul class="list"></ul>');
 									if($(el).parent().attr('data-sizey')==2)
 											   $(el).find('.show').css('padding-top','70px');
 										   else if($(el).parent().attr('data-sizey')==3)
@@ -2146,7 +2146,7 @@ function minicalendar(el)
 								});
 								if(array.length!=0){
 								$.each(array,function(index){
-									$(el).find('.list').append('<li class="p-t-xs p-r-xs" style="color : '+array[index].color+'"><span style="color : black" class="text-cap">'+array[index].title+'<br><small class="block m-t-n-xxs">'+ array[index].start.format('HH:MM') + ' </small></span></li>');
+									$(el).find('.list').append('<li class="p-t-xs p-r-xs" style="color : '+array[index].color+'"><span style="color : #58666e" class="text-cap">'+array[index].title+'<br><small class="block m-t-n-xxs">'+ array[index].start.format('HH:MM') + ' </small></span></li>');
 									
 								});
 								}
@@ -2317,7 +2317,7 @@ function googledata(el,response,startTime,endTime)
 											 var todayDate=new Date(date.getFullYear(), date.getMonth(), date.getDate(),00,00,00);
 									   var endDate=new Date(date.getFullYear(), date.getMonth(), date.getDate(),23,59,59);
 											if(ev.start.getTime() >= (todayDate.getTime()) && ev.start.getTime() <= (endDate.getTime())) {	
-											$(el).find('.list').append('<li class="p-t-xs p-r-xs" style="color:'+ev.color+'"><span style="color : black" class="text-cap">'+ev.title+'<br><small class="block m-t-n-xxs">'+ ev.start.format('HH:MM') + ' </small></span></li>');
+											$(el).find('.list').append('<li class="p-t-xs p-r-xs" style="color:'+ev.color+'"><span style="color : #58666e" class="text-cap">'+ev.title+'<br><small class="block m-t-n-xxs">'+ ev.start.format('HH:MM') + ' </small></span></li>');
 											}
 											});
 											if($(el).find('.list').find('li').length==0 && $(el).find('.portlet-error-message').length==0 )
