@@ -385,6 +385,12 @@ html[dir=rtl] .wrapper,html[dir=rtl] .container,html[dir=rtl] label {
 		<div id="templateBody" class="bodyContent rounded6">
 			<h2>Unsubscribe</h2>
 			<form id="unsubscribe-form" action="/confirmation" method="post" onsubmit="return isValid();" novalidate>
+				<input type="hidden" name="cid" value="<%=campaignId%>">
+				<input type="hidden" name="t" value="<%=workflow.unsubscribe.tag%>">
+				<input type="hidden" name="company" value="<%=company%>">
+				<input type="hidden" name="c_name" value="<%= workflow.name%>">
+				<input type="hidden" name="unsubscribe_email" value="<%= workflow.unsubscribe.unsubscribe_email%>">
+				
 				<div id="unsubscribe-template"></div>
 				<div class="error"></div>
 				<label for="email-address">Email Address <span
@@ -405,31 +411,19 @@ html[dir=rtl] .wrapper,html[dir=rtl] .container,html[dir=rtl] label {
 		</a>
 	</div>
 
-	<script id="remove-from-this-campaign-template" type="text/html">
-<input type="hidden" name="cid" value="<%=campaignId%>">
+<script id="remove-from-this-campaign-template" type="text/html">
 <input type="hidden" name="status" value="current">
-<input type="hidden" name="t" value="<%=workflow.unsubscribe.tag%>">
-<input type="hidden" name="company" value="<%=company%>">
-<input type="hidden" name="c_name" value="<%= workflow.name%>">
 
 <p>You are about to be removed from the Campaign - <%= workflow.name %></p>
 </script>
 
 <script id="remove-from-all-campaigns-template" type="text/html">
-<input type="hidden" name="cid" value="<%=campaignId%>">
 <input type="hidden" name="status" value="all">
-<input type="hidden" name="t" value="<%=workflow.unsubscribe.tag%>">
-<input type="hidden" name="company" value="<%=company%>">
 
 <p>You are about to be removed from <b>all</b> communication from this sender</p>
 </script>
 
 <script id="ask-the-user-template" type="text/html">
-<input type="hidden" name="cid" value="<%=campaignId%>">
-<input type="hidden" name="t" value="<%=workflow.unsubscribe.tag%>">
-<input type="hidden" name="company" value="<%=company%>">
-<input type="hidden" name="c_name" value="<%= workflow.name%>">
-
 <input type="radio" name="status" id="current" value="current"/> Remove me from this campaign - <%= workflow.name %>
 <br/>
 <input type="radio" name="status" value="all" id="all" required checked/> Stop ALL communication from this sender.

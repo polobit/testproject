@@ -60,6 +60,7 @@ function gmap_search_by_date(DateRange){
 	$.getJSON( DateRangeUrl, function( Response ) {
 	    
 		$("#map-tab-waiting").fadeOut();
+		map.setZoom(2);
 		if(Response != null) {
 			for(var Key in Response){
 				Response[Key].z_index = parseInt(Key);

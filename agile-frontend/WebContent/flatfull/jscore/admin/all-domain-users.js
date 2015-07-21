@@ -12,6 +12,19 @@ $(function()
             });
 	
 	});
+
+	$( "#domain-search-results2" ).die().live('click', function( e ) 	{
+		e.preventDefault(e);
+		
+		var email = $('#domainSearchText2').val();
+		console.log(" in all -domain users.js "+email);
+		$("#domainSearchText").val(email);
+		
+			Backbone.history.navigate("getDomainUserDetails/"+email , {
+                trigger: true
+            });
+	
+	});
 	
 	// deltes user from domain from admin panel
 	

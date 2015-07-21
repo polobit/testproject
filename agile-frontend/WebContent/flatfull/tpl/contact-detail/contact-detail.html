@@ -50,11 +50,9 @@
 									{{/hasMenuScope}}
 							{{#canEditContact owner.id}}
 									<li class='divider'></li>
-									{{#hasMenuScope 'CAMPAIGN'}}
 									<li><a href='#bulk-campaigns' class="contact-add-campaign"
 										id="contact-add-campaign"><i class="icon-sitemap"></i> Add
 											to Campaign</a></li>
-									{{/hasMenuScope}}
 									<li><a href='#send-email{{#if_propertyName "email"}}/{{value}}{{/if_propertyName}}' id="contact-send-email"><i
 											class="icon-envelope-alt"></i> Send Email</a></li>
 

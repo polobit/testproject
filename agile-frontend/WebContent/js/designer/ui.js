@@ -114,9 +114,50 @@ function generateDynamicSelectUI(uiFieldDefinition, url, keyField, valField)
 	var keyField = uiFieldDefinition.dynamicName;
 	var valField = uiFieldDefinition.dynamicValue;
 	var appendNameField = uiFieldDefinition.appendToDynamicName;
-		
+	var type = uiFieldDefinition.type;
+
+	// Append or prepend
+	var arrange_type = uiFieldDefinition.arrange_type;
+	
+
+	// Select events
+	var eventHandler = uiFieldDefinition.eventHandler;
+	var event = uiFieldDefinition.event;
+
 	var selectContainer = $("<select name='" + uiFieldDefinition.name + "' title='" + uiFieldDefinition.title + "'> " + "</select>");
-	var options = uiFieldDefinition.options;
+
+	if(event && eventHandler)
+		selectContainer = $("<select id='"+uiFieldDefinition.id+"' "+getStyleAttribute(uiFieldDefinition.style)+" name='" + uiFieldDefinition.name + "' title='" + uiFieldDefinition.title + "'" + event +"='"+eventHandler+"' type='"+(type == undefined ? 'select' : type)+"'></select>");
+	
+	// For From Email select, options need to rearranged
+	if(uiFieldDefinition.id == "from_email" && uiFieldDefinition.name == "from_email")
+	{
+		// Remove Contact's owner
+		delete uiFieldDefinition.options["Contact's Owner"];
+
+		fetchAndFillSelect(url,keyField, valField, appendNameField, uiFieldDefinition.options, selectContainer, arrange_type, function($selectContainer, data){
+
+		  		$selectContainer.find("option:first").before("<option value='{{owner.email}}'>Contact's Owner</option>");
+
+				// Make Contact's owner selected
+				 $selectContainer.val("Contact's Owner").attr('selected', 'selected');
+				
+				// Rearranges options
+				rearrange_from_email_options($selectContainer, data);				
+		});
+
+		return selectContainer;
+	}
+
+	// Fetches data and fill select
+	fetchAndFillSelect(url,keyField, valField, appendNameField, uiFieldDefinition.options, selectContainer, arrange_type)
+	
+	return selectContainer;
+}
+
+function fetchAndFillSelect(url, keyField, valField, appendNameField, options, selectContainer, arrange_type, callback)
+{
+
 	var selectOptionAttributes ="";
 	
 	
@@ -129,13 +170,13 @@ function generateDynamicSelectUI(uiFieldDefinition, url, keyField, valField)
 					if(key.indexOf("*") == 0)
 					{
 						key  = key.substr(1);
-						selectOptionAttributes += "<option selected value='" + value + "'>" + key + "</option>";
+						selectOptionAttributes += "<option selected='selected' value='" + value + "'>" + key + "</option>";
 					}
 					else
 						selectOptionAttributes += "<option value='" + value + "'>" + key + "</option>";
 				});
 	 }
-	
+
 	$.ajax({
 		  url: url,
 		  async: false,
@@ -171,14 +212,20 @@ function generateDynamicSelectUI(uiFieldDefinition, url, keyField, valField)
     				else
     				    option = "<option value='" + value + "'>" + key + "</option>";
         				
-        			// Append to container	
-        			$(option).appendTo(selectContainer);	        				        								
+    				if(arrange_type && arrange_type == "prepend")
+    					$(option).prependTo(selectContainer);
+    				else
+    				{	
+    					// Append to container	
+        				$(option).appendTo(selectContainer);	        				        								
+        			}
 				}											   	   	   	  	   	  				
 		});
+
+		  if(callback && typeof (callback) === "function")
+		  	callback(selectContainer, data);
 		  }
 	});
-	
-	return selectContainer;
 }
 
 
@@ -403,7 +450,7 @@ function getStyleAttribute(styleAttributes)
 function loadTinyMCE(name)
 {
 	var strWindowFeatures = "height=650, width=800,menubar=no,location=yes,resizable=yes,scrollbars=yes,status=yes";
-	var newwindow = window.open('cd_tiny_mce.jsp?id=' + name,'name',strWindowFeatures);
+	var newwindow = window.open('summernote.jsp?id=' + name,'name',strWindowFeatures);
 	if (window.focus)
 	{
 		newwindow.focus();
@@ -740,6 +787,14 @@ function _generateUIFields(selector, ui) {
            continue;
         }
         
+        if(uiFieldType == "anchor")
+        {
+        	uiField = generateAnchorUI(uiFieldDefinition);
+        	
+        	$(uiField).appendTo(container)
+        	continue;
+        }
+        
         
         // Else Input, textarea,		                
         addLabel(uiFieldDefinition.label, container);
@@ -753,6 +808,22 @@ function _generateUIFields(selector, ui) {
 
 }
 
+
+function generateAnchorUI(uiFieldDefinition)
+{
+	var style = "style=''", href="#";
+
+	if(uiFieldDefinition.href)
+		href = uiFieldDefinition.href;
+	
+	if(uiFieldDefinition.style)
+		style = getStyleAttribute(uiFieldDefinition.style);
+
+	if(uiFieldDefinition.event)
+		return "<a href='"+href+"'" + " " + style + " " + uiFieldDefinition.event+"='"+uiFieldDefinition.callback+";return;'>"+uiFieldDefinition.text+"</a>";
+
+	return "<a href='"+href+"'"  + " " + style+">"+uiFieldDefinition.text+"</a>";
+}
 
 // Constructs the UI elements from nodeDefinition. IF UI key is elements, it constructs tabs based on categories and add elements 
 // Automatically
@@ -868,6 +939,7 @@ function resetUI(selector)
 	
 }
 
+//checks if the given string contains a string
 function contains(string, substring){
 	
 	if(string == undefined || string.length == 0)

@@ -26,6 +26,10 @@ var AdminPanelRouter = Backbone.Router.extend({
 	// get domain details
 
 	"getDomainUserDetails/:id" : "getDomainUserDetails",
+
+	//search domain 
+
+	"domainSearch" : "domainSearch"
 		
 	
 	
@@ -311,6 +315,13 @@ var AdminPanelRouter = Backbone.Router.extend({
 		$('#content').html(upgrade_plan.render().el);
 		$(".active").removeClass("active");
 		// $("#fat-menu").addClass("active");
+	},
+
+	domainSearch : function()
+	{
+		var el = $(getTemplate('all-domain-search', {}));
+		$("#content").html(el);
+		hideTransitionBar();
 	}
 
 });

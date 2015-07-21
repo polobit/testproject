@@ -117,6 +117,9 @@ public class SendMail
 
     public static final String STRIPE_IMPORT_NOTIFICATION = "contact_sync_notification_template";
     public static final String STRIPE_IMPORT_NOTIFICATION_SUBJECT = "Stripe Import Report";
+    
+    public static final String FROM_VERIFICATION_EMAIL = "from_verification_email";
+    public static final String FROM_VERIFICATION_EMAIL_SUBJECT = "Verify your Email";
 
     /**
      * From Name of email.

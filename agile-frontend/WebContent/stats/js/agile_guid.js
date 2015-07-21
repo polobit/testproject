@@ -10,6 +10,9 @@ var agile_guid = {
 			this.cookie_name = 'agile-crm-guid';
 			this.cookie_email = 'agile-email';
 			this.cookie_original_ref = 'agile-original-referrer';
+			this.cookie_tags = 'agile-tags';
+			this.cookie_score = "agile-score";
+			this.cookie_campaigns = "agile-campaigns";
 			this.new_guid = false;
 		},
 		

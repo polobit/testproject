@@ -154,7 +154,7 @@ $(function(){
     		});
     	    
         	// Init fancy on layouts
-        	show_fancy_box(layouts);
+    	    show_fancy_box(layouts, type);
        });
        
 });
@@ -184,11 +184,17 @@ function render_theme_previews()
 {
 	var title = '<h2>Select a Template</h2>';
 	var textarea_id = '<%= id%>';
-	
-	var html_link = '<span style="display:inline; float: right; margin-top: -32px;">'
-					+'<a class="btn" href="cd_tiny_mce.jsp?id='+textarea_id+'">'
+	var html_link ;
+	if('<%= type%>'== 'web_rules' )
+		 html_link = '<span style="display:inline; float: right; margin-top: -32px;">'
+			+'<a class="btn" href="cd_tiny_mce.jsp?id='+textarea_id+'">'
+				+'Create your own'
+			+'</a></span>'
+			else
+	 html_link = '<span style="display:inline; float: right; margin-top: -32px;">'
+					+'<a class="btn" href="summernote.jsp?id='+textarea_id+'">'
 						+'Create your own'
-					+'</a></span>'
+					+'</a></span>' 
 	
 	$('#preview-container-title').html(title + html_link);
 	
@@ -234,7 +240,7 @@ function getMergeFields(){
 	return merge_fields;
 }
 
-function show_fancy_box(content_array)
+function show_fancy_box(content_array, type)
 {
 	
 	var t_id = '<%=id%>';
@@ -254,8 +260,10 @@ function show_fancy_box(content_array)
      	    beforeLoad: function() {
 
      	    this.href = location.origin + this.href;
-             
-            this.title = (this.index + 1) + ' of ' + this.group.length + '<br/> <a style="color: white; text-decoration: underline;" href="cd_tiny_mce.jsp?id='+t_id+'&url='+this.link+'">Load in Editor</a>';
+     	    
+     	   this.title = (type==='email') ? (this.index + 1) + ' of ' + this.group.length + '<br/> <a style="color: white; text-decoration: underline;" href="summernote.jsp?id='+t_id+'&url='+this.link+'">Load in Editor</a>' :
+     		  (type==='web_rules') ? this.title = (this.index + 1) + ' of ' + this.group.length + '<br/> <a style="color: white; text-decoration: underline;" href="cd_tiny_mce.jsp?id='+t_id+'&url='+this.link+'">Load in Editor</a>' : '';
+     	    	
          },
          afterLoad: function()
          {

@@ -20,6 +20,7 @@ import com.agilecrm.account.AccountEmailStats;
 import com.agilecrm.account.AccountPrefs;
 import com.agilecrm.account.EmailTemplates;
 import com.agilecrm.account.MenuSetting;
+import com.agilecrm.account.VerifiedEmails;
 import com.agilecrm.activities.Activity;
 import com.agilecrm.activities.BulkActionLog;
 import com.agilecrm.activities.Event;
@@ -198,6 +199,8 @@ public class ObjectifyGenericDao<T> extends DAOBase
 		
 		// For facebook page intergration
 		ObjectifyService.register(FacebookPage.class);
+		
+		ObjectifyService.register(VerifiedEmails.class);
 
 	}
 
