@@ -1250,3 +1250,18 @@
 	{{/if}}
 </select>
 </script>
+
+<script id="portlets-campaign-stats-report-model-template" type="text/html">
+		<div class="portlet_header portlet_edit_icons panel-heading b-b-none" onmouseover="showPortletIcons(this); return false;" onmouseout="hidePortletIcons(this); return false;">
+			<h4 class="h4 text-ellipsis text-muted">
+				<span class="pull-left inline-block text-ellipsis" style="width:70%;">Campaign Stats</span>
+			</h4>
+			<div class="portlet_header_icons pull-right clear-fix text-muted p-t-xs pos-abs pos-r-0 pos-t-xs vis-hide">
+				<i id="{{id}}-close" class="c-p icon-close {{remove_spaces name}}-close p-r-sm" onclick="deletePortlet(this);"></i>
+			</div>
+		</div>
+        <div class="portlet_body"></div>
+     <div class="portlets" id="{{id}}">&nbsp;</div>
+     <div class="column_position" style="display:none">{{column_position}}</div>
+     <div class="row_position" style="display:none">{{row_position}}</div>	
+</script>

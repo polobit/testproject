@@ -100,6 +100,7 @@ public class PortletUtil {
 				allPortlets.add(new Portlet("Stats Report",PortletType.USERACTIVITY));
 				allPortlets.add(new Portlet("Leaderboard",PortletType.USERACTIVITY));
 				allPortlets.add(new Portlet("Calls Per Person",PortletType.USERACTIVITY));
+				allPortlets.add(new Portlet("Campaign stats",PortletType.USERACTIVITY));
 			}
 			
 			allPortlets.add(new Portlet("Agile CRM Blog",PortletType.RSS));

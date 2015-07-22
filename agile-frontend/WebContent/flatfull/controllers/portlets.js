@@ -88,6 +88,8 @@ function addNewPortlet(portlet_type,p_name){
 		obj.name="Stats Report";
 	else if(p_name=="Leaderboard")
 		obj.name="Leaderboard";
+	else if(p_name=="Campaignstats")
+		obj.name="Campaign stats";
 	obj.portlet_type=portlet_type;
 	var max_row_position=0;
 	if(gridster!=undefined)

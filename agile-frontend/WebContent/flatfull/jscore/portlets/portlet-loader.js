@@ -17,6 +17,7 @@ function loadPortlets(el){
 	App_Portlets.emailsOpened = new Array();
 	App_Portlets.statsReport = new Array();
 	App_Portlets.leaderboard = new Array();
+	App_Portlets.campaignstats = new Array();
 	/*
 	 * If Portlets_View is not defined , creates collection view, collection is
 	 * sorted based on position i.e., set when sorted using jquery ui sortable
