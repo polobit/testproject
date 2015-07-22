@@ -209,10 +209,8 @@ if(isSafari && isWin)
 			preload_dashlet_libs();
 
 			$('#account_timezone').val(jstz.determine().name());
-			console.log("starting of login");
 			$('.openid_large_btn').click(function(e)
 			{
-				console.log("ready to oauth form");
 				
 				// Gets Data Google/Yahoo and submits to LoginServlet
 				var data = $(this).attr('data');

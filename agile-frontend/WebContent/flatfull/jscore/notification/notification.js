@@ -348,6 +348,11 @@ function check_browser_notification_settings(el)
 	$('#enable-notification', el).die().live('click', function(e)
 	{
 		e.preventDefault();
+        // Checking modal existance
+		if($('#notification-enable-help-modal').length == 0){
+			   $("body").append(getTemplate("notification-enable-help-modal", {}));
+		}
+
 		$('#notification-enable-help-modal').modal("show");
 	});
 
@@ -355,6 +360,11 @@ function check_browser_notification_settings(el)
 	$('#disable-notification', el).die().live('click', function(e)
 	{
 		e.preventDefault();
+		 // Checking modal existance
+		if($('#notification-disable-help-modal').length == 0){
+			   $("body").append(getTemplate("notification-disable-help-modal", {}));
+		}
+
 		$('#notification-disable-help-modal').modal("show");
 	});
 }
