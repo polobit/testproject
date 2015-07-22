@@ -1977,7 +1977,7 @@ function minicalendar(el)
 											if (data.color == 'red' || data.color == '#f05050')
 												data.color='#f05050';
 											else if (data.color == '#36C' || data.color == '#23b7e5' || data.color == 'blue')
-												data.color='#23b7e5';
+												data.color='#7266ba';
 											else if (data.color == 'green' || data.color == '#bbb')
 												data.color='#fad733';
 											
@@ -2019,6 +2019,10 @@ function minicalendar(el)
 											$(el).find('.list').append('<li class="p-t-xs p-r-xs" style="color:'+ev.color+'"><span style="color : #58666e" class="text-cap">'+ev.title+'<br><small class="block m-t-n-xxs">'+ e_date.format('HH:MM') + ' </small></span></li>');
 											}
 											}); 
+											if($(el).find('.list').find('li').length!=0 && $(el).find('.portlet-error-message').length!=0 )
+											{
+												$(el).find('.events_show').append('<div class="portlet-error-message" style="display:none">No appointments for the day</div>');
+											}
 											
 											callback(jso);
 									   }
