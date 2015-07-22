@@ -118,7 +118,7 @@ public class CampaignStatusUtil
 	 * @param campaignId
 	 *            - CampaignId of active campaign.
 	 */
-	private static void setActiveCampaignStatus(Contact contact, String campaignId, String campaignName)
+	public static void setActiveCampaignStatus(Contact contact, String campaignId, String campaignName)
 	{
 		boolean isNew = true;
 

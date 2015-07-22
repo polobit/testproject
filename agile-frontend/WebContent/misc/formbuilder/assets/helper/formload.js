@@ -4,6 +4,10 @@ define([
 	return { agile_form_load : function()
 	{
 		var url = window.location.protocol + '//' + window.location.host + '/' + 'core/api/forms/form?formId=' + formNumber;
+		
+		if(typeof formLoadDomain != 'undefined')
+			url = 'https://' + formLoadDomain + '.agilecrm.com/core/api/forms/form?formId=' + formNumber;
+		
 		$.ajax({
 			url : url,
 			type: 'GET',

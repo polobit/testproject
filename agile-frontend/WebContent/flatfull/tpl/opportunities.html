@@ -57,7 +57,9 @@
 						<li><a href="#deal_mile_change_modal" data-toggle="modal">Change Milestone/Track</a></li>
 						<li class="divider"></li>
 						<li><a href="#deal_contact_add_tag_modal" data-toggle="modal">Add Tag to related Contacts</a></li>
-						<li><a href="#deal_contact_add_camp_modal" data-toggle="modal">Add related Contacts to Campaign</a></li>
+						{{#hasMenuScope 'CAMPAIGN'}}
+							<li><a href="#deal_contact_add_camp_modal" data-toggle="modal">Add related Contacts to Campaign</a></li>
+						{{/hasMenuScope}}
 						<li class="divider"></li>
 						<li><a href="#deal_bulk_archive_modal" data-toggle="modal">Archive</a></li>
 						<li><a href="#deal_bulk_restore_modal" data-toggle="modal">Restore</a></li>

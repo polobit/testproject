@@ -1,6 +1,7 @@
 package com.agilecrm.filter;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -36,14 +37,15 @@ public class JSONPRequestFilter implements Filter
 	// Checks if request is JSONP request based on callback parameter
 	if (isJSONPRequest(httpRequest))
 	{
+	    response.setContentType("application/javascript");
+	    response.setCharacterEncoding(StandardCharsets.UTF_8.toString());
+
 	    // Gets response output streams, and writes response of JSAPI call
 	    // enclosed with in callback parameter.
 	    ServletOutputStream out = response.getOutputStream();
 	    out.println(getCallbackParameter(httpRequest) + "(");
 	    chain.doFilter(request, response);
 	    out.println(");");
-
-	    response.setContentType("application/javascript");
 	}
 	else
 	{
