@@ -19,7 +19,7 @@
   font-style: normal;
   font-weight: 700;
   /*src: local('Source Sans Pro Bold'), local('SourceSansPro-Bold'), url('../font/sourcesanspro/sourcesanspro-bold.woff') format('woff');*/
-  src: local('Source Sans Pro Bold'), local('SourceSansPro-Bold'), url(http://fonts.gstatic.com/s/sourcesanspro/v9/toadOcfmlt9b38dHJxOBGFzONuGKG1DnNuYnL34Jwfo.woff2) format('woff2');
+  src: local('Source Sans Pro Bold'), local('SourceSansPro-Bold'), url(https://fonts.gstatic.com/s/sourcesanspro/v9/toadOcfmlt9b38dHJxOBGFzONuGKG1DnNuYnL34Jwfo.woff2) format('woff2');
  }
 
 html {
