@@ -2185,10 +2185,12 @@ function loadingGoogleEvents(el,startTime,endTime){
 	{
 		if(response==undefined)
 		{
-			if($(el).find('.list').find('li').length==0 && $(el).find('.portlet-error-message').length==0 )
+			setTimeout(function(){
+				if($(el).find('.list').find('li').length==0 && $(el).find('.portlet-error-message').length==0 )
 											{
 												$(el).find('.events_show').append('<div class="portlet-error-message" style="display:block">No appointments for the day</div>');
 											}
+			},1000);
 		}
 		console.log(response);
 		if (response)
