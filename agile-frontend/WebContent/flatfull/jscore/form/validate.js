@@ -121,7 +121,7 @@ function isValidForm(form) {
 
 	jQuery.validator.addMethod("date", function(value, element){
 		if(value=="")
-			return false;
+			return true;
 		if(CURRENT_USER_PREFS.dateFormat.indexOf("dd/mm/yy") != -1 || CURRENT_USER_PREFS.dateFormat.indexOf("dd.mm.yy") != -1)
 		{
 			return !/Invalid|NaN/.test(new Date(convertDateFromUKtoUS(value))); 
@@ -131,7 +131,7 @@ function isValidForm(form) {
 
 	jQuery.validator.addMethod("date_input", function(value, element){
 		if(value=="")
-			return false;
+			return true;
 		if(CURRENT_USER_PREFS.dateFormat.indexOf("dd/mm/yy") != -1 || CURRENT_USER_PREFS.dateFormat.indexOf("dd.mm.yy") != -1)
 		{
 			return !/Invalid|NaN/.test(new Date(convertDateFromUKtoUS(value))); 
