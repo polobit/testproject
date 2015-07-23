@@ -62,7 +62,7 @@ $(function()
 	 
 	$("input:file").change(function (){
 		var size = this.files[0].size;
-		window.opener.CUSTOM_DOCUMENT_SIZE = size;
+		
 		if(this.files[0].size > 102645760)
 	    {
 	    	
@@ -75,6 +75,7 @@ $(function()
 	    }
 	    else
 	    {
+	    	window.opener.CUSTOM_DOCUMENT_SIZE = size;
 			var fileName = $(this).val();
 		    $(".filename").html(fileName);
 		    // To remove error message while change
