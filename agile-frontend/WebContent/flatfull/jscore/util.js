@@ -463,3 +463,73 @@ $('.modal:visible').die().live('shown.bs.modal', function()
 			$('.modal-backdrop', $('.modal:visible')).height($('.modal-dialog', $('.modal:visible')).height() + 70);
 	}, 500);
 });
+
+/*
+ function to get the date in user selected format in useprefs page. Will take epoc time  as input
+*/
+
+function getDateInFormatFromEpoc(date)
+{
+	if(!date)
+		return;
+	if ((date / 100000000000) > 1)
+	{1
+		return en.dateFormatter({raw: getGlobalizeFormat()})(new Date(parseInt(date)));
+	}
+	return en.dateFormatter({raw: getGlobalizeFormat()})(new Date(parseInt(date) * 1000));
+
+}
+
+/*
+ function to get the date in user selected format in useprefs page. Will takes date object as input
+*/
+
+function getDateInFormat(date)
+{
+	if(!date)
+		return;
+	return en.dateFormatter({raw: getGlobalizeFormat()})(date);
+
+}
+
+function getGlobalizeFormat()
+{
+	var format = CURRENT_USER_PREFS.dateFormat;
+	
+	if(format.search("MM") != -1)
+		format = format.replace(/MM/g, "MMMM");
+	else if(format.search("M") != -1)
+		format = format.replace(/M/g, "MMM");
+	if(format.search("DD") != -1)
+		format = format.replace(/DD/g, "EEEE");
+	else if(format.search("D") != -1)
+		format = format.replace(/D/g, "EEE");
+	format = format.replace(/m/g, "M");
+	return format;
+}
+
+
+/* To convert UK formatted date to US formatted date
+   ukDate should be in dd/mm/yyyy format
+*/
+function convertDateFromUKtoUS(ukDate)
+{
+	if(!ukDate)
+		return "";
+	var date;
+	if(ukDate.search("/") != -1)
+		date = ukDate.split("/");
+	else
+		date = ukDate.split(".");
+	if(date.length == 3)
+	{	
+		var returnDate = new Date(date[1]+"/"+date[0]+"/"+date[2]);
+		if(!/Invalid|NaN/.test(returnDate))
+			return returnDate.format("mm/dd/yyyy");
+		else
+			return "";
+	}
+	else 
+		return "";
+}
+

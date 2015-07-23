@@ -134,7 +134,11 @@ $(function()
 	{
 		// If event start date is changed and end date is less than start date,
 		// change the value of the end date to start date.
-		var eventDate2 = new Date($('#event-date-2').val());
+		var eventDate2;
+		if(CURRENT_USER_PREFS.dateFormat.indexOf("dd/mm/yy") != -1 || CURRENT_USER_PREFS.dateFormat.indexOf("dd.mm.yy") != -1)
+			eventDate2 = new Date(convertDateFromUKtoUS($('#event-date-2').val()));
+		else
+		 	eventDate2 = new Date($('#event-date-2').val());
 		if (ev.date.valueOf() > eventDate2.valueOf())
 		{
 			$('#event-date-2').val($('#event-date-1').val());
@@ -147,7 +151,11 @@ $(function()
 	{
 		// If event start date is changed and end date is less than start date,
 		// change the value of the end date to start date.
-		var eventDate2 = new Date($('#update-event-date-2').val());
+		var eventDate2;
+		if(CURRENT_USER_PREFS.dateFormat.indexOf("dd/mm/yy") != -1 || CURRENT_USER_PREFS.dateFormat.indexOf("dd.mm.yy") != -1)
+			eventDate2 = new Date(convertDateFromUKtoUS($('#update-event-date-2').val()));
+		else
+		 	eventDate2 = new Date($('#update-event-date-2').val());
 		if (ev.date.valueOf() > eventDate2.valueOf())
 		{
 			$('#update-event-date-2').val($('#update-event-date-1').val());

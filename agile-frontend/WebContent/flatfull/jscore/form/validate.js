@@ -118,6 +118,26 @@ function isValidForm(form) {
 			return false;
 		return true;
 	}," You can select maximum 3 folders only.");
+
+	jQuery.validator.addMethod("date", function(value, element){
+		if(value=="")
+			return false;
+		if(CURRENT_USER_PREFS.dateFormat.indexOf("dd/mm/yy") != -1 || CURRENT_USER_PREFS.dateFormat.indexOf("dd.mm.yy") != -1)
+		{
+			return !/Invalid|NaN/.test(new Date(convertDateFromUKtoUS(value))); 
+		}else
+			return !/Invalid|NaN/.test(new Date(value));
+	}," Please enter a valid date.");
+
+	jQuery.validator.addMethod("date_input", function(value, element){
+		if(value=="")
+			return false;
+		if(CURRENT_USER_PREFS.dateFormat.indexOf("dd/mm/yy") != -1 || CURRENT_USER_PREFS.dateFormat.indexOf("dd.mm.yy") != -1)
+		{
+			return !/Invalid|NaN/.test(new Date(convertDateFromUKtoUS(value))); 
+		}else
+			return !/Invalid|NaN/.test(new Date(value));
+	}," Please enter a valid date.");
 	
 	$(form).validate({
 		rules : {

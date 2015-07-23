@@ -82,7 +82,7 @@ content="<%=domainUser.getInfo(DomainUser.LAST_LOGGED_IN_TIME)%>" />
 
 <%
     String CSS_PATH = "/";
-	String FLAT_FULL_PATH = "flatfull/";
+  String FLAT_FULL_PATH = "flatfull/";
 //String CSS_PATH = "//cdnapp.agilecrm.com/";
 %>
 
@@ -108,29 +108,29 @@ content="<%=domainUser.getInfo(DomainUser.LAST_LOGGED_IN_TIME)%>" />
 
 <!--  bootstrap 3 files -->
 <%
-	String ui = request.getParameter("ui");
-	String css = request.getParameter("css");
-	String cssWrap = request.getParameter("cssWrap");
-	System.out.println(ui);
-	System.out.println(css);
-	System.out.println(cssWrap);
-	
-	System.out.println(CSS_PATH + "css/bootstrap.css />");
-	
-	String cssLink = "<link rel=\"stylesheet\" type=\"text/css\" href=\"" + FLAT_FULL_PATH + "css/bootstrap.css\" />";
-	
-	System.out.println(cssLink);
-	if(ui != null)
-	    cssLink = "<link rel=\"stylesheet\" type=\"text/css\" href=\"" + FLAT_FULL_PATH + "css/bootstrap-" + ui + ".css/>";
-	else if(css != null)
-	{
-	    cssLink = "<link rel=\"stylesheet\" type=\"text/css\" href=\"/cssloader?link="+css + "\"/>";
-	    if(cssWrap != null)
-		cssLink += "\n<link rel=\"stylesheet\" type=\"text/css\" href=\"/cssloader?link="+cssWrap + "\"/>";
-	}
-	    
-	    
-	System.out.println(cssLink);    
+  String ui = request.getParameter("ui");
+  String css = request.getParameter("css");
+  String cssWrap = request.getParameter("cssWrap");
+  System.out.println(ui);
+  System.out.println(css);
+  System.out.println(cssWrap);
+  
+  System.out.println(CSS_PATH + "css/bootstrap.css />");
+  
+  String cssLink = "<link rel=\"stylesheet\" type=\"text/css\" href=\"" + FLAT_FULL_PATH + "css/bootstrap.css\" />";
+  
+  System.out.println(cssLink);
+  if(ui != null)
+      cssLink = "<link rel=\"stylesheet\" type=\"text/css\" href=\"" + FLAT_FULL_PATH + "css/bootstrap-" + ui + ".css/>";
+  else if(css != null)
+  {
+      cssLink = "<link rel=\"stylesheet\" type=\"text/css\" href=\"/cssloader?link="+css + "\"/>";
+      if(cssWrap != null)
+    cssLink += "\n<link rel=\"stylesheet\" type=\"text/css\" href=\"/cssloader?link="+cssWrap + "\"/>";
+  }
+      
+      
+  System.out.println(cssLink);    
 %>
 
 <%=cssLink %>
@@ -157,7 +157,7 @@ content="<%=domainUser.getInfo(DomainUser.LAST_LOGGED_IN_TIME)%>" />
 
 <style>
 .clickdesk_bubble {
-	display: none !important;
+  display: none !important;
 }
 </style>
  <!-- <script src='http://cdnjs.cloudflare.com/ajax/libs/headjs/1.0.3/head.load.min.js'></script> -->
@@ -388,55 +388,55 @@ content="<%=domainUser.getInfo(DomainUser.LAST_LOGGED_IN_TIME)%>" />
 <div id="wrap" class="app app-aside-folded-inactive app-header-fixed app-aside-fixed 
 <% 
 if(currentUserPrefs.menuPosition.equals("top")){
-	out.print("app-aside-dock ");
+  out.print("app-aside-dock ");
 }else if(currentUserPrefs.menuPosition.equals("leftcol")){
-	out.print("app-aside-folded ");
-	}
+  out.print("app-aside-folded ");
+  }
 /* if(currentUserPrefs.layout.equals("fixed")){
-	out.print("container ");
-	} */
+  out.print("container ");
+  } */
 
 %>">
 
 <!-- Including header(Navigation Bar) page -->
-	<%@ include file="flatfull/header.html"%>
+  <%@ include file="flatfull/header.html"%>
 
  <aside id="aside" class="app-aside hidden-xs 
  <%
- 	switch (Integer.parseInt(currentUserPrefs.theme)) {
- 		case 1:  out.print("bg-black ");
-   				 break;
- 		case 2:  out.print("bg-black ");
-				 break;
- 		case 3:  out.print("bg-dark ");
-				 break;
- 		case 4:  out.print("bg-black ");
-				 break;
- 		case 5:  out.print("bg-dark ");
-				 break;
- 		case 6:  out.print("bg-dark ");
-				 break;
- 		case 7:  out.print("bg-white b-r ");
-				 break;
- 		case 8:  out.print("bg-light dker b-r ");
-				 break;
- 		case 9:  out.print("bg-dark ");
-				 break;
- 		case 10:  out.print("bg-black ");
-				 break;
- 		case 11:  out.print("bg-dark ");
-				 break;
- 		case 12:  out.print("bg-dark ");
-				 break;
- 		case 13:  out.print("bg-dark ");
-				 break;
- 		case 14:  out.print("bg-light ");
-				 break;
- 		default:
-        		break;
+  switch (Integer.parseInt(currentUserPrefs.theme)) {
+    case 1:  out.print("bg-black ");
+           break;
+    case 2:  out.print("bg-black ");
+         break;
+    case 3:  out.print("bg-dark ");
+         break;
+    case 4:  out.print("bg-black ");
+         break;
+    case 5:  out.print("bg-dark ");
+         break;
+    case 6:  out.print("bg-dark ");
+         break;
+    case 7:  out.print("bg-white b-r ");
+         break;
+    case 8:  out.print("bg-light dker b-r ");
+         break;
+    case 9:  out.print("bg-dark ");
+         break;
+    case 10:  out.print("bg-black ");
+         break;
+    case 11:  out.print("bg-dark ");
+         break;
+    case 12:  out.print("bg-dark ");
+         break;
+    case 13:  out.print("bg-dark ");
+         break;
+    case 14:  out.print("bg-light ");
+         break;
+    default:
+            break;
  
- 	}
-  		
+  }
+      
  %>">
           <div class="aside-wrap">
         <div class="navi-wrap">
@@ -507,7 +507,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
   </li>
   <li class='<%if(currentUserPrefs.menuPosition.equals("top")){out.print("dockedicons ");} else{out.print("fixedicons ");} %>' id="planView"> <a href="#subscribe"><i class="icon-shopping-cart"></i> <span> Plan &amp; Upgrade </span></a></li>
   <li class='pos-b-0 <%if(currentUserPrefs.menuPosition.equals("top")){out.print("dockedicons ");} else{out.print("fixedicons ");} %>' id ="helpView"><a href="#help"><i class="icon-question"></i>
-											<span> Help </span></a></li>
+                      <span> Help </span></a></li>
   </ul>
   </nav>
   </div>
@@ -543,8 +543,8 @@ document.getElementById('templates').innerHTML=tpl.responseText; //insert in dum
 
 <!-- Templates
 Use = [<]%@ include file="tpl/min/tpl.js" %[>] -->
-		
-	
+    
+  
 
 <!-- Determine Console.logging - we log in local boxes -->
 <%
@@ -561,7 +561,6 @@ if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Produ
 
 %>
 
- <%@ include file="tpl/min/precompiled/flatfull/tpl.html"%>  
  
                    
 
@@ -630,7 +629,7 @@ var JQUERY_LIB_PATH = "//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.j
 //var JQUERY_LIB_PATH = LIB_PATH + 'lib/jquery.min.js';
 
 
-<!-- JQUery Core and UI CDN -->	
+<!-- JQUery Core and UI CDN --> 
 <!-- The same ajax libraries are used by designer - if you are changing the version here, change in designer too -->
 head.load("https://code.jquery.com/jquery-1.10.2.min.js", "//code.jquery.com/jquery-migrate-1.2.1.min.js", LIB_PATH_FLATFULL + "/lib/agile/agile-jquery-migration.js", LIB_PATH_FLATFULL + "lib/bootstrap.js", LIB_PATH_FLATFULL + 'lib/bootstrap3-typeahead.js', LIB_PATH_FLATFULL + 'lib/jquery.validate.min.js', LIB_PATH_FLATFULL + 'lib/bootstrap-datepicker-min.js',LIB_PATH_FLATFULL + 'lib/date-formatter.js', LIB_PATH_FLATFULL + 'lib/bootstrap-timepicker-min.js');
 
@@ -643,6 +642,8 @@ if(HANDLEBARS_PRECOMPILATION)
 head.js(HANDLEBARS_LIB,   "tpl/min/precompiled/" + FLAT_FULL_PATH + "tpl.js" + "?_=" + _AGILE_VERSION);
 else
 head.js(HANDLEBARS_LIB);
+var en;
+load_globalize();
 
 
 // head.js("//cdnjs.cloudflare.com/ajax/libs/handlebars.js/1.3.0/handlebars.min.js", "tpl/min/tpl.js");
@@ -667,11 +668,31 @@ $("img.init-loading", $('#content')).attr("src", "/img/ajax-loader-cursor.gif");
 head.js({"core" :   '/jscore/min/' + FLAT_FULL_PATH +'js-all-min.js' + "?_=" + _AGILE_VERSION});
 head.js({"stats" : 'stats/min/agile-min.js' + "?_=" + _AGILE_VERSION});
 head.ready(["core", "stats"], function(){
-	
-	if(!HANDLEBARS_PRECOMPILATION)
-		downloadTemplate("tpl.js");
+  
+  if(!HANDLEBARS_PRECOMPILATION)
+    downloadTemplate("tpl.js");
 });
 });
+function load_globalize()
+{
+  head.js(LIB_PATH + 'lib/cldr.min.js', LIB_PATH + 'lib/cldr/event.js', LIB_PATH + 'lib/cldr/supplemental.js', LIB_PATH + 'lib/cldr/unresolved.js', function()
+  {
+      head.js(LIB_PATH + 'lib/globalize.min.js', LIB_PATH + 'lib/globalize/message.js', LIB_PATH + 'lib/globalize/number.js', LIB_PATH + 'lib/globalize/plural.js', LIB_PATH + 'lib/globalize/date.js' , function()
+      {
+        head.ready(function(){
+          $.getJSON('json/nodes/globalize/cldr.js', function(data){
+            Globalize.load(data);
+            en = Globalize("en");
+          })
+        });
+    
+                
+    
+    
+      });
+                
+  });
+}
 
 </script>
 
