@@ -922,7 +922,7 @@ function set_p_portlets(base_model){
 			if(base_model.get('settings').track!=undefined && base_model.get('settings').track!="anyTrack"){
 				pipeline_id = base_model.get('settings').track;
 			}
-			var url='core/api/opportunity/stats/details/'+pipeline_id+'?min='+getStartAndEndDatesEpochForPortlets(start_date_str)+'&max='+(getStartAndEndDatesEpochForPortlets(end_date_str)-1)+'';
+			var url='core/api/opportunity/stats/details/'+pipeline_id+'?min='+getStartAndEndDatesOnDue(start_date_str)+'&max='+(getStartAndEndDatesOnDue(end_date_str)-1)+'';
 
 			fetchPortletsGraphData(url,function(data){
 				if(data.status==406){

@@ -1540,7 +1540,7 @@ $('.portlet-settings-save-modal').live('click', function(e){
 					if(data.get('settings').track!=undefined && data.get('settings').track!="anyTrack"){
 						pipeline_id = data.get('settings').track;
 					}
-					var url='core/api/opportunity/stats/details/'+pipeline_id+'?min='+getStartAndEndDatesEpochForPortlets(start_date_str)+'&max='+(getStartAndEndDatesEpochForPortlets(end_date_str)-1)+'';
+					var url='core/api/opportunity/stats/details/'+pipeline_id+'?min='+getStartAndEndDatesOnDue(start_date_str)+'&max='+(getStartAndEndDatesOnDue(end_date_str)-1)+'';
 
 					fetchPortletsGraphData(url,function(data1){
 						if(data1.status==406){
