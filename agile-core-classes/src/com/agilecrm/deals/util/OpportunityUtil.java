@@ -682,7 +682,7 @@ public class OpportunityUtil
 		}
 		else
 		{
-			startCalendar.setTimeInMillis(minTime * 1000);
+			startCalendar.setTimeInMillis((minTime * 1000) + (24 * 60 * 60 * 1000));
 		}
 		startCalendar.set(Calendar.DAY_OF_MONTH, 1);
 		startCalendar.set(Calendar.HOUR_OF_DAY, 0);
@@ -715,6 +715,11 @@ public class OpportunityUtil
 			String mmYY = (startCalendar.getTimeInMillis() / 1000) + "";
 			dealsObject.put(mmYY, totalAndPipeline);
 			startCalendar.add(Calendar.MONTH, 1);
+			startCalendar.set(Calendar.DAY_OF_MONTH, 1);
+			startCalendar.set(Calendar.HOUR_OF_DAY, 0);
+			startCalendar.set(Calendar.MINUTE, 0);
+			startCalendar.set(Calendar.SECOND, 0);
+			startCalendar.set(Calendar.MILLISECOND, 0);
 			startTimeInMilliSecs = startCalendar.getTimeInMillis();
 		}
 	}
