@@ -833,7 +833,7 @@ function getStartAndEndDatesEpochForPortlets(duration)
 		d.setDate(1);
 	}
 
-	console.log((getGMTEpochFromDate(d) / 1000));
+	console.log((getUTCMidNightEpochFromDate(d) / 1000));
 
-	return (getGMTEpochFromDate(d) / 1000);
+	return (getUTCMidNightEpochFromDate(d) / 1000);
 }
