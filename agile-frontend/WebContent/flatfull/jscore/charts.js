@@ -351,6 +351,10 @@ function showLine(url, selector, name, yaxis_name, show_loading)
 	// callback
 	setupCharts(function()
 	{
+		if (reportDataRequest && reportDataRequest.readyState==1 && reportDataRequest.state()=="pending")
+		{
+			reportDataRequest.abort();
+		}
 
 		// Loads statistics details from backend i.e.,[{closed
 		// date:{total:value, pipeline: value},...]
