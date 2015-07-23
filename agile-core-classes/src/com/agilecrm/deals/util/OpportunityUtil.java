@@ -739,7 +739,7 @@ public class OpportunityUtil
 		Date opportunityDate = new Date(opportunity.close_date * 1000);
 
 		Calendar calendar = Calendar.getInstance();
-		calendar.setTime(opportunityDate);
+		calendar.setTimeInMillis(opportunity.close_date * 1000);
 		calendar.set(Calendar.DAY_OF_MONTH, 1);
 		calendar.set(Calendar.HOUR_OF_DAY, 0);
 		calendar.set(Calendar.MINUTE, 0);
@@ -747,7 +747,7 @@ public class OpportunityUtil
 		calendar.set(Calendar.MILLISECOND, 0);
 
 		Date firstDayOfMonth = calendar.getTime();
-		String mmYY = (firstDayOfMonth.getTime() / 1000) + "";
+		String mmYY = (calendar.getTimeInMillis() / 1000) + "";
 
 		Double oldTotal = 0D, oldPipeline = 0D;
 
