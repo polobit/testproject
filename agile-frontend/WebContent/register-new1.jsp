@@ -314,9 +314,14 @@ margin-bottom:7px;
 .terms-field:hover {
   color: #46B1DD;
 }
+
+
 .terms-field {
   color: #00B5FF;
 }
+
+
+
 
   </style>
 
