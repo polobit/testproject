@@ -1820,9 +1820,9 @@ function loadGoogleEventsForPortlets(p_el,startTime,endTime){
 
 					var current_date = new Date();
 					var timezone_offset = current_date.getTimezoneOffset();
-					var startDate = new Date((startTime * 1000)-(timezone_offset*60*1000));
-       				var gDateStart = startDate.toISOString();
-       				var endDate = new Date((endTime * 1000)-(timezone_offset*60*1000));
+					var startDate = new Date(startTime * 1000);
+					var gDateStart = startDate.toISOString();
+       				var endDate = new Date(endTime * 1000);
        				var gDateEnd = endDate.toISOString();
 					// Retrieve the events from primary
 					var request = gapi.client.calendar.events
@@ -1835,6 +1835,10 @@ function loadGoogleEventsForPortlets(p_el,startTime,endTime){
 								var fc_event = google2fcEvent(resp.items[i]);
 								fc_event.startEpoch = new Date(fc_event.start).getTime()/1000;
 								fc_event.endEpoch = new Date(fc_event.end).getTime()/1000;
+								if (isNaN(fc_event.endEpoch))
+								{
+									fc_event.endEpoch = new Date(fc_event.google.end.date).getTime()/1000;
+								}
 								console.log(fc_event);
 								events.push(fc_event);
 
