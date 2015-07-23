@@ -311,7 +311,12 @@ margin-bottom:7px;
 	
   margin-bottom: 0;
 }
-
+.terms-field:hover {
+  color: #46B1DD;
+}
+.terms-field {
+  color: #00B5FF;
+}
 
   </style>
 
@@ -327,6 +332,9 @@ margin-bottom:7px;
 <script type="text/javascript" src="/lib/bootstrap.v3.min.js"></script>
 <script type="text/javascript" src="/lib/phonenumber-lib/intlTelInput.js"></script>
 <script type="text/javascript" src="/lib/jquery.validate.min.js"></script>
+
+
+
 <script type="text/javascript">
 var isSafari = (Object.prototype.toString.call(window.HTMLElement).indexOf('Constructor') > 0);
 var isWin = (window.navigator.userAgent.indexOf("Windows") != -1);
@@ -382,7 +390,7 @@ if(isSafari && isWin)
 <div class="list-group list-group-sm" style="margin-bottom:4px;">
 <div class="list-group-item">
 <input class="input-xlarge field required form-control no-border" name='name'
-											type="text" required maxlength="50" minlength="3" pattern="^[A-Za-z_]{3,50}$"
+											type="text" required maxlength="50" minlength="3" title="Name should be at least 3 characters" pattern="^[A-Za-z_]{3,50}$"
 											placeholder="Full Name" autocapitalize="off" autofocus>
 
 </div>
@@ -391,7 +399,7 @@ if(isSafari && isWin)
 <div class="list-group-item">
 <input class="input-xlarge field required email form-control no-border"
 			id="login_email" name='email' type="email" required maxlength="50"
-			minlength="6" value="<%=email%>" placeholder="Email Address (User ID)"
+			minlength="6" value="<%=email%>"  placeholder="Email Address (User ID)"
 			autocapitalize="off">
 </div>
 
@@ -408,8 +416,7 @@ if(isSafari && isWin)
 
 <div class="text-white m-b-md text-left text-xs">
      By clicking sign up, I agree to Agile CRM's <a
-											href="https://www.agilecrm.com/terms.html" class="text-u-l" target="_blank"
-											style="color:#fff;">Terms of Service</a>
+											href="https://www.agilecrm.com/terms.html" class="terms-field" target="_blank">Terms of Service</a>
 									</div> 		
 
 <input type='submit' id="register_account" value="Sign Up" class='btn btn-lg btn-primary btn-block'>

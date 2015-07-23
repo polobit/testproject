@@ -20,6 +20,11 @@ if (request.getAttribute("javax.servlet.forward.request_uri") == null) {
 <meta name="description" content="">
 <meta name="author" content="">
 
+
+
+
+
+
 <style>
 body {
 	background: #7266ba;
@@ -49,6 +54,11 @@ body {
 	  height: 31px!important;
 }
 
+.custom-error {
+	color: rgb(199, 73, 73);
+	display: none;
+}
+
 </style>
 <link rel="stylesheet" type="text/css" href="/flatfull/css/bootstrap.v3.min.css" />
 <link rel="stylesheet" type="text/css" href="/flatfull/css/font.css" />
@@ -60,6 +70,25 @@ body {
 <script type='text/javascript' src='/lib/jquery-new/jquery-2.1.1.min.js'></script>
 <script type="text/javascript" src="/lib/bootstrap.v3.min.js"></script>
 <script type="text/javascript" src="/lib/phonenumber-lib/intlTelInput.js"></script>
+
+
+<script>
+$(document).ready(function(){
+
+
+	
+   $("#login_phone_number").focus(function(){
+   if ($(this).val() == "") {
+   	$(".custom-error").show();
+   }
+   });
+ 
+});
+</script>
+
+
+
+
 <script>
 $(document).ready(function(){
 
@@ -128,7 +157,7 @@ This is where you and your users will log in to your account
 </div>
 
 <div class="form-group m-b-xs" style="margin-top: 18px;">
-<div class="col-sm-offset-3 col-sm-9 text-base"> We will create unique experience based on your company and role</div>
+<div class="col-sm-offset-3 col-sm-9 text-base"> We will create unique experience based on your role and company </div>
 </div>
 <div class="form-group">
 <label class="col-sm-3 control-label"> Role & Company</label>
@@ -139,7 +168,7 @@ This is where you and your users will log in to your account
 											<option value="VP">VP</option>
 											<option value="VP, Sales">VP, Sales</option>
 											<option value="VP, Marketing">VP, Marketing</option>
-											<option value="Customer Success Manager">Customer Success Manager</option>
+											<option value="Customer Success Manager" title="Customer Success Manager">Customer Success Manager</option>
 											<option value="Sales Manager">Sales Manager</option>
 											<option value="Marketing Manager">Marketing Manager</option>
 											<option value="Consultant">Consultant</option>
@@ -173,6 +202,7 @@ This is where you and your users will log in to your account
 											class="field form-control required tel-number"
 											id="login_phone_number" required name='phone_number' type="text"
 											placeholder="Phone Number" autocapitalize="off">
+											<div class='custom-error'>This field is required</div>
 </div>
 </div>
 
