@@ -63,10 +63,23 @@ $(function()
 	$("input:file").change(function (){
 		var size = this.files[0].size;
 		window.opener.CUSTOM_DOCUMENT_SIZE = size;
-		var fileName = $(this).val();
-	    $(".filename").html(fileName);
-	    // To remove error message while change
-	    isValid();
+		if(this.files[0].size > 102645760)
+	    {
+	    	
+	    	$("#fileextension").replaceWith($("#fileextension").clone(true));
+	    	$save_info = $('<div style="display:inline-block"><small><p style="color:#B94A48; font-size:14px"><i>'
+												+ 'Document size exceeds the 10MB limit.'
+												+ '</i></p></small></div>');
+	    	$("#upl_doc").after($save_info);
+	    	$save_info.show().delay(4000).hide(1);
+	    }
+	    else
+	    {
+			var fileName = $(this).val();
+		    $(".filename").html(fileName);
+		    // To remove error message while change
+		    isValid();
+		}
 	  });
 }); 
 
@@ -123,7 +136,7 @@ function isValid(){
 <input type="hidden" name="signature" value="lJaO/ZQyMANyulpZrP/FcxVLz5M=" />
 <p><input name="file" id='fileextension' type="file" /></p>
 <br/>
-<input name="upload" value="Upload" class='submit btn btn-primary' type="submit"/> 
+<input name="upload" id="upl_doc" value="Upload" class='submit btn btn-primary' type="submit"/> 
 </form> 
 </div>
 </div>
