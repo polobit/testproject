@@ -718,13 +718,14 @@ function dealsLineChartByPipeline(pipeline_id)
  * @param url
  * @param successCallback
  */
+ var reportDataRequest;
 function fetchReportData(url, successCallback)
 {
 	// Hides error message
 	$("#plan-limit-error").hide();
 	
 	// Fetches data
-	$.getJSON(url, function(data)
+	reportDataRequest = $.getJSON(url, function(data)
 			{	
 				// Sends data to callback
 				if(successCallback && typeof (successCallback) === "function")
@@ -745,7 +746,7 @@ function fetchReportData(url, successCallback)
 						+ '</i></p></small></div>');
 				
 				$("#plan-limit-error").html($save_info).show();
-			}); 
+			});
 }
 /**
  * Function to build deal's line chart to compare total value and pipeline value.
@@ -783,6 +784,10 @@ function showAreaSpline(url, selector, name, yaxis_name, show_loading)
 	// callback
 	setupCharts(function()
 	{
+		if (reportDataRequest && reportDataRequest.readyState==1 && reportDataRequest.state()=="pending")
+		{
+			reportDataRequest.abort();
+		}
 
 		// Loads statistics details from backend i.e.,[{closed
 		// date:{total:value, pipeline: value},...]
