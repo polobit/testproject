@@ -75,13 +75,22 @@ body {
 <script>
 $(document).ready(function(){
 
+var telInput = $("#login_phone_number"),
+  errorMsg = $("#error-msg"),
+  validMsg = $("#valid-msg");
+
+// on blur: validate
+telInput.blur(function() { console.log("blur"); console.log($.trim(telInput.val()) + " : " + telInput.intlTelInput("isValidNumber"));
+  if ($.trim(telInput.val()) && telInput.intlTelInput("isValidNumber")) {
+        $(".custom-error").hide();
+  } else {
+     $(".custom-error").show();
+  }
+});
+
 
 	
-   $("#login_phone_number").focus(function(){
-   if ($(this).val() == "") {
-   	$(".custom-error").show();
-   }
-   });
+  
  
 });
 </script>
