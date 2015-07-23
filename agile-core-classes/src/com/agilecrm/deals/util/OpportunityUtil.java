@@ -682,7 +682,7 @@ public class OpportunityUtil
 		}
 		else
 		{
-			startCalendar.setTimeInMillis((minTime * 1000)+(24 * 60 * 60 * 1000));
+			startCalendar.setTimeInMillis(minTime * 1000);
 		}
 		startCalendar.set(Calendar.DAY_OF_MONTH, 1);
 		startCalendar.set(Calendar.HOUR_OF_DAY, 0);
