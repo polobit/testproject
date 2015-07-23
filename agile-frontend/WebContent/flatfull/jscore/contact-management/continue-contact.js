@@ -561,7 +561,12 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
 								}
 								else if(response.status == 403)
 								{
-									show_error_in_formactions(modal_id, form_id, 'form-action-error', response.responseText);
+									if(form_id == 'companyForm')
+										show_error_in_formactions(modal_id, form_id, 'form-action-error', "You do not have permission to create Companies.");
+									else if(form_id == 'continueCompanyForm')
+										show_error_in_formactions(modal_id, form_id, 'form-action-error', "You do not have permission to update Companies.");
+									else
+										show_error_in_formactions(modal_id, form_id, 'form-action-error', response.responseText);
 								}
 								else
 												show_error(modal_id, form_id, 'duplicate-email', response.responseText);
