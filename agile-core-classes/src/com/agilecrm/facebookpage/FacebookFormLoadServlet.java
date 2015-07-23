@@ -43,16 +43,17 @@ public class FacebookFormLoadServlet extends HttpServlet
     	Form form = FormUtil.getFormById(formId);
     	JSONObject jobj = new JSONObject();
     	
-    	try {
-			jobj.put("id", form.id);
-		  	jobj.put("updated_time", form.updated_time);
-	    	jobj.put("formName", form.formName);
-	    	jobj.put("formJson", form.formJson);
-	    	
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+    	if(form != null) {
+	    	try {
+				jobj.put("id", form.id);
+			  	jobj.put("updated_time", form.updated_time);
+		    	jobj.put("formName", form.formName);
+		    	jobj.put("formJson", form.formJson);
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+    	}
+    	
     	
     	response.setContentType("application/json");
     	PrintWriter out = response.getWriter();    	
