@@ -63,7 +63,7 @@ $(function()
 	$("input:file").change(function (){
 		var size = this.files[0].size;
 		
-		if(this.files[0].size > 102645760)
+		if(this.files[0].size > 10485760)
 	    {
 	    	
 	    	$("#fileextension").replaceWith($("#fileextension").clone(true));
