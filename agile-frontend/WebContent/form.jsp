@@ -23,7 +23,7 @@ String domain = request.getParameter("d");
          <div class="row">
            <textarea id="render" style="width:0px;height:0px;display:none;" class="hidden"></textarea>
            <div id="agileFormHolder"></div>           
-           <script data-main="https://<%=domain%>.agilecrm.com/misc/formbuilder/main-built.js" src="https://<%=domain%>.agilecrm.com/misc/formbuilder/assets/lib/require.js?v=3" ></script>
+           <script data-main="misc/formbuilder/main-built.js" src="misc/formbuilder/assets/lib/require.js?v=3" ></script>
          </div>
       </div>
    </body>
