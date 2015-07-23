@@ -137,7 +137,7 @@ function isValid(){
 <input type="hidden" name="signature" value="lJaO/ZQyMANyulpZrP/FcxVLz5M=" />
 <p><input name="file" id='fileextension' type="file" /></p>
 <br/>
-<input name="upload" id="upl_doc" value="Upload" class='submit btn btn-primary' type="submit"/> 
+<input name="upload" id="upl_doc" value="Upload" class='submit btn btn-primary m-r-xs' type="submit"/> 
 </form> 
 </div>
 </div>
