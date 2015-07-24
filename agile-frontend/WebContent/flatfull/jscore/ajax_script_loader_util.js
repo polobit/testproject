@@ -6,7 +6,7 @@
  * @param url
  * @param callback
  */
-function load_urls_on_ajax_stop(url, callback) {
+function load_urls_on_ajax_stop(url, callback) { 
 	if (!isActive()) {
 		setTimeout(function() {
 			load_urls_on_ajax_stop(url, callback);

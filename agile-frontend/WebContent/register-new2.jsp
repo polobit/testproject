@@ -199,8 +199,8 @@ $(document).ready(function(){
 			});
 	
 });
-function preload_dashlet_libs(){
-	setTimeout(function(){head.load('/flatfull/lib/lib-all.js')}, 5000);
+function preload_dashlet_libs(){ 
+	setTimeout(function(){head.load('/flatfull/final-lib/min/lib-all-min.js')}, 5000);
 }
 </script>
 
