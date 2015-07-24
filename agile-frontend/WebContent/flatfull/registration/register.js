@@ -171,10 +171,10 @@ $("#error-area").slideUp("slow");
 function showEmailErrorMessage(error)
 {
 	console.log(error);
-	$("#error-area").slideDown("slow").text(error.error);
+	$("#error-area").slideDown("slow").html(error.error);
 }
 
 function showDomainErrorMessage(error)
 {
-	$("#error-area").slideDown("slow").slideDown().text(error.error);
+	$("#error-area").slideDown("slow").slideDown().html(error.error);
 }
