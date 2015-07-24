@@ -44,6 +44,9 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.lang.StringUtils;
 
+import com.agilecrm.user.UserPrefs;
+import com.agilecrm.user.util.UserPrefsUtil;
+
 /**
  * Utility class for date manipulation. This class gives a simple interface for
  * common Date, Calendar and Timezone operations. It is possible to apply
@@ -381,6 +384,35 @@ public class DateUtil
 		calendar.set(Calendar.MINUTE, Integer.parseInt(mins));
 
 		return calendar;
+
+	}
+	/**
+	 * Returns time zone offset in minutes as {String} 
+	 * to add to UTC to get standard time in this 
+	 * time zone for current user
+	 * 
+	 */
+	public static String getCurrentUserTimezoneOffset()
+	{
+		String timeZone = null;
+		try
+		{
+			UserPrefs userPrefs = UserPrefsUtil.getCurrentUserPrefs();
+			if(userPrefs!=null && userPrefs.timezone!=null)
+			{
+				TimeZone current_timezone = TimeZone.getTimeZone(userPrefs.timezone);
+				if(current_timezone!=null)
+				{
+					timeZone = String.valueOf(((current_timezone.getRawOffset()/1000)/60));
+				}
+			}
+		}
+		catch (Exception e)
+		{
+			System.out.println("Inside getCurrentUserTimezoneId in DateUtil");
+			e.printStackTrace();
+		}
+		return timeZone;
 
 	}
 

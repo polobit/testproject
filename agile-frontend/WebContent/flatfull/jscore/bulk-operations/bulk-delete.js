@@ -231,6 +231,7 @@ function customize_bulk_delete(id_array, data_array){
  */
 function bulk_delete_operation(url, id_array, index_array, table, is_grid_view, data_array){
 	var json = {};
+	var count = id_array.length;
 	if(!SELECT_ALL)
 		json.ids = JSON.stringify(id_array);
 	var dynamic_filter = getDynamicFilters();
@@ -251,16 +252,20 @@ function bulk_delete_operation(url, id_array, index_array, table, is_grid_view, 
 					$(".navbar_due_tasks").css("display", "none");
 				else
 					$(".navbar_due_tasks").css("display", "block");
-				$('#due_tasks_count').html(due_task_count);
+				if(due_task_count !=0)
+					$('#due_tasks_count').html(due_task_count);
+				else
+					$('#due_tasks_count').html("");
 			}
 			
 			$(".bulk-delete-loading").remove();	
-			
-			if($(table).attr('id') == "contacts-table")
-				showNotyPopUp('information', "Your contacts deletion will be processed shortly", "top", 5000);
-			if($(table).attr('id') == "companies")
-				showNotyPopUp('information', "Your companies deletion will be processed shortly", "top", 5000);
-			
+			if(count > 20 || count == 0)
+			{
+				if($(table).attr('id') == "contacts-table")
+					showNotyPopUp('information', "Your contacts deletion will be processed shortly", "top", 5000);
+				if($(table).attr('id') == "companies")
+					showNotyPopUp('information', "Your companies deletion will be processed shortly", "top", 5000);
+			}
 			if(!is_grid_view)
 			{
 				var tbody = $(table).find('tbody');

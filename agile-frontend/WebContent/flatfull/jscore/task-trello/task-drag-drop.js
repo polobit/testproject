@@ -207,6 +207,9 @@ function saveAfterDrop(oldTask, criteria, newTaskListId, newTaskListOwnerId, tas
 			$(".navbar_due_tasks").css("display", "none");
 		else
 			$(".navbar_due_tasks").css("display", "block");
-		$('#due_tasks_count').html(due_task_count);
+		if(due_task_count !=0)
+			$('#due_tasks_count').html(due_task_count);
+		else
+			$('#due_tasks_count').html("");
 	} });
 }
