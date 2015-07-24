@@ -849,7 +849,7 @@ $('.portlet-settings-save-modal').live('click', function(e){
 
 	        		App_Portlets.todayEventsCollection[parseInt(pos)] = new Base_Collection_View({ url : '/core/api/portlets/portletAgenda?duration='+data.get('settings').duration+'&start_time='+getStartAndEndDatesOnDue(start_date_str)+'&end_time='+getStartAndEndDatesOnDue(end_date_str), templateKey : 'portlets-events', sort_collection : false, individual_tag_name : 'tr',
 						postRenderCallback : function(p_el){
-
+							loadGoogleEventsForPortlets(p_el,getStartAndEndDatesOnDue(start_date_str),getStartAndEndDatesOnDue(end_date_str));
 						} });
 	        	}else if(data.get('portlet_type')=="TASKSANDEVENTS" && data.get('name')=="Today Tasks"){
 	        		var start_date_str = '';
@@ -949,8 +949,8 @@ $('.portlet-settings-save-modal').live('click', function(e){
 						else if(data.get('settings').duration=="1-day")
 							$('#'+el.split("-save-modal")[0]).parent().find('.portlet_body').html("<div class='portlet-error-message'>No calendar events for today</div>");
 	        		}*/
-	        		$('#'+el.split("-save-modal")[0]).parent().find('.portlet_body').html(getRandomLoadingImg());
-	        		$('#'+el.split("-save-modal")[0]).parent().find('.portlet_body').html($(App_Portlets.todayEventsCollection[parseInt(pos)].render().el));
+	        		$('#'+el.split("-save-modal")[0]).parent().find('.portlet_body').find('#normal-events').html(getRandomLoadingImg());
+	        		$('#'+el.split("-save-modal")[0]).parent().find('.portlet_body').find('#normal-events').html($(App_Portlets.todayEventsCollection[parseInt(pos)].render().el));
 	        	}else if(data.get('portlet_type')=="TASKSANDEVENTS" && data.get('name')=="Today Tasks"){
 	        		App_Portlets.tasksCollection[parseInt(pos)].collection.fetch();
 	        		/*if(App_Portlets.tasksCollection[parseInt(pos)]!=undefined && App_Portlets.tasksCollection[parseInt(pos)].collection.length>0){
@@ -1243,7 +1243,7 @@ $('.portlet-settings-save-modal').live('click', function(e){
 	        		$('#'+el.split("-save-modal")[0]).parent().find('.portlet_body').attr('id',idVal);
 	        		
 	        		var selector=idVal;
-	    			var url='/core/api/portlets/portletGrowthGraph?tags='+data.get('settings').tags+'&frequency='+data.get('settings').frequency+'&duration='+data.get('settings').duration+'&start-date='+getStartAndEndDatesOnDue(data.get('settings').duration)+'&end-date='+getStartAndEndDatesOnDue("TOMORROW");
+	    			var url='/core/api/portlets/portletGrowthGraph?tags='+data.get('settings').tags+'&frequency='+data.get('settings').frequency+'&duration='+data.get('settings').duration+'&start-date='+getUTCMidNightEpochFromDate(new Date(getStartAndEndDatesOnDue(data.get('settings').duration)*1000))+'&end-date='+getUTCMidNightEpochFromDate(new Date(getStartAndEndDatesOnDue("TOMORROW")*1000));
 	    			var sizey = parseInt($('#'+selector).parent().attr("data-sizey"));
 	    			var topPos = 50*sizey;
 	    			if(sizey==2 || sizey==3)
@@ -1260,6 +1260,13 @@ $('.portlet-settings-save-modal').live('click', function(e){
 	    					
 	    					return;
 	    				}
+
+	    				var categories = [];
+						var tempcategories = [];
+						var dataLength = 0;
+						var min_tick_interval = 1;
+						var frequency = data.get('settings').frequency;
+
 	    				var sortedKeys = [];
 	    				$.each(data1,function(k,v){
 	    					sortedKeys.push(k);
@@ -1290,14 +1297,80 @@ $('.portlet-settings-save-modal').live('click', function(e){
 	    						// Find series with the name k1 and to that,
 	    						// push v1
 	    						var series_data = find_series_with_name(series, k1);
-	    						series_data.data.push([
-	    								k * 1000, v1
-	    						]);
+	    						series_data.data.push(v1);
 	    					});
+	    					tempcategories.push(k*1000);
+							dataLength++;
 
 	    				});
+
+	    				var cnt = 0;
+						if(Math.ceil(dataLength/10)>0){
+							min_tick_interval = Math.ceil(dataLength/10);
+							if(min_tick_interval==3){
+								min_tick_interval = 4;
+							}
+						}
+						$.each(sortedData, function(k, v){
+							var dte = new Date(tempcategories[cnt]);
+							if(frequency!=undefined){
+								if(frequency=="daily"){
+									categories.push(Highcharts.dateFormat('%e.%b', Date.UTC(dte.getUTCFullYear(), dte.getUTCMonth(), dte.getUTCDate()))+'');
+								}else if(frequency=="weekly"){
+									if(cnt!=dataLength-1){
+										var next_dte = new Date(tempcategories[cnt+1]);
+										categories.push(Highcharts.dateFormat('%e.%b', Date.UTC(dte.getUTCFullYear(), dte.getUTCMonth(), dte.getUTCDate()))+' - '+Highcharts.dateFormat('%e.%b', Date.UTC(next_dte.getUTCFullYear(), next_dte.getUTCMonth(), next_dte.getUTCDate()-1)));
+									}else{
+										var end_date = new Date();
+										categories.push(Highcharts.dateFormat('%e.%b', Date.UTC(dte.getUTCFullYear(), dte.getUTCMonth(), dte.getUTCDate()))+' - '+Highcharts.dateFormat('%e.%b', Date.UTC(end_date.getFullYear(), end_date.getMonth(), end_date.getDate())));
+									}
+								}else if(frequency=="monthly"){
+									if(cnt!=dataLength-1){
+										var next_dte = new Date(tempcategories[cnt+1]);
+										var current_date = new Date();
+										var from_date = '';
+										var to_date = '';
+										if(cnt!=0){
+											if(current_date.getUTCFullYear()!=dte.getUTCFullYear()){
+												from_date = Highcharts.dateFormat('%b.%Y', Date.UTC(dte.getUTCFullYear(), dte.getUTCMonth(), dte.getUTCDate()));
+											}else{
+												from_date = Highcharts.dateFormat('%b', Date.UTC(dte.getUTCFullYear(), dte.getUTCMonth(), dte.getUTCDate()));
+											}
+											categories.push(from_date);
+										}else{
+											if(current_date.getUTCFullYear()!=dte.getUTCFullYear()){
+												from_date = Highcharts.dateFormat('%e.%b.%Y', Date.UTC(dte.getUTCFullYear(), dte.getUTCMonth(), dte.getUTCDate()));
+											}else{
+												from_date = Highcharts.dateFormat('%e.%b', Date.UTC(dte.getUTCFullYear(), dte.getUTCMonth(), dte.getUTCDate()));
+											}
+											if(current_date.getUTCFullYear()!=next_dte.getUTCFullYear()){
+												to_date = Highcharts.dateFormat('%e.%b.%Y', Date.UTC(next_dte.getUTCFullYear(), next_dte.getUTCMonth(), next_dte.getUTCDate()-1));
+											}else{
+												to_date = Highcharts.dateFormat('%e.%b', Date.UTC(next_dte.getUTCFullYear(), next_dte.getUTCMonth(), next_dte.getUTCDate()-1));
+											}
+											categories.push(from_date+' - '+to_date);
+										}
+									}else{
+										var current_date = new Date();
+										var from_date = '';
+										var to_date = '';
+										var end_date = new Date();
+										if(current_date.getUTCFullYear()!=dte.getUTCFullYear()){
+											from_date = Highcharts.dateFormat('%e.%b.%Y', Date.UTC(dte.getUTCFullYear(), dte.getUTCMonth(), dte.getUTCDate()));
+											to_date = Highcharts.dateFormat('%e.%b.%Y', Date.UTC(end_date.getFullYear(), end_date.getMonth(), end_date.getDate()));
+										}else{
+											from_date = Highcharts.dateFormat('%e.%b', Date.UTC(dte.getUTCFullYear(), dte.getUTCMonth(), dte.getUTCDate()));
+											to_date = Highcharts.dateFormat('%e.%b', Date.UTC(end_date.getFullYear(), end_date.getMonth(), end_date.getDate()));
+										}
+										categories.push(from_date+' - '+to_date);
+									}
+								}
+								cnt++;
+							}
+
+						});
 	    				
-	    				portletGrowthGraph(selector,series,data);
+	    				portletGrowthGraph(selector,series,data,categories,min_tick_interval);
 	    			});
 	    			//Saved tags are appended
 	    			var p_settings=data.get('settings');
@@ -1801,4 +1874,72 @@ function getDurationForPortlets(duration){
 		}
 		
 		return time_period;
+}
+function loadGoogleEventsForPortlets(p_el,startTime,endTime){
+	$.getJSON('core/api/calendar-prefs/get', function(response)
+	{
+		var events = new Array();
+		console.log(response);
+		if (response)
+		{
+			//createCookie('google_event_token', response.access_token);
+
+			head.js('https://apis.google.com/js/client.js', '/lib/calendar/gapi-helper.js', function()
+			{
+				setupGC(function()
+				{
+
+					gapi.auth.setToken({ access_token : response.access_token, state : "https://www.googleapis.com/auth/calendar" });
+
+					var current_date = new Date();
+					var timezone_offset = current_date.getTimezoneOffset();
+					var startDate = new Date(startTime * 1000);
+					var gDateStart = startDate.toISOString();
+       				var endDate = new Date(endTime * 1000);
+       				var gDateEnd = endDate.toISOString();
+					// Retrieve the events from primary
+					var request = gapi.client.calendar.events
+								.list({ 'calendarId' : 'primary', maxResults : 25, singleEvents : true, orderBy : 'startTime', timeMin : gDateStart, timeMax : gDateEnd });
+						request.execute(function(resp)
+						{
+							console.log(resp);
+							for (var i = 0; i < resp.items.length; i++)
+							{
+								var fc_event = google2fcEvent(resp.items[i]);
+								fc_event.startEpoch = new Date(fc_event.start).getTime()/1000;
+								fc_event.endEpoch = new Date(fc_event.end).getTime()/1000;
+								if (isNaN(fc_event.endEpoch))
+								{
+									fc_event.endEpoch = new Date(fc_event.google.end.date).getTime()/1000;
+								}
+								console.log(fc_event);
+								events.push(fc_event);
+
+							}
+							App_Portlets.googleEventCollectionView = new Base_Collection_View({ data : events, templateKey : "portlets-google-events", individual_tag_name : 'tr',
+								sort_collection : true, sortKey : 'start', descending : false, 
+								postRenderCallback : function(el){
+									if($(p_el).parent().parent().find('#normal-events').find('table').find('tr').length>0)
+									{
+										$(p_el).parent().parent().find('#google-events').addClass('m-t-n-md').css("border-top","1px solid #eee");
+									}
+									setTimeout(function(){
+										if($(p_el).parent().parent().find('#normal-events').find('table').find('tr').length==0 && $(p_el).parent().parent().find('#google-events').find('table').find('tr').length==0)
+										{
+											$(p_el).parent().parent().find('#normal-events').html('<div class="portlet-error-message">No calendar events</div>');
+										}
+									},1000);
+								} });
+							//googleEventCollectionView.appendItem = appendGoogleEvent;
+							if($(p_el).parent().parent().find('#google-events').find('table').find('tr').length==0)
+							{
+								$(p_el).parent().parent().find('#google-events').html(App_Portlets.googleEventCollectionView.render(true).el);
+							}
+							hideTransitionBar();
+						});
+
+				});
+			});
+		}
+	});
 }

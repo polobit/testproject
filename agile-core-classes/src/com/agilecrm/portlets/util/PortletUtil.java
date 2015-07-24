@@ -567,9 +567,15 @@ public class PortletUtil {
 				start_date = Long.valueOf(json.getString("startDate"));
 			if(json.getString("endDate")!=null)
 				end_date = Long.valueOf(json.getString("endDate"))-1;
-			ReportsUtil.check(start_date*1000, end_date*1000);
+			String time_zone = DateUtil.getCurrentUserTimezoneOffset();
+		    if (time_zone != null)
+		    {
+		    	start_date += (Long.parseLong(time_zone)*60*1000);
+		    	end_date += (Long.parseLong(time_zone)*60*1000);
+		    }
+			ReportsUtil.check(start_date, end_date);
 			
-			growthGraphString=TagSearchUtil.getTagCount(null, tags, String.valueOf(start_date*1000), String.valueOf(end_date*1000), type).toString();
+			growthGraphString=TagSearchUtil.getTagCount(null, tags, String.valueOf(start_date), String.valueOf(end_date), type).toString();
 		}
 		if(growthGraphString!=null)
 			growthGraphJSON = (JSONObject)JSONSerializer.toJSON(growthGraphString);
