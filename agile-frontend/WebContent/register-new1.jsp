@@ -1,3 +1,4 @@
+<%@page import="com.agilecrm.util.RegisterUtil"%>
 <%@page import="com.agilecrm.user.RegisterVerificationServlet"%>
 <%@page import="org.apache.commons.lang.StringUtils"%>
 <%@page import="com.agilecrm.util.VersioningUtil"%>
@@ -10,6 +11,12 @@
 		return;
 	}
 
+	if(RegisterUtil.isWrongURL(request))
+	{
+	    RegisterUtil.redirectToRegistrationpage(request, response);
+	    return;
+	}
+
   String _source = request.getParameter("_source");
   
   String registered_email = request.getParameter("email");
@@ -19,6 +26,8 @@
     request.getRequestDispatcher("/register-new2.jsp").forward(request, response);
     return;
   }
+  
+  
 
 %>
 

@@ -35,6 +35,7 @@ public class RegisterVerificationServlet extends HttpServlet
 	invalid_domains.add("fastmail");
 	invalid_domains.add("usa.gov");
     }
+
     /**
      * 
      */
