@@ -108,11 +108,9 @@ public abstract class BulkActionAdaptor implements DeferredTask
 
     private void setSession()
     {
-
 	if (info != null)
 	{
 	    SessionManager.set(info);
-	    return;
 	}
 
 	if (key != null)
@@ -123,6 +121,7 @@ public abstract class BulkActionAdaptor implements DeferredTask
 
 	    BulkActionUtil.setSessionManager(user);
 	}
+
     }
 
     /**
