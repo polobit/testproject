@@ -250,10 +250,20 @@ public class ReportsAPI
 		filter = ContactFilter.getContactFilter(Long.parseLong(filterId));
 
 	    // For each tag, get the occurrences for this time frame
+	    int i = 0;
 	    for (String tag : tags)
 	    {
-		int count = TagSearchUtil.getTagCount(filter, tag, String.valueOf(Long.parseLong(startTime)-(Long.parseLong(timeZone)*60*1000)), String.valueOf(Long.parseLong(endTime)-(Long.parseLong(timeZone)*60*1000)));
+	    int count = 0;
+	    if (i == 0)
+	    {
+	    count = TagSearchUtil.getTagCount(filter, tag, String.valueOf(Long.parseLong(startTime)-(Long.parseLong(timeZone)*60*1000)), String.valueOf(Long.parseLong(endTime)-(Long.parseLong(timeZone)*60*1000)));
+	    }
+	    else
+	    {
+	    count = TagSearchUtil.getNextTagCount(filter, tags[0], String.valueOf(Long.parseLong(startTime)-(Long.parseLong(timeZone)*60*1000)), String.valueOf(Long.parseLong(endTime)-(Long.parseLong(timeZone)*60*1000)), tag);
+	    }
 		tagsJSONArray.put(new JSONObject().put(tag, count));
+		i++;
 	    }
 	}
 	catch (Exception e)
