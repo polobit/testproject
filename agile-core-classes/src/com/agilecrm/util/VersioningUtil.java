@@ -1,5 +1,15 @@
 package com.agilecrm.util;
 
+import javax.servlet.ServletRequest;
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.commons.lang.StringUtils;
+
+import com.google.appengine.api.modules.ModulesService;
+import com.google.appengine.api.modules.ModulesServiceFactory;
+import com.google.appengine.api.taskqueue.DeferredTaskContext;
+import com.google.appengine.api.utils.SystemProperty;
+
 /**
  * <code>VersioningUitl</code> class checks request version and builds login
  * URLs accordingly.
