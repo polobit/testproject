@@ -736,6 +736,8 @@ function appendItemInResult(item)
 	// Returns template, can be contact or company compares in template
 	i.find('a').html(itemView.render(true).el);
 
+	i.find('a').removeAttr('href');
+
 	if (type)
 	{
 		if (type == "contact_entity")
