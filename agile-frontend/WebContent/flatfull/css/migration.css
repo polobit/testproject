@@ -1327,6 +1327,7 @@ display:none;
 
 #noty_topCenter_layout_container {
   top:8px!Important;
+  z-index: 1030!important;
 }
 
 #noty_topCenter_layout_container li {
@@ -1406,7 +1407,13 @@ min-width:50%;
 color: #98a6ad;
 }
 
+@media (max-width:767px) {
 
+  #noty_topCenter_layout_container {
+  display: none!important;
+}
+
+}
 
 
 
