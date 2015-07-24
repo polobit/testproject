@@ -7,6 +7,8 @@
 if (request.getAttribute("javax.servlet.forward.request_uri") == null) {
     response.sendRedirect("/register");
 }
+
+String _AGILE_VERSION = SystemProperty.applicationVersion.get();
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -217,7 +219,8 @@ This is where you and your users will log in to your account
 
 <input type='hidden' id="login_email" name='email' value=<%=request.getParameter("email")%>></input>
 <input type='hidden' id="" name='name' value=<%=request.getParameter("name")%>></input>
-<input type="password" class="hide" name='password' id="password" value=<%=request.getParameter("password")%>></input>
+
+<input type="password" class="hide" name='password' id="password" value="<%=request.getParameter("password")%>"></input>
 	<input type='hidden' name='type' value='agile'></input>
 <div class="line line-lg b-b" style="margin-top:25px;"></div>
 
@@ -238,7 +241,7 @@ This is where you and your users will log in to your account
 </div>
 </div>
 
-<script src="/flatfull/registration/register.js" type="text/javascript"></script>
+<script src="/flatfull/registration/register.js?_v=<%=_AGILE_VERSION%>"   type="text/javascript"></script>
 <script type="text/javascript">
 var version = <%="\"" + VersioningUtil.getAppVersion(request) + "\""%>;
   var applicationId = <%="\"" + SystemProperty.applicationId.get() + "\""%>;
