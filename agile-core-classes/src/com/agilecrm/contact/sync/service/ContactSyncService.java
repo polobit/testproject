@@ -15,7 +15,6 @@ import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.sync.ImportStatus;
 import com.agilecrm.contact.sync.Type;
 import com.agilecrm.contact.sync.wrapper.ContactWrapper;
-import com.agilecrm.contact.util.BulkActionUtil;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
@@ -319,6 +318,7 @@ public abstract class ContactSyncService implements SyncService
 	{
 	    contact = ContactUtil.mergeContactFields(contact);
 
+	    accessControl.setObject(contact);
 	    if (!accessControl.canDelete())
 	    {
 		syncStatus.put(ImportStatus.ACCESS_DENIED, syncStatus.get(ImportStatus.ACCESS_DENIED) + 1);
