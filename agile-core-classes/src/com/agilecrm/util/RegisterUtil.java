@@ -32,7 +32,7 @@ public class RegisterUtil
 	// Read Subdomain
 	String subdomain = NamespaceUtil.getNamespaceFromURL(request.getServerName());
 
-	if (subdomain != null && subdomain != "my" && request.getRequestURI().contains("/register"))
+	if (subdomain != null && !"my".equals(subdomain) && request.getRequestURI().contains("/register"))
 	{
 	    return true;
 	}
