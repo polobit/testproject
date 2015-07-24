@@ -246,6 +246,7 @@ function set_p_portlets(base_model){
 		App_Portlets.todayEventsCollection[parseInt(pos)] = new Base_Collection_View({ url : '/core/api/portlets/portletAgenda?duration='+base_model.get('settings').duration+'&start_time='+getStartAndEndDatesOnDue(start_date_str)+'&end_time='+getStartAndEndDatesOnDue(end_date_str), templateKey : 'portlets-events', sort_collection : false, individual_tag_name : 'tr',
 			postRenderCallback : function(p_el){
 				addWidgetToGridster(base_model);
+				loadGoogleEventsForPortlets(p_el,getStartAndEndDatesOnDue(start_date_str),getStartAndEndDatesOnDue(end_date_str));
 			} });
 		App_Portlets.todayEventsCollection[parseInt(pos)].collection.fetch();
 	}else if(base_model.get('portlet_type')=="TASKSANDEVENTS" && base_model.get('name')=="Today Tasks"){
@@ -351,8 +352,8 @@ function set_p_portlets(base_model){
 				else if(base_model.get('settings').duration=="1-day")
 					$(this).html("<div class='portlet-error-message'>No calendar events for today</div>");
 			}*/
-			$(this).html(getRandomLoadingImg());
-			$(this).html($(App_Portlets.todayEventsCollection[parseInt(pos)].render().el));
+			$(this).find('#normal-events').html(getRandomLoadingImg());
+			$(this).find('#normal-events').html($(App_Portlets.todayEventsCollection[parseInt(pos)].render().el));
 			setPortletContentHeight(base_model);
 		}else if($(this).parent().attr('id')=='ui-id-'+column_position+'-'+row_position && base_model.get('name')=="Today Tasks"){
 			/*if(App_Portlets.tasksCollection[parseInt(pos)]!=undefined && App_Portlets.tasksCollection[parseInt(pos)].collection.length>0){
