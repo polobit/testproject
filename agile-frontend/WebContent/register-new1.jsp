@@ -404,7 +404,8 @@ if(isSafari && isWin)
 <div class="list-group list-group-sm" style="margin-bottom:4px;">
 <div class="list-group-item">
 <input class="input-xlarge field required form-control no-border" name='name'
-											type="text" required maxlength="50" minlength="3" title="Name should be at least 3 characters" pattern="^[A-Za-z_]{3,50}$"
+											type="text" required maxlength="50" minlength="3" title="Name should be at least 3 characters" 
+                      pattern="[a-zA-Z0-9\s]+"
 											placeholder="Full Name" autocapitalize="off" autofocus>
 
 </div>
