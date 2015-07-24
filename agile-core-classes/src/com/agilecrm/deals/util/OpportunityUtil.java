@@ -29,7 +29,9 @@ import com.agilecrm.search.AppengineSearch;
 import com.agilecrm.search.document.OpportunityDocument;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.UserPrefs;
 import com.agilecrm.user.access.util.UserAccessControlUtil;
+import com.agilecrm.user.util.UserPrefsUtil;
 import com.campaignio.tasklets.agile.util.AgileTaskletUtil;
 import com.google.appengine.api.search.Document.Builder;
 import com.google.appengine.api.search.Index;
@@ -671,10 +673,16 @@ public class OpportunityUtil
 	{
 		pipelineId = null;
 	}
+	String timeZone = "UTC";
+	UserPrefs userPrefs = UserPrefsUtil.getCurrentUserPrefs();
+	if (userPrefs != null && userPrefs.timezone != null)
+	{
+		timeZone = userPrefs.timezone;
+	}
 	List<Opportunity> opportunitiesList = getOpportunitiesByPipeline(pipelineId, minTime, maxTime);
 	if (opportunitiesList != null && opportunitiesList.size() > 0)
 	{
-		Calendar startCalendar = Calendar.getInstance();
+		Calendar startCalendar = Calendar.getInstance(TimeZone.getTimeZone(timeZone));
 		System.out.println("Start Calendar timezone id-----"+startCalendar.getTimeZone().getID());
 		if (minTime == 0)
 		{
@@ -690,7 +698,7 @@ public class OpportunityUtil
 		startCalendar.set(Calendar.SECOND, 0);
 		startCalendar.set(Calendar.MILLISECOND, 0);
 		System.out.println("startCalendar.getTimeInMillis()-----"+startCalendar.getTimeInMillis());
-		Calendar endCalendar = Calendar.getInstance();
+		Calendar endCalendar = Calendar.getInstance(TimeZone.getTimeZone(timeZone));
 		System.out.println("End Calendar timezone id-----"+endCalendar.getTimeZone().getID());
 		if (maxTime == 1543842319)
 		{
@@ -738,7 +746,7 @@ public class OpportunityUtil
 		 */
 		Date opportunityDate = new Date(opportunity.close_date * 1000);
 
-		Calendar calendar = Calendar.getInstance();
+		Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone(timeZone));
 		calendar.setTimeInMillis(opportunity.close_date * 1000);
 		calendar.set(Calendar.DAY_OF_MONTH, 1);
 		calendar.set(Calendar.HOUR_OF_DAY, 0);
