@@ -132,6 +132,13 @@ public class TagSearchUtil
 	Calendar endCalendar = Calendar.getInstance(TimeZone.getTimeZone(timezone));
 	endCalendar.setTimeInMillis(Long.parseLong(endTime));
 	long endTimeMilli = endCalendar.getTimeInMillis();
+	
+	String current_timezone = DateUtil.getCurrentUserTimezoneOffset();
+	long timezoneOffsetInMilliSecs = 0L;
+	if (current_timezone != null)
+	{
+		timezoneOffsetInMilliSecs = Long.valueOf(current_timezone)*60*1000;
+	}
 
 	if (endTimeMilli < startTimeMilli)
 	    return null;
@@ -188,7 +195,7 @@ public class TagSearchUtil
 	    }
 
 	    // Put time and tags array
-	    tagsCountJSONObject.put(startTimeMilli / 1000 + "", tagsCount);
+	    tagsCountJSONObject.put((startTimeMilli + timezoneOffsetInMilliSecs) / 1000 + "", tagsCount);
 
 	    startTimeMilli = startCalendar.getTimeInMillis()+1000;
 	    startCalendar.setTimeInMillis(startCalendar.getTimeInMillis()+1000);
@@ -232,6 +239,13 @@ public class TagSearchUtil
 	Calendar endCalendar = Calendar.getInstance();
 	endCalendar.setTimeInMillis(Long.parseLong(endTime));
 	long endTimeMilli = endCalendar.getTimeInMillis();
+	
+	String current_timezone = DateUtil.getCurrentUserTimezoneOffset();
+	long timezoneOffsetInMilliSecs = 0L;
+	if (current_timezone != null)
+	{
+		timezoneOffsetInMilliSecs = Long.valueOf(current_timezone)*60*1000;
+	}
 
 	if (endTimeMilli < startTimeMilli)
 	    return null;
@@ -257,7 +271,7 @@ public class TagSearchUtil
 
 	    tagsCount.put("Conversion", tagRatio1);
 	    // Put time and tags array
-	    tagsCountJSONObject.put(startTimeMilli / 1000 + "", tagsCount);
+	    tagsCountJSONObject.put((startTimeMilli + timezoneOffsetInMilliSecs) / 1000 + "", tagsCount);
 
 	    startTimeMilli = startCalendar.getTimeInMillis();
 	}
