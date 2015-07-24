@@ -201,7 +201,10 @@ $(function()
 
 		getHtmlContent(function(html_content)
 		{
-			tinyMCECallBack("tinyMCEhtml_email", html_content);
+			setTimeout(function()
+			{
+				tinyMCECallBack("tinyMCEhtml_email", html_content);
+			}, 1000);
 		});
 
 	});
@@ -210,8 +213,7 @@ $(function()
 
 function getHtmlContent(callback)
 {
-	var htmlContent = '';
-	$.get("/misc/modal-templates/survey/choice-four/choice-four.html", function(data)
+	$.get("/misc/modal-templates/schedule/popout/pop-out.html", function(data)
 	{
 		return callback(data);
 	});
