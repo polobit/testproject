@@ -60,10 +60,10 @@ public class RegisterVerificationServlet extends HttpServlet
 	    if (isTrottleLimitReached(userIp))
 	    {
 		System.out.println("Throttle reached" + userIp);
-		writeErrorMessage(
-			response,
-			"You seem to have registered an account very recently. Please wait for 1 day if you wish to create another or write to care@agilecrm.com.");
-		return;
+		// writeErrorMessage(
+		// response,
+		// "You seem to have registered an account very recently. Please wait for 1 day if you wish to create another or write to care@agilecrm.com.");
+		// return;
 	    }
 
 	    if (StringUtils.equalsIgnoreCase(request.getHeader("X-AppEngine-Country"), "BD")
