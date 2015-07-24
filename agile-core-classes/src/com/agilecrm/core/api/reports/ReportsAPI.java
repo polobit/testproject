@@ -136,7 +136,8 @@ public class ReportsAPI
 
 	    report.rules.add(rule);
 
-	    UserAccessControlUtil.checkReadAccessAndModifyTextSearchQuery(Contact.class.getSimpleName(), report.rules);
+	    UserAccessControlUtil.checkReadAccessAndModifyTextSearchQuery(Contact.class.getSimpleName(), report.rules,
+		    null);
 
 	    // Generates report results
 	    Collection<Contact> contacts = report.generateReports(Integer.parseInt(count), cursor);

@@ -92,7 +92,8 @@ public class ContactFilterResultFetcher
     private Map<String, Object> searchMap;
 
     {
-	access = UserAccessControl.getAccessControl(UserAccessControl.AccessControlClasses.Contact, null);
+	access = UserAccessControl.getAccessControl(UserAccessControl.AccessControlClasses.Contact, null,
+		getDomainUser());
     }
 
     ContactFilterResultFetcher()
@@ -567,7 +568,7 @@ public class ContactFilterResultFetcher
     private void modifyFilterCondition()
     {
 	UserAccessControlUtil.checkReadAccessAndModifyTextSearchQuery(
-		UserAccessControl.AccessControlClasses.Contact.toString(), filter.rules);
+		UserAccessControl.AccessControlClasses.Contact.toString(), filter.rules, getDomainUser());
 
 	if (hasScope(UserAccessScopes.VIEW_CONTACTS)
 		&& !(hasScope(UserAccessScopes.UPDATE_CONTACT) || hasScope(UserAccessScopes.DELETE_CONTACTS)))
