@@ -627,6 +627,13 @@ function set_p_portlets(base_model){
 					
 					return;
 				}
+				
+				var categories = [];
+				var tempcategories = [];
+				var dataLength = 0;
+				var min_tick_interval = 1;
+				var frequency = base_model.get('settings').frequency;
+				
 				var sortedKeys = [];
 				$.each(data,function(k,v){
 					sortedKeys.push(k);
@@ -657,14 +664,83 @@ function set_p_portlets(base_model){
 						// Find series with the name k1 and to that,
 						// push v1
 						var series_data = find_series_with_name(series, k1);
-						series_data.data.push([
-								k * 1000, v1
-						]);
+						var dt = new Date(k*1000);
+						series_data.data.push(v1);
 					});
+					tempcategories.push(k*1000);
+					dataLength++;
 
 				});
+
+				var cnt = 0;
+				if(Math.ceil(dataLength/10)>0){
+					min_tick_interval = Math.ceil(dataLength/10);
+					if(min_tick_interval==3){
+						min_tick_interval = 4;
+					}
+				}
+				head.js(LIB_PATH + 'lib/flot/highcharts-3.js', function(){
+					$.each(sortedData, function(k, v){
+						var dte = new Date(tempcategories[cnt]);
+						if(frequency!=undefined){
+							if(frequency=="daily"){
+								categories.push(Highcharts.dateFormat('%e.%b', Date.UTC(dte.getUTCFullYear(), dte.getUTCMonth(), dte.getUTCDate()))+'');
+							}else if(frequency=="weekly"){
+								if(cnt!=dataLength-1){
+									var next_dte = new Date(tempcategories[cnt+1]);
+									categories.push(Highcharts.dateFormat('%e.%b', Date.UTC(dte.getUTCFullYear(), dte.getUTCMonth(), dte.getUTCDate()))+' - '+Highcharts.dateFormat('%e.%b', Date.UTC(next_dte.getUTCFullYear(), next_dte.getUTCMonth(), next_dte.getUTCDate()-1)));
+								}else{
+									var end_date = new Date();
+									categories.push(Highcharts.dateFormat('%e.%b', Date.UTC(dte.getUTCFullYear(), dte.getUTCMonth(), dte.getUTCDate()))+' - '+Highcharts.dateFormat('%e.%b', Date.UTC(end_date.getFullYear(), end_date.getMonth(), end_date.getDate())));
+								}
+							}else if(frequency=="monthly"){
+								if(cnt!=dataLength-1){
+									var next_dte = new Date(tempcategories[cnt+1]);
+									var current_date = new Date();
+									var from_date = '';
+									var to_date = '';
+									if(cnt!=0){
+										if(current_date.getUTCFullYear()!=dte.getUTCFullYear()){
+											from_date = Highcharts.dateFormat('%b.%Y', Date.UTC(dte.getUTCFullYear(), dte.getUTCMonth(), dte.getUTCDate()));
+										}else{
+											from_date = Highcharts.dateFormat('%b', Date.UTC(dte.getUTCFullYear(), dte.getUTCMonth(), dte.getUTCDate()));
+										}
+										categories.push(from_date);
+									}else{
+										if(current_date.getUTCFullYear()!=dte.getUTCFullYear()){
+											from_date = Highcharts.dateFormat('%e.%b.%Y', Date.UTC(dte.getUTCFullYear(), dte.getUTCMonth(), dte.getUTCDate()));
+										}else{
+											from_date = Highcharts.dateFormat('%e.%b', Date.UTC(dte.getUTCFullYear(), dte.getUTCMonth(), dte.getUTCDate()));
+										}
+										if(current_date.getUTCFullYear()!=next_dte.getUTCFullYear()){
+											to_date = Highcharts.dateFormat('%e.%b.%Y', Date.UTC(next_dte.getUTCFullYear(), next_dte.getUTCMonth(), next_dte.getUTCDate()-1));
+										}else{
+											to_date = Highcharts.dateFormat('%e.%b', Date.UTC(next_dte.getUTCFullYear(), next_dte.getUTCMonth(), next_dte.getUTCDate()-1));
+										}
+										categories.push(from_date+' - '+to_date);
+									}
+								}else{
+									var current_date = new Date();
+									var from_date = '';
+									var to_date = '';
+									var end_date = new Date();
+									if(current_date.getUTCFullYear()!=dte.getUTCFullYear()){
+										from_date = Highcharts.dateFormat('%e.%b.%Y', Date.UTC(dte.getUTCFullYear(), dte.getUTCMonth(), dte.getUTCDate()));
+										to_date = Highcharts.dateFormat('%e.%b.%Y', Date.UTC(end_date.getFullYear(), end_date.getMonth(), end_date.getDate()));
+									}else{
+										from_date = Highcharts.dateFormat('%e.%b', Date.UTC(dte.getUTCFullYear(), dte.getUTCMonth(), dte.getUTCDate()));
+										to_date = Highcharts.dateFormat('%e.%b', Date.UTC(end_date.getFullYear(), end_date.getMonth(), end_date.getDate()));
+									}
+									categories.push(from_date+' - '+to_date);
+								}
+							}
+							cnt++;
+						}
+
+					});
+				});
 				
-				portletGrowthGraph(selector,series,base_model);
+				portletGrowthGraph(selector,series,base_model,categories,min_tick_interval);
 				
 				addWidgetToGridster(base_model);
 			});
@@ -1399,7 +1475,7 @@ function emailsSentBarGraph(selector,domainUsersList,series,mailsCountList,mails
 	    });
 	});
 }
-function portletGrowthGraph(selector,series,base_model){
+function portletGrowthGraph(selector,series,base_model,categories,min_tick_interval){
 	var flag=true;
 	
 	/*if(base_model.get("settings").tags==""){
@@ -1430,19 +1506,22 @@ function portletGrowthGraph(selector,series,base_model){
 		        chart: {
 		            type: 'areaspline',
 		            marginRight: 20,
-		            plotBorderWidth: 1,
-		            plotBorderColor: '#F4F4F5'
+		            //plotBorderWidth: 1,
+		            //plotBorderColor: '#F4F4F5'
 		        },
 		        title: {
 		            text: ''
 		        },
 		        xAxis: {
-		        	type: 'datetime',
+		        	/*type: 'datetime',
 			        dateTimeLabelFormats: {
 			            //don't display the dummy year  month: '%e.%b',
 			        	day: '%e.%b'
 			        },
-			        minTickInterval: 24 * 3600 * 1000,
+			        minTickInterval: min_interval,*/
+			        categories: categories,
+			        tickmarkPlacement: 'on',
+			        minTickInterval: min_tick_interval,
 			        gridLineWidth : 1,
 					gridLineColor : '#F4F4F5',
 					labels : {
