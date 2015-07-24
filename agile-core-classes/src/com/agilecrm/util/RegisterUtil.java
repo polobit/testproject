@@ -44,7 +44,7 @@ public class RegisterUtil
     {
 	try
 	{
-	    resp.sendRedirect(VersioningUtil.getURL("my", request));
+	    resp.sendRedirect(VersioningUtil.getURL("my", request) + "register");
 	}
 	catch (IOException e)
 	{

@@ -36,6 +36,15 @@ public class RegisterVerificationServlet extends HttpServlet
 	invalid_domains.add("usa.gov");
     }
 
+    private static final ArrayList<String> IPlIST = new ArrayList<String>();
+
+    static
+    {
+	IPlIST.add("49.206.56.84");
+	IPlIST.add("117.247.178.90");
+
+    }
+
     /**
      * 
      */
@@ -57,13 +66,13 @@ public class RegisterVerificationServlet extends HttpServlet
 
 	try
 	{
-	    if (isTrottleLimitReached(userIp))
+	    if (isTrottleLimitReached(userIp) && !IPlIST.contains(userIp))
 	    {
 		System.out.println("Throttle reached" + userIp);
-		// writeErrorMessage(
-		// response,
-		// "You seem to have registered an account very recently. Please wait for 1 day if you wish to create another or write to care@agilecrm.com.");
-		// return;
+		writeErrorMessage(
+			response,
+			"You seem to have registered an account very recently. Please wait for 1 day if you wish to create another or write to care@agilecrm.com.");
+		return;
 	    }
 
 	    if (StringUtils.equalsIgnoreCase(request.getHeader("X-AppEngine-Country"), "BD")
