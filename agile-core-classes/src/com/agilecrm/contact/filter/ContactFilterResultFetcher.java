@@ -90,13 +90,6 @@ public class ContactFilterResultFetcher
      */
     private Map<String, Object> searchMap;
 
-    {
-	System.out.println("initializing scopes" + getDomainUser().email);
-	access = UserAccessControl.getAccessControl(UserAccessControl.AccessControlClasses.Contact, null,
-		getDomainUser());
-	System.out.println(access.getCurrentUserScopes());
-    }
-
     ContactFilterResultFetcher()
     {
 
@@ -123,12 +116,20 @@ public class ContactFilterResultFetcher
     public ContactFilterResultFetcher(String filter_id, String dynamic_filter, int max_fetch_set_size,
 	    String contact_ids, Long currentDomainUserId)
     {
+
 	max_fetch_size = Integer.MAX_VALUE;
 
 	this.max_fetch_set_size = max_fetch_set_size;
 
 	this.contact_ids = contact_ids;
 	domainUserId = currentDomainUserId;
+
+	System.out.println("initializing scopes " + getDomainUser().email);
+	access = UserAccessControl.getAccessControl(UserAccessControl.AccessControlClasses.Contact, null,
+		getDomainUser());
+
+	System.out.println(access.getCurrentUserScopes());
+
 	try
 	{
 	    System.out.println("filter : " + filter_id);
@@ -511,8 +512,12 @@ public class ContactFilterResultFetcher
 
     private DomainUser getDomainUser()
     {
+	System.out.println("getting domain user : " + user);
 	if (user != null)
+	{
+	    System.out.println(user.email);
 	    return user;
+	}
 
 	if (domainUserId != null)
 	{
