@@ -796,4 +796,16 @@ margin-left:13px;
   font-size: 15px;
   }
   
+  .addtosite-model-header-border{
+  border-bottom: none !important;
+}
+.addtosite-body-content{
+	border: 1px solid #ddd;
+    padding: 30px;
+    text-align: center;border-radius: 6px;
+}
+.margin-left-18{
+	margin-left: 18px;
+}
+  
 
