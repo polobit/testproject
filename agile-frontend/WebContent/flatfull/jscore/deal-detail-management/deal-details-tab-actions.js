@@ -97,14 +97,14 @@ var deal_details_tab = {
 };
 
 //For updating document from contact-details
-$(".document-edit-deal-tab").die().live('click', function(e){
+$('body').on('click', '.document-edit-deal-tab', function(e){
 	e.preventDefault();
 	var id = $(this).attr('data');
 	updateDocument(dealDocsView.collection.get(id));
 });
 
 // For unlinking document from contact-details
-$(".document-unlink-deal-tab").die().live('click', function(e){
+$('body').on('click', '.document-unlink-deal-tab', function(e){
 	e.preventDefault();
 	var id = $(this).attr('data');
 	var json = dealDocsView.collection.get(id).toJSON();
@@ -129,7 +129,7 @@ $(".document-unlink-deal-tab").die().live('click', function(e){
 /**
  * For showing new/existing documents
  */
-$(".add-deal-document-select").die().live('click', function(e){
+$('body').on('click', '.add-deal-document-select', function(e){
 	e.preventDefault();
 	var el = $(this).closest("div");
 	$(this).css("display", "none");
@@ -145,7 +145,7 @@ $(".add-deal-document-select").die().live('click', function(e){
 /**
  * For adding existing document to current contact
  */
-$(".add-deal-document-confirm").die().live('click', function(e){
+$('body').on('click', '.add-deal-document-confirm', function(e){
 	e.preventDefault();
 	
     var document_id = $(this).closest(".deal-document-select").find("#document-select").val();
@@ -197,7 +197,7 @@ $(".add-deal-document-confirm").die().live('click', function(e){
 /**
  * To cancel the add documents request
  */
-$(".add-deal-document-cancel").die().live('click', function(e){
+$('body').on('click', '.add-deal-document-cancel', function(e){
 	e.preventDefault();
 	var el = $(this).closest("div");
 	el.find(".deal-document-select").css("display", "none");

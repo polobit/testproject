@@ -546,7 +546,7 @@ var WorkflowsRouter = Backbone.Router
 							// Show custom tags textbox
 							$('#trigger-custom-tags', el).closest('div.control-group').css('display', '');
 
-							$('.trigger-tags', el).live("focus", function(e)
+							$('.trigger-tags', el).on("focus", function(e)
 							{
 								e.preventDefault();
 								addTagsDefaultTypeahead($('form#addTriggerForm').find('div#RHS'));

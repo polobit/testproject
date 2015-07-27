@@ -1,6 +1,6 @@
 $(function(){ 
 
-	$("#choose-avatar-modal table td a").die().live('click', function(e) {
+    $("body").on('click', '#choose-avatar-modal table td a', function(e) {
 	
 			e.preventDefault();
 	
@@ -14,7 +14,7 @@ $(function(){
 			$(this).trigger('choose-image')
 	});
 	
-	$('#choose-avatar-modal').die().live('choose-image', function() {
+	    $("body").on('choose-image', '#choose-avatar-modal table td a', function(e) {
 	
 			var selectedSource = $(this).find(".modal-body input[type='hidden']").val();
 			
@@ -29,7 +29,7 @@ $(function(){
 				//$(".preview-avatar").attr("src", selectedSource);
 			}
 	});
-	$('#choose-avatar-test').die().live('choose-image', function() {
+	$("body").on('choose-image', '#choose-avatar-test', function(e) {
 		$("#choose-avatar-modal").closest('.modal').modal('hide');
 		var selectedSource = $(this).find(".modal-body input[type='hidden']").val();
 		

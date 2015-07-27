@@ -43,7 +43,7 @@ $(function()
 	 * details, which are already added to time-line, when the contact is
 	 * getting to its detail view.
 	 */
-	$('#contactDetailsTab a[href="#timeline"]').live('click', function(e)
+	$('body').on('click', '#contactDetailsTab a[href="#timeline"]', function(e)
 	{
 		e.preventDefault();
 
@@ -52,7 +52,7 @@ $(function()
 		contact_details_tab.load_timeline();
 	});
 
-	$('.email-subject').die().live('click', function(e)
+	$('body').on('click', '.email-subject', function(e)
 	{
 		e.preventDefault();
 		var href = $(this).attr("href");
@@ -80,7 +80,7 @@ $(function()
 	 * });
 	 */
 
-	$('#show-page-views').die().live('click', function(e)
+	$('body').on('click', '#show-page-views', function(e)
 	{
 		e.preventDefault();
 
@@ -88,7 +88,7 @@ $(function()
 	});
 
 	// to remove contact from active campaign.
-	$('.remove-active-campaign').die().live('click', function(e)
+	$('body').on('click', '.remove-active-campaign', function(e)
 	{
 		e.preventDefault();
 
@@ -143,7 +143,7 @@ $(function()
 	 * Fetches all the notes related to the contact and shows the notes
 	 * collection as a table in its tab-content, when "Notes" tab is clicked.
 	 */
-	$('#contactDetailsTab a[href="#notes"]').live('click', function(e)
+	$('body').on('click', '#contactDetailsTab a[href="#notes"]', function(e)
 	{
 		e.preventDefault();
 		save_contact_tab_position_in_cookie("notes");
@@ -154,7 +154,7 @@ $(function()
 	 * Fetches all the events related to the contact and shows the events
 	 * collection as a table in its tab-content, when "Events" tab is clicked.
 	 */
-	$('#contactDetailsTab a[href="#events"]').live('click', function(e)
+	$('body').on('click', '#contactDetailsTab a[href="#events"]', function(e)
 	{
 		e.preventDefault();
 		save_contact_tab_position_in_cookie("events");
@@ -166,7 +166,7 @@ $(function()
 	 * collection as a table in its tab-content, when "Documents" tab is
 	 * clicked.
 	 */
-	$('#contactDetailsTab a[href="#documents"]').live('click', function(e)
+	$('body').on('click', '#contactDetailsTab a[href="#documents"]', function(e)
 	{
 		e.preventDefault();
 		save_contact_tab_position_in_cookie("documents");
@@ -177,7 +177,7 @@ $(function()
 	 * Fetches all the notes related to the contact and shows the tasks
 	 * collection as a table in its tab-content, when "Tasks" tab is clicked.
 	 */
-	$('#contactDetailsTab a[href="#tasks"]').live('click', function(e)
+	$('body').on('click', '#contactDetailsTab a[href="#tasks"]', function(e)
 	{
 		e.preventDefault();
 		save_contact_tab_position_in_cookie("tasks");
@@ -188,7 +188,7 @@ $(function()
 	 * Fetches all the deals related to the contact and shows the deals
 	 * collection as a table in its tab-content, when "Deals" tab is clicked.
 	 */
-	$('#contactDetailsTab a[href="#deals"]').live('click', function(e)
+	$('body').on('click', '#contactDetailsTab a[href="#deals"]', function(e)
 	{
 		e.preventDefault();
 		save_contact_tab_position_in_cookie("deals");
@@ -198,7 +198,7 @@ $(function()
 	/**
 	 * Fetches all the cases related to the contact and shows the collection.
 	 */
-	$('#contactDetailsTab a[href="#cases"]').live('click', function(e)
+	$('body').on('click', '#contactDetailsTab a[href="#cases"]', function(e)
 	{
 		e.preventDefault();
 		save_contact_tab_position_in_cookie("cases");
@@ -211,7 +211,7 @@ $(function()
 	 * associated email (gmail or imap) in Email-preferences of this CRM, when
 	 * "Mail" tab is clicked.
 	 */
-	$('#contactDetailsTab a[href="#mail"]').live('click', function(e)
+	$('body').on('click', '#contactDetailsTab a[href="#mail"]', function(e)
 	{
 		e.preventDefault();
 		email_server_type = "agilecrm"
@@ -224,7 +224,7 @@ $(function()
 	 * To do so the email should be run in analytics script provided by
 	 * agileCRM.
 	 */
-	$('#contactDetailsTab a[href="#stats"]').live('click', function(e)
+	 $('body').on('click', '#contactDetailsTab a[href="#stats"]', function(e)
 	{
 		e.preventDefault();
 		save_contact_tab_position_in_cookie("stats");
@@ -237,14 +237,14 @@ $(function()
 	 * and shows them in a table. Also shows a campaigns drop down list to
 	 * subscribe the contact to the selected campaign.
 	 */
-	$('#contactDetailsTab a[href="#campaigns"]').live('click', function(e)
+	$('body').on('click', '#contactDetailsTab a[href="#campaigns"]', function(e)
 	{
 		e.preventDefault();
 		save_contact_tab_position_in_cookie("campaigns");
 		contact_details_tab.load_campaigns();
 	});
 
-	$('#contactDetailsTab a[href="#company-contacts"]').live('click', function(e)
+    $('body').on('click', '#contactDetailsTab a[href="#company-contacts"]', function(e)
 	{
 		e.preventDefault();
 		fill_company_related_contacts(App_Contacts.contactDetailView.model.id, 'company-contacts');
@@ -255,7 +255,7 @@ $(function()
 	 * contains email server, email name from next time application loads from
 	 * emails from this email server and email
 	 */
-	$('.agile-emails').die().live('click', function(e)
+	$('body').on('click', '.agile-emails', function(e)
 	{
 		e.preventDefault();
 		var email_server = $(this).attr('email-server');
@@ -274,7 +274,7 @@ $(function()
 	 * Populates subject and description using email templates, on select option
 	 * change of "Fill From Templates" field.
 	 */
-	$('.emailSelect').die().live('change', function(e)
+	$('body').on('change', '.emailSelect', function(e)
 	{
 		e.preventDefault();
 
@@ -363,11 +363,7 @@ $(function()
 	 * Sends email to the target email. Before sending, validates and serializes
 	 * email form.
 	 */
-	$('#sendEmail')
-			.die()
-			.live(
-					'click',
-					function(e)
+	$('body').on('change', '#sendEmail', function(e)
 					{
 						e.preventDefault();
 
@@ -458,16 +454,14 @@ $(function()
 	 * Close button click event of send email form. Navigates to contact detail
 	 * view.
 	 */
-	$('#send-email-close').die().live('click', function(e)
+	$('body').on('click', '#send-email-close', function(e)
 	{
 		e.preventDefault();
 
 		window.history.back();
 	});
 
-	$('#email-reply').die().live(
-			'click',
-			function(e)
+    $('body').on('click', '#email-reply', function(e)
 			{
 				e.preventDefault();
 
@@ -528,7 +522,7 @@ $(function()
 
 			});
 
-	$('#email-reply-div').live('hover', function(e)
+	$('body').on('hover', '#email-reply-div', function(e)
 	{
 		e.preventDefault();
 
@@ -538,7 +532,7 @@ $(function()
 	/**
 	 * Delete functionality for activity blocks in contact details
 	 */
-	$('.activity-delete').die().live('click', function(e)
+	$('body').on('click', '.activity-delete', function(e)
 	{
 		e.preventDefault();
 
@@ -616,7 +610,7 @@ $(function()
 		} });
 	});
 
-	$('#cc-link, #bcc-link').die().live('click', function(e)
+	$('body').on('click', '#cc-link, #bcc-link', function(e)
 	{
 		e.preventDefault();
 
@@ -640,7 +634,7 @@ $(function()
 		$('#email_bcc').closest('.control-group').show();
 	});
 
-	$('#from_email_link').die().live('click', function(e)
+	$('body').on('click', '#from_email_link', function(e)
 	{
 		e.preventDefault();
 		$(this).closest('.control-group').hide();

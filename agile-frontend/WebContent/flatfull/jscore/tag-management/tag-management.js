@@ -270,13 +270,13 @@ function append_tag_management(base_model) {
 	// $(this.model_list_element).append($(el));
 }
 
-$("#add-new-tag").die().live('click', function(e) {
+$('body').on('click', '#add-new-tag', function(e){
 	e.preventDefault();
 
 	toggleAddTag(true);
 });
 
-$("#new_tag").die().live('keydown', function(event) {
+$('body').on('keydown', '#new_tag', function(event){
 	console.log(event.which)
 
 	if (event.which == 0) {
@@ -314,12 +314,12 @@ function toggleAddTag(show) {
 }
 
 /*
- * $("#new_tag").die().live('blur', function(event){
+ * $("#new_tag").on('blur', function(event){
  * 
  * });
  */
 
-$("#add_new_tag").die().live('click', function(e) {
+$('body').on('click', '#add_new_tag', function(e){
 	e.preventDefault();
 	var newTag = $().val();
 

@@ -29,7 +29,7 @@ $(function()
 	COMPANY_CUSTOM_FIELDS = undefined;
 	
 	// Filter Contacts- Clone Multiple
-	$(".filter-contacts-multiple-add").die().live('click', function(e)
+	$('body').on('click', '.filter-contacts-multiple-add', function(e)
 	{
 		e.preventDefault();
 		// To solve chaining issue when cloned
@@ -50,7 +50,7 @@ $(function()
 	});
 	
 	// Filter Contacts- Clone Multiple
-	$(".filter-contacts-multiple-add-or-rules").die().live('click', function(e)
+	$('body').on('click', '.filter-contacts-multiple-add-or-rules', function(e)
 	{
 		e.preventDefault();
 		// To solve chaining issue when cloned
@@ -71,7 +71,7 @@ $(function()
 	});
 	
 	// Filter Contacts- Clone Multiple
-	$(".filter-companies-multiple-add").die().live('click', function(e)
+	$('body').on('click', '.filter-companies-multiple-add', function(e)
 	{
 		e.preventDefault();
 		// To solve chaining issue when cloned
@@ -90,7 +90,7 @@ $(function()
 	});
 	
 	// Filter Contacts- Clone Multiple
-	$(".filter-companies-multiple-add-or-rules").die().live('click', function(e)
+	$('body').on('click', '.filter-companies-multiple-add-or-rules', function(e)
 	{
 		e.preventDefault();
 		// To solve chaining issue when cloned
@@ -111,13 +111,13 @@ $(function()
 	
 
 	// Filter Contacts- Remove Multiple
-	$("i.filter-contacts-multiple-remove").die().live('click', function(e)
+	$('body').on('click', 'i.filter-contacts-multiple-remove', function(e)
 	{
 		$(this).closest("tr").remove();
 	});
 
 	// Fetch filter result without changing route on click
-	$('.filter').live('click', function(e)
+	$('body').on('click', '.filter', function(e)
 	{
 
 		e.preventDefault();
@@ -146,20 +146,20 @@ $(function()
 	 * If default filter is selected, removes filter cookies an load contacts
 	 * with out any query condition
 	 */
-	$('.default_filter').live('click', function(e)
+	$('body').on('click', '.default_filter', function(e)
 	{
 		e.preventDefault();
 		revertToDefaultContacts();
 	});
 
-	$('.default_contact_remove_tag').die().live('click', function(e)
+	$('body').on('click', '.default_contact_remove_tag', function(e)
 	{
 		e.preventDefault();
 		// Navigate to show form
 		Backbone.history.navigate("contacts", { trigger : true });
 	});
 
-	$('#companies-filter').live('click', function(e)
+	$('body').on('click', '#companies-filter', function(e)
 	{
 
 		e.preventDefault();
@@ -192,7 +192,7 @@ $(function()
 		 */
 	});
 
-	$('.lhs_chanined_parent').die().live('change', function(e)
+	$('body').on('change', '.lhs_chanined_parent', function(e)
 	{
 		e.preventDefault();
 
@@ -203,7 +203,7 @@ $(function()
 		}
 	});
 	
-	$("#condition > select").die().live('change', function(e){
+	$('body').on('change', '#condition > select', function(e){
 		e.preventDefault();
 
 		if ($(this).find("option:selected").hasClass('tags'))
@@ -214,7 +214,7 @@ $(function()
 		
 	})
 	
-	$("#contact_type").die().live('change', function(e)
+	$('body').on('change', '#contact_type', function(e)
 	{
 		if($(this).val() == 'COMPANY') {
 			$('#companies-filter-wrapper').show();
@@ -479,7 +479,7 @@ function show_chained_fields(el, data, forceShow)
 
 	// If there is a change in lhs field, and it has tags in it then tags are
 	// loaded into its respective RHS block
-	$('.lhs', el).die().live('change', function(e)
+	$('.lhs', el).on('change', function(e)
 	{
 		e.preventDefault();
 		var value = $(this).val();

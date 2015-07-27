@@ -1,7 +1,6 @@
 $(function(){
 	
-	
-	$('#twilio_verify_settings').die().live('click', function(e)
+	$('body').on('click', '#twilio_verify_settings', function(e)
 			{
 				e.preventDefault();
 				
@@ -14,7 +13,7 @@ $(function(){
 		 * Twilio.On click of verify button in Twilio initial template,
 		 * verifyNumberFromTwilio is called to verify a number in Twilio
 		 */
-		$('#twilio_verify').die().live('click', function(e)
+		$('body').on('click', '#twilio_verify', function(e)
 		{
 			e.preventDefault();
 

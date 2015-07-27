@@ -128,7 +128,7 @@ tasks_new : function()
 $(function()
 {
 
-	$(".c_list").die().live('click', function(e)
+	$("body").on('click', ".c_list", function(e)
 	{
 		e.preventDefault();
 		// Creates the cookie
@@ -143,7 +143,7 @@ $(function()
 		App_Calendar.calendar();
 	});
 
-	$(".c_cal").die().live('click', function(e)
+	$("body").on('click', ".c_cal", function(e)
 	{
 		e.preventDefault();
 		// Erases the cookie
@@ -153,7 +153,7 @@ $(function()
 		App_Calendar.calendar();
 	});
 
-	$(".c_list_view_future").die().live('click', function(e)
+	$("body").on('click', ".c_list_view_future", function(e)
 	{
 		e.preventDefault();
 		// Creates the cookie
@@ -186,7 +186,7 @@ $(function()
 $(function()
 {
 
-	$(".c_list").die().live('click', function(e)
+        $("body").on('click', ".c_list", function(e)
 	{
 		e.preventDefault();
 		// Creates the cookie
@@ -201,7 +201,7 @@ $(function()
 		App_Calendar.calendar();
 	});
 
-	$(".c_cal").die().live('click', function(e)
+	$("body").on('click', ".c_cal", function(e)
 	{
 		e.preventDefault();
 		// Erases the cookie
@@ -211,7 +211,7 @@ $(function()
 		App_Calendar.calendar();
 	});
 
-	$(".c_list_view_future").die().live('click', function(e)
+	$("body").on('click', ".c_list_view_future", function(e)
 	{
 		e.preventDefault();
 		// Creates the cookie

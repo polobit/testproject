@@ -584,7 +584,7 @@ function loadDefaultFilters(callback)
 
 $(function()
 {
-	$("#sync-google-calendar").die().live('click', function(e)
+	$("body").on('click', '#sync-google-calendar', function(e)
 	{
 		e.preventDefault();
 
@@ -595,7 +595,7 @@ $(function()
 		window.location = "/scribe?service=google_calendar&return_url=" + encodeURIComponent(callbackURL);
 	});
 
-	$("#sync-google-calendar-delete").die().live('click', function(e)
+	$("body").on('click', '#sync-google-calendar-delete', function(e)
 	{
 		e.preventDefault();
 
@@ -619,13 +619,13 @@ $(function()
 	});
 
 	// Show filter drop down.
-	$('#event-filter-button').live('click', function(e)
+	$("body").on('click', '#event-filter-button', function(e)
 	{
 		e.preventDefault();
 		showEventFilters();
 	});
 
-	$('#event-filter-validate').live('click', function(e)
+	$("body").on('click', '#event-filter-validate', function(e)
 	{
 		$('#filter_options').hide();
 		var formId = 'eventsFilterForm';
@@ -657,7 +657,7 @@ $(function()
 	});
 
 	// Show filter drop down.
-	$('#clear-event-filters').live('click', function(e)
+	$("body").on('click', '#clear-event-filters', function(e)
 	{
 		e.preventDefault();
 		$('#filter_options select').val('');
@@ -666,7 +666,7 @@ $(function()
 		showEventFilters();
 	});
 
-	$('#event_type').live('change', function()
+	$("body").on('change', '#event_type', function(e)
 	{
 		console.log("----------", this.options[this.selectedIndex].text);
 		var dd = document.getElementById('event-owner');
@@ -677,7 +677,7 @@ $(function()
 		}
 	});
 
-	$('#event-owner').live('change', function()
+	$("body").on('change', '#event-owner', function(e)
 	{
 		console.log("----------", this.options[this.selectedIndex].text);
 		var opt = this.options[this.selectedIndex].text;
@@ -725,7 +725,7 @@ function today()
 {
 	fullCal.fullCalendar('today');
 }
-$('.agendaDayWeekMonth').die().live('click', function()
+$('body').on('click', '.agendaDayWeekMonth', function()
 {
 	currentView = $(this).attr('id');
 	fullCal.fullCalendar('changeView', currentView);

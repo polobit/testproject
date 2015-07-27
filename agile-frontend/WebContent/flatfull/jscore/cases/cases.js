@@ -13,8 +13,8 @@ $(function()
 	 * When mouseover on any row of opportunities list, the pop-over of deal is
 	 * shown
 	 */
-	$('#cases-model-list > tr').live(
-			'mouseenter',
+	$("body").on('mouseenter',
+			'#cases-model-list > tr',
 			function()
 			{
 
@@ -47,7 +47,7 @@ $(function()
 	/**
 	 * On mouse out on the row hides the popover.
 	 */
-	$('#cases-model-list > tr').live('mouseleave', function()
+	 $('body').on('mouseleave', '#cases-model-list > tr', function()
 	{
 		$(this).popover('hide');
 	});
@@ -55,7 +55,7 @@ $(function()
 	/**
 	 * Close button of Case popup is clicked.
 	 */
-	$('#close-case').live('click', function(e)
+	$('body').on('click', '#close-case', function(e)
 	{
 		e.preventDefault();
 	});
@@ -66,13 +66,13 @@ $(function()
 $(function()
 {
 
-	$('.cases-add').live('click', function(e)
+	$('body').on('click', '.cases-add', function(e)
 	{
 		e.preventDefault();
 		showCases();
 	});
 
-	$("#cases_validate").live('click', function(e)
+	$('body').on('click', '#cases_validate', function(e) 
 	{
 		e.preventDefault();
 
@@ -142,8 +142,7 @@ $(function()
 		// Removes validation error messages
 		remove_validation_errors('casesUpdateModal');
 	});
-
-	$('#cases-model-list > tr > td:not(":first-child")').live('click', function(e)
+	$('body').on('click', '#cases-model-list > tr > td:not(":first-child")', function(e) 
 	{
 		e.preventDefault();
 		updatecases($(this).closest('tr').data());

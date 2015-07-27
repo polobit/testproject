@@ -68,7 +68,7 @@ $(function()
 	 * details, which are already added to time-line, when the task is getting
 	 * to its detail view.
 	 */
-	$('#taskDetailsTab a[href="#timeline"]').live('click', function(e)
+	$('body').on('click', '#taskDetailsTab a[href="#timeline"]', function(e) 
 	{
 		e.preventDefault();
 
@@ -81,28 +81,28 @@ $(function()
 	 * Fetches all the notes related to the task and shows the notes collection
 	 * as a table in its tab-content, when "Notes" tab is clicked.
 	 */
-	$('#taskDetailsTab a[href="#notes"]').live('click', function(e)
+	$('body').on('click', '#taskDetailsTab a[href="#notes"]', function(e) 
 	{
 		e.preventDefault();
 		save_task_tab_position_in_cookie("notes");
 		task_details_tab.load_notes();
 	});
 
-	$('#taskDetailsTab a[href="#contacts"]').live('click', function(e)
+	$('body').on('click', '#taskDetailsTab a[href="#contacts"]', function(e)
 	{
 		e.preventDefault();
 		save_task_tab_position_in_cookie("contacts");
 		task_details_tab.loadTaskRelatedContactsView();
 	});
 
-	$('#taskDetailsTab a[href="#activity"]').live('click', function(e)
+        $('body').on('click', '#taskDetailsTab a[href="#activity"]', function(e) 
 	{
 		e.preventDefault();
 		save_task_tab_position_in_cookie("activity");
 		task_details_tab.loadActivitiesView();
 	});
-
-	$('.task-owner-list').live('click', function()
+	
+	$('body').on('click', '.task-owner-list', function(e) 
 	{
 
 		$('#change-task-owner-ul').css('display', 'none');
@@ -135,7 +135,7 @@ $(function()
 		} });
 	});
 
-	$('#change-owner-element > .task-owner-add').live('click', function(e)
+	$('body').on('click', '#change-owner-element > .task-owner-add', function(e)
 	{
 		e.preventDefault();
 		fill_task_owners(undefined, undefined, function()
@@ -153,7 +153,7 @@ $(function()
 
 	});
 
-	$('#task-owner').live('click', function(e)
+	$('body').on('click', '#task-owner', function(e)
 	{
 		e.preventDefault();
 		fill_task_owners(undefined, undefined, function()
@@ -173,7 +173,7 @@ $(function()
 	/**
 	 * task note update
 	 */
-	$('.task-note-edit').die().live('click', function(e)
+	$('body').on('click', '.task-note-edit', function(e) 
 	{
 
 		e.preventDefault();
@@ -189,7 +189,7 @@ $(function()
 	 * * update task related notes /
 	 */
 
-	$("#task_note_update").live('click', function(e)
+	$('body').on('click', '#task_note_update', function(e)
 	{
 		e.preventDefault();
 
@@ -216,7 +216,7 @@ $(function()
 		saveTaskNote($("#tasknoteUpdateForm"), $("#tasknoteupdatemodal"), this, json);
 	})
 
-	$('.delete_task').live('click', function(e)
+        $('body').on('click', '.delete_task', function(e)
 	{
 		var id = $('.delete_task').attr('data');
 		e.preventDefault();
@@ -273,7 +273,7 @@ function save_task_tab_position_in_cookie(tab_href)
 
 $(function()
 {
-	$('#task_edit').die().live('click', function(e)
+	$('body').on('click', '#task_edit', function(e) 
 	{
 		e.preventDefault();
 		var id = $(this).attr('data');
@@ -300,7 +300,7 @@ $(function()
 
 	});
 
-	$('.task-add-contact').die().live('click', function(e)
+	$('body').on('click', '.task-add-contact', function(e) 
 	{
 		e.preventDefault();
 		update_task(taskDetailView.toJSON());
@@ -367,7 +367,7 @@ function fill_relation_task(el)
  * Saves note model using "Bcakbone.Model" object, and adds saved data to
  * time-line if necessary.
  */
-$('#tasknote_validate').live('click', function(e)
+$('body').on('click', '#tasknote_validate', function(e) 
 {
 	e.preventDefault();
 

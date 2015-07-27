@@ -106,7 +106,7 @@ $(function()
 	 * Click on search icon in search field top nav-bar, shows simple search
 	 * results in separate page
 	 */
-	$("#search-results").live('click', function(e)
+	$('body').on('click', '#search-results', function(e)
 	{
 		e.preventDefault();
 		showSearchResults();

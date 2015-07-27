@@ -3,7 +3,7 @@ $(function(){
 	/**
 	 * For adding new document
 	 */
-	$(".documents-add").die().live('click', function(e){
+	$('body').on('click', '.documents-add', function(e){
 		e.preventDefault();
 		var el = $("#uploadDocumentForm");
 		$("#uploadDocumentModal").modal('show');
@@ -60,7 +60,7 @@ $(function(){
     /** 
      * When clicked on choose network type
      */
-	$(".link").live('click', function(e)
+	$('body').on('click', '.link', function(e)
 	{
 		e.preventDefault();
 		$(this).closest('form').find('#error').html("");
@@ -82,7 +82,7 @@ $(function(){
 	/**
 	 * To validate the document add or edit forms
 	 */
-    $('#document_validate, #document_update_validate').live('click',function(e){
+	$('body').on('click', '#document_validate, #document_update_validate', function(e){
  		e.preventDefault();
 
  		var modal_id = $(this).closest('.upload-document-modal').attr("id");
@@ -100,7 +100,7 @@ $(function(){
     /** 
      * Document list view edit
      */
-     $('#documents-model-list > tr > td:not(":first-child")').live('click', function(e) {
+	 $('body').on('click', '#documents-model-list > tr > td:not(":first-child")', function(e){
     	 if(e.target.parentElement.attributes[0].name!="href" && e.target.parentElement.attributes[1].name!="href"){
      		e.preventDefault();
      	 	updateDocument($(this).closest('tr').data());

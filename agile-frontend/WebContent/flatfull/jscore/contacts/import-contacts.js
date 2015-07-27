@@ -6,8 +6,7 @@ $(function()
 	// table, still calls
 	// fileUploadInit,
 	// so user can uploadimport-comp again if required
-	$('#import-cancel').die().live('click', function(e)
-	{
+	$('body').on('click', '#import-cancel', function(e){
 
 		// Sends empty JSON to remove
 		// contact uploaded
@@ -15,15 +14,14 @@ $(function()
 	});
 	
 	// cancel option for deals import
-	$('#deal-cancel').die().live('click', function(e)
-			{
+	$('body').on('click', '#deal-cancel', function(e){
 
 				// Sends empty JSON to remove
 				// contact uploaded
 				$('#content').html(getTemplate("import-deals", {}));
 			});
 
-	$(".upload").die().live('click', function(e)
+	$('body').on('click', '.upload', function(e)
 	{
 
 		// get hidden value file type
@@ -39,11 +37,7 @@ $(function()
 		return false;
 	})
 
-	$('#import-contacts')
-			.die()
-			.live(
-					'click',
-					function(e)
+	$('body').on('click', '#import-contacts', function(e)
 					{
 
 						if ($(this).attr('disabled'))
@@ -279,12 +273,7 @@ $(function()
 /**
  * validation for csv import companies
  */
-
-$('#import-comp')
-		.die()
-		.live(
-				'click',
-				function(e)
+$('body').on('click', '#import-comp', function(e)
 				{
 
 					if ($(this).attr('disabled'))
@@ -451,12 +440,7 @@ $('#import-comp')
 /**
  * import deals validations
  */
-
-$('#import-deals')
-		.die()
-		.live(
-				'click',
-				function(e)
+$('body').on('click', '#import-deals', function(e)
 				{
 
 					if ($(this).attr('disabled'))

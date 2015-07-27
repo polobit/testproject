@@ -29,7 +29,7 @@ function load_account_email_activity($account_activity)
 
 $(function(){
 	
-	$('#email-gateway-delete').die().live('click', function(e){
+	$("body").on("click", '#email-gateway-delete', function(e) {
 		e.preventDefault();
 		
 		if(!confirm("Are you sure you want to delete?"))

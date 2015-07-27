@@ -6,7 +6,7 @@
  */
 $(function()
 {
-	$("#invoice-model-list > tr").live('click', function(e)
+	$('body').on('click', '#invoice-model-list > tr', function(e)
 	{
 		e.preventDefault();
 
@@ -22,7 +22,7 @@ $(function()
 		// App_Subscription.invoiceDetails(data);
 	});
 	
-	$("#charge-model-list > tr").live('click', function(e)
+	$('body').on('click', '#charge-model-list > tr', function(e)
 			{
 				e.preventDefault();
 				var invoice_id = $(this).find('.data').attr('data');

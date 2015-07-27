@@ -15,7 +15,7 @@ $(function()
 	 * form and hides task form, changes color and font-weight)
 	 * 
 	 */
-	$('#show-activity').live('click', function(e)
+	$("body").on('click', '#show-activity', function(e)
 	{
 		e.preventDefault();
 		highlight_event();
@@ -26,7 +26,7 @@ $(function()
 	/**
 	 * Shows the event form fields in activity modal
 	 */
-	$(".add-event").live('click', function(e)
+	$("body").on('click', '.add-event', function(e)
 	{
 		e.preventDefault();
 
@@ -45,7 +45,7 @@ $(function()
 	/**
 	 * shows description field in new event model
 	 */
-	$("#add_event_desctiption").live('click', function(e)
+	$("body").on('click', '#add_event_desctiption', function(e)
 	{
 		e.preventDefault();
 		$(".event_discription").removeClass("hide");
@@ -58,7 +58,7 @@ $(function()
 	 * updated by calling save_event function
 	 * 
 	 */
-	$('#update_event_validate').die().live('click', function(e)
+	$("body").on('click', '#update_event_validate', function(e)
 	{
 		e.preventDefault();
 		var eventId = $('#updateActivityModal').find("input[type='hidden']").val();
@@ -76,12 +76,8 @@ $(function()
 	 * Deletes an event from calendar by calling ajax DELETE request with an
 	 * appropriate url
 	 */
-	$('#event_delete')
-			.die()
-			.live(
-					'click',
-					function(e)
-					{
+	 $("body").on('click', '#event_delete', function(e)
+	 {
 						e.preventDefault();
 
 						if ($(this).attr('disabled') == 'disabled')
@@ -392,7 +388,7 @@ $(function()
 	 * Highlights the event features (Shows event form and hides task form,
 	 * changing color and font-weight)
 	 */
-	$("#event").live('click', function(e)
+	$("body").on('click', '#event', function(e)
 	{
 		e.preventDefault();
 		highlight_event();
@@ -401,11 +397,7 @@ $(function()
 	/**
 	 * when web appointment event is deleted this event will be fired out
 	 */
-	$('#cancel_delete')
-			.die()
-			.live(
-					'click',
-					function(e)
+	$("body").on('click', '#cancel_delete', function(e)
 					{
 						e.preventDefault();
 
@@ -472,7 +464,7 @@ $(function()
 	/**
 	 * when user deleting web appointment event this will be called
 	 */
-	$('#delete_web_event').die().live('click', function(e)
+	$('body').on('click', '#delete_web_event', function(e)
 	{
 		e.preventDefault();
 

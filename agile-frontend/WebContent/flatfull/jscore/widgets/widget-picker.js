@@ -89,7 +89,7 @@ $(function()
 	 * anchor tag and gets the model from the collection with widget name and
 	 * add widget then navigates back to the contact-details page
 	 */
-	$('.install-custom-widget').live('click', function(e)
+	$('body').on('click', '.install-custom-widget', function(e)
 	{
 
 		e.preventDefault();
@@ -150,7 +150,7 @@ $(function()
 	 * When user chooses to delete a widget, on confirmation sends delete
 	 * request based on the name of the widget
 	 */
-	$('#delete-widget').die().live('click', function(e)
+	$('body').on('click', '#delete-widget', function(e)
 	{
 		// Fetch widget name from the widget on which delete is clicked
 		var widget_name = $(this).attr('widget-name');
@@ -168,7 +168,7 @@ $(function()
 
 		});	
 
-	$('#remove-widget').die().live('click', function(e)
+	$('body').on('click', '#remove-widget', function(e)
 	{
 		// Fetch widget name from the widget on which delete is clicked
 		var widget_name = $(this).attr('widget-name');
@@ -236,10 +236,8 @@ function update_collection(widget_name)
 function build_custom_widget_form(el)
 {
 	var divClone;
-
-	$('#add-custom-widget').die().live(
-			'click',
-			function(e)
+	
+	$('body').on('click', '#add-custom-widget', function(e)
 			{
 				divClone = $("#custom-widget").clone();
 				var widget_custom_view = new Base_Model_View({ url : "/core/api/widgets/custom", template : "add-custom-widget", isNew : true,
@@ -247,8 +245,8 @@ function build_custom_widget_form(el)
 					{
 						console.log('In post render callback');
 						console.log(el);
-
-						$('#script_type').die().live('change', function(e)
+                        
+						$('body').on('change', '#script_type', function(e)
 						{
 							var script_type = $('#script_type').val();
 							if (script_type == "script")
@@ -279,8 +277,8 @@ function build_custom_widget_form(el)
 					} });
 
 				$('#custom-widget', el).html(widget_custom_view.render(true).el);
-
-				$('#cancel_custom_widget').die().live('click', function(e)
+				
+				$('body').on('click', '#cancel_custom_widget', function(e)
 				{
 					// Restore element back to original
 					$("#custom-widget").replaceWith(divClone); 

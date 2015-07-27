@@ -421,7 +421,7 @@ var SubscribeRouter = Backbone.Router.extend({
 								return parseInt(value) >= 5;
 							}, " Should purchase a minimum of 5000 emails.");
 					
-					$("#email-quantity", el).die().live('keyup', function(e){
+					$("#email-quantity", el).on('keyup', function(e){ 
 						isValidForm($("#email-plan-form", el));
 						if(e.which == 13)
 							{
@@ -514,7 +514,7 @@ var SubscribeRouter = Backbone.Router.extend({
 					if(++counter <= 1)
 					{
 						
-						$("#account_email_plan_upgrade", el).die().live('click' , function(e){
+						$("#account_email_plan_upgrade", el).on('click' , function(e){
 							e.preventDefault();
 							that.email_subscription(subscribe_email_plan.model);
 						})
@@ -613,7 +613,7 @@ var SubscribeRouter = Backbone.Router.extend({
 		
 			var subscription_model = new BaseModel(data);
 			
-			$("#change-card").die().live('click' , function(e){
+			$("body").on('click' , '#change-card', function(e){
 				e.preventDefault();
 				//alert("here");
 				that.showCreditCardForm(subscription_model, function(model){
@@ -659,14 +659,14 @@ var SubscribeRouter = Backbone.Router.extend({
 			
 			if(++counter <= 1)
 			{
-				$("#attach_card_notification", el).die().live('click' , function(e){
+				$("#attach_card_notification", el).on('click' , function(e){
 					e.preventDefault();
 					that.showCreditCardForm(subscribe_account_plan.model, function(model){
 						Backbone.history.navigate("subscribe-plan", { trigger : true });
 					})
 				})
 				
-				$("#user-plan-details-popover", el).live('click', function(e){
+				$("#user-plan-details-popover", el).on('click', function(e){
 					  var ele = getTemplate("account-plan-details-popover", subscribe_account_plan.model.get("planLimits"));
 					  console.log(ele);
 				        $(this).attr({
@@ -721,7 +721,7 @@ var SubscribeRouter = Backbone.Router.extend({
 		 */
 		postRenderCallback : function(el)
 		{
-				$("#account_email_attach_card", el).die().live('click' , function(e){
+				$("#account_email_attach_card", el).on('click' , function(e){
 					e.preventDefault();
 					//alert("here");
 					that.showCreditCardForm(subscribe_email_plan.model, function(model){
@@ -730,7 +730,7 @@ var SubscribeRouter = Backbone.Router.extend({
 					});
 				});
 				
-				$("#account_email_plan_upgrade", el).die().live('click' , function(e){
+				$("#account_email_plan_upgrade", el).on('click' , function(e){
 					e.preventDefault();
 					that.email_subscription(subscribe_email_plan.model);
 					//alert("here");
@@ -748,7 +748,7 @@ var SubscribeRouter = Backbone.Router.extend({
 				        	//"trigger" : "hover"
 				        });
 					  
-				$("#email-plan-details-popover", el).live('click', function(e){
+				$("#email-plan-details-popover", el).on('click', function(e){
 						  $(this).popover('show');
 					  });
 				
@@ -825,7 +825,7 @@ var SubscribeRouter = Backbone.Router.extend({
 		 */
 		postRenderCallback : function(el)
 		{
-			$("#change-card", el).die().live('click' , function(e){
+			$("#change-card", el).on('click' , function(e){
 				e.preventDefault();
 				//alert("here");
 				that.showCreditCardForm(stripe_customer_details.model, function(model){

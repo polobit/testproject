@@ -673,7 +673,7 @@ function hidePortletSettingsAfterSave(modal_id){
 	//$('#'+form_id).hide();
 	$('.modal-backdrop').hide();
 }
-$('.portlet-minimize').die().live('click', function(e){
+$('body').on('click', '.portlet-minimize', function(e) {
 	e.preventDefault();
 	var id = $(this).attr('id').split("-collapse")[0];
 
@@ -699,7 +699,7 @@ $('.portlet-minimize').die().live('click', function(e){
 	
 	$('#'+id).parent().find('.portlet_body').hide();
 });
-$('.portlet-maximize').die().live('click', function(e){
+$('body').on('click', '.portlet-maximize', function(e) {
 	e.preventDefault();
 	var id = $(this).attr('id').split("-collapse")[0];
 
@@ -725,7 +725,7 @@ $('.portlet-maximize').die().live('click', function(e){
 	
 	$('#'+id).parent().find('.portlet_body').show();
 });
-$('.portlet-settings-save-modal').live('click', function(e){
+$('body').on('click', '.portlet-settings-save-modal', function(e) {
 	e.preventDefault();
 	var scrollPosition=$(window).scrollTop();
 	var form_id=$(this).parent().prev().find('form:visible').attr('id');
@@ -1613,7 +1613,7 @@ function initBlogPortletSync(el)
 					});
 
 }
-$('#group-by-task-report').live('change',function(e){
+$('body').on('change', '#group-by-task-report', function(e) {
 	
 	$('#tasks-task-report').trigger("change");
 	
@@ -1637,7 +1637,7 @@ $('#group-by-task-report').live('change',function(e){
 	else
 		$('#tasks-control-group').show();
 });
-$('#tasks-task-report').live('change',function(e){
+$('body').on('change', '#tasks-task-report', function(e) {
 	if($('#tasks-task-report').val()=="completed-tasks"){
 		if($('#split-by-task-report > option#status').is(':selected'))
 			$('#split-by-task-report > option#status').attr("selected",false);
@@ -1646,23 +1646,23 @@ $('#tasks-task-report').live('change',function(e){
 	else
 		$('#split-by-task-report > option#status').show();
 });
-$('.stats_report_portlet_body').live('mouseover',function(e){
+$('body').on('mouseover', '.stats_report_portlet_body', function(e) {
 	if($('.stats_report_portlet_body').parent().find('.gs-resize-handle'))
 		$('.stats_report_portlet_body').parent().find('.gs-resize-handle').remove();
 	$('.stats_report_portlet_body').find('.portlet_header_icons').css("visibility","visible");
 	//$('.stats_report_portlet_body').find('.stats-report-settings').find('span').eq(0).addClass('p-l-lg');
 });
-$('.stats_report_portlet_body').live('mouseout',function(e){
+$('body').on('mouseout', '.stats_report_portlet_body', function(e) {
 	$('.stats_report_portlet_body').find('.portlet_header_icons').css("visibility","hidden");
 	//$('.stats_report_portlet_body').find('.stats-report-settings').find('span').eq(0).removeClass('p-l-lg');
 });
-$('.onboarding-skip').live('click',function(e){
+$('body').on('click', '.onboarding-skip', function(e) {
 	$(this).parent().find('span').css("text-decoration","line-through");
 	if(!$(this).parent().find('small').hasClass('onboarding-undo'))
 		$(this).parent().find('span').after("<small class='p-l-sm onboarding-undo c-p'>(undo)</small>");
 	$(this).remove();
 });
-$('.onboarding-undo').live('click',function(e){
+$('body').on('click', '.onboarding-undo', function(e) {
 	$(this).parent().find('span').css("text-decoration","none");
 	$(this).parent().find('label').remove();
 	$(this).parent().find('span').before("<label class='i-checks i-checks-sm onboarding-check' style='padding-right:4px;'><input type='checkbox'><i></i></label>");
@@ -1670,7 +1670,7 @@ $('.onboarding-undo').live('click',function(e){
 		$(this).parent().find('span').after("<small class='p-l-sm onboarding-skip c-p'>(skip)</small>");
 	$(this).remove();
 });
-$('.onboarding-check').live('change',function(e){
+$('body').on('change', '.onboarding-check', function(e) {
 	/*$(this).parent().find('span').before("<label class='fa fa-check p-r-sm'><i></i></label>");
 	if(!$(this).parent().find('small').hasClass('onboarding-undo'))
 		$(this).parent().find('span').after("<small class='p-l-sm onboarding-undo c-p'>(undo)</small>");
@@ -1723,41 +1723,41 @@ function gravatarImgForPortlets(width){
 	var data_name = '';
 	return new Handlebars.SafeString('https://secure.gravatar.com/avatar/' + Agile_MD5("") + '.jpg?s=' + width + '' + backup_image + data_name);
 }
-$('.leaderboard_portlet_header').live('mouseover',function(e){
+$('body').on('mouseover', '.leaderboard_portlet_header', function(e) {
 	$('.leaderboard_portlet_header').find('.portlet_header_icons').css("visibility","visible");
 });
-$('.leaderboard_portlet_header').live('mouseout',function(e){
+$('body').on('mouseout', '.leaderboard_portlet_header', function(e) {
 	$('.leaderboard_portlet_header').find('.portlet_header_icons').css("visibility","hidden");
 });
-$('#category-select-all').die().live('click',function(e){
+$('body').on('click', '.leaderboard_portlet_header', function(e) {
 		e.preventDefault();
 		$('#category-list').multiSelect('select_all');
 });
-$('#category-select-none').die().live('click',function(e){
+$('body').on('click', '#category-select-none', function(e) {
 		e.preventDefault();
 		$('#category-list').multiSelect('deselect_all');
 });
-$('#user-select-all').die().live('click',function(e){
+$('body').on('click', '#user-select-all', function(e) {
 		e.preventDefault();
 		$('#user-list').multiSelect('select_all');
 });
-$('#user-select-none').die().live('click',function(e){
+$('body').on('click', '#user-select-none', function(e) {
 		e.preventDefault();
 		$('#user-list').multiSelect('deselect_all');
 });
-$('#calls-user-select-all').die().live('click',function(e){
+$('body').on('click', '#calls-user-select-all', function(e) {
 	e.preventDefault();
 	$('#calls-user-list').multiSelect('select_all');
 });
-$('#calls-user-select-none').die().live('click',function(e){
+$('body').on('click', '#calls-user-select-none', function(e) {
 	e.preventDefault();
 	$('#calls-user-list').multiSelect('deselect_all');
 });
-$('#task-report-user-select-all').die().live('click',function(e){
+$('body').on('click', '#task-report-user-select-all', function(e) {
 		e.preventDefault();
 		$('#task-report-user-list').multiSelect('select_all');
 });
-$('#task-report-user-select-none').die().live('click',function(e){
+$('body').on('click', '#task-report-user-select-none', function(e) {
 		e.preventDefault();
 		$('#task-report-user-list').multiSelect('deselect_all');
 });

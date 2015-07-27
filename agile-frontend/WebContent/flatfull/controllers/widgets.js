@@ -699,8 +699,7 @@ var WidgetsRouter = Backbone.Router
 																								{
 																												console.log('In post render callback');
 																												console.log(el);
-
-																												$('#script_type').die().live('change', function(e)
+																												$('body').on('change', '#script_type', function(e)
 																												{
 																																var script_type = $('#script_type').val();
 																																if (script_type == "script")
@@ -732,7 +731,7 @@ var WidgetsRouter = Backbone.Router
 
 																				$('#custom-widget', el).html(widget_custom_view.render(true).el);
 
-																				$('#cancel_custom_widget').die().live('click', function(e)
+																				$('body').on('click', '#cancel_custom_widget', function(e) 
 																				{
 																								// Restore element back to original
 																								$("#custom-widget").replaceWith(divClone);

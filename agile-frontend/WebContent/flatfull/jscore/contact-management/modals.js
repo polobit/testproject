@@ -96,7 +96,7 @@ $(function(){
 		/**
 		 * Close clicked of company entered, this brings back text input field of company to fill again
 		 */
-		$("#personForm [name='contact_company_id'] a.close").live('click',function(e){
+		$('body').on('click', '#personForm [name="contact_company_id"] a.close', function(e){
 			$("#personForm #contact_company").show();
 		});
 	
@@ -104,14 +104,14 @@ $(function(){
 		 * Click event of "Save Changes" button in person modal
 		 * Saves the contact using the function "serialize_and_save_continue_contact"
 		 */
-	    $('#person_validate').live('click', function(e){
+		$('body').on('click', '#person_validate', function(e){
 	    	serialize_and_save_continue_contact(e, 'personForm', 'personModal', false, true, this, 'tags_source_person_modal');
 	    });
 	    
 	    /**
 		 * Navigates to controller to import contacts from a file
 		 */
-	    $('#import-link').live('click', function (e) {
+		$('body').on('click', '#import-link', function(e){
 	    	Backbone.history.navigate("import",{trigger: true});	        
 	    });
 	    
@@ -119,7 +119,7 @@ $(function(){
 		 * Click event of "Save Changes" button in company modal
 		 * Saves the contact using the function "serialize_and_save_continue_contact"
 		 */
-	    $('#company_validate').live('click', function (e) {
+		$('body').on('click', '#company_validate', function(e){
 	    	serialize_and_save_continue_contact(e, 'companyForm', 'companyModal', false, false, this);
 	    });
 	    
@@ -147,8 +147,7 @@ $(function(){
 	    });
 
 	    //hide modal when click on upgrade
-
-	    $('.hideCurrentModal').live('click', function () {
+		$('body').on('click', '.hideCurrentModal', function(e){
 	    	$(this).closest(".modal").hide();
 	    	if($("body").hasClass("modal-open"))
 	    		$("body").removeClass("modal-open");

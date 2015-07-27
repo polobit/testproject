@@ -224,38 +224,38 @@
 		dealConAddTag = $('#deal-contact-add-tag');
 		dealConAddCamp = $('#deal-contact-add-camp');
 		filterJSON = $.parseJSON(readCookie('deal-filters'));
-
-		changeOwner.die().live('click',function(e){
+		
+		changeOwner.on('click',function(e){
 			e.preventDefault();
 			bulkOwnerChangeDeals();
 		});
 		
-		archiveDeals.die().live('click',function(e){
+		archiveDeals.on('click',function(e){
 			e.preventDefault();
 			bulkArchiveDeals();
 		});
 		
-		restoreDeals.die().live('click',function(e){
+		restoreDeals.on('click',function(e){
 			e.preventDefault();
 			bulkRestoreDeals();
 		});
 		
-		deleteDeals.die().live('click',function(e){
+		deleteDeals.on('click',function(e){
 			e.preventDefault();
 			bulkDeleteDeals();
 		});
 		
-		dealConAddTag.die().live('click',function(e){
+		dealConAddTag.on('click',function(e){
 			e.preventDefault();
 			bulkAddDealContactTags($(this));
 		});
 		
-		dealConAddCamp.die().live('click',function(e){
+		dealConAddCamp.on('click',function(e){
 			e.preventDefault();
 			bulkAddDealContactsToCamp($(this));
 		});
 		
-		$("#pipeline-list-bulk").die().live('change',function(e){
+		$('body').on('change', '#pipeline-list-bulk', function(e) {
 			populateMilestones($("#deal_mile_change_modal"), undefined,$(this).val(), undefined, function(data){
 				$("#milestone-list-bulk").html(data);
 				$("#milestone-list-bulk").closest('div').find('.loading-img').hide();
@@ -263,18 +263,18 @@
 			});
 		});
 		
-		$('#deal-bulk-mile').die().live('click',function(e){
+		$('body').on('click', '#deal-bulk-mile', function(e) {
 			e.preventDefault();
 			bulkMilestoneChange($(this));
 		});
 		
-		$('#select-all-available-deals').die().live('click',function(e){
+		$('body').on('click', '#select-all-available-deals', function(e) {
 			e.preventDefault();
 			deal_bulk_actions.SELECT_ALL_DEALS = true;
 			$('body').find('#bulk-select').html("Selected " + numberWithCommas(getAvailableDeals()) + " deals. <a id='select-choosen-deals' href='#'>Select choosen deals only.</a>");
 		});
 		
-		$('#select-choosen-deals').die().live('click',function(e){
+		$('body').on('click', '#select-choosen-deals', function(e) {
 			e.preventDefault();
 			deal_bulk_actions.SELECT_ALL_DEALS = false;
 			$('body').find('#bulk-select').html("Selected " + numberWithCommas(App_Deals.opportunityCollectionView.collection.length) + " deals. <a id='select-all-available-deals' href='#'>Select all " + numberWithCommas(getAvailableDeals()) + " deals</a>");

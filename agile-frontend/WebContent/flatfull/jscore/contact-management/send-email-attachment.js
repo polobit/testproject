@@ -6,7 +6,7 @@
 	 * to attach in send-email form 
 	 */
     $(function(){
-	$(".add-attachment-select").die().live('click', function(e){
+	$('body').on('click', '.add-attachment-select', function(e){
 		e.preventDefault();
 		var el = $(this).closest("div");
 		$(this).css("display", "none");
@@ -22,7 +22,7 @@
 	/**
 	 * For adding existing document to current contact
 	 */
-	$(".add-attachment-confirm").die().live('click', function(e){
+	$('body').on('click', '.add-attachment-confirm', function(e){
 		e.preventDefault();		
 		var network_type = $('#attachment-select').find(":selected").attr('network_type');
 		if(typeof network_type !=='undefined' && network_type.toUpperCase() === 'GOOGLE')
@@ -73,7 +73,7 @@
 	/**
 	 * To cancel the add attachment request in send-email form
 	 */
-	$(".add-attachment-cancel").die().live('click', function(e){
+	$('body').on('click', '.add-attachment-cancel', function(e){
 		e.preventDefault();
 		var blobKey = $('#emailForm').find('#attachment_id').attr('name');
 		if(typeof blobKey !== typeof undefined)

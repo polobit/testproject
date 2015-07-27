@@ -16,10 +16,7 @@ $(function()
 	 * Bulk operations - Change owner Shows all the users as drop down list to
 	 * select one of them as the owner for the selected contacts.
 	 */
-	$("#bulk-owner")
-			.live(
-					'click',
-					function(e)
+	$("body").on("click", "#bulk-owner", function(e)
 					{
 						e.preventDefault();
 
@@ -54,7 +51,7 @@ $(function()
 
 		// Yes callback
 		// Bind a custom event to trigger on loading the form
-		$('body').die('fill_owners').live('fill_owners', function(event)
+		$("body").off('fill_owners').on("fill_owners", "#bulk-owner", function(event)
 		{
 			var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
 			fillSelect('ownerBulkSelect', '/core/api/users', 'domainUsers', 'no-callback ', optionsTemplate);
@@ -67,7 +64,7 @@ $(function()
 		 * Changes the owner by sending the new owner name as path parameter and
 		 * contact ids as form data of post request
 		 */
-		$('#changeOwnerToBulk').die().live('click', function(e)
+		$("body").on("click", "#changeOwnerToBulk", function(e)
 		{
 			e.preventDefault();
 
@@ -103,10 +100,7 @@ $(function()
 	 * Bulk operations - Adds to campaign Shows all the workflows as drop down
 	 * list to select one of them to subscribe the selected contacts
 	 */
-	$("#bulk-campaigns")
-			.live(
-					'click',
-					function(e)
+	$("body").on("click", "#bulk-campaigns", function(e)
 					{
 						e.preventDefault();
 
@@ -207,7 +201,7 @@ $(function()
 
 		console.log(filter);
 
-		$('body').die('fill_campaigns').live('fill_campaigns', function(event)
+        $("body").off('fill_campaigns').on("fill_campaigns", "#bulk-campaigns", function(event)
 		{
 			var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
 			fillSelect('campaignBulkSelect', '/core/api/workflows', 'workflow', 'no-callback ', optionsTemplate);
@@ -220,7 +214,7 @@ $(function()
 		 * Subscribes the selected contacts to a campaign by sending the
 		 * workflow id and selected contacts' ids.
 		 */
-		$('#addBulkTocampaign').die().live('click', function(e)
+		$("body").off('fill_campaigns').on("click", "#addBulkTocampaign", function(e)
 		{
 			e.preventDefault();
 
@@ -254,11 +248,8 @@ $(function()
 	 * Bulk operations - Adds tags' Shows the existing tags with help of
 	 * typeahead to add tags to the selected contacts. Also we can add new tags.
 	 */
-	$("#bulk-tags")
-			.live(
-					'click',
-					function(e)
-					{
+	$("body").on("click", "#bulk-tags", function(e)
+			{
 						e.preventDefault();
 
 						if (!canRunBulkOperations())
@@ -314,7 +305,7 @@ $(function()
 		 * Add the tags to the selected contacts by sending the contact ids and
 		 * tags through post request to the appropriate url
 		 */
-		$('#addTagsToContactsBulk').die().live('click', function(e)
+		 $("body").on("click", "#addTagsToContactsBulk", function(e)
 		{
 			e.preventDefault();
 
@@ -385,10 +376,7 @@ $(function()
 	 * Bulk operations - Adds tags' Shows the existing tags with help of
 	 * typeahead to add tags to the selected contacts. Also we can add new tags.
 	 */
-	$("#bulk-tags-remove")
-			.live(
-					'click',
-					function(e)
+	$("body").on("click", "#bulk-tags-remove", function(e)
 					{
 						e.preventDefault();
 
@@ -446,11 +434,7 @@ $(function()
 		 * Add the tags to the selected contacts by sending the contact ids and
 		 * tags through post request to the appropriate url
 		 */
-		$('#removeTagsToContactsBulk')
-				.die()
-				.live(
-						'click',
-						function(e)
+		$("body").on("click", "#removeTagsToContactsBulk", function(e)
 						{
 							e.preventDefault();
 
@@ -516,10 +500,7 @@ $(function()
 	 * Bulk operations - Sends email to the bulk of contacts by filling up the
 	 * send email details like from, subject and body.
 	 */
-	$("#bulk-email")
-			.live(
-					'click',
-					function(e)
+	$("body").on("click", "#bulk-email", function(e)
 					{
 						e.preventDefault();
 
@@ -614,7 +595,7 @@ $(function()
 		// Selected Contact ids
 		var id_array = get_contacts_bulk_ids();
 
-		$('body').die('fill_emails').live('fill_emails', function(event)
+        $("body").off('fill_emails').on("fill_emails", "#bulk-email", function(event)
 		{
 
 			var $emailForm = $('#emailForm');
@@ -653,7 +634,7 @@ $(function()
 
 		Backbone.history.navigate("bulk-email", { trigger : true });
 
-		$('#bulk-send-email').die().live('click', function(e)
+		$("body").on("click", "#bulk-send-email", function(e)
 		{
 			e.preventDefault();
 
@@ -695,10 +676,7 @@ $(function()
 	 * Bulk Operations - Exports selected contacts in a CSV file as an
 	 * attachment to email of current domain user.
 	 */
-	$("#bulk-contacts-export")
-			.live(
-					'click',
-					function(e)
+	$("body").on("click", "#bulk-contacts-export", function(e)
 					{
 						e.preventDefault();
 
@@ -726,11 +704,7 @@ $(function()
 						contacts_csv_modal.modal('show');
 
 						// If Yes clicked
-						$('#contacts-export-csv-confirm')
-								.die()
-								.live(
-										'click',
-										function(e)
+						$("body").on("click", "#contacts-export-csv-confirm", function(e)
 										{
 											e.preventDefault();
 
@@ -774,10 +748,7 @@ $(function()
 	 * Bulk Operations - Exports selected contacts in a CSV file as an
 	 * attachment to email of current domain user.
 	 */
-	$("#bulk-companies-export")
-			.live(
-					'click',
-					function(e)
+	$("body").on("click", "#bulk-companies-export", function(e)
 					{
 						e.preventDefault();
 
@@ -805,11 +776,7 @@ $(function()
 						companies_csv_modal.modal('show');
 
 						// If Yes clicked
-						$('#companies-export-csv-confirm')
-								.die()
-								.live(
-										'click',
-										function(e)
+						$("body").on("click", "#companies-export-csv-confirm", function(e)
 										{
 											e.preventDefault();
 
@@ -850,11 +817,7 @@ $(function()
 					});
 
 
-	$("#select-all-available-contacts")
-			.die()
-			.live(
-					'click',
-					function(e)
+    $("body").on("click", "#select-all-available-contacts", function(e)
 					{
 						e.preventDefault();
 						SELECT_ALL = true;
@@ -873,11 +836,7 @@ $(function()
 						});
 					});
 
-	$("#select-all-revert")
-			.die()
-			.live(
-					'click',
-					function(e)
+    $("body").on("click", "#select-all-revert", function(e) 
 					{
 						e.preventDefault();
 						SELECT_ALL = false;

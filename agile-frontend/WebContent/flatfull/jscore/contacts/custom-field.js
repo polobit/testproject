@@ -12,7 +12,7 @@ $(function() {
 	 * Loads the respective modal (Text or Date or List or Check-box modal) based
 	 * on the id attribute of the clicked link to save the custom fields.
 	 */
-	$(".fieldmodal").die().live('click', function(event) {
+	$('body').on('click', '.fieldmodal', function(event){
 		event.preventDefault();
 		var type = $(this).attr("type");
 		
@@ -21,7 +21,7 @@ $(function() {
 	});
 	
 	
-	$("#custom-field-type").die().live("change", function(e){
+	$('body').on('change', '#custom-field-type', function(e){
 		e.preventDefault();
 		var value = $(this).val();
 		if(value == "LIST")
@@ -60,19 +60,19 @@ $(function() {
 		
 	})
 	
-	$('#admin-settings-customfields-model-list > tr > td:not(":first-child")').live('click', function(e) {
+	$('body').on('change', '#admin-settings-customfields-model-list > tr > td:not(":first-child")', function(e){
 		e.preventDefault();
 		var custom_field = $(this).closest('tr').data();
 		console.log(custom_field);
 		showCustomFieldModel(custom_field.toJSON());
 	});
-	$('#edit-custom-field').live('click', function(e) {
+	$('body').on('click', '#edit-custom-field', function(e){
 		e.preventDefault();
 		var custom_field = $(this).closest('tr').data();
 		console.log(custom_field);
 		showCustomFieldModel(custom_field.toJSON());
 	});
-	$('#delete-custom-field').live('click', function(e) {
+	$('body').on('click', '#delete-custom-field', function(e){
 		if(confirm("Are you sure you want to delete?")){
 			e.preventDefault();
 			var custom_field = $(this).closest('tr').data();

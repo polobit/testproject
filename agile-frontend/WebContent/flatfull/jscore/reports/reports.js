@@ -2,12 +2,7 @@
 var REPORT;
 $(function()
 {
-
-	$("#reports-email-now")
-			.die()
-			.live(
-					'click',
-					function(e)
+    $('body').on('click', '#reports-email-now', function(e)
 					{
 						// e.preventDefault();
 						e.stopPropagation();
@@ -65,9 +60,7 @@ $(function()
 															});
 										});
 					});
-	$("#campaign_id").die().live(
-			'click',
-			function(e)
+	$('body').on('click', '#campaign_id', function(e)
 			{
 				e.preventDefault();
 				e.stopPropagation();
@@ -91,7 +84,7 @@ $(function()
 					} });
 
 			});
-	$("#report-instant-results").die().live('click', function(e)
+	$('body').on('click', '#report-instant-results', function(e) 
 	{
 		e.stopPropagation();
 		var id = $(this).attr('data');
@@ -101,7 +94,7 @@ $(function()
 		 */
 	});
 
-	$("#frequency").die().live('change', function(e)
+	$('body').on('change', '#frequency', function(e) 
 	{
 		var frequency = $("#frequency").val();
 		if (frequency == "DAILY")
@@ -131,44 +124,43 @@ $(function()
 	/*
 	 * author jaagdeesh
 	 */
-	$("#activity_advanced").die().live('click', function(e)
+	$('body').on('click', '#activity_advanced', function(e) 
 	{
 		e.preventDefault();
 
 	});
 
-	$('#activity-advanced-block').live('shown', function()
+	$('body').on('shown', '#activity-advanced-block', function(e) 
 	{
 		$('#activity_advanced').html('<span><i class="icon-minus"></i></span> Advanced');
 
 	});
 
-	$('#activity-advanced-block').live('hidden', function()
+    $('body').on('hidden', '#activity-advanced-block', function(e) 
 	{
 		$('#activity_advanced').html('<span><i class="icon-plus"></i></span> Advanced');
 	});
 	
-	$("#report_advanced").die().live('click', function(e)
+	$('body').on('click', '#report_advanced', function(e) 
 			{
 				e.preventDefault();
 				$("#report_advanced span i").toggleClass("fa-minus");
 				$("#report_advanced span i").toggleClass("fa-plus");
 
 			});
-
-			$('#report-advanced-block').live('shown', function()
+            
+			$('body').on('shown', '#report-advanced-block', function(e)
 			{
 				$('#report_advanced').html('<span><i class="icon-minus"></i></span> Advanced');
 
 			});
-
-			$('#report-advanced-block').live('hidden', function()
+			
+			$('body').on('hidden', '#report-advanced-block', function(e)
 			{
 				$('#report_advanced').html('<span><i class="icon-plus"></i></span> Advanced');
 			});
 			
-			
-			$("#duration").die().live('change', function(e)
+			$('body').on('change', '#duration', function(e)
 					{
 						var frequency = $("#duration").val();
 						if (frequency == "DAILY")

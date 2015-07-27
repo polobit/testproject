@@ -1,6 +1,6 @@
 $(function(){
 	
-	$('#email-gateway-delete').die().live('click', function(e){
+	$('body').on('click', '#email-gateway-delete', function(e){
 		e.preventDefault();
 		
 		if(!confirm("Are you sure you want to delete?"))
@@ -31,7 +31,7 @@ $(function(){
 		});
 	});
 	
-	$('#sms-gateway-delete').die().live('click', function(e){
+	$('body').on('click', '#sms-gateway-delete', function(e){ 
 		e.preventDefault();
 		
 		if(!confirm("Are you sure you want to delete?"))

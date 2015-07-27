@@ -268,9 +268,9 @@ function deletePortlet(el) {
 								+ getDurationForPortlets(model.get("settings").duration)
 								+ "?");
 }
-$('.portlet-delete-modal').live(
-		"click",
-		function(e) {
+$('body').on(
+		"click",'.portlet-delete-modal',
+		function(e) { 
 			e.preventDefault();
 			var portlet = Portlets_View.collection.get($(this).attr('id'));
 			/*
@@ -322,16 +322,16 @@ $('.portlet-delete-modal').live(
  * 
  * });
  */
-$(
-		'#portlets-contacts-model-list > tr, #portlets-companies-model-list > tr, #portlets-contacts-email-opens-model-list > tr')
-		.live('click', function(e) {
+ $('body').on(
+		"click",'#portlets-contacts-model-list > tr, #portlets-companies-model-list > tr, #portlets-contacts-email-opens-model-list > tr',
+		function(e) {
 			var id = $(this).find(".data").attr("data");
 			App_Contacts.navigate("contact/" + id, {
 				trigger : true
 			});
 		});
-$('#portlets-opportunities-model-list > tr').live(
-		'click',
+ $('body').on(
+		"click",'#portlets-opportunities-model-list > tr',
 		function(e) {
 			/*
 			 * if(e.target.attributes[0].name!="href"){ e.preventDefault();
@@ -355,10 +355,9 @@ $('#portlets-opportunities-model-list > tr').live(
 				});
 			}
 		});
-$('#portlets-events-model-list > tr')
-		.live(
-				'click',
-				function(e) {
+$('body').on(
+		"click",'#portlets-events-model-list > tr',
+		function(e) {
 					var hrefFlag = false;
 					if (e.target.attributes != undefined
 							&& e.target.attributes != null
@@ -479,9 +478,9 @@ $('#portlets-events-model-list > tr')
 						return false;
 					}
 				});
-$('#portlets-tasks-model-list > tr').live(
-		'click',
-		function(e) {
+$('body').on(
+		"click",'#portlets-tasks-model-list > tr',
+		function(e) {`
 			/*
 			 * App_Portlets.currentPosition =
 			 * ''+$(this).parents('.gs-w').find('.column_position').text().trim()+''+$(this).parents('.gs-w').find('.row_position').text().trim();
@@ -518,10 +517,9 @@ $('#portlets-tasks-model-list > tr').live(
 /**
  * Makes the pending task as completed by calling complete_task function
  */
-$('.portlets-tasks-select')
-		.live(
-				'click',
-				function(e) {
+ $('body').on(
+		"click",'.portlets-tasks-select',
+		function(e) {`
 					e.stopPropagation();
 					if ($(this).is(':checked')) {
 						// Complete
@@ -557,7 +555,7 @@ function hidePortletErrors(ele) {
 	if ($('#' + ele.id).next().is(':visible'))
 		$('#' + ele.id).next().hide();
 }
-$('.portlet-settings').live('click', function(e) {
+$('body').on("click",'.portlet-settings',function(e) {
 	e.preventDefault();
 	showPortletSettings(this.id);
 });

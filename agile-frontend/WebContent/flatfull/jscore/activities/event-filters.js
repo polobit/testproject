@@ -1,6 +1,6 @@
 $(function()
 {
-	$(".calendar_check").die().live('click', function(e)
+	$("body").on('click', '.calendar_check', function(e)
 	{
 		showLoadingOnCalendar(true);
 		createRequestUrlBasedOnFilter();
@@ -27,7 +27,7 @@ $(function()
 
 	});
 
-	$(".calendar_user_check").die().live('click', function(e)
+	$("body").on('click', '.calendar_user_check', function(e)
 	{
 		showLoadingOnCalendar(true);
 		// checkBothCalWhenNoCalSelected();
@@ -47,7 +47,7 @@ $(function()
 
 	});
 
-	$('.select_all_users').die().live('click', function(event)
+	$("body").on('click', '.select_all_users', function(event)
 	{ // on click
 		if (this.checked)
 		{ // check select status
@@ -68,7 +68,7 @@ $(function()
 		loadFullCalednarOrListView();
 	});
 
-	$('#event_time').die().live('change', function(event)
+	$("body").on('change', '#event_time', function(event)
 	{ // on click
 		if ($("#event_time").val() == "future")
 			createCookie("agile_calendar_view", "calendar_list_view_future");

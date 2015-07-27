@@ -29,7 +29,7 @@ $(function()
 		}
 	}, 10000); // 15 sec
 
-	$(".noty_twilio_mute").die().live('click', function(e)
+	$('body').on('click', '.noty_twilio_mute', function(e)
 			{
 				e.preventDefault();
 				console.log("Twilio call noty_twilio_mute from noty");
@@ -40,7 +40,7 @@ $(function()
 				$('.noty_buttons').find('.noty_twilio_mute').toggle();
 			});
 	
-	$(".noty_twilio_unmute").die().live('click', function(e)
+	$('body').on('click', '.noty_twilio_unmute', function(e)
 			{
 				e.preventDefault();
 				console.log("Twilio call noty_twilio_unmute from noty");
@@ -52,7 +52,7 @@ $(function()
 			});
 	
 	
-	$(".noty_twilio_hangup").die().live('click', function(e)
+	$('body').on('click', '.noty_twilio_hangup', function(e)
 	{
 		e.preventDefault();
 		console.log("Twilio call hang up from noty");
@@ -60,7 +60,7 @@ $(function()
 		Twilio.Device.disconnectAll();
 	});
 
-	$(".noty_twilio_dialpad").die().live('click', function(e)
+	$('body').on('click', '.noty_twilio_dialpad', function(e)
 	{
 		e.preventDefault();
 		console.log("Twilio call dailpad from noty");
@@ -69,8 +69,7 @@ $(function()
 	});
 	
 	//START voice mails
-	
-	$("#noty_twilio_voicemail").die().live('click', function(e){
+	$('body').on('click', '#noty_twilio_voicemail', function(e){
 		e.preventDefault();
 		var voiceMailCount = parseInt($(this).attr('data-length'));
 		if(voiceMailCount === 1) {
@@ -80,14 +79,13 @@ $(function()
 		}
 	});
 	
-	$(".voiceMailItem").die().live('click',function(e){
+	$('body').on('click', '.voiceMailItem', function(e){
 		e.preventDefault();
 		sendVoiceAndEndCall($(this).attr('data-src'));
 	});
 		
 	//END voice mails related
-
-	$(".noty_twilio_answer").die().live('click', function(e)
+	$('body').on('click', '.noty_twilio_answer', function(e)
 	{
 		e.preventDefault();
 		console.log("Twilio call answered from noty");
@@ -95,7 +93,7 @@ $(function()
 		globalconnection.accept();
 	});
 
-	$(".noty_twilio_ignore").die().live('click', function(e)
+	$('body').on('click', '.noty_twilio_ignore', function(e)
 	{
 		e.preventDefault();
 		console.log("Twilio call ignore from noty");
@@ -103,7 +101,7 @@ $(function()
 		globalconnection.ignore();
 	});
 
-	$(".noty_twilio_cancel").die().live('click', function(e)
+	$('body').on('click', '.noty_twilio_cancel', function(e)
 	{
 		e.preventDefault();
 		console.log("Twilio call canceld from noty");
@@ -113,7 +111,7 @@ $(function()
 		Twilio.Device.disconnectAll();
 	});
 
-	$("#validate_account").die().live('click', function(e)
+	$('body').on('click', '#validate_account', function(e)
 	{
 		e.preventDefault();
 		console.log("In validate event");
@@ -147,7 +145,7 @@ $(function()
 		 */
 	});
 
-	$("#twilio_number").die().live('change', function(e)
+	$('body').on('change', '#twilio_number', function(e)
 	{
 		e.preventDefault();
 		$("#error-number-not-selected").hide();
@@ -158,14 +156,14 @@ $(function()
 
 		$("#twilio_number_sid").val(numberSID);
 	});
-
-	$("#twilio_from_number").die().live('change', function(e)
+	
+	$('body').on('change', '#twilio_from_number', function(e)
 	{
 		e.preventDefault();
 		$("#error-number-not-selected").hide();
 	});
 
-	$(".contact-make-twilio-call").die().live('click', function(e)
+	$('body').on('click', '.contact-make-twilio-call', function(e)
 	{
 		e.preventDefault();
 		TWILIO_CALLTYPE = "Outgoing";
@@ -189,13 +187,13 @@ $(function()
 		twiliocall($(this).attr("phone"), getContactName(contactDetailsObj));
 	});
 
-	$("#twilio_acc_sid", "#twilio_auth_token").die().live('click', function(e)
+	$('body').on('click', '#twilio_acc_sid, #twilio_auth_token', function(e)
 	{
 		e.preventDefault();
 		$("#note-number-not-available").hide();
 	});
 	
-	$(".twilioio-advance-settings").die().live('click', function(e)
+	$('body').on('click', '.twilioio-advance-settings', function(e)
 	 {
 		e.preventDefault();
 		

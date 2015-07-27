@@ -2,7 +2,7 @@ var existingDocumentsView;
 
 $(function()
 {
-	$(".task-edit-contact-tab").die().live('click', function(e)
+	$('body').on('click', '.task-edit-contact-tab', function(e)
 	{
 		e.preventDefault();
 		var id = $(this).attr('data');
@@ -27,11 +27,7 @@ $(function()
 	});
 
 	// Event edit in contact details tab
-	$(".event-edit-contact-tab")
-			.die()
-			.live(
-					'click',
-					function(e)
+	$('body').on('click', '.event-edit-contact-tab', function(e)
 					{
 						e.preventDefault();
 						var id = $(this).attr('data');
@@ -76,8 +72,8 @@ $(function()
 						// Fills owner select element
 						populateUsersInUpdateActivityModal(value);
 					});
-
-	$(".complete-task").die().live('click', function(e)
+	
+	$('body').on('click', '.complete-task', function(e)
 	{
 		e.preventDefault();
 		if ($(this).is(':checked'))
@@ -95,7 +91,7 @@ $(function()
 	});
 
 	// For adding new deal from contact-details
-	$(".contact-add-deal").die().live('click', function(e)
+	$('body').on('click', '.contact-add-deal', function(e)
 	{
 		e.preventDefault();
 		var el = $("#opportunityForm");
@@ -152,7 +148,7 @@ $(function()
 	});
 
 	// For updating a deal from contact-details
-	$(".deal-edit-contact-tab").die().live('click', function(e)
+	$('body').on('click', '.deal-edit-contact-tab', function(e)
 	{
 		e.preventDefault();
 		var id = $(this).attr('data');
@@ -160,8 +156,7 @@ $(function()
 	});
 
 	// For Adding new case from contacts/cases
-
-	$(".contact-add-case").die().live('click', function(e)
+	$('body').on('click', '.contact-add-case', function(e)
 	{
 		e.preventDefault();
 		var el = $("#casesForm");
@@ -187,7 +182,7 @@ $(function()
 	});
 
 	// For updating a case from contact-details
-	$(".cases-edit-contact-tab").die().live('click', function(e)
+	$('body').on('click', '.cases-edit-contact-tab', function(e)
 	{
 		e.preventDefault();
 		var id = $(this).attr('data');
@@ -196,7 +191,7 @@ $(function()
 
 	// Adding contact when user clicks Add contact button under Contacts tab in
 	// Company Page
-	$(".contact-add-contact").die().live('click', function(e)
+	$('body').on('click', '.contact-add-contact', function(e)
 	{
 		e.preventDefault();
 
@@ -219,7 +214,7 @@ $(function()
 	});
 
 	// For adding new document from contact-details
-	$(".contact-add-document").die().live('click', function(e)
+	$('body').on('click', '.contact-add-document', function(e)
 	{
 		e.preventDefault();
 		var el = $("#uploadDocumentForm");
@@ -237,7 +232,7 @@ $(function()
 	});
 
 	// For updating document from contact-details
-	$(".document-edit-contact-tab").die().live('click', function(e)
+	$('body').on('click', '.document-edit-contact-tab', function(e)
 	{
 		e.preventDefault();
 		var id = $(this).attr('data');
@@ -245,7 +240,7 @@ $(function()
 	});
 
 	// For unlinking document from contact-details
-	$(".document-unlink-contact-tab").die().live('click', function(e)
+	$('body').on('click', '.document-unlink-contact-tab', function(e)
 	{
 		e.preventDefault();
 		var id = $(this).attr('data');
@@ -270,7 +265,7 @@ $(function()
 	/**
 	 * For showing new/existing documents
 	 */
-	$(".add-document-select").die().live('click', function(e)
+	$('body').on('click', '.add-document-select', function(e)
 	{
 		e.preventDefault();
 		var el = $(this).closest("div");
@@ -287,7 +282,7 @@ $(function()
 	/**
 	 * To cancel the add documents request
 	 */
-	$(".add-document-cancel").die().live('click', function(e)
+	$('body').on('click', '.add-document-cancel', function(e)
 	{
 		e.preventDefault();
 		var el = $("#documents");
@@ -298,7 +293,7 @@ $(function()
 	/**
 	 * For adding existing document to current contact
 	 */
-	$(".add-document-confirm").die().live('click', function(e)
+	$('body').on('click', '.add-document-confirm', function(e)
 	{
 		e.preventDefault();
 

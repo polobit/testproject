@@ -13,7 +13,7 @@ $(function(){
 	 * related to the contact in contact detail view. Also prepends the 
 	 * contact name to related to field of activity modal.
 	 */ 
-    $('.contact-add-task').live('click', function(e){
+	$('body').on('click', '.contact-add-task', function(e){ 
     	e.preventDefault();
 
     	var	el = $("#taskForm");
@@ -37,7 +37,7 @@ $(function(){
 	 * related to the contact in contact detail view. Also prepends the 
 	 * contact name to related to field of activity modal.
 	 */ 
-    $('.contact-add-event').live('click', function(e){
+    $('body').on('click', '.contact-add-event', function(e){ 
     	e.preventDefault();
 
     	var	el = $("#activityForm");
@@ -54,7 +54,7 @@ $(function(){
      * detail view. Also prepends the contact name to related to field of 
      * activity modal.  
      */ 
-    $('.contact-add-note').live('click', function(e){
+    $('body').on('click', '.contact-add-note', function(e){ 
     	e.preventDefault();
     	var	el = $("#noteForm");
     	
@@ -69,7 +69,7 @@ $(function(){
      * option and then fills the select drop down with all the campaigns by triggering
      * a custom event (fill_campaigns_contact).
      */ 
-    $('.contact-add-campaign, .add-to-campaign').live('click', function(e){
+	$('body').on('click', '.contact-add-campaign, .add-to-campaign', function(e){ 
     		e.preventDefault();
     	
     		var contact_id = App_Contacts.contactDetailView.model.id;
@@ -86,7 +86,7 @@ $(function(){
 	    		 * it executes once, if again it is clicked it executes twice and so on).  
 	    		 */
     		
-	    		$('body').die('fill_campaigns_contact').live('fill_campaigns_contact', function(event){
+	    		$('body').off('fill_campaigns_contact').on('fill_campaigns_contact', function(event){
 	    			var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
 	    	        fillSelect('campaign-select','/core/api/workflows', 'workflow', 'no-callback ', optionsTemplate); 
 	    		});
@@ -115,7 +115,7 @@ $(function(){
     		 * Subscribes the contact to selected campaign from the drop down, when
     		 * the Add button is clicked
     		 */
-    		$('#subscribe-contact-campaign, #add-to-campaign').die().live('click',function(e){
+			$('body').on('click', '#subscribe-contact-campaign, #add-to-campaign', function(e){
     			e.preventDefault();
 
     			var $form;
@@ -206,7 +206,7 @@ $(function(){
     		}); // End of Add button of form Event Handler
     		
     		// Click event of campaigns form close button
-    		$('#contact-close-campaign, #cancel-to-add-campaign').live('click', function(e){
+			$('body').on('click', '#contact-close-campaign, #cancel-to-add-campaign', function(e){
     			e.preventDefault();
     			
     			// Campaigns tab form

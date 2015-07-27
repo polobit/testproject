@@ -355,7 +355,7 @@ var _plan_on_signup = <%=mapper.writeValueAsString(plan)%>;
 var CURRENT_USER_PREFS = <%=mapper.writeValueAsString(currentUserPrefs)%>;
 
 //Get current user prefs json
-var ACCOUNT_PREFS = <%=mapper.writeValueAsString(accountPrefs)%>;
+var ACCOUNT_PREFS = <%=mapper.writeValueAsString(accountPrefs)%>; 
 
 // Get current domain user json
 var CURRENT_DOMAIN_USER = <%=mapper.writeValueAsString(domainUser)%>;
@@ -371,15 +371,29 @@ var _billing_restriction = <%=mapper.writeValueAsString(restriction)%>;
 var JQUERY_LIB_PATH = "//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js";
 //var JQUERY_LIB_PATH = LIB_PATH + 'lib/jquery.min.js';
 
-head.load("https://cdnjs.cloudflare.com/ajax/libs/jquery/1.10.2/jquery.min.js", LIB_PATH + 'final-lib/min/lib-all-min.js', LIB_PATH + 'lib/backbone-route-filter.js');
+// head.load("https://cdnjs.cloudflare.com/ajax/libs/jquery/1.10.2/jquery.min.js", LIB_PATH + 'final-lib/min/lib-all-min.js', LIB_PATH + 'lib/backbone-route-filter.js');
+
+<!-- JQUery Core and UI CDN -->	
+<!-- The same ajax libraries are used by designer - if you are changing the version here, change in designer too -->
+head.load("https://code.jquery.com/jquery-1.10.2.min.js", LIB_PATH_FLATFULL + "lib/bootstrap.js",  LIB_PATH + 'final-lib/min/lib-all-min.js', LIB_PATH + 'lib/backbone-route-filter.js');
 
 if(HANDLEBARS_PRECOMPILATION)
 head.js(HANDLEBARS_LIB, "tpl/min/precompiled/" + FLAT_FULL_PATH + "tpl.js" + "?_=" + _AGILE_VERSION);
 else
 head.js(HANDLEBARS_LIB);
 
+<!-- Country Names from country codes -->
+// // head.js(LIB_PATH + 'lib/country-from-code.js');
+
+<!-- Inital.js Text avatars -->
+// head.js(LIB_PATH + 'lib/text-avatar/initial.min.js');
+
+<!-- mustache.js -->
+// head.js('//cdnjs.cloudflare.com/ajax/libs/mustache.js/0.8.1/mustache.min.js');
+
 // Fetch/Create contact from our domain
 var Agile_Contact = {};
+
 
 head.ready(function() {
 // Remove the loadinng
@@ -393,7 +407,8 @@ head.ready(["core", "stats"], function(){
 	if(!HANDLEBARS_PRECOMPILATION)
 		downloadTemplate("tpl.js");
 });
-}); 
+});    
+
 
 </script>
 

@@ -177,7 +177,7 @@ function init_acl_restriction()
 			}
 		}
 		
-		$("._upgrade").die().live('click', function(e){
+		$('body').on('click', '._upgrade', function(e) {
 			e.preventDefault();
 			var id = $(this).attr('id');
 			if(!id)

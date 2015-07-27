@@ -4,7 +4,7 @@ $(function()
 	/**
 	 * Shows deal popup
 	 */
-	$('.deals-add').live('click', function(e)
+	$('body').on('click', '.deals-add', function(e)
 	{
 		e.preventDefault();
 		show_deal();
@@ -13,7 +13,7 @@ $(function()
 	/**
 	 * Validates deal and saves
 	 */
-	$("#opportunity_validate").live('click', function(e)
+	$('body').on('click', '#opportunity_validate', function(e)
 	{
 		e.preventDefault();
 
@@ -101,8 +101,7 @@ $(function()
 	/**
 	 * Deal list view edit
 	 */
-	$('#opportunities-model-list > tr > td:not(":first-child")').live('click', function(e)
-	{
+	$('body').on('click', '#opportunities-model-list > tr > td:not(":first-child")', function(e){
 		e.preventDefault();
 		$('.popover').remove();
 		var currentdeal = $(this).closest('tr').data();
@@ -113,20 +112,19 @@ $(function()
 	/**
 	 * Dash board edit
 	 */
-	$('#dashboard-opportunities-model-list > tr').live('click', function(e)
-	{
+	$('body').on('click', '#dashboard-opportunities-model-list > tr', function(e){
 		e.preventDefault();
 		var currentdeal = $(this).closest('tr').data();
 		Backbone.history.navigate("deal/" + currentdeal.id, { trigger : true });
 		// updateDeal($(this).closest('tr').data());
 	});
-
-	$('.milestones > li').live('mouseenter', function()
+    
+	$('body').on('mouseenter', '.milestones > li', function(e)
 	{
 		$(this).find('.deal-options').css("visibility", "visible");
 	});
 
-	$('.milestones > li').live('mouseleave', function()
+	$('body').on('mouseleave', '.milestones > li', function(e)
 	{
 		$(this).find('.deal-options').css("visibility", "hidden");
 	});
@@ -134,7 +132,7 @@ $(function()
 	/**
 	 * Milestone view deal edit
 	 */
-	$('.deal-edit').live('click', function(e)
+	$('body').on('click', '.deal-edit', function(e)
 	{
 		e.preventDefault();
 		var id = $(this).closest('.data').attr('id');
@@ -154,7 +152,7 @@ $(function()
 	/**
 	 * Milestone view deal delete
 	 */
-	$('.deal-delete').live('click', function(e)
+	$('body').on('click', '.deal-delete', function(e)
 	{
 		e.preventDefault();
 		if (!confirm("Are you sure you want to delete?"))
@@ -195,7 +193,7 @@ $(function()
 	/**
 	 * Update the milestones list when the pipeline is changed in the modal.
 	 */
-	$("#pipeline").live("change", function(e)
+	$('body').on('change', '#pipeline', function(e)
 	{
 		var el = $(this).closest('form');
 		$('#milestone', el).closest('div').find('.loading-img').show();
@@ -207,23 +205,20 @@ $(function()
 		});
 	});
 
-	$("#opportunity_archive").die().live('click', function(e)
+	$('body').on('click', '#opportunity_archive', function(e)
 	{
 		e.preventDefault();
 		$('#archived', $('#opportunityUpdateForm')).attr('checked', 'checked');
 		$("#opportunityUpdateModal #opportunity_validate").trigger('click');
 	});
-	$("#opportunity_unarchive").die().live('click', function(e)
+	$('body').on('click', '#opportunity_unarchive', function(e)
 	{
 		e.preventDefault();
 		$('#archived', $('#opportunityUpdateForm')).removeAttr('checked');
 		$('#opportunityUpdateModal #opportunity_validate').trigger('click');
 	});
 
-	$('#deal-quick-archive')
-			.live(
-					'click',
-					function(e)
+	$('body').on('click', '#deal-quick-archive', function(e)
 					{
 						e.preventDefault();
 
@@ -319,10 +314,7 @@ $(function()
 										} });
 					});
 
-	$('#deal-quick-restore')
-			.live(
-					'click',
-					function(e)
+	$('body').on('click', '#deal-quick-restore', function(e)
 					{
 						e.preventDefault();
 
@@ -418,7 +410,7 @@ $(function()
 	/**
 	 * Milestone view deal delete
 	 */
-	$('.deal-archive').die().live('click', function(e)
+	$('body').on('click', '.deal-archive', function(e)
 	{
 		e.preventDefault();
 
@@ -433,7 +425,7 @@ $(function()
 	/**
 	 * Milestone view deal delete
 	 */
-	$('.deal-restore').die().live('click', function(e)
+	$('body').on('click', '.deal-restore', function(e)
 	{
 		e.preventDefault();
 
@@ -445,7 +437,7 @@ $(function()
 		$("#deal_restore_confirm_modal").modal('show');
 	});
 
-	$('#pipeline_milestone').live('change', function(e)
+	$('body').on('change', '#pipeline_milestone', function(e)
 	{
 		var temp = $(this).val();
 		var track = temp.substring(0, temp.indexOf('_'));

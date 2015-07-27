@@ -116,7 +116,7 @@ function submitLhsFilter()
 	App_Contacts.contacts(undefined, undefined, undefined, true);
 }
 
-$('a.filter-multiple-add-lhs').die().live("click", function(e)
+$('body').on('click', 'a.filter-multiple-add-lhs', function(e)
 {
 	e.preventDefault();
 	var fieldName = $(this).data('name');
@@ -132,7 +132,7 @@ $('a.filter-multiple-add-lhs').die().live("click", function(e)
 });
 
 // Filter Contacts- Remove Multiple
-$("i.filter-tags-multiple-remove-lhs").die().live('click', function(e)
+$('body').on('click', 'i.filter-tags-multiple-remove-lhs', function(e)
 {
 	var container = $(this).parents('.lhs-contact-filter-row');
 	$(container).find('#RHS').children().val("").trigger('blur').trigger('change');
@@ -140,7 +140,7 @@ $("i.filter-tags-multiple-remove-lhs").die().live('click', function(e)
 });
 
 // Filter Contacts- Remove Multiple
-$("a.clear-filter-condition-lhs").die().live('click', function(e)
+$('body').on('click', 'a.clear-filter-condition-lhs', function(e)
 {
 	$(this).addClass('hide');
 	var container = $(this).parents('.lhs-row-filter');
@@ -153,7 +153,7 @@ $("a.clear-filter-condition-lhs").die().live('click', function(e)
 	submitLhsFilter();
 });
 
-$('#clear-lhs-contact-filters').die().live("click", function(e)
+$('body').on('click', '#clear-lhs-contact-filters', function(e)
 {
 	e.preventDefault();
 	eraseData('dynamic_contact_filter');
@@ -161,7 +161,7 @@ $('#clear-lhs-contact-filters').die().live("click", function(e)
 	App_Contacts.contacts();
 });
 
-$('#clear-lhs-company-filters').die().live("click", function(e)
+$('body').on('click', '#clear-lhs-company-filters', function(e)
 {
 	e.preventDefault();
 	eraseData('dynamic_company_filter');
@@ -169,7 +169,7 @@ $('#clear-lhs-company-filters').die().live("click", function(e)
 	App_Contacts.contacts();
 });
 
-$('#lhs-filters-header').die().live("click", function(e)
+$('body').on('click', '#lhs-filters-header', function(e)
 {
 	e.preventDefault();
 	$(this).find('i').toggleClass('fa-plus-square-o').toggleClass('fa-minus-square-o');
@@ -177,7 +177,7 @@ $('#lhs-filters-header').die().live("click", function(e)
 	$(this).next().find('.lhs-contact-filter-row:visible').find('#RHS').filter(visibleFilter).find(':not(input.date)').focus();
 });
 
-$('#lhs-contact-filter-form select[name="CONDITION"]').die().live('change', function(e)
+$('body').on('click', '#lhs-contact-filter-form select[name="CONDITION"]', function(e)
 {
 	var selected = $(this).val();
 	$(this).parent().find('div.condition_container').addClass('hide');
@@ -197,7 +197,7 @@ $('#lhs-contact-filter-form select[name="CONDITION"]').die().live('change', func
 	}
 });
 
-$('#lhs-contact-filter-form #RHS input').die().live("blur keyup", function(e)
+$('body').on('blur keyup', '#lhs-contact-filter-form #RHS input', function(e)
 {
 	if (e.type == 'focusout' || e.keyCode == '13')
 	{
@@ -232,7 +232,7 @@ $('#lhs-contact-filter-form #RHS input').die().live("blur keyup", function(e)
 	}
 });
 
-$('#lhs-contact-filter-form #RHS select').die().live("change", function(e)
+$('body').on('change', '#lhs-contact-filter-form #RHS select', function(e)
 {
 	if ($(this).parent().next().attr("id") == "RHS_NEW")
 	{
@@ -269,7 +269,7 @@ $('#lhs-contact-filter-form #RHS select').die().live("change", function(e)
 	$(this).blur();
 });
 
-$('#lhs-contact-filter-form #RHS_NEW select').die().live("change", function(e)
+$('body').on('change', '#lhs-contact-filter-form #RHS_NEW select', function(e)
 {
 	if ($(this).parent().prev().attr("id") == "RHS")
 	{
@@ -289,7 +289,7 @@ $('#lhs-contact-filter-form #RHS_NEW select').die().live("change", function(e)
 	$(this).blur();
 });
 
-$('#lhs-contact-filter-form #RHS_NEW input').die().live("blur keyup", function(e)
+$('body').on('blur keyup', '#lhs-contact-filter-form #RHS_NEW input', function(e)
 {
 	if (e.type == 'focusout' || e.keyCode == '13')
 	{

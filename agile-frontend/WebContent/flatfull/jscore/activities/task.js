@@ -46,7 +46,7 @@ $(function()
 	 * relatedTo field typeahead, changing color and font-weight) when we click
 	 * on task link in activities modal.
 	 */
-	$("#task").live('click', function(e)
+	$("body").on("click", '#task', function(e)
 	{
 		e.preventDefault();
 		var el = $("#taskForm");
@@ -64,7 +64,7 @@ $(function()
 	/**
 	 * Shows activity modal with all the task create fields.
 	 */
-	$(".add-task").live('click', function(e)
+	$("body").on("click", '.add-task', function(e)
 	{
 		e.preventDefault();
 
@@ -78,11 +78,11 @@ $(function()
 	 * own table, so to edit tasks call update_task function for each category.
 	 */
 	/*
-	 * $('#overdue > tr').live('click', function(e) { e.preventDefault();
-	 * update_task(this); }); $('#today > tr').live('click', function(e) {
+	 * $('#overdue > tr').on('click', function(e) { e.preventDefault();
+	 * update_task(this); }); $('#today > tr').on('click', function(e) {
 	 * e.preventDefault(); update_task(this); }); $('#tomorrow >
-	 * tr').live('click', function(e) { e.preventDefault(); update_task(this);
-	 * }); $('#next-week > tr').live('click', function(e) { e.preventDefault();
+	 * tr').on('click', function(e) { e.preventDefault(); update_task(this);
+	 * }); $('#next-week > tr').on('click', function(e) { e.preventDefault();
 	 * update_task(this); });
 	 */
 
@@ -91,14 +91,14 @@ $(function()
 	 */
 	/*
 	 * // TODO:jitendra reenable it $('#tasks-list-model-list > tr >
-	 * td:not(":first-child")').live('click', function(e) { e.preventDefault();
+	 * td:not(":first-child")').on('click', function(e) { e.preventDefault();
 	 * update_task($(this).closest('tr')); });
 	 */
 
 	/**
 	 * Dash board edit
 	 */
-	$('#dashboard1-tasks-model-list > tr').live('click', function(e)
+	$("body").on("click", '#dashboard1-tasks-model-list > tr', function(e)
 	{
 		e.preventDefault();
 		update_task(this);
@@ -108,7 +108,7 @@ $(function()
 	 * When clicked on update button of task-update-modal, the task will get
 	 * updated by calling save_task function
 	 */
-	$('#update_task_validate').live('click', function(e)
+	$("body").on("click", '#update_task_validate', function(e)
 	{
 		e.preventDefault();
 		save_task('updateTaskForm', 'updateTaskModal', true, this);
@@ -186,7 +186,7 @@ $(function()
 	/**
 	 * Makes the pending task as completed by calling complete_task function
 	 */
-	$('.tasks-select').live('click', function(e)
+	$("body").on("click", '.tasks-select', function(e)
 	{
 		e.stopPropagation();
 		if ($(this).is(':checked'))
@@ -202,7 +202,7 @@ $(function()
 	 * All completed and pending tasks will be shown in separate section
 	 */
 	/*
-	 * $('#tasks-list').live('click', function(e) { this.tasksListView = new
+	 * $('#tasks-list').on('click', function(e) { this.tasksListView = new
 	 * Base_Collection_View({ url : '/core/api/tasks/all', restKey : "task",
 	 * templateKey : "tasks-list", individual_tag_name : 'tr' });
 	 * this.tasksListView.collection.fetch();

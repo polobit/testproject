@@ -25,7 +25,7 @@ $(function(){
 		enableKeyboardShotcuts();
 	
 	/* For toggling keyboard shortcuts modal popup */
-	$('#keyboard-shortcuts').die().live('click', function(e){
+    $("body").on('click', '#keyboard-shortcuts', function(e){
 		e.preventDefault();
 		var keyShortModal = $(getTemplate("shortcut-keys"),{});
 		keyShortModal.modal('show');

@@ -425,7 +425,7 @@ function convertToHumanDateUsingMoment(format, date)
 	return time_s;
 }
 
-$("#create_new_appointment").die().live('click', function(e)
+$('body').on('click', '#create_new_appointment', function(e)
 {
 	// reloads the page
 	location.reload(true);

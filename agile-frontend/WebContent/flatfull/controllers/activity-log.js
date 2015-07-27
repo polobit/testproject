@@ -221,7 +221,7 @@ $(function()
 	
 	
 	// Click events to agents dropdown and department
-	$("ul#user-select li a, ul#entity_type li a").die().live("click", function(e)
+	$("body").on("click", "ul#user-select li a, ul#entity_type li a",function(e)
 	{
 		e.preventDefault();
 
@@ -235,7 +235,7 @@ $(function()
 		updateActivty(url);
 
 	});
-	$("ul#entity_type li a").die().live("click", function()
+	$("body").on("click", "ul#entity_type li a",function(e)
 	{
 		var entitytype = $(this).html();
 
@@ -245,7 +245,7 @@ $(function()
 		$('.activity-sub-heading').html(entitytype);
 
 	});
-	$("ul#user-select li a").die().live("click", function()
+	$("body").on("click", "ul#user-select li a",function(e)
 	{
 
 		var user = $(this).html();

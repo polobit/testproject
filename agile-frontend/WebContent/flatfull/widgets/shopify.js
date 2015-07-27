@@ -140,14 +140,14 @@ $(function()
 										last_name = ' ';
 						showShopifyClient(shop);
 
-						$('#shopify_add_contact').die().live('click', function(e)
+						$("body").on("click", '#shopify_add_contact', function(e)
 						{
 										e.preventDefault();
 
 										addContactToShopify(shop);
 						});
 
-						$('.order').die().live('click', function(e)
+						$("body").on("click", '.order', function(e)
 						{
 										e.preventDefault();
 										var orderId = $(this).attr('value');

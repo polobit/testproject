@@ -7,9 +7,7 @@
 $(function() {
 
 	// Code for Merge fields in Email Template
-	$(".merge-field").die().live('click',
-			function(e) {
-
+	$('body').on('click', '.merge-field', function (e) {
 				e.preventDefault();
 				// console.log("Merge field");
 

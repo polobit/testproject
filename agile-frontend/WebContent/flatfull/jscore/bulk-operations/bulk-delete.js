@@ -13,7 +13,7 @@ $(function(){
     * Customizes the delete operation
     * Deletes the entities
     */	
-	$('#delete-checked, .delete-checked-contacts').die().live('click', function(event){
+	$("body").on("click", "#delete-checked, .delete-checked-contacts", function(event){
 		event.preventDefault();
 		var id_array = [];
 		var index_array = [];
@@ -130,7 +130,7 @@ $(function(){
 	    * Customizes the delete operation
 	    * Deletes the entities
 	    */	
-		$('#delete-checked-grid').die().live('click', function(event){
+		$("body").on("click", "#delete-checked-grid", function(event){
 			event.preventDefault();
 			var id_array = [];
 			var index_array = [];

@@ -237,7 +237,7 @@ function getContactPadcontentKey(url)
 $(function() {
 	
 	// Show activity modal
-	$('.modal-form').live('click', function(e) {
+	$("body").on("click", ".modal-form", function(e) {
 		e.preventDefault();
 		var id = $(this).attr('modal_id');
 		if(id == "opportunityModal")

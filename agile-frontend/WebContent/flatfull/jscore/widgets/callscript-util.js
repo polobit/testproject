@@ -2,13 +2,13 @@ var CSRCOLLECTION;
 
 $(function()
 {
-	$("#callscriptruleForm").live('click', function(e)
+	$('body').on('click', '#callscriptruleForm', function(e)
 	 {
 		 makeWidgetTabActive();
 	 });
 	
 	// Filter Contacts- Clone Multiple
-	$(".callscript-multiple-add").die().live('click', function(e)
+	$('body').on('click', '.callscript-multiple-add', function(e)
 	{
 		e.preventDefault();
 		// To solve chaining issue when cloned
@@ -29,13 +29,13 @@ $(function()
 	});
 
 	// Filter Contacts- Remove Multiple
-	$("i.callscript-multiple-remove").die().live('click', function(e)
+	$('body').on('click', 'i.callscript-multiple-remove', function(e)
 	{
 		$(this).closest("tr").remove();
 	});
 
 	// Add rule from modal to widget form, show save btn , hide add rule btn
-	$('.edit-callscriptrule').die().live('click', function(e)
+	$('body').on('click', '.edit-callscriptrule', function(e)
 	{
 		e.preventDefault();
 
@@ -52,7 +52,7 @@ $(function()
 	});
 
 	// Delete event for call script rule
-	$('.delete-callscriptrule').die().live('click', function(e)
+	$('body').on('click', '.delete-callscriptrule', function(e)
 	{
 		e.preventDefault();
 		
@@ -68,13 +68,13 @@ $(function()
 	});
 
 	// Display rule actions
-	$('.row-callscriptrule').live('mouseenter', function()
+	$('body').on('mouseenter', '.row-callscriptrule', function(e)
 	{
 		$(this).find(".callscriptrule-actions").css("visibility", "visible");
 	});
 
 	// Hide rule actions
-	$('.row-callscriptrule').live('mouseleave', function()
+	$('body').on('mouseleave', '.row-callscriptrule', function(e)
 	{
 		$(this).find(".callscriptrule-actions").css("visibility", "hidden");
 	});

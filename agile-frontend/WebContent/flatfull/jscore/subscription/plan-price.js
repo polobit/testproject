@@ -209,7 +209,7 @@ function setPlan(user_plan)
 $(function()
 		{
 		
-		$('.plan-collection-in').die().live('click', function(e){
+		$('body').on('click', '.plan-collection-in', function(e){
 			 
 			$(this).find("[name='pro_vs_lite']").attr('checked','checked');
 			var plan_type = "";
@@ -238,7 +238,7 @@ $(function()
 	  	});
 
 		// Tags selection
-		$("ul.tagsli a").die().live("click", function(e){
+		$('body').on('click', 'ul.tagsli a', function(e){
 			
 			e.preventDefault();
 			
@@ -263,7 +263,7 @@ $(function()
 	  		setCost(update_price());
 		});
 		
-		$("#billing_cycle").die().live("change", function(e){
+		$('body').on('change', '#billing_cycle', function(e){
 			e.preventDefault();
 			var plan_interval = $(this).val();
 			
@@ -279,7 +279,7 @@ $(function()
  	     	$("#users_total_cost").text((value * price).toFixed(2));
 			
 		});
-		$("#user_quantity").die().live("change",function(e){
+		$('body').on('change', '#user_quantity', function(e){
 			e.preventDefault();
 			var value = $(this).val();
 			price = update_price();
@@ -287,7 +287,7 @@ $(function()
  	     	$("#users_total_cost").text((value * price).toFixed(2));
 		});
 		
-		$("#plan_type").die().live("change",function(){
+		$('body').on('change', '#plan_type', function(e){
 			var plan_type = $(this).val();
 			$("#"+ plan_type +"_plan > .plan-collection-in").click();
 			if($(this).val() == "free")
@@ -297,7 +297,7 @@ $(function()
 			}
 		});
 	    
-      	$('#purchase-plan').die().live('click', function(e){
+		$('body').on('click', '#purchase-plan', function(e){
 	          /*var quantity = $("#users_quantity").text();
 	          var cost = $("#users_total_cost").text();
 	          var plan = $("input[name='pro_vs_lite']:checked").val();*/
@@ -391,10 +391,7 @@ $(function()
       	});
       	
      // Check coupon functionality
-    	$("#check_valid_coupon").die().live(
-    			'click',
-    			function() {
-
+	 $('body').on('click', '#check_valid_coupon', function(e){
     				// Get coupon input value
     				var couponId = $("#coupon_code").val();
     				if (!couponId) {

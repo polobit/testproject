@@ -113,7 +113,8 @@ function load_imap_properties(model, el) {
 }
 
 $(function() {
-	$("#saveTheme").die().live("click", function(e) {
+	$('body').on('click', '#saveTheme', function(e)
+	{
 		e.preventDefault();
 		$(".theme-save-status").css("display","none");
 		var saveBtn = $(this);
@@ -148,11 +149,8 @@ $(function() {
 		});
 	});
 
-	$(".gmail-share-settings-select")
-			.die()
-			.live(
-					'click',
-					function(e) {
+	$('body').on('click', '.gmail-share-settings-select', function(e)
+	{
 						e.preventDefault();
 						var id = $(this).attr("oid");
 						var el = $(this).closest("div");
@@ -176,7 +174,7 @@ $(function() {
 	/**
 	 * To cancel the imap share settings event
 	 */
-	$(".gmail-share-settings-cancel").die().live('click', function(e) {
+	$('body').on('click', '.gmail-share-settings-cancel', function(e){
 		e.preventDefault();
 		var el = $(this).closest("div");
 		var name = $(this).attr('name');
@@ -188,11 +186,7 @@ $(function() {
 	/**
 	 * Share imap settings with othe users
 	 */
-	$(".imap-share-settings-select")
-			.die()
-			.live(
-					'click',
-					function(e) {
+	$('body').on('click', '.imap-share-settings-select', function(e){
 						e.preventDefault();
 						var id = $(this).attr("oid");
 						var el = $(this).closest("div");
@@ -215,7 +209,7 @@ $(function() {
 	/**
 	 * To cancel the imap share settings event
 	 */
-	$(".imap-share-settings-cancel").die().live('click', function(e) {
+	$('body').on('click', '.imap-share-settings-cancel', function(e){
 		e.preventDefault();
 		var el = $(this).closest("div");
 		var name = $(this).attr('name');
@@ -228,9 +222,7 @@ $(function() {
 	/**
 	 * Select imap server folder, will fetch mails from these folders
 	 */
-	$(".imap-folders-settings-click").die().live(
-			'click',
-			function(e) {
+	$('body').on('click', '.imap-folders-settings-click', function(e){
 				e.preventDefault();
 				var el = $(this).closest("div");
 				var id = $(this).attr("oid");
@@ -247,7 +239,7 @@ $(function() {
 	/**
 	 * To cancel the imap folder settings
 	 */
-	$(".imap-folders-settings-cancel").die().live('click', function(e) {
+	$('body').on('click', '.imap-folders-settings-cancel', function(e){
 		e.preventDefault();
 		var el = $(this).closest("div");
 		el.find('#imap-folders-multi-select').empty();
@@ -258,11 +250,7 @@ $(function() {
 	/**
 	 * Share office settings with other users
 	 */
-	$(".office-share-settings-select")
-			.die()
-			.live(
-					'click',
-					function(e) {
+	$('body').on('click', '.office-share-settings-select', function(e){
 						e.preventDefault();
 						var el = $(this).closest("div");
 						$(this).css("display", "none");
@@ -286,7 +274,7 @@ $(function() {
 	/**
 	 * To cancel the imap share settings event
 	 */
-	$(".office-share-settings-cancel").die().live('click', function(e) {
+	$('body').on('click', '.office-share-settings-cancel', function(e){
 		e.preventDefault();
 		var el = $(this).closest("div");
 		var name = $(this).attr('name');
@@ -295,7 +283,7 @@ $(function() {
 		el.find(".office-share-settings-txt").css("display", "inline");
 	});
 
-	$("#gmail-prefs-delete").live("click", function(e) {
+	$('body').on('click', '#gmail-prefs-delete', function(e){
 
 		e.preventDefault();
 
@@ -324,7 +312,7 @@ $(function() {
 		});
 	});
 	
-	$("#office-prefs-delete, #imap-prefs-delete").live("click", function(e) {
+	$('body').on('click', '#office-prefs-delete, #imap-prefs-delete', function(e){
 
 		e.preventDefault();
 		

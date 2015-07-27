@@ -1,4 +1,4 @@
-$('#revoke-shopify').die().live('click', function(e)
+$('body').on('click', '#revoke-shopify', function(e)
 {
 				if (confirm("Are you sure to delete Shopify?"))
 				{
@@ -8,7 +8,7 @@ $('#revoke-shopify').die().live('click', function(e)
 				return false;
 });
 
-$("#widget_shopify").die().live('click', function(e)
+$('body').on('click', '#widget_shopify', function(e)
 {
 				var shopName = $('#shop').val();
 				if (shopName == "")

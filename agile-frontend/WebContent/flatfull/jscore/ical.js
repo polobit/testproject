@@ -5,7 +5,7 @@
  * 
  * author: Naresh
  */
-$("#subscribe-ical").live('click', function(event)
+$("body").on('click', '#subscribe-ical', function(event)
 {
 	event.preventDefault();
 	set_api_key();
@@ -64,7 +64,7 @@ function set_url(apiKey, domain)
  * When Send Mail is clicked from Ical Modal, it hides the ical modal and shows
  * the ical-send email modal.
  */
-$('#send-ical-email').live('click', function(event)
+$("body").on('click', '#send-ical-email', function(event)
 {
 	event.preventDefault();
 
@@ -113,11 +113,7 @@ $('#send-ical-email').live('click', function(event)
 function send_ical_info_email(emailModal)
 {
 	// When Send Clicked, validate the form and send email.
-	$('#shareIcalMail')
-			.die()
-			.live(
-					'click',
-					function(e)
+	$("body").on('click', '#shareIcalMail', function(e)
 					{
 						e.preventDefault();
 
@@ -155,7 +151,7 @@ $(function()
 
 	})
 
-	$('#show-schedule-url').die().live('click', function(e)
+    $("body").on('click', '#show-schedule-url', function(e)
 	{
 		e.preventDefault();
 		$('#scheduleModal').modal('show');
@@ -191,7 +187,7 @@ $(function()
 
 });
 
-$('#send-schedule-url-email').live('click', function(e)
+$("body").on('click', '#send-schedule-url-email', function(e)
 {
 	e.preventDefault();
 
@@ -226,12 +222,7 @@ $('#send-schedule-url-email').live('click', function(e)
 function send_schedule_url_email(emailModal)
 {
 	// When Send Clicked, validate the form and send email.
-	$('#share-url-email')
-			.die()
-			.live(
-					'click',
-					function(e)
-					{
+	$("body").on('click', '#share-url-email', function(e){
 						e.preventDefault();
 
 						// if not valid

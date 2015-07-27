@@ -1,18 +1,18 @@
 $(function(){ 
 
-	$(".upload_s3").live('click', function(e){
+    $('body').on('click', '.upload_s3', function (e) {
 		e.preventDefault();
 		uploadImage("upload-container");
 	});
 
 	//Upload contact image
-	$(".upload_pic").live('click', function(e){
+	$('body').on('click', '.upload_pic', function (e) {
 		e.preventDefault();
 		uploadImage("contact-container");
 	});
 	
 	//Upload personal prefs
-	$(".upload_prefs_s3").live('click', function(e){
+	$('body').on('click', '.upload_prefs_s3', function (e) {
 		e.preventDefault();
 		uploadImage("upload-in-modal");
 	});

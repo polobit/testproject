@@ -19,7 +19,7 @@ $(function()
 	 * Fetches all the notes related to the deal and shows the notes collection
 	 * as a table in its tab-content, when "Notes" tab is clicked.
 	 */
-	$('#deal-details-tab a[href="#dealnotes"]').live('click', function(e)
+	$('body').on('click', '#deal-details-tab a[href="#dealnotes"]', function(e)
 	{
 		e.preventDefault();
 		save_deal_tab_position_in_cookie("dealnotes");
@@ -30,7 +30,7 @@ $(function()
 	 * Fetches all the contacts related to the deal and shows the contacts
 	 * collection as a table in its tab-content, when "contacts" tab is clicked.
 	 */
-	$('#deal-details-tab a[href="#dealrelated"]').live('click', function(e)
+	$('body').on('click', '#deal-details-tab a[href="#dealrelated"]', function(e)
 	{
 		e.preventDefault();
 		save_deal_tab_position_in_cookie("dealrelated");
@@ -41,7 +41,7 @@ $(function()
 	 * Fetches all the notes related to the contact and shows the tasks
 	 * collection as a table in its tab-content, when "Tasks" tab is clicked.
 	 */
-	$('#deal-details-tab a[href="#dealactivities"]').live('click', function(e)
+	$('body').on('click', '#deal-details-tab a[href="#dealactivities"]', function(e)
 	{
 		e.preventDefault();
 		save_deal_tab_position_in_cookie("dealactivities");
@@ -52,7 +52,7 @@ $(function()
 	 * Fetches all the docs related to the deal and shows the docs collection as
 	 * a table in its tab-content, when "Documents" tab is clicked.
 	 */
-	$('#deal-details-tab a[href="#dealdocs"]').live('click', function(e)
+	$('body').on('click', '#deal-details-tab a[href="#dealdocs"]', function(e)
 	{
 		e.preventDefault();
 		save_deal_tab_position_in_cookie("dealdocs");

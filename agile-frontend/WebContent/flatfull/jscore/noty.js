@@ -150,7 +150,7 @@ function notySetup(type, message, position, noty_timeout, clickCallback) {
 	    if(clickCallback && typeof clickCallback == "function" && n.options.id)
 	    {
 	    	Nagger_Noty = n.options.id;
-	    	$("#" + n.options.id).die().live('click', function(e){
+	    	$("#" + n.options.id).on('click', function(e){
 	    		clickCallback();
 	    	})
 	    }

@@ -1,6 +1,6 @@
 $(function()
 {
-				$("#freshbooks").die().live("click", function(e)
+				$('body').on('click', '#freshbooks', function(e)
 				{
 								e.preventDefault();
 								var url = $('#freshbooks_url').val();

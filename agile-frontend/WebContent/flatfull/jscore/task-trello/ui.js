@@ -33,14 +33,14 @@ $(function()
 	});	
 	
 	// Display task actions
-	$('.listed-task').live('mouseenter', function()
+	$('body').on('mouseenter', '.listed-task', function(e)
 	{
 		$(this).find(".task-actions").css("display", "block");
 		$(this).find(".task-note-action").hide();
 	});
 
 	// Hide task actions
-	$('.listed-task').live('mouseleave', function()
+	$('body').on('mouseleave', '.listed-task', function(e)
 	{
 		$(this).find(".task-actions").css("display", "none");
 		$(this).find(".task-note-action").show();
@@ -50,7 +50,7 @@ $(function()
 	 * Task Action: Delete task from UI as well as DB. Need to do this manually
 	 * because nested collection can not perform default functions.
 	 */
-	$('.delete-task').die().live('click', function(event)
+	$('body').on('click', '.delete-task', function(event)
 	{
 		if (!confirm("Are you sure you want to delete?"))
 			return;
@@ -60,7 +60,7 @@ $(function()
 	});
 
 	// Task Action: Mark task complete, make changes in DB.
-	$('.is-task-complete').die().live('click', function(event)
+	$('body').on('click', '.is-task-complete', function(event)
 	{
 		event.preventDefault();
 
@@ -69,7 +69,7 @@ $(function()
 	});
 
 	// Task Action: Open Task Edit Modal and display details in it.
-	$('.edit-task').die().live('click', function(event)
+	$('body').on('click', '.edit-task', function(event)
 	{
 		event.preventDefault();
 
@@ -78,7 +78,7 @@ $(function()
 	});
 	
 	// Click events to agents dropdown of Owner's list and Criteria's list
-	/*$("ul#new-owner-tasks li a, ul#new-type-tasks li a").die().live("click", function(e)
+	/*$("ul#new-owner-tasks li a, ul#new-type-tasks li a").live("click", function(e)
 	{
 		e.preventDefault();			
 		
@@ -111,7 +111,7 @@ $(function()
 	});
 
 	// Change page heading as per owner selection
-	$("ul#new-owner-tasks li a").die().live("click", function()
+	$("ul#new-owner-tasks li a").live("click", function()
 	{		
 		// Change heading of page
 		changeHeadingOfPage($('#new-owner-tasks').closest(".btn-group").find(".selected_name").html());
@@ -129,7 +129,7 @@ $(function()
 		changeStatus($(this).attr("value"), $(this).closest("form"));
 	});	
 	
-	$(".group-view").die().live('click', function(event)
+	$('body').on('click', '.group-view', function(event)
 	{
 		event.preventDefault();
 		console.log("group-view event");

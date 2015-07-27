@@ -8,7 +8,7 @@
 $(function () {
 	
 	// Show filter drop down.
-	$('#show-filter-button').live('click', function(e){
+	$('body').on('click', '#show-filter-button', function(e) {
 		e.preventDefault();
 		if($('#filter_options').is(':visible'))
 			$('#filter_options').hide();
@@ -17,13 +17,13 @@ $(function () {
 	});
 	
 	// Filter deals.
-	$('#deals-filter-validate').live('click', function(e){
+	$('body').on('click', '#deals-filter-validate', function(e) {
 		e.preventDefault();
 		filterDeals($(this));
 	});
 	
 	// For updating the filter inequality and the fields based on the filter type selected.
-	$('#filter_options .filter_type').live('change',function(e){
+	$('body').on('change', '#filter_options .filter_type', function(e) {
 		var filter = $(this).closest('.control-group').attr('id');
 		if($(this).val()=='equals'){
 			$('#'+filter+' .equals').show();
@@ -52,7 +52,7 @@ $(function () {
 	});
 	
 	// Clear the deal filter form and remove the cookie.
-	$('#clear-deal-filters').live('click',function(e){
+	$('body').on('click', '#clear-deal-filters', function(e) {
 		$('#dealsFilterForm input').val('');
 	 	$('#dealsFilterForm select').filter(':visible').val('');
 		$('#dealsFilterForm select.filter_type').val('equals');
@@ -67,7 +67,8 @@ $(function () {
 		$('#show-filter-button').removeClass('btn-primary');
 	});
 	
-	$('#filter_options a.changeIcon').live('click',function(e){$(this).find('i').toggleClass('icon-plus icon-minus')});
+	$('body').on('click', '#filter_options a.changeIcon', function(e) {
+	$(this).find('i').toggleClass('icon-plus icon-minus')});
 	
 });
 

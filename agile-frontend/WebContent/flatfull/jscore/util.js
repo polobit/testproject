@@ -457,7 +457,7 @@ function hideTransitionBar()
 			$('.butterbar').addClass('hide');
 	}, 10);
 }
-$('.modal:visible').die().live('shown.bs.modal', function()
+$('body').on('shown.bs.modal', '.modal:visible', function (e) 
 {
 	setTimeout(function()
 	{

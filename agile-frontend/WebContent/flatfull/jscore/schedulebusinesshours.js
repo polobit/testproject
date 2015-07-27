@@ -2,10 +2,7 @@ var businessHoursManager;
 $(function()
 {
 
-	$("#btnSerialize").die().live(
-			'click',
-			function(e)
-			{
+    $("body").on("click","#btnSerialize", function(e){
 				e.preventDefault();
 
 				var saveBtn = $(this);
@@ -62,13 +59,7 @@ $(function()
 
 			});
 
-	$("#edit-schedule-id")
-			.die()
-			.live(
-					'click',
-					function(e)
-					{
-
+	$("body").on("click","#edit-schedule-id", function(e){
 						e.preventDefault();
 						var data = $('#scheduleurl').text();
 						var scheduling_id = data.substr(data.lastIndexOf("/") + 1);
@@ -85,10 +76,7 @@ $(function()
 
 					});
 
-	$("#save-scheduleurl").die().live(
-			'click',
-			function(e)
-			{
+    $("body").on("click","#save-scheduleurl", function(e){
 				e.preventDefault();
 				var data = $("#url").val();
 				if (data.length < 4)

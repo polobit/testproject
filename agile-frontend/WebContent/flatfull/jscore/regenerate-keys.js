@@ -1,6 +1,6 @@
 $(function(){
-	$("#api_key_generate_icon").live('click', function(e){e.preventDefault(); regenerate_api_key('core/api/api-key/key');});
-	$("#jsapi_key_generate_icon").live('click', function(e){e.preventDefault(); regenerate_api_key('core/api/api-key/jskey');});
+	$("body").on("click","#api_key_generate_icon", function(e){e.preventDefault(); regenerate_api_key('core/api/api-key/key');});
+	$("body").on("click","#jsapi_key_generate_icon", function(e){e.preventDefault(); regenerate_api_key('core/api/api-key/jskey');});
 });
 
 function update_admin_settings_api_key_template(){

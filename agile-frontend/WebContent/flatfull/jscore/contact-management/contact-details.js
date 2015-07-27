@@ -141,7 +141,7 @@ function show_owner(){
 $(function(){
 	
 	// Deletes a contact from database
-	$('#contact-actions-delete').live('click', function(e){
+	$('body').on('click', '#contact-actions-delete', function(e){
 		
 		e.preventDefault();
 		if(!confirm("Do you want to delete the contact?"))
@@ -167,7 +167,7 @@ $(function(){
 	/**
 	 * Deletes a tag of a contact (removes the tag from the contact and saves the contact)
 	 */ 
-	$('.remove-tags').live('click', function(e){
+	$('body').on('click', '.remove-tags', function(e){
 		e.preventDefault();
 		
 		var tag = $(this).attr("tag");
@@ -213,7 +213,7 @@ $(function(){
 	/**
 	 * Shows a form to add tags with typeahead option
 	 */ 
-	$('#add-tags').live('click', function(e) {
+	$('body').on('click', '#add-tags', function(e){
 		e.preventDefault();
 		$(this).css("display", "none");
 		$("#addTagsForm").css("display", "block");
@@ -225,7 +225,7 @@ $(function(){
 	 * "click" event of add button of tags form in contact detail view
 	 * Pushes the added tags into tags array attribute of the contact and saves it
 	 */ 
-	$('#contact-add-tags').live('click', function(e){
+	$('body').on('click', '#contact-add-tags', function(e){
 		e.preventDefault();
 		
 	    // Add Tags
@@ -292,7 +292,7 @@ $(function(){
 	 * Changes, owner of the contact, when an option of change owner drop down
 	 * is selected.   
 	 */
-	$('.contact-owner-list').live('click', function(){
+	$('body').on('click', '.contact-owner-list', function(e){
 	
 		$('#change-owner-ul').css('display', 'none');
 		
@@ -327,7 +327,7 @@ $(function(){
 	/**
 	 * Get the updated details of the contact and update the model.
 	 */
-	$('#action_refresh_contact').live('click',function(){
+	$('body').on('click', '#action_refresh_contact', function(e){
 			var id =  App_Contacts.contactDetailView.model.id;
 		var contact_details_model = Backbone.Model.extend({ url : function()
 			{
@@ -414,7 +414,7 @@ function contact_detail_view_navigation(id, contact_list_view, el){
 
 $(function(){
 	
-	$(".tooltip_info").die().live("mouseenter", function() {
+	$('body').on('mouseenter', '.tooltip_info', function(e){
 		 $(this).tooltip({
 			 html : true
 		 });
@@ -427,7 +427,7 @@ $(function(){
 	 * gets increased by one, both in UI and back end
 	 * 
 	 */  
-	$('#add').live('click', function(e){
+	$('body').on('mouseenter', '#add', function(e){
 	    e.preventDefault();
 	    
 	    // Convert string type to int
@@ -465,7 +465,7 @@ $(function(){
 	 * gets decreased by one, both in UI and back end
 	 * 
 	 */
-	$('#minus').live('click', function(e){
+	$('body').on('click', '#minus', function(e){
 		e.preventDefault();
 		
 		// Converts string type to Int
@@ -496,14 +496,14 @@ $(function(){
 	$('#score').children().attr('unselectable', 'on');
 	
 	// Popover for help in contacts,tasks etc
-    $('#element').live('mouseenter',function(e){
+	$('body').on('mouseenter', '#element', function(e){
     	e.preventDefault();
         $(this).popover({
         	template:'<div class="popover" style="width:400px"><div class="arrow"></div><div class="popover-inner"><div class="popover-content"><p></p></div></div></div>'
         });
         $(this).popover('show');
     });
-    $('#element-title').live('mouseenter',function(e){
+	$('body').on('mouseenter', '#element-title', function(e){
     	e.preventDefault();
         $(this).popover('show');
     });
@@ -517,7 +517,7 @@ $(function(){
         $(this).popover('show');
     });*/
     
-    $('#change-owner-element > #contact-owner').live('click',function(e){
+	$('body').on('click', '#change-owner-element > #contact-owner', function(e){
     	e.preventDefault();
     	
     	fill_owners(undefined, undefined, function(){
@@ -531,7 +531,7 @@ $(function(){
     	});
     });
     
-    $('#change-owner-element > .contact-owner-add').live('click',function(e){
+	$('body').on('click', '#change-owner-element > .contact-owner-add', function(e){
     	e.preventDefault();
     	
     	fill_owners(undefined, undefined, function(){
@@ -546,7 +546,7 @@ $(function(){
     	});
     });
     
-    $("#disable_map_view").die().live('click', function(e){
+	$('body').on('click', '#disable_map_view', function(e){
 		e.preventDefault();
 		if(islocalStorageHasSpace()){
 			localStorage.setItem('MAP_VIEW','disabled');
@@ -556,7 +556,7 @@ $(function(){
 		$("#map_view_action").html("<i class='icon-plus text-sm c-p' title='Show map' id='enable_map_view'></i>");
 		
     });
-	$("#enable_map_view").die().live('click', function(e){
+	$('body').on('click', '#enable_map_view', function(e){
 		e.preventDefault();
 		if(islocalStorageHasSpace()){
 			localStorage.setItem('MAP_VIEW','enabled');

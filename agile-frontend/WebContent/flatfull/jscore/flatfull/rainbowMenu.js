@@ -3,7 +3,7 @@
 (function(){
 
 // window options funda
-$("#menuPosition").die().live("change", function(){
+$('body').on('change', '#menuPosition', function(e){
 	CURRENT_USER_PREFS.menuPosition = $(this).val();
 	$(".theme-save-status").css("display","inline");
 	if($(this).val() == 'top')
@@ -25,7 +25,7 @@ $("#menuPosition").die().live("change", function(){
 	}
 });
 
-$("#layout").die().live("change", function(){
+$('body').on('change', '#layout', function(e){
 	CURRENT_USER_PREFS.layout = $(this).val();
 	$(".theme-save-status").css("display","inline");
 	if($(this).val() == 'fluid')
@@ -42,7 +42,7 @@ $("#layout").die().live("change", function(){
 	}
 });
 
-$("#animations").die().live("change",function(){
+$('body').on('change', '#animations', function(e){
 	CURRENT_USER_PREFS.animations = $(this).is(':checked');
 	$(".theme-save-status").css("display","inline");
 	if($(this).is(':checked'))
@@ -105,7 +105,7 @@ $("#check-dock-aside").on('click',function(){
 
 
 
-$("#check-box-layout").die().live('click',function(){
+$("#check-box-layout").live('click',function(){
 	if ( $(this).is(":checked") ) {
 	$(".app").addClass("container");
 	var pos = $("#aside").offset();
@@ -132,7 +132,7 @@ $("#check-box-layout").die().live('click',function(){
 	*/
 
 //retrieve the current radio button value	
-	$(".magicMenu input:radio").die().live('click',function(){
+$('body').on('change', '.magicMenu input:radio', function(e){
 		CURRENT_USER_PREFS.theme = $(this).val();
 		$(".theme-save-status").css("display","inline");
 		var asideClassName = $(this).attr("target-aside-class");
@@ -161,14 +161,13 @@ $.fn.removeClassPrefix = function(prefix) {
 /*funda for contact details*/
 
 
-
-  $("#contacts-inner-tabs #next").die().live('click',function(){
+  $('body').on('click', '#contacts-inner-tabs #next', function(e){
 	  console.log("next clicked");
     var target = $("#contactDetailsTab");
     target.animate({ scrollLeft : (target.scrollLeft() + 270)},1000);
   });
   
-   $("#contacts-inner-tabs #prev").die().live('click',function(){
+  $('body').on('click', '#contacts-inner-tabs #prev', function(e){
 	   console.log("prev clicked");
     var target = $("#contactDetailsTab");
     target.animate({ scrollLeft : (target.scrollLeft() - 270)},1000);

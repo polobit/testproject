@@ -1,4 +1,4 @@
-$('.activity-deal-edit').live('click', function(e)
+$('body').on('click', '.activity-deal-edit', function(e) 
 {
 	e.preventDefault();
 	var data = $(this).closest('a').attr("data");
@@ -8,7 +8,7 @@ $('.activity-deal-edit').live('click', function(e)
 	updatedeals(currentDeal);
 });
 
-$('.activity-event-edit').live('click', function(e)
+$('body').on('click', '.activity-event-edit', function(e)
 {
 	e.preventDefault();
 	var data = $(this).closest('a').attr("data");
@@ -19,7 +19,7 @@ $('.activity-event-edit').live('click', function(e)
 
 });
 
-$(".activity-edit-note").die().live('click', function(e)
+$('body').on('click', '.activity-edit-note', function(e)
 {
 	e.preventDefault();
 	console.log($(this).attr('data'));
@@ -47,7 +47,7 @@ $(".activity-edit-note").die().live('click', function(e)
 });
 
 /*
- * $(".activity-delete-info").die().live('click', function(e) {
+ * $(".activity-delete-info").live('click', function(e) {
  * e.preventDefault(); console.log($(this).attr('data')); var data =
  * $(this).attr('data'); var deletednames = getActivityObject(data);
  * 
@@ -60,7 +60,7 @@ $(".activity-edit-note").die().live('click', function(e)
  * });
  */
 
-$('.activity-task-edit').live('click', function(e)
+$('body').on('click', '.activity-task-edit', function(e) 
 {
 	e.preventDefault();
 	var data = $(this).closest('a').attr("data");
@@ -69,7 +69,7 @@ $('.activity-task-edit').live('click', function(e)
 	updateactivity__task(currenttask);
 });
 
-$('.email-details').live('click', function(e)
+$('body').on('click', '.email-details', function(e) 
 {
 	e.preventDefault();
 	var data = $(this).closest('a').attr("data");

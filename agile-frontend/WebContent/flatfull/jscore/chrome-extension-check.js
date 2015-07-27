@@ -148,7 +148,7 @@ function Initialize_Chrome_Webstore_events()
 	*//**
 	 * To dismiss chrome extension popup
 	 *//*
-	$('#chrome_extension #dismiss').die().live('click', function(e)
+	$('#chrome_extension #dismiss').live('click', function(e)
 	{
 		e.stopPropagation();
 
@@ -161,7 +161,7 @@ function Initialize_Chrome_Webstore_events()
 	*//**
 	 * To prevent notify user on each session
 	 *//*
-	$("#chrome_extension #prevent_extension_request").die().live('click', function()
+	$("#chrome_extension #prevent_extension_request").live('click', function()
 	{
 
 		// To prevent notify user permanantly
@@ -173,7 +173,7 @@ function Initialize_Chrome_Webstore_events()
 	*//**
 	 * Install extension
 	 *//*
-	$('#chrome_extension #chrome_install_button').die().live('click', function(e)
+	$('#chrome_extension #chrome_install_button').live('click', function(e)
 	{
 
 		e.stopPropagation();

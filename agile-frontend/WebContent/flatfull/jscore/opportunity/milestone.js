@@ -4,7 +4,7 @@ $(function(){
 	 * If default view is selected, deals are loaded with default view and 
 	 * removes the view cookie set when view is selected
 	 */ 
-	$('.deals-list-view').die().live('click', function(e) {
+	$('body').on('click', '.deals-list-view', function(e) {
 		e.preventDefault();
 		
 		// Creates the cookie
@@ -15,7 +15,7 @@ $(function(){
 
 	});
 	
-	$('#opportunity-track-list-model-list a.pipeline').live('click',function(e){
+	$('body').on('click', '#opportunity-track-list-model-list a.pipeline', function(e) {
 		e.preventDefault();
 		createCookie("agile_deal_track", $(this).attr('id'));
 		if(readCookie('deal-filters')){
@@ -34,7 +34,7 @@ $(function(){
 	 * If Pipelined View is selected, deals are loaded with pipelined view and 
 	 * creates the pipelined view cookie
 	 */
-	$('.deals-pipelined-view').die().live('click', function(e) {
+	$('body').on('click', '.deals-pipelined-view', function(e) {
 		e.preventDefault();
 
 		// Erases the cookie
@@ -48,7 +48,7 @@ $(function(){
 	 * If Pipelined View is selected, deals are loaded with pipelined view and 
 	 * creates the pipelined view cookie
 	 */
-	$('.deals-export-csv').die().live('click', function(e) {
+	$('body').on('click', '.deals-export-csv', function(e) {
 		e.preventDefault();
 
 		console.log('Exporting ...');
@@ -56,7 +56,7 @@ $(function(){
 		deals_csv_modal.modal('show');
 		
 		// If Yes clicked
-		$('#deals-export-csv-confirm').die().live('click',function(e){
+		$('body').on('click', '#deals-export-csv-confirm', function(e) {
 			e.preventDefault();
 			if($(this).attr('disabled'))
 		   	     return;
@@ -86,14 +86,13 @@ $(function(){
 
 	});
 	
-	$('.add-pipeline').die().live('click',function(e){
+	$('body').on('click', '.add-pipeline', function(e) {
 		$('#pipelineForm input').val('');
 		$('#pipelineForm input#milestones').val('New,Prospect,Proposal,Won,Lost');
 		$('#pipelineModal').find('.save-status').html('');
 	});
 	
-	
-	$('.pipeline-edit').die().live('click',function(e){
+	$('body').on('click', '.pipeline-edit', function(e) {
 		var id = $(this).attr('id');
 		var json = App_Admin_Settings.pipelineGridView.collection.get(id).toJSON();
 		deserializeForm(json,$('#pipelineForm'));
@@ -104,13 +103,13 @@ $(function(){
 	 * If Pipelined View is selected, deals are loaded with pipelined view and 
 	 * creates the pipelined view cookie
 	 */
-	$('.pipeline-delete').die().live('click', function(e) {
+	$('body').on('click', '.pipeline-delete', function(e) {
 		e.preventDefault();
 		var id = $(this).attr('id');
 		var name = $(this).attr('data');
 		$('#track-name').text(name);
 		// If Yes clicked
-		$('#pipeline-delete-confirm').die().live('click',function(e){
+		$('body').on('click', '#pipeline-delete-confirm', function(e) {
 			e.preventDefault();
 			if($(this).attr('disabled'))
 		   	     return;
@@ -157,7 +156,7 @@ $(function(){
 	/**
 	 * To remove the milestone from list.
 	 */
-	$(".milestone-delete").die().live('click', function(e){
+	$('body').on('click', '.milestone-delete', function(e) {
 		e.preventDefault();
 		if (!confirm("Are you sure you want to delete ?" ))
 			return;
@@ -168,7 +167,7 @@ $(function(){
 	/**
 	 * Shows input field to add new milestone.
 	 */
-    $(".show_milestone_field").die().live('click', function(e){
+	$('body').on('click', '.show_milestone_field', function(e) {
     	e.preventDefault();
     	var form = $(this).closest('form');
     	console.log('New Milestone to - ',form.attr('id'));
@@ -180,7 +179,7 @@ $(function(){
     /**
 	 * Adds new milestone to the sortable list.
 	 */
-    $(".add_milestone").die().live('click', function(e){
+	$('body').on('click', '.add_milestone', function(e) {
     	
     	e.preventDefault();
     	var form = $(this).closest('form');
@@ -227,7 +226,8 @@ $(function(){
     		}
     	}
     });
-    $(".add_new_milestone").die().live("keypress",function(e){
+
+	$('body').on('keypress', '.add_new_milestone', function(e) {
     	if(e.keyCode == 13)
     	{
     		var form = $(this).closest("form");
@@ -235,7 +235,7 @@ $(function(){
     	}
     });
     
-    $(".save-pipelines").die().live('click', function(e){
+	$('body').on('click', '.save-pipelines', function(e) {
     	e.preventDefault();
     	
     	$('#admin-settings-milestones-model-list').find('form').each(function(index){
@@ -257,7 +257,7 @@ $(function(){
     	
     });
     
-    $("#pipeline_validate").die().live('click', function(e){
+	$('body').on('click', '#pipeline_validate', function(e) {
     	e.preventDefault();
     	
     	// Returns, if the save button has disabled attribute

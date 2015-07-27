@@ -155,9 +155,7 @@ $(function() {
 	 * User can exlicitly disable noty in current session. Along with removing
 	 * the noty a flag is set, which is checked before showing noty
 	 */
-	$('span.notify-close').die().live(
-			'click',
-			function() {
+	$("body").on("click", "span.notify-close", function(e) {
 				// Flat which indicates user has disables
 				Is_Profile_Guider_Closed = true;
 				$(this).parent().slideUp(
@@ -173,7 +171,7 @@ $(function() {
 	/**
 	 * Removes welcome message and shows next step
 	 */
-	$('#noty-welcome-user').die().live('click', function(e) {
+	 $("body").on("click", "#noty-welcome-user", function(e) {
 		e.preventDefault();
 		delete Profile_Info["Welcome"];
 		set_profile_noty();

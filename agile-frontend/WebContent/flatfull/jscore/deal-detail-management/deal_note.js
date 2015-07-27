@@ -1,4 +1,4 @@
-$(".deal-edit-note").die().live('click', function(e)
+$('body').on('click', '.deal-edit-note', function(e)
 	{
 	
 		e.preventDefault();
@@ -11,7 +11,7 @@ $(".deal-edit-note").die().live('click', function(e)
 	});
 
 
-    $("#dealnote_update").live('click', function(e)
+    $('body').on('click', '#dealnote_update', function(e)
 		{
 			e.preventDefault();
 
@@ -44,7 +44,7 @@ $(".deal-edit-note").die().live('click', function(e)
 		 * Saves note model using "Bcakbone.Model" object, and adds saved data to
 		 * time-line if necessary.
 		 */
-		$('#dealnote_validate').live('click', function(e)
+		$('body').on('click', '#dealnote_validate', function(e)
 		{
 			
 			e.preventDefault();
@@ -73,7 +73,7 @@ $(".deal-edit-note").die().live('click', function(e)
 		/**
 		 * Shows note modal and activates contacts typeahead to its related to field
 		 */
-		$('#dealshow-note').live('click', function(e)
+		$('body').on('click', '#dealshow-note', function(e)
 		{
 			if(App_Deal_Details.dealDetailView.model.get('archived') == true)
 				return;	

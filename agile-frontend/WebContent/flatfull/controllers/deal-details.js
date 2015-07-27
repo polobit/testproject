@@ -91,7 +91,7 @@ var DealDetailsRouter = Backbone.Router.extend({
 /**
  * Validates deal edit form and saves
  */
-$("#opportunity_validate_form").live('click', function(e)
+$("body").on('click', "#opportunity_validate_form", function(e)
 {
 	e.preventDefault();
 
@@ -109,7 +109,7 @@ $("#opportunity_validate_form").live('click', function(e)
 		saveDeal(form_id, modal_id, this, json, false);
 });
 
-$('#deal-owner').live('click', function(e)
+$("body").on('click', "#deal-owner", function(e)
 {
 	e.preventDefault();
 	fill_deal_owners(undefined, undefined, function()
@@ -126,7 +126,7 @@ $('#deal-owner').live('click', function(e)
 
 });
 
-$('#opportunity-actions-delete').live('click', function(e)
+$("body").on('click', "#opportunity-actions-delete", function(e)
 {
 	e.preventDefault();
 
@@ -198,7 +198,7 @@ function deal_detail_view_navigation(id, deal_collection, el)
  * Changes, owner of the contact, when an option of change owner drop down is
  * selected.
  */
-$('.deal-owner-list').live('click', function()
+$("body").on('click', ".deal-owner-list", function(e)
 {
 
 	$('#change-deal-owner-ul').css('display', 'none');
@@ -233,7 +233,7 @@ $('.deal-owner-list').live('click', function()
 
 });
 
-$('.deal-add-contact').live('click', function(e)
+$("body").on('click', ".deal-add-contact", function(e)
 {
 	e.preventDefault();
 	console.log(App_Deal_Details.dealDetailView.model.toJSON());
@@ -247,7 +247,7 @@ $('.deal-add-contact').live('click', function(e)
 
 });
 
-$('.deal-detail-edit-deal').live('click', function(e)
+$("body").on('click', ".deal-detail-edit-deal", function(e)
 {
 	e.preventDefault();
 	console.log(App_Deal_Details.dealDetailView.model.toJSON());
@@ -256,7 +256,7 @@ $('.deal-detail-edit-deal').live('click', function(e)
 
 });
 
-$('.deal-note').live('click', function(e)
+$("body").on('click', ".deal-note", function(e)
 {
 	e.preventDefault();
 
@@ -333,7 +333,7 @@ function deserialize_deal(value, template)
 
 }
 
-$('#dealdetail-archive').live('click', function(e)
+$("body").on('click', "#dealdetail-archive", function(e)
 {
 	e.preventDefault();
 
@@ -344,7 +344,7 @@ $('#dealdetail-archive').live('click', function(e)
 
 });
 
-$('.deal-restore-detail-view').live('click', function(e)
+$("body").on('click', ".deal-restore-detail-view", function(e)
 {
 	e.preventDefault();
 
