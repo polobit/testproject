@@ -6269,6 +6269,63 @@ $(function()
 		}
 		return time_period;
 	});
+	
+	/**
+	 * Returns a given date string to a time ago format ,used for gmaps listview implementation
+	 * 
+	 */
+	Handlebars.registerHelper('timeAgo',function(dateString){
+
+		var date=new Date();
+		 try
+			{
+			 var find = '-';
+			 var re = new RegExp(find, 'g');
+			 dateString = dateString.replace(re, '/');
+			 dateString = dateString.match(/[^:]+(\:[^:]+)?/g);
+			 date=new Date(dateString[0]);
+			}
+			catch (err)
+			{
+				console.log("Error in parsing date");
+			}
+
+	    var seconds = Math.floor((new Date() - date) / 1000);
+
+	    var interval = Math.floor(seconds / 31536000);
+
+	    if (interval > 1) {
+	        return interval + " years ago";
+	    }
+	    interval = Math.floor(seconds / 2592000);
+	    if (interval > 1) {
+	        return interval + " months ago";
+	    }
+	    interval = Math.floor(seconds / 86400);
+	    if (interval > 1) {
+	        return interval + " days ago";
+	    }
+	    interval = Math.floor(seconds / 3600);
+	    if (interval > 1) {
+	        return interval + " hours ago";
+	    }
+	    interval = Math.floor(seconds / 60);
+	    if (interval > 1) {
+	        return interval + " minutes ago";
+	    }
+	    return new Handlebars.SafeString(Math.floor(seconds) + " seconds ago");
+
+		
+	});
+	
+	/**
+	 * Returns a string by making its first letter a capital letter.
+	 * Used in gmap implementation for table view
+	 */
+	Handlebars.registerHelper('capitalizeFirstLetter',function(city,country){
+		return new Handlebars.SafeString(city.charAt(0).toUpperCase() + city.slice(1)+", "+country);
+		
+	});
 });
 
 // helper function return created time for event

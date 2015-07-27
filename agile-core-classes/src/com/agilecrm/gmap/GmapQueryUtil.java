@@ -1,6 +1,10 @@
 package com.agilecrm.gmap;
 
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+
 import org.json.JSONArray;
+import org.json.JSONObject;
 
 import com.agilecrm.db.GoogleSQL;
 import com.agilecrm.db.util.GoogleSQLUtil;
@@ -30,7 +34,7 @@ public class GmapQueryUtil {
 		            +" AND DATE(stats_time) " 
 		            +" BETWEEN DATE("+GoogleSQLUtil.encodeSQLColumnValue(convertedStartDate)+")  AND DATE("+GoogleSQLUtil.encodeSQLColumnValue(convertedEndDate)+")"
 		            +" AND email='' "
-		            +" GROUP BY guid) pp ORDER BY visit_time desc LIMIT 500";
+		            +" GROUP BY guid) pp ORDER BY visit_time desc";
 		
 		System.out.println("sids query is: " + query);
 
@@ -46,8 +50,101 @@ public class GmapQueryUtil {
     	}
     }
 	 
+	 
+	 /**This returns by page views of the visitors by session 
+	  * 
+	  *  
+	  * */
+	 public static JSONArray getVisitorsBySession(String userDomain, String startDate, String endDate, String timeZone,String queryOffset,String pageSize)
+	 {
+	    String convertedStartDate = DateUtil.getMySQLNowDateFormat(Long.parseLong(startDate), timeZone);
+	    String convertedEndDate = DateUtil.getMySQLNowDateFormat(Long.parseLong(endDate), timeZone);
+		
+	    String query=" select guid,email,city,region,country,user_agent,stats_time as visit_time,sid,ref,count(*) as page_views, ref from page_views where domain="+GoogleSQLUtil.encodeSQLColumnValue(userDomain)+" and stats_time BETWEEN DATE("+GoogleSQLUtil.encodeSQLColumnValue(convertedStartDate)+")  AND DATE("+GoogleSQLUtil.encodeSQLColumnValue(convertedEndDate)+") group by sid";
+		
+	    /*Appends limit to the existing query if offset and pagesize were recieved from client */
+		if(queryOffset == null && pageSize != null){
+			query += GoogleSQLUtil.appendLimitToQuery(Integer.toString(0),pageSize);
+		}else if(queryOffset != null && pageSize != null){
+			query += GoogleSQLUtil.appendLimitToQuery(queryOffset,pageSize);
+		}
+		System.out.println("sids query is: " + query);
+
+    	try
+    	{
+    		//Call a private method 
+    	    return getJSONQuery(query);
+    	}
+    	catch (Exception e1)
+    	{
+    	    e1.printStackTrace();
+    	    System.out.println("Exception while executing query "+e1);
+    	    return null;
+    	}
+    }
+	 
 	 public static String addConvertTZ(String timeZoneOffset)
 	    {
 		return "CONVERT_TZ(stats_time,'+00:00'," + GoogleSQLUtil.encodeSQLColumnValue(timeZoneOffset) + ")";
 	    }
+	 
+	 /**
+		 * This is a similar implementation from the GoogleSql.getJSONQuery except that
+		 * this returns column name by alias if provided in query .
+		 * The small change can also be made in the common class(GoogleSql)
+		 * 
+		 * 
+		 * Note :resultMetadata.getColumnLabel(i) method returns the alias name if given ,actual column name if not .
+		 * 
+		 * @param query
+		 *            - query
+		 * @return - json array
+		 * @throws Exception
+		 */
+		private static  JSONArray getJSONQuery(String query)
+		{
+			System.out.println("Query " + query);
+			ResultSet rs = GoogleSQL.executeQuery(query);
+			if (rs == null)
+				return null;
+
+			System.out.println("Result set object  " + rs);
+
+			JSONArray agentDetailsArray = new JSONArray();
+			try
+			{
+				ResultSetMetaData resultMetadata = rs.getMetaData();
+
+				int numColumns = resultMetadata.getColumnCount();
+
+				String columnName = null;
+
+				while (rs.next())
+				{
+					JSONObject eachAgentJSON = new JSONObject();
+
+					for (int i = 1; i < numColumns + 1; i++)
+					{
+						columnName = resultMetadata.getColumnLabel(i);
+						eachAgentJSON.put(columnName, "" + rs.getString(columnName));
+					}
+
+					agentDetailsArray.put(eachAgentJSON);
+				}
+			}
+			catch (Exception e)
+			{
+				System.out.println("Exception while mapping result set"+e);
+				return agentDetailsArray;
+			}
+			finally
+			{
+				// close the Connection and ResultSet objects
+				GoogleSQL.closeResultSet(rs);
+			}
+			return agentDetailsArray;
+			
+		}
+		
+	
 }
