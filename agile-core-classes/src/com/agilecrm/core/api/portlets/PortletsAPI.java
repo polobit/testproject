@@ -485,4 +485,18 @@ public class PortletsAPI {
 	public List<DomainUser> getCurrentDomainUsersForPortlets()throws Exception {
 		return PortletUtil.getCurrentDomainUsersForPortlets();
 	}
+	
+	@Path("/portletCampaignstats")
+	@GET
+	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	public JSONObject getCampaignstatsForPortlets(@QueryParam("duration") String duration,@QueryParam("start-date") String startDate,@QueryParam("end-date") String endDate,@QueryParam("time_zone") String timeZone,@QueryParam("campaign_type") String campaigntype ) throws Exception{
+		JSONObject json=new JSONObject();
+		json.put("duration",duration);
+		json.put("startDate",startDate);
+		json.put("endDate",endDate);
+		json.put("timeZone",timeZone);
+		json.put("campaigntype",campaigntype);
+		return PortletUtil.getCampaignstatsForPortlets(json);
+	}
+	
 }

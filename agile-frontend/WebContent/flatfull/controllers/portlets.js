@@ -156,6 +156,10 @@ function addNewPortlet(portlet_type,p_name){
 		obj.size_y=2;
 		obj.size_x=2;
 	}
+	else if(portlet_type=="USERACTIVITY" && p_name=="Campaignstats"){
+		json['duration']="yesterday";
+		json['campaign_type']="All";
+	}
 	var portlet = new BaseModel();
 	portlet.url = 'core/api/portlets/addPortlet';
 	portlet.set({ "prefs" : JSON.stringify(json) }, { silent : true });

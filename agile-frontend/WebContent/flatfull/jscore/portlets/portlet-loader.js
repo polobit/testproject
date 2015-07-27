@@ -655,7 +655,28 @@ function showPortletSettings(el){
 			$('#ms-category-list', elData).addClass('portlet-category-ms-container');					
 		});
 	}
-	
+	else if(base_model.get('portlet_type')=="USERACTIVITY" && base_model.get('name')=="Campaign stats"){
+		$('#portletsCampaignStatsSettingsModal').modal('show');
+		$('#portletsCampaignStatsSettingsModal > .modal-dialog > .modal-content > .modal-footer > .save-modal').attr('id',base_model.get("id")+'-save-modal');
+		$("#portlet-type",$('#portletsCampaignStatsSettingsModal')).val(base_model.get('portlet_type'));
+		$("#portlet-name",$('#portletsCampaignStatsSettingsModal')).val(base_model.get('name'));
+		
+		elData = $('#portletsCampaignStatsSettingsForm');
+		$("#duration", elData).find('option[value='+ base_model.get("settings").duration +']').attr("selected", "selected");
+		
+		var options="<option value='ALL'>ALL</option>" ;
+		$.ajax({ type : 'GET', url : '/core/api/workflows', async : false, dataType : 'json',
+			success: function(data){
+				$.each(data,function(index,campaignfilter){
+					options+="<option value="+campaignfilter.id+">"+campaignfilter.name+"</option>";
+				});
+				$('#campaign_type', elData).html(options);
+				$("#campaign_type", elData).find('option[value='+ base_model.get("settings").campaign_type +']').attr("selected", "selected");
+				$('.loading-img').hide();
+			}
+		});
+		
+	}
 	if(base_model.get('name')=="Pending Deals" || base_model.get('name')=="Deals By Milestone" || base_model.get('name')=="Closures Per Person" || base_model.get('name')=="Deals Funnel"){
 		$('#due-date', elData).datepicker({
 			format : 'mm/dd/yyyy'
@@ -1560,7 +1581,63 @@ $('.portlet-settings-save-modal').live('click', function(e){
 		        		$('#'+el.split("-save-modal")[0]).parent().find('.portlet_body').find('.dealsWonValue').append("Total won value:"+totalVal);
 	        		},2000);
 	        	}*/
-	        	
+	        if(data.get('portlet_type')=="USERACTIVITY" && data.get('name')=="Campaign stats"){	
+				var start_date_str = "";
+				var end_date_str ="";
+				var emailsSentCount;
+				var emailsOpenedCount;
+				var emailsClickedCount;
+				var emailsUnsubscribed;
+		if(data.get('settings').duration=='yesterday'){
+				start_date_str = ''+data.get('settings').duration;
+				end_date_str = 'today';
+			}else if(data.get('settings').duration=='last-week'){
+				start_date_str = ''+data.get('settings').duration;
+				end_date_str = 'last-week-end';
+			}else if(data.get('settings').duration=='last-month'){
+				start_date_str = ''+data.get('settings').duration;
+				end_date_str = 'last-month-end';
+			}else if(data.get('settings').duration=='24-hours'){
+				start_date_str = ''+data.get('settings').duration;
+				end_date_str = 'now';
+			}else if(data.get('settings').duration=='this-week'){
+				start_date_str = ''+data.get('settings').duration;
+				end_date_str = 'this-week-end';
+			}else if(data.get('settings').duration=='this-month'){
+				start_date_str = ''+data.get('settings').duration;
+				end_date_str = 'this-month-end';
+			}else{
+				start_date_str = ''+data.get('settings').duration;
+				end_date_str = 'TOMORROW';
+			}
+		var selector1='emails-opened';
+			var selector2='emails-clicked';
+			var selector3='emails-unsubscribed';
+			var that = $('#'+el.split("-save-modal")[0]).parent();
+		var url = '/core/api/portlets/portletCampaignstats?duration='+data.get('settings').duration+'&start-date='+getStartAndEndDatesOnDue(start_date_str)+'&end-date='+getStartAndEndDatesOnDue(end_date_str)+'&time_zone='+(new Date().getTimezoneOffset())+'&campaign_type='+data.get('settings').campaign_type; 
+		fetchPortletsGraphData(url,function(data){
+			emailsSentCount=data["emailsent"];
+				emailsOpenedCount=data["emailopened"];
+				emailsClickedCount=data["emailclicked"];
+				emailsUnsubscribed=data["emailunsubscribed"];
+				that.find('#emails-sent-count').text(getNumberWithCommasForPortlets(emailsSentCount));
+				that.find('#emails-sent-label').text("Emails sent");
+				var series=[];
+				series.push(["Emails Sent",emailsSentCount-emailsOpenedCount]);
+				series.push(["Emails Opened",emailsOpenedCount]);
+				campstatsPieChart(selector1,series,emailsSentCount,emailsOpenedCount);
+				
+				var series1=[];
+				series1.push(["Emails Sent",emailsSentCount-emailsClickedCount]);
+				series1.push(["Emails Clicked",emailsClickedCount]);
+				campstatsPieChart(selector2,series1,emailsSentCount,emailsClickedCount);
+				
+				var series2=[];
+				series2.push(["Emails Sent",emailsSentCount-emailsUnsubscribed]);
+				series2.push(["Emails Unsubscribed",emailsUnsubscribed]);
+				campstatsPieChart(selector3,series2,emailsSentCount,emailsUnsubscribed);
+			});
+			}
 	        	setPortletContentHeight(data);
     			$('#'+data.get('id')).parent().find('div:last').after('<span class="gs-resize-handle gs-resize-handle-both"></span>');
 	        	

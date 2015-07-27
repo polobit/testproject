@@ -1379,5 +1379,70 @@ public class PortletUtil {
 			return null;
 		}
 	}
+	
+	public static  JSONObject getCampaignstatsForPortlets(JSONObject json) throws Exception
+	{
+		JSONObject datajson=new JSONObject();
+		int emailsClicked = 0;
+		int emailsOpened =0;
+		int emailsent = 0;
+		int unsubscribe =0;
+		String a="";
+		JSONArray campaignEmailsJSONArray;
+		long minTime=0L;
+		long maxTime=0L;
+		if(json!=null && json.get("duration")!=null){
+			if(json.getString("startDate")!=null)
+				minTime = Long.valueOf(json.getString("startDate"));
+			if(json.getString("endDate")!=null)
+				maxTime = Long.valueOf(json.getString("endDate"))-1;
+		
+			if(json.getString("duration")!=null && json.getString("duration").equalsIgnoreCase("24-hours")){
+			minTime = (new Date().getTime()/1000)-(24*60*60);
+			maxTime = new Date().getTime()/1000;
+		}
+		// start date in mysql date format.
+		String startDate = CampaignReportsUtil.getStartDate(String.valueOf(minTime*1000), String.valueOf(maxTime*1000), null, json.getString("timeZone"));
+		
+		// end date in mysql date format.
+		String endDate = CampaignReportsUtil.getEndDateForReports(String.valueOf(maxTime*1000), json.getString("timeZone"));
+		
+		String [] array = {"EMAIL_OPENED","EMAIL_CLICKED","EMAIL_SENT","UNSUBSCRIBED"};
+		if (json.getString("campaigntype").equalsIgnoreCase("ALL"))
+		campaignEmailsJSONArray = CampaignReportsSQLUtil.getCountByLogTypes(startDate,endDate,json.getString("timeZone"),array);
+			
+		else
+			{campaignEmailsJSONArray	=CampaignReportsSQLUtil.getEachCampaignStatsForTable(json.getString("campaigntype"),startDate,endDate,json.getString("timeZone"),a);
+				System.out.println("see"+campaignEmailsJSONArray);	}
+		if(campaignEmailsJSONArray!=null && campaignEmailsJSONArray.length()>0)
+		{	
+		try{
+				for(int i=0;i<campaignEmailsJSONArray.length();i++){
+
+			if(campaignEmailsJSONArray.getJSONObject(i).getString("log_type").equals("EMAIL_OPENED"))
+			{emailsOpened = Integer.parseInt(campaignEmailsJSONArray.getJSONObject(i).getString("count"));continue;}
+			if(campaignEmailsJSONArray.getJSONObject(i).getString("log_type").equals("EMAIL_CLICKED"))
+			{emailsClicked = Integer.parseInt(campaignEmailsJSONArray.getJSONObject(i).getString("count"));continue;}
+			if(campaignEmailsJSONArray.getJSONObject(i).getString("log_type").equals("EMAIL_SENT"))
+			{emailsent = Integer.parseInt(campaignEmailsJSONArray.getJSONObject(i).getString("count"));continue;}
+			if(campaignEmailsJSONArray.getJSONObject(i).getString("log_type").equals("UNSUBSCRIBED"))
+			{unsubscribe = Integer.parseInt(campaignEmailsJSONArray.getJSONObject(i).getString("count"));continue;}
+			
+			}
+			
+			}
+			catch(Exception e)
+			{
+				System.out.println(e);
+			}
+		}
+		
+	}
+		datajson.put("emailopened",emailsOpened);
+			datajson.put("emailclicked",emailsClicked);
+			datajson.put("emailsent",emailsent);
+			datajson.put("emailunsubscribed",unsubscribe);
+		return datajson;
+		}
 
 }

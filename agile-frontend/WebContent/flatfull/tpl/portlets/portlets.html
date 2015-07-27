@@ -1133,9 +1133,9 @@
 		<li class="pull-left">
 			<div class="panel-heading">
 				<h4 class="h4 text-ellipsis text-muted"><span class="pull-left inline-block" style="width:50px;">Tasks</span>
-				<small class="pull-right text-right p-t-xs portlet-header-small-text text-ellipsis" style="width:calc(100% - 50px);">
+				<!-- <small class="pull-right text-right p-t-xs portlet-header-small-text text-ellipsis" style="width:calc(100% - 50px);">
 					{{get_portlet_duration settings.duration}}
-				</small></h4>
+				</small></h4> -->
 				<div class="portlet_header_icons pull-right clear-fix text-muted p-t-xs pos-abs pos-r-0 pos-t-xs" style="visibility: hidden;">
 					<i id="{{id}}-settings" class="portlet-settings icon-wrench p-r-xs c-p"></i>
 					<i id="{{id}}-close" class="c-p icon-close StatsReport-close p-r-sm" onclick="deletePortlet(this);"></i>
@@ -1255,13 +1255,30 @@
 		<div class="portlet_header portlet_edit_icons panel-heading b-b-none" onmouseover="showPortletIcons(this); return false;" onmouseout="hidePortletIcons(this); return false;">
 			<h4 class="h4 text-ellipsis text-muted">
 				<span class="pull-left inline-block text-ellipsis" style="width:70%;">Campaign Stats</span>
+				<small class="pull-right text-right p-t-xs portlet-header-small-text text-ellipsis" style="width: 30%;">
+					{{get_portlet_duration settings.duration}}
+				</small>
 			</h4>
 			<div class="portlet_header_icons pull-right clear-fix text-muted p-t-xs pos-abs pos-r-0 pos-t-xs vis-hide">
+				<i id="{{id}}-settings" class="portlet-settings icon-wrench p-r-xs c-p"></i>
 				<i id="{{id}}-close" class="c-p icon-close {{remove_spaces name}}-close p-r-sm" onclick="deletePortlet(this);"></i>
 			</div>
 		</div>
-        <div class="portlet_body"></div>
+        <div class="portlet_body">
+			<div id="emails-sent" class="pull-left text-center padder-v" style="width:50%;height:77px">
+			<div id="emails-sent-count"></div>
+			<div id="emails-sent-label"></div> 
+			</div>
+			<div id="emails-opened" class="pull-left" style="width:50%;height:77px"></div>
+			<div id="emails-clicked" class="pull-left" style="width:50%;height:77px"></div>
+
+			<div id="emails-unsubscribed" class="pull-left" style="width:50%;height:77px"></div>
+		</div>
      <div class="portlets" id="{{id}}">&nbsp;</div>
      <div class="column_position" style="display:none">{{column_position}}</div>
      <div class="row_position" style="display:none">{{row_position}}</div>	
+</script>
+
+<script id="portlets-campaign-stats-body-model-template" type="text/html">
+
 </script>
