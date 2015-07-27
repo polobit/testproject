@@ -211,7 +211,7 @@ This is where you and your users will log in to your account
 											class="field form-control required tel-number"
 											id="login_phone_number" required name='phone_number' type="text"
 											placeholder="Phone Number" autocapitalize="off">
-											<div class='custom-error'>This field is required</div>
+											<div class='custom-error'>Please enter valid number</div>
 </div>
 </div>
 
