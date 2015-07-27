@@ -29,7 +29,6 @@ function gmap_date_range(el, callback){
 
 function gmap_search_by_date(DateRange){
 	console.clear();
-	console.log(DateRange);
 	
     var User_Domain = CURRENT_DOMAIN_USER.domain;
 	//var User_Domain = "our";
@@ -53,8 +52,9 @@ function gmap_search_by_date(DateRange){
 	options += ("&time_zone=" + d.getTimezoneOffset());
 
 	var DateRangeUrl = "core/api/gmap/daterange?user_domain=" + encodeURIComponent(User_Domain) + options;
+	var visitorBySessionUrl="core/api/gmap/daterangebysession?user_domain=" + encodeURIComponent(User_Domain) + options;
 	
-	console.log("url: " + DateRangeUrl);
+	gmap_create_table_view(visitorBySessionUrl);
 	
 	$("#map-tab-waiting").fadeIn();
 	$.getJSON( DateRangeUrl, function( Response ) {
@@ -65,8 +65,13 @@ function gmap_search_by_date(DateRange){
 			for(var Key in Response){
 				Response[Key].z_index = parseInt(Key);
 			}
+			try{
 			gmap_add_marker(Response);
-			gmap_create_table_view("", Response);
+			}
+			catch(err){
+		      alert("Error "+err)
+			}
+			
 		}
 		
 		else {

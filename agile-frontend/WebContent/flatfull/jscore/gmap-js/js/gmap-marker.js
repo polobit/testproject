@@ -3,21 +3,27 @@
  Applies a click listener on marker.
 */   
 function gmap_add_marker(Locations){
-  
+	
+	google.maps.visualRefresh = true;
+	
+	var mapProp = {
+		center:new google.maps.LatLng(39.0000, 22.0000),
+		zoom:2,
+		mapTypeId:google.maps.MapTypeId.ROADMAP
+	};
+	
+	/**Creating a new instance everytime the date were modified ,this is required to reresh the markers and clusters*/
+	window.map=new google.maps.Map(document.getElementById("google_map"),mapProp);
+	
 	var markerCluster;
-	if(markerCluster)
-	markerCluster.setMap(null);
 	/**Single instance will be used for all the marker infowindow's
 */	var infowindow = new google.maps.InfoWindow();
 	
 	 var myLatlng = [];
 	 var marker = [];
-	 for (var i=0; i<marker.length; i++) {
-	        marker[i].setMap(null);
-	    }
-	 
 	 /**Intializing spiderifier */
-	 var oms = new OverlappingMarkerSpiderfier(map, {keepSpiderfied:true,nearbyDistance:40,legWeight:2});
+	 var oms = new OverlappingMarkerSpiderfier(map, {keepSpiderfied:true,nearbyDistance:40,legWeight:0});
+	 
 
 	                  for (var i=0;i < Locations.length;i++)
 	                  {   
@@ -87,7 +93,7 @@ function gmap_add_marker(Locations){
 
 	                  }
 	                  /**Initializing marker clusterer*/ 
-	                  markerCluster = new MarkerClusterer(map, marker, {clusterClass: 'poiCluster', maxZoom:15});
+	                  markerCluster = new MarkerClusterer(map, marker, {maxZoom:15});
 	                  
 	                  /**Listener to show the spiderify markers on clicking the clusterer count directly*/ 
 	                  google.maps.event.addListener(markerCluster, 'click', function(cluster) {
