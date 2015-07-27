@@ -6,7 +6,7 @@ public class Globals
 	public static String[] URLS = { "agilecrm.com", "helptor.com", "-dot-sandbox-dot-agile-crm-cloud.appspot.com",
 			"-dot-sandbox-dot-agilecrmbeta.appspot.com", "-dot-addon-dot-agilecrmbeta.appspot.com",
 			"-dot-mcsandbox-dot-agile-crm-cloud.appspot.com", "-dot-sandbox-dot-agilesanbox.appspot.com",
-			"agilesanbox.com" };
+			"agilesanbox.com", "-dot-newui-dot-agilecrmbeta.appspot.com" };
 
 	public static String SUB_VERSION_URL = "-dot-agile-crm-cloud.appspot.com";
 
