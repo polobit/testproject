@@ -1411,7 +1411,7 @@ public class PortletUtil {
 		// end date in mysql date format.
 		String endDate = CampaignReportsUtil.getEndDateForReports(String.valueOf(maxTime*1000), json.getString("timeZone"));
 		
-		String [] array = {"EMAIL_OPENED","EMAIL_CLICKED","EMAIL_SENT","UNSUBSCRIBED"};
+		String [] array = {"EMAIL_SENT","EMAIL_OPENED","EMAIL_CLICKED","UNSUBSCRIBED"};
 		if (json.getString("campaigntype").equalsIgnoreCase("ALL"))
 		campaignEmailsJSONArray = getCountByLogTypesforPortlets(startDate,endDate,json.getString("timeZone"),array);
 			
@@ -1428,10 +1428,9 @@ public class PortletUtil {
 			if(campaignEmailsJSONArray.getJSONObject(i).getString("log_type").equals("EMAIL_CLICKED"))
 			{emailsClicked = Integer.parseInt(campaignEmailsJSONArray.getJSONObject(i).getString("count"));continue;}
 			if(campaignEmailsJSONArray.getJSONObject(i).getString("log_type").equals("EMAIL_SENT"))
-			{emailsent = Integer.parseInt(campaignEmailsJSONArray.getJSONObject(i).getString("count"));continue;}
+			{emailsent = Integer.parseInt(campaignEmailsJSONArray.getJSONObject(i).getString("total"));continue;}
 			if(campaignEmailsJSONArray.getJSONObject(i).getString("log_type").equals("UNSUBSCRIBED"))
 			{unsubscribe = Integer.parseInt(campaignEmailsJSONArray.getJSONObject(i).getString("count"));continue;}
-			
 			}
 			
 			}
@@ -1463,8 +1462,8 @@ public class PortletUtil {
     	// Returns (sign)HH:mm from total minutes.
     	String timeZoneOffset = GoogleSQLUtil.convertMinutesToTime(timeZone);
     	
-    	String query = "SELECT log_type,count(Distinct subscriber_id) AS count "+  
-    			"FROM stats.campaign_logs USE INDEX(domain_logtype_logtime_index) "+
+    	String query = "SELECT log_type,count(Distinct subscriber_id) AS count ,count(subscriber_id) AS total "+  
+    			" FROM stats.campaign_logs USE INDEX(domain_logtype_logtime_index) "+
     	                "WHERE DOMAIN="+GoogleSQLUtil.encodeSQLColumnValue(domain) +" AND log_type = " + GoogleSQLUtil.encodeSQLColumnValue(logType[0]) + 
     	                " AND log_time BETWEEN CONVERT_TZ("+GoogleSQLUtil.encodeSQLColumnValue(startDate)+","+GoogleSQLUtil.getConvertTZ2(timeZoneOffset)+") " + 
     	                "AND CONVERT_TZ("+GoogleSQLUtil.encodeSQLColumnValue(endDate)+","+GoogleSQLUtil.getConvertTZ2(timeZoneOffset)+") GROUP BY log_type ";
@@ -1476,8 +1475,8 @@ public class PortletUtil {
     	        	 
     	        	query += " UNION ALL ";
     	        	 
-    	        	query +=  "SELECT log_type,count(Distinct subscriber_id) AS count "+  
-    	    			"FROM stats.campaign_logs USE INDEX(domain_logtype_logtime_index) "+
+    	        	query +=  "SELECT log_type,count(Distinct subscriber_id) AS count , count(subscriber_id) AS total "+  
+    	    			" FROM stats.campaign_logs USE INDEX(domain_logtype_logtime_index) "+
     	    	                "WHERE DOMAIN="+GoogleSQLUtil.encodeSQLColumnValue(domain)+ " AND log_type = " + GoogleSQLUtil.encodeSQLColumnValue(logType[i]) + 
     	    	                " AND log_time BETWEEN CONVERT_TZ("+GoogleSQLUtil.encodeSQLColumnValue(startDate)+","+GoogleSQLUtil.getConvertTZ2(timeZoneOffset)+") " + 
     	    	                "AND CONVERT_TZ("+GoogleSQLUtil.encodeSQLColumnValue(endDate)+","+GoogleSQLUtil.getConvertTZ2(timeZoneOffset)+") GROUP BY log_type ";

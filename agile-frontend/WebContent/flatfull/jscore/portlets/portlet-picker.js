@@ -1029,9 +1029,7 @@ function set_p_portlets(base_model){
 				end_date_str = 'TOMORROW';
 			}
 			
-			var selector1='emails-opened';
-			var selector2='emails-clicked';
-			var selector3='emails-unsubscribed';
+			
 			var that = $(this);
 		var url = '/core/api/portlets/portletCampaignstats?duration='+base_model.get('settings').duration+'&start-date='+getStartAndEndDatesOnDue(start_date_str)+'&end-date='+getStartAndEndDatesOnDue(end_date_str)+'&time_zone='+(new Date().getTimezoneOffset())+'&campaign_type='+base_model.get('settings').campaign_type; 
 		setTimeout(function(){
@@ -1045,14 +1043,21 @@ function set_p_portlets(base_model){
 				emailsUnsubscribed=data["emailunsubscribed"];
 				if(emailsSentCount==0){
 					that.find('#emails-sent').css('width','100%').css('height','100%');
+					that.find('#emails-sent').removeClass('p-sm b-b b-r b-light');
 					that.find('#emails-sent').html('<div class="portlet-error-message">No Email activity</div>');
 					that.find('#emails-opened').css('display','none');
 					that.find('#emails-clicked').css('display','none');
 					that.find('#emails-unsubscribed').css('display','none');
 				}
 				else{
+					var selector1='opengraph';
+					var selector2='clickedgraph';
+					var selector3='unsubgraph';
 				that.find('#emails-sent-count').text(getNumberWithCommasForPortlets(emailsSentCount));
 				that.find('#emails-sent-label').text("Emails sent");
+				that.find('#emails-opened').append('<div class="pull-left text-light" style="width:60%">Opened<div>'+getNumberWithCommasForPortlets(emailsOpenedCount)+'</div></div><div class="pull-left" id=opengraph style="width:40%;height:57px"></div>');
+				that.find('#emails-clicked').append('<div class="pull-left text-light" style="width:60%">Clicked<div>'+getNumberWithCommasForPortlets(emailsClickedCount)+'</div></div><div class="pull-left" id=clickedgraph style="width:40%;height:57px"></div>');
+				that.find('#emails-unsubscribed').append('<div class="pull-left text-light" style="width:60%">Unsubscribed<div>'+getNumberWithCommasForPortlets(emailsUnsubscribed)+'</div></div><div class="pull-left" id=unsubgraph style="width:40%;height:57px"></div>');
 				var series=[];
 				series.push(["Emails Sent",emailsSentCount-emailsOpenedCount]);
 				series.push(["Emails Opened",emailsOpenedCount]);
@@ -2161,17 +2166,13 @@ function showUserName(obj){
 
 function campstatsPieChart(selector,data,count1,count2){
 	head.js(LIB_PATH + 'lib/flot/highcharts-3.js',LIB_PATH + 'lib/flot/no-data-to-display.js', function(){
-		if(count1==0 && count2==0){
-			
-			$('#'+selector).html('<div class="portlet-error-message">No Email activity</div>');
-			return;
-		}
 		
 		$('#'+selector).highcharts({
 	        chart: {
 	            type: 'pie',
-	            marginLeft: -30,
-	          // height: 77.5
+	            marginLeft: 30,
+			//	marginTop : -10
+	          
 	        },
 	        colors : ['#e8eff0','#27C24C'],
 	        title: {
@@ -2181,8 +2182,9 @@ function campstatsPieChart(selector,data,count1,count2){
 	        	enabled: false
 	        },
 	        legend: {
-	        	/*symbolHeight: 0,
-	        	symbolWidth: 0,*/
+				enabled:false,
+	        	/* /*symbolHeight: 0,
+	        	symbolWidth: 0,
 	        	layout: 'vertical',
 	            align: 'right',
 	            verticalAlign: 'top',
@@ -2205,7 +2207,7 @@ function campstatsPieChart(selector,data,count1,count2){
 	            	//fontWeight: "bold"
 	            },
 	            borderWidth : 0,
-				floating : true,
+				floating : true, */
 	        },
 	        plotOptions: {
 	        	series: {
