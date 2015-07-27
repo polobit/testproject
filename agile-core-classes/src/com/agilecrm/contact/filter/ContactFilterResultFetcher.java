@@ -31,7 +31,6 @@ import com.agilecrm.subscription.SubscriptionUtil;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.access.UserAccessControl;
 import com.agilecrm.user.access.UserAccessScopes;
-import com.agilecrm.user.access.util.UserAccessControlUtil;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.google.gson.JsonSyntaxException;
 import com.googlecode.objectify.Key;
@@ -92,8 +91,10 @@ public class ContactFilterResultFetcher
     private Map<String, Object> searchMap;
 
     {
+	System.out.println("initializing scopes" + getDomainUser().email);
 	access = UserAccessControl.getAccessControl(UserAccessControl.AccessControlClasses.Contact, null,
 		getDomainUser());
+	System.out.println(access.getCurrentUserScopes());
     }
 
     ContactFilterResultFetcher()
@@ -130,6 +131,7 @@ public class ContactFilterResultFetcher
 	domainUserId = currentDomainUserId;
 	try
 	{
+	    System.out.println("filter : " + filter_id);
 	    Long filterId = Long.parseLong(filter_id);
 	    this.filter = ContactFilter.getContactFilter(filterId);
 	    if (this.filter != null)
@@ -567,9 +569,6 @@ public class ContactFilterResultFetcher
 
     private void modifyFilterCondition()
     {
-	UserAccessControlUtil.checkReadAccessAndModifyTextSearchQuery(
-		UserAccessControl.AccessControlClasses.Contact.toString(), filter.rules, getDomainUser());
-
 	if (hasScope(UserAccessScopes.VIEW_CONTACTS)
 		&& !(hasScope(UserAccessScopes.UPDATE_CONTACT) || hasScope(UserAccessScopes.DELETE_CONTACTS)))
 	{
