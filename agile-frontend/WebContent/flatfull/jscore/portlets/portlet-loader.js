@@ -1615,11 +1615,24 @@ $('.portlet-settings-save-modal').live('click', function(e){
 			var selector3='emails-unsubscribed';
 			var that = $('#'+el.split("-save-modal")[0]).parent();
 		var url = '/core/api/portlets/portletCampaignstats?duration='+data.get('settings').duration+'&start-date='+getStartAndEndDatesOnDue(start_date_str)+'&end-date='+getStartAndEndDatesOnDue(end_date_str)+'&time_zone='+(new Date().getTimezoneOffset())+'&campaign_type='+data.get('settings').campaign_type; 
+		setTimeout(function(){
+				if(that.find('#emails-sent-count').text().trim()=="")
+					that.find('#emails-sent-count').html("<img src='../flatfull/img/ajax-loader-cursor.gif' style='width:12px;height:10px;opacity:0.5;' />");
+			},1000);
 		fetchPortletsGraphData(url,function(data){
+			
 			emailsSentCount=data["emailsent"];
 				emailsOpenedCount=data["emailopened"];
 				emailsClickedCount=data["emailclicked"];
 				emailsUnsubscribed=data["emailunsubscribed"];
+				if(emailsSentCount==0){
+					that.find('#emails-sent').css('width','100%').css('height','100%');
+					that.find('#emails-sent').html('<div class="portlet-error-message">No Email activity</div>');
+					that.find('#emails-opened').css('display','none');
+					that.find('#emails-clicked').css('display','none');
+					that.find('#emails-unsubscribed').css('display','none');
+				}
+				else{
 				that.find('#emails-sent-count').text(getNumberWithCommasForPortlets(emailsSentCount));
 				that.find('#emails-sent-label').text("Emails sent");
 				var series=[];
@@ -1636,7 +1649,8 @@ $('.portlet-settings-save-modal').live('click', function(e){
 				series2.push(["Emails Sent",emailsSentCount-emailsUnsubscribed]);
 				series2.push(["Emails Unsubscribed",emailsUnsubscribed]);
 				campstatsPieChart(selector3,series2,emailsSentCount,emailsUnsubscribed);
-			});
+				}
+				});
 			}
 	        	setPortletContentHeight(data);
     			$('#'+data.get('id')).parent().find('div:last').after('<span class="gs-resize-handle gs-resize-handle-both"></span>');

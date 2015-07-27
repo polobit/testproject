@@ -29,6 +29,7 @@ import com.agilecrm.contact.email.ContactEmail;
 import com.agilecrm.contact.email.util.ContactEmailUtil;
 import com.agilecrm.contact.filter.util.ContactFilterUtil;
 import com.agilecrm.contact.util.ContactUtil;
+import com.agilecrm.db.GoogleSQL;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.deals.Milestone;
 import com.agilecrm.deals.Opportunity;
@@ -50,7 +51,10 @@ import com.campaignio.reports.CampaignReportsUtil;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyService;
-
+import com.googlecode.objectify.Query;
+import com.agilecrm.db.util.GoogleSQLUtil;
+import com.google.appengine.api.NamespaceManager;
+import com.google.appengine.api.utils.SystemProperty;
 /**
  * <code>PortletUtil</code> is the utility class to fetch portlets with
  * respect to id, position.
@@ -1409,7 +1413,7 @@ public class PortletUtil {
 		
 		String [] array = {"EMAIL_OPENED","EMAIL_CLICKED","EMAIL_SENT","UNSUBSCRIBED"};
 		if (json.getString("campaigntype").equalsIgnoreCase("ALL"))
-		campaignEmailsJSONArray = CampaignReportsSQLUtil.getCountByLogTypes(startDate,endDate,json.getString("timeZone"),array);
+		campaignEmailsJSONArray = getCountByLogTypesforPortlets(startDate,endDate,json.getString("timeZone"),array);
 			
 		else
 			{campaignEmailsJSONArray	=CampaignReportsSQLUtil.getEachCampaignStatsForTable(json.getString("campaigntype"),startDate,endDate,json.getString("timeZone"),a);
@@ -1444,5 +1448,54 @@ public class PortletUtil {
 			datajson.put("emailunsubscribed",unsubscribe);
 		return datajson;
 		}
+		
+		 public static JSONArray getCountByLogTypesforPortlets(String startDate, String endDate, String timeZone, String[] logType)
+    {
+    	
+			 String domain=NamespaceManager.get();
+    	// For development
+    	if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Development)
+    	    domain = "localhost";
+
+    	if (StringUtils.isEmpty(domain) ||  logType == null || logType.length == 0)
+    	    return null;
+
+    	// Returns (sign)HH:mm from total minutes.
+    	String timeZoneOffset = GoogleSQLUtil.convertMinutesToTime(timeZone);
+    	
+    	String query = "SELECT log_type,count(Distinct subscriber_id) AS count "+  
+    			"FROM stats.campaign_logs USE INDEX(domain_logtype_logtime_index) "+
+    	                "WHERE DOMAIN="+GoogleSQLUtil.encodeSQLColumnValue(domain) +" AND log_type = " + GoogleSQLUtil.encodeSQLColumnValue(logType[0]) + 
+    	                " AND log_time BETWEEN CONVERT_TZ("+GoogleSQLUtil.encodeSQLColumnValue(startDate)+","+GoogleSQLUtil.getConvertTZ2(timeZoneOffset)+") " + 
+    	                "AND CONVERT_TZ("+GoogleSQLUtil.encodeSQLColumnValue(endDate)+","+GoogleSQLUtil.getConvertTZ2(timeZoneOffset)+") GROUP BY log_type ";
+    	
+    	         for(int i = 0; i < logType.length; i++)
+    	         {
+    	        	 if(i == 0)
+    	        		 continue;
+    	        	 
+    	        	query += " UNION ALL ";
+    	        	 
+    	        	query +=  "SELECT log_type,count(Distinct subscriber_id) AS count "+  
+    	    			"FROM stats.campaign_logs USE INDEX(domain_logtype_logtime_index) "+
+    	    	                "WHERE DOMAIN="+GoogleSQLUtil.encodeSQLColumnValue(domain)+ " AND log_type = " + GoogleSQLUtil.encodeSQLColumnValue(logType[i]) + 
+    	    	                " AND log_time BETWEEN CONVERT_TZ("+GoogleSQLUtil.encodeSQLColumnValue(startDate)+","+GoogleSQLUtil.getConvertTZ2(timeZoneOffset)+") " + 
+    	    	                "AND CONVERT_TZ("+GoogleSQLUtil.encodeSQLColumnValue(endDate)+","+GoogleSQLUtil.getConvertTZ2(timeZoneOffset)+") GROUP BY log_type ";
+    	        	 
+    	         }
+    	         
+//    	         System.out.println("Query is " + query);
+    	
+    	try
+    	{
+    	    return GoogleSQL.getJSONQuery(query);
+    	}
+    	catch (Exception e)
+    	{
+    	    e.printStackTrace();
+    	    return new JSONArray();
+    	}
+
+    }
 
 }
