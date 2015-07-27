@@ -64,6 +64,13 @@ public class Document extends Cursor
      */
     @NotSaved(IfDefault.class)
     public String extension = null;
+    
+    /**
+     * Size  of  Document in bytes.
+     * zero for old documents and GOOGLE docs.
+     */
+    @NotSaved(IfDefault.class)
+    public Long size = 0L;
 
     /**
      * Network where document is stored.

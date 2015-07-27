@@ -56,6 +56,8 @@ import com.agilecrm.session.UserInfo;
 import com.agilecrm.subscription.restrictions.db.BillingRestriction;
 import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
 import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.access.UserAccessControl;
+import com.agilecrm.user.access.UserAccessControl.AccessControlClasses;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.CSVUtil;
 import com.agilecrm.util.CacheUtil;
@@ -529,6 +531,7 @@ public class BulkOperationsAPI
 
 	System.out.println(key);
 
+	DomainUser domainUser = null;
 	try
 	{
 	    // Creates domain user key, which is set as a contact owner
@@ -536,7 +539,7 @@ public class BulkOperationsAPI
 
 	    System.out.println("setting domain user for key : " + ownerKey);
 
-	    DomainUser domainUser = DomainUserUtil.getDomainUser(ownerKey.getId());
+	    domainUser = DomainUserUtil.getDomainUser(ownerKey.getId());
 
 	    if (domainUser != null)
 		BulkActionUtil.setSessionManager(domainUser);
@@ -561,15 +564,18 @@ public class BulkOperationsAPI
 
 	    // Calls utility method to save contacts in csv with owner id,
 	    // according to contact prototype sent
-	    BillingRestriction restrictions = BillingRestrictionUtil.getBillingRestriction(true);
+	    BillingRestriction restrictions = BillingRestrictionUtil.getBillingRestrictionFromDB();
+
+	    UserAccessControl accessControl = UserAccessControl.getAccessControl(AccessControlClasses.Contact, null,
+		    domainUser);
 
 	    if (type.equalsIgnoreCase("contacts"))
 	    {
-		new CSVUtil(restrictions).createContactsFromCSV(blobStream, contact, ownerId);
+		new CSVUtil(restrictions, accessControl).createContactsFromCSV(blobStream, contact, ownerId);
 	    }
 	    else if (type.equalsIgnoreCase("companies"))
 	    {
-		new CSVUtil(restrictions).createCompaniesFromCSV(blobStream, contact, ownerId, type);
+		new CSVUtil(restrictions, accessControl).createCompaniesFromCSV(blobStream, contact, ownerId, type);
 	    }
 
 	    ContactUtil.eraseContactsCountCache();
@@ -602,6 +608,16 @@ public class BulkOperationsAPI
 	// Creates a blobkey object from blobkey string
 	BlobKey blobKey = new BlobKey(key);
 
+	DomainUser user = null;
+	try
+	{
+	    user = DomainUserUtil.getDomainUser(Long.parseLong(ownerId));
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	}
+
 	// Reads the stream from blobstore
 	InputStream blobStream;
 	try
@@ -612,10 +628,12 @@ public class BulkOperationsAPI
 	    // Calls utility method to save contacts in csv with owner id,
 	    // according to contact prototype sent
 	    BillingRestriction restrictions = BillingRestrictionUtil.getBillingRestriction(true);
+	    UserAccessControl accessControl = UserAccessControl.getAccessControl(AccessControlClasses.Contact, null,
+		    user);
 	    LinkedHashMap<String, Object> dealMap = (LinkedHashMap<String, Object>) deal;
 	    ArrayList<LinkedHashMap<String, String>> props = (ArrayList<LinkedHashMap<String, String>>) dealMap
 		    .get("properties");
-	    new CSVUtil(restrictions).createDealsFromCSV(blobStream, props, ownerId);
+	    new CSVUtil(restrictions, accessControl).createDealsFromCSV(blobStream, props, ownerId);
 
 	}
 	catch (IOException e)

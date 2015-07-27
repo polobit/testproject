@@ -205,9 +205,9 @@ function deletePortlet(el){
 	var model = Portlets_View.collection.get(p_id);
 	var header_text = $('#'+p_id).parent().find('.portlet_header > h4 > span').text();
 	var header_sub_text = $('#'+p_id).parent().find('.portlet_header > h4 > small').text();
-	if(header_text!=undefined && header_text.trim()!="" && header_text.trim()!="Getting started")
+	if(header_text!=undefined && header_text.trim()!="" && header_text.trim()!="Getting Started")
 		$('#portletDeleteModal > .modal-dialog > .modal-content > .modal-body').html("Are you sure you want to delete Dashlet - "+header_text.trim()+" "+header_sub_text.trim()+"?");
-	else if(header_text!=undefined && header_text.trim()=="Getting started")
+	else if(header_text!=undefined && header_text.trim()=="Getting Started")
 		$('#portletDeleteModal > .modal-dialog > .modal-content > .modal-body').html("Are you sure you want to delete Dashlet - "+header_text.trim()+"?<br/>This dashlet can't be added back again.");
 	else if(model.get("name")=="Leaderboard")
 		$('#portletDeleteModal > .modal-dialog > .modal-content > .modal-body').html("Are you sure you want to delete Dashlet - Leaderboard "+getDurationForPortlets(model.get("settings").duration)+"?");

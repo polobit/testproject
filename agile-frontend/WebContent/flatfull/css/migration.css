@@ -1016,8 +1016,8 @@ display: block!important;
 
 .wrapper-md.bg-light.b-b h1,.wrapper-md.bg-light.b-b h3,.text-custom-muted
 {
-	font-weight:normal!important;
-	color:#777!important;
+	
+	color:#000;
 }
 
 time,i.fa-clock-o
@@ -1338,13 +1338,32 @@ display:none;
 	position:absolute;
 	bottom:15px;
 }
-
+/*
 #noty_bottomCenter_layout_container {
   bottom: 0px!important;
 }	
 #noty_bottomCenter_layout_container li {
   width:389px!important;
+}*/
+
+#noty_topCenter_layout_container {
+  top:8px!Important;
+  z-index: 1030!important;
 }
+
+#noty_topCenter_layout_container li {
+    background: #F7ECC2!important;
+  border-radius: 0px!important;
+  color: #666363!important;
+  /* border: 1px solid #F0C36D; */
+  width: 371px!important;
+}
+
+#noty_topCenter_layout_container span.noty_text span {
+  font-weight: 600;
+}
+
+
 .email-attchment-bg {
 background-color: #f5f5f5;
 border: 1px solid #dcdcdc;
@@ -1366,6 +1385,59 @@ min-width:50%;
   
 }
 
+/* ending hack for new ui contact details big tag will come down  */
+
+/*.getting-started-header {
+  background: #7BA9D0;
+  border-left: 6px solid #409AB3;
+  border-right: 6px solid #409AB3;
+  border-radius: 4px;
+  color: inherit;
+  margin-bottom: 2px;
+  padding: 10px;
+
+}*/
+
+.getting-started-body > div  {
+/*background: #f3f3f4;
+  border-left: 6px solid #e7eaec;
+  border-right: 6px solid #e7eaec;
+  border-radius: 4px;
+  color: inherit;
+  margin-bottom: 2px;*/
+  padding: 3px 10px 0px;
+  word-wrap: break-word;
+}
+
+.getting-started-body > div a {
+  color: #337ab7;
+  font-size: 14px;
+  text-transform: capitalize;
+}
+.getting-started-body > div p {
+
+   color: rgb(88, 102, 110);
+  font-size: 14px;
+}
+
+
+
+.portlet_header h4 span {
+  padding-bottom: 1px;
+  font-weight: 300;
+color: #98a6ad;
+}
+
+@media (max-width:767px) {
+
+  #noty_topCenter_layout_container {
+  display: none!important;
+}
+
+}
+
+
 
 
 /* ending hack for new ui contact details big tag will come down  */
+

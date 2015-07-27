@@ -35,6 +35,16 @@ public class RegisterVerificationServlet extends HttpServlet
 	invalid_domains.add("fastmail");
 	invalid_domains.add("usa.gov");
     }
+
+    private static final ArrayList<String> IPlIST = new ArrayList<String>();
+
+    static
+    {
+	IPlIST.add("49.206.56.84");
+	IPlIST.add("117.247.178.90");
+
+    }
+
     /**
      * 
      */
@@ -56,7 +66,7 @@ public class RegisterVerificationServlet extends HttpServlet
 
 	try
 	{
-	    if (isTrottleLimitReached(userIp))
+	    if (isTrottleLimitReached(userIp) && !IPlIST.contains(userIp))
 	    {
 		System.out.println("Throttle reached" + userIp);
 		writeErrorMessage(
@@ -80,11 +90,24 @@ public class RegisterVerificationServlet extends HttpServlet
 	// If Localhost - just return
 	if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Development)
 	{
-	    writeErrorMessage(response, "Not allowed in local server");
+	    // writeErrorMessage(response, "Not allowed in local server");
+	    // return;
+	}
+	System.out.println("domain : " + domain + ", email" + email);
+
+	if (!StringUtils.isEmpty(domain) && DomainUserUtil.count(domain) > 0)
+	{
+	    System.out.println("duplicate domain");
+
+	    JSONObject error = new JSONObject();
+	    PrintWriter writer = response.getWriter();
+	    writeErrorMessage(response, "Domain '" + domain
+		    + "' already exists. If you already have an account, you can login <a href='https://" + domain
+		    + ".agilecrm.com/login" + "'>here</a>.");
 	    return;
 	}
 
-	if (!StringUtils.isEmpty(email))
+	else if (!StringUtils.isEmpty(email))
 	{
 	    String emailDomainSubstring = email.split("@")[1];
 	    System.out.println(emailDomainSubstring);
@@ -113,19 +136,6 @@ public class RegisterVerificationServlet extends HttpServlet
 			+ domainUser.domain + " domain");
 		return;
 	    }
-	}
-
-	System.out.println("domain : " + domain + ", email" + email);
-	if (!StringUtils.isEmpty(domain) && DomainUserUtil.count(domain) > 0)
-	{
-	    System.out.println("duplicate domain");
-
-	    JSONObject error = new JSONObject();
-	    PrintWriter writer = response.getWriter();
-	    writeErrorMessage(response, "Domain '" + domain
-		    + "' already exists. If you already have an account, you can login <a href='https://" + domain
-		    + ".agilecrm.com/login" + "'>here</a>.");
-	    return;
 	}
 
 	if (!StringUtils.isEmpty(oauth))

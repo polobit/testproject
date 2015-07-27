@@ -30,6 +30,7 @@ import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil.Err
 import com.agilecrm.subscription.restrictions.entity.DaoBillingRestriction;
 import com.agilecrm.subscription.restrictions.entity.DaoBillingRestriction.ClassEntities;
 import com.agilecrm.subscription.restrictions.exception.PlanRestrictedException;
+import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.access.util.UserAccessControlUtil;
 import com.agilecrm.util.email.SendMail;
 import com.google.appengine.api.NamespaceManager;
@@ -69,7 +70,7 @@ public class ReportsUtil
 
 	    // Call process filters to get reports for one domain, and add
 	    // domain details
-	    Map<String, Object> results = processReports(report);
+	    Map<String, Object> results = processReports(report, null);
 
 	    // Report heading. It holds the field values chosen in the report
 	    LinkedHashSet<String> reportHeadings = new LinkedHashSet<String>();
@@ -130,11 +131,12 @@ public class ReportsUtil
      * @param user
      * @return
      */
-    public static Map<String, Object> processReports(Reports report)
+    public static Map<String, Object> processReports(Reports report, DomainUser user)
     {
 	SearchRule.addContactTypeRule(report.rules, Type.PERSON);
 
-	UserAccessControlUtil.checkReadAccessAndModifyTextSearchQuery(Contact.class.getSimpleName(), report.rules);
+	UserAccessControlUtil
+		.checkReadAccessAndModifyTextSearchQuery(Contact.class.getSimpleName(), report.rules, user);
 
 	// Iterate through each filter and add results collection
 	// To store reports in collection
