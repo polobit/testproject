@@ -344,10 +344,10 @@ public class APIKey
      * @param apiKey
      * @return
      */
-    public static APIKey updateAllowedDomains(APIKey apiKey)
+    public static APIKey updateAllowedDomains(String allowedDomains)
     {
 	APIKey key = getAPIKey();
-	key.allowed_domains = apiKey.allowed_domains;
+	key.allowed_domains = allowedDomains;
 	dao.put(key);
 	return key;
     }

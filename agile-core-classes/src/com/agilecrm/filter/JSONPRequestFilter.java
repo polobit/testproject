@@ -12,6 +12,12 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang.StringUtils;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import com.agilecrm.account.APIKey;
+
 /**
  * <code>JSONRequestFilter</code> handles requests sent to JSAPI. It handles the
  * request and writes the response back to callback function sent from the
@@ -44,7 +50,24 @@ public class JSONPRequestFilter implements Filter
 	    // enclosed with in callback parameter.
 	    ServletOutputStream out = response.getOutputStream();
 	    out.println(getCallbackParameter(httpRequest) + "(");
-	    chain.doFilter(request, response);
+
+	    if (isAllowedJSONPRequest(httpRequest))
+	    {
+		chain.doFilter(request, response);
+	    }
+	    else
+	    {
+		JSONObject error = new JSONObject();
+		try
+                {
+	            error.put("error", "Invalid request");
+	            out.println(error.toString());
+                }
+                catch (JSONException e)
+                {
+                    System.out.println("Exception occured in sending error message");
+                }
+	    }
 	    out.println(");");
 	}
 	else
@@ -86,5 +109,24 @@ public class JSONPRequestFilter implements Filter
     @Override
     public void init(FilterConfig arg0) throws ServletException
     {
+    }
+
+    public boolean isAllowedJSONPRequest(HttpServletRequest request)
+    {
+	try
+	{
+	    String[] allowedDomains = APIKey.getAllowedDomains().split(",");
+	    for (int i = 0; i < allowedDomains.length; i++)
+	    {
+		String allowedDomain = allowedDomains[i].trim();
+		if(StringUtils.equals(allowedDomain, "*") || StringUtils.indexOf(request.getRequestURL().toString(), allowedDomain) != -1)
+		    return true;
+            }
+	    return false;
+	}
+	catch(Exception e)
+	{
+	    return true;
+	}
     }
 }

@@ -19,7 +19,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 	"custom-fields" : "customFields",
 
 	/* Api & Analytics */
-	"api" : "api", "analytics-code" : "analyticsCode", "analytics-code/:id" : "analyticsCode",
+	"analytics-code" : "analyticsCode",
 
 	/* Milestones */
 	"milestones" : "milestones",
@@ -267,7 +267,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 	 * site, add/delete contacts from users website or blog directly. Loads
 	 * minified prettify.js to prettify analytics code.
 	 */
-	analyticsCode : function(id)
+	analyticsCode : function()
 	{
 		if (!CURRENT_DOMAIN_USER.is_admin)
 		{
@@ -286,15 +286,6 @@ var AdminSettingsRouter = Backbone.Router.extend({
 				$('#content').find('#AdminPrefsTab .select').removeClass('select');
 				$('#content').find('.analytics-code-tab').addClass('select');
 				prettyPrint();
-				if (id)
-				{
-					$(el).find('#APITab a[href="#' + id + '"]').trigger('click');
-				}
-
-				// initZeroClipboard("api_track_webrules_code_icon",
-				// "api_track_webrules_code");
-				// initZeroClipboard("api_key_code_icon", "api_key_code");
-				// initZeroClipboard("api_track_code_icon", "api_track_code");
 
 				try
 				{
@@ -309,35 +300,6 @@ var AdminSettingsRouter = Backbone.Router.extend({
 				}
 
 			} });
-
-			// $('#content').html(view.el);
-		});
-	},
-
-	/**
-	 * Shows API-KEY. Loads minified prettify.js to prettify the view
-	 */
-	api : function()
-	{
-		if (!CURRENT_DOMAIN_USER.is_admin)
-		{
-			$('#content').html(getTemplate('others-not-allowed', {}));
-			return;
-		}
-		head.js(LIB_PATH + 'lib/prettify-min.js', function()
-		{
-			var view = new Base_Model_View({ url : '/core/api/api-key', template : "admin-settings-api-model", postRenderCallback : function(el)
-			{
-
-				initializeRegenerateKeysListeners();
-				prettyPrint();
-			} });
-			$("#content").html(getTemplate("admin-settings"), {});
-			$('#content').find('#admin-prefs-tabs-content').html(view.el);
-			$('#content').find('#AdminPrefsTab .select').removeClass('select');
-			$('#content').find('.analytics-code-tab').addClass('select');
-			$(".active").removeClass("active");
-			// $('#content').html(view.el);
 		});
 	},
 
