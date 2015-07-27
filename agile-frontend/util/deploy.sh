@@ -14,6 +14,8 @@ sh yui-flat-full.sh
 sh tpl.sh
 
 sh tpl-flatfull.sh
+
+sh lib-minifer.sh
 #sh ../../appengine-java-sdk-1.8.6/appengine-java-sdk-1.8.6/bin/appcfg.sh -A agilecrmbeta -V sandbox --enable_jar_classes update ../war
 
 #sh ../../appengine-java-sdk-1.8.6/appengine-java-sdk-1.8.6/bin/appcfg.sh --oauth2 --enable_jar_classes update ../war
