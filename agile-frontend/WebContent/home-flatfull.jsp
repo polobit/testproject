@@ -544,7 +544,6 @@ document.getElementById('templates').innerHTML=tpl.responseText; //insert in dum
 <!-- Templates
 Use = [<]%@ include file="tpl/min/tpl.js" %[>] -->
 		
-	
 
 <!-- Determine Console.logging - we log in local boxes -->
 <%
@@ -561,9 +560,8 @@ if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Produ
 
 %>
 
- <%@ include file="tpl/min/precompiled/flatfull/tpl.html"%>  
  
-                   
+   <%@ include file="tpl/min/precompiled/flatfull/tpl.html"%>                 
 
 
 </div>
@@ -670,9 +668,14 @@ head.ready(["core", "stats"], function(){
 	
 	if(!HANDLEBARS_PRECOMPILATION)
 		downloadTemplate("tpl.js");
+	$('[data-toggle="tooltip"]').tooltip();
+	if(navigator.userAgent.indexOf("Chrome") != -1 && readCookie('CHORME_EXTENSION_DOWNLOAD')!="false" && !document.getElementById('agilecrm_extension')){
+	var chorme_extesion_temp=getTemplate("chrome-extension-download",{});
+	$('body').append(chorme_extesion_temp);
+	}
+	
 });
 });
-
 </script>
 
 <!--  <script type="text/javascript" src="js/flatfull/app.min.js"></script>  -->
