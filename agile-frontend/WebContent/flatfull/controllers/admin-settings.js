@@ -19,7 +19,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 	"custom-fields" : "customFields",
 
 	/* Api & Analytics */
-	"analytics-code" : "analyticsCode",
+	"analytics-code" : "analyticsCode", "analytics-code/:id" : "analyticsCode",
 
 	/* Milestones */
 	"milestones" : "milestones",
@@ -267,7 +267,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 	 * site, add/delete contacts from users website or blog directly. Loads
 	 * minified prettify.js to prettify analytics code.
 	 */
-	analyticsCode : function()
+	analyticsCode : function(id)
 	{
 		if (!CURRENT_DOMAIN_USER.is_admin)
 		{
@@ -286,7 +286,19 @@ var AdminSettingsRouter = Backbone.Router.extend({
 				$('#content').find('#AdminPrefsTab .select').removeClass('select');
 				$('#content').find('.analytics-code-tab').addClass('select');
 				prettyPrint();
-
+				if (id)
+				{
+					switch(id)
+					{
+					case "api-key":
+						break;
+					case "analytics-code":
+					case "allowed-domains":
+						$(el).find('a[href="#api-key"]').trigger('click');
+						$(el).find('a[href="#' + id + '"]').trigger('click');
+						break;
+					}
+				}
 				try
 				{
 					if (ACCOUNT_PREFS.plan.plan_type.split("_")[0] == "PRO")
