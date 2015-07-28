@@ -2,6 +2,8 @@
 <%@page import="com.agilecrm.account.util.AccountPrefsUtil"%>
 <%@page import="org.apache.commons.lang.StringUtils"%>
 <%@page import="com.agilecrm.account.AccountPrefs"%>
+<%@page import="java.net.URLDecoder"%>
+<%@page import="org.json.JSONObject"%>
 <%
 /*
 we use setAttribute() to store the username and to autofill if he want to resubmit the form after correcting the error occurred. 
@@ -33,6 +35,42 @@ if(error != null)
   System.out.println(error);
 else
   error = "";
+
+if("multi-login".equalsIgnoreCase(error)){
+Cookie[] cookies = request.getCookies();
+String cookieString = null;
+
+// Reads multiple instace cookie which contains user agent info
+if( cookies != null ){
+   for (Cookie cookie : cookies){
+      if(cookie.getName().equals("_multiple_login"))
+      {
+		  cookieString = URLDecoder.decode(cookie.getValue());
+		  break;
+      }
+   }
+}
+
+// If json object is not avaiable page is redirected to login page
+JSONObject cookieJSON = null;
+if(cookieString == null)
+{
+    response.sendRedirect("/login");
+    return;
+}
+
+cookieJSON = new JSONObject(cookieString);
+
+// Reads user agent info from cookie
+String agent = "unknown";
+if(cookieJSON.has("userAgent"))
+{
+    JSONObject user_details = cookieJSON.getJSONObject("userAgent");
+    cookieJSON.put("user_details", user_details);
+    agent = user_details.get("browser_name") + "(" + user_details.get("full_version") +")/" + user_details.get("OSName");
+    error=agent;
+}
+}
 
 // Users can show their logo on login page. 
 AccountPrefs accountPrefs = AccountPrefsUtil.getAccountPrefs();
@@ -86,11 +124,16 @@ text-decoration:underline;
 }
 
 .error {
-	color: red !important;
+	color: white !important;
+	background-color: #c74949;
+  border-color: #c74949;
 }
 
 .close {
 	  color: #000 !important;
+}
+.login-position-fixed{
+position: fixed;width: 100%;top: 0px;
 }
 
 </style>
@@ -185,7 +228,12 @@ if(isSafari && isWin)
 			</div>
 		</div>
 	</div> -->
-	
+<div id="openid_btns">
+					   <% if(!StringUtils.isEmpty(error)){%>
+				        <div  class="alert error login-error login-position-fixed text-center m-b-none">
+							<a class="close" data-dismiss="alert" href="#" style="position:relative;top:-2px;">&times</a><%=error%> 
+						</div>
+						<%}%>	
 	<div class="app app-header-fixed app-aside-fixed" id="app">
 
 		<div ui-view="" class="fade-in-right-big smooth">
@@ -195,7 +243,7 @@ if(isSafari && isWin)
 						<i class="fa fa-cloud m-r-xs"></i>Agile CRM
 					</a>
 				
-				<div class="m-b-lg">
+				<div>
 				
 				<form id='oauth' name='oauth' method='post'>
               <%--      <div><h3>Sign In
@@ -210,13 +258,6 @@ if(isSafari && isWin)
                    
                    </h3></div> --%>
 						
-					<div id="openid_btns">
-					   <% if(!StringUtils.isEmpty(error)){%>
-				        <div class="alert error alert-danger login-error text-center m-b-none">
-							<a class="close" data-dismiss="alert" href="#" style="position:relative;top:-2px;">&times</a><%=error%> 
-						</div>
-						<%}%>
-							
 				<!-- 		<h3><small>Login using existing accounts</small></h3>
 					  <div  style="padding-top:10px;">
 						<input type='hidden' name='type' value='oauth'></input>

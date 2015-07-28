@@ -723,6 +723,7 @@ border-color: #23b7e5!important;
 
 /* Popup alerts (Chrome extension)*/
 .agent-popup-alert {
+	z-index:99999;
 	position: fixed;
 	top: 53px;
 	right: 20px;
