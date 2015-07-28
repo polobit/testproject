@@ -333,6 +333,13 @@ function savecases(formId, modalId, saveBtn, json)
 			 */
 		}// end if
 		/* end-if(Contact-Details) */
+		/*
+		 * If(Company-Details)
+		 */
+		else if (company_util.isCompany()) {
+			company_util.updateCasesList(cases,true);
+		}
+		/*end-if(Company-Details) */
 		else if (Current_Route == 'cases')
 		{
 			// On cases page.. adjust current model

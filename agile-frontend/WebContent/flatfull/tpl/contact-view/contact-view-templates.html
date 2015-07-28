@@ -30,11 +30,19 @@
         	{{/if_contact_type}}
         
 			{{#if_contact_type "COMPANY"}}
-        		<a class="text-cap">{{getPropertyValue properties "name"}}</a>
-        		<small class="text-muted m-t-xs">{{getPropertyValue properties "url"}}</small>
+        		<a class="text-cap">{{getPropertyValue properties "name"}}</a></br>
+        		<div><small class="text-muted m-t-xs">{{getPropertyValue properties "url"}}</small></div>
         	{{/if_contact_type}}
 	</div>
 	</div>
+	</td>
+</script>
+
+<script id = "contacts-custom-view-name-template" type="text/html">
+	<td class="data" data="{{id}}">
+    	<div class="text-ellipsis" style="width:15em;">
+    		<a class="text-cap">{{getPropertyValue properties "name"}}</>
+    	</div>
 	</td>
 </script>
 
@@ -130,7 +138,23 @@
 	</td>
 </script>
 
+<script id = "contacts-custom-view-url-template" type="text/html">
+	<td class='data' data='{{id}}'>
+    <div class="text-ellipsis" style="width:15em;">
+		<a href="{{getPropertyValue properties 'url'}}" class="text-cap">{{getPropertyValue properties "url"}}</a>
+    </div>
+	</td>
+</script>
+
 <script id = "contacts-custom-view-lead_owner-template" type="text/html">
+	<td class='data' data='{{id}}'>
+       <div class="text-ellipsis" style="width:15em;">
+	   	<a class="text-cap">{{owner.name}}</a>
+       </div>
+	</td>
+</script>
+
+<script id = "contacts-custom-view-owner-template" type="text/html">
 	<td class='data' data='{{id}}'>
        <div class="text-ellipsis" style="width:15em;">
 	   	<a class="text-cap">{{owner.name}}</a>

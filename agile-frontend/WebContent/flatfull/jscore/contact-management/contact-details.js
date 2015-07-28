@@ -119,6 +119,9 @@ function checkContactUpdated(){
  */
 function fill_owners(el, data, callback){
 	var optionsTemplate = "<li><a class='contact-owner-list' data='{{id}}'>{{name}}</a></li>";
+	if(company_util.isCompany())
+		optionsTemplate = "<li><a class='company-owner-list' data='{{id}}'>{{name}}</a></li>";
+	
     fillSelect('contact-detail-owner','/core/api/users', 'domainUsers', callback, optionsTemplate, true); 
 }
 
@@ -561,7 +564,10 @@ $(function(){
 		if(islocalStorageHasSpace()){
 			localStorage.setItem('MAP_VIEW','enabled');
 		}
-		show_map();
+		if(company_util.isCompany())
+			company_util.show_map();
+		else
+			show_map();
 		
 		
 	});

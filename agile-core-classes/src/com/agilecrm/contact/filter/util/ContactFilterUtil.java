@@ -181,6 +181,7 @@ public class ContactFilterUtil
 	    // Queries contacts whose owner_key is equal to current domain user
 	    // key
 	    queryMap.put("owner_key", userKey);
+	    queryMap.put("type", Contact.Type.PERSON);
 	}
 	else if (type == ContactFilter.DefaultFilter.LEADS)
 	{
@@ -260,7 +261,12 @@ public class ContactFilterUtil
 
 	    // Queries contacts whose owner_key is equal to current domain user
 	    // key
-	    return Contact.dao.listKeysByProperty("owner_key", userKey);
+	    Map<String, Object> queryMap = new HashMap<String, Object>();
+	    queryMap.put("owner_key", userKey);
+	    // Get only contacts of type person.
+	    queryMap.put("type", Contact.Type.PERSON);
+
+	    return Contact.dao.listKeysByProperty(queryMap);
 	}
 	else if (type == ContactFilter.DefaultFilter.LEADS)
 	{

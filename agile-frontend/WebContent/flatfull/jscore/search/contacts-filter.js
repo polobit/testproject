@@ -159,39 +159,6 @@ $(function()
 		Backbone.history.navigate("contacts", { trigger : true });
 	});
 
-	$('#companies-filter').live('click', function(e)
-	{
-
-		e.preventDefault();
-		eraseCookie('contact_filter');
-		eraseCookie('contact_filter_type');
-
-		createCookie('company_filter', "Companies");
-		CONTACTS_HARD_RELOAD = true;
-		App_Contacts.contacts(); // /Show Companies list, explicitly hard
-		// reload
-		return;
-		/*
-		 * {{ OLD-CODE below }} if(readCookie('contact_view')) {
-		 * App_Contacts.contact_custom_view.collection.url =
-		 * "core/api/contacts/companies"
-		 * App_Contacts.contact_custom_view.collection.fetch();
-		 * //$('.filter-dropdown',
-		 * App_Contacts.contact_custom_view.el).append(filter_name); } /* If
-		 * contactsListView is defined (default view) then load filter results
-		 * in default view
-		 * 
-		 * if(App_Contacts.contactsListView &&
-		 * App_Contacts.contactsListView.collection) { // Set url to default
-		 * view to load filter results
-		 * App_Contacts.contactsListView.collection.url =
-		 * "core/api/contacts/companies";
-		 * App_Contacts.contactsListView.collection.fetch();
-		 * //$('.filter-dropdown',
-		 * App_Contacts.contactsListView.el).append(filter_name); }
-		 */
-	});
-
 	$('.lhs_chanined_parent').die().live('change', function(e)
 	{
 		e.preventDefault();
@@ -248,7 +215,7 @@ function setupContactFilterList(cel, tag_id)
 	var filter_id = null;
 		contactFiltersListView = new Base_Collection_View(
 			{
-				url : '/core/api/filters',
+				url : '/core/api/filters?type=PERSON',
 				sort_collection : false,
 				restKey : "ContactFilter",
 				templateKey : "contact-filter-list",

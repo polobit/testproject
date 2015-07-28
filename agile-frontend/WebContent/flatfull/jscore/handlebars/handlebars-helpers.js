@@ -148,6 +148,70 @@ $(function()
 		return options.fn(exclusive_fields)
 
 	});
+	
+	/**
+	 * Returns custom fields without few fields like LINKEDIN or TWITTER or
+	 * title fields
+	 */
+	Handlebars.registerHelper('getCompanyCustomPropertiesExclusively', function(items, options)
+	{
+
+		var exclude_by_subtype = [
+				"LINKEDIN", "TWITTER"
+		];
+		var exclude_by_name = [
+			"title"
+		];
+
+		var fields = getCompanyCustomProperties(items);
+		
+		var exclusive_fields = [];
+		for (var i = 0; i < fields.length; i++)
+		{
+			if (jQuery.inArray(fields[i].name, exclude_by_name) != -1 || (fields[i].subtype && jQuery.inArray(fields[i].subtype, exclude_by_subtype) != -1))
+			{
+				continue;
+			}
+
+			exclusive_fields.push(jQuery.extend(true, {}, fields[i]));
+		}
+		if (exclusive_fields.length == 0)
+			return options.inverse(exclusive_fields);
+
+		$.getJSON("core/api/custom-fields/type/DATE", function(data)
+		{
+
+			if (data.length == 0)
+				return;
+
+			for (var j = 0; j < data.length; j++)
+			{
+				for (var i = 0; i < exclusive_fields.length; i++)
+				{
+					if (exclusive_fields[i].name == data[j].field_label)
+						try
+						{
+							var value = exclusive_fields[i].value;
+
+							if (!isNaN(value))
+							{
+								exclusive_fields[i].value = value;
+								exclusive_fields[i]["subtype"] = data[j].field_type;
+							}
+
+						}
+						catch (err)
+						{
+							exclusive_fields[i].value = exclusive_fields[i].value;
+						}
+				}
+			}
+			updateCompanyCustomData(options.fn(exclusive_fields));
+		});
+
+		return options.fn(exclusive_fields)
+
+	});
 
 	Handlebars.registerHelper('urlEncode', function(url, key, data)
 	{
@@ -362,7 +426,7 @@ $(function()
 	 */
 	Handlebars.registerHelper('contactShortName', function()
 	{
-		if (App_Contacts.contactDetailView && App_Contacts.contactDetailView.model)
+		if (App_Contacts.contactDetailView && App_Contacts.contactDetailView.model && !company_util.isCompany())
 		{
 
 			var contact_properties = App_Contacts.contactDetailView.model.get('properties');
@@ -405,6 +469,14 @@ $(function()
 			return "Company";
 		}
 	});
+	
+	Handlebars.registerHelper("isCompany", function(options)
+			{
+				if (company_util.isCompany())
+					return options.fn(this);
+
+				return options.inverse(this);
+			});
 
 	/**
 	 * Returns workflow name surrounded by quotations if exists, otherwise this
@@ -6326,6 +6398,48 @@ $(function()
 		return new Handlebars.SafeString(city.charAt(0).toUpperCase() + city.slice(1)+", "+country);
 		
 	});
+	
+	/**
+	 * Returns table headings for custom companies list view
+	 */
+	Handlebars.registerHelper('companyTableHeadings', function(item)
+	{
+
+		var el = "";
+		$.each(App_Companies.companyViewModel[item], function(index, element)
+		{
+			if (element.indexOf("custom_") == 0)
+				element = element.split("custom_")[1];
+			element = element.replace("_", " ")
+
+			el = el.concat('<th>' + ucfirst(element) + '</th>');
+
+		});
+
+		return new Handlebars.SafeString(el);
+	});
+	
+	Handlebars
+	.registerHelper(
+			'companies_count',
+			function()
+			{
+				var count_message;
+				if (this[0] && this[0].count && (this[0].count != -1))
+				{
+
+					if (this[0].count > 9999 && (readCookie('company_filter') || readData('dynamic_company_filter')))
+						count_message = "<small> (" + 10000 + "+ Total) </small>" + '<span style="vertical-align: text-top; margin-left: -5px">' + '<img border="0" src="/img/help.png"' + 'style="height: 10px; vertical-align: middle" rel="popover"' + 'data-placement="bottom" data-title="Lead Score"' + 'data-content="Looks like there are over 10,000 results. Sorry we can\'t give you a precise number in such cases."' + 'id="element" data-trigger="hover">' + '</span>';
+
+					else
+						count_message = "<small> (" + this[0].count + " Total) </small>";
+				}
+				else
+					count_message = "<small> (" + this.length + " Total) </small>";
+
+				return new Handlebars.SafeString(count_message);
+			});
+	
 });
 
 // helper function return created time for event
