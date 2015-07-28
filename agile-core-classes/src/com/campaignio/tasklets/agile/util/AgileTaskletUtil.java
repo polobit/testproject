@@ -805,6 +805,12 @@ public class AgileTaskletUtil {
 
 			JSONObject data = subscriberJSON.getJSONObject("data");
 
+			// If no modified time
+			if(!data.has("modified_time"))
+			{
+				return getUpdatedSubscriberJSON(subscriberJSON, 0L);
+			}
+				
 			// Compares updated time of subscriber json and current contact
 			if (data.has("modified_time")
 					&& data.getLong("modified_time") != 0L)
