@@ -60,7 +60,7 @@ $(function(){
     	
     	// Displays contact name, to indicate the note is related to the contact
     	fill_relation(el);
-    	//$('#noteModal').modal('show');
+    	$('#noteModal').modal('show');
     	agile_type_ahead("note_related_to", el, contacts_typeahead);
      });
     
