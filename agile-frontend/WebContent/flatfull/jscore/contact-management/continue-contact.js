@@ -132,6 +132,20 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
 												obj = App_Contacts.contact_custom_view.collection.get(id).toJSON();
 
 				}
+				
+				if (company_util.isCompany() && id)
+				{
+
+								// If user refreshes in company details page, then none of the list
+								// views are defined so, company will be fetched from detailed view
+								if (App_Companies.companyDetailView && App_Companies.companyDetailView.model != null && App_Companies.companyDetailView.model.get('id') == id)
+												obj = App_Companies.companyDetailView.model.toJSON();
+
+								// If company list view is defined, then company is fetched from list.
+								else if (App_Companies.companiesListView && App_Companies.companiesListView.collection.get(id) != null)
+												obj = App_Companies.companiesListView.collection.get(id).toJSON();
+
+				}
 
 				// Loads continue editing form
 				var template;

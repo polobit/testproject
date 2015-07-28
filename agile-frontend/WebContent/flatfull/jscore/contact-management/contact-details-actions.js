@@ -54,13 +54,13 @@ $(function(){
      * detail view. Also prepends the contact name to related to field of 
      * activity modal.  
      */ 
-    $('.contact-add-note').live('click', function(e){
+    $('#noteModal').on('shown.bs.modal', function(e){
     	e.preventDefault();
     	var	el = $("#noteForm");
     	
     	// Displays contact name, to indicate the note is related to the contact
     	fill_relation(el);
-    	$('#noteModal').modal('show');
+    	//$('#noteModal').modal('show');
     	agile_type_ahead("note_related_to", el, contacts_typeahead);
      });
     
