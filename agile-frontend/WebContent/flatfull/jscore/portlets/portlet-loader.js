@@ -1632,14 +1632,14 @@ $('.portlet-settings-save-modal').live('click', function(e){
 					that.find('#emails-unsubscribed').css('display','none');
 				}
 				else{
-					var selector1='opengraph';
-					var selector2='clickedgraph';
-					var selector3='unsubgraph';
+					var selector1=that.find('#emails-opened');
+					var selector2=that.find('#emails-clicked');
+					var selector3=that.find('#emails-unsubscribed');
 				that.find('#emails-sent-count').text(getNumberWithCommasForPortlets(emailsSentCount));
 				that.find('#emails-sent-label').text("Emails sent");
-				that.find('#emails-opened').append('<div class="pull-left text-light" style="width:60%">Opened<div>'+getNumberWithCommasForPortlets(emailsOpenedCount)+'</div></div><div class="pull-left" id=opengraph style="width:40%;height:57px"></div>');
-				that.find('#emails-clicked').append('<div class="pull-left text-light" style="width:60%">Clicked<div>'+getNumberWithCommasForPortlets(emailsClickedCount)+'</div></div><div class="pull-left" id=clickedgraph style="width:40%;height:57px"></div>');
-				that.find('#emails-unsubscribed').append('<div class="pull-left text-light" style="width:60%">Unsubscribed<div>'+getNumberWithCommasForPortlets(emailsUnsubscribed)+'</div></div><div class="pull-left" id=unsubgraph style="width:40%;height:57px"></div>');
+				that.find('#emails-opened').append('<div class="pull-left text-light" style="width:60%">Opened<div>'+getNumberWithCommasForPortlets(emailsOpenedCount)+'</div></div><div class="pull-left graph" id=opengraph style="width:40%;height:57px"></div>');
+				that.find('#emails-clicked').append('<div class="pull-left text-light" style="width:60%">Clicked<div>'+getNumberWithCommasForPortlets(emailsClickedCount)+'</div></div><div class="pull-left graph" id=clickedgraph style="width:40%;height:57px"></div>');
+				that.find('#emails-unsubscribed').append('<div class="pull-left text-light" style="width:60%">Unsubscribed<div>'+getNumberWithCommasForPortlets(emailsUnsubscribed)+'</div></div><div class="pull-left graph" id=unsubgraph style="width:40%;height:57px"></div>');
 				var series=[];
 				series.push(["Emails Sent",emailsSentCount-emailsOpenedCount]);
 				series.push(["Emails Opened",emailsOpenedCount]);
