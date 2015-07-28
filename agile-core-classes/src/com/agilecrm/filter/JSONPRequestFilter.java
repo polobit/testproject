@@ -119,7 +119,7 @@ public class JSONPRequestFilter implements Filter
 	    for (int i = 0; i < allowedDomains.length; i++)
 	    {
 		String allowedDomain = allowedDomains[i].trim();
-		if(StringUtils.equals(allowedDomain, "*") || StringUtils.indexOf(request.getRequestURL().toString(), allowedDomain) != -1)
+		if(StringUtils.isNotBlank(allowedDomain) && (StringUtils.equals(allowedDomain, "*") || StringUtils.indexOf(request.getRequestURL().toString(), allowedDomain) != -1))
 		    return true;
             }
 	    return false;
