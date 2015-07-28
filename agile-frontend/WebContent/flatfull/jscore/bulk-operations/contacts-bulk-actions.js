@@ -1171,7 +1171,7 @@ function postBulkOperationData(url, data, form, contentType, callback, error_mes
 function getDynamicFilters()
 {
 	var dynamic_filter = null;
-	if (readCookie('company_filter'))
+	if (company_util.isCompany())
 	{
 		dynamic_filter = readData('dynamic_company_filter')
 	}
