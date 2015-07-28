@@ -6,19 +6,27 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+
+import org.json.JSONArray;
+import org.json.JSONException;
 
 import au.com.bytecode.opencsv.CSVWriter;
 
+import com.agilecrm.bulkaction.deferred.ContactExportPullTask;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.CustomFieldDef;
 import com.agilecrm.contact.CustomFieldDef.SCOPE;
 import com.agilecrm.contact.Note;
 import com.agilecrm.contact.export.ContactCSVExport;
+import com.agilecrm.contact.filter.ContactFilterIdsResultFetcher;
 import com.agilecrm.contact.util.CustomFieldDefUtil;
 import com.agilecrm.contact.util.NoteUtil;
 import com.google.appengine.api.files.FileWriteChannel;
+import com.googlecode.objectify.Key;
 
 public class ContactExportCSVUtil
 {
@@ -173,8 +181,8 @@ public class ContactExportCSVUtil
 		sb.append(note.subject.trim());
 	    if (note.description != null)
 		sb.append("\n" + note.description);
-	    //ten notes are already added in header use that index.
-	    contactData[contactData.length-10+count] = sb.toString();
+	    // ten notes are already added in header use that index.
+	    contactData[contactData.length - 10 + count] = sb.toString();
 	    count++;
 	    if (count == 10)
 		break;
@@ -214,4 +222,80 @@ public class ContactExportCSVUtil
 	return exportedFileName.toString();
     }
 
+    public static void addToPullQueue(Long currentUserId, String contact_ids, String filter, String dynamicFilter,
+	    String data)
+    {
+	ContactExportPullTask task = null;
+	Set<Key<Contact>> contactList = new HashSet<Key<Contact>>();
+	if (contact_ids != null)
+	{
+	    JSONArray contact_ids_json;
+	    try
+	    {
+		contact_ids_json = new JSONArray(contact_ids);
+		for (int i = 0; i < contact_ids_json.length(); i++)
+		{
+		    contactList.add(new Key<Contact>(Contact.class, contact_ids_json.getLong(i)));
+		}
+	    }
+	    catch (JSONException e)
+	    {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	    }
+
+	}
+	else if (filter != null)
+	{
+	    if (isTextSearchQuery(filter))
+	    {
+		// Add ids to pull queue
+		ContactFilterIdsResultFetcher idFetcher = new ContactFilterIdsResultFetcher(filter, null, null, null,
+			200, currentUserId);
+
+		while (idFetcher.hasNext())
+		{
+		    contactList.addAll(idFetcher.next());
+		}
+	    }
+
+	    // Add Ids to pull queue
+	    task = new ContactExportPullTask(filter, currentUserId);
+	}
+
+	else if (dynamicFilter != null)
+	{
+	    // Add ids to pull queueu
+	    // Add ids to pull queue
+	    ContactFilterIdsResultFetcher idFetcher = new ContactFilterIdsResultFetcher(null, dynamicFilter, null,
+		    null, 200, currentUserId);
+
+	    while (idFetcher.hasNext())
+	    {
+		contactList.addAll(idFetcher.next());
+	    }
+	}
+
+	if (task == null && contactList.size() > 0)
+	{
+	    // Add Ids to pull queue
+	    task = new ContactExportPullTask(contactList, currentUserId);
+	}
+
+    }
+
+    public static boolean isTextSearchQuery(String filter)
+    {
+	if (filter.startsWith("#tags/"))
+	    return false;
+
+	if (filter.equals("#contacts"))
+	    return false;
+
+	if (filter.contains("system-"))
+	    return false;
+
+	return true;
+
+    }
 }
