@@ -141,6 +141,11 @@ public class Opportunity extends Cursor implements Serializable
     public Long created_time = 0L;
 
     /**
+     * Created time of a deal.
+     */
+    public Long milestone_changed_time = 0L;
+
+    /**
      * Track a deal.
      */
     @NotSaved(IfDefault.class)
@@ -430,6 +435,9 @@ public class Opportunity extends Cursor implements Serializable
 	if (oldOpportunity != null && StringUtils.isNotEmpty(this.milestone)
 		&& StringUtils.isNotEmpty(oldOpportunity.milestone))
 	{
+	    if (!this.pipeline.equals(oldOpportunity.pipeline) || !this.milestone.equals(oldOpportunity.milestone))
+		this.milestone_changed_time = System.currentTimeMillis() / 1000;
+
 	    if (!this.milestone.equals(oldOpportunity.milestone) && this.milestone.equalsIgnoreCase("Won"))
 		this.won_date = System.currentTimeMillis() / 1000;
 	}
