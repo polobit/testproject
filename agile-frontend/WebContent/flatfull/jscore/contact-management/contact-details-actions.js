@@ -54,7 +54,7 @@ $(function(){
      * detail view. Also prepends the contact name to related to field of 
      * activity modal.  
      */ 
-    $('#noteModal').on('shown.bs.modal', function(e){
+    $('.contact-add-note').live('click', function(e){
     	e.preventDefault();
     	var	el = $("#noteForm");
     	
