@@ -16,6 +16,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import org.apache.commons.codec.DecoderException;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.WordUtils;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -100,6 +101,9 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 	 */
 	@NotSaved(IfDefault.class)
 	public boolean is_disabled = false;
+
+	@NotSaved(IfDefault.class)
+	public boolean is_send_password = true;
 
 	/**
 	 * Email content to be sent for the first time
@@ -384,6 +388,8 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 
 			if (user.password.equals(MASKED_PASSWORD))
 				user.password = null;
+			if (StringUtils.isNotBlank(user.name))
+				user.name = WordUtils.capitalizeFully(user.name);
 
 			user.sendEmail(SendMail.WELCOME_SUBJECT, SendMail.WELCOME);
 		}

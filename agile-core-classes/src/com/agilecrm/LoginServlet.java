@@ -187,7 +187,8 @@ public class LoginServlet extends HttpServlet
 			throw new Exception("We have not been able to locate any user " + email);
 
 		if (domainUser.is_disabled)
-			throw new Exception("you have been disabled. please contact your administrator");
+			throw new Exception(
+					"Sorry, it seems that your admin has been disabled to login here. Please contact your admin to enable your login access.");
 
 		// Check if user is registered by OpenID, if yes then throw exception
 		// notifying him of OpenID registeration

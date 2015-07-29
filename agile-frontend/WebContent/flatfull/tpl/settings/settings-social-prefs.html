@@ -3,7 +3,7 @@
 	<div class="panel wrapper" >
 		{{#if id}} 
 			{{add_tag "Email"}} 
-			<center><img class="thumbnail m-b-none thumb-transparent thumb-xl" src="/img/icons/google-mail-sync.png"></center><br>
+			<center><img class="thumbnail m-b-none thumb-transparent thumb-xl" src="/img/icons/google-mail-sync.png"></center>
             <div class="m-t-md">
 				{{#if picture}} 
 					<i class="media-grid thumb thumb-wrapper"> 
@@ -17,6 +17,7 @@
 					<i class="media-grid"> <img class="thumbnail m-b-none thumb-transparent img-responsive square-thumb" src="{{emailGravatarurl 50 email}}"  /> </i>
 			   	{{/if}}
 			   	<label>{{name}}</label> 
+ <p><a class="text-info pull-right" href="#sync">Sync Google Apps</a></p>
 <div class="clearfix"></div>
 <div class="m-t-lg">
 			   	<a href="#" class="btn btn-sm btn-danger" id="gmail-prefs-delete" oid={{id}}>Disable</a>
@@ -32,6 +33,7 @@
 			</div>--><br/>
     		<div class="ellipsis-multiline m-b-sm" rel="tooltip" title="See all emails related to a contact from your Gmail account.">
 				See all emails related to a contact from your Gmail account.
+                <p><a class="text-info pull-right" href="#sync">Sync Google Apps</a></p>
 			</div>
 			{{#has_email_account_limit_reached}}
 			<div> <a class="btn btn-sm btn-default pull-left" disabled="disabled">Enable</a></div>

@@ -115,7 +115,7 @@ function showCalendar()
 	var calendarView = (!readCookie('calendarDefaultView')) ? 'month' : readCookie('calendarDefaultView');
 	$('#' + calendarView).addClass('bg-light');
 	var contentHeight = 400;
-	if ( calendarView == "agendaDay" || calendarView == "agendaWeek" )
+	if (calendarView == "agendaDay" || calendarView == "agendaWeek")
 	{
 		contentHeight = 575;
 	}
@@ -286,90 +286,105 @@ function showCalendar()
 							var popover_min_width = 300;
 							if (calendarView == "month")
 							{
-								popover_min_width = $('.fc-view-month').find('.fc-widget-content').eq(0).width()*2;
-								var left = jsEvent.currentTarget.offsetLeft+jsEvent.currentTarget.offsetWidth+10;
+								popover_min_width = $('.fc-view-month').find('.fc-widget-content').eq(0).width() * 2;
+								var left = jsEvent.currentTarget.offsetLeft + jsEvent.currentTarget.offsetWidth + 10;
 								var top = jsEvent.currentTarget.offsetTop;
-								if ($('.fc-border-separate:visible').width()-left < popover_min_width)
+								if ($('.fc-border-separate:visible').width() - left < popover_min_width)
 								{
-									left = jsEvent.currentTarget.offsetLeft-popover_min_width-10;
+									left = jsEvent.currentTarget.offsetLeft - popover_min_width - 10;
 									leftorright = 'right';
 								}
-								if ($('.fc-border-separate:visible').width()-popover_min_width-20 < jsEvent.currentTarget.offsetWidth)
+								if ($('.fc-border-separate:visible').width() - popover_min_width - 20 < jsEvent.currentTarget.offsetWidth)
 								{
-									left = ((jsEvent.currentTarget.offsetLeft+jsEvent.currentTarget.offsetWidth+10)/2)-(popover_min_width/2);
-									top = jsEvent.currentTarget.offsetTop+jsEvent.currentTarget.offsetHeight+10;
+									left = ((jsEvent.currentTarget.offsetLeft + jsEvent.currentTarget.offsetWidth + 10) / 2) - (popover_min_width / 2);
+									top = jsEvent.currentTarget.offsetTop + jsEvent.currentTarget.offsetHeight + 10;
 									leftorright = 'top';
 								}
-								var popoverElement = '<div class="fc-overlayw ' + leftorright + '" style="width:100%;min-width:'+popover_min_width+'px;max-width:'+popover_min_width+'px;left:'+left+'px;top:'+top+'px;position:absolute;z-index:10;display:none;">' + '<div class="panel bg-white b-a pos-rlt p-sm">' + '<span class="arrow ' + leftorright + ' ' + pullupornot + '" style="top:11px;"></span>' + '<div class="h4 font-thin m-b-sm"><div class="pull-left text-ellipsis p-b-xs" style="width:100%;">' + event.title + '</div></div>' + '<div class="line b-b b-light"></div>' + '<div><i class="icon-clock text-muted m-r-xs"></i>' + event.start
-									.format('dd-mmm-yyyy HH:MM') + '<div class="pull-right" style="width:10%;"><img class="r-2x" src="' + event.ownerPic + '" height="20px" width="20px" title="' + event.owner.name + '"/></div></div>' + '<div class="text-ellipsis">' + reletedContacts + '</div>' + '<div class="text-ellipsis">' + meeting_type + '</div>' + '</div>' + '</div>';
+								var popoverElement = '<div class="fc-overlayw ' + leftorright + '" style="width:100%;min-width:' + popover_min_width + 'px;max-width:' + popover_min_width + 'px;left:' + left + 'px;top:' + top + 'px;position:absolute;z-index:10;display:none;">' + '<div class="panel bg-white b-a pos-rlt p-sm">' + '<span class="arrow ' + leftorright + ' ' + pullupornot + '" style="top:11px;"></span>' + '<div class="h4 font-thin m-b-sm"><div class="pull-left text-ellipsis p-b-xs" style="width:100%;">' + event.title + '</div></div>' + '<div class="line b-b b-light"></div>' + '<div><i class="icon-clock text-muted m-r-xs"></i>' + event.start
+										.format('dd-mmm-yyyy HH:MM') + '<div class="pull-right" style="width:10%;"><img class="r-2x" src="' + event.ownerPic + '" height="20px" width="20px" title="' + event.owner.name + '"/></div></div>' + '<div class="text-ellipsis">' + reletedContacts + '</div>' + '<div class="text-ellipsis">' + meeting_type + '</div>' + '</div>' + '</div>';
 								$(this).after(popoverElement);
-								if ($('.fc-border-separate:visible').height()-jsEvent.currentTarget.offsetTop < $(this).parent().find('.fc-overlayw').height())
+								if ($('.fc-border-separate:visible').height() - jsEvent.currentTarget.offsetTop < $(this).parent().find('.fc-overlayw')
+										.height())
 								{
-									$(this).parent().find('.fc-overlayw').css("top",top-$(this).parent().find('.fc-overlayw').height()+jsEvent.currentTarget.offsetHeight+20+"px");
-									$(this).parent().find('.fc-overlayw').find('.arrow').css("top", $(this).parent().find('.fc-overlayw').height()-31+"px");
+									$(this).parent().find('.fc-overlayw').css("top",
+											top - $(this).parent().find('.fc-overlayw').height() + jsEvent.currentTarget.offsetHeight + 20 + "px");
+									$(this).parent().find('.fc-overlayw').find('.arrow').css("top", $(this).parent().find('.fc-overlayw').height() - 31 + "px");
 								}
-								if ($('.fc-border-separate:visible').width()-popover_min_width-20 < jsEvent.currentTarget.offsetWidth)
+								if ($('.fc-border-separate:visible').width() - popover_min_width - 20 < jsEvent.currentTarget.offsetWidth)
 								{
 									$(this).parent().find('.fc-overlayw').find('.arrow').css("top", "-9px");
 								}
-								if (($('.fc-border-separate:visible').height()-jsEvent.currentTarget.offsetTop-jsEvent.currentTarget.offsetHeight-10 < $(this).parent().find('.fc-overlayw').height()+10) && ($('.fc-border-separate:visible').width()-popover_min_width-20 < jsEvent.currentTarget.offsetWidth))
+								if (($('.fc-border-separate:visible').height() - jsEvent.currentTarget.offsetTop - jsEvent.currentTarget.offsetHeight - 10 < $(
+										this).parent().find('.fc-overlayw').height() + 10) && ($('.fc-border-separate:visible').width() - popover_min_width - 20 < jsEvent.currentTarget.offsetWidth))
 								{
 									$(this).parent().find('.fc-overlayw').find('.arrow').removeClass('top').addClass('bottom');
-									left = ((jsEvent.currentTarget.offsetLeft+jsEvent.currentTarget.offsetWidth+10)/2)-(popover_min_width/2);
-									top = jsEvent.currentTarget.offsetTop-$(this).parent().find('.fc-overlayw').height()+10;
-									$(this).parent().find('.fc-overlayw').css({"top":top+"px","lef":left+"px"});
-									$(this).parent().find('.fc-overlayw').find('.arrow').css("top", $(this).parent().find('.fc-overlayw').height()-22+"px");
+									left = ((jsEvent.currentTarget.offsetLeft + jsEvent.currentTarget.offsetWidth + 10) / 2) - (popover_min_width / 2);
+									top = jsEvent.currentTarget.offsetTop - $(this).parent().find('.fc-overlayw').height() + 10;
+									$(this).parent().find('.fc-overlayw').css({ "top" : top + "px", "lef" : left + "px" });
+									$(this).parent().find('.fc-overlayw').find('.arrow').css("top", $(this).parent().find('.fc-overlayw').height() - 22 + "px");
 								}
 							}
 							else if (calendarView == "agendaWeek")
 							{
-								popover_min_width = $('.fc-view-agendaWeek').find('.fc-widget-content').eq(0).width()*2;
-								var left = jsEvent.currentTarget.offsetLeft+jsEvent.currentTarget.offsetWidth+10;
+								popover_min_width = $('.fc-view-agendaWeek').find('.fc-widget-content').eq(0).width() * 2;
+								var left = jsEvent.currentTarget.offsetLeft + jsEvent.currentTarget.offsetWidth + 10;
 								var top = jsEvent.currentTarget.offsetTop;
-								if ($('.fc-agenda-slots:visible').width()-left < popover_min_width)
+								if ($('.fc-agenda-slots:visible').width() - left < popover_min_width)
 								{
-									left = jsEvent.currentTarget.offsetLeft-popover_min_width-10;
+									left = jsEvent.currentTarget.offsetLeft - popover_min_width - 10;
 									leftorright = 'right';
 								}
-								//var event_width = jsEvent.currentTarget.offsetWidth;
-								var popoverElement = '<div class="fc-overlayw ' + leftorright + '" style="width:100%;min-width:'+popover_min_width+'px;max-width:'+popover_min_width+'px;left:'+left+'px;top:'+top+'px;position:absolute;z-index:10;display:none;">' + '<div class="panel bg-white b-a pos-rlt p-sm">' + '<span class="arrow ' + leftorright + ' ' + pullupornot + '" style="top:11px;"></span>' + '<div class="h4 font-thin m-b-sm"><div class="pull-left text-ellipsis p-b-xs" style="width:100%;">' + event.title + '</div></div>' + '<div class="line b-b b-light"></div>' + '<div><i class="icon-clock text-muted m-r-xs"></i>' + event.start
-									.format('dd-mmm-yyyy HH:MM') + '<div class="pull-right" style="width:10%;"><img class="r-2x" src="' + event.ownerPic + '" height="20px" width="20px" title="' + event.owner.name + '"/></div></div>' + '<div class="text-ellipsis">' + reletedContacts + '</div>' + '<div class="text-ellipsis">' + meeting_type + '</div>' + '</div>' + '</div>';
+								// var event_width =
+								// jsEvent.currentTarget.offsetWidth;
+								var popoverElement = '<div class="fc-overlayw ' + leftorright + '" style="width:100%;min-width:' + popover_min_width + 'px;max-width:' + popover_min_width + 'px;left:' + left + 'px;top:' + top + 'px;position:absolute;z-index:10;display:none;">' + '<div class="panel bg-white b-a pos-rlt p-sm">' + '<span class="arrow ' + leftorright + ' ' + pullupornot + '" style="top:11px;"></span>' + '<div class="h4 font-thin m-b-sm"><div class="pull-left text-ellipsis p-b-xs" style="width:100%;">' + event.title + '</div></div>' + '<div class="line b-b b-light"></div>' + '<div><i class="icon-clock text-muted m-r-xs"></i>' + event.start
+										.format('dd-mmm-yyyy HH:MM') + '<div class="pull-right" style="width:10%;"><img class="r-2x" src="' + event.ownerPic + '" height="20px" width="20px" title="' + event.owner.name + '"/></div></div>' + '<div class="text-ellipsis">' + reletedContacts + '</div>' + '<div class="text-ellipsis">' + meeting_type + '</div>' + '</div>' + '</div>';
 								$(this).after(popoverElement);
-								if ($('.fc-agenda-slots:visible').height()-jsEvent.currentTarget.offsetTop < $(this).parent().find('.fc-overlayw').height())
+								if ($('.fc-agenda-slots:visible').height() - jsEvent.currentTarget.offsetTop < $(this).parent().find('.fc-overlayw').height())
 								{
-									$(this).parent().find('.fc-overlayw').css("top",top-$(this).parent().find('.fc-overlayw').height()+jsEvent.currentTarget.offsetHeight+20+"px");
-									$(this).parent().find('.fc-overlayw').find('.arrow').css("top", $(this).parent().find('.fc-overlayw').height()-31+"px");
+									$(this).parent().find('.fc-overlayw').css("top",
+											top - $(this).parent().find('.fc-overlayw').height() + jsEvent.currentTarget.offsetHeight + 20 + "px");
+									$(this).parent().find('.fc-overlayw').find('.arrow').css("top", $(this).parent().find('.fc-overlayw').height() - 31 + "px");
 								}
 							}
 							else if (calendarView == "agendaDay")
 							{
 								var left = jsEvent.currentTarget.offsetLeft;
-								var top = jsEvent.currentTarget.offsetTop+jsEvent.currentTarget.offsetHeight+10;
+								var top = jsEvent.currentTarget.offsetTop + jsEvent.currentTarget.offsetHeight + 10;
 								leftorright = 'top';
-								if ($('.fc-agenda-slots:visible').width()-jsEvent.currentTarget.offsetLeft < popover_min_width)
+								if ($('.fc-agenda-slots:visible').width() - jsEvent.currentTarget.offsetLeft < popover_min_width)
 								{
-									left = jsEvent.currentTarget.offsetLeft-jsEvent.currentTarget.offsetWidth-($('.fc-agenda-slots:visible').width()-jsEvent.currentTarget.offsetLeft-jsEvent.currentTarget.offsetWidth);
+									left = jsEvent.currentTarget.offsetLeft - jsEvent.currentTarget.offsetWidth - ($('.fc-agenda-slots:visible').width() - jsEvent.currentTarget.offsetLeft - jsEvent.currentTarget.offsetWidth);
 								}
-								var popoverElement = '<div class="fc-overlayw ' + leftorright + '" style="width:100%;min-width:'+popover_min_width+'px;max-width:'+popover_min_width+'px;left:'+left+'px;top:'+top+'px;position:absolute;z-index:10;display:none;">' + '<div class="panel bg-white b-a pos-rlt p-sm">' + '<span class="arrow ' + leftorright + ' ' + pullupornot + '" style="top:11px;"></span>' + '<div class="h4 font-thin m-b-sm"><div class="pull-left text-ellipsis p-b-xs" style="width:100%;">' + event.title + '</div></div>' + '<div class="line b-b b-light"></div>' + '<div><i class="icon-clock text-muted m-r-xs"></i>' + event.start
-									.format('dd-mmm-yyyy HH:MM') + '<div class="pull-right" style="width:10%;"><img class="r-2x" src="' + event.ownerPic + '" height="20px" width="20px" title="' + event.owner.name + '"/></div></div>' + '<div class="text-ellipsis">' + reletedContacts + '</div>' + '<div class="text-ellipsis">' + meeting_type + '</div>' + '</div>' + '</div>';
+								var popoverElement = '<div class="fc-overlayw ' + leftorright + '" style="width:100%;min-width:' + popover_min_width + 'px;max-width:' + popover_min_width + 'px;left:' + left + 'px;top:' + top + 'px;position:absolute;z-index:10;display:none;">' + '<div class="panel bg-white b-a pos-rlt p-sm">' + '<span class="arrow ' + leftorright + ' ' + pullupornot + '" style="top:11px;"></span>' + '<div class="h4 font-thin m-b-sm"><div class="pull-left text-ellipsis p-b-xs" style="width:100%;">' + event.title + '</div></div>' + '<div class="line b-b b-light"></div>' + '<div><i class="icon-clock text-muted m-r-xs"></i>' + event.start
+										.format('dd-mmm-yyyy HH:MM') + '<div class="pull-right" style="width:10%;"><img class="r-2x" src="' + event.ownerPic + '" height="20px" width="20px" title="' + event.owner.name + '"/></div></div>' + '<div class="text-ellipsis">' + reletedContacts + '</div>' + '<div class="text-ellipsis">' + meeting_type + '</div>' + '</div>' + '</div>';
 								$(this).after(popoverElement);
-								$(this).parent().find('.fc-overlayw').find('.arrow').css({"top":"-9px","left":"11px"});
-								if ($('.fc-agenda-slots:visible').width()-jsEvent.currentTarget.offsetLeft < popover_min_width)
+								$(this).parent().find('.fc-overlayw').find('.arrow').css({ "top" : "-9px", "left" : "11px" });
+								if ($('.fc-agenda-slots:visible').width() - jsEvent.currentTarget.offsetLeft < popover_min_width)
 								{
-									$(this).parent().find('.fc-overlayw').find('.arrow').css({"top":"-9px","left":popover_min_width-15+"px"});
+									$(this).parent().find('.fc-overlayw').find('.arrow').css({ "top" : "-9px", "left" : popover_min_width - 15 + "px" });
 								}
-								if ((jsEvent.currentTarget.offsetTop < $(this).parent().find('.fc-overlayw').height()+10) && ($('.fc-agenda-slots:visible').height()-jsEvent.currentTarget.offsetHeight < $(this).parent().find('.fc-overlayw').height()+10))
+								if ((jsEvent.currentTarget.offsetTop < $(this).parent().find('.fc-overlayw').height() + 10) && ($('.fc-agenda-slots:visible')
+										.height() - jsEvent.currentTarget.offsetHeight < $(this).parent().find('.fc-overlayw').height() + 10))
 								{
-									$(this).parent().find('.fc-overlayw').css("top",jsEvent.currentTarget.offsetTop+40+"px");
+									$(this).parent().find('.fc-overlayw').css("top", jsEvent.currentTarget.offsetTop + 40 + "px");
 								}
-								if ((jsEvent.currentTarget.offsetTop > $(this).parent().find('.fc-overlayw').height()+10) && ($('.fc-agenda-slots:visible').height()-(jsEvent.currentTarget.offsetHeight+jsEvent.currentTarget.offsetTop) < $(this).parent().find('.fc-overlayw').height()+10))
+								if ((jsEvent.currentTarget.offsetTop > $(this).parent().find('.fc-overlayw').height() + 10) && ($('.fc-agenda-slots:visible')
+										.height() - (jsEvent.currentTarget.offsetHeight + jsEvent.currentTarget.offsetTop) < $(this).parent().find(
+										'.fc-overlayw').height() + 10))
 								{
 									$(this).parent().find('.fc-overlayw').find('.arrow').removeClass('top').addClass('bottom');
-									$(this).parent().find('.fc-overlayw').find('.arrow').css("top",$(this).parent().find('.fc-overlayw').height()-22+"px");
-									$(this).parent().find('.fc-overlayw').css("top",$('.fc-agenda-slots:visible').height()-jsEvent.currentTarget.offsetHeight-$(this).parent().find('.fc-overlayw').height()+7+"px");
-									if ($('.fc-agenda-slots:visible').width()-jsEvent.currentTarget.offsetLeft < popover_min_width)
+									$(this).parent().find('.fc-overlayw').find('.arrow').css("top", $(this).parent().find('.fc-overlayw').height() - 22 + "px");
+									$(this).parent().find('.fc-overlayw').css(
+											"top",
+											$('.fc-agenda-slots:visible').height() - jsEvent.currentTarget.offsetHeight - $(this).parent().find('.fc-overlayw')
+													.height() + 7 + "px");
+									if ($('.fc-agenda-slots:visible').width() - jsEvent.currentTarget.offsetLeft < popover_min_width)
 									{
-										$(this).parent().find('.fc-overlayw').css("left",jsEvent.currentTarget.offsetLeft-jsEvent.currentTarget.offsetWidth-($('.fc-agenda-slots:visible').width()-jsEvent.currentTarget.offsetLeft-jsEvent.currentTarget.offsetWidth)+"px");
+										$(this).parent().find('.fc-overlayw')
+												.css(
+														"left",
+														jsEvent.currentTarget.offsetLeft - jsEvent.currentTarget.offsetWidth - ($('.fc-agenda-slots:visible')
+																.width() - jsEvent.currentTarget.offsetLeft - jsEvent.currentTarget.offsetWidth) + "px");
 									}
 								}
 							}
@@ -397,7 +412,12 @@ function showCalendar()
 						{
 							$(".ui-resizable-handle").hide();
 							event = renderEventBasedOnOwner(event);
-							console.log("exec ");
+							var start_event = new Date(event.start).getTime() / 1000;
+							var end_event = new Date(event.end).getTime() / 1000;
+							if (end_event - start_event == 3600)
+							{
+								$(element).height('');
+							}
 						},
 
 						/**
