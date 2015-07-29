@@ -60,7 +60,7 @@ public class JSONPRequestFilter implements Filter
 		JSONObject error = new JSONObject();
 		try
                 {
-	            error.put("error", "Invalid request");
+	            error.put("error", "Request form unauthorised domain");
 	            out.println(error.toString());
                 }
                 catch (JSONException e)
@@ -119,12 +119,22 @@ public class JSONPRequestFilter implements Filter
 	    for (int i = 0; i < allowedDomains.length; i++)
 	    {
 		String allowedDomain = allowedDomains[i].trim();
-		if(StringUtils.isNotBlank(allowedDomain) && (StringUtils.equals(allowedDomain, "*") || StringUtils.indexOf(request.getRequestURL().toString(), allowedDomain) != -1))
-		    return true;
-            }
+		if (StringUtils.isNotBlank(allowedDomain))
+		{
+		    if (StringUtils.contains(allowedDomain, "*"))
+		    {
+			if (StringUtils.equals(allowedDomain, "*"))
+			    return true;
+			else
+			    allowedDomain = allowedDomain.replace("*", "");
+		    }
+		    if (StringUtils.indexOf(request.getServerName().toString(), allowedDomain) != -1)
+			return true;
+		}
+	    }
 	    return false;
 	}
-	catch(Exception e)
+	catch (Exception e)
 	{
 	    return true;
 	}
