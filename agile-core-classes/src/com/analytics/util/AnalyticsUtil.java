@@ -7,6 +7,7 @@ import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+
 /**
  * <code>AnalyticsUtil</code> is the utility class for Analytics. It merges page
  * views based on sessions. It combines the urls with their timespent.
@@ -123,6 +124,22 @@ public class AnalyticsUtil
 
 	// Return JSONArray of merged map values
 	return new JSONArray(mergedPageViewsMap.values());
+    }
+    
+    /**
+     * Verifies whether domain having any web stats
+     * 
+     * @return boolean
+     */
+    public static boolean hasJSAPIForDomain()
+    {
+    	JSONArray pageViews = AnalyticsSQLUtil.getLimitedPageViews(5);
+    	
+    	if(pageViews != null && pageViews.length() > 0)
+    		return true;
+    	
+    	return false;
+    	
     }
 
 }
