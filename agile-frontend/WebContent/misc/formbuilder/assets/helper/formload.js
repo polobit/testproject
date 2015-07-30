@@ -5,9 +5,6 @@ define([
 	{
 		var url = window.location.protocol + '//' + window.location.host + '/' + 'core/api/forms/form?formId=' + formNumber;
 		
-		if(typeof formLoadDomain != 'undefined' && window.location.hostname.split('.')[0] == "my")
-			url = 'https://my.agilecrm.com/fbformload?formId=' + formNumber + '&domain=' + formLoadDomain;
-		
 		$.ajax({
 			url : url,
 			type: 'GET',
@@ -23,12 +20,8 @@ define([
 			    	  if(formHtml != '') {
 			    		  $('#agileFormHolder').html(formHtml);
 			    		  $('#agileFormHolder style').remove();
-			    		  if(typeof formLoadDomain != 'undefined'){
-			    			  $('#agile-form').attr("action","https://"+ formLoadDomain +".agilecrm.com/formsubmit");
-			    		  }
 			    	  }
 				}
-				
 				
 			}
 		});
