@@ -1043,7 +1043,6 @@ function set_p_portlets(base_model){
 				emailsUnsubscribed=data["emailunsubscribed"];
 				if(emailsSentCount==0){
 					that.find('#emails-sent').css('width','100%').css('height','100%');
-					that.find('#emails-sent').removeClass('p-sm b-b b-r b-light');
 					that.find('#emails-sent').html('<div class="portlet-error-message">No Email activity</div>');
 					that.find('#emails-opened').css('display','none');
 					that.find('#emails-clicked').css('display','none');
@@ -1053,11 +1052,16 @@ function set_p_portlets(base_model){
 					var selector1=that.find('#emails-opened');
 					var selector2=that.find('#emails-clicked');
 					var selector3=that.find('#emails-unsubscribed');
+					that.find('#emails-sent').addClass('pull-left p-xs b-b b-r b-light w-half');
+					selector1.addClass('pull-left p-xs b-b b-light w-half');
+					selector2.addClass('pull-left p-xs b-r b-light w-half');
+					selector3.addClass('pull-left p-xs w-half');
+					
 				that.find('#emails-sent-count').text(getNumberWithCommasForPortlets(emailsSentCount));
 				that.find('#emails-sent-label').text("Emails sent");
-				that.find('#emails-opened').append('<div class="pull-left text-light" style="width:60%">Opened<div>'+getNumberWithCommasForPortlets(emailsOpenedCount)+'</div></div><div class="pull-left graph" id=opengraph style="width:40%;height:57px"></div>');
-				that.find('#emails-clicked').append('<div class="pull-left text-light" style="width:60%">Clicked<div>'+getNumberWithCommasForPortlets(emailsClickedCount)+'</div></div><div class="pull-left graph" id=clickedgraph style="width:40%;height:57px"></div>');
-				that.find('#emails-unsubscribed').append('<div class="pull-left text-light" style="width:60%">Unsubscribed<div>'+getNumberWithCommasForPortlets(emailsUnsubscribed)+'</div></div><div class="pull-left graph" id=unsubgraph style="width:40%;height:57px"></div>');
+				that.find('#emails-opened').append('<div class="pull-left text-light" style="width: 40%;"><div class="text-sm">Opened</div><div class="text-count text-center" style="color:rgb(250, 215, 51);">'+getNumberWithCommasForPortlets(emailsOpenedCount)+'</div></div><div class="pull-left graph" id=opengraph style="height:100%; width:60%"></div>');
+				that.find('#emails-clicked').append('<div class="pull-left text-light" style="width:40%"><div class="text-sm">Clicked</div><div class="text-count text-center" style="color:rgb(18, 209, 18);">'+getNumberWithCommasForPortlets(emailsClickedCount)+'</div></div><div class="pull-left graph" id=clickedgraph style="height:100%;width:60%"></div>');
+				that.find('#emails-unsubscribed').append('<div class="pull-left text-light" style="width:40%"><div class="text-sm">Unsubscribed</div><div class="text-count text-center" style="color:rgb(240, 80, 80);">'+getNumberWithCommasForPortlets(emailsUnsubscribed)+'</div></div><div class="pull-left graph" id=unsubgraph style="height:100%;width:60%"></div>');
 				var series=[];
 				series.push(["Emails Sent",emailsSentCount-emailsOpenedCount]);
 				series.push(["Emails Opened",emailsOpenedCount]);
@@ -2166,15 +2170,69 @@ function showUserName(obj){
 
 function campstatsPieChart(selector,data,count1,count2){
 	head.js(LIB_PATH + 'lib/flot/highcharts-3.js',LIB_PATH + 'lib/flot/no-data-to-display.js', function(){
-		
+		var color;
+		var dis=0;
+		if(data[1][0]=='Emails Opened')
+			color='rgb(250, 215, 51)';
+		if(data[1][0]=='Emails Clicked')
+			color='rgb(18, 209, 18)';
+		if(data[1][0]=='Emails Unsubscribed')
+			color='rgb(240, 80, 80)';
 		$(selector).find('.graph').highcharts({
 	        chart: {
 	            type: 'pie',
-	            marginLeft: 30,
-			//	marginTop : -10
+				 labelsEnabled: false,
+				autoMargins: false,
+				marginTop: 0,
+					marginBottom: -6,
+					marginLeft: 0,
+					marginRight: 0,
+					pullOutRadius: 0,
+					            events: {
+                load: function(e) {
+                    console.log(this);
+                    this.options.plotOptions.series.dataLabels.distance =  ((this.chartHeight+this.chartWidth) / 7.5) * -1;
+                    this.series[0].update(this.options);
+                },
+                redraw: function(e) {
+                 console.log(this); 
+					var pos_left,pos_top;
+                    var chart = this;
+					if($(selector).parents('.portlet_body').height()<=200)
+					{
+						pos_top=chart.chartHeight/2.72;
+					}
+					else if($(selector).parents('.portlet_body').height()>200 && $(selector).parents('.portlet_body').height()<=450 )
+					{
+						pos_top=chart.chartHeight/2.16;
+					}
+					
+					else 
+					{
+						pos_top=chart.chartHeight/2.04;
+					}
+					if($(selector).parents('.portlet_body').width()<=405)
+						pos_left=chart.chartWidth/1.90;
+					else if($(selector).parents('.portlet_body').width()>405 && $(selector).parents('.portlet_body').width()<=836 )
+					{
+						pos_left=chart.chartWidth/2.05;
+						
+					}
+					
+					else 
+					{
+						pos_left=chart.chartWidth/2.00;
+						
+					}
+                        chart.series[0].data[1].dataLabel.attr({
+                            x:pos_left,
+							y:pos_top
+                        });
+                }
+        },
 	          
 	        },
-	        colors : ['#e8eff0','#27C24C'],
+	        colors : ['#e8eff0',color],
 	        title: {
 	            text: ''
 	        },
@@ -2183,34 +2241,32 @@ function campstatsPieChart(selector,data,count1,count2){
 	        },
 	        legend: {
 				enabled:false,
-	        	/* /*symbolHeight: 0,
-	        	symbolWidth: 0,
-	        	layout: 'vertical',
-	            align: 'right',
-	            verticalAlign: 'top',
-	            x: 5,
-                y: 12,
-	    		labelFormatter: function () {
-	    			if(this.name=="Emails Opened")
-						return 	'<div><span>Opened:'+count2+'</span></div>';
-					else if(this.name=="Emails Clicked")
-						return 	'<div><span>Clicked:'+count2+'</span></div>';
-					else if(this.name=="Emails Unsubscribed")
-						return 	'<div><span>Unsubscribed:'+count2+'</span></div>';
-	    			else if(this.name=="Emails Sent")
-	    				return 	'<div><span>Sent:'+count1+'</span></div>';
-	            	
-	            },
-	            itemStyle: {
-	            	color: "#ccc",
-	            	fontSize: "10px", 
-	            	//fontWeight: "bold"
-	            },
-	            borderWidth : 0,
-				floating : true, */
+	        	
 	        },
 	        plotOptions: {
 	        	series: {
+					dataLabels: {
+						align : 'center',
+	            		enabled: true,
+	            		useHTML: true,
+	            		connectorWidth: 0,
+	    	            formatter: function () {
+	    	            	 var ff = '';
+	    	            	
+							if(this.point.name=="Emails Opened")
+	    	            		ff = 	'<div class="text-center"><span style="color:'+this.point.color+'"><b>'+Math.round(this.point.percentage).toString()+'%</b></span></div>';
+								
+							if(this.point.name=="Emails Clicked")
+	    	            		ff = 	'<div class="text-center"><span style="color:'+this.point.color+'"><b>'+Math.round(this.point.percentage).toString()+'%</b></span></div>';
+	    	            	if(this.point.name=="Emails Unsubscribed")
+	    	            		ff = 	'<div class="text-center"><span style="color:'+this.point.color+'"><b>'+Math.round(this.point.percentage).toString()+'%</b></span></div>';
+	    	            	
+							return ff; 
+							
+	    	            },
+	            		/*format: '<b>{point.name}</b>: {point.percentage:.1f}',*/
+	                    distance: 0,
+	                },
 	                borderWidth : 0,
 	                states: {
 	                	hover: {
@@ -2219,28 +2275,9 @@ function campstatsPieChart(selector,data,count1,count2){
 	                }
 	            },
 	            pie: {
-					size:50,
 					borderWidth: 0,
-	            	innerSize : 45,
-	            	dataLabels: {
-	            		enabled: true,
-	            		useHTML: true,
-	            		connectorWidth: 0,
-	    	            formatter: function () {
-	    	            	var ff = '';
-	    	            	if(this.point.name=="Emails Opened")
-	    	            		ff = 	'<div class="text-center"><span style="color:'+this.point.color+'"><b>'+Math.round(this.point.percentage).toString()+'%</b></span></div>';
-	    	            	
-							if(this.point.name=="Emails Clicked")
-	    	            		ff = 	'<div class="text-center"><span style="color:'+this.point.color+'"><b>'+Math.round(this.point.percentage).toString()+'%</b></span></div>';
-	    	            	if(this.point.name=="Emails Unsubscribed")
-	    	            		ff = 	'<div class="text-center"><span style="color:'+this.point.color+'"><b>'+Math.round(this.point.percentage).toString()+'%</b></span></div>';
-	    	            	
-							return ff;
-	    	            },
-	            		/*format: '<b>{point.name}</b>: {point.percentage:.1f}',*/
-	                    distance: -24	
-	                },
+					innerSize: '100%',
+				},
 	                showInLegend: true,
 	                enableMouseTracking: false,
 	                point: {
@@ -2250,8 +2287,7 @@ function campstatsPieChart(selector,data,count1,count2){
 		                    }
 		                }
 	                }
-	            }
-	        },
+	            },
 	        series: [{
 	           // name: 'Deal',
 	            data: data

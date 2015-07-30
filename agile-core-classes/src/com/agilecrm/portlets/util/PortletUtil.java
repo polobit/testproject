@@ -1383,7 +1383,11 @@ public class PortletUtil {
 			return null;
 		}
 	}
-	
+	/**
+	 * Fetches Campaign emails data
+	 * 
+	 * @return {JSONObject}
+	 */
 	public static  JSONObject getCampaignstatsForPortlets(JSONObject json) throws Exception
 	{
 		JSONObject datajson=new JSONObject();
@@ -1412,7 +1416,7 @@ public class PortletUtil {
 		String endDate = CampaignReportsUtil.getEndDateForReports(String.valueOf(maxTime*1000), json.getString("timeZone"));
 		
 		String [] array = {"EMAIL_SENT","EMAIL_OPENED","EMAIL_CLICKED","UNSUBSCRIBED"};
-		if (json.getString("campaigntype").equalsIgnoreCase("ALL"))
+		if (json.getString("campaigntype").equalsIgnoreCase("All"))
 		campaignEmailsJSONArray = getCountByLogTypesforPortlets(startDate,endDate,json.getString("timeZone"),array);
 			
 		else

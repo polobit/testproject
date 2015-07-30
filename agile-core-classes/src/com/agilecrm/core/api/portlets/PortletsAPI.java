@@ -485,7 +485,11 @@ public class PortletsAPI {
 	public List<DomainUser> getCurrentDomainUsersForPortlets()throws Exception {
 		return PortletUtil.getCurrentDomainUsersForPortlets();
 	}
-	
+	/**
+	 * Gets campaign emails stats based on log_Type
+	 * 
+	 * @return {@Link JSONObject}
+	 */
 	@Path("/portletCampaignstats")
 	@GET
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })

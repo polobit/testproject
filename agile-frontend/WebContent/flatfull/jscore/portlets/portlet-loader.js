@@ -154,8 +154,6 @@ function set_up_portlets(el, portlets_el){
 						$('#'+this.$resized_widget.attr('id')+' > .portlet_header').css("width","100%");*/
 					$('#'+this.$resized_widget.attr('id')+' > .portlet_header').find('ul').width(($('#'+this.$resized_widget.attr('id')+' > .portlet_body').find('ul').width()/$('#'+this.$resized_widget.attr('id')+' > .portlet_body').width()*100)+'%');
         		}
-        		
-
 				var models = [];
 
 				/*
@@ -664,7 +662,7 @@ function showPortletSettings(el){
 		elData = $('#portletsCampaignStatsSettingsForm');
 		$("#duration", elData).find('option[value='+ base_model.get("settings").duration +']').attr("selected", "selected");
 		
-		var options="<option value='ALL'>ALL</option>" ;
+		var options="<option value='All'>All Campaign</option>" ;
 		$.ajax({ type : 'GET', url : '/core/api/workflows', async : false, dataType : 'json',
 			success: function(data){
 				$.each(data,function(index,campaignfilter){
@@ -1625,7 +1623,6 @@ $('.portlet-settings-save-modal').live('click', function(e){
 				emailsUnsubscribed=data["emailunsubscribed"];
 				if(emailsSentCount==0){
 					that.find('#emails-sent').css('width','100%').css('height','100%');
-					that.find('#emails-sent').removeClass('p-sm b-b b-r b-light');
 					that.find('#emails-sent').html('<div class="portlet-error-message">No Email activity</div>');
 					that.find('#emails-opened').css('display','none');
 					that.find('#emails-clicked').css('display','none');
@@ -1635,11 +1632,15 @@ $('.portlet-settings-save-modal').live('click', function(e){
 					var selector1=that.find('#emails-opened');
 					var selector2=that.find('#emails-clicked');
 					var selector3=that.find('#emails-unsubscribed');
+					that.find('#emails-sent').addClass('pull-left p-xs b-b b-r b-light w-half');
+					selector1.addClass('pull-left p-xs b-b b-light w-half');
+					selector2.addClass('pull-left p-xs b-r b-light w-half');
+					selector3.addClass('pull-left p-xs w-half');
 				that.find('#emails-sent-count').text(getNumberWithCommasForPortlets(emailsSentCount));
 				that.find('#emails-sent-label').text("Emails sent");
-				that.find('#emails-opened').append('<div class="pull-left text-light" style="width:60%">Opened<div>'+getNumberWithCommasForPortlets(emailsOpenedCount)+'</div></div><div class="pull-left graph" id=opengraph style="width:40%;height:57px"></div>');
-				that.find('#emails-clicked').append('<div class="pull-left text-light" style="width:60%">Clicked<div>'+getNumberWithCommasForPortlets(emailsClickedCount)+'</div></div><div class="pull-left graph" id=clickedgraph style="width:40%;height:57px"></div>');
-				that.find('#emails-unsubscribed').append('<div class="pull-left text-light" style="width:60%">Unsubscribed<div>'+getNumberWithCommasForPortlets(emailsUnsubscribed)+'</div></div><div class="pull-left graph" id=unsubgraph style="width:40%;height:57px"></div>');
+				that.find('#emails-opened').append('<div class="pull-left text-light" style="width: 40%;"><div class="text-sm">Opened</div><div class="text-count text-center" style="color:rgb(250, 215, 51);">'+getNumberWithCommasForPortlets(emailsOpenedCount)+'</div></div><div class="pull-left graph" id=opengraph style="height:100%; width:60%"></div>');
+				that.find('#emails-clicked').append('<div class="pull-left text-light" style="width:40%"><div class="text-sm">Clicked</div><div class="text-count text-center" style="color:rgb(18, 209, 18);">'+getNumberWithCommasForPortlets(emailsClickedCount)+'</div></div><div class="pull-left graph" id=clickedgraph style="height:100%;width:60%"></div>');
+				that.find('#emails-unsubscribed').append('<div class="pull-left text-light" style="width:40%"><div class="text-sm">Unsubscribed</div><div class="text-count text-center" style="color:rgb(240, 80, 80);">'+getNumberWithCommasForPortlets(emailsUnsubscribed)+'</div></div><div class="pull-left graph" id=unsubgraph style="height:100%;width:60%"></div>');
 				var series=[];
 				series.push(["Emails Sent",emailsSentCount-emailsOpenedCount]);
 				series.push(["Emails Opened",emailsOpenedCount]);
