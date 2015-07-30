@@ -1003,6 +1003,27 @@ function getDealCustomProperties(items)
 				{
 					finalFields.push(allCustomFields[i]);
 				}
+				else if(allCustomFields[i].field_type=="DATE")
+				{
+					for(var j=0;j<fields.length;j++)
+					{
+						if(allCustomFields[i].name==fields[j].name)
+						{
+							if(!fields[j].value)
+								return '';
+							if(fields[j].index && (CURRENT_USER_PREFS.dateFormat.indexOf("dd/mm/yy") != -1 || CURRENT_USER_PREFS.dateFormat.indexOf("dd.mm.yy") != -1))
+								fields[j].value = convertDateFromUKtoUS(fields[j].value);
+							var dateString = new Date(fields[j].value);
+							if(dateString == "Invalid Date")
+								fields[j].value = getDateInFormatFromEpoc(fields[j].value);
+							else
+								fields[j].value = en.dateFormatter({raw: getGlobalizeFormat()})(dateString);
+
+							finalFields.push(fields[j]);
+							break;
+						}
+					}
+				}
 				else
 				{
 					for(var j=0;j<fields.length;j++)

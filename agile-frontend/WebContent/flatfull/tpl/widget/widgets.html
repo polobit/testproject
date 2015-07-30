@@ -13,10 +13,12 @@
                 {{else}}{{#if_equals name "HelpScout"}}Help Scout
                         {{else}}{{#if_equals name "Twilio"}}Twilio Call Log
                                 {{else}}{{#if_equals name "TwilioIO"}}Twilio
-                                       {{else}}{{#if_equals name "CallScript"}}Call Script
-                                               {{else}}{{name}}
-                                               {{/if_equals}}
-                                       {{/if_equals}}
+										{{else}}{{#if_equals name "CallScript"}}Call Script
+											{{else}}{{#if_equals name "Rapleaf"}}TowerData
+                                                {{else}}{{name}}
+                                                {{/if_equals}}
+											{{/if_equals}}
+                                        {{/if_equals}}
                                {{/if_equals}}
                         {{/if_equals}}
                 {{/if_equals}}

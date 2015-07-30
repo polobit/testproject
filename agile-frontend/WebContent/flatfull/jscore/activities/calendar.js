@@ -424,10 +424,10 @@ function showCalendar()
 							highlight_event();
 
 							// Set Date for Event
-							var dateFormat = 'mm/dd/yyyy';
-							$('#task-date-1').val(start.format(dateFormat));
-							$("#event-date-1").val(start.format(dateFormat));
-							$("#event-date-2").val(end.format(dateFormat));
+							//var dateFormat = 'mm/dd/yyyy';
+							$('#task-date-1').val(getDateInFormat(start));
+							$("#event-date-1").val(getDateInFormat(start));
+							$("#event-date-2").val(getDateInFormat(end));
 
 							// Set Time for Event
 							if ((start.getHours() == 00) && (end.getHours() == 00) && (end.getMinutes() == 00))
@@ -528,8 +528,8 @@ function showCalendar()
 
 							// Set date for update Event
 							var dateFormat = 'mm/dd/yyyy';
-							$("#update-event-date-1").val((event.start).format(dateFormat));
-							$("#update-event-date-2").val((event.end).format(dateFormat));
+							$("#update-event-date-1").val(getDateInFormat(event.start));
+							$("#update-event-date-2").val(getDateInFormat(event.end));
 
 							// hide end date & time for all day events
 							if (event.allDay)

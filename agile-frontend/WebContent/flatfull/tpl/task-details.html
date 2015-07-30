@@ -41,7 +41,7 @@
 <div style="height:5px;" class="progress  w-full m-b-none">
           <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="{{progress}}" aria-valuemin="0" aria-valuemax="100" style="width: {{progress}}%;"></div>
      </div> 
- <div class="m-t-xs"><time style="font-size:14px!important;" datetime="{{epochToHumanDate "dd mmm yyyy" due}}">Due {{epochToHumanDate "dd mmm yyyy" due}}</time></div>
+ <div class="m-t-xs"><time style="font-size:14px!important;">Due {{epochToHumanDateInFormat due}}</time></div>
 <div class="clearfix"></div>
  
 </div>
@@ -50,7 +50,7 @@
 {{#if_equals "COMPLETED" status}}
 <span class="text-cap">{{displayTaskStatus status}}
 <br>
-{{#if task_completed_time}}<time datetime="{{epochToHumanDate "dd mmm yyyy" task_completed_time}}">{{epochToHumanDate "dd mmm yyyy" task_completed_time}}</time>{{/if}}
+{{#if task_completed_time}}<time >{{epochToHumanDateInFormat task_completed_time}}</time>{{/if}}
 </span>
 
 {{/if_equals}}
@@ -58,7 +58,7 @@
 {{#if_equals "YET_TO_START" status}}
 <span class="text-cap">{{displayTaskStatus status}}
 <br>
-<time datetime="{{epochToHumanDate "dd mmm yyyy" due}}">Due {{epochToHumanDate "dd mmm yyyy" due}}</time>
+<time >Due {{epochToHumanDateInFormat due}}</time>
 </span>
 {{/if_equals}}
 </div>
@@ -273,7 +273,7 @@
 <div class="pull-right">
 		<small class="edit-hover  text-muted"> 
 			<i class="fa fa-clock-o m-r-xs"></i>
-			<time class="text-sm"  datetime="{{epochToHumanDate "" time}}" >{{epochToHumanDate "dd mmm yyyy" time}}</time>
+			<time class="text-sm event-created-time"  datetime="{{epochToHumanDate "" time}}" >{{epochToHumanDate "dd mmm yyyy" time}}</time>
 		</small>
 	</div>
 	<div class="clearfix"></div>

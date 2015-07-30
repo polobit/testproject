@@ -767,13 +767,12 @@ $(function()
 	{
 		if(!date)
 			return;
-		var format = CURRENT_USER_PREFS.dateFormat;
-		format = format.replace(/MM/g, "mmmm").replace(/M/g, "mmm").replace(/DD/g, "dddd").replace(/D/g, "ddd");
 		var dateString = new Date(date);
 		if(dateString == "Invalid Date")
 			return getDateInFormatFromEpoc(date);
 		else
-			return dateString.format(format);
+			return en.dateFormatter({raw: getGlobalizeFormat()})(dateString);
+
 		
 	});
 
@@ -6339,6 +6338,23 @@ $(function()
 		{
 			time_period = 'Last 24 Hours';
 		}
+		else if (duration == 'next-quarter')
+		{
+			time_period = 'Next Quarter';
+		}
+		else if (duration == 'this-and-next-quarter')
+		{
+			time_period = 'This and Next Quarter';
+		}
+		else if (duration == 'this-year')
+		{
+			time_period = 'This Year';
+		}
+		else if (duration == 'next-year')
+		{
+			time_period = 'Next Year';
+		}
+		
 		return time_period;
 	});
 	
@@ -6396,6 +6412,15 @@ $(function()
 	 */
 	Handlebars.registerHelper('capitalizeFirstLetter',function(city,country){
 		return new Handlebars.SafeString(city.charAt(0).toUpperCase() + city.slice(1)+", "+country);
+		
+	});
+	
+	/**
+	 * Returns a default image url .
+	 * 
+	 */
+	Handlebars.registerHelper('getDefaultImage',function(){
+		return new Handlebars.SafeString(LIB_PATH_FLATFULL + 'images/flatfull/user-default.jpg');
 		
 	});
 	
