@@ -834,7 +834,7 @@ function dealsLineChart()
  */
 function dealsLineChartByPipeline(pipeline_id)
 {
-	showDealAreaSpline('core/api/opportunity/stats/details/'+pipeline_id+'?min=0&max=1543842319', 'total-pipeline-chart', 'Monthly Deals', 'Total Value');
+	showDealAreaSpline('core/api/opportunity/stats/details/'+pipeline_id+'?min=0&max=1543842319', 'total-pipeline-chart', 'Monthly Revenue - All Deals', 'Total Value');
 }
 
 /**
@@ -1194,6 +1194,8 @@ function showDealAreaSpline(url, selector, name, yaxis_name, show_loading)
 				sortedData[''+value] = data[''+value];
 			});
 
+			var min_tick_interval = 1;
+			var dataLength = 0;
 			// Iterates through data and adds keys into
 			// categories
 			$.each(sortedData, function(k, v)
@@ -1221,12 +1223,21 @@ function showDealAreaSpline(url, selector, name, yaxis_name, show_loading)
 					// Find series with the name k1 and to that,
 					// push v1
 					var series_data = find_series_with_name(series, k1);
-					series_data.data.push([
-							k * 1000, v1
-					]);
+					series_data.data.push(v1);
 				});
-
+				var dt = new Date(k * 1000);
+				categories.push(Highcharts.dateFormat('%b.%Y',Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()))+'');
+				dataLength++;
 			});
+
+			if(Math.ceil((dataLength-1)/10)>0)
+			{
+				min_tick_interval = Math.ceil(dataLength/10);
+				if(min_tick_interval==3)
+				{
+					min_tick_interval = 4;
+				}
+			}
 
 			// After loading and processing all data, highcharts are initialized
 			// setting preferences and data to show
@@ -1239,15 +1250,21 @@ function showDealAreaSpline(url, selector, name, yaxis_name, show_loading)
 			    },
 			    title: {
 			        text: name,
-			        x: -20//center
+			        x: -20,//center
+			        style : {
+						textTransform : 'normal'
+					}
 			    },
 			    xAxis: {
-			        type: 'datetime',
-			        dateTimeLabelFormats: {
+			        //type: 'datetime',
+			        /*dateTimeLabelFormats: {
 			            //don't display the dummy year  month: '%e.%b',
 			            year: '%b'
-			        },
-			        minTickInterval: 24 * 3600 * 1000
+			        },*/
+			        //minTickInterval: 24 * 3600 * 1000
+			        categories: categories,
+			        tickmarkPlacement: 'on',
+			        minTickInterval : min_tick_interval
 			    },
 			    yAxis: {
 			        title: {
@@ -1263,12 +1280,15 @@ function showDealAreaSpline(url, selector, name, yaxis_name, show_loading)
 			        min: 0
 			    },
 			    //Tooltip to show details,
-			    ongraphtooltip: {
-			        formatter: function(){
-			            return'<b>'+this.series.name+'</b><br/>'+Highcharts.dateFormat('%e.%b',
-			            this.x)+': '+this.y.toFixed(2);
-			        }
-			    },
+			    tooltip: {
+	    			formatter: function(){
+		        		return '<div>' + 
+		        		        '<div class="p-n">'+this.x+'</div>' + 
+		        		        '<div class="p-n"><font color='+this.series.color+'>'+this.series.name+'</font> : '+getCurrencySymbolForCharts()+''+getNumberWithCommasForCharts(this.y)+'</div>' +
+		        		        '</div>';
+		        	},
+		        	useHTML: true
+	        	},
 			    legend: {
 			        layout: 'vertical',
 			        align: 'right',
@@ -1286,4 +1306,18 @@ function showDealAreaSpline(url, selector, name, yaxis_name, show_loading)
 			});
 		});
 	});
+}
+function getCurrencySymbolForCharts(){
+	var value = ((CURRENT_USER_PREFS.currency != null) ? CURRENT_USER_PREFS.currency : "USD-$");
+	var symbol = ((value.length < 4) ? "$" : value.substring(4, value.length));
+	return symbol;
+}
+function getNumberWithCommasForCharts(value){
+	value = parseFloat(value);
+	value = Math.round(value);
+	if(value==0)
+		return value;
+
+	if (value)
+		return value.toFixed(2).toString().replace(/\B(?=(?:\d{3})+(?!\d))/g, ",").replace('.00', '');
 }
