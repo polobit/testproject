@@ -669,10 +669,10 @@ head.ready(["core", "stats"], function(){
 	if(!HANDLEBARS_PRECOMPILATION)
 		downloadTemplate("tpl.js");
 	$('[data-toggle="tooltip"]').tooltip();
-	if(navigator.userAgent.indexOf("Chrome") != -1 && readCookie('CHORME_EXTENSION_DOWNLOAD')!="false" && !document.getElementById('agilecrm_extension')){
+	/* if(navigator.userAgent.indexOf("Chrome") != -1 && readCookie('CHORME_EXTENSION_DOWNLOAD')!="false" && !document.getElementById('agilecrm_extension')){
 	var chorme_extesion_temp=getTemplate("chrome-extension-download",{});
 	$('body').append(chorme_extesion_temp);
-	}
+	} */
 	
 });
 });

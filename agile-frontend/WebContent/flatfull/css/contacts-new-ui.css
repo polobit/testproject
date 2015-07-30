@@ -760,4 +760,10 @@ border-color: #23b7e5!important;
 .agent-popup-alert .clickdesk-image img {
 	height: 40px;
 }
+
+.google-apps-icon{
+	height: 32px;
+  margin-top: 14px;
+  margin-left: 5px;
+}
 /* End of Popup alerts (Chrome extension)*/

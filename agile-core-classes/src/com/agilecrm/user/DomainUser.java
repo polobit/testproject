@@ -103,7 +103,7 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 	public boolean is_disabled = false;
 
 	@NotSaved(IfDefault.class)
-	public boolean is_send_password = true;
+	public boolean is_send_password = false;
 
 	/**
 	 * Email content to be sent for the first time
