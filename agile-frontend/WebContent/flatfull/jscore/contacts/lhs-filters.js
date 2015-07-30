@@ -197,44 +197,9 @@ $('#lhs-contact-filter-form select[name="CONDITION"]').die().live('change', func
 	}
 });
 
-$('#lhs-contact-filter-form #RHS input:not(.date)').die().live("blur keyup", function(e)
+$('#lhs-contact-filter-form #RHS input').die().live("blur keyup", function(e)
 {
 	if (e.type == 'focusout' || e.keyCode == '13')
-	{
-		var prevVal = $(this).attr('prev-val');
-		var currVal = $(this).val().trim();
-		if (prevVal == currVal)
-		{
-			return;
-		}
-		else
-		{
-			$(this).attr('prev-val', currVal);
-		}
-		if ($(this).parent().next().attr("id") == "RHS_NEW")
-		{
-			if ($(this).parent().next().find('input').val() != "" && currVal != "")
-			{
-				submitLhsFilter();
-				$(this).blur();
-			}
-		}
-		else
-		{
-			if (currVal == "")
-			{
-				var container = $(this).parents('.lhs-contact-filter-row');
-				$(container).find('a.clear-filter-condition-lhs').addClass('hide');
-			}
-			submitLhsFilter();
-			$(this).blur();
-		}
-	}
-});
-
-$('#lhs-contact-filter-form #RHS input.date').die().live("change keyup", function(e)
-{
-	if (e.type == 'change' || e.keyCode == '13')
 	{
 		var prevVal = $(this).attr('prev-val');
 		var currVal = $(this).val().trim();
@@ -324,42 +289,9 @@ $('#lhs-contact-filter-form #RHS_NEW select').die().live("change", function(e)
 	$(this).blur();
 });
 
-$('#lhs-contact-filter-form #RHS_NEW input:not(.date)').die().live("blur keyup", function(e)
+$('#lhs-contact-filter-form #RHS_NEW input').die().live("blur keyup", function(e)
 {
 	if (e.type == 'focusout' || e.keyCode == '13')
-	{
-		var prevVal = $(this).attr('prev-val');
-		var currVal = $(this).val().trim();
-		if (prevVal == currVal)
-		{
-			return;
-		}
-		else
-		{
-			$(this).attr('prev-val', currVal);
-		}
-		if ($(this).parent().prev().attr("id") == "RHS")
-		{
-			if ($(this).parent().prev().find('input').val() != "")
-			{
-				submitLhsFilter();
-				$(this).blur();
-			}
-		}
-		else
-		{
-			if (currVal != "")
-			{
-				submitLhsFilter();
-				$(this).blur();
-			}
-		}
-	}
-});
-
-$('#lhs-contact-filter-form #RHS_NEW input.date').die().live("change keyup", function(e)
-{
-	if (e.type == 'change' || e.keyCode == '13')
 	{
 		var prevVal = $(this).attr('prev-val');
 		var currVal = $(this).val().trim();
