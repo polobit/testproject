@@ -482,15 +482,15 @@ var AdminSettingsRouter = Backbone.Router.extend({
 
 		var emailGateway;
 		$.each(this.integrations.collection.where({name:"EmailGateway"}),function(key,value){
-			var prefJSON = JSON.parse(value.attributes.prefs);
-			if(prefJSON["email_api"])
-				emailGateway = prefJSON["email_api"];
-			});
+		
+			emailGateway = JSON.parse(value.attributes.prefs);
+		
+		});
 		
 		// Allow only one Email gateway configured
-		if(emailGateway)//check if email gateway exist
+		if(emailGateway && emailGateway["email_api"])//check if email gateway exist
 		{
-			if(emailGateway.toUpperCase() != value)//checks if the current email gateway is the same as the clicked one
+			if(emailGateway["email_api"].toUpperCase() != value)//checks if the current email gateway is the same as the clicked one
 			{
 			modalAlert("sms-integration-alert-modal","You have a Email Gateway already configured. Please disable that to configure a new one.","Email Gateway Configured");
 			this.navigate("integrations", { trigger : true });
@@ -498,14 +498,12 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			}
 		}	
 
-		var email_gateway_model = App_Admin_Settings.integrations.collection.where({ name : "EmailGateway" })[0];
-		
-		if(!email_gateway_model){
-			email_gateway_model = new Backbone.Model({"email_api": value, "api_user":"", "api_key": ""});
-		}
-		
+		// To show template according to api. Note: Widget and EmailGateway model is different
+		if(!emailGateway)
+			emailGateway = {"email_api":value, "api_user": "", "api_key":""}; 
+				
 		this.email_gateway = new Base_Model_View({ 
-			model : email_gateway_model,
+			data : emailGateway,
 			url : 'core/api/email-gateway',
 			template : 'settings-email-gateway', postRenderCallback : function(el)
 			{
