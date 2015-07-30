@@ -60,7 +60,7 @@ public class JSONPRequestFilter implements Filter
 		JSONObject error = new JSONObject();
 		try
                 {
-	            error.put("error", "Request form unauthorised domain");
+	            error.put("error", "Request from unauthorised domain");
 	            out.println(error.toString());
                 }
                 catch (JSONException e)
