@@ -3,33 +3,37 @@
 <td style="cursor:default;" class="select_checkbox">
 </td>
 
-<td>
-	<div class="row-fluid">
+
 {{#if contact}}
-    	<div style="display:inline;padding-right:5px;height:auto;">
+<td class="data" data="{{contact.id}}">
+	<div class="row-fluid">
+    	<div class="thumb-sm agile-img m-r-sm" style="margin-right:10px">
 {{#wrap_entity this.contact}}
         	<img class="img-inital r r-2x" style="height:30px;width:30px" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}" />
         </div>
     	<div style="height:auto;display:inline-block;vertical-align:top;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;width:70%">
-        	<b>	{{getPropertyValue properties "first_name"}}
-        		{{getPropertyValue properties "last_name"}} </b>
+        	<a class="text-cap custom-link">{{getPropertyValue properties "first_name"}}
+        		{{getPropertyValue properties "last_name"}} 
+               </a>
         	<br />
         		{{getPropertyValue properties "email"}}
 {{/wrap_entity}}
 		</div>
+</td>
+<div class="row-fluid">
 {{else}}
-    	<div style="display:inline;padding-right:5px;height:auto;">
-        	<img class="img-inital r r-2x" style="height:30px;width:30px" src="https://dpm72z3r2fvl4.cloudfront.net/css/images/user-default.png" />
-        </div>
+<td>
+<div class="thumb-sm agile-img m-r-sm" style="margin-right:10px">
+<img class="img-inital r r-2x" style="height:30px;width:30px" data-name="{{dataNameAvatar properties}}" src="{{getDefaultImage}}" />
+</div>
+ 
     	<div style="height:auto;display:inline-block;vertical-align:top;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;width:70%">
         	<b>	Anonymous </b>
 		</div>
 {{/if}}
 	</div>
 </td>
-<td><div>{{page_views}}</div></td>
-<td><div>{{ref}}</div></td>
-<td><div>{{capitalizeFirstLetter city country}}</div>{{#if user_agent}}
+<td><a target="_blank" href="{{ref}}">{{ref}}</a>{{#if user_agent}}
 			{{#stringToJSON this "parsedUserAgent"}}
         	<div>
 				{{#if device_type}}
@@ -44,7 +48,8 @@
         	</div>
        		{{/stringToJSON}}
         {{/if}}</td>
-<td><div>{{timeAgo visit_time}} 
+<td><div>{{capitalizeFirstLetter city country}}</div></td>
+<td><div style="text-align:right;">{{timeAgo visit_time}} 
 
 </div></td>
 
@@ -69,16 +74,14 @@
 				url="core/api/bulk/update?action_type=DELETE">
 				<col width="0%">
 				<col width="20%">
-                <col width="10%">
-                <col width="30%">
-				<col width="20%">
+                <col width="35%">
+				<col width="25%">
 				<col width="20%">
 				<div class="filter-criteria"></div>
 				<thead>
 					<tr>
                         <th></th>
 						<th>Name</th>
-                        <th>Pages</th>
                         <th>Referer</th>
 						<th>Location</th>
                         <th></th>

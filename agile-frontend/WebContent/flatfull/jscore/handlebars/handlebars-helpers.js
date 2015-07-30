@@ -6417,6 +6417,15 @@ $(function()
 	});
 	
 	/**
+	 * Returns a default image url .
+	 * 
+	 */
+	Handlebars.registerHelper('getDefaultImage',function(){
+		return new Handlebars.SafeString(LIB_PATH_FLATFULL + 'images/flatfull/user-default.jpg');
+		
+	});
+	
+	/**
 	 * Returns table headings for custom companies list view
 	 */
 	Handlebars.registerHelper('companyTableHeadings', function(item)
