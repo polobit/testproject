@@ -311,7 +311,7 @@ var CompaniesRouter = Backbone.Router
 				}, error : function(data, response)
 				{
 					if (response && response.status == '403')
-						$("#content").html(response.responseText);
+						$("#content").html("You do not have permission to view this Company.");
 				} });
 
 				return;

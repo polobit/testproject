@@ -221,7 +221,7 @@
 		
 		var map_view=localStorage.getItem('MAP_VIEW');
 		if(map_view=="disabled"){
-			$("#map_view_action").html("<i class='icon-plus text-sm c-p' title='Show map' id='enable_map_view'></i>");
+			$("#map_view_action",el).html("<i class='icon-plus text-sm c-p' title='Show map' id='enable_map_view'></i>");
 			return;
 		}
 			

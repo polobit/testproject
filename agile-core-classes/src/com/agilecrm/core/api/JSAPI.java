@@ -600,12 +600,15 @@ public class JSAPI
 		return JSAPIUtil.generateContactMissingError();
 
 	    ObjectMapper mapper = new ObjectMapper();
+	    List<ContactField> properties = contact.properties;
 
-	    // Reads contact field object from json.
-	    ContactField field = mapper.readValue(obj.toString(), ContactField.class);
+	    for (int i = 0; i < contact.properties.size(); i++)
+	        if(StringUtils.equals(contact.properties.get(i).name, obj.getString("name")) && StringUtils.equals(contact.properties.get(i).subtype, obj.getString("subtype")))
+	            properties.remove(i);
 
-	    // Adds/updates field to contact and saves it
-	    contact.addProperty(field);
+	    properties.add(new ContactField(obj.getString("name"), obj.getString("value"), obj.getString("subtype")));
+	    contact.properties = properties;
+	    contact.save();
 
 	    // Returns updated contact
 	    return mapper.writeValueAsString(contact);

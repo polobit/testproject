@@ -6,7 +6,7 @@ define([
 		var url = window.location.protocol + '//' + window.location.host + '/' + 'core/api/forms/form?formId=' + formNumber;
 		
 		if(typeof formLoadDomain != 'undefined')
-			url = 'https://' + formLoadDomain + '.agilecrm.com/core/api/forms/form?formId=' + formNumber;
+			url = 'https://my.agilecrm.com/fbformload?formId=' + formNumber + '&domain=' + formLoadDomain;
 		
 		$.ajax({
 			url : url,

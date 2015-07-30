@@ -103,7 +103,7 @@ public class ContactExportCSVUtil
 		ContactCSVExport.FACEBOOK, ContactCSVExport.XING, ContactCSVExport.BLOG, ContactCSVExport.GOOGLE_PLUS,
 		ContactCSVExport.FLICKR, ContactCSVExport.GITHUB, ContactCSVExport.YOUTUBE };
 
-	return ContactExportCSVUtil.appendCustomFieldsToHeaders(headers, SCOPE.COMPANY);
+	return getHeaders(ContactExportCSVUtil.appendCustomFieldsToHeaders(headers, SCOPE.COMPANY));
     }
 
     /**
@@ -173,8 +173,8 @@ public class ContactExportCSVUtil
 		sb.append(note.subject.trim());
 	    if (note.description != null)
 		sb.append("\n" + note.description);
-	    //ten notes are already added in header use that index.
-	    contactData[contactData.length-10+count] = sb.toString();
+	    // ten notes are already added in header use that index.
+	    contactData[contactData.length - 10 + count] = sb.toString();
 	    count++;
 	    if (count == 10)
 		break;

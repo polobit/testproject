@@ -319,7 +319,7 @@ function showPortletSettings(el){
 		var options ='<option value="">Select...</option>'
 			+'<option value="contacts">All Contacts</option>'
 			+'<option value="myContacts">My Contacts</option>';
-		$.ajax({ type : 'GET', url : '/core/api/filters', async : false, dataType : 'json',
+		$.ajax({ type : 'GET', url : '/core/api/filters?type=PERSON', async : false, dataType : 'json',
 			success: function(data){
 				$.each(data,function(index,contactFilter){
 					options+="<option value="+contactFilter.id+">"+contactFilter.name+"</option>";

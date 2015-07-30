@@ -892,6 +892,14 @@
 		<url-pattern>/facebookpagetab</url-pattern>
 	</servlet-mapping>	
 	<servlet>
+		<servlet-name>FacebookFormLoadServlet</servlet-name>
+		<servlet-class>com.agilecrm.facebookpage.FacebookFormLoadServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>FacebookFormLoadServlet</servlet-name>
+		<url-pattern>/fbformload</url-pattern>
+	</servlet-mapping>
+	<servlet>
 		<servlet-name>FacebookPageServlet</servlet-name>
 		<servlet-class>com.agilecrm.facebookpage.FacebookPageServlet</servlet-class>
 	</servlet>
