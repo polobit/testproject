@@ -224,7 +224,11 @@ function serializeLhsFilters(element)
 		}
 		RHS_NEW_VALUE = $(RHS_NEW_ELEMENT).val();
 		if ($(RHS_NEW_ELEMENT).hasClass("date") && RHS_NEW_VALUE && RHS_NEW_VALUE !="") {
-			var date = new Date($(RHS_NEW_ELEMENT).val());
+			var date;
+			if(CURRENT_USER_PREFS.dateFormat.indexOf("dd/mm/yy") != -1 || CURRENT_USER_PREFS.dateFormat.indexOf("dd.mm.yy") != -1)
+				date = new Date(convertDateFromUKtoUS($(RHS_NEW_ELEMENT).val()));
+			else
+				date = new Date($(RHS_NEW_ELEMENT).val());
 			RHS_NEW_VALUE = getGMTEpochFromDate(date);
 		}
 		if(RHS_NEW_VALUE && typeof RHS_NEW_VALUE == "string") {
