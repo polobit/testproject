@@ -134,10 +134,12 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
 	if (company_util.isCompany() && id)
 	{
 
+
 		// If user refreshes in company details page, then none of the list
 		// views are defined so, company will be fetched from detailed view
 		if (App_Companies.companyDetailView && App_Companies.companyDetailView.model != null && App_Companies.companyDetailView.model.get('id') == id)
 			obj = App_Companies.companyDetailView.model.toJSON();
+
 
 		// If company list view is defined, then company is fetched from list.
 		else if (App_Companies.companiesListView && App_Companies.companiesListView.collection.get(id) != null)
@@ -608,10 +610,11 @@ function deserialize_contact(contact, template)
 	// Loads the form based on template value
 	var form = $("#content").html(getTemplate(template, contact));
 
-	// Add placeholder and date picker to date custom fields
-	$('.date_input').attr("placeholder", "MM/DD/YYYY");
 
-	$('.date_input').datepicker({ format : 'mm/dd/yyyy', weekStart : CALENDAR_WEEK_START_DAY });
+	// Add placeholder and date picker to date custom fields
+	$('.date_input').attr("placeholder", "Select Date");
+
+	$('.date_input').datepicker({ format : CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY});
 
 	// To set typeahead for tags
 	setup_tags_typeahead();
@@ -744,12 +747,19 @@ function custom_Property_JSON(name, type, form_id)
 
 	console.log(elem_type);
 
+
 	if (elem_type == 'checkbox')
 		elem_value = elem.is(':checked') ? 'on' : 'off';
 	else if (elem.hasClass("date_input"))
-		elem_value = new Date(elem.val()).getTime() / 1000;
-	else
-		elem_value = elem.val();
+		{
+			if(CURRENT_USER_PREFS.dateFormat.indexOf("dd/mm/yy") != -1 || CURRENT_USER_PREFS.dateFormat.indexOf("dd.mm.yy") != -1)
+				elem_value = new Date(convertDateFromUKtoUS(elem.val())).getTime() / 1000;
+			else
+				elem_value = new Date(elem.val()).getTime() / 1000;
+		}
+		else
+			elem_value = elem.val();
+
 
 	json.value = elem_value;
 

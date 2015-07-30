@@ -767,13 +767,12 @@ $(function()
 	{
 		if(!date)
 			return;
-		var format = CURRENT_USER_PREFS.dateFormat;
-		format = format.replace(/MM/g, "mmmm").replace(/M/g, "mmm").replace(/DD/g, "dddd").replace(/D/g, "ddd");
 		var dateString = new Date(date);
 		if(dateString == "Invalid Date")
 			return getDateInFormatFromEpoc(date);
 		else
-			return dateString.format(format);
+			return en.dateFormatter({raw: getGlobalizeFormat()})(dateString);
+
 		
 	});
 

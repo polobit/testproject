@@ -109,9 +109,13 @@ $(function()
 	$('#casesModal, #casesUpdateModal').on("shown.bs.modal", function()
 	{
 		// Add placeholder and date picker to date custom fields
-		$('.date_input').attr("placeholder", "MM/DD/YYYY");
 
-		$('.date_input').datepicker({ format : 'mm/dd/yyyy', weekStart : CALENDAR_WEEK_START_DAY });
+		$('.date_input').attr("placeholder","Select Date");
+    
+		$('.date_input').datepicker({
+			format: CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY
+		});
+
 	});
 
 	/**
@@ -217,7 +221,11 @@ function showCases()
 	});
 
 	// Enable the datepicker
-	$('#close_date', el).datepicker({ format : 'mm/dd/yyyy', weekStart : CALENDAR_WEEK_START_DAY });
+
+	$('#close_date', el).datepicker({
+		format : CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY
+	});
+		
 
 	$("#casesModal").modal('show');
 }
