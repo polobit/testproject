@@ -217,6 +217,9 @@ public class AgileTaskletUtil {
 			// System.out.println("Field name is " + field.name);
 
 			JSONObject subscriberJSON = new JSONObject();
+			
+			// Added contact id. For new contact, id doesn't exist
+			subscriberJSON.put("id", contact.id);
 
 			List<ContactField> properties = contact.getProperties();
 
