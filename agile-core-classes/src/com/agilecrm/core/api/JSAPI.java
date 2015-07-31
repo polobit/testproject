@@ -18,6 +18,7 @@ import javax.ws.rs.core.MediaType;
 import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.JsonParseException;
+import org.codehaus.jackson.map.DeserializationConfig;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.json.JSONArray;
@@ -366,7 +367,6 @@ public class JSAPI
     {
 	try
 	{
-
 	    // Replace multiple space with single space
 	    tags = tags.trim().replaceAll(" +", " ");
 
@@ -431,7 +431,6 @@ public class JSAPI
     {
 	try
 	{
-
 	    // Replace multiple space with single space
 	    tags = tags.trim().replaceAll(" +", " ");
 
@@ -1448,6 +1447,59 @@ public class JSAPI
 	    c.addContactToCase(contact.id.toString());
 	    c.save();
 	    return mapper.writeValueAsString(c);
+	}
+	catch (JsonParseException e)
+	{
+	    e.printStackTrace();
+	    return null;
+	}
+	catch (JsonMappingException e)
+	{
+	    e.printStackTrace();
+	    return null;
+	}
+	catch (IOException e)
+	{
+	    e.printStackTrace();
+	    return null;
+	}
+    }
+
+    @Path("/opportunity/update-deal")
+    @GET
+    @Produces("application / x-javascript;charset=UTF-8;")
+    public String updateOpportunity(@QueryParam("opportunity") String opportunity, @QueryParam("email") String email)
+    {
+	try
+	{
+	    JSONObject dealJson = new JSONObject(opportunity);
+
+	    if (!dealJson.has("id"))
+		return JSAPIUtil.generateJSONErrorResponse(Errors.ID_NOT_FOUND, "deal");
+
+	    Opportunity deal = OpportunityUtil.getOpportunity(dealJson.getLong("id"));
+	    if (deal == null)
+		return JSAPIUtil.generateJSONErrorResponse(Errors.ENTITY_NOT_FOUND, "Deal");
+
+	    ObjectMapper mapper = new ObjectMapper();
+	    JSONObject oldDealJson = new JSONObject(mapper.writeValueAsString(deal)); //
+
+	    Iterator<?> keys = dealJson.keys();
+	    while (keys.hasNext())
+	    {
+		String key = (String) keys.next();
+		if (oldDealJson.has(key))
+		    oldDealJson.put(key, dealJson.getString(key));
+	    }
+	    mapper.configure(DeserializationConfig.Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+	    Opportunity updatedDeal = mapper.readValue(oldDealJson.toString(), Opportunity.class);
+	    updatedDeal.save();
+	    return mapper.writeValueAsString(updatedDeal);
+	}
+	catch (JSONException e)
+	{
+	    e.printStackTrace();
+	    return null;
 	}
 	catch (JsonParseException e)
 	{
