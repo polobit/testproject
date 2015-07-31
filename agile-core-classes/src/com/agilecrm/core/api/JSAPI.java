@@ -1482,7 +1482,7 @@ public class JSAPI
 		return JSAPIUtil.generateJSONErrorResponse(Errors.ENTITY_NOT_FOUND, "Deal");
 
 	    ObjectMapper mapper = new ObjectMapper();
-	    JSONObject oldDealJson = new JSONObject(mapper.writeValueAsString(deal)); //
+	    JSONObject oldDealJson = new JSONObject(mapper.writeValueAsString(deal));
 
 	    Iterator<?> keys = dealJson.keys();
 	    while (keys.hasNext())
