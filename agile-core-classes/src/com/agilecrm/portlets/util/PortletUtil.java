@@ -1416,12 +1416,12 @@ public class PortletUtil {
 		String endDate = CampaignReportsUtil.getEndDateForReports(String.valueOf(maxTime*1000), json.getString("timeZone"));
 		
 		String [] array = {"EMAIL_SENT","EMAIL_OPENED","EMAIL_CLICKED","UNSUBSCRIBED"};
-		if (json.getString("campaigntype").equalsIgnoreCase("All"))
-		campaignEmailsJSONArray = getCountByLogTypesforPortlets(startDate,endDate,json.getString("timeZone"),array);
+		//if (json.getString("campaigntype").equalsIgnoreCase("All"))
+		campaignEmailsJSONArray = getCountByLogTypesforPortlets(json.getString("campaigntype"),startDate,endDate,json.getString("timeZone"));
 			
-		else
-			{campaignEmailsJSONArray	=CampaignReportsSQLUtil.getEachCampaignStatsForTable(json.getString("campaigntype"),startDate,endDate,json.getString("timeZone"),a);
-				System.out.println("see"+campaignEmailsJSONArray);	}
+		//else
+			//{campaignEmailsJSONArray	=CampaignReportsSQLUtil.getEachCampaignStatsForTable(json.getString("campaigntype"),startDate,endDate,json.getString("timeZone"),a);
+				System.out.println("see"+campaignEmailsJSONArray);	//}
 		if(campaignEmailsJSONArray!=null && campaignEmailsJSONArray.length()>0)
 		{	
 		try{
@@ -1452,21 +1452,22 @@ public class PortletUtil {
 		return datajson;
 		}
 		
-		 public static JSONArray getCountByLogTypesforPortlets(String startDate, String endDate, String timeZone, String[] logType)
+		 public static JSONArray getCountByLogTypesforPortlets(String campaignType,String startDate, String endDate, String timeZone)
     {
     	
 			 String domain=NamespaceManager.get();
+			 String query;
     	// For development
     	if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Development)
     	    domain = "localhost";
 
-    	if (StringUtils.isEmpty(domain) ||  logType == null || logType.length == 0)
-    	    return null;
-
+    	//if (StringUtils.isEmpty(domain) ||  logType == null || logType.length == 0)
+    	  //  return null;
+    		
     	// Returns (sign)HH:mm from total minutes.
     	String timeZoneOffset = GoogleSQLUtil.convertMinutesToTime(timeZone);
     	
-    	String query = "SELECT log_type,count(Distinct subscriber_id) AS count ,count(subscriber_id) AS total "+  
+    	/* String query = "SELECT log_type,count(Distinct subscriber_id) AS count ,count(subscriber_id) AS total "+  
     			" FROM stats.campaign_logs USE INDEX(domain_logtype_logtime_index) "+
     	                "WHERE DOMAIN="+GoogleSQLUtil.encodeSQLColumnValue(domain) +" AND log_type = " + GoogleSQLUtil.encodeSQLColumnValue(logType[0]) + 
     	                " AND log_time BETWEEN CONVERT_TZ("+GoogleSQLUtil.encodeSQLColumnValue(startDate)+","+GoogleSQLUtil.getConvertTZ2(timeZoneOffset)+") " + 
@@ -1485,9 +1486,20 @@ public class PortletUtil {
     	    	                " AND log_time BETWEEN CONVERT_TZ("+GoogleSQLUtil.encodeSQLColumnValue(startDate)+","+GoogleSQLUtil.getConvertTZ2(timeZoneOffset)+") " + 
     	    	                "AND CONVERT_TZ("+GoogleSQLUtil.encodeSQLColumnValue(endDate)+","+GoogleSQLUtil.getConvertTZ2(timeZoneOffset)+") GROUP BY log_type ";
     	        	 
-    	         }
-    	         
-//    	         System.out.println("Query is " + query);
+    	         } */
+			if(campaignType.equalsIgnoreCase("All"))	 
+				 query  =  "SELECT log_type,count(Distinct subscriber_id) AS count ,count(subscriber_id) AS total "+ 
+									" FROM stats.campaign_logs USE INDEX(domain_logtype_logtime_index) "+
+									"WHERE DOMAIN="+GoogleSQLUtil.encodeSQLColumnValue(domain) +" AND log_type in ('EMAIL_SENT','EMAIL_OPENED','EMAIL_CLICKED','UNSUBSCRIBED')"+
+									" AND log_time BETWEEN CONVERT_TZ("+GoogleSQLUtil.encodeSQLColumnValue(startDate)+","+GoogleSQLUtil.getConvertTZ2(timeZoneOffset)+") " +
+										 "AND CONVERT_TZ("+GoogleSQLUtil.encodeSQLColumnValue(endDate)+","+GoogleSQLUtil.getConvertTZ2(timeZoneOffset)+") GROUP BY log_type ";
+			else
+				 query = "SELECT log_type,count(DISTINCT subscriber_id) AS count,count(subscriber_id) AS total "+  
+									"FROM stats.campaign_logs USE INDEX(campid_domain_logtype_logtime_subid_index) "+
+									"WHERE DOMAIN="+GoogleSQLUtil.encodeSQLColumnValue(domain)+" AND campaign_id="+GoogleSQLUtil.encodeSQLColumnValue(campaignType)+" AND log_type in ('EMAIL_SENT','EMAIL_OPENED','EMAIL_CLICKED','UNSUBSCRIBED')"+
+									"AND log_time BETWEEN CONVERT_TZ("+GoogleSQLUtil.encodeSQLColumnValue(startDate)+","+GoogleSQLUtil.getConvertTZ2(timeZoneOffset)+") " + 
+									"AND CONVERT_TZ("+GoogleSQLUtil.encodeSQLColumnValue(endDate)+","+GoogleSQLUtil.getConvertTZ2(timeZoneOffset)+") GROUP BY log_type " ;
+                
     	
     	try
     	{

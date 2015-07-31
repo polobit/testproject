@@ -833,6 +833,15 @@ border-radius: 2px;
 
 .text-count{
 font-size:30px;
+    position: relative;
+    top: 50%;
+    transform: translateY(-80%);
+}
+
+.stats_text
+{
+	width:45%;
+	height:100%;
 }
 
 .graph >.highcharts-container

@@ -1638,9 +1638,9 @@ $('.portlet-settings-save-modal').live('click', function(e){
 					selector3.addClass('pull-left p-xs w-half');
 				that.find('#emails-sent-count').text(getNumberWithCommasForPortlets(emailsSentCount));
 				that.find('#emails-sent-label').text("Emails sent");
-				that.find('#emails-opened').append('<div class="pull-left text-light" style="width: 45%;"><div class="text-sm text-ellipsis">Opened</div><div class="text-count text-center" style="color:rgb(250, 215, 51);">'+getNumberWithCommasForPortlets(emailsOpenedCount)+'</div></div><div class="pull-left graph" id=opengraph style="height:100%; width:55%"></div>');
-				that.find('#emails-clicked').append('<div class="pull-left text-light" style="width:45%"><div class="text-sm text-ellipsis">Clicked</div><div class="text-count text-center" style="color:rgb(18, 209, 18);">'+getNumberWithCommasForPortlets(emailsClickedCount)+'</div></div><div class="pull-left graph" id=clickedgraph style="height:100%;width:55%"></div>');
-				that.find('#emails-unsubscribed').append('<div class="pull-left text-light" style="width:45%"><div class="text-sm text-ellipsis">Unsubscribed</div><div class="text-count text-center" style="color:rgb(240, 80, 80);">'+getNumberWithCommasForPortlets(emailsUnsubscribed)+'</div></div><div class="pull-left graph" id=unsubgraph style="height:100%;width:55%"></div>');
+				that.find('#emails-opened').append('<div class="pull-left text-light stats_text" ><div class="text-sm text-ellipsis">Opened</div><div class="text-count text-center" style="color:rgb(250, 215, 51);">'+getNumberWithCommasForPortlets(emailsOpenedCount)+'</div></div><div class="pull-left graph" id=opengraph style="height:100%; width:55%"></div>');
+				that.find('#emails-clicked').append('<div class="pull-left text-light stats_text"><div class="text-sm text-ellipsis">Clicked</div><div class="text-count text-center" style="color:rgb(18, 209, 18);">'+getNumberWithCommasForPortlets(emailsClickedCount)+'</div></div><div class="pull-left graph" id=clickedgraph style="height:100%;width:55%"></div>');
+				that.find('#emails-unsubscribed').append('<div class="pull-left text-light stats_text"><div class="text-sm text-ellipsis">Unsubscribed</div><div class="text-count text-center" style="color:rgb(240, 80, 80);">'+getNumberWithCommasForPortlets(emailsUnsubscribed)+'</div></div><div class="pull-left graph" id=unsubgraph style="height:100%;width:55%"></div>');
 				var series=[];
 				series.push(["Emails Sent",emailsSentCount-emailsOpenedCount]);
 				series.push(["Emails Opened",emailsOpenedCount]);
