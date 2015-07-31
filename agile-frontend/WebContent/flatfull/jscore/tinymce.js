@@ -396,6 +396,7 @@ function get_contact_json_for_merge_fields()
 				contact_property_json[arr[i]]= get_formatted_date(contact_property_json[arr[i]]);
 			
 			contact_property_json["location"] = JSON.parse(contact_property_json["address"]);
+			contact_property_json["id"] = contact_json["id"];
 		}
 		catch(err)
 		{
