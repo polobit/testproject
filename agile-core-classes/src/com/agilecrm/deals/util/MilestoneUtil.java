@@ -70,6 +70,8 @@ public class MilestoneUtil
 	Milestone milestone = new Milestone("New,Prospect,Proposal,Won,Lost");
 	milestone.name = "Default";
 	milestone.isDefault = true;
+	milestone.won_milestone = "Won";
+	milestone.lost_milestone = "Lost";
 	milestone.save();
 	return milestone;
     }
