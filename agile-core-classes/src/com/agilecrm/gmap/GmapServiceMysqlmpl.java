@@ -89,7 +89,9 @@ public class GmapServiceMysqlmpl implements GmapService {
     		String convertedStartDate = DateUtil.getMySQLNowDateFormat(Long.parseLong(startDate), timeZone);
     	    String convertedEndDate = DateUtil.getMySQLNowDateFormat(Long.parseLong(endDate), timeZone);
     		
-    	    String query=" select guid,email,city,region,country,user_agent,stats_time as visit_time,sid,ref from page_views where domain="+GoogleSQLUtil.encodeSQLColumnValue(userDomain)+" and stats_time BETWEEN DATE("+GoogleSQLUtil.encodeSQLColumnValue(convertedStartDate)+")  AND DATE("+GoogleSQLUtil.encodeSQLColumnValue(convertedEndDate)+") order by stats_time desc ";
+    	    String query=" select guid,email,city,region,country,user_agent,stats_time as visit_time,sid,ref from page_views where domain="+GoogleSQLUtil.encodeSQLColumnValue(userDomain)+" and stats_time BETWEEN " +GoogleSQLUtil.encodeSQLColumnValue(getStartDateTimeStamp(convertedStartDate))+"  AND "+GoogleSQLUtil.encodeSQLColumnValue(getEndDateTimeStamp(convertedEndDate))+" order by stats_time desc ";
+    	    
+    	    System.out.println("Query "+query);
     		
     	    /*Appends limit to the existing query if offset and pagesize were recieved from client */
     		if(queryOffset == null && pageSize != null){
@@ -169,6 +171,24 @@ public class GmapServiceMysqlmpl implements GmapService {
 		}
 		return agentDetailsArray;
 		
+	}
+	
+	private  String getStartDateTimeStamp(String startDate){
+		if(startDate != null){
+			startDate = startDate.substring(0, 10);
+			startDate += " 00:00:00"; 
+			return startDate;
+		}
+		return null;
+	}
+	
+	private  String getEndDateTimeStamp(String endDate){
+		if(endDate != null){
+			endDate = endDate.substring(0, 10);
+			endDate +=" 23:59:59";
+			return endDate;
+		}
+		return null;
 	}
 	
 
