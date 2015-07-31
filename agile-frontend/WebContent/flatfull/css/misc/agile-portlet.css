@@ -834,3 +834,9 @@ border-radius: 2px;
 .text-count{
 font-size:30px;
 }
+
+.graph >.highcharts-container
+{
+	height: 100%!important;
+	width : 100%!important;
+}

@@ -6507,7 +6507,7 @@ Handlebars.registerHelper('get_campaign_type_filter', function(filter_name)
 {
 	var campaign_type ='';
 	if(filter_name=='All')
-		campaign_type= 'All Campaign';
+		campaign_type= 'All Campaigns';
 	else{
 		var filter=$.ajax({ type : 'GET', url : '/core/api/workflows/'+filter_name, async : false, dataType : 'json',
 		success : function(data)
