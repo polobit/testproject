@@ -318,10 +318,10 @@ public class ShopifySyncImpl extends OneWaySyncService
 	try
 	{
 	    Response response = oAuthRequest.send();
-	    System.out.println("response.getHeader(x-shopify-shop-api-call-limit)----------"+response.getHeader("x-shopify-shop-api-call-limit"));
-	    if(response.getHeader("x-shopify-shop-api-call-limit")!=null && response.getHeader("x-shopify-shop-api-call-limit").equalsIgnoreCase("39/40"))
+	    System.out.println("response.getHeader(x-shopify-shop-api-call-limit)----------"+response.getHeader("X-Shopify-Shop-Api-Call-Limit"));
+	    if(response.getHeader("X-Shopify-Shop-Api-Call-Limit")!=null && response.getHeader("X-Shopify-Shop-Api-Call-Limit").equalsIgnoreCase("39/40"))
 	    {
-	    	System.out.println("response.getHeader(x-shopify-shop-api-call-limit)----------"+response.getHeader("x-shopify-shop-api-call-limit"));
+	    	System.out.println("response.getHeader(x-shopify-shop-api-call-limit)----------"+response.getHeader("X-Shopify-Shop-Api-Call-Limit"));
 	    	Thread.sleep(10000);
 	    	getCustomerCount(url);
 	    }
@@ -372,10 +372,10 @@ public class ShopifySyncImpl extends OneWaySyncService
 	try
 	{
 	    Response response = oAuthRequest.send();
-	    System.out.println("response.getHeader(x-shopify-shop-api-call-limit)----------"+response.getHeader("x-shopify-shop-api-call-limit"));
-	    if(response.getHeader("x-shopify-shop-api-call-limit")!=null && response.getHeader("x-shopify-shop-api-call-limit").equalsIgnoreCase("39/40"))
+	    System.out.println("response.getHeader(x-shopify-shop-api-call-limit)----------"+response.getHeader("X-Shopify-Shop-Api-Call-Limit"));
+	    if(response.getHeader("X-Shopify-Shop-Api-Call-Limit")!=null && response.getHeader("X-Shopify-Shop-Api-Call-Limit").equalsIgnoreCase("39/40"))
 	    {
-	    	System.out.println("response.getHeader(x-shopify-shop-api-call-limit)----------"+response.getHeader("x-shopify-shop-api-call-limit"));
+	    	System.out.println("response.getHeader(x-shopify-shop-api-call-limit)----------"+response.getHeader("X-Shopify-Shop-Api-Call-Limit"));
 	    	Thread.sleep(10000);
 	    	getCustomers(accessURl, currentPage, countURL);
 	    }
