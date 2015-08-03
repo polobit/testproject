@@ -18,14 +18,14 @@
 				<div class="control-group form-group">
 						<div class="controls">
 							{{#if_equals email_api "SEND_GRID"}}
-								<input type="text" autocomplete="off" class="input-medium required form-control" placeholder="API User" value="{{api_user}}" name="api_user">
+								<input type="text" autocomplete="off" class="input-medium required form-control" placeholder="Username" value="{{api_user}}" name="api_user">
 							{{/if_equals}}
 						</div>
 				</div>
 				<div class="control-group form-group">
 						<div class="controls">
 							{{#if_equals email_api "SEND_GRID"}}
-								<input type="password" autocomplete="off" class="input-medium form-control required" placeholder="API Key" value="{{api_key}}"  name="api_key"/>
+								<input type="password" autocomplete="off" class="input-medium form-control required" placeholder="Password" value="{{api_key}}"  name="api_key"/>
 							{{/if_equals}}
 
                         	{{#if_equals email_api "MANDRILL"}}
