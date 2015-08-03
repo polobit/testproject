@@ -311,6 +311,7 @@ public class ShopifySyncImpl extends OneWaySyncService
     private int getCustomerCount(String url)
     {
     System.out.println("Start getCustomerCount(-)-----");
+    System.out.println("url------"+url);
 	int count = 0;
 	OAuthRequest oAuthRequest = new OAuthRequest(Verb.GET, url);
 	oAuthRequest.addHeader("X-Shopify-Access-Token", prefs.token);
@@ -326,6 +327,9 @@ public class ShopifySyncImpl extends OneWaySyncService
 		count = Integer.parseInt(properties.get("count"));
 	    System.out.println("count----"+count);
 	    System.out.println("properties.containsKey(count)----"+properties.containsKey("count"));
+	    for (Map.Entry<String,String> entry : properties.entrySet()) {
+			System.out.println(entry.getKey()+"---------"+entry.getValue());
+		}
 	}
 
 	catch (OAuthException e)
