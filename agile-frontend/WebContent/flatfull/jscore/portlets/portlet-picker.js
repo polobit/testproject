@@ -1052,7 +1052,7 @@ function set_p_portlets(base_model){
 					var selector1=that.find('#emails-opened');
 					var selector2=that.find('#emails-clicked');
 					var selector3=that.find('#emails-unsubscribed');
-					that.find('#emails-sent').addClass('pull-left p-xs b-b b-r b-light w-half');
+					that.find('#emails-sent').addClass('pull-left p-xs b-b b-r b-light w-half overflow-hidden');
 					selector1.addClass('pull-left p-xs b-b b-light w-half');
 					selector2.addClass('pull-left p-xs b-r b-light w-half');
 					selector3.addClass('pull-left p-xs w-half');
