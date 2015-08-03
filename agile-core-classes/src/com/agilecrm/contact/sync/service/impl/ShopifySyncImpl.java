@@ -319,7 +319,7 @@ public class ShopifySyncImpl extends OneWaySyncService
 	{
 	    Response response = oAuthRequest.send();
 	    System.out.println("response.getHeader(x-shopify-shop-api-call-limit)----------"+response.getHeader("x-shopify-shop-api-call-limit"));
-	    if(response.getHeader("x-shopify-shop-api-call-limit").equalsIgnoreCase("39/40"))
+	    if(response.getHeader("x-shopify-shop-api-call-limit")!=null && response.getHeader("x-shopify-shop-api-call-limit").equalsIgnoreCase("39/40"))
 	    {
 	    	System.out.println("response.getHeader(x-shopify-shop-api-call-limit)----------"+response.getHeader("x-shopify-shop-api-call-limit"));
 	    	Thread.sleep(10000);
@@ -373,12 +373,12 @@ public class ShopifySyncImpl extends OneWaySyncService
 	{
 	    Response response = oAuthRequest.send();
 	    System.out.println("response.getHeader(x-shopify-shop-api-call-limit)----------"+response.getHeader("x-shopify-shop-api-call-limit"));
-	    /*if(response.getHeader("x-shopify-shop-api-call-limit").equalsIgnoreCase("39/40"))
+	    if(response.getHeader("x-shopify-shop-api-call-limit")!=null && response.getHeader("x-shopify-shop-api-call-limit").equalsIgnoreCase("39/40"))
 	    {
 	    	System.out.println("response.getHeader(x-shopify-shop-api-call-limit)----------"+response.getHeader("x-shopify-shop-api-call-limit"));
 	    	Thread.sleep(10000);
 	    	getCustomers(accessURl, currentPage, countURL);
-	    }*/
+	    }
 	    Map<String, ArrayList<LinkedHashMap<String, Object>>> results = new ObjectMapper().readValue(
 		    response.getStream(), Map.class);
 	    customers = results.get("customers");
