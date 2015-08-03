@@ -310,6 +310,7 @@ public class ShopifySyncImpl extends OneWaySyncService
 
     private int getCustomerCount(String url)
     {
+    System.out.println("Start getCustomerCount(-)-----");
 	int count = 0;
 	OAuthRequest oAuthRequest = new OAuthRequest(Verb.GET, url);
 	oAuthRequest.addHeader("X-Shopify-Access-Token", prefs.token);
@@ -323,6 +324,8 @@ public class ShopifySyncImpl extends OneWaySyncService
 		    });
 	    if (properties.containsKey("count"))
 		count = Integer.parseInt(properties.get("count"));
+	    System.out.println("count----"+count);
+	    System.out.println("properties.containsKey(count)----"+properties.containsKey("count"));
 	}
 
 	catch (OAuthException e)
@@ -336,6 +339,7 @@ public class ShopifySyncImpl extends OneWaySyncService
 	{
 	    e.printStackTrace();
 	}
+	System.out.println("End getCustomerCount(-)-----");
 	return count;
     }
 
@@ -349,7 +353,8 @@ public class ShopifySyncImpl extends OneWaySyncService
      */
     public ArrayList<LinkedHashMap<String, Object>> getCustomers(String accessURl, int currentPage, String countURL)
     {
-
+    System.out.println("Start getCustomers(-,-,-)-------");
+    System.out.println("currentPage---"+currentPage+"--------MAX_FETCH_RESULT-----"+MAX_FETCH_RESULT);
 	OAuthRequest oAuthRequest = new OAuthRequest(Verb.GET, accessURl);
 	oAuthRequest.addHeader("X-Shopify-Access-Token", prefs.token);
 	ArrayList<LinkedHashMap<String, Object>> customers = new ArrayList<LinkedHashMap<String, Object>>();
@@ -360,7 +365,7 @@ public class ShopifySyncImpl extends OneWaySyncService
 		    response.getStream(), Map.class);
 	    customers = results.get("customers");
 	    int total_customers = getCustomerCount(countURL);
-
+	    System.out.println("total_customers-------"+total_customers);
 	    // Some times no customers getting due to invalid response so
 	    // if customers null again calling the getCustomers method
 	    if ((customers == null && (currentPage * MAX_FETCH_RESULT) < total_customers)
@@ -380,6 +385,7 @@ public class ShopifySyncImpl extends OneWaySyncService
 	{
 	    e.printStackTrace();
 	}
+	System.out.println("End getCustomers(-,-,-)-------");
 	return customers;
     }
 
