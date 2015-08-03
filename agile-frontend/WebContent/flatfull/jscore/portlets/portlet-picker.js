@@ -2186,7 +2186,7 @@ function campstatsPieChart(selector,data,count1,count2){
 				marginTop: 0,
 					marginBottom: -6,
 					marginLeft: 0,
-					marginRight: 5,
+					marginRight: 0,
 					pullOutRadius: 0,
 					            events: {
                 load: function(e) {
