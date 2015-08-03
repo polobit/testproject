@@ -321,6 +321,14 @@ margin-bottom:7px;
 }
 
 
+@media all and (max-width: 767px) {
+
+body {
+  background-size: cover;
+
+}
+  
+}
 
 
   </style>
