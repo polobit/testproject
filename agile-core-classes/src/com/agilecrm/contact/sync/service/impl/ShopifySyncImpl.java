@@ -322,8 +322,12 @@ public class ShopifySyncImpl extends OneWaySyncService
 	    if(response!=null && response.getCode()==429)
 	    {
 	    	System.out.println("response.getCode()--------------"+response.getCode());
+	    	System.out.println("before thread sleep--------------");
 	    	Thread.sleep(10000);
+	    	oAuthRequest = new OAuthRequest(Verb.GET, url);
+	    	oAuthRequest.addHeader("X-Shopify-Access-Token", prefs.token);
 	    	response = oAuthRequest.send();
+	    	System.out.println("after thread sleep--------------");
 	    }
 	    HashMap<String, String> properties = new ObjectMapper().readValue(response.getBody(),
 		    new TypeReference<HashMap<String, String>>()
@@ -376,8 +380,12 @@ public class ShopifySyncImpl extends OneWaySyncService
 	    if(response!=null && response.getCode()==429)
 	    {
 	    	System.out.println("response.getCode()--------------"+response.getCode());
+	    	System.out.println("before thread sleep--------------");
 	    	Thread.sleep(10000);
+	    	oAuthRequest = new OAuthRequest(Verb.GET, accessURl);
+	    	oAuthRequest.addHeader("X-Shopify-Access-Token", prefs.token);
 	    	response = oAuthRequest.send();
+	    	System.out.println("after thread sleep--------------");
 	    }
 	    Map<String, ArrayList<LinkedHashMap<String, Object>>> results = new ObjectMapper().readValue(
 		    response.getStream(), Map.class);
@@ -395,6 +403,7 @@ public class ShopifySyncImpl extends OneWaySyncService
 	}
 	catch (OAuthException e)
 	{
+		e.printStackTrace();
 	    if (e.getCause().equals(new SocketTimeoutException())
 		    || e.getCause().toString().contains((new SocketTimeoutException()).toString()))
 		getCustomers(accessURl, currentPage, countURL);
