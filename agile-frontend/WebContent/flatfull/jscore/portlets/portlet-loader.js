@@ -35,6 +35,8 @@ function loadPortlets(el){
 					if(Portlets_View.collection.length==0)
 						$('.gridster > div:visible > div',el).removeClass('gs-w');
 				// });
+				initializePortletsListeners_1();
+				initializePortletsListeners_2();
 			} });
 		this.Portlets_View.appendItem = set_p_portlets;
 
@@ -725,7 +727,8 @@ $('body').on('click', '.portlet-maximize', function(e) {
 	
 	$('#'+id).parent().find('.portlet_body').show();
 });
-$('body').on('click', '.portlet-settings-save-modal', function(e) {
+function initializePortletsListeners_2(){
+$('.modal-footer').off("click").on('click', '.portlet-settings-save-modal', function(e) {
 	e.preventDefault();
 	var scrollPosition=$(window).scrollTop();
 	var form_id=$(this).parent().prev().find('form:visible').attr('id');
@@ -1580,40 +1583,8 @@ $('body').on('click', '.portlet-settings-save-modal', function(e) {
 		});
 	}
 });
-function showPortletSettingsForm(formId){
-	$('#portletSettingsModal > .modal-body > form').each(function(){
-		if($(this).attr('id')==formId)
-			$(this).show();
-		else
-			$(this).hide();
-	});
-}
-function initBlogPortletSync(el)
-{
-	head
-			.js(
-					LIB_PATH + 'lib/jquery.feeds.min.js',
-					function()
-					{
 
-						$('#portlet_blog_sync_container',el)
-								.feeds(
-										{
-											feeds : { blog : "https://www.agilecrm.com/blog/feed/" },
-											max : 3,
-											entryTemplate : function(entry)
-											{
-												return '' + '<a href="' + entry.link + '" title = "' + entry.title + '" target="_blank" >' + entry.title + '</a><div style="color:#999;font-size:11px;line-height: 13px;margin-bottom:5px">' 
-												+ new Date(entry.publishedDate).format('mmm d, yyyy') + '</div><p style="padding-top:5px;margin-bottom:15px">' 
-												+ entry.contentSnippet.replace('<a', '<a target="_blank"') + '</p>';
-											},
-											onComplete : function(e){
-												$('#portlet_blog_sync_container',el).append('<span class="pull-right"><a href="https://www.agilecrm.com/blog" target="_blank">Agile CRM Blog</a></span>');
-											} });
-					});
-
-}
-$('body').on('change', '#group-by-task-report', function(e) {
+$('#portletsTaskReportSettingsModal').off("change").on('change', '#group-by-task-report', function(e) {
 	
 	$('#tasks-task-report').trigger("change");
 	
@@ -1637,7 +1608,8 @@ $('body').on('change', '#group-by-task-report', function(e) {
 	else
 		$('#tasks-control-group').show();
 });
-$('body').on('change', '#tasks-task-report', function(e) {
+
+$('.modal-content').off("change").on('change', '#tasks-task-report', function(e) {
 	if($('#tasks-task-report').val()=="completed-tasks"){
 		if($('#split-by-task-report > option#status').is(':selected'))
 			$('#split-by-task-report > option#status').attr("selected",false);
@@ -1646,31 +1618,20 @@ $('body').on('change', '#tasks-task-report', function(e) {
 	else
 		$('#split-by-task-report > option#status').show();
 });
-$('body').on('mouseover', '.stats_report_portlet_body', function(e) {
+
+$('.gridster-portlets').off("mouseover").on('mouseover', '.stats_report_portlet_body', function(e) {
 	if($('.stats_report_portlet_body').parent().find('.gs-resize-handle'))
 		$('.stats_report_portlet_body').parent().find('.gs-resize-handle').remove();
 	$('.stats_report_portlet_body').find('.portlet_header_icons').css("visibility","visible");
 	//$('.stats_report_portlet_body').find('.stats-report-settings').find('span').eq(0).addClass('p-l-lg');
 });
-$('body').on('mouseout', '.stats_report_portlet_body', function(e) {
+
+$('.gridster-portlets').off("mouseout").on('mouseout', '.stats_report_portlet_body', function(e) {
 	$('.stats_report_portlet_body').find('.portlet_header_icons').css("visibility","hidden");
 	//$('.stats_report_portlet_body').find('.stats-report-settings').find('span').eq(0).removeClass('p-l-lg');
 });
-$('body').on('click', '.onboarding-skip', function(e) {
-	$(this).parent().find('span').css("text-decoration","line-through");
-	if(!$(this).parent().find('small').hasClass('onboarding-undo'))
-		$(this).parent().find('span').after("<small class='p-l-sm onboarding-undo c-p'>(undo)</small>");
-	$(this).remove();
-});
-$('body').on('click', '.onboarding-undo', function(e) {
-	$(this).parent().find('span').css("text-decoration","none");
-	$(this).parent().find('label').remove();
-	$(this).parent().find('span').before("<label class='i-checks i-checks-sm onboarding-check' style='padding-right:4px;'><input type='checkbox'><i></i></label>");
-	if(!$(this).parent().find('small').hasClass('onboarding-skip'))
-		$(this).parent().find('span').after("<small class='p-l-sm onboarding-skip c-p'>(skip)</small>");
-	$(this).remove();
-});
-$('body').on('change', '.onboarding-check', function(e) {
+
+$('.portlet_body').off("change").on('change', '.onboarding-check', function(e) {
 	/*$(this).parent().find('span').before("<label class='fa fa-check p-r-sm'><i></i></label>");
 	if(!$(this).parent().find('small').hasClass('onboarding-undo'))
 		$(this).parent().find('span').after("<small class='p-l-sm onboarding-undo c-p'>(undo)</small>");
@@ -1711,6 +1672,103 @@ $('body').on('change', '.onboarding-check', function(e) {
 			}} });
 		
 });
+
+$('.gridster-portlets').off("mouseover").on('mouseover', '.leaderboard_portlet_header', function(e) {
+	$('.leaderboard_portlet_header').find('.portlet_header_icons').css("visibility","visible");
+});
+
+$('.gridster-portlets').off("mouseout").on('mouseout', '.leaderboard_portlet_header', function(e) {
+	$('.leaderboard_portlet_header').find('.portlet_header_icons').css("visibility","hidden");
+});
+
+$('.modal-body').off("click").on('click', '#category-select-all', function(e) {
+		e.preventDefault();
+		$('#category-list').multiSelect('select_all');
+});
+
+$('.modal-content').off("click").on('click', '#category-select-none', function(e) {
+		e.preventDefault();
+		$('#category-list').multiSelect('deselect_all');
+});
+
+$('.modal-body').on('click', '#user-select-all', function(e) {
+		e.preventDefault();
+		$('#user-list').multiSelect('select_all');
+});
+
+$('.modal-content').on('click', '#user-select-none', function(e) {
+		e.preventDefault();
+		$('#user-list').multiSelect('deselect_all');
+});
+
+$('.modal-body').on('click', '#calls-user-select-all', function(e) {
+	e.preventDefault();
+	$('#calls-user-list').multiSelect('select_all');
+});
+
+$('.modal-content').on('click', '#calls-user-select-none', function(e) {
+	e.preventDefault();
+	$('#calls-user-list').multiSelect('deselect_all');
+});
+
+$('.modal-body').on('click', '#task-report-user-select-all', function(e) {
+		e.preventDefault();
+		$('#task-report-user-list').multiSelect('select_all');
+});
+
+$('.modal-content').on('click', '#task-report-user-select-none', function(e) {
+		e.preventDefault();
+		$('#task-report-user-list').multiSelect('deselect_all');
+});
+
+}
+function showPortletSettingsForm(formId){
+	$('#portletSettingsModal > .modal-body > form').each(function(){
+		if($(this).attr('id')==formId)
+			$(this).show();
+		else
+			$(this).hide();
+	});
+}
+function initBlogPortletSync(el)
+{
+	head
+			.js(
+					LIB_PATH + 'lib/jquery.feeds.min.js',
+					function()
+					{
+
+						$('#portlet_blog_sync_container',el)
+								.feeds(
+										{
+											feeds : { blog : "https://www.agilecrm.com/blog/feed/" },
+											max : 3,
+											entryTemplate : function(entry)
+											{
+												return '' + '<a href="' + entry.link + '" title = "' + entry.title + '" target="_blank" >' + entry.title + '</a><div style="color:#999;font-size:11px;line-height: 13px;margin-bottom:5px">' 
+												+ new Date(entry.publishedDate).format('mmm d, yyyy') + '</div><p style="padding-top:5px;margin-bottom:15px">' 
+												+ entry.contentSnippet.replace('<a', '<a target="_blank"') + '</p>';
+											},
+											onComplete : function(e){
+												$('#portlet_blog_sync_container',el).append('<span class="pull-right"><a href="https://www.agilecrm.com/blog" target="_blank">Agile CRM Blog</a></span>');
+											} });
+					});
+
+}
+$('body').on('click', '.onboarding-skip', function(e) {
+	$(this).parent().find('span').css("text-decoration","line-through");
+	if(!$(this).parent().find('small').hasClass('onboarding-undo'))
+		$(this).parent().find('span').after("<small class='p-l-sm onboarding-undo c-p'>(undo)</small>");
+	$(this).remove();
+});
+$('body').on('click', '.onboarding-undo', function(e) {
+	$(this).parent().find('span').css("text-decoration","none");
+	$(this).parent().find('label').remove();
+	$(this).parent().find('span').before("<label class='i-checks i-checks-sm onboarding-check' style='padding-right:4px;'><input type='checkbox'><i></i></label>");
+	if(!$(this).parent().find('small').hasClass('onboarding-skip'))
+		$(this).parent().find('span').after("<small class='p-l-sm onboarding-skip c-p'>(skip)</small>");
+	$(this).remove();
+});
 function gravatarImgForPortlets(width){
 	// Default image
 	var img = DEFAULT_GRAVATAR_url;
@@ -1723,44 +1781,6 @@ function gravatarImgForPortlets(width){
 	var data_name = '';
 	return new Handlebars.SafeString('https://secure.gravatar.com/avatar/' + Agile_MD5("") + '.jpg?s=' + width + '' + backup_image + data_name);
 }
-$('body').on('mouseover', '.leaderboard_portlet_header', function(e) {
-	$('.leaderboard_portlet_header').find('.portlet_header_icons').css("visibility","visible");
-});
-$('body').on('mouseout', '.leaderboard_portlet_header', function(e) {
-	$('.leaderboard_portlet_header').find('.portlet_header_icons').css("visibility","hidden");
-});
-$('body').on('click', '.leaderboard_portlet_header', function(e) {
-		e.preventDefault();
-		$('#category-list').multiSelect('select_all');
-});
-$('body').on('click', '#category-select-none', function(e) {
-		e.preventDefault();
-		$('#category-list').multiSelect('deselect_all');
-});
-$('body').on('click', '#user-select-all', function(e) {
-		e.preventDefault();
-		$('#user-list').multiSelect('select_all');
-});
-$('body').on('click', '#user-select-none', function(e) {
-		e.preventDefault();
-		$('#user-list').multiSelect('deselect_all');
-});
-$('body').on('click', '#calls-user-select-all', function(e) {
-	e.preventDefault();
-	$('#calls-user-list').multiSelect('select_all');
-});
-$('body').on('click', '#calls-user-select-none', function(e) {
-	e.preventDefault();
-	$('#calls-user-list').multiSelect('deselect_all');
-});
-$('body').on('click', '#task-report-user-select-all', function(e) {
-		e.preventDefault();
-		$('#task-report-user-list').multiSelect('select_all');
-});
-$('body').on('click', '#task-report-user-select-none', function(e) {
-		e.preventDefault();
-		$('#task-report-user-list').multiSelect('deselect_all');
-});
 function getDurationForPortlets(duration){
 	var time_period = 'Today';
 		if (duration == 'yesterday'){
