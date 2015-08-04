@@ -48,13 +48,13 @@ function updateActivityReport(id){
 	
 }
 
-$(function(){
+function initializeActivityReportsListeners(){
 	
 	$('body').on('hidden.bs.modal', '#activityReportModal', function(e){
 		$('#users-list, #activity-type-list').multiSelect('deselect_all');
 	});
 	
-	$('body').on('click', '#activity-reports-email-now', function(e){
+	$('#activity-report-model-list').off("click").on('click', '#activity-reports-email-now', function(e){
 		e.preventDefault();
 		e.stopPropagation();
 		var id = $(this).attr('data');
@@ -147,4 +147,4 @@ $(function(){
 			updateActivityReport($(this).closest('tr').find('.data').attr('data'));
 		});
 	*/
-});
+}

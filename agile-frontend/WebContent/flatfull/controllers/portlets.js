@@ -268,7 +268,8 @@ function deletePortlet(el) {
 								+ getDurationForPortlets(model.get("settings").duration)
 								+ "?");
 }
-$('body').on(
+function initializePortletsListeners_1(){
+	$('#portletDeleteModal').off("click").on(
 		"click",'.portlet-delete-modal',
 		function(e) { 
 			e.preventDefault();
@@ -301,36 +302,18 @@ $('body').on(
 				},
 				dataType : 'json'
 			});
-		});
-/*
- * $("#add-portlet").live("click", function(e){ e.preventDefault();
- * this.Catalog_Portlets_View = new Base_Collection_View({ url :
- * '/core/api/portlets/default', restKey : "portlet", templateKey :
- * "portlets-add", sort_collection : false, individual_tag_name : 'div',
- * postRenderCallback : function(el){
- * if($('#deals',$('#portletStreamModal')).children().length==0)
- * $('#deals',$('#portletStreamModal')).parent().hide();
- * if($('#taksAndEvents',$('#portletStreamModal')).children().length==0)
- * $('#taksAndEvents',$('#portletStreamModal')).parent().hide();
- * if($('#userActivity',$('#portletStreamModal')).children().length==0)
- * $('#userActivity',$('#portletStreamModal')).parent().hide(); } });
- * 
- * this.Catalog_Portlets_View.appendItem = organize_portlets; //
- * this.Catalog_Portlets_View.collection.fetch(); // Show form modal
- * $('#portletStreamModal').modal('show'); // Add social network types template
- * $("#portletstreamDetails",$('#portletStreamModal')).html(this.Catalog_Portlets_View.el);
- * 
- * });
- */
- $('body').on(
+	});
+
+	$('.portlet_body').off("click").on(
 		"click",'#portlets-contacts-model-list > tr, #portlets-companies-model-list > tr, #portlets-contacts-email-opens-model-list > tr',
 		function(e) {
 			var id = $(this).find(".data").attr("data");
 			App_Contacts.navigate("contact/" + id, {
 				trigger : true
 			});
-		});
- $('body').on(
+	});
+
+	$('.portlet_body').off("click").on(
 		"click",'#portlets-opportunities-model-list > tr',
 		function(e) {
 			/*
@@ -354,8 +337,9 @@ $('body').on(
 					trigger : true
 				});
 			}
-		});
-$('body').on(
+	});
+
+	$('.portlet_body').off("click").on(
 		"click",'#portlets-events-model-list > tr',
 		function(e) {
 					var hrefFlag = false;
@@ -477,10 +461,11 @@ $('body').on(
 						$("#updateActivityModal").modal('show');
 						return false;
 					}
-				});
-$('body').on(
+	});
+
+	$('.portlet_body').off("click").on(
 		"click",'#portlets-tasks-model-list > tr',
-		function(e) {`
+		function(e) {
 			/*
 			 * App_Portlets.currentPosition =
 			 * ''+$(this).parents('.gs-w').find('.column_position').text().trim()+''+$(this).parents('.gs-w').find('.row_position').text().trim();
@@ -498,7 +483,8 @@ $('body').on(
 			 */
 			var hrefFlag = false;
 			if (e.target.tagName.toLowerCase() == "a"
-					|| e.target.tagName.toLowerCase() == "i")
+					|| e.target.tagName.toLowerCase() == "i" 
+					|| e.target.tagName.toLowerCase() == "input")
 				hrefFlag = true;
 			/*
 			 * if(e.target.tagName.toLowerCase()=="a") hrefFlag = true;
@@ -513,13 +499,11 @@ $('body').on(
 					trigger : true
 				});
 			}
-		});
-/**
- * Makes the pending task as completed by calling complete_task function
- */
- $('body').on(
+	});
+
+	$('.gridster-portlets').off("click").on(
 		"click",'.portlets-tasks-select',
-		function(e) {`
+		function(e) {
 					e.stopPropagation();
 					if ($(this).is(':checked')) {
 						// Complete
@@ -550,15 +534,40 @@ $('body').on(
 											'<div class="portlet-error-message">No tasks found.</div>');
 						}
 					}
-				});
+	});
+
+	$('.gridster-portlets').off("click").on("click",'.portlet-settings',function(e) {
+		e.preventDefault();
+		showPortletSettings(this.id);
+	});
+}
+/*
+ * $("#add-portlet").live("click", function(e){ e.preventDefault();
+ * this.Catalog_Portlets_View = new Base_Collection_View({ url :
+ * '/core/api/portlets/default', restKey : "portlet", templateKey :
+ * "portlets-add", sort_collection : false, individual_tag_name : 'div',
+ * postRenderCallback : function(el){
+ * if($('#deals',$('#portletStreamModal')).children().length==0)
+ * $('#deals',$('#portletStreamModal')).parent().hide();
+ * if($('#taksAndEvents',$('#portletStreamModal')).children().length==0)
+ * $('#taksAndEvents',$('#portletStreamModal')).parent().hide();
+ * if($('#userActivity',$('#portletStreamModal')).children().length==0)
+ * $('#userActivity',$('#portletStreamModal')).parent().hide(); } });
+ * 
+ * this.Catalog_Portlets_View.appendItem = organize_portlets; //
+ * this.Catalog_Portlets_View.collection.fetch(); // Show form modal
+ * $('#portletStreamModal').modal('show'); // Add social network types template
+ * $("#portletstreamDetails",$('#portletStreamModal')).html(this.Catalog_Portlets_View.el);
+ * 
+ * });
+ */
+/**
+ * Makes the pending task as completed by calling complete_task function
+ */
 function hidePortletErrors(ele) {
 	if ($('#' + ele.id).next().is(':visible'))
 		$('#' + ele.id).next().hide();
 }
-$('body').on("click",'.portlet-settings',function(e) {
-	e.preventDefault();
-	showPortletSettings(this.id);
-});
 function addWidgetToGridster(base_model) {
 	var add_flag = true;
 	if (gridster != undefined) {

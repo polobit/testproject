@@ -22,14 +22,13 @@ function scramble_input_names(el)
 		scrambled_index+=1;
 	});
 }
-
-$(function()
+SEARCHABLE_CONTACT_CUSTOM_FIELDS = undefined;
+COMPANY_CUSTOM_FIELDS = undefined;
+function initializeContactFiltersListeners()
 {
-	SEARCHABLE_CONTACT_CUSTOM_FIELDS = undefined;
-	COMPANY_CUSTOM_FIELDS = undefined;
 	
 	// Filter Contacts- Clone Multiple
-	$('body').on('click', '.filter-contacts-multiple-add', function(e)
+	$('#content').off("click").on('click', '.filter-contacts-multiple-add', function(e)
 	{
 		e.preventDefault();
 		// To solve chaining issue when cloned
@@ -50,7 +49,7 @@ $(function()
 	});
 	
 	// Filter Contacts- Clone Multiple
-	$('body').on('click', '.filter-contacts-multiple-add-or-rules', function(e)
+	$('body').off("click").on('click', '.filter-contacts-multiple-add-or-rules', function(e)
 	{
 		e.preventDefault();
 		// To solve chaining issue when cloned
@@ -111,7 +110,7 @@ $(function()
 	
 
 	// Filter Contacts- Remove Multiple
-	$('body').on('click', 'i.filter-contacts-multiple-remove', function(e)
+	$('body').off("click").on('click', 'i.filter-contacts-multiple-remove', function(e)
 	{
 		$(this).closest("tr").remove();
 	});
@@ -226,7 +225,7 @@ $(function()
 	});
 	
 	
-});
+}
 
 /**
  * Sets up contact filters list in contacts list page, also whether cookie is
