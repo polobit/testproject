@@ -59,8 +59,6 @@ public class ShopifySyncImpl extends OneWaySyncService
     private String lastSyncPoint;
 
     SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd hh:mm");
-    
-    private int apiLimitIterationCount = 0;
 
     /*
      * (non-Javadoc)
@@ -320,19 +318,11 @@ public class ShopifySyncImpl extends OneWaySyncService
 	try
 	{
 	    Response response = oAuthRequest.send();
-	    Map<String, String> responseHeadersMap = response.getHeaders();
-	    if(responseHeadersMap!=null)
+	    //If we get 429 response code, we'll get the response again after 15 seconds.
+	    if(response!=null && response.getCode()==429)
 	    {
-	    	for (Map.Entry<String,String> entry : responseHeadersMap.entrySet()) {
-				System.out.println(entry.getKey()+"---------"+entry.getValue());
-			}
-	    }
-	    System.out.println("apiLimitIterationCount--------"+apiLimitIterationCount);
-	    if(response!=null && response.getCode()==429 && apiLimitIterationCount<10)
-	    {
-	    	apiLimitIterationCount++;
-	    	Thread.sleep(10000);
-	    	getCustomerCount(url);
+	    	Thread.sleep(15000);
+	    	response = oAuthRequest.send();
 	    }
 	    HashMap<String, String> properties = new ObjectMapper().readValue(response.getBody(),
 		    new TypeReference<HashMap<String, String>>()
@@ -381,20 +371,11 @@ public class ShopifySyncImpl extends OneWaySyncService
 	try
 	{
 	    Response response = oAuthRequest.send();
-	    Map<String, String> responseHeadersMap = response.getHeaders();
-	    if(responseHeadersMap!=null)
+	    //If we get 429 response code, we'll get the response again after 15 seconds.
+	    if(response!=null && response.getCode()==429)
 	    {
-	    	System.out.println("responseHeadersMap----------------");
-	    	for (Map.Entry<String,String> entry : responseHeadersMap.entrySet()) {
-				System.out.println(entry.getKey()+"---------"+entry.getValue());
-			}
-	    }
-	    System.out.println("apiLimitIterationCount--------"+apiLimitIterationCount);
-	    if(response!=null && response.getCode()==429 && apiLimitIterationCount<5)
-	    {
-	    	apiLimitIterationCount++;
-	    	Thread.sleep(10000);
-	    	getCustomers(accessURl, currentPage, countURL);
+	    	Thread.sleep(15000);
+	    	response = oAuthRequest.send();
 	    }
 	    Map<String, ArrayList<LinkedHashMap<String, Object>>> results = new ObjectMapper().readValue(
 		    response.getStream(), Map.class);
