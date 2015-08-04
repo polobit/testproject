@@ -275,27 +275,23 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			return;
 		}
 		$("#content").html(getTemplate("admin-settings"), {});
+		$('#content').find('#AdminPrefsTab .select').removeClass('select');
+		$('#content').find('.analytics-code-tab').addClass('select');
+
 		head.js(LIB_PATH + 'lib/prettify-min.js', function()
 		{
-			var view = new Base_Model_View({ url : '/core/api/api-key', template : "admin-settings-api-key-model", postRenderCallback : function(el)
+			new Base_Model_View({ url : '/core/api/api-key', template : "admin-settings-api-key-model", postRenderCallback : function(el)
 			{
-
-				initializeRegenerateKeysListeners();
-				$('#content').find('#admin-prefs-tabs-content').html(view.el);
-
-				$('#content').find('#AdminPrefsTab .select').removeClass('select');
-				$('#content').find('.analytics-code-tab').addClass('select');
+				$('#content').find('#admin-prefs-tabs-content').html(el);
 				prettyPrint();
 				if (id)
 				{
-					switch(id)
-					{
+					switch (id) {
 					case "api-key":
 						break;
-					case "analytics-code":
-					case "allowed-domains":
-						$(el).find('a[href="#api-key"]').trigger('click');
+					default:
 						$(el).find('a[href="#' + id + '"]').trigger('click');
+						$(el).find('a[href="#api-key"]').trigger('click');
 						break;
 					}
 				}
@@ -310,7 +306,6 @@ var AdminSettingsRouter = Backbone.Router.extend({
 				{
 					$("#tracking-webrules-whitelist, .tracking-webrules-whitelist-tab").hide();
 				}
-
 			} });
 		});
 	},

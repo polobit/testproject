@@ -6791,3 +6791,28 @@ Handlebars.registerHelper('get_campaign_type_filter', function(filter_name)
 				}
 				return html;
 			});
+			
+			Handlebars.registerHelper('totalTimeFormat', function(timeInSec)
+			{
+				if (timeInSec == "0")
+					return "0 sec";
+
+				return SecondsToCampaignTime(timeInSec);
+			});
+
+	// To show blocked ips as list
+	Handlebars.registerHelper('blocked_ips_list', function(data)
+			{
+				var html = "";
+				if (data)
+				{
+					var blocked_ips = data.split(",");
+					for ( var i in blocked_ips)
+					{
+						blocked_ips[i] = blocked_ips[i].trim();
+						html += "<tr data='" + blocked_ips[i] + "' style='display: table-row;'><td><div class='inline-block v-top text-ellipsis' style='width:80%'>";
+						html += blocked_ips[i] + "</div></td><td class='b-r-none'><div class='m-b-n-xs' style='display:none;'><a class='blocked-ip-delete c-p m-l-sm text-l-none text-xs'  data-toggle='modal' role='button' href='#'><i title='Delete Blocked IP' class='task-action icon icon-trash'></i></a></div></td></tr>";
+					}
+				}
+				return html;
+			});

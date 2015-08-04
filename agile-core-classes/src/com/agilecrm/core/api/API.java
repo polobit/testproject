@@ -61,4 +61,12 @@ public class API
     {
 	return APIKey.updateAllowedDomains(allowedDomains);
     }
+    
+    @Path("api-key/blocked-ips")
+    @PUT
+    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    public APIKey updateBlockedIps(@QueryParam("blocked_ips") String blockedIps)
+    {
+	return APIKey.updateBlockedIps(blockedIps);
+    }
 }

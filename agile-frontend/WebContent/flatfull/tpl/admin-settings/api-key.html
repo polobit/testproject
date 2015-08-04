@@ -124,6 +124,31 @@
                      </div>
                   </div>
                   <!-- end of Allowed Domains template -->
+       			  <!-- Blocked IP's template -->
+                  <div class="panel panel-default">
+                     <div id="settings-blocked-ips">
+                        <div class="panel-heading" role="tab" id="headingTwo">
+                           <div class="panel-title">
+                              <a class="accordion-toggle" data-toggle="collapse" aria-controls="collapseTwo" aria-expanded="true" data-parent="#accordion" href="#blocked-ips">Blocked IP's</a>
+                           </div>
+                        </div>
+                        <div class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo" id="blocked-ips">
+                           <div class="panel-body p-n" id="api-accordion">
+   					<table class="table table-hover custom-fields-table bg-white m-b-none">
+   						<colgroup><col width="50%"><col width="4%"></colgroup>
+   						<tbody id="blocked_ips_list">
+   							{{#blocked_ips_list blocked_ips}}{{/blocked_ips_list}}
+   						</tbody>
+   					</table>
+   					<div class="show_field p-l p-t p-b">
+   						<input type="text" id="new_blocked_ip" name="new_blocked_ip" style="width:250px;display:inline-block;" class="form-control input-sm" placeholder="New Blocked IP">
+   						<a href="#blocked-ips" class="btn btn-sm btn-primary" id="update_blocked_ips">Add</a>
+   					</div>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+                  <!-- end of Blocked IPs template -->
                </div>
             </div>
          </div>

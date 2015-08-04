@@ -44,7 +44,10 @@ public class APIKey
 
     // Allowed Domains
     public String allowed_domains = "localhost, *";
-
+    
+    // Blocked IP Addresses String
+    public String blocked_ips = null;
+    
     /**
      * Domain User Key
      */
@@ -361,5 +364,25 @@ public class APIKey
     {
 	APIKey key = getAPIKey();
 	return key.allowed_domains;
+    }
+    
+    /**
+     * Update blocked ips of APIKey Object
+     */
+    public static APIKey updateBlockedIps(String blockedIps)
+    {
+	APIKey key = getAPIKey();
+	key.blocked_ips = blockedIps;
+	dao.put(key);
+	return key;
+    }
+    
+    /**
+     * Get Blocked IP's string
+     */
+    public static String getBlockedIps()
+    {
+	APIKey key = getAPIKey();
+	return key.blocked_ips;
     }
 }

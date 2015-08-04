@@ -10,6 +10,7 @@ import org.apache.commons.lang.StringUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.agilecrm.account.APIKey;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.user.notification.NotificationPrefs.Type;
 import com.agilecrm.user.notification.util.NotificationPrefsUtil;
@@ -91,6 +92,9 @@ public class AnalyticsServlet extends HttpServlet
 	// if domain is empty, avoid adding to SQL.
 	if (StringUtils.isBlank(domain))
 	    return;
+	
+	if(isBlockedIp(req))
+	    return;
 	    
 	// Insert into table
 	AnalyticsSQLUtil.addToPageViews(domain, guid, email, sid, url, ip, isNew, ref, userAgent, country, region,
@@ -149,5 +153,39 @@ public class AnalyticsServlet extends HttpServlet
 
 	return ipAddress;
     }
+    
+    /**
+     * Function to check if IP Address is Blocked
+     */
+    public static Boolean isBlockedIp(HttpServletRequest request)
+    {
+	try
+	{
+	    String[] blockedIpsArr = APIKey.getBlockedIps().split(",");
+	    String clientIp = getClientIP(request);
+	    for (int i = 0; i < blockedIpsArr.length; i++)
+	    {
+		if (ipMatch(clientIp, blockedIpsArr[i]))
+		    return true;
+	    }
+	    return false;
+	}
+	catch (Exception e)
+	{
+	    return true;
+	}
+    }
 
+    public static Boolean ipMatch(String clientIp, String blockedIp)
+    {
+	String[] clientIpTokens = clientIp.split("\\.");
+	String[] blockedIpTokens = blockedIp.split("\\.");
+	for (int i = 0; i < clientIpTokens.length; i++)
+	{
+	    if (!(StringUtils.equals(blockedIpTokens[i], "*") || StringUtils.equals(clientIpTokens[i],
+		    blockedIpTokens[i])))
+		return false;
+	}
+	return true;
+    }
 }
