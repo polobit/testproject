@@ -170,9 +170,9 @@ This is where you and your users will log in to your account
 <div class="form-group m-b-xs" style="margin-top: 18px;">
 <div class="col-sm-offset-3 col-sm-9 text-base"> We will create unique experience based on your role and company </div>
 </div>
-<div class="form-group">
+<div class="form-group m-b-none">
 <label class="col-sm-3 control-label"> Role & Company</label>
-<div class="col-sm-3">
+<div class="col-sm-3 m-b">
 <select class="form-control required" required  name="role">
 											<option value="" selected disabled>Role</option>
 											<option value="CEO">CEO</option>
@@ -189,7 +189,7 @@ This is where you and your users will log in to your account
 											<option value="Other">Other</option>
 								  </select>
 </div>
-<div class="col-sm-3">
+<div class="col-sm-3 m-b">
 	<select class="form-control required"  name="company_type" required  data-width="100%">
 											<option value="" selected disabled>Select Type</option>
 											<option value="B2B">B2B</option>

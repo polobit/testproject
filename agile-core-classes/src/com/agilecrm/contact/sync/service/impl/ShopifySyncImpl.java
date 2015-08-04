@@ -310,12 +310,25 @@ public class ShopifySyncImpl extends OneWaySyncService
 
     private int getCustomerCount(String url)
     {
+    System.out.println("Start getCustomerCount(-)-----");
+    System.out.println("url------"+url);
 	int count = 0;
 	OAuthRequest oAuthRequest = new OAuthRequest(Verb.GET, url);
 	oAuthRequest.addHeader("X-Shopify-Access-Token", prefs.token);
 	try
 	{
 	    Response response = oAuthRequest.send();
+	    //If we get 429 response code, we'll get the response again after 10 seconds.
+	    if(response!=null && response.getCode()==429)
+	    {
+	    	System.out.println("response.getCode()--------------"+response.getCode());
+	    	System.out.println("before thread sleep--------------");
+	    	Thread.sleep(10000);
+	    	oAuthRequest = new OAuthRequest(Verb.GET, url);
+	    	oAuthRequest.addHeader("X-Shopify-Access-Token", prefs.token);
+	    	response = oAuthRequest.send();
+	    	System.out.println("after thread sleep--------------");
+	    }
 	    HashMap<String, String> properties = new ObjectMapper().readValue(response.getBody(),
 		    new TypeReference<HashMap<String, String>>()
 		    {
@@ -323,6 +336,11 @@ public class ShopifySyncImpl extends OneWaySyncService
 		    });
 	    if (properties.containsKey("count"))
 		count = Integer.parseInt(properties.get("count"));
+	    System.out.println("count----"+count);
+	    System.out.println("properties.containsKey(count)----"+properties.containsKey("count"));
+	    for (Map.Entry<String,String> entry : properties.entrySet()) {
+			System.out.println(entry.getKey()+"---------"+entry.getValue());
+		}
 	}
 
 	catch (OAuthException e)
@@ -336,6 +354,7 @@ public class ShopifySyncImpl extends OneWaySyncService
 	{
 	    e.printStackTrace();
 	}
+	System.out.println("End getCustomerCount(-)-----");
 	return count;
     }
 
@@ -349,18 +368,30 @@ public class ShopifySyncImpl extends OneWaySyncService
      */
     public ArrayList<LinkedHashMap<String, Object>> getCustomers(String accessURl, int currentPage, String countURL)
     {
-
+    System.out.println("Start getCustomers(-,-,-)-------");
+    System.out.println("currentPage---"+currentPage+"--------MAX_FETCH_RESULT-----"+MAX_FETCH_RESULT);
 	OAuthRequest oAuthRequest = new OAuthRequest(Verb.GET, accessURl);
 	oAuthRequest.addHeader("X-Shopify-Access-Token", prefs.token);
 	ArrayList<LinkedHashMap<String, Object>> customers = new ArrayList<LinkedHashMap<String, Object>>();
 	try
 	{
 	    Response response = oAuthRequest.send();
+	    //If we get 429 response code, we'll get the response again after 10 seconds.
+	    if(response!=null && response.getCode()==429)
+	    {
+	    	System.out.println("response.getCode()--------------"+response.getCode());
+	    	System.out.println("before thread sleep--------------");
+	    	Thread.sleep(10000);
+	    	oAuthRequest = new OAuthRequest(Verb.GET, accessURl);
+	    	oAuthRequest.addHeader("X-Shopify-Access-Token", prefs.token);
+	    	response = oAuthRequest.send();
+	    	System.out.println("after thread sleep--------------");
+	    }
 	    Map<String, ArrayList<LinkedHashMap<String, Object>>> results = new ObjectMapper().readValue(
 		    response.getStream(), Map.class);
 	    customers = results.get("customers");
 	    int total_customers = getCustomerCount(countURL);
-
+	    System.out.println("total_customers-------"+total_customers);
 	    // Some times no customers getting due to invalid response so
 	    // if customers null again calling the getCustomers method
 	    if ((customers == null && (currentPage * MAX_FETCH_RESULT) < total_customers)
@@ -372,6 +403,7 @@ public class ShopifySyncImpl extends OneWaySyncService
 	}
 	catch (OAuthException e)
 	{
+		e.printStackTrace();
 	    if (e.getCause().equals(new SocketTimeoutException())
 		    || e.getCause().toString().contains((new SocketTimeoutException()).toString()))
 		getCustomers(accessURl, currentPage, countURL);
@@ -380,6 +412,7 @@ public class ShopifySyncImpl extends OneWaySyncService
 	{
 	    e.printStackTrace();
 	}
+	System.out.println("End getCustomers(-,-,-)-------");
 	return customers;
     }
 

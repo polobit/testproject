@@ -13,6 +13,8 @@ import javax.ws.rs.core.MediaType;
 import com.agilecrm.account.EmailGateway;
 import com.agilecrm.account.util.EmailGatewayUtil;
 import com.thirdparty.mandrill.webhook.MandrillWebhookUtil;
+import com.thirdparty.sendgrid.webhook.SendGridWebhook;
+import com.thirdparty.sendgrid.webhook.util.SendGridWebhookUtil;
 
 /**
  * <code>EmailGatewayAPI</code> is the api class for Email Gateways. It handles
@@ -73,12 +75,15 @@ public class EmailGatewayAPI
     @Path("/add-webhook")
     @GET
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public String addAgileWebhook(@QueryParam("api_key") String apiKey, @QueryParam("type") String type)
+    public String addAgileWebhook(@QueryParam("api_key") String apiKey, @QueryParam("api_user") String apiUser, @QueryParam("type") String type)
     {
 	// Add webhook
 	if (type.equals(EmailGateway.EMAIL_API.MANDRILL.toString()))
 	    return MandrillWebhookUtil.addWebhook(apiKey);
 
+	if(type.equals(EmailGateway.EMAIL_API.SEND_GRID.toString()))
+		return SendGridWebhookUtil.addWebhook(apiUser, apiKey);
+	
 	return null;
     }
 
