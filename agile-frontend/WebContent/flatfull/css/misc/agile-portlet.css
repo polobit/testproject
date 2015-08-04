@@ -713,14 +713,15 @@ border-radius: 2px;
 }
 .portlet_body_calendar>#calendar_container>.fc-content>.fc-view>.fc-border-separate>tbody>tr
  {
-  line-height: .66;
+  line-height: .45;
  }
  
 .portlet_body_calendar>#calendar_container>.fc-header>tbody>tr>td
 {
 	height : 11px;
 	background-color:#fff;
-	color:black
+	color:black;
+	 cursor: move;
 }
 .portlet_body_calendar>#calendar_container>.fc-header>tbody>tr>td .fc-button>.fc-button-inner, .portlet_body_calendar>#calendar_container>.fc-header>tbody>tr>td .fc-state-default{
 	background:#fff;

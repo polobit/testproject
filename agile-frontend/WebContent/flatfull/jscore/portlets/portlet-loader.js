@@ -89,7 +89,7 @@ function set_up_portlets(el, portlets_el){
         autogenerate_stylesheet: true,
         draggable: {
         	limit: true,
-        	ignore_dragging: [".portlet_body",".portlet_body *",".portlet-panel",".portlet-panel *"],
+        	ignore_dragging: [".portlet_body",".portlet_body *",".portlet-panel",".portlet-panel *",".fc-content *",".events_show *"],
         	stop: function(event,ui){
         		
         		//$('#'+this.$player.attr('id')).attr('id','ui-id-'+this.$player.attr('data-col')+'-'+this.$player.attr('data-row'));
@@ -1955,7 +1955,7 @@ function minicalendar(el)
 									   var todayDate=new Date(date.getFullYear(), date.getMonth(), date.getDate(),00,00,00);
 									   var endDate=new Date(date.getFullYear(), date.getMonth(), date.getDate(),23,59,59);
 									   if(start<todayDate &&  todayDate<end){
-												$(el).find('.events_show').empty().append('<div class="show p-t-xs text-md p-l-sm text-center">Today </div><ul class="list"></ul>');
+												$(el).find('.events_show').empty().append('<div class="show p-t-xs text-md text-center">Today </div><ul class="list"></ul>');
 												if($(el).parent().attr('data-sizey')==2)
 											   $(el).find('.show').css('padding-top','70px');
 										   else if($(el).parent().attr('data-sizey')==3)
@@ -2016,13 +2016,24 @@ function minicalendar(el)
 											 $.each(jso,function(index,ev){
 											if(ev.start >= (todayDate.getTime()/1000) && ev.start <= (endDate.getTime()/1000)) {	
 											var e_date= new Date(ev.start*1000);
-											$(el).find('.list').append('<li class="p-t-xs p-r-xs" style="color:'+ev.color+'"><span style="color : #58666e" class="text-cap">'+ev.title+'<br><small class="block m-t-n-xxs">'+ e_date.format('HH:MM') + ' </small></span></li>');
+											if($(el).find('.list').find('li').length!=0){
+												$(el).find('.list').find('small').each(function(x) 
+												{
+													if(e_date.format('HH:MM')<$(this).text())
+													{$(this).parents('li').before('<li class="p-t-xs p-r-xs" style="color:'+ev.color+'"><span style="color : #58666e" class="text-cap word-break"><a class="minical-portlet-event" id='+ev.id+' data='+ev+'>'+ev.title+'</a><br><small class="block m-t-n-xxs">'+ e_date.format('HH:MM') + ' </small></span></li>');
+													return false;}
+													else
+													{
+														$(this).parents('.list').append('<li class="p-t-xs p-r-xs" style="color:'+ev.color+'"><span style="color : #58666e" class="text-cap word-break"><a class="minical-portlet-event" id='+ev.id+' data='+ev+'>'+ev.title+'</a><br><small class="block m-t-n-xxs">'+ e_date.format('HH:MM') + ' </small></span></li>') ;
+														return false;
+													}
+												 });
+													}
+													else
+											$(el).find('.list').append('<li class="p-t-xs p-r-xs" style="color:'+ev.color+'"><span style="color : #58666e" class="text-cap word-break"><a class="minical-portlet-event" id='+ev.id+' data='+ev+'>'+ev.title+'</a><br><small class="block m-t-n-xxs">'+ e_date.format('HH:MM') + ' </small></span></li>');
 											}
 											}); 
-											if($(el).find('.list').find('li').length!=0 && $(el).find('.portlet-error-message').length!=0 )
-											{
-												$(el).find('.events_show').append('<div class="portlet-error-message" style="display:none">No appointments for the day</div>');
-											}
+											
 											
 											callback(jso);
 									   }
@@ -2043,6 +2054,7 @@ function minicalendar(el)
 							    									 	var year = event.start.getFullYear(), month = event.start.getMonth() + 1, date = event.start.getDate();
 					                   var result = year + '-' + (month < 10 ? '0' + month : month) + '-' + (date < 10 ? '0' + date : date);
 					                   $(element).addClass(result);
+					                   $(element).attr('id',event.id);
 									   
 									   $('.fc-event').find('.fc-event-inner').css('display','none');
 										var count=$(el).find('.'+result).length;
@@ -2114,22 +2126,80 @@ function minicalendar(el)
 		},
 								eventMouseover : function(event, jsEvent, view)
 						{
+							$(el).find('.portlet_header_icons').removeClass('vis-hide');
+							$(el).find('.fc-button').css('visibility','visible');
 							el.parent().css('z-index',3);
-							var leftorright = 'right';
-							var pullupornot = '';
-							if(jsEvent.relatedTarget.parentElement.parentNode.className.search('fc-last')>0 || jsEvent.relatedTarget.parentElement.className.search('fc-last')>0)
+							var reletedContacts = '';
+							var meeting_type = '';
+							if (event.contacts)
 							{
-								leftorright = 'bottom';
+								if (event.contacts.length > 0)
+									reletedContacts += '<i class="icon-user text-muted m-r-xs"></i>';
 							}
-							else if (event.start.getDay() == 0 || event.start.getDay() == 1 || event.start.getDay() == 2)
-									leftorright = 'left';
-								pullupornot = 'pull-up';
-								var popoverElement = '<div class="fc-overlay ' + leftorright + '">' + '<div class="panel bg-white b-a pos-rlt p-sm">' + '<span class="arrow ' + leftorright + ' ' + pullupornot + '"></span>' + '<div class="h4 font-thin m-b-sm"><div class="pull-left text-ellipsis" style="width:140px">' + event.title + '</div></div>' + '<div class="line b-b b-light"></div>' + '<div><i class="icon-clock text-muted m-r-xs"></i>' + event.start
-									.format('dd-mmm-yyyy HH:MM') + '</div>' + '</div>' + '</div>';
-							$(this).append(popoverElement);
+							if (event.contacts)
+							{
+								for (var i = 0; i < event.contacts.length; i++)
+								{
+									if (event.contacts[i].type == "PERSON")
+									{
+										var last_name = getPropertyValue(event.contacts[i].properties, "last_name");
+										if (last_name == undefined)
+											last_name = "";
+										reletedContacts += '<a class="text-info" href="#contact/' + event.contacts[i].id + '">' + getPropertyValue(
+												event.contacts[i].properties, "first_name") + ' ' + last_name + '</a>';
+									}
+									else
+									{
+										try
+										{
+											reletedContacts += '<a class="text-info" href="#company/' + event.contacts[i].id + '">' + getPropertyValue(
+													event.contacts[i].properties, "name") + '</a>';
+										}
+										catch (err)
+										{
+											console.log("error");
+										}
+									}
+									if (i != event.contacts.length - 1)
+										reletedContacts += ', ';
+								}
+							}
+							if (event.meeting_type && event.description)
+							{
+								meeting_type = '<i class="icon-comment-alt text-muted m-r-xs"></i><span>Meeting Type - ' + event.meeting_type + '</span><br/><span title=' + event.description + '>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' + event.description + '</span>';
+							}
+
+							else if (event.description)
+							{
+								meeting_type = '<i class="icon-comment-alt text-muted m-r-xs"></i><span title=' + event.description + '>' + event.description + '</span>';
+							}
+							var leftorright = 'bottom';
+							var pullupornot = '';
+							var popoverElement = '';
+							if(event.type=="AGILE"){
+								popoverElement = '<div class="fc-overlay ' + leftorright + '" style="width:100%;">' + '<div class="panel bg-white b-a pos-rlt p-sm">' + '<span class="arrow ' + leftorright + ' ' + pullupornot + '"></span>' + '<div class="h4 font-thin m-b-sm"><div class="pull-left text-ellipsis p-b-xs" style="width:100%;">' + event.title + '</div></div>' + '<div class="line b-b b-light"></div>' + '<div><i class="icon-clock text-muted m-r-xs"></i>' + event.start
+									.format('dd-mmm-yyyy HH:MM') + '<div class="pull-right" style="width:10%;"><img class="r-2x" src="' + event.ownerPic + '" height="20px" width="20px" title="' + event.owner.name + '"/></div></div>' + '<div class="text-ellipsis">' + reletedContacts + '</div>' + '<div class="text-ellipsis">' + meeting_type + '</div>' + '</div>' + '</div>';
+								$(this).append(popoverElement);
+								$(this).find('.fc-overlay').find('.arrow').css('top','70px');
+							}else{
+								popoverElement = '<div class="fc-overlay ' + leftorright + '" style="width:100%;">' + '<div class="panel bg-white b-a pos-rlt p-sm">' + '<span class="arrow ' + leftorright + ' ' + pullupornot + '"></span>' + '<div class="h4 font-thin m-b-sm"><div class="pull-left text-ellipsis p-b-xs" style="width:100%;">' + event.title + '</div></div>' + '<div class="line b-b b-light"></div>' + '<div><i class="icon-clock text-muted m-r-xs"></i>' + event.start
+									.format('dd-mmm-yyyy HH:MM') + '<div class="pull-right" style="width:10%;"></div></div>' + '<div class="text-ellipsis">' + reletedContacts + '</div>' + '<div class="text-ellipsis">' + meeting_type + '</div>' + '</div>' + '</div>';
+								$(this).append(popoverElement);
+							}
+							if(event.start.getDay()==4 || event.start.getDay()==5 || event.start.getDay()==6){
+								$(this).find('.fc-overlay').css('left','-180px');
+								$(this).find('.fc-overlay').find('.arrow').css('left','91%');
+							}
+							if(reletedContacts!='' || meeting_type!=''){
+								$(this).find('.fc-overlay').css('top','-95px');
+								$(this).find('.fc-overlay').find('.arrow').css('top','84px');
+							}
+							if(reletedContacts!='' && meeting_type!=''){
+								$(this).find('.fc-overlay').css('top','-108px');
+								$(this).find('.fc-overlay').find('.arrow').css('top','98px');
+							}
 							$(this).find('.fc-overlay').show();
 						},
-						
 						eventMouseout : function(event, jsEvent, view)
 						{
 							el.parent().css('z-index',2);
@@ -2138,8 +2208,14 @@ function minicalendar(el)
 						},
 								
 								dayClick : function(date,allDay,jsEvent,view){
+									App_Portlets.refetchEvents = false;
 									var days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
-									$(el).find('.events_show').empty().append('<div class="show p-t-xs text-md p-l-sm text-center">'+days[date.getDay()]+', ' +date.format('dd mmm')+' </div><ul class="list"></ul>');
+									var current_date = new Date();
+									if(date.getFullYear()==current_date.getFullYear() && date.getMonth()==current_date.getMonth() && date.getDate()==current_date.getDate()){
+										$(el).find('.events_show').empty().append('<div class="show p-t-xs text-md text-center">Today</div><ul class="list"></ul>');
+									}else{
+										$(el).find('.events_show').empty().append('<div class="show p-t-xs text-md text-center">'+days[date.getDay()]+', ' +date.format('dd mmm')+' </div><ul class="list"></ul>');
+									}
 									if($(el).parent().attr('data-sizey')==2)
 											   $(el).find('.show').css('padding-top','70px');
 										   else if($(el).parent().attr('data-sizey')==3)
@@ -2150,11 +2226,25 @@ function minicalendar(el)
 								});
 								if(array.length!=0){
 								$.each(array,function(index){
-									$(el).find('.list').append('<li class="p-t-xs p-r-xs" style="color : '+array[index].color+'"><span style="color : #58666e" class="text-cap">'+array[index].title+'<br><small class="block m-t-n-xxs">'+ array[index].start.format('HH:MM') + ' </small></span></li>');
+									if($(el).find('.list').find('li').length!=0){
+												$(el).find('.list').find('small').each(function(x) 
+												{
+													if(array[index].start.format('HH:MM')<$(this).text())
+													{$(this).parents('li').before('<li class="p-t-xs p-r-xs" style="color : '+array[index].color+'"><span style="color : #58666e" class="text-cap word-break"><a class="minical-portlet-event" id='+array[index].id+' data='+array[index]+'>'+array[index].title+'</a><br><small class="block m-t-n-xxs">'+ array[index].start.format('HH:MM') + ' </small></span></li>');
+													return false;}
+													else
+													{
+														$(this).parents('.list').append('<li class="p-t-xs p-r-xs" style="color : '+array[index].color+'"><span style="color : #58666e" class="text-cap word-break"><a class="minical-portlet-event" id='+array[index].id+' data='+array[index]+'>'+array[index].title+'</a><br><small class="block m-t-n-xxs">'+ array[index].start.format('HH:MM') + ' </small></span></li>') ;
+														return false;
+													}
+												 });
+									}
+									else
+									$(el).find('.list').append('<li class="p-t-xs p-r-xs" style="color : '+array[index].color+'"><span style="color : #58666e" class="text-cap word-break"><a class="minical-portlet-event" id='+array[index].id+' data='+array[index]+'>'+array[index].title+'</a><br><small class="block m-t-n-xxs">'+ array[index].start.format('HH:MM') + ' </small></span></li>');
 									
 								});
 								}
-								else{
+								else if(!App_Portlets.refetchEvents){
 									$(el).find('.events_show').append('<div class="portlet-error-message">No appointments for the day</div>');
 								}
 								}
@@ -2163,13 +2253,9 @@ function minicalendar(el)
 
 							
 }
-
-
-
 $('.portlet_body_calendar').live('mouseover',function(e){
 			$(this).find('.portlet_header_icons').removeClass('vis-hide');
 			$(this).find('.fc-button').css('visibility','visible');
-			//$(this).find('.fc-header-right').addClass('vis-hide');
 			
 });
 
@@ -2318,15 +2404,28 @@ function googledata(el,response,startTime,endTime)
 								
 
 							}
+							var len=$(".events_show").find('.list').find('li').length;
 							 $.each(events,function(index,ev){
 											var date=new Date();
 											 var todayDate=new Date(date.getFullYear(), date.getMonth(), date.getDate(),00,00,00);
 									   var endDate=new Date(date.getFullYear(), date.getMonth(), date.getDate(),23,59,59);
 											if(ev.start.getTime() >= (todayDate.getTime()) && ev.start.getTime() <= (endDate.getTime())) {	
-											$(el).find('.list').append('<li class="p-t-xs p-r-xs" style="color:'+ev.color+'"><span style="color : #58666e" class="text-cap">'+ev.title+'<br><small class="block m-t-n-xxs">'+ ev.start.format('HH:MM') + ' </small></span></li>');
+											if(len!=0){
+												$(el).find('.list').find('small').each(function( index ) 
+												{
+													if(ev.start.format('HH:MM')<$(this).text())
+													{$(this).parents('li').before('<li class="p-t-xs p-r-xs" style="color:'+ev.color+'"><span style="color : #58666e" class="text-cap word-break"><a class="minical-portlet-event" id='+ev.id+' data='+ev+'>'+ev.title+'</a><br><small class="block m-t-n-xxs">'+ ev.start.format('HH:MM') + ' </small></span></li>');
+													return false;}
+													/* else
+													$(this).parents('li').after('<li class="p-t-xs p-r-xs" style="color:'+ev.color+'"><span style="color : #58666e" class="text-cap word-break"><a class="minical-portlet-event" id='+ev.id+' data='+ev+'>'+ev.title+'</a><br><small class="block m-t-n-xxs">'+ ev.start.format('HH:MM') + ' </small></span></li>') ;
+												 */
+												 });
+											}
+											else
+											 $(el).find('.list').append('<li class="p-t-xs p-r-xs" style="color:'+ev.color+'"><span style="color : #58666e" class="text-cap word-break"><a class="minical-portlet-event" id='+ev.id+' data='+ev+'>'+ev.title+'</a><br><small class="block m-t-n-xxs">'+ ev.start.format('HH:MM') + ' </small></span></li>');
 											}
 											});
-											if($(el).find('.list').find('li').length==0 && $(el).find('.portlet-error-message').length==0 )
+											if($(el).find('.list').find('li').length==0 && $(el).find('.portlet-error-message').length==0 && !App_Portlets.refetchEvents)
 											{
 												$(el).find('.events_show').append('<div class="portlet-error-message" style="display:block">No appointments for the day</div>');
 											}
@@ -2373,3 +2472,93 @@ function getaspectratio(el)
 	}
 	return (width/height);
 }
+
+$('.minical-portlet-event').live('click',function(e){
+	App_Portlets.currentPosition = '' + $(this).parents('.gs-w').find('.column_position').text().trim() + '' + $(this).parents('.gs-w').find('.row_position').text().trim();
+	App_Portlets.currentPortletName = 'Mini Calendar';
+	var id = $(this).attr('id');
+	if(id && !isNaN(id)){
+		var events_array= $('#calendar_container',$(this).parentsUntil('.mini-cal').eq($(this).parentsUntil('.mini-cal').length-1)).fullCalendar('clientEvents', id, function(event) {
+			return (event.start >= date && event.start < endDate);
+		});
+		//$('#'+id,$('#calendar_container')).trigger('click');
+		var model = events_array[0];
+		App_Portlets.currentEventObj = model;
+		if(!model)
+			return;
+		if(model.color == "#f05050" || model.color == "red")
+			model.color = "red";
+		else if(model.color == "#7266ba" || model.color == "#36C")
+			model.color = "#36C";
+		else
+			model.color = "green";
+		// Deserialize
+		deserializeForm(model, $("#updateActivityForm"));
+
+		// Set time for update Event
+		$('#update-event-time-1')
+				.val(
+						(new Date(model.start.getTime()).getHours() < 10 ? "0" : "") + new Date(model.start.getTime()).getHours() + ":" + (new Date(
+								model.start.getTime()).getMinutes() < 10 ? "0" : "") + new Date(model.start.getTime()).getMinutes());
+		$('#update-event-time-2')
+				.val(
+						(new Date(model.end.getTime()).getHours() < 10 ? "0" : "") + new Date(model.end.getTime()).getHours() + ":" + (new Date(
+								model.end.getTime()).getMinutes() < 10 ? "0" : "") + new Date(model.end.getTime()).getMinutes());
+
+		// Set date for update Event
+		var dateFormat = 'mm/dd/yyyy';
+		$("#update-event-date-1").val((new Date(model.start.getTime())).format(dateFormat));
+		$("#update-event-date-2").val((new Date(model.end.getTime())).format(dateFormat));
+
+		// hide end date & time for all day events
+		if (model.allDay)
+		{
+			$("#update-event-date-2").closest('.row').hide();
+			$('#update-event-time-1').closest('.control-group').hide();
+		}
+		else
+		{
+			$('#update-event-time-1').closest('.control-group').show();
+			$("#update-event-date-2").closest('.row').show();
+		}
+
+		if (model.type == "WEB_APPOINTMENT" && (model.start.getTime() / 1000) > parseInt(new Date().getTime() / 1000))
+		{
+			$("[id='event_delete']").attr("id", "delete_web_event");
+			web_event_title = model.title;
+			if (model.contacts.length > 0)
+			{
+				var firstname = getPropertyValue(model.contacts[0].properties, "first_name");
+				if (firstname == undefined)
+						firstname = "";
+					var lastname = getPropertyValue(model.contacts[0].properties, "last_name");
+					if (lastname == undefined)
+						lastname = "";
+				web_event_contact_name = firstname + " " + lastname;
+			}
+		}
+		else
+		{
+			$("[id='delete_web_event']").attr("id", "event_delete");
+		}
+
+		if (model.description)
+		{
+			var description = '<label class="control-label"><b>Description </b></label><div class="controls"><textarea id="description" name="description" rows="3" class="input form-control" placeholder="Add Description"></textarea></div>'
+			$("#event_desc").html(description);
+			$("textarea#description").val(model.description);
+		}
+		else
+		{
+			var desc = '<div class="row-fluid">' + '<div class="control-group form-group m-b-none">' + '<a href="#" id="add_event_desctiption"><i class="icon-plus"></i> Add Description </a>' + '<div class="controls event_discription hide">' + '<textarea id="description" name="description" rows="3" class="input form-control w-full col-md-8" placeholder="Add Description"></textarea>' + '</div></div></div>'
+			$("#event_desc").html(desc);
+		}
+		// Fills owner select element
+		populateUsersInUpdateActivityModal(model);
+
+		// Show edit modal for the event
+		$("#updateActivityModal").modal('show');
+		$('#'+id,$('#calendar_container')).trigger('click');
+		return false;
+	}
+});

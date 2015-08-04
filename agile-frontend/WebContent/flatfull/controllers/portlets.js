@@ -174,7 +174,7 @@ function deletePortlet(el)
 	else if(model.get("name")=="Leaderboard")
 		$('#portletDeleteModal > .modal-dialog > .modal-content > .modal-body').html("Are you sure you want to delete Dashlet - Leaderboard "+getDurationForPortlets(model.get("settings").duration)+"?");
 	else if(model.get("name")=="Mini Calendar")
-		$('#portletDeleteModal > .modal-dialog > .modal-content > .modal-body').html("Are you sure you want to delete Dashlet - Calendar");
+		$('#portletDeleteModal > .modal-dialog > .modal-content > .modal-body').html("Are you sure you want to delete Dashlet - Mini Calendar");
 	else
 		$('#portletDeleteModal > .modal-dialog > .modal-content > .modal-body').html("Are you sure you want to delete Dashlet - Activity Overview "+getDurationForPortlets(model.get("settings").duration)+"?");
 }
