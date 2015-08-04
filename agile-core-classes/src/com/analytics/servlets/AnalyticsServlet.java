@@ -93,7 +93,7 @@ public class AnalyticsServlet extends HttpServlet
 	if (StringUtils.isBlank(domain))
 	    return;
 	
-	if(isBlockedIp(req))
+	if(isBlockedIp(ip))
 	    return;
 	    
 	// Insert into table
@@ -157,12 +157,11 @@ public class AnalyticsServlet extends HttpServlet
     /**
      * Function to check if IP Address is Blocked
      */
-    public static Boolean isBlockedIp(HttpServletRequest request)
+    public static Boolean isBlockedIp(String clientIp)
     {
 	try
 	{
 	    String[] blockedIpsArr = APIKey.getBlockedIps().split(",");
-	    String clientIp = getClientIP(request);
 	    for (int i = 0; i < blockedIpsArr.length; i++)
 	    {
 		if (ipMatch(clientIp, blockedIpsArr[i]))
