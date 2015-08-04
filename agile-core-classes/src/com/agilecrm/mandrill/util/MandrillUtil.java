@@ -1,9 +1,6 @@
 package com.agilecrm.mandrill.util;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
@@ -14,13 +11,9 @@ import org.jsoup.examples.HtmlToPlainText;
 
 import com.agilecrm.Globals;
 import com.agilecrm.contact.email.EmailSender;
-import com.agilecrm.db.GoogleSQL;
 import com.agilecrm.mandrill.util.deferred.MailDeferredTask;
 import com.agilecrm.util.EmailUtil;
 import com.agilecrm.util.HttpClientUtil;
-import com.agilecrm.workflows.util.WorkflowUtil;
-import com.campaignio.logger.Log.LogType;
-import com.campaignio.logger.util.CampaignLogsSQLUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.thirdparty.mandrill.EmailContentLengthLimitExceededException;
 import com.thirdparty.mandrill.Mandrill;
@@ -96,11 +89,8 @@ public class MandrillUtil
 	boolean flag = false;
 	String toName = "";
 
-	Map<String, String> campaignNameMap = new HashMap<String, String>();
-
 	try
 	{
-	    List<Object[]> queryList = new ArrayList<Object[]>();
 	    for (MailDeferredTask mailDeferredTask : tasks)
 	    {
 
@@ -112,28 +102,6 @@ public class MandrillUtil
 		{
 
 		    System.out.println("Namespace mail deferred task : " + mailDeferredTask.domain);
-		    String campaignName = null;
-		    if (mailDeferredTask.campaignId != null)
-		    {
-			if (!campaignNameMap.containsKey(mailDeferredTask.campaignId + "-" + mailDeferredTask.domain))
-			{
-			    campaignName = WorkflowUtil.getCampaignName(mailDeferredTask.campaignId);
-			    campaignNameMap.put(mailDeferredTask.campaignId + "-" + mailDeferredTask.domain,
-				    campaignName);
-			}
-			else
-			{
-			    campaignName = campaignNameMap.get(mailDeferredTask.campaignId + "-"
-				    + mailDeferredTask.domain);
-			}
-
-		    }
-
-		    Object[] newLog = new Object[] { mailDeferredTask.domain, mailDeferredTask.campaignId,
-			    campaignName, mailDeferredTask.subscriberId, GoogleSQL.getFutureDate(),
-			    "Subject: " + mailDeferredTask.subject, LogType.EMAIL_SENT.toString() };
-
-		    queryList.add(newLog);
 
 		    if (!StringUtils.isBlank(mailDeferredTask.text))
 		    {
@@ -194,15 +162,6 @@ public class MandrillUtil
 
 		    flag = true;
 		}
-
-	    }
-
-	    if (queryList.size() > 0)
-	    {
-		Long start_time = System.currentTimeMillis();
-		CampaignLogsSQLUtil.addToCampaignLogs(queryList);
-		System.out.println("batch request completed : " + (System.currentTimeMillis() - start_time));
-		System.out.println("Logs size : " + queryList.size());
 
 	    }
 

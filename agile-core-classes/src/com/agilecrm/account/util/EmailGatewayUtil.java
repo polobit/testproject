@@ -1,7 +1,9 @@
 package com.agilecrm.account.util;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
@@ -16,6 +18,7 @@ import com.agilecrm.Globals;
 import com.agilecrm.account.EmailGateway;
 import com.agilecrm.account.EmailGateway.EMAIL_API;
 import com.agilecrm.contact.email.EmailSender;
+import com.agilecrm.db.GoogleSQL;
 import com.agilecrm.mandrill.util.MandrillUtil;
 import com.agilecrm.mandrill.util.deferred.MailDeferredTask;
 import com.agilecrm.queues.util.PullQueueUtil;
@@ -25,7 +28,9 @@ import com.agilecrm.widgets.Widget;
 import com.agilecrm.widgets.Widget.IntegrationType;
 import com.agilecrm.widgets.Widget.WidgetType;
 import com.agilecrm.widgets.util.WidgetUtil;
+import com.agilecrm.workflows.util.WorkflowUtil;
 import com.campaignio.logger.Log.LogType;
+import com.campaignio.logger.util.CampaignLogsSQLUtil;
 import com.campaignio.logger.util.LogUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.blobstore.BlobKey;
@@ -82,6 +87,45 @@ public class EmailGatewayUtil
 	{
 	    e.printStackTrace();
 	    return null;
+	}
+    }
+
+    public static void addEmailLogs(List<MailDeferredTask> tasks)
+    {
+	Map<String, String> campaignNameMap = new HashMap<String, String>();
+	List<Object[]> queryList = new ArrayList<Object[]>();
+	for (MailDeferredTask mailDeferredTask : tasks)
+	{
+	    String campaignName = null;
+	    if (StringUtils.isEmpty(mailDeferredTask.campaignId))
+	    {
+		continue;
+	    }
+
+	    if (!campaignNameMap.containsKey(mailDeferredTask.campaignId + "-" + mailDeferredTask.domain))
+	    {
+		campaignName = WorkflowUtil.getCampaignName(mailDeferredTask.campaignId);
+		campaignNameMap.put(mailDeferredTask.campaignId + "-" + mailDeferredTask.domain, campaignName);
+	    }
+	    else
+	    {
+		campaignName = campaignNameMap.get(mailDeferredTask.campaignId + "-" + mailDeferredTask.domain);
+	    }
+
+	    Object[] newLog = new Object[] { mailDeferredTask.domain, mailDeferredTask.campaignId, campaignName,
+		    mailDeferredTask.subscriberId, GoogleSQL.getFutureDate(), "Subject: " + mailDeferredTask.subject,
+		    LogType.EMAIL_SENT.toString() };
+
+	    queryList.add(newLog);
+
+	}
+
+	if (queryList.size() > 0)
+	{
+	    Long start_time = System.currentTimeMillis();
+	    CampaignLogsSQLUtil.addToCampaignLogs(queryList);
+	    System.out.println("batch request completed : " + (System.currentTimeMillis() - start_time));
+	    System.out.println("Logs size : " + queryList.size());
 	}
     }
 
@@ -420,55 +464,7 @@ public class EmailGatewayUtil
      */
     public static void sendMails(List<TaskHandle> tasks)
     {
-
-	TaskHandle firstTaskHandle = tasks.get(0);
-
-	MailDeferredTask mailDeferredTask = (MailDeferredTask) SerializationUtils.deserialize(firstTaskHandle
-		.getPayload());
-
-	String domain = mailDeferredTask.domain;
-
-	String oldNamespace = NamespaceManager.get();
-
-	try
-	{
-
-	    // Set namespace
-	    NamespaceManager.set(domain);
-
-	    EmailSender emailSender = EmailSender.getEmailSender();
-	    EmailGateway emailGateway = emailSender.emailGateway;
-
-	    if (emailSender.canSend())
-	    {
-		// If null or Mandrill
-		if (emailGateway == null || emailGateway.email_api == EmailGateway.EMAIL_API.MANDRILL)
-		    MandrillUtil.sendMandrillMails(convertTaskHandlestoMailDeferredTasks(tasks), emailSender);
-
-		// If SendGrid
-		else if (emailGateway.email_api == EMAIL_API.SEND_GRID)
-		    SendGridUtil.sendSendGridMails(tasks, emailSender);
-
-		emailSender.setCount(tasks.size());
-		emailSender.updateStats();
-
-	    }
-	    else
-	    {
-		// Add email exceeded log to each subscriber
-		addEmailExceededLog(tasks);
-	    }
-
-	}
-	catch (Exception e)
-	{
-	    e.printStackTrace();
-	    System.err.println("Exception occured in sendMails of EmailGatewayUtil..." + e.getMessage());
-	}
-	finally
-	{
-	    NamespaceManager.set(oldNamespace);
-	}
+	sendMailsMailDeferredTask(convertTaskHandlestoMailDeferredTasks(tasks));
     }
 
     public static List<MailDeferredTask> convertTaskHandlestoMailDeferredTasks(List<TaskHandle> tasks)
@@ -495,14 +491,12 @@ public class EmailGatewayUtil
      * @param tasks
      *            - Leased tasks
      */
-    public static void addEmailExceededLog(List<TaskHandle> tasks)
+    public static void addEmailExceededLog(List<MailDeferredTask> tasks)
     {
 	try
 	{
-	    for (TaskHandle task : tasks)
+	    for (MailDeferredTask mailDeferredTask : tasks)
 	    {
-		MailDeferredTask mailDeferredTask = (MailDeferredTask) SerializationUtils
-			.deserialize(task.getPayload());
 
 		// For personal bulk emails, no need to add log
 		if (StringUtils.isBlank(mailDeferredTask.campaignId)
@@ -518,6 +512,58 @@ public class EmailGatewayUtil
 	{
 	    e.printStackTrace();
 	    System.err.println("Exception occured while adding exceeded log in EmailGatewayUtil..." + e.getMessage());
+	}
+    }
+
+    public static void sendMailsMailDeferredTask(List<MailDeferredTask> tasks)
+    {
+
+	MailDeferredTask mailDeferredTask = tasks.get(0);
+
+	String domain = mailDeferredTask.domain;
+
+	String oldNamespace = NamespaceManager.get();
+
+	try
+	{
+
+	    // Set namespace
+	    NamespaceManager.set(domain);
+
+	    EmailSender emailSender = EmailSender.getEmailSender();
+	    EmailGateway emailGateway = emailSender.emailGateway;
+
+	    if (emailSender.canSend())
+	    {
+		// If null or Mandrill
+		if (emailGateway == null || emailGateway.email_api == EmailGateway.EMAIL_API.MANDRILL)
+		    MandrillUtil.sendMandrillMails(tasks, emailSender);
+
+		// If SendGrid
+		else if (emailGateway.email_api == EMAIL_API.SEND_GRID)
+		    SendGridUtil.sendSendGridMails(tasks, emailSender);
+
+		addEmailLogs(tasks);
+
+		emailSender.setCount(tasks.size());
+		emailSender.updateStats();
+
+	    }
+	    else
+	    {
+		// Add email exceeded log to each subscriber
+		addEmailExceededLog(tasks);
+	    }
+
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    System.err.println("Exception occured in sendMails of EmailGatewayUtil..." + e.getMessage());
+	}
+	finally
+	{
+	    NamespaceManager.set(oldNamespace);
 	}
     }
 }
