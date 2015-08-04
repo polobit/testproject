@@ -318,10 +318,11 @@ public class ShopifySyncImpl extends OneWaySyncService
 	try
 	{
 	    Response response = oAuthRequest.send();
-	    //If we get 429 response code, we'll get the response again after 15 seconds.
+	    //If we get 429 response code, we'll get the response again after 10 seconds.
 	    if(response!=null && response.getCode()==429)
 	    {
-	    	Thread.sleep(15000);
+	    	System.out.println("response.getCode()--------------"+response.getCode());
+	    	Thread.sleep(10000);
 	    	response = oAuthRequest.send();
 	    }
 	    HashMap<String, String> properties = new ObjectMapper().readValue(response.getBody(),
@@ -371,10 +372,11 @@ public class ShopifySyncImpl extends OneWaySyncService
 	try
 	{
 	    Response response = oAuthRequest.send();
-	    //If we get 429 response code, we'll get the response again after 15 seconds.
+	    //If we get 429 response code, we'll get the response again after 10 seconds.
 	    if(response!=null && response.getCode()==429)
 	    {
-	    	Thread.sleep(15000);
+	    	System.out.println("response.getCode()--------------"+response.getCode());
+	    	Thread.sleep(10000);
 	    	response = oAuthRequest.send();
 	    }
 	    Map<String, ArrayList<LinkedHashMap<String, Object>>> results = new ObjectMapper().readValue(
