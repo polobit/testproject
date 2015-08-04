@@ -8,25 +8,34 @@
  * author: Rammohan
  */
 
-$(function()
+function initializeEventListners(el)
 {
-	/**
-	 * Shows activity modal, and highlights the event form features (Shows event
-	 * form and hides task form, changes color and font-weight)
-	 * 
-	 */
-	$("body").on('click', '#show-activity', function(e)
-	{
-		e.preventDefault();
-		highlight_event();
 
-		$("#activityModal").modal('show');
+$("#ical_appointment_links").off('click').on('click', '#subscribe-ical', function(event)
+{
+	event.preventDefault();
+	set_api_key();
+});
+
+
+	$('#calendarAgendaButtons').off('click').on('click', '.agendaDayWeekMonth', function()
+	{
+		currentView = $(this).attr('id');
+		fullCal.fullCalendar('changeView', currentView);
+		$(this).parent().find('button').each(function()
+		{
+			if ($(this).attr('id') == currentView)
+				$(this).addClass('bg-light');
+			else
+				$(this).removeClass('bg-light');
+		});
+
 	});
 
 	/**
 	 * Shows the event form fields in activity modal
 	 */
-	$("body").on('click', '.add-event', function(e)
+	$("#add-event-div").off('click').on('click', '.add-event', function(e)
 	{
 		e.preventDefault();
 
@@ -45,7 +54,7 @@ $(function()
 	/**
 	 * shows description field in new event model
 	 */
-	$("body").on('click', '#add_event_desctiption', function(e)
+	$("#addEventDescription").off('click').on('click', '#add_event_desctiption', function(e)
 	{
 		e.preventDefault();
 		$(".event_discription").removeClass("hide");
@@ -76,8 +85,13 @@ $(function()
 	 * Deletes an event from calendar by calling ajax DELETE request with an
 	 * appropriate url
 	 */
-	 $("body").on('click', '#event_delete', function(e)
-	 {
+	$("#event-save-footer")
+			.off('click')
+			.on(
+					'click',
+					'#event_delete',
+					function(e)
+					{
 						e.preventDefault();
 
 						if ($(this).attr('disabled') == 'disabled')
@@ -132,6 +146,99 @@ $(function()
 						}
 
 					});
+
+	// evnet filters
+
+	$("body").on('click', '.calendar_check', function(e)
+	{
+		showLoadingOnCalendar(true);
+		createRequestUrlBasedOnFilter();
+		var calendar = $(this).val();
+		var ownerids = '';
+		if (calendar == "agile")
+		{
+			if (this.checked == true)
+			{
+				ownerids = getOwnerIdsFromCookie(true);
+				renderFullCalenarEvents(ownerids);
+			}
+
+			else
+			{
+				ownerids = getOwnerIdsFromCookie(true);
+				removeFullCalendarEvents(ownerids);
+			}
+
+		}
+
+		if (calendar == "google")
+			loadFullCalednarOrListView();
+
+	});
+
+	$("body").on('click', '.calendar_user_check', function(e)
+	{
+		showLoadingOnCalendar(true);
+		// checkBothCalWhenNoCalSelected();
+		createRequestUrlBasedOnFilter();
+		// loadFullCalednarOrListView();
+		var user_id = $(this).val();
+		if (this.checked == true)
+		{
+			renderFullCalenarEvents(user_id);
+		}
+		else
+		{
+			removeFullCalendarEvents(user_id);
+		}
+
+		// $('.select_all_users').removeAttr("checked");
+
+	});
+
+	$("body").on('click', '.select_all_users', function(event)
+	{ // on click
+		if (this.checked)
+		{ // check select status
+			$('.calendar_user_check').each(function()
+			{
+				this.checked = true;
+			});
+		}
+		else
+		{
+			$('.calendar_user_check').each(function()
+			{ // loop through each checkbox
+				if ($(this).val() != CURRENT_AGILE_USER.id)
+					this.checked = false;
+			});
+		}
+		createRequestUrlBasedOnFilter();
+		loadFullCalednarOrListView();
+	});
+	/*
+	 * $("body").on('change', '#event_time', function(event) { // on click if
+	 * ($("#event_time").val() == "future") createCookie("agile_calendar_view",
+	 * "calendar_list_view_future"); else createCookie("agile_calendar_view",
+	 * "calendar_list_view"); createRequestUrlBasedOnFilter();
+	 * loadFullCalednarOrListView(); });
+	 */
+
+}
+
+$(function()
+{
+	/**
+	 * Shows activity modal, and highlights the event form features (Shows event
+	 * form and hides task form, changes color and font-weight)
+	 * 
+	 */
+	
+	  $("body").on('click', '#show-activity', function(e) { e.preventDefault();
+	  highlight_event();
+	  
+	  $("#activityModal").modal('show'); });
+	 
 
 	/**
 	 * Activates the date picker to the corresponding fields in activity modal
@@ -388,16 +495,19 @@ $(function()
 	 * Highlights the event features (Shows event form and hides task form,
 	 * changing color and font-weight)
 	 */
-	$("body").on('click', '#event', function(e)
-	{
-		e.preventDefault();
-		highlight_event();
-	});
+	/*
+	 * $("body").on('click', '#event', function(e) { e.preventDefault();
+	 * highlight_event(); });
+	 */
 
 	/**
 	 * when web appointment event is deleted this event will be fired out
 	 */
-	$("body").on('click', '#cancel_delete', function(e)
+	$("body")
+			.on(
+					'click',
+					'#cancel_delete',
+					function(e)
 					{
 						e.preventDefault();
 

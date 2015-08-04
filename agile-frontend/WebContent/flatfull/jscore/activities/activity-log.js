@@ -28,6 +28,7 @@ function updateActivty(params)
 		individual_tag_name : 'li', postRenderCallback : function(el)
 		{
 			includeTimeAgo(el);
+			initializeActivitiesListner(el);
 		}, appendItemCallback : function(el)
 		{
 			includeTimeAgo(el);

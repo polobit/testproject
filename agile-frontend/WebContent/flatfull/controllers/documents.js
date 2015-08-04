@@ -19,13 +19,13 @@ var DocumentsRouter = Backbone.Router.extend({
 			individual_tag_name : 'tr', postRenderCallback : function(el)
 			{
 				includeTimeAgo(el);
-/*				head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
-				{
-					$(".document-created-time", el).timeago();
-				});*/
-			},
-			appendItemCallback : function(el)
-			{ 
+				initializeDocumentsListner(el);
+				/*
+				 * head.js(LIB_PATH + 'lib/jquery.timeago.js', function() {
+				 * $(".document-created-time", el).timeago(); });
+				 */
+			}, appendItemCallback : function(el)
+			{
 				// To show timeago for models appended by infini scroll
 				includeTimeAgo(el);
 			} });

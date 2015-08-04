@@ -499,7 +499,7 @@ function showCalendar()
 							}
 							else
 							{
-								var desc = '<div class="row-fluid">' + '<div class="control-group form-group m-b-none">' + '<a href="#" id="add_event_desctiption"><i class="icon-plus"></i> Add Description </a>' + '<div class="controls event_discription hide">' + '<textarea id="description" name="description" rows="3" class="input form-control w-full col-md-8" placeholder="Add Description"></textarea>' + '</div></div></div>'
+								var desc = '<div class="row-fluid">' + '<div class="control-group form-group m-b-none " id="addEventDescription">' + '<a href="#" id="add_event_desctiption"><i class="icon-plus"></i> Add Description </a>' + '<div class="controls event_discription hide">' + '<textarea id="description" name="description" rows="3" class="input form-control w-full col-md-8" placeholder="Add Description"></textarea>' + '</div></div></div>'
 								$("#event_desc").html(desc);
 							}
 							// Show edit modal for the event
@@ -619,71 +619,40 @@ $(function()
 	});
 
 	// Show filter drop down.
-	$("body").on('click', '#event-filter-button', function(e)
-	{
-		e.preventDefault();
-		showEventFilters();
-	});
-
-	$("body").on('click', '#event-filter-validate', function(e)
-	{
-		$('#filter_options').hide();
-		var formId = 'eventsFilterForm';
-		var json = serializeForm(formId);
-		createCookie('event-filters', JSON.stringify(json));
-
-		if (readCookie("agile_calendar_view"))
-		{
-			if (json.time === 'future')
-				createCookie("agile_calendar_view", "calendar_list_view_future");
-			else
-				createCookie("agile_calendar_view", "calendar_list_view");
-		}
-
-		// if list view
-		if (!readCookie("agile_calendar_view"))
-		{
-			$('#calendar_event').html('');
-			// App_Calendar.calendar();
-			showCalendar();
-		}
-		else
-		{
-
-			loadAgileEvents();
-			loadGoogleEvents();
-
-		}
-	});
-
-	// Show filter drop down.
-	$("body").on('click', '#clear-event-filters', function(e)
-	{
-		e.preventDefault();
-		$('#filter_options select').val('');
-		eraseCookie('event-filters');
-		loadDefaultFilters();
-		showEventFilters();
-	});
-
-	$("body").on('change', '#event_type', function(e)
-	{
-		console.log("----------", this.options[this.selectedIndex].text);
-		var dd = document.getElementById('event-owner');
-		var opt = $(this).val();
-		if (opt == 'google' && dd.options[dd.selectedIndex].text != 'Any')
-		{
-			dd.selectedIndex = 0;
-		}
-	});
-
-	$("body").on('change', '#event-owner', function(e)
-	{
-		console.log("----------", this.options[this.selectedIndex].text);
-		var opt = this.options[this.selectedIndex].text;
-		if (opt != 'Me' && opt != 'Any')
-			$('#event_type').val('agile');
-	});
+	/*
+	 * $("body").on('click', '#event-filter-button', function(e) {
+	 * e.preventDefault(); showEventFilters(); });
+	 * 
+	 * $("body").on('click', '#event-filter-validate', function(e) {
+	 * $('#filter_options').hide(); var formId = 'eventsFilterForm'; var json =
+	 * serializeForm(formId); createCookie('event-filters',
+	 * JSON.stringify(json));
+	 * 
+	 * if (readCookie("agile_calendar_view")) { if (json.time === 'future')
+	 * createCookie("agile_calendar_view", "calendar_list_view_future"); else
+	 * createCookie("agile_calendar_view", "calendar_list_view"); }
+	 *  // if list view if (!readCookie("agile_calendar_view")) {
+	 * $('#calendar_event').html(''); // App_Calendar.calendar();
+	 * showCalendar(); } else {
+	 * 
+	 * loadAgileEvents(); loadGoogleEvents();
+	 *  } });
+	 *  // Show filter drop down. $("body").on('click', '#clear-event-filters',
+	 * function(e) { e.preventDefault(); $('#filter_options select').val('');
+	 * eraseCookie('event-filters'); loadDefaultFilters(); showEventFilters();
+	 * });
+	 * 
+	 * $("body").on('change', '#event_type', function(e) {
+	 * console.log("----------", this.options[this.selectedIndex].text); var dd =
+	 * document.getElementById('event-owner'); var opt = $(this).val(); if (opt ==
+	 * 'google' && dd.options[dd.selectedIndex].text != 'Any') {
+	 * dd.selectedIndex = 0; } });
+	 * 
+	 * $("body").on('change', '#event-owner', function(e) {
+	 * console.log("----------", this.options[this.selectedIndex].text); var opt =
+	 * this.options[this.selectedIndex].text; if (opt != 'Me' && opt != 'Any')
+	 * $('#event_type').val('agile'); });
+	 */
 
 	/**
 	 * Hide the filters window when click on out side of the filters pop up.
@@ -725,19 +694,6 @@ function today()
 {
 	fullCal.fullCalendar('today');
 }
-$('body').on('click', '.agendaDayWeekMonth', function()
-{
-	currentView = $(this).attr('id');
-	fullCal.fullCalendar('changeView', currentView);
-	$(this).parent().find('button').each(function()
-	{
-		if ($(this).attr('id') == currentView)
-			$(this).addClass('bg-light');
-		else
-			$(this).removeClass('bg-light');
-	});
-
-});
 
 function getCalendarUsersDetails()
 {
@@ -772,3 +728,5 @@ function getCalendarUsersDetails()
 
 	return json_users;
 }
+
+

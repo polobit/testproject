@@ -6,14 +6,12 @@
  */
 
 // handle popover
-$(function()
-{
 
-	/**
-	 * When mouseover on any row of opportunities list, the pop-over of deal is
-	 * shown
-	 */
-	$("body").on('mouseenter',
+
+// show add case modal
+function initializeCasesListeners(el){
+
+	$("#case-list").off("mouseenter").on('mouseenter',
 			'#cases-model-list > tr',
 			function()
 			{
@@ -47,32 +45,18 @@ $(function()
 	/**
 	 * On mouse out on the row hides the popover.
 	 */
-	 $('body').on('mouseleave', '#cases-model-list > tr', function()
+	 $('#case-list').off('mouseleave').on('mouseleave', '#cases-model-list > tr', function()
 	{
 		$(this).popover('hide');
 	});
 
-	/**
-	 * Close button of Case popup is clicked.
-	 */
-	$('body').on('click', '#close-case', function(e)
-	{
-		e.preventDefault();
-	});
-
-});
-
-// show add case modal
-$(function()
-{
-
-	$('body').on('click', '.cases-add', function(e)
+	$('#cases-add-div').off('click').on('click', '.cases-add', function(e)
 	{
 		e.preventDefault();
 		showCases();
 	});
 
-	$('body').on('click', '#cases_validate', function(e) 
+	$('#cases-add-save').off('click').on('click', '#cases_validate', function(e) 
 	{
 		e.preventDefault();
 
@@ -142,12 +126,12 @@ $(function()
 		// Removes validation error messages
 		remove_validation_errors('casesUpdateModal');
 	});
-	$('body').on('click', '#cases-model-list > tr > td:not(":first-child")', function(e) 
+	$('#case-list').off('click').on('click', '#cases-model-list > tr > td:not(":first-child")', function(e) 
 	{
 		e.preventDefault();
 		updatecases($(this).closest('tr').data());
 	});
-});
+}
 
 /**
  * Show cases popup for editing

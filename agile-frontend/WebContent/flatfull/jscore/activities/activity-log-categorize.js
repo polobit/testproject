@@ -1,4 +1,43 @@
-$('body').on('click', '.activity-deal-edit', function(e) 
+
+function initializeActivitiesListner(el){
+
+
+	// Click events to agents dropdown and department
+	$("#activity-log-header-div").off('click').on("click", "ul#user-select li a, ul#entity_type li a", function(e)
+	{
+		e.preventDefault();
+
+		// Show selected name
+		var name = $(this).html(), id = $(this).attr("href");
+
+		$(this).closest("ul").data("selected_item", id);
+		$(this).closest(".btn-group").find(".selected_name").text(name);
+		var url = getParameters();
+
+		updateActivty(url);
+
+	});
+	$(".type-task-button").off('click').on("click", "ul#entity_type li a", function(e)
+	{
+		var entitytype = $(this).html();
+
+		var entity_attribute = $(this).attr("href");
+		createCookie("selectedentity", entity_attribute, 90);
+		createCookie("selectedentity_value", entitytype, 90);
+		$('.activity-sub-heading').html(entitytype);
+
+	});
+	$(".activity-log-button").off('click').on("click", "ul#user-select li a", function(e)
+	{
+
+		var user = $(this).html();
+		var user_attribute = $(this).attr("href");
+		createCookie("selecteduser", user_attribute, 90);
+		createCookie("selecteduser_value", user, 90);
+
+	});
+
+/*$('body').on('click', '.activity-deal-edit', function(e) 
 {
 	e.preventDefault();
 	var data = $(this).closest('a').attr("data");
@@ -6,9 +45,9 @@ $('body').on('click', '.activity-deal-edit', function(e)
 	var currentDeal = getDealObject(data);
 
 	updatedeals(currentDeal);
-});
+});*/
 
-$('body').on('click', '.activity-event-edit', function(e)
+$('.activity-tag').off('click').on('click', '.activity-event-edit', function(e)
 {
 	e.preventDefault();
 	var data = $(this).closest('a').attr("data");
@@ -19,7 +58,7 @@ $('body').on('click', '.activity-event-edit', function(e)
 
 });
 
-$('body').on('click', '.activity-edit-note', function(e)
+/*$('body').on('click', '.activity-edit-note', function(e)
 {
 	e.preventDefault();
 	console.log($(this).attr('data'));
@@ -45,7 +84,7 @@ $('body').on('click', '.activity-edit-note', function(e)
 	noteModal.modal('show');
 
 });
-
+*/
 /*
  * $(".activity-delete-info").live('click', function(e) {
  * e.preventDefault(); console.log($(this).attr('data')); var data =
@@ -60,16 +99,16 @@ $('body').on('click', '.activity-edit-note', function(e)
  * });
  */
 
-$('body').on('click', '.activity-task-edit', function(e) 
+/*$('body').on('click', '.activity-task-edit', function(e) 
 {
 	e.preventDefault();
 	var data = $(this).closest('a').attr("data");
 	var currenttask = getTaskObject(data);
 
 	updateactivity__task(currenttask);
-});
+});*/
 
-$('body').on('click', '.email-details', function(e) 
+$('#activity-tag').off('click').on('click', '.email-details', function(e) 
 {
 	e.preventDefault();
 	var data = $(this).closest('a').attr("data");
@@ -81,6 +120,7 @@ $('body').on('click', '.email-details', function(e)
 
 });
 
+}
 function getDealObject(id)
 {
 

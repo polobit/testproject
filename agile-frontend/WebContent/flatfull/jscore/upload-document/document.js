@@ -1,9 +1,10 @@
-$(function(){ 
-	
+
+
+function initializeDocumentsListner(el){	
 	/**
 	 * For adding new document
 	 */
-	$('body').on('click', '.documents-add', function(e){
+	$('#document-add').off('click').on('click', '.documents-add', function(e){
 		e.preventDefault();
 		var el = $("#uploadDocumentForm");
 		$("#uploadDocumentModal").modal('show');
@@ -60,7 +61,7 @@ $(function(){
     /** 
      * When clicked on choose network type
      */
-	$('body').on('click', '.link', function(e)
+	$('#document-link').off('click').on('click', '.link', function(e)
 	{
 		e.preventDefault();
 		$(this).closest('form').find('#error').html("");
@@ -100,14 +101,16 @@ $(function(){
     /** 
      * Document list view edit
      */
-	 $('body').on('click', '#documents-model-list > tr > td:not(":first-child")', function(e){
+	 $('#document-list').off('click').on('click', '#documents-model-list > tr > td:not(":first-child")', function(e){
+
     	 if(e.target.parentElement.attributes[0].name!="href" && e.target.parentElement.attributes[1].name!="href"){
      		e.preventDefault();
+
      	 	updateDocument($(this).closest('tr').data());
      	 }
  	});
 
-});	
+}
 
 /**
  * Show document popup for updating

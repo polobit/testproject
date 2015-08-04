@@ -7,9 +7,7 @@ var DealsRouter = Backbone.Router.extend({
 	routes : {
 
 	/* Deals/Opportunity */
-	"deals" : "deals",
-	"import-deals" :"importDeals",
-	},
+	"deals" : "deals", "import-deals" : "importDeals", },
 
 	/**
 	 * Fetches all the opportunities as list and also as milestone lists.
@@ -20,17 +18,17 @@ var DealsRouter = Backbone.Router.extend({
 	deals : function()
 	{
 		pipeline_id = 0;
-		if(readCookie("agile_deal_track"))
+		if (readCookie("agile_deal_track"))
 			pipeline_id = readCookie("agile_deal_track");
-		
+
 		// Depending on cookie shows list or milestone view
 		if (!readCookie("agile_deal_view"))
 		{
 			template_key = "opportunities-by-milestones";
-			
-			if(pipeline_id == 1)
+
+			if (pipeline_id == 1)
 				pipeline_id = 0;
-			
+
 			$('#content').html(getTemplate("new-opportunity-header", {}));
 			// Add row-fluid if user prefs are set to fluid
 			if (IS_FLUID)
@@ -42,19 +40,22 @@ var DealsRouter = Backbone.Router.extend({
 			DEALS_LIST_COLLECTION = null;
 			setupDealsTracksList();
 			setupDealFilters();
+			initializeDealsListners();
 		}
 		else
 		{
 			DEALS_LIST_COLLECTION = null;
 			var query = ''
-				if(readCookie('deal-filters')){
-					query = '&filters='+encodeURIComponent(getDealFilters());
-				}
+			if (readCookie('deal-filters'))
+			{
+				query = '&filters=' + encodeURIComponent(getDealFilters());
+			}
 			// Fetches deals as list
-			this.opportunityCollectionView = new Base_Collection_View({ url : 'core/api/opportunity/based?pipeline_id='+pipeline_id+query, templateKey : "opportunities", individual_tag_name : 'tr', sort_collection : false, cursor : true, page_size : 25,
+			this.opportunityCollectionView = new Base_Collection_View({ url : 'core/api/opportunity/based?pipeline_id=' + pipeline_id + query,
+				templateKey : "opportunities", individual_tag_name : 'tr', sort_collection : false, cursor : true, page_size : 25,
 				postRenderCallback : function(el)
 				{
-					if(pipeline_id == 1)
+					if (pipeline_id == 1)
 						pipeline_id = 0;
 					var cel = App_Deals.opportunityCollectionView.el;
 					appendCustomfieldsHeaders(el);
@@ -68,16 +69,15 @@ var DealsRouter = Backbone.Router.extend({
 					deal_bulk_actions.init_dom(el);
 					setupDealsTracksList(cel);
 					setupDealFilters(cel);
-				},
-				appendItemCallback : function(el)
-				{ 
+					initializeDealsListners(el);
+				}, appendItemCallback : function(el)
+				{
 					appendCustomfields(el);
 
 					// To show timeago for models appended by infini scroll
 					includeTimeAgo(el);
-					
-				}
-				});
+
+				} });
 			this.opportunityCollectionView.collection.fetch();
 
 			$('#content').html(this.opportunityCollectionView.render().el);
@@ -85,10 +85,12 @@ var DealsRouter = Backbone.Router.extend({
 
 		$(".active").removeClass("active");
 		$("#dealsmenu").addClass("active");
-		setTimeout(function(){$('a.deal-notes').tooltip();}, 2000);
+		setTimeout(function()
+		{
+			$('a.deal-notes').tooltip();
+		}, 2000);
 	},
-	
-	
+
 	/**
 	 * import deals from a csv file and then upload all deals to databse
 	 */
