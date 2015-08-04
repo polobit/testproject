@@ -315,6 +315,7 @@ public class ShopifySyncImpl extends OneWaySyncService
 	int count = 0;
 	OAuthRequest oAuthRequest = new OAuthRequest(Verb.GET, url);
 	oAuthRequest.addHeader("X-Shopify-Access-Token", prefs.token);
+	oAuthRequest.addHeader("X-Shopify-Shop-Api-Call-Limit", "1/40");
 	try
 	{
 	    Response response = oAuthRequest.send();
@@ -375,6 +376,7 @@ public class ShopifySyncImpl extends OneWaySyncService
     System.out.println("currentPage---"+currentPage+"--------MAX_FETCH_RESULT-----"+MAX_FETCH_RESULT);
 	OAuthRequest oAuthRequest = new OAuthRequest(Verb.GET, accessURl);
 	oAuthRequest.addHeader("X-Shopify-Access-Token", prefs.token);
+	oAuthRequest.addHeader("X-Shopify-Shop-Api-Call-Limit", "1/40");
 	ArrayList<LinkedHashMap<String, Object>> customers = new ArrayList<LinkedHashMap<String, Object>>();
 	try
 	{
