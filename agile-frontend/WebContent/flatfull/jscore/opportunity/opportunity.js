@@ -195,7 +195,6 @@ var tracks = new Base_Collection_View({url : '/core/api/milestone/pipelines'});
 							html+='<option value="'+mile.id+'_'+milestone+'">'+mile.name+' - '+milestone+'</option>';
 					});
 					html+='</optgroup>';
-					
 				});
 				$('#' + id, el).closest('.control-group').find('label b').text('Track & Milestone');
 			}
@@ -241,8 +240,10 @@ var tracks = new Base_Collection_View({url : '/core/api/milestone/pipelines'});
 			console.log(jsonModel);
 			
 			// If there is only one pipeline, select the option by default and hide the field.
-			if(jsonModel.length==1)
+			if(jsonModel.length==1){
 				html+='<option value="'+jsonModel[0].id+'" selected="selected">'+jsonModel[0].name+'</option>';
+				$('#milestone-set-msg').show();
+			}
 			else {
 				$.each(jsonModel,function(index,mile){
 					console.log(mile.milestones,value);
@@ -252,7 +253,7 @@ var tracks = new Base_Collection_View({url : '/core/api/milestone/pipelines'});
 						html+='<option value="'+mile.id+'" selected="selected">'+mile.name+'</option>';
 					else
 						html+='<option value="'+mile.id+'">'+mile.name+'</option>';
-					
+					$('#milestone-set-msg').show();
 				});
 			}
 			$('#pipeline',el).html(html);

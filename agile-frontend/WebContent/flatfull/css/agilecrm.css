@@ -1905,6 +1905,10 @@ text-overflow:ellipsis;
 	visibility: hidden !important;
 }
 
+a.disabled i {
+	color: #dee5e7;
+}
+
 #deal-tracks-accordion .accordion-heading:hover #icons {
 	display: block!important;
 }

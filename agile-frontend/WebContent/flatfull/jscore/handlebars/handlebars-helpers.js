@@ -607,6 +607,8 @@ $(function()
 					function(data)
 					{
 						var html = "";
+						var wonMsg = 'Deals with this milestone are considered as Won.';
+						var lostMsg = 'Deals with this milestone are considered as Lost.';
 						// var html = "<ul class='milestone-value-list
 						// tagsinput' style='padding:1px;list-style:none;'>";
 						if (data)
@@ -614,17 +616,19 @@ $(function()
 							var milestones = data.milestones.split(",");
 							for ( var i in milestones)
 							{
-								html += "<tr data='" + milestones[i] + "' style='display: table-row;'><td><div class='inline-block v-top text-ellipsis' style='width:80%'>";
-								html += milestones[i] + "</div></td><td class='b-r-none'><div class='m-b-n-xs'>";
+								html += "<tr data='" + milestones[i] + "' style='display: table-row;'><td><div class='milestone-name-block inline-block v-top text-ellipsis' style='width:80%'>";
 								if(milestones[i] == data.won_milestone){
-									html += "<a class='milestone-won text-l-none-hover c-p text-xs hover-hide' style='visibility:visible;'><i title='Won Milestone' class='icon-like'></i></a>";
-									html += "<a class='milestone-lost text-l-none-hover c-p text-xs m-l-sm not-applicable' style='visibility:hidden;'><i title='Lost Milestone' class='icon-dislike'></i></a>";
+									html += milestones[i] + "<i title='Lost Milestone' class='icon-like mark-won m-l-sm'></i></div></td><td class='b-r-none'><div class='m-b-n-xs'>";
+									html += "<a class='milestone-won text-l-none-hover c-p text-xs hover-show disabled' style='visibility:hidden;'><i title='"+wonMsg+"' class='icon-like'></i></a>";
+									html += "<a class='milestone-lost text-l-none-hover c-p text-xs m-l-sm not-applicable hover-show' style='visibility:hidden;'><i title='"+lostMsg+"' class='icon-dislike'></i></a>";
 								} else if(milestones[i] == data.lost_milestone){
-									html += "<a class='milestone-won text-l-none-hover c-p text-xs not-applicable' style='visibility:hidden;'><i title='Won Milestone' class='icon-like'></i></a>";
-									html += "<a class='milestone-lost text-l-none-hover c-p text-xs m-l-sm hover-hide' style='visibility:visible;'><i title='Lost Milestone' class='icon-dislike'></i></a>";
+									html += milestones[i] + "<i title='Lost Milestone' class='icon-dislike mark-lost m-l-sm'></i></div></td><td class='b-r-none'><div class='m-b-n-xs'>";
+									html += "<a class='milestone-won text-l-none-hover c-p text-xs not-applicable hover-show' style='visibility:hidden;'><i title='"+wonMsg+"' class='icon-like'></i></a>";
+									html += "<a class='milestone-lost text-l-none-hover c-p text-xs m-l-sm hover-show disabled' style='visibility:hidden;'><i title='"+lostMsg+"' class='icon-dislike'></i></a>";
 								} else{
-									html += "<a class='milestone-won text-l-none-hover c-p text-xs hover-show' style='visibility:hidden;'><i title='Won Milestone' class='icon-like'></i></a>";
-									html += "<a class='milestone-lost text-l-none-hover c-p text-xs m-l-sm hover-show' style='visibility:hidden;'><i title='Lost Milestone' class='icon-dislike'></i></a>";
+									html += milestones[i] + "</div></td><td class='b-r-none'><div class='m-b-n-xs'>";
+									html += "<a class='milestone-won text-l-none-hover c-p text-xs hover-show' style='visibility:hidden;'><i title='"+wonMsg+"' class='icon-like'></i></a>";
+									html += "<a class='milestone-lost text-l-none-hover c-p text-xs m-l-sm hover-show' style='visibility:hidden;'><i title='"+lostMsg+"' class='icon-dislike'></i></a>";
 								}
 								html +=	"<a class='milestone-delete c-p m-l-sm text-l-none text-xs hover-show' style='visibility:hidden;'><i title='Delete Milestone' class='icon icon-trash'></i>" +
 										"</a><a class='text-l-none-hover c-p text-xs m-l-sm hover-show' style='visibility:hidden;'><i title='Drag' class='icon-move'></i></a></div></td></tr>";

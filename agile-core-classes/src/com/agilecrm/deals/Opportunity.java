@@ -435,7 +435,8 @@ public class Opportunity extends Cursor implements Serializable
 	if (oldOpportunity != null && StringUtils.isNotEmpty(this.milestone)
 		&& StringUtils.isNotEmpty(oldOpportunity.milestone))
 	{
-	    if (!this.pipeline.equals(oldOpportunity.pipeline) || !this.milestone.equals(oldOpportunity.milestone))
+	    if (!this.pipeline_id.equals(oldOpportunity.getPipeline_id())
+		    || !this.milestone.equals(oldOpportunity.milestone))
 		this.milestone_changed_time = System.currentTimeMillis() / 1000;
 
 	    if (!this.milestone.equals(oldOpportunity.milestone) && this.milestone.equalsIgnoreCase("Won"))
