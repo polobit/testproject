@@ -152,11 +152,14 @@ $(function(){
 
 	});
 
+	});
+
+function initializeMilestineSettingsListeners(){
 	// Admin Settings milestone list
 	/**
 	 * To remove the milestone from list.
 	 */
-	$('body').on('click', '.milestone-delete', function(e) {
+	$('#admin-settings-milestones-model-list').off('click').on('click', '.milestone-delete', function(e) {
 		e.preventDefault();
 		if (!confirm("Are you sure you want to delete ?" ))
 			return;
@@ -167,7 +170,7 @@ $(function(){
 	/**
 	 * Shows input field to add new milestone.
 	 */
-	$('body').on('click', '.show_milestone_field', function(e) {
+	$('#admin-settings-milestones-model-list').off('click').on('click', '.show_milestone_field', function(e) {
     	e.preventDefault();
     	var form = $(this).closest('form');
     	console.log('New Milestone to - ',form.attr('id'));
@@ -179,7 +182,7 @@ $(function(){
     /**
 	 * Adds new milestone to the sortable list.
 	 */
-	$('body').on('click', '.add_milestone', function(e) {
+	$('#admin-settings-milestones-model-list').off('click').on('click', '.add_milestone', function(e) {
     	
     	e.preventDefault();
     	var form = $(this).closest('form');
@@ -227,7 +230,7 @@ $(function(){
     	}
     });
 
-	$('body').on('keypress', '.add_new_milestone', function(e) {
+	$('#admin-settings-milestones-model-list').off('keypress').on('keypress', '.add_new_milestone', function(e) {
     	if(e.keyCode == 13)
     	{
     		var form = $(this).closest("form");
@@ -235,7 +238,7 @@ $(function(){
     	}
     });
     
-	$('body').on('click', '.save-pipelines', function(e) {
+	$('##admin-settings-milestones-model-list').on('click', '.save-pipelines', function(e) {
     	e.preventDefault();
     	
     	$('#admin-settings-milestones-model-list').find('form').each(function(index){
@@ -257,7 +260,7 @@ $(function(){
     	
     });
     
-	$('body').on('click', '#pipeline_validate', function(e) {
+	$('#pipelineModal').off('click').on('click', '#pipeline_validate', function(e) {
     	e.preventDefault();
     	
     	// Returns, if the save button has disabled attribute
@@ -296,7 +299,8 @@ $(function(){
     	});
     	
     });
-});
+
+}
 
 
 /** 

@@ -4,9 +4,9 @@
  * 
  * @module Billing author: Yaswanth
  */
-$(function()
+function initializeInvoicesListeners()
 {
-	$('body').on('click', '#invoice-model-list > tr', function(e)
+	$('#invoice-details-holder').on('click', '#invoice-model-list > tr', function(e)
 	{
 		e.preventDefault();
 
@@ -22,7 +22,7 @@ $(function()
 		// App_Subscription.invoiceDetails(data);
 	});
 	
-	$('body').on('click', '#charge-model-list > tr', function(e)
+	$('#invoice-details-holder').on('click', '#charge-model-list > tr', function(e)
 			{
 				e.preventDefault();
 				var invoice_id = $(this).find('.data').attr('data');
@@ -32,4 +32,4 @@ $(function()
 				}	
 								
 	});
-});
+}

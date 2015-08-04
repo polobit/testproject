@@ -584,39 +584,7 @@ function loadDefaultFilters(callback)
 
 $(function()
 {
-	$("body").on('click', '#sync-google-calendar', function(e)
-	{
-		e.preventDefault();
-
-		// URL to return, after fetching token and secret key from LinkedIn
-		var callbackURL = window.location.href;
-
-		// For every request of import, it will ask to grant access
-		window.location = "/scribe?service=google_calendar&return_url=" + encodeURIComponent(callbackURL);
-	});
-
-	$("body").on('click', '#sync-google-calendar-delete', function(e)
-	{
-		e.preventDefault();
-
-		var disabled = $(this).attr("disabled");
-		if (disabled)
-			return;
-
-		$(this).attr("disabled", "disabled");
-
-		$(this).after(getRandomLoadingImg());
-		App_Widgets.calendar_sync_google.model.url = "/core/api/calendar-prefs"
-		console.log(App_Widgets.calendar_sync_google.model.destroy({ success : function()
-		{
-
-			App_Widgets.calendar_sync_google.model.clear();
-			App_Widgets.calendar_sync_google.model.url = "/core/api/calendar-prefs/get"
-			App_Widgets.calendar_sync_google.render(true);
-			erase_google_calendar_prefs_cookie();
-
-		} }));
-	});
+	
 
 	// Show filter drop down.
 	$("body").on('click', '#event-filter-button', function(e)

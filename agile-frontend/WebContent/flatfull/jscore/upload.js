@@ -1,9 +1,6 @@
 $(function(){ 
 
-    $('body').on('click', '.upload_s3', function (e) {
-		e.preventDefault();
-		uploadImage("upload-container");
-	});
+   
 
 	//Upload contact image
 	$('body').on('click', '.upload_pic', function (e) {

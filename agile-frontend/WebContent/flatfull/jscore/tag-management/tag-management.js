@@ -270,13 +270,16 @@ function append_tag_management(base_model) {
 	// $(this.model_list_element).append($(el));
 }
 
-$('body').on('click', '#add-new-tag', function(e){
+function initializeTagManagementListeners(){
+
+
+$('#admin-prefs-tabs-content').on('click', '#add-new-tag', function(e){
 	e.preventDefault();
 
 	toggleAddTag(true);
 });
 
-$('body').on('keydown', '#new_tag', function(event){
+$('#admin-prefs-tabs-content').on('keydown', '#new_tag', function(event){
 	console.log(event.which)
 
 	if (event.which == 0) {
@@ -286,6 +289,7 @@ $('body').on('keydown', '#new_tag', function(event){
 		return;
 	saveTag(this);
 });
+}
 
 function blur_out_input_field(element) {
 	var value = $(element).val().trim();
