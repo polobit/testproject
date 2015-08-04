@@ -1,5 +1,6 @@
 package com.agilecrm.account.util;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.ws.rs.WebApplicationException;
@@ -64,8 +65,8 @@ public class EmailGatewayUtil
 	    if (widget == null)
 	    {
 		widget = new Widget("EmailGateway",
-		        "Email gateway supports third party email apis integration into Agile.", "", "", "", "",
-		        WidgetType.INTEGRATIONS, IntegrationType.EMAIL);
+			"Email gateway supports third party email apis integration into Agile.", "", "", "", "",
+			WidgetType.INTEGRATIONS, IntegrationType.EMAIL);
 	    }
 
 	    ObjectMapper map = new ObjectMapper();
@@ -325,7 +326,7 @@ public class EmailGatewayUtil
 	    if (emailGateway == null)
 	    {
 		Mandrill.sendMail(null, true, fromEmail, fromName, to, cc, bcc, subject, replyTo, html, text,
-		        mandrillMetadata, documentIds, blobKeys, attachments);
+			mandrillMetadata, documentIds, blobKeys, attachments);
 
 		return;
 	    }
@@ -333,12 +334,12 @@ public class EmailGatewayUtil
 	    // If Mandrill
 	    if (EMAIL_API.MANDRILL.equals(emailGateway.email_api))
 		Mandrill.sendMail(emailGateway.api_key, true, fromEmail, fromName, to, cc, bcc, subject, replyTo, html,
-		        text, mandrillMetadata, documentIds, blobKeys, attachments);
+			text, mandrillMetadata, documentIds, blobKeys, attachments);
 
 	    // If SendGrid
 	    else if (EMAIL_API.SEND_GRID.equals(emailGateway.email_api))
 		SendGrid.sendMail(emailGateway.api_user, emailGateway.api_key, fromEmail, fromName, to, cc, bcc,
-		        subject, replyTo, html, text, null, attachments);
+			subject, replyTo, html, text, null, attachments);
 
 	}
 	catch (Exception e)
@@ -379,7 +380,7 @@ public class EmailGatewayUtil
 	EmailGateway emailGateway = EmailGatewayUtil.getEmailGateway();
 
 	sendEmail(emailGateway, domain, fromEmail, fromName, to, cc, bcc, subject, replyTo, html, text,
-	        mandrillMetadata, documentIds, blobKeys, attachments);
+		mandrillMetadata, documentIds, blobKeys, attachments);
     }
 
     /**
@@ -405,7 +406,7 @@ public class EmailGatewayUtil
 	    String replyTo, String html, String text, String mandrillMetadata, String subscriberId, String campaignId)
     {
 	MailDeferredTask mailDeferredTask = new MailDeferredTask(emailGatewayType, apiUser, apiKey, domain, fromEmail,
-	        fromName, to, cc, bcc, subject, replyTo, html, text, mandrillMetadata, subscriberId, campaignId);
+		fromName, to, cc, bcc, subject, replyTo, html, text, mandrillMetadata, subscriberId, campaignId);
 
 	// Add to pull queue with from email as Tag
 	PullQueueUtil.addToPullQueue(queueName, mailDeferredTask, fromEmail);
@@ -423,7 +424,7 @@ public class EmailGatewayUtil
 	TaskHandle firstTaskHandle = tasks.get(0);
 
 	MailDeferredTask mailDeferredTask = (MailDeferredTask) SerializationUtils.deserialize(firstTaskHandle
-	        .getPayload());
+		.getPayload());
 
 	String domain = mailDeferredTask.domain;
 
@@ -442,7 +443,7 @@ public class EmailGatewayUtil
 	    {
 		// If null or Mandrill
 		if (emailGateway == null || emailGateway.email_api == EmailGateway.EMAIL_API.MANDRILL)
-		    MandrillUtil.sendMandrillMails(tasks, emailSender);
+		    MandrillUtil.sendMandrillMails(convertTaskHandlestoMailDeferredTasks(tasks), emailSender);
 
 		// If SendGrid
 		else if (emailGateway.email_api == EMAIL_API.SEND_GRID)
@@ -470,6 +471,24 @@ public class EmailGatewayUtil
 	}
     }
 
+    public static List<MailDeferredTask> convertTaskHandlestoMailDeferredTasks(List<TaskHandle> tasks)
+    {
+	List<MailDeferredTask> mailDeferredTasks = new ArrayList<MailDeferredTask>();
+	for (TaskHandle handle : tasks)
+	{
+	    try
+	    {
+		mailDeferredTasks.add((MailDeferredTask) SerializationUtils.deserialize(handle.getPayload()));
+	    }
+	    catch (Exception e)
+	    {
+		e.printStackTrace();
+	    }
+
+	}
+	return mailDeferredTasks;
+    }
+
     /**
      * Adds email exceeded log
      * 
@@ -483,15 +502,15 @@ public class EmailGatewayUtil
 	    for (TaskHandle task : tasks)
 	    {
 		MailDeferredTask mailDeferredTask = (MailDeferredTask) SerializationUtils
-		        .deserialize(task.getPayload());
+			.deserialize(task.getPayload());
 
 		// For personal bulk emails, no need to add log
 		if (StringUtils.isBlank(mailDeferredTask.campaignId)
-		        && StringUtils.isBlank(mailDeferredTask.subscriberId))
+			&& StringUtils.isBlank(mailDeferredTask.subscriberId))
 		    break;
 
 		LogUtil.addLogToSQL(mailDeferredTask.campaignId, mailDeferredTask.subscriberId,
-		        "Emails limit exceeded. Please increase your quota.", LogType.EMAIL_SENDING_FAILED.toString());
+			"Emails limit exceeded. Please increase your quota.", LogType.EMAIL_SENDING_FAILED.toString());
 
 	    }
 	}
