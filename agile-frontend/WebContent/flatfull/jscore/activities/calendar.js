@@ -586,6 +586,7 @@ $(function()
 {
 	
 
+
 	// Show filter drop down.
 	/*
 	 * $("body").on('click', '#event-filter-button', function(e) {
