@@ -5,10 +5,9 @@
  * same label for different fields then error message is shown and will not send
  * request to save.
  */
-$(function()
-{
+function initializeImportListeners(){
 
-    $('body').on('click', '#google-import', function(e){
+    $('#prefs-tabs-content').off('click').on('click', '#google-import', function(e){
 		
 		// URL to return, after fetching token and secret key from LinkedIn
 		var callbackURL = window.location.href + "/contacts";
@@ -50,7 +49,7 @@ $(function()
 
 	});
 	
-	 $('body').on('click', '#google-import-prefs-delete', function(e){
+	 $('#prefs-tabs-content').off('click').on('click', '#google-import-prefs-delete', function(e){
 		e.preventDefault();
 		var disabled = $(this).attr("disabled");
 		if(disabled)
@@ -66,7 +65,7 @@ $(function()
 		}}));
 	});
 
-	$('body').on('change', '#sync-type', function(e){
+	$('#prefs-tabs-content').off('change').on('change', '#sync-type', function(e){
 		e.preventDefault();
 		var value = $(this).val();
 		if(value == "AGILE_TO_CLIENT" || value == "TWO_WAY")
@@ -90,7 +89,7 @@ $(function()
 		
 	})
 	
-	$('body').on('click', '.save-contact-prefs', function(e){
+	$('#prefs-tabs-content').off('click').on('click', '.save-contact-prefs', function(e){
 		e.preventDefault();
 		var disabled = $(this).attr("disabled");
 		if(disabled)
@@ -124,7 +123,7 @@ $(function()
 	})
 	
 	
-	$('body').on('click', '#quickbook_sync_prefs', function(e){
+	$('#prefs-tabs-content').off('click').on('click', '#quickbook_sync_prefs', function(e){
 		e.preventDefault();
 		var disable = $(this).attr('disabled');
 		if(disable)
@@ -150,7 +149,7 @@ $(function()
 		
 	});
 	
-	$('body').on('click', '#xero_sync_prefs', function(e){
+	$('#prefs-tabs-content').off('click').on('click', '#xero_sync_prefs', function(e){
 		e.preventDefault();
 		var disable = $(this).attr('disabled');
 		if(disable)
@@ -176,7 +175,7 @@ $(function()
 		
 	});
 	
-	$('body').on('click', '#freshbooks_sync_prefs', function(e){
+	$('#prefs-tabs-content').off('click').on('click', '#freshbooks_sync_prefs', function(e){
 					e.preventDefault();
 					var disable = $(this).attr('disabled');
 					if(disable)
@@ -202,9 +201,51 @@ $(function()
 					
 				});
 
+	//oauth request for xero
+$('#prefs-tabs-content').off('click').on('click', '#xeroconnect', function(e){
+	var callbackURL = window.location.href;
+	console.log(callbackURL);
 
-	
+	// For every request of import, it will ask to grant access
+	window.location = "/scribe?service=xero&return_url=" + encodeURIComponent(callbackURL);
+	return false;
 });
+
+$("#prefs-tabs-content").off('click').on('click', '#sync-google-calendar', function(e)
+	{
+		e.preventDefault();
+
+		// URL to return, after fetching token and secret key from LinkedIn
+		var callbackURL = window.location.href;
+
+		// For every request of import, it will ask to grant access
+		window.location = "/scribe?service=google_calendar&return_url=" + encodeURIComponent(callbackURL);
+	});
+
+	$("#prefs-tabs-content").off('click').on('click', '#sync-google-calendar-delete', function(e)
+	{
+		e.preventDefault();
+
+		var disabled = $(this).attr("disabled");
+		if (disabled)
+			return;
+
+		$(this).attr("disabled", "disabled");
+
+		$(this).after(getRandomLoadingImg());
+		App_Widgets.calendar_sync_google.model.url = "/core/api/calendar-prefs"
+		console.log(App_Widgets.calendar_sync_google.model.destroy({ success : function()
+		{
+
+			App_Widgets.calendar_sync_google.model.clear();
+			App_Widgets.calendar_sync_google.model.url = "/core/api/calendar-prefs/get"
+			App_Widgets.calendar_sync_google.render(true);
+			erase_google_calendar_prefs_cookie();
+
+		} }));
+	});
+	
+}
 
 function show_success_message_after_save_button(message, el)
 {
@@ -221,15 +262,7 @@ function show_success_message_after_save_button(message, el)
 		
 }
 
-//oauth request for xero
-$('body').on('click', '#xeroconnect', function(e){
-	var callbackURL = window.location.href;
-	console.log(callbackURL);
 
-	// For every request of import, it will ask to grant access
-	window.location = "/scribe?service=xero&return_url=" + encodeURIComponent(callbackURL);
-	return false;
-});
 
 
 //Compute the edit distance between the two given strings

@@ -7,12 +7,12 @@
  * 
  * author: Yaswanth
  */
-$(function() {
+function initializeCustomFieldsListeners(){
 	/**
 	 * Loads the respective modal (Text or Date or List or Check-box modal) based
 	 * on the id attribute of the clicked link to save the custom fields.
 	 */
-	$('body').on('click', '.fieldmodal', function(event){
+	$('#custom-fields-accordion').off('click').on('click', '.fieldmodal', function(event){
 		event.preventDefault();
 		var type = $(this).attr("type");
 		
@@ -21,7 +21,7 @@ $(function() {
 	});
 	
 	
-	$('body').on('change', '#custom-field-type', function(e){
+	$('#custom-field-add-modal').off('change').on('change', '#custom-field-type', function(e){
 		e.preventDefault();
 		var value = $(this).val();
 		if(value == "LIST")
@@ -60,19 +60,19 @@ $(function() {
 		
 	})
 	
-	$('body').on('change', '#admin-settings-customfields-model-list > tr > td:not(":first-child")', function(e){
+	$('#custom-fields-accordion').off('change').on('change', '#admin-settings-customfields-model-list > tr > td:not(":first-child")', function(e){
 		e.preventDefault();
 		var custom_field = $(this).closest('tr').data();
 		console.log(custom_field);
 		showCustomFieldModel(custom_field.toJSON());
 	});
-	$('body').on('click', '#edit-custom-field', function(e){
+	$('#custom-fields-accordion').off('change').on('click', '#edit-custom-field', function(e){
 		e.preventDefault();
 		var custom_field = $(this).closest('tr').data();
 		console.log(custom_field);
 		showCustomFieldModel(custom_field.toJSON());
 	});
-	$('body').on('click', '#delete-custom-field', function(e){
+	$('#custom-fields-accordion').off('change').on('click', '#delete-custom-field', function(e){
 		if(confirm("Are you sure you want to delete?")){
 			e.preventDefault();
 			var custom_field = $(this).closest('tr').data();
@@ -92,7 +92,7 @@ $(function() {
 				}, dataType : 'json' });
 		}
 	});
-});
+}
 
 function showCustomFieldModel(data)
 {

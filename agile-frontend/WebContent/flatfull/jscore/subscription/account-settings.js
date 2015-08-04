@@ -48,14 +48,14 @@ function set_up_account_stats(el, callback)
  * Handles events on delete account at stats and confirmation, sends delete
  * request on confirmation
  */
-$(function()
-{
+function initializeAccountSettingsListeners(){
+
 	ACCOUNT_DELETE_REASON_JSON = undefined;
 	/**
 	 * If user clicks on confirm delete the modal is hidden and
 	 * delete request is sent to "core/api/delete/account"
 	 */
-	$('body').on('click', '#confirm-delete-account', function(e) {
+	$('#content').off('click').on('click', '#confirm-delete-account', function(e) {
 		
 			e.preventDefault();
 
@@ -85,7 +85,7 @@ $(function()
 	});
 	
 	// Cancellation for free users
-	$('body').on('click', '#cancel-account', function(e) {
+	$('#content').off('click').on('click', '#cancel-account', function(e) {
 	
 			e.preventDefault();
 			
@@ -105,7 +105,7 @@ $(function()
 				ACCOUNT_DELETE_REASON_JSON = undefined;
 			});
 			
-			$('body').on('click', '#warning-feedback-save', function(e) {
+			$('#warning-deletion-feedback').off('click').on('click', '#warning-feedback-save', function(e) {
 				e.preventDefault();
 				
 				var form = $("#cancelation-feedback-form");
@@ -142,7 +142,7 @@ $(function()
 	});
 	
 	// Cancellation for paid users
-	$('body').on('click', '#cancel-account-request', function(e) {
+	$('#content').off('click').on('click', '#cancel-account-request', function(e) {
 	
 			e.preventDefault();
 			
@@ -159,7 +159,7 @@ $(function()
 				$("#account_cancel_reason").val()
 			});
 			
-			$('body').on('click', '#send-delete-request', function(e) {
+			$('#send-cancellation').off('click').on('click', '#send-delete-request', function(e) {
 
 				e.preventDefault();
 
@@ -230,4 +230,4 @@ $(function()
 			});
 			
 	});
-});
+}

@@ -78,7 +78,10 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			return;
 		}
 		$("#content").html(getTemplate("admin-settings"), {});
-		var view = new Base_Model_View({ url : '/core/api/account-prefs', template : "admin-settings-account-prefs", postRenderCallback : function(){} });
+		var view = new Base_Model_View({ url : '/core/api/account-prefs', template : "admin-settings-account-prefs", postRenderCallback : function(){
+			initializeAdminSettingsListeners();	
+			initializeAccountSettingsListeners();
+		} });
 
 		$('#content').find('#admin-prefs-tabs-content').html(view.render().el);
 		$('#content').find('#AdminPrefsTab .select').removeClass('select');
@@ -100,6 +103,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 		this.usersListView = new Base_Collection_View({ url : '/core/api/users', restKey : "domainUser", templateKey : "admin-settings-users",
 			individual_tag_name : 'tr', postRenderCallback : function(el)
 			{
+				
 				head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
 				{
 					$(".last-login-time", el).timeago();
@@ -128,6 +132,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 		var view = new Base_Model_View({ url : 'core/api/users', template : "admin-settings-user-add", isNew : true, window : 'users', reload : false,
 			postRenderCallback : function(el)
 			{
+				
 				if (view.model.get("id"))
 					addTagAgile("User invited");
 
@@ -209,6 +214,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 
 		}, postRenderCallback : function(el)
 		{
+			
 			bindAdminChangeAction(el, view.model.toJSON());
 		} });
 
@@ -238,7 +244,11 @@ var AdminSettingsRouter = Backbone.Router.extend({
 		}
 		$("#content").html(getTemplate("admin-settings"), {});
 		this.customFieldsListView = new Base_Collection_View({ url : '/core/api/custom-fields/allScopes', restKey : "customFieldDefs",
-			templateKey : "admin-settings-customfields", individual_tag_name : 'tr' });
+			templateKey : "admin-settings-customfields", individual_tag_name : 'tr' , postRenderCallback : function(el){
+				initializeCustomFieldsListeners();
+				
+			}
+		});
 		
 		this.customFieldsListView.appendItem = groupingCustomFields;
 
@@ -267,6 +277,8 @@ var AdminSettingsRouter = Backbone.Router.extend({
 		{
 			var view = new Base_Model_View({ url : '/core/api/api-key', template : "admin-settings-api-key-model", postRenderCallback : function(el)
 			{
+				
+				initializeRegenerateKeysListeners();
 				$('#content').find('#admin-prefs-tabs-content').html(view.el);
 
 				$('#content').find('#AdminPrefsTab .select').removeClass('select');
@@ -315,6 +327,8 @@ var AdminSettingsRouter = Backbone.Router.extend({
 		{
 			var view = new Base_Model_View({ url : '/core/api/api-key', template : "admin-settings-api-model", postRenderCallback : function(el)
 			{
+				
+				initializeRegenerateKeysListeners();
 				prettyPrint();
 			} });
 			$("#content").html(getTemplate("admin-settings"), {});
@@ -341,6 +355,8 @@ var AdminSettingsRouter = Backbone.Router.extend({
 		this.pipelineGridView = new Base_Collection_View({ url : '/core/api/milestone/pipelines', templateKey : "admin-settings-milestones",
 			individual_tag_name : 'div', sortKey : "name", postRenderCallback : function(el)
 			{
+				
+				initializeMilestineSettingsListeners();
 				setup_milestones(el);
 				var tracks_length = App_Admin_Settings.pipelineGridView.collection.length;
 				if(tracks_length == 1)
@@ -448,6 +464,8 @@ var AdminSettingsRouter = Backbone.Router.extend({
 		this.tagsview1 = new Base_Collection_View({ url : 'core/api/tags/stats1', templateKey : "tag-management", individual_tag_name : 'li',
 			sort_collection : true, sortKey : 'tag', postRenderCallback : function(el)
 			{
+				
+				initializeTagManagementListeners();
 			} });
 		this.tagsview1.appendItem = append_tag_management;
 
@@ -484,6 +502,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 
 		template : 'settings-email-gateway', postRenderCallback : function(el)
 		{
+			
 			// Loads jquery.chained.min.js
 			head.js(LIB_PATH + 'lib/agile.jquery.chained.min.js', function()
 			{
@@ -587,6 +606,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 				model.set({ prefs : JSON.stringify(prefJSON) }, { silent : true });
 			}, postRenderCallback : function(el)
 			{
+				
 				if(id=="plivo"){
 					$("#integrations-image",el).attr("src","/img/plugins/plivo.png");
 					$("#accoundID",el).attr("name","account_id");
