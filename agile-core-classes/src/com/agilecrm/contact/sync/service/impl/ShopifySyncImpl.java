@@ -315,9 +315,20 @@ public class ShopifySyncImpl extends OneWaySyncService
 	int count = 0;
 	OAuthRequest oAuthRequest = new OAuthRequest(Verb.GET, url);
 	oAuthRequest.addHeader("X-Shopify-Access-Token", prefs.token);
-	oAuthRequest.addHeader("X-Shopify-Shop-Api-Call-Limit", "1/40");
 	try
 	{
+		Map<String, String> oAuthRequestHeadersMap = oAuthRequest.getHeaders();
+		if(oAuthRequestHeadersMap!=null)
+	    {
+			System.out.println("oAuthRequestHeadersMap-------------");
+	    	for (Map.Entry<String,String> entry : oAuthRequestHeadersMap.entrySet()) {
+				System.out.println(entry.getKey()+"---------"+entry.getValue());
+			}
+	    	if(oAuthRequestHeadersMap.get("X-Shopify-Shop-Api-Call-Limit").equalsIgnoreCase("39/40"))
+	    	{
+	    		Thread.sleep(10000);
+	    	}
+	    }
 	    Response response = oAuthRequest.send();
 	    Map<String, String> responseHeadersMap = response.getHeaders();
 	    if(responseHeadersMap!=null)
@@ -376,14 +387,26 @@ public class ShopifySyncImpl extends OneWaySyncService
     System.out.println("currentPage---"+currentPage+"--------MAX_FETCH_RESULT-----"+MAX_FETCH_RESULT);
 	OAuthRequest oAuthRequest = new OAuthRequest(Verb.GET, accessURl);
 	oAuthRequest.addHeader("X-Shopify-Access-Token", prefs.token);
-	oAuthRequest.addHeader("X-Shopify-Shop-Api-Call-Limit", "1/40");
 	ArrayList<LinkedHashMap<String, Object>> customers = new ArrayList<LinkedHashMap<String, Object>>();
 	try
 	{
+		Map<String, String> oAuthRequestHeadersMap = oAuthRequest.getHeaders();
+		if(oAuthRequestHeadersMap!=null)
+	    {
+			System.out.println("oAuthRequestHeadersMap-------------");
+	    	for (Map.Entry<String,String> entry : oAuthRequestHeadersMap.entrySet()) {
+				System.out.println(entry.getKey()+"---------"+entry.getValue());
+			}
+	    	if(oAuthRequestHeadersMap.get("X-Shopify-Shop-Api-Call-Limit").equalsIgnoreCase("39/40"))
+	    	{
+	    		Thread.sleep(10000);
+	    	}
+	    }
 	    Response response = oAuthRequest.send();
 	    Map<String, String> responseHeadersMap = response.getHeaders();
 	    if(responseHeadersMap!=null)
 	    {
+	    	System.out.println("responseHeadersMap----------------");
 	    	for (Map.Entry<String,String> entry : responseHeadersMap.entrySet()) {
 				System.out.println(entry.getKey()+"---------"+entry.getValue());
 			}
