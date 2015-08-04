@@ -1,8 +1,7 @@
 // Stores report object, so it can be used while creating report table headings
 var REPORT;
-$(function()
-{
-    $('body').on('click', '#reports-email-now', function(e)
+function initializeReportsListeners(){
+	$('#report-model-list').off("click").on('click', '#reports-email-now', function(e)
 					{
 						// e.preventDefault();
 						e.stopPropagation();
@@ -60,6 +59,7 @@ $(function()
 															});
 										});
 					});
+
 	$('body').on('click', '#campaign_id', function(e)
 			{
 				e.preventDefault();
@@ -84,7 +84,7 @@ $(function()
 					} });
 
 			});
-	$('body').on('click', '#report-instant-results', function(e) 
+	$('#report-model-list').on('click', '#report-instant-results', function(e) 
 	{
 		e.stopPropagation();
 		var id = $(this).attr('data');
@@ -185,8 +185,7 @@ $(function()
 
 						}
 					});
-
-})
+}
 
 function reportsContactTableView(base_model, customDatefields, view)
 {
