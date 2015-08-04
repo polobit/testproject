@@ -1373,6 +1373,7 @@ max-width:50%;
 min-width:50%;
 }
 
+
 /* starting hack for new ui contact details big tag will come down  */
 #added-tags-ul li {
   text-align:left;
@@ -1434,10 +1435,50 @@ color: #98a6ad;
   display: none!important;
 }
 
+
+
+
+
+
+
+/* starting css app mobile compatibility */
+
+@media (min-width:768px){
+.app-details-width {
+	width:299px;
+}
+}
+
+@media (max-width:767px){
+
+	.app-details-width {
+	width:100%;
+	}
+
+ .fixedicons,.dockedicons {
+ position:static!important;
+ }
+ 
+ .table-layout-mob-view {
+ table-layout:auto;
+ }
+ 
+ .agile-table td > div.table-resp {
+  width: 15em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.activity_time {
+  position: static;
+}
+
 }
 
 
 
 
+
 /* ending hack for new ui contact details big tag will come down  */
+
 
