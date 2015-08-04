@@ -1,4 +1,4 @@
-package com.thirdparty;
+package com.thirdparty.sendgrid;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -57,16 +57,19 @@ public class SendGrid
      * Post param to[] - to add multiple to emails
      */
     public static final String SENDGRID_API_PARAM_MULTIPLE_TO = "to[]";
-
+    public static final String SENDGRID_API_PARAM_MULTIPLE_TO_NAME = "toname[]";
+    
     /**
      * Post param cc[] - to add multiple cc emails
      */
     public static final String SENDGRID_API_PARAM_MULTIPLE_CC = "cc[]";
+    public static final String SENDGRID_API_PARAM_MULTIPLE_CC_NAME = "ccname[]";
 
     /**
      * Post param bcc[] - to add multiple bcc emails
      */
     public static final String SENDGRID_API_PARAM_MULTIPLE_BCC = "bcc[]";
+    public static final String SENDGRID_API_PARAM_MULTIPLE_BCC_NAME = "bccname[]";
 
     /**
      * Post param replyto
@@ -159,6 +162,7 @@ public class SendGrid
 	catch (Exception e)
 	{
 	    e.printStackTrace();
+	    System.err.println("Exception occured while sending email from sendgrid..." + e.getMessage());
 	    return e.getMessage();
 	}
 
@@ -206,17 +210,17 @@ public class SendGrid
 	        + SENDGRID_API_PARAM_FROM_NAME + "=" + URLEncoder.encode(fromName, "UTF-8");
 
 	// Appends To emails
-	queryString += "&" + addToEmailsToParams(EmailUtil.getStringTokenSet(to, ","), SENDGRID_API_PARAM_MULTIPLE_TO);
+	queryString += "&" + addToEmailsToParams(EmailUtil.getStringTokenSet(to, ","), SENDGRID_API_PARAM_MULTIPLE_TO, SENDGRID_API_PARAM_MULTIPLE_TO_NAME);
 
 	// Appends CC
 	if (!StringUtils.isEmpty(cc))
 	    queryString += "&"
-		    + addToEmailsToParams(EmailUtil.getStringTokenSet(cc, ","), SENDGRID_API_PARAM_MULTIPLE_CC);
+		    + addToEmailsToParams(EmailUtil.getStringTokenSet(cc, ","), SENDGRID_API_PARAM_MULTIPLE_CC, SENDGRID_API_PARAM_MULTIPLE_CC_NAME);
 
 	// Appends BCC
 	if (!StringUtils.isEmpty(bcc))
 	    queryString += "&"
-		    + addToEmailsToParams(EmailUtil.getStringTokenSet(bcc, ","), SENDGRID_API_PARAM_MULTIPLE_BCC);
+		    + addToEmailsToParams(EmailUtil.getStringTokenSet(bcc, ","), SENDGRID_API_PARAM_MULTIPLE_BCC, SENDGRID_API_PARAM_MULTIPLE_BCC_NAME);
 
 	// Reply To
 	if (!StringUtils.isEmpty(replyTo) && !fromEmail.equals(replyTo))
@@ -237,7 +241,7 @@ public class SendGrid
 	if (attachmentData != null && attachmentData.length != 0)
 	    queryString += "&" + getAttachmentQueryString(attachmentData);
 
-	System.out.println("QueryString  \n" + queryString + "\n\n");
+//	System.out.println("QueryString  \n" + queryString + "\n\n");
 
 	return queryString;
     }
@@ -251,7 +255,7 @@ public class SendGrid
      * @return String
      * @throws UnsupportedEncodingException
      */
-    private static String addToEmailsToParams(Set<String> emails, String param) throws UnsupportedEncodingException
+    private static String addToEmailsToParams(Set<String> emails, String param, String paramName) throws UnsupportedEncodingException
     {
 	String multipleTo = "";
 
@@ -260,7 +264,9 @@ public class SendGrid
 	// Adds multiple - to[]="email1" & to[]="email2"
 	while (itr.hasNext())
 	{
-	    multipleTo += param + "=" + URLEncoder.encode(itr.next(), "UTF-8");
+		String emailString = itr.next();
+				
+	    multipleTo += param + "=" + URLEncoder.encode(EmailUtil.getEmail(emailString), "UTF-8") + "&" + paramName + "=" + URLEncoder.encode(EmailUtil.getEmailName(emailString), "UTF-8");
 
 	    // appends '&' except for last one.
 	    if (itr.hasNext())
