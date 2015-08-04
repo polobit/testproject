@@ -2272,7 +2272,7 @@ function loadingGoogleEvents(el,startTime,endTime){
 		if(response==undefined)
 		{
 			setTimeout(function(){
-				if($(el).find('.list').find('li').length==0 && $(el).find('.portlet-error-message').length==0 )
+				if($(el).find('.list').find('li').length==0 && $(el).find('.portlet-error-message').length==0 && !App_Portlets.refetchEvents)
 											{
 												$(el).find('.events_show').append('<div class="portlet-error-message" style="display:block">No appointments for the day</div>');
 											}
@@ -2506,7 +2506,7 @@ $('.minical-portlet-event').live('click',function(e){
 								model.end.getTime()).getMinutes() < 10 ? "0" : "") + new Date(model.end.getTime()).getMinutes());
 
 		// Set date for update Event
-		var dateFormat = 'mm/dd/yyyy';
+		var dateFormat = CURRENT_USER_PREFS.dateFormat;
 		$("#update-event-date-1").val((new Date(model.start.getTime())).format(dateFormat));
 		$("#update-event-date-2").val((new Date(model.end.getTime())).format(dateFormat));
 
