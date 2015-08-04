@@ -164,7 +164,7 @@ public class AnalyticsServlet extends HttpServlet
 	    String[] blockedIpsArr = APIKey.getBlockedIps().split(",");
 	    for (int i = 0; i < blockedIpsArr.length; i++)
 	    {
-		if (ipMatch(clientIp, blockedIpsArr[i]))
+		if (ipMatch(clientIp, blockedIpsArr[i].trim()))
 		    return true;
 	    }
 	    return false;
@@ -181,7 +181,7 @@ public class AnalyticsServlet extends HttpServlet
 	String[] blockedIpTokens = blockedIp.split("\\.");
 	for (int i = 0; i < clientIpTokens.length; i++)
 	{
-	    if (!(StringUtils.equals(blockedIpTokens[i], "*") || StringUtils.equals(clientIpTokens[i],
+	    if (!(StringUtils.equals("*", blockedIpTokens[i]) || StringUtils.equals(clientIpTokens[i],
 		    blockedIpTokens[i])))
 		return false;
 	}
