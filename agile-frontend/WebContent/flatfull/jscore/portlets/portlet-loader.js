@@ -2243,7 +2243,7 @@ function minicalendar(el)
 								});
 								}
 								else if(!App_Portlets.refetchEvents){
-									$(el).find('.events_show').append('<div class="portlet-error-message">No appointments for the day</div>');
+									$(el).find('.events_show').append('<div class="portlet-error-message">No appointments for the day </div><a class="minical-portlet-event-add text-info p-l" id='+date.getTime()+'>+Add</a>');
 								}
 								}
 							    	
@@ -2270,9 +2270,10 @@ function loadingGoogleEvents(el,startTime,endTime){
 		if(response==undefined)
 		{
 			setTimeout(function(){
-				if($(el).find('.list').find('li').length==0 && $(el).find('.portlet-error-message').length==0 && !App_Portlets.refetchEvents)
+				if($(el).find('.list').find('li').length==0 && $(el).find('.portlet-error-message').length==0)
 											{
-												$(el).find('.events_show').append('<div class="portlet-error-message" style="display:block">No appointments for the day</div>');
+												var date=new Date();
+												$(el).find('.events_show').append('<div class="portlet-error-message">No appointments for the day </div><a class="minical-portlet-event-add text-info p-l" id='+date.getTime()+'>+Add</a>');
 											}
 			},1000);
 		}
@@ -2403,8 +2404,8 @@ function googledata(el,response,startTime,endTime)
 
 							}
 							var len=$(".events_show").find('.list').find('li').length;
+							var date=new Date();
 							 $.each(events,function(index,ev){
-											var date=new Date();
 											 var todayDate=new Date(date.getFullYear(), date.getMonth(), date.getDate(),00,00,00);
 									   var endDate=new Date(date.getFullYear(), date.getMonth(), date.getDate(),23,59,59);
 											if(ev.start.getTime() >= (todayDate.getTime()) && ev.start.getTime() <= (endDate.getTime())) {	
@@ -2424,9 +2425,9 @@ function googledata(el,response,startTime,endTime)
 											}
 											});
 											setTimeout(function(){
-											if($(el).find('.list').find('li').length==0 && $(el).find('.portlet-error-message').length==0 && !App_Portlets.refetchEvents)
+											if($(el).find('.list').find('li').length==0 && $(el).find('.portlet-error-message').length==0)
 											{
-												$(el).find('.events_show').append('<div class="portlet-error-message" style="display:block">No appointments for the day</div>');
+												$(el).find('.events_show').append('<div class="portlet-error-message">No appointments for the day </div><a class="minical-portlet-event-add text-info p-l" id='+date.getTime()+'> +Add</a>');
 											}
 											},1000);
 											
@@ -2501,7 +2502,9 @@ $('.minical-portlet-event').live('click',function(e){
 			model.color = "green";
 		// Deserialize
 		deserializeForm(model, $("#updateActivityForm"));
-
+		
+		$("#update-event-date-1").val(getDateInFormat(event.start));
+		$("#update-event-date-2").val(getDateInFormat(event.end));
 		// Set time for update Event
 		$('#update-event-time-1')
 				.val(
@@ -2510,10 +2513,6 @@ $('.minical-portlet-event').live('click',function(e){
 				.val(
 						(end.getHours() < 10 ? "0" : "") + end.getHours() + ":" + (end.getMinutes() < 10 ? "0" : "") + end.getMinutes());
 
-		// Set date for update Event
-		//var dateFormat = CURRENT_USER_PREFS.dateFormat;
-		$("#update-event-date-1").val(getFormattedDate(event.start));
-		$("#update-event-date-2").val(getFormattedDate(event.end));
 
 		// hide end date & time for all day events
 		if (model.allDay)
@@ -2568,4 +2567,35 @@ $('.minical-portlet-event').live('click',function(e){
 	
 		});
 	}
+});
+
+$('.minical-portlet-event-add').live('click',function(e){
+	// Show a new event
+	App_Portlets.currentPosition = '' + $(this).parents('.gs-w').find('.column_position').text().trim() + '' + $(this).parents('.gs-w').find('.row_position').text().trim();
+	App_Portlets.currentPortletName = 'Mini Calendar';
+	var start = new Date(parseInt($(this).attr('id')));
+							$('#activityModal').modal('show');
+							highlight_event();
+
+							// Set Date for Event
+							//var dateFormat = 'mm/dd/yyyy';
+							$('#task-date-1').val(getDateInFormat(start));
+							$("#event-date-1").val(getDateInFormat(start));
+							$("#event-date-2").val(getDateInFormat(start));
+
+							// Set Time for Event
+							//if ((start.getHours() == 00) && (start.getHours() == 00) && (start.getMinutes() == 00))
+							//{
+								$('#event-time-1').val('');
+								$('#event-time-2').val('');
+							//}
+							/* else
+							{
+								$('#event-time-1')
+										.val(
+												(start.getHours() < 10 ? "0" : "") + start.getHours() + ":" + (start.getMinutes() < 10 ? "0" : "") + start
+														.getMinutes());
+								$('#event-time-2').val(
+										(start.getHours() < 10 ? "0" : "") + start.getHours() + ":" + (start.getMinutes() < 10 ? "0" : "") + start.getMinutes());
+							} */
 });
