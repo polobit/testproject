@@ -32,7 +32,10 @@
 								<input type="text" autocomplete="off" class="input-medium required form-control"  placeholder="API Key" value="{{api_key}}" name="api_key"/>
 							{{/if_equals}}
 						</div>
-				</div>			
+				</div>	
+				{{#if_equals email_api "SEND_GRID"}}
+					<p>Note: Emails with attachments are currently not supported by the SendGrid integration. They are sent via Agile&#39;s default email gateway.</p>
+				{{/if_equals}}		
 				<div class="form-actions">
 					<a type="reset" class="btn btn-default btn-sm" href="#integrations">Cancel</a>
                		<a type="submit" href="#" class="save btn btn-sm btn-primary">Save</a>
