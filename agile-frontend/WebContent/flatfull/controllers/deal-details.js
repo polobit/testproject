@@ -12,6 +12,7 @@ var DealDetailsRouter = Backbone.Router.extend({
 
 	dealdetails : function(id)
 	{
+		$("#content").html("<div id='deal-detail-page'></div>")
 		// For getting custom fields
 		if (App_Deals.customFieldsList == null || App_Deals.customFieldsList == undefined)
 		{
@@ -40,8 +41,8 @@ var DealDetailsRouter = Backbone.Router.extend({
 		} });
 
 		var ele = this.dealDetailView.render(true).el;
-		$("#content").html(getRandomLoadingImg());
-		$('#content').html(ele);
+		$("#deal-detail-page").html(getRandomLoadingImg());
+		$('#deal-detail-page').html(ele);
 
 	},
 

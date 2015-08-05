@@ -7,6 +7,48 @@
  * author: Rammohan
  */
 
+$( document ).ready(function() {
+	alert("hello");
+	/**
+	 * Makes the pending task as completed by calling complete_task function
+	 */
+	$("body").on("click", '.tasks-select', function(e)
+	{
+		e.stopPropagation();
+		if ($(this).is(':checked'))
+		{
+			// Complete
+			var taskId = $(this).attr('data');
+			// complete_task(taskId, $(this));
+			complete_task(taskId, App_Calendar.tasksListView.collection, $(this).closest('tr'))
+		}
+	});
+
+	/**
+	 * Shows activity modal with all the task create fields.
+	 */
+	$("body").on("click", '.add-task', function(e)
+	{
+		e.preventDefault();
+
+		// Show task modal with owners list.
+		showTaskModal(this);
+	});
+	/**
+	 * Show event of update task modal Activates typeahead for task-update-modal
+	 */
+	$('#updateTaskModal').on('shown.bs.modal', function()
+	{
+
+		var el = $("#updateTaskForm");
+		agile_type_ahead("update_task_related_to", el, contacts_typeahead);
+
+		// Fill details in form
+		setForm(el);
+	});
+
+});
+
 function initializeTasksListeners(){
 	$('.update-task-timepicker').timepicker({ defaultTime : get_hh_mm(true), showMeridian : false });
 	$('.update-task-timepicker').timepicker().on('show.timepicker', function(e)
@@ -44,7 +86,7 @@ function initializeTasksListeners(){
 	 * relatedTo field typeahead, changing color and font-weight) when we click
 	 * on task link in activities modal.
 	 */
-	$("#content").on("click", '#task', function(e)
+	/*$("#content").on("click", '#task', function(e)
 	{
 		e.preventDefault();
 		var el = $("#taskForm");
@@ -57,18 +99,9 @@ function initializeTasksListeners(){
 			$("#owners-list", el).find('option[value=' + CURRENT_DOMAIN_USER.id + ']').attr("selected", "selected");
 			$("#owners-list", $("#taskForm")).closest('div').find('.loading-img').hide();
 		});
-	});
+	});*/
 
-	/**
-	 * Shows activity modal with all the task create fields.
-	 */
-	$("#content").on("click", '.add-task', function(e)
-	{
-		e.preventDefault();
-
-		// Show task modal with owners list.
-		showTaskModal(this);
-	});
+	
 
 	/**
 	 * Tasks are categorized into four types (overdue, today, tomorrow and
@@ -96,17 +129,17 @@ function initializeTasksListeners(){
 	/**
 	 * Dash board edit
 	 */
-	$("#content").on("click", '#dashboard1-tasks-model-list > tr', function(e)
+	/*$("#content").on("click", '#dashboard1-tasks-model-list > tr', function(e)
 	{
 		e.preventDefault();
 		update_task(this);
-	});
+	});*/
 
 	/**
 	 * When clicked on update button of task-update-modal, the task will get
 	 * updated by calling save_task function
 	 */
-	$("#content").on("click", '#update_task_validate', function(e)
+	$("#updateTaskModal").on("click", '#update_task_validate', function(e)
 	{
 		e.preventDefault();
 		save_task('updateTaskForm', 'updateTaskModal', true, this);
@@ -134,18 +167,7 @@ function initializeTasksListeners(){
 		$(".task-add-note", $("#updateTaskForm")).show();
 	});
 
-	/**
-	 * Show event of update task modal Activates typeahead for task-update-modal
-	 */
-	$('#updateTaskModal').on('shown.bs.modal', function()
-	{
-
-		var el = $("#updateTaskForm");
-		agile_type_ahead("update_task_related_to", el, contacts_typeahead);
-
-		// Fill details in form
-		setForm(el);
-	});
+	
 
 	/**
 	 * Date Picker Activates datepicker for task due element
@@ -181,20 +203,7 @@ function initializeTasksListeners(){
 		showNoteOnForm("updateTaskForm", value.notes);
 	}
 
-	/**
-	 * Makes the pending task as completed by calling complete_task function
-	 */
-	$("#content").on("click", '.tasks-select', function(e)
-	{
-		e.stopPropagation();
-		if ($(this).is(':checked'))
-		{
-			// Complete
-			var taskId = $(this).attr('data');
-			// complete_task(taskId, $(this));
-			complete_task(taskId, App_Calendar.tasksListView.collection, $(this).closest('tr'))
-		}
-	});
+	
 
 	/**
 	 * All completed and pending tasks will be shown in separate section
@@ -210,14 +219,14 @@ function initializeTasksListeners(){
 	 * });
 	 */
 
-	 $('#content').on('mouseenter', '.listed-task', function(e)
+	 $('#tasks-list-template').on('mouseenter', '.listed-task', function(e)
 	{
 		$(this).find(".task-actions").css("display", "block");
 		$(this).find(".task-note-action").hide();
 	});
 
 	// Hide task actions
-	$('#content').on('mouseleave', '.listed-task', function(e)
+	$('#tasks-list-template').on('mouseleave', '.listed-task', function(e)
 	{
 		$(this).find(".task-actions").css("display", "none");
 		$(this).find(".task-note-action").show();
@@ -227,7 +236,7 @@ function initializeTasksListeners(){
 	 * Task Action: Delete task from UI as well as DB. Need to do this manually
 	 * because nested collection can not perform default functions.
 	 */
-	$('#content').on('click', '.delete-task', function(event)
+	$('#tasks-list-template').on('click', '.delete-task', function(event)
 	{
 		if (!confirm("Are you sure you want to delete?"))
 			return;
@@ -237,7 +246,7 @@ function initializeTasksListeners(){
 	});
 
 	// Task Action: Mark task complete, make changes in DB.
-	$('#content').on('click', '.is-task-complete', function(event)
+	$('#tasks-list-template').on('click', '.is-task-complete', function(event)
 	{
 		event.preventDefault();
 
@@ -246,7 +255,7 @@ function initializeTasksListeners(){
 	});
 
 	// Task Action: Open Task Edit Modal and display details in it.
-	$('#content').on('click', '.edit-task', function(event)
+	$('#tasks-list-template').on('click', '.edit-task', function(event)
 	{
 		event.preventDefault();
 
@@ -306,7 +315,7 @@ function initializeTasksListeners(){
 		changeStatus($(this).attr("value"), $(this).closest("form"));
 	});	
 	
-	$('#content').on('click', '.group-view', function(event)
+	$('#tasks-list-template').on('click', '.group-view', function(event)
 	{
 		event.preventDefault();
 		console.log("group-view event");
@@ -315,6 +324,10 @@ function initializeTasksListeners(){
 		applyDetailsFromGroupView();
 	});	
 }
+
+
+
+
 
 /**
  * Highlights the task portion of activity modal (Shows task form and hides

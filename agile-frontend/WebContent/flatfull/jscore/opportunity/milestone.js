@@ -238,7 +238,7 @@ function initializeMilestineSettingsListeners(){
     	}
     });
     
-	$('##admin-settings-milestones-model-list').on('click', '.save-pipelines', function(e) {
+	$('#admin-settings-milestones-model-list').on('click', '.save-pipelines', function(e) {
     	e.preventDefault();
     	
     	$('#admin-settings-milestones-model-list').find('form').each(function(index){

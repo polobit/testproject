@@ -1,6 +1,6 @@
 function initializeRegenerateKeysListeners(){
-	$("#api_key_code").off(click).on("click","#api_key_generate_icon", function(e){e.preventDefault(); regenerate_api_key('core/api/api-key/key');});
-	$("#jsapi_key_code").off(click).on("click","#jsapi_key_generate_icon", function(e){e.preventDefault(); regenerate_api_key('core/api/api-key/jskey');});
+	$("#api_key_code").off('click').on("click","#api_key_generate_icon", function(e){e.preventDefault(); regenerate_api_key('core/api/api-key/key');});
+	$("#jsapi_key_code").off('click').on("click","#jsapi_key_generate_icon", function(e){e.preventDefault(); regenerate_api_key('core/api/api-key/jskey');});
 }
 
 function update_admin_settings_api_key_template(){

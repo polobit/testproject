@@ -7,7 +7,7 @@
  */
 function initializeImportListeners(){
 
-    $('#prefs-tabs-content').off('click').on('click', '#google-import', function(e){
+    $('#prefs-tabs-content').on('click', '#google-import', function(e){
 		
 		// URL to return, after fetching token and secret key from LinkedIn
 		var callbackURL = window.location.href + "/contacts";
@@ -49,7 +49,7 @@ function initializeImportListeners(){
 
 	});
 	
-	 $('#prefs-tabs-content').off('click').on('click', '#google-import-prefs-delete', function(e){
+	 $('#prefs-tabs-content').on('click', '#google-import-prefs-delete', function(e){
 		e.preventDefault();
 		var disabled = $(this).attr("disabled");
 		if(disabled)
@@ -65,7 +65,7 @@ function initializeImportListeners(){
 		}}));
 	});
 
-	$('#prefs-tabs-content').off('change').on('change', '#sync-type', function(e){
+	$('#prefs-tabs-content').on('change', '#sync-type', function(e){
 		e.preventDefault();
 		var value = $(this).val();
 		if(value == "AGILE_TO_CLIENT" || value == "TWO_WAY")
@@ -89,7 +89,7 @@ function initializeImportListeners(){
 		
 	})
 	
-	$('#prefs-tabs-content').off('click').on('click', '.save-contact-prefs', function(e){
+	$('#prefs-tabs-content').on('click', '.save-contact-prefs', function(e){
 		e.preventDefault();
 		var disabled = $(this).attr("disabled");
 		if(disabled)
@@ -123,7 +123,7 @@ function initializeImportListeners(){
 	})
 	
 	
-	$('#prefs-tabs-content').off('click').on('click', '#quickbook_sync_prefs', function(e){
+	$('#prefs-tabs-content').on('click', '#quickbook_sync_prefs', function(e){
 		e.preventDefault();
 		var disable = $(this).attr('disabled');
 		if(disable)
@@ -149,7 +149,7 @@ function initializeImportListeners(){
 		
 	});
 	
-	$('#prefs-tabs-content').off('click').on('click', '#xero_sync_prefs', function(e){
+	$('#prefs-tabs-content').on('click', '#xero_sync_prefs', function(e){
 		e.preventDefault();
 		var disable = $(this).attr('disabled');
 		if(disable)
@@ -175,7 +175,7 @@ function initializeImportListeners(){
 		
 	});
 	
-	$('#prefs-tabs-content').off('click').on('click', '#freshbooks_sync_prefs', function(e){
+	$('#prefs-tabs-content').on('click', '#freshbooks_sync_prefs', function(e){
 					e.preventDefault();
 					var disable = $(this).attr('disabled');
 					if(disable)
@@ -202,7 +202,7 @@ function initializeImportListeners(){
 				});
 
 	//oauth request for xero
-$('#prefs-tabs-content').off('click').on('click', '#xeroconnect', function(e){
+$('#prefs-tabs-content').on('click', '#xeroconnect', function(e){
 	var callbackURL = window.location.href;
 	console.log(callbackURL);
 
@@ -211,7 +211,7 @@ $('#prefs-tabs-content').off('click').on('click', '#xeroconnect', function(e){
 	return false;
 });
 
-$("#prefs-tabs-content").off('click').on('click', '#sync-google-calendar', function(e)
+$("#prefs-tabs-content").on('click', '#sync-google-calendar', function(e)
 	{
 		e.preventDefault();
 
@@ -222,7 +222,7 @@ $("#prefs-tabs-content").off('click').on('click', '#sync-google-calendar', funct
 		window.location = "/scribe?service=google_calendar&return_url=" + encodeURIComponent(callbackURL);
 	});
 
-	$("#prefs-tabs-content").off('click').on('click', '#sync-google-calendar-delete', function(e)
+	$("#prefs-tabs-content").on('click', '#sync-google-calendar-delete', function(e)
 	{
 		e.preventDefault();
 

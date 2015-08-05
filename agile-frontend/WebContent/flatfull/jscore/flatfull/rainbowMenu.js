@@ -1,7 +1,7 @@
 // Magic Menu JavaScript Document
 
 function initializeThemeSettingsListeners(){
-	$('#theme-and-layout').off('click').on('click', '#saveTheme', function(e)
+	$('#theme-and-layout').on('click', '#saveTheme', function(e)
 	{
 		e.preventDefault();
 		$(".theme-save-status").css("display","none");

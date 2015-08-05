@@ -8,10 +8,12 @@
 // handle popover
 
 
+
 // show add case modal
 function initializeCasesListeners(el){
 
 	$("#case-list").off("mouseenter").on('mouseenter',
+
 			'#cases-model-list > tr',
 			function()
 			{

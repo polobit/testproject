@@ -8,7 +8,7 @@
 function initializeTriggersListeners(){
 
 	// Tag suggestions when 'Tag is added' and 'Tag is deleted' options selected
-	$('#addTriggerForm').off('change').on('change', '#trigger-type', function(e)
+	$('#addTriggerForm').on('change', '#trigger-type', function(e)
 	{
 		e.preventDefault();
 
@@ -143,7 +143,7 @@ function initializeTriggersListeners(){
 	});
 	
 	// When cancel clicked, take to Back page
-	$('#addTriggerForm').off('click').on('click', '#trigger-cancel', function(e)
+	$('#addTriggerForm').on('click', '#trigger-cancel', function(e)
 	{
 		e.preventDefault();
 
@@ -151,7 +151,7 @@ function initializeTriggersListeners(){
 			history.back(-1);
 	});
 	
-	$('#addTriggerForm').off('change').on('change', '#email-tracking-type', function(e){
+	$('#addTriggerForm').on('change', '#email-tracking-type', function(e){
 		
 		e.preventDefault();
 		

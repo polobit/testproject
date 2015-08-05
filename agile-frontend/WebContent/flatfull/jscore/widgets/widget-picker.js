@@ -236,7 +236,7 @@ function build_custom_widget_form(el)
 {
 	var divClone;
 	
-	$('#custom-widget').off('click').on('click', '#add-custom-widget', function(e)
+	$('#prefs-tabs-content').on('click', '#add-custom-widget', function(e)
 			{
 				divClone = $("#custom-widget").clone();
 				var widget_custom_view = new Base_Model_View({ url : "/core/api/widgets/custom", template : "add-custom-widget", isNew : true,
@@ -277,7 +277,7 @@ function build_custom_widget_form(el)
 
 				$('#custom-widget', el).html(widget_custom_view.render(true).el);
 				
-				$('#custom-widget').off('click').on('click', '#cancel_custom_widget', function(e)
+				$('#prefs-tabs-content').on('click', '#cancel_custom_widget', function(e)
 				{
 					// Restore element back to original
 					$("#custom-widget").replaceWith(divClone); 
