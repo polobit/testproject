@@ -1211,7 +1211,7 @@ else if($(this).parent().attr('id')=='ui-id-'+column_position+'-'+row_position &
 		if($(this).parent().attr('id')=='ui-id-'+column_position+'-'+row_position && base_model.get('name')=="Mini Calendar"){
 			$(this).find('.events_show').html(getRandomLoadingImg());
 			setPortletContentHeight(base_model);
-			
+			App_Portlets.refetchEvents = false;
 			minicalendar($(this));
 			
 			if(base_model.get('is_minimized'))

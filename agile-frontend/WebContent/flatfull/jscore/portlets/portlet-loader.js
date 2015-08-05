@@ -2016,17 +2016,16 @@ function minicalendar(el)
 											 $.each(jso,function(index,ev){
 											if(ev.start >= (todayDate.getTime()/1000) && ev.start <= (endDate.getTime()/1000)) {	
 											var e_date= new Date(ev.start*1000);
-											if($(el).find('.list').find('li').length!=0){
+											var len=$(el).find('.list').find('li').length;
+											if(len!=0){
 												$(el).find('.list').find('small').each(function(x) 
 												{
 													if(e_date.format('HH:MM')<$(this).text())
 													{$(this).parents('li').before('<li class="p-t-xs p-r-xs" style="color:'+ev.color+'"><span style="color : #58666e" class="text-cap word-break"><a class="minical-portlet-event" id='+ev.id+' data='+ev+'>'+ev.title+'</a><br><small class="block m-t-n-xxs">'+ e_date.format('HH:MM') + ' </small></span></li>');
 													return false;}
-													else
-													{
+													if(x==len-1)
 														$(this).parents('.list').append('<li class="p-t-xs p-r-xs" style="color:'+ev.color+'"><span style="color : #58666e" class="text-cap word-break"><a class="minical-portlet-event" id='+ev.id+' data='+ev+'>'+ev.title+'</a><br><small class="block m-t-n-xxs">'+ e_date.format('HH:MM') + ' </small></span></li>') ;
-														return false;
-													}
+
 												 });
 													}
 													else
@@ -2226,17 +2225,16 @@ function minicalendar(el)
 								});
 								if(array.length!=0){
 								$.each(array,function(index){
-									if($(el).find('.list').find('li').length!=0){
+									var len=$(el).find('.list').find('li').length;
+												if(len!=0){
 												$(el).find('.list').find('small').each(function(x) 
 												{
 													if(array[index].start.format('HH:MM')<$(this).text())
 													{$(this).parents('li').before('<li class="p-t-xs p-r-xs" style="color : '+array[index].color+'"><span style="color : #58666e" class="text-cap word-break"><a class="minical-portlet-event" id='+array[index].id+' data='+array[index]+'>'+array[index].title+'</a><br><small class="block m-t-n-xxs">'+ array[index].start.format('HH:MM') + ' </small></span></li>');
 													return false;}
-													else
-													{
-														$(this).parents('.list').append('<li class="p-t-xs p-r-xs" style="color : '+array[index].color+'"><span style="color : #58666e" class="text-cap word-break"><a class="minical-portlet-event" id='+array[index].id+' data='+array[index]+'>'+array[index].title+'</a><br><small class="block m-t-n-xxs">'+ array[index].start.format('HH:MM') + ' </small></span></li>') ;
-														return false;
-													}
+													
+													if(x==len-1)
+														$(this).parents('.list').append('<li class="p-t-xs p-r-xs" style="color : '+array[index].color+'"><span style="color : #58666e" class="text-cap word-break"><a class="minical-portlet-event" id='+array[index].id+' data='+array[index]+'>'+array[index].title+'</a><br><small class="block m-t-n-xxs">'+ array[index].start.format('HH:MM') + ' </small></span></li>');
 												 });
 									}
 									else
@@ -2425,10 +2423,12 @@ function googledata(el,response,startTime,endTime)
 											 $(el).find('.list').append('<li class="p-t-xs p-r-xs" style="color:'+ev.color+'"><span style="color : #58666e" class="text-cap word-break"><a class="minical-portlet-event" id='+ev.id+' data='+ev+'>'+ev.title+'</a><br><small class="block m-t-n-xxs">'+ ev.start.format('HH:MM') + ' </small></span></li>');
 											}
 											});
+											setTimeout(function(){
 											if($(el).find('.list').find('li').length==0 && $(el).find('.portlet-error-message').length==0 && !App_Portlets.refetchEvents)
 											{
 												$(el).find('.events_show').append('<div class="portlet-error-message" style="display:block">No appointments for the day</div>');
 											}
+											},1000);
 											
 							
 						});

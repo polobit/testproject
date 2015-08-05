@@ -711,6 +711,13 @@ function save_event(formId, modalName, isUpdate, saveBtn, callback)
 							App_Portlets.todayEventsCollection[parseInt(App_Portlets.currentPosition)].render(true);
 
 						}
+						
+						else if (App_Portlets.currentPortletName && App_Portlets.currentPortletName == 'Mini Calendar')
+					      {
+					       $('#calendar_container').fullCalendar( 'refetchEvents' );
+					       App_Portlets.refetchEvents = true;
+					      }
+						
 						else
 							App_Calendar.navigate("calendar", { trigger : true });
 
