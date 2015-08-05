@@ -7,7 +7,7 @@
 			return true;
 		if(App_Companies.companies && Current_Route == "companies")
 			return true;
-		if(Current_Route.indexOf('company')>-1)
+		if(Current_Route && Current_Route.indexOf('company')>-1)
 			return true;
 		
 		return false;
