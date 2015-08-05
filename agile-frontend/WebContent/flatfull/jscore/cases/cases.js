@@ -128,6 +128,69 @@ function initializeCasesListeners(el){
 		// Removes validation error messages
 		remove_validation_errors('casesUpdateModal');
 	});
+});
+
+
+// show add case modal
+function initializeCasesListeners(el){
+
+	$("#case-list").off("mouseenter").on('mouseenter',
+			'#cases-model-list > tr',
+			function()
+			{
+
+				var data = $(this).find('.data').attr('data');
+				var currentCase = App_Cases.casesCollectionView.collection.get(data);
+				var ele = getTemplate("cases-detail-popover", currentCase.toJSON());
+
+				$(this).popover(
+						{ "rel" : "popover", "trigger" : "hover", "placement" : 'right', "original-title" : currentCase.toJSON().name, "content" : ele,
+							"html" : true, });
+
+				/**
+				 * Checks for last 'tr' and change placement of popover to 'top'
+				 * inorder to prevent scrolling on last row of list
+				 */
+				$('#cases-model-list > tr:last').popover(
+						{ "rel" : "popover", "trigger" : "hover", "placement" : 'right', "original-title" : currentCase.toJSON().name, "content" : ele,
+							"html" : true, });
+
+				/**
+				 * make sure first popover is shown on the right
+				 */
+				$('#cases-model-list > tr:first').popover(
+						{ "rel" : "popover", "trigger" : "hover", "placement" : 'right', "original-title" : currentCase.toJSON().name, "content" : ele,
+							"html" : true, });
+
+				$(this).popover('show');
+			});
+
+	/**
+	 * On mouse out on the row hides the popover.
+	 */
+	 $('#case-list').off('mouseleave').on('mouseleave', '#cases-model-list > tr', function()
+	{
+		$(this).popover('hide');
+	});
+
+	$('#cases-add-div').off('click').on('click', '.cases-add', function(e)
+	{
+		e.preventDefault();
+		showCases();
+	});
+
+	$('#cases-add-save').off('click').on('click', '#cases_validate', function(e) 
+	{
+		e.preventDefault();
+
+		// To know updated or added cases form names
+		var modal_id = $(this).closest('.cases-modal').attr("id");
+		var form_id = $(this).closest('.cases-modal').find('form').attr("id");
+		var json = serializeForm(form_id);
+		savecases(form_id, modal_id, this, json);
+	});
+
+	
 	$('#case-list').off('click').on('click', '#cases-model-list > tr > td:not(":first-child")', function(e) 
 	{
 		e.preventDefault();

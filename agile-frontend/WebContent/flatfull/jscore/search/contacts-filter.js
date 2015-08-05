@@ -28,7 +28,7 @@ function initializeContactFiltersListeners()
 {
 	
 	// Filter Contacts- Clone Multiple
-	$('#content').off("click").on('click', '.filter-contacts-multiple-add', function(e)
+	$('#reports-listerners-container').on('click', '.filter-contacts-multiple-add', function(e)
 	{
 		e.preventDefault();
 		// To solve chaining issue when cloned
@@ -49,7 +49,7 @@ function initializeContactFiltersListeners()
 	});
 	
 	// Filter Contacts- Clone Multiple
-	$('body').off("click").on('click', '.filter-contacts-multiple-add-or-rules', function(e)
+	$('#reports-listerners-container').on('click', '.filter-contacts-multiple-add-or-rules', function(e)
 	{
 		e.preventDefault();
 		// To solve chaining issue when cloned
@@ -70,7 +70,7 @@ function initializeContactFiltersListeners()
 	});
 	
 	// Filter Contacts- Clone Multiple
-	$('body').on('click', '.filter-companies-multiple-add', function(e)
+	$('#reports-listerners-container').on('click', '.filter-companies-multiple-add', function(e)
 	{
 		e.preventDefault();
 		// To solve chaining issue when cloned
@@ -89,7 +89,7 @@ function initializeContactFiltersListeners()
 	});
 	
 	// Filter Contacts- Clone Multiple
-	$('body').on('click', '.filter-companies-multiple-add-or-rules', function(e)
+	$('#reports-listerners-container').on('click', '.filter-companies-multiple-add-or-rules', function(e)
 	{
 		e.preventDefault();
 		// To solve chaining issue when cloned
@@ -110,7 +110,7 @@ function initializeContactFiltersListeners()
 	
 
 	// Filter Contacts- Remove Multiple
-	$('body').off("click").on('click', 'i.filter-contacts-multiple-remove', function(e)
+	$('#reports-listerners-container').on('click', 'i.filter-contacts-multiple-remove', function(e)
 	{
 		$(this).closest("tr").remove();
 	});

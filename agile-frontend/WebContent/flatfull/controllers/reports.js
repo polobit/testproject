@@ -23,7 +23,9 @@ var ReportsRouter = Backbone.Router.extend({
 		
 		head.js(LIB_PATH + 'jscore/handlebars/handlebars-helpers.js', function()
 				{
-					$("#content").html(getTemplate('report-categories', {}));
+					$("#content").html("<div id='reports-listerners-container'></div>");
+					$("#reports-listerners-container").html(getTemplate('report-categories', {}));
+					initializeReportsListeners();
 					hideTransitionBar();
 					$(".active").removeClass("active");
 					$("#reportsmenu").addClass("active");
@@ -43,13 +45,14 @@ var ReportsRouter = Backbone.Router.extend({
 	
 	activityReports : function()
 	{
-		$("#content").html(getRandomLoadingImg());
+		$("#content").html("<div id='reports-listerners-container'></div>");
+		$("#reports-listerners-container").html(getRandomLoadingImg());
 		this.activityReports = new Base_Collection_View({ url : '/core/api/activity-reports', restKey : "activityReports", templateKey : "activity-report", individual_tag_name : 'tr', 
 			postRenderCallback: function(){
 				initializeActivityReportsListeners();
 			} });
 		this.activityReports.collection.fetch();
-		$("#content").html(this.activityReports.render().el);
+		$("#reports-listerners-container").html(this.activityReports.render().el);
 
 		$(".active").removeClass("active");
 		$("#reportsmenu").addClass("active");
@@ -62,13 +65,15 @@ var ReportsRouter = Backbone.Router.extend({
 		
 		if(!tight_acl.checkPermission('ACTIVITY'))
 			return;
-		
-		$("#content").html(getRandomLoadingImg());
+		$("#content").html("<div id='reports-listerners-container'></div>");
+		$("#reports-listerners-container").html(getRandomLoadingImg());
 		
 		var count = 0;
 		var activity_report_add = new Base_Model_View({ url : 'core/api/activity-reports', template : "activity-reports-add", window : "activity-reports", isNew : true,
 			postRenderCallback : function(el)
 			{
+				initializeActivityReportsListeners();
+				initializeReportsListeners();
 				if (count != 0)
 					return;
 				// Fills owner select element
@@ -81,7 +86,7 @@ var ReportsRouter = Backbone.Router.extend({
 								$('#ms-users-list .ms-selection', el).children('ul').addClass('multiSelect').attr("name", "user_ids").attr("id", "user_ids");
 								++count;
 								if (count > 0)
-									$("#content").html(el);
+									$("#reports-listerners-container").html(el);
 									
 									$('.activity_time_timepicker').timepicker({ 'timeFormat': 'H:i ' ,'step': 30});
 									$(".activity_time_timepicker").val("09:00");
@@ -90,7 +95,7 @@ var ReportsRouter = Backbone.Router.extend({
 						}, '<option value="{{id}}">{{name}}</option>', true, el);
 			} });
 
-		$("#content").html(getRandomLoadingImg());
+		$("#reports-listerners-container").html(getRandomLoadingImg());
 		activity_report_add.render();
 
 	},
@@ -108,8 +113,8 @@ var ReportsRouter = Backbone.Router.extend({
 		
 		if(!tight_acl.checkPermission('ACTIVITY'))
 			return;
-		
-		$("#content").html(getRandomLoadingImg());
+		$("#content").html("<div id='reports-listerners-container'></div>");
+		$("#reports-listerners-container").html(getRandomLoadingImg());
 		// Counter to set when script is loaded. Used to avoid flash in page
 		var count = 0;
 
@@ -125,6 +130,8 @@ var ReportsRouter = Backbone.Router.extend({
 		var report_model = new Base_Model_View({ url : 'core/api/activity-reports', change : false, model : activityReport, template : "activity-reports-add", window : "activity-reports",
 		postRenderCallback : function(el)
 			{
+				initializeActivityReportsListeners();
+				initializeReportsListeners();
 				if (count != 0)
 					return;
 				fillSelect("users-list", '/core/api/users', 'domainUser', function()
@@ -144,7 +151,7 @@ var ReportsRouter = Backbone.Router.extend({
 								$('#ms-activity-type-list .ms-selection', el).children('ul').addClass('multiSelect').attr("name", "activity").attr("id", "activity_type");
 								$('#ms-users-list .ms-selection', el).children('ul').addClass('multiSelect').attr("name", "user_ids").attr("id", "user_ids");
 								
-								$("#content").html(el)
+								$("#reports-listerners-container").html(el)
 								$.each(json.user_ids,function(i,user_id){
 									$('#users-list').multiSelect('select',user_id);
 									console.log('select user---',user_id);
@@ -188,7 +195,7 @@ var ReportsRouter = Backbone.Router.extend({
 				
 			} });
 
-		$("#content").html(getRandomLoadingImg());
+		$("#reports-listerners-container").html(getRandomLoadingImg());
 		report_model.render();
 
 	},
@@ -199,14 +206,14 @@ var ReportsRouter = Backbone.Router.extend({
 	 */
 	emailReports : function()
 	{
-	
+			$("#content").html("<div id='reports-listerners-container'></div>");
 			this.reports = new Base_Collection_View({ url : '/core/api/reports', restKey : "reports", templateKey : "report", individual_tag_name : 'tr', 
 				postRenderCallback: function(){
 					initializeReportsListeners();
 				}});
 
 			this.reports.collection.fetch();
-			$("#content").html(this.reports.render().el);
+			$("#reports-listerners-container").html(this.reports.render().el);
 
 			$(".active").removeClass("active");
 			$("#reportsmenu").addClass("active");
@@ -220,11 +227,14 @@ var ReportsRouter = Backbone.Router.extend({
 	reportAdd : function()
 	{
 		var count = 0;
-		$("#content").html(getRandomLoadingImg());
+		$("#content").html("<div id='reports-listerners-container'></div>");
+		$("#reports-listerners-container").html(getRandomLoadingImg());
 		SEARCHABLE_CONTACT_CUSTOM_FIELDS = undefined;
 		var report_add = new Base_Model_View({ url : 'core/api/reports', template : "reports-add", window : "contact-reports", isNew : true,
 			postRenderCallback : function(el)
 			{
+				initializeContactFiltersListeners();
+				initializeReportsListeners();
 				// Counter to set when script is loaded. Used to avoid flash in
 				// page
 				if (count != 0)
@@ -241,7 +251,7 @@ var ReportsRouter = Backbone.Router.extend({
 
 						++count;
 						if (count > 1)
-							$("#content").html(el);
+							$("#reports-listerners-container").html(el);
 						$('.report_time_timepicker').timepicker({ 'timeFormat': 'H:i ' ,'step': 30});
 						$(".report_time_timepicker").val("09:00");
 						$("#report_timezone").val(ACCOUNT_PREFS.timezone);
@@ -255,13 +265,13 @@ var ReportsRouter = Backbone.Router.extend({
 					{
 						++count;
 						if (count > 1)
-							$("#content").html(el)
+							$("#reports-listerners-container").html(el)
 					});
 				});
 
 			} });
 
-		$("#content").html(getRandomLoadingImg());
+		$("#reports-listerners-container").html(getRandomLoadingImg());
 		report_add.render();
 
 	},
@@ -274,7 +284,8 @@ var ReportsRouter = Backbone.Router.extend({
 	 */
 	reportEdit : function(id)
 	{
-		$("#content").html(getRandomLoadingImg());
+		$("#content").html("<div id='reports-listerners-container'></div>");
+		$("#reports-listerners-container").html(getRandomLoadingImg());
 		// Counter to set when script is loaded. Used to avoid flash in page
 		var count = 0;
 
@@ -287,9 +298,11 @@ var ReportsRouter = Backbone.Router.extend({
 
 		// Gets a report to edit, from reports collection, based on id
 		var report = this.reports.collection.get(id);
-		var report_model = new Base_Model_View({ url : 'core/api/reports', change : false, model : report, template : "reports-add", window : "contact-reports",
+		var report_model = new Base_Model_View({ url : 'core/api/reports', change : false, model : report, template : "reports-add", window : "contact-reports", id : "reports-listerners-container",
 			postRenderCallback : function(el)
 			{
+				initializeContactFiltersListeners();
+				initializeReportsListeners();
 				if (count != 0)
 					return;
 				fillSelect("custom-fields-optgroup", "core/api/custom-fields/scope?scope=CONTACT", undefined, function()
@@ -350,11 +363,10 @@ var ReportsRouter = Backbone.Router.extend({
 					});
 					scramble_input_names($(el).find('div#report-settings'));
 				});
-				initializeContactFiltersListeners();
 
 			} });
 
-		$("#content").html(getRandomLoadingImg());
+		$("#reports-listerners-container").html(getRandomLoadingImg());
 		report_model.render();
 
 	},
@@ -530,7 +542,9 @@ var ReportsRouter = Backbone.Router.extend({
 		else
 			el = $(getTemplate("report-growth", {}));
 
-		$("#content").html(el);
+		$("#content").html("<div id='reports-listerners-container'></div>");
+		$("#reports-listerners-container").html(el);
+		initializeChartReportsListeners();
 
 		if (type && (type == 'growth' || type == 'funnel'))
 		{

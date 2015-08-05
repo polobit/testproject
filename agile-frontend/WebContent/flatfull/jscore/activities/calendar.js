@@ -507,6 +507,8 @@ function showCalendar()
 
 							// Fills owner select element
 							populateUsersInUpdateActivityModal(event);
+
+							// initializeEventModelEvents();
 							return false;
 						}
 
@@ -599,15 +601,14 @@ $(function()
 	 * 
 	 * if (readCookie("agile_calendar_view")) { if (json.time === 'future')
 	 * createCookie("agile_calendar_view", "calendar_list_view_future"); else
-	 * createCookie("agile_calendar_view", "calendar_list_view"); }
-	 *  // if list view if (!readCookie("agile_calendar_view")) {
+	 * createCookie("agile_calendar_view", "calendar_list_view"); } // if list
+	 * view if (!readCookie("agile_calendar_view")) {
 	 * $('#calendar_event').html(''); // App_Calendar.calendar();
 	 * showCalendar(); } else {
 	 * 
-	 * loadAgileEvents(); loadGoogleEvents();
-	 *  } });
-	 *  // Show filter drop down. $("body").on('click', '#clear-event-filters',
-	 * function(e) { e.preventDefault(); $('#filter_options select').val('');
+	 * loadAgileEvents(); loadGoogleEvents(); } }); // Show filter drop down.
+	 * $("body").on('click', '#clear-event-filters', function(e) {
+	 * e.preventDefault(); $('#filter_options select').val('');
 	 * eraseCookie('event-filters'); loadDefaultFilters(); showEventFilters();
 	 * });
 	 * 
@@ -697,5 +698,3 @@ function getCalendarUsersDetails()
 
 	return json_users;
 }
-
-

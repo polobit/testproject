@@ -23,8 +23,9 @@ calendar : function()
 	// read cookie for view if list_view is there then rendar list view else
 	// rendar default view
 
-	$('#content').html(getTemplate("calendar", {}));
-	$('#content').find("#calendar-filters").html(getTemplate("event-left-filter", users));
+	$('#content').html("<div id='calendar-listers'>&nbsp;</div>");
+	$('#calendar-listers').html(getTemplate("calendar", {}));
+	$('#calendar-listers').find("#calendar-filters").html(getTemplate("event-left-filter", users));
 	buildCalendarLhsFilters();
 	createRequestUrlBasedOnFilter();
 	var view = readCookie("agile_calendar_view");
@@ -137,27 +138,26 @@ tasks_new : function()
  * 
  * if (eventFilters && eventFilters.event_type == 'future')
  * createCookie("agile_calendar_view", "calendar_list_view_future"); else
- * createCookie("agile_calendar_view", "calendar_list_view");
- *  // Loads the calendar App_Calendar.calendar(); });
+ * createCookie("agile_calendar_view", "calendar_list_view"); // Loads the
+ * calendar App_Calendar.calendar(); });
  * 
  * $("body").on('click', ".c_cal", function(e) { e.preventDefault(); // Erases
- * the cookie eraseCookie("agile_calendar_view");
- *  // Loads the calendar App_Calendar.calendar(); });
+ * the cookie eraseCookie("agile_calendar_view"); // Loads the calendar
+ * App_Calendar.calendar(); });
  * 
  * $("body").on('click', ".c_list_view_future", function(e) {
  * e.preventDefault(); // Creates the cookie createCookie("agile_calendar_view",
- * "calendar_list_view_future");
- *  // Loads the calendar App_Calendar.calendar(); });
+ * "calendar_list_view_future"); // Loads the calendar App_Calendar.calendar();
+ * });
  * 
  * if (readCookie("agile_calendar_view")) {
- * $('#grp_filter').removeClass('hide'); }
- *  // intialize event tab $('#event_tab').tab();
+ * $('#grp_filter').removeClass('hide'); } // intialize event tab
+ * $('#event_tab').tab();
  * 
  * if (!readCookie("agile_calendar_view"))
  * $('#agile_event_list').addClass('hide'); else { if
  * ($('#agile_event_list').hasClass('hide'))
- * $('#agile_event_list').removeClass('hide') }
- *  // $('#taskDetailsTab').tab();
+ * $('#agile_event_list').removeClass('hide') } // $('#taskDetailsTab').tab();
  * 
  * });
  * 
@@ -168,24 +168,22 @@ tasks_new : function()
  * 
  * if (eventFilters && eventFilters.event_type == 'future')
  * createCookie("agile_calendar_view", "calendar_list_view_future"); else
- * createCookie("agile_calendar_view", "calendar_list_view");
- *  // Loads the calendar App_Calendar.calendar(); });
+ * createCookie("agile_calendar_view", "calendar_list_view"); // Loads the
+ * calendar App_Calendar.calendar(); });
  * 
  * $("body").on('click', ".c_cal", function(e) { e.preventDefault(); // Erases
- * the cookie eraseCookie("agile_calendar_view");
- *  // Loads the calendar App_Calendar.calendar(); });
+ * the cookie eraseCookie("agile_calendar_view"); // Loads the calendar
+ * App_Calendar.calendar(); });
  * 
  * $("body").on('click', ".c_list_view_future", function(e) {
  * e.preventDefault(); // Creates the cookie createCookie("agile_calendar_view",
- * "calendar_list_view_future");
- *  // Loads the calendar App_Calendar.calendar(); });
- *  // intialize event tab $('#event_tab').tab();
+ * "calendar_list_view_future"); // Loads the calendar App_Calendar.calendar();
+ * }); // intialize event tab $('#event_tab').tab();
  * 
  * $(window).scroll(function() { if ($('#google').hasClass('active')) {
  * 
  * if ($(window).scrollTop() + $(window).height() == $(document).height()) {
- * loadMoreEventsFromGoogle(); } }
- *  })
+ * loadMoreEventsFromGoogle(); } } })
  * 
  * });
  */
