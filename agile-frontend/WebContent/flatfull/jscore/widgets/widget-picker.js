@@ -81,15 +81,14 @@ function organize_widgets(base_model)
  * widget model, Add and delete functionalities of the widgets are defined in
  * this init function
  */
-$(function()
-{
+function initializeWidgetSettingsListeners(){
 	// adding widget
 	/**
 	 * When user clicks on add-widget, gets the widget-name which is set to add
 	 * anchor tag and gets the model from the collection with widget name and
 	 * add widget then navigates back to the contact-details page
 	 */
-	$('body').on('click', '.install-custom-widget', function(e)
+	$('#custom-widget').off('click').on('click', '.install-custom-widget', function(e)
 	{
 
 		e.preventDefault();
@@ -150,7 +149,7 @@ $(function()
 	 * When user chooses to delete a widget, on confirmation sends delete
 	 * request based on the name of the widget
 	 */
-	$('body').on('click', '#delete-widget', function(e)
+	$('#prefs-tabs-content').off('click').on('click', '#delete-widget', function(e)
 	{
 		// Fetch widget name from the widget on which delete is clicked
 		var widget_name = $(this).attr('widget-name');
@@ -168,7 +167,7 @@ $(function()
 
 		});	
 
-	$('body').on('click', '#remove-widget', function(e)
+	$('#prefs-tabs-content').off('click').on('click', '#remove-widget', function(e)
 	{
 		// Fetch widget name from the widget on which delete is clicked
 		var widget_name = $(this).attr('widget-name');
@@ -197,7 +196,7 @@ $(function()
 	
 	
 
-});
+}
 
 function delete_widget(widget_name)
 {
@@ -237,7 +236,7 @@ function build_custom_widget_form(el)
 {
 	var divClone;
 	
-	$('body').on('click', '#add-custom-widget', function(e)
+	$('#custom-widget').off('click').on('click', '#add-custom-widget', function(e)
 			{
 				divClone = $("#custom-widget").clone();
 				var widget_custom_view = new Base_Model_View({ url : "/core/api/widgets/custom", template : "add-custom-widget", isNew : true,
@@ -246,7 +245,7 @@ function build_custom_widget_form(el)
 						console.log('In post render callback');
 						console.log(el);
                         
-						$('body').on('change', '#script_type', function(e)
+						$('#custom_widget_form').off('change').on('change', '#script_type', function(e)
 						{
 							var script_type = $('#script_type').val();
 							if (script_type == "script")
@@ -278,7 +277,7 @@ function build_custom_widget_form(el)
 
 				$('#custom-widget', el).html(widget_custom_view.render(true).el);
 				
-				$('body').on('click', '#cancel_custom_widget', function(e)
+				$('#custom-widget').off('click').on('click', '#cancel_custom_widget', function(e)
 				{
 					// Restore element back to original
 					$("#custom-widget").replaceWith(divClone); 

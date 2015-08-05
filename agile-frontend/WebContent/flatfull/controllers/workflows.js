@@ -50,6 +50,7 @@ var WorkflowsRouter = Backbone.Router
 				this.workflow_list_view = new Base_Collection_View({ url : '/core/api/workflows', restKey : "workflow", sort_collection : false,
 					templateKey : "workflows", individual_tag_name : 'tr', cursor : true, page_size : 20, postRenderCallback : function(el)
 					{
+						initializeTriggersListeners();
 						head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
 						{
 							$("time.campaign-created-time", el).timeago();
@@ -96,7 +97,7 @@ var WorkflowsRouter = Backbone.Router
 				this.workflow_model = undefined;
 
 				$('#content').html(getTemplate('workflow-add', { "is_new" : true }));
-				initiate_tour("workflows-add", $('#content'));
+				initiate_tour("workflows-add", $('#content'));	
 			},
 
 			/**
@@ -257,6 +258,7 @@ var WorkflowsRouter = Backbone.Router
 				var logsListView = new Base_Collection_View({ url : '/core/api/campaigns/logs/' + id + log_type, templateKey : "campaign-logs",
 					cursor : true,page_size :20, individual_tag_name : 'tr', sort_collection :false, postRenderCallback : function(el)
 					{
+						initializeTriggersListeners();
 						head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
 						{
 							$("time.log-created-time", el).timeago();
@@ -391,6 +393,7 @@ var WorkflowsRouter = Backbone.Router
 				 */
 				postRenderCallback : function(el)
 				{
+					initializeAccountSettingsListeners();
 
 					// Loads jquery.chained.min.js
 					head.js(LIB_PATH + 'lib/agile.jquery.chained.min.js', function()
@@ -482,7 +485,7 @@ var WorkflowsRouter = Backbone.Router
 				var view = new Base_Model_View({ url : 'core/api/triggers', model : currentTrigger, template : "trigger-add", window : 'triggers',
 					postRenderCallback : function(el)
 					{
-
+						initializeTriggersListeners();
 						// Loads jquery.chained.min.js
 						head.js(LIB_PATH + 'lib/agile.jquery.chained.min.js', function()
 						{

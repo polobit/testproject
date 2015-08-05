@@ -59,6 +59,7 @@ var WidgetsRouter = Backbone.Router
 																this.Catalog_Widgets_View = new Base_Collection_View({ url : '/core/api/widgets/default', restKey : "widget", templateKey : "widgets-add",
 																				sort_collection : false, individual_tag_name : 'div', postRenderCallback : function(el)
 																				{
+																								initializeWidgetSettingsListeners();
 																								build_custom_widget_form(el);
 																								setTimeout(function(){
 																									var socialHeight=0;
@@ -697,6 +698,7 @@ var WidgetsRouter = Backbone.Router
 																				var widget_custom_view = new Base_Model_View({ url : "/core/api/widgets/custom", template : "add-custom-widget", isNew : true,
 																								postRenderCallback : function(el)
 																								{
+																												initializeWidgetSettingsListeners();
 																												console.log('In post render callback');
 																												console.log(el);
 																												$('body').on('change', '#script_type', function(e)
@@ -754,7 +756,7 @@ var WidgetsRouter = Backbone.Router
 																// Gets Social Prefs (Same as Linkedin/Twitter) for Gmail
 
 
-																this.contact_sync_google = new Base_Model_View({ url : 'core/api/contactprefs/google', template : 'admin-settings-import-google-contacts', });
+																this.contact_sync_google = new Base_Model_View({ url : 'core/api/contactprefs/google', template : 'admin-settings-import-google-contacts',postRenderCallback: function(el){initializeImportListeners();} });
 
 																// Adds header
 																$('#prefs-tabs-content')
@@ -770,17 +772,17 @@ var WidgetsRouter = Backbone.Router
 																// Adds Gmail Prefs
 																$('#contact-prefs').append(this.contact_sync_google.render().el);
 
-																this.calendar_sync_google = new Base_Model_View({ url : 'core/api/calendar-prefs/get', template : 'import-google-calendar', });
+																this.calendar_sync_google = new Base_Model_View({ url : 'core/api/calendar-prefs/get', template : 'import-google-calendar',postRenderCallback: function(el){initializeImportListeners();} });
 
 																// console.log(getTemplate("import-google-contacts", {}));
 																$('#calendar-prefs').append(this.calendar_sync_google.render().el);
 
 																/* Add E-commerce Prefs template */
 																this.shopify_sync = new Base_Model_View({ url : 'core/api/shopify/import-settings',
-																				template : 'admin-settings-import-shopify-contact-syncPrefs' });
+																				template : 'admin-settings-import-shopify-contact-syncPrefs',postRenderCallback: function(el){initializeImportListeners();} });
 																$('#shopify').append(this.shopify_sync.render().el);
 																
-																this.freshbooks_sync = new Base_Model_View({url:'core/api/freshbooks/import-settings',template:'admin-settings-import-freshbooks-contacts-syncPrefs'});
+																this.freshbooks_sync = new Base_Model_View({url:'core/api/freshbooks/import-settings',template:'admin-settings-import-freshbooks-contacts-syncPrefs',postRenderCallback: function(el){initializeImportListeners();}});
 																$('#freshbook').append(this.freshbooks_sync.render().el);
 																/* salesforce import template */
 																// this.salesforce = new
@@ -791,25 +793,25 @@ var WidgetsRouter = Backbone.Router
 																// Base_Model_View({url:'core/api/salesforce/get-prefs',template:'admin-settings-salesforce-contact-sync'});
 																// $('#force').append(this.salesforce.render().el);
 																// adding zoho crm contact sync template preferences
-																this.zoho_sync = new Base_Model_View({ url : 'core/api/zoho/import-settings', template : 'admin-settings-import-zoho-contact-sync' });
+																this.zoho_sync = new Base_Model_View({ url : 'core/api/zoho/import-settings', template : 'admin-settings-import-zoho-contact-sync' ,postRenderCallback: function(el){initializeImportListeners();}});
 																$('#zoho').append(this.zoho_sync.render().el);
 																// model for quickbook import
-																this.quickbook_sync = new Base_Model_View({ url : 'core/quickbook/import-settings', template : 'admin-settings-import-quickbook' });
+																this.quickbook_sync = new Base_Model_View({ url : 'core/quickbook/import-settings', template : 'admin-settings-import-quickbook',postRenderCallback: function(el){initializeImportListeners();} });
 																$('#quickbook').append(this.quickbook_sync.render().el);
 
 																// model for xero import
-																this.xero_sync = new Base_Model_View({ url : 'core/xero/import-settings', template : 'admin-settings-import-xeroSync' });
+																this.xero_sync = new Base_Model_View({ url : 'core/xero/import-settings', template : 'admin-settings-import-xeroSync',postRenderCallback: function(el){initializeImportListeners();} });
 																$('#xero').append(this.xero_sync.render().el);
 
 																/*
 																 * Add stripe payment gateway contact sync template preferences
 																 */
-																this.stripe_sync = new Base_Model_View({ url : 'core/api/stripe/import-settings', template : 'admin-settings-import-stripe-contact-sync' });
+																this.stripe_sync = new Base_Model_View({ url : 'core/api/stripe/import-settings', template : 'admin-settings-import-stripe-contact-sync' ,postRenderCallback: function(el){initializeImportListeners();}});
 
 																$('#stripe').append(this.stripe_sync.render().el);
 
 																var data = { "service" : "Gmail", "return_url" : encodeURIComponent(window.location.href) };
-																var itemView = new Base_Model_View({ url : '/core/api/social-prefs/GMAIL', template : "settings-social-prefs", data : data });
+																var itemView = new Base_Model_View({ url : '/core/api/social-prefs/GMAIL', template : "settings-social-prefs", data : data,postRenderCallback: function(el){initializeImportListeners();} });
 																itemView.model.fetch();
 
 																// Adds Gmail Prefs
@@ -836,6 +838,7 @@ var WidgetsRouter = Backbone.Router
 																var options = { url : "core/api/contactprefs/GOOGLE", template : "admin-settings-import-google-contacts-setup",
 																				postRenderCallback : function(el)
 																				{
+																								initializeWidgetSettingsListeners();
 																								console.log(el);
 																								// App_Settings.setup_google_contacts.model =
 																								// App_Settings.contact_sync_google.model;

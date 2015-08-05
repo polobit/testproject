@@ -58,6 +58,10 @@ var SubscribeRouter = Backbone.Router.extend({
 		 */
 		postRenderCallback : function(el)
 		{
+
+			
+			initializeSubscriptionListeners();
+			
 			var data = subscribe_plan.model.toJSON();
 			var _window = window;
 
@@ -199,6 +203,7 @@ var SubscribeRouter = Backbone.Router.extend({
 		var upgrade_plan = new Base_Model_View({ url : "core/api/subscription", template : "purchase-plan-new", isNew : true,
 			postRenderCallback : function(el)
 			{
+				initializeSubscriptionListeners();
 				head.js(LIB_PATH + 'lib/countries.js', function()
 				{
 					print_country($("#country", el));
@@ -282,6 +287,7 @@ var SubscribeRouter = Backbone.Router.extend({
 				showNotyPopUp("information", "Your plan has been updated successfully. Please logout and login again for the new changes to apply.", "top");
 			},
 			postRenderCallback : function(el) {
+				initializeSubscriptionListeners();
 				card_expiry(el);
 				head.js(LIB_PATH + 'lib/countries.js', function()
 				{
@@ -360,6 +366,7 @@ var SubscribeRouter = Backbone.Router.extend({
 		var upgrade_plan = new Base_Model_View({ url : "core/api/subscription", template : "purchase-plan", isNew : true, data : plan,
 			postRenderCallback : function(el)
 			{
+				initializeSubscriptionListeners();
 				// Discount
 				showCouponDiscountAmount(plan_json, el);
 				card_expiry(el);
@@ -609,11 +616,12 @@ var SubscribeRouter = Backbone.Router.extend({
 		$.getJSON("core/api/subscription?reload=true", function(data){
 			_billing_restriction = data.cachedData;
 			init_acl_restriction();
-			$("#content").html(getTemplate("subscribe", data))
-		
+			$("#content").html(getTemplate("subscribe", data));
+			initializeAccountSettingsListeners();
+			initializeInvoicesListeners();
 			var subscription_model = new BaseModel(data);
 			
-			$("body").on('click' , '#change-card', function(e){
+			$("#show_plan_page").off('click').on('click' , '#change-card', function(e){
 				e.preventDefault();
 				//alert("here");
 				that.showCreditCardForm(subscription_model, function(model){

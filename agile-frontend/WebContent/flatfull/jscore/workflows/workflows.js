@@ -6,15 +6,15 @@
  * 
  * 
  */
-$(function(){
+function initializeTriggersListeners(){
 
 	// To stop propagation to edit page
-	$('body').on('click', '.stop-propagation', function (e) {
-		e.stopPropagation();
-	});
+	$('#workflows-model-list').off('click').on('click', '.stop-propagation', function (e) {
+        e.stopPropagation();
+    });
 	
 	// Show logs of selected filter
-	$('body').on('click', '.log-filters', function (e) {
+	$('#campaign-analysis-tabs-content').off('click').on('click', '.log-filters', function (e) {
 		e.preventDefault();
 		
 		var log_type = $(this).data('log-type');
@@ -24,7 +24,7 @@ $(function(){
 	});
 	
 	// Show stats of selected campaign
-	$('body').on('change', '#campaign-reports-select', function (e) {
+	$('#campaign-logs-list').off('change').on('change', '#campaign-reports-select', function (e) {
 		
 		e.preventDefault();
 		
@@ -53,7 +53,7 @@ $(function(){
 	 * so ids are separated by comma in click event.
 	 * 
 	 **/
-	$('body').on('click', '#save-workflow-top, #save-workflow-bottom, #duplicate-workflow-top, #duplicate-workflow-bottom', function (e, trigger_data) {
+	$('#workflowform').off('click').on('click', '#save-workflow-top, #save-workflow-bottom, #duplicate-workflow-top, #duplicate-workflow-bottom', function (e, trigger_data) {
            e.preventDefault();
            
            // Temporary variable to hold clicked button, either top or bottom. $ is preceded, just to show 
@@ -165,7 +165,7 @@ $(function(){
      *  Deletes all logs of campaign
      *      
      **/
-	$('body').on('click', '#delete_campaign_logs', function (e) {
+	$('#campaign-analysis-tabs-content').off('click').on('click', '#delete_campaign_logs', function (e) {
     	e.preventDefault();
     	
     	// Gets campaign id
@@ -191,7 +191,7 @@ $(function(){
 	/**
 	 * Script to show workflow video tutorial in bootstrap modal.
 	 **/
-	$('body').on('click', '#workflow-designer-help', function (e) {
+	$('#workflowform').off('click').on('click', '#workflow-designer-help', function (e) {
 		e.preventDefault();
 
 		// Removes if previous modals exist.
@@ -214,7 +214,7 @@ $(function(){
 		});
 	});
 	
-	$('body').on('click', '#workflow-unsubscribe-option', function (e) {
+	$('#workflowform').off('click').on('click', '#workflow-unsubscribe-option', function (e) {
 		e.preventDefault();
 
 		if($(this).hasClass('collapsed'))
@@ -227,7 +227,7 @@ $(function(){
 		
 	});
 	
-	$('body').on('change', '#unsubscribe-action', function (e) {
+	$('#workflowform').off('change').on('change', '#unsubscribe-action', function (e) {
 		e.preventDefault();
 		
 		var all_text = "Contact will not receive any further emails from any campaign (i.e., the 'Send Email' option will not work. However, other actions in" 
@@ -250,7 +250,7 @@ $(function(){
 		
 	});
 	
-});
+}
 
 /**
  * Creates a new workflow or Copy existing workflow and add to workflows collection

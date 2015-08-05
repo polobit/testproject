@@ -44,7 +44,10 @@ var ReportsRouter = Backbone.Router.extend({
 	activityReports : function()
 	{
 		$("#content").html(getRandomLoadingImg());
-		this.activityReports = new Base_Collection_View({ url : '/core/api/activity-reports', restKey : "activityReports", templateKey : "activity-report", individual_tag_name : 'tr'});
+		this.activityReports = new Base_Collection_View({ url : '/core/api/activity-reports', restKey : "activityReports", templateKey : "activity-report", individual_tag_name : 'tr', 
+			postRenderCallback: function(){
+				initializeActivityReportsListeners();
+			} });
 		this.activityReports.collection.fetch();
 		$("#content").html(this.activityReports.render().el);
 
@@ -197,7 +200,10 @@ var ReportsRouter = Backbone.Router.extend({
 	emailReports : function()
 	{
 	
-			this.reports = new Base_Collection_View({ url : '/core/api/reports', restKey : "reports", templateKey : "report", individual_tag_name : 'tr' });
+			this.reports = new Base_Collection_View({ url : '/core/api/reports', restKey : "reports", templateKey : "report", individual_tag_name : 'tr', 
+				postRenderCallback: function(){
+					initializeReportsListeners();
+				}});
 
 			this.reports.collection.fetch();
 			$("#content").html(this.reports.render().el);
@@ -344,6 +350,7 @@ var ReportsRouter = Backbone.Router.extend({
 					});
 					scramble_input_names($(el).find('div#report-settings'));
 				});
+				initializeContactFiltersListeners();
 
 			} });
 

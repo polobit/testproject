@@ -7,9 +7,7 @@
  * author: Rammohan
  */
 
-$(function()
-{
-
+function initializeTasksListeners(){
 	$('.update-task-timepicker').timepicker({ defaultTime : get_hh_mm(true), showMeridian : false });
 	$('.update-task-timepicker').timepicker().on('show.timepicker', function(e)
 	{
@@ -46,7 +44,7 @@ $(function()
 	 * relatedTo field typeahead, changing color and font-weight) when we click
 	 * on task link in activities modal.
 	 */
-	$("body").on("click", '#task', function(e)
+	$("#content").on("click", '#task', function(e)
 	{
 		e.preventDefault();
 		var el = $("#taskForm");
@@ -64,7 +62,7 @@ $(function()
 	/**
 	 * Shows activity modal with all the task create fields.
 	 */
-	$("body").on("click", '.add-task', function(e)
+	$("#content").on("click", '.add-task', function(e)
 	{
 		e.preventDefault();
 
@@ -98,7 +96,7 @@ $(function()
 	/**
 	 * Dash board edit
 	 */
-	$("body").on("click", '#dashboard1-tasks-model-list > tr', function(e)
+	$("#content").on("click", '#dashboard1-tasks-model-list > tr', function(e)
 	{
 		e.preventDefault();
 		update_task(this);
@@ -108,7 +106,7 @@ $(function()
 	 * When clicked on update button of task-update-modal, the task will get
 	 * updated by calling save_task function
 	 */
-	$("body").on("click", '#update_task_validate', function(e)
+	$("#content").on("click", '#update_task_validate', function(e)
 	{
 		e.preventDefault();
 		save_task('updateTaskForm', 'updateTaskModal', true, this);
@@ -186,7 +184,7 @@ $(function()
 	/**
 	 * Makes the pending task as completed by calling complete_task function
 	 */
-	$("body").on("click", '.tasks-select', function(e)
+	$("#content").on("click", '.tasks-select', function(e)
 	{
 		e.stopPropagation();
 		if ($(this).is(':checked'))
@@ -211,7 +209,112 @@ $(function()
 	 * 
 	 * });
 	 */
-});
+
+	 $('#content').on('mouseenter', '.listed-task', function(e)
+	{
+		$(this).find(".task-actions").css("display", "block");
+		$(this).find(".task-note-action").hide();
+	});
+
+	// Hide task actions
+	$('#content').on('mouseleave', '.listed-task', function(e)
+	{
+		$(this).find(".task-actions").css("display", "none");
+		$(this).find(".task-note-action").show();
+	});
+
+	/*
+	 * Task Action: Delete task from UI as well as DB. Need to do this manually
+	 * because nested collection can not perform default functions.
+	 */
+	$('#content').on('click', '.delete-task', function(event)
+	{
+		if (!confirm("Are you sure you want to delete?"))
+			return;
+
+		// Delete Task.
+		deleteTask(getTaskId(this), getTaskListId(this), getTaskListOwnerId(this));
+	});
+
+	// Task Action: Mark task complete, make changes in DB.
+	$('#content').on('click', '.is-task-complete', function(event)
+	{
+		event.preventDefault();
+
+		// make task completed.
+		completeTask(getTaskId(this), getTaskListId(this), getTaskListOwnerId(this));
+	});
+
+	// Task Action: Open Task Edit Modal and display details in it.
+	$('#content').on('click', '.edit-task', function(event)
+	{
+		event.preventDefault();
+
+		// Show and Fill details in Task Edit modal
+		editTask(getTaskId(this), getTaskListId(this), parseInt(getTaskListOwnerId(this)));
+	});
+	
+	// Click events to agents dropdown of Owner's list and Criteria's list
+	/*$("ul#new-owner-tasks li a, ul#new-type-tasks li a").live("click", function(e)
+	{
+		e.preventDefault();			
+		
+		// Hide list view and show column view with loading img
+		hideListViewAndShowLoading();		
+		
+		// Show selected name
+		var name = $(this).html(), id = $(this).attr("href");
+		
+		var selectedDropDown = $(this).closest("ul").attr("id");
+				
+		if(selectedDropDown == "new-type-tasks") // criteria type
+		    $(this).closest("ul.main-menu").data("selected_item", id);
+		else  // owner type
+			$(this).closest("ul").data("selected_item", id);
+		
+		$(this).closest(".btn-group").find(".selected_name").text(name);
+
+		// Empty collection
+		if(TASKS_LIST_COLLECTION != null)
+		TASKS_LIST_COLLECTION.collection.reset();
+		
+		//Add selected details of dropdown in cookie
+		addDetailsInCookie(this);
+		
+		setTimeout(function() { // Do something after 2 seconds
+			// Get details from dropdown and call function to create collection
+			getDetailsForCollection();
+		}, 2000);
+	});
+
+	// Change page heading as per owner selection
+	$("ul#new-owner-tasks li a").live("click", function()
+	{		
+		// Change heading of page
+		changeHeadingOfPage($('#new-owner-tasks').closest(".btn-group").find(".selected_name").html());
+	});*/
+
+	/*
+	 * In new/update task modal, on selection of status, show progress slider
+	 * and change %
+	 */
+	$(".status").change(function()
+	{
+		console.log("status change event");
+		
+		// Change status UI and input field
+		changeStatus($(this).attr("value"), $(this).closest("form"));
+	});	
+	
+	$('#content').on('click', '.group-view', function(event)
+	{
+		event.preventDefault();
+		console.log("group-view event");
+				
+		// Change UI and input field
+		applyDetailsFromGroupView();
+	});	
+}
 
 /**
  * Highlights the task portion of activity modal (Shows task form and hides

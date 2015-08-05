@@ -5,11 +5,10 @@
  * @module Campaigns
  * 
  */
-$(function()
-{
+function initializeTriggersListeners(){
 
 	// Tag suggestions when 'Tag is added' and 'Tag is deleted' options selected
-	$('body').on('change', '#trigger-type', function(e)
+	$('#addTriggerForm').off('change').on('change', '#trigger-type', function(e)
 	{
 		e.preventDefault();
 
@@ -144,7 +143,7 @@ $(function()
 	});
 	
 	// When cancel clicked, take to Back page
-	$('body').on('click', '#trigger-cancel', function(e)
+	$('#addTriggerForm').off('click').on('click', '#trigger-cancel', function(e)
 	{
 		e.preventDefault();
 
@@ -152,7 +151,7 @@ $(function()
 			history.back(-1);
 	});
 	
-	$('body').on('change', '#email-tracking-type', function(e){
+	$('#addTriggerForm').off('change').on('change', '#email-tracking-type', function(e){
 		
 		e.preventDefault();
 		
@@ -167,7 +166,9 @@ $(function()
 		show_email_tracking_campaigns();
 		
 	});
-});
+
+	
+}
 
 /**
  * Shows hidden trigger-milestones select element and fills with milestones
