@@ -945,15 +945,14 @@ content: "\f075"!important;
 	width: 100%;
 	border:1px solid #dee5e7;
 	border-radius: 5px;
-	display:flex;
-	flex-direction:row;
+	
 }
 .milestone-column {
 	min-width: 150px;
 	box-sizing: border-box;
 	vertical-align: top;
 	border-right: 1px solid #dee5e7!important;
-    /* display: inline-block; */
+    display: inline-block;
 }
 .milestone-heading {
 	/*padding: 21px 0px;*/
@@ -975,8 +974,8 @@ content: "\f075"!important;
 	background:lightyellow!important;
 }
 .milestone-column>ul, .milestone-column>div.milestones {
-	/* height: 468px;
-	overflow-y: auto !important; */
+	height: 468px;
+	overflow-y: auto !important;
 	list-style: none;
 	margin-left: 0px;
 	margin-bottom: 0px;
