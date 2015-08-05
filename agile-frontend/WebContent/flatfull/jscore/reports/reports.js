@@ -1,7 +1,7 @@
 // Stores report object, so it can be used while creating report table headings
 var REPORT;
 function initializeReportsListeners(){
-	$('#report-model-list').off("click").on('click', '#reports-email-now', function(e)
+	$('#reports-listerners-container').on('click', '#reports-email-now', function(e)
 					{
 						// e.preventDefault();
 						e.stopPropagation();
@@ -60,7 +60,7 @@ function initializeReportsListeners(){
 										});
 					});
 
-	$('body').on('click', '#campaign_id', function(e)
+	$('#reports-listerners-container').on('click', '#campaign_id', function(e)
 			{
 				e.preventDefault();
 				e.stopPropagation();
@@ -84,7 +84,7 @@ function initializeReportsListeners(){
 					} });
 
 			});
-	$('#report-model-list').on('click', '#report-instant-results', function(e) 
+	$('#reports-listerners-container').on('click', '#report-instant-results', function(e) 
 	{
 		e.stopPropagation();
 		var id = $(this).attr('data');
@@ -94,7 +94,7 @@ function initializeReportsListeners(){
 		 */
 	});
 
-	$('body').on('change', '#frequency', function(e) 
+	$('#reports-listerners-container').on('change', '#frequency', function(e) 
 	{
 		var frequency = $("#frequency").val();
 		if (frequency == "DAILY")
@@ -124,24 +124,24 @@ function initializeReportsListeners(){
 	/*
 	 * author jaagdeesh
 	 */
-	$('body').on('click', '#activity_advanced', function(e) 
+	$('#reports-listerners-container').on('click', '#activity_advanced', function(e) 
 	{
 		e.preventDefault();
 
 	});
 
-	$('body').on('shown', '#activity-advanced-block', function(e) 
+	$('#reports-listerners-container').on('shown', '#activity-advanced-block', function(e) 
 	{
 		$('#activity_advanced').html('<span><i class="icon-minus"></i></span> Advanced');
 
 	});
 
-    $('body').on('hidden', '#activity-advanced-block', function(e) 
+    $('#reports-listerners-container').on('hidden', '#activity-advanced-block', function(e) 
 	{
 		$('#activity_advanced').html('<span><i class="icon-plus"></i></span> Advanced');
 	});
 	
-	$('body').on('click', '#report_advanced', function(e) 
+	$('#reports-listerners-container').on('click', '#report_advanced', function(e) 
 			{
 				e.preventDefault();
 				$("#report_advanced span i").toggleClass("fa-minus");
@@ -149,18 +149,18 @@ function initializeReportsListeners(){
 
 			});
             
-			$('body').on('shown', '#report-advanced-block', function(e)
+			$('#reports-listerners-container').on('shown', '#report-advanced-block', function(e)
 			{
 				$('#report_advanced').html('<span><i class="icon-minus"></i></span> Advanced');
 
 			});
 			
-			$('body').on('hidden', '#report-advanced-block', function(e)
+			$('#reports-listerners-container').on('hidden', '#report-advanced-block', function(e)
 			{
 				$('#report_advanced').html('<span><i class="icon-plus"></i></span> Advanced');
 			});
 			
-			$('body').on('change', '#duration', function(e)
+			$('#reports-listerners-container').on('change', '#duration', function(e)
 					{
 						var frequency = $("#duration").val();
 						if (frequency == "DAILY")

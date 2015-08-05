@@ -1,5 +1,5 @@
-$(function(){
-	$('body').on('click', '.report-chorts', function(e){
+function initializeChartReportsListeners(){
+	$('#reports-listerners-container').on('click', '.report-chorts', function(e){
 		e.preventDefault();
 		var formelement = $(this).parents('form'); 
 		if (!isValidForm($(formelement))) {
@@ -48,4 +48,4 @@ $(function(){
 		
 		
 	});
-});
+}
