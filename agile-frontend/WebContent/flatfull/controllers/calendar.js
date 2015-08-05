@@ -96,13 +96,14 @@ tasks : function()
 /* Show new view of tasks. */
 tasks_new : function()
 {
-	$('#content').html(getTemplate("new-tasks-list-header", {}));
+	$('#content').html("<div id='tasks-list-template'>&nbsp;</div>");
+	$('#tasks-list-template').html(getTemplate("new-tasks-list-header", {}));
 
 	fillSelect("new-owner-tasks", '/core/api/users/current-user', 'domainUser', function fillOwner()
 	{
-		$('#content').find("#new-owner-tasks").prepend("<li><a href=''>All Tasks</a></li>");
-		$('#content').find("#new-owner-tasks").append("<li><a href='all-pending-tasks' class='hide-on-status'>All Pending Tasks</a></li>");
-		$('#content').find("#new-owner-tasks").append("<li><a href='my-pending-tasks' class='hide-on-owner hide-on-status'>My Pending Tasks</a></li>");
+		$('#tasks-list-template').find("#new-owner-tasks").prepend("<li><a href=''>All Tasks</a></li>");
+		$('#tasks-list-template').find("#new-owner-tasks").append("<li><a href='all-pending-tasks' class='hide-on-status'>All Pending Tasks</a></li>");
+		$('#tasks-list-template').find("#new-owner-tasks").append("<li><a href='my-pending-tasks' class='hide-on-owner hide-on-status'>My Pending Tasks</a></li>");
 		initializeTasksListeners();
 		// Read stored selections from cookie and Creates nested collection
 		readDetailsFromCookie();

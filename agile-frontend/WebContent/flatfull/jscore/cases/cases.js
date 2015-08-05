@@ -7,8 +7,8 @@
 
 // handle popover
 $(function()
-{
 
+{
 	/**
 	 * When mouseover on any row of opportunities list, the pop-over of deal is
 	 * shown

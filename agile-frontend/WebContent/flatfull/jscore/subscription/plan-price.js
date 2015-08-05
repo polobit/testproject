@@ -208,7 +208,7 @@ function setPlan(user_plan)
 
 function initializeSubscriptionListeners(){
 		
-		$('#content').off('click').on('click', '.plan-collection-in', function(e){
+		$('#subscribe_plan_change').on('click', '.plan-collection-in', function(e){
 			 
 			$(this).find("[name='pro_vs_lite']").attr('checked','checked');
 			var plan_type = "";
@@ -262,7 +262,7 @@ function initializeSubscriptionListeners(){
 	  		setCost(update_price());
 		});
 		
-		$('#content').on('change', '#billing_cycle', function(e){
+		$('#subscribe_plan_change').on('change', '#billing_cycle', function(e){
 			e.preventDefault();
 			var plan_interval = $(this).val();
 			
@@ -278,7 +278,7 @@ function initializeSubscriptionListeners(){
  	     	$("#users_total_cost").text((value * price).toFixed(2));
 			
 		});
-		$('#content').on('change', '#user_quantity', function(e){
+		$('#subscribe_plan_change').on('change', '#user_quantity', function(e){
 			e.preventDefault();
 			var value = $(this).val();
 			price = update_price();
@@ -286,7 +286,7 @@ function initializeSubscriptionListeners(){
  	     	$("#users_total_cost").text((value * price).toFixed(2));
 		});
 		
-		$('#content').on('change', '#plan_type', function(e){
+		$('#subscribe_plan_change').on('change', '#plan_type', function(e){
 			var plan_type = $(this).val();
 			$("#"+ plan_type +"_plan > .plan-collection-in").click();
 			if($(this).val() == "free")
@@ -296,7 +296,7 @@ function initializeSubscriptionListeners(){
 			}
 		});
 	    
-		$('#content').on('click', '#purchase-plan', function(e){
+		$('#subscribe_plan_change').on('click', '#purchase-plan', function(e){
 	          /*var quantity = $("#users_quantity").text();
 	          var cost = $("#users_total_cost").text();
 	          var plan = $("input[name='pro_vs_lite']:checked").val();*/
@@ -390,7 +390,7 @@ function initializeSubscriptionListeners(){
       	});
       	
      // Check coupon functionality
-	 $('#content').on('click', '#check_valid_coupon', function(e){
+	 $('#subscribe_plan_change').on('click', '#check_valid_coupon', function(e){
     				// Get coupon input value
     				var couponId = $("#coupon_code").val();
     				if (!couponId) {

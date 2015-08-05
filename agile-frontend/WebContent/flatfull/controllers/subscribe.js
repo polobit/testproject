@@ -35,6 +35,7 @@ var SubscribeRouter = Backbone.Router.extend({
 	 */
 	subscribe : function(id)
 	{
+		$("#content").html("<div id='subscribe_plan_change'></div>");
 		if(IS_NEW_USER && _plan_on_signup && _plan_on_signup.plan_type && _plan_on_signup.plan_type == "FREE")
 		{
 			_plan_on_signup = null;
@@ -127,7 +128,7 @@ var SubscribeRouter = Backbone.Router.extend({
 			//	load_slider(el);
 			});
 		} });
-		$('#content').html(subscribe_plan.render().el);
+		$('#subscribe_plan_change').html(subscribe_plan.render().el);
 		$(".active").removeClass("active");
 		$("#planView").addClass("active");
 	},
@@ -621,7 +622,7 @@ var SubscribeRouter = Backbone.Router.extend({
 			initializeInvoicesListeners();
 			var subscription_model = new BaseModel(data);
 			
-			$("#show_plan_page").off('click').on('click' , '#change-card', function(e){
+			$("#show_plan_page").on('click' , '#change-card', function(e){
 				e.preventDefault();
 				//alert("here");
 				that.showCreditCardForm(subscription_model, function(model){
