@@ -15,9 +15,22 @@ public class TaskExcecutorThreadPool
     private BlockingQueue<Work> taskQueue = null;
     private List<TaskExecutorThread> threads = new ArrayList<TaskExecutorThread>();
     private boolean isStopped = false;
+    private int taskRunnableRate;
+
+    public boolean canAddMore()
+    {
+	if (threads.isEmpty())
+	    return true;
+
+	if (threads.size() < this.taskRunnableRate)
+	    return true;
+
+	return false;
+    }
 
     public TaskExcecutorThreadPool(int numberOfThreads, int taskRunnableRate)
     {
+	this.taskRunnableRate = taskRunnableRate;
 	taskQueue = new ArrayBlockingQueue<Work>(taskRunnableRate);
 
 	for (int i = 0; i < numberOfThreads; i++)

@@ -19,6 +19,7 @@ import com.google.api.client.http.HttpHeaders;
 import com.google.api.services.taskqueue.Taskqueue;
 import com.google.api.services.taskqueue.model.Task;
 import com.google.appengine.api.NamespaceManager;
+import com.google.appengine.api.taskqueue.DeferredTask;
 import com.googlecode.objectify.cache.TriggerFutureHook;
 
 public class TaskletThread implements Work
@@ -49,7 +50,21 @@ public class TaskletThread implements Work
 	    // TriggerFutureHook.install();
 	    // System.out.println(Thread.currentThread().getName());
 	    //
-	    EmailGatewayUtil.sendMailsMailDeferredTask(convertTaskHandlestoMailDeferredTasks(tasks));
+
+	    if (tasks.size() > 0 && isMailTask(tasks.get(0)))
+	    {
+		EmailGatewayUtil.sendMailsMailDeferredTask(convertTaskHandlestoMailDeferredTasks(tasks));
+	    }
+	    else
+	    {
+		for (Task task : tasks)
+		{
+		    DeferredTask deferredTask = convertResponseToDeferredTask(task);
+		    if (deferredTask != null)
+			deferredTask.run();
+		}
+	    }
+
 	}
 	catch (Exception e)
 	{
@@ -104,6 +119,30 @@ public class TaskletThread implements Work
 
 	}
 
+    }
+
+    private DeferredTask convertResponseToDeferredTask(Task task)
+    {
+	try
+	{
+	    return (DeferredTask) SerializationUtils.deserialize(Base64
+		    .decodeBase64(task.getPayloadBase64().getBytes()));
+	}
+	catch (Exception e)
+	{
+	    logger.error(e);
+	    return null;
+	}
+
+    }
+
+    private boolean isMailTask(Task handle)
+    {
+	DeferredTask task = convertResponseToDeferredTask(handle);
+	if (task == null)
+	    return false;
+
+	return (task instanceof MailDeferredTask);
     }
 
     private JsonBatchCallback<Void> getBatchCallback()

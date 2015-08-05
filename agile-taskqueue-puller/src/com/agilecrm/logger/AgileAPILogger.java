@@ -21,6 +21,11 @@ public class AgileAPILogger
 	return logger;
     }
 
+    public static Logger getLogger()
+    {
+	return logger;
+    }
+
     public static FileWriter getFileWriter()
     {
 	File file = new File("/home/yaswanth/apilog-writer.csv");

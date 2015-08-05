@@ -60,6 +60,7 @@ public class TaskQueueStatsDaemon extends Thread
 	isThreadPool = true;
 	if (threadPool == null)
 	{
+	    wairPeriodInMilliSeconds = 15000;
 	    threadPool = new TaskExcecutorThreadPool(numberOfWorkerThreads, 1024);
 	}
 
@@ -263,7 +264,7 @@ public class TaskQueueStatsDaemon extends Thread
 	    System.out.println("loading");
 	    List<Task> tasks = leaseTasksFromAppengine();
 
-	    do
+	    while (threadPool.canAddMore())
 	    {
 		List<Task> localTask = null;
 		if (tasks == null)
@@ -288,8 +289,7 @@ public class TaskQueueStatsDaemon extends Thread
 		TaskletThread t = new TaskletThread(localTask, TASK_QUEUE_NAME, taskQueue, logger);
 
 		threadPool.enqueue(t);
-
-	    } while (true);
+	    }
 
 	    try
 	    {
@@ -312,5 +312,4 @@ public class TaskQueueStatsDaemon extends Thread
 	    leaseTasksOld();
 	}
     }
-
 }

@@ -336,7 +336,9 @@ public class GoogleSQL
 	cpds.setMinPoolSize(2);
 	cpds.setAcquireIncrement(2);
 	cpds.setMaxPoolSize(10);
-	cpds.setMaxIdleTime(1200);
+	cpds.setMaxIdleTime(1200000); // In milli-seconds
+	System.out.println(cpds.getMaxIdleTime());
+	System.out.println(cpds.getMaxStatementsPerConnection());
 	System.out.println(cpds.getMaxIdleTime());
 
 	return cpds.getConnection();
