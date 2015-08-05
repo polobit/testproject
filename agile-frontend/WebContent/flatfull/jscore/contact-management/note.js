@@ -54,9 +54,9 @@ $(function()
 			enable_save_button($(this));
 			return;
 		}
-		if($("#note_relatedto_tag").children().length==0)
+		if($("#noteUpdateForm #note_relatedto_tag").children().length==0)
 		{
-			$("#note_relatedto_error").show().delay(5000).hide(1);
+			$("#noteUpdateForm #note_relatedto_error").show().delay(5000).hide(1);
 			enable_save_button($(this));
 			return;
 		}
@@ -93,9 +93,9 @@ $(function()
 		{
 			return;
 		}
-		if($("#note_relatedto_tag").children().length==0)
+		if($("#noteForm #note_relatedto_tag").children().length==0)
 		{
-			$("#note_relatedto_error").show().delay(5000).hide(1);
+			$("#noteForm #note_relatedto_error").show().delay(5000).hide(1);
 			return;
 		}
 		disable_save_button($(this));

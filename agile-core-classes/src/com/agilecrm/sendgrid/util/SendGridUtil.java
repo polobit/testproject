@@ -2,7 +2,6 @@ package com.agilecrm.sendgrid.util;
 
 import java.util.List;
 
-import org.apache.commons.lang.SerializationUtils;
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -15,11 +14,6 @@ import com.agilecrm.mandrill.util.deferred.MailDeferredTask;
 import com.agilecrm.util.EmailUtil;
 import com.agilecrm.util.HttpClientUtil;
 import com.thirdparty.sendgrid.SendGrid;
-
-import com.campaignio.logger.Log.LogType;
-import com.campaignio.logger.util.LogUtil;
-
-import com.google.appengine.api.taskqueue.TaskHandle;
 
 /**
  * <code>SendGridUtil</code> is the utility class for bulk sending using
@@ -90,7 +84,6 @@ public class SendGridUtil
 		if (!StringUtils.isBlank(mailDeferredTask.campaignId)
 			&& !StringUtils.isBlank(mailDeferredTask.subscriberId))
 		{
-
 		    if (!StringUtils.isBlank(mailDeferredTask.text))
 		    {
 			// Appends Agile label

@@ -179,7 +179,6 @@ public class MandrillUtil
 
 		HttpClientUtil.accessPostURLUsingHttpClient(Mandrill.MANDRILL_API_POST_URL
 			+ Mandrill.MANDRILL_API_MESSAGE_CALL, "application/json", mailJSON.toString());
-
 	    }
 
 	}
