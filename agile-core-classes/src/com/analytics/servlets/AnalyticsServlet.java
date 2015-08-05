@@ -93,8 +93,8 @@ public class AnalyticsServlet extends HttpServlet
 	if (StringUtils.isBlank(domain))
 	    return;
 	
-	if(isBlockedIp(ip))
-	    return;
+	/*if(isBlockedIp(ip))
+	    return;*/
 	    
 	// Insert into table
 	AnalyticsSQLUtil.addToPageViews(domain, guid, email, sid, url, ip, isNew, ref, userAgent, country, region,
@@ -171,7 +171,7 @@ public class AnalyticsServlet extends HttpServlet
 	}
 	catch (Exception e)
 	{
-	    return true;
+	    return false;
 	}
     }
 
