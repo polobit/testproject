@@ -376,13 +376,4 @@ public class APIKey
 	dao.put(key);
 	return key;
     }
-    
-    /**
-     * Get Blocked IP's string
-     */
-    public static String getBlockedIps()
-    {
-	APIKey key = getAPIKey();
-	return key.blocked_ips;
-    }
 }
