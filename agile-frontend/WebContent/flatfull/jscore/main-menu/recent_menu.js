@@ -99,9 +99,15 @@ function modelAction(elem)
 	
 	if(type=='contact_entity')
 	{
-		App_Contacts.navigate("contact/"+id,{trigger:true});
-		$('#contactsmenu').parent().find('.active').removeClass('active');
-		$('#contactsmenu').addClass('active');
+		if(entity.attributes.type == 'COMPANY' ){
+			App_Contacts.navigate("company/"+id,{trigger:true});
+			$('#companiesmenu').parent().find('.active').removeClass('active');
+			$('#companiesmenu').addClass('active');
+		} else {
+			App_Contacts.navigate("contact/"+id,{trigger:true});
+			$('#contactsmenu').parent().find('.active').removeClass('active');
+			$('#contactsmenu').addClass('active');
+		}
 	}	
 	else if(type=='deal')
 	{

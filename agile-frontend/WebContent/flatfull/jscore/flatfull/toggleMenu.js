@@ -27,9 +27,11 @@ $('#app-aside-folded').on('click', function(e) {
 	
 	//contactInnerTabsInvoke();
 	
+    
 	});
 	
 $(document).ready(function(){
+
 
     $("#contact-results li").click(function(){
    $("#mobile-menu-settings").trigger('click');
@@ -37,8 +39,9 @@ $(document).ready(function(){
  
 
 	if(( $(window).width() ) < 768 ) {
-	$("#aside li a").click(function(){
-	  $("#mobile-menu").trigger("click");
+	
+	$(".nav li a").click(function(){
+	  $("#mobile-menu").delay(2000).trigger("click");
 	});
 	
 
@@ -84,7 +87,8 @@ $(document).ready(function(){
 
 
 
- 
+
+
 	
 	
 	

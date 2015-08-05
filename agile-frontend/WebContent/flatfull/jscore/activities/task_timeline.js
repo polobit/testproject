@@ -50,7 +50,13 @@ var task_details_tab = {
 								var taskJSON = taskDetailView.toJSON();
 								var domainUserId = taskJSON.domain
 								taskActivitiesView = new Base_Collection_View({ url : '/core/api/activitylog/getActivityByEntityId?entity_id='+taskJSON.id+'', templateKey : "task-related-activity",
-												individual_tag_name : 'li',sortKey : "time", descending : true,cursor : true, page_size : 25 });
+												individual_tag_name : 'li',sortKey : "time", descending : true,cursor : true, page_size : 25, postRenderCallback : function(el)
+												{
+																head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
+																{
+																				$(".event-created-time", el).timeago();
+																})
+												} });
 								taskActivitiesView.collection.fetch();
 								$('#task_tab_detail').find('#activity').html(taskActivitiesView.el);
 

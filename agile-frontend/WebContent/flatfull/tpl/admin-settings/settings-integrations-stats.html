@@ -7,10 +7,10 @@
 <div class="panel panel-default">
 <table class="table table-bordered table-hover">
    
-    <thead>
+    <thead class="panel-heading">
         <tr>
-            <th style="font-weight:normal;background-color:#f6f8f8;width:60%">Name</th>
-            <th style="font-weight:normal;background-color:#f6f8f8;width:40%">Count <span class="text-right block m-t-n-md text-muted">Your Plan Limits</span></th>
+            <th style="width:46%" class="font-normal">Name</th>
+            <th style="width:54%" class="font-normal">Count <span class="text-right block m-t-n-md text-muted">Your Plan Limits</span></th>
         </tr>
     </thead>
     <tbody>
@@ -48,7 +48,7 @@
 				</div>
 <div class="clearfix"></div>
 		</div>
-{{#unless _agile_email_gateway}}
+		{{#unless _agile_email_gateway}}
 			{{#if_equals "paused" status}}
 				<div class="alert alert-danger m-t" role="alert">
   					Important: Emails from your account are blocked due to poor reputation. Please contact our <a href="#contact-us">support</a> team if you wish to correct this.
@@ -56,6 +56,10 @@
 			{{/if_equals}}
 		{{/unless}}
 		<div>
+		
+		{{#if_equals "SEND_GRID" _agile_email_gateway}}
+			<div class="text-md">SendGrid stats are shown <a class="text-info" href="https://sendgrid.com/statistics" target="_blank">here</a></div><br/>
+		{{else}}
 		<div class="row">
         	<div class="col-md-6 b-r b-light">
         	<div class="panel panel-default">
@@ -88,6 +92,7 @@
         	</div>
     	</div>
     	</div>
+		{{/if_equals}}	
     	</div>
     	
 		<div class="m-b-sm"> 

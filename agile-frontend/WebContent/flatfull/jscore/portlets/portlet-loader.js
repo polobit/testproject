@@ -319,7 +319,7 @@ function showPortletSettings(el){
 		var options ='<option value="">Select...</option>'
 			+'<option value="contacts">All Contacts</option>'
 			+'<option value="myContacts">My Contacts</option>';
-		$.ajax({ type : 'GET', url : '/core/api/filters', async : false, dataType : 'json',
+		$.ajax({ type : 'GET', url : '/core/api/filters?type=PERSON', async : false, dataType : 'json',
 			success: function(data){
 				$.each(data,function(index,contactFilter){
 					options+="<option value="+contactFilter.id+">"+contactFilter.name+"</option>";
@@ -427,7 +427,7 @@ function showPortletSettings(el){
 		
 		elData = $('#portletsDealsClosuresPerPersonSettingsForm');
 		$("#group-by", elData).find('option[value='+ base_model.get("settings")["group-by"] +']').attr("selected", "selected");
-		$("#due-date", elData).val(new Date(base_model.get("settings")["due-date"]*1000).format('mm/dd/yyyy'));
+		$("#due-date", elData).val(getDateInFormatFromEpoc(base_model.get("settings")["due-date"]));
 	}else if(base_model.get('portlet_type')=="DEALS" && base_model.get('name')=="Deals Won"){
 		$('#portletsDealsWonSettingsModal').modal('show');
 		$('#portletsDealsWonSettingsModal > .modal-dialog > .modal-content > .modal-footer > .save-modal').attr('id',base_model.get("id")+'-save-modal');
@@ -653,11 +653,36 @@ function showPortletSettings(el){
 			$('#ms-user-list', elData).addClass('portlet-user-ms-container');
 			$('#ms-category-list', elData).addClass('portlet-category-ms-container');					
 		});
+	}else if(base_model.get('portlet_type')=="DEALS" && base_model.get('name')=="Revenue Graph"){
+		$('#portletsDealsRevenueGraphSettingsModal').modal('show');
+		$('#portletsDealsRevenueGraphSettingsModal > .modal-dialog > .modal-content > .modal-footer > .save-modal').attr('id',base_model.get("id")+'-save-modal');
+		$("#portlet-type",$('#portletsDealsRevenueGraphSettingsModal')).val(base_model.get('portlet_type'));
+		$("#portlet-name",$('#portletsDealsRevenueGraphSettingsModal')).val(base_model.get('name'));
+		
+		elData = $('#portletsDealsRevenueGraphSettingsForm');
+		var options = '';
+		if(base_model.get('settings').track=="anyTrack"){
+			options += '<option value="anyTrack" selected="selected">Any</option>';
+		}else{
+			options += '<option value="anyTrack">Any</option>';
+		}
+		$.ajax({ type : 'GET', url : '/core/api/milestone/pipelines', async : false, dataType : 'json',
+				success: function(data){
+					$.each(data,function(index,trackObj){
+						if(base_model.get('settings').track==trackObj.id)
+							options+="<option value="+trackObj.id+" selected='selected'>"+trackObj.name+"</option>";
+						else
+							options+="<option value="+trackObj.id+">"+trackObj.name+"</option>";
+					});
+				} });
+		$('#track', elData).html(options);
+		$('.loading-img').hide();
+		$("#duration", elData).find('option[value='+ base_model.get("settings").duration +']').attr("selected", "selected");
 	}
 	
 	if(base_model.get('name')=="Pending Deals" || base_model.get('name')=="Deals By Milestone" || base_model.get('name')=="Closures Per Person" || base_model.get('name')=="Deals Funnel"){
 		$('#due-date', elData).datepicker({
-			format : 'mm/dd/yyyy'
+			format : CURRENT_USER_PREFS.dateFormat
 		});
 	}	
 }
@@ -1577,6 +1602,71 @@ $('.portlet-settings-save-modal').live('click', function(e){
 	    				taskReportBarGraph(selector,groupByNamesList,series,text,data,domainUserNamesList);
 	    				
 	    			});
+	        	}else if(data.get('portlet_type')=="DEALS" && data.get('name')=="Revenue Graph"){
+	        		$('#'+el.split("-save-modal")[0]).parent().find('.portlet_body').attr('id',idVal);
+
+	        		var start_date_str = data.get('settings').duration+'-start';
+					var end_date_str = data.get('settings').duration+'-end';
+
+					var selector=idVal;;
+					var pipeline_id = 0;
+					if(data.get('settings').track!=undefined && data.get('settings').track!="anyTrack"){
+						pipeline_id = data.get('settings').track;
+					}
+					var url='core/api/opportunity/stats/details/'+pipeline_id+'?min='+getStartAndEndDatesOnDue(start_date_str)+'&max='+(getStartAndEndDatesOnDue(end_date_str)-1)+'';
+
+					fetchPortletsGraphData(url,function(data1){
+						if(data1.status==406){
+							// Show cause of error in saving
+							$save_info = $('<div class="portlet-error-message inline-block"><small><p class="text-base" style="color:#B94A48;"><i>'
+										+ data1.responseText
+										+ '</i></p></small></div>');
+					
+							$('#'+selector).html($save_info).show();
+					
+							return;
+						}
+						var sortedKeys = [];
+						var categories = [];
+						$.each(data1,function(k,v){
+							sortedKeys.push(k);
+						});
+						sortedKeys.sort();
+						var sortedData = {};
+						$.each(sortedKeys,function(index,value){
+							sortedData[''+value] = data1[''+value];
+						});
+						var series;
+						// Iterates through data and adds keys into
+						// categories
+						$.each(sortedData, function(k, v){
+							// Initializes series with names with the first
+							// data point
+							if (series == undefined){
+								var index = 0;
+								series = [];
+								$.each(v, function(k1, v1){
+									var series_data = {};
+									series_data.name = k1;
+									series_data.data = [];
+									series[index++] = series_data;
+								});
+							}
+							// Fill Data Values with series data
+							$.each(v, function(k1, v1){
+								// Find series with the name k1 and to that,
+								// push v1
+								var series_data = find_series_with_name(series, k1);
+								series_data.data.push(v1);
+							});
+							var dt = new Date(k * 1000);
+							categories.push(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));
+
+						});
+				
+						portletDealRevenueGraph(selector,series,data,categories);
+					});
+
 	        	}
 	        	if(data.get('portlet_type')=="CONTACTS" && data.get('name')=="Emails Opened"){
 	        		$('#'+el.split("-save-modal")[0]).parent().find('.portlet_body').attr('id',idVal);

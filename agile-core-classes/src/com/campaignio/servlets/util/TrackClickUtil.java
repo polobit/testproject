@@ -4,6 +4,7 @@ import java.net.URLEncoder;
 import java.util.Iterator;
 
 import org.apache.commons.lang.StringUtils;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.agilecrm.contact.Contact;
@@ -201,6 +202,7 @@ public class TrackClickUtil
 	    
 	    JSONObject data = contactJSON.getJSONObject("data");
 	    
+	    data.remove("id");
 	    data.remove("powered_by");
 	    data.remove("created_date");
 	    data.remove("modified_date");

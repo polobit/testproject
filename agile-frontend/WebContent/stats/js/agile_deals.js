@@ -60,3 +60,23 @@ function agile_getDeals(callback, email)
 	// Callback
 	agile_json(agile_url, callback);
 }
+
+function agile_updateDeal(data, callback, email)
+{
+	if (!email)
+	{
+		if (!agile_guid.get_email())
+		{
+			return;
+		}
+		else
+			email = agile_guid.get_email();
+	}
+	var params = "opportunity={0}&email={1}".format(encodeURIComponent(JSON.stringify(data)), encodeURIComponent(email));
+
+	// Build URL
+	var agile_url = agile_id.getURL() + "/opportunity/update-deal?callback=?&id=" + agile_id.get() + "&" + params;
+
+	// Send Request
+	agile_json(agile_url, callback);
+}

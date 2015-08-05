@@ -54,10 +54,10 @@ $(function(){
 				
 				$("#custom-field-deals", $(target)).html(el);
 				// Add placeholder and date picker to date custom fields
-				$('.date_input', $(target)).attr("placeholder","MM/DD/YYYY");
+				$('.date_input', $(target)).attr("placeholder","Select Date");
 		    
 				$('.date_input', $(target)).datepicker({
-					format: 'mm/dd/yyyy'
+					format: CURRENT_USER_PREFS.dateFormat
 				});
 				
 			}, "COMPANY")

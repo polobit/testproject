@@ -238,6 +238,7 @@ ObjectMapper mapper = new ObjectMapper();
 %>
 <!DOCTYPE html>
 <%@page import="com.google.appengine.api.utils.SystemProperty"%>
+ <%@ page contentType="text/html; charset=UTF-8" %>
 <html>
 <head>
 

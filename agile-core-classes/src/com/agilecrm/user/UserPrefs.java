@@ -87,6 +87,13 @@ public class UserPrefs
 	public String timezone = null;
 
 	/**
+     * date format
+     */
+    @NotSaved(IfDefault.class)
+    public String dateFormat = "mm/dd/yyyy";
+
+
+	/**
 	 * Type of Currency.
 	 */
 	@NotSaved(IfDefault.class)

@@ -719,3 +719,15 @@ border-color: #23b7e5!important;
 #milestone_val > span.help-inline{
 	font-size: 13.5px;
 }
+#contact-results > li.active{
+	background-color: #fafafa;
+}
+#deals-results > li.active{
+	background-color: #fafafa;
+}
+#document-results > li.active{
+	background-color: #fafafa;
+}
+#case-results > li.active{
+	background-color: #fafafa;
+}
