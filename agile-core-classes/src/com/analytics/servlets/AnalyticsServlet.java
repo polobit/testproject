@@ -93,8 +93,11 @@ public class AnalyticsServlet extends HttpServlet
 	if (StringUtils.isBlank(domain))
 	    return;
 	
-	/*if(isBlockedIp(ip))
-	    return;*/
+	System.out.println("client ip is " + ip);
+	System.out.println("is blocked ip " + isBlockedIp(ip));
+	
+	if(isBlockedIp(ip))
+	    return;
 	    
 	// Insert into table
 	AnalyticsSQLUtil.addToPageViews(domain, guid, email, sid, url, ip, isNew, ref, userAgent, country, region,
@@ -161,9 +164,14 @@ public class AnalyticsServlet extends HttpServlet
     {
 	try
 	{
+	    System.out.println("client ip is " + clientIp);
+	    System.out.println("blocked ips are " + APIKey.getBlockedIps());
+	    
 	    String[] blockedIpsArr = APIKey.getBlockedIps().split(",");
 	    for (int i = 0; i < blockedIpsArr.length; i++)
 	    {
+		System.out.println("is ip match");
+		System.out.println(ipMatch(clientIp, blockedIpsArr[i].trim()));
 		if (ipMatch(clientIp, blockedIpsArr[i].trim()))
 		    return true;
 	    }
@@ -171,6 +179,7 @@ public class AnalyticsServlet extends HttpServlet
 	}
 	catch (Exception e)
 	{
+	    System.out.println("Exception occured " + e.getMessage());
 	    return false;
 	}
     }
@@ -181,6 +190,8 @@ public class AnalyticsServlet extends HttpServlet
 	String[] blockedIpTokens = blockedIp.split("\\.");
 	for (int i = 0; i < clientIpTokens.length; i++)
 	{
+	    System.out.println("client token is " + clientIpTokens[i]);
+	    System.out.println("blocked ip token is " + blockedIpTokens[i]);
 	    if (!(StringUtils.equals("*", blockedIpTokens[i]) || StringUtils.equals(clientIpTokens[i],
 		    blockedIpTokens[i])))
 		return false;
