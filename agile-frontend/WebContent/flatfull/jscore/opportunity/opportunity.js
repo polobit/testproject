@@ -10,7 +10,7 @@ $(function () {
 	/**
 	 * When mouseover on any row of opportunities list, the popover of deal is shown
 	 **/
-	$('body').on('mouseenter', '#opportunities-model-list > tr', function(e) {
+	$('#opportunity-listners').on('mouseenter', '#opportunities-model-list > tr', function(e) {
         var data = $(this).find('.data').attr('data');
 
         var currentDeal = App_Deals.opportunityCollectionView.collection.get(data);
@@ -51,14 +51,14 @@ $(function () {
     /**
      * On mouse out on the row hides the popover.
      **/
-	$('body').on('mouseleave', '#opportunities-model-list > tr', function(e) {
+	$('#opportunity-listners').on('mouseleave', '#opportunities-model-list > tr', function(e) {
     	 $(this).popover('hide');
     });
 	
     /**
      * On click on the row hides the popover.
      **/
-	$('body').on('click', '#opportunities-model-list > tr, .hide-popover', function(e) {
+	$('#opportunity-listners').on('click', '#opportunities-model-list > tr, .hide-popover', function(e) {
     	 $(this).closest('tr').popover('hide');
     });
     
@@ -66,12 +66,12 @@ $(function () {
     * When deal is added from contact-detail by selecting 'Add Opportunity' from actions 
     * and then close button of deal is clicked, it should navigate to contact-detail.
     **/
-	$('body').on('click', '#close-deal', function(e) {
+	$('#opportunity-listners').on('click', '#close-deal', function(e) {
     	e.preventDefault();
     	window.history.back();
     });
 	
-	$('body').on('click', '#deal-milestone-regular', function(e) {
+	$('#opportunity-listners').on('click', '#deal-milestone-regular', function(e) {
     	e.preventDefault();
     	eraseCookie('deal-milestone-view');
     	App_Deals.deals();

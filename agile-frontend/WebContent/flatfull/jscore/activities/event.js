@@ -11,14 +11,58 @@
 function initializeEventListners(el)
 {
 
-$("#ical_appointment_links").off('click').on('click', '#subscribe-ical', function(event)
+$("#ical_appointment_links").on('click', '#subscribe-ical', function(event)
 {
 	event.preventDefault();
 	set_api_key();
 });
 
 
-	$('#calendarAgendaButtons').off('click').on('click', '.agendaDayWeekMonth', function()
+/**
+ * When Send Mail is clicked from Ical Modal, it hides the ical modal and shows
+ * the ical-send email modal.
+ */
+$("#icalModal").on('click', '#send-ical-email', function(event)
+{
+	event.preventDefault();
+
+	$("#icalModal").modal('hide');
+
+	// Removes previous modals if exist.
+	if ($('#share-ical-by-email').size() != 0)
+		$('#share-ical-by-email').remove();
+
+	// Gets current user
+	var CurrentuserModel = Backbone.Model.extend({ url : '/core/api/users/current-user', restKey : "domainUser" });
+
+	var currentuserModel = new CurrentuserModel();
+
+	currentuserModel.fetch({ success : function(data)
+	{
+
+		var model = data.toJSON();
+
+		// Insert ical-url into model
+		var icalURL = $('#icalModal').find('#ical-feed').text();
+		model.ical_url = icalURL;
+
+		var emailModal = $(getTemplate("share-ical-by-email", model));
+
+		var description = $(emailModal).find('textarea').val();
+
+		description = description.replace(/<br\/>/g, "\r\n");
+
+		$(emailModal).find('textarea').val(description);
+
+		emailModal.modal('show');
+
+		// Send ical info email
+		send_ical_info_email(emailModal);
+	} });
+});
+
+
+	$('#calendarAgendaButtons').on('click', '.agendaDayWeekMonth', function()
 	{
 		currentView = $(this).attr('id');
 		fullCal.fullCalendar('changeView', currentView);
@@ -35,7 +79,7 @@ $("#ical_appointment_links").off('click').on('click', '#subscribe-ical', functio
 	/**
 	 * Shows the event form fields in activity modal
 	 */
-	$("#add-event-div").off('click').on('click', '.add-event', function(e)
+	$("#add-event-div").on('click', '.add-event', function(e)
 	{
 		e.preventDefault();
 
@@ -54,7 +98,7 @@ $("#ical_appointment_links").off('click').on('click', '#subscribe-ical', functio
 	/**
 	 * shows description field in new event model
 	 */
-	$("#addEventDescription").off('click').on('click', '#add_event_desctiption', function(e)
+	$("#updateActivityModal").on('click', '#add_event_desctiption', function(e)
 	{
 		e.preventDefault();
 		$(".event_discription").removeClass("hide");
@@ -62,12 +106,96 @@ $("#ical_appointment_links").off('click').on('click', '#subscribe-ical', functio
 		return;
 	});
 
-	/**
+
+	$("#addEventDescription").on('click', '#add_event_desctiption', function(e)
+	{
+		e.preventDefault();
+		$(".event_discription").removeClass("hide");
+		$(this).hide();
+		return;
+	});
+
+	
+
+	
+
+	// evnet filters
+
+	$("#calendar-listers").on('click', '.calendar_check', function(e)
+	{
+		showLoadingOnCalendar(true);
+		createRequestUrlBasedOnFilter();
+		var calendar = $(this).val();
+		var ownerids = '';
+		if (calendar == "agile")
+		{
+			if (this.checked == true)
+			{
+				ownerids = getOwnerIdsFromCookie(true);
+				renderFullCalenarEvents(ownerids);
+			}
+
+			else
+			{
+				ownerids = getOwnerIdsFromCookie(true);
+				removeFullCalendarEvents(ownerids);
+			}
+
+		}
+
+		if (calendar == "google")
+			loadFullCalednarOrListView();
+
+	});
+
+	$("#calendar-listers").on('click', '.calendar_user_check', function(e)
+	{
+		showLoadingOnCalendar(true);
+		// checkBothCalWhenNoCalSelected();
+		createRequestUrlBasedOnFilter();
+		// loadFullCalednarOrListView();
+		var user_id = $(this).val();
+		if (this.checked == true)
+		{
+			renderFullCalenarEvents(user_id);
+		}
+		else
+		{
+			removeFullCalendarEvents(user_id);
+		}
+
+		// $('.select_all_users').removeAttr("checked");
+
+	});
+
+	$("#calendar-listers").on('click', '.select_all_users', function(event)
+	{ // on click
+		if (this.checked)
+		{ // check select status
+			$('.calendar_user_check').each(function()
+			{
+				this.checked = true;
+			});
+		}
+		else
+		{
+			$('.calendar_user_check').each(function()
+			{ // loop through each checkbox
+				if ($(this).val() != CURRENT_AGILE_USER.id)
+					this.checked = false;
+			});
+		}
+		createRequestUrlBasedOnFilter();
+		loadFullCalednarOrListView();
+	});
+
+
+/**
 	 * When clicked on update button of event-update-modal, the event will get
 	 * updated by calling save_event function
 	 * 
 	 */
-	$("body").on('click', '#update_event_validate', function(e)
+	$("#updateActivityModal").on('click', '#update_event_validate', function(e)
 	{
 		e.preventDefault();
 		var eventId = $('#updateActivityModal').find("input[type='hidden']").val();
@@ -81,13 +209,22 @@ $("#ical_appointment_links").off('click').on('click', '#subscribe-ical', functio
 
 	});
 
-	/**
-	 * Deletes an event from calendar by calling ajax DELETE request with an
-	 * appropriate url
-	 */
-	$("#event-save-footer")
-			.off('click')
-			.on(
+
+
+$("#event-save-footer").on('click', '#delete_web_event', function(e)
+	{
+		e.preventDefault();
+
+		var event_id = $('#updateActivityForm input[name=id]').val();
+		$("#updateActivityModal").modal('hide');
+		$("#webEventCancelModel").modal('show');
+		$("#cancel_event_title").html("Delete event &#39" + web_event_title + "&#39?");
+		$("#event_id_hidden").html("<input type='hidden' name='event_id' id='event_id' value='" + event_id + "'/>");
+
+	});
+
+
+$("#webEventCancelModel").on(
 					'click',
 					'#event_delete',
 					function(e)
@@ -147,84 +284,96 @@ $("#ical_appointment_links").off('click').on('click', '#subscribe-ical', functio
 
 					});
 
-	// evnet filters
+	
 
-	$("body").on('click', '.calendar_check', function(e)
-	{
-		showLoadingOnCalendar(true);
-		createRequestUrlBasedOnFilter();
-		var calendar = $(this).val();
-		var ownerids = '';
-		if (calendar == "agile")
-		{
-			if (this.checked == true)
-			{
-				ownerids = getOwnerIdsFromCookie(true);
-				renderFullCalenarEvents(ownerids);
-			}
-
-			else
-			{
-				ownerids = getOwnerIdsFromCookie(true);
-				removeFullCalendarEvents(ownerids);
-			}
-
-		}
-
-		if (calendar == "google")
-			loadFullCalednarOrListView();
-
-	});
-
-	$("body").on('click', '.calendar_user_check', function(e)
-	{
-		showLoadingOnCalendar(true);
-		// checkBothCalWhenNoCalSelected();
-		createRequestUrlBasedOnFilter();
-		// loadFullCalednarOrListView();
-		var user_id = $(this).val();
-		if (this.checked == true)
-		{
-			renderFullCalenarEvents(user_id);
-		}
-		else
-		{
-			removeFullCalendarEvents(user_id);
-		}
-
-		// $('.select_all_users').removeAttr("checked");
-
-	});
-
-	$("body").on('click', '.select_all_users', function(event)
-	{ // on click
-		if (this.checked)
-		{ // check select status
-			$('.calendar_user_check').each(function()
-			{
-				this.checked = true;
-			});
-		}
-		else
-		{
-			$('.calendar_user_check').each(function()
-			{ // loop through each checkbox
-				if ($(this).val() != CURRENT_AGILE_USER.id)
-					this.checked = false;
-			});
-		}
-		createRequestUrlBasedOnFilter();
-		loadFullCalednarOrListView();
-	});
+/**
+	 * Highlights the event features (Shows event form and hides task form,
+	 * changing color and font-weight)
+	 */
 	/*
-	 * $("body").on('change', '#event_time', function(event) { // on click if
-	 * ($("#event_time").val() == "future") createCookie("agile_calendar_view",
-	 * "calendar_list_view_future"); else createCookie("agile_calendar_view",
-	 * "calendar_list_view"); createRequestUrlBasedOnFilter();
-	 * loadFullCalednarOrListView(); });
+	 * $("body").on('click', '#event', function(e) { e.preventDefault();
+	 * highlight_event(); });
 	 */
 
+	/**
+	 * when web appointment event is deleted this event will be fired out
+	 */
+	$("#webEventCancelModel")
+			.on(
+					'click',
+					'#cancel_delete',
+					function(e)
+					{
+						e.preventDefault();
+
+						var event_id = $('#webEventCancelForm input[name=event_id]').val();
+
+						var parameter_value = $(this).attr("action_parameter");
+
+						if (parameter_value == "donotdelete")
+						{
+							$("#webEventCancelModel").modal('hide');
+							return;
+						}
+						var cancel_reason = $('#webEventCancelForm textarea[name=appointment_cancel_reason]').val();
+						// variable
+						var save_button = $(this);
+
+						disable_save_button(save_button);
+						$
+								.ajax({
+									url : 'core/api/events/cancelwebevent/?eventid=' + event_id + '&cancelreason=' + cancel_reason + '&action_parameter=' + parameter_value,
+									type : 'DELETE',
+									success : function()
+									{
+										// if event deleted from today events
+										// portlet, we removed that event from
+										// portlet events collection
+										if (App_Portlets.currentPosition && App_Portlets.todayEventsCollection && App_Portlets.todayEventsCollection[parseInt(App_Portlets.currentPosition)] && (Current_Route == undefined || Current_Route == 'dashboard'))
+										{
+											App_Portlets.todayEventsCollection[parseInt(App_Portlets.currentPosition)].collection
+													.remove(App_Portlets.todayEventsCollection[parseInt(App_Portlets.currentPosition)].collection.get(event_id));
+
+											App_Portlets.todayEventsCollection[parseInt(App_Portlets.currentPosition)].render(true);
+
+										}
+										else if (App_Contacts.contactDetailView && Current_Route == "contact/" + App_Contacts.contactDetailView.model.get('id'))
+										{
+											var eventModel = eventsView.collection.get(event_id);
+											eventsView.collection.remove(eventModel);
+											enable_save_button(save_button);
+
+											$("#webEventCancelModel").modal('hide');
+											contact_details_tab.load_events();
+											return;
+										}
+
+										// $('#updateActivityModal').find('span.save-status
+										// img').remove();
+										enable_save_button(save_button);
+
+										$("#webEventCancelModel").modal('hide');
+
+										$('#calendar_event').fullCalendar('removeEvents', event_id);
+									} });
+						if (readCookie("agile_calendar_view"))
+						{
+							var eventModel = eventCollectionView.collection.get(event_id);
+							eventModel.set(eventModel, { remove : true });
+							document.location.reload();
+
+						}
+
+					});
+
+
+
 }
+
+
+
+
+
 
 $(function()
 {
@@ -491,102 +640,10 @@ $(function()
 		});
 	});
 
-	/**
-	 * Highlights the event features (Shows event form and hides task form,
-	 * changing color and font-weight)
-	 */
-	/*
-	 * $("body").on('click', '#event', function(e) { e.preventDefault();
-	 * highlight_event(); });
-	 */
-
-	/**
-	 * when web appointment event is deleted this event will be fired out
-	 */
-	$("body")
-			.on(
-					'click',
-					'#cancel_delete',
-					function(e)
-					{
-						e.preventDefault();
-
-						var event_id = $('#webEventCancelForm input[name=event_id]').val();
-
-						var parameter_value = $(this).attr("action_parameter");
-
-						if (parameter_value == "donotdelete")
-						{
-							$("#webEventCancelModel").modal('hide');
-							return;
-						}
-						var cancel_reason = $('#webEventCancelForm textarea[name=appointment_cancel_reason]').val();
-						// variable
-						var save_button = $(this);
-
-						disable_save_button(save_button);
-						$
-								.ajax({
-									url : 'core/api/events/cancelwebevent/?eventid=' + event_id + '&cancelreason=' + cancel_reason + '&action_parameter=' + parameter_value,
-									type : 'DELETE',
-									success : function()
-									{
-										// if event deleted from today events
-										// portlet, we removed that event from
-										// portlet events collection
-										if (App_Portlets.currentPosition && App_Portlets.todayEventsCollection && App_Portlets.todayEventsCollection[parseInt(App_Portlets.currentPosition)] && (Current_Route == undefined || Current_Route == 'dashboard'))
-										{
-											App_Portlets.todayEventsCollection[parseInt(App_Portlets.currentPosition)].collection
-													.remove(App_Portlets.todayEventsCollection[parseInt(App_Portlets.currentPosition)].collection.get(event_id));
-
-											App_Portlets.todayEventsCollection[parseInt(App_Portlets.currentPosition)].render(true);
-
-										}
-										else if (App_Contacts.contactDetailView && Current_Route == "contact/" + App_Contacts.contactDetailView.model.get('id'))
-										{
-											var eventModel = eventsView.collection.get(event_id);
-											eventsView.collection.remove(eventModel);
-											enable_save_button(save_button);
-
-											$("#webEventCancelModel").modal('hide');
-											contact_details_tab.load_events();
-											return;
-										}
-
-										// $('#updateActivityModal').find('span.save-status
-										// img').remove();
-										enable_save_button(save_button);
-
-										$("#webEventCancelModel").modal('hide');
-
-										$('#calendar_event').fullCalendar('removeEvents', event_id);
-									} });
-						if (readCookie("agile_calendar_view"))
-						{
-							var eventModel = eventCollectionView.collection.get(event_id);
-							eventModel.set(eventModel, { remove : true });
-							document.location.reload();
-
-						}
-
-					});
-
-	/**
-	 * when user deleting web appointment event this will be called
-	 */
-	$('body').on('click', '#delete_web_event', function(e)
-	{
-		e.preventDefault();
-
-		var event_id = $('#updateActivityForm input[name=id]').val();
-		$("#updateActivityModal").modal('hide');
-		$("#webEventCancelModel").modal('show');
-		$("#cancel_event_title").html("Delete event &#39" + web_event_title + "&#39?");
-		$("#event_id_hidden").html("<input type='hidden' name='event_id' id='event_id' value='" + event_id + "'/>");
-
-	});
-
 });
+
+
+
 
 /**
  * Highlights the event portion of activity modal (Shows event form and hides

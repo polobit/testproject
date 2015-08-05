@@ -1,35 +1,6 @@
 $(function()
 {
 
-	/**
-	 * Shows deal popup
-	 */
-	$('body').on('click', '.deals-add', function(e)
-	{
-		e.preventDefault();
-		show_deal();
-	});
-
-	/**
-	 * Validates deal and saves
-	 */
-	$('body').on('click', '#opportunity_validate', function(e)
-	{
-		e.preventDefault();
-
-		// To know updated or added deal form names
-		var modal_id = $(this).closest('.opportunity-modal').attr("id");
-		var form_id = $(this).closest('.opportunity-modal').find('form').attr("id");
-
-		var json = serializeForm(form_id);
-		json["custom_data"] = serialize_custom_fields(form_id);
-
-		console.log(json);
-		if (form_id == "opportunityForm")
-			saveDeal(form_id, modal_id, this, json, false);
-		else
-			saveDeal(form_id, modal_id, this, json, true);
-	});
 
 	/**
 	 * To avoid showing previous errors of the modal.
@@ -98,17 +69,7 @@ $(function()
 
 	});
 
-	/**
-	 * Deal list view edit
-	 */
-	$('body').on('click', '#opportunities-model-list > tr > td:not(":first-child")', function(e){
-		e.preventDefault();
-		$('.popover').remove();
-		var currentdeal = $(this).closest('tr').data();
-		Backbone.history.navigate("deal/" + currentdeal.id, { trigger : true });
-		// updateDeal($(this).closest('tr').data());
-	});
-
+	
 	/**
 	 * Dash board edit
 	 */
@@ -118,106 +79,7 @@ $(function()
 		Backbone.history.navigate("deal/" + currentdeal.id, { trigger : true });
 		// updateDeal($(this).closest('tr').data());
 	});
-    
-	$('body').on('mouseenter', '.milestones > li', function(e)
-	{
-		$(this).find('.deal-options').css("visibility", "visible");
-	});
-
-	$('body').on('mouseleave', '.milestones > li', function(e)
-	{
-		$(this).find('.deal-options').css("visibility", "hidden");
-	});
-
-	/**
-	 * Milestone view deal edit
-	 */
-	$('body').on('click', '.deal-edit', function(e)
-	{
-		e.preventDefault();
-		var id = $(this).closest('.data').attr('id');
-		var milestone = ($(this).closest('ul').attr("milestone")).trim();
-		var currentDeal;
-
-		// Get the current deal model from the collection.
-		var dealPipelineModel = DEALS_LIST_COLLECTION.collection.where({ heading : milestone });
-		if (!dealPipelineModel)
-			return;
-		currentDeal = dealPipelineModel[0].get('dealCollection').get(id).toJSON();
-
-		if (currentDeal)
-			updateDeal(currentDeal, true);
-	});
-
-	/**
-	 * Milestone view deal delete
-	 */
-	$('body').on('click', '.deal-delete', function(e)
-	{
-		e.preventDefault();
-		if (!confirm("Are you sure you want to delete?"))
-			return;
-
-		var id = $(this).closest('.data').attr('id');
-		var milestone = ($(this).closest('ul').attr("milestone")).trim();
-		var id_array = [];
-		var id_json = {};
-
-		// Create array with entity id.
-		id_array.push(id);
-
-		// Set entity id array in to json object with key ids,
-		// where ids are read using form param
-		id_json.ids = JSON.stringify(id_array);
-
-		var that = this;
-		$.ajax({ url : 'core/api/opportunity/' + id, type : 'DELETE', success : function()
-		{
-			// Remove the deal from the collection and remove the UI element.
-			var dealPipelineModel = DEALS_LIST_COLLECTION.collection.where({ heading : milestone });
-			if (!dealPipelineModel)
-				return;
-			dealPipelineModel[0].get('dealCollection').remove(dealPipelineModel[0].get('dealCollection').get(id));
-
-			// Removes deal from list
-			$(that).closest('li').css("display", "none");
-
-			// Shows Milestones Pie
-			pieMilestones();
-
-			// Shows deals chart
-			dealsLineChart();
-		} });
-	});
-
-	/**
-	 * Update the milestones list when the pipeline is changed in the modal.
-	 */
-	$('body').on('change', '#pipeline', function(e)
-	{
-		var el = $(this).closest('form');
-		$('#milestone', el).closest('div').find('.loading-img').show();
-		// Fills milestone select element
-		populateMilestones(el, undefined, $(this).val(), undefined, function(data)
-		{
-			$("#milestone", el).html(data);
-			$("#milestone", el).closest('div').find('.loading-img').hide();
-		});
-	});
-
-	$('body').on('click', '#opportunity_archive', function(e)
-	{
-		e.preventDefault();
-		$('#archived', $('#opportunityUpdateForm')).attr('checked', 'checked');
-		$("#opportunityUpdateModal #opportunity_validate").trigger('click');
-	});
-	$('body').on('click', '#opportunity_unarchive', function(e)
-	{
-		e.preventDefault();
-		$('#archived', $('#opportunityUpdateForm')).removeAttr('checked');
-		$('#opportunityUpdateModal #opportunity_validate').trigger('click');
-	});
-
+  
 	$('body').on('click', '#deal-quick-archive', function(e)
 					{
 						e.preventDefault();
@@ -410,7 +272,7 @@ $(function()
 	/**
 	 * Milestone view deal delete
 	 */
-	$('body').on('click', '.deal-archive', function(e)
+	$('#opportunity-listners').on('click', '.deal-archive', function(e)
 	{
 		e.preventDefault();
 

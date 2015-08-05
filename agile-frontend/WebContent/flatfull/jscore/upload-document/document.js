@@ -83,7 +83,7 @@ function initializeDocumentsListner(el){
 	/**
 	 * To validate the document add or edit forms
 	 */
-	$('body').on('click', '#document_validate, #document_update_validate', function(e){
+	$('#uploadDocumentUpdateModal,#uploadDocumentModal').on('click', '#document_validate, #document_update_validate', function(e){
  		e.preventDefault();
 
  		var modal_id = $(this).closest('.upload-document-modal').attr("id");

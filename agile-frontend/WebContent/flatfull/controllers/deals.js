@@ -20,7 +20,7 @@ var DealsRouter = Backbone.Router.extend({
 		pipeline_id = 0;
 		if (readCookie("agile_deal_track"))
 			pipeline_id = readCookie("agile_deal_track");
-
+		$('#content').html("<div id='opportunity-listners'>&nbsp;</div>");
 		// Depending on cookie shows list or milestone view
 		if (!readCookie("agile_deal_view"))
 		{
@@ -29,18 +29,18 @@ var DealsRouter = Backbone.Router.extend({
 			if (pipeline_id == 1)
 				pipeline_id = 0;
 
-			$('#content').html(getTemplate("new-opportunity-header", {}));
+			$('#opportunity-listners').html(getTemplate("new-opportunity-header", {}));
 			// Add row-fluid if user prefs are set to fluid
 			if (IS_FLUID)
 			{
-				$('#content').find('div.row').removeClass('row').addClass('row');
+				$('#opportunity-listners').find('div.row').removeClass('row').addClass('row');
 			}
 			pipeline_count = 0;
 			deal_fetching = false;
 			DEALS_LIST_COLLECTION = null;
 			setupDealsTracksList();
 			setupDealFilters();
-			initializeDealsListners();
+			initializeDealListners();
 		}
 		else
 		{
@@ -69,7 +69,7 @@ var DealsRouter = Backbone.Router.extend({
 					deal_bulk_actions.init_dom(el);
 					setupDealsTracksList(cel);
 					setupDealFilters(cel);
-					initializeDealsListners(el);
+					initializeDealListners(el);
 				}, appendItemCallback : function(el)
 				{
 					appendCustomfields(el);
@@ -80,7 +80,7 @@ var DealsRouter = Backbone.Router.extend({
 				} });
 			this.opportunityCollectionView.collection.fetch();
 
-			$('#content').html(this.opportunityCollectionView.render().el);
+			$('#opportunity-listners').html(this.opportunityCollectionView.render().el);
 		}
 
 		$(".active").removeClass("active");
