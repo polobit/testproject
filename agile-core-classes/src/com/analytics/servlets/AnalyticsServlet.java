@@ -94,7 +94,7 @@ public class AnalyticsServlet extends HttpServlet
 	    return;
 	
 	System.out.println("client ip is " + ip);
-	System.out.println("blocked ips are " + APIKey.getBlockedIps());
+	System.out.println("blocked ips are " + APIKey.getAPIKeyRelatedToDomain(domain).blocked_ips);
 	System.out.println("is blocked ip " + isBlockedIp(ip));
 	
 	if(isBlockedIp(ip))
