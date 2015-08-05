@@ -62,6 +62,7 @@ public class AnalyticsServlet extends HttpServlet
 
 	// Client IP Address
 	String ip = getClientIP(req);
+	System.out.println("Client IP is " + ip);
 
 	// For New Session
 	String isNew = null;
@@ -93,11 +94,7 @@ public class AnalyticsServlet extends HttpServlet
 	if (StringUtils.isBlank(domain))
 	    return;
 	
-	System.out.println("client ip is " + ip);
-	System.out.println("blocked ips are " + APIKey.getAPIKeyRelatedToDomain(domain).blocked_ips);
-	System.out.println("is blocked ip " + isBlockedIp(ip));
-	
-	if(isBlockedIp(ip))
+	if(isBlockedIp(ip, domain))
 	    return;
 	    
 	// Insert into table
@@ -161,11 +158,11 @@ public class AnalyticsServlet extends HttpServlet
     /**
      * Function to check if IP Address is Blocked
      */
-    public static Boolean isBlockedIp(String clientIp)
+    public static Boolean isBlockedIp(String clientIp, String domain)
     {
 	try
 	{
-	    String[] blockedIpsArr = APIKey.getBlockedIps().split(",");
+	    String[] blockedIpsArr = APIKey.getAPIKeyRelatedToDomain(domain).blocked_ips.split(",");
 	    for (int i = 0; i < blockedIpsArr.length; i++)
 	    {
 		if (ipMatch(clientIp, blockedIpsArr[i].trim()))
