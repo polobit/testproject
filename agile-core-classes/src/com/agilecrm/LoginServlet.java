@@ -188,7 +188,7 @@ public class LoginServlet extends HttpServlet
 
 		if (domainUser.is_disabled)
 			throw new Exception(
-					"Sorry, your account has been disabled. Please contact your admin to reenable your access.");
+					"Sorry, your account has been disabled. Please contact your admin to reenable your access");
 
 		// Check if user is registered by OpenID, if yes then throw exception
 		// notifying him of OpenID registeration

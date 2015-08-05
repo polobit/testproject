@@ -68,7 +68,7 @@ if(cookieJSON.has("userAgent"))
     JSONObject user_details = cookieJSON.getJSONObject("userAgent");
     cookieJSON.put("user_details", user_details);
     agent = user_details.get("OSName") + " - " +user_details.get("browser_name") ;
-    error="We had to log you out as you seem to have logged in from some other browser <span style='font-size:12px'>"+ agent+ "</span>";
+    error="We had to log you out as you seem to have logged in from some other browser <span style='font-size:12px'>("+ agent+ ")</span>";
 }
 }
 
