@@ -2484,7 +2484,14 @@ $('.minical-portlet-event').live('click',function(e){
 		//$('#'+id,$('#calendar_container')).trigger('click');
 		var model = events_array[0];
 		App_Portlets.currentEventObj = model;
-		if(!model)
+		var eventsURL = '/core/api/events/'+events_array[0].id;
+		var event;
+		$.getJSON(eventsURL, function(doc)
+		{
+			event=doc;
+			var start = getDate(event.start);
+			var end = getDate(event.end);
+			if(!model)
 			return;
 		if(model.color == "#f05050" || model.color == "red")
 			model.color = "red";
@@ -2498,17 +2505,15 @@ $('.minical-portlet-event').live('click',function(e){
 		// Set time for update Event
 		$('#update-event-time-1')
 				.val(
-						(new Date(model.start.getTime()).getHours() < 10 ? "0" : "") + new Date(model.start.getTime()).getHours() + ":" + (new Date(
-								model.start.getTime()).getMinutes() < 10 ? "0" : "") + new Date(model.start.getTime()).getMinutes());
+						(start.getHours() < 10 ? "0" : "") + start.getHours() + ":" + (start.getMinutes() < 10 ? "0" : "") + start.getMinutes());
 		$('#update-event-time-2')
 				.val(
-						(new Date(model.end.getTime()).getHours() < 10 ? "0" : "") + new Date(model.end.getTime()).getHours() + ":" + (new Date(
-								model.end.getTime()).getMinutes() < 10 ? "0" : "") + new Date(model.end.getTime()).getMinutes());
+						(end.getHours() < 10 ? "0" : "") + end.getHours() + ":" + (end.getMinutes() < 10 ? "0" : "") + end.getMinutes());
 
 		// Set date for update Event
-		var dateFormat = CURRENT_USER_PREFS.dateFormat;
-		$("#update-event-date-1").val((new Date(model.start.getTime())).format(dateFormat));
-		$("#update-event-date-2").val((new Date(model.end.getTime())).format(dateFormat));
+		//var dateFormat = CURRENT_USER_PREFS.dateFormat;
+		$("#update-event-date-1").val(getFormattedDate(event.start));
+		$("#update-event-date-2").val(getFormattedDate(event.end));
 
 		// hide end date & time for all day events
 		if (model.allDay)
@@ -2560,5 +2565,7 @@ $('.minical-portlet-event').live('click',function(e){
 		$("#updateActivityModal").modal('show');
 		$('#'+id,$('#calendar_container')).trigger('click');
 		return false;
+	
+		});
 	}
 });
