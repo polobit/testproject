@@ -1,32 +1,53 @@
-/**
- Creates a new marker and info window.
- Applies a click listener on marker.
-*/   
-function gmap_add_marker(Locations){
-	
-	google.maps.visualRefresh = true;
-	
-	var mapProp = {
-		center:new google.maps.LatLng(39.0000, 22.0000),
-		zoom:2,
-		mapTypeId:google.maps.MapTypeId.ROADMAP
-	};
-	
-	/**Creating a new instance everytime the date were modified ,this is required to reresh the markers and clusters*/
-	window.map=new google.maps.Map(document.getElementById("google_map"),mapProp);
-	
-	var markerCluster;
-	/**Single instance will be used for all the marker infowindow's
-*/	var infowindow = new google.maps.InfoWindow();
-	
-	 var myLatlng = [];
-	 var marker = [];
-	 /**Intializing spiderifier */
-	 var oms = new OverlappingMarkerSpiderfier(map, {keepSpiderfied:true,nearbyDistance:40,legWeight:0});
-	 
+/**Global variable holds the time interval to make rest call */
+var INTERVAL=5000;
+/** Global variable holds the latitudes and longitudes,used by the marker to plot a location */
+var myLatlng = [];
+
+/**Global variable to hold markers */
+var marker = [];
+
+/** It holds the unique sid's : just to have a unique visits as mysql query doesnot group sid's*/
+var markerStore={};
+
+var offSet=0; 
+var limit=200;
+
+/** Global variable to hold REST API call url*/
+var url;
+/**Global variable to hold clusterer object */
+var markerCluster;
+/**Single instance will be used for all the marker infowindow's
+*/
+var infowindow;
+
+
+ /**spiderifier object */
+var oms;
+ 
+ 
+/** Function to retrieve visitors data with offset: called on every 5 seconds */
+function getMarkers() {
+		$.getJSON( url+'&cursor='+offSet+'&page_size='+limit, function( res ) {
+			
+			if(res != ""){
+				/** Call a function to plot the markers with recieved marker data*/
+				plotMarkers(res);
+				offSet=offSet+limit;
+		        setTimeout(getMarkers,INTERVAL);
+			}
+			
+		});
+		
+	}
+
+/** Function which takes response from server and create a marker,infowindow adds it to Clusterer and Spiderifier */
+function plotMarkers(Locations){
 
 	                  for (var i=0;i < Locations.length;i++)
 	                  {   
+	                	  
+	                	  /**Check if we have duplicate markers : markers with same sid is pretend to be a duplicate marker here */
+	                	  if(! markerStore.hasOwnProperty(Locations[i].sid)) {
 	                	    var User_Location = (Locations[i].city_lat_long).split(",");
 	                        myLatlng[i] = new google.maps.LatLng(User_Location[0],User_Location[1]);
 	                        var parsedString = Locations[i].parsedUserAgent.replace(/\\/g, '');
@@ -79,11 +100,14 @@ function gmap_add_marker(Locations){
 	                         marker[i] = new google.maps.Marker({
 	                              position: myLatlng[i],
 	                              map: map,
+	                              draggable:false,
 	                              icon:icon,
 	                              content:strVar
 	                          });
 	                         
-	                          oms.addMarker(marker[i]);
+	                         markerStore[Locations[i].sid] = marker[i];
+	                         
+	                         oms.addMarker(marker[i]);
 	                          
 	                          /**Marker click event*/ 
 	                          google.maps.event.addListener(marker[i], 'click', function() {
@@ -92,41 +116,54 @@ function gmap_add_marker(Locations){
 	                        	});
 
 	                  }
-	                  /**Initializing marker clusterer*/ 
-	                  markerCluster = new MarkerClusterer(map, marker, {maxZoom:15});
-	                  
-	                  /**Listener to show the spiderify markers on clicking the clusterer count directly*/ 
-	                  google.maps.event.addListener(markerCluster, 'click', function(cluster) {
-
-	                      var markers = cluster.getMarkers();
-
-	                      if(prepareMarkers(markers)){
-	                           //to wait for map update
-	                          setTimeout(function(){
-	                              google.maps.event.trigger(markers[markers.length-1], 'click');
-	                          },1000)
-	                      }
-	                      return true;
-	                  });
-	                  
-
-	                  function prepareMarkers(markers){
-	                  var cont=0;
-	                  var latitudMaster=markers[0].getPosition().lat();
-	                  var longitudMaster=markers[0].getPosition().lng();
-	                  for(var i=0;i<markers.length;i++){
-	                      if(markers[i].getPosition().lat() === latitudMaster & markers[i].getPosition().lng() === longitudMaster ){
-	                          cont++;
-	                      }else{
-	                          return false;
-	                      }
 	                  }
-	                  if(cont==markers.length){
-	                      return true;
-	                  }else if(cont<markers.length){
-	                      return false;
+	                  
+	                  /**If the marker cluster is not  yet initialized then do it once with existing markers */
+	                  if(markerCluster == undefined){
+	                	  
+	                	  
+	                      /**Initializing marker clusterer*/ 
+	  	      		    markerCluster = new MarkerClusterer(map,marker,{maxZoom:15});
+	  	      		    
+	  	      		    
+	  	      		    /**Listener to show the spiderify markers on clicking the clusterer count directly*/ 
+	  	      		    google.maps.event.addListener(markerCluster, 'click', function(cluster) {
+
+	  	      		        var markers = cluster.getMarkers();
+
+	  	      		        if(prepareMarkers(markers)){
+	  	      		             //to wait for map update
+	  	      		            setTimeout(function(){
+	  	      		                google.maps.event.trigger(markers[markers.length-1], 'click');
+	  	      		            },1000)
+	  	      		        }
+	  	      		        return true;
+	  	      		    });
+	  	      		    
+
+	  	      		    function prepareMarkers(markers){
+	  	      		    var cont=0;
+	  	      		    var latitudMaster=markers[0].getPosition().lat();
+	  	      		    var longitudMaster=markers[0].getPosition().lng();
+	  	      		    for(var i=0;i<markers.length;i++){
+	  	      		        if(markers[i].getPosition().lat() === latitudMaster & markers[i].getPosition().lng() === longitudMaster ){
+	  	      		            cont++;
+	  	      		        }else{
+	  	      		            return false;
+	  	      		        }
+	  	      		    }
+	  	      		    if(cont==markers.length){
+	  	      		        return true;
+	  	      		    }else if(cont<markers.length){
+	  	      		        return false;
+	  	      		    }
+	  	      		}
+	                	  
+	                  }else{
+	                	  markerCluster.addMarkers(marker,false);
+	                	  
 	                  }
-	              }
+	              
 	                  
 	                  /**Listener to close the infowindow if opened on clicking a map*/ 
 	                  google.maps.event.addListener(map, 'click', function(){
@@ -134,6 +171,54 @@ function gmap_add_marker(Locations){
 	                		  infowindow.close();
 	                	  }
 	                  });
+	
+	
+	
+}
+
+/**
+ This method is being called from gmap-date-sort.js as soon as map object created
+*/   
+function gmap_add_marker(DateRangeUrl){
+	
+	
+	google.maps.visualRefresh = true;
+	
+	var mapProp = {
+		center:new google.maps.LatLng(39.0000, 22.0000),
+		zoom:2,
+		mapTypeId:google.maps.MapTypeId.ROADMAP
+	};
+	
+	
+	/**Creating a new instance everytime the date were modified ,this is required to reresh the markers and clusters*/
+	window.map=new google.maps.Map(document.getElementById("google_map"),mapProp);
+	map.setOptions({ minZoom: 2});
+	
+	/**Reset all the global variables */
+	offSet=0;
+	myLatlng = [];
+	marker = [];
+	markerStore={};
+	markerCluster=undefined;
+	infowindow=undefined;
+	oms=undefined;
+	
+	
+	
+	/**Single instance will be used for all the marker infowindow's
+	*/
+	infowindow = new google.maps.InfoWindow({maxWidth: 230});
+	
+    /** Spiderify intialization*/
+	oms= new OverlappingMarkerSpiderfier(map, {keepSpiderfied:true,nearbyDistance:40,legWeight:0});
+	url=DateRangeUrl;
+	
+	
+	/**Initiate the Rest call to get the data from server */
+	getMarkers(url);
+	
+	
 }
 
 /**It just formats the first letter of a string with capital letter ,Only used here for city.*/ 
@@ -229,7 +314,7 @@ function timeSince(dateStr) {
 		 var re = new RegExp(find, 'g');
 		 dateStr = dateStr.replace(re, '/');
 		 dateStr = dateStr.match(/[^:]+(\:[^:]+)?/g);
-		 date=new Date(dateStr[0]);
+		 date = new Date(dateStr[0]+' UTC');
 		}
 		catch (err)
 		{

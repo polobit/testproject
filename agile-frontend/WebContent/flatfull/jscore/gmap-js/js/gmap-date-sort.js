@@ -50,33 +50,34 @@ function gmap_search_by_date(DateRange){
 	// Add Timezone offset
 	var d = new Date();
 	options += ("&time_zone=" + d.getTimezoneOffset());
-
-	var DateRangeUrl = "core/api/gmap/daterange?user_domain=" + encodeURIComponent(User_Domain) + options;
+	//var DateRangeUrl = "core/api/gmap/daterange?user_domain=" + encodeURIComponent(User_Domain) + options;
 	var visitorBySessionUrl="core/api/gmap/daterangebysession?user_domain=" + encodeURIComponent(User_Domain) + options;
+	var DateRangeUrl="core/api/gmap/daterangebysession?user_domain=" + encodeURIComponent(User_Domain) + options;
 	
-	gmap_create_table_view(visitorBySessionUrl);
-	
-	$("#map-tab-waiting").fadeIn();
-	$.getJSON( DateRangeUrl, function( Response ) {
-	    
-		$("#map-tab-waiting").fadeOut();
+	//Check which tab is active and make a respective call
+	if($('ul.nav-tabs li.active').attr('id') == 'gmap-map-tab'){
 		map.setZoom(2);
-		if(Response != null) {
-			for(var Key in Response){
-				Response[Key].z_index = parseInt(Key);
-			}
-			try{
-			gmap_add_marker(Response);
-			}
-			catch(err){
-		      alert("Error "+err)
-			}
-			
-		}
+		$("#map-tab-waiting").fadeOut();
+		setTimeout(function(){
+			gmap_add_marker(DateRangeUrl);
+        },1000)
+        
+	}else{
+		gmap_create_table_view(visitorBySessionUrl);
+	}
+	
+	$("li#gmap-table-tab").off().on("click", function(){
 		
-		else {
-			console.log("No recent visitors available for this date range.")
+		if(! $(this).closest('ul').parent('div').find('div.tab-content').find('div#gmap-table-view').find('tbody').length){
+			gmap_create_table_view(visitorBySessionUrl);
 		}
-	});
+	     
+	  });
+	
+
+	
+	
+	
+
 }
 
