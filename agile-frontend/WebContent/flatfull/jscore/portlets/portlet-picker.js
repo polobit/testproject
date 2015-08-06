@@ -1044,14 +1044,14 @@ function set_p_portlets(base_model){
 				if(emailsSentCount==0){
 					that.find('#emails-sent').css('width','100%').css('height','100%');
 					that.find('#emails-sent').html('<div class="portlet-error-message">No Email activity</div>');
-					that.find('#emails-opened').css('display','none');
-					that.find('#emails-clicked').css('display','none');
-					that.find('#emails-unsubscribed').css('display','none');
 				}
 				else{
 					var selector1=that.find('#emails-opened');
 					var selector2=that.find('#emails-clicked');
 					var selector3=that.find('#emails-unsubscribed');
+					selector1.css('display','block');
+					selector2.css('display','block');
+					selector3.css('display','block');
 					that.find('#emails-sent').addClass('pull-left p-xs b-b b-r b-light w-half overflow-hidden');
 					selector1.addClass('pull-left p-xs b-b b-light w-half');
 					selector2.addClass('pull-left p-xs b-r b-light w-half');
@@ -2171,6 +2171,7 @@ function showUserName(obj){
 function campstatsPieChart(selector,data,count1,count2){
 	head.js(LIB_PATH + 'lib/flot/highcharts-3.js',LIB_PATH + 'lib/flot/no-data-to-display.js', function(){
 		var color;
+		//var innersize='100%';
 		var dis=0;
 		if(data[1][0]=='Emails Opened')
 			color='rgb(250, 215, 51)';
@@ -2224,7 +2225,8 @@ function campstatsPieChart(selector,data,count1,count2){
 						pos_left=chart.chartWidth/2.00;
 						
 					}
-                        chart.series[0].data[1].dataLabel.attr({
+                        
+						chart.series[0].data[1].dataLabel.attr({
                             x:pos_left,
 							y:pos_top
                         });
@@ -2276,6 +2278,7 @@ function campstatsPieChart(selector,data,count1,count2){
 	            },
 	            pie: {
 					borderWidth: 0,
+					size : '100%',
 					innerSize: '100%',
 				},
 	                showInLegend: true,

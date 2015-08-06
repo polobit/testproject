@@ -1624,14 +1624,14 @@ $('.portlet-settings-save-modal').live('click', function(e){
 				if(emailsSentCount==0){
 					that.find('#emails-sent').css('width','100%').css('height','100%');
 					that.find('#emails-sent').html('<div class="portlet-error-message">No Email activity</div>');
-					that.find('#emails-opened').css('display','none');
-					that.find('#emails-clicked').css('display','none');
-					that.find('#emails-unsubscribed').css('display','none');
 				}
 				else{
 					var selector1=that.find('#emails-opened');
 					var selector2=that.find('#emails-clicked');
 					var selector3=that.find('#emails-unsubscribed');
+					selector1.css('display','block');
+					selector2.css('display','block');
+					selector3.css('display','block');
 					that.find('#emails-sent').addClass('pull-left p-xs b-b b-r b-light w-half overflow-hidden');
 					selector1.addClass('pull-left p-xs b-b b-light w-half');
 					selector2.addClass('pull-left p-xs b-r b-light w-half');
