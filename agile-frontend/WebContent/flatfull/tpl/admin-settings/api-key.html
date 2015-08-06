@@ -116,6 +116,9 @@
    						</tbody>
    					</table>
    					<div class="show_field p-l p-t p-b">
+   			<div class="m-b-sm">
+   				<small><b>API & Analytics</b> will be enabled on above domains. To allow all domains wildcard <b>*</b> can be used. To enable on domain eg: <b>https://www.example.com</b> and its subdomain eg: <b>https://test.example.com</b> you can add the hostname i.e <b>example.com</b>. To allow only on a particular subdomain eg: <b>https://test.example.com</b> please add as <b>test.example.com</b> or <b>*.example.com</b>.</small>
+   			</div>
    						<input type="text" id="new_allowed_domain" name="new_allowed_domain" style="width:250px;display:inline-block;" class="form-control input-sm" placeholder="New Allowed Domain">
    						<a href="#analytics-code" class="btn btn-sm btn-primary" id="update_allowed_domains">Add</a>
    					</div>
@@ -141,7 +144,10 @@
    						</tbody>
    					</table>
    					<div class="show_field p-l p-t p-b">
-						<input type="text" id="new_blocked_ip" name="new_blocked_ip" style="width:250px;display:inline-block;" class="form-control input-sm" placeholder="New IP Filter">
+   			<div class="m-b-sm">
+   				<small><b>Tracking</b> will be disabled on above IP Filters. To disable tracking on a particular IP Address, add as eg: <i>192.168.1.1</i>. Range of IP addresses can be specified using wildcard <b>*</b> as <i>192.168.1.*</i> | <i>192.168.*.*</i> | <i>192.*.*.*</i>. To block tracking for all IP Addresses a Filter can be added as <i>*.*.*.*</i>.</small>
+   			</div>
+   			<input type="text" id="new_blocked_ip" name="new_blocked_ip" style="width:250px;display:inline-block;" class="form-control input-sm" placeholder="New IP Address">
    						<a href="#blocked-ips" class="btn btn-sm btn-primary" id="update_blocked_ips">Add</a>
    					</div>
                            </div>
