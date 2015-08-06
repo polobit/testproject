@@ -5,8 +5,12 @@
 	 * For showing existing documents and Add new doc option
 	 * to attach in send-email form 
 	 */
-    $(function(){
-	$('body').on('click', '.add-attachment-select', function(e){
+	function sendEmailAttachmentListeners(listener_container_id){
+     	
+	if(!listener_container_id)
+		  listener_container_id = "send-email-listener-container";
+
+	$('#' + listener_container_id).on('click', '.add-attachment-select', function(e){
 		e.preventDefault();
 		var el = $(this).closest("div");
 		$(this).css("display", "none");
@@ -22,7 +26,7 @@
 	/**
 	 * For adding existing document to current contact
 	 */
-	$('body').on('click', '.add-attachment-confirm', function(e){
+	$('#' + listener_container_id).on('click', '.add-attachment-confirm', function(e){
 		e.preventDefault();		
 		var network_type = $('#attachment-select').find(":selected").attr('network_type');
 		if(typeof network_type !=='undefined' && network_type.toUpperCase() === 'GOOGLE')
@@ -73,7 +77,7 @@
 	/**
 	 * To cancel the add attachment request in send-email form
 	 */
-	$('body').on('click', '.add-attachment-cancel', function(e){
+	$('#' + listener_container_id).on('click', '.add-attachment-cancel', function(e){
 		e.preventDefault();
 		var blobKey = $('#emailForm').find('#attachment_id').attr('name');
 		if(typeof blobKey !== typeof undefined)
@@ -95,7 +99,7 @@
     	$('#emailForm').find('#eattachment_key').attr("value","value");
 	});
 	
-    });
+	}
     
     function deleteBlob(blob_key)
     {

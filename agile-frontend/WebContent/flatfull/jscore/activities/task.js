@@ -8,7 +8,6 @@
  */
 
 $( document ).ready(function() {
-	alert("hello");
 	/**
 	 * Makes the pending task as completed by calling complete_task function
 	 */

@@ -116,7 +116,10 @@ function submitLhsFilter()
 	App_Contacts.contacts(undefined, undefined, undefined, true);
 }
 
-$('body').on('click', 'a.filter-multiple-add-lhs', function(e)
+
+function contactFiltersListeners(){
+
+$('#conatcts-listeners-conatainer').on('click', 'a.filter-multiple-add-lhs', function(e)
 {
 	e.preventDefault();
 	var fieldName = $(this).data('name');
@@ -132,7 +135,7 @@ $('body').on('click', 'a.filter-multiple-add-lhs', function(e)
 });
 
 // Filter Contacts- Remove Multiple
-$('body').on('click', 'i.filter-tags-multiple-remove-lhs', function(e)
+$('#conatcts-listeners-conatainer').on('click', 'i.filter-tags-multiple-remove-lhs', function(e)
 {
 	var container = $(this).parents('.lhs-contact-filter-row');
 	$(container).find('#RHS').children().val("").trigger('blur').trigger('change');
@@ -140,7 +143,7 @@ $('body').on('click', 'i.filter-tags-multiple-remove-lhs', function(e)
 });
 
 // Filter Contacts- Remove Multiple
-$('body').on('click', 'a.clear-filter-condition-lhs', function(e)
+$('#conatcts-listeners-conatainer').on('click', 'a.clear-filter-condition-lhs', function(e)
 {
 	$(this).addClass('hide');
 	var container = $(this).parents('.lhs-row-filter');
@@ -153,7 +156,7 @@ $('body').on('click', 'a.clear-filter-condition-lhs', function(e)
 	submitLhsFilter();
 });
 
-$('body').on('click', '#clear-lhs-contact-filters', function(e)
+$('#conatcts-listeners-conatainer').on('click', '#clear-lhs-contact-filters', function(e)
 {
 	e.preventDefault();
 	eraseData('dynamic_contact_filter');
@@ -161,7 +164,7 @@ $('body').on('click', '#clear-lhs-contact-filters', function(e)
 	App_Contacts.contacts();
 });
 
-$('body').on('click', '#clear-lhs-company-filters', function(e)
+$('#conatcts-listeners-conatainer').on('click', '#clear-lhs-company-filters', function(e)
 {
 	e.preventDefault();
 	eraseData('dynamic_company_filter');
@@ -169,7 +172,7 @@ $('body').on('click', '#clear-lhs-company-filters', function(e)
 	App_Contacts.contacts();
 });
 
-$('body').on('click', '#lhs-filters-header', function(e)
+$('#conatcts-listeners-conatainer').on('click', '#lhs-filters-header', function(e)
 {
 	e.preventDefault();
 	$(this).find('i').toggleClass('fa-plus-square-o').toggleClass('fa-minus-square-o');
@@ -177,7 +180,7 @@ $('body').on('click', '#lhs-filters-header', function(e)
 	$(this).next().find('.lhs-contact-filter-row:visible').find('#RHS').filter(visibleFilter).find(':not(input.date)').focus();
 });
 
-$('body').on('click', '#lhs-contact-filter-form select[name="CONDITION"]', function(e)
+$('#conatcts-listeners-conatainer').on('click', '#lhs-contact-filter-form select[name="CONDITION"]', function(e)
 {
 	var selected = $(this).val();
 	$(this).parent().find('div.condition_container').addClass('hide');
@@ -197,7 +200,7 @@ $('body').on('click', '#lhs-contact-filter-form select[name="CONDITION"]', funct
 	}
 });
 
-$('body').on('blur keyup', '#lhs-contact-filter-form #RHS input', function(e)
+$('#conatcts-listeners-conatainer').on('blur keyup', '#lhs-contact-filter-form #RHS input', function(e)
 {
 	if (e.type == 'focusout' || e.keyCode == '13')
 	{
@@ -232,7 +235,7 @@ $('body').on('blur keyup', '#lhs-contact-filter-form #RHS input', function(e)
 	}
 });
 
-$('body').on('change', '#lhs-contact-filter-form #RHS select', function(e)
+$('#conatcts-listeners-conatainer').on('change', '#lhs-contact-filter-form #RHS select', function(e)
 {
 	if ($(this).parent().next().attr("id") == "RHS_NEW")
 	{
@@ -269,7 +272,7 @@ $('body').on('change', '#lhs-contact-filter-form #RHS select', function(e)
 	$(this).blur();
 });
 
-$('body').on('change', '#lhs-contact-filter-form #RHS_NEW select', function(e)
+$('#conatcts-listeners-conatainer').on('change', '#lhs-contact-filter-form #RHS_NEW select', function(e)
 {
 	if ($(this).parent().prev().attr("id") == "RHS")
 	{
@@ -289,7 +292,7 @@ $('body').on('change', '#lhs-contact-filter-form #RHS_NEW select', function(e)
 	$(this).blur();
 });
 
-$('body').on('blur keyup', '#lhs-contact-filter-form #RHS_NEW input', function(e)
+$('#conatcts-listeners-conatainer').on('blur keyup', '#lhs-contact-filter-form #RHS_NEW input', function(e)
 {
 	if (e.type == 'focusout' || e.keyCode == '13')
 	{
@@ -321,6 +324,9 @@ $('body').on('blur keyup', '#lhs-contact-filter-form #RHS_NEW input', function(e
 		}
 	}
 });
+
+}
+
 /**
  * Added tags typeahead on fields
  * 

@@ -38,19 +38,19 @@ function loadMiscScriptsWithTimeOut() {
 
 function loadMiscScripts() {
 
-	load_urls_on_ajax_stop('lib/user-voice.js');
+	// load_urls_on_ajax_stop('lib/user-voice.js');
 
 	// load_clickdesk_code();
 
 	// Clicky code
-	load_urls_on_ajax_stop('//static.getclicky.com/js', function() {
+	/*load_urls_on_ajax_stop('//static.getclicky.com/js', function() {
 
 		try {
 			clicky.init(100729733);
 		} catch (e) {
 
 		}
-	});
+	});*/
 
 	/**
 	 * Sets timeout for registering notifications.Waits for 2secs after page
@@ -60,7 +60,7 @@ function loadMiscScripts() {
 	
 	
 	
-}
+} 
 
 /**
  * Clickdesk Widget

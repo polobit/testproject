@@ -51,8 +51,8 @@ function initializeDealDetailsListners(el)
 	 * Fetches all the docs related to the deal and shows the docs collection as
 	 * a table in its tab-content, when "Documents" tab is clicked.
 	 */
-	$('body').on('click', '#deal-details-tab a[href="#dealdocs"]', function(e)
-	#deal-detail-page		e.preventDefault();
+	$('#deal-detail-page').on('click', '#deal-details-tab a[href="#dealdocs"]', function(e)
+	{		e.preventDefault();
 		save_deal_tab_position_in_cookie("dealdocs");
 		deal_details_tab.load_deal_docs();
 	});
