@@ -109,6 +109,11 @@
                         </div>
                         <div class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo" id="allowed-domains">
                            <div class="panel-body p-n" id="api-accordion">
+   {{#unless allowed_domains}}
+   			<div class="p-t-sm p-l-sm p-r-sm p-b-xs">
+   				<div><b>API & Analytics</b> will be enabled on following domains. To allow all domains wildcard character <b>"*"</b> can be used.</div>
+   			</div>
+   {{/unless}}
    					<table class="table table-hover custom-fields-table bg-white m-b-none">
    						<colgroup><col width="50%"><col width="4%"></colgroup>
    						<tbody id="allowed_domains_list">
@@ -116,9 +121,6 @@
    						</tbody>
    					</table>
    					<div class="show_field p-l p-t p-b">
-   			<div class="m-b-sm">
-   				<small><b>API & Analytics</b> will be enabled on above domains. To allow all domains wildcard <b>*</b> can be used. To enable on domain eg: <b>https://www.example.com</b> and its subdomain eg: <b>https://test.example.com</b> you can add the hostname i.e <b>example.com</b>. To allow only on a particular subdomain eg: <b>https://test.example.com</b> please add as <b>test.example.com</b> or <b>*.example.com</b>.</small>
-   			</div>
    						<input type="text" id="new_allowed_domain" name="new_allowed_domain" style="width:250px;display:inline-block;" class="form-control input-sm" placeholder="New Allowed Domain">
    						<a href="#analytics-code" class="btn btn-sm btn-primary" id="update_allowed_domains">Add</a>
    					</div>
@@ -137,6 +139,12 @@
                         </div>
                         <div class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo" id="ip-filters">
                            <div class="panel-body p-n" id="api-accordion">
+   {{#unless blocked_ips}}
+   			<div class="p-t-sm p-l-sm p-r-sm p-b-xs">
+   				<div>By creating IP filters you can disable the <b>tracking</b> system.</div>
+   			</div>
+   {{/unless}}
+   
    					<table class="table table-hover custom-fields-table bg-white m-b-none">
    						<colgroup><col width="50%"><col width="4%"></colgroup>
    						<tbody id="blocked_ips_list">
@@ -144,9 +152,6 @@
    						</tbody>
    					</table>
    					<div class="show_field p-l p-t p-b">
-   			<div class="m-b-sm">
-   				<small><b>Tracking</b> will be disabled on above IP Filters. To disable tracking on a particular IP Address, add as eg: <i>192.168.1.1</i>. Range of IP addresses can be specified using wildcard <b>*</b> as <i>192.168.1.*</i> | <i>192.168.*.*</i> | <i>192.*.*.*</i>. To block tracking for all IP Addresses a Filter can be added as <i>*.*.*.*</i>.</small>
-   			</div>
    			<input type="text" id="new_blocked_ip" name="new_blocked_ip" style="width:250px;display:inline-block;" class="form-control input-sm" placeholder="New IP Address">
    						<a href="#blocked-ips" class="btn btn-sm btn-primary" id="update_blocked_ips">Add</a>
    					</div>
@@ -175,6 +180,19 @@
                <li>.NET - <a href="https://github.com/agilecrm/c-sharp-api" target="_blank" rel="nofollow" title="Link: https://github.com/agilecrm/c-sharp-api">GitHub</a></li>
             </ul>
             We will be publishing API for other languages very soon.
+   
+   <h4 class="m-t-md">
+   	Allowed Domains
+   </h4>
+   <p>To enable on domain eg: <b>https://www.example.com</b> and its subdomain eg: <b>https://test.example.com</b> you can add the hostname i.e <b>example.com</b>.</p>
+   <p>To allow only on a particular subdomain eg: <b>https://test.example.com</b> please add as <b>test.example.com</b> or <b>*.example.com</b>.</p>
+   
+   <h4 class="m-t-md">
+               IP Filters
+            </h4>
+               <p>To disable tracking on a particular IP address, add as eg: <b>192.168.1.1</b> and also you can specify range of IP addresses using wildcard character <b>"*"</b> as <b>192.168.1.* | 192.168.*.* | 192.*.*.*</b></p>
+               <p>To block tracking from all IP Addresses a Filter can be added as <b>*.*.*.*</b></p>
+            </ul>
          </div>
       </div>
    </div>
