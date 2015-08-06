@@ -2,6 +2,19 @@
 var Portlets_View;
 var portlet_template_loaded_map = {};
 
+$(function()
+{
+				$.getJSON('/core/api/users/agileusers', function(users)
+			{
+				$.each(users, function(i, user)
+				{
+					if (CURRENT_DOMAIN_USER.id == user.domain_user_id)
+					{
+					CURRENT_AGILE_USER = user;
+					}
+				});
+			});
+});
 /**
  * Loads all the portlets for the current agile user
  * 
@@ -2055,7 +2068,7 @@ function minicalendar(el)
 					                   $(element).addClass(result);
 					                   $(element).attr('id',event.id);
 									   
-									   $('.fc-event').find('.fc-event-inner').css('display','none');
+									   $('.fc-event').find('.fc-event-inner').css('display','none');   
 										var count=$(el).find('.'+result).length;
 										if(count>3){
 											$(element).hide();
@@ -2069,7 +2082,7 @@ function minicalendar(el)
 									}
 									var h=parseInt($(el).find('.fc-widget-content').css('height'));
 									var head=parseInt($(el).find('.fc-header').css('height'));
-									var top=element.position().top+h-22;
+									var top=element.position().top+h-25s;
 									var left=element.position().left+5;
 											$(element).css('top',top);
 											$(element).css('left',left);
@@ -2121,6 +2134,7 @@ function minicalendar(el)
            $('.'+this,el).eq(eventsLength-1).after('<div class="plus-button pos-abs c-p" style="top: '+(pos.top-7)+'px;left: '+icon_pos+'px; color:lightgray;" title="'+(eventsLength-3)+' more">&nbsp;</div>');
           }
          });
+			
          }
 		},
 								eventMouseover : function(event, jsEvent, view)
@@ -2275,7 +2289,7 @@ function loadingGoogleEvents(el,startTime,endTime){
 												var date=new Date();
 												$(el).find('.events_show').append('<div class="portlet-calendar-error-message">No appointments for the day</div><div class="text-center"><a class="minical-portlet-event-add text-info" id='+date.getTime()+'>+Add</a></div>');
 											}
-			},1000);
+			},10000);
 		}
 		console.log(response);
 		if (response)
@@ -2429,7 +2443,7 @@ function googledata(el,response,startTime,endTime)
 											{
 												$(el).find('.events_show').append('<div class="portlet-calendar-error-message">No appointments for the day</div><div class="text-center"><a class="minical-portlet-event-add text-info" id='+date.getTime()+'>+Add</a></div>');
 											}
-											},1000);
+											},10000);
 											
 							
 						});

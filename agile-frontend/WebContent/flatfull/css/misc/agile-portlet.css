@@ -861,6 +861,7 @@ text-transform: uppercase;
 {
 	padding: 20px 15px;
 	font-size: 14px;
+	font-style: italic;
 	text-align: center;
 	color: #98a6ad;
 }
