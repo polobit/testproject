@@ -13,9 +13,10 @@ function startGettingDeals(criteria, pending)
 		if(readCookie('agile_deal_track') != pipeline_id)
 			createCookie('agile_deal_track',pipeline_id);
 	}
-	var milestones = trackListView.collection.get(pipeline_id).toJSON().milestones.split(',');
+	var currentTrack = trackListView.collection.get(pipeline_id).toJSON();
+	var milestones = currentTrack.milestones.split(',');
 	console.log(milestones);
-	createDealsNestedCollection(pipeline_id,milestones);
+	createDealsNestedCollection(pipeline_id,milestones,currentTrack);
 	
 }
 
@@ -32,7 +33,7 @@ function dealFiltersForCollection(criteria)
 }
 
 // Creates nested collection
-function createDealsNestedCollection(pipeline_id,milestones)
+function createDealsNestedCollection(pipeline_id,milestones,currentTrack)
 {
 	console.log("In createNestedCollection");
 
@@ -54,6 +55,10 @@ function createDealsNestedCollection(pipeline_id,milestones)
 		// Add heading to task list in main collection
 			var url = initialURL + "&milestone=" + milestones[i];
 			newDealList = { "heading" : milestones[i], "url" : url};
+			if(currentTrack.won_milestone == milestones[i])
+				newDealList.won_milestone = currentTrack.won_milestone;
+			else if(currentTrack.lost_milestone == milestones[i])
+				newDealList.lost_milestone = currentTrack.lost_milestone;
 
 		if (!newDealList)
 			return;

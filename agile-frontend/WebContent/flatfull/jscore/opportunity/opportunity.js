@@ -242,7 +242,7 @@ var tracks = new Base_Collection_View({url : '/core/api/milestone/pipelines'});
 			// If there is only one pipeline, select the option by default and hide the field.
 			if(jsonModel.length==1){
 				html+='<option value="'+jsonModel[0].id+'" selected="selected">'+jsonModel[0].name+'</option>';
-				$('#milestone-set-msg').show();
+				milestone_util.showMilestonePopup(jsonModel[0]);
 			}
 			else {
 				$.each(jsonModel,function(index,mile){
@@ -253,7 +253,7 @@ var tracks = new Base_Collection_View({url : '/core/api/milestone/pipelines'});
 						html+='<option value="'+mile.id+'" selected="selected">'+mile.name+'</option>';
 					else
 						html+='<option value="'+mile.id+'">'+mile.name+'</option>';
-					$('#milestone-set-msg').show();
+					milestone_util.showMilestonePopup(mile);
 				});
 			}
 			$('#pipeline',el).html(html);

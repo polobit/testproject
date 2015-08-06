@@ -40,8 +40,8 @@
 			</div>
 			</div>
         <div class="clearfix"></div>
-		<div id="milestone-set-msg" class="alert alert-warning" role="alert" style="width: 50%;position: fixed;top: 0px;left: 25%; display:none;">
-  				Important: Agile is unable to determine your 'Won' and 'Lost' milestones. Please go to milestone settings and set you 'Won' and 'Lost' milestones for better Deal reporting.
+		<div id="milestone-set-msg" class="alert alert-warning p-sm" role="alert" style="width: 50%;position: fixed;top: 15px;left: 25%; display:none;">
+  				For better deal reports and sales forecasting, please set your 'Won' and 'Lost' milestones in the <a href="#milestones" style="font-style:italic;text-decoration: initial;color: #337ab7;">Deal settings</a> page.
 			</div>
     </div>
 </div>
@@ -114,7 +114,7 @@
 </script>
 <script id="opportunities-by-paging-model-template" type="text/html">
 	<div class='dealtitle-angular panel-heading'>
-		<div class='milestone-heading text-left text-ellipsis'> <span class="miltstone-title text-base text-ellipsis inline-block v-bottom pull-left" style="width:calc(100% -  45px)">{{heading}}</span><span id="{{remove_spaces heading}}_count" class="txt-mute badge pull-right m-t-xs"></span><span class="pull-right pos-abs pos-r-sm pos-t-xs"><img class="loading_img" src="/img/ajax-loader-cursor.gif" width="12px"></span></div>
+		<div class='milestone-heading text-left text-ellipsis'> <span class="miltstone-title text-base text-ellipsis inline-block v-bottom pull-left" style="width:calc(100% -  45px);{{#if lost_milestone}}color:red;{{/if}}{{#if won_milestone}}color:green;{{/if}}">{{heading}}</span><span id="{{remove_spaces heading}}_count" class="txt-mute badge pull-right m-t-xs"></span><span class="pull-right pos-abs pos-r-sm pos-t-xs"><img class="loading_img" src="/img/ajax-loader-cursor.gif" width="12px"></span></div>
 		<span></span>
 	</div>
 	<div id="{{remove_spaces heading}}-list-container" class='milestones panel-body p-n bg-light lter' milestone='{{heading}}'>

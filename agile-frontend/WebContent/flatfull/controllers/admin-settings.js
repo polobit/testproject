@@ -345,7 +345,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 				var tracks_length = App_Admin_Settings.pipelineGridView.collection.length;
 				if(tracks_length == 1)
 					$('#content').find('#deal-tracks-accordion').find('.collapse').addClass('in');
-				milestone_util.init();
+				milestone_util.init(el);
 			} });
 		this.pipelineGridView.collection.fetch();
 		$('#content').find('#admin-prefs-tabs-content').html(this.pipelineGridView.render().el);
