@@ -284,6 +284,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			{
 				$('#content').find('#admin-prefs-tabs-content').html(el);
 				prettyPrint();
+				$(".prettyprint").css({"padding":"0px", "border":"none"});
 				if (id)
 				{
 					switch (id) {

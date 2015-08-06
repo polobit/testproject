@@ -17,12 +17,12 @@
                                  <b>API key</b> for REST clients (Java, PHP, .Net wrappers) and integrations (Zapier, Wufoo, Unbounce, Chrome extension and others).
                                  <div class="clearfix"></div>
                                  <br/>
-                                 <pre  class="prettyprint" id="api_key_code">{{api_key}}<span class="pull-right inline-block"><a id="api_key_generate_icon" class="c-p m-t-xs m-r-xs"><i class="icon-repeat"></i></a><img border="0" src="/img/help.png" class="question-tag-tiny v-top"  rel="popover" data-placement="bottom" data-title="" data-content="Reset API Key" id="element" data-trigger="hover" data-original-title=""></span></pre>
-                                 tracking-webrules
-                                 <b>Javascript API key</b> only for tracking code on website.
+                                 <code  class="prettyprint" id="api_key_code">{{api_key}}<span class="pull-right inline-block"><a id="api_key_generate_icon" class="c-p m-t-xs m-r-xs"><i class="icon-repeat"></i></a><img border="0" src="/img/help.png" class="question-tag-tiny v-top"  rel="popover" data-placement="bottom" data-title="" data-content="Reset API Key" id="element" data-trigger="hover" data-original-title=""></span></code>
+                                 <br/><br/>
+   					  			 <b>Javascript API key</b> only for tracking code on website.
                                  <div class="clearfix"></div>
                                  <br/>
-                                 <pre class="prettyprint" id="jsapi_key_code">{{js_api_key}}<span class="inline-block pull-right"><a id="jsapi_key_generate_icon" class="c-p m-t-xs m-r-xs"><i class="icon-repeat"></i></a><img border="0" src="/img/help.png" class="question-tag-tiny v-top" rel="popover" data-placement="bottom" data-title="" data-content="Reset JavaScript API Key" id="element" data-trigger="hover" data-original-title=""></span></pre>
+                                 <code class="prettyprint" id="jsapi_key_code">{{js_api_key}}<span class="inline-block pull-right"><a id="jsapi_key_generate_icon" class="c-p m-t-xs m-r-xs"><i class="icon-repeat"></i></a><img border="0" src="/img/help.png" class="question-tag-tiny v-top" rel="popover" data-placement="bottom" data-title="" data-content="Reset JavaScript API Key" id="element" data-trigger="hover" data-original-title=""></span></code>
                               </div>
                            </div>
                         </div>
@@ -49,14 +49,14 @@
                                     <div class="tab-pane" id="tracking">
                                        <div class="clearfix"></div>
                                        <div>
-                                          <pre  id="api_track_code" class="prettyprint">
+                                        <code  id="api_track_code" class="prettyprint">
    				&lt;script type="text/javascript" src="https://{{getCurrentDomain}}.agilecrm.com/stats/min/agile-min.js"&gt; 
    				&lt;/script&gt;
    				&lt;script type="text/javascript" &gt;
    				 _agile.set_account('{{js_api_key}}', '{{getCurrentDomain}}');
    				 _agile.track_page_view();
    				&lt;/script&gt;
-   				</pre>
+   				</code>
                                        </div>
                                     </div>
                                     <!-- End of Tracking code templete -->
@@ -64,7 +64,7 @@
                                     <div class="tab-pane active" id="tracking-webrules">
                                        <div class="clearfix"></div>
                                        <div>
-                                          <pre  id="api_track_webrules_code" class="prettyprint">
+                                          <code  id="api_track_webrules_code" class="prettyprint">
    				&lt;script type="text/javascript" src="https://{{getCurrentDomain}}.agilecrm.com/stats/min/agile-min.js"&gt; 
    				&lt;/script&gt;
    				&lt;script type="text/javascript" &gt;
@@ -72,7 +72,7 @@
    				 _agile.track_page_view();
    				 _agile_execute_web_rules();
    				&lt;/script&gt;
-   				</pre>
+   				</code>
                                        </div>
                                     </div>
                                     <!-- Tracking code with Web Rules templete -->
@@ -80,7 +80,7 @@
                                     <div class="tab-pane active" id="tracking-webrules-whitelist">
                                        <div class="clearfix"></div>
                                        <div>
-                                          <pre class="prettyprint" id="api_track_webrules_code">
+                                          <code class="prettyprint" id="api_track_webrules_code">
    			&lt;script type="text/javascript" src="https://{{getCurrentDomain}}.agilecrm.com/stats/min/agile-min.js"&gt;
    			&lt;/script&gt;
    			&lt;script type="text/javascript" &gt;
@@ -89,7 +89,7 @@
     			 _agile.track_page_view();
     			 _agile_execute_web_rules();
    			&lt;/script&gt;
-   			</pre>
+   			</code>
                                        </div>
                                     </div>
                                     <!-- / Tracking code with Web Rules whitelist enabled -->

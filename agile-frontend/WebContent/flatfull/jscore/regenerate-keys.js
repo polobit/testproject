@@ -10,6 +10,19 @@ function update_admin_settings_api_key_template(){
 		dataType : 'json', 
 		success : function(data){
 			$("#admin-prefs-tabs-content").html(getTemplate("admin-settings-api-key-model", data));
+			prettyPrint();
+			$(".prettyprint").css({"padding":"0px", "border":"none"});
+			try
+			{
+				if (ACCOUNT_PREFS.plan.plan_type.split("_")[0] == "PRO")
+					$("#tracking-webrules, .tracking-webrules-tab").hide();
+				else
+					$("#tracking-webrules-whitelist, .tracking-webrules-whitelist-tab").hide();
+			}
+			catch (e)
+			{
+				$("#tracking-webrules-whitelist, .tracking-webrules-whitelist-tab").hide();
+			}
 		}
 	})
 }
