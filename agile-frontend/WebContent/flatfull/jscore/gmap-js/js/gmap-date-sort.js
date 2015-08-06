@@ -1,5 +1,5 @@
 
-
+var isDateChanged=false;
 function gmap_date_range(el, callback){
 	
 
@@ -28,6 +28,7 @@ function gmap_date_range(el, callback){
 }
 
 function gmap_search_by_date(DateRange){
+	isDateChanged=true;
 	console.clear();
 	
     var User_Domain = CURRENT_DOMAIN_USER.domain;
@@ -57,7 +58,7 @@ function gmap_search_by_date(DateRange){
 	//Check which tab is active and make a respective call
 	if($('ul.nav-tabs li.active').attr('id') == 'gmap-map-tab'){
 		map.setZoom(2);
-		$("#map-tab-waiting").fadeOut();
+		$("#map-tab-waiting").fadeIn();
 		setTimeout(function(){
 			gmap_add_marker(DateRangeUrl);
         },1000)
@@ -68,10 +69,19 @@ function gmap_search_by_date(DateRange){
 	
 	$("li#gmap-table-tab").off().on("click", function(){
 		
-		if(! $(this).closest('ul').parent('div').find('div.tab-content').find('div#gmap-table-view').find('tbody').length){
+		if((! $(this).closest('ul').parent('div').find('div.tab-content').find('div#gmap-table-view').find('tbody').length || isDateChanged) &&  ! $(this).hasClass('active')){
+			isDateChanged=false;
 			gmap_create_table_view(visitorBySessionUrl);
 		}
 	     
+	  });
+$("li#gmap-map-tab").off().on("click", function(){
+		
+		if(isDateChanged && ! $(this).hasClass('active')){
+			isDateChanged=false;
+			gmap_add_marker(DateRangeUrl);
+		}
+		
 	  });
 	
 

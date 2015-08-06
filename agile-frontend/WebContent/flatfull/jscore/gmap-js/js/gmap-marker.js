@@ -34,7 +34,8 @@ function getMarkers() {
 				plotMarkers(res);
 				offSet=offSet+limit;
 		        setTimeout(getMarkers,INTERVAL);
-			}
+			}else
+				$("#map-tab-waiting").fadeOut();
 			
 		});
 		
