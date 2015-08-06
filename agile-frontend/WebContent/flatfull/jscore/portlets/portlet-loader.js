@@ -2243,7 +2243,7 @@ function minicalendar(el)
 								});
 								}
 								else if(!App_Portlets.refetchEvents){
-									$(el).find('.events_show').append('<div class="portlet-error-message">No appointments for the day </div><a class="minical-portlet-event-add text-info p-l" id='+date.getTime()+'>+Add</a>');
+									$(el).find('.events_show').append('<div class="portlet-calendar-error-message">No appointments for the day</div><div class="text-center"><a class="minical-portlet-event-add text-info" id='+date.getTime()+'>+Add</a></div>');
 								}
 								}
 							    	
@@ -2270,10 +2270,10 @@ function loadingGoogleEvents(el,startTime,endTime){
 		if(response==undefined)
 		{
 			setTimeout(function(){
-				if($(el).find('.list').find('li').length==0 && $(el).find('.portlet-error-message').length==0)
+				if($(el).find('.list').find('li').length==0 && $(el).find('.portlet-calendar-error-message').length==0)
 											{
 												var date=new Date();
-												$(el).find('.events_show').append('<div class="portlet-error-message">No appointments for the day </div><a class="minical-portlet-event-add text-info p-l" id='+date.getTime()+'>+Add</a>');
+												$(el).find('.events_show').append('<div class="portlet-calendar-error-message">No appointments for the day</div><div class="text-center"><a class="minical-portlet-event-add text-info" id='+date.getTime()+'>+Add</a></div>');
 											}
 			},1000);
 		}
@@ -2425,9 +2425,9 @@ function googledata(el,response,startTime,endTime)
 											}
 											});
 											setTimeout(function(){
-											if($(el).find('.list').find('li').length==0 && $(el).find('.portlet-error-message').length==0)
+											if($(el).find('.list').find('li').length==0 && $(el).find('.portlet-calendar-error-message').length==0)
 											{
-												$(el).find('.events_show').append('<div class="portlet-error-message">No appointments for the day </div><a class="minical-portlet-event-add text-info p-l" id='+date.getTime()+'> +Add</a>');
+												$(el).find('.events_show').append('<div class="portlet-calendar-error-message">No appointments for the day</div><div class="text-center"><a class="minical-portlet-event-add text-info" id='+date.getTime()+'>+Add</a></div>');
 											}
 											},1000);
 											
@@ -2503,8 +2503,8 @@ $('.minical-portlet-event').live('click',function(e){
 		// Deserialize
 		deserializeForm(model, $("#updateActivityForm"));
 		
-		$("#update-event-date-1").val(getDateInFormat(event.start));
-		$("#update-event-date-2").val(getDateInFormat(event.end));
+		$("#update-event-date-1").val(getDateInFormat(start));
+		$("#update-event-date-2").val(getDateInFormat(end));
 		// Set time for update Event
 		$('#update-event-time-1')
 				.val(

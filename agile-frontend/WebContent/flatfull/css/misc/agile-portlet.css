@@ -857,4 +857,10 @@ top:70px;
 .portlet_body_calendar .fc-header-title h2:first-letter { 
 text-transform: uppercase;
  }
- 
+ .portlet-calendar-error-message
+{
+	padding: 20px 15px;
+	font-size: 14px;
+	text-align: center;
+	color: #98a6ad;
+}
