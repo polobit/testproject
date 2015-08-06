@@ -171,7 +171,7 @@ public class ContactExportCSVUtil
      * note max for each contact if notes are more than 5 then it will ignore
      * rest of notes
      */
-    private static String[] addNotes(String[] contactData, List<Note> notes)
+    public static String[] addNotes(String[] contactData, List<Note> notes)
     {
 	int count = 0;
 	for (Note note : notes)

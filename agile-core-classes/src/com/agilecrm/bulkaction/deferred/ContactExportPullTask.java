@@ -1,6 +1,9 @@
 package com.agilecrm.bulkaction.deferred;
 
+import java.io.IOException;
+import java.io.OutputStream;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -14,7 +17,6 @@ import com.agilecrm.contact.export.util.ContactExportCSVUtil;
 import com.agilecrm.contact.filter.ContactFilterResultFetcher;
 import com.google.appengine.api.taskqueue.DeferredTask;
 import com.googlecode.objectify.Key;
-t.export.ContactCSVExport;
 import com.agilecrm.contact.export.util.ContactExportCSVUtil;
 import com.agilecrm.contact.filter.ContactFilterResultFetcher;
 import com.agilecrm.contact.util.NoteUtil;
@@ -71,19 +73,22 @@ public class ContactExportPullTask implements DeferredTask
 	// TODO Auto-generated method stub
 
     }
-    
-    private void getConnection()
-    {
-	 URL outUrl = new URL(Mandrill.MANDRILL_API_POST_URL + Mandrill.MANDRILL_API_MESSAGE_CALL);
-	    outConn = (HttpURLConnection) outUrl.openConnection();
-	    outConn.setDoOutput(true);
-	    outConn.setRequestMethod("POST");
-	    outConn.setConnectTimeout(600000);
-	    outConn.setReadTimeout(600000);
-	    outConn.setRequestProperty("Content-Type", "application/json");
-	    outConn.setRequestProperty("charset", "utf-8");
 
-	    outStream = outConn.getOutputStream();
+    private void getConnection() throws IOException
+    {
+	OutputStream outStream = null;
+	HttpURLConnection outConn = null;
+
+	URL outUrl = new URL(Mandrill.MANDRILL_API_POST_URL + Mandrill.MANDRILL_API_MESSAGE_CALL);
+	outConn = (HttpURLConnection) outUrl.openConnection();
+	outConn.setDoOutput(true);
+	outConn.setRequestMethod("POST");
+	outConn.setConnectTimeout(600000);
+	outConn.setReadTimeout(600000);
+	outConn.setRequestProperty("Content-Type", "application/json");
+	outConn.setRequestProperty("charset", "utf-8");
+
+	outStream = outConn.getOutputStream();
     }
 
     /**
