@@ -13,4 +13,6 @@ appcfg.sh -A agilecrmbeta -V newui update ../target/agile-java-server/agile-fron
 
 rm WebContent/jscore/min/flatfull/js-all-min.js
 
+git stash
+
 git checkout development_modules
