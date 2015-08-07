@@ -164,29 +164,7 @@ function initializeAdminpanelListner(el){
 		
 		});
 		
-		/*$("body").on("click", '.refund', function(e) { 
-	
-			e.preventDefault();
-			if (!confirm("Are you sure you want to apply for refund ?" ))
-				return;
-			var chargeid=$(this).attr("data");
-
-			$.ajax({
-				url: '/core/api/admin_panel/applyrefund?chargeid='+chargeid, 
-				type : 'GET',
-				success : function(data)
-				{
-					var amount = data.refunds.data[0].amount/100;
-					add_refunded_info_as_note_to_owner(email,amount);
-					alert("successfully applied for refund");
-					location.reload(true);
-				},
-				error : function(response)
-				{
-					showNotyPopUp("information", "error occured please try again", "top");
-				} });
-			
-		});*/
+		
 	$("#deleteUserPlanSpan").off('click').on("click", '#delete_userplan', function(e) { 
 			e.preventDefault();
 			if (!confirm("Are you sure you want to cancel this subscription ?" ))

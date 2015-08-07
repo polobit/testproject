@@ -37,16 +37,6 @@ function initializeActivitiesListner(el){
 
 	});
 
-/*$('body').on('click', '.activity-deal-edit', function(e) 
-{
-	e.preventDefault();
-	var data = $(this).closest('a').attr("data");
-
-	var currentDeal = getDealObject(data);
-
-	updatedeals(currentDeal);
-});*/
-
 $('.activity-tag').off('click').on('click', '.activity-event-edit', function(e)
 {
 	e.preventDefault();
@@ -57,56 +47,6 @@ $('.activity-tag').off('click').on('click', '.activity-event-edit', function(e)
 	update_event_activity(currentevent);
 
 });
-
-/*$('body').on('click', '.activity-edit-note', function(e)
-{
-	e.preventDefault();
-	console.log($(this).attr('data'));
-	var data = $(this).attr('data');
-
-	var note = getNoteObject(data);
-	console.log(note);
-
-	// Clone modal, so we dont have to create a update modal.
-	// we can clone add change ids and use it as different modal
-
-	$('#noteUpdateModal').remove();
-
-	var noteModal = $("#noteModal").clone();
-
-	$("#noteForm > fieldset", noteModal).prepend('<input name="id" type="hidden"/>');
-	$("#noteForm", noteModal).parent().parent().find(".modal-header > h3").html('<i class="icon-edit"></i>&nbsp;Edit Note');
-	$("#noteForm", noteModal).attr('id', "noteUpdateForm");
-	noteModal.attr('id', "noteUpdateModal");
-	$("#note_validate", noteModal).attr("id", "note_update");
-	deserializeForm(JSON.parse(note), $("#noteUpdateForm", noteModal));
-
-	noteModal.modal('show');
-
-});
-*/
-/*
- * $(".activity-delete-info").live('click', function(e) {
- * e.preventDefault(); console.log($(this).attr('data')); var data =
- * $(this).attr('data'); var deletednames = getActivityObject(data);
- * 
- * console.log(deletednames);
- * 
- * var ele = getTemplate("deletednames-detail-popover", deletednames);
- * $(this).attr({ "rel" : "popover", "data-placement" : 'right', "data-content" :
- * ele }); //$(this).popover('show');
- * 
- * });
- */
-
-/*$('body').on('click', '.activity-task-edit', function(e) 
-{
-	e.preventDefault();
-	var data = $(this).closest('a').attr("data");
-	var currenttask = getTaskObject(data);
-
-	updateactivity__task(currenttask);
-});*/
 
 $('#activity-tag').off('click').on('click', '.email-details', function(e) 
 {
