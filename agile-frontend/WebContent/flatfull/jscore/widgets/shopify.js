@@ -1,4 +1,6 @@
-$('body').on('click', '#revoke-shopify', function(e)
+function initializeShopifyListeners(){
+
+$('#prefs-tabs-content').on('click', '#revoke-shopify', function(e)
 {
 				if (confirm("Are you sure to delete Shopify?"))
 				{
@@ -8,7 +10,7 @@ $('body').on('click', '#revoke-shopify', function(e)
 				return false;
 });
 
-$('body').on('click', '#widget_shopify', function(e)
+$('#prefs-tabs-content').on('click', '#widget_shopify', function(e)
 {
 				var shopName = $('#shop').val();
 				if (shopName == "")
@@ -23,4 +25,5 @@ $('body').on('click', '#widget_shopify', function(e)
 				window.location = "/scribe?service_type=shopify&url=shopify&shop=" + shopName + "&domain=" + domain + "";
 
 });
+}
 

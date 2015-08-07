@@ -1,6 +1,5 @@
-$(function()
-{
-	$('body').on('click', '#widget-prefs-save', function(e)
+function initializeWidgetUtilListeners(){
+	$('#prefs-tabs-content').on('click', '#widget-prefs-save', function(e)
 	{
 		e.preventDefault();
 
@@ -64,7 +63,7 @@ $(function()
 		})
 	});
 
-});
+}
 
 function update_collection_with_prefs(data)
 {
@@ -579,6 +578,7 @@ function show_set_up_widget(widget_name, template_id, url, model)
 	var el;
 	var models;
 	$('#prefs-tabs-content').html(getRandomLoadingImg());
+	initializeWidgetUtilListeners();
 	if (model)
 	{
 		console.log(model)
