@@ -87,6 +87,8 @@ function addNewPortlet(portlet_type,p_name){
 		obj.name="Calls Per Person";
 	else if(p_name=="AgileCRMBlog")
 		obj.name="Agile CRM Blog";
+	else if(p_name=="AccountDetails")
+		obj.name="Account Details";
 	else if(p_name=="TaskReport")
 		obj.name="Task Report";
 	else if(p_name=="StatsReport")
@@ -95,6 +97,8 @@ function addNewPortlet(portlet_type,p_name){
 		obj.name="Leaderboard";
 	else if(p_name=="RevenueGraph")
 		obj.name="Revenue Graph";
+	else if(p_name=="UserActivities")
+		obj.name="User Activities"
 	obj.portlet_type=portlet_type;
 	var max_row_position=0;
 	if(gridster!=undefined)
@@ -148,7 +152,12 @@ function addNewPortlet(portlet_type,p_name){
 		json['duration']="today-and-tomorrow";
 	else if(portlet_type=="TASKSANDEVENTS" && p_name=="TodayTasks")
 		json['duration']="today-and-tomorrow";
+	}
+	else if(portlet_type=="ACCOUNT" && p_name=="AccountDetails"){
+      		//json['account']="account";
+	}
 	else if(portlet_type=="RSS" && p_name=="AgileCRMBlog")
+		//else if(portlet_type=="CUSTOMERACTIVITY" && p_name=="CustomerActivities")
 		obj.size_y=2;
 	else if(portlet_type=="USERACTIVITY" && p_name=="Leaderboard"){
 		json['duration']="this-month";

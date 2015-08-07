@@ -17,6 +17,9 @@ function loadPortlets(el){
 	App_Portlets.emailsOpened = new Array();
 	App_Portlets.statsReport = new Array();
 	App_Portlets.leaderboard = new Array();
+	App_Portlets.accountInfo = new Array();
+	App_Portlets.activity=new Array();
+	App_Portlets.activitiesView= new Array();
 	/*
 	 * If Portlets_View is not defined , creates collection view, collection is
 	 * sorted based on position i.e., set when sorted using jquery ui sortable
@@ -824,7 +827,9 @@ $('.portlet-settings-save-modal').live('click', function(e){
 	        			App_Portlets.filteredCompanies[parseInt(pos)] = new Base_Collection_View({ url : '/core/api/portlets/portletContacts?filter='+data.get('settings').filter+'&sortKey=-created_time', templateKey : 'portlets-companies', sort_collection : false, individual_tag_name : 'tr', sortKey : "-created_time" });
 	        		else
 	        			App_Portlets.filteredContacts[parseInt(pos)] = new Base_Collection_View({ url : '/core/api/portlets/portletContacts?filter='+data.get('settings').filter+'&sortKey=-created_time', templateKey : 'portlets-contacts', sort_collection : false, individual_tag_name : 'tr', sortKey : "-created_time" });
-	        	}else if(data.get('portlet_type')=="CONTACTS" && data.get('name')=="Emails Opened"){
+	        	}
+	        	
+	        	else if(data.get('portlet_type')=="CONTACTS" && data.get('name')=="Emails Opened"){
 	        		var start_date_str = '';
 	        		var end_date_str = '';
 	        		if(data.get('settings').duration=='yesterday'){
