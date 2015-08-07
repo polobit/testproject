@@ -805,28 +805,7 @@ function initializeMilestoneListners(el){
     		form.find(".add_milestone").click();
     	}
     });
-    
-	/*$('body').on('click', '.save-pipelines', function(e) {
-    	e.preventDefault();
-    	
-    	$('#admin-settings-milestones-model-list').find('form').each(function(index){
-    		var mile = serializeForm($(this).attr('id'));
-        	console.log('---------',mile);
-        	// Saving that pipeline object
-        	var pipeline = new Backbone.Model();
-        	pipeline.url = '/core/api/milestone';
-        	pipeline.save(mile, {
-        		// If the milestone is changed, to show that change in edit popup if opened without reloading the app.
-        		success : function(model, response) {
-        			App_Admin_Settings.milestones();
-        		},
-				error: function(data,response){
-					console.log(response);
-				}
-        	});
-    	});
-    	
-    });*/
+
     
 	$('#pipelineModal').on('click', '#pipeline_validate', function(e) {
     	e.preventDefault();

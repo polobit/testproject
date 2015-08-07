@@ -1,6 +1,6 @@
 $(function()
 {
-    $('body').on('click', '#select-all-active-contacts', function(e)
+    $('#content').on('click', '#select-all-active-contacts', function(e)
 	{
 						e.preventDefault();
 						SUBSCRIBERS_SELECT_ALL = true;
@@ -18,7 +18,7 @@ $(function()
 						});
 					});
 
-    $('body').on('click', '#select-all-active-contacts-revert', function(e)
+    $('#content').on('click', '#select-all-active-contacts-revert', function(e)
 					{
 						e.preventDefault();
 						SUBSCRIBERS_SELECT_ALL = false;

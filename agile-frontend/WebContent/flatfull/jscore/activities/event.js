@@ -130,12 +130,7 @@ $("#updateActivityModal").on(
 	 * Highlights the event features (Shows event form and hides task form,
 	 * changing color and font-weight)
 	 */
-	/*
-	 * $("body").on('click', '#event', function(e) { e.preventDefault();
-	 * highlight_event(); });
-	 */
-
-	/**
+		/**
 	 * when web appointment event is deleted this event will be fired out
 	 */
 	$("#webEventCancelModel")

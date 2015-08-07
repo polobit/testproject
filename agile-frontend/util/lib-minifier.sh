@@ -1,5 +1,9 @@
 #!/bin/bash
 
+rm -r ../WebContent/flatfull/final-lib/min
+
+mkdir ../WebContent/flatfull/final-lib/min
+
 # js lib files
 cat $(find ../WebContent/flatfull/final-lib/ -iname *.js ! -path ../WebContent/flatfull/final-lib/min/*.js | sort) >../WebContent/flatfull/final-lib/min/lib-all-min.js 
 

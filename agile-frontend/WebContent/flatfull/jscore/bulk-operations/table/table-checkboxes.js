@@ -83,9 +83,9 @@ $(function(){
     */	
 	$('body').on('click', '.thead_check', function(event){
 		console.log( $(this).is(':checked'));
-		if(!$(this).attr('checked'))
+		if(!$(this).is(':checked'))
 		{
-			$('.tbody_check').removeAttr('checked');
+			$('.tbody_check').prop('checked',false);
 			
 			if (Current_Route == 'deals')
 				deal_bulk_actions.toggle_deals_bulk_actions_dropdown(undefined, true,$(this).parents('table').attr('id'));
@@ -94,9 +94,9 @@ $(function(){
 			
 		}
 		else
-			$('.tbody_check').attr('checked', 'checked');
+			$('.tbody_check').prop('checked',true);
 	
-		console.log($(this).attr('checked'));
+		console.log($(this).is(':checked'));
 		
 		// Show bulk operations only when thead check box is checked
 		if (Current_Route == 'deals')

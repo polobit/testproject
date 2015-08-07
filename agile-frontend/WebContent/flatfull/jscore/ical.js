@@ -5,7 +5,7 @@
  * 
  * author: Naresh
  */
-$("body").on('click', '#subscribe-ical', function(event)
+$("#content").on('click', '#subscribe-ical', function(event)
 {
 	event.preventDefault();
 	set_api_key();
