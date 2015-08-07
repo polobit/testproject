@@ -152,7 +152,6 @@ function addNewPortlet(portlet_type,p_name){
 		json['duration']="today-and-tomorrow";
 	else if(portlet_type=="TASKSANDEVENTS" && p_name=="TodayTasks")
 		json['duration']="today-and-tomorrow";
-	}
 	else if(portlet_type=="ACCOUNT" && p_name=="AccountDetails"){
       		//json['account']="account";
 	}
