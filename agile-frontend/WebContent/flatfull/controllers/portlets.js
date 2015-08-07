@@ -19,7 +19,12 @@ var PortletsRouter = Backbone.Router
 															function()
 											{this.Catalog_Portlets_View = new Base_Collection_View({ url : '/core/api/portlets/default', templateKey : "portlets-add",
 												sort_collection : false, individual_tag_name : 'div', postRenderCallback : function(el){
-													
+													if($('#deals').children().length==0)
+														$('#deals').parents('.wrapper-md').hide();
+													if($('#taksAndEvents').children().length==0)
+														$('#taksAndEvents').parents('.wrapper-md').hide();
+													if($('#userActivity').children().length==0)
+														$('#userActivity').parents('.wrapper-md').hide();
 												} });
 											
 											
