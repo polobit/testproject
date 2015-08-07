@@ -11,6 +11,7 @@ var CasesRouter = Backbone.Router.extend({
 	 */
 	listCases : function()
 	{
+		 $('#content').html("<div id='cases-listners'>&nbsp;</div>");
 		this.casesCollectionView = new Base_Collection_View({ url : 'core/api/cases', sort_collection : false, restKey : "case", templateKey : "cases",
 			cursor : true, page_size : 25, individual_tag_name : 'tr', postRenderCallback : function(el)
 			{
@@ -23,7 +24,7 @@ var CasesRouter = Backbone.Router.extend({
 
 		this.casesCollectionView.collection.fetch();
 
-		$('#content').html(this.casesCollectionView.render().el);
+		$('#cases-listners').html(this.casesCollectionView.render().el);
 
 		$(".active").removeClass("active");
 		$("#casesmenu").addClass("active");

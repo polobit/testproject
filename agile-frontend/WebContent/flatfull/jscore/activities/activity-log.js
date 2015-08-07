@@ -29,6 +29,7 @@ function updateActivty(params)
 		{
 			includeTimeAgo(el);
 			initializeActivitiesListner(el);
+			initializeEventListners(el);
 		}, appendItemCallback : function(el)
 		{
 			includeTimeAgo(el);

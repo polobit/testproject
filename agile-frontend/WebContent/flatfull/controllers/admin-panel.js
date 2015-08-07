@@ -108,7 +108,7 @@ var AdminPanelRouter = Backbone.Router.extend({
 	// router to fill domain details template from admin panel
 	getDomainUserDetails : function(id)
 	{
-
+		 $('#content').html("<div id='admin-panel-listners'>&nbsp;</div>");
 		var self = this;
 		var domainname;
 		this.usersListViewCollection = new Base_Collection_View({ url : 'core/api/admin_panel/getParticularDomainUsers?d=' + id, templateKey : "all-domain",

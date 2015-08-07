@@ -14,6 +14,7 @@ var DocumentsRouter = Backbone.Router.extend({
 	 */
 	documents : function()
 	{
+		 $('#content').html("<div id='documents-listners'>&nbsp;</div>");
 		// Fetches documents as list
 		this.DocumentCollectionView = new Base_Collection_View({ url : 'core/api/documents', templateKey : "documents", cursor : true, page_size : 20,
 			individual_tag_name : 'tr', postRenderCallback : function(el)
@@ -32,7 +33,7 @@ var DocumentsRouter = Backbone.Router.extend({
 		this.DocumentCollectionView.collection.fetch();
 
 		// Shows deals as list view
-		$('#content').html(this.DocumentCollectionView.render().el);
+		$('#documents-listners').html(this.DocumentCollectionView.render().el);
 
 		$(".active").removeClass("active");
 		$("#documentsmenu").addClass("active");
