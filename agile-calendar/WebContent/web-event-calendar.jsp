@@ -49,6 +49,7 @@ String meeting_durations=null;
 List<Long>_multiple_users=new ArrayList<Long>();
 URL ur=new URL(url);
 String d_name=domain_name= NamespaceUtil.getNamespaceFromURL(ur);
+String _AGILE_VERSION = SystemProperty.applicationVersion.get();
 int calendar_wk_start_day=0;
 if(scheduleid.equalsIgnoreCase("calendar")){
     scheduleid=ar[ar.length-1];
@@ -245,8 +246,8 @@ ObjectMapper mapper = new ObjectMapper();
 
 <title>Online Appointment Scheduling - <%=user_name %></title>
 <link rel="stylesheet" href="../../css/web-calendar-event/bootstrap.min.css">
-<link rel="stylesheet" href="../../css/web-calendar-event/style.css">
-<link rel="stylesheet" type="text/css" href="/css/web-calendar-event/agile-css-framework.css">
+<link rel="stylesheet" href="../../css/web-calendar-event/style.css?_=<%=_AGILE_VERSION%>">
+<link rel="stylesheet" type="text/css" href="/css/web-calendar-event/agile-css-framework.css?_=<%=_AGILE_VERSION%>">
 <!-- <link rel="stylesheet" href="../../css/web-calendar-event/font-awesome.min.css"> -->
 <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css">
 
@@ -265,9 +266,9 @@ ObjectMapper mapper = new ObjectMapper();
 <script type="text/javascript" src="../../lib/web-calendar-event/utils.js"></script>
 <script type="text/javascript"
 	src="../../lib/web-calendar-event/layout.js?ver=1.0.2"></script>
-<script type="text/javascript" src="../../jscore/web-calendar-event/time.js"></script>
-<script type="text/javascript" src="../../jscore/web-calendar-event/util.js"></script>
-<script type="text/javascript" src="../../jscore/web-calendar-event/ui.js"></script>
+<script type="text/javascript" src="../../jscore/web-calendar-event/time.js?_=<%=_AGILE_VERSION%>"></script>
+<script type="text/javascript" src="../../jscore/web-calendar-event/util.js?_=<%=_AGILE_VERSION%>"></script>
+<script type="text/javascript" src="../../jscore/web-calendar-event/ui.js?_=<%=_AGILE_VERSION%>"></script>
 </head>
 
 <body onload="bodyLoad();">
