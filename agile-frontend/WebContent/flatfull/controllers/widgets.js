@@ -313,6 +313,7 @@ var WidgetsRouter = Backbone.Router
 												 */
 												TwilioIO : function(id)
 												{
+													initializeTwilioGlobalListeners();
 													if (!id)
 														show_set_up_widget("TwilioIO", 'twilioio-login');
 													else
@@ -331,6 +332,7 @@ var WidgetsRouter = Backbone.Router
 																if (!id)
 																{
 																				show_set_up_widget("Twilio", 'twilio-login', encodeURIComponent(window.location.href) + "/twilio");
+																				initializeTwilioGlobalListeners();
 																}
 
 																else
@@ -338,6 +340,7 @@ var WidgetsRouter = Backbone.Router
 
 																				if (!isNaN(parseInt(id)))
 																				{
+																					initializeTwilioGlobalListeners();
 																								$.getJSON(
 																																"/core/api/widgets/twilio/numbers/" + id,
 																																function(data)
@@ -365,6 +368,7 @@ var WidgetsRouter = Backbone.Router
 																								return;
 
 																				}
+																				initializeTwilioGlobalListeners();
 
 																				$.getJSON("core/api/widgets/Twilio", function(data)
 																				{
@@ -491,6 +495,7 @@ var WidgetsRouter = Backbone.Router
 																 				show_set_up_widget("Shopify","shopify-revoke-access")
 																 		
 																 }
+																 initializeShopifyListeners();
 												},
 
 
@@ -1084,6 +1089,7 @@ var WidgetsRouter = Backbone.Router
 												CallScriptShow : function()
 												{	
 													showCallScriptRule();
+													
 												},
 												
 												/**
@@ -1092,6 +1098,7 @@ var WidgetsRouter = Backbone.Router
 												CallScriptAdd : function()
 												{
 													addCallScriptRule();
+													
 												},
 												
 												/**
@@ -1100,6 +1107,7 @@ var WidgetsRouter = Backbone.Router
 												CallScriptEdit : function(id)
 												{
 													editCallScriptRule(id);
+
 												}
 								});
 
