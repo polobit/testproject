@@ -497,6 +497,10 @@ var ContactsRouter = Backbone.Router.extend({
 			{
 				App_Contacts.contactDetails(id, this.contactDetailView.model);
 				contactsTimelineListners();
+				initializeEventListners();
+				initializeCasesListeners();
+				initializeDealListners();
+				initializeDocumentsListner();
 				return;
 			}
 		}
@@ -531,6 +535,10 @@ var ContactsRouter = Backbone.Router.extend({
 				}
 				});
 				contactsTimelineListners();
+				initializeEventListners();
+				initializeCasesListeners();
+				initializeDealListners();
+				initializeDocumentsListner();
 				return;
 			}
 
@@ -588,6 +596,10 @@ var ContactsRouter = Backbone.Router.extend({
 						$(".contact-make-call",el).hide();
 					}
 					contactsTimelineListners(el);
+					initializeEventListners(el);
+					initializeCasesListeners(el);
+					initializeDealListners(el);
+					initializeDocumentsListner(el);
 				} });
 
 			var el = this.contactDetailView.render(true).el;
@@ -677,6 +689,10 @@ var ContactsRouter = Backbone.Router.extend({
 				$("#map_view_action").html("<i class='icon-minus text-sm c-p' title='Hide map' id='disable_map_view'></i>");
 
 		contactsTimelineListners(el);
+		initializeEventListners(el);
+		initializeCasesListeners(el);
+		initializeDealListners(el);
+		initializeDocumentsListner(el);
 		//contactInnerTabsInvoke(el);
 
 	},
