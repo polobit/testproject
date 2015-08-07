@@ -459,6 +459,7 @@ var ContactsRouter = Backbone.Router.extend({
 	 */
 	contactDetails : function(id, contact)
 	{
+		 $('#content').html("<div id='contact-detail-listners'>&nbsp;</div>");
 		//Removed previous contact timeline tags from the isotope, if existed
 		if(App_Contacts.contactDetailView!=undefined && App_Contacts.contactDetailView.model!=undefined && App_Contacts.contactDetailView.model.collection!=undefined){
 			getTemplate("timeline1", App_Contacts.contactDetailView.model.collection.models, undefined, function(result)
@@ -495,6 +496,7 @@ var ContactsRouter = Backbone.Router.extend({
 			if (id == this.contactDetailView.model.toJSON()['id'])
 			{
 				App_Contacts.contactDetails(id, this.contactDetailView.model);
+				contactsTimelineListners();
 				return;
 			}
 		}
@@ -525,10 +527,10 @@ var ContactsRouter = Backbone.Router.extend({
 				error: function(data, response)
 				{
 					if(response && response.status == '403')
-						$("#content").html(response.responseText);
+						$("#contact-detail-listners").html(response.responseText);
 				}
 				});
-
+				contactsTimelineListners();
 				return;
 			}
 
@@ -585,10 +587,11 @@ var ContactsRouter = Backbone.Router.extend({
 						$(".contact-make-twilio-call",el).show();
 						$(".contact-make-call",el).hide();
 					}
+					contactsTimelineListners(el);
 				} });
 
 			var el = this.contactDetailView.render(true).el;
-			$('#content').html(el);
+			$('#contact-detail-listners').html(el);
 			fill_company_related_contacts(id, 'company-contacts');
 			return;
 		}
@@ -663,7 +666,7 @@ var ContactsRouter = Backbone.Router.extend({
 
 		var el = this.contactDetailView.render(true).el;
 
-		$('#content').html(el);
+		$('#contact-detail-listners').html(el);
 		
 		// Check updates in the contact.
 		checkContactUpdated();
@@ -673,7 +676,7 @@ var ContactsRouter = Backbone.Router.extend({
 		else
 				$("#map_view_action").html("<i class='icon-minus text-sm c-p' title='Hide map' id='disable_map_view'></i>");
 
-
+		contactsTimelineListners(el);
 		//contactInnerTabsInvoke(el);
 
 	},

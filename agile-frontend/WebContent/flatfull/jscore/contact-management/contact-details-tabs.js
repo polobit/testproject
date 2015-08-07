@@ -43,7 +43,7 @@ $(function()
 	 * details, which are already added to time-line, when the contact is
 	 * getting to its detail view.
 	 */
-	$('body').on('click', '#contactDetailsTab a[href="#timeline"]', function(e)
+	$('#contact-detail-listners').on('click', '#contactDetailsTab a[href="#timeline"]', function(e)
 	{
 		e.preventDefault();
 
