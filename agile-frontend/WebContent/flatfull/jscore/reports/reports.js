@@ -259,7 +259,7 @@ function reportsContactTableView(base_model, customDatefields, view)
 
 function deserialize_multiselect(data, el)
 {
-	$("#content").html(el);
+	$("#reports-listerners-container").html(el);
 
 	if (!data['fields_set'])
 		return;
