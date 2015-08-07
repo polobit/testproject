@@ -1,22 +1,7 @@
 
+$(function(){
 
-function initializeDocumentsListner(el){	
-	/**
-	 * For adding new document
-	 */
-	$('#documents-listners').on('click', '.documents-add', function(e){
-		e.preventDefault();
-		var el = $("#uploadDocumentForm");
-		$("#uploadDocumentModal").modal('show');
-
-		// Contacts type-ahead
-		agile_type_ahead("document_relates_to_contacts", el, contacts_typeahead);
-		
-		// Deals type-ahead
-		agile_type_ahead("document_relates_to_deals", el, deals_typeahead, false,null,null,"core/api/search/deals",false, true);
-	});
-	
-	/**
+/**
 	 * To avoid showing previous errors of the modal.
 	 */
 	$('#uploadDocumentModal, #uploadDocumentUpdateModal').on('show.bs.modal', function() {
@@ -97,6 +82,30 @@ function initializeDocumentsListner(el){
     	else
     		saveDocument(form_id, modal_id, this, true, json);
 	});
+
+});
+
+
+
+
+
+function initializeDocumentsListner(el){	
+	/**
+	 * For adding new document
+	 */
+	$('#documents-listners').on('click', '.documents-add', function(e){
+		e.preventDefault();
+		var el = $("#uploadDocumentForm");
+		$("#uploadDocumentModal").modal('show');
+
+		// Contacts type-ahead
+		agile_type_ahead("document_relates_to_contacts", el, contacts_typeahead);
+		
+		// Deals type-ahead
+		agile_type_ahead("document_relates_to_deals", el, deals_typeahead, false,null,null,"core/api/search/deals",false, true);
+	});
+	
+	
     
     /** 
      * Document list view edit

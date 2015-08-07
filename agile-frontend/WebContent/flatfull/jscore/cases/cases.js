@@ -8,9 +8,10 @@
 // handle popover
 
 
-// show add case modal
-function initializeCasesListeners(el){
-	/**
+$(function(){
+
+
+/**
 	 * To avoid showing previous errors of the modal.
 	 */
 	$('#casesModal, #casesUpdateModal').on('show.bs.modal', function(data)
@@ -70,6 +71,26 @@ function initializeCasesListeners(el){
 		remove_validation_errors('casesUpdateModal');
 	});
 
+
+	$('#casesModal,#casesUpdateModal').on('click', '#cases_validate', function(e) 
+	{
+		e.preventDefault();
+
+		// To know updated or added cases form names
+		var modal_id = $(this).closest('.cases-modal').attr("id");
+		var form_id = $(this).closest('.cases-modal').find('form').attr("id");
+		var json = serializeForm(form_id);
+		savecases(form_id, modal_id, this, json);
+	});
+
+
+
+});
+
+
+// show add case modal
+function initializeCasesListeners(el){
+	
 	$("#cases-listners").on('mouseenter',
 			'#cases-model-list > tr',
 			function()
@@ -115,17 +136,7 @@ function initializeCasesListeners(el){
 		showCases();
 	});
 
-	$('#casesModal,#casesUpdateModal').on('click', '#cases_validate', function(e) 
-	{
-		e.preventDefault();
-
-		// To know updated or added cases form names
-		var modal_id = $(this).closest('.cases-modal').attr("id");
-		var form_id = $(this).closest('.cases-modal').find('form').attr("id");
-		var json = serializeForm(form_id);
-		savecases(form_id, modal_id, this, json);
-	});
-
+	
 	
 	$('#cases-listners').on('click', '#cases-model-list > tr > td:not(":first-child")', function(e) 
 	{

@@ -8,7 +8,62 @@
  */
 $(function(){ 
 	
+	/**
+	 * Displays activity modal with all task features,  to add a task 
+	 * related to the contact in contact detail view. Also prepends the 
+	 * contact name to related to field of activity modal.
+	 */ 
+	$('body').on('click', '.contact-add-task', function(e){ 
+    	e.preventDefault();
+
+    	var	el = $("#taskForm");
+		$('#activityTaskModal').modal('show');
+		highlight_task();
+		// Displays contact name, to indicate the task is related to the contact
+		fill_relation(el);
+		agile_type_ahead("task_related_to", el, contacts_typeahead);
+
+		// Fills owner select element
+		populateUsers("owners-list", $("#taskForm"), undefined, undefined,
+				function(data) {
+					$("#taskForm").find("#owners-list").html(data);
+					$("#owners-list", el).find('option[value='+ CURRENT_DOMAIN_USER.id +']').attr("selected", "selected");
+					$("#owners-list", $("#taskForm")).closest('div').find('.loading-img').hide();					
+		});
+    });
 	
+	/**
+	 * Displays activity modal with all event features,  to add a event 
+	 * related to the contact in contact detail view. Also prepends the 
+	 * contact name to related to field of activity modal.
+	 */ 
+    $('body').on('click', '.contact-add-event', function(e){ 
+    	e.preventDefault();
+
+    	var	el = $("#activityForm");
+		$('#activityModal').modal('show');
+		highlight_event();
+		// Displays contact name, to indicate the task is related to the contact
+		fill_relation(el);
+		agile_type_ahead("event_related_to", el, contacts_typeahead);
+
+    });
+    
+    /**
+     * Displays note modal, to add a note related to the contact in contact 
+     * detail view. Also prepends the contact name to related to field of 
+     * activity modal.  
+     */ 
+    $('body').on('click', '.contact-add-note', function(e){ 
+    	e.preventDefault();
+        console.log("execution");
+    	var	el = $("#noteForm");
+    	
+    	// Displays contact name, to indicate the note is related to the contact
+    	fill_relation(el);
+    	$('#noteModal').modal('show');
+    	agile_type_ahead("note_related_to", el, contacts_typeahead);
+     });
     
     /**
      * Subscribes contact to a campaign. First loads a form with campaigns select 

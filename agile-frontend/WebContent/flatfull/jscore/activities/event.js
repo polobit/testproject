@@ -8,94 +8,9 @@
  * author: Rammohan
  */
 
-function initializeEventListners(el)
-{
-
-$("#ical_appointment_links").on('click', '#subscribe-ical', function(event)
-{
-	event.preventDefault();
-	set_api_key();
-});
-
+$(function(){
 
 /**
- * When Send Mail is clicked from Ical Modal, it hides the ical modal and shows
- * the ical-send email modal.
- */
-$("#icalModal").on('click', '#send-ical-email', function(event)
-{
-	event.preventDefault();
-
-	$("#icalModal").modal('hide');
-
-	// Removes previous modals if exist.
-	if ($('#share-ical-by-email').size() != 0)
-		$('#share-ical-by-email').remove();
-
-	// Gets current user
-	var CurrentuserModel = Backbone.Model.extend({ url : '/core/api/users/current-user', restKey : "domainUser" });
-
-	var currentuserModel = new CurrentuserModel();
-
-	currentuserModel.fetch({ success : function(data)
-	{
-
-		var model = data.toJSON();
-
-		// Insert ical-url into model
-		var icalURL = $('#icalModal').find('#ical-feed').text();
-		model.ical_url = icalURL;
-
-		var emailModal = $(getTemplate("share-ical-by-email", model));
-
-		var description = $(emailModal).find('textarea').val();
-
-		description = description.replace(/<br\/>/g, "\r\n");
-
-		$(emailModal).find('textarea').val(description);
-
-		emailModal.modal('show');
-
-		// Send ical info email
-		send_ical_info_email(emailModal);
-	} });
-});
-
-
-	$('#calendar-listers').on('click', '.agendaDayWeekMonth', function()
-	{
-		currentView = $(this).attr('id');
-		fullCal.fullCalendar('changeView', currentView);
-		$(this).parent().find('button').each(function()
-		{
-			if ($(this).attr('id') == currentView)
-				$(this).addClass('bg-light');
-			else
-				$(this).removeClass('bg-light');
-		});
-
-	});
-
-	/**
-	 * Shows the event form fields in activity modal
-	 */
-	$("#calendar-listers").on('click', '.add-event', function(e)
-	{
-		e.preventDefault();
-
-		$('#activityModal').modal('show');
-		highlight_event();
-
-		/*
-		 * $('#task-date-1').val(new Date().format('mm/dd/yyyy'));
-		 * $("#event-date-1").val(new Date().format('mm/dd/yyyy'));
-		 * $("#event-date-2").val(new Date().format('mm/dd/yyyy'));
-		 */
-
-		return;
-	});
-
-	/**
 	 * shows description field in new event model
 	 */
 	$("#updateActivityModal").on('click', '#add_event_desctiption', function(e)
@@ -114,81 +29,6 @@ $("#icalModal").on('click', '#send-ical-email', function(event)
 		$(this).hide();
 		return;
 	});
-
-	
-
-	
-
-	// evnet filters
-
-	$("#calendar-listers").on('click', '.calendar_check', function(e)
-	{
-		showLoadingOnCalendar(true);
-		createRequestUrlBasedOnFilter();
-		var calendar = $(this).val();
-		var ownerids = '';
-		if (calendar == "agile")
-		{
-			if (this.checked == true)
-			{
-				ownerids = getOwnerIdsFromCookie(true);
-				renderFullCalenarEvents(ownerids);
-			}
-
-			else
-			{
-				ownerids = getOwnerIdsFromCookie(true);
-				removeFullCalendarEvents(ownerids);
-			}
-
-		}
-
-		if (calendar == "google")
-			loadFullCalednarOrListView();
-
-	});
-
-	$("#calendar-listers").on('click', '.calendar_user_check', function(e)
-	{
-		showLoadingOnCalendar(true);
-		// checkBothCalWhenNoCalSelected();
-		createRequestUrlBasedOnFilter();
-		// loadFullCalednarOrListView();
-		var user_id = $(this).val();
-		if (this.checked == true)
-		{
-			renderFullCalenarEvents(user_id);
-		}
-		else
-		{
-			removeFullCalendarEvents(user_id);
-		}
-
-		// $('.select_all_users').removeAttr("checked");
-
-	});
-
-	$("#calendar-listers").on('click', '.select_all_users', function(event)
-	{ // on click
-		if (this.checked)
-		{ // check select status
-			$('.calendar_user_check').each(function()
-			{
-				this.checked = true;
-			});
-		}
-		else
-		{
-			$('.calendar_user_check').each(function()
-			{ // loop through each checkbox
-				if ($(this).val() != CURRENT_AGILE_USER.id)
-					this.checked = false;
-			});
-		}
-		createRequestUrlBasedOnFilter();
-		loadFullCalednarOrListView();
-	});
-
 
 /**
 	 * When clicked on update button of event-update-modal, the event will get
@@ -365,6 +205,173 @@ $("#updateActivityModal").on(
 						}
 
 					});
+
+
+	
+
+});
+
+
+function initializeEventListners(el)
+{
+
+$("#ical_appointment_links").on('click', '#subscribe-ical', function(event)
+{
+	event.preventDefault();
+	set_api_key();
+});
+
+
+/**
+ * When Send Mail is clicked from Ical Modal, it hides the ical modal and shows
+ * the ical-send email modal.
+ */
+$("#icalModal").on('click', '#send-ical-email', function(event)
+{
+	event.preventDefault();
+
+	$("#icalModal").modal('hide');
+
+	// Removes previous modals if exist.
+	if ($('#share-ical-by-email').size() != 0)
+		$('#share-ical-by-email').remove();
+
+	// Gets current user
+	var CurrentuserModel = Backbone.Model.extend({ url : '/core/api/users/current-user', restKey : "domainUser" });
+
+	var currentuserModel = new CurrentuserModel();
+
+	currentuserModel.fetch({ success : function(data)
+	{
+
+		var model = data.toJSON();
+
+		// Insert ical-url into model
+		var icalURL = $('#icalModal').find('#ical-feed').text();
+		model.ical_url = icalURL;
+
+		var emailModal = $(getTemplate("share-ical-by-email", model));
+
+		var description = $(emailModal).find('textarea').val();
+
+		description = description.replace(/<br\/>/g, "\r\n");
+
+		$(emailModal).find('textarea').val(description);
+
+		emailModal.modal('show');
+
+		// Send ical info email
+		send_ical_info_email(emailModal);
+	} });
+});
+
+
+	$('#calendar-listers').on('click', '.agendaDayWeekMonth', function()
+	{
+		currentView = $(this).attr('id');
+		fullCal.fullCalendar('changeView', currentView);
+		$(this).parent().find('button').each(function()
+		{
+			if ($(this).attr('id') == currentView)
+				$(this).addClass('bg-light');
+			else
+				$(this).removeClass('bg-light');
+		});
+
+	});
+
+	/**
+	 * Shows the event form fields in activity modal
+	 */
+	$("#calendar-listers").on('click', '.add-event', function(e)
+	{
+		e.preventDefault();
+
+		$('#activityModal').modal('show');
+		highlight_event();
+
+		/*
+		 * $('#task-date-1').val(new Date().format('mm/dd/yyyy'));
+		 * $("#event-date-1").val(new Date().format('mm/dd/yyyy'));
+		 * $("#event-date-2").val(new Date().format('mm/dd/yyyy'));
+		 */
+
+		return;
+	});
+
+	
+	
+
+	// evnet filters
+
+	$("#calendar-listers").on('click', '.calendar_check', function(e)
+	{
+		showLoadingOnCalendar(true);
+		createRequestUrlBasedOnFilter();
+		var calendar = $(this).val();
+		var ownerids = '';
+		if (calendar == "agile")
+		{
+			if (this.checked == true)
+			{
+				ownerids = getOwnerIdsFromCookie(true);
+				renderFullCalenarEvents(ownerids);
+			}
+
+			else
+			{
+				ownerids = getOwnerIdsFromCookie(true);
+				removeFullCalendarEvents(ownerids);
+			}
+
+		}
+
+		if (calendar == "google")
+			loadFullCalednarOrListView();
+
+	});
+
+	$("#calendar-listers").on('click', '.calendar_user_check', function(e)
+	{
+		showLoadingOnCalendar(true);
+		// checkBothCalWhenNoCalSelected();
+		createRequestUrlBasedOnFilter();
+		// loadFullCalednarOrListView();
+		var user_id = $(this).val();
+		if (this.checked == true)
+		{
+			renderFullCalenarEvents(user_id);
+		}
+		else
+		{
+			removeFullCalendarEvents(user_id);
+		}
+
+		// $('.select_all_users').removeAttr("checked");
+
+	});
+
+	$("#calendar-listers").on('click', '.select_all_users', function(event)
+	{ // on click
+		if (this.checked)
+		{ // check select status
+			$('.calendar_user_check').each(function()
+			{
+				this.checked = true;
+			});
+		}
+		else
+		{
+			$('.calendar_user_check').each(function()
+			{ // loop through each checkbox
+				if ($(this).val() != CURRENT_AGILE_USER.id)
+					this.checked = false;
+			});
+		}
+		createRequestUrlBasedOnFilter();
+		loadFullCalednarOrListView();
+	});
+
 
 
 

@@ -8,6 +8,57 @@
 $(function()
 {
 
+
+	/**
+	 * Update the milestones list when the pipeline is changed in the modal.
+	 */
+	$('#content').on('change', '#pipeline', function(e)
+	{
+		var el = $(this).closest('form');
+		$('#milestone', el).closest('div').find('.loading-img').show();
+		// Fills milestone select element
+		populateMilestones(el, undefined, $(this).val(), undefined, function(data)
+		{
+			$("#milestone", el).html(data);
+			$("#milestone", el).closest('div').find('.loading-img').hide();
+		});
+	});
+
+	$('#content').on('click', '#opportunity_archive', function(e)
+	{
+		e.preventDefault();
+		$('#archived', $('#opportunityUpdateForm')).attr('checked', 'checked');
+		$("#opportunityUpdateModal #opportunity_validate").trigger('click');
+	});
+	$('#content').on('click', '#opportunity_unarchive', function(e)
+	{
+		e.preventDefault();
+		$('#archived', $('#opportunityUpdateForm')).removeAttr('checked');
+		$('#opportunityUpdateModal #opportunity_validate').trigger('click');
+	});
+
+
+	/**
+	 * Validates deal and saves
+	 */
+	$('#content').on('click', '#opportunity_validate', function(e)
+	{
+		e.preventDefault();
+
+		// To know updated or added deal form names
+		var modal_id = $(this).closest('.opportunity-modal').attr("id");
+		var form_id = $(this).closest('.opportunity-modal').find('form').attr("id");
+
+		var json = serializeForm(form_id);
+		json["custom_data"] = serialize_custom_fields(form_id);
+
+		console.log(json);
+		if (form_id == "opportunityForm")
+			saveDeal(form_id, modal_id, this, json, false);
+		else
+			saveDeal(form_id, modal_id, this, json, true);
+	});
+
 	
 });
 
@@ -447,34 +498,7 @@ $('#opportunity-listners').on('click', '.deals-list-view', function(e) {
 		} });
 	});
 
-	/**
-	 * Update the milestones list when the pipeline is changed in the modal.
-	 */
-	$('#opportunityModal').on('change', '#pipeline', function(e)
-	{
-		var el = $(this).closest('form');
-		$('#milestone', el).closest('div').find('.loading-img').show();
-		// Fills milestone select element
-		populateMilestones(el, undefined, $(this).val(), undefined, function(data)
-		{
-			$("#milestone", el).html(data);
-			$("#milestone", el).closest('div').find('.loading-img').hide();
-		});
-	});
-
-	$('#opportunityModal').on('click', '#opportunity_archive', function(e)
-	{
-		e.preventDefault();
-		$('#archived', $('#opportunityUpdateForm')).attr('checked', 'checked');
-		$("#opportunityUpdateModal #opportunity_validate").trigger('click');
-	});
-	$('#opportunityModal').on('click', '#opportunity_unarchive', function(e)
-	{
-		e.preventDefault();
-		$('#archived', $('#opportunityUpdateForm')).removeAttr('checked');
-		$('#opportunityUpdateModal #opportunity_validate').trigger('click');
-	});
-
+	
 
 /**
 	 * Deal list view edit
@@ -498,26 +522,6 @@ $('#opportunity-listners').on('click', '.deals-list-view', function(e) {
 		show_deal();
 	});
 
-	/**
-	 * Validates deal and saves
-	 */
-	$('#opportunityModal').on('click', '#opportunity_validate', function(e)
-	{
-		e.preventDefault();
-
-		// To know updated or added deal form names
-		var modal_id = $(this).closest('.opportunity-modal').attr("id");
-		var form_id = $(this).closest('.opportunity-modal').find('form').attr("id");
-
-		var json = serializeForm(form_id);
-		json["custom_data"] = serialize_custom_fields(form_id);
-
-		console.log(json);
-		if (form_id == "opportunityForm")
-			saveDeal(form_id, modal_id, this, json, false);
-		else
-			saveDeal(form_id, modal_id, this, json, true);
-	});
 
 
 	/**
