@@ -156,5 +156,9 @@ var _agile = {
 		create_case : function(callback)
 		{
 			agile_createCase(callback);								// Create case and add to contact with email set
+		},
+		update_deal : function(data, callback, email)
+		{
+			agile_updateDeal(data, callback, email);				// Update deal of contact
 		}
 };

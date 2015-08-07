@@ -88,6 +88,8 @@ function addNewPortlet(portlet_type,p_name){
 		obj.name="Stats Report";
 	else if(p_name=="Leaderboard")
 		obj.name="Leaderboard";
+	else if(p_name=="RevenueGraph")
+		obj.name="Revenue Graph";
 	obj.portlet_type=portlet_type;
 	var max_row_position=0;
 	if(gridster!=undefined)
@@ -153,6 +155,9 @@ function addNewPortlet(portlet_type,p_name){
 		json['category']=categoryJson;
 		obj.size_y=2;
 		obj.size_x=2;
+	}else if(portlet_type=="DEALS" && p_name=="RevenueGraph"){
+		json['duration']="this-quarter";
+		json['track']="anyTrack";
 	}
 	var portlet = new BaseModel();
 	portlet.url = 'core/api/portlets/addPortlet';
@@ -309,8 +314,8 @@ $('#portlets-events-model-list > tr').live('click', function(e){
 	   
 	 // Set date for update Event
 	    var dateFormat = 'mm/dd/yyyy';
-	    $("#update-event-date-1").val((new Date(model.get('start')*1000)).format(dateFormat));
-	    $("#update-event-date-2").val((new Date(model.get('end')*1000)).format(dateFormat));
+	    $("#update-event-date-1").val(getDateInFormatFromEpoc(model.get('start')));
+	    $("#update-event-date-2").val(getDateInFormatFromEpoc(model.get('end')));
 	    
 	   	// hide end date & time for all day events
 	    if(model.toJSON().allDay)
@@ -517,49 +522,62 @@ function getStartAndEndDatesOnDue(duration){
 		d.setDate(d.getDate() + 2);
 	
 	//this quarter start
-	if(duration=="this-quarter-start"){
+	if(duration=="this-quarter-start" || duration=="this-and-next-quarter-start"){
 		var currentMonth = d.getMonth();
-		var qtrMonth = currentMonth%3;
-		if(qtrMonth==0)
-			qtrMonth=3;
-		d.setMonth((currentMonth-qtrMonth)+1);
+		if(currentMonth<3)
+			d.setMonth(0);
+		else if(currentMonth>=3 && currentMonth<6)
+			d.setMonth(3);
+		else if(currentMonth>=6 && currentMonth<9)
+			d.setMonth(6);
+		else if(currentMonth>=9 && currentMonth<12)
+			d.setMonth(9);
 		d.setDate(1);
 	}
 	
 	//this quarter end
 	if(duration=="this-quarter-end"){
 		var currentMonth = d.getMonth();
-		var qtrMonth = currentMonth%3;
-		if(qtrMonth==0)
-			qtrMonth=3;
-		d.setMonth((currentMonth-qtrMonth)+4);
+		if(currentMonth<3)
+			d.setMonth(3);
+		else if(currentMonth>=3 && currentMonth<6)
+			d.setMonth(6);
+		else if(currentMonth>=6 && currentMonth<9)
+			d.setMonth(9);
+		else if(currentMonth>=9 && currentMonth<12){
+			d.setFullYear(d.getFullYear()+1);
+			d.setMonth(0);
+		}
 		d.setDate(1);
 	}
 	
 	//last quarter start
 	if(duration=="last-quarter-start"){
 		var currentMonth = d.getMonth();
-		var qtrMonth = currentMonth%3;
-		if(qtrMonth==0)
-			qtrMonth=3;
-		if(currentMonth<=3){
-			d.setMonth(10);
-			dt.setFullYear(dt.getFullYear()-1);
-		}else{
-			d.setMonth((currentMonth-qtrMonth)-2);
+		if(currentMonth<3){
+			d.setFullYear(d.getFullYear()-1);
+			d.setMonth(9);
 		}
+		else if(currentMonth>=3 && currentMonth<6)
+			d.setMonth(0);
+		else if(currentMonth>=6 && currentMonth<9)
+			d.setMonth(3);
+		else if(currentMonth>=9 && currentMonth<12)
+			d.setMonth(6);
 		d.setDate(1);
 	}
 	
 	//last quarter end
 	if(duration=="last-quarter-end"){
 		var currentMonth = d.getMonth();
-		var qtrMonth = currentMonth%3;
-		if(currentMonth<=3){
-			d.setMonth(1);
-		}else{
-			d.setMonth((currentMonth-qtrMonth)+1);
-		}
+		if(currentMonth<3)
+			d.setMonth(0);
+		else if(currentMonth>=3 && currentMonth<6)
+			d.setMonth(3);
+		else if(currentMonth>=6 && currentMonth<9)
+			d.setMonth(6);
+		else if(currentMonth>=9 && currentMonth<12)
+			d.setMonth(9);
 		d.setDate(1);
 	}
 	
@@ -568,9 +586,283 @@ function getStartAndEndDatesOnDue(duration){
 		d.setDate(1);
 		d.setMonth(d.getMonth()+1);
 	}
+
+	//next quarter start
+	if(duration=="next-quarter-start"){
+		var currentMonth = d.getMonth();
+		if(currentMonth<3)
+			d.setMonth(3);
+		else if(currentMonth>=3 && currentMonth<6)
+			d.setMonth(6);
+		else if(currentMonth>=6 && currentMonth<9)
+			d.setMonth(9);
+		else if(currentMonth>=9 && currentMonth<12){
+			d.setFullYear(d.getFullYear()+1);
+			d.setMonth(0);
+		}
+		d.setDate(1);
+	}
+	
+	//next quarter end
+	if(duration=="next-quarter-end" || duration=="this-and-next-quarter-end"){
+		var currentMonth = d.getMonth();
+		if(currentMonth<3)
+			d.setMonth(6);
+		else if(currentMonth>=3 && currentMonth<6)
+			d.setMonth(9);
+		else if(currentMonth>=6 && currentMonth<9){
+			d.setFullYear(d.getFullYear()+1);
+			d.setMonth(0);
+		}
+		else if(currentMonth>=9 && currentMonth<12){
+			d.setFullYear(d.getFullYear()+1);
+			d.setMonth(3);
+		}
+		d.setDate(1);
+	}
+
+	//this year start
+	if(duration=="this-year-start"){
+		d.setMonth(d.getMonth()-d.getMonth());
+		d.setDate(1);
+	}
+	
+	//this year end
+	if(duration=="this-year-end"){
+		d.setFullYear(d.getFullYear()+1);
+		d.setMonth(d.getMonth()-d.getMonth());
+		d.setDate(1);
+	}
+
+	//next year start
+	if(duration=="next-year-start"){
+		d.setFullYear(d.getFullYear()+1);
+		d.setMonth(d.getMonth()-d.getMonth());
+		d.setDate(1);
+	}
+	
+	//next year end
+	if(duration=="next-year-end"){
+		d.setFullYear(d.getFullYear()+2);
+		d.setMonth(d.getMonth()-d.getMonth());
+		d.setDate(1);
+	}
 		
 
 	console.log((getGMTTimeFromDate(d) / 1000));
 
 	return (getGMTTimeFromDate(d) / 1000);
+}
+function getStartAndEndDatesEpochForPortlets(duration)
+{
+	var d = new Date();
+
+	//Last 24 Hrs
+	if(duration == "24-hours"){
+		var hrs = (d.setMilliseconds(0)/1000)-(24*60*60);
+		return hrs;
+	}
+	//Current time
+	if(duration == "now")
+		return (d.setMilliseconds(0)/1000);
+	// Today
+	if (duration == "1-day" || duration == "today")
+		console.log(getGMTTimeFromDate(d) / 1000);
+	
+	// This week
+	if (duration == "this-week" || duration == "this-week-start"){
+		if(new Date().getDay()!=0)
+			d.setDate(d.getDate() - (new Date().getDay()-1));
+		else
+			d.setDate(d.getDate() - (new Date().getDay()+6));
+	}
+	// This week end
+	if (duration == "this-week-end"){
+		if(new Date().getDay()!=0)
+			d.setDate((d.getDate() - (new Date().getDay()-1))+7);
+		else
+			d.setDate((d.getDate() - (new Date().getDay()+6))+7);
+	}
+	//Last week start
+	if(duration == "last-week" || duration == "last-week-start")
+		d.setDate(d.getDate()-d.getDay()-6);
+	
+	//Lats week end
+	if(duration == "last-week-end")
+		d.setDate((d.getDate()-d.getDay())+1);
+	
+	// 1 Week ago
+	if (duration == "1-week")
+		d.setDate(d.getDate() - 6);
+	
+	// 1 Month ago
+	if (duration == "1-month")
+		d.setDate(d.getDate() - 29);
+	
+	// This month
+	if (duration == "this-month" || duration == "this-month-start")
+		d.setDate(1);
+	
+	//Last month start
+	if(duration == "last-month" || duration == "last-month-start"){
+		d.setDate(1);
+		d.setMonth(d.getMonth()-1);
+	}
+	
+	//Lats month end
+	if(duration == "last-month-end"){
+		d.setDate((d.getDate()-d.getDate())+1);
+		d.setMonth(d.getMonth());
+	}
+
+	// Tomorrow
+	if (duration == "TOMORROW")
+		d.setDate(d.getDate() + 1);
+	
+	// Yesterday
+	if (duration == "yesterday")
+		d.setDate(d.getDate() - 1);
+	
+	// Last 2 days
+	if (duration == "2-days")
+		d.setDate(d.getDate() - 1);
+	
+	// next 7 days
+	if (duration == "next-7-days")
+		d.setDate(d.getDate() + 8);
+
+	// next 7 days
+	if (duration == "today-and-tomorrow")
+		d.setDate(d.getDate() + 2);
+	
+	//this quarter start
+	if(duration=="this-quarter-start" || duration=="this-and-next-quarter-start"){
+		var currentMonth = d.getMonth();
+		if(currentMonth<3)
+			d.setMonth(0);
+		else if(currentMonth>=3 && currentMonth<6)
+			d.setMonth(3);
+		else if(currentMonth>=6 && currentMonth<9)
+			d.setMonth(6);
+		else if(currentMonth>=9 && currentMonth<12)
+			d.setMonth(9);
+		d.setDate(1);
+	}
+	
+	//this quarter end
+	if(duration=="this-quarter-end"){
+		var currentMonth = d.getMonth();
+		if(currentMonth<3)
+			d.setMonth(3);
+		else if(currentMonth>=3 && currentMonth<6)
+			d.setMonth(6);
+		else if(currentMonth>=6 && currentMonth<9)
+			d.setMonth(9);
+		else if(currentMonth>=9 && currentMonth<12){
+			d.setFullYear(d.getFullYear()+1);
+			d.setMonth(0);
+		}
+		d.setDate(1);
+	}
+	
+	//last quarter start
+	if(duration=="last-quarter-start"){
+		var currentMonth = d.getMonth();
+		if(currentMonth<3){
+			d.setFullYear(d.getFullYear()-1);
+			d.setMonth(9);
+		}
+		else if(currentMonth>=3 && currentMonth<6)
+			d.setMonth(0);
+		else if(currentMonth>=6 && currentMonth<9)
+			d.setMonth(3);
+		else if(currentMonth>=9 && currentMonth<12)
+			d.setMonth(6);
+		d.setDate(1);
+	}
+	
+	//last quarter end
+	if(duration=="last-quarter-end"){
+		var currentMonth = d.getMonth();
+		if(currentMonth<3)
+			d.setMonth(0);
+		else if(currentMonth>=3 && currentMonth<6)
+			d.setMonth(3);
+		else if(currentMonth>=6 && currentMonth<9)
+			d.setMonth(6);
+		else if(currentMonth>=9 && currentMonth<12)
+			d.setMonth(9);
+		d.setDate(1);
+	}
+	
+	// This month end
+	if (duration == "this-month-end"){
+		d.setDate(1);
+		d.setMonth(d.getMonth()+1);
+	}
+
+	//next quarter start
+	if(duration=="next-quarter-start"){
+		var currentMonth = d.getMonth();
+		if(currentMonth<3)
+			d.setMonth(3);
+		else if(currentMonth>=3 && currentMonth<6)
+			d.setMonth(6);
+		else if(currentMonth>=6 && currentMonth<9)
+			d.setMonth(9);
+		else if(currentMonth>=9 && currentMonth<12){
+			d.setFullYear(d.getFullYear()+1);
+			d.setMonth(0);
+		}
+		d.setDate(1);
+	}
+	
+	//next quarter end
+	if(duration=="next-quarter-end" || duration=="this-and-next-quarter-end"){
+		var currentMonth = d.getMonth();
+		if(currentMonth<3)
+			d.setMonth(6);
+		else if(currentMonth>=3 && currentMonth<6)
+			d.setMonth(9);
+		else if(currentMonth>=6 && currentMonth<9){
+			d.setFullYear(d.getFullYear()+1);
+			d.setMonth(0);
+		}
+		else if(currentMonth>=9 && currentMonth<12){
+			d.setFullYear(d.getFullYear()+1);
+			d.setMonth(3);
+		}
+		d.setDate(1);
+	}
+
+	//this year start
+	if(duration=="this-year-start"){
+		d.setMonth(d.getMonth()-d.getMonth());
+		d.setDate(1);
+	}
+	
+	//this year end
+	if(duration=="this-year-end"){
+		d.setFullYear(d.getFullYear()+1);
+		d.setMonth(d.getMonth()-d.getMonth());
+		d.setDate(1);
+	}
+
+	//next year start
+	if(duration=="next-year-start"){
+		d.setFullYear(d.getFullYear()+1);
+		d.setMonth(d.getMonth()-d.getMonth());
+		d.setDate(1);
+	}
+	
+	//next year end
+	if(duration=="next-year-end"){
+		d.setFullYear(d.getFullYear()+2);
+		d.setMonth(d.getMonth()-d.getMonth());
+		d.setDate(1);
+	}
+
+	console.log((getUTCMidNightEpochFromDate(d) / 1000));
+
+	return (getUTCMidNightEpochFromDate(d) / 1000);
 }

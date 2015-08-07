@@ -4,7 +4,7 @@ import com.agilecrm.account.EmailGateway;
 import com.agilecrm.account.EmailGateway.EMAIL_API;
 import com.agilecrm.account.util.EmailGatewayUtil;
 import com.google.appengine.api.taskqueue.DeferredTask;
-import com.thirdparty.SendGrid;
+import com.thirdparty.sendgrid.SendGrid;
 import com.thirdparty.mandrill.Mandrill;
 
 /**

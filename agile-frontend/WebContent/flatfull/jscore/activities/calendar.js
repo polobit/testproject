@@ -114,6 +114,11 @@ function showCalendar()
 	putGoogleCalendarLink();
 	var calendarView = (!readCookie('calendarDefaultView')) ? 'month' : readCookie('calendarDefaultView');
 	$('#' + calendarView).addClass('bg-light');
+	var contentHeight = 400;
+	if ( calendarView == "agendaDay" || calendarView == "agendaWeek" )
+	{
+		contentHeight = 575;
+	}
 	fullCal = $('#calendar_event')
 			.fullCalendar(
 					{
@@ -237,8 +242,9 @@ function showCalendar()
 						selectHelper : true,
 						editable : true,
 						theme : false,
-						contentHeight : 400,
+						contentHeight : contentHeight,
 						firstDay : CALENDAR_WEEK_START_DAY,
+						firstHour : 7,
 						themeButtonIcons : { prev : 'fc-icon-left-single-arrow', next : 'fc-icon-right-single-arrow' },
 						eventMouseover : function(event, jsEvent, view)
 						{
@@ -270,35 +276,6 @@ function showCalendar()
 							}
 							var leftorright = 'left';
 							var pullupornot = '';
-							if (calendarView == "agendaDay")
-							{
-								leftorright = 'top';
-							}
-							else
-							{
-								pullupornot = 'pull-up';
-								if (calendarView == "agendaWeek")
-								{
-									if (event.start.getHours() >= 20 && ((event.start.getDay() != 5 && event.start.getDay() != 6)))
-									{
-										leftorright = 'bottom';
-										pullupornot = '';
-									}
-									else if (event.start.getHours() <= 3 && ((event.start.getDay() != 5 && event.start.getDay() != 6)))
-									{
-										leftorright = 'top';
-										pullupornot = '';
-									}
-
-								}
-								if (calendarView == "month")
-								{
-									if (event.start.getDay() == 5 || event.start.getDay() == 6)
-										leftorright = 'right';
-								}
-
-							}
-
 							if (event.meeting_type && event.description)
 							{
 								meeting_type = '<i class="icon-comment-alt text-muted m-r-xs"></i><span>Meeting Type - ' + event.meeting_type + '</span><br/><span title=' + event.description + '>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' + addDotsAtEnd(event.description) + '</span>';
@@ -308,21 +285,111 @@ function showCalendar()
 							{
 								meeting_type = '<i class="icon-comment-alt text-muted m-r-xs"></i><span title=' + event.description + '>' + addDotsAtEnd(event.description) + '</span>';
 							}
-							var popoverElement = '<div class="fc-overlay ' + leftorright + '">' + '<div class="panel bg-white b-a pos-rlt p-sm">' + '<span class="arrow ' + leftorright + ' ' + pullupornot + '"></span>' + '<div class="h4 font-thin m-b-sm"><div class="pull-left">' + event.title + '</div><div class="pull-right"><img class="r-2x" src="' + event.ownerPic + '" height="20px" width="20px" title="' + event.owner.name + '"/></div></div>' + '<div class="line b-b b-light"></div>' + '<div><i class="icon-clock text-muted m-r-xs"></i>' + event.start
-									.format('dd-mmm-yyyy HH:MM') + '</div>' + '<div>' + reletedContacts + '</div>' + '<div>' + meeting_type + '</div>' + '</div>' + '</div>';
-							$(this).append(popoverElement);
+
+							var popoverElement = '';
+							var popover_min_width = 300;
+							if (calendarView == "month")
+							{
+								popover_min_width = $('.fc-view-month').find('.fc-widget-content').eq(0).width()*2;
+								var left = jsEvent.currentTarget.offsetLeft+jsEvent.currentTarget.offsetWidth+10;
+								var top = jsEvent.currentTarget.offsetTop;
+								if ($('.fc-border-separate:visible').width()-left < popover_min_width)
+								{
+									left = jsEvent.currentTarget.offsetLeft-popover_min_width-10;
+									leftorright = 'right';
+								}
+								if ($('.fc-border-separate:visible').width()-popover_min_width-20 < jsEvent.currentTarget.offsetWidth)
+								{
+									left = ((jsEvent.currentTarget.offsetLeft+jsEvent.currentTarget.offsetWidth+10)/2)-(popover_min_width/2);
+									top = jsEvent.currentTarget.offsetTop+jsEvent.currentTarget.offsetHeight+10;
+									leftorright = 'top';
+								}
+								var popoverElement = '<div class="fc-overlayw ' + leftorright + '" style="width:100%;min-width:'+popover_min_width+'px;max-width:'+popover_min_width+'px;left:'+left+'px;top:'+top+'px;position:absolute;z-index:10;display:none;">' + '<div class="panel bg-white b-a pos-rlt p-sm">' + '<span class="arrow ' + leftorright + ' ' + pullupornot + '" style="top:11px;"></span>' + '<div class="h4 font-thin m-b-sm"><div class="pull-left text-ellipsis p-b-xs" style="width:100%;">' + event.title + '</div></div>' + '<div class="line b-b b-light"></div>' + '<div><i class="icon-clock text-muted m-r-xs"></i>' + event.start
+									.format('dd-mmm-yyyy HH:MM') + '<div class="pull-right" style="width:10%;"><img class="r-2x" src="' + event.ownerPic + '" height="20px" width="20px" title="' + event.owner.name + '"/></div></div>' + '<div class="text-ellipsis">' + reletedContacts + '</div>' + '<div class="text-ellipsis">' + meeting_type + '</div>' + '</div>' + '</div>';
+								$(this).after(popoverElement);
+								if ($('.fc-border-separate:visible').height()-jsEvent.currentTarget.offsetTop < $(this).parent().find('.fc-overlayw').height())
+								{
+									$(this).parent().find('.fc-overlayw').css("top",top-$(this).parent().find('.fc-overlayw').height()+jsEvent.currentTarget.offsetHeight+20+"px");
+									$(this).parent().find('.fc-overlayw').find('.arrow').css("top", $(this).parent().find('.fc-overlayw').height()-31+"px");
+								}
+								if ($('.fc-border-separate:visible').width()-popover_min_width-20 < jsEvent.currentTarget.offsetWidth)
+								{
+									$(this).parent().find('.fc-overlayw').find('.arrow').css("top", "-9px");
+								}
+								if (($('.fc-border-separate:visible').height()-jsEvent.currentTarget.offsetTop-jsEvent.currentTarget.offsetHeight-10 < $(this).parent().find('.fc-overlayw').height()+10) && ($('.fc-border-separate:visible').width()-popover_min_width-20 < jsEvent.currentTarget.offsetWidth))
+								{
+									$(this).parent().find('.fc-overlayw').find('.arrow').removeClass('top').addClass('bottom');
+									left = ((jsEvent.currentTarget.offsetLeft+jsEvent.currentTarget.offsetWidth+10)/2)-(popover_min_width/2);
+									top = jsEvent.currentTarget.offsetTop-$(this).parent().find('.fc-overlayw').height()+10;
+									$(this).parent().find('.fc-overlayw').css({"top":top+"px","lef":left+"px"});
+									$(this).parent().find('.fc-overlayw').find('.arrow').css("top", $(this).parent().find('.fc-overlayw').height()-22+"px");
+								}
+							}
+							else if (calendarView == "agendaWeek")
+							{
+								popover_min_width = $('.fc-view-agendaWeek').find('.fc-widget-content').eq(0).width()*2;
+								var left = jsEvent.currentTarget.offsetLeft+jsEvent.currentTarget.offsetWidth+10;
+								var top = jsEvent.currentTarget.offsetTop;
+								if ($('.fc-agenda-slots:visible').width()-left < popover_min_width)
+								{
+									left = jsEvent.currentTarget.offsetLeft-popover_min_width-10;
+									leftorright = 'right';
+								}
+								//var event_width = jsEvent.currentTarget.offsetWidth;
+								var popoverElement = '<div class="fc-overlayw ' + leftorright + '" style="width:100%;min-width:'+popover_min_width+'px;max-width:'+popover_min_width+'px;left:'+left+'px;top:'+top+'px;position:absolute;z-index:10;display:none;">' + '<div class="panel bg-white b-a pos-rlt p-sm">' + '<span class="arrow ' + leftorright + ' ' + pullupornot + '" style="top:11px;"></span>' + '<div class="h4 font-thin m-b-sm"><div class="pull-left text-ellipsis p-b-xs" style="width:100%;">' + event.title + '</div></div>' + '<div class="line b-b b-light"></div>' + '<div><i class="icon-clock text-muted m-r-xs"></i>' + event.start
+									.format('dd-mmm-yyyy HH:MM') + '<div class="pull-right" style="width:10%;"><img class="r-2x" src="' + event.ownerPic + '" height="20px" width="20px" title="' + event.owner.name + '"/></div></div>' + '<div class="text-ellipsis">' + reletedContacts + '</div>' + '<div class="text-ellipsis">' + meeting_type + '</div>' + '</div>' + '</div>';
+								$(this).after(popoverElement);
+								if ($('.fc-agenda-slots:visible').height()-jsEvent.currentTarget.offsetTop < $(this).parent().find('.fc-overlayw').height())
+								{
+									$(this).parent().find('.fc-overlayw').css("top",top-$(this).parent().find('.fc-overlayw').height()+jsEvent.currentTarget.offsetHeight+20+"px");
+									$(this).parent().find('.fc-overlayw').find('.arrow').css("top", $(this).parent().find('.fc-overlayw').height()-31+"px");
+								}
+							}
+							else if (calendarView == "agendaDay")
+							{
+								var left = jsEvent.currentTarget.offsetLeft;
+								var top = jsEvent.currentTarget.offsetTop+jsEvent.currentTarget.offsetHeight+10;
+								leftorright = 'top';
+								if ($('.fc-agenda-slots:visible').width()-jsEvent.currentTarget.offsetLeft < popover_min_width)
+								{
+									left = jsEvent.currentTarget.offsetLeft-jsEvent.currentTarget.offsetWidth-($('.fc-agenda-slots:visible').width()-jsEvent.currentTarget.offsetLeft-jsEvent.currentTarget.offsetWidth);
+								}
+								var popoverElement = '<div class="fc-overlayw ' + leftorright + '" style="width:100%;min-width:'+popover_min_width+'px;max-width:'+popover_min_width+'px;left:'+left+'px;top:'+top+'px;position:absolute;z-index:10;display:none;">' + '<div class="panel bg-white b-a pos-rlt p-sm">' + '<span class="arrow ' + leftorright + ' ' + pullupornot + '" style="top:11px;"></span>' + '<div class="h4 font-thin m-b-sm"><div class="pull-left text-ellipsis p-b-xs" style="width:100%;">' + event.title + '</div></div>' + '<div class="line b-b b-light"></div>' + '<div><i class="icon-clock text-muted m-r-xs"></i>' + event.start
+									.format('dd-mmm-yyyy HH:MM') + '<div class="pull-right" style="width:10%;"><img class="r-2x" src="' + event.ownerPic + '" height="20px" width="20px" title="' + event.owner.name + '"/></div></div>' + '<div class="text-ellipsis">' + reletedContacts + '</div>' + '<div class="text-ellipsis">' + meeting_type + '</div>' + '</div>' + '</div>';
+								$(this).after(popoverElement);
+								$(this).parent().find('.fc-overlayw').find('.arrow').css({"top":"-9px","left":"11px"});
+								if ($('.fc-agenda-slots:visible').width()-jsEvent.currentTarget.offsetLeft < popover_min_width)
+								{
+									$(this).parent().find('.fc-overlayw').find('.arrow').css({"top":"-9px","left":popover_min_width-15+"px"});
+								}
+								if ((jsEvent.currentTarget.offsetTop < $(this).parent().find('.fc-overlayw').height()+10) && ($('.fc-agenda-slots:visible').height()-jsEvent.currentTarget.offsetHeight < $(this).parent().find('.fc-overlayw').height()+10))
+								{
+									$(this).parent().find('.fc-overlayw').css("top",jsEvent.currentTarget.offsetTop+40+"px");
+								}
+								if ((jsEvent.currentTarget.offsetTop > $(this).parent().find('.fc-overlayw').height()+10) && ($('.fc-agenda-slots:visible').height()-(jsEvent.currentTarget.offsetHeight+jsEvent.currentTarget.offsetTop) < $(this).parent().find('.fc-overlayw').height()+10))
+								{
+									$(this).parent().find('.fc-overlayw').find('.arrow').removeClass('top').addClass('bottom');
+									$(this).parent().find('.fc-overlayw').find('.arrow').css("top",$(this).parent().find('.fc-overlayw').height()-22+"px");
+									$(this).parent().find('.fc-overlayw').css("top",$('.fc-agenda-slots:visible').height()-jsEvent.currentTarget.offsetHeight-$(this).parent().find('.fc-overlayw').height()+7+"px");
+									if ($('.fc-agenda-slots:visible').width()-jsEvent.currentTarget.offsetLeft < popover_min_width)
+									{
+										$(this).parent().find('.fc-overlayw').css("left",jsEvent.currentTarget.offsetLeft-jsEvent.currentTarget.offsetWidth-($('.fc-agenda-slots:visible').width()-jsEvent.currentTarget.offsetLeft-jsEvent.currentTarget.offsetWidth)+"px");
+									}
+								}
+							}
+
 							$(jsEvent.currentTarget).css('z-index', 9);
 							if (event.allDay)
 							{
 								$(jsEvent.currentTarget.parentElement).css('z-index', 9);
 							}
-							$(this).find('.fc-overlay').show();
+							$(this).parent().find('.fc-overlayw').show();
 							$(this).find(".ui-resizable-handle").show();
 						},
 						eventMouseout : function(event, jsEvent, view)
 						{
-							$(this).find('.fc-overlay').hide();
-							$(this).find('.fc-overlay').remove();
+							$(this).parent().find('.fc-overlayw').hide();
+							$(this).parent().find('.fc-overlayw').remove();
 							$(this).find(".ui-resizable-handle").hide();
 							$(jsEvent.currentTarget).css('z-index', 8);
 							if (event.allDay)
@@ -357,10 +424,10 @@ function showCalendar()
 							highlight_event();
 
 							// Set Date for Event
-							var dateFormat = 'mm/dd/yyyy';
-							$('#task-date-1').val(start.format(dateFormat));
-							$("#event-date-1").val(start.format(dateFormat));
-							$("#event-date-2").val(end.format(dateFormat));
+							//var dateFormat = 'mm/dd/yyyy';
+							$('#task-date-1').val(getDateInFormat(start));
+							$("#event-date-1").val(getDateInFormat(start));
+							$("#event-date-2").val(getDateInFormat(end));
 
 							// Set Time for Event
 							if ((start.getHours() == 00) && (end.getHours() == 00) && (end.getMinutes() == 00))
@@ -461,8 +528,8 @@ function showCalendar()
 
 							// Set date for update Event
 							var dateFormat = 'mm/dd/yyyy';
-							$("#update-event-date-1").val((event.start).format(dateFormat));
-							$("#update-event-date-2").val((event.end).format(dateFormat));
+							$("#update-event-date-1").val(getDateInFormat(event.start));
+							$("#update-event-date-2").val(getDateInFormat(event.end));
 
 							// hide end date & time for all day events
 							if (event.allDay)
@@ -740,6 +807,14 @@ $('.agendaDayWeekMonth').die().live('click', function()
 		else
 			$(this).removeClass('bg-light');
 	});
+	if (currentView == "agendaDay" || currentView == "agendaWeek")
+	{
+		fullCal.fullCalendar('option', 'contentHeight', 575);
+	}
+	else
+	{
+		fullCal.fullCalendar('option', 'contentHeight', 400);
+	}
 
 });
 

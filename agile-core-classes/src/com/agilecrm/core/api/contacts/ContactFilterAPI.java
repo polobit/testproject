@@ -185,7 +185,7 @@ public class ContactFilterAPI
 	ContactFilter contact_filter = ContactFilterUtil.getFilterFromJSONString(filterJson);
 	// Sets ACL condition
 	UserAccessControlUtil.checkReadAccessAndModifyTextSearchQuery(
-		UserAccessControl.AccessControlClasses.Contact.toString(), contact_filter.rules);
+		UserAccessControl.AccessControlClasses.Contact.toString(), contact_filter.rules, null);
 	return new ArrayList<Contact>(contact_filter.queryContacts(Integer.parseInt(count), cursor, sortKey));
     }
 

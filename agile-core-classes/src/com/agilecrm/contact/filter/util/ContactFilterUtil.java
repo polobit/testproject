@@ -70,7 +70,7 @@ public class ContactFilterUtil
 
 	    // Sets ACL condition
 	    UserAccessControlUtil.checkReadAccessAndModifyTextSearchQuery(
-		    UserAccessControl.AccessControlClasses.Contact.toString(), filter.rules);
+		    UserAccessControl.AccessControlClasses.Contact.toString(), filter.rules, null);
 
 	    /*
 	     * if(filter.rules != null) { // Search rule to specify type is

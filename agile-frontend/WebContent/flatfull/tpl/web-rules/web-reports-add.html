@@ -151,7 +151,7 @@
 													type="text" name="temp" class="email required"/> <input id="updated_date" type="text"
 													name="updated_date"
 													class="ON AFTER BEFORE BETWEEN input required date form-control"
-													placeholder="MM/DD/YY" />
+													placeholder="{{dateFormat}}" data-date-format="{{dateFormat}}" />
 													<input type="text" name="temp"
 													class="IS_GREATER_THAN IS_LESS_THAN number required form-control" placeholder="Enter Score"/>
 													<select class="form-control">
@@ -414,7 +414,7 @@
 											<div id="RHS-NEW" name="RHS_NEW">
 												<input id="date_between" type="text" name="temp"
 													 class="BETWEEN input date required form-control"
-													placeholder="MM/DD/YY" />
+													placeholder="{{dateFormat}}"  data-date-format="{{dateFormat}}"/>
 											</div>
 										</td>
 										<td class="v-top">
@@ -438,14 +438,14 @@
 													id="date_between" type="text"
 													name="temp"
 													class="BETWEEN EQUALS AFTER BEFORE input date required xs form-control"
-													placeholder="MM/DD/YY" />
+													placeholder="{{dateFormat}}" data-date-format="{{dateFormat}}" />
 											</div>
 										</td>
 										<td class="controls v-top">
 											<div id="nested_rhs" name="nested_rhs">
 												<input id="date_between" type="text" name="temp"
 													class="BETWEEN input date required form-control"
-													placeholder="MM/DD/YY" />
+													placeholder="{{dateFormat}} data-date-format="{{dateFormat}}"" />
 											</div>
 										</td>
 

@@ -224,9 +224,9 @@
 	</table>
 </div>
 {{else}}
-	<div class="portlet-error-message">
+	<!-- <div class="portlet-error-message">
 		No calendar events
-	</div>
+	</div> -->
 {{/if}}
 </script>
 <script id="portlets-events-model-template" type="text/html">
@@ -246,6 +246,40 @@
 		{{#if this.contacts}}
 			<div class="w-full m-b-xxs text-ellipsis" style="padding-left:79px;">
 				{{#related_to_one contacts}}{{/related_to_one}}
+			</div>
+		{{/if}}
+	</div>
+</td>
+</script>
+
+<script id="portlets-google-events-collection-template" type="text/html">
+{{#if this.length}}
+<div class="">
+	<table class="table no-sorting t-l-fix agile-table-ellipsis">
+		<tbody id="portlets-google-events-model-list" style="cursor:pointer;"></tbody>
+	</table>
+</div>
+{{/if}}
+</script>
+<script id="portlets-google-events-model-template" type="text/html">
+<td class="data">
+	<div class="portlet-time-view no-inherit">
+		<div style="width: 73%;padding-top:2px;padding-bottom:3px;" class="pull-left m-b-xs text-ellipsis">
+			<span class="label p-l-xs p-r-xxs text-base pos-rlt m-r event-start-time font-bold bg-success" datetime="{{get_AM_PM_format startEpoch}}">
+				<i class="arrow right arrow-success" style="right:-8px;"></i>
+				{{get_AM_PM_format startEpoch}}
+			</span>
+			<a class="text-ellipsis" style="width:60%;">{{title}}</a>
+		</div>
+		<div class="text-right m-b-xs  text-ellipsis text-muted" style="width: 27%;">
+		<i class="fa fa-clock-o m-r-xs"></i>	
+		<time class="event-end-time" datetime="{{epochToHumanDate "HH:MM" endEpoch}}" >{{get_duration startEpoch endEpoch}}</time>
+		</div>
+		{{#if this.contacts}}
+			<div class="w-full m-b-xxs text-ellipsis" style="padding-left:79px;">
+				{{#each contacts}}
+					<span class="label bg-light dk text-tiny">{{getContactDisplayValue this}}</span> 
+				{{/each}}
 			</div>
 		{{/if}}
 	</div>
@@ -679,7 +713,10 @@
 				<i id="{{id}}-close" class="c-p icon-close {{remove_spaces name}}-close p-r-sm" onclick="deletePortlet(this);"></i>
 			</div>
 		</div>
-        <div class="portlet_body panel-body p-n b-n"></div>
+        <div class="portlet_body panel-body p-n b-n">
+        	<div id="normal-events">&nbsp;</div>
+        	<div id="google-events">&nbsp;</div>
+        </div>
      <div class="portlets" id="{{id}}">&nbsp;</div>
      <div class="column_position" style="display:none">{{column_position}}</div>
      <div class="row_position" style="display:none">{{row_position}}</div>
@@ -1162,6 +1199,26 @@
 <div class="portlets" id="{{id}}">&nbsp;</div>
 <div class="column_position" style="display:none">{{column_position}}</div>
 <div class="row_position" style="display:none">{{row_position}}</div>	
+</script>
+
+<script id="portlets-deals-revenue-graph-model-template" type="text/html">
+		<div class="portlet_header portlet_edit_icons panel-heading b-b-none" onmouseover="showPortletIcons(this); return false;" onmouseout="hidePortletIcons(this); return false;">
+			<h4 class="h4 text-ellipsis text-muted">
+				<span class="pull-left inline-block text-ellipsis" style="width:60%;">Revenue Graph</span>
+				<small class="pull-right text-right p-t-xs portlet-header-small-text text-ellipsis" style="width: 40%;">
+					{{get_portlet_duration settings.duration}}
+				</small>
+			</h4>
+			<div class="portlet_header_icons pull-right clear-fix text-muted p-t-xs pos-abs pos-r-0 pos-t-xs vis-hide">
+				<i id="{{id}}-settings" class="portlet-settings icon-wrench p-r-xs c-p"></i>
+				<i id="{{id}}-close" class="c-p icon-close {{remove_spaces name}}-close p-r-sm" onclick="deletePortlet(this);"></i>
+			</div>
+		</div>
+        <div class="portlet_body panel-body p-n b-n">
+		</div>
+     <div class="portlets" id="{{id}}">&nbsp;</div>
+     <div class="column_position" style="display:none">{{column_position}}</div>
+     <div class="row_position" style="display:none">{{row_position}}</div>	
 </script>
 
 <script id="portlets-collection-template" type="text/html">

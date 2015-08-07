@@ -152,7 +152,10 @@ $(function()
 	/**
 	 * Date Picker Activates datepicker for task due element
 	 */
-	$('#task-date-1').datepicker({ format : 'mm/dd/yyyy', weekStart : CALENDAR_WEEK_START_DAY });
+
+	$('#task-date-1').datepicker({ format : CURRENT_USER_PREFS.dateFormat , weekStart : CALENDAR_WEEK_START_DAY});
+	$('#update-task-date-1').datepicker({ format : CURRENT_USER_PREFS.dateFormat , weekStart : CALENDAR_WEEK_START_DAY});
+
 
 	/**
 	 * Shows a pop-up modal with pre-filled values to update a task
@@ -230,7 +233,7 @@ function highlight_task()
 				$("#activityForm").find("#event_related_to").closest(".controls").find("ul").children());
 
 	// Date().format('mm/dd/yyyy'));
-	$('input.date').val(new Date().format('mm/dd/yyyy')).datepicker('update');
+	$('input.date').val(getDateInFormat(new Date())).datepicker('update');
 }
 
 /**
@@ -303,7 +306,10 @@ function save_task(formId, modalId, isUpdate, saveBtn)
 							$(".navbar_due_tasks").css("display", "none");
 						else
 							$(".navbar_due_tasks").css("display", "inline-block");
-						$('#due_tasks_count').html(due_task_count);
+						if(due_task_count !=0)
+							$('#due_tasks_count').html(due_task_count);
+						else
+							$('#due_tasks_count').html("");
 
 						if (Current_Route == 'calendar')
 						{
@@ -629,8 +635,10 @@ function complete_task(taskId, collection, ui, callback)
 			$(".navbar_due_tasks").css("display", "none");
 		else
 			$(".navbar_due_tasks").css("display", "inline-block");
-		$('#due_tasks_count').html(due_task_count);
-
+		if(due_task_count !=0)
+			$('#due_tasks_count').html(due_task_count);
+		else
+			$('#due_tasks_count').html("");
 		if (ui)
 			ui.fadeOut(500);
 

@@ -115,7 +115,7 @@
 <script id = "contacts-custom-view-created_time-template" type="text/html">
 	<td class='data' data='{{id}}'>
     <div class="text-ellipsis" style="width:15em;">
-		<a class="text-cap">{{epochToHumanDate "dd mmm yyyy" created_time}}</a>
+		<a class="text-cap">{{epochToHumanDateInFormat  created_time}}</a>
     </div>
 	</td>
 </script>
@@ -124,7 +124,7 @@
 	<td class='data' data='{{id}}'>
     <div class="text-ellipsis" style="width:15em;">
 		{{#if updated_time}}
-			{{epochToHumanDate "dd mmm yyyy" updated_time}}
+			{{epochToHumanDateInFormat  updated_time}}
 		{{/if}}
     </div>
 	</td>
@@ -190,7 +190,7 @@
 <script id = "contacts-custom-view-custom-date-template" type="text/html">
 	<td class='data' data='{{id}}'>
        <div class="text-ellipsis" style="width:15em;">
-	   	  <span>{{epochToHumanDate "dd mmm yyyy" value}}</span>
+	   	  <span>{{stringToHumanDateInFormat value}}</span>
        </div>
 	</td>
 </script>

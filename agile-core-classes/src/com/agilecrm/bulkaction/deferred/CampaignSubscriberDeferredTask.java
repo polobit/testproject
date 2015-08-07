@@ -17,6 +17,7 @@ import com.agilecrm.workflows.util.WorkflowUtil;
 import com.campaignio.tasklets.agile.util.AgileTaskletUtil;
 import com.campaignio.tasklets.util.TaskCore;
 import com.google.appengine.api.NamespaceManager;
+import com.google.appengine.api.utils.SystemProperty;
 import com.googlecode.objectify.Key;
 import com.thirdparty.Mailgun;
 
@@ -41,11 +42,11 @@ public class CampaignSubscriberDeferredTask extends BulkActionAdaptor
 
     public boolean isValidTask()
     {
-	if (StringUtils.isEmpty(namespace))
-	    return false;
+	if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Production
+		&& StringUtils.isEmpty(namespace))
 
-	if (campaignId == null)
-	    return false;
+	    if (campaignId == null)
+		return false;
 	if (key == null)
 	    return false;
 

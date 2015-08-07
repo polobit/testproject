@@ -526,13 +526,19 @@ $(function()
 					{
 						e.preventDefault();
 
+							// Selected Contact ids
+							var id_array = get_contacts_bulk_ids();
+
 						if (!canRunBulkOperations())
 						{
 							showModalConfirmation(
 									"Bulk Email",
 									"You may not be the owner for some of the contacts selected. Proceeding with this operation will send email to only your contacts.<br/><br/> Do you want to proceed?",
-
-									show_bulk_email_form, function()
+									function()
+									{
+										show_bulk_email_form(id_array)
+									},
+									function()
 									{
 										// No callback
 										return;
@@ -560,8 +566,6 @@ $(function()
 						}
 						else
 						{
-							// Selected Contact ids
-							var id_array = get_contacts_bulk_ids();
 
 							// when SELECT_ALL is true i.e., all contacts are
 							// selected.
@@ -605,17 +609,18 @@ $(function()
 								return;
 							}
 
-							show_bulk_email_form()
+							show_bulk_email_form(id_array)
 						}
 
 					});
 
-	function show_bulk_email_form()
+	function show_bulk_email_form(id_array)
 	{
 		var count = 0;
 
 		// Selected Contact ids
-		var id_array = get_contacts_bulk_ids();
+		if(id_array && id_array.length == 0)
+		id_array = get_contacts_bulk_ids();
 
 		$('body').die('fill_emails').live('fill_emails', function(event)
 		{

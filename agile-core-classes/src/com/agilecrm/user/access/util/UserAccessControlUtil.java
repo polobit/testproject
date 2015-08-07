@@ -69,7 +69,7 @@ public class UserAccessControlUtil
 	// if (!className.equals(Contact.class.getSimpleName()))
 	// return true;
 
-	UserAccessControl acccessControl = UserAccessControl.getAccessControl(className, object);
+	UserAccessControl acccessControl = UserAccessControl.getAccessControl(className, object, null);
 	if (acccessControl == null)
 	    return true;
 
@@ -100,7 +100,8 @@ public class UserAccessControlUtil
     public static <T> void checkReadAccessAndModifyQuery(String className, Query<T> q)
     {
 	System.out.println("class name " + className);
-	UserAccessControl userAccess = UserAccessControl.getAccessControl(className, null);
+
+	UserAccessControl userAccess = UserAccessControl.getAccessControl(className, null, null);
 
 	System.out.println("access : " + userAccess);
 
@@ -117,10 +118,10 @@ public class UserAccessControlUtil
 	}
     }
 
-    public static void checkReadAccessAndModifyTextSearchQuery(String className, List<SearchRule> rules)
+    public static void checkReadAccessAndModifyTextSearchQuery(String className, List<SearchRule> rules, DomainUser user)
     {
 	System.out.println("class name" + className);
-	UserAccessControl userAccess = UserAccessControl.getAccessControl(className, null);
+	UserAccessControl userAccess = UserAccessControl.getAccessControl(className, null, user);
 
 	System.out.println("user access :  " + userAccess);
 
@@ -131,9 +132,9 @@ public class UserAccessControlUtil
 	    userAccess.modifyTextSearchQuery(rules);
     }
 
-    public static UserAccessControl getAccessControl(String className, Object object)
+    public static UserAccessControl getAccessControl(String className, Object object, DomainUser user)
     {
-	return UserAccessControl.getAccessControl(className, object);
+	return UserAccessControl.getAccessControl(className, object, user);
     }
 
     // Returns current user scopes

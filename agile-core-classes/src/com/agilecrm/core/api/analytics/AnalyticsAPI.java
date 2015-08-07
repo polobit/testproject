@@ -73,7 +73,7 @@ public class AnalyticsAPI {
 		if (StringUtils.isEmpty(domain))
 			return 0;
 
-		return AnalyticsSQLUtil.getPageViewsCountForGivenDomain(domain);
+		return AnalyticsUtil.hasJSAPIForDomain() ? 1 : 0;
 	}
 
 	@Path("sessions-count")
