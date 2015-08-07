@@ -1673,4 +1673,17 @@ function contactsTimelineListners(el){
 	});
 
 
+	//Upload contact image
+	$('#contact-detail-listners').on('click', '.upload_pic', function (e) {
+		e.preventDefault();
+		uploadImage("contact-container");
+	});
+	
+	//Upload personal prefs
+	$('#contact-detail-listners').on('click', '.upload_prefs_s3', function (e) {
+		e.preventDefault();
+		uploadImage("upload-in-modal");
+	});
+
+
 }

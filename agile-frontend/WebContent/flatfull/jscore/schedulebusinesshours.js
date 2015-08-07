@@ -1,143 +1,145 @@
 var businessHoursManager;
-$(function()
-{
 
-    $("body").on("click","#btnSerialize", function(e){
-				e.preventDefault();
 
-				var saveBtn = $(this);
-				disable_save_button($(saveBtn));
-				if (!$.trim($("#15mins").val()) && !$.trim($("#30mins").val()) && !$.trim($("#60mins").val()))
+
+function initializeOnlineCalendarListners(el){
+	
+	 $("#online-cal-listners").on("click","#btnSerialize", function(e){
+			e.preventDefault();
+
+			var saveBtn = $(this);
+			disable_save_button($(saveBtn));
+			if (!$.trim($("#15mins").val()) && !$.trim($("#30mins").val()) && !$.trim($("#60mins").val()))
+			{
+				enable_save_button($(saveBtn));
+				$('#meeting_duration_message').fadeIn('slow');
+				setTimeout(function()
 				{
-					enable_save_button($(saveBtn));
-					$('#meeting_duration_message').fadeIn('slow');
+					$('#meeting_duration_message').fadeOut('slow');
+				}, 5000);
+				return;
+			}
+
+			if ($("#15mins").val().charCodeAt(0) == ' ' && $("#30mins").val().charCodeAt(0) == ' ' && $("#60mins").val().charCodeAt(0) == ' ')
+			{
+				enable_save_button($(saveBtn));
+				$('#meeting_duration_message').fadeIn('slow');
+				setTimeout(function()
+				{
+					$('#meeting_duration_message').fadeOut('slow');
+				}, 5000);
+				return;
+			}
+			var data = $('#scheduleurl').text();
+			var scheduling_id = data.substr(data.lastIndexOf("/") + 1);
+			var url = data.substr(0, data.lastIndexOf("/") + 1);
+			var json = serializeForm("scheduleform");
+			var meeting_durations = formToJSON();
+			console.log(meeting_durations);
+
+			var business_hours = JSON.stringify(businessHoursManager.serialize());
+
+			json['business_hours'] = business_hours;
+			json['meeting_durations'] = meeting_durations;
+			json['schedule_id'] = scheduling_id;
+			console.log(business_hours);
+
+			// $("#schedule-preferences").html(getRandomLoadingImg());
+			$.ajax({ url : '/core/api/scheduleprefs', type : 'PUT', contentType : 'application/json', async : false, data : JSON.stringify(json),
+				success : function()
+				{
 					setTimeout(function()
 					{
-						$('#meeting_duration_message').fadeOut('slow');
-					}, 5000);
-					return;
-				}
-
-				if ($("#15mins").val().charCodeAt(0) == ' ' && $("#30mins").val().charCodeAt(0) == ' ' && $("#60mins").val().charCodeAt(0) == ' ')
-				{
-					enable_save_button($(saveBtn));
-					$('#meeting_duration_message').fadeIn('slow');
-					setTimeout(function()
-					{
-						$('#meeting_duration_message').fadeOut('slow');
-					}, 5000);
-					return;
-				}
-				var data = $('#scheduleurl').text();
-				var scheduling_id = data.substr(data.lastIndexOf("/") + 1);
-				var url = data.substr(0, data.lastIndexOf("/") + 1);
-				var json = serializeForm("scheduleform");
-				var meeting_durations = formToJSON();
-				console.log(meeting_durations);
-
-				var business_hours = JSON.stringify(businessHoursManager.serialize());
-
-				json['business_hours'] = business_hours;
-				json['meeting_durations'] = meeting_durations;
-				json['schedule_id'] = scheduling_id;
-				console.log(business_hours);
-
-				// $("#schedule-preferences").html(getRandomLoadingImg());
-				$.ajax({ url : '/core/api/scheduleprefs', type : 'PUT', contentType : 'application/json', async : false, data : JSON.stringify(json),
-					success : function()
-					{
-						setTimeout(function()
-						{
-							enable_save_button($(saveBtn));
-						}, 2000);
-						$('#error_message').empty();
-					}, error : function(error)
-					{
-						$('#error_message').html("There was an error in saving your settings. Please try again in a minute.");
 						enable_save_button($(saveBtn));
-					} });
-
-			});
-
-	$("body").on("click","#edit-schedule-id", function(e){
-						e.preventDefault();
-						var data = $('#scheduleurl').text();
-						var scheduling_id = data.substr(data.lastIndexOf("/") + 1);
-						var url = data.substr(0, data.lastIndexOf("/") + 1);
-						console.log(url + "   " + scheduling_id);
-						$("#edit").hide();
-						$("#scheduleurl").removeAttr("href");
-						$('#scheduleurl')
-								.html(
-										url + "<input class='input-sm inline-block form-control' style='width:140px' type='text'  name='url' id='url' value='" + scheduling_id + "'/><buttion class='btn btn-primary btn-sm inline-block m-l-sm' id='save-scheduleurl'>Save</button>");
-
-						$("#scheduleurl").addClass("nounderline");
-						$('#scheduleModal').data('modal', null);
-
-					});
-
-    $("body").on("click","#save-scheduleurl", function(e){
-				e.preventDefault();
-				var data = $("#url").val();
-				if (data.length < 4)
-				{
-					$('#charlength').fadeIn('slow');
-					setTimeout(function()
-					{
-						$('#charlength').fadeOut('slow');
 					}, 2000);
-					return;
-				}
-
-				var regex = /^[0-9a-zA-Z\_]+$/
-				if (!(regex.test(data)))
+					$('#error_message').empty();
+				}, error : function(error)
 				{
-					$('#specialchar').fadeIn('slow');
+					$('#error_message').html("There was an error in saving your settings. Please try again in a minute.");
+					enable_save_button($(saveBtn));
+				} });
+
+		});
+
+$("#online-cal-listners").on("click","#edit-schedule-id", function(e){
+					e.preventDefault();
+					var data = $('#scheduleurl').text();
+					var scheduling_id = data.substr(data.lastIndexOf("/") + 1);
+					var url = data.substr(0, data.lastIndexOf("/") + 1);
+					console.log(url + "   " + scheduling_id);
+					$("#edit").hide();
+					$("#scheduleurl").removeAttr("href");
+					$('#scheduleurl')
+							.html(
+									url + "<input class='input-sm inline-block form-control' style='width:140px' type='text'  name='url' id='url' value='" + scheduling_id + "'/><buttion class='btn btn-primary btn-sm inline-block m-l-sm' id='save-scheduleurl'>Save</button>");
+
+					$("#scheduleurl").addClass("nounderline");
+					$('#scheduleModal').data('modal', null);
+
+				});
+
+$("#online-cal-listners").on("click","#save-scheduleurl", function(e){
+			e.preventDefault();
+			var data = $("#url").val();
+			if (data.length < 4)
+			{
+				$('#charlength').fadeIn('slow');
+				setTimeout(function()
+				{
+					$('#charlength').fadeOut('slow');
+				}, 2000);
+				return;
+			}
+
+			var regex = /^[0-9a-zA-Z\_]+$/
+			if (!(regex.test(data)))
+			{
+				$('#specialchar').fadeIn('slow');
+				setTimeout(function()
+				{
+					$('#specialchar').fadeOut('slow');
+				}, 2000);
+				return;
+			}
+
+			var saveBtn = $(this);
+			disable_save_button($(saveBtn));
+			$.ajax({
+				url : '/core/api/scheduleprefs/updateId?scheduleid=' + data + '&domainId=' + CURRENT_DOMAIN_USER.id,
+				type : 'GET',
+				datatype : "json",
+				success : function(user)
+				{
+					var onlineschedulingURL = "https://" + CURRENT_DOMAIN_USER.domain + ".agilecrm.com/calendar/" + user.schedule_id;
+					$("#scheduleurl").attr("href", onlineschedulingURL);
+					$("#scheduleurl").text(onlineschedulingURL);
+
+					$("#scheduleurl").removeClass("nounderline");
+					enable_save_button($(saveBtn));
+					$("#edit").show();
+					$("#specialchar").hide();
+					$("#charlength").hide();
+					$("#scheduleurl").removeClass("nounderline");
+
+				},
+				error : function(error)
+				{
+
+					console.log(error);
+					$('#schedule_error_message').html(
+							'Something went wrong as your schedule url was not updated. Please try again in few hours. Error: ' + error.statusText);
+					$('#schedule_error_message').fadeIn('slow');
 					setTimeout(function()
 					{
-						$('#specialchar').fadeOut('slow');
+						$('#schedule_error_message').fadeOut('slow');
 					}, 2000);
+					enable_save_button($(saveBtn));
 					return;
-				}
+				} });
 
-				var saveBtn = $(this);
-				disable_save_button($(saveBtn));
-				$.ajax({
-					url : '/core/api/scheduleprefs/updateId?scheduleid=' + data + '&domainId=' + CURRENT_DOMAIN_USER.id,
-					type : 'GET',
-					datatype : "json",
-					success : function(user)
-					{
-						var onlineschedulingURL = "https://" + CURRENT_DOMAIN_USER.domain + ".agilecrm.com/calendar/" + user.schedule_id;
-						$("#scheduleurl").attr("href", onlineschedulingURL);
-						$("#scheduleurl").text(onlineschedulingURL);
+		});
 
-						$("#scheduleurl").removeClass("nounderline");
-						enable_save_button($(saveBtn));
-						$("#edit").show();
-						$("#specialchar").hide();
-						$("#charlength").hide();
-						$("#scheduleurl").removeClass("nounderline");
-
-					},
-					error : function(error)
-					{
-
-						console.log(error);
-						$('#schedule_error_message').html(
-								'Something went wrong as your schedule url was not updated. Please try again in few hours. Error: ' + error.statusText);
-						$('#schedule_error_message').fadeIn('slow');
-						setTimeout(function()
-						{
-							$('#schedule_error_message').fadeOut('slow');
-						}, 2000);
-						enable_save_button($(saveBtn));
-						return;
-					} });
-
-			});
-
-});
+}
 
 /**
  * meeting duration form will be serialized manually becoz to trim spaces

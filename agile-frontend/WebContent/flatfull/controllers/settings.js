@@ -619,7 +619,8 @@ var SettingsRouter = Backbone.Router
 
 			scheduler : function()
 			{
-				$("#content").html(getTemplate("settings"), {});
+				 $('#content').html("<div id='online-cal-listners'>&nbsp;</div>");
+				$("#online-cal-listners").html(getTemplate("settings"), {});
 				var view = new Base_Model_View({
 					url : 'core/api/scheduleprefs',
 					type : 'GET',
@@ -648,6 +649,8 @@ var SettingsRouter = Backbone.Router
 									$(".mini-time").keydown(false).addClass("form-control");
 
 								});
+						
+						initializeOnlineCalendarListners(el);
 
 					} });
 				$('#prefs-tabs-content').html(view.render().el);
