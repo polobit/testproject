@@ -438,7 +438,7 @@ var SettingsRouter = Backbone.Router
 				var view = new Base_Model_View({ url : '/core/api/email/templates', isNew : true, template : "settings-email-template-add",
 					window : 'email-templates', postRenderCallback : function()
 					{
-						initializeSettingsListeners();
+						initializeEmailTemplateAddListeners();
 					} });
 
 				$('#prefs-tabs-content').html(view.render().el);
@@ -483,7 +483,7 @@ var SettingsRouter = Backbone.Router
 				var view = new Base_Model_View({ url : '/core/api/email/templates', model : currentTemplate, template : "settings-email-template-add",
 					window : 'email-templates', postRenderCallback : function()
 					{
-						initializeSettingsListeners();
+						initializeEmailTemplateAddListeners();
 					} });
 
 				$('#prefs-tabs-content').html(view.render().el);

@@ -342,7 +342,7 @@
 		var total_available_deals = getAvailableDeals();
 
 		console.log(filterJSON);
-		if ($(clicked_ele).attr('checked') == 'checked')
+		if ($(clicked_ele).is(':checked'))
 		{
 			$('body').find('#bulk-actions').css('display', 'inline-block');
 

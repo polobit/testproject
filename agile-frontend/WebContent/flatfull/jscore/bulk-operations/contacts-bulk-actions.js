@@ -915,7 +915,7 @@ function toggle_contacts_bulk_actions_dropdown(clicked_ele, isBulk, isCampaign)
 
 	console.log(readCookie('contact_filter'));
 	$('body').find('#bulk-select').css('display', 'none')
-	if ($(clicked_ele).attr('checked') == 'checked')
+	if ($(clicked_ele).is(':checked'))
 	{
 		$('body').find('#bulk-actions').css('display', 'inline-block');
 

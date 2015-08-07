@@ -180,7 +180,7 @@ $('#conatcts-listeners-conatainer').on('click', '#lhs-filters-header', function(
 	$(this).next().find('.lhs-contact-filter-row:visible').find('#RHS').filter(visibleFilter).find(':not(input.date)').focus();
 });
 
-$('#conatcts-listeners-conatainer').on('click', '#lhs-contact-filter-form select[name="CONDITION"]', function(e)
+$('#conatcts-listeners-conatainer').on('change', '#lhs-contact-filter-form select[name="CONDITION"]', function(e)
 {
 	var selected = $(this).val();
 	$(this).parent().find('div.condition_container').addClass('hide');

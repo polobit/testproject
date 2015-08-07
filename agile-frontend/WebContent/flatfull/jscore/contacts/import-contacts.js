@@ -712,7 +712,7 @@ function parseCSV(key, type)
 					}
 
 					var $firstDiv = $('#content').first();
-					$firstDiv.html(getTemplate(template, {}));
+					$firstDiv.html(template);
 								
 					initializeImportEvents($firstDiv.attr('id'));
 

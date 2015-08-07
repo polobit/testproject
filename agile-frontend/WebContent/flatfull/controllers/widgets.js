@@ -1080,6 +1080,7 @@ var WidgetsRouter = Backbone.Router
 																else
 																				fill_form(id, "CallScript", 'callscript-login');
 																                adjust_form();
+																initializeCallScriptListeners();
 
 												},
 												
@@ -1089,6 +1090,7 @@ var WidgetsRouter = Backbone.Router
 												CallScriptShow : function()
 												{	
 													showCallScriptRule();
+													initializeCallScriptListeners();
 													
 												},
 												
@@ -1098,6 +1100,7 @@ var WidgetsRouter = Backbone.Router
 												CallScriptAdd : function()
 												{
 													addCallScriptRule();
+													initializeCallScriptListeners();
 													
 												},
 												
@@ -1107,6 +1110,7 @@ var WidgetsRouter = Backbone.Router
 												CallScriptEdit : function(id)
 												{
 													editCallScriptRule(id);
+													initializeCallScriptListeners();
 
 												}
 								});

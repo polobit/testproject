@@ -4,10 +4,10 @@
  * javascript plugin that makes it easy to create simple, beautiful wysiwyg
  * editors with the help of wysihtml5 and Twitter Bootstrap.
  */
-$(function() {
+function initializeEmailTemplateAddListeners(){
 
 	// Code for Merge fields in Email Template
-	$('body').on('click', '.merge-field', function (e) {
+	$('#prefs-tabs-content').on('click', '.merge-field', function (e) {
 				e.preventDefault();
 				// console.log("Merge field");
 
@@ -30,7 +30,7 @@ $(function() {
 							+ fieldContent + '}}');
 				}
 			});
-});
+}
 
 /**
  * Sets HTML Editor for UserPrefs, EmailTemplates etc.

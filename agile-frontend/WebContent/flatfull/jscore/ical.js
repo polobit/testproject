@@ -5,7 +5,7 @@
  * 
  * author: Naresh
  */
-$("body").on('click', '#subscribe-ical', function(event)
+$("#content").on('click', '#subscribe-ical', function(event)
 {
 	event.preventDefault();
 	set_api_key();
@@ -112,6 +112,11 @@ $(function()
 
 	})
 
+	/*
+	 * $("body").on('click', '#show-schedule-url', function(e) {
+	 * e.preventDefault(); $('#scheduleModal').modal('show'); });
+	 */
+
 	$('#scheduleModal').on('show.bs.modal', function()
 	{
 
@@ -141,3 +146,53 @@ $(function()
 	});
 
 });
+
+/*
+ * $("body").on('click', '#send-schedule-url-email', function(e) {
+ * e.preventDefault();
+ * 
+ * $("#scheduleModal").modal('hide'); // Removes previous modals if exist. if
+ * ($('#scheduleModal').size() != 0) $('#scheduleModal').remove();
+ * 
+ * var emailModal = $(getTemplate("share-schedule-url-by-email", {}));
+ * 
+ * var description = $(emailModal).find('textarea').val();
+ * 
+ * description = description.replace(/<br\/>/g, "\r\n");
+ * 
+ * $(emailModal).find('textarea').val(description);
+ * 
+ * emailModal.modal('show'); // Send schedule url by email //
+ * send_schedule_url_email(emailModal);
+ * 
+ * });
+ */
+
+/**
+ * Sends email with ical data to current-user email.
+ * 
+ * @method send_ical_info_email
+ * @param emailModal -
+ *            ical-email-modal
+ */
+/*
+ * function send_schedule_url_email(emailModal) { // When Send Clicked, validate
+ * the form and send email. $("#icalModal") .on( 'click', '#share-url-email',
+ * function(e) { e.preventDefault();
+ *  // if not valid if (!isValidForm($('#sharescheduleurlmailForm'))) return;
+ * 
+ * var json = serializeForm("sharescheduleurlmailForm"); json.body =
+ * json.body.replace(/\r\n/g, "<br/>");
+ * 
+ * var url = 'core/api/emails/send-email?from=' + encodeURIComponent(json.from) +
+ * '&to=' + encodeURIComponent(json.to) + '&subject=' +
+ * encodeURIComponent(json.subject) + '&body=' + encodeURIComponent(json.body);
+ *  // Shows message $save_info = $('<img src="img/1-0.gif" height="18px"
+ * width="18px"></img>&nbsp;&nbsp;<span><p class="text-success" style="color:#008000; font-size:15px; display:inline-block">
+ * <i>Sending mail...</i></p></span>'); $("#msg",
+ * this.el).append($save_info); $save_info.show().delay(2000).fadeOut("slow");
+ *  // Navigates to previous page on sending email $.post(url, function() {
+ * emailModal.modal('hide'); });
+ * 
+ * }); }
+ */
