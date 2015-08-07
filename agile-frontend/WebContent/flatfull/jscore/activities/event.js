@@ -62,7 +62,7 @@ $("#icalModal").on('click', '#send-ical-email', function(event)
 });
 
 
-	$('#calendarAgendaButtons').on('click', '.agendaDayWeekMonth', function()
+	$('#calendar-listers').on('click', '.agendaDayWeekMonth', function()
 	{
 		currentView = $(this).attr('id');
 		fullCal.fullCalendar('changeView', currentView);
@@ -79,7 +79,7 @@ $("#icalModal").on('click', '#send-ical-email', function(event)
 	/**
 	 * Shows the event form fields in activity modal
 	 */
-	$("#add-event-div").on('click', '.add-event', function(e)
+	$("#calendar-listers").on('click', '.add-event', function(e)
 	{
 		e.preventDefault();
 
@@ -107,7 +107,7 @@ $("#icalModal").on('click', '#send-ical-email', function(event)
 	});
 
 
-	$("#addEventDescription").on('click', '#add_event_desctiption', function(e)
+	$("#activityModal").on('click', '#add_event_desctiption', function(e)
 	{
 		e.preventDefault();
 		$(".event_discription").removeClass("hide");
@@ -211,7 +211,7 @@ $("#icalModal").on('click', '#send-ical-email', function(event)
 
 
 
-$("#event-save-footer").on('click', '#delete_web_event', function(e)
+$("#webEventCancelModel").on('click', '#delete_web_event', function(e)
 	{
 		e.preventDefault();
 
@@ -224,7 +224,7 @@ $("#event-save-footer").on('click', '#delete_web_event', function(e)
 	});
 
 
-$("#webEventCancelModel").on(
+$("#updateActivityModal").on(
 					'click',
 					'#event_delete',
 					function(e)

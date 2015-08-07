@@ -809,7 +809,8 @@ var ContactsRouter = Backbone.Router.extend({
 	 */
 	importContacts : function()
 	{
-		$('#content').html(getTemplate("import-contacts", {}));
+		$('#content').html('<div id="import-contacts-event-listener"></div>').find('#import-contacts-event-listener').html(getTemplate("import-contacts", {}));
+        initializeImportEvents('import-contacts-event-listener');
 	},
 	
 

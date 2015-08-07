@@ -16,7 +16,8 @@ var ActivitylogRouter = Backbone.Router.extend({
 		DEAL_TRACKS_COUNT = getTracksCount();
 		head.js(LIB_PATH + 'lib/date-charts.js', LIB_PATH + 'lib/date-range-picker.js', CSS_PATH + "css/misc/date-picker.css", function()
 		{
-			$('#content').html(getTemplate("activity-list-header", {}));
+			 $('#content').html("<div id='activities-listners'>&nbsp;</div>");
+			$('#activities-listners').html(getTemplate("activity-list-header", {}));
 			/*
 			 * if(IS_FLUID){
 			 * $('#activity_header').removeClass('row').addClass('row-fluid'); }
@@ -36,7 +37,7 @@ var ActivitylogRouter = Backbone.Router.extend({
 			// fill workflows
 			fillSelect('user-select', 'core/api/users', 'domainuser', function fillActivities()
 			{
-				$('#content').find("#user-select").append("<li><a href=''>All Users</a></li>");
+				$('#activities-listners').find("#user-select").append("<li><a href=''>All Users</a></li>");
 
 				var selected_start_time = readCookie("selectedStartTime");
 				var selected_end_time = readCookie("selectedEndTime");
@@ -82,6 +83,7 @@ var ActivitylogRouter = Backbone.Router.extend({
 
 							});
 							initializeActivitiesListner(el);
+							initializeEventListners(el);
 
 						}, appendItemCallback : function(el)
 						{

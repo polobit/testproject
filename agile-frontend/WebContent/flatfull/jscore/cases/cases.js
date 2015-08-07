@@ -70,7 +70,7 @@ function initializeCasesListeners(el){
 		remove_validation_errors('casesUpdateModal');
 	});
 
-	$("#case-list").off("mouseenter").on('mouseenter',
+	$("#cases-listners").on('mouseenter',
 			'#cases-model-list > tr',
 			function()
 			{
@@ -104,18 +104,18 @@ function initializeCasesListeners(el){
 	/**
 	 * On mouse out on the row hides the popover.
 	 */
-	 $('#case-list').off('mouseleave').on('mouseleave', '#cases-model-list > tr', function()
+	 $('#cases-listners').on('mouseleave', '#cases-model-list > tr', function()
 	{
 		$(this).popover('hide');
 	});
 
-	$('#cases-add-div').off('click').on('click', '.cases-add', function(e)
+	$('#cases-listners').on('click', '.cases-add', function(e)
 	{
 		e.preventDefault();
 		showCases();
 	});
 
-	$('#cases-add-save').off('click').on('click', '#cases_validate', function(e) 
+	$('#casesModal,#casesUpdateModal').on('click', '#cases_validate', function(e) 
 	{
 		e.preventDefault();
 
@@ -127,7 +127,7 @@ function initializeCasesListeners(el){
 	});
 
 	
-	$('#case-list').off('click').on('click', '#cases-model-list > tr > td:not(":first-child")', function(e) 
+	$('#cases-listners').on('click', '#cases-model-list > tr > td:not(":first-child")', function(e) 
 	{
 		e.preventDefault();
 		updatecases($(this).closest('tr').data());

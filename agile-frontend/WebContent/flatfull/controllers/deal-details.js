@@ -90,22 +90,6 @@ var DealDetailsRouter = Backbone.Router.extend({
 
 });
 
-/**
- * Validates deal edit form and saves
- */
-/*
- * $("body").on('click', "#opportunity_validate_form", function(e) {
- * e.preventDefault(); // To know updated or added deal form names var modal_id =
- * $(this).closest('.container').attr("id"); var form_id =
- * $(this).closest('.container').find('form').attr("id");
- * 
- * var json = serializeForm(form_id); json["custom_data"] =
- * serialize_custom_fields(form_id);
- * 
- * console.log(json); if (form_id == "opportunityForm1") saveDeal(form_id,
- * modal_id, this, json, false); else saveDeal(form_id, modal_id, this, json,
- * false); });
- */
 
 /**
  * Shows all the domain users names as ul drop down list to change the owner of

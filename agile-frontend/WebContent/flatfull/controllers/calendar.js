@@ -61,18 +61,7 @@ calendar : function()
 		$('#event_tab').css('display', 'none');
 	}
 
-	/*
-	 * this.tasksListView = new Base_Collection_View({ url : '/core/api/tasks',
-	 * restKey : "task", templateKey : "tasks", individual_tag_name : 'tr',
-	 * postRenderCallback : function(el) { head.js(LIB_PATH +
-	 * 'lib/jquery.timeago.js', function() { $(".task-due-time", el).timeago();
-	 * }); } }); // Tasks has its own appendItem function to show the status //
-	 * (overdue, // today, tomorrow and next-week) this.tasksListView.appendItem =
-	 * append_tasks; this.tasksListView.collection.fetch();
-	 * 
-	 * $('#tasks').html(this.tasksListView.el);
-	 */
-	// $('#event-list-filters').html(getTemplate('event-filter'));
+	
 },
 
 /* Show tasks list when All Tasks clicked under calendar page. */
@@ -128,65 +117,7 @@ tasks_new : function()
 
 });
 
-// commeted code for list view of events
 
-/*
- * $(function() {
- * 
- * $("body").on('click', ".c_list", function(e) { e.preventDefault(); // Creates
- * the cookie var eventFilters = JSON.parse(readCookie('event-lhs-filters'));
- * 
- * if (eventFilters && eventFilters.event_type == 'future')
- * createCookie("agile_calendar_view", "calendar_list_view_future"); else
- * createCookie("agile_calendar_view", "calendar_list_view"); // Loads the
- * calendar App_Calendar.calendar(); });
- * 
- * $("body").on('click', ".c_cal", function(e) { e.preventDefault(); // Erases
- * the cookie eraseCookie("agile_calendar_view"); // Loads the calendar
- * App_Calendar.calendar(); });
- * 
- * $("body").on('click', ".c_list_view_future", function(e) {
- * e.preventDefault(); // Creates the cookie createCookie("agile_calendar_view",
- * "calendar_list_view_future"); // Loads the calendar App_Calendar.calendar();
- * });
- * 
- * if (readCookie("agile_calendar_view")) {
- * $('#grp_filter').removeClass('hide'); } // intialize event tab
- * $('#event_tab').tab();
- * 
- * if (!readCookie("agile_calendar_view"))
- * $('#agile_event_list').addClass('hide'); else { if
- * ($('#agile_event_list').hasClass('hide'))
- * $('#agile_event_list').removeClass('hide') } // $('#taskDetailsTab').tab();
- * 
- * });
- * 
- * $(function() {
- * 
- * $("body").on('click', ".c_list", function(e) { e.preventDefault(); // Creates
- * the cookie var eventFilters = JSON.parse(readCookie('event-lhs-filters'));
- * 
- * if (eventFilters && eventFilters.event_type == 'future')
- * createCookie("agile_calendar_view", "calendar_list_view_future"); else
- * createCookie("agile_calendar_view", "calendar_list_view"); // Loads the
- * calendar App_Calendar.calendar(); });
- * 
- * $("body").on('click', ".c_cal", function(e) { e.preventDefault(); // Erases
- * the cookie eraseCookie("agile_calendar_view"); // Loads the calendar
- * App_Calendar.calendar(); });
- * 
- * $("body").on('click', ".c_list_view_future", function(e) {
- * e.preventDefault(); // Creates the cookie createCookie("agile_calendar_view",
- * "calendar_list_view_future"); // Loads the calendar App_Calendar.calendar();
- * }); // intialize event tab $('#event_tab').tab();
- * 
- * $(window).scroll(function() { if ($('#google').hasClass('active')) {
- * 
- * if ($(window).scrollTop() + $(window).height() == $(document).height()) {
- * loadMoreEventsFromGoogle(); } } })
- * 
- * });
- */
 // append events in category base
 function appendItem1(base_model)
 {

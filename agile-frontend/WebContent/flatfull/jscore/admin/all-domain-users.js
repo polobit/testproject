@@ -18,7 +18,7 @@ function initializeDomainsearchListner(el){
 function initializeAdminpanelListner(el){
 // takes searchbox value and navigate this to router
 	
-	$("#domainSearchForm2").off('click').on("click", '#domain-search-results2', function(e) {
+	$("#admin-panel-listners").on("click", '#domain-search-results2', function(e) {
 		e.preventDefault(e);
 		
 		var email = $('#domainSearchText2').val();
@@ -32,7 +32,7 @@ function initializeAdminpanelListner(el){
 	});
 	
 	// deltes user from domain from admin panel
-	$("#all-domain-model-list").off('click').on("click", '.delete_user', function(e) {
+	$("#admin-panel-listners").on("click", '.delete_user', function(e) {
 		
 		e.preventDefault();
 		if (!confirm("Are you sure you want to delete ?" ))
@@ -56,7 +56,7 @@ function initializeAdminpanelListner(el){
 	});
 	
 	// navigates to domain details from all domain users
-	$("#all-domain-users-table").off('click').on("click", '#all-domain-users-model-list > tr', function(e) 
+	$("#admin-panel-listners").on("click", '#all-domain-users-model-list > tr', function(e) 
 			{
 				e.preventDefault();
 
@@ -72,7 +72,7 @@ function initializeAdminpanelListner(el){
 		 * If user clicks on delete, delete request is sent to
 		 * "core/api/admin/delete/namespace"
 		 */
-		 $("#account").off('click').on("click", '.delete-namespace', function(e) {
+	$("#admin-panel-listners").on("click", '.delete-namespace', function(e) {
 			
 					e.preventDefault();
 					
@@ -102,7 +102,7 @@ function initializeAdminpanelListner(el){
 					
 				   }
 		});
-		$("#admin-charge-model-list").off('click').on("click", '.refundpopup', function(e) {
+	$("#admin-panel-listners").on("click", '.refundpopup', function(e) {
 			e.preventDefault();
 			
 			var chargeid = $(this).attr("chargeid");
@@ -165,7 +165,7 @@ function initializeAdminpanelListner(el){
 		});
 		
 		
-	$("#deleteUserPlanSpan").off('click').on("click", '#delete_userplan', function(e) { 
+		$("#admin-panel-listners").on("click", '#delete_userplan', function(e) { 
 			e.preventDefault();
 			if (!confirm("Are you sure you want to cancel this subscription ?" ))
 				return;
@@ -186,7 +186,7 @@ function initializeAdminpanelListner(el){
 			
 		});
 		});
-		$("#deleteEmailPlanSpan").on("click", '#delete_emailplan', function(e) { 
+		$("#admin-panel-listners").on("click", '#delete_emailplan', function(e) { 
 			e.preventDefault();
 			if (!confirm("Are you sure you want to cancel this subscription ?" ))
 				return;
@@ -209,7 +209,7 @@ function initializeAdminpanelListner(el){
 			
 		});
 		
-		$("#unPauseMandrillDiv").off('click').on("click", '#unpause_mandrill', function(e)
+		$("#admin-panel-listners").on("click", '#unpause_mandrill', function(e)
 		{
 			e.preventDefault();
 			if (!confirm("Are you sure you want to UnPause Mandrill?" ))

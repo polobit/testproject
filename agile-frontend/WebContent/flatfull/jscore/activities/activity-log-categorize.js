@@ -3,7 +3,7 @@ function initializeActivitiesListner(el){
 
 
 	// Click events to agents dropdown and department
-	$("#activity-log-header-div").off('click').on("click", "ul#user-select li a, ul#entity_type li a", function(e)
+	$("#activities-listners").on("click", "ul#user-select li a, ul#entity_type li a", function(e)
 	{
 		e.preventDefault();
 
@@ -17,7 +17,7 @@ function initializeActivitiesListner(el){
 		updateActivty(url);
 
 	});
-	$(".type-task-button").off('click').on("click", "ul#entity_type li a", function(e)
+	$("#activities-listners").on("click", "ul#entity_type li a", function(e)
 	{
 		var entitytype = $(this).html();
 
@@ -27,7 +27,7 @@ function initializeActivitiesListner(el){
 		$('.activity-sub-heading').html(entitytype);
 
 	});
-	$(".activity-log-button").off('click').on("click", "ul#user-select li a", function(e)
+	$("#activities-listners").on("click", "ul#user-select li a", function(e)
 	{
 
 		var user = $(this).html();
@@ -37,7 +37,9 @@ function initializeActivitiesListner(el){
 
 	});
 
-$('.activity-tag').off('click').on('click', '.activity-event-edit', function(e)
+
+
+	$("#activities-listners").on('click', '.activity-event-edit', function(e)
 {
 	e.preventDefault();
 	var data = $(this).closest('a').attr("data");
@@ -48,7 +50,9 @@ $('.activity-tag').off('click').on('click', '.activity-event-edit', function(e)
 
 });
 
-$('#activity-tag').off('click').on('click', '.email-details', function(e) 
+
+
+	$("#activities-listners").on('click', '.email-details', function(e) 
 {
 	e.preventDefault();
 	var data = $(this).closest('a').attr("data");

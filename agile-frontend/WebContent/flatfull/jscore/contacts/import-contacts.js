@@ -1,27 +1,10 @@
 BLOB_KEY = undefined;
-$(function()
-{
+function initializeImportEvents(id){
 
-	// Cancels import, removes the contacts uploaded in to
-	// table, still calls
-	// fileUploadInit,
-	// so user can uploadimport-comp again if required
-	$('body').on('click', '#import-cancel', function(e){
+if(!id)
+	  id = "content";
 
-		// Sends empty JSON to remove
-		// contact uploaded
-		$('#content').html(getTemplate("import-contacts", {}));
-	});
-	
-	// cancel option for deals import
-	$('body').on('click', '#deal-cancel', function(e){
-
-				// Sends empty JSON to remove
-				// contact uploaded
-				$('#content').html(getTemplate("import-deals", {}));
-			});
-
-	$('body').on('click', '.upload', function(e)
+$('#' + id).on('click', '.upload', function(e)
 	{
 
 		// get hidden value file type
@@ -35,9 +18,36 @@ $(function()
 			newwindow.focus();
 		}
 		return false;
-	})
+	});
 
-	$('body').on('click', '#import-contacts', function(e)
+
+// Cancels import, removes the contacts uploaded in to
+	// table, still calls
+	// fileUploadInit,
+	// so user can uploadimport-comp again if required
+	$('#' + id).on('click', '#import-cancel', function(e){
+
+		// Sends empty JSON to remove
+		// contact uploaded
+		var $firstDiv = $('#content').first();
+		$firstDiv.html(getTemplate("import-contacts", {}));
+
+		initializeImportEvents($firstDiv.attr('id'));
+	});
+	
+	// cancel option for deals import
+	$('#' + id).on('click', '#deal-cancel', function(e){
+
+				// Sends empty JSON to remove
+				// contact uploaded
+				var $firstDiv = $('#content').first();
+				$firstDiv.html(getTemplate("import-deals", {}));
+
+				initializeImportEvents($firstDiv.attr('id'));
+			});
+
+
+$('#' + id).on('click', '#import-contacts', function(e)
 					{
 
 						if ($(this).attr('disabled'))
@@ -258,7 +268,10 @@ $(function()
 								// Navigate to contacts page
 								// Sends empty JSON to remove
 								// contact uploaded
-								$('#content').html(getTemplate("import-contacts", {}));
+								var $firstDiv = $('#content').first();
+								$firstDiv.html(getTemplate("import-contacts", {}));
+								initializeImportEvents($firstDiv.attr('id'));
+
 								showNotyPopUp('information', "Contacts are now being imported. You will be notified on email when it is done", "top", 5000);
 
 								addTagAgile(IMPORT_TAG);
@@ -268,12 +281,12 @@ $(function()
 							}, });
 
 					})
-});
+
 
 /**
  * validation for csv import companies
  */
-$('body').on('click', '#import-comp', function(e)
+$('#' + id).on('click', '#import-comp', function(e)
 				{
 
 					if ($(this).attr('disabled'))
@@ -427,7 +440,11 @@ $('body').on('click', '#import-comp', function(e)
 							// Navigate to contacts page
 							// Sends empty JSON to remove
 							// contact uploaded
-							$('#content').html(getTemplate("import-contacts", {}));
+							var $firstDiv = $('#content').first();
+								$firstDiv.html(getTemplate("import-contacts", {}));
+
+								initializeImportEvents($firstDiv.attr('id'));
+
 							showNotyPopUp('information', "Companies are now being imported. You will be notified on email when it is done", "top", 5000);
 
 							// Calls vefiryUploadStatus with data returned
@@ -440,7 +457,7 @@ $('body').on('click', '#import-comp', function(e)
 /**
  * import deals validations
  */
-$('body').on('click', '#import-deals', function(e)
+$('#' + id).on('click', '#import-deals', function(e)
 				{
 
 					if ($(this).attr('disabled'))
@@ -651,6 +668,10 @@ $('body').on('click', '#import-deals', function(e)
 
 				});
 
+}
+
+
+
 /**
  * Receives blobkey from the CSV upload popup after storing in blobstore, and
  * request is set to process the CSV and return first 10 contacts where user can
@@ -690,7 +711,11 @@ function parseCSV(key, type)
 						template = $(getTemplate("import-deals2", data));
 					}
 
-					$('#content').html(template);
+					var $firstDiv = $('#content').first();
+					$firstDiv.html(getTemplate(template, {}));
+								
+					initializeImportEvents($firstDiv.attr('id'));
+
 					setup_tags_typeahead();
 				})
 

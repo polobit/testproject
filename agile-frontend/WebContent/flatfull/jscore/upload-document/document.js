@@ -4,7 +4,7 @@ function initializeDocumentsListner(el){
 	/**
 	 * For adding new document
 	 */
-	$('#document-add').off('click').on('click', '.documents-add', function(e){
+	$('#documents-listners').on('click', '.documents-add', function(e){
 		e.preventDefault();
 		var el = $("#uploadDocumentForm");
 		$("#uploadDocumentModal").modal('show');
@@ -61,7 +61,7 @@ function initializeDocumentsListner(el){
     /** 
      * When clicked on choose network type
      */
-	$('#document-link').off('click').on('click', '.link', function(e)
+    $('#uploadDocumentUpdateModal,#uploadDocumentModal').on('click', '.link', function(e)
 	{
 		e.preventDefault();
 		$(this).closest('form').find('#error').html("");
@@ -101,7 +101,7 @@ function initializeDocumentsListner(el){
     /** 
      * Document list view edit
      */
-	 $('#document-list').off('click').on('click', '#documents-model-list > tr > td:not(":first-child")', function(e){
+	$('#documents-listners').on('click', '#documents-model-list > tr > td:not(":first-child")', function(e){
 
     	 if(e.target.parentElement.attributes[0].name!="href" && e.target.parentElement.attributes[1].name!="href"){
      		e.preventDefault();
