@@ -1941,6 +1941,7 @@ function getDurationForPortlets(duration){
 var jso=[];
 function minicalendar(el)
 {
+	eraseCookie('current_date_calendar');
 	init_cal(el);
 	var totalEvents = 0;
 	var eventsCount = 0;
@@ -1967,15 +1968,28 @@ function minicalendar(el)
 									var date=new Date();
 									   var todayDate=new Date(date.getFullYear(), date.getMonth(), date.getDate(),00,00,00);
 									   var endDate=new Date(date.getFullYear(), date.getMonth(), date.getDate(),23,59,59);
-									   if(start<todayDate &&  todayDate<end){
+											if(readCookie('current_date_calendar')!=null)
+											{
+												var days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+												var cookie_date=new Date(readCookie('current_date_calendar'));
+												if(cookie_date.getTime()!=todayDate.getTime()){
+													todayDate=cookie_date;
+												endDate=new Date(cookie_date.getFullYear(), cookie_date.getMonth(), cookie_date.getDate(),23,59,59);
+												$(el).find('.events_show').empty().append('<div class="show p-t-xs text-md text-center">'+days[cookie_date.getDay()]+', ' +cookie_date.format('dd mmm')+' </div><ul class="list"></ul>');
+	
+												}
+												else
+													$(el).find('.events_show').empty().append('<div class="show p-t-xs text-md text-center">Today </div><ul class="list"></ul>');
+											}
+											else if(start<todayDate &&  todayDate<end){
 												$(el).find('.events_show').empty().append('<div class="show p-t-xs text-md text-center">Today </div><ul class="list"></ul>');
-												if($(el).parent().attr('data-sizey')==2)
+											
+									   }
+									
+											if($(el).parent().attr('data-sizey')==2)
 											   $(el).find('.show').css('padding-top','70px');
 										   else if($(el).parent().attr('data-sizey')==3)
 											   $(el).find('.show').css('padding-top','120px');
-									   }
-									
-										
 										var top=parseInt($(el).find('.fc-widget-content').css('height'))/2-7;
 									$(el).find('.fc-day-number').css('top',top);  
 									
@@ -2027,7 +2041,12 @@ function minicalendar(el)
 										{
 											console.log(jso);
 											 $.each(jso,function(index,ev){
-											if(ev.start >= (todayDate.getTime()/1000) && ev.start <= (endDate.getTime()/1000)) {	
+											if(ev.start >= (todayDate.getTime()/1000) && ev.start <= (endDate.getTime()/1000)) {
+												if($(el).find('.portlet-calendar-error-message').length!=0)
+												{
+													$(el).find('.portlet-calendar-error-message').css('display','none');
+													$(el).find('.minical-portlet-event-add').css('display','none');
+												}
 											var e_date= new Date(ev.start*1000);
 											var len=$(el).find('.list').find('li').length;
 											if(len!=0){
@@ -2067,8 +2086,8 @@ function minicalendar(el)
 					                   var result = year + '-' + (month < 10 ? '0' + month : month) + '-' + (date < 10 ? '0' + date : date);
 					                   $(element).addClass(result);
 					                   $(element).attr('id',event.id);
-									   
-									   $('.fc-event').find('.fc-event-inner').css('display','none');   
+
+									   $('.fc-event').find('.fc-event-inner').css('display','none');
 										var count=$(el).find('.'+result).length;
 										if(count>3){
 											$(element).hide();
@@ -2082,12 +2101,26 @@ function minicalendar(el)
 									}
 									var h=parseInt($(el).find('.fc-widget-content').css('height'));
 									var head=parseInt($(el).find('.fc-header').css('height'));
-									var top=element.position().top+h-25s;
+									var top=element.position().top+h-25;
 									var left=element.position().left+5;
 											$(element).css('top',top);
 											$(element).css('left',left);
 									   
 		 if(eventsCount==totalEvents || eventsCount==(2*totalEvents)){
+			 var temp;
+			 if($(el).find('.fc-border-separate').find('tbody').find('tr:last').css('display')!="none"){
+			 if($(el).find('.fc-border-separate').find('tbody').find('tr').length==6 && ($(el).parent().attr('data-sizey')==1))
+				 $(el).find('.fc-border-separate').find('tbody').find('tr').find('.fc-first').find('div:first').css('min-height','23px');
+			 }
+			 $(el).find('.fc-border-separate').find('tbody').find('tr').each(function(index){
+				 if($(el).find('.fc-border-separate').find('tbody').find('tr').eq(index).find('.fc-first').find('.fc-day-content').find('div').height()> $(el).find('.fc-border-separate').find('tbody').find('tr').eq(index+1).find('.fc-first').find('.fc-day-content').find('div').height())
+					 temp= $(el).find('.fc-border-separate').find('tbody').find('tr').eq(index+1).find('.fc-first').find('.fc-day-content').find('div').height();
+				 else
+					 temp= $(el).find('.fc-border-separate').find('tbody').find('tr').eq(index).find('.fc-first').find('.fc-day-content').find('div').height();
+			 });
+			  $(el).find('.fc-border-separate').find('tbody').find('tr').each(function(index){
+				  $(this).find('.fc-first').find('.fc-day-content').find('div').css('height',temp);
+			  });
 											totalEvents = 0;
 											eventsCount = 0;
 											jso=[];
@@ -2113,7 +2146,7 @@ function minicalendar(el)
            pos.left += addPixels;
            pos.left -= 10;
           }
-		  pos.top += 5;
+		  pos.top += 6;
           if($(el).parent().attr('data-sizey')==2){
           // pos.top -= 20;
           }else if($(el).parent().attr('data-sizey')==3){
@@ -2134,7 +2167,6 @@ function minicalendar(el)
            $('.'+this,el).eq(eventsLength-1).after('<div class="plus-button pos-abs c-p" style="top: '+(pos.top-7)+'px;left: '+icon_pos+'px; color:lightgray;" title="'+(eventsLength-3)+' more">&nbsp;</div>');
           }
          });
-			
          }
 		},
 								eventMouseover : function(event, jsEvent, view)
@@ -2221,6 +2253,7 @@ function minicalendar(el)
 						},
 								
 								dayClick : function(date,allDay,jsEvent,view){
+									createCookie("current_date_calendar", date);
 									App_Portlets.refetchEvents = false;
 									var days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
 									var current_date = new Date();
@@ -2265,18 +2298,16 @@ function minicalendar(el)
 
 							
 }
+
 $('.portlet_body_calendar').live('mouseover',function(e){
 			$(this).find('.portlet_header_icons').removeClass('vis-hide');
-			$(this).find('.fc-button').css('visibility','visible');
-			
+			$(this).find('.fc-button').css('visibility','visible');	
 });
 
 $('.portlet_body_calendar').live('mouseout',function(e){
 	$(this).find('.portlet_header_icons').addClass('vis-hide');
 	$(this).find('.fc-button').css('visibility','hidden');
-	//	$(this).find('.fc-header-right').removeClass('vis-hide');
 });
-
 function loadingGoogleEvents(el,startTime,endTime){
 	
 	$.getJSON('core/api/calendar-prefs/get', function(response)
@@ -2422,6 +2453,13 @@ function googledata(el,response,startTime,endTime)
 							 $.each(events,function(index,ev){
 											 var todayDate=new Date(date.getFullYear(), date.getMonth(), date.getDate(),00,00,00);
 									   var endDate=new Date(date.getFullYear(), date.getMonth(), date.getDate(),23,59,59);
+									   
+									   if(readCookie('current_date_calendar')!=null)
+											{
+												var cookie_date=new Date(readCookie('current_date_calendar'));
+												todayDate=cookie_date;
+												endDate=new Date(cookie_date.getFullYear(), cookie_date.getMonth(), cookie_date.getDate(),23,59,59);
+											}
 											if(ev.start.getTime() >= (todayDate.getTime()) && ev.start.getTime() <= (endDate.getTime())) {	
 											if(len!=0){
 												$(el).find('.list').find('small').each(function( index ) 
@@ -2526,7 +2564,6 @@ $('.minical-portlet-event').live('click',function(e){
 		$('#update-event-time-2')
 				.val(
 						(end.getHours() < 10 ? "0" : "") + end.getHours() + ":" + (end.getMinutes() < 10 ? "0" : "") + end.getMinutes());
-
 
 		// hide end date & time for all day events
 		if (model.allDay)
