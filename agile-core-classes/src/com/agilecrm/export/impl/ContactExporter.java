@@ -1,5 +1,10 @@
 package com.agilecrm.export.impl;
 
+import java.io.BufferedInputStream;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
+import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.util.List;
 import java.util.Map;
@@ -17,12 +22,6 @@ public class ContactExporter extends AbstractCSVExporter<Contact>
     public ContactExporter(Class<Contact> clazz)
     {
 	super(clazz);
-	// TODO Auto-generated constructor stub
-    }
-
-    public ContactExporter(Class<Contact> clazz, Writer writer)
-    {
-	super(clazz, writer);
 	// TODO Auto-generated constructor stub
     }
 
@@ -46,4 +45,33 @@ public class ContactExporter extends AbstractCSVExporter<Contact>
 	return str;
     }
 
+    ByteArrayOutputStream stream;
+
+    byte[] data;
+
+    @Override
+    protected Writer getWriter()
+    {
+
+	stream = new ByteArrayOutputStream(16000000);
+
+	return new OutputStreamWriter(stream);
+    }
+
+    @Override
+    protected InputStream getInputStream()
+    {
+
+	Long startTime = System.currentTimeMillis();
+	byte[] b = stream.toByteArray();
+
+	System.out.println(System.currentTimeMillis() - startTime);
+
+	Long startTime1 = System.currentTimeMillis();
+	System.out.println(stream.size());
+	System.out.println(System.currentTimeMillis() - startTime1);
+
+	// TODO Auto-generated method stub
+	return new BufferedInputStream(new ByteArrayInputStream(b));
+    }
 }

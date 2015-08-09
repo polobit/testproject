@@ -9,6 +9,7 @@ import java.util.List;
 import au.com.bytecode.opencsv.CSVWriter;
 
 import com.agilecrm.contact.export.util.ContactExportCSVUtil;
+import com.agilecrm.file.readers.IFileInputStream;
 import com.google.appengine.api.files.AppEngineFile;
 import com.google.appengine.api.files.FileService;
 import com.google.appengine.api.files.FileServiceFactory;
@@ -18,10 +19,11 @@ public class CSVWriterAgile
 {
     private CSVWriter csvWriter = null;
     private String path = null;
+    private IFileInputStream inputStream = null;
 
     private List<String[]> cachedRows = new ArrayList<String[]>();
 
-    public CSVWriterAgile(Writer writer)
+    public CSVWriterAgile(Writer writer, String fileName)
     {
 	csvWriter = new CSVWriter(writer);
     }
