@@ -10,8 +10,54 @@
 	
 	milestone_util.showMilestonePopup = function(track){
 		
-		if(!(track.lost_milestone && track.won_milestone))
-			$('#milestone-set-msg').show();
+		if(!(track.lost_milestone && track.won_milestone) || track.won_milestone.length == 0 || track.lost_milestone.length == 0){
+			setDefaultLostAndWon(track,function(newTrack){
+				if(!(newTrack.lost_milestone && newTrack.won_milestone))
+					$('#milestone-set-msg').show();
+				return newTrack;
+			});
+		}
+	};
+	
+	var setWon = function(track,callback){
+		var url = 'core/api/milestone/won';
+		var input = {};
+		input.pipeline_id = track.id;
+		input.milestone = track.won_milestone;
+		$.ajax({ url : url, type : 'POST', data : input, contentType : "application/x-www-form-urlencoded", success : function(data)
+			{
+				if(callback)
+					callback();
+			}});
+	};
+	
+	var setLost = function(track,callback){
+		var url = 'core/api/milestone/lost';
+		var input = {};
+		input.pipeline_id = track.id;
+		input.milestone = track.lost_milestone;
+		$.ajax({ url : url, type : 'POST', data : input, contentType : "application/x-www-form-urlencoded", success : function(data)
+			{
+				if(callback)
+					callback();
+			}});
+	};
+	
+	var setDefaultLostAndWon = function(track, callback){
+		var milestones = track.milestones.split(',');
+		$.each(milestones, function(index, val){
+			if(val.toUpperCase() == 'WON' && (track.won_milestone == undefined || track.won_milestone.length==0) && val != track.lost_milestone){
+				track.won_milestone = val;
+				setWon(track);
+			} else if(val.toUpperCase() == 'LOST' && (track.lost_milestone == undefined || track.lost_milestone.length==0) && val != track.won_milestone){
+				track.lost_milestone = val;
+				setLost(track);
+			}
+				
+		});
+		
+		if(callback)
+			callback(track);
 	};
 	
 	milestone_util.savePipelineForm = function(formId,callback){
