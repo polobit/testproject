@@ -530,6 +530,7 @@ function fillSlotDetails(slot_durations_one_user)
 		var select = '<div class="panel panel-default">' + '<div class="panel-heading font-bold">' + json.time + ' mins</div>' + '<div class="panel-body">' + '<form class="bs-example form-horizontal">' + '<div class="form-group" style="margin-left:7px;">' + temp + '</div></form></div></div>';
 		$('.segment1').append('<div class="col-sm-' + dataLength + ' show_slots"><p class="timeslot-view">' + select + '</p></div>');
 	}
+	if(multi_user_ids.length<2)
 	$(".panel-body").height(parseInt(getPanelBodyMaxHeight()) + 26);
 	$('.segment1').append('<div class="clearfix"></div>');
 

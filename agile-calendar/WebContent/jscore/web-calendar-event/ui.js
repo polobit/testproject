@@ -115,9 +115,9 @@ $(function()
 
 				slot_details = SELECTED_DOMAIN_USER['slot_details'];
 				$('.show_slots').hide();
-
 				getSlotDurations();
 				$(".segment1").fadeIn("slow");
+				$(".panel-body").height(parseInt(getPanelBodyMaxHeight()) + 26);
 				autoscrol(".segment1");
 			}
 

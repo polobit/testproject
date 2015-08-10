@@ -118,6 +118,7 @@ $(function()
 
 				getSlotDurations();
 				$(".segment1").fadeIn("slow");
+				$(".panel-body").height(parseInt(getPanelBodyMaxHeight()) + 26);
 				autoscrol(".segment1");
 			}
 
