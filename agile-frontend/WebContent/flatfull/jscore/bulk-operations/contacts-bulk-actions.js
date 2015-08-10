@@ -276,6 +276,24 @@ $(function()
 										return;
 									});
 						}
+						if (is_free_plan() && has_more_than_limit())
+						{
+							continueAction = false;
+							showModalConfirmation(
+									"Add tags",
+									"You can apply this bulk action only on 25 contacts in the FREE Plan. Please choose lesser number of contacts or upgrade your account.",
+									function()
+									{
+										Backbone.history.navigate("subscribe", { trigger : true });
+									}, function()
+									{
+										// No callback
+										return;
+									}, function()
+									{
+										return;
+									}, "Upgrade", "Close");
+						}
 						else
 						{
 							show_add_tag_bulkaction_form()
@@ -406,6 +424,24 @@ $(function()
 									{
 										return;
 									});
+						}
+						if (is_free_plan() && has_more_than_limit())
+						{
+							continueAction = false;
+							showModalConfirmation(
+									"Remove tags",
+									"You can apply this bulk action only on 25 contacts in the FREE Plan. Please choose lesser number of contacts or upgrade your account.",
+									function()
+									{
+										Backbone.history.navigate("subscribe", { trigger : true });
+									}, function()
+									{
+										// No callback
+										return;
+									}, function()
+									{
+										return;
+									}, "Upgrade", "Close");
 						}
 						else
 						{
