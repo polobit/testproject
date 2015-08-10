@@ -1,8 +1,12 @@
 package com.agilecrm;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
 import java.nio.channels.Channels;
+import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,13 +22,29 @@ import com.google.appengine.api.files.FileWriteChannel;
 public class CSVWriterAgile
 {
     private CSVWriter csvWriter = null;
-    private String path = null;
+    FileWriteChannel writeChannel = null;
     private IFileInputStream inputStream = null;
+    private File file;
+    private String path;
+
+    private int count = 0;
 
     private List<String[]> cachedRows = new ArrayList<String[]>();
 
     public CSVWriterAgile(Writer writer, String fileName)
     {
+	csvWriter = new CSVWriter(writer);
+    }
+
+    public CSVWriterAgile(File file) throws IOException
+    {
+	this.file = file;
+
+	if (!file.exists())
+	    file.createNewFile();
+
+	BufferedWriter writer = new BufferedWriter(new FileWriter(file));
+
 	csvWriter = new CSVWriter(writer);
     }
 
@@ -62,7 +82,7 @@ public class CSVWriterAgile
     {
 	cachedRows.add(row);
 
-	if (cachedRows.size() >= 50)
+	if (cachedRows.size() >= 100)
 	{
 	    writePendingFiles();
 	}
@@ -73,12 +93,19 @@ public class CSVWriterAgile
 
     }
 
+    public int getNumberOfRows()
+    {
+	return count;
+    }
+
     private void writePendingFiles()
     {
 	if (cachedRows.size() == 0)
 	{
 	    return;
 	}
+
+	count += cachedRows.size();
 
 	csvWriter.writeAll(cachedRows);
 	cachedRows.clear();
@@ -105,7 +132,10 @@ public class CSVWriterAgile
     // Returns path only if file stored in server
     public String getPath()
     {
-	return path;
+	if (file == null)
+	    return null;
+
+	return file.getPath();
 	// Blob file Path
     }
 }
