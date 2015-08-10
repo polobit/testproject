@@ -37,7 +37,7 @@ public class TaskQueueStatsDaemon extends Thread
 
     private Long remoteAPIInstalledTime = null;
 
-    private static int MAX_REMOTE_API_VALIDITY_IN_HOURS = 6;
+    private static int MAX_REMOTE_API_VALIDITY_IN_HOURS = 1;
 
     public static final RemoteApiOptions options = new RemoteApiOptions().server("agilecrmbeta.appspot.com", 443)
 	    .credentials("naresh@faxdesk.com", "clickdesk");
