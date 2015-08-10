@@ -109,11 +109,11 @@
                         </div>
                         <div class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo" id="allowed-domains">
                            <div class="panel-body p-n" id="api-accordion">
-   {{#unless allowed_domains}}
+   {{#hide_allowed_domains_text allowed_domains}}
    			<div class="p-t-sm p-l-sm p-r-sm p-b-xs">
-   				<div><b>API & Analytics</b> will be enabled on following domains. To allow all domains wildcard character <b>"*"</b> can be used.</div>
+   				<div><b>API & Analytics</b> will be enabled on following domains. All domains are allowed by default using wildcard <b>"*"</b></div>
    			</div>
-   {{/unless}}
+   {{/hide_allowed_domains_text}}
    					<table class="table table-hover custom-fields-table bg-white m-b-none">
    						<colgroup><col width="50%"><col width="4%"></colgroup>
    						<tbody id="allowed_domains_list">
@@ -141,7 +141,7 @@
                            <div class="panel-body p-n" id="api-accordion">
    {{#unless blocked_ips}}
    			<div class="p-t-sm p-l-sm p-r-sm p-b-xs">
-   				<div>By creating IP filters you can disable the <b>tracking</b> system.</div>
+   				<div>By creating IP filters you can disable <b>Web Stats</b> and <b>Tracking</b>.</div>
    			</div>
    {{/unless}}
    

@@ -6816,3 +6816,10 @@ Handlebars.registerHelper('get_campaign_type_filter', function(filter_name)
 				}
 				return html;
 			});
+
+	// Is new allowed domain
+	Handlebars.registerHelper("hide_allowed_domains_text", function(data, options){
+		if (data && data != "localhost, *")
+			return options.inverse(this);
+		return options.fn(this);
+	});

@@ -45,6 +45,7 @@ public class JSONPRequestFilter implements Filter
 	{
 	    response.setContentType("application/javascript");
 	    response.setCharacterEncoding(StandardCharsets.UTF_8.toString());
+	    System.out.println("JSAPI request FQDN " + request.getServerName());
 
 	    // Gets response output streams, and writes response of JSAPI call
 	    // enclosed with in callback parameter.
@@ -128,7 +129,7 @@ public class JSONPRequestFilter implements Filter
 			else
 			    allowedDomain = allowedDomain.replace("*", "");
 		    }
-		    if (StringUtils.indexOf(request.getRemoteHost().toString(), allowedDomain) != -1)
+		    if (StringUtils.indexOf(request.getServerName(), allowedDomain) != -1)
 			return true;
 		}
 	    }
