@@ -45,7 +45,7 @@ public class JSONPRequestFilter implements Filter
 	{
 	    response.setContentType("application/javascript");
 	    response.setCharacterEncoding(StandardCharsets.UTF_8.toString());
-	    System.out.println("JSAPI request FQDN " + request.getServerName());
+	    System.out.println("JSAPI request URL " + ((HttpServletRequest) request).getHeader("Referer"));
 
 	    // Gets response output streams, and writes response of JSAPI call
 	    // enclosed with in callback parameter.
