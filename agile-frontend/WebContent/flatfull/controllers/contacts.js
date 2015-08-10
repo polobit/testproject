@@ -91,12 +91,11 @@ var ContactsRouter = Backbone.Router
 					head.js(LIB_PATH + 'jscore/handlebars/handlebars-helpers.js' + _AGILE_VERSION, LIB_PATH + 'lib/jquery.gridster.js', function()
 					{
 						var el = $(getTemplate('portlets', {}));
-
+						
 						$("#content").html(el);
 						$('[data-toggle="tooltip"]').tooltip();
-						if (navigator.userAgent.indexOf("Chrome") != -1 && !document.getElementById('agilecrm_extension'))
+						if ((navigator.userAgent.toLowerCase().indexOf('chrome') > -1&&navigator.userAgent.toLowerCase().indexOf('opr/') == -1) && !document.getElementById('agilecrm_extension'))
 						{
-
 							$("#chrome-extension-button").removeClass('hide');
 						}
 						/*
