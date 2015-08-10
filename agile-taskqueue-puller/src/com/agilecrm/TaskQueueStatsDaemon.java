@@ -247,8 +247,8 @@ public class TaskQueueStatsDaemon extends Thread
     {
 	try
 	{
-	    Mailgun.sendMail("campaigns@agile.com", "Campaign Observer", "yaswanth@agilecrm.com", "naresh@invox.com",
-		    null, "EC2 Error", null, "Hi Yaswanth " + message, null);
+	    Mailgun.sendMail("campaigns@agile.com", "Email Observer", "yaswanth@agilecrm.com",
+		    "naresh@agilecrm.com,raja@agilecrm.com", null, "EC2 Error", null, "Hi Yaswanth " + message, null);
 	}
 	catch (Exception e)
 	{
