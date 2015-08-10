@@ -17,6 +17,7 @@ import com.google.api.services.taskqueue.model.TaskQueue;
 import com.google.api.services.taskqueue.model.TaskQueue.Stats;
 import com.google.appengine.tools.remoteapi.RemoteApiInstaller;
 import com.google.appengine.tools.remoteapi.RemoteApiOptions;
+import com.thirdparty.Mailgun;
 
 public class TaskQueueStatsDaemon extends Thread
 {
@@ -33,6 +34,13 @@ public class TaskQueueStatsDaemon extends Thread
     private int numberOfWorkerThreads = 4;
 
     private boolean isThreadPool = false;
+
+    private Long remoteAPIInstalledTime = null;
+
+    private static int MAX_REMOTE_API_VALIDITY_IN_HOURS = 10;
+
+    public static final RemoteApiOptions options = new RemoteApiOptions().server("agilecrmbeta.appspot.com", 443)
+	    .credentials("naresh@faxdesk.com", "clickdesk");
 
     org.apache.log4j.Logger logger = null;
 
@@ -132,7 +140,6 @@ public class TaskQueueStatsDaemon extends Thread
 	}
 	else
 	{
-	    setRemoteAPI();
 	    leaseTasks();
 	}
 
@@ -145,29 +152,72 @@ public class TaskQueueStatsDaemon extends Thread
 
     RemoteApiInstaller installer = null;
 
-    private void setRemoteAPI()
+    /**
+     * Gets connector to access datastore remotely
+     * 
+     * @throws IOException
+     */
+    private void setRemoteAPI() throws IOException
     {
 	System.out.println("setting remote api in thread " + Thread.currentThread().getName());
+
+	/**
+	 * If installer is already installed, this condition block checks for
+	 * expiry and resets config is expired
+	 */
 	if (installer != null)
-	    return;
-
-	RemoteApiOptions options = new RemoteApiOptions().server("agilecrmbeta.appspot.com", 443).credentials(
-		"naresh@faxdesk.com", "clickdesk");
-
-	// CachingRemoteApiInstaller installer = new
-	// CachingRemoteApiInstaller();
-
-	installer = new RemoteApiInstaller();
-
-	try
 	{
-	    installer.install(options);
+	    if (!isRemoteAPIExpired())
+		return;
+
+	    logger.info("Uninstalling current Prefs : " + System.currentTimeMillis() + " In thread : "
+		    + Thread.currentThread().getName());
+
+	    // Uninstalls prefs
+	    installer.uninstall();
+
+	    logger.info("Re-Installing prefs : " + System.currentTimeMillis() + " In thread : "
+		    + Thread.currentThread().getName());
 	}
-	catch (IOException e)
+	else
 	{
-	    // TODO Auto-generated catch block
-	    e.printStackTrace();
+	    // Installs remote API for first time
+	    installer = new RemoteApiInstaller();
 	}
+
+	installRemoteAPI();
+    }
+
+    private void installRemoteAPI() throws IOException
+    {
+
+	installer.install(options);
+
+	logger.info("Installing prefs : " + System.currentTimeMillis() + " In thread : "
+		+ Thread.currentThread().getName());
+
+    }
+
+    /**
+     * Checks for remote api config expiry.
+     * 
+     * @return
+     */
+    private boolean isRemoteAPIExpired()
+    {
+	if (remoteAPIInstalledTime == null)
+	    return false;
+
+	Long currentTime = System.currentTimeMillis();
+
+	Long timeDifference = currentTime - remoteAPIInstalledTime;
+
+	int hours = (int) (timeDifference / (1000 * 60 * 60));
+
+	if (MAX_REMOTE_API_VALIDITY_IN_HOURS > hours)
+	    return false;
+
+	return true;
     }
 
     private List<Task> leaseTasksFromAppengine()
@@ -193,8 +243,42 @@ public class TaskQueueStatsDaemon extends Thread
 	}
     }
 
+    private void sendErrorEmail(String message)
+    {
+	try
+	{
+	    Mailgun.sendMail("campaigns@agile.com", "Campaign Observer", "yaswanth@agilecrm.com", "naresh@invox.com",
+		    null, "EC2 Error", null, "Hi Yaswanth " + message, null);
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    logger.error("Exception occured while sending error initiated mail " + e.getMessage());
+	}
+
+    }
+
     private synchronized void leaseTasks()
     {
+	try
+	{
+	    // Checks and sets remote api when required
+	    setRemoteAPI();
+	}
+	catch (IOException e)
+	{
+	    logger.error(e.getMessage());
+	    sendErrorEmail("IO Exception raised in thread : " + Thread.currentThread().getName());
+	    return;
+	}
+	catch (Exception e)
+	{
+	    logger.error(e.getMessage());
+	    sendErrorEmail("Exception raised in thread : " + Thread.currentThread().getName());
+
+	    return;
+	}
+
 	try
 	{
 	    System.out.println("loading");
