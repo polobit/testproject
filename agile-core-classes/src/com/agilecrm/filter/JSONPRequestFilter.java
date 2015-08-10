@@ -129,7 +129,7 @@ public class JSONPRequestFilter implements Filter
 			else
 			    allowedDomain = allowedDomain.replace("*", "");
 		    }
-		    if (StringUtils.indexOf(request.getServerName(), allowedDomain) != -1)
+		    if (StringUtils.indexOf(request.getHeader("Referer"), allowedDomain) != -1)
 			return true;
 		}
 	    }
