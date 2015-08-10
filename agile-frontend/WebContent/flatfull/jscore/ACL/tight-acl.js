@@ -8,7 +8,7 @@
 	tight_acl.REPORTS_PER = false;
 	tight_acl.ACTIVITY_PER = false;
 	var obj = {};
-
+	
 	/*
 	 * Initialize the permissions when user changes the route using the menu scopes in the current domain user object.
 	 */
@@ -78,3 +78,11 @@
 		return CURRENT_DOMAIN_USER.menu_scopes.indexOf(scope) > -1;
 	}
 }(window.tight_acl = window.tight_acl || {}, $));
+
+(function(acl_util, $, undefined) {
+	acl_util.updateTagAcl = function(isEnable){
+		var input = {};
+		input.is_enable = isEnable;
+		queuePostRequest('tag_acl', "/core/api/users/allow-new-tag", input, function(){}, function(){});
+	};
+}(window.acl_util = window.acl_util || {}, $));

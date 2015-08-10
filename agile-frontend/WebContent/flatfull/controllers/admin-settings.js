@@ -448,6 +448,9 @@ var AdminSettingsRouter = Backbone.Router.extend({
 		this.tagsview1 = new Base_Collection_View({ url : 'core/api/tags/stats1', templateKey : "tag-management", individual_tag_name : 'li',
 			sort_collection : true, sortKey : 'tag', postRenderCallback : function(el)
 			{
+				$('#new_tag_acl',el).off().on('change',function(){
+					acl_util.updateTagAcl($(this).is(':checked'));
+				});
 			} });
 		this.tagsview1.appendItem = append_tag_management;
 
