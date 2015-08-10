@@ -192,6 +192,7 @@ public class TaskQueueStatsDaemon extends Thread
     {
 
 	installer.install(options);
+	remoteAPIInstalledTime = System.currentTimeMillis();
 
 	logger.info("Installing prefs : " + System.currentTimeMillis() + " In thread : "
 		+ Thread.currentThread().getName());
