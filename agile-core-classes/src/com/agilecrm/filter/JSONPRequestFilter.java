@@ -128,7 +128,7 @@ public class JSONPRequestFilter implements Filter
 			else
 			    allowedDomain = allowedDomain.replace("*", "");
 		    }
-		    if (StringUtils.indexOf(request.getServerName().toString(), allowedDomain) != -1)
+		    if (StringUtils.indexOf(request.getRemoteHost().toString(), allowedDomain) != -1)
 			return true;
 		}
 	    }
