@@ -39,8 +39,8 @@ public class TaskQueueStatsDaemon extends Thread
 
     private static int MAX_REMOTE_API_VALIDITY_IN_HOURS = 1;
 
-    public static final RemoteApiOptions options = new RemoteApiOptions().server("agilecrmbeta.appspot.com", 443)
-	    .credentials("naresh@faxdesk.com", "clickdesk");
+    public RemoteApiOptions options = new RemoteApiOptions().server("agilecrmbeta.appspot.com", 443).credentials(
+	    "naresh@faxdesk.com", "clickdesk");
 
     org.apache.log4j.Logger logger = null;
 
