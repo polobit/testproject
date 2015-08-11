@@ -1,5 +1,8 @@
 package com.agilecrm.export;
 
+import java.io.File;
+import java.io.IOException;
+
 import com.agilecrm.contact.Contact;
 import com.agilecrm.deals.Opportunity;
 import com.agilecrm.export.Exporter.EXPORT_TYPE;
@@ -10,11 +13,16 @@ public class ExportBuilder
 {
     public static Exporter<Contact> buildContactExporter()
     {
-	return new ContactExporter(EXPORT_TYPE.CONTACT);
+	return new ContactExporter();
+    }
+
+    public static Exporter<Contact> buildContactExporter(File file) throws IOException
+    {
+	return new ContactExporter(file);
     }
 
     public static Exporter<Opportunity> buildDealsExporter()
     {
-	return new DealsExporter(Opportunity.class);
+	return new DealsExporter();
     }
 }

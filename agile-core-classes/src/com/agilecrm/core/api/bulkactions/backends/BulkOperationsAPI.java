@@ -841,8 +841,15 @@ public class BulkOperationsAPI
 	System.out.println("Namespace is in exportContactsCSV " + NamespaceManager.get());
 
 	List<Contact> contacts_list = new ArrayList<Contact>();
-	String[] header = ContactExportCSVUtil.getCSVHeadersForContact();
 	String path = null;
+
+	int i = 0;
+
+	if (i + 10 == 10)
+	{
+	    ContactExportCSVUtil.addToPullQueue(currentUserId, contact_ids, filter, dynamicFilter, data);
+	    return;
+	}
 
 	Exporter<Contact> exporter = ExportBuilder.buildContactExporter();
 	// If filter is not empty, 500 contacts are fetched on every
@@ -853,7 +860,6 @@ public class BulkOperationsAPI
 
 	    String currentCursor = null;
 	    String previousCursor = null;
-	    int firstTime = 0;
 
 	    do
 	    {

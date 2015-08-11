@@ -1,6 +1,7 @@
 package com.agilecrm.export.impl;
 
-import java.io.Writer;
+import java.io.File;
+import java.io.IOException;
 import java.util.Map;
 
 import com.agilecrm.deals.Opportunity;
@@ -10,17 +11,16 @@ import com.agilecrm.export.DealCSVExport;
 public class DealsExporter extends AbstractCSVExporter<Opportunity>
 {
 
-    public DealsExporter(Class<Opportunity> clazz)
+    public DealsExporter()
     {
 	// TODO Auto-generated constructor stub
 	super(EXPORT_TYPE.DEAL);
-
     }
 
-    public DealsExporter(Class<Opportunity> clazz, Writer writer)
+    public DealsExporter(File file) throws IOException
     {
 	// TODO Auto-generated constructor stub
-	super(Opportunity.class, writer);
+	super(EXPORT_TYPE.DEAL, file);
     }
 
     @Override

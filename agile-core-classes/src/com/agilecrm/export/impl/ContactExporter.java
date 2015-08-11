@@ -1,5 +1,7 @@
 package com.agilecrm.export.impl;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -13,9 +15,15 @@ import com.agilecrm.export.AbstractCSVExporter;
 public class ContactExporter extends AbstractCSVExporter<Contact>
 {
 
-    public ContactExporter(com.agilecrm.export.Exporter.EXPORT_TYPE export_type)
+    public ContactExporter()
     {
-	super(export_type);
+	super(EXPORT_TYPE.CONTACT);
+	// TODO Auto-generated constructor stub
+    }
+
+    public ContactExporter(File file) throws IOException
+    {
+	super(EXPORT_TYPE.CONTACT, file);
 	// TODO Auto-generated constructor stub
     }
 

@@ -6,10 +6,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
+import java.util.Random;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -25,6 +24,8 @@ import com.agilecrm.contact.export.ContactCSVExport;
 import com.agilecrm.contact.filter.ContactFilterIdsResultFetcher;
 import com.agilecrm.contact.util.CustomFieldDefUtil;
 import com.agilecrm.contact.util.NoteUtil;
+import com.agilecrm.queues.util.PullQueueUtil;
+import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.files.FileWriteChannel;
 import com.googlecode.objectify.Key;
 
@@ -225,8 +226,11 @@ public class ContactExportCSVUtil
     public static void addToPullQueue(Long currentUserId, String contact_ids, String filter, String dynamicFilter,
 	    String data)
     {
+	Random random = new Random();
+	random.setSeed(System.currentTimeMillis());
+	int randomInt = random.nextInt();
 	ContactExportPullTask task = null;
-	Set<Key<Contact>> contactList = new HashSet<Key<Contact>>();
+	List<Key<Contact>> contactList = new ArrayList<Key<Contact>>();
 	if (contact_ids != null)
 	{
 	    JSONArray contact_ids_json;
@@ -281,6 +285,8 @@ public class ContactExportCSVUtil
 	    // Add Ids to pull queue
 	    task = new ContactExportPullTask(contactList, currentUserId);
 	}
+
+	PullQueueUtil.addToPullQueue("export-pull-queue", task, NamespaceManager.get() + "_" + randomInt);
 
     }
 

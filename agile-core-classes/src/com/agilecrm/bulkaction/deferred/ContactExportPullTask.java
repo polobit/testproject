@@ -1,32 +1,22 @@
 package com.agilecrm.bulkaction.deferred;
 
+import java.io.File;
 import java.io.IOException;
-import java.io.OutputStream;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-
-import au.com.bytecode.opencsv.CSVWriter;
 
 import com.agilecrm.contact.Contact;
-import com.agilecrm.contact.export.util.ContactExportCSVUtil;
 import com.agilecrm.contact.filter.ContactFilterResultFetcher;
+import com.agilecrm.export.ExportBuilder;
+import com.agilecrm.export.Exporter;
 import com.google.appengine.api.taskqueue.DeferredTask;
 import com.googlecode.objectify.Key;
-import com.agilecrm.contact.export.util.ContactExportCSVUtil;
-import com.agilecrm.contact.filter.ContactFilterResultFetcher;
-import com.agilecrm.contact.util.NoteUtil;
-import com.google.appengine.api.files.FileWriteChannel;
-import com.google.appengine.api.taskqueue.DeferredTask;
-import com.googlecode.objectify.Key;
-import com.thirdparty.mandrill.Mandrill;
 
 public class ContactExportPullTask implements DeferredTask
 {
+
+    File file = null;
+    Exporter<Contact> exporter;
 
     /**
      * 
@@ -34,7 +24,7 @@ public class ContactExportPullTask implements DeferredTask
     private static final long serialVersionUID = -9119860558950199133L;
 
     private String filter;
-    private Set<Key<Contact>> contactList = new HashSet<Key<Contact>>();
+    private List<Key<Contact>> contactList = new ArrayList<Key<Contact>>();
     private Long domainUserId;
 
     public ContactExportPullTask(String filter, Long domainUserId)
@@ -43,7 +33,7 @@ public class ContactExportPullTask implements DeferredTask
 	this.domainUserId = domainUserId;
     }
 
-    public ContactExportPullTask(Set<Key<Contact>> contactList, Long domainUserId)
+    public ContactExportPullTask(List<Key<Contact>> contactList, Long domainUserId)
     {
 	this.contactList = contactList;
 	this.domainUserId = domainUserId;
@@ -52,11 +42,14 @@ public class ContactExportPullTask implements DeferredTask
     @Override
     public void run()
     {
+	if (file == null)
+	{
+	    file = new File("test-yaswanth.csv");
+	}
+	List<Contact> contacts = new ArrayList<Contact>();
 	if (filter != null)
 	{
 	    ContactFilterResultFetcher fetcher = new ContactFilterResultFetcher(filter, null, 200, null, domainUserId);
-
-	    List<Contact> contacts = new ArrayList<Contact>();
 
 	    while (fetcher.hasNext())
 	    {
@@ -65,30 +58,30 @@ public class ContactExportPullTask implements DeferredTask
 	}
 	else if (contactList != null)
 	{
-
+	    contacts.addAll(Contact.dao.fetchAllByKeys(contactList));
 	}
 
-	String[] header = ContactExportCSVUtil.getCSVHeadersForContact();
+	writeContactCSV(contacts);
 
 	// TODO Auto-generated method stub
 
     }
 
-    private void getConnection() throws IOException
+    private Exporter<Contact> getExporter()
     {
-	OutputStream outStream = null;
-	HttpURLConnection outConn = null;
+	if (exporter != null)
+	    return exporter;
+	try
+	{
+	    return exporter = ExportBuilder.buildContactExporter(file);
+	}
+	catch (IOException e)
+	{
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	}
 
-	URL outUrl = new URL(Mandrill.MANDRILL_API_POST_URL + Mandrill.MANDRILL_API_MESSAGE_CALL);
-	outConn = (HttpURLConnection) outUrl.openConnection();
-	outConn.setDoOutput(true);
-	outConn.setRequestMethod("POST");
-	outConn.setConnectTimeout(600000);
-	outConn.setReadTimeout(600000);
-	outConn.setRequestProperty("Content-Type", "application/json");
-	outConn.setRequestProperty("charset", "utf-8");
-
-	outStream = outConn.getOutputStream();
+	return (Exporter<Contact>) null;
     }
 
     /**
@@ -98,37 +91,8 @@ public class ContactExportPullTask implements DeferredTask
      * @param contactList
      * @param isFirstTime
      */
-    public static void writeContactCSV(List<Contact> contactList, String[] headers,
-	    Boolean isFirstTime)
+    public void writeContactCSV(List<Contact> contactList)
     {
-	try
-	{
-	    CSVWriter writer = new CSVWriter(Channels.newWriter(writeChannel, "UTF8"));
-	    
-	    Writer i = new OutputStreamWriter(out)
-
-	    if (isFirstTime)
-		writer.writeNext(headers);
-
-	    Map<String, Integer> indexMap = ContactExportCSVUtil.getIndexMapOfCSVHeaders(headers);
-
-	    for (Contact contact : contactList)
-	    {
-		if (contact == null)
-		    continue;
-
-		String str[] = ContactCSVExport.insertContactProperties(contact, indexMap, headers.length);
-		List<Note> notes = NoteUtil.getNotes(contact.id);
-		writer.writeNext(addNotes(str, notes));
-	    }
-
-	    // Close without finalizing
-	    writer.close();
-	}
-	catch (Exception e)
-	{
-	    e.printStackTrace();
-	    System.err.println("Exception occured in writeContactCSV " + e.getMessage());
-	}
+	getExporter().writeEntitesToCSV(contactList);
     }
 }

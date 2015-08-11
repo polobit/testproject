@@ -3,7 +3,6 @@ package com.agilecrm.export;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.Writer;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -44,14 +43,6 @@ public abstract class AbstractCSVExporter<T> implements Exporter<T>
 	csvWriter = new CSVWriterAgile();
     }
 
-    private File getOutputFile()
-    {
-	if (file != null)
-	    return file;
-
-	return file = new File("test");
-    }
-
     /**
      * Constructor which can take a writer object and build CSV writer wrapper
      * around it. It can be use full when stream is from url connection or any
@@ -59,10 +50,20 @@ public abstract class AbstractCSVExporter<T> implements Exporter<T>
      * 
      * @param clazz
      * @param writer
+     * @throws IOException
      */
-    public AbstractCSVExporter(Class<T> clazz, Writer writer)
+    public AbstractCSVExporter(EXPORT_TYPE export_type, File file) throws IOException
     {
-	csvWriter = new CSVWriterAgile();
+	this.export_type = export_type;
+	csvWriter = new CSVWriterAgile(file);
+    }
+
+    private File getOutputFile()
+    {
+	if (file != null)
+	    return file;
+
+	return file = new File("test");
     }
 
     /**
