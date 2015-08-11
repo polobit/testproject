@@ -5783,7 +5783,7 @@ $(function()
 			App_Portlets.deal_tracks = data;
 		} });
 		if (App_Portlets.track_length > 1)
-		{t_
+		{
 			if (track_id == 0)
 				header_name = "Default";
 			else
