@@ -731,7 +731,7 @@
 			$('#personModal').modal('show');
 		});
 		
-		$('#contactDetailsTab a[href="#company-contacts"]').live('click', function(e)
+		$('#contactDetailsTab a[href="#company-contacts"]').die().live('click', function(e)
 				{
 					e.preventDefault();
 					fill_company_related_contacts(App_Companies.companyDetailView.model.id, 'company-contacts');
@@ -741,7 +741,7 @@
 		 * Fetches all the deals related to the contact and shows the deals
 		 * collection as a table in its tab-content, when "Deals" tab is clicked.
 		 */
-		$('#contactDetailsTab a[href="#company-deals"]').live('click', function(e)
+		$('#contactDetailsTab a[href="#company-deals"]').die().live('click', function(e)
 		{
 			e.preventDefault();
 			save_contact_tab_position_in_cookie("deals");
@@ -751,7 +751,7 @@
 		/**
 		 * Fetches all the cases related to the contact and shows the collection.
 		 */
-		$('#contactDetailsTab a[href="#company-cases"]').live('click', function(e)
+		$('#contactDetailsTab a[href="#company-cases"]').die().live('click', function(e)
 		{
 			e.preventDefault();
 			save_contact_tab_position_in_cookie("cases");
@@ -763,7 +763,7 @@
 		 * Fetches all the notes related to the contact and shows the notes
 		 * collection as a table in its tab-content, when "Notes" tab is clicked.
 		 */
-		$('#contactDetailsTab a[href="#company-notes"]').live('click', function(e)
+		$('#contactDetailsTab a[href="#company-notes"]').die().live('click', function(e)
 		{
 			e.preventDefault();
 			save_contact_tab_position_in_cookie("notes");
@@ -775,7 +775,7 @@
 		 * collection as a table in its tab-content, when "Documents" tab is
 		 * clicked.
 		 */
-		$('#contactDetailsTab a[href="#company-documents"]').live('click', function(e)
+		$('#contactDetailsTab a[href="#company-documents"]').die().live('click', function(e)
 		{
 			e.preventDefault();
 			save_contact_tab_position_in_cookie("documents");
@@ -786,14 +786,14 @@
 		 * "click" event of add button of tags form in contact detail view
 		 * Pushes the added tags into tags array attribute of the contact and saves it
 		 */ 
-		$('#company-add-tags').live('click', function(e){
+		$('#company-add-tags').die().live('click', function(e){
 			e.preventDefault();
 			
 		   addTagsToCompany();
 		});
 		
 		// Deletes a contact from database
-		$('#company-actions-delete').live('click', function(e){
+		$('#company-actions-delete').die().live('click', function(e){
 			
 			e.preventDefault();
 			deleteCurrentCompany();
@@ -803,7 +803,7 @@
 		 * Changes, owner of the contact, when an option of change owner drop down
 		 * is selected.   
 		 */
-		$('.company-owner-list').live('click', function(){
+		$('.company-owner-list').die().live('click', function(){
 		
 			$('#change-owner-ul').css('display', 'none');
 			
@@ -813,7 +813,7 @@
 		/**
 		 * Deletes a tag of a contact (removes the tag from the contact and saves the contact)
 		 */ 
-		$('.remove-company-tags').live('click', function(e){
+		$('.remove-company-tags').die().live('click', function(e){
 			e.preventDefault();
 			
 			var tag = $(this).attr("tag");

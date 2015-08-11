@@ -1124,7 +1124,10 @@ function getSelectionCriteria()
 	}
 	
 	if(_BULK_CONTACTS == "#companies"){
-		return 'Companies';
+		if(filter_id)
+			return filter_id;
+		else
+			return 'Companies';
 	}
 
 	// If filter cookie is not available then it returns either '#contacts' of
