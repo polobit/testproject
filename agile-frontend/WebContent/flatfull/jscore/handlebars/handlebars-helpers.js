@@ -5700,7 +5700,7 @@ $(function()
 		else if (p_name == 'Revenue Graph')
 			icon_name = 'icon-graph';
 		else if (p_name == 'Campaign stats')
-			icon_name = 'icon-pie-chart';
+			icon_name = 'icon-sitemap';
 		return icon_name;
 	});
 	/**
@@ -5783,7 +5783,7 @@ $(function()
 			App_Portlets.deal_tracks = data;
 		} });
 		if (App_Portlets.track_length > 1)
-		{
+		{t_
 			if (track_id == 0)
 				header_name = "Default";
 			else
@@ -6403,6 +6403,8 @@ Handlebars.registerHelper('SALES_CALENDAR_URL', function()
 		description = 'Find current plan information, number of users and more.';
 	else if (p_name== 'Revenue Graph')
 		description = 'Forecasted revenue graph based on your Deals.';
+	else if (p_name == 'Campaign stats')
+		description = 'See how your campaigns are performing with stats on email opens and link clicks.'
 	return description;
 			});
 
