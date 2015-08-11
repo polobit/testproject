@@ -120,8 +120,9 @@ content="<%=domainUser.getInfo(DomainUser.LAST_LOGGED_IN_TIME)%>" />
 
 <%=cssLink %>
 <!-- <link rel="stylesheet" type="text/css" href="<%=FLAT_FULL_PATH%>css/agile-app-framework.css">  -->
-<link rel="stylesheet" type="text/css" href="<%=FLAT_FULL_PATH%>css/min/core-all.css"></link>
 <link rel="stylesheet" type="text/css" href="<%=FLAT_FULL_PATH%>css/min/misc-all.css"></link>
+<link rel="stylesheet" type="text/css" href="<%=FLAT_FULL_PATH%>css/min/core-all.css"></link>
+
 
 <style>
 .clickdesk_bubble {
