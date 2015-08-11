@@ -261,7 +261,7 @@ function show_custom_fields_helper(custom_fields, properties){
 		var div_col9_style = "";
 		var div_col3_style = "";
 		var checkbox_style ="";
-
+		var max_len = 500;
 		if(field.scope == "CONTACT"){
 			label_style = "col-sm-3 word-break";
 			field_style = "col-sm-10";
@@ -460,20 +460,20 @@ function show_custom_fields_helper(custom_fields, properties){
 							+'</b><span class="field_req">*</span></label><div class="controls"><textarea rows="'
 							+rows+'" class="'
 							+field.field_type.toLowerCase()
-							+'_input custom_field required form-control resize-vertical" id='
+							+'_input custom_field required form-control resize-vertical field_length" id='
 							+field.id+' name="'
 							+field.field_label
-							+'"></textarea></div></div>');
+							+'" max_len="'+max_len+'"></textarea></div></div>');
 				}else{
 					el = el.concat('<div class="control-group form-group"><label class="control-label '+label_style+'">'
 							+field.field_label
 							+'<span class="field_req">*</span></label><div class="controls col-sm-9 '+div_col9_style+'"><textarea rows="'
 							+rows+'" class="'
 							+field.field_type.toLowerCase()
-							+'_input custom_field required form-control resize-vertical" id='
+							+'_input custom_field required form-control resize-vertical field_length" id='
 							+field.id+' name="'
 							+field.field_label
-							+'" ></textarea></div></div>');
+							+'"  max_len="'+max_len+'"></textarea></div></div>');
 				}
 			}else{
 				if(isModal){
@@ -482,20 +482,20 @@ function show_custom_fields_helper(custom_fields, properties){
 							+'</b></label><div class="controls"><textarea rows="'
 							+rows+'" class="'
 							+field.field_type.toLowerCase()
-							+'_input custom_field form-control resize-vertical" id='
+							+'_input custom_field form-control resize-vertical field_length" id='
 							+field.id+' name="'
 							+field.field_label
-							+'" ></textarea></div></div>');
+							+'"  max_len="'+max_len+'"></textarea></div></div>');
 				}else{
 					el = el.concat('<div class="control-group form-group"><label class="control-label '+label_style+'">'
 							+field.field_label
 							+'</label><div class="controls col-sm-9 '+div_col9_style+'"><textarea rows="'
 							+rows+'" class="'
 							+field.field_type.toLowerCase()
-							+'_input custom_field form-control resize-vertical" id='
+							+'_input custom_field form-control resize-vertical field_length" id='
 							+field.id+' name="'
 							+field.field_label
-							+'" ></textarea></div></div>');
+							+'"  max_len="'+max_len+'"></textarea></div></div>');
 				}
 			}
 			return;
@@ -509,20 +509,20 @@ function show_custom_fields_helper(custom_fields, properties){
 						+field.field_label
 						+'</b><span class="field_req">*</span></label><div class="controls custom-number-controls"><input type="number" class="'
 						+field.field_type.toLowerCase()
-						+'_input custom_field required form-control" id="'
+						+'_input custom_field required form-control field_length" id="'
 						+field.id+'" name="'
 						+field.field_label
-						+'" value="0"></input>'
+						+'" value="0" max_len="'+max_len+'"></input>'
 						+'</div></div>');
 				}else{
 					el = el.concat('<div class="control-group form-group">	<label class="control-label '+label_style+'">'
 							+field.field_label
 							+' <span class="field_req">*</span></label><div class="controls col-sm-9 '+div_col3_style+' custom-number-controls"><input type="number" class="'
 							+field.field_type.toLowerCase()
-							+'_input custom_field required form-control" id="'
+							+'_input custom_field required form-control field_length" id="'
 							+field.id+'" name="'
 							+field.field_label
-							+'" value="0"></input>'
+							+'" value="0" max_len="'+max_len+'"></input>'
 							+'</div></div>');
 				}
 			}else{
@@ -531,20 +531,20 @@ function show_custom_fields_helper(custom_fields, properties){
 						+field.field_label
 						+'</label><div class="controls custom-number-controls"><input type="number" class="'
 						+field.field_type.toLowerCase()
-						+'_input custom_field form-control" id="'
+						+'_input custom_field form-control field_length" id="'
 						+field.id+'" name="'
 						+field.field_label
-						+'" value="0"></input>'
+						+'" value="0" max_len="'+max_len+'"></input>'
 						+'</div></div>');
 				}else{
 					el = el.concat('<div class="control-group form-group">	<label class="control-label '+label_style+'">'
 							+field.field_label
 							+'</label><div class="controls col-sm-9 '+div_col3_style+' custom-number-controls"><input type="number" class="'
 							+field.field_type.toLowerCase()
-							+'_input custom_field form-control" id="'
+							+'_input custom_field form-control field_length" id="'
 							+field.id+'" name="'
 							+field.field_label
-							+'" value="0"></input>'
+							+'" value="0" max_len="'+max_len+'"></input>'
 							+'</div></div>');
 				}
 			}
@@ -564,17 +564,17 @@ function show_custom_fields_helper(custom_fields, properties){
 							+field.field_label
 							+'</b><span class="field_req">*</span></label><div class="controls"><input type="text" class="'
 							+field.field_type.toLowerCase()
-							+'_input custom_field required form-control" id='
+							+'_input custom_field required form-control field_length" id='
 							+field.id+' name="'+field.field_label
-							+'"></div></div>');
+							+'" max_len="'+max_len+'"></div></div>');
 			}else{
 				el = el.concat('<div class="control-group form-group">	<label class="control-label '+label_style+'">'
 						+field.field_label
 						+' <span class="field_req">*</span></label><div class="controls col-sm-9 '+div_col9_style+'"><input type="text" class="'
 						+field.field_type.toLowerCase()
-						+'_input custom_field required form-control" id='
+						+'_input custom_field required form-control field_length" id='
 						+field.id+' name="'+field.field_label
-						+'"></div></div>');
+						+'" max_len="'+max_len+'"></div></div>');
 			}
 		}else{
 			if(isModal){
@@ -582,19 +582,19 @@ function show_custom_fields_helper(custom_fields, properties){
 							+field.field_label
 							+'</b></label><div class="controls"><input type="text" class="'
 							+field.field_type.toLowerCase()
-							+'_input custom_field form-control" id='
+							+'_input custom_field form-control field_length" id='
 							+field.id+' name="'
 							+field.field_label
-							+'"></div></div>');
+							+'" max_len="'+max_len+'"></div></div>');
 			}else{
 				el = el.concat('<div class="control-group form-group"><label class="control-label '+label_style+'">'
 						+field.field_label
 						+'</label><div class="controls col-sm-9 '+div_col9_style+'"><input type="text" class="'
 						+field.field_type.toLowerCase()
-						+'_input custom_field form-control" id='
+						+'_input custom_field form-control field_length" id='
 						+field.id+' name="'
 						+field.field_label
-						+'"></div></div>');
+						+'" max_len="'+max_len+'"></div></div>');
 			}
 		}
 	});

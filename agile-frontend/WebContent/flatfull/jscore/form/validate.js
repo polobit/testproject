@@ -138,6 +138,18 @@ function isValidForm(form) {
 		}else
 			return !/Invalid|NaN/.test(new Date(value));
 	}," Please enter a valid date.");
+
+	jQuery.validator.addMethod("field_length", function(value, element){
+		if(value=="")
+			return true;
+		var counter = 0;
+		var max_len = $(element).attr('max_len');
+		if(max_len == "")
+			return true;
+		if(value.length > max_len)
+			return false;
+		return true;
+	}," Maximum length is 500 characters only.");
 	
 	$(form).validate({
 		rules : {
