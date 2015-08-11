@@ -44,6 +44,7 @@ public class TagAccessControl extends UserAccessControl
     @Override
     public boolean canCreate()
     {
+	System.out.println("-------check access for tag----" + hasScope(UserAccessScopes.ADD_NEW_TAG));
 	return hasScope(UserAccessScopes.ADD_NEW_TAG);
     }
 

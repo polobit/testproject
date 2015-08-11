@@ -283,6 +283,9 @@ $(function(){
 	       			console.log(new_tags);
 	       			// Adds the added tags (if new) to tags collection
 	       			tagsCollection.add(new BaseModel({"tag" : new_tags}));
+	       		},
+	       		error: function(model,response){
+	       			console.log(response);
 	       		}
 	        });
 		}
