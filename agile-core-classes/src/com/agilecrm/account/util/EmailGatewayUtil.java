@@ -29,7 +29,7 @@ import com.campaignio.logger.util.LogUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.blobstore.BlobKey;
 import com.google.appengine.api.taskqueue.TaskHandle;
-import com.thirdparty.SendGrid;
+import com.thirdparty.sendgrid.SendGrid;
 import com.thirdparty.mandrill.Mandrill;
 
 /**
@@ -322,7 +322,7 @@ public class EmailGatewayUtil
 	    }
 
 	    // If no gateway setup, sends email through Agile Mandrill
-	    if (emailGateway == null)
+	    if (emailGateway == null || (EMAIL_API.SEND_GRID.equals(emailGateway.email_api) && (documentIds.size() != 0 || blobKeys.size() != 0)))
 	    {
 		Mandrill.sendMail(null, true, fromEmail, fromName, to, cc, bcc, subject, replyTo, html, text,
 		        mandrillMetadata, documentIds, blobKeys, attachments);

@@ -625,6 +625,7 @@ function show_custom_fields_helper_for_merge(custom_fields, contacts) {
 								value = new Date(
 										property.value * 1000)
 								.format('mm/dd/yyyy');
+
 							} catch (err) {
 							}
 						}
@@ -745,8 +746,11 @@ function fill_custom_data(property, form)
 			else if($(element[0]).hasClass("date_input"))
 				{
 				try {
-					element.attr("value", new Date(property.value * 1000)
-							.format('mm/dd/yyyy'));
+					var dateString = new Date(property.value);
+					if(dateString == "Invalid Date")
+						element.attr("value", getDateInFormatFromEpoc(property.value));
+					else
+						element.attr("value", getDateInFormat(dateString));
 					return;
 				} catch (err) {
 
@@ -782,6 +786,11 @@ function serialize_custom_fields(form)
     	json.value =  $(element).val();
     	
     	if(elem_type=='checkbox')json.value = $(element).is(':checked')?'on':'off';
+    	if($(element).hasClass("date_input") && ($(element).val() !=undefined && $(element).val().trim() !=""))
+    		if(CURRENT_USER_PREFS.dateFormat.indexOf("dd/mm/yy") != -1 || CURRENT_USER_PREFS.dateFormat.indexOf("dd.mm.yy") != -1)
+    			json.value = en.dateFormatter({raw: "MM/dd/yyyy"})(new Date(convertDateFromUKtoUS(this.value)));
+    		else
+    			json.value = en.dateFormatter({raw: "MM/dd/yyyy"})(new Date(this.value));
     	
     	
     	if(!json.value)

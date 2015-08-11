@@ -809,3 +809,15 @@ margin-left:13px;
 }
   
 
+#contact-results > li.active{
+	background-color: #fafafa;
+}
+#deals-results > li.active{
+	background-color: #fafafa;
+}
+#document-results > li.active{
+	background-color: #fafafa;
+}
+#case-results > li.active{
+	background-color: #fafafa;
+}

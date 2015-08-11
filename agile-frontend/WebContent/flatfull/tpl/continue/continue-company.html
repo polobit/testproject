@@ -14,6 +14,19 @@
                         <input name="name" type="text" class="required form-control" id="company_name" value="{{getPropertyValue properties "name"}}"/>
                     </div>
                 </div>
+				<div class="control-group form-group" id="tags_source_continue_company">
+                    <label class="control-label col-sm-3">Tag</label>
+                    <div class="controls col-sm-9">
+                        <div class="pull-left">
+                            <ul name="tags" class="tagsinput tags p-n">
+                                {{#each tags}}
+                                <li class="tag inline-block btn btn-xs btn-primary m-r-xs m-b-xs" data="{{this}}">{{this}}<a class="close m-l-xs" id="remove_tag">&times</a></li>
+                                {{/each}}
+                            </ul>
+                        </div>
+                        <input name="tags" type="text" id="tags-new-person" class="tags-typeahead form-control" />
+                    </div>
+                </div>
                 <div class="control-group form-group">
                     <label class="control-label col-sm-3">Url</label>
                     <div class="controls col-sm-9">

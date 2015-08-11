@@ -321,13 +321,13 @@ function deserialize_deal(value, template)
 	});
 
 	// Enable the datepicker
-	$('#close_date', dealForm).datepicker({ format : 'mm/dd/yyyy', weekStart : CALENDAR_WEEK_START_DAY });
+	$('#close_date', dealForm).datepicker({ format : CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY});
 
 	add_custom_fields_to_form(value, function(data)
 	{
 		var el = show_custom_fields_helper(data["custom_fields"], []);
 		$("#custom-field-deals", dealForm).html(fill_custom_fields_values_generic($(el), value["custom_data"]));
-		$('.date_input', dealForm).datepicker({ format : 'mm/dd/yyyy', weekStart : CALENDAR_WEEK_START_DAY });
+		$('.date_input', dealForm).datepicker({ format : CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY});
 
 	}, "DEAL")
 

@@ -64,12 +64,13 @@ String logo_url = accountPrefs.logo;
 <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
 <style>
 body {
-background-image:url('..<%=flatfull_path%>/images/flatfull/buildings.jpg');
-background-repeat:no-repeat;
-background-position:center center;
-background-size:100% 100%;
-background-attachment:fixed;
+   background-image: url('../flatfull/images/flatfull/agile-login-page.png');
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: 100% 100%;
+  background-attachment: fixed;
 }
+
 
 .text-white
 {

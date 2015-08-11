@@ -61,7 +61,10 @@ $(function()
 		});
 
 		// Navigate to show form
-		Backbone.history.navigate("bulk-owner", { trigger : true });
+		if(company_util.isCompany())
+			Backbone.history.navigate("company-bulk-owner", { trigger : true });
+		else
+			Backbone.history.navigate("bulk-owner", { trigger : true });
 
 		/**
 		 * Changes the owner by sending the new owner name as path parameter and
@@ -276,6 +279,24 @@ $(function()
 										return;
 									});
 						}
+						if (is_free_plan() && has_more_than_limit())
+						{
+							continueAction = false;
+							showModalConfirmation(
+									"Add tags",
+									"You can apply this bulk action only on 25 contacts in the FREE Plan. Please choose lesser number of contacts or upgrade your account.",
+									function()
+									{
+										Backbone.history.navigate("subscribe", { trigger : true });
+									}, function()
+									{
+										// No callback
+										return;
+									}, function()
+									{
+										return;
+									}, "Upgrade", "Close");
+						}
 						else
 						{
 							show_add_tag_bulkaction_form()
@@ -407,6 +428,24 @@ $(function()
 										return;
 									});
 						}
+						if (is_free_plan() && has_more_than_limit())
+						{
+							continueAction = false;
+							showModalConfirmation(
+									"Remove tags",
+									"You can apply this bulk action only on 25 contacts in the FREE Plan. Please choose lesser number of contacts or upgrade your account.",
+									function()
+									{
+										Backbone.history.navigate("subscribe", { trigger : true });
+									}, function()
+									{
+										// No callback
+										return;
+									}, function()
+									{
+										return;
+									}, "Upgrade", "Close");
+						}
 						else
 						{
 							show_remove_tag_bulkaction_form()
@@ -523,13 +562,19 @@ $(function()
 					{
 						e.preventDefault();
 
+							// Selected Contact ids
+							var id_array = get_contacts_bulk_ids();
+
 						if (!canRunBulkOperations())
 						{
 							showModalConfirmation(
 									"Bulk Email",
 									"You may not be the owner for some of the contacts selected. Proceeding with this operation will send email to only your contacts.<br/><br/> Do you want to proceed?",
-
-									show_bulk_email_form, function()
+									function()
+									{
+										show_bulk_email_form(id_array)
+									},
+									function()
 									{
 										// No callback
 										return;
@@ -557,8 +602,6 @@ $(function()
 						}
 						else
 						{
-							// Selected Contact ids
-							var id_array = get_contacts_bulk_ids();
 
 							// when SELECT_ALL is true i.e., all contacts are
 							// selected.
@@ -602,17 +645,18 @@ $(function()
 								return;
 							}
 
-							show_bulk_email_form()
+							show_bulk_email_form(id_array)
 						}
 
 					});
 
-	function show_bulk_email_form()
+	function show_bulk_email_form(id_array)
 	{
 		var count = 0;
 
 		// Selected Contact ids
-		var id_array = get_contacts_bulk_ids();
+		if(id_array && id_array.length == 0)
+		id_array = get_contacts_bulk_ids();
 
 		$('body').die('fill_emails').live('fill_emails', function(event)
 		{
@@ -638,7 +682,11 @@ $(function()
 
 			// Shows selected contacts count in Send-email page.
 			$emailForm.find('div#bulk-count').css('display', 'inline-block');
-			$emailForm.find('div#bulk-count p').html("Selected <b>" + count + " contacts</b> for sending email.");
+			
+			if(company_util.isCompany())
+				$emailForm.find('div#bulk-count p').html("Selected <b>" + count + " Companie(s)</b> for sending email.");
+			else
+				$emailForm.find('div#bulk-count p').html("Selected <b>" + count + " Contact(s)</b> for sending email.");
 
 			// Hide to,cc and bcc
 			$emailForm.find('input[name="to"]').closest('.control-group').attr('class', 'hidden');
@@ -651,7 +699,10 @@ $(function()
 
 		});
 
-		Backbone.history.navigate("bulk-email", { trigger : true });
+		if(company_util.isCompany())
+			Backbone.history.navigate("company-bulk-email", { trigger : true });
+		else
+			Backbone.history.navigate("bulk-email", { trigger : true });
 
 		$('#bulk-send-email').die().live('click', function(e)
 		{
@@ -683,11 +734,15 @@ $(function()
 			var json = {};
 			json.contact_ids = id_array;
 			json.data = JSON.stringify(form_json);
+			
+			var msg = "Emails have been queued for " + count + " contacts. They will be sent shortly.";
+			if(company_util.isCompany())
+				msg = "Emails have been queued for " + count + " companies. They will be sent shortly.";
 
 			postBulkOperationData(url, json, $form, null, function()
 			{
 				enable_send_button($('#bulk-send-email'));
-			}, "Emails have been queued for " + count + " contacts. They will be sent shortly.");
+			}, msg);
 		});
 	}
 
@@ -841,8 +896,8 @@ $(function()
 												// hide bulk actions button.
 												$('body').find('#bulk-actions').css('display', 'none');
 												$('body').find('#bulk-select').css('display', 'none');
-												$('table#companies').find('.thead_check').removeAttr('checked');
-												$('table#companies').find('.tbody_check').removeAttr('checked');
+												$('table#companies,table#contacts-table').find('.thead_check').removeAttr('checked');
+												$('table#companies,table#contacts-table').find('.tbody_check').removeAttr('checked');
 
 											}, "no_noty");
 										});
@@ -859,11 +914,19 @@ $(function()
 						e.preventDefault();
 						SELECT_ALL = true;
 						_BULK_CONTACTS = window.location.hash;
+						
+						var html = '';
+						
+						if(company_util.isCompany())
+							html = ' Selected All ' + getAvailableContacts() + ' companies. <a hrer="#" id="select-all-revert" class="c-p text-info">Select chosen companies only</a>';
+						else
+							html = ' Selected All ' + getAvailableContacts() + ' contacts. <a hrer="#" id="select-all-revert" class="c-p text-info">Select chosen contacts only</a>';
+
+						
 						$('body')
 								.find('#bulk-select')
 								.css('display', 'inline-block')
-								.html(
-										' Selected All ' + getAvailableContacts() + ' contacts. <a hrer="#" id="select-all-revert" class="c-p text-info">Select chosen contacts only</a>');
+								.html(html);
 
 						// On choosing select all option, all the visible
 						// checkboxes in the table should be checked
@@ -882,12 +945,15 @@ $(function()
 						e.preventDefault();
 						SELECT_ALL = false;
 						_BULK_CONTACTS = undefined;
+						
+						var html = '';
+						
+						if(company_util.isCompany())
+							html = "Selected " + App_Companies.companiesListView.collection.length + " companies. <a href='#'  id='select-all-available-contacts' class='c-p text-info'>Select all " + getAvailableContacts() + " companies</a>";
+						else
+							html = "Selected " + App_Contacts.contactsListView.collection.length + " contacts. <a href='#'  id='select-all-available-contacts' class='c-p text-info'>Select all " + getAvailableContacts() + " contacts</a>";
 
-						$('body')
-								.find('#bulk-select')
-								//.css('display', 'block')
-								.html(
-										"Selected " + App_Contacts.contactsListView.collection.length + " contacts. <a href='#'  id='select-all-available-contacts' class='c-p text-info'>Select all " + getAvailableContacts() + " contacts</a>");
+						$('body').find('#bulk-select').html(html);
 					});
 
 });
@@ -959,8 +1025,19 @@ function toggle_contacts_bulk_actions_dropdown(clicked_ele, isBulk, isCampaign)
 	if ($(clicked_ele).attr('checked') == 'checked')
 	{
 		$('body').find('#bulk-actions').css('display', 'inline-block');
-
-		if (isBulk && total_available_contacts != App_Contacts.contactsListView.collection.length)
+		
+		if(company_util.isCompany()){
+			if (isBulk && total_available_contacts != App_Companies.companiesListView.collection.length)
+			{
+			$('body')
+					.find('#bulk-select')
+					.css('display', 'block')
+					.html(
+							"Selected " + App_Companies.companiesListView.collection.length + " companies. <a id='select-all-available-contacts' class='c-p text-info' href='#'>Select all " + total_available_contacts + " companies</a>");
+			$('#bulk-select').css("display","inline");
+			}
+		} else {
+			if (isBulk && total_available_contacts != App_Contacts.contactsListView.collection.length)
 			{
 			$('body')
 					.find('#bulk-select')
@@ -969,6 +1046,9 @@ function toggle_contacts_bulk_actions_dropdown(clicked_ele, isBulk, isCampaign)
 							"Selected " + App_Contacts.contactsListView.collection.length + " contacts. <a id='select-all-available-contacts' class='c-p text-info' href='#'>Select all " + total_available_contacts + " contacts</a>");
 			$('#bulk-select').css("display","inline");
 			}
+		}
+
+		
 	}
 	else
 	{
@@ -1005,13 +1085,18 @@ function toggle_contacts_bulk_actions_dropdown(clicked_ele, isBulk, isCampaign)
  */
 function getAvailableContacts()
 {
-	if (App_Contacts.contactsListView.collection.toJSON()[0] && App_Contacts.contactsListView.collection.toJSON()[0].count)
-	{
-		//
-		current_view_contacts_count = App_Contacts.contactsListView.collection.toJSON()[0].count;
-		return current_view_contacts_count;
-	}
-
+		if (company_util.isCompany() && App_Companies.companiesListView.collection.toJSON()[0] && App_Companies.companiesListView.collection.toJSON()[0].count)
+		{
+			//
+			current_view_contacts_count = App_Companies.companiesListView.collection.toJSON()[0].count;
+			return current_view_contacts_count;
+		} else if (App_Contacts.contactsListView.collection.toJSON()[0] && App_Contacts.contactsListView.collection.toJSON()[0].count)
+		{
+			//
+			current_view_contacts_count = App_Contacts.contactsListView.collection.toJSON()[0].count;
+			return current_view_contacts_count;
+		}
+	 
 	return App_Contacts.contactsListView.collection.toJSON().length;
 }
 
@@ -1026,11 +1111,20 @@ function getSelectionCriteria()
 {
 	// Reads filter cookie$('.filter-criteria'
 
-	var filter_id = $('.filter-criteria', $(App_Contacts.contactsListView.el)).attr("_filter");
+	var filter_id = undefined;
+	
+	if(company_util.isCompany())
+		filter_id = $('.filter-criteria', $(App_Companies.companiesListView.el)).attr("_filter");
+	else
+		filter_id = $('.filter-criteria', $(App_Contacts.contactsListView.el)).attr("_filter");
 
 	if (filter_id && _BULK_CONTACTS == "#contacts")
 	{
 		return filter_id;
+	}
+	
+	if(_BULK_CONTACTS == "#companies"){
+		return 'Companies';
 	}
 
 	// If filter cookie is not available then it returns either '#contacts' of
@@ -1052,6 +1146,7 @@ function getSelectionCriteria()
  */
 function postBulkOperationData(url, data, form, contentType, callback, error_message)
 {
+	var count = data.contact_ids.length;
 	var dynamic_filter = getDynamicFilters();
 	if (dynamic_filter != null)
 	{
@@ -1094,8 +1189,11 @@ function postBulkOperationData(url, data, form, contentType, callback, error_mes
 		if (callback && typeof (callback) === "function")
 			callback(data);
 
-		// On save back to contacts list
-		Backbone.history.navigate("contacts", { trigger : true });
+		if(!company_util.isCompany())
+			// On save back to contacts list
+			Backbone.history.navigate("contacts", { trigger : true });
+		else
+			Backbone.history.navigate("companies", { trigger : true });
 
 		// If no_noty is given as error message, neglect noty
 		if (error_message === "no_noty")
@@ -1106,14 +1204,15 @@ function postBulkOperationData(url, data, form, contentType, callback, error_mes
 			showNotyPopUp('information', "Task scheduled", "top", 5000);
 			return;
 		}
-		showNotyPopUp('information', error_message, "top", 5000);
+		if(count > 20 || count == 0)
+			showNotyPopUp('information', error_message, "top", 5000);
 	} });
 }
 
 function getDynamicFilters()
 {
 	var dynamic_filter = null;
-	if (readCookie('company_filter'))
+	if (company_util.isCompany())
 	{
 		dynamic_filter = readData('dynamic_company_filter')
 	}

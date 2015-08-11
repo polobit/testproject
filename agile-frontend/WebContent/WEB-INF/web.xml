@@ -347,6 +347,15 @@
 		<url-pattern>/backend/mandrillwebhook/*</url-pattern>
 	</servlet-mapping>
 
+    <servlet>
+		<servlet-name>SendGrid Webhook</servlet-name>
+		<servlet-class>com.thirdparty.sendgrid.webhook.SendGridWebhook</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>SendGrid Webhook</servlet-name>
+		<url-pattern>/backend/sendgridwebhook/*</url-pattern>
+	</servlet-mapping>
 	<servlet>
 		<servlet-name>TwilioServlet</servlet-name>
 		<servlet-class>com.agilecrm.plugin.oauth.TwilioServlet</servlet-class>
@@ -891,6 +900,14 @@
 		<servlet-name>FacebookPageTab</servlet-name>
 		<url-pattern>/facebookpagetab</url-pattern>
 	</servlet-mapping>	
+	<servlet>
+		<servlet-name>FacebookFormLoadServlet</servlet-name>
+		<servlet-class>com.agilecrm.facebookpage.FacebookFormLoadServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>FacebookFormLoadServlet</servlet-name>
+		<url-pattern>/fbformload</url-pattern>
+	</servlet-mapping>
 	<servlet>
 		<servlet-name>FacebookPageServlet</servlet-name>
 		<servlet-class>com.agilecrm.facebookpage.FacebookPageServlet</servlet-class>

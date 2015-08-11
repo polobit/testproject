@@ -7,7 +7,6 @@ import java.util.List;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
-import javax.ws.rs.HeaderParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
@@ -23,12 +22,9 @@ import org.json.JSONException;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.filter.ContactFilter;
 import com.agilecrm.contact.filter.util.ContactFilterUtil;
-import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.search.ui.serialize.SearchRule;
-import com.agilecrm.search.ui.serialize.SearchRule.RuleCondition;
 import com.agilecrm.user.access.UserAccessControl;
 import com.agilecrm.user.access.util.UserAccessControlUtil;
-import com.google.gson.Gson;
 
 /**
  * <code>ContactFilterAPI</code> class includes REST calls to access
@@ -51,8 +47,10 @@ public class ContactFilterAPI
      */
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public List<ContactFilter> getContactFilters()
+    public List<ContactFilter> getContactFilters(@QueryParam("type") String contactType)
     {
+	if (StringUtils.isNotEmpty(contactType))
+	    return ContactFilter.getAllContactFiltersByType(contactType);
 	return ContactFilter.getAllContactFilters();
     }
 
@@ -125,7 +123,7 @@ public class ContactFilterAPI
     @POST
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public List<Contact> getQueryResultsList(@PathParam("filter_id") String id, @FormParam("page_size") String count,
-    		@FormParam("cursor") String cursor, @FormParam("global_sort_key") String sortKey)
+	    @FormParam("cursor") String cursor, @FormParam("global_sort_key") String sortKey)
     {
 	System.out.println("cursor : " + cursor);
 	if (!StringUtils.isEmpty(count))
@@ -133,7 +131,7 @@ public class ContactFilterAPI
 
 	return ContactFilterUtil.getContacts(id, null, null, sortKey);
     }
-    
+
     /**
      * Returns {@link Contact}s list based on the {@link SearchRule} in the
      * {@link ContactFilter} which is fetched by its id. It checks the type of
@@ -175,18 +173,20 @@ public class ContactFilterAPI
 	// Deletes all contact filters with ids specified in the list
 	ContactFilter.dao.deleteBulkByIds(contactFiltersJSONArray);
     }
-    
+
     @POST
     @Path("/filter/dynamic-filter")
-    @Consumes({ MediaType.WILDCARD})
+    @Consumes({ MediaType.WILDCARD })
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public List<Contact> filterContacts(@FormParam("filterJson") String filterJson, @FormParam("page_size") String count,
-    		@FormParam("cursor") String cursor, @FormParam("global_sort_key") String sortKey)
+    public List<Contact> filterContacts(@FormParam("filterJson") String filterJson,
+	    @FormParam("page_size") String count, @FormParam("cursor") String cursor,
+	    @FormParam("global_sort_key") String sortKey)
     {
-    	ContactFilter contact_filter = ContactFilterUtil.getFilterFromJSONString(filterJson);
-    	// Sets ACL condition
-	    UserAccessControlUtil.checkReadAccessAndModifyTextSearchQuery(UserAccessControl.AccessControlClasses.Contact.toString(), contact_filter.rules);
-    	return new ArrayList<Contact>(contact_filter.queryContacts(Integer.parseInt(count), cursor, sortKey));
+	ContactFilter contact_filter = ContactFilterUtil.getFilterFromJSONString(filterJson);
+	// Sets ACL condition
+	UserAccessControlUtil.checkReadAccessAndModifyTextSearchQuery(
+		UserAccessControl.AccessControlClasses.Contact.toString(), contact_filter.rules, null);
+	return new ArrayList<Contact>(contact_filter.queryContacts(Integer.parseInt(count), cursor, sortKey));
     }
-    
+
 }
