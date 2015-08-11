@@ -329,5 +329,14 @@
   		<task-retry-limit>1</task-retry-limit>
   </retry-parameters>
   </queue>
+  
+  <!-- Notification Pull Queue -->
+  <queue>
+  	<name>notification-pull-queue</name>
+  	<mode>pull</mode>
+  	<retry-parameters>
+  		<task-retry-limit>2</task-retry-limit>
+  	</retry-parameters>
+  </queue>
 
 </queue-entries>
