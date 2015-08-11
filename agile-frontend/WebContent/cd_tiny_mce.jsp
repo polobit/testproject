@@ -1,6 +1,10 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<%@page import="org.json.JSONObject"%>
 <%@page import="java.util.Calendar"%>
+<%@page import="org.json.JSONObject"%>
+<%@page import="org.json.JSONException"%>
+
+
+
 
 <html xmlns="http://www.w3.org/1999/xhtml">
 
@@ -26,19 +30,22 @@
 		//String LIB_PATH = "//dpm72z3r2fvl4.cloudfront.net/js/";
 	String LIB_PATH = "/";
 	
-	String template_json = (String) session.getAttribute("Template_JSON");
-
-	String data = null;
-	if(template_json != null)
-	{
-		System.out.println(template_json);
-		/* JSONArray abc=new JSONArray(template_json);
-		JSONObject a = new JSONObject(abc[0]); */
-		session.removeAttribute("Template_JSON");
+	String template_json = request.getParameter("data");
+	
+	JSONObject jsonObj =null;
+	String tpl_text="";
+	try {
+		if(template_json != null){
+		jsonObj = new JSONObject(template_json);
+		 tpl_text = jsonObj.getString("text");
+		System.out.println(jsonObj.getString("text"));
+		}
+	} catch (JSONException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
 	}
+	System.out.println("Request parameter in tinymce: "+template_json);
 %>
-
-
 	
 <!-- Bootstrap  -->
 <link rel="stylesheet" type="text/css"	href="<%= CSS_PATH%>css/bootstrap-<%=template%>.min.css" />
@@ -52,12 +59,7 @@
 <script type="text/javascript" src="js/designer/tinymce/tinymce.min.js"></script>
 <script type="text/javascript">
 
-var TEMPLATE_JSON = <%=template_json%>
-
-
 var MERGE_FIELDS = {}
-
-//var TEMPLATE_JSON = 
 
 //Read a page's GET URL variables and return them as an associative array.
 function getUrlVars() {
@@ -131,13 +133,14 @@ $(function()
 try{
 		
 	    var textarea_id = getUrlVars()["id"];
-	    var subtype = getUrlVars()["subtype"];
 	    var url = getUrlVars()["url"];
-	
+		var template_json= <%=template_json%>;
 		// Load HTML into Tiny MCE.
 		if(textarea_id !== undefined && url === undefined)
 		{
 		var initHTML = window.opener.$('#' + textarea_id).val();
+		if(!initHTML)
+			initHTML = template_json.text;
 		$('#content').val(initHTML);
 		var isWarning = should_warn(initHTML);
 		showWarning(isWarning);
@@ -163,15 +166,6 @@ try{
                     init_tinymce();
 	    			});
 	    }
-	    
-	    if(TEMPLATE_JSON != undefined && subtype != undefined){
-	    	$('#content').val(TEMPLATE_JSON.text);
-	    	var isWarning = should_warn(TEMPLATE_JSON.text);
-			showWarning(isWarning);
-			 init_tinymce();
-			
-	    }
-	    	
 	    
 	    // Show empty editor if none of templates selected
 	    if(window.history.length > 1)
@@ -443,4 +437,3 @@ function showWarning(isWarning)
 
 </body>
 </html>
-
