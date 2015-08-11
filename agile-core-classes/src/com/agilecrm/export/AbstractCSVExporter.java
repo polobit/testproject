@@ -35,23 +35,20 @@ public abstract class AbstractCSVExporter<T> implements Exporter<T>
 
     protected abstract String[] convertEntityToCSVRow(T entity, Map<String, Integer> indexMap, int headerLength);
 
-    protected AbstractCSVExporter(EXPORT_TYPE export_type)
+    public AbstractCSVExporter(EXPORT_TYPE export_type)
     {
 	this.export_type = export_type;
 
-	try
-	{
-	    csvWriter = new CSVWriterAgile(getOutputFile());
-	}
-	catch (IOException e)
-	{
-	    // TODO Auto-generated catch block
-	    e.printStackTrace();
-	}
+	// csvWriter = new CSVWriterAgile(getOutputFile());
+
+	csvWriter = new CSVWriterAgile();
     }
 
     private File getOutputFile()
     {
+	if (file != null)
+	    return file;
+
 	return file = new File("test");
     }
 
@@ -63,7 +60,7 @@ public abstract class AbstractCSVExporter<T> implements Exporter<T>
      * @param clazz
      * @param writer
      */
-    protected AbstractCSVExporter(Class<T> clazz, Writer writer)
+    public AbstractCSVExporter(Class<T> clazz, Writer writer)
     {
 	csvWriter = new CSVWriterAgile();
     }
@@ -72,9 +69,18 @@ public abstract class AbstractCSVExporter<T> implements Exporter<T>
      * Flush should be called to ensure all writers are closed and all entities
      * are added into CSV
      */
-    public final void flush()
+    public final void finalize()
     {
 	csvWriter.flush();
+	try
+	{
+	    sendEmail();
+	}
+	catch (JSONException e)
+	{
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	}
     }
 
     public final void writeEntitesToCSV(List<T> entities)
@@ -155,6 +161,11 @@ public abstract class AbstractCSVExporter<T> implements Exporter<T>
 
 	SendMail.sendMail("yaswanth@agilecrm.com", export_type.templateSubject, export_type.templaceTemplate, map,
 		SendMail.AGILE_FROM_EMAIL, SendMail.AGILE_FROM_NAME);
+    }
+
+    public static void main(String[] args)
+    {
+	ExportBuilder.buildContactExporter();
     }
 }
 

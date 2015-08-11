@@ -29,6 +29,6 @@ public interface Exporter<T>
 
     public void writeEntitesToCSV(List<T> entities);
 
-    public void flush();
+    public void finalize();
 
 }

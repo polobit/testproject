@@ -6,7 +6,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
 import java.nio.channels.Channels;
-import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,6 +22,7 @@ public class CSVWriterAgile
 {
     private CSVWriter csvWriter = null;
     FileWriteChannel writeChannel = null;
+    FileService fileService = null;
     private IFileInputStream inputStream = null;
     private File file;
     private String path;
@@ -54,7 +54,7 @@ public class CSVWriterAgile
     public CSVWriterAgile()
     {
 	// Get a file service
-	FileService fileService = FileServiceFactory.getFileService();
+	fileService = FileServiceFactory.getFileService();
 
 	// Create a new Blob file with mime-type "text/csv"
 	AppEngineFile file;
@@ -66,9 +66,10 @@ public class CSVWriterAgile
 
 	    // Open a channel to write to it
 	    boolean lock = false;
-	    FileWriteChannel writeChannel = fileService.openWriteChannel(file, lock);
+	    writeChannel = fileService.openWriteChannel(file, lock);
 
 	    csvWriter = new CSVWriter(Channels.newWriter(writeChannel, "UTF8"));
+
 	}
 	catch (IOException e)
 	{
@@ -121,6 +122,11 @@ public class CSVWriterAgile
 	try
 	{
 	    csvWriter.close();
+
+	    if (writeChannel != null)
+	    {
+		writeChannel.close();
+	    }
 	}
 	catch (IOException e)
 	{
@@ -132,6 +138,8 @@ public class CSVWriterAgile
     // Returns path only if file stored in server
     public String getPath()
     {
+	if (path != null)
+	    return path;
 	if (file == null)
 	    return null;
 

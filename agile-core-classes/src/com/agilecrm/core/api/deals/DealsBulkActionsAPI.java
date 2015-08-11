@@ -450,7 +450,7 @@ public class DealsBulkActionsAPI
 	}
 	finally
 	{
-	    exporter.flush();
+	    exporter.finalize();
 	}
     }
 

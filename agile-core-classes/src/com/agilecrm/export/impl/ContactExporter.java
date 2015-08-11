@@ -13,9 +13,9 @@ import com.agilecrm.export.AbstractCSVExporter;
 public class ContactExporter extends AbstractCSVExporter<Contact>
 {
 
-    public ContactExporter(Class<Contact> clazz)
+    public ContactExporter(com.agilecrm.export.Exporter.EXPORT_TYPE export_type)
     {
-	super(clazz);
+	super(export_type);
 	// TODO Auto-generated constructor stub
     }
 

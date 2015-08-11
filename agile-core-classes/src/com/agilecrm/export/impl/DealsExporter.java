@@ -13,7 +13,7 @@ public class DealsExporter extends AbstractCSVExporter<Opportunity>
     public DealsExporter(Class<Opportunity> clazz)
     {
 	// TODO Auto-generated constructor stub
-	super(Opportunity.class);
+	super(EXPORT_TYPE.DEAL);
 
     }
 
