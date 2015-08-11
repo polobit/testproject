@@ -480,56 +480,58 @@ var AdminSettingsRouter = Backbone.Router.extend({
 		if (id == 'mandrill')
 			value = 'MANDRILL';
 
-		this.email_gateway = new Base_Model_View({ url : 'core/api/email-gateway',
-
-		template : 'settings-email-gateway', postRenderCallback : function(el)
+		var emailGateway;
+		$.each(this.integrations.collection.where({name:"EmailGateway"}),function(key,value){
+		
+			emailGateway = JSON.parse(value.attributes.prefs);
+		
+		});
+		
+		// Allow only one Email gateway configured
+		if(emailGateway && emailGateway["email_api"])//check if email gateway exist
 		{
-			// Loads jquery.chained.min.js
-			head.js(LIB_PATH + 'lib/agile.jquery.chained.min.js', function()
+			if(emailGateway["email_api"].toUpperCase() != value)//checks if the current email gateway is the same as the clicked one
 			{
-				var LHS, RHS;
+			modalAlert("sms-integration-alert-modal","You have a Email Gateway already configured. Please disable that to configure a new one.","Email Gateway Configured");
+			this.navigate("integrations", { trigger : true });
+			return;	
+			}
+		}	
 
-				// Assigning elements with ids LHS
-				// and RHS
-				// in trigger-add.html
-				LHS = $("#LHS", el);
-				RHS = $("#RHS", el);
-
-				// Chaining dependencies of input
-				// fields
-				// with jquery.chained.js
-				RHS.chained(LHS);
-
-				// Trigger change on email api select
-				setTimeout(function()
-				{
-					$('#email-api', el).val(value).attr("selected", "selected").trigger('change')
-				}, 1);
-			});
-		}, saveCallback : function()
-		{
-			// On saved, navigate to integrations
-			Backbone.history.navigate("integrations", { trigger : true });
-
-			data = App_Admin_Settings.email_gateway.model.toJSON();
-
-			// Add webhook
-			if (data.email_api == "MANDRILL")
+		// To show template according to api. Note: Widget and EmailGateway model is different
+		if(!emailGateway)
+			emailGateway = {"email_api":value, "api_user": "", "api_key":""}; 
+				
+		this.email_gateway = new Base_Model_View({ 
+			data : emailGateway,
+			url : 'core/api/email-gateway',
+			template : 'settings-email-gateway', postRenderCallback : function(el)
 			{
-				// Add mandrill webhook
-				$.getJSON("core/api/email-gateway/add-webhook?api_key=" + data.api_key + "&type=" + data.email_api, function(data)
-				{
+				if(id=="mandrill"){
+					$("#integrations-image",el).attr("src","img/crm-plugins/mandrill_logo.png");
+				}
+				
+				if(id=="sendgrid"){
+					$("#integrations-image",el).attr("src","img/crm-plugins/sendgrid_logo.png");
+				}
+				
+			}, saveCallback : function()
+			{
+				// On saved, navigate to integrations
+				Backbone.history.navigate("integrations", { trigger : true });
 
+				data = App_Admin_Settings.email_gateway.model.toJSON();
+
+				// Add webhook
+				$.getJSON("core/api/email-gateway/add-webhook?api_user="+data.api_user+"&api_key=" + data.api_key + "&type=" + data.email_api, function(data)
+				{
 					console.log(data);
-
 				});
 			}
-		}
 
 		});
 
 		$('#content').find('#admin-prefs-tabs-content').html(this.email_gateway.render().el);
-		$('#content').find('#AdminPrefsTab .select').removeClass('select');
 		$('#content').find('.integrations-tab').addClass('select');
 		$(".active").removeClass("active");
 	},

@@ -31,10 +31,16 @@ function serializeForm(form_id) {
 	 * returns epoch time.
 	 */
 	arr = arr.concat($('#' + form_id + ' input.date').map(function() {
-		return {
-			"name" : this.name,
-			"value" : new Date(this.value).getTime() / 1000
-		};
+		if(CURRENT_USER_PREFS.dateFormat.indexOf("dd/mm/yy") != -1 || CURRENT_USER_PREFS.dateFormat.indexOf("dd.mm.yy") != -1)
+			return {
+				"name" : this.name,
+				"value" : new Date(convertDateFromUKtoUS(this.value)).getTime() / 1000
+			};
+		else
+			return {
+				"name" : this.name,
+				"value" : new Date(this.value).getTime() / 1000
+			};
 	}).get());
 	
 	arr = arr.concat($('#' + form_id + ' select.multi-select').map(function() {
@@ -146,7 +152,11 @@ function serializeChainedElement(element)
 
 		// If type of the field is "date" then return epoch time
 		if ($(data).hasClass("date")) {
-			var date = new Date($(data).val());
+			var date;
+			if(CURRENT_USER_PREFS.dateFormat.indexOf("dd/mm/yy") != -1 || CURRENT_USER_PREFS.dateFormat.indexOf("dd.mm.yy") != -1)
+				date = new Date(convertDateFromUKtoUS($(data).val()));
+			else
+				date = new Date($(data).val());
 			value = getGMTEpochFromDate(date);
 		}
 
@@ -206,12 +216,20 @@ function serializeLhsFilters(element)
 			RHS_VALUE = $(RHS_ELEMENT).val().trim();
 		}
 		if ($(RHS_ELEMENT).hasClass("date") && RHS_VALUE && RHS_VALUE != "") {
-			var date = new Date($(RHS_ELEMENT).val());
+			var date;
+			if(CURRENT_USER_PREFS.dateFormat.indexOf("dd/mm/yy") != -1 || CURRENT_USER_PREFS.dateFormat.indexOf("dd.mm.yy") != -1)
+				date = new Date(convertDateFromUKtoUS($(RHS_ELEMENT).val()));
+			else
+				date = new Date($(RHS_ELEMENT).val());
 			RHS_VALUE = getGMTEpochFromDate(date);
 		}
 		RHS_NEW_VALUE = $(RHS_NEW_ELEMENT).val();
 		if ($(RHS_NEW_ELEMENT).hasClass("date") && RHS_NEW_VALUE && RHS_NEW_VALUE !="") {
-			var date = new Date($(RHS_NEW_ELEMENT).val());
+			var date;
+			if(CURRENT_USER_PREFS.dateFormat.indexOf("dd/mm/yy") != -1 || CURRENT_USER_PREFS.dateFormat.indexOf("dd.mm.yy") != -1)
+				date = new Date(convertDateFromUKtoUS($(RHS_NEW_ELEMENT).val()));
+			else
+				date = new Date($(RHS_NEW_ELEMENT).val());
 			RHS_NEW_VALUE = getGMTEpochFromDate(date);
 		}
 		if(RHS_NEW_VALUE && typeof RHS_NEW_VALUE == "string") {

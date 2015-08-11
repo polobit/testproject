@@ -246,7 +246,12 @@ $(function(){
  * 			html object of the task or note form
  */
 function fill_relation(el){
-	var json = App_Contacts.contactDetailView.model.toJSON();
+	var json = null;
+	if(company_util.isCompany()){
+		json = App_Companies.companyDetailView.model.toJSON();
+	} else {
+		json = App_Contacts.contactDetailView.model.toJSON();
+	}
  	var contact_name = getContactName(json);//getPropertyValue(json.properties, "first_name")+ " " + getPropertyValue(json.properties, "last_name");
  	
  	// Adds contact name to tags ul as li element

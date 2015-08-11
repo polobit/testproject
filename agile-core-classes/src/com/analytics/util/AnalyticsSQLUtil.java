@@ -130,6 +130,28 @@ public class AnalyticsSQLUtil
 			return null;
 		}
 	}
+	
+	/**
+	 * Returns page views based on given count
+	 * 
+	 * @param limit - fetch count
+	 */
+	public static JSONArray getLimitedPageViews(int limit)
+	{
+		String domain = NamespaceManager.get();
+
+		String query = "SELECT * FROM page_views WHERE domain = " + GoogleSQLUtil.encodeSQLColumnValue(domain) + " LIMIT " + limit;
+
+		try
+		{
+			return GoogleSQL.getJSONQuery(query);
+		}
+		catch (Exception e1)
+		{
+			e1.printStackTrace();
+			return null;
+		}
+	}
 
 	/**
 	 * Removes stats from SQL based on namespace.

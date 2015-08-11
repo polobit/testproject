@@ -18,6 +18,7 @@ import javax.ws.rs.core.MediaType;
 import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.JsonParseException;
+import org.codehaus.jackson.map.DeserializationConfig;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.json.JSONArray;
@@ -366,7 +367,6 @@ public class JSAPI
     {
 	try
 	{
-
 	    // Replace multiple space with single space
 	    tags = tags.trim().replaceAll(" +", " ");
 
@@ -431,7 +431,6 @@ public class JSAPI
     {
 	try
 	{
-
 	    // Replace multiple space with single space
 	    tags = tags.trim().replaceAll(" +", " ");
 
@@ -576,46 +575,57 @@ public class JSAPI
     @Path("contacts/add-property")
     @GET
     @Produces("application / x-javascript;charset=UTF-8;")
-    public String addProperty(@QueryParam("data") String json, @QueryParam("email") String email)
+    public String addProperty(@QueryParam("data") String property, @QueryParam("email") String email)
     {
 	try
 	{
-	    JSONObject obj = new JSONObject(json);
-	    Iterator<?> keys = obj.keys();
-	    while (keys.hasNext())
-	    {
-		String key = (String) keys.next();
-		if (key.equals("type"))
-		{
-		    String value = obj.getString(key);
-		    obj.remove(key);
-		    obj.put("subtype", value);
-		}
-	    }
-	    // Fetches contact based on email
+	    ObjectMapper mapper = new ObjectMapper();
 	    Contact contact = ContactUtil.searchContactByEmail(email);
-
-	    // Returns if contact is null
 	    if (contact == null)
 		return JSAPIUtil.generateContactMissingError();
 
-	    ObjectMapper mapper = new ObjectMapper();
+	    JSONObject contactProperty = new JSONObject(property);
 	    List<ContactField> properties = contact.properties;
 
 	    for (int i = 0; i < contact.properties.size(); i++)
-	        if(StringUtils.equals(contact.properties.get(i).name, obj.getString("name")) && StringUtils.equals(contact.properties.get(i).subtype, obj.getString("subtype")))
-	            properties.remove(i);
+	    {
+		if (StringUtils.equals(properties.get(i).name, contactProperty.getString("name")))
+		{
+		    if (contactProperty.has("type"))
+		    {
+			if (StringUtils.equals(contactProperty.getString("type"), properties.get(i).subtype))
+			    properties.remove(i);
+		    }
+		    else
+			properties.remove(i);
+		}
+	    }
 
-	    properties.add(new ContactField(obj.getString("name"), obj.getString("value"), obj.getString("subtype")));
+	    ContactField field = new ContactField();
+	    field.name = contactProperty.getString("name");
+	    field.value = contactProperty.getString("value");
+	    field.subtype = contactProperty.has("type") ? contactProperty.getString("type") : null;
+	    field.type = field.getFieldType();
+
+	    properties.add(field);
 	    contact.properties = properties;
 	    contact.save();
-
-	    // Returns updated contact
 	    return mapper.writeValueAsString(contact);
 	}
-	catch (Exception e)
+	catch (JSONException e)
 	{
-	    e.printStackTrace();
+	    return null;
+	}
+	catch (JsonGenerationException e)
+	{
+	    return null;
+	}
+	catch (JsonMappingException e)
+	{
+	    return null;
+	}
+	catch (IOException e)
+	{
 	    return null;
 	}
     }
@@ -1437,6 +1447,59 @@ public class JSAPI
 	    c.addContactToCase(contact.id.toString());
 	    c.save();
 	    return mapper.writeValueAsString(c);
+	}
+	catch (JsonParseException e)
+	{
+	    e.printStackTrace();
+	    return null;
+	}
+	catch (JsonMappingException e)
+	{
+	    e.printStackTrace();
+	    return null;
+	}
+	catch (IOException e)
+	{
+	    e.printStackTrace();
+	    return null;
+	}
+    }
+
+    @Path("/opportunity/update-deal")
+    @GET
+    @Produces("application / x-javascript;charset=UTF-8;")
+    public String updateOpportunity(@QueryParam("opportunity") String opportunity, @QueryParam("email") String email)
+    {
+	try
+	{
+	    JSONObject dealJson = new JSONObject(opportunity);
+
+	    if (!dealJson.has("id"))
+		return JSAPIUtil.generateJSONErrorResponse(Errors.ID_NOT_FOUND, "deal");
+
+	    Opportunity deal = OpportunityUtil.getOpportunity(dealJson.getLong("id"));
+	    if (deal == null)
+		return JSAPIUtil.generateJSONErrorResponse(Errors.ENTITY_NOT_FOUND, "Deal");
+
+	    ObjectMapper mapper = new ObjectMapper();
+	    JSONObject oldDealJson = new JSONObject(mapper.writeValueAsString(deal));
+
+	    Iterator<?> keys = dealJson.keys();
+	    while (keys.hasNext())
+	    {
+		String key = (String) keys.next();
+		if (oldDealJson.has(key))
+		    oldDealJson.put(key, dealJson.getString(key));
+	    }
+	    mapper.configure(DeserializationConfig.Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+	    Opportunity updatedDeal = mapper.readValue(oldDealJson.toString(), Opportunity.class);
+	    updatedDeal.save();
+	    return mapper.writeValueAsString(updatedDeal);
+	}
+	catch (JSONException e)
+	{
+	    e.printStackTrace();
+	    return null;
 	}
 	catch (JsonParseException e)
 	{
