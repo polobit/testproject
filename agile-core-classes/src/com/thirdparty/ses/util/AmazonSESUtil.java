@@ -14,9 +14,8 @@ import com.thirdparty.ses.AmazonSES;
 
 public class AmazonSESUtil
 {
-	public static void sendSESMails(List<TaskHandle>tasks, EmailSender emailSender)
+	public static void sendSESMails(List<MailDeferredTask>tasks, EmailSender emailSender)
 	{
-		MailDeferredTask mailDeferredTask = null;
 		EmailGateway emailGateway = emailSender.emailGateway;
 		
 		if(emailGateway == null)
@@ -24,13 +23,11 @@ public class AmazonSESUtil
 		
 		AmazonSES ses = AmazonSES.getInstance(emailGateway.api_key, emailGateway.api_user, emailGateway.regions);
 		
-		for(TaskHandle task: tasks)
+		for(MailDeferredTask mailDeferredTask: tasks)
 		{
 			try
 			{
-				mailDeferredTask = (MailDeferredTask) SerializationUtils
-					.deserialize(task.getPayload());
-			
+						
 				if (!StringUtils.isBlank(mailDeferredTask.text))
 				{
 					// Appends Agile label
