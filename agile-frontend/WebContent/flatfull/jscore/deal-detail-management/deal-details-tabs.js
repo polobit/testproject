@@ -18,7 +18,7 @@ function initializeDealDetailsListners(el)
 	 * Fetches all the notes related to the deal and shows the notes collection
 	 * as a table in its tab-content, when "Notes" tab is clicked.
 	 */
-	$('#deal-detail-page').on('click', '#deal-details-tab a[href="#dealnotes"]', function(e)
+	$('#content').on('click', '#deal-details-tab a[href="#dealnotes"]', function(e)
 	{
 		e.preventDefault();
 		save_deal_tab_position_in_cookie("dealnotes");
@@ -29,7 +29,7 @@ function initializeDealDetailsListners(el)
 	 * Fetches all the contacts related to the deal and shows the contacts
 	 * collection as a table in its tab-content, when "contacts" tab is clicked.
 	 */
-	$('#deal-detail-page').on('click', '#deal-details-tab a[href="#dealrelated"]', function(e)
+	$('#content').on('click', '#deal-details-tab a[href="#dealrelated"]', function(e)
 	{
 		e.preventDefault();
 		save_deal_tab_position_in_cookie("dealrelated");
@@ -40,7 +40,7 @@ function initializeDealDetailsListners(el)
 	 * Fetches all the notes related to the contact and shows the tasks
 	 * collection as a table in its tab-content, when "Tasks" tab is clicked.
 	 */
-	$('#deal-detail-page').on('click', '#deal-details-tab a[href="#dealactivities"]', function(e)
+	$('#content').on('click', '#deal-details-tab a[href="#dealactivities"]', function(e)
 	{
 		e.preventDefault();
 		save_deal_tab_position_in_cookie("dealactivities");
@@ -51,14 +51,14 @@ function initializeDealDetailsListners(el)
 	 * Fetches all the docs related to the deal and shows the docs collection as
 	 * a table in its tab-content, when "Documents" tab is clicked.
 	 */
-	$('#deal-detail-page').on('click', '#deal-details-tab a[href="#dealdocs"]', function(e)
+	$('#content').on('click', '#deal-details-tab a[href="#dealdocs"]', function(e)
 	{		e.preventDefault();
 		save_deal_tab_position_in_cookie("dealdocs");
 		deal_details_tab.load_deal_docs();
 	});
 
 
-	$("#deal-detail-page").on('click', "#deal-owner", function(e)
+	$("#content").on('click', "#deal-owner", function(e)
 
 	{
 		e.preventDefault();
@@ -77,7 +77,7 @@ function initializeDealDetailsListners(el)
 	});
 
 
-	$("#deal-detail-page").on('click', "#opportunity-actions-delete", function(e)
+	$("#content").on('click', "#opportunity-actions-delete", function(e)
 
 	{
 		e.preventDefault();
@@ -96,7 +96,7 @@ function initializeDealDetailsListners(el)
 		} });
 	});
 
-	$('#deal-detail-page').on('click', '.deal-edit-note', function(e)
+	$('#content').on('click', '.deal-edit-note', function(e)
 	{
 
 		e.preventDefault();
@@ -108,7 +108,7 @@ function initializeDealDetailsListners(el)
 		$('#dealnoteupdatemodal').modal('show');
 	});
 
-	$('#deal-detail-page').on('click', '#dealnote_update', function(e)
+	$('#content').on('click', '#dealnote_update', function(e)
 	{
 		e.preventDefault();
 
@@ -138,7 +138,7 @@ function initializeDealDetailsListners(el)
 	 * Saves note model using "Bcakbone.Model" object, and adds saved data to
 	 * time-line if necessary.
 	 */
-	$('#deal-detail-page').on('click', '#dealnote_validate', function(e)
+	$('#content').on('click', '#dealnote_validate', function(e)
 	{
 
 		e.preventDefault();
@@ -167,7 +167,7 @@ function initializeDealDetailsListners(el)
 	/**
 	 * Shows note modal and activates contacts typeahead to its related to field
 	 */
-	$('#deal-detail-page').on('click', '#dealshow-note', function(e)
+	$('#content').on('click', '#dealshow-note', function(e)
 	{
 		if (App_Deal_Details.dealDetailView.model.get('archived') == true)
 			return;
@@ -182,7 +182,7 @@ function initializeDealDetailsListners(el)
 	 * Changes, owner of the contact, when an option of change owner drop down
 	 * is selected.
 	 */
-	$("#deal-detail-page").off('click').on('click', ".deal-owner-list", function(e)
+	$("#content").on('click', ".deal-owner-list", function(e)
 	{
 
 		$('#change-deal-owner-ul').css('display', 'none');
@@ -217,7 +217,7 @@ function initializeDealDetailsListners(el)
 
 	});
 
-	$("#deal-detail-page").on('click', ".deal-add-contact", function(e)
+	$("#content").on('click', ".deal-add-contact", function(e)
 	{
 		e.preventDefault();
 		console.log(App_Deal_Details.dealDetailView.model.toJSON());
@@ -231,7 +231,7 @@ function initializeDealDetailsListners(el)
 
 	});
 
-	$("#deal-detail-page").on('click', ".deal-detail-edit-deal", function(e)
+	$("#content").on('click', ".deal-detail-edit-deal", function(e)
 	{
 		e.preventDefault();
 		console.log(App_Deal_Details.dealDetailView.model.toJSON());
@@ -240,7 +240,7 @@ function initializeDealDetailsListners(el)
 
 	});
 
-	$("#deal-detail-page").on('click', ".deal-note", function(e)
+	$("#content").on('click', ".deal-note", function(e)
 	{
 		e.preventDefault();
 
@@ -251,7 +251,7 @@ function initializeDealDetailsListners(el)
 		$('#deal-note-modal').modal('show');
 	});
 
-	$("#deal-detail-page").on('click', "#dealdetail-archive", function(e)
+	$("#content").on('click', "#dealdetail-archive", function(e)
 	{
 		e.preventDefault();
 
@@ -262,7 +262,7 @@ function initializeDealDetailsListners(el)
 
 	});
 
-	$("#deal-detail-page").on('click', ".deal-restore-detail-view", function(e)
+	$("#content").on('click', ".deal-restore-detail-view", function(e)
 	{
 		e.preventDefault();
 
@@ -275,14 +275,14 @@ function initializeDealDetailsListners(el)
 	});
 
 	//For updating document from contact-details
-$('#deal-detail-page').on('click', '.document-edit-deal-tab', function(e){
+$('#dcontent').on('click', '.document-edit-deal-tab', function(e){
 	e.preventDefault();
 	var id = $(this).attr('data');
 	updateDocument(dealDocsView.collection.get(id));
 });
 
 // For unlinking document from contact-details
-$('#deal-detail-page').on('click', '.document-unlink-deal-tab', function(e){
+$('#content').on('click', '.document-unlink-deal-tab', function(e){
 	e.preventDefault();
 	var id = $(this).attr('data');
 	var json = dealDocsView.collection.get(id).toJSON();
@@ -307,7 +307,7 @@ $('#deal-detail-page').on('click', '.document-unlink-deal-tab', function(e){
 /**
  * For showing new/existing documents
  */
-$('#deal-detail-page').on('click', '.add-deal-document-select', function(e){
+$('#content').on('click', '.add-deal-document-select', function(e){
 	e.preventDefault();
 	var el = $(this).closest("div");
 	$(this).css("display", "none");
@@ -323,7 +323,7 @@ $('#deal-detail-page').on('click', '.add-deal-document-select', function(e){
 /**
  * For adding existing document to current contact
  */
-$('#deal-detail-page').on('click', '.add-deal-document-confirm', function(e){
+$('#content').on('click', '.add-deal-document-confirm', function(e){
 	e.preventDefault();
 	
     var document_id = $(this).closest(".deal-document-select").find("#document-select").val();
@@ -375,7 +375,7 @@ $('#deal-detail-page').on('click', '.add-deal-document-confirm', function(e){
 /**
  * To cancel the add documents request
  */
-$('#deal-detail-page').on('click', '.add-deal-document-cancel', function(e){
+$('#content').on('click', '.add-deal-document-cancel', function(e){
 	e.preventDefault();
 	var el = $(this).closest("div");
 	el.find(".deal-document-select").css("display", "none");
