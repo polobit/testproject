@@ -182,13 +182,14 @@ $(document).on('click','div.emailLink',function(){
 	if(emailToSend != '' && emailToSend != undefined){
 		var visitorBySessionUrl="core/api/contacts/search/email/"+emailToSend;
 		$.getJSON(visitorBySessionUrl,function(res){
-			if(res != ''){
+			if(res != '' && res != undefined){
 				var contactId=res.id;
 				window.location.href='#contact/'+contactId;
+			}else{
+				$('#visitorsNoContactModal').modal('show');
 			}
 		});
 	}
-	
 	
 });
 

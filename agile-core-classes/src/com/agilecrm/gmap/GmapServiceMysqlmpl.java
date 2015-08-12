@@ -79,7 +79,11 @@ public class GmapServiceMysqlmpl implements GmapService {
     		String convertedStartDate = DateUtil.getMySQLNowDateFormat(Long.parseLong(startDate), timeZone);
     	    String convertedEndDate = DateUtil.getMySQLNowDateFormat(Long.parseLong(endDate), timeZone);
     		
-    	    String query=" select guid,email,city,region,country,user_agent,stats_time as visit_time,city_lat_long,sid,ref from page_views where domain="+GoogleSQLUtil.encodeSQLColumnValue(userDomain)+" and stats_time BETWEEN " +GoogleSQLUtil.encodeSQLColumnValue(getStartDateTimeStamp(convertedStartDate))+"  AND "+GoogleSQLUtil.encodeSQLColumnValue(getEndDateTimeStamp(convertedEndDate))+" order by stats_time desc ";
+    	    System.out.println("Start date " + convertedStartDate);
+    	    System.out.println("end date: " + convertedEndDate);
+    		
+    	    
+    	    String query=" select guid,email,city,region,country,user_agent,stats_time as visit_time,city_lat_long,sid,ref from page_views where domain="+GoogleSQLUtil.encodeSQLColumnValue(userDomain)+" and stats_time BETWEEN " +GoogleSQLUtil.encodeSQLColumnValue(convertedStartDate)+"  AND "+GoogleSQLUtil.encodeSQLColumnValue(convertedEndDate)+" order by stats_time desc ";
     	    
     	    System.out.println("Query "+query);
     		
