@@ -30,8 +30,8 @@ import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.contact.util.bulk.BulkActionNotifications;
 import com.agilecrm.deals.Opportunity;
 import com.agilecrm.deals.util.OpportunityUtil;
-import com.agilecrm.export.AbstractCSVExporter;
-import com.agilecrm.export.impl.DealsExporter;
+import com.agilecrm.export.util.DealExportBlobUtil;
+import com.agilecrm.export.util.DealExportEmailUtil;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
 import com.agilecrm.user.DomainUser;
@@ -425,7 +425,6 @@ public class DealsBulkActionsAPI
 	List<Opportunity> deals = null;
 	long total = 0;
 	int max = 1000;
-	AbstractCSVExporter<Opportunity> exporter = new DealsExporter(Opportunity.class);
 	try
 	{
 	    org.json.JSONObject filterJSON = new org.json.JSONObject(filters);
@@ -434,23 +433,27 @@ public class DealsBulkActionsAPI
 	    do
 	    {
 		deals = OpportunityUtil.getOpportunitiesByFilter(filterJSON, max, currentCursor);
-
-		exporter.writeEntitesToCSV(deals);
-
 		currentCursor = deals.get(deals.size() - 1).cursor;
-
+		firstTime++;
+		if (firstTime == 1)
+		    path = DealExportBlobUtil.writeDealCSVToBlobstore(deals, false);
+		else
+		    DealExportBlobUtil.editExistingBlobFile(path, deals, false);
 		total += deals.size();
 	    } while (deals.size() > 0 && !StringUtils.equals(previousCursor, currentCursor));
-
+	    DealExportBlobUtil.editExistingBlobFile(path, null, true);
+	    List<String> fileData = DealExportBlobUtil.retrieveBlobFileData(path);
+	    if (count == null)
+		count = String.valueOf(total);
+	    // Send every partition as separate email
+	    for (String partition : fileData)
+		DealExportEmailUtil.exportDealCSVAsEmail(DomainUserUtil.getDomainUser(currentUserId), partition,
+			String.valueOf(count));
 	}
 	catch (JSONException e)
 	{
 	    System.out.println("Exception in export deal in backend code. - " + e.getMessage());
 	    e.printStackTrace();
-	}
-	finally
-	{
-	    exporter.finalize();
 	}
     }
 

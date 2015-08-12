@@ -158,11 +158,18 @@ public abstract class AbstractCSVExporter<T> implements Exporter<T>
 
     private final void sendEmail() throws JSONException
     {
+	String blobKey = ContactExportBlobUtil.getBlobKeyFromPath(getDownloadURL());
+	System.out.println("blob key : " + blobKey);
+	String downloadUrl = "https://local-dot-sandbox-dot-agilecrmbeta.appspot.com/download-attachment?key="
+		+ blobKey;
+
+	System.out.println("download url : " + downloadUrl);
+	CacheUtil.setCache(blobKey, "export_csv", 24 * 60 * 60 * 1000);
+
 	HashMap<String, String> map = new HashMap<String, String>();
 	map.put("count", String.valueOf(csvWriter.getNumberOfRows()));
-	map.put("download_url", getDownloadURL());
+	map.put("download_url", downloadUrl);
 
-	String blobKey = ContactExportBlobUtil.getBlobKeyFromPath(getDownloadURL());
 	CacheUtil.setCache(blobKey, "export_csv", 24 * 60 * 60 * 1000);
 
 	System.out.println(blobKey);
