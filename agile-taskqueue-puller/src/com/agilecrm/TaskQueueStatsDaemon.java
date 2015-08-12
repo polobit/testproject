@@ -232,7 +232,7 @@ public class TaskQueueStatsDaemon extends Thread
 	    lease = getTaskqueue().tasks().lease(Authorization.PROJECT_NAME, TASK_QUEUE_NAME,
 		    PullScheduler.DEFAULT_COUNT_LIMIT, PullScheduler.DEFAULT_LEASE_PERIOD);
 
-	    lease.set("groupByTag", true);
+	    lease.set("group_by_tag", true);
 
 	    com.google.api.services.taskqueue.model.Tasks tasks = lease.execute();
 
