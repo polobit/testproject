@@ -1,7 +1,6 @@
 package com.agilecrm.queues;
 
 import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang.SerializationUtils;
@@ -205,7 +204,7 @@ public class PullScheduler
 	    return;
 
 	// To delete completed tasks
-	List<TaskHandle> completedTasks = new ArrayList<TaskHandle>();
+	// List<TaskHandle> completedTasks = new ArrayList<TaskHandle>();
 
 	// Get queue to delete tasks
 	Queue queue = QueueFactory.getQueue(queueName);
@@ -265,7 +264,7 @@ public class PullScheduler
 
 		// System.out.println("Adding completed tasks");
 		// Add to completed list
-		completedTasks.add(taskHandle);
+		// completedTasks.add(taskHandle);
 	    }
 	    else
 		break;
@@ -273,9 +272,9 @@ public class PullScheduler
 
 	// System.out.println("deleted tasks");
 	// Delete completed tasks
-	PullQueueUtil.deleteTasks(queueName, completedTasks);
+	// PullQueueUtil.deleteTasks(queueName, completedTasks);
 
-	System.out.println("deleting tasks " + completedTasks.size());
+	// System.out.println("deleting tasks " + completedTasks.size());
 
     }
 
