@@ -1945,6 +1945,7 @@ function minicalendar(el)
 	init_cal(el);
 	var totalEvents = 0;
 	var eventsCount = 0;
+	var dayClasses = [];
 	
 	
 						$('#calendar_container',el).fullCalendar({
@@ -2086,11 +2087,13 @@ function minicalendar(el)
 					                   var result = year + '-' + (month < 10 ? '0' + month : month) + '-' + (date < 10 ? '0' + date : date);
 					                   $(element).addClass(result);
 					                   $(element).attr('id',event.id);
-
+					                   	dayClasses.push(result);
 									   $('.fc-event').find('.fc-event-inner').css('display','none');
+
 										var count=$(el).find('.'+result).length;
 										if(count>3){
-											$(element).hide();
+											return false;
+											//$(element).hide();
 										}  
 								} ,
 								eventAfterRender: function (event, element, view) {
@@ -2108,6 +2111,7 @@ function minicalendar(el)
 									   
 		 if(eventsCount==totalEvents || eventsCount==(2*totalEvents)){
 			 var temp;
+			 var dayEventsTotalCount = totalEvents;
 			 if($(el).find('.fc-border-separate').find('tbody').find('tr:last').css('display')!="none"){
 			 if($(el).find('.fc-border-separate').find('tbody').find('tr').length==6 && ($(el).parent().attr('data-sizey')==1))
 				 $(el).find('.fc-border-separate').find('tbody').find('tr').find('.fc-first').find('div:first').css('min-height','23px');
@@ -2131,6 +2135,15 @@ function minicalendar(el)
           }
          });
          $.each(classNamesArray,function(index, value){
+         	var dayEventsCount = 0;
+          $.each(dayClasses, function(index1, value1){
+           if(dayClasses[index1]==classNamesArray[index]){
+            dayEventsCount++;
+           }
+          });
+          if(eventsCount==(2*dayEventsTotalCount)){
+           dayEventsCount = dayEventsCount/2;
+          }
           var pos = $('.'+this,el).eq(0).position();
 		  var eventsLength = $('.'+this,el).length;
           var addPixels = Math.round(($(el).find('.fc-widget-header').eq(1).width()-10)/2);
@@ -2146,7 +2159,7 @@ function minicalendar(el)
            pos.left += addPixels;
            pos.left -= 10;
           }
-		  pos.top += 6;
+		  pos.top += 8;
           if($(el).parent().attr('data-sizey')==2){
           // pos.top -= 20;
           }else if($(el).parent().attr('data-sizey')==3){
@@ -2162,11 +2175,12 @@ function minicalendar(el)
              $(this,el).css({"top": pos.top, "left":pos.left});
             }
            });
-		   if($('.'+this,el).length>3){
+		   if(dayEventsCount>3){
            var icon_pos = pos.left+(3*6);
-           $('.'+this,el).eq(eventsLength-1).after('<div class="plus-button pos-abs c-p" style="top: '+(pos.top-7)+'px;left: '+icon_pos+'px; color:lightgray;" title="'+(eventsLength-3)+' more">&nbsp;</div>');
+           $('.'+this,el).eq(eventsLength-1).after('<div class="plus-button pos-abs c-p" style="top: '+(pos.top-7)+'px;left: '+icon_pos+'px; color:lightgray;" title="'+(dayEventsCount-3)+' more">&nbsp;</div>');
           }
          });
+		dayClasses = [];
          }
 		},
 								eventMouseover : function(event, jsEvent, view)
