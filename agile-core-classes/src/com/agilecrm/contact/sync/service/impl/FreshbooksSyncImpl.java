@@ -233,20 +233,22 @@ public class FreshbooksSyncImpl extends OneWaySyncService
 				if (!StringUtils.isEmpty(item.getString("name")))
 				{
 					if(item.get("name")!=null)
-					{
-						//Replacing special characters with underscore except space and underscore
+					{	
+						// Replacing special characters with underscore except space and
+						// underscore
 						String tagName = item.get("name").toString().replaceAll("[^\\p{L}\\p{N} _]", "_").trim();
-						if(tagName!=null){
-							//if tag name start with _ we removed that _ until tag name starts with alphabet
-							while(tagName.startsWith("_"))
-								tagName = tagName.replaceFirst("_", "").trim();
-							if(!tagName.isEmpty())
-								contact.tags.add(tagName);
+						// if tag name start with _ or digit we removing that character until tag name
+						// starts with alphabet
+						while (StringUtils.isNotBlank(tagName) && (tagName.startsWith("_") || Character.isDigit(tagName.charAt(0))))
+						{
+						    if (tagName.startsWith("_"))
+							tagName = tagName.replaceFirst("_", "").trim();
+						    if (Character.isDigit(tagName.charAt(0)))
+							tagName = tagName.replaceFirst("[0-9]", "").trim();
 						}
 					}
 				}
 				contact.save();
-
 			    }
 			}
 		    }
