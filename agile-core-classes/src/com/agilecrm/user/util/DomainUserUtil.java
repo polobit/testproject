@@ -694,10 +694,16 @@ public class DomainUserUtil
 	List<DomainUser> users = getUsers();
 	for (DomainUser user : users)
 	{
-	    if (isEnable)
-		user.restricted_scopes.remove(UserAccessScopes.ADD_NEW_TAG);
-	    else
-		user.restricted_scopes.add(UserAccessScopes.ADD_NEW_TAG);
+	    if (!user.is_admin)
+	    {
+		if (user.restricted_scopes == null)
+		    user.restricted_scopes = new HashSet<UserAccessScopes>();
+
+		if (isEnable)
+		    user.restricted_scopes.remove(UserAccessScopes.ADD_NEW_TAG);
+		else
+		    user.restricted_scopes.add(UserAccessScopes.ADD_NEW_TAG);
+	    }
 	}
 
 	dao.putAll(users);
