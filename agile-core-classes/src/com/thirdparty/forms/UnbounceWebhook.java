@@ -58,55 +58,39 @@ public class UnbounceWebhook extends HttpServlet
 	    {
 		response.sendError(HttpServletResponse.SC_UNAUTHORIZED,
 		        "Unauthorized: No owner exists with this API Key - " + tagsWithKey[0]);
-		response.sendError(HttpServletResponse.SC_UNAUTHORIZED,
-		        "Unauthorized: No owner exists with this API Key - " + tagsWithKey[0]);
 		return;
 	    }
-
-	    // Define properties list (ContactField)
-	    List<ContactField> properties = new ArrayList<ContactField>();
 
 	    // Get post data from unbounce and convert to json {"name": "value"}
 	    JSONObject obj = new JSONObject(req.getParameter("data.json"));
 	    JSONObject finalJson = convertUnbounceJson(obj);
 
-	    // Define contact
-	    Contact contact = null;
-
 	    // Check if email exists in json, if yes search for contact
-	    if (!StringUtils.isBlank(finalJson.optString(Contact.EMAIL)))
-		contact = ContactUtil.searchContactByEmail(finalJson.getString(Contact.EMAIL));
-	    else
+	    if (StringUtils.isBlank(finalJson.optString(Contact.EMAIL)))
 	    {
 		response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Bad Request: Email is missing");
 		return;
 	    }
+	    Contact contact = ContactUtil.searchContactByEmail(finalJson.getString(Contact.EMAIL));
 
-	    // If First Name and Last Name are blank, send a bad request
-	    if (StringUtils.isBlank(finalJson.optString(Contact.FIRST_NAME))
-		    && StringUtils.isBlank(finalJson.optString(Contact.LAST_NAME)))
-	    {
-		response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Bad Request: First or Last Name is missing");
-		return;
-	    }
 	    // If contact is null create new contact
 	    if (contact == null)
 		contact = new Contact();
 
+	    // Define properties list (ContactField)
+	    List<ContactField> properties = new ArrayList<ContactField>();
+
 	    // Build agile contact fields from finalJson
 	    FormsUtil.jsonToAgile(finalJson, properties, null);
 
-	    if (owner != null)
-	    {
-		// Set contact owner, update properties and save contact
-		contact.setContactOwner(owner);
-		contact.properties = FormsUtil.updateContactProperties(properties, contact.properties);
+	    // Set contact owner, update properties and save contact
+	    contact.setContactOwner(owner);
+	    contact.properties = FormsUtil.updateContactProperties(properties, contact.properties);
 
-		if(tags != null && tags.length > 0)
-		    contact.addTags(FormsUtil.getValidTags(tags));
-		else
-		    contact.save();
-	    }
+	    if (tags != null && tags.length > 0)
+		contact.addTags(FormsUtil.getValidTags(tags));
+	    else
+		contact.save();
 	}
 	catch (Exception e)
 	{
