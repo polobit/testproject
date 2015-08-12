@@ -479,6 +479,9 @@ var AdminSettingsRouter = Backbone.Router.extend({
 
 		if (id == 'mandrill')
 			value = 'MANDRILL';
+		else if (id == 'ses')
+			 value = 'SES';
+		
 
 		var emailGateway;
 		$.each(this.integrations.collection.where({name:"EmailGateway"}),function(key,value){
@@ -515,11 +518,18 @@ var AdminSettingsRouter = Backbone.Router.extend({
 					$("#integrations-image",el).attr("src","img/crm-plugins/sendgrid_logo.png");
 				}
 				
+				if(id=="ses"){
+					$("#integrations-image",el).attr("src","img/crm-plugins/ses_logo.png");
+				}
+				
 			}, saveCallback : function()
 			{
 				// On saved, navigate to integrations
 				Backbone.history.navigate("integrations", { trigger : true });
 
+				if(value == 'SES')
+					return;
+				
 				data = App_Admin_Settings.email_gateway.model.toJSON();
 
 				// Add webhook

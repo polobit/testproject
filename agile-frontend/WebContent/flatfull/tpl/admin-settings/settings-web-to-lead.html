@@ -300,6 +300,54 @@
 			</div>
 		</div>
 		<!-- End of SendGrid -->
+		<!-- SES -->
+			<div class="col-md-4 col-sm-6 col-xs-12 text-center">
+				<div class="panel wrapper text-center b-a">
+					<div class="pos-rlt">
+					<center><img alt="sms-integration" src="img/crm-plugins/ses_logo.png" class=" thumb-xl img-responsive">
+                	</center>
+					<div class="clearfix"></div>
+				</div>
+				<br>
+				<div class="m-t-sm" rel="tooltip">
+				Send your emails via your Amazon SES account. Amazon SES is an outbound-only email-sending service that provides an easy, cost-effective way for you to send email.
+				</div><br/>
+				<div align="left"> 
+					{{#if this.length}}	
+						{{#gateway_exists "SES" this}}
+							<a href="#integrations" class="btn btn-sm btn-danger " id="email-gateway-delete"  data={{id}} >Disable</a>
+							<a href="#email-gateways/ses" class="btn btn-sm btn-default">Settings</a>
+						{{else}}
+							 {{#isAllowedInCurrentPlan "is_email_gateway_allowed"}}
+					         	<div>
+                      				<a href="#email-gateways/ses" class="btn btn-sm btn-default">Enable</a>
+                			 	</div>
+           					 {{else}}
+            					<div style="display:inline;">
+            						<div class="btn btn-sm btn-default _upgrade" id="ses-upgrade">Enable</div>
+                 					<div style="display:inline;float:right;display:none;" class="text-right ses-upgrade" calc(100% - 100px);"><i>{{toSafeString message}}</i>
+	                 				</div>
+	                 			</div>
+            				 {{/isAllowedInCurrentPlan}}
+						{{/gateway_exists}}
+					{{else}}
+						{{#isAllowedInCurrentPlan "is_email_gateway_allowed"}}
+					    	<div>
+                      			<a href="#email-gateways/ses" class="btn btn-sm btn-default">Enable</a>
+                			</div>
+           				{{else}}
+            				<div style="display:inline;">
+            					<div class="btn btn-sm btn-default _upgrade" id="ses-upgrade">Enable</div>
+                 				<div style="display:inline;float:right;display:none;width: calc(100% - 100px);" class="text-right ses-upgrade"><i>{{toSafeString message}}</i>
+	                 			</div>
+	                 		</div>
+            			{{/isAllowedInCurrentPlan}}
+					{{/if}}
+				</div>
+			</div>
+		</div>
+		<!-- End of SES -->
+		
 	</div>
 </div>
 </div>

@@ -11,6 +11,7 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.agilecrm.AgileQueues;
 import com.agilecrm.Globals;
 import com.agilecrm.account.EmailGateway;
 import com.agilecrm.account.EmailGateway.EMAIL_API;
@@ -30,6 +31,7 @@ import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.blobstore.BlobKey;
 import com.google.appengine.api.taskqueue.TaskHandle;
 import com.thirdparty.sendgrid.SendGrid;
+import com.thirdparty.ses.util.AmazonSESUtil;
 import com.thirdparty.mandrill.Mandrill;
 
 /**
@@ -48,8 +50,10 @@ public class EmailGatewayUtil
 
 	try
 	{
-	    // Check given api keys
-	    EmailGatewayUtil.checkEmailAPISettings(emailGateway);
+	    // Check given api keys. Skip validation for SES
+		if(!(emailGateway.email_api.equals(EMAIL_API.SES)))
+			EmailGatewayUtil.checkEmailAPISettings(emailGateway);
+			
 	}
 	catch (Exception e)
 	{
@@ -164,7 +168,7 @@ public class EmailGatewayUtil
 	    response = SendGrid.sendMail(emailGateway.api_user, emailGateway.api_key, "api_test@agilecrm.com",
 		    "API Test", "naresh@agilecrm.com", null, null,
 		    "SendGrid test email from " + NamespaceManager.get(), null, "Test Email.", "Test Email", null);
-	else
+	else if(emailGateway.email_api.equals(EMAIL_API.MANDRILL))
 	    response = Mandrill.sendMail(emailGateway.api_key, false, "api_test@agilecrm.com", "API Test",
 		    "naresh@agilecrm.com", null, null, "Mandrill test email from " + NamespaceManager.get(), null,
 		    "Test Email.", "Test Email", null, null, null);
@@ -322,7 +326,7 @@ public class EmailGatewayUtil
 	    }
 
 	    // If no gateway setup, sends email through Agile Mandrill
-	    if (emailGateway == null || (EMAIL_API.SEND_GRID.equals(emailGateway.email_api) && (documentIds.size() != 0 || blobKeys.size() != 0)))
+	    if (emailGateway == null || ((EMAIL_API.SEND_GRID.equals(emailGateway.email_api) || EMAIL_API.SES.equals(emailGateway.email_api)) && (documentIds.size() != 0 || blobKeys.size() != 0)))
 	    {
 		Mandrill.sendMail(null, true, fromEmail, fromName, to, cc, bcc, subject, replyTo, html, text,
 		        mandrillMetadata, documentIds, blobKeys, attachments);
@@ -339,6 +343,9 @@ public class EmailGatewayUtil
 	    else if (EMAIL_API.SEND_GRID.equals(emailGateway.email_api))
 		SendGrid.sendMail(emailGateway.api_user, emailGateway.api_key, fromEmail, fromName, to, cc, bcc,
 		        subject, replyTo, html, text, null, attachments);
+	    
+	    else if (EMAIL_API.SES.equals(emailGateway.email_api))
+	    	addToQueue(AgileQueues.NORMAL_PERSONAL_EMAIL_PULL_QUEUE, emailGateway.email_api.toString(), emailGateway.api_user, emailGateway.api_key, NamespaceManager.get(), fromEmail, fromName, to, cc, bcc, subject, replyTo, html, text, null, null, null);
 
 	}
 	catch (Exception e)
@@ -447,6 +454,9 @@ public class EmailGatewayUtil
 		// If SendGrid
 		else if (emailGateway.email_api == EMAIL_API.SEND_GRID)
 		    SendGridUtil.sendSendGridMails(tasks, emailSender);
+		
+		else if (emailGateway.email_api == EMAIL_API.SES)
+			AmazonSESUtil.sendSESMails(tasks, emailSender);
 
 		emailSender.setCount(tasks.size());
 		emailSender.updateStats();

@@ -5,6 +5,7 @@ import com.agilecrm.account.EmailGateway.EMAIL_API;
 import com.agilecrm.account.util.EmailGatewayUtil;
 import com.google.appengine.api.taskqueue.DeferredTask;
 import com.thirdparty.sendgrid.SendGrid;
+import com.thirdparty.ses.AmazonSES;
 import com.thirdparty.mandrill.Mandrill;
 
 /**
@@ -104,5 +105,9 @@ public class MailDeferredTask implements DeferredTask
 	// If SendGrid
 	else if (emailGateway.email_api == EMAIL_API.SEND_GRID)
 	    SendGrid.sendMail(apiUser, apiKey, fromEmail, fromName, to, cc, bcc, subject, replyTo, html, text, null);
+	
+	// Amazon SES
+	else if (emailGateway.email_api == EMAIL_API.SES)
+		AmazonSES.sendEmail(emailGateway.api_key, emailGateway.api_user, emailGateway.regions, fromEmail, fromName, to, cc, bcc, subject, replyTo, html, text);
     }
 }
