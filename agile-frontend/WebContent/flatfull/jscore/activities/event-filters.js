@@ -223,6 +223,7 @@ function loadFullCalednarOrListView()
 
 		loadAgileEvents();
 		loadGoogleEvents();
+		loadOfficeEvents();
 
 	}
 }
@@ -270,6 +271,30 @@ function putGoogleCalendarLink()
 	{
 		$("#google_cal").addClass('hide');
 		$("#google_cal_link").removeClass('hide');
+	}
+}
+
+function putOfficeCalendarLink()
+{
+	var calEnable = false;
+
+	$.ajax({ url : 'core/api/officecalendar', async : false, success : function(response)
+	{
+		if (response)
+			calEnable = true;
+
+	} });
+
+	if (calEnable)
+	{
+		$("#office_cal").removeClass('hide');
+		$("#office_cal_link").addClass('hide');
+	}
+
+	else
+	{
+		$("#office_cal").addClass('hide');
+		$("#office_cal_link").removeClass('hide');
 	}
 }
 

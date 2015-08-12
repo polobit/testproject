@@ -112,6 +112,8 @@ function showCalendar()
 
 	_init_gcal_options();
 	putGoogleCalendarLink();
+	putOfficeCalendarLink();
+	
 	var calendarView = (!readCookie('calendarDefaultView')) ? 'month' : readCookie('calendarDefaultView');
 	$('#' + calendarView).addClass('bg-light');
 	var contentHeight = 400;
@@ -184,18 +186,22 @@ function showCalendar()
 									var start_end_array = {};
 									start_end_array.startTime = start.getTime() / 1000;
 									start_end_array.endTime = end.getTime() / 1000;
+									console.log(start_end_array.startTime+" : "+start_end_array.endTime);
 									createCookie('fullcalendar_start_end_time', JSON.stringify(start_end_array));
 
 									var eventsURL = '/core/api/events?start=' + start.getTime() / 1000 + "&end=" + end.getTime() / 1000;
-
+									
 									eventsURL += '&owner_id=' + agile_event_owners;
 									console.log('-----------------', eventsURL);
+									loadOfficeEvents(start.getTime(), end.getTime());
+									
 									$.getJSON(eventsURL, function(doc)
 									{
 										$.each(doc, function(index, data)
 										{
 											// decides the color of event based
 											// on owner id
+											console.log(data);
 											data = renderEventBasedOnOwner(data);
 										});
 
@@ -743,6 +749,7 @@ $(function()
 
 			loadAgileEvents();
 			loadGoogleEvents();
+			loadOfficeEvents();
 
 		}
 	});
