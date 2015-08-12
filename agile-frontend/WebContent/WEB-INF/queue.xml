@@ -270,38 +270,53 @@
   </retry-parameters>
   </queue>
   
-  <queue>
+
+  <!-- Pull queues with ACLS -->
+
+    <queue>
   <name>normal-email-pull-queue</name>
   <mode>pull</mode>
+    <acl> 
+      <user-email>yaswanth@agilecrm.com</user-email>
+    </acl>
   <retry-parameters>
-  		<task-retry-limit>2</task-retry-limit>
+      <task-retry-limit>2</task-retry-limit>
   </retry-parameters>
   </queue>
   
   <queue>
   <name>bulk-email-pull-queue</name>
   <mode>pull</mode>
+  <acl> 
+      <user-email>yaswanth@agilecrm.com</user-email>
+  </acl>
   <retry-parameters>
-  		<task-retry-limit>2</task-retry-limit>
+      <task-retry-limit>2</task-retry-limit>
   </retry-parameters>
   </queue>
   
   <queue>
   <name>normal-personal-email-pull-queue</name>
   <mode>pull</mode>
+  <acl> 
+      <user-email>yaswanth@agilecrm.com</user-email>
+  </acl>
   <retry-parameters>
-      <task-retry-limit>2</task-retry-limit>	  
+      <task-retry-limit>2</task-retry-limit>    
   </retry-parameters>
   </queue>
-  
+
   <queue>
   <name>bulk-personal-email-pull-queue</name>
   <mode>pull</mode>
+  <acl> 
+      <user-email>yaswanth@agilecrm.com</user-email>
+  </acl>
   <retry-parameters>
-  		<task-retry-limit>2</task-retry-limit>
+      <task-retry-limit>2</task-retry-limit>
   </retry-parameters>
   </queue>
-  
+
 
   <!-- temporary queues -->
    <queue>
