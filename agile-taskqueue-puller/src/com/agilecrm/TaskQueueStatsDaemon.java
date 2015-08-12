@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.apache.log4j.Level;
 
+import com.agilecrm.contact.Contact;
 import com.agilecrm.logger.AgileAPILogger;
 import com.agilecrm.queues.PullScheduler;
 import com.agilecrm.threads.TaskExcecutorThreadPool;
@@ -15,6 +16,7 @@ import com.google.api.services.taskqueue.Taskqueue.Tasks.Lease;
 import com.google.api.services.taskqueue.model.Task;
 import com.google.api.services.taskqueue.model.TaskQueue;
 import com.google.api.services.taskqueue.model.TaskQueue.Stats;
+import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.tools.remoteapi.RemoteApiInstaller;
 import com.google.appengine.tools.remoteapi.RemoteApiOptions;
 import com.thirdparty.Mailgun;
@@ -39,10 +41,9 @@ public class TaskQueueStatsDaemon extends Thread
 
     private static int MAX_REMOTE_API_VALIDITY_IN_HOURS = 1;
 
-    public RemoteApiOptions options = new RemoteApiOptions().server("agilecrmbeta.appspot.com", 443).credentials(
-	    "naresh@faxdesk.com", "clickdesk");
-
     org.apache.log4j.Logger logger = null;
+
+    public static final String password = "";
 
     TaskQueueStatsDaemon()
     {
@@ -191,7 +192,10 @@ public class TaskQueueStatsDaemon extends Thread
     private void installRemoteAPI() throws IOException
     {
 
+	RemoteApiOptions options = new RemoteApiOptions().server("agile-crm-cloud.appspot.com", 443).credentials(
+		"yaswanth@agilecrm.com", password);
 	installer.install(options);
+
 	remoteAPIInstalledTime = System.currentTimeMillis();
 
 	logger.info("Installing prefs : " + remoteAPIInstalledTime + " In thread : " + Thread.currentThread().getName());
@@ -227,6 +231,8 @@ public class TaskQueueStatsDaemon extends Thread
 	{
 	    lease = getTaskqueue().tasks().lease(Authorization.PROJECT_NAME, TASK_QUEUE_NAME,
 		    PullScheduler.DEFAULT_COUNT_LIMIT, PullScheduler.DEFAULT_LEASE_PERIOD);
+
+	    lease.set("groupByTag", true);
 
 	    com.google.api.services.taskqueue.model.Tasks tasks = lease.execute();
 
@@ -395,5 +401,22 @@ public class TaskQueueStatsDaemon extends Thread
 	    logger.info(e.getMessage());
 	    leaseTasksOld();
 	}
+    }
+
+    public static void main(String[] args) throws IOException
+    {
+	RemoteApiOptions options = new RemoteApiOptions().server("agile-crm-cloud.appspot.com", 443).credentials(
+		"yaswanth@agilecrm.com", password);
+	RemoteApiInstaller installer = new RemoteApiInstaller();
+	installer.install(options);
+	NamespaceManager.set("local");
+	System.out.println(Contact.dao.fetchAll());
+	installer.uninstall();
+
+	long remoteAPIInstalledTime = System.currentTimeMillis();
+
+	// logger.info("Installing prefs : " + remoteAPIInstalledTime +
+	// " In thread : " + Thread.currentThread().getName());
+
     }
 }
