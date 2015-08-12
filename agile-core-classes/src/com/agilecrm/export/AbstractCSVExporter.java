@@ -8,12 +8,15 @@ import java.util.List;
 import java.util.Map;
 
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import com.agilecrm.CSVWriterAgile;
+import com.agilecrm.contact.export.util.ContactExportBlobUtil;
 import com.agilecrm.contact.export.util.ContactExportCSVUtil;
 import com.agilecrm.export.util.DealExportCSVUtil;
 import com.agilecrm.file.readers.ByteBufferBackedInputStream;
 import com.agilecrm.file.readers.IFileInputStream;
+import com.agilecrm.util.CacheUtil;
 import com.agilecrm.util.email.SendMail;
 
 /**
@@ -158,6 +161,12 @@ public abstract class AbstractCSVExporter<T> implements Exporter<T>
 	HashMap<String, String> map = new HashMap<String, String>();
 	map.put("count", String.valueOf(csvWriter.getNumberOfRows()));
 	map.put("download_url", getDownloadURL());
+
+	String blobKey = ContactExportBlobUtil.getBlobKeyFromPath(getDownloadURL());
+	CacheUtil.setCache(blobKey, "export_csv", 24 * 60 * 60 * 1000);
+
+	System.out.println(blobKey);
+
 	map.put("contact_type", export_type.label);
 
 	SendMail.sendMail("yaswanth@agilecrm.com", export_type.templateSubject, export_type.templaceTemplate, map,

@@ -848,7 +848,7 @@ public class BulkOperationsAPI
 	if (i + 10 == 10)
 	{
 	    ContactExportCSVUtil.addToPullQueue(currentUserId, contact_ids, filter, dynamicFilter, data);
-	    return;
+	    // return;
 	}
 
 	Exporter<Contact> exporter = ExportBuilder.buildContactExporter();
@@ -902,7 +902,6 @@ public class BulkOperationsAPI
 
 	    String currentCursor = null;
 	    String previousCursor = null;
-	    int firstTime = 0;
 
 	    do
 	    {
@@ -929,11 +928,6 @@ public class BulkOperationsAPI
 
 	exporter.finalize();
 
-	String blobKey = ContactExportBlobUtil.getBlobKeyFromPath(path);
-	CacheUtil.setCache(blobKey, "export_csv", 24 * 60 * 60 * 1000);
-
-	String downloadUrl = "https://" + new JSONObject(data).getString("domain")
-		+ ".agilecrm.com/download-attachment?key=" + blobKey;
 	// ContactExportEmailUtil.exportContactCSVAsEmail(data, downloadUrl,
 	// String.valueOf(count),
 	// ContactExportType.CONTACT);
