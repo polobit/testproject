@@ -1,8 +1,10 @@
 package com.agilecrm.gmap;
 
 import java.sql.ResultSet;
-
 import java.sql.ResultSetMetaData;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import org.codehaus.jackson.map.ObjectMapper;
@@ -22,6 +24,7 @@ import com.campaignio.reports.DateUtil;
 
 
 public class GmapServiceMysqlmpl implements GmapService {
+	private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
 	@Override
 	public List<GmapLogs> getLatestVisitors(String userDomain,
@@ -31,30 +34,17 @@ public class GmapServiceMysqlmpl implements GmapService {
 			System.out.println("None of the required input parameters should be null");
 			return null;
 		}
-        	
-
-	    
-
     	try
     	{
     		String convertedStartDate = DateUtil.getMySQLNowDateFormat(Long.parseLong(startDate), timeZone);
     	    String convertedEndDate = DateUtil.getMySQLNowDateFormat(Long.parseLong(endDate), timeZone);
     		
-            //Two subqueries, one gets a list with all  anonymous visitors(email == "") and another with unique existing latest visitors(email != "")
-    	    //UNION ALL joins both sets.
-    		//Here CONVERT_TZ function has been removed to preserve the indexing on the table for this query.
-    		String query="SELECT pp.guid, pp.email,visit_time, pp.city_lat_long, pp.user_agent, pp.city, pp.region, pp.country FROM "
-    		            +" (SELECT p1.guid, p1.email,MAX(mx_time) as visit_time, p1.city_lat_long, p1.user_agent, p1.city, p1.region, p1.country "
-    		            +" FROM "
-    		            +" (SELECT guid, email,MAX(stats_time)as mx_time, city_lat_long, user_agent, city, region, country FROM page_views WHERE domain ="+GoogleSQLUtil.encodeSQLColumnValue(userDomain)+" AND DATE(stats_time) BETWEEN DATE("+GoogleSQLUtil.encodeSQLColumnValue(convertedStartDate)+")  AND DATE("+GoogleSQLUtil.encodeSQLColumnValue(convertedEndDate)+") GROUP BY guid) p1 where p1.email !='' GROUP BY email "
-    		            +" UNION ALL "
-    		            +" SELECT guid, email,MAX(stats_time)as mx_time, city_lat_long, user_agent, city, region, country " 
-    		            +" FROM page_views " 
-    		            +" WHERE domain ="+GoogleSQLUtil.encodeSQLColumnValue(userDomain)+"" 
-    		            +" AND DATE(stats_time) " 
-    		            +" BETWEEN DATE("+GoogleSQLUtil.encodeSQLColumnValue(convertedStartDate)+")  AND DATE("+GoogleSQLUtil.encodeSQLColumnValue(convertedEndDate)+")"
-    		            +" AND email='' "
-    		            +" GROUP BY guid) pp ORDER BY visit_time desc";
+    	    
+    	    String query="SELECT guid, email,MAX(stats_time)as visit_time, city_lat_long, user_agent, city, region, country " 
+		            +" FROM page_views " 
+		            +" WHERE domain ="+GoogleSQLUtil.encodeSQLColumnValue(userDomain)+"" 
+		            +" AND stats_time" 
+		            +" BETWEEN " +GoogleSQLUtil.encodeSQLColumnValue(getStartDateTimeStamp(convertedStartDate))+"  AND "+GoogleSQLUtil.encodeSQLColumnValue(getEndDateTimeStamp(convertedEndDate))+" group by sid";
     		
     		System.out.println("sids query is: " + query);
     		
@@ -89,7 +79,7 @@ public class GmapServiceMysqlmpl implements GmapService {
     		String convertedStartDate = DateUtil.getMySQLNowDateFormat(Long.parseLong(startDate), timeZone);
     	    String convertedEndDate = DateUtil.getMySQLNowDateFormat(Long.parseLong(endDate), timeZone);
     		
-    	    String query=" select guid,email,city,region,country,user_agent,stats_time as visit_time,sid,ref from page_views where domain="+GoogleSQLUtil.encodeSQLColumnValue(userDomain)+" and stats_time BETWEEN " +GoogleSQLUtil.encodeSQLColumnValue(getStartDateTimeStamp(convertedStartDate))+"  AND "+GoogleSQLUtil.encodeSQLColumnValue(getEndDateTimeStamp(convertedEndDate))+" order by stats_time desc ";
+    	    String query=" select guid,email,city,region,country,user_agent,stats_time as visit_time,city_lat_long,sid,ref from page_views where domain="+GoogleSQLUtil.encodeSQLColumnValue(userDomain)+" and stats_time BETWEEN " +GoogleSQLUtil.encodeSQLColumnValue(getStartDateTimeStamp(convertedStartDate))+"  AND "+GoogleSQLUtil.encodeSQLColumnValue(getEndDateTimeStamp(convertedEndDate))+" order by stats_time desc ";
     	    
     	    System.out.println("Query "+query);
     		
@@ -173,21 +163,57 @@ public class GmapServiceMysqlmpl implements GmapService {
 		
 	}
 	
+	/**
+	 * A private utility method to format a given local start date to a utc 
+	 *  
+	 *  */
 	private  String getStartDateTimeStamp(String startDate){
-		if(startDate != null){
-			startDate = startDate.substring(0, 10);
-			startDate += " 00:00:00"; 
-			return startDate;
+		try {
+			if(startDate != null){
+				startDate = startDate.substring(0, 10);
+			    int year=Integer.parseInt(startDate.substring(0,4));
+			    int month=Integer.parseInt(startDate.substring(5,7));
+			    int day=Integer.parseInt(startDate.substring(8,10));
+			    
+		        Calendar date1 = new GregorianCalendar(year,month-1,day,0,0,0);
+		        long utcTimeStamp = DateTimeUtility.toUTC(date1.getTimeInMillis(), date1.getTimeZone());
+		        Calendar utcCal = Calendar.getInstance();
+		        utcCal.setTimeInMillis(utcTimeStamp);
+				return sdf.format(utcCal.getTime());
+			}
+		} catch (Exception e) {
+			System.out.println("Exception while converting a given start date to a utc ");
 		}
+		
 		return null;
 	}
 	
+	/** 
+	 * 
+	 * A private utility method to format a given local end date to a utc 
+	 *  
+	 *  
+	 * 
+	 * */
 	private  String getEndDateTimeStamp(String endDate){
-		if(endDate != null){
-			endDate = endDate.substring(0, 10);
-			endDate +=" 23:59:59";
-			return endDate;
+		try {
+			if(endDate != null){
+				endDate = endDate.substring(0, 10);
+			    int year=Integer.parseInt(endDate.substring(0,4));
+			    int month=Integer.parseInt(endDate.substring(5,7));
+			    int day=Integer.parseInt(endDate.substring(8,10));
+			    
+		        Calendar date1 = new GregorianCalendar(year,month-1,day,23,59,59);
+		        long utcTimeStamp = DateTimeUtility.toUTC(date1.getTimeInMillis(), date1.getTimeZone());
+		        Calendar utcCal = Calendar.getInstance();
+		        utcCal.setTimeInMillis(utcTimeStamp);
+				return sdf.format(utcCal.getTime());
+			}
+			
+		} catch (Exception e) {
+			System.out.println("Exception while converting a given end date to a utc ");
 		}
+		
 		return null;
 	}
 	
