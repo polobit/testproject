@@ -171,6 +171,7 @@ public class GmapServiceMysqlmpl implements GmapService {
 		try {
 			if(startDate != null){
 				startDate = startDate.substring(0, 10);
+				System.out.println("Start date "+startDate);
 			    int year=Integer.parseInt(startDate.substring(0,4));
 			    int month=Integer.parseInt(startDate.substring(5,7));
 			    int day=Integer.parseInt(startDate.substring(8,10));
@@ -179,6 +180,7 @@ public class GmapServiceMysqlmpl implements GmapService {
 		        long utcTimeStamp = DateTimeUtility.toUTC(date1.getTimeInMillis(), date1.getTimeZone());
 		        Calendar utcCal = Calendar.getInstance();
 		        utcCal.setTimeInMillis(utcTimeStamp);
+		        System.out.println("Start date after utc formatted "+utcCal.getTime()+" "+sdf.format(utcCal.getTime()));
 				return sdf.format(utcCal.getTime());
 			}
 		} catch (Exception e) {
@@ -199,6 +201,7 @@ public class GmapServiceMysqlmpl implements GmapService {
 		try {
 			if(endDate != null){
 				endDate = endDate.substring(0, 10);
+				System.out.println("End date "+endDate);
 			    int year=Integer.parseInt(endDate.substring(0,4));
 			    int month=Integer.parseInt(endDate.substring(5,7));
 			    int day=Integer.parseInt(endDate.substring(8,10));
@@ -207,6 +210,7 @@ public class GmapServiceMysqlmpl implements GmapService {
 		        long utcTimeStamp = DateTimeUtility.toUTC(date1.getTimeInMillis(), date1.getTimeZone());
 		        Calendar utcCal = Calendar.getInstance();
 		        utcCal.setTimeInMillis(utcTimeStamp);
+		       System.out.println("End date after utc formatted "+utcCal.getTime()+" "+sdf.format(utcCal.getTime()));
 				return sdf.format(utcCal.getTime());
 			}
 			
