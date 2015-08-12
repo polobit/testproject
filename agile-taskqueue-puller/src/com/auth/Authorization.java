@@ -31,7 +31,7 @@ public class Authorization
 {
 
     /** Directory to store user credentials. */
-    private static final java.io.File DATA_STORE_DIR = new java.io.File(System.getProperty("user.home"),
+    private static final java.io.File DATA_STORE_DIR = new java.io.File(System.getProperty("user.dir"),
 	    ".store/task_queue_sample");
 
     private static FileDataStoreFactory dataStoreFactory;
@@ -41,7 +41,7 @@ public class Authorization
     /** Global instance of the JSON factory. */
     private static final JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
 
-    public static final String PROJECT_NAME = "agilecrmbeta";
+    public static final String PROJECT_NAME = "agile-crm-cloud";
 
     public static Credential credentials = null;
 
@@ -69,10 +69,10 @@ public class Authorization
     {
 	logger.info(System.getProperty("user.dir"));
 
-	logger.info(System.getProperty("user.dir") + "/credentials/client_secrets.json");
+	logger.info(System.getProperty("user.dir") + "/credentials/live/client_secrets.json");
 
 	FileInputStream f = new FileInputStream(new File(System.getProperty("user.dir")
-		+ "/credentials/client_secrets.json"));
+		+ "/credentials/live/client_secrets.json"));
 	logger.info(f.toString());
 	// load client secrets
 	GoogleClientSecrets clientSecrets = GoogleClientSecrets.load(JSON_FACTORY, new InputStreamReader(f));
@@ -136,5 +136,18 @@ public class Authorization
 	}
 
 	return null;
+    }
+
+    public static void main(String[] args)
+    {
+	try
+	{
+	    getCredentials();
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	}
+
     }
 }

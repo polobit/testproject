@@ -94,7 +94,7 @@ public class TaskletThread implements Work
 		{
 		    try
 		    {
-			taskqueue.tasks().delete("s~agilecrmbeta", queueName, task.getId())
+			taskqueue.tasks().delete("s~agile-crm-cloud", queueName, task.getId())
 				.queue(batchRequest, getBatchCallback());
 		    }
 
