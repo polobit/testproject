@@ -47,15 +47,20 @@ function initializeOnlineCalendarListners(el){
 				console.log(business_hours);
 
 			// $("#schedule-preferences").html(getRandomLoadingImg());
-			$.ajax({ url : '/core/api/scheduleprefs', type : 'PUT', contentType : 'application/json', async : false, data : JSON.stringify(json),
-				success : function()
-				{
-					setTimeout(function()
+				$.ajax({ url : '/core/api/scheduleprefs', type : 'PUT', contentType : 'application/json', async : false, data : JSON.stringify(json),
+					success : function()
 					{
+						setTimeout(function()
+						{
+							enable_save_button($(saveBtn));
+						}, 2000);
+						$('#error_message').empty();
+					}, error : function(error)
+					{
+						$('#error_message').html("There was an error in saving your settings. Please try again in a minute.");
 						enable_save_button($(saveBtn));
 						eraseCookie("BUFFER_TIME_UNIT");
 					} });
-
 		});
 
 $("#online-cal-listners").on("click","#edit-schedule-id", function(e){
@@ -135,26 +140,6 @@ $("#online-cal-listners").on("click","#save-scheduleurl", function(e){
 				} });
 
 		});
-
-}
-
-					},
-					error : function(error)
-					{
-
-						console.log(error);
-						$('#schedule_error_message').html(
-								'Something went wrong as your schedule url was not updated. Please try again in few hours. Error: ' + error.statusText);
-						$('#schedule_error_message').fadeIn('slow');
-						setTimeout(function()
-						{
-							$('#schedule_error_message').fadeOut('slow');
-						}, 2000);
-						enable_save_button($(saveBtn));
-						return;
-					} });
-
-			});
 	
 	$("#online-cal-listners").on("click","#calendar_advanced", function(e)
 	{

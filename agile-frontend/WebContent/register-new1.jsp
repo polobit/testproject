@@ -1,3 +1,4 @@
+<%@page import="com.agilecrm.util.RegisterUtil"%>
 <%@page import="com.agilecrm.user.RegisterVerificationServlet"%>
 <%@page import="org.apache.commons.lang.StringUtils"%>
 <%@page import="com.agilecrm.util.VersioningUtil"%>
@@ -170,8 +171,8 @@ if(isSafari && isWin)
 </div>
   </div>
   
-  <a class="carousel-control left" href="#myCarousel" data-slide="prev">‹</a>
-  <a class="carousel-control right" href="#myCarousel" data-slide="next">›</a>
+  <a class="carousel-control left" href="#myCarousel" data-slide="prev">ï¿½</a>
+  <a class="carousel-control right" href="#myCarousel" data-slide="next">ï¿½</a>
 </div>
 </div>
 </div>

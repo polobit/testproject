@@ -123,15 +123,13 @@ function initializeReportsListeners(){
 	/*
 	 * author jaagdeesh
 	 */
-
-	$("#report-dashlat-navigate").die().live('click', function(e)
+	$('#reports-listerners-container').on('click', '#report-dashlat-navigate', function(e)
 	{
 		e.preventDefault();
 		Backbone.history.navigate("add-dashlet", { trigger : true });
 
 	});
 
-	$("#activity_advanced").die().live('click', function(e)
 	$('#reports-listerners-container').on('click', '#activity_advanced', function(e) 
 	{
 		e.preventDefault();
@@ -157,48 +155,42 @@ function initializeReportsListeners(){
 
 	});
             
-			$('#reports-listerners-container').on('shown', '#report-advanced-block', function(e)
-			{
-				$('#report_advanced').html('<span><i class="icon-minus"></i></span> Advanced');
+	$('#reports-listerners-container').on('shown', '#report-advanced-block', function(e)
+	{
+		$('#report_advanced').html('<span><i class="icon-minus"></i></span> Advanced');
 
 	});
 			
-			$('#reports-listerners-container').on('hidden', '#report-advanced-block', function(e)
-			{
-				$('#report_advanced').html('<span><i class="icon-plus"></i></span> Advanced');
-			});
-			
-			$('#reports-listerners-container').on('change', '#duration', function(e)
-					{
-						var frequency = $("#duration").val();
-						if (frequency == "DAILY")
-						{
-							$("#contact_report_weekday").css("display", "none");
-							$("#contact_report_day").css("display", "none");
-							$("#contact_report_time").css("display", "block");
-
-	$("#duration").die().live('change', function(e)
+	$('#reports-listerners-container').on('hidden', '#report-advanced-block', function(e)
 	{
-		var frequency = $("#duration").val();
-		if (frequency == "DAILY")
-		{
-			$("#contact_report_weekday").css("display", "none");
-			$("#contact_report_day").css("display", "none");
-			$("#contact_report_time").css("display", "block");
+		$('#report_advanced').html('<span><i class="icon-plus"></i></span> Advanced');
+	});
+	
+	$('#reports-listerners-container').on('change', '#duration', function(e)
+			{
+				var frequency = $("#duration").val();
+				if (frequency == "DAILY")
+				{
+					$("#contact_report_weekday").css("display", "none");
+					$("#contact_report_day").css("display", "none");
+					$("#contact_report_time").css("display", "block");
 
-		}
-		else if (frequency == "WEEKLY")
-		{
-			$("#contact_report_day").css("display", "none");
-			$("#contact_report_time").css("display", "block");
-			$("#contact_report_weekday").css("display", "block");
+				}
+				else if (frequency == "WEEKLY")
+				{
+					$("#contact_report_day").css("display", "none");
+					$("#contact_report_time").css("display", "block");
+					$("#contact_report_weekday").css("display", "block");
 
-		}
-		else if (frequency == "MONTHLY")
-		{
-			$("#contact_report_weekday").css("display", "none");
-			$("#contact_report_time").css("display", "block");
-			$("#contact_report_day").css("display", "block");
+				}
+				else if (frequency == "MONTHLY")
+				{
+					$("#contact_report_weekday").css("display", "none");
+					$("#contact_report_time").css("display", "block");
+					$("#contact_report_day").css("display", "block");
+
+				}
+	});
 }
 
 function reportsContactTableView(base_model, customDatefields, view)

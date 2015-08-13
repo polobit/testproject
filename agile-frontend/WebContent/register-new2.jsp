@@ -216,8 +216,8 @@ $(document).ready(function(){
 	        $(".custom-error").hide();
 	  } else {
 	     $(".custom-error").show();
-	  }
-	});
+	  
+}	});
 
 	$("#login_phone_number").intlTelInput({
 				utilsScript: "lib/phonenumber-lib/utils.js",

@@ -12,7 +12,7 @@ $(function()
 	/**
 	 * Update the milestones list when the pipeline is changed in the modal.
 	 */
-	$('#content').on('change', '#pipeline', function(e)
+	$('#opportunityUpdateModal, #opportunityModal').on('change', '#pipeline', function(e)
 	{
 		var el = $(this).closest('form');
 		$('#milestone', el).closest('div').find('.loading-img').show();
@@ -24,13 +24,13 @@ $(function()
 		});
 	});
 
-	$('#content').on('click', '#opportunity_archive', function(e)
+	$('#opportunityUpdateModal, #opportunityModal').on('click', '#opportunity_archive', function(e)
 	{
 		e.preventDefault();
 		$('#archived', $('#opportunityUpdateForm')).attr('checked', 'checked');
 		$("#opportunityUpdateModal #opportunity_validate").trigger('click');
 	});
-	$('#content').on('click', '#opportunity_unarchive', function(e)
+	$('#opportunityUpdateModal, #opportunityModal').on('click', '#opportunity_unarchive', function(e)
 	{
 		e.preventDefault();
 		$('#archived', $('#opportunityUpdateForm')).removeAttr('checked');
@@ -41,7 +41,7 @@ $(function()
 	/**
 	 * Validates deal and saves
 	 */
-	$('#content').on('click', '#opportunity_validate', function(e)
+	$('#opportunityUpdateModal, #opportunityModal').on('click', '#opportunity_validate', function(e)
 	{
 		e.preventDefault();
 

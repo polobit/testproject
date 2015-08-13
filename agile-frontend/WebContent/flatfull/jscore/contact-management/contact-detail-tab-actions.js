@@ -72,8 +72,7 @@ $(function()
 		populateUsersInUpdateActivityModal(value);
 	});
 
-
-	$(".complete-task").die().live('click', function(e)
+	$('body').on('click', '.complete-task', function(e)
 	{
 		e.preventDefault();
 		if ($(this).is(':checked'))

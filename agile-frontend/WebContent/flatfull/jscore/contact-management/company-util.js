@@ -434,13 +434,13 @@
 		 * If default filter is selected, removes filter cookies an load contacts
 		 * with out any query condition
 		 */
-		$('.default_company_filter').die().live('click', function(e)
+		$('.default_company_filter').on('click', function(e)
 		{
 			e.preventDefault();
 			revertToDefaultCompanies();
 		});
 		
-		$('#companies-filter').die().live('click', function(e)
+		$('#companies-filter').on('click', function(e)
 		{
 
 			e.preventDefault();
@@ -454,7 +454,7 @@
 			return;
 		});
 		
-		$('.company_static_filter').die().live('click', function(e)
+		$('.company_static_filter').on('click', function(e)
 		{
 
 			e.preventDefault();
@@ -480,14 +480,14 @@
 			// now filters will work only on contact, not company
 		});
 		
-		$('#comp-sort-by-created_time-desc').die().live('click',function(e){
+		$('#comp-sort-by-created_time-desc').on('click',function(e){
 			e.preventDefault();
 			createCookie('company_sort_field',$(this).attr('data'));
 			COMPANIES_HARD_RELOAD=true;
 			App_Companies.companies();
 		});
 		
-		$('#comp-sort-by-created_time-asc').die().live('click',function(e){
+		$('#comp-sort-by-created_time-asc').on('click',function(e){
 			e.preventDefault();
 			createCookie('company_sort_field',$(this).attr('data'));
 			COMPANIES_HARD_RELOAD=true;
@@ -709,7 +709,7 @@
 		
 		// Adding contact when user clicks Add contact button under Contacts tab in
 		// Company Page
-		$(".contact-add-contact").die().live('click', function(e)
+		$(".contact-add-contact").on('click', function(e)
 		{
 			e.preventDefault();
 
@@ -731,7 +731,7 @@
 			$('#personModal').modal('show');
 		});
 		
-		$('#contactDetailsTab a[href="#company-contacts"]').die().live('click', function(e)
+		$('#contactDetailsTab a[href="#company-contacts"]').on('click', function(e)
 				{
 					e.preventDefault();
 					fill_company_related_contacts(App_Companies.companyDetailView.model.id, 'company-contacts');
@@ -741,7 +741,7 @@
 		 * Fetches all the deals related to the contact and shows the deals
 		 * collection as a table in its tab-content, when "Deals" tab is clicked.
 		 */
-		$('#contactDetailsTab a[href="#company-deals"]').die().live('click', function(e)
+		$('#contactDetailsTab a[href="#company-deals"]').on('click', function(e)
 		{
 			e.preventDefault();
 			save_contact_tab_position_in_cookie("deals");
@@ -751,7 +751,7 @@
 		/**
 		 * Fetches all the cases related to the contact and shows the collection.
 		 */
-		$('#contactDetailsTab a[href="#company-cases"]').die().live('click', function(e)
+		$('#contactDetailsTab a[href="#company-cases"]').on('click', function(e)
 		{
 			e.preventDefault();
 			save_contact_tab_position_in_cookie("cases");
@@ -763,7 +763,7 @@
 		 * Fetches all the notes related to the contact and shows the notes
 		 * collection as a table in its tab-content, when "Notes" tab is clicked.
 		 */
-		$('#contactDetailsTab a[href="#company-notes"]').die().live('click', function(e)
+		$('#contactDetailsTab a[href="#company-notes"]').on('click', function(e)
 		{
 			e.preventDefault();
 			save_contact_tab_position_in_cookie("notes");
@@ -775,7 +775,7 @@
 		 * collection as a table in its tab-content, when "Documents" tab is
 		 * clicked.
 		 */
-		$('#contactDetailsTab a[href="#company-documents"]').die().live('click', function(e)
+		$('#contactDetailsTab a[href="#company-documents"]').on('click', function(e)
 		{
 			e.preventDefault();
 			save_contact_tab_position_in_cookie("documents");
@@ -786,14 +786,14 @@
 		 * "click" event of add button of tags form in contact detail view
 		 * Pushes the added tags into tags array attribute of the contact and saves it
 		 */ 
-		$('#company-add-tags').die().live('click', function(e){
+		$('#company-add-tags').on('click', function(e){
 			e.preventDefault();
 			
 		   addTagsToCompany();
 		});
 		
 		// Deletes a contact from database
-		$('#company-actions-delete').die().live('click', function(e){
+		$('#company-actions-delete').on('click', function(e){
 			
 			e.preventDefault();
 			deleteCurrentCompany();
@@ -803,7 +803,7 @@
 		 * Changes, owner of the contact, when an option of change owner drop down
 		 * is selected.   
 		 */
-		$('.company-owner-list').die().live('click', function(){
+		$('.company-owner-list').on('click', function(){
 		
 			$('#change-owner-ul').css('display', 'none');
 			
@@ -813,7 +813,7 @@
 		/**
 		 * Deletes a tag of a contact (removes the tag from the contact and saves the contact)
 		 */ 
-		$('.remove-company-tags').die().live('click', function(e){
+		$('.remove-company-tags').on('click', function(e){
 			e.preventDefault();
 			
 			var tag = $(this).attr("tag");

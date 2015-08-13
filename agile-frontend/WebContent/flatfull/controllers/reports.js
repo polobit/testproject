@@ -69,6 +69,7 @@ var ReportsRouter = Backbone.Router
 		
 		if(!tight_acl.checkPermission('ACTIVITY'))
 			return;
+
 		$("#content").html("<div id='reports-listerners-container'></div>");
 		$("#reports-listerners-container").html(getRandomLoadingImg());
 		
@@ -76,44 +77,31 @@ var ReportsRouter = Backbone.Router
 		var activity_report_add = new Base_Model_View({ url : 'core/api/activity-reports', template : "activity-reports-add", window : "activity-reports", isNew : true,
 			postRenderCallback : function(el)
 			{
+
 				initializeActivityReportsListeners();
 				initializeReportsListeners();
 				if (count != 0)
 					return;
-
-				if (!tight_acl.checkPermission('ACTIVITY'))
-					return;
-
-				$("#content").html(getRandomLoadingImg());
-
-				var count = 0;
-				var activity_report_add = new Base_Model_View({
-					url : 'core/api/activity-reports',
-					template : "activity-reports-add",
-					window : "activity-reports",
-					isNew : true,
-					postRenderCallback : function(el)
+								
+				// Fills owner select element
+				fillSelect("users-list", '/core/api/users', 'domainUser', function()
+				{
+					head.js(LIB_PATH + 'lib/jquery.multi-select.js',CSS_PATH + 'css/businesshours/jquerytimepicker.css', LIB_PATH + 'lib/businesshours/jquerytimepicker.js', function()
 					{
-						if (count != 0)
-							return;
-						// Fills owner select element
-						fillSelect("users-list", '/core/api/users', 'domainUser', function()
-						{
-							head.js(LIB_PATH + 'lib/jquery.multi-select.js',CSS_PATH + 'css/businesshours/jquerytimepicker.css', LIB_PATH + 'lib/businesshours/jquerytimepicker.js', function()
-							{
-								$('#activity-type-list, #users-list',el).multiSelect();
-								$('#ms-activity-type-list .ms-selection', el).children('ul').addClass('multiSelect').attr("name", "activity").attr("id", "activity_type");
-								$('#ms-users-list .ms-selection', el).children('ul').addClass('multiSelect').attr("name", "user_ids").attr("id", "user_ids");
-								++count;
-								if (count > 0)
-									$("#reports-listerners-container").html(el);
-									
-									$('.activity_time_timepicker').timepicker({ 'timeFormat': 'H:i ' ,'step': 30});
-									$(".activity_time_timepicker").val("09:00");
-									$("#report_timezone").val(ACCOUNT_PREFS.timezone);
-							});
-						}, '<option value="{{id}}">{{name}}</option>', true, el);
-					} });
+						$('#activity-type-list, #users-list',el).multiSelect();
+						$('#ms-activity-type-list .ms-selection', el).children('ul').addClass('multiSelect').attr("name", "activity").attr("id", "activity_type");
+						$('#ms-users-list .ms-selection', el).children('ul').addClass('multiSelect').attr("name", "user_ids").attr("id", "user_ids");
+						++count;
+						if (count > 0)
+							$("#reports-listerners-container").html(el);
+							
+							$('.activity_time_timepicker').timepicker({ 'timeFormat': 'H:i ' ,'step': 30});
+							$(".activity_time_timepicker").val("09:00");
+							$("#report_timezone").val(ACCOUNT_PREFS.timezone);
+					});
+				}, '<option value="{{id}}">{{name}}</option>', true, el);
+				
+				} });
 
 		$("#reports-listerners-container").html(getRandomLoadingImg());
 		activity_report_add.render();
@@ -128,6 +116,7 @@ var ReportsRouter = Backbone.Router
 	 */
 	activityReportEdit : function(id)
 	{
+
 		if(!tight_acl.checkPermission('REPORT'))
 			return;
 		
@@ -138,51 +127,34 @@ var ReportsRouter = Backbone.Router
 		// Counter to set when script is loaded. Used to avoid flash in page
 		var count = 0;
 
-			/**
-			 * Edits a report by de-serializing the existing report into its
-			 * saving form, from there it can be edited and saved. Populates
-			 * users and loads agile.jquery.chained.min.js to match the
-			 * conditions with the values of input fields.
-			 */
-			activityReportEdit : function(id)
+		// If reports view is not defined, navigates to reports
+		if (!this.activityReports || !this.activityReports.collection || this.activityReports.collection.length == 0 || this.activityReports.collection.get(id) == null)
+		{
+			this.navigate("activity-reports", { trigger : true });
+			return;
+		}
+
+		// Gets a report to edit, from reports collection, based on id
+		var activityReport = this.activityReports.collection.get(id);
+		var report_model = new Base_Model_View({ url : 'core/api/activity-reports', change : false, model : activityReport, template : "activity-reports-add", window : "activity-reports",
+		postRenderCallback : function(el)
 			{
 				initializeActivityReportsListeners();
 				initializeReportsListeners();
 				if (count != 0)
 					return;
-
-				if (!tight_acl.checkPermission('ACTIVITY'))
-					return;
-
-				$("#content").html(getRandomLoadingImg());
-				// Counter to set when script is loaded. Used to avoid flash in
-				// page
-				var count = 0;
-
-				// If reports view is not defined, navigates to reports
-				if (!this.activityReports || !this.activityReports.collection || this.activityReports.collection.length == 0 || this.activityReports.collection
-						.get(id) == null)
-				{
-					this.navigate("activity-reports", { trigger : true });
-					return;
-				}
-
-				// Gets a report to edit, from reports collection, based on id
-				var activityReport = this.activityReports.collection.get(id);
-				var report_model = new Base_Model_View({
-					url : 'core/api/activity-reports',
-					change : false,
-					model : activityReport,
-					template : "activity-reports-add",
-					window : "activity-reports",
-					postRenderCallback : function(el)
-					{
-						if (count != 0)
-							return;
-						fillSelect("users-list", '/core/api/users', 'domainUser', function()
+				fillSelect("users-list", '/core/api/users', 'domainUser', function()
 						{
 							var json = activityReport.toJSON();
-							var time = json.activity_start_time;
+							var time=json.activity_start_time;
+							
+							var frequency=json.frequency;
+							
+							deserializeForm(json,$('#activityReportsForm',el));
+							
+							
+							head.js(LIB_PATH + 'lib/jquery.multi-select.js',CSS_PATH + 'css/businesshours/jquerytimepicker.css', LIB_PATH + 'lib/businesshours/jquerytimepicker.js', function()
+							{
 
 								$('#activity-type-list, #users-list',el).multiSelect();
 								$('#ms-activity-type-list .ms-selection', el).children('ul').addClass('multiSelect').attr("name", "activity").attr("id", "activity_type");
@@ -210,73 +182,33 @@ var ReportsRouter = Backbone.Router
 									$("#activity_report_day").css("display", "none");
 									$("#activity_report_time").css("display", "block");
 
-							deserializeForm(json, $('#activityReportsForm', el));
+								}
+								else if (frequency == "WEEKLY")
+								{
+									$("#activity_report_day").css("display", "none");
+									$("#activity_report_time").css("display", "block");
+									$("#activity_report_weekday").css("display", "block");
 
-							head.js(LIB_PATH + 'lib/jquery.multi-select.js', CSS_PATH + 'css/businesshours/jquerytimepicker.css',
-									LIB_PATH + 'lib/businesshours/jquerytimepicker.js', function()
-									{
+								}
+								else if (frequency == "MONTHLY")
+								{
+									$("#activity_report_weekday").css("display", "none");
+									$("#activity_report_time").css("display", "block");
+									$("#activity_report_day").css("display", "block");
 
-										$('#activity-type-list, #users-list', el).multiSelect();
-										$('#ms-activity-type-list .ms-selection', el).children('ul').addClass('multiSelect').attr("name", "activity").attr(
-												"id", "activity_type");
-										$('#ms-users-list .ms-selection', el).children('ul').addClass('multiSelect').attr("name", "user_ids").attr("id",
-												"user_ids");
-
-										$("#content").html(el)
-										$.each(json.user_ids, function(i, user_id)
-										{
-											$('#users-list').multiSelect('select', user_id);
-											console.log('select user---', user_id);
-										});
-										$.each(json.activity, function(i, activity)
-										{
-											$('#activity-type-list').multiSelect('select', activity);
-											console.log('select activity-------', activity);
-										});
-										$('#ms-activity-type-list .ms-selection').children('ul').addClass('multiSelect').attr("name", "activity").attr("id",
-												"activity_type");
-										$('#ms-users-list .ms-selection').children('ul').addClass('multiSelect').attr("name", "user_ids")
-												.attr("id", "user_ids");
-
-										if (json.report_timezone == null)
-										{
-											$("#report_timezone").val(ACCOUNT_PREFS.timezone);
-										}
-										// based on frequency we are showing and
-										// hideing the time and date and month
-										// fields
-										if (frequency == "DAILY")
-										{
-											$("#activity_report_weekday").css("display", "none");
-											$("#activity_report_day").css("display", "none");
-											$("#activity_report_time").css("display", "block");
-
-										}
-										else if (frequency == "WEEKLY")
-										{
-											$("#activity_report_day").css("display", "none");
-											$("#activity_report_time").css("display", "block");
-											$("#activity_report_weekday").css("display", "block");
-
-										}
-										else if (frequency == "MONTHLY")
-										{
-											$("#activity_report_weekday").css("display", "none");
-											$("#activity_report_time").css("display", "block");
-											$("#activity_report_day").css("display", "block");
-
-										}
-										$('.activity_time_timepicker').timepicker({ 'timeFormat' : 'H:i ', 'step' : 30 });
-
-									});
+								}
+								$('.activity_time_timepicker').timepicker({ 'timeFormat': 'H:i ' ,'step': 30});
+								
+							});
 						}, '<option value="{{id}}">{{name}}</option>', true, el);
+				
+			} });
 
 		$("#reports-listerners-container").html(getRandomLoadingImg());
 		report_model.render();
 
-				$("#content").html(getRandomLoadingImg());
-				report_model.render();
 
+	},
 	
 	/**
 	 * Shows list of reports, with an option to add new report
@@ -319,19 +251,10 @@ var ReportsRouter = Backbone.Router
 
 					head.js(LIB_PATH + 'lib/jquery.multi-select.js' ,CSS_PATH + 'css/businesshours/jquerytimepicker.css', LIB_PATH + 'lib/businesshours/jquerytimepicker.js', function()
 					{
-						// Counter to set when script is loaded. Used to avoid
-						// flash in
-						// page
-						if (count != 0)
-							return;
-						fillSelect("custom-fields-optgroup", "core/api/custom-fields/scope?scope=CONTACT", undefined, function()
-						{
 
-							head.js(LIB_PATH + 'lib/jquery.multi-select.js', CSS_PATH + 'css/businesshours/jquerytimepicker.css',
-									LIB_PATH + 'lib/businesshours/jquerytimepicker.js', function()
-									{
+						$('#multipleSelect', el).multiSelect({ selectableOptgroup : true });
 
-										$('#multipleSelect', el).multiSelect({ selectableOptgroup : true });
+						$('.ms-selection', el).children('ul').addClass('multiSelect').attr("name", "fields_set").attr("id", "fields_set").sortable();
 
 						++count;
 						if (count > 1)
@@ -353,13 +276,12 @@ var ReportsRouter = Backbone.Router
 					});
 				});
 
-						
+			} });
+
 		$("#reports-listerners-container").html(getRandomLoadingImg());
 		report_add.render();
-
 	},
 				
-
 	/**
 	 * Edits a report by de-serializing the existing report into its saving
 	 * form, from there it can be edited and saved. Populates users and loads
@@ -382,8 +304,7 @@ var ReportsRouter = Backbone.Router
 				initializeReportsListeners();
 				if (count != 0)
 					return;
-				}
-
+				
 				// Gets a report to edit, from reports collection, based on id
 				
 					fillSelect("custom-fields-optgroup", "core/api/custom-fields/scope?scope=CONTACT", undefined, function()

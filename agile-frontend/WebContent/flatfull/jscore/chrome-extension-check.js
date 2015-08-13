@@ -1,4 +1,4 @@
-$(".agent-popup-alert-dismiss").die().live('click', function(event)
+$("body").on('click', '.agent-popup-alert-dismiss', function(event)
 {
 	createCookie('CHORME_EXTENSION_DOWNLOAD', false);
 	$("#chrome_extension").remove();

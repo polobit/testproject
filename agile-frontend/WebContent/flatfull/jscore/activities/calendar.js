@@ -718,6 +718,18 @@ function today()
 {
 	fullCal.fullCalendar('today');
 }
+
+$("body").on('click', '.agendaDayWeekMonth', function()
+{
+	currentView = $(this).attr('id');
+	fullCal.fullCalendar('changeView', currentView);
+	$(this).parent().find('button').each(function()
+	{
+		if ($(this).attr('id') == currentView)
+			$(this).addClass('bg-light');
+		else
+			$(this).removeClass('bg-light');
+	});
 	if (currentView == "agendaDay" || currentView == "agendaWeek")
 	{
 		fullCal.fullCalendar('option', 'contentHeight', 575);
@@ -726,6 +738,11 @@ function today()
 	{
 		fullCal.fullCalendar('option', 'contentHeight', 400);
 	}
+
+});
+
+
+	
 
 function getCalendarUsersDetails()
 {
