@@ -2,7 +2,7 @@
 <%@page import="org.apache.commons.lang.StringUtils"%>
 <%@page import="com.agilecrm.user.UserPrefs"%>
 <%@page import="com.agilecrm.user.util.UserPrefsUtil"%>
-<html lang="en">
+<html lang="en"   style = "overflow-y: hidden;">
 
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -30,25 +30,26 @@
 	%>
 	
 	<!-- Bootstrap  -->
-	<link rel="stylesheet" type="text/css"	href="<%= CSS_PATH%>css/bootstrap-<%=template%>.min.css" />
-	<link rel="stylesheet" type="text/css"	href="<%= CSS_PATH%>css/bootstrap-responsive.min.css" />
+	<link rel="stylesheet" type="text/css" href="flatfull/css/bootstrap.css">
+	<link rel="stylesheet" type="text/css"	href="<%= CSS_PATH%>flatfull/css/bootstrap-responsive.min.css" />
 	
 	<!-- Fancy box -->
-	<link rel="stylesheet" type="text/css" href="<%= CSS_PATH%>css/jquery.fancybox.css?v=2.1.5" media="screen" />
-
+	<link rel="stylesheet" type="text/css" href="<%= CSS_PATH%>flatfull/css/jquery.fancybox.css?v=2.1.5" media="screen" />
+<link rel="stylesheet" type="text/css" href="flatfull/css/agilecrm.css?_=sandbox.1">
+	<link rel="stylesheet" type="text/css" href="flatfull/css/app.css">
+	<link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
 	<title>AgileCRM Email Templates</title>
-
-	<script type="text/javascript" src="<%= LIB_PATH%>lib/jquery.min.js"></script>
+	<script type="text/javascript" src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
 	<script type="text/javascript" src="<%= LIB_PATH%>flatfull/lib/jquery-new/jquery.redirect.js"></script>
 	
 	<script type="text/javascript" src="moment.js"></script>
-	<script type="text/javascript" src="<%= LIB_PATH%>lib/handlebars-1.0.0.beta.6-min.js"></script>
+	<script type="text/javascript" src="<%= LIB_PATH%>flatfull/lib/handlebars-1.0.0.beta.6-min.js"></script>
 	
-	<script type="text/javascript" src="<%= LIB_PATH%>lib/bootstrap.min.js"></script>
+	<script type="text/javascript" src="<%= LIB_PATH%>flatfull/lib/bootstrap.js"></script>
 
     <!-- Add fancyBox main JS and CSS files -->
-	<script type="text/javascript" src="<%= LIB_PATH%>lib/jquery.fancybox.js?v=2.1.5"></script>
-	<link rel="stylesheet" type="text/css" href="/css/agilecrm.css?_=sandbox.1">
+	<%-- <script type="text/javascript" src="<%= LIB_PATH%>flatfull/lib/jquery.fancybox.js?v=2.1.5"></script> --%>
+	
 	
 	<style>
 		 div.theme-preview
@@ -90,15 +91,37 @@
 </head>
 
 <body>
-<div class="container">
+
+<div id="agilecrm-container">
+	<div id="content" class="app-content-body" style = "background-color:#edf1f2 !important">
+		<div>
+			<div class="custom-animated custom-fadeInUp">
+				<div class="wrapper-md lter b-b">
+					<div class="row">
+   	 					<div class="col-sm-12 col-md-12">
+   	 					<div id="preview-container" class="span12">
+							<!-- Container for theme previews -->
+							<div id="preview-container-title" class="page-header"></div>
+							<div id="preview-container-content"></div>
+						</div>
+   	 					</div>
+   	 				</div>
+   	 			</div>
+   	 		</div>
+   	 	</div>
+   	</div>
+</div>
+
+
+<!-- <div class="container">
 	<div class="row">
 		<div id="preview-container" class="span12">
-			<!-- Container for theme previews -->
+			Container for theme previews
 			<div id="preview-container-title" class="page-header"></div>
 			<div id="preview-container-content"></div>
 		</div>
 	</div>
-</div>
+</div> -->
 <script>
 
 // Global variable to reuse obtained email templates json
@@ -133,7 +156,7 @@ $(function(){
 		$('.tablerows_clicked').die().live('click', function(e){
 			console.log("bhasuri");
 			var element = e.currentTarget;
-			load_in_editor($(element).attr("data"),"campaign_template");
+			/* load_in_editor($(element).attr("data"),"campaign_template"); */
 		});
 		 // When any theme is clicked, opens respective layouts
 		 $('div.theme-preview>a').die().live('click', function(e){
@@ -170,6 +193,9 @@ $(function(){
         	// Init fancy on layouts
         	show_fancy_box(layouts);
        });
+		 
+		 
+		 
        
 });
 
@@ -203,9 +229,10 @@ function render_theme_previews()
 	var textarea_id = '<%= id%>';
 	
 	var html_link = '<span style="display:inline; float: right; margin-top: -32px;">'
-					+'<a class="btn" href="cd_tiny_mce.jsp?id='+textarea_id+'">'
+					+'<a class="btn btn-sm  btn-default" href="cd_tiny_mce.jsp?id='+textarea_id+'">'
 						+'Create your own'
 					+'</a></span>'
+					
 	
 	$('#preview-container-title').html(title + html_link);
 	
@@ -296,6 +323,16 @@ function show_email_templates(){
 			var el1 = getTemplate('campaign_templates1', CAMPAIGN_EMAIL_NODES2);
 			
 			$('#preview-container-content').prepend(el1);
+				
+				$('.campaign-templates-panel').on('hidden.bs.collapse', function (e) {
+					var current_target = e.currentTarget;
+					$(current_target).find('.icon-minus').toggleClass('icon-plus icon-minus');
+			});
+				$('.campaign-templates-panel').on('show.bs.collapse', function (e) {
+					var current_target = e.currentTarget;
+					$(current_target).find('.icon-plus').toggleClass('icon-plus icon-minus');
+		
+				});
 		}
 		
 		$.getJSON(location.origin + '/core/api/email/templates', function(templates){
@@ -345,6 +382,7 @@ function get_email_nodes(workflows){
 				CAMPAIGN_EMAIL_NODES[node.id]=node;	
 		}
 		});
+		if(CAMPAIGN_EMAIL_NODES1.length)
 		CAMPAIGN_EMAIL_NODES2[workflow.id]=CAMPAIGN_EMAIL_NODES1;
 		CAMPAIGN_EMAIL_NODES1 = [];
 		
@@ -445,7 +483,10 @@ Handlebars.registerHelper('epochToHumanDate_eachkeys', function(format, value){
 	});
 	Handlebars.registerHelper('get_campaign_name', function(value, campare_with, options){
 		var campaign_details = value[0];
+		if(campaign_details)
 		return campaign_details.campaign_name;
+		else 
+			return "";
 		
 	})
 
@@ -459,7 +500,17 @@ Handlebars.registerHelper('epochToHumanDate_eachkeys', function(format, value){
 		var campaign_details = value[0];
 		return campaign_details.created_time;
 		
-	})
+	});
+	
+	function collapse_it(event)
+	{
+		console.log(event);
+		$('div>.'+event+'>a>i').toggleClass('icon-plus icon-minus');
+		if($('div>.'+event+'>a>i').hasClass('icon-plus'))
+		$('tr.'+event).addClass('hide')
+		else
+		$('tr.'+event).removeClass('hide')
+	}
 </script>
 
 <!-- Preview Templates  -->
@@ -472,7 +523,7 @@ Handlebars.registerHelper('epochToHumanDate_eachkeys', function(format, value){
 {{/unless}}
 
 {{#if this}}
-	<div class="span12">
+	<div class="span11">
 		<div class="page-header">
 			<h3>{{label}}</h3>
 		</div>
@@ -499,7 +550,7 @@ Handlebars.registerHelper('epochToHumanDate_eachkeys', function(format, value){
 </script>
 
 <script id="user_templates-template" type="text/x-handlebars-template">
-<div class="span12"><div class="page-header">
+<div class="span11"><div class="page-header">
 <h3>User Email templates</h3>
 </div>
 <div>
@@ -545,7 +596,7 @@ Handlebars.registerHelper('epochToHumanDate_eachkeys', function(format, value){
 </script>
 
 <script id="campaign_templates1-template" type="text/x-handlebars-template">
-<div class="span12"><div class="page-header">
+<div class="span11"><div class="page-header">
 <h3>Campaign Templates</h3>
 </div>
 <div>
@@ -563,41 +614,81 @@ Handlebars.registerHelper('epochToHumanDate_eachkeys', function(format, value){
 <tbody id="settings-email-templates-model-list" route="email-template/" class="agile-edit-row">
 {{#eachkeys this}}
 
-<tr onClick = 'load_in_editor("{{key}}","user_template")' style="cursor:pointer">
-
 
 {{#if_greater value.length "1"}}
+<tr onClick = 'load_in_editor1("{{key}}","user_template")' style="cursor:pointer">
 <td class='data hide' data='{{value.id}}'>{{value.id}}</td>
-<td>
-		<div class="table-resp">
-    		{{get_campaign_name value}}
+	<td>
+		<div class="table-resp" >
+    		<div style = "text-overflow: ellipsis;  white-space: nowrap;  overflow: hidden;width: 80%;float: left;">
+				{{get_campaign_name value}}
+			</div>
+			<div style = "float: left;" class = "id_{{key}}" >
+    			<a href="#" style="float: right;" onclick = "collapse_it('id_{{key}}')"><i class="icon-plus"></i></a>
+			</div>
+    	</div>
     	</div>
     </td> 
     <td>
-    	<div class="table-resp">
-    		<a href="#" class="multiple-add"><i class="icon-plus"></i></a>
-    	</div>
     </td>   
     <td class="text-muted" style="color: #b2b0b1;">
           <div class="text-muted table-resp text-xs"> <i class="fa fa-clock-o m-r-xs"></i>
     	       Created <time class="created_time time-ago" value="{{get_created_time value}}" datetime="{{epochToHumanDate_eachkeys "ddd mmm dd yyyy" value}}">{{epochToHumanDate_eachkeys "ddd mmm dd yyyy" value}}</time>
           </div>
     </td>
-
-
-
-{{else}}
-
+</tr>
 {{#eachkeys value}}
+<tr class = "hide id_{{../key}}">
 <td class='data hide' data='{{key}}'>{{key}}</td>
 <td>
 		<div class="table-resp">
-    		{{value.id}}
+    		<div style = "text-overflow: ellipsis;  white-space: nowrap;  overflow: hidden;float: left;width: 80%;">
+				 
+			</div>
     	</div>
     </td> 
     <td>
     	<div class="table-resp">
-    		{{value.subject}}
+    		{{value.subject}} 
+    	</div>
+    </td>   
+    <td class="text-muted" style="color: #b2b0b1;">
+       {{#if value.created_time}}
+          <div class="text-muted table-resp text-xs"> <i class="fa fa-clock-o m-r-xs"></i>
+    	       Created <time class="created_time time-ago" value="{{value.created_time}}" datetime="{{epochToHumanDate "" value.created_time}}">{{epochToHumanDate "ddd mmm dd yyyy" value.created_time}}</time>
+          </div>
+       {{/if}}
+    </td>
+</tr>
+{{/eachkeys}}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{{else}}
+<tr onClick = 'load_in_editor1("{{key}}","user_template")' style="cursor:pointer">
+{{#eachkeys value}}
+<td class='data hide' data='{{key}}'>{{key}}</td>
+<td>
+		<div class="table-resp">
+    		<div style = "text-overflow: ellipsis;  white-space: nowrap;  overflow: hidden;float: left;width: 80%;">
+				{{value.campaign_name}}
+			</div>
+    	</div>
+    </td> 
+    <td>
+    	<div class="table-resp">
+    		{{value.subject}}vv
     	</div>
     </td>   
     <td class="text-muted" style="color: #b2b0b1;">
@@ -622,7 +713,7 @@ Handlebars.registerHelper('epochToHumanDate_eachkeys', function(format, value){
 </script>
 
 <script id="campaign_templates-template" type="text/x-handlebars-template">
-<div class="span12">
+<div class="span11">
 	<div class="page-header">
 		<h3>Campaign templates</h3>
 	</div>
@@ -632,12 +723,14 @@ Handlebars.registerHelper('epochToHumanDate_eachkeys', function(format, value){
 			<div class="accordion" id="campaigns-accordion">
 				<div id="campaign-names-list">
 					{{#eachkeys this}}
-						<div>
-							<form id="campaign_form_{{key}}" class="form-horizontal m-t-sm m-b-none pipeline" method=post>
-								<div id="{{key}}-campaign-email-subject" class="accordion-group overflow-hidden m-b-xs"  >
-									<div class="accordion-heading" style="background:#f5f5f5;">
-										<h4><a class="accordion-toggle collapsed pull-left text-l-none-hover" style="width:90%" data-toggle="collapse" data-parent="#campaigns-accordion" href="#campaign-name-{{key}}-accordion">{{get_campaign_name value}}</a>
-										</h4>
+						<div  class = "div-striped" style = "  padding: 10px;   margin-bottom: 3px;">
+							<form id="campaign_form_{{key}}" class="form-horizontal m-b-none pipeline" method=post>
+								<div id="{{key}}-campaign-email-subject" class="accordion-group overflow-hidden campaign-templates-panel"  >
+									<div class="accordion-heading">
+											{{get_campaign_name value}}
+											<a class="accordion-toggle collapsed text-l-none-hover" style="width:90%" data-toggle="collapse" data-parent="#campaigns-accordion" href="#campaign-name-{{key}}-accordion">
+											<i class="icon-plus" style="float: right;"></i>
+											</a>
 										<div class="clearfix"></div>
 									</div>
 									<div class="collapse" id="campaign-name-{{key}}-accordion">
@@ -645,15 +738,11 @@ Handlebars.registerHelper('epochToHumanDate_eachkeys', function(format, value){
     										<div class="control-group m-b-none">  	 
 												<div id ="email-subject-{{key}}">
 													<table class="table table-bordered agile-ellipsis-dynamic custom-fields-table m-b-xxs" >
-														<colgroup><col width="50%"><col width="3%"></colgroup>
 														<tbody class="campaigns-tbody ui-sortable">
 															{{#eachkeys value}}
 																<tr class="tablerows_clicked" style="display: table-row;"  data="{{value.id}}">
 																	<td>
 																		<div class="p-l-sm inline-block v-top text-ellipsis" style="width:80%">{{value.subject}}</div>
-																	</td>
-																	<td class="p-r-none">
-																		<div class="m-b-n-xs" style="display:none;"></div>
 																	</td>
 																</tr>
 															{{/eachkeys}}
