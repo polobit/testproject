@@ -3,9 +3,9 @@ cd ../
 
 git stash
 
-git checkout govind_agile
+git checkout govind_agile_merged_sandbox
 
-git pull origin govind_agile
+git pull origin govind_agile_merged_sandbox
 
 ant create-target
 

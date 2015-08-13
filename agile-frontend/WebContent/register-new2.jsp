@@ -7,6 +7,7 @@
 if (request.getAttribute("javax.servlet.forward.request_uri") == null) {
     response.sendRedirect("/register");
 }
+String _AGILE_VERSION = SystemProperty.applicationVersion.get();
 %>
 <!DOCTYPE html>
 <html lang="en">
