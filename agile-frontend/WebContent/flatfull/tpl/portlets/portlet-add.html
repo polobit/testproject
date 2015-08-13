@@ -1,16 +1,16 @@
 <script id="portlets-add-model-template" type="text/html">
-		<!--<div class="show_screeshot pos-rlt " onmouseenter="javascript:showDashlettype(this,'{{remove_spaces name}}');" onmouseleave="javascript:hideDashlettype(this);">-->
-		<div class="show_screeshot"  
-							id="{{remove_spaces name}}">
-		<div class="panel wrapper b-a text-center">
-			<div class="text-md"><i class="portlets-modal-icon icon {{get_portlet_icon name}}"></i>				
-				<b>{{get_portlet_name name}}</b></div><br>
-			<div class="text-flow-ellipsis line-clamp line-clamp-3 m-b widget-text" style="height:60px"  rel="tooltip" title="{{get_portlet_description name}}">
-				{{get_portlet_description name}}
+			<!--<div class="show_screeshot pos-rlt " onmouseenter="javascript:showDashlettype(this,'{{remove_spaces name}}');" onmouseleave="javascript:hideDashlettype(this);">-->
+			<div class="show_screeshot"  
+						id="{{remove_spaces name}}">
+			<div class="panel wrapper b-a text-center">
+				<div class="text-md"><i class="portlets-modal-icon icon {{get_portlet_icon name}}"></i>				
+					<b>{{get_portlet_name name}}</b></div><br>
+				<div class="text-flow-ellipsis line-clamp line-clamp-3 m-b widget-text" style="height:60px"  rel="tooltip" title="{{get_portlet_description name}}">
+					{{get_portlet_description name}}
+				</div>
+			<div><a class="btn btn-sm btn-default add-widget" onclick="javascript:addNewPortlet('{{portlet_type}}','{{remove_spaces name}}');">Add</a></div>
 			</div>
-		<div><a class="btn btn-sm btn-default add-widget" onclick="javascript:addNewPortlet('{{portlet_type}}','{{remove_spaces name}}');">Add</a></div>
-		</div>
-		</div>
+			</div>
 </script>
 <script id="portlets-add-collection-template" type="text/html">
 <div class="bg-light lter b-b wrapper-md">
