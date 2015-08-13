@@ -27,7 +27,12 @@ var PortletsRouter = Backbone.Router
 													individual_tag_name : 'div',
 													postRenderCallback : function(
 															el) {
-
+														if($('#deals').children().length==0)
+															$('#deals').parents('.wrapper-md').hide();
+														if($('#taksAndEvents').children().length==0)
+															$('#taksAndEvents').parents('.wrapper-md').hide();
+														if($('#userActivity').children().length==0)
+															$('#userActivity').parents('.wrapper-md').hide();
 													}
 												});
 
@@ -66,164 +71,159 @@ var PortletsRouter = Backbone.Router
 		});
 // For adding new portlets
 function addNewPortlet(portlet_type, p_name) {
-	var obj = {};
-	var json = {};
-	var curDate = new Date();
-	if (p_name == "FilterBased")
-		obj.name = "Filter Based";
-	else if (p_name == "EmailsOpened")
-		obj.name = "Emails Opened";
-	else if (p_name == "EmailsSent")
-		obj.name = "Emails Sent";
-	else if (p_name == "PendingDeals")
-		obj.name = "Pending Deals";
-	else if (p_name == "Agenda")
-		obj.name = "Agenda";
-	else if (p_name == "TodayTasks")
-		obj.name = "Today Tasks";
-	else if (p_name == "DealsByMilestone")
-		obj.name = "Deals By Milestone";
-	else if (p_name == "ClosuresPerPerson")
-		obj.name = "Closures Per Person";
-	else if (p_name == "DealsWon")
-		obj.name = "Deals Won";
-	else if (p_name == "DealsFunnel")
-		obj.name = "Deals Funnel";
-	else if (p_name == "GrowthGraph")
-		obj.name = "Growth Graph";
-	else if (p_name == "DealsAssigned")
-		obj.name = "Deals Assigned";
-	else if (p_name == "CallsPerPerson")
-		obj.name = "Calls Per Person";
-	else if (p_name == "AgileCRMBlog")
-		obj.name = "Agile CRM Blog";
-	else if (p_name == "TaskReport")
-		obj.name = "Task Report";
-	else if (p_name == "StatsReport")
-		obj.name = "Stats Report";
-	else if (p_name == "Leaderboard")
-		obj.name = "Leaderboard";
-	obj.portlet_type = portlet_type;
-	var max_row_position = 0;
-	if (gridster != undefined)
-		/*
-		 * gridster.$widgets.each(function(){
-		 * if(parseInt($(this).attr("data-row"))>max_row_position)
-		 * max_row_position = parseInt($(this).attr("data-row")) *
-		 * parseInt($(this).attr("data-sizey")); });
-		 */
-		var next_position = gridster.next_position(1, 1);
-	obj.column_position = next_position.col;
-	obj.row_position = next_position.row;
-	obj.size_x = next_position.size_x;
-	obj.size_y = next_position.size_y;
-	if (portlet_type == "CONTACTS" && p_name == "FilterBased")
-		json['filter'] = "myContacts";
-	else if (portlet_type == "CONTACTS" && p_name == "EmailsOpened")
-		json['duration'] = "2-days";
-	else if (portlet_type == "USERACTIVITY" && p_name == "EmailsSent")
-		json['duration'] = "1-day";
-	else if (portlet_type == "CONTACTS" && p_name == "GrowthGraph") {
-		json['tags'] = "";
-		json['frequency'] = 'daily';
-		// json['start-date']=new
-		// Date(curDate.getFullYear(),curDate.getMonth(),curDate.getDate()-6,0,0,0).getTime();
-		// json['end-date']=new
-		// Date(curDate.getFullYear(),curDate.getMonth(),curDate.getDate(),0,0,0).getTime();
-		json['duration'] = "1-week";
-	} else if (portlet_type == "DEALS" && p_name == "PendingDeals") {
-		json['deals'] = "my-deals";
-	} else if (portlet_type == "DEALS"
-			&& (p_name == "DealsByMilestone" || p_name == "DealsFunnel")) {
-		json['deals'] = "my-deals";
-		json['track'] = 0;
-		// json['due-date']=Math.round((new Date()).getTime()/1000);
-	} else if (portlet_type == "DEALS" && p_name == "ClosuresPerPerson") {
-		json['group-by'] = "number-of-deals";
-		json['due-date'] = Math.round((new Date()).getTime() / 1000);
-	} else if (portlet_type == "DEALS" && p_name == "DealsWon")
-		json['duration'] = "1-week";
-	else if (portlet_type == "DEALS" && p_name == "DealsAssigned")
-		json['duration'] = "1-day";
-	else if (portlet_type == "USERACTIVITY" && p_name == "CallsPerPerson") {
-		json['group-by'] = "number-of-calls";
-		json['duration'] = "1-day";
-	} else if (portlet_type == "TASKSANDEVENTS" && p_name == "TaskReport") {
-		json['group-by'] = "user";
-		json['split-by'] = "category";
-		json['duration'] = "1-week";
-		json['tasks'] = "all-tasks";
-	} else if (portlet_type == "USERACTIVITY" && p_name == "StatsReport") {
-		json['duration'] = "yesterday";
-	} else if (portlet_type == "TASKSANDEVENTS" && p_name == "Agenda")
-		json['duration'] = "today-and-tomorrow";
-	else if (portlet_type == "TASKSANDEVENTS" && p_name == "TodayTasks")
-		json['duration'] = "today-and-tomorrow";
-	else if (portlet_type == "RSS" && p_name == "AgileCRMBlog")
-		obj.size_y = 2;
-	else if (portlet_type == "USERACTIVITY" && p_name == "Leaderboard") {
-		json['duration'] = "this-month";
-		var categoryJson = {};
-		categoryJson['revenue'] = true;
-		categoryJson['dealsWon'] = true;
-		categoryJson['calls'] = true;
-		categoryJson['tasks'] = true;
-		json['category'] = categoryJson;
-		obj.size_y = 2;
-		obj.size_x = 2;
+	var obj={};
+	var json={};
+	var curDate=new Date();
+	if(p_name=="FilterBased")
+		obj.name="Filter Based";
+	else if(p_name=="EmailsOpened")
+		obj.name="Emails Opened";
+	else if(p_name=="EmailsSent")
+		obj.name="Emails Sent";
+	else if(p_name=="PendingDeals")
+		obj.name="Pending Deals";
+	else if(p_name=="Agenda")
+		obj.name="Agenda";
+	else if(p_name=="TodayTasks")
+		obj.name="Today Tasks";
+	else if(p_name=="DealsByMilestone")
+		obj.name="Deals By Milestone";
+	else if(p_name=="ClosuresPerPerson")
+		obj.name="Closures Per Person";
+	else if(p_name=="DealsWon")
+		obj.name="Deals Won";
+	else if(p_name=="DealsFunnel")
+		obj.name="Deals Funnel";
+	else if(p_name=="GrowthGraph")
+		obj.name="Growth Graph";
+	else if(p_name=="DealsAssigned")
+		obj.name="Deals Assigned";
+	else if(p_name=="CallsPerPerson")
+		obj.name="Calls Per Person";
+	else if(p_name=="AgileCRMBlog")
+		obj.name="Agile CRM Blog";
+	else if(p_name=="AccountDetails")
+		obj.name="Account Details";
+	else if(p_name=="TaskReport")
+		obj.name="Task Report";
+	else if(p_name=="StatsReport")
+		obj.name="Stats Report";
+	else if(p_name=="Leaderboard")
+		obj.name="Leaderboard";
+	else if(p_name=="RevenueGraph")
+		obj.name="Revenue Graph";
+	else if(p_name=="UserActivities")
+		obj.name="User Activities"
+	obj.portlet_type=portlet_type;
+	var max_row_position=0;
+	if(gridster!=undefined)
+		/*gridster.$widgets.each(function(){
+			if(parseInt($(this).attr("data-row"))>max_row_position)
+				max_row_position = parseInt($(this).attr("data-row")) * parseInt($(this).attr("data-sizey"));
+		});*/
+		var next_position = gridster.next_position(1,1);
+	obj.column_position=next_position.col;
+	obj.row_position=next_position.row;
+	obj.size_x=next_position.size_x;
+	obj.size_y=next_position.size_y;
+	if(portlet_type=="CONTACTS" && p_name=="FilterBased")
+		json['filter']="myContacts";
+	else if(portlet_type=="CONTACTS" && p_name=="EmailsOpened")
+		json['duration']="2-days";
+	else if(portlet_type=="USERACTIVITY" && p_name=="EmailsSent")
+		json['duration']="1-day";
+	else if(portlet_type=="CONTACTS" && p_name=="GrowthGraph"){
+		json['tags']="";
+		json['frequency']='daily';
+		//json['start-date']=new Date(curDate.getFullYear(),curDate.getMonth(),curDate.getDate()-6,0,0,0).getTime();
+		//json['end-date']=new Date(curDate.getFullYear(),curDate.getMonth(),curDate.getDate(),0,0,0).getTime();
+		json['duration']="1-week";
+	}
+	else if(portlet_type=="DEALS" && p_name=="PendingDeals"){
+		json['deals']="my-deals";
+	}
+	else if(portlet_type=="DEALS" && (p_name=="DealsByMilestone" || p_name=="DealsFunnel")){
+		json['deals']="my-deals";
+		json['track']=0;
+		//json['due-date']=Math.round((new Date()).getTime()/1000);
+	}else if(portlet_type=="DEALS" && p_name=="ClosuresPerPerson"){
+		json['group-by']="number-of-deals";
+		json['due-date']=Math.round((new Date()).getTime()/1000);
+	}else if(portlet_type=="DEALS" && p_name=="DealsWon")
+		json['duration']="1-week";
+	else if(portlet_type=="DEALS" && p_name=="DealsAssigned")
+		json['duration']="1-day";
+	else if(portlet_type=="USERACTIVITY" && p_name=="CallsPerPerson"){
+		json['group-by']="number-of-calls";
+		json['duration']="1-day";
+	}else if(portlet_type=="TASKSANDEVENTS" && p_name=="TaskReport"){
+		json['group-by']="user";
+		json['split-by']="category";
+		json['duration']="1-week";
+		json['tasks']="all-tasks";
+	}else if(portlet_type=="USERACTIVITY" && p_name=="StatsReport"){
+		json['duration']="yesterday";
+	}else if(portlet_type=="TASKSANDEVENTS" && p_name=="Agenda")
+		json['duration']="today-and-tomorrow";
+	else if(portlet_type=="TASKSANDEVENTS" && p_name=="TodayTasks")
+		json['duration']="today-and-tomorrow";
+	else if(portlet_type=="ACCOUNT" && p_name=="AccountDetails"){
+      		//json['account']="account";
+	}
+	else if(portlet_type=="RSS" && p_name=="AgileCRMBlog")
+		//else if(portlet_type=="CUSTOMERACTIVITY" && p_name=="CustomerActivities")
+		obj.size_y=2;
+	else if(portlet_type=="USERACTIVITY" && p_name=="Leaderboard"){
+		json['duration']="this-month";
+		var categoryJson={};
+		categoryJson['revenue']=true;
+		categoryJson['dealsWon']=true;
+		categoryJson['calls']=true;
+		categoryJson['tasks']=true;
+		json['category']=categoryJson;
+		obj.size_y=2;
+		obj.size_x=2;
+	}else if(portlet_type=="DEALS" && p_name=="RevenueGraph"){
+		json['duration']="this-quarter";
+		json['track']="anyTrack";
 	}
 	var portlet = new BaseModel();
 	portlet.url = 'core/api/portlets/addPortlet';
-	portlet.set({
-		"prefs" : JSON.stringify(json)
-	}, {
-		silent : true
-	});
+	portlet.set({ "prefs" : JSON.stringify(json) }, { silent : true });
 	var model;
 	var scrollPosition;
-	portlet
-			.save(obj,
-					{
-						success : function(data) {
-							// hidePortletsPopup();
-							model = new BaseModel(data.toJSON());
-							// var el =
-							// $(getTemplate('portlets-collection',model));
-							if ($('#zero-portlets').is(':visible'))
-								$('#zero-portlets').hide();
-							if ($('#no-portlets').is(':visible'))
-								$('#no-portlets').hide();
-							App_Portlets.navigate("dashboard", {
-								trigger : true
-							});
-							// Portlets_View.collection.add(model);
-
-							// scrollPosition =
-							// ((parseInt($('#ui-id-'+model.column_position+'-'+model.row_position).attr('data-row'))-1)*200)+5;
-							// //move the scroll bar for showing the newly added
-							// portlet
-							// window.scrollTo(0,scrollPosition);
-							// //scrollPosition = 0;
-						},
-						error : function(model, response) {
-							hidePortletsPopup();
-							var model = data.toJSON();
-							// var el = $(getTemplate('portlets-model', model));
-							if ($('#zero-portlets').is(':visible'))
-								$('#zero-portlets').hide();
-							if ($('#no-portlets').is(':visible'))
-								$('#no-portlets').hide();
-							Portlets_View.collection.add(model);
-							scrollPosition = ((parseInt($(
-									'#ui-id-' + model.column_position + '-'
-											+ model.row_position).attr(
-									'data-row')) - 1) * 200) + 5;
-							// move the scroll bar for showing the newly added
-							// portlet
-							window.scrollTo(0, scrollPosition);
-							scrollPosition = 0;
-						}
-					});
+	portlet.save(obj, {
+        success: function (data) {
+        	//hidePortletsPopup();
+        	model=new BaseModel(data.toJSON());
+//        	var el = $(getTemplate('portlets-collection',model));
+        	if($('#zero-portlets').is(':visible'))
+        		$('#zero-portlets').hide();
+        	if($('#no-portlets').is(':visible'))
+    			$('#no-portlets').hide();
+        	App_Portlets.navigate("dashboard", { trigger : true });	
+        	//Portlets_View.collection.add(model);
+        	
+//        	scrollPosition = ((parseInt($('#ui-id-'+model.column_position+'-'+model.row_position).attr('data-row'))-1)*200)+5;
+//        	//move the scroll bar for showing the newly added portlet
+//        	window.scrollTo(0,scrollPosition);
+//        	//scrollPosition = 0;
+        },
+        error: function (model, response) {
+        	hidePortletsPopup();
+        	var model=data.toJSON();
+        	//var el = $(getTemplate('portlets-model', model));
+        	if($('#zero-portlets').is(':visible'))
+        		$('#zero-portlets').hide();
+        	if($('#no-portlets').is(':visible'))
+    			$('#no-portlets').hide();
+        	Portlets_View.collection.add(model);
+        	scrollPosition = ((parseInt($('#ui-id-'+model.column_position+'-'+model.row_position).attr('data-row'))-1)*200)+5;
+        	//move the scroll bar for showing the newly added portlet
+        	window.scrollTo(0,scrollPosition);
+        	scrollPosition = 0;
+        }});
+	
 
 }
 function hidePortletsPopup() {
@@ -568,6 +568,8 @@ function hidePortletErrors(ele) {
 	if ($('#' + ele.id).next().is(':visible'))
 		$('#' + ele.id).next().hide();
 }
+
+
 function addWidgetToGridster(base_model) {
 	var add_flag = true;
 	if (gridster != undefined) {
@@ -590,79 +592,79 @@ function addWidgetToGridster(base_model) {
 		}
 	}
 }
-function getStartAndEndDatesOnDue(duration) {
+function getStartAndEndDatesOnDue(duration){
 	var d = new Date();
 
-	// Last 24 Hrs
-	if (duration == "24-hours") {
-		var hrs = (d.setMilliseconds(0) / 1000) - (24 * 60 * 60);
+	//Last 24 Hrs
+	if(duration == "24-hours"){
+		var hrs = (d.setMilliseconds(0)/1000)-(24*60*60);
 		return hrs;
 	}
-	// Current time
-	if (duration == "now")
-		return (d.setMilliseconds(0) / 1000);
+	//Current time
+	if(duration == "now")
+		return (d.setMilliseconds(0)/1000);
 	// Today
 	if (duration == "1-day" || duration == "today")
 		console.log(getGMTTimeFromDate(d) / 1000);
-
+	
 	// This week
-	if (duration == "this-week" || duration == "this-week-start") {
-		if (new Date().getDay() != 0)
-			d.setDate(d.getDate() - (new Date().getDay() - 1));
+	if (duration == "this-week" || duration == "this-week-start"){
+		if(new Date().getDay()!=0)
+			d.setDate(d.getDate() - (new Date().getDay()-1));
 		else
-			d.setDate(d.getDate() - (new Date().getDay() + 6));
+			d.setDate(d.getDate() - (new Date().getDay()+6));
 	}
 	// This week end
-	if (duration == "this-week-end") {
-		if (new Date().getDay() != 0)
-			d.setDate((d.getDate() - (new Date().getDay() - 1)) + 7);
+	if (duration == "this-week-end"){
+		if(new Date().getDay()!=0)
+			d.setDate((d.getDate() - (new Date().getDay()-1))+7);
 		else
-			d.setDate((d.getDate() - (new Date().getDay() + 6)) + 7);
+			d.setDate((d.getDate() - (new Date().getDay()+6))+7);
 	}
-	// Last week start
-	if (duration == "last-week" || duration == "last-week-start")
-		d.setDate(d.getDate() - d.getDay() - 6);
-
-	// Lats week end
-	if (duration == "last-week-end")
-		d.setDate((d.getDate() - d.getDay()) + 1);
-
+	//Last week start
+	if(duration == "last-week" || duration == "last-week-start")
+		d.setDate(d.getDate()-d.getDay()-6);
+	
+	//Lats week end
+	if(duration == "last-week-end")
+		d.setDate((d.getDate()-d.getDay())+1);
+	
 	// 1 Week ago
 	if (duration == "1-week")
 		d.setDate(d.getDate() - 6);
-
+	
 	// 1 Month ago
 	if (duration == "1-month")
 		d.setDate(d.getDate() - 29);
-
+	
 	// This month
 	if (duration == "this-month" || duration == "this-month-start")
 		d.setDate(1);
-
-	// Last month start
-	if (duration == "last-month" || duration == "last-month-start") {
+	
+	//Last month start
+	if(duration == "last-month" || duration == "last-month-start"){
 		d.setDate(1);
-		d.setMonth(d.getMonth() - 1);
+		d.setMonth(d.getMonth()-1);
 	}
-
-	// Lats month end
-	if (duration == "last-month-end") {
-		d.setDate((d.getDate() - d.getDate()) + 1);
+	
+	//Lats month end
+	if(duration == "last-month-end"){
+		d.setDate((d.getDate()-d.getDate())+1);
 		d.setMonth(d.getMonth());
 	}
 
 	// Tomorrow
 	if (duration == "TOMORROW")
 		d.setDate(d.getDate() + 1);
-
+	
 	// Yesterday
 	if (duration == "yesterday")
 		d.setDate(d.getDate() - 1);
-
+	
 	// Last 2 days
 	if (duration == "2-days")
 		d.setDate(d.getDate() - 1);
-
+	
 	// next 7 days
 	if (duration == "next-7-days")
 		d.setDate(d.getDate() + 8);
@@ -684,9 +686,9 @@ function getStartAndEndDatesOnDue(duration) {
 			d.setMonth(9);
 		d.setDate(1);
 	}
-
-	// this quarter end
-	if (duration == "this-quarter-end") {
+	
+	//this quarter end
+	if(duration=="this-quarter-end"){
 		var currentMonth = d.getMonth();
 		if(currentMonth<3)
 			d.setMonth(3);
@@ -700,9 +702,9 @@ function getStartAndEndDatesOnDue(duration) {
 		}
 		d.setDate(1);
 	}
-
-	// last quarter start
-	if (duration == "last-quarter-start") {
+	
+	//last quarter start
+	if(duration=="last-quarter-start"){
 		var currentMonth = d.getMonth();
 		if(currentMonth<3){
 			d.setFullYear(d.getFullYear()-1);
@@ -716,9 +718,9 @@ function getStartAndEndDatesOnDue(duration) {
 			d.setMonth(6);
 		d.setDate(1);
 	}
-
-	// last quarter end
-	if (duration == "last-quarter-end") {
+	
+	//last quarter end
+	if(duration=="last-quarter-end"){
 		var currentMonth = d.getMonth();
 		if(currentMonth<3)
 			d.setMonth(0);
@@ -730,11 +732,11 @@ function getStartAndEndDatesOnDue(duration) {
 			d.setMonth(9);
 		d.setDate(1);
 	}
-
+	
 	// This month end
-	if (duration == "this-month-end") {
+	if (duration == "this-month-end"){
 		d.setDate(1);
-		d.setMonth(d.getMonth() + 1);
+		d.setMonth(d.getMonth()+1);
 	}
 
 	//next quarter start

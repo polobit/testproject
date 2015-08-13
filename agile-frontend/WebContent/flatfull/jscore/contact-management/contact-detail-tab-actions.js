@@ -36,10 +36,7 @@ $(function()
 						$("#updateActivityModal").modal('show');
 
 						$('.update-start-timepicker').val(fillTimePicker(value.start));
-							$('.update-end-timepicker').val(fillTimePicker(value.end));
-		
-
-		$('.update-end-timepicker').val(fillTimePicker(value.end));
+						$('.update-end-timepicker').val(fillTimePicker(value.end));
 
 		if (value.type == "WEB_APPOINTMENT" && parseInt(value.start) > parseInt(new Date().getTime() / 1000))
 		{

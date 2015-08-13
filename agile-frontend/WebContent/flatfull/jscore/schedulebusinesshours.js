@@ -155,8 +155,8 @@ $("#online-cal-listners").on("click","#save-scheduleurl", function(e){
 					} });
 
 			});
-
-	$("#calendar_advanced").die().live('click', function(e)
+	
+	$("#online-cal-listners").on("click","#calendar_advanced", function(e)
 	{
 		e.preventDefault();
 		$("#calendar_advanced span i").toggleClass("fa-minus");
@@ -164,19 +164,18 @@ $("#online-cal-listners").on("click","#save-scheduleurl", function(e){
 
 	});
 
-	$('#calendar_advanced_block').live('shown', function()
+	$("#online-cal-listners").on("shown","#calendar_advanced_block", function(e)
 	{
 		$('#calendar_advanced').html('<span><i class="icon-minus"></i></span> Advanced');
 
 	});
 
-	$('#calendar_advanced_block').live('hidden', function()
+	$("#online-cal-listners").on("hidden","#calendar_advanced_block", function(e)
 	{
 		$('#calendar_advanced').html('<span><i class="icon-plus"></i></span> Advanced');
 	});
 
-	$("#bufferTime").die().live('keypress', function(e)
-	{
+	$("#online-cal-listners").on("keypress","#bufferTime", function(e){
 		// if the letter is not digit then display error and don't type anything
 		if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57))
 		{
@@ -186,7 +185,7 @@ $("#online-cal-listners").on("click","#save-scheduleurl", function(e){
 		}
 	});
 
-	$(".onlineCalendarAddToSite").die().live('click', function(e)
+	$("#online-cal-listners").on("click",".onlineCalendarAddToSite", function(e)
 	{
 		e.preventDefault();
 
@@ -194,7 +193,7 @@ $("#online-cal-listners").on("click","#save-scheduleurl", function(e){
 		onlineCalendarModel.modal('show');
 	});
 
-	$(".getStartedToAddToSite").die().live('click', function(e)
+	$("#online-cal-listners").on("click",".getStartedToAddToSite", function(e)
 	{
 		e.preventDefault();
 		Backbone.history.navigate("webrules-add", { trigger : true });
@@ -212,7 +211,7 @@ $("#online-cal-listners").on("click","#save-scheduleurl", function(e){
 
 	});
 
-});
+}
 
 function getHtmlContent(callback)
 {

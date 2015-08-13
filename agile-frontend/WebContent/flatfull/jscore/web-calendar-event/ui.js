@@ -7,7 +7,7 @@ $(function()
 	var MIDNIGHT_END_TIME = null;
 
 	// Select slot duration 60/30/15min
-	$(".selected_meeting_time").die().live('click', function(e)
+	$('body').on('click', '.selected_meeting_time', function(e)
 	{
 		// e.preventDefault();
 

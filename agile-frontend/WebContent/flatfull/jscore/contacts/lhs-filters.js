@@ -200,7 +200,7 @@ $('#conatcts-listeners-conatainer').on('change', '#lhs-contact-filter-form selec
 	}
 });
 
-$('#conatcts-listeners-conatainer').on('blur keyup', '#lhs-contact-filter-form #RHS input', function(e)
+$('#conatcts-listeners-conatainer').on('blur keyup', '#lhs-contact-filter-form #RHS input:not(.date)', function(e)
 {
 	if (e.type == 'focusout' || e.keyCode == '13')
 	{
@@ -235,7 +235,7 @@ $('#conatcts-listeners-conatainer').on('blur keyup', '#lhs-contact-filter-form #
 	}
 });
 
-$('#lhs-contact-filter-form #RHS input.date').die().live("change keyup", function(e)
+$('#conatcts-listeners-conatainer').on('change keyup', '#lhs-contact-filter-form #RHS input.date', function(e)
 {
 	if (e.type == 'change' || e.keyCode == '13')
 	{
@@ -270,7 +270,7 @@ $('#lhs-contact-filter-form #RHS input.date').die().live("change keyup", functio
 	}
 });
 
-$('#lhs-contact-filter-form #RHS select').die().live("change", function(e)
+$('#conatcts-listeners-conatainer').on('change', '#lhs-contact-filter-form #RHS select', function(e)
 {
 	if ($(this).parent().next().attr("id") == "RHS_NEW")
 	{
@@ -327,7 +327,7 @@ $('#conatcts-listeners-conatainer').on('change', '#lhs-contact-filter-form #RHS_
 	$(this).blur();
 });
 
-$('#conatcts-listeners-conatainer').on('blur keyup', '#lhs-contact-filter-form #RHS_NEW input', function(e)
+$('#conatcts-listeners-conatainer').on('blur keyup', '#lhs-contact-filter-form #RHS_NEW input:not(.date)', function(e)
 {
 	if (e.type == 'focusout' || e.keyCode == '13')
 	{
@@ -360,7 +360,7 @@ $('#conatcts-listeners-conatainer').on('blur keyup', '#lhs-contact-filter-form #
 	}
 });
 
-$('#lhs-contact-filter-form #RHS_NEW input.date').die().live("change keyup", function(e)
+$('#conatcts-listeners-conatainer').on('change keyup', '#lhs-contact-filter-form #RHS_NEW input.date', function(e)
 {
 	if (e.type == 'change' || e.keyCode == '13')
 	{
@@ -392,6 +392,8 @@ $('#lhs-contact-filter-form #RHS_NEW input.date').die().live("change keyup", fun
 		}
 	}
 });
+
+}
 /**
  * Added tags typeahead on fields
  * 

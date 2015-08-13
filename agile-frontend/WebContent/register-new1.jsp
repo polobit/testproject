@@ -10,9 +10,17 @@
 		return;
 	}
 
+  if(RegisterUtil.isWrongURL(request))
+	{
+	    RegisterUtil.redirectToRegistrationpage(request, response);
+	    return;
+	}
+
   String _source = request.getParameter("_source");
   
   String registered_email = request.getParameter("email");
+
+String _AGILE_VERSION = SystemProperty.applicationVersion.get();
 
   if(registered_email != null)
   {
@@ -95,7 +103,8 @@ if(isSafari && isWin)
 <div class="list-group list-group-sm" style="margin-bottom:4px;">
 <div class="list-group-item">
 <input class="input-xlarge field required form-control no-border" name='name'
-											type="text" required maxlength="50" minlength="3" pattern="^[A-Za-z_]{3,50}$"
+											type="text" required maxlength="50" minlength="3" title="Name should be at least 3 characters" 
+                      pattern="[a-zA-Z0-9\s]+"
 											placeholder="Full Name" autocapitalize="off" autofocus>
 
 </div>
@@ -104,7 +113,7 @@ if(isSafari && isWin)
 <div class="list-group-item">
 <input class="input-xlarge field required email form-control no-border"
 			id="login_email" name='email' type="email" required maxlength="50"
-			minlength="6" value="<%=email%>" placeholder="Email Address (User ID)"
+			minlength="6" value="<%=email%>"  placeholder="Email Address (User ID)"
 			autocapitalize="off">
 </div>
 
@@ -121,8 +130,7 @@ if(isSafari && isWin)
 
 <div class="text-white m-b-md text-left text-xs">
      By clicking sign up, I agree to Agile CRM's <a
-											href="https://www.agilecrm.com/terms.html" class="text-u-l" target="_blank"
-											style="color:#fff;">Terms of Service</a>
+											href="https://www.agilecrm.com/terms.html" class="terms-field" target="_blank">Terms of Service</a>
 									</div> 		
 
 <input type='submit' id="register_account" value="Sign Up" class='btn btn-lg btn-primary btn-block'>
@@ -143,7 +151,7 @@ if(isSafari && isWin)
   <div class="active item m-l-none">
   	<div style="margin: 0 auto 10px; width: 200px;">
 	<div class="pull-left tweet-img-pricing">
-		<!-- <img title="Nicolas Woirhaye" src="/img/testimonial-nicolas-reg.png">   -->
+		<img title="Nicolas Woirhaye" src="/img/testimonial-nicolas-reg.png">
 	</div>
 	<div class="pull-left tweet-txt">
 		<span class="tweet-arrow"></span>
@@ -169,7 +177,6 @@ if(isSafari && isWin)
 </div>
 </div>
 </div>
-
 <!-- JQUery Core and UI CDN -->
 <script type='text/javascript' src='//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js'></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/jstimezonedetect/1.0.4/jstz.min.js" type="text/javascript"></script>

@@ -49,6 +49,11 @@ body {
 	  height: 31px!important;
 }
 
+.custom-error {
+	color: rgb(199, 73, 73);
+	display: none;
+}
+
 </style>
 <link rel="stylesheet" type="text/css" href="/flatfull/css/bootstrap.v3.min.css" />
 <link rel="stylesheet" type="text/css" href="/flatfull/css/app.css" />
@@ -113,18 +118,18 @@ This is where you and your users will log in to your account
 </div>
 
 <div class="form-group m-b-xs" style="margin-top: 18px;">
-<div class="col-sm-offset-3 col-sm-9 text-base"> We will create unique experience based on your company and role</div>
+<div class="col-sm-offset-3 col-sm-9 text-base"> We will create unique experience based on your role and company </div>
 </div>
-<div class="form-group">
+<div class="form-group m-b-none">
 <label class="col-sm-3 control-label"> Role & Company</label>
-<div class="col-sm-3">
+<div class="col-sm-3 m-b">
 <select class="form-control required" required  name="role">
 											<option value="" selected disabled>Role</option>
 											<option value="CEO">CEO</option>
 											<option value="VP">VP</option>
 											<option value="VP, Sales">VP, Sales</option>
 											<option value="VP, Marketing">VP, Marketing</option>
-											<option value="Customer Success Manager">Customer Success Manager</option>
+											<option value="Customer Success Manager" title="Customer Success Manager">Customer Success Manager</option>
 											<option value="Sales Manager">Sales Manager</option>
 											<option value="Marketing Manager">Marketing Manager</option>
 											<option value="Consultant">Consultant</option>
@@ -134,7 +139,7 @@ This is where you and your users will log in to your account
 											<option value="Other">Other</option>
 								  </select>
 </div>
-<div class="col-sm-3">
+<div class="col-sm-3 m-b">
 	<select class="form-control required"  name="company_type" required  data-width="100%">
 											<option value="" selected disabled>Select Type</option>
 											<option value="B2B">B2B</option>
@@ -158,12 +163,14 @@ This is where you and your users will log in to your account
 											class="field form-control required tel-number"
 											id="login_phone_number" required name='phone_number' type="text"
 											placeholder="Phone Number" autocapitalize="off">
+											<div class='custom-error'>Please enter valid number</div>
 </div>
 </div>
 
 <input type='hidden' id="login_email" name='email' value=<%=request.getParameter("email")%>></input>
 <input type='hidden' id="" name='name' value=<%=request.getParameter("name")%>></input>
-<input type="password" class="hide" name='password' id="password" value=<%=request.getParameter("password")%>></input>
+
+<input type="password" class="hide" name='password' id="password" value="<%=request.getParameter("password")%>"></input>
 	<input type='hidden' name='type' value='agile'></input>
 <div class="line line-lg b-b" style="margin-top:25px;"></div>
 
@@ -186,12 +193,31 @@ This is where you and your users will log in to your account
 
 <script type='text/javascript' src='//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js'></script>
 <script type="text/javascript" src="/lib/phonenumber-lib/intlTelInput.js"></script>
-<script src="/flatfull/registration/register.js" type="text/javascript"></script>
+<script src="/flatfull/registration/register.js?_v=<%=_AGILE_VERSION%>"   type="text/javascript"></script>
+<script type="text/javascript">
+var version = <%="\"" + VersioningUtil.getAppVersion(request) + "\""%>;
+  var applicationId = <%="\"" + SystemProperty.applicationId.get() + "\""%>;
+	$("#password").value = "<%=request.getParameter("password")%>"
+</script>
+
 <script>
 $(document).ready(function(){
 
 	// Pre load dashlet files when don is active
 	preload_dashlet_libs();
+
+	var telInput = $("#login_phone_number"),
+	  errorMsg = $("#error-msg"),
+	  validMsg = $("#valid-msg");
+
+	// on blur: validate
+	telInput.blur(function() { console.log("blur"); console.log($.trim(telInput.val()) + " : " + telInput.intlTelInput("isValidNumber"));
+	  if ($.trim(telInput.val()) && telInput.intlTelInput("isValidNumber")) {
+	        $(".custom-error").hide();
+	  } else {
+	     $(".custom-error").show();
+	  }
+	});
 
 	$("#login_phone_number").intlTelInput({
 				utilsScript: "lib/phonenumber-lib/utils.js",
@@ -204,8 +230,4 @@ function preload_dashlet_libs(){
 }
 </script>
 
-<script type="text/javascript">
-var version = <%="\"" + VersioningUtil.getAppVersion(request) + "\""%>;
-  var applicationId = <%="\"" + SystemProperty.applicationId.get() + "\""%>;
-</script>
 </body>

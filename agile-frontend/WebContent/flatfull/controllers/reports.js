@@ -292,7 +292,7 @@ var ReportsRouter = Backbone.Router
 			this.reports.collection.fetch();
 			$("#reports-listerners-container").html(this.reports.render().el);
 
-				this.reports = new Base_Collection_View({ url : '/core/api/reports', restKey : "reports", templateKey : "report", individual_tag_name : 'tr' });
+	},
 
 	/**
 	 * Loads a template to add new report. Populates users drop down list and
@@ -353,22 +353,12 @@ var ReportsRouter = Backbone.Router
 					});
 				});
 
-						head.js(LIB_PATH + 'lib/jquery-ui.min.js', LIB_PATH + 'lib/agile.jquery.chained.min.js', function()
-						{
-							scramble_input_names($(el).find('div#report-settings'));
-							chainFiltersForContact(el, undefined, function()
-							{
-								++count;
-								if (count > 1)
-									$("#content").html(el)
-							});
-						});
-
+						
 		$("#reports-listerners-container").html(getRandomLoadingImg());
 		report_add.render();
 
-				$("#content").html(getRandomLoadingImg());
-				report_add.render();
+	},
+				
 
 	/**
 	 * Edits a report by de-serializing the existing report into its saving
@@ -383,19 +373,6 @@ var ReportsRouter = Backbone.Router
 		// Counter to set when script is loaded. Used to avoid flash in page
 		var count = 0;
 
-			/**
-			 * Edits a report by de-serializing the existing report into its
-			 * saving form, from there it can be edited and saved. Populates
-			 * users and loads agile.jquery.chained.min.js to match the
-			 * conditions with the values of input fields.
-			 */
-			reportEdit : function(id)
-			{
-				$("#content").html(getRandomLoadingImg());
-				// Counter to set when script is loaded. Used to avoid flash in
-				// page
-				var count = 0;
-
 		// Gets a report to edit, from reports collection, based on id
 		var report = this.reports.collection.get(id);
 		var report_model = new Base_Model_View({ url : 'core/api/reports', change : false, model : report, template : "reports-add", window : "contact-reports", id : "reports-listerners-container",
@@ -408,18 +385,8 @@ var ReportsRouter = Backbone.Router
 				}
 
 				// Gets a report to edit, from reports collection, based on id
-				var report = this.reports.collection.get(id);
-				var report_model = new Base_Model_View({
-					url : 'core/api/reports',
-					change : false,
-					model : report,
-					template : "reports-add",
-					window : "contact-reports",
-					postRenderCallback : function(el)
-					{
-						if (count != 0)
-							return;
-						fillSelect("custom-fields-optgroup", "core/api/custom-fields/scope?scope=CONTACT", undefined, function()
+				
+					fillSelect("custom-fields-optgroup", "core/api/custom-fields/scope?scope=CONTACT", undefined, function()
 						{
 
 							head.js(LIB_PATH + 'lib/jquery.multi-select.js', CSS_PATH + 'css/businesshours/jquerytimepicker.css',
@@ -460,8 +427,12 @@ var ReportsRouter = Backbone.Router
 
 											}
 
-		$("#reports-listerners-container").html(getRandomLoadingImg());
-		report_model.render();
+											if (report.toJSON().report_timezone == null)
+											{
+												$("#report_timezone").val(ACCOUNT_PREFS.timezone);
+											}
+										}, 1000);
+									});
 
 						}, '<option value="custom_{{field_label}}">{{field_label}}</option>', true, el);
 
@@ -480,7 +451,7 @@ var ReportsRouter = Backbone.Router
 
 					} });
 
-				$("#content").html(getRandomLoadingImg());
+				$("#reports-listerners-container").html(getRandomLoadingImg());
 				report_model.render();
 
 			},
@@ -659,7 +630,9 @@ var ReportsRouter = Backbone.Router
 				else
 					el = $(getTemplate("report-growth", {}));
 
-				$("#content").html(el);
+				$("#content").html("<div id='reports-listerners-container'></div>");
+				$("#reports-listerners-container").html(el);
+				initializeChartReportsListeners();
 
 				if (type && (type == 'growth' || type == 'funnel'))
 				{
@@ -672,18 +645,4 @@ var ReportsRouter = Backbone.Router
 					addTagsDefaultTypeahead(element);
 				});
 			}
-
-		$("#content").html("<div id='reports-listerners-container'></div>");
-		$("#reports-listerners-container").html(el);
-		initializeChartReportsListeners();
-
-		if (type && (type == 'growth' || type == 'funnel'))
-		{
-			setup_tags_typeahead();
-			return;
-		}
-		$.each($("[id=tags-reports]", el), function(i, element)
-		{
-			console.log(element);
-			addTagsDefaultTypeahead(element);
-		});
+	});
