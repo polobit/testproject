@@ -7,7 +7,7 @@ import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.TimeUnit;
 
-import com.agilecrm.TaskQueueStatsDaemon;
+import com.Globals;
 import com.google.appengine.tools.remoteapi.RemoteApiInstaller;
 import com.google.appengine.tools.remoteapi.RemoteApiOptions;
 
@@ -103,8 +103,8 @@ class TaskExecutorThread extends Thread
     public void run()
     {
 
-	RemoteApiOptions options = new RemoteApiOptions().server("agile-crm-cloud.appspot.com", 443).credentials(
-		"yaswanth@agilecrm.com", TaskQueueStatsDaemon.password);
+	RemoteApiOptions options = new RemoteApiOptions().server(Globals.APPLICATION_ID + ".appspot.com", 443)
+		.credentials(Globals.USER_ID, Globals.PASSWORD);
 
 	// CachingRemoteApiInstaller installer = new
 	// CachingRemoteApiInstaller();
