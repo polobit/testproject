@@ -879,3 +879,85 @@ function getStartAndEndDatesEpochForPortlets(duration)
 
 	return (getUTCMidNightEpochFromDate(d) / 1000);
 }
+
+/*function showDashlettype(x,p_name)
+{
+	var a;
+	var image_src;
+	
+	if(p_name=="FilterBased")
+		image_src="http://snag.gy/cZXxH.jpg";
+	else
+		image_src="https://d1gwclp1pmzk26.cloudfront.net/img/gravatar/73.png";
+	a='<div class="screenshot"><img src='+image_src+' style="width:100%;height :150px"/></div>';
+	$(x).append(a);
+	$('.screenshot').show();
+	
+	
+
+}
+
+function hideDashlettype(x){
+	$('.screenshot').remove();
+}*/
+
+$('.show_screeshot').live("mouseenter",function(){
+	var p_name=$(this).attr('id');
+	var image;
+	var placement="right"
+	if(p_name=="FilterBased")
+		image="http://snag.gy/cZXxH.jpg";
+	else if(p_name=="EmailsOpened")
+		image="http://snag.gy/Ib2Bk.jpg";
+	else if(p_name=="PendingDeals")
+		image="http://snag.gy/u2EzC.jpg";
+	else if(p_name=="Agenda")
+		image="http://snag.gy/kvqEB.jpg";
+	else if(p_name=="TodayTasks")
+		image="http://snag.gy/21oEA.jpg";
+	else if(p_name=="DealsByMilestone")
+		image="http://snag.gy/DSJan.jpg";
+	else if(p_name=="ClosuresPerPerson")
+		image="https://d1gwclp1pmzk26.cloudfront.net/img/gravatar/73.png";
+	else if(p_name=="DealsWon")
+		image="https://d1gwclp1pmzk26.cloudfront.net/img/gravatar/73.png";
+	else if(p_name=="DealsFunnel")
+		image="http://snag.gy/qWGKP.jpg";
+	else if(p_name=="GrowthGraph")
+		image="http://snag.gy/bOeka.jpg";
+	else if(p_name=="DealsAssigned")
+		image="https://d1gwclp1pmzk26.cloudfront.net/img/gravatar/73.png";
+	else if(p_name=="CallsPerPerson")
+		image="https://d1gwclp1pmzk26.cloudfront.net/img/gravatar/73.png";
+	else if(p_name=="AgileCRMBlog")
+		image="http://snag.gy/EnuRz.jpg";
+	else if(p_name=="AccountDetails")
+		image="http://snag.gy/Tg2nD.jpg";
+	else if(p_name=="TaskReport")
+		image="http://snag.gy/9EwD9.jpg";
+	else if(p_name=="StatsReport")
+		image="http://snag.gy/FdvNs.jpg";
+	else if(p_name=="Leaderboard")
+		image="https://d1gwclp1pmzk26.cloudfront.net/img/gravatar/73.png";
+	else if(p_name=="RevenueGraph")
+	{
+		placement="left";
+		image="https://d1gwclp1pmzk26.cloudfront.net/img/gravatar/73.png";
+	}
+	else if(p_name=="UserActivities")
+		{
+			placement="left";
+		image="http://snag.gy/osWJu.jpg";
+	}
+	$(this).popover({
+	"rel":"popover",
+	"trigger":"hover",
+	"placement":placement,
+	"html" : "true",
+	"content" : function(){
+		return '<img src='+image+' style="width:250px;height:200px">';
+		
+	}
+});
+	$(this).popover('show');
+});
