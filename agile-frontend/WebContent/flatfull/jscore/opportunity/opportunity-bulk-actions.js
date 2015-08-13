@@ -277,7 +277,7 @@
 		$('body').on('click', '#select-choosen-deals', function(e) {
 			e.preventDefault();
 			deal_bulk_actions.SELECT_ALL_DEALS = false;
-			$('body').find('#bulk-select').html("Selected " + numberWithCommas(App_Deals.opportunityCollectionView.collection.length) + " deals. <a id='select-all-available-deals' href='#'>Select all " + numberWithCommas(getAvailableDeals()) + " deals</a>");
+			$('body').find('#bulk-select').html("Selected " + numberWithCommas(App_Deals.opportunityCollectionView.collection.length) + " deals. <a id='select-all-available-deals' class='text-info' href='#'>Select all " + numberWithCommas(getAvailableDeals()) + " deals</a>");
 		});
 		
 		$(".deal_bulk_modal").on('show.bs.modal',function(){
@@ -351,7 +351,7 @@
 						.find('#bulk-select')
 						.show()
 						.html(
-								"Selected " + numberWithCommas(App_Deals.opportunityCollectionView.collection.length) + " deals. <a id='select-all-available-deals' href='#'>Select all " + numberWithCommas(total_available_deals) + " deals</a>");
+								"Selected " + numberWithCommas(App_Deals.opportunityCollectionView.collection.length) + " deals. <a id='select-all-available-deals' class='text-info' href='#'>Select all " + numberWithCommas(total_available_deals) + " deals</a>");
 		}
 		else
 		{

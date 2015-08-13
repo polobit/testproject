@@ -672,9 +672,9 @@ border-radius: 2px;
  	overflow:hidden!important;
  }
  .portlet-error-message{
- 	padding: 11px 15px;
-	font-size: 15px;
-	font-style: italic;
+ 	padding: 50px 15px;
+	font-size: 14px;
+	text-align: center;
 	color: #98a6ad;
  }
  .portlet-error-privilege-message{
@@ -691,7 +691,7 @@ border-radius: 2px;
  	font-weight: 300!important;
 }
 .ob-portlet-font-check{
-	padding-left: 2px;
+	/* padding-left: 2px; */
 }
 .ob-portlet-font-no-check{
 	padding-left: 2px;
@@ -829,4 +829,24 @@ border-radius: 2px;
 .portlet_header small {
 	color: #98a6ad!important;
  	font-weight: 300!important;
+}
+ 
+.scroll > div > div
+{
+	border-bottom:1px solid #edf1f2; 
+}
+.scroll > div > div:last-child {
+  border-bottom: none;
+}
+.scroll div[id*="heading"] 
+{
+ border-bottom:1px solid #edf1f2;
+ border-top:1px solid #edf1f2;
+ 
+}
+ 
+
+.activity_body 
+{
+	margin-top:-1px;
 }

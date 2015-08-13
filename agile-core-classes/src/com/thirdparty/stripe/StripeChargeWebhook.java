@@ -3,6 +3,7 @@ package com.thirdparty.stripe;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -49,7 +50,7 @@ public class StripeChargeWebhook extends HttpServlet
 	}
 
 	ServletInputStream data = request.getInputStream();
-	BufferedReader reader = new BufferedReader(new InputStreamReader(data));
+	BufferedReader reader = new BufferedReader(new InputStreamReader(data, StandardCharsets.UTF_8));
 	String line = "";
 	String stripeData = "";
 	while ((line = reader.readLine()) != null)

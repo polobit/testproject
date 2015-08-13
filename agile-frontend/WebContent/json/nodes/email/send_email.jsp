@@ -27,9 +27,22 @@
             "name": "from_email",
             "id": "from_email",
             "required": "required",
-            "title": "Enter your email address.",
-            "fieldType": "input",
-            "type": "email"
+            "title": "Select your email address.",
+            "url": "/core/api/account-prefs/verified-emails/all",
+            "dynamicName": "email",
+            "dynamicValue": "email",
+            "arrange_type": "prepend",
+            "fieldType": "dynamicselect",
+             "type": "verified_email",
+             "options": {
+                "+ Add new": "verify_email"
+            }, 
+            "event": "onchange",
+            "eventHandler": "openVerifyEmailModal(this)",
+            "style": {
+            	"width": "77.5%",
+            	"padding": "0.4em"
+            }
         },
         {
             "label": "To",

@@ -56,7 +56,7 @@ define(
 					});
 				});
 
-				$('#form-save').click(function(){
+				$('#form-save').click(function(event){
 					formSave.agile_form_save(event);
 				});
 			}}

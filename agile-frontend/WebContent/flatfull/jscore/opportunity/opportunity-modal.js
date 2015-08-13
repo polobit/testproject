@@ -19,9 +19,11 @@ $(function()
 	{
 
 		// Add placeholder and date picker to date custom fields
-		$('.date_input').attr("placeholder", "MM/DD/YYYY");
-
-		$('.date_input').datepicker({ format : 'mm/dd/yyyy', weekStart : CALENDAR_WEEK_START_DAY });
+		$('.date_input').attr("placeholder","Select Date");
+    
+		$('.date_input').datepicker({
+			format: CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY
+		});
 	})
 
 	/**
@@ -364,8 +366,10 @@ function updateDeal(ele, editFromMilestoneView)
 	});
 
 	// Enable the datepicker
-	$('#close_date', dealForm).datepicker({ format : 'mm/dd/yyyy', weekStart : CALENDAR_WEEK_START_DAY });
-
+	$('#close_date', dealForm).datepicker({
+		format : CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY
+	});
+	
 	// Add notes in deal modal
 	showNoteOnForm("opportunityUpdateForm", value.notes);
 
@@ -432,7 +436,9 @@ function show_deal()
 	});
 
 	// Enable the datepicker
-	$('#close_date', el).datepicker({ format : 'mm/dd/yyyy', weekStart : CALENDAR_WEEK_START_DAY });
+	$('#close_date', el).datepicker({
+		format : CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY
+	});
 }
 
 function checkPipeline(pipeId)
@@ -557,6 +563,10 @@ function saveDeal(formId, modalId, saveBtn, json, isUpdate)
 					return false;
 				}
 			});
+		} else if(App_Companies.companyDetailView
+				&& Current_Route == "company/"
+					+ App_Companies.companyDetailView.model.get('id')){
+			company_util.updateDealsList(deal,true);
 		}
 		// When deal is added or updated from Deals route
 		else if (Current_Route == 'deals')

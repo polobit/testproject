@@ -1155,4 +1155,36 @@ public class WebCalendarEventUtil
 		}
 		return true;
 	}
+
+	/**
+	 * converts the buffer time to seconds or milliseconds
+	 * 
+	 * @param hours
+	 * @param secOrMil
+	 * @return
+	 */
+	public static long convertHoursToMilliSeconds(int bufferTime, String secOrMil)
+	{
+
+		long milliSecs = 0L;
+		try
+		{
+			if ("minutes".equalsIgnoreCase(secOrMil))
+			{
+				milliSecs = (long) (bufferTime * 60 * 1000);
+			}
+			else if ("hours".equalsIgnoreCase(secOrMil))
+			{
+				milliSecs = (long) bufferTime * 60 * 60 * 1000;
+			}
+		}
+		catch (Exception e)
+		{
+			System.out.println("exception occured while calculating buffertime" + e.getMessage());
+		}
+
+		return milliSecs;
+
+	}
+
 }

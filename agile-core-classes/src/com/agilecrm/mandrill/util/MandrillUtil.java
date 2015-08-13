@@ -2,7 +2,6 @@ package com.agilecrm.mandrill.util;
 
 import java.util.List;
 
-import org.apache.commons.lang.SerializationUtils;
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -15,10 +14,7 @@ import com.agilecrm.contact.email.EmailSender;
 import com.agilecrm.mandrill.util.deferred.MailDeferredTask;
 import com.agilecrm.util.EmailUtil;
 import com.agilecrm.util.HttpClientUtil;
-import com.campaignio.logger.Log.LogType;
-import com.campaignio.logger.util.LogUtil;
 import com.google.appengine.api.NamespaceManager;
-import com.google.appengine.api.taskqueue.TaskHandle;
 import com.thirdparty.mandrill.EmailContentLengthLimitExceededException;
 import com.thirdparty.mandrill.Mandrill;
 import com.thirdparty.mandrill.subaccounts.MandrillSubAccounts;
@@ -75,17 +71,15 @@ public class MandrillUtil
      * @param tasks
      *            - pull queue leased tasks
      */
-    public static void sendMandrillMails(List<TaskHandle> tasks, EmailSender emailSender)
+    public static void sendMandrillMails(List<MailDeferredTask> tasks, EmailSender emailSender)
     {
-	TaskHandle firstTaskHandle = tasks.get(0);
 
-	MailDeferredTask firstMailDefferedTask = (MailDeferredTask) SerializationUtils.deserialize(firstTaskHandle
-	        .getPayload());
+	MailDeferredTask firstMailDefferedTask = tasks.get(0);
 
 	// Initialize mailJSON with common fields
 	JSONObject mailJSON = getMandrillMailJSON(emailSender.getMandrillAPIKey(), firstMailDefferedTask.domain,
-	        firstMailDefferedTask.fromEmail, firstMailDefferedTask.fromName, firstMailDefferedTask.replyTo,
-	        firstMailDefferedTask.metadata, emailSender.isEmailWhiteLabelEnabled());
+		firstMailDefferedTask.fromEmail, firstMailDefferedTask.fromName, firstMailDefferedTask.replyTo,
+		firstMailDefferedTask.metadata, emailSender.isEmailWhiteLabelEnabled());
 
 	JSONArray mergeVarsArray = new JSONArray();
 	JSONArray toArray = new JSONArray();
@@ -97,37 +91,34 @@ public class MandrillUtil
 
 	try
 	{
-	    for (TaskHandle task : tasks)
+	    for (MailDeferredTask mailDeferredTask : tasks)
 	    {
 
 		flag = false;
 
-		MailDeferredTask mailDeferredTask = (MailDeferredTask) SerializationUtils
-		        .deserialize(task.getPayload());
-
 		// Creates log for sending email
 		if (!StringUtils.isBlank(mailDeferredTask.campaignId)
-		        && !StringUtils.isBlank(mailDeferredTask.subscriberId))
+			&& !StringUtils.isBlank(mailDeferredTask.subscriberId))
 		{
-		    LogUtil.addLogToSQL(mailDeferredTask.campaignId, mailDeferredTask.subscriberId, "Subject: "
-			    + mailDeferredTask.subject, LogType.EMAIL_SENT.toString());
+
+		    System.out.println("Namespace mail deferred task : " + mailDeferredTask.domain);
 
 		    if (!StringUtils.isBlank(mailDeferredTask.text))
 		    {
 			// Appends Agile label
 			mailDeferredTask.text = StringUtils.replace(mailDeferredTask.text,
-			        EmailUtil.getPoweredByAgileLink("campaign", "Powered by"), "Sent using Agile");
+				EmailUtil.getPoweredByAgileLink("campaign", "Powered by"), "Sent using Agile");
 			mailDeferredTask.text = EmailUtil.appendAgileToText(mailDeferredTask.text, "Sent using",
-			        emailSender.isEmailWhiteLabelEnabled());
+				emailSender.isEmailWhiteLabelEnabled());
 		    }
 
 		    // If no powered by merge field, append Agile label to
 		    // html
 		    if (!StringUtils.isBlank(mailDeferredTask.html)
 			    && !StringUtils.contains(mailDeferredTask.html,
-			            EmailUtil.getPoweredByAgileLink("campaign", "Powered by")))
+				    EmailUtil.getPoweredByAgileLink("campaign", "Powered by")))
 			mailDeferredTask.html = EmailUtil.appendAgileToHTML(mailDeferredTask.html, "campaign",
-			        "Powered by", emailSender.isEmailWhiteLabelEnabled());
+				"Powered by", emailSender.isEmailWhiteLabelEnabled());
 
 		}
 
@@ -135,7 +126,7 @@ public class MandrillUtil
 		// each in campaign). If CC or BCC or multiple To with comma
 		// separated given then send email without merging
 		if (!StringUtils.isBlank(mailDeferredTask.cc) || !StringUtils.isBlank(mailDeferredTask.bcc)
-		        || isToExists(toArray, mailDeferredTask.to) || mailDeferredTask.to.contains(","))
+			|| isToExists(toArray, mailDeferredTask.to) || mailDeferredTask.to.contains(","))
 		{
 		    sendWithoutMerging(mailDeferredTask, emailSender.getMandrillAPIKey());
 		    continue;
@@ -143,7 +134,7 @@ public class MandrillUtil
 
 		// MergeVars
 		mergeVarsArray.put(getEachMergeJSON(EmailUtil.getEmail(mailDeferredTask.to), mailDeferredTask.subject,
-		        mailDeferredTask.html, mailDeferredTask.text));
+			mailDeferredTask.html, mailDeferredTask.text));
 
 		JSONObject eachToJSON = new JSONObject();
 		eachToJSON.put(Mandrill.MANDRILL_RECIPIENT_EMAIL, EmailUtil.getEmail(mailDeferredTask.to));
@@ -182,12 +173,12 @@ public class MandrillUtil
 	    for (int i = 0, len = tempArray.length(); i < len; i++)
 	    {
 		mailJSON.getJSONObject(Mandrill.MANDRILL_MESSAGE)
-		        .put(Mandrill.MANDRILL_TO, tempArray.getJSONObject(i).getJSONArray("toArray"))
-		        .put(Mandrill.MANDRILL_MERGE_VARS, tempArray.getJSONObject(i).getJSONArray("mergeVarsArray"))
-		        .put(Mandrill.MANDRILL_MERGE, true).put(Mandrill.MANDRILL_PRESERVE_RECIPIENTS, false);
+			.put(Mandrill.MANDRILL_TO, tempArray.getJSONObject(i).getJSONArray("toArray"))
+			.put(Mandrill.MANDRILL_MERGE_VARS, tempArray.getJSONObject(i).getJSONArray("mergeVarsArray"))
+			.put(Mandrill.MANDRILL_MERGE, true).put(Mandrill.MANDRILL_PRESERVE_RECIPIENTS, false);
 
 		HttpClientUtil.accessPostURLUsingHttpClient(Mandrill.MANDRILL_API_POST_URL
-		        + Mandrill.MANDRILL_API_MESSAGE_CALL, mailJSON.toString());
+			+ Mandrill.MANDRILL_API_MESSAGE_CALL, "application/json", mailJSON.toString());
 	    }
 
 	}

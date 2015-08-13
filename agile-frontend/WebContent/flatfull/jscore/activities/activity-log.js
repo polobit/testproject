@@ -73,7 +73,9 @@ function getParameters()
 
 	if (range && range != "Filter by date")
 	{
-		var start_time = Date.parse($.trim(range[0])).valueOf();
+		//var start_time = Date.parse($.trim(range[0])).valueOf();
+		//Get the GMT start time
+		var start_time = getUTCMidNightEpochFromDate(new Date($.trim(range[0])));
 
 		var end_value = $.trim(range[1]);
 
@@ -82,7 +84,10 @@ function getParameters()
 			end_value = end_value + " 23:59:59";
 
 		// Returns milliseconds from end date.
-		var end_time = Date.parse(end_value).valueOf();
+		//var end_time = Date.parse(end_value).valueOf();
+		var end_time = getUTCMidNightEpochFromDate(new Date(end_value));
+		
+		end_time += (((23*60*60)+(59*60)+59)*1000);
 
 		// Adds start_time, end_time and timezone offset to params.
 		params += ("&start_time=" + start_time + "&end_time=" + end_time);

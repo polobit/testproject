@@ -228,6 +228,11 @@ function initializeTaskDetailListeners(){
 		$.ajax({ url : 'core/api/tasks/' + id, type : 'DELETE', success : function(response)
 		{
 			document.location.href = document.location.origin + "#/tasks";
+			var due_task_count = getDueTasksCount();
+			if(due_task_count !=0)
+				$('#due_tasks_count').html(due_task_count);
+			else
+				$('#due_tasks_count').html("");
 		} })
 	})
 

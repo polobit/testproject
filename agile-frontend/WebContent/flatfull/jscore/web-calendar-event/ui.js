@@ -7,29 +7,17 @@ $(function()
 	var MIDNIGHT_END_TIME = null;
 
 	// Select slot duration 60/30/15min
-	$('body').on('click', '.choose', function(e)
+	$(".selected_meeting_time").die().live('click', function(e)
 	{
-		e.preventDefault();
+		// e.preventDefault();
 
 		$("#details").empty();
 		Selected_Time = $(this).attr('data');
-
-		var json_meeting_duration = JSON.parse(meeting_duration);
-		console.log(json_meeting_duration);
-		if (Selected_Time == 15)
-		{
-			appointmenttype = json_meeting_duration['15mins'];
-		}
-		else if (Selected_Time == 30)
-		{
-			appointmenttype = json_meeting_duration['30mins'];
-			;
-		}
-		else if (Selected_Time == 60)
-		{
-			appointmenttype = json_meeting_duration['60mins'];
-			;
-		}
+		$(".show_slots").find('input:radio').attr('checked', false);
+		$(this, [
+			'input:radio'
+		]).attr('checked', true);
+		appointmenttype = $('input[name="selected_meeting_time"]:checked').val();
 
 		$(".activemin").removeClass("activemin");
 		$(this).find('.minutes').addClass("activemin");
@@ -110,6 +98,7 @@ $(function()
 				User_Name = selected_user_name = SELECTED_DOMAIN_USER['name'];
 				meeting_duration = SELECTED_DOMAIN_USER['meeting_durations'];
 				meeting_types = SELECTED_DOMAIN_USER['meeting_types'];
+				BUFFERTIME = SELECTED_DOMAIN_USER['buffer_time'];
 
 				if (meeting_types[0] != "")
 				{
@@ -129,6 +118,7 @@ $(function()
 
 				getSlotDurations();
 				$(".segment1").fadeIn("slow");
+				$(".panel-body").height(parseInt(getPanelBodyMaxHeight()) + 26);
 				autoscrol(".segment1");
 			}
 

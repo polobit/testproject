@@ -419,7 +419,10 @@ function appendCustomfields(el){
 			 $(el).find('#opportunities-model-list tr').each(function(index,element){
 				 var row = '';
 				 $.each(customfields, function(i,customfield){
-						 row += '<td class="deal_custom_replace"><div class="text-ellipsis" style="width:6em">'+dealCustomFieldValue(customfield.field_label,deals[index].attributes.custom_data)+'</div></td>';
+				 		if(customfield.field_type == "DATE")
+				 			row += '<td class="deal_custom_replace"><div class="text-ellipsis" style="width:6em">'+dealCustomFieldValueForDate(customfield.field_label,deals[index].attributes.custom_data)+'</div></td>';
+				 		else
+							row += '<td class="deal_custom_replace"><div class="text-ellipsis" style="width:6em">'+dealCustomFieldValue(customfield.field_label,deals[index].attributes.custom_data)+'</div></td>';
 					});
 				 $(this).append(row);
 			 });
@@ -439,6 +442,23 @@ function dealCustomFieldValue(name, data){
 	$.each(data,function(index, field){
 		if(field.name == name){
 			value = field.value;
+		}
+	});
+	return value;
+}
+
+function dealCustomFieldValueForDate(name, data){
+	var value = '';
+	$.each(data,function(index, field){
+		if(field.name == name){
+			if(!field.value)
+				return '';
+			var dateString = new Date(field.value);
+			if(dateString == "Invalid Date")
+				value = getDateInFormatFromEpoc(field.value);
+			else
+				value = en.dateFormatter({raw: getGlobalizeFormat()})(dateString);
+			
 		}
 	});
 	return value;

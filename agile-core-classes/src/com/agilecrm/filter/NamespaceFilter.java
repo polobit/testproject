@@ -76,6 +76,9 @@ public class NamespaceFilter implements Filter
 		// If it is facebook page tab, just return
 		if (((HttpServletRequest) request).getRequestURI().contains("facebookpagetab"))
 		    return true;
+		
+		if (((HttpServletRequest) request).getRequestURI().contains("fbformload"))
+		    return true;
 
 		if (((HttpServletRequest) request).getRequestURI().contains("/_ah/mail"))
 			return true;

@@ -71,12 +71,14 @@ function setupLhsFilters(cel, is_company)
 function loadCustomFiledsFilters(fields, cel, is_company)
 {
 	$('#custom-filter-fields', cel).html(getTemplate("contacts-lhs-filters-custom", fields));
+
 	// $('#custom-filter-fields', cel).find("input.date").datepicker({ format :
 	// 'mm/dd/yyyy'});
 	addTagsTypeaheadLhs($('#tags-lhs-filter-table', cel).find("div.lhs-contact-filter-row").find('#RHS'));
-	$("input.date", cel).datepicker({ format : 'mm/dd/yyyy', weekStart : CALENDAR_WEEK_START_DAY, autoclose : true });
+	$("input.date", cel).datepicker({ format :CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY, autoclose : true });
 	// $('#custom-filter-fields', cel).find("input.date").datepicker({ format :
 	// 'mm/dd/yyyy'});
+
 	scramble_filter_input_names(cel);
 	if (is_company && readData('dynamic_company_filter'))
 	{
@@ -92,28 +94,26 @@ function submitLhsFilter()
 {
 	var formData = serializeLhsFilters($('#lhs-contact-filter-form'))
 	// erase filter cookies
-	eraseCookie('contact_filter');
-	eraseCookie('contact_filter_type');
-	// eraseCookie('company_filter');
 	var contact_type = formData.contact_type;
-	if (contact_type == 'COMPANY')
-	{
+	if(contact_type == 'COMPANY') {
+		eraseCookie('company_filter');
 		eraseData('dynamic_company_filter');
 		if (formData != null && formData.rules.length > 0)
 		{
 			storeData('dynamic_company_filter', JSON.stringify(formData));
-			createCookie('company_filter', "Companies");
+			//createCookie('company_filter', "Companies");
 		}
-	}
-	else
-	{
+		COMPANIES_HARD_RELOAD=true;
+		App_Companies.companies(undefined, undefined, undefined, true);
+	} else {
+		eraseCookie('contact_filter');
+		eraseCookie('contact_filter_type');
 		eraseData('dynamic_contact_filter');
 		if (formData != null && formData.rules.length > 0)
 			storeData('dynamic_contact_filter', JSON.stringify(formData));
+		CONTACTS_HARD_RELOAD=true;
+		App_Contacts.contacts(undefined, undefined, undefined, true);
 	}
-
-	CONTACTS_HARD_RELOAD = true;
-	App_Contacts.contacts(undefined, undefined, undefined, true);
 }
 
 
@@ -168,8 +168,8 @@ $('#conatcts-listeners-conatainer').on('click', '#clear-lhs-company-filters', fu
 {
 	e.preventDefault();
 	eraseData('dynamic_company_filter');
-	CONTACTS_HARD_RELOAD = true;
-	App_Contacts.contacts();
+	COMPANIES_HARD_RELOAD=true;
+	App_Companies.companies();
 });
 
 $('#conatcts-listeners-conatainer').on('click', '#lhs-filters-header', function(e)
@@ -235,7 +235,42 @@ $('#conatcts-listeners-conatainer').on('blur keyup', '#lhs-contact-filter-form #
 	}
 });
 
-$('#conatcts-listeners-conatainer').on('change', '#lhs-contact-filter-form #RHS select', function(e)
+$('#lhs-contact-filter-form #RHS input.date').die().live("change keyup", function(e)
+{
+	if (e.type == 'change' || e.keyCode == '13')
+	{
+		var prevVal = $(this).attr('prev-val');
+		var currVal = $(this).val().trim();
+		if (prevVal == currVal)
+		{
+			return;
+		}
+		else
+		{
+			$(this).attr('prev-val', currVal);
+		}
+		if ($(this).parent().next().attr("id") == "RHS_NEW")
+		{
+			if ($(this).parent().next().find('input').val() != "" && currVal != "")
+			{
+				submitLhsFilter();
+				$(this).blur();
+			}
+		}
+		else
+		{
+			if (currVal == "")
+			{
+				var container = $(this).parents('.lhs-contact-filter-row');
+				$(container).find('a.clear-filter-condition-lhs').addClass('hide');
+			}
+			submitLhsFilter();
+			$(this).blur();
+		}
+	}
+});
+
+$('#lhs-contact-filter-form #RHS select').die().live("change", function(e)
 {
 	if ($(this).parent().next().attr("id") == "RHS_NEW")
 	{
@@ -325,8 +360,38 @@ $('#conatcts-listeners-conatainer').on('blur keyup', '#lhs-contact-filter-form #
 	}
 });
 
-}
-
+$('#lhs-contact-filter-form #RHS_NEW input.date').die().live("change keyup", function(e)
+{
+	if (e.type == 'change' || e.keyCode == '13')
+	{
+		var prevVal = $(this).attr('prev-val');
+		var currVal = $(this).val().trim();
+		if (prevVal == currVal)
+		{
+			return;
+		}
+		else
+		{
+			$(this).attr('prev-val', currVal);
+		}
+		if ($(this).parent().prev().attr("id") == "RHS")
+		{
+			if ($(this).parent().prev().find('input').val() != "")
+			{
+				submitLhsFilter();
+				$(this).blur();
+			}
+		}
+		else
+		{
+			if (currVal != "")
+			{
+				submitLhsFilter();
+				$(this).blur();
+			}
+		}
+	}
+});
 /**
  * Added tags typeahead on fields
  * 

@@ -1,12 +1,8 @@
 package com.thirdparty.forms;
 
 import java.io.IOException;
-import java.net.URI;
-import java.net.URL;
-import java.security.acl.Owner;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -14,15 +10,13 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.collections.SetUtils;
-import org.apache.commons.collections.map.HashedMap;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
-import org.json.JSONArray;
 
 import com.agilecrm.account.APIKey;
 import com.agilecrm.contact.Contact;
@@ -40,11 +34,8 @@ import com.agilecrm.workflows.triggers.Trigger;
 import com.agilecrm.workflows.triggers.util.TriggerUtil;
 import com.agilecrm.workflows.util.WorkflowSubscribeUtil;
 import com.campaignio.servlets.util.TrackClickUtil;
-import com.google.appengine.api.datastore.Key;
-import com.google.appengine.datanucleus.annotations.Owned;
-import com.google.appengine.labs.repackaged.org.json.JSONException;
-import com.google.appengine.labs.repackaged.org.json.JSONObject;
 
+@SuppressWarnings("serial")
 public class AgileForm extends HttpServlet
 {
     public static String[] authDetails = { "_agile_form_name", "_agile_domain", "_agile_api", "_agile_redirect_url" };
@@ -94,9 +85,16 @@ public class AgileForm extends HttpServlet
 		response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Form with name does not exist");
 		return;
 	    }
-
 	    runFormTrigger(contact, newContact, form, formJson);
-	    response.sendRedirect(getNormalizedRedirectURL(agileRedirectURL, contact, request));
+
+	    try
+	    {
+		request.setAttribute("url", getNormalizedRedirectURL(agileRedirectURL, contact, request));
+		request.getRequestDispatcher("/agileformredirect").forward(request, response);
+	    }
+	    catch (ServletException e)
+	    {
+	    }
 	    return;
 	}
 	catch (org.json.JSONException e)
@@ -290,7 +288,8 @@ public class AgileForm extends HttpServlet
 	{
 	    try
 	    {
-		com.googlecode.objectify.Key<DomainUser> owner = getDomainUserKeyFromInputKey(formJson.getString("_agile_api"));
+		com.googlecode.objectify.Key<DomainUser> owner = getDomainUserKeyFromInputKey(formJson
+		        .getString("_agile_api"));
 		if (owner != null)
 		    return result;
 	    }
@@ -363,7 +362,6 @@ public class AgileForm extends HttpServlet
 	    params = "&fwd=cd";
 
 	params = params + TrackClickUtil.appendContactPropertiesToParams(contact);
-
 	return normalizedRedirectURL + params;
     }
 

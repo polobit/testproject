@@ -395,11 +395,16 @@ $(function()
 	 * Activates the date picker to the corresponding fields in activity modal
 	 * and activity-update modal
 	 */
-	var eventDate = $('#event-date-1').datepicker({ format : 'mm/dd/yyyy', weekStart : CALENDAR_WEEK_START_DAY }).on('changeDate', function(ev)
+
+	var eventDate = $('#event-date-1').datepicker({ format : CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY }).on('changeDate', function(ev)
 	{
 		// If event start date is changed and end date is less than start date,
 		// change the value of the end date to start date.
-		var eventDate2 = new Date($('#event-date-2').val());
+		var eventDate2;
+		if(CURRENT_USER_PREFS.dateFormat.indexOf("dd/mm/yy") != -1 || CURRENT_USER_PREFS.dateFormat.indexOf("dd.mm.yy") != -1)
+			eventDate2 = new Date(convertDateFromUKtoUS($('#event-date-2').val()));
+		else
+		 	eventDate2 = new Date($('#event-date-2').val());
 		if (ev.date.valueOf() > eventDate2.valueOf())
 		{
 			$('#event-date-2').val($('#event-date-1').val());
@@ -407,19 +412,27 @@ $(function()
 
 	});
 
-	$('#event-date-2').datepicker({ format : 'mm/dd/yyyy', weekStart : CALENDAR_WEEK_START_DAY });
-	$('#update-event-date-1').datepicker({ format : 'mm/dd/yyyy', weekStart : CALENDAR_WEEK_START_DAY }).on('changeDate', function(ev)
+
+	$('#event-date-2').datepicker({ format : CURRENT_USER_PREFS.dateFormat , weekStart : CALENDAR_WEEK_START_DAY});
+	$('#update-event-date-1').datepicker({ format : CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY }).on('changeDate', function(ev)
+
 	{
 		// If event start date is changed and end date is less than start date,
 		// change the value of the end date to start date.
-		var eventDate2 = new Date($('#update-event-date-2').val());
+		var eventDate2;
+		if(CURRENT_USER_PREFS.dateFormat.indexOf("dd/mm/yy") != -1 || CURRENT_USER_PREFS.dateFormat.indexOf("dd.mm.yy") != -1)
+			eventDate2 = new Date(convertDateFromUKtoUS($('#update-event-date-2').val()));
+		else
+		 	eventDate2 = new Date($('#update-event-date-2').val());
 		if (ev.date.valueOf() > eventDate2.valueOf())
 		{
 			$('#update-event-date-2').val($('#update-event-date-1').val());
 		}
 
 	});
-	$('#update-event-date-2').datepicker({ format : 'mm/dd/yyyy', weekStart : CALENDAR_WEEK_START_DAY });
+
+	$('#update-event-date-2').datepicker({ format : CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY });
+
 
 	/**
 	 * Activates time picker for start time to the fields with class
@@ -664,7 +677,7 @@ function highlight_event()
 				$("#taskForm").find("#task_related_to").closest(".controls").find("ul").children());
 
 	// Date().format('mm/dd/yyyy'));
-	$('input.date').val(new Date().format('mm/dd/yyyy'));
+	$('input.date').val(getDateInFormat(new Date()));
 }
 
 /**

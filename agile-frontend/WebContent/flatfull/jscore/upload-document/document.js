@@ -172,8 +172,14 @@ function saveDocumentURL(url, network, id)
 	$('#' + form_id).find("#" + network).closest(".link").find(".icon-ok").css("display", "inline");
 	$('#' + form_id).find('#' + network).closest(".link").css("background-color", "#EDEDED");
    	$('#' + form_id).find('#upload_url').val(url);
+   	$('#' + form_id).find('#size').val(CUSTOM_DOCUMENT_SIZE);
+
     //$('#' + form_id).find('#url').html('<a href="'+ url +'" target="_blank">'+ url +'</a>');
 }
+
+/**
+ *stores size of document
+ */
 
 /**
  * Saves document instance
@@ -219,6 +225,8 @@ function saveDocument(form_id, modal_id, saveBtn, isUpdate, json)
 	newDocument.url = 'core/api/documents';
 	newDocument.save(json, {
 		success : function(data) {
+			// reset document size 
+			CUSTOM_DOCUMENT_SIZE = 0;
 
 			// Removes disabled attribute of save button
 			enable_save_button($(saveBtn));//$(saveBtn).removeAttr('disabled');
@@ -286,6 +294,8 @@ function saveDocument(form_id, modal_id, saveBtn, isUpdate, json)
 							return false;
 					}
 				});
+			} else if (company_util.isCompany()){
+				company_util.updateDocumentsList(document,true);
 			}
 			else if (Current_Route == 'documents') {
 				if (isUpdate)

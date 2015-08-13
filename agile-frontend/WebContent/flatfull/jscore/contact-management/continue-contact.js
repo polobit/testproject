@@ -130,6 +130,22 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
 			obj = App_Contacts.contact_custom_view.collection.get(id).toJSON();
 
 	}
+	
+	if (company_util.isCompany() && id)
+	{
+
+
+		// If user refreshes in company details page, then none of the list
+		// views are defined so, company will be fetched from detailed view
+		if (App_Companies.companyDetailView && App_Companies.companyDetailView.model != null && App_Companies.companyDetailView.model.get('id') == id)
+			obj = App_Companies.companyDetailView.model.toJSON();
+
+
+		// If company list view is defined, then company is fetched from list.
+		else if (App_Companies.companiesListView && App_Companies.companiesListView.collection.get(id) != null)
+			obj = App_Companies.companiesListView.collection.get(id).toJSON();
+
+	}
 
 	// Loads continue editing form
 	var template;
@@ -306,6 +322,64 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
 
 		if (isValidField(form_id + ' #company_url'))
 			properties.push(property_JSON('url', form_id + ' #company_url'));
+		
+		if (tagsSourceId === undefined || !tagsSourceId || tagsSourceId.length <= 0)
+			tagsSourceId = form_id;
+
+		var tags = get_tags(tagsSourceId);
+		if (tags != undefined && tags.length != 0)
+		{
+			obj.tags = [];
+
+			var tags_valid = true;
+			if (!obj['tagsWithTime'] || obj['tagsWithTime'].length == 0)
+			{
+				$.each(tags[0].value, function(index, value)
+				{
+					if(!isValidTag(value, false)) {
+						tags_valid = false;
+						return false;
+					}
+				});
+				obj['tagsWithTime'] = [];
+				$.each(tags[0].value, function(index, value)
+				{
+					obj.tagsWithTime.push({ "tag" : value });
+				});
+			}
+			else
+			{
+				var tag_objects_temp = [];
+				$.each(tags[0].value, function(index, value)
+				{
+					var is_new = true;
+					$.each(obj['tagsWithTime'], function(index, tagObject)
+					{
+						if (value == tagObject.tag)
+						{
+							tag_objects_temp.push(tagObject);
+							is_new = false
+							return false;
+						}
+					});
+
+					if (is_new) {
+						tag_objects_temp.push({ "tag" : value });
+						//check if tags are valid if they are newly adding to the contact.
+						if(!isValidTag(value, false)) {
+							tags_valid = false;
+							return false;
+						}
+					}
+				});
+				obj['tagsWithTime'] = tag_objects_temp;
+			}
+			if(!tags_valid) {
+				$('.invalid-tags-person').show().delay(6000).hide(1);
+				enable_save_button($(saveBtn));
+				return false;
+			}
+		}
 	}
 
 	/*
@@ -411,6 +485,7 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
 	if (id != null)
 		obj['id'] = id;
 
+
 	obj["created_time"] = created_time;
 
 	// Saves contact
@@ -427,7 +502,10 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
 		// Removes disabled attribute of save button
 		enable_save_button($(saveBtn));
 
-		add_contact_to_view(App_Contacts.contactsListView, data, obj.id);
+		if(is_person)
+			add_contact_to_view(App_Contacts.contactsListView, data, obj.id);
+		else
+			add_contact_to_view(App_Companies.companiesListView, data, obj.id);
 
 		// Adds the tags to tags collection
 		if (tags != undefined && tags.length != 0)
@@ -456,14 +534,21 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
 		}
 		else
 		{
+			if(is_person){
+				// update contacts-details view
+				if (App_Contacts.contactDetailView)
+								App_Contacts.contactDetailView.model = data;
 
-			// update contacts-details view
-			if (App_Contacts.contactDetailView)
-				App_Contacts.contactDetailView.model = data;
+				// App_Contacts.contactDetails(data.id,data);
+				// App_Contacts.navigate("contact/"+data.id);
+				App_Contacts.navigate("contact/" + data.id, { trigger : true });
+			} else {
+				// update contacts-details view
+				if (App_Companies.companyDetailView)
+					App_Companies.companyDetailView.model = data;
 
-			// App_Contacts.contactDetails(data.id,data);
-			// App_Contacts.navigate("contact/"+data.id);
-			App_Contacts.navigate("contact/" + data.id, { trigger : true });
+				App_Companies.navigate("company/" + data.id, { trigger : true });
+			}
 		}
 
 		// Hides the modal
@@ -495,13 +580,19 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
 		}
 		else if (response.status == 403)
 		{
-			show_error_in_formactions(modal_id, form_id, 'form-action-error', response.responseText);
+			if(form_id == 'companyForm')
+				show_error_in_formactions(modal_id, form_id, 'form-action-error', "You do not have permission to create Companies.");
+			else if(form_id == 'continueCompanyForm')
+				show_error_in_formactions(modal_id, form_id, 'form-action-error', "You do not have permission to update Companies.");
+			else
+				show_error_in_formactions(modal_id, form_id, 'form-action-error', response.responseText);
 		}
 		else
 			show_error(modal_id, form_id, 'duplicate-email', response.responseText);
 	} });
 
 	return obj;
+
 }
 
 /**
@@ -519,10 +610,11 @@ function deserialize_contact(contact, template)
 	// Loads the form based on template value
 	var form = $("#content").html(getTemplate(template, contact));
 
-	// Add placeholder and date picker to date custom fields
-	$('.date_input').attr("placeholder", "MM/DD/YYYY");
 
-	$('.date_input').datepicker({ format : 'mm/dd/yyyy', weekStart : CALENDAR_WEEK_START_DAY });
+	// Add placeholder and date picker to date custom fields
+	$('.date_input').attr("placeholder", "Select Date");
+
+	$('.date_input').datepicker({ format : CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY});
 
 	// To set typeahead for tags
 	setup_tags_typeahead();
@@ -655,12 +747,19 @@ function custom_Property_JSON(name, type, form_id)
 
 	console.log(elem_type);
 
+
 	if (elem_type == 'checkbox')
 		elem_value = elem.is(':checked') ? 'on' : 'off';
 	else if (elem.hasClass("date_input"))
-		elem_value = new Date(elem.val()).getTime() / 1000;
-	else
-		elem_value = elem.val();
+		{
+			if(CURRENT_USER_PREFS.dateFormat.indexOf("dd/mm/yy") != -1 || CURRENT_USER_PREFS.dateFormat.indexOf("dd.mm.yy") != -1)
+				elem_value = new Date(convertDateFromUKtoUS(elem.val())).getTime() / 1000;
+			else
+				elem_value = new Date(elem.val()).getTime() / 1000;
+		}
+		else
+			elem_value = elem.val();
+
 
 	json.value = elem_value;
 
@@ -728,7 +827,7 @@ $(function()
 	// Update button click event in continue-company
 	$('body').on('click', '#company-update', function(e)
 	{
-		serialize_and_save_continue_contact(e, 'continueCompanyForm', 'companyModal', false, false, this);
+		serialize_and_save_continue_contact(e, 'continueCompanyForm', 'companyModal', false, false, this,'tags_source_continue_company');
 	});
 });
 
@@ -751,11 +850,11 @@ function add_contact_to_view(appView, model, isUpdate)
 	{
 		if (appView.collection.get(model.id) != null) // update existing model
 			appView.collection.get(model.id).set(model);
-		else if (readCookie('company_filter')) // add model only if its in
+		else if (company_util.isCompany()) // add model only if its in
 			// company view
 			add_model_cursor(appView.collection, model);
 		else if (isUpdate)
-			CONTACTS_HARD_RELOAD = true; // reload contacts next time,
+			COMPANIES_HARD_RELOAD = true; // reload contacts next time,
 		// because we may have updated
 		// Company, so reflect in Contact
 	}

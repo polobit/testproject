@@ -35,7 +35,8 @@
         <div class="data-block">
             <div class="panel panel-default">
 			    <div class="panel-heading">Cases List</div>
-                <table class="table table-striped showCheckboxes m-b-none agile-table panel" url="core/api/cases/bulk" id="case-list">				 
+                <div class="table-responsive">
+                <table class="table table-striped showCheckboxes m-b-none agile-table panel table-layout-mob-view" url="core/api/cases/bulk" id="case-list">				 
 				   <thead>
                         <tr>
                             <th style="width:10%">Owner</th>
@@ -49,6 +50,7 @@
                     </tbody>
                 </table>
             </div>
+           </div>
         </div>
         {{/if}}
 	</div>

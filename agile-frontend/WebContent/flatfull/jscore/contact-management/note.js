@@ -54,6 +54,12 @@ $(function()
 			enable_save_button($(this));
 			return;
 		}
+		if($("#noteUpdateForm #note_relatedto_tag").children().length==0)
+		{
+			$("#noteUpdateForm #note_relatedto_error").show().delay(5000).hide(1);
+			enable_save_button($(this));
+			return;
+		}
 
 		// Shows loading symbol until model get saved
 		//$('#noteUpdateModal').find('span.save-status').html(getRandomLoadingImg());
@@ -87,7 +93,11 @@ $(function()
 		{
 			return;
 		}
-
+		if($("#noteForm #note_relatedto_tag").children().length==0)
+		{
+			$("#noteForm #note_relatedto_error").show().delay(5000).hide(1);
+			return;
+		}
 		disable_save_button($(this));
 		
 		// Shows loading symbol until model get saved

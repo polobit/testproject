@@ -246,6 +246,9 @@ $(function() {
 	// removes the view cookie set when view is selected
 	$('body').on('click', '.DefaultView', function(e){
 		e.preventDefault();
+		
+		if(company_util.isCompany())
+			return;
 
 		// Erases the cookie
 		eraseCookie("contact_view");

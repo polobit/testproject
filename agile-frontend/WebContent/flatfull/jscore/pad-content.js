@@ -205,7 +205,7 @@ function fill_slate(id, el, key) {
 			$("#" + id, el).html(
 					getTemplate("empty-collection-model",
 							CONTENT_JSON["companies"]));
-		else if((route_path == "filter_results") && readCookie('company_filter'))
+		else if((route_path == "filter_results") && company_util.isCompany())
 			$("#" + id, el).html(
 					getTemplate("empty-collection-model",
 							CONTENT_JSON["filter_results_companies"]));
@@ -228,6 +228,21 @@ function getContactPadcontentKey(url)
 		return "filter_results";
 	
 	return "contacts";
+		
+}
+
+function getCompanyPadcontentKey(url)
+{
+	if(!url)
+		return;
+	
+	if(url.indexOf('tag') > 0)
+		return "tag_results";
+	
+	if(url.indexOf('filter') > 0)
+		return "filter_results";
+	
+	return "companies";
 		
 }
 

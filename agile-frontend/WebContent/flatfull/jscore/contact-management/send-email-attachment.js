@@ -15,7 +15,7 @@
 		var el = $(this).closest("div");
 		$(this).css("display", "none");
 		el.find(".attachment-document-select").css("display", "inline");
-		var optionsTemplate = "<option value='{{id}}' network_type='{{titleFromEnums network_type}}'>{{name}}</option>";
+		var optionsTemplate = "<option value='{{id}}' network_type='{{titleFromEnums network_type}}' size='{{size}}'>{{name}}</option>";
         fillSelect('attachment-select','core/api/documents', 'documents',  function fillNew()
 		{
 			el.find("#attachment-select option:first").after("<option value='new'>Upload new doc</option>");
@@ -29,10 +29,15 @@
 	$('#' + listener_container_id).on('click', '.add-attachment-confirm', function(e){
 		e.preventDefault();		
 		var network_type = $('#attachment-select').find(":selected").attr('network_type');
+		var document_size = $('#attachment-select').find(":selected").attr('size');
 		if(typeof network_type !=='undefined' && network_type.toUpperCase() === 'GOOGLE')
 		{
 			$(this).closest("span").find(".attachment-status").html("<span style='color:#df382c;margin-top:10px; display:block'>Can not attach Google Drive doc to email. You can add a link instead in the email.</span>");
 			$(this).css({'border': '1px solid #df382c','outline': 'none'   });				             	            
+		}
+		else if(document_size >= 5242880){
+			$(this).closest("span").find(".attachment-status").html("<span style='color:#df382c;margin-top:10px; display:block'>Document size exceeds the 5MB limit.</span>");
+			$(this).css({'border': '1px solid #df382c','outline': 'none'   });
 		}
 		else
 		{

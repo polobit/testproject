@@ -1,42 +1,54 @@
-/**
- Creates a new marker and info window.
- Applies a click listener on marker.
-*/   
-function gmap_add_marker(Locations){
-  
+/**Global variable holds the time interval to make rest call */
+var INTERVAL=2000;
+/** Global variable holds the latitudes and longitudes,used by the marker to plot a location */
+var myLatlng = [];
 
-	//gmap_delete_marker();
-	//This holds previous infowindow object .
-	var previousInfoWindow=undefined;
-	var markerCluster;
-	if(markerCluster)
-	markerCluster.setMap(null);
-	
-	
-	 var myLatlng = [];
-	 var infowindow = [];
-	 var marker = [];
-	 for (var i=0; i<marker.length; i++) {
-	        marker[i].setMap(null);
-	    }
+/**Global variable to hold markers */
+var marker = [];
 
-	                  function MakeInfoWindowEvent(map, infowindow, marker) {  
-	                     return function() {
-	                    	if(previousInfoWindow != undefined && previousInfoWindow != "")
-	                    	 previousInfoWindow.close();
-	                        infowindow.open(map, marker);
-	                        previousInfoWindow=infowindow;
-	                     };  
-	                  }
-	                  
-	                  function CloseInfoWindowEvent(map,infowindow){
-	                	  return function(){
-	                		  infowindow.close();
-	                	  }
-	                  }
+/** It holds the unique sid's : just to have a unique visits as mysql query doesnot group sid's*/
+var markerStore={};
+
+var offSet=0; 
+var limit=200;
+
+/** Global variable to hold REST API call url*/
+var url;
+/**Global variable to hold clusterer object */
+var markerCluster;
+/**Single instance will be used for all the marker infowindow's
+*/
+var infowindow;
+
+
+ /**spiderifier object */
+var oms;
+ 
+ 
+/** Function to retrieve visitors data with offset: called on every 5 seconds */
+function getMarkers() {
+		$.getJSON( url+'&cursor='+offSet+'&page_size='+limit, function( res ) {
+			
+			if(res != ""){
+				/** Call a function to plot the markers with recieved marker data*/
+				plotMarkers(res);
+				offSet=offSet+limit;
+		        setTimeout(getMarkers,INTERVAL);
+			}else
+				$("#map-tab-waiting").fadeOut();
+			
+		});
+		
+	}
+
+/** Function which takes response from server and create a marker,infowindow adds it to Clusterer and Spiderifier */
+function plotMarkers(Locations){
 
 	                  for (var i=0;i < Locations.length;i++)
 	                  {   
+	                	  
+	                	  /**Check if we have duplicate markers : markers with same sid is pretend to be a duplicate marker here */
+	                	  if(! markerStore.hasOwnProperty(Locations[i].sid)) {
 	                	    var User_Location = (Locations[i].city_lat_long).split(",");
 	                        myLatlng[i] = new google.maps.LatLng(User_Location[0],User_Location[1]);
 	                        var parsedString = Locations[i].parsedUserAgent.replace(/\\/g, '');
@@ -55,11 +67,7 @@ function gmap_add_marker(Locations){
 	                        var markerImageUrl=gmap_set_icons(email,30);
 	                        
 	                        var icon = {
-	                        	     url: markerImageUrl, // url
-	                        	     size: new google.maps.Size(40, 40),
-	                        	     origin: new google.maps.Point(0,0),
-	                        	     scaledSize: new google.maps.Size(30,30),
-	                        	     anchor: new google.maps.Point(0, 32)
+	                        	     url: markerImageUrl
 	                        	 };
 	                        
 	                         if(email == undefined || email == "")
@@ -71,7 +79,7 @@ function gmap_add_marker(Locations){
 	                         strVar += "  <img alt=\"null\" class=\"photo\" src='"+markerImageUrl+"' style=\"width: 61px;border-radius:8px\">";
 	                         strVar += "  <\/div>";
 	                         strVar += "  <div style=\"width: 230px;padding-left: 70px;\">";
-	                         strVar += "    <div style=\"";
+	                         strVar += "    <div class=\"emailLink\" emailAttr="+email+" style=\"";
 	                         strVar += "    margin: 7px 0px 0;";
 	                         strVar += "    font-size: 14px;";
 	                         strVar += "    white-space: nowrap;";
@@ -79,7 +87,7 @@ function gmap_add_marker(Locations){
 	                         strVar += "    width: 100%;";
 	                         strVar += "    overflow: hidden;";
 	                         strVar += "    color: #363f44;";
-	                         strVar += "\">"+email+"<br>"+timeSince(Locations[i].visit_time)+"<br>"+Locations[i].city+","+Locations[i].country+"<\/div>";
+	                         strVar += "\"><a>"+email+"</a><br>"+timeSince(Locations[i].visit_time)+"<br>"+capitalizeFirstLetter(Locations[i].city)+" , "+Locations[i].country+"<\/div>";
 	                         strVar += "    <p style=\"";
 	                         strVar += "    margin: 3px 0 0px;float:right"; 
 	                         strVar += "\"><a href=\"#\" style=\"";
@@ -93,35 +101,158 @@ function gmap_add_marker(Locations){
 	                         marker[i] = new google.maps.Marker({
 	                              position: myLatlng[i],
 	                              map: map,
-	                              icon:icon
+	                              draggable:false,
+	                              icon:icon,
+	                              content:strVar
 	                          });
-		                        infowindow[i] = new google.maps.InfoWindow({
-		                                 content: strVar
-		                             });
-	                       
-	                           google.maps.event.addListener(marker[i], 'click', MakeInfoWindowEvent(map, infowindow[i], marker[i]));
-	                           google.maps.event.addListener(map, 'click', CloseInfoWindowEvent(map, infowindow[i]));
-	                               
+	                         
+	                         markerStore[Locations[i].sid] = marker[i];
+	                         
+	                         oms.addMarker(marker[i]);
+	                          
+	                          /**Marker click event*/ 
+	                          google.maps.event.addListener(marker[i], 'click', function() {
+	                        	    infowindow.setContent(this.content);
+	                        	    infowindow.open(map,this);
+	                        	});
 
 	                  }
-	                  var mcOptions = {gridSize: 50, maxZoom: 15};
-	                  markerCluster = new MarkerClusterer(map, marker,mcOptions);
-	                
+	                  }
+	                  
+	                  /**If the marker cluster is not  yet initialized then do it once with existing markers */
+	                  if(markerCluster == undefined){
+	                	  
+	                	  
+	                      /**Initializing marker clusterer*/ 
+	  	      		    markerCluster = new MarkerClusterer(map,marker,{maxZoom:15});
+	  	      		    
+	  	      		    
+	  	      		    /**Listener to show the spiderify markers on clicking the clusterer count directly*/ 
+	  	      		    google.maps.event.addListener(markerCluster, 'click', function(cluster) {
 
+	  	      		        var markers = cluster.getMarkers();
+
+	  	      		        if(prepareMarkers(markers)){
+	  	      		             //to wait for map update
+	  	      		            setTimeout(function(){
+	  	      		                google.maps.event.trigger(markers[markers.length-1], 'click');
+	  	      		            },1000)
+	  	      		        }
+	  	      		        return true;
+	  	      		    });
+	  	      		    
+
+	  	      		    function prepareMarkers(markers){
+	  	      		    var cont=0;
+	  	      		    var latitudMaster=markers[0].getPosition().lat();
+	  	      		    var longitudMaster=markers[0].getPosition().lng();
+	  	      		    for(var i=0;i<markers.length;i++){
+	  	      		        if(markers[i].getPosition().lat() === latitudMaster & markers[i].getPosition().lng() === longitudMaster ){
+	  	      		            cont++;
+	  	      		        }else{
+	  	      		            return false;
+	  	      		        }
+	  	      		    }
+	  	      		    if(cont==markers.length){
+	  	      		        return true;
+	  	      		    }else if(cont<markers.length){
+	  	      		        return false;
+	  	      		    }
+	  	      		}
+	                	  
+	                  }else{
+	                	  markerCluster.addMarkers(marker,false);
+	                	  
+	                  }
+	              
+	                  
+	                  /**Listener to close the infowindow if opened on clicking a map*/ 
+	                  google.maps.event.addListener(map, 'click', function(){
+	                	  if(infowindow){
+	                		  infowindow.close();
+	                	  }
+	                  });
+	
+	
+	
 }
 
+$(document).on('click','div.emailLink',function(){
+	var emailToSend=$(this).attr('emailAttr');
+	if(emailToSend != '' && emailToSend != undefined){
+		var visitorBySessionUrl="core/api/contacts/search/email/"+emailToSend;
+		$.getJSON(visitorBySessionUrl,function(res){
+			if(res != '' && res != undefined){
+				var contactId=res.id;
+				window.location.href='#contact/'+contactId;
+			}else{
+				$('#visitorsNoContactModal').modal('show');
+			}
+		});
+	}
+	
+});
+
+/**
+ This method is being called from gmap-date-sort.js as soon as map object created
+*/   
+function gmap_add_marker(DateRangeUrl){
+	
+	
+	google.maps.visualRefresh = true;
+	
+	var mapProp = {
+		center:new google.maps.LatLng(39.0000, 22.0000),
+		zoom:2,
+		mapTypeId:google.maps.MapTypeId.ROADMAP
+	};
+	
+	
+	/**Creating a new instance everytime the date were modified ,this is required to reresh the markers and clusters*/
+	window.map=new google.maps.Map(document.getElementById("google_map"),mapProp);
+	map.setOptions({ minZoom: 2});
+	
+	/**Reset all the global variables */
+	offSet=0;
+	myLatlng = [];
+	marker = [];
+	markerStore={};
+	markerCluster=undefined;
+	infowindow=undefined;
+	oms=undefined;
+	
+	
+	
+	/**Single instance will be used for all the marker infowindow's
+	*/
+	infowindow = new google.maps.InfoWindow({maxWidth: 230});
+	
+    /** Spiderify intialization*/
+	oms= new OverlappingMarkerSpiderfier(map, {keepSpiderfied:true,nearbyDistance:40,legWeight:0});
+	url=DateRangeUrl;
+	
+	
+	/**Initiate the Rest call to get the data from server */
+	getMarkers(url);
+	
+	
+}
+
+/**It just formats the first letter of a string with capital letter ,Only used here for city.*/ 
+function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
+/**Function which returns either a default image or an SVG image based on the email*/
 function gmap_set_icons(email,width){
 	
-	var backup_image = "&d=" + DEFAULT_GRAVATAR_url + "\" ";
-	var data_name = '';
-
 	if (email == undefined || email == "")
-		return 'https://secure.gravatar.com/avatar/' + Agile_MD5("") + '.jpg?s=' + width + '' + backup_image + data_name;
-
+		return LIB_PATH_FLATFULL + 'images/flatfull/anonymous_visitor.png';
 	return prepareLettergravatar(email);
 	
 }
 
+/**Formats the device,OS and Browser to a required format*/ 
 function normalize_os(data){
 	
 	if (data === undefined || data.indexOf('_') === -1)
@@ -131,17 +262,8 @@ function normalize_os(data){
 	return data.split('_')[0];
 }
 
-function gmap_set_map(map){
-	for(var Loop=0; Loop < window.gmap_marker_list.length; Loop++){
-		window.gmap_marker_list[Loop].setMap(map);
-	}
-}
 
-function gmap_delete_marker(){
-	gmap_set_map(null);
-	window.gmap_marker_list = [];
-}
-
+/**This is a slight modification to the existing "initial" plugin used in the application ,could not reuse that but had to use as an another function*/
 function prepareLettergravatar(email){
 
 	var colors = ["#1abc9c", "#16a085", "#f1c40f", "#f39c12", "#2ecc71", "#27ae60", "#e67e22", "#d35400", "#3498db", "#2980b9", "#e74c3c", "#c0392b", "#9b59b6", "#8e44ad", "#bdc3c7", "#34495e", "#2c3e50", "#95a5a6", "#7f8c8d", "#ec87bf", "#d870ad", "#f69785", "#9ba37e", "#b49255", "#b49255", "#a94136"];
@@ -151,10 +273,10 @@ function prepareLettergravatar(email){
 			        "name":email,
 			        "charCount": 1,
 			        "textColor": "#ffffff",
-			        "height": 100,
-			        "width": 100,
-			        "fontSize": 60,
-			        "fontWeight": 400,
+			        "height": 32,
+			        "width": 32,
+			        "fontSize": 18,
+			        "fontWeight": 170,
 			        "fontFamily": "HelveticaNeue-Light,Helvetica Neue Light,Helvetica Neue,Helvetica, Arial,Lucida Grande, sans-serif"
 			    };
 
@@ -200,6 +322,7 @@ function prepareLettergravatar(email){
 	}
 }
 
+/**Formats the given  date to "time Ago"*/
 function timeSince(dateStr) {
 	var date=new Date();
 	 try
@@ -208,7 +331,7 @@ function timeSince(dateStr) {
 		 var re = new RegExp(find, 'g');
 		 dateStr = dateStr.replace(re, '/');
 		 dateStr = dateStr.match(/[^:]+(\:[^:]+)?/g);
-		 date=new Date(dateStr[0]);
+		 date = new Date(dateStr[0]+' UTC');
 		}
 		catch (err)
 		{

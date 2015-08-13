@@ -18,6 +18,7 @@ import org.json.JSONObject;
 
 import com.agilecrm.contact.email.bounce.EmailBounceStatus.EmailBounceType;
 import com.agilecrm.contact.util.ContactUtil;
+import com.agilecrm.util.DateUtil;
 import com.campaignio.reports.CampaignReportsSQLUtil;
 import com.campaignio.reports.CampaignReportsUtil;
 
@@ -91,6 +92,11 @@ public class CampaignReportsAPI
     {
 	try
 	{
+		String current_timezone = DateUtil.getCurrentUserTimezoneOffset();
+		if (current_timezone != null)
+		{
+			timeZone = ""+(Long.valueOf(current_timezone)*-1);
+		}
 	    // start date in mysql date format.
 	    String startDate = CampaignReportsUtil.getStartDate(startTime, endTime, type, timeZone);
 
@@ -130,6 +136,11 @@ public class CampaignReportsAPI
     {
 	try
 	{
+		String current_timezone = DateUtil.getCurrentUserTimezoneOffset();
+		if (current_timezone != null)
+		{
+			timeZone = ""+(Long.valueOf(current_timezone)*-1);
+		}
 	    // start date in mysql date format.
 	    String startDate = CampaignReportsUtil.getStartDate(startTime, endTime, null, timeZone);
 

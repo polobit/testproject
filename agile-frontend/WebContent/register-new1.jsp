@@ -162,8 +162,8 @@ if(isSafari && isWin)
 </div>
   </div>
   
-  <a class="carousel-control left" href="#myCarousel" data-slide="prev">â€¹</a>
-  <a class="carousel-control right" href="#myCarousel" data-slide="next">â€º</a>
+  <a class="carousel-control left" href="#myCarousel" data-slide="prev">‹</a>
+  <a class="carousel-control right" href="#myCarousel" data-slide="next">›</a>
 </div>
 </div>
 </div>

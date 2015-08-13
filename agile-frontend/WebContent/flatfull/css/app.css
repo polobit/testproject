@@ -2695,6 +2695,7 @@ fieldset[disabled] .i-checks input + i:before {
 
 .datepicker {
   margin: 0 5px;
+  min-width: 170px;
 }
 
 .datepicker .btn-default {
