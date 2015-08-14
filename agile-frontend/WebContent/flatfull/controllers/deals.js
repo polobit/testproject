@@ -96,7 +96,8 @@ var DealsRouter = Backbone.Router.extend({
 	 */
 	importDeals : function()
 	{
-		$('#content').html(getTemplate("import-deals", {}));
+		$('#content').html("<div id='import-deals-listener'></div>").find("#import-deals-listener").html(getTemplate("import-deals", {}));
+		initializeImportEvents("import-deals-listener");
 	},
 
 });

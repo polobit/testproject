@@ -711,7 +711,7 @@ function parseCSV(key, type)
 						template = $(getTemplate("import-deals2", data));
 					}
 
-					var $firstDiv = $('#content').first();
+					var $firstDiv = $('#content').children().first();
 					$firstDiv.html(template);
 								
 					initializeImportEvents($firstDiv.attr('id'));
