@@ -277,7 +277,7 @@ $(function(){
 	});
 
 	//For updating document from contact-details
-$('#dcontent').on('click', '.document-edit-deal-tab', function(e){
+$('#content').on('click', '.document-edit-deal-tab', function(e){
 	e.preventDefault();
 	var id = $(this).attr('data');
 	updateDocument(dealDocsView.collection.get(id));
