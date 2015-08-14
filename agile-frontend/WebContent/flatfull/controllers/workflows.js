@@ -50,7 +50,6 @@ var WorkflowsRouter = Backbone.Router
 				this.workflow_list_view = new Base_Collection_View({ url : '/core/api/workflows', restKey : "workflow", sort_collection : false,
 					templateKey : "workflows", individual_tag_name : 'tr', cursor : true, page_size : 20, postRenderCallback : function(el)
 					{
-						initializeTriggersListeners();
 						head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
 						{
 							$("time.campaign-created-time", el).timeago();
@@ -74,7 +73,8 @@ var WorkflowsRouter = Backbone.Router
 
 				this.workflow_list_view.collection.fetch();
 
-				$('#content').html(this.workflow_list_view.el);
+				$("#content").html('<div id="workflows-listener-container"></div>').find('#workflows-listener-container').html(this.workflow_list_view.el);
+				initializeWorkflowsListeners();
 
 				$(".active").removeClass("active");
 				$("#workflowsmenu").addClass("active");
@@ -96,7 +96,9 @@ var WorkflowsRouter = Backbone.Router
 				this.workflow_json = undefined;
 				this.workflow_model = undefined;
 
-				$('#content').html(getTemplate('workflow-add', { "is_new" : true }));
+				$("#content").html('<div id="workflows-listener-container"></div>').find('#workflows-listener-container').html(getTemplate('workflow-add', { "is_new" : true }));
+				initializeWorkflowsListeners();
+
 				initiate_tour("workflows-add", $('#content'));	
 				
 				// Init SendVerify Email
@@ -159,7 +161,8 @@ var WorkflowsRouter = Backbone.Router
 				this.workflow_json = this.workflow_model.get("rules");
 
 				var el = $(getTemplate('workflow-add', {}));
-				$('#content').html(el);
+				$("#content").html('<div id="workflows-listener-container"></div>').find('#workflows-listener-container').html(el);
+				initializeWorkflowsListeners();
 
 				// Set the name
 				$('#workflow-name').val(this.workflow_model.get("name"));
@@ -189,7 +192,8 @@ var WorkflowsRouter = Backbone.Router
 					return;
 				}
 
-				$('#content').html(getTemplate('workflow-categories', {}));
+				$("#content").html('<div id="workflows-listener-container"></div>').find('#workflows-listener-container').html(getTemplate('workflow-categories', {}));
+				initializeWorkflowsListeners();
 			},
 
 			/**
@@ -224,7 +228,9 @@ var WorkflowsRouter = Backbone.Router
 					that.workflow_json = JSON.stringify(data);
 				} });
 
-				$('#content').html(getTemplate('workflow-add', { "is_new" : true }));
+				$("#content").html('<div id="workflows-listener-container"></div>').find('#workflows-listener-container').html(getTemplate('workflow-add', { "is_new" : true }));
+				initializeWorkflowsListeners();
+
 
 				// Init SendVerify Email
 				send_verify_email()
@@ -1099,3 +1105,8 @@ var WorkflowsRouter = Backbone.Router
 				$('#campaign-tabs .select').removeClass('select');
 				$('.campaign-subscribers-tab').addClass('select');
 			} });
+
+function initializeWorkflowsListeners(){
+
+	
+}
