@@ -26,9 +26,11 @@ SEARCHABLE_CONTACT_CUSTOM_FIELDS = undefined;
 COMPANY_CUSTOM_FIELDS = undefined;
 function initializeContactFiltersListeners()
 {
-	
+}
+$(function(){
+
 	// Filter Contacts- Clone Multiple
-	$('#reports-listerners-container').on('click', '.filter-contacts-multiple-add', function(e)
+	$('body').on('click', '.filter-contacts-multiple-add', function(e)
 	{
 		e.preventDefault();
 		// To solve chaining issue when cloned
@@ -49,7 +51,7 @@ function initializeContactFiltersListeners()
 	});
 	
 	// Filter Contacts- Clone Multiple
-	$('#reports-listerners-container').on('click', '.filter-contacts-multiple-add-or-rules', function(e)
+	$('body').on('click', '.filter-contacts-multiple-add-or-rules', function(e)
 	{
 		e.preventDefault();
 		// To solve chaining issue when cloned
@@ -70,7 +72,7 @@ function initializeContactFiltersListeners()
 	});
 	
 	// Filter Contacts- Clone Multiple
-	$('#reports-listerners-container').on('click', '.filter-companies-multiple-add', function(e)
+	$('body').on('click', '.filter-companies-multiple-add', function(e)
 	{
 		e.preventDefault();
 		// To solve chaining issue when cloned
@@ -89,7 +91,7 @@ function initializeContactFiltersListeners()
 	});
 	
 	// Filter Contacts- Clone Multiple
-	$('#reports-listerners-container').on('click', '.filter-companies-multiple-add-or-rules', function(e)
+	$('body').on('click', '.filter-companies-multiple-add-or-rules', function(e)
 	{
 		e.preventDefault();
 		// To solve chaining issue when cloned
@@ -110,7 +112,7 @@ function initializeContactFiltersListeners()
 	
 
 	// Filter Contacts- Remove Multiple
-	$('#reports-listerners-container').on('click', 'i.filter-contacts-multiple-remove', function(e)
+	$('body').on('click', 'i.filter-contacts-multiple-remove', function(e)
 	{
 		$(this).closest("tr").remove();
 	});
@@ -168,25 +170,7 @@ function initializeContactFiltersListeners()
 		App_Contacts.contacts(); // /Show Companies list, explicitly hard
 		// reload
 		return;
-		/*
-		 * {{ OLD-CODE below }} if(readCookie('contact_view')) {
-		 * App_Contacts.contact_custom_view.collection.url =
-		 * "core/api/contacts/companies"
-		 * App_Contacts.contact_custom_view.collection.fetch();
-		 * //$('.filter-dropdown',
-		 * App_Contacts.contact_custom_view.el).append(filter_name); } /* If
-		 * contactsListView is defined (default view) then load filter results
-		 * in default view
-		 * 
-		 * if(App_Contacts.contactsListView &&
-		 * App_Contacts.contactsListView.collection) { // Set url to default
-		 * view to load filter results
-		 * App_Contacts.contactsListView.collection.url =
-		 * "core/api/contacts/companies";
-		 * App_Contacts.contactsListView.collection.fetch();
-		 * //$('.filter-dropdown',
-		 * App_Contacts.contactsListView.el).append(filter_name); }
-		 */
+		
 	});
 
 	$('body').on('change', '.lhs_chanined_parent', function(e)
@@ -222,8 +206,7 @@ function initializeContactFiltersListeners()
 		}
 	});
 	
-	
-}
+});
 
 /**
  * Sets up contact filters list in contacts list page, also whether cookie is

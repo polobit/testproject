@@ -223,6 +223,7 @@ var CompaniesRouter = Backbone.Router
 					$('#contacts-count').html(count_message);
 				} else {					
 					setupLhsFilters(el,true);
+					contactFiltersListeners("lhs_filters_conatiner");
 				}
 			} });
 		
@@ -359,7 +360,7 @@ var CompaniesRouter = Backbone.Router
 		var el = this.companyDetailView.render(true).el;
 		$('#content').html(el);
 		fill_company_related_contacts(id, 'company-contacts');
-		company_detail_tab.initEvents();
+		// company_detail_tab.initEvents();
 		return;
 	},
 	

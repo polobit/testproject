@@ -117,9 +117,12 @@ function submitLhsFilter()
 }
 
 
-function contactFiltersListeners(){
+function contactFiltersListeners(container_id){
 
-$('#conatcts-listeners-conatainer').on('click', 'a.filter-multiple-add-lhs', function(e)
+if(!container_id)
+	  container_id = 'conatcts-listeners-conatainer';
+
+$('#' + container_id).on('click', 'a.filter-multiple-add-lhs', function(e)
 {
 	e.preventDefault();
 	var fieldName = $(this).data('name');
@@ -135,7 +138,7 @@ $('#conatcts-listeners-conatainer').on('click', 'a.filter-multiple-add-lhs', fun
 });
 
 // Filter Contacts- Remove Multiple
-$('#conatcts-listeners-conatainer').on('click', 'i.filter-tags-multiple-remove-lhs', function(e)
+$('#' + container_id).on('click', 'i.filter-tags-multiple-remove-lhs', function(e)
 {
 	var container = $(this).parents('.lhs-contact-filter-row');
 	$(container).find('#RHS').children().val("").trigger('blur').trigger('change');
@@ -143,7 +146,7 @@ $('#conatcts-listeners-conatainer').on('click', 'i.filter-tags-multiple-remove-l
 });
 
 // Filter Contacts- Remove Multiple
-$('#conatcts-listeners-conatainer').on('click', 'a.clear-filter-condition-lhs', function(e)
+$('#' + container_id).on('click', 'a.clear-filter-condition-lhs', function(e)
 {
 	$(this).addClass('hide');
 	var container = $(this).parents('.lhs-row-filter');
@@ -156,7 +159,7 @@ $('#conatcts-listeners-conatainer').on('click', 'a.clear-filter-condition-lhs', 
 	submitLhsFilter();
 });
 
-$('#conatcts-listeners-conatainer').on('click', '#clear-lhs-contact-filters', function(e)
+$('#' + container_id).on('click', '#clear-lhs-contact-filters', function(e)
 {
 	e.preventDefault();
 	eraseData('dynamic_contact_filter');
@@ -164,7 +167,7 @@ $('#conatcts-listeners-conatainer').on('click', '#clear-lhs-contact-filters', fu
 	App_Contacts.contacts();
 });
 
-$('#conatcts-listeners-conatainer').on('click', '#clear-lhs-company-filters', function(e)
+$('#' + container_id).on('click', '#clear-lhs-company-filters', function(e)
 {
 	e.preventDefault();
 	eraseData('dynamic_company_filter');
@@ -172,7 +175,7 @@ $('#conatcts-listeners-conatainer').on('click', '#clear-lhs-company-filters', fu
 	App_Companies.companies();
 });
 
-$('#conatcts-listeners-conatainer').on('click', '#lhs-filters-header', function(e)
+$('#' + container_id).on('click', '#lhs-filters-header', function(e)
 {
 	e.preventDefault();
 	$(this).find('i').toggleClass('fa-plus-square-o').toggleClass('fa-minus-square-o');
@@ -180,7 +183,7 @@ $('#conatcts-listeners-conatainer').on('click', '#lhs-filters-header', function(
 	$(this).next().find('.lhs-contact-filter-row:visible').find('#RHS').filter(visibleFilter).find(':not(input.date)').focus();
 });
 
-$('#conatcts-listeners-conatainer').on('change', '#lhs-contact-filter-form select[name="CONDITION"]', function(e)
+$('#' + container_id).on('change', '#lhs-contact-filter-form select[name="CONDITION"]', function(e)
 {
 	var selected = $(this).val();
 	$(this).parent().find('div.condition_container').addClass('hide');
@@ -200,7 +203,7 @@ $('#conatcts-listeners-conatainer').on('change', '#lhs-contact-filter-form selec
 	}
 });
 
-$('#conatcts-listeners-conatainer').on('blur keyup', '#lhs-contact-filter-form #RHS input:not(.date)', function(e)
+$('#' + container_id).on('blur keyup', '#lhs-contact-filter-form #RHS input:not(.date)', function(e)
 {
 	if (e.type == 'focusout' || e.keyCode == '13')
 	{
@@ -235,7 +238,7 @@ $('#conatcts-listeners-conatainer').on('blur keyup', '#lhs-contact-filter-form #
 	}
 });
 
-$('#conatcts-listeners-conatainer').on('change keyup', '#lhs-contact-filter-form #RHS input.date', function(e)
+$('#' + container_id).on('change keyup', '#lhs-contact-filter-form #RHS input.date', function(e)
 {
 	if (e.type == 'change' || e.keyCode == '13')
 	{
@@ -270,7 +273,7 @@ $('#conatcts-listeners-conatainer').on('change keyup', '#lhs-contact-filter-form
 	}
 });
 
-$('#conatcts-listeners-conatainer').on('change', '#lhs-contact-filter-form #RHS select', function(e)
+$('#' + container_id).on('change', '#lhs-contact-filter-form #RHS select', function(e)
 {
 	if ($(this).parent().next().attr("id") == "RHS_NEW")
 	{
@@ -307,7 +310,7 @@ $('#conatcts-listeners-conatainer').on('change', '#lhs-contact-filter-form #RHS 
 	$(this).blur();
 });
 
-$('#conatcts-listeners-conatainer').on('change', '#lhs-contact-filter-form #RHS_NEW select', function(e)
+$('#' + container_id).on('change', '#lhs-contact-filter-form #RHS_NEW select', function(e)
 {
 	if ($(this).parent().prev().attr("id") == "RHS")
 	{
@@ -327,7 +330,7 @@ $('#conatcts-listeners-conatainer').on('change', '#lhs-contact-filter-form #RHS_
 	$(this).blur();
 });
 
-$('#conatcts-listeners-conatainer').on('blur keyup', '#lhs-contact-filter-form #RHS_NEW input:not(.date)', function(e)
+$('#' + container_id).on('blur keyup', '#lhs-contact-filter-form #RHS_NEW input:not(.date)', function(e)
 {
 	if (e.type == 'focusout' || e.keyCode == '13')
 	{
@@ -360,7 +363,7 @@ $('#conatcts-listeners-conatainer').on('blur keyup', '#lhs-contact-filter-form #
 	}
 });
 
-$('#conatcts-listeners-conatainer').on('change keyup', '#lhs-contact-filter-form #RHS_NEW input.date', function(e)
+$('#' + container_id).on('change keyup', '#lhs-contact-filter-form #RHS_NEW input.date', function(e)
 {
 	if (e.type == 'change' || e.keyCode == '13')
 	{
