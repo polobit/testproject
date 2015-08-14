@@ -1,6 +1,6 @@
-function initializeAvatarModalListeners(){
-
-    $("#choose-avatar-modal").on('click', 'table td a', function(e) {
+$(function(){
+	
+   $("#choose-avatar-modal").on('click', 'table td a', function(e) {
 	
 			e.preventDefault();
 	
@@ -48,7 +48,8 @@ function initializeAvatarModalListeners(){
 	$('#choose-avatar-modal').on('show.bs.modal',function (e) {
 		$('#choose-avatar-modal').html($('#choose-avatar-test').html());
 	});
-}
+
+})
 
 // selects default avatars randomly
 function choose_random_avatar()

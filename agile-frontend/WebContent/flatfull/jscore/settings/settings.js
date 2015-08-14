@@ -115,7 +115,7 @@ function load_imap_properties(model, el) {
 
 function initializeSettingsListeners(){
 
-	$('#prefs-tabs-content').off('click').on('click', '.gmail-share-settings-select', function(e)
+	$('#prefs-tabs-content').on('click', '.gmail-share-settings-select', function(e)
 	{
 						e.preventDefault();
 						var id = $(this).attr("oid");
@@ -139,7 +139,7 @@ function initializeSettingsListeners(){
 	/**
 	 * To cancel the imap share settings event
 	 */
-	$('#prefs-tabs-content').off('click').on('click', '.gmail-share-settings-cancel', function(e){
+	$('#prefs-tabs-content').on('click', '.gmail-share-settings-cancel', function(e){
 		e.preventDefault();
 		var el = $(this).closest("div");
 		var name = $(this).attr('name');
@@ -151,7 +151,7 @@ function initializeSettingsListeners(){
 	/**
 	 * Share imap settings with othe users
 	 */
-	$('#prefs-tabs-content').off('click').on('click', '.imap-share-settings-select', function(e){
+	$('#prefs-tabs-content').on('click', '.imap-share-settings-select', function(e){
 						e.preventDefault();
 						var id = $(this).attr("oid");
 						var el = $(this).closest("div");
@@ -174,7 +174,7 @@ function initializeSettingsListeners(){
 	/**
 	 * To cancel the imap share settings event
 	 */
-	$('#prefs-tabs-content').off('click').on('click', '.imap-share-settings-cancel', function(e){
+	$('#prefs-tabs-content').on('click', '.imap-share-settings-cancel', function(e){
 		e.preventDefault();
 		var el = $(this).closest("div");
 		var name = $(this).attr('name');
@@ -187,7 +187,7 @@ function initializeSettingsListeners(){
 	/**
 	 * Select imap server folder, will fetch mails from these folders
 	 */
-	$('#prefs-tabs-content').off('click').on('click', '.imap-folders-settings-click', function(e){
+	$('#prefs-tabs-content').on('click', '.imap-folders-settings-click', function(e){
 				e.preventDefault();
 				var el = $(this).closest("div");
 				var id = $(this).attr("oid");
@@ -204,7 +204,7 @@ function initializeSettingsListeners(){
 	/**
 	 * To cancel the imap folder settings
 	 */
-	$('#prefs-tabs-content').off('click').on('click', '.imap-folders-settings-cancel', function(e){
+	$('#prefs-tabs-content').on('click', '.imap-folders-settings-cancel', function(e){
 		e.preventDefault();
 		var el = $(this).closest("div");
 		el.find('#imap-folders-multi-select').empty();
@@ -215,7 +215,7 @@ function initializeSettingsListeners(){
 	/**
 	 * Share office settings with other users
 	 */
-	$('#prefs-tabs-content').off('.click').on('click', '.office-share-settings-select', function(e){
+	$('#prefs-tabs-content').on('click', '.office-share-settings-select', function(e){
 						e.preventDefault();
 						var el = $(this).closest("div");
 						$(this).css("display", "none");
@@ -239,7 +239,7 @@ function initializeSettingsListeners(){
 	/**
 	 * To cancel the imap share settings event
 	 */
-	$('#prefs-tabs-content').off('.click').on('click', '.office-share-settings-cancel', function(e){
+	$('#prefs-tabs-content').on('click', '.office-share-settings-cancel', function(e){
 		e.preventDefault();
 		var el = $(this).closest("div");
 		var name = $(this).attr('name');
@@ -248,7 +248,7 @@ function initializeSettingsListeners(){
 		el.find(".office-share-settings-txt").css("display", "inline");
 	});
 
-	$('#prefs-tabs-content').off('click').on('click', '#gmail-prefs-delete', function(e){
+	$('#prefs-tabs-content').on('click', '#gmail-prefs-delete', function(e){
 
 		e.preventDefault();
 
@@ -277,7 +277,7 @@ function initializeSettingsListeners(){
 		});
 	});
 	
-	$('#prefs-tabs-content').off('click').on('click', '#office-prefs-delete, #imap-prefs-delete', function(e){
+	$('#prefs-tabs-content').on('click', '#office-prefs-delete, #imap-prefs-delete', function(e){
 
 		e.preventDefault();
 		
@@ -313,12 +313,14 @@ function initializeSettingsListeners(){
 
 function initializeAdminSettingsListeners(){
 
-	 $('#upload-container').off('click').on('click', '.upload_s3', function (e) {
+	 $('#upload-container .upload_s3').off('click');
+	 $('#upload-container').on('click', '.upload_s3', function (e) {
 		e.preventDefault();
 		uploadImage("upload-container");
 	});
 
-	$("#admin-prefs-tabs-content").off('click').on("click", '#email-gateway-delete', function(e) {
+	$('#admin-prefs-tabs-content #email-gateway-delete').off('click');
+	$("#admin-prefs-tabs-content").on("click", '#email-gateway-delete', function(e) {
 		e.preventDefault();
 		
 		if(!confirm("Are you sure you want to delete?"))
@@ -349,7 +351,8 @@ function initializeAdminSettingsListeners(){
 		});
 	});
 
-	$('#admin-prefs-tabs-content').off('click').on('click', '#sms-gateway-delete', function(e){ 
+	$('#admin-prefs-tabs-content #sms-gateway-delete').off('click');
+	$('#admin-prefs-tabs-content').on('click', '#sms-gateway-delete', function(e){ 
 		e.preventDefault();
 		
 		if(!confirm("Are you sure you want to delete?"))
@@ -371,7 +374,8 @@ function initializeAdminSettingsListeners(){
 	 */
 		
 	// Cancellation for free users
-	$('#accountPrefs').off('click').on('click', '#cancel-account', function(e) {
+	$('#accountPrefs #cancel-account').off('click');
+	$('#accountPrefs').on('click', '#cancel-account', function(e) {
 	
 			e.preventDefault();
 			
@@ -428,7 +432,8 @@ function initializeAdminSettingsListeners(){
 	});
 	
 	// Cancellation for paid users
-	$('#accountPrefs').off('click').on('click', '#cancel-account-request', function(e) {
+	$('#accountPrefs #cancel-account-request').off('click');
+	$('#accountPrefs').on('click', '#cancel-account-request', function(e) {
 	
 			e.preventDefault();
 			
