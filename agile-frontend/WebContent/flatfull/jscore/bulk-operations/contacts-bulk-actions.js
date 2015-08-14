@@ -51,7 +51,7 @@ $(function()
 
 		// Yes callback
 		// Bind a custom event to trigger on loading the form
-		$("body").off('fill_owners').on("fill_owners", "#bulk-owner", function(event)
+		$("body").off('fill_owners').on("fill_owners", function(event)
 		{
 			var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
 			fillSelect('ownerBulkSelect', '/core/api/users', 'domainUsers', 'no-callback ', optionsTemplate);
@@ -204,7 +204,7 @@ $(function()
 
 		console.log(filter);
 
-        $("body").off('fill_campaigns').on("fill_campaigns", "#bulk-campaigns", function(event)
+        $("body").off('fill_campaigns').on("fill_campaigns", function(event)
 		{
 			var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
 			fillSelect('campaignBulkSelect', '/core/api/workflows', 'workflow', 'no-callback ', optionsTemplate);
@@ -639,7 +639,7 @@ $(function()
 		if(id_array && id_array.length == 0)
 		id_array = get_contacts_bulk_ids();
 
-        $("body").off('fill_emails').on("fill_emails", "#bulk-email", function(event)
+        $("body").off('fill_emails').on("fill_emails", function(event)
 		{
 
 			var $emailForm = $('#emailForm');
