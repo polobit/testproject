@@ -1,4 +1,23 @@
+$(function(){ 
 
+	$("body").on('click', ".upload_s3", function(e){
+		e.preventDefault();
+		uploadImage("upload-container");
+	});
+
+	//Upload contact image
+	$("body").on('click', ".upload_pic", function(e){
+		e.preventDefault();
+		uploadImage("contact-container");
+	});
+	
+	//Upload personal prefs
+	$("body").on('click', ".upload_prefs_s3", function(e){
+		e.preventDefault();
+		uploadImage("upload-in-modal");
+	});
+	
+});	
 
 function uploadImage(id)
 {

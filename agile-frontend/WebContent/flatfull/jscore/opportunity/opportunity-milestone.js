@@ -110,7 +110,7 @@ function initDealListCollection(milestones)
 function dealAppend(base_model)
 {
 	var dealsListModel = new Base_List_View({ model : base_model, "view" : "inline", template : "opportunities-by-paging-model", tagName : 'div',
-		className : "milestone-column", id : base_model.get("heading").replace(/ +/g, '') });
+		className : "milestone-column panel m-b-none  b-n r-n panel-default", id : base_model.get("heading").replace(/ +/g, '') });
 
 	// Render model in main collection
 	var el = dealsListModel.render().el;
