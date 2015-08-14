@@ -13,6 +13,7 @@ import com.amazonaws.services.simpleemail.model.Content;
 import com.amazonaws.services.simpleemail.model.Destination;
 import com.amazonaws.services.simpleemail.model.Message;
 import com.amazonaws.services.simpleemail.model.SendEmailRequest;
+import com.thirdparty.ses.util.AmazonSESUtil;
 
 
 public class AmazonSES
@@ -113,11 +114,5 @@ public class AmazonSES
             System.out.println("The email was not sent.");
             System.out.println("Error message: " + ex.getMessage());
         }
-	}
-	
-	public static void main(String[] args)
-	{
-		AmazonSES ses = new AmazonSES("AKIAIGD3AZW6HNQNNKWQ", "RFJaxJr9utec7I6PkcubyRi6HaBA/bF0apC03pYP", "us-west-2");
-		ses.sendEmail("naresh@agilecrm.com", "Naresh Agile", "naresh@faxdesk.com, naresh@agilecrm.com", null, null, "Test email from localhost", "naresh@agilecrm.com", "Html email", "Text email");
 	}
 }

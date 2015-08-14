@@ -134,8 +134,7 @@ public class MandrillUtil
 		// If same To email (i.e., multiple send-email nodes linked to
 		// each in campaign). If CC or BCC or multiple To with comma
 		// separated given then send email without merging
-		if (!StringUtils.isBlank(mailDeferredTask.cc) || !StringUtils.isBlank(mailDeferredTask.bcc)
-		        || isToExists(toArray, mailDeferredTask.to) || mailDeferredTask.to.contains(","))
+		if (doSendWithoutMerging(mailDeferredTask, toArray, task.getTag()))
 		{
 		    sendWithoutMerging(mailDeferredTask, emailSender.getMandrillAPIKey());
 		    continue;
@@ -551,5 +550,17 @@ public class MandrillUtil
 	    // }
 	}
 	return true;
+    }
+    
+    public static boolean doSendWithoutMerging(MailDeferredTask mailDeferredTask, JSONArray toArray, String tag)
+    {
+    	if(StringUtils.isBlank(tag))
+    		return true;
+    	
+    	if(!StringUtils.isBlank(mailDeferredTask.cc) || !StringUtils.isBlank(mailDeferredTask.bcc)
+		|| isToExists(toArray, mailDeferredTask.to) || mailDeferredTask.to.contains(","))
+    		return true;
+    	
+    	return false;
     }
 }

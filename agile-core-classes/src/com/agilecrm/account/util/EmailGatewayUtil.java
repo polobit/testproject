@@ -50,9 +50,8 @@ public class EmailGatewayUtil
 
 	try
 	{
-	    // Check given api keys. Skip validation for SES
-		if(!(emailGateway.email_api.equals(EMAIL_API.SES)))
-			EmailGatewayUtil.checkEmailAPISettings(emailGateway);
+	    // Check given api keys.
+		EmailGatewayUtil.checkEmailAPISettings(emailGateway);
 			
 	}
 	catch (Exception e)
@@ -172,6 +171,8 @@ public class EmailGatewayUtil
 	    response = Mandrill.sendMail(emailGateway.api_key, false, "api_test@agilecrm.com", "API Test",
 		    "naresh@agilecrm.com", null, null, "Mandrill test email from " + NamespaceManager.get(), null,
 		    "Test Email.", "Test Email", null, null, null);
+	else if(emailGateway.email_api.equals(EMAIL_API.SES))
+		response = AmazonSESUtil.verifySESKeys(emailGateway.api_user, emailGateway.api_key, emailGateway.regions);
 
 	try
 	{
@@ -345,7 +346,13 @@ public class EmailGatewayUtil
 		        subject, replyTo, html, text, null, attachments);
 	    
 	    else if (EMAIL_API.SES.equals(emailGateway.email_api))
-	    	addToQueue(AgileQueues.NORMAL_PERSONAL_EMAIL_PULL_QUEUE, emailGateway.email_api.toString(), emailGateway.api_user, emailGateway.api_key, NamespaceManager.get(), fromEmail, fromName, to, cc, bcc, subject, replyTo, html, text, null, null, null);
+	    {
+	    	MailDeferredTask mailDeferredTask = new MailDeferredTask(emailGateway.email_api.toString(), emailGateway.api_user, emailGateway.api_key, domain, fromEmail,
+	    	        fromName, to, cc, bcc, subject, replyTo, html, text, null, null, null);
+
+	    	// Add to pull queue with from email as Tag
+	    	PullQueueUtil.addToPullQueue(AgileQueues.NORMAL_PERSONAL_EMAIL_PULL_QUEUE, mailDeferredTask, fromEmail + "_personal");
+	    }
 
 	}
 	catch (Exception e)
@@ -456,7 +463,7 @@ public class EmailGatewayUtil
 		    SendGridUtil.sendSendGridMails(tasks, emailSender);
 		
 		else if (emailGateway.email_api == EMAIL_API.SES)
-			AmazonSESUtil.sendSESMails(tasks, emailSender);
+			AmazonSESUtil.sendBulkMails(tasks, emailSender);
 
 		emailSender.setCount(tasks.size());
 		emailSender.updateStats();
