@@ -12,8 +12,10 @@ var deal_tab_position_cookie_name = "deal_tab_position";
 var id;
 
 function initializeDealDetailsListners(el)
-{
+{	
+}
 
+$(function(){
 	/**
 	 * Fetches all the notes related to the deal and shows the notes collection
 	 * as a table in its tab-content, when "Notes" tab is clicked.
@@ -138,7 +140,7 @@ function initializeDealDetailsListners(el)
 	 * Saves note model using "Bcakbone.Model" object, and adds saved data to
 	 * time-line if necessary.
 	 */
-	$('#content').on('click', '#dealnote_validate', function(e)
+	$('#deal-note-modal').on('click', '#dealnote_validate', function(e)
 	{
 
 		e.preventDefault();
@@ -382,7 +384,9 @@ $('#content').on('click', '.add-deal-document-cancel', function(e){
 	el.find(".add-deal-document-select").css("display", "inline");
 });
 
-}
+});
+
+// }
 
 function save_deal_tab_position_in_cookie(tab_href)
 {

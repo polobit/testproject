@@ -175,6 +175,8 @@ var CompaniesRouter = Backbone.Router
 
 			$('#content').html(el);
 
+			contactFiltersListeners("lhs_filters_conatiner");
+
 			$(".active").removeClass("active");
 			$("#companiesmenu").addClass("active");
 			return;
@@ -251,6 +253,7 @@ var CompaniesRouter = Backbone.Router
 			$('#bulk-select').css('display', 'none');
 			COMPANIES_HARD_RELOAD = true;
 		}
+
 		$(".active").removeClass("active");
 		$("#companiesmenu").addClass("active");
 	
