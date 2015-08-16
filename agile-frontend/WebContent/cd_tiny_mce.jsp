@@ -3,9 +3,6 @@
 <%@page import="org.json.JSONObject"%>
 <%@page import="org.json.JSONException"%>
 
-
-
-
 <html xmlns="http://www.w3.org/1999/xhtml">
 
 <head>
@@ -29,24 +26,25 @@
 <%
 		//String LIB_PATH = "//dpm72z3r2fvl4.cloudfront.net/js/";
 	String LIB_PATH = "/";
-	
-	String template_json = request.getParameter("data");
-	
-	JSONObject jsonObj =null;
-	String tpl_text="";
-	try {
-		if(template_json != null){
-		jsonObj = new JSONObject(template_json);
-		 tpl_text = jsonObj.getString("text");
-		System.out.println(jsonObj.getString("text"));
-		}
-	} catch (JSONException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	}
-	System.out.println("Request parameter in tinymce: "+template_json);
 %>
-	
+
+<%
+String template_json = request.getParameter("data");
+
+JSONObject jsonObj =null;
+String tpl_text="";
+try {
+	if(template_json != null){
+	jsonObj = new JSONObject(template_json);
+	 tpl_text = jsonObj.getString("text");
+	System.out.println(jsonObj.getString("text"));
+	}
+} catch (JSONException e) {
+	// TODO Auto-generated catch block
+	e.printStackTrace();
+}
+System.out.println("Request parameter in tinymce: "+template_json);
+%>
 <!-- Bootstrap  -->
 <link rel="stylesheet" type="text/css"	href="<%= CSS_PATH%>css/bootstrap-<%=template%>.min.css" />
 <link rel="stylesheet" type="text/css"	href="<%= CSS_PATH%>css/bootstrap-responsive.min.css" />
@@ -131,16 +129,19 @@ function set_up_merge_fields(editor)
 $(function()
 {	
 try{
+		var templateJSON = <%=template_json%>;
 		
 	    var textarea_id = getUrlVars()["id"];
 	    var url = getUrlVars()["url"];
-		var template_json= <%=template_json%>;
+	
 		// Load HTML into Tiny MCE.
 		if(textarea_id !== undefined && url === undefined)
 		{
-		var initHTML = window.opener.$('#' + textarea_id).val();
-		if(!initHTML)
-			initHTML = template_json.text;
+			var initHTML
+			if(templateJSON)
+				initHTML = templateJSON.text;
+			else
+			initHTML = window.opener.$('#' + textarea_id).val();
 		$('#content').val(initHTML);
 		var isWarning = should_warn(initHTML);
 		showWarning(isWarning);

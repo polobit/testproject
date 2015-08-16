@@ -48,7 +48,7 @@
 	<script type="text/javascript" src="<%= LIB_PATH%>flatfull/lib/bootstrap.js"></script>
 
     <!-- Add fancyBox main JS and CSS files -->
-	<%-- <script type="text/javascript" src="<%= LIB_PATH%>flatfull/lib/jquery.fancybox.js?v=2.1.5"></script> --%>
+	<script type="text/javascript" src="<%= LIB_PATH%>flatfull/lib/jquery.fancybox.js?v=2.1.5"></script> 
 	
 	
 	<style>
@@ -150,62 +150,59 @@ $(function(){
       
     	  
    		// Gets email_templates_structure.js
-		get_templates_json(url);
-   		
-		
-		$('.tablerows_clicked').die().live('click', function(e){
-			console.log("bhasuri");
-			var element = e.currentTarget;
-			/* load_in_editor($(element).attr("data"),"campaign_template"); */
+		get_templates_json(url, function(e){ 
+			
+			$('.tablerows_clicked').on( "click", function() {
+				var element = e.currentTarget;
+				/* load_in_editor($(element).attr("data"),"campaign_template"); */
+			});
+			 // When any theme is clicked, opens respective layouts
+			 $('div.theme-preview>a').on( "click", function(e){
+			    
+				e.preventDefault();
+			     	    
+			    // Get label to identify clicked theme in json
+			    var title = $(this).parent().find('input').val();
+			    var layouts=[];
+
+	    	    // load all layouts of clicked theme
+	    	    $.each(TEMPLATES_JSON["templates"], function(index, value){
+	    			
+	    	    	// to exit from nested loops
+	    	    	var flag = true;
+	    	    	
+	    			$.each(value.themes, function(index, theme){
+	    				
+	    				if(theme.title === title){
+
+	    					layouts = theme.layouts;
+	    				
+	    					flag = false;
+	    					
+	    					return false;
+	    				
+	    				}
+	    			});
+	    			
+	    			return flag;
+	    			
+	    		});
+	    	    
+	        	// Init fancy on layouts
+	        	show_fancy_box(layouts);
+	       });
 		});
-		 // When any theme is clicked, opens respective layouts
-		 $('div.theme-preview>a').die().live('click', function(e){
-		    
-			e.preventDefault();
-		     	    
-		    // Get label to identify clicked theme in json
-		    var title = $(this).parent().find('input').val();
-		    var layouts=[];
-
-    	    // load all layouts of clicked theme
-    	    $.each(TEMPLATES_JSON["templates"], function(index, value){
-    			
-    	    	// to exit from nested loops
-    	    	var flag = true;
-    	    	
-    			$.each(value.themes, function(index, theme){
-    				
-    				if(theme.title === title){
-
-    					layouts = theme.layouts;
-    				
-    					flag = false;
-    					
-    					return false;
-    				
-    				}
-    			});
-    			
-    			return flag;
-    			
-    		});
-    	    
-        	// Init fancy on layouts
-        	show_fancy_box(layouts);
-       });
-		 
-		 
-		 
-       
+   		
 });
 
 /**
  * Fetches email_templates_structure.js and render themes.
  **/
- function get_templates_json(url)
+ function get_templates_json(url,callback)
 {
 	 var textarea_id = '<%= id%>';
-	 if(textarea_id == 'tinyMCEhtml_email')
+	 var template_type = '<%= type%>';
+	 if(textarea_id == 'tinyMCEhtml_email' && template_type == 'email')
 		 show_email_templates();
 		// Fetch email_templates_structure.js and render
 		$.getJSON(location.origin + url, function(data){
@@ -215,6 +212,9 @@ $(function(){
 			
 			// render theme previews
 			render_theme_previews();
+			
+			if (callback && typeof (callback) === "function")
+				callback(data);
 		
 		});
 	
@@ -235,7 +235,12 @@ function render_theme_previews()
 					
 	
 	$('#preview-container-title').html(title + html_link);
+					
+	$('#preview-container-content').append('<div class="span11" style = " margin-bottom: -5%;"><div class="page-header"><h3>Agile Templates</h3></div>');
+	/*
+	heme-preview
 	
+	*/
 	$.each(TEMPLATES_JSON["templates"], function(index, value){
 
 		// Initialize the theme preview container 
@@ -316,13 +321,13 @@ function show_email_templates(){
 		
 		var email_nodes = get_email_nodes(workflows);
 		if(CAMPAIGN_EMAIL_NODES){
-			var el = getTemplate('campaign_templates', CAMPAIGN_EMAIL_NODES2);
+			 var el = getTemplate('campaign_templates', CAMPAIGN_EMAIL_NODES2);
 			
-			$('#preview-container-content').prepend(el);
+			$('#preview-container-content').prepend(el); 
 			
-			var el1 = getTemplate('campaign_templates1', CAMPAIGN_EMAIL_NODES2);
+			/* var el1 = getTemplate('campaign_templates1', CAMPAIGN_EMAIL_NODES2);
 			
-			$('#preview-container-content').prepend(el1);
+			$('#preview-container-content').prepend(el1); */
 				
 				$('.campaign-templates-panel').on('hidden.bs.collapse', function (e) {
 					var current_target = e.currentTarget;
@@ -525,7 +530,7 @@ Handlebars.registerHelper('epochToHumanDate_eachkeys', function(format, value){
 {{#if this}}
 	<div class="span11">
 		<div class="page-header">
-			<h3>{{label}}</h3>
+			<h4>{{label}}</h4>
 		</div>
 	
 		<div>
@@ -551,7 +556,7 @@ Handlebars.registerHelper('epochToHumanDate_eachkeys', function(format, value){
 
 <script id="user_templates-template" type="text/x-handlebars-template">
 <div class="span11"><div class="page-header">
-<h3>User Email templates</h3>
+<h3>Your Email Temaplates</h3>
 </div>
 <div>
 <div id="preview-container-content">
@@ -597,7 +602,7 @@ Handlebars.registerHelper('epochToHumanDate_eachkeys', function(format, value){
 
 <script id="campaign_templates1-template" type="text/x-handlebars-template">
 <div class="span11"><div class="page-header">
-<h3>Campaign Templates</h3>
+<h3> Campaign Emails</h3>
 </div>
 <div>
 <div id="preview-container-content">
@@ -613,7 +618,6 @@ Handlebars.registerHelper('epochToHumanDate_eachkeys', function(format, value){
 </thead>
 <tbody id="settings-email-templates-model-list" route="email-template/" class="agile-edit-row">
 {{#eachkeys this}}
-
 
 {{#if_greater value.length "1"}}
 <tr onClick = 'load_in_editor1("{{key}}","user_template")' style="cursor:pointer">
@@ -662,19 +666,6 @@ Handlebars.registerHelper('epochToHumanDate_eachkeys', function(format, value){
 </tr>
 {{/eachkeys}}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 {{else}}
 <tr onClick = 'load_in_editor1("{{key}}","user_template")' style="cursor:pointer">
 {{#eachkeys value}}
@@ -715,7 +706,7 @@ Handlebars.registerHelper('epochToHumanDate_eachkeys', function(format, value){
 <script id="campaign_templates-template" type="text/x-handlebars-template">
 <div class="span11">
 	<div class="page-header">
-		<h3>Campaign templates</h3>
+		<h3> Campaign Emails</h3>
 	</div>
 
 	<div>
@@ -737,12 +728,12 @@ Handlebars.registerHelper('epochToHumanDate_eachkeys', function(format, value){
 										<fieldset>
     										<div class="control-group m-b-none">  	 
 												<div id ="email-subject-{{key}}">
-													<table class="table table-bordered agile-ellipsis-dynamic custom-fields-table m-b-xxs" >
+													<table class="table agile-ellipsis-dynamic custom-fields-table m-b-xxs" style = "margin-top: 6px;" >
 														<tbody class="campaigns-tbody ui-sortable">
 															{{#eachkeys value}}
 																<tr class="tablerows_clicked" style="display: table-row;"  data="{{value.id}}">
 																	<td>
-																		<div class="p-l-sm inline-block v-top text-ellipsis" style="width:80%">{{value.subject}}</div>
+																		<div class="p-l-sm inline-block v-top text-ellipsis" style="width:80%"><a onClick = 'load_in_editor("{{value.id}}","campaign_template")'>{{value.subject}}</a></div>
 																	</td>
 																</tr>
 															{{/eachkeys}}
