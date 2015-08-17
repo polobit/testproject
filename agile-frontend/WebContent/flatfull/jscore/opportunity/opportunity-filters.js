@@ -8,6 +8,11 @@
 $(function()
 {
 
+ $('.deals-add').on('click', function(e)
+	{
+		e.preventDefault();
+		show_deal();
+	});
 
 	/**
 	 * Update the milestones list when the pipeline is changed in the modal.
@@ -521,8 +526,7 @@ $('#opportunity-listners').on('click', '.deals-list-view', function(e) {
 		e.preventDefault();
 		show_deal();
 	});
-
-
+ 
 
 	/**
 	 * Milestone view deal delete

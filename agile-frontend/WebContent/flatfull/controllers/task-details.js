@@ -236,7 +236,9 @@ function initializeTaskDetailListeners(){
 		} })
 	})
 
-    $('#task-detail-lhs').on('click', '#task_edit', function(e) 
+    
+    $('#content #task_edit').off('click');
+    $('#content').on('click', '#task_edit', function(e) 
 	{
 		e.preventDefault();
 		var id = $(this).attr('data');
@@ -263,11 +265,11 @@ function initializeTaskDetailListeners(){
 
 	});
 
-	/*$('#content').on('click', '.task-add-contact', function(e) 
+	$('#content').on('click', '.task-add-contact', function(e) 
 	{
 		e.preventDefault();
 		update_task(taskDetailView.toJSON());
-	});*/
+	});
 
 	/**
  * task note validate
