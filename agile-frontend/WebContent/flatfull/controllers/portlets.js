@@ -922,19 +922,30 @@ $('.show_screeshot').live("mouseenter",function(){
 		else if(p_name=="DealsWon")
 			image="https://d1gwclp1pmzk26.cloudfront.net/img/gravatar/73.png";
 		else if(p_name=="DealsFunnel")
+		{
 			image="http://snag.gy/qWGKP.jpg";
+			placement="left";
+		}
 		else if(p_name=="GrowthGraph")
+		{
+			placement="left";
 			image="http://snag.gy/bOeka.jpg";
+		}
 		else if(p_name=="DealsAssigned")
 			image="https://d1gwclp1pmzk26.cloudfront.net/img/gravatar/73.png";
 		else if(p_name=="CallsPerPerson")
+		{
+			placement="left";
 			image="https://d1gwclp1pmzk26.cloudfront.net/img/gravatar/73.png";
+		}
 		else if(p_name=="AgileCRMBlog")
 			image="http://snag.gy/EnuRz.jpg";
 		else if(p_name=="AccountDetails")
 			image="http://snag.gy/Tg2nD.jpg";
-		else if(p_name=="TaskReport")
-			image="http://snag.gy/9EwD9.jpg";
+		else if(p_name=="TaskReport"){
+				placement="left";
+				image="http://snag.gy/9EwD9.jpg";		
+			}
 		else if(p_name=="StatsReport")
 			image="http://snag.gy/FdvNs.jpg";
 		else if(p_name=="Leaderboard")
@@ -955,7 +966,7 @@ $('.show_screeshot').live("mouseenter",function(){
 		"placement":placement,
 		"html" : "true",
 		"content" : function(){
-			return '<img src='+image+' style="width:250px;height:200px">';
+			return '<img src='+image+'>';
 
 		}
 	});

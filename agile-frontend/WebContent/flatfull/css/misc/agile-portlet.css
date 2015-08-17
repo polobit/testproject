@@ -862,3 +862,8 @@ border-radius: 2px;
 	text-align: center;
 	left:99%;
 } */
+.show_screeshot + .popover
+{
+	max-width: none;
+	
+}
