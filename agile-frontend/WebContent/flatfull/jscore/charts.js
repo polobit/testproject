@@ -1226,7 +1226,10 @@ function showDealAreaSpline(url, selector, name, yaxis_name, show_loading)
 					series_data.data.push(v1);
 				});
 				var dt = new Date(k * 1000);
-				categories.push(Highcharts.dateFormat('%b.%Y',Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()))+'');
+				if(selector=="revenue-chart")
+					categories.push(Highcharts.dateFormat('%e.%b',Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()))+'');
+				else
+					categories.push(Highcharts.dateFormat('%b.%Y',Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()))+'');
 				dataLength++;
 			});
 

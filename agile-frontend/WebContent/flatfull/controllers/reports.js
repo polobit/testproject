@@ -13,7 +13,7 @@ var ReportsRouter = Backbone.Router
 				"activity-report-edit/:id" : "activityReportEdit", "acivity-report-results/:id" : "activityReportInstantResults",
 				"contact-reports" : "emailReports", "report-add" : "reportAdd", "report-edit/:id" : "reportEdit",
 				"report-results/:id" : "reportInstantResults", "report-charts/:type" : "reportCharts", "report-funnel/:tags" : "showFunnelReport",
-				"report-growth/:tags" : "showGrowthReport", "report-cohorts/:tag1/:tag2" : "showCohortsReport", "report-ratio/:tag1/:tag2" : "showRatioReport" },
+				"report-growth/:tags" : "showGrowthReport", "report-cohorts/:tag1/:tag2" : "showCohortsReport", "report-ratio/:tag1/:tag2" : "showRatioReport" ,"sales-report":"showrevenuegraph" },
 
 			/**
 			 * Shows reports categories
@@ -584,6 +584,23 @@ var ReportsRouter = Backbone.Router
 					console.log(element);
 					addTagsDefaultTypeahead(element);
 				});
-			}
+			},
 
+			showrevenuegraph : function()
+			{
+				head.js(LIB_PATH + 'lib/date-charts.js', LIB_PATH + 'lib/date-range-picker.js', CSS_PATH + "css/misc/date-picker.css", function()
+						{
+
+							// Load Reports Template
+							$("#content").html(getTemplate("report-sales", {}));
+
+							// Set the name
+							//$('#reports-growth-tags').text(tags);
+
+							initSalesCharts(function()
+							{
+								showsalesReportGraphs();
+							});
+						});
+			}
 		});

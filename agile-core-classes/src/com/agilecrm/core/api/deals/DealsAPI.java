@@ -930,4 +930,23 @@ public class DealsAPI
 	    je.printStackTrace();
 	}
     }
+    /**
+     * Gets sum of expected values and pipeline values of the deals having
+     * closed date within the month of given time period. Deals Stats - Details.
+     * 
+     * @param min
+     *            - Given time less than closed date.
+     * @param max
+     *            - Given time more than closed date.
+     * @return string having sum of expected values and pipeline values of the
+     *         deals of same month.
+     */
+    @Path("stats/details/{owner-id}/{pipeline-id}")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public String getDealsDetailsByPipelineandOwner(@PathParam("owner-id") Long ownerId,@PathParam("pipeline-id") Long pipelineId,
+    		@QueryParam("min") Long min, @QueryParam("max") Long max)
+    {
+	return OpportunityUtil.getDealsDetailsByPipelineandOwner(ownerId,pipelineId, min, max).toString();
+    }
 }
