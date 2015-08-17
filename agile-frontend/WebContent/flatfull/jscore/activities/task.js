@@ -545,6 +545,7 @@ function save_task(formId, modalId, isUpdate, saveBtn)
 							taskDetailView = data;
 							$("#content").html(getTemplate("task-detail", data.toJSON()));
 							task_details_tab.loadActivitiesView();
+							initializeTaskDetailListeners();
 
 						}
 					} });

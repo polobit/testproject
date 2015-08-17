@@ -265,6 +265,7 @@ function initializeTaskDetailListeners(){
 
 	});
 
+    $('#content .task-add-contact').off('click');
 	$('#content').on('click', '.task-add-contact', function(e) 
 	{
 		e.preventDefault();
