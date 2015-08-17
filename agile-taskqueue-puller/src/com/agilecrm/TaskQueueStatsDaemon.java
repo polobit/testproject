@@ -6,6 +6,9 @@ import java.util.List;
 
 import org.apache.log4j.Level;
 
+import com.Globals;
+import com.agilecrm.contact.Contact;
+import com.agilecrm.contact.filter.util.ContactFilterUtil;
 import com.agilecrm.logger.AgileAPILogger;
 import com.agilecrm.queues.PullScheduler;
 import com.agilecrm.threads.TaskExcecutorThreadPool;
@@ -15,9 +18,9 @@ import com.google.api.services.taskqueue.Taskqueue.Tasks.Lease;
 import com.google.api.services.taskqueue.model.Task;
 import com.google.api.services.taskqueue.model.TaskQueue;
 import com.google.api.services.taskqueue.model.TaskQueue.Stats;
+import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.tools.remoteapi.RemoteApiInstaller;
 import com.google.appengine.tools.remoteapi.RemoteApiOptions;
-import com.thirdparty.Mailgun;
 
 public class TaskQueueStatsDaemon extends Thread
 {
@@ -36,11 +39,6 @@ public class TaskQueueStatsDaemon extends Thread
     private boolean isThreadPool = false;
 
     private Long remoteAPIInstalledTime = null;
-
-    private static int MAX_REMOTE_API_VALIDITY_IN_HOURS = 1;
-
-    public RemoteApiOptions options = new RemoteApiOptions().server("agilecrmbeta.appspot.com", 443).credentials(
-	    "naresh@faxdesk.com", "clickdesk");
 
     org.apache.log4j.Logger logger = null;
 
@@ -88,7 +86,7 @@ public class TaskQueueStatsDaemon extends Thread
 
     private int getTotalTasks() throws IOException
     {
-	Taskqueue.Taskqueues.Get request = getTaskqueue().taskqueues().get(Authorization.PROJECT_NAME, TASK_QUEUE_NAME);
+	Taskqueue.Taskqueues.Get request = getTaskqueue().taskqueues().get(Globals.PROJECT_NAME, TASK_QUEUE_NAME);
 	request.setGetStats(true);
 	try
 	{
@@ -109,7 +107,7 @@ public class TaskQueueStatsDaemon extends Thread
 
     private boolean hasNewTasks() throws IOException
     {
-	Taskqueue.Taskqueues.Get request = getTaskqueue().taskqueues().get(Authorization.PROJECT_NAME, TASK_QUEUE_NAME);
+	Taskqueue.Taskqueues.Get request = getTaskqueue().taskqueues().get(Globals.PROJECT_NAME, TASK_QUEUE_NAME);
 	request.setGetStats(true);
 	try
 	{
@@ -191,7 +189,10 @@ public class TaskQueueStatsDaemon extends Thread
     private void installRemoteAPI() throws IOException
     {
 
+	RemoteApiOptions options = new RemoteApiOptions().server(Globals.APPLICATION_ID + ".appspot.com", 443)
+		.credentials(Globals.USER_ID, Globals.PASSWORD);
 	installer.install(options);
+
 	remoteAPIInstalledTime = System.currentTimeMillis();
 
 	logger.info("Installing prefs : " + remoteAPIInstalledTime + " In thread : " + Thread.currentThread().getName());
@@ -214,7 +215,7 @@ public class TaskQueueStatsDaemon extends Thread
 
 	int hours = (int) (timeDifference / (1000 * 60 * 60));
 
-	if (MAX_REMOTE_API_VALIDITY_IN_HOURS > hours)
+	if (Globals.MAX_REMOTE_API_VALIDITY_IN_HOURS > hours)
 	    return false;
 
 	return true;
@@ -225,9 +226,12 @@ public class TaskQueueStatsDaemon extends Thread
 	Lease lease;
 	try
 	{
-	    lease = getTaskqueue().tasks().lease(Authorization.PROJECT_NAME, TASK_QUEUE_NAME,
-		    PullScheduler.DEFAULT_COUNT_LIMIT, PullScheduler.DEFAULT_LEASE_PERIOD);
+	    lease = getTaskqueue()
+		    .tasks()
+		    .lease(Globals.PROJECT_NAME, TASK_QUEUE_NAME, PullScheduler.DEFAULT_COUNT_LIMIT,
+			    PullScheduler.DEFAULT_LEASE_PERIOD).set(Globals.GROUP_BY_TAG_PARAM, true);
 
+	    logger.info(lease.buildHttpRequestUrl().toString());
 	    com.google.api.services.taskqueue.model.Tasks tasks = lease.execute();
 
 	    if (tasks == null || tasks.size() == 0)
@@ -247,8 +251,10 @@ public class TaskQueueStatsDaemon extends Thread
     {
 	try
 	{
-	    Mailgun.sendMail("campaigns@agile.com", "Email Observer", "yaswanth@agilecrm.com",
-		    "naresh@agilecrm.com,raja@agilecrm.com", null, "EC2 Error", null, "Hi Yaswanth " + message, null);
+	    // Mailgun.sendMail("campaigns@agile.com", "Email Observer",
+	    // "yaswanth@agilecrm.com",
+	    // "naresh@agilecrm.com,raja@agilecrm.com", null, "EC2 Error", null,
+	    // "Hi Yaswanth " + message, null);
 	}
 	catch (Exception e)
 	{
@@ -395,5 +401,36 @@ public class TaskQueueStatsDaemon extends Thread
 	    logger.info(e.getMessage());
 	    leaseTasksOld();
 	}
+    }
+
+    public static void main(String[] args)
+    {
+
+	RemoteApiOptions options = new RemoteApiOptions().server(Globals.APPLICATION_ID + ".appspot.com", 443)
+		.credentials(Globals.USER_ID, Globals.PASSWORD);
+
+	// CachingRemoteApiInstaller installer = new
+	// CachingRemoteApiInstaller();
+
+	RemoteApiInstaller installer = new RemoteApiInstaller();
+
+	try
+	{
+	    installer.install(options);
+	}
+	catch (IOException e)
+	{
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	}
+
+	NamespaceManager.set("local");
+
+	List<Contact> contacts = ContactFilterUtil.getContacts(String.valueOf(5311046533251072l), 10, null, null);
+
+	contacts.get(0).addTags("Medisetti123");
+	contacts.get(0).save(false);
+	installer.uninstall();
+
     }
 }

@@ -35,8 +35,8 @@ import com.campaignio.logger.util.LogUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.blobstore.BlobKey;
 import com.google.appengine.api.taskqueue.TaskHandle;
-import com.thirdparty.sendgrid.SendGrid;
 import com.thirdparty.mandrill.Mandrill;
+import com.thirdparty.sendgrid.SendGrid;
 
 /**
  * <code>EmailGatewayUtil</code> is the utility class for EmailGateway. It
@@ -104,7 +104,7 @@ public class EmailGatewayUtil
 
 	    if (!campaignNameMap.containsKey(mailDeferredTask.campaignId + "-" + mailDeferredTask.domain))
 	    {
-		campaignName = WorkflowUtil.getCampaignName(mailDeferredTask.campaignId);
+		campaignName = WorkflowUtil.getCampaignName(mailDeferredTask.campaignId, mailDeferredTask.domain);
 		campaignNameMap.put(mailDeferredTask.campaignId + "-" + mailDeferredTask.domain, campaignName);
 	    }
 	    else
@@ -367,7 +367,9 @@ public class EmailGatewayUtil
 	    }
 
 	    // If no gateway setup, sends email through Agile Mandrill
-	    if (emailGateway == null || (EMAIL_API.SEND_GRID.equals(emailGateway.email_api) && (documentIds.size() != 0 || blobKeys.size() != 0)))
+	    if (emailGateway == null
+		    || (EMAIL_API.SEND_GRID.equals(emailGateway.email_api) && (documentIds.size() != 0 || blobKeys
+			    .size() != 0)))
 	    {
 		Mandrill.sendMail(null, true, fromEmail, fromName, to, cc, bcc, subject, replyTo, html, text,
 			mandrillMetadata, documentIds, blobKeys, attachments);

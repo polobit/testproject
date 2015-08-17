@@ -7,6 +7,7 @@ import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.TimeUnit;
 
+import com.Globals;
 import com.google.appengine.tools.remoteapi.RemoteApiInstaller;
 import com.google.appengine.tools.remoteapi.RemoteApiOptions;
 
@@ -102,8 +103,8 @@ class TaskExecutorThread extends Thread
     public void run()
     {
 
-	RemoteApiOptions options = new RemoteApiOptions().server("agilecrmbeta.appspot.com", 443).credentials(
-		"naresh@faxdesk.com", "clickdesk");
+	RemoteApiOptions options = new RemoteApiOptions().server(Globals.APPLICATION_ID + ".appspot.com", 443)
+		.credentials(Globals.USER_ID, Globals.PASSWORD);
 
 	// CachingRemoteApiInstaller installer = new
 	// CachingRemoteApiInstaller();
