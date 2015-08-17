@@ -256,7 +256,7 @@ $(function(){
 	    	// Checks if tag already exists in contact
 			if($.inArray(new_tags, json.tags) >= 0)
 				return;
-			tight_acl.canAddTag(new_tags.toString(),function(respnse){
+			acl_util.canAddTag(new_tags.toString(),function(respnse){
 				json.tagsWithTime.push({"tag" : new_tags.toString()});
 	   			
 		    	// Save the contact with added tags

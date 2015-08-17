@@ -362,7 +362,7 @@ $(function()
 				json.data = JSON.stringify(tags[0].value);
 				json.contact_ids = id_array;
 
-				tight_acl.canAddTag(json.data,function(result){
+				acl_util.canAddTag(json.data,function(result){
 					postBulkOperationData(url, json, $('#tagsBulkForm'), undefined, function(data)
 							{
 								enable_save_button(saveButton);

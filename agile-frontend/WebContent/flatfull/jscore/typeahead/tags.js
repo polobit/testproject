@@ -149,7 +149,7 @@ function setup_tags_typeahead() {
     			
     			tag = tag.trim();
     			
-    			tight_acl.canAddTag(tag,function(canAdd){
+    			acl_util.canAddTag(tag,function(canAdd){
     				
     				if(canAdd){
         				alert('No permission.');

@@ -69,16 +69,20 @@
 			tight_acl.REPORTS_PER = true;
 			App_ACL.notAllowed(obj);
 		}
-	}
+	};
 	
 	/*
 	 * Check the permission based up on the given scope.
 	 */
 	tight_acl.checkPermission = function(scope){
 		return CURRENT_DOMAIN_USER.menu_scopes.indexOf(scope) > -1;
-	}
+	};
 	
-	tight_acl.canAddTag = function(tag,callback,errorCallback){
+}(window.tight_acl = window.tight_acl || {}, $));
+
+(function(acl_util, $, undefined) {
+
+	acl_util.canAddTag = function(tag,callback,errorCallback){
 		
 		if(tagsCollectionView){
 			if(tag.indexOf('[') < 0){
@@ -125,13 +129,32 @@
 				}
 			});
 		}
-	}
-}(window.tight_acl = window.tight_acl || {}, $));
-
-(function(acl_util, $, undefined) {
-	acl_util.updateTagAcl = function(isEnable){
+	};
+	
+	var setTagACL = function(el){
+		$.ajax({ type : 'GET', url : '/core/api/users', async : false, dataType : 'json',
+			success: function(data){
+				var isCheck = false;
+				$.each(data,function(index,domainUser){
+					if(!domainUser.is_admin && (domainUser.scopes && $.inArray("ADD_NEW_TAG", domainUser.scopes) != -1))
+						isCheck = true;
+						
+				});
+				if(isCheck)
+					$('#new_tag_acl',el).attr('checked','checked');
+			} });
+	};
+	
+	var updateTagAcl = function(isEnable){
 		var input = {};
 		input.is_enable = isEnable;
 		queuePostRequest('tag_acl', "/core/api/users/allow-new-tag", input, function(){}, function(){});
 	};
+	
+	acl_util.initTagACL = function(el){
+		$('#new_tag_acl',el).off().on('change',function(){
+			updateTagAcl($(this).is(':checked'));
+		});
+		setTagACL(el);
+	}
 }(window.acl_util = window.acl_util || {}, $));
