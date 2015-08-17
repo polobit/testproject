@@ -4,6 +4,7 @@ var businessHoursManager;
 
 function initializeOnlineCalendarListners(el){
 	
+	 $("#online-cal-listners #btnSerialize").off("click");
 	 $("#online-cal-listners").on("click","#btnSerialize", function(e){
 			e.preventDefault();
 
@@ -63,6 +64,7 @@ function initializeOnlineCalendarListners(el){
 					} });
 		});
 
+$("#online-cal-listners #edit-schedule-id").off("click");
 $("#online-cal-listners").on("click","#edit-schedule-id", function(e){
 					e.preventDefault();
 					var data = $('#scheduleurl').text();
@@ -80,6 +82,7 @@ $("#online-cal-listners").on("click","#edit-schedule-id", function(e){
 
 				});
 
+$("#online-cal-listners #save-scheduleurl").off("click");
 $("#online-cal-listners").on("click","#save-scheduleurl", function(e){
 			e.preventDefault();
 			var data = $("#url").val();
@@ -141,6 +144,7 @@ $("#online-cal-listners").on("click","#save-scheduleurl", function(e){
 
 		});
 	
+	$("#online-cal-listners #calendar_advanced").off("click");
 	$("#online-cal-listners").on("click","#calendar_advanced", function(e)
 	{
 		e.preventDefault();
@@ -149,17 +153,20 @@ $("#online-cal-listners").on("click","#save-scheduleurl", function(e){
 
 	});
 
+	$("#online-cal-listners #calendar_advanced_block").off("shown");
 	$("#online-cal-listners").on("shown","#calendar_advanced_block", function(e)
 	{
 		$('#calendar_advanced').html('<span><i class="icon-minus"></i></span> Advanced');
 
 	});
 
+	$("#online-cal-listners #calendar_advanced_block").off("hidden");
 	$("#online-cal-listners").on("hidden","#calendar_advanced_block", function(e)
 	{
 		$('#calendar_advanced').html('<span><i class="icon-plus"></i></span> Advanced');
 	});
 
+	$("#online-cal-listners #bufferTime").off("keypress");
 	$("#online-cal-listners").on("keypress","#bufferTime", function(e){
 		// if the letter is not digit then display error and don't type anything
 		if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57))
@@ -170,33 +177,51 @@ $("#online-cal-listners").on("click","#save-scheduleurl", function(e){
 		}
 	});
 
+	$("#online-cal-listners .onlineCalendarAddToSite").off("click");
 	$("#online-cal-listners").on("click",".onlineCalendarAddToSite", function(e)
 	{
 		e.preventDefault();
 
+        console.log("asadfas");
+
+        $("body #onlineCalendarAddToSite").remove();
+
 		onlineCalendarModel = $(getTemplate("online-calendar-addtosite", {}));
 		onlineCalendarModel.modal('show');
-	});
 
-	$("#online-cal-listners").on("click",".getStartedToAddToSite", function(e)
-	{
-		e.preventDefault();
-		Backbone.history.navigate("webrules-add", { trigger : true });
-		if (onlineCalendarModel)
-			onlineCalendarModel.modal('hide');
-		onlineCalendarModel = null;
+		onlineCalendarModel.on("shown.bs.modal", function(){
 
-		getHtmlContent(function(html_content)
-		{
-			setTimeout(function()
-			{
-				tinyMCECallBack("tinyMCEhtml_email", html_content);
-			}, 1000);
+			console.log("fasdsad");
+
+			
 		});
 
+		
+		
 	});
 
+	// $("#onlineCalendarAddToSite .getStartedToAddToSite").off("click");	
 }
+
+$("body").on("click",".getStartedToAddToSite", function(e)
+		{
+
+			e.preventDefault();
+			Backbone.history.navigate("webrules-add", { trigger : true });
+			if (onlineCalendarModel)
+				onlineCalendarModel.modal('hide');
+			onlineCalendarModel = null;
+
+			getHtmlContent(function(html_content)
+			{
+				setTimeout(function()
+				{
+					tinyMCECallBack("tinyMCEhtml_email", html_content);
+				}, 1000);
+			});
+
+		});
+
 
 function getHtmlContent(callback)
 {
