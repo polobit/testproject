@@ -80,17 +80,17 @@ public class AmazonSESUtil
 				+ "&region=" +URLEncoder.encode(region, "UTF-8")+ "&action=" + URLEncoder.encode("ListIdentities", "UTF-8");
 		
 		if(SystemProperty.environment.value() == SystemProperty.Environment.Value.Development)
-			url = "http://localhost:8080/amazon-ses" + params;
+			url = "http://localhost:8080/ses-beta-app" + params;
 			
 		if(SystemProperty.environment.value() == SystemProperty.Environment.Value.Production)
 		{
 			// For Beta sandbox
 			if(SystemProperty.applicationId.get().equals("agilecrmbeta"))
-				url = url + "amazon-ses" +params;
+				url = url + "ses-beta-app" +params;
 		
 			// For Production
 			if(SystemProperty.applicationId.get().equals("agile-crm-cloud"))
-				url = url + "amazon-ses" + params;
+				url = url + "ses-live-app" + params;
 			
 		}
 		
