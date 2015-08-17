@@ -325,7 +325,7 @@ public class UsersAPI
     {
 
 	if (isEnable != null)
-	    DomainUserUtil.setEnableNewTag(isEnable);
+	    DomainUserUtil.setNewTagACL(isEnable);
 
 	return null;
     }

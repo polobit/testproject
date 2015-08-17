@@ -77,6 +77,55 @@
 	tight_acl.checkPermission = function(scope){
 		return CURRENT_DOMAIN_USER.menu_scopes.indexOf(scope) > -1;
 	}
+	
+	tight_acl.canAddTag = function(tag,callback,errorCallback){
+		
+		if(tagsCollectionView){
+			if(tag.indexOf('[') < 0){
+				if(tagsCollectionView.collection.where({"tag":tag}).length == 0){
+					alert("Tag '" + tag + "' does not exist. You don't have permissions to create a new Tag.");
+					if(errorCallback)
+						errorCallback("Tag '" + tag + "' does not exist. You don't have permissions to create a new Tag.");
+				}
+				else if(callback)
+					callback(tagsCollectionView.collection.where({"tag":tag}).length > 0);
+			} else {
+				var tagArray = JSON.parse(tag);
+				var newtags = '';
+				$.each(tagArray,function(i,tagStr){
+					if(tagsCollectionView.collection.where({"tag":tagStr}).length == 0)
+						if(newTags.length == 0)
+							newTags = tagStr;
+						else
+							newTags += ", "+tagStr;
+				});
+				
+				if(newTags.length > 0){
+					alert("Tag '" + newTags + "' does not exist. You don't have permissions to create a new Tag.");
+					if(errorCallback)
+						errorCallback("Tag '" + newTags + "' does not exist. You don't have permissions to create a new Tag.");
+				}
+				else if(callback)
+					callback(true);
+				
+			}
+		} else {
+			$.ajax({
+				url: 'core/api/tags/can_add_tag?tag='+tag,
+				type: 'GET',
+				success: function(result){
+					if(callback)
+						callback(result);
+					else
+						return result;
+				}, error: function(response){
+					alert(response.responseText);
+					if(errorCallback)
+						errorCallback(response.responseText);
+				}
+			});
+		}
+	}
 }(window.tight_acl = window.tight_acl || {}, $));
 
 (function(acl_util, $, undefined) {

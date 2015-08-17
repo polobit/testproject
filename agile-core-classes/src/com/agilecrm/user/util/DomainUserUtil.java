@@ -688,7 +688,7 @@ public class DomainUserUtil
 	}
     }
 
-    public static void setEnableNewTag(Boolean isEnable)
+    public static void setNewTagACL(Boolean isEnable)
     {
 	// TODO Auto-generated method stub
 	List<DomainUser> users = getUsers();
@@ -696,18 +696,24 @@ public class DomainUserUtil
 	{
 	    if (!user.is_admin)
 	    {
-		if (user.restricted_scopes == null)
-		    user.restricted_scopes = new HashSet<UserAccessScopes>();
-
-		if (isEnable)
-		    user.restricted_scopes.remove(UserAccessScopes.ADD_NEW_TAG);
-		else
-		    user.restricted_scopes.add(UserAccessScopes.ADD_NEW_TAG);
+		try
+		{
+		    if (user.restricted_scopes == null)
+			user.restricted_scopes = new HashSet<UserAccessScopes>();
+		    if (isEnable)
+			user.scopes.add(UserAccessScopes.ADD_NEW_TAG);
+		    else
+			user.scopes.remove(UserAccessScopes.ADD_NEW_TAG);
+		    user.save();
+		}
+		catch (Exception e)
+		{
+		    e.printStackTrace();
+		    System.out.println("Exception is new tag acl - " + e.getMessage());
+		}
 	    }
+
 	}
-
-	dao.putAll(users);
-
     }
 
 }
