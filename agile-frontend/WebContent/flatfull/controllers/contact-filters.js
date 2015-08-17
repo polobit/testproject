@@ -72,6 +72,7 @@ var ContactFiltersRouter = Backbone.Router.extend({
 			return;
 		}
 
+		$("#content").html(LOADING_HTML);
 		var contact_filter = this.contactFiltersList.collection.get(id);
 		var ContactFilter = new Base_Model_View({ url : 'core/api/filters', model : contact_filter, template : "filter-contacts",
 			window : 'contact-filters', postRenderCallback : function(el)
@@ -82,11 +83,16 @@ var ContactFiltersRouter = Backbone.Router.extend({
 				$("#content").html(LOADING_HTML);
 				head.js(LIB_PATH + 'lib/agile.jquery.chained.min.js', function()
 				{
-					chainFiltersForContactAndCompany(el, contact_filter.toJSON(), function()
+					$("#content").html(LOADING_HTML);
+					// setTimeout(function(){
+						chainFiltersForContactAndCompany(el, contact_filter.toJSON(), function()
 						{
 							$('#content').html(el);
 						});
-					scramble_input_names($(el).find('#filter-settings'));
+					scramble_input_names($(el).find('#filter-settings')); 						
+					// }, 0);
+					
+
 				})
 			}, saveCallback : function(data)
 			{

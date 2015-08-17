@@ -319,11 +319,15 @@ $('#opportunity-listners').on('click', '.deals-list-view', function(e) {
 		e.preventDefault();
 
 		console.log('Exporting ...');
+		$("body #deals-export-csv-modal").remove();
+
 		var deals_csv_modal = $(getTemplate('deals-export-csv-modal'),{});
 		deals_csv_modal.modal('show');
 		
-		// If Yes clicked
-		$('body').on('click', '#deals-export-csv-confirm', function(e) {
+		deals_csv_modal.on("shown.bs.modal", function(){
+
+				// If Yes clicked
+		$('#deals-export-csv-modal').on('click', '#deals-export-csv-confirm', function(e) {
 			e.preventDefault();
 			if($(this).attr('disabled'))
 		   	     return;
@@ -349,6 +353,9 @@ $('#opportunity-listners').on('click', '.deals-list-view', function(e) {
 				}
 			});
 		});
+
+		});
+		
 		
 
 	});
