@@ -111,8 +111,9 @@ $(function()
 										else if (App_Portlets.currentPortletName && App_Portlets.currentPortletName == 'Mini Calendar')
 									      {
 											createCookie("current_date_calendar",new Date(parseInt($('.minical-portlet-event').attr('data-date'))));
-									       $('#calendar_container').fullCalendar( 'refetchEvents' );
-									       App_Portlets.refetchEvents = true;
+										       $('#calendar_container').fullCalendar( 'refetchEvents' );
+										       App_Portlets.refetchEvents = true;
+										       eraseCookie(current_date_calendar);
 									      }
 
 										// $('#updateActivityModal').find('span.save-status
@@ -721,10 +722,13 @@ function save_event(formId, modalName, isUpdate, saveBtn, callback)
 						
 						else if (App_Portlets.currentPortletName && App_Portlets.currentPortletName == 'Mini Calendar')
 					      {
-							createCookie("current_date_calendar",new Date(parseInt($('.minical-portlet-event').attr('data-date'))));
-					       $('#calendar_container').fullCalendar( 'refetchEvents' );
-					       App_Portlets.refetchEvents = true;
-					       eraseCookie(current_date_calendar);
+							if($('.minical-portlet-event').attr('data-date')!=undefined)
+								createCookie("current_date_calendar",new Date(parseInt($('.minical-portlet-event').attr('data-date'))));
+								else
+									createCookie("current_date_calendar",new Date(parseInt($('.minical-portlet-event-add').attr('data-date'))));	
+						       $('#calendar_container').fullCalendar( 'refetchEvents' );
+						       App_Portlets.refetchEvents = true;
+						       eraseCookie(current_date_calendar);
 					      }
 						
 						else
