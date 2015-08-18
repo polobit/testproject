@@ -113,7 +113,7 @@ $(function()
 											createCookie("current_date_calendar",new Date(parseInt($('.minical-portlet-event').attr('data-date'))));
 										       $('#calendar_container').fullCalendar( 'refetchEvents' );
 										       App_Portlets.refetchEvents = true;
-										       eraseCookie(current_date_calendar);
+										       eraseCookie('current_date_calendar');
 									      }
 
 										// $('#updateActivityModal').find('span.save-status
@@ -728,7 +728,7 @@ function save_event(formId, modalName, isUpdate, saveBtn, callback)
 									createCookie("current_date_calendar",new Date(parseInt($('.minical-portlet-event-add').attr('data-date'))));	
 						       $('#calendar_container').fullCalendar( 'refetchEvents' );
 						       App_Portlets.refetchEvents = true;
-						       eraseCookie(current_date_calendar);
+						       eraseCookie('current_date_calendar');
 					      }
 						
 						else
