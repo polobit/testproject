@@ -724,9 +724,12 @@ function save_event(formId, modalName, isUpdate, saveBtn, callback)
 					      {
 							if($('.minical-portlet-event').attr('data-date')!=undefined)
 								createCookie("current_date_calendar",new Date(parseInt($('.minical-portlet-event').attr('data-date'))));
-								else
-									createCookie("current_date_calendar",new Date(parseInt($('.minical-portlet-event-add').attr('data-date'))));	
-						       $('#calendar_container').fullCalendar( 'refetchEvents' );
+							else{
+								var a=new Date(parseInt($('.minical-portlet-event-add').attr('data-date')));	
+								a.setHours(0,0,0,0);
+								createCookie("current_date_calendar",a);
+							}
+							$('#calendar_container').fullCalendar( 'refetchEvents' );
 						       App_Portlets.refetchEvents = true;
 						       eraseCookie('current_date_calendar');
 					      }

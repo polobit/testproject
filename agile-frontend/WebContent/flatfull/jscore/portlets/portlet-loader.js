@@ -1941,7 +1941,7 @@ function getDurationForPortlets(duration){
 var jso=[];
 function minicalendar(el)
 {
-	//eraseCookie('current_date_calendar');
+	eraseCookie('current_date_calendar');
 	init_cal(el);
 	var totalEvents = 0;
 	var eventsCount = 0;
