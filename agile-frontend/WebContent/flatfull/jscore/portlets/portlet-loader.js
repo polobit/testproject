@@ -1941,7 +1941,7 @@ function getDurationForPortlets(duration){
 var jso=[];
 function minicalendar(el)
 {
-	eraseCookie('current_date_calendar');
+	//eraseCookie('current_date_calendar');
 	init_cal(el);
 	var totalEvents = 0;
 	var eventsCount = 0;
@@ -2040,6 +2040,7 @@ function minicalendar(el)
 										
 									if (doc)
 										{
+
 											console.log(jso);
 											 $.each(jso,function(index,ev){
 											if(ev.start >= (todayDate.getTime()/1000) && ev.start <= (endDate.getTime()/1000)) {
@@ -2054,15 +2055,15 @@ function minicalendar(el)
 												$(el).find('.list').find('small').each(function(x) 
 												{
 													if(e_date.format('HH:MM')<$(this).text())
-													{$(this).parents('li').before('<li class="p-t-xs p-r-xs" style="color:'+ev.color+'"><span style="color : #58666e" class="text-cap word-break"><a class="minical-portlet-event" id='+ev.id+' data='+ev+'>'+ev.title+'</a><br><small class="block m-t-n-xxs">'+ e_date.format('HH:MM') + ' </small></span></li>');
+													{$(this).parents('li').before('<li class="p-t-xs p-r-xs" style="color:'+ev.color+'"><span style="color : #58666e" class="text-cap word-break"><a class="minical-portlet-event" id='+ev.id+' data-date='+todayDate.getTime()+'>'+ev.title+'</a><br><small class="block m-t-n-xxs">'+ e_date.format('HH:MM') + ' </small></span></li>');
 													return false;}
 													if(x==len-1)
-														$(this).parents('.list').append('<li class="p-t-xs p-r-xs" style="color:'+ev.color+'"><span style="color : #58666e" class="text-cap word-break"><a class="minical-portlet-event" id='+ev.id+' data='+ev+'>'+ev.title+'</a><br><small class="block m-t-n-xxs">'+ e_date.format('HH:MM') + ' </small></span></li>') ;
+														$(this).parents('.list').append('<li class="p-t-xs p-r-xs" style="color:'+ev.color+'"><span style="color : #58666e" class="text-cap word-break"><a class="minical-portlet-event" id='+ev.id+' data-date='+todayDate.getTime()+'>'+ev.title+'</a><br><small class="block m-t-n-xxs">'+ e_date.format('HH:MM') + ' </small></span></li>') ;
 
 												 });
 													}
 													else
-											$(el).find('.list').append('<li class="p-t-xs p-r-xs" style="color:'+ev.color+'"><span style="color : #58666e" class="text-cap word-break"><a class="minical-portlet-event" id='+ev.id+' data='+ev+'>'+ev.title+'</a><br><small class="block m-t-n-xxs">'+ e_date.format('HH:MM') + ' </small></span></li>');
+											$(el).find('.list').append('<li class="p-t-xs p-r-xs" style="color:'+ev.color+'"><span style="color : #58666e" class="text-cap word-break"><a class="minical-portlet-event" id='+ev.id+' data-date='+todayDate.getTime()+'>'+ev.title+'</a><br><small class="block m-t-n-xxs">'+ e_date.format('HH:MM') + ' </small></span></li>');
 											}
 											}); 
 											
@@ -2267,7 +2268,7 @@ function minicalendar(el)
 						},
 								
 								dayClick : function(date,allDay,jsEvent,view){
-									createCookie("current_date_calendar", date);
+									//createCookie("current_date_calendar", date);
 									App_Portlets.refetchEvents = false;
 									var days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
 									var current_date = new Date();
@@ -2291,20 +2292,20 @@ function minicalendar(el)
 												$(el).find('.list').find('small').each(function(x) 
 												{
 													if(array[index].start.format('HH:MM')<$(this).text())
-													{$(this).parents('li').before('<li class="p-t-xs p-r-xs" style="color : '+array[index].color+'"><span style="color : #58666e" class="text-cap word-break"><a class="minical-portlet-event" id='+array[index].id+' data='+array[index]+'>'+array[index].title+'</a><br><small class="block m-t-n-xxs">'+ array[index].start.format('HH:MM') + ' </small></span></li>');
+													{$(this).parents('li').before('<li class="p-t-xs p-r-xs" style="color : '+array[index].color+'"><span style="color : #58666e" class="text-cap word-break"><a class="minical-portlet-event" id='+array[index].id+' data-date='+date.getTime()+'>'+array[index].title+'</a><br><small class="block m-t-n-xxs">'+ array[index].start.format('HH:MM') + ' </small></span></li>');
 													return false;}
 													
 													if(x==len-1)
-														$(this).parents('.list').append('<li class="p-t-xs p-r-xs" style="color : '+array[index].color+'"><span style="color : #58666e" class="text-cap word-break"><a class="minical-portlet-event" id='+array[index].id+' data='+array[index]+'>'+array[index].title+'</a><br><small class="block m-t-n-xxs">'+ array[index].start.format('HH:MM') + ' </small></span></li>');
+														$(this).parents('.list').append('<li class="p-t-xs p-r-xs" style="color : '+array[index].color+'"><span style="color : #58666e" class="text-cap word-break"><a class="minical-portlet-event" id='+array[index].id+' data-date='+date.getTime()+'>'+array[index].title+'</a><br><small class="block m-t-n-xxs">'+ array[index].start.format('HH:MM') + ' </small></span></li>');
 												 });
 									}
 									else
-									$(el).find('.list').append('<li class="p-t-xs p-r-xs" style="color : '+array[index].color+'"><span style="color : #58666e" class="text-cap word-break"><a class="minical-portlet-event" id='+array[index].id+' data='+array[index]+'>'+array[index].title+'</a><br><small class="block m-t-n-xxs">'+ array[index].start.format('HH:MM') + ' </small></span></li>');
+									$(el).find('.list').append('<li class="p-t-xs p-r-xs" style="color : '+array[index].color+'"><span style="color : #58666e" class="text-cap word-break"><a class="minical-portlet-event" id='+array[index].id+' data-date='+date.getTime()+'>'+array[index].title+'</a><br><small class="block m-t-n-xxs">'+ array[index].start.format('HH:MM') + ' </small></span></li>');
 									
 								});
 								}
 								else if(!App_Portlets.refetchEvents){
-									$(el).find('.events_show').append('<div class="portlet-calendar-error-message">No appointments for the day</div><div class="text-center"><a class="minical-portlet-event-add text-info" id='+date.getTime()+'>+Add</a></div>');
+									$(el).find('.events_show').append('<div class="portlet-calendar-error-message">No appointments for the day</div><div class="text-center"><a class="minical-portlet-event-add text-info" id='+date.getTime()+' data-date='+date.getTime()+'>+Add</a></div>');
 								}
 								}
 							    	
@@ -2332,7 +2333,7 @@ function loadingGoogleEvents(el,startTime,endTime){
 				if($(el).find('.list').find('li').length==0 && $(el).find('.portlet-calendar-error-message').length==0)
 											{
 												var date=new Date();
-												$(el).find('.events_show').append('<div class="portlet-calendar-error-message">No appointments for the day</div><div class="text-center"><a class="minical-portlet-event-add text-info" id='+date.getTime()+'>+Add</a></div>');
+												$(el).find('.events_show').append('<div class="portlet-calendar-error-message">No appointments for the day</div><div class="text-center"><a class="minical-portlet-event-add text-info" id='+date.getTime()+' data-date='+date.getTime()+'>+Add</a></div>');
 											}
 			},10000);
 		}
@@ -2392,8 +2393,8 @@ function googledata(el,response,startTime,endTime)
 								var fc_event = google2fcEvent(resp.items[j]);
 								  fc_event.startDate=new Date(fc_event.start);
 								  fc_event.end=new Date(fc_event.end);
-								  fc_event.color='darkgray';
-								  fc_event.backgroundColor='darkgray';
+								  fc_event.color='#3a3f51';
+								  fc_event.backgroundColor='#3a3f51';
 								   if(fc_event.allDay==true){
 									  fc_event.start = new Date(fc_event.startDate.getTime()+fc_event.startDate.getTimezoneOffset()*60*1000);
 									  fc_event.end= new Date(new Date(fc_event.google.end.date).getTime()+fc_event.startDate.getTimezoneOffset()*60*1000);
@@ -2491,9 +2492,10 @@ function googledata(el,response,startTime,endTime)
 											}
 											});
 											setTimeout(function(){
+												//eraseCookie('current_date_calendar');
 											if($(el).find('.list').find('li').length==0 && $(el).find('.portlet-calendar-error-message').length==0)
 											{
-												$(el).find('.events_show').append('<div class="portlet-calendar-error-message">No appointments for the day</div><div class="text-center"><a class="minical-portlet-event-add text-info" id='+date.getTime()+'>+Add</a></div>');
+												$(el).find('.events_show').append('<div class="portlet-calendar-error-message">No appointments for the day</div><div class="text-center"><a class="minical-portlet-event-add text-info" id='+date.getTime()+' data-date='+date.getTime()+'>+Add</a></div>');
 											}
 											},10000);
 											

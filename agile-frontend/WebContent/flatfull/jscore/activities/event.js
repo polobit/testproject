@@ -110,6 +110,7 @@ $(function()
 										
 										else if (App_Portlets.currentPortletName && App_Portlets.currentPortletName == 'Mini Calendar')
 									      {
+											createCookie("current_date_calendar",new Date(parseInt($('.minical-portlet-event').attr('data-date'))));
 									       $('#calendar_container').fullCalendar( 'refetchEvents' );
 									       App_Portlets.refetchEvents = true;
 									      }
@@ -720,8 +721,10 @@ function save_event(formId, modalName, isUpdate, saveBtn, callback)
 						
 						else if (App_Portlets.currentPortletName && App_Portlets.currentPortletName == 'Mini Calendar')
 					      {
+							createCookie("current_date_calendar",new Date(parseInt($('.minical-portlet-event').attr('data-date'))));
 					       $('#calendar_container').fullCalendar( 'refetchEvents' );
 					       App_Portlets.refetchEvents = true;
+					       eraseCookie(current_date_calendar);
 					      }
 						
 						else
