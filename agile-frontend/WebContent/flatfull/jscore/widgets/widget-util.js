@@ -1,5 +1,10 @@
 function initializeWidgetUtilListeners(){
-	$('#prefs-tabs-content').on('click', '#widget-prefs-save', function(e)
+	
+}
+
+$(function(){
+	
+	$('#content').on('click', '#widget-prefs-save', function(e)
 	{
 		e.preventDefault();
 
@@ -63,7 +68,7 @@ function initializeWidgetUtilListeners(){
 		})
 	});
 
-}
+});
 
 function update_collection_with_prefs(data)
 {
@@ -267,10 +272,16 @@ function zendesk_save_widget_prefs()
 		e.preventDefault();
 
 		// Checks whether all input fields are given
-		if (!isValidForm($("#zendesk_login_form")))
-		{
+		try{
+			if (!isValidForm($("#zendesk_login_form")))
+			{
+				return;
+			}
+
+		}catch(err){
 			return;
 		}
+		
 		// Saves Zendesk preferences in ClickDesk widget
 		// object
 		saveZendeskWidgetPrefs();
@@ -322,10 +333,15 @@ function sip_save_widget_prefs()
 		e.preventDefault();
 
 		// Checks whether all input fields are given
-		if (!isValidForm($("#sip_login_form")))
-		{
+		try{
+			if (!isValidForm($("#sip_login_form")))
+					{
+						return;
+					}			
+		}catch(err){
 			return;
 		}
+		
 		// Saves Sip preferences in ClickDesk widget
 		// object
 		saveSipWidgetPrefs();
@@ -389,10 +405,15 @@ function twilioio_save_widget_prefs()
 		}
 
 		// Checks whether all input fields are given
-		if (!isValidForm($("#twilioio_login_form")))
-		{
+		try{
+			if (!isValidForm($("#twilioio_login_form")))
+			{
+				return;
+			}
+		}catch(err){
 			return;
 		}
+		
 
 		if ($("#twilio_from_numbers option:selected").val() == "" && $("#twilio_numbers option:selected").val() == "")
 		{
@@ -470,10 +491,15 @@ function callscript_save_widget_prefs()
 		}
 
 		// Checks whether all input fields are given
-		if (!isValidForm($("#callscriptruleForm")))
-		{
+		try{
+			if (!isValidForm($("#callscriptruleForm")))
+			{
+				return;
+			}
+		}catch(err){
 			return;
-		}		
+		}
+				
 
 		// Saves call script preferences in callscript widget object
 		saveCallScriptWidgetPrefs();

@@ -327,12 +327,8 @@ $("body").on("change", '.status', function()
 		console.log("status change event");
 		
 		// Change status UI and input field
-		changeStatus($(this).attr("value"), $(this).closest("form"));
+		changeStatus($(this).val(), $(this).closest("form"));
 	});	
-
-
-
-
 
 
 /**
