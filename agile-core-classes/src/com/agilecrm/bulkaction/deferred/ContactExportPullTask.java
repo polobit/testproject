@@ -2,7 +2,6 @@ package com.agilecrm.bulkaction.deferred;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import com.agilecrm.contact.Contact;
@@ -10,7 +9,6 @@ import com.agilecrm.contact.filter.ContactFilterResultFetcher;
 import com.agilecrm.export.ExportBuilder;
 import com.agilecrm.export.Exporter;
 import com.google.appengine.api.taskqueue.DeferredTask;
-import com.googlecode.objectify.Key;
 
 public class ContactExportPullTask implements DeferredTask
 {
@@ -22,21 +20,21 @@ public class ContactExportPullTask implements DeferredTask
      * 
      */
     private static final long serialVersionUID = -9119860558950199133L;
-
     private String filter;
-    private List<Key<Contact>> contactList = new ArrayList<Key<Contact>>();
+    private String contact_ids;
     private Long domainUserId;
+    private String dynamicFilter;
+    private Long currentUserId;
+    private String namespace = null;
 
-    public ContactExportPullTask(String filter, Long domainUserId)
+    public ContactExportPullTask(String contact_ids, String filter, String dynamicFilter, Long currentUserId,
+	    String namespace)
     {
+	this.contact_ids = contact_ids;
+	this.dynamicFilter = dynamicFilter;
 	this.filter = filter;
-	this.domainUserId = domainUserId;
-    }
-
-    public ContactExportPullTask(List<Key<Contact>> contactList, Long domainUserId)
-    {
-	this.contactList = contactList;
-	this.domainUserId = domainUserId;
+	this.currentUserId = currentUserId;
+	this.namespace = namespace;
     }
 
     @Override
@@ -46,22 +44,10 @@ public class ContactExportPullTask implements DeferredTask
 	{
 	    file = new File("test-yaswanth.csv");
 	}
-	List<Contact> contacts = new ArrayList<Contact>();
-	if (filter != null)
-	{
-	    ContactFilterResultFetcher fetcher = new ContactFilterResultFetcher(filter, null, 200, null, domainUserId);
 
-	    while (fetcher.hasNext())
-	    {
-		contacts.addAll(fetcher.nextSet());
-	    }
-	}
-	else if (contactList != null)
-	{
-	    contacts.addAll(Contact.dao.fetchAllByKeys(contactList));
-	}
+	writeContacts();
 
-	writeContactCSV(contacts);
+	getExporter().finalize();
 
 	// TODO Auto-generated method stub
 
@@ -82,6 +68,17 @@ public class ContactExportPullTask implements DeferredTask
 	}
 
 	return (Exporter<Contact>) null;
+    }
+
+    private void writeContacts()
+    {
+	ContactFilterResultFetcher fetcher = new ContactFilterResultFetcher(filter, dynamicFilter, 200, contact_ids,
+		currentUserId);
+
+	while (fetcher.hasNextSet())
+	{
+	    getExporter().writeEntitesToCSV(fetcher.nextSet());
+	}
     }
 
     /**

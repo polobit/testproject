@@ -223,70 +223,8 @@ public class ContactExportCSVUtil
 	return exportedFileName.toString();
     }
 
-    public static void addToPullQueue(Long currentUserId, String contact_ids, String filter, String dynamicFilter,
-	    String data)
+    public static void addToPullQueue(Long currentUserId, String contact_ids, String filter, String dynamicFilter)
     {
-	Random random = new Random();
-	random.setSeed(System.currentTimeMillis());
-	int randomInt = random.nextInt();
-	ContactExportPullTask task = null;
-	List<Key<Contact>> contactList = new ArrayList<Key<Contact>>();
-	if (contact_ids != null)
-	{
-	    JSONArray contact_ids_json;
-	    try
-	    {
-		contact_ids_json = new JSONArray(contact_ids);
-		for (int i = 0; i < contact_ids_json.length(); i++)
-		{
-		    contactList.add(new Key<Contact>(Contact.class, contact_ids_json.getLong(i)));
-		}
-	    }
-	    catch (JSONException e)
-	    {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	    }
-
-	}
-	else if (filter != null)
-	{
-	    if (isTextSearchQuery(filter))
-	    {
-		// Add ids to pull queue
-		ContactFilterIdsResultFetcher idFetcher = new ContactFilterIdsResultFetcher(filter, null, null, null,
-			200, currentUserId);
-
-		while (idFetcher.hasNext())
-		{
-		    contactList.addAll(idFetcher.next());
-		}
-	    }
-
-	    // Add Ids to pull queue
-	    task = new ContactExportPullTask(filter, currentUserId);
-	}
-
-	else if (dynamicFilter != null)
-	{
-	    // Add ids to pull queueu
-	    // Add ids to pull queue
-	    ContactFilterIdsResultFetcher idFetcher = new ContactFilterIdsResultFetcher(null, dynamicFilter, null,
-		    null, 200, currentUserId);
-
-	    while (idFetcher.hasNext())
-	    {
-		contactList.addAll(idFetcher.next());
-	    }
-	}
-
-	if (task == null && contactList.size() > 0)
-	{
-	    // Add Ids to pull queue
-	    task = new ContactExportPullTask(contactList, currentUserId);
-	}
-
-	PullQueueUtil.addToPullQueue("export-pull-queue", task, NamespaceManager.get() + "_" + randomInt);
 
     }
 

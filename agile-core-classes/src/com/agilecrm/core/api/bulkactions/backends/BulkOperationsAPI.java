@@ -32,6 +32,7 @@ import com.agilecrm.activities.util.ActivitySave;
 import com.agilecrm.activities.util.ActivityUtil;
 import com.agilecrm.bulkaction.deferred.CampaignStatusUpdateDeferredTask;
 import com.agilecrm.bulkaction.deferred.CampaignSubscriberDeferredTask;
+import com.agilecrm.bulkaction.deferred.ContactExportPullTask;
 import com.agilecrm.bulkaction.deferred.ContactsBulkDeleteDeferredTask;
 import com.agilecrm.bulkaction.deferred.ContactsBulkTagAddDeferredTask;
 import com.agilecrm.bulkaction.deferred.ContactsBulkTagRemoveDeferredTask;
@@ -54,6 +55,7 @@ import com.agilecrm.contact.util.bulk.BulkActionNotifications;
 import com.agilecrm.contact.util.bulk.BulkActionNotifications.BulkAction;
 import com.agilecrm.export.ExportBuilder;
 import com.agilecrm.export.Exporter;
+import com.agilecrm.queues.util.PullQueueUtil;
 import com.agilecrm.session.UserInfo;
 import com.agilecrm.subscription.restrictions.db.BillingRestriction;
 import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
@@ -847,8 +849,12 @@ public class BulkOperationsAPI
 
 	if (i + 10 == 10)
 	{
-	    ContactExportCSVUtil.addToPullQueue(currentUserId, contact_ids, filter, dynamicFilter, data);
-	    // return;
+	    ContactExportPullTask task = new ContactExportPullTask(contact_ids, filter, dynamicFilter, currentUserId,
+		    NamespaceManager.get());
+	    PullQueueUtil.addToPullQueue("export-pull-queue", task, NamespaceManager.get());
+
+	    // filter, dynamicFilter, data);
+	    return;
 	}
 
 	Exporter<Contact> exporter = ExportBuilder.buildContactExporter();
