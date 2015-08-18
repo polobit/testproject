@@ -7,8 +7,6 @@ import java.util.List;
 import org.apache.log4j.Level;
 
 import com.Globals;
-import com.agilecrm.contact.Contact;
-import com.agilecrm.contact.filter.util.ContactFilterUtil;
 import com.agilecrm.logger.AgileAPILogger;
 import com.agilecrm.queues.PullScheduler;
 import com.agilecrm.threads.TaskExcecutorThreadPool;
@@ -18,9 +16,12 @@ import com.google.api.services.taskqueue.Taskqueue.Tasks.Lease;
 import com.google.api.services.taskqueue.model.Task;
 import com.google.api.services.taskqueue.model.TaskQueue;
 import com.google.api.services.taskqueue.model.TaskQueue.Stats;
-import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.tools.remoteapi.RemoteApiInstaller;
 import com.google.appengine.tools.remoteapi.RemoteApiOptions;
+import com.google.apphosting.api.ApiProxy;
+import com.google.apphosting.api.ApiProxy.Delegate;
+import com.google.apphosting.api.ApiProxy.Environment;
+import com.thirdparty.Mailgun;
 
 public class TaskQueueStatsDaemon extends Thread
 {
@@ -149,9 +150,21 @@ public class TaskQueueStatsDaemon extends Thread
     }
 
     RemoteApiInstaller installer = null;
+    Delegate<Environment> threadLocalDelegate = null;
+
+    private void uninstall()
+    {
+	if (threadLocalDelegate == null)
+	    return;
+
+	ApiProxy.setDelegate(threadLocalDelegate);
+	// Uninstalls prefs
+	installer.uninstall();
+    }
 
     /**
      * Gets connector to access datastore remotely
+     * 
      * 
      * @throws IOException
      */
@@ -171,8 +184,15 @@ public class TaskQueueStatsDaemon extends Thread
 	    logger.info("Uninstalling current Prefs : " + System.currentTimeMillis() + " In thread : "
 		    + Thread.currentThread().getName());
 
-	    // Uninstalls prefs
-	    installer.uninstall();
+	    try
+	    {
+		uninstall();
+	    }
+	    catch (Exception e)
+	    {
+		sendErrorEmail(e.getMessage());
+		return;
+	    }
 
 	    logger.info("Re-Installing prefs : " + System.currentTimeMillis() + " In thread : "
 		    + Thread.currentThread().getName());
@@ -192,6 +212,8 @@ public class TaskQueueStatsDaemon extends Thread
 	RemoteApiOptions options = new RemoteApiOptions().server(Globals.APPLICATION_ID + ".appspot.com", 443)
 		.credentials(Globals.USER_ID, Globals.PASSWORD);
 	installer.install(options);
+
+	threadLocalDelegate = ApiProxy.getDelegate();
 
 	remoteAPIInstalledTime = System.currentTimeMillis();
 
@@ -251,10 +273,8 @@ public class TaskQueueStatsDaemon extends Thread
     {
 	try
 	{
-	    // Mailgun.sendMail("campaigns@agile.com", "Email Observer",
-	    // "yaswanth@agilecrm.com",
-	    // "naresh@agilecrm.com,raja@agilecrm.com", null, "EC2 Error", null,
-	    // "Hi Yaswanth " + message, null);
+	    Mailgun.sendMail("campaigns@agile.com", "Email Observer", "yaswanth@agilecrm.com",
+		    "naresh@agilecrm.com,raja@agilecrm.com", null, "EC2 Error", null, "Hi Yaswanth " + message, null);
 	}
 	catch (Exception e)
 	{
@@ -401,36 +421,5 @@ public class TaskQueueStatsDaemon extends Thread
 	    logger.info(e.getMessage());
 	    leaseTasksOld();
 	}
-    }
-
-    public static void main(String[] args)
-    {
-
-	RemoteApiOptions options = new RemoteApiOptions().server(Globals.APPLICATION_ID + ".appspot.com", 443)
-		.credentials(Globals.USER_ID, Globals.PASSWORD);
-
-	// CachingRemoteApiInstaller installer = new
-	// CachingRemoteApiInstaller();
-
-	RemoteApiInstaller installer = new RemoteApiInstaller();
-
-	try
-	{
-	    installer.install(options);
-	}
-	catch (IOException e)
-	{
-	    // TODO Auto-generated catch block
-	    e.printStackTrace();
-	}
-
-	NamespaceManager.set("local");
-
-	List<Contact> contacts = ContactFilterUtil.getContacts(String.valueOf(5311046533251072l), 10, null, null);
-
-	contacts.get(0).addTags("Medisetti123");
-	contacts.get(0).save(false);
-	installer.uninstall();
-
     }
 }
