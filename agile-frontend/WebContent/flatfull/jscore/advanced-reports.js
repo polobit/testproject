@@ -173,7 +173,7 @@ function showsalesReportGraphs()
 	//Get the GMT end time
 	var end_time = getUTCMidNightEpochFromDate(new Date(end_value));
 
-	end_time += (((23*60*60)+(59*60)+59)*1000);
+	//end_time += (((23*60*60)+(59*60)+59)*1000);
 
 	// Adds start_time, end_time and timezone offset to params.
 	
