@@ -957,6 +957,7 @@ var WidgetsRouter = Backbone.Router
 																$('#PrefsTab .select').removeClass('select');
 																$('.contact-sync-tab').addClass('select');
 																this.freshbooks_import_settings = new Base_Model_View({ url : 'core/api/freshbooks/import-settings', template : 'admin-settings-import-freshbooks-settings',
+																	            postRenderCallback: function(el){initializeImportListeners();},
 																				saveCallback : function(model)
 																				{
 
