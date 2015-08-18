@@ -309,14 +309,7 @@ function initializeTasksListeners(){
 	 * In new/update task modal, on selection of status, show progress slider
 	 * and change %
 	 */
-	$(".status").change(function()
-	{
-		console.log("status change event");
 		
-		// Change status UI and input field
-		changeStatus($(this).attr("value"), $(this).closest("form"));
-	});	
-	
 	$('#tasks-list-template').on('click', '.group-view', function(event)
 	{
 		event.preventDefault();
@@ -325,7 +318,18 @@ function initializeTasksListeners(){
 		// Change UI and input field
 		applyDetailsFromGroupView();
 	});	
+
+	
 }
+
+$("body").on("change", '.status', function()
+	{
+		console.log("status change event");
+		
+		// Change status UI and input field
+		changeStatus($(this).attr("value"), $(this).closest("form"));
+	});	
+
 
 
 

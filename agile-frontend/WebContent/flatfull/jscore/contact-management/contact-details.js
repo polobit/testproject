@@ -430,7 +430,7 @@ $(function(){
 	 * gets increased by one, both in UI and back end
 	 * 
 	 */  
-	$('body').on('mouseenter', '#add', function(e){
+	$('body').on('click', '#add', function(e){
 	    e.preventDefault();
 	    
 	    // Convert string type to int

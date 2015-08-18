@@ -95,6 +95,8 @@ $(function(){
 // show add case modal
 function initializeCasesListeners(el){
 	
+	$('#cases-listners').off();
+	// $("#cases-listners #cases-model-list > tr").off('mouseenter');
 	$("#cases-listners").on('mouseenter',
 			'#cases-model-list > tr',
 			function()
@@ -102,6 +104,7 @@ function initializeCasesListeners(el){
 
 				var data = $(this).find('.data').attr('data');
 				var currentCase = App_Cases.casesCollectionView.collection.get(data);
+				
 				var ele = getTemplate("cases-detail-popover", currentCase.toJSON());
 
 				$(this).popover(
@@ -112,16 +115,16 @@ function initializeCasesListeners(el){
 				 * Checks for last 'tr' and change placement of popover to 'top'
 				 * inorder to prevent scrolling on last row of list
 				 */
-				$('#cases-model-list > tr:last').popover(
+				/*$('#cases-model-list > tr:last').popover(
 						{ "rel" : "popover", "trigger" : "hover", "placement" : 'right', "original-title" : currentCase.toJSON().name, "content" : ele,
-							"html" : true, });
+							"html" : true, });*/
 
 				/**
 				 * make sure first popover is shown on the right
 				 */
-				$('#cases-model-list > tr:first').popover(
+				/*$('#cases-model-list > tr:first').popover(
 						{ "rel" : "popover", "trigger" : "hover", "placement" : 'right', "original-title" : currentCase.toJSON().name, "content" : ele,
-							"html" : true, });
+							"html" : true, });*/
 
 				$(this).popover('show');
 			});
@@ -129,11 +132,13 @@ function initializeCasesListeners(el){
 	/**
 	 * On mouse out on the row hides the popover.
 	 */
+	 $("#cases-listners #cases-model-list > tr").off('mouseleave');
 	 $('#cases-listners').on('mouseleave', '#cases-model-list > tr', function()
 	{
 		$(this).popover('hide');
 	});
 
+	$("#cases-listners .cases-add").off('click');
 	$('#cases-listners').on('click', '.cases-add', function(e)
 	{
 		e.preventDefault();
@@ -141,7 +146,7 @@ function initializeCasesListeners(el){
 	});
 
 	
-	
+	$("#cases-listners #cases-model-list > tr > td:not(':first-child')").off('click');
 	$('#cases-listners').on('click', '#cases-model-list > tr > td:not(":first-child")', function(e) 
 	{
 		e.preventDefault();

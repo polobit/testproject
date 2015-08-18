@@ -269,6 +269,7 @@ function deletePortlet(el) {
 								+ "?");
 }
 function initializePortletsListeners_1(){
+
 	$('#portletDeleteModal').off("click").on(
 		"click",'.portlet-delete-modal',
 		function(e) { 
@@ -313,9 +314,10 @@ function initializePortletsListeners_1(){
 			});
 	});
 
-	$('.portlet_body').off("click").on(
+	$('.portlet_body').on(
 		"click",'#portlets-opportunities-model-list > tr',
 		function(e) {
+
 			/*
 			 * if(e.target.attributes[0].name!="href"){ e.preventDefault();
 			 * App_Portlets.currentPosition =
@@ -339,7 +341,7 @@ function initializePortletsListeners_1(){
 			}
 	});
 
-	$('.portlet_body').off("click").on(
+	$('.portlet_body').on(
 		"click",'#portlets-events-model-list > tr',
 		function(e) {
 					var hrefFlag = false;
@@ -463,7 +465,7 @@ function initializePortletsListeners_1(){
 					}
 	});
 
-	$('.portlet_body').off("click").on(
+	$('.portlet_body').on(
 		"click",'#portlets-tasks-model-list > tr',
 		function(e) {
 			/*
@@ -501,7 +503,7 @@ function initializePortletsListeners_1(){
 			}
 	});
 
-	$('.gridster-portlets').off("click").on(
+	$('.gridster-portlets').on(
 		"click",'.portlets-tasks-select',
 		function(e) {
 					e.stopPropagation();
@@ -536,7 +538,7 @@ function initializePortletsListeners_1(){
 					}
 	});
 
-	$('.gridster-portlets').off("click").on("click",'.portlet-settings',function(e) {
+    $('.gridster-portlets').on("click",'.portlet-settings',function(e) {
 		e.preventDefault();
 		showPortletSettings(this.id);
 	});

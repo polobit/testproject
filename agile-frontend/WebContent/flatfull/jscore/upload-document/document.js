@@ -93,6 +93,7 @@ function initializeDocumentsListner(el){
 	/**
 	 * For adding new document
 	 */
+	$('#documents-listners').off();
 	$('#documents-listners').on('click', '.documents-add', function(e){
 		e.preventDefault();
 		var el = $("#uploadDocumentForm");
@@ -110,6 +111,7 @@ function initializeDocumentsListner(el){
     /** 
      * Document list view edit
      */
+    // $('#documents-listners #documents-model-list > tr > td:not(":first-child")').off();
 	$('#documents-listners').on('click', '#documents-model-list > tr > td:not(":first-child")', function(e){
 
     	 if(e.target.parentElement.attributes[0].name!="href" && e.target.parentElement.attributes[1].name!="href"){

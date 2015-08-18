@@ -110,7 +110,7 @@ $(function(){
 		$('#dealnoteupdatemodal').modal('show');
 	});
 
-	$('#content').on('click', '#dealnote_update', function(e)
+	$('body').on('click', '#dealnote_update', function(e)
 	{
 		e.preventDefault();
 
