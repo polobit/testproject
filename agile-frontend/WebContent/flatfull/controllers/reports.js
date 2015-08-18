@@ -95,9 +95,9 @@ var ReportsRouter = Backbone.Router
 						if (count > 0)
 							$("#reports-listerners-container").html(el);
 							
-							$('.activity_time_timepicker').timepicker({ 'timeFormat': 'H:i ' ,'step': 30});
-							$(".activity_time_timepicker").val("09:00");
-							$("#report_timezone").val(ACCOUNT_PREFS.timezone);
+							$('.activity_time_timepicker', el).timepicker({ 'timeFormat': 'H:i ' ,'step': 30});
+							$(".activity_time_timepicker", el).val("09:00");
+							$("#report_timezone", el).val(ACCOUNT_PREFS.timezone);
 					});
 				}, '<option value="{{id}}">{{name}}</option>', true, el);
 				
@@ -259,9 +259,10 @@ var ReportsRouter = Backbone.Router
 						++count;
 						if (count > 1)
 							$("#reports-listerners-container").html(el);
-						$('.report_time_timepicker').timepicker({ 'timeFormat': 'H:i ' ,'step': 30});
-						$(".report_time_timepicker").val("09:00");
-						$("#report_timezone").val(ACCOUNT_PREFS.timezone);
+
+						$('.report_time_timepicker', el).timepicker({ 'timeFormat': 'H:i ' ,'step': 30});
+						$(".report_time_timepicker", el).val("09:00");
+						$("#report_timezone", el).val(ACCOUNT_PREFS.timezone);
 					});
 				}, '<option value="custom_{{field_label}}">{{field_label}}</option>', true, el);
 
