@@ -4,6 +4,8 @@ var businessHoursManager;
 
 function initializeOnlineCalendarListners(el){
 	
+	 $("#online-cal-listners").off();
+	 
 	 $("#online-cal-listners #btnSerialize").off("click");
 	 $("#online-cal-listners").on("click","#btnSerialize", function(e){
 			e.preventDefault();
