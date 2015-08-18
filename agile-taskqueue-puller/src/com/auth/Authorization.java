@@ -7,6 +7,7 @@ import java.io.InputStreamReader;
 import java.security.GeneralSecurityException;
 import java.util.Collections;
 
+import com.Globals;
 import com.agilecrm.logger.AgileAPILogger;
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.extensions.java6.auth.oauth2.AuthorizationCodeInstalledApp;
@@ -31,8 +32,8 @@ public class Authorization
 {
 
     /** Directory to store user credentials. */
-    private static final java.io.File DATA_STORE_DIR = new java.io.File(System.getProperty("user.home"),
-	    ".store/task_queue_sample");
+    private static final java.io.File DATA_STORE_DIR = new java.io.File(System.getProperty("user.dir"),
+	    ".store/beta/task_queue_sample");
 
     private static FileDataStoreFactory dataStoreFactory;
 
@@ -40,8 +41,6 @@ public class Authorization
 
     /** Global instance of the JSON factory. */
     private static final JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
-
-    public static final String PROJECT_NAME = "agilecrmbeta";
 
     public static Credential credentials = null;
 
@@ -69,10 +68,10 @@ public class Authorization
     {
 	logger.info(System.getProperty("user.dir"));
 
-	logger.info(System.getProperty("user.dir") + "/credentials/client_secrets.json");
+	logger.info(System.getProperty("user.dir") + "/credentials/beta/client_secrets.json");
 
 	FileInputStream f = new FileInputStream(new File(System.getProperty("user.dir")
-		+ "/credentials/client_secrets.json"));
+		+ "/credentials/beta/client_secrets.json"));
 	logger.info(f.toString());
 	// load client secrets
 	GoogleClientSecrets clientSecrets = GoogleClientSecrets.load(JSON_FACTORY, new InputStreamReader(f));
@@ -115,7 +114,7 @@ public class Authorization
 	{
 	    Credential cred = getCredentials();
 
-	    Taskqueue tq = new Taskqueue.Builder(httpTransport, JSON_FACTORY, cred).setApplicationName(PROJECT_NAME)
+	    Taskqueue tq = new Taskqueue.Builder(httpTransport, JSON_FACTORY, cred).setApplicationName(Globals.PROJECT_NAME)
 		    .setTaskqueueRequestInitializer(new TaskqueueRequestInitializer()
 		    {
 
@@ -136,5 +135,18 @@ public class Authorization
 	}
 
 	return null;
+    }
+
+    public static void main(String[] args)
+    {
+	try
+	{
+	    getCredentials();
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	}
+
     }
 }
