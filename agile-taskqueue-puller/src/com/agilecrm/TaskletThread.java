@@ -179,14 +179,9 @@ public class TaskletThread implements Work
 	{
 	    try
 	    {
-		System.out.println(handle.getId());
-		System.out.println(handle.keySet());
-		System.out.println(handle.getKind());
-
-		System.out.println("Tag of task " + handle.get("tag"));
 		MailDeferredTask mailDeferredTask = (MailDeferredTask) SerializationUtils.deserialize(Base64
 			.decodeBase64(handle.getPayloadBase64().getBytes()));
-		System.out.println(mailDeferredTask.fromEmail);
+		logger.info(mailDeferredTask.fromEmail + " Thread : " + Thread.currentThread().getName());
 
 		mailDeferredTasks.add(mailDeferredTask);
 	    }
