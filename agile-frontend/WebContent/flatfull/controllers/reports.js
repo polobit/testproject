@@ -13,7 +13,7 @@ var ReportsRouter = Backbone.Router
 				"activity-report-edit/:id" : "activityReportEdit", "acivity-report-results/:id" : "activityReportInstantResults",
 				"contact-reports" : "emailReports", "report-add" : "reportAdd", "report-edit/:id" : "reportEdit",
 				"report-results/:id" : "reportInstantResults", "report-charts/:type" : "reportCharts", "report-funnel/:tags" : "showFunnelReport",
-				"report-growth/:tags" : "showGrowthReport", "report-cohorts/:tag1/:tag2" : "showCohortsReport", "report-ratio/:tag1/:tag2" : "showRatioReport" ,"sales-report":"showrevenuegraph" },
+				"report-growth/:tags" : "showGrowthReport", "report-cohorts/:tag1/:tag2" : "showCohortsReport", "report-ratio/:tag1/:tag2" : "showRatioReport" ,"report-sales":"showrevenuegraph" },
 
 			/**
 			 * Shows reports categories
