@@ -88,7 +88,7 @@ function initializeWidgetSettingsListeners(){
 	 * anchor tag and gets the model from the collection with widget name and
 	 * add widget then navigates back to the contact-details page
 	 */
-	$('#custom-widget').off('click').on('click', '.install-custom-widget', function(e)
+	$('#custom-widget').on('click', '.install-custom-widget', function(e)
 	{
 
 		e.preventDefault();
@@ -149,7 +149,7 @@ function initializeWidgetSettingsListeners(){
 	 * When user chooses to delete a widget, on confirmation sends delete
 	 * request based on the name of the widget
 	 */
-	$('#prefs-tabs-content').off('click').on('click', '#delete-widget', function(e)
+	$('#prefs-tabs-content').on('click', '#delete-widget', function(e)
 	{
 		// Fetch widget name from the widget on which delete is clicked
 		var widget_name = $(this).attr('widget-name');
@@ -167,7 +167,7 @@ function initializeWidgetSettingsListeners(){
 
 		});	
 
-	$('#prefs-tabs-content').off('click').on('click', '#remove-widget', function(e)
+	$('#prefs-tabs-content').on('click', '#remove-widget', function(e)
 	{
 		// Fetch widget name from the widget on which delete is clicked
 		var widget_name = $(this).attr('widget-name');
@@ -193,10 +193,13 @@ function initializeWidgetSettingsListeners(){
 		}, dataType : 'json' });
 	});
 	
-	
-	
-
 }
+
+$(function(){
+
+
+
+});
 
 function delete_widget(widget_name)
 {

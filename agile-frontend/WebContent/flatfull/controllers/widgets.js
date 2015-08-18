@@ -842,6 +842,7 @@ var WidgetsRouter = Backbone.Router
 																var options = { url : "core/api/contactprefs/GOOGLE", template : "admin-settings-import-google-contacts-setup",
 																				postRenderCallback : function(el)
 																				{
+																					            initializeImportListeners();
 																								initializeWidgetSettingsListeners();
 																								console.log(el);
 																								// App_Settings.setup_google_contacts.model =

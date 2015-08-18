@@ -319,54 +319,6 @@ function initializeAdminSettingsListeners(){
 		uploadImage("upload-container");
 	});
 
-	$('#admin-prefs-tabs-content #email-gateway-delete').off('click');
-	$("#admin-prefs-tabs-content").on("click", '#email-gateway-delete', function(e) {
-		e.preventDefault();
-		
-		if(!confirm("Are you sure you want to delete?"))
-    		return false;
-		
-		$.ajax({
-			url: 'core/api/email-gateway',
-			type: 'DELETE',
-			success: function(){
-				
-				if(App_Admin_Settings.email_gateway && App_Admin_Settings.email_gateway.model)
-			     {
-			    	 var data = App_Admin_Settings.email_gateway.model.toJSON();
-			    	 
-			    	 if(data.email_api == "MANDRILL")
-			    	 {
-			    		 	// Delete mandrill webhook
-							$.getJSON("core/api/email-gateway/delete-webhook?api_key="+ data.api_key+"&type="+data.email_api, function(data){
-								
-								console.log(data);
-								
-							});
-			    	 }
-			     }	
-				
-				location.reload(true);
-			}
-		});
-	});
-
-	$('#admin-prefs-tabs-content #sms-gateway-delete').off('click');
-	$('#admin-prefs-tabs-content').on('click', '#sms-gateway-delete', function(e){ 
-		e.preventDefault();
-		
-		if(!confirm("Are you sure you want to delete?"))
-    		return false;
-		var id=$(this).attr('data');
-		$.ajax({
-			url: 'core/api/widgets/integrations/'+id,
-			type: 'DELETE',
-			success: function(){
-				location.reload(true);
-			}
-		});
-	});
-
 	ACCOUNT_DELETE_REASON_JSON = undefined;
 	/**
 	 * If user clicks on confirm delete the modal is hidden and
@@ -522,9 +474,57 @@ function initializeAdminSettingsListeners(){
 			
 	});
 
-
-
 }
+
+$(function(){
+
+	$("#content").on("click", '#email-gateway-delete', function(e) {
+		e.preventDefault();
+		
+		if(!confirm("Are you sure you want to delete?"))
+    		return false;
+		
+		$.ajax({
+			url: 'core/api/email-gateway',
+			type: 'DELETE',
+			success: function(){
+				
+				if(App_Admin_Settings.email_gateway && App_Admin_Settings.email_gateway.model)
+			     {
+			    	 var data = App_Admin_Settings.email_gateway.model.toJSON();
+			    	 
+			    	 if(data.email_api == "MANDRILL")
+			    	 {
+			    		 	// Delete mandrill webhook
+							$.getJSON("core/api/email-gateway/delete-webhook?api_key="+ data.api_key+"&type="+data.email_api, function(data){
+								
+								console.log(data);
+								
+							});
+			    	 }
+			     }	
+				
+				location.reload(true);
+			}
+		});
+	});
+
+	$("#content").on('click', '#sms-gateway-delete', function(e){ 
+		e.preventDefault();
+		
+		if(!confirm("Are you sure you want to delete?"))
+    		return false;
+		var id=$(this).attr('data');
+		$.ajax({
+			url: 'core/api/widgets/integrations/'+id,
+			type: 'DELETE',
+			success: function(){
+				location.reload(true);
+			}
+		});
+	});
+
+});
 
 
 
