@@ -1817,7 +1817,7 @@ $('.portlet_body').off("change").on('change', '.onboarding-check', function(e) {
 			json2["done"] = false;
 			json2["skip"] = false;
 		}
-		json1[""+$(this).attr('value')] = json2;
+		json1[""+$(this).prop('value')] = json2;
 	});
 	model.set({ 'prefs' : JSON.stringify(json1) }, { silent : true });
 	// Saves new width and height in server

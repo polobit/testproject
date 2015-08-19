@@ -150,7 +150,7 @@ $(function(){
     			// Show loading symbol until model get saved
     		    //$('#contactCampaignForm').find('span.save-status').html(getRandomLoadingImg());
     		    
-    			var workflow_id = $('#campaign-select option:selected').attr('value');
+    			var workflow_id = $('#campaign-select option:selected').prop('value');
     			var workflow_name = $('#campaign-select option:selected').text();
     			
     			// If Active, don't add to campaign

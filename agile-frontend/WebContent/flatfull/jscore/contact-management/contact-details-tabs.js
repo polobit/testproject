@@ -617,7 +617,7 @@ function initializeSendEmailListeners(){
 		$('#emailForm').find('.error').removeClass('error');
 		$('#emailForm').find('.help-inline').css('display', 'none');
 
-		var model_id = $('.emailSelect option:selected').attr('value');
+		var model_id = $('.emailSelect option:selected').prop('value');
 
 		// When default option selected make subject and body empty
 		if (!model_id)

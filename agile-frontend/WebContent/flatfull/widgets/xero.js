@@ -210,7 +210,7 @@ $(function()
 			$("body").on('click','.invoices', function(e)
 			{
 				e.preventDefault();
-				var invoiceId = $(this).attr('value');
+				var invoiceId = $(this).prop('value');
 
 				// checking for data existence in div
 				if ($('#collapse-' + invoiceId).text().trim() === "")

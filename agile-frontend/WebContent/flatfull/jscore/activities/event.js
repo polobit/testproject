@@ -455,12 +455,12 @@ $(function()
 	});
 	$('.start-timepicker').timepicker().on('show.timepicker', function(e)
 	{
-		if ($('.start-timepicker').attr('value') != "" && $('.start-timepicker').attr('value') != undefined)
+		if ($('.start-timepicker').prop('value') != "" && $('.start-timepicker').prop('value') != undefined)
 		{
-			if ($('.start-timepicker').attr('value').split(":")[0] != undefined)
-				e.time.hours = $('.start-timepicker').attr('value').split(":")[0];
-			if ($('.start-timepicker').attr('value').split(":")[0] != undefined)
-				e.time.minutes = $('.start-timepicker').attr('value').split(":")[1];
+			if ($('.start-timepicker').prop('value').split(":")[0] != undefined)
+				e.time.hours = $('.start-timepicker').prop('value').split(":")[0];
+			if ($('.start-timepicker').prop('value').split(":")[0] != undefined)
+				e.time.minutes = $('.start-timepicker').prop('value').split(":")[1];
 		}
 		$('.bootstrap-timepicker-hour').val(e.time.hours);
 		$('.bootstrap-timepicker-minute').val(e.time.minutes);
@@ -474,12 +474,12 @@ $(function()
 	console.log(get_hh_mm(true));
 	$('.end-timepicker').timepicker().on('show.timepicker', function(e)
 	{
-		if ($('.end-timepicker').attr('value') != "" && $('.end-timepicker').attr('value') != undefined)
+		if ($('.end-timepicker').prop('value') != "" && $('.end-timepicker').prop('value') != undefined)
 		{
-			if ($('.end-timepicker').attr('value').split(":")[0] != undefined)
-				e.time.hours = $('.end-timepicker').attr('value').split(":")[0];
-			if ($('.end-timepicker').attr('value').split(":")[0] != undefined)
-				e.time.minutes = $('.end-timepicker').attr('value').split(":")[1];
+			if ($('.end-timepicker').prop('value').split(":")[0] != undefined)
+				e.time.hours = $('.end-timepicker').prop('value').split(":")[0];
+			if ($('.end-timepicker').prop('value').split(":")[0] != undefined)
+				e.time.minutes = $('.end-timepicker').prop('value').split(":")[1];
 		}
 		$('.bootstrap-timepicker-hour').val(e.time.hours);
 		$('.bootstrap-timepicker-minute').val(e.time.minutes);
@@ -493,16 +493,16 @@ $(function()
 	{
 		// ChangeTime event is not working, so need to invoke user method.
 		var endTime = changeEndTime($('.update-start-timepicker').val().split(":"), $('.update-end-timepicker').val().split(":"));
-		$('.update-end-timepicker').val(endTime);
+		$('.update-end-timepicker').val(endTime); 
 	});
 	$('.update-start-timepicker').timepicker().on('show.timepicker', function(e)
 	{
-		if ($('.update-start-timepicker').attr('value') != "" && $('.update-start-timepicker').attr('value') != undefined)
+		if ($('.update-start-timepicker').prop('value') != "" && $('.update-start-timepicker').prop('value') != undefined)
 		{
-			if ($('.update-start-timepicker').attr('value').split(":")[0] != undefined)
-				e.time.hours = $('.update-start-timepicker').attr('value').split(":")[0];
-			if ($('.update-start-timepicker').attr('value').split(":")[0] != undefined)
-				e.time.minutes = $('.update-start-timepicker').attr('value').split(":")[1];
+			if ($('.update-start-timepicker').prop('value').split(":")[0] != undefined)
+				e.time.hours = $('.update-start-timepicker').prop('value').split(":")[0];
+			if ($('.update-start-timepicker').prop('value').split(":")[0] != undefined)
+				e.time.minutes = $('.update-start-timepicker').prop('value').split(":")[1];
 		}
 		$('.bootstrap-timepicker-hour').val(e.time.hours);
 		$('.bootstrap-timepicker-minute').val(e.time.minutes);
@@ -515,12 +515,12 @@ $(function()
 	$('.update-end-timepicker').timepicker({ defaultTime : get_hh_mm(true), showMeridian : false });
 	$('.update-end-timepicker').timepicker().on('show.timepicker', function(e)
 	{
-		if ($('.update-end-timepicker').attr('value') != "" && $('.update-end-timepicker').attr('value') != undefined)
+		if ($('.update-end-timepicker').prop('value') != "" && $('.update-end-timepicker').prop('value') != undefined)
 		{
-			if ($('.update-end-timepicker').attr('value').split(":")[0] != undefined)
-				e.time.hours = $('.update-end-timepicker').attr('value').split(":")[0];
-			if ($('.update-end-timepicker').attr('value').split(":")[0] != undefined)
-				e.time.minutes = $('.update-end-timepicker').attr('value').split(":")[1];
+			if ($('.update-end-timepicker').prop('value').split(":")[0] != undefined)
+				e.time.hours = $('.update-end-timepicker').prop('value').split(":")[0];
+			if ($('.update-end-timepicker').prop('value').split(":")[0] != undefined)
+				e.time.minutes = $('.update-end-timepicker').prop('value').split(":")[1];
 		}
 		$('.bootstrap-timepicker-hour').val(e.time.hours);
 		$('.bootstrap-timepicker-minute').val(e.time.minutes);

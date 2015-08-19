@@ -194,7 +194,7 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
 		}
 		else if (isValidField(form_id + ' #contact_company'))
 		{
-			if ($form.find('#contact_company').attr('value').length > 100)
+			if ($form.find('#contact_company').prop('value').length > 100)
 			{
 				show_error(modal_id, form_id, 'duplicate-email', 'Company name too long. Please restrict upto 100 characters.');
 				enable_save_button($(saveBtn));// Remove loading image
@@ -290,7 +290,7 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
 
 		if (isValidField('company_name'))
 		{
-			var companyName = $form.find('#company_name').attr('value');
+			var companyName = $form.find('#company_name').prop('value');
 			if (companyName.length > 100)
 			{
 				// Company name too long, show error and return;

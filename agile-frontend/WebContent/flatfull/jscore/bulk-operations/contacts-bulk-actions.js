@@ -87,7 +87,7 @@ $(function()
 
 			var url;
 
-			var new_owner = $('#ownerBulkSelect option:selected').attr('value');
+			var new_owner = $('#ownerBulkSelect option:selected').prop('value');
 			url = '/core/api/bulk/update?action_type=CHANGE_OWNER&owner=' + new_owner;
 			var json = {};
 			json.contact_ids = id_array;
@@ -235,7 +235,7 @@ $(function()
 			// Show loading symbol until model get saved
 			// $('#campaignsBulkForm').find('span.save-status').html(getRandomLoadingImg());
 
-			var workflow_id = $('#campaignBulkSelect option:selected').attr('value');
+			var workflow_id = $('#campaignBulkSelect option:selected').prop('value');
 			var url = '/core/api/bulk/update?workflow_id=' + workflow_id + "&action_type=ASIGN_WORKFLOW";
 
 			var json = {};

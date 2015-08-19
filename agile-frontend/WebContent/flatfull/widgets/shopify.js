@@ -150,7 +150,7 @@ $(function()
 						$("body").on("click", '.order', function(e)
 						{
 										e.preventDefault();
-										var orderId = $(this).attr('value');
+										var orderId = $(this).prop('value');
 										console.log("order id is " + orderId);
 										// checking for data existence in div
 										/*
