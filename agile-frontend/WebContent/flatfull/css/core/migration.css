@@ -76,6 +76,11 @@ margin: 0px 0 15px;
 {
 	padding:0px;
 }*/
+
+.highcharts-tooltip table {
+    background: transparent!important;
+}
+
 .right {
 	float: right;
 }
@@ -1475,9 +1480,6 @@ color: #98a6ad;
 
 }
 
-
-
-
-
 /* ending hack for new ui contact details big tag will come down  */
+
 

@@ -43,7 +43,7 @@ function loadProgressSlider(el)
 			step : 1, 
 			skin : "round", 
 			onstatechange : function(value){
-				changeProgress(value, $(".status", el).attr("value"), el);
+				changeProgress(value, $(".status", el).val(), el);
 			}
 		});
 	});
