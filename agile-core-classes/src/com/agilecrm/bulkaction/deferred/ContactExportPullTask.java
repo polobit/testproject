@@ -8,6 +8,7 @@ import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.filter.ContactFilterResultFetcher;
 import com.agilecrm.export.ExportBuilder;
 import com.agilecrm.export.Exporter;
+import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.taskqueue.DeferredTask;
 
 public class ContactExportPullTask implements DeferredTask
@@ -40,6 +41,9 @@ public class ContactExportPullTask implements DeferredTask
     @Override
     public void run()
     {
+	NamespaceManager.set(namespace);
+	System.out.println("-----------------------------------------------------------------------------------------");
+	System.out.println(contact_ids + " " + dynamicFilter + " " + filter + " " + currentUserId + " " + namespace);
 	if (file == null)
 	{
 	    file = new File("test-yaswanth.csv");
@@ -48,6 +52,8 @@ public class ContactExportPullTask implements DeferredTask
 	writeContacts();
 
 	getExporter().finalize();
+
+	NamespaceManager.set(null);
 
 	// TODO Auto-generated method stub
 
@@ -72,12 +78,14 @@ public class ContactExportPullTask implements DeferredTask
 
     private void writeContacts()
     {
-	ContactFilterResultFetcher fetcher = new ContactFilterResultFetcher(filter, dynamicFilter, 200, contact_ids,
+	ContactFilterResultFetcher fetcher = new ContactFilterResultFetcher(filter, dynamicFilter, 20, contact_ids,
 		currentUserId);
 
 	while (fetcher.hasNextSet())
 	{
+	    Long time = System.currentTimeMillis();
 	    getExporter().writeEntitesToCSV(fetcher.nextSet());
+	    System.out.println(System.currentTimeMillis() - time);
 	}
     }
 
@@ -91,5 +99,19 @@ public class ContactExportPullTask implements DeferredTask
     public void writeContactCSV(List<Contact> contactList)
     {
 	getExporter().writeEntitesToCSV(contactList);
+    }
+
+    public static void main(String[] args)
+    {
+
+	ContactFilterResultFetcher fetcher = new ContactFilterResultFetcher("6407376026468352", null, 20, null,
+		1752041L);
+
+	while (fetcher.hasNextSet())
+	{
+	    Long time = System.currentTimeMillis();
+	    System.out.println(fetcher.nextSet());
+	    System.out.println(System.currentTimeMillis() - time);
+	}
     }
 }

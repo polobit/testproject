@@ -1209,7 +1209,7 @@ public class ContactsAPI
     @Path("/export")
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public void exportContacts(@FormParam("contact_ids") String contact_ids, @FormParam("filter") String filter,
+    public void exportContacts(@FormParam("contact_ids") String contact_ids, @QueryParam("filter") String filter,
 	    @FormParam("dynamic_filter") String dynamicFilter, @FormParam("data") String data)
     {
 	if (StringUtils.isBlank(data))
