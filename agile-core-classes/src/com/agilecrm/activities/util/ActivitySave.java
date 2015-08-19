@@ -25,6 +25,10 @@ import com.agilecrm.document.util.DocumentUtil;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.google.gson.Gson;
 
+/**
+ * <code>ActivitySave</code> class is intracts with ActivityUtil to create activities.
+ * ActivitySave intracts all other classes to create log for action performed
+ */
 public class ActivitySave
 {
 
