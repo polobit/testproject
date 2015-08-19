@@ -88,7 +88,8 @@ function initializeWidgetSettingsListeners(){
 	 * anchor tag and gets the model from the collection with widget name and
 	 * add widget then navigates back to the contact-details page
 	 */
-	$('#custom-widget').on('click', '.install-custom-widget', function(e)
+	$('#prefs-tabs-content').off();
+	$('#prefs-tabs-content, #custom-widget').on('click', '.install-custom-widget', function(e)
 	{
 
 		e.preventDefault();

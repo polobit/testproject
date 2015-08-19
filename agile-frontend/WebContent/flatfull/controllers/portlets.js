@@ -401,7 +401,7 @@ function initializePortletsListeners_1(){
 														.getMinutes());
 
 						// Set date for update Event
-						var dateFormat = 'mm/dd/yyyy';
+						var dateFormat = CURRENT_USER_PREFS.dateFormat;
 						$("#update-event-date-1").val(
 								(new Date(model.get('start') * 1000))
 										.format(dateFormat));
