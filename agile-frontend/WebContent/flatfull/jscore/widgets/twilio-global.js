@@ -19,6 +19,10 @@ TWILIO_IS_VOICEMAIL = false;
 
 function initializeTwilioGlobalListeners(){
 	
+}
+
+$(function(){
+
 	// After 15 sec procedure will start.
 	setTimeout(function()
 	{
@@ -28,9 +32,6 @@ function initializeTwilioGlobalListeners(){
 			globalTwilioIOSetup();
 		}
 	}, 10000); // 15 sec
-}
-
-$(function(){
 
 	$('body').on('click', '.noty_twilio_mute', function(e)
 			{
