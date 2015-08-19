@@ -287,6 +287,10 @@ $(function()
 			set_tinymce_content('email-body', '');
 
 			$("#emailForm").find('textarea[name="body"]').val("");
+
+			$('.add-attachment-cancel').trigger("click");
+
+			$('#eattachment_error').hide();
 			return;
 		}
 
@@ -349,6 +353,20 @@ $(function()
 
 			// Insert content into tinymce
 			set_tinymce_content('email-body', text);
+
+			if (model.attachment_id && Current_Route != 'bulk-email')
+			{
+				$('.add-attachment-select').trigger("click");
+				setTimeout(function(){
+					$('#attachment-select').find('option[value='+model.attachment_id+']').attr("selected","selected");
+					$('.add-attachment-confirm').trigger("click");
+				},500);
+			}
+			else if (model.attachment_id && Current_Route == 'bulk-email')
+			{
+				$('.add-attachment-select').hide();
+				$('#eattachment_error').show();
+			}
 		} });
 
 	});

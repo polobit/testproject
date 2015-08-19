@@ -59,4 +59,25 @@ $(function(){
 			}
 		});
 	});
+
+	$('.add-tpl-attachment-confirm').die().live("click", function(e){
+		e.preventDefault();
+		if($(this).parent().find('select').val()=="new"){
+			$('#uploadDocumentModal').modal('show');
+		}else if($(this).parent().find('select').val()!=""){
+			$('#tpl-attachment-select').hide();
+			$('#tpl-attachment-name').show();
+			$('#attachment_id',$('#tpl-attachment-name')).val($(this).parent().find('select').val());
+			$('#tpl_attachment_fname',$('#tpl-attachment-name')).text($(this).parent().find('option:selected').text());
+		}
+	});
+
+	$('.add-tpl-attachment-cancel').die().live("click", function(e){
+		e.preventDefault();
+		$('#tpl-attachment-select').show();
+		$('#tpl-attachment-name').hide();
+		$('.add-attachment-select').show();
+		$('.attachment-document-select').hide();
+		$('#attachment_id',$('#tpl-attachment-name')).val("");
+	});
 });

@@ -16,7 +16,8 @@
 		{
 			el.find("#attachment-select option:first").after("<option value='new'>Upload new doc</option>");
 
-		}, optionsTemplate, false, el); 
+		}, optionsTemplate, false, el);
+		$('#enable_tracking').css("margin-top", "-7px"); 
 	});
 	
 	/**
@@ -73,6 +74,7 @@
 		    	$('#emailForm').find('#eattachment_key').attr('value',document_id);
 		    }
 	    }
+	    $('#enable_tracking').css("margin-top", "-47px");
 	});
 	
 	/**
@@ -98,6 +100,7 @@
 		$('#emailForm').find(".add-attachment-select").css("display", "inline");
 		$('#emailForm').find('#eattachment_key').attr("name","name");
     	$('#emailForm').find('#eattachment_key').attr("value","value");
+    	$('#enable_tracking').css("margin-top", "-7px");
 	});
 	
     });
