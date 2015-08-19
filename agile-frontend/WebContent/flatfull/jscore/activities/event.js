@@ -210,6 +210,7 @@ $("#updateActivityModal").on(
 function initializeEventListners(el)
 {
 
+
 $("#ical_appointment_links").on('click', '#subscribe-ical', function(event)
 {
 	event.preventDefault();
@@ -260,6 +261,28 @@ $("#icalModal").on('click', '#send-ical-email', function(event)
 	} });
 });
 
+
+$("#calendar-listers").on('click', '.agendaDayWeekMonth', function()
+{
+	currentView = $(this).attr('id');
+	fullCal.fullCalendar('changeView', currentView);
+	$(this).parent().find('button').each(function()
+	{
+		if ($(this).attr('id') == currentView)
+			$(this).addClass('bg-light');
+		else
+			$(this).removeClass('bg-light');
+	});
+	if (currentView == "agendaDay" || currentView == "agendaWeek")
+	{
+		fullCal.fullCalendar('option', 'contentHeight', 575);
+	}
+	else
+	{
+		fullCal.fullCalendar('option', 'contentHeight', 400);
+	}
+
+});
 
 	$('#calendar-listers').on('click', '.agendaDayWeekMonth', function()
 	{
