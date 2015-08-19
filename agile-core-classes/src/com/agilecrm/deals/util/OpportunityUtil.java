@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -1571,10 +1572,11 @@ public class OpportunityUtil
 		 *         month.
 		 */
 		public static JSONObject getDealsDetailsByPipelineandOwner(Long ownerId,
-				Long pipelineId, long minTime, long maxTime) {
+				Long pipelineId, long minTime, long maxTime,String frequency) {
 			// Final JSON Constants
 			String TOTAL = "total";
 			String PIPELINE = "pipeline";
+			int type=Calendar.DAY_OF_MONTH;
 
 			// Deals Object
 			JSONObject dealsObject = new JSONObject();
@@ -1608,7 +1610,8 @@ public class OpportunityUtil
 			} else {
 				startCalendar.setTimeInMillis((minTime * 1000));
 			}
-			// startCalendar.set(Calendar.DAY_OF_MONTH, 1);
+			if (StringUtils.equalsIgnoreCase(frequency, "monthly"))
+			startCalendar.set(Calendar.DAY_OF_MONTH, 1);
 			startCalendar.set(Calendar.HOUR_OF_DAY, 0);
 			startCalendar.set(Calendar.MINUTE, 0);
 			startCalendar.set(Calendar.SECOND, 0);
@@ -1625,7 +1628,8 @@ public class OpportunityUtil
 			} else {
 				endCalendar.setTimeInMillis(maxTime * 1000);
 			}
-			// endCalendar.set(Calendar.DAY_OF_MONTH, 1);
+			if (StringUtils.equalsIgnoreCase(frequency, "monthly"))
+			 endCalendar.set(Calendar.DAY_OF_MONTH, 1);
 			endCalendar.set(Calendar.HOUR_OF_DAY, 0);
 			endCalendar.set(Calendar.MINUTE, 0);
 			endCalendar.set(Calendar.SECOND, 0);
@@ -1639,17 +1643,32 @@ public class OpportunityUtil
 				totalAndPipeline.put(PIPELINE, 0);
 				String mmYY = (startCalendar.getTimeInMillis() / 1000) + "";
 				dealsObject.put(mmYY, totalAndPipeline);
-				startCalendar.add(Calendar.DAY_OF_MONTH, 1);
+				if (StringUtils.equalsIgnoreCase(frequency, "daily"))
+					{type=Calendar.DAY_OF_MONTH;
+					startCalendar.add(type, 1);
+					}
+				if (StringUtils.equalsIgnoreCase(frequency, "monthly"))
+				{
+					type = Calendar.MONTH;
+					startCalendar.add(type, 1);
+					startCalendar.set(Calendar.DAY_OF_MONTH, 1);
+					//startCalendar.setTimeInMillis(startCalendar.getTimeInMillis());
+				}
+				if (StringUtils.equalsIgnoreCase(frequency, "weekly"))
+				{ type = Calendar.WEEK_OF_YEAR;
+				startCalendar.add(type, 1);}
 				// startCalendar.set(Calendar.DAY_OF_MONTH, 1);
-				startCalendar.set(Calendar.HOUR_OF_DAY, 0);
-				startCalendar.set(Calendar.MINUTE, 0);
-				startCalendar.set(Calendar.SECOND, 0);
-				startCalendar.set(Calendar.MILLISECOND, 0);
+				//startCalendar.set(Calendar.HOUR_OF_DAY, 0);
+				//startCalendar.set(Calendar.MINUTE, 0);
+				//startCalendar.set(Calendar.SECOND, 0);
+				//startCalendar.set(Calendar.MILLISECOND, 0);
 				startTimeInMilliSecs = startCalendar.getTimeInMillis();
 			}
 			// }
 			for (Opportunity opportunity : opportunitiesList) {
 				try {
+					String mmYY;
+					String last="";
 					// Total and Pipeline (total * probability)
 					double total = opportunity.expected_value;
 					double pipeline = opportunity.expected_value
@@ -1665,14 +1684,34 @@ public class OpportunityUtil
 					Calendar calendar = Calendar.getInstance(TimeZone
 							.getTimeZone(timeZone));
 					calendar.setTimeInMillis(opportunity.close_date * 1000);
-					// calendar.set(Calendar.DAY_OF_MONTH, 1);
+					if(StringUtils.equalsIgnoreCase(frequency, "monthly")) 
+						calendar.set(Calendar.DAY_OF_MONTH, 1);
+					if(StringUtils.equalsIgnoreCase(frequency,"weekly"))
+						{
+						
+						Iterator iter = dealsObject.keys();
+						while (iter.hasNext()) {
+						    String key = (String) iter.next();
+						    if((calendar.getTimeInMillis()/1000+"").compareToIgnoreCase(key.toString())>-1)
+						     {
+						    	last=key;
+						    	continue;	
+						     }
+						    break;
+						}
+						
+						}
 					calendar.set(Calendar.HOUR_OF_DAY, 0);
 					calendar.set(Calendar.MINUTE, 0);
 					calendar.set(Calendar.SECOND, 0);
 					calendar.set(Calendar.MILLISECOND, 0);
 
 					Date firstDayOfMonth = calendar.getTime();
-					String mmYY = (calendar.getTimeInMillis() / 1000) + "";
+					
+					if(StringUtils.equalsIgnoreCase(frequency,"weekly"))
+						 mmYY=last;
+					else
+						 mmYY = (calendar.getTimeInMillis() / 1000) + "";
 
 					Double oldTotal = 0D, oldPipeline = 0D;
 

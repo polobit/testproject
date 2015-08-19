@@ -127,6 +127,16 @@ head.js(LIB_PATH + 'lib/date-charts.js', LIB_PATH + 'lib/date-range-picker.js', 
 		});
 
 		// Init the callback when the frequency selector changes too
+		if ($('#frequency').length > 0)
+			{
+		// Get Frequency
+			callback();
+			$('#frequency').change(function()
+			{
+			callback();
+			});
+		}
+			// Init the callback when the track selector changes too
 		fillSelect("track", "/core/api/milestone/pipelines", undefined, function()
 		{
 			$('#track').change(function()
@@ -176,7 +186,9 @@ function showsalesReportGraphs()
 	//end_time += (((23*60*60)+(59*60)+59)*1000);
 
 	// Adds start_time, end_time and timezone offset to params.
-	
+	var d = new Date();
+	start_time=start_time+(d.getTimezoneOffset()*60*1000);
+	end_time=end_time+(d.getTimezoneOffset()*60*1000);
 
 
 	if ($('#owner').length > 0)
@@ -197,8 +209,14 @@ function showsalesReportGraphs()
 			options +=('/'+ track);
 
 	}
-	options += ("?min=" + start_time/1000 + "&max=" + end_time/1000);
 
+	options += ("?min=" + start_time/1000 + "&max=" + end_time/1000);
+	if ($('#frequency').length > 0)
+	{
+		// Get Frequency
+		var frequency = $("#frequency").val();
+		options += ("&frequency=" + frequency);
+	}
 	// If Frequency is present - send frequency too
 	
 

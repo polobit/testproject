@@ -945,8 +945,8 @@ public class DealsAPI
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public String getDealsDetailsByPipelineandOwner(@PathParam("owner-id") Long ownerId,@PathParam("pipeline-id") Long pipelineId,
-    		@QueryParam("min") Long min, @QueryParam("max") Long max)
+    		@QueryParam("min") Long min, @QueryParam("max") Long max,@QueryParam("frequency") String frequency)
     {
-	return OpportunityUtil.getDealsDetailsByPipelineandOwner(ownerId,pipelineId, min, max).toString();
+	return OpportunityUtil.getDealsDetailsByPipelineandOwner(ownerId,pipelineId, min, max,frequency).toString();
     }
 }

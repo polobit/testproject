@@ -9,6 +9,15 @@
                 <i class="icon-calendar icon-large"></i>
                 <span id="range">{{date-range "today" "-6"}}</span>
               </div>
+
+              <div class="pull-right" style="padding:0px 8px 10px">
+				<select name="frequency" id="frequency" class="required form-control" style="width:100px">
+					<option value="daily">Daily</option>
+					<option value="weekly">Weekly</option>
+                    <option value="monthly">Monthly</option>
+                </select>
+			</div> 
+			
 			<div class="pull-right" style="padding:0px 8px 10px">
 				<select name="track" id="track" class="required form-control">
 					<option value="Any track">Any Track</option>
