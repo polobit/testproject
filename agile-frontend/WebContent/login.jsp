@@ -262,6 +262,11 @@ if(isSafari && isWin)
 
 				e.preventDefault();
 			});
+			$('body').on('click', '.close', function(e){
+				 e.preventDefault();
+				 $(this).closest('div').fadeOut('slow', function() {
+				   });
+				 });
 			
 		});
 		
