@@ -25,6 +25,10 @@
 <%@page import="java.util.Arrays"%>
 
 <%
+/**
+ * checks for team calendar or individual calendar. gets required details to process 
+ *a request and keeps them in global variable to avoid multiple queries to db.
+ */
 String url = request.getRequestURL().toString();
 String[] ar=url.split("/");
 String scheduleid=ar[ar.length-2];
