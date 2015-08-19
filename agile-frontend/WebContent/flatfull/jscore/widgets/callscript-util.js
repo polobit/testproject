@@ -2,12 +2,15 @@ var CSRCOLLECTION;
 
 function initializeCallScriptListeners(){
 
+    $('#prefs-tabs-content').off();
+    $('#prefs-tabs-content #callscriptruleForm').off('click');
 	$('#prefs-tabs-content').on('click', '#callscriptruleForm', function(e)
 	 {
 		 makeWidgetTabActive();
 	 });
 	
 	// Filter Contacts- Clone Multiple
+	$('#prefs-tabs-content .callscript-multiple-add').off('click');
 	$('#prefs-tabs-content').on('click', '.callscript-multiple-add', function(e)
 	{
 		e.preventDefault();
@@ -29,12 +32,14 @@ function initializeCallScriptListeners(){
 	});
 
 	// Filter Contacts- Remove Multiple
+	$('#prefs-tabs-content i.callscript-multiple-remove').off('click');
 	$('#prefs-tabs-content').on('click', 'i.callscript-multiple-remove', function(e)
 	{
 		$(this).closest("tr").remove();
 	});
 
 	// Add rule from modal to widget form, show save btn , hide add rule btn
+	$('#prefs-tabs-content .edit-callscriptrule').off('click');
 	$('#prefs-tabs-content').on('click', '.edit-callscriptrule', function(e)
 	{
 		e.preventDefault();
@@ -52,6 +57,7 @@ function initializeCallScriptListeners(){
 	});
 
 	// Delete event for call script rule
+	$('#prefs-tabs-content .delete-callscriptrule').off('click');
 	$('#prefs-tabs-content').on('click', '.delete-callscriptrule', function(e)
 	{
 		e.preventDefault();
@@ -68,12 +74,14 @@ function initializeCallScriptListeners(){
 	});
 
 	// Display rule actions
+	$('#prefs-tabs-content .row-callscriptrule').off('mouseenter');
 	$('#prefs-tabs-content').on('mouseenter', '.row-callscriptrule', function(e)
 	{
 		$(this).find(".callscriptrule-actions").css("visibility", "visible");
 	});
 
 	// Hide rule actions
+	$('#prefs-tabs-content .row-callscriptrule').off('mouseleave');
 	$('#prefs-tabs-content').on('mouseleave', '.row-callscriptrule', function(e)
 	{
 		$(this).find(".callscriptrule-actions").css("visibility", "hidden");
