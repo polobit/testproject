@@ -1226,6 +1226,13 @@ $(function()
 		return CURRENT_DOMAIN_USER.domain;
 	});
 
+	Handlebars.registerHelper('current_user_email',function()
+	{
+		return CURRENT_DOMAIN_USER.email;
+			 
+	});
+
+
 	/*
 	 * To add comma in between the elements.
 	 */

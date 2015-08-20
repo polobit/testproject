@@ -1,47 +1,19 @@
-
-<script id="settings-user-prefs-tab-template" type="text/html">
-	<div class="tab-container m-b-none">
-           <ul class="nav nav-tabs">
-             <li class="prefs-profile"><a href="#user-prefs/profile" class="b-l-none">Profile</a></li>
-             <li class="prefs-reminders"><a href="#user-prefs/reminders">Reminders</a></li>
-			 <li class="prefs-advanced"><a href="#user-prefs/advanced">Advanced</a></li>
-           </ul>
-	</div>
-	<div class="tab-pane active" id="settings-user-prefs-tab-content">
-</script>
-
-
-
-
-
-<script id="settings-user-prefs-template" type="text/html">
+<script id="settings-advanced-template" type="text/html">
 <!--  Contact View Detail in Detailed mode - when only one contact is shown -->
-
 <div class="panel wrapper">
+
     <form id="userPrefs" class="form-horizontal" role="form">
         <fieldset>
             <input name="id" type="hidden" value="{{id}}" /> 		
             <!-- <legend>Personal Settings</legend> -->
             <div class="row">
                 <div class="col-md-6 col-sm-6 col-xs-6">
-                    <div class="control-group form-group">
+                    <div class="control-group form-group hidden">
                         <label class="control-label col-sm-4">Name <span class="field_req">*</span></label>
                         <div class="controls col-sm-8">
                             <input name="name" type="text" class="required form-control" value="{{currentDomainUserName}}" autocapitalize="off" />
                         </div>
                     </div>
-                    <div class="control-group form-group">
-                        <label class="control-label col-sm-4">Registered Email </label>
-                        <div class="controls col-sm-8">
-                            <input type="text" class="form-control" disabled="disabled" value="{{current_user_email}}" autocapitalize="off" />
-                        </div>
-                    </div>
-                    <div class="control-group form-group">
-						<label class="control-label col-sm-4">Password</label>
-                		<div class="control-label text-left col-sm-8">
-							<a href="#change-password" class="text-info">Change Password</a>      
-                		</div>
-            		</div>
                     <div class="control-group form-group hidden">
                         <label class="control-label col-sm-4">Color Theme <span class="field_req">*</span></label> 
                         <div class="controls col-sm-8">
@@ -63,7 +35,7 @@
                         </div>
                     </div>
 
-<div class="control-group form-group hidden">
+<div class="control-group form-group">
 						<label class="control-label col-sm-4">Time Zone</label>
 						<div class="controls col-sm-8">
 							<select name="timezone" id="timezone" class="form-control">
@@ -857,13 +829,12 @@
 								<option value="UTC"> UTC</option>
 
 							</select>
-							
 						</div>
 					</div>
-            <div class="control-group form-group hidden">
+            <div class="control-group form-group">
                 <label class="control-label col-sm-4">Currency</label>
                 <div class="controls col-sm-8">
-                   <select id="target_list" name="currency" class="form-control">
+                    <select id="target_list" name="currency" class="form-control">
                         <option value="USD-$" selected="1">United States Dollar</option>
                         <option value="EUR-&euro;">Euro</option>
                         <option value="DZD-DA">Algerian Dinar</option>
@@ -956,10 +927,9 @@
                         <option value="YER-YER">Yemeni Rial</option>
                         <option value="ZMK-ZK">Zambian Kwacha</option>
                     </select>
-                        
                 </div>
             </div>
-            <div class="control-group form-group hidden">
+            <div class="control-group form-group">
             	<label class="control-label col-sm-4">Date Format <span class="field_req">*</span></label> 
                 <div class="controls col-sm-8">
                 	<select name="dateFormat" id="date-format" class="required form-control">
@@ -976,36 +946,47 @@
                         <option value="D, dd M, yyyy">{{currentDateInFormat "D, dd M, yyyy"}}</option>
                         <option value="DD, dd MM, yyyy">{{currentDateInFormat "DD, dd MM, yyyy"}}</option>
                      </select>
-						
+                 </div>
+             </div>
+             <div class="control-group form-group">
+            	<label class="control-label col-sm-4">Calendar Week</label> 
+                <div class="controls col-sm-8">
+                	<select name="calendar_wk_start_day" id="calendar_wk_start_day" class="required form-control">
+						<option value="0">Sunday</option>
+                        <option value="1">Monday</option>
+                     </select>
+                 </div>
+                 <div class="col-sm-offset-4 col-sm-9">
+                 	<span class="text-muted">Your calender week starts with either of the selected days.</span>
                  </div>
              </div>
                 </div>
-                <div class="col-md-3 col-sm-3 col-xs-3">
+                <div class="col-md-3 col-sm-3 col-xs-3 hidden">
                     
                         <div id="upload-container" messg="User image has been uploaded">
-                            <div class="clearfix"><a href="#choose-avatar-modal" data-toggle="modal" class="pull-left">
-								<div class="imgholder thumb-lg thumb-wrapper" style="width:85px;">
+                            <div class="clearfix"><a href="#choose-avatar-modal" data-toggle="modal">
+								<div class="imgholder thumb-lg thumb-wrapper">
                                   {{#if pic}}
                                     <img class="w-full"  src="{{pic}}"  />
                                   {{else}}
                                     <img class="w-full"  src="https://contactuswidget.appspot.com/images/pic.png"  />
                                   {{/if}}
 								</div></a>												
-                                <div class="m-l-sm pull-left" style="margin-top:64px;">
+                                <p>
 									<input type="hidden" id="upload_url" name="pic"/>  
                                     <!--<input style="margin: 10px 0px 0px;" class="upload_s3 btn" type="button" id="user_prefs_image" value="Upload"/>-->
 									<a href="#choose-avatar-modal" class="text-info" data-toggle="modal">Change Avatar</a>
-                                </div>
+                                </p>
                             </div>
                         
                     </div>
                 </div>
             </div>
-            <div class="row">
+            <div class="row hidden">
 <div class="col-md-12">
             <div class="control-group form-group">
                 <label class="control-label col-sm-2">Signature</label> 
-                <div class="controls col-sm-8">
+                <div class="controls col-sm-9">
 					<div id="loading-editor"></div>
                     <textarea class="col-md-12 form-control" id="WYSItextarea" rows="10" name="signature" style="display: none;" placeholder="Enter text ..."></textarea>
                 </div>
@@ -1014,15 +995,7 @@
 </div>
 <div class="row">
 <div class="col-md-12">            
-<div class="control-group form-group hidden">
-            	<label class="control-label col-sm-2">Calendar Week starts on</label> 
-                <div class="controls col-sm-9">
-                	<select name="calendar_wk_start_day" id="calendar_wk_start_day" class="required form-control">
-						<option value="0">Sunday</option>
-                        <option value="1">Monday</option>
-                     </select>
-                 </div>
-             </div>
+
 	  <div class="control-group form-group hidden">
                 <label class="control-label col-sm-2">Task Reminders</label>
                 <div class="controls col-sm-9">
@@ -1045,7 +1018,7 @@
 </div>       
                 </div>
             </div>
-                <div class="control-group form-group hidden">
+                <div class="control-group form-group">
                 <label class="control-label col-sm-2">Shortcuts</label>
                 <div class="controls col-sm-9">
                     <div class="checkbox">
@@ -1056,7 +1029,12 @@
 </div>      
                 </div>
             </div>
-            
+            <div class="control-group form-group hidden">
+<label class="col-sm-2">&nbsp;</label>
+                <div class="controls col-sm-9">
+					<a href="#change-password" class="text-info">Change Password</a>      
+                </div>
+            </div>
 </div>
 </div>
 <div class="line  b-b line-lg"></div>
@@ -1073,8 +1051,8 @@
             
         </fieldset>
     </form>
-
 </div>
+
 
 <div id="choose-avatar-test" class="modal fade responsive-ui-modal">
 <div class="modal-dialog">
@@ -1111,5 +1089,5 @@
 </div>
 </div>
 </div>
-</script>	
+</script>
 
