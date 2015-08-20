@@ -313,6 +313,18 @@ function initializePortletsListeners_1(){
 				trigger : true
 			});
 	});
+	
+	$('.portlet_body').off("click").on('click', '.email-details', function(e) 
+			{
+				e.preventDefault();
+				var data = $(this).closest('a').attr("data");
+
+				var obj = getActivityObject(data);
+				console.log(obj);
+				var emailinfo = $(getTemplate("infoModal", JSON.parse(obj)));
+				emailinfo.modal('show');
+
+			});
 
 	$('.portlet_body').on(
 		"click",'#portlets-opportunities-model-list > tr',
