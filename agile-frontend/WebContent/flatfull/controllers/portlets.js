@@ -325,6 +325,19 @@ function initializePortletsListeners_1(){
 				emailinfo.modal('show');
 
 			});
+	
+
+	$('.portlet_body').off("click").on('click', '.activity-event-edit', function(e)
+{
+	e.preventDefault();
+	var data = $(this).closest('a').attr("data");
+
+	var currentevent = getEventObject(data);
+
+	update_event_activity(currentevent);
+
+});
+
 
 	$('.portlet_body').on(
 		"click",'#portlets-opportunities-model-list > tr',
