@@ -842,9 +842,9 @@ var WidgetsRouter = Backbone.Router
 																var options = { url : "core/api/contactprefs/GOOGLE", template : "admin-settings-import-google-contacts-setup",
 																				postRenderCallback : function(el)
 																				{
-																					            initializeImportListeners();
+																					            
 																								initializeWidgetSettingsListeners();
-																								console.log(el);
+																								initializeImportListeners();
 																								// App_Settings.setup_google_contacts.model =
 																								// App_Settings.contact_sync_google.model;
 																				} };
