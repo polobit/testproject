@@ -85,8 +85,8 @@ var ContactsRouter = Backbone.Router.extend({
             });
 			
 		}else{
-			head.js(LIB_PATH + 'jscore/handlebars/handlebars-helpers.js'+ _AGILE_VERSION,
-					LIB_PATH + 'lib/jquery.gridster.js',function(){
+			/*head.js(LIB_PATH + 'jscore/handlebars/handlebars-helpers.js'+ _AGILE_VERSION,
+					LIB_PATH + 'lib/jquery.gridster.js',function(){*/
 				var el = $(getTemplate('portlets', {}));
 				$("#content").html(el);
 				$('[data-toggle="tooltip"]').tooltip();
@@ -98,7 +98,7 @@ var ContactsRouter = Backbone.Router.extend({
 					$('#content').find('div.row').removeClass('row').addClass('row-fluid');
 				}*/
 				loadPortlets(el);
-			});
+			// });
 		}
 	},
 	
