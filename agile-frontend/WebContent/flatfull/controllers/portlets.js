@@ -305,7 +305,8 @@ function initializePortletsListeners_1(){
 			});
 	});
 
-	$('.portlet_body').off("click").on(
+	$('.portlet_body #portlets-contacts-model-list > tr, #portlets-companies-model-list > tr, #portlets-contacts-email-opens-model-list > tr').off();
+	$('.portlet_body').on(
 		"click",'#portlets-contacts-model-list > tr, #portlets-companies-model-list > tr, #portlets-contacts-email-opens-model-list > tr',
 		function(e) {
 			var id = $(this).find(".data").attr("data");
@@ -314,7 +315,8 @@ function initializePortletsListeners_1(){
 			});
 	});
 	
-	$('.portlet_body').off("click").on('click', '.email-details', function(e) 
+	$('.portlet_body .email-details').off();
+	$('.portlet_body').on('click', '.email-details', function(e) 
 			{
 				e.preventDefault();
 				var data = $(this).closest('a').attr("data");
