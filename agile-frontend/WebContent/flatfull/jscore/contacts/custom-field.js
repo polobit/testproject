@@ -21,45 +21,6 @@ function initializeCustomFieldsListeners(){
 	});
 	
 	
-	$('#custom-field-add-modal').on('change', '#custom-field-type', function(e){
-		e.preventDefault();
-		var value = $(this).val();
-		if(value == "LIST")
-		{
-			$("#custom-field-data").hide();
-			$("input",  $("#custom-field-data")).removeAttr("name");
-			$("#custom-field-list-values").show();
-			$("input",  $("#custom-field-list-values")).attr("name", "field_data");
-			$("#custom-field-formula-data").hide();
-			$("textarea",  $("#custom-field-formula-data")).removeAttr("name");
-		}
-		else if(value == "TEXTAREA")
-		{
-			$("#custom-field-data").show();
-			$("input",  $("#custom-field-data")).attr("name", "field_data");
-			$("#custom-field-list-values").hide();
-			$("input",  $("#custom-field-list-values")).removeAttr("name");
-			$("#custom-field-formula-data").hide();
-			$("textarea",  $("#custom-field-formula-data")).removeAttr("name");
-		}
-		else if(value == "FORMULA")
-		{
-			$("#custom-field-data").hide();
-			$("input",  $("#custom-field-data")).removeAttr("name");
-			$("#custom-field-list-values").hide();
-			$("input",  $("#custom-field-list-values")).removeAttr("name");
-			$("#custom-field-formula-data").show();
-			$("textarea",  $("#custom-field-formula-data")).attr("name", "field_data");
-		}
-		else
-		{
-			$("#custom-field-data").hide();
-			$("#custom-field-list-values").hide();
-			$("#custom-field-formula-data").hide();
-		}
-		
-	})
-	
 	$('#custom-fields-accordion').on('change', '#admin-settings-customfields-model-list > tr > td:not(":first-child")', function(e){
 		e.preventDefault();
 		var custom_field = $(this).closest('tr').data();
@@ -118,6 +79,7 @@ function showCustomFieldModel(data)
 		     $('#custom-field-add-modal').css("left", "50%");
 		     $('#custom-field-add-modal').css("width", modalWidth);
 		     $('#custom-field-add-modal').css("margin", (modalWidth/2)*-1);
+		     bindCustomFiledChangeEvent(el);
 		},
 		saveCallback : function(model)
 		{
@@ -174,6 +136,48 @@ function showCustomFieldModel(data)
 
 	$('#custom-field-modal').html(modelView.render(true).el);
 	$("#custom-field-type").trigger("change");
+}
+
+
+function bindCustomFiledChangeEvent(el){
+	$('#custom-field-add-modal',el).on('change', '#custom-field-type', function(e){
+		e.preventDefault();
+		var value = $(this).val();
+		if(value == "LIST")
+		{
+			$("#custom-field-data").hide();
+			$("input",  $("#custom-field-data")).removeAttr("name");
+			$("#custom-field-list-values").show();
+			$("input",  $("#custom-field-list-values")).attr("name", "field_data");
+			$("#custom-field-formula-data").hide();
+			$("textarea",  $("#custom-field-formula-data")).removeAttr("name");
+		}
+		else if(value == "TEXTAREA")
+		{
+			$("#custom-field-data").show();
+			$("input",  $("#custom-field-data")).attr("name", "field_data");
+			$("#custom-field-list-values").hide();
+			$("input",  $("#custom-field-list-values")).removeAttr("name");
+			$("#custom-field-formula-data").hide();
+			$("textarea",  $("#custom-field-formula-data")).removeAttr("name");
+		}
+		else if(value == "FORMULA")
+		{
+			$("#custom-field-data").hide();
+			$("input",  $("#custom-field-data")).removeAttr("name");
+			$("#custom-field-list-values").hide();
+			$("input",  $("#custom-field-list-values")).removeAttr("name");
+			$("#custom-field-formula-data").show();
+			$("textarea",  $("#custom-field-formula-data")).attr("name", "field_data");
+		}
+		else
+		{
+			$("#custom-field-data").hide();
+			$("#custom-field-list-values").hide();
+			$("#custom-field-formula-data").hide();
+		}
+		
+	});
 }
 
 /**
