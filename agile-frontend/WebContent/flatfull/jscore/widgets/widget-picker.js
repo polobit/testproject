@@ -88,7 +88,7 @@ function initializeWidgetSettingsListeners(){
 	 * anchor tag and gets the model from the collection with widget name and
 	 * add widget then navigates back to the contact-details page
 	 */
-	$('#prefs-tabs-content').off();
+	$('#prefs-tabs-content .install-custom-widget').off();
 	$('#prefs-tabs-content, #custom-widget').on('click', '.install-custom-widget', function(e)
 	{
 
@@ -150,6 +150,7 @@ function initializeWidgetSettingsListeners(){
 	 * When user chooses to delete a widget, on confirmation sends delete
 	 * request based on the name of the widget
 	 */
+	$('#prefs-tabs-content #delete-widget').off();
 	$('#prefs-tabs-content').on('click', '#delete-widget', function(e)
 	{
 		// Fetch widget name from the widget on which delete is clicked
@@ -168,6 +169,7 @@ function initializeWidgetSettingsListeners(){
 
 		});	
 
+	$('#prefs-tabs-content #remove-widget').off();
 	$('#prefs-tabs-content').on('click', '#remove-widget', function(e)
 	{
 		// Fetch widget name from the widget on which delete is clicked

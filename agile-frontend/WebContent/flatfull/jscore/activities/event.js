@@ -51,7 +51,7 @@ $(function(){
 
 
 
-$("#webEventCancelModel").on('click', '#delete_web_event', function(e)
+$("#updateActivityModal").on('click', '#delete_web_event', function(e)
 	{
 		e.preventDefault();
 
