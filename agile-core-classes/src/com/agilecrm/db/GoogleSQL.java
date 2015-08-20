@@ -318,6 +318,8 @@ public class GoogleSQL
 
 	Properties property = new Properties(System.getProperties());
 	property.put("com.mchange.v2.log.MLog", "log4j");
+	property.put("autoReconnect", "true");
+
 	// property.put("com.mchange.v2.log.FallbackMLog.DEFAULT_CUTOFF_LEVEL",
 	// "OFF");
 	System.setProperties(property);
