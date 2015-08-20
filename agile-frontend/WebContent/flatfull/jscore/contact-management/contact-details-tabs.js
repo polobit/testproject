@@ -333,13 +333,6 @@ $(function()
 
 			});
 
-	$('body').on('hover', '#email-reply-div', function(e)
-	{
-		e.preventDefault();
-
-		$(this).find('#email-reply').toggle();
-	});
-
 	/**
 	 * Delete functionality for activity blocks in contact details
 	 */

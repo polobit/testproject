@@ -1479,7 +1479,12 @@ color: #98a6ad;
 }
 
 }
-
+}
 /* ending hack for new ui contact details big tag will come down  */
 
-
+a#email-reply{
+  display: none;
+}
+#email-reply-div:hover a#email-reply{
+  display: block;
+}
