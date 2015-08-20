@@ -78,7 +78,7 @@ public class ContactExportPullTask implements DeferredTask
 
     private void writeContacts()
     {
-	ContactFilterResultFetcher fetcher = new ContactFilterResultFetcher(filter, dynamicFilter, 20, contact_ids,
+	ContactFilterResultFetcher fetcher = new ContactFilterResultFetcher(filter, dynamicFilter, 200, contact_ids,
 		currentUserId);
 
 	while (fetcher.hasNextSet())
