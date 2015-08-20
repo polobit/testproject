@@ -1,8 +1,5 @@
 package com.agilecrm.logger;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.io.PrintStream;
 
 import org.apache.log4j.Logger;
@@ -24,23 +21,6 @@ public class AgileAPILogger
     public static Logger getLogger()
     {
 	return logger;
-    }
-
-    public static FileWriter getFileWriter()
-    {
-	File file = new File("/home/yaswanth/apilog-writer.csv");
-	try
-	{
-	    FileWriter writer = new FileWriter(file);
-
-	    return writer;
-	}
-	catch (IOException e)
-	{
-	    // TODO Auto-generated catch block
-	    e.printStackTrace();
-	}
-	return null;
     }
 
     public static void tieSystemOutAndErrToLog()

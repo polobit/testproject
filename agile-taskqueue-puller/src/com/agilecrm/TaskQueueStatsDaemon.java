@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.apache.log4j.Level;
 
+import com.Globals;
 import com.agilecrm.logger.AgileAPILogger;
 import com.agilecrm.queues.PullScheduler;
 import com.agilecrm.threads.TaskExcecutorThreadPool;
@@ -17,6 +18,9 @@ import com.google.api.services.taskqueue.model.TaskQueue;
 import com.google.api.services.taskqueue.model.TaskQueue.Stats;
 import com.google.appengine.tools.remoteapi.RemoteApiInstaller;
 import com.google.appengine.tools.remoteapi.RemoteApiOptions;
+import com.google.apphosting.api.ApiProxy;
+import com.google.apphosting.api.ApiProxy.Delegate;
+import com.google.apphosting.api.ApiProxy.Environment;
 import com.thirdparty.Mailgun;
 
 public class TaskQueueStatsDaemon extends Thread
@@ -36,11 +40,6 @@ public class TaskQueueStatsDaemon extends Thread
     private boolean isThreadPool = false;
 
     private Long remoteAPIInstalledTime = null;
-
-    private static int MAX_REMOTE_API_VALIDITY_IN_HOURS = 1;
-
-    public RemoteApiOptions options = new RemoteApiOptions().server("agilecrmbeta.appspot.com", 443).credentials(
-	    "naresh@faxdesk.com", "clickdesk");
 
     org.apache.log4j.Logger logger = null;
 
@@ -88,7 +87,7 @@ public class TaskQueueStatsDaemon extends Thread
 
     private int getTotalTasks() throws IOException
     {
-	Taskqueue.Taskqueues.Get request = getTaskqueue().taskqueues().get(Authorization.PROJECT_NAME, TASK_QUEUE_NAME);
+	Taskqueue.Taskqueues.Get request = getTaskqueue().taskqueues().get(Globals.PROJECT_NAME, TASK_QUEUE_NAME);
 	request.setGetStats(true);
 	try
 	{
@@ -109,7 +108,7 @@ public class TaskQueueStatsDaemon extends Thread
 
     private boolean hasNewTasks() throws IOException
     {
-	Taskqueue.Taskqueues.Get request = getTaskqueue().taskqueues().get(Authorization.PROJECT_NAME, TASK_QUEUE_NAME);
+	Taskqueue.Taskqueues.Get request = getTaskqueue().taskqueues().get(Globals.PROJECT_NAME, TASK_QUEUE_NAME);
 	request.setGetStats(true);
 	try
 	{
@@ -151,9 +150,21 @@ public class TaskQueueStatsDaemon extends Thread
     }
 
     RemoteApiInstaller installer = null;
+    Delegate<Environment> threadLocalDelegate = null;
+
+    private void uninstall()
+    {
+	if (threadLocalDelegate == null)
+	    return;
+
+	ApiProxy.setDelegate(threadLocalDelegate);
+	// Uninstalls prefs
+	installer.uninstall();
+    }
 
     /**
      * Gets connector to access datastore remotely
+     * 
      * 
      * @throws IOException
      */
@@ -173,8 +184,15 @@ public class TaskQueueStatsDaemon extends Thread
 	    logger.info("Uninstalling current Prefs : " + System.currentTimeMillis() + " In thread : "
 		    + Thread.currentThread().getName());
 
-	    // Uninstalls prefs
-	    installer.uninstall();
+	    try
+	    {
+		uninstall();
+	    }
+	    catch (Exception e)
+	    {
+		sendErrorEmail(e.getMessage());
+		return;
+	    }
 
 	    logger.info("Re-Installing prefs : " + System.currentTimeMillis() + " In thread : "
 		    + Thread.currentThread().getName());
@@ -191,7 +209,12 @@ public class TaskQueueStatsDaemon extends Thread
     private void installRemoteAPI() throws IOException
     {
 
+	RemoteApiOptions options = new RemoteApiOptions().server(Globals.APPLICATION_ID + ".appspot.com", 443)
+		.credentials(Globals.USER_ID, Globals.PASSWORD);
 	installer.install(options);
+
+	threadLocalDelegate = ApiProxy.getDelegate();
+
 	remoteAPIInstalledTime = System.currentTimeMillis();
 
 	logger.info("Installing prefs : " + remoteAPIInstalledTime + " In thread : " + Thread.currentThread().getName());
@@ -214,7 +237,7 @@ public class TaskQueueStatsDaemon extends Thread
 
 	int hours = (int) (timeDifference / (1000 * 60 * 60));
 
-	if (MAX_REMOTE_API_VALIDITY_IN_HOURS > hours)
+	if (Globals.MAX_REMOTE_API_VALIDITY_IN_HOURS > hours)
 	    return false;
 
 	return true;
@@ -225,9 +248,12 @@ public class TaskQueueStatsDaemon extends Thread
 	Lease lease;
 	try
 	{
-	    lease = getTaskqueue().tasks().lease(Authorization.PROJECT_NAME, TASK_QUEUE_NAME,
-		    PullScheduler.DEFAULT_COUNT_LIMIT, PullScheduler.DEFAULT_LEASE_PERIOD);
+	    lease = getTaskqueue()
+		    .tasks()
+		    .lease(Globals.PROJECT_NAME, TASK_QUEUE_NAME, PullScheduler.DEFAULT_COUNT_LIMIT,
+			    PullScheduler.DEFAULT_LEASE_PERIOD).set(Globals.GROUP_BY_TAG_PARAM, true);
 
+	    logger.info(lease.buildHttpRequestUrl().toString());
 	    com.google.api.services.taskqueue.model.Tasks tasks = lease.execute();
 
 	    if (tasks == null || tasks.size() == 0)
