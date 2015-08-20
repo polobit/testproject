@@ -30,6 +30,8 @@ $(function(){
 					$("#owners-list", el).find('option[value='+ CURRENT_DOMAIN_USER.id +']').attr("selected", "selected");
 					$("#owners-list", $("#taskForm")).closest('div').find('.loading-img').hide();					
 		});
+
+       activateSliderAndTimerToTaskModal();
     });
 	
 	/**

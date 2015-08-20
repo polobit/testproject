@@ -7,6 +7,7 @@ $(function()
 		e.preventDefault();
 		var id = $(this).attr('data');
 		var value = tasksView.collection.get(id).toJSON();
+
 		deserializeForm(value, $("#updateTaskForm"));
 
 		$("#updateTaskModal").modal('show');
@@ -24,6 +25,9 @@ $(function()
 
 		// Add notes in task modal
 		showNoteOnForm("updateTaskForm", value.notes);
+
+		activateSliderAndTimerToTaskModal();
+
 	});
 
 	// Event edit in contact details tab
