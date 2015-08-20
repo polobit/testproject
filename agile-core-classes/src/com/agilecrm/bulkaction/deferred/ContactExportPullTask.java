@@ -46,7 +46,7 @@ public class ContactExportPullTask implements DeferredTask
 	System.out.println(contact_ids + " " + dynamicFilter + " " + filter + " " + currentUserId + " " + namespace);
 	if (file == null)
 	{
-	    file = new File("test-yaswanth.csv");
+	    file = new File(System.getProperty("user.dir") + "/exports/contacts/" + namespace + filter + ".csv");
 	}
 
 	writeContacts();

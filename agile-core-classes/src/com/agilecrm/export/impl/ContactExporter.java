@@ -35,7 +35,11 @@ public class ContactExporter extends AbstractCSVExporter<Contact>
 	List<Note> notes;
 	try
 	{
+	    Long start = System.currentTimeMillis();
 	    notes = NoteUtil.getNotes(contact.id);
+	    System.out.println("Notes Fetch Time :" + (System.currentTimeMillis() - start) + " , Notes fetched : "
+		    + notes.size());
+
 	    return ContactExportCSVUtil.addNotes(str, notes);
 	}
 	catch (Exception e)
