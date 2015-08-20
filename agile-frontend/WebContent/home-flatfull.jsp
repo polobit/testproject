@@ -129,10 +129,6 @@ content="<%=domainUser.getInfo(DomainUser.LAST_LOGGED_IN_TIME)%>" />
   display: none !important;
 }
 
-#upgrade_button a:hover{
-  background-color:#67C767 !important;
-
-}
 
 </style>
 <!--  responsive table js -->
