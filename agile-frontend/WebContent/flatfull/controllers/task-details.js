@@ -71,6 +71,7 @@ function initializeTaskDetailListeners(){
 	 * details, which are already added to time-line, when the task is getting
 	 * to its detail view.
 	 */
+	$('#task-tab-container-header #taskDetailsTab a[href="#timeline"]').off();
 	$('#task-tab-container-header').on('click', '#taskDetailsTab a[href="#timeline"]', function(e) 
 	{
 		e.preventDefault();
@@ -84,6 +85,7 @@ function initializeTaskDetailListeners(){
 	 * Fetches all the notes related to the task and shows the notes collection
 	 * as a table in its tab-content, when "Notes" tab is clicked.
 	 */
+	$('#task-tab-container-header #taskDetailsTab a[href="#notes"]').off();
 	$('#task-tab-container-header').on('click', '#taskDetailsTab a[href="#notes"]', function(e) 
 	{
 		e.preventDefault();
@@ -91,6 +93,7 @@ function initializeTaskDetailListeners(){
 		task_details_tab.load_notes();
 	});
 
+	$('#task-tab-container-header #taskDetailsTab a[href="#contacts"]').off();
 	$('#task-tab-container-header').on('click', '#taskDetailsTab a[href="#contacts"]', function(e)
 	{
 		e.preventDefault();
@@ -98,13 +101,15 @@ function initializeTaskDetailListeners(){
 		task_details_tab.loadTaskRelatedContactsView();
 	});
 
-     $('#task-tab-container-header').on('click', '#taskDetailsTab a[href="#activity"]', function(e) 
+	$('#task-tab-container-header #taskDetailsTab a[href="#activity"]').off();
+    $('#task-tab-container-header').on('click', '#taskDetailsTab a[href="#activity"]', function(e) 
 	{
 		e.preventDefault();
 		save_task_tab_position_in_cookie("activity");
 		task_details_tab.loadActivitiesView();
 	});
 	
+	$('#change-owner-element .task-owner-list').off();
 	$('#change-owner-element').on('click', '.task-owner-list', function(e) 
 	{
 
@@ -138,6 +143,7 @@ function initializeTaskDetailListeners(){
 		} });
 	});
 
+	$('#change-owner-element .task-owner-add').off();
 	$('#change-owner-element').on('click', '.task-owner-add', function(e)
 	{
 		e.preventDefault();
@@ -156,6 +162,7 @@ function initializeTaskDetailListeners(){
 
 	});
 
+	$('#change-owner-element #task-owner').off();
 	$('#change-owner-element').on('click', '#task-owner', function(e)
 	{
 		e.preventDefault();
@@ -176,6 +183,7 @@ function initializeTaskDetailListeners(){
 	/**
 	 * task note update
 	 */
+	$('#task_tab_detail .task-note-edit').off();
 	$('#task_tab_detail').on('click', '.task-note-edit', function(e) 
 	{
 
@@ -192,6 +200,7 @@ function initializeTaskDetailListeners(){
 	 * * update task related notes /
 	 */
 
+	$('#tasknoteupdatemodal #task_note_update').off();
 	$('#tasknoteupdatemodal').on('click', '#task_note_update', function(e)
 	{
 		e.preventDefault();
@@ -219,6 +228,7 @@ function initializeTaskDetailListeners(){
 		saveTaskNote($("#tasknoteUpdateForm"), $("#tasknoteupdatemodal"), this, json);
 	})
 
+	$('#task-detail-lhs .delete_task').off();
     $('#task-detail-lhs').on('click', '.delete_task', function(e)
 	{
 		var id = $('.delete_task').attr('data');
@@ -234,10 +244,43 @@ function initializeTaskDetailListeners(){
 			else
 				$('#due_tasks_count').html("");
 		} })
-	})
+	});
 
-    
-    $('#content #task_edit').off('click');
+	/**
+ * task note validate
+ */
+/**
+ * Saves note model using "Bcakbone.Model" object, and adds saved data to
+ * time-line if necessary.
+ */
+$('#new-task-modal').on('click', '#tasknote_validate', function(e) 
+{
+	e.preventDefault();
+
+	// Returns, if the save button has disabled attribute
+	if ($(this).attr('disabled'))
+		return;
+
+	if (!isValidForm('#tasknoteForm'))
+	{
+		return;
+	}
+
+	disable_save_button($(this));
+	var json = serializeForm("tasknoteForm");
+
+	console.log(json);
+
+	saveTaskNote($("#tasknoteForm"), $("#new-task-modal"), this, json);
+});
+
+
+}
+
+
+$(function(){
+
+	$('#content #task_edit').off('click');
     $('#content').on('click', '#task_edit', function(e) 
 	{
 		e.preventDefault();
@@ -272,36 +315,8 @@ function initializeTaskDetailListeners(){
 		update_task(taskDetailView.toJSON());
 	});
 
-	/**
- * task note validate
- */
-/**
- * Saves note model using "Bcakbone.Model" object, and adds saved data to
- * time-line if necessary.
- */
-$('#new-task-modal').on('click', '#tasknote_validate', function(e) 
-{
-	e.preventDefault();
-
-	// Returns, if the save button has disabled attribute
-	if ($(this).attr('disabled'))
-		return;
-
-	if (!isValidForm('#tasknoteForm'))
-	{
-		return;
-	}
-
-	disable_save_button($(this));
-	var json = serializeForm("tasknoteForm");
-
-	console.log(json);
-
-	saveTaskNote($("#tasknoteForm"), $("#new-task-modal"), this, json);
 });
 
-
-}
 
 /**
  * Activates "Timeline" tab and its tab-content in contact details and also
@@ -361,6 +376,8 @@ function update_task(value)
 		}
 		$("#owners-list", $("#updateTaskForm")).closest('div').find('.loading-img').hide();
 	});
+
+    activateSliderAndTimerToTaskModal();
 
 	// Add notes in task modal
 	showNoteOnForm("updateTaskForm", value.notes);
