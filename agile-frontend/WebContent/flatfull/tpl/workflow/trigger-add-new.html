@@ -23,6 +23,53 @@
 		</div>
 
 		<div id="general" class="row">
+
+			<div class="col-md-3 col-sm-6 col-xs-12">
+    			<div class="panel wrapper text-center">
+        			<!-- Icon and Title -->
+       				<div>
+           				 <div>
+              				  <i class="icon-user icon-3x"></i>
+            			</div>
+            			<b>Contact is added</b>
+        			</div>
+        			<br>
+        			<div class="ellipsis-multiline m-b-md" rel="tooltip">
+						Contact is added Contact is added Contact is added Contact is added Contact is added Contact is added Contact is added Contact is added Contact is added Contact is added Contact is added 
+       				</div>
+        			<!-- Add button -->
+        			<div>
+            			<a class="btn btn-sm btn-default" href="#">Go</a>
+        			</div>
+    			</div>
+			</div>
+
+			<div class="col-md-3 col-sm-6 col-xs-12">
+    			<div class="panel wrapper text-center">
+        			<!-- Icon and Title -->
+       				<div>
+           				 <div>
+              				  <i class="icon-user icon-3x"></i>
+            			</div>
+            			<b>Score is added</b>
+        			</div>
+        			<br>
+        			<div class="ellipsis-multiline m-b-md" rel="tooltip">
+						Score is added Score is added Score is added Score is added Score is added Score is added Score is added Score is added Score is added Score is added Score is added Score is added 
+       				</div>
+        			<!-- Add button -->
+        			
+					<div class="control-group form-group">
+						<div class="controls" id="trigger-custom-tags-add" >
+                 			<input type="text" placeholder="Enter Score" id="trigger-custom-score" name="custom_score" class="ADD_SCORE required custom-value digits form-control m-b-n-xxs w-md ">
+						</div>
+					</div>
+					<span for="trigger-custom-score" generated="true" class="help-inline" style="display: none;">Please enter only digits.</span>
+					<div>
+            			<a class="btn btn-sm btn-default" href="#">Go</a>
+        			</div>
+    			</div>
+			</div>
 		
 			<div class="col-md-3 col-sm-6 col-xs-12">
     			<div class="panel wrapper text-center">
@@ -260,7 +307,7 @@
 
 		<div class="row">
    			<div class="col-md-12">
-           		<h4 class="m-t-md">Payment</h4>
+           		<h4 class="m-t-md">Third party integrations</h4>
 			</div>
 		</div>
 
@@ -312,7 +359,68 @@
     			</div>
 			</div>
 
+			<div class="col-md-3 col-sm-6 col-xs-12">
+    			<div class="panel wrapper text-center">
+        			<!-- Icon and Title -->
+       				<div>
+           				 <div>
+              				  <i class="icon-user icon-3x"></i>
+            			</div>
+            			<b>Shopify</b>
+        			</div>
+        			<br/>
+        			<div class="ellipsis-multiline m-b-md" rel="tooltip">
+						TBD Shopify event TBD Shopify event TBD Shopify event TBD Shopify event TBD Shopify event TBD Shopify event TBD Shopify event TBD Shopify event TBD Shopify event TBD Shopify event TBD Shopify event 
+       				</div>
+
+					<div class="control-group form-group">
+						<div class="controls">
+							<select id="trigger-shopify-event" name="trigger_shopify_event" class="required form-control w-md">
+									<option value="">Select Shopify Event</option>
+									<option value="CUSTOMERS_CREATE">Customer created</option>
+									<option value="CUSTOMERS_UPDATE">Customer updated</option>
+									<option value="ORDERS_CREATE">Order created</option>
+									<option value="ORDERS_UPDATED">Order updated</option>
+									<option value="ORDERS_PAID">Order payment</option>
+									<option value="ORDERS_DELETE">Order deleted</option>
+									<option value="ORDERS_FULFILLED">Order fulfilled</option>
+									<option value="ORDERS_CANCELLED">Order cancelled</option>
+									<option value="CHECKOUTS_CREATE">Checkout created</option>
+									<option value="CHECKOUTS_UPDATE">Checkout updated</option>
+									<option value="CHECKOUTS_DELETE">Checkout deleted</option>
+                            </select>	
+                 		</div>
+					</div>
+
+					<div class="m-t-xs">
+							<small>
+								<i class="icon-info-sign"></i> 
+								You need to setup Webhooks in your Shopify account for this. In your stores Admin panel, go to Settings, Notifications, Webhooks, and create a webhook for the desired event with the below URL. <br> 
+								<a class="inbound-help-text">{{shopifyWebhook}}</a>
+							</small>
+					</div>
+
+					<div class="checkbox">
+                    	<label class="i-checks i-checks-sm">
+                        	<input type="checkbox" name="trigger_run_on_new_contacts"><i></i>
+	                            Run only on new Contacts
+						</label>
+                    </div>
+
+        			<!-- Add button -->
+        			<div>
+            			<a class="btn btn-sm btn-default" href="#">Go</a>
+        			</div>
+    			</div>
+			</div>
+
 		</div><!-- Add tags end -->
+
+		<div class="row">
+   			<div class="col-md-12">
+           		<h4 class="m-t-md">Email Bounces</h4>
+			</div>
+		</div>
 
 		<div class="row">
    			<div class="col-md-12">
@@ -329,45 +437,25 @@
            				 <div>
               				  <i class="icon-user icon-3x"></i>
             			</div>
-            			<b>New Email</b>
-        			</div>
-        			<br/>
-        			<div class="ellipsis-multiline m-b-md" rel="tooltip">
-            			TBD New Email
-       				</div>
-        			<!-- Add button -->
-
-					<div class="ellipsis-multiline m-b-md" rel="tooltip" id="trigger-inbound-mail-event">
-            			<small><i class="icon-info-sign"></i> For Agile CRM to recognize your emails, please setup <a class="inbound-help-text">{{inboundMail}}</a> as forwarding email at your email server. When there is a new email to this address, the From address will be added to your Contacts and to the Campaign (in case it is a new Contact).</small>								
-       				</div>
-
-					<div class="checkbox">
-                    	<label class="i-checks i-checks-sm">
-                        	<input type="checkbox" name="new_email_trigger_run_on_new_contacts"><i></i>
-	                            Run only on new Contacts
-						</label>
-                    </div>
-
-        			<div>
-            			<a class="btn btn-sm btn-default" href="#">Go</a>
-        			</div>
-    			</div>
-			</div>
-
-			<div class="col-md-3 col-sm-6 col-xs-12">
-    			<div class="panel wrapper text-center">
-        			<!-- Icon and Title -->
-       				<div>
-           				 <div>
-              				  <i class="icon-user icon-3x"></i>
-            			</div>
             			<b>Email Opened</b>
         			</div>
         			<br/>
         			<div class="ellipsis-multiline m-b-md" rel="tooltip">
             			TBD Email Opened
        				</div>
+
+					<div class="control-group form-group">
+						<div class="controls">
+							<select id="email-tracking-type" name="email_tracking_type" class="required form-control w-md">
+									<option value="ANY">Personal or Campaign emails</option>
+									<option value="PERSONAL">Personal emails only</option>
+									<option value="CAMPAIGNS">Campaign emails only</option>
+                            </select>	
+                 		</div>
+					</div>
+
         			<!-- Add button -->
+
         			<div>
             			<a class="btn btn-sm btn-default" href="#">Go</a>
         			</div>
@@ -387,7 +475,24 @@
         			<div class="ellipsis-multiline m-b-md" rel="tooltip">
             			TBD Email Link clicked
        				</div>
-        			<!-- Add button -->
+        			
+					<div class="control-group form-group">
+						<div class="controls">
+							<select id="email-tracking-type" name="email_tracking_type" class="required form-control w-md">
+									<option value="ANY">Personal or Campaign emails</option>
+									<option value="PERSONAL">Personal emails only</option>
+									<option value="CAMPAIGNS">Campaign emails only</option>
+                            </select>	
+                 		</div>
+					</div>
+
+					<div class="control-group form-group">
+						<div class="controls" id="email_link_clicked">
+							<input type="text" id="custom-link-clicked" value="" name="custom_link_clicked" class="required EMAIL_LINK_CLICKED form-control m-b-n-xxs w-md" placeholder="Link URL contains">	
+                 		</div>
+					</div>
+							
+					<!-- Add button -->
         			<div>
             			<a class="btn btn-sm btn-default" href="#">Go</a>
         			</div>
@@ -407,6 +512,15 @@
         			<div class="ellipsis-multiline m-b-md" rel="tooltip">
             			TBD Unsubscribed
        				</div>
+
+					<div class="control-group form-group">
+						<div class="controls">
+							<select id="campaign-trigger-select" class="required form-control">
+								<option class="default-select" value="">Select...</option>
+							</select>
+                 		</div>
+					</div>
+
         			<!-- Add button -->
         			<div>
             			<a class="btn btn-sm btn-default" href="#">Go</a>
@@ -468,6 +582,38 @@
             			TBD Sppam Report
        				</div>
         			<!-- Add button -->
+        			<div>
+            			<a class="btn btn-sm btn-default" href="#">Go</a>
+        			</div>
+    			</div>
+			</div>
+
+			<div class="col-md-3 col-sm-6 col-xs-12">
+    			<div class="panel wrapper text-center">
+        			<!-- Icon and Title -->
+       				<div>
+           				 <div>
+              				  <i class="icon-user icon-3x"></i>
+            			</div>
+            			<b>New Email</b>
+        			</div>
+        			<br/>
+        			<div class="ellipsis-multiline m-b-md" rel="tooltip">
+            			TBD New Email
+       				</div>
+        			<!-- Add button -->
+
+					<div class="ellipsis-multiline m-b-md" rel="tooltip" id="trigger-inbound-mail-event">
+            			<small><i class="icon-info-sign"></i> For Agile CRM to recognize your emails, please setup <a class="inbound-help-text">{{inboundMail}}</a> as forwarding email at your email server. When there is a new email to this address, the From address will be added to your Contacts and to the Campaign (in case it is a new Contact).</small>								
+       				</div>
+
+					<div class="checkbox">
+                    	<label class="i-checks i-checks-sm">
+                        	<input type="checkbox" name="new_email_trigger_run_on_new_contacts"><i></i>
+	                            Run only on new Contacts
+						</label>
+                    </div>
+
         			<div>
             			<a class="btn btn-sm btn-default" href="#">Go</a>
         			</div>
