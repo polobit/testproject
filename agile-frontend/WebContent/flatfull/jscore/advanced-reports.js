@@ -141,20 +141,25 @@ head.js(LIB_PATH + 'lib/date-charts.js', LIB_PATH + 'lib/date-range-picker.js', 
 		{
 			$('#track').change(function()
 			{
+				$('#reports-sales-track').text($("#track option:selected").text());
 				callback();
 			});
-		}, '<option class="default-select" value="{{id}}">{{name}}</option>', false, undefined, "Any Track");
+		}, '<option class="default-select" value="{{id}}">{{name}}</option>', false, undefined, "All Tracks");
 
 		fillSelect("owner", "core/api/users", undefined, function()
 		{
 			$('#owner').change(function()
 			{
+				$('#reports-sales-owner').text($("#owner option:selected").text());
 				callback();
 			});
 
-		}, '<option class="default-select" value="{{id}}">{{name}}</option>', false, undefined, "Any Owner");
+		}, '<option class="default-select" value="{{id}}">{{name}}</option>', false, undefined, "All Owners");
 
 		callback();
+
+		
+		
 	}
 
 function showsalesReportGraphs()
@@ -195,7 +200,7 @@ function showsalesReportGraphs()
 	{
 		// Get Frequency
 		var owner_id=0;
-		if ($("#owner").val() != "" && $("#owner").val() != "Any")
+		if ($("#owner").val() != "" && $("#owner").val() != "All Owners")
 			owner_id=$("#owner").val();
 			options += owner_id;
 	}
@@ -204,7 +209,7 @@ function showsalesReportGraphs()
 	{
 		// Get Frequency
 		var track = 0;
-		if($("#track").val() != "" &&  $("#track").val() != "Any track")
+		if($("#track").val() != "" &&  $("#track").val() != "All Tracks")
 			track=$("#track").val();
 			options +=('/'+ track);
 

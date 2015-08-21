@@ -1612,6 +1612,15 @@ public class OpportunityUtil
 			}
 			if (StringUtils.equalsIgnoreCase(frequency, "monthly"))
 			startCalendar.set(Calendar.DAY_OF_MONTH, 1);
+			
+			if (StringUtils.equalsIgnoreCase(frequency, "Quartely"))
+			{
+				int a= startCalendar.get(Calendar.MONTH)/3;
+				a=a*3;
+				startCalendar.set(Calendar.MONTH,a);
+				startCalendar.set(Calendar.DAY_OF_MONTH, 1);
+				
+			}
 			startCalendar.set(Calendar.HOUR_OF_DAY, 0);
 			startCalendar.set(Calendar.MINUTE, 0);
 			startCalendar.set(Calendar.SECOND, 0);
@@ -1630,6 +1639,14 @@ public class OpportunityUtil
 			}
 			if (StringUtils.equalsIgnoreCase(frequency, "monthly"))
 			 endCalendar.set(Calendar.DAY_OF_MONTH, 1);
+			if (StringUtils.equalsIgnoreCase(frequency, "Quartely"))
+			{
+				int a= endCalendar.get(Calendar.MONTH)/3;
+				a=a*3;
+				endCalendar.set(Calendar.MONTH,a);
+				endCalendar.set(Calendar.DAY_OF_MONTH, 1);
+				
+			}
 			endCalendar.set(Calendar.HOUR_OF_DAY, 0);
 			endCalendar.set(Calendar.MINUTE, 0);
 			endCalendar.set(Calendar.SECOND, 0);
@@ -1651,6 +1668,13 @@ public class OpportunityUtil
 				{
 					type = Calendar.MONTH;
 					startCalendar.add(type, 1);
+					startCalendar.set(Calendar.DAY_OF_MONTH, 1);
+					//startCalendar.setTimeInMillis(startCalendar.getTimeInMillis());
+				}
+				if (StringUtils.equalsIgnoreCase(frequency, "Quartely"))
+				{
+					type = Calendar.MONTH;
+					startCalendar.add(type, 3);
 					startCalendar.set(Calendar.DAY_OF_MONTH, 1);
 					//startCalendar.setTimeInMillis(startCalendar.getTimeInMillis());
 				}
@@ -1686,6 +1710,13 @@ public class OpportunityUtil
 					calendar.setTimeInMillis(opportunity.close_date * 1000);
 					if(StringUtils.equalsIgnoreCase(frequency, "monthly")) 
 						calendar.set(Calendar.DAY_OF_MONTH, 1);
+					if(StringUtils.equalsIgnoreCase(frequency, "Quartely"))
+					{
+						int a= calendar.get(Calendar.MONTH)/3;
+						a=a*3;
+						calendar.set(Calendar.MONTH,a);
+						calendar.set(Calendar.DAY_OF_MONTH, 1);
+					}
 					if(StringUtils.equalsIgnoreCase(frequency,"weekly"))
 						{
 						
