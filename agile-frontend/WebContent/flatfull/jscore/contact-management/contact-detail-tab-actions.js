@@ -2,11 +2,12 @@ var existingDocumentsView;
 
 $(function()
 {
-	$(".task-edit-contact-tab").die().live('click', function(e)
+	$('body').on('click', '.task-edit-contact-tab', function(e)
 	{
 		e.preventDefault();
 		var id = $(this).attr('data');
 		var value = tasksView.collection.get(id).toJSON();
+
 		deserializeForm(value, $("#updateTaskForm"));
 
 		$("#updateTaskModal").modal('show');
@@ -24,21 +25,22 @@ $(function()
 
 		// Add notes in task modal
 		showNoteOnForm("updateTaskForm", value.notes);
+
+		activateSliderAndTimerToTaskModal();
+
 	});
 
 	// Event edit in contact details tab
+	$('body').on('click', '.event-edit-contact-tab', function(e)
+					{
+						e.preventDefault();
+						var id = $(this).attr('data');
+						var value = eventsView.collection.get(id).toJSON();
+						deserializeForm(value, $("#updateActivityForm"));
+						$("#updateActivityModal").modal('show');
 
-	$(".event-edit-contact-tab").die().live('click', function(e)
-	{
-		e.preventDefault();
-		var id = $(this).attr('data');
-		var value = eventsView.collection.get(id).toJSON();
-		deserializeForm(value, $("#updateActivityForm"));
-		$("#updateActivityModal").modal('show');
-
-		$('.update-start-timepicker').val(fillTimePicker(value.start));
-
-		$('.update-end-timepicker').val(fillTimePicker(value.end));
+						$('.update-start-timepicker').val(fillTimePicker(value.start));
+						$('.update-end-timepicker').val(fillTimePicker(value.end));
 
 		if (value.type == "WEB_APPOINTMENT" && parseInt(value.start) > parseInt(new Date().getTime() / 1000))
 		{
@@ -74,8 +76,7 @@ $(function()
 		populateUsersInUpdateActivityModal(value);
 	});
 
-
-	$(".complete-task").die().live('click', function(e)
+	$('body').on('click', '.complete-task', function(e)
 	{
 		e.preventDefault();
 		if ($(this).is(':checked'))
@@ -93,7 +94,7 @@ $(function()
 	});
 
 	// For adding new deal from contact-details
-	$(".contact-add-deal").die().live('click', function(e)
+	$('body').on('click', '.contact-add-deal', function(e)
 	{
 		e.preventDefault();
 		var el = $("#opportunityForm");
@@ -157,7 +158,7 @@ $(function()
 	});
 
 	// For updating a deal from contact-details
-	$(".deal-edit-contact-tab").die().live('click', function(e)
+	$('body').on('click', '.deal-edit-contact-tab', function(e)
 	{
 		e.preventDefault();
 		var id = $(this).attr('data');
@@ -165,8 +166,7 @@ $(function()
 	});
 
 	// For Adding new case from contacts/cases
-
-	$(".contact-add-case").die().live('click', function(e)
+	$('body').on('click', '.contact-add-case', function(e)
 	{
 		e.preventDefault();
 		var el = $("#casesForm");
@@ -199,15 +199,39 @@ $(function()
 	});
 
 	// For updating a case from contact-details
-	$(".cases-edit-contact-tab").die().live('click', function(e)
+	$('body').on('click', '.cases-edit-contact-tab', function(e)
 	{
 		e.preventDefault();
 		var id = $(this).attr('data');
 		updatecases(casesView.collection.get(id));
 	});
 
+	// Adding contact when user clicks Add contact button under Contacts tab in
+	// Company Page
+	$('body').on('click', '.contact-add-contact', function(e)
+	{
+		e.preventDefault();
+
+		// This is a hacky method. ( See jscore/contact-management/modals.js for
+		// its use )
+		// 'forceCompany' is a global variable. It is used to enforce Company
+		// name on Add Contact modal.
+		// Prevents user from removing this company from the modal that is
+		// shown.
+		// Disables typeahead, as it won't be needed as there will be no Company
+		// input text box.
+		var json = App_Contacts.contactDetailView.model.toJSON();
+		forceCompany.name = getContactName(json); // name of Company
+		forceCompany.id = json.id; // id of Company
+		forceCompany.doit = true; // yes force it. If this is false the
+		// Company won't be forced.
+		// Also after showing modal, it is set to false internally, so
+		// Company is not forced otherwise.
+		$('#personModal').modal('show');
+	});
+
 	// For adding new document from contact-details
-	$(".contact-add-document").die().live('click', function(e)
+	$('body').on('click', '.contact-add-document', function(e)
 	{
 		e.preventDefault();
 		var el = $("#uploadDocumentForm");
@@ -230,7 +254,7 @@ $(function()
 	});
 
 	// For updating document from contact-details
-	$(".document-edit-contact-tab").die().live('click', function(e)
+	$('body').on('click', '.document-edit-contact-tab', function(e)
 	{
 		e.preventDefault();
 		var id = $(this).attr('data');
@@ -238,7 +262,7 @@ $(function()
 	});
 
 	// For unlinking document from contact-details
-	$(".document-unlink-contact-tab").die().live('click', function(e)
+	$('body').on('click', '.document-unlink-contact-tab', function(e)
 	{
 		e.preventDefault();
 		var id = $(this).attr('data');
@@ -268,7 +292,7 @@ $(function()
 	/**
 	 * For showing new/existing documents
 	 */
-	$(".add-document-select").die().live('click', function(e)
+	$('body').on('click', '.add-document-select', function(e)
 	{
 		e.preventDefault();
 		var el = $(this).closest("div");
@@ -285,7 +309,7 @@ $(function()
 	/**
 	 * To cancel the add documents request
 	 */
-	$(".add-document-cancel").die().live('click', function(e)
+	$('body').on('click', '.add-document-cancel', function(e)
 	{
 		e.preventDefault();
 		var el = $("#documents");
@@ -296,7 +320,7 @@ $(function()
 	/**
 	 * For adding existing document to current contact
 	 */
-	$(".add-document-confirm").die().live('click', function(e)
+	$('body').on('click', '.add-document-confirm', function(e)
 	{
 		e.preventDefault();
 

@@ -8,7 +8,7 @@ $(function()
 	/**
 	 * Get stream and perform favorite action on selected tweet.
 	 */
-	$(".favorite-status").die().live("click", function(e)
+	$('body').on('click', '.favorite-status', function(e)
 	{
 		// Get the id of the tweet on which retweet is clicked
 		var streamId = ($(this).closest('article').attr('stream-id'));
@@ -20,7 +20,7 @@ $(function()
 	/**
 	 * Get stream and perform undo-favorite action on selected tweet.
 	 */
-	$(".undo-favorite-status").die().live("click", function(e)
+	$('body').on('click', '.undo-favorite-status', function(e)
 	{
 		// Get the id of the tweet on which retweet is clicked
 		var streamId = ($(this).closest('article').attr('stream-id'));
@@ -39,11 +39,7 @@ $(function()
 	 * @param tweetOwner
 	 *            Twitter user's screen name.
 	 */
-	$(".more-options")
-			.die()
-			.live(
-					"click",
-					function(e)
+	$('body').on('click', '.more-options', function(e)
 					{
 						var streamId = ($(this).closest('article').attr('stream-id'));
 						var tweetId = ($(this).closest('article').attr('id'));
@@ -137,7 +133,7 @@ $(function()
 	 * @param tweetOwner
 	 *            Twitter user's screen name to send follow request
 	 */
-	$(".follow-user").die().live("click", function(e)
+	$('body').on('click', '.follow-user', function(e)
 	{
 		// Details to be pass on to method.
 		var streamId = ($(this).closest('article').attr('stream-id'));
@@ -155,7 +151,7 @@ $(function()
 	 * @param tweetOwner
 	 *            Twitter user's screen name to send unfollow request
 	 */
-	$(".unfollow-user").die().live("click", function(e)
+	$('body').on('click', '.unfollow-user', function(e)
 	{
 		// Details to be pass on to method.
 		var streamId = ($(this).closest('article').attr('stream-id'));
@@ -173,7 +169,7 @@ $(function()
 	 * @param tweetOwner
 	 *            Twitter user's screen name to send block request
 	 */
-	$(".block-user").die().live("click", function(e)
+	$('body').on('click', '.block-user', function(e)
 	{
 		// Details to be pass on to method.
 		var streamId = ($(this).closest('article').attr('stream-id'));
@@ -191,7 +187,7 @@ $(function()
 	 * @param tweetOwner
 	 *            Twitter user's screen name to send unblock request
 	 */
-	$(".unblock-user").die().live("click", function(e)
+	$('body').on('click', '.unblock-user', function(e)
 	{
 		// Details to be pass on to method.
 		var streamId = ($(this).closest('article').attr('stream-id'));
@@ -204,7 +200,7 @@ $(function()
 	 * Sends delete request to Twitter profile in Twitter based on stream id,
 	 * Twitter user's screen name and tweet id.
 	 */
-	$(".delete-tweet").die().live("click", function(e)
+	$('body').on('click', '.delete-tweet', function(e)
 	{
 		// Ask confirmation to user.
 		if (!confirm("Are you sure you want to delete this tweet?"))
@@ -254,7 +250,7 @@ $(function()
 	 * Get tweet, show tweet in modal with list of user with details, who
 	 * retweeted that tweet.
 	 */
-	$(".show-retweet").die().live("click", function(e)
+	$('body').on('click', '.show-retweet', function(e)
 	{		
 		// Close all dropdowns of all tweets.
 		$('.more-options-list').toggle(false);
