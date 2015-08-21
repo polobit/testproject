@@ -152,7 +152,7 @@
 	};
 	
 	acl_util.initTagACL = function(el){
-		$('#new_tag_acl',el).off().on('change',function(){
+		$('#new_tag_acl',el).off('change').on('change',function(){
 			updateTagAcl($(this).is(':checked'));
 		});
 		setTagACL(el);
