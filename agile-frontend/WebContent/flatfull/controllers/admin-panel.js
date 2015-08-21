@@ -140,7 +140,7 @@ var AdminPanelRouter = Backbone.Router.extend({
 		});
 		this.usersListViewCollection.collection.fetch();
 
-		$('#content').html(this.usersListViewCollection.el);
+		$('#admin-panel-listners').html(this.usersListViewCollection.el);
 
 	},
 
