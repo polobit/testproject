@@ -27,9 +27,10 @@ function showXeroClient()
 		// If data is not defined return
 		if (data)
 		{
-			//To get the latest invoices on top.
-			if(data.invoice != undefined && data.invoice.Invoice != undefined){				
-				data.invoice.Invoice = data.invoice.Invoice.reverse();
+			if(data.invoice != undefined && data.invoice.Invoice != undefined){	
+				if($.isArray(data.invoice.Invoice)){
+					data.invoice.Invoice = data.invoice.Invoice.reverse();
+				}
 			}	
 			
 			// Fill Xero widget template with FreshBooks clients data

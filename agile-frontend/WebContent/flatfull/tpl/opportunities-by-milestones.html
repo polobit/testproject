@@ -110,11 +110,11 @@
 </div>
 </script>
 <script id="opportunities-by-paging-model-template" type="text/html">
-	<div class='dealtitle-angular panel-heading'>
+	<div class='dealtitle-angular panel-heading '>
 		<div class='milestone-heading text-left text-ellipsis'> <span class="miltstone-title text-base text-ellipsis inline-block v-bottom pull-left" style="width:calc(100% -  45px)">{{heading}}</span><span id="{{remove_spaces heading}}_count" class="txt-mute badge pull-right m-t-xs"></span><span class="pull-right pos-abs pos-r-sm pos-t-xs"><img class="loading_img" src="/img/ajax-loader-cursor.gif" width="12px"></span></div>
 		<span></span>
 	</div>
-	<div id="{{remove_spaces heading}}-list-container" class='milestones panel-body p-n bg-light lter' milestone='{{heading}}'>
+	<div id="{{remove_spaces heading}}-list-container" class='milestones panel-body p-n' milestone='{{heading}}'>
 		
 	</div>
 </script>
@@ -234,7 +234,7 @@
 		<a class="text-info" href="#contact/{{id}}">{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}</a>
     {{/if_contact_type}}
 	{{#if_contact_type "COMPANY"}}
-     	<a class="text-info" href="#contact/{{id}}">{{getPropertyValue properties "name"}}</a>
+     	<a class="text-info" href="#company/{{id}}">{{getPropertyValue properties "name"}}</a>
     {{/if_contact_type}}
 </script>
 <script id="opportunity-track-list-collection-template" type="text/html">

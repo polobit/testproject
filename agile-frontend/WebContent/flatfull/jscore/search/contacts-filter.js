@@ -121,9 +121,7 @@ $(function()
 	{
 
 		e.preventDefault();
-		eraseCookie('company_filter');
 		eraseData('dynamic_contact_filter');
-		eraseData('dynamic_company_filter');
 
 		var filter_id = $(this).attr('id');
 		var filter_type = $(this).attr('filter_type');
@@ -157,39 +155,6 @@ $(function()
 		e.preventDefault();
 		// Navigate to show form
 		Backbone.history.navigate("contacts", { trigger : true });
-	});
-
-	$('#companies-filter').live('click', function(e)
-	{
-
-		e.preventDefault();
-		eraseCookie('contact_filter');
-		eraseCookie('contact_filter_type');
-
-		createCookie('company_filter', "Companies");
-		CONTACTS_HARD_RELOAD = true;
-		App_Contacts.contacts(); // /Show Companies list, explicitly hard
-		// reload
-		return;
-		/*
-		 * {{ OLD-CODE below }} if(readCookie('contact_view')) {
-		 * App_Contacts.contact_custom_view.collection.url =
-		 * "core/api/contacts/companies"
-		 * App_Contacts.contact_custom_view.collection.fetch();
-		 * //$('.filter-dropdown',
-		 * App_Contacts.contact_custom_view.el).append(filter_name); } /* If
-		 * contactsListView is defined (default view) then load filter results
-		 * in default view
-		 * 
-		 * if(App_Contacts.contactsListView &&
-		 * App_Contacts.contactsListView.collection) { // Set url to default
-		 * view to load filter results
-		 * App_Contacts.contactsListView.collection.url =
-		 * "core/api/contacts/companies";
-		 * App_Contacts.contactsListView.collection.fetch();
-		 * //$('.filter-dropdown',
-		 * App_Contacts.contactsListView.el).append(filter_name); }
-		 */
 	});
 
 	$('.lhs_chanined_parent').die().live('change', function(e)
@@ -248,7 +213,7 @@ function setupContactFilterList(cel, tag_id)
 	var filter_id = null;
 		contactFiltersListView = new Base_Collection_View(
 			{
-				url : '/core/api/filters',
+				url : '/core/api/filters?type=PERSON',
 				sort_collection : false,
 				restKey : "ContactFilter",
 				templateKey : "contact-filter-list",
@@ -286,8 +251,6 @@ function setupContactFilterList(cel, tag_id)
 
 						el.find('.filter-dropdown').append(filter_name);
 					}
-					else if (filter_name = readCookie('company_filter'))
-						el.find('.filter-dropdown').append(filter_name);
 
 					if (!filter_name)
 						return;

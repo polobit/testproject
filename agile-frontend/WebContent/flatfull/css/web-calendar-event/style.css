@@ -42,12 +42,12 @@ body {
 #avatar {
 	margin: 15px auto;
 	display: block;
-	height: 95px;
+	height: 60px;
 }
 #multi-user-avatar{
 	margin: 15px auto;
 	display: block;
-	height: 95px;
+	height: 60px;
 }
 
 .lead {
@@ -78,7 +78,7 @@ body {
 }
 
 .segment .col-sm-4 {
-	text-align: center;
+	/* text-align: center; */
 }
 
 .segment2 {
@@ -439,7 +439,8 @@ box-sizing: content-box;
 border-bottom: 1px solid #ddd;
 padding: 0px;
 padding-bottom: 4px;
-font-size: 17px;
+font-size: 16px;
+font-weight:800;
 
 color: #8E8F8F;
 }

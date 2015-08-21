@@ -1,4 +1,5 @@
 var businessHoursManager;
+var onlineCalendarModel;
 $(function()
 {
 
@@ -43,6 +44,8 @@ $(function()
 				json['business_hours'] = business_hours;
 				json['meeting_durations'] = meeting_durations;
 				json['schedule_id'] = scheduling_id;
+				json['bufferTime'] = $("#bufferTime").val();
+				json['bufferTimeUnit'] = $("#bufferTimeUnit").val();
 				console.log(business_hours);
 
 				// $("#schedule-preferences").html(getRandomLoadingImg());
@@ -58,6 +61,7 @@ $(function()
 					{
 						$('#error_message').html("There was an error in saving your settings. Please try again in a minute.");
 						enable_save_button($(saveBtn));
+						eraseCookie("BUFFER_TIME_UNIT");
 					} });
 
 			});
@@ -149,7 +153,71 @@ $(function()
 
 			});
 
+	$("#calendar_advanced").die().live('click', function(e)
+	{
+		e.preventDefault();
+		$("#calendar_advanced span i").toggleClass("fa-minus");
+		$("#calendar_advanced span i").toggleClass("fa-plus");
+
+	});
+
+	$('#calendar_advanced_block').live('shown', function()
+	{
+		$('#calendar_advanced').html('<span><i class="icon-minus"></i></span> Advanced');
+
+	});
+
+	$('#calendar_advanced_block').live('hidden', function()
+	{
+		$('#calendar_advanced').html('<span><i class="icon-plus"></i></span> Advanced');
+	});
+
+	$("#bufferTime").die().live('keypress', function(e)
+	{
+		// if the letter is not digit then display error and don't type anything
+		if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57))
+		{
+			// display error message
+			$("#errmsg").html("Digits Only").show().fadeOut(3000);
+			return false;
+		}
+	});
+
+	$(".onlineCalendarAddToSite").die().live('click', function(e)
+	{
+		e.preventDefault();
+
+		onlineCalendarModel = $(getTemplate("online-calendar-addtosite", {}));
+		onlineCalendarModel.modal('show');
+	});
+
+	$(".getStartedToAddToSite").die().live('click', function(e)
+	{
+		e.preventDefault();
+		Backbone.history.navigate("webrules-add", { trigger : true });
+		if (onlineCalendarModel)
+			onlineCalendarModel.modal('hide');
+		onlineCalendarModel = null;
+
+		getHtmlContent(function(html_content)
+		{
+			setTimeout(function()
+			{
+				tinyMCECallBack("tinyMCEhtml_email", html_content);
+			}, 1000);
+		});
+
+	});
+
 });
+
+function getHtmlContent(callback)
+{
+	$.get("/misc/modal-templates/schedule/popout/pop-out.html", function(data)
+	{
+		return callback(data);
+	});
+}
 
 /**
  * meeting duration form will be serialized manually becoz to trim spaces

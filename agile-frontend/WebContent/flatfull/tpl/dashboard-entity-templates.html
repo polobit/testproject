@@ -43,7 +43,7 @@
         		<a href="#contact/{{id}}" class="activate-link"><img class="thumbnail img-inital inline thumb" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}" width="40px" height="40px"  title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}" /></a>
         	{{/if_contact_type}}
 			{{#if_contact_type "COMPANY"}}
-        		<a href="#contact/{{id}}" class="activate-link"><img class="thumbnail" {{getCompanyImage "40" "display:inline;"}} title="{{getPropertyValue properties "name"}}"/></a>
+        		<a href="#company/{{id}}" class="activate-link"><img class="thumbnail" {{getCompanyImage "40" "display:inline;"}} title="{{getPropertyValue properties "name"}}"/></a>
         	{{/if_contact_type}}
        {{/each}}
 	</div>{{#if_greater this.contacts.length "3"}}<span>...</span>{{/if_greater}}
@@ -121,7 +121,7 @@
 				<img class="thumbnail img-inital inline thumb" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}" width="40px" height="40px" title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}" /></a>
 			{{/if_contact_type}}
 			{{#if_contact_type "COMPANY"}} 
-				<a href="#contact/{{id}}" class="activate-link">
+				<a href="#company/{{id}}" class="activate-link">
 				<img class="thumbnail" {{getCompanyImage "40" "display:inline;"}} title="{{getPropertyValue properties " name"}}"/></a>
 			{{/if_contact_type}}
 		{{/each}}

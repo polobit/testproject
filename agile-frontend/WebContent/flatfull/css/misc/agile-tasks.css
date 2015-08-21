@@ -176,6 +176,10 @@
 	background: #edf1f2;
 }
 
+.listed-task.blue:after {
+	background: #7266ba;
+}
+
 .listed-task:first-child {
 	/*margin-top: 0;*/
 }

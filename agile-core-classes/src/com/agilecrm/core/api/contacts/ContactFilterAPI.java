@@ -47,8 +47,10 @@ public class ContactFilterAPI
      */
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public List<ContactFilter> getContactFilters()
+    public List<ContactFilter> getContactFilters(@QueryParam("type") String contactType)
     {
+	if (StringUtils.isNotEmpty(contactType))
+	    return ContactFilter.getAllContactFiltersByType(contactType);
 	return ContactFilter.getAllContactFilters();
     }
 

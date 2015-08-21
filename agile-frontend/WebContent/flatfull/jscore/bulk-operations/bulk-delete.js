@@ -263,9 +263,12 @@ function bulk_delete_operation(url, id_array, index_array, table, is_grid_view, 
 			{
 				if($(table).attr('id') == "contacts-table")
 					showNotyPopUp('information', "Your contacts deletion will be processed shortly", "top", 5000);
-				if($(table).attr('id') == "companies")
+				if($(table).attr('id') == "companies"){
 					showNotyPopUp('information', "Your companies deletion will be processed shortly", "top", 5000);
+					COMPANIES_HARD_RELOAD = true;
+				}
 			}
+			
 			if(!is_grid_view)
 			{
 				var tbody = $(table).find('tbody');

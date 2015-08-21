@@ -42,8 +42,8 @@ public class DefaultWidgets
 		"/widgets/twitter.js", "/img/plugins/twitter.png", "/widgets/twitter-logo-small.png", null,
 		WidgetType.SOCIAL));
 	widgets.add(new Widget("Rapleaf",
-		" Rapleaf makes it incredibly easy for you to personalize content for your customers.",
-		"/widgets/rapleaf.js", "/img/plugins/rapleaf.png", "/widgets/rapleaf-logo-small.png", null,
+		" Towerdata makes it incredibly easy for you to personalize content for your customers.",
+		"/widgets/rapleaf.js", "/img/plugins/towerdata.png", "/widgets/towerdata-logo-small.png", null,
 		WidgetType.SOCIAL));
 	widgets.add(new Widget("ClickDesk",
 		"Convert chat sessions with potential customers into contacts in Agile along with the conversation.",

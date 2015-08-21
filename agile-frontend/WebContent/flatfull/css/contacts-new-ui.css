@@ -700,7 +700,7 @@ border-width: 2px!important;
 }
 
 .fc-b-warning{
-border-color: #fad733!important;
+border-color: #7266ba!important;
 }
 
 .fc-border-height {
@@ -711,11 +711,160 @@ border-color: #fad733!important;
 border-color: #edf1f2!important;
 }
 .fc-b-info{
-border-color: #23b7e5!important;
+border-color: #fad733!important;
 }
 .fc-b-danger {
   border-color: #f05050!important;
 }
 #milestone_val > span.help-inline{
 	font-size: 13.5px;
+}
+
+
+/* Popup alerts (Chrome extension)*/
+.agent-popup-alert {
+	z-index:99999;
+	position: fixed;
+	top: 53px;
+	right: 20px;
+	max-width: 400px;
+	background: #fff;
+	border-radius: 5px;
+	border: 1px solid #e5e5e5;
+	-webkit-box-shadow: rgba(0, 0, 0, 0.2) 0 0 30px -3px;
+	box-shadow: rgba(0, 0, 0, 0.2) 0 0 30px -3px;
+	-moz-box-shadow: rgba(0, 0, 0, 0.2) 0 0 30px -3px;
+}
+
+.agent-popup-alert .popup-content {
+	margin: 15px 25px 15px 80px;
+	overflow: hidden;
+}
+
+.agent-popup-alert .button-sesction {
+	margin: 0px 10px 15px 80px;
+}
+
+.agent-popup-alert .agent-popup-alert-dismiss {
+	position: absolute;
+	top: 10px;
+	right: 10px;
+}
+
+.agent-popup-alert .clickdesk-image {
+	position: absolute;
+	top: 20px;
+	left: 18px;
+}
+
+.agent-popup-alert .clickdesk-image img {
+	height: 40px;
+}
+
+.google-apps-icon{
+	height: 32px;
+  margin-top: 14px;
+  margin-left: 5px;
+}
+/* End of Popup alerts (Chrome extension)*/
+.online-meeting-padding{
+  padding: 6px 15px !important;
+  background-color: #edf1f2;
+}
+.online-meeting-border{
+	border: 1px solid #ddd;
+}
+.business-hours-margin{
+	margin-top: 12px;
+}
+.online-padding{
+margin-left:13px;
+}
+
+//added custom css for bootstrap modals on venkat demand
+
+
+
+-----------------------------------------------------
+.addtosite-modal{
+	bottom: auto;
+  display: block;
+  left: auto;
+  position: relative;
+  right: auto;
+  top: auto;
+  z-index: 1;
+  overflow: hidden;
+}
+.addtosite-modal-dialogue{
+	left: auto;
+  color: #404040;
+  margin-top: auto;
+  margin-left: auto;
+  margin-right: auto;
+}
+.addtosite-modal-content{
+	box-shadow: none;
+  border-radius: 0;
+}
+
+.addtosite-modal-header{
+	padding: 15px;
+  position: relative;
+  border: 0;
+}
+.addtosite-modal-title{
+	  font-size: 18px;
+  font-weight: 300;
+}
+.addtosite-modal-body{
+	min-height: 90px;
+}
+.addtosite-modal-footer{
+	padding: 10px 15px;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  background-color: rgba(0,0,0,0.025);
+  color: #5c7174;
+  border-color: rgba(0,0,0,0.04);
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+
+.addtosite-modal-header:after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 15px;
+  right: 15px;
+  height: 1px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  }
+  .text-15 {
+  font-size: 15px;
+  }
+  
+  .addtosite-model-header-border{
+  border-bottom: none !important;
+}
+.addtosite-body-content{
+	border: 1px solid #ddd;
+    padding: 30px;
+    text-align: center;border-radius: 6px;
+}
+.margin-left-18{
+	margin-left: 18px;
+}
+  
+#contact-results > li.active{
+	background-color: #fafafa;
+}
+#deals-results > li.active{
+	background-color: #fafafa;
+}
+#document-results > li.active{
+	background-color: #fafafa;
+}
+#case-results > li.active{
+	background-color: #fafafa;
 }
