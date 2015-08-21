@@ -5,8 +5,12 @@
 	 * For showing existing documents and Add new doc option
 	 * to attach in send-email form 
 	 */
-    $(function(){
-	$(".add-attachment-select").die().live('click', function(e){
+	function sendEmailAttachmentListeners(listener_container_id){
+     	
+	if(!listener_container_id)
+		  listener_container_id = "send-email-listener-container";
+
+	$('#' + listener_container_id).on('click', '.add-attachment-select', function(e){
 		e.preventDefault();
 		var el = $(this).closest("div");
 		$(this).css("display", "none");
@@ -17,13 +21,13 @@
 			el.find("#attachment-select option:first").after("<option value='new'>Upload new doc</option>");
 
 		}, optionsTemplate, false, el);
-		$('#enable_tracking').css("margin-top", "-7px"); 
+        $('#enable_tracking').css("margin-top", "-7px");
 	});
 	
 	/**
 	 * For adding existing document to current contact
 	 */
-	$(".add-attachment-confirm").die().live('click', function(e){
+	$('#' + listener_container_id).on('click', '.add-attachment-confirm', function(e){
 		e.preventDefault();		
 		var network_type = $('#attachment-select').find(":selected").attr('network_type');
 		var document_size = $('#attachment-select').find(":selected").attr('size');
@@ -74,13 +78,13 @@
 		    	$('#emailForm').find('#eattachment_key').attr('value',document_id);
 		    }
 	    }
-	    $('#enable_tracking').css("margin-top", "-47px");
+		$('#enable_tracking').css("margin-top", "-47px");
 	});
 	
 	/**
 	 * To cancel the add attachment request in send-email form
 	 */
-	$(".add-attachment-cancel").die().live('click', function(e){
+	$('#' + listener_container_id).on('click', '.add-attachment-cancel', function(e){
 		e.preventDefault();
 		var blobKey = $('#emailForm').find('#attachment_id').attr('name');
 		if(typeof blobKey !== typeof undefined)
@@ -103,7 +107,7 @@
     	$('#enable_tracking').css("margin-top", "-7px");
 	});
 	
-    });
+	}
     
     function deleteBlob(blob_key)
     {

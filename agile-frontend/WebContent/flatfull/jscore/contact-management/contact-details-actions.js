@@ -13,7 +13,7 @@ $(function(){
 	 * related to the contact in contact detail view. Also prepends the 
 	 * contact name to related to field of activity modal.
 	 */ 
-    $('.contact-add-task').live('click', function(e){
+	$('body').on('click', '.contact-add-task', function(e){ 
     	e.preventDefault();
 
     	var	el = $("#taskForm");
@@ -30,6 +30,8 @@ $(function(){
 					$("#owners-list", el).find('option[value='+ CURRENT_DOMAIN_USER.id +']').attr("selected", "selected");
 					$("#owners-list", $("#taskForm")).closest('div').find('.loading-img').hide();					
 		});
+
+       activateSliderAndTimerToTaskModal();
     });
 	
 	/**
@@ -37,7 +39,7 @@ $(function(){
 	 * related to the contact in contact detail view. Also prepends the 
 	 * contact name to related to field of activity modal.
 	 */ 
-    $('.contact-add-event').live('click', function(e){
+    $('body').on('click', '.contact-add-event', function(e){ 
     	e.preventDefault();
 
     	var	el = $("#activityForm");
@@ -54,13 +56,17 @@ $(function(){
      * detail view. Also prepends the contact name to related to field of 
      * activity modal.  
      */ 
-    $('.contact-add-note').live('click', function(e){
+    $('body').on('click', '.contact-add-note', function(e){ 
     	e.preventDefault();
+        console.log("execution");
     	var	el = $("#noteForm");
     	
     	// Displays contact name, to indicate the note is related to the contact
     	fill_relation(el);
-    	$('#noteModal').modal('show');
+
+        if(!$(this).attr("data-toggle"))
+             $('#noteModal').modal('show');
+         
     	agile_type_ahead("note_related_to", el, contacts_typeahead);
      });
     
@@ -69,7 +75,7 @@ $(function(){
      * option and then fills the select drop down with all the campaigns by triggering
      * a custom event (fill_campaigns_contact).
      */ 
-    $('.contact-add-campaign, .add-to-campaign').live('click', function(e){
+	$('body').on('click', '.contact-add-campaign, .add-to-campaign', function(e){ 
     		e.preventDefault();
     	
     		var contact_id = App_Contacts.contactDetailView.model.id;
@@ -86,7 +92,7 @@ $(function(){
 	    		 * it executes once, if again it is clicked it executes twice and so on).  
 	    		 */
     		
-	    		$('body').die('fill_campaigns_contact').live('fill_campaigns_contact', function(event){
+	    		$('body').off('fill_campaigns_contact').on('fill_campaigns_contact', function(event){
 	    			var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
 	    	        fillSelect('campaign-select','/core/api/workflows', 'workflow', 'no-callback ', optionsTemplate); 
 	    		});
@@ -115,7 +121,7 @@ $(function(){
     		 * Subscribes the contact to selected campaign from the drop down, when
     		 * the Add button is clicked
     		 */
-    		$('#subscribe-contact-campaign, #add-to-campaign').die().live('click',function(e){
+			$('body').on('click', '#subscribe-contact-campaign, #add-to-campaign', function(e){
     			e.preventDefault();
 
     			var $form;
@@ -146,7 +152,7 @@ $(function(){
     			// Show loading symbol until model get saved
     		    //$('#contactCampaignForm').find('span.save-status').html(getRandomLoadingImg());
     		    
-    			var workflow_id = $('#campaign-select option:selected').attr('value');
+    			var workflow_id = $('#campaign-select option:selected').prop('value');
     			var workflow_name = $('#campaign-select option:selected').text();
     			
     			// If Active, don't add to campaign
@@ -206,7 +212,7 @@ $(function(){
     		}); // End of Add button of form Event Handler
     		
     		// Click event of campaigns form close button
-    		$('#contact-close-campaign, #cancel-to-add-campaign').live('click', function(e){
+			$('body').on('click', '#contact-close-campaign, #cancel-to-add-campaign', function(e){
     			e.preventDefault();
     			
     			// Campaigns tab form

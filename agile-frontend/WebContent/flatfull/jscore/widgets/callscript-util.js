@@ -1,14 +1,17 @@
 var CSRCOLLECTION;
 
-$(function()
-{
-	$("#callscriptruleForm").live('click', function(e)
+function initializeCallScriptListeners(){
+
+    $('#prefs-tabs-content').off();
+    $('#prefs-tabs-content #callscriptruleForm').off('click');
+	$('#prefs-tabs-content').on('click', '#callscriptruleForm', function(e)
 	 {
 		 makeWidgetTabActive();
 	 });
 	
 	// Filter Contacts- Clone Multiple
-	$(".callscript-multiple-add").die().live('click', function(e)
+	$('#prefs-tabs-content .callscript-multiple-add').off('click');
+	$('#prefs-tabs-content').on('click', '.callscript-multiple-add', function(e)
 	{
 		e.preventDefault();
 		// To solve chaining issue when cloned
@@ -29,13 +32,15 @@ $(function()
 	});
 
 	// Filter Contacts- Remove Multiple
-	$("i.callscript-multiple-remove").die().live('click', function(e)
+	$('#prefs-tabs-content i.callscript-multiple-remove').off('click');
+	$('#prefs-tabs-content').on('click', 'i.callscript-multiple-remove', function(e)
 	{
 		$(this).closest("tr").remove();
 	});
 
 	// Add rule from modal to widget form, show save btn , hide add rule btn
-	$('.edit-callscriptrule').die().live('click', function(e)
+	$('#prefs-tabs-content .edit-callscriptrule').off('click');
+	$('#prefs-tabs-content').on('click', '.edit-callscriptrule', function(e)
 	{
 		e.preventDefault();
 
@@ -52,7 +57,8 @@ $(function()
 	});
 
 	// Delete event for call script rule
-	$('.delete-callscriptrule').die().live('click', function(e)
+	$('#prefs-tabs-content .delete-callscriptrule').off('click');
+	$('#prefs-tabs-content').on('click', '.delete-callscriptrule', function(e)
 	{
 		e.preventDefault();
 		
@@ -68,17 +74,19 @@ $(function()
 	});
 
 	// Display rule actions
-	$('.row-callscriptrule').live('mouseenter', function()
+	$('#prefs-tabs-content .row-callscriptrule').off('mouseenter');
+	$('#prefs-tabs-content').on('mouseenter', '.row-callscriptrule', function(e)
 	{
 		$(this).find(".callscriptrule-actions").css("visibility", "visible");
 	});
 
 	// Hide rule actions
-	$('.row-callscriptrule').live('mouseleave', function()
+	$('#prefs-tabs-content .row-callscriptrule').off('mouseleave');
+	$('#prefs-tabs-content').on('mouseleave', '.row-callscriptrule', function(e)
 	{
 		$(this).find(".callscriptrule-actions").css("visibility", "hidden");
 	});
-});
+}
 
 // Get widget and make adjustment of buttons in widget form
 function adjust_form()
@@ -264,6 +272,7 @@ function showCallScriptRule()
 	if (callscriptPrefsJson != null)
 	{
 		$("#prefs-tabs-content").html(getTemplate("callscript-table", callscriptPrefsJson.csrules));
+		initializeSubscriptionListeners();
 		
 		// Apply drag drop (sortable)
 		setup_sortable_callscriptrules();
@@ -284,11 +293,13 @@ function addCallScriptRule()
 
 	var add_csr = new Base_Model_View({ template : "callscript-rule", isNew : "true", postRenderCallback : function(el)
 	{
+		
 		head.js(LIB_PATH + 'lib/agile.jquery.chained.min.js', function()
 		{
 			chainFilters(el, undefined, function()
 			{
 				$('#prefs-tabs-content').html(el);
+				initializeSubscriptionListeners();
 
 				// if this is first rule then set add-widget url on cancel btn
 				if (!isCallScriptAdded())
@@ -323,6 +334,7 @@ function editCallScriptRule(ruleCount)
 		var csrule = getRule(callscriptPrefsJson,ruleCount);
 
 		$("#prefs-tabs-content").html(LOADING_HTML);
+		
 		head.js(LIB_PATH + 'lib/agile.jquery.chained.min.js', function()
 		{
 			$("#prefs-tabs-content").html(getTemplate("callscript-rule"));
@@ -333,6 +345,7 @@ function editCallScriptRule(ruleCount)
 			{
 				$("#prefs-tabs-content").find('#filter-settings').find("#loading-img-for-table").hide();
 				$("#prefs-tabs-content").find('#filter-settings').find(".chained-table").show();
+				initializeSubscriptionListeners();
 				
 				$(".callscript-multiple-remove").show();
 				$(".callscript-multiple-remove")[0].style.display = "none";

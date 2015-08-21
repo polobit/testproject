@@ -590,7 +590,7 @@ function showCalendar()
 							}
 							else
 							{
-								var desc = '<div class="row-fluid">' + '<div class="control-group form-group m-b-none">' + '<a href="#" id="add_event_desctiption"><i class="icon-plus"></i> Add Description </a>' + '<div class="controls event_discription hide">' + '<textarea id="description" name="description" rows="3" class="input form-control w-full col-md-8" placeholder="Add Description"></textarea>' + '</div></div></div>'
+								var desc = '<div class="row-fluid">' + '<div class="control-group form-group m-b-none " id="addEventDescription">' + '<a href="#" id="add_event_desctiption"><i class="icon-plus"></i> Add Description </a>' + '<div class="controls event_discription hide">' + '<textarea id="description" name="description" rows="3" class="input form-control w-full col-md-8" placeholder="Add Description"></textarea>' + '</div></div></div>'
 								$("#event_desc").html(desc);
 							}
 							// Show edit modal for the event
@@ -598,6 +598,8 @@ function showCalendar()
 
 							// Fills owner select element
 							populateUsersInUpdateActivityModal(event);
+
+							// initializeEventModelEvents();
 							return false;
 						}
 
@@ -675,107 +677,7 @@ function loadDefaultFilters(callback)
 
 $(function()
 {
-	$("#sync-google-calendar").die().live('click', function(e)
-	{
-		e.preventDefault();
-
-		// URL to return, after fetching token and secret key from LinkedIn
-		var callbackURL = window.location.href;
-
-		// For every request of import, it will ask to grant access
-		window.location = "/scribe?service=google_calendar&return_url=" + encodeURIComponent(callbackURL);
-	});
-
-	$("#sync-google-calendar-delete").die().live('click', function(e)
-	{
-		e.preventDefault();
-
-		var disabled = $(this).attr("disabled");
-		if (disabled)
-			return;
-
-		$(this).attr("disabled", "disabled");
-
-		$(this).after(getRandomLoadingImg());
-		App_Widgets.calendar_sync_google.model.url = "/core/api/calendar-prefs"
-		console.log(App_Widgets.calendar_sync_google.model.destroy({ success : function()
-		{
-
-			App_Widgets.calendar_sync_google.model.clear();
-			App_Widgets.calendar_sync_google.model.url = "/core/api/calendar-prefs/get"
-			App_Widgets.calendar_sync_google.render(true);
-			erase_google_calendar_prefs_cookie();
-
-		} }));
-	});
-
-	// Show filter drop down.
-	$('#event-filter-button').live('click', function(e)
-	{
-		e.preventDefault();
-		showEventFilters();
-	});
-
-	$('#event-filter-validate').live('click', function(e)
-	{
-		$('#filter_options').hide();
-		var formId = 'eventsFilterForm';
-		var json = serializeForm(formId);
-		createCookie('event-filters', JSON.stringify(json));
-
-		if (readCookie("agile_calendar_view"))
-		{
-			if (json.time === 'future')
-				createCookie("agile_calendar_view", "calendar_list_view_future");
-			else
-				createCookie("agile_calendar_view", "calendar_list_view");
-		}
-
-		// if list view
-		if (!readCookie("agile_calendar_view"))
-		{
-			$('#calendar_event').html('');
-			// App_Calendar.calendar();
-			showCalendar();
-		}
-		else
-		{
-
-			loadAgileEvents();
-			loadGoogleEvents();
-
-		}
-	});
-
-	// Show filter drop down.
-	$('#clear-event-filters').live('click', function(e)
-	{
-		e.preventDefault();
-		$('#filter_options select').val('');
-		eraseCookie('event-filters');
-		loadDefaultFilters();
-		showEventFilters();
-	});
-
-	$('#event_type').live('change', function()
-	{
-		console.log("----------", this.options[this.selectedIndex].text);
-		var dd = document.getElementById('event-owner');
-		var opt = $(this).val();
-		if (opt == 'google' && dd.options[dd.selectedIndex].text != 'Any')
-		{
-			dd.selectedIndex = 0;
-		}
-	});
-
-	$('#event-owner').live('change', function()
-	{
-		console.log("----------", this.options[this.selectedIndex].text);
-		var opt = this.options[this.selectedIndex].text;
-		if (opt != 'Me' && opt != 'Any')
-			$('#event_type').val('agile');
-	});
-
+	
 	/**
 	 * Hide the filters window when click on out side of the filters pop up.
 	 */
@@ -816,27 +718,7 @@ function today()
 {
 	fullCal.fullCalendar('today');
 }
-$('.agendaDayWeekMonth').die().live('click', function()
-{
-	currentView = $(this).attr('id');
-	fullCal.fullCalendar('changeView', currentView);
-	$(this).parent().find('button').each(function()
-	{
-		if ($(this).attr('id') == currentView)
-			$(this).addClass('bg-light');
-		else
-			$(this).removeClass('bg-light');
-	});
-	if (currentView == "agendaDay" || currentView == "agendaWeek")
-	{
-		fullCal.fullCalendar('option', 'contentHeight', 575);
-	}
-	else
-	{
-		fullCal.fullCalendar('option', 'contentHeight', 400);
-	}
 
-});
 
 function getCalendarUsersDetails()
 {

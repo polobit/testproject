@@ -1,6 +1,6 @@
 $(function()
 {
-	$("#import_salesforce").die().live('click', function(e)
+	$('body').on('click', '#import_salesforce', function(e)
 			{
 				e.preventDefault();
 				var newwindow = window.open("import_salesforce.jsp?id=import_from_salesforce", 'name', 'height=420,width=500');

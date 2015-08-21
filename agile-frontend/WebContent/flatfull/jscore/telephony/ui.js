@@ -6,7 +6,7 @@ $(function()
 	/**
 	 * On click of dialpad button on call noty, will display/remove keypad.
 	 */
-	$(".dialpad").die().live("click", function(e)
+	$('body').on('click', '.dialpad', function(e)
 	{
 		e.preventDefault();
 
@@ -28,7 +28,7 @@ $(function()
 	 * hard coded number. For Testing purpose. Call action is not visible to
 	 * user.
 	 */
-	$(".make-call").die().live("click", function(e)
+	$('body').on('click', '.make-call', function(e)
 	{
 		e.preventDefault();
 
@@ -53,7 +53,7 @@ $(function()
 	 * On click of telephone icon on contact page before phone number at top
 	 * right panel, will make SIP call to same number.
 	 */
-	$(".contact-make-sip-call").die().live("click", function(e)
+	$('body').on('click', '.contact-make-sip-call', function(e)
 	{
 		e.preventDefault();
 
@@ -89,7 +89,7 @@ $(function()
 	/**
 	 * Onclick of hangup button in call noty, when call is connected.
 	 */
-	$(".hangup").die().live("click", function(e)
+	$('body').on('click', '.hangup', function(e)
 	{
 		e.preventDefault();
 
@@ -103,7 +103,7 @@ $(function()
 	/**
 	 * On incoming call noty, on ignore button click. It will cut the call.
 	 */
-	$('.ignore').die().live("click", function(e)
+	$('body').on('click', '.ignore', function(e)
 	{
 		// Display
 		showCallNotyPopup("ignored", "error", SIP_Call_Noty_IMG+'<span class="noty_contact_details"><b>Ignored call  </b>'+ User_Number + '<br><a href="#'+Contact_Link+'" style="color: inherit;">' + User_Name +  '</a><br></span><div class="clearfix"></div>', 5000);
@@ -124,7 +124,7 @@ $(function()
 	/**
 	 * On incoming call noty, on answer button click. It will connect call.
 	 */
-	$('.answer').die().live("click", function(e)
+	$('body').on('click', '.answer', function(e)
 	{
 		// SIP accept call.
 		Sip_Session_Call.accept(Config_Call);

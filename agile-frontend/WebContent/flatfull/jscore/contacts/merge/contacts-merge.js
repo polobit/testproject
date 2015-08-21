@@ -10,7 +10,7 @@ var dup_contacts1_array = [];
 
 $(function()
 {
-				$('#duplicate-contacts-cancel').die().live('click', function(event)
+				$('body').on('click', '#duplicate-contacts-cancel', function(event)
 				{
 								event.preventDefault();
 								dup_contacts1_array.length = 0;
@@ -18,7 +18,7 @@ $(function()
 								Backbone.history.navigate("contact/" + master_record.id, { trigger : true });
 				});
 
-				$('#contact-merge-cancel').die().live('click', function(event)
+				$('body').on('click', '#contact-merge-cancel', function(event)
 				{
 								event.preventDefault();
 								dup_contacts1_array.length = 0;
@@ -34,11 +34,7 @@ $(function()
 				 * sends these contacts to merge contacts page
 				 * 
 				 */
-				$('#duplicate-contacts-checked-grid')
-												.die()
-												.live(
-																				'click',
-																				function(event)
+				$('body').on('click', '#duplicate-contacts-checked-grid', function(event)
 																				{
 																								event.preventDefault();
 																								var index_array = [];
@@ -78,7 +74,7 @@ $(function()
 				 * object and deletes the duplicate contact objects from the datastore
 				 * 
 				 */
-				$('#merge-contacts-model').die().live('click', function(event)
+				$('body').on('click', '#merge-contacts-model', function(event)
 				{
 								event.preventDefault();
 								if (dup_contacts1_array.length > 1)

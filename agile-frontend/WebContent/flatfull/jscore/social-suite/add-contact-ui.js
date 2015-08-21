@@ -4,7 +4,7 @@ $(function()
 	 * After display of add contact form, Fills name with tweet owner's name in
 	 * add-contact popup form.
 	 */
-	$(".add-twitter-contact").die().live("click", function(e)
+	$('body').on('click', '.add-twitter-contact', function(e)
 	{
 		var streamId = ($(this).closest('article').attr('stream-id'));
 		var tweetId = ($(this).closest('article').attr('id'));
