@@ -4,8 +4,7 @@ $(function()
 	 * Displays note modal. Also prepends the contact name to related to field
 	 * of activity modal.
 	 */
-	$('.task-add-note, .deal-add-note').live('click', function(e)
-	{
+	$('body').on('click', '.task-add-note, .deal-add-note', function(e){
 		e.preventDefault();
 
 		// Get form id

@@ -2,11 +2,10 @@
 function startGettingDeals(criteria, pending)
 {
 	console.log('------started-----', pipeline_id);
-	var milestoneString = (trackListView.collection.get(pipeline_id)) ? trackListView.collection.get(pipeline_id).toJSON().milestones : "";
-
+	var milestoneString = trackListView.collection.get(pipeline_id).toJSON().milestones;
 	if (milestoneString.trim().length == 0)
 	{
-		var html = '<div class="alert-info alert"><div class="slate-content"><div class="box-left pull-left m-r-md"><img alt="Clipboard" src="/img/clipboard.png"></div><div class="box-right pull-left"><h4 class="m-t-none">You have no milestones defined</h4><br><a href="#milestones" class="btn btn-default btn-sm m-t-xs"><i class="icon icon-plus-sign"></i> Add Milestones</a></div><div class="clearfix"></div></div></div>';
+		var html = '<div class="slate" style="margin:0px;"><div class="slate-content"><div class="box-left"><img alt="Clipboard" src="/img/clipboard.png"></div><div class="box-right"><h3>You have no milestones defined</h3><br><a href="#milestones" class="btn"><i class="icon icon-plus-sign"></i> Add Milestones</a></div></div></div>';
 		$('#new-opportunity-list-paging').html(html);
 		return;
 	}

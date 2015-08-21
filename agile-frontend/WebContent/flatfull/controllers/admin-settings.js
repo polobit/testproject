@@ -54,7 +54,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 	{
 		if (!CURRENT_DOMAIN_USER.is_admin)
 		{
-			$('#content').html(getTemplate('others-not-allowed',{}));
+			$('#content').html(getTemplate('others-not-allowed', {}));
 			return;
 		}
 		$("#content").html(getTemplate("admin-settings"), {});
@@ -74,11 +74,15 @@ var AdminSettingsRouter = Backbone.Router.extend({
 	{
 		if (!CURRENT_DOMAIN_USER.is_admin)
 		{
-			$('#content').html(getTemplate('others-not-allowed',{}));
+			$('#content').html(getTemplate('others-not-allowed', {}));
 			return;
 		}
 		$("#content").html(getTemplate("admin-settings"), {});
-		var view = new Base_Model_View({ url : '/core/api/account-prefs', template : "admin-settings-account-prefs", postRenderCallback : function(){} });
+		var view = new Base_Model_View({ url : '/core/api/account-prefs', template : "admin-settings-account-prefs", postRenderCallback : function()
+		{
+			initializeAdminSettingsListeners();
+			initializeAccountSettingsListeners();
+		} });
 
 		$('#content').find('#admin-prefs-tabs-content').html(view.render().el);
 		$('#content').find('#AdminPrefsTab .select').removeClass('select');
@@ -93,13 +97,14 @@ var AdminSettingsRouter = Backbone.Router.extend({
 	{
 		if (!CURRENT_DOMAIN_USER.is_admin)
 		{
-			$('#content').html(getTemplate('others-not-allowed',{}));
+			$('#content').html(getTemplate('others-not-allowed', {}));
 			return;
 		}
 		$("#content").html(getTemplate("admin-settings"), {});
 		this.usersListView = new Base_Collection_View({ url : '/core/api/users', restKey : "domainUser", templateKey : "admin-settings-users",
 			individual_tag_name : 'tr', postRenderCallback : function(el)
 			{
+
 				head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
 				{
 					$(".last-login-time", el).timeago();
@@ -121,13 +126,14 @@ var AdminSettingsRouter = Backbone.Router.extend({
 	{
 		if (!CURRENT_DOMAIN_USER.is_admin)
 		{
-			$('#content').html(getTemplate('others-not-allowed',{}));
+			$('#content').html(getTemplate('others-not-allowed', {}));
 			return;
 		}
 		$("#content").html(getTemplate("admin-settings"), {});
 		var view = new Base_Model_View({ url : 'core/api/users', template : "admin-settings-user-add", isNew : true, window : 'users', reload : false,
 			postRenderCallback : function(el)
 			{
+
 				if (view.model.get("id"))
 					addTagAgile("User invited");
 
@@ -137,10 +143,11 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			{
 				$.getJSON("core/api/users/current-owner", function(data)
 				{
-					if(data){
-					data["created_user_email"] = response.email;
+					if (data)
+					{
+						data["created_user_email"] = response.email;
 
-					add_created_user_info_as_note_to_owner(data);
+						add_created_user_info_as_note_to_owner(data);
 					}
 				});
 			} });
@@ -164,7 +171,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 	{
 		if (!CURRENT_DOMAIN_USER.is_admin)
 		{
-			$('#content').html(getTemplate('others-not-allowed',{}));
+			$('#content').html(getTemplate('others-not-allowed', {}));
 			return;
 		}
 		$("#content").html(getTemplate("admin-settings"), {});
@@ -209,6 +216,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 
 		}, postRenderCallback : function(el)
 		{
+
 			bindAdminChangeAction(el, view.model.toJSON());
 		} });
 
@@ -233,13 +241,17 @@ var AdminSettingsRouter = Backbone.Router.extend({
 	{
 		if (!CURRENT_DOMAIN_USER.is_admin)
 		{
-			$('#content').html(getTemplate('others-not-allowed',{}));
+			$('#content').html(getTemplate('others-not-allowed', {}));
 			return;
 		}
 		$("#content").html(getTemplate("admin-settings"), {});
 		this.customFieldsListView = new Base_Collection_View({ url : '/core/api/custom-fields/allScopes', restKey : "customFieldDefs",
-			templateKey : "admin-settings-customfields", individual_tag_name : 'tr' });
-		
+			templateKey : "admin-settings-customfields", individual_tag_name : 'tr', postRenderCallback : function(el)
+			{
+				initializeCustomFieldsListeners();
+
+			} });
+
 		this.customFieldsListView.appendItem = groupingCustomFields;
 
 		this.customFieldsListView.collection.fetch();
@@ -259,7 +271,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 	{
 		if (!CURRENT_DOMAIN_USER.is_admin)
 		{
-			$('#content').html(getTemplate('others-not-allowed',{}));
+			$('#content').html(getTemplate('others-not-allowed', {}));
 			return;
 		}
 		$("#content").html(getTemplate("admin-settings"), {});
@@ -267,6 +279,8 @@ var AdminSettingsRouter = Backbone.Router.extend({
 		{
 			var view = new Base_Model_View({ url : '/core/api/api-key', template : "admin-settings-api-key-model", postRenderCallback : function(el)
 			{
+
+				initializeRegenerateKeysListeners();
 				$('#content').find('#admin-prefs-tabs-content').html(view.el);
 
 				$('#content').find('#AdminPrefsTab .select').removeClass('select');
@@ -284,19 +298,18 @@ var AdminSettingsRouter = Backbone.Router.extend({
 
 				try
 				{
-					if(ACCOUNT_PREFS.plan.plan_type.split("_")[0]=="PRO")
+					if (ACCOUNT_PREFS.plan.plan_type.split("_")[0] == "PRO")
 						$("#tracking-webrules, .tracking-webrules-tab").hide();
 					else
 						$("#tracking-webrules-whitelist, .tracking-webrules-whitelist-tab").hide();
 				}
-				catch(e)
+				catch (e)
 				{
 					$("#tracking-webrules-whitelist, .tracking-webrules-whitelist-tab").hide();
 				}
 
 			} });
 
-			
 			// $('#content').html(view.el);
 		});
 	},
@@ -308,13 +321,15 @@ var AdminSettingsRouter = Backbone.Router.extend({
 	{
 		if (!CURRENT_DOMAIN_USER.is_admin)
 		{
-			$('#content').html(getTemplate('others-not-allowed',{}));
+			$('#content').html(getTemplate('others-not-allowed', {}));
 			return;
 		}
 		head.js(LIB_PATH + 'lib/prettify-min.js', function()
 		{
 			var view = new Base_Model_View({ url : '/core/api/api-key', template : "admin-settings-api-model", postRenderCallback : function(el)
 			{
+
+				initializeRegenerateKeysListeners();
 				prettyPrint();
 			} });
 			$("#content").html(getTemplate("admin-settings"), {});
@@ -334,22 +349,24 @@ var AdminSettingsRouter = Backbone.Router.extend({
 	{
 		if (!CURRENT_DOMAIN_USER.is_admin)
 		{
-			$('#content').html(getTemplate('others-not-allowed',{}));
+			$('#content').html(getTemplate('others-not-allowed', {}));
 			return;
 		}
-		$("#content").html(getTemplate("admin-settings"), {});
+		$('#content').html("<div id='milestone-listner'>&nbsp;</div>");
+		$("#milestone-listner").html(getTemplate("admin-settings"), {});
 		this.pipelineGridView = new Base_Collection_View({ url : '/core/api/milestone/pipelines', templateKey : "admin-settings-milestones",
 			individual_tag_name : 'div', sortKey : "name", postRenderCallback : function(el)
 			{
 				setup_milestones(el);
 				var tracks_length = App_Admin_Settings.pipelineGridView.collection.length;
-				if(tracks_length == 1)
-					$('#content').find('#deal-tracks-accordion').find('.collapse').addClass('in');
+				if (tracks_length == 1)
+					$('#milestone-listner').find('#deal-tracks-accordion').find('.collapse').addClass('in');
+				initializeMilestoneListners(el);
 			} });
 		this.pipelineGridView.collection.fetch();
-		$('#content').find('#admin-prefs-tabs-content').html(this.pipelineGridView.render().el);
-		$('#content').find('#AdminPrefsTab .select').removeClass('select');
-		$('#content').find('.milestones-tab').addClass('select');
+		$('#milestone-listner').find('#admin-prefs-tabs-content').html(this.pipelineGridView.render().el);
+		$('#milestone-listner').find('#AdminPrefsTab .select').removeClass('select');
+		$('#milestone-listner').find('.milestones-tab').addClass('select');
 		$(".active").removeClass("active");
 	},
 
@@ -373,7 +390,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 
 		if (!CURRENT_DOMAIN_USER.is_admin)
 		{
-			$('#content').html(getTemplate('others-not-allowed',{}));
+			$('#content').html(getTemplate('others-not-allowed', {}));
 			return;
 		}
 
@@ -382,7 +399,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 		$('#content').find('.stats-tab').addClass('select');
 		$(".active").removeClass("active");
 		$('#content').find('#admin-prefs-tabs-content').html(getRandomLoadingImg());
-		head.js(LIB_PATH + 'jscore/handlebars/handlebars-helpers.js'+ '?_=' + _AGILE_VERSION, function()
+		head.js(LIB_PATH + 'jscore/handlebars/handlebars-helpers.js' + '?_=' + _AGILE_VERSION, function()
 		{
 			var email_stats = {};
 			var sms_stats = {};
@@ -395,17 +412,17 @@ var AdminSettingsRouter = Backbone.Router.extend({
 					sms_stats = stats;
 					var totalLogs = {};
 					totalLogs = $.extend(email_stats, sms_stats);
-					
+
 					$.ajax({ url : 'core/api/namespace-stats/getdomainstats', type : "GET", dataType : 'json', success : function(stats)
-						{
-							acct_stats = stats;
-							totalLogs = $.extend(totalLogs, acct_stats);
-							var emailStatsModelView = new Base_Model_View({ template : 'admin-settings-integrations-stats', data : totalLogs });
-		
-							$('#content').find('#admin-prefs-tabs-content').html(emailStatsModelView.render(true).el);
-							hideTransitionBar();
-						}});
-					
+					{
+						acct_stats = stats;
+						totalLogs = $.extend(totalLogs, acct_stats);
+						var emailStatsModelView = new Base_Model_View({ template : 'admin-settings-integrations-stats', data : totalLogs });
+
+						$('#content').find('#admin-prefs-tabs-content').html(emailStatsModelView.render(true).el);
+						hideTransitionBar();
+					} });
+
 				} });
 
 			} });
@@ -420,12 +437,15 @@ var AdminSettingsRouter = Backbone.Router.extend({
 	{
 		if (!CURRENT_DOMAIN_USER.is_admin)
 		{
-			$('#content').html(getTemplate('others-not-allowed',{}));
+			$('#content').html(getTemplate('others-not-allowed', {}));
 			return;
 		}
 		$("#content").html(getTemplate("admin-settings"), {});
 
-		this.integrations = new Base_Collection_View({ url : 'core/api/widgets/integrations', templateKey : 'admin-settings-web-to-lead', postRenderCallback : function(){} });
+		this.integrations = new Base_Collection_View({ url : 'core/api/widgets/integrations', templateKey : 'admin-settings-web-to-lead',
+			postRenderCallback : function()
+			{
+			} });
 
 		this.integrations.collection.fetch();
 
@@ -439,7 +459,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 	{
 		if (!CURRENT_DOMAIN_USER.is_admin)
 		{
-			$('#content').html(getTemplate('others-not-allowed',{}));
+			$('#content').html(getTemplate('others-not-allowed', {}));
 			return;
 		}
 
@@ -448,6 +468,8 @@ var AdminSettingsRouter = Backbone.Router.extend({
 		this.tagsview1 = new Base_Collection_View({ url : 'core/api/tags/stats1', templateKey : "tag-management", individual_tag_name : 'li',
 			sort_collection : true, sortKey : 'tag', postRenderCallback : function(el)
 			{
+
+				initializeTagManagementListeners();
 			} });
 		this.tagsview1.appendItem = append_tag_management;
 
@@ -547,35 +569,41 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			this.navigate("integrations", { trigger : true });
 			return;
 		}
-		
-		var value,accountID;
-		if (id == "plivo"){
+
+		var value, accountID;
+		if (id == "plivo")
+		{
 			value = 'PLIVO';
 			accountID = "account_id";
 		}
-		if (id == "twilio"){
+		if (id == "twilio")
+		{
 			value = 'TWILIO';
 			accountID = "account_sid";
 		}
-		
+
 		var smsGateway;
-		$.each(this.integrations.collection.models,function(key,value){
-			var prefJSON = JSON.parse(value.attributes.prefs);
-			if(prefJSON["sms_api"])
-				smsGateway = prefJSON["sms_api"];
-			});
-		
-		//allow one sms gateway configured at a time
-		if(smsGateway != undefined)//check if sms gateway exist
+		$.each(this.integrations.collection.models, function(key, value)
 		{
-			if(smsGateway.toUpperCase() != value)//checks if the current sms gateway is the same as the clicked one
+			var prefJSON = JSON.parse(value.attributes.prefs);
+			if (prefJSON["sms_api"])
+				smsGateway = prefJSON["sms_api"];
+		});
+
+		// allow one sms gateway configured at a time
+		if (smsGateway != undefined)// check if sms gateway exist
+		{
+			if (smsGateway.toUpperCase() != value)// checks if the current sms
+			// gateway is the same as
+			// the clicked one
 			{
-			modalAlert("sms-integration-alert-modal","You have a SMS Gateway already configured. Please disable that to configure a new one.","SMS Gateway Configured");
-			this.navigate("integrations", { trigger : true });
-			return;	
+				modalAlert("sms-integration-alert-modal", "You have a SMS Gateway already configured. Please disable that to configure a new one.",
+						"SMS Gateway Configured");
+				this.navigate("integrations", { trigger : true });
+				return;
 			}
 		}
-		
+
 		view = new Base_Model_View({
 			model : App_Admin_Settings.integrations.collection.where({ name : "SMS-Gateway" })[0],
 			url : 'core/api/sms-gateway',
@@ -583,23 +611,28 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			prePersist : function(model)
 			{
 				if (id == "plivo")
-				var prefJSON = { account_id : model.attributes.account_id, auth_token : model.attributes.auth_token, endpoint : model.attributes.endpoint, sms_api : value }; 
+					var prefJSON = { account_id : model.attributes.account_id, auth_token : model.attributes.auth_token, endpoint : model.attributes.endpoint,
+						sms_api : value };
 				if (id == "twilio")
-				var prefJSON = { account_sid : model.attributes.account_sid, auth_token : model.attributes.auth_token, endpoint : model.attributes.endpoint, sms_api : value}; 
+					var prefJSON = { account_sid : model.attributes.account_sid, auth_token : model.attributes.auth_token,
+						endpoint : model.attributes.endpoint, sms_api : value };
 				model.set({ prefs : JSON.stringify(prefJSON) }, { silent : true });
 			}, postRenderCallback : function(el)
 			{
-				if(id=="plivo"){
-					$("#integrations-image",el).attr("src","/img/plugins/plivo.png");
-					$("#accoundID",el).attr("name","account_id");
-					$("#accoundID",el).attr("placeholder","Auth ID");
-					$("#integrations-label",el).text("You need a Paid Plivo account to be able to send SMS");
+
+				if (id == "plivo")
+				{
+					$("#integrations-image", el).attr("src", "/img/plugins/plivo.png");
+					$("#accoundID", el).attr("name", "account_id");
+					$("#accoundID", el).attr("placeholder", "Auth ID");
+					$("#integrations-label", el).text("You need a Paid Plivo account to be able to send SMS");
 				}
-				if(id=="twilio"){
-					$("#integrations-image",el).attr("src","/img/plugins/twilio.png");
-					$("#accoundID",el).attr("name","account_sid");
-					$("#accoundID",el).attr("placeholder","Account SID");
-					$("#integrations-label",el).text("Please provide your account details");
+				if (id == "twilio")
+				{
+					$("#integrations-image", el).attr("src", "/img/plugins/twilio.png");
+					$("#accoundID", el).attr("name", "account_sid");
+					$("#accoundID", el).attr("placeholder", "Account SID");
+					$("#integrations-label", el).text("Please provide your account details");
 				}
 			}, saveCallback : function(data)
 			{
@@ -612,14 +645,12 @@ var AdminSettingsRouter = Backbone.Router.extend({
 
 				$responceText = "<div style='color:#B94A48; font-size:14px' id='sms-gateway-error'><i>" + data.responseText + "</i></div>";
 				$("#sms-integration-error", this.el).append($responceText);
-			}
-		});
+			} });
 
-		
 		$('#content').find('#admin-prefs-tabs-content').html(view.render().el);
 		$('#content').find('#AdminPrefsTab .select').removeClass('select');
 		$('#content').find('.integrations-tab').addClass('select');
 		$(".active").removeClass("active");
-	} 
+	}
 
 });
