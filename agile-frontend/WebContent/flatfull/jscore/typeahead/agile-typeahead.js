@@ -10,6 +10,8 @@ var TYPEHEAD_EMAILS = {};
 // Saves map of key: name and value: contact name
 var TYPEHEAD_NAMES = {};
 
+var TYPEHEAD_TYPE = {};
+
 /**
  * This script file defines simple search keywords entered in input fields are
  * sent to back end as query through bootstrap typeahead. Methods render,
@@ -157,6 +159,12 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
 									TYPEHEAD_EMAILS[tag_name] = getContactEmail(item);
 
 									TYPEHEAD_NAMES[tag_name] = getContactName(item);
+									
+									if(item.type == 'PERSON')
+										TYPEHEAD_TYPE[tag_name] = '#contact/';
+									else if(item.type == 'COMPANY')
+										TYPEHEAD_TYPE[tag_name] = '#company/';
+										
 								});
 
 								/*
@@ -328,7 +336,7 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
 											.closest("div.controls")
 											.find(".tags")
 											.append(
-													'<li class="tag  btn btn-xs btn-primary m-r-xs inline-block"  data="' + TYPEHEAD_EMAILS[items] + '"><a href="#contact/' + TYPEHEAD_TAGS[items] + '">' + items_temp + '</a><a class="close m-l-xs" id="remove_tag">&times</a></li>');
+													'<li class="tag  btn btn-xs btn-primary m-r-xs inline-block"  data="' + TYPEHEAD_EMAILS[items] + '"><a href="'+TYPEHEAD_TYPE[items] + TYPEHEAD_TAGS[items] + '">' + items_temp + '</a><a class="close m-l-xs" id="remove_tag">&times</a></li>');
 
 								}
 
@@ -368,7 +376,7 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
 								if (tag_not_exist)
 									$('.tags', el)
 											.append(
-													'<li class="tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block"  data="' + TYPEHEAD_TAGS[items] + '"><a href="#contact/' + TYPEHEAD_TAGS[items] + '" class="text-white v-middle">' + items_temp + '</a><a class="close m-l-xs" id="remove_tag">&times</a></li>');
+													'<li class="tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block"  data="' + TYPEHEAD_TAGS[items] + '"><a href="'+TYPEHEAD_TYPE[items] + TYPEHEAD_TAGS[items] + '" class="text-white v-middle">' + items_temp + '</a><a class="close m-l-xs" id="remove_tag">&times</a></li>');
 							}
 							//Sets modal backdrop height to modal dialog height after select the tag
 							$('.modal-backdrop',$('.modal:visible')).height($('.modal-dialog',$('.modal:visible')).height()+70);
@@ -549,7 +557,7 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
 }
 
 // Removes tags ("Related to" field contacts)
-$('#remove_tag').die().live('click', function(event)
+$("body").on("click", '#remove_tag', function(event)
 {
 	event.preventDefault();
 	$(this).parent().remove();
@@ -735,6 +743,8 @@ function appendItemInResult(item)
 	i.addClass('typeahead-border');
 	// Returns template, can be contact or company compares in template
 	i.find('a').html(itemView.render(true).el);
+
+	i.find('a').removeAttr('href');
 
 	if (type)
 	{

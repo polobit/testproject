@@ -9,12 +9,13 @@ import org.json.JSONObject;
 
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.util.ContactUtil;
+import com.agilecrm.cursor.Cursor;
 
 import eu.bitwalker.useragentutils.UserAgent;
 
 @XmlRootElement
 @JsonAutoDetect
-public class GmapLogs {
+public class GmapLogs extends Cursor {
 	
 	public String guid;
 	
@@ -31,6 +32,12 @@ public class GmapLogs {
 	public String region;
 	
 	public String country;
+	
+	public String ref;
+	
+	public String sid;
+	
+	public String page_views;
 	
 	/**
      * Default Log.

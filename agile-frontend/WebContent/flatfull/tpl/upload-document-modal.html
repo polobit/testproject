@@ -39,8 +39,9 @@
 							class="field_req">*</span></label>
 						<div class="controls">
 						    <input type="hidden" name="url" id="upload_url" class="required"/>
+						    <input type="hidden" name="size" id="size" class="required"/>
 						    <input type="hidden" name="network_type" id="network_type" class="required"/>
-						    <div class="row">
+						    <div class="row" id="document-link">
 						    <div class="col-md-3 col-sm-3 col-xs-3 all-l-none">
 								<div class="link text-center thumbnail m-b-none"><i class="icon-ok pull-right" style="display:none;"></i><br/>
 									<a href="#" id="S3"><i class="icon-desktop icon-2x" title="Custom"></i><br/><span>My Computer</span></a>
@@ -94,7 +95,7 @@
 			</fieldset>
 		</form>
 	</div>
-	<div class="modal-footer">
+	<div class="modal-footer" id="document-save-footer">
 		<a href="#" class="btn btn-sm btn-primary" id="document_validate">Save</a> <span class="save-status"></span>
 	</div>
 </div>

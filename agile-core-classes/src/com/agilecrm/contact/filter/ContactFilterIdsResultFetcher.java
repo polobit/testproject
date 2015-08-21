@@ -184,7 +184,7 @@ public class ContactFilterIdsResultFetcher
     private void modifyFilterCondition()
     {
 	UserAccessControlUtil.checkReadAccessAndModifyTextSearchQuery(
-		UserAccessControl.AccessControlClasses.Contact.toString(), filter.rules);
+		UserAccessControl.AccessControlClasses.Contact.toString(), filter.rules, getDomainUser());
 
 	if (hasScope(UserAccessScopes.VIEW_CONTACTS)
 		&& !(hasScope(UserAccessScopes.UPDATE_CONTACT) || hasScope(UserAccessScopes.DELETE_CONTACTS)))

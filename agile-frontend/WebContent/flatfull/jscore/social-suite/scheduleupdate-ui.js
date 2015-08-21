@@ -6,9 +6,7 @@
 $(function()
 {
 	/* Show calender and time for selection on message modal. */
-	$("#tweet_scheduling").die().live(
-			"click",
-			function(e)
+	$('body').on('click', '#tweet_scheduling', function(e)
 			{
 				// Message modal open for edit scheduled update.
 				if ($("#schedule_controls").css("display") == "block" && Scheduled_Edit)
@@ -26,8 +24,8 @@ $(function()
 					this.className = "tweet-scheduling tweet-scheduling-active";
 
 					// Set current date.
-					$('input.date').val(new Date().format('mm/dd/yyyy'));
-					$('#scheduled_date').datepicker({ startDate : "today", autoclose : true, todayHighlight : true, format : 'mm/dd/yyyy' }).on('changeDate',
+					$('input.date').val(getDateInFormat(new Date()));
+					$('#scheduled_date').datepicker({ startDate : "today", autoclose : true, todayHighlight : true, format : CURRENT_USER_PREFS.dateFormat }).on('changeDate',
 							function(ev)
 							{
 								console.log(new Date(ev.date));
@@ -80,7 +78,7 @@ $(function()
 	/**
 	 * Calls function to check selected time after cloasing Time picker modal.
 	 */
-	/**$('.bootstrap-timepicker').die().live('hide', function()
+	/**$('.bootstrap-timepicker').live('hide', function()
 	{
 		isTimeInPast();
 	});
@@ -90,7 +88,7 @@ $(function()
 	 * Calls function to open Message modal with selected scheduled update
 	 * details and save into DB after modifications.
 	 */
-	$('.edit-scheduled-update').die().live('click', function()
+	$('body').on('click', '.edit-scheduled-update', function(e)
 	{
 		var updateId = $(this).closest('tr').find('.data').attr('data');
 

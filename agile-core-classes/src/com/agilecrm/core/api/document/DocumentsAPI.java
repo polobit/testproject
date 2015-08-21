@@ -103,7 +103,9 @@ public class DocumentsAPI
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     public Document createDocument(Document document)
     {
-	document.save();
+    	if(document.network_type.equals("GOOGLE"))
+    		document.size = 0L;
+    	document.save();
 
 	try
 	{
@@ -139,6 +141,8 @@ public class DocumentsAPI
 	    // TODO Auto-generated catch block
 	    e.printStackTrace();
 	}
+	if(document.network_type.equals("GOOGLE"))
+		document.size = 0L;
 	document.save();
 	return document;
     }

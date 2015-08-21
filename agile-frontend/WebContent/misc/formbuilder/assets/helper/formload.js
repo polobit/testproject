@@ -5,9 +5,6 @@ define([
 	{
 		var url = window.location.protocol + '//' + window.location.host + '/' + 'core/api/forms/form?formId=' + formNumber;
 		
-		if(typeof formLoadDomain != 'undefined')
-			url = 'https://' + formLoadDomain + '.agilecrm.com/core/api/forms/form?formId=' + formNumber;
-		
 		$.ajax({
 			url : url,
 			type: 'GET',
@@ -22,10 +19,9 @@ define([
 					var formHtml = $("#render").val();
 			    	  if(formHtml != '') {
 			    		  $('#agileFormHolder').html(formHtml);
-			    		  $('#agileFormHolder style').remove();			    		  
+			    		  $('#agileFormHolder style').remove();
 			    	  }
 				}
-				
 				
 			}
 		});

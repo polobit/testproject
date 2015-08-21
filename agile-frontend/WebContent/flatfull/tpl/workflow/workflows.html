@@ -84,10 +84,11 @@
         {{/unless}}
         {{#if this.length}}
 			{{add_tag "Campaigns"}}
-            <div class="col-md-9 col-sm-9 table-responsive">
+            <div class="col-md-9 col-sm-9">
 			<div class="panel panel-default">
 			    <div class="panel-heading">Campaigns List</div>
-                <table class="table table-striped showCheckboxes m-b-none agile-table panel" url="core/api/workflows/bulk" id="workflows-tour-step">
+                <div class="table-responsive">
+                <table class="table table-striped showCheckboxes m-b-none agile-table panel table-layout-mob-view" url="core/api/workflows/bulk" id="workflows-tour-step">
                     <thead>
                         <tr>
                             <th class="hide">Id</th>
@@ -100,6 +101,7 @@
                     <tbody id="workflows-model-list" route="workflow/" class="c-p"> </tbody>
                 </table>
 				</div>
+                </div>
             </div>
         {{/if}}
     <div class="col-md-3 col-sm-3" id="learn-workflows">

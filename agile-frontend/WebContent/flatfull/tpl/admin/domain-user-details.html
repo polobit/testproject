@@ -104,7 +104,7 @@ Plan Type: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{plan.name}}
 	Users: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{quantity}}
 </p><br/><p>
 	<span style="width: auto;max-width: 40%;display: inline-block;"><a href="/#domainSubscribe/{{../../description}}"><strong><u> Change Plan</strong></u> </a> </span>
-	<span class="pull-right" style="text-overflow: ellipsis;overflow: hidden;height: auto;white-space: nowrap;max-width: 55%;display: inline-block;">
+	<span id="deleteUserPlanSpan" class="pull-right" style="text-overflow: ellipsis;overflow: hidden;height: auto;white-space: nowrap;max-width: 55%;display: inline-block;">
 	<a href="#" id="delete_userplan" sub_id={{id}} cus_id={{../../id}}> <strong><u>Cancel Subscription</u></strong> </a></span>
 </p><br/><br/>
 </div>
@@ -145,7 +145,7 @@ Amount: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{get_total_amount plan.
 Plan Type: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{plan.name}}
 </p>
 <p>
-	<span class="pull-right">
+	<span class="pull-right" id="deleteEmailPlanSpan">
 	<a href="#" id="delete_emailplan" sub_id={{id}} cus_id={{../../id}}> <strong><u>Cancel Subscription</u></strong> </a></span>
 </p>
 <br/><br/>
@@ -228,7 +228,7 @@ Plan Type: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{plan.name}}
 </div>
 
 {{#if emailcount}}
-	{{#if_equals emailcount.status "paused"}}<div class="text-danger">Email sending on this domain is paused.<a href="#" class="btn" id="unpause_mandrill" domain={{emailcount.name}}>Resume</a></div><br/>{{/if_equals}}
+	{{#if_equals emailcount.status "paused"}}<div class="text-danger" id="unPauseMandrillDiv">Email sending on this domain is paused.<a href="#" class="btn" id="unpause_mandrill" domain={{emailcount.name}}>Resume</a></div><br/>{{/if_equals}}
 {{/if}}
 <a  align="center" data="" class="delete-namespace data btn btn-danger">Delete  Account</a>
 

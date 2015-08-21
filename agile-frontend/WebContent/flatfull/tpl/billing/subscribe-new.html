@@ -11,7 +11,7 @@
 	
 </div>
 </div>
-<div class="wrapper-md">
+<div id="show_plan_page" class="wrapper-md">
 <div class="row">
 	<div class="col-md-7">
 <div class="row">
@@ -412,4 +412,101 @@ White Label : {{#if whiteLabelEnabled}} Yes {{else}} No{{/if}}
 {{/if}}
 	
 	
+</script>
+<script id="subscribe-custom-admin-stats-template" type="text/html">
+<div class="m-n text-base">
+  	<div>
+  		<p class="b-b p-b-xs font-bold p-l-sm">Users</p>
+  		{{#getSubscriptionBasedOnPlan billingData plan}}
+			<div class="form-horizontal">
+				<div class="control-group form-group m-b-none">
+					<label class="control-label col-xs-5 p-t-none">Plan</label>
+					<label class="col-xs-1 text-left p-n">:</label>
+					<div class="controls col-xs-6 p-t-none">{{getAccountPlanName ../plan.plan_type}}</div>
+				</div>
+				<div class="control-group form-group m-b-none">
+					<label class="control-label col-xs-5 p-t-none">Users</label>
+					<label class="col-xs-1 text-left p-n">:</label>
+					<div class="control-label text-left col-xs-6 p-t-none">{{../userCount}} ({{quantity}})</div>
+				</div>	
+				<div class="control-group form-group m-b-none">
+					<label class="control-label col-xs-5 p-t-none">Amount</label>
+					<label class="col-xs-1 text-left p-n">:</label>
+					<div class="control-label text-left col-xs-6 p-t-none">${{total}}
+						<i class="icon-info p-t-none" data-toggle="tooltip" data-placement="left" title="{{quantity}} * {{numeric_operation plan.amount "100" "/"}}"></i>
+					</div>
+				</div>
+				<div class="control-group form-group m-b-none">
+					<label class="control-label col-xs-5 p-t-none">Billing</label>
+					<label class="col-xs-1 text-left p-n">:</label>
+					<div class="control-label text-left col-xs-6 p-t-none">{{getAccountPlanInteval ../plan.plan_type}}</div>					
+				</div>
+				<div class="control-group form-group m-b-none">
+					<label class="control-label col-xs-5 p-t-none">Next Billing</label>
+					<label class="col-xs-1 text-left p-n">:</label>
+					<div class="control-label text-left col-xs-6 p-t-none">{{epochToHumanDate "mmm dd, yyyy" currentPeriodEnd}}</div>
+				</div>
+			</div>
+		{{else}}
+			<div class="control-group form-group m-b-none">
+				<label class="control-label col-xs-5 p-t-none">Plan</label>
+				<label class="col-xs-1 text-left p-n">:</label>
+				<div class="control-label text-left col-xs-6 p-t-none">Free</div>
+			</div>
+			<div class="control-group form-group m-b-none">
+				<label class="control-label col-xs-5 p-t-none">Users</label>
+				<label class="col-xs-1 text-left p-n">:</label>
+				<div class="control-label text-left col-xs-6 p-t-none">2</div>
+			</div>
+		{{/getSubscriptionBasedOnPlan}}
+  	</div>
+	<div class="m-t-md">
+		<p class="b-b p-b-xs font-bold p-l-sm">Emails</p>
+			{{#getSubscriptionBasedOnPlan billingData emailPlan}} 
+			<div class="form-horizontal" name="emailPlan" id="email-plan-form">
+				<div class="control-group form-group m-b-none">
+					<label class="control-label col-xs-5 p-t-none">Purchased</label>
+					<label class="col-xs-1 text-left p-n">:</label>
+					<div class="controls col-xs-6 p-t-none">
+						{{numeric_operation ../emailPlan.quantity 1000 "*"}}<small> /month</small> <br/>
+					</div>
+				</div>
+				<div class="control-group form-group m-b-none">
+					<label class="control-label col-xs-5 p-t-none">Existing</label>
+					<label class="col-xs-1 text-left p-n">:</label>
+					<div class="controls col-xs-6 p-t-none">
+						<span>{{getRemaininaEmails}}</span><br/>
+					</div>
+				</div>
+				<div class="control-group form-group m-b-none">
+					<label class="control-label col-xs-5 p-t-none">Amount</label>
+					<label class="col-xs-1 text-left p-n">:</label>
+					<div class="control-label text-left col-xs-6 p-t-none">${{total}} <i class="icon-info" data-toggle="tooltip" data-placement="left" title="${{numeric_operation plan.amount "100" "/"}} / thousand"></i></div>
+				</div>	
+				<div class="control-group form-group m-b-none">
+					<label class="control-label col-xs-5 p-t-none">Next Billing</label>
+					<label class="col-xs-1 text-left p-n">:</label>
+					<div class="control-label text-left col-xs-6 p-t-none">
+						{{epochToHumanDate "mmm dd, yyyy" currentPeriodEnd}}
+					</div>
+				</div>
+			</div>
+		 {{else}}		
+			<div class="form-horizontal" name="emailPlan" id="email-plan-form">
+				<div class="control-group form-group m-b-none">
+					<label class="control-label col-xs-5 p-t-none">Free</label>
+					<label class="col-xs-1 text-left p-n">:</label>
+					<div class="controls col-xs-6 p-t-none"> 5000 <i class="icon-info" data-toggle="tooltip" data-placement="left" title="free emails that will contain 'Powered by Agile CRM' at the bottom of the email. To remove this, you may purchase an email package."></i></div>
+				</div>
+				<div class="control-group form-group m-b-none">
+					<label class="control-label col-xs-5 p-t-none">Remaining</label>
+					<label class="col-xs-1 text-left p-n">:</label>
+					<div class="controls col-xs-6 p-t-none">
+						<span>{{getRemaininaEmails}}</span><br/>
+					</div>
+				</div>
+			</div>
+		{{/getSubscriptionBasedOnPlan}}
+	</div>
+</div>
 </script>

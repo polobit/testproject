@@ -15,6 +15,9 @@
 			else
 				error = "";
 			
+			//flatfull path
+			String flatfull_path="/flatfull";
+			
 %>
 
 <!DOCTYPE html>
@@ -435,6 +438,9 @@ $.validator.setDefaults({
 	<script type="text/javascript">
 		$(document).ready(function() {	
 			
+			// Pre load dashlet files when don is active
+			preload_dashlet_libs();
+
 			$('#account_timezone').val(jstz.determine().name());	
 			// Initializes phone library
 			$("#login_phone_number").intlTelInput({
@@ -737,6 +743,11 @@ $.validator.setDefaults({
 					  }
 					});
 		}
+
+		function preload_dashlet_libs(){
+			setTimeout(function(){head.load('<%=flatfull_path%>/lib/lib-all.js')}, 5000);
+		}
+
 		</script>
 	<!-- Clicky code -->
 	<script src="//static.getclicky.com/js" type="text/javascript"></script>

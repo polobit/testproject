@@ -48,7 +48,10 @@ function navigateToDetailsPage(data, name)
 	console.log(model);
 	if (model.entity_type == "contact_entity")
 	{
-		App_Contacts.navigate("contact/" + data, { trigger : true });
+		if(model.type == "COMPANY")
+			App_Companies.navigate("company/" + data, { trigger : true });
+		else
+			App_Contacts.navigate("contact/" + data, { trigger : true });
 		return;
 	}
 	if(model.entity_type == "deal")
@@ -106,7 +109,7 @@ $(function()
 	 * Click on search icon in search field top nav-bar, shows simple search
 	 * results in separate page
 	 */
-	$("#search-results").live('click', function(e)
+	$('body').on('click', '#search-results', function(e)
 	{
 		e.preventDefault();
 		showSearchResults();
