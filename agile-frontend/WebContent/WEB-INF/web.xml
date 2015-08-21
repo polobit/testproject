@@ -347,6 +347,15 @@
 		<url-pattern>/backend/mandrillwebhook/*</url-pattern>
 	</servlet-mapping>
 
+    <servlet>
+		<servlet-name>SendGrid Webhook</servlet-name>
+		<servlet-class>com.thirdparty.sendgrid.webhook.SendGridWebhook</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>SendGrid Webhook</servlet-name>
+		<url-pattern>/backend/sendgridwebhook/*</url-pattern>
+	</servlet-mapping>
 	<servlet>
 		<servlet-name>TwilioServlet</servlet-name>
 		<servlet-class>com.agilecrm.plugin.oauth.TwilioServlet</servlet-class>
@@ -657,6 +666,15 @@
 		<servlet-name>AgileForm</servlet-name>
 		<url-pattern>/formsubmit</url-pattern>
 	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>AgileFormRedirect</servlet-name>
+		<servlet-class>com.thirdparty.forms.AgileFormRedirect</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>AgileFormRedirect</servlet-name>
+		<url-pattern>/agileformredirect</url-pattern>
+	</servlet-mapping>
 
 	<servlet>
 		<servlet-name>ShopifyWebhookTrigger</servlet-name>
@@ -763,6 +781,15 @@
 	<servlet-mapping>
 		<servlet-name>Confirmation</servlet-name>
 		<url-pattern>/confirmation</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>FromEmailVerification</servlet-name>
+		<jsp-file>/verify_from_email.jsp</jsp-file>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>FromEmailVerification</servlet-name>
+		<url-pattern>/verify-email</url-pattern>
 	</servlet-mapping>
 
 	<servlet>
@@ -874,6 +901,14 @@
 		<url-pattern>/facebookpagetab</url-pattern>
 	</servlet-mapping>	
 	<servlet>
+		<servlet-name>FacebookFormLoadServlet</servlet-name>
+		<servlet-class>com.agilecrm.facebookpage.FacebookFormLoadServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>FacebookFormLoadServlet</servlet-name>
+		<url-pattern>/fbformload</url-pattern>
+	</servlet-mapping>
+	<servlet>
 		<servlet-name>FacebookPageServlet</servlet-name>
 		<servlet-class>com.agilecrm.facebookpage.FacebookPageServlet</servlet-class>
 	</servlet>
@@ -899,5 +934,15 @@
 		<url-pattern>/backend/printallnamespaces</url-pattern>
 	</servlet-mapping>
 	
+	<servlet>
+		<display-name>Remote API Servlet</display-name>
+		<servlet-name>RemoteApiServlet</servlet-name>
+		<servlet-class>com.google.apphosting.utils.remoteapi.RemoteApiServlet</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>RemoteApiServlet</servlet-name>
+		<url-pattern>/remote_api</url-pattern>
+	</servlet-mapping>
 	
 </web-app>

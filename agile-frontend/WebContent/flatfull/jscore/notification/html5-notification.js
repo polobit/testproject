@@ -71,7 +71,7 @@ function request_notification_permission() {
 		
 		if (notify.permissionLevel() == notify.PERMISSION_DEFAULT) {
 
-			$('#set-desktop-notification').live('click', function() {
+            $('body').on('click', '#set-desktop-notification', function(){
 				notify.requestPermission(function() {
 					if(notify.permissionLevel() == notify.PERMISSION_GRANTED)
 					{	

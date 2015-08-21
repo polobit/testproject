@@ -59,7 +59,6 @@ import com.agilecrm.subscription.restrictions.exception.PlanRestrictedException;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.access.UserAccessControl;
-import com.agilecrm.user.access.UserAccessControl.AccessControlClasses;
 import com.agilecrm.user.access.exception.AccessDeniedException;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.email.SendMail;
@@ -91,18 +90,20 @@ public class CSVUtil
 
     private static final int MAX_ALLOWED_FIELD_VALUE_SIZE = 490;
 
-    private UserAccessControl accessControl = UserAccessControl.getAccessControl(AccessControlClasses.Contact, null);
+    private UserAccessControl accessControl = null;
 
     private CSVUtil()
     {
 
     }
 
-    public CSVUtil(BillingRestriction billingRestriction)
+    public CSVUtil(BillingRestriction billingRestriction, UserAccessControl accessControl)
     {
 	this.billingRestriction = billingRestriction;
 	dBbillingRestriction = (ContactBillingRestriction) DaoBillingRestriction.getInstace(
 		Contact.class.getSimpleName(), this.billingRestriction);
+
+	this.accessControl = accessControl;
 
     }
 
@@ -1345,6 +1346,7 @@ public class CSVUtil
 	String path = null;
 	try
 	{
+
 	    // Get a file service
 	    FileService fileService = FileServiceFactory.getFileService();
 

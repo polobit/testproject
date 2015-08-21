@@ -497,7 +497,18 @@ var Base_Model_View = Backbone.View
 				// Shows loading in the view, if render conditions are
 				// satisfied
 				else {
-					$(this.el).html(getRandomLoadingImg());
+					if (this.options.template == "portlets-leader-board-body-model")
+					{
+						var sizey = this.options.portletSizeY;
+	    				var topPos = 50*sizey;
+	    				if(sizey==2 || sizey==3)
+	    					topPos += 50;
+	        			$(this.el).html("<div class='text-center v-middle opa-half' style='margin-top:"+topPos+"px'><img src='../flatfull/img/ajax-loader-cursor.gif' style='width:12px;height:10px;opacity:0.5;' /></div>");
+					}
+					else
+					{
+						$(this.el).html(getRandomLoadingImg());
+					}
 				}
 
 				// Returns view object
@@ -592,5 +603,8 @@ function disable_save_button(elem)
  */
 function enable_save_button(elem)
 {
+	if(!elem.attr('data-save-text'))
+		 elem.attr('data-save-text', 'save');
+		
 	elem.html(elem.attr('data-save-text')).removeAttr('disabled data-save-text');
 }

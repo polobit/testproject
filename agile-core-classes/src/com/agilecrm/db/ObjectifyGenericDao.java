@@ -20,6 +20,7 @@ import com.agilecrm.account.AccountEmailStats;
 import com.agilecrm.account.AccountPrefs;
 import com.agilecrm.account.EmailTemplates;
 import com.agilecrm.account.MenuSetting;
+import com.agilecrm.account.VerifiedEmails;
 import com.agilecrm.activities.Activity;
 import com.agilecrm.activities.BulkActionLog;
 import com.agilecrm.activities.Event;
@@ -59,6 +60,7 @@ import com.agilecrm.user.access.util.UserAccessControlUtil.CRUDOperation;
 import com.agilecrm.user.notification.NotificationPrefs;
 import com.agilecrm.util.CacheUtil;
 import com.agilecrm.voicemail.VoiceMail;
+// import com.agilecrm.webpages.WebPage;
 import com.agilecrm.webrules.WebRule;
 import com.agilecrm.widgets.CustomWidget;
 import com.agilecrm.widgets.Widget;
@@ -99,14 +101,13 @@ import com.thirdparty.google.calendar.GoogleCalenderPrefs;
  * @param <T>
  *            class name to get objectify services
  */
-public class ObjectifyGenericDao<T> extends DAOBase
-{
+public class ObjectifyGenericDao<T> extends DAOBase {
 
-	static final int BAD_MODIFIERS = Modifier.FINAL | Modifier.STATIC | Modifier.TRANSIENT;
+	static final int BAD_MODIFIERS = Modifier.FINAL | Modifier.STATIC
+			| Modifier.TRANSIENT;
 
 	// Registers the classes with ObjectifyService
-	static
-	{
+	static {
 		ObjectifyService.register(Contact.class);
 		ObjectifyService.register(CustomFieldDef.class);
 		ObjectifyService.register(CustomView.class);
@@ -195,9 +196,14 @@ public class ObjectifyGenericDao<T> extends DAOBase
 		ObjectifyService.register(ContactSchemaUpdateStats.class);
 
 		ObjectifyService.register(OnlineCalendarPrefs.class);
-		
+
 		// For facebook page intergration
 		ObjectifyService.register(FacebookPage.class);
+		
+		ObjectifyService.register(VerifiedEmails.class);
+
+		// For page builder
+		// ObjectifyService.register(WebPage.class);
 
 	}
 
@@ -211,13 +217,11 @@ public class ObjectifyGenericDao<T> extends DAOBase
 	 * 
 	 * @param clazz
 	 */
-	public ObjectifyGenericDao(Class<T> clazz)
-	{
+	public ObjectifyGenericDao(Class<T> clazz) {
 		this.clazz = clazz;
 	}
 
-	public Class<T> getClazz()
-	{
+	public Class<T> getClazz() {
 		return clazz;
 	}
 
@@ -227,15 +231,17 @@ public class ObjectifyGenericDao<T> extends DAOBase
 	 * @param entity
 	 * @return Key of the saved entity
 	 */
-	public Key<T> put(T entity)
-	{
+	public Key<T> put(T entity) {
 		// Checks if entities are exceeding current plan limits
-		DaoBillingRestriction daoRestriction = DaoBillingRestriction.getInstace(clazz.getSimpleName(), entity);
+		DaoBillingRestriction daoRestriction = DaoBillingRestriction
+				.getInstace(clazz.getSimpleName(), entity);
 		if (daoRestriction != null && !daoRestriction.check())
-			BillingRestrictionUtil.throwLimitExceededException(clazz.getSimpleName());
+			BillingRestrictionUtil.throwLimitExceededException(clazz
+					.getSimpleName());
 
 		// Checks User access control over current entity to be saved.
-		UserAccessControlUtil.check(clazz.getSimpleName(), entity, CRUDOperation.CREATE, true);
+		UserAccessControlUtil.check(clazz.getSimpleName(), entity,
+				CRUDOperation.CREATE, true);
 
 		return ofy().put(entity);
 	}
@@ -246,8 +252,7 @@ public class ObjectifyGenericDao<T> extends DAOBase
 	 * @param entities
 	 * @return map of keys of saved entites
 	 */
-	public Map<Key<T>, T> putAll(Iterable<T> entities)
-	{
+	public Map<Key<T>, T> putAll(Iterable<T> entities) {
 		return ofy().put(entities);
 	}
 
@@ -256,8 +261,7 @@ public class ObjectifyGenericDao<T> extends DAOBase
 	 * 
 	 * @param entity
 	 */
-	public void delete(T entity)
-	{
+	public void delete(T entity) {
 		if (canDelete(entity))
 			ofy().delete(entity);
 	}
@@ -267,8 +271,7 @@ public class ObjectifyGenericDao<T> extends DAOBase
 	 * 
 	 * @param entity
 	 */
-	public void deleteAsync(T entity)
-	{
+	public void deleteAsync(T entity) {
 		ofy().async().delete(entity);
 	}
 
@@ -277,8 +280,7 @@ public class ObjectifyGenericDao<T> extends DAOBase
 	 * 
 	 * @param entityKey
 	 */
-	public void deleteKey(Key<T> entityKey)
-	{
+	public void deleteKey(Key<T> entityKey) {
 		ofy().delete(entityKey);
 	}
 
@@ -287,8 +289,7 @@ public class ObjectifyGenericDao<T> extends DAOBase
 	 * 
 	 * @param entities
 	 */
-	public void deleteAll(Iterable<T> entities)
-	{
+	public void deleteAll(Iterable<T> entities) {
 		ofy().delete(entities);
 	}
 
@@ -297,8 +298,7 @@ public class ObjectifyGenericDao<T> extends DAOBase
 	 * 
 	 * @param keys
 	 */
-	public void deleteKeys(Iterable<Key<T>> keys)
-	{
+	public void deleteKeys(Iterable<Key<T>> keys) {
 		ofy().delete(keys);
 	}
 
@@ -307,23 +307,18 @@ public class ObjectifyGenericDao<T> extends DAOBase
 	 * 
 	 * @param ids
 	 */
-	public void deleteBulkByIds(JSONArray ids)
-	{
+	public void deleteBulkByIds(JSONArray ids) {
 		List<Key<T>> keys = new ArrayList<Key<T>>();
 
 		// Add keys
-		for (int i = 0; i < ids.length(); i++)
-		{
-			try
-			{
+		for (int i = 0; i < ids.length(); i++) {
+			try {
 				String keyString = ids.getString(i);
 				Long key = Long.parseLong(keyString);
 
 				// Adds to keys list
 				keys.add(new Key<T>(clazz, key));
-			}
-			catch (Exception e)
-			{
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
@@ -339,8 +334,7 @@ public class ObjectifyGenericDao<T> extends DAOBase
 	 * @return an entity of specified type (T)
 	 * @throws EntityNotFoundException
 	 */
-	public T get(Long id) throws EntityNotFoundException
-	{
+	public T get(Long id) throws EntityNotFoundException {
 		Key<T> key = new Key<T>(this.clazz, id);
 		return get(key);
 	}
@@ -352,8 +346,7 @@ public class ObjectifyGenericDao<T> extends DAOBase
 	 * @return
 	 * @throws EntityNotFoundException
 	 */
-	public T get(Key<T> key) throws EntityNotFoundException
-	{
+	public T get(Key<T> key) throws EntityNotFoundException {
 		return ofy().get(key);
 	}
 
@@ -364,8 +357,7 @@ public class ObjectifyGenericDao<T> extends DAOBase
 	 * @param propValue
 	 * @return T matching Object
 	 */
-	public T getByProperty(String propName, Object propValue)
-	{
+	public T getByProperty(String propName, Object propValue) {
 		Query<T> q = ofy().query(clazz);
 		q.filter(propName, propValue);
 
@@ -378,11 +370,9 @@ public class ObjectifyGenericDao<T> extends DAOBase
 	 * @param map
 	 * @return T matching object
 	 */
-	public T getByProperty(Map<String, Object> map)
-	{
+	public T getByProperty(Map<String, Object> map) {
 		Query<T> q = ofy().query(clazz);
-		for (String propName : map.keySet())
-		{
+		for (String propName : map.keySet()) {
 			q.filter(propName, map.get(propName));
 		}
 
@@ -395,8 +385,7 @@ public class ObjectifyGenericDao<T> extends DAOBase
 	 * @param map
 	 * @return T matching object
 	 */
-	public int getCountByProperty(String propName, Object propValue)
-	{
+	public int getCountByProperty(String propName, Object propValue) {
 		Query<T> q = ofy().query(clazz);
 		q.filter(propName, propValue);
 
@@ -409,11 +398,9 @@ public class ObjectifyGenericDao<T> extends DAOBase
 	 * @param map
 	 * @return T matching object
 	 */
-	public int getCountByProperty(Map<String, Object> map)
-	{
+	public int getCountByProperty(Map<String, Object> map) {
 		Query<T> q = ofy().query(clazz);
-		for (String propName : map.keySet())
-		{
+		for (String propName : map.keySet()) {
 			q.filter(propName, map.get(propName));
 		}
 
@@ -427,8 +414,7 @@ public class ObjectifyGenericDao<T> extends DAOBase
 	 * @param propValue
 	 * @return list of T matching objects
 	 */
-	public List<T> listByProperty(String propName, Object propValue)
-	{
+	public List<T> listByProperty(String propName, Object propValue) {
 		Query<T> q = ofy().query(clazz);
 		q.filter(propName, propValue);
 
@@ -441,22 +427,19 @@ public class ObjectifyGenericDao<T> extends DAOBase
 	 * @param map
 	 * @return list of T matching objects
 	 */
-	public List<T> listByProperty(Map<String, Object> map)
-	{
+	public List<T> listByProperty(Map<String, Object> map) {
 		Query<T> q = ofy().query(clazz);
-		for (String propName : map.keySet())
-		{
+		for (String propName : map.keySet()) {
 			q.filter(propName, map.get(propName));
 		}
 
 		return fetchAll(q);
 	}
 
-	public List<T> listByPropertyAndOrder(Map<String, Object> map, String orderBy)
-	{
+	public List<T> listByPropertyAndOrder(Map<String, Object> map,
+			String orderBy) {
 		Query<T> q = ofy().query(clazz);
-		for (String propName : map.keySet())
-		{
+		for (String propName : map.keySet()) {
 			q.filter(propName, map.get(propName));
 		}
 		if (!StringUtils.isEmpty(orderBy))
@@ -470,8 +453,7 @@ public class ObjectifyGenericDao<T> extends DAOBase
 	 * 
 	 * @return list of all T objects
 	 */
-	public List<T> fetchAll()
-	{
+	public List<T> fetchAll() {
 		Query<T> q = ofy().query(clazz);
 
 		return fetchAll(q);
@@ -482,8 +464,7 @@ public class ObjectifyGenericDao<T> extends DAOBase
 	 * 
 	 * @return list of all T objects
 	 */
-	public List<T> fetchAllByOrder(String orderBy)
-	{
+	public List<T> fetchAllByOrder(String orderBy) {
 		Query<T> q = ofy().query(clazz);
 		if (!StringUtils.isEmpty(orderBy))
 			q.order(orderBy);
@@ -495,12 +476,10 @@ public class ObjectifyGenericDao<T> extends DAOBase
 	 * 
 	 * @return list of all T objects
 	 */
-	public List<T> fetchAllByOrder(String orderBy, Map<String, Object> map)
-	{
+	public List<T> fetchAllByOrder(String orderBy, Map<String, Object> map) {
 		Query<T> query = ofy().query(clazz);
 		if (map != null)
-			for (String propName : map.keySet())
-			{
+			for (String propName : map.keySet()) {
 				System.out.println(propName);
 				query.filter(propName, map.get(propName));
 			}
@@ -517,8 +496,7 @@ public class ObjectifyGenericDao<T> extends DAOBase
 	 * @param keysList
 	 * @return List of T entities
 	 */
-	public List<T> fetchAllByKeys(List<Key<T>> keysList)
-	{
+	public List<T> fetchAllByKeys(List<Key<T>> keysList) {
 		return asList(ofy().get(keysList).values());
 	}
 
@@ -527,8 +505,7 @@ public class ObjectifyGenericDao<T> extends DAOBase
 	 * 
 	 * @return number of entities
 	 */
-	public int count()
-	{
+	public int count() {
 		Query<T> q = ofy().query(clazz);
 
 		return getCount(q);
@@ -541,17 +518,17 @@ public class ObjectifyGenericDao<T> extends DAOBase
 	 * @param cursor
 	 * @return list of entities
 	 */
-	public List<T> fetchAll(int max, String cursor)
-	{
+	public List<T> fetchAll(int max, String cursor) {
 		return fetchAll(max, cursor, null);
 	}
 
-	public List<T> fetchAll(int max, String cursor, Map<String, Object> map, boolean forceLoad)
-	{
+	public List<T> fetchAll(int max, String cursor, Map<String, Object> map,
+			boolean forceLoad) {
 		if (!forceLoad)
 			return fetchAll(max, cursor, map);
 
-		CacheUtil.deleteCache(this.clazz.getSimpleName() + "_" + NamespaceManager.get() + "_count");
+		CacheUtil.deleteCache(this.clazz.getSimpleName() + "_"
+				+ NamespaceManager.get() + "_count");
 		return fetchAll(max, cursor, map);
 	}
 
@@ -570,31 +547,28 @@ public class ObjectifyGenericDao<T> extends DAOBase
 	 *            to filter the entities based on a property
 	 * @return list of entities
 	 */
-	public List<T> fetchAll(int max, String cursor, Map<String, Object> map)
-	{
+	public List<T> fetchAll(int max, String cursor, Map<String, Object> map) {
 		System.out.println(":::::::::::::::::::::::::::::::::::::::::");
 		return fetchAll(max, cursor, map, false, true);
 	}
 
-	public List<T> fetchAll(int max, String cursor, Map<String, Object> map, boolean forceLoad, boolean cache)
-	{
+	public List<T> fetchAll(int max, String cursor, Map<String, Object> map,
+			boolean forceLoad, boolean cache) {
 		Query<T> query = ofy().query(clazz);
 		if (map != null)
-			for (String propName : map.keySet())
-			{
+			for (String propName : map.keySet()) {
 				query.filter(propName, map.get(propName));
 			}
 
 		return fetchAllWithCursor(max, cursor, query, forceLoad, cache);
 	}
 
-	public List<T> fetchAllByOrder(int max, String cursor, Map<String, Object> map, boolean forceLoad, boolean cache,
-			String orderBy)
-	{
+	public List<T> fetchAllByOrder(int max, String cursor,
+			Map<String, Object> map, boolean forceLoad, boolean cache,
+			String orderBy) {
 		Query<T> query = ofy().query(clazz);
 		if (map != null)
-			for (String propName : map.keySet())
-			{
+			for (String propName : map.keySet()) {
 				System.out.println(propName);
 				query.filter(propName, map.get(propName));
 			}
@@ -605,13 +579,14 @@ public class ObjectifyGenericDao<T> extends DAOBase
 		return fetchAllWithCursor(max, cursor, query, forceLoad, cache);
 	}
 
-	public List<T> fetchAllWithCursor(int max, String cursor, Query<T> query, boolean forceLoad, boolean cache)
-	{
+	public List<T> fetchAllWithCursor(int max, String cursor, Query<T> query,
+			boolean forceLoad, boolean cache) {
 		// Checks if read access is allowed to current user. If read access is
 		// not provided then query is modified such that user can access only
 		// entities he had created
 		System.out.println("check read query");
-		UserAccessControlUtil.checkReadAccessAndModifyQuery(clazz.getSimpleName(), query);
+		UserAccessControlUtil.checkReadAccessAndModifyQuery(
+				clazz.getSimpleName(), query);
 
 		if (cursor != null)
 			query.startCursor(Cursor.fromWebSafeString(cursor));
@@ -621,33 +596,31 @@ public class ObjectifyGenericDao<T> extends DAOBase
 		List<T> results = new ArrayList<T>();
 
 		QueryResultIterator<T> iterator = query.iterator();
-		while (iterator.hasNext())
-		{
+		while (iterator.hasNext()) {
 			T result = iterator.next();
 
 			// Add to list
 			results.add(result);
 
 			// Send totalCount if first time
-			if (cursor == null && index == 0)
-			{
+			if (cursor == null && index == 0) {
 				// First time query - let's get the count
-				if (result instanceof com.agilecrm.cursor.Cursor)
-				{
+				if (result instanceof com.agilecrm.cursor.Cursor) {
 
 					com.agilecrm.cursor.Cursor agileCursor = (com.agilecrm.cursor.Cursor) result;
-					Object object = forceLoad ? null : CacheUtil.getCache(this.clazz.getSimpleName() + "_"
-							+ NamespaceManager.get() + "_count");
+					Object object = forceLoad ? null : CacheUtil
+							.getCache(this.clazz.getSimpleName() + "_"
+									+ NamespaceManager.get() + "_count");
 
 					if (object != null)
 						agileCursor.count = (Integer) object;
-					else
-					{
+					else {
 						long startTime = System.currentTimeMillis();
 						agileCursor.count = query.count();
 						long endTime = System.currentTimeMillis();
 						if ((endTime - startTime) > 15 * 1000 && cache)
-							CacheUtil.setCache(this.clazz.getSimpleName() + "_" + NamespaceManager.get() + "_count",
+							CacheUtil.setCache(this.clazz.getSimpleName() + "_"
+									+ NamespaceManager.get() + "_count",
 									agileCursor.count, 1 * 60 * 60 * 1000);
 					}
 
@@ -655,17 +628,14 @@ public class ObjectifyGenericDao<T> extends DAOBase
 			}
 
 			// Check if we have reached the limit
-			if (++index == max)
-			{
+			if (++index == max) {
 				// Sets cursor for client
-				if (iterator.hasNext())
-				{
+				if (iterator.hasNext()) {
 					Cursor cursorDb = iterator.getCursor();
 					newCursor = cursorDb.toWebSafeString();
 
 					// Store the cursor in the last element
-					if (result instanceof com.agilecrm.cursor.Cursor)
-					{
+					if (result instanceof com.agilecrm.cursor.Cursor) {
 						com.agilecrm.cursor.Cursor agileCursor = (com.agilecrm.cursor.Cursor) result;
 						agileCursor.cursor = newCursor;
 					}
@@ -683,16 +653,14 @@ public class ObjectifyGenericDao<T> extends DAOBase
 	 * @param propValue
 	 * @return list of keys of type T
 	 */
-	public List<Key<T>> listKeysByProperty(String propName, Object propValue)
-	{
+	public List<Key<T>> listKeysByProperty(String propName, Object propValue) {
 		Query<T> q = ofy().query(clazz);
 		q.filter(propName, propValue);
 
 		return fetchAllKeys(q);
 	}
 
-	public List<Key<T>> listAllKeys()
-	{
+	public List<Key<T>> listAllKeys() {
 		Query<T> q = ofy().query(clazz);
 
 		return fetchAllKeys(q);
@@ -704,11 +672,9 @@ public class ObjectifyGenericDao<T> extends DAOBase
 	 * @param map
 	 * @return list of keys of type T
 	 */
-	public List<Key<T>> listKeysByProperty(Map<String, Object> map)
-	{
+	public List<Key<T>> listKeysByProperty(Map<String, Object> map) {
 		Query<T> q = ofy().query(clazz);
-		for (String propName : map.keySet())
-		{
+		for (String propName : map.keySet()) {
 			q.filter(propName, map.get(propName));
 		}
 
@@ -721,11 +687,10 @@ public class ObjectifyGenericDao<T> extends DAOBase
 	 * @param map
 	 * @return
 	 */
-	public List<Key<T>> listKeyByProperty(Map<String, Object> map, String orderBy, Integer limit)
-	{
+	public List<Key<T>> listKeyByProperty(Map<String, Object> map,
+			String orderBy, Integer limit) {
 		Query<T> q = ofy().query(clazz);
-		for (String propName : map.keySet())
-		{
+		for (String propName : map.keySet()) {
 			q.filter(propName, map.get(propName));
 		}
 		if (limit != null)
@@ -742,8 +707,7 @@ public class ObjectifyGenericDao<T> extends DAOBase
 	 * @param exampleObj
 	 * @return T matching object
 	 */
-	public T getByExample(T exampleObj)
-	{
+	public T getByExample(T exampleObj) {
 		Query<T> queryByExample = buildQueryByExample(exampleObj);
 		Iterable<T> iterableResults = queryByExample.fetch();
 		Iterator<T> i = iterableResults.iterator();
@@ -759,8 +723,7 @@ public class ObjectifyGenericDao<T> extends DAOBase
 	 * @param exampleObj
 	 * @return list of T matching entities
 	 */
-	public List<T> listByExample(T exampleObj)
-	{
+	public List<T> listByExample(T exampleObj) {
 		Query<T> queryByExample = buildQueryByExample(exampleObj);
 
 		return fetchAll(queryByExample);
@@ -772,11 +735,9 @@ public class ObjectifyGenericDao<T> extends DAOBase
 	 * @param iterable
 	 * @return list of entities
 	 */
-	private List<T> asList(Iterable<T> iterable)
-	{
+	private List<T> asList(Iterable<T> iterable) {
 		ArrayList<T> list = new ArrayList<T>();
-		for (T t : iterable)
-		{
+		for (T t : iterable) {
 			list.add(t);
 		}
 		return list;
@@ -788,11 +749,9 @@ public class ObjectifyGenericDao<T> extends DAOBase
 	 * @param iterableKeys
 	 * @return list of keys
 	 */
-	private List<Key<T>> asKeyList(Iterable<Key<T>> iterableKeys)
-	{
+	private List<Key<T>> asKeyList(Iterable<Key<T>> iterableKeys) {
 		ArrayList<Key<T>> keys = new ArrayList<Key<T>>();
-		for (Key<T> key : iterableKeys)
-		{
+		for (Key<T> key : iterableKeys) {
 			keys.add(key);
 		}
 		return keys;
@@ -804,36 +763,30 @@ public class ObjectifyGenericDao<T> extends DAOBase
 	 * @param exampleObj
 	 * @return Query object
 	 */
-	private Query<T> buildQueryByExample(T exampleObj)
-	{
+	private Query<T> buildQueryByExample(T exampleObj) {
 		Query<T> q = ofy().query(clazz);
 
 		// Add all non-null properties to query filter
-		for (Field field : clazz.getDeclaredFields())
-		{
+		for (Field field : clazz.getDeclaredFields()) {
 			// Ignore transient, embedded, array, and collection properties
-			if (field.isAnnotationPresent(Transient.class) || (field.isAnnotationPresent(Embedded.class))
-					|| (field.getType().isArray()) || (Collection.class.isAssignableFrom(field.getType()))
+			if (field.isAnnotationPresent(Transient.class)
+					|| (field.isAnnotationPresent(Embedded.class))
+					|| (field.getType().isArray())
+					|| (Collection.class.isAssignableFrom(field.getType()))
 					|| ((field.getModifiers() & BAD_MODIFIERS) != 0))
 				continue;
 
 			field.setAccessible(true);
 
 			Object value;
-			try
-			{
+			try {
 				value = field.get(exampleObj);
-			}
-			catch (IllegalArgumentException e)
-			{
+			} catch (IllegalArgumentException e) {
+				throw new RuntimeException(e);
+			} catch (IllegalAccessException e) {
 				throw new RuntimeException(e);
 			}
-			catch (IllegalAccessException e)
-			{
-				throw new RuntimeException(e);
-			}
-			if (value != null)
-			{
+			if (value != null) {
 				q.filter(field.getName(), value);
 			}
 		}
@@ -841,58 +794,57 @@ public class ObjectifyGenericDao<T> extends DAOBase
 		return q;
 	}
 
-	public T fetch(Query<T> q)
-	{
+	public T fetch(Query<T> q) {
 		// Checks if read access is allowed to current user. If read access is
 		// not provided then query is modified such that user can access only
 		// entities he had created
-		UserAccessControlUtil.checkReadAccessAndModifyQuery(clazz.getSimpleName(), q);
+		UserAccessControlUtil.checkReadAccessAndModifyQuery(
+				clazz.getSimpleName(), q);
 
 		return q.get();
 	}
 
-	public List<T> fetchAll(Query<T> q)
-	{
+	public List<T> fetchAll(Query<T> q) {
 		// Checks if read access is allowed to current user. If read access is
 		// not provided then query is modified such that user can access only
 		// entities he had created
-		UserAccessControlUtil.checkReadAccessAndModifyQuery(clazz.getSimpleName(), q);
+		UserAccessControlUtil.checkReadAccessAndModifyQuery(
+				clazz.getSimpleName(), q);
 
 		return asList(q.fetch());
 	}
 
-	public List<Key<T>> fetchAllKeys(Query<T> q)
-	{
+	public List<Key<T>> fetchAllKeys(Query<T> q) {
 		// Checks if read access is allowed to current user. If read access is
 		// not provided then query is modified such that user can access only
 		// entities he had created
-		UserAccessControlUtil.checkReadAccessAndModifyQuery(clazz.getSimpleName(), q);
+		UserAccessControlUtil.checkReadAccessAndModifyQuery(
+				clazz.getSimpleName(), q);
 
 		return asKeyList(q.fetchKeys());
 	}
 
-	public int getCount(Query<T> q)
-	{
+	public int getCount(Query<T> q) {
 		// Checks if read access is allowed to current user. If read access is
 		// not provided then query is modified such that user can access only
 		// entities he had created
-		UserAccessControlUtil.checkReadAccessAndModifyQuery(clazz.getSimpleName(), q);
+		UserAccessControlUtil.checkReadAccessAndModifyQuery(
+				clazz.getSimpleName(), q);
 
 		return q.count();
 	}
 
-	public boolean canDelete(T entity)
-	{
-		return UserAccessControlUtil.check(clazz.getSimpleName(), entity, CRUDOperation.DELETE, false);
+	public boolean canDelete(T entity) {
+		return UserAccessControlUtil.check(clazz.getSimpleName(), entity,
+				CRUDOperation.DELETE, false);
 	}
-	
-	public List<T> fetchAllByOrderWithoutCount(int max, String cursor, Map<String, Object> map, boolean forceLoad, boolean cache,
-			String orderBy)
-	{
+
+	public List<T> fetchAllByOrderWithoutCount(int max, String cursor,
+			Map<String, Object> map, boolean forceLoad, boolean cache,
+			String orderBy) {
 		Query<T> query = ofy().query(clazz);
 		if (map != null)
-			for (String propName : map.keySet())
-			{
+			for (String propName : map.keySet()) {
 				System.out.println(propName);
 				query.filter(propName, map.get(propName));
 			}
@@ -900,16 +852,18 @@ public class ObjectifyGenericDao<T> extends DAOBase
 		if (!StringUtils.isEmpty(orderBy))
 			query.order(orderBy);
 
-		return fetchAllWithCursorWithoutCount(max, cursor, query, forceLoad, cache);
+		return fetchAllWithCursorWithoutCount(max, cursor, query, forceLoad,
+				cache);
 	}
 
-	public List<T> fetchAllWithCursorWithoutCount(int max, String cursor, Query<T> query, boolean forceLoad, boolean cache)
-	{
+	public List<T> fetchAllWithCursorWithoutCount(int max, String cursor,
+			Query<T> query, boolean forceLoad, boolean cache) {
 		// Checks if read access is allowed to current user. If read access is
 		// not provided then query is modified such that user can access only
 		// entities he had created
 		System.out.println("check read query");
-		UserAccessControlUtil.checkReadAccessAndModifyQuery(clazz.getSimpleName(), query);
+		UserAccessControlUtil.checkReadAccessAndModifyQuery(
+				clazz.getSimpleName(), query);
 
 		if (cursor != null)
 			query.startCursor(Cursor.fromWebSafeString(cursor));
@@ -919,27 +873,21 @@ public class ObjectifyGenericDao<T> extends DAOBase
 		List<T> results = new ArrayList<T>();
 
 		QueryResultIterator<T> iterator = query.iterator();
-		while (iterator.hasNext())
-		{
+		while (iterator.hasNext()) {
 			T result = iterator.next();
 
 			// Add to list
 			results.add(result);
 
-
-
 			// Check if we have reached the limit
-			if (++index == max)
-			{
+			if (++index == max) {
 				// Sets cursor for client
-				if (iterator.hasNext())
-				{
+				if (iterator.hasNext()) {
 					Cursor cursorDb = iterator.getCursor();
 					newCursor = cursorDb.toWebSafeString();
 
 					// Store the cursor in the last element
-					if (result instanceof com.agilecrm.cursor.Cursor)
-					{
+					if (result instanceof com.agilecrm.cursor.Cursor) {
 						com.agilecrm.cursor.Cursor agileCursor = (com.agilecrm.cursor.Cursor) result;
 						agileCursor.cursor = newCursor;
 					}
@@ -949,5 +897,5 @@ public class ObjectifyGenericDao<T> extends DAOBase
 		}
 		return results;
 	}
-	
+
 }

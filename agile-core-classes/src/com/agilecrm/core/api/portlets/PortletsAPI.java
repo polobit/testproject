@@ -17,6 +17,7 @@ import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import net.sf.json.JSONSerializer;
 
+import com.agilecrm.activities.Activity;
 import com.agilecrm.activities.Event;
 import com.agilecrm.activities.Task;
 import com.agilecrm.contact.Contact;
@@ -216,6 +217,7 @@ public class PortletsAPI {
 			sortKey = "-created_time";
 		return PortletUtil.getContactsList(json,sortKey);
 	}
+	
 	/**
 	 * Gets Emails opened portlet data
 	 * 
@@ -485,6 +487,38 @@ public class PortletsAPI {
 	public List<DomainUser> getCurrentDomainUsersForPortlets()throws Exception {
 		return PortletUtil.getCurrentDomainUsersForPortlets();
 	}
+	
+	
+	/**
+	 * Gets Activity portlet data
+	 * 
+	 * @return {List Activity}
+	 */
+	@Path("/portletCustomerActivity")
+	@GET
+	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	public List<Activity> getPortletActivityData(@QueryParam("cursor") String cursor, @QueryParam("page_size") String count)throws Exception {
+		
+		PortletUtil.checkPrivilegesForPortlets("ACTIVITY");
+		if(count!=null){
+		return PortletUtil.getPortletActivitydata(Integer.parseInt(count), cursor);
+		}
+		else
+			return null;
+	}
+	
+	/**
+	 * Gets Account portlet data
+	 * 
+	 * @return {JSONObject}
+	 */
+	@Path("/portletAccount")
+	@GET
+	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	public JSONObject getPortletAccountList()throws Exception {
+	
+		return PortletUtil.getAccountsList();
+	}
 	/**
 	 * Gets campaign emails stats based on log_Type
 	 * 
@@ -502,5 +536,4 @@ public class PortletsAPI {
 		json.put("campaigntype",campaigntype);
 		return PortletUtil.getCampaignstatsForPortlets(json);
 	}
-	
 }

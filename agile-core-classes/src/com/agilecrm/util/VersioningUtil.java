@@ -5,6 +5,9 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.StringUtils;
 
+import com.google.appengine.api.modules.ModulesService;
+import com.google.appengine.api.modules.ModulesServiceFactory;
+import com.google.appengine.api.taskqueue.DeferredTaskContext;
 import com.google.appengine.api.utils.SystemProperty;
 
 /**
@@ -112,7 +115,32 @@ public class VersioningUtil
 
 	if (StringUtils.equals(applicationId, "agilecrmbeta"))
 	    return "https://" + domain + "-dot-sandbox-dot-agilesanbox.appspot.com/";
-	
+
 	return VersioningUtil.getDefaultLoginUrl(domain);
+    }
+
+    public static boolean isBackgroundThread()
+    {
+	ModulesService service = ModulesServiceFactory.getModulesService();
+	if (service == null)
+	    return false;
+
+	String module = service.getCurrentModule();
+	System.out.println("current module : " + module);
+	if (!"default".equals(module))
+	{
+	    return true;
+	}
+
+	HttpServletRequest request = DeferredTaskContext.getCurrentRequest();
+
+	System.out.println("deferred task request : " + request);
+
+	if (request != null)
+	{
+	    return true;
+	}
+
+	return false;
     }
 }

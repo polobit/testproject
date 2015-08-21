@@ -17,6 +17,10 @@ var ContactBulkActionRouter = Backbone.Router.extend({
 		
 		"bulk-email" : "emailBulk", 
 		
+		"company-bulk-owner" : "companyOwnerBulk",
+		
+		"company-bulk-email" : "companyEmailBulk"
+		
 	},
 
 	/**
@@ -27,7 +31,7 @@ var ContactBulkActionRouter = Backbone.Router.extend({
 	ownerBulk : function()
 	{
 
-		// On reloading redirecting to contacts list
+		// On reloading redirecting to contacts/companies list
 		if (!App_Contacts.contactsListView)
 			Backbone.history.navigate("contacts", { trigger : true });
 		else
@@ -93,9 +97,52 @@ var ContactBulkActionRouter = Backbone.Router.extend({
 			Backbone.history.navigate("contacts", { trigger : true });
 		else
 		{
-			$("#content").html(getTemplate("send-email", {}));
+			var el = $("#content").html('<div id="send-email-listener-container"></div>').find('#send-email-listener-container').html(getTemplate("send-email", {}));
+			// $("#content").html(getTemplate("send-email", {}));
 			$("#emailForm").find('.add-attachment-select').hide();
 			$('body').trigger('fill_emails');
+			initializeSendEmailListeners();
+			sendEmailAttachmentListeners("send-email-listener-container");
+		}
+	},
+	
+	/**
+	 * Loads the owners template to subscribe the selected contacts to a
+	 * campaign and triggers the custom event 'fill_owners' to fill the
+	 * owners select drop down. This event is
+	 */
+	companyOwnerBulk : function()
+	{
+
+		// On reloading redirecting to contacts/companies list
+		if (!App_Companies.companiesListView)
+			Backbone.history.navigate("companies", { trigger : true });
+		else
+		{
+			$("#content").html(getTemplate("bulk-actions-company-owner", {}));
+			$('body').trigger('fill_owners');
+		}
+	},
+
+	/**
+	 * Loads the email template to send email to the selected contacts
+	 * and triggers an event, which fills send email details. This event
+	 * is binded to trigger on loading of the template
+	 */
+	companyEmailBulk : function()
+	{
+
+		// On reloading redirecting to contacts list
+		if (!App_Companies.companiesListView)
+			Backbone.history.navigate("companies", { trigger : true });
+		else
+		{
+			var el = $("#content").html('<div id="send-email-listener-container"></div>').find('#send-email-listener-container').html(getTemplate("send-email-company", {}));
+			$("#emailForm").find('.add-attachment-select').hide();
+			$('body').trigger('fill_emails');
+			initializeSendEmailListeners();
+			sendEmailAttachmentListeners("send-email-listener-container");
+
 		}
 	}
 	

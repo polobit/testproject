@@ -1,7 +1,7 @@
 <script id="filter-contacts-template" type="text/html">
 <div class="bg-light lter b-b wrapper-md">
  {{#if id}} 
-                        <h3  class="formheading h3 font-thin m-n"> Edit Contact Filter<span
+                        <h3  class="formheading h3 font-thin m-n"> Edit Contact/Company Filter<span
 						style="vertical-align: text-top; margin-left: -3px"> <img
 							border="0" src="/img/help.png"
 							style="height: 6px;" rel="popover"
@@ -163,15 +163,15 @@
 													class="BETWEEN_NUMBER number required form-control"/>
 												<input id="updated_date" type="text" name="updated_date"
 													class="ON AFTER BEFORE BETWEEN input required date form-control"
-													placeholder="MM/DD/YY" data-date-format="mm/dd/yyyy"/>
+													placeholder="{{dateFormat}}" data-date-format="{{dateFormat}}"/>
 											</div>
 										</td>
 										<td class="rhs-new-block controls v-top">
 											<div id="RHS-NEW" name="RHS_NEW">
 												<input type="text" name="temp"
 													class="BETWEEN_NUMBER number required form-control"/>
-												<input id="date_between" type="text" name="temp" data-date-format="mm/dd/yyyy"
-													class="BETWEEN input date required form-control" placeholder="MM/DD/YY" />
+												<input id="date_between" type="text" name="temp" data-date-format="{{dateFormat}}"
+													class="BETWEEN input date required form-control" placeholder="{{dateFormat}}" />
 											</div>
 										</td>
 										<td class="nested-condition-block v-top" >
@@ -193,14 +193,14 @@
 													id="date_between" type="text" 
 													name="temp"
 													class="BETWEEN EQUALS AFTER BEFORE input date required form-control"
-													placeholder="MM/DD/YY" data-date-format="mm/dd/yyyy"/>
+													placeholder="{{dateFormat}}" data-date-format="{{dateFormat}}"/>
 											</div>
 										</td>
 										<td class="controls v-top" >
 											<div id="nested_rhs" name="nested_rhs">
 												<input id="date_between" type="text" name="temp"
 													style="width: 92%;" class="BETWEEN input date required form-control"
-													placeholder="MM/DD/YY" data-date-format="mm/dd/yyyy" />
+													placeholder="{{dateFormat}}" data-date-format="{{dateFormat}}" />
 											</div>
 										</td>
 									<td>
@@ -326,8 +326,8 @@
 										</td>
 										<td class="rhs-new-block controls v-top">
 											<div id="RHS-NEW" name="RHS_NEW">
-												<input id="date_between" type="text" name="temp" data-date-format="mm/dd/yyyy"
-													class="BETWEEN input date required form-control"  placeholder="MM/DD/YY" />
+												<input id="date_between" type="text" name="temp" data-date-format="{{dateFormat}}"
+													class="BETWEEN input date required form-control"  placeholder="{{dateFormat}}" />
 												<input type="text" name="temp"
 													class="BETWEEN_NUMBER number required form-control"/>
 											</div>
@@ -350,13 +350,13 @@
 													id="date_between" type="text" 
 													name="temp"
 													class="BETWEEN EQUALS AFTER BEFORE input date required form-control"
-													placeholder="MM/DD/YY" data-date-format="mm/dd/yyyy"/>
+													placeholder="{{dateFormat}}" data-date-format="{{dateFormat}}"/>
 											</div>
 										</td>
 										<td class="controls v-top">
 											<div id="nested_rhs" name="nested_rhs">
 												<input id="date_between" type="text" name="temp"  class="BETWEEN input date required form-control"
-													placeholder="MM/DD/YY" data-date-format="mm/dd/yyyy" />
+													placeholder="{{dateFormat}}" data-date-format="{{dateFormat}}" />
 											</div>
 										</td>
 									<td>
@@ -449,13 +449,13 @@
                                                 <input type="text" name="temp" class="email required form-control"/>
 												<input id="updated_date" type="text" name="updated_date" 
 													class="ON AFTER BEFORE BETWEEN input required date form-control"
-													placeholder="MM/DD/YY" data-date-format="mm/dd/yyyy"/>
+													placeholder="{{dateFormat}}" data-date-format="{{dateFormat}}"/>
 											</div>
 										</td>
 										<td class="rhs-new-block controls v-top" >
 											<div id="RHS-NEW" name="RHS_NEW">
-												<input id="date_between" type="text" name="temp" data-date-format="mm/dd/yyyy"
-													class="BETWEEN input date required form-control"  placeholder="MM/DD/YY" />
+												<input id="date_between" type="text" name="temp" data-date-format="{{dateFormat}}"
+													class="BETWEEN input date required form-control"  placeholder="{{dateFormat}}" />
 											</div>
 										</td>
 										<td class="nested-condition-block v-top">
@@ -476,13 +476,13 @@
 													id="date_between" type="text"
 													name="temp"
 													class="BETWEEN EQUALS AFTER BEFORE input date required form-control"
-													placeholder="MM/DD/YY" data-date-format="mm/dd/yyyy"/>
+													placeholder="{{dateFormat}}" data-date-format="{{dateFormat}}"/>
 											</div>
 										</td>
 										<td class="controls v-top" >
 											<div id="nested_rhs" name="nested_rhs">
 												<input id="date_between" type="text" name="temp" class="BETWEEN input date required form-control"
-													placeholder="MM/DD/YY" data-date-format="mm/dd/yyyy" />
+													placeholder="{{dateFormat}}" data-date-format="{{dateFormat}}" />
 											</div>
 										</td>
 									<td>
@@ -571,13 +571,13 @@
                                                 <input type="text" name="temp" class="email required form-control"/>
 												<input id="updated_date" type="text" name="updated_date"
 													class="ON AFTER BEFORE BETWEEN input required date form-control"
-													placeholder="MM/DD/YY" data-date-format="mm/dd/yyyy"/>
+													placeholder="{{dateFormat}}" data-date-format="{{dateFormat}}"/>
 											</div>
 										</td>
 										<td class="rhs-new-block controls v-top">
 											<div id="RHS-NEW" name="RHS_NEW">
-												<input id="date_between" type="text" name="temp" data-date-format="mm/dd/yyyy"
-													class="BETWEEN input date required form-control"  placeholder="MM/DD/YY" />
+												<input id="date_between" type="text" name="temp" data-date-format="{{dateFormat}}"
+													class="BETWEEN input date required form-control"  placeholder="{{dateFormat}}" />
 											</div>
 										</td>
 										<td class="nested-condition-block v-top">
@@ -598,13 +598,13 @@
 													id="date_between" type="text" 
 													name="temp"
 													class="BETWEEN EQUALS AFTER BEFORE input date required form-control"
-													placeholder="MM/DD/YY" data-date-format="mm/dd/yyyy"/>
+													placeholder="{{dateFormat}}" data-date-format="{{dateFormat}}"/>
 											</div>
 										</td>
 										<td class="controls v-top">
 											<div id="nested_rhs" name="nested_rhs">
 												<input id="date_between" type="text" name="temp" class="BETWEEN input date required form-control"
-													placeholder="MM/DD/YY" data-date-format="mm/dd/yyyy" />
+													placeholder="{{dateFormat}}" data-date-format="{{dateFormat}}" />
 											</div>
 										</td>
 									<td>

@@ -102,8 +102,12 @@ public class TwilioUtil
 		System.out.println("OutgoingCallerID's: " + outgoingCallerIds);
 
 		// If no numbers, return empty object
-		if (Integer.parseInt(outgoingCallerIds.getString("total")) == 0)
-			return new JSONArray();
+		
+		  if (outgoingCallerIds.has("total") && Integer.parseInt(outgoingCallerIds.getString("total")) == 0)
+			  return new JSONArray();
+		 
+		  if(!outgoingCallerIds.has("OutgoingCallerId"))
+				return new JSONArray();	
 
 		/*
 		 * Response may be array or single object, check and return the first
@@ -349,11 +353,12 @@ public class TwilioUtil
 			System.out.println("Calls in twilio logs " + calls);
 
 			// If no calls, return empty array
-			if (Integer.parseInt(calls.getString("total")) == 0)
-				return logs;
+			/*
+			 * if (Integer.parseInt(calls.getString("total")) == 0) return logs;
+			 */
 
 			// When single call log, need to make array from object
-			if (Integer.parseInt(calls.getString("total")) == 1)
+			if (calls.get("Call") instanceof JSONObject)
 				logs = new JSONArray("[" + calls.getJSONObject("Call").toString() + "]");
 			else
 				// When multiple call logs, get array
@@ -624,9 +629,13 @@ public class TwilioUtil
 				.getJSONObject("IncomingPhoneNumbers");
 
 		// If no numbers, return empty object
-		if (Integer.parseInt(result.getString("total")) == 0)
-			return new JSONArray();
-
+		
+		 if (result.has("total") && Integer.parseInt(result.getString("total")) == 0)
+			 return new JSONArray();
+		 
+		 if(!result.has("IncomingPhoneNumber"))
+			 return new JSONArray();
+		 
 		/*
 		 * Response may be array or single object, check and return the first
 		 * number if it is an array
@@ -653,9 +662,13 @@ public class TwilioUtil
 		JSONObject outgoingCallerIds = XML.toJSONObject(response.getResponseText()).getJSONObject("TwilioResponse")
 				.getJSONObject("OutgoingCallerIds");
 
+		
 		// If no numbers, return empty object
-		if (Integer.parseInt(outgoingCallerIds.getString("total")) == 0)
+		if (outgoingCallerIds.has("total") && Integer.parseInt(outgoingCallerIds.getString("total")) == 0)
 			return new JSONArray();
+				
+		if(!outgoingCallerIds.has("OutgoingCallerId"))
+			return new JSONArray();		
 
 		/*
 		 * Response may be array or single object, check and return the first

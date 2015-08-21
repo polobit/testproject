@@ -29,13 +29,17 @@ function sipStart()
 				{
 					head.js(LIB_PATH + 'lib/telephony/SIPml-api.js', function()
 					{
-						SIPml.setDebugLevel("error");
+						// SIPml.setDebugLevel("error");
 
 						// initialize SIPML5
-						if (SIPml.isInitialized()) // If already done.
+						if (SIPml.isInitialized()){
+							// If already done.
 							sipRegister();
-						else
+						} 
+						else{
 							SIPml.init(sipRegister);
+						}
+							
 					});
 				}
 			}).error(function(data)
@@ -53,6 +57,7 @@ function sipStart()
  */
 function sipRegister()
 {
+
 	// Add audio tags in home page.
 	addAudio();
 
@@ -99,6 +104,7 @@ function sipRegister()
 					//url = "wss://54.83.12.176:10062/wss"; // https
 			}
 
+			
 			// Define sip stack
 			Sip_Stack = new SIPml.Stack({ realm : credentials.sip_realm, impi : credentials.sip_privateid, impu : credentials.sip_publicid,
 				password : credentials.sip_password, display_name : credentials.sip_username, websocket_proxy_url : url, enable_rtcweb_breaker : true,

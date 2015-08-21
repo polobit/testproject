@@ -61,14 +61,14 @@
 						<a class="text-info" href="#contact/{{id}}">{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}</a>,
 					{{/if_contact_type}}
 					{{#if_contact_type "COMPANY"}}
-        				<a class="text-info" href="#contact/{{id}}">{{getPropertyValue properties "name"}}</a>,
+        				<a class="text-info" href="#company/{{id}}">{{getPropertyValue properties "name"}}</a>,
         			{{/if_contact_type}}
 				{{/isDuplicateContactProperty}}
            		
            	{{/if}}
        	{{/each}}
 		</div>
-		<div class="pos-abs pos-r-0 pos-b-0">
+		<div class="pos-abs pos-r-0 pos-b-0" id="deal-hover-actions">
 		<span class="actions">
 <a title="Edit"  data="{{id}}" data-toggle="modal" class="deal-edit-note c-p text-l-none-hover p-r-sm"> <i class="icon-pencil"></i> </a>
             <a title="Delete" class="c-p text-l-none-hover"><span class="activity-delete icon-trash inline"  id="{{id}}" url="core/api/contacts/notes/bulk"></span></a>

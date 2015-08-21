@@ -1,82 +1,4 @@
-$(function()
-{
-	$(".calendar_check").die().live('click', function(e)
-	{
-		createRequestUrlBasedOnFilter();
-		var calendar = $(this).val();
-		var ownerids = '';
-		if (calendar == "agile")
-		{
-			if (this.checked == true)
-			{
-				ownerids = getOwnerIdsFromCookie(true);
-				renderFullCalenarEvents(ownerids);
-			}
 
-			else
-			{
-				ownerids = getOwnerIdsFromCookie(true);
-				removeFullCalendarEvents(ownerids);
-			}
-
-		}
-
-		if (calendar == "google")
-			loadFullCalednarOrListView();
-
-	});
-
-	$(".calendar_user_check").die().live('click', function(e)
-	{
-		// checkBothCalWhenNoCalSelected();
-		createRequestUrlBasedOnFilter();
-		// loadFullCalednarOrListView();
-		var user_id = $(this).val();
-		if (this.checked == true)
-		{
-			renderFullCalenarEvents(user_id);
-		}
-		else
-		{
-			removeFullCalendarEvents(user_id);
-		}
-
-		// $('.select_all_users').removeAttr("checked");
-
-	});
-
-	$('.select_all_users').die().live('click', function(event)
-	{ // on click
-		if (this.checked)
-		{ // check select status
-			$('.calendar_user_check').each(function()
-			{
-				this.checked = true;
-			});
-		}
-		else
-		{
-			$('.calendar_user_check').each(function()
-			{ // loop through each checkbox
-				if ($(this).val() != CURRENT_AGILE_USER.id)
-					this.checked = false;
-			});
-		}
-		createRequestUrlBasedOnFilter();
-		loadFullCalednarOrListView();
-	});
-
-	$('#event_time').die().live('change', function(event)
-	{ // on click
-		if ($("#event_time").val() == "future")
-			createCookie("agile_calendar_view", "calendar_list_view_future");
-		else
-			createCookie("agile_calendar_view", "calendar_list_view");
-		createRequestUrlBasedOnFilter();
-		loadFullCalednarOrListView();
-	});
-
-});
 
 function createRequestUrlBasedOnFilter()
 {
@@ -286,6 +208,8 @@ function renderFullCalenarEvents(ownerid)
 			data = renderEventBasedOnOwner(data);
 			$('#calendar_event').fullCalendar('renderEvent', data);
 		});
+		showLoadingOnCalendar(false);
+
 	});
 
 }
@@ -304,6 +228,7 @@ function removeFullCalendarEvents(ownerid)
 		{
 			$('#calendar_event').fullCalendar('removeEvents', data.id);
 		});
+		showLoadingOnCalendar(false);
 	});
 
 }
@@ -477,4 +402,20 @@ function revertEventColorBasedOnPriority(event)
 		event.color = "#36C";
 	return event;
 
+}
+
+function showLoadingOnCalendar(loading)
+{
+	if (loading)
+	{
+		$("#loading_calendar_events").remove();
+		$('.fc-header-left').append(
+				'<span id="loading_calendar_events" style="margin-left:5px;vertical-align:middle;padding-top: 5px;position: absolute;">loading...</span>')
+				.show();
+		$('.fc-header-left').show();
+	}
+	else
+	{
+		$("#loading_calendar_events").hide();
+	}
 }

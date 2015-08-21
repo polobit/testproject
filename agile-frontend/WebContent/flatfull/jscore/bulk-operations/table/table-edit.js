@@ -14,21 +14,30 @@ var SCROLL_POSITION;
 
 $(function() {
 
-	$('.agile-edit-row > tr > td:not(":first-child")').live('click', function(e) {
+	$("body").on('click', '.agile-edit-row > tr > td:not(":first-child")',
+			function(e) {
 		e.preventDefault();
 		
-		var route = $('.agile-edit-row').attr('route')
+		var route = $('.agile-edit-row').attr('route');
+		
+		// Newly added code for displaying contacts and companies in same table with different routes.
+		if($(this).closest('tr').find('[route]').length != 0)
+			route = $(this).closest('tr').find('[route]').attr('route');
+		
 		var data = $(this).closest('tr').find('.data').attr('data');
 
-		if(route == "contact/")
+		if(route == "contact/" || route == "company/")
 			SCROLL_POSITION = window.pageYOffset;
 
-		console.log(data);
-		if (data) {
-			Backbone.history.navigate(route + data, {
-				trigger : true
-			});
-		}
-	});
-});
+				if (route == "contact/")
+					SCROLL_POSITION = window.pageYOffset;
 
+				console.log(data);
+
+				if (data) {
+					Backbone.history.navigate(route + data, {
+						trigger : true
+					});
+				}
+			});
+});

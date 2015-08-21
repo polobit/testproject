@@ -207,7 +207,7 @@ public class MandrillWebhook extends HttpServlet
 		contact.emailBounceStatus.add(emailBounceStatus);
 	    }
 
-	    contact.save();
+	    contact.update();
 
 		// Execute trigger
 	    executeTriggerForBounce(contact, emailBounceType);

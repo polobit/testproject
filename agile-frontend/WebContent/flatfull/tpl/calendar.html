@@ -20,7 +20,7 @@
 	   			  <li><a href="#" class="c_cal">Calendar</a></li>
 				</ul>
 			</div> -->
-<div class="inline-block m-r">
+<div class="inline-block m-r" id="calendarAgendaButtons">
 				<button type="button" class="btn btn-sm btn-default" onclick="today()">Today</button>
 					<div class="btn-group m-l-xs">
 						<button id="agendaDay" class="btn btn-sm btn-default agendaDayWeekMonth" >Day</button>
@@ -28,7 +28,7 @@
 						<button id="month" class="btn btn-sm btn-default agendaDayWeekMonth" >Month</button>
 					</div>
 			</div>
-			 <div class="btn-group  inline-block">
+			 <div class="btn-group  inline-block" id="add-event-div">
 				  
 	               <div class="btn btn-sm btn-default add-event" data-toggle="modal"><i class="icon-plus-sign"></i> Add Event</div>
 	               <a class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown">
@@ -193,12 +193,12 @@
                 <i></i>     Google           
               </label>
 <div class="hide " id="google_cal_link">
-              <span style="margin-left:26px;font-style: italic;font-size: 12px;text-decoration: underline;"> <a  href="#sync" class="text-muted">  Add Google Calendar</a></span>           
+              <span style="margin-left:26px;font-size: 12px;"> <a  href="#sync" class="text-muted"> + Add Google Calendar</a></span>           
               </div>
 </div><br/>
 <div>
 {{#if this.length}}
-<label>Team</label><br/>
+<label><h4 class="m-b-n-sm">Team</label></h4><br/>
 {{/if}}
 {{#each this}}
 <label class="i-checks i-checks-sm">
@@ -218,7 +218,4 @@
 
 
 </div>
-</script>
-<script>
-
 </script>

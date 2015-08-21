@@ -213,9 +213,14 @@ function displaySlots()
 	console.log(Available_Slots.length);
 	var after_now = [];
 	var date = new Date();
+	if (BUFFERTIME == null)
+	{
+		BUFFERTIME = single_user_mapobject['buffer_time'];
+	}
+	var current_date_time = date.getTime() + parseInt(BUFFERTIME);
 	for (var s = 0; s < Available_Slots.length; s++)
 	{
-		if (Available_Slots[s][0] * 1000 > date.getTime())
+		if (Available_Slots[s][0] * 1000 > parseInt(current_date_time))
 		{
 
 			after_now.push(Available_Slots[s]);
@@ -439,9 +444,9 @@ function addDotsAtEnd(title)
 {
 	if (title)
 	{
-		if (title.length > 50)
+		if (title.length > 10)
 		{
-			var subst = title.substr(0, 50);
+			var subst = title.substr(0, 10);
 			subst = subst + "....";
 			return subst;
 		}
@@ -510,36 +515,70 @@ function fillSlotDetails(slot_durations_one_user)
 
 		}
 	}
-	if (data.length == 3)
+	MEETING_DURATION_AND_NAMES = data = generateNewDataArray(data);
+	var dataLength = 12 / data.length;
+	for ( var slotDetail in data)
 	{
-		for ( var slotDetail in data)
+		var json = JSON.parse(data[slotDetail]);
+		var meeting_names = json.meeting_names;
+		var temp = '';
+
+		for ( var meeting_name in meeting_names)
 		{
-			var json = JSON.parse(data[slotDetail]);
-			$('.segment1')
-					.append(
-							'<div class="col-sm-4 show_slots"><p title="' + json.title + '" class="choose timeslot-view" data="' + json.time + '"><span class="minutes">' + json.time + ' mins</span><br />' + addDotsAtEnd(json.title) + '</p></div>');
+			temp += '<div class="radio"><label><input class="c-p selected_meeting_time" type="radio" data="' + json.time + '" name="selected_meeting_time" value="' + meeting_names[meeting_name] + '"><i></i>' + meeting_names[meeting_name] + '</label></div>';
 		}
-		$('.segment1').append('<div class="clearfix"></div>');
+		var select = '<div class="panel panel-default">' + '<div class="panel-heading font-bold">' + json.time + ' mins</div>' + '<div class="panel-body">' + '<form class="bs-example form-horizontal">' + '<div class="form-group" style="margin-left:7px;">' + temp + '</div></form></div></div>';
+		$('.segment1').append('<div class="col-sm-' + dataLength + ' show_slots"><p class="timeslot-view">' + select + '</p></div>');
 	}
-	if (data.length == 2)
+	if(multi_user_ids.length<2)
+	$(".panel-body").height(parseInt(getPanelBodyMaxHeight()) + 26);
+	$('.segment1').append('<div class="clearfix"></div>');
+
+}
+
+function getPanelBodyMaxHeight()
+{
+	var max = 0;
+	$('.panel-body').each(function()
 	{
-		for ( var slotDetail in data)
+		var height = $(this).height();
+		if (height > max)
 		{
-			var json = JSON.parse(data[slotDetail]);
-			$('.segment1')
-					.append(
-							'<div class="col-sm-5 col-md-4 show_slots" style="margin-left: 144px;"><p title="' + json.title + '" class="choose" data="' + json.time + '"><span class="minutes">' + json.time + ' mins</span><br />' + addDotsAtEnd(json.title) + '</p></div>');
+			max = height;
 		}
-		$('.segment1').append('<div class="clearfix"></div>');
-	}
-	if (data.length == 1)
+	});
+	return max;
+}
+
+function generateNewDataArray(data)
+{
+	var finalJsonArray = [];
+	for ( var slotDetail in data)
 	{
-		for ( var slotDetail in data)
+		var json = JSON.parse(data[slotDetail]);
+
+		var json_meeting_names = [];
+		if (json.title.indexOf(",") > -1)
 		{
-			var json = JSON.parse(data[slotDetail]);
-			$('.segment1')
-					.append(
-							'<div class="col-sm-12 show_slots" align="center"><p title="' + json.title + '" class="choose" data="' + json.time + '"><span class="minutes">' + json.time + ' mins</span><br />' + addDotsAtEnd(json.title) + '</p></div>');
+			json_meeting_names = json.title.split(",");
 		}
+		else
+		{
+			json_meeting_names.push(json.title);
+		}
+		if (json_meeting_names.length > 0)
+		{
+			var newJson = {};
+			newJson.time = json.time;
+			newJson.meeting_names = json_meeting_names;
+			finalJsonArray.push(JSON.stringify(newJson));
+
+		}
+		else
+		{
+			finalJsonArray.push(JSON.stringify(json));
+		}
+
 	}
+	return finalJsonArray;
 }

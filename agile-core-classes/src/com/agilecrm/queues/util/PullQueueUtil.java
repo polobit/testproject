@@ -39,7 +39,13 @@ public class PullQueueUtil
     public static void addToPullQueue(String queueName, DeferredTask deferredTask, String tag)
     {
 	Queue queue = QueueFactory.getQueue(queueName);
-	queue.addAsync(TaskOptions.Builder.withMethod(TaskOptions.Method.PULL).payload(deferredTask).tag(tag));
+	TaskOptions taskOptions = TaskOptions.Builder.withMethod(TaskOptions.Method.PULL).payload(deferredTask);
+	
+	// To group by tag
+	if(StringUtils.isNotBlank(tag))
+		taskOptions = taskOptions.tag(tag);
+	
+	queue.addAsync(taskOptions);
     }
 
     /**

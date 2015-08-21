@@ -7,16 +7,20 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.agilecrm.account.APIKey;
+import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.util.TagUtil;
 import com.agilecrm.user.DomainUser;
+import com.agilecrm.workflows.util.WorkflowSubscribeUtil;
 import com.googlecode.objectify.Key;
 
 public class JSAPIUtil
 {
     public static enum Errors
     {
-	UNAUTHORIZED("Invalid API key"), CONTACT_MISSING("Contact not found"), INVALID_PARAMETERS("Invalid parameter"), API_KEY_MISSING("API key missing"), DUPLICATE_CONTACT(
-		"Duplicate found for \"%s\""), CONTACT_LIMIT_REACHED("Contacts limit reached"), PROPERTY_MISSING("Property not found for contact"), INVALID_TAGS("Invalid tags");
+	UNAUTHORIZED("Invalid API key"), CONTACT_MISSING("Contact not found"), INVALID_PARAMETERS("Invalid parameter"), API_KEY_MISSING(
+	        "API key missing"), DUPLICATE_CONTACT("Duplicate found for \"%s\""), CONTACT_LIMIT_REACHED(
+	        "Contacts limit reached"), PROPERTY_MISSING("Property not found for contact"), INVALID_TAGS(
+	        "Invalid tags"), ID_NOT_FOUND("ID missing in \"%s\" data"), ENTITY_NOT_FOUND("\"%s\" not found with ID");
 
 	String errorMessage;
 
@@ -76,5 +80,14 @@ public class JSAPIUtil
 	else if (APIKey.isValidJSKey(key))
 	    return APIKey.getDomainUserKeyRelatedToJSAPIKey(key);
 	return null;
+    }
+
+    public static void subscribeCampaigns(String campaignIds, Contact contact)
+    {
+	String[] campaignIdsArr = campaignIds.split(",");
+	for (int i = 0; i < campaignIdsArr.length; i++)
+	{
+	    WorkflowSubscribeUtil.subscribe(contact, Long.parseLong(campaignIdsArr[i]));
+	}
     }
 }

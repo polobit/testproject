@@ -5,8 +5,10 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Map;
 import java.util.TimeZone;
 
@@ -39,6 +41,8 @@ import com.agilecrm.portlets.Portlet;
 import com.agilecrm.portlets.Portlet.PortletType;
 import com.agilecrm.reports.ReportsUtil;
 import com.agilecrm.search.util.TagSearchUtil;
+import com.agilecrm.subscription.Subscription;
+import com.agilecrm.subscription.SubscriptionUtil;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.UserPrefs;
@@ -48,6 +52,9 @@ import com.agilecrm.user.util.UserPrefsUtil;
 import com.agilecrm.util.DateUtil;
 import com.campaignio.reports.CampaignReportsSQLUtil;
 import com.campaignio.reports.CampaignReportsUtil;
+import com.google.appengine.api.NamespaceManager;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyService;
@@ -91,6 +98,7 @@ public class PortletUtil {
 				//allPortlets.add(new Portlet("Deals Won",PortletType.DEALS));
 				allPortlets.add(new Portlet("Deals Funnel",PortletType.DEALS));
 				//allPortlets.add(new Portlet("Deals Assigned",PortletType.DEALS));
+				allPortlets.add(new Portlet("Revenue Graph",PortletType.DEALS));
 			}
 			
 			if(domainUser!=null && domainUser.menu_scopes!=null && domainUser.menu_scopes.contains(NavbarConstants.CALENDAR)){
@@ -104,10 +112,12 @@ public class PortletUtil {
 				allPortlets.add(new Portlet("Stats Report",PortletType.USERACTIVITY));
 				allPortlets.add(new Portlet("Leaderboard",PortletType.USERACTIVITY));
 				allPortlets.add(new Portlet("Calls Per Person",PortletType.USERACTIVITY));
+				allPortlets.add(new Portlet("User Activities",PortletType.USERACTIVITY));
 				allPortlets.add(new Portlet("Campaign stats",PortletType.USERACTIVITY));
 			}
 			
 			allPortlets.add(new Portlet("Agile CRM Blog",PortletType.RSS));
+			allPortlets.add(new Portlet("Account Details",PortletType.ACCOUNT));
 			
 			setIsAddedStatus(allPortlets);
 		} catch (Exception e) {
@@ -572,9 +582,15 @@ public class PortletUtil {
 				start_date = Long.valueOf(json.getString("startDate"));
 			if(json.getString("endDate")!=null)
 				end_date = Long.valueOf(json.getString("endDate"))-1;
-			ReportsUtil.check(start_date*1000, end_date*1000);
+			String time_zone = DateUtil.getCurrentUserTimezoneOffset();
+		    if (time_zone != null)
+		    {
+		    	start_date += (Long.parseLong(time_zone)*60*1000);
+		    	end_date += (Long.parseLong(time_zone)*60*1000);
+		    }
+			ReportsUtil.check(start_date, end_date);
 			
-			growthGraphString=TagSearchUtil.getTagCount(null, tags, String.valueOf(start_date*1000), String.valueOf(end_date*1000), type).toString();
+			growthGraphString=TagSearchUtil.getTagCount(null, tags, String.valueOf(start_date), String.valueOf(end_date), type).toString();
 		}
 		if(growthGraphString!=null)
 			growthGraphJSON = (JSONObject)JSONSerializer.toJSON(growthGraphString);
@@ -774,8 +790,9 @@ public class PortletUtil {
 			Portlet tasksPortlet = new Portlet("Today Tasks",PortletType.TASKSANDEVENTS,2,2,1,1);
 			Portlet pendingDealsPortlet = new Portlet("Pending Deals",PortletType.DEALS,1,4,2,1);
 			Portlet filterBasedContactsPortlet = new Portlet("Filter Based",PortletType.CONTACTS,1,3,2,1);
-			
+			Portlet accountPortlet=new Portlet("Account Details",PortletType.ACCOUNT,1,5,1,1);
 			Portlet onboardingPortlet = new Portlet("Onboarding",PortletType.CONTACTS,3,1,1,2);
+			Portlet activityPortlet=new Portlet("User Activities",PortletType.USERACTIVITY,2,5,1,1);
 			
 			JSONObject filterBasedContactsPortletJSON = new JSONObject();
 			filterBasedContactsPortletJSON.put("filter","myContacts");
@@ -830,6 +847,13 @@ public class PortletUtil {
 			}
 			onboardingPortlet.prefs = onboardingPortletJSON.toString();
 			
+			//JSONObject accountPortletJSON = new JSONObject();
+			//accountPortletJSON.put("account", "default");
+			//accountPortlet.prefs=accountPortletJSON.toString();
+			
+			
+			accountPortlet.save();
+			activityPortlet.save();
 			dummyPortlet.save();
 			eventsPortlet.save();
 			tasksPortlet.save();
@@ -1512,5 +1536,54 @@ public class PortletUtil {
     	}
 
     }
+
+	public static JSONObject getAccountsList() throws Exception {
+		JSONObject json=new JSONObject();
+
+		String oldNamespace = NamespaceManager.get();
+		DomainUser user = DomainUserUtil.getDomainOwner(oldNamespace);
+		NamespaceManager.set("our");
+		try
+		{
+		   
+			String a=DomainUserUtil.getCurrentDomainUser().email;
+			System.out.println(a);
+			Contact contact=ContactUtil.searchContactByEmail(user.email);
+			if(contact!=null){
+				DomainUser owner=contact.getOwner();
+				json.put("Owner_name",owner.name);
+				json.put("Owner_pic",owner.getOwnerPic());
+				json.put("Owner_url", owner.getCalendarURL());
+			}
+			
+			
+		}
+		finally
+		{
+		    NamespaceManager.set(oldNamespace);
+		}
+		
+		Subscription sub=SubscriptionUtil.getSubscription();
+		System.out.println(sub.plan);
+		json.put("Count",sub.plan.quantity);
+		json.put("Plan",sub.plan.getPlanName());
+		if(sub.plan.plan_id!=null){
+			json.put("Plan_Interval",sub.plan.getPlanInterval());
+		}
+		if(sub.emailPlan!=null){
+		json.put("Email",(sub.emailPlan.quantity)*1000);
+		}
+		
+		
+		return json;
+	}
+	
+	public static List<Activity> getPortletActivitydata(int max,String cursor) {
+		System.out.println("Inside list");
+		List<Activity> list=ActivityUtil.getActivities(max, cursor);
+		System.out.println("Size of List"+list.size());
+		System.out.println(list);
+		return list;
+	}
 
 }

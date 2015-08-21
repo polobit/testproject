@@ -42,6 +42,16 @@ function initValidator(selector, callback) {
 	     return valid;
 		  
 	  });
+	  
+	  // From email validation
+	  $.tools.validator.fn("[type=verified_email]", "From email is not verified. Please verify it.", function(input, value){
+		  
+	     if(input && input.prop("tagName") == "SELECT")
+	    	return input.find('option:selected').attr('unverified') ? false : true;
+		  
+	     return true;
+	     
+	  });
 	
     // Adds wall effect to show the the first error
     $.tools.validator.addEffect("wall", function (errors, event) {

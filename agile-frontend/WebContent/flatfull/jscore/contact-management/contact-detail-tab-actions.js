@@ -2,11 +2,12 @@ var existingDocumentsView;
 
 $(function()
 {
-	$(".task-edit-contact-tab").die().live('click', function(e)
+	$('body').on('click', '.task-edit-contact-tab', function(e)
 	{
 		e.preventDefault();
 		var id = $(this).attr('data');
 		var value = tasksView.collection.get(id).toJSON();
+
 		deserializeForm(value, $("#updateTaskForm"));
 
 		$("#updateTaskModal").modal('show');
@@ -24,14 +25,13 @@ $(function()
 
 		// Add notes in task modal
 		showNoteOnForm("updateTaskForm", value.notes);
+
+		activateSliderAndTimerToTaskModal();
+
 	});
 
 	// Event edit in contact details tab
-	$(".event-edit-contact-tab")
-			.die()
-			.live(
-					'click',
-					function(e)
+	$('body').on('click', '.event-edit-contact-tab', function(e)
 					{
 						e.preventDefault();
 						var id = $(this).attr('data');
@@ -40,44 +40,43 @@ $(function()
 						$("#updateActivityModal").modal('show');
 
 						$('.update-start-timepicker').val(fillTimePicker(value.start));
-
 						$('.update-end-timepicker').val(fillTimePicker(value.end));
 
-						if (value.type == "WEB_APPOINTMENT" && parseInt(value.start) > parseInt(new Date().getTime() / 1000))
-						{
-							$("[id='event_delete']").attr("id", "delete_web_event");
-							web_event_title = value.title;
-							if (value.contacts.length > 0)
-							{
-								var firstname = getPropertyValue(value.contacts[0].properties, "first_name");
-								if (firstname == undefined)
-									firstname = "";
-								var lastname = getPropertyValue(value.contacts[0].properties, "last_name");
-								if (lastname == undefined)
-									lastname = "";
-								web_event_contact_name = firstname + " " + lastname;
-							}
-						}
-						else
-						{
-							$("[id='delete_web_event']").attr("id", "event_delete");
-						}
-						if (value.description)
-						{
-							var description = '<label class="control-label"><b>Description </b></label><div class="controls"><textarea id="description" name="description" rows="3" class="input form-control" placeholder="Add Description"></textarea></div>'
-							$("#event_desc").html(description);
-							$("textarea#description").val(value.description);
-						}
-						else
-						{
-							var desc = '<div class="row-fluid">' + '<div class="control-group form-group m-b-none">' + '<a href="#" id="add_event_desctiption"><i class="icon-plus"></i> Add Description </a>' + '<div class="controls event_discription hide">' + '<textarea id="description" name="description" rows="3" class="input form-control w-full col-md-8" placeholder="Add Description"></textarea>' + '</div></div></div>'
-							$("#event_desc").html(desc);
-						}
-						// Fills owner select element
-						populateUsersInUpdateActivityModal(value);
-					});
+		if (value.type == "WEB_APPOINTMENT" && parseInt(value.start) > parseInt(new Date().getTime() / 1000))
+		{
+			$("[id='event_delete']").attr("id", "delete_web_event");
+			web_event_title = value.title;
+			if (value.contacts.length > 0)
+			{
+				var firstname = getPropertyValue(value.contacts[0].properties, "first_name");
+				if (firstname == undefined)
+					firstname = "";
+				var lastname = getPropertyValue(value.contacts[0].properties, "last_name");
+				if (lastname == undefined)
+					lastname = "";
+				web_event_contact_name = firstname + " " + lastname;
+			}
+		}
+		else
+		{
+			$("[id='delete_web_event']").attr("id", "event_delete");
+		}
+		if (value.description)
+		{
+			var description = '<label class="control-label"><b>Description </b></label><div class="controls"><textarea id="description" name="description" rows="3" class="input form-control" placeholder="Add Description"></textarea></div>'
+			$("#event_desc").html(description);
+			$("textarea#description").val(value.description);
+		}
+		else
+		{
+			var desc = '<div class="row-fluid">' + '<div class="control-group form-group m-b-none">' + '<a href="#" id="add_event_desctiption"><i class="icon-plus"></i> Add Description </a>' + '<div class="controls event_discription hide">' + '<textarea id="description" name="description" rows="3" class="input form-control w-full col-md-8" placeholder="Add Description"></textarea>' + '</div></div></div>'
+			$("#event_desc").html(desc);
+		}
+		// Fills owner select element
+		populateUsersInUpdateActivityModal(value);
+	});
 
-	$(".complete-task").die().live('click', function(e)
+	$('body').on('click', '.complete-task', function(e)
 	{
 		e.preventDefault();
 		if ($(this).is(':checked'))
@@ -95,7 +94,7 @@ $(function()
 	});
 
 	// For adding new deal from contact-details
-	$(".contact-add-deal").die().live('click', function(e)
+	$('body').on('click', '.contact-add-deal', function(e)
 	{
 		e.preventDefault();
 		var el = $("#opportunityForm");
@@ -143,16 +142,23 @@ $(function()
 		});
 
 		// Enable the datepicker
-		$('#close_date', el).datepicker({ format : 'mm/dd/yyyy', weekStart : CALENDAR_WEEK_START_DAY });
 
-		var json = App_Contacts.contactDetailView.model.toJSON();
+		$('#close_date', el).datepicker({ format : CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY});
+
+
+		var json = null;
+		if(company_util.isCompany()){
+			json = App_Companies.companyDetailView.model.toJSON();
+		} else {
+			json = App_Contacts.contactDetailView.model.toJSON();
+		}
 		var contact_name = getContactName(json);
 		$('.tags', el).append('<li class="tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block" data="' + json.id + '">' + contact_name + '</li>');
 
 	});
 
 	// For updating a deal from contact-details
-	$(".deal-edit-contact-tab").die().live('click', function(e)
+	$('body').on('click', '.deal-edit-contact-tab', function(e)
 	{
 		e.preventDefault();
 		var id = $(this).attr('data');
@@ -160,8 +166,7 @@ $(function()
 	});
 
 	// For Adding new case from contacts/cases
-
-	$(".contact-add-case").die().live('click', function(e)
+	$('body').on('click', '.contact-add-case', function(e)
 	{
 		e.preventDefault();
 		var el = $("#casesForm");
@@ -176,9 +181,16 @@ $(function()
 			agile_type_ahead("contacts-typeahead-input", el, contacts_typeahead);
 
 			// Enable the datepicker
-			$('#close_date', el).datepicker({ format : 'mm/dd/yyyy', weekStart : CALENDAR_WEEK_START_DAY });
 
-			var json = App_Contacts.contactDetailView.model.toJSON();
+			$('#close_date', el).datepicker({ format : CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY });
+
+
+			var json = null;
+			if(company_util.isCompany()){
+				json = App_Companies.companyDetailView.model.toJSON();
+			} else {
+				json = App_Contacts.contactDetailView.model.toJSON();
+			}
 			var contact_name = getContactName(json);
 			$('.tags', el).append('<li class="tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block" data="' + json.id + '">' + contact_name + '</li>');
 
@@ -187,7 +199,7 @@ $(function()
 	});
 
 	// For updating a case from contact-details
-	$(".cases-edit-contact-tab").die().live('click', function(e)
+	$('body').on('click', '.cases-edit-contact-tab', function(e)
 	{
 		e.preventDefault();
 		var id = $(this).attr('data');
@@ -196,7 +208,7 @@ $(function()
 
 	// Adding contact when user clicks Add contact button under Contacts tab in
 	// Company Page
-	$(".contact-add-contact").die().live('click', function(e)
+	$('body').on('click', '.contact-add-contact', function(e)
 	{
 		e.preventDefault();
 
@@ -219,7 +231,7 @@ $(function()
 	});
 
 	// For adding new document from contact-details
-	$(".contact-add-document").die().live('click', function(e)
+	$('body').on('click', '.contact-add-document', function(e)
 	{
 		e.preventDefault();
 		var el = $("#uploadDocumentForm");
@@ -231,13 +243,18 @@ $(function()
 		// Deals type-ahead
 		agile_type_ahead("document_relates_to_deals", el, deals_typeahead, false, null, null, "core/api/search/deals", false, true);
 
-		var json = App_Contacts.contactDetailView.model.toJSON();
+		var json = null;
+		if(company_util.isCompany()){
+			json = App_Companies.companyDetailView.model.toJSON();
+		} else {
+			json = App_Contacts.contactDetailView.model.toJSON();
+		}
 		var contact_name = getContactName(json);
 		$('.tags', el).append('<li class="tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block" data="' + json.id + '">' + contact_name + '</li>');
 	});
 
 	// For updating document from contact-details
-	$(".document-edit-contact-tab").die().live('click', function(e)
+	$('body').on('click', '.document-edit-contact-tab', function(e)
 	{
 		e.preventDefault();
 		var id = $(this).attr('data');
@@ -245,14 +262,19 @@ $(function()
 	});
 
 	// For unlinking document from contact-details
-	$(".document-unlink-contact-tab").die().live('click', function(e)
+	$('body').on('click', '.document-unlink-contact-tab', function(e)
 	{
 		e.preventDefault();
 		var id = $(this).attr('data');
 		var json = documentsView.collection.get(id).toJSON();
 
 		// To get the contact id and converting into string
-		var contact_id = App_Contacts.contactDetailView.model.id + "";
+		var contact_id = "";
+		
+		if(company_util.isCompany())
+			contact_id = App_Companies.companyDetailView.model.id + "";
+		else
+			contact_id = App_Contacts.contactDetailView.model.id + "";
 
 		// Removes the contact id from related to contacts
 		json.contact_ids.splice(json.contact_ids.indexOf(contact_id), 1);
@@ -270,7 +292,7 @@ $(function()
 	/**
 	 * For showing new/existing documents
 	 */
-	$(".add-document-select").die().live('click', function(e)
+	$('body').on('click', '.add-document-select', function(e)
 	{
 		e.preventDefault();
 		var el = $(this).closest("div");
@@ -287,7 +309,7 @@ $(function()
 	/**
 	 * To cancel the add documents request
 	 */
-	$(".add-document-cancel").die().live('click', function(e)
+	$('body').on('click', '.add-document-cancel', function(e)
 	{
 		e.preventDefault();
 		var el = $("#documents");
@@ -298,7 +320,7 @@ $(function()
 	/**
 	 * For adding existing document to current contact
 	 */
-	$(".add-document-confirm").die().live('click', function(e)
+	$('body').on('click', '.add-document-confirm', function(e)
 	{
 		e.preventDefault();
 
@@ -324,7 +346,12 @@ $(function()
 			// Deals type-ahead
 			agile_type_ahead("document_relates_to_deals", el, deals_typeahead, false, null, null, "core/api/search/deals", false, true);
 
-			var json = App_Contacts.contactDetailView.model.toJSON();
+			var json = null;
+			if(company_util.isCompany()){
+				json = App_Companies.companyDetailView.model.toJSON();
+			} else {
+				json = App_Contacts.contactDetailView.model.toJSON();
+			}
 			var contact_name = getContactName(json);
 			$('.tags', el).append('<li class="tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block" data="' + json.id + '">' + contact_name + '</li>');
 		}
@@ -357,7 +384,13 @@ function existing_document_attach(document_id, saveBtn)
 	var json = existingDocumentsView.collection.get(document_id).toJSON();
 
 	// To get the contact id and converting into string
-	var contact_id = App_Contacts.contactDetailView.model.id + "";
+	var contact_id = null;
+	
+	if(company_util.isCompany()){
+		contact_id = App_Companies.companyDetailView.model.id + "";
+	} else {
+		contact_id = App_Contacts.contactDetailView.model.id + "";
+	}
 
 	// Checks whether the selected document is already attached to that contact
 	if ((json.contact_ids).indexOf(contact_id) < 0)
@@ -369,6 +402,7 @@ function existing_document_attach(document_id, saveBtn)
 	{
 		saveBtn.closest("span").find(".save-status").html("<span style='color:red;margin-left:10px;'>Linked Already</span>");
 		saveBtn.closest("span").find('span.save-status').find("span").fadeOut(5000);
+		hideTransitionBar();
 		return;
 	}
 }

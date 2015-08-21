@@ -57,7 +57,9 @@
 						<li><a href="#deal_mile_change_modal" data-toggle="modal">Change Milestone/Track</a></li>
 						<li class="divider"></li>
 						<li><a href="#deal_contact_add_tag_modal" data-toggle="modal">Add Tag to related Contacts</a></li>
-						<li><a href="#deal_contact_add_camp_modal" data-toggle="modal">Add related Contacts to Campaign</a></li>
+						{{#hasMenuScope 'CAMPAIGN'}}
+							<li><a href="#deal_contact_add_camp_modal" data-toggle="modal">Add related Contacts to Campaign</a></li>
+						{{/hasMenuScope}}
 						<li class="divider"></li>
 						<li><a href="#deal_bulk_archive_modal" data-toggle="modal">Archive</a></li>
 						<li><a href="#deal_bulk_restore_modal" data-toggle="modal">Restore</a></li>
@@ -332,7 +334,7 @@
         	<a href="#contact/{{id}}" class="activate-link hide-popover thumb-sm"><img class="r r-2x img-inital" data-name="{{dataNameAvatar properties 40}}" src="{{gravatarurl properties 40}}"   title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}" /></a>
        {{/if_contact_type}}
 	   {{#if_contact_type "COMPANY"}}
-        	<a href="#contact/{{id}}" class="activate-link hide-popover thumb-sm"><img class="r r-2x" {{getCompanyImage "40" "display:inline;"}} title="{{getPropertyValue properties "name"}}"/></a>
+        	<a href="#company/{{id}}" class="activate-link hide-popover thumb-sm"><img class="r r-2x" {{getCompanyImage "40" "display:inline;"}} title="{{getPropertyValue properties "name"}}"/></a>
        {{/if_contact_type}}
    {{/each}}
    </div>
