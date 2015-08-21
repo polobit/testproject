@@ -319,8 +319,8 @@
 	function setupCompanyViews(cel, button_name) {
 
 		// Creates a view for custom views
-		head.load(CSS_PATH + 'css/bootstrap_submenu.css',  function()
-		{
+		/*head.load(CSS_PATH + 'css/bootstrap_submenu.css',  function()
+		{*/
 			var el = getTemplate("company-view-collection");
 			$("#view-list", cel).html(el);
 			updateSelectedSortKey($("#view-list", cel));
@@ -331,7 +331,7 @@
 			// the view is show in the custom view button.
 			//if (button_name)
 				//$("#view-list", cel).find('.custom_view').append(button_name);
-		});
+		// });
 	}
 	
 	var updateSelectedSortKey = function(el) {
