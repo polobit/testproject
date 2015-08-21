@@ -1,16 +1,8 @@
 package com.thirdparty.forms;
 
-import java.io.BufferedReader;
-import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URI;
-import java.net.URL;
-import java.security.acl.Owner;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -18,18 +10,13 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.collections.SetUtils;
-import org.apache.commons.collections.map.HashedMap;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
-import org.apache.http.HttpConnection;
-import org.json.JSONArray;
 
 import com.agilecrm.account.APIKey;
 import com.agilecrm.contact.Contact;
@@ -47,11 +34,8 @@ import com.agilecrm.workflows.triggers.Trigger;
 import com.agilecrm.workflows.triggers.util.TriggerUtil;
 import com.agilecrm.workflows.util.WorkflowSubscribeUtil;
 import com.campaignio.servlets.util.TrackClickUtil;
-import com.google.appengine.api.datastore.Key;
-import com.google.appengine.datanucleus.annotations.Owned;
-import com.google.appengine.labs.repackaged.org.json.JSONException;
-import com.google.appengine.labs.repackaged.org.json.JSONObject;
 
+@SuppressWarnings("serial")
 public class AgileForm extends HttpServlet
 {
     public static String[] authDetails = { "_agile_form_name", "_agile_domain", "_agile_api", "_agile_redirect_url" };

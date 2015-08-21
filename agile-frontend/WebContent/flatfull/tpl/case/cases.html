@@ -2,7 +2,7 @@
 <div class="custom-animated custom-fadeInUp">
 <div class="wrapper-md lter bg-light b-b">
 <div class="row">
-    <div class="col-sm-12 col-md-12">
+    <div class="col-sm-12 col-md-12" id="cases-add-div">
        
             <h3 class="pull-left font-thin h3">Cases</h3>
             <a href="#cases-add" class="cases-add btn pull-right btn-default btn-addon btn-sm"><i class="fa fa-plus-circle"></i> Add Case</a>
@@ -35,7 +35,8 @@
         <div class="data-block">
             <div class="panel panel-default">
 			    <div class="panel-heading">Cases List</div>
-                <table class="table table-striped showCheckboxes m-b-none agile-table panel" url="core/api/cases/bulk" id="case-list">				 
+                <div class="table-responsive">
+                <table class="table table-striped showCheckboxes m-b-none agile-table panel table-layout-mob-view" url="core/api/cases/bulk" id="case-list">				 
 				   <thead>
                         <tr>
                             <th style="width:10%">Owner</th>
@@ -49,6 +50,7 @@
                     </tbody>
                 </table>
             </div>
+           </div>
         </div>
         {{/if}}
 	</div>

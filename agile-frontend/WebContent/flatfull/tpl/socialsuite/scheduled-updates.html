@@ -48,8 +48,9 @@
 <div class="data-block">
          <div class="data-container"> 
          <div class="panel panel-default">
-         <div class="panel-heading">Scheduled Messages List</div>         	
-			<table id="schedule-updates" class="table table-striped showCheckboxes m-b-none agile-table panel"
+         <div class="panel-heading">Scheduled Messages List</div>   
+<div class="table-responsive">      	
+			<table id="schedule-updates" class="table table-striped showCheckboxes m-b-none agile-table panel table-layout-mob-view"
 				url="core/scheduledupdate/bulk">
              
 				<thead>
@@ -65,6 +66,7 @@
 				<tbody id="socialsuite-scheduled-updates-model-list" class="socialsuite-scheduled-updates-model-list">
 				</tbody>
 			</table>
+</div>
 			</div>
          </div>
 </div>	
@@ -97,7 +99,7 @@
 <td class="is-actionable edit-scheduled-update text-muted">
 	<div class="table-resp">
 	<i class="fa fa-clock-o m-r-xs"></i>
-    <time class="time-ago b-b b-light" value="{{schedule}}" datetime="{{epochToHumanDate "" schedule}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" schedule}}</time>
+    <time class="time-ago" value="{{schedule}}" datetime="{{epochToHumanDate "" schedule}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" schedule}}</time>
 	</div>
 </td>
 <td class="is-actionable edit-scheduled-update"><div class="table-resp">{{headline}}</div></td>

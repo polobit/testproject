@@ -12,6 +12,7 @@ var DealDetailsRouter = Backbone.Router.extend({
 
 	dealdetails : function(id)
 	{
+		$("#content").html("<div id='deal-detail-page'></div>")
 		// For getting custom fields
 		if (App_Deals.customFieldsList == null || App_Deals.customFieldsList == undefined)
 		{
@@ -35,12 +36,13 @@ var DealDetailsRouter = Backbone.Router.extend({
 
 			if (deal_collection != null && readCookie("agile_deal_view"))
 				deal_detail_view_navigation(id, deal_collection, el);
+			initializeDealDetailsListners(el);
 
 		} });
 
 		var ele = this.dealDetailView.render(true).el;
-		$("#content").html(getRandomLoadingImg());
-		$('#content').html(ele);
+		$("#deal-detail-page").html(getRandomLoadingImg());
+		$('#deal-detail-page').html(ele);
 
 	},
 
@@ -88,61 +90,6 @@ var DealDetailsRouter = Backbone.Router.extend({
 
 });
 
-/**
- * Validates deal edit form and saves
- */
-$("#opportunity_validate_form").live('click', function(e)
-{
-	e.preventDefault();
-
-	// To know updated or added deal form names
-	var modal_id = $(this).closest('.container').attr("id");
-	var form_id = $(this).closest('.container').find('form').attr("id");
-
-	var json = serializeForm(form_id);
-	json["custom_data"] = serialize_custom_fields(form_id);
-
-	console.log(json);
-	if (form_id == "opportunityForm1")
-		saveDeal(form_id, modal_id, this, json, false);
-	else
-		saveDeal(form_id, modal_id, this, json, false);
-});
-
-$('#deal-owner').live('click', function(e)
-{
-	e.preventDefault();
-	fill_deal_owners(undefined, undefined, function()
-	{
-
-		$('#deal-owner').css('display', 'none');
-
-		$('#change-deal-owner-ul').css('display', 'inline-block');
-
-		if ($('#change-deal-owner-ul').css('display') == 'inline-block')
-			$("#change-owner-element").find(".loading").remove();
-
-	});
-
-});
-
-$('#opportunity-actions-delete').live('click', function(e)
-{
-	e.preventDefault();
-
-	if (!confirm("Are you sure you want to delete?"))
-		return;
-
-	var id = $(this).closest('.deal_detail_delete').attr('data');
-
-	$.ajax({ url : 'core/api/opportunity/' + id, type : 'DELETE', success : function(data)
-	{
-		Backbone.history.navigate("#deals", { trigger : true });
-	}, error : function(response)
-	{
-		alert("some exception occured please try again");
-	} });
-});
 
 /**
  * Shows all the domain users names as ul drop down list to change the owner of
@@ -193,79 +140,6 @@ function deal_detail_view_navigation(id, deal_collection, el)
 		$('.navigation', el).append('<a style="float:right;" href="#deal/' + next_deal_id + '" class=""><i class="icon icon-chevron-right"></i></a>');
 
 }
-
-/**
- * Changes, owner of the contact, when an option of change owner drop down is
- * selected.
- */
-$('.deal-owner-list').live('click', function()
-{
-
-	$('#change-deal-owner-ul').css('display', 'none');
-
-	// Reads the owner id from the selected option
-	var new_owner_id = $(this).attr('data');
-	var new_owner_name = $(this).text();
-	var current_owner_id = $('#deal-owner').attr('data');
-	// Returns, if same owner is selected again
-	if (new_owner_id == current_owner_id)
-	{
-		// Showing updated owner
-		show_deal_owner();
-		return;
-	}
-
-	var dealModel = new BaseModel();
-	dealModel.url = '/core/api/opportunity/change-owner/' + new_owner_id + "/" + App_Deal_Details.dealDetailView.model.get('id');
-	dealModel.save(App_Deal_Details.dealDetailView.model.toJSON(), { success : function(model)
-	{
-
-		$('#deal-owner').text(new_owner_name);
-		$('#deal-owner').attr('data', new_owner_id);
-
-		// Showing updated owner
-		show_deal_owner();
-		App_Deal_Details.dealDetailView.model = model;
-		App_Deal_Details.dealDetailView.render(true)
-		Backbone.history.navigate("deal/" + model.toJSON().id, { trigger : true });
-
-	} });
-
-});
-
-$('.deal-add-contact').live('click', function(e)
-{
-	e.preventDefault();
-	console.log(App_Deal_Details.dealDetailView.model.toJSON());
-	var currentdeal = App_Deal_Details.dealDetailView.model;
-	updateDeal(currentdeal);
-
-	setTimeout(function()
-	{
-		$('#opportunityUpdateForm').find("input[name='relates_to']").focus();
-	}, 800);
-
-});
-
-$('.deal-detail-edit-deal').live('click', function(e)
-{
-	e.preventDefault();
-	console.log(App_Deal_Details.dealDetailView.model.toJSON());
-	var currentdeal = App_Deal_Details.dealDetailView.model;
-	updateDeal(currentdeal);
-
-});
-
-$('.deal-note').live('click', function(e)
-{
-	e.preventDefault();
-
-	var el = $("#dealnoteForm");
-
-	// Displays contact name, to indicate the note is related to the contact
-	fill_relation_deal(el);
-	$('#deal-note-modal').modal('show');
-});
 
 /**
  * Displays note modal, to add a note related to the contact in contact detail
@@ -321,40 +195,17 @@ function deserialize_deal(value, template)
 	});
 
 	// Enable the datepicker
-	$('#close_date', dealForm).datepicker({ format : 'mm/dd/yyyy', weekStart : CALENDAR_WEEK_START_DAY });
+	$('#close_date', dealForm).datepicker({ format : CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY});
 
 	add_custom_fields_to_form(value, function(data)
 	{
 		var el = show_custom_fields_helper(data["custom_fields"], []);
 		$("#custom-field-deals", dealForm).html(fill_custom_fields_values_generic($(el), value["custom_data"]));
-		$('.date_input', dealForm).datepicker({ format : 'mm/dd/yyyy', weekStart : CALENDAR_WEEK_START_DAY });
+		$('.date_input', dealForm).datepicker({ format : CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY});
 
 	}, "DEAL")
 
 }
-
-$('#dealdetail-archive').live('click', function(e)
-{
-	e.preventDefault();
-
-	var currentDeal = App_Deal_Details.dealDetailView.model.toJSON();
-	$("#archived-deal-id", $("#deal_archive_confirm_modal")).val(currentDeal.id);
-	$("#archived-deal-milestone", $("#deal_archive_confirm_modal")).val(currentDeal.milestone);
-	$("#deal_archive_confirm_modal").modal('show');
-
-});
-
-$('.deal-restore-detail-view').live('click', function(e)
-{
-	e.preventDefault();
-
-	var currentDeal = App_Deal_Details.dealDetailView.model.toJSON();
-
-	$("#restored-deal-id", $("#deal_restore_confirm_modal")).val(currentDeal.id);
-	$("#restored-deal-milestone", $("#deal_restore_confirm_modal")).val(currentDeal.milestone);
-	$("#deal_restore_confirm_modal").modal('show');
-
-});
 
 /**
  * 

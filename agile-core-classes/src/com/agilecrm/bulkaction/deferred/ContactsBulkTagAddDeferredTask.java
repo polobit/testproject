@@ -10,6 +10,7 @@ import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.session.UserInfo;
 import com.agilecrm.user.DomainUser;
+import com.google.appengine.api.utils.SystemProperty;
 import com.googlecode.objectify.Key;
 
 public class ContactsBulkTagAddDeferredTask extends BulkActionAdaptor
@@ -30,7 +31,9 @@ public class ContactsBulkTagAddDeferredTask extends BulkActionAdaptor
     @Override
     public boolean isValidTask()
     {
-	if (StringUtils.isEmpty(namespace))
+
+	if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Production
+		&& StringUtils.isEmpty(namespace))
 	    return false;
 
 	return true;

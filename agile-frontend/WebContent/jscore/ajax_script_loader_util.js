@@ -6,97 +6,98 @@
  * @param url
  * @param callback
  */
-function load_urls_on_ajax_stop(url, callback)
-{
-	if (!isActive())
-	{
-		setTimeout(function()
-		{
+function load_urls_on_ajax_stop(url, callback) {
+	if (!isActive()) {
+		setTimeout(function() {
 			load_urls_on_ajax_stop(url, callback);
 		}, 5000);
 		return;
 	}
 
-	head.js(url, function()
-	{
+	head.js(url, function() {
 		if (callback && typeof callback == "function")
 			callback();
 	});
 
 }
 
-function loadMiscScriptsWithTimeOut()
-{
-	if(loadMiscScripts)
-	{
+function loadMiscScriptsWithTimeOut() {
+
+
+	if (loadMiscScripts) {
 		// Load User voice then
 		setTimeout(loadMiscScripts, 10000);
 		return;
 	}
-	
-	try
-	{
+
+	try {
 		setTimeout(loadMiscScriptsWithTimeOut, 3000);
-	}
-	catch (err)
-	{
+	} catch (err) {
 		console.log(err);
 	}
-	
-		
+
 }
 
-function loadMiscScripts()
-{
+function loadMiscScripts() {
 
 	load_urls_on_ajax_stop('lib/user-voice.js');
 
 	load_urls_on_ajax_stop('//static.getclicky.com/js');
-	
+
 	// load_clickdesk_code();
-	
+
 	// Clicky code
-	load_urls_on_ajax_stop('//static.getclicky.com/js', function()
-	{
+	load_urls_on_ajax_stop('//static.getclicky.com/js', function() {
+
+		try {
+			clicky.init(100729733);
+		} catch (e) {
+		}
 
 		try
+	{
+		if(_agile)
 		{
-			clicky.init(100729733);
+			setup_our_domain_sync();
+			return;
 		}
-		catch (e)
-		{
-		}
+		load_urls_on_ajax_stop("stats/min/agile-min.js", function(){
+			setup_our_domain_sync();
+		})
+		
+	}
+	catch(err)
+	{
+		console.log();
+	}
+
 	});
 
 	/**
 	 * Sets timeout for registering notifications.Waits for 2secs after page
 	 * loads and calls downloadAndRegisterForNotifications function
 	 */
-	downloadAndRegisterForNotifications();
+	downloadAndRegisterForNotifications();	
 }
-
 
 /**
  * Clickdesk Widget
- *//*
-function load_clickdesk_code()
-{
-	return;
-	
-	if (CLICKDESK_CODE_LOADED)
-		return;
+ */
+/*
+ * function load_clickdesk_code() { return;
+ * 
+ * if (CLICKDESK_CODE_LOADED) return;
+ * 
+ * console.log("loading clickdesk..");
+ * 
+ * CLICKDESK_CODE_LOADED = true;
+ * 
+ * load_urls_on_ajax_stop(glcpath + 'livechat-new.js', function(){
+ * CLICKDESK_CODE_LOADED = true; })
+ *  }
+ */
 
-	console.log("loading clickdesk..");
-	
-	CLICKDESK_CODE_LOADED = true;
-	
-	load_urls_on_ajax_stop(glcpath + 'livechat-new.js', function(){
-		CLICKDESK_CODE_LOADED = true;
-	})
-
-}*/
-
-$(function(){
+$(function() {
 	loadMiscScriptsWithTimeOut();
 })
 
@@ -105,8 +106,7 @@ $(function(){
  * 
  * @returns {Boolean}
  */
-function isActive()
-{
+function isActive() {
 	if ($.active > 0)
 		return false;
 	return true;

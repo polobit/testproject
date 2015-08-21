@@ -10,7 +10,7 @@ $(function () {
 	/**
 	 * When mouseover on any row of opportunities list, the popover of deal is shown
 	 **/
-	$('#opportunities-model-list > tr').live('mouseenter', function () {
+	$('#opportunity-listners').on('mouseenter', '#opportunities-model-list > tr', function(e) {
         var data = $(this).find('.data').attr('data');
 
         var currentDeal = App_Deals.opportunityCollectionView.collection.get(data);
@@ -51,14 +51,14 @@ $(function () {
     /**
      * On mouse out on the row hides the popover.
      **/
-	$('#opportunities-model-list > tr').live('mouseleave', function(){
+	$('#opportunity-listners').on('mouseleave', '#opportunities-model-list > tr', function(e) {
     	 $(this).popover('hide');
     });
 	
     /**
      * On click on the row hides the popover.
      **/
-	$('#opportunities-model-list > tr, .hide-popover').live('click', function(){
+	$('#opportunity-listners').on('click', '#opportunities-model-list > tr, .hide-popover', function(e) {
     	 $(this).closest('tr').popover('hide');
     });
     
@@ -66,24 +66,24 @@ $(function () {
     * When deal is added from contact-detail by selecting 'Add Opportunity' from actions 
     * and then close button of deal is clicked, it should navigate to contact-detail.
     **/
-	$('#close-deal').live('click', function(e){
+	$('#opportunity-listners').on('click', '#close-deal', function(e) {
     	e.preventDefault();
     	window.history.back();
     });
 	
-	$('#deal-milestone-regular').live('click', function(e){
+	$('#opportunity-listners').on('click', '#deal-milestone-regular', function(e) {
     	e.preventDefault();
     	eraseCookie('deal-milestone-view');
     	App_Deals.deals();
     });
 	
-	$('#deal-milestone-compact').live('click', function(e){
+	$('body').on('click', '#deal-milestone-compact', function(e) {
     	e.preventDefault();
     	createCookie('deal-milestone-view','compact');
     	App_Deals.deals();
     });
 	
-	$('#deal-milestone-fit').live('click', function(e){
+	$('body').on('click', '#deal-milestone-fit', function(e) {
     	e.preventDefault();
     	createCookie('deal-milestone-view','fit');
     	App_Deals.deals();
@@ -419,7 +419,10 @@ function appendCustomfields(el){
 			 $(el).find('#opportunities-model-list tr').each(function(index,element){
 				 var row = '';
 				 $.each(customfields, function(i,customfield){
-						 row += '<td class="deal_custom_replace"><div class="text-ellipsis" style="width:6em">'+dealCustomFieldValue(customfield.field_label,deals[index].attributes.custom_data)+'</div></td>';
+				 		if(customfield.field_type == "DATE")
+				 			row += '<td class="deal_custom_replace"><div class="text-ellipsis" style="width:6em">'+dealCustomFieldValueForDate(customfield.field_label,deals[index].attributes.custom_data)+'</div></td>';
+				 		else
+							row += '<td class="deal_custom_replace"><div class="text-ellipsis" style="width:6em">'+dealCustomFieldValue(customfield.field_label,deals[index].attributes.custom_data)+'</div></td>';
 					});
 				 $(this).append(row);
 			 });
@@ -439,6 +442,23 @@ function dealCustomFieldValue(name, data){
 	$.each(data,function(index, field){
 		if(field.name == name){
 			value = field.value;
+		}
+	});
+	return value;
+}
+
+function dealCustomFieldValueForDate(name, data){
+	var value = '';
+	$.each(data,function(index, field){
+		if(field.name == name){
+			if(!field.value)
+				return '';
+			var dateString = new Date(field.value);
+			if(dateString == "Invalid Date")
+				value = getDateInFormatFromEpoc(field.value);
+			else
+				value = en.dateFormatter({raw: getGlobalizeFormat()})(dateString);
+			
 		}
 	});
 	return value;

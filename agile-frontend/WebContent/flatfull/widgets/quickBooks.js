@@ -149,7 +149,7 @@ $(function()
 
 		    showQuickbooksContacts();
 
-		    $('#quickbooks_add_contact').die().live('click', function(e)
+			$("body").on("click", '#quickbooks_add_contact', function(e)
 		    {
 			e.preventDefault();
 			addContactToQuickbooks(first_name, last_name, Email);

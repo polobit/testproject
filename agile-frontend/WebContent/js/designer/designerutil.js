@@ -577,6 +577,8 @@ function openVerifyEmailModal(el)
 				// Focus on input
 				modal.on('shown.bs.modal', function () {
   					$(this).find('input').focus();
+
+  					parent.send_verify_email();
 				});
 
 				// On hidden

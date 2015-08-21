@@ -1,20 +1,14 @@
 // Stores report object, so it can be used while creating report table headings
 var REPORT;
-$(function()
-{
-
-	$("#reports-email-now")
-			.die()
-			.live(
-					'click',
-					function(e)
+function initializeReportsListeners(){
+	$('#reports-listerners-container').on('click', '#reports-email-now', function(e)
 					{
 						// e.preventDefault();
 						e.stopPropagation();
 
 						var id = $(this).attr('data');
 
-						var confirmationModal = $('<div id="report-send-confirmation" class="modal fade in">' + '<div class="modal-dialog">'+ '<div class="modal-content">'+ '<div class="modal-header" >' + '<a href="#" data-dismiss="modal" class="close">&times;</a>' + '<h3>Send Report</h3></div>' + '<div class="modal-body">' + '<p>You are about to send report.</p>' + '<p>Do you want to proceed?</p>' + '</div>' + '<div class="modal-footer">' + '<div><span class="report-message" style="margin-right:5px"></span></div>' + '<div>' + '<a href="#" id="report-send-confirm" class="btn btn-primary">Yes</a>' + '<a  href="#" class="btn btn-default" data-dismiss="modal" >No</a>' + '</div>' + '</div>' + '</div>' + '</div>'+ '</div>'+ '</div>');
+						var confirmationModal = $('<div id="report-send-confirmation" class="modal fade in">' + '<div class="modal-dialog">' + '<div class="modal-content">' + '<div class="modal-header" >' + '<a href="#" data-dismiss="modal" class="close">&times;</a>' + '<h3>Send Report</h3></div>' + '<div class="modal-body">' + '<p>You are about to send report.</p>' + '<p>Do you want to proceed?</p>' + '</div>' + '<div class="modal-footer">' + '<div><span class="report-message" style="margin-right:5px"></span></div>' + '<div>' + '<a href="#" id="report-send-confirm" class="btn btn-primary">Yes</a>' + '<a  href="#" class="btn btn-default" data-dismiss="modal" >No</a>' + '</div>' + '</div>' + '</div>' + '</div>' + '</div>' + '</div>');
 
 						confirmationModal.modal('show');
 
@@ -65,9 +59,8 @@ $(function()
 															});
 										});
 					});
-	$("#campaign_id").die().live(
-			'click',
-			function(e)
+
+	$('#reports-listerners-container').on('click', '#campaign_id', function(e)
 			{
 				e.preventDefault();
 				e.stopPropagation();
@@ -91,7 +84,7 @@ $(function()
 					} });
 
 			});
-	$("#report-instant-results").die().live('click', function(e)
+	$('#reports-listerners-container').on('click', '#report-instant-results', function(e) 
 	{
 		e.stopPropagation();
 		var id = $(this).attr('data');
@@ -101,7 +94,7 @@ $(function()
 		 */
 	});
 
-	$("#frequency").die().live('change', function(e)
+	$('#reports-listerners-container').on('change', '#frequency', function(e) 
 	{
 		var frequency = $("#frequency").val();
 		if (frequency == "DAILY")
@@ -127,107 +120,108 @@ $(function()
 		}
 	});
 
-	
 	/*
 	 * author jaagdeesh
 	 */
-	$("#activity_advanced").die().live('click', function(e)
+	$('#reports-listerners-container').on('click', '#report-dashlat-navigate', function(e)
+	{
+		e.preventDefault();
+		Backbone.history.navigate("add-dashlet", { trigger : true });
+
+	});
+
+	$('#reports-listerners-container').on('click', '#activity_advanced', function(e) 
 	{
 		e.preventDefault();
 
 	});
 
-	$('#activity-advanced-block').live('shown', function()
+	$('#reports-listerners-container').on('shown', '#activity-advanced-block', function(e) 
 	{
 		$('#activity_advanced').html('<span><i class="icon-minus"></i></span> Advanced');
 
 	});
 
-	$('#activity-advanced-block').live('hidden', function()
+    $('#reports-listerners-container').on('hidden', '#activity-advanced-block', function(e) 
 	{
 		$('#activity_advanced').html('<span><i class="icon-plus"></i></span> Advanced');
 	});
+
+	$('#reports-listerners-container').on('click', '#report_advanced', function(e) 
+	{
+		e.preventDefault();
+		$("#report_advanced span i").toggleClass("fa-minus");
+		$("#report_advanced span i").toggleClass("fa-plus");
+
+	});
+            
+	$('#reports-listerners-container').on('shown', '#report-advanced-block', function(e)
+	{
+		$('#report_advanced').html('<span><i class="icon-minus"></i></span> Advanced');
+
+	});
+			
+	$('#reports-listerners-container').on('hidden', '#report-advanced-block', function(e)
+	{
+		$('#report_advanced').html('<span><i class="icon-plus"></i></span> Advanced');
+	});
 	
-	$("#report_advanced").die().live('click', function(e)
+	$('#reports-listerners-container').on('change', '#duration', function(e)
 			{
-				e.preventDefault();
-				$("#report_advanced span i").toggleClass("fa-minus");
-				$("#report_advanced span i").toggleClass("fa-plus");
+				var frequency = $("#duration").val();
+				if (frequency == "DAILY")
+				{
+					$("#contact_report_weekday").css("display", "none");
+					$("#contact_report_day").css("display", "none");
+					$("#contact_report_time").css("display", "block");
 
-			});
+				}
+				else if (frequency == "WEEKLY")
+				{
+					$("#contact_report_day").css("display", "none");
+					$("#contact_report_time").css("display", "block");
+					$("#contact_report_weekday").css("display", "block");
 
-			$('#report-advanced-block').live('shown', function()
-			{
-				$('#report_advanced').html('<span><i class="icon-minus"></i></span> Advanced');
+				}
+				else if (frequency == "MONTHLY")
+				{
+					$("#contact_report_weekday").css("display", "none");
+					$("#contact_report_time").css("display", "block");
+					$("#contact_report_day").css("display", "block");
 
-			});
-
-			$('#report-advanced-block').live('hidden', function()
-			{
-				$('#report_advanced').html('<span><i class="icon-plus"></i></span> Advanced');
-			});
-			
-			
-			$("#duration").die().live('change', function(e)
-					{
-						var frequency = $("#duration").val();
-						if (frequency == "DAILY")
-						{
-							$("#contact_report_weekday").css("display", "none");
-							$("#contact_report_day").css("display", "none");
-							$("#contact_report_time").css("display", "block");
-
-						}
-						else if (frequency == "WEEKLY")
-						{
-							$("#contact_report_day").css("display", "none");
-							$("#contact_report_time").css("display", "block");
-							$("#contact_report_weekday").css("display", "block");
-
-						}
-						else if (frequency == "MONTHLY")
-						{
-							$("#contact_report_weekday").css("display", "none");
-							$("#contact_report_time").css("display", "block");
-							$("#contact_report_day").css("display", "block");
-
-						}
-					});
-
-})
+				}
+	});
+}
 
 function reportsContactTableView(base_model, customDatefields, view)
 {
 	/*
-	 * Old Code : Using this fails on firefox, works on Chrome though
-	 *  // Creates list view for var itemView = new Base_List_View({ model :
-	 * base_model, template : 'contacts-custom-view-model', tagName :
-	 * this.options.individual_tag_name });
-	 *  // Reads the modelData (customView object) var modelData =
-	 * this.options.modelData;
-	 *  // Reads fields_set from modelData var fields = modelData['fields_set'];
-	 *  // Converts base_model (contact) in to JSON var contact =
-	 * base_model.toJSON();
-	 *  // Clears the template, because all the fields are appended, has to be
-	 * reset // for each contact
-	 * $('#contacts-custom-view-model-template').empty();
-	 *  // Iterates through, each field name and appends the field according to //
+	 * Old Code : Using this fails on firefox, works on Chrome though // Creates
+	 * list view for var itemView = new Base_List_View({ model : base_model,
+	 * template : 'contacts-custom-view-model', tagName :
+	 * this.options.individual_tag_name }); // Reads the modelData (customView
+	 * object) var modelData = this.options.modelData; // Reads fields_set from
+	 * modelData var fields = modelData['fields_set']; // Converts base_model
+	 * (contact) in to JSON var contact = base_model.toJSON(); // Clears the
+	 * template, because all the fields are appended, has to be reset // for
+	 * each contact $('#contacts-custom-view-model-template').empty(); //
+	 * Iterates through, each field name and appends the field according to //
 	 * order of the fields $.each(fields, function(index, field_name) {
 	 * if(field_name.indexOf("properties_") != -1) field_name =
 	 * field_name.split("properties_")[1];
 	 * 
 	 * $('#contacts-custom-view-model-template').append(
-	 * getTemplate('contacts-custom-view-' + field_name, contact)); });
-	 *  // Appends model to model-list template in collection template $(("#" +
+	 * getTemplate('contacts-custom-view-' + field_name, contact)); }); //
+	 * Appends model to model-list template in collection template $(("#" +
 	 * this.options.templateKey + '-model-list'), this.el).append(
 	 * itemView.render().el); // ----------- this line fails on Firefox
 	 */
 
 	var modelData = view.options.modelData; // Reads the modelData (customView
-											// object)
+	// object)
 	var fields = modelData['fields_set']; // Reads fields_set from modelData
 	var contact = base_model.toJSON(); // Converts base_model (contact) in to
-										// JSON
+	// JSON
 	var final_html_content = "";
 	var element_tag = view.options.individual_tag_name;
 	var templateKey = view.options.templateKey;
@@ -268,7 +262,7 @@ function reportsContactTableView(base_model, customDatefields, view)
 
 function deserialize_multiselect(data, el)
 {
-	$("#content").html(el);
+	$("#reports-listerners-container").html(el);
 
 	if (!data['fields_set'])
 		return;
@@ -280,7 +274,7 @@ function deserialize_multiselect(data, el)
 	$('.ms-selection', el).children('ul').addClass('multiSelect').attr("name", "fields_set").attr("id", "fields_set").sortable();
 }
 
-function getEpochTimeFromReport(time, day,frequency)
+function getEpochTimeFromReport(time, day, frequency)
 {
 
 	var time_array = new Array();
@@ -292,61 +286,68 @@ function getEpochTimeFromReport(time, day,frequency)
 		hour = time_array[0];
 		min = time_array[1];
 	}
-		
-		if(frequency=="DAILY"){
-			var date = new Date();
-			
-			var day_of_month=date.getDate();
-			
-			
-			date.setDate(day_of_month+1);
-			date.setHours(hour);
-			date.setMinutes(min);
-			return (date.getTime())/1000;
-			
-		}
-		
-	if(frequency=="WEEKLY"){
+
+	if (frequency == "DAILY")
+	{
 		var date = new Date();
-		
-		var weekday=date.getDay();
-		var day_of_month=date.getDate();
-		
-		if(day > weekday){
-			day_of_month+=(parseInt(day)-weekday);
+
+		var day_of_month = date.getDate();
+
+		date.setDate(day_of_month + 1);
+		date.setHours(hour);
+		date.setMinutes(min);
+		return (date.getTime()) / 1000;
+
+	}
+
+	if (frequency == "WEEKLY")
+	{
+		var date = new Date();
+
+		var weekday = date.getDay();
+		var day_of_month = date.getDate();
+
+		if (day > weekday)
+		{
+			day_of_month += (parseInt(day) - weekday);
 		}
-		else{
-			day_of_month=(day_of_month-(weekday-parseInt(day)))+7;
+		else
+		{
+			day_of_month = (day_of_month - (weekday - parseInt(day))) + 7;
 		}
-		
+
 		date.setDate(day_of_month);
 		date.setHours(hour);
 		date.setMinutes(min);
-		return (date.getTime())/1000;
-		
+		return (date.getTime()) / 1000;
+
 	}
-	
-	if(frequency=="MONTHLY"){
+
+	if (frequency == "MONTHLY")
+	{
 		var date = new Date();
-		var day_of_month=date.getDate();
-		var month_in_year=date.getMonth();
-		if(day > day_of_month){
-			month_in_year=month_in_year;
+		var day_of_month = date.getDate();
+		var month_in_year = date.getMonth();
+		if (day > day_of_month)
+		{
+			month_in_year = month_in_year;
 		}
-		else{
-			month_in_year = month_in_year+1;
+		else
+		{
+			month_in_year = month_in_year + 1;
 		}
 		date.setMonth(month_in_year);
 		date.setDate(day);
 		date.setHours(hour);
 		date.setMinutes(min);
-		return (date.getTime())/1000;
-		
+		return (date.getTime()) / 1000;
+
 	}
 
 }
 
-function getNextMonthEppoch(time,day,month){
+function getNextMonthEppoch(time, day, month)
+{
 	var time_array = new Array();
 	var hour, min;
 	if (time)
@@ -356,23 +357,19 @@ function getNextMonthEppoch(time,day,month){
 		min = time_array[1];
 	}
 	var date = new Date();
-	var day_of_month=date.getDate();
-	var month_in_year=date.getMonth();
-	if(day > day_of_month){
-		month_in_year=month_in_year+1;
+	var day_of_month = date.getDate();
+	var month_in_year = date.getMonth();
+	if (day > day_of_month)
+	{
+		month_in_year = month_in_year + 1;
 	}
-	else{
-		month_in_year = month_in_year+2;
+	else
+	{
+		month_in_year = month_in_year + 2;
 	}
 	date.setMonth(month_in_year);
 	date.setDate(day);
 	date.setHours(hour);
 	date.setMinutes(min);
-	return (date.getTime())/1000;
+	return (date.getTime()) / 1000;
 }
-
-
-
-
-
-
