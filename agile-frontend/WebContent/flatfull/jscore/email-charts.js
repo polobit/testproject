@@ -92,7 +92,9 @@ function getOptions()
 	 */
 	// Returns milliseconds from start date. For e.g., August 6, 2013 converts
 	// to 1375727400000
-	var start_time = Date.parse($.trim(range[0])).valueOf();
+	//var start_time = Date.parse($.trim(range[0])).valueOf();
+	//Get the GMT start time
+	var start_time = getUTCMidNightEpochFromDate(new Date(range[0]));
 
 	var end_value = $.trim(range[1]);
 
@@ -101,7 +103,11 @@ function getOptions()
 		end_value = end_value + " 23:59:59";
 
 	// Returns milliseconds from end date.
-	var end_time = Date.parse(end_value).valueOf();
+	//var end_time = Date.parse(end_value).valueOf();
+	//Get the GMT end time
+	var end_time = getUTCMidNightEpochFromDate(new Date(end_value));
+
+	end_time += (((23*60*60)+(59*60)+59)*1000);
 
 	// Adds start_time, end_time and timezone offset to params.
 	options += ("start_time=" + start_time + "&end_time=" + end_time);

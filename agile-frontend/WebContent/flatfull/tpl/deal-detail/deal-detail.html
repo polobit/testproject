@@ -1,11 +1,11 @@
 
 <script id="deal-detail-template" type="text/html">
-<div class="app-content-full  h-full dock-view-fixing">
+<div class="app-content-full  h-full dock-view-fixing" id="deal-detail-header">
 <div class="hbox hbox-auto-xs hbox-auto-sm bg-light">
-<div class="col  bg-light lter b-r" style="width:299px">
+<div class="col  bg-light lter b-r" style="width:299px;">
 <div class="vbox" style="display:block">
 <div class="row-row" style="display:block">
-<div class="wrapper pos-rlt">
+<div class="wrapper pos-rlt" id="deal-detail-actions-dropdown">
 <div class="contact-navigation-view hide"><span class="navigation  contact-switching"></span></div>
 <div class="h3 font-thin custom-color m-b-xs" style="width:85%">{{#if name}}{{name}}{{/if}}</div>
 {{#if expected_value}}
@@ -142,7 +142,7 @@
         		<a href="#contact/{{id}}" class="activate-link thumb"><img  data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}"   title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}" /></a>
         	{{/if_contact_type}}
 			{{#if_contact_type "COMPANY"}}
-        		<a href="#contact/{{id}}" class="activate-link thumb"><img  {{getCompanyImage "40" "display:inline;"}} title="{{getPropertyValue properties "name"}}"/></a>
+        		<a href="#company/{{id}}" class="activate-link thumb"><img  {{getCompanyImage "40" "display:inline;"}} title="{{getPropertyValue properties "name"}}"/></a>
         	{{/if_contact_type}}
         {{/each}}
       </div> 

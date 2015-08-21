@@ -50,7 +50,7 @@
                         <div class="control-group form-group col-md-6">
                             <label class="control-label"><b>Start Date </b><span class="field_req">*</span></label>
                             <div class="controls">
-                                <input type="text" name="start" placeholder="mm/dd/yyyy" id="event-date-1" class="required date form-control" />							
+                                <input type="text" name="start" placeholder="Select Date" id="event-date-1" class="required date form-control" />							
                             </div>
                         </div>
                         <div class="control-group form-group col-md-6">
@@ -64,7 +64,7 @@
                         <div class="control-group form-group col-md-6 m-b-none">
                             <label class="control-label"><b>End Date </b><span class="field_req">*</span></label>
                             <div class="controls">
-                                <input type="text" name="end" placeholder="mm/dd/yyyy" id="event-date-2" class="required date form-control" />									
+                                <input type="text" name="end" placeholder="Select Date" id="event-date-2" class="required date form-control" />									
                             </div>
                         </div>
                         <div class="control-group form-group col-md-6 m-b-none">
@@ -103,7 +103,7 @@
                     </div>
                     
                      <div class="row-fluid">
-					<div class="control-group form-group m-b-none">
+					<div class="control-group form-group m-b-none" id="addEventDescription">
 						<a href="#" id="add_event_desctiption"><i class="icon-plus"></i> Add Description </a>
 						<div class="controls event_discription hide">
 							<textarea id="description" name="description" rows="3"
@@ -115,7 +115,7 @@
             </form>
         </div>
     </div>
-    <div class="modal-footer">
+    <div class="modal-footer" id="event-save-footer">
         <a href="#" class="btn btn-primary" id="task_event_validate">Save </a>
         <span class="save-status"></span>
     </div>

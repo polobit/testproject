@@ -49,6 +49,7 @@ String meeting_durations=null;
 List<Long>_multiple_users=new ArrayList<Long>();
 URL ur=new URL(url);
 String d_name=domain_name= NamespaceUtil.getNamespaceFromURL(ur);
+String _AGILE_VERSION = SystemProperty.applicationVersion.get();
 int calendar_wk_start_day=0;
 if(scheduleid.equalsIgnoreCase("calendar")){
     scheduleid=ar[ar.length-1];
@@ -141,6 +142,7 @@ if(scheduleid.contains(",")){
 		 domain_user_json.put("meeting_durations",online_prefs.meeting_durations);
 		 domain_user_json.put("meeting_types",online_prefs.meeting_types.split(","));
 		 domain_user_json.put("slot_details",WebCalendarEventUtil. getSlotDetails(null,online_prefs.meeting_durations));
+		 domain_user_json.put("buffer_time",WebCalendarEventUtil.convertHoursToMilliSeconds(online_prefs.bufferTime,online_prefs.bufferTimeUnit));
 		 map_object.put(String.valueOf(_domain_user.id), domain_user_json);
 		UserPrefs us_prefs=UserPrefsUtil.getUserPrefs(agile_user);
 		List<String> profile=new ArrayList<String>();
@@ -220,7 +222,8 @@ if (scheduleid != null && !multiple_users)
 	      }
 	      else if(online_prefs!=null){
 	    	   meeting_durations=online_prefs.meeting_durations;
-	 	      meeting_types=online_prefs.meeting_types;  
+	 	      meeting_types=online_prefs.meeting_types; 
+	 	     single_user_map_object.put("buffer_time",WebCalendarEventUtil.convertHoursToMilliSeconds(online_prefs.bufferTime,online_prefs.bufferTimeUnit));
 	      }
 	      single_user_map_object.put(String.valueOf(user_id),WebCalendarEventUtil.getSlotDetails(null, meeting_durations)); 
 	      	
@@ -238,12 +241,14 @@ ObjectMapper mapper = new ObjectMapper();
 %>
 <!DOCTYPE html>
 <%@page import="com.google.appengine.api.utils.SystemProperty"%>
+<%@ page contentType="text/html; charset=UTF-8" %>
 <html>
 <head>
 
 <title>Online Appointment Scheduling - <%=user_name %></title>
 <link rel="stylesheet" href="../../css/web-calendar-event/bootstrap.min.css">
-<link rel="stylesheet" href="../../css/web-calendar-event/style.css">
+<link rel="stylesheet" href="../../css/web-calendar-event/style.css?_=<%=_AGILE_VERSION%>">
+<link rel="stylesheet" type="text/css" href="/css/web-calendar-event/agile-css-framework.css?_=<%=_AGILE_VERSION%>">
 <!-- <link rel="stylesheet" href="../../css/web-calendar-event/font-awesome.min.css"> -->
 <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css">
 
@@ -262,9 +267,9 @@ ObjectMapper mapper = new ObjectMapper();
 <script type="text/javascript" src="../../lib/web-calendar-event/utils.js"></script>
 <script type="text/javascript"
 	src="../../lib/web-calendar-event/layout.js?ver=1.0.2"></script>
-<script type="text/javascript" src="../../jscore/web-calendar-event/time.js"></script>
-<script type="text/javascript" src="../../jscore/web-calendar-event/util.js"></script>
-<script type="text/javascript" src="../../jscore/web-calendar-event/ui.js"></script>
+<script type="text/javascript" src="../../jscore/web-calendar-event/time.js?_=<%=_AGILE_VERSION%>"></script>
+<script type="text/javascript" src="../../jscore/web-calendar-event/util.js?_=<%=_AGILE_VERSION%>"></script>
+<script type="text/javascript" src="../../jscore/web-calendar-event/ui.js?_=<%=_AGILE_VERSION%>"></script>
 </head>
 
 <body onload="bodyLoad();">
@@ -1239,17 +1244,10 @@ var business_hours_array=<%=business_hours_array%>;
 var multiple_schedule_ids=<%=multiple_users%>;
 var meeting_types=[];
 var slot_details=[];
- var User_Name = <%=mapper.writeValueAsString(user_name)%>;
- var single_user_mapobject=<%=single_user_map_object%>;
- var User_Id = <%=user_id%>;
- var Agile_User_Id = <%=agile_user_id%>;
- var selecteddate="";
- var SELECTED_TIMEZONE="";
- var current_date_mozilla="";
- var domainname=<%=mapper.writeValueAsString(domain_name)%>;
- var meeting_duration=<%=mapper.writeValueAsString(meeting_durations)%>;
- var slot_array=<%=mapper.writeValueAsString(slots_array)%>;
- var CURRENT_DAY_OPERATION=null;
+var single_user_mapobject=<%=single_user_map_object%>;
+var CURRENT_DAY_OPERATION=null;
+var MEETING_DURATION_AND_NAMES=null;
+var BUFFERTIME=null;
  </script>
 
 	<script type="text/javascript">

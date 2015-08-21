@@ -8,7 +8,7 @@
                 <div class="box-right pull-left">
                     <h4 class="m-t-none">{{contactShortName}} is not associated with any deals. </h4>
                     <div class="text">
-						All Deals that have this contact in the 'Related to' field are shown here.
+						All Deals that have this {{#isCompany}}company{{else}}contact{{/isCompany}} in the 'Related to' field are shown here.
                     </div>
                     {{#hasMenuScope 'DEALS'}}
                     <a href="#" class="contact-add-deal btn-default btn-sm btn blue btn-slate-action m-t-xs"><i class="icon-plus-sign"></i>  Add Deal</a>
@@ -71,7 +71,7 @@
 							<a href="#contact/{{id}}">{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}</a>,
         				{{/if_contact_type}}
 						{{#if_contact_type "COMPANY"}}
-        					<a href="#contact/{{id}}">{{getPropertyValue properties "name"}}</a>,
+        					<a href="#company/{{id}}">{{getPropertyValue properties "name"}}</a>,
         				{{/if_contact_type}}
 				{{/isDuplicateContactProperty}}
            		

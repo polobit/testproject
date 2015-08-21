@@ -289,7 +289,7 @@ $(function()
 			// handling all events related to this widget
 
 			// Deletes GooglePlus profile on click of delete button in template
-			$('#GooglePlus_plugin_delete').die().live('click', function(e)
+			$("body").on("click", "#GooglePlus_plugin_delete", function(e)
 			{
 				e.preventDefault();
 				contactGooglePlusId = agile_crm_get_contact_property_by_subtype('website', 'GOOGLE-PLUS');
@@ -301,13 +301,13 @@ $(function()
 
 			});
 
-			$('.peoplesearch').die().live('click', function(e)
+			$("body").on("click", ".peoplesearch", function(e)
 			{
 				e.preventDefault();
 				$('#' + WIDGET_NAME).html(getTemplate('googleplus-modified-search', searchDetails));
 			});
-
-			$('#gpsearchbtn').die().live('click', function(e)
+			
+			$("body").on("click", "#gpsearchbtn", function(e)
 			{
 				e.preventDefault();
 
@@ -323,7 +323,7 @@ $(function()
 				showMatchedPeople(searchDetails['keywords']);
 			});
 
-			$('#searchkeywords').die().live('keypress', function(event)
+			$("body").on("keypress", "#searchkeywords", function(event)
 			{
 				if (event.keyCode == 13)
 				{
@@ -332,13 +332,13 @@ $(function()
 				}
 			});
 
-			$('#gpsearchclose').die().live('click', function(e)
+			$("body").on("click", "#gpsearchclose", function(e)
 			{
 				showMatchedPeople(searchDetails['keywords']);
 				e.preventDefault();
 			});
 
-			$('.GoogleplusDisplayPic').die().live('mouseover', function(e)
+			$("body").on("mouseover", ".GoogleplusDisplayPic", function(e)
 			{
 
 				// Unique Google Plus User Id from widget
@@ -364,9 +364,9 @@ $(function()
 				 * Called show to overcome pop over bug (not showing pop over on mouse
 				 * hover for first time)
 				 */
-				$(this).popover('show');
+				$(this).popover('show');  
 
-				$('#' + profileID).die().live('click', function(e)
+				$('#' + profileID).on('click', function(e)
 				{
 
 					e.preventDefault();
@@ -405,7 +405,7 @@ $(function()
 
 			});
 
-			$('#gplusstreammore').die().live('click', function(e)
+			$("body").on("click", "#gplusstreammore", function(e)
 			{
 				e.preventDefault();
 				var nextPageToken = $(this).attr("ntoken");

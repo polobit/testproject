@@ -138,7 +138,7 @@ function getTemplateUrls(templateName)
 		template_relative_urls.push("contact-filter.js");
 	}
 	if (templateName.indexOf("contact-view") == 0 || templateName.indexOf("contact-custom") == 0 || templateName.indexOf("contacts-custom") == 0 || templateName
-			.indexOf("contacts-grid") == 0)
+			.indexOf("contacts-grid") == 0 || templateName.indexOf("company-view") == 0 || templateName.indexOf("companies-custom") == 0)
 	{
 		template_relative_urls.push("contact-view.js");
 	}
@@ -169,6 +169,10 @@ function getTemplateUrls(templateName)
 	if (templateName.indexOf("webrule") == 0)
 	{
 		template_relative_urls.push("web-rules.js");
+	}
+	if (templateName.indexOf("webpage") == 0)
+	{
+		template_relative_urls.push("web-pages.js");
 	}
 	if (templateName.indexOf("workflow") == 0 || templateName.indexOf("campaign") == 0 || templateName.indexOf("trigger") == 0 || templateName
 			.indexOf("automation") == 0)
@@ -568,7 +572,7 @@ function get_website_icon(item){
 
 function get_social_icon(name){
 	if (!name)
-	return;
+	return "icon-globe";
 
     var icon_json = { "TWITTER" : "icon-social-tumblr", "LINKEDIN" : "fa fa-linkedin", "URL" : "icon-globe", "GOOGLE-PLUS" : "fa fa-google-plus",
 	"FACEBOOK" : "icon-social-facebook", "GITHUB" : "fa fa-github", "FEED" : "icon-rss", "XING" : "fa fa-xing", "SKYPE" : "icon-skype",
@@ -719,6 +723,113 @@ function getContactCustomProperties(items)
 	return finalFields;
 }
 
+
+/**
+ * Returns list of custom properties. used to fill custom data in fields in
+ * continue contact
+ * 
+ * @param items
+ * @returns
+ */
+function getCompanyCustomProperties(items)
+{
+	if (items == undefined)
+		return items;
+
+	var fields = [];
+	var fieldName='';
+	var datajson={};
+	for (var i = 0; i < items.length; i++)
+	{
+		if (items[i].type == "CUSTOM" && items[i].name != "image")
+		{
+			if(fieldName=='')
+				fieldName=items[i].name;
+			fields.push(items[i]);
+			datajson[''+items[i].name]=items[i].value;
+		}
+	}
+	
+	//Added for formula type custom field
+	var type='';
+	if(App_Companies.customFieldsList!=undefined && App_Companies.customFieldsList!=null){
+		for(var i=0;i<App_Companies.customFieldsList.collection.models.length;i++){
+			if(App_Companies.customFieldsList.collection.models[i].get("field_label")==fieldName){
+				type = App_Companies.customFieldsList.collection.models[i].get("scope");
+				break;
+			}
+		}
+	}
+	
+	var formulaFields=[];
+	var allCustomFields=[];
+	var finalFields=[];
+	
+	if(App_Companies.customFieldsList!=undefined && App_Companies.customFieldsList!=null){
+		if(type=='')
+			type='CONTACT';
+		for(var i=0;i<App_Companies.customFieldsList.collection.models.length;i++){
+			var json={};
+			if(App_Companies.customFieldsList.collection.models[i].get("scope")==type && App_Companies.customFieldsList.collection.models[i].get("field_type")=="FORMULA"){
+				var tplEleData = Mustache.render(App_Companies.customFieldsList.collection.models[i].get("field_data"),datajson);
+				var evalFlag = true;
+				var tplEleDataAftEval;
+				try{
+					tplEleDataAftEval = eval(tplEleData)
+				}catch(err){
+					console.log(err.message);
+					evalFlag = false;
+				}
+				if(!evalFlag)
+					tplEleDataAftEval = tplEleData;
+				if(evalFlag && tplEleDataAftEval!=undefined && tplEleDataAftEval!=null){
+					json.name=App_Companies.customFieldsList.collection.models[i].get("field_label");
+					json.type="CUSTOM";
+					json.position=App_Companies.customFieldsList.collection.models[i].get("position");
+					json.value=tplEleDataAftEval;
+					json.field_type=App_Companies.customFieldsList.collection.models[i].get("field_type");
+					allCustomFields.push(json);
+					
+					formulaFields.push(json);
+				}
+			}else if(App_Companies.customFieldsList.collection.models[i].get("scope")==type){
+				json.name=App_Companies.customFieldsList.collection.models[i].get("field_label");
+				json.type="CUSTOM";
+				json.position=App_Companies.customFieldsList.collection.models[i].get("position");
+				json.field_type=App_Companies.customFieldsList.collection.models[i].get("field_type");
+				allCustomFields.push(json);
+			}
+		}
+	}
+	if(fields.length>0){
+		if(allCustomFields.length>0){
+			for(var i=0;i<allCustomFields.length;i++){
+				if(allCustomFields[i].field_type=="FORMULA"){
+					finalFields.push(allCustomFields[i]);
+				}else{
+					for(var j=0;j<fields.length;j++){
+						if(allCustomFields[i].name==fields[j].name){
+							finalFields.push(fields[j]);
+							break;
+						}
+					}
+				}
+			}
+		}else{
+			for(var k=0;k<fields.length;k++){
+				finalFields.push(fields[k]);	
+			}
+		}
+		
+	}else{
+		for(var k=0;k<formulaFields.length;k++){
+			finalFields.push(formulaFields[k]);	
+		}
+	}
+	
+	return finalFields;
+}
+
 /**
  * Turns the first letter of the given string to upper-case and the remaining to
  * lower-case (EMaiL to Email).
@@ -816,6 +927,12 @@ function updateCustomData(el)
 {
 	$(".custom-data", App_Contacts.contactDetailView.el).html(el)
 }
+
+function updateCompanyCustomData(el)
+{
+	$(".custom-data", App_Companies.companyDetailView.el).html(el)
+}
+
 /**
  * Returns list of custom properties. used to fill custom data in fields in
  * deal details
@@ -889,6 +1006,27 @@ function getDealCustomProperties(items)
 				if(allCustomFields[i].field_type=="FORMULA")
 				{
 					finalFields.push(allCustomFields[i]);
+				}
+				else if(allCustomFields[i].field_type=="DATE")
+				{
+					for(var j=0;j<fields.length;j++)
+					{
+						if(allCustomFields[i].name==fields[j].name)
+						{
+							if(!fields[j].value)
+								return '';
+							if(fields[j].index && (CURRENT_USER_PREFS.dateFormat.indexOf("dd/mm/yy") != -1 || CURRENT_USER_PREFS.dateFormat.indexOf("dd.mm.yy") != -1))
+								fields[j].value = convertDateFromUKtoUS(fields[j].value);
+							var dateString = new Date(fields[j].value);
+							if(dateString == "Invalid Date")
+								fields[j].value = getDateInFormatFromEpoc(fields[j].value);
+							else
+								fields[j].value = en.dateFormatter({raw: getGlobalizeFormat()})(dateString);
+
+							finalFields.push(fields[j]);
+							break;
+						}
+					}
 				}
 				else
 				{

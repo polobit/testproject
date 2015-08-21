@@ -61,7 +61,7 @@ function loadWidgets(el, contact)
 		 */
 		var flag = false;
 
-		$(el).live('view_loaded', function(e)
+		$(el).on('view_loaded', function(e)
 		{
 
 			if (flag == false)
@@ -85,7 +85,7 @@ function loadWidgets(el, contact)
 	 * and sets "is_minimized" field of widget as true, we check this while
 	 * loading widgets and skip loading widget if it is minimized
 	 */
-	$('.widget-minimize').die().live('click', function(e)
+	$('#prefs-tabs-content').on('click', '.widget-minimize', function(e)
 	{
 		e.preventDefault();
 		var widget_name = $(this).attr('widget');
@@ -120,7 +120,7 @@ function loadWidgets(el, contact)
 	 * widget as false, we check this while loading widgets and skip loading
 	 * widget if it is minimized
 	 */
-	$('.widget-maximize').die().live('click', function(e)
+	$('#prefs-tabs-content').on('click', '.widget-maximize', function(e)
 	{
 		e.preventDefault();
 		var widget_name = $(this).attr('widget');

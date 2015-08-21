@@ -7,12 +7,12 @@
  * 
  * author: Yaswanth
  */
-$(function() {
+function initializeCustomFieldsListeners(){
 	/**
 	 * Loads the respective modal (Text or Date or List or Check-box modal) based
 	 * on the id attribute of the clicked link to save the custom fields.
 	 */
-	$(".fieldmodal").die().live('click', function(event) {
+	$('#custom-fields-accordion').on('click', '.fieldmodal', function(event){
 		event.preventDefault();
 		var type = $(this).attr("type");
 		
@@ -21,58 +21,19 @@ $(function() {
 	});
 	
 	
-	$("#custom-field-type").die().live("change", function(e){
-		e.preventDefault();
-		var value = $(this).val();
-		if(value == "LIST")
-		{
-			$("#custom-field-data").hide();
-			$("input",  $("#custom-field-data")).removeAttr("name");
-			$("#custom-field-list-values").show();
-			$("input",  $("#custom-field-list-values")).attr("name", "field_data");
-			$("#custom-field-formula-data").hide();
-			$("textarea",  $("#custom-field-formula-data")).removeAttr("name");
-		}
-		else if(value == "TEXTAREA")
-		{
-			$("#custom-field-data").show();
-			$("input",  $("#custom-field-data")).attr("name", "field_data");
-			$("#custom-field-list-values").hide();
-			$("input",  $("#custom-field-list-values")).removeAttr("name");
-			$("#custom-field-formula-data").hide();
-			$("textarea",  $("#custom-field-formula-data")).removeAttr("name");
-		}
-		else if(value == "FORMULA")
-		{
-			$("#custom-field-data").hide();
-			$("input",  $("#custom-field-data")).removeAttr("name");
-			$("#custom-field-list-values").hide();
-			$("input",  $("#custom-field-list-values")).removeAttr("name");
-			$("#custom-field-formula-data").show();
-			$("textarea",  $("#custom-field-formula-data")).attr("name", "field_data");
-		}
-		else
-		{
-			$("#custom-field-data").hide();
-			$("#custom-field-list-values").hide();
-			$("#custom-field-formula-data").hide();
-		}
-		
-	})
-	
-	$('#admin-settings-customfields-model-list > tr > td:not(":first-child")').live('click', function(e) {
+	$('#custom-fields-accordion').on('change', '#admin-settings-customfields-model-list > tr > td:not(":first-child")', function(e){
 		e.preventDefault();
 		var custom_field = $(this).closest('tr').data();
 		console.log(custom_field);
 		showCustomFieldModel(custom_field.toJSON());
 	});
-	$('#edit-custom-field').live('click', function(e) {
+	$('#custom-fields-accordion').on('click', '#edit-custom-field', function(e){
 		e.preventDefault();
 		var custom_field = $(this).closest('tr').data();
 		console.log(custom_field);
 		showCustomFieldModel(custom_field.toJSON());
 	});
-	$('#delete-custom-field').live('click', function(e) {
+	$('#custom-fields-accordion').on('click', '#delete-custom-field', function(e){
 		if(confirm("Are you sure you want to delete?")){
 			e.preventDefault();
 			var custom_field = $(this).closest('tr').data();
@@ -92,7 +53,7 @@ $(function() {
 				}, dataType : 'json' });
 		}
 	});
-});
+}
 
 function showCustomFieldModel(data)
 {
@@ -118,6 +79,7 @@ function showCustomFieldModel(data)
 		     $('#custom-field-add-modal').css("left", "50%");
 		     $('#custom-field-add-modal').css("width", modalWidth);
 		     $('#custom-field-add-modal').css("margin", (modalWidth/2)*-1);
+		     bindCustomFiledChangeEvent(el);
 		},
 		saveCallback : function(model)
 		{
@@ -174,6 +136,48 @@ function showCustomFieldModel(data)
 
 	$('#custom-field-modal').html(modelView.render(true).el);
 	$("#custom-field-type").trigger("change");
+}
+
+
+function bindCustomFiledChangeEvent(el){
+	$('#custom-field-add-modal',el).on('change', '#custom-field-type', function(e){
+		e.preventDefault();
+		var value = $(this).val();
+		if(value == "LIST")
+		{
+			$("#custom-field-data").hide();
+			$("input",  $("#custom-field-data")).removeAttr("name");
+			$("#custom-field-list-values").show();
+			$("input",  $("#custom-field-list-values")).attr("name", "field_data");
+			$("#custom-field-formula-data").hide();
+			$("textarea",  $("#custom-field-formula-data")).removeAttr("name");
+		}
+		else if(value == "TEXTAREA")
+		{
+			$("#custom-field-data").show();
+			$("input",  $("#custom-field-data")).attr("name", "field_data");
+			$("#custom-field-list-values").hide();
+			$("input",  $("#custom-field-list-values")).removeAttr("name");
+			$("#custom-field-formula-data").hide();
+			$("textarea",  $("#custom-field-formula-data")).removeAttr("name");
+		}
+		else if(value == "FORMULA")
+		{
+			$("#custom-field-data").hide();
+			$("input",  $("#custom-field-data")).removeAttr("name");
+			$("#custom-field-list-values").hide();
+			$("input",  $("#custom-field-list-values")).removeAttr("name");
+			$("#custom-field-formula-data").show();
+			$("textarea",  $("#custom-field-formula-data")).attr("name", "field_data");
+		}
+		else
+		{
+			$("#custom-field-data").hide();
+			$("#custom-field-list-values").hide();
+			$("#custom-field-formula-data").hide();
+		}
+		
+	});
 }
 
 /**
@@ -625,6 +629,7 @@ function show_custom_fields_helper_for_merge(custom_fields, contacts) {
 								value = new Date(
 										property.value * 1000)
 								.format('mm/dd/yyyy');
+
 							} catch (err) {
 							}
 						}
@@ -745,8 +750,11 @@ function fill_custom_data(property, form)
 			else if($(element[0]).hasClass("date_input"))
 				{
 				try {
-					element.attr("value", new Date(property.value * 1000)
-							.format('mm/dd/yyyy'));
+					var dateString = new Date(property.value);
+					if(dateString == "Invalid Date")
+						element.attr("value", getDateInFormatFromEpoc(property.value));
+					else
+						element.attr("value", getDateInFormat(dateString));
 					return;
 				} catch (err) {
 
@@ -782,6 +790,11 @@ function serialize_custom_fields(form)
     	json.value =  $(element).val();
     	
     	if(elem_type=='checkbox')json.value = $(element).is(':checked')?'on':'off';
+    	if($(element).hasClass("date_input") && ($(element).val() !=undefined && $(element).val().trim() !=""))
+    		if(CURRENT_USER_PREFS.dateFormat.indexOf("dd/mm/yy") != -1 || CURRENT_USER_PREFS.dateFormat.indexOf("dd.mm.yy") != -1)
+    			json.value = en.dateFormatter({raw: "MM/dd/yyyy"})(new Date(convertDateFromUKtoUS(this.value)));
+    		else
+    			json.value = en.dateFormatter({raw: "MM/dd/yyyy"})(new Date(this.value));
     	
     	
     	if(!json.value)

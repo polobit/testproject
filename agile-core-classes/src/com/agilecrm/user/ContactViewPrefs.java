@@ -15,10 +15,10 @@ import com.googlecode.objectify.annotation.Parent;
 import com.googlecode.objectify.condition.IfDefault;
 
 /**
- * <code>ContactViewPrefs</code> is the base class for user's contact view preferences. 
- * User can select properties properties from contacts that will be shown on user's contact view page.
- * The preferences can be changed any time by an user.
- * </p>
+ * <code>ContactViewPrefs</code> is the base class for user's contact view
+ * preferences. User can select properties properties from contacts that will be
+ * shown on user's contact view page. The preferences can be changed any time by
+ * an user. </p>
  * <p>
  * <code>@JsonIgnoreProperties(ignoreUnknown=true)</code> annotation is used to
  * ignore properties that aren't used.
@@ -44,11 +44,23 @@ public class ContactViewPrefs
      */
     @Parent
     private Key<AgileUser> user;
-   
+
+    /**
+     * Specifies the scope of the custom field should be added
+     */
+    public static enum Type
+    {
+	PERSON, COMPANY
+    };
+
+    @NotSaved(IfDefault.class)
+    public Type type = Type.PERSON;
+
     /**
      * UserPrefs Dao.
      */
-    private static ObjectifyGenericDao<ContactViewPrefs> dao = new ObjectifyGenericDao<ContactViewPrefs>(ContactViewPrefs.class);
+    private static ObjectifyGenericDao<ContactViewPrefs> dao = new ObjectifyGenericDao<ContactViewPrefs>(
+	    ContactViewPrefs.class);
 
     /**
      * Default UserPrefs.
@@ -58,7 +70,6 @@ public class ContactViewPrefs
 
     }
 
-   
     /**
      * @param userId
      * @param fields_set
@@ -68,13 +79,13 @@ public class ContactViewPrefs
 	this.fields_set = fields_set;
 	this.user = new Key<AgileUser>(AgileUser.class, userId);
     }
-    
+
     /**
      * Saves UserPrefs. Wraps DomainUser Name with UserPrefs name.
      */
     public void save()
     {
-    	dao.put(this);
+	dao.put(this);
     }
 
     /**
@@ -82,6 +93,6 @@ public class ContactViewPrefs
      */
     public void delete()
     {
-    	dao.delete(this);
+	dao.delete(this);
     }
 }

@@ -1,21 +1,7 @@
-$(function(){ 
-	
-	/**
-	 * For adding new document
-	 */
-	$(".documents-add").die().live('click', function(e){
-		e.preventDefault();
-		var el = $("#uploadDocumentForm");
-		$("#uploadDocumentModal").modal('show');
 
-		// Contacts type-ahead
-		agile_type_ahead("document_relates_to_contacts", el, contacts_typeahead);
-		
-		// Deals type-ahead
-		agile_type_ahead("document_relates_to_deals", el, deals_typeahead, false,null,null,"core/api/search/deals",false, true);
-	});
-	
-	/**
+$(function(){
+
+/**
 	 * To avoid showing previous errors of the modal.
 	 */
 	$('#uploadDocumentModal, #uploadDocumentUpdateModal').on('show.bs.modal', function() {
@@ -60,7 +46,7 @@ $(function(){
     /** 
      * When clicked on choose network type
      */
-	$(".link").live('click', function(e)
+    $('#uploadDocumentUpdateModal,#uploadDocumentModal').on('click', '.link', function(e)
 	{
 		e.preventDefault();
 		$(this).closest('form').find('#error').html("");
@@ -82,7 +68,7 @@ $(function(){
 	/**
 	 * To validate the document add or edit forms
 	 */
-    $('#document_validate, #document_update_validate').live('click',function(e){
+	$('#uploadDocumentUpdateModal,#uploadDocumentModal').on('click', '#document_validate, #document_update_validate', function(e){
  		e.preventDefault();
 
  		var modal_id = $(this).closest('.upload-document-modal').attr("id");
@@ -96,18 +82,46 @@ $(function(){
     	else
     		saveDocument(form_id, modal_id, this, true, json);
 	});
+
+});
+
+
+
+
+
+function initializeDocumentsListner(el){	
+	/**
+	 * For adding new document
+	 */
+	$('#documents-listners').off();
+	$('#documents-listners').on('click', '.documents-add', function(e){
+		e.preventDefault();
+		var el = $("#uploadDocumentForm");
+		$("#uploadDocumentModal").modal('show');
+
+		// Contacts type-ahead
+		agile_type_ahead("document_relates_to_contacts", el, contacts_typeahead);
+		
+		// Deals type-ahead
+		agile_type_ahead("document_relates_to_deals", el, deals_typeahead, false,null,null,"core/api/search/deals",false, true);
+	});
+	
+	
     
     /** 
      * Document list view edit
      */
-     $('#documents-model-list > tr > td:not(":first-child")').live('click', function(e) {
+    // $('#documents-listners #documents-model-list > tr > td:not(":first-child")').off();
+	$('#documents-listners').on('click', '#documents-model-list > tr > td:not(":first-child")', function(e){
+
     	 if(e.target.parentElement.attributes[0].name!="href" && e.target.parentElement.attributes[1].name!="href"){
      		e.preventDefault();
+
      	 	updateDocument($(this).closest('tr').data());
      	 }
  	});
 
-});	
+}
 
 /**
  * Show document popup for updating
@@ -160,8 +174,14 @@ function saveDocumentURL(url, network, id)
 	$('#' + form_id).find("#" + network).closest(".link").find(".icon-ok").css("display", "inline");
 	$('#' + form_id).find('#' + network).closest(".link").css("background-color", "#EDEDED");
    	$('#' + form_id).find('#upload_url').val(url);
+   	$('#' + form_id).find('#size').val(CUSTOM_DOCUMENT_SIZE);
+
     //$('#' + form_id).find('#url').html('<a href="'+ url +'" target="_blank">'+ url +'</a>');
 }
+
+/**
+ *stores size of document
+ */
 
 /**
  * Saves document instance
@@ -207,6 +227,8 @@ function saveDocument(form_id, modal_id, saveBtn, isUpdate, json)
 	newDocument.url = 'core/api/documents';
 	newDocument.save(json, {
 		success : function(data) {
+			// reset document size 
+			CUSTOM_DOCUMENT_SIZE = 0;
 
 			// Removes disabled attribute of save button
 			enable_save_button($(saveBtn));//$(saveBtn).removeAttr('disabled');
@@ -274,6 +296,8 @@ function saveDocument(form_id, modal_id, saveBtn, isUpdate, json)
 							return false;
 					}
 				});
+			} else if (company_util.isCompany()){
+				company_util.updateDocumentsList(document,true);
 			}
 			else if (Current_Route == 'documents') {
 				if (isUpdate)
