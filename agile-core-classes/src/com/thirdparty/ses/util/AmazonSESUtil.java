@@ -1,5 +1,6 @@
 package com.thirdparty.ses.util;
 
+import java.io.IOException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,9 +18,23 @@ import com.google.appengine.api.taskqueue.TaskHandle;
 import com.google.appengine.api.utils.SystemProperty;
 import com.thirdparty.ses.AmazonSES;
 
+/**
+ * <code>AmazonSESUtil</code> is the utility class for verifying given aws keys and sending emails
+ * 
+ * @author naresh
+ *
+ */
 public class AmazonSESUtil
 {
-	public static void sendBulkMails(List<TaskHandle> tasks, EmailSender emailSender)
+	/**
+	 * Converts task handle list to MailDeferred tasks.
+	 * 
+	 * @param tasks - queue tasks.
+	 * @param emailSender - EmailSender object
+	 * 
+	 * @throws Exception
+	 */
+	public static void sendBulkMails(List<TaskHandle> tasks, EmailSender emailSender) throws Exception
 	{
 		List<MailDeferredTask> mailTasks = new ArrayList<MailDeferredTask>();
 		
@@ -29,14 +44,22 @@ public class AmazonSESUtil
 		sendSESMails(mailTasks, emailSender);
 	}
 	
-	public static void sendSESMails(List<MailDeferredTask>tasks, EmailSender emailSender)
+	/**
+	 * Sends bulk emails using amazon ses
+	 * 
+	 * @param tasks - maildeferred tasks
+	 * @param emailSender - EmailSender
+	 * 
+	 * @throws Exception - {@link IllegalArgumentException}
+	 */
+	public static void sendSESMails(List<MailDeferredTask>tasks, EmailSender emailSender) throws Exception
 	{
 		EmailGateway emailGateway = emailSender.emailGateway;
 		
 		if(emailGateway == null)
-			return;
+			throw new IllegalArgumentException("EmailGateway cannot be null");
 		
-		AmazonSES ses = AmazonSES.getInstance(emailGateway.api_key, emailGateway.api_user, emailGateway.regions);
+		AmazonSES ses = AmazonSES.getInstance(emailGateway.api_user, emailGateway.api_key, emailGateway.regions);
 		
 		for(MailDeferredTask mailDeferredTask: tasks)
 		{
@@ -71,34 +94,68 @@ public class AmazonSESUtil
 		}
 	}
 
-	public static String verifySESKeys(String accessKey, String secretKey, String region) throws Exception
+	/**
+	 * Validates SES credentials.
+	 * 
+	 * @param accessKey - AWS access key
+	 * @param secretKey - AWS secret key
+	 * @param region - AWS region
+	 * 
+	 * @return response string
+	 * 
+	 * @throws Exception - {@link IOException}
+	 */
+	public static String verifySESKeys(final String accessKey, final String secretKey, final String region) throws Exception
 	{
 		
-		String url = "http://54.87.153.50:8080/";
-		
-		String params = "/ses?access_key=" + URLEncoder.encode(accessKey, "UTF-8") + "&secret_key=" + URLEncoder.encode(secretKey, "UTF-8") 
-				+ "&region=" +URLEncoder.encode(region, "UTF-8")+ "&action=" + URLEncoder.encode("ListIdentities", "UTF-8");
+		String host = "http://54.87.153.50:8080/";
 		
 		if(SystemProperty.environment.value() == SystemProperty.Environment.Value.Development)
-			url = "http://localhost:8080/ses-beta-app" + params;
+			host = "http://localhost:8080/ses-beta-app";
 			
 		if(SystemProperty.environment.value() == SystemProperty.Environment.Value.Production)
 		{
 			// For Beta sandbox
 			if(SystemProperty.applicationId.get().equals("agilecrmbeta"))
-				url = url + "ses-beta-app" +params;
+				host = host + "ses-beta-app";
 		
 			// For Production
 			if(SystemProperty.applicationId.get().equals("agile-crm-cloud"))
-				url = url + "ses-live-app" + params;
+				host = host + "ses-live-app";
 			
 		}
 		
-		System.out.println("URL is" + url);
+		String params = "/ses?access_key=" + URLEncoder.encode(accessKey, "UTF-8") + "&secret_key=" + URLEncoder.encode(secretKey, "UTF-8") 
+				+ "&region=" +URLEncoder.encode(region, "UTF-8")+ "&action=" + URLEncoder.encode("ListIdentities", "UTF-8");
 		
-		String response = HTTPUtil.accessURL(url);
+		return HTTPUtil.accessURL(host + params);
+	}
+
+	/**
+	 * Sends email through amazon ses with provided parameters
+	 * 
+	 * @param accessKey - AWS access key
+	 * @param secretKey - AWS secret key
+	 * @param region - AWS region
+	 * @param fromEmail - from email
+	 * @param fromName - from name
+	 * @param to - To email string can be separated by commas
+	 * @param cc - CC email string can be separated by commas
+	 * @param bcc - BCC email string can be separated by commas
+	 * @param subject - email subject
+	 * @param replyTo - Reply To
+	 * @param html - HTML body
+	 * @param text - Text body
+	 * 
+	 * @throws Exception - {@link IllegalArgumentException}
+	 */
+	public static void sendEmail(String accessKey, String secretKey,
+			String region, String fromEmail, String fromName, String to,
+			String cc, String bcc, String subject, String replyTo, String html,
+			String text) throws Exception {
 		
-		return response;
-		
+		AmazonSES ses = AmazonSES.getInstance(accessKey, secretKey, region);
+		ses.sendEmail(fromEmail, fromName, to, cc, bcc, subject, replyTo, html,
+				text);
 	}
 }
