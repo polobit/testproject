@@ -121,12 +121,15 @@
 	};
 	
 	var initEvents = function(el){
-		$('.milestone-won').die().live('click',function(e){
+		$('#milestone-listner').on('click', '.milestone-won', function(e){
+		//$('.milestone-won').die().live('click',function(e){
 			e.preventDefault();
 			if(!$(this).hasClass('disabled'))
 				setWonMilestone($(this));
 		});
-		$('.milestone-lost').die().live('click',function(e){
+		
+		$('#milestone-listner').on('click', '.milestone-lost', function(e){
+		//$('.milestone-lost').die().live('click',function(e){
 			e.preventDefault();
 			if(!$(this).hasClass('disabled'))
 				setLostMilestone($(this));
