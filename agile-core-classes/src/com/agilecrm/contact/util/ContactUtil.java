@@ -19,12 +19,14 @@ import org.codehaus.jackson.type.TypeReference;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import com.agilecrm.AgileQueues;
 import com.agilecrm.activities.util.ActivitySave;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Contact.Type;
 import com.agilecrm.contact.ContactField;
 import com.agilecrm.contact.email.ContactEmail;
 import com.agilecrm.contact.email.bounce.EmailBounceStatus.EmailBounceType;
+import com.agilecrm.contact.email.deferred.LastContactedDeferredTask;
 import com.agilecrm.contact.email.util.ContactEmailUtil;
 import com.agilecrm.contact.exception.DuplicateContactException;
 import com.agilecrm.db.ObjectifyGenericDao;
@@ -48,6 +50,9 @@ import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.google.appengine.api.search.Document.Builder;
 import com.google.appengine.api.search.Index;
+import com.google.appengine.api.taskqueue.Queue;
+import com.google.appengine.api.taskqueue.QueueFactory;
+import com.google.appengine.api.taskqueue.TaskOptions;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Query;
 
@@ -994,11 +999,12 @@ public class ContactUtil
 	int i = 0;
 	for (Contact contact : contacts_list)
 	{
-	    contact.setContactOwner(newOwnerKey);
+
 	    Key<DomainUser> userKey = contact.getContactOwnerKey();
 
 	    if (!new_owner.equals(userKey))
 	    {
+		contact.setContactOwner(newOwnerKey);
 		builderObjects.add(contactDocuments.buildDocument(contact));
 		// docs[i] = contactDocuments.buildDocument(contact);
 		++i;
@@ -1342,7 +1348,7 @@ public class ContactUtil
 	    return;
 
 	UserAccessControl control = UserAccessControl.getAccessControl(
-		UserAccessControl.AccessControlClasses.Contact.toString(), null);
+		UserAccessControl.AccessControlClasses.Contact.toString(), null, null);
 
 	if (control.hasScope(UserAccessScopes.DELETE_CONTACTS) || control.hasScope(UserAccessScopes.UPDATE_CONTACT))
 	    return;
@@ -1706,5 +1712,13 @@ public class ContactUtil
 	}
 	return 0;
 
+    }
+
+    public static void updateCampaignEmailedTime(Long contactId, Long lastCampaignEmailed, String toEmail)
+    {
+	LastContactedDeferredTask lastContactDeferredtask = new LastContactedDeferredTask(contactId,
+		lastCampaignEmailed, toEmail);
+	Queue queue = QueueFactory.getQueue(AgileQueues.LAST_CONTACTED_UPDATE_QUEUE);
+	queue.add(TaskOptions.Builder.withPayload(lastContactDeferredtask));
     }
 }

@@ -217,6 +217,9 @@ public class AgileTaskletUtil {
 			// System.out.println("Field name is " + field.name);
 
 			JSONObject subscriberJSON = new JSONObject();
+			
+			// Added contact id. For new contact, id doesn't exist
+			subscriberJSON.put("id", contact.id);
 
 			List<ContactField> properties = contact.getProperties();
 
@@ -266,9 +269,7 @@ public class AgileTaskletUtil {
 									fieldValue = (fieldValue / 100000000000L > 1) ? fieldValue
 											: fieldValue * 1000;
 
-									field.value = DateUtil
-											.getDateInGivenFormat(fieldValue,
-													"dd MMM yyyy", timezone);
+									field.value =  DateUtil.getDateInGivenFormat(fieldValue, "dd MMM yyyy", timezone);
 								}
 							}
 						} catch (Exception e) {
@@ -453,6 +454,9 @@ public class AgileTaskletUtil {
 		try {
 			JSONObject subscriberJSON = new JSONObject();
 
+			// Added contact id. For new contact, id doesn't exist
+			subscriberJSON.put("id", contact.id);
+						
 			List<ContactField> properties = contact.getProperties();
 
 			// Contact Properties
@@ -807,6 +811,12 @@ public class AgileTaskletUtil {
 
 			JSONObject data = subscriberJSON.getJSONObject("data");
 
+			// If no modified time
+			if(!data.has("modified_time"))
+			{
+				return getUpdatedSubscriberJSON(subscriberJSON, 0L);
+			}
+				
 			// Compares updated time of subscriber json and current contact
 			if (data.has("modified_time")
 					&& data.getLong("modified_time") != 0L)

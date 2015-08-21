@@ -119,7 +119,8 @@ var timeline_entity_loader = {
 						})
 	}, timline_fetch_data : function(url, callback)
 	{
-		$("#timeline-loading-img", App_Contacts.contactDetailView.el).show();
+		//$("#timeline-loading-img", App_Contacts.contactDetailView.el).show();
+		showTransitionBar();
 
 		console.log(this.active_connections);
 		// this.active_connections = true;
@@ -135,13 +136,15 @@ var timeline_entity_loader = {
 				callback(data);
 			
 			if(!_this.active_connections)
-				$(".timeline-loading-img", App_Contacts.contactDetailView.el).hide();
+				//$(".timeline-loading-img", App_Contacts.contactDetailView.el).hide();
+				hideTransitionBar();
 		}).error(function()
 		{
 			-- _this.active_connections;
 			
 			if(!_this.active_connections)
-				$(".timeline-loading-img", App_Contacts.contactDetailView.el).hide();
+				//$(".timeline-loading-img", App_Contacts.contactDetailView.el).hide();
+				hideTransitionBar();
 		});
 	}, getOpenedEmailsFromEmails : function(emails)
 	{

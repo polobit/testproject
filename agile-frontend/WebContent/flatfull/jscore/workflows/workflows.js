@@ -6,15 +6,18 @@
  * 
  * 
  */
+function initializeWorkflowsListeners(){
+}
+
 $(function(){
 
 	// To stop propagation to edit page
-	$(".stop-propagation").die().live('click', function(e){
-		e.stopPropagation();
-	});
+	$('body').on('click', '.stop-propagation', function (e) {
+        e.stopPropagation();
+    });
 	
 	// Show logs of selected filter
-	$(".log-filters").die().live('click', function(e){
+	$('body').on('click', '.log-filters', function (e) {
 		e.preventDefault();
 		
 		var log_type = $(this).data('log-type');
@@ -24,7 +27,7 @@ $(function(){
 	});
 	
 	// Show stats of selected campaign
-	$('#campaign-reports-select').live('change', function(e){
+	$('body').on('change', '#campaign-reports-select', function (e) {
 		
 		e.preventDefault();
 		
@@ -53,7 +56,7 @@ $(function(){
 	 * so ids are separated by comma in click event.
 	 * 
 	 **/
-	$('#save-workflow-top, #save-workflow-bottom, #duplicate-workflow-top, #duplicate-workflow-bottom').live('click', function (e, trigger_data) {
+	$('body').on('click', '#save-workflow-top, #save-workflow-bottom, #duplicate-workflow-top, #duplicate-workflow-bottom', function (e, trigger_data) {
            e.preventDefault();
            
            // Temporary variable to hold clicked button, either top or bottom. $ is preceded, just to show 
@@ -68,7 +71,7 @@ $(function(){
            
     	// Check if the form is valid
     	if (!isValidForm('#workflowform')) {
-  		$('#workflowform').find("input.required").focus();
+    		$('#workflowform').find("span.help-inline").not(':hidden').prev('input').focus();
     		return false;
     	}
     	
@@ -79,10 +82,12 @@ $(function(){
         
         var unsubscribe_tag = $('#unsubscribe-tag').val().trim();
         var unsubscribe_action = $('#unsubscribe-action').val();
+        var unsubscribe_email = $('#unsubscribe-email').val().trim();
         
         var unsubscribe_json ={
         		               		"tag":unsubscribe_tag,
-        		               		"action":unsubscribe_action
+        		               		"action":unsubscribe_action,
+        		               		"unsubscribe_email": unsubscribe_email
         		               }
         
         // Check for valid name
@@ -163,7 +168,7 @@ $(function(){
      *  Deletes all logs of campaign
      *      
      **/
-	$('#delete_campaign_logs').live('click', function (e) {
+	$('body').on('click', '#delete_campaign_logs', function (e) {
     	e.preventDefault();
     	
     	// Gets campaign id
@@ -189,7 +194,7 @@ $(function(){
 	/**
 	 * Script to show workflow video tutorial in bootstrap modal.
 	 **/
-	$('#workflow-designer-help').die().live('click', function(e){
+	$('body').on('click', '#workflow-designer-help', function (e) {
 		e.preventDefault();
 
 		// Removes if previous modals exist.
@@ -212,21 +217,20 @@ $(function(){
 		});
 	});
 	
-	$('#workflow-unsubscribe-option').die().live('click', function(e){
+	$('body').on('click', '#workflow-unsubscribe-option', function (e) {
 		e.preventDefault();
-		//$(this).css('display','none');
-		//$('#workflow-unsubscribe-block').show('slow');
+
+		if($(this).hasClass('collapsed'))
+		{
+			$('#workflow-unsubscribe-option').html('<span><i class="icon-plus"></i></span> Manage Unsubscription');
+			return;
+		}
+		
+		$('#workflow-unsubscribe-option').html('<span><i class="icon-minus"></i></span> Manage Unsubscription')
+		
 	});
 	
-	$('#workflow-unsubscribe-block').live('shown', function(){
-		$('#workflow-unsubscribe-option').html('<span><i class="icon-minus"></i></span> Manage Unsubscription');
-	});
-	
-	$('#workflow-unsubscribe-block').live('hidden', function(){
-		$('#workflow-unsubscribe-option').html('<span><i class="icon-plus"></i></span> Manage Unsubscription');
-	});
-	
-	$('#unsubscribe-action').die().live('change', function(e){
+	$('body').on('change', '#unsubscribe-action', function (e) {
 		e.preventDefault();
 		
 		var all_text = "Contact will not receive any further emails from any campaign (i.e., the 'Send Email' option will not work. However, other actions in" 
@@ -248,7 +252,6 @@ $(function(){
 			$p_ele.html(ask_text);
 		
 	});
-	
 });
 
 /**

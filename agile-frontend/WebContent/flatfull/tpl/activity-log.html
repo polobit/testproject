@@ -854,8 +854,9 @@ Deleted  {{custom1}} Campaigns<br/>
 <div class="row">
     <div class="col-md-12" id="activity_header">
         
-            <h3 class="activity-heading font-thin h3  pull-left"><span>Activities</span>&nbsp;<small class="activity-sub-heading" ></small>&nbsp;<small class="activity-user" ></small></h3>
-		<div class="pull-right">
+            <h3 class="activity-heading font-thin h3  pull-left"><span>User Activities</span>&nbsp;<small class="activity-sub-heading" ></small>&nbsp;<small class="activity-user" ></small></h3>
+            
+		<div class="pull-right" id="activity-log-header-div">
 		<div class="btn-group pull-right type-task-button c-p">
                 <div class="btn btn-default btn-sm selected_name" id="selectedentity_type">All Activities</div>
                 <a class="btn btn-default dropdown-toggle btn-sm" data-toggle="dropdown" href="#">
@@ -883,7 +884,7 @@ Deleted  {{custom1}} Campaigns<br/>
                 <ul class="dropdown-menu" id="user-select"></ul>
             </div>
 
-            <div id="activities_date_range" class="btn-group pull-right activity-date-filter c-p m-r">
+            <div id="activities_date_range" class="btn-group pull-right activity-date-filter c-p m-r m-t-none">
             <span class="inline-block" style="padding: 3px 10px;">
                <i class="icon-calendar icon-large m-r-xs"></i>
                 <span id="range" class="text-xs">Filter by date</span>
@@ -892,7 +893,10 @@ Deleted  {{custom1}} Campaigns<br/>
                 <span class="caret  inline-block p-t-xs"></span>
               </span>
             </div>
-            
+            <div class="btn-group m-r pull-right" role="group">
+                <a href="#activities" class="btn btn-default btn-sm bg-light">User Activities</a> 
+                <a href="#contact-activities" class="btn btn-default btn-sm" onclick="$(this).prev().removeClass('bg-light')">Contact Activities</a>
+            </div>
             
           
 

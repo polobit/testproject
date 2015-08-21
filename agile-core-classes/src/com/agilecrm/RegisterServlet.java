@@ -28,6 +28,7 @@ import com.agilecrm.session.UserInfo;
 import com.agilecrm.subscription.SubscriptionUtil;
 import com.agilecrm.subscription.ui.serialize.Plan;
 import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.RegisterVerificationServlet;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.ReferenceUtil;
 import com.agilecrm.util.RegisterUtil;
@@ -101,12 +102,12 @@ public class RegisterServlet extends HttpServlet
 	catch (Exception e)
 	{
 	    // Send to Login Page
-	    request.getRequestDispatcher("register.jsp?error=" + URLEncoder.encode(e.getMessage())).forward(request,
-		    response);
+	    request.getRequestDispatcher("register-new1.jsp?error=" + URLEncoder.encode(e.getMessage())).forward(
+		    request, response);
 	    return;
 	}
 
-	request.getRequestDispatcher("register.jsp").forward(request, response);
+	request.getRequestDispatcher("register-new1.jsp").forward(request, response);
     }
 
     /**
@@ -497,6 +498,15 @@ public class RegisterServlet extends HttpServlet
 	if (domainUser != null && reference_domain != null)
 	{
 	    ReferenceUtil.updateReferralCount(reference_domain);
+	}
+
+	try
+	{
+	    RegisterVerificationServlet.storeIpInMemcache(request, domainUser.domain);
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
 	}
 	userInfo.setDomainId(domainUser.id);
 	return domainUser;

@@ -30,6 +30,12 @@ public class Unsubscribe
      * Tag to be added to subscriber, when subscriber confirms Unsubscribe
      */
     public String tag = null;
+    
+    /**
+     * From email of unsubscribe confirmation email 
+     */
+    public String unsubscribe_email = null;
+    
 
     /**
      * Default Unsubscribe

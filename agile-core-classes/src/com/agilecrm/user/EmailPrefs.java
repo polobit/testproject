@@ -112,6 +112,17 @@ public class EmailPrefs
     private List<String> sharedImapUserNames;
     private List<String> sharedGmailUserNames;
     private List<String> sharedExchangeUserNames;
+    private List<String> fetchUrls;
+
+    public List<String> getFetchUrls()
+    {
+        return fetchUrls;
+    }
+
+    public void setFetchUrls(List<String> fetchUrls)
+    {
+        this.fetchUrls = fetchUrls;
+    }
 
     public EmailPrefs()
     {

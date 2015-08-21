@@ -14,6 +14,7 @@ function agile_addCampaign(data, callback, email)
 	{
 		if (!agile_guid.get_email())
 		{
+			agile_cookieCampaigns("add", data);
 			return;
 		}
 		else 
@@ -100,6 +101,7 @@ function agile_unsubscribeCampaign(data, callback, email)
 	{
 		if (!agile_guid.get_email())
 		{
+			agile_cookieCampaigns("delete", data);
 			return;
 		}
 		else 

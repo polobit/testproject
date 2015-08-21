@@ -1,7 +1,11 @@
 package com.agilecrm.core.api;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
@@ -21,10 +25,18 @@ import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.agilecrm.account.EmailGateway;
+
+import com.agilecrm.account.EmailGateway.EMAIL_API;
+import com.agilecrm.account.VerifiedEmails.Verified;
+
+import com.agilecrm.account.VerifiedEmails;
+
 import com.agilecrm.account.util.EmailGatewayUtil;
+import com.agilecrm.account.util.VerifiedEmailsUtil;
 import com.agilecrm.activities.util.ActivitySave;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.email.ContactEmail;
@@ -37,6 +49,8 @@ import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.EmailPrefs;
 import com.agilecrm.util.EmailUtil;
 import com.agilecrm.util.HTTPUtil;
+import com.agilecrm.util.VersioningUtil;
+import com.agilecrm.util.email.SendMail;
 import com.campaignio.tasklets.agile.util.AgileTaskletUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.blobstore.BlobKey;
@@ -256,13 +270,17 @@ public class EmailsAPI
     public String getEmailActivityFromMandrill() throws Exception
     {
 	EmailGateway emailGateway = EmailGatewayUtil.getEmailGateway();
+	
+	// If SendGrid, return 
+	if(emailGateway != null && emailGateway.email_api.equals(EMAIL_API.SEND_GRID))
+		return new JSONObject().put("_agile_email_gateway", emailGateway.email_api.toString()).toString();
 
 	String apiKey = null;
 
 	// Get emailGateway api-key
 	if (emailGateway != null)
 	    apiKey = emailGateway.api_key;
-
+	
 	String domain = NamespaceManager.get();
 
 	// Returns mandrill subaccount info if created, otherwise error json.
@@ -300,6 +318,8 @@ public class EmailsAPI
 	    subAccountJSON.put("created_at", "");
 	    subAccountJSON.put("notes", "");
 	    subAccountJSON.put("first_sent_at", "");
+	    
+	    subAccountJSON.put("_agile_email_gateway", "MANDRILL");
 
 	    return subAccountJSON.toString();
 	}
@@ -441,6 +461,40 @@ public class EmailsAPI
 	    e.printStackTrace();
 	    return null;
 	}
+    }
+    
+    @Path("verify-from-email")
+    @POST
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    public void sendVerificationEmail(@FormParam("email") String email)
+    {
+    	
+    	VerifiedEmails verifiedEmails = VerifiedEmailsUtil.getVerifiedEmailsByEmail(email);
+    	
+    	// Email verified already
+    	if(verifiedEmails != null && verifiedEmails.verified.equals(Verified.YES))
+    		throw new WebApplicationException(Response.status(javax.ws.rs.core.Response.Status.BAD_REQUEST)
+    			    .entity("Email verified already.").build());
+    	
+    	boolean exists = false;
+    	
+    	if(verifiedEmails != null && verifiedEmails.verified.equals(Verified.NO))
+    		exists = true;
+    	
+    	// If null, create new object
+    	if(verifiedEmails == null)
+    		verifiedEmails = new VerifiedEmails(email, String.valueOf(System.currentTimeMillis()));
+    	
+    	verifiedEmails.save();
+    	
+    	// Send Verification email
+    	verifiedEmails.sendEmail();
+    	
+    	// If email exists already and not verified yet, send email again and throw exception
+    	if(exists)
+        		throw new WebApplicationException(Response.status(javax.ws.rs.core.Response.Status.BAD_REQUEST)
+        			    .entity("Email not verified yet.").build());
+    	
     }
 
 }

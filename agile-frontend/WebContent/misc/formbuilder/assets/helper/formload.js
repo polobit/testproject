@@ -4,6 +4,7 @@ define([
 	return { agile_form_load : function()
 	{
 		var url = window.location.protocol + '//' + window.location.host + '/' + 'core/api/forms/form?formId=' + formNumber;
+		
 		$.ajax({
 			url : url,
 			type: 'GET',
@@ -19,24 +20,8 @@ define([
 			    	  if(formHtml != '') {
 			    		  $('#agileFormHolder').html(formHtml);
 			    		  $('#agileFormHolder style').remove();
-			    		  
-			    		  //resetting generated form values to meet requirement.
-			    		  
-//			    		  _agile.set_account($("#_agile_api").val(), $("#_agile_domain").val());
-//			    		  console.log($("#_agile_api").val()+","+ $("#_agile_domain").val());
-
-//			    		  $('#agile-form').attr("method","POST");
-//			    		  var agileFormSubmitURL = "#";
-//			    		  $('#agile-form').attr("action",agileFormSubmitURL);
-			    		  
-			    		  var newRedirectHiddenField = $("#_agile_redirect_url").val();
-			    		  if(typeof newRedirectHiddenField != "undefined" && newRedirectHiddenField == "#") {
-			    			  $("#_agile_redirect_url").val("https://"+$("#_agile_domain").val()+".agilecrm.com/agileform_thankyou.jsp");
-			    		  }		    		  
-			    		  
 			    	  }
 				}
-				
 				
 			}
 		});

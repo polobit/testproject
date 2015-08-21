@@ -3,9 +3,9 @@ package com.agilecrm.search;
 import java.util.Collection;
 import java.util.List;
 
+import com.agilecrm.SearchFilter;
 import com.agilecrm.cases.Case;
 import com.agilecrm.contact.Contact;
-import com.agilecrm.contact.filter.ContactFilter;
 import com.agilecrm.deals.Opportunity;
 import com.agilecrm.document.Document;
 import com.agilecrm.search.ui.serialize.SearchRule;
@@ -98,10 +98,10 @@ public interface QueryInterface
 
 	public Collection<?> processQuery(String query, Integer page, String cursor);
 
-	Collection<?> advancedSearch(ContactFilter filter);
+	Collection<?> advancedSearch(SearchFilter filter);
 
-	Collection<?> advancedSearch(ContactFilter filter, Integer count, String cursor, String orderBy);
+	Collection<?> advancedSearch(SearchFilter filter, Integer count, String cursor, String orderBy);
 
-	List<ScoredDocument> advancedSearchOnlyIds(ContactFilter filter, Integer count, String cursor, String orderBy);
+	List<ScoredDocument> advancedSearchOnlyIds(SearchFilter filter, Integer count, String cursor, String orderBy);
 
 }

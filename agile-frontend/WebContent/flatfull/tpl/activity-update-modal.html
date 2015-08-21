@@ -12,6 +12,7 @@
                 <fieldset>
                     <input name="id" type="hidden" value="{{id}}" /> 
                     <input type="hidden"  name="type" id="type" value="{{type}}"/>
+                     <input type="hidden"  name="meeting_type" id="meeting_type"/>
                     <div class="row">
                     	<div class="col-md-6">
 	                        <div id="addEvent" class="control-group form-group">
@@ -51,7 +52,7 @@
                         <div class="control-group form-group col-md-6">
                             <label class="control-label"><b>Start Date: </b><span class="field_req">*</span></label>
                             <div class="controls">
-                                <input type="text" name="start" placeholder="mm/dd/yyyy" id="update-event-date-1" class="required date form-control" />							
+                                <input type="text" name="start"  placeholder="Select Date" id="update-event-date-1" class="required date form-control" />							
                             </div>
                         </div>
                         <div class="control-group form-group col-md-6">
@@ -65,7 +66,7 @@
                         <div class="control-group form-group col-md-6">
                             <label class="control-label"><b>End Date: </b><span class="field_req">*</span></label>
                             <div class="controls">
-                                <input type="text" name="end" placeholder="mm/dd/yyyy" id="update-event-date-2" class="required date form-control" />									
+                                <input type="text" name="end" placeholder="Select Date" id="update-event-date-2" class="required date form-control" />									
                             </div>
                         </div>
                         <div class="control-group form-group col-md-6">
@@ -98,11 +99,15 @@
 	                        </div>
 	                    </div>
                     </div>
+                    
+                     <div class="control-group" id="event_desc">
+					
+				</div>
                 </fieldset>
             </form>
         </div>
     </div>
-    <div class="modal-footer">
+    <div class="modal-footer" id="event-save-footer">
         <a href="#" class="btn btn-sm btn-danger" id="event_delete">Delete</a>
         <a href="#" class="btn btn-sm btn-primary" id="update_event_validate">Update</a>&nbsp;
         <span class="save-status"></span>

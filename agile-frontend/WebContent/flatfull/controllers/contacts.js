@@ -78,15 +78,28 @@ var ContactsRouter = Backbone.Router.extend({
 			setup_dashboard(el);
 			// loadDynamicTimeline("my-timeline", el);
 		});*/
-		head.js(LIB_PATH + 'jscore/handlebars/handlebars-helpers.js',
-				LIB_PATH + 'lib/jquery.gridster.js',function(){
-			var el = $(getTemplate('portlets', {}));
-			$("#content").html(el);
-			/*if (IS_FLUID){
-				$('#content').find('div.row').removeClass('row').addClass('row-fluid');
-			}*/
-			loadPortlets(el);
-		});
+		if(CURRENT_DOMAIN_USER.domain == "admin")
+		{
+			Backbone.history.navigate("domainSearch" , {
+                trigger: true
+            });
+			
+		}else{
+			/*head.js(LIB_PATH + 'jscore/handlebars/handlebars-helpers.js'+ _AGILE_VERSION,
+					LIB_PATH + 'lib/jquery.gridster.js',function(){*/
+				var el = $(getTemplate('portlets', {}));
+				$("#content").html(el);
+				$('[data-toggle="tooltip"]').tooltip();
+				if ((navigator.userAgent.toLowerCase().indexOf('chrome') > -1&&navigator.userAgent.toLowerCase().indexOf('opr/') == -1) && !document.getElementById('agilecrm_extension'))
+				{
+					$("#chrome-extension-button").removeClass('hide');
+				}
+				/*if (IS_FLUID){
+					$('#content').find('div.row').removeClass('row').addClass('row-fluid');
+				}*/
+				loadPortlets(el);
+			// });
+		}
 	},
 	
 	/**
@@ -113,9 +126,9 @@ var ContactsRouter = Backbone.Router.extend({
 		SELECT_ALL = false;
 		
 		//campaign filters are disabled for time being.
-		if(readData('dynamic_contact_filter') &&readData('dynamic_contact_filter').indexOf('campaign_status') >= 0 ) {
+		/*if(readData('dynamic_contact_filter') &&readData('dynamic_contact_filter').indexOf('campaign_status') >= 0 ) {
 			eraseData('dynamic_contact_filter');
-		}
+		}*/
 
 		var max_contacts_count = 20;
 		var is_company = false;
@@ -141,15 +154,6 @@ var ContactsRouter = Backbone.Router.extend({
 		this.tag_id = tag_id;
 		var postData;
 
-		// Check if contacts page is set to show companie
-		if (readCookie('company_filter'))
-		{
-			eraseCookie('contact_filter');
-			eraseCookie('contact_filter_type');
-			is_company = true;
-		}
-		if (readCookie('contact_filter_type') && readCookie('contact_filter_type') == 'COMPANY')
-			is_company = true;
 		// Tags, Search & default browse comes to the same function
 		if (tag_id)
 		{
@@ -160,8 +164,8 @@ var ContactsRouter = Backbone.Router.extend({
 			
 			// erase filter cookie
 			eraseCookie('contact_filter');
-			eraseCookie('company_filter');
-			eraseCookie('contact_filter_type');
+			//eraseCookie('company_filter');
+			//eraseCookie('contact_filter_type');
 			eraseData('dynamic_contact_filter');
 
 			if (this.contactsListView && this.contactsListView.collection)
@@ -190,30 +194,16 @@ var ContactsRouter = Backbone.Router.extend({
 			}
 		}
 
-		if (readCookie('company_filter'))
-		{
-			// Change template to companies - this template is separate
-			// from contacts default template
-			url = "core/api/contacts/companies/list";
-
-			if (!grid_view && !readCookie("agile_contact_view"))
-				template_key = "companies";
-		}
-
 		// If contact-filter cookie is defined set url to fetch
 		// respective filter results
 		if (filter_id || (filter_id = readCookie('contact_filter')))
 		{
 			collection_is_reverse = false;
 			url = "core/api/filters/query/list/" + filter_id;
-			if (readCookie('contact_filter_type') && readCookie('contact_filter_type') == 'COMPANY')
-				template_key = "companies";
 		}
 
 		// If view is set to custom view, load the custom view
-		// If Company filter active-don't load any Custom View Show
-		// default
-		if ((!readCookie('company_filter') && readCookie('contact_filter_type') != 'COMPANY') && !readCookie("agile_contact_view"))
+		if (!readCookie("agile_contact_view"))
 		{
 			if(readData('dynamic_contact_filter')) {
 				// Then call customview function with filter url
@@ -246,24 +236,24 @@ var ContactsRouter = Backbone.Router.extend({
 			this.contactsListView = undefined;
 			CONTACTS_HARD_RELOAD = false;
 		}
-
+		
 		if (this.contactsListView && this.contactsListView.collection)
 		{
 			this.contactsListView.collection.url = url;
 
-			$('#content').html(this.contactsListView.render(true).el);
+			$('#content').html('<div id="conatcts-listeners-conatainer"></div>');
+			$('#conatcts-listeners-conatainer').html(this.contactsListView.render(true).el);
 
 			$(".active").removeClass("active");
 			$("#contactsmenu").addClass("active");
+
+			contactFiltersListeners();
 			return;
 		}
-		if(readData('dynamic_contact_filter') && !readCookie('company_filter')) {
+		if(readData('dynamic_contact_filter')) {
 			url = 'core/api/filters/filter/dynamic-filter';
 			postData = readData('dynamic_contact_filter');
-		} else if(readData('dynamic_company_filter') && readCookie('company_filter')) {
-			url = 'core/api/filters/filter/dynamic-filter';
-			postData = readData('dynamic_company_filter');
-		}
+		} 
 
 		var slateKey = getContactPadcontentKey(url);
 		if(is_lhs_filter) {
@@ -272,9 +262,6 @@ var ContactsRouter = Backbone.Router.extend({
 			{
 				template_key = "contacts-grid-table";
 				individual_tag_name = "div";
-			}
-			if(readCookie('company_filter')) {
-				template_key = "companies-table";
 			}
 		}
 
@@ -317,14 +304,19 @@ var ContactsRouter = Backbone.Router.extend({
 		// Contacts are fetched when the app loads in the initialize
 		this.contactsListView.collection.fetch();
 		if(!is_lhs_filter) {
-			$('#content').html(this.contactsListView.render().el);
+			$('#content').html('<div id="conatcts-listeners-conatainer"></div>');
+			$('#conatcts-listeners-conatainer').html(this.contactsListView.render().el);
+			contactFiltersListeners();
 		} else {
-			$('#content').find('.contacts-div').html(this.contactsListView.render().el);
+			$('#conatcts-listeners-conatainer').find('.contacts-div').html(this.contactsListView.render().el);
 			$('#bulk-actions').css('display', 'none');
+			$('#bulk-select').css('display', 'none');
 			CONTACTS_HARD_RELOAD = true;
 		}
 		$(".active").removeClass("active");
 		$("#contactsmenu").addClass("active");
+	
+
 	},
 	
 	/**
@@ -479,6 +471,7 @@ var ContactsRouter = Backbone.Router.extend({
 			if (id == this.contactDetailView.model.toJSON()['id'])
 			{
 				App_Contacts.contactDetails(id, this.contactDetailView.model);
+				
 				return;
 			}
 		}
@@ -501,7 +494,10 @@ var ContactsRouter = Backbone.Router.extend({
 				model.id = id;
 				model.fetch({ success : function(data)
 				{
-					
+					if(data.type == 'COMPANY'){
+						App_Companies.companyDetails(id);
+						return;
+					}
 					// Call Contact Details again
 					App_Contacts.contactDetails(id, model);
 
@@ -512,7 +508,7 @@ var ContactsRouter = Backbone.Router.extend({
 						$("#content").html(response.responseText);
 				}
 				});
-
+				
 				return;
 			}
 
@@ -535,52 +531,14 @@ var ContactsRouter = Backbone.Router.extend({
 		// If contact is of type company , go to company details page
 		if (contact.get('type') == 'COMPANY')
 		{			
-			this.contactDetailView = new Base_Model_View({ model : contact, isNew : true, template : "company-detail",
-				postRenderCallback : function(el)
-				{
-				//	contactInnerTabsInvoke(el);  hiding the prev,next arrows when viewport suits
-					fill_company_related_contacts(id, 'company-contacts');
-					// Clone contact model, to avoid render and
-					// post-render fell in to
-					// loop while changing attributes of contact
-					var recentViewedTime = new Backbone.Model();
-					recentViewedTime.url = "core/api/contacts/viewed-at/" + contact.get('id');
-					recentViewedTime.save();
-
-					if (App_Contacts.contactsListView && App_Contacts.contactsListView.collection && App_Contacts.contactsListView.collection.get(id))
-						App_Contacts.contactsListView.collection.get(id).attributes = contact.attributes;
-
-					starify(el);
-					show_map(el);
-					//fill_owners(el, contact.toJSON());
-					// loadWidgets(el, contact.toJSON());
-					
-					// For sip
-					if (Sip_Stack != undefined && Sip_Register_Session != undefined && Sip_Start == true)
-					{
-						$(".contact-make-sip-call",el).show();
-						$(".contact-make-twilio-call",el).hide();
-						$(".contact-make-call",el).hide();
-					}
-					//else if (Twilio.Device.status() == "ready" || Twilio.Device.status() == "busy")
-					else if(Twilio_Start == true)
-					{
-						$(".contact-make-sip-call",el).hide();
-						$(".contact-make-twilio-call",el).show();
-						$(".contact-make-call",el).hide();
-					}
-				} });
-
-			var el = this.contactDetailView.render(true).el;
-			$('#content').html(el);
-			fill_company_related_contacts(id, 'company-contacts');
+			Backbone.history.navigate( "company/"+id, { trigger : true });
 			return;
 		}
 
 		this.contactDetailView = new Base_Model_View({ model : contact, isNew : true, template : "contact-detail", postRenderCallback : function(el)
 		{
 			
-			
+			$("#mobile-menu-settings").trigger('click');
 			// Clone contact model, to avoid render and post-render fell
 			// in to
 			// loop while changing attributes of contact
@@ -648,7 +606,7 @@ var ContactsRouter = Backbone.Router.extend({
 		var el = this.contactDetailView.render(true).el;
 
 		$('#content').html(el);
-		
+
 		// Check updates in the contact.
 		checkContactUpdated();
 
@@ -790,7 +748,8 @@ var ContactsRouter = Backbone.Router.extend({
 	 */
 	importContacts : function()
 	{
-		$('#content').html(getTemplate("import-contacts", {}));
+		$('#content').html('<div id="import-contacts-event-listener"></div>').find('#import-contacts-event-listener').html(getTemplate("import-contacts", {}));
+        initializeImportEvents('import-contacts-event-listener');
 	},
 	
 
@@ -846,7 +805,7 @@ var ContactsRouter = Backbone.Router.extend({
 			// Show the email form with the email prefilled from the curtrent contact
 			model = this.contactDetailView.model.toJSON();
 		}
-		var el = $("#content").html(getTemplate("send-email", model));
+		var el = $("#content").html('<div id="send-email-listener-container"></div>').find('#send-email-listener-container').html(getTemplate("send-email", model));
 		
 		// Call setupTypeAhead to get contacts
 		agile_type_ahead("to", el, contacts_typeahead, null, null, "email-search", null, true, null, true);
@@ -962,6 +921,8 @@ var ContactsRouter = Backbone.Router.extend({
 			});
 		}
 		
+		initializeSendEmailListeners();
+		sendEmailAttachmentListeners("send-email-listener-container");
 	},
 	
 	/**
@@ -1022,13 +983,17 @@ var ContactsRouter = Backbone.Router.extend({
 			view_data = App_Contacts.contactViewModel;
 
 		}
+	
 
 		// If defined
 		if (this.contact_custom_view && this.contact_custom_view.collection.url == url)
 		{
 			
 			var el = App_Contacts.contact_custom_view.render(true).el;
-			$('#content').html(el);
+			$('#content').html('<div id="conatcts-listeners-conatainer"></div>');
+			$('#conatcts-listeners-conatainer').html(el);
+
+			contactFiltersListeners();
 
 			if (readCookie('company_filter'))
 				$('#contact-heading', el).text('Companies');
@@ -1067,10 +1032,6 @@ var ContactsRouter = Backbone.Router.extend({
 			postRenderCallback : function(el, collection)
 			{
 				App_Contacts.contactsListView = App_Contacts.contact_custom_view;
-
-				// To set heading in template
-				if (readCookie('company_filter'))
-					$('#contact-heading', el).text('Companies');
 
 				// To set chats and view when contacts are fetch by
 				// infiniscroll
@@ -1111,16 +1072,20 @@ var ContactsRouter = Backbone.Router.extend({
 				});
 		
 		if(!is_lhs_filter) {
-			$('#content').html(this.contact_custom_view.el);
+			$('#content').html('<div id="conatcts-listeners-conatainer"></div>');
+			$('#conatcts-listeners-conatainer').html(this.contact_custom_view.el);
+			contactFiltersListeners();
 		} else {
-			$('#content').find('.contacts-div').html(this.contact_custom_view.el);
+			$('#conatcts-listeners-conatainer').find('.contacts-div').html(this.contact_custom_view.el);
 			$('#bulk-actions').css('display', 'none');
+			$('#bulk-select').css('display', 'none');
 			CONTACTS_HARD_RELOAD = true;
 		}
 		
 		// Activate Contacts Navbar tab
 		$(".active").removeClass("active");
 		$("#contactsmenu").addClass("active");
+	
 	},
 	
 	addLead : function(first, last){

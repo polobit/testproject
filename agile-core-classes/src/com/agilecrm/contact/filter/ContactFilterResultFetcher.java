@@ -31,7 +31,6 @@ import com.agilecrm.subscription.SubscriptionUtil;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.access.UserAccessControl;
 import com.agilecrm.user.access.UserAccessScopes;
-import com.agilecrm.user.access.util.UserAccessControlUtil;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.google.gson.JsonSyntaxException;
 import com.googlecode.objectify.Key;
@@ -91,10 +90,6 @@ public class ContactFilterResultFetcher
      */
     private Map<String, Object> searchMap;
 
-    {
-	access = UserAccessControl.getAccessControl(UserAccessControl.AccessControlClasses.Contact, null);
-    }
-
     ContactFilterResultFetcher()
     {
 
@@ -121,14 +116,23 @@ public class ContactFilterResultFetcher
     public ContactFilterResultFetcher(String filter_id, String dynamic_filter, int max_fetch_set_size,
 	    String contact_ids, Long currentDomainUserId)
     {
+
 	max_fetch_size = Integer.MAX_VALUE;
 
 	this.max_fetch_set_size = max_fetch_set_size;
 
 	this.contact_ids = contact_ids;
 	domainUserId = currentDomainUserId;
+
+	System.out.println("initializing scopes " + getDomainUser().email);
+	access = UserAccessControl.getAccessControl(UserAccessControl.AccessControlClasses.Contact, null,
+		getDomainUser());
+
+	System.out.println(access.getCurrentUserScopes());
+
 	try
 	{
+	    System.out.println("filter : " + filter_id);
 	    Long filterId = Long.parseLong(filter_id);
 	    this.filter = ContactFilter.getContactFilter(filterId);
 	    if (this.filter != null)
@@ -508,8 +512,12 @@ public class ContactFilterResultFetcher
 
     private DomainUser getDomainUser()
     {
+	System.out.println("getting domain user : " + user);
 	if (user != null)
+	{
+	    System.out.println(user.email);
 	    return user;
+	}
 
 	if (domainUserId != null)
 	{
@@ -566,9 +574,6 @@ public class ContactFilterResultFetcher
 
     private void modifyFilterCondition()
     {
-	UserAccessControlUtil.checkReadAccessAndModifyTextSearchQuery(
-		UserAccessControl.AccessControlClasses.Contact.toString(), filter.rules);
-
 	if (hasScope(UserAccessScopes.VIEW_CONTACTS)
 		&& !(hasScope(UserAccessScopes.UPDATE_CONTACT) || hasScope(UserAccessScopes.DELETE_CONTACTS)))
 	{

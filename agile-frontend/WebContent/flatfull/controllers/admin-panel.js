@@ -26,10 +26,10 @@ var AdminPanelRouter = Backbone.Router.extend({
 	// get domain details
 
 	"getDomainUserDetails/:id" : "getDomainUserDetails",
-		
-	
-	
-	
+
+	// search domain
+
+	"domainSearch" : "domainSearch"
 
 	},
 
@@ -43,7 +43,7 @@ var AdminPanelRouter = Backbone.Router.extend({
 		$.ajax({ url : 'core/api/admin_panel/getdomainstats?d=' + domainname, type : 'GET', success : function(data)
 		{
 			console.log(data);
-			
+
 			var emails = data.emailcount;
 			data.emailcount = JSON.parse(data.emailcount);
 			$(el).find('#account').html(getTemplate("domain-info", data));
@@ -56,9 +56,6 @@ var AdminPanelRouter = Backbone.Router.extend({
 		} });
 
 	},
-	
-	
-	
 
 	// function will be called from getDomainDetails Navigation
 	// todisplay get subscription object for particular domain
@@ -71,13 +68,13 @@ var AdminPanelRouter = Backbone.Router.extend({
 			console.log("ssssssssssssssssssssssss");
 			console.log(data);
 			$(el).find('#planinfo').html(getTemplate("plan-info", data));
-			
+
 			if (data == null || data == "" || data == undefined)
 			{
 
 				$("#login_id").attr("href", "https://" + domainname + ".agilecrm.com/login");
 			}
-			
+
 			else
 				that.get_collection_of_charges_for_customer_from_adminpanel(el, data.id);
 		} });
@@ -102,7 +99,7 @@ var AdminPanelRouter = Backbone.Router.extend({
 	{
 		this.chargecollection = new Base_Collection_View({ url : "core/api/admin_panel/getcharges?d=" + customerid, templateKey : "admin-charge",
 
-		individual_tag_name : 'tr',sortKey : 'createdtime', descending : true });
+		individual_tag_name : 'tr', sortKey : 'createdtime', descending : true });
 		this.chargecollection.collection.fetch();
 
 		$('.past-chargecollection', el).html(this.chargecollection.render().el);
@@ -111,7 +108,7 @@ var AdminPanelRouter = Backbone.Router.extend({
 	// router to fill domain details template from admin panel
 	getDomainUserDetails : function(id)
 	{
-
+		 $('#content').html("<div id='admin-panel-listners'>&nbsp;</div>");
 		var self = this;
 		var domainname;
 		this.usersListViewCollection = new Base_Collection_View({ url : 'core/api/admin_panel/getParticularDomainUsers?d=' + id, templateKey : "all-domain",
@@ -123,13 +120,14 @@ var AdminPanelRouter = Backbone.Router.extend({
 				});
 
 				var mod_collection = self.usersListViewCollection.collection.models;
-			
-				
+
 				domainname = mod_collection[0].get('domain');
 				email = mod_collection[0].get('email');
 				self.get_customerobject_for_domain_from_adminpanel(el, domainname);
 				$('#account').html("<img src='img/21-0.gif'>");
 				self.get_account_stats_for_domain_from_adminpanel(el, domainname);
+
+				initializeAdminpanelListner(el);
 
 			},
 
@@ -212,7 +210,11 @@ var AdminPanelRouter = Backbone.Router.extend({
 	allDomainUsers : function()
 	{
 		allDomainUsersCollectionView = new Base_Collection_View({ url : 'core/api/admin_panel/getAllDomainUsers', templateKey : "all-domain-users",
-			individual_tag_name : 'tr', cursor : true, page_size : 25 });
+			individual_tag_name : 'tr', cursor : true, page_size : 25, postRenderCallback : function(el)
+			{
+				initializeAdminpanelListner(el);
+
+			} });
 
 		allDomainUsersCollectionView.collection.fetch();
 		$('#content').html(allDomainUsersCollectionView.el);
@@ -256,17 +258,19 @@ var AdminPanelRouter = Backbone.Router.extend({
 				showCouponCodeContainer(id);
 				$("#user_quantity").attr("value", data.plan.quantity);
 				price = update_price();
-				$( "#users_quantity").text(data.plan.quantity);
-     	    	$("#users_total_cost").text((data.plan.quantity * price).toFixed(2));
+				$("#users_quantity").text(data.plan.quantity);
+				$("#users_total_cost").text((data.plan.quantity * price).toFixed(2));
 
-				head.load(CSS_PATH + 'css/jslider.css', CSS_PATH + "css/misc/agile-plan-upgrade.css", LIB_PATH + 'lib/jquery.slider.min.js', function()
+				/*head.load(CSS_PATH + "css/misc/agile-plan-upgrade.css", LIB_PATH + 'lib/jquery.slider.min.js', function()
 				{
 					if ($.isEmptyObject(data))
 						setPlan("free");
 					else
 						setPlan(data);
-					//load_slider(el);
-				});
+					// load_slider(el);
+				});*/
+
+				initializeAdminpanelListner(el);
 			} });
 		$('#content').html(subscribe_plan.render().el);
 	},
@@ -301,7 +305,7 @@ var AdminPanelRouter = Backbone.Router.extend({
 			}, saveCallback : function(data)
 			{
 				window.navigate("domainSubscribe/" + plan.domain_name, { trigger : true });
-				add_plan_change_info_as_note_to_owner(email,plan.plan_type,plan.plan_id,plan.quantity);
+				add_plan_change_info_as_note_to_owner(email, plan.plan_type, plan.plan_id, plan.quantity);
 				showNotyPopUp("information", "You have been upgraded successfully. Please logout and login again for the new changes to apply.", "top");
 			}
 
@@ -311,6 +315,14 @@ var AdminPanelRouter = Backbone.Router.extend({
 		$('#content').html(upgrade_plan.render().el);
 		$(".active").removeClass("active");
 		// $("#fat-menu").addClass("active");
+	},
+
+	domainSearch : function()
+	{
+		var el = $(getTemplate('all-domain-search', {}));
+		$("#content").html(el);
+		initializeDomainsearchListner();
+		hideTransitionBar();
 	}
 
 });

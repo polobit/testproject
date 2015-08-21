@@ -1,7 +1,9 @@
 package com.thirdparty.mandrill.webhook;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -16,7 +18,6 @@ import com.agilecrm.account.APIKey;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
 import com.agilecrm.contact.util.ContactUtil;
-import com.agilecrm.subscription.limits.PlanLimits;
 import com.agilecrm.subscription.restrictions.exception.PlanRestrictedException;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.util.EmailUtil;
@@ -29,12 +30,22 @@ import com.googlecode.objectify.Key;
 @SuppressWarnings("serial")
 public class MandrillWebhookTriggerInbound extends HttpServlet
 {
-    public enum AgileDetail
+    public static enum AgileDetail
     {
 	API_KEY, DOMAIN;
     }
 
     public static final String INBOUND_MAIL_EVENT = "INBOUND_MAIL_EVENT";
+
+    public static final Map<String, String> confirmationSubjects;
+
+    static
+    {
+	confirmationSubjects = new HashMap<String, String>();
+	confirmationSubjects.put("forwarding-noreply@google.com", "Forwarding Confirmation");
+	confirmationSubjects.put("no-reply@cc.yahoo-inc.com", "Forwarding Email Confirmation");
+	confirmationSubjects.put("noreply@zoho.com", "Email forwarding confirmation");
+    }
 
     public void service(HttpServletRequest request, HttpServletResponse response) throws IOException
     {
@@ -60,6 +71,7 @@ public class MandrillWebhookTriggerInbound extends HttpServlet
 		{
 		    JSONObject message = event.getJSONObject("msg");
 		    // System.out.println("email message is " + message);
+
 		    if (message == null)
 		    {
 			// response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
@@ -277,12 +289,15 @@ public class MandrillWebhookTriggerInbound extends HttpServlet
 	try
 	{
 	    String messageSubject = message.getString("subject");
-	    String[] emailTitleWords = new String[] { "Forwarding", "Confirmation" };
-	    for (int i = 0; i < emailTitleWords.length; i++)
+	    String fromEmail = message.getString("from_email");
+
+	    for (Map.Entry<String, String> entry : confirmationSubjects.entrySet())
 	    {
-		isConfirmationEmail = StringUtils.contains(messageSubject, emailTitleWords[i]);
-		if (!isConfirmationEmail)
+		if (StringUtils.equals(entry.getKey(), fromEmail) && messageSubject.indexOf(entry.getValue()) != -1)
+		{
+		    isConfirmationEmail = true;
 		    break;
+		}
 	    }
 	}
 	catch (JSONException e)
@@ -301,11 +316,24 @@ public class MandrillWebhookTriggerInbound extends HttpServlet
 
 	    DomainUser user = APIKey.getDomainUserRelatedToAPIKey(apiKey);
 	    EmailUtil.sendEmailUsingAPI("noreply@agilecrm.com", "Agile CRM", user.email, null, null, messageSubject,
-		    null, null, message.getString("text"), null, null);
+		    null, getMessageContent("html", message), getMessageContent("text", message), null, null);
 	}
 	catch (Exception e)
 	{
 	    System.out.println("exception occured in sending confirmation email " + e.getMessage());
 	}
+    }
+
+    public String getMessageContent(String contentType, JSONObject message)
+    {
+	try
+	{
+	    if (message.has(contentType))
+		return message.getString(contentType);
+	}
+	catch (JSONException e)
+	{
+	}
+	return null;
     }
 }

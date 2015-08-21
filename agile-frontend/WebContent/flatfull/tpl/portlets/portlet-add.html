@@ -1,13 +1,11 @@
 <script id="portlets-add-model-template" type="text/html">
-		<div class="panel wrapper b-a">
-			<center class="network-type text-md" style="color: #8a6086;">
-			
-			<div class="thumbnail w"><i class="portlets-modal-icon icon {{get_portlet_icon name}}"></i>				
-				{{get_portlet_name name}}</div>
-			<div class="text-flow-ellipsis line-clamp line-clamp-3 m-b widget-text" style="height:60px"  rel="tooltip" title="{{description}}">
-				{{description}}
+		<div class="panel wrapper b-a text-center">
+			<div class="text-md"><i class="portlets-modal-icon icon {{get_portlet_icon name}}"></i>				
+				<b>{{get_portlet_name name}}</b></div><br>
+			<div class="text-flow-ellipsis line-clamp line-clamp-3 m-b widget-text" style="height:60px"  rel="tooltip" title="{{get_portlet_description name}}">
+				{{get_portlet_description name}}
 			</div>
-			{{#if_equals "Mini Calendar" name}}
+		{{#if_equals "Mini Calendar" name}}
 			  {{#if is_added}}
 		<div>	<a class="btn btn-sm btn-default add-widget disabled" >Add</a></div>
 			{{else}}
@@ -17,7 +15,7 @@
 			<div>	<a class="btn btn-sm btn-default add-widget" onclick="javascript:addNewPortlet('{{portlet_type}}','{{remove_spaces name}}');">Add</a></div>
 		
 		{{/if_equals}}
-			</center>
+			
 		</div>    
 </script>
 <script id="portlets-add-collection-template" type="text/html">

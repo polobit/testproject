@@ -16,6 +16,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import org.apache.commons.codec.DecoderException;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.WordUtils;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -28,7 +29,6 @@ import com.agilecrm.subscription.Subscription;
 import com.agilecrm.subscription.SubscriptionUtil;
 import com.agilecrm.user.access.UserAccessScopes;
 import com.agilecrm.user.util.DomainUserUtil;
-import com.agilecrm.user.util.OnlineCalendarUtil;
 import com.agilecrm.user.util.UserPrefsUtil;
 import com.agilecrm.util.MD5Util;
 import com.agilecrm.util.VersioningUtil;
@@ -101,6 +101,9 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 	 */
 	@NotSaved(IfDefault.class)
 	public boolean is_disabled = false;
+
+	@NotSaved(IfDefault.class)
+	public boolean is_send_password = false;
 
 	/**
 	 * Email content to be sent for the first time
@@ -385,6 +388,8 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 
 			if (user.password.equals(MASKED_PASSWORD))
 				user.password = null;
+			if (StringUtils.isNotBlank(user.name))
+				user.name = WordUtils.capitalizeFully(user.name);
 
 			user.sendEmail(SendMail.WELCOME_SUBJECT, SendMail.WELCOME);
 		}
@@ -712,7 +717,8 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 		{
 
 			domainuser = DomainUserUtil.getDomainUser(id);
-			this.schedule_id = domainuser.schedule_id;
+			if (StringUtils.isBlank(this.schedule_id))
+				this.schedule_id = domainuser.schedule_id;
 
 		}
 
@@ -1054,15 +1060,10 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 
 		String calendar_url = VersioningUtil.getHostURLByApp(domain);
 
-		OnlineCalendarPrefs online_cal_prefs = OnlineCalendarUtil.getCalendarPrefs(id);
-		String scheduleid = null;
-		if (online_cal_prefs != null)
-		{
-			scheduleid = online_cal_prefs.schedule_id;
-			calendar_url += "calendar/" + scheduleid;
-		}
-		else if (!StringUtils.isEmpty(schedule_id))
+		if (StringUtils.isNotBlank(schedule_id))
 			calendar_url += "calendar/" + schedule_id;
+		else
+			calendar_url += "calendar/" + getScheduleid(name);
 
 		return calendar_url;
 

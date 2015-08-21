@@ -50,13 +50,14 @@
         </div>
         <!-- Add button -->
         <div>
-            <a class="btn btn-sm btn-primary" href="#activity-reports">Go</a>
+            <a cl
+ass="btn btn-sm btn-primary" href="#activity-reports">Go</a>
         </div>
     </div>
 </div>
 </div>
-
 </script>
+
 <script id="activity-report-collection-template" type="text/html">
 <div class="custom-animated custom-fadeInUp">
 <div class="wrapper-md lter bg-light b-b">
@@ -75,10 +76,11 @@
 		 <div id="slate" class="col-sm-9 col-md-9">
          </div>
         {{#if this.length}}
-        <div class="col-md-9 col-sm-9 table-responsive">
+        <div class="col-md-9 col-sm-9">
 		<div class="panel panel-default">
 		<div class="panel-heading">Activity Reports List</div>
-        <table class="table table-bordered table-striped showCheckboxes m-b-none agile-table panel" url="core/api/activity-reports/bulk">
+        <div class="table-responsive">
+        <table class="table table-bordered table-striped showCheckboxes m-b-none agile-table panel table-layout-mob-view" url="core/api/activity-reports/bulk">
             <thead>
                 <tr>
                     <th>Name</th>
@@ -91,6 +93,7 @@
             </tbody>
         </table>
 		</div>
+        </div>
         </div>
 		{{/if}}
     <div class="col-md-3 col-sm-3 p-none">
@@ -142,9 +145,9 @@
 		<form id="activityReportsForm" class="form-horizontal">
 				<div name="rules" class="formsection chainedSelect">
  					{{#if id}} 
-                        <div class="panel-heading font-bold"><h4 class="h4"> Edit Activity Report</h4></div>
+                        <div class="panel-heading">Edit Activity Report</div>
                       {{else}}
-                        <div class="panel-heading font-bold"><h4 class="h4"><i class="icon-plus-sign"></i> Add Activity Report</h4></div>
+                        <div class="panel-heading"><i class="icon-plus-sign"></i> Add Activity Report</div>
                     {{/if}}
                 <div class="panel-body">
 				<fieldset>

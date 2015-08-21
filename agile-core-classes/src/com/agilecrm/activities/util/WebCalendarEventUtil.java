@@ -728,21 +728,20 @@ public class WebCalendarEventUtil
 			WebCalendarEvent saveMe = new WebCalendarEvent();
 
 			// Assign proper name on basis of slot time duration
-			if (wce.slot_time.compareTo((long) 15) == 0)
-				saveMe.name = meeting_duration.getString("15mins");
-			;
-			if (wce.slot_time.compareTo((long) 30) == 0)
-				saveMe.name = meeting_duration.getString("30mins");
-			;
-			if (wce.slot_time.compareTo((long) 60) == 0)
-				saveMe.name = meeting_duration.getString("60mins");
-			;
+			/*
+			 * if (wce.slot_time.compareTo((long) 15) == 0) saveMe.name =
+			 * meeting_duration.getString("15mins"); ; if
+			 * (wce.slot_time.compareTo((long) 30) == 0) saveMe.name =
+			 * meeting_duration.getString("30mins"); ; if
+			 * (wce.slot_time.compareTo((long) 60) == 0) saveMe.name =
+			 * meeting_duration.getString("60mins"); ;
+			 */
 
 			// Assign slot time
 			saveMe.slot_time = wce.slot_time;
 
 			// Get assigned slot name
-			wce.name = saveMe.name;
+			// wce.name = saveMe.name;
 
 			// WCE save
 			// saveMe.save();
@@ -796,6 +795,14 @@ public class WebCalendarEventUtil
 				newEvnt.color = "#36C";
 				newEvnt.type = EventType.WEB_APPOINTMENT;
 
+				if (StringUtils.isNotEmpty(wce.phoneNumber) && !"Meeting Type".equalsIgnoreCase(wce.phoneNumber))
+				{
+					newEvnt.meeting_type = wce.phoneNumber.trim();
+				}
+				if (StringUtils.isNotEmpty(wce.notes))
+				{
+					newEvnt.description = wce.notes;
+				}
 				epoch_start_date = newEvnt.start;
 				String cid = contact.id.toString(); // related contact
 
@@ -848,6 +855,14 @@ public class WebCalendarEventUtil
 				client_event.created_time = System.currentTimeMillis() / 1000;
 				newEvnt.color = "#36C";
 				newEvnt.type = EventType.WEB_APPOINTMENT;
+				if (StringUtils.isNotEmpty(wce.phoneNumber) && !"Meeting Type".equalsIgnoreCase(wce.phoneNumber))
+				{
+					newEvnt.meeting_type = wce.phoneNumber.trim();
+				}
+				if (StringUtils.isNotEmpty(wce.notes))
+				{
+					newEvnt.description = wce.notes;
+				}
 
 				epoch_start_date = newEvnt.start;
 
@@ -1140,4 +1155,36 @@ public class WebCalendarEventUtil
 		}
 		return true;
 	}
+
+	/**
+	 * converts the buffer time to seconds or milliseconds
+	 * 
+	 * @param hours
+	 * @param secOrMil
+	 * @return
+	 */
+	public static long convertHoursToMilliSeconds(int bufferTime, String secOrMil)
+	{
+
+		long milliSecs = 0L;
+		try
+		{
+			if ("minutes".equalsIgnoreCase(secOrMil))
+			{
+				milliSecs = (long) (bufferTime * 60 * 1000);
+			}
+			else if ("hours".equalsIgnoreCase(secOrMil))
+			{
+				milliSecs = (long) bufferTime * 60 * 60 * 1000;
+			}
+		}
+		catch (Exception e)
+		{
+			System.out.println("exception occured while calculating buffertime" + e.getMessage());
+		}
+
+		return milliSecs;
+
+	}
+
 }

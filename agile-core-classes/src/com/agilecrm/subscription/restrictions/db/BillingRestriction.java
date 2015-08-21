@@ -201,7 +201,7 @@ public class BillingRestriction
 	if (one_time_emails_count != null && one_time_emails_count > 0)
 	    return true;
 
-	return false;
+	return true;
     }
 
     /**
@@ -244,6 +244,8 @@ public class BillingRestriction
     public void refresh(boolean refreshContacts)
     {
 
+	System.out.println(this.tags_in_our_domain);
+	System.out.println(this);
 	webrules_count = WebRule.dao.count();
 	campaigns_count = Workflow.dao.count();
 	AccountEmailStats stats = AccountEmailStatsUtil.getAccountEmailStats(NamespaceManager.get());

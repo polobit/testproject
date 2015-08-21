@@ -13,7 +13,10 @@ var CasesRouter = Backbone.Router.extend({
 	{
 		this.casesCollectionView = new Base_Collection_View({ url : 'core/api/cases', sort_collection : false, restKey : "case", templateKey : "cases", cursor : true, page_size : 25,
 			individual_tag_name : 'tr',	postRenderCallback : function(el) {
+
 				includeTimeAgo(el);
+
+				initializeCasesListeners(el);
 			},
 			appendItemCallback : function(el)
 			{

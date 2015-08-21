@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 
-import com.agilecrm.contact.filter.ContactFilter;
+import com.agilecrm.SearchFilter;
 import com.agilecrm.search.query.QueryDocument;
 import com.agilecrm.search.ui.serialize.SearchRule;
 import com.google.appengine.api.search.Index;
@@ -171,7 +171,7 @@ public class AppengineSearch<T>
      * @return
      */
     @SuppressWarnings("rawtypes")
-    public Collection getAdvacnedSearchResultsForFilter(ContactFilter filter, Integer count, String cursor, String orderBy)
+    public Collection getAdvacnedSearchResultsForFilter(SearchFilter filter, Integer count, String cursor, String orderBy)
     {
 	return query.advancedSearch(filter, count, cursor, orderBy);
     }

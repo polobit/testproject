@@ -20,7 +20,6 @@ import com.agilecrm.session.UserInfo;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.MD5Util;
-import com.google.appengine.api.NamespaceManager;
 import com.google.gdata.util.common.base.Charsets;
 
 /**
@@ -74,7 +73,7 @@ public class BasicAuthFilter implements Filter
 	    if (index > 0)
 	    {
 		final String[] credentials = StringUtils.split(
-		        new String(Base64.decodeBase64(auth.substring(index).getBytes()), Charsets.UTF_8), ':');
+			new String(Base64.decodeBase64(auth.substring(index).getBytes()), Charsets.UTF_8), ':');
 
 		if (credentials.length == 2)
 		{
@@ -86,19 +85,17 @@ public class BasicAuthFilter implements Filter
 		    DomainUser domainUser = DomainUserUtil.getDomainUserFromEmail(user);
 
 		    // Domain should be checked to avoid saving in other domains
-		    if (domainUser != null && domainUser.domain != null
-			    && domainUser.domain.equals(NamespaceManager.get()) && !StringUtils.isEmpty(password))
+
+		    // If domain user exists and the APIKey matches, request
+		    // is
+		    // given access
+		    if (isValidPassword(password, domainUser) || isValidAPIKey(password, domainUser))
 		    {
-			// If domain user exists and the APIKey matches, request
-			// is
-			// given access
-			if (isValidPassword(password, domainUser) || isValidAPIKey(password, domainUser))
-			{
-			    setUser(domainUser);
-			    chain.doFilter(httpRequest, httpResponse);
-			    return;
-			}
+			setUser(domainUser);
+			chain.doFilter(httpRequest, httpResponse);
+			return;
 		    }
+
 		}
 	    }
 	}

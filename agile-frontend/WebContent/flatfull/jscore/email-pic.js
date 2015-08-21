@@ -18,7 +18,7 @@ $(function()
 	});*/
 	
 	//prevent default focusout of email
-	$('#email').live('focusout', function(e)
+	$("#content").on('focusout', '#email', function(e)
 	{
 		e.preventDefault();
 

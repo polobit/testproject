@@ -276,6 +276,12 @@ public class Opportunity extends Cursor implements Serializable
 	contact_ids.add(id);
     }
 
+    @JsonIgnore
+    public List<Key<Contact>> getContactKeys()
+    {
+	return related_contacts;
+    }
+
     @XmlElement(name = "contact_ids")
     public List<String> getContact_ids()
     {

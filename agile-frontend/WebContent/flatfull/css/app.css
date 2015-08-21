@@ -1,6 +1,26 @@
 /* 
-
 */
+@font-face {
+  font-family: 'Source Sans Pro';
+  font-style: normal;
+  font-weight: 300;
+  /*src: local('Source Sans Pro Light'), local('SourceSansPro-Light'), url('../font/sourcesanspro/sourcesanspro-light.woff') format('woff'); */
+  src: local('Source Sans Pro Light'), local('SourceSansPro-Light'), url(https://fonts.gstatic.com/s/sourcesanspro/v9/toadOcfmlt9b38dHJxOBGD_j0nMiB9fPhg_k1wdK2h0.woff2) format('woff2');
+}
+@font-face {
+  font-family: 'Source Sans Pro';
+  font-style: normal;
+  font-weight: 400;
+  /* src: local('Source Sans Pro'), local('SourceSansPro-Regular'), url('../font/sourcesanspro/sourcesanspro.woff') format('woff');\ */
+  src: local('Source Sans Pro'), local('SourceSansPro-Regular'), url(https://fonts.gstatic.com/s/sourcesanspro/v9/ODelI1aHBYDBqgeIAH2zlNOAHFN6BivSraYkjhveRHY.woff2) format('woff2');
+ }
+@font-face {
+  font-family: 'Source Sans Pro';
+  font-style: normal;
+  font-weight: 700;
+  /*src: local('Source Sans Pro Bold'), local('SourceSansPro-Bold'), url('../font/sourcesanspro/sourcesanspro-bold.woff') format('woff');*/
+  src: local('Source Sans Pro Bold'), local('SourceSansPro-Bold'), url(https://fonts.gstatic.com/s/sourcesanspro/v9/toadOcfmlt9b38dHJxOBGFzONuGKG1DnNuYnL34Jwfo.woff2) format('woff2');
+ }
 
 html {
   background-color: #f0f3f4;
@@ -2675,6 +2695,7 @@ fieldset[disabled] .i-checks input + i:before {
 
 .datepicker {
   margin: 0 5px;
+  min-width: 170px;
 }
 
 .datepicker .btn-default {

@@ -198,9 +198,27 @@ public class DealsAPI
     @Path("/byMilestone/{milestone}")
     @GET
     @Produces({ MediaType.APPLICATION_JSON })
-    public List<Opportunity> getOpportunitiesWithMilestone(@PathParam("milestone") String milestone)
+    public List<Opportunity> getOpportunitiesWithMilestone(@PathParam("milestone") String milestone,
+	    @QueryParam("cursor") String cursor, @QueryParam("page_size") String count)
     {
-	return OpportunityUtil.getDeals(null, milestone, null);
+	int counts = 0;
+	if (count != null)
+	{
+	    counts = Integer.parseInt(count);
+	    if (counts > 50)
+		counts = 50;
+
+	    System.out.println("Test page size = " + counts);
+
+	    return OpportunityUtil.getDealsWithMilestone(null, milestone, null, counts, cursor);
+	}
+	else
+	{
+	    counts = 5;
+	    System.out.println("Test page size1 = " + counts);
+	    return OpportunityUtil.getDealsWithMilestone(null, milestone, null, counts, cursor);
+	}
+
     }
 
     /**
@@ -844,6 +862,68 @@ public class DealsAPI
 	    String uri = "/core/api/opportunity/backend/change-milestone/" + SessionManager.get().getDomainId();
 
 	    OpportunityUtil.postDataToDealBackend(uri, filters, ids, form);
+	}
+	catch (Exception je)
+	{
+	    je.printStackTrace();
+	}
+    }
+
+    /**
+     * Call backends for updating deals pipeline and milestone.
+     */
+    @Path("/bulk/contacts/add-tag")
+    @POST
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    public void addTagToDealRelatedContacts(@FormParam("ids") String ids, @FormParam("filter") String filters,
+	    @FormParam("form") String form)
+    {
+	try
+	{
+	    if (StringUtils.isNotEmpty(ids))
+	    {
+		JSONArray idsArray = new JSONArray(ids);
+		System.out.println("------------" + idsArray.length());
+	    }
+
+	    org.json.JSONObject filterJSON = new org.json.JSONObject(filters);
+	    System.out.println("------------" + filterJSON.toString());
+
+	    String uri = "/core/api/opportunity/backend/contacts/add-tag/" + SessionManager.get().getDomainId();
+
+	    OpportunityUtil.postDataToDealBackend(uri, filters, ids, form);
+	}
+	catch (Exception je)
+	{
+	    je.printStackTrace();
+	}
+    }
+
+    /**
+     * Call backends for updating deals owner.
+     */
+    @Path("/bulk/contacts/add-campaign/{workflow_id}")
+    @POST
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    public void addDealRelatedContactsToCampaigns(@PathParam("workflow_id") Long workflowId,
+	    @FormParam("ids") String ids, @FormParam("filter") String filters)
+    {
+	try
+	{
+	    if (StringUtils.isNotEmpty(ids))
+	    {
+		JSONArray idsArray = new JSONArray(ids);
+		System.out.println("------------" + idsArray.length());
+	    }
+
+	    org.json.JSONObject filterJSON = new org.json.JSONObject(filters);
+	    System.out.println("------------" + filterJSON.toString());
+	    System.out.println("Workflow_id" + workflowId);
+
+	    String uri = "/core/api/opportunity/backend/contacts/add-campaign/" + workflowId + "/"
+		    + SessionManager.get().getDomainId();
+
+	    OpportunityUtil.postDataToDealBackend(uri, filters, ids);
 	}
 	catch (Exception je)
 	{

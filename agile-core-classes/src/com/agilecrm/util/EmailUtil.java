@@ -23,7 +23,7 @@ import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
 import com.campaignio.tasklets.util.MergeFieldsUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.blobstore.BlobKey;
-import com.thirdparty.SendGrid;
+import com.thirdparty.sendgrid.SendGrid;
 
 public class EmailUtil
 {
@@ -168,7 +168,7 @@ public class EmailUtil
 
 	String trackingImage = "<div class=\"ag-img\"><img src="
 	        + VersioningUtil.getHostURLByApp(NamespaceManager.get()) + "open?" + queryParams
-	        + " nosend=\"1\" width=\"1\" height=\"1\"></img></div>";
+	        + " nosend=\"1\" style=\"display:none!important;\" width=\"1\" height=\"1\"></img></div>";
 
 	return html + trackingImage;
     }

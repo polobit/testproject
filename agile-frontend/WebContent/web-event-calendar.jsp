@@ -49,6 +49,7 @@ String meeting_durations=null;
 List<Long>_multiple_users=new ArrayList<Long>();
 URL ur=new URL(url);
 String d_name= domain_name=NamespaceUtil.getNamespaceFromURL(ur);
+int calendar_wk_start_day=0;
 if(scheduleid.equalsIgnoreCase("calendar")){
     scheduleid=ar[ar.length-1];
 }
@@ -212,6 +213,7 @@ if (scheduleid != null && !multiple_users)
 	      user_id = domainUser.id;
 	      agile_user_id = agileUser.id;
 	      domain_name = domainUser.domain;
+	      calendar_wk_start_day=Integer.parseInt(userPrefs.calendar_wk_start_day);
 	      if(online_prefs==null){
 	      meeting_durations=domainUser.meeting_durations;
 	      meeting_types=domainUser.meeting_types;
@@ -236,12 +238,14 @@ ObjectMapper mapper = new ObjectMapper();
 %>
 <!DOCTYPE html>
 <%@page import="com.google.appengine.api.utils.SystemProperty"%>
+ <%@ page contentType="text/html; charset=UTF-8" %>
 <html>
 <head>
 
 <title>Online Appointment Scheduling - <%=user_name %></title>
 <link rel="stylesheet" href="../../flatfull/css/web-calendar-event/bootstrap.min.css">
 <link rel="stylesheet" href="../../flatfull/css/web-calendar-event/style.css">
+<link rel="stylesheet" type="text/css" href="../../flatfull/css/agile-css-framework.css">
 <!-- <link rel="stylesheet" href="../../flatfull/css/web-calendar-event/font-awesome.min.css"> -->
 <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css">
 
@@ -1223,6 +1227,7 @@ ObjectMapper mapper = new ObjectMapper();
 var User_Name = <%=mapper.writeValueAsString(user_name)%>;
 var User_Id = <%=user_id%>;
 var Agile_User_Id = <%=agile_user_id%>;
+var CALENDAR_WEEK_START_DAY=<%=calendar_wk_start_day%>
 var selecteddate="";
 var SELECTED_TIMEZONE="";
 var current_date_mozilla="";
@@ -1236,17 +1241,9 @@ var business_hours_array=<%=business_hours_array%>;
 var multiple_schedule_ids=<%=multiple_users%>;
 var meeting_types=[];
 var slot_details=[];
- var User_Name = <%=mapper.writeValueAsString(user_name)%>;
- var single_user_mapobject=<%=single_user_map_object%>;
- var User_Id = <%=user_id%>;
- var Agile_User_Id = <%=agile_user_id%>;
- var selecteddate="";
- var SELECTED_TIMEZONE="";
- var current_date_mozilla="";
- var domainname=<%=mapper.writeValueAsString(domain_name)%>;
- var meeting_duration=<%=mapper.writeValueAsString(meeting_durations)%>;
- var slot_array=<%=mapper.writeValueAsString(slots_array)%>;
- var CURRENT_DAY_OPERATION=null;
+var single_user_mapobject=<%=single_user_map_object%>;
+var CURRENT_DAY_OPERATION=null;
+var MEETING_DURATION_AND_NAMES=null;
  </script>
 
 	<script type="text/javascript">
@@ -1284,7 +1281,7 @@ var slot_details=[];
 					// Initialize date picker
 					$('#datepick').DatePicker({ flat : true, date : [
 							'2014-07-6', '2016-07-28'
-					], current : '' + currentDate, format : 'Y-m-d', calendars : 1,starts: 0, mode : 'single', view : 'days', onRender: function(date) {
+					], current : '' + currentDate, format : 'Y-m-d', calendars : 1,starts: CALENDAR_WEEK_START_DAY, mode : 'single', view : 'days', onRender: function(date) {
 						return {
 							disabled: (date.valueOf() < Date.now()-ms),
 							className: date.valueOf() < Date.now()-ms ? 'datepickerNotInMonth' : false

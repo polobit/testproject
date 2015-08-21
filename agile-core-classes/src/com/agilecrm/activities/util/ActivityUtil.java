@@ -452,7 +452,7 @@ public class ActivityUtil
     {
 	try
 	{
-	    return dao.fetchAllByOrder(max, cursor, null, true, false, "-time");
+	    return dao.fetchAllByOrderWithoutCount(max, cursor, null, true, false, "-time");
 	}
 	catch (Exception e)
 	{
@@ -1743,6 +1743,30 @@ public class ActivityUtil
 	    return str.replace("_", " ").toLowerCase();
 	}
 	return str.toLowerCase();
+    }
+    
+    /**
+     * Gets the count of answered calls.
+     * 
+     * @param activityType
+     *            - Given activity type.
+     * 
+     * @return list of activities based on activity type.
+     */
+    public static int getCompletedCallsCountOfUser(Long ownerId, long minTime,
+	    long maxTime)
+    {
+    	try
+    	{
+    		return dao.ofy().query(Activity.class).filter("activity_type", ActivityType.CALL)
+    		        .filter("user", new Key<DomainUser>(DomainUser.class, ownerId)).filter("time >= ", minTime)
+    		        .filter("time <= ", maxTime).filter("custom3", Call.ANSWERED).count();
+    	}
+    	catch(Exception e)
+    	{
+    		e.printStackTrace();
+    		return 0;
+    	}
     }
 
 }

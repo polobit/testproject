@@ -14,7 +14,7 @@
 									data-toggle="tooltip"
 									title="<i class='icon-edit icon-white icon'></i> Change Picture"
 									style='text-decoration: none;'> 
-								<img class='img-circle upload_pic imgholder submit' style="width:96px;height:96px" type="submit"
+								<img class='b-2x r-2x upload_pic imgholder submit' style="width:96px;height:96px" type="submit"
 									{{getCompanyImage "80" "display:inline;"}} />
 								</a> <input type="hidden" id="upload_url" name="gravatarurl">
 								<a style="display: none;" class="save_img submit" type="submit">Save</a>
@@ -24,7 +24,7 @@
  
 								<a class="dropdown-toggle" data-toggle="dropdown"><span class="fa fa-angle-down text-lg"></span></a>
 								<ul class="dropdown-menu pull-right">
-<li> <a href="#contact-edit"><i class="icon-edit"></i> Edit</a></li>
+<li> <a href="#company-edit"><i class="icon-edit"></i> Edit</a></li>
 <li class="divider"></li>
 									<li><a href='#' class="contact-add-case"><i
 											class="icon-folder-close"></i> Add Case</a></li>
@@ -36,7 +36,7 @@
 									<li><a href='#send-email{{#if_propertyName "email"}}/{{value}}{{/if_propertyName}}' id="contact-send-email"><i
 											class="icon-envelope-alt"></i> Send Email</a></li>
 									<li class='divider'></li>
-									<li><a href='#' id='contact-actions-delete'><i
+									<li><a href='#' id='company-actions-delete'><i
 											class="icon-trash"></i> Delete</a></li>
 								</ul>
 </div>
@@ -52,7 +52,7 @@
 								
 								<div class="text-base text-center m-b-xs text-muted m-t-sm">
 									{{#property_is_exists "website" properties}}
-									{{#multiple_Property_Element "website" properties}} {{#each
+									{{#multiple_Company_Property_Element "website" properties}} {{#each
 									this}} {{#if_equals subtype "TWITTER"}} <span class="m-r-xs"><a target="_blank"
 										href="https://twitter.com/{{getTwitterHandleByURL value}}"
 										style="text-decoration: none" class="text-muted"> <i
@@ -70,14 +70,14 @@
 										target="_blank" href="{{getHyperlinkFromURL value}}" style="text-decoration: none" class="text-muted">
 											<i class="{{get_social_icon subtype}}"></i>
 									</a>
-									</span>{{/if_equals}} {{/if_equals}} {{/each}} {{/multiple_Property_Element}}
+									</span>{{/if_equals}} {{/if_equals}} {{/each}} {{/multiple_Company_Property_Element}}
 									{{/property_is_exists}}
 								</div>
 							</div>
 					
 		
 							
-								<div id='star' style='padding-bottom: 13px; width: auto !important'></div>
+								<div id='star' style='padding-bottom: 13px; width: auto !important;margin:0 auto;'></div>
 								
 				
 					
@@ -104,10 +104,45 @@
 			{{/canEditContact}}
        </div>
     </div>
-					
-					
-					
+				
+<!-- Tags block -->
 
+<div class="m-t-sm"><small class="text-muted text-sm">Tags</small></div>
+						<div class="contact-tags m-b-xs m-t-xs">
+					<ul id="added-tags-ul" class="tagsinput inline v-top m-b-sm p-n">
+							{{#if tagsWithTime.length}} 
+							 {{#canEditContact owner.id}}
+								{{#each tagsWithTime}}
+										<li class="inline-block tag btn btn-xs btn-default m-r-xs m-b-xs" data="{{this.tag}}"><span><a
+								class="anchor m-r-xs custom-color" style="color:#363f44" href="#tags/{{encodeString this.tag}}">{{this.tag}}</a><a
+								class="close remove-company-tags" tag="{{this.tag}}">&times</a></span></li> 
+								{{/each}}
+								{{else}}
+									{{#each tagsWithTime}}
+										<li class="inline-block tag btn btn-xs btn-default m-r-xs m-b-xs" data="{{this.tag}}"><span><a
+											class="anchor" style="color:#363f44" href="#tags/{{encodeString this.tag}}">{{this.tag}}</a></span></li> 
+									{{/each}}
+							 {{/canEditContact}}
+							{{/if}}
+						 
+						
+					</ul>	
+					<div class="inline-block m-t-xs">
+						<div id="addTagsForm" style="display: none;" class="m-b-none">
+							<div class="control-group save-tag m-b-none">
+								<input name="" type="text" id="addTags"
+									class="tags-typeahead ignore-comma-keydown form-control inline-block"
+									style="width: 60%" placeholder="Enter tag" />
+								<span><a href="#" class="btn btn-sm btn-default m-l-sm m-r-xs" id="company-add-tags">Add</a></span>
+							</div>
+						</div>
+						{{#canEditContact owner.id}}
+			<a href="#" id="add-tags" rel="tooltip"
+							data-original-title="addtag" data-placement="top" class="text-xs text-muted"><i
+							class="icon-plus"></i> <span >Add</span></a>
+						{{/canEditContact}}
+					</div>
+				</div>	
 <!-- funda for contact details edit -->
 
 {{#property_is_exists "phone" properties}}
@@ -143,7 +178,7 @@
 							{{#property_is_exists "phone" properties}}
 <div class="m-t-sm text-left"><small class="text-xs text-muted">Contact Info</small></div>
 							<div class="text-left">
-								{{#multiple_Property_Element "phone" properties}}
+								{{#multiple_Company_Property_Element "phone" properties}}
 								
 								<div class="custom-color text-sm">
 									{{#each this}}
@@ -161,12 +196,12 @@
 									
 									{{/each}}
 								</div>
-								{{/multiple_Property_Element}}
+								{{/multiple_Company_Property_Element}}
 							</div>
 							{{/property_is_exists}}
  							{{#property_is_exists "email" properties}}
 							<div class="text-left custom-color">
-								{{#multiple_Property_Element "email" properties}}
+								{{#multiple_Company_Property_Element "email" properties}}
 								
 								{{#property_is_exists "phone" ../properties}}
 								
@@ -180,11 +215,11 @@
 										</div>
 									{{/each}}
 									
-									{{/multiple_Property_Element}}
+									{{/multiple_Company_Property_Element}}
 								</div>
 								{{/property_is_exists}}
 
- <div class="custom-data"> {{#getContactCustomPropertiesExclusively properties}}
+ <div class="custom-data"> {{#getCompanyCustomPropertiesExclusively properties}}
 <div class="clearfix"></div>
 <div class="m-t-sm text-left"><small class="text-xs text-muted">Custom Info</small></div>
 
@@ -196,16 +231,16 @@
 										</div>
 										{{#if_equals index ../this.length}}
 											<div class="pull-left custom-color">
-											{{#if_equals subtype "DATE"}} <i class="fa fa-clock-o m-r-xs"></i><time class="note-created-time" datetime="{{epochToHumanDate "" value}}">{{epochToHumanDate "dd mmm yyyy" value}}</time>{{else}}{{value}} {{/if_equals}}</div>
+											{{#if_equals subtype "DATE"}} <i class="fa fa-clock-o m-r-xs m-l-xs"></i> <time class="note-created-time" datetime="{{epochToHumanDate "" value}}">{{epochToHumanDateInFormat value}}</time>{{else}}{{value}} {{/if_equals}}</div>
 										{{else}}
 											<div class="pull-left custom-color">
-											{{#if_equals subtype "DATE"}} <i class="fa fa-clock-o m-r-xs"></i><time class="note-created-time" datetime="{{epochToHumanDate "" value}}">{{epochToHumanDate "dd mmm yyyy" value}}</time>{{else}}{{value}} {{/if_equals}}</div>
+											{{#if_equals subtype "DATE"}} <i class="fa fa-clock-o m-r-xs m-l-xs"></i> <time class="note-created-time" datetime="{{epochToHumanDate "" value}}">{{epochToHumanDateInFormat value}}</time>{{else}}{{value}} {{/if_equals}}</div>
 										{{/if_equals}}
 										</div>
                                         <div class="clearfix"></div>
 										{{/each_with_index}}
 									</div>
-									{{/getContactCustomPropertiesExclusively}}
+									{{/getCompanyCustomPropertiesExclusively}}
 									</div>
 
 
@@ -215,7 +250,7 @@
 										<div class="pull-left">
 											{{#address_Element properties}}{{/address_Element}}</div></div>
 
-										<div class="pull-left">
+										<div class="pull-left m-t-sm m-b-sm w-full">
 											<div id="map" style="width: auto; height: 200px; display: none; margin: 10px">
 											</div>
 										</div>
@@ -233,10 +268,10 @@
 	<div class="tab-container">
 			<ul class="nav nav-tabs  bg-light" id="contactDetailsTab">
 				<li class="active"><a data-toggle="tab" href="#company-contacts">Contacts</a></li>
-				<li class=""><a data-toggle="tab" href="#deals">Deals</a></li>
-				<li class=""><a data-toggle="tab" href="#cases">Cases</a></li>
-                <li class=""><a data-toggle="tab" href="#notes">Notes</a></li>
-                <li class=""><a data-toggle="tab" href="#documents">Documents</a></li>				
+				<li class=""><a data-toggle="tab" href="#company-deals">Deals</a></li>
+				<li class=""><a data-toggle="tab" href="#company-cases">Cases</a></li>
+                <li class=""><a data-toggle="tab" href="#company-notes">Notes</a></li>
+                <li class=""><a data-toggle="tab" href="#company-documents">Documents</a></li>				
 			</ul>
 			</div>
 			<div class="tab-content" id="contact-tab-content">

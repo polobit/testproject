@@ -4,11 +4,13 @@ import javax.persistence.Id;
 import javax.persistence.PrePersist;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.json.JSONArray;
 
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.user.util.DomainUserUtil;
+import com.agilecrm.user.util.OnlineCalendarUtil;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.annotation.Cached;
 import com.googlecode.objectify.annotation.Indexed;
@@ -39,12 +41,28 @@ public class OnlineCalendarPrefs
 	public String meeting_types = "In Person, Phone, Skype, Google Hangouts";
 
 	/**
-	 * according to user timings businesshous will be displayed in scheduling
+	 * according to user timings businesshours will be displayed in scheduling
 	 * page
 	 */
 	@NotSaved(IfDefault.class)
 	public String business_hours = getDefaultBusinessHours();
 
+	/**
+	 * based On buffer time we show slots in online calendar page
+	 */
+	@NotSaved(IfDefault.class)
+	public int bufferTime = 0;
+
+	/**
+	 * based On buffer time Units(minutes or hours) we show slots in online
+	 * calendar page
+	 */
+	@NotSaved(IfDefault.class)
+	public String bufferTimeUnit = null;
+
+	/**
+	 * default meeting names and slot is meeting durations
+	 */
 	@NotSaved(IfDefault.class)
 	public String meeting_durations = "{\"15mins\":\"say hi\",\"30mins\":\"let's keep it short\",\"60mins\":\"let's chat\"}";
 
@@ -131,7 +149,7 @@ public class OnlineCalendarPrefs
 			if (d_user != null)
 				this.user = new Key<DomainUser>(DomainUser.class, d_user.id);
 		}
-		if (this.schedule_id != null)
+		if (StringUtils.isNotBlank(this.schedule_id))
 			this.schedule_id = this.schedule_id.toLowerCase();
 	}
 
@@ -148,6 +166,7 @@ public class OnlineCalendarPrefs
 	{
 		try
 		{
+			OnlineCalendarUtil.saveScheduleIdInDomainUser(this);
 			dao.put(this);
 		}
 		catch (Exception e)

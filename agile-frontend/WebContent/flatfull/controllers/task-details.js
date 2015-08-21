@@ -18,6 +18,7 @@ taskDetailView : function(id)
 			var task = App_Calendar.allTasksListView.collection.get(id);
 			taskDetailView = task;
 			$("#content").html(getTemplate("task-detail", task.toJSON()));
+			initializeTaskDetailListeners();
 			task_details_tab.loadActivitiesView();
 
 		}
@@ -28,6 +29,7 @@ taskDetailView : function(id)
 			{
 				taskDetailView = task;
 				$("#content").html(getTemplate("task-detail", task.toJSON()));
+				initializeTaskDetailListeners();
 				task_details_tab.loadActivitiesView();
 			}
 			else
@@ -37,6 +39,7 @@ taskDetailView : function(id)
 				{
 					taskDetailView = new taskModel(response);
 					$("#content").html(getTemplate("task-detail", taskDetailView.toJSON()));
+					initializeTaskDetailListeners();
 					task_details_tab.loadActivitiesView();
 				} });
 			}
@@ -48,6 +51,7 @@ taskDetailView : function(id)
 			{
 				taskDetailView = new taskModel(response);
 				$("#content").html(getTemplate("task-detail", taskDetailView.toJSON()));
+				initializeTaskDetailListeners();
 				task_details_tab.loadActivitiesView();
 			} });
 
@@ -58,8 +62,7 @@ taskDetailView : function(id)
 
 });
 
-$(function()
-{
+function initializeTaskDetailListeners(){
 
 	var id;
 
@@ -68,7 +71,8 @@ $(function()
 	 * details, which are already added to time-line, when the task is getting
 	 * to its detail view.
 	 */
-	$('#taskDetailsTab a[href="#timeline"]').live('click', function(e)
+	$('#task-tab-container-header #taskDetailsTab a[href="#timeline"]').off();
+	$('#task-tab-container-header').on('click', '#taskDetailsTab a[href="#timeline"]', function(e) 
 	{
 		e.preventDefault();
 
@@ -81,28 +85,32 @@ $(function()
 	 * Fetches all the notes related to the task and shows the notes collection
 	 * as a table in its tab-content, when "Notes" tab is clicked.
 	 */
-	$('#taskDetailsTab a[href="#notes"]').live('click', function(e)
+	$('#task-tab-container-header #taskDetailsTab a[href="#notes"]').off();
+	$('#task-tab-container-header').on('click', '#taskDetailsTab a[href="#notes"]', function(e) 
 	{
 		e.preventDefault();
 		save_task_tab_position_in_cookie("notes");
 		task_details_tab.load_notes();
 	});
 
-	$('#taskDetailsTab a[href="#contacts"]').live('click', function(e)
+	$('#task-tab-container-header #taskDetailsTab a[href="#contacts"]').off();
+	$('#task-tab-container-header').on('click', '#taskDetailsTab a[href="#contacts"]', function(e)
 	{
 		e.preventDefault();
 		save_task_tab_position_in_cookie("contacts");
 		task_details_tab.loadTaskRelatedContactsView();
 	});
 
-	$('#taskDetailsTab a[href="#activity"]').live('click', function(e)
+	$('#task-tab-container-header #taskDetailsTab a[href="#activity"]').off();
+    $('#task-tab-container-header').on('click', '#taskDetailsTab a[href="#activity"]', function(e) 
 	{
 		e.preventDefault();
 		save_task_tab_position_in_cookie("activity");
 		task_details_tab.loadActivitiesView();
 	});
-
-	$('.task-owner-list').live('click', function()
+	
+	$('#change-owner-element .task-owner-list').off();
+	$('#change-owner-element').on('click', '.task-owner-list', function(e) 
 	{
 
 		$('#change-task-owner-ul').css('display', 'none');
@@ -135,7 +143,8 @@ $(function()
 		} });
 	});
 
-	$('#change-owner-element > .task-owner-add').live('click', function(e)
+	$('#change-owner-element .task-owner-add').off();
+	$('#change-owner-element').on('click', '.task-owner-add', function(e)
 	{
 		e.preventDefault();
 		fill_task_owners(undefined, undefined, function()
@@ -153,7 +162,8 @@ $(function()
 
 	});
 
-	$('#task-owner').live('click', function(e)
+	$('#change-owner-element #task-owner').off();
+	$('#change-owner-element').on('click', '#task-owner', function(e)
 	{
 		e.preventDefault();
 		fill_task_owners(undefined, undefined, function()
@@ -173,7 +183,8 @@ $(function()
 	/**
 	 * task note update
 	 */
-	$('.task-note-edit').die().live('click', function(e)
+	$('#task_tab_detail .task-note-edit').off();
+	$('#task_tab_detail').on('click', '.task-note-edit', function(e) 
 	{
 
 		e.preventDefault();
@@ -189,7 +200,8 @@ $(function()
 	 * * update task related notes /
 	 */
 
-	$("#task_note_update").live('click', function(e)
+	$('#tasknoteupdatemodal #task_note_update').off();
+	$('#tasknoteupdatemodal').on('click', '#task_note_update', function(e)
 	{
 		e.preventDefault();
 
@@ -216,7 +228,8 @@ $(function()
 		saveTaskNote($("#tasknoteUpdateForm"), $("#tasknoteupdatemodal"), this, json);
 	})
 
-	$('.delete_task').live('click', function(e)
+	$('#task-detail-lhs .delete_task').off();
+    $('#task-detail-lhs').on('click', '.delete_task', function(e)
 	{
 		var id = $('.delete_task').attr('data');
 		e.preventDefault();
@@ -225,10 +238,85 @@ $(function()
 		$.ajax({ url : 'core/api/tasks/' + id, type : 'DELETE', success : function(response)
 		{
 			document.location.href = document.location.origin + "#/tasks";
+			var due_task_count = getDueTasksCount();
+			if(due_task_count !=0)
+				$('#due_tasks_count').html(due_task_count);
+			else
+				$('#due_tasks_count').html("");
 		} })
-	})
+	});
+
+	/**
+ * task note validate
+ */
+/**
+ * Saves note model using "Bcakbone.Model" object, and adds saved data to
+ * time-line if necessary.
+ */
+$('#new-task-modal').on('click', '#tasknote_validate', function(e) 
+{
+	e.preventDefault();
+
+	// Returns, if the save button has disabled attribute
+	if ($(this).attr('disabled'))
+		return;
+
+	if (!isValidForm('#tasknoteForm'))
+	{
+		return;
+	}
+
+	disable_save_button($(this));
+	var json = serializeForm("tasknoteForm");
+
+	console.log(json);
+
+	saveTaskNote($("#tasknoteForm"), $("#new-task-modal"), this, json);
+});
+
+
+}
+
+
+$(function(){
+
+	$('#content #task_edit').off('click');
+    $('#content').on('click', '#task_edit', function(e) 
+	{
+		e.preventDefault();
+		var id = $(this).attr('data');
+		var task
+		if (App_Calendar.allTasksListView)
+		{
+			task = App_Calendar.allTasksListView.collection.get(id);
+		}
+		else if (App_Calendar.tasksListView)
+		{
+			task = App_Calendar.tasksListView.collection.get(id);
+			if (!task)
+			{
+				task = taskDetailView;
+			}
+		}
+		else
+		{
+			task = taskDetailView;
+
+		}
+		if (task)
+			update_task(task.toJSON());
+
+	});
+
+    $('#content .task-add-contact').off('click');
+	$('#content').on('click', '.task-add-contact', function(e) 
+	{
+		e.preventDefault();
+		update_task(taskDetailView.toJSON());
+	});
 
 });
+
 
 /**
  * Activates "Timeline" tab and its tab-content in contact details and also
@@ -271,42 +359,7 @@ function save_task_tab_position_in_cookie(tab_href)
 	createCookie(task_tab_position_cookie_name, tab_href);
 }
 
-$(function()
-{
-	$('#task_edit').die().live('click', function(e)
-	{
-		e.preventDefault();
-		var id = $(this).attr('data');
-		var task
-		if (App_Calendar.allTasksListView)
-		{
-			task = App_Calendar.allTasksListView.collection.get(id);
-		}
-		else if (App_Calendar.tasksListView)
-		{
-			task = App_Calendar.tasksListView.collection.get(id);
-			if (!task)
-			{
-				task = taskDetailView;
-			}
-		}
-		else
-		{
-			task = taskDetailView;
 
-		}
-		if (task)
-			update_task(task.toJSON());
-
-	});
-
-	$('.task-add-contact').die().live('click', function(e)
-	{
-		e.preventDefault();
-		update_task(taskDetailView.toJSON());
-	});
-
-});
 // update task
 function update_task(value)
 {
@@ -323,6 +376,8 @@ function update_task(value)
 		}
 		$("#owners-list", $("#updateTaskForm")).closest('div').find('.loading-img').hide();
 	});
+
+    activateSliderAndTimerToTaskModal();
 
 	// Add notes in task modal
 	showNoteOnForm("updateTaskForm", value.notes);
@@ -360,33 +415,6 @@ function fill_relation_task(el)
 
 }
 
-/**
- * task note validate
- */
-/**
- * Saves note model using "Bcakbone.Model" object, and adds saved data to
- * time-line if necessary.
- */
-$('#tasknote_validate').live('click', function(e)
-{
-	e.preventDefault();
-
-	// Returns, if the save button has disabled attribute
-	if ($(this).attr('disabled'))
-		return;
-
-	if (!isValidForm('#tasknoteForm'))
-	{
-		return;
-	}
-
-	disable_save_button($(this));
-	var json = serializeForm("tasknoteForm");
-
-	console.log(json);
-
-	saveTaskNote($("#tasknoteForm"), $("#new-task-modal"), this, json);
-});
 
 function saveTaskNote(form, noteModal, element, note)
 {

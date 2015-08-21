@@ -91,9 +91,9 @@
  <div class="listed-task red ui-state-default" id="{{id}}">
 {{else}}
   {{#if_equals priority_type "LOW"}}
-    <div class="listed-task gray ui-state-default" id="{{id}}">
-  {{else}}
     <div class="listed-task yellow ui-state-default" id="{{id}}">
+  {{else}}
+    <div class="listed-task blue ui-state-default" id="{{id}}">
   {{/if_equals}}
 {{/if_equals}}
 
@@ -130,7 +130,7 @@
         			<a href="#contact/{{id}}" class="activate-link task-related-contacts text-sm text-muted">{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}</a>
         		{{/if_contact_type}}
 				{{#if_contact_type "COMPANY"}}
-        			<a href="#contact/{{id}}" class="activate-link task-related-contacts text-sm text-muted">{{getPropertyValue properties "name"}}</a>
+        			<a href="#company/{{id}}" class="activate-link task-related-contacts text-sm text-muted">{{getPropertyValue properties "name"}}</a>
         		{{/if_contact_type}}
         	{{/each}}
 		 </div>

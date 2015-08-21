@@ -1,5 +1,11 @@
 $(function(){
-	$('#facebookPageTabSave').die().live('click', function(e){
+	
+	
+});
+
+function initializeFbPageTabListners(el){
+
+	$("#fbPageTab-listners").on('click', '#facebookPageTabSave', function(e){
 		e.preventDefault();
 		
 		// Checks whether all input fields are given
@@ -34,7 +40,7 @@ $(function(){
 		    });		
 	});
 	
-	$(".deleteFacebookLinkedpage").die().live("click", function(e) {
+	$("#fbPageTab-listners").on('click', '.deleteFacebookLinkedpage', function(e){
 		e.preventDefault();
 		var agree = confirm("Are you sure you want to remove Agile form tab ?");
 		if(agree) {
@@ -72,11 +78,10 @@ $(function(){
 		}		
 	});
 	
-	$("#formToUse").die().live("change", function(e) {
+	$("#fbPageTab-listners").on('change', '#formToUse', function(e){
 		var preSelectedFormId = $("#connectedForm_"+$(this).val()).attr("data-pageid");
 		if(typeof preSelectedFormId != "undefined") {
 			$("#facebookTabPage").val(preSelectedFormId);
 		}
 	});
-	
-});
+}

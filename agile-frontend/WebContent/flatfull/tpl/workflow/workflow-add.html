@@ -52,7 +52,6 @@
 					</div>
 					<br/>
 					<div class="collapse" id="workflow-unsubscribe-block">
-                    	<div class="text-sm text-light">Agile can unsubscribe your contacts from either the current campaign or all campaigns (ongoing and future)</div>
 						<div class="row">
                          <div class="control-group form-group">
 							<label class="control-label col-sm-2">
@@ -67,9 +66,9 @@
 							</div>
                     	</div>
                         </div>
+						<div class="text-sm text-light">Agile can unsubscribe your contacts from either the current campaign or all campaigns (ongoing and future)</div>
                         <br/>
                         <br>
-                        <div class="text-sm text-light">Agile can add the tags automatically when your contact unsubscribes. You can run more campaigns against this tag in future.</div>
                     	<div class="row">
                          <div class="control-group form-group">
 							<label class="control-label col-sm-2">
@@ -80,11 +79,24 @@
 							</div>
                     	</div>
                         </div>
+						<div class="text-sm text-light">Agile can add the tags automatically when your contact unsubscribes. You can run more campaigns against this tag in future.</div>
                         <br/>
                         <br>
-                        <small>Unsubscribed contacts are not sent any further emails or tweets but other actions such as lead scoring will still continue to execute.</small>
+                    	<div class="row">
+                         <div class="control-group form-group">
+							<label class="control-label col-sm-2">
+								<b>Unsubscribe Email:</b>
+							</label>
+							<div class="controls col-sm-4">
+								<input type="text" name="unsubscribe_email" id="unsubscribe-email" placeholder="From email address" class="email form-control">
+							</div>
+                    	</div>
+                        </div>
+						<div class="text-sm text-light">When a contact unsubscribes from your campaign, a confirmation email is sent. The above given email address will be used as ‘From’ address for that email.</div>
+						<br/>
+						<br/>
+                        <small>Unsubscribed contacts are not sent any further emails but other actions such as lead scoring will still continue to execute.</small>
 					</div>
-                 
                     <br />
                     <br />
                     {{#if is_new}}

@@ -796,7 +796,7 @@ public class TaskUtil
      * 
      * @return List of tasks
      */
-    public static List<Task> getTasksRelatesToOwnerOfTypeAndCategory(Long owner, String category, String status,Long startTime,Long endTime,String tasks){
+    public static List<Task> getTasksRelatesToOwnerOfTypeAndCategory(Long owner, String category, String status,Long startTime,Long endTime,String tasks,List<Key<DomainUser>> usersKeyList){
     	List<Task> tasksList1 = new ArrayList<Task>();
 		List<Task> tasksList2 = new ArrayList<Task>();
     	try{
@@ -839,6 +839,13 @@ public class TaskUtil
     			else
     				searchMap1.put("task_completed_time <", endTime);
     		}
+    		
+    		if (usersKeyList!=null)
+    		{
+    			searchMap1.put("owner in", usersKeyList);
+    			searchMap2.put("owner in", usersKeyList);
+    		}
+    		
     		tasksList1 = dao.listByProperty(searchMap1);
     		if(tasks.equalsIgnoreCase("all-tasks"))
     		{
@@ -866,4 +873,23 @@ public class TaskUtil
     	}
     	return tasksList1;
     }
+    
+    /**
+	 * Gets the count of completed tasks of a user
+	 * 
+	 * @return List of tasks that have been pending for Today
+	 */
+	public static int getCompletedTasksOfUser(Long startTime, Long endTime, Long ownerId)
+	{
+		try
+		{
+			return dao.ofy().query(Task.class).filter("owner", new Key<DomainUser>(DomainUser.class, ownerId))
+						.filter("task_completed_time >=", startTime).filter("task_completed_time <", endTime).filter("is_complete", true).count();
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			return 0;
+		}
+	}
 }

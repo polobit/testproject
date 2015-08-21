@@ -22,7 +22,7 @@ function setupZendeskAuth()
 	$('#Zendesk').html(getTemplate('zendesk-login', {}));
 
 	// On click of save button, check input and save details
-	$('#save_prefs').die().live('click', function(e)
+	$("body").on('click','#save_prefs', function(e)
 	{
 		e.preventDefault();
 
@@ -172,7 +172,7 @@ function showTicketsInZendesk(data)
 	 * On click of show more in tickets panel, we splice 5 tickets from
 	 * all_tickets and show every time
 	 */
-	$('#more_tickets').die().live('click', function(e)
+	 $("body").on('click','#more_tickets', function(e)
 	{
 		e.preventDefault();
 
@@ -257,7 +257,7 @@ function registerClickEventsInZendesk()
 	/*
 	 * On click of update ticket link for ticket, update ticket method is called
 	 */
-	$('#ticket_update').die().live('click', function(e)
+	$("body").on('click','#ticket_update', function(e)
 	{
 		e.preventDefault();
 
@@ -267,7 +267,7 @@ function registerClickEventsInZendesk()
 	});
 
 	// On click of show ticket, show ticket by ticket id method is called
-	$('#ticket_show').die().live('click', function(e)
+	$("body").on('click','#ticket_show', function(e)
 	{
 		e.preventDefault();
 
@@ -530,7 +530,7 @@ $(function()
 			showZendeskProfile();
 
 			// On click of add ticket, add ticket method is called
-			$('#add_ticket').die().live('click', function(e)
+			$("body").on('click','#add_ticket', function(e)
 			{
 				e.preventDefault();
 				addTicketToZendesk();
@@ -540,13 +540,13 @@ $(function()
 			 * On mouse enter of ticket, show tab link which has a link to show detailed
 			 * description of ticket and comment on it
 			 */
-			$('.zendesk_ticket_hover').live('mouseenter', function(e)
+			 $("body").on('mouseenter','.zendesk_ticket_hover', function(e)
 			{
 				$(this).find('.zendesk_tab_link').show();
 			});
 
 			// On mouse leave of chat, hides tab link
-			$('.zendesk_ticket_hover').live('mouseleave', function(e)
+			$("body").on('mouseleave','.zendesk_ticket_hover', function(e)
 			{
 				$('.zendesk_tab_link').hide();
 			});

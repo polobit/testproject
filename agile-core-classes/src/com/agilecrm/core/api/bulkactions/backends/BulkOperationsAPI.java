@@ -4,8 +4,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.ws.rs.Consumes;
@@ -28,7 +30,12 @@ import com.agilecrm.activities.Activity.EntityType;
 import com.agilecrm.activities.BulkActionLog;
 import com.agilecrm.activities.util.ActivitySave;
 import com.agilecrm.activities.util.ActivityUtil;
+import com.agilecrm.bulkaction.deferred.CampaignStatusUpdateDeferredTask;
 import com.agilecrm.bulkaction.deferred.CampaignSubscriberDeferredTask;
+import com.agilecrm.bulkaction.deferred.ContactsBulkDeleteDeferredTask;
+import com.agilecrm.bulkaction.deferred.ContactsBulkTagAddDeferredTask;
+import com.agilecrm.bulkaction.deferred.ContactsBulkTagRemoveDeferredTask;
+import com.agilecrm.bulkaction.deferred.ContactsOwnerChangeDeferredTask;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.email.EmailSender;
 import com.agilecrm.contact.email.util.ContactBulkEmailUtil;
@@ -49,11 +56,13 @@ import com.agilecrm.session.UserInfo;
 import com.agilecrm.subscription.restrictions.db.BillingRestriction;
 import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
 import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.access.UserAccessControl;
+import com.agilecrm.user.access.UserAccessControl.AccessControlClasses;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.CSVUtil;
 import com.agilecrm.util.CacheUtil;
 import com.agilecrm.workflows.Workflow;
-import com.agilecrm.workflows.status.CampaignStatus.Status;
+import com.agilecrm.workflows.status.CampaignStatus;
 import com.agilecrm.workflows.status.util.CampaignStatusUtil;
 import com.agilecrm.workflows.util.WorkflowUtil;
 import com.campaignio.cron.util.CronUtil;
@@ -90,40 +99,49 @@ public class BulkOperationsAPI
 	    throws JSONException
     {
 	System.out.println(model_ids + " model ids " + filter + " filter " + current_user_id + " current user");
-	ContactFilterResultFetcher fetcher = new ContactFilterResultFetcher(filter, dynamicFilter, 200, model_ids,
-		current_user_id);
 
-	while (fetcher.hasNextSet())
+	ContactFilterIdsResultFetcher idsFetcher = new ContactFilterIdsResultFetcher(filter, dynamicFilter, model_ids,
+		null, 200, current_user_id);
+
+	while (idsFetcher.hasNext())
 	{
-	    List<Contact> contacts = fetcher.nextSet();
 
-	    if (model_ids != null)
-		ContactUtil.processContacts(contacts);
+	    try
+	    {
+		Set<Key<Contact>> contactSet = idsFetcher.next();
+		ContactsBulkDeleteDeferredTask task = new ContactsBulkDeleteDeferredTask(current_user_id,
+			NamespaceManager.get(), contactSet);
 
-	    ContactUtil.deleteContacts(contacts);
+		// Add to queue
+		Queue queue = QueueFactory.getQueue(AgileQueues.CONTACTS_DELETE_QUEUE);
+		queue.add(TaskOptions.Builder.withPayload(task));
+
+	    }
+	    catch (Exception e)
+	    {
+		e.printStackTrace();
+	    }
 
 	}
 
-	System.out.println("contacts : " + fetcher.getAvailableContacts());
-	System.out.println("companies : " + fetcher.getAvailableCompanies());
+	System.out.println("contacts : " + idsFetcher.getContactCount());
+	System.out.println("companies : " + idsFetcher.getCompanyCount());
 
 	String message = "";
-	if (fetcher.getAvailableContacts() > 0)
+	if (idsFetcher.getContactCount() > 0)
 	{
-	    message = fetcher.getAvailableContacts() + " Contacts deleted";
-	    ActivitySave.createBulkActionActivity(fetcher.getAvailableContacts(), "DELETE", "", "contacts", "");
+	    message = idsFetcher.getContactCount() + " Contacts deleted";
+	    ActivitySave.createBulkActionActivity(idsFetcher.getContactCount(), "DELETE", "", "contacts", "");
 	}
-	else if (fetcher.getAvailableCompanies() > 0)
+	else if (idsFetcher.getCompanyCount() > 0)
 	{
-	    message = fetcher.getAvailableCompanies() + " Companies deleted";
-	    ActivitySave.createBulkActionActivity(fetcher.getAvailableCompanies(), "DELETE", "", "companies", "");
+	    message = idsFetcher.getCompanyCount() + " Companies deleted";
+	    ActivitySave.createBulkActionActivity(idsFetcher.getCompanyCount(), "DELETE", "", "companies", "");
 	}
 	else
 	{
-	    message = fetcher.getAvailableCompanies() + " Contacts/Companies deleted";
+	    message = idsFetcher.getTotalCount() + " Contacts/Companies deleted";
 	}
-
-	ContactUtil.eraseContactsCountCache();
 
 	BulkActionNotifications.publishNotification(message);
 
@@ -149,37 +167,48 @@ public class BulkOperationsAPI
     {
 	System.out.println(contact_ids + " model ids " + filter + " filter " + new_owner + " new_owner");
 
-	ContactFilterResultFetcher fetcher = new ContactFilterResultFetcher(filter, dynamicFilter, 200, contact_ids,
-		current_user);
+	ContactFilterIdsResultFetcher idsFetcher = new ContactFilterIdsResultFetcher(filter, dynamicFilter,
+		contact_ids, null, 200, current_user);
 
-	while (fetcher.hasNextSet())
+	while (idsFetcher.hasNext())
 	{
-	    List<Contact> contacts = fetcher.nextSet();
 
-	    if (contact_ids != null)
-		ContactUtil.processContacts(contacts);
+	    try
+	    {
+		Set<Key<Contact>> contactSet = idsFetcher.next();
+		ContactsOwnerChangeDeferredTask task = new ContactsOwnerChangeDeferredTask(current_user,
+			NamespaceManager.get(), contactSet, null, new_owner);
 
-	    ContactUtil.changeOwnerToContactsBulk(contacts, new_owner);
+		// Add to queue
+		Queue queue = QueueFactory.getQueue(AgileQueues.OWNER_CHANGE_QUEUE);
+		queue.add(TaskOptions.Builder.withPayload(task));
+
+	    }
+	    catch (Exception e)
+	    {
+		e.printStackTrace();
+	    }
+
 	}
 
 	String message = "Owner changed for ";
-	if (fetcher.getAvailableContacts() > 0)
+	if (idsFetcher.getContactCount() > 0)
 	{
-	    message = message + fetcher.getAvailableContacts() + " Contacts";
+	    message = message + idsFetcher.getContactCount() + " Contacts";
 	    DomainUser user = DomainUserUtil.getDomainUser(Long.parseLong(new_owner));
-	    ActivitySave.createBulkActionActivity(fetcher.getAvailableContacts(), "CHANGE_OWNER", user.name,
-		    "contacts", "");
+	    ActivitySave.createBulkActionActivity(idsFetcher.getContactCount(), "CHANGE_OWNER", user.name, "contacts",
+		    "");
 	}
-	else if (fetcher.getAvailableCompanies() > 0)
+	else if (idsFetcher.getCompanyCount() > 0)
 	{
-	    message = message + fetcher.getAvailableCompanies() + " Companies";
+	    message = message + idsFetcher.getCompanyCount() + " Companies";
 	    DomainUser user = DomainUserUtil.getDomainUser(Long.parseLong(new_owner));
-	    ActivitySave.createBulkActionActivity(fetcher.getAvailableCompanies(), "CHANGE_OWNER", user.name,
-		    "companies", "");
+	    ActivitySave.createBulkActionActivity(idsFetcher.getCompanyCount(), "CHANGE_OWNER", user.name, "companies",
+		    "");
 	}
 	else
 	{
-	    message = message + fetcher.getAvailableCompanies() + " Companies/Contacts";
+	    message = message + idsFetcher.getTotalCount() + " Companies/Contacts";
 	}
 	BulkActionNotifications.publishNotification(message);
 
@@ -223,11 +252,12 @@ public class BulkOperationsAPI
 	    return;
 
 	ContactFilterIdsResultFetcher idsFetcher = new ContactFilterIdsResultFetcher(filter, dynamicFilter,
-		contact_ids, 200, current_user_id);
+		contact_ids, null, 200, current_user_id);
 
 	idsFetcher.setLimits();
 
 	int count = 0;
+	UserInfo info = new UserInfo(user);
 	while (idsFetcher.hasNext())
 	{
 
@@ -236,7 +266,7 @@ public class BulkOperationsAPI
 		Set<Key<Contact>> contactSet = idsFetcher.next();
 		count += contactSet.size();
 		CampaignSubscriberDeferredTask task = new CampaignSubscriberDeferredTask(current_user_id, workflowId,
-			NamespaceManager.get(), contactSet, new UserInfo(user));
+			NamespaceManager.get(), contactSet, info);
 
 		// Add to queue
 		Queue queue = QueueFactory.getQueue(AgileQueues.CAMPAIGN_SUBSCRIBE_SUBTASK_QUEUE);
@@ -373,24 +403,41 @@ public class BulkOperationsAPI
 	if (tagsArray == null)
 	    return;
 
-	ContactFilterResultFetcher fetcher = new ContactFilterResultFetcher(filter, dynamicFilter, 200, contact_ids,
-		current_user);
+	ContactFilterIdsResultFetcher idsFetcher = new ContactFilterIdsResultFetcher(filter, dynamicFilter,
+		contact_ids, null, 200, current_user);
 
-	while (fetcher.hasNextSet())
+	DomainUser user = DomainUserUtil.getDomainUser(current_user);
+	if (user == null)
+	    return;
+
+	UserInfo info = new UserInfo(user);
+
+	while (idsFetcher.hasNext())
 	{
-	    List<Contact> contacts = fetcher.nextSet();
 
-	    if (contact_ids != null)
-		ContactUtil.processContacts(contacts);
+	    try
+	    {
 
-	    // ContactUtil.deleteContactsbyListSupressNotification(fetcher.nextSet());
-	    ContactUtil.addTagsToContactsBulk(contacts, tagsArray);
+		Set<Key<Contact>> contactSet = idsFetcher.next();
+		ContactsBulkTagAddDeferredTask task = new ContactsBulkTagAddDeferredTask(current_user,
+			NamespaceManager.get(), contactSet, info, tagsArray);
+
+		// Add to queue
+		Queue queue = QueueFactory.getQueue(AgileQueues.BULK_TAGS_QUEUE);
+		queue.addAsync(TaskOptions.Builder.withPayload(task));
+
+	    }
+	    catch (Exception e)
+	    {
+		e.printStackTrace();
+	    }
+
 	}
 
 	BulkActionNotifications.publishconfirmation(BulkAction.BULK_ACTIONS.ADD_TAGS, Arrays.asList(tagsArray)
-		.toString(), String.valueOf(fetcher.getAvailableContacts()));
+		.toString(), String.valueOf(idsFetcher.getTotalCount()));
 
-	ActivitySave.createBulkActionActivity(fetcher.getAvailableContacts(), "ADD_TAG", tagsString, "contacts", "");
+	ActivitySave.createBulkActionActivity(idsFetcher.getTotalCount(), "ADD_TAG", tagsString, "contacts", "");
     }
 
     @SuppressWarnings("unchecked")
@@ -427,24 +474,41 @@ public class BulkOperationsAPI
 	if (tagsArray == null)
 	    return;
 
-	ContactFilterResultFetcher fetcher = new ContactFilterResultFetcher(filter, dynamicFilter, 200, contact_ids,
-		current_user);
+	ContactFilterIdsResultFetcher idsFetcher = new ContactFilterIdsResultFetcher(filter, dynamicFilter,
+		contact_ids, null, 200, current_user);
 
-	while (fetcher.hasNextSet())
+	DomainUser user = DomainUserUtil.getDomainUser(current_user);
+	if (user == null)
+	    return;
+
+	UserInfo info = new UserInfo(user);
+
+	while (idsFetcher.hasNext())
 	{
-	    List<Contact> contacts = fetcher.nextSet();
 
-	    if (contact_ids != null)
-		ContactUtil.processContacts(contacts);
+	    try
+	    {
 
-	    // ContactUtil.deleteContactsbyListSupressNotification(fetcher.nextSet());
-	    ContactUtil.removeTagsToContactsBulk(contacts, tagsArray);
+		Set<Key<Contact>> contactSet = idsFetcher.next();
+		ContactsBulkTagRemoveDeferredTask task = new ContactsBulkTagRemoveDeferredTask(current_user,
+			NamespaceManager.get(), contactSet, info, tagsArray);
+
+		// Add to queue
+		Queue queue = QueueFactory.getQueue(AgileQueues.BULK_TAGS_QUEUE);
+		queue.addAsync(TaskOptions.Builder.withPayload(task));
+
+	    }
+	    catch (Exception e)
+	    {
+		e.printStackTrace();
+	    }
+
 	}
 
 	BulkActionNotifications.publishconfirmation(BulkAction.BULK_ACTIONS.REMOVE_TAGS, Arrays.asList(tagsArray)
-		.toString(), String.valueOf(fetcher.getAvailableContacts()));
+		.toString(), String.valueOf(idsFetcher.getTotalCount()));
 
-	ActivitySave.createBulkActionActivity(fetcher.getAvailableContacts(), "REMOVE_TAG", tagsString, "contacts", "");
+	ActivitySave.createBulkActionActivity(idsFetcher.getTotalCount(), "REMOVE_TAG", tagsString, "contacts", "");
 
     }
 
@@ -467,6 +531,7 @@ public class BulkOperationsAPI
 
 	System.out.println(key);
 
+	DomainUser domainUser = null;
 	try
 	{
 	    // Creates domain user key, which is set as a contact owner
@@ -474,7 +539,7 @@ public class BulkOperationsAPI
 
 	    System.out.println("setting domain user for key : " + ownerKey);
 
-	    DomainUser domainUser = DomainUserUtil.getDomainUser(ownerKey.getId());
+	    domainUser = DomainUserUtil.getDomainUser(ownerKey.getId());
 
 	    if (domainUser != null)
 		BulkActionUtil.setSessionManager(domainUser);
@@ -499,15 +564,18 @@ public class BulkOperationsAPI
 
 	    // Calls utility method to save contacts in csv with owner id,
 	    // according to contact prototype sent
-	    BillingRestriction restrictions = BillingRestrictionUtil.getBillingRestriction(true);
+	    BillingRestriction restrictions = BillingRestrictionUtil.getBillingRestrictionFromDB();
+
+	    UserAccessControl accessControl = UserAccessControl.getAccessControl(AccessControlClasses.Contact, null,
+		    domainUser);
 
 	    if (type.equalsIgnoreCase("contacts"))
 	    {
-		new CSVUtil(restrictions).createContactsFromCSV(blobStream, contact, ownerId);
+		new CSVUtil(restrictions, accessControl).createContactsFromCSV(blobStream, contact, ownerId);
 	    }
 	    else if (type.equalsIgnoreCase("companies"))
 	    {
-		new CSVUtil(restrictions).createCompaniesFromCSV(blobStream, contact, ownerId, type);
+		new CSVUtil(restrictions, accessControl).createCompaniesFromCSV(blobStream, contact, ownerId, type);
 	    }
 
 	    ContactUtil.eraseContactsCountCache();
@@ -540,6 +608,16 @@ public class BulkOperationsAPI
 	// Creates a blobkey object from blobkey string
 	BlobKey blobKey = new BlobKey(key);
 
+	DomainUser user = null;
+	try
+	{
+	    user = DomainUserUtil.getDomainUser(Long.parseLong(ownerId));
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	}
+
 	// Reads the stream from blobstore
 	InputStream blobStream;
 	try
@@ -550,10 +628,12 @@ public class BulkOperationsAPI
 	    // Calls utility method to save contacts in csv with owner id,
 	    // according to contact prototype sent
 	    BillingRestriction restrictions = BillingRestrictionUtil.getBillingRestriction(true);
+	    UserAccessControl accessControl = UserAccessControl.getAccessControl(AccessControlClasses.Contact, null,
+		    user);
 	    LinkedHashMap<String, Object> dealMap = (LinkedHashMap<String, Object>) deal;
 	    ArrayList<LinkedHashMap<String, String>> props = (ArrayList<LinkedHashMap<String, String>>) dealMap
 		    .get("properties");
-	    new CSVUtil(restrictions).createDealsFromCSV(blobStream, props, ownerId);
+	    new CSVUtil(restrictions, accessControl).createDealsFromCSV(blobStream, props, ownerId);
 
 	}
 	catch (IOException e)
@@ -589,40 +669,40 @@ public class BulkOperationsAPI
 	    throws JSONException
     {
 
-	// to show in notification
-	int contactSize = 0;
+	Map<String, Object> searchMap = null;
 
 	// if all active subscribers are selected
 	if (!StringUtils.isEmpty(allActiveSubscribers) && allActiveSubscribers.equals("all-active-subscribers"))
 	{
-
-	    contactSize = CampaignStatusUtil.removeBulkSubscribersFromCampaign(campaign_id);
-
-	    BulkActionNotifications.publishconfirmation(BulkAction.REMOVE_ACTIVE_SUBSCRIBERS,
-		    String.valueOf(contactSize));
-	    return;
+	    searchMap = new HashMap<String, Object>();
+	    searchMap.put("campaignStatus.status", campaign_id + "-" + CampaignStatus.Status.ACTIVE);
 	}
 
-	// Removes and updates for selected active subscribers
-	JSONArray activeContactsJSONArray = new JSONArray(contactIds);
-	contactSize = activeContactsJSONArray.length();
+	ContactFilterIdsResultFetcher fetcher = new ContactFilterIdsResultFetcher(null, null, contactIds, searchMap,
+		200, null);
 
 	String campaignName = null;
 
 	if (!StringUtils.isBlank(campaign_id))
 	    campaignName = WorkflowUtil.getCampaignName(campaign_id);
 
-	for (int i = 0; i < contactSize; i++)
-	{
-	    // Remove from Cron
-	    CronUtil.removeTask(campaign_id, activeContactsJSONArray.getString(i));
+	Long campaignId = Long.parseLong(campaign_id);
 
-	    // Set REMOVED campaignStatus
-	    CampaignStatusUtil.setStatusOfCampaign(activeContactsJSONArray.getString(i), campaign_id, campaignName,
-		    Status.REMOVED);
+	// Removes Cron entities
+	CronUtil.removeTask(campaign_id, null);
+
+	while (fetcher.hasNext())
+	{
+	    CampaignStatusUpdateDeferredTask task = new CampaignStatusUpdateDeferredTask(campaignId, campaignName,
+		    NamespaceManager.get(), fetcher.next());
+
+	    // Add to queue
+	    Queue queue = QueueFactory.getQueue(AgileQueues.WORKFLOWS_RELATED_QUEUE);
+	    queue.addAsync(TaskOptions.Builder.withPayload(task));
 	}
 
-	BulkActionNotifications.publishconfirmation(BulkAction.REMOVE_ACTIVE_SUBSCRIBERS, String.valueOf(contactSize));
+	BulkActionNotifications.publishconfirmation(BulkAction.REMOVE_ACTIVE_SUBSCRIBERS,
+		String.valueOf(fetcher.getTotalCount()));
     }
 
     /**

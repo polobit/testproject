@@ -21,7 +21,7 @@ function setupClickDeskAuth()
 	$('#ClickDesk').html(getTemplate('clickdesk-login', {}));
 
 	// On click of save button, check input and save details
-	$('#save_clickdesk_prefs').die().live('click', function(e)
+	$("body").on("click", "#save_clickdesk_prefs", function(e)
 	{
 		e.preventDefault();
 
@@ -84,7 +84,7 @@ function showClickDeskProfile()
 	 * On click of tickets tab in ClickDesk profile, retrieve tickets from
 	 * ClickDesk and show in the ClickDesk tickets panel
 	 */
-	$('#clickdesk_tickets').die().live('click', function(e)
+	$("body").on("click", "#clickdesk_tickets", function(e)
 	{
 		e.preventDefault();
 
@@ -186,7 +186,7 @@ function registerClickEventsInChat(chats_data)
 	 * On click of show chat, retrieve chat data appended to the chat element
 	 * clicked and show it in modal
 	 */
-	$('#clickdesk_chat_show').die().live('click', function(e)
+	$("body").on("click", "#clickdesk_chat_show", function(e)
 	{
 		e.preventDefault();
 
@@ -201,7 +201,7 @@ function registerClickEventsInChat(chats_data)
 	 * On click of show more link, retrieve more chats from ClickDesk if exists
 	 * and shows it in the ClickDesk panel
 	 */
-	$('#more_chats_link').die().live('click', function(e)
+	$("body").on("click", "#more_chats_link", function(e)
 	{
 		e.preventDefault();
 
@@ -388,7 +388,7 @@ function registerEventsInTickets(tickets_data)
 	 * On click of show ticket, retrieve ticket data appended to the chat
 	 * element clicked and show it in modal
 	 */
-	$('#clickdesk_ticket_show').die().live('click', function(e)
+	$("body").on("click", "#clickdesk_ticket_show", function(e)
 	{
 		e.preventDefault();
 
@@ -400,7 +400,7 @@ function registerEventsInTickets(tickets_data)
 
 	});
 
-	$('#more_tickets_link').die().live('click', function(e)
+	$("body").on("click", "#more_tickets_link", function(e)
 	{
 		e.preventDefault();
 
@@ -596,13 +596,13 @@ $(function()
 			 * On mouse enter of ticket, show tab link which has a link to show detailed
 			 * description of ticket
 			 */
-			$('.clickdesk_ticket_hover').live('mouseenter', function(e)
+			$("body").on("mouseenter", ".clickdesk_ticket_hover", function(e)
 			{
 				$(this).find('.clickdesk_ticket_tab_link').show();
 			});
 
 			// On mouse leave of ticket, hides tab link
-			$('.clickdesk_ticket_hover').live('mouseleave', function(e)
+			$("body").on("mouseleave", ".clickdesk_ticket_hover", function(e)
 			{
 				$('.clickdesk_ticket_tab_link').hide();
 			});
@@ -611,13 +611,13 @@ $(function()
 			 * On mouse enter of chat, show tab link which has a link to show detailed
 			 * description of chat
 			 */
-			$('.clickdesk_chat_hover').live('mouseenter', function(e)
+			$("body").on("mouseenter", ".clickdesk_chat_hover", function(e)
 			{
 				$(this).find('.clickdesk_chat_tab_link').show();
 			});
 
 			// On mouse leave of chat, hides tab link
-			$('.clickdesk_chat_hover').live('mouseleave', function(e)
+			$("body").on("mouseleave", ".clickdesk_chat_hover", function(e)
 			{
 				$('.clickdesk_chat_tab_link').hide();
 			});
