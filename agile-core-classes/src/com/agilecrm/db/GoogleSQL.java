@@ -313,10 +313,15 @@ public class GoogleSQL
 
     private static Connection getConnection() throws PropertyVetoException, SQLException
     {
-	if (SystemProperty.environment.value() != SystemProperty.Environment.Value.Development)
+	if (SystemProperty.environment.value() != null)
 	{
 	    return getGoogleSQLConnection();
 	}
+
+	// String url =
+	// "jdbc:mysql://173.194.84.175:3306/stats?user=root&password=mysql123";
+	String url = "jdbc:mysql://173.194.84.175:3306/stats?user=root&password=mysql123";
+
 	if (cpds != null)
 	    return cpds.getConnection();
 
@@ -332,7 +337,7 @@ public class GoogleSQL
 	cpds.setDriverClass("com.mysql.jdbc.Driver"); // loads the jdbc driver
 	// cpds.setJdbcUrl("jdbc:mysql://localhost:3306/stats?user=root&password=mysql123");
 	// jdbc:mysql://localhost:3306/stats?user=root&password=mysql123
-	cpds.setJdbcUrl("jdbc:mysql://173.194.84.175:3306/stats?user=root&password=mysql123");
+	cpds.setJdbcUrl(url);
 	// cpds.setUser("root");
 	// cpds.setPassword("mysql123");
 
