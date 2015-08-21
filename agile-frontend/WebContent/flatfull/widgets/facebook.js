@@ -19,7 +19,7 @@ function showFacebookMatchingProfile(first_name)
 			console.log(data);
 			var template = $('#' + FACEBOOK_PLUGIN_NAME).html(getTemplate('facebook-matching-profiles', data));
 
-			$(".facebookImage").die().live('mouseover', function()
+			$("body").on("mouseover", ".facebookImage", function(e)
 			{
 				// Unique Twitter Id from widget
 				Facebook_id = $(this).attr('id');
@@ -34,7 +34,7 @@ function showFacebookMatchingProfile(first_name)
 				$(this).popover('show');
 
 				// on click of any profile, save it to the contact
-				$('#' + Facebook_id).die().live('click', function(e)
+				$('#' + Facebook_id).on('click', function(e)
 				{
 					e.preventDefault();
 
@@ -160,9 +160,7 @@ function showFacebookProfile(facebookid)
 			$('#Twitter_plugin_delete').show();
 			var template = $('#' + FACEBOOK_PLUGIN_NAME).html(getTemplate('facebook-profile', data));
 
-			$("#facebook_post_btn").die().live(
-					'click',
-					function()
+			$("body").on("click", "#facebook_post_btn", function(e)
 					{
 						console.log("post on a wall")
 						queueGetRequest("widget_queue", "/core/api/widgets/facebook/postonwall/" + FACEBOOK_PLUGIN_ID + "/" + facebookid + "/" + "hai", 'json',
@@ -279,14 +277,14 @@ function getUserNameOrUserID(url) {
 			showFacebookMatchingProfile(SEARCH_STRING);
 		}
 
-		$('#facebook_search_btn').die().live('click', function(e)
+		$("body").on("click", "#facebook_search_btn", function(e)
 		{
 			e.preventDefault();
 
 			getModifiedFacebookMatchingProfiles();
 		});
 
-		$('.facebook_modify_search').die().live('click', function(e)
+		$("body").on("click", ".facebook_modify_search", function(e)
 		{
 			e.preventDefault();
 
@@ -294,7 +292,7 @@ function getUserNameOrUserID(url) {
 
 			$('#' + FACEBOOK_PLUGIN_NAME).html(getTemplate('facebook-modified-search', { "searchString" : SEARCH_STRING }));
 		});
-		$('#facebook_search_close').die().live('click', function(e)
+		$("body").on("click", "#facebook_search_close", function(e)
 		{
 			e.preventDefault();
 
@@ -305,7 +303,7 @@ function getUserNameOrUserID(url) {
 		});
 		
 		// Deletes Twitter profile on click of delete button in template
-		$('#Facebook_plugin_delete').die().live('click', function(e)
+		$("body").on("click", "#Facebook_plugin_delete", function(e)
 		{
 			e.preventDefault();
 			web_url = agile_crm_get_contact_property_by_subtype('website', 'FACEBOOK');

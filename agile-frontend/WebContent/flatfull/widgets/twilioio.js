@@ -31,7 +31,7 @@ $(function()
 
 	showListOfContactNumbers();
 
-	$("#twilioio_more_call_logs").die().live('click', function(e)
+	$("body").on("click", '#twilioio_more_call_logs', function(e)
 	{
 		e.preventDefault();
 
@@ -82,7 +82,7 @@ function showListOfContactNumbers()
 	/*
 	 * On change of number in select box, we retrieve call logs for it and show
 	 */
-	$('#contact_number').die().live('change', function(e)
+	$("body").on("change", '#contact_number', function(e)
 	{
 		$('#twilio-logs-panel').html(TWILIOIO_LOGS_LOAD_IMAGE);
 		var to = $('#contact_number').val();
@@ -143,7 +143,7 @@ function getTwilioIOLogs(to)
 		/*
 		 * On click of play button in Twilio logs, call conversaion is played
 		 */
-		$("#record_sound_play").die().live("click", function(e)
+		$("body").on("click", '#record_sound_play', function(e)
 		{
 			e.preventDefault();
 
@@ -179,7 +179,7 @@ function getTwilioIOLogs(to)
 		});
 
 		// To stop the audio call when playing
-		$(".icon-stop").die().live('click', function(e)
+		$("body").on("click", '.icon-stop', function(e)
 		{
 			e.preventDefault();
 			audio.pause();

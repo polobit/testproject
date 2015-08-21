@@ -103,7 +103,7 @@ function showTwitterMatchingProfiles(data)
 		$(this).popover('show');
 
 		// on click of any profile, save it to the contact
-		$('#' + Twitter_id).die().live('click', function(e)
+		$('#' + Twitter_id).on('click', function(e)
 		{
 			e.preventDefault();
 
@@ -470,7 +470,7 @@ function showTwitterProfile(Twitter_id)
 function registerClickEventsInTwitter(Twitter_id, twitter_connected, stream_data)
 {
 	// On click of see more link, more updates are retrieved
-	$('.twitter_stream').die().live('click', function(e)
+	$("body").on('click','.twitter_stream', function(e)
 	{
 
 		e.preventDefault();
@@ -524,7 +524,7 @@ function registerClickEventsInTwitter(Twitter_id, twitter_connected, stream_data
 	 * On click of less button, hides update stream and shows current update by
 	 * toggling
 	 */
-	$('#twitter_less').die().live('click', function(e)
+	$("body").on('click','#twitter_less', function(e)
 	{
 		e.preventDefault();
 
@@ -563,7 +563,7 @@ function registerClickEventsInTwitter(Twitter_id, twitter_connected, stream_data
 	 * On click of refresh icon in the Twitter panel, all the new updates are
 	 * shown
 	 */
-	$('#twitter_refresh_stream').die().live('click', function(e)
+	$("body").on('click','#twitter_refresh_stream', function(e)
 	{
 		e.preventDefault();
 
@@ -1283,7 +1283,7 @@ $(function()
 			}
 
 			// Deletes Twitter profile on click of delete button in template
-			$('#Twitter_plugin_delete').die().live('click', function(e)
+			$("body").on('click','#Twitter_plugin_delete', function(e)
 			{
 				e.preventDefault();
 
@@ -1296,14 +1296,14 @@ $(function()
 			});
 
 			// Sends a message to Twitter when clicked on send message button
-			$('#twitter_message').die().live('click', function(e)
+			$("body").on('click','#twitter_message', function(e)
 			{
 				e.preventDefault();
 				sendTwitterMessage(Twitter_id);
 			});
 
 			// Sends an follow request to Twitter when clicked on follow button
-			$('#twitter_follow').die().live('click', function(e)
+			$("body").on('click','#twitter_follow', function(e)
 			{
 				e.preventDefault();
 
@@ -1316,14 +1316,14 @@ $(function()
 			});
 
 			// Sends an UnFollow request to Twitter when clicked on UnFollow button
-			$('#twitter_unfollow').die().live('click', function(e)
+			$("body").on('click','#twitter_unfollow', function(e)
 			{
 				e.preventDefault();
 				sendUnfollowRequest(Twitter_id);
 			});
 
 			// On mouse enter unfollow
-			$('#twitter_unfollow').live('mouseenter', function()
+			$("body").on('mouseenter','#twitter_unfollow', function(e)
 			{
 				$('#twitter_unfollow').text("Unfollow");
 				$('#twitter_unfollow').addClass("btn-danger");
@@ -1331,7 +1331,7 @@ $(function()
 			});
 
 			// On mouse leave following
-			$('#twitter_unfollow').live('mouseleave', function()
+			$("body").on('mouseleave','#twitter_unfollow', function(e)
 			{
 				$('#twitter_unfollow').text("Following");
 				$('#twitter_unfollow').addClass("btn-primary");
@@ -1339,7 +1339,7 @@ $(function()
 			});
 
 			// ReTweets a tweet in Twitter on click of ReTweet link
-			$('.twitter_retweet').die().live('click', function(e)
+			$("body").on('click','.twitter_retweet', function(e)
 			{
 				e.preventDefault();
 
@@ -1352,7 +1352,7 @@ $(function()
 			});
 
 			// Sends a tweet to the contact Twitter profile
-			$('#twitter_tweet').die().live('click', function(e)
+			$("body").on('click','#twitter_tweet', function(e)
 			{
 				e.preventDefault();
 				tweetInTwitter(Twitter_id);
@@ -1360,7 +1360,7 @@ $(function()
 			});
 
 			// on click of name link to modify search, search template is shown
-			$('.twitter_modify_search').die().live('click', function(e)
+			$("body").on('click','.twitter_modify_search', function(e)
 			{
 				e.preventDefault();
 
@@ -1373,7 +1373,7 @@ $(function()
 			 * On click of search button in modify template, matching profiles are
 			 * fetched
 			 */
-			$('#twitter_search_btn').die().live('click', function(e)
+			$("body").on('click','#twitter_search_btn', function(e)
 			{
 				e.preventDefault();
 
@@ -1383,7 +1383,7 @@ $(function()
 			/*
 			 * On click of close, show past results with past searched data
 			 */
-			$('#twitter_search_close').die().live('click', function(e)
+			$("body").on('click','#twitter_search_close', function(e)
 			{
 				e.preventDefault();
 
@@ -1394,7 +1394,7 @@ $(function()
 			});
 
 			// On click of followers in twitter panel
-			$('#twitter_followers').die().live('click', function(e1)
+			$("body").on('click','#twitter_followers', function(e1)
 			{
 				e1.preventDefault();
 
@@ -1433,8 +1433,8 @@ $(function()
 					{
 						// Show matching profiles in Twitter panel
 						$('#twitter_follower_panel', agile_crm_get_current_view()).html(getTemplate("twitter-follower-following", result));
-
-						$(".twitterImage").die().live('mouseover', function()
+						
+						$("body").on('mouseover','.twitterImage', function(e1)
 						{
 							// Unique Twitter Id from widget
 							var id = $(this).attr('id');
@@ -1459,7 +1459,7 @@ $(function()
 				});
 			});
 
-			$('#more_followers').die().live('click', function(e2)
+			$("body").on('click','#more_followers', function(e2)
 			{
 				e2.preventDefault();
 
@@ -1490,7 +1490,7 @@ $(function()
 			});
 
 			// On click of following in twitter panel
-			$('#twitter_following').die().live('click', function(e1)
+			$("body").on('click','#twitter_following', function(e1)
 			{
 				e1.preventDefault();
 
@@ -1525,7 +1525,7 @@ $(function()
 						// Show matching profiles in Twitter panel
 						$('#twitter_following_panel', agile_crm_get_current_view()).html(getTemplate("twitter-follower-following", result));
 
-						$(".twitterImage").die().live('mouseover', function()
+						$("body").on('mouseover','.twitterImage', function(e1)
 						{
 							// Unique Twitter Id from widget
 							var id = $(this).attr('id');
@@ -1550,7 +1550,7 @@ $(function()
 				});
 			});
 
-			$('#more_following').die().live('click', function(e2)
+			$("body").on('click','#more_following', function(e2)
 			{
 				e2.preventDefault();
 

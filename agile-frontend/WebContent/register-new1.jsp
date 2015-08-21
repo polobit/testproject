@@ -11,7 +11,7 @@
 		return;
 	}
 
-	if(RegisterUtil.isWrongURL(request))
+  if(RegisterUtil.isWrongURL(request))
 	{
 	    RegisterUtil.redirectToRegistrationpage(request, response);
 	    return;
@@ -28,8 +28,6 @@ String _AGILE_VERSION = SystemProperty.applicationVersion.get();
     request.getRequestDispatcher("/register-new2.jsp").forward(request, response);
     return;
   }
-  
-  
 
 %>
 
@@ -46,318 +44,10 @@ String _AGILE_VERSION = SystemProperty.applicationVersion.get();
 <meta name="author" content="">
 
 
-<style>
-body {
-  background-image: url('../flatfull/images/flatfull/agile-registration-page.png');
-  background-repeat: no-repeat;
-  background-position: center center;
-  background-size: 100% 100%;
-  background-attachment: fixed;
-}
-
-.error-top-view {
-  position: fixed;
-  background-color: rgb(199, 73, 73);
-  width: 100%;
-  top: 0;
-  height: 50px;
-  color: #fff;
-  text-align: center;
-  padding-top: 15px;
-  display: none;
-}
-
-.text-white
-{
-color:#fff!important;
-}
-
-
-.panel {
-  position: fixed!important;
-  bottom: 0;
-  right: 10px;
-  color: #fff;
-  border-radius:50%!important;
-  background: none!important;
-
-}
-
-.agile-testimonial
-{
-box-shadow: rgba(0, 0, 0, 0.14902) 0px 1px 3px;
-padding: 10px 13px;
-box-sizing: border-box;
-border-color: rgb(238, 238, 238) rgb(221, 221, 221) rgb(187, 187, 187);
-border-width: 1px;
-border-style: solid;
-border-radius: 4px;
-position:relative;
-margin: 30px auto;
-width: 365px;
-
-}
-.agile-testimonial li
-{
-	margin-bottom:15px;
-	list-style:none;
-}
-.agile-testimonial .tweet-img-pricing
-{
-width:51px;	
-margin-top:12px;
-}
-.agile-testimonial .tweet-img-pricing img
-{
-	width:40px;
-	height:40px;
-}
-.agile-testimonial  .tweet-head
-{
-	margin-bottom:3px;
-	margin-top:7px;
-}
-
-.agile-testimonial .tweet-txt
-{
-	width: 125px;
-
-
-position: relative;
-
-}
-/*.agile-testimonial .tweet-arrow
-{
-	position: absolute;
-display: block;
-border-top: 6px solid transparent;
-border-bottom: 6px solid transparent;
-border-right: 6px solid #82949a;
-left: -8px;
-top: 30%;
-}*/
-.agile-testimonial .tweet-authname
-{
-	font-size:13px;
-	display:block;
-	margin-top:15px;
-}
-.agile-testimonial .tweet-authdesc
-{
-font-size: 12px;
-margin-top:5px;
-display:block;
-margin-bottom:7px;
-}
-.tweet-info
-{
-  font-size: 12px;
-  line-height: 16px;
-  text-align: center;
-  margin-top: 3px;
-  width: 75%;
-  margin: 0 auto;
-}
-.no-margin-L
-{
-	margin-left:0px;
-}
-
-.carousel {
-  position: relative;
-  margin-bottom: 20px;
-  line-height: 1;
-}
-
-.carousel-inner {
-  position: relative;
-  width: 100%;
-  overflow: hidden;
-  
-  
-  
-}
-
-.carousel-inner > .item {
-  position: relative;
-  display: none;
-  -webkit-transition: 0.6s ease-in-out left;
-     -moz-transition: 0.6s ease-in-out left;
-       -o-transition: 0.6s ease-in-out left;
-          transition: 0.6s ease-in-out left;
-}
-
-.carousel-inner > .item > img,
-.carousel-inner > .item > a > img {
-  display: block;
-  line-height: 1;
-}
-
-.carousel-inner > .active,
-.carousel-inner > .next,
-.carousel-inner > .prev {
-  display: block;
-}
-
-.carousel-inner > .active {
-  left: 0;
-}
-
-.carousel-inner > .next,
-.carousel-inner > .prev {
-  position: absolute;
-  top: 0;
-  width: 100%;
-}
-
-.carousel-inner > .next {
-  left: 100%;
-}
-
-.carousel-inner > .prev {
-  left: -100%;
-}
-
-.carousel-inner > .next.left,
-.carousel-inner > .prev.right {
-  left: 0;
-}
-
-.carousel-inner > .active.left {
-  left: -100%;
-}
-
-
-.carousel-inner > .active.right {
-  left: 100%;
-}
-
-.carousel-control {
-  position: absolute;
-  top: 30px!important;
-  background-image:none!important;
-  width: 40px!important;
-  height: 40px!important;
-  margin-top: -20px;
-  font-size: 60px!important;
-  font-weight: 100;
-  line-height: 30px;
-  color: #000!important;
-  text-align: center;
-  background: none;
-  border:none;
-  -webkit-border-radius: 23px;
-     -moz-border-radius: 23px;
-          border-radius: 23px;
-  opacity: 0.5;
-  filter: alpha(opacity=50);
-  display: none;
-  
-}
-.carousel-control.left
-{
- left: -55px;	
-}
-.carousel-control.right {
-  right: -55px!important;
-  left: auto;
-
-}
-
-.carousel-control:hover,
-.carousel-control:focus {
-  color: #999;
-  text-decoration: none;
-  opacity: 0.9;
-  filter: alpha(opacity=90);
-}
-
-.carousel-indicators {
-  position: absolute;
-  top: 15px;
-  right: 15px;
-  z-index: 5;
-  margin: 0;
-  list-style: none;
-  display:none;
-}
-
-.carousel-indicators li {
-  display: block;
-  float: left;
-  width: 10px;
-  height: 10px;
-  margin-left: 5px;
-  text-indent: -999px;
-  background-color: #ccc;
-  background-color: rgba(255, 255, 255, 0.25);
-  border-radius: 5px;
-}
-
-.carousel-indicators .active {
-  background-color: #fff;
-}
-
-.carousel-caption {
-  position: absolute;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  padding: 15px;
-  background: #333333;
-  background: rgba(0, 0, 0, 0.75);
-}
-
-.carousel-caption h4,
-.carousel-caption p {
-  line-height: 20px;
-  color: #ffffff;
-}
-
-.carousel-caption h4 {
-  margin: 0 0 5px;
-}
-
-.carousel-caption p {
-	
-  margin-bottom: 0;
-}
-.terms-field:hover {
-  color: #46B1DD;
-}
-
-
-.terms-field {
-  color: #00B5FF;
-}
-
-
-@media all and (max-width: 767px) {
-
-body {
-  background-size: cover;
-
-}
-  
-}
-
-
-  </style>
-
+<!-- Page CSS -->
+<link rel="stylesheet" type="text/css" href="/flatfull/css/register-new.css" />
 <link rel="stylesheet" type="text/css" href="/flatfull/css/bootstrap.v3.min.css" />
-<link rel="stylesheet" type="text/css" href="/flatfull/css/font.css" />
 <link rel="stylesheet" type="text/css" href="/flatfull/css/app.css" />
-<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
-
-
-
-<!-- JQUery Core and UI CDN -->
-<script type='text/javascript' src='/lib/jquery-new/jquery-2.1.1.min.js'></script>
-<script type="text/javascript" src="/lib/bootstrap.v3.min.js"></script>
-<script type="text/javascript" src="/lib/phonenumber-lib/intlTelInput.js"></script>
-<script type="text/javascript" src="/lib/jquery.validate.min.js"></script>
-
-
 
 <script type="text/javascript">
 var isSafari = (Object.prototype.toString.call(window.HTMLElement).indexOf('Constructor') > 0);
@@ -481,24 +171,23 @@ if(isSafari && isWin)
 </div>
   </div>
   
-  <a class="carousel-control left" href="#myCarousel" data-slide="prev">‹</a>
-  <a class="carousel-control right" href="#myCarousel" data-slide="next">›</a>
+  <a class="carousel-control left" href="#myCarousel" data-slide="prev">�</a>
+  <a class="carousel-control right" href="#myCarousel" data-slide="next">�</a>
 </div>
 </div>
 </div>
 </div>
 </div>
+<!-- JQUery Core and UI CDN -->
+<script type='text/javascript' src='//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js'></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/jstimezonedetect/1.0.4/jstz.min.js" type="text/javascript"></script>
-<script src="/flatfull/registration/register.js?_v=<%=_AGILE_VERSION%>"   type="text/javascript"></script>
+<script src="/flatfull/registration/register.js" type="text/javascript"></script>
   <script type="text/javascript">
   var version = <%="\"" + VersioningUtil.getAppVersion(request) + "\""%>;
   var applicationId = <%="\"" + SystemProperty.applicationId.get() + "\""%>;
 $(document).ready(function() {
   $('#account_timezone').val(jstz.determine().name());
 });
-
-
-
   </script>
 
   <!-- Clicky code -->

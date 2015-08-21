@@ -5,7 +5,7 @@
 
 
 {{#if contact}}
-<td class="data" data="{{contact.id}}">
+<td class="data-contact" data="{{contact.id}}">
 	<div class="row-fluid">
     	<div class="thumb-sm agile-img m-r-sm" style="margin-right:10px">
 {{#wrap_entity this.contact}}
@@ -33,7 +33,7 @@
 {{/if}}
 	</div>
 </td>
-<td><a target="_blank" href="{{ref}}">{{ref}}</a></td>
+<td class="referer"  style="white-space:nowrap;text-overflow:ellipsis;overflow:hidden"><a class="refererUrl" target="_blank" href="{{ref}}">{{ref}}</a></td>
 <td><div>{{capitalizeFirstLetter city country}}</div></td>
 <td>{{#if user_agent}}
 			{{#stringToJSON this "parsedUserAgent"}}
@@ -90,7 +90,7 @@
                         <th></th>
 					</tr>
 				</thead>
-				<tbody id="gmap-table-model-list" class="gmap-table-model-list"
+				<tbody id="gmap-table-model-list" class="gmap-table-model-list agile-row"
 					route="contact/" style="overflow: scroll;overflow:hidden;">
 				</tbody>
 			</table>

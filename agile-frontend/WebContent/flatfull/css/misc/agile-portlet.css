@@ -851,6 +851,12 @@ border-radius: 2px;
 	margin-top:-1px;
 }
 
+.stats-report-settings .portlet_header_icons {
+	visibility: hidden;
+}
+.stats-report-settings:hover .portlet_header_icons {
+	visibility: visible;
+
 /* .screenshot {
 	display : none;
 	position: absolute;

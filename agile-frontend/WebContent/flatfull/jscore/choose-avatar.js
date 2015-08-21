@@ -1,6 +1,6 @@
-$(function(){ 
-
-	$("#choose-avatar-modal table td a").die().live('click', function(e) {
+$(function(){
+	
+   $("#choose-avatar-modal").on('click', 'table td a', function(e) {
 	
 			e.preventDefault();
 	
@@ -14,9 +14,9 @@ $(function(){
 			$(this).trigger('choose-image')
 	});
 	
-	$('#choose-avatar-modal').die().live('choose-image', function() {
+	$("#choose-avatar-modal").on('choose-image', 'table td a', function(e) {
 	
-			var selectedSource = $(this).find(".modal-body input[type='hidden']").val();
+			var selectedSource = $(this).closest('tbody').find("input[type='hidden']").val();
 			
 			if(selectedSource)
 			{
@@ -29,9 +29,9 @@ $(function(){
 				//$(".preview-avatar").attr("src", selectedSource);
 			}
 	});
-	$('#choose-avatar-test').die().live('choose-image', function() {
+	$("#choose-avatar-modal").on('choose-image', '#choose-avatar-test', function(e) {
 		$("#choose-avatar-modal").closest('.modal').modal('hide');
-		var selectedSource = $(this).find(".modal-body input[type='hidden']").val();
+		var selectedSource = $(this).closest('tbody').find("input[type='hidden']").val();
 		
 		if(selectedSource)
 		{
@@ -48,7 +48,8 @@ $(function(){
 	$('#choose-avatar-modal').on('show.bs.modal',function (e) {
 		$('#choose-avatar-modal').html($('#choose-avatar-test').html());
 	});
-});
+
+})
 
 // selects default avatars randomly
 function choose_random_avatar()

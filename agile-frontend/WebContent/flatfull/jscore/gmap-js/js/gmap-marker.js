@@ -27,7 +27,10 @@ var oms;
  
 /** Function to retrieve visitors data with offset: called on every 5 seconds */
 function getMarkers() {
-		$.getJSON( url+'&cursor='+offSet+'&page_size='+limit, function( res ) {
+	console.log(window.pauseMap);
+	if(! window.pauseMap){
+		
+	$.getJSON( url+'&cursor='+offSet+'&page_size='+limit, function( res ) {
 			
 			if(res != ""){
 				/** Call a function to plot the markers with recieved marker data*/
@@ -38,6 +41,10 @@ function getMarkers() {
 				$("#map-tab-waiting").fadeOut();
 			
 		});
+		
+	}else
+		$("#map-tab-waiting").fadeOut();
+	
 		
 	}
 
@@ -182,9 +189,15 @@ $(document).on('click','div.emailLink',function(){
 	if(emailToSend != '' && emailToSend != undefined){
 		var visitorBySessionUrl="core/api/contacts/search/email/"+emailToSend;
 		$.getJSON(visitorBySessionUrl,function(res){
-			if(res != ''){
+			if(res != '' && res != undefined){
 				var contactId=res.id;
 				window.location.href='#contact/'+contactId;
+			}else{
+				console.log("Response is empty");
+				$('#noContactMessage').fadeIn();
+				setTimeout(function(){
+					$('#noContactMessage').fadeOut();
+		            },5000)
 			}
 		});
 	}
@@ -236,6 +249,30 @@ function gmap_add_marker(DateRangeUrl){
 	
 	
 }
+
+
+$(document).on('click','.agile-row > tr > td', function(e) {
+	if($(this).hasClass('referer')){
+		var refererUrl=$(this).find('a').attr('href');
+		window.open(refererUrl);
+		
+	}else{
+		var route = $('.agile-edit-row').attr('route');
+		// Newly added code for displaying contacts and companies in same table with different routes.
+		if($(this).closest('tr').find('[route]').length != 0)
+		route = $(this).closest('tr').find('[route]').attr('route');
+		var data = $(this).closest('tr').find('.data-contact').attr('data');
+		if(route == "contact/" || route == "company/")
+		SCROLL_POSITION = window.pageYOffset;
+		console.log(data);
+		if (data) {
+		Backbone.history.navigate(route + data, {
+		trigger : true
+		});
+		}
+	}
+
+	}); 
 
 /**It just formats the first letter of a string with capital letter ,Only used here for city.*/ 
 function capitalizeFirstLetter(string) {

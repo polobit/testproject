@@ -17,6 +17,11 @@ import com.thirdparty.mandrill.Mandrill;
 @SuppressWarnings("serial")
 public class MailDeferredTask implements DeferredTask
 {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = -4125770150185924086L;
+
     public String emailGatewayType = null;
     public String apiUser = null;
     public String apiKey = null;

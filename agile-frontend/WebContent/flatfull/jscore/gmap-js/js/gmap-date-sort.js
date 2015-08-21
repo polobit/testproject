@@ -2,9 +2,11 @@
 var isDateChanged=false;
 function gmap_date_range(el, callback){
 	
-
+	  
 		// Bootstrap date range picker.
-		$('#gmap_date_range', el).daterangepicker({ ranges : { 'Today' : [
+	   var date = new Date();
+	   date.setDate(date.getDate()-1);
+		$('#gmap_date_range', el).daterangepicker({ranges : { 'Today' : [
 				'today', 'today'
 		], 'Yesterday' : [
 				'yesterday', 'yesterday'
@@ -18,6 +20,8 @@ function gmap_date_range(el, callback){
 				Date.today().moveToFirstDayOfMonth().add({ months : -1 }), Date.today().moveToFirstDayOfMonth().add({ days : -1 })
 		] } }, function(start, end)
 		{
+			window.toDate=start;
+			window.fromDate=end;
 			$('#gmap_date_range span').html(start.toString('MMMM d, yyyy') + ' - ' + end.toString('MMMM d, yyyy'));
 			gmap_search_by_date($('#gmap_date_range span').text());
 		});
@@ -41,9 +45,13 @@ function gmap_search_by_date(DateRange){
 	// Returns milliseconds from start date. For e.g., August 6, 2013 converts
 	// to 1375727400000
 	var start_date = Date.parse($.trim(range[0])).valueOf();
+	start_date=convertToUTCTime(start_date,'start');
 
 	// Returns milliseconds from end date.
 	var end_date = Date.parse($.trim(range[1])).valueOf();
+	end_date=convertToUTCTime(end_date,'end');
+	
+	
 	
 	// Adds start_time, end_time and timezone offset to params.
 	options += ("start_date=" + start_date + "&end_date=" + end_date);
@@ -68,6 +76,7 @@ function gmap_search_by_date(DateRange){
 	}
 	
 	$("li#gmap-table-tab").off().on("click", function(){
+		window.pauseMap=true;
 		
 		if((! $(this).closest('ul').parent('div').find('div.tab-content').find('div#gmap-table-view').find('tbody').length || isDateChanged) &&  ! $(this).hasClass('active')){
 			isDateChanged=false;
@@ -76,18 +85,38 @@ function gmap_search_by_date(DateRange){
 	     
 	  });
 $("li#gmap-map-tab").off().on("click", function(){
-		
+	    window.pauseMap=false;
+	    
 		if(isDateChanged && ! $(this).hasClass('active')){
 			isDateChanged=false;
-			gmap_add_marker(DateRangeUrl);
+			map.setZoom(2);
+			setTimeout(function(){
+				gmap_add_marker(DateRangeUrl);
+	        },1000)
+		}else{
+			$("#map-tab-waiting").fadeIn();
+			getMarkers();
 		}
+			
 		
 	  });
 	
-
-	
-	
 	
 
+}
+
+function convertToUTCTime(localTime,whatTime){
+	try{
+		
+		var time = new Date(localTime);
+		if(whatTime == 'start')
+		time.setHours(0,0,0,0);
+		else if(whatTime == 'end')
+		time.setHours(23,59,59,999);
+		var utc_start = new Date(time.getUTCFullYear(), time.getUTCMonth(), time.getUTCDate(),  time.getUTCHours(), time.getUTCMinutes(), time.getUTCSeconds(), time.getUTCMilliseconds());
+		return utc_start.getTime();
+	}catch(err){
+		console.log("Error converting local  time to utc"+err);
+	}
 }
 
