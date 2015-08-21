@@ -860,9 +860,9 @@ $(function()
 		if (color == 'red' || color == '#f05050')
 			return 'danger';
 		if (color == '#36C' || color == '#23b7e5' || color == 'blue')
-			return 'warning';
+			return 'primary';
 		if (color == 'green' || color == '#bbb')
-			return 'light';
+			return 'warning';
 	});
 
 	/**

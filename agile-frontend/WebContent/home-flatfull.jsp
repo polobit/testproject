@@ -677,6 +677,7 @@ head.ready(["core", "stats"], function(){
   
   if(!HANDLEBARS_PRECOMPILATION)
     downloadTemplate("tpl.js");
+  $('[data-toggle="tooltip"]').tooltip();
 });
 });
 function load_globalize()

@@ -944,9 +944,9 @@ content: "\f075"!important;
 	white-space: nowrap;
 	overflow: auto;
 	width: 100%;
-	
 	border:1px solid #dee5e7;
 	border-radius: 5px;
+	
 }
 .milestone-column {
 	min-width: 150px;

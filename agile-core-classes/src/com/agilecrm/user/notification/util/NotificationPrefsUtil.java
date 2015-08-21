@@ -6,8 +6,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.agilecrm.AgileQueues;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.deals.Opportunity;
+import com.agilecrm.queues.util.PullQueueUtil;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.notification.NotificationPrefs;
@@ -108,8 +110,7 @@ public class NotificationPrefsUtil
 			return;
 
 		NotificationsDeferredTask notificationsDeferredTask = new NotificationsDeferredTask(domain, json.toString());
-		Queue queue = QueueFactory.getQueue("notification-queue");
-		queue.addAsync(TaskOptions.Builder.withPayload(notificationsDeferredTask));
+		PullQueueUtil.addToPullQueue(AgileQueues.NOTIFICATION_PULL_QUEUE, notificationsDeferredTask, null);
 	}
 
 	/**

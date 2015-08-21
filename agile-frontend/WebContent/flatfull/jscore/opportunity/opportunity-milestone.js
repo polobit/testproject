@@ -1,26 +1,27 @@
 // Before selecting proper type array from map, need to fill map with user's detail.
 function startGettingDeals(criteria, pending)
 {
-	console.log('------started-----',pipeline_id);
+	console.log('------started-----', pipeline_id);
 	var milestoneString = (trackListView.collection.get(pipeline_id)) ? trackListView.collection.get(pipeline_id).toJSON().milestones : "";
 
-	if(milestoneString.trim().length == 0){
+	if (milestoneString.trim().length == 0)
+	{
 		var html = '<div class="alert-info alert"><div class="slate-content"><div class="box-left pull-left m-r-md"><img alt="Clipboard" src="/img/clipboard.png"></div><div class="box-right pull-left"><h4 class="m-t-none">You have no milestones defined</h4><br><a href="#milestones" class="btn btn-default btn-sm m-t-xs"><i class="icon icon-plus-sign"></i> Add Milestones</a></div><div class="clearfix"></div></div></div>';
 		$('#new-opportunity-list-paging').html(html);
 		return;
 	}
-	if(readCookie('agile_deal_track')){
-		if(readCookie('agile_deal_track') != pipeline_id)
-			createCookie('agile_deal_track',pipeline_id);
+	if (readCookie('agile_deal_track'))
+	{
+		if (readCookie('agile_deal_track') != pipeline_id)
+			createCookie('agile_deal_track', pipeline_id);
 	}
 	var milestones = trackListView.collection.get(pipeline_id).toJSON().milestones.split(',');
 	console.log(milestones);
-	createDealsNestedCollection(pipeline_id,milestones);
-	
+	createDealsNestedCollection(pipeline_id, milestones);
+
 }
 
-
-//Decide which array to pass for creation of collection.
+// Decide which array to pass for creation of collection.
 function dealFiltersForCollection(criteria)
 {
 	if (criteria == "CATEGORY")
@@ -32,18 +33,19 @@ function dealFiltersForCollection(criteria)
 }
 
 // Creates nested collection
-function createDealsNestedCollection(pipeline_id,milestones)
+function createDealsNestedCollection(pipeline_id, milestones)
 {
 	console.log("In createNestedCollection");
 
 	// Initialize nested collection
 	initDealListCollection(milestones);
-	
+
 	// Url to call DB
-	var initialURL = '/core/api/opportunity/based?pipeline_id='+pipeline_id+'&order_by=close_date';
-	
-	if(readCookie('deal-filters')){
-		initialURL += '&filters='+encodeURIComponent(getDealFilters());
+	var initialURL = '/core/api/opportunity/based?pipeline_id=' + pipeline_id + '&order_by=close_date';
+
+	if (readCookie('deal-filters'))
+	{
+		initialURL += '&filters=' + encodeURIComponent(getDealFilters());
 	}
 
 	// Creates main collection with deals lists
@@ -52,8 +54,8 @@ function createDealsNestedCollection(pipeline_id,milestones)
 		var newDealList;
 
 		// Add heading to task list in main collection
-			var url = initialURL + "&milestone=" + milestones[i];
-			newDealList = { "heading" : milestones[i], "url" : url};
+		var url = initialURL + "&milestone=" + milestones[i];
+		newDealList = { "heading" : milestones[i], "url" : url };
 
 		if (!newDealList)
 			return;
@@ -70,7 +72,6 @@ function createDealsNestedCollection(pipeline_id,milestones)
 	fetchForNextDealsList(milestones);
 }
 
-
 // Initialize nested collection
 function initDealListCollection(milestones)
 {
@@ -84,25 +85,29 @@ function initDealListCollection(milestones)
 
 			// Adjust Height Of Task List And Scroll as per window size
 			var count = milestones.length;
-			if(!count)return;
+			if (!count)
+				return;
 			// Setting dynamic auto width
-			var width = (100/count);
-			
-			if(readCookie('deal-milestone-view')){
-				if(readCookie('deal-milestone-view') == "compact" && count > 8)
-					width = 100/8;
-			} else if(count > 5) {
-				width = 100/5;
+			var width = (100 / count);
+
+			if (readCookie('deal-milestone-view'))
+			{
+				if (readCookie('deal-milestone-view') == "compact" && count > 8)
+					width = 100 / 8;
 			}
-			
-			$('#opportunities-by-paging-model-list',el).find('.milestone-column').width(width +"%");
+			else if (count > 5)
+			{
+				width = 100 / 5;
+			}
+
+			$('#opportunities-by-paging-model-list', el).find('.milestone-column').width(width + "%");
 		} });
 
 	// Over write append function
 	DEALS_LIST_COLLECTION.appendItem = dealAppend;
 }
 
-//Append sub collection and model
+// Append sub collection and model
 function dealAppend(base_model)
 {
 	var dealsListModel = new Base_List_View({ model : base_model, "view" : "inline", template : "opportunities-by-paging-model", tagName : 'div',
@@ -129,7 +134,7 @@ function fetchForNextDealsList(milestones)
 	if (pipeline_count < milestones.length)
 	{
 		// call fetch for next task list.
-		dealsFetch(pipeline_count,milestones);
+		dealsFetch(pipeline_count, milestones);
 	}
 
 	// All task list are done.
@@ -137,12 +142,11 @@ function fetchForNextDealsList(milestones)
 		deal_fetching = true;
 }
 
-
 /**
  * Create sub collection, ad to model in main collection, fetch tasks from DB
  * for sub collection and update UI.
  */
-function dealsFetch(index,milestones)
+function dealsFetch(index, milestones)
 {
 	console.log("index: " + index);
 
@@ -151,47 +155,44 @@ function dealsFetch(index,milestones)
 
 	if (!base_model)
 		return;
-	
+
 	var dealsTemplate = 'deals-by-paging';
-	
-	if(!readCookie('deal-milestone-view')){
+
+	if (!readCookie('deal-milestone-view'))
+	{
 		dealsTemplate = 'deals-by-paging-relax';
 	}
 
 	// Define sub collection
-	var dealCollection = new Base_Collection_View({
-		url : base_model.get("url"),
-		templateKey : dealsTemplate,
-		individual_tag_name : 'li',
-		sort_collection : false,
-		cursor : true,
-		page_size : 20,
-		postRenderCallback : function(el)
+	var dealCollection = new Base_Collection_View({ url : base_model.get("url"), templateKey : dealsTemplate, individual_tag_name : 'li',
+		sort_collection : false, cursor : true, page_size : 20, postRenderCallback : function(el)
 		{
-			$('ul.milestones',el).attr('milestone',base_model.get("heading"));
-			
+			$('ul.milestones', el).attr('milestone', base_model.get("heading"));
+
 			if (!readCookie("agile_deal_view"))
-			deal_infi_scroll($('#'+base_model.get("heading").replace(/ +/g, '')+'-list-container')[0], dealCollection);
-			
+				deal_infi_scroll($('#' + base_model.get("heading").replace(/ +/g, '') + '-list-container')[0], dealCollection);
+
 			includeTimeAgo(el);
 		} });
 
 	// Fetch task from DB for sub collection
 	dealCollection.collection.fetch({ success : function(data)
-	{	
+	{
 		// Add sub collection in model of main collection.
 		base_model.set('dealCollection', dealCollection.collection);
-		$('#'+base_model.get("heading").replace(/ +/g, '')+'-list-container').html(dealCollection.render(true).el)
-		console.log($('#'+base_model.get("heading").replace(/ +/g, '')).find('img.loading_img').length);
-		$('#'+base_model.get("heading").replace(/ +/g, '')).find('img.loading_img').hide();
-		try {
-			var count = data.at(0)?data.at(0).toJSON().count:0;
-			$('#'+base_model.get("heading").replace(/ +/g, '')+'_count').text(data.at(0)?data.at(0).toJSON().count:0);
+		$('#' + base_model.get("heading").replace(/ +/g, '') + '-list-container').html(dealCollection.render(true).el)
+		console.log($('#' + base_model.get("heading").replace(/ +/g, '')).find('img.loading_img').length);
+		$('#' + base_model.get("heading").replace(/ +/g, '')).find('img.loading_img').hide();
+		try
+		{
+			var count = data.at(0) ? data.at(0).toJSON().count : 0;
+			$('#' + base_model.get("heading").replace(/ +/g, '') + '_count').text(data.at(0) ? data.at(0).toJSON().count : 0);
 		}
-		catch(err) {
-		    console.log(err);
+		catch (err)
+		{
+			console.log(err);
 		}
-		
+
 		$('a.deal-notes').tooltip();
 		// Counter to fetch next sub collection
 		pipeline_count++;
@@ -201,17 +202,16 @@ function dealsFetch(index,milestones)
 	} });
 }
 
-
 function deal_infi_scroll(element_id, targetCollection)
 {
-	console.log("initialize_infinite_scrollbar",element_id);
+	console.log("initialize_infinite_scrollbar", element_id);
 
 	if (element_id == undefined || element_id == null)
 	{
 		console.log("no elmnt");
 		return;
 	}
-console.log(targetCollection);
+	console.log(targetCollection);
 	targetCollection.infiniScroll = new Backbone.InfiniScroll(targetCollection.collection, {
 		target : element_id,
 		untilAttr : 'cursor',

@@ -41,12 +41,28 @@ public class OnlineCalendarPrefs
 	public String meeting_types = "In Person, Phone, Skype, Google Hangouts";
 
 	/**
-	 * according to user timings businesshous will be displayed in scheduling
+	 * according to user timings businesshours will be displayed in scheduling
 	 * page
 	 */
 	@NotSaved(IfDefault.class)
 	public String business_hours = getDefaultBusinessHours();
 
+	/**
+	 * based On buffer time we show slots in online calendar page
+	 */
+	@NotSaved(IfDefault.class)
+	public int bufferTime = 0;
+
+	/**
+	 * based On buffer time Units(minutes or hours) we show slots in online
+	 * calendar page
+	 */
+	@NotSaved(IfDefault.class)
+	public String bufferTimeUnit = null;
+
+	/**
+	 * default meeting names and slot is meeting durations
+	 */
 	@NotSaved(IfDefault.class)
 	public String meeting_durations = "{\"15mins\":\"say hi\",\"30mins\":\"let's keep it short\",\"60mins\":\"let's chat\"}";
 

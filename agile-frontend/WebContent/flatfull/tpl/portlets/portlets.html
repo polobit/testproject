@@ -190,7 +190,7 @@
 {{/if}}
 </script>
 <script id="portlets-tasks-model-template" type="text/html">
-	<td data="{{id}}" class="data" style="width:30px;border-left:3px solid {{#if_equals priority_type "NORMAL"}}#fad733{{else}}{{#if_equals priority_type "HIGH"}}#f05050{{else}}#edf1f2{{/if_equals}}{{/if_equals}}"><label class="i-checks i-checks-sm"><input type="checkbox" data='{{id}}' class='portlets-tasks-select' id="tasklist"><i></i></label></td>
+	<td data="{{id}}" class="data" style="width:30px;border-left:3px solid {{#if_equals priority_type "NORMAL"}}#7266ba{{else}}{{#if_equals priority_type "HIGH"}}#f05050{{else}}#fad733{{/if_equals}}{{/if_equals}}"><label class="i-checks i-checks-sm"><input type="checkbox" data='{{id}}' class='portlets-tasks-select' id="tasklist"><i></i></label></td>
 	<td style="width:calc(100%-30px)">
 		<div class="no-inherit">
   			<div class="pull-left text-ellipsis" style="width:70%;">
@@ -265,8 +265,8 @@
 <td class="data">
 	<div class="portlet-time-view no-inherit">
 		<div style="width: 73%;padding-top:2px;padding-bottom:3px;" class="pull-left m-b-xs text-ellipsis">
-			<span class="label p-l-xs p-r-xxs text-base pos-rlt m-r event-start-time font-bold bg-success" datetime="{{get_AM_PM_format startEpoch}}">
-				<i class="arrow right arrow-success" style="right:-8px;"></i>
+			<span class="label p-l-xs p-r-xxs text-base pos-rlt m-r event-start-time font-bold bg-dark" datetime="{{get_AM_PM_format startEpoch}}">
+				<i class="arrow right arrow-dark" style="right:-8px;"></i>
 				{{get_AM_PM_format startEpoch}}
 			</span>
 			<a class="text-ellipsis" style="width:60%;">{{title}}</a>
@@ -1284,6 +1284,10 @@
 				<small class="text-muted">Welcome to Agile CRM</small>
 			</div>
 			<div class="pull-right">
+
+<a id="chrome-extension-button" href="https://chrome.google.com/webstore/detail/agile-crm/eofoblinhpjfhkjlfckmeidagfogclib" data-toggle="tooltip" data-placement="bottom" title="" data-original-title=" Agile CRM Chrome Extension is available now. Please click here to install the extension." class="hide m-r-sm text-info inline-block" style="margin-top:12px;" target="_blank">
+					 Download Chrome Extension
+				</a>
 				<a href="#add-dashlet" id="add-portlet" class="btn btn-default btn-sm btn-addon add-portlet add-stream-tab right pos-rlt">
 					<i class="icon icon-plus-sign"></i> Add Dashlet
 				</a> 
