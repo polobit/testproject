@@ -122,7 +122,7 @@ function google2fcEvent(google)
 		// to the
 		// original,
 		// color: 'orange',
-		className : 'b-l b-2x b-success b-b-l-r-2x b-t-l-r-2x fc_border_height', backgroundColor : '#fff', editable : false // To
+		className : 'b-l b-2x b-dark b-b-l-r-2x b-t-l-r-2x fc_border_height', backgroundColor : '#fff', editable : false // To
 	// make
 	// the
 	// google

@@ -313,6 +313,10 @@ public class GoogleSQL
 
     private static Connection getConnection() throws PropertyVetoException, SQLException
     {
+	if (SystemProperty.environment.value() != SystemProperty.Environment.Value.Development)
+	{
+	    return getGoogleSQLConnection();
+	}
 	if (cpds != null)
 	    return cpds.getConnection();
 

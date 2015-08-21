@@ -28,6 +28,7 @@ function organize_portlets(base_model){
 }
 function set_p_portlets(base_model){
 	var itemView;
+	
 	if(base_model.get('portlet_type')=="CONTACTS" && base_model.get('name')=="Filter Based"){
 		App_Portlets.filteredContactsView = new Base_Model_View({ model : base_model, template : "portlets-contacts-filterbased-model", tagName : 'div' });
 		
@@ -116,7 +117,8 @@ function set_p_portlets(base_model){
 			$('.gridster > div:visible',this.el).html($(App_Portlets.agileCRMBlogView.render().el).attr("id","ui-id-"+base_model.get("column_position")+"-"+base_model.get("row_position")).attr("data-sizey",base_model.get("size_y")).attr("data-sizex",base_model.get("size_x")).attr("data-col",base_model.get("column_position")).attr("data-row",base_model.get("row_position")).addClass('gs-w panel panel-default'));
 		else
 			$('.gridster > div:visible > div:last',this.el).after($(App_Portlets.agileCRMBlogView.render().el).attr("id","ui-id-"+base_model.get("column_position")+"-"+base_model.get("row_position")).attr("data-sizey",base_model.get("size_y")).attr("data-sizex",base_model.get("size_x")).attr("data-col",base_model.get("column_position")).attr("data-row",base_model.get("row_position")).addClass('gs-w panel panel-default'));
-	}else if(base_model.get('portlet_type')=="TASKSANDEVENTS" && base_model.get('name')=="Task Report"){
+	}
+	else if(base_model.get('portlet_type')=="TASKSANDEVENTS" && base_model.get('name')=="Task Report"){
 		App_Portlets.taskReportView = new Base_Model_View({ model : base_model, template : "portlets-tasksandevents-task-report-model", tagName : 'div' });
 		if($('.gridster > div:visible > div',this.el).length==0)
 			$('.gridster > div:visible',this.el).html($(App_Portlets.taskReportView.render().el).attr("id","ui-id-"+base_model.get("column_position")+"-"+base_model.get("row_position")).attr("data-sizey",base_model.get("size_y")).attr("data-sizex",base_model.get("size_x")).attr("data-col",base_model.get("column_position")).attr("data-row",base_model.get("row_position")).addClass('gs-w panel panel-default'));
@@ -153,6 +155,22 @@ function set_p_portlets(base_model){
 			$('.gridster > div:visible',this.el).html($(App_Portlets.revenueGraphView.render().el).attr("id","ui-id-"+base_model.get("column_position")+"-"+base_model.get("row_position")).attr("data-sizey",base_model.get("size_y")).attr("data-sizex",base_model.get("size_x")).attr("data-col",base_model.get("column_position")).attr("data-row",base_model.get("row_position")).addClass('gs-w panel panel-default'));
 		else
 			$('.gridster > div:visible > div:last',this.el).after($(App_Portlets.revenueGraphView.render().el).attr("id","ui-id-"+base_model.get("column_position")+"-"+base_model.get("row_position")).attr("data-sizey",base_model.get("size_y")).attr("data-sizex",base_model.get("size_x")).attr("data-col",base_model.get("column_position")).attr("data-row",base_model.get("row_position")).addClass('gs-w panel panel-default'));
+	}
+	else if(base_model.get('portlet_type')=="ACCOUNT" && base_model.get('name')=="Account Details"){
+		App_Portlets.accountView = new Base_Model_View({ model : base_model, template : "portlets-account-model", tagName : 'div',cursor : true,scroll_symbol:'scroll'});
+		if($('.gridster > div:visible > div',this.el).length==0)
+			$('.gridster > div:visible',this.el).html($(App_Portlets.accountView.render().el).attr("id","ui-id-"+base_model.get("column_position")+"-"+base_model.get("row_position")).attr("data-sizey",base_model.get("size_y")).attr("data-sizex",base_model.get("size_x")).attr("data-col",base_model.get("column_position")).attr("data-row",base_model.get("row_position")).addClass('gs-w panel panel-default'));
+		else
+			$('.gridster > div:visible > div:last',this.el).after($(App_Portlets.accountView.render().el).attr("id","ui-id-"+base_model.get("column_position")+"-"+base_model.get("row_position")).attr("data-sizey",base_model.get("size_y")).attr("data-sizex",base_model.get("size_x")).attr("data-col",base_model.get("column_position")).attr("data-row",base_model.get("row_position")).addClass('gs-w panel panel-default'));
+	}
+	else if(base_model.get('portlet_type')=="USERACTIVITY" && base_model.get('name')=="User Activities"){
+			posi=base_model.get("column_position")+''+base_model.get("row_position")
+		App_Portlets.activitiesView[parseInt(posi)] = new Base_Model_View({ model : base_model, template : "portlets-activites-model", tagName : 'div' });
+		
+		if($('.gridster > div:visible > div',this.el).length==0)
+			$('.gridster > div:visible',this.el).html($(App_Portlets.activitiesView[parseInt(posi)].render().el).attr("id","ui-id-"+base_model.get("column_position")+"-"+base_model.get("row_position")).attr("data-sizey",base_model.get("size_y")).attr("data-sizex",base_model.get("size_x")).attr("data-col",base_model.get("column_position")).attr("data-row",base_model.get("row_position")).addClass('gs-w panel panel-default'));
+		else
+			$('.gridster > div:visible > div:last',this.el).after($(App_Portlets.activitiesView[parseInt(posi)].render().el).attr("id","ui-id-"+base_model.get("column_position")+"-"+base_model.get("row_position")).attr("data-sizey",base_model.get("size_y")).attr("data-sizex",base_model.get("size_x")).attr("data-col",base_model.get("column_position")).attr("data-row",base_model.get("row_position")).addClass('gs-w panel panel-default'));
 	}
 	//var itemView = new Base_Model_View({ model : base_model, template : "portlets-model", tagName : 'div', });
 
@@ -313,10 +331,37 @@ function set_p_portlets(base_model){
 		if(base_model.get('settings').user!=undefined)
 			users = JSON.stringify(base_model.get('settings').user);
 		App_Portlets.leaderboard[parseInt(pos)] = new Base_Model_View({ url : '/core/api/portlets/portletLeaderboard?duration='+base_model.get('settings').duration+'&start-date='+getStartAndEndDatesOnDue(start_date_str)+'&end-date='+getStartAndEndDatesOnDue(end_date_str)+'&revenue='+base_model.get('settings').category.revenue+'&dealsWon='+base_model.get('settings').category.dealsWon+'&calls='+base_model.get('settings').category.calls+'&tasks='+base_model.get('settings').category.tasks+'&user='+users, template : 'portlets-leader-board-body-model', tagName : 'div',
-			postRenderCallback : function(p_el){
+			portletSizeX : base_model.get('size_x'), portletSizeY : base_model.get('size_y'), postRenderCallback : function(p_el){
 				addWidgetToGridster(base_model);
 				$('#ui-id-'+column_position+'-'+row_position+' > .portlet_header').find('ul').width(($('#ui-id-'+column_position+'-'+row_position+' > .portlet_body').find('ul').width()/$('#ui-id-'+column_position+'-'+row_position+' > .portlet_body').width()*100)+'%');
 			} });
+	}else if(base_model.get('portlet_type')=="ACCOUNT" && base_model.get('name')=="Account Details"){
+		App_Portlets.accountInfo[parseInt(pos)] = new Base_Model_View({ url : '/core/api/portlets/portletAccount', template : "portlets-account-body-model", 
+			postRenderCallback : function(p_el){
+				addWidgetToGridster(base_model);
+			} });
+	}
+	else if(base_model.get('portlet_type')=="USERACTIVITY" && base_model.get('name')=="User Activities"){
+		
+		
+		App_Portlets.activity[parseInt(pos)] = new Base_Collection_View({ url : '/core/api/portlets/portletCustomerActivity', sortKey : 'time', descending : true,
+			templateKey : "portlets-activities-list-log", cursor : true, page_size : 20, individual_tag_name:'div',
+			postRenderCallback : function(p_el){
+				addWidgetToGridster(base_model);
+				
+				head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
+						{
+							$("time", p_el).timeago();
+									
+						});
+				contact_detail_page_infi_scroll($('.activity_body',App_Portlets.activitiesView[parseInt(pos)].el),App_Portlets.activity[parseInt(pos)])
+					}, appendItemCallback : function(p_el)
+					{
+						includeTimeAgo(p_el);
+		}});
+		App_Portlets.activity[parseInt(pos)].appendItem = append_activity;
+		App_Portlets.activity[parseInt(pos)].collection.fetch();
+		
 	}
 	$('.portlet_body',this.el).each(function(){
 		if($(this).parent().attr('id')=='ui-id-'+column_position+'-'+row_position && base_model.get('name')=="Filter Based"){
@@ -1056,6 +1101,19 @@ function set_p_portlets(base_model){
 				
 				addWidgetToGridster(base_model);
 			});
+			setPortletContentHeight(base_model);
+		}
+		else if($(this).parent().attr('id')=='ui-id-'+column_position+'-'+row_position && base_model.get('name')=="Account Details"){
+			
+			$(this).html(getRandomLoadingImg());
+			$(this).html($(App_Portlets.accountInfo[parseInt(pos)].render().el));
+			setPortletContentHeight(base_model);
+		}
+		
+		else if($(this).parent().attr('id')=='ui-id-'+column_position+'-'+row_position && base_model.get('name')=="User Activities"){
+			
+			$(this).html(getRandomLoadingImg());
+			$(this).html($(App_Portlets.activity[parseInt(pos)].render().el));
 			setPortletContentHeight(base_model);
 		}
 		if($(this).parent().attr('id')=='ui-id-'+column_position+'-'+row_position && base_model.get('name')=="Emails Opened"){
@@ -2300,4 +2358,48 @@ function portletDealRevenueGraph(selector,series,base_model,categories){
 				colors : [ "#23b7e5", "#27c24c", "#7266ba", "#fad733","#f05050","#aaeeee", "#ff0066", "#eeaaee", "#55BF3B", "#DF5353" ],
 		    });
 		});
+}
+
+function append_activity(base_model)
+{
+
+	var itemView = new Base_List_View({ model : base_model, "view" : "inline", template : this.options.templateKey + "-model"});
+
+	// add to the right box - overdue, today, tomorrow etc.
+	var createdtime = get_activity_created_time(base_model.get('time'));
+
+	// Today
+	if (createdtime == 0)
+	{
+		$('#earllier',this.el).show();
+		$('#next-week-heading', this.el).show();
+		var heading = $('#today-heading', this.el);
+
+		$('#today-activity', this.el).append(itemView.render().el);
+		$('#today-activity', this.el).parent('table').css("display", "block");
+		$('#today-activity', this.el).show();
+		$('#today-heading', this.el).show();
+	}
+
+	if (createdtime == -1)
+	{
+		$('#earllier',this.el).show();
+		$('#next-week-heading', this.el).show();
+		var heading = $('#tomorrow-heading', this.el);
+
+		$('#tomorrow-activity', this.el).append(itemView.render().el);
+		$('#tomorrow-activity', this.el).parent('table').css("display", "block");
+		$('#tomorrow-activity', this.el).show();
+		$('#tomorrow-heading', this.el).show();
+	}
+	if (createdtime < -1)
+	{
+
+		var heading = $('#next-week-heading', this.el);
+
+		$('#next-week-activity', this.el).append(itemView.render().el);
+		$('#next-week-activity', this.el).parent('table').css("display", "block");
+		$('#next-week-activity', this.el).show();
+		
+	}
 }

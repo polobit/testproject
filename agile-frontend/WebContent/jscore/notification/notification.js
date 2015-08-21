@@ -10,43 +10,44 @@ var notification_prefs;
 /**
  * Fetches notification preferences for current user
  */
-function downloadAndRegisterForNotifications()
-{
+function downloadAndRegisterForNotifications() {
 
-	// As of now I know that this function is calling only once after loggin. so Updating due task count in this function;
-	var due_task_count=getDueTasksCount();
-	if(due_task_count==0)
+	// As of now I know that this function is calling only once after loggin. so
+	// Updating due task count in this function;
+	var due_task_count = getDueTasksCount();
+	if (due_task_count == 0)
 		$(".navbar_due_tasks").css("display", "none");
 	else
 		$(".navbar_due_tasks").css("display", "block");
 	$('#due_tasks_count').html(due_task_count);
 	// Download Notification Prefs
-	var notification_model = Backbone.Model.extend({ url : 'core/api/notifications' });
+	var notification_model = Backbone.Model.extend({
+		url : 'core/api/notifications'
+	});
 
 	var model = new notification_model();
-	model.fetch({ success : function(data)
-	{
+	model.fetch({
+		success : function(data) {
 
-		// Notification Preferences with respect to current agile user
-		notification_prefs = data.toJSON();
-		console.log(notification_prefs);
+			// Notification Preferences with respect to current agile user
+			notification_prefs = data.toJSON();
+			console.log(notification_prefs);
 
-		// Gets domain
-		getDomainFromCurrentUser();
-	} });
+			// Gets domain
+			getDomainFromCurrentUser();
+		}
+	});
 }
 
 /**
  * Gets domain from current user using backbone model.
  */
-function getDomainFromCurrentUser()
-{
-		var domain = CURRENT_DOMAIN_USER['domain'];
-		subscribeToPubNub(domain, function(message)
-		{
+function getDomainFromCurrentUser() {
+	var domain = CURRENT_DOMAIN_USER['domain'];
+	subscribeToPubNub(domain, function(message) {
 
-			_setupNotification(message);
-		});
+		_setupNotification(message);
+	});
 }
 
 /**
@@ -55,81 +56,99 @@ function getDomainFromCurrentUser()
  * @param domain -
  *            Domain name.
  */
-function subscribeToPubNub(domain)
-{
+function subscribeToPubNub(domain) {
 	// Put http or https
 	// var protocol = document.location.protocol;
 	var protocol = 'https';
-	load_urls_on_ajax_stop(protocol + '://pubnub.a.ssl.fastly.net/pubnub-3.4.min.js', function()
-	{
-		// CREATE A PUBNUB OBJECT
-		var pubnub = PUBNUB.init({ 'publish_key' : 'pub-c-e4c8fdc2-40b1-443d-8bb0-2a9c8facd274',
-			'subscribe_key' : 'sub-c-118f8482-92c3-11e2-9b69-12313f022c90', ssl : true, origin : 'pubsub.pubnub.com' });
-		pubnub.ready();
-		pubnub.subscribe({ channel : domain, callback : function(message)
-		{
-			console.log(message);
-			if(message.type  == "LOGIN_INSTANCE")
-			{
-				check_login_instance(message);
-				return;
-			}
-			
-			// shows notification for bulk actions
-			if (message.type == "BULK_ACTIONS")
-			{
-				bulkActivitiesNoty('information', message);
-				return;
-			}
-			
-			if (message.type == "EVENT_REMINDER")
-			{
-				if(CURRENT_DOMAIN_USER['email']==message.useremail){
-				var html = getTemplate("event-notification", message);
-				showNoty('information', html, "bottomRight", "EVENT_REMINDER",undefined,3000000);
-				return;
-				}
-			
-			}
-			
-			
-			// shows call notification
-			if(message.type == "CALL"){
-				var html = getTemplate('call-notification', message);
-				showNoty('information', html, 'bottomRight', "CALL");
-				return;
-			}
+	load_urls_on_ajax_stop(
+			protocol + '://pubnub.a.ssl.fastly.net/pubnub-3.4.min.js',
+			function() {
+				// CREATE A PUBNUB OBJECT
+				var pubnub = PUBNUB
+						.init({
+							'publish_key' : 'pub-c-e4c8fdc2-40b1-443d-8bb0-2a9c8facd274',
+							'subscribe_key' : 'sub-c-118f8482-92c3-11e2-9b69-12313f022c90',
+							ssl : true,
+							origin : 'pubsub.pubnub.com'
+						});
+				pubnub.ready();
+				pubnub
+						.subscribe({
+							channel : domain,
+							callback : function(message) {
+								console.log(message);
+								if (message.type == "LOGIN_INSTANCE") {
+									check_login_instance(message);
+									return;
+								}
 
-			if(message.type == "UNKNOWN_CALL"){
-				var html = getTemplate("unknown-call-notification", message);
-				showNoty('information', html, "bottomRight", "UNKNOWN_CALL");
-				return;
-			}
-			
-			if(message.notification == "CAMPAIGN_NOTIFY")
-			{
-			   var custom_json = JSON.parse(message["custom_value"]);
+								// shows notification for bulk actions
+								if (message.type == "BULK_ACTIONS") {
+									bulkActivitiesNoty('information', message);
+									return;
+								}
 
-			   if(custom_json.owner_id == "ALL")
-				   showNoty('information', getTemplate('campaign-notify',message), 'bottomRight',"CAMPAIGN_NOTIFY");
-			   
-			   if(custom_json.owner_id == CURRENT_DOMAIN_USER['id'])
-				   showNoty('information', getTemplate('campaign-notify', message), 'bottomRight',"CAMPAIGN_NOTIFY");
-				   
-			   return;
-			}
+								if (message.type == "EVENT_REMINDER") {
+									if (CURRENT_DOMAIN_USER['email'] == message.useremail) {
+										var html = getTemplate(
+												"event-notification", message);
+										showNoty('information', html,
+												"bottomRight",
+												"EVENT_REMINDER", undefined,
+												3000000);
+										return;
+									}
 
-			// sets notification for notification preferences.
-			_setupNotification(message);
-		},
-		connect : function()
-		{
-			console.log("connected");
-			publishLoginEvent(pubnub);
-		}
-		
-		});
-	});
+								}
+
+								// shows call notification
+								if (message.type == "CALL") {
+									var html = getTemplate('call-notification',
+											message);
+									showNoty('information', html,
+											'bottomRight', "CALL");
+									return;
+								}
+
+								if (message.type == "UNKNOWN_CALL") {
+									var html = getTemplate(
+											"unknown-call-notification",
+											message);
+									showNoty('information', html,
+											"bottomRight", "UNKNOWN_CALL");
+									return;
+								}
+
+								if (message.notification == "CAMPAIGN_NOTIFY") {
+									var custom_json = JSON
+											.parse(message["custom_value"]);
+
+									if (custom_json.owner_id == "ALL")
+										showNoty('information', getTemplate(
+												'campaign-notify', message),
+												'bottomRight',
+												"CAMPAIGN_NOTIFY");
+
+									if (custom_json.owner_id == CURRENT_DOMAIN_USER['id'])
+										showNoty('information', getTemplate(
+												'campaign-notify', message),
+												'bottomRight',
+												"CAMPAIGN_NOTIFY");
+
+									return;
+								}
+
+								// sets notification for notification
+								// preferences.
+								_setupNotification(message);
+							},
+							connect : function() {
+								console.log("connected");
+								publishLoginEvent(pubnub);
+							}
+
+						});
+			});
 }
 
 /**
@@ -138,8 +157,7 @@ function subscribeToPubNub(domain)
  * @param object
  *            object data such as contact
  */
-function _setupNotification(object)
-{
+function _setupNotification(object) {
 
 	// Inorder to avoid navigating to the contact
 	if (object.notification == 'CONTACT_DELETED')
@@ -154,8 +172,7 @@ function _setupNotification(object)
 	// Verify whether current_user key exists. It doesn't exists when tag added
 	// through campaign, or notification for email-clicked etc. since session
 	// doesn't exist.
-	if ('current_user_name' in object)
-	{
+	if ('current_user_name' in object) {
 		if (notification_prefs.prefs.currentDomainUserName == object.current_user_name)
 			return;
 	}
@@ -173,14 +190,15 @@ function _setupNotification(object)
  *            notification template
  * 
  */
-function notification_for_email_and_browsing(object, html)
-{
+function notification_for_email_and_browsing(object, html) {
 
-	if (object.notification == 'CLICKED_LINK' || object.notification == 'OPENED_EMAIL' || object.notification == 'IS_BROWSING')
-	{
+	if (object.notification == 'CLICKED_LINK'
+			|| object.notification == 'OPENED_EMAIL'
+			|| object.notification == 'IS_BROWSING') {
 		var option = get_option(object.notification);
 
-		notification_based_on_type_of_contact(option, object, html, object.notification);
+		notification_based_on_type_of_contact(option, object, html,
+				object.notification);
 		return;
 	}
 }
@@ -196,28 +214,30 @@ function notification_for_email_and_browsing(object, html)
  * @param html -
  *            notification template.
  */
-function notification_for_contact_and_deal(object, html)
-{
-	$.each(notification_prefs, function(key, value)
-	{
+function notification_for_contact_and_deal(object, html) {
+	$
+			.each(
+					notification_prefs,
+					function(key, value) {
 
-		if (key == object.notification.toLowerCase())
-		{
-			if (notification_prefs[key])
-			{
+						if (key == object.notification.toLowerCase()) {
+							if (notification_prefs[key]) {
 
-				// Replace CONTACT with COMPANY for contact-type COMPANY
-				if ((object.notification == "CONTACT_ADDED" || object.notification == "CONTACT_DELETED") && object.type == "COMPANY")
-				{
-					var company = object.notification.replace('CONTACT', 'COMPANY');
-					object.notification = company;
-				}
+								// Replace CONTACT with COMPANY for contact-type
+								// COMPANY
+								if ((object.notification == "CONTACT_ADDED" || object.notification == "CONTACT_DELETED")
+										&& object.type == "COMPANY") {
+									var company = object.notification.replace(
+											'CONTACT', 'COMPANY');
+									object.notification = company;
+								}
 
-				showNoty('information', html, 'bottomRight', object.notification);
-			}
-		}
+								showNoty('information', html, 'bottomRight',
+										object.notification);
+							}
+						}
 
-	});
+					});
 }
 
 /**
@@ -227,8 +247,7 @@ function notification_for_contact_and_deal(object, html)
  * @param contact -
  *            contact object.
  */
-function is_assigned(contact)
-{
+function is_assigned(contact) {
 
 	// Current user who logged_in
 	var current_user = notification_prefs.prefs.currentDomainUserName;
@@ -249,8 +268,7 @@ function is_assigned(contact)
  * @param contact -
  *            contact object.
  */
-function is_assigned_and_starred(contact)
-{
+function is_assigned_and_starred(contact) {
 
 	// checks assigned and starred
 	if (is_assigned(contact) && contact.star_value > 0)
@@ -266,8 +284,7 @@ function is_assigned_and_starred(contact)
  * @param notification_type -
  *            CLICKED_LINK or OPENED_EMAIL or IS_BROWSING
  */
-function get_option(notification_type)
-{
+function get_option(notification_type) {
 	switch (notification_type) {
 	case 'CLICKED_LINK':
 		return notification_prefs.link_clicked;
@@ -291,8 +308,8 @@ function get_option(notification_type)
  * @param notification_type -
  *            CLICKED_LINK or OPENED_EMAIL or IS_BROWSING
  */
-function notification_based_on_type_of_contact(option, contact, message, notification_type)
-{
+function notification_based_on_type_of_contact(option, contact, message,
+		notification_type) {
 	switch (option) {
 	case 'CONTACT_ASSIGNED':
 		if (is_assigned(contact))
@@ -316,19 +333,17 @@ function notification_based_on_type_of_contact(option, contact, message, notific
  * @param el -
  *            backbone el element.
  */
-function check_browser_notification_settings(el)
-{
+function check_browser_notification_settings(el) {
 
 	// Verify desktop notification settings.
 	// Check if browser support
-	if (notify && !notify.isSupported)
-	{
+	if (notify && !notify.isSupported) {
 		$('#set-desktop-notification').css('display', 'none');
 	}
 
 	// Allowed
-	if (notify && notify.isSupported && notify.permissionLevel() == notify.PERMISSION_GRANTED)
-	{
+	if (notify && notify.isSupported
+			&& notify.permissionLevel() == notify.PERMISSION_GRANTED) {
 		$('#set-desktop-notification').css('display', 'none');
 		$('#desktop-notification-content')
 				.html(
@@ -336,8 +351,8 @@ function check_browser_notification_settings(el)
 	}
 
 	// Denied
-	if (notify && notify.isSupported && notify.permissionLevel() == notify.PERMISSION_DENIED)
-	{
+	if (notify && notify.isSupported
+			&& notify.permissionLevel() == notify.PERMISSION_DENIED) {
 		$('#set-desktop-notification').css('display', 'none');
 		$('#desktop-notification-content')
 				.html(
@@ -345,15 +360,13 @@ function check_browser_notification_settings(el)
 	}
 
 	// notification enable help
-	$('#enable-notification', el).die().live('click', function(e)
-	{
+	$('#enable-notification', el).die().live('click', function(e) {
 		e.preventDefault();
 		$('#notification-enable-help-modal').modal("show");
 	});
 
 	// notification disable help
-	$('#disable-notification', el).die().live('click', function(e)
-	{
+	$('#disable-notification', el).die().live('click', function(e) {
 		e.preventDefault();
 		$('#notification-disable-help-modal').modal("show");
 	});
@@ -367,25 +380,30 @@ function check_browser_notification_settings(el)
  *            backbone el element
  * 
  */
-function showSwitchChanges(el)
-{
-	$('#notification-switch', el).die().live('switch-change', function()
-	{
-		var status = $('#notification-switch').bootstrapSwitch('status');
+function showSwitchChanges(el) {
+	$('#notification-switch', el).die().live(
+			'switch-change',
+			function() {
+				var status = $('#notification-switch')
+						.bootstrapSwitch('status');
 
-		// if ON - status is true
-		if (status)
-		{
-			$(el).find('input[type=checkbox]').not('#control_notifications,#notification_sound').removeAttr('disabled');
-			$(el).find('select').not('#control_notifications').removeAttr('disabled');
-		}
-		else
-		{
-			$(el).find('input[type=checkbox]').not('#control_notifications').attr('disabled', 'disabled');
-			$(el).find('select').not('#control_notifications, #notification_sound').attr('disabled', 'disabled');
-		}
+				// if ON - status is true
+				if (status) {
+					$(el).find('input[type=checkbox]').not(
+							'#control_notifications,#notification_sound')
+							.removeAttr('disabled');
+					$(el).find('select').not('#control_notifications')
+							.removeAttr('disabled');
+				} else {
+					$(el).find('input[type=checkbox]').not(
+							'#control_notifications').attr('disabled',
+							'disabled');
+					$(el).find('select').not(
+							'#control_notifications, #notification_sound')
+							.attr('disabled', 'disabled');
+				}
 
-	});
+			});
 }
 
 /**
@@ -401,132 +419,157 @@ function showSwitchChanges(el)
  * @param notification_type -
  *            notification type - TAG_CREATED, TAG_DELETED etc.
  */
-function showNoty(type, message, position, notification_type, onCloseCallback,timeout)
-{
-	if(!timeout){
-		timeout=30000;
+function showNoty(type, message, position, notification_type, onCloseCallback,
+		timeout) {
+	if (!timeout) {
+		timeout = 30000;
 	}
 	// Don't show notifications when disabled by user. Neglect campaign ones
-	if(notification_type != "EVENT_REMINDER" ){
-	
-	if (notification_type != "CAMPAIGN_NOTIFY"&& !notification_prefs.control_notifications)
-		return;
+	if (notification_type != "EVENT_REMINDER") {
+
+		if (notification_type != "CAMPAIGN_NOTIFY"
+				&& !notification_prefs.control_notifications)
+			return;
 	}
 
 	// Check for html5 notification permission.
-	if (notify && notify.isSupported && notify.permissionLevel() == notify.PERMISSION_GRANTED)
-	{
-		if(notification_type=="CALL"){
-			show_desktop_notification($('span:eq(0)', message).attr('id'), $(message).find('#calling-contact-id').text(),
-									  $(message).find('#call-notification-text').text(), $(message).find('#calling-contact-id').attr('href'),
-									  $(message).find('#calling-contact-id').attr('href').split('/')[1] + '-' + "CALL");
+	if (notify && notify.isSupported
+			&& notify.permissionLevel() == notify.PERMISSION_GRANTED) {
+		if (notification_type == "CALL") {
+			show_desktop_notification($('span:eq(0)', message).attr('id'), $(
+					message).find('#calling-contact-id').text(), $(message)
+					.find('#call-notification-text').text(), $(message).find(
+					'#calling-contact-id').attr('href'), $(message).find(
+					'#calling-contact-id').attr('href').split('/')[1]
+					+ '-' + "CALL");
 			return;
 		}
-		if(notification_type=="UNKNOWN_CALL"){
-			show_desktop_notification($('span:eq(0)', message).attr('id'), $(message).find("#unknown-contact-name").text(),$(message).find("#unknown-call-notification-text").text(),
-										$(message).find("#unknown-contact-name").attr('href'),
-										$(message).find("#unknown-contact-name").attr('href').split('/')[2]+'-'+"UNKNOWN_CALL");
+		if (notification_type == "UNKNOWN_CALL") {
+			show_desktop_notification($('span:eq(0)', message).attr('id'), $(
+					message).find("#unknown-contact-name").text(), $(message)
+					.find("#unknown-call-notification-text").text(), $(message)
+					.find("#unknown-contact-name").attr('href'), $(message)
+					.find("#unknown-contact-name").attr('href').split('/')[2]
+					+ '-' + "UNKNOWN_CALL");
 			return;
 		}
-		if(notification_type=="CAMPAIGN_NOTIFY"){
-			show_desktop_notification($('span:eq(0)', message).attr('id'), $(message).find('#campaign-contact-id').text(),
-									  $(message).find('#campaign-notify-text').text(), $(message).find('#campaign-contact-id').attr('href'),
-									  $(message).find('#campaign-contact-id').attr('href').split('/')[1] + '-' + "CAMPAIGN_NOTIFY");
+		if (notification_type == "CAMPAIGN_NOTIFY") {
+			show_desktop_notification($('span:eq(0)', message).attr('id'), $(
+					message).find('#campaign-contact-id').text(), $(message)
+					.find('#campaign-notify-text').text(), $(message).find(
+					'#campaign-contact-id').attr('href'), $(message).find(
+					'#campaign-contact-id').attr('href').split('/')[1]
+					+ '-' + "CAMPAIGN_NOTIFY");
 			return;
 		}
-		
-		if(notification_type=="EVENT_REMINDER"){
-			
-			show_desktop_notification(getImageUrl(message,notification_type), getNotificationType(notification_type), getTextMessage(message), getId(message), getId(message).split(
-			'/')[1] + '-' + notification_type,3000000);
+
+		if (notification_type == "EVENT_REMINDER") {
+
+			show_desktop_notification(getImageUrl(message, notification_type),
+					getNotificationType(notification_type),
+					getTextMessage(message), getId(message), getId(message)
+							.split('/')[1]
+							+ '-' + notification_type, 3000000);
 			return;
 		}
-		
-		
-		show_desktop_notification(getImageUrl(message,notification_type), getNotificationType(notification_type), getTextMessage(message), getId(message), getId(message).split(
-				'/')[1] + '-' + notification_type);
+
+		show_desktop_notification(getImageUrl(message, notification_type),
+				getNotificationType(notification_type),
+				getTextMessage(message), getId(message), getId(message).split(
+						'/')[1]
+						+ '-' + notification_type);
 		return;
 	}
 
 	// Download the lib
-	head.js(LIB_PATH + 'lib/noty/jquery.noty.js', LIB_PATH + 'lib/noty/layouts/bottomRight.js', LIB_PATH + 'lib/noty/layouts/bottom.js',
-			LIB_PATH + 'lib/noty/themes/default.js', function()
-			{
+	head
+			.js(
+					LIB_PATH + 'lib/noty/jquery.noty.js',
+					LIB_PATH + 'lib/noty/layouts/bottomRight.js',
+					LIB_PATH + 'lib/noty/layouts/bottom.js',
+					LIB_PATH + 'lib/noty/themes/default.js',
+					function() {
 
-			var n = noty({ text : message, layout : position, type : type, timeout : timeout, 
-			
-				closeCallback : 
-					(onCloseCallback && typeof onCloseCallback == 'function') ? onCloseCallback : undefined,
-				callback : {
-					// If on close callback is defined, callback is called after noty is closed. Small hack; because noty close callback in lib is badly implemented 
-					// and one callback gets called on other noty action
-					onClose : function(){
-						console.log(this);
-						if(this.options.closeCallback && typeof this.options.closeCallback == 'function')
-							{
-								this.options.closeCallback ();
+						var n = noty({
+							text : message,
+							layout : position,
+							type : type,
+							timeout : timeout,
+
+							closeCallback : (onCloseCallback && typeof onCloseCallback == 'function') ? onCloseCallback
+									: undefined,
+							callback : {
+								// If on close callback is defined, callback is
+								// called after noty is closed. Small hack;
+								// because noty close callback in lib is badly
+								// implemented
+								// and one callback gets called on other noty
+								// action
+								onClose : function() {
+									console.log(this);
+									if (this.options.closeCallback
+											&& typeof this.options.closeCallback == 'function') {
+										this.options.closeCallback();
+									}
+								}
 							}
-					}
-				}
-			});
-				
-				console.log(n);
+						});
 
-				// Play sounds for only user notifications
-				if (n.options.type == 'information')
-				{
-					if (notification_prefs.notification_sound != 'no_sound')
-						play_sound(notification_prefs.notification_sound);
-				}
+						console.log(n);
 
-				// Set the handler for click
-				$('.noty_bar').die().live('click', function()
-				{
+						// Play sounds for only user notifications
+						if (n.options.type == 'information') {
+							if (notification_prefs.notification_sound != 'no_sound')
+								play_sound(notification_prefs.notification_sound);
+						}
 
-					// // warning type is used for upgrade. So when cliked on it
-					// navigate to subscribe.
-					// if(n.options.type == "warning")
-					// {
-					// // Send to upgrade page
-					// Backbone.history.navigate('subscribe', {
-					// trigger : true
-					// });
-					// }
+						// Set the handler for click
+						$('.noty_bar').die().live('click', function() {
 
-					// information type is used for user notification. When
-					// clicked
-					// navigate to link.
-					if (n.options.type == "information")
-					{
-						var link = $(this).find("a").attr("href");
-						if(link)
-						Backbone.history.navigate(link, { trigger : true });
-					}
+							// // warning type is used for upgrade. So when
+							// cliked on it
+							// navigate to subscribe.
+							// if(n.options.type == "warning")
+							// {
+							// // Send to upgrade page
+							// Backbone.history.navigate('subscribe', {
+							// trigger : true
+							// });
+							// }
 
-				});
-			});
+							// information type is used for user notification.
+							// When
+							// clicked
+							// navigate to link.
+							if (n.options.type == "information") {
+								var link = $(this).find("a").attr("href");
+								if (link)
+									Backbone.history.navigate(link, {
+										trigger : true
+									});
+							}
+
+						});
+					});
 }
 
-/** HTML5 Desktop Notification utility methods. Depends on notification template.*/
+/** HTML5 Desktop Notification utility methods. Depends on notification template. */
 /**
  * Returns required text from notification template as html5 doesn't allow html.
  * 
  * @param {String}
  *            message - notification template.
  */
-function getTextMessage(message)
-{
+function getTextMessage(message) {
 	var name;
 	var type = $(message).find('#notification-type').text();
 
-	if ($(message).find('#notification-contact-id').text() != "")
-	{
+	if ($(message).find('#notification-contact-id').text() != "") {
 		name = $(message).find('#notification-contact-id').text();
 		return name + " " + type;
 	}
-	
-	if ($(message).find('#noty_text').text() != "")
-	{
+
+	if ($(message).find('#noty_text').text() != "") {
 		name = $(message).find('#noty_text').text();
 		return name;
 	}
@@ -535,19 +578,20 @@ function getTextMessage(message)
 	return name + " " + type;
 }
 
-
-
 /**
  * Returns converted notification-type. E.g., TAG_ADDED to New Tag
  */
-function getNotificationType(notification_type)
-{
-	if (notification_type == "CONTACT_ADDED" || notification_type == "COMPANY_ADDED" || notification_type == "TAG_ADDED" || notification_type == "DEAL_CREATED")
+function getNotificationType(notification_type) {
+	if (notification_type == "CONTACT_ADDED"
+			|| notification_type == "COMPANY_ADDED"
+			|| notification_type == "TAG_ADDED"
+			|| notification_type == "DEAL_CREATED")
 		return "New " + ucfirst(notification_type.split('_')[0]);
 
 	if (notification_type == "IS_BROWSING")
 		return ucfirst(notification_type.split('_')[1]);
-	return ucfirst(notification_type.split('_')[0]) + " " + ucfirst(notification_type.split('_')[1]);
+	return ucfirst(notification_type.split('_')[0]) + " "
+			+ ucfirst(notification_type.split('_')[1]);
 }
 
 /**
@@ -557,14 +601,12 @@ function getNotificationType(notification_type)
  * @param {String}
  *            message - notification template.
  */
-function getId(message)
-{
-	if(($(message).find('#noty_text').text() != "")){
+function getId(message) {
+	if (($(message).find('#noty_text').text() != "")) {
 		return $(message).find('#noty_text').text();
 	}
-	
-	if ($(message).find('#notification-contact-id').text() != "")
-	{
+
+	if ($(message).find('#notification-contact-id').text() != "") {
 		return $(message).find('#notification-contact-id').attr('href');
 	}
 	return $(message).find('#notification-deal-id').attr('href');
@@ -575,49 +617,50 @@ function getId(message)
  * 
  * @param {String}
  *            message - notification template.
- *            
+ * 
  * @param {String}
- *            notification_type - notification-type like COMPANY_ADDED, DEAL_ADDED etc.
+ *            notification_type - notification-type like COMPANY_ADDED,
+ *            DEAL_ADDED etc.
  */
-function getImageUrl(message, notification_type)
-{
-	if(notification_type == "EVENT_REMINDER"){
-		
+function getImageUrl(message, notification_type) {
+	if (notification_type == "EVENT_REMINDER") {
+
 		return '/img/eventreminder.png';
 	}
-	
-	if ($(message).find('#notification-contact-id').text() != "")
-		{
-		
+
+	if ($(message).find('#notification-contact-id').text() != "") {
+
 		// if contact is company fetch company url
-		if(notification_type === 'COMPANY_ADDED' || notification_type === 'COMPANY_DELETED')
+		if (notification_type === 'COMPANY_ADDED'
+				|| notification_type === 'COMPANY_DELETED')
 			return $('span:eq(1)', message).attr('id');
-		
+
 		return $('span:eq(0)', message).attr('id');
-		}
+	}
 
 	return '/img/deal.png';
 }
-/** End of HTML5 Desktop Notification utility methods*/
+/** End of HTML5 Desktop Notification utility methods */
 
 /**
  * Plays notification sounds on clicking on play button.
  */
-function notification_play_button()
-{
+function notification_play_button() {
 	// Play notification sound when clicked on play icon.
-	$('#notification-sound-play').live('click', function(e)
-	{
-		e.preventDefault();
+	$('#notification-sound-play').live(
+			'click',
+			function(e) {
+				e.preventDefault();
 
-		var sound = $('#notificationsForm #notification_sound').find(":selected").val();
+				var sound = $('#notificationsForm #notification_sound').find(
+						":selected").val();
 
-		// silent
-		if (sound == 'no_sound')
-			return;
+				// silent
+				if (sound == 'no_sound')
+					return;
 
-		// plays sound
-		play_sound(sound);
-	});
+				// plays sound
+				play_sound(sound);
+			});
 
 }

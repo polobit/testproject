@@ -5,7 +5,7 @@
  * 
  * author: Naresh
  */
-$("#subscribe-ical").live('click', function(event)
+$("#content").on('click', '#subscribe-ical', function(event)
 {
 	event.preventDefault();
 	set_api_key();
@@ -61,49 +61,6 @@ function set_url(apiKey, domain)
 }
 
 /**
- * When Send Mail is clicked from Ical Modal, it hides the ical modal and shows
- * the ical-send email modal.
- */
-$('#send-ical-email').live('click', function(event)
-{
-	event.preventDefault();
-
-	$("#icalModal").modal('hide');
-
-	// Removes previous modals if exist.
-	if ($('#share-ical-by-email').size() != 0)
-		$('#share-ical-by-email').remove();
-
-	// Gets current user
-	var CurrentuserModel = Backbone.Model.extend({ url : '/core/api/users/current-user', restKey : "domainUser" });
-
-	var currentuserModel = new CurrentuserModel();
-
-	currentuserModel.fetch({ success : function(data)
-	{
-
-		var model = data.toJSON();
-
-		// Insert ical-url into model
-		var icalURL = $('#icalModal').find('#ical-feed').text();
-		model.ical_url = icalURL;
-
-		var emailModal = $(getTemplate("share-ical-by-email", model));
-
-		var description = $(emailModal).find('textarea').val();
-
-		description = description.replace(/<br\/>/g, "\r\n");
-
-		$(emailModal).find('textarea').val(description);
-
-		emailModal.modal('show');
-
-		// Send ical info email
-		send_ical_info_email(emailModal);
-	} });
-});
-
-/**
  * Sends email with ical data to current-user email.
  * 
  * @method send_ical_info_email
@@ -113,10 +70,10 @@ $('#send-ical-email').live('click', function(event)
 function send_ical_info_email(emailModal)
 {
 	// When Send Clicked, validate the form and send email.
-	$('#shareIcalMail')
-			.die()
-			.live(
+	$("#share-ical-by-email")
+			.on(
 					'click',
+					'#shareIcalMail',
 					function(e)
 					{
 						e.preventDefault();
@@ -155,11 +112,10 @@ $(function()
 
 	})
 
-	$('#show-schedule-url').die().live('click', function(e)
-	{
-		e.preventDefault();
-		$('#scheduleModal').modal('show');
-	});
+	/*
+	 * $("body").on('click', '#show-schedule-url', function(e) {
+	 * e.preventDefault(); $('#scheduleModal').modal('show'); });
+	 */
 
 	$('#scheduleModal').on('show.bs.modal', function()
 	{
@@ -191,30 +147,26 @@ $(function()
 
 });
 
-$('#send-schedule-url-email').live('click', function(e)
-{
-	e.preventDefault();
-
-	$("#scheduleModal").modal('hide');
-
-	// Removes previous modals if exist.
-	if ($('#scheduleModal').size() != 0)
-		$('#scheduleModal').remove();
-
-	var emailModal = $(getTemplate("share-schedule-url-by-email", {}));
-
-	var description = $(emailModal).find('textarea').val();
-
-	description = description.replace(/<br\/>/g, "\r\n");
-
-	$(emailModal).find('textarea').val(description);
-
-	emailModal.modal('show');
-
-	// Send schedule url by email
-	// send_schedule_url_email(emailModal);
-
-});
+/*
+ * $("body").on('click', '#send-schedule-url-email', function(e) {
+ * e.preventDefault();
+ * 
+ * $("#scheduleModal").modal('hide'); // Removes previous modals if exist. if
+ * ($('#scheduleModal').size() != 0) $('#scheduleModal').remove();
+ * 
+ * var emailModal = $(getTemplate("share-schedule-url-by-email", {}));
+ * 
+ * var description = $(emailModal).find('textarea').val();
+ * 
+ * description = description.replace(/<br\/>/g, "\r\n");
+ * 
+ * $(emailModal).find('textarea').val(description);
+ * 
+ * emailModal.modal('show'); // Send schedule url by email //
+ * send_schedule_url_email(emailModal);
+ * 
+ * });
+ */
 
 /**
  * Sends email with ical data to current-user email.
@@ -223,36 +175,24 @@ $('#send-schedule-url-email').live('click', function(e)
  * @param emailModal -
  *            ical-email-modal
  */
-function send_schedule_url_email(emailModal)
-{
-	// When Send Clicked, validate the form and send email.
-	$('#share-url-email')
-			.die()
-			.live(
-					'click',
-					function(e)
-					{
-						e.preventDefault();
-
-						// if not valid
-						if (!isValidForm($('#sharescheduleurlmailForm')))
-							return;
-
-						var json = serializeForm("sharescheduleurlmailForm");
-						json.body = json.body.replace(/\r\n/g, "<br/>");
-
-						var url = 'core/api/emails/send-email?from=' + encodeURIComponent(json.from) + '&to=' + encodeURIComponent(json.to) + '&subject=' + encodeURIComponent(json.subject) + '&body=' + encodeURIComponent(json.body);
-
-						// Shows message
-						$save_info = $('<img src="img/1-0.gif" height="18px" width="18px"></img>&nbsp;&nbsp;<span><p class="text-success" style="color:#008000; font-size:15px; display:inline-block"> <i>Sending mail...</i></p></span>');
-						$("#msg", this.el).append($save_info);
-						$save_info.show().delay(2000).fadeOut("slow");
-
-						// Navigates to previous page on sending email
-						$.post(url, function()
-						{
-							emailModal.modal('hide');
-						});
-
-					});
-}
+/*
+ * function send_schedule_url_email(emailModal) { // When Send Clicked, validate
+ * the form and send email. $("#icalModal") .on( 'click', '#share-url-email',
+ * function(e) { e.preventDefault();
+ *  // if not valid if (!isValidForm($('#sharescheduleurlmailForm'))) return;
+ * 
+ * var json = serializeForm("sharescheduleurlmailForm"); json.body =
+ * json.body.replace(/\r\n/g, "<br/>");
+ * 
+ * var url = 'core/api/emails/send-email?from=' + encodeURIComponent(json.from) +
+ * '&to=' + encodeURIComponent(json.to) + '&subject=' +
+ * encodeURIComponent(json.subject) + '&body=' + encodeURIComponent(json.body);
+ *  // Shows message $save_info = $('<img src="img/1-0.gif" height="18px"
+ * width="18px"></img>&nbsp;&nbsp;<span><p class="text-success" style="color:#008000; font-size:15px; display:inline-block">
+ * <i>Sending mail...</i></p></span>'); $("#msg",
+ * this.el).append($save_info); $save_info.show().delay(2000).fadeOut("slow");
+ *  // Navigates to previous page on sending email $.post(url, function() {
+ * emailModal.modal('hide'); });
+ * 
+ * }); }
+ */

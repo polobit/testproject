@@ -1,6 +1,5 @@
-$(function()
-{
-// takes searchbox value and navigate this to router
+
+function initializeDomainsearchListner(el){
 	$( "#domainSearchForm" ).submit(function( e ) 	{
 		e.preventDefault(e);
 		
@@ -13,7 +12,13 @@ $(function()
 	
 	});
 
-	$( "#domain-search-results2" ).die().live('click', function( e ) 	{
+}
+
+
+function initializeAdminpanelListner(el){
+// takes searchbox value and navigate this to router
+	
+	$("#admin-panel-listners").on("click", '#domain-search-results2', function(e) {
 		e.preventDefault(e);
 		
 		var email = $('#domainSearchText2').val();
@@ -27,8 +32,7 @@ $(function()
 	});
 	
 	// deltes user from domain from admin panel
-	
-$(".delete_user").die().live('click', function(e){
+	$("#admin-panel-listners").on("click", '.delete_user', function(e) {
 		
 		e.preventDefault();
 		if (!confirm("Are you sure you want to delete ?" ))
@@ -52,8 +56,7 @@ $(".delete_user").die().live('click', function(e){
 	});
 	
 	// navigates to domain details from all domain users
-	
-	$("#all-domain-users-model-list > tr").live('click', function(e)
+	$("#admin-panel-listners").on("click", '#all-domain-users-model-list > tr', function(e) 
 			{
 				e.preventDefault();
 
@@ -69,7 +72,7 @@ $(".delete_user").die().live('click', function(e){
 		 * If user clicks on delete, delete request is sent to
 		 * "core/api/admin/delete/namespace"
 		 */
-		$(".delete-namespace").die().live('click', function(e){
+	$("#admin-panel-listners").on("click", '.delete-namespace', function(e) {
 			
 					e.preventDefault();
 					
@@ -99,7 +102,7 @@ $(".delete_user").die().live('click', function(e){
 					
 				   }
 		});
-		$(".refundpopup").live('click',function(e){
+	$("#admin-panel-listners").on("click", '.refundpopup', function(e) {
 			e.preventDefault();
 			
 			var chargeid = $(this).attr("chargeid");
@@ -116,7 +119,7 @@ $(".delete_user").die().live('click', function(e){
 
 
 
-		$("#partialrefund").die().live('click', function(e){
+		$("#partial-refund-footer").off('click').on("click", '#partialrefund', function(e) { 
 			
 			e.preventDefault();
 			if (!isValidForm($("#admin-partial-refund")))
@@ -161,30 +164,8 @@ $(".delete_user").die().live('click', function(e){
 		
 		});
 		
-		$(".refund").die().live('click', function(e){
-	
-			e.preventDefault();
-			if (!confirm("Are you sure you want to apply for refund ?" ))
-				return;
-			var chargeid=$(this).attr("data");
-
-			$.ajax({
-				url: '/core/api/admin_panel/applyrefund?chargeid='+chargeid, 
-				type : 'GET',
-				success : function(data)
-				{
-					var amount = data.refunds.data[0].amount/100;
-					add_refunded_info_as_note_to_owner(email,amount);
-					alert("successfully applied for refund");
-					location.reload(true);
-				},
-				error : function(response)
-				{
-					showNotyPopUp("information", "error occured please try again", "top");
-				} });
-			
-		});
-		$("#delete_userplan").die().live('click',function(e) {
+		
+		$("#admin-panel-listners").on("click", '#delete_userplan', function(e) { 
 			e.preventDefault();
 			if (!confirm("Are you sure you want to cancel this subscription ?" ))
 				return;
@@ -205,7 +186,7 @@ $(".delete_user").die().live('click', function(e){
 			
 		});
 		});
-		$("#delete_emailplan").die().live('click',function(e) {
+		$("#admin-panel-listners").on("click", '#delete_emailplan', function(e) { 
 			e.preventDefault();
 			if (!confirm("Are you sure you want to cancel this subscription ?" ))
 				return;
@@ -228,7 +209,7 @@ $(".delete_user").die().live('click', function(e){
 			
 		});
 		
-		$('#unpause_mandrill').die().live('click',function(e) 
+		$("#admin-panel-listners").on("click", '#unpause_mandrill', function(e)
 		{
 			e.preventDefault();
 			if (!confirm("Are you sure you want to UnPause Mandrill?" ))
@@ -246,4 +227,4 @@ $(".delete_user").die().live('click', function(e){
 				}
 			});
 		});
-});
+}

@@ -190,7 +190,7 @@ $(function() {
 	 * which is selected and calls customView function is called to to custom
 	 * view of contacts
 	 */
-	$('.ContactView').die().live('click', function(e) {
+	$('body').on('click', '.ContactView', function(e){
 
 				e.preventDefault();
 				
@@ -244,7 +244,7 @@ $(function() {
 
 	// If default view is selected, contacts are loaded with default view and
 	// removes the view cookie set when view is selected
-	$('.DefaultView').die().live('click', function(e) {
+	$('body').on('click', '.DefaultView', function(e){
 		e.preventDefault();
 		
 		if(company_util.isCompany())
@@ -276,7 +276,7 @@ $(function() {
 	
 	// If grid view is selected, contacts are loaded with grid view and
 	// creates the grid view cookie 
-	$('.GridView').die().live('click', function(e) {
+	$('body').on('click', '.GridView', function(e){
 		e.preventDefault();
 		
 		// Erases the cookie

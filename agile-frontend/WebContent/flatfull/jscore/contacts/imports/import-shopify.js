@@ -1,6 +1,6 @@
 $(function()
 {
-	$("#import_shopify").die().live('click', function(e)
+	$('body').on('click', '#import_shopify', function(e)
 			{
 				var shopName = $('#shop').val();
 				if(shopName == ""){
@@ -18,7 +18,7 @@ $(function()
 			
 	
 			
-			$("#shopify-setting").die().live('click',function(e){
+			$('body').on('click', '#shopify-setting', function(e){
 				e.preventDefault();
 				var disabled = $(this).attr("disabled");
 				if(disabled){

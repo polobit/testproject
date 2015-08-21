@@ -1,4 +1,3 @@
-
 var Portlets_View;
 var portlet_template_loaded_map = {};
 
@@ -17,23 +16,30 @@ function loadPortlets(el){
 	App_Portlets.emailsOpened = new Array();
 	App_Portlets.statsReport = new Array();
 	App_Portlets.leaderboard = new Array();
+	App_Portlets.accountInfo = new Array();
+	App_Portlets.activity=new Array();
+	App_Portlets.activitiesView= new Array();
 	/*
 	 * If Portlets_View is not defined , creates collection view, collection is
 	 * sorted based on position i.e., set when sorted using jquery ui sortable
 	 */
 	if (!Portlets_View){
-		head.load(FLAT_FULL_UI + "css/misc/agile-portlet.css" + "?_=" + _AGILE_VERSION);
+
+		// head.load(FLAT_FULL_UI + "css/misc/agile-portlet.css" + "?_=" + _AGILE_VERSION);
+
 		// This flag is used to ensure portlet script are loaded only once in
 		// postrender. It is set to false after portlet setup is initialized
 		is_portlet_view_new = true;
 		Portlets_View = new Base_Collection_View({ url : '/core/api/portlets', sortKey : "row_position",sort_collection : false, restKey : "portlet", templateKey : "portlets", individual_tag_name : 'div',
 			postRenderCallback : function(portlets_el){
-				head.load(FLAT_FULL_UI + "css/jquery.gridster.css", function(){
+				// head.load(FLAT_FULL_UI + "css/jquery.gridster.css", function(){
 					// If scripts aren't loaded earlier, setup is initialized
 					set_up_portlets(el, portlets_el);
 					if(Portlets_View.collection.length==0)
 						$('.gridster > div:visible > div',el).removeClass('gs-w');
-				});
+				// });
+				initializePortletsListeners_1();
+				initializePortletsListeners_2();
 			} });
 		this.Portlets_View.appendItem = set_p_portlets;
 
@@ -697,7 +703,7 @@ function hidePortletSettingsAfterSave(modal_id){
 	//$('#'+form_id).hide();
 	$('.modal-backdrop').hide();
 }
-$('.portlet-minimize').die().live('click', function(e){
+$('body').on('click', '.portlet-minimize', function(e) {
 	e.preventDefault();
 	var id = $(this).attr('id').split("-collapse")[0];
 
@@ -723,7 +729,7 @@ $('.portlet-minimize').die().live('click', function(e){
 	
 	$('#'+id).parent().find('.portlet_body').hide();
 });
-$('.portlet-maximize').die().live('click', function(e){
+$('body').on('click', '.portlet-maximize', function(e) {
 	e.preventDefault();
 	var id = $(this).attr('id').split("-collapse")[0];
 
@@ -749,7 +755,8 @@ $('.portlet-maximize').die().live('click', function(e){
 	
 	$('#'+id).parent().find('.portlet_body').show();
 });
-$('.portlet-settings-save-modal').live('click', function(e){
+function initializePortletsListeners_2(){
+$('.modal-footer').off("click").on('click', '.portlet-settings-save-modal', function(e) {
 	e.preventDefault();
 	var scrollPosition=$(window).scrollTop();
 	var form_id=$(this).parent().prev().find('form:visible').attr('id');
@@ -824,7 +831,9 @@ $('.portlet-settings-save-modal').live('click', function(e){
 	        			App_Portlets.filteredCompanies[parseInt(pos)] = new Base_Collection_View({ url : '/core/api/portlets/portletContacts?filter='+data.get('settings').filter+'&sortKey=-created_time', templateKey : 'portlets-companies', sort_collection : false, individual_tag_name : 'tr', sortKey : "-created_time" });
 	        		else
 	        			App_Portlets.filteredContacts[parseInt(pos)] = new Base_Collection_View({ url : '/core/api/portlets/portletContacts?filter='+data.get('settings').filter+'&sortKey=-created_time', templateKey : 'portlets-contacts', sort_collection : false, individual_tag_name : 'tr', sortKey : "-created_time" });
-	        	}else if(data.get('portlet_type')=="CONTACTS" && data.get('name')=="Emails Opened"){
+	        	}
+	        	
+	        	else if(data.get('portlet_type')=="CONTACTS" && data.get('name')=="Emails Opened"){
 	        		var start_date_str = '';
 	        		var end_date_str = '';
 	        		if(data.get('settings').duration=='yesterday'){
@@ -932,7 +941,7 @@ $('.portlet-settings-save-modal').live('click', function(e){
 					if(data.get('settings').user!=undefined)
 						users = JSON.stringify(data.get('settings').user);
 					App_Portlets.leaderboard[parseInt(pos)] = new Base_Model_View({ url : '/core/api/portlets/portletLeaderboard?duration='+data.get('settings').duration+'&start-date='+getStartAndEndDatesOnDue(start_date_str)+'&end-date='+getStartAndEndDatesOnDue(end_date_str)+'&revenue='+data.get('settings').category.revenue+'&dealsWon='+data.get('settings').category.dealsWon+'&calls='+data.get('settings').category.calls+'&tasks='+data.get('settings').category.tasks+'&user='+users, template : 'portlets-leader-board-body-model', tagName : 'div',
-						postRenderCallback : function(p_el){
+						portletSizeX : data.get('size_x'), portletSizeY : data.get('size_y'), postRenderCallback : function(p_el){
 							$('#ui-id-'+column_position+'-'+row_position+' > .portlet_header').find('ul').width(($('#ui-id-'+column_position+'-'+row_position+' > .portlet_body').find('ul').width()/$('#ui-id-'+column_position+'-'+row_position+' > .portlet_body').width()*100)+'%');
 						} });
 	        	}
@@ -1742,6 +1751,145 @@ $('.portlet-settings-save-modal').live('click', function(e){
 		});
 	}
 });
+
+$('#portletsTaskReportSettingsModal').off("change").on('change', '#group-by-task-report', function(e) {
+	
+	$('#tasks-task-report').trigger("change");
+	
+	$('#split-by-task-report > option').each(function(e1){
+		if($(this).val()==$('#group-by-task-report').val())
+			$(this).hide();
+		else{
+			if($('#tasks-task-report').val()=="completed-tasks" && $(this).val()!="status"){
+				$(this).show();
+				$(this).attr("selected",true);
+			}else if($('#tasks-task-report').val()=="all-tasks"){
+				$(this).show();
+				$(this).attr("selected",true);
+			}
+		}
+	});
+	if($('#group-by-task-report').val()=="status"){
+		$('#tasks-task-report > option#all-tasks').attr("selected",true);
+		$('#tasks-control-group').hide();
+	}
+	else
+		$('#tasks-control-group').show();
+});
+
+$('.modal-content').off("change").on('change', '#tasks-task-report', function(e) {
+	if($('#tasks-task-report').val()=="completed-tasks"){
+		if($('#split-by-task-report > option#status').is(':selected'))
+			$('#split-by-task-report > option#status').attr("selected",false);
+		$('#split-by-task-report > option#status').hide();
+	}
+	else
+		$('#split-by-task-report > option#status').show();
+});
+
+$('.gridster-portlets').off("mouseover").on('mouseover', '.stats_report_portlet_body', function(e) {
+	if($('.stats_report_portlet_body').parent().find('.gs-resize-handle'))
+		$('.stats_report_portlet_body').parent().find('.gs-resize-handle').remove();
+	$('.stats_report_portlet_body').find('.portlet_header_icons').css("visibility","visible");
+	//$('.stats_report_portlet_body').find('.stats-report-settings').find('span').eq(0).addClass('p-l-lg');
+});
+
+$('.gridster-portlets').off("mouseout").on('mouseout', '.stats_report_portlet_body', function(e) {
+	$('.stats_report_portlet_body').find('.portlet_header_icons').css("visibility","hidden");
+	//$('.stats_report_portlet_body').find('.stats-report-settings').find('span').eq(0).removeClass('p-l-lg');
+});
+
+$('.portlet_body').off("change").on('change', '.onboarding-check', function(e) {
+	/*$(this).parent().find('span').before("<label class='fa fa-check p-r-sm'><i></i></label>");
+	if(!$(this).parent().find('small').hasClass('onboarding-undo'))
+		$(this).parent().find('span').after("<small class='p-l-sm onboarding-undo c-p'>(undo)</small>");
+	$(this).remove();*/
+	var that = $(this);
+	var model_id = $(this).parent().parent().parent().find('.portlets').attr('id');
+	var model = Portlets_View.collection.get(model_id);
+	var json1 = {};
+	$(this).parent().parent().find('label').each(function(){
+		var json2 = {};
+		if($(this).find('input:checkbox').is(':checked')){
+			json2["done"] = true;
+			json2["skip"] = false;
+		}else{
+			json2["done"] = false;
+			json2["skip"] = false;
+		}
+		json1[""+$(this).prop('value')] = json2;
+	});
+	model.set({ 'prefs' : JSON.stringify(json1) }, { silent : true });
+	// Saves new width and height in server
+	$.ajax({ type : 'POST', url : '/core/api/portlets/saveOnboardingPrefs', data : JSON.stringify(model.toJSON()),
+		contentType : "application/json; charset=utf-8", dataType : 'json', success: function(){
+			if(that.find('input:checkbox').is(':checked')){
+				that.parent().find('span').css("text-decoration","line-through");
+				/*that.parent().find('span > a').addClass("text-muted");
+				that.parent().find('label').removeClass('fa fa-square-o ob-portlet-font-check onboarding-check c-p');
+				that.parent().find('label').addClass('fa fa-check-square-o ob-portlet-font-check onboarding-check c-p text-muted');
+				that.find('input:checkbox').removeClass('ob-portlet-no-check');
+				that.find('input:checkbox').addClass('ob-portlet-check');*/
+			}else{
+				that.parent().find('span').css("text-decoration","none");
+				/*that.parent().find('span > a').removeClass("text-muted");
+				that.parent().find('label').removeClass('fa fa-check-square-o ob-portlet-font-check onboarding-check c-p text-muted');
+				that.parent().find('label').addClass('fa fa-square-o ob-portlet-font-check onboarding-check c-p');
+				that.find('input:checkbox').removeClass('ob-portlet-check');
+				that.find('input:checkbox').addClass('ob-portlet-no-check');*/
+			}} });
+		
+});
+
+$('.gridster-portlets').off("mouseover").on('mouseover', '.leaderboard_portlet_header', function(e) {
+	$('.leaderboard_portlet_header').find('.portlet_header_icons').css("visibility","visible");
+});
+
+$('.gridster-portlets').off("mouseout").on('mouseout', '.leaderboard_portlet_header', function(e) {
+	$('.leaderboard_portlet_header').find('.portlet_header_icons').css("visibility","hidden");
+});
+
+$('.modal-body').off("click").on('click', '#category-select-all', function(e) {
+		e.preventDefault();
+		$('#category-list').multiSelect('select_all');
+});
+
+$('.modal-content').off("click").on('click', '#category-select-none', function(e) {
+		e.preventDefault();
+		$('#category-list').multiSelect('deselect_all');
+});
+
+$('.modal-body').on('click', '#user-select-all', function(e) {
+		e.preventDefault();
+		$('#user-list').multiSelect('select_all');
+});
+
+$('.modal-content').on('click', '#user-select-none', function(e) {
+		e.preventDefault();
+		$('#user-list').multiSelect('deselect_all');
+});
+
+$('.modal-body').on('click', '#calls-user-select-all', function(e) {
+	e.preventDefault();
+	$('#calls-user-list').multiSelect('select_all');
+});
+
+$('.modal-content').on('click', '#calls-user-select-none', function(e) {
+	e.preventDefault();
+	$('#calls-user-list').multiSelect('deselect_all');
+});
+
+$('.modal-body').on('click', '#task-report-user-select-all', function(e) {
+		e.preventDefault();
+		$('#task-report-user-list').multiSelect('select_all');
+});
+
+$('.modal-content').on('click', '#task-report-user-select-none', function(e) {
+		e.preventDefault();
+		$('#task-report-user-list').multiSelect('deselect_all');
+});
+
+}
 function showPortletSettingsForm(formId){
 	$('#portletSettingsModal > .modal-body > form').each(function(){
 		if($(this).attr('id')==formId)
@@ -1775,103 +1923,19 @@ function initBlogPortletSync(el)
 					});
 
 }
-$('#group-by-task-report').live('change',function(e){
-	
-	$('#tasks-task-report').trigger("change");
-	
-	$('#split-by-task-report > option').each(function(e1){
-		if($(this).val()==$('#group-by-task-report').val())
-			$(this).hide();
-		else{
-			if($('#tasks-task-report').val()=="completed-tasks" && $(this).val()!="status"){
-				$(this).show();
-				$(this).attr("selected",true);
-			}else if($('#tasks-task-report').val()=="all-tasks"){
-				$(this).show();
-				$(this).attr("selected",true);
-			}
-		}
-	});
-	if($('#group-by-task-report').val()=="status"){
-		$('#tasks-task-report > option#all-tasks').attr("selected",true);
-		$('#tasks-control-group').hide();
-	}
-	else
-		$('#tasks-control-group').show();
-});
-$('#tasks-task-report').live('change',function(e){
-	if($('#tasks-task-report').val()=="completed-tasks"){
-		if($('#split-by-task-report > option#status').is(':selected'))
-			$('#split-by-task-report > option#status').attr("selected",false);
-		$('#split-by-task-report > option#status').hide();
-	}
-	else
-		$('#split-by-task-report > option#status').show();
-});
-$('.stats_report_portlet_body').live('mouseover',function(e){
-	if($('.stats_report_portlet_body').parent().find('.gs-resize-handle'))
-		$('.stats_report_portlet_body').parent().find('.gs-resize-handle').remove();
-	$('.stats_report_portlet_body').find('.portlet_header_icons').css("visibility","visible");
-	//$('.stats_report_portlet_body').find('.stats-report-settings').find('span').eq(0).addClass('p-l-lg');
-});
-$('.stats_report_portlet_body').live('mouseout',function(e){
-	$('.stats_report_portlet_body').find('.portlet_header_icons').css("visibility","hidden");
-	//$('.stats_report_portlet_body').find('.stats-report-settings').find('span').eq(0).removeClass('p-l-lg');
-});
-$('.onboarding-skip').live('click',function(e){
+$('body').on('click', '.onboarding-skip', function(e) {
 	$(this).parent().find('span').css("text-decoration","line-through");
 	if(!$(this).parent().find('small').hasClass('onboarding-undo'))
 		$(this).parent().find('span').after("<small class='p-l-sm onboarding-undo c-p'>(undo)</small>");
 	$(this).remove();
 });
-$('.onboarding-undo').live('click',function(e){
+$('body').on('click', '.onboarding-undo', function(e) {
 	$(this).parent().find('span').css("text-decoration","none");
 	$(this).parent().find('label').remove();
 	$(this).parent().find('span').before("<label class='i-checks i-checks-sm onboarding-check' style='padding-right:4px;'><input type='checkbox'><i></i></label>");
 	if(!$(this).parent().find('small').hasClass('onboarding-skip'))
 		$(this).parent().find('span').after("<small class='p-l-sm onboarding-skip c-p'>(skip)</small>");
 	$(this).remove();
-});
-$('.onboarding-check').live('change',function(e){
-	/*$(this).parent().find('span').before("<label class='fa fa-check p-r-sm'><i></i></label>");
-	if(!$(this).parent().find('small').hasClass('onboarding-undo'))
-		$(this).parent().find('span').after("<small class='p-l-sm onboarding-undo c-p'>(undo)</small>");
-	$(this).remove();*/
-	var that = $(this);
-	var model_id = $(this).parent().parent().parent().find('.portlets').attr('id');
-	var model = Portlets_View.collection.get(model_id);
-	var json1 = {};
-	$(this).parent().parent().find('label').each(function(){
-		var json2 = {};
-		if($(this).find('input:checkbox').is(':checked')){
-			json2["done"] = true;
-			json2["skip"] = false;
-		}else{
-			json2["done"] = false;
-			json2["skip"] = false;
-		}
-		json1[""+$(this).attr('value')] = json2;
-	});
-	model.set({ 'prefs' : JSON.stringify(json1) }, { silent : true });
-	// Saves new width and height in server
-	$.ajax({ type : 'POST', url : '/core/api/portlets/saveOnboardingPrefs', data : JSON.stringify(model.toJSON()),
-		contentType : "application/json; charset=utf-8", dataType : 'json', success: function(){
-			if(that.find('input:checkbox').is(':checked')){
-				that.parent().find('span').css("text-decoration","line-through");
-				/*that.parent().find('span > a').addClass("text-muted");
-				that.parent().find('label').removeClass('fa fa-square-o ob-portlet-font-check onboarding-check c-p');
-				that.parent().find('label').addClass('fa fa-check-square-o ob-portlet-font-check onboarding-check c-p text-muted');
-				that.find('input:checkbox').removeClass('ob-portlet-no-check');
-				that.find('input:checkbox').addClass('ob-portlet-check');*/
-			}else{
-				that.parent().find('span').css("text-decoration","none");
-				/*that.parent().find('span > a').removeClass("text-muted");
-				that.parent().find('label').removeClass('fa fa-check-square-o ob-portlet-font-check onboarding-check c-p text-muted');
-				that.parent().find('label').addClass('fa fa-square-o ob-portlet-font-check onboarding-check c-p');
-				that.find('input:checkbox').removeClass('ob-portlet-check');
-				that.find('input:checkbox').addClass('ob-portlet-no-check');*/
-			}} });
-		
 });
 function gravatarImgForPortlets(width){
 	// Default image
@@ -1885,44 +1949,6 @@ function gravatarImgForPortlets(width){
 	var data_name = '';
 	return new Handlebars.SafeString('https://secure.gravatar.com/avatar/' + Agile_MD5("") + '.jpg?s=' + width + '' + backup_image + data_name);
 }
-$('.leaderboard_portlet_header').live('mouseover',function(e){
-	$('.leaderboard_portlet_header').find('.portlet_header_icons').css("visibility","visible");
-});
-$('.leaderboard_portlet_header').live('mouseout',function(e){
-	$('.leaderboard_portlet_header').find('.portlet_header_icons').css("visibility","hidden");
-});
-$('#category-select-all').die().live('click',function(e){
-		e.preventDefault();
-		$('#category-list').multiSelect('select_all');
-});
-$('#category-select-none').die().live('click',function(e){
-		e.preventDefault();
-		$('#category-list').multiSelect('deselect_all');
-});
-$('#user-select-all').die().live('click',function(e){
-		e.preventDefault();
-		$('#user-list').multiSelect('select_all');
-});
-$('#user-select-none').die().live('click',function(e){
-		e.preventDefault();
-		$('#user-list').multiSelect('deselect_all');
-});
-$('#calls-user-select-all').die().live('click',function(e){
-	e.preventDefault();
-	$('#calls-user-list').multiSelect('select_all');
-});
-$('#calls-user-select-none').die().live('click',function(e){
-	e.preventDefault();
-	$('#calls-user-list').multiSelect('deselect_all');
-});
-$('#task-report-user-select-all').die().live('click',function(e){
-		e.preventDefault();
-		$('#task-report-user-list').multiSelect('select_all');
-});
-$('#task-report-user-select-none').die().live('click',function(e){
-		e.preventDefault();
-		$('#task-report-user-list').multiSelect('deselect_all');
-});
 function getDurationForPortlets(duration){
 	var time_period = 'Today';
 		if (duration == 'yesterday'){

@@ -497,7 +497,7 @@ function register_focus_on_tinymce(selector)
 	if(!document)
 		return;
 	
-	$(document).die().live('click', function(e){
+	$(document).on('click', function(e){
 		
 		e.preventDefault();
 		
