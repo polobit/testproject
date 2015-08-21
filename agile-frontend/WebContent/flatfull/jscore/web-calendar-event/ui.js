@@ -7,29 +7,17 @@ $(function()
 	var MIDNIGHT_END_TIME = null;
 
 	// Select slot duration 60/30/15min
-	$(".choose").die().live('click', function(e)
+	$('body').on('click', '.selected_meeting_time', function(e)
 	{
-		e.preventDefault();
+		// e.preventDefault();
 
 		$("#details").empty();
 		Selected_Time = $(this).attr('data');
-
-		var json_meeting_duration = JSON.parse(meeting_duration);
-		console.log(json_meeting_duration);
-		if (Selected_Time == 15)
-		{
-			appointmenttype = json_meeting_duration['15mins'];
-		}
-		else if (Selected_Time == 30)
-		{
-			appointmenttype = json_meeting_duration['30mins'];
-			;
-		}
-		else if (Selected_Time == 60)
-		{
-			appointmenttype = json_meeting_duration['60mins'];
-			;
-		}
+		$(".show_slots").find('input:radio').attr('checked', false);
+		$(this, [
+			'input:radio'
+		]).attr('checked', true);
+		appointmenttype = $('input[name="selected_meeting_time"]:checked').val();
 
 		$(".activemin").removeClass("activemin");
 		$(this).find('.minutes').addClass("activemin");
@@ -72,7 +60,7 @@ $(function()
 	});
 
 	// Only single slot selection is allowed
-	$(".selected-slot").die().live('click', function(e)
+	$('body').on('click', '.selected-slot', function(e)
 	{
 		var currentId = $(this).attr('id');
 
@@ -92,7 +80,7 @@ $(function()
 
 	});
 
-	$("#multi-user-avatar").die().live('click', function(e)
+	$('body').on('click', '#multi-user-avatar', function(e)
 	{
 		$(".thumbnail").css("background", "none");
 		$(this).css("background", "#4A90E2");
@@ -110,6 +98,7 @@ $(function()
 				User_Name = selected_user_name = SELECTED_DOMAIN_USER['name'];
 				meeting_duration = SELECTED_DOMAIN_USER['meeting_durations'];
 				meeting_types = SELECTED_DOMAIN_USER['meeting_types'];
+				BUFFERTIME = SELECTED_DOMAIN_USER['buffer_time'];
 
 				if (meeting_types[0] != "")
 				{
@@ -129,6 +118,7 @@ $(function()
 
 				getSlotDurations();
 				$(".segment1").fadeIn("slow");
+				$(".panel-body").height(parseInt(getPanelBodyMaxHeight()) + 26);
 				autoscrol(".segment1");
 			}
 
@@ -136,7 +126,7 @@ $(function()
 
 	});
 
-	$('#user_timezone').die().change(function()
+	$('#user_timezone').change(function()
 	{
 
 		SELECTED_TIMEZONE = $('#user_timezone').val();
@@ -151,13 +141,13 @@ $(function()
 		get_slots(selecteddate, Selected_Time);
 	});
 
-	$('.timezone1').die().click(function()
+	$('.timezone1').click(function()
 	{
 		$("#hidetimezone").removeClass("hide");
 		$('.timezone1').hide();
 	});
 
-	$('#user_timezone').die().blur(function()
+	$('#user_timezone').blur(function()
 	{
 		if (SELECTED_TIMEZONE == $('#user_timezone').val())
 		{

@@ -20,6 +20,21 @@ function gmap_initialize(el)
 			window.gmap_marker_list = [];
 			
 			gmap_date_range(el, function(){
+				var $today = new Date();
+				var $yesterday = new Date($today);
+				$yesterday.setDate($today.getDate() - 1);
+				var from_date = $yesterday;
+				var to_date = $yesterday;
+				if(window.toDate != undefined && window.toDate != '')
+					to_date=window.toDate;
+				else
+					window.toDate=to_date;
+				if(window.fromDate != undefined && window.fromDate != '')
+					from_date=window.fromDate;
+				else
+				window.fromDate=from_date;
+				
+				$('#gmap_date_range span').html(to_date.toString('MMMM d, yyyy') + " - " + from_date.toString('MMMM d, yyyy'));
 				gmap_search_by_date($('#gmap_date_range span').text());
 			});
 //			if(window.map != undefined){

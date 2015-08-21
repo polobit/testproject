@@ -830,3 +830,29 @@ border-radius: 2px;
 	color: #98a6ad!important;
  	font-weight: 300!important;
 }
+ 
+.scroll > div > div
+{
+	border-bottom:1px solid #edf1f2; 
+}
+.scroll > div > div:last-child {
+  border-bottom: none;
+}
+.scroll div[id*="heading"] 
+{
+ border-bottom:1px solid #edf1f2;
+ border-top:1px solid #edf1f2;
+ 
+}
+ 
+
+.activity_body 
+{
+	margin-top:-1px;
+}
+.stats-report-settings .portlet_header_icons {
+	visibility: hidden;
+}
+.stats-report-settings:hover .portlet_header_icons {
+	visibility: visible;
+}

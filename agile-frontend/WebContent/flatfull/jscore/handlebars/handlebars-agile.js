@@ -170,6 +170,10 @@ function getTemplateUrls(templateName)
 	{
 		template_relative_urls.push("web-rules.js");
 	}
+	if (templateName.indexOf("webpage") == 0)
+	{
+		template_relative_urls.push("web-pages.js");
+	}
 	if (templateName.indexOf("workflow") == 0 || templateName.indexOf("campaign") == 0 || templateName.indexOf("trigger") == 0 || templateName
 			.indexOf("automation") == 0)
 	{
@@ -568,7 +572,7 @@ function get_website_icon(item){
 
 function get_social_icon(name){
 	if (!name)
-	return;
+	return "icon-globe";
 
     var icon_json = { "TWITTER" : "icon-social-tumblr", "LINKEDIN" : "fa fa-linkedin", "URL" : "icon-globe", "GOOGLE-PLUS" : "fa fa-google-plus",
 	"FACEBOOK" : "icon-social-facebook", "GITHUB" : "fa fa-github", "FEED" : "icon-rss", "XING" : "fa fa-xing", "SKYPE" : "icon-skype",
