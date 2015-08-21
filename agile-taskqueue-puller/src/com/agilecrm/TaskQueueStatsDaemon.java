@@ -77,12 +77,10 @@ public class TaskQueueStatsDaemon extends Thread
 
     private Taskqueue getTaskqueue()
     {
-	if (taskQueue != null)
-	{
-	    return taskQueue;
-	}
 
-	return taskQueue = Authorization.getTaskqeues(TASK_QUEUE_NAME);
+	taskQueue = Authorization.getTaskqeues(TASK_QUEUE_NAME);
+
+	return taskQueue;
     }
 
     private int getTotalTasks() throws IOException
