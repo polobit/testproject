@@ -140,8 +140,7 @@ function setup_tags_typeahead() {
         }
     });
     
-    
-    $("#addTags").die().live('keydown',function(e) {
+    $('body').on('keydown', '#addTags', function(e) {
     	if(e.which == 13 && !isTagsTypeaheadActive)
     		{
     			e.preventDefault();
@@ -383,8 +382,8 @@ function remove_tags(base_model)
 }
 
 $(function(){
-	
-	$("#refresh-tags").die().live('click', function(e){
+
+	$('body').on('click', '#refresh-tags', function(e){
 		e.preventDefault();
 		$('#tagslist', App_Contacts.contactsListView.el).html(getRandomLoadingImg());
 		init_tags_collection(App_Contacts.contactsListView.el, function(tags){

@@ -9,7 +9,7 @@
 $(function()
 {
 
-	$(".edit-note").die().live('click', function(e)
+	$('body').on('click', '.edit-note', function(e)
 	{
 		e.preventDefault();
 		console.log($(this).attr('data'));
@@ -36,7 +36,7 @@ $(function()
 		// noteModal.modal('show');
 	});
 
-	$("#note_update").live('click', function(e)
+    $('body').on('click', '#note_update', function(e)
 	{
 		e.preventDefault();
 
@@ -81,7 +81,7 @@ $(function()
 	 * Saves note model using "Bcakbone.Model" object, and adds saved data to
 	 * time-line if necessary.
 	 */
-	$('#note_validate').live('click', function(e)
+	$('body').on('click', '#note_validate', function(e)
 	{
 		e.preventDefault();
 
@@ -116,7 +116,7 @@ $(function()
 	/**
 	 * Shows note modal and activates contacts typeahead to its related to field
 	 */
-	$('#show-note').live('click', function(e)
+	$('body').on('click', '#show-note', function(e)
 	{
 		e.preventDefault();
 		$("#noteModal").modal('show');

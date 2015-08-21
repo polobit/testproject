@@ -13,7 +13,7 @@
 $(function() {
 	
 /*	// To toggle the contact us email
-	$("#show_support").die().live("click", function(e){
+	$("#show_support").live("click", function(e){
 		  e.preventDefault();
 		  $("#content").html(getTemplate("help-mail-form"), {});
 		 // $("#helpmailForm").toggle();
@@ -21,7 +21,7 @@ $(function() {
 	});*/
 
 	// Prevent default on click
-	$('#helpMail').die().live('click', function(e){
+	$("body").on('click', '#helpMail', function(e){
 		e.preventDefault();
 
 		if($(this).attr('disabled'))

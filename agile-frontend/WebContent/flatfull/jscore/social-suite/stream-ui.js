@@ -63,7 +63,7 @@ function initializeSocialSuite()
 	/**
 	 * Display popup form with stream details.
 	 */
-	$(".add-stream").die().live("click", function(e)
+	$('body').on('click', '.add-stream', function(e)
 	{
 		// Need to call openTwitter function in ui.js for Oauth.
 		head.js('js/designer/ui.js', function()
@@ -92,7 +92,7 @@ function initializeSocialSuite()
 	/**
 	 * On click of twitter icon, Calls Oauth for selected network type.
 	 */
-	$(".network-type").die().live("click", function(e)
+	$('body').on('click', '.network-type', function(e)
 	{
 		// User select Twitter.
 		if (this.id == "twitter_option")
@@ -114,11 +114,7 @@ function initializeSocialSuite()
 	/**
 	 * Get stream name from selected option in list of streams.
 	 */
-	$(".stream-type")
-			.die()
-			.live(
-					"click",
-					function(e)
+	$('body').on('click', '.stream-type', function(e)
 					{
 						e.preventDefault();
 
@@ -242,11 +238,7 @@ function initializeSocialSuite()
 	 * Fetchs data from popup stream add form and save stream as well as add to
 	 * the collection, publish register message to the server.
 	 */
-	$(".save-twitter-stream")
-			.die()
-			.live(
-					"click",
-					function(e)
+	$('body').on('click', '.save-twitter-stream', function(e)
 					{
 						// Check add-stream button is not enable
 						if ($('#addStreamModal').find('#add_twitter_stream').attr('disabled'))
@@ -340,7 +332,7 @@ function initializeSocialSuite()
 	 * Gets stream, Delete it from collection and dB and publish unregister
 	 * stream.
 	 */
-	$(".stream-delete").die().live("click", function(e)
+	$('body').on('click', '.stream-delete', function(e)
 	{
 		if (!confirm("Are you sure you want to delete?"))
 			return;
@@ -372,7 +364,7 @@ function initializeSocialSuite()
 	 * per that. like Retry : re-register stream on server. Add-new -tweet : Add
 	 * new unread tweets on stream.
 	 */
-	$(".action-notify").die().live("click", function(e)
+	$('body').on('click', '.action-notify', function(e)
 	{
 		// Get relation for action.
 		var relation = $(this).attr('rel');

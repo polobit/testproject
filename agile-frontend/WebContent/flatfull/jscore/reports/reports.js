@@ -1,13 +1,7 @@
 // Stores report object, so it can be used while creating report table headings
 var REPORT;
-$(function()
-{
-
-	$("#reports-email-now")
-			.die()
-			.live(
-					'click',
-					function(e)
+function initializeReportsListeners(){
+	$('#reports-listerners-container').on('click', '#reports-email-now', function(e)
 					{
 						// e.preventDefault();
 						e.stopPropagation();
@@ -65,9 +59,8 @@ $(function()
 															});
 										});
 					});
-	$("#campaign_id").die().live(
-			'click',
-			function(e)
+
+	$('#reports-listerners-container').on('click', '#campaign_id', function(e)
 			{
 				e.preventDefault();
 				e.stopPropagation();
@@ -91,7 +84,7 @@ $(function()
 					} });
 
 			});
-	$("#report-instant-results").die().live('click', function(e)
+	$('#reports-listerners-container').on('click', '#report-instant-results', function(e) 
 	{
 		e.stopPropagation();
 		var id = $(this).attr('data');
@@ -101,7 +94,7 @@ $(function()
 		 */
 	});
 
-	$("#frequency").die().live('change', function(e)
+	$('#reports-listerners-container').on('change', '#frequency', function(e) 
 	{
 		var frequency = $("#frequency").val();
 		if (frequency == "DAILY")
@@ -130,77 +123,75 @@ $(function()
 	/*
 	 * author jaagdeesh
 	 */
-
-	$("#report-dashlat-navigate").die().live('click', function(e)
+	$('#reports-listerners-container').on('click', '#report-dashlat-navigate', function(e)
 	{
 		e.preventDefault();
 		Backbone.history.navigate("add-dashlet", { trigger : true });
 
 	});
 
-	$("#activity_advanced").die().live('click', function(e)
+	$('#reports-listerners-container').on('click', '#activity_advanced', function(e) 
 	{
 		e.preventDefault();
 
 	});
 
-	$('#activity-advanced-block').live('shown', function()
+	$('#reports-listerners-container').on('shown', '#activity-advanced-block', function(e) 
 	{
 		$('#activity_advanced').html('<span><i class="icon-minus"></i></span> Advanced');
 
 	});
 
-	$('#activity-advanced-block').live('hidden', function()
+    $('#reports-listerners-container').on('hidden', '#activity-advanced-block', function(e) 
 	{
 		$('#activity_advanced').html('<span><i class="icon-plus"></i></span> Advanced');
 	});
 
-	$("#report_advanced").die().live('click', function(e)
+	$('#reports-listerners-container').on('click', '#report_advanced', function(e) 
 	{
 		e.preventDefault();
 		$("#report_advanced span i").toggleClass("fa-minus");
 		$("#report_advanced span i").toggleClass("fa-plus");
 
 	});
-
-	$('#report-advanced-block').live('shown', function()
+            
+	$('#reports-listerners-container').on('shown', '#report-advanced-block', function(e)
 	{
 		$('#report_advanced').html('<span><i class="icon-minus"></i></span> Advanced');
 
 	});
-
-	$('#report-advanced-block').live('hidden', function()
+			
+	$('#reports-listerners-container').on('hidden', '#report-advanced-block', function(e)
 	{
 		$('#report_advanced').html('<span><i class="icon-plus"></i></span> Advanced');
 	});
+	
+	$('#reports-listerners-container').on('change', '#duration', function(e)
+			{
+				var frequency = $("#duration").val();
+				if (frequency == "DAILY")
+				{
+					$("#contact_report_weekday").css("display", "none");
+					$("#contact_report_day").css("display", "none");
+					$("#contact_report_time").css("display", "block");
 
-	$("#duration").die().live('change', function(e)
-	{
-		var frequency = $("#duration").val();
-		if (frequency == "DAILY")
-		{
-			$("#contact_report_weekday").css("display", "none");
-			$("#contact_report_day").css("display", "none");
-			$("#contact_report_time").css("display", "block");
+				}
+				else if (frequency == "WEEKLY")
+				{
+					$("#contact_report_day").css("display", "none");
+					$("#contact_report_time").css("display", "block");
+					$("#contact_report_weekday").css("display", "block");
 
-		}
-		else if (frequency == "WEEKLY")
-		{
-			$("#contact_report_day").css("display", "none");
-			$("#contact_report_time").css("display", "block");
-			$("#contact_report_weekday").css("display", "block");
+				}
+				else if (frequency == "MONTHLY")
+				{
+					$("#contact_report_weekday").css("display", "none");
+					$("#contact_report_time").css("display", "block");
+					$("#contact_report_day").css("display", "block");
 
-		}
-		else if (frequency == "MONTHLY")
-		{
-			$("#contact_report_weekday").css("display", "none");
-			$("#contact_report_time").css("display", "block");
-			$("#contact_report_day").css("display", "block");
-
-		}
+				}
 	});
-
-})
+}
 
 function reportsContactTableView(base_model, customDatefields, view)
 {
@@ -271,7 +262,7 @@ function reportsContactTableView(base_model, customDatefields, view)
 
 function deserialize_multiselect(data, el)
 {
-	$("#content").html(el);
+	$("#reports-listerners-container").html(el);
 
 	if (!data['fields_set'])
 		return;

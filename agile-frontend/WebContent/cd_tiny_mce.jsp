@@ -26,13 +26,51 @@
 	String LIB_PATH = "/";
 %>
 	
-<!-- Bootstrap  -->
+<!-- Bootstrap -->
 <link rel="stylesheet" type="text/css"	href="<%= CSS_PATH%>css/bootstrap-<%=template%>.min.css" />
-<link rel="stylesheet" type="text/css"	href="<%= CSS_PATH%>css/bootstrap-responsive.min.css" />
 
-<!-- New UI -->
-<link rel="stylesheet" type="text/css" href="flatfull/css/bootstrap.css">
-<link rel="stylesheet" type="text/css" href="flatfull/css/app.css">
+<!-- New UI 
+<link rel="stylesheet" type="text/css" href="flatfull/css/bootstrap.css"> -->
+<link rel="stylesheet" type="text/css" href="flatfull/css/app.css">  
+
+<style type="text/css">
+ .alert-warning {
+    color: #8a6d3b;
+    background-color: #fcf8e3;
+    border-color: #faebcc;
+}
+.alert {
+    padding: 15px;
+    margin-bottom: 20px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+}
+
+.btn {
+    display: inline-block;
+    padding: 6px 12px;
+    margin-bottom: 0;
+    font-size: 14px;
+    font-weight: normal;
+    line-height: 1.42857143;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    -ms-touch-action: manipulation;
+    touch-action: manipulation;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    background-image: none;
+    border: 1px solid transparent;
+    border-radius: 1px;
+}
+
+div[role="presentation"] { 
+}
+</style>
 	
 <script type="text/javascript" src="lib/jquery.min.js"></script>
 <script type="text/javascript" src="js/designer/tinymce/tinymce.min.js"></script>
@@ -104,6 +142,14 @@ function set_up_merge_fields(editor)
 	});
 	
 	return menu;
+}
+
+function setTinyMCEImageUploadURL(url){
+	
+	var elem = $('input')[0];
+	
+    $(elem).val(url).trigger("change");
+    
 }
 
 
@@ -278,7 +324,7 @@ function init_tinymce()
                 	
                 	window.location = '/templates.jsp?id=tinyMCEhtml_email&t='+type;
                 }
-            });
+            }); 
             
             editor.on('change', function(e) {
                 var isWarning = should_warn(tinyMCE.activeEditor.getContent());
@@ -405,7 +451,7 @@ function showWarning(isWarning)
                     <p id="loading-msg">Loading HTML Editor...</p>
                     <textarea name="content" id='content' rows="30" cols="90" style="display:none;"></textarea>
                     <br/>
-                    <p><a href="#" id="save_html" class="btn btn-large pull-right" style="font-weight: bold;">Save</a></p>
+                    <p style="text-align: right;"><a href="#" id="save_html" class="btn btn-default btn-large" style="font-weight: bold;">Save</a></p>
                 </form>
             </div>
         </div>
