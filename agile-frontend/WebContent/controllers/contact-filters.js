@@ -76,7 +76,7 @@ var ContactFiltersRouter = Backbone.Router.extend({
 		var ContactFilter = new Base_Model_View({ url : 'core/api/filters', model : contact_filter, template : "filter-contacts",
 			window : 'contact-filters', postRenderCallback : function(el)
 			{
-				$(el).live('agile_model_loaded', function(e) {
+				$(el).on('agile_model_loaded', function(e) {
 					$("#contact_type").trigger('change');
 				})
 				$("#content").html(LOADING_HTML);

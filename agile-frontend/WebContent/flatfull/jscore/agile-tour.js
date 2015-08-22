@@ -136,7 +136,7 @@ function start_tour(key, el)
 	}
 
 	// Tour should be initialized only after page is loaded
-	$('body').live('agile_collection_loaded', function(event, element)
+	$("body").on('agile_collection_loaded', 'body', function(event, element)
 	{
 		if (tour_flag)
 			return;

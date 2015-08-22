@@ -5,12 +5,10 @@
  * same label for different fields then error message is shown and will not send
  * request to save.
  */
-$(function()
-{
+function initializeImportListeners(){
 
-	$('#google-import').die().live('click', function(e)
-	{
-
+	$('#prefs-tabs-content #google-import').off();
+    $('#prefs-tabs-content').on('click', '#google-import', function(e){
 		
 		// URL to return, after fetching token and secret key from LinkedIn
 		var callbackURL = window.location.href + "/contacts";
@@ -52,7 +50,8 @@ $(function()
 
 	});
 	
-	$("#google-import-prefs-delete").die().live("click", function(e){
+	$('#prefs-tabs-content #google-import-prefs-delete').off();
+	 $('#prefs-tabs-content').on('click', '#google-import-prefs-delete', function(e){
 		e.preventDefault();
 		var disabled = $(this).attr("disabled");
 		if(disabled)
@@ -67,8 +66,9 @@ $(function()
 			App_Widgets.contact_sync_google.render(true);
 		}}));
 	});
-	
-	$("#sync-type").die().live('change', function(e){
+
+	$('#prefs-tabs-content #sync-type').off();
+	$('#prefs-tabs-content').on('change', '#sync-type', function(e){
 		e.preventDefault();
 		var value = $(this).val();
 		if(value == "AGILE_TO_CLIENT" || value == "TWO_WAY")
@@ -92,7 +92,8 @@ $(function()
 		
 	})
 	
-	$(".save-contact-prefs").die().live('click', function(e){
+	$('#prefs-tabs-content .save-contact-prefs').off();
+	$('#prefs-tabs-content').on('click', '.save-contact-prefs', function(e){
 		e.preventDefault();
 		var disabled = $(this).attr("disabled");
 		if(disabled)
@@ -125,8 +126,8 @@ $(function()
 		
 	})
 	
-	
-	$('#quickbook_sync_prefs').die().live('click',function(e){
+	$('#prefs-tabs-content #quickbook_sync_prefs').off();
+	$('#prefs-tabs-content').on('click', '#quickbook_sync_prefs', function(e){
 		e.preventDefault();
 		var disable = $(this).attr('disabled');
 		if(disable)
@@ -152,7 +153,8 @@ $(function()
 		
 	});
 	
-	$('#xero_sync_prefs').die().live('click',function(e){
+	$('#prefs-tabs-content #xero_sync_prefs').off();
+	$('#prefs-tabs-content').on('click', '#xero_sync_prefs', function(e){
 		e.preventDefault();
 		var disable = $(this).attr('disabled');
 		if(disable)
@@ -178,7 +180,8 @@ $(function()
 		
 	});
 	
-	$('#freshbooks_sync_prefs').die().live('click',function(e){
+	$('#prefs-tabs-content #freshbooks_sync_prefs').off();
+	$('#prefs-tabs-content').on('click', '#freshbooks_sync_prefs', function(e){
 					e.preventDefault();
 					var disable = $(this).attr('disabled');
 					if(disable)
@@ -204,9 +207,54 @@ $(function()
 					
 				});
 
+	//oauth request for xero
+$('#prefs-tabs-content #xeroconnect').off();
+$('#prefs-tabs-content').on('click', '#xeroconnect', function(e){
+	var callbackURL = window.location.href;
+	console.log(callbackURL);
 
-	
+	// For every request of import, it will ask to grant access
+	window.location = "/scribe?service=xero&return_url=" + encodeURIComponent(callbackURL);
+	return false;
 });
+
+$('#prefs-tabs-content #sync-google-calendar').off();
+$("#prefs-tabs-content").on('click', '#sync-google-calendar', function(e)
+	{
+		e.preventDefault();
+
+		// URL to return, after fetching token and secret key from LinkedIn
+		var callbackURL = window.location.href;
+
+		// For every request of import, it will ask to grant access
+		window.location = "/scribe?service=google_calendar&return_url=" + encodeURIComponent(callbackURL);
+	});
+
+	$('#prefs-tabs-content #sync-google-calendar-delete').off();
+	$("#prefs-tabs-content").on('click', '#sync-google-calendar-delete', function(e)
+	{
+		e.preventDefault();
+
+		var disabled = $(this).attr("disabled");
+		if (disabled)
+			return;
+
+		$(this).attr("disabled", "disabled");
+
+		$(this).after(getRandomLoadingImg());
+		App_Widgets.calendar_sync_google.model.url = "/core/api/calendar-prefs"
+		console.log(App_Widgets.calendar_sync_google.model.destroy({ success : function()
+		{
+
+			App_Widgets.calendar_sync_google.model.clear();
+			App_Widgets.calendar_sync_google.model.url = "/core/api/calendar-prefs/get"
+			App_Widgets.calendar_sync_google.render(true);
+			erase_google_calendar_prefs_cookie();
+
+		} }));
+	});
+	
+}
 
 function show_success_message_after_save_button(message, el)
 {
@@ -223,16 +271,7 @@ function show_success_message_after_save_button(message, el)
 		
 }
 
-//oauth request for xero
 
-$('#xeroconnect').die().live('click', function(e){
-	var callbackURL = window.location.href;
-	console.log(callbackURL);
-
-	// For every request of import, it will ask to grant access
-	window.location = "/scribe?service=xero&return_url=" + encodeURIComponent(callbackURL);
-	return false;
-});
 
 
 //Compute the edit distance between the two given strings

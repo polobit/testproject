@@ -52,7 +52,7 @@ function workflow_alerts(title, message , template, callback){
 function send_verify_email()
 {
 	// On Enter Key
-	$('#verify-email-form').find('input').die().live('keypress', function(e){
+	$('#verify-email-form').find('input').on('keypress', function(e){
 		
 		// Enter key
 		if(e.type== 'keypress' && e.which != 13)
@@ -64,7 +64,7 @@ function send_verify_email()
 		$('#verify-email-send').trigger('click');
 	});
 
-	$('#verify-email-send').die().live('click', function(e){
+	$('#verify-email-send').on('click', function(e){
 		
 		e.preventDefault();
 

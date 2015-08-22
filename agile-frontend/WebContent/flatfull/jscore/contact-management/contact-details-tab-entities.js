@@ -61,9 +61,9 @@ var contact_details_tab = {
 	            	if($(this).find('.priority_type').text().trim() == "High") {
             			$(this).css("border-left","3px solid #f05050");
             		}else if($(this).find('.priority_type').text().trim() == "Normal"){
-            			$(this).css("border-left","3px solid #fad733");
+            			$(this).css("border-left","3px solid #7266ba");
             		}else if($(this).find('.priority_type').text().trim() == "Low") {
-            			$(this).css("border-left","3px solid #edf1f2");
+            			$(this).css("border-left","3px solid #fad733");
             		}
 	            	});
 	            }
@@ -109,9 +109,9 @@ var contact_details_tab = {
 		            		if($(this).find('.priority_type').text().trim()== "HIGH") {
 		            			$(this).css("border-left","3px solid #f05050");
 		            		}else if($(this).find('.priority_type').text().trim() == "NORMAL"){
-		            			$(this).css("border-left","3px solid #fad733");
+		            			$(this).css("border-left","3px solid #7266ba");
 		            		}else if($(this).find('.priority_type').text().trim() == "LOW") {
-		            			$(this).css("border-left","3px solid #edf1f2");
+		            			$(this).css("border-left","3px solid #fad733");
 		            		}
 		            	});
 		            }

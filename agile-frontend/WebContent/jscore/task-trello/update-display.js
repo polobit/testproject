@@ -35,7 +35,7 @@ function displaySettings()
 // Load and display slider in update task modal of task for progress.
 function loadProgressSlider(el)
 {
-	head.load(CSS_PATH + 'css/jslider.css', LIB_PATH + 'lib/jquery.slider.min.js', function()
+	head.load(LIB_PATH + 'lib/jquery.slider.min.js', function()
 	{
 		$(".progress_slider", el).slider({ from : 0, to : 100, step : 1, skin : "round", onstatechange : function(value)
 		{

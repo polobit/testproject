@@ -1,6 +1,10 @@
-$(function()
-{
-	$("#widget-prefs-save").die().live('click', function(e)
+function initializeWidgetUtilListeners(){
+	
+}
+
+$(function(){
+	
+	$('#content').on('click', '#widget-prefs-save', function(e)
 	{
 		e.preventDefault();
 
@@ -98,7 +102,7 @@ function clickdesk_save_widget_prefs()
 	$('#save_clickdesk_prefs').unbind("click");
 
 	// On click of save button, check input and save details
-	$('#save_clickdesk_prefs').die().live('click', function(e)
+	$('body').on('click', '#save_clickdesk_prefs', function(e)
 	{
 		e.preventDefault();
 
@@ -137,7 +141,7 @@ function helpscout_save_widget_prefs()
 	$('#save_api_key').unbind("click");
 
 	// Saves the API key
-	$('#save_api_key').die().live('click', function(e)
+	$('body').on('click', '#save_api_key', function(e)
 	{
 		e.preventDefault();
 
@@ -177,7 +181,7 @@ function freshbook_save_widget_prefs()
 	$('#freshbooks_save_token').unbind("click");
 
 	// On click of save button, check input and save details
-	$('#freshbooks_save_token').die().live('click', function(e)
+	$('body').on('click', '#freshbooks_save_token', function(e)
 	{
 		e.preventDefault();
 
@@ -218,7 +222,7 @@ function rapleaf_save_widget_prefs()
 	$('#save_api_key').unbind("click");
 
 	// Saves the API key
-	$('#save_api_key').die().live('click', function(e)
+	$('body').on('click', '#save_api_key', function(e)
 	{
 		e.preventDefault();
 
@@ -263,15 +267,21 @@ function zendesk_save_widget_prefs()
 	$('#save_prefs').unbind("click");
 
 	// On click of save button, check input and save details
-	$('#save_prefs').die().live('click', function(e)
+	$('body').on('click', '#save_prefs', function(e)
 	{
 		e.preventDefault();
 
 		// Checks whether all input fields are given
-		if (!isValidForm($("#zendesk_login_form")))
-		{
+		try{
+			if (!isValidForm($("#zendesk_login_form")))
+			{
+				return;
+			}
+
+		}catch(err){
 			return;
 		}
+		
 		// Saves Zendesk preferences in ClickDesk widget
 		// object
 		saveZendeskWidgetPrefs();
@@ -318,15 +328,20 @@ function sip_save_widget_prefs()
 	$('#save_prefs').unbind("click");
 
 	// On click of save button, check input and save details
-	$('#save_prefs').die().live('click', function(e)
+	$('body').on('click', '#save_prefs', function(e)
 	{
 		e.preventDefault();
 
 		// Checks whether all input fields are given
-		if (!isValidForm($("#sip_login_form")))
-		{
+		try{
+			if (!isValidForm($("#sip_login_form")))
+					{
+						return;
+					}			
+		}catch(err){
 			return;
 		}
+		
 		// Saves Sip preferences in ClickDesk widget
 		// object
 		saveSipWidgetPrefs();
@@ -377,7 +392,7 @@ function twilioio_save_widget_prefs()
 	$('#save_prefs').unbind("click");
 
 	// On click of save button, check input and save details
-	$('#save_prefs').die().live('click', function(e)
+	$('body').on('click', '#save_prefs', function(e)
 	{
 		e.preventDefault();
 
@@ -390,10 +405,15 @@ function twilioio_save_widget_prefs()
 		}
 
 		// Checks whether all input fields are given
-		if (!isValidForm($("#twilioio_login_form")))
-		{
+		try{
+			if (!isValidForm($("#twilioio_login_form")))
+			{
+				return;
+			}
+		}catch(err){
 			return;
 		}
+		
 
 		if ($("#twilio_from_numbers option:selected").val() == "" && $("#twilio_numbers option:selected").val() == "")
 		{
@@ -460,7 +480,7 @@ function callscript_save_widget_prefs()
 	$('#save_prefs').unbind("click");
 
 	// On click of save button, check input and save details
-	$('#save_prefs').die().live('click', function(e)
+	$('body').on('click', '#save_prefs', function(e)
 	{
 		e.preventDefault();		
 
@@ -471,10 +491,15 @@ function callscript_save_widget_prefs()
 		}
 
 		// Checks whether all input fields are given
-		if (!isValidForm($("#callscriptruleForm")))
-		{
+		try{
+			if (!isValidForm($("#callscriptruleForm")))
+			{
+				return;
+			}
+		}catch(err){
 			return;
-		}		
+		}
+				
 
 		// Saves call script preferences in callscript widget object
 		saveCallScriptWidgetPrefs();
@@ -579,6 +604,7 @@ function show_set_up_widget(widget_name, template_id, url, model)
 	var el;
 	var models;
 	$('#prefs-tabs-content').html(getRandomLoadingImg());
+	initializeWidgetUtilListeners();
 	if (model)
 	{
 		console.log(model)
@@ -735,7 +761,7 @@ function set_up_access(widget_name, template_id, data, url, model)
 	$('#PrefsTab .select').removeClass('select');
 	$('.add-widget-prefs-tab').addClass('select');
 
-	$(".revoke-widget").die().live('click', function(e)
+	$('body').on('click', '.revoke-widget', function(e)
 	{
 
 		console.log($(this).attr("widget-name"));
@@ -868,7 +894,7 @@ function xero_save_widget_prefs()
 	$('#xero_save_token').unbind("click");
 	alert("hello in xero save")
 	// On click of save button, check input and save details
-	$('#xero_save_token').die().live('click', function(e)
+	$('body').on('click', '#xero_save_token', function(e)
 	{
 		e.preventDefault();
 
@@ -902,7 +928,7 @@ function chargify_save_widget_prefs()
 	$('#chargify_save_api_key').unbind("click");
 
 	// Saves the API key
-	$('#chargify_save_api_key').die().live('click', function(e)
+	$('body').on('click', '#chargify_save_api_key', function(e)
 	{
 		e.preventDefault();
 

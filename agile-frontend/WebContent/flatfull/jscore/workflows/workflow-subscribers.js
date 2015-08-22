@@ -1,12 +1,7 @@
 $(function()
 {
-
-	$("#select-all-active-contacts")
-			.die()
-			.live(
-					'click',
-					function(e)
-					{
+    $('#content').on('click', '#select-all-active-contacts', function(e)
+	{
 						e.preventDefault();
 						SUBSCRIBERS_SELECT_ALL = true;
 						$('#content')
@@ -23,11 +18,7 @@ $(function()
 						});
 					});
 
-	$("#select-all-active-contacts-revert")
-			.die()
-			.live(
-					'click',
-					function(e)
+    $('#content').on('click', '#select-all-active-contacts-revert', function(e)
 					{
 						e.preventDefault();
 						SUBSCRIBERS_SELECT_ALL = false;

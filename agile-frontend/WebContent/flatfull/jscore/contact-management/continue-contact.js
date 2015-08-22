@@ -194,7 +194,7 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
 		}
 		else if (isValidField(form_id + ' #contact_company'))
 		{
-			if ($form.find('#contact_company').attr('value').length > 100)
+			if ($form.find('#contact_company').prop('value').length > 100)
 			{
 				show_error(modal_id, form_id, 'duplicate-email', 'Company name too long. Please restrict upto 100 characters.');
 				enable_save_button($(saveBtn));// Remove loading image
@@ -290,7 +290,7 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
 
 		if (isValidField('company_name'))
 		{
-			var companyName = $form.find('#company_name').attr('value');
+			var companyName = $form.find('#company_name').prop('value');
 			if (companyName.length > 100)
 			{
 				// Company name too long, show error and return;
@@ -770,14 +770,14 @@ function custom_Property_JSON(name, type, form_id)
 $(function()
 {
 
-	$("#content [name='contact_company_id'] a.close").live('click', function()
+	$('body').on('click', '#content [name="contact_company_id"] a.close', function(e)
 	{
 		$("#content #contact_company").show();
 		$("#content [name='contact_company_id']").html('');
 	})
 
 	// Clones multiple fields
-	$("a.multiple-add").die().live('click', function(e)
+	$('body').on('click', 'a.multiple-add', function(e)
 	{
 		e.preventDefault();
 
@@ -786,7 +786,7 @@ $(function()
 	});
 
 	// Removes multiple fields
-	$("a.multiple-remove").live('click', function(e)
+	$('body').on('click', 'a.multiple-remove', function(e)
 	{
 		e.preventDefault();
 
@@ -801,13 +801,13 @@ $(function()
 	});
 
 	// Update button click event in continue-contact form
-	$("#update").die().live('click', function(e)
+	$('body').on('click', '#update', function(e)
 	{
 		serialize_and_save_continue_contact(e, 'continueform', 'personModal', false, true, this, "tags_source_continue_contact");
 	});
 
 	// Close button click event in continue-contact form
-	$("#close").live('click', function(e)
+	$('body').on('click', '#close', function(e)
 	{
 		e.preventDefault();
 		var id = $('#continueform input[name=id]').val();
@@ -825,7 +825,7 @@ $(function()
 	});
 
 	// Update button click event in continue-company
-	$("#company-update").die().live('click', function(e)
+	$('body').on('click', '#company-update', function(e)
 	{
 		serialize_and_save_continue_contact(e, 'continueCompanyForm', 'companyModal', false, false, this,'tags_source_continue_company');
 	});

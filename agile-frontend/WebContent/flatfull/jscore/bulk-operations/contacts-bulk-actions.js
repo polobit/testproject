@@ -16,10 +16,7 @@ $(function()
 	 * Bulk operations - Change owner Shows all the users as drop down list to
 	 * select one of them as the owner for the selected contacts.
 	 */
-	$("#bulk-owner")
-			.live(
-					'click',
-					function(e)
+	$("body").on("click", "#bulk-owner", function(e)
 					{
 						e.preventDefault();
 
@@ -54,7 +51,7 @@ $(function()
 
 		// Yes callback
 		// Bind a custom event to trigger on loading the form
-		$('body').die('fill_owners').live('fill_owners', function(event)
+		$("body").off('fill_owners').on("fill_owners", function(event)
 		{
 			var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
 			fillSelect('ownerBulkSelect', '/core/api/users', 'domainUsers', 'no-callback ', optionsTemplate);
@@ -70,7 +67,7 @@ $(function()
 		 * Changes the owner by sending the new owner name as path parameter and
 		 * contact ids as form data of post request
 		 */
-		$('#changeOwnerToBulk').die().live('click', function(e)
+		$("body").on("click", "#changeOwnerToBulk", function(e)
 		{
 			e.preventDefault();
 
@@ -90,7 +87,7 @@ $(function()
 
 			var url;
 
-			var new_owner = $('#ownerBulkSelect option:selected').attr('value');
+			var new_owner = $('#ownerBulkSelect option:selected').prop('value');
 			url = '/core/api/bulk/update?action_type=CHANGE_OWNER&owner=' + new_owner;
 			var json = {};
 			json.contact_ids = id_array;
@@ -106,10 +103,7 @@ $(function()
 	 * Bulk operations - Adds to campaign Shows all the workflows as drop down
 	 * list to select one of them to subscribe the selected contacts
 	 */
-	$("#bulk-campaigns")
-			.live(
-					'click',
-					function(e)
+	$("body").on("click", "#bulk-campaigns", function(e)
 					{
 						e.preventDefault();
 
@@ -210,7 +204,7 @@ $(function()
 
 		console.log(filter);
 
-		$('body').die('fill_campaigns').live('fill_campaigns', function(event)
+        $("body").off('fill_campaigns').on("fill_campaigns", function(event)
 		{
 			var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
 			fillSelect('campaignBulkSelect', '/core/api/workflows', 'workflow', 'no-callback ', optionsTemplate);
@@ -223,7 +217,7 @@ $(function()
 		 * Subscribes the selected contacts to a campaign by sending the
 		 * workflow id and selected contacts' ids.
 		 */
-		$('#addBulkTocampaign').die().live('click', function(e)
+		$("body").off('fill_campaigns').on("click", "#addBulkTocampaign", function(e)
 		{
 			e.preventDefault();
 
@@ -241,7 +235,7 @@ $(function()
 			// Show loading symbol until model get saved
 			// $('#campaignsBulkForm').find('span.save-status').html(getRandomLoadingImg());
 
-			var workflow_id = $('#campaignBulkSelect option:selected').attr('value');
+			var workflow_id = $('#campaignBulkSelect option:selected').prop('value');
 			var url = '/core/api/bulk/update?workflow_id=' + workflow_id + "&action_type=ASIGN_WORKFLOW";
 
 			var json = {};
@@ -257,11 +251,8 @@ $(function()
 	 * Bulk operations - Adds tags' Shows the existing tags with help of
 	 * typeahead to add tags to the selected contacts. Also we can add new tags.
 	 */
-	$("#bulk-tags")
-			.live(
-					'click',
-					function(e)
-					{
+	$("body").on("click", "#bulk-tags", function(e)
+			{
 						e.preventDefault();
 
 						if (!canRunBulkOperations())
@@ -335,7 +326,7 @@ $(function()
 		 * Add the tags to the selected contacts by sending the contact ids and
 		 * tags through post request to the appropriate url
 		 */
-		$('#addTagsToContactsBulk').die().live('click', function(e)
+		 $("body").on("click", "#addTagsToContactsBulk", function(e)
 		{
 			e.preventDefault();
 
@@ -406,10 +397,7 @@ $(function()
 	 * Bulk operations - Adds tags' Shows the existing tags with help of
 	 * typeahead to add tags to the selected contacts. Also we can add new tags.
 	 */
-	$("#bulk-tags-remove")
-			.live(
-					'click',
-					function(e)
+	$("body").on("click", "#bulk-tags-remove", function(e)
 					{
 						e.preventDefault();
 
@@ -485,11 +473,7 @@ $(function()
 		 * Add the tags to the selected contacts by sending the contact ids and
 		 * tags through post request to the appropriate url
 		 */
-		$('#removeTagsToContactsBulk')
-				.die()
-				.live(
-						'click',
-						function(e)
+		$("body").on("click", "#removeTagsToContactsBulk", function(e)
 						{
 							e.preventDefault();
 
@@ -555,10 +539,7 @@ $(function()
 	 * Bulk operations - Sends email to the bulk of contacts by filling up the
 	 * send email details like from, subject and body.
 	 */
-	$("#bulk-email")
-			.live(
-					'click',
-					function(e)
+	$("body").on("click", "#bulk-email", function(e)
 					{
 						e.preventDefault();
 
@@ -658,7 +639,7 @@ $(function()
 		if(id_array && id_array.length == 0)
 		id_array = get_contacts_bulk_ids();
 
-		$('body').die('fill_emails').live('fill_emails', function(event)
+        $("body").off('fill_emails').on("fill_emails", function(event)
 		{
 
 			var $emailForm = $('#emailForm');
@@ -704,7 +685,8 @@ $(function()
 		else
 			Backbone.history.navigate("bulk-email", { trigger : true });
 
-		$('#bulk-send-email').die().live('click', function(e)
+		$("body #bulk-send-email").off("click");
+		$("body").on("click", "#bulk-send-email", function(e)
 		{
 			e.preventDefault();
 
@@ -750,10 +732,8 @@ $(function()
 	 * Bulk Operations - Exports selected contacts in a CSV file as an
 	 * attachment to email of current domain user.
 	 */
-	$("#bulk-contacts-export")
-			.live(
-					'click',
-					function(e)
+	// $("body #bulk-contacts-export").off("click");
+	$("body").on("click", "#bulk-contacts-export", function(e)
 					{
 						e.preventDefault();
 
@@ -780,48 +760,46 @@ $(function()
 						// contacts</b>");
 						contacts_csv_modal.modal('show');
 
-						// If Yes clicked
-						$('#contacts-export-csv-confirm')
-								.die()
-								.live(
-										'click',
-										function(e)
-										{
-											e.preventDefault();
+						contacts_csv_modal.on('shown.bs.modal', function(){
+							// If Yes clicked
+							$("#contacts-export-csv-modal").on("click",'#contacts-export-csv-confirm', function(e)
+							{
+								e.preventDefault();
 
-											if ($(this).attr('disabled'))
-												return;
+								if ($(this).attr('disabled'))
+									return;
 
-											$(this).attr('disabled', 'disabled');
+								$(this).attr('disabled', 'disabled');
 
-											// Shows message
-											$save_info = $('<img src="img/1-0.gif" height="18px" width="18px"></img>&nbsp;&nbsp;<span><small class="text-success" style="font-size:15px; display:inline-block"><i>Email will be sent shortly.</i></small></span>');
-											$(this).parent('.modal-footer').find('.contacts-export-csv-message').append($save_info);
-											$save_info.show();
+								// Shows message
+								$save_info = $('<img src="img/1-0.gif" height="18px" width="18px"></img>&nbsp;&nbsp;<span><small class="text-success" style="font-size:15px; display:inline-block"><i>Email will be sent shortly.</i></small></span>');
+								$(this).parent('.modal-footer').find('.contacts-export-csv-message').append($save_info);
+								$save_info.show();
 
-											var url = '/core/api/bulk/update?action_type=EXPORT_CONTACTS_CSV';
+								var url = '/core/api/bulk/update?action_type=EXPORT_CONTACTS_CSV';
 
-											var json = {};
-											json.contact_ids = id_array;
-											json.data = JSON.stringify(CURRENT_DOMAIN_USER);
-											postBulkOperationData(url, json, undefined, undefined, function()
-											{
+								var json = {};
+								json.contact_ids = id_array;
+								json.data = JSON.stringify(CURRENT_DOMAIN_USER);
+								postBulkOperationData(url, json, undefined, undefined, function()
+								{
 
-												// hide modal after 3 secs
-												setTimeout(function()
-												{
-													contacts_csv_modal.modal('hide');
-												}, 3000);
+									// hide modal after 3 secs
+									setTimeout(function()
+									{
+										contacts_csv_modal.modal('hide');
+									}, 3000);
 
-												// Uncheck contacts table and
-												// hide bulk actions button.
-												$('body').find('#bulk-actions').css('display', 'none');
-												$('body').find('#bulk-select').css('display', 'none');
-												$('table#contacts-table').find('.thead_check').removeAttr('checked');
-												$('table#contacts-table').find('.tbody_check').removeAttr('checked');
+									// Uncheck contacts table and
+									// hide bulk actions button.
+									$('body').find('#bulk-actions').css('display', 'none');
+									$('body').find('#bulk-select').css('display', 'none');
+									$('table#contacts-table').find('.thead_check').removeAttr('checked');
+									$('table#contacts-table').find('.tbody_check').removeAttr('checked');
 
-											}, "no_noty");
-										});
+								}, "no_noty");
+							});
+						});						
 
 					});
 	
@@ -829,10 +807,8 @@ $(function()
 	 * Bulk Operations - Exports selected contacts in a CSV file as an
 	 * attachment to email of current domain user.
 	 */
-	$("#bulk-companies-export")
-			.live(
-					'click',
-					function(e)
+	$("body #bulk-companies-export").off("click");
+	$("body").on("click", "#bulk-companies-export", function(e)
 					{
 						e.preventDefault();
 
@@ -859,12 +835,9 @@ $(function()
 						// contacts</b>");
 						companies_csv_modal.modal('show');
 
+						companies_csv_modal.on('shown.bs.modal', function(){
 						// If Yes clicked
-						$('#companies-export-csv-confirm')
-								.die()
-								.live(
-										'click',
-										function(e)
+						$("#companies-export-csv-modal").on("click", '#companies-export-csv-confirm', function(e)
 										{
 											e.preventDefault();
 
@@ -902,14 +875,16 @@ $(function()
 											}, "no_noty");
 										});
 
+
+						});
+
+
+						
+
 					});
 
-
-	$("#select-all-available-contacts")
-			.die()
-			.live(
-					'click',
-					function(e)
+	$("body #select-all-available-contacts").off("click");
+    $("body").on("click", "#select-all-available-contacts", function(e)
 					{
 						e.preventDefault();
 						SELECT_ALL = true;
@@ -936,11 +911,8 @@ $(function()
 						});
 					});
 
-	$("#select-all-revert")
-			.die()
-			.live(
-					'click',
-					function(e)
+    $("body #select-all-available-contacts").off("click");
+    $("body").on("click", "#select-all-revert", function(e) 
 					{
 						e.preventDefault();
 						SELECT_ALL = false;
@@ -1022,7 +994,7 @@ function toggle_contacts_bulk_actions_dropdown(clicked_ele, isBulk, isCampaign)
 
 	console.log(readCookie('contact_filter'));
 	$('body').find('#bulk-select').css('display', 'none')
-	if ($(clicked_ele).attr('checked') == 'checked')
+	if ($(clicked_ele).is(':checked'))
 	{
 		$('body').find('#bulk-actions').css('display', 'inline-block');
 		
@@ -1124,7 +1096,10 @@ function getSelectionCriteria()
 	}
 	
 	if(_BULK_CONTACTS == "#companies"){
-		return 'Companies';
+		if(filter_id)
+			return filter_id;
+		else
+			return 'Companies';
 	}
 
 	// If filter cookie is not available then it returns either '#contacts' of
