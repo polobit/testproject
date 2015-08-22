@@ -319,8 +319,8 @@
 	function setupCompanyViews(cel, button_name) {
 
 		// Creates a view for custom views
-		head.load(CSS_PATH + 'css/bootstrap_submenu.css',  function()
-		{
+		/*head.load(CSS_PATH + 'css/bootstrap_submenu.css',  function()
+		{*/
 			var el = getTemplate("company-view-collection");
 			$("#view-list", cel).html(el);
 			updateSelectedSortKey($("#view-list", cel));
@@ -331,7 +331,7 @@
 			// the view is show in the custom view button.
 			//if (button_name)
 				//$("#view-list", cel).find('.custom_view').append(button_name);
-		});
+		// });
 	}
 	
 	var updateSelectedSortKey = function(el) {
@@ -708,30 +708,6 @@
 	};
 	
 	company_detail_tab.initEvents = function(){
-		
-		// Adding contact when user clicks Add contact button under Contacts tab in
-		// Company Page
-		$("body").on('click', '.contact-add-contact', function(e)
-		{
-			e.preventDefault();
-
-			// This is a hacky method. ( See jscore/contact-management/modals.js for
-			// its use )
-			// 'forceCompany' is a global variable. It is used to enforce Company
-			// name on Add Contact modal.
-			// Prevents user from removing this company from the modal that is
-			// shown.
-			// Disables typeahead, as it won't be needed as there will be no Company
-			// input text box.
-			var json = App_Companies.companyDetailView.model.toJSON();
-			forceCompany.name = getContactName(json); // name of Company
-			forceCompany.id = json.id; // id of Company
-			forceCompany.doit = true; // yes force it. If this is false the
-			// Company won't be forced.
-			// Also after showing modal, it is set to false internally, so
-			// Company is not forced otherwise.
-			$('#personModal').modal('show');
-		});
 		
 		$("body").on('click', '#contactDetailsTab a[href="#company-contacts"]', function(e)
 				{
