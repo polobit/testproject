@@ -558,7 +558,7 @@ public class EmailGatewayUtil
 		    SendGridUtil.sendSendGridMails(tasks, emailSender);
 		
 		else if (emailGateway.email_api == EMAIL_API.SES)
-			AmazonSESUtil.sendBulkMails(tasks, emailSender);
+			AmazonSESUtil.sendSESMails(tasks, emailSender);
 
 		addEmailLogs(tasks);
 
