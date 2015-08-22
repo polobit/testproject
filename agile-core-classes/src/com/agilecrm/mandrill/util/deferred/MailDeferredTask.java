@@ -6,6 +6,7 @@ import com.agilecrm.account.util.EmailGatewayUtil;
 import com.google.appengine.api.taskqueue.DeferredTask;
 import com.thirdparty.sendgrid.SendGrid;
 import com.thirdparty.ses.AmazonSES;
+import com.thirdparty.ses.util.AmazonSESUtil;
 import com.thirdparty.mandrill.Mandrill;
 
 /**
@@ -96,12 +97,6 @@ public class MailDeferredTask implements DeferredTask
 	{
 	    emailGateway = EmailGatewayUtil.getEmailGateway();
 
-	}
-	catch (Exception e)
-	{
-	    e.printStackTrace();
-	}
-
 	// If null or Mandrill
 	if (emailGateway == null || emailGateway.email_api == EmailGateway.EMAIL_API.MANDRILL)
 	    Mandrill.sendMail(apiKey, true, fromEmail, fromName, to, cc, bcc, subject, replyTo, html, text, metadata,
@@ -113,6 +108,13 @@ public class MailDeferredTask implements DeferredTask
 	
 	// Amazon SES
 	else if (emailGateway.email_api == EMAIL_API.SES)
-		AmazonSES.sendEmail(emailGateway.api_key, emailGateway.api_user, emailGateway.regions, fromEmail, fromName, to, cc, bcc, subject, replyTo, html, text);
+		AmazonSESUtil.sendEmail(emailGateway.api_key, emailGateway.api_user, emailGateway.regions, fromEmail, fromName, to, cc, bcc, subject, replyTo, html, text);
+	
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    System.err.println("Exception occured in MailDeferred Task ..." + e.getMessage());
+	}
     }
 }
