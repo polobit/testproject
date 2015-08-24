@@ -847,16 +847,6 @@ public class BulkOperationsAPI
 
 	int i = 0;
 
-	if (i + 10 == 10)
-	{
-	    ContactExportPullTask task = new ContactExportPullTask(contact_ids, filter, dynamicFilter, currentUserId,
-		    NamespaceManager.get());
-	    PullQueueUtil.addToPullQueue("export-pull-queue", task, NamespaceManager.get());
-
-	    // filter, dynamicFilter, data);
-	    return;
-	}
-
 	Exporter<Contact> exporter = ExportBuilder.buildContactExporter();
 	// If filter is not empty, 500 contacts are fetched on every
 	// iteration
