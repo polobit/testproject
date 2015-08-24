@@ -36,7 +36,7 @@ public class GCSServiceAgile
 	this.bucketName = bucketName;
     }
 
-    private GcsFilename getFileName()
+    public GcsFilename getFileName()
     {
 	return new GcsFilename(bucketName, fileName);
     }
