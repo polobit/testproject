@@ -13,7 +13,7 @@
 		if(!(track.lost_milestone && track.won_milestone) || track.won_milestone.length == 0 || track.lost_milestone.length == 0){
 			setDefaultLostAndWon(track,function(newTrack){
 				if(!(newTrack.lost_milestone && newTrack.won_milestone))
-					$('#milestone-set-msg').show();
+					$('#milestone-set-msg').css("display","inline");
 				return newTrack;
 			});
 		}
@@ -96,6 +96,7 @@
 				$('#'+formId+' i.mark-won').remove();
 				container.find('.milestone-name-block').append("<i data-toogle='tooltip' title='"+milestone_util.wonMsg+"' class='icon-like mark-won m-l-sm'></i>");
 				container.find('a.milestone-won').addClass('disabled');
+				$('.mark-won',container).tooltip();
 			});
 		}
 	};
@@ -116,6 +117,7 @@
 				$('#'+formId+' i.mark-lost').remove();
 				container.find('.milestone-name-block').append("<i data-toogle='tooltip' title='"+milestone_util.lostMsg+"' class='icon-dislike mark-lost m-l-sm'></i>");
 				container.find('a.milestone-lost').addClass('disabled');
+				$('.mark-lost',container).tooltip();
 			});
 		}
 	};
@@ -135,7 +137,7 @@
 				setLostMilestone($(this));
 		});
 		
-		$('.milestone-won, .milestone-lost, .mark-won, .mark-lost',el).tooltip();
+		$('.milestone-won, .milestone-lost, .mark-won, .mark-lost, .milestone-delete',el).tooltip();
 		
 	};
 	
