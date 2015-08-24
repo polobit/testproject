@@ -5,25 +5,18 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
-import java.nio.channels.Channels;
+import java.nio.channels.Channel;
 import java.util.ArrayList;
 import java.util.List;
 
 import au.com.bytecode.opencsv.CSVWriter;
 
-import com.agilecrm.contact.export.util.ContactExportCSVUtil;
-import com.agilecrm.file.readers.IFileInputStream;
-import com.google.appengine.api.files.AppEngineFile;
-import com.google.appengine.api.files.FileService;
-import com.google.appengine.api.files.FileServiceFactory;
-import com.google.appengine.api.files.FileWriteChannel;
+import com.agilecrm.export.gcs.GCSServiceAgile;
 
 public class CSVWriterAgile
 {
     private CSVWriter csvWriter = null;
-    FileWriteChannel writeChannel = null;
-    FileService fileService = null;
-    private IFileInputStream inputStream = null;
+    private Channel channel;
     private File file;
     private String path;
 
@@ -48,35 +41,15 @@ public class CSVWriterAgile
 	csvWriter = new CSVWriter(writer);
     }
 
-    /**
-     * Writes using appengine file service
-     */
-    public CSVWriterAgile()
+    public CSVWriterAgile(String fileName) throws IOException
     {
-	// Get a file service
-	fileService = FileServiceFactory.getFileService();
+	GCSServiceAgile service = new GCSServiceAgile(fileName, "agile-export");
 
-	// Create a new Blob file with mime-type "text/csv"
-	AppEngineFile file;
-	try
-	{
-	    file = fileService.createNewBlobFile("text/csv", ContactExportCSVUtil.getExportFileName("Contacts_"));
+	Writer writer = service.getOutputWriter();
 
-	    path = file.getFullPath();
+	channel = service.getOutputchannel();
 
-	    // Open a channel to write to it
-	    boolean lock = false;
-	    writeChannel = fileService.openWriteChannel(file, lock);
-
-	    csvWriter = new CSVWriter(Channels.newWriter(writeChannel, "UTF8"));
-
-	}
-	catch (IOException e)
-	{
-	    // TODO Auto-generated catch block
-	    e.printStackTrace();
-	}
-
+	csvWriter = new CSVWriter(writer);
     }
 
     public void writeNext(String[] row)
@@ -123,9 +96,9 @@ public class CSVWriterAgile
 	{
 	    csvWriter.close();
 
-	    if (writeChannel != null)
+	    if (channel != null)
 	    {
-		writeChannel.close();
+		channel.close();
 	    }
 	}
 	catch (IOException e)

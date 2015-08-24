@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import com.agilecrm.CSVWriterAgile;
 import com.agilecrm.contact.export.util.ContactExportBlobUtil;
@@ -18,6 +17,7 @@ import com.agilecrm.file.readers.ByteBufferBackedInputStream;
 import com.agilecrm.file.readers.IFileInputStream;
 import com.agilecrm.util.CacheUtil;
 import com.agilecrm.util.email.SendMail;
+import com.google.appengine.api.NamespaceManager;
 
 /**
  * Base level Abstract class for all exports (deals, contacts)
@@ -43,7 +43,15 @@ public abstract class AbstractCSVExporter<T> implements Exporter<T>
 
 	// csvWriter = new CSVWriterAgile(getOutputFile());
 
-	csvWriter = new CSVWriterAgile();
+	try
+	{
+	    csvWriter = new CSVWriterAgile(NamespaceManager.get());
+	}
+	catch (IOException e)
+	{
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	}
     }
 
     /**
