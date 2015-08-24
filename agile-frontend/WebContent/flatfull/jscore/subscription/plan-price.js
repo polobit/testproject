@@ -164,7 +164,8 @@ function setPriceTemplete(user_plan, element)
 function setPlan(user_plan)
 {
 	try{
-		var interval = "yearly", plan_type = "regular";
+
+	    var interval = "yearly", plan_type = "regular";
 		if(IS_NEW_USER && _plan_on_signup)
 		{
 			plan_type = _plan_on_signup.plan_type.toLowerCase();
@@ -189,9 +190,9 @@ function setPlan(user_plan)
 		}
 	
 		
-		$("#plan_type").attr('value', plan_type).trigger("change");
+		$("#plan_type").val(plan_type).trigger("change");
 		//$("ul.tagsli a." + interval).trigger("click");
-		$("#billing_cycle").attr('value', interval).trigger("change");
+		$("#billing_cycle").val(interval).trigger("change");
 		
 		
 		
@@ -208,6 +209,8 @@ function setPlan(user_plan)
 
 function initializeSubscriptionListeners(){
 		
+		$('#subscribe_plan_change').off("click");
+
 		$('#subscribe_plan_change').on('click', '.plan-collection-in', function(e){
 			 
 			$(this).find("[name='pro_vs_lite']").attr('checked','checked');
@@ -237,7 +240,7 @@ function initializeSubscriptionListeners(){
 	  	});
 
 		// Tags selection
-		$('#plans-panel').off('click').on('click', 'ul.tagsli a', function(e){
+		$('#subscribe_plan_change #plans-panel').off('click').on('click', 'ul.tagsli a', function(e){
 			
 			e.preventDefault();
 			
