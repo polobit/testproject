@@ -48,13 +48,13 @@ function updateActivityReport(id){
 	
 }
 
-$(function(){
+function initializeActivityReportsListeners(){
 	
-	$('#activityReportModal').live('hidden.bs.modal',function(e){
+	$('body').on('hidden.bs.modal', '#activityReportModal', function(e){
 		$('#users-list, #activity-type-list').multiSelect('deselect_all');
 	});
 	
-	$('#activity-reports-email-now').die().live('click',function(e){
+	$('#reports-listerners-container').on('click', '#activity-reports-email-now', function(e){
 		e.preventDefault();
 		e.stopPropagation();
 		var id = $(this).attr('data');
@@ -121,20 +121,20 @@ $(function(){
 				});
 	});
 	
-	$('#activity-type-list-select-all').die().live('click',function(e){
+	$('#reports-listerners-container').on('click', '#activity-type-list-select-all', function(e){
 		e.preventDefault();
 		$('#activity-type-list').multiSelect('select_all');
 	});
-	$('#activity-type-list-select-none').die().live('click',function(e){
+	$('#reports-listerners-container').on('click', '#activity-type-list-select-none', function(e){
 		e.preventDefault();
 		$('#activity-type-list').multiSelect('deselect_all');
 	});
 	
-	$('#users-list-select-all').die().live('click',function(e){
+	$('#reports-listerners-container').on('click', '#users-list-select-all', function(e){
 		e.preventDefault();
 		$('#users-list').multiSelect('select_all');
 	});
-	$('#users-list-select-none').die().live('click',function(e){
+	$('#reports-listerners-container').on('click', '#users-list-select-none', function(e){
 		e.preventDefault();
 		$('#users-list').multiSelect('deselect_all');
 	});
@@ -147,4 +147,4 @@ $(function(){
 			updateActivityReport($(this).closest('tr').find('.data').attr('data'));
 		});
 	*/
-});
+}

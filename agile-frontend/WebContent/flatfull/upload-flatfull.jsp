@@ -54,6 +54,9 @@ function returnBack()
 		 {
 			 window.opener.setImageURLInModal(url);
 		 }
+		 else if(id == "tinymce_image_upload"){
+			 window.opener.setTinyMCEImageUploadURL(url);
+		 }
 		 else
 		 {
 			 window.opener.setImageURL(url);

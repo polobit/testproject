@@ -18,6 +18,10 @@ function deserializeForm(data, form)
 	// Iterates through the data(which is to be populated in the form) and finds
 	// field elements in the form based on the name of the field and populates
 	// it. i represents key of the map, el is the value corresponding to key
+
+	// Reset tags html
+    // $(form).find(".contacts.tags").html("");
+
 	$
 			.each(
 					data,
@@ -430,7 +434,7 @@ function deserializeChainedElement(data, rule_element)
 		$.each(option_element, function(index, element)
 		{
 			// Selects the option
-			if ($(element).attr('value') == value)
+			if ($(element).prop('value') == value)
 			{
 				$(element).attr("selected", "selected");
 				var url = $(element).attr("url");
@@ -506,7 +510,7 @@ function deserializeChainedElementWebrule(data, rule_element)
 		$.each(option_element, function(index, element)
 		{
 			// Selects the option
-			if ($(element).attr('value') == value)
+			if ($(element).prop('value') == value)
 			{
 				if ((value == "UNSUBSCRIBE_CAMPAIGN" || value == "ASSIGN_CAMPAIGN") && data['RHS'])
 				{

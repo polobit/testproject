@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.Globals;
 import com.auth.Authorization;
 import com.google.api.services.taskqueue.Taskqueue;
 import com.google.api.services.taskqueue.Taskqueue.Tasks;
@@ -20,7 +21,7 @@ public class TaskUtil
 
 	Tasks tasksCollection = queue.tasks();
 
-	Lease lease = tasksCollection.lease(Authorization.PROJECT_NAME, taskName, numberOfTasks, leaseTime);
+	Lease lease = tasksCollection.lease(Globals.PROJECT_NAME, taskName, numberOfTasks, leaseTime);
 
 	com.google.api.services.taskqueue.model.Tasks tasks = lease.execute();
 

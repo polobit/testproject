@@ -6,7 +6,7 @@ cat $(find ../WebContent/controllers ! -path ../WebContent/controllers/app.js -n
 
 
 ## Not path is set to avoid duplicating backbone js files that is already included and min files that should not be include again jscore.
-cat $(find ../WebContent/jscore ! -path ../WebContent/jscore/backbone/\*.js ! -path  ../WebContent/jscore/min/*.js -name "*.js" ! -path  ../WebContent/jscore/min/flatfull/*.js -name "*.js") >> ../WebContent/jscore/min/js-all-min.js
+cat $(find ../WebContent/jscore ! -path ../WebContent/jscore/backbone/\*.js ! -path  ../WebContent/jscore/min/\*.js -name "*.js" ! -path  ../WebContent/jscore/min/flatfull/\*.js -name "*.js") >> ../WebContent/jscore/min/js-all-min.js
 
 cat ../WebContent/controllers/app.js >> ../WebContent/jscore/min/js-all-min.js
 
@@ -28,4 +28,3 @@ find ../WebContent/widgets/*.js -prune | while read f; do (echo "$f"; java -jar 
 
 
 ##java -jar 
-

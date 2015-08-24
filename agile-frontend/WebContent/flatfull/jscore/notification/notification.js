@@ -348,16 +348,26 @@ function check_browser_notification_settings(el)
 	}
 
 	// notification enable help
-	$('#enable-notification', el).die().live('click', function(e)
+	$('#enable-notification', el).on('click', function(e)
 	{
 		e.preventDefault();
+        // Checking modal existance
+		if($('#notification-enable-help-modal').length == 0){
+			   $("body").append(getTemplate("notification-enable-help-modal", {}));
+		}
+
 		$('#notification-enable-help-modal').modal("show");
 	});
 
 	// notification disable help
-	$('#disable-notification', el).die().live('click', function(e)
+	$('#disable-notification', el).on('click', function(e)
 	{
 		e.preventDefault();
+		 // Checking modal existance
+		if($('#notification-disable-help-modal').length == 0){
+			   $("body").append(getTemplate("notification-disable-help-modal", {}));
+		}
+
 		$('#notification-disable-help-modal').modal("show");
 	});
 }
@@ -483,7 +493,7 @@ function showNoty(type, message, position, notification_type, onCloseCallback,ti
 				}
 
 				// Set the handler for click
-				$('.noty_bar').die().live('click', function()
+				$('.noty_bar').on('click', function()
 				{
 
 					// // warning type is used for upgrade. So when cliked on it
@@ -609,7 +619,7 @@ function getImageUrl(message, notification_type)
 function notification_play_button()
 {
 	// Play notification sound when clicked on play icon.
-	$('#notification-sound-play').live('click', function(e)
+	$('body').on('click', '#notification-sound-play', function(e)
 	{
 		e.preventDefault();
 
