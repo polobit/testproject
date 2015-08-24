@@ -211,31 +211,36 @@
 	 * Init all the category related click events. Call this only when the category page is opened.
 	 */
 	categories.init = function(){
-		$('.show_task_category_field').die().live('click',function(e){
+		$('#category-tracks-accordion').on('click','.show_task_category_field',function(e){
+		//$('.show_task_category_field').die().live('click',function(e){
 			e.preventDefault();
 			$(this).parent().hide();
 			$('#task-category').find('.show_field').show();
 		});
 		
-	    $("#add_task_category").die().live('click', function(e){
+		$('#category-tracks-accordion').on('click','#add_task_category',function(e){
+	    //$("#add_task_category").die().live('click', function(e){
 	    	e.preventDefault();
 	    	saveCategory(this);
 	    });
 	    
-	    $('.category-delete').die().live('click',function(e){
+		$('#category-tracks-accordion').on('click','.category-delete',function(e){
+	    //$('.category-delete').die().live('click',function(e){
 	    	e.preventDefault();
 	    	$('#delete-category-confirm-dialog input').val($(this).attr('id'));
 	    	$('#category-name').text($(this).attr('data'));
 	    	$('#category-delete-modal').modal('show');
 	    });
 	    
-	    $('#category-delete-confirm').die().live('click',function(e){
+		$('body').on('click','#category-delete-confirm',function(e){
+	   // $('#category-delete-confirm').die().live('click',function(e){
 	    	e.preventDefault();
 	    	var id = $('#delete-category-confirm-dialog input').val();
 	    	deleteCategory(id);
 	    });
 	    
-	    $("#add_new_task_category").die().live("keypress",function(e){
+		$('#category-tracks-accordion').on('keypress','#add_new_task_category',function(e){
+	    //$("#add_new_task_category").die().live("keypress",function(e){
 	    	if(e.keyCode == 13)
 	    	{
 	    		$("#add_task_category").click();
