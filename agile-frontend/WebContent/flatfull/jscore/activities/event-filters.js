@@ -22,8 +22,13 @@ $(function()
 
 		}
 
-		if (calendar == "google")
+		if (calendar == "google"){
 			loadFullCalednarOrListView();
+		}
+		
+		if(calendar == "office"){
+			loadFullCalednarOrListView();
+		}
 
 	});
 
