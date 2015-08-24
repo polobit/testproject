@@ -770,7 +770,8 @@
 		   addTagsToCompany();
 		});
 		
-		$("#companyAddTags").die().live('keydown',function(e) {
+		$("body").on('keydown', "#companyAddTags",function(e) {
+		//$("#companyAddTags").die().live('keydown',function(e) {
 	    	if(e.which == 13 && !isTagsTypeaheadActive){
 	    		addTagsToCompany();
 	    		}
