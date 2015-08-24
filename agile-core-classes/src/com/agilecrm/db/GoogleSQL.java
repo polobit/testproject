@@ -392,7 +392,7 @@ public class GoogleSQL
     public static String getFutureDate()
     {
 
-	DateFormat dateFormat = new SimpleDateFormat("yyyy:MM:dd hh:mm:ss");
+	DateFormat dateFormat = new SimpleDateFormat("yyyy:MM:dd HH:mm:ss");
 
 	Calendar calendar = Calendar.getInstance();
 
