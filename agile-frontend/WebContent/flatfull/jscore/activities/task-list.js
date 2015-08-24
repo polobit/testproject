@@ -15,7 +15,7 @@ function includeTimeAgo(element){
 function initOwnerslist() {
 	
 	// Click events to agents dropdown and department
-	$("ul#owner-tasks li a, ul#type-tasks li a").die().live("click", function(e) {
+	$("body").on("click", 'ul#owner-tasks li a, ul#type-tasks li a', function(e) {
 				e.preventDefault();
 
 				// Show selected name
@@ -28,7 +28,7 @@ function initOwnerslist() {
 				updateData(url);
 				
 	});
-	$("ul#owner-tasks li a").die().live("click", function() {
+	$("body").on("click", 'ul#owner-tasks li a', function(e) {
 		
 		$('.task-heading').html($(this).html() +'&nbsp<small class="tasks-count"></small> <span style="font-size: small;color: #525252;  background-color: rgb(255,255,204);  border: 1px solid rgb(211,211,211);border-radius: 3px;padding: 3px 5px 3px 5px;">Try our <a href="#tasks-new">new look</a></span>');
 		//$('.task-heading').text($(this).html());
@@ -125,7 +125,7 @@ $(function(){
     * Customizes the delete operation
     * Deletes the entities
     */	
-	$('#bulk-complete').live('click', function(event){
+	$("body").on("click", '#bulk-complete', function(event) {
 		event.preventDefault();
 		var index_array = [];
 		var data_array = [];
@@ -152,7 +152,10 @@ $(function(){
             $('body').find(".select-none").html('<div class="alert alert-danger"><a class="close" data-dismiss="alert" href="#">&times;</a>You have not selected any records to complete. Please select at least one record to continue.</div>').show().delay(3000).hide(1);
 	
 		var due_task_count=getDueTasksCount();
-		$('#due_tasks_count').html(due_task_count);
+		if(due_task_count != 0)
+			$('#due_tasks_count').html(due_task_count);
+		else
+			$('#due_tasks_count').html("");
 		
 	});
 	

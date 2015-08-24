@@ -14,7 +14,7 @@ $(function(){
     * Prepends check-boxes to the tables which are having the class showCheckboxes, 
     * by triggering the event agile_collection_loaded from base-collection render event, while loading the collection.
     */ 	
-	$('body').live('agile_collection_loaded', function(event, el) {
+	$('body').on('agile_collection_loaded', function(event, el) {
 		//use class ignore-collection if any other table needs to be used inside the template.
 		var table_element = $('table:not(.ignore-collection)', el);
 		
@@ -81,11 +81,11 @@ $(function(){
     * Changes the checking status of table body check-boxes according to 
     * the status of table head check-box
     */	
-	$('.thead_check').live('click', function(event){
+	$('body').on('click', '.thead_check', function(event){
 		console.log( $(this).is(':checked'));
-		if(!$(this).attr('checked'))
+		if(!$(this).is(':checked'))
 		{
-			$('.tbody_check').removeAttr('checked');
+			$('.tbody_check').prop('checked',false);
 			
 			if (Current_Route == 'deals')
 				deal_bulk_actions.toggle_deals_bulk_actions_dropdown(undefined, true,$(this).parents('table').attr('id'));
@@ -94,9 +94,9 @@ $(function(){
 			
 		}
 		else
-			$('.tbody_check').attr('checked', 'checked');
+			$('.tbody_check').prop('checked',true);
 	
-		console.log($(this).attr('checked'));
+		console.log($(this).is(':checked'));
 		
 		// Show bulk operations only when thead check box is checked
 		if (Current_Route == 'deals')
@@ -111,7 +111,7 @@ $(function(){
     * and shows the bulk-actions drop down of contacts only when 
     * there is at least one check-box checked.
     */	
-	$('.tbody_check').live('click', function(event){
+	$('body').on('click', '.tbody_check', function(event){
 		event.stopPropagation();
 		
 		if (Current_Route == 'deals')

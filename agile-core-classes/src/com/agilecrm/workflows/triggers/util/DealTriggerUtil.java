@@ -78,17 +78,25 @@ public class DealTriggerUtil
 	 */
 	public static void checkMilestoneChange(Opportunity oldOpportunity, Opportunity updatedOpportunity)
 	{
-		// if no change in pipeline and milestone, return
-		if (oldOpportunity.pipeline_id.equals(updatedOpportunity.pipeline_id)
+		try
+		{
+			// if no change in pipeline and milestone, return
+			if (oldOpportunity.getPipeline_id().equals(updatedOpportunity.getPipeline_id())
 				&& oldOpportunity.milestone.equals(updatedOpportunity.milestone))
 			return;
 
-		System.out.println("Milestone changed from " + oldOpportunity.milestone + " to " + updatedOpportunity.milestone
+			System.out.println("Milestone changed from " + oldOpportunity.milestone + " to " + updatedOpportunity.milestone
 				+ " of deal " + updatedOpportunity.name);
 
-		// execute trigger for deal milestone change.
-		executeTriggerForDealsBasedOnCondition(updatedOpportunity.getContacts(), oldOpportunity, updatedOpportunity,
+			// execute trigger for deal milestone change.
+			executeTriggerForDealsBasedOnCondition(updatedOpportunity.getContacts(), oldOpportunity, updatedOpportunity,
 				Trigger.Type.DEAL_MILESTONE_IS_CHANGED);
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+			System.err.println("Exception occured while checking milestone change..." + e.getMessage());
+		}
 	}
 
 	/**

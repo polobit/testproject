@@ -1,42 +1,58 @@
 <script id="gmap-table-model-template" type="text/html">
 
 <td style="cursor:default;" class="select_checkbox">
-<label class="i-checks i-checks-sm">
-	<input class="tbody_check" type="checkbox"/>
-	<i></i>
-</label>
 </td>
 
-<td>
-	<div class="row-fluid">
+
 {{#if contact}}
-    	<div style="display:inline;padding-right:5px;height:auto;">
+<td class="data-contact" data="{{contact.id}}">
+	<div class="row-fluid">
+    	<div class="thumb-sm agile-img m-r-sm" style="margin-right:10px">
 {{#wrap_entity this.contact}}
-        	<img class="thumbnail img-inital" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}" width="40px" height="40px" style="display:inline; width:40px; height:40px; " />
+        	<img class="img-inital r r-2x" style="height:30px;width:30px" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}" />
         </div>
     	<div style="height:auto;display:inline-block;vertical-align:top;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;width:70%">
-        	<b>	{{getPropertyValue properties "first_name"}}
-        		{{getPropertyValue properties "last_name"}} </b>
+        	<a class="text-cap custom-link">{{getPropertyValue properties "first_name"}}
+        		{{getPropertyValue properties "last_name"}} 
+               </a>
         	<br />
         		{{getPropertyValue properties "email"}}
 {{/wrap_entity}}
 		</div>
+</td>
+<div class="row-fluid">
 {{else}}
-    	<div style="display:inline;padding-right:5px;height:auto;">
-        	<img class="thumbnail" width="40px" height="40px" style="display:inline; width:40px; height:40px; " src="https://secure.gravatar.com/avatar/d41d8cd98f00b204e9800998ecf8427e.jpg?s=40&d=https%3A//da4o37ei6ybbh.cloudfront.net/css/images/pic.png" />
-        </div>
+<td>
+<div class="thumb-sm agile-img m-r-sm" style="margin-right:10px">
+<img class="img-inital r r-2x" style="height:30px;width:30px" data-name="{{dataNameAvatar properties}}" src="{{getDefaultImage}}" />
+</div>
+ 
     	<div style="height:auto;display:inline-block;vertical-align:top;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;width:70%">
-        	<b>	Anonymous </b>
+        		Unknown 
 		</div>
 {{/if}}
 	</div>
 </td>
+<td class="referer"  style="white-space:nowrap;text-overflow:ellipsis;overflow:hidden"><a class="refererUrl" target="_blank" href="{{ref}}">{{ref}}</a></td>
+<td><div>{{capitalizeFirstLetter city country}}</div></td>
+<td>{{#if user_agent}}
+			{{#stringToJSON this "parsedUserAgent"}}
+        	<div>
+				{{#if device_type}}
+              		<img class="inline m-r-xs r r-2x" style="width:12px;" src="/img/web-stats/devices/{{device_type}}.png"  title="{{device_type}}">
+				{{/if}}
+				{{#if os}}
+                	<img class="inline m-r-xs r r-2x" style="width:12px;" src="/img/web-stats/os/{{normalize_os os}}.png" title="{{os}}">
+				{{/if}}
+				{{#if browser_name}}
+		      		<img class="inline m-r-xs r r-2x" style="width:12px;" src="/img/web-stats/browsers/{{browser_name}}.png"  title="{{browser_name}}">
+				{{/if}}
+        	</div>
+       		{{/stringToJSON}}
+        {{/if}}</td>
+<td><div style="text-align:right;width: 100px;">{{timeAgo visit_time}} 
 
-<td><div>{{visit_time}}</div></td>
-
-<td><div>{{user_location}}</div></td>
-
-<td><div>{{user_agent}}</div></td>
+</div></td>
 
 </script>
 
@@ -54,25 +70,27 @@
 		<div class="data">
 			<div class="data-container"></div>
 			<div class="panel panel-default">
-			<div class="panel-heading">Gmap List</div>
-			<table id="contacts" class="table table-striped showCheckboxes agile-ellipsis-dynamic"
+			<div class="panel-heading"></div>
+			<table id="contacts" class="table table-striped agile-ellipsis-dynamic"
 				url="core/api/bulk/update?action_type=DELETE">
-				<col width="5%">
-				<col width="30%">
-				<col width="15%">
+				<col width="0%">
+				<col width="20%">
+                <col width="35%">
 				<col width="25%">
-				<col width="25%">
+                <col width="10%">
+				<col width="10%">
 				<div class="filter-criteria"></div>
 				<thead>
 					<tr>
-						<th><label class="i-checks i-checks-sm"><input class="thead_check" type="checkbox"/><i></i></label></th>
+                        <th></th>
 						<th>Name</th>
-						<th>Last Visited</th>						
+                        <th>Referer</th>
 						<th>Location</th>
-						<th>Device Type</th>
+                        <th></th>
+                        <th></th>
 					</tr>
 				</thead>
-				<tbody id="gmap-table-model-list" class="gmap-table-model-list"
+				<tbody id="gmap-table-model-list" class="gmap-table-model-list agile-row"
 					route="contact/" style="overflow: scroll;overflow:hidden;">
 				</tbody>
 			</table>

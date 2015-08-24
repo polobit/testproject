@@ -3,6 +3,9 @@
 /*css for all login pages */
 
 
+
+
+
 html,body
 {
 	height:100%;
@@ -18,7 +21,7 @@ html,body
 	font-family:"Open Sans",Arial,sans-serif;
 }
 
-#domain-error
+#domain-error, #email-error
 {
 	background: #e87251;
 color: #fff;
@@ -218,4 +221,39 @@ vertical-align: bottom;
 
 .intl-tel-input {
 	display:block;
+}
+.elements-sibling {
+float:left;
+margin-right:5px;
+width:175px;
+}
+.elements-sibling-last
+{
+    display: inline-block;
+    width:180px;
+}
+
+
+@media all and (max-width:500px) {
+
+.regpage-container {
+    width: 90%;
+}
+
+.regpage-container {
+        padding:0px;
+    }
+
+ .elements-sibling {
+    float: none;
+    margin-right: 0px;
+    margin-bottom:10px;
+    width:100%;
+ }   
+ .elements-sibling-last {
+
+display: block;
+width: auto;
+ }
+
 }

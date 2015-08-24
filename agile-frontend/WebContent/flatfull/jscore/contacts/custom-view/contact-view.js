@@ -47,17 +47,25 @@ function contactTableView(base_model,customDatefields,view) {
 					{
 						field_name = field_name.split("CUSTOM_")[1]; 			
 						var property = getProperty(contact.properties, field_name);
+						var json = {};
 						if(!property)
 						{
-							$(el).append(getTemplate('contacts-custom-view-custom', {}));
+							json.id = contact.id;
+							$(el).append(getTemplate('contacts-custom-view-custom', json));
 							return;
 						}
 						if(isDateCustomField(customDatefields,property)){
 							console.log('got true');
-							$(el).append(getTemplate('contacts-custom-view-custom-date', property));
+							json = property;
+							json.id = contact.id;
+							$(el).append(getTemplate('contacts-custom-view-custom-date', json));
 						}
 						else
-							$(el).append(getTemplate('contacts-custom-view-custom', property));
+						{
+							json = property;
+							json.id = contact.id;
+							$(el).append(getTemplate('contacts-custom-view-custom', json));
+						}
 						return;
 					}
 					
@@ -101,8 +109,8 @@ function isDateCustomField(customDatefields,property){
 function setupViews(cel, button_name) {
 
 	// Creates a view for custom views
-	head.load(CSS_PATH + 'css/bootstrap_submenu.css',  function()
-	{
+	/*head.load(CSS_PATH + 'css/bootstrap_submenu.css',  function()
+	{*/
 		var el = getTemplate("contact-view-collection");
 		$("#view-list", cel).html(el);
 		/*$("#view-list", cel).find('.dropdown-menu').find(".dropdown-submenu").on("click",function(e){
@@ -120,7 +128,7 @@ function setupViews(cel, button_name) {
 			$('#contact-view-model-list>li').css('display','none');
 			$('#contact-view-model-list>li:first').css('display','list-item');
 		}
-	});
+	// });
 }
 
 function updateSelectedSortKey(el) {
@@ -182,7 +190,7 @@ $(function() {
 	 * which is selected and calls customView function is called to to custom
 	 * view of contacts
 	 */
-	$('.ContactView').die().live('click', function(e) {
+	$('body').on('click', '.ContactView', function(e){
 
 				e.preventDefault();
 				
@@ -236,8 +244,11 @@ $(function() {
 
 	// If default view is selected, contacts are loaded with default view and
 	// removes the view cookie set when view is selected
-	$('.DefaultView').die().live('click', function(e) {
+	$('body').on('click', '.DefaultView', function(e){
 		e.preventDefault();
+		
+		if(company_util.isCompany())
+			return;
 
 		// Erases the cookie
 		eraseCookie("contact_view");
@@ -265,7 +276,7 @@ $(function() {
 	
 	// If grid view is selected, contacts are loaded with grid view and
 	// creates the grid view cookie 
-	$('.GridView').die().live('click', function(e) {
+	$('body').on('click', '.GridView', function(e){
 		e.preventDefault();
 		
 		// Erases the cookie

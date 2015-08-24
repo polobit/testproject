@@ -9,7 +9,7 @@ import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 
-import com.agilecrm.contact.filter.ContactFilter;
+import com.agilecrm.SearchFilter;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.reports.Reports;
 import com.agilecrm.search.QueryInterface;
@@ -166,7 +166,7 @@ public class QueryDocument<T> implements QueryInterface
      */
     @Override
     @SuppressWarnings("rawtypes")
-    public Collection<T> advancedSearch(ContactFilter filter)
+    public Collection<T> advancedSearch(SearchFilter filter)
     {
 	// Construct query string based on SearchRule object
 	String query = QueryDocumentUtil.constructFilterQuery(filter);
@@ -186,7 +186,7 @@ public class QueryDocument<T> implements QueryInterface
      */
     @Override
     @SuppressWarnings("rawtypes")
-    public Collection<T> advancedSearch(ContactFilter filter, Integer count, String cursor, String orderBy)
+    public Collection<T> advancedSearch(SearchFilter filter, Integer count, String cursor, String orderBy)
     {
 	String query = QueryDocumentUtil.constructFilterQuery(filter);
 	System.out.println("query build is : " + query);
@@ -203,7 +203,7 @@ public class QueryDocument<T> implements QueryInterface
      */
     @Override
     @SuppressWarnings("rawtypes")
-    public List<ScoredDocument> advancedSearchOnlyIds(ContactFilter filter, Integer count, String cursor, String orderBy)
+    public List<ScoredDocument> advancedSearchOnlyIds(SearchFilter filter, Integer count, String cursor, String orderBy)
     {
 	String query = QueryDocumentUtil.constructFilterQuery(filter);
 	System.out.println("query build is : " + query);
@@ -321,17 +321,23 @@ public class QueryDocument<T> implements QueryInterface
 	    SortExpression.Builder sortExpressionBuilder = SortExpression.newBuilder();
 	    if (orderBy.startsWith("-"))
 	    {
-		sortExpressionBuilder = sortExpressionBuilder.setExpression(orderBy.substring(1)).setDirection(
+	    orderBy = orderBy.substring(1);
+		sortExpressionBuilder = sortExpressionBuilder.setDirection(
 			SortDirection.DESCENDING);
 	    }
 	    else
 	    {
-		sortExpressionBuilder = sortExpressionBuilder.setExpression(orderBy).setDirection(
+		sortExpressionBuilder = sortExpressionBuilder.setDirection(
 			SortDirection.ASCENDING);
 	    }
-	    if (orderBy.contains("time"))
+	    sortExpressionBuilder.setExpression(orderBy);
+	    if (orderBy.contains("time") || orderBy.contains("last_contacted"))
 	    {
-		sortExpressionBuilder.setDefaultValueDate(SearchApiLimits.MAXIMUM_DATE_VALUE);
+		sortExpressionBuilder.setExpression(orderBy+"_epoch").setDefaultValueNumeric(0.0);
+	    }
+	    else if (orderBy.contains("name"))
+	    {
+		sortExpressionBuilder.setDefaultValue("");
 	    }
 	    else
 	    {

@@ -30,11 +30,19 @@
         	{{/if_contact_type}}
         
 			{{#if_contact_type "COMPANY"}}
-        		<a class="text-cap">{{getPropertyValue properties "name"}}</a>
-        		<small class="text-muted m-t-xs">{{getPropertyValue properties "url"}}</small>
+        		<a class="text-cap">{{getPropertyValue properties "name"}}</a></br>
+        		<div><small class="text-muted m-t-xs">{{getPropertyValue properties "url"}}</small></div>
         	{{/if_contact_type}}
 	</div>
 	</div>
+	</td>
+</script>
+
+<script id = "contacts-custom-view-name-template" type="text/html">
+	<td class="data" data="{{id}}">
+    	<div class="text-ellipsis" style="width:15em;">
+    		<a class="text-cap">{{getPropertyValue properties "name"}}</>
+    	</div>
 	</td>
 </script>
 
@@ -107,7 +115,7 @@
 <script id = "contacts-custom-view-created_time-template" type="text/html">
 	<td class='data' data='{{id}}'>
     <div class="text-ellipsis" style="width:15em;">
-		<a class="text-cap">{{epochToHumanDate "dd mmm yyyy" created_time}}</a>
+		<a class="text-cap">{{epochToHumanDateInFormat  created_time}}</a>
     </div>
 	</td>
 </script>
@@ -116,7 +124,7 @@
 	<td class='data' data='{{id}}'>
     <div class="text-ellipsis" style="width:15em;">
 		{{#if updated_time}}
-			{{epochToHumanDate "dd mmm yyyy" updated_time}}
+			{{epochToHumanDateInFormat  updated_time}}
 		{{/if}}
     </div>
 	</td>
@@ -130,7 +138,23 @@
 	</td>
 </script>
 
+<script id = "contacts-custom-view-url-template" type="text/html">
+	<td class='data' data='{{id}}'>
+    <div class="text-ellipsis" style="width:15em;">
+		<a href="{{getPropertyValue properties 'url'}}" class="text-cap">{{getPropertyValue properties "url"}}</a>
+    </div>
+	</td>
+</script>
+
 <script id = "contacts-custom-view-lead_owner-template" type="text/html">
+	<td class='data' data='{{id}}'>
+       <div class="text-ellipsis" style="width:15em;">
+	   	<a class="text-cap">{{owner.name}}</a>
+       </div>
+	</td>
+</script>
+
+<script id = "contacts-custom-view-owner-template" type="text/html">
 	<td class='data' data='{{id}}'>
        <div class="text-ellipsis" style="width:15em;">
 	   	<a class="text-cap">{{owner.name}}</a>
@@ -156,7 +180,7 @@
 
 
 <script id ="contacts-custom-view-custom-template" type="text/html">
-	<td class='data' data=''>
+	<td class='data' data='{{id}}'>
        <div class="text-ellipsis" style="width:15em;">
 		  <span>{{value}}</span>
        </div>
@@ -164,9 +188,9 @@
 </script>
 
 <script id = "contacts-custom-view-custom-date-template" type="text/html">
-	<td class='data' data=''>
+	<td class='data' data='{{id}}'>
        <div class="text-ellipsis" style="width:15em;">
-	   	  <span>{{epochToHumanDate "dd mmm yyyy" value}}</span>
+	   	  <span>{{stringToHumanDateInFormat value}}</span>
        </div>
 	</td>
 </script>

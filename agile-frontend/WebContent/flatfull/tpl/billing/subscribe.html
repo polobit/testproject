@@ -345,15 +345,20 @@
 								</div>
 							</div>
 						</form>
-		<div class="row">
-			<div class="col-sm-offset-4 col-sm-8" style="display:none" id="coupon_code_container">
-						<form class="">
-								<label class="control-label"> <span class="text-base"><b>Coupon Code: </b><span class="text-xs">(Only for Credit Card)</span></span></label>
-									<input type="text" class="form-control" placeholder="Enter Promo Code" id="coupon_code"  rel="tooltip" title="" />
-									<input type="button" class="btn btn-sm btn-default form-control" value="Validate" id="check_valid_coupon" style="margin: 0px 3px;" />
- 									<i class=""></i><br/> <span class="error text-danger"></span>
-						</form>
-			</div>
+		<div class="control-group form-group" style="display:none" id="coupon_code_container">
+					<form class="">
+							<label class="control-label col-sm-4 col-xs-12">Coupon Code <br><span class="text-xs">(Only for Credit Card)</span></label>
+							<div class="controls col-xs-5 col-sm-5 p-r-none">
+								<input type="text" class="form-control  input-sm" placeholder="Enter Promo Code" id="coupon_code" rel="tooltip" title="">
+								<span class="error text-danger"></span>
+							</div>
+							<div class="controls col-xs-2 col-sm-2 m-l-none p-l-xs" >
+								<input type="button" class="btn btn-sm btn-default" value="Validate" id="check_valid_coupon">
+							</div>
+							<div class="controls col-xs-1 col-sm-1 p-l-none">
+								<i class=""></i>
+							</div>
+					</form>
 		</div>
 		<div class="line ling-lg b-b"></div>
 		<div class="row">

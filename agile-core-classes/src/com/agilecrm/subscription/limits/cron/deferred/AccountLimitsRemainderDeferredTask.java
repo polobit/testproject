@@ -16,61 +16,62 @@ import com.google.appengine.api.taskqueue.DeferredTask;
  */
 public class AccountLimitsRemainderDeferredTask implements DeferredTask
 {
-	private String namespace;
+    private String namespace;
 
-	public AccountLimitsRemainderDeferredTask(String namespace)
+    public AccountLimitsRemainderDeferredTask(String namespace)
+    {
+	this.namespace = namespace;
+    }
+
+    @Override
+    public void run()
+    {
+	String oldNamespace = NamespaceManager.get();
+	try
 	{
-		this.namespace = namespace;
+	    // Namespace is set to ensure exact namespace usage is recored and
+	    // saved
+	    NamespaceManager.set(namespace);
+
+	    // Fetches existing restriction object and refreshes usage details
+	    // and saves back
+	    BillingRestriction restriction = BillingRestrictionUtil.getBillingRestrictionAndSubscriptionFromDB();
+
+	    System.out.println(restriction.tags_in_our_domain);
+	    restriction.refresh(true);
+
+	    // Get tag for each type. If usage exceeds 75 of allowed limit then
+	    // tag is added
+	    // This is required for contacts as we have to hard update even if
+	    // limits are less than 75%
+	    DaoBillingRestriction contactRestriction = DaoBillingRestriction.getInstaceDeamon("Contact", restriction);
+
+	    // Set it true so tags are updated. It removes previous tags
+	    contactRestriction.hardUpdateTags = true;
+	    contactRestriction.getTag();
+	    DaoBillingRestriction.getInstaceDeamon("WebRule", restriction).getTag();
+	    DaoBillingRestriction.getInstaceDeamon("Workflow", restriction).getTag();
+	    DaoBillingRestriction.getInstaceDeamon("Email", restriction).getTag();
+	    DaoBillingRestriction.getInstaceDeamon("Trigger", restriction).getTag();
+
+	    AccountEmailStatsUtil.checkLimits();
+
+	    System.out.println("namespace : " + namespace);
+	    System.out.println("Contacts = " + restriction.contacts_count + ", webrules = "
+		    + restriction.webrules_count + ", workflow = " + restriction.campaigns_count);
+
+	    if (restriction.id == null)
+		restriction.save();
+
+	    // Adds tags in out domain
+	    BillingRestrictionReminderUtil.addRestictionTagsInOurDomain(restriction.tagsToAddInOurDomain);
+	}
+	finally
+	{
+	    NamespaceManager.set(oldNamespace);
 	}
 
-	@Override
-	public void run()
-	{
-		String oldNamespace = NamespaceManager.get();
-		try
-		{
-			// Namespace is set to ensure exact namespace usage is recored and
-			// saved
-			NamespaceManager.set(namespace);
+	// TODO Auto-generated method stub
 
-			// Fetches existing restriction object and refreshes usage details
-			// and saves back
-			BillingRestriction restriction = BillingRestrictionUtil.getBillingRestriction(false);
-
-			restriction.refresh(true);
-
-			// Get tag for each type. If usage exceeds 75 of allowed limit then
-			// tag is added
-			// This is required for contacts as we have to hard update even if
-			// limits are less than 75%
-			DaoBillingRestriction contactRestriction = DaoBillingRestriction.getInstace("Contact", restriction);
-
-			// Set it true so tags are updated. It removes previous tags
-			contactRestriction.hardUpdateTags = true;
-			contactRestriction.getTag();
-			DaoBillingRestriction.getInstace("WebRule", restriction).getTag();
-			DaoBillingRestriction.getInstace("Workflow", restriction).getTag();
-			DaoBillingRestriction.getInstace("Email", restriction).getTag();
-			DaoBillingRestriction.getInstace("Trigger", restriction).getTag();
-
-			AccountEmailStatsUtil.checkLimits();
-
-			System.out.println("namespace : " + namespace);
-			System.out.println("Contacts = " + restriction.contacts_count + ", webrules = "
-					+ restriction.webrules_count + ", workflow = " + restriction.campaigns_count);
-
-			if (restriction.id == null)
-				restriction.save();
-
-			// Adds tags in out domain
-			BillingRestrictionReminderUtil.addRestictionTagsInOurDomain(restriction.tagsToAddInOurDomain);
-		}
-		finally
-		{
-			NamespaceManager.set(oldNamespace);
-		}
-
-		// TODO Auto-generated method stub
-
-	}
+    }
 }

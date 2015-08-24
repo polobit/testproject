@@ -27,41 +27,41 @@ import com.agilecrm.util.MD5Util;
 @Path("/api/user-prefs")
 public class UserPrefsAPI
 {
-    /**
-     * Gets UserPrefs of current agile user.
-     * 
-     * @return UserPrefs of current agile user.
-     */
-    @GET
-    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public UserPrefs getCurrentUserPrefs()
-    {
-	try
+	/**
+	 * Gets UserPrefs of current agile user.
+	 * 
+	 * @return UserPrefs of current agile user.
+	 */
+	@GET
+	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	public UserPrefs getCurrentUserPrefs()
 	{
-	    return UserPrefsUtil.getCurrentUserPrefs();
+		try
+		{
+			return UserPrefsUtil.getCurrentUserPrefs();
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			return null;
+		}
 	}
-	catch (Exception e)
-	{
-	    e.printStackTrace();
-	    return null;
-	}
-    }
 
-    /**
-     * Updates UserPrefs.
-     * 
-     * @param prefs
-     *            - UserPrefs object to be updated.
-     * @return updated UserPrefs.
-     */
-    @PUT
-    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public UserPrefs saveUserPrefs(UserPrefs prefs)
-    {
-	try
+	/**
+	 * Updates UserPrefs.
+	 * 
+	 * @param prefs
+	 *            - UserPrefs object to be updated.
+	 * @return updated UserPrefs.
+	 */
+	@PUT
+	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	public UserPrefs saveUserPrefs(UserPrefs prefs)
 	{
-	    // Get UserPrefs of user who is logged in
-	    UserPrefs userPrefs = UserPrefsUtil.getCurrentUserPrefs();
+		try
+		{
+			// Get UserPrefs of user who is logged in
+			UserPrefs userPrefs = UserPrefsUtil.getCurrentUserPrefs();
 
 	    userPrefs.name = prefs.name;
 	    userPrefs.pic = prefs.pic;
@@ -70,70 +70,75 @@ public class UserPrefsAPI
 	    userPrefs.width = prefs.width;
 	    userPrefs.task_reminder = prefs.task_reminder;
 	    userPrefs.event_reminder = prefs.event_reminder;
+	    userPrefs.dateFormat = prefs.dateFormat;
 	    userPrefs.timezone = prefs.timezone;
 	    userPrefs.currency = prefs.currency;
 	    userPrefs.keyboard_shotcuts = prefs.keyboard_shotcuts;
+	    userPrefs.calendar_wk_start_day = prefs.calendar_wk_start_day;
 
-	    userPrefs.save();
-	    return userPrefs;
+			userPrefs.save();
+			return userPrefs;
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			return null;
+		}
 	}
-	catch (Exception e)
-	{
-	    e.printStackTrace();
-	    return null;
-	}
-    }
 
-    /**
-     * To change current domain user password
-     * 
-     * @throws Exception
-     */
-    @Path("/changePassword")
-    @PUT
-    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public void changePasswordOfCurrentDomainUser(@FormParam("current_pswd") String currentPassword,
-	    @FormParam("new_pswd") String newPassword) throws Exception
-    {
-	DomainUser currentDomainUser = DomainUserUtil.getCurrentDomainUser();
-	if (StringUtils.equals(MD5Util.getMD5HashedPassword(currentPassword), currentDomainUser.getHashedString()))
+	/**
+	 * To change current domain user password
+	 * 
+	 * @throws Exception
+	 */
+	@Path("/changePassword")
+	@PUT
+	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	public void changePasswordOfCurrentDomainUser(@FormParam("current_pswd") String currentPassword,
+			@FormParam("new_pswd") String newPassword) throws Exception
 	{
-	    try
-	    {
-		currentDomainUser.password = newPassword;
-		currentDomainUser.save();
-	    }
-	    catch (Exception e)
-	    {
-		e.printStackTrace();
-		System.out.println(e.getMessage());
-		throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
-		        .build());
-	    }
+		DomainUser currentDomainUser = DomainUserUtil.getCurrentDomainUser();
+		if (StringUtils.equals(MD5Util.getMD5HashedPassword(currentPassword), currentDomainUser.getHashedString()))
+		{
+			try
+			{
+				currentDomainUser.password = newPassword;
+				currentDomainUser.save();
+			}
+			catch (Exception e)
+			{
+				e.printStackTrace();
+				System.out.println(e.getMessage());
+				throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+						.build());
+			}
+		}
+		else
+			throw new Exception("Current Password not matched");
 	}
-	else
-	    throw new Exception("Current Password not matched");
-    }
-    
-    @Path("saveTheme")
-    @PUT
-    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public void saveTheme(@FormParam("menuPosition") String menuPosition, @FormParam("layout") String layout, @FormParam("theme") String theme){
-    	UserPrefs currentUserPrefs = UserPrefsUtil.getCurrentUserPrefs();
-    	try
-	    {
-    	currentUserPrefs.menuPosition = menuPosition;
-    	currentUserPrefs.layout = layout;
-    	currentUserPrefs.theme = theme;
-    	currentUserPrefs.save();
-	    }
-    	catch (Exception e)
-	    {
-		e.printStackTrace();
-		System.out.println(e.getMessage());
-		throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
-		        .build());
-	    }
-    }
+
+	@Path("saveTheme")
+	@PUT
+	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	public void saveTheme(@FormParam("menuPosition") String menuPosition, @FormParam("layout") String layout,
+			@FormParam("theme") String theme, @FormParam("animations") boolean animations)
+	{
+		UserPrefs currentUserPrefs = UserPrefsUtil.getCurrentUserPrefs();
+		try
+		{
+			currentUserPrefs.menuPosition = menuPosition;
+			currentUserPrefs.layout = layout;
+			currentUserPrefs.theme = theme;
+			currentUserPrefs.animations = animations;
+			currentUserPrefs.save();
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			System.out.println(e.getMessage());
+			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+					.build());
+		}
+	}
 
 }

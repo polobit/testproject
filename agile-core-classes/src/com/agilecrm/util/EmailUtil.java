@@ -22,7 +22,8 @@ import com.agilecrm.contact.email.EmailSender;
 import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
 import com.campaignio.tasklets.util.MergeFieldsUtil;
 import com.google.appengine.api.NamespaceManager;
-import com.thirdparty.SendGrid;
+import com.google.appengine.api.blobstore.BlobKey;
+import com.thirdparty.sendgrid.SendGrid;
 
 public class EmailUtil
 {
@@ -46,7 +47,7 @@ public class EmailUtil
 
 	// Comment script tags.
 	emailBody = emailBody.replaceAll("(<script|<SCRIPT)", "<!--<script").replaceAll("(</script>|</SCRIPT>)",
-		"<script>-->");
+	        "<script>-->");
 
 	// If emailBody is text, replace '\n' with <br> is enough
 	if (!(emailBody.contains("</")))
@@ -117,7 +118,7 @@ public class EmailUtil
      * @return response of the remote object
      */
     public static void sendMail(String fromEmail, String fromName, String to, String cc, String bcc, String subject,
-	    String replyTo, String html, String text, List<Long> documentIds) throws Exception
+	    String replyTo, String html, String text, List<Long> documentIds, List<BlobKey> blobKeys) throws Exception
     {
 	try
 	{
@@ -127,7 +128,8 @@ public class EmailUtil
 	    html = appendAgileToHTML(html, "email", "Sent using", emailSender.isEmailWhiteLabelEnabled());
 	    text = appendAgileToText(text, "Sent using", emailSender.isEmailWhiteLabelEnabled());
 
-	    emailSender.sendEmail(fromEmail, fromName, to, cc, bcc, subject, replyTo, html, text, null, documentIds);
+	    emailSender.sendEmail(fromEmail, fromName, to, cc, bcc, subject, replyTo, html, text, null, documentIds,
+		    blobKeys);
 	}
 	catch (Exception e)
 	{
@@ -165,8 +167,8 @@ public class EmailUtil
 	    queryParams += "s=" + trackerId;
 
 	String trackingImage = "<div class=\"ag-img\"><img src="
-		+ VersioningUtil.getHostURLByApp(NamespaceManager.get()) + "open?" + queryParams
-		+ " nosend=\"1\" width=\"1\" height=\"1\"></img></div>";
+	        + VersioningUtil.getHostURLByApp(NamespaceManager.get()) + "open?" + queryParams
+	        + " nosend=\"1\" style=\"display:none!important;\" width=\"1\" height=\"1\"></img></div>";
 
 	return html + trackingImage;
     }
@@ -181,7 +183,7 @@ public class EmailUtil
     public static String getPoweredByAgileURL(String medium)
     {
 	return "https://www.agilecrm.com?utm_source=powered-by&utm_medium=" + medium + "&utm_campaign="
-		+ NamespaceManager.get();
+	        + NamespaceManager.get();
     }
 
     /**
@@ -192,7 +194,7 @@ public class EmailUtil
     public static String getPoweredByAgileLink(String medium, String labelText)
     {
 	return labelText + " <a href=\"" + getPoweredByAgileURL(medium)
-		+ "\" target=\"_blank\" style=\"text-decoration:none;\" rel=\"nofollow\"> Agile</a>";
+	        + "\" target=\"_blank\" style=\"text-decoration:none;\" rel=\"nofollow\"> Agile</a>";
     }
 
     /**
@@ -209,7 +211,7 @@ public class EmailUtil
 
 	// Returns only html if Agile label exits
 	if (StringUtils.isBlank(html) || StringUtils.contains(html, "https://www.agilecrm.com?utm_source=powered-by")
-		|| StringUtils.contains(html, "Sent using <a href=\"https://www.agilecrm.com") || isWhiteLableEnabled)
+	        || StringUtils.contains(html, "Sent using <a href=\"https://www.agilecrm.com") || isWhiteLableEnabled)
 	    return html;
 
 	// For Campaign HTML emails, Powered by should be right aligned
@@ -272,7 +274,7 @@ public class EmailUtil
      *            - text body
      */
     public static void sendEmailUsingAPI(String fromEmail, String fromName, String to, String cc, String bcc,
-	    String subject, String replyTo, String html, String text, List<Long> documentIds)
+	    String subject, String replyTo, String html, String text, List<Long> documentIds, List<BlobKey> blobKeys)
     {
 
 	String domain = NamespaceManager.get();
@@ -286,7 +288,7 @@ public class EmailUtil
 
 	// Send email
 	EmailGatewayUtil.sendEmail(domain, fromEmail, fromName, to, cc, bcc, subject, replyTo, html, text, null,
-		documentIds);
+	        documentIds, blobKeys);
     }
 
     /**

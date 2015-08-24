@@ -3,6 +3,7 @@ package com.agilecrm.activities.util;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -587,7 +588,7 @@ public class TaskUtil
 	 * 
 	 * @return List of tasks that have been pending for Today
 	 */
-	public static List<Task> getTodayPendingTasks(Long startTime, Long endTime)
+	public static List<Task> getTodayPendingTasks(Long startTime, Long endTime,String duration)
 	{
 		try
 		{
@@ -609,8 +610,13 @@ public class TaskUtil
 			DomainUser domainUser = DomainUserUtil.getCurrentDomainUser();
 
 			// Gets list of tasks filtered on given conditions
-			return dao.ofy().query(Task.class).filter("owner", new Key<DomainUser>(DomainUser.class, domainUser.id))
-					.filter("due >=", startTime).filter("due <", endTime).filter("is_complete", false).limit(50).list();
+			if(duration!=null && duration.equalsIgnoreCase("all-over-due"))
+				return dao.ofy().query(Task.class).filter("owner", new Key<DomainUser>(DomainUser.class, domainUser.id))
+						.filter("due <", endTime).filter("is_complete", false).limit(50).list();
+			else
+				return dao.ofy().query(Task.class).filter("owner", new Key<DomainUser>(DomainUser.class, domainUser.id))
+						.filter("due >=", startTime).filter("due <", endTime).filter("is_complete", false).limit(50).list();
+			
 		}
 		catch (Exception e)
 		{
@@ -790,36 +796,100 @@ public class TaskUtil
      * 
      * @return List of tasks
      */
-    public static List<Task> getTasksRelatesToOwnerOfTypeAndCategory(Long owner, String category, String status,Long startTime,Long endTime,String tasks){
+    public static List<Task> getTasksRelatesToOwnerOfTypeAndCategory(Long owner, String category, String status,Long startTime,Long endTime,String tasks,List<Key<DomainUser>> usersKeyList){
+    	List<Task> tasksList1 = new ArrayList<Task>();
+		List<Task> tasksList2 = new ArrayList<Task>();
     	try{
-    		Map<String, Object> searchMap = new HashMap<String, Object>();
-    		
+    		Map<String, Object> searchMap1 = new HashMap<String, Object>();
+    		Map<String, Object> searchMap2 = new HashMap<String, Object>();
     		if (owner!=null)
-    			searchMap.put("owner", new Key<DomainUser>(DomainUser.class, owner));
+    		{
+    			searchMap1.put("owner", new Key<DomainUser>(DomainUser.class, owner));
+    			searchMap2.put("owner", new Key<DomainUser>(DomainUser.class, owner));
+    		}
     		
     		if(StringUtils.isNotBlank(category))
-    			searchMap.put("type", category);
-    		
-    		if(StringUtils.isNotBlank(status))
-    			searchMap.put("status", status);
-    		
-    		if(startTime!=null){
-    			if(tasks.equalsIgnoreCase("all-tasks"))
-    				searchMap.put("due >=", startTime);
-    			else
-    				searchMap.put("task_completed_time >=", startTime);
-    		}
-    		if(endTime!=null){
-    			if(tasks.equalsIgnoreCase("all-tasks"))
-    				searchMap.put("due <", endTime);
-    			else
-    				searchMap.put("task_completed_time <", endTime);
+    		{
+    			searchMap1.put("type", category);
+    			searchMap2.put("type", category);
     		}
     		
-    		return dao.listByProperty(searchMap);
-    	}catch (Exception e){
+    		if(StringUtils.isNotBlank(status)){
+    			searchMap1.put("status", status);
+    			searchMap2.put("status", status);
+    		}
+    		
+    		if(startTime!=null)
+    		{
+    			if(tasks.equalsIgnoreCase("all-tasks"))
+    			{
+    				searchMap1.put("due >=", startTime);
+    				searchMap2.put("task_completed_time >=", startTime);
+    			}
+    			else
+    				searchMap1.put("task_completed_time >=", startTime);
+    		}
+    		if(endTime!=null)
+    		{
+    			if(tasks.equalsIgnoreCase("all-tasks"))
+    			{
+    				searchMap1.put("due <", endTime);
+    				searchMap2.put("task_completed_time <", endTime);
+    			}
+    			else
+    				searchMap1.put("task_completed_time <", endTime);
+    		}
+    		
+    		if (usersKeyList!=null)
+    		{
+    			searchMap1.put("owner in", usersKeyList);
+    			searchMap2.put("owner in", usersKeyList);
+    		}
+    		
+    		tasksList1 = dao.listByProperty(searchMap1);
+    		if(tasks.equalsIgnoreCase("all-tasks"))
+    		{
+    			HashSet<Long> hashSet = new HashSet<Long>();
+    			tasksList2 = dao.listByProperty(searchMap2);
+    			for(Task task: tasksList1)
+    			{
+    				hashSet.add(task.id);
+    			}
+        		for (Task task : tasksList2) 
+        		{
+					if(!hashSet.contains(task.id))
+					{
+						tasksList1.add(task);
+						hashSet.add(task.id);
+					}
+				}
+    		}
+    		
+    	}
+    	catch (Exception e)
+    	{
     		e.printStackTrace();
     		return null;
     	}
+    	return tasksList1;
     }
+    
+    /**
+	 * Gets the count of completed tasks of a user
+	 * 
+	 * @return List of tasks that have been pending for Today
+	 */
+	public static int getCompletedTasksOfUser(Long startTime, Long endTime, Long ownerId)
+	{
+		try
+		{
+			return dao.ofy().query(Task.class).filter("owner", new Key<DomainUser>(DomainUser.class, ownerId))
+						.filter("task_completed_time >=", startTime).filter("task_completed_time <", endTime).filter("is_complete", true).count();
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			return 0;
+		}
+	}
 }

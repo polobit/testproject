@@ -32,8 +32,9 @@
   </queue>
   <queue>
     <name>notification-queue</name>
-    <rate>5/s</rate>
-    <max-concurrent-requests>5</max-concurrent-requests>
+    <rate>10/s</rate>
+    <bucket-size>10</bucket-size>
+    <max-concurrent-requests>40</max-concurrent-requests>
     <retry-parameters>
 		<task-retry-limit>1</task-retry-limit>
 	</retry-parameters>
@@ -41,10 +42,14 @@
   <queue>
     <name>reports-queue</name>
     <rate>10/s</rate>
+     <acl> 
+      <user-email>yaswanth@agilecrm.com</user-email>
+    </acl>
     <max-concurrent-requests>20</max-concurrent-requests>
     <retry-parameters>
 		<task-retry-limit>1</task-retry-limit>
 	</retry-parameters>
+	<target>agile-normal-bulk</target>
   </queue>
   <queue>
     <name>periodic-triggers-queue</name>
@@ -89,11 +94,12 @@
     <retry-parameters>
 		<task-retry-limit>1</task-retry-limit>
 	</retry-parameters>
+	<target>agile-normal-bulk</target>
   </queue>
    <queue>
     <name>bulk-actions-queue</name>
-    <rate>2/s</rate>
-    <max-concurrent-requests>5</max-concurrent-requests>
+    <rate>5/s</rate>
+    <max-concurrent-requests>10</max-concurrent-requests>
     <retry-parameters>
 		<task-retry-limit>0</task-retry-limit>
 	</retry-parameters>
@@ -132,7 +138,7 @@
 	</retry-parameters>
 	<target>agile-normal-bulk</target>
   </queue>
-   <queue>
+  <queue>
   	<name>owner-change-queue</name>
     <rate>5/s</rate>
     <max-concurrent-requests>10</max-concurrent-requests>
@@ -153,20 +159,21 @@
   
    <queue>
   	<name>campaign-subscribe-subtask-queue</name>
-    <rate>5/s</rate>
-    <max-concurrent-requests>15</max-concurrent-requests>
+    <rate>10/s</rate>
+    <max-concurrent-requests>40</max-concurrent-requests>
     <retry-parameters>
 		<task-retry-limit>1</task-retry-limit>
 	</retry-parameters>
   </queue>
-  
+
    <queue>
   	<name>bulk-tags-queue</name>
-    <rate>5/s</rate>
-    <max-concurrent-requests>10</max-concurrent-requests>
+    <rate>10/s</rate>
+    <max-concurrent-requests>20</max-concurrent-requests>
     <retry-parameters>
 		<task-retry-limit>1</task-retry-limit>
 	</retry-parameters>
+    <target>agile-normal-bulk</target>
   </queue>
    <queue>
   	<name>contacts-upload-queue</name>
@@ -188,7 +195,11 @@
   </queue>
    <queue>
   	<name>bulk-emails-queue</name>
+    <acl> 
+      <user-email>yaswanth@agilecrm.com</user-email>
+    </acl>
     <rate>5/s</rate>
+    
     <max-concurrent-requests>10</max-concurrent-requests>
     <retry-parameters>
 		<task-retry-limit>1</task-retry-limit>
@@ -215,10 +226,10 @@
   </queue>
    <queue>
   	<name>workflows-related-queue</name>
-    <rate>5/s</rate>
-    <max-concurrent-requests>10</max-concurrent-requests>
+    <rate>10/s</rate>
+    <max-concurrent-requests>30</max-concurrent-requests>
     <retry-parameters>
-		<task-retry-limit>1</task-retry-limit>
+		<task-retry-limit>3</task-retry-limit>
 	</retry-parameters>
 	<target>agile-normal-bulk</target>
   </queue>
@@ -229,7 +240,6 @@
     <retry-parameters>
 		<task-retry-limit>1</task-retry-limit>
 	</retry-parameters>
-	<target>agile-normal-bulk</target>
   </queue>
   
   <queue>
@@ -241,6 +251,17 @@
 	</retry-parameters>
 	<target>agile-temp-bulk</target>
   </queue>
+  
+  <queue>
+    <name>last-contacted-update-queue</name>
+    <rate>10/s</rate>
+    <max-concurrent-requests>20</max-concurrent-requests>
+    <retry-parameters>
+		<task-retry-limit>1</task-retry-limit>
+	</retry-parameters>
+  </queue>
+  
+  
   <!-- pull queues -->
   <queue>
   <name>normal-campaign-pull-queue</name>
@@ -260,6 +281,9 @@
   
   <queue>
   <name>normal-email-pull-queue</name>
+    <acl> 
+      <user-email>yaswanth@agilecrm.com</user-email>
+    </acl>
   <mode>pull</mode>
   <retry-parameters>
   		<task-retry-limit>2</task-retry-limit>
@@ -269,13 +293,28 @@
   <queue>
   <name>bulk-email-pull-queue</name>
   <mode>pull</mode>
+  <acl> 
+    <user-email>yaswanth@agilecrm.com</user-email>
+  </acl>
   <retry-parameters>
   		<task-retry-limit>2</task-retry-limit>
   </retry-parameters>
   </queue>
+
+
+  <queue>
+  <name>dummy-pull-queue</name>
+  <mode>pull</mode>
+   <acl>
+      <user-email>yaswanth@agilecrm.com</user-email>  
+    </acl>
+  </queue>
   
   <queue>
   <name>normal-personal-email-pull-queue</name>
+    <acl>
+      <user-email>yaswanth@agilecrm.com</user-email>
+    </acl>
   <mode>pull</mode>
   <retry-parameters>
       <task-retry-limit>2</task-retry-limit>	  
@@ -284,6 +323,9 @@
   
   <queue>
   <name>bulk-personal-email-pull-queue</name>
+    <acl> 
+      <user-email>yaswanth@agilecrm.com</user-email>
+    </acl>
   <mode>pull</mode>
   <retry-parameters>
   		<task-retry-limit>2</task-retry-limit>
@@ -316,6 +358,27 @@
   <retry-parameters>
   		<task-retry-limit>1</task-retry-limit>
   </retry-parameters>
+  </queue>
+  
+  <!-- Notification Pull Queue -->
+  <queue>
+  	<name>notification-pull-queue</name>
+  	<mode>pull</mode>
+       <acl> 
+      <user-email>yaswanth@agilecrm.com</user-email>
+    </acl>
+  	<retry-parameters>
+  		<task-retry-limit>2</task-retry-limit>
+  	</retry-parameters>
+  </queue>
+
+  <queue>
+    <name>pull-queue</name>
+    <mode>pull</mode>
+    <acl>
+      <user-email>yaswanth@agilecrm.com</user-email>      <!-- can list, get, lease, delete, and update tasks -->
+  <!--  can insert tasks, in addition to rights granted by being a user_email above -->
+    </acl>
   </queue>
 
 </queue-entries>

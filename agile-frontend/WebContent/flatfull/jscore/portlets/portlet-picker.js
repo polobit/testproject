@@ -14,18 +14,21 @@ function organize_portlets(base_model){
 	 * as div id (div defined in portlet-add.html)
 	 */
 	if (portlet_type == "CONTACTS")
-		$('#contacts', this.el).append($(itemView.render().el));
+		$('#contacts', this.el).append($(itemView.render().el).addClass('col-md-3 col-sm-6 col-xs-12'));
 	else if (portlet_type == "DEALS")
-		$('#deals', this.el).append($(itemView.render().el));
+		$('#deals', this.el).append($(itemView.render().el).addClass('col-md-3 col-sm-6 col-xs-12'));
 	else if (portlet_type == "TASKSANDEVENTS")
-		$('#taksAndEvents', this.el).append($(itemView.render().el));
+		$('#taksAndEvents', this.el).append($(itemView.render().el).addClass('col-md-3 col-sm-6 col-xs-12'));
 	else if (portlet_type == "USERACTIVITY")
-		$('#userActivity', this.el).append($(itemView.render().el));
+		$('#userActivity', this.el).append($(itemView.render().el).addClass('col-md-3 col-sm-6 col-xs-12'));
 	else if (portlet_type == "RSS")
-		$('#rssFeed', this.el).append($(itemView.render().el));
+		$('#rssFeed', this.el).append($(itemView.render().el).addClass('col-md-3 col-sm-6 col-xs-12'));
+	else if (portlet_type == "ACCOUNT")
+		$('#accountInfo', this.el).append($(itemView.render().el).addClass('col-md-3 col-sm-6 col-xs-12'));
 }
 function set_p_portlets(base_model){
 	var itemView;
+	
 	if(base_model.get('portlet_type')=="CONTACTS" && base_model.get('name')=="Filter Based"){
 		App_Portlets.filteredContactsView = new Base_Model_View({ model : base_model, template : "portlets-contacts-filterbased-model", tagName : 'div' });
 		
@@ -114,7 +117,8 @@ function set_p_portlets(base_model){
 			$('.gridster > div:visible',this.el).html($(App_Portlets.agileCRMBlogView.render().el).attr("id","ui-id-"+base_model.get("column_position")+"-"+base_model.get("row_position")).attr("data-sizey",base_model.get("size_y")).attr("data-sizex",base_model.get("size_x")).attr("data-col",base_model.get("column_position")).attr("data-row",base_model.get("row_position")).addClass('gs-w panel panel-default'));
 		else
 			$('.gridster > div:visible > div:last',this.el).after($(App_Portlets.agileCRMBlogView.render().el).attr("id","ui-id-"+base_model.get("column_position")+"-"+base_model.get("row_position")).attr("data-sizey",base_model.get("size_y")).attr("data-sizex",base_model.get("size_x")).attr("data-col",base_model.get("column_position")).attr("data-row",base_model.get("row_position")).addClass('gs-w panel panel-default'));
-	}else if(base_model.get('portlet_type')=="TASKSANDEVENTS" && base_model.get('name')=="Task Report"){
+	}
+	else if(base_model.get('portlet_type')=="TASKSANDEVENTS" && base_model.get('name')=="Task Report"){
 		App_Portlets.taskReportView = new Base_Model_View({ model : base_model, template : "portlets-tasksandevents-task-report-model", tagName : 'div' });
 		if($('.gridster > div:visible > div',this.el).length==0)
 			$('.gridster > div:visible',this.el).html($(App_Portlets.taskReportView.render().el).attr("id","ui-id-"+base_model.get("column_position")+"-"+base_model.get("row_position")).attr("data-sizey",base_model.get("size_y")).attr("data-sizex",base_model.get("size_x")).attr("data-col",base_model.get("column_position")).attr("data-row",base_model.get("row_position")).addClass('gs-w panel panel-default'));
@@ -135,10 +139,38 @@ function set_p_portlets(base_model){
 			App_Portlets.onboardingView = new Base_Model_View({ model : base_model, template : "portlets-user-onboarding-model", tagName : 'div' });
 		
 		if($('.gridster > div:visible > div',this.el).length==0)
-			$('.gridster > div:visible',this.el).html($(App_Portlets.onboardingView.render().el).attr("id","ui-id-"+base_model.get("column_position")+"-"+base_model.get("row_position")).attr("data-sizey",base_model.get("size_y")).attr("data-sizex",base_model.get("size_x")).attr("data-col",base_model.get("column_position")).attr("data-row",base_model.get("row_position")).addClass('gs-w').css('background','#F9EDBE'));
+			$('.gridster > div:visible',this.el).html($(App_Portlets.onboardingView.render().el).attr("id","ui-id-"+base_model.get("column_position")+"-"+base_model.get("row_position")).attr("data-sizey",base_model.get("size_y")).attr("data-sizex",base_model.get("size_x")).attr("data-col",base_model.get("column_position")).attr("data-row",base_model.get("row_position")).addClass('gs-w'));
 		else
-			$('.gridster > div:visible > div:last',this.el).after($(App_Portlets.onboardingView.render().el).attr("id","ui-id-"+base_model.get("column_position")+"-"+base_model.get("row_position")).attr("data-sizey",base_model.get("size_y")).attr("data-sizex",base_model.get("size_x")).attr("data-col",base_model.get("column_position")).attr("data-row",base_model.get("row_position")).addClass('gs-w').css('background','#F9EDBE'));
+			$('.gridster > div:visible > div:last',this.el).after($(App_Portlets.onboardingView.render().el).attr("id","ui-id-"+base_model.get("column_position")+"-"+base_model.get("row_position")).attr("data-sizey",base_model.get("size_y")).attr("data-sizex",base_model.get("size_x")).attr("data-col",base_model.get("column_position")).attr("data-row",base_model.get("row_position")).addClass('gs-w'));
 		setPortletContentHeight(base_model);
+	}else if(base_model.get('portlet_type')=="USERACTIVITY" && base_model.get('name')=="Leaderboard"){
+		App_Portlets.leaderboardView = new Base_Model_View({ model : base_model, template : "portlets-leader-board-model", tagName : 'div' });
+		if($('.gridster > div:visible > div',this.el).length==0)
+			$('.gridster > div:visible',this.el).html($(App_Portlets.leaderboardView.render().el).attr("id","ui-id-"+base_model.get("column_position")+"-"+base_model.get("row_position")).attr("data-sizey",base_model.get("size_y")).attr("data-sizex",base_model.get("size_x")).attr("data-col",base_model.get("column_position")).attr("data-row",base_model.get("row_position")).addClass('gs-w panel panel-default'));
+		else
+			$('.gridster > div:visible > div:last',this.el).after($(App_Portlets.leaderboardView.render().el).attr("id","ui-id-"+base_model.get("column_position")+"-"+base_model.get("row_position")).attr("data-sizey",base_model.get("size_y")).attr("data-sizex",base_model.get("size_x")).attr("data-col",base_model.get("column_position")).attr("data-row",base_model.get("row_position")).addClass('gs-w panel panel-default'));
+	}else if(base_model.get('portlet_type')=="DEALS" && base_model.get('name')=="Revenue Graph"){
+		App_Portlets.revenueGraphView = new Base_Model_View({ model : base_model, template : "portlets-deals-revenue-graph-model", tagName : 'div' });
+		if($('.gridster > div:visible > div',this.el).length==0)
+			$('.gridster > div:visible',this.el).html($(App_Portlets.revenueGraphView.render().el).attr("id","ui-id-"+base_model.get("column_position")+"-"+base_model.get("row_position")).attr("data-sizey",base_model.get("size_y")).attr("data-sizex",base_model.get("size_x")).attr("data-col",base_model.get("column_position")).attr("data-row",base_model.get("row_position")).addClass('gs-w panel panel-default'));
+		else
+			$('.gridster > div:visible > div:last',this.el).after($(App_Portlets.revenueGraphView.render().el).attr("id","ui-id-"+base_model.get("column_position")+"-"+base_model.get("row_position")).attr("data-sizey",base_model.get("size_y")).attr("data-sizex",base_model.get("size_x")).attr("data-col",base_model.get("column_position")).attr("data-row",base_model.get("row_position")).addClass('gs-w panel panel-default'));
+	}
+	else if(base_model.get('portlet_type')=="ACCOUNT" && base_model.get('name')=="Account Details"){
+		App_Portlets.accountView = new Base_Model_View({ model : base_model, template : "portlets-account-model", tagName : 'div',cursor : true,scroll_symbol:'scroll'});
+		if($('.gridster > div:visible > div',this.el).length==0)
+			$('.gridster > div:visible',this.el).html($(App_Portlets.accountView.render().el).attr("id","ui-id-"+base_model.get("column_position")+"-"+base_model.get("row_position")).attr("data-sizey",base_model.get("size_y")).attr("data-sizex",base_model.get("size_x")).attr("data-col",base_model.get("column_position")).attr("data-row",base_model.get("row_position")).addClass('gs-w panel panel-default'));
+		else
+			$('.gridster > div:visible > div:last',this.el).after($(App_Portlets.accountView.render().el).attr("id","ui-id-"+base_model.get("column_position")+"-"+base_model.get("row_position")).attr("data-sizey",base_model.get("size_y")).attr("data-sizex",base_model.get("size_x")).attr("data-col",base_model.get("column_position")).attr("data-row",base_model.get("row_position")).addClass('gs-w panel panel-default'));
+	}
+	else if(base_model.get('portlet_type')=="USERACTIVITY" && base_model.get('name')=="User Activities"){
+			posi=base_model.get("column_position")+''+base_model.get("row_position")
+		App_Portlets.activitiesView[parseInt(posi)] = new Base_Model_View({ model : base_model, template : "portlets-activites-model", tagName : 'div' });
+		
+		if($('.gridster > div:visible > div',this.el).length==0)
+			$('.gridster > div:visible',this.el).html($(App_Portlets.activitiesView[parseInt(posi)].render().el).attr("id","ui-id-"+base_model.get("column_position")+"-"+base_model.get("row_position")).attr("data-sizey",base_model.get("size_y")).attr("data-sizex",base_model.get("size_x")).attr("data-col",base_model.get("column_position")).attr("data-row",base_model.get("row_position")).addClass('gs-w panel panel-default'));
+		else
+			$('.gridster > div:visible > div:last',this.el).after($(App_Portlets.activitiesView[parseInt(posi)].render().el).attr("id","ui-id-"+base_model.get("column_position")+"-"+base_model.get("row_position")).attr("data-sizey",base_model.get("size_y")).attr("data-sizex",base_model.get("size_x")).attr("data-col",base_model.get("column_position")).attr("data-row",base_model.get("row_position")).addClass('gs-w panel panel-default'));
 	}
 	//var itemView = new Base_Model_View({ model : base_model, template : "portlets-model", tagName : 'div', });
 
@@ -188,6 +220,12 @@ function set_p_portlets(base_model){
 		if(base_model.get('settings').duration=='yesterday'){
 			start_date_str = ''+base_model.get('settings').duration;
 			end_date_str = 'today';
+		}else if(base_model.get('settings').duration=='this-week'){
+			start_date_str = ''+base_model.get('settings').duration;
+			end_date_str = 'this-week-end';
+		}else if(base_model.get('settings').duration=='this-month'){
+			start_date_str = ''+base_model.get('settings').duration;
+			end_date_str = 'this-month-end';
 		}else{
 			start_date_str = ''+base_model.get('settings').duration;
 			end_date_str = 'TOMORROW';
@@ -213,13 +251,46 @@ function set_p_portlets(base_model){
 			} });
 		App_Portlets.dealsWon[parseInt(pos)].collection.fetch();
 	}else if(base_model.get('portlet_type')=="TASKSANDEVENTS" && base_model.get('name')=="Agenda"){
-		App_Portlets.todayEventsCollection[parseInt(pos)] = new Base_Collection_View({ url : '/core/api/portlets/portletAgenda?start_time='+getNewDueDate("TODAY")+'&end_time='+getNewDueDate("TOMORROW"), templateKey : 'portlets-events', individual_tag_name : 'tr',
+		var start_date_str = '';
+		var end_date_str = '';
+		if(base_model.get('settings').duration=='next-7-days'){
+			start_date_str = 'TOMORROW';
+			end_date_str = ''+base_model.get('settings').duration;
+		}else if(base_model.get('settings').duration=='today-and-tomorrow'){
+			start_date_str = 'today';
+			end_date_str = ''+base_model.get('settings').duration;
+		}else if(base_model.get('settings').duration=='this-week'){
+			start_date_str = ''+base_model.get('settings').duration;
+			end_date_str = 'this-week-end';
+		}else{
+			start_date_str = ''+base_model.get('settings').duration;
+			end_date_str = 'TOMORROW';
+		}
+		
+		App_Portlets.todayEventsCollection[parseInt(pos)] = new Base_Collection_View({ url : '/core/api/portlets/portletAgenda?duration='+base_model.get('settings').duration+'&start_time='+getStartAndEndDatesOnDue(start_date_str)+'&end_time='+getStartAndEndDatesOnDue(end_date_str), templateKey : 'portlets-events', sort_collection : false, individual_tag_name : 'tr',
 			postRenderCallback : function(p_el){
 				addWidgetToGridster(base_model);
+				loadGoogleEventsForPortlets(p_el,getStartAndEndDatesOnDue(start_date_str),getStartAndEndDatesOnDue(end_date_str));
 			} });
 		App_Portlets.todayEventsCollection[parseInt(pos)].collection.fetch();
 	}else if(base_model.get('portlet_type')=="TASKSANDEVENTS" && base_model.get('name')=="Today Tasks"){
-		App_Portlets.tasksCollection[parseInt(pos)] = new Base_Collection_View({ url : '/core/api/portlets/portletTodayTasks?start_time='+getNewDueDate("TODAY")+'&end_time='+getNewDueDate("TOMORROW"), templateKey : 'portlets-tasks', individual_tag_name : 'tr',
+		var start_date_str = '';
+		var end_date_str = '';
+		if(base_model.get('settings').duration=='next-7-days'){
+			start_date_str = 'TOMORROW';
+			end_date_str = ''+base_model.get('settings').duration;
+		}else if(base_model.get('settings').duration=='today-and-tomorrow'){
+			start_date_str = 'today';
+			end_date_str = ''+base_model.get('settings').duration;
+		}else if(base_model.get('settings').duration=='this-week'){
+			start_date_str = ''+base_model.get('settings').duration;
+			end_date_str = 'this-week-end';
+		}else{
+			start_date_str = ''+base_model.get('settings').duration;
+			end_date_str = 'TOMORROW';
+		}
+		
+		App_Portlets.tasksCollection[parseInt(pos)] = new Base_Collection_View({ url : '/core/api/portlets/portletTodayTasks?duration='+base_model.get('settings').duration+'&start_time='+getStartAndEndDatesOnDue(start_date_str)+'&end_time='+getStartAndEndDatesOnDue(end_date_str), templateKey : 'portlets-tasks', sort_collection : false, individual_tag_name : 'tr',
 			postRenderCallback : function(p_el){
 				addWidgetToGridster(base_model);
 			} });
@@ -253,20 +324,47 @@ function set_p_portlets(base_model){
 									"</div>";
 				$('.stats-report-settings',p_el).find('span').eq(0).before(settingsEl);
 			} });*/
+	}else if(base_model.get('portlet_type')=="USERACTIVITY" && base_model.get('name')=="Leaderboard"){
+		var start_date_str = base_model.get('settings').duration+'-start';
+		var end_date_str = base_model.get('settings').duration+'-end';
+		var users = '';
+		if(base_model.get('settings').user!=undefined)
+			users = JSON.stringify(base_model.get('settings').user);
+		App_Portlets.leaderboard[parseInt(pos)] = new Base_Model_View({ url : '/core/api/portlets/portletLeaderboard?duration='+base_model.get('settings').duration+'&start-date='+getStartAndEndDatesOnDue(start_date_str)+'&end-date='+getStartAndEndDatesOnDue(end_date_str)+'&revenue='+base_model.get('settings').category.revenue+'&dealsWon='+base_model.get('settings').category.dealsWon+'&calls='+base_model.get('settings').category.calls+'&tasks='+base_model.get('settings').category.tasks+'&user='+users, template : 'portlets-leader-board-body-model', tagName : 'div',
+			portletSizeX : base_model.get('size_x'), portletSizeY : base_model.get('size_y'), postRenderCallback : function(p_el){
+				addWidgetToGridster(base_model);
+				$('#ui-id-'+column_position+'-'+row_position+' > .portlet_header').find('ul').width(($('#ui-id-'+column_position+'-'+row_position+' > .portlet_body').find('ul').width()/$('#ui-id-'+column_position+'-'+row_position+' > .portlet_body').width()*100)+'%');
+			} });
+	}else if(base_model.get('portlet_type')=="ACCOUNT" && base_model.get('name')=="Account Details"){
+		App_Portlets.accountInfo[parseInt(pos)] = new Base_Model_View({ url : '/core/api/portlets/portletAccount', template : "portlets-account-body-model", 
+			postRenderCallback : function(p_el){
+				addWidgetToGridster(base_model);
+			} });
 	}
-	if(itemCollection!=undefined)
-		itemCollection.collection.fetch();
+	else if(base_model.get('portlet_type')=="USERACTIVITY" && base_model.get('name')=="User Activities"){
+		
+		
+		App_Portlets.activity[parseInt(pos)] = new Base_Collection_View({ url : '/core/api/portlets/portletCustomerActivity', sortKey : 'time', descending : true,
+			templateKey : "portlets-activities-list-log", cursor : true, page_size : 20, individual_tag_name:'div',
+			postRenderCallback : function(p_el){
+				addWidgetToGridster(base_model);
+				
+				head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
+						{
+							$("time", p_el).timeago();
+									
+						});
+				contact_detail_page_infi_scroll($('.activity_body',App_Portlets.activitiesView[parseInt(pos)].el),App_Portlets.activity[parseInt(pos)])
+					}, appendItemCallback : function(p_el)
+					{
+						includeTimeAgo(p_el);
+		}});
+		App_Portlets.activity[parseInt(pos)].appendItem = append_activity;
+		App_Portlets.activity[parseInt(pos)].collection.fetch();
+		
+	}
 	$('.portlet_body',this.el).each(function(){
-		if($(this).parent().attr('id')=='ui-id-'+column_position+'-'+row_position && base_model.get('name')!="Deals By Milestone" 
-			&& base_model.get('name')!="Closures Per Person" && base_model.get('name')!="Deals Funnel" && base_model.get('name')!="Emails Sent"
-				&& base_model.get('name')!="Growth Graph" && base_model.get('name')!="Today Tasks" && base_model.get('name')!="Deals Assigned"
-					&& base_model.get('name')!="Calls Per Person" && base_model.get('name')!="Agile CRM Blog" && base_model.get('name')!="Agenda" 
-						&& base_model.get('name')!="Pending Deals" && base_model.get('name')!="Deals Won" && base_model.get('name')!="Filter Based" 
-							&& base_model.get('name')!="Emails Opened" && base_model.get('name')!="Task Report" && base_model.get('name')!="Onboarding"){
-			$(this).html(getRandomLoadingImg());
-			$(this).html($(itemCollection.render().el));
-			setPortletContentHeight(base_model);
-		}else if($(this).parent().attr('id')=='ui-id-'+column_position+'-'+row_position && base_model.get('name')=="Filter Based"){
+		if($(this).parent().attr('id')=='ui-id-'+column_position+'-'+row_position && base_model.get('name')=="Filter Based"){
 			if(base_model.get('settings').filter=="companies"){
 				App_Portlets.filteredCompanies[parseInt(pos)].collection.fetch();
 				$(this).html(getRandomLoadingImg());
@@ -292,12 +390,48 @@ function set_p_portlets(base_model){
 			$(this).html($(App_Portlets.dealsWon[parseInt(pos)].render().el));
 			setPortletContentHeight(base_model);
 		}else if($(this).parent().attr('id')=='ui-id-'+column_position+'-'+row_position && base_model.get('name')=="Agenda"){
-			$(this).html(getRandomLoadingImg());
-			$(this).html($(App_Portlets.todayEventsCollection[parseInt(pos)].render().el));
+			/*if(App_Portlets.todayEventsCollection[parseInt(pos)]!=undefined && App_Portlets.todayEventsCollection[parseInt(pos)].collection.length>0){
+				$(this).html(getRandomLoadingImg());
+				$(this).html($(App_Portlets.todayEventsCollection[parseInt(pos)].render().el));
+			}else{
+				if(base_model.get('settings').duration=="next-7-days")
+					$(this).html("<div class='portlet-error-message'>No calendar events for next 7 days</div>");
+				else if(base_model.get('settings').duration=="this-week")
+					$(this).html("<div class='portlet-error-message'>No calendar events for this week</div>");
+				else if(base_model.get('settings').duration=="today-and-tomorrow")
+					$(this).html("<div class='portlet-error-message'>No calendar events for today and tomorrow</div>");
+				else if(base_model.get('settings').duration=="1-day")
+					$(this).html("<div class='portlet-error-message'>No calendar events for today</div>");
+			}*/
+			$(this).find('#normal-events').html(getRandomLoadingImg());
+			$(this).find('#normal-events').html($(App_Portlets.todayEventsCollection[parseInt(pos)].render().el));
 			setPortletContentHeight(base_model);
 		}else if($(this).parent().attr('id')=='ui-id-'+column_position+'-'+row_position && base_model.get('name')=="Today Tasks"){
+			/*if(App_Portlets.tasksCollection[parseInt(pos)]!=undefined && App_Portlets.tasksCollection[parseInt(pos)].collection.length>0){
+				$(this).html(getRandomLoadingImg());
+				$(this).html($(App_Portlets.tasksCollection[parseInt(pos)].render().el));
+			}else{
+				if(base_model.get('settings').duration=="next-7-days")
+					$(this).html("<div class='portlet-error-message'>No tasks for next 7 days</div>");
+				else if(base_model.get('settings').duration=="this-week")
+					$(this).html("<div class='portlet-error-message'>No tasks for this week</div>");
+				else if(base_model.get('settings').duration=="today-and-tomorrow")
+					$(this).html("<div class='portlet-error-message'>No tasks for today and tomorrow</div>");
+				else if(base_model.get('settings').duration=="1-day")
+					$(this).html("<div class='portlet-error-message'>No tasks for today</div>");
+				else if(base_model.get('settings').duration=="all-over-due")
+					$(this).html("<div class='portlet-error-message'>No overdue tasks</div>");
+			}*/
 			$(this).html(getRandomLoadingImg());
 			$(this).html($(App_Portlets.tasksCollection[parseInt(pos)].render().el));
+			setPortletContentHeight(base_model);
+		}else if($(this).parent().attr('id')=='ui-id-'+column_position+'-'+row_position && base_model.get('name')=="Leaderboard"){
+			var sizey = parseInt($(this).parent().attr("data-sizey"));
+	    	var topPos = 50*sizey;
+	    	if(sizey==2 || sizey==3)
+	    		topPos += 50;
+	        $(this).html("<div class='text-center v-middle opa-half' style='margin-top:"+topPos+"px'><img src='../flatfull/img/ajax-loader-cursor.gif' style='width:12px;height:10px;opacity:0.5;' /></div>");
+	    	$(this).html($(App_Portlets.leaderboard[parseInt(pos)].render().el));
 			setPortletContentHeight(base_model);
 		}else if($(this).parent().attr('id')=='ui-id-'+column_position+'-'+row_position && base_model.get('name')=="Deals By Milestone"){
 			$(this).attr('id','p-body-'+column_position+'-'+row_position);
@@ -528,7 +662,7 @@ function set_p_portlets(base_model){
 			$(this).attr('id','p-body-'+column_position+'-'+row_position);
 			
 			var selector=$(this).attr('id');
-			var url='/core/api/portlets/portletGrowthGraph?tags='+base_model.get('settings').tags+'&frequency='+base_model.get('settings').frequency+'&duration='+base_model.get('settings').duration+'&start-date='+getStartAndEndDatesOnDue(base_model.get('settings').duration)+'&end-date='+getStartAndEndDatesOnDue("TOMORROW");
+			var url='/core/api/portlets/portletGrowthGraph?tags='+base_model.get('settings').tags+'&frequency='+base_model.get('settings').frequency+'&duration='+base_model.get('settings').duration+'&start-date='+getUTCMidNightEpochFromDate(new Date(getStartAndEndDatesOnDue(base_model.get('settings').duration)*1000))+'&end-date='+getUTCMidNightEpochFromDate(new Date(getStartAndEndDatesOnDue("TOMORROW")*1000));
 			var sizey = parseInt($('#'+selector).parent().attr("data-sizey"));
 			var topPos = 50*sizey;
 			if(sizey==2 || sizey==3)
@@ -545,6 +679,13 @@ function set_p_portlets(base_model){
 					
 					return;
 				}
+				
+				var categories = [];
+				var tempcategories = [];
+				var dataLength = 0;
+				var min_tick_interval = 1;
+				var frequency = base_model.get('settings').frequency;
+				
 				var sortedKeys = [];
 				$.each(data,function(k,v){
 					sortedKeys.push(k);
@@ -575,14 +716,83 @@ function set_p_portlets(base_model){
 						// Find series with the name k1 and to that,
 						// push v1
 						var series_data = find_series_with_name(series, k1);
-						series_data.data.push([
-								k * 1000, v1
-						]);
+						var dt = new Date(k*1000);
+						series_data.data.push(v1);
 					});
+					tempcategories.push(k*1000);
+					dataLength++;
 
 				});
+
+				var cnt = 0;
+				if(Math.ceil(dataLength/10)>0){
+					min_tick_interval = Math.ceil(dataLength/10);
+					if(min_tick_interval==3){
+						min_tick_interval = 4;
+					}
+				}
+				head.js(LIB_PATH + 'lib/flot/highcharts-3.js', function(){
+					$.each(sortedData, function(k, v){
+						var dte = new Date(tempcategories[cnt]);
+						if(frequency!=undefined){
+							if(frequency=="daily"){
+								categories.push(Highcharts.dateFormat('%e.%b', Date.UTC(dte.getUTCFullYear(), dte.getUTCMonth(), dte.getUTCDate()))+'');
+							}else if(frequency=="weekly"){
+								if(cnt!=dataLength-1){
+									var next_dte = new Date(tempcategories[cnt+1]);
+									categories.push(Highcharts.dateFormat('%e.%b', Date.UTC(dte.getUTCFullYear(), dte.getUTCMonth(), dte.getUTCDate()))+' - '+Highcharts.dateFormat('%e.%b', Date.UTC(next_dte.getUTCFullYear(), next_dte.getUTCMonth(), next_dte.getUTCDate()-1)));
+								}else{
+									var end_date = new Date();
+									categories.push(Highcharts.dateFormat('%e.%b', Date.UTC(dte.getUTCFullYear(), dte.getUTCMonth(), dte.getUTCDate()))+' - '+Highcharts.dateFormat('%e.%b', Date.UTC(end_date.getFullYear(), end_date.getMonth(), end_date.getDate())));
+								}
+							}else if(frequency=="monthly"){
+								if(cnt!=dataLength-1){
+									var next_dte = new Date(tempcategories[cnt+1]);
+									var current_date = new Date();
+									var from_date = '';
+									var to_date = '';
+									if(cnt!=0){
+										if(current_date.getUTCFullYear()!=dte.getUTCFullYear()){
+											from_date = Highcharts.dateFormat('%b.%Y', Date.UTC(dte.getUTCFullYear(), dte.getUTCMonth(), dte.getUTCDate()));
+										}else{
+											from_date = Highcharts.dateFormat('%b', Date.UTC(dte.getUTCFullYear(), dte.getUTCMonth(), dte.getUTCDate()));
+										}
+										categories.push(from_date);
+									}else{
+										if(current_date.getUTCFullYear()!=dte.getUTCFullYear()){
+											from_date = Highcharts.dateFormat('%e.%b.%Y', Date.UTC(dte.getUTCFullYear(), dte.getUTCMonth(), dte.getUTCDate()));
+										}else{
+											from_date = Highcharts.dateFormat('%e.%b', Date.UTC(dte.getUTCFullYear(), dte.getUTCMonth(), dte.getUTCDate()));
+										}
+										if(current_date.getUTCFullYear()!=next_dte.getUTCFullYear()){
+											to_date = Highcharts.dateFormat('%e.%b.%Y', Date.UTC(next_dte.getUTCFullYear(), next_dte.getUTCMonth(), next_dte.getUTCDate()-1));
+										}else{
+											to_date = Highcharts.dateFormat('%e.%b', Date.UTC(next_dte.getUTCFullYear(), next_dte.getUTCMonth(), next_dte.getUTCDate()-1));
+										}
+										categories.push(from_date+' - '+to_date);
+									}
+								}else{
+									var current_date = new Date();
+									var from_date = '';
+									var to_date = '';
+									var end_date = new Date();
+									if(current_date.getUTCFullYear()!=dte.getUTCFullYear()){
+										from_date = Highcharts.dateFormat('%e.%b.%Y', Date.UTC(dte.getUTCFullYear(), dte.getUTCMonth(), dte.getUTCDate()));
+										to_date = Highcharts.dateFormat('%e.%b.%Y', Date.UTC(end_date.getFullYear(), end_date.getMonth(), end_date.getDate()));
+									}else{
+										from_date = Highcharts.dateFormat('%e.%b', Date.UTC(dte.getUTCFullYear(), dte.getUTCMonth(), dte.getUTCDate()));
+										to_date = Highcharts.dateFormat('%e.%b', Date.UTC(end_date.getFullYear(), end_date.getMonth(), end_date.getDate()));
+									}
+									categories.push(from_date+' - '+to_date);
+								}
+							}
+							cnt++;
+						}
+
+					});
+				});
 				
-				portletGrowthGraph(selector,series,base_model);
+				portletGrowthGraph(selector,series,base_model,categories,min_tick_interval);
 				
 				addWidgetToGridster(base_model);
 			});
@@ -640,13 +850,23 @@ function set_p_portlets(base_model){
 			if(base_model.get('settings').duration=='yesterday'){
 				start_date_str = ''+base_model.get('settings').duration;
 				end_date_str = 'today';
+			}else if(base_model.get('settings').duration=='this-week'){
+				start_date_str = ''+base_model.get('settings').duration;
+				end_date_str = 'this-week-end';
+			}else if(base_model.get('settings').duration=='this-month'){
+				start_date_str = ''+base_model.get('settings').duration;
+				end_date_str = 'this-month-end';
 			}else{
 				start_date_str = ''+base_model.get('settings').duration;
 				end_date_str = 'TOMORROW';
 			}
 			
+			var users = '';
+			if(base_model.get('settings')["calls-user-list"]!=undefined)
+				users = JSON.stringify(base_model.get('settings')["calls-user-list"]);
+
 			var selector=$(this).attr('id');
-			var url='/core/api/portlets/portletCallsPerPerson?duration='+base_model.get('settings').duration+'&start-date='+getStartAndEndDatesOnDue(start_date_str)+'&end-date='+getStartAndEndDatesOnDue(end_date_str);
+			var url='/core/api/portlets/portletCallsPerPerson?duration='+base_model.get('settings').duration+'&start-date='+getStartAndEndDatesOnDue(start_date_str)+'&end-date='+getStartAndEndDatesOnDue(end_date_str)+'&user='+users;
 			
 			var answeredCallsCountList=[];
 			var busyCallsCountList=[];
@@ -731,7 +951,7 @@ function set_p_portlets(base_model){
 			
 			setPortletContentHeight(base_model);
 			
-			addWidgetToGridster(base_model);
+			//addWidgetToGridster(base_model);
 		}else if($(this).parent().attr('id')=='ui-id-'+column_position+'-'+row_position && base_model.get('name')=="Task Report"){
 			$(this).attr('id','p-body-'+column_position+'-'+row_position);
 			
@@ -740,13 +960,23 @@ function set_p_portlets(base_model){
 			if(base_model.get('settings').duration=='yesterday'){
 				start_date_str = ''+base_model.get('settings').duration;
 				end_date_str = 'today';
+			}else if(base_model.get('settings').duration=='this-week'){
+				start_date_str = ''+base_model.get('settings').duration;
+				end_date_str = 'this-week-end';
+			}else if(base_model.get('settings').duration=='this-month'){
+				start_date_str = ''+base_model.get('settings').duration;
+				end_date_str = 'this-month-end';
 			}else{
 				start_date_str = ''+base_model.get('settings').duration;
 				end_date_str = 'TOMORROW';
 			}
+
+			var users = '';
+			if(base_model.get('settings')["task-report-user-list"]!=undefined)
+				users = JSON.stringify(base_model.get('settings')["task-report-user-list"]);
 			
 			var selector=$(this).attr('id');
-			var url='/core/api/portlets/portletTaskReport?group-by='+base_model.get('settings')["group-by"]+'&split-by='+base_model.get('settings')["split-by"]+'&start-date='+getStartAndEndDatesOnDue(start_date_str)+'&end-date='+getStartAndEndDatesOnDue(end_date_str)+'&tasks='+base_model.get('settings').tasks;
+			var url='/core/api/portlets/portletTaskReport?group-by='+base_model.get('settings')["group-by"]+'&split-by='+base_model.get('settings')["split-by"]+'&start-date='+getStartAndEndDatesOnDue(start_date_str)+'&end-date='+getStartAndEndDatesOnDue(end_date_str)+'&tasks='+base_model.get('settings').tasks+'&user='+users;
 			
 			var groupByList=[];
 			var splitByList=[];
@@ -805,6 +1035,86 @@ function set_p_portlets(base_model){
 				$(this).hide();
 			
 			setPortletContentHeight(base_model);
+		}else if($(this).parent().attr('id')=='ui-id-'+column_position+'-'+row_position && base_model.get('name')=="Revenue Graph"){
+			$(this).attr('id','p-body-'+column_position+'-'+row_position);
+			
+			var start_date_str = base_model.get('settings').duration+'-start';
+			var end_date_str = base_model.get('settings').duration+'-end';
+
+			var selector=$(this).attr('id');
+			var pipeline_id = 0;
+			if(base_model.get('settings').track!=undefined && base_model.get('settings').track!="anyTrack"){
+				pipeline_id = base_model.get('settings').track;
+			}
+			var url='core/api/opportunity/stats/details/'+pipeline_id+'?min='+getStartAndEndDatesOnDue(start_date_str)+'&max='+(getStartAndEndDatesOnDue(end_date_str)-1)+'';
+
+			fetchPortletsGraphData(url,function(data){
+				if(data.status==406){
+					// Show cause of error in saving
+					$save_info = $('<div class="portlet-error-message inline-block"><small><p class="text-base" style="color:#B94A48;"><i>'
+							+ data.responseText
+							+ '</i></p></small></div>');
+					
+					$('#'+selector).html($save_info).show();
+					
+					return;
+				}
+				var sortedKeys = [];
+				var categories = [];
+				$.each(data,function(k,v){
+					sortedKeys.push(k);
+				});
+				sortedKeys.sort();
+				var sortedData = {};
+				$.each(sortedKeys,function(index,value){
+					sortedData[''+value] = data[''+value];
+				});
+				var series;
+				// Iterates through data and adds keys into
+				// categories
+				$.each(sortedData, function(k, v){
+					// Initializes series with names with the first
+					// data point
+					if (series == undefined){
+						var index = 0;
+						series = [];
+						$.each(v, function(k1, v1){
+							var series_data = {};
+							series_data.name = k1;
+							series_data.data = [];
+							series[index++] = series_data;
+						});
+					}
+					// Fill Data Values with series data
+					$.each(v, function(k1, v1){
+						// Find series with the name k1 and to that,
+						// push v1
+						var series_data = find_series_with_name(series, k1);
+						series_data.data.push(v1);
+					});
+					var dt = new Date(k * 1000);
+					categories.push(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));
+
+				});
+				
+				portletDealRevenueGraph(selector,series,base_model,categories);
+				
+				addWidgetToGridster(base_model);
+			});
+			setPortletContentHeight(base_model);
+		}
+		else if($(this).parent().attr('id')=='ui-id-'+column_position+'-'+row_position && base_model.get('name')=="Account Details"){
+			
+			$(this).html(getRandomLoadingImg());
+			$(this).html($(App_Portlets.accountInfo[parseInt(pos)].render().el));
+			setPortletContentHeight(base_model);
+		}
+		
+		else if($(this).parent().attr('id')=='ui-id-'+column_position+'-'+row_position && base_model.get('name')=="User Activities"){
+			
+			$(this).html(getRandomLoadingImg());
+			$(this).html($(App_Portlets.activity[parseInt(pos)].render().el));
+			setPortletContentHeight(base_model);
 		}
 		if($(this).parent().attr('id')=='ui-id-'+column_position+'-'+row_position && base_model.get('name')=="Emails Opened"){
 			$(this).attr('id','p-body-'+column_position+'-'+row_position);
@@ -814,6 +1124,12 @@ function set_p_portlets(base_model){
 			if(base_model.get('settings').duration=='yesterday'){
 				start_date_str = ''+base_model.get('settings').duration;
 				end_date_str = 'today';
+			}else if(base_model.get('settings').duration=='this-week'){
+				start_date_str = ''+base_model.get('settings').duration;
+				end_date_str = 'this-week-end';
+			}else if(base_model.get('settings').duration=='this-month'){
+				start_date_str = ''+base_model.get('settings').duration;
+				end_date_str = 'this-month-end';
 			}else{
 				start_date_str = ''+base_model.get('settings').duration;
 				end_date_str = 'TOMORROW';
@@ -851,7 +1167,7 @@ function set_p_portlets(base_model){
 			
 			setPortletContentHeight(base_model);
 		}
-		addWidgetToGridster(base_model);
+		//addWidgetToGridster(base_model);
 	});
 	$('.stats_report_portlet_body', this.el).each(function(){
 		/*if($(this).parent().attr('id')=='ui-id-'+column_position+'-'+row_position && base_model.get('name')=="Stats Report"){
@@ -874,6 +1190,12 @@ function set_p_portlets(base_model){
 			}else if(base_model.get('settings').duration=='24-hours'){
 				start_date_str = ''+base_model.get('settings').duration;
 				end_date_str = 'now';
+			}else if(base_model.get('settings').duration=='this-week'){
+				start_date_str = ''+base_model.get('settings').duration;
+				end_date_str = 'this-week-end';
+			}else if(base_model.get('settings').duration=='this-month'){
+				start_date_str = ''+base_model.get('settings').duration;
+				end_date_str = 'this-month-end';
 			}else{
 				start_date_str = ''+base_model.get('settings').duration;
 				end_date_str = 'TOMORROW';
@@ -1186,7 +1508,7 @@ function dealsFunnelGraph(selector,funnel_data){
 	            marginRight: 20,
 	            className: 'deals-funnel-portlet'
 	        },
-	        colors : [ "#23b7e5", "#27c24c", "#7266ba", "#fad733","#f05050" ],
+	        colors : [ "#23b7e5", "#27c24c", "#7266ba", "#fad733","#f05050","#aaeeee", "#ff0066", "#eeaaee", "#55BF3B", "#DF5353" ],
 	        title: {
 	            text: ''
 	        },
@@ -1285,7 +1607,7 @@ function emailsSentBarGraph(selector,domainUsersList,series,mailsCountList,mails
 	    });
 	});
 }
-function portletGrowthGraph(selector,series,base_model){
+function portletGrowthGraph(selector,series,base_model,categories,min_tick_interval){
 	var flag=true;
 	
 	/*if(base_model.get("settings").tags==""){
@@ -1316,19 +1638,22 @@ function portletGrowthGraph(selector,series,base_model){
 		        chart: {
 		            type: 'areaspline',
 		            marginRight: 20,
-		            plotBorderWidth: 1,
-		            plotBorderColor: '#F4F4F5'
+		            //plotBorderWidth: 1,
+		            //plotBorderColor: '#F4F4F5'
 		        },
 		        title: {
 		            text: ''
 		        },
 		        xAxis: {
-		        	type: 'datetime',
+		        	/*type: 'datetime',
 			        dateTimeLabelFormats: {
 			            //don't display the dummy year  month: '%e.%b',
 			        	day: '%e.%b'
 			        },
-			        minTickInterval: 24 * 3600 * 1000,
+			        minTickInterval: min_interval,*/
+			        categories: categories,
+			        tickmarkPlacement: 'on',
+			        minTickInterval: min_tick_interval,
 			        gridLineWidth : 1,
 					gridLineColor : '#F4F4F5',
 					labels : {
@@ -1395,7 +1720,7 @@ function portletGrowthGraph(selector,series,base_model){
 					align : 'right',
 					verticalAlign : 'top'
 				},
-				colors : [ "#23b7e5", "#27c24c", "#7266ba", "#fad733","#f05050" ],
+				colors : [ "#23b7e5", "#27c24c", "#7266ba", "#fad733","#f05050","#aaeeee", "#ff0066", "#eeaaee", "#55BF3B", "#DF5353" ],
 		    });
 		});
 	}
@@ -1468,10 +1793,12 @@ function callsPerPersonBarGraph(selector,domainUsersList,series,totalCallsCountL
 	                formatter: function() {
 	                	var userIndex=0;
 	                	for(var i=0;i<domainUserImgList.length;i++){
-	                		if(this.value==domainUserImgList[i])
+	                		if(this.value==domainUserImgList[i] && domainUserImgList[i].substring(0,8)!="no image")
 	                			userIndex=i;
+	                		else if(this.value==domainUserImgList[i] && domainUserImgList[i].substring(0,8)=="no image")
+		                			userIndex=parseInt(domainUserImgList[i].substring(9,10));
 	                	}
-	                	if(this.value!=undefined && this.value!="")
+	                	if(this.value!=undefined && this.value!="" && this.value.substring(0,8)!="no image")
 	                		return '<img src="'+this.value+'" alt="" style="vertical-align: middle; width: 25px; height: 25px;border-radius:15px;" title="'+domainUsersList[userIndex]+'"/>';
 	                	else
 	                		return '<img src="'+gravatarImgForPortlets(25)+'" alt="" style="vertical-align: middle; width: 25px; height: 25px;border-radius:15px;" title="'+domainUsersList[userIndex]+'"/>';
@@ -1562,7 +1889,7 @@ function callsPerPersonBarGraph(selector,domainUsersList,series,totalCallsCountL
 	        exporting: {
 		        enabled: false
 		    },
-		    colors : [ "#27c24c", "#23b7e5", "#f05050", "#7266ba", "#fad733" ],
+		    colors : [ "#27c24c", "#23b7e5", "#f05050", "#7266ba", "#fad733","#aaeeee", "#ff0066", "#eeaaee", "#55BF3B", "#DF5353" ],
 		    legend : {
 				itemStyle : {
 					fontSize : '10px',
@@ -1616,7 +1943,21 @@ function setPortletContentHeight(base_model){
 		
 		$('#'+base_model.get("id")).parent().find('.stats_report_portlet').css("overflow-x","hidden");
 		$('#'+base_model.get("id")).parent().find('.stats_report_portlet').css("overflow-y","hidden");
-	}else{
+	}/*else if(base_model.get("name")=="Leaderboard"){
+		if(base_model.get("size_y")==1){
+			$('#'+base_model.get("id")).parent().find('.portlet_body').css("height",(base_model.get("size_y")*200)+"px");
+			$('#'+base_model.get("id")).parent().find('.portlet_body').css("max-height",(base_model.get("size_y")*200)+"px");
+		}else if(base_model.get("size_y")==2){
+			$('#'+base_model.get("id")).parent().find('.portlet_body').css("height",(base_model.get("size_y")*200)+10+"px");
+			$('#'+base_model.get("id")).parent().find('.portlet_body').css("max-height",(base_model.get("size_y")*200)+10+"px");
+		}else if(base_model.get("size_y")==3){
+			$('#'+base_model.get("id")).parent().find('.portlet_body').css("height",(base_model.get("size_y")*200)+20+"px");
+			$('#'+base_model.get("id")).parent().find('.portlet_body').css("max-height",(base_model.get("size_y")*200)+20+"px");
+		}
+		
+		$('#'+base_model.get("id")).parent().find('.portlet_body').css("overflow-x","hidden");
+		$('#'+base_model.get("id")).parent().find('.portlet_body').css("overflow-y","auto");
+	}*/else{
 		if(base_model.get("size_y")==1){
 			$('#'+base_model.get("id")).parent().find('.portlet_body').css("height",(base_model.get("size_y")*200)-45+"px");
 			$('#'+base_model.get("id")).parent().find('.portlet_body').css("max-height",(base_model.get("size_y")*200)-45+"px");
@@ -1670,7 +2011,7 @@ function getPortletsTimeConversion(diffInSeconds){
 function taskReportBarGraph(selector,groupByList,series,text,base_model,domainUserNamesList){
 	head.js(LIB_PATH + 'lib/flot/highcharts-3.js', function(){
 		$('#'+selector).highcharts({
-			colors : [ "#23b7e5", "#27c24c", "#7266ba", "#fad733","#f05050" ],
+			colors : [ "#23b7e5", "#27c24c", "#7266ba", "#fad733","#f05050","#aaeeee", "#ff0066", "#eeaaee", "#55BF3B", "#DF5353" ],
 	        chart: {
 	            type: 'bar',
 	            marginRight: 20
@@ -1685,10 +2026,12 @@ function taskReportBarGraph(selector,groupByList,series,text,base_model,domainUs
 	                	if(base_model.get('settings')["group-by"]=="user"){
 	                		var userIndex=0;
 		                	for(var i=0;i<groupByList.length;i++){
-		                		if(this.value==groupByList[i])
+		                		if(this.value==groupByList[i] && groupByList[i].substring(0,8)!="no image")
 		                			userIndex=i;
+		                		else if(this.value==groupByList[i] && groupByList[i].substring(0,8)=="no image")
+		                			userIndex=parseInt(groupByList[i].substring(9,10));
 		                	}
-	                		if(this.value!=undefined && this.value!="")
+	                		if(this.value!=undefined && this.value!="" && this.value.substring(0,8)!="no image")
 		                		return '<img src="'+this.value+'" alt="" style="vertical-align: middle; width: 25px; height: 25px;border-radius:15px;" title="'+domainUserNamesList[userIndex]+'"/>';
 		                	else
 		                		return '<img src="'+gravatarImgForPortlets(25)+'" alt="" style="vertical-align: middle; width: 25px; height: 25px;border-radius:15px;" title="'+domainUserNamesList[userIndex]+'"/>';
@@ -1746,7 +2089,25 @@ function taskReportBarGraph(selector,groupByList,series,text,base_model,domainUs
 				borderRadius : 3,
 				style : {
 					color : '#EFEFEF'
-				}
+				},
+				formatter: function() {
+                	if(base_model.get('settings')["group-by"]=="user"){
+                		var userIndex=0;
+	                	for(var i=0;i<groupByList.length;i++){
+	                		if(this.key==groupByList[i])
+	                			userIndex=i;
+	                	}
+                		return  '<div>' + 
+        		        		'<div class="p-n" style="color:'+this.series.color+';">'+domainUserNamesList[userIndex]+' </div>' +
+        		        		'<div class="p-n" style="color:'+this.series.color+';">'+this.series.name+':'+this.y+' </div>' +
+        		        		'</div>';
+                	}else
+                		return  '<div>' + 
+		        				'<div class="p-n" style="color:'+this.series.color+';">'+this.x+' </div>' +
+		        				'<div class="p-n" style="color:'+this.series.color+';">'+this.series.name+':'+this.y+' </div>' + 
+		        				'</div>';
+                },
+                useHTML: true
 			},
 			legend : {
 				itemStyle : {
@@ -1891,4 +2252,154 @@ function emailsOpenedPieChart(selector,data,emailsSentCount,emailsOpenedCount){
 }
 function showUserName(obj){
 	alert("hai");
+}
+function portletDealRevenueGraph(selector,series,base_model,categories){
+	
+	head.js(LIB_PATH + 'lib/flot/highcharts-3.js', function(){
+			if(series==undefined && categories!=undefined && categories.length==0){
+				$('#'+selector).html('<div class="portlet-error-message">No deals found</div>');
+				return;
+			}
+			$('#'+selector).highcharts({
+		        chart: {
+		            type: 'areaspline',
+		            marginRight: 20,
+		            //plotBorderWidth: 1,
+		            //plotBorderColor: '#F4F4F5'
+		        },
+		        title: {
+		            text: ''
+		        },
+		        xAxis: {
+		        	//type: 'datetime',
+		        	categories: categories,
+			        /*dateTimeLabelFormats: {
+			            //don't display the dummy year  month: '%e.%b',
+			        	day: '%e.%b'
+			        },*/
+			        //minTickInterval: 24 * 3600 * 1000,
+			        gridLineWidth : 1,
+					gridLineColor : '#F4F4F5',
+					labels : {
+						style : {
+							color : '#98a6ad',
+							fontSize : '11px'
+						},
+						formatter: function(){
+							return Highcharts.dateFormat('%b',this.value);
+						},
+					},
+					lineWidth : 0,
+					tickWidth : 0,
+					tickmarkPlacement: 'on'
+		        },
+		        yAxis: {
+		            min: 0,
+		            title: {
+		                text: ''
+		            },
+		            gridLineWidth : 1,
+		    		gridLineColor : '#F4F4F5',
+		    		labels : {
+		    			style : {
+		    				color : '#98a6ad',
+		    				fontSize : '11px'
+		    			}
+		    		}
+		        },
+		        plotOptions: {
+		        	series : {
+		    			borderWidth : 2,
+		    			borderColor : '#23b7e5',
+		    			marker: {
+		    				symbol: 'circle'
+		    			}
+		    		},
+		    		areaspline: {
+		    			marker: {
+		    				lineWidth: 1,
+		                    lineColor: null, // inherit from series
+		                    radius: 2
+		    			}
+		    		}
+		        },
+		        series: series,
+		        exporting: {
+			        enabled: false
+			    },
+			    tooltip : {
+					borderWidth : 1,
+					backgroundColor : '#313030',
+					shadow : false,
+					borderColor: '#000',
+					borderRadius : 3,
+					style : {
+						color : '#EFEFEF'
+					},
+					formatter: function(){
+		        		return '<div>' + 
+		        		        '<div class="p-n">'+Highcharts.dateFormat('%b',this.x)+'</div>' + 
+		        		        '<div class="p-n"><font color='+this.series.color+'>'+this.series.name+'</font> : '+getPortletsCurrencySymbol()+''+getNumberWithCommasForPortlets(this.y)+'</div>' +
+		        		        '</div>';
+		        	},
+					useHTML: true
+				},
+				legend : {
+					itemStyle : {
+						fontSize : '10px',
+						color : '#98a6ad'
+					},
+					borderWidth : 0,
+					layout : 'vertical',
+					floating : true,
+					align : 'right',
+					verticalAlign : 'top'
+				},
+				colors : [ "#23b7e5", "#27c24c", "#7266ba", "#fad733","#f05050","#aaeeee", "#ff0066", "#eeaaee", "#55BF3B", "#DF5353" ],
+		    });
+		});
+}
+
+function append_activity(base_model)
+{
+
+	var itemView = new Base_List_View({ model : base_model, "view" : "inline", template : this.options.templateKey + "-model"});
+
+	// add to the right box - overdue, today, tomorrow etc.
+	var createdtime = get_activity_created_time(base_model.get('time'));
+
+	// Today
+	if (createdtime == 0)
+	{
+		$('#earllier',this.el).show();
+		$('#next-week-heading', this.el).show();
+		var heading = $('#today-heading', this.el);
+
+		$('#today-activity', this.el).append(itemView.render().el);
+		$('#today-activity', this.el).parent('table').css("display", "block");
+		$('#today-activity', this.el).show();
+		$('#today-heading', this.el).show();
+	}
+
+	if (createdtime == -1)
+	{
+		$('#earllier',this.el).show();
+		$('#next-week-heading', this.el).show();
+		var heading = $('#tomorrow-heading', this.el);
+
+		$('#tomorrow-activity', this.el).append(itemView.render().el);
+		$('#tomorrow-activity', this.el).parent('table').css("display", "block");
+		$('#tomorrow-activity', this.el).show();
+		$('#tomorrow-heading', this.el).show();
+	}
+	if (createdtime < -1)
+	{
+
+		var heading = $('#next-week-heading', this.el);
+
+		$('#next-week-activity', this.el).append(itemView.render().el);
+		$('#next-week-activity', this.el).parent('table').css("display", "block");
+		$('#next-week-activity', this.el).show();
+		
+	}
 }

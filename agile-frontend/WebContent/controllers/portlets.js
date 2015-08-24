@@ -144,7 +144,7 @@ function addNewPortlet(portlet_type,p_name){
 	},1000);*/
 }
 function hidePortletsPopup(){
-	$('#portletStreamModal').modal('hide');
+	$('#portletStreamModal').modal('hide'); 
 	$('.modal-backdrop').hide();
 }
 function deletePortlet(el){
@@ -153,8 +153,8 @@ function deletePortlet(el){
 	$('#portletDeleteModal > .modal-footer > .save-modal').attr('id',p_id);
 	$('#portletDeleteModal > .modal-body').html("Are you sure you want to delete Dashlet - "+$('#'+p_id).parent().find('.portlet_header > .portlet_header_name').text().trim()+"?");
 }
-$('.portlet-delete-modal').live("click", function(e){
-	e.preventDefault();
+$('.portlet-delete-modal').live("click", function(e){ 
+	e.preventDefault(); 
 	var portlet = Portlets_View.collection.get($(this).attr('id'));
 	/*
 	 * Sends Delete request with portlet name as path parameter, and on
@@ -165,7 +165,7 @@ $('.portlet-delete-modal').live("click", function(e){
 
 	success : function(data){
 		Portlets_View.collection.remove(portlet);
-		//$('#'+el.parentNode.parentNode.parentNode.parentNode.parentNode.id).remove();
+		//$('#'+el.parentNode.parentNode.parentNode.parentNode.parentNode.id).remove(); $('body').off().on('click', '#import-cancel'
 		gridster.remove_widget($('#'+portlet.get("id")).parent(),false);
 		setTimeout(function(){
 			gridster.$changed.attr('id','ui-id-'+gridster.$changed.attr('data-col')+'-'+gridster.$changed.attr('data-row'));

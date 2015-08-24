@@ -15,6 +15,8 @@ import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Note;
 import com.agilecrm.cursor.Cursor;
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.agilecrm.session.SessionManager;
+import com.agilecrm.session.UserInfo;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.UserPrefs;
@@ -297,7 +299,6 @@ public class Task extends Cursor
 	catch (Exception e)
 	{
 	    e.printStackTrace();
-
 	}
 
 	return "";
@@ -362,6 +363,15 @@ public class Task extends Cursor
 	}
 	System.out.println("Owner_id : " + this.owner_id);
 
+	// If owner_id is null
+	if (owner_id == null)
+	{
+	    UserInfo userInfo = SessionManager.get();
+	    if (userInfo == null)
+		return;
+
+	    owner_id = SessionManager.get().getDomainId().toString();
+	}
 	// Saves domain user key
 	if (owner_id != null)
 	    owner = new Key<DomainUser>(DomainUser.class, Long.parseLong(owner_id));

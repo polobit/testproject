@@ -43,16 +43,15 @@ public class BulkActionUtil
     public static enum ActionType
     {
 	DELETE("/core/api/bulk-actions/delete/contacts", AgileQueues.CONTACTS_DELETE_QUEUE), ASIGN_WORKFLOW(
-	        "/core/api/bulk-actions/enroll-campaign/%s", AgileQueues.CAMPAIGN_SUBSCRIBE_QUEUE), CHANGE_OWNER(
-	        "/core/api/bulk-actions/change-owner/%s", AgileQueues.OWNER_CHANGE_QUEUE), ADD_TAG(
-	        "/core/api/bulk-actions/contact/tags", AgileQueues.BULK_TAGS_QUEUE), CONTACTS_UPLOAD(
-	        "/core/api/bulk-actions/contacts/multi/upload", AgileQueues.CONTACTS_UPLOAD_QUEUE), REMOVE_ACTIVE_SUBSCRIBERS(
-	        "/core/api/bulk-actions/remove-active-subscribers/%s", AgileQueues.WORKFLOWS_RELATED_QUEUE), SEND_EMAIL(
-	        "/core/api/bulk-actions/contacts/send-email", AgileQueues.BULK_EMAILS_QUEUE), EXPORT_CONTACTS_CSV(
-	        "/core/api/bulk-actions/contacts/export-contacts-csv", AgileQueues.CONTACTS_EXPORT_QUEUE), EXPORT_COMPANIES_CSV(
-	    	        "/core/api/bulk-actions/contacts/export-companies-csv", AgileQueues.CONTACTS_EXPORT_QUEUE), REMOVE_TAG(
-	        "/core/api/bulk-actions/contact/remove-tags", AgileQueues.BULK_TAGS_QUEUE);
-
+		"/core/api/bulk-actions/enroll-campaign/%s", AgileQueues.CAMPAIGN_SUBSCRIBE_QUEUE), CHANGE_OWNER(
+		"/core/api/bulk-actions/change-owner/%s", AgileQueues.OWNER_CHANGE_QUEUE), ADD_TAG(
+		"/core/api/bulk-actions/contact/tags", AgileQueues.BULK_ACTION_QUEUE), CONTACTS_UPLOAD(
+		"/core/api/bulk-actions/contacts/multi/upload", AgileQueues.CONTACTS_UPLOAD_QUEUE), REMOVE_ACTIVE_SUBSCRIBERS(
+		"/core/api/bulk-actions/remove-active-subscribers/%s", AgileQueues.WORKFLOWS_RELATED_QUEUE), SEND_EMAIL(
+		"/core/api/bulk-actions/contacts/send-email", AgileQueues.BULK_EMAILS_QUEUE), EXPORT_CONTACTS_CSV(
+		"/core/api/bulk-actions/contacts/export-contacts-csv", AgileQueues.CONTACTS_EXPORT_QUEUE), EXPORT_COMPANIES_CSV(
+		"/core/api/bulk-actions/contacts/export-companies-csv", AgileQueues.CONTACTS_EXPORT_QUEUE), REMOVE_TAG(
+		"/core/api/bulk-actions/contact/remove-tags", AgileQueues.BULK_ACTION_QUEUE);
 
 	String url, queue;
 
@@ -134,7 +133,6 @@ public class BulkActionUtil
 	Queue queue = QueueFactory.getQueue(queueName);
 	TaskOptions taskOptions = null;
 
-
 	String bulk_action_tracker = String.valueOf(randInt(1, 10000));
 
 	/*
@@ -144,8 +142,7 @@ public class BulkActionUtil
 	if (data.length > 1 && !StringUtils.isEmpty(data[1]))
 	{
 	    taskOptions = TaskOptions.Builder.withUrl(uri).param("filter", data[0]).param("data", data[1])
-		    .param("tracker", bulk_action_tracker).header("Content-Type", contentType)
-		    .method(type);
+		    .param("tracker", bulk_action_tracker).header("Content-Type", contentType).method(type);
 
 	    queue.addAsync(taskOptions);
 	    return;
@@ -355,7 +352,7 @@ public class BulkActionUtil
 
 	return new ArrayList<Contact>(ContactFilterUtil.getContacts(criteria, ENTITIES_FETCH_LIMIT, cursor, null));
     }
-    
+
     /**
      * Filters based on search criteria
      * 
@@ -370,13 +367,11 @@ public class BulkActionUtil
 
 	setSessionManager(domainUserId);
 
-	
 	if (criteria.equalsIgnoreCase("Companies"))
 	    return ContactUtil.getAllCompanies(ENTITIES_FETCH_LIMIT, cursor);
 
 	return new ArrayList<Contact>(ContactFilterUtil.getContacts(criteria, ENTITIES_FETCH_LIMIT, cursor, null));
     }
-
 
     /**
      * Removes active subscribers from Cron if exists and updates each selected

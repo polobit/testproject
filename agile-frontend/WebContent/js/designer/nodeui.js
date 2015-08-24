@@ -113,7 +113,11 @@ function constructNodeFromDefinition(nodeJSONDefinition, jsonData, nodeId) {
             	// Disables 'text' required property if html is given and text is empty 
             	disable_text_required_property($(this));
                 
-            	$(this).find("form").trigger('submit');
+            	var $form = $(this).find('form');
+            	
+            	// Check Validity
+            	if($form.data("validator").checkValidity())
+            		$form.trigger('submit');
             }
         }
     });
@@ -197,12 +201,18 @@ function saveNode(e) {
 				}	  
 			  				  	
 		}
+		
+		
+		
 		 templateContinue(nodeId);
 		 
 		 var $save_info = '<span id="workflow-edit-msg" style="color: red;">You have unsaved changes. Click on &lsquo;Save Campaign&rsquo; to save.</span>';
 		 
 		 // Shows 'Save Campaign' message. Naresh (21/02/2014)
 		 window.parent.$("#workflow-msg").html($save_info).fadeIn(1000);
+		 
+		 if(!checkWorkflowSize())
+				return;
 		   	
         // close the dialog after the node is constructed			
         $("#nodeui").dialog('close');

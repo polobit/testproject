@@ -19,6 +19,8 @@ var DocumentsRouter = Backbone.Router.extend({
 			individual_tag_name : 'tr', postRenderCallback : function(el)
 			{
 				includeTimeAgo(el);
+				initializeDocumentsListner(el);
+
 /*				head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
 				{
 					$(".document-created-time", el).timeago();

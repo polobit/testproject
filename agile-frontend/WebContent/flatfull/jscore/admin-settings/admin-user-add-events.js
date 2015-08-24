@@ -1,6 +1,6 @@
 function bindAdminChangeAction(el, data)
 {
-	$('input[name="is_admin"]', el).die().live('change', function(e){
+	$('input[name="is_admin"]', el).on('change', function(e){
 	var is_admin = $(this).is(":checked");
 	if(is_admin == false)
 		$("input[type=checkbox]", $('div[name="newscopes"]', el)).removeAttr("disabled");
@@ -8,7 +8,7 @@ function bindAdminChangeAction(el, data)
 		$("input[type=checkbox]", $('div[name="newscopes"]', el)).attr("checked", "checked" ).attr("disabled", "disabled");
 	})
 	
-	$("input[type=checkbox]", $('div[name="newscopes"]', el)).die().live('change', function(e){
+	$("input[type=checkbox]", $('div[name="newscopes"]', el)).on('change', function(e){
 		if(!this.checked){
 			$(this).removeAttr("checked");
 		}
@@ -25,7 +25,7 @@ function bindAdminChangeAction(el, data)
 				$('input[value="CREATE_CONTACT"]', el).attr("checked", "checked" ).attr("disabled", "disabled");
 		}
 			
-	import_field.die().live('change', function(e){
+	import_field.on('change', function(e){
 		var is_import_enabled = $(this).is(":checked");
 		if(is_import_enabled == true)
 			{

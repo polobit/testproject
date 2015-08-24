@@ -167,6 +167,13 @@ var CONTENT_JSON = {
 	"contact-activities/Email_Soft_Bounced" : {
 		"title" : "No soft bounces recorded yet.",
 		"image" : "/img/clipboard.png"
+	},
+	"webpages" : {
+		"title" : "You do not have any Webpages currently.",
+		"description" : "You can create a page easily by using our smart builder.",
+		"button_text" : "Add Webpage",
+		"route" : "#webpage-add",
+		"image" : "/img/clipboard.png"
 	}
 	/*"web-rules" : {/All_Activities
 		
@@ -198,7 +205,7 @@ function fill_slate(id, el, key) {
 			$("#" + id, el).html(
 					getTemplate("empty-collection-model",
 							CONTENT_JSON["companies"]));
-		else if((route_path == "filter_results") && readCookie('company_filter'))
+		else if((route_path == "filter_results") && company_util.isCompany())
 			$("#" + id, el).html(
 					getTemplate("empty-collection-model",
 							CONTENT_JSON["filter_results_companies"]));
@@ -224,13 +231,28 @@ function getContactPadcontentKey(url)
 		
 }
 
+function getCompanyPadcontentKey(url)
+{
+	if(!url)
+		return;
+	
+	if(url.indexOf('tag') > 0)
+		return "tag_results";
+	
+	if(url.indexOf('filter') > 0)
+		return "filter_results";
+	
+	return "companies";
+		
+}
+
 /**
  * Show modal if add entity form is modal, it is used for contacts (adding new contact)
  */
 $(function() {
 	
 	// Show activity modal
-	$('.modal-form').live('click', function(e) {
+	$("body").on("click", ".modal-form", function(e) {
 		e.preventDefault();
 		var id = $(this).attr('modal_id');
 		if(id == "opportunityModal")

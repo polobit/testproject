@@ -9,7 +9,7 @@
 $(function()
 {
 
-	$(".edit-note").die().live('click', function(e)
+	$('body').on('click', '.edit-note', function(e)
 	{
 		e.preventDefault();
 		console.log($(this).attr('data'));
@@ -36,7 +36,7 @@ $(function()
 		// noteModal.modal('show');
 	});
 
-	$("#note_update").live('click', function(e)
+    $('body').on('click', '#note_update', function(e)
 	{
 		e.preventDefault();
 
@@ -51,6 +51,12 @@ $(function()
 		{
 
 			// Removes disabled attribute of save button
+			enable_save_button($(this));
+			return;
+		}
+		if($("#noteUpdateForm #note_relatedto_tag").children().length==0)
+		{
+			$("#noteUpdateForm #note_relatedto_error").show().delay(5000).hide(1);
 			enable_save_button($(this));
 			return;
 		}
@@ -75,7 +81,7 @@ $(function()
 	 * Saves note model using "Bcakbone.Model" object, and adds saved data to
 	 * time-line if necessary.
 	 */
-	$('#note_validate').live('click', function(e)
+	$('body').on('click', '#note_validate', function(e)
 	{
 		e.preventDefault();
 
@@ -87,7 +93,11 @@ $(function()
 		{
 			return;
 		}
-
+		if($("#noteForm #note_relatedto_tag").children().length==0)
+		{
+			$("#noteForm #note_relatedto_error").show().delay(5000).hide(1);
+			return;
+		}
 		disable_save_button($(this));
 		
 		// Shows loading symbol until model get saved
@@ -106,7 +116,7 @@ $(function()
 	/**
 	 * Shows note modal and activates contacts typeahead to its related to field
 	 */
-	$('#show-note').live('click', function(e)
+	$('body').on('click', '#show-note', function(e)
 	{
 		e.preventDefault();
 		$("#noteModal").modal('show');

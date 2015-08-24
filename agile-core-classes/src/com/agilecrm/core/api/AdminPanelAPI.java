@@ -101,21 +101,31 @@ public class AdminPanelAPI
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public List<DomainUser> getAllDomainUsers(@QueryParam("cursor") String cursor, @QueryParam("page_size") String count)
     {
-	String domain = NamespaceManager.get();
 
-	if (StringUtils.isEmpty(domain) || !domain.equals("admin"))
-	{
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-		    .entity("Sorry you don't have privileges to access this page.").build());
-	}
+     try{
 
-	if (count != null)
-	{
-	    System.out.println("Fetching page by page");
-	    return DomainUserUtil.getAllDomainUsers(Integer.parseInt(count), cursor);
-	}
+	    String domain = NamespaceManager.get();
 
-	return DomainUserUtil.getAllUsers();
+		if (StringUtils.isEmpty(domain) || !domain.equals("admin"))
+		{
+		    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+			    .entity("Sorry you don't have privileges to access this page.").build());
+		}
+
+		if (count != null)
+		{
+		    System.out.println("Fetching page by page");
+		    return DomainUserUtil.getAllDomainUsers(Integer.parseInt(count), cursor);
+		}
+
+		
+
+     }catch(Exception e){
+            System.out.println(e.getMessage());      
+     }
+	
+       return DomainUserUtil.getAllUsers();
+	
     }
 
     /**
@@ -284,7 +294,7 @@ public class AdminPanelAPI
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     public Subscription getsubscriptionOfDomain(@QueryParam("d") String domainname) throws StripeException
     {
-	if (StringUtils.isEmpty(NamespaceManager.get()) || !NamespaceManager.get().equals("admin"))
+	if (StringUtils.isEmpty(NamespaceManager.get()) || (!NamespaceManager.get().equals("admin") && !NamespaceManager.get().equals("our")))
 	{
 	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
 		    .entity("Sorry you don't have privileges to access this page.").build());

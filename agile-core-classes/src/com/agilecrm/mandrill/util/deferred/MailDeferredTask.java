@@ -4,7 +4,7 @@ import com.agilecrm.account.EmailGateway;
 import com.agilecrm.account.EmailGateway.EMAIL_API;
 import com.agilecrm.account.util.EmailGatewayUtil;
 import com.google.appengine.api.taskqueue.DeferredTask;
-import com.thirdparty.SendGrid;
+import com.thirdparty.sendgrid.SendGrid;
 import com.thirdparty.mandrill.Mandrill;
 
 /**
@@ -17,6 +17,11 @@ import com.thirdparty.mandrill.Mandrill;
 @SuppressWarnings("serial")
 public class MailDeferredTask implements DeferredTask
 {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = -4125770150185924086L;
+
     public String emailGatewayType = null;
     public String apiUser = null;
     public String apiKey = null;
@@ -99,7 +104,7 @@ public class MailDeferredTask implements DeferredTask
 	// If null or Mandrill
 	if (emailGateway == null || emailGateway.email_api == EmailGateway.EMAIL_API.MANDRILL)
 	    Mandrill.sendMail(apiKey, true, fromEmail, fromName, to, cc, bcc, subject, replyTo, html, text, metadata,
-		    null);
+		    null, null);
 
 	// If SendGrid
 	else if (emailGateway.email_api == EMAIL_API.SEND_GRID)

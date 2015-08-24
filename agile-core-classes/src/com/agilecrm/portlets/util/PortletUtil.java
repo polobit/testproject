@@ -2,9 +2,13 @@ package com.agilecrm.portlets.util;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Map;
 import java.util.TimeZone;
 
@@ -36,6 +40,8 @@ import com.agilecrm.portlets.Portlet;
 import com.agilecrm.portlets.Portlet.PortletType;
 import com.agilecrm.reports.ReportsUtil;
 import com.agilecrm.search.util.TagSearchUtil;
+import com.agilecrm.subscription.Subscription;
+import com.agilecrm.subscription.SubscriptionUtil;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.UserPrefs;
@@ -45,6 +51,9 @@ import com.agilecrm.user.util.UserPrefsUtil;
 import com.agilecrm.util.DateUtil;
 import com.campaignio.reports.CampaignReportsSQLUtil;
 import com.campaignio.reports.CampaignReportsUtil;
+import com.google.appengine.api.NamespaceManager;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyService;
@@ -85,21 +94,25 @@ public class PortletUtil {
 				//allPortlets.add(new Portlet("Deals Won",PortletType.DEALS));
 				allPortlets.add(new Portlet("Deals Funnel",PortletType.DEALS));
 				//allPortlets.add(new Portlet("Deals Assigned",PortletType.DEALS));
+				allPortlets.add(new Portlet("Revenue Graph",PortletType.DEALS));
 			}
 			
 			if(domainUser!=null && domainUser.menu_scopes!=null && domainUser.menu_scopes.contains(NavbarConstants.CALENDAR)){
 				allPortlets.add(new Portlet("Agenda",PortletType.TASKSANDEVENTS));
 				allPortlets.add(new Portlet("Today Tasks",PortletType.TASKSANDEVENTS));
-				//allPortlets.add(new Portlet("Task Report",PortletType.TASKSANDEVENTS));
+				allPortlets.add(new Portlet("Task Report",PortletType.TASKSANDEVENTS));
 			}
 			
 			if(domainUser!=null && domainUser.menu_scopes!=null && domainUser.menu_scopes.contains(NavbarConstants.ACTIVITY)){
 				//allPortlets.add(new Portlet("Emails Sent",PortletType.USERACTIVITY));
 				allPortlets.add(new Portlet("Stats Report",PortletType.USERACTIVITY));
+				allPortlets.add(new Portlet("Leaderboard",PortletType.USERACTIVITY));
 				allPortlets.add(new Portlet("Calls Per Person",PortletType.USERACTIVITY));
+				allPortlets.add(new Portlet("User Activities",PortletType.USERACTIVITY));
 			}
 			
 			allPortlets.add(new Portlet("Agile CRM Blog",PortletType.RSS));
+			allPortlets.add(new Portlet("Account Details",PortletType.ACCOUNT));
 			
 			setIsAddedStatus(allPortlets);
 		} catch (Exception e) {
@@ -142,12 +155,17 @@ public class PortletUtil {
 				System.out.println("is duration value null--"+json.get("duration")==null);
 				System.out.println("duration value--"+json.get("duration"));*/
 				if(portlet.name!=null && portlet.name.equalsIgnoreCase("Growth Graph") && json.containsKey("start-date") && json.containsKey("end-date")
-						 && !json.containsKey("duration")){
+						 && !json.containsKey("duration"))
 					json.put("duration","1-week");
-					
+				else if(portlet.name!=null && (portlet.name.equalsIgnoreCase("Agenda") || portlet.name.equalsIgnoreCase("Today Tasks")) && !json.containsKey("duration"))
+					json.put("duration","1-day");
+				portlet.settings=json;
+			}else{
+				if(portlet.name!=null && (portlet.name.equalsIgnoreCase("Agenda") || portlet.name.equalsIgnoreCase("Today Tasks"))){
+					JSONObject json=new JSONObject();
+					json.put("duration","1-day");
 					portlet.settings=json;
-				}else
-					portlet.settings=json;
+				}
 			}
 			if(!portlet.name.equalsIgnoreCase("Dummy Blog"))
 				added_portlets.add(portlet);
@@ -368,7 +386,7 @@ public class PortletUtil {
 		}
 		return finalDealsList;
 	}
-	public static List<Event> getAgendaList(String startTime,String endTime)throws Exception{
+	public static List<Event> getAgendaList(String startTime,String endTime,String duration)throws Exception{
 		try {
 			if(startTime!=null && endTime!=null)
 				return EventUtil.getTodayPendingEvents(Long.valueOf(startTime),Long.valueOf(endTime));
@@ -379,11 +397,14 @@ public class PortletUtil {
 			return null;
 		}
 	}
-	public static List<Task> getTodayTasksList(String startTime,String endTime)throws Exception{
+	public static List<Task> getTodayTasksList(String startTime,String endTime,String duration)throws Exception{
 		try {
-			if(startTime!=null && endTime!=null)
-				return TaskUtil.getTodayPendingTasks(Long.valueOf(startTime),Long.valueOf(endTime));
-			else
+			if(startTime!=null && endTime!=null){
+				if(duration!=null && duration.equalsIgnoreCase("all-over-due"))
+					return TaskUtil.getTodayPendingTasks(Long.valueOf(startTime),Long.valueOf(endTime),duration);
+				else
+					return TaskUtil.getTodayPendingTasks(Long.valueOf(startTime),Long.valueOf(endTime),duration);
+			}else
 				return null;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -556,9 +577,15 @@ public class PortletUtil {
 				start_date = Long.valueOf(json.getString("startDate"));
 			if(json.getString("endDate")!=null)
 				end_date = Long.valueOf(json.getString("endDate"))-1;
-			ReportsUtil.check(start_date*1000, end_date*1000);
+			String time_zone = DateUtil.getCurrentUserTimezoneOffset();
+		    if (time_zone != null)
+		    {
+		    	start_date += (Long.parseLong(time_zone)*60*1000);
+		    	end_date += (Long.parseLong(time_zone)*60*1000);
+		    }
+			ReportsUtil.check(start_date, end_date);
 			
-			growthGraphString=TagSearchUtil.getTagCount(null, tags, String.valueOf(start_date*1000), String.valueOf(end_date*1000), type).toString();
+			growthGraphString=TagSearchUtil.getTagCount(null, tags, String.valueOf(start_date), String.valueOf(end_date), type).toString();
 		}
 		if(growthGraphString!=null)
 			growthGraphJSON = (JSONObject)JSONSerializer.toJSON(growthGraphString);
@@ -660,7 +687,30 @@ public class PortletUtil {
 		
 		List<Long> callsDurationList=new ArrayList<Long>();
 		
-		for(DomainUser domainUser : domainUsersList){
+		List<DomainUser> usersList = new ArrayList<DomainUser>();
+		
+		try {
+			if(json.containsKey("user")){
+				if(json.getJSONArray("user")!=null){
+					List<Long> userJSONList = new ArrayList<Long>();
+					for(int i=0;i<json.getJSONArray("user").size();i++){
+						userJSONList.add(json.getJSONArray("user").getLong(i));
+					}
+					for(DomainUser domainUser : domainUsersList){
+						if(userJSONList.contains(domainUser.id))
+							usersList.add(domainUser);
+					}
+				}
+			}else{
+				for(DomainUser domainUser : domainUsersList){
+					usersList.add(domainUser);
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		int i=0;
+		for(DomainUser domainUser : usersList){
 			int answeredCallsCount=0;
 			int busyCallsCount=0;
 			int failedCallsCount=0;
@@ -708,6 +758,9 @@ public class PortletUtil {
 				userPrefs = UserPrefsUtil.getUserPrefs(agileUser);
 			if(userPrefs!=null)
 				domainUserImgList.add(userPrefs.pic);
+			else
+				domainUserImgList.add("no image-"+i);
+			i++;
 		}
 		callsPerPersonJSON.put("answeredCallsCountList",answeredCallsCountList);
 		callsPerPersonJSON.put("busyCallsCountList",busyCallsCountList);
@@ -732,8 +785,9 @@ public class PortletUtil {
 			Portlet tasksPortlet = new Portlet("Today Tasks",PortletType.TASKSANDEVENTS,2,2,1,1);
 			Portlet pendingDealsPortlet = new Portlet("Pending Deals",PortletType.DEALS,1,4,2,1);
 			Portlet filterBasedContactsPortlet = new Portlet("Filter Based",PortletType.CONTACTS,1,3,2,1);
-			
+			Portlet accountPortlet=new Portlet("Account Details",PortletType.ACCOUNT,1,5,1,1);
 			Portlet onboardingPortlet = new Portlet("Onboarding",PortletType.CONTACTS,3,1,1,2);
+			Portlet activityPortlet=new Portlet("User Activities",PortletType.USERACTIVITY,2,5,1,1);
 			
 			JSONObject filterBasedContactsPortletJSON = new JSONObject();
 			filterBasedContactsPortletJSON.put("filter","myContacts");
@@ -753,6 +807,14 @@ public class PortletUtil {
 			JSONObject statsReportPortletJSON = new JSONObject();
 			statsReportPortletJSON.put("duration","yesterday");
 			statsReportPortlet.prefs = statsReportPortletJSON.toString();
+			
+			JSONObject eventsPortletJSON = new JSONObject();
+			eventsPortletJSON.put("duration","today-and-tomorrow");
+			eventsPortlet.prefs = eventsPortletJSON.toString();
+			
+			JSONObject tasksPortletJSON = new JSONObject();
+			tasksPortletJSON.put("duration","today-and-tomorrow");
+			tasksPortlet.prefs = tasksPortletJSON.toString();
 			
 			JSONObject onboardingPortletJSON = new JSONObject();
 			List<String> onboardingSteps = new ArrayList<>();
@@ -780,6 +842,13 @@ public class PortletUtil {
 			}
 			onboardingPortlet.prefs = onboardingPortletJSON.toString();
 			
+			//JSONObject accountPortletJSON = new JSONObject();
+			//accountPortletJSON.put("account", "default");
+			//accountPortlet.prefs=accountPortletJSON.toString();
+			
+			
+			accountPortlet.save();
+			activityPortlet.save();
 			dummyPortlet.save();
 			eventsPortlet.save();
 			tasksPortlet.save();
@@ -805,11 +874,37 @@ public class PortletUtil {
 			DomainUser dUser=DomainUserUtil.getCurrentDomainUser();
 			if(dUser!=null)
 				domainUsersList=DomainUserUtil.getUsers(dUser.domain);
-			if(json!=null && json.getString("group-by")!=null && json.getString("split-by")!=null && json.getString("startDate")!=null && json.getString("endDate")!=null && json.getString("group-by").equalsIgnoreCase("user") && json.getString("split-by").equalsIgnoreCase("category")){
+
+			List<DomainUser> usersList = new ArrayList<DomainUser>();
+			
+			List<Key<DomainUser>> usersKeyList = new ArrayList<Key<DomainUser>>();
+
+			if(json.containsKey("user")){
+				if(json.getJSONArray("user")!=null){
+					List<Long> userJSONList = new ArrayList<Long>();
+					for(int i=0;i<json.getJSONArray("user").size();i++){
+						userJSONList.add(json.getJSONArray("user").getLong(i));
+					}
+					for(DomainUser domainUser : domainUsersList){
+						if(userJSONList.contains(domainUser.id)){
+							usersList.add(domainUser);
+							usersKeyList.add(new Key<DomainUser>(DomainUser.class, domainUser.id));
+						}
+					}
+				}
+			}else{
 				for(DomainUser domainUser : domainUsersList){
+					usersList.add(domainUser);
+					usersKeyList.add(new Key<DomainUser>(DomainUser.class, domainUser.id));
+				}
+			}
+
+			if(json!=null && json.getString("group-by")!=null && json.getString("split-by")!=null && json.getString("startDate")!=null && json.getString("endDate")!=null && json.getString("group-by").equalsIgnoreCase("user") && json.getString("split-by").equalsIgnoreCase("category")){
+				int i=0;
+				for(DomainUser domainUser : usersList){
 					Map<String,Integer> splitByMap = new LinkedHashMap<String,Integer>();
 					for(Task.Type category : Task.Type.values()){
-						List<Task> tasksList = TaskUtil.getTasksRelatesToOwnerOfTypeAndCategory(domainUser.id,category.name(),null,Long.valueOf(json.getString("startDate")),Long.valueOf(json.getString("endDate")),json.getString("tasks"));
+						List<Task> tasksList = TaskUtil.getTasksRelatesToOwnerOfTypeAndCategory(domainUser.id,category.name(),null,Long.valueOf(json.getString("startDate")),Long.valueOf(json.getString("endDate")),json.getString("tasks"),null);
 						if(tasksList!=null)
 							splitByMap.put(category.name(),tasksList.size());
 						else
@@ -824,15 +919,17 @@ public class PortletUtil {
 					if(userPrefs!=null)
 						groupByList.add(userPrefs.pic);
 					else
-						groupByList.add("");
+						groupByList.add("no image-"+i);
 					splitByList.add(splitByMap);
 					domainUserNamesList.add(domainUser.name);
+					i++;
 				}
 			}else if(json!=null && json.getString("group-by")!=null && json.getString("split-by")!=null && json.getString("startDate")!=null && json.getString("endDate")!=null && json.getString("group-by").equalsIgnoreCase("user") && json.getString("split-by").equalsIgnoreCase("status")){
-				for(DomainUser domainUser : domainUsersList){
+				int i=0;
+				for(DomainUser domainUser : usersList){
 					Map<String,Integer> splitByMap = new LinkedHashMap<String,Integer>();
 					for(Task.Status status : Task.Status.values()){
-						List<Task> tasksList = TaskUtil.getTasksRelatesToOwnerOfTypeAndCategory(domainUser.id,null,status.name(),Long.valueOf(json.getString("startDate")),Long.valueOf(json.getString("endDate")),json.getString("tasks"));
+						List<Task> tasksList = TaskUtil.getTasksRelatesToOwnerOfTypeAndCategory(domainUser.id,null,status.name(),Long.valueOf(json.getString("startDate")),Long.valueOf(json.getString("endDate")),json.getString("tasks"),null);
 						if(tasksList!=null)
 							splitByMap.put(status.name(),tasksList.size());
 						else
@@ -847,15 +944,16 @@ public class PortletUtil {
 					if(userPrefs!=null)
 						groupByList.add(userPrefs.pic);
 					else
-						groupByList.add("");
+						groupByList.add("no image-"+i);
 					splitByList.add(splitByMap);
 					domainUserNamesList.add(domainUser.name);
+					i++;
 				}
 			}else if(json!=null && json.getString("group-by")!=null && json.getString("split-by")!=null && json.getString("startDate")!=null && json.getString("endDate")!=null && json.getString("group-by").equalsIgnoreCase("category") && json.getString("split-by").equalsIgnoreCase("user")){
 				for(Task.Type category : Task.Type.values()){
 					Map<String,Integer> splitByMap = new LinkedHashMap<String,Integer>();
-					for(DomainUser domainUser : domainUsersList){
-						List<Task> tasksList = TaskUtil.getTasksRelatesToOwnerOfTypeAndCategory(domainUser.id,category.name(),null,Long.valueOf(json.getString("startDate")),Long.valueOf(json.getString("endDate")),json.getString("tasks"));
+					for(DomainUser domainUser : usersList){
+						List<Task> tasksList = TaskUtil.getTasksRelatesToOwnerOfTypeAndCategory(domainUser.id,category.name(),null,Long.valueOf(json.getString("startDate")),Long.valueOf(json.getString("endDate")),json.getString("tasks"),null);
 						if(tasksList!=null)
 							splitByMap.put(domainUser.name,tasksList.size());
 						else
@@ -868,7 +966,7 @@ public class PortletUtil {
 				for(Task.Type category : Task.Type.values()){
 					Map<String,Integer> splitByMap = new LinkedHashMap<String,Integer>();
 					for(Task.Status status : Task.Status.values()){
-						List<Task> tasksList = TaskUtil.getTasksRelatesToOwnerOfTypeAndCategory(null,category.name(),status.name(),Long.valueOf(json.getString("startDate")),Long.valueOf(json.getString("endDate")),json.getString("tasks"));
+						List<Task> tasksList = TaskUtil.getTasksRelatesToOwnerOfTypeAndCategory(null,category.name(),status.name(),Long.valueOf(json.getString("startDate")),Long.valueOf(json.getString("endDate")),json.getString("tasks"),usersKeyList);
 						if(tasksList!=null)
 							splitByMap.put(status.name(),tasksList.size());
 						else
@@ -880,8 +978,8 @@ public class PortletUtil {
 			}else if(json!=null && json.getString("group-by")!=null && json.getString("split-by")!=null && json.getString("startDate")!=null && json.getString("endDate")!=null && json.getString("group-by").equalsIgnoreCase("status") && json.getString("split-by").equalsIgnoreCase("user")){
 				for(Task.Status status : Task.Status.values()){
 					Map<String,Integer> splitByMap = new LinkedHashMap<String,Integer>();
-					for(DomainUser domainUser : domainUsersList){
-						List<Task> tasksList = TaskUtil.getTasksRelatesToOwnerOfTypeAndCategory(domainUser.id,null,status.name(),Long.valueOf(json.getString("startDate")),Long.valueOf(json.getString("endDate")),json.getString("tasks"));
+					for(DomainUser domainUser : usersList){
+						List<Task> tasksList = TaskUtil.getTasksRelatesToOwnerOfTypeAndCategory(domainUser.id,null,status.name(),Long.valueOf(json.getString("startDate")),Long.valueOf(json.getString("endDate")),json.getString("tasks"),null);
 						if(tasksList!=null)
 							splitByMap.put(domainUser.name,tasksList.size());
 						else
@@ -894,7 +992,7 @@ public class PortletUtil {
 				for(Task.Status status : Task.Status.values()){
 					Map<String,Integer> splitByMap = new LinkedHashMap<String,Integer>();
 					for(Task.Type category : Task.Type.values()){
-						List<Task> tasksList = TaskUtil.getTasksRelatesToOwnerOfTypeAndCategory(null,category.name(),status.name(),Long.valueOf(json.getString("startDate")),Long.valueOf(json.getString("endDate")),json.getString("tasks"));
+						List<Task> tasksList = TaskUtil.getTasksRelatesToOwnerOfTypeAndCategory(null,category.name(),status.name(),Long.valueOf(json.getString("startDate")),Long.valueOf(json.getString("endDate")),json.getString("tasks"),usersKeyList);
 						if(tasksList!=null)
 							splitByMap.put(category.name(),tasksList.size());
 						else
@@ -1103,6 +1201,255 @@ public class PortletUtil {
 			e.printStackTrace();
 		}
 		return dataJson;
+	}
+	
+	public static JSONObject getPortletLeaderboardData(JSONObject json)throws Exception{
+		List<DomainUser> domainUsersList = null;
+		JSONObject dataJson = new JSONObject();
+		List<JSONObject> cateList = new ArrayList<JSONObject>();
+		long minTime=0L;
+		long maxTime=0L;
+		int categoryCount=0;
+		List<DomainUser> usersList = new ArrayList<DomainUser>();
+		try {
+			DomainUser dUser=DomainUserUtil.getCurrentDomainUser();
+			if(dUser!=null)
+				domainUsersList=DomainUserUtil.getUsers(dUser.domain);
+			if(json!=null && json.getString("duration")!=null){
+				if(json.getString("startDate")!=null)
+					minTime = Long.valueOf(json.getString("startDate"));
+				if(json.getString("endDate")!=null)
+					maxTime = Long.valueOf(json.getString("endDate"))-1;
+				if(json.containsKey("user")){
+					if(json.getJSONArray("user")!=null){
+						List<Long> userJSONList = new ArrayList<Long>();
+						for(int i=0;i<json.getJSONArray("user").size();i++){
+							userJSONList.add(json.getJSONArray("user").getLong(i));
+						}
+						for(DomainUser domainUser : domainUsersList){
+							if(userJSONList.contains(domainUser.id))
+								usersList.add(domainUser);
+						}
+					}
+				}else{
+					for(DomainUser domainUser : domainUsersList){
+						usersList.add(domainUser);
+					}
+				}
+				if(json.getBoolean("revenue")){
+					for(DomainUser domainUser : usersList){
+						JSONObject cateJson = new JSONObject();
+						cateJson.put("name", "Revenue");
+						List<Opportunity> wonDealsList = OpportunityUtil.getWonDealsListOfUser(minTime, maxTime, domainUser.id);
+						Double milestoneValue = 0d;
+						if(wonDealsList!=null){
+							for(Opportunity opportunity : wonDealsList){
+								milestoneValue += opportunity.expected_value;
+							}
+						}
+						cateJson.put("value", Math.round(milestoneValue));
+						cateJson.put("userName", domainUser.name);
+						if(dUser.id.equals(domainUser.id))
+							cateJson.put("isDomainUser", true);
+						else
+							cateJson.put("isDomainUser", false);
+						
+						AgileUser agileUser = AgileUser.getCurrentAgileUserFromDomainUser(domainUser.id);
+						
+						UserPrefs userPrefs = null;
+						
+						if(agileUser!=null)
+							userPrefs = UserPrefsUtil.getUserPrefs(agileUser);
+						if(userPrefs!=null)
+							cateJson.put("userPic",userPrefs.pic);
+						else
+							cateJson.put("userPic","");
+						cateList.add(cateJson);
+						Collections.sort(cateList,new Comparator<JSONObject>(){
+							@Override  
+			                public int compare(JSONObject o1, JSONObject o2){
+								return Double.valueOf(o2.getDouble("value")).compareTo(Double.valueOf(o1.getDouble("value")));  
+			                }
+			            });
+					}
+					dataJson.put("revenueJson", cateList);
+					dataJson.put("revenue", true);
+					categoryCount++;
+				}else
+					dataJson.put("revenue", false);
+				if(json.getBoolean("dealsWon")){
+					cateList = new ArrayList<JSONObject>();
+					for(DomainUser domainUser : usersList){
+						JSONObject cateJson = new JSONObject();
+						cateJson.put("name", "Deals Won");
+						cateJson.put("value", OpportunityUtil.getWonDealsCountOfUser(minTime, maxTime, domainUser.id));
+						cateJson.put("userName", domainUser.name);
+						if(dUser.id.equals(domainUser.id))
+							cateJson.put("isDomainUser", true);
+						else
+							cateJson.put("isDomainUser", false);
+						
+						AgileUser agileUser = AgileUser.getCurrentAgileUserFromDomainUser(domainUser.id);
+						
+						UserPrefs userPrefs = null;
+						
+						if(agileUser!=null)
+							userPrefs = UserPrefsUtil.getUserPrefs(agileUser);
+						if(userPrefs!=null)
+							cateJson.put("userPic",userPrefs.pic);
+						else
+							cateJson.put("userPic","");
+						cateList.add(cateJson);
+						Collections.sort(cateList,new Comparator<JSONObject>(){
+							@Override  
+			                public int compare(JSONObject o1, JSONObject o2){
+								return Integer.valueOf(o2.getInt("value")).compareTo(Integer.valueOf(o1.getInt("value")));  
+			                }
+			            });
+					}
+					dataJson.put("dealsWonJson", cateList);
+					dataJson.put("dealsWon", true);
+					categoryCount++;
+				}else
+					dataJson.put("dealsWon", false);
+				if(json.getBoolean("calls")){
+					cateList = new ArrayList<JSONObject>();
+					for(DomainUser domainUser : usersList){
+						JSONObject cateJson = new JSONObject();
+						cateJson.put("name", "Deals Won");
+						cateJson.put("value", ActivityUtil.getCompletedCallsCountOfUser(domainUser.id, minTime, maxTime));
+						cateJson.put("userName", domainUser.name);
+						if(dUser.id.equals(domainUser.id))
+							cateJson.put("isDomainUser", true);
+						else
+							cateJson.put("isDomainUser", false);
+						
+						AgileUser agileUser = AgileUser.getCurrentAgileUserFromDomainUser(domainUser.id);
+						
+						UserPrefs userPrefs = null;
+						
+						if(agileUser!=null)
+							userPrefs = UserPrefsUtil.getUserPrefs(agileUser);
+						if(userPrefs!=null)
+							cateJson.put("userPic",userPrefs.pic);
+						else
+							cateJson.put("userPic","");
+						cateList.add(cateJson);
+						Collections.sort(cateList,new Comparator<JSONObject>(){
+							@Override  
+			                public int compare(JSONObject o1, JSONObject o2){
+								return Integer.valueOf(o2.getInt("value")).compareTo(Integer.valueOf(o1.getInt("value")));  
+			                }
+			            });
+					}
+					dataJson.put("callsJson", cateList);
+					dataJson.put("calls", true);
+					categoryCount++;
+				}else
+					dataJson.put("calls", false);
+				if(json.getBoolean("tasks")){
+					cateList = new ArrayList<JSONObject>();
+					for(DomainUser domainUser : usersList){
+						JSONObject cateJson = new JSONObject();
+						cateJson.put("name", "Deals Won");
+						cateJson.put("value", TaskUtil.getCompletedTasksOfUser(minTime, maxTime, domainUser.id));
+						cateJson.put("userName", domainUser.name);
+						if(dUser.id.equals(domainUser.id))
+							cateJson.put("isDomainUser", true);
+						else
+							cateJson.put("isDomainUser", false);
+						
+						AgileUser agileUser = AgileUser.getCurrentAgileUserFromDomainUser(domainUser.id);
+						
+						UserPrefs userPrefs = null;
+						
+						if(agileUser!=null)
+							userPrefs = UserPrefsUtil.getUserPrefs(agileUser);
+						if(userPrefs!=null)
+							cateJson.put("userPic",userPrefs.pic);
+						else
+							cateJson.put("userPic","");
+						cateList.add(cateJson);
+						Collections.sort(cateList,new Comparator<JSONObject>(){
+							@Override  
+			                public int compare(JSONObject o1, JSONObject o2){
+								return Integer.valueOf(o2.getInt("value")).compareTo(Integer.valueOf(o1.getInt("value")));  
+			                }
+			            });
+					}
+					dataJson.put("tasksJson", cateList);
+					dataJson.put("tasks", true);
+					categoryCount++;
+				}else
+					dataJson.put("tasks", false);
+				dataJson.put("categoryCount", categoryCount);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return dataJson;
+	}
+	
+	public static List<DomainUser> getCurrentDomainUsersForPortlets()throws Exception{
+		try {
+			DomainUser dUser=DomainUserUtil.getCurrentDomainUser();
+			if(dUser!=null)
+				return DomainUserUtil.getUsers(dUser.domain);
+			else
+				return null;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	public static JSONObject getAccountsList() throws Exception {
+		JSONObject json=new JSONObject();
+
+		String oldNamespace = NamespaceManager.get();
+		DomainUser user = DomainUserUtil.getDomainOwner(oldNamespace);
+		NamespaceManager.set("our");
+		try
+		{
+		   
+			String a=DomainUserUtil.getCurrentDomainUser().email;
+			System.out.println(a);
+			Contact contact=ContactUtil.searchContactByEmail(user.email);
+			if(contact!=null){
+				DomainUser owner=contact.getOwner();
+				json.put("Owner_name",owner.name);
+				json.put("Owner_pic",owner.getOwnerPic());
+				json.put("Owner_url", owner.getCalendarURL());
+			}
+			
+			
+		}
+		finally
+		{
+		    NamespaceManager.set(oldNamespace);
+		}
+		
+		Subscription sub=SubscriptionUtil.getSubscription();
+		System.out.println(sub.plan);
+		json.put("Count",sub.plan.quantity);
+		json.put("Plan",sub.plan.getPlanName());
+		if(sub.plan.plan_id!=null){
+			json.put("Plan_Interval",sub.plan.getPlanInterval());
+		}
+		if(sub.emailPlan!=null){
+		json.put("Email",(sub.emailPlan.quantity)*1000);
+		}
+		
+		
+		return json;
+	}
+	
+	public static List<Activity> getPortletActivitydata(int max,String cursor) {
+		System.out.println("Inside list");
+		List<Activity> list=ActivityUtil.getActivities(max, cursor);
+		System.out.println("Size of List"+list.size());
+		System.out.println(list);
+		return list;
 	}
 
 }

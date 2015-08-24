@@ -21,13 +21,15 @@ function includeTimeAgo(element)
  */
 function updateActivty(params)
 {
-	console.log("entered into update activity function  "+new Date().getTime()+"  time with milliseconds "+new Date())
+	console.log("entered into update activity function  " + new Date().getTime() + "  time with milliseconds " + new Date())
 	// Creates backbone collection view
 	this.activitiesview = new Base_Collection_View({ url : '/core/api/activitylog/getActivitiesOnSelectedCondition' + params, sortKey : 'time',
 		descending : true, templateKey : "activity-list-log", sort_collection : false, cursor : true, scroll_symbol : 'scroll', page_size : 20,
 		individual_tag_name : 'li', postRenderCallback : function(el)
 		{
 			includeTimeAgo(el);
+			initializeActivitiesListner(el);
+			initializeEventListners(el);
 		}, appendItemCallback : function(el)
 		{
 			includeTimeAgo(el);
@@ -40,8 +42,8 @@ function updateActivty(params)
 
 	// Renders data to activity list page.
 	$('#activity-list-based-condition').html(this.activitiesview.render().el);
-	
-	console.log("completed update activity function  "+new Date().getTime()+"  time with milliseconds "+new Date())
+
+	console.log("completed update activity function  " + new Date().getTime() + "  time with milliseconds " + new Date())
 
 }
 
@@ -71,7 +73,9 @@ function getParameters()
 
 	if (range && range != "Filter by date")
 	{
-		var start_time = Date.parse($.trim(range[0])).valueOf();
+		//var start_time = Date.parse($.trim(range[0])).valueOf();
+		//Get the GMT start time
+		var start_time = getUTCMidNightEpochFromDate(new Date($.trim(range[0])));
 
 		var end_value = $.trim(range[1]);
 
@@ -80,7 +84,10 @@ function getParameters()
 			end_value = end_value + " 23:59:59";
 
 		// Returns milliseconds from end date.
-		var end_time = Date.parse(end_value).valueOf();
+		//var end_time = Date.parse(end_value).valueOf();
+		var end_time = getUTCMidNightEpochFromDate(new Date(end_value));
+		
+		end_time += (((23*60*60)+(59*60)+59)*1000);
 
 		// Adds start_time, end_time and timezone offset to params.
 		params += ("&start_time=" + start_time + "&end_time=" + end_time);
@@ -140,7 +147,11 @@ function initActivitiesDateRange()
 			Date.today().moveToFirstDayOfMonth(), Date.today().moveToLastDayOfMonth()
 	], 'Last Month' : [
 			Date.today().moveToFirstDayOfMonth().add({ months : -1 }), Date.today().moveToFirstDayOfMonth().add({ days : -1 })
-	] } }, function(start, end)
+	] }, locale : { applyLabel : 'Apply', cancelLabel : 'Cancel', fromLabel : 'From', toLabel : 'To', customRangeLabel : 'Custom', daysOfWeek : [
+			'Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'
+	], monthNames : [
+			'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'
+	], firstDay : parseInt(CALENDAR_WEEK_START_DAY) } }, function(start, end)
 	{
 		if (start && end)
 		{

@@ -17,27 +17,39 @@
  */
 function agile_createContact(data, callback)
 {
+	// Create json object and append properties
+	var model = {};
+
+	// Create properties list
 	var properties = [];
 
 	for ( var key in data)
 	{
-		if (data.hasOwnProperty(key) && key != "tags")
+		if (data.hasOwnProperty(key) && key != "tags" && key != "lead_score")
 		{
 			// Add tags to properties array
 			properties.push(agile_propertyJSON(key, data[key]));
 		}
 	}
 
+	// Get original referrer from cookie
 	var original_ref = agile_read_cookie(agile_guid.cookie_original_ref);
+
+	// Get the tags from cookie
+	var tags_from_cookie = agile_read_cookie(agile_guid.cookie_tags);
+
+	// Get score from cookie
+	var score_from_cookie = agile_read_cookie(agile_guid.cookie_score);
+
+	// Get campaigns from cookie
+	var campaigns_from_cookie = agile_read_cookie(agile_guid.cookie_campaigns);
+
+	// Add properties to model
+	model.properties = properties;
+
 	if(original_ref)
 		properties.push(agile_propertyJSON("original_ref", original_ref));
 
-	// Get the tags from cookie
-	var tags_from_cookie = agile_read_cookie("agile-tags");
-
-	// Create json object and append properties
-	var model = {};
-	model.properties = properties;
 	if (data["tags"])
 	{
 		var tags = data["tags"];
@@ -57,7 +69,7 @@ function agile_createContact(data, callback)
 	}
 	if (tags_from_cookie)
 	{
-		agile_delete_cookie("agile-tags");
+		agile_delete_cookie(agile_guid.cookie_tags);
 		var tags_string = tags_from_cookie.trim().replace("/ /g", " ");
 		tags_string = tags_string.replace("/, /g", ",");
 		var tags_array = tags_string.split(",");
@@ -77,12 +89,27 @@ function agile_createContact(data, callback)
 			}
 		}
 	}
-
-	// var params = "contact={0}&tags={1}".format(encodeURIComponent(data),
-	// encodeURIComponent(JSON.stringify(tags)));
+	if(data["lead_score"])
+	{
+		model.lead_score = parseInt(data["lead_score"]);
+	}
+	if(score_from_cookie)
+	{
+		agile_delete_cookie(agile_guid.cookie_score);
+		if(model.lead_score)
+			model.lead_score = model.lead_score + parseInt(score_from_cookie);
+		else
+			model.lead_score = parseInt(score_from_cookie);
+	}
+	var params = "contact={0}".format(encodeURIComponent(JSON.stringify(model)));
+	if(campaigns_from_cookie)
+	{
+		agile_delete_cookie(agile_guid.cookie_campaigns);
+		params = params + "&campaigns={0}".format(encodeURIComponent(campaigns_from_cookie));
+	}
 
 	// Get
-	var agile_url = agile_id.getURL() + "/contacts?callback=?&id=" + agile_id.get() + "&contact=" + encodeURIComponent(JSON.stringify(model));
+	var agile_url = agile_id.getURL() + "/contacts?callback=?&id=" + agile_id.get() + "&" + params;
 
 	// Callback
 	agile_json(agile_url, callback);

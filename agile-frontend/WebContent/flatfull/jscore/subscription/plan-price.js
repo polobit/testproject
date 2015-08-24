@@ -173,7 +173,7 @@ function setPlan(user_plan)
 		else if(user_plan != "free" && user_plan != "super")
 		{
 			var stripe_subscription = getSubscription(user_plan.billingData, user_plan.plan);
-			if(stripe_subscription)
+			if(stripe_subscription || CURRENT_DOMAIN_USER.domain == "admin")
 			{
 				plan_type = USER_DETAILS.getPlanTypeByStripe(USER_BILLING_PREFS);
 				interval = USER_DETAILS.getPlanIntervalByStripe(USER_BILLING_PREFS);
@@ -184,12 +184,12 @@ function setPlan(user_plan)
 			else
 			{
 				interval = "monthly";
-				plan_type = "free"
+				plan_type = "free";
 			}
 		}
 	
 		
-		$("input[value='" + plan_type + "']").trigger("click");
+		$("#plan_type").attr('value', plan_type).trigger("change");
 		//$("ul.tagsli a." + interval).trigger("click");
 		$("#billing_cycle").attr('value', interval).trigger("change");
 		
@@ -206,10 +206,9 @@ function setPlan(user_plan)
 
 
 
-$(function()
-		{
+function initializeSubscriptionListeners(){
 		
-		$('.plan-collection-in').die().live('click', function(e){
+		$('#subscribe_plan_change').on('click', '.plan-collection-in', function(e){
 			 
 			$(this).find("[name='pro_vs_lite']").attr('checked','checked');
 			var plan_type = "";
@@ -238,7 +237,7 @@ $(function()
 	  	});
 
 		// Tags selection
-		$("ul.tagsli a").die().live("click", function(e){
+		$('#plans-panel').off('click').on('click', 'ul.tagsli a', function(e){
 			
 			e.preventDefault();
 			
@@ -263,7 +262,7 @@ $(function()
 	  		setCost(update_price());
 		});
 		
-		$("#billing_cycle").die().live("change", function(e){
+		$('#subscribe_plan_change').on('change', '#billing_cycle', function(e){
 			e.preventDefault();
 			var plan_interval = $(this).val();
 			
@@ -279,7 +278,7 @@ $(function()
  	     	$("#users_total_cost").text((value * price).toFixed(2));
 			
 		});
-		$("#user_quantity").die().live("change",function(e){
+		$('#subscribe_plan_change').on('change', '#user_quantity', function(e){
 			e.preventDefault();
 			var value = $(this).val();
 			price = update_price();
@@ -287,7 +286,7 @@ $(function()
  	     	$("#users_total_cost").text((value * price).toFixed(2));
 		});
 		
-		$("#plan_type").die().live("change",function(){
+		$('#subscribe_plan_change').on('change', '#plan_type', function(e){
 			var plan_type = $(this).val();
 			$("#"+ plan_type +"_plan > .plan-collection-in").click();
 			if($(this).val() == "free")
@@ -297,7 +296,7 @@ $(function()
 			}
 		});
 	    
-      	$('#purchase-plan').die().live('click', function(e){
+		$('#subscribe_plan_change').on('click', '#purchase-plan', function(e){
 	          /*var quantity = $("#users_quantity").text();
 	          var cost = $("#users_total_cost").text();
 	          var plan = $("input[name='pro_vs_lite']:checked").val();*/
@@ -391,10 +390,7 @@ $(function()
       	});
       	
      // Check coupon functionality
-    	$("#check_valid_coupon").die().live(
-    			'click',
-    			function() {
-
+	 $('#subscribe_plan_change').on('click', '#check_valid_coupon', function(e){
     				// Get coupon input value
     				var couponId = $("#coupon_code").val();
     				if (!couponId) {
@@ -415,7 +411,7 @@ $(function()
 
     			});
     	
-});	   
+}   
 
 function is_new_signup_payment()
 {

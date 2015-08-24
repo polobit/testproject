@@ -4,6 +4,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -17,6 +18,7 @@ import com.agilecrm.contact.Contact.Type;
 import com.agilecrm.contact.filter.ContactFilter.DefaultFilter;
 import com.agilecrm.contact.filter.util.ContactFilterUtil;
 import com.agilecrm.contact.util.BulkActionUtil;
+import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.search.document.ContactDocument;
 import com.agilecrm.search.query.QueryDocument;
 import com.agilecrm.search.ui.serialize.SearchRule;
@@ -77,15 +79,22 @@ public class ContactFilterIdsResultFetcher
     }
 
     public ContactFilterIdsResultFetcher(String filter_id, String dynamic_filter, String contact_ids,
-	    int max_fetch_set_size, Long currentDomainUserId)
+	    Map<String, Object> searchMap, int max_fetch_set_size, Long currentDomainUserId)
     {
 	max_fetch_size = Integer.MAX_VALUE;
+
+	this.searchMap = searchMap;
 
 	this.max_fetch_set_size = max_fetch_set_size;
 
 	domainUserId = currentDomainUserId;
 
-	if (filter_id != null)
+	if (searchMap != null)
+	{
+	    iterator = getSystemFilter("_dummy");
+	}
+
+	else if (filter_id != null)
 	{
 	    try
 	    {
@@ -123,9 +132,21 @@ public class ContactFilterIdsResultFetcher
 	}
 
 	if (this.filter != null)
+	{
 	    modifyFilterCondition();
+	    SearchRule rule = new SearchRule();
+	    rule.LHS = "type";
+	    rule.CONDITION = RuleCondition.EQUALS;
+	    rule.RHS = filter.contact_type.toString();
+	    isContacts = Type.PERSON == filter.contact_type ? true : false;
+	    if (!isContacts)
+		isCompany = true;
 
-	BulkActionUtil.setSessionManager(domainUserId);
+	    filter.rules.add(rule);
+	}
+
+	if (domainUserId != null)
+	    BulkActionUtil.setSessionManager(domainUserId);
 
     }
 
@@ -163,7 +184,7 @@ public class ContactFilterIdsResultFetcher
     private void modifyFilterCondition()
     {
 	UserAccessControlUtil.checkReadAccessAndModifyTextSearchQuery(
-		UserAccessControl.AccessControlClasses.Contact.toString(), filter.rules);
+		UserAccessControl.AccessControlClasses.Contact.toString(), filter.rules, getDomainUser());
 
 	if (hasScope(UserAccessScopes.VIEW_CONTACTS)
 		&& !(hasScope(UserAccessScopes.UPDATE_CONTACT) || hasScope(UserAccessScopes.DELETE_CONTACTS)))
@@ -235,6 +256,72 @@ public class ContactFilterIdsResultFetcher
 	return fetched_count;
     }
 
+    public int getContactCount()
+    {
+	if (isContact())
+	    return getTotalCount();
+
+	return 0;
+    }
+
+    public int getCompanyCount()
+    {
+	if (isCompany())
+	    return getTotalCount();
+
+	return 0;
+    }
+
+    private Boolean isContacts;
+    private Boolean isCompany;
+
+    private boolean isContact()
+    {
+	if (isContacts != null)
+	    return isContacts;
+
+	Type type = getTypeFromResults();
+
+	if (type == Type.PERSON)
+	    return (isContacts = true);
+
+	return false;
+    }
+
+    private boolean isCompany()
+    {
+	if (isCompany != null)
+	    return isCompany;
+
+	Type type = getTypeFromResults();
+
+	if (type == Type.COMPANY)
+	    return (isCompany = true);
+
+	return false;
+
+    }
+
+    private Type getTypeFromResults()
+    {
+	if (contactsSet.size() == 0)
+	    return Type.PERSON;
+
+	Iterator<Key<Contact>> iterator = contactsSet.iterator();
+
+	while (iterator.hasNext())
+	{
+	    Key<Contact> contactKey = iterator.next();
+
+	    Contact contact = ContactUtil.getContact(contactKey.getId());
+	    if (contact != null)
+		return contact.type;
+	}
+
+	return Type.PERSON;
+
+    }
+
     QueryDocument<Contact> queryInstace = new QueryDocument<Contact>(new ContactDocument().getIndex(), Contact.class);
 
     /**
@@ -242,6 +329,8 @@ public class ContactFilterIdsResultFetcher
      * 
      * @return
      */
+    Set<Key<Contact>> contactsSet = new HashSet<Key<Contact>>();
+
     private Set<Key<Contact>> fetchNextSet()
     {
 	System.out.println("**fetching next set***");
@@ -250,7 +339,7 @@ public class ContactFilterIdsResultFetcher
 
 	if (contact_ids_json != null)
 	{
-	    Set<Key<Contact>> contactsSet = getContactIds();
+	    contactsSet = getContactIds();
 
 	    fetched_count += contactsSet.size();
 	    return contactsSet;
@@ -258,7 +347,8 @@ public class ContactFilterIdsResultFetcher
 
 	if (iterator != null)
 	{
-	    return fetchFromDefaultfilter();
+	    contactsSet = fetchFromDefaultfilter();
+	    return contactsSet;
 	}
 
 	// Fetches first 200 contacts
@@ -271,13 +361,13 @@ public class ContactFilterIdsResultFetcher
 	    return new HashSet<Key<Contact>>();
 	}
 
-	Set<Key<Contact>> contactKeys = new HashSet<Key<Contact>>();
+	contactsSet = new HashSet<Key<Contact>>();
 
 	for (ScoredDocument doc : scoredDocuments)
 	{
 	    try
 	    {
-		contactKeys.add(new Key<Contact>(Contact.class, Long.parseLong(doc.getId())));
+		contactsSet.add(new Key<Contact>(Contact.class, Long.parseLong(doc.getId())));
 	    }
 	    catch (Exception e)
 	    {
@@ -285,11 +375,11 @@ public class ContactFilterIdsResultFetcher
 	    }
 	}
 
-	fetched_count += contactKeys.size();
+	fetched_count += contactsSet.size();
 
 	setCursor(scoredDocuments);
 
-	return contactKeys;
+	return contactsSet;
 
     }
 
@@ -301,7 +391,8 @@ public class ContactFilterIdsResultFetcher
      */
     private QueryResultIterator<Key<Contact>> getSystemFilter(String id)
     {
-	searchMap = new HashMap<String, Object>();
+	if (searchMap == null)
+	    searchMap = new HashMap<String, Object>();
 
 	// Checks if Filter id contacts "system", which indicates the
 	// request is to load results based on the default filters provided

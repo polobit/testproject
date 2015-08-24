@@ -116,15 +116,29 @@
                            "type": "text"
                        },
                        {
-                           "label": "From (Email):",
-                           "category": "Info",
-                           "name": "from_email",
-                           "id": "from_email",
-                           "required": "required",
-                           "title": "Enter your email address.",
-                           "fieldType": "input",
-                           "type": "email"
-                       },
+    					"label": "From (Email):",
+    					"category": "Info",
+    					"name": "from_email",
+    					"id": "from_email",
+    					"required": "required",
+    					"title": "Select your email address.",
+    					"url": "/core/api/account-prefs/verified-emails/all",
+    					"dynamicName": "email",
+    					"dynamicValue": "email",
+    					"arrange_type": "prepend",
+    					"fieldType": "dynamicselect",
+    					"type": "verified_email",
+    					"options": {
+        					"Contact's Owner": "{{owner.email}}",
+        					"+ Add new": "verify_email"
+    						},
+    					"event": "onchange",
+    					"eventHandler": "openVerifyEmailModal(this)",
+    					"style": {
+        					"width": "77.5%",
+        					"padding": "0.4em"
+    						}
+						},  
                        {
                            "label": "To",
                            "category": "Info",
@@ -1012,7 +1026,7 @@
                 },
                 {
                     "name": "from_email",
-                    "value": "me@mycompany.com"
+                    "value": "{{owner.email}}"
                 },
                 {
                     "name": "to_email",
@@ -1098,15 +1112,29 @@
                            "type": "text"
                        },
                        {
-                           "label": "From (Email):",
-                           "category": "Info",
-                           "name": "from_email",
-                           "id": "from_email",
-                           "required": "required",
-                           "title": "Enter your email address.",
-                           "fieldType": "input",
-                           "type": "email"
-                       },
+    					"label": "From (Email):",
+    					"category": "Info",
+    					"name": "from_email",
+    					"id": "from_email",
+    					"required": "required",
+    					"title": "Select your email address.",
+    					"url": "/core/api/account-prefs/verified-emails/all",
+    					"dynamicName": "email",
+    					"dynamicValue": "email",
+    					"arrange_type": "prepend",
+    					"fieldType": "dynamicselect",
+    					"type": "verified_email",
+    					"options": {
+        					"Contact's Owner": "{{owner.email}}",
+        					"+ Add new": "verify_email"
+    						},
+    					"event": "onchange",
+    					"eventHandler": "openVerifyEmailModal(this)",
+    					"style": {
+        					"width": "77.5%",
+        					"padding": "0.4em"
+    						}
+					   },
                        {
                            "label": "To",
                            "category": "Info",
@@ -1994,7 +2022,7 @@
                 },
                 {
                     "name": "from_email",
-                    "value": "me@mycompany.com"
+                    "value": "{{owner.email}}"
                 },
                 {
                     "name": "to_email",

@@ -3,6 +3,8 @@ function showAddonsTab(){
 	
 	 if(!checkMaxNodesCount())
  		return;
+	 if(!checkWorkflowSize())
+     	return;
    
    $('#addontabs').tabs({
 	   
@@ -83,6 +85,9 @@ function addAddonTabTemplate(data, url, callback, container)
 	if(!checkMaxNodesCount())
  		return;
 	
+	if(!checkWorkflowSize())
+		return;
+    	
          var catalogTemplate = $('#catalogtemplate').clone();
          catalogTemplate.removeAttr('style');
 

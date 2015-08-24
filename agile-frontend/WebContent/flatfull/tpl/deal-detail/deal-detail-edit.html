@@ -28,7 +28,7 @@
 							class="field_req">*</span></label>
 						<div class="controls">
 							<span><input type="text" name="expected_value"
-								class="required form-control number" max="1000000000000"
+								class="required form-control number" min="0" max="1000000000000"
 								placeholder="Value of Deal" /></span>
 						</div>
 					</div>
@@ -69,7 +69,7 @@
 						<label class="control-label"><b>Close Date </b></label>
 						<div class="controls">
 							<span><input id="close_date" type="text" name="close_date"
-								class="input form-control date" placeholder="MM/DD/YY" /></span>
+								class="input form-control date" placeholder="{{dateFormat}}" /></span>
 						</div>
 					</div>
 				</div>

@@ -395,7 +395,10 @@ function get_contact_json_for_merge_fields()
 			for(var i in arr)
 				contact_property_json[arr[i]]= get_formatted_date(contact_property_json[arr[i]]);
 			
-			contact_property_json["location"] = JSON.parse(contact_property_json["address"]);
+			contact_property_json["id"] = contact_json["id"];
+			
+			if(contact_property_json["address"])
+				contact_property_json["location"] = JSON.parse(contact_property_json["address"]);
 		}
 		catch(err)
 		{
@@ -494,7 +497,7 @@ function register_focus_on_tinymce(selector)
 	if(!document)
 		return;
 	
-	$(document).die().live('click', function(e){
+	$(document).on('click', function(e){
 		
 		e.preventDefault();
 		

@@ -7,31 +7,73 @@
  * author: Rammohan
  */
 
-$(function()
-{
+$( document ).ready(function() {
+	/**
+	 * Makes the pending task as completed by calling complete_task function
+	 */
+	$("body").on("click", '.tasks-select', function(e)
+	{
+		e.stopPropagation();
+		if ($(this).is(':checked'))
+		{
+			// Complete
+			var taskId = $(this).attr('data');
+			// complete_task(taskId, $(this));
+			complete_task(taskId, App_Calendar.tasksListView.collection, $(this).closest('tr'))
+		}
+	});
+
+	/**
+	 * Shows activity modal with all the task create fields.
+	 */
+	$("body").on("click", '.add-task', function(e)
+	{
+		e.preventDefault();
+
+		// Show task modal with owners list.
+		showTaskModal(this);
+	});
+	/**
+	 * Show event of update task modal Activates typeahead for task-update-modal
+	 */
+	$('#updateTaskModal').on('shown.bs.modal', function()
+	{
+
+		var el = $("#updateTaskForm");
+		agile_type_ahead("update_task_related_to", el, contacts_typeahead);
+
+		// Fill details in form
+		setForm(el);
+
+	});
+
+});
+
+
+function activateSliderAndTimerToTaskModal(){
 
 	$('.update-task-timepicker').timepicker({ defaultTime : get_hh_mm(true), showMeridian : false });
-	$('.update-task-timepicker').timepicker().on('show.timepicker', function(e) 
+	$('.update-task-timepicker').timepicker().on('show.timepicker', function(e)
 	{
-		if($('.update-task-timepicker').attr('value')!="" && $('.update-task-timepicker').attr('value')!=undefined)
+		if ($('.update-task-timepicker').prop('value') != "" && $('.update-task-timepicker').prop('value') != undefined)
 		{
-			if($('.update-task-timepicker').attr('value').split(":")[0]!=undefined)
-				e.time.hours = $('.update-task-timepicker').attr('value').split(":")[0];
-			if($('.update-task-timepicker').attr('value').split(":")[0]!=undefined)
-				e.time.minutes = $('.update-task-timepicker').attr('value').split(":")[1];
+			if ($('.update-task-timepicker').prop('value').split(":")[0] != undefined)
+				e.time.hours = $('.update-task-timepicker').prop('value').split(":")[0];
+			if ($('.update-task-timepicker').prop('value').split(":")[0] != undefined)
+				e.time.minutes = $('.update-task-timepicker').prop('value').split(":")[1];
 		}
 		$('.bootstrap-timepicker-hour').val(e.time.hours);
 		$('.bootstrap-timepicker-minute').val(e.time.minutes);
 	});
 	$('.new-task-timepicker').timepicker({ defaultTime : '12:00', showMeridian : false });
-	$('.new-task-timepicker').timepicker().on('show.timepicker', function(e) 
+	$('.new-task-timepicker').timepicker().on('show.timepicker', function(e)
 	{
-		if($('.new-task-timepicker').attr('value')!="" && $('.new-task-timepicker').attr('value')!=undefined)
+		if ($('.new-task-timepicker').prop('value') != "" && $('.new-task-timepicker').prop('value') != undefined)
 		{
-			if($('.new-task-timepicker').attr('value').split(":")[0]!=undefined)
-				e.time.hours = $('.new-task-timepicker').attr('value').split(":")[0];
-			if($('.new-task-timepicker').attr('value').split(":")[0]!=undefined)
-				e.time.minutes = $('.new-task-timepicker').attr('value').split(":")[1];
+			if ($('.new-task-timepicker').prop('value').split(":")[0] != undefined)
+				e.time.hours = $('.new-task-timepicker').prop('value').split(":")[0];
+			if ($('.new-task-timepicker').prop('value').split(":")[0] != undefined)
+				e.time.minutes = $('.new-task-timepicker').prop('value').split(":")[1];
 		}
 		$('.bootstrap-timepicker-hour').val(e.time.hours);
 		$('.bootstrap-timepicker-minute').val(e.time.minutes);
@@ -42,76 +84,19 @@ $(function()
 	loadProgressSlider($("#updateTaskForm"));
 
 	/**
-	 * Activates all features of a task form (highlighting the task form,
-	 * relatedTo field typeahead, changing color and font-weight) when we click
-	 * on task link in activities modal.
-	 */
-	$("#task").live('click', function(e)
-	{
-		e.preventDefault();
-		var el = $("#taskForm");
-		highlight_task();
-		agile_type_ahead("task_related_to", el, contacts_typeahead);
-		categories.getCategoriesHtml(undefined,function(catsHtml){
-			$('#type',el).html(catsHtml);
-			// Fills owner select element
-			populateUsers("owners-list", $("#taskForm"), undefined, undefined, function(data)
-			{
-				$("#taskForm").find("#owners-list").html(data);
-				$("#owners-list", el).find('option[value=' + CURRENT_DOMAIN_USER.id + ']').attr("selected", "selected");
-				$("#owners-list", $("#taskForm")).closest('div').find('.loading-img').hide();
-			});
-		});
-	});
-
-	/**
-	 * Shows activity modal with all the task create fields.
-	 */
-	$(".add-task").live('click', function(e)
-	{
-		e.preventDefault();
-
-		// Show task modal with owners list.
-		showTaskModal(this);
-	});
-
-	/**
-	 * Tasks are categorized into four types (overdue, today, tomorrow and
-	 * next-week) while displaying them in client side.Each category has it's
-	 * own table, so to edit tasks call update_task function for each category.
-	 */
-	/*
-	 * $('#overdue > tr').live('click', function(e) { e.preventDefault();
-	 * update_task(this); }); $('#today > tr').live('click', function(e) {
-	 * e.preventDefault(); update_task(this); }); $('#tomorrow >
-	 * tr').live('click', function(e) { e.preventDefault(); update_task(this);
-	 * }); $('#next-week > tr').live('click', function(e) { e.preventDefault();
-	 * update_task(this); });
+	 * Date Picker Activates datepicker for task due element
 	 */
 
-	/**
-	 * Task list edit
-	 */
-	/*
-	 * // TODO:jitendra reenable it $('#tasks-list-model-list > tr >
-	 * td:not(":first-child")').live('click', function(e) { e.preventDefault();
-	 * update_task($(this).closest('tr')); });
-	 */
+	$('#task-date-1').datepicker({ format : CURRENT_USER_PREFS.dateFormat , weekStart : CALENDAR_WEEK_START_DAY});
+	$('#update-task-date-1').datepicker({ format : CURRENT_USER_PREFS.dateFormat , weekStart : CALENDAR_WEEK_START_DAY});
 
-	/**
-	 * Dash board edit
-	 */
-	$('#dashboard1-tasks-model-list > tr').live('click', function(e)
-	{
-		e.preventDefault();
-		update_task(this);
-	});
 
 	/**
 	 * When clicked on update button of task-update-modal, the task will get
 	 * updated by calling save_task function
 	 */
-	$('#update_task_validate').live('click', function(e)
+	$('#updateTaskModal #update_task_validate').off('click');
+	$("#updateTaskModal").on("click", '#update_task_validate', function(e)
 	{
 		e.preventDefault();
 		save_task('updateTaskForm', 'updateTaskModal', true, this);
@@ -120,6 +105,7 @@ $(function()
 	/**
 	 * initialises task time picker
 	 */
+	$('#updateTaskModal').off('hidden.bs.modal');
 	$('#updateTaskModal').on('hidden.bs.modal', function()
 	{
 
@@ -139,76 +125,17 @@ $(function()
 		$(".task-add-note", $("#updateTaskForm")).show();
 	});
 
-	/**
-	 * Show event of update task modal Activates typeahead for task-update-modal
-	 */
-	$('#updateTaskModal').on('shown.bs.modal', function()
-	{
+}
 
-		var el = $("#updateTaskForm");
-		agile_type_ahead("update_task_related_to", el, contacts_typeahead);
-
-		// Fill details in form
-		setForm(el);
-	});
-
-	/**
-	 * Date Picker Activates datepicker for task due element
-	 */
-	$('#task-date-1').datepicker({ format : 'mm/dd/yyyy' });
-
-	/**
-	 * Shows a pop-up modal with pre-filled values to update a task
-	 * 
-	 * @method updateTask
-	 * @param {Object}
-	 *            ele assembled html object
-	 * 
-	 */
-	function update_task(ele)
-	{
-		var value = $(ele).data().toJSON();
-		deserializeForm(value, $("#updateTaskForm"));
-		$("#updateTaskModal").modal('show');
-		$('.update-task-timepicker').val(fillTimePicker(value.due));
-		categories.getCategoriesHtml(value,function(catsHtml){
-			$('#type',$("#updateTaskForm")).html(catsHtml);
-			// Fills owner select element
-			populateUsers("owners-list", $("#updateTaskForm"), value, 'taskOwner', function(data)
-			{
-				$("#updateTaskForm").find("#owners-list").html(data);
-				if (value.taskOwner)
-				{
-					$("#owners-list", $("#updateTaskForm")).find('option[value=' + value['taskOwner'].id + ']').attr("selected", "selected");
-				}
-				$("#owners-list", $("#updateTaskForm")).closest('div').find('.loading-img').hide();
-			});
-		});
-
-		// Add notes in task modal
-		showNoteOnForm("updateTaskForm", value.notes);
-	}
-
-	/**
-	 * Makes the pending task as completed by calling complete_task function
-	 */
-	$('.tasks-select').live('click', function(e)
-	{
-		e.stopPropagation();
-		if ($(this).is(':checked'))
-		{
-			// Complete
-			var taskId = $(this).attr('data');
-			// complete_task(taskId, $(this));
-			complete_task(taskId, App_Calendar.tasksListView.collection, $(this).closest('tr'))
-		}
-	});
+function initializeTasksListeners(){
+		
+	activateSliderAndTimerToTaskModal();
 
 	/**
 	 * All completed and pending tasks will be shown in separate section
 	 */
 	/*
-	 * $('#tasks-list').live('click', function(e) { this.tasksListView = new
+	 * $('#tasks-list').on('click', function(e) { this.tasksListView = new
 	 * Base_Collection_View({ url : '/core/api/tasks/all', restKey : "task",
 	 * templateKey : "tasks-list", individual_tag_name : 'tr' });
 	 * this.tasksListView.collection.fetch();
@@ -217,7 +144,78 @@ $(function()
 	 * 
 	 * });
 	 */
-});
+
+	 $('#tasks-list-template').on('mouseenter', '.listed-task', function(e)
+	{
+		$(this).find(".task-actions").css("display", "block");
+		$(this).find(".task-note-action").hide();
+	});
+
+	// Hide task actions
+	$('#tasks-list-template').on('mouseleave', '.listed-task', function(e)
+	{
+		$(this).find(".task-actions").css("display", "none");
+		$(this).find(".task-note-action").show();
+	});
+
+	/*
+	 * Task Action: Delete task from UI as well as DB. Need to do this manually
+	 * because nested collection can not perform default functions.
+	 */
+	$('#tasks-list-template').on('click', '.delete-task', function(event)
+	{
+		if (!confirm("Are you sure you want to delete?"))
+			return;
+
+		// Delete Task.
+		deleteTask(getTaskId(this), getTaskListId(this), getTaskListOwnerId(this));
+	});
+
+	// Task Action: Mark task complete, make changes in DB.
+	$('#tasks-list-template').on('click', '.is-task-complete', function(event)
+	{
+		event.preventDefault();
+
+		// make task completed.
+		completeTask(getTaskId(this), getTaskListId(this), getTaskListOwnerId(this));
+	});
+
+	// Task Action: Open Task Edit Modal and display details in it.
+	$('#tasks-list-template').on('click', '.edit-task', function(event)
+	{
+		event.preventDefault();
+
+		// Show and Fill details in Task Edit modal
+		editTask(getTaskId(this), getTaskListId(this), parseInt(getTaskListOwnerId(this)));
+	});
+	
+	
+
+	/*
+	 * In new/update task modal, on selection of status, show progress slider
+	 * and change %
+	 */
+		
+	$('#tasks-list-template').on('click', '.group-view', function(event)
+	{
+		event.preventDefault();
+		console.log("group-view event");
+				
+		// Change UI and input field
+		applyDetailsFromGroupView();
+	});	
+
+	
+}
+
+$("body").on("change", '.status', function()
+	{
+		console.log("status change event");
+		
+		// Change status UI and input field
+		changeStatus($(this).val(), $(this).closest("form"));
+	});	
+
 
 /**
  * Highlights the task portion of activity modal (Shows task form and hides
@@ -236,7 +234,7 @@ function highlight_task()
 				$("#activityForm").find("#event_related_to").closest(".controls").find("ul").children());
 
 	// Date().format('mm/dd/yyyy'));
-	$('input.date').val(new Date().format('mm/dd/yyyy')).datepicker('update');
+	$('input.date').val(getDateInFormat(new Date())).datepicker('update');
 }
 
 /**
@@ -309,7 +307,10 @@ function save_task(formId, modalId, isUpdate, saveBtn)
 							$(".navbar_due_tasks").css("display", "none");
 						else
 							$(".navbar_due_tasks").css("display", "inline-block");
-						$('#due_tasks_count').html(due_task_count);
+						if(due_task_count !=0)
+							$('#due_tasks_count').html(due_task_count);
+						else
+							$('#due_tasks_count').html("");
 
 						if (Current_Route == 'calendar')
 						{
@@ -426,10 +427,11 @@ function save_task(formId, modalId, isUpdate, saveBtn)
 								App_Calendar.tasksListView.render(true);
 							}
 							else
-								App_Tasks.navigate("task/"+task.id, { trigger : true });
+								App_Tasks.navigate("task/" + task.id, { trigger : true });
 							taskDetailView = data;
 							$("#content").html(getTemplate("task-detail", data.toJSON()));
 							task_details_tab.loadActivitiesView();
+							initializeTaskDetailListeners();
 
 						}
 					} });
@@ -621,10 +623,13 @@ function complete_task(taskId, collection, ui, callback)
 	new_task.url = '/core/api/tasks';
 	new_task.save(taskJSON, { success : function(model, response)
 	{
-		if(Current_Route.indexOf("contact/")>-1){
+		if (Current_Route.indexOf("contact/") > -1)
+		{
 			collection.get(taskId).set(model);
-		}else{
-			collection.remove(model);			
+		}
+		else
+		{
+			collection.remove(model);
 		}
 
 		var due_task_count = getDueTasksCount();
@@ -632,8 +637,10 @@ function complete_task(taskId, collection, ui, callback)
 			$(".navbar_due_tasks").css("display", "none");
 		else
 			$(".navbar_due_tasks").css("display", "inline-block");
-		$('#due_tasks_count').html(due_task_count);
-
+		if(due_task_count !=0)
+			$('#due_tasks_count').html(due_task_count);
+		else
+			$('#due_tasks_count').html("");
 		if (ui)
 			ui.fadeOut(500);
 

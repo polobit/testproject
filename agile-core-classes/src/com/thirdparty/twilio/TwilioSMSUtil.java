@@ -112,7 +112,7 @@ public class TwilioSMSUtil
 			result = XML.toJSONObject(response.getResponseText()).getJSONObject(TWILIO_RESPONSE)
 					.getJSONObject(TWILIO_INCOMING_NUMBERS);
 
-			if (result.getInt("total") == 1)
+			if (result.get("IncomingPhoneNumber") instanceof JSONObject)
 			{
 				verifiredTwilioNumbers.add(result.getJSONObject("IncomingPhoneNumber").get("PhoneNumber").toString());
 				return verifiredTwilioNumbers;
@@ -127,8 +127,8 @@ public class TwilioSMSUtil
 		}
 		catch (Exception e)
 		{
-			System.out.println("Exception in TwilioSMS. The result is " + result);
-			e.printStackTrace();
+			System.out.println("Exception in TwilioSMS: " + e.getMessage());
+			System.out.println("The result is " + result);
 		}
 
 		return verifiredTwilioNumbers;

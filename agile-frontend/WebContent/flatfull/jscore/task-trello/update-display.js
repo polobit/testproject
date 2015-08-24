@@ -35,7 +35,7 @@ function displaySettings()
 // Load and display slider in update task modal of task for progress.
 function loadProgressSlider(el)
 {
-	head.load(CSS_PATH + 'css/jslider.css', LIB_PATH + 'lib/jquery.slider.min.js', function()
+	head.load(LIB_PATH + 'lib/jquery.slider.min.js', function()
 	{
 		$(".progress_slider", el).slider({ 
 			from : 0, 
@@ -43,7 +43,7 @@ function loadProgressSlider(el)
 			step : 1, 
 			skin : "round", 
 			onstatechange : function(value){
-				changeProgress(value, $(".status", el).attr("value"), el);
+				changeProgress(value, $(".status", el).val(), el);
 			}
 		});
 	});
@@ -517,8 +517,8 @@ function addTasklListDetails(addTaskElement)
 	case "DUE":
 	{		
 		var epochTime = getNewDueDate($(addTaskElement).attr("heading"));
-		var startDate = new Date(epochTime *1000).format('mm/dd/yyyy');
-		$("#taskForm").find("input.date").val(new Date(startDate).format('mm/dd/yyyy')).datepicker('update');		
+		var startDate = getDateInFormatFromEpoc(epochTime);
+		$("#taskForm").find("input.date").val(startDate).datepicker('update');		
 	}
 		break;		
 	case "PRIORITY":
