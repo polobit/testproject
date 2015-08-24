@@ -232,7 +232,7 @@ function initializeSubscriptionListeners(){
 	  		removeStyleForAPlan();
 	  		var id = $(this).parent(); 	
 	  		addStyleForAPlan(id,null); 
-	  		$("#plan_type").attr("value", id.attr("id").split("_")[0]);
+	  		$("#plan_type").val(id.attr("id").split("_")[0]);
 	  		
 	      	// Cost
 	  		setCost(update_price());
