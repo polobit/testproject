@@ -485,7 +485,7 @@ public class TagUtil
 	    return true;
 
 	DomainUser user = DomainUserUtil.getCurrentDomainUser();
-	if (user.restricted_scopes.contains(UserAccessScopes.ADD_NEW_TAG))
+	if (user.restricted_scopes != null && user.restricted_scopes.contains(UserAccessScopes.ADD_NEW_TAG))
 	{
 	    Set<String> newTagSet = new HashSet<String>();
 	    // If tags are not empty, considering they are simple tags and adds
@@ -535,7 +535,7 @@ public class TagUtil
 	    return newTags;
 
 	DomainUser user = DomainUserUtil.getCurrentDomainUser();
-	if (user.restricted_scopes.contains(UserAccessScopes.ADD_NEW_TAG))
+	if (user.restricted_scopes != null && user.restricted_scopes.contains(UserAccessScopes.ADD_NEW_TAG))
 	{
 	    for (String tag : tags)
 	    {
@@ -553,7 +553,7 @@ public class TagUtil
 	    return true;
 
 	DomainUser user = DomainUserUtil.getCurrentDomainUser();
-	if (user.restricted_scopes.contains(UserAccessScopes.ADD_NEW_TAG))
+	if (user.restricted_scopes != null && user.restricted_scopes.contains(UserAccessScopes.ADD_NEW_TAG))
 	{
 	    for (Tag tag : tags)
 	    {
