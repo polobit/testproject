@@ -557,7 +557,7 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
 }
 
 // Removes tags ("Related to" field contacts)
-$('#remove_tag').die().live('click', function(event)
+$("body").on("click", '#remove_tag', function(event)
 {
 	event.preventDefault();
 	$(this).parent().remove();

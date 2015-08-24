@@ -1,4 +1,4 @@
-$(".agent-popup-alert-dismiss").die().live('click', function(event)
+$("body").on('click', '.agent-popup-alert-dismiss', function(event)
 {
 	createCookie('CHORME_EXTENSION_DOWNLOAD', false);
 	$("#chrome_extension").remove();
@@ -105,29 +105,68 @@ $(".agent-popup-alert-dismiss").die().live('click', function(event)
  * 
  *//**
 	 * To dismiss chrome extension popup
-	 */
-/*
- * $('#chrome_extension #dismiss').die().live('click', function(e) {
- * e.stopPropagation(); // To prevent notify user permanantly
- * createCookie("prevent_extension_request", "true");
- * 
- * Toggle_Extension_Request_Ui(true); });
- * 
- *//**
+	 *//*
+	$('#chrome_extension #dismiss').live('click', function(e)
+	{
+		e.stopPropagation();
+
+		// To prevent notify user permanantly
+		createCookie("prevent_extension_request", "true");
+
+		Toggle_Extension_Request_Ui(true);
+	});
+
+	*//**
 	 * To prevent notify user on each session
-	 */
-/*
- * $("#chrome_extension #prevent_extension_request").die().live('click',
- * function() { // To prevent notify user permanantly
- * createCookie("prevent_extension_request", "true");
- * 
- * Toggle_Extension_Request_Ui(true); });
- * 
- *//**
+	 *//*
+	$("#chrome_extension #prevent_extension_request").live('click', function()
+	{
+
+		// To prevent notify user permanantly
+		createCookie("prevent_extension_request", "true");
+
+		Toggle_Extension_Request_Ui(true);
+	});
+
+	*//**
 	 * Install extension
-	 */
-/*
- * $('#chrome_extension #chrome_install_button').die().live('click', function(e) {
+	 *//*
+	$('#chrome_extension #chrome_install_button').live('click', function(e)
+	{
+
+		e.stopPropagation();
+
+		var $this = $(this);
+
+		Toggle_Extension_Loader("inline");
+
+		try
+		{
+			chrome.webstore.install(Chrome_Extension_Webstore_Url, function(success)
+			{
+
+				console.log(success);
+				Toggle_Extension_Request_Ui(true);
+
+			}, function(error)
+			{
+				console.log(error);
+				Toggle_Extension_Loader("none");
+				//OpenInNewTab();
+			});
+		}
+		catch (e)
+		{
+			console.log(e);
+			Toggle_Extension_Loader("none");
+			//OpenInNewTab();
+		}
+		return false;
+	});
+}
+
+*//**
+ * Toggle loader image
  * 
  * e.stopPropagation();
  * 

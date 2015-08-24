@@ -165,7 +165,7 @@ if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Produ
 
 %>
 
- <%@ include file="tpl/min/precompiled/tpl.html" %>
+<%@ include file="tpl/min/precompiled/tpl.html" %>
 
 </div>
 <!-- Including Footer page -->

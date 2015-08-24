@@ -6,85 +6,12 @@
  */
 
 // handle popover
-$(function()
-{
-
-	/**
-	 * When mouseover on any row of opportunities list, the pop-over of deal is
-	 * shown
-	 */
-	$('#cases-model-list > tr').live(
-			'mouseenter',
-			function()
-			{
-
-				var data = $(this).find('.data').attr('data');
-				var currentCase = App_Cases.casesCollectionView.collection.get(data);
-				var ele = getTemplate("cases-detail-popover", currentCase.toJSON());
-
-				$(this).popover(
-						{ "rel" : "popover", "trigger" : "hover", "placement" : 'right', "original-title" : currentCase.toJSON().name, "content" : ele,
-							"html" : true, });
-
-				/**
-				 * Checks for last 'tr' and change placement of popover to 'top'
-				 * inorder to prevent scrolling on last row of list
-				 */
-				/*$('#cases-model-list > tr:last').popover(
-						{ "rel" : "popover", "trigger" : "hover", "placement" : 'right', "original-title" : currentCase.toJSON().name, "content" : ele,
-							"html" : true, });*/
-
-				/**
-				 * make sure first popover is shown on the right
-				 */
-				$/*('#cases-model-list > tr:first').popover(
-						{ "rel" : "popover", "trigger" : "hover", "placement" : 'right', "original-title" : currentCase.toJSON().name, "content" : ele,
-							"html" : true, });*/
-
-				$(this).popover('show');
-			});
-
-	/**
-	 * On mouse out on the row hides the popover.
-	 */
-	$('#cases-model-list > tr').live('mouseleave', function()
-	{
-		$(this).popover('hide');
-	});
-
-	/**
-	 * Close button of Case popup is clicked.
-	 */
-	$('#close-case').live('click', function(e)
-	{
-		e.preventDefault();
-	});
 
 
-});
+$(function(){
 
-// show add case modal
-$(function()
-{
 
-	$('.cases-add').live('click', function(e)
-	{
-		e.preventDefault();
-		showCases();
-	});
-
-	$("#cases_validate").live('click', function(e)
-	{
-		e.preventDefault();
-
-		// To know updated or added cases form names
-		var modal_id = $(this).closest('.cases-modal').attr("id");
-		var form_id = $(this).closest('.cases-modal').find('form').attr("id");
-		var json = serializeForm(form_id);
-		savecases(form_id, modal_id, this, json);
-	});
-
-	/**
+/**
 	 * To avoid showing previous errors of the modal.
 	 */
 	$('#casesModal, #casesUpdateModal').on('show.bs.modal', function(data)
@@ -148,12 +75,84 @@ $(function()
 		remove_validation_errors('casesUpdateModal');
 	});
 
-	$('#cases-model-list > tr > td:not(":first-child")').live('click', function(e)
+
+	$('#casesModal,#casesUpdateModal').on('click', '#cases_validate', function(e) 
+	{
+		e.preventDefault();
+
+		// To know updated or added cases form names
+		var modal_id = $(this).closest('.cases-modal').attr("id");
+		var form_id = $(this).closest('.cases-modal').find('form').attr("id");
+		var json = serializeForm(form_id);
+		savecases(form_id, modal_id, this, json);
+	});
+
+
+
+});
+
+
+// show add case modal
+function initializeCasesListeners(el){
+	
+	$('#cases-listners').off();
+	// $("#cases-listners #cases-model-list > tr").off('mouseenter');
+	$("#cases-listners").on('mouseenter',
+			'#cases-model-list > tr',
+			function()
+			{
+
+				var data = $(this).find('.data').attr('data');
+				var currentCase = App_Cases.casesCollectionView.collection.get(data);
+				
+				var ele = getTemplate("cases-detail-popover", currentCase.toJSON());
+
+				$(this).popover(
+						{ "rel" : "popover", "trigger" : "hover", "placement" : 'right', "original-title" : currentCase.toJSON().name, "content" : ele,
+							"html" : true, });
+
+				/**
+				 * Checks for last 'tr' and change placement of popover to 'top'
+				 * inorder to prevent scrolling on last row of list
+				 */
+				/*$('#cases-model-list > tr:last').popover(
+						{ "rel" : "popover", "trigger" : "hover", "placement" : 'right', "original-title" : currentCase.toJSON().name, "content" : ele,
+							"html" : true, });*/
+
+				/**
+				 * make sure first popover is shown on the right
+				 */
+				/*$('#cases-model-list > tr:first').popover(
+						{ "rel" : "popover", "trigger" : "hover", "placement" : 'right', "original-title" : currentCase.toJSON().name, "content" : ele,
+							"html" : true, });*/
+
+				$(this).popover('show');
+			});
+
+	/**
+	 * On mouse out on the row hides the popover.
+	 */
+	 $("#cases-listners #cases-model-list > tr").off('mouseleave');
+	 $('#cases-listners').on('mouseleave', '#cases-model-list > tr', function()
+	{
+		$(this).popover('hide');
+	});
+
+	$("#cases-listners .cases-add").off('click');
+	$('#cases-listners').on('click', '.cases-add', function(e)
+	{
+		e.preventDefault();
+		showCases();
+	});
+
+	
+	$("#cases-listners #cases-model-list > tr > td:not(':first-child')").off('click');
+	$('#cases-listners').on('click', '#cases-model-list > tr > td:not(":first-child")', function(e) 
 	{
 		e.preventDefault();
 		updatecases($(this).closest('tr').data());
 	});
-});
+}
 
 /**
  * Show cases popup for editing

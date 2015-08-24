@@ -63,7 +63,7 @@ function setupSipAuth()
 	 *  // Shows input fields to save the Sip preferences
 	 * $('#Sip').html(getTemplate('sip-login', {}));
 	 *  // On click of save button, check input and save details
-	 * $('#save_prefs').die().live('click', function(e) { e.preventDefault();
+	 * $('#save_prefs').live('click', function(e) { e.preventDefault();
 	 *  // Checks whether all input fields are given if
 	 * (!isValidForm($("#sip_login_form"))) { return; } // Saves Sip preferences
 	 * in ClickDesk widget object saveSipPrefs();

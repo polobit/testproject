@@ -9,6 +9,7 @@ import org.apache.commons.lang.SerializationUtils;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
+import com.Globals;
 import com.agilecrm.account.util.EmailGatewayUtil;
 import com.agilecrm.mandrill.util.deferred.MailDeferredTask;
 import com.agilecrm.threads.Work;
@@ -53,6 +54,8 @@ public class TaskletThread implements Work
 
 	    if (tasks.size() > 0 && isMailTask(tasks.get(0)))
 	    {
+		System.out
+			.println("********************************************************************************************************");
 		EmailGatewayUtil.sendMailsMailDeferredTask(convertTaskHandlestoMailDeferredTasks(tasks));
 	    }
 	    else
@@ -60,8 +63,9 @@ public class TaskletThread implements Work
 		for (Task task : tasks)
 		{
 		    DeferredTask deferredTask = convertResponseToDeferredTask(task);
-		    if (deferredTask != null)
-			deferredTask.run();
+
+		    // if (deferredTask != null)
+		    // deferredTask.run();
 		}
 	    }
 
@@ -94,7 +98,7 @@ public class TaskletThread implements Work
 		{
 		    try
 		    {
-			taskqueue.tasks().delete("s~agile-crm-cloud", queueName, task.getId())
+			taskqueue.tasks().delete(Globals.APPLICATION_ID_TO_DELETE_TASKS, queueName, task.getId())
 				.queue(batchRequest, getBatchCallback());
 		    }
 
@@ -125,6 +129,7 @@ public class TaskletThread implements Work
     {
 	try
 	{
+	    System.out.println(task.getQueueName());
 	    return (DeferredTask) SerializationUtils.deserialize(Base64
 		    .decodeBase64(task.getPayloadBase64().getBytes()));
 	}
@@ -176,6 +181,7 @@ public class TaskletThread implements Work
 	    {
 		MailDeferredTask mailDeferredTask = (MailDeferredTask) SerializationUtils.deserialize(Base64
 			.decodeBase64(handle.getPayloadBase64().getBytes()));
+		logger.info(mailDeferredTask.fromEmail + " Thread : " + Thread.currentThread().getName());
 
 		mailDeferredTasks.add(mailDeferredTask);
 	    }

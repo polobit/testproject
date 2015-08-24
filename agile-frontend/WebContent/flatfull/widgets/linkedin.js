@@ -67,7 +67,7 @@ $(function()
 	}
 
 	// Deletes LinkedIn profile on click of delete button in template
-	$('#Linkedin_plugin_delete').die().live('click', function(event)
+	$("body").on("click", '#Linkedin_plugin_delete', function(event)
 	{
 		event.preventDefault();
 
@@ -80,21 +80,21 @@ $(function()
 	});
 
 	// Sends a message to LinkedIn when clicked on send message button
-	$('#linkedin_message').die().live('click', function(e)
+	$("body").on("click", '#linkedin_message', function(e)
 	{
 		e.preventDefault();
 		sendLinkedInMessage(Linkedin_id);
 	});
 
 	// Sends an connect request to LinkedIn when clicked on connect button
-	$('#linkedin_connect').die().live('click', function(e)
+	$("body").on("click", '#linkedin_connect', function(e)
 	{
 		e.preventDefault();
 		sendLinkedInAddRequest(Linkedin_id);
 	});
 
 	// ReShares a post in LinkedIn on click of share link
-	$('.linkedin_share').die().live('click', function(e)
+	$("body").on("click", '.linkedin_share', function(e)
 	{
 		e.preventDefault();
 		var share_id = $(this).attr("id");
@@ -102,7 +102,7 @@ $(function()
 	});
 
 	// Retrieves work positions of a person
-	$('#linkedin_experience').die().live('click', function(e)
+	$("body").on("click", '#linkedin_experience', function(e)
 	{
 		e.preventDefault();
 
@@ -113,7 +113,7 @@ $(function()
 	});
 
 	// Retrieves shared connections between contact and agile user LinkedIn
-	$('#linkedin_shared_connections').die().live('click', function(e)
+	$("body").on("click", '#linkedin_shared_connections', function(e)
 	{
 		e.preventDefault();
 
@@ -124,7 +124,7 @@ $(function()
 	});
 
 	// on click of updates tab, retrieves network updates
-	$('#linkedin_update_tab').die().live('click', function(e)
+	$("body").on("click", '#linkedin_update_tab', function(e)
 	{
 		e.preventDefault();
 
@@ -135,7 +135,7 @@ $(function()
 	});
 
 	// On click of name link in results to modify, shows modify template
-	$('.linkedin_modify_search').die().live('click', function(e)
+	$("body").on("click", '.linkedin_modify_search', function(e)
 	{
 		e.preventDefault();
 
@@ -145,7 +145,7 @@ $(function()
 	});
 
 	// On click of search button in modify, retrieves matches for search text
-	$('#linkedin_search_btn').die().live('click', function(e)
+	$("body").on("click", '#linkedin_search_btn', function(e)
 	{
 		e.preventDefault();
 
@@ -153,7 +153,7 @@ $(function()
 	});
 
 	// On click of close button in LinkedIn, show results for past search text
-	$('#linkedin_search_close').die().live('click', function(e)
+	$("body").on("click", '#linkedin_search_close', function(e)
 	{
 		e.preventDefault();
 
@@ -164,19 +164,19 @@ $(function()
 	});
 
 	// On mouse enter of work position, show link to read more
-	$('.experience_li').live('mouseenter', function(e)
+	$("body").on("mouseenter", '.experience_li', function(e)
 	{
 		$(this).find('.show-summary').show();
 	});
 
 	// On mouse leave of work position, hide link to read more
-	$('.experience_li').live('mouseleave', function(e)
+	$("body").on("mouseleave", '.experience_li', function(e)
 	{
 		$(this).find('.show-summary').hide();
 	});
 
 	// On click of show more in work position, show whole summary
-	$('.show-summary').die().live('click', function(e)
+	$("body").on("click", '.show-summary', function(e)
 	{
 		e.preventDefault();
 		var href = $(this).attr("href");
@@ -268,7 +268,7 @@ function showLinkedinMatchingProfiles(data)
 	 * Displays LinkedIn profile details on mouse hover of profile, and saves
 	 * profile on click
 	 */
-	$(".linkedinImage").die().live('mouseover', function()
+	$("body").on("mouseover", '.linkedinImage', function(e)
 	{
 		// Unique LinkedIn Id from widget
 		Linkedin_id = $(this).attr('id');
@@ -285,7 +285,7 @@ function showLinkedinMatchingProfiles(data)
 		$(this).popover('show');
 
 		// on click of any profile, save it to the contact
-		$('#' + Linkedin_id).die().live('click', function(e)
+		$('#' + Linkedin_id).on('click', function(e)
 		{
 			e.preventDefault();
 
@@ -554,7 +554,7 @@ function showExperienceInLinkedIn(data)
 function registerEventsInLinkedIn(Linkedin_id, linkedin_connected, Stream_Data)
 {
 	// On click of see more link, more updates are retrieved
-	$('.linkedin_stream').die().live('click', function(e)
+	$("body").on("click", '.linkedin_stream', function(e)
 	{
 		e.preventDefault();
 
@@ -597,7 +597,7 @@ function registerEventsInLinkedIn(Linkedin_id, linkedin_connected, Stream_Data)
 	 * On click of less button, hides update stream and shows current update by
 	 * toggling
 	 */
-	$('#linkedin_less').die().live('click', function(e)
+	$("body").on("click", '#linkedin_less', function(e)
 	{
 		e.preventDefault();
 
@@ -629,7 +629,7 @@ function registerEventsInLinkedIn(Linkedin_id, linkedin_connected, Stream_Data)
 	 * On click of refresh icon in the LinkedIn panel, all the new updates are
 	 * shown
 	 */
-	$('#linkedin_refresh_stream').die().live('click', function(e)
+	$("body").on("click", '#linkedin_refresh_stream', function(e)
 	{
 		e.preventDefault();
 
@@ -1155,7 +1155,7 @@ function getLinkedInSharedConnections(Linkedin_id)
 		 * Displays LinkedIn profile details on mouse hover and saves profile on
 		 * click
 		 */
-		$(".linkedinSharedImage").die().live('mouseover', function()
+		$("body").on("mouseover", '.linkedinSharedImage', function(e)
 		{
 
 			// Aligns details to left in the pop over

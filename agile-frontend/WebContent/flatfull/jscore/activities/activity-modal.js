@@ -13,7 +13,7 @@ $(function() {
 	 * Saves the content of activity modal by verifying whether it is a task or
 	 * event
 	 */
-	$('#task_event_validate').die().live('click', function(e) {
+	$('body').on('click', '#task_event_validate', function(e) {
 		e.preventDefault();
 
 		console.log(this);
@@ -64,7 +64,7 @@ $(function() {
 	/**
 	 * Hide end-date & time for all day events.
 	 */
-	$('#activityForm #allDay').live('click',function(e){
+	$('body').on('click', '#activityForm #allDay', function(e) {
 		
 		if($(this).is(':checked'))
 		{	
@@ -78,7 +78,7 @@ $(function() {
 		}
 	});
 	
-	$('#updateActivityForm #allDay').live('click',function(e){
+	$('body').on('click', '#updateActivityForm #allDay', function(e) { 
 		
 		if($(this).is(':checked'))
 		{
