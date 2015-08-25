@@ -697,13 +697,14 @@ public class PortletUtil {
 						userJSONList.add(json.getJSONArray("user").getLong(i));
 					}
 					for(DomainUser domainUser : domainUsersList){
-						if(userJSONList.contains(domainUser.id))
+						if(userJSONList.contains(domainUser.id) && !domainUser.is_disabled)
 							usersList.add(domainUser);
 					}
 				}
 			}else{
 				for(DomainUser domainUser : domainUsersList){
-					usersList.add(domainUser);
+					if(!domainUser.is_disabled)
+						usersList.add(domainUser);
 				}
 			}
 		} catch (Exception e) {
@@ -886,7 +887,7 @@ public class PortletUtil {
 						userJSONList.add(json.getJSONArray("user").getLong(i));
 					}
 					for(DomainUser domainUser : domainUsersList){
-						if(userJSONList.contains(domainUser.id)){
+						if(userJSONList.contains(domainUser.id) && !domainUser.is_disabled){
 							usersList.add(domainUser);
 							usersKeyList.add(new Key<DomainUser>(DomainUser.class, domainUser.id));
 						}
@@ -894,8 +895,10 @@ public class PortletUtil {
 				}
 			}else{
 				for(DomainUser domainUser : domainUsersList){
-					usersList.add(domainUser);
-					usersKeyList.add(new Key<DomainUser>(DomainUser.class, domainUser.id));
+					if(!domainUser.is_disabled){
+						usersList.add(domainUser);
+						usersKeyList.add(new Key<DomainUser>(DomainUser.class, domainUser.id));
+					}
 				}
 			}
 
@@ -1227,13 +1230,14 @@ public class PortletUtil {
 							userJSONList.add(json.getJSONArray("user").getLong(i));
 						}
 						for(DomainUser domainUser : domainUsersList){
-							if(userJSONList.contains(domainUser.id))
+							if(userJSONList.contains(domainUser.id) && !domainUser.is_disabled)
 								usersList.add(domainUser);
 						}
 					}
 				}else{
 					for(DomainUser domainUser : domainUsersList){
-						usersList.add(domainUser);
+						if(!domainUser.is_disabled)
+							usersList.add(domainUser);
 					}
 				}
 				if(json.getBoolean("revenue")){

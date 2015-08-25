@@ -502,7 +502,8 @@ function showPortletSettings(el){
 			$.ajax({ type : 'GET', url : '/core/api/users', async : false, dataType : 'json',
 				success: function(data){
 					$.each(data,function(index,domainUser){
-						options+="<option value="+domainUser.id+">"+domainUser.name+"</option>";
+						if(!domainUser.is_disabled)
+							options+="<option value="+domainUser.id+">"+domainUser.name+"</option>";
 					});
 					$('#calls-user-list', elData).html(options);
 					$.each(base_model.get("settings")["calls-user-list"], function(){
@@ -515,7 +516,8 @@ function showPortletSettings(el){
 			$.ajax({ type : 'GET', url : '/core/api/users', async : false, dataType : 'json',
 				success: function(data){
 					$.each(data,function(index,domainUser){
-						options+="<option value="+domainUser.id+" selected='selected'>"+domainUser.name+"</option>";
+						if(!domainUser.is_disabled)
+							options+="<option value="+domainUser.id+" selected='selected'>"+domainUser.name+"</option>";
 					});
 					$('#calls-user-list', elData).html(options);
 					$('.loading-img').hide();
@@ -553,7 +555,8 @@ function showPortletSettings(el){
 			$.ajax({ type : 'GET', url : '/core/api/users', async : false, dataType : 'json',
 				success: function(data){
 					$.each(data,function(index,domainUser){
-						options+="<option value="+domainUser.id+">"+domainUser.name+"</option>";
+						if(!domainUser.is_disabled)
+							options+="<option value="+domainUser.id+">"+domainUser.name+"</option>";
 					});
 					$('#task-report-user-list', elData).html(options);
 					$.each(base_model.get("settings")["task-report-user-list"], function(){
@@ -566,7 +569,8 @@ function showPortletSettings(el){
 			$.ajax({ type : 'GET', url : '/core/api/users', async : false, dataType : 'json',
 				success: function(data){
 					$.each(data,function(index,domainUser){
-						options+="<option value="+domainUser.id+" selected='selected'>"+domainUser.name+"</option>";
+						if(!domainUser.is_disabled)
+							options+="<option value="+domainUser.id+" selected='selected'>"+domainUser.name+"</option>";
 					});
 					$('#task-report-user-list', elData).html(options);
 					$('.loading-img').hide();
@@ -627,7 +631,8 @@ function showPortletSettings(el){
 			$.ajax({ type : 'GET', url : '/core/api/portlets/portletUsers', async : false, dataType : 'json',
 				success: function(data){
 					$.each(data,function(index,domainUser){
-						options+="<option value="+domainUser.id+">"+domainUser.name+"</option>";
+						if(!domainUser.is_disabled)
+							options+="<option value="+domainUser.id+">"+domainUser.name+"</option>";
 					});
 					$('#user-list', elData).html(options);
 					$.each(base_model.get("settings").user, function(){
@@ -640,7 +645,8 @@ function showPortletSettings(el){
 			$.ajax({ type : 'GET', url : '/core/api/portlets/portletUsers', async : false, dataType : 'json',
 				success: function(data){
 					$.each(data,function(index,domainUser){
-						options+="<option value="+domainUser.id+" selected='selected'>"+domainUser.name+"</option>";
+						if(!domainUser.is_disabled)
+							options+="<option value="+domainUser.id+" selected='selected'>"+domainUser.name+"</option>";
 					});
 					$('#user-list', elData).html(options);
 					$('.loading-img').hide();
