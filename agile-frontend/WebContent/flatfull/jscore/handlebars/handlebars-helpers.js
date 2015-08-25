@@ -6703,7 +6703,5 @@ Handlebars.registerHelper('SALES_CALENDAR_URL', function()
 		    if(readCookie(CONTACTS_DYNAMIC_FILTER_COOKIE_STATUS)=="hide"){
 			return "none";
 	       	}
-	    	else{
-			 return "block";
-		     }
+	    	
 			});
