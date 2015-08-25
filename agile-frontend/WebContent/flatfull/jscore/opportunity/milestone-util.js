@@ -97,6 +97,7 @@
 				container.find('.milestone-name-block').append("<i data-toogle='tooltip' title='"+milestone_util.wonMsg+"' class='icon-like mark-won m-l-sm'></i>");
 				container.find('a.milestone-won').addClass('disabled');
 				$('.mark-won',container).tooltip();
+				App_Admin_Settings.pipelineGridView.collection.get(resp.id).set('won_milestone',resp.won_milestone, {silent:true});
 			});
 		}
 	};
@@ -118,6 +119,7 @@
 				container.find('.milestone-name-block').append("<i data-toogle='tooltip' title='"+milestone_util.lostMsg+"' class='icon-dislike mark-lost m-l-sm'></i>");
 				container.find('a.milestone-lost').addClass('disabled');
 				$('.mark-lost',container).tooltip();
+				App_Admin_Settings.pipelineGridView.collection.get(resp.id).set('lost_milestone',resp.lost_milestone, {silent:true});
 			});
 		}
 	};

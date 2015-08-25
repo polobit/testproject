@@ -204,14 +204,14 @@ public class MilestoneUtil
 	    Milestone mile = getMilestone(pipelineId);
 	    if (mile == null)
 		throw new Exception("Track not found. Pleas check the id.");
-	    mile.lost_milestone = null;
+	    mile.won_milestone = null;
 	    String[] milestones = mile.milestones.split(",");
 	    for (String milestone : milestones)
 	    {
 		if (milestone.equalsIgnoreCase(wonMilestone))
-		    mile.lost_milestone = milestone;
+		    mile.won_milestone = milestone;
 	    }
-	    if (mile.lost_milestone != null)
+	    if (mile.won_milestone != null)
 		mile.save();
 	    else
 		throw new Exception("Unable to find the given milestone. Please check the input.");
