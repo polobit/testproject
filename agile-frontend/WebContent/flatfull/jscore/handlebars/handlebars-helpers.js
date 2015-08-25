@@ -6697,3 +6697,13 @@ Handlebars.registerHelper('SALES_CALENDAR_URL', function()
 		       return options.fn(json);		        
 
 			});
+	
+	Handlebars.registerHelper('toggle_contacts_filter', function(options)
+			{	        
+		    if(readCookie(CONTACTS_DYNAMIC_FILTER_COOKIE_STATUS)=="hide"){
+			return "none";
+	       	}
+	    	else{
+			 return "block";
+		     }
+			});

@@ -63,7 +63,7 @@ function setupLhsFilters(cel, is_company)
 					loadCustomFiledsFilters(SEARCHABLE_CONTACT_CUSTOM_FIELDS, cel, is_company);
 				}
 				$('[data-toggle="tooltip"]').tooltip();
-				showDynamicFilters();
+				//showDynamicFilters();
 			}, optionsTemplate, false, $('#lhs_filters_conatiner', cel));
 		}, optionsTemplate, false, $('#lhs_filters_conatiner', cel));
 
