@@ -4,12 +4,12 @@ import java.io.IOException;
 import java.io.Writer;
 import java.nio.channels.Channels;
 
-import com.google.appengine.tools.cloudstorage.GcsFileOptions;
-import com.google.appengine.tools.cloudstorage.GcsFilename;
-import com.google.appengine.tools.cloudstorage.GcsOutputChannel;
-import com.google.appengine.tools.cloudstorage.GcsService;
-import com.google.appengine.tools.cloudstorage.GcsServiceFactory;
-import com.google.appengine.tools.cloudstorage.RetryParams;
+import com.google.agile.repackaged.appengine.tools.cloudstorage.GcsFileOptions;
+import com.google.agile.repackaged.appengine.tools.cloudstorage.GcsFilename;
+import com.google.agile.repackaged.appengine.tools.cloudstorage.GcsOutputChannel;
+import com.google.agile.repackaged.appengine.tools.cloudstorage.GcsService;
+import com.google.agile.repackaged.appengine.tools.cloudstorage.GcsServiceFactory;
+import com.google.agile.repackaged.appengine.tools.cloudstorage.RetryParams;
 
 /**
  * 
