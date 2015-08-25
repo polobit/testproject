@@ -406,6 +406,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			
 			$('#email-stats-listners').find('#admin-prefs-tabs-content').html(getTemplate('admin-settings-integrations-stats-new',{}));
 			$('#integration-stats a[href="#account-stats-new"]', $("#email-stats-listners")).tab('show');
+			$('#email-stats-listners').find('#account-stats-new').html(LOADING_ON_CURSOR);
 			account_stats_integrations.loadAccountStats($("#email-stats-listners"));
 			initializeStatsListners($("#email-stats-listners"));
 			hideTransitionBar();
