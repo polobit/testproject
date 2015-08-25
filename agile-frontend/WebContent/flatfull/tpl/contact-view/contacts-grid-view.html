@@ -3,25 +3,27 @@
 <div class="p-b col-md-4 {{id}}">
   {{#if_contact_type "PERSON"}}
     <div class="b r-5x p-sm bg-white" id={{id}} style="height:110px;">
-	<label class="i-checks i-checks-sm right">
+	<div class="left pos-abs"><label class="i-checks i-checks-sm">
        <input type="checkbox" class="tbody_check" value="">
        <i></i>                
-     </label>
-	  <div class="pull-left m-r-xs thumb">
-        <img class="img-inital inline r r-2x" title="{{getPropertyValue properties 'first_name'}} {{getPropertyValue properties 'last_name'}}" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 50}}" width="50px" height="50px"  />
+     </label></div>
+     <div style="margin-left: 25px;">
+	  <div class="pull-left m-r-xs thumb-sm">
+       <a href="#contact/{{id}}"> <img class="img-inital inline r r-2x"  data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 50}}" width="40px !important;" height="40px !important"  /></a>
       </div>
-	  <div class="pull-left text-ellipsis" style="width:70%;">
-        <a href="#contact/{{id}}" class="text-first-capital">
+	  <div class="pull-left text-ellipsis" style="width:70%;line-height:18px;">
+        <a href="#contact/{{id}}" class="text-first-capital agile-contact-grid-view">
 			{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}		
 		</a>
 		<br/>
         	{{getPropertyValue properties "email"}}
         
 </div>
+</div>
 <div class="clearfix"></div>
-<div class="w-full text-ellipsis m-t-xs">
+<div class="w-full text-ellipsis m-t-xs m-t">
         {{#each tags}}
-        <span class="label bg-light dk text-tiny overflow-visible inline-block font-normal">{{this}}</span>
+        <span class="label text-muted bg-light dk text-tiny overflow-visible inline-block font-normal">{{this}}</span>
         {{/each}}
 	  </div>
     </div>
@@ -34,10 +36,10 @@
            <i></i>                
         </label>
 	  	<div class="pull-left m-r-xs">
-        	<img class="thumbnail m-b-none" title="{{getPropertyValue properties 'name'}}" {{getCompanyImage "50" "display:inline;"}} />
+        	<img class="thumbnail m-b-none"  />
       	</div>
-	  	<div class="pull-left text-ellipsis" style="width:70%;">
-        	<a href="#contact/{{id}}" class="text-first-capital">
+	  	<div class="pull-left text-ellipsis" style="width:70%;line-height:18px;">
+        	<a href="#contact/{{id}}" class="text-first-capital agile-contact-grid-view">
         		<b>{{getPropertyValue properties "name"}}</b>
 			</a>
 			<br/>
@@ -56,20 +58,24 @@
 <div class="p-b col-md-4 {{id}}">
   {{#if_contact_type "PERSON"}}
     <div class="b r-5x p-sm" style="background-color:#f5f5dc;height:97px;"id={{id}}>
-			<label class="i-checks right">
+	<div class="left pos-abs">
+           <label class="i-checks">
                 <input type="checkbox" class="tbody_check" value="">
                 <i></i>                
       		</label>
+    </div>
+    <div style="margin-left: 25px;">
 	  <div class="pull-left m-r-xs">
-        <img title="{{getPropertyValue properties 'first_name'}} {{getPropertyValue properties 'last_name'}}" class="thumbnail img-inital inline m-b-none" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 50}}" width="50px" height="50px"  />
+        <img title="{{getPropertyValue properties 'first_name'}} {{getPropertyValue properties 'last_name'}}" class="thumbnail img-inital inline m-b-none" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 50}}" width="40px !important" height="40px !important"  />
       </div>
-	  <div class="pull-left text-ellipsis" style="width:70%;">
-        <a href="#contact/{{id}}" class="text-first-capital">
+	  <div class="pull-left text-ellipsis" style="width:70%;line-height:18px;">
+        <a href="#contact/{{id}}" class="text-first-capital agile-contact-grid-view">
 			{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}		
 		</a>
 		<br/>
         	{{getPropertyValue properties "email"}}
         
+</div>
 </div>
 <div class="clearfix"></div>
 <div class="w-full text-ellipsis m-t-xs">
@@ -150,6 +156,7 @@
 		</div>
 </div>
 <div class="pull-right">
+            <div class="btn-group inline-block m-r-xs" id="contacts-view-options"></div>
             <div class="btn-group m-r-sm" id="filter-list"></div>
 			<div class="btn-group " id="view-list"></div>
 			
@@ -160,14 +167,18 @@
     </div>
     </div>
 <div class="hbox hbox-auto-xs hbox-auto-sm bg-light">
-    <div class="col w-md b-r ">
+    <div class="col w-md b-r" id="contacts-lhs-filters-toggle" style="display:{{toggle_contacts_filter}}">
         <div class="data-block">
             <div  id="lhs_filters_conatiner">
 				
 			</div>
         </div>
     </div>
-    <div class="col wrapper">
+    <div class="col wrapper contacts-div">
+<div>Contacts List
+<a id="contacts-left-filters-toggle" class="m-l-xs" data-toggle="tooltip" data-placement="right" title="" data-original-title="Filters">
+			<i id="icon-filter" class="fa fa-bars icon-white"></i>
+		</a></div>
 		<div class="filter-criteria"></div>
         <div id="slate">
         </div>
@@ -185,6 +196,12 @@
 </script>
 <script id="contacts-grid-table-collection-template" type="text/html">
 	<div class="filter-criteria"></div>
+<div id="panel-heading">
+Contacts List
+<a id="contacts-left-filters-toggle" class="m-l-xs" data-toggle="tooltip" data-placement="right" title="" data-original-title="Filters">
+			<i id="icon-filter" class="fa fa-bars icon-white"></i>
+		</a>
+        </div>
         <div id="slate">
         </div>
         {{#if this.length}}

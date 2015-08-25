@@ -292,10 +292,12 @@ var ContactsRouter = Backbone.Router.extend({
 					$('#contacts-count').html(count_message);
 					setupViews();
 					setupContactFilterList();
+					//setUpContactView();
 				} else {					
 					setupLhsFilters(cel, is_company);
 					setupViews(cel);
 					setupContactFilterList(cel, tag_id);
+					setUpContactView(cel);
 				}
 				
 				start_tour("contacts", el);
@@ -1002,6 +1004,7 @@ var ContactsRouter = Backbone.Router.extend({
 			//pieTags(el);
 			setupViews(el, view_data.name);
 			setupContactFilterList(el, tag_id);
+			setUpContactView(el);
 
 			$(".active").removeClass("active"); // Activate Contacts
 												// Navbar tab
@@ -1042,6 +1045,7 @@ var ContactsRouter = Backbone.Router.extend({
 
 				// show list of filters dropdown in contacts list
 				setupContactFilterList(el, App_Contacts.tag_id);
+				setUpContactView(el);
 				if(is_lhs_filter) {
 					var count = 0;
 					if(collection.models.length > 0) {

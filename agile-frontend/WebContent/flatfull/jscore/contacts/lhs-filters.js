@@ -41,6 +41,7 @@ function setupLhsFilters(cel, is_company)
 	else
 	{
 		$('#lhs_filters_conatiner', cel).html(getTemplate("contacts-lhs-filters"));
+		
 		fillSelect('owner_select', '/core/api/users', undefined, function()
 		{
 			fillSelect('campaign_select_master', '/core/api/workflows', undefined, function()
@@ -416,6 +417,25 @@ $('#' + container_id).on('change keyup', '#lhs-contact-filter-form #RHS_NEW inpu
 			}
 
 		});
+     
+     
+     $('#' + container_id).on('click', '.contacts-view', function(e)
+    			{
+    				e.preventDefault();
+
+    				var data=$(this).attr("data");
+    				if(data=="list"){
+    					eraseCookie("agile_contact_view");
+    				}
+    				else if(data=="grid"){
+    					createCookie("agile_contact_view","grid-view");
+    					CONTACTS_HARD_RELOAD=true;
+    				}
+    				App_Contacts.contacts();
+    			});
+     
+     
+     
 
 }
 /**
