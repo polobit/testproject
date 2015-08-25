@@ -83,7 +83,12 @@ $(document).ready(function(){
    
    }
 
-
+	// initializing need help popover for header page
+   $(".need_help").popover({ placement : 'left',
+					html:true,
+					container: 'body'
+				});
+   //$(".need_help").popover('show'); 
 
    });
 
