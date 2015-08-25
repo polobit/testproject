@@ -49,7 +49,9 @@ $( document ).ready(function() {
 
 });
 
-function initializeTasksListeners(){
+
+function activateSliderAndTimerToTaskModal(){
+
 	$('.update-task-timepicker').timepicker({ defaultTime : get_hh_mm(true), showMeridian : false });
 	$('.update-task-timepicker').timepicker().on('show.timepicker', function(e)
 	{
@@ -82,63 +84,18 @@ function initializeTasksListeners(){
 	loadProgressSlider($("#updateTaskForm"));
 
 	/**
-	 * Activates all features of a task form (highlighting the task form,
-	 * relatedTo field typeahead, changing color and font-weight) when we click
-	 * on task link in activities modal.
-	 */
-	/*$("#content").on("click", '#task', function(e)
-	{
-		e.preventDefault();
-		var el = $("#taskForm");
-		highlight_task();
-		agile_type_ahead("task_related_to", el, contacts_typeahead);
-		// Fills owner select element
-		populateUsers("owners-list", $("#taskForm"), undefined, undefined, function(data)
-		{
-			$("#taskForm").find("#owners-list").html(data);
-			$("#owners-list", el).find('option[value=' + CURRENT_DOMAIN_USER.id + ']').attr("selected", "selected");
-			$("#owners-list", $("#taskForm")).closest('div').find('.loading-img').hide();
-		});
-	});*/
-
-	
-
-	/**
-	 * Tasks are categorized into four types (overdue, today, tomorrow and
-	 * next-week) while displaying them in client side.Each category has it's
-	 * own table, so to edit tasks call update_task function for each category.
-	 */
-	/*
-	 * $('#overdue > tr').on('click', function(e) { e.preventDefault();
-	 * update_task(this); }); $('#today > tr').on('click', function(e) {
-	 * e.preventDefault(); update_task(this); }); $('#tomorrow >
-	 * tr').on('click', function(e) { e.preventDefault(); update_task(this);
-	 * }); $('#next-week > tr').on('click', function(e) { e.preventDefault();
-	 * update_task(this); });
+	 * Date Picker Activates datepicker for task due element
 	 */
 
-	/**
-	 * Task list edit
-	 */
-	/*
-	 * // TODO:jitendra reenable it $('#tasks-list-model-list > tr >
-	 * td:not(":first-child")').on('click', function(e) { e.preventDefault();
-	 * update_task($(this).closest('tr')); });
-	 */
+	$('#task-date-1').datepicker({ format : CURRENT_USER_PREFS.dateFormat , weekStart : CALENDAR_WEEK_START_DAY});
+	$('#update-task-date-1').datepicker({ format : CURRENT_USER_PREFS.dateFormat , weekStart : CALENDAR_WEEK_START_DAY});
 
-	/**
-	 * Dash board edit
-	 */
-	/*$("#content").on("click", '#dashboard1-tasks-model-list > tr', function(e)
-	{
-		e.preventDefault();
-		update_task(this);
-	});*/
 
 	/**
 	 * When clicked on update button of task-update-modal, the task will get
 	 * updated by calling save_task function
 	 */
+	$('#updateTaskModal #update_task_validate').off('click');
 	$("#updateTaskModal").on("click", '#update_task_validate', function(e)
 	{
 		e.preventDefault();
@@ -148,6 +105,7 @@ function initializeTasksListeners(){
 	/**
 	 * initialises task time picker
 	 */
+	$('#updateTaskModal').off('hidden.bs.modal');
 	$('#updateTaskModal').on('hidden.bs.modal', function()
 	{
 
@@ -167,46 +125,11 @@ function initializeTasksListeners(){
 		$(".task-add-note", $("#updateTaskForm")).show();
 	});
 
-	
+}
 
-	/**
-	 * Date Picker Activates datepicker for task due element
-	 */
-
-	$('#task-date-1').datepicker({ format : CURRENT_USER_PREFS.dateFormat , weekStart : CALENDAR_WEEK_START_DAY});
-	$('#update-task-date-1').datepicker({ format : CURRENT_USER_PREFS.dateFormat , weekStart : CALENDAR_WEEK_START_DAY});
-
-
-	/**
-	 * Shows a pop-up modal with pre-filled values to update a task
-	 * 
-	 * @method updateTask
-	 * @param {Object}
-	 *            ele assembled html object
-	 * 
-	 */
-	function update_task(ele)
-	{
-		var value = $(ele).data().toJSON();
-		deserializeForm(value, $("#updateTaskForm"));
-		$("#updateTaskModal").modal('show');
-		$('.update-task-timepicker').val(fillTimePicker(value.due));
-		// Fills owner select element
-		populateUsers("owners-list", $("#updateTaskForm"), value, 'taskOwner', function(data)
-		{
-			$("#updateTaskForm").find("#owners-list").html(data);
-			if (value.taskOwner)
-			{
-				$("#owners-list", $("#updateTaskForm")).find('option[value=' + value['taskOwner'].id + ']').attr("selected", "selected");
-			}
-			$("#owners-list", $("#updateTaskForm")).closest('div').find('.loading-img').hide();
-		});
-		$('#update-task-date-1', "#updateTaskForm").datepicker({ format : 'mm/dd/yyyy', weekStart : CALENDAR_WEEK_START_DAY });
-		// Add notes in task modal
-		showNoteOnForm("updateTaskForm", value.notes);
-	}
-
-	
+function initializeTasksListeners(){
+		
+	activateSliderAndTimerToTaskModal();
 
 	/**
 	 * All completed and pending tasks will be shown in separate section
@@ -266,45 +189,7 @@ function initializeTasksListeners(){
 		editTask(getTaskId(this), getTaskListId(this), parseInt(getTaskListOwnerId(this)));
 	});
 	
-	// Click events to agents dropdown of Owner's list and Criteria's list
-	/*$("ul#new-owner-tasks li a, ul#new-type-tasks li a").live("click", function(e)
-	{
-		e.preventDefault();			
-		
-		// Hide list view and show column view with loading img
-		hideListViewAndShowLoading();		
-		
-		// Show selected name
-		var name = $(this).html(), id = $(this).attr("href");
-		
-		var selectedDropDown = $(this).closest("ul").attr("id");
-				
-		if(selectedDropDown == "new-type-tasks") // criteria type
-		    $(this).closest("ul.main-menu").data("selected_item", id);
-		else  // owner type
-			$(this).closest("ul").data("selected_item", id);
-		
-		$(this).closest(".btn-group").find(".selected_name").text(name);
-
-		// Empty collection
-		if(TASKS_LIST_COLLECTION != null)
-		TASKS_LIST_COLLECTION.collection.reset();
-		
-		//Add selected details of dropdown in cookie
-		addDetailsInCookie(this);
-		
-		setTimeout(function() { // Do something after 2 seconds
-			// Get details from dropdown and call function to create collection
-			getDetailsForCollection();
-		}, 2000);
-	});
-
-	// Change page heading as per owner selection
-	$("ul#new-owner-tasks li a").live("click", function()
-	{		
-		// Change heading of page
-		changeHeadingOfPage($('#new-owner-tasks').closest(".btn-group").find(".selected_name").html());
-	});*/
+	
 
 	/*
 	 * In new/update task modal, on selection of status, show progress slider

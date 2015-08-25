@@ -7,6 +7,7 @@
  */
 function initializeImportListeners(){
 
+	$('#prefs-tabs-content #google-import').off();
     $('#prefs-tabs-content').on('click', '#google-import', function(e){
 		
 		// URL to return, after fetching token and secret key from LinkedIn
@@ -49,6 +50,7 @@ function initializeImportListeners(){
 
 	});
 	
+	$('#prefs-tabs-content #google-import-prefs-delete').off();
 	 $('#prefs-tabs-content').on('click', '#google-import-prefs-delete', function(e){
 		e.preventDefault();
 		var disabled = $(this).attr("disabled");
@@ -65,6 +67,7 @@ function initializeImportListeners(){
 		}}));
 	});
 
+	$('#prefs-tabs-content #sync-type').off();
 	$('#prefs-tabs-content').on('change', '#sync-type', function(e){
 		e.preventDefault();
 		var value = $(this).val();
@@ -89,6 +92,7 @@ function initializeImportListeners(){
 		
 	})
 	
+	$('#prefs-tabs-content .save-contact-prefs').off();
 	$('#prefs-tabs-content').on('click', '.save-contact-prefs', function(e){
 		e.preventDefault();
 		var disabled = $(this).attr("disabled");
@@ -122,7 +126,7 @@ function initializeImportListeners(){
 		
 	})
 	
-	
+	$('#prefs-tabs-content #quickbook_sync_prefs').off();
 	$('#prefs-tabs-content').on('click', '#quickbook_sync_prefs', function(e){
 		e.preventDefault();
 		var disable = $(this).attr('disabled');
@@ -149,6 +153,7 @@ function initializeImportListeners(){
 		
 	});
 	
+	$('#prefs-tabs-content #xero_sync_prefs').off();
 	$('#prefs-tabs-content').on('click', '#xero_sync_prefs', function(e){
 		e.preventDefault();
 		var disable = $(this).attr('disabled');
@@ -175,6 +180,7 @@ function initializeImportListeners(){
 		
 	});
 	
+	$('#prefs-tabs-content #freshbooks_sync_prefs').off();
 	$('#prefs-tabs-content').on('click', '#freshbooks_sync_prefs', function(e){
 					e.preventDefault();
 					var disable = $(this).attr('disabled');
@@ -202,6 +208,7 @@ function initializeImportListeners(){
 				});
 
 	//oauth request for xero
+$('#prefs-tabs-content #xeroconnect').off();
 $('#prefs-tabs-content').on('click', '#xeroconnect', function(e){
 	var callbackURL = window.location.href;
 	console.log(callbackURL);
@@ -211,6 +218,7 @@ $('#prefs-tabs-content').on('click', '#xeroconnect', function(e){
 	return false;
 });
 
+$('#prefs-tabs-content #sync-google-calendar').off();
 $("#prefs-tabs-content").on('click', '#sync-google-calendar', function(e)
 	{
 		e.preventDefault();
@@ -222,6 +230,7 @@ $("#prefs-tabs-content").on('click', '#sync-google-calendar', function(e)
 		window.location = "/scribe?service=google_calendar&return_url=" + encodeURIComponent(callbackURL);
 	});
 
+	$('#prefs-tabs-content #sync-google-calendar-delete').off();
 	$("#prefs-tabs-content").on('click', '#sync-google-calendar-delete', function(e)
 	{
 		e.preventDefault();

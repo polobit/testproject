@@ -488,6 +488,7 @@ color;
 /* Not to overide z-index of datepicker due to timepicker modal */
 .datepicker {
 	z-index: 2050 !important;
+	min-width: 170px;
 }
 
 /*for information block */

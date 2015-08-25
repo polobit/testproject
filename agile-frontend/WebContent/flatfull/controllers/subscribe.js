@@ -105,7 +105,7 @@ var SubscribeRouter = Backbone.Router.extend({
  			
  			if(id){
  				addStyleForAPlan(id,planDetails);
- 				$("#plan_type").attr("value", id.attr("id").split("_")[0]);
+ 				$("#plan_type").val(id.attr("id").split("_")[0]);
  			}
 									
 			element = setPriceTemplete(data.plan.plan_type, el);
@@ -113,20 +113,21 @@ var SubscribeRouter = Backbone.Router.extend({
 			// Show Coupon code input field
 			id = (id && id == "coupon") ? id : "";
 			showCouponCodeContainer(id);
-			$("#user_quantity").attr("value", quantity);
+			$("#user_quantity").val(quantity);
 			price = update_price();
 			$( "#users_quantity").text(quantity);
      	    $("#users_total_cost").text((quantity * price).toFixed(2));
 
 			/*head.load(CSS_PATH + "css/misc/agile-plan-upgrade.css", LIB_PATH + 'lib/jquery.slider.min.js', function()
-			{
+			{ */
 				if ($.isEmptyObject(data))
 					setPlan("free");
 				else
 					setPlan(data);
 				
 			//	load_slider(el);
-			});*/
+			// });
+
 		} });
 		$('#subscribe_plan_change').html(subscribe_plan.render().el);
 		$(".active").removeClass("active");

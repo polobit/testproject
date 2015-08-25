@@ -76,6 +76,7 @@ function gmap_search_by_date(DateRange){
 	}
 	
 	$("li#gmap-table-tab").off().on("click", function(){
+		window.pauseMap=true;
 		
 		if((! $(this).closest('ul').parent('div').find('div.tab-content').find('div#gmap-table-view').find('tbody').length || isDateChanged) &&  ! $(this).hasClass('active')){
 			isDateChanged=false;
@@ -84,11 +85,19 @@ function gmap_search_by_date(DateRange){
 	     
 	  });
 $("li#gmap-map-tab").off().on("click", function(){
-		
+	    window.pauseMap=false;
+	    
 		if(isDateChanged && ! $(this).hasClass('active')){
 			isDateChanged=false;
-			gmap_add_marker(DateRangeUrl);
+			map.setZoom(2);
+			setTimeout(function(){
+				gmap_add_marker(DateRangeUrl);
+	        },1000)
+		}else{
+			$("#map-tab-waiting").fadeIn();
+			getMarkers();
 		}
+			
 		
 	  });
 	

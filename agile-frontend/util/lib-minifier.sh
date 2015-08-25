@@ -9,6 +9,9 @@ cat $(find ../WebContent/flatfull/final-lib/ -iname *.js ! -path ../WebContent/f
 
 java -jar yuicompressor-2.4.7.jar ../WebContent/flatfull/final-lib/min/lib-all-min.js --type js -o  ../WebContent/flatfull/final-lib/min/lib-all-min.js
 
+rm -r ../WebContent/flatfull/css/min/*.css
+
+mkdir ../WebContent/flatfull/css/min/
 
 ## CSS files
 cat ../WebContent/flatfull/css/final-lib/*.css > ../WebContent/flatfull/css/min/lib-all.css

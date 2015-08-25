@@ -313,6 +313,11 @@ public class GoogleSQL
 
     private static Connection getConnection() throws PropertyVetoException, SQLException
     {
+	if (SystemProperty.environment.value() != null
+		&& SystemProperty.environment.value() != SystemProperty.Environment.Value.Development)
+	{
+	    return getGoogleSQLConnection();
+	}
 	if (cpds != null)
 	    return cpds.getConnection();
 
@@ -387,7 +392,7 @@ public class GoogleSQL
     public static String getFutureDate()
     {
 
-	DateFormat dateFormat = new SimpleDateFormat("yyyy:MM:dd hh:mm:ss");
+	DateFormat dateFormat = new SimpleDateFormat("yyyy:MM:dd HH:mm:ss");
 
 	Calendar calendar = Calendar.getInstance();
 

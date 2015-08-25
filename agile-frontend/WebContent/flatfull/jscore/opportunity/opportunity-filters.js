@@ -14,20 +14,7 @@ $(function()
 		show_deal();
 	});
 
-	/**
-	 * Update the milestones list when the pipeline is changed in the modal.
-	 */
-	$('#opportunityUpdateModal, #opportunityModal').on('change', '#pipeline', function(e)
-	{
-		var el = $(this).closest('form');
-		$('#milestone', el).closest('div').find('.loading-img').show();
-		// Fills milestone select element
-		populateMilestones(el, undefined, $(this).val(), undefined, function(data)
-		{
-			$("#milestone", el).html(data);
-			$("#milestone", el).closest('div').find('.loading-img').hide();
-		});
-	});
+	
 
 	$('#opportunityUpdateModal, #opportunityModal').on('click', '#opportunity_archive', function(e)
 	{
@@ -297,6 +284,21 @@ $('#opportunity-listners').on('click', '.deals-list-view', function(e) {
 		App_Deals.deals();
 	});
 	
+	
+	/**
+	 * Update the milestones list when the pipeline is changed in the modal.
+	 */
+	$('#opportunity-listners').on('change', '#pipeline', function(e)
+	{
+		var el = $(this).closest('form');
+		$('#milestone', el).closest('div').find('.loading-img').show();
+		// Fills milestone select element
+		populateMilestones(el, undefined, $(this).val(), undefined, function(data)
+		{
+			$("#milestone", el).html(data);
+			$("#milestone", el).closest('div').find('.loading-img').hide();
+		});
+	});
 	/**
 	 * If Pipelined View is selected, deals are loaded with pipelined view and 
 	 * creates the pipelined view cookie
