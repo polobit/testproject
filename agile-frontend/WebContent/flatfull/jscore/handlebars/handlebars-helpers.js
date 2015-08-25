@@ -2559,7 +2559,7 @@ $(function()
 		}
 		else if (value >= 40 && value < 75)
 		{
-			type = "bg-light dk text-tiny";
+			type = "bg-light text-tiny";
 			reputation = "Ok";
 		}
 		else if (value >= 75 && value < 90)
@@ -4710,7 +4710,7 @@ $(function()
 						}
 						else if (value >= 40 && value < 75)
 						{
-							type = "bg-light dk text-tiny";
+							type = "bg-light text-tiny";
 							reputation = "Ok";
 						}
 						else if (value >= 75 && value < 90)
@@ -6696,4 +6696,12 @@ Handlebars.registerHelper('SALES_CALENDAR_URL', function()
 
 		       return options.fn(json);		        
 
+			});
+	
+	Handlebars.registerHelper('toggle_contacts_filter', function(options)
+			{	        
+		    if(readCookie(CONTACTS_DYNAMIC_FILTER_COOKIE_STATUS)=="hide"){
+			return "none";
+	       	}
+	    	
 			});
