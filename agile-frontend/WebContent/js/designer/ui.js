@@ -451,15 +451,9 @@ function generateHTMLEditor(uiFieldDefinition, container) {
 	if(uiFieldDefinition.value != undefined)
 		value = uiFieldDefinition.value;
 
-	var htmlDiv = "<label>HTML: <a href='#' onclick='load_email_templates(); return false;'>(Select a Template / Load from Editor)</a>" +
-			"</label><select style='  position: relative;float: right; cursor: pointer; margin-right: 8px; width: 25%;' onChange = 'show_templates(this)' ><option value=''>Select a Template</option><option value='my_email_templates'>" +
-			"My Email Templates</option><option value='agile_templates'>Agile Campaign Templates</option><option value='campaign_email_templates'>" +
-			" My Campaign Emails</option></select><br/><br/>";
+	var htmlDiv = "<label>HTML: <a href='#' onclick='load_email_templates(); return false;'>(Select a Template / Load from Editor)</a></label><br/><br/> ";
 	
-	/*if(uiFieldDefinition.style)
-		htmlDiv += "<textarea  id='tinyMCE" + textAreaName +"' style='width:100%' name='" + textAreaName + "' rows='13' cols='75'>" + value + "</textarea>";		
-	else*/
-	htmlDiv += "<textarea  id='tinyMCE" + textAreaName +"' name='" + textAreaName + "' style='width:100%' rows='13' cols='75'>" + value + "</textarea>";		
+	htmlDiv += "<textarea  id='tinyMCE" + textAreaName +"' name='" + textAreaName + "' style='width:100%' rows='13' cols='75'>" + value + "</textarea> ";		
 	htmlDiv += "<div style='clear:both;'></div><br/><p style='margin: 0;position: relative;top: 20px;'><i>You can leave empty if you do not wish to send html emails. Plain text emails would be sent. Only HTML emails would be tracked.</i></p>";	
 
 	$(htmlDiv).appendTo(container);	
