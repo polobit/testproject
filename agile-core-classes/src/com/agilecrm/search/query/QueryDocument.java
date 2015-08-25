@@ -331,7 +331,7 @@ public class QueryDocument<T> implements QueryInterface
 			SortDirection.ASCENDING);
 	    }
 	    sortExpressionBuilder.setExpression(orderBy);
-	    if (orderBy.contains("time") || orderBy.contains("last_contacted") || orderBy.contains("last_emailed") || orderBy.contains("last_called") || orderBy.contains("last_campaign_emaild"))
+	    if (orderBy.contains("time") || orderBy.contains("last_contacted"))
 	    {
 		sortExpressionBuilder.setExpression(orderBy+"_epoch").setDefaultValueNumeric(0.0);
 	    }

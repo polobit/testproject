@@ -998,7 +998,12 @@ $(function()
 				element = element.split("properties_")[1];
 			if (element.indexOf("custom_") == 0)
 				element = element.split("custom_")[1];
-
+			if (element == "last_contacted_time")
+				element = "Last contacted";
+			if (element == "last_emailed_time")
+				element = "Last emailed";
+			if (element == "last_called_time")
+				element = "Last called";
 			element = element.replace("_", " ")
 
 			el = el.concat('<th>' + ucfirst(element) + '</th>');
