@@ -3638,6 +3638,13 @@ $(function()
 			return options.fn(this);
 	});
 
+	Handlebars.registerHelper('if_keyboard_shortcuts_enabled', function(options)
+	{
+		if (CURRENT_USER_PREFS.keyboard_shotcuts)
+			return options.fn(this);
+		return options.inverse(this);
+	});
+
 	Handlebars.registerHelper('campaigns_heading', function(value, options)
 	{
 		var val = 0;
