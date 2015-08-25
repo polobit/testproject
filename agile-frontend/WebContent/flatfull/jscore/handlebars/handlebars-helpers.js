@@ -4710,7 +4710,7 @@ $(function()
 						}
 						else if (value >= 40 && value < 75)
 						{
-							type = "bg-light dk text-tiny";
+							type = "bg-light text-tiny";
 							reputation = "Ok";
 						}
 						else if (value >= 75 && value < 90)
