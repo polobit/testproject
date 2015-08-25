@@ -265,7 +265,7 @@ function deletePortlet(el) {
 								+ "?");
 	else if(model.get("name")=="Mini Calendar")
 		$('#portletDeleteModal > .modal-dialog > .modal-content > .modal-body')
-	.html("Are you sure you want to delete Dashlet - Mini Calendar");
+	.html("Are you sure you want to delete Dashlet - Mini Calendar?");
 	
 	else
 		$('#portletDeleteModal > .modal-dialog > .modal-content > .modal-body')

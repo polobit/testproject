@@ -108,10 +108,12 @@ $("#updateActivityModal").on(
 										
 										else if (App_Portlets.currentPortletName && App_Portlets.currentPortletName == 'Mini Calendar')
 									      {
-											createCookie("current_date_calendar",new Date(parseInt($('.minical-portlet-event').attr('data-date'))));
+												var a=new Date(parseInt($('.minical-portlet-event').attr('data-date')));	
+												a.setHours(0,0,0,0);
+												createCookie("current_date_calendar",a);
 										       $('#calendar_container').fullCalendar( 'refetchEvents' );
 										       App_Portlets.refetchEvents = true;
-										       eraseCookie('current_date_calendar');
+										       //eraseCookie('current_date_calendar');
 									      }
 
 										// $('#updateActivityModal').find('span.save-status
@@ -935,8 +937,11 @@ function save_event(formId, modalName, isUpdate, saveBtn, callback)
 						
 						else if (App_Portlets.currentPortletName && App_Portlets.currentPortletName == 'Mini Calendar')
 					      {
-							if($('.minical-portlet-event').attr('data-date')!=undefined)
-								createCookie("current_date_calendar",new Date(parseInt($('.minical-portlet-event').attr('data-date'))));
+							if($('.minical-portlet-event').attr('data-date')!=undefined){
+								var a=new Date(parseInt($('.minical-portlet-event').attr('data-date')));	
+								a.setHours(0,0,0,0);
+								createCookie("current_date_calendar",a);
+							}
 							else{
 								var a=new Date(parseInt($('.minical-portlet-event-add').attr('data-date')));	
 								a.setHours(0,0,0,0);
@@ -944,7 +949,7 @@ function save_event(formId, modalName, isUpdate, saveBtn, callback)
 							}
 							$('#calendar_container').fullCalendar( 'refetchEvents' );
 						       App_Portlets.refetchEvents = true;
-						       eraseCookie('current_date_calendar');
+						       //eraseCookie('current_date_calendar');
 					      }
 						
 						else

@@ -2545,6 +2545,8 @@ function minicalendar(el)
 							el.parent().css('z-index',3);
 							var reletedContacts = '';
 							var meeting_type = '';
+							if(CURRENT_AGILE_USER.domainUser.ownerPic=="" || CURRENT_AGILE_USER.domainUser.ownerPic=="no image")
+									event.ownerPic=gravatarImgForPortlets(25);
 							if (event.contacts)
 							{
 								if (event.contacts.length > 0)
@@ -2681,6 +2683,7 @@ function loadingGoogleEvents(el,startTime,endTime){
 												$(el).find('.events_show').append('<div class="portlet-calendar-error-message">No appointments for the day</div><div class="text-center"><a class="minical-portlet-event-add text-info" id='+date.getTime()+' data-date='+date.getTime()+'>+Add</a></div>');
 											}
 			},10000);
+			eraseCookie('current_date_calendar');
 		}
 		console.log(response);
 		if (response)
@@ -2819,13 +2822,14 @@ function googledata(el,response,startTime,endTime)
 												var cookie_date=new Date(readCookie('current_date_calendar'));
 												todayDate=cookie_date;
 												endDate=new Date(cookie_date.getFullYear(), cookie_date.getMonth(), cookie_date.getDate(),23,59,59);
+												
 											}
 											if(ev.start.getTime() >= (todayDate.getTime()) && ev.start.getTime() <= (endDate.getTime())) {	
 											if(len!=0){
 												$(el).find('.list').find('small').each(function( index ) 
 												{
 													if(ev.start.format('HH:MM')<$(this).text())
-													{$(this).parents('li').before('<li class="p-t-xs p-r-xs" style="color:'+ev.color+'"><span style="color : #58666e" class="text-cap word-break"><a class="minical-portlet-event" id='+ev.id+' data='+ev+'>'+ev.title+'</a><br><small class="block m-t-n-xxs">'+ ev.start.format('HH:MM') + ' </small></span></li>');
+													{$(this).parents('li').before('<li class="p-t-xs p-r-xs" style="color:'+ev.color+'"><span style="color : #58666e" class="text-cap word-break"><a class="minical-portlet-event" id='+ev.id+' data-date='+date.getTime()+'>'+ev.title+'</a><br><small class="block m-t-n-xxs">'+ ev.start.format('HH:MM') + ' </small></span></li>');
 													return false;}
 													/* else
 													$(this).parents('li').after('<li class="p-t-xs p-r-xs" style="color:'+ev.color+'"><span style="color : #58666e" class="text-cap word-break"><a class="minical-portlet-event" id='+ev.id+' data='+ev+'>'+ev.title+'</a><br><small class="block m-t-n-xxs">'+ ev.start.format('HH:MM') + ' </small></span></li>') ;
@@ -2833,9 +2837,10 @@ function googledata(el,response,startTime,endTime)
 												 });
 											}
 											else
-											 $(el).find('.list').append('<li class="p-t-xs p-r-xs" style="color:'+ev.color+'"><span style="color : #58666e" class="text-cap word-break"><a class="minical-portlet-event" id='+ev.id+' data='+ev+'>'+ev.title+'</a><br><small class="block m-t-n-xxs">'+ ev.start.format('HH:MM') + ' </small></span></li>');
+											 $(el).find('.list').append('<li class="p-t-xs p-r-xs" style="color:'+ev.color+'"><span style="color : #58666e" class="text-cap word-break"><a class="minical-portlet-event" id='+ev.id+' data-date='+date.getTime()+'>'+ev.title+'</a><br><small class="block m-t-n-xxs">'+ ev.start.format('HH:MM') + ' </small></span></li>');
 											}
 											});
+											eraseCookie('current_date_calendar');
 											setTimeout(function(){
 												//eraseCookie('current_date_calendar');
 											if($(el).find('.list').find('li').length==0 && $(el).find('.portlet-calendar-error-message').length==0)
