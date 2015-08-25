@@ -6597,6 +6597,8 @@ Handlebars.registerHelper('SALES_CALENDAR_URL', function()
 		description = 'Find current plan information, number of users and more.';
 	else if (p_name== 'Revenue Graph')
 		description = 'Forecasted revenue graph based on your Deals.';
+	else if (p_name== 'Mini Calendar')
+		description = 'A mini calendar with an overview of your agenda for the day.'
 	return description;
 			});
 

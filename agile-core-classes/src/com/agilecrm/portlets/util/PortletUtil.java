@@ -101,6 +101,7 @@ public class PortletUtil {
 				allPortlets.add(new Portlet("Agenda",PortletType.TASKSANDEVENTS));
 				allPortlets.add(new Portlet("Today Tasks",PortletType.TASKSANDEVENTS));
 				allPortlets.add(new Portlet("Task Report",PortletType.TASKSANDEVENTS));
+				allPortlets.add(new Portlet("Mini Calendar",PortletType.TASKSANDEVENTS));
 			}
 			
 			if(domainUser!=null && domainUser.menu_scopes!=null && domainUser.menu_scopes.contains(NavbarConstants.ACTIVITY)){
@@ -1409,6 +1410,7 @@ public class PortletUtil {
 
 	public static JSONObject getAccountsList() throws Exception {
 		JSONObject json=new JSONObject();
+
 
 		String oldNamespace = NamespaceManager.get();
 		DomainUser user = DomainUserUtil.getDomainOwner(oldNamespace);
