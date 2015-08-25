@@ -47,6 +47,7 @@ public class GCSServiceAgile
     {
 	this.fileName = fileName;
 	this.bucketName = bucketName;
+	this.options = options;
 	if (options == null)
 	{
 	    options = GcsFileOptions.getDefaultInstance();
