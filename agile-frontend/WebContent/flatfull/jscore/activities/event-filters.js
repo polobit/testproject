@@ -145,7 +145,6 @@ function loadFullCalednarOrListView()
 
 		loadAgileEvents();
 		loadGoogleEvents();
-		loadOfficeEvents();
 
 	}
 }

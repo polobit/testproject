@@ -32,8 +32,8 @@ public class WidgetUtil {
 	public static List<Widget> getAvailableWidgets() {
 		List<Widget> allWidgets = new ArrayList<Widget>();
 
-		// Fetch all custom widgets and add it to list.
-		allWidgets.addAll(CustomWidgets.getAllCustomWidgets());
+		// Fetch all custom widgets and add it to list
+		allWidgets.addAll(CustomWidgets.getUserCustomWidgets());
 
 		// Gets list of all configurable widgets.
 		allWidgets.addAll(DefaultWidgets.getAvailableDefaultWidgets());

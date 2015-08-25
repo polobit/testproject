@@ -283,6 +283,9 @@ function build_custom_widget_form(el)
 
 				$('#custom-widget', el).html(widget_custom_view.render(true).el);
 				
+				//Is Custom widget for all.
+				$('#custom_isForAll').val(isForAll);
+				
 				$('#prefs-tabs-content').on('click', '#cancel_custom_widget', function(e)
 				{
 					// Restore element back to original

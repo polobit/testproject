@@ -280,7 +280,7 @@ var WidgetsRouter = Backbone.Router
 																if (!id)
 																				show_set_up_widget("HelpScout", "helpscout-login");
 																else
-																				fill_form(id, "HelpScout", 'helpscout-login');
+																				fill_form(id, "HelpScout", 'helpscout-login')
 												},
 
 												/**
@@ -491,7 +491,7 @@ var WidgetsRouter = Backbone.Router
 																 else{ 
 																 			
 																 				
-																 				show_set_up_widget("Shopify","shopify-revoke-access");
+																 				show_set_up_widget("Shopify","shopify-revoke-access")
 																 		
 																 }
 																 initializeShopifyListeners();

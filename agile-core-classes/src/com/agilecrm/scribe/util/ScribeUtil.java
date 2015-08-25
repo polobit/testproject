@@ -251,21 +251,21 @@ public class ScribeUtil
 	 */
 	if (serviceName.equalsIgnoreCase(ScribeServlet.SERVICE_TYPE_TWITTER)
 		|| serviceName.equalsIgnoreCase(ScribeServlet.SERVICE_TYPE_LINKED_IN))
-	    saveLinkedInOrTwitterPrefs(req, accessToken);
+	    saveLinkedInOrTwitterPrefs(req, accessToken, isForAll);
 
 	// If Service type is Gmail, save preferences in social prefs
 	else if (serviceName.equalsIgnoreCase(ScribeServlet.SERVICE_TYPE_GMAIL))
-	    saveGmailPrefs(code, service, agileUser);
+	    saveGmailPrefs(code, service, agileUser, isForAll);
 	
 	else if (serviceName.equalsIgnoreCase(ScribeServlet.SERVICE_TYPE_GOOGLE_PLUS))
-		saveGooglePlusPrefs(req, code);
+		saveGooglePlusPrefs(req, code, isForAll);
 
 	/*
 	 * if service type is stripe, we post the code and get the access token
 	 * and widget is updated with new access token and refresh token
 	 */
 	else if (serviceName.equalsIgnoreCase(ScribeServlet.SERVICE_TYPE_STRIPE))
-	    saveStripePrefs(req, code);
+	    saveStripePrefs(req, code, isForAll);
 
 	/*
 	 * if service type is google, we post the code and get the access token
@@ -274,11 +274,11 @@ public class ScribeUtil
 	 */
 	else if (serviceName.equalsIgnoreCase(ScribeServlet.SERVICE_TYPE_GOOGLE))
 	{
-	    saveGooglePrefs(code, null);
+	    saveGooglePrefs(code, null, isForAll);
 	}
 	else if (serviceName.equalsIgnoreCase(ScribeServlet.SERVICE_TYPE_GOOGLE_CALENDAR))
 	{
-	    saveGoogleCalenderPrefs(code, null);
+	    saveGoogleCalenderPrefs(code, null, isForAll);
 	}
 	else if (serviceName.equalsIgnoreCase(ScribeServlet.SERVICE_TYPE_GOOGLE_DRIVE))
 	{
@@ -289,20 +289,21 @@ public class ScribeUtil
 	}
 	else if (serviceName.equalsIgnoreCase(ScribeServlet.SERVICE_TYPE_STRIPE_IMPORT))
 	{
-	    saveStripeImportPref(req, accessToken);
+	    saveStripeImportPref(req, accessToken, isForAll);
 
 	}
 	else if (serviceName.equalsIgnoreCase(ScribeServlet.SERVICE_TYPE_FACEBOOK))
 	{
-	    saveFacebookPrefs(req, code, service);
+	    saveFacebookPrefs(req, code, service, isForAll);
 	}
 	else if (serviceName.equalsIgnoreCase(ScribeServlet.SERVICE_TYPE_SHOPIFY))
 	{
-	    saveShopifyPrefs(req, code);
+	    saveShopifyPrefs(req, code, isForAll);
 	}else if(serviceName.equalsIgnoreCase(ScribeServlet.XERO_SERVICE)){
-	    saveXeroPrefs(req,accessToken);
+	    saveXeroPrefs(req,accessToken, isForAll);
 	}
-
+		//Setting isForAll as false.
+		req.getSession().setAttribute("isForAll", false);
     }
 
     /**
@@ -313,7 +314,7 @@ public class ScribeUtil
      * @param code
      *            the code
      */
-    private static void saveShopifyPrefs(HttpServletRequest req, String code)
+    private static void saveShopifyPrefs(HttpServletRequest req, String code, String isForAll)
     {
 	String shopDomain = req.getParameter("shop");
 	String accessURl = new ShopifyAccessURLBuilder(shopDomain).code(code).clientKey(Globals.SHOPIFY_API_KEY)
@@ -349,7 +350,7 @@ public class ScribeUtil
      * @param accessToken
      *            {@link String} access token after OAuth
      */
-    public static void saveStripeImportPref(HttpServletRequest req, Token accessToken)
+    public static void saveStripeImportPref(HttpServletRequest req, Token accessToken, String isForAll)
     {
 
 	String code = req.getParameter("code");
@@ -397,7 +398,7 @@ public class ScribeUtil
      * @param accessToken
      *            {@link String} access token after OAuth
      */
-    public static void saveLinkedInOrTwitterPrefs(HttpServletRequest req, Token accessToken)
+    public static void saveLinkedInOrTwitterPrefs(HttpServletRequest req, Token accessToken, String isForAll)
     {
 	System.out.println("Saving LinkedIn or Twitter Prefs");
 
@@ -426,7 +427,7 @@ public class ScribeUtil
      *            current {@link AgileUser}
      * @throws IOException
      */
-    public static void saveGmailPrefs(String code, OAuthService service, AgileUser agileUser) throws IOException
+    public static void saveGmailPrefs(String code, OAuthService service, AgileUser agileUser, String isForAll) throws IOException
     {
 	System.out.println("Saving Gmail Prefs");
 
@@ -472,7 +473,7 @@ public class ScribeUtil
      *            {@link String} code retrieved after OAuth
      * @throws IOException
      */
-    public static void saveStripePrefs(HttpServletRequest req, String code) throws IOException
+    public static void saveStripePrefs(HttpServletRequest req, String code, String isForAll) throws IOException
     {
 	System.out.println("In stripe save");
 
@@ -509,7 +510,7 @@ public class ScribeUtil
      *            {@link String} code retrieved after OAuth
      * @throws IOException
      */
-    public static void saveGooglePrefs(String code, JSONObject object) throws IOException
+    public static void saveGooglePrefs(String code, JSONObject object, String isForAll) throws IOException
     {
 	System.out.println("In google save token");
 
@@ -546,7 +547,7 @@ public class ScribeUtil
      * @param object
      * @throws IOException
      */
-    public static void saveGoogleCalenderPrefs(String code, JSONObject object) throws IOException
+    public static void saveGoogleCalenderPrefs(String code, JSONObject object, String isForAll) throws IOException
     {
 	// Exchanges access token/refresh token with extracted Authorization
 	// code
@@ -609,6 +610,7 @@ public class ScribeUtil
 	 * prefs in widget
 	 */
 	Iterator<Entry<String, String>> it = properties.entrySet().iterator();
+	widget.isForAll = Boolean.valueOf(properties.get("isForAll"));
 	while (it.hasNext())
 	{
 	    Map.Entry<String, String> pairs = it.next();
@@ -637,7 +639,7 @@ public class ScribeUtil
      * @param service
      * @throws IOException
      */
-    public static void saveFacebookPrefs(HttpServletRequest req, String code, OAuthService service) throws IOException
+    public static void saveFacebookPrefs(HttpServletRequest req, String code, OAuthService service, String isForAll) throws IOException
     {
 	System.out.println("In Facebook save");
 
@@ -674,6 +676,7 @@ public class ScribeUtil
 	properties.put("verifier", verifier.getValue());
 	properties.put("code", code);
 	properties.put("time", String.valueOf(System.currentTimeMillis()));
+	properties.put("isForAll", isForAll);
 
 	// Gets widget name from the session
 	String serviceType = (String) req.getSession().getAttribute("service_type");
@@ -733,7 +736,7 @@ public class ScribeUtil
      * @param accessToken
      */
     
-    private static void saveXeroPrefs(HttpServletRequest req, Token accessToken){
+    private static void saveXeroPrefs(HttpServletRequest req, Token accessToken, String isForAll){
 	ContactPrefs prefs = new ContactPrefs();
 	prefs.token = accessToken.getToken();
 	prefs.secret = accessToken.getSecret();
@@ -759,7 +762,7 @@ public class ScribeUtil
 	prefs.save();
     }
     
-    public static void saveGooglePlusPrefs(HttpServletRequest req, String code)
+    public static void saveGooglePlusPrefs(HttpServletRequest req, String code, String isForAll)
 	{
 		System.out.println("Saving GPlus Prefs");
 
@@ -780,6 +783,7 @@ public class ScribeUtil
 		properties.put("refresh_token", refresh_token);
 		properties.put("expires_in", expires_in);
 		properties.put("time", String.valueOf(System.currentTimeMillis()));
+		properties.put("isForAll", isForAll);
 
 		// Gets widget name from the session
 		String serviceType = (String) req.getSession().getAttribute("service_type");

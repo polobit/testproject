@@ -892,7 +892,7 @@ function setUpError(widget_name, template_id, error_data, error_url, model)
 function xero_save_widget_prefs()
 {
 	$('#xero_save_token').unbind("click");
-	alert("hello in xero save")
+	
 	// On click of save button, check input and save details
 	$('body').on('click', '#xero_save_token', function(e)
 	{

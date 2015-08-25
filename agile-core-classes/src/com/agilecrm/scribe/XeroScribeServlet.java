@@ -60,7 +60,7 @@ public class XeroScribeServlet extends HttpServlet
 		if (data != null)
 		{
 			System.out.println(data);
-			saveXeroPrefs(data);
+			saveXeroPrefs(data, isForAll);
 			String returnURL = (String) req.getSession().getAttribute("return_url");
 			System.out.println("return url " + returnURL);
 
@@ -87,7 +87,7 @@ public class XeroScribeServlet extends HttpServlet
 	 *            {@link String} code retrieved after OAuth
 	 * @throws IOException
 	 */
-	public static void saveXeroPrefs(String data) throws IOException
+	public static void saveXeroPrefs(String data,String isForAll) throws IOException
 	{
 		System.out.println("In Xero save");
 
@@ -98,7 +98,7 @@ public class XeroScribeServlet extends HttpServlet
 				new TypeReference<HashMap<String, String>>()
 				{
 				});
-
+		properties.put("isForAll", isForAll);
 		String widgetId = properties.get("widget_id");
 		if (widgetId == null)
 		{
