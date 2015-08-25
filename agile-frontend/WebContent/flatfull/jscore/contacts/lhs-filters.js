@@ -34,6 +34,7 @@ function setupLhsFilters(cel, is_company)
 			{
 				loadCustomFiledsFilters(COMPANY_CUSTOM_FIELDS, cel, is_company);
 			}
+		
 		}, optionsTemplate, false, $('#lhs_filters_conatiner', cel));
 
 	}
@@ -61,6 +62,8 @@ function setupLhsFilters(cel, is_company)
 				{
 					loadCustomFiledsFilters(SEARCHABLE_CONTACT_CUSTOM_FIELDS, cel, is_company);
 				}
+				$('[data-toggle="tooltip"]').tooltip();
+				showDynamicFilters();
 			}, optionsTemplate, false, $('#lhs_filters_conatiner', cel));
 		}, optionsTemplate, false, $('#lhs_filters_conatiner', cel));
 
@@ -395,6 +398,24 @@ $('#' + container_id).on('change keyup', '#lhs-contact-filter-form #RHS_NEW inpu
 		}
 	}
 });
+
+
+     $('#' + container_id).on('click', '#contacts-left-filters-toggle', function(e)
+		{
+			e.preventDefault();
+
+			if ($('#contacts-lhs-filters-toggle').is(':visible'))
+			{
+				$('#contacts-lhs-filters-toggle').hide();
+				createCookie(CONTACTS_DYNAMIC_FILTER_COOKIE_STATUS, "hide");
+			}
+			else
+			{
+				$('#contacts-lhs-filters-toggle').show();
+				createCookie(CONTACTS_DYNAMIC_FILTER_COOKIE_STATUS, "show");
+			}
+
+		});
 
 }
 /**
