@@ -10,12 +10,10 @@ import java.util.Map;
 import org.json.JSONException;
 
 import com.agilecrm.CSVWriterAgile;
-import com.agilecrm.contact.export.util.ContactExportBlobUtil;
 import com.agilecrm.contact.export.util.ContactExportCSVUtil;
 import com.agilecrm.export.util.DealExportCSVUtil;
 import com.agilecrm.file.readers.ByteBufferBackedInputStream;
 import com.agilecrm.file.readers.IFileInputStream;
-import com.agilecrm.util.CacheUtil;
 import com.agilecrm.util.email.SendMail;
 import com.google.appengine.api.NamespaceManager;
 
@@ -166,22 +164,10 @@ public abstract class AbstractCSVExporter<T> implements Exporter<T>
 
     private final void sendEmail() throws JSONException
     {
-	String blobKey = ContactExportBlobUtil.getBlobKeyFromPath(getDownloadURL());
-	System.out.println("blob key : " + blobKey);
-	String downloadUrl = "https://local-dot-sandbox-dot-agilecrmbeta.appspot.com/download-attachment?key="
-		+ blobKey;
-
-	System.out.println("download url : " + downloadUrl);
-	CacheUtil.setCache(blobKey, "export_csv", 24 * 60 * 60 * 1000);
 
 	HashMap<String, String> map = new HashMap<String, String>();
 	map.put("count", String.valueOf(csvWriter.getNumberOfRows()));
-	map.put("download_url", downloadUrl);
-
-	CacheUtil.setCache(blobKey, "export_csv", 24 * 60 * 60 * 1000);
-
-	System.out.println(blobKey);
-
+	map.put("download_url", csvWriter.getPath());
 	map.put("contact_type", export_type.label);
 
 	SendMail.sendMail("yaswanth@agilecrm.com", export_type.templateSubject, export_type.templaceTemplate, map,
