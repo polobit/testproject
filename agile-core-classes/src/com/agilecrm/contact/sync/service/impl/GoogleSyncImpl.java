@@ -505,6 +505,8 @@ public class GoogleSyncImpl extends TwoWaySyncService
 			IBatchStatus status = BatchUtils.getStatus(entry);
 			System.out.println(batchId + ": " + status.getCode() + " (" + status.getReason() + ")");
 		}
+		
+		responseFeed = null;
 
 		prefs.last_synced_to_client = contact.created_time > prefs.last_synced_to_client ? contact.created_time
 			: prefs.last_synced_to_client;
@@ -526,6 +528,8 @@ public class GoogleSyncImpl extends TwoWaySyncService
 			IBatchStatus status = BatchUtils.getStatus(entry);
 			System.out.println(batchId + ": " + status.getCode() + " (" + status.getReason() + ")");
 		}
+		
+		responseFeed = null;
 
 		prefs.last_synced_updated_contacts_to_client = (contact.updated_time != 0 && contact.updated_time > prefs.last_synced_updated_contacts_to_client) ? contact.updated_time
 			: prefs.last_synced_to_client;
