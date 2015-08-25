@@ -2577,3 +2577,7 @@ div.cat-addtocart-row.row1 span,div.cat-addtocart-row.row2 span {
 {
 	font-size:75%;
 }*/
+
+.tooltip-inner {
+	max-width: 260px;
+}
