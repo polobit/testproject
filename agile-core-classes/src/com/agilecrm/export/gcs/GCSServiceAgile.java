@@ -75,7 +75,7 @@ public class GCSServiceAgile
 
     public String getFilePathToDownload()
     {
-	return "https://storage.googleapis.com/" + bucketName + "/" + getFileName();
+	return "https://storage.googleapis.com/" + bucketName + "/" + fileName;
     }
 
     public static void main(String[] args)
