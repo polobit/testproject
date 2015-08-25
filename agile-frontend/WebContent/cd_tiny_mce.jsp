@@ -30,7 +30,7 @@
 
 <%
 String template_json = request.getParameter("data");
-
+System.out.println(template_json);
 JSONObject jsonObj =null;
 String tpl_text="";
 try {
@@ -55,6 +55,7 @@ System.out.println("Request parameter in tinymce: "+template_json);
 	
 <script type="text/javascript" src="lib/jquery.min.js"></script>
 <script type="text/javascript" src="js/designer/tinymce/tinymce.min.js"></script>
+<script type="text/javascript" src="<%= LIB_PATH%>flatfull/lib/jquery-new/jquery.redirect.js"></script>
 <script type="text/javascript">
 
 var MERGE_FIELDS = {}
@@ -217,8 +218,12 @@ try{
 		// Confirm before going to Templates
     	if(!confirm("Your changes will be lost. Are you sure you want to go back to templates?"))
     		return;
+    	var subtype = {};
+    	subtype = <%= template_json %>;
+    	var data = <%= template_json%>;
+		//window.history.back();
+		$.redirect("templates.jsp?id=tinyMCEhtml_email&t=email",{'data':JSON.stringify(data)})
 		
-		window.history.back();
 		
 	});
 	
