@@ -10,6 +10,7 @@ import com.google.agile.repackaged.appengine.tools.cloudstorage.GcsOutputChannel
 import com.google.agile.repackaged.appengine.tools.cloudstorage.GcsService;
 import com.google.agile.repackaged.appengine.tools.cloudstorage.GcsServiceFactory;
 import com.google.agile.repackaged.appengine.tools.cloudstorage.RetryParams;
+import com.google.appengine.api.NamespaceManager;
 
 /**
  * 
@@ -45,7 +46,11 @@ public class GCSServiceAgile
     {
 	if (outPutChannel != null)
 	    return outPutChannel;
-	return outPutChannel = gcsService.createOrReplace(getFileName(), GcsFileOptions.getDefaultInstance());
+
+	GcsFileOptions options = new GcsFileOptions.Builder().mimeType("ext/csv").acl("public-read")
+		.addUserMetadata("domain", NamespaceManager.get()).build();
+
+	return outPutChannel = gcsService.createOrReplace(getFileName(), options);
     }
 
     public Writer getOutputWriter() throws IOException
