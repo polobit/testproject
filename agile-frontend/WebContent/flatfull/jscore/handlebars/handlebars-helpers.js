@@ -2564,7 +2564,7 @@ $(function()
 		}
 		else if (value >= 40 && value < 75)
 		{
-			type = "bg-light dk text-tiny";
+			type = "bg-light text-tiny";
 			reputation = "Ok";
 		}
 		else if (value >= 75 && value < 90)
@@ -3643,6 +3643,13 @@ $(function()
 			return options.fn(this);
 	});
 
+	Handlebars.registerHelper('if_keyboard_shortcuts_enabled', function(options)
+	{
+		if (CURRENT_USER_PREFS.keyboard_shotcuts)
+			return options.fn(this);
+		return options.inverse(this);
+	});
+
 	Handlebars.registerHelper('campaigns_heading', function(value, options)
 	{
 		var val = 0;
@@ -4715,7 +4722,7 @@ $(function()
 						}
 						else if (value >= 40 && value < 75)
 						{
-							type = "bg-light dk text-tiny";
+							type = "bg-light text-tiny";
 							reputation = "Ok";
 						}
 						else if (value >= 75 && value < 90)
@@ -6602,6 +6609,8 @@ Handlebars.registerHelper('SALES_CALENDAR_URL', function()
 		description = 'Find current plan information, number of users and more.';
 	else if (p_name== 'Revenue Graph')
 		description = 'Forecasted revenue graph based on your Deals.';
+	else if (p_name== 'Mini Calendar')
+		description = 'A mini calendar with an overview of your agenda for the day.'
 	return description;
 			});
 
@@ -6701,4 +6710,12 @@ Handlebars.registerHelper('SALES_CALENDAR_URL', function()
 
 		       return options.fn(json);		        
 
+			});
+	
+	Handlebars.registerHelper('toggle_contacts_filter', function(options)
+			{	        
+		    if(readCookie(CONTACTS_DYNAMIC_FILTER_COOKIE_STATUS)=="hide"){
+			return "none";
+	       	}
+	    	
 			});

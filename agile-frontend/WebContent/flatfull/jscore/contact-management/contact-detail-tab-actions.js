@@ -220,7 +220,13 @@ $(function()
 		// shown.
 		// Disables typeahead, as it won't be needed as there will be no Company
 		// input text box.
-		var json = App_Contacts.contactDetailView.model.toJSON();
+		var json = {};
+
+		if(Current_Route.indexOf("company") > -1)
+			 json = App_Companies.companyDetailView.model.toJSON();
+		else 
+			 json = App_Contacts.contactDetailView.model.toJSON();
+
 		forceCompany.name = getContactName(json); // name of Company
 		forceCompany.id = json.id; // id of Company
 		forceCompany.doit = true; // yes force it. If this is false the

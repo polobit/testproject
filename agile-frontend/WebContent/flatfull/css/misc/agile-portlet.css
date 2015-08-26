@@ -156,7 +156,6 @@ padding: 0 8px 0 0;
 	border-radius: 0 0 4px 4px;*/
     overflow: auto;
     
-    
 }
 .portlet_body table td
 {
@@ -706,6 +705,7 @@ border-radius: 2px;
   	opacity: 0;
   	color: #98a6ad;
 }
+
 .leader-board li {
   	width: 25%;
   	border-right: 1px solid #ddd;
@@ -855,4 +855,164 @@ border-radius: 2px;
 }
 .stats-report-settings:hover .portlet_header_icons {
 	visibility: visible;
+}
+/* Mini Calendar */
+.portlet_body_calendar>#calendar_container
+{
+	font-size : 12px;
+}
+.portlet_body_calendar>#calendar_container>.fc-content>.fc-view>.fc-border-separate>tbody>tr
+ {
+  line-height: .45;
+ }
+ 
+.portlet_body_calendar>#calendar_container>.fc-header>tbody>tr>td
+{
+	height : 11px;
+	background-color:#fff;
+	color:black;
+	 cursor: move;
+}
+.portlet_body_calendar>#calendar_container>.fc-header>tbody>tr>td .fc-button>.fc-button-inner, .portlet_body_calendar>#calendar_container>.fc-header>tbody>tr>td .fc-state-default{
+	background:#fff;
+	border-color:#fff;
+	margin-right:5px
+}
+.portlet_body_calendar>#calendar_container>.fc-header>tbody>tr>.fc-header-center h2
+{
+	font-size:16px;
+	line-height : 15px;
+	padding-right:	5px;
+	 text-transform: lowercase; 
+	 color:#58666e
+}
+
+.portlet_body_calendar>#calendar_container>.fc-content>.fc-view>.fc-border-separate>tbody>tr>td>div>.fc-day-number
+{
+	float : none;
+	text-align : center;
+	position: relative;
+	/*vertical-align:middle;*/
+	
+}
+
+
+.portlet_body_calendar>#calendar_container>.fc-header>tbody>tr .fc-button-content
+{
+	height : 1.5em;
+}
+ 
+.portlet_body_calendar>#calendar_container>.fc-content>.fc-view div>.fc-event{
+	width : 4px!important;
+	z-index: auto!important;
+	border-left:0;
+	min-height:0;
+}
+
+.portlet_body_calendar>#calendar_container>.fc-content>.fc-view>.fc-border-separate th, .portlet_body_calendar>#calendar_container>.fc-content>.fc-view>.fc-border-separate td
+{
+	border-width:1px 0 0 0;
+	border-color:rgba(128, 128, 128, 0.06);
+}
+
+/* .portlet_body_calendar>#calendar_container>.fc-content>.fc-view>.fc-border-separate th.fc-first, .portlet_body_calendar>#calendar_container>.fc-content>.fc-view>.fc-border-separate td.fc-first
+{
+	border-left-width:1px
+} */
+
+.portlet_body_calendar tr:last-child td
+{
+	border-bottom:none;
+}
+
+.portlet_body_calendar::-webkit-scrollbar {
+ width: 5px;
+ margin-right: 4px !important;
+ background:#eee;
+}
+
+.portlet_body_calendar::-webkit-scrollbar-thumb {
+ background: #bebebe;
+}
+.portlet_body_calendar .events_show{
+	background-color:#CBE0E7;
+	height:100%;
+}
+
+.events_show::-webkit-scrollbar-thumb {
+ background: #bebebe;
+}
+.events_show::-webkit-scrollbar {
+ width: 5px;
+ margin-right: 4px !important;
+ background:#eee;
+}
+.events_show{
+	overflow-y:auto
+}
+
+
+.portlet_body_calendar>#calendar_container>.fc-content>.fc-view div>.fc-event>.fc-overlay{
+ min-width: 210px!important;
+ max-width: 210px!important;
+}
+.portlet_body_calendar>#calendar_container>.fc-content>.fc-view 
+{
+	overflow:inherit;
+}
+.mini-cal>.gs-resize-handle-both
+{
+	z-index:0;
+}
+ .portlet_body_calendar>#calendar_container>.fc-header>tbody>tr>.fc-header-left, .portlet_body_calendar>#calendar_container>.fc-header>tbody>tr>.fc-header-right{
+  width: 45%;
+  text-align: center;
+  color:lightgray;
+} 
+ .portlet_body_calendar thead{
+color:lightgray;
+}
+.portlet_body_calendar>#calendar_container>.fc-header .fc-button{
+	visibility:hidden;
+}
+.portlet_body_calendar ul
+{
+list-style:inherit!important;
+padding-left:28px;
+}
+
+.portlet_body_calendar .fc-overlay .pull-up{
+top:15px;
+}
+
+.portlet_body_calendar .fc-overlay.bottom{
+  left: -100px;
+  top: -79px;
+  padding: 0 10px;
+  margin: 0;
+}
+
+.arrow.bottom{
+top:70px;
+}
+
+.plus-button:after {
+  content: '+';
+  font-size: 10px;
+}
+
+.portlet_body_calendar .fc-header-title  {
+	padding-top:5px
+ }
+.portlet_body_calendar .fc-header-title h2:first-letter { 
+text-transform: uppercase;
+ }
+ .portlet-calendar-error-message
+{
+	padding: 20px 10px;
+	font-size: 14px;
+	font-style: italic;
+	text-align: center;
+	color: #98a6ad;
+	word-wrap: break-word;
 }
