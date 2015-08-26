@@ -2,7 +2,9 @@
 <%@page import="java.util.Calendar"%>
 <%@page import="org.json.JSONObject"%>
 <%@page import="org.json.JSONException"%>
-
+<%@page import="org.codehaus.jackson.map.ObjectMapper"%>
+<%@page import="java.net.URLEncoder"%>
+<%@page import="com.agilecrm.user.util.UserPrefsUtil"%>
 <html xmlns="http://www.w3.org/1999/xhtml">
 
 <head>
@@ -27,35 +29,82 @@
 		//String LIB_PATH = "//dpm72z3r2fvl4.cloudfront.net/js/";
 	String LIB_PATH = "/";
 %>
-
+	
 <%
 String template_json = request.getParameter("data");
-System.out.println(template_json);
-JSONObject jsonObj =null;
-String tpl_text="";
-try {
-	if(template_json != null){
-	jsonObj = new JSONObject(template_json);
-	 tpl_text = jsonObj.getString("text");
-	System.out.println(jsonObj.getString("text"));
+
+if(template_json != null){
+	
+try
+{
+	JSONObject template_object = new JSONObject(template_json);
+
+	if (template_object.has("text")){
+		template_json  = template_object.get("text").toString();
+		
+		template_json = template_json.replaceAll("(<script|<SCRIPT)", "<!--<script").replaceAll(
+			"(</script>|</SCRIPT>)", "<script>-->");
 	}
-} catch (JSONException e) {
-	// TODO Auto-generated catch block
-	e.printStackTrace();
+
 }
-System.out.println("Request parameter in tinymce: "+template_json);
+catch (JSONException e)
+{
+	System.out.println("Exception while commenting scripts in template: "+ e.getMessage());
+}
+
+ObjectMapper mapper = new ObjectMapper();
+
+System.out.println("Request parameter in tinymce: "+template_json); 
+
 %>
 <!-- Bootstrap  -->
 <link rel="stylesheet" type="text/css"	href="<%= CSS_PATH%>css/bootstrap-<%=template%>.min.css" />
-<link rel="stylesheet" type="text/css"	href="<%= CSS_PATH%>css/bootstrap-responsive.min.css" />
 
-<!-- New UI -->
-<link rel="stylesheet" type="text/css" href="flatfull/css/bootstrap.css">
-<link rel="stylesheet" type="text/css" href="flatfull/css/app.css">
+<!-- New UI 
+<link rel="stylesheet" type="text/css" href="flatfull/css/bootstrap.css"> -->
+<link rel="stylesheet" type="text/css" href="flatfull/css/app.css">  
+
+<style type="text/css">
+ .alert-warning {
+    color: #8a6d3b;
+    background-color: #fcf8e3;
+    border-color: #faebcc;
+}
+.alert {
+    padding: 15px;
+    margin-bottom: 20px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+}
+
+.btn {
+    display: inline-block;
+    padding: 6px 12px;
+    margin-bottom: 0;
+    font-size: 14px;
+    font-weight: normal;
+    line-height: 1.42857143;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    -ms-touch-action: manipulation;
+    touch-action: manipulation;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    background-image: none;
+    border: 1px solid transparent;
+    border-radius: 1px;
+}
+
+div[role="presentation"] { 
+}
+</style>
 	
 <script type="text/javascript" src="lib/jquery.min.js"></script>
 <script type="text/javascript" src="js/designer/tinymce/tinymce.min.js"></script>
-<script type="text/javascript" src="<%= LIB_PATH%>flatfull/lib/jquery-new/jquery.redirect.js"></script>
 <script type="text/javascript">
 
 var MERGE_FIELDS = {}
@@ -126,11 +175,19 @@ function set_up_merge_fields(editor)
 	return menu;
 }
 
+function setTinyMCEImageUploadURL(url){
+	
+	var elem = $('input')[0];
+	
+    $(elem).val(url).trigger("change");
+    
+}
+
 
 $(function()
 {	
 try{
-		var templateJSON = <%=template_json%>;
+		var templateJSON = <%= mapper.writeValueAsString(template_json)%>;
 		
 	    var textarea_id = getUrlVars()["id"];
 	    var url = getUrlVars()["url"];
@@ -139,8 +196,10 @@ try{
 		if(textarea_id !== undefined && url === undefined)
 		{
 			var initHTML
-			if(templateJSON)
-				initHTML = templateJSON.text;
+			if(templateJSON){
+				initHTML = (templateJSON);
+				//initHTML = templateJSON.text;
+			}
 			else
 			initHTML = window.opener.$('#' + textarea_id).val();
 		$('#content').val(initHTML);
@@ -218,12 +277,8 @@ try{
 		// Confirm before going to Templates
     	if(!confirm("Your changes will be lost. Are you sure you want to go back to templates?"))
     		return;
-    	var subtype = {};
-    	subtype = <%= template_json %>;
-    	var data = <%= template_json%>;
-		//window.history.back();
-		$.redirect("templates.jsp?id=tinyMCEhtml_email&t=email",{'data':JSON.stringify(data)})
 		
+		window.history.back();
 		
 	});
 	
@@ -307,7 +362,7 @@ function init_tinymce()
                 	
                 	window.location = '/templates.jsp?id=tinyMCEhtml_email&t='+type;
                 }
-            });
+            }); 
             
             editor.on('change', function(e) {
                 var isWarning = should_warn(tinyMCE.activeEditor.getContent());
@@ -434,7 +489,7 @@ function showWarning(isWarning)
                     <p id="loading-msg">Loading HTML Editor...</p>
                     <textarea name="content" id='content' rows="30" cols="90" style="display:none;"></textarea>
                     <br/>
-                    <p><a href="#" id="save_html" class="btn btn-large pull-right" style="font-weight: bold;">Save</a></p>
+                    <p style="text-align: right;"><a href="#" id="save_html" class="btn btn-default btn-large" style="font-weight: bold;">Save</a></p>
                 </form>
             </div>
         </div>
