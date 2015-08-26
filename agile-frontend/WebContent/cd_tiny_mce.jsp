@@ -52,6 +52,7 @@ catch (JSONException e)
 	System.out.println("Exception while commenting scripts in template: "+ e.getMessage());
 }
 
+}
 ObjectMapper mapper = new ObjectMapper();
 
 System.out.println("Request parameter in tinymce: "+template_json); 
