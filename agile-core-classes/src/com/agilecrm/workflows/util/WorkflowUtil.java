@@ -1,15 +1,7 @@
 package com.agilecrm.workflows.util;
 
-import java.io.IOException;
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
-
-import org.codehaus.jackson.JsonGenerationException;
-import org.codehaus.jackson.map.JsonMappingException;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.agilecrm.db.ObjectifyGenericDao;
@@ -194,56 +186,4 @@ public class WorkflowUtil
 		return (Workflow) dao.ofy().query(Workflow.class).filter("name", campaignName);
 	}
 
-	public static String get_email_workflows(HttpServletRequest req)
-	{
-		String a = req.getParameter("data");
-		if (!"POST".equalsIgnoreCase(req.getMethod()))
-		{
-			String workflows = req.getParameter("workflows");
-
-			ObjectMapper mapper = new ObjectMapper();
-			try
-			{
-				String mappedString = mapper.writeValueAsString(getAllWorkflows());
-				JSONArray o = new JSONArray(mappedString);
-
-				System.out.println(o.toString());
-
-				return o.toString();
-			}
-			catch (JSONException e)
-			{
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			catch (JsonGenerationException e)
-			{
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			catch (JsonMappingException e)
-			{
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			catch (IOException e)
-			{
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-		try
-		{
-			JSONArray o = new JSONArray(a);
-			return o.toString();
-		}
-		catch (JSONException e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return "{}";
-		// req.
-		// return null;
-	}
 }
