@@ -158,7 +158,8 @@ public abstract class AbstractCSVExporter<T> implements Exporter<T>
     {
 
 	HashMap<String, String> map = new HashMap<String, String>();
-	map.put("count", String.valueOf(csvWriter.getNumberOfRows()));
+	// -1 to exclude heading from count
+	map.put("count", String.valueOf(csvWriter.getNumberOfRows() - 1));
 	map.put("download_url", csvWriter.getPath());
 	map.put("contact_type", export_type.label);
 
