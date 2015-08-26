@@ -95,7 +95,7 @@
 					callback(tagsCollectionView.collection.where({"tag":tag}).length > 0);
 			} else {
 				var tagArray = JSON.parse(tag);
-				var newtags = '';
+				var newTags = '';
 				$.each(tagArray,function(i,tagStr){
 					if(tagsCollectionView.collection.where({"tag":tagStr}).length == 0)
 						if(newTags.length == 0)
