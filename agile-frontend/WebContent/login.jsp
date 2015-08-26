@@ -151,11 +151,7 @@ if(isSafari && isWin)
 
 <body>
 <div id="openid_btns">
-					   <% if(!StringUtils.isEmpty(error)){%>
-				        <div  class="alert error login-error login-position-fixed text-center m-b-none">
-							<a class="close" data-dismiss="alert" href="#" style="position:relative;top:-2px;">&times</a><%=error%> 
-						</div>
-						<%}%>	
+					   	
 	<div class="app app-header-fixed app-aside-fixed" id="app">
 
 		<div ui-view="" class="fade-in-right-big smooth">
@@ -237,6 +233,11 @@ if(isSafari && isWin)
 		</div>
 		</div>
 		</div>
+		<% if(!StringUtils.isEmpty(error)){%>
+				        <div  class="alert error login-error login-position-fixed text-center m-b-none">
+							<a class="close" data-dismiss="alert" href="#" style="position:relative;top:-2px;">&times</a><%=error%> 
+						</div>
+						<%}%>
 	</div>
 	
 	<!-- JQUery Core and UI CDN -->
@@ -261,6 +262,11 @@ if(isSafari && isWin)
 
 				e.preventDefault();
 			});
+			$('body').on('click', '.close', function(e){
+				 e.preventDefault();
+				 $(this).closest('div').fadeOut('slow', function() {
+				   });
+				 });
 			
 		});
 		

@@ -362,7 +362,7 @@ var CLICKDESK_CODE_LOADED = false;
 var _plan_on_signup = <%=mapper.writeValueAsString(plan)%>;
 
 // Get current user prefs json
-var CURRENT_USER_PREFS = <%=mapper.writeValueAsString(currentUserPrefs)%>;
+var CURRENT_USER_PREFS = <%=UserPrefsUtil.getMapperString(currentUserPrefs)%>;
 
 //Get current user prefs json
 var ACCOUNT_PREFS = <%=mapper.writeValueAsString(accountPrefs)%>; 

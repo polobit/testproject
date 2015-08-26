@@ -33,6 +33,7 @@ var PortletsRouter = Backbone.Router
 															$('#taksAndEvents').parents('.wrapper-md').hide();
 														if($('#userActivity').children().length==0)
 															$('#userActivity').parents('.wrapper-md').hide();
+														initializeAddPortletsListeners();
 													}
 												});
 
@@ -46,6 +47,7 @@ var PortletsRouter = Backbone.Router
 														.render().el);
 
 									});
+										
 				}
 			},
 			// Show form modal
@@ -114,6 +116,8 @@ function addNewPortlet(portlet_type, p_name) {
 		obj.name="Revenue Graph";
 	else if(p_name=="UserActivities")
 		obj.name="User Activities"
+	else if(p_name=="MiniCalendar")
+		obj.name="Mini Calendar";
 	obj.portlet_type=portlet_type;
 	var max_row_position=0;
 	if(gridster!=undefined)
@@ -261,6 +265,10 @@ function deletePortlet(el) {
 						"Are you sure you want to delete Dashlet - Leaderboard "
 								+ getDurationForPortlets(model.get("settings").duration)
 								+ "?");
+	else if(model.get("name")=="Mini Calendar")
+		$('#portletDeleteModal > .modal-dialog > .modal-content > .modal-body')
+	.html("Are you sure you want to delete Dashlet - Mini Calendar?");
+	
 	else
 		$('#portletDeleteModal > .modal-dialog > .modal-content > .modal-body')
 				.html(
@@ -569,7 +577,82 @@ function initializePortletsListeners_1(){
 		e.preventDefault();
 		showPortletSettings(this.id);
 	});
+   
 }
+
+function initializeAddPortletsListeners(){
+ $('.col-md-3').on("mouseenter",'.show_screeshot',function(e){
+    	var p_name=$(this).attr('id');
+    	var image;
+    	var placement="right"
+    		if(p_name=="FilterBased")
+    			image="flatfull/img/dashboard_images/My-contacts.png";
+    		else if(p_name=="EmailsOpened")
+    			image="flatfull/img/dashboard_images/Email-opened.png";
+    		else if(p_name=="PendingDeals")
+    			image="flatfull/img/dashboard_images/account-information.png";
+    		else if(p_name=="Agenda")
+    			image="flatfull/img/dashboard_images/Events.png";
+    		else if(p_name=="TodayTasks")
+    			image="flatfull/img/dashboard_images/Task.png";
+    		else if(p_name=="DealsByMilestone")
+    				image="flatfull/img/dashboard_images/Milestone.png";
+    		else if(p_name=="DealsFunnel")
+    		{
+    				image="flatfull/img/dashboard_images/Task.png";
+    			placement="left";
+    		}
+    		else if(p_name=="GrowthGraph")
+    		{
+    			placement="left";
+    				image="flatfull/img/dashboard_images/Tag-Graph.png";
+    		}
+    		else if(p_name=="CallsPerPerson")
+    		{
+    			placement="left";
+    				image="flatfull/img/dashboard_images/Calls.png";
+    		}
+    		else if(p_name=="AgileCRMBlog")
+    			image="flatfull/img/dashboard_images/Agile-Blog.png";
+    		else if(p_name=="AccountDetails")
+    			image="flatfull/img/dashboard_images/account-information.png";
+    		else if(p_name=="TaskReport"){
+    				placement="left";
+    				image="flatfull/img/dashboard_images/account-information.png";		
+    			}
+    		else if(p_name=="StatsReport")
+    			image="flatfull/img/dashboard_images/stats.png";
+    		else if(p_name=="Leaderboard")
+    				image="flatfull/img/dashboard_images/Leaderboard.png";
+    		else if(p_name=="RevenueGraph")
+    		{
+    			placement="left";
+    			image="flatfull/img/dashboard_images/Revenue-graph.png";
+    		}
+    		else if(p_name=="UserActivities")
+    		{
+    			placement="left";
+    			image="flatfull/img/dashboard_images/Activities.png";
+    		}
+    		else if(p_name=="MiniCalendar")
+    		{
+    			placement="left";
+    			image="flatfull/img/dashboard_images/Activities.png";
+    		}
+    	$(this).popover({
+    		"rel":"popover",
+    		"trigger":"hover",
+    		"placement":placement,
+    		"html" : "true",
+    		"content" : function(){
+    			return '<img src='+image+'>';
+
+    		}
+    	});
+    	$(this).popover('show');
+    });
+
+	}
 /*
  * $("#add-portlet").live("click", function(e){ e.preventDefault();
  * this.Catalog_Portlets_View = new Base_Collection_View({ url :
@@ -1047,96 +1130,3 @@ function getStartAndEndDatesEpochForPortlets(duration)
 
 	return (getUTCMidNightEpochFromDate(d) / 1000);
 }
-
-/*function showDashlettype(x,p_name)
-{
-	var a;
-	var image_src;
-	
-	if(p_name=="FilterBased")
-		image_src="http://snag.gy/cZXxH.jpg";
-	else
-		image_src="https://d1gwclp1pmzk26.cloudfront.net/img/gravatar/73.png";
-	a='<div class="screenshot"><img src='+image_src+' style="width:100%;height :150px"/></div>';
-	$(x).append(a);
-	$('.screenshot').show();
-	
-	
-
-}
-
-function hideDashlettype(x){
-	$('.screenshot').remove();
-}*/
-
-$('.show_screeshot').live("mouseenter",function(){
-	var p_name=$(this).attr('id');
-	var image;
-	var placement="right"
-		if(p_name=="FilterBased")
-			image="http://snag.gy/cZXxH.jpg";
-		else if(p_name=="EmailsOpened")
-			image="http://snag.gy/Ib2Bk.jpg";
-		else if(p_name=="PendingDeals")
-			image="http://snag.gy/u2EzC.jpg";
-		else if(p_name=="Agenda")
-			image="http://snag.gy/kvqEB.jpg";
-		else if(p_name=="TodayTasks")
-			image="http://snag.gy/21oEA.jpg";
-		else if(p_name=="DealsByMilestone")
-			image="http://snag.gy/DSJan.jpg";
-		else if(p_name=="ClosuresPerPerson")
-			image="https://d1gwclp1pmzk26.cloudfront.net/img/gravatar/73.png";
-		else if(p_name=="DealsWon")
-			image="https://d1gwclp1pmzk26.cloudfront.net/img/gravatar/73.png";
-		else if(p_name=="DealsFunnel")
-		{
-			image="http://snag.gy/qWGKP.jpg";
-			placement="left";
-		}
-		else if(p_name=="GrowthGraph")
-		{
-			placement="left";
-			image="http://snag.gy/bOeka.jpg";
-		}
-		else if(p_name=="DealsAssigned")
-			image="https://d1gwclp1pmzk26.cloudfront.net/img/gravatar/73.png";
-		else if(p_name=="CallsPerPerson")
-		{
-			placement="left";
-			image="https://d1gwclp1pmzk26.cloudfront.net/img/gravatar/73.png";
-		}
-		else if(p_name=="AgileCRMBlog")
-			image="http://snag.gy/EnuRz.jpg";
-		else if(p_name=="AccountDetails")
-			image="http://snag.gy/Tg2nD.jpg";
-		else if(p_name=="TaskReport"){
-				placement="left";
-				image="http://snag.gy/9EwD9.jpg";		
-			}
-		else if(p_name=="StatsReport")
-			image="http://snag.gy/FdvNs.jpg";
-		else if(p_name=="Leaderboard")
-			image="https://d1gwclp1pmzk26.cloudfront.net/img/gravatar/73.png";
-		else if(p_name=="RevenueGraph")
-		{
-			placement="left";
-			image="https://d1gwclp1pmzk26.cloudfront.net/img/gravatar/73.png";
-		}
-		else if(p_name=="UserActivities")
-		{
-			placement="left";
-			image="http://snag.gy/osWJu.jpg";
-		}
-	$(this).popover({
-		"rel":"popover",
-		"trigger":"hover",
-		"placement":placement,
-		"html" : "true",
-		"content" : function(){
-			return '<img src='+image+'>';
-
-		}
-	});
-	$(this).popover('show');
-});

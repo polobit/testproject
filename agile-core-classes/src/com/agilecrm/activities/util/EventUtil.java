@@ -83,7 +83,10 @@ public class EventUtil
 	}
     }
 
-    // returns all events count
+    /**
+     * 
+     * @return all events count
+     */
     public static int getCount()
     {
 
