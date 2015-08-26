@@ -1293,14 +1293,10 @@ function showDealAreaSpline(url, selector, name, yaxis_name, show_loading)
 									from_date = Highcharts.dateFormat('%e.%b', Date.UTC(start_date.getFullYear(), start_date.getMonth(), start_date.getDate()));
 								
 								}
-								if(current_date.getFullYear()!=next_dte.getFullYear())
-								{
+								//if(current_date.getFullYear()!=next_dte.getFullYear())
+								
 									to_date = Highcharts.dateFormat('%e.%b.%Y', Date.UTC(next_dte.getFullYear(), next_dte.getMonth(), next_dte.getDate()-1));
-								}
-								else
-								{
-									to_date = Highcharts.dateFormat('%e.%b', Date.UTC(next_dte.getFullYear(), next_dte.getMonth(), next_dte.getDate()-1));
-								}
+								
 								categories.push(from_date+' - '+to_date);
 							}
 						}
