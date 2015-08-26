@@ -234,4 +234,86 @@ public class CategoriesUtil
 	matcher = pattern.matcher(category);
 	return matcher.matches();
     }
+    
+    /**
+     * Get the category by type.
+     * 
+     * @param type
+     *            type of the category.
+     * @return
+     */
+    public List<Category> getCategoriesByType(String type)
+    {
+    List<Category> categoriesList = null;
+    try 
+    {
+    	categoriesList = dao.ofy().query(Category.class).filter("entity_type", type).order("order").list();
+    	if (categoriesList != null && categoriesList.size() == 0)
+    	{
+    		categoriesList = createDefaultCategoriesByType(type);
+    	}
+    	if (type.equals(Category.EntityType.DEAL_LOST_REASON.toString()) || type.equals(Category.EntityType.DEAL_SOURCE.toString()))
+    	{
+    		categoriesList = dao.ofy().query(Category.class).filter("entity_type", type).filter("label !=", "Default_"+type.toLowerCase()+"_").list();
+    	}
+    	
+	} 
+    catch (Exception e) {
+		e.printStackTrace();
+	}
+    return categoriesList;
+    }
+    
+    /**
+     * Get the category by name and type.
+     * 
+     * @param name
+     *            name of the category.
+     * @param type
+     *            type of the category.
+     * @return
+     */
+    public List<Category> getCategoryByNameAndType(String name, String type)
+    {
+	name = CategoriesUtil.encodeCategory(name);
+
+	return dao.ofy().query(Category.class).filter("name", name).filter("entity_type", type).list();
+    }
+    
+    /**
+     * Create default categories for each type. This is for the first time when the user is
+     * loggin for the first time.
+     * 
+     * @return list of default categories of differnt types.
+     */
+    public List<Category> createDefaultCategoriesByType(String type)
+    {
+    	List<Category> categories = new ArrayList<Category>();
+    	if (type.equals(Category.EntityType.DEAL_LOST_REASON.toString()))
+    	{
+    		//It should not be deleted
+    		Category cat1 = new Category("Default_"+type.toLowerCase()+"_", 0, Category.EntityType.DEAL_LOST_REASON);
+    		createCategory(cat1);
+    		Category cat2 = new Category("Unqualified", 1, Category.EntityType.DEAL_LOST_REASON);
+    		categories.add(cat2);
+    		Category cat3 = new Category("Lost to competitor", 2, Category.EntityType.DEAL_LOST_REASON);
+    		categories.add(cat3);
+    		Category cat4 = new Category("Expensive", 3, Category.EntityType.DEAL_LOST_REASON);
+    		categories.add(cat4);
+    	}
+    	else if (type.equals(Category.EntityType.DEAL_SOURCE.toString()))
+    	{
+    		//It should not be deleted
+    		Category cat1 = new Category("Default_"+type.toLowerCase()+"_", 0, Category.EntityType.DEAL_SOURCE);
+    		createCategory(cat1);
+    		Category cat2 = new Category("Website", 1, Category.EntityType.DEAL_SOURCE);
+    		categories.add(cat2);
+    		Category cat3 = new Category("Referral", 2, Category.EntityType.DEAL_SOURCE);
+    		categories.add(cat3);
+    		Category cat4 = new Category("Ads", 3, Category.EntityType.DEAL_SOURCE);
+    		categories.add(cat4);
+    	}
+    	dao.putAll(categories);
+    	return categories;
+    }
 }

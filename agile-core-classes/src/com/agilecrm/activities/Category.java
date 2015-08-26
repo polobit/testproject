@@ -66,7 +66,7 @@ public class Category
      */
     public static enum EntityType
     {
-	CONTACT, DEAL, TASK, EVENT, CAMPAIGN, DOCUMENT
+	CONTACT, DEAL, TASK, EVENT, CAMPAIGN, DOCUMENT, DEAL_LOST_REASON, DEAL_SOURCE
     }
 
     public static final String SPACE = "_SPACE_";

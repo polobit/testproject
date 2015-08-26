@@ -313,6 +313,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			$('#content').html(getTemplate('others-not-allowed', {}));
 			return;
 		}
+		var that = this;
 		$('#content').html("<div id='milestone-listner'>&nbsp;</div>");
 		$("#milestone-listner").html(getTemplate("admin-settings"), {});
 		this.pipelineGridView = new Base_Collection_View({ url : '/core/api/milestone/pipelines', templateKey : "admin-settings-milestones",
@@ -324,6 +325,8 @@ var AdminSettingsRouter = Backbone.Router.extend({
 					$('#milestone-listner').find('#deal-tracks-accordion').find('.collapse').addClass('in');
 				initializeMilestoneListners(el);
 				milestone_util.init(el);
+				that.lostReasons();
+				that.dealSources();
 			} });
 		this.pipelineGridView.collection.fetch();
 		$('#milestone-listner').find('#admin-prefs-tabs-content').html(this.pipelineGridView.render().el);
@@ -623,6 +626,50 @@ var AdminSettingsRouter = Backbone.Router.extend({
 		$('#content').find('#admin-prefs-tabs-content').html(view.render().el);
 		$('#content').find('#AdminPrefsTab .select').removeClass('select');
 		$('#content').find('.integrations-tab').addClass('select');
+		$(".active").removeClass("active");
+	},
+	
+	/**
+	 * Fetch all lost reasons
+	 */
+	lostReasons : function()
+	{
+		if (!CURRENT_DOMAIN_USER.is_admin)
+		{
+			$('#content').html(getTemplate('others-not-allowed',{}));
+			return;
+		}
+		this.dealLostReasons = new Base_Collection_View({ url : '/core/api/categories?entity_type=DEAL_LOST_REASON', templateKey : "admin-settings-lost-reasons",
+			individual_tag_name : 'tr', sortKey : "name", postRenderCallback : function(el)
+			{
+				//initializeMilestoneListners(el);
+			} });
+		this.dealLostReasons.collection.fetch();
+		$('#content').find('#admin-prefs-tabs-content').find("#admin-settings-lost-reasons").html(this.dealLostReasons.render().el);
+		$('#content').find('#AdminPrefsTab .select').removeClass('select');
+		$('#content').find('.milestones-tab').addClass('select');
+		$(".active").removeClass("active");
+	},
+
+	/**
+	 * Fetch all deal sources
+	 */
+	dealSources : function()
+	{
+		if (!CURRENT_DOMAIN_USER.is_admin)
+		{
+			$('#content').html(getTemplate('others-not-allowed',{}));
+			return;
+		}
+		this.dealSourcesView = new Base_Collection_View({ url : '/core/api/categories?entity_type=DEAL_SOURCE', templateKey : "admin-settings-deal-sources",
+			individual_tag_name : 'tr', sortKey : "name", postRenderCallback : function(el)
+			{
+				//initializeMilestoneListners(el);
+			} });
+		this.dealSourcesView.collection.fetch();
+		$('#content').find('#admin-prefs-tabs-content').find("#admin-settings-deal-sources").html(this.dealSourcesView.render().el);
+		$('#content').find('#AdminPrefsTab .select').removeClass('select');
+		$('#content').find('.milestones-tab').addClass('select');
 		$(".active").removeClass("active");
 	}
 
