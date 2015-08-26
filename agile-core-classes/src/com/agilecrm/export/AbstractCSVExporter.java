@@ -7,10 +7,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.json.JSONException;
-
 import com.agilecrm.CSVWriterAgile;
 import com.agilecrm.contact.export.util.ContactExportCSVUtil;
+import com.agilecrm.db.GoogleSQL;
 import com.agilecrm.export.util.DealExportCSVUtil;
 import com.agilecrm.file.readers.ByteBufferBackedInputStream;
 import com.agilecrm.file.readers.IFileInputStream;
@@ -43,7 +42,8 @@ public abstract class AbstractCSVExporter<T> implements Exporter<T>
 
 	try
 	{
-	    csvWriter = new CSVWriterAgile(NamespaceManager.get());
+
+	    csvWriter = new CSVWriterAgile(NamespaceManager.get() + "_" + GoogleSQL.getFutureDate());
 	}
 	catch (IOException e)
 	{
