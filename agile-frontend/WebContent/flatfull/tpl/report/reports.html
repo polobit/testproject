@@ -135,14 +135,14 @@
             <b>Activity Reports</b>
         </div>  
         <br />
+                
+        {{#isAllowedInCurrentPlan "is_activity_reports_enabled"}}
         <!-- Description -->
         <div class="ellipsis-multiline m-b-md" rel="tooltip" title="{{description}}">
-          	Get a periodic  email digest of various activities by users in Agile.
-            <div style="display:none;" class="activity-reports-upgrade" ><p class="text-danger>{{toSafeString message}}<p></div>
+            Get a periodic  email digest of various activities by users in Agile.
+            <div style="display:none;" class="activity-reports-upgrade" ><p class="text-danger">{{toSafeString message}}<p></div>
         </div>
         <!-- Add button -->
-        <div>
-        {{#isAllowedInCurrentPlan "is_activity_reports_enabled"}}
 			{{#hasMenuScope 'ACTIVITY'}}
             	<div  style="/*margin: 40px auto;    width: 50%;*/ display:inline;">
                     <a class="btn btn-sm btn-default"  href="#activity-reports" id="activity-reports-upgrade">Go</a>
@@ -152,13 +152,19 @@
 				<span class="btn btn-default btn-sm disabled" >Go</span>
 			{{/hasMenuScope}}
             {{else}}
+            <!-- Description -->
+            <div class="ellipsis-multiline m-b-md" rel="tooltip" title="{{description}}">
+            Get a periodic  email digest of various activities by users in Agile.
+            <div style="display:none;" class="activity-reports-upgrade" ><p class="text-danger">{{toSafeString message}}<p></div>
+             </div>
+        <!-- Add button -->
             <div >
                     <div class="btn btn-sm btn-default _upgrade" id="activity-reports-upgrade">Go</div>
                 </div>
                  
             {{/isAllowedInCurrentPlan}}
              <div class="clearfix"></div>
-        </div>
+        
     </div>
 </div>
 {{/hasMenuScope}}
@@ -328,19 +334,25 @@
             <b>User Activities</b>
         </div>
         <br />
+        
+        {{#isAllowedInCurrentPlan "is_email_gateway_allowed"}}
         <!-- Description -->
         <div class="ellipsis-multiline m-b-md" rel="tooltip" title="{{description}}">
           See a chronological activity report of your CRM users.
           <div style="display:none;" class="activities-upgrade" ><p class="text-danger">{{toSafeString message}}<p></div>
         </div>
         <!-- Add button -->
-
-        {{#isAllowedInCurrentPlan "is_email_gateway_allowed"}}
           
                 <div  style="/*margin: 40px auto;    width: 50%;*/ display:inline;">
                       <a class="btn btn-sm btn-default" href="#activities">Go</a>
                 </div>
             {{else}}
+            <!-- Description -->
+            <div class="ellipsis-multiline m-b-md" rel="tooltip" title="{{description}}">
+             See a chronological activity report of your CRM users.
+           <div style="display:none;" class="activities-upgrade" ><p class="text-danger">{{toSafeString message}}<p></div>
+            </div>
+        <!-- Add button -->
             <div class="inline " style="/*margin: 40px auto;    width: 50%;*/ display:inline;">
                     <div class="btn btn-sm btn-default _upgrade" id="activities-upgrade">Go</div>
                 </div>
