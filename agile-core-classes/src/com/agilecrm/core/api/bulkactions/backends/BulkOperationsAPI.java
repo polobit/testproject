@@ -32,7 +32,6 @@ import com.agilecrm.activities.util.ActivitySave;
 import com.agilecrm.activities.util.ActivityUtil;
 import com.agilecrm.bulkaction.deferred.CampaignStatusUpdateDeferredTask;
 import com.agilecrm.bulkaction.deferred.CampaignSubscriberDeferredTask;
-import com.agilecrm.bulkaction.deferred.ContactExportPullTask;
 import com.agilecrm.bulkaction.deferred.ContactsBulkDeleteDeferredTask;
 import com.agilecrm.bulkaction.deferred.ContactsBulkTagAddDeferredTask;
 import com.agilecrm.bulkaction.deferred.ContactsBulkTagRemoveDeferredTask;
@@ -55,7 +54,6 @@ import com.agilecrm.contact.util.bulk.BulkActionNotifications;
 import com.agilecrm.contact.util.bulk.BulkActionNotifications.BulkAction;
 import com.agilecrm.export.ExportBuilder;
 import com.agilecrm.export.Exporter;
-import com.agilecrm.queues.util.PullQueueUtil;
 import com.agilecrm.session.UserInfo;
 import com.agilecrm.subscription.restrictions.db.BillingRestriction;
 import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
@@ -845,6 +843,10 @@ public class BulkOperationsAPI
 	List<Contact> contacts_list = new ArrayList<Contact>();
 	String path = null;
 
+	DomainUser user = DomainUserUtil.getDomainUser(currentUserId);
+	if (user == null)
+	    return;
+
 	int i = 0;
 
 	Exporter<Contact> exporter = ExportBuilder.buildContactExporter();
@@ -923,6 +925,7 @@ public class BulkOperationsAPI
 	}
 
 	exporter.finalize();
+	exporter.sendEmail(user.email);
 
 	// ContactExportEmailUtil.exportContactCSVAsEmail(data, downloadUrl,
 	// String.valueOf(count),

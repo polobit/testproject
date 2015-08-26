@@ -82,15 +82,6 @@ public abstract class AbstractCSVExporter<T> implements Exporter<T>
     public final void finalize()
     {
 	csvWriter.flush();
-	try
-	{
-	    sendEmail();
-	}
-	catch (JSONException e)
-	{
-	    // TODO Auto-generated catch block
-	    e.printStackTrace();
-	}
     }
 
     public final void writeEntitesToCSV(List<T> entities)
@@ -162,7 +153,7 @@ public abstract class AbstractCSVExporter<T> implements Exporter<T>
 	return csvWriter.getPath();
     }
 
-    private final void sendEmail() throws JSONException
+    public final void sendEmail(String email)
     {
 
 	HashMap<String, String> map = new HashMap<String, String>();
@@ -170,7 +161,7 @@ public abstract class AbstractCSVExporter<T> implements Exporter<T>
 	map.put("download_url", csvWriter.getPath());
 	map.put("contact_type", export_type.label);
 
-	SendMail.sendMail("yaswanth@agilecrm.com", export_type.templateSubject, export_type.templaceTemplate, map,
+	SendMail.sendMail(email, export_type.templateSubject, export_type.templaceTemplate, map,
 		SendMail.AGILE_FROM_EMAIL, SendMail.AGILE_FROM_NAME);
     }
 

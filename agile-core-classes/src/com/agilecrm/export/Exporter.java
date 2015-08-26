@@ -31,4 +31,6 @@ public interface Exporter<T>
 
     public void finalize();
 
+    public void sendEmail(String email);
+
 }
