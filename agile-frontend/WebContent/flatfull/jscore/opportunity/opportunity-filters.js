@@ -673,6 +673,8 @@ function initializeMilestoneListners(el){
 	$('#milestone-listner').on('click', '.add-pipeline', function(e) {
 		$('#pipelineForm input').val('');
 		$('#pipelineForm input#milestones').val('New,Prospect,Proposal,Won,Lost');
+		$('#pipelineForm input#won_milestone').val('Won');
+		$('#pipelineForm input#lost_milestone').val('Lost');
 		$('#pipelineModal').find('.save-status').html('');
 	});
 	
