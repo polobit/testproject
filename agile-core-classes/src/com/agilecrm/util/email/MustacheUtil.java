@@ -147,8 +147,7 @@ public class MustacheUtil
 		    {
 			Map.Entry<String, JsonNode> next = i.next();
 			Object o = toObject(next.getValue());
-			if (next.getKey().indexOf("time") > -1 || next.getKey().indexOf("date") > -1 
-					|| next.getKey().indexOf("last_contacted") > -1 || next.getKey().indexOf("last_called") > -1 || next.getKey().indexOf("last_emailed") > -1)
+			if (next.getKey().indexOf("time") > -1 || next.getKey().indexOf("date") > -1)
 			{
 			    try
 			    {

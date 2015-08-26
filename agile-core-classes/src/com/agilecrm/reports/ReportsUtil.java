@@ -292,7 +292,7 @@ public class ReportsUtil
 			{
 			    fieldValue = contactJSON.get(field).toString();
 
-			    if (field.contains("time"))
+			    if (field.contains("time") || field.equalsIgnoreCase("last_contacted") || field.equalsIgnoreCase("last_emailed") || field.equalsIgnoreCase("last_called"))
 				fieldValue = SearchUtil.getDateWithoutTimeComponent(Long.parseLong(fieldValue) * 1000);
 			}
 
