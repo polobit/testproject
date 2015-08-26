@@ -21,6 +21,12 @@ public class ContactExporter extends AbstractCSVExporter<Contact>
 	// TODO Auto-generated constructor stub
     }
 
+    public ContactExporter(EXPORT_TYPE type)
+    {
+	super(type);
+	// TODO Auto-generated constructor stub
+    }
+
     public ContactExporter(File file) throws IOException
     {
 	super(EXPORT_TYPE.CONTACT, file);

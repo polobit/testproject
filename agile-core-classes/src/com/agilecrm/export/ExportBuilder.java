@@ -16,6 +16,11 @@ public class ExportBuilder
 	return new ContactExporter();
     }
 
+    public static Exporter<Contact> buildCompanyExporter()
+    {
+	return new ContactExporter(EXPORT_TYPE.COMPANY);
+    }
+
     public static Exporter<Contact> buildContactExporter(File file) throws IOException
     {
 	return new ContactExporter(file);
