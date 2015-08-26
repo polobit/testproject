@@ -291,8 +291,12 @@ public class ReportsUtil
 			else
 			{
 			    fieldValue = contactJSON.get(field).toString();
+			    
+			    if (fieldValue.equals("0") && (field.equalsIgnoreCase("last_contacted") || field.equalsIgnoreCase("last_emailed") || field.equalsIgnoreCase("last_called")))
+			    	fieldValue = "";
 
-			    if (field.contains("time") || field.equalsIgnoreCase("last_contacted") || field.equalsIgnoreCase("last_emailed") || field.equalsIgnoreCase("last_called"))
+			    if ((field.contains("time") || field.equalsIgnoreCase("last_contacted") || field.equalsIgnoreCase("last_emailed") || field.equalsIgnoreCase("last_called")) 
+			    		&& !fieldValue.equals(""))
 				fieldValue = SearchUtil.getDateWithoutTimeComponent(Long.parseLong(fieldValue) * 1000);
 			}
 
