@@ -12,7 +12,7 @@ public interface Exporter<T>
 
 	CONTACT("Agile CRM Contacts CSV", SendMail.EXPORT_CONTACTS_CSV, "Contact(s)"),
 
-	COMPANY("Agile CRM  CSV", SendMail.EXPORT_CONTACTS_CSV, "Companies");
+	COMPANY("Agile CRM Companies CSV", SendMail.EXPORT_CONTACTS_CSV, "Companies");
 
 	String templateSubject;
 	String templaceTemplate;
