@@ -30,6 +30,8 @@ import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.contact.util.bulk.BulkActionNotifications;
 import com.agilecrm.deals.Opportunity;
 import com.agilecrm.deals.util.OpportunityUtil;
+import com.agilecrm.export.ExportBuilder;
+import com.agilecrm.export.Exporter;
 import com.agilecrm.export.util.DealExportBlobUtil;
 import com.agilecrm.export.util.DealExportEmailUtil;
 import com.agilecrm.session.SessionManager;
@@ -406,6 +408,10 @@ public class DealsBulkActionsAPI
 	    @QueryParam("cursor") String cursor, @QueryParam("page_size") String count,
 	    @FormParam("filter") String filters)
     {
+	DomainUser user = DomainUserUtil.getDomainUser(currentUserId);
+
+	if (user == null)
+	    return;
 	// Set the session manager to get the user preferences and the other
 	// details required.
 	if (SessionManager.get() != null)
@@ -414,7 +420,6 @@ public class DealsBulkActionsAPI
 	}
 	else
 	{
-	    DomainUser user = DomainUserUtil.getDomainUser(currentUserId);
 	    SessionManager.set(new UserInfo(null, user.email, user.name));
 	    SessionManager.get().setDomainId(user.id);
 	}
@@ -429,26 +434,17 @@ public class DealsBulkActionsAPI
 	{
 	    org.json.JSONObject filterJSON = new org.json.JSONObject(filters);
 	    System.out.println("------------" + filterJSON.toString());
-
+	    Exporter<Opportunity> dealsExporter = ExportBuilder.buildDealsExporter();
 	    do
 	    {
 		deals = OpportunityUtil.getOpportunitiesByFilter(filterJSON, max, currentCursor);
 		currentCursor = deals.get(deals.size() - 1).cursor;
-		firstTime++;
-		if (firstTime == 1)
-		    path = DealExportBlobUtil.writeDealCSVToBlobstore(deals, false);
-		else
-		    DealExportBlobUtil.editExistingBlobFile(path, deals, false);
+		dealsExporter.writeEntitesToCSV(deals);
 		total += deals.size();
 	    } while (deals.size() > 0 && !StringUtils.equals(previousCursor, currentCursor));
-	    DealExportBlobUtil.editExistingBlobFile(path, null, true);
-	    List<String> fileData = DealExportBlobUtil.retrieveBlobFileData(path);
-	    if (count == null)
-		count = String.valueOf(total);
-	    // Send every partition as separate email
-	    for (String partition : fileData)
-		DealExportEmailUtil.exportDealCSVAsEmail(DomainUserUtil.getDomainUser(currentUserId), partition,
-			String.valueOf(count));
+
+	    dealsExporter.finalize();
+	    dealsExporter.sendEmail(user.email);
 	}
 	catch (JSONException e)
 	{
