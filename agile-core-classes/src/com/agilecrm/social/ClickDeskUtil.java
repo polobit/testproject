@@ -14,14 +14,10 @@ import com.agilecrm.widgets.Widget;
  */
 public class ClickDeskUtil {
 
-	/**
-	 * Base URL to retrieve chats from ClickDesk
-	 */
+	// Base URL to retrieve chats from ClickDesk
 	public final static String CLICKDESK_CHATS_URL = "https://my.clickdesk.com/rest/dev/api/getchats/<email>?offset=<offset>";
 
-	/**
-	 * Base URL to retrieve tickets from ClickDesk
-	 */
+	// Base URL to retrieve tickets from ClickDesk
 	public final static String CLICKDESK_TICKETS_URL = "https://my.clickdesk.com/rest/dev/api/gettickets/<email>?offset=<offset>";
 
 	/**
@@ -41,7 +37,6 @@ public class ClickDeskUtil {
 		String url = CLICKDESK_CHATS_URL.replace("<email>", email).replace(
 				"<offset>", offset);
 		System.out.println("ClickDesk request URL : " + url);
-
 		// connect to ClickDesk
 		String response = HTTPUtil.accessURLUsingAuthentication(url,
 				widget.getProperty("clickdesk_username"),
@@ -96,13 +91,10 @@ public class ClickDeskUtil {
 		if (response.contains("401"))
 			return "Authentication failed. Please try again";
 
-		/*
-		 * ClickDesk returns 404 for IO exception, else exception returned from
-		 * clickDesk is thrown
-		 */
+		// ClickDesk returns 404 for IO exception, else exception returned from
+		// clickDesk is thrown
 		if (response.contains("404"))
 			return "An error occured. Refresh and try again.";
-
 		return response;
 	}
 

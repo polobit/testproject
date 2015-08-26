@@ -32,7 +32,7 @@ import com.agilecrm.widgets.util.WidgetUtil;
 public class ChargifyWidgetsAPI {
 
 	/**
-	 * getChargifyClientProfile method will be called from AgileCRM when widget
+	 * GetChargifyClientProfile method will be called from AgileCRM when widget
 	 * is loaded. getChargifyClientProfile method just acts as a controller,
 	 * receives request from AgileCRM forwards to ChargifyUtil class depending
 	 * upon the command, it calls the appropriate method in ChargifyUtil &
@@ -86,10 +86,10 @@ public class ChargifyWidgetsAPI {
 				String subscriptions = ChargifyUtil
 						.getSubscriptions(customerJson);
 
-				// get invoices for the customer
+				// Get invoices for the customer
 				String invoices = ChargifyUtil.getInvoices(customerJson);
 
-				// constructing jsonObject on combining customer,subscriptions
+				// Constructing jsonObject with customer,subscriptions
 				// and invoices
 				result = (new JSONObject().put("customer", customerJson).put(
 						"subscriptions", new JSONArray(subscriptions)).put(
@@ -135,7 +135,7 @@ public class ChargifyWidgetsAPI {
 		try {
 			ChargifyUtil ChargifyUtil = new ChargifyUtil(
 					widget.getProperty("chargify_api_key"), "agilecrm");
-			// calls ChargifyUtil method to add Contact to Chargify account
+			// Calls ChargifyUtil method to add Contact to Chargify account
 			return ChargifyUtil.createCustomer(firstName, lastName, email);
 		} catch (Exception e) {
 			throw new WebApplicationException(Response
