@@ -1,5 +1,5 @@
 var plan_json = [];
-
+var email_json = {};
 var PLAN_DETAILS = {
 		getPlanPrice : function(plan_name) {
 			return PLANS_COSTS_JSON[plan_name];
@@ -154,7 +154,7 @@ function setPriceTemplete(user_plan, element)
 		
 		$(element).find('#' + plan_type + '_plan_select').attr('checked','checked');
 		$(element).find('.'+ interval).addClass("plan-select");
-		$(element).find('#users_select_slider').attr('value', quantity);
+		$(element).find('#users_select_slider').val(quantity);
 		
 		return element;	
 	
@@ -189,9 +189,9 @@ function setPlan(user_plan)
 		}
 	
 		
-		$("#plan_type").attr('value', plan_type).trigger("change");
+		$("#plan_type").val(plan_type).trigger("change");
 		//$("ul.tagsli a." + interval).trigger("click");
-		$("#billing_cycle").attr('value', interval).trigger("change");
+		$("#billing_cycle").val(interval).trigger("change");
 		
 		
 		
@@ -207,7 +207,9 @@ function setPlan(user_plan)
 
 
 function initializeSubscriptionListeners(){
-		
+
+	    $('#subscribe_plan_change').off();
+	
 		$('#subscribe_plan_change').on('click', '.plan-collection-in', function(e){
 			 
 			$(this).find("[name='pro_vs_lite']").attr('checked','checked');
@@ -229,7 +231,7 @@ function initializeSubscriptionListeners(){
 	  		removeStyleForAPlan();
 	  		var id = $(this).parent(); 	
 	  		addStyleForAPlan(id,null); 
-	  		$("#plan_type").attr("value", id.attr("id").split("_")[0]);
+	  		$("#plan_type").val(id.attr("id").split("_")[0]);
 	  		
 	      	// Cost
 	  		setCost(update_price());
@@ -237,7 +239,7 @@ function initializeSubscriptionListeners(){
 	  	});
 
 		// Tags selection
-		$('#plans-panel').off('click').on('click', 'ul.tagsli a', function(e){
+		$('#subscribe_plan_change #plans-panel').off('click').on('click', 'ul.tagsli a', function(e){
 			
 			e.preventDefault();
 			
@@ -274,7 +276,7 @@ function initializeSubscriptionListeners(){
 			}
 			var price = update_price();
 			var value = $("#user_quantity").val();
-			$( "#users_quantity").text(value);
+//			$( "#users_quantity").text(value);
  	     	$("#users_total_cost").text((value * price).toFixed(2));
 			
 		});
@@ -295,7 +297,28 @@ function initializeSubscriptionListeners(){
 				setCost(update_price());
 			}
 		});
-	    
+		
+		$('#subscribe_plan_change').on('click', '#purchase-email-plan', function(e){
+					
+					
+			          var emailQuantity = $("#email-quantity").val();
+			          var emailCost = $("#emails_total_cost").text();
+			          var emailRate = $("#email_rate").text();
+			          var currentDate = new Date();
+//			          email_json.billingDate = currentDate.setDate(currentDate.getDate()+30) / 1000; 
+			        
+			          email_json.emailRate = emailRate;
+			        email_json.emailCost = emailCost;
+			        email_json.quantity = emailQuantity;
+//				    console.log("email_json"+email_json);
+//				    if(!$.isEmptyObject(USER_CREDIRCARD_DETAILS)){
+//				    	
+//				    	plan_json.customer = JSON.parse(USER_CREDIRCARD_DETAILS);
+//				    }
+				    
+		    	
+				});
+		
 		$('#subscribe_plan_change').on('click', '#purchase-plan', function(e){
 	          /*var quantity = $("#users_quantity").text();
 	          var cost = $("#users_total_cost").text();
@@ -410,6 +433,44 @@ function initializeSubscriptionListeners(){
     				});
 
     			});
+
+	 $('#subscribe_plan_change').on("keyup", '#email-quantity', function(e){
+			// console.log(e.which);
+				var quantity =  $(this).val();
+				if(isNaN(quantity))
+					return;
+				
+				var emails = quantity * 1000;
+				
+				if(IS_HAVING_MANDRILL)
+				{
+					$("#emails_total_cost").html(quantity * 2);
+					$("#email_rate").html("$2");
+					return;
+				}
+				if(emails < 100000)
+					{
+						$("#emails_total_cost").html(quantity * 4);
+						$("#email_rate").html("$4");
+					}
+				
+				else if(emails <= 1000000)
+				{
+					$("#emails_total_cost").html(quantity * 3);
+					$("#email_rate").html("$3");
+				}
+				else if(emails >= 1000000)
+				{
+					$("#emails_total_cost").html(quantity * 2);
+					$("#email_rate").html("$2");
+				}
+				
+				email_validation($("#email-plan-form"));
+				if(e.which == 13)
+				{
+					e.preventDefault();
+					}
+			});
     	
 }   
 
@@ -417,3 +478,46 @@ function is_new_signup_payment()
 {
 	return IS_NEW_USER && _plan_on_signup;
 }
+
+function email_validation(form){
+	
+	$(form).validate({
+		rules : {
+			atleastThreeMonths : true,
+			multipleEmails: true,
+			email: true,
+			phone: true
+		},
+		debug : true,
+		errorElement : 'span',
+		errorClass : 'help-inline',
+
+		// Higlights the field and addsClass error if validation failed
+		highlight : function(element, errorClass) {
+			$(element).closest('#email_validation_container').addClass('single-error');
+		},
+
+		// Unhiglights and remove error field if validation check passes
+		unhighlight : function(element, errorClass) {
+			$(element).closest('#email_validation_container').removeClass('single-error');
+		},
+		
+		errorPlacement : function(error, element){
+            console.log(error);
+            console.log($(element).closest('#email_validation_container').length);
+            
+            try{
+            if($(element).closest('#email_validation_container').length) {
+                error.insertAfter($(element).closest('#email_validation_container'));
+            } else {
+                error.insertAfter($(element).closest(element));
+            }
+        }
+        catch(err){
+            console.log(err);
+        }
+		
+	}
+	});
+	return $(form).valid();
+	}

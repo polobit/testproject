@@ -5,67 +5,101 @@
  * @module Subscription
  * @author Yaswanth
  */
+var _data = null;
 var SubscribeRouter = Backbone.Router.extend({
 
 	routes : {
 	/* Subscription page */
 	"subscribe-plan" : "subscribe", "subscribe-plan/:id" : "subscribe",
 	
+	/* billing settings */
+	"billing-settings" : "billingSettings",
+	
+	"account-details" : "accountDetails",
+	
+	"invoice-details" : "invoiceDetailsList",
 	
 	/* Updating subscription details */
 	"updatecard" : "updateCreditCard",
 	
 	"updateplan" : "updatePlan", "purchase-plan" : "purchasePlan",
 	
+	"purchase-email" : "purchaseEmail",
+	
 	"purchase-plan-new" : "purchasePlanNew",
 
 	/* Invoices */
 	"invoice" : "invoice", "invoice/:id" : "invoiceDetails","getInvoiceDetails/:id" : "getInvoiceDetails",
 	"subscribe_new" : "subscribe_new" ,
-	"subscribe" : "subscribe_new",
+	"subscribe" : "subscribe","subscribe/:id/:plan" : "subscribe",
 	"email_subscription" : "email_subscription",
 	"attach-card" :  "addCreditCardNew",
 	"update-card" : "updateCardNew",
 	},
 
+	purchaseEmail : function()
+	{
+		var plan = email_json;
+		console.log("purchase email");
+		console.log(plan);
+		var update_email = new Base_Model_View({ url : "core/api/subscription", data : email_json, template : "purchase-emails",  window : 'subscribe',
+			
+			saveCallback : function(){
+				showNotyPopUp("information", "Emails have been purchased successfully.", "top");
+			},
+			postRenderCallback : function(el) {
+				card_expiry(el);
+				head.js(LIB_PATH + 'lib/countries.js', function()
+				{
+					print_country($("#country", el));
+				});
+			},
+			
+		});
+
+		$('#content').html(update_email.render().el);
+		$(".active").removeClass("active");
+		$("#planView").addClass("active");
+		
+	},
 	/**
 	 * Shows the subscription details(If subscribed ) of subscription form, this
 	 * function also sets account statistics in the subscription page, using
 	 * post render callback of the Base_Model_View
 	 */
-	subscribe : function(id)
+	subscribe : function(id, plan)
 	{
+		IS_HAVING_MANDRILL = false;		
 		$("#content").html("<div id='subscribe_plan_change'></div>");
+
 		if(IS_NEW_USER && _plan_on_signup && _plan_on_signup.plan_type && _plan_on_signup.plan_type == "FREE")
 		{
 			_plan_on_signup = null;
 			Backbone.history.navigate("dashboard", {trigger : true});
 			return;
 		}
+		if(!$.isEmptyObject(USER_CREDIRCARD_DETAILS)){
+	    	
+	    	plan_json.customer = JSON.parse(USER_CREDIRCARD_DETAILS);
+	    }
+		var that = this;
+		var counter = 0;
+        showTransitionBar();
+		var planDetails;
 		
-		/*
-		 * Creates new view with a render callback to setup expiry dates
-		 * field(show dropdown of month and year), countries list and respective
-		 * states list using countries.js plugin account stats in subscription
-		 * page
-		 */
 		var subscribe_plan = new Base_Model_View({ url : "core/api/subscription?reload=true", template : "subscribe-new", window : 'subscribe',
-		/*
-		 * postRenderCallback : function(el) { // Setup account statistics
-		 * set_up_account_stats(el); // Load date and year for card expiry
-		 * card_expiry(el); // Load countries and respective states
-		 * head.js(LIB_PATH + 'lib/countries.js', function() {
-		 * print_country($("#country", el)); }); },
-		 */
+
 		postRenderCallback : function(el)
 		{
-
-			
-			initializeSubscriptionListeners();
-			
 			var data = subscribe_plan.model.toJSON();
-			var _window = window;
+			_data = subscribe_plan.model.toJSON();
+			console.log(_data);
 
+			initializeSubscriptionListeners()
+
+			
+			var _window = window;
+			that.email_subscription(subscribe_plan);
 			// Setup account statistics
 			set_up_account_stats(el);
 
@@ -76,13 +110,17 @@ var SubscribeRouter = Backbone.Router.extend({
 			
 			if(!USER_CREDIRCARD_DETAILS && !(IS_NEW_USER && _plan_on_signup))
 			{
+				head.load(CSS_PATH + "css/misc/agile-plan-upgrade.css",function()
+						{
+					
+						});
 				Backbone.history.navigate("subscribe", {trigger : true});
 				return;
 			}
 			var billing_data = JSON.parse(data.billingData);
 			var stripe_subscription = getSubscription(data.billingData, data.plan);
 			var planType = "";						
- 			var id = null;
+ 			
  			var quantity;
  			if(stripe_subscription == null)
  			{
@@ -91,46 +129,75 @@ var SubscribeRouter = Backbone.Router.extend({
  			}
  			else
  			{
- 				quantity = billing_data.subscription.quantity;
- 				planType = billing_data.subscription.plan.name.toUpperCase();
+ 				quantity = data.plan.quantity;
+ 				planType = data.plan.plan_type.toUpperCase();
  			}
- 			var planDetails = "<span class='text-head-black'>Current Plan</span></br><span class='text-head-black'>"+quantity+" Users</span>";
+ 			planDetails = "<span class='text-head-black'>Current Plan</span></br><span class='text-head-black'>"+quantity+" Users</span>";
  			if(planType.indexOf('STARTER') == 0){
- 				var id = $('#starter_plan');
+ 				 id = $('#starter_plan');
  			}else if(planType.indexOf('REGULAR') == 0){
- 				var id = $('#regular_plan');
+ 				 id = $('#regular_plan');
 			}else if(planType.indexOf('PRO') == 0){			
- 				var id = $('#pro_plan');			
+ 				 id = $('#pro_plan');			
  			}	
  			
  			if(id){
- 				addStyleForAPlan(id,planDetails);
- 				$("#plan_type").attr("value", id.attr("id").split("_")[0]);
+ 				//setTimeout(addStyleForAPlan(id,planDetails), 1000);
+ 				$("#plan_type").val(id.attr("id").split("_")[0]);
  			}
-									
+ 			console.log(id);	
+			console.log(plan);			
 			element = setPriceTemplete(data.plan.plan_type, el);
-
+			addStyleForAPlan(id,planDetails);
 			// Show Coupon code input field
 			id = (id && id == "coupon") ? id : "";
 			showCouponCodeContainer(id);
-			$("#user_quantity").attr("value", quantity);
+			quantity = $("#user_quantity").val(quantity);
 			price = update_price();
-			$( "#users_quantity").text(quantity);
-     	    $("#users_total_cost").text((quantity * price).toFixed(2));
-
-			/*head.load(CSS_PATH + "css/misc/agile-plan-upgrade.css", LIB_PATH + 'lib/jquery.slider.min.js', function()
-			{
-				if ($.isEmptyObject(data))
-					setPlan("free");
-				else
-					setPlan(data);
-				
+//			$( "#users_quantity").text(quantity);
+			document.getElementById("users_total_cost").value = (quantity * price).toFixed(2);
+//     	    $("#users_total_cost").val((quantity * price).toFixed(2));
+     	   if ($.isEmptyObject(data))
+				setPlan("free");
+			else
+				setPlan(data);
+			/*head.load(CSS_PATH + 'css/jslider.css', CSS_PATH + "css/misc/agile-plan-upgrade.css", LIB_PATH + 'lib/jquery.slider.min.js', function()
+			{				
 			//	load_slider(el);
 			});*/
+			data = _data;
+			_billing_restriction = _data.cachedData;
+			init_acl_restriction();
+			
+			var subscription_model = new BaseModel(data);
+			/*$("#change-card").on('click' , function(e){
+				e.preventDefault();
+				//alert("here");
+				that.showCreditCardForm(subscription_model, function(model){
+				});
+			});*/
+			
+			that.setup_account_plan(subscription_model);
+			
+			that.setup_email_plan(subscription_model);
+			
+			that.show_card_details(subscription_model);
+			
+			that.recent_invoice(subscription_model);
+			hideTransitionBar();
+			$('#email-quantity').attr('autofocus','autofocus');
+			document.getElementById('email-quantity').value="";
+			document.getElementById('email-quantity').name="";
+//			$('[autofocus]:first').focus();
+//		    document.getElementById('email-quantity').focus();
+			
 		} });
+	
+		addStyleForAPlan(id,planDetails);
 		$('#subscribe_plan_change').html(subscribe_plan.render().el);
 		$(".active").removeClass("active");
 		$("#planView").addClass("active");
+		
 	},
 	
 	getInvoiceDetails : function(invoice_id)
@@ -412,14 +479,13 @@ var SubscribeRouter = Backbone.Router.extend({
 		var counter = 0;
 		var viewParams = {
 				url : "core/api/subscription",
-				isNew : true,
-				template : "email-plan-form",
+				data : email_json,
+				template : "email-update",
 				postRenderCallback : function(el) {
 					$("#close", el).click(function(e){
 						e.preventDefault();
 						that.setup_email_plan(subscription);
 					})
-					
 							// Phone number validation
 					jQuery.validator.addMethod("email_plan_minimum", function(value, element) {
 	
@@ -452,46 +518,8 @@ var SubscribeRouter = Backbone.Router.extend({
 		
 		var counter = 0;
 		var email_subscription = new Base_Model_View(viewParams);
-		
-		// Prepend Loading
-		$('#email-details-pane').html(email_subscription.render().el);
-		
-		// that.email_subscription();
-
-		$("#email-quantity").bind('keyup', function(e){
-			// console.log(e.which);
-				var quantity =  $(this).val();
-				if(isNaN(quantity))
-					return;
-				
-				var emails = quantity * 1000;
-				
-				if(IS_HAVING_MANDRILL)
-				{
-					$("#emails_total_cost").html(quantity * 2);
-					$("#email_rate").html("$2");
-					return;
-				}
-				if(emails < 100000)
-					{
-						$("#emails_total_cost").html(quantity * 4);
-						$("#email_rate").html("$4");
-					}
-				
-				else if(emails <= 1000000)
-				{
-					$("#emails_total_cost").html(quantity * 3);
-					$("#email_rate").html("$3");
-				}
-				else if(emails >= 1000000)
-				{
-					$("#emails_total_cost").html(quantity * 2);
-					$("#email_rate").html("$2");
-				}
-				
-			});
-		
-		
+		$('#purchase-email').html(email_subscription.render().el);
+	
 	},
 	email_sbuscrption_step1 : function(subscription)
 	{
@@ -691,11 +719,12 @@ var SubscribeRouter = Backbone.Router.extend({
 			}
 			
 			
-			// that.email_subscription();
+			 that.email_subscription();
 			
 		}});
 		
 		$('#plan-details-pane').html(subscribe_account_plan.render(true).el);
+		$("#planView").addClass("active");
 	},
 	setup_email_plan : function(subscription)
 	{
@@ -720,7 +749,7 @@ var SubscribeRouter = Backbone.Router.extend({
 		 * states list using countries.js plugin account stats in subscription
 		 * page
 		 */
-		var subscribe_email_plan = new Base_Model_View({ url : "core/api/subscription", template : "email-plan-details", model : subscription, window : 'subscribe',
+		var subscribe_email_plan = new Base_Model_View({ url : "core/api/subscription", template : "email-update", model : subscription, window : 'subscribe',
 		/*
 		 * postRenderCallback : function(el) { // Setup account statistics
 		 * set_up_account_stats(el); // Load date and year for card expiry
@@ -770,7 +799,7 @@ var SubscribeRouter = Backbone.Router.extend({
 			
 		}});
 		
-		$('#email-details-pane').html(subscribe_email_plan.render(true).el);
+		$('#purchase-email').html(subscribe_email_plan.render(true).el);
 	},
 	showCreditCardForm : function(subscription, callback)
 	{
@@ -912,7 +941,7 @@ var SubscribeRouter = Backbone.Router.extend({
 			customerId = subscription.get("billingData").id;
 		}
 		
-		var invoice_collection = new Base_Collection_View({ url : "core/api/subscription/charges/"+customerId+"?page_size=20" , templateKey : "charge",
+		var invoice_collection = new Base_Collection_View({ url : "core/api/subscription/charges/"+customerId+"?page_size=20" ,  template : "charge",
 
 		individual_tag_name : 'tr',sortKey : 'created', descending : true });
 		invoice_collection.collection.fetch();
@@ -981,21 +1010,27 @@ function is_free_plan()
  * @param description
  */
 function addStyleForAPlan(id,planDetails){
-	if(id){
-		id.css("opacity","1");
+if(id){
 		
-		if(planDetails){
-			id.find('.user-plan').html(planDetails);
-			// id.find('.djc_addtocart_link').text('Add users');
+		if(($('selected-plan')) != ($('#email-div')))
+		{
+			$(".plan-collection-in").removeClass('selected-plan');	
+		    id.find('.plan-collection-in').addClass('selected-plan');
 		}
-	}	
+		else
+		{
+			$('#email-div').addClass('selected-plan');	
+		}
+		
+	}
 }
 
-function removeStyleForAPlan(){
+function removeStyleForAPlan(id){
 	var id = $('#plans-panel');
+	
 	id.find(".plan-collection-bot").css("opacity","0.5");
 	
-	
-			
+	if(($('selected-plan')) != ($('#email-div')))
+		$(".plan-collection-in").removeClass('selected-plan');	
 	
 }

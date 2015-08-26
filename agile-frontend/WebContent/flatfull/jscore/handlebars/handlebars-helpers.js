@@ -148,70 +148,6 @@ $(function()
 		return options.fn(exclusive_fields)
 
 	});
-	
-	/**
-	 * Returns custom fields without few fields like LINKEDIN or TWITTER or
-	 * title fields
-	 */
-	Handlebars.registerHelper('getCompanyCustomPropertiesExclusively', function(items, options)
-	{
-
-		var exclude_by_subtype = [
-				"LINKEDIN", "TWITTER"
-		];
-		var exclude_by_name = [
-			"title"
-		];
-
-		var fields = getCompanyCustomProperties(items);
-		
-		var exclusive_fields = [];
-		for (var i = 0; i < fields.length; i++)
-		{
-			if (jQuery.inArray(fields[i].name, exclude_by_name) != -1 || (fields[i].subtype && jQuery.inArray(fields[i].subtype, exclude_by_subtype) != -1))
-			{
-				continue;
-			}
-
-			exclusive_fields.push(jQuery.extend(true, {}, fields[i]));
-		}
-		if (exclusive_fields.length == 0)
-			return options.inverse(exclusive_fields);
-
-		$.getJSON("core/api/custom-fields/type/DATE", function(data)
-		{
-
-			if (data.length == 0)
-				return;
-
-			for (var j = 0; j < data.length; j++)
-			{
-				for (var i = 0; i < exclusive_fields.length; i++)
-				{
-					if (exclusive_fields[i].name == data[j].field_label)
-						try
-						{
-							var value = exclusive_fields[i].value;
-
-							if (!isNaN(value))
-							{
-								exclusive_fields[i].value = value;
-								exclusive_fields[i]["subtype"] = data[j].field_type;
-							}
-
-						}
-						catch (err)
-						{
-							exclusive_fields[i].value = exclusive_fields[i].value;
-						}
-				}
-			}
-			updateCompanyCustomData(options.fn(exclusive_fields));
-		});
-
-		return options.fn(exclusive_fields)
-
-	});
 
 	Handlebars.registerHelper('urlEncode', function(url, key, data)
 	{
@@ -426,7 +362,7 @@ $(function()
 	 */
 	Handlebars.registerHelper('contactShortName', function()
 	{
-		if (App_Contacts.contactDetailView && App_Contacts.contactDetailView.model && !company_util.isCompany())
+		if (App_Contacts.contactDetailView && App_Contacts.contactDetailView.model)
 		{
 
 			var contact_properties = App_Contacts.contactDetailView.model.get('properties');
@@ -469,14 +405,6 @@ $(function()
 			return "Company";
 		}
 	});
-	
-	Handlebars.registerHelper("isCompany", function(options)
-			{
-				if (company_util.isCompany())
-					return options.fn(this);
-
-				return options.inverse(this);
-			});
 
 	/**
 	 * Returns workflow name surrounded by quotations if exists, otherwise this
@@ -763,19 +691,6 @@ $(function()
 		
 	});
 
-	Handlebars.registerHelper('stringToHumanDateInFormat', function(date)
-	{
-		if(!date)
-			return;
-		var dateString = new Date(date);
-		if(dateString == "Invalid Date")
-			return getDateInFormatFromEpoc(date);
-		else
-			return en.dateFormatter({raw: getGlobalizeFormat()})(dateString);
-
-		
-	});
-
 	/**
 	 * Helper function to return the date string converting to local timezone.
 	 */
@@ -860,9 +775,9 @@ $(function()
 		if (color == 'red' || color == '#f05050')
 			return 'danger';
 		if (color == '#36C' || color == '#23b7e5' || color == 'blue')
-			return 'primary';
-		if (color == 'green' || color == '#bbb')
 			return 'warning';
+		if (color == 'green' || color == '#bbb')
+			return 'light';
 	});
 
 	/**
@@ -2240,7 +2155,7 @@ $(function()
 			// Iterates inorder to insert each field into json
 			for (var i = 0; i < email_fields.length; i++)
 			{
-				// Splits based on colon. E.g "To: naresh@agilecrm.com "
+				// Splits based on colon. E.g "To: naresh@agilecrm.com   "
 				var arrcolon = email_fields[i].split(":");
 
 				// Inserts LHS of colon as key. E.g., To
@@ -2250,7 +2165,7 @@ $(function()
 				// accessible
 
 				// Inserts RHS of colon as value. E.g.,
-				// naresh@agilecrm.com
+				// naresh@agilecrm.com  
 				var value = arrcolon.slice(1).join(":"); // join the
 				// remaining string
 				// based on colon,
@@ -2713,11 +2628,6 @@ $(function()
 		// data.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,");
 	});
 
-	Handlebars.registerHelper('formatAmount', function(data){
-		data = parseFloat(data);
-		return data.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, "$1,");
-	});
-	
 	Handlebars.registerHelper('QbDateFormat', function(data)
 	{
 
@@ -4365,7 +4275,7 @@ $(function()
 			// Iterates inorder to insert each field into json
 			for (var i = 0; i < email_fields.length; i++)
 			{
-				// Splits based on colon. E.g "To: naresh@agilecrm.com "
+				// Splits based on colon. E.g "To: naresh@agilecrm.com   "
 				var arrcolon = email_fields[i].split(":");
 
 				// Inserts LHS of colon as key. E.g., To
@@ -4373,7 +4283,7 @@ $(function()
 				key = key.trim(); // if key starts with space, it can't
 				// accessible
 
-				// Inserts RHS of colon as value. E.g., naresh@agilecrm.com
+				// Inserts RHS of colon as value. E.g., naresh@agilecrm.com  
 				var value = arrcolon.slice(1).join(":"); // join the
 				// remaining string
 				// based on colon,
@@ -5754,7 +5664,7 @@ $(function()
 			icon_name = 'icon-filter';
 		else if (p_name == 'Deals Assigned')
 			icon_name = 'icon-user';
-		else if (p_name == 'Agenda' || p_name == 'Mini Calendar')
+		else if (p_name == 'Agenda')
 			icon_name = "icon-calendar";
 		else if (p_name == 'Today Tasks' || p_name == 'Task Report')
 			icon_name = "icon-tasks";
@@ -6240,6 +6150,17 @@ $(function()
 		else
 			return _billing_restriction.currentLimits[key];
 	});
+	
+	/**
+	 * Returns task completion status (Since boolean false is not getting
+	 * printed, converted it into string and returned.)
+	 */
+	Handlebars.registerHelper('ifCompanyPage', function(options)
+	{
+		if (custom_menu.isCompanyType())
+			return options.fn(this);
+		return options.inverse(this);
+	});
 
 	Handlebars.registerHelper("getLeaderboardCateCount", function(options){
 		var count=0;
@@ -6259,6 +6180,25 @@ $(function()
 	 */
 	Handlebars.registerHelper("getIndexIncrementByOne", function(indexVal){
 		return ++indexVal;
+	});
+	/**
+	 * Returns table headings for custom companies list view
+	 */
+	Handlebars.registerHelper('companyTableHeadings', function(item)
+	{
+
+		var el = "";
+		$.each(App_Companies.companyViewModel[item], function(index, element)
+		{
+			if (element.indexOf("custom_") == 0)
+				element = element.split("custom_")[1];
+			element = element.replace("_", " ")
+
+			el = el.concat('<th>' + ucfirst(element) + '</th>');
+
+		});
+
+		return new Handlebars.SafeString(el);
 	});
 	/**
 	 * getting duration for portlets
@@ -6338,112 +6278,10 @@ $(function()
 		{
 			time_period = 'Last 24 Hours';
 		}
-		else if (duration == 'next-quarter')
-		{
-			time_period = 'Next Quarter';
-		}
-		else if (duration == 'this-and-next-quarter')
-		{
-			time_period = 'This and Next Quarter';
-		}
-		else if (duration == 'this-year')
-		{
-			time_period = 'This Year';
-		}
-		else if (duration == 'next-year')
-		{
-			time_period = 'Next Year';
-		}
 		
 		return time_period;
 	});
-	
-	/**
-	 * Returns a given date string to a time ago format ,used for gmaps listview implementation
-	 * 
-	 */
-	Handlebars.registerHelper('timeAgo',function(dateString){
 
-		var date=new Date();
-		 try
-			{
-			 var find = '-';
-			 var re = new RegExp(find, 'g');
-			 dateString = dateString.replace(re, '/');
-			 dateString = dateString.match(/[^:]+(\:[^:]+)?/g);
-			 date=new Date(dateString[0]);
-			}
-			catch (err)
-			{
-				console.log("Error in parsing date");
-			}
-
-	    var seconds = Math.floor((new Date() - date) / 1000);
-
-	    var interval = Math.floor(seconds / 31536000);
-
-	    if (interval > 1) {
-	        return interval + " years ago";
-	    }
-	    interval = Math.floor(seconds / 2592000);
-	    if (interval > 1) {
-	        return interval + " months ago";
-	    }
-	    interval = Math.floor(seconds / 86400);
-	    if (interval > 1) {
-	        return interval + " days ago";
-	    }
-	    interval = Math.floor(seconds / 3600);
-	    if (interval > 1) {
-	        return interval + " hours ago";
-	    }
-	    interval = Math.floor(seconds / 60);
-	    if (interval > 1) {
-	        return interval + " minutes ago";
-	    }
-	    return new Handlebars.SafeString(Math.floor(seconds) + " seconds ago");
-
-		
-	});
-	
-	/**
-	 * Returns a string by making its first letter a capital letter.
-	 * Used in gmap implementation for table view
-	 */
-	Handlebars.registerHelper('capitalizeFirstLetter',function(city,country){
-		return new Handlebars.SafeString(city.charAt(0).toUpperCase() + city.slice(1)+", "+country);
-		
-	});
-	
-	/**
-	 * Returns a default image url .
-	 * 
-	 */
-	Handlebars.registerHelper('getDefaultImage',function(){
-		return new Handlebars.SafeString(LIB_PATH_FLATFULL + 'images/flatfull/user-default.jpg');
-		
-	});
-	
-	/**
-	 * Returns table headings for custom companies list view
-	 */
-	Handlebars.registerHelper('companyTableHeadings', function(item)
-	{
-
-		var el = "";
-		$.each(App_Companies.companyViewModel[item], function(index, element)
-		{
-			if (element.indexOf("custom_") == 0)
-				element = element.split("custom_")[1];
-			element = element.replace("_", " ")
-
-			el = el.concat('<th>' + ucfirst(element) + '</th>');
-
-		});
-
-		return new Handlebars.SafeString(el);
-	});
-	
 	Handlebars
 	.registerHelper(
 			'companies_count',
@@ -6568,132 +6406,32 @@ Handlebars.registerHelper('SALES_CALENDAR_URL', function()
 	if (p_name == 'Filter Based')
 		description = 'See a list of 50 recently added contacts customizable by filters.';
 	else if (p_name == 'Emails Opened')
-		description = 'See what percentage of people open your direct emails.';
+		description = 'Get a percentage view of emails opened by contacts from all emails sent.';
 	else if (p_name == 'Growth Graph')
 		description = 'Gain a quick insight on how contacts with specific tag(s) have changed over time.';
 	else if (p_name == 'Calls Per Person')
-		description = 'Detailed reports on call activity of your team.';
+		description = 'See answered, busy, failed or voicemail calls for selected users based on duration.';
 	else if (p_name == 'Pending Deals')
-		description = 'Gives you a heads up on all your pending Deals.';
+		description = 'Quickly see all pending deals listed by company, deal value and associated contacts.';
 	else if (p_name == 'Deals By Milestone')
-		description = 'A pie-chart of Deals grouped by Milestone.';
+		description = 'See Pictorial statistics of deal tracks in your sales pipeline.';
 	else if (p_name == 'Deals Funnel')
-		description = 'A funnel report of total Deals value in each Milestone.';
+		description = 'See a funnel graph of how leads are passing through various stages in your sales cycle.';
 	else if (p_name == 'Agenda')
-		description = 'A quick view of events from your calendar.';
+		description = 'Get a quick view of calendar events for the duration specified.';
 	else if (p_name == 'Today Tasks')
-		description = 'A list of your upcoming or due Tasks';
+		description = 'See the tasks based on the duration specified or all pending tasks.';
 	else if (p_name == 'Task Report')
 		description = 'Get a quick view of tasks by all users reported by status and duration.';
 	else if (p_name == 'Agile CRM Blog')
-		description = "A feed of what's happening at our end including updates on new features.";
+		description = 'Stay up to date with all new features, bug fixes or product enhancements with this simple blog feed.';
 	else if(p_name=='Stats Report')
-		description = 'Detailed list of activities done by your team members.';
+		description = 'See new contacts added, deals won, emails sent and new deals for the selected duration.';
 	else if (p_name == 'Leaderboard')
-		description = ' A leaderboard for your team based on revenue won, tasks done, calls etc.';
+		description = 'Evaluate performance with a scorecard overview of users for the selected duration.';
 	else if (p_name== 'User Activities')
 		description = 'See a timeline of user actions in Agile CRM.';
 	else if (p_name== 'Account Details')
 		description = 'Find current plan information, number of users and more.';
-	else if (p_name== 'Revenue Graph')
-		description = 'Forecasted revenue graph based on your Deals.';
 	return description;
-			});
-
-	Handlebars.registerHelper('trialEndDate', function(billingData, options)
-			{
-		      var json={};
-		      var currentEpoch = new Date().getTime()/1000;
-		      currentEpoch = Math.round(currentEpoch);
-		      /*console.log("billing data is:");
-		      console.log(billingData.customer.metadata.trial_end);*/
-		      //billingData = billingData.toString();
-		      /*console.log("string is:");
-		      if(billingData.subscriptions.data.trialEnd)
-		        console.log(billingData.subscriptions.data.trialEnd);*/
-		      if(!billingData)
-		    	  {
-		    	  	return options.inverse(this);
-		    	  }
-		    	  console.log(billingData);
-		    	  /*var billingData = JSON.parse(billingData.billingData);
-		    	  console.log(billingData);*/
-              if(billingData.metadata && billingData.metadata.trial_end && billingData.metadata.trial_end > currentEpoch)
-        	   {
-
-        		var has_trial = (parseInt(billingData.metadata.trial_end) - currentEpoch)/(24*60*60);
-        		has_trial = Math.round(has_trial);
-        		var trialDate = (billingData.metadata.trial_end)/(24*60*60);
-        		if(has_trial>0)
-        			{
-        				json['trial_exists'] = true;
-        				json['days_left'] = has_trial;
-        				var monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
-        				                  "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
-        				                ];
-        				var date = new Date();
-        	            date.setDate(date.getDate() + has_trial); 
-        	            var formattedDate = date.getDate()+' '+(monthNames[date.getMonth()])+' '+date.getFullYear();
-        				/*formattedDate = JSON.stringify(formattedDate);
-        	            console.log(formattedDate);*/
-        				json['trial_date'] = formattedDate;
-        				console.log("trial in json is:"+json['trial_date']);
-        				
-        			}
-        		else
-        			json['trial_exists'] = false;
-        		
-        	   }
-              else
-		        json['trial_exists'] = false;
-
-		       return options.fn(json);		        
-
-			});
-
-	Handlebars.registerHelper('trialEnd', function(billingData, options)
-			{
-		      var json={};
-		      var currentEpoch = new Date().getTime()/1000;
-		      currentEpoch = Math.round(currentEpoch);
-		      /*console.log("billing data is:");
-		      console.log(billingData.customer.metadata.trial_end);*/
-		      //billingData = billingData.toString();
-		      /*console.log("string is:");
-		      if(billingData.subscriptions.data.trialEnd)
-		        console.log(billingData.subscriptions.data.trialEnd);*/
-		      if(!billingData)
-		    	  {
-		    	  	return options.inverse(this);
-		    	  }
-		    	  console.log(billingData);
-
-              if(billingData.metadata && billingData.metadata.trial_end && billingData.metadata.trial_end > currentEpoch)
-        	   {
-
-        		var has_trial = (parseInt(billingData.metadata.trial_end) - currentEpoch)/(24*60*60);
-        		has_trial = Math.floor(has_trial);
-        		if(has_trial>0)
-        			{
-        				json['trial_exists'] = true;
-        				json['days_left'] = has_trial;
-        				var monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
-        				                  "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
-        				                ];
-        				var date = new Date();
-        	            date.setDate(date.getDate() + has_trial); 
-        	            var formattedDate = date.getDate()+' '+(monthNames[date.getMonth()])+' '+date.getFullYear();
-        	            formattedDate = JSON.stringify(formattedDate);
-        	            console.log(formattedDate);
-        				json['trial_date'] = formattedDate;
-        			}
-        		else
-        			json['trial_exists'] = false;
-        		
-        	   }
-              else
-		        json['trial_exists'] = false;
-
-		       return options.fn(json);		        
-
 			});
