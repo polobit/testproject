@@ -45,8 +45,8 @@ public class CSVWriterAgile
 
     public CSVWriterAgile(String fileName) throws IOException
     {
-	GcsFileOptions options = new GcsFileOptions.Builder().mimeType("text/csv").acl("public-read")
-		.addUserMetadata("domain", NamespaceManager.get()).build();
+	GcsFileOptions options = new GcsFileOptions.Builder().mimeType("text/csv").contentEncoding("UTF-8")
+		.acl("public-read").addUserMetadata("domain", NamespaceManager.get()).build();
 
 	GCSServiceAgile service = new GCSServiceAgile(fileName, "agile-export", options);
 
