@@ -1256,7 +1256,7 @@ function showDealAreaSpline(url, selector, name, yaxis_name, show_loading)
 							categories.push(Highcharts.dateFormat('%e.%b', Date.UTC(dte.getFullYear(), dte.getMonth(), dte.getDate()))+' - '+Highcharts.dateFormat('%e.%b', Date.UTC(end_date.getFullYear(), end_date.getMonth(), end_date.getDate())));
 						}
 					}
-					else if(frequency=="monthly")
+					else if(frequency=="monthly" || frequency=="yearly")
 					{
 						if(cnt!=dataLength-1)
 						{
@@ -1266,6 +1266,9 @@ function showDealAreaSpline(url, selector, name, yaxis_name, show_loading)
 							var to_date = '';
 							if(cnt!=0)
 							{
+								if(frequency=="yearly")
+									from_date = Highcharts.dateFormat('%Y', Date.UTC(dte.getFullYear(), dte.getMonth(), dte.getDate()));
+								else{
 								if(current_date.getFullYear()!=dte.getFullYear())
 								{
 									from_date = Highcharts.dateFormat('%b.%Y', Date.UTC(dte.getFullYear(), dte.getMonth(), dte.getDate()));
@@ -1275,6 +1278,7 @@ function showDealAreaSpline(url, selector, name, yaxis_name, show_loading)
 									from_date = Highcharts.dateFormat('%b', Date.UTC(dte.getFullYear(), dte.getMonth(), dte.getDate()));
 								
 								}
+							}
 								categories.push(from_date);
 							}
 							else
