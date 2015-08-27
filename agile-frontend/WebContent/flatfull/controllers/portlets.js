@@ -590,7 +590,7 @@ function initializeAddPortletsListeners(){
     		else if(p_name=="EmailsOpened")
     			image="flatfull/img/dashboard_images/Email-opened.png";
     		else if(p_name=="PendingDeals")
-    			image="flatfull/img/dashboard_images/account-information.png";
+    			image="flatfull/img/dashboard_images/Pending-Deals.png";
     		else if(p_name=="Agenda")
     			image="flatfull/img/dashboard_images/Events.png";
     		else if(p_name=="TodayTasks")
@@ -599,7 +599,7 @@ function initializeAddPortletsListeners(){
     				image="flatfull/img/dashboard_images/Milestone.png";
     		else if(p_name=="DealsFunnel")
     		{
-    				image="flatfull/img/dashboard_images/Task.png";
+    				image="flatfull/img/dashboard_images/Deals-Funnel.png";
     			placement="left";
     		}
     		else if(p_name=="GrowthGraph")
@@ -618,7 +618,7 @@ function initializeAddPortletsListeners(){
     			image="flatfull/img/dashboard_images/account-information.png";
     		else if(p_name=="TaskReport"){
     				placement="left";
-    				image="flatfull/img/dashboard_images/account-information.png";		
+    				image="flatfull/img/dashboard_images/Task-report.png";		
     			}
     		else if(p_name=="StatsReport")
     			image="flatfull/img/dashboard_images/stats.png";
@@ -632,12 +632,12 @@ function initializeAddPortletsListeners(){
     		else if(p_name=="UserActivities")
     		{
     			placement="left";
-    			image="flatfull/img/dashboard_images/Activities.png";
+    			image="flatfull/img/dashboard_images/User-Activities.png";
     		}
     		else if(p_name=="MiniCalendar")
     		{
     			placement="left";
-    			image="flatfull/img/dashboard_images/Activities.png";
+    			image="flatfull/img/dashboard_images/Mini-Calendar.jpg";
     		}
     	$(this).popover({
     		"rel":"popover",
