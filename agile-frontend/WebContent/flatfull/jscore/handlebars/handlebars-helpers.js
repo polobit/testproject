@@ -5722,6 +5722,8 @@ $(function()
 			portlet_name = "Task Report";
 		else if(p_name=='Stats Report')
 			portlet_name = "Activity Overview";
+		else if(p_name=='Campaign stats')
+			portlet_name = "Campaign Stats"
 		else
 			portlet_name = p_name;
 		return portlet_name;
