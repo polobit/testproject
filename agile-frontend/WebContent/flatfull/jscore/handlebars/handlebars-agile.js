@@ -277,9 +277,9 @@ function getTemplateUrls(templateName)
 	{
 		template_relative_urls.push("facebookpage.js");
 	}
-	if (templateName.indexOf("billing-settings") == 0)
+	if (templateName.indexOf("webpages") == 0)
 	{
-		template_relative_urls.push("settings.js");
+		template_relative_urls.push("webpages.js");
 	}
 	return template_relative_urls;
 }
@@ -359,7 +359,7 @@ function downloadTemplate(url, callback)
 		url = "tpl/min/precompiled/" + FLAT_FULL_UI + url;
 	}
 	else
-		url = "tpl/min/" + FLAT_FULL_UI + url;
+		url = "tpl/min/" + FLAT_FULL_UI +  url;
 
 	// If JS
 	if (url.endsWith("js") && HANDLEBARS_PRECOMPILATION)
@@ -369,7 +369,6 @@ function downloadTemplate(url, callback)
 	}
 
 	url += "?_=" + _AGILE_VERSION;
-
 	
 	console.log(url + " " + dataType);
 
@@ -378,7 +377,7 @@ function downloadTemplate(url, callback)
 	if (callback && typeof (callback) === "function")
 		is_async = true;
 
-	jQuery.ajax({ url : url, dataType : dataType, cache: true, success : function(result)
+	jQuery.ajax({ url : url, dataType : dataType, success : function(result)
 	{
 		// If HTMl, add to body
 		if (dataType == 'html')
@@ -573,18 +572,18 @@ function get_website_icon(item){
 
 function get_social_icon(name){
 	if (!name)
-	return;
+	return "fa fa-globe";
 
-    var icon_json = { "TWITTER" : "icon-social-tumblr", "LINKEDIN" : "fa fa-linkedin", "URL" : "icon-globe", "GOOGLE-PLUS" : "fa fa-google-plus",
-	"FACEBOOK" : "icon-social-facebook", "GITHUB" : "fa fa-github", "FEED" : "icon-rss", "XING" : "fa fa-xing", "SKYPE" : "icon-skype",
-	"YOUTUBE" : "fa fa-youtube-play", "FLICKR" : "fa fa-flickr" };
+    var icon_json = { "TWITTER" : "fa fa-twitter", "LINKEDIN" : "fa fa-linkedin-square", "URL" : "fa fa-globe", "GOOGLE-PLUS" : "fa fa-google-plus-square",
+	"FACEBOOK" : "fa fa-facebook-square", "GITHUB" : "fa fa-github", "FEED" : "icon-rss", "XING" : "fa fa-xing-square", "SKYPE" : "icon-skype",
+	"YOUTUBE" : "fa fa-youtube-square", "FLICKR" : "fa fa-flickr" };
 
     name = name.trim();
 
     if (icon_json[name])
 	return icon_json[name];
 
-    return "icon-globe";
+    return "fa fa-globe";
 }
 
 function get_subtype(item){
@@ -724,6 +723,113 @@ function getContactCustomProperties(items)
 	return finalFields;
 }
 
+
+/**
+ * Returns list of custom properties. used to fill custom data in fields in
+ * continue contact
+ * 
+ * @param items
+ * @returns
+ */
+function getCompanyCustomProperties(items)
+{
+	if (items == undefined)
+		return items;
+
+	var fields = [];
+	var fieldName='';
+	var datajson={};
+	for (var i = 0; i < items.length; i++)
+	{
+		if (items[i].type == "CUSTOM" && items[i].name != "image")
+		{
+			if(fieldName=='')
+				fieldName=items[i].name;
+			fields.push(items[i]);
+			datajson[''+items[i].name]=items[i].value;
+		}
+	}
+	
+	//Added for formula type custom field
+	var type='';
+	if(App_Companies.customFieldsList!=undefined && App_Companies.customFieldsList!=null){
+		for(var i=0;i<App_Companies.customFieldsList.collection.models.length;i++){
+			if(App_Companies.customFieldsList.collection.models[i].get("field_label")==fieldName){
+				type = App_Companies.customFieldsList.collection.models[i].get("scope");
+				break;
+			}
+		}
+	}
+	
+	var formulaFields=[];
+	var allCustomFields=[];
+	var finalFields=[];
+	
+	if(App_Companies.customFieldsList!=undefined && App_Companies.customFieldsList!=null){
+		if(type=='')
+			type='CONTACT';
+		for(var i=0;i<App_Companies.customFieldsList.collection.models.length;i++){
+			var json={};
+			if(App_Companies.customFieldsList.collection.models[i].get("scope")==type && App_Companies.customFieldsList.collection.models[i].get("field_type")=="FORMULA"){
+				var tplEleData = Mustache.render(App_Companies.customFieldsList.collection.models[i].get("field_data"),datajson);
+				var evalFlag = true;
+				var tplEleDataAftEval;
+				try{
+					tplEleDataAftEval = eval(tplEleData)
+				}catch(err){
+					console.log(err.message);
+					evalFlag = false;
+				}
+				if(!evalFlag)
+					tplEleDataAftEval = tplEleData;
+				if(evalFlag && tplEleDataAftEval!=undefined && tplEleDataAftEval!=null){
+					json.name=App_Companies.customFieldsList.collection.models[i].get("field_label");
+					json.type="CUSTOM";
+					json.position=App_Companies.customFieldsList.collection.models[i].get("position");
+					json.value=tplEleDataAftEval;
+					json.field_type=App_Companies.customFieldsList.collection.models[i].get("field_type");
+					allCustomFields.push(json);
+					
+					formulaFields.push(json);
+				}
+			}else if(App_Companies.customFieldsList.collection.models[i].get("scope")==type){
+				json.name=App_Companies.customFieldsList.collection.models[i].get("field_label");
+				json.type="CUSTOM";
+				json.position=App_Companies.customFieldsList.collection.models[i].get("position");
+				json.field_type=App_Companies.customFieldsList.collection.models[i].get("field_type");
+				allCustomFields.push(json);
+			}
+		}
+	}
+	if(fields.length>0){
+		if(allCustomFields.length>0){
+			for(var i=0;i<allCustomFields.length;i++){
+				if(allCustomFields[i].field_type=="FORMULA"){
+					finalFields.push(allCustomFields[i]);
+				}else{
+					for(var j=0;j<fields.length;j++){
+						if(allCustomFields[i].name==fields[j].name){
+							finalFields.push(fields[j]);
+							break;
+						}
+					}
+				}
+			}
+		}else{
+			for(var k=0;k<fields.length;k++){
+				finalFields.push(fields[k]);	
+			}
+		}
+		
+	}else{
+		for(var k=0;k<formulaFields.length;k++){
+			finalFields.push(formulaFields[k]);	
+		}
+	}
+	
+	return finalFields;
+}
+
 /**
  * Turns the first letter of the given string to upper-case and the remaining to
  * lower-case (EMaiL to Email).
@@ -821,6 +927,12 @@ function updateCustomData(el)
 {
 	$(".custom-data", App_Contacts.contactDetailView.el).html(el)
 }
+
+function updateCompanyCustomData(el)
+{
+	$(".custom-data", App_Companies.companyDetailView.el).html(el)
+}
+
 /**
  * Returns list of custom properties. used to fill custom data in fields in
  * deal details
@@ -894,6 +1006,27 @@ function getDealCustomProperties(items)
 				if(allCustomFields[i].field_type=="FORMULA")
 				{
 					finalFields.push(allCustomFields[i]);
+				}
+				else if(allCustomFields[i].field_type=="DATE")
+				{
+					for(var j=0;j<fields.length;j++)
+					{
+						if(allCustomFields[i].name==fields[j].name)
+						{
+							if(!fields[j].value)
+								return '';
+							if(fields[j].index && (CURRENT_USER_PREFS.dateFormat.indexOf("dd/mm/yy") != -1 || CURRENT_USER_PREFS.dateFormat.indexOf("dd.mm.yy") != -1))
+								fields[j].value = convertDateFromUKtoUS(fields[j].value);
+							var dateString = new Date(fields[j].value);
+							if(dateString == "Invalid Date")
+								fields[j].value = getDateInFormatFromEpoc(fields[j].value);
+							else
+								fields[j].value = en.dateFormatter({raw: getGlobalizeFormat()})(dateString);
+
+							finalFields.push(fields[j]);
+							break;
+						}
+					}
 				}
 				else
 				{
