@@ -585,7 +585,7 @@ var WorkflowsRouter = Backbone.Router
 						fillSelect('campaign-select', '/core/api/workflows', 'workflow', 'no-callback', optionsTemplate, false, el);
 						
 						
-						$('.new-trigger-hidden').hide();
+						//$('.new-trigger-hidden').hide();
 					},
 
 					saveCallback : function()
