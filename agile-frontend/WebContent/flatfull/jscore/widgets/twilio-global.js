@@ -1249,17 +1249,21 @@ function twilioApiRequest(ApiCallUrl){
 function searchForContactImg(from) {
 	console.log("searchForContactImg : " + from);	
 	var contactImg = "";
-	var responseJson = $.parseJSON(
+	try {
+		var responseJson = $.parseJSON(
 	        $.ajax({
 	        	url: "core/api/contacts/search/phonenumber/"+from,
 	            async: false,
 	            dataType: 'json'
 	        }).responseText
 	    );
-	console.log("**** responseJson ****");
-	console.log(responseJson);
-	
-	return responseJson;
+		console.log("**** responseJson ****");
+		console.log(responseJson);
+		
+		return responseJson;
+	} catch(e) {
+		return null;
+	}	
 }
 
 // Add contact img in html for call noty text with contact url
