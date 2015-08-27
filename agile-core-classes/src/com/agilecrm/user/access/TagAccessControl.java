@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.agilecrm.contact.Tag;
 import com.agilecrm.search.ui.serialize.SearchRule;
+import com.agilecrm.user.util.DomainUserUtil;
 import com.googlecode.objectify.Query;
 
 public class TagAccessControl extends UserAccessControl
@@ -44,6 +45,8 @@ public class TagAccessControl extends UserAccessControl
     @Override
     public boolean canCreate()
     {
+	if (DomainUserUtil.getCurrentDomainUser().is_admin)
+	    return true;
 	System.out.println("-------check access for tag----" + hasScope(UserAccessScopes.ADD_NEW_TAG));
 	return hasScope(UserAccessScopes.ADD_NEW_TAG);
     }

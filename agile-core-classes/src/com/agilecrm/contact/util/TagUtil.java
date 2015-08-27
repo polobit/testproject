@@ -485,6 +485,8 @@ public class TagUtil
 	    return true;
 
 	DomainUser user = DomainUserUtil.getCurrentDomainUser();
+	if (user.is_admin)
+	    return true;
 	if (user.restricted_scopes != null && user.restricted_scopes.contains(UserAccessScopes.ADD_NEW_TAG))
 	{
 	    Set<String> newTagSet = new HashSet<String>();
@@ -535,6 +537,8 @@ public class TagUtil
 	    return newTags;
 
 	DomainUser user = DomainUserUtil.getCurrentDomainUser();
+	if (user.is_admin)
+	    return newTags;
 	if (user.restricted_scopes != null && user.restricted_scopes.contains(UserAccessScopes.ADD_NEW_TAG))
 	{
 	    for (String tag : tags)
@@ -553,6 +557,8 @@ public class TagUtil
 	    return true;
 
 	DomainUser user = DomainUserUtil.getCurrentDomainUser();
+	if (user.is_admin)
+	    return true;
 	if (user.restricted_scopes != null && user.restricted_scopes.contains(UserAccessScopes.ADD_NEW_TAG))
 	{
 	    for (Tag tag : tags)
