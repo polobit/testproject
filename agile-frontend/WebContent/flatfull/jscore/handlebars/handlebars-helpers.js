@@ -3797,6 +3797,13 @@ $(function()
 		return options.fn(content.match(/([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9._-]+)/gi)[0]);
 	});
 
+	Handlebars.registerHelper('if_keyboard_shortcuts_enabled', function(options)
+	{
+		if (CURRENT_USER_PREFS.keyboard_shotcuts)
+			return options.fn(this);
+		return options.inverse(this);
+	});
+
 	Handlebars.registerHelper('getCurrentContactPropertyBlock', function(value, options)
 	{
 		if (App_Contacts.contactDetailView && App_Contacts.contactDetailView.model)
