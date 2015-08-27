@@ -47,6 +47,20 @@ $(function()
 		return getPropertyValueBySubtype(items, name, subtype);
 	});
 
+
+	 Handlebars.registerHelper('properties_count_reached', function(properties, length, options)
+	{
+		var count = 0;
+		for(var i=0;i < properties.length; i++)
+		{
+			if(properties[i].name == "website")
+				count++;
+		}
+		if(count > length)
+			return options.fn(this);
+		return options.inverse(this);
+	});
+
 	/**
 	 * Helper function to return the value of property based on type of the
 	 * property
@@ -143,6 +157,70 @@ $(function()
 				}
 			}
 			updateCustomData(options.fn(exclusive_fields));
+		});
+
+		return options.fn(exclusive_fields)
+
+	});
+	
+	/**
+	 * Returns custom fields without few fields like LINKEDIN or TWITTER or
+	 * title fields
+	 */
+	Handlebars.registerHelper('getCompanyCustomPropertiesExclusively', function(items, options)
+	{
+
+		var exclude_by_subtype = [
+				"LINKEDIN", "TWITTER"
+		];
+		var exclude_by_name = [
+			"title"
+		];
+
+		var fields = getCompanyCustomProperties(items);
+		
+		var exclusive_fields = [];
+		for (var i = 0; i < fields.length; i++)
+		{
+			if (jQuery.inArray(fields[i].name, exclude_by_name) != -1 || (fields[i].subtype && jQuery.inArray(fields[i].subtype, exclude_by_subtype) != -1))
+			{
+				continue;
+			}
+
+			exclusive_fields.push(jQuery.extend(true, {}, fields[i]));
+		}
+		if (exclusive_fields.length == 0)
+			return options.inverse(exclusive_fields);
+
+		$.getJSON("core/api/custom-fields/type/DATE", function(data)
+		{
+
+			if (data.length == 0)
+				return;
+
+			for (var j = 0; j < data.length; j++)
+			{
+				for (var i = 0; i < exclusive_fields.length; i++)
+				{
+					if (exclusive_fields[i].name == data[j].field_label)
+						try
+						{
+							var value = exclusive_fields[i].value;
+
+							if (!isNaN(value))
+							{
+								exclusive_fields[i].value = value;
+								exclusive_fields[i]["subtype"] = data[j].field_type;
+							}
+
+						}
+						catch (err)
+						{
+							exclusive_fields[i].value = exclusive_fields[i].value;
+						}
+				}
+			}
+			updateCompanyCustomData(options.fn(exclusive_fields));
 		});
 
 		return options.fn(exclusive_fields)
@@ -362,7 +440,7 @@ $(function()
 	 */
 	Handlebars.registerHelper('contactShortName', function()
 	{
-		if (App_Contacts.contactDetailView && App_Contacts.contactDetailView.model)
+		if (App_Contacts.contactDetailView && App_Contacts.contactDetailView.model && !company_util.isCompany())
 		{
 
 			var contact_properties = App_Contacts.contactDetailView.model.get('properties');
@@ -405,6 +483,14 @@ $(function()
 			return "Company";
 		}
 	});
+	
+	Handlebars.registerHelper("isCompany", function(options)
+			{
+				if (company_util.isCompany())
+					return options.fn(this);
+
+				return options.inverse(this);
+			});
 
 	/**
 	 * Returns workflow name surrounded by quotations if exists, otherwise this
@@ -607,15 +693,31 @@ $(function()
 					function(data)
 					{
 						var html = "";
+						var wonMsg = 'Deals with this milestone are considered as Won.';
+						var lostMsg = 'Deals with this milestone are considered as Lost.';
 						// var html = "<ul class='milestone-value-list
 						// tagsinput' style='padding:1px;list-style:none;'>";
 						if (data)
 						{
-							var milestones = data.split(",");
+							var milestones = data.milestones.split(",");
 							for ( var i in milestones)
 							{
-								html += "<tr data='" + milestones[i] + "' style='display: table-row;'><td><div class='inline-block v-top text-ellipsis' style='width:80%'>";
-								html += milestones[i] + "</div></td><td class='b-r-none'><div class='m-b-n-xs' style='display:none;'><a class='text-l-none-hover c-p text-xs'><i title='Drag' class='icon-move'></i></a><a class='milestone-delete c-p m-l-sm text-l-none text-xs'  data-toggle='modal' role='button' href='#'><i title='Delete Milestone' class='task-action icon icon-trash'></i></a></div></td></tr>";
+								html += "<tr data='" + milestones[i] + "' style='display: table-row;'><td><div class='milestone-name-block inline-block v-top text-ellipsis' style='width:80%'>";
+								if(milestones[i] == data.won_milestone){
+									html += milestones[i] + "<i data-toogle='tooltip' title='"+wonMsg+"' class='icon-like mark-won m-l-sm'></i></div></td><td class='b-r-none'><div class='m-b-n-xs'>";
+									html += "<a class='milestone-won text-l-none-hover c-p text-xs hover-show disabled' style='visibility:hidden;' data-toggle='tooltip' title='Set as Won Milestone'><i class='icon-like'></i></a>";
+									html += "<a class='milestone-lost text-l-none-hover c-p text-xs m-l-sm not-applicable hover-show' style='visibility:hidden;' data-toggle='tooltip' title='Set as Lost Milestone'><i class='icon-dislike'></i></a>";
+								} else if(milestones[i] == data.lost_milestone){
+									html += milestones[i] + "<i data-toogle='tooltip' title='"+lostMsg+"' class='icon-dislike mark-lost m-l-sm'></i></div></td><td class='b-r-none'><div class='m-b-n-xs'>";
+									html += "<a class='milestone-won text-l-none-hover c-p text-xs not-applicable hover-show' style='visibility:hidden;' data-toggle='tooltip' title='Set as Won Milestone'><i class='icon-like'></i></a>";
+									html += "<a class='milestone-lost text-l-none-hover c-p text-xs m-l-sm hover-show disabled' style='visibility:hidden;' data-toggle='tooltip' title='Set as Lost Milestone'><i class='icon-dislike'></i></a>";
+								} else{
+									html += milestones[i] + "</div></td><td class='b-r-none'><div class='m-b-n-xs'>";
+									html += "<a class='milestone-won text-l-none-hover c-p text-xs hover-show' style='visibility:hidden;' data-toggle='tooltip' title='Set as Won Milestone'><i class='icon-like'></i></a>";
+									html += "<a class='milestone-lost text-l-none-hover c-p text-xs m-l-sm hover-show' style='visibility:hidden;' data-toggle='tooltip' title='Set as Lost Milestone'><i class='icon-dislike'></i></a>";
+								}
+								html +=	"<a class='milestone-delete c-p m-l-sm text-l-none text-xs hover-show' style='visibility:hidden;' data-toggle='tooltip' title='Delete Milestone'><i class='icon icon-trash'></i>" +
+										"</a><a class='text-l-none-hover c-p text-xs m-l-sm hover-show' style='visibility:hidden;'><i title='Drag' class='icon-move'></i></a></div></td></tr>";
 								// html += "<li data='" + milestones[i] +
 								// "'><div><span>" + milestones[i] + "</span><a
 								// class='milestone-delete right'
@@ -691,6 +793,19 @@ $(function()
 		
 	});
 
+	Handlebars.registerHelper('stringToHumanDateInFormat', function(date)
+	{
+		if(!date)
+			return;
+		var dateString = new Date(date);
+		if(dateString == "Invalid Date")
+			return getDateInFormatFromEpoc(date);
+		else
+			return en.dateFormatter({raw: getGlobalizeFormat()})(dateString);
+
+		
+	});
+
 	/**
 	 * Helper function to return the date string converting to local timezone.
 	 */
@@ -740,6 +855,43 @@ $(function()
 	});
 
 	/**
+	 * Helper function to return task date (dd, ex: Jan 10 ) from epoch time
+	 */
+	Handlebars.registerHelper('epochToTaskDate1', function(date)
+	{
+
+		var intMonth, intDay;
+
+		// Verifies whether date is in milliseconds, then
+		// no need to multiply with 1000
+		if ((date / 100000000000) > 1)
+		{
+			intMonth = new Date(date).getMonth();
+			intDay = new Date(date).getDate();
+		}
+		else
+		{
+			intMonth = new Date(parseInt(date) * 1000).getMonth();
+			intDay = new Date(parseInt(date) * 1000).getDate();
+		}
+		var monthArray = [
+				"Jan", "Feb", "March", "April", "May", "June", "July", "Aug", "Sept", "Oct", "Nov", "Dec"
+		];
+
+	 
+
+		return getOrdinal(intDay);
+	});
+
+function getOrdinal(intDay) {
+      
+       var s=["th","st","nd","rd"],
+           v = intDay%100;
+       return new Handlebars.SafeString(intDay +'<span>' + (s[(v-20)%10]||s[v]||s[0]) + '</span>');
+        
+    }
+
+	/**
 	 * Helper function to return task color based on it's priority
 	 */
 	Handlebars.registerHelper('task_label_color', function(priority)
@@ -775,9 +927,9 @@ $(function()
 		if (color == 'red' || color == '#f05050')
 			return 'danger';
 		if (color == '#36C' || color == '#23b7e5' || color == 'blue')
-			return 'warning';
+			return 'primary';
 		if (color == 'green' || color == '#bbb')
-			return 'light';
+			return 'warning';
 	});
 
 	/**
@@ -913,7 +1065,6 @@ $(function()
 				element = element.split("properties_")[1];
 			if (element.indexOf("custom_") == 0)
 				element = element.split("custom_")[1];
-
 			element = element.replace("_", " ")
 
 			el = el.concat('<th>' + ucfirst(element) + '</th>');
@@ -1142,6 +1293,7 @@ $(function()
 		return CURRENT_DOMAIN_USER.domain;
 	});
 
+	
 	/*
 	 * To add comma in between the elements.
 	 */
@@ -1218,10 +1370,10 @@ $(function()
 								if (properties_count != 0)
 
 									el = el
-											.concat('<div class="contact-addressview"><div><div class="pull-left hide" style="width:18px"><i class="icon icon-pointer"></i></div><div class="custom-color">');
+											.concat('<div class="contact-addressview"><div><div class="custom-color text-center">');
 								else
 									el = el
-											.concat('<div class="contact-addressview"><div><div class="pull-left hide" style="width:18px"><i class="icon icon-pointer"></i></div><div class="custom-color">');
+											.concat('<div class="contact-addressview"><div><div class="custom-color text-center">');
 
 								if(address.address !== undefined)
 									el = el.concat(address.address+", ");
@@ -1249,8 +1401,8 @@ $(function()
 								});*/
 
 								if (properties[i].subtype)
-									el = el.concat('<span class="label bg-light dk text-tiny">' + properties[i].subtype + '</span>');
-								el = el.concat('</span>&nbsp;<span id="map_view_action"></span></div></div>');
+									el = el.concat('<span class="label bg-light dk text-tiny hide">' + properties[i].subtype + '</span>');
+								el = el.concat('</span>&nbsp;<span id="map_view_action hide"></span></div></div>');
 								return new Handlebars.SafeString(el);
 							}
 							else if (properties[i].name == "phone" || properties[i].name == "email")
@@ -2155,7 +2307,7 @@ $(function()
 			// Iterates inorder to insert each field into json
 			for (var i = 0; i < email_fields.length; i++)
 			{
-				// Splits based on colon. E.g "To: naresh@agilecrm.com   "
+				// Splits based on colon. E.g "To: naresh@agilecrm.com     "
 				var arrcolon = email_fields[i].split(":");
 
 				// Inserts LHS of colon as key. E.g., To
@@ -2165,7 +2317,7 @@ $(function()
 				// accessible
 
 				// Inserts RHS of colon as value. E.g.,
-				// naresh@agilecrm.com  
+				// naresh@agilecrm.com    
 				var value = arrcolon.slice(1).join(":"); // join the
 				// remaining string
 				// based on colon,
@@ -2474,7 +2626,7 @@ $(function()
 		}
 		else if (value >= 40 && value < 75)
 		{
-			type = "bg-light dk text-tiny";
+			type = "bg-light text-tiny";
 			reputation = "Ok";
 		}
 		else if (value >= 75 && value < 90)
@@ -2628,6 +2780,11 @@ $(function()
 		// data.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,");
 	});
 
+	Handlebars.registerHelper('formatAmount', function(data){
+		data = parseFloat(data);
+		return data.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, "$1,");
+	});
+	
 	Handlebars.registerHelper('QbDateFormat', function(data)
 	{
 
@@ -3548,6 +3705,13 @@ $(function()
 			return options.fn(this);
 	});
 
+	Handlebars.registerHelper('if_keyboard_shortcuts_enabled', function(options)
+	{
+		if (CURRENT_USER_PREFS.keyboard_shotcuts)
+			return options.fn(this);
+		return options.inverse(this);
+	});
+
 	Handlebars.registerHelper('campaigns_heading', function(value, options)
 	{
 		var val = 0;
@@ -4275,7 +4439,7 @@ $(function()
 			// Iterates inorder to insert each field into json
 			for (var i = 0; i < email_fields.length; i++)
 			{
-				// Splits based on colon. E.g "To: naresh@agilecrm.com   "
+				// Splits based on colon. E.g "To: naresh@agilecrm.com     "
 				var arrcolon = email_fields[i].split(":");
 
 				// Inserts LHS of colon as key. E.g., To
@@ -4283,7 +4447,7 @@ $(function()
 				key = key.trim(); // if key starts with space, it can't
 				// accessible
 
-				// Inserts RHS of colon as value. E.g., naresh@agilecrm.com  
+				// Inserts RHS of colon as value. E.g., naresh@agilecrm.com    
 				var value = arrcolon.slice(1).join(":"); // join the
 				// remaining string
 				// based on colon,
@@ -4620,7 +4784,7 @@ $(function()
 						}
 						else if (value >= 40 && value < 75)
 						{
-							type = "bg-light dk text-tiny";
+							type = "bg-light text-tiny";
 							reputation = "Ok";
 						}
 						else if (value >= 75 && value < 90)
@@ -5664,7 +5828,7 @@ $(function()
 			icon_name = 'icon-filter';
 		else if (p_name == 'Deals Assigned')
 			icon_name = 'icon-user';
-		else if (p_name == 'Agenda')
+		else if (p_name == 'Agenda' || p_name == 'Mini Calendar')
 			icon_name = "icon-calendar";
 		else if (p_name == 'Today Tasks' || p_name == 'Task Report')
 			icon_name = "icon-tasks";
@@ -5680,6 +5844,8 @@ $(function()
 			icon_name = "icon-info";
 		else if (p_name == 'Revenue Graph')
 			icon_name = 'icon-graph';
+		else if (p_name == 'Campaign stats')
+			icon_name = 'icon-sitemap';
 		return icon_name;
 	});
 	/**
@@ -6150,17 +6316,6 @@ $(function()
 		else
 			return _billing_restriction.currentLimits[key];
 	});
-	
-	/**
-	 * Returns task completion status (Since boolean false is not getting
-	 * printed, converted it into string and returned.)
-	 */
-	Handlebars.registerHelper('ifCompanyPage', function(options)
-	{
-		if (custom_menu.isCompanyType())
-			return options.fn(this);
-		return options.inverse(this);
-	});
 
 	Handlebars.registerHelper("getLeaderboardCateCount", function(options){
 		var count=0;
@@ -6180,25 +6335,6 @@ $(function()
 	 */
 	Handlebars.registerHelper("getIndexIncrementByOne", function(indexVal){
 		return ++indexVal;
-	});
-	/**
-	 * Returns table headings for custom companies list view
-	 */
-	Handlebars.registerHelper('companyTableHeadings', function(item)
-	{
-
-		var el = "";
-		$.each(App_Companies.companyViewModel[item], function(index, element)
-		{
-			if (element.indexOf("custom_") == 0)
-				element = element.split("custom_")[1];
-			element = element.replace("_", " ")
-
-			el = el.concat('<th>' + ucfirst(element) + '</th>');
-
-		});
-
-		return new Handlebars.SafeString(el);
 	});
 	/**
 	 * getting duration for portlets
@@ -6278,10 +6414,112 @@ $(function()
 		{
 			time_period = 'Last 24 Hours';
 		}
+		else if (duration == 'next-quarter')
+		{
+			time_period = 'Next Quarter';
+		}
+		else if (duration == 'this-and-next-quarter')
+		{
+			time_period = 'This and Next Quarter';
+		}
+		else if (duration == 'this-year')
+		{
+			time_period = 'This Year';
+		}
+		else if (duration == 'next-year')
+		{
+			time_period = 'Next Year';
+		}
 		
 		return time_period;
 	});
+	
+	/**
+	 * Returns a given date string to a time ago format ,used for gmaps listview implementation
+	 * 
+	 */
+	Handlebars.registerHelper('timeAgo',function(dateString){
 
+		var date=new Date();
+		 try
+			{
+			 var find = '-';
+			 var re = new RegExp(find, 'g');
+			 dateString = dateString.replace(re, '/');
+			 dateString = dateString.match(/[^:]+(\:[^:]+)?/g);
+			 date=new Date(dateString[0]);
+			}
+			catch (err)
+			{
+				console.log("Error in parsing date");
+			}
+
+	    var seconds = Math.floor((new Date() - date) / 1000);
+
+	    var interval = Math.floor(seconds / 31536000);
+
+	    if (interval > 1) {
+	        return interval + " years ago";
+	    }
+	    interval = Math.floor(seconds / 2592000);
+	    if (interval > 1) {
+	        return interval + " months ago";
+	    }
+	    interval = Math.floor(seconds / 86400);
+	    if (interval > 1) {
+	        return interval + " days ago";
+	    }
+	    interval = Math.floor(seconds / 3600);
+	    if (interval > 1) {
+	        return interval + " hours ago";
+	    }
+	    interval = Math.floor(seconds / 60);
+	    if (interval > 1) {
+	        return interval + " minutes ago";
+	    }
+	    return new Handlebars.SafeString(Math.floor(seconds) + " seconds ago");
+
+		
+	});
+	
+	/**
+	 * Returns a string by making its first letter a capital letter.
+	 * Used in gmap implementation for table view
+	 */
+	Handlebars.registerHelper('capitalizeFirstLetter',function(city,country){
+		return new Handlebars.SafeString(city.charAt(0).toUpperCase() + city.slice(1)+", "+country);
+		
+	});
+	
+	/**
+	 * Returns a default image url .
+	 * 
+	 */
+	Handlebars.registerHelper('getDefaultImage',function(){
+		return new Handlebars.SafeString(LIB_PATH_FLATFULL + 'images/flatfull/user-default.jpg');
+		
+	});
+	
+	/**
+	 * Returns table headings for custom companies list view
+	 */
+	Handlebars.registerHelper('companyTableHeadings', function(item)
+	{
+
+		var el = "";
+		$.each(App_Companies.companyViewModel[item], function(index, element)
+		{
+			if (element.indexOf("custom_") == 0)
+				element = element.split("custom_")[1];
+			element = element.replace("_", " ")
+
+			el = el.concat('<th>' + ucfirst(element) + '</th>');
+
+		});
+
+		return new Handlebars.SafeString(el);
+	});
+	
 	Handlebars
 	.registerHelper(
 			'companies_count',
@@ -6406,32 +6644,175 @@ Handlebars.registerHelper('SALES_CALENDAR_URL', function()
 	if (p_name == 'Filter Based')
 		description = 'See a list of 50 recently added contacts customizable by filters.';
 	else if (p_name == 'Emails Opened')
-		description = 'Get a percentage view of emails opened by contacts from all emails sent.';
+		description = 'See what percentage of people open your direct emails.';
 	else if (p_name == 'Growth Graph')
 		description = 'Gain a quick insight on how contacts with specific tag(s) have changed over time.';
 	else if (p_name == 'Calls Per Person')
-		description = 'See answered, busy, failed or voicemail calls for selected users based on duration.';
+		description = 'Detailed reports on call activity of your team.';
 	else if (p_name == 'Pending Deals')
-		description = 'Quickly see all pending deals listed by company, deal value and associated contacts.';
+		description = 'Gives you a heads up on all your pending Deals.';
 	else if (p_name == 'Deals By Milestone')
-		description = 'See Pictorial statistics of deal tracks in your sales pipeline.';
+		description = 'A pie-chart of Deals grouped by Milestone.';
 	else if (p_name == 'Deals Funnel')
-		description = 'See a funnel graph of how leads are passing through various stages in your sales cycle.';
+		description = 'A funnel report of total Deals value in each Milestone.';
 	else if (p_name == 'Agenda')
-		description = 'Get a quick view of calendar events for the duration specified.';
+		description = 'A quick view of events from your calendar.';
 	else if (p_name == 'Today Tasks')
-		description = 'See the tasks based on the duration specified or all pending tasks.';
+		description = 'A list of your upcoming or due Tasks';
 	else if (p_name == 'Task Report')
 		description = 'Get a quick view of tasks by all users reported by status and duration.';
 	else if (p_name == 'Agile CRM Blog')
-		description = 'Stay up to date with all new features, bug fixes or product enhancements with this simple blog feed.';
+		description = "A feed of what's happening at our end including updates on new features.";
 	else if(p_name=='Stats Report')
-		description = 'See new contacts added, deals won, emails sent and new deals for the selected duration.';
+		description = 'Detailed list of activities done by your team members.';
 	else if (p_name == 'Leaderboard')
-		description = 'Evaluate performance with a scorecard overview of users for the selected duration.';
+		description = ' A leaderboard for your team based on revenue won, tasks done, calls etc.';
 	else if (p_name== 'User Activities')
 		description = 'See a timeline of user actions in Agile CRM.';
 	else if (p_name== 'Account Details')
 		description = 'Find current plan information, number of users and more.';
+	else if (p_name== 'Revenue Graph')
+		description = 'Forecasted revenue graph based on your Deals.';
+	else if (p_name== 'Mini Calendar')
+		description = 'A mini calendar with an overview of your agenda for the day.'
+	else if (p_name == 'Campaign stats')
+		description = 'See how your campaigns are performing with stats on email opens and link clicks.'
 	return description;
+			});
+
+	Handlebars.registerHelper('trialEndDate', function(billingData, options)
+			{
+		      var json={};
+		      var currentEpoch = new Date().getTime()/1000;
+		      currentEpoch = Math.round(currentEpoch);
+		      /*console.log("billing data is:");
+		      console.log(billingData.customer.metadata.trial_end);*/
+		      //billingData = billingData.toString();
+		      /*console.log("string is:");
+		      if(billingData.subscriptions.data.trialEnd)
+		        console.log(billingData.subscriptions.data.trialEnd);*/
+		      if(!billingData)
+		    	  {
+		    	  	return options.inverse(this);
+		    	  }
+		    	  console.log(billingData);
+		    	  /*var billingData = JSON.parse(billingData.billingData);
+		    	  console.log(billingData);*/
+              if(billingData.metadata && billingData.metadata.trial_end && billingData.metadata.trial_end > currentEpoch)
+        	   {
+
+        		var has_trial = (parseInt(billingData.metadata.trial_end) - currentEpoch)/(24*60*60);
+        		has_trial = Math.round(has_trial);
+        		var trialDate = (billingData.metadata.trial_end)/(24*60*60);
+        		if(has_trial>0)
+        			{
+        				json['trial_exists'] = true;
+        				json['days_left'] = has_trial;
+        				var monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
+        				                  "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+        				                ];
+        				var date = new Date();
+        	            date.setDate(date.getDate() + has_trial); 
+        	            var formattedDate = date.getDate()+' '+(monthNames[date.getMonth()])+' '+date.getFullYear();
+        				/*formattedDate = JSON.stringify(formattedDate);
+        	            console.log(formattedDate);*/
+        				json['trial_date'] = formattedDate;
+        				console.log("trial in json is:"+json['trial_date']);
+        				
+        			}
+        		else
+        			json['trial_exists'] = false;
+        		
+        	   }
+              else
+		        json['trial_exists'] = false;
+
+		       return options.fn(json);		        
+
+			});
+
+	Handlebars.registerHelper('trialEnd', function(billingData, options)
+			{
+		      var json={};
+		      var currentEpoch = new Date().getTime()/1000;
+		      currentEpoch = Math.round(currentEpoch);
+		      /*console.log("billing data is:");
+		      console.log(billingData.customer.metadata.trial_end);*/
+		      //billingData = billingData.toString();
+		      /*console.log("string is:");
+		      if(billingData.subscriptions.data.trialEnd)
+		        console.log(billingData.subscriptions.data.trialEnd);*/
+		      if(!billingData)
+		    	  {
+		    	  	return options.inverse(this);
+		    	  }
+		    	  console.log(billingData);
+
+              if(billingData.metadata && billingData.metadata.trial_end && billingData.metadata.trial_end > currentEpoch)
+        	   {
+
+        		var has_trial = (parseInt(billingData.metadata.trial_end) - currentEpoch)/(24*60*60);
+        		has_trial = Math.floor(has_trial);
+        		if(has_trial>0)
+        			{
+        				json['trial_exists'] = true;
+        				json['days_left'] = has_trial;
+        				var monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
+        				                  "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+        				                ];
+        				var date = new Date();
+        	            date.setDate(date.getDate() + has_trial); 
+        	            var formattedDate = date.getDate()+' '+(monthNames[date.getMonth()])+' '+date.getFullYear();
+        	            formattedDate = JSON.stringify(formattedDate);
+        	            console.log(formattedDate);
+        				json['trial_date'] = formattedDate;
+        			}
+        		else
+        			json['trial_exists'] = false;
+        		
+        	   }
+              else
+		        json['trial_exists'] = false;
+
+		       return options.fn(json);		        
+
+			});
+
+Handlebars.registerHelper('get_campaign_type_filter', function(filter_name)
+{
+	var campaign_type ='';
+	if(filter_name=='All')
+		campaign_type= 'All Campaigns';
+	else{
+		var filter=$.ajax({ type : 'GET', url : '/core/api/workflows/'+filter_name, async : false, dataType : 'json',
+		success : function(data)
+			{
+				if (data != null && data != undefined)
+					campaign_type = "" + data.name;
+			} });
+	}
+	return campaign_type;
+		
+});
+
+
+/**
+	 * Displays multiple times occurred properties of a contact in its detail
+	 * view in single entity
+	 */
+	Handlebars.registerHelper('multiple_Property_Element_temp', function(name, properties, options)
+	{
+
+		var matching_properties_list = agile_crm_get_contact_properties_list(name)
+		if (matching_properties_list.length > 1)
+			return true;
+		else
+			return false;
+	});
+	
+	Handlebars.registerHelper('toggle_contacts_filter', function(options)
+			{	        
+		    if(readCookie(CONTACTS_DYNAMIC_FILTER_COOKIE_STATUS)=="hide"){
+			return "none";
+	       	}
 			});
