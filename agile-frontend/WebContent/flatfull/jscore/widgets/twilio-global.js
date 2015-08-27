@@ -1109,21 +1109,25 @@ function twilioSecondsToFriendly(time) {
 function searchForContact(from) {
 	console.log("searchForContact : " + from);	
 	var fromName = "";
-	var responseJson = $.parseJSON(
+
+	try {
+       var responseJson = $.parseJSON(
 	        $.ajax({
 	        	url: "core/api/contacts/search/phonenumber/"+from,
 	            async: false,
 	            dataType: 'json'
 	        }).responseText
 	    );
-	console.log("**** responseJson ****");
-	console.log(responseJson);
 	
-	if(responseJson != null) {
-		TWILIO_CONTACT_ID = responseJson.id;
-		console.log("TWILIO_CONTACT_ID : "+TWILIO_CONTACT_ID);
-		fromName = getContactName(responseJson);
-	}
+		if(responseJson != null) {
+			TWILIO_CONTACT_ID = responseJson.id;
+			console.log("TWILIO_CONTACT_ID : "+TWILIO_CONTACT_ID);
+			fromName = getContactName(responseJson);
+		}
+    } catch(e){
+       return "";
+    }
+    
 	return fromName;
 }
 
