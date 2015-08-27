@@ -6,17 +6,41 @@
 	var lostIcon = "<i title='Make Milestone Won' class='task-action icon icon-dislike'></i>";
 	milestone_util.wonMsg = 'Deals with this milestone are considered as Won.';
 	milestone_util.lostMsg = 'Deals with this milestone are considered as Lost.';
-	var milestoneMsg = "For better deal reports and sales forecasting, please set your 'Won' and 'Lost' milestones in the <deal settings> page.";
-	
+	var milestoneMsg = "For better deal reports and sales forecasting, please set your 'Won' and 'Lost' milestones in the <i style='text-decoration:underline;'>Deal settings</i> page.";
+	milestone_util.isNotyVisible = false;
 	milestone_util.showMilestonePopup = function(track){
 		
 		if(!(track.lost_milestone && track.won_milestone) || track.won_milestone.length == 0 || track.lost_milestone.length == 0){
 			setDefaultLostAndWon(track,function(newTrack){
-				if(!(newTrack.lost_milestone && newTrack.won_milestone))
-					$('#milestone-set-msg').css("display","inline");
+				if(!(newTrack.lost_milestone && newTrack.won_milestone)){
+					milestone_util.showMilestoneNoty();
+					milestone_util.isNotyVisible = true;
+				}
 				return newTrack;
 			});
 		}
+	};
+	
+	milestone_util.showMilestoneNoty = function(){
+		
+		if(milestone_util.isNotyVisible)
+			return;
+		
+		// If Noty is present already, then noty is initiated again
+		if(Nagger_Noty && $("#" +Nagger_Noty).length > 0)
+			return;
+		
+		setTimeout(function(){ 
+			// Show the first one after 3 secs
+			showNotyPopUp("warning", milestoneMsg, "topCenter", "none", function(){
+					Nagger_Noty = null;
+					Backbone.history.navigate('milestones', {
+						 trigger : true
+						 });
+				});
+		
+		}, 6000);
+			
 	};
 	
 	var setWon = function(track,callback){

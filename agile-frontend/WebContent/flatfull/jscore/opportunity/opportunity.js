@@ -245,6 +245,7 @@ var tracks = new Base_Collection_View({url : '/core/api/milestone/pipelines'});
 				milestone_util.showMilestonePopup(jsonModel[0]);
 			}
 			else {
+				milestone_util.isNotyVisible = false;
 				$.each(jsonModel,function(index,mile){
 					console.log(mile.milestones,value);
 					if(!mile.name)

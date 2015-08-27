@@ -746,6 +746,13 @@ function initializeMilestoneListners(el){
 		e.preventDefault();
 		if (!confirm("Are you sure you want to delete ?" ))
 			return;
+		
+		var formId = $(this).closest('form');
+		if($(this).closest('tr').find('.mark-won').length > 0){
+			formId.find('input[name="won_milestone"]').val('');
+		} else if($(this).closest('tr').find('.mark-lost').length > 0){
+			formId.find('input[name="lost_milestone"]').val('');
+		}
 		$(this).closest('tr').css("display", "none");
 		fill_ordered_milestone($(this).closest('form').attr('id'));
 	});
