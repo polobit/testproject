@@ -464,6 +464,7 @@ public class EmailGatewayUtil
      */
     public static void sendMails(List<TaskHandle> tasks)
     {
+    	
 	sendMailsMailDeferredTask(convertTaskHandlestoMailDeferredTasks(tasks));
     }
 
@@ -537,7 +538,7 @@ public class EmailGatewayUtil
 	    {
 		// If null or Mandrill
 		if (emailGateway == null || emailGateway.email_api == EmailGateway.EMAIL_API.MANDRILL)
-		    MandrillUtil.sendMandrillMails(tasks, emailSender);
+		    MandrillUtil.splitMandrillTasks(tasks, emailSender);
 
 		// If SendGrid
 		else if (emailGateway.email_api == EMAIL_API.SEND_GRID)

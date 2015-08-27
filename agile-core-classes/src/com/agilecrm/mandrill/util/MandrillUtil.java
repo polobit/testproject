@@ -1,5 +1,6 @@
 package com.agilecrm.mandrill.util;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
@@ -17,6 +18,7 @@ import com.agilecrm.util.HttpClientUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.thirdparty.mandrill.EmailContentLengthLimitExceededException;
 import com.thirdparty.mandrill.Mandrill;
+import com.thirdparty.mandrill.exception.RetryException;
 import com.thirdparty.mandrill.subaccounts.MandrillSubAccounts;
 
 /**
@@ -64,6 +66,39 @@ public class MandrillUtil
 	}
     }
 
+    
+    /**
+     * Splitting tasks to send emails through different Mandrill Accounts. 
+     * 
+     * @param tasks
+     * @param emailSender
+     */
+    public static void splitMandrillTasks(List<MailDeferredTask> tasks, EmailSender emailSender)
+    {
+    	// Allows only 20% tasks to send through Old Account
+    	int limit = tasks.size() % 20;
+    	
+    	List<MailDeferredTask> tasksFragment = new ArrayList<MailDeferredTask>();
+    	
+    	// Add 20% tasks
+    	for(int i=0; i < limit; i++)
+    		tasksFragment.add(tasks.get(i));
+    
+    	// Affected Mandrill
+    	emailSender.setMandrillAPIKey(Globals.MANDRIL_API_KEY_VALUE);
+    	sendMandrillMails(tasksFragment, emailSender);
+    	
+    	// Clears list to add remaining tasks
+    	tasksFragment.clear();
+    	
+    	for(int i=limit; i < tasks.size(); i++)
+    		tasksFragment.add(tasks.get(i));
+    	
+    	// New Mandrill account
+    	emailSender.setMandrillAPIKey(Globals.MANDRILL_API_KEY_VALUE_2);
+    	sendMandrillMails(tasksFragment, emailSender);
+    }
+    
     /**
      * Sends mails through mandrill. It constructs mail json with merge
      * variables and their content
@@ -76,8 +111,13 @@ public class MandrillUtil
 
 	MailDeferredTask firstMailDefferedTask = tasks.get(0);
 
+	String apiKey = emailSender.getMandrillAPIKey();
+	
+	// Verifies if subaccount exists
+	checkSubAccountExists(firstMailDefferedTask.domain, apiKey);
+	
 	// Initialize mailJSON with common fields
-	JSONObject mailJSON = getMandrillMailJSON(emailSender.getMandrillAPIKey(), firstMailDefferedTask.domain,
+	JSONObject mailJSON = getMandrillMailJSON(apiKey, firstMailDefferedTask.domain,
 		firstMailDefferedTask.fromEmail, firstMailDefferedTask.fromName, firstMailDefferedTask.replyTo,
 		firstMailDefferedTask.metadata, emailSender.isEmailWhiteLabelEnabled());
 
@@ -213,7 +253,7 @@ public class MandrillUtil
 		System.out.println("Sending emails in MandrillUtil through subaccount api..." + apiKey);
 
 	    // Complete mail json to be sent
-	    JSONObject mailJSON = Mandrill.setMandrillAPIKey(apiKey, subaccount);
+	    JSONObject mailJSON = Mandrill.setMandrillAPIKey(apiKey, subaccount, isPaid);
 
 	    JSONObject messageJSON = getMessageJSON(subaccount, fromEmail, fromName, replyTo, metadata);
 	    mailJSON.put(Mandrill.MANDRILL_MESSAGE, messageJSON);
@@ -542,5 +582,31 @@ public class MandrillUtil
 	    // }
 	}
 	return true;
+    }
+    
+    /**
+     * Verifies whether subaccount exists, if not creates
+     * 
+     * @param subaccountId
+     * @param apiKey
+     */
+    private static void checkSubAccountExists(String subaccountId, String apiKey){
+    	
+    	// To get the response
+    	String response = MandrillSubAccounts.updateMandrillSubAccount(subaccountId, apiKey, "");
+    	
+    	 if (StringUtils.contains(response, "Unknown_Subaccount"))
+		 {
+			try 
+			{
+				// throw retry exception and create new subaccount
+				throw new RetryException("Unknown Mandrill Subaccount");
+			} 
+			catch (RetryException e) {
+				
+				 // Creates new subaccount
+			    MandrillSubAccounts.createMandrillSubAccount(subaccountId, apiKey);
+			}
+		 }
     }
 }
