@@ -25,6 +25,10 @@ import com.agilecrm.document.util.DocumentUtil;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.google.gson.Gson;
 
+/**
+ * <code>ActivitySave</code> class is interacts with ActivityUtil to create activities.
+ * ActivitySave interacts all other classes to create log for action performed
+ */
 public class ActivitySave
 {
 
@@ -588,7 +592,7 @@ public class ActivitySave
     }
 
     /**
-     * creates actiivty log when contact owner changed from contact details
+     * creates activity log when contact owner changed from contact details
      * page.
      * 
      * @param contact

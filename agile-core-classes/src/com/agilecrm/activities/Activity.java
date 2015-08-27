@@ -24,6 +24,24 @@ import com.googlecode.objectify.annotation.Indexed;
 import com.googlecode.objectify.annotation.NotSaved;
 import com.googlecode.objectify.condition.IfDefault;
 
+/**
+ * <code>Activity</code> class represents the Activities performed by user 
+ * <p>
+ * The Activity entity includes time and username and user id and 
+ * </p>
+ * <p>
+ * This class implements {@link AgileUser} to create key and to store the key as
+ * the User id as owner.
+ * </p>
+ * <p>
+ * The <code>Activity</code> class provides methods to create
+ *  the Activities.
+ * </p>
+ * 
+ * @author Saikiran
+ * 
+ */
+
 @XmlRootElement
 @Cached
 public class Activity extends Cursor
@@ -121,18 +139,33 @@ public class Activity extends Cursor
     @Indexed
     public Long time = 0L;
 
+    
+    /**
+     * stores modified values
+     */
     @NotSaved(IfDefault.class)
     public String custom1 = null;
-
+/**
+ * stores old values
+ */
     @NotSaved(IfDefault.class)
     public String custom2 = null;
 
+    /**
+     * stores modified fields
+     */
     @NotSaved(IfDefault.class)
     public String custom3 = null;
 
+    /**
+     * stores deal owner id for deal entity
+     */
     @NotSaved(IfDefault.class)
     public String custom4 = null;
 
+    /**
+     * stores related contact ids for each activity
+     */
     @NotSaved(IfDefault.class)
     public String related_contact_ids;
 
@@ -173,6 +206,12 @@ public class Activity extends Cursor
 	return null;
     }
 
+    
+    /**
+     * 
+     * @return user pic of the user who performed activity
+     * @throws Exception
+     */
     @XmlElement(name = "userPic")
     public String getUserPic() throws Exception
     {
@@ -213,6 +252,12 @@ public class Activity extends Cursor
 	dao.put(this);
     }
 
+    /**
+     * 
+     * @return entity object based id of activity
+     * intracts with {@link DaoActivity} wrapper to get entities
+     * @throws Exception
+     */
     @XmlElement
     public Object getEntityObject() throws Exception
     {
@@ -222,6 +267,10 @@ public class Activity extends Cursor
 	return obj;
     }
 
+    
+    /**
+     * called this method before activity getting saved
+     */
     @PrePersist
     private void prePersist()
     {

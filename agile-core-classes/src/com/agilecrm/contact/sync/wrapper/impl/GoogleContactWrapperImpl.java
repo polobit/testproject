@@ -270,16 +270,10 @@ public class GoogleContactWrapperImpl extends ContactWrapper
 		    
 		    //tags.add(details.groupName);
 		    if(details.groupName!=null)
-		    {
-		    	//Replacing special characters with underscore except space and underscore
-		    	String tagName = details.groupName.replaceAll("[^\\p{L}\\p{N} _]", "_").trim();
-		    	if(tagName!=null){
-		    		//if tag name start with _ we removed that _ until tag name starts with alphabet
-					while(tagName.startsWith("_"))
-						tagName = tagName.replaceFirst("_", "").trim();
-					if(!tagName.isEmpty())
-						tags.add(tagName);
-		    	}
+		    {	
+		    	String tag = convertToAgileTag(details.groupName);
+		    	if(StringUtils.isNotBlank(tag))
+		    	    tags.add(tag);
 		    }
 		}
 		    

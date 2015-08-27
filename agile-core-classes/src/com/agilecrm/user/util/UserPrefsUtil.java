@@ -1,6 +1,13 @@
 package com.agilecrm.user.util;
 
+import java.io.IOException;
 import java.util.List;
+
+import org.codehaus.jackson.JsonGenerationException;
+import org.codehaus.jackson.map.JsonMappingException;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import com.agilecrm.core.api.prefs.UserPrefsAPI;
 import com.agilecrm.db.ObjectifyGenericDao;
@@ -70,7 +77,7 @@ public class UserPrefsUtil
     private static UserPrefs getDefaultPrefs(AgileUser agileUser)
     {
 	UserPrefs userPrefs = new UserPrefs(agileUser.id, null, null, "pink", "", EmailUtil.getPoweredByAgileLink(
-	        "email-signature", "Sent using"), true, false);
+		"email-signature", "Sent using"), true, false);
 	userPrefs.save();
 	return userPrefs;
     }
@@ -133,4 +140,39 @@ public class UserPrefsUtil
 	}
     }
 
+    public static String getMapperString(UserPrefs prefs)
+    {
+	ObjectMapper mapper = new ObjectMapper();
+	try
+	{
+	    String mappedString = mapper.writeValueAsString(prefs);
+	    JSONObject o = new JSONObject(mappedString);
+
+	    System.out.println(o.toString());
+
+	    return o.toString();
+	}
+	catch (JSONException e)
+	{
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	}
+	catch (JsonGenerationException e)
+	{
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	}
+	catch (JsonMappingException e)
+	{
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	}
+	catch (IOException e)
+	{
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	}
+
+	return "{}";
+    }
 }

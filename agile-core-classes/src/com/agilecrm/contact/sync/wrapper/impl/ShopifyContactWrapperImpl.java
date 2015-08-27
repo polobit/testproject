@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 
@@ -53,7 +54,7 @@ public class ShopifyContactWrapperImpl extends ContactWrapper
     public ContactField getFirstName()
     {
 	String firstName = null;
-	if (contactProperties.containsKey("first_name") && contactProperties.get("first_name")!=null)
+	if (contactProperties.containsKey("first_name") && contactProperties.get("first_name") != null)
 	{
 	    firstName = contactProperties.get("first_name").toString();
 	}
@@ -69,7 +70,7 @@ public class ShopifyContactWrapperImpl extends ContactWrapper
     public ContactField getLastName()
     {
 	String lastName = null;
-	if (contactProperties.containsKey("last_name") && contactProperties.get("last_name")!=null)
+	if (contactProperties.containsKey("last_name") && contactProperties.get("last_name") != null)
 	{
 	    lastName = contactProperties.get("last_name").toString();
 	}
@@ -85,7 +86,7 @@ public class ShopifyContactWrapperImpl extends ContactWrapper
     public ContactField getEmail()
     {
 	String email = null;
-	if (contactProperties.containsKey("email") && contactProperties.get("email")!=null)
+	if (contactProperties.containsKey("email") && contactProperties.get("email") != null)
 	{
 	    email = contactProperties.get("email").toString();
 	}
@@ -148,32 +149,22 @@ public class ShopifyContactWrapperImpl extends ContactWrapper
     @Override
     public List<String> getTags()
     {
-	List<String> tags = new ArrayList<String>();
+	List<String> tagList = new ArrayList<String>();
 	if (contactProperties.containsKey("tags"))
 	{
-	    String[] tag = contactProperties.get("tags").toString().split(",");
-	    for (String s : tag)
+	    String[] tags = contactProperties.get("tags").toString().split(",");
+	    for (String tag : tags)
 	    {
-		if (!s.isEmpty())
+		if (StringUtils.isNotBlank(tag))
 		{
-			if(s!=null)
-			{
-				//Replacing special characters with underscore except space and underscore
-				String tagName = s.replaceAll("[^\\p{L}\\p{N} _]", "_").trim();
-				if(tagName!=null){
-					//if tag name start with _ we removed that _ until tag name starts with alphabet
-					while(tagName.startsWith("_"))
-						tagName = tagName.replaceFirst("_", "").trim();
-					if(!tagName.isEmpty())
-						tags.add(tagName);
-				}
-			}
+		    tag = convertToAgileTag(tag);
+		    if (StringUtils.isNotBlank(tag))
+			tagList.add(tag);
 		}
 	    }
 
 	}
-
-	return tags;
+	return tagList;
     }
 
     /**
@@ -224,7 +215,7 @@ public class ShopifyContactWrapperImpl extends ContactWrapper
     public List<Note> getNotes()
     {
 	List<Note> notes = new ArrayList<Note>();
-	if (contactProperties.containsKey("note") && contactProperties.get("note")!=null)
+	if (contactProperties.containsKey("note") && contactProperties.get("note") != null)
 	{
 	    String note = contactProperties.get("note").toString();
 	    Note n = new Note("Customer's Note", note);
