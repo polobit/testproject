@@ -9,7 +9,7 @@
 		var regexString = '^['+r+']['+r+' 0-9_-]*$';
 		var is_valid = new RegExp(regexString).test(value);
 		if (showAlert && !is_valid)
-			alert("Category name should start with an alphabet and can not contain special characters other than underscore, space and hypen");
+			alert("Category name should start with an alphabet and can not contain special characters other than underscore, space and hyphen");
 		return is_valid;
 	}
 	
@@ -99,7 +99,13 @@
     	disable_save_button($(that));//$(saveBtn).attr('disabled', 'disabled');
     	
     	if (!categories.isValid(label)) {
-    		$(that).parent().find('.save-status').html('<span style="color:red;">Category name should start with an alphabet and can not contain special characters other than underscore, space and hypen</span>');
+    		if(label.length === 0)
+    			$(that).parent().find('.save-status').html('<span style="color:red;">This field is required.</span>');
+    		else
+    			$(that).parent().find('.save-status').html('<span style="color:red;">Category name should start with an alphabet and can not contain special characters other than underscore, space and hyphen</span>');
+    		setTimeout(function(){ 
+    			$(that).parent().find('.save-status').html();
+    			}, 3000);
     		// Removes disabled attribute of save button
     		enable_save_button($(that));//$(saveBtn).removeAttr('disabled');
     		return false;
@@ -108,6 +114,7 @@
     	var cat = {};
     	cat.label = label;
     	cat.order = $('#admin-settings-categories-model-list').find('tr').length;
+    	cat.type='TASK';
     	console.log(cat);
     	// Saving that pipeline object
     	var category = new Backbone.Model();
