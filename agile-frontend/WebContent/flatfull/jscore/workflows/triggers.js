@@ -439,3 +439,15 @@ function show_email_tracking_campaigns()
 				
 			}, optionsTemplate, false);
 }
+
+function initializeTriggerEventListners()
+{
+	$("#trigger-listers").on('click', '.add-trigger', function(e){
+		console.log(e);
+		var type = e.target.getAttribute("data");
+
+		App_Workflows.trigger_add_new(type);
+		//$('#trigger-type', el).val(type).attr("selected", "selected").trigger('change');
+
+	});
+}
