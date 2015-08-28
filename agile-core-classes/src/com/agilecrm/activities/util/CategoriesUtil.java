@@ -110,6 +110,22 @@ public class CategoriesUtil
     }
 
     /**
+     * Return list of categories.
+     * 
+     * @return list of categories sort by the order.
+     */
+    public List<Category> getAllCategoriesByType(String type)
+    {
+	List<Category> categories = dao.ofy().query(Category.class).filter("entity_type", type).order("order").list();
+
+	if (categories.size() == 0)
+	{
+	    categories = careateDefaultCategories();
+	}
+	return categories;
+    }
+
+    /**
      * Delete the category.
      * 
      * @param id

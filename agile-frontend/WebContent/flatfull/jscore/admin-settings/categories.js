@@ -56,7 +56,7 @@
 	 */
 	categories.getCategories = function(callback){
 		$.ajax({
-			url: 'core/api/categories',
+			url: 'core/api/categories?entity_type=TASK',
 			type: 'GET',
 			dataType: 'json',
 			success: function(cats){

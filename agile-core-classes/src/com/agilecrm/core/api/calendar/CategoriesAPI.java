@@ -60,7 +60,7 @@ public class CategoriesAPI
     {
 	if (StringUtils.isEmpty(entityType))
 	    return categoriesUtil.getAllCategories();
-	return null;
+	return categoriesUtil.getAllCategoriesByType(entityType);
     }
 
     /**
