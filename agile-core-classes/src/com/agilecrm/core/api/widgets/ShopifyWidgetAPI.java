@@ -20,12 +20,10 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.json.JSONArray;
-import org.json.JSONObject;
 
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.social.ShopifyPluginUtil;
-import com.agilecrm.social.StripePluginUtil;
 import com.agilecrm.widgets.Widget;
 import com.agilecrm.widgets.util.WidgetUtil;
 
@@ -71,7 +69,6 @@ public class ShopifyWidgetAPI
 		Iterator<LinkedHashMap<String, Object>> it = orders.iterator();
 		while (it.hasNext())
 		{
-
 		    customerOrders.put(it.next());
 		}
 	    }
@@ -142,9 +139,9 @@ public class ShopifyWidgetAPI
 	    Iterator<LinkedHashMap<String, Object>> it = lineItems.iterator();
 	    while (it.hasNext())
 	    {
-		LinkedHashMap<String, Object> item = it.next();
-		item.put("currency", currency);
-		itemArray.put(item);
+			LinkedHashMap<String, Object> item = it.next();
+			item.put("currency", currency);
+			itemArray.put(item);
 	    }
 
 	}
@@ -154,40 +151,8 @@ public class ShopifyWidgetAPI
     }
 
     /**
-     * Retrieves customer informations
-     * 
-     * @param widgetId
-     * @param customerId
-     * @return
-     */
-    /*
-     * @Path("/customer/{widget-id}/{customerId}")
-     * 
-     * @GET
-     * 
-     * @Produces(MediaType.TEXT_PLAIN) public String
-     * getCustomerDetails(@PathParam("widget-id") Long widgetId,
-     * 
-     * @PathParam("customerId") String customerId) { try { // Retrieves widget
-     * based on its id Widget widget = WidgetUtil.getWidget(widgetId);
-     * 
-     * if (widget == null) return null;
-     * 
-     * // return ShopifyPluginUtil.getCustomer(widget, customerId).toString();
-     * 
-     * }
-     * 
-     * catch (Exception e) { throw new
-     * WebApplicationException(Response.status(Response
-     * .Status.BAD_REQUEST).entity(e.getMessage()) .build()); }
-     * 
-     * }
-     */
-
-    /**
      * delete shopify widget
      */
-
     @DELETE
     public void delete()
     {

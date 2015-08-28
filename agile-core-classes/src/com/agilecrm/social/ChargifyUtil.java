@@ -118,9 +118,10 @@ public class ChargifyUtil {
 		System.out.println("customersArray " + customersArray);
 
 		// Throw exception if no customers found in chargify acc.
-		if (customersArray.length() == 0)
+		if (customersArray.length() == 0) {
 			throw new Exception(chargifyNamespace
 					+ " domain of doesn't contain any customers");
+		}
 
 		// Iterate through customers array and fetch only.
 		for (int i = 0; i < customersArray.length(); i++) {

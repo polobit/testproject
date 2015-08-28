@@ -15,12 +15,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-
 import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 import org.scribe.exceptions.OAuthException;
 import org.scribe.model.OAuthRequest;
@@ -29,12 +24,8 @@ import org.scribe.model.Verb;
 
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
-import com.agilecrm.contact.util.ContactUtil;
-import com.agilecrm.core.api.widgets.ShopifyWidgetAPI;
-import com.agilecrm.util.HTTPUtil;
-import com.agilecrm.util.StringUtils2;
 import com.agilecrm.widgets.Widget;
-import com.google.code.linkedinapi.client.enumeration.HttpMethod;
+import com.agilecrm.widgets.util.ExceptionUtil;
 
 /**
  * The <code>ShopifyPluginUtil</code> class acts as a Client to Shopify server
@@ -77,9 +68,9 @@ public class ShopifyPluginUtil
 		return orders;
 
 	    }
-	    catch (OAuthException e)
+	    catch (Exception e)
 	    {
-		e.printStackTrace();
+	    	ExceptionUtil.catchException(e);
 	    }
 	
 
@@ -89,19 +80,20 @@ public class ShopifyPluginUtil
 
     public static Integer isCustomerExist(Widget widget, String email)
     {
-	LinkedHashMap<String, Object> customer = getCustomer(widget, email);
-	if (customer != null && customer.size() > 0)
-	    return (Integer) customer.get("id");
-	return null;
+		LinkedHashMap<String, Object> customer = getCustomer(widget, email);
+		if (customer != null && customer.size() > 0){
+		    return (Integer) customer.get("id");
+		}
+		return null;
     }
 
     public static LinkedHashMap<String, Object> getCustomer(Widget widget, String email)
     {
-	String token = widget.getProperty("token");
-	String shopName = widget.getProperty("shop");
-	String url = "https://" + shopName + "/admin/customers/search.json?query=email:" + email + "";
-	System.out.println(url);
-	return getCustomer(url, token, email);
+		String token = widget.getProperty("token");
+		String shopName = widget.getProperty("shop");
+		String url = "https://" + shopName + "/admin/customers/search.json?query=email:" + email + "";
+		System.out.println(url);
+		return getCustomer(url, token, email);
     }
 
     private static LinkedHashMap<String, Object> getCustomer(String accessURl, String token, String email)
@@ -117,15 +109,11 @@ public class ShopifyPluginUtil
 		    Map.class);
 	    customer = (List<LinkedHashMap<String, Object>>) results.get("customers");
 
-	}
-	catch (OAuthException e)
-	{
-	    e.printStackTrace();
-	}
-	catch (Exception e)
-	{
-	    e.printStackTrace();
-	}
+	}catch (Exception e)
+    {
+    	ExceptionUtil.catchException(e);
+    }
+
 	if (customer.size() > 0)
 	{
 	    return customer.get(0);
@@ -136,13 +124,13 @@ public class ShopifyPluginUtil
 
     private static String getAccessUrl(String shop, String customer_id)
     {
-	StringBuilder sb = new StringBuilder("https://" + shop + "/admin/orders.json?customer_id=" + customer_id+"&status=any");
-	System.out.println("Access url " + sb.toString());
-	return sb.toString();
+		StringBuilder sb = new StringBuilder("https://" + shop + "/admin/orders.json?customer_id=" + customer_id+"&status=any");
+		System.out.println("Access url " + sb.toString());
+		return sb.toString();
     }
 
     /**
-     * add new customer in shopify
+     * Adds new customer in shopify
      * 
      * @param contact
      */
@@ -172,9 +160,10 @@ public class ShopifyPluginUtil
 	    System.out.println(resp);
 	}
 	catch (Exception e)
-	{
-	    e.printStackTrace();
-	}
+    {
+    	ExceptionUtil.catchException(e);
+    }
+
 	OAuthRequest oAuthRequest = new OAuthRequest(Verb.GET, url);
 	oAuthRequest.addHeader("X-Shopify-Access-Token", token);
 
@@ -206,7 +195,7 @@ public class ShopifyPluginUtil
 	    String inputLine;
 	    while ((inputLine = reader.readLine()) != null)
 	    {
-		output += inputLine;
+	    	output += inputLine;
 	    }
 
 	    wr.close();
@@ -214,12 +203,20 @@ public class ShopifyPluginUtil
 
 	}
 	catch (Exception e)
-	{
-	    e.printStackTrace();
-	}
+    {
+    	ExceptionUtil.catchException(e);
+    }
+
 	return output;
     }
 
+    /**
+     * Gets the orders.
+     * 
+     * @param widget
+     * @param id
+     * @return
+     */
     public static LinkedHashMap<String, Object> getOrder(Widget widget, Long id)
     {
 
@@ -239,18 +236,20 @@ public class ShopifyPluginUtil
 	    orders = (LinkedHashMap<String, Object>) results.get("order");
 
 	}
-	catch (OAuthException e)
-	{
-	    e.printStackTrace();
-	}
 	catch (Exception e)
-	{
-	    e.printStackTrace();
-	}
+    {
+    	ExceptionUtil.catchException(e);
+    }
+
 
 	return orders;
     }
     
+    /**
+     * Helps to know is the shop expired.
+     * @param widget
+     * @return
+     */
     public static boolean isShopExpired(Widget widget){
 	boolean status = false;
 	String token = widget.getProperty("token");
@@ -266,22 +265,19 @@ public class ShopifyPluginUtil
 	    
 	    for(Map.Entry<String, LinkedHashMap<String, Object>> m:results.entrySet()){
 		String key = m.getKey();
-		if(key.equalsIgnoreCase("errors")){
-		    status = true;
-		    break;
-		}
+			if(key.equalsIgnoreCase("errors")){
+			    status = true;
+			    break;
+			}
 	    }
 	  
 
 	}
-	catch (OAuthException e)
-	{
-	    e.printStackTrace();
-	}
 	catch (Exception e)
-	{
-	    e.printStackTrace();
-	}
+    {
+    	ExceptionUtil.catchException(e);
+    }
+
 
 	return status;
 	

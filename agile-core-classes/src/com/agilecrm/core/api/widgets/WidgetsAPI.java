@@ -40,8 +40,7 @@ import com.thirdparty.google.ContactsImportUtil;
 public class WidgetsAPI {
 
 	/**
-	 * Gets list of available configurable widgets which are shown on user
-	 * preference widgets panel.
+	 * Gets list of available widgets
 	 * 
 	 * @return {@link List} of {@link Widget}
 	 */
@@ -53,7 +52,7 @@ public class WidgetsAPI {
 	}
 
 	/**
-	 * Gets List of configured widgets of the current user
+	 * Gets List of widgets added for current user
 	 * 
 	 * @return {@link List} of {@link Widget}
 	 */
@@ -109,20 +108,18 @@ public class WidgetsAPI {
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public Widget createCustomWidget(CustomWidget customWidget) {
 		System.out.println("In custom widgets api create");
-		if (customWidget == null) {
-			return null;
+		if (customWidget != null) {
+			// Removes the special character in name of custom widget.
+			customWidget.name = customWidget.name.replaceAll("[^a-zA-Z]+", "");
+
+			if (WidgetUtil.checkIfWidgetNameExists(customWidget.name)) {
+				return null;
+			}
+
+			System.out.println(customWidget);
+			customWidget.save();
 		}
 
-		// Removes the special character in name of custom widget.
-		customWidget.name = customWidget.name.replaceAll("[^a-zA-Z]+", "");
-
-		if (WidgetUtil.checkIfWidgetNameExists(customWidget.name)) {
-			return null;
-		}
-
-		System.out.println(customWidget);
-
-		customWidget.save();
 		return customWidget;
 	}
 
@@ -137,11 +134,9 @@ public class WidgetsAPI {
 	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public Widget updateWidget(Widget widget) {
-		if (widget == null) {
-			return null;
+		if (widget != null) {
+			widget.save();
 		}
-
-		widget.save();
 		return widget;
 	}
 
@@ -157,11 +152,10 @@ public class WidgetsAPI {
 		// Deletes widget based on name
 		Widget widget = WidgetUtil.getWidget(widget_name);
 
-		if (widget == null) {
-			return;
+		if (widget != null) {
+			// default widgets are removed from database on deletion
+			widget.delete();
 		}
-		// default widgets are removed from database on deletion
-		widget.delete();
 	}
 
 	/**
@@ -190,16 +184,14 @@ public class WidgetsAPI {
 	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public void savePositions(List<Widget> widgets) {
-		if (widgets == null) {
-			return;
-		}
-
-		// UI sends only ID and Position
-		for (Widget widget : widgets) {
-			Widget fullWidget = WidgetUtil.getWidget(widget.id);
-			System.out.println(fullWidget);
-			fullWidget.position = widget.position;
-			fullWidget.save();
+		if (widgets != null) {
+			// UI sends only ID and Position
+			for (Widget widget : widgets) {
+				Widget fullWidget = WidgetUtil.getWidget(widget.id);
+				System.out.println(fullWidget);
+				fullWidget.position = widget.position;
+				fullWidget.save();
+			}
 		}
 	}
 
@@ -235,7 +227,7 @@ public class WidgetsAPI {
 	}
 
 	/**
-	 * Gets contacts from the sales force.
+	 * Gets the contacts from the salesforce.
 	 * 
 	 * @param userId
 	 * @param password
@@ -270,7 +262,7 @@ public class WidgetsAPI {
 	}
 
 	/**
-	 * Gets all the widgets of type integration.
+	 * Gets a list of widgets based on widget_type which is INTEGRATIONS
 	 * 
 	 * @return
 	 */

@@ -40,7 +40,7 @@ public class XeroUtil
 	{
 		String widget_id = widget.id.toString();
 		System.out.println("callbackUrl in XeroUtil : " + callbackUrl);
-		// get invoices from url
+		// Get invoices from url
 		String res = HTTPUtil.accessHTTPURL(xeroPluginurl + "/invoice",
 				(new JSONObject(widget.prefs).put("email", email).put("widget_id", widget_id).put("callbackUrl",
 						callbackUrl)).toString(), "PUT");
@@ -64,7 +64,7 @@ public class XeroUtil
 
 	public String addContact(Widget widget, String firstName, String lastName, String email) throws Exception
 	{
-		// call to create contact in xero
+		// Call to create contact in xero
 		return HTTPUtil.accessHTTPURL(xeroPluginurl + "/addcontact",
 				(new JSONObject(widget.prefs).put("name", (firstName + " " + lastName).trim()).put("email", email).put(
 						"callbackUrl", callbackUrl)).toString(), "PUT");
@@ -79,7 +79,7 @@ public class XeroUtil
 	 */
 	public String getLineItemsOfInvoice(String invoiceId, Widget widget) throws Exception
 	{
-		// call to get lineitems in xero for invoice id
+		// Call to get lineitems in xero for invoice id
 		return HTTPUtil.accessHTTPURL(xeroPluginurl + "/lineitems",
 				(new JSONObject(widget.prefs).put("invoiceId", invoiceId).put("callbackUrl", callbackUrl)).toString(),
 				"PUT");
@@ -87,7 +87,7 @@ public class XeroUtil
 
 	public String getOrganisationInfo(Widget widget) throws Exception
 	{
-		// call to get lineitems in xero for invoice id
+		// Call to get lineitems in xero for invoice id
 		return HTTPUtil.accessHTTPURL(xeroPluginurl + "/organisation",
 				(new JSONObject(widget.prefs).put("callbackUrl", callbackUrl)).toString(), "PUT");
 	}

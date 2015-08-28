@@ -1,17 +1,12 @@
 package com.agilecrm.core.api.widgets;
 
-import java.io.IOException;
-import java.net.SocketTimeoutException;
-
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -19,6 +14,7 @@ import org.json.JSONObject;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.social.ZendeskUtil;
 import com.agilecrm.widgets.Widget;
+import com.agilecrm.widgets.util.ExceptionUtil;
 import com.agilecrm.widgets.util.WidgetUtil;
 
 /**
@@ -56,27 +52,15 @@ public class ZendeskWidgetsAPI {
 			// Retrieves widget based on its id
 			Widget widget = WidgetUtil.getWidget(widgetId);
 
-			if (widget == null)
+			if (widget == null) {
 				return null;
+			}
 
 			// Calls ZendeskUtil to retrieve tickets for contacts email
 			return ZendeskUtil.getContactTickets(widget, email);
-		} catch (SocketTimeoutException e) {
-			throw new WebApplicationException(Response
-					.status(Response.Status.BAD_REQUEST)
-					.entity("Request timed out. Refresh and Please try again.")
-					.build());
-		} catch (IOException e) {
-			throw new WebApplicationException(Response
-					.status(Response.Status.BAD_REQUEST)
-					.entity("An error occurred. Refresh and Please try again.")
-					.build());
 		} catch (Exception e) {
-			throw new WebApplicationException(Response
-					.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
-					.build());
+			throw ExceptionUtil.catchWebException(e);
 		}
-
 	}
 
 	/**
@@ -109,11 +93,11 @@ public class ZendeskWidgetsAPI {
 			// Retrieves widget based on its id
 			Widget widget = WidgetUtil.getWidget(widgetId);
 
-			if (widget == null)
-				return null;
-
 			String response = ZendeskUtil.addTicket(widget, name, email,
 					subject, description);
+			if (widget == null) {
+				return null;
+			}
 
 			/*
 			 * Since response in coming in the form of String, check for message
@@ -126,22 +110,9 @@ public class ZendeskWidgetsAPI {
 
 			// Calls ZendeskUtil method to add a ticket in Zendesk
 			return response;
-		} catch (SocketTimeoutException e) {
-			throw new WebApplicationException(Response
-					.status(Response.Status.BAD_REQUEST)
-					.entity("Request timed out. Refresh and Please try again.")
-					.build());
-		} catch (IOException e) {
-			throw new WebApplicationException(Response
-					.status(Response.Status.BAD_REQUEST)
-					.entity("An error occurred. Refresh and Please try again.")
-					.build());
 		} catch (Exception e) {
-			throw new WebApplicationException(Response
-					.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
-					.build());
+			throw ExceptionUtil.catchWebException(e);
 		}
-
 	}
 
 	/**
@@ -167,27 +138,15 @@ public class ZendeskWidgetsAPI {
 			// Retrieves widget based on its id
 			Widget widget = WidgetUtil.getWidget(widgetId);
 
-			if (widget == null)
+			if (widget == null) {
 				return null;
+			}
 
 			// Calls ZendeskUtil and updates ticket in Zendesk
 			return ZendeskUtil.updateTicket(widget, ticketNumber, description);
-		} catch (SocketTimeoutException e) {
-			throw new WebApplicationException(Response
-					.status(Response.Status.BAD_REQUEST)
-					.entity("Request timed out. Refresh and Please try again.")
-					.build());
-		} catch (IOException e) {
-			throw new WebApplicationException(Response
-					.status(Response.Status.BAD_REQUEST)
-					.entity("An error occurred. Refresh and Please try again.")
-					.build());
 		} catch (Exception e) {
-			throw new WebApplicationException(Response
-					.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
-					.build());
+			throw ExceptionUtil.catchWebException(e);
 		}
-
 	}
 
 	/**
@@ -205,25 +164,14 @@ public class ZendeskWidgetsAPI {
 			// Retrieves widget based on its id
 			Widget widget = WidgetUtil.getWidget(widgetId);
 
-			if (widget == null)
+			if (widget == null) {
 				return null;
+			}
 
 			// Calls ZendeskUtil and retrieves Zendesk account user information
 			return ZendeskUtil.getUserInfo(widget, "");
-		} catch (SocketTimeoutException e) {
-			throw new WebApplicationException(Response
-					.status(Response.Status.BAD_REQUEST)
-					.entity("Request timed out. Refresh and Please try again.")
-					.build());
-		} catch (IOException e) {
-			throw new WebApplicationException(Response
-					.status(Response.Status.BAD_REQUEST)
-					.entity("An error occurred. Refresh and Please try again.")
-					.build());
 		} catch (Exception e) {
-			throw new WebApplicationException(Response
-					.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
-					.build());
+			throw ExceptionUtil.catchWebException(e);
 		}
 
 	}
@@ -249,25 +197,14 @@ public class ZendeskWidgetsAPI {
 			// Retrieves widget based on its id
 			Widget widget = WidgetUtil.getWidget(widgetId);
 
-			if (widget == null)
+			if (widget == null) {
 				return null;
+			}
 
 			// Calls ZendeskUtil and retrieves tickets by its status
 			return ZendeskUtil.getTicketsByStatus(widget, email, status);
-		} catch (SocketTimeoutException e) {
-			throw new WebApplicationException(Response
-					.status(Response.Status.BAD_REQUEST)
-					.entity("Request timed out. Refresh and Please try again.")
-					.build());
-		} catch (IOException e) {
-			throw new WebApplicationException(Response
-					.status(Response.Status.BAD_REQUEST)
-					.entity("An error occurred. Refresh and Please try again.")
-					.build());
 		} catch (Exception e) {
-			throw new WebApplicationException(Response
-					.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
-					.build());
+			throw ExceptionUtil.catchWebException(e);
 		}
 	}
 
@@ -292,29 +229,13 @@ public class ZendeskWidgetsAPI {
 			Widget widget = WidgetUtil.getWidget(widgetId);
 
 			if (widget != null) {
-				/*
-				 * Calls ZendeskUtil and retrives user inforamtion along with
-				 * tickets to show in the Zendesk widget
-				 */
-				result = ZendeskUtil.getZendeskProfile(widget, email);
+				result =ZendeskUtil.getZendeskProfile(widget, email);
 			}
 
-			return result;
-
-		} catch (SocketTimeoutException e) {
-			throw new WebApplicationException(Response
-					.status(Response.Status.BAD_REQUEST)
-					.entity("Request timed out. Refresh and Please try again.")
-					.build());
-		} catch (IOException e) {
-			throw new WebApplicationException(Response
-					.status(Response.Status.BAD_REQUEST)
-					.entity("An error occurred. Refresh and Please try again.")
-					.build());
+			// Retrieves user information from zendesk.
+			return  result;
 		} catch (Exception e) {
-			throw new WebApplicationException(Response
-					.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
-					.build());
+			throw ExceptionUtil.catchWebException(e);
 		}
 	}
 }

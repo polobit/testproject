@@ -4,15 +4,14 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 
 import org.json.JSONObject;
 
 import com.agilecrm.Globals;
 import com.agilecrm.social.QuickBooksUtil;
 import com.agilecrm.widgets.Widget;
+import com.agilecrm.widgets.util.ExceptionUtil;
 import com.agilecrm.widgets.util.WidgetUtil;
 
 /**
@@ -59,11 +58,9 @@ public class QuickBooksWidgetAPI
 	{
 	    // Calls QuickBooksUtil method to retrieve invoices
 	    return utilObj.getQuickBooksProfile(email);
-	}
-	catch (Exception e)
+	}catch (Exception e)
 	{
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
-		    .build());
+	    throw ExceptionUtil.catchWebException(e);
 	}
 
     }
@@ -99,13 +96,12 @@ public class QuickBooksWidgetAPI
 	    QuickBooksUtil utilObj = new QuickBooksUtil(widget.getProperty("token"), widget.getProperty("secret"),
 		    Globals.QUICKBOOKS_CONSUMER_KEY, Globals.QUICKBOOKS_CONSUMER_SECRET, widget.getProperty("company"));
 
-	    // calls XeroUtil method to add Contact to Xero account
+	    // Calls XeroUtil method to add Contact to Xero account
 	    return utilObj.createCustomer(firstName, lastName, email);
 	}
 	catch (Exception e)
 	{
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
-		    .build());
+	    throw ExceptionUtil.catchWebException(e);
 	}
     }
 }

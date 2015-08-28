@@ -1,7 +1,5 @@
 package com.agilecrm.core.api.widgets;
 
-import java.io.IOException;
-import java.net.SocketTimeoutException;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
@@ -11,9 +9,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 
 import org.json.JSONArray;
 
@@ -41,6 +37,7 @@ import com.agilecrm.social.twitter.TwitterTweet;
 import com.agilecrm.social.twitter.TwitterUpdates;
 import com.agilecrm.social.twitter.TwitterUtil;
 import com.agilecrm.widgets.Widget;
+import com.agilecrm.widgets.util.ExceptionUtil;
 import com.agilecrm.widgets.util.WidgetUtil;
 
 /**
@@ -83,30 +80,19 @@ public class LinkedInTwitterWidgetsAPI
 	    Widget widget = WidgetUtil.getWidget(widgetId);
 
 	    // Returns null if widget doesn't exist with given widget id
-	    if (widget == null)
-		return null;
+	    if (widget == null){
+	    	return null;
+	    }
 
-	    /*
-	     * Based on widget name, profiles are searched based on first and
-	     * last name of contact in LinkedIn and Twitter
-	     */
-	    if (widget.name.equalsIgnoreCase("LINKEDIN"))
-		return LinkedInSearch.searchLinkedInProfiles(widget, contact);
-
-	    else if (widget.name.equalsIgnoreCase("TWITTER"))
-		return TwitterSearch.searchTwitterProfiles(widget, contact);
-	}
-	catch (SocketTimeoutException e)
+	    //Based on widget name, profiles are searched based on first and last name of contact in LinkedIn and Twitter
+	    if (widget.name.equalsIgnoreCase("LINKEDIN")){
+	    	return LinkedInSearch.searchLinkedInProfiles(widget, contact);
+	    }else if (widget.name.equalsIgnoreCase("TWITTER")){
+	    	return TwitterSearch.searchTwitterProfiles(widget, contact);
+	    }
+	}catch (Exception e)
 	{
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("Request timed out. Refresh and Please try again.").build());
-	}
-	catch (IOException e)
-	{
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("An error occurred. Refresh and Please try again.").build());
-	}
-	catch (Exception e)
-	{
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build());
+	    throw ExceptionUtil.catchWebException(e);
 	}
 	return null;
     }
@@ -144,27 +130,17 @@ public class LinkedInTwitterWidgetsAPI
 	    Widget widget = WidgetUtil.getWidget(widgetId);
 
 	    // Returns null if widget doesn't exist with given widget id
-	    if (widget == null)
-		return null;
+	    if (widget == null){
+	    	return null;
+	    }
 
-	    /*
-	     * Profiles are searched based on given keywords in LinkedIn
-	     */
-	    if (widget.name.equalsIgnoreCase("LINKEDIN"))
-		return LinkedInSearch.modifiedSearchForLinkedInProfiles(widget, keywords);
-
-	}
-	catch (SocketTimeoutException e)
+  	    // Profiles are searched based on given keywords in LinkedIn
+	    if (widget.name.equalsIgnoreCase("LINKEDIN")){
+	    	return LinkedInSearch.modifiedSearchForLinkedInProfiles(widget, keywords);
+	    }
+	}catch (Exception e)
 	{
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("Request timed out. Refresh and Please try again.").build());
-	}
-	catch (IOException e)
-	{
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("An error occurred. Refresh and Please try again.").build());
-	}
-	catch (Exception e)
-	{
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build());
+	    throw ExceptionUtil.catchWebException(e);
 	}
 	return null;
     }
@@ -190,27 +166,17 @@ public class LinkedInTwitterWidgetsAPI
 	    Widget widget = WidgetUtil.getWidget(widgetId);
 
 	    // Returns null if widget doesn't exist with given widget id
-	    if (widget == null)
-		return null;
+	    if (widget == null){
+	    	return null;
+	    }
 
-	    /*
-	     * Profiles are searched based on given search string
-	     */
-	    if (widget.name.equalsIgnoreCase("TWITTER"))
-		return TwitterSearch.modifiedSearchForTwitterProfiles(widget, searchString);
-
-	}
-	catch (SocketTimeoutException e)
+	    // Profiles are searched based on given search string
+	    if (widget.name.equalsIgnoreCase("TWITTER")){
+	    	return TwitterSearch.modifiedSearchForTwitterProfiles(widget, searchString);
+	    }
+	}catch (Exception e)
 	{
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("Request timed out. Refresh and Please try again.").build());
-	}
-	catch (IOException e)
-	{
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("An error occurred. Refresh and Please try again.").build());
-	}
-	catch (Exception e)
-	{
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build());
+	    throw ExceptionUtil.catchWebException(e);
 	}
 	return null;
     }
@@ -236,34 +202,20 @@ public class LinkedInTwitterWidgetsAPI
 	    // Retrieve widget based on its id
 	    Widget widget = WidgetUtil.getWidget(widgetId);
 
-	    if (widget == null)
-		return null;
+	    if (widget == null){
+	    	return null;
+	    }
 
-	    /*
-	     * Based on widget name, calls LinkedUtil method to get LinkedIn id
-	     * of a profile by LinkedIn URL
-	     */
-	    if (widget.name.equalsIgnoreCase("LINKEDIN"))
-		return LinkedInUtil.getLinkedInIdByUrl(widget, webUrl);
-
-	    /*
-	     * Calls TwitterUtil method to Twitter id of a profile by Twitter
-	     * URL
-	     */
-	    else if (widget.name.equalsIgnoreCase("TWITTER"))
-		return TwitterUtil.getTwitterIdByUrl(widget, webUrl);
-	}
-	catch (SocketTimeoutException e)
+	    // Based on widget name, calls LinkedUtil method to get LinkedIn id of a profile by LinkedIn URL
+	    if (widget.name.equalsIgnoreCase("LINKEDIN")){
+	    	return LinkedInUtil.getLinkedInIdByUrl(widget, webUrl);
+	    }else if (widget.name.equalsIgnoreCase("TWITTER")){
+	    	 //Calls TwitterUtil method to Twitter id of a profile by Twitter URL
+	    	return TwitterUtil.getTwitterIdByUrl(widget, webUrl);
+	    }
+	}catch (Exception e)
 	{
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("Request timed out. Refresh and Please try again.").build());
-	}
-	catch (IOException e)
-	{
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("An error occurred. Refresh and Please try again.").build());
-	}
-	catch (Exception e)
-	{
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build());
+	    throw ExceptionUtil.catchWebException(e);
 	}
 	return null;
     }
@@ -287,31 +239,22 @@ public class LinkedInTwitterWidgetsAPI
 	// Retrieves widget based on id
 	Widget widget = WidgetUtil.getWidget(widgetId);
 
-	if (widget == null)
+	if (widget == null){
 	    return null;
+	}
 
 	try
 	{
 	    // Gets profile from LinkedInUtil based on socialId
-	    if (widget.name.equalsIgnoreCase("LINKEDIN"))
-		return LinkedInProfile.getLinkedInProfileById(widget, socialId);
-
-	    // Gets profile from TwitterUtil based on socialId
-	    else if (widget.name.equalsIgnoreCase("TWITTER"))
-		return TwitterProfile.getTwitterProfileById(widget, socialId);
-	}
-
-	catch (SocketTimeoutException e)
+	    if (widget.name.equalsIgnoreCase("LINKEDIN")){
+	    	return LinkedInProfile.getLinkedInProfileById(widget, socialId);
+	    } else if (widget.name.equalsIgnoreCase("TWITTER")){
+	    	// Gets profile from TwitterUtil based on socialId
+	    	return TwitterProfile.getTwitterProfileById(widget, socialId);
+	    }
+	}catch (Exception e)
 	{
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("Request timed out. Refresh and Please try again.").build());
-	}
-	catch (IOException e)
-	{
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("An error occurred. Refresh and Please try again.").build());
-	}
-	catch (Exception e)
-	{
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build());
+	    throw ExceptionUtil.catchWebException(e);
 	}
 	return null;
     }
@@ -335,31 +278,23 @@ public class LinkedInTwitterWidgetsAPI
 	// Retrieves widget based on id
 	Widget widget = WidgetUtil.getWidget(widgetId);
 
-	if (widget == null)
+	if (widget == null){
 	    return null;
+	}
 
 	try
 	{
 	    // Gets profile from LinkedInUtil based on socialId
-	    if (widget.name.equalsIgnoreCase("LINKEDIN"))
-		return LinkedInProfile.getLinkedInProfile(widget);
-
-	    // Gets profile from TwitterUtil based on socialId
-	    else if (widget.name.equalsIgnoreCase("TWITTER"))
-		return TwitterProfile.getTwitterProfile(widget);
-	}
-
-	catch (SocketTimeoutException e)
+	    if (widget.name.equalsIgnoreCase("LINKEDIN")){
+	    	return LinkedInProfile.getLinkedInProfile(widget);
+	    } else if (widget.name.equalsIgnoreCase("TWITTER")){	   
+	    	// Gets profile from TwitterUtil based on socialId
+    		return TwitterProfile.getTwitterProfile(widget);
+	    }
+    
+	}catch (Exception e)
 	{
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("Request timed out. Refresh and Please try again.").build());
-	}
-	catch (IOException e)
-	{
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("An error occurred. Refresh and Please try again.").build());
-	}
-	catch (Exception e)
-	{
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build());
+	    throw ExceptionUtil.catchWebException(e);
 	}
 	return null;
     }
@@ -383,27 +318,17 @@ public class LinkedInTwitterWidgetsAPI
 	    // Retrieves widget based on its id
 	    Widget widget = WidgetUtil.getWidget(widgetId);
 
-	    if (widget == null)
-		return null;
+	    if (widget == null){
+	    	return null;
+	    }
 
-	    /*
-	     * If widget name is LinkedIn, retrieve the work positions of a
-	     * LinkedIn profile based on socialId
-	     */
-	    if (widget.name.equalsIgnoreCase("LINKEDIN"))
-		return LinkedInExperience.getExperience(widget, socialId);
-	}
-	catch (SocketTimeoutException e)
+	    // If widget name is LinkedIn, retrieve the work positions of a LinkedIn profile based on socialId
+	    if (widget.name.equalsIgnoreCase("LINKEDIN")){
+	    	return LinkedInExperience.getExperience(widget, socialId);
+	    }
+	}catch (Exception e)
 	{
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("Request timed out. Refresh and Please try again.").build());
-	}
-	catch (IOException e)
-	{
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("An error occurred. Refresh and Please try again.").build());
-	}
-	catch (Exception e)
-	{
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build());
+	    throw ExceptionUtil.catchWebException(e);
 	}
 	return null;
     }
@@ -429,31 +354,20 @@ public class LinkedInTwitterWidgetsAPI
 	    // Retrieves widget based on its id
 	    Widget widget = WidgetUtil.getWidget(widgetId);
 
-	    if (widget == null)
-		return null;
+	    if (widget == null){
+	    	return null;
+	    }
 
-	    /*
-	     * Based on widget name, Calls LinkedUtil or TwitterUtil method to
-	     * retrieve all network updates based on social id
-	     */
-	    if (widget.name.equalsIgnoreCase("LINKEDIN"))
-		return LinkedInUpdates.getNetworkUpdates(widget, socialId, 0, 0, null, null);
+	    // Based on widget name, Calls LinkedUtil or TwitterUtil method to retrieve all network updates based on social id
+	    if (widget.name.equalsIgnoreCase("LINKEDIN")){
+	    	return LinkedInUpdates.getNetworkUpdates(widget, socialId, 0, 0, null, null);
+	    }else if (widget.name.equalsIgnoreCase("TWITTER")){
+	    	return TwitterUpdates.getNetworkUpdates(widget, Long.parseLong(socialId));
+	    }
 
-	    else if (widget.name.equalsIgnoreCase("TWITTER"))
-		return TwitterUpdates.getNetworkUpdates(widget, Long.parseLong(socialId));
-
-	}
-	catch (SocketTimeoutException e)
+	}catch (Exception e)
 	{
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("Request timed out. Refresh and Please try again.").build());
-	}
-	catch (IOException e)
-	{
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("An error occurred. Refresh and Please try again.").build());
-	}
-	catch (Exception e)
-	{
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build());
+	    throw ExceptionUtil.catchWebException(e);
 	}
 	return null;
     }
@@ -484,29 +398,19 @@ public class LinkedInTwitterWidgetsAPI
 	{
 	    // Retrieves a widget based on its id
 	    Widget widget = WidgetUtil.getWidget(widgetId);
-	    if (widget == null)
-		return null;
+	    if (widget == null){
+	    	return null;
+	    }
 
-	    /*
-	     * If widget name is Twitter, fetches tweets for twitter profile
-	     * with socialId and filter them to specific(endIndex) number of
-	     * tweets tweeted before the given tweet id
-	     */
-	    if (widget.name.equalsIgnoreCase("TWITTER"))
-		return TwitterUpdates.getNetworkUpdates(widget, Long.parseLong(socialId), Long.parseLong(tweetId) - 5, Integer.parseInt(endIndex));
+	    //If widget name is Twitter, fetches tweets for twitter profile with socialId and filter them to 
+	    // specific(endIndex) number of tweets tweeted before the given tweet id
+	    if (widget.name.equalsIgnoreCase("TWITTER")){
+	    	return TwitterUpdates.getNetworkUpdates(widget, Long.parseLong(socialId), Long.parseLong(tweetId) - 5, Integer.parseInt(endIndex));
+	    }
 
-	}
-	catch (SocketTimeoutException e)
+	}catch (Exception e)
 	{
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("Request timed out. Refresh and Please try again.").build());
-	}
-	catch (IOException e)
-	{
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("An error occurred. Refresh and Please try again.").build());
-	}
-	catch (Exception e)
-	{
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build());
+	    throw ExceptionUtil.catchWebException(e);
 	}
 	return null;
     }
@@ -536,28 +440,18 @@ public class LinkedInTwitterWidgetsAPI
 	    // Retrieves a widget based on its id
 	    Widget widget = WidgetUtil.getWidget(widgetId);
 
-	    if (widget == null)
-		return null;
+	    if (widget == null){
+	    	return null;
+	    }
 
-	    /*
-	     * Calls LinkedUtil method to get specific number of network updates
-	     * based on index
-	     */
-	    if (widget.name.equalsIgnoreCase("LINKEDIN"))
-		return LinkedInUpdates.getNetworkUpdates(widget, socialId, Integer.parseInt(startIndex), Integer.parseInt(endIndex), null, null);
+	    // Calls LinkedUtil method to get specific number of network updates based on index
+	    if (widget.name.equalsIgnoreCase("LINKEDIN")){
+	    	return LinkedInUpdates.getNetworkUpdates(widget, socialId, Integer.parseInt(startIndex), Integer.parseInt(endIndex), null, null);
+	    }
 
-	}
-	catch (SocketTimeoutException e)
+	}catch (Exception e)
 	{
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("Request timed out. Refresh and Please try again.").build());
-	}
-	catch (IOException e)
-	{
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("An error occurred. Refresh and Please try again.").build());
-	}
-	catch (Exception e)
-	{
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build());
+	    throw ExceptionUtil.catchWebException(e);
 	}
 	return null;
     }
@@ -593,36 +487,23 @@ public class LinkedInTwitterWidgetsAPI
 	    // Retrieve a widget by its Id
 	    Widget widget = WidgetUtil.getWidget(widgetId);
 
-	    if (widget == null)
-		return null;
-
-	    /*
-	     * Calls LinkedUtil method to get specific number of network updates
-	     * based on index and between the given dates
-	     */
-	    if (widget.name.equalsIgnoreCase("LINKEDIN"))
-	    {
-		/*
-		 * 5 seconds is delayed to avoid recent update, because it
-		 * includes the end date update also which we already have
-		 */
-		if (endDate != null)
-		    endDate = String.valueOf(Integer.parseInt(endDate) - 5);
-		return LinkedInUpdates.getNetworkUpdates(widget, socialId, Integer.parseInt(startIndex), Integer.parseInt(endIndex), startDate, endDate);
+	    if (widget == null){
+	    	return null;
 	    }
 
-	}
-	catch (SocketTimeoutException e)
+	    // Calls LinkedUtil method to get specific number of network updates based on index and between the given dates
+	    if (widget.name.equalsIgnoreCase("LINKEDIN"))
+	    {
+			// 5 seconds is delayed to avoid recent update, because it includes the end date update also which we already have
+			if (endDate != null){
+			    endDate = String.valueOf(Integer.parseInt(endDate) - 5);
+			}
+			return LinkedInUpdates.getNetworkUpdates(widget, socialId, Integer.parseInt(startIndex), Integer.parseInt(endIndex), startDate, endDate);
+	    }
+
+	}catch (Exception e)
 	{
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("Request timed out. Refresh and Please try again.").build());
-	}
-	catch (IOException e)
-	{
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("An error occurred. Refresh and Please try again.").build());
-	}
-	catch (Exception e)
-	{
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build());
+	    throw ExceptionUtil.catchWebException(e);
 	}
 	return null;
     }
@@ -650,29 +531,21 @@ public class LinkedInTwitterWidgetsAPI
 	    // Retrieves widget based on its id
 	    Widget widget = WidgetUtil.getWidget(widgetId);
 
-	    if (widget == null)
-		return null;
+	    if (widget == null){
+	    	return null;
+	    }
 
 	    // Calls LinkedInUtil method to reshare a share in LinkedIn by id
-	    if (widget.name.equalsIgnoreCase("LINKEDIN"))
-		return LinkedInUpdates.reshareLinkedInPost(widget, shareId, comment);
+	    if (widget.name.equalsIgnoreCase("LINKEDIN")){
+	    	return LinkedInUpdates.reshareLinkedInPost(widget, shareId, comment);
+	    } else if (widget.name.equalsIgnoreCase("TWITTER")){
+		    // Calls TwitterUtil method to retweet a tweet in Twitter by its ID
+	    	return TwitterTweet.reTweetByTweetId(widget, Long.parseLong(shareId));
+	    }
 
-	    // Calls TwitterUtil method to retweet a tweet in Twitter by its ID
-	    else if (widget.name.equalsIgnoreCase("TWITTER"))
-		return TwitterTweet.reTweetByTweetId(widget, Long.parseLong(shareId));
-
-	}
-	catch (SocketTimeoutException e)
+	}catch (Exception e)
 	{
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("Request timed out. Refresh and Please try again.").build());
-	}
-	catch (IOException e)
-	{
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("An error occurred. Refresh and Please try again.").build());
-	}
-	catch (Exception e)
-	{
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build());
+	    throw ExceptionUtil.catchWebException(e);
 	}
 	return "Unsuccessfull";
     }
@@ -697,28 +570,18 @@ public class LinkedInTwitterWidgetsAPI
 	    // Retrieve a widget by its id
 	    Widget widget = WidgetUtil.getWidget(widgetId);
 
-	    if (widget == null)
-		return null;
+	    if (widget == null){
+	    	return null;
+	    }
 
-	    /*
-	     * If widget name is Twitter, retrieves follower IDs of the Twitter
-	     * profile with socialId
-	     */
-	    if (widget.name.equalsIgnoreCase("TWITTER"))
-		return TwitterFollowers.getFollowersIDs(widget, socialId);
+	    // If widget name is Twitter, retrieves follower IDs of the Twitter profile with socialId
+	    if (widget.name.equalsIgnoreCase("TWITTER")){
+	    	return TwitterFollowers.getFollowersIDs(widget, socialId);
+	    }
 
-	}
-	catch (SocketTimeoutException e)
+	}catch (Exception e)
 	{
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("Request timed out. Refresh and Please try again.").build());
-	}
-	catch (IOException e)
-	{
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("An error occurred. Refresh and Please try again.").build());
-	}
-	catch (Exception e)
-	{
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build());
+	    throw ExceptionUtil.catchWebException(e);
 	}
 	return null;
     }
@@ -744,25 +607,17 @@ public class LinkedInTwitterWidgetsAPI
 	    // Retrieve widget object from its id
 	    Widget widget = WidgetUtil.getWidget(widgetId);
 
-	    if (widget == null)
-		return null;
+	    if (widget == null){
+	    	return null;
+	    }
 
 	    // If widget name equals Twitter, get following IDs
-	    if (widget.name.equalsIgnoreCase("TWITTER"))
-		return TwitterFollowing.getFollowingIDs(widget, socialId);
-
-	}
-	catch (SocketTimeoutException e)
+	    if (widget.name.equalsIgnoreCase("TWITTER")){
+	    	return TwitterFollowing.getFollowingIDs(widget, socialId);
+	    }
+	}catch (Exception e)
 	{
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("Request timed out. Refresh and Please try again.").build());
-	}
-	catch (IOException e)
-	{
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("An error occurred. Refresh and Please try again.").build());
-	}
-	catch (Exception e)
-	{
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build());
+	    throw ExceptionUtil.catchWebException(e);
 	}
 	return null;
     }
@@ -788,31 +643,20 @@ public class LinkedInTwitterWidgetsAPI
 	    // Retrieve widget object from its id
 	    Widget widget = WidgetUtil.getWidget(widgetId);
 
-	    if (widget == null)
-		return null;
+	    if (widget == null){
+	    	return null;
+	    }
 
-	    /*
-	     * Form a JSONArray with the given twitter IDs to retrieve profiles
-	     * for those IDs
-	     */
+	    // Form a JSONArray with the given twitter IDs to retrieve profiles for those IDs
 	    JSONArray twitterIdsJsonArray = new JSONArray(twitterIds);
 
 	    // If widget name equals Twitter, get profiles based on IDs
-	    if (widget.name.equalsIgnoreCase("TWITTER"))
-		return TwitterUtil.getListOfProfiles(widget, twitterIdsJsonArray);
-
-	}
-	catch (SocketTimeoutException e)
+	    if (widget.name.equalsIgnoreCase("TWITTER")){
+	    	return TwitterUtil.getListOfProfiles(widget, twitterIdsJsonArray);
+	    }
+	}catch (Exception e)
 	{
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("Request timed out. Refresh and Please try again.").build());
-	}
-	catch (IOException e)
-	{
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("An error occurred. Refresh and Please try again.").build());
-	}
-	catch (Exception e)
-	{
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build());
+	    throw ExceptionUtil.catchWebException(e);
 	}
 	return null;
     }
@@ -841,27 +685,17 @@ public class LinkedInTwitterWidgetsAPI
 	{
 	    // Retrieve widget object from its id
 	    Widget widget = WidgetUtil.getWidget(widgetId);
-	    if (widget == null)
-		return null;
+	    if (widget == null){
+	    	return null;
+	    }
 
-	    /*
-	     * Based on widget name, calls LinkedInUtil method to get shared
-	     * connections between agile user and the profile with socialId
-	     */
-	    if (widget.name.equalsIgnoreCase("LINKEDIN"))
-		return LinkedInConnections.getSharedConnections(widget, socialId);
-	}
-	catch (SocketTimeoutException e)
+	    // Based on widget name, calls LinkedInUtil method to get shared connections between agile user and the profile with socialId
+	    if (widget.name.equalsIgnoreCase("LINKEDIN")){
+	    	return LinkedInConnections.getSharedConnections(widget, socialId);
+	    }
+	}catch (Exception e)
 	{
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("Request timed out. Refresh and Please try again.").build());
-	}
-	catch (IOException e)
-	{
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("An error occurred. Refresh and Please try again.").build());
-	}
-	catch (Exception e)
-	{
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build());
+	    throw ExceptionUtil.catchWebException(e);
 	}
 	return null;
     }
@@ -891,31 +725,20 @@ public class LinkedInTwitterWidgetsAPI
 	{
 	    // Retrieve widget object from its id
 	    Widget widget = WidgetUtil.getWidget(widgetId);
-	    if (widget == null)
-		return null;
+	    if (widget == null){
+	    	return null;
+	    }
 
-	    /*
-	     * Based on widget name, Calls LinkedUtil method to send message to
-	     * person by socialId
-	     */
-	    if (widget.name.equalsIgnoreCase("LINKEDIN"))
-		return LinkedInConnect.connectInLinkedIn(widget, socialId, subject, message);
-
-	    // Calls TwitterUtil method to send message to person by socialId
-	    else if (widget.name.equalsIgnoreCase("TWITTER"))
-		return TwitterFollow.follow(widget, Long.parseLong(socialId));
-	}
-	catch (SocketTimeoutException e)
+	    // Based on widget name, Calls LinkedUtil method to send message to person by socialId
+	    if (widget.name.equalsIgnoreCase("LINKEDIN")){
+	    	return LinkedInConnect.connectInLinkedIn(widget, socialId, subject, message);
+	    }else if (widget.name.equalsIgnoreCase("TWITTER")){
+	    	// Calls TwitterUtil method to send message to person by socialId
+	    	return TwitterFollow.follow(widget, Long.parseLong(socialId));
+	    }
+	}catch (Exception e)
 	{
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("Request timed out. Refresh and Please try again.").build());
-	}
-	catch (IOException e)
-	{
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("An error occurred. Refresh and Please try again.").build());
-	}
-	catch (Exception e)
-	{
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build());
+	    throw ExceptionUtil.catchWebException(e);
 	}
 	return null;
     }
@@ -940,27 +763,17 @@ public class LinkedInTwitterWidgetsAPI
 	{
 	    // Retrieve widget object from its id
 	    Widget widget = WidgetUtil.getWidget(widgetId);
-	    if (widget == null)
-		return null;
+	    if (widget == null){
+	    	return null;
+	    }
 
-	    /*
-	     * Based on widget name, calls TwitterUtil method to unfollow a
-	     * profile in Twitter with given Twitter ID
-	     */
-	    if (widget.name.equalsIgnoreCase("TWITTER"))
-		return TwitterFollow.unfollow(widget, Long.parseLong(socialId));
-	}
-	catch (SocketTimeoutException e)
+	    // Based on widget name, calls TwitterUtil method to unfollow a profile in Twitter with given Twitter ID
+	    if (widget.name.equalsIgnoreCase("TWITTER")){
+	    	return TwitterFollow.unfollow(widget, Long.parseLong(socialId));
+	    }
+	}catch (Exception e)
 	{
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("Request timed out. Refresh and Please try again.").build());
-	}
-	catch (IOException e)
-	{
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("An error occurred. Refresh and Please try again.").build());
-	}
-	catch (Exception e)
-	{
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build());
+	    throw ExceptionUtil.catchWebException(e);
 	}
 	return null;
     }
@@ -990,34 +803,20 @@ public class LinkedInTwitterWidgetsAPI
 	{
 	    // Retrieve widget object from its id
 	    Widget widget = WidgetUtil.getWidget(widgetId);
-	    if (widget == null)
-		return null;
+	    if (widget == null){
+	    	return null;
+	    }
 
-	    /*
-	     * Calls LinkedUtil method to send message to person by socialId,
-	     * based on widget name
-	     */
-	    if (widget.name.equalsIgnoreCase("LINKEDIN"))
-		return LinkedInMessage.sendLinkedInMessageById(widget, socialId, subject, message);
-
-	    /*
-	     * Calls TwitterUtil method to send message to person by socialId,
-	     * based on widget name
-	     */
-	    else if (widget.name.equalsIgnoreCase("TWITTER"))
-		return TwitterMessage.sendTwitterMessageById(widget, socialId, message);
-	}
-	catch (SocketTimeoutException e)
+	    // Calls LinkedUtil method to send message to person by socialId, based on widget name
+	    if (widget.name.equalsIgnoreCase("LINKEDIN")){
+	    	return LinkedInMessage.sendLinkedInMessageById(widget, socialId, subject, message);
+	    } else if (widget.name.equalsIgnoreCase("TWITTER")){
+	    	// Calls TwitterUtil method to send message to person by socialId, based on widget name
+	    	return TwitterMessage.sendTwitterMessageById(widget, socialId, message);
+	    }
+	}catch (Exception e)
 	{
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("Request timed out. Refresh and Please try again.").build());
-	}
-	catch (IOException e)
-	{
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("An error occurred. Refresh and Please try again.").build());
-	}
-	catch (Exception e)
-	{
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build());
+	    throw ExceptionUtil.catchWebException(e);
 	}
 	return null;
     }
@@ -1043,28 +842,18 @@ public class LinkedInTwitterWidgetsAPI
 	{
 	    // Retrieve widget object from its id
 	    Widget widget = WidgetUtil.getWidget(widgetId);
-	    if (widget == null)
-		return null;
+	    if (widget == null){
+	    	return null;
+	    }
 
-	    /*
-	     * Calls TwitterUtil method to tweet to a person by their screen
-	     * name which is included in the message
-	     */
-	    if (widget.name.equalsIgnoreCase("TWITTER"))
-		return TwitterTweet.tweetInTwitter(widget, message);
+	    // Calls TwitterUtil method to tweet to a person by their screen name which is included in the message
+	    if (widget.name.equalsIgnoreCase("TWITTER")){
+	    	return TwitterTweet.tweetInTwitter(widget, message);
+	    }
 
-	}
-	catch (SocketTimeoutException e)
+	}catch (Exception e)
 	{
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("Request timed out. Refresh and Please try again.").build());
-	}
-	catch (IOException e)
-	{
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("An error occurred. Refresh and Please try again.").build());
-	}
-	catch (Exception e)
-	{
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build());
+	    throw ExceptionUtil.catchWebException(e);
 	}
 	return null;
     }

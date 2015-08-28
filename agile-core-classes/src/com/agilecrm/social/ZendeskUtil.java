@@ -18,6 +18,7 @@ import com.agilecrm.widgets.Widget;
  * @author Tejaswi
  * @since February 2013
  */
+
 public class ZendeskUtil {
 
 	/**
@@ -54,7 +55,6 @@ public class ZendeskUtil {
 		return tickets;
 	}
 
-	// Each Chat
 	/**
 	 * Calls chat method of pluginName type class in ClickDeskPlugins server
 	 * using REST API to add ticket in Zendesk
@@ -85,7 +85,7 @@ public class ZendeskUtil {
 				.put("visitorJSON", contactPrefsJSON)
 				.put("messageJSON", messageJSON);
 
-		// send request to plugins server and return response
+		// Send request to plugins server and return response
 		return HTTPUtil.accessHTTPURL(pluginURL + "core/agile/zendesk/add",
 				json.toString(), "PUT");
 
@@ -116,7 +116,7 @@ public class ZendeskUtil {
 		JSONObject json = new JSONObject().put("pluginPrefsJSON",
 				pluginPrefsJSON).put("messageJSON", messageJSON);
 
-		// send request to plugins server and return response
+		// Send request to plugins server and return response
 		return HTTPUtil.accessHTTPURL(pluginURL + "core/agile/zendesk/update",
 				json.toString(), "PUT");
 

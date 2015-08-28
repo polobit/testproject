@@ -5,15 +5,14 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
-import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 
 import org.json.JSONObject;
 
 import com.agilecrm.Globals;
 import com.agilecrm.social.FacebookUtil;
 import com.agilecrm.widgets.Widget;
+import com.agilecrm.widgets.util.ExceptionUtil;
 import com.agilecrm.widgets.util.WidgetUtil;
 
 /**
@@ -34,11 +33,11 @@ public class FacebookWidgetsApi {
 	String errorMessage = "Authentication Error. Please reconfigure your Facebook widget.";
 
 	/**
-	 * Get the facebook profiles based on the username.
+	 * Contacts to Facebook and search facebook profiles based on user name
 	 * 
 	 * @param widgetId
 	 * @param firstname
-	 * @return
+	 * @return JSONObject
 	 */
 	@Path("contacts/{widget-id}")
 	@GET
@@ -59,26 +58,20 @@ public class FacebookWidgetsApi {
 			FacebookUtil facebookUtil = new FacebookUtil(
 					Globals.FACEBOOK_APP_ID, Globals.FACEBOOK_APP_SECRET,
 					widget.getProperty("token"));
-			/*
-			 * String res =
-			 * facebookUtil.searchContactsByName(firstname).toString();
-			 * System.out.println(res);
-			 */
+
 			return facebookUtil.searchContactsByName(firstname);
 		} catch (Exception e) {
-			throw new WebApplicationException(Response
-					.status(Response.Status.BAD_REQUEST).entity(errorMessage)
-					.build());
+			throw ExceptionUtil.catchWebException(e);
 		}
 
 	}
 
 	/**
-	 * Get facebook profiles based on the user id.
+	 * get facebook profile base on userid
 	 * 
 	 * @param widgetId
 	 * @param id
-	 * @return
+	 * @return JSONObject
 	 */
 	@Path("userProfile/{widget-id}/{id}")
 	@GET
@@ -102,19 +95,17 @@ public class FacebookWidgetsApi {
 			System.out.println(res);
 			return res;
 		} catch (Exception e) {
-			throw new WebApplicationException(Response
-					.status(Response.Status.BAD_REQUEST).entity(errorMessage)
-					.build());
+			throw ExceptionUtil.catchWebException(e);
 		}
 
 	}
 
 	/**
-	 * Gets the current user facebook profile.
+	 * gives Facebook Current user
 	 * 
 	 * @param widgetId
 	 * @param id
-	 * @return
+	 * @return String
 	 */
 	@Path("currentUserProfile/{widget-id}")
 	@GET
@@ -134,12 +125,8 @@ public class FacebookWidgetsApi {
 					Globals.FACEBOOK_APP_ID, Globals.FACEBOOK_APP_SECRET,
 					widget.getProperty("token"));
 			return facebookUtil.getFacebookCurrentUser();
-			// System.out.println(res);
-			// return res;
 		} catch (Exception e) {
-			throw new WebApplicationException(Response
-					.status(Response.Status.BAD_REQUEST).entity(errorMessage)
-					.build());
+			throw ExceptionUtil.catchWebException(e);
 		}
 
 	}

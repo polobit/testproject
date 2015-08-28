@@ -6,13 +6,13 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.agilecrm.social.ChargifyUtil;
 import com.agilecrm.widgets.Widget;
+import com.agilecrm.widgets.util.ExceptionUtil;
 import com.agilecrm.widgets.util.WidgetUtil;
 
 /**
@@ -100,9 +100,7 @@ public class ChargifyWidgetsAPI {
 			return result;
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new WebApplicationException(Response
-					.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
-					.build());
+			throw ExceptionUtil.catchWebException(e);
 		}
 	}
 
@@ -137,10 +135,10 @@ public class ChargifyWidgetsAPI {
 					widget.getProperty("chargify_api_key"), "agilecrm");
 			// Calls ChargifyUtil method to add Contact to Chargify account
 			return ChargifyUtil.createCustomer(firstName, lastName, email);
-		} catch (Exception e) {
-			throw new WebApplicationException(Response
-					.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
-					.build());
+		}
+		catch (Exception e)
+		{
+			throw ExceptionUtil.catchWebException(e);
 		}
 	}
 }

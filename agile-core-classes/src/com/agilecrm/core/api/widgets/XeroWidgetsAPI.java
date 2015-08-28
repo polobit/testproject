@@ -55,8 +55,9 @@ public class XeroWidgetsAPI
 		System.out.println("xero widgets api");
 		// Retrieves widget based on its id
 		Widget widget = WidgetUtil.getWidget(widgetId);
-		if (widget == null)
+		if (widget == null){
 			return null;
+		}
 
 		widget = checkAccesToken(widget);
 		
@@ -98,8 +99,9 @@ public class XeroWidgetsAPI
 	{
 		// Retrieves widget based on its id
 		Widget widget = WidgetUtil.getWidget(widgetId);
-		if (widget == null)
+		if (widget == null){
 			return null;
+		}
 		
 		widget = checkAccesToken(widget);
 
@@ -131,8 +133,9 @@ public class XeroWidgetsAPI
 	{
 		// Retrieves widget based on its id
 		Widget widget = WidgetUtil.getWidget(widgetId);
-		if (widget == null)
+		if (widget == null){
 			return null;
+		}
 		
 		widget = checkAccesToken(widget);
 
@@ -157,8 +160,9 @@ public class XeroWidgetsAPI
 	{
 		// Retrieves widget based on its id
 		Widget widget = WidgetUtil.getWidget(widgetId);
-		if (widget == null)
+		if (widget == null){
 			return null;
+		}
 		
 		widget = checkAccesToken(widget);
 
@@ -214,7 +218,7 @@ public class XeroWidgetsAPI
 					XeroUtil utilObj = new XeroUtil();
 					utilObj.callbackUrl = String.format(utilObj.callbackUrl,getReqDomainURL());
 					return utilObj.refreshToken(widget);
-			}
+				}
 			}
 			catch (NumberFormatException e)
 			{
@@ -232,5 +236,4 @@ public class XeroWidgetsAPI
 		return widget;
 	}
 	
-
 }
