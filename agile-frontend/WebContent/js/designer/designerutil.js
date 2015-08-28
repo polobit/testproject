@@ -668,7 +668,7 @@ function getTaskCategories(type)
 {
 	var categories = {};
 	$.ajax({
-		  url: '/core/api/categories',
+		  url: '/core/api/categories?entity_type=TASK',
 		  type: "GET",
 		  async:false,
 		  dataType:'json',
