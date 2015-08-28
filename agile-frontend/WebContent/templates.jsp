@@ -97,14 +97,51 @@
 <div id="agilecrm-container">
 	<div id="content" class="app-content-body" style = "background-color:#edf1f2 !important">
 		<div>
-			<div class="custom-animated custom-fadeInUp">
-				<div class="wrapper-md lter b-b">
-					<div class="row">
-   	 					<div class="col-sm-12 col-md-12">
-   	 					<div id="preview-container" class="span12">
+			<div class="app-content-body custom-animated custom-fadeInUp">
+				<div class="bg-light lter b-b wrapper-md ng-scope">
+    				<div>
+     					<div>
+ 							<h1 class="m-n font-thin h3 pull-left">
+ 								<span id="template-heading">Select a Template</span>
+ 							</h1>
+							<div class="pull-right">
+					            <div class="inline-block">
+								    <div class="btn-group">
+       									<a class="btn btn-sm btn-default" href="cd_tiny_mce.jsp?id=<%= id%>">Create your own</a> 
+									</div>
+								</div>
+            				</div>
+        					<div class="clearfix"></div>
+    					</div>
+					</div>
+				</div>
+				<div class="hbox hbox-auto-xs hbox-auto-sm">
+					<div class="col contacts-div">
+   	 					<div class=""> 
+   	 					<div id="preview-container" class="data">
 							<!-- Container for theme previews -->
-							<div id="preview-container-title" class="page-header"></div>
-							<div id="preview-container-content"></div>
+							<div id="preview-container-content" class="panel-heading">
+								<% if(("email").equals(type)) {%>
+								<div class="span11 email-template">
+									<div class="">
+										<h3>Your Email Temaplates</h3>
+									</div>
+									<div id="loading-email-template" class= "hide">
+										<img src="img/21-0.gif" alt="Empty image template">
+										<p>Loading...</p>
+									</div>
+								</div>
+								<div class="span11 campaign-template" >
+									<div class="">
+										<h3>Campaign Temaplates</h3>
+									</div>
+									<div id="loading-campaign-template" class= "hide">
+										<img src="img/21-0.gif" alt="Empty image template">
+										<p>Loading...</p>
+									</div> 
+								</div>
+								<%} %>
+							</div>
 						</div>
    	 					</div>
    	 				</div>
@@ -236,9 +273,9 @@ function render_theme_previews()
 					+'</a></span>'
 					
 	
-	$('#preview-container-title').html(title + html_link);
+	//$('#preview-container-title').html(title + html_link);
 					
-	$('#preview-container-content').append('<div class="span11" style = " margin-bottom: -5%;"><div class="page-header"><h3>Agile Templates</h3></div>');
+	$('#preview-container-content').append('<div class="span11"><div class=""><h3>Agile Templates</h3></div>');
 	/*
 	heme-preview
 	
@@ -319,18 +356,16 @@ function show_fancy_box(content_array)
 function show_email_templates(){
 	
 	//get list of workflows
+		$('#loading-email-template').removeClass("hide"); 
+		$('#loading-campaign-template').removeClass("hide"); 
 	$.getJSON(location.origin + '/core/api/workflows', function(workflows){
 		
 		var email_nodes = get_email_nodes(workflows);
 		if(CAMPAIGN_EMAIL_NODES){
 			 var el = getTemplate('campaign_templates', CAMPAIGN_EMAIL_NODES2);
+			 $('#loading-campaign-template').addClass("hide"); 
+			$('.campaign-template').append(el); 
 			
-			$('#preview-container-content').prepend(el); 
-			
-			/* var el1 = getTemplate('campaign_templates1', CAMPAIGN_EMAIL_NODES2);
-			
-			$('#preview-container-content').prepend(el1); */
-				
 				$('.campaign-templates-panel').on('hidden.bs.collapse', function (e) {
 					var current_target = e.currentTarget;
 					$(current_target).find('.icon-minus').toggleClass('icon-plus icon-minus');
@@ -347,8 +382,9 @@ function show_email_templates(){
 			USER_TEMPLATES_JSON = get_email_templates(templates);
 			
 			var el1 = getTemplate('user_templates',templates)
-
-			$('#preview-container-content').prepend(el1);
+			
+			$('#loading-email-template').addClass("hide"); 
+			$('.email-template').append(el1);
 		});
 		
 	});
@@ -516,7 +552,7 @@ Handlebars.registerHelper('epochToHumanDate_eachkeys', function(format, value){
 		if($('div>.'+event+'>a>i').hasClass('icon-plus'))
 		$('tr.'+event).addClass('hide')
 		else
-		$('tr.'+event).removeClass('hide')
+		$('tr	.'+event).removeClass('hide')
 	}
 </script>
 
@@ -531,7 +567,7 @@ Handlebars.registerHelper('epochToHumanDate_eachkeys', function(format, value){
 
 {{#if this}}
 	<div class="span11">
-		<div class="page-header">
+		<div class="" style = "margin-bottom: 20px;">
 			<h4>{{label}}</h4>
 		</div>
 	
@@ -557,160 +593,180 @@ Handlebars.registerHelper('epochToHumanDate_eachkeys', function(format, value){
 </script>
 
 <script id="user_templates-template" type="text/x-handlebars-template">
-<div class="span11"><div class="page-header">
-<h3>Your Email Temaplates</h3>
-</div>
-<div>
-<div id="preview-container-content">
-<table class="table table-striped showCheckboxes panel agile-table" url="">
-<thead>
-    <tr>
-		<th class="hide header">Id</th>                    
-		<th style="width:30%;" class="header">Name</th>
-        <th style="width:30%;" class="header">Subject</th>
-        <th style="width:40%;" class="header"></th>
-    </tr>
+{{#unless this}}
+	<div id="logs-slate" style="margin-top: 20px;margin-left: 20px;">
+		<div class="alert alert-info">
+    		<div class="slate-content">
+				<div class="box-left pull-left m-r-md">
+ 	           		<img alt="Clipboard" src="/img/clipboard.png">
+				</div>
+				<div class="box-right pull-left">
+            		<h4 class="m-t-none">No template found.</h4>
+        		</div>
+    		</div>
+			<div class="clearfix"></div>
+		</div>
+	</div>
+{{/unless}}
 
-</thead>
-<tbody id="settings-email-templates-model-list" route="email-template/" class="agile-edit-row">
-{{#each this}}
-<tr onClick = 'load_in_editor("{{id}}","user_template")' style="cursor:pointer">
-<td class='data hide' data='{{id}}'>{{id}}</td>
-<td>
-		<div class="table-resp">
-    		{{name}}
-    	</div>
-    </td> 
-    <td>
-    	<div class="table-resp">
-    		{{subject}}
-    	</div>
-    </td>   
-    <td class="text-muted" style="color: #b2b0b1;">
-       {{#if created_time}}
-          <div class="text-muted table-resp text-xs"> <i class="fa fa-clock-o m-r-xs"></i>
-    	       Created <time class="created_time time-ago" value="{{created_time}}" datetime="{{epochToHumanDate "" created_time}}">{{epochToHumanDate "ddd mmm dd yyyy" created_time}}</time>
-          </div>
-       {{/if}}
-    </td>
-</tr>
+{{#if this}}
 
-{{/each}}
-</tbody>
-</table>
+<div class="span11" style="margin-top: 20px;">
+	<div>
+		<div id="preview-container-content">
+			<table class="table table-striped showCheckboxes panel agile-table" url="">
+				<thead>
+    				<tr>
+						<th class="hide header">Id</th>                    
+						<th style="width:30%;" class="header">Name</th>
+        				<th style="width:30%;" class="header">Subject</th>
+        				<th style="width:40%;" class="header"></th>
+    				</tr>
+				</thead>
+				<tbody id="settings-email-templates-model-list" route="email-template/" class="agile-edit-row">
+					{{#each this}}
+						<tr onClick = 'load_in_editor("{{id}}","user_template")' style="cursor:pointer">
+							<td class='data hide' data='{{id}}'>{{id}}</td>
+							<td>
+								<div class="table-resp">
+    								{{name}}
+    							</div>
+    						</td> 
+   		 					<td>
+    							<div class="table-resp">
+    								{{subject}}
+    							</div>
+    						</td>   
+    						<td class="text-muted" style="color: #b2b0b1;">
+       							{{#if created_time}}
+          							<div class="text-muted table-resp text-xs"> <i class="fa fa-clock-o m-r-xs"></i>
+    	       							Created <time class="created_time time-ago" value="{{created_time}}" datetime="{{epochToHumanDate "" created_time}}">{{epochToHumanDate "ddd mmm dd yyyy" created_time}}</time>
+          							</div>
+       							{{/if}}
+    						</td>
+						</tr>
+					{{/each}}
+				</tbody>
+			</table>
+		</div>
+	</div>
 </div>
-</div>
+
+{{/if}}
 </script>
 
 <script id="campaign_templates1-template" type="text/x-handlebars-template">
-<div class="span11"><div class="page-header">
-<h3> Campaign Emails</h3>
-</div>
 <div>
-<div id="preview-container-content">
-<table class="table table-striped showCheckboxes panel agile-table" url="">
-<thead>
-    <tr>
-		<th class="hide header">Id</th>                    
-		<th style="width:30%;" class="header">Campaign Name</th>
-        <th style="width:30%;" class="header">Subject</th>
-        <th style="width:40%;" class="header"></th>
-    </tr>
-
-</thead>
-<tbody id="settings-email-templates-model-list" route="email-template/" class="agile-edit-row">
-{{#eachkeys this}}
-
-{{#if_greater value.length "1"}}
-<tr onClick = 'load_in_editor1("{{key}}","user_template")' style="cursor:pointer">
-<td class='data hide' data='{{value.id}}'>{{value.id}}</td>
-	<td>
-		<div class="table-resp" >
-    		<div style = "text-overflow: ellipsis;  white-space: nowrap;  overflow: hidden;width: 80%;float: left;">
-				{{get_campaign_name value}}
-			</div>
-			<div style = "float: left;" class = "id_{{key}}" >
-    			<a href="#" style="float: right;" onclick = "collapse_it('id_{{key}}')"><i class="icon-plus"></i></a>
-			</div>
-    	</div>
-    	</div>
-    </td> 
-    <td>
-    </td>   
-    <td class="text-muted" style="color: #b2b0b1;">
-          <div class="text-muted table-resp text-xs"> <i class="fa fa-clock-o m-r-xs"></i>
-    	       Created <time class="created_time time-ago" value="{{get_created_time value}}" datetime="{{epochToHumanDate_eachkeys "ddd mmm dd yyyy" value}}">{{epochToHumanDate_eachkeys "ddd mmm dd yyyy" value}}</time>
-          </div>
-    </td>
-</tr>
-{{#eachkeys value}}
-<tr class = "hide id_{{../key}}">
-<td class='data hide' data='{{key}}'>{{key}}</td>
-<td>
-		<div class="table-resp">
-    		<div style = "text-overflow: ellipsis;  white-space: nowrap;  overflow: hidden;float: left;width: 80%;">
-				 
-			</div>
-    	</div>
-    </td> 
-    <td>
-    	<div class="table-resp">
-    		{{value.subject}} 
-    	</div>
-    </td>   
-    <td class="text-muted" style="color: #b2b0b1;">
-       {{#if value.created_time}}
-          <div class="text-muted table-resp text-xs"> <i class="fa fa-clock-o m-r-xs"></i>
-    	       Created <time class="created_time time-ago" value="{{value.created_time}}" datetime="{{epochToHumanDate "" value.created_time}}">{{epochToHumanDate "ddd mmm dd yyyy" value.created_time}}</time>
-          </div>
-       {{/if}}
-    </td>
-</tr>
-{{/eachkeys}}
-
-{{else}}
-<tr onClick = 'load_in_editor1("{{key}}","user_template")' style="cursor:pointer">
-{{#eachkeys value}}
-<td class='data hide' data='{{key}}'>{{key}}</td>
-<td>
-		<div class="table-resp">
-    		<div style = "text-overflow: ellipsis;  white-space: nowrap;  overflow: hidden;float: left;width: 80%;">
-				{{value.campaign_name}}
-			</div>
-    	</div>
-    </td> 
-    <td>
-    	<div class="table-resp">
-    		{{value.subject}}vv
-    	</div>
-    </td>   
-    <td class="text-muted" style="color: #b2b0b1;">
-       {{#if value.created_time}}
-          <div class="text-muted table-resp text-xs"> <i class="fa fa-clock-o m-r-xs"></i>
-    	       Created <time class="created_time time-ago" value="{{value.created_time}}" datetime="{{epochToHumanDate "" value.created_time}}">{{epochToHumanDate "ddd mmm dd yyyy" value.created_time}}</time>
-          </div>
-       {{/if}}
-    </td>
-
-{{/eachkeys}}
-{{/if_greater}}
-
-
-</tr>
-
-{{/eachkeys}}
-</tbody>
-</table>
-</div>
+	<div id="preview-container-content">
+		<table class="table table-striped showCheckboxes panel agile-table" url="">
+			<thead>
+   				<tr>
+					<th class="hide header">Id</th>                    
+					<th style="width:30%;" class="header">Campaign Name</th>
+        			<th style="width:30%;" class="header">Subject</th>
+        			<th style="width:40%;" class="header"></th>
+    			</tr>
+			</thead>
+			<tbody id="settings-email-templates-model-list" route="email-template/" class="agile-edit-row">
+				{{#eachkeys this}}
+					{{#if_greater value.length "1"}}
+						<tr onClick = 'load_in_editor1("{{key}}","user_template")' style="cursor:pointer">
+							<td class='data hide' data='{{value.id}}'>{{value.id}}</td>
+							<td>
+								<div class="table-resp" >
+    								<div style = "text-overflow: ellipsis;  white-space: nowrap;  overflow: hidden;width: 80%;float: left;">
+										{{get_campaign_name value}}
+									</div>
+									<div style = "float: left;" class = "id_{{key}}" >
+    									<a href="#" style="float: right;" onclick = "collapse_it('id_{{key}}')"><i class="icon-plus"></i></a>
+									</div>
+    							</div>
+						    </td> 
+   	 						<td>
+   							</td>   
+    						<td class="text-muted" style="color: #b2b0b1;">
+          						<div class="text-muted table-resp text-xs"> <i class="fa fa-clock-o m-r-xs"></i>
+    	       						Created <time class="created_time time-ago" value="{{get_created_time value}}" datetime="{{epochToHumanDate_eachkeys "ddd mmm dd yyyy" value}}">{{epochToHumanDate_eachkeys "ddd mmm dd yyyy" value}}</time>
+          						</div>
+    						</td>
+						</tr>
+						{{#eachkeys value}}
+							<tr class = "hide id_{{../key}}">
+								<td class='data hide' data='{{key}}'>{{key}}</td>
+								<td>
+									<div class="table-resp">
+    									<div style = "text-overflow: ellipsis;  white-space: nowrap;  overflow: hidden;float: left;width: 80%;">
+										</div>
+    								</div>
+    							</td> 
+    							<td>
+    								<div class="table-resp">
+    									{{value.subject}} 
+    								</div>
+    							</td>   
+    							<td class="text-muted" style="color: #b2b0b1;">
+       								{{#if value.created_time}}
+          								<div class="text-muted table-resp text-xs"> <i class="fa fa-clock-o m-r-xs"></i>
+    	       								Created <time class="created_time time-ago" value="{{value.created_time}}" datetime="{{epochToHumanDate "" value.created_time}}">{{epochToHumanDate "ddd mmm dd yyyy" value.created_time}}</time>
+          								</div>
+       								{{/if}}
+    							</td>
+							</tr>
+						{{/eachkeys}}
+					{{else}}
+						<tr onClick = 'load_in_editor1("{{key}}","user_template")' style="cursor:pointer">
+							{{#eachkeys value}}
+								<td class='data hide' data='{{key}}'>{{key}}</td>
+								<td>
+									<div class="table-resp">
+    									<div style = "text-overflow: ellipsis;  white-space: nowrap;  overflow: hidden;float: left;width: 80%;">
+											{{value.campaign_name}}
+										</div>
+    								</div>
+    							</td> 
+    							<td>
+    								<div class="table-resp">
+    									{{value.subject}}
+    								</div>
+    							</td>   
+    							<td class="text-muted" style="color: #b2b0b1;">
+       								{{#if value.created_time}}
+          								<div class="text-muted table-resp text-xs"> <i class="fa fa-clock-o m-r-xs"></i>
+    	      								Created <time class="created_time time-ago" value="{{value.created_time}}" datetime="{{epochToHumanDate "" value.created_time}}">{{epochToHumanDate "ddd mmm dd yyyy" value.created_time}}</time>
+         								</div>
+       								{{/if}}
+    							</td>
+							{{/eachkeys}}
+						{{/if_greater}}
+					</tr>
+				{{/eachkeys}}
+			</tbody>
+		</table>
+	</div>
 </div>
 </script>
 
 <script id="campaign_templates-template" type="text/x-handlebars-template">
-<div class="span11">
-	<div class="page-header">
-		<h3> Campaign Emails</h3>
-	</div>
 
+{{#unless this}}
+	<div id="logs-slate" style="margin-top: 20px;margin-left: 20px;">
+		<div class="alert alert-info">
+    		<div class="slate-content">
+				<div class="box-left pull-left m-r-md">
+ 	           		<img alt="Clipboard" src="/img/clipboard.png">
+				</div>
+				<div class="box-right pull-left">
+            		<h4 class="m-t-none">None of the campaign match this criteria.</h4>
+        		</div>
+    		</div>
+			<div class="clearfix"></div>
+		</div>
+	</div>
+{{/unless}}
+
+{{#if this}}
+
+<div class="span11" style="margin-top: 20px;">
 	<div>
 		<div id="preview-container-content">
 			<div class="accordion" id="campaigns-accordion">
@@ -755,7 +811,8 @@ Handlebars.registerHelper('epochToHumanDate_eachkeys', function(format, value){
 	</div>
 </div>
 
-</div>
+{{/if}}
+
 </script>
 
 </body>
