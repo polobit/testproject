@@ -7,7 +7,7 @@
 	milestone_util.wonMsg = 'Deals with this milestone are considered as Won.';
 	milestone_util.lostMsg = 'Deals with this milestone are considered as Lost.';
 	var milestoneMsg = "For better deal reports and sales forecasting, please set your 'Won' and 'Lost' milestones in the <i style='text-decoration:underline;'>Deal settings</i> page.";
-	milestone_util.isNotyVisible = false;
+	milestone_util.isNotyVisible = true;
 	milestone_util.showMilestonePopup = function(track){
 		
 		if(!(track.lost_milestone && track.won_milestone) || track.won_milestone.length == 0 || track.lost_milestone.length == 0){
@@ -22,6 +22,14 @@
 	};
 	
 	milestone_util.showMilestoneNoty = function(){
+		
+		// If route is subscribe, it will remove existing noty and returns. If there is not existy nagger noty, it will just return
+		if(Current_Route.indexOf('deal') == 0)
+		{
+			if(Nagger_Noty)
+				$.noty.closeAll();
+			//return;
+		}
 		
 		if(milestone_util.isNotyVisible)
 			return;
@@ -41,6 +49,7 @@
 				});
 		
 		}, 6000);
+		milestone_util.isNotyVisible = true;
 			
 	};
 	
