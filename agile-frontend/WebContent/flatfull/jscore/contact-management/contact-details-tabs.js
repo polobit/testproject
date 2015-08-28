@@ -688,18 +688,34 @@ function initializeSendEmailListeners(){
 			// Insert content into tinymce
 			set_tinymce_content('email-body', text);
 			
-			if (model.attachment_id && Current_Route != 'bulk-email')
+			if (model.attachment_id && Current_Route != 'bulk-email' && Current_Route != 'company-bulk-email')
 			{
-				$('.add-attachment-select').trigger("click");
-				setTimeout(function(){
+				var el = $('.add-attachment-select').closest("div");
+				$('.add-attachment-select').hide();
+				el.find(".attachment-document-select").css("display", "inline");
+				var optionsTemplate = "<option value='{{id}}' network_type='{{titleFromEnums network_type}}' size='{{size}}' url='{{url}}'>{{name}}</option>";
+        		fillSelect('attachment-select','core/api/documents', 'documents',  function fillNew()
+				{
+					el.find("#attachment-select option:first").after("<option value='new'>Upload new doc</option>");
 					$('#attachment-select').find('option[value='+model.attachment_id+']').attr("selected","selected");
 					$('.add-attachment-confirm').trigger("click");
-				},500);
+
+				}, optionsTemplate, false, el);
 			}
-			else if (model.attachment_id && Current_Route == 'bulk-email')
+			else if (model.attachment_id && (Current_Route == 'bulk-email' || Current_Route == 'company-bulk-email'))
 			{
 				$('.add-attachment-select').hide();
 				$('#eattachment_error').show();
+			}
+			else if(!model.attachment_id && (Current_Route == 'bulk-email' || Current_Route == 'company-bulk-email'))
+			{
+				$('.add-attachment-select').hide();
+				$('#eattachment_error').hide();
+			}
+			else if(!model.attachment_id)
+			{
+				$('.add-attachment-cancel').trigger("click");
+				$('#eattachment_error').hide();
 			}
 		} });
 
