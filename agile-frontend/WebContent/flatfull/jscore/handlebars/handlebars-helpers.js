@@ -6791,14 +6791,6 @@ Handlebars.registerHelper('get_campaign_type_filter', function(filter_name)
 				}
 				return html;
 			});
-			
-			Handlebars.registerHelper('totalTimeFormat', function(timeInSec)
-			{
-				if (timeInSec == "0")
-					return "0 sec";
-
-				return SecondsToCampaignTime(timeInSec);
-			});
 
 	// To show blocked ips as list
 	Handlebars.registerHelper('blocked_ips_list', function(data)
