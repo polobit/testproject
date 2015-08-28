@@ -522,6 +522,16 @@ var SettingsRouter = Backbone.Router
 				$('.email-templates-tab').addClass('select');
 				$(".active").removeClass("active");
 				// $("#content").html(view.el);
+				if ($('#attachment_id').val())
+				{
+					$('.add-attachment-select').trigger("click");
+					setTimeout(function(){
+						$('#attachment-select').find('option[value='+$('#attachment_id').val()+']').attr("selected","selected");
+						$('.add-tpl-attachment-confirm').trigger("click");
+					},500);
+					$('#tpl-attachment-select').hide();
+					$('#tpl-attachment-name').show();
+				}
 			},
 
 			/**
