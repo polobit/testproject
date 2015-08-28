@@ -998,7 +998,6 @@ $(function()
 				element = element.split("properties_")[1];
 			if (element.indexOf("custom_") == 0)
 				element = element.split("custom_")[1];
-
 			element = element.replace("_", " ")
 
 			el = el.concat('<th>' + ucfirst(element) + '</th>');
@@ -1227,6 +1226,7 @@ $(function()
 		return CURRENT_DOMAIN_USER.domain;
 	});
 
+	
 	/*
 	 * To add comma in between the elements.
 	 */
@@ -3795,6 +3795,13 @@ $(function()
 		console.log(content);
 
 		return options.fn(content.match(/([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9._-]+)/gi)[0]);
+	});
+
+	Handlebars.registerHelper('if_keyboard_shortcuts_enabled', function(options)
+	{
+		if (CURRENT_USER_PREFS.keyboard_shotcuts)
+			return options.fn(this);
+		return options.inverse(this);
 	});
 
 	Handlebars.registerHelper('getCurrentContactPropertyBlock', function(value, options)

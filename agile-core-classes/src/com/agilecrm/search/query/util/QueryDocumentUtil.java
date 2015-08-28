@@ -122,7 +122,7 @@ public class QueryDocumentUtil
 			 * Build equals and not equals queries conditions except time based
 			 * conditions
 			 */
-			if (!(lhs.contains("time") || lhs.contains("last_contacted")) || condition.equals(SearchRule.RuleCondition.DEFINED) || condition.equals(SearchRule.RuleCondition.NOT_DEFINED) )
+			if (!(lhs.contains("time") || lhs.contains("last_contacted") || lhs.contains("last_emailed") || lhs.contains("last_called") || lhs.contains("last_campaign_emaild")) || condition.equals(SearchRule.RuleCondition.DEFINED) || condition.equals(SearchRule.RuleCondition.NOT_DEFINED) )
 			{
 				/*
 				 * Create new query with LHS and RHS conditions to be processed
@@ -232,7 +232,7 @@ public class QueryDocumentUtil
 			}
 
 			// Queries on created or updated times
-			else if ((lhs.contains("last_contacted") || lhs.contains("time")) && !lhs.contains("tags"))
+			else if ((lhs.contains("last_contacted") || lhs.contains("time") || lhs.contains("last_emailed") || lhs.contains("last_called") || lhs.contains("last_campaign_emaild")) && !lhs.contains("tags"))
 			{
 				query = createTimeQueryEpoch(query, lhs, condition, rhs, rhs_new, joinCondition);
 			}

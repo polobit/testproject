@@ -2566,3 +2566,12 @@ div.cat-addtocart-row.row1 span,div.cat-addtocart-row.row2 span {
 {
 	font-size:75%;
 }*/
+
+select.input-xs{
+	height: 25px;
+    line-height: 30px;
+    padding: 0px 6px;
+}
+.mce-panel{
+	    border: 0 solid #CFDADD;
+}

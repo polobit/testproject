@@ -213,3 +213,38 @@
        </div>
 	</td>
 </script>
+
+<script id = "contacts-custom-view-last_contacted-template" type="text/html">
+	<td class='data' data='{{id}}'>
+       <div class="text-ellipsis" style="width:15em;">
+       {{#if_equals last_contacted 0}}
+       
+	   	{{else}}
+	   	 <span>{{epochToHumanDateInFormat  last_contacted}}</span>	
+	   	 		{{#if_equals last_contacted last_emailed}}<i class="fa fa-envelope-o text-muted m-l-xs"></i>
+	   	 		{{else}}
+	   	 			{{#if_equals last_contacted last_campaign_emaild}}<i class="fa fa-sitemap text-muted m-l-xs"></i>
+	   	 			{{else}}
+	   	 				{{#if_equals last_contacted last_called}}<i class="fa fa-phone text-muted m-l-xs"></i>{{/if_equals}}
+	   	 			{{/if_equals}}
+	   	 		{{/if_equals}}
+	   	 {{/if_equals}} 
+       </div>
+	</td>
+</script>
+
+<script id = "contacts-custom-view-last_emailed-template" type="text/html">
+	<td class='data' data='{{id}}'>
+       <div class="text-ellipsis" style="width:15em;">
+	   	  <span>{{epochToHumanDate "dd mmm yyyy" last_emailed}}</span>
+       </div>
+	</td>
+</script>
+
+<script id = "contacts-custom-view-last_called-template" type="text/html">
+	<td class='data' data='{{id}}'>
+       <div class="text-ellipsis" style="width:15em;">
+	   	  <span>{{epochToHumanDate "dd mmm yyyy" last_called}}</span>
+       </div>
+	</td>
+</script>
