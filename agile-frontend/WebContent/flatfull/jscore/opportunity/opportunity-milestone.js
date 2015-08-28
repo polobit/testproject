@@ -105,6 +105,7 @@ function initDealListCollection(milestones)
 			}
 
 			$('#opportunities-by-paging-model-list', el).find('.milestone-column').width(width + "%");
+			$('.mark-won, .mark-lost',el).tooltip();
 		} });
 
 	// Over write append function
