@@ -385,7 +385,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			return;
 		}
 		$("#content").html(getTemplate("admin-settings"), {});
-		this.categoryGridView = new Base_Collection_View({ url : '/core/api/categories', templateKey : "admin-settings-categories",
+		this.categoryGridView = new Base_Collection_View({ url : '/core/api/categories?entity_type=TASK', templateKey : "admin-settings-categories",
 			individual_tag_name : 'tr', sortKey : "order", postRenderCallback : function(el)
 			{
 				console.log("loaded categories : ", el);
