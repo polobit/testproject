@@ -1,6 +1,6 @@
 $(function()
 {
-	$("#update_blocked_ips").die().live("click", function(e)
+	$("#update_blocked_ips").click(function(e)
 	{
 		e.preventDefault();
 		$(this).attr("disabled", "disabled");
@@ -15,7 +15,7 @@ $(function()
 		put_blocked_ips(blocked_ips);
 	});
 
-	$(".blocked-ip-delete").die().live("click", function(e)
+	$(".blocked-ip-delete").click(function(e)
 	{
 		e.preventDefault();
 		$(this).closest("tr").remove();

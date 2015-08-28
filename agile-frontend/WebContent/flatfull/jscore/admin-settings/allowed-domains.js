@@ -1,6 +1,6 @@
 $(function()
 {
-	$("#update_allowed_domains").die().live("click", function(e)
+	$("#update_allowed_domains").click(function(e)
 	{
 		e.preventDefault();
 		$(this).attr("disabled", "disabled");
@@ -15,7 +15,7 @@ $(function()
 		put_allowed_domains(allowed_domains);
 	});
 
-	$(".allowed-domain-delete").die().live("click", function(e)
+	$(".allowed-domain-delete").click(function(e)
 	{
 		e.preventDefault();
 		$(this).closest("tr").remove();
