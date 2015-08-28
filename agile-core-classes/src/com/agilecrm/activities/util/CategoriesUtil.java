@@ -313,6 +313,11 @@ public class CategoriesUtil
     		Category cat4 = new Category("Ads", 3, Category.EntityType.DEAL_SOURCE);
     		categories.add(cat4);
     	}
+    	else if (type.equals(Category.EntityType.TASK.toString()))
+    	{
+    		categories = careateDefaultCategories();
+    		return categories;
+    	}
     	dao.putAll(categories);
     	return categories;
     }

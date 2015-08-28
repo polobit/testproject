@@ -62,6 +62,7 @@ public class CategoriesAPI
     {
 	if (StringUtils.isEmpty(entityType))
 	    return categoriesUtil.getAllCategories();
+	
 	return categoriesUtil.getCategoriesByType(entityType);
     }
 
