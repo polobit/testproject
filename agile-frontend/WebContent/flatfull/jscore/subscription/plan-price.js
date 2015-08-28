@@ -191,7 +191,7 @@ function setPlan(user_plan)
 		
 		$("#plan_type").val(plan_type).trigger("change");
 		//$("ul.tagsli a." + interval).trigger("click");
-		$("#billing_cycle").val(interval).trigger("change");
+		$("#billing_cycle").val(interval).trigger("click");
 		
 		
 		
@@ -200,10 +200,6 @@ function setPlan(user_plan)
 		// alert(err);
 	}
 }
-
-
-
-
 
 
 function initializeSubscriptionListeners(){
@@ -275,8 +271,10 @@ function initializeSubscriptionListeners(){
 				$('#'+ key +'_plan_price').html(discount_amount.toFixed(2));
 			}
 			var price = update_price();
+			if(!price)
+				return;
 			var value = $("#user_quantity").val();
-//			$( "#users_quantity").text(value);
+			$( "#users_quantity").text(value);
  	     	$("#users_total_cost").text((value * price).toFixed(2));
 			
 		});

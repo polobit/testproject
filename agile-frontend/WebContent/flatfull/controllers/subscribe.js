@@ -108,7 +108,7 @@ var SubscribeRouter = Backbone.Router.extend({
 			
 			USER_CREDIRCARD_DETAILS = subscribe_plan.model.toJSON().billingData;
 			
-			if(!USER_CREDIRCARD_DETAILS && !(IS_NEW_USER && _plan_on_signup))
+			/*if(!USER_CREDIRCARD_DETAILS && !(IS_NEW_USER && _plan_on_signup))
 			{
 				head.load(CSS_PATH + "css/misc/agile-plan-upgrade.css",function()
 						{
@@ -116,9 +116,13 @@ var SubscribeRouter = Backbone.Router.extend({
 						});
 				Backbone.history.navigate("subscribe", {trigger : true});
 				return;
-			}
-			var billing_data = JSON.parse(data.billingData);
-			var stripe_subscription = getSubscription(data.billingData, data.plan);
+			}*/
+			if(data && data.billingData)
+				{
+					var billing_data = JSON.parse(data.billingData);
+					var stripe_subscription = getSubscription(data.billingData, data.plan);
+				}
+			
 			var planType = "";						
  			
  			var quantity;
@@ -145,18 +149,17 @@ var SubscribeRouter = Backbone.Router.extend({
  				//setTimeout(addStyleForAPlan(id,planDetails), 1000);
  				$("#plan_type").val(id.attr("id").split("_")[0]);
  			}
- 			console.log(id);	
-			console.log(plan);			
+ 			console.log(id);
 			element = setPriceTemplete(data.plan.plan_type, el);
 			addStyleForAPlan(id,planDetails);
 			// Show Coupon code input field
 			id = (id && id == "coupon") ? id : "";
 			showCouponCodeContainer(id);
-			quantity = $("#user_quantity").val(quantity);
+//			quantity = $("#user_quantity").val();
 			price = update_price();
-//			$( "#users_quantity").text(quantity);
-			document.getElementById("users_total_cost").value = (quantity * price).toFixed(2);
-//     	    $("#users_total_cost").val((quantity * price).toFixed(2));
+			$( "#user_quantity").val(quantity);
+			$( "#users_quantity").text(quantity);
+			$("#users_total_cost").text((quantity * price).toFixed(2));
      	   if ($.isEmptyObject(data))
 				setPlan("free");
 			else
@@ -190,6 +193,8 @@ var SubscribeRouter = Backbone.Router.extend({
 			document.getElementById('email-quantity').name="";
 //			$('[autofocus]:first').focus();
 //		    document.getElementById('email-quantity').focus();
+			
+			$('.selected-plan', el).trigger('click');
 			
 		} });
 	
