@@ -6765,8 +6765,10 @@ Handlebars.registerHelper('get_campaign_type_filter', function(filter_name)
 	Handlebars.registerHelper('toggle_contacts_filter', function(options)
 			{	        
 		    if(readCookie(CONTACTS_DYNAMIC_FILTER_COOKIE_STATUS)=="hide"){
-			return "none";
+		    	return "none";
 	       	}
+			});
+
 	Handlebars.registerHelper('totalTimeFormat', function(timeInSec)
 			{
 				if (timeInSec == "0")
@@ -6815,4 +6817,3 @@ Handlebars.registerHelper('get_campaign_type_filter', function(filter_name)
 			return options.inverse(this);
 		return options.fn(this);
 	});
-});
