@@ -6815,3 +6815,4 @@ Handlebars.registerHelper('get_campaign_type_filter', function(filter_name)
 			return options.inverse(this);
 		return options.fn(this);
 	});
+});
