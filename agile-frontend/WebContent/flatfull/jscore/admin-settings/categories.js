@@ -114,7 +114,7 @@
     	var cat = {};
     	cat.label = label;
     	cat.order = $('#admin-settings-categories-model-list').find('tr').length;
-    	cat.type='TASK';
+    	cat.entity_type='TASK';
     	console.log(cat);
     	// Saving that pipeline object
     	var category = new Backbone.Model();
