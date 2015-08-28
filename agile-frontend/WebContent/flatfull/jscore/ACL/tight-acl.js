@@ -85,8 +85,8 @@
 	acl_util.canAddTag = function(tag,callback,errorCallback){
 		
 		if(CURRENT_DOMAIN_USER.is_admin){
-			if(callback)
-				callback(true);
+			if(errorCallback)
+				errorCallback(true);
 			else
 				return true;
 		}
