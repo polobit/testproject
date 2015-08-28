@@ -23,14 +23,6 @@
 	
 	milestone_util.showMilestoneNoty = function(){
 		
-		// If route is subscribe, it will remove existing noty and returns. If there is not existy nagger noty, it will just return
-		if(Current_Route.indexOf('deal') < 0)
-		{
-			if(Nagger_Noty)
-				$.noty.close(Nagger_Noty);
-			return;
-		}
-		
 		if(milestone_util.isNotyVisible)
 			return;
 		
