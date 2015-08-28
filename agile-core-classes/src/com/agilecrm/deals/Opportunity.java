@@ -429,6 +429,17 @@ public class Opportunity extends Cursor implements Serializable
 	// old opportunity (or deal) having id.
 	Opportunity oldOpportunity = null;
 
+	String wonMilestone = "Won";
+	try
+	{
+	    wonMilestone = MilestoneUtil.getMilestone(pipeline_id).won_milestone;
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	}
+	System.out.println("-------------won date---------" + wonMilestone);
+
 	// cache old data to compare new and old in triggers
 	if (id != null)
 	    oldOpportunity = OpportunityUtil.getOpportunity(id);
@@ -439,20 +450,10 @@ public class Opportunity extends Cursor implements Serializable
 		    || !this.milestone.equals(oldOpportunity.milestone))
 		this.milestone_changed_time = System.currentTimeMillis() / 1000;
 
-	    String wonMilestone = "Won";
-	    try
-	    {
-		wonMilestone = MilestoneUtil.getMilestone(pipeline_id).won_milestone;
-	    }
-	    catch (Exception e)
-	    {
-		e.printStackTrace();
-	    }
-	    System.out.println("-------------won date---------" + wonMilestone);
 	    if (!this.milestone.equals(oldOpportunity.milestone) && this.milestone.equalsIgnoreCase(wonMilestone))
 		this.won_date = System.currentTimeMillis() / 1000;
 	}
-	else if (oldOpportunity == null && this.milestone.equalsIgnoreCase("Won"))
+	else if (oldOpportunity == null && this.milestone.equalsIgnoreCase(wonMilestone))
 	    this.won_date = System.currentTimeMillis() / 1000;
 	dao.put(this);
 
