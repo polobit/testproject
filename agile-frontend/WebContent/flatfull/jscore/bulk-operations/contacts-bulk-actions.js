@@ -67,7 +67,7 @@ $(function()
 		 * Changes the owner by sending the new owner name as path parameter and
 		 * contact ids as form data of post request
 		 */
-		$("body").on("click", "#changeOwnerToBulk", function(e)
+		$("#changeOwnerToBulk").click(function(e)
 		{
 			e.preventDefault();
 
@@ -217,7 +217,7 @@ $(function()
 		 * Subscribes the selected contacts to a campaign by sending the
 		 * workflow id and selected contacts' ids.
 		 */
-		$("body").off('fill_campaigns').on("click", "#addBulkTocampaign", function(e)
+		$("#addBulkTocampaign").click(function(e)
 		{
 			e.preventDefault();
 
@@ -326,7 +326,7 @@ $(function()
 		 * Add the tags to the selected contacts by sending the contact ids and
 		 * tags through post request to the appropriate url
 		 */
-		 $("body").on("click", "#addTagsToContactsBulk", function(e)
+		 $("#addTagsToContactsBulk").click(function(e)
 		{
 			e.preventDefault();
 
@@ -473,7 +473,7 @@ $(function()
 		 * Add the tags to the selected contacts by sending the contact ids and
 		 * tags through post request to the appropriate url
 		 */
-		$("body").on("click", "#removeTagsToContactsBulk", function(e)
+		$("#removeTagsToContactsBulk").click(function(e)
 						{
 							e.preventDefault();
 
@@ -539,6 +539,7 @@ $(function()
 	 * Bulk operations - Sends email to the bulk of contacts by filling up the
 	 * send email details like from, subject and body.
 	 */
+	//$("body #bulk-email").off("click");
 	$("body").on("click", "#bulk-email", function(e)
 					{
 						e.preventDefault();
@@ -686,7 +687,7 @@ $(function()
 			Backbone.history.navigate("bulk-email", { trigger : true });
 
 		$("body #bulk-send-email").off("click");
-		$("body").on("click", "#bulk-send-email", function(e)
+		$("#bulk-send-email").click(function(e)
 		{
 			e.preventDefault();
 
