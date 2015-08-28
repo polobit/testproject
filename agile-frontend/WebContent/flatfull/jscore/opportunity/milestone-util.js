@@ -47,8 +47,12 @@
 						 trigger : true
 						 });
 				});
+			
+			setTimeout(function(){
+				$.noty.closeAll();
+			}, 10000);
 		
-		}, 6000);
+		}, 4000);
 		milestone_util.isNotyVisible = true;
 			
 	};
