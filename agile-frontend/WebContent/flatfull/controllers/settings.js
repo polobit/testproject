@@ -524,13 +524,18 @@ var SettingsRouter = Backbone.Router
 				// $("#content").html(view.el);
 				if ($('#attachment_id').val())
 				{
-					$('.add-attachment-select').trigger("click");
-					setTimeout(function(){
+					var el = $('#tpl-attachment-select').closest("div");
+					$('#tpl-attachment-select').hide();
+					el.find(".attachment-document-select").css("display", "inline");
+					var optionsTemplate = "<option value='{{id}}' network_type='{{titleFromEnums network_type}}' size='{{size}}' url='{{url}}'>{{name}}</option>";
+        			fillSelect('attachment-select','core/api/documents', 'documents',  function fillNew()
+					{
+						el.find("#attachment-select option:first").after("<option value='new'>Upload new doc</option>");
 						$('#attachment-select').find('option[value='+$('#attachment_id').val()+']').attr("selected","selected");
 						$('.add-tpl-attachment-confirm').trigger("click");
-					},500);
-					$('#tpl-attachment-select').hide();
-					$('#tpl-attachment-name').show();
+						$('#tpl-attachment-select').hide();
+						$('#tpl-attachment-name').show();
+					}, optionsTemplate, false, el);
 				}
 			},
 

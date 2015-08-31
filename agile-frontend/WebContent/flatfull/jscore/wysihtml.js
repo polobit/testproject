@@ -132,11 +132,15 @@ function initializeEmailTemplateAddListeners(){
 		e.preventDefault();
 		if($(this).parent().find('select').val()=="new"){
 			$('#uploadDocumentModal').modal('show');
+			$('#GOOGLE',$('#uploadDocumentModal')).parent().hide();
 		}else if($(this).parent().find('select').val()!=""){
 			$('#tpl-attachment-select').hide();
 			$('#tpl-attachment-name').show();
 			$('#attachment_id',$('#tpl-attachment-name')).val($(this).parent().find('select').val());
-			$('#tpl_attachment_fname',$('#tpl-attachment-name')).text($(this).parent().find('option:selected').text());
+			//$('#tpl_attachment_fname',$('#tpl-attachment-name')).text($(this).parent().find('option:selected').text());
+			$('#tpl_attachment_fname',$('#tpl-attachment-name')).html('<a href='+$(this).parent().find('option:selected').attr('url')+'>'+$(this).parent().find('option:selected').text()+'</a>');
+		}else if($(this).parent().find('select').val()==""){
+			$('#attachment-select-required').show();
 		}
 	});
 
@@ -147,6 +151,19 @@ function initializeEmailTemplateAddListeners(){
 		$('.add-attachment-select').show();
 		$('.attachment-document-select').hide();
 		$('#attachment_id',$('#tpl-attachment-name')).val("");
+	});
+
+	$('#prefs-tabs-content').on("change", "#attachment-select", function(e){
+		e.preventDefault();
+		if($(this).val()==""){
+			$('#attachment-select-required').show();
+		}else{
+			$('#attachment-select-required').hide();
+		}
+	});
+
+	$('#uploadDocumentModal').on('hidden.bs.modal', function(e){
+		$('#GOOGLE',$('#uploadDocumentModal')).parent().show();
 	});
 }
 
