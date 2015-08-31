@@ -85,10 +85,11 @@
 	acl_util.canAddTag = function(tag,callback,errorCallback){
 		
 		if(CURRENT_DOMAIN_USER.is_admin){
-			if(errorCallback)
-				errorCallback(true);
+			if(callback)
+				callback(true);
 			else
 				return true;
+			return;
 		}
 		
 		if(tagsCollectionView){

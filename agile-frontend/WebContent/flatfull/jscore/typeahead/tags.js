@@ -163,8 +163,7 @@ function setup_tags_typeahead() {
     			
     			acl_util.canAddTag(tag,function(canAdd){
     				
-    				if(canAdd){
-        				alert('No permission.');
+    				if(!canAdd){
         				return;
         			}
     				
