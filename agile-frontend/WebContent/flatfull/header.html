@@ -241,11 +241,11 @@
 								data-toggle="dropdown" href="">New <b class="caret"></b></a>
 								<ul class="dropdown-menu animated fadeInRight">
 									<li><a href="#personModal"  data-toggle="modal" id="person">
-											Contact</a></li>
+											Contact<% if(currentUserPrefs.keyboard_shotcuts) {out.print("<span style='color: #D2C9C9;font-size: 12px;' class='pull-right'>Shift + N</span>");} %></a></li>
 									<li><a href="#companyModal"  data-toggle="modal"
 										id="company"> Company</a></li>
 									<li><a href="#"  id="show-activity"> Event</a></li>
-									<li><a href="#" class=" add-task"> Task</a></li>
+									<li><a href="#" class=" add-task"> Task<% if(currentUserPrefs.keyboard_shotcuts) {out.print("<span style='color: #D2C9C9;font-size: 12px;' class='pull-right'>Shift + T</span>");} %></a></li>
 
 									<%
 										if(domainUser.menu_scopes.contains(NavbarConstants.DEALS)){
@@ -290,8 +290,11 @@
 											%> --%> <span class="text-sm m-r-md"> <b><%=user.getEmail()%></b></span>
 
 									</a></li>
-									<li><a href="#user-prefs"><!-- <i class="icon-cog"></i> -->
-											Preferences</a></li>
+
+
+									<li><a href="#user-prefs/profile"><!-- <i class="icon-cog"></i> -->
+
+											Preferences<% if(currentUserPrefs.keyboard_shotcuts) {out.print("<span style='color: #D2C9C9;font-size: 12px;' class='pull-right'>Shift + P</span>");} %></a></li>
 
 									<%
 									    if (domainUser != null && domainUser.is_admin)

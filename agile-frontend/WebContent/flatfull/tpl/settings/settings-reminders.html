@@ -1,424 +1,45 @@
-<script id="reports-add-template" type="text/html">
-<div class="custom-animated custom-fadeInUp">
-<div class="wrapper-md lter bg-light b-b">
-<div class="row">
-    <div class="col-sm-12 col-md-12">
-       
-            <h3 class="pull-left font-thin h3">Email Reports</h3>
-            
-       
-    </div>
-</div>
-</div>
-<div class="col-md-12">
-	<div class="wrapper-md">
-		<div class="panel panel-default">
-		<form id="reportsForm" class="form-horizontal">
-			<div name="rules" class="formsection chainedSelect">
- 					{{#if id}} 
-                       <div class="panel-heading">Edit Email Report</div>
-                      {{else}}
-                        <div class="panel-heading"><i class="icon-plus-sign"></i> Add Email Report</div>
-                    {{/if}}
-				<div class="panel-body">
-				<fieldset>
-					<div class="control-group form-group">
-						<label class="control-label col-sm-2">Name<span class="field_req">*</span></label>
-						<div class="controls col-sm-8">
-							<input type="text" name="name" class="required form-control" />
-						</div>
-					</div>
+<script id="settings-reminders-template" type="text/html">
+<!--  Contact View Detail in Detailed mode - when only one contact is shown -->
+<div class="panel wrapper">
 
-					<div class="control-group form-group" id="report-settings" >
-						<label class="control-label col-sm-2">Condition</label>
-						<div class="controls col-sm-8">
-							<div>Meet <i>All </i> of the following conditions</div>
-							<table class="chained-table bg-transparent m-b-xs contact and_rules">
-								<tbody>
-									<tr class="chained controls hide" name="rules">
-										<td>
-											<div name="ruleType">
-												<input type="text" class="hide" name="temp" class="required form-control"
-													value="Contact" />
-											</div>
-										</td>
-										<td class="lhs-block">
-											<div id="LHS" name="LHS">
-												<select name="temp" class="lhs form-control" id="LHS">
-													<optgroup label="Tag">
-														<option value="tags" selected="selected">Tag</option>
-														<option value="tags_time">Tag And Created Date</option>
-													</optgroup>
-													<optgroup label="Date">
-														<option value="created_time">Created</option>
-														<option value="updated_time">Updated</option>
-														<option value="last_contacted">Last Contacted</option>
-														<option value="last_emailed">Last Emailed</option>
-														<option value="last_called">Last Called</option>
-														<option value="last_campaign_emaild">Last Campaign Emailed</option>
-													</optgroup>
- 													<optgroup label="Properties">
-														<option value="first_name">First Name</option>
-														<option value="last_name">Last Name</option>
-														<option value="email">Email Address</option>
-														<option value="company">Company</option>
-														<option value="title">Job Title</option>
-														<option value="phone">Phone Number</option>
-														<option value="lead_score">Score</option>
-														<option value="owner_id">Owner</option>
-														<option value="address">Address</option>
-														<!--<option value="city">City</option>
-														<option value="state">State</option>
-														<option value="country">Country</option>
-														<option value="zip">Zip</option>-->
-													</optgroup>
-													<optgroup label="Campaigns">
-														<option value="campaign_status">Campaign Status</option>
-													</optgroup>
-													 <optgroup label="Custom Fields" id="custom-fields" class="hide">
-													</optgroup>
-												</select>
-											</div>
-											</div>
-										</td>
-									<td class="codition-block">
-											<div id="condition" name="CONDITION">
-												<select name="temp" class="form-control">
-													<option value="EQUALS"
-														class="first_name last_name phone company title org_tag jobtitle email phone city state zip country org_name custom_label custom_sfsadf org_custom_label org_custom_sfsadf">is</option>
-													<option value="EQUALS" class="owner_id" related="RHS" url="core/api/users" parse_key="id" parse_value="name">is</option>
-													<option value="NOTEQUALS" class="owner_id" related="RHS" url="core/api/users" parse_key="id" parse_value="name">isn't</option>
-													<option value="NOTEQUALS"
-														class="first_name last_name company owner org_tag title email phone city state zip country org_name custom_label custom_sfsadf org_custom_label org_custom_sfsadf">isn't</option>
-													<option value="EQUALS" class="tags tags_time">is</option>
-													<option value="NOTEQUALS" class="tags">isn't</option>
-													<option value="EQUALS" class="lead_score">equals</option>
-													<option value="BETWEEN_NUMBER" class="lead_score">between</option>
-													<option value="IS_GREATER_THAN" class="lead_score">greater than</option>
-													<option value="IS_LESS_THAN" class="lead_score">less than</option>
-													<option value="ON" class="updated_time created_time last_contacted last_emailed last_called last_campaign_emaild">on</option>
-													<option value="AFTER" class="created_time updated_time last_contacted last_emailed last_called last_campaign_emaild">is
-														after</option>
-													<option value="BEFORE" class="created_time updated_time last_contacted last_emailed last_called last_campaign_emaild">is
-														before</option>
-													<option value="BETWEEN" class="created_time updated_time last_contacted last_emailed last_called last_campaign_emaild">is
-														between</option>
-													<option value="LAST" class="created_time updated_time last_contacted last_emailed last_called last_campaign_emaild">in
-														last</option>
-													<option value="NEXT" class="created_time updated_time">in next
-														</option>
-													<option value="EQUALS" class="tag org_tag">is</option>
-													<option value="ANYOF" class="tag">is any of</option>
-													<option value="CONTAINS" class="address">contains word</option>
-													<option value="NOT_CONTAINS" class="address">not contains word</option>
-													<option value="NOT_ADDED" class="campaign_status" related="RHS" url="core/api/workflows" parse_key="id" parse_value="name">Never Added</option>
-													<option value="ACTIVE" class="campaign_status" related="RHS" url="core/api/workflows" parse_key="id" parse_value="name">Active</option>
-													<option value="DONE" class="campaign_status" related="RHS" url="core/api/workflows" parse_key="id" parse_value="name">Completed</option>
-													<option value="REMOVED" class="campaign_status" related="RHS" url="core/api/workflows" parse_key="id" parse_value="name">Removed</option>
-													<option value="SOFTBOUNCED" class="campaign_status" related="RHS" url="core/api/workflows" parse_key="id" parse_value="name">Soft Bounced</option>
-													<option value="HARDBOUNCED" class="campaign_status" related="RHS" url="core/api/workflows" parse_key="id" parse_value="name">Hard Bounced</option>
-													<option value="UNSUBSCRIBED" class="campaign_status" related="RHS" url="core/api/workflows" parse_key="id" parse_value="name">Unsubscribed</option>
-													<option value="SPAM" class="campaign_status" related="RHS" url="core/api/workflows" parse_key="id" parse_value="name">Spam Reported</option>
-													<option value="DEFINED" class="email phone company title address city state zip country custom_label custom_sfsadf org_custom_label org_custom_sfsadf">is defined</option>
-													<option value="NOT_DEFINED" class="email phone company title address city state zip country custom_label custom_sfsadf org_custom_label org_custom_sfsadf">is not defined</option>
-												
-												</select>
-											</div>
-										</td>
-										<td class="rhs-block  controls v-top">
-											<div id="RHS" class="rhs" name="RHS">
-												<input type="text" name="temp"
-													class="LAST NEXT required form-control" placeholder="Number of days"/>
-												<input type="text" name="temp" 
-													class="EQUALS NOTEQUALS ANYOF CONTAINS NOT_CONTAINS required form-control"/>
-												<input type="text" name="temp" 
-													class="MATCHES form-control  required"/>
-												<input type="text" name="temp"
-													class="IS_GREATER_THAN IS_LESS_THAN number form-control required"/> 
-                                                <input type="text" name="tag" 
-													class="tags tags_time required form-control m-n" /> 
-                                                <input type="text" name="temp" class="email required form-control"/>
-												<input type="text" name="temp" 
-													class="BETWEEN_NUMBER number required form-control"/>
-												<input id="updated_date" type="text" name="updated_date"
-													class="ON AFTER BEFORE BETWEEN input required date form-control"
-													placeholder="{{dateFormat}}" data-date-format="{{dateFormat}}"/>
-											</div>
-										</td>
-										<td class="rhs-new-block controls v-top">
-											<div id="RHS-NEW" name="RHS_NEW">
-												<input type="text" name="temp"
-													class="BETWEEN_NUMBER number required form-control"/>
-												<input id="date_between" type="text" name="temp" data-date-format="{{dateFormat}}"
-													class="BETWEEN input date required form-control" placeholder="{{dateFormat}}" />
-											</div>
-										</td>
-										<td class="nested-condition-block v-top" >
-											<div id="nested_condition" name="nested_condition">
-												<select name="temp" class="form-control">
-													<option value="EQUALS" class="tags_time">on</option>
-													<option value="AFTER" class="tags_time">is after</option>
-													<option value="BEFORE" class="tags_time">is before</option>
-													<option value="BETWEEN" class="tags_time">is
-														between</option>
-													<option value="LAST" class="tags_time">in last</option>
-												</select>
-											</div>
-										</td>
-										<td class="controls v-top" >
-											<div id="nested_lhs" name="nested_lhs">
-												<input type="text" name="temp" class="LAST required form-control" placeholder="Number of days" /> 
-												<input
-													id="date_between" type="text" 
-													name="temp"
-													class="BETWEEN EQUALS AFTER BEFORE input date required form-control"
-													placeholder="{{dateFormat}}"  data-date-format="{{dateFormat}}"/>
-											</div>
-										</td>
-										<td class="controls v-top" >
-											<div id="nested_rhs" name="nested_rhs">
-												<input id="date_between" type="text" name="temp"
-													style="width: 92%;" class="BETWEEN input date required form-control"
-													placeholder="{{dateFormat}}" data-date-format="{{dateFormat}}" />
-											</div>
-										</td>
-										<td>
-									<div class="m-l-sm">
-										<i
-											class="filter-contacts-multiple-remove icon-remove-circle c-p"
-											></i></div></td>
-
-									</tr>
-								
-								</tbody>
-									
-							</table>
-								<a href="#" class="filter-contacts-multiple-add text-l-none m-t-xs text-info"><i class="icon-plus"></i> Add condition</a>
-							<br/><br/><small>and</small><br/>
-							<div>Meet  <i> Any </i> of the following conditions</div>
-
-							<table class="bg-transparent m-b-xs chained-table contact or_rules">
-								<tbody>
-									<tr valign="top" class="chained controls hide" name="or_rules">
-										<td>
-											<div name="ruleType">
-												<input type="text" class="hide" name="temp" class="required form-control"
-													value="Contact"/>
-											</div>
-										</td>
-										<td class="lhs-block">
-											<div id="LHS" name="LHS">
-												<select name="temp" class="lhs form-control" id="LHS" >
-													<optgroup label="Tag">
-														<option value="tags" selected="selected">Tag</option>
-														<option value="tags_time">Tag And Created Date</option>
-													</optgroup>
-													<optgroup label="Date">
-														<option value="created_time">Created</option>
-														<option value="updated_time">Updated</option>
-														<option value="last_contacted">Last Contacted</option>
-														<option value="last_emailed">Last Emailed</option>
-														<option value="last_called">Last Called</option>
-														<option value="last_campaign_emaild">Last Campaign Emailed</option>
-													</optgroup>
- 													<optgroup label="Properties">
-														<option value="first_name">First Name</option>
-														<option value="last_name">Last Name</option>
-														<option value="email">Email Address</option>
-														<option value="company">Company</option>
-														<option value="title">Job Title</option>
-														<option value="phone">Phone Number</option>
-														<option value="lead_score">Score</option>
-														<option value="owner_id">Owner</option>
-														<option value="address">Address</option>
-														<!--<option value="city">City</option>
-														<option value="state">State</option>
-														<option value="country">Country</option>
-														<option value="zip">Zip</option>-->
-													</optgroup>
-													<optgroup label="Campaigns">
-														<option value="campaign_status">Campaign Status</option>
-													</optgroup>
-													 <optgroup label="Custom Fields" id="custom-fields" class="hide">
-													</optgroup>
-												</select>
-											</div>
-										</td>
-										<td class="codition-block">
-											<div id="condition" name="CONDITION">
-												<select name="temp" class="w-full form-control">
-													<option value="EQUALS"
-														class="first_name last_name phone company title org_tag jobtitle email phone city state zip country org_name custom_label custom_sfsadf org_custom_label org_custom_sfsadf">is</option>
-													<option value="EQUALS" class="owner_id" related="RHS" url="core/api/users" parse_key="id" parse_value="name">is</option>
-													<option value="NOTEQUALS" class="owner_id" related="RHS" url="core/api/users" parse_key="id" parse_value="name">isn't</option>
-													<option value="NOTEQUALS"
-														class="first_name last_name company owner org_tag title email phone city state zip country org_name custom_label custom_sfsadf org_custom_label org_custom_sfsadf">isn't</option>
-													<option value="EQUALS" class="tags tags_time">is</option>
-													<option value="NOTEQUALS" class="tags">isn't</option>
-													<option value="BETWEEN_NUMBER" class="lead_score">between</option>
-													<option value="IS_GREATER_THAN" class="lead_score">greater than</option>
-													<option value="IS_LESS_THAN" class="lead_score">less than</option>
-													<option value="ON" class="updated_time created_time last_contacted last_emailed last_called last_campaign_emaild">on</option>
-													<option value="AFTER" class="created_time updated_time last_contacted last_emailed last_called last_campaign_emaild">is
-														after</option>
-													<option value="BEFORE" class="created_time updated_time last_contacted last_emailed last_called last_campaign_emaild">is
-														before</option>
-													<option value="BETWEEN" class="created_time updated_time last_contacted last_emailed last_called last_campaign_emaild">is
-														between</option>
-													<option value="LAST" class="created_time updated_time last_contacted last_emailed last_called last_campaign_emaild">in
-														last</option>
-													<option value="NEXT" class="created_time updated_time">in next
-														</option>
-													<option value="EQUALS" class="tag org_tag">is</option>
-													<option value="ANYOF" class="tag">is any of</option>
-													<option value="CONTAINS" class="address">contains word</option>
-													<option value="NOT_CONTAINS" class="address">not contains word</option>
-													<option value="NOT_ADDED" class="campaign_status" related="RHS" url="core/api/workflows" parse_key="id" parse_value="name">Never Added</option>
-													<option value="ACTIVE" class="campaign_status" related="RHS" url="core/api/workflows" parse_key="id" parse_value="name">Active</option>
-													<option value="DONE" class="campaign_status" related="RHS" url="core/api/workflows" parse_key="id" parse_value="name">Completed</option>
-													<option value="REMOVED" class="campaign_status" related="RHS" url="core/api/workflows" parse_key="id" parse_value="name">Removed</option>
-													<option value="SOFTBOUNCED" class="campaign_status" related="RHS" url="core/api/workflows" parse_key="id" parse_value="name">Soft Bounced</option>
-													<option value="HARDBOUNCED" class="campaign_status" related="RHS" url="core/api/workflows" parse_key="id" parse_value="name">Hard Bounced</option>
-													<option value="UNSUBSCRIBED" class="campaign_status" related="RHS" url="core/api/workflows" parse_key="id" parse_value="name">Unsubscribed</option>
-													<option value="SPAM" class="campaign_status" related="RHS" url="core/api/workflows" parse_key="id" parse_value="name">Spam Reported</option>
-													<option value="DEFINED" class="email phone company title address city state zip country custom_label custom_sfsadf org_custom_label org_custom_sfsadf">is defined</option>
-													<option value="NOT_DEFINED" class="email phone company title address city state zip country custom_label custom_sfsadf org_custom_label org_custom_sfsadf">is not defined</option>
-												</select>
-											</div>
-										</td>
-										<td class="rhs-block v-top controls">
-											<div id="RHS" class="rhs" name="RHS">
-
-												<input type="text" name="temp"
-													class="LAST NEXT required form-control" placeholder="Number of days"/>
-												<input type="text" name="temp"
-													class="EQUALS NOTEQUALS ANYOF CONTAINS NOT_CONTAINS required form-control"/>
-												 
-												<input type="text" name="temp" 
-													class="MATCHES required form-control"/>
-												<input type="text" name="temp"
-													class="IS_GREATER_THAN IS_LESS_THAN number required form-control"/> 
-													
-                                                <input type="text" name="tag" 
-													class="tags tags_time required form-control" /> 
-                                                <input type="text" name="temp" class="email required form-control"/>
-												<input type="text" name="temp"
-													class="BETWEEN_NUMBER number required form-control"/>
-												<input id="updated_date" type="text" name="updated_date" style="text-overflow:none; "
-													class="ON AFTER BEFORE BETWEEN input required date form-control"
-													placeholder="MM/DD/YY" data-date-format="mm/dd/yyyy"/>
-											</div>
-										</td>
-										<td class="rhs-new-block controls v-top">
-											<div id="RHS-NEW" name="RHS_NEW">
-												<input id="date_between" type="text" name="temp" data-date-format="mm/dd/yyyy"
-													class="BETWEEN input date required form-control"  placeholder="MM/DD/YY" />
-												<input type="text" name="temp"
-													class="BETWEEN_NUMBER number required form-control"/>
-											</div>
-										</td>
-										<td class="nested-condition-block v-top" >
-											<div id="nested_condition" name="nested_condition">
-												<select name="temp" class="form-control w-full">
-													<option value="EQUALS" class="tags_time">on</option>
-													<option value="AFTER" class="tags_time">is after</option>
-													<option value="BEFORE" class="tags_time">is before</option>
-													<option value="BETWEEN" class="tags_time">is
-														between</option>
-													<option value="LAST" class="tags_time">in last</option>
-											</div>
-										</td>
-										<td class="controls v-top">
-											<div id="nested_lhs" name="nested_lhs">
-												<input type="text" name="temp" class="LAST required form-control" placeholder="Number of days" /> 
-												<input
-													id="date_between" type="text" 
-													name="temp"
-													class="BETWEEN EQUALS AFTER BEFORE input date required form-control"
-													placeholder="MM/DD/YY" data-date-format="mm/dd/yyyy"/>
-											</div>
-										</td>
-										<td class="controls v-top">
-											<div id="nested_rhs" name="nested_rhs">
-												<input id="date_between" type="text" name="temp"  class="BETWEEN input date required form-control"
-													placeholder="MM/DD/YY" data-date-format="mm/dd/yyyy" />
-											</div>
-										</td>
-									<td>
-									<div  class="m-l-sm">
-										<i
-											class="filter-contacts-multiple-remove icon-remove-circle c-p"
-											></i></div></td>
-									</tr>
-								
-								</tbody>
-							</table>
-								<a href="#" class="filter-contacts-multiple-add-or-rules text-l-none m-t-xs text-info"><i class="icon-plus"></i> Add condition</a>
-							
-
-						</div>
-					</div>
-			
-
-			<div class="control-group form-group">
-				<label class="control-label col-sm-2">Fields <span class="field_req">*</span></label>
-				<div class="controls col-sm-8" id="contactTypeAhead">
-					<select id="multipleSelect" class="required form-control" multiple="multiple">
-						<optgroup label='Contact Fields'>
-							<option value="properties_first_name">First Name</option>
-							<option value="properties_last_name">Last Name</option>
-							<option value="properties_email">Email</option>
-							<option value="properties_company">Company</option>
-							<option value="tags">Tags</option>
-							<option value="properties_title">Title</option>
-							<option value="properties_phone">Phone</option>
-							<option value="properties_website">Website</option>
-							<option value="created_time">Created Date</option>
-							<option value="updated_time">Updated Date</option>
-							<option value="properties_image">Image</option>
-							<option value="lead_owner">Owner</option>
-							<option value="lead_score">Score</option>
-							<option value="last_contacted">Last Contacted</option>
-							<option value="last_emailed">Last Emailed</option>
-							<option value="last_called">Last Called</option>
-						</optgroup>
-						<optgroup id="custom-fields-optgroup" label='Custom Fields'>
-
-						</optgroup>
-					</select>
-				</div>
-			</div>
-
-			<div class="control-group form-group">
-				<label class="control-label col-sm-2">Send Report To<span
-					class="field_req">*</span></label>
-				<div class="controls col-sm-8">
-					<input type="text" name="sendTo" class="required form-control" placeholder="Email addresses separated by comma"/>
-				</div>
-			</div>
-			<div class="control-group form-group">
-				<label class="control-label col-sm-2">Duration<span
-					class="field_req">*</span></label>
-				<div class="controls col-sm-8">
-					<select class="required form-control" name="duration" id="duration">
-					<option value="DAILY">Daily</option>
-						<option value="WEEKLY">Weekly</option>
-						<option value="MONTHLY">Monthly</option>
-					</select>
-				</div>
-			</div>			
-<div class="control-group form-group">
-				<label class="control-label col-sm-2" ><a href="" id="report_advanced" data-toggle="collapse" data-target="#report-advanced-block" class="text-info"><span><i class="fa fa-plus"></i></span>&nbsp;Advanced</a></label>
-			</div>
-			<div class="row">
-			<div class="collapse col-sm-12" id="report-advanced-block">
+    <form id="userPrefs" class="form-horizontal" role="form">
+        <fieldset>
+            <input name="id" type="hidden" value="{{id}}" /> 		
+            <!-- <legend>Personal Settings</legend> -->
+            <div class="row hidden">
+                <div class="col-md-6 col-sm-6 col-xs-6">
+                    <div class="control-group form-group hidden">
+                        <label class="control-label col-sm-4">Name <span class="field_req">*</span></label>
+                        <div class="controls col-sm-8">
+                            <input name="name" type="text" class="required form-control" value="{{currentDomainUserName}}" autocapitalize="off" />
+                        </div>
+                    </div>
+                    <div class="control-group form-group hidden">
+                        <label class="control-label col-sm-4">Color Theme <span class="field_req">*</span></label> 
+                        <div class="controls col-sm-8">
+                            <select name="template" id="userPrefsTemplate" class="required form-control">
+								<option value="pink">Purple</option>
+                                <option value="blue">Blue</option>
+                                <option value="green">Green</option>
+                                <option value="brown">Brown</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="control-group form-group hidden">
+                        <label class="control-label col-sm-4">Width</label> 
+                        <div class="controls col-sm-8">
+                            <select name="width" id="userPrefsWidth" class="form-control">
+                                <option value="">Fixed</option>
+                                <option value="-fluid">Fluid</option>
+                            </select>
+                        </div>
+                    </div>
 
 <div class="control-group form-group">
-						<label class="control-label col-sm-2">Time Zone</label>
+						<label class="control-label col-sm-4">Time Zone</label>
 						<div class="controls col-sm-8">
-							<select name="report_timezone" id="report_timezone" class="form-control">
-					         <option value="Africa/Abidjan">
-									Africa/Abidjan</option>
+							<select name="timezone" id="timezone" class="form-control">
+								   <option value="Africa/Abidjan">Africa/Abidjan</option>
 								<option value="Africa/Accra"> Africa/Accra</option>
 								<option value="Africa/Algiers">
 									Africa/Algiers</option>
@@ -1208,98 +829,264 @@
 								<option value="UTC"> UTC</option>
 
 							</select>
+								   
 						</div>
 					</div>
-            <div class="control-group form-group" id="contact_report_day" style="display:none;">
-				<label class="control-label col-sm-2">Day of Month</label>
-				<div class="controls col-sm-8">
-					<select name="activity_day" class="form-control"> 
-                    <option value="1">1</option>
-					<option value="2">2</option>
-					<option value="3">3</option>
-					<option value="4">4</option>
-					<option value="5">5</option>
-					<option value="6">6</option>
-					<option value="7">7</option>
-					<option value="8">8</option>
-					<option value="9">9</option>
-					<option value="10">10</option>
-					<option value="11">11</option>
-					<option value="12">12</option>
-					<option value="13">13</option>
-					<option value="14">14</option>
-					<option value="15">15</option>
-					<option value="16">16</option>
-					<option value="17">17</option>
-					<option value="18">18</option>
-					<option value="19">19</option>
-					<option value="20">20</option>
-					<option value="21">21</option>
-					<option value="22">22</option>
-					<option value="23">23</option>
-					<option value="24">24</option>
-					<option value="25">25</option>
-					<option value="26">26</option>
-					<option value="27">27</option>
-					<option value="28">28</option>
-					<option value="29">29</option>
-					<option value="30">30</option>
-
-				</select>
-				</div>
-			</div>
-            <div class="control-group form-group" id="contact_report_weekday" style="display:none;">
-				<label class="control-label col-sm-2">Day</label>
-				<div class="controls col-sm-8">
-					<select name="activity_weekday" class="form-control"> 
-						<option value="2">Monday</option>
-					    <option value="3">Tuesday</option>
-					    <option value="4">Wednesday</option>
-						<option value="5">Thursday</option>
-						<option value="6">Friday</option>
-						<option value="7">Saturday</option>
-                        <option value="1">Sunday</option>						
-                   </select>
-				</div>
-			</div>	
-			<div class="control-group form-group" id="contact_report_time">
-				<label class="control-label col-sm-2">Time</label>
-				<div class="controls col-sm-8">
-					 <input type="text" name="activity_time" class="report_time_timepicker input-small form-control" id="activity_time"  placeholder="time" />
-				</div>
-			</div>	
-			
-			
-			</div>			
-
-			<input type="text" class="hide form-control" name="report_type" value="Contact" /></input>
-			{{#if id}} <input type="text" name="id" class="hide form-control" value="{{id}}" />
-			{{/if}}
+            <div class="control-group form-group">
+                <label class="control-label col-sm-4">Currency</label>
+                <div class="controls col-sm-8">
+                   <select id="target_list" name="currency" class="form-control">
+                        <option value="USD-$" selected="1">United States Dollar</option>
+                        <option value="EUR-&euro;">Euro</option>
+                        <option value="DZD-DA">Algerian Dinar</option>
+                        <option value="ARS-$">Argentina Peso</option>
+                        <option value="AUD-$">Australian Dollar</option>
+                        <option value="BHD-BD">Bahraini Dinar</option>
+                        <option value="BOB-$b">Bolivian Boliviano</option>
+                        <option value="BWP-P">Botswanan Pula</option>
+                        <option value="BRL-R$">Brazilian Real</option>
+                        <option value="GBP-&pound;">British Pound Sterling</option>
+                        <option value="BND-$">Brunei Dollar</option>
+                        <option value="BGN-&#1083;&#1074;">Bulgarian Lev</option>
+                        <option value="CAD-$">Canadian Dollar</option>
+                        <option value="KYD-$">Cayman Islands Dollar</option>
+                        <option value="XOF-CFAF">CFA Franc BCEAO</option>
+                        <option value="CLP-$">Chilean Peso</option>
+                        <option value="CNY-&yen;">Chinese Yuan</option>
+                        <option value="COP-$">Colombian Peso</option>
+                        <option value="CRC-&#8353;">Costa Rican Colon</option>
+                        <option value="HRK-kn">Croatian Kuna</option>
+                        <option value="CZK-K&#269;">Czech Republic Koruna</option>
+                        <option value="DKK-kr">Danish Krone</option>
+                        <option value="DOP-RD$">Dominican Peso</option>
+                        <option value="EGP-&pound;">Egyptian Pound</option>
+                        <option value="EEK-kr">Estonian Kroon</option>
+                        <option value="FJD-$">Fijian Dollar</option>
+                        <option value="HNL-L">Honduran Lempira</option>
+                        <option value="HKD-$">Hong Kong Dollar</option>
+                        <option value="HUF-Ft">Hungarian Forint</option>
+                        <option value="INR-Rs">Indian Rupee</option>
+                        <option value="IDR-Rp">Indonesian Rupiah</option>
+                        <option value="ILS-&#8362;">Israeli New Sheqel</option>
+                        <option value="JMD-J$">Jamaican Dollar</option>
+                        <option value="JPY-&yen;">Japanese Yen</option>
+                        <option value="JOD-JOD">Jordanian Dinar</option>
+                        <option value="KZT-&#1083;&#1074;">Kazakhstani Tenge</option>
+                        <option value="KES-KSh">Kenyan Shilling</option>
+                        <option value="KWD-KD">Kuwaiti Dinar</option>
+                        <option value="LVL-Ls">Latvian Lats</option>
+                        <option value="LBP-&pound;">Lebanese Pound</option>
+						<option value="LYD-LD">Libyan Dinar</option>
+                        <option value="LTL-Lt">Lithuanian Litas</option>
+                        <option value="MKD-&#1076;&#1077;&#1085;">Macedonian Denar</option>
+                        <option value="MYR-RM">Malaysian Ringgit</option>
+                        <option value="MUR-&#8360;">Mauritian Rupee</option>
+                        <option value="MXN-$">Mexican Peso</option>
+                        <option value="MDL-MDL">Moldovan Leu</option>
+                        <option value="MAD-DH">Moroccan Dirham</option>
+                        <option value="NAD-$">Namibian Dollar</option>
+                        <option value="NPR-&#8360;">Nepalese Rupee</option>
+                        <option value="ANG-&fnof;">Netherlands Antillean Guilder</option>
+                        <option value="TWD-NT$">New Taiwan Dollar</option>
+                        <option value="NZD-$">New Zealand Dollar</option>
+                        <option value="NIO-C$">Nicaraguan Cordoba</option>
+                        <option value="NGN-&#8358;">Nigerian Naira</option>
+                        <option value="NOK-kr">Norwegian Krone</option>
+                        <option value="OMR-RO">Omani Rial</option>
+                        <option value="PKR-&#8360;">Pakistani Rupee</option>
+                        <option value="PGK-K">Papua New Guinean Kina</option>
+                        <option value="PYG-Gs">Paraguayan Guarani</option>
+                        <option value="PEN-S/.">Peruvian Nuevo Sol</option>
+                        <option value="PHP-&#8369;">Philippine Peso</option>
+                        <option value="PLN-z&#322;">Polish Zloty</option>
+                        <option value="QAR-QR">Qatari Rial</option>
+                        <option value="RON-lei">Romanian Leu</option>
+                        <option value="RUB-&#1088;&#1091;&#1073;">Russian Ruble</option>
+                        <option value="SVC-&#8353;">Salvadoran Colon</option>
+                        <option value="SAR-SR">Saudi Riyal</option>
+                        <option value="RSD-&#1044;&#1080;&#1085;.">Serbian Dinar</option>
+                        <option value="SCR-&#8360;">Seychellois Rupee</option>
+                        <option value="SLL-Le">Sierra Leonean Leone</option>
+                        <option value="SGD-$">Singapore Dollar</option>
+                        <option value="SKK-Sk">Slovak Koruna</option>
+                        <option value="ZAR-R">South African Rand</option>
+                        <option value="KRW-&#8361;">South Korean Won</option>
+                        <option value="LKR-&#8360;">Sri Lankan Rupee</option>
+                        <option value="SEK-kr">Swedish Krona</option>
+                        <option value="CHF-CHF">Swiss Franc</option>
+                        <option value="TZS-TSh">Tanzanian Shilling</option>
+                        <option value="THB-&#3647;">Thai Baht</option>
+                        <option value="TTD-TT$">Trinidad and Tobago Dollar</option>
+                        <option value="TND-TD">Tunisian Dinar</option>
+                        <option value="TRY-YTL">Turkish Lira</option>
+                        <option value="UGX-USh">Ugandan Shilling</option>
+                        <option value="UAH-UAH">Ukrainian Hryvnia</option>
+                        <option value="AED-Dh">United Arab Emirates Dirham</option>
+                        <option value="UYU-$U">Uruguayan Peso</option>
+                        <option value="UZS-&#1083;&#1074;">Uzbekistan Som</option>
+                        <option value="VND-&#8363;">Vietnamese Dong</option>
+                        <option value="YER-YER">Yemeni Rial</option>
+                        <option value="ZMK-ZK">Zambian Kwacha</option>
+                    </select>
+                        
+                </div>
+            </div>
+            <div class="control-group form-group">
+            	<label class="control-label col-sm-4">Date Format <span class="field_req">*</span></label> 
+                <div class="controls col-sm-8">
+                	<select name="dateFormat" id="date-format" class="required form-control">
+						<option value="mm/dd/yyyy">{{currentDateInFormat "mm/dd/yyyy"}}</option>
+                        <option value="dd/mm/yyyy">{{currentDateInFormat "dd/mm/yyyy"}}</option>
+                        <option value="mm/dd/yy">{{currentDateInFormat "mm/dd/yy"}}</option>
+                        <option value="dd/mm/yy">{{currentDateInFormat "dd/mm/yy"}}</option>
+                        <option value="mm.dd.yyyy">{{currentDateInFormat "mm.dd.yyyy"}}</option>
+                        <option value="dd.mm.yyyy">{{currentDateInFormat "dd.mm.yyyy"}}</option>
+                        <option value="mm.dd.yy">{{currentDateInFormat "mm.dd.yy"}}</option>
+                        <option value="dd.mm.yy">{{currentDateInFormat "dd.mm.yy"}}</option>
+                        <option value="dd M, yyyy">{{currentDateInFormat "dd M, yyyy"}}</option>
+                        <option value="dd MM, yyyy">{{currentDateInFormat "dd MM, yyyy"}}</option>
+                        <option value="D, dd M, yyyy">{{currentDateInFormat "D, dd M, yyyy"}}</option>
+                        <option value="DD, dd MM, yyyy">{{currentDateInFormat "DD, dd MM, yyyy"}}</option>
+                     </select>
+						
+                 </div>
+             </div>
+                </div>
+                <div class="col-md-3 col-sm-3 col-xs-3">
+                    
+                        <div id="upload-container" messg="User image has been uploaded">
+                            <div class="clearfix"><a href="#choose-avatar-modal" data-toggle="modal">
+								<div class="imgholder thumb-lg thumb-wrapper">
+                                  {{#if pic}}
+                                    <img class="w-full"  src="{{pic}}"  />
+                                  {{else}}
+                                    <img class="w-full"  src="https://contactuswidget.appspot.com/images/pic.png"  />
+                                  {{/if}}
+								</div></a>												
+                                <p>
+									<input type="hidden" id="upload_url" name="pic"/>  
+                                    <!--<input style="margin: 10px 0px 0px;" class="upload_s3 btn" type="button" id="user_prefs_image" value="Upload"/>-->
+									<a href="#choose-avatar-modal" class="text-info" data-toggle="modal">Change Avatar</a>
+                                </p>
+                            </div>
+                        
+                    </div>
+                </div>
+            </div>
+            <div class="row hidden">
+<div class="col-md-12">
+            <div class="control-group form-group">
+                <label class="control-label col-sm-2">Signature</label> 
+                <div class="controls col-sm-9">
+					<div id="loading-editor"></div>
+                    <textarea class="col-md-12 form-control" id="WYSItextarea" rows="10" name="signature" style="display: none;" placeholder="Enter text ..."></textarea>
+                </div>
+            </div>
+            </div>
 </div>
-<hr>
-
 <div class="row">
-<div class="col-sm-offset-2 col-sm-8">
-			<div class="form-actions">
-				<a href="#contact-reports" class="btn btn-sm btn-default">Close</a>
-				<a href="#" type="submit" class="save btn btn-sm btn-primary" id="filtersAdd">Save</a>
-			</div>
+<div class="col-md-12">            
+<div class="control-group form-group hidden">
+            	<label class="control-label col-sm-2">Calendar Week starts on</label> 
+                <div class="controls col-sm-9">
+                	<select name="calendar_wk_start_day" id="calendar_wk_start_day" class="required form-control">
+						<option value="0">Sunday</option>
+                        <option value="1">Monday</option>
+                     </select>
+                 </div>
+             </div>
+	  <div class="control-group form-group">
+                <label class="control-label col-sm-2">Task Reminders</label>
+                <div class="controls col-sm-9">
+<div class="checkbox">
+                    <label class="i-checks i-checks-sm">
+                    <input id="task_remainder" type="checkbox" name="task_reminder" value="true" /><i></i>
+                    Send a daily email reminder when tasks are due 
+                    </label>
+</div>       
+                </div>
+            </div>
+<div class="control-group form-group">
+                <label class="control-label col-sm-2">Event Reminder</label>
+                <div class="controls col-sm-9">
+                    <div class="checkbox">
+<label class="i-checks i-checks-sm">
+                    <input id="event_remainder" type="checkbox" name="event_reminder" value="true" /><i></i>
+                    Send email reminder 10 minutes before a calendar event
+                    </label>
+</div>       
+                </div>
+            </div>
+                <div class="control-group form-group hidden">
+                <label class="control-label col-sm-2">Shortcuts</label>
+                <div class="controls col-sm-9">
+                    <div class="checkbox">
+<label class="i-checks i-checks-sm">
+                    <input id="keyboard_shotcuts" type="checkbox" name="keyboard_shotcuts" /><i></i>
+                    Enable keyboard shortcuts <a href="#" data-dismiss="modal" class="t-l-none data-toggle="modal" id="keyboard-shortcuts"><i class="icon-info-sign"></i></a>
+                    </label> 
+</div>      
+                </div>
+            </div>
+            <div class="control-group form-group hidden">
+<label class="col-sm-2">&nbsp;</label>
+                <div class="controls col-sm-9">
+					<a href="#change-password" class="text-info">Change Password</a>      
+                </div>
+            </div>
 </div>
 </div>
-			</fieldset>
-			</div>
-			</div>
-		</form>
-		</div>
+<div class="line  b-b line-lg"></div>
+<div class="row">
+<div class="col-md-12">
+<div class="form-group">
+            <div class="col-sm-offset-2 col-sm-9">
+                <a href="#" type="submit" class="save btn btn-sm btn-primary">Save Changes</a>
+                <!--<a href="#settings" class="btn btn-default btn-sm ">Cancel</a>-->
+            </div>
+</div>
+</div>
+            </div>
+            
+        </fieldset>
+    </form>
+</div>
+
+
+<div id="choose-avatar-test" class="modal fade responsive-ui-modal">
+<div class="modal-dialog">
+<div class="modal-content">
+
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal">&times;</button>
+		<h3 class="modal-title">Avatars</h3>
 	</div>
+	<div class="modal-body choose-avatars">
+		<table>
+		 	<tbody>
+                   <input type="hidden" name="custom-avatar" value="{{#getCurrentUserPrefs}}{{#if pic}}{{pic}}{{/if}}{{/getCurrentUserPrefs}}">
+                   <tr>
+                     <!--<td><a href="#"><img class="thumbnail" src="https://d1gwclp1pmzk26.cloudfront.net/img/gravatar/pic.png" style="width:58px;height:58px;"/></a>
+                         <p class="help-block" style="color:#999;padding-top:5px;opacity:0">For</p>
+                     </td>-->
+                     <td colspan="3">
+                      	 <div id="upload-in-modal" messg="User image has been uploaded">
+							<a href="#" class="imgholder m-none inline-block thumb-md thumb-wrapper">
+	                         	<img class="preview-avatar avatar-thumb m-b-none" src="{{#getCurrentUserPrefs}}{{#if pic}}{{pic}}{{/if}}{{/getCurrentUserPrefs}}" width="58" height="58"/>
+                          	</a>
+                          	<div class="m-l-xs inline-block">
+                                  <input class="upload_prefs_s3 submit btn btn-sm  btn-default m-t-lg" type="submit" id="user_prefs_image" value="Upload"/>
+                          	</div>
+                         </div>
+                         <p class="help-block p-t-xs">Recommended image size: 50px*50px.</p>
+                     </td>
+		 		  </tr>
+				  {{{get_avatars_template}}}
+		 	</tbody>
+		</table>		   
+	</div>
+</div>
 </div>
 </div>
 </script>
 
-<Script id="custom-fields-options-template" type="text/html">
-
-{{this.name}}
-{{#each this}}
-	<option value="custom_{{this.name}}">{{this.name}}</option>
-{{/each}} 
-</Script>

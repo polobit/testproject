@@ -114,6 +114,8 @@ function addNewPortlet(portlet_type, p_name) {
 		obj.name="Revenue Graph";
 	else if(p_name=="UserActivities")
 		obj.name="User Activities"
+	else if(p_name=="MiniCalendar")
+		obj.name="Mini Calendar";
 	obj.portlet_type=portlet_type;
 	var max_row_position=0;
 	if(gridster!=undefined)
@@ -261,6 +263,10 @@ function deletePortlet(el) {
 						"Are you sure you want to delete Dashlet - Leaderboard "
 								+ getDurationForPortlets(model.get("settings").duration)
 								+ "?");
+	else if(model.get("name")=="Mini Calendar")
+		$('#portletDeleteModal > .modal-dialog > .modal-content > .modal-body')
+	.html("Are you sure you want to delete Dashlet - Mini Calendar?");
+	
 	else
 		$('#portletDeleteModal > .modal-dialog > .modal-content > .modal-body')
 				.html(
