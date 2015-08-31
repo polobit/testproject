@@ -273,7 +273,7 @@ public class Mandrill
 		catch (RetryException e)
 		{
 		    // Creates new subaccount
-		    MandrillSubAccounts.createMandrillSubAccount(subaccount, apiKey);
+		    MandrillSubAccounts.createMandrillSubAccount(subaccount, mailJSON.getString(MANDRILL_API_KEY));
 
 		    System.out.println("Resending email with subaccount " + subaccount + "...");
 
