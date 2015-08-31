@@ -33,6 +33,27 @@ var PortletsRouter = Backbone.Router
 															$('#taksAndEvents').parents('.wrapper-md').hide();
 														if($('#userActivity').children().length==0)
 															$('#userActivity').parents('.wrapper-md').hide();
+														preload([
+   																	'flatfull/img/dashboard_images/Mini-Calendar.jpg',
+   																	'flatfull/img/dashboard_images/stats.png',
+   																	'flatfull/img/dashboard_images/Leaderboard.png',
+   																	'flatfull/img/dashboard_images/account-information.png',
+   																	'flatfull/img/dashboard_images/Activities.png',
+   																	'flatfull/img/dashboard_images/Agile-Blog.png',
+   																	'flatfull/img/dashboard_images/Calls.png',
+   																	'flatfull/img/dashboard_images/Deals-Funnel.png',
+   																	'flatfull/img/dashboard_images/Email-opened.png',
+   																	'flatfull/img/dashboard_images/Events.png',
+   																	'flatfull/img/dashboard_images/Milestone.png',
+																	'flatfull/img/dashboard_images/My-contacts.png',
+   																	'flatfull/img/dashboard_images/Pending-Deals.png',
+   																	'flatfull/img/dashboard_images/Revenue-graph.png',
+																	'flatfull/img/dashboard_images/Tag-Graph.png',
+																	'flatfull/img/dashboard_images/Task-report.png',
+																	'flatfull/img/dashboard_images/Task.png',
+																	'flatfull/img/dashboard_images/User-Activities.png',
+
+																]);
 														initializeAddPortletsListeners();
 													}
 												});
@@ -71,6 +92,12 @@ var PortletsRouter = Backbone.Router
 						});
 			}
 		});
+
+function preload(arrayOfImages) {
+    $(arrayOfImages).each(function () {
+        $('<img />').attr('src',this).appendTo('body').css('display','none');
+    });
+}
 // For adding new portlets
 function addNewPortlet(portlet_type, p_name) {
 	var obj={};
