@@ -38,6 +38,14 @@ import com.thirdparty.mandrill.subaccounts.MandrillSubAccounts;
  */
 public class Mandrill
 {
+	
+	private static final List<String> agileMandrillKeys = new ArrayList<String>();
+	
+	static
+	{
+		agileMandrillKeys.add(Globals.MANDRIL_API_KEY_VALUE);
+		agileMandrillKeys.add(Globals.MANDRILL_API_KEY_VALUE_2);
+	}
 
     /**
      * Mandrill core REST API URL
@@ -548,19 +556,16 @@ public class Mandrill
 		// If API Key is given - Gateway exists
 		if(StringUtils.isNotBlank(apiKey))
 		{
-			List<String> keys = new ArrayList<String>();
-			keys.add(Globals.MANDRIL_API_KEY_VALUE);
-			keys.add(Globals.MANDRILL_API_KEY_VALUE_2);
-			
-			// Skip if apikey matches Agile's
-			if(!keys.contains(apiKey))
+			// Just add api key. No need of adding pool for other Mandrill accounts
+			if(!agileMandrillKeys.contains(apiKey))
 				return mailJSON.put(MANDRILL_API_KEY, apiKey);
 		}
 		
 		// Add pool for paid users
-		if(isPaid != null)
+		if(isPaid == null)
 			isPaid = isPaid();
 		
+		// Key2 and paid pool for Agile's Paid users
 		apiKey = isPaid ? Globals.MANDRILL_API_KEY_VALUE_2 : Globals.MANDRIL_API_KEY_VALUE;
 		String ipPool = isPaid ? Globals.MANDRILL_PAID_POOL :  MANDRILL_MAIN_POOL;
 		

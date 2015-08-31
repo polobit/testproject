@@ -76,7 +76,7 @@ public class MandrillUtil
     public static void splitMandrillTasks(List<MailDeferredTask> tasks, EmailSender emailSender)
     {
     	// Allows only 20% tasks to send through Old Account
-    	int limit = tasks.size() % 20;
+    	int limit = (int) (tasks.size() * 0.2);
     	
     	List<MailDeferredTask> tasksFragment = new ArrayList<MailDeferredTask>();
     	
@@ -84,7 +84,7 @@ public class MandrillUtil
     	for(int i=0; i < limit; i++)
     		tasksFragment.add(tasks.get(i));
     
-    	// Affected Mandrill
+    	// Affected Mandrill key for 20% emails
     	emailSender.setMandrillAPIKey(Globals.MANDRIL_API_KEY_VALUE);
     	sendMandrillMails(tasksFragment, emailSender);
     	
@@ -109,6 +109,9 @@ public class MandrillUtil
     public static void sendMandrillMails(List<MailDeferredTask> tasks, EmailSender emailSender)
     {
 
+    if(tasks.isEmpty())
+    	return;
+    	
 	MailDeferredTask firstMailDefferedTask = tasks.get(0);
 
 	String apiKey = emailSender.getMandrillAPIKey();
@@ -591,6 +594,9 @@ public class MandrillUtil
      * @param apiKey
      */
     private static void checkSubAccountExists(String subaccountId, String apiKey){
+    	
+    	if(StringUtils.isBlank(subaccountId) || StringUtils.isBlank(apiKey))
+    		return;
     	
     	// To get the response
     	String response = MandrillSubAccounts.updateMandrillSubAccount(subaccountId, apiKey, "");
