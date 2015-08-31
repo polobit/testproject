@@ -22,6 +22,8 @@ import com.google.apphosting.api.ApiProxy;
 import com.google.apphosting.api.ApiProxy.Delegate;
 import com.google.apphosting.api.ApiProxy.Environment;
 import com.thirdparty.Mailgun;
+ronment;
+import com.thirdparty.Mailgun;
 
 public class TaskQueueStatsDaemon extends Thread
 {
@@ -77,12 +79,10 @@ public class TaskQueueStatsDaemon extends Thread
 
     private Taskqueue getTaskqueue()
     {
-	if (taskQueue != null)
-	{
-	    return taskQueue;
-	}
 
-	return taskQueue = Authorization.getTaskqeues(TASK_QUEUE_NAME);
+	taskQueue = Authorization.getTaskqeues(TASK_QUEUE_NAME);
+
+	return taskQueue;
     }
 
     private int getTotalTasks() throws IOException
@@ -253,6 +253,7 @@ public class TaskQueueStatsDaemon extends Thread
 		    .lease(Globals.PROJECT_NAME, TASK_QUEUE_NAME, PullScheduler.DEFAULT_COUNT_LIMIT,
 			    PullScheduler.DEFAULT_LEASE_PERIOD).set(Globals.GROUP_BY_TAG_PARAM, true);
 
+	    APIStats.incrementCounter();
 	    logger.info(lease.buildHttpRequestUrl().toString());
 	    com.google.api.services.taskqueue.model.Tasks tasks = lease.execute();
 
