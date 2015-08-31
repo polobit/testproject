@@ -47,19 +47,20 @@ public class FreshBooksWidgetsAPI {
 	public String getClientsFromFreshBooks(
 			@PathParam("widget-id") Long widgetId,
 			@PathParam("email") String email) {
+		String result = null;
 		// Retrieves widget based on its id
 		Widget widget = WidgetUtil.getWidget(widgetId);
 
-		if (widget == null) {
-			return null;
-		}
+		if (widget != null) {
 
-		try {
-			// Calls FreshBooksUtil method to retrieve clients
-			return FreshBooksUtil.getClients(widget, email);
-		} catch (Exception e) {
-			throw ExceptionUtil.catchWebException(e);
+			try {
+				// Calls FreshBooksUtil method to retrieve clients
+				result = FreshBooksUtil.getClients(widget, email);
+			} catch (Exception e) {
+				throw ExceptionUtil.catchWebException(e);
+			}
 		}
+		return result;
 	}
 
 	/**
@@ -77,19 +78,20 @@ public class FreshBooksWidgetsAPI {
 	public String getInvoicesFromFreshBooks(
 			@PathParam("widget-id") Long widgetId,
 			@PathParam("client_id") String clientId) {
+		String result = null;
 		// Retrieves widget based on its id
 		Widget widget = WidgetUtil.getWidget(widgetId);
 
-		if (widget == null) {
-			return null;
-		}
+		if (widget != null) {
 
-		try {
-			// Calls FreshBooksUtil method to retrieve invoices of client
-			return FreshBooksUtil.getInvoicesOfClient(widget, clientId);
-		} catch (Exception e) {
-			throw ExceptionUtil.catchWebException(e);
+			try {
+				// Calls FreshBooksUtil method to retrieve invoices of client
+				result = FreshBooksUtil.getInvoicesOfClient(widget, clientId);
+			} catch (Exception e) {
+				throw ExceptionUtil.catchWebException(e);
+			}
 		}
+		return result;
 
 	}
 
@@ -105,19 +107,19 @@ public class FreshBooksWidgetsAPI {
 	@GET
 	@Produces(MediaType.TEXT_PLAIN)
 	public String getItemsFromFreshBooks(@PathParam("widget-id") Long widgetId) {
+		String result = null;
 		// Retrieves widget based on its id
 		Widget widget = WidgetUtil.getWidget(widgetId);
 
-		if (widget == null) {
-			return null;
+		if (widget != null) {
+			try {
+				// Calls FreshBooksUtil method to retrieve items in FreshBooks
+				result = FreshBooksUtil.getItems(widget);
+			} catch (Exception e) {
+				throw ExceptionUtil.catchWebException(e);
+			}
 		}
-
-		try {
-			// Calls FreshBooksUtil method to retrieve items in FreshBooks
-			return FreshBooksUtil.getItems(widget);
-		} catch (Exception e) {
-			throw ExceptionUtil.catchWebException(e);
-		}
+		return result;
 	}
 
 	/**
@@ -132,18 +134,18 @@ public class FreshBooksWidgetsAPI {
 	@GET
 	@Produces(MediaType.TEXT_PLAIN)
 	public String getTaxesFromFreshBooks(@PathParam("widget-id") Long widgetId) {
+		String result = null;
 		// Retrieves widget based on its id
 		Widget widget = WidgetUtil.getWidget(widgetId);
-		if (widget == null) {
-			return null;
+		if (widget != null) {
+			try {
+				// Calls FreshBooksUtil method to retrieve taxes in FreshBooks
+				result = FreshBooksUtil.getTaxes(widget);
+			} catch (Exception e) {
+				throw ExceptionUtil.catchWebException(e);
+			}
 		}
-
-		try {
-			// Calls FreshBooksUtil method to retrieve taxes in FreshBooks
-			return FreshBooksUtil.getTaxes(widget);
-		} catch (Exception e) {
-			throw ExceptionUtil.catchWebException(e);
-		}
+		return result;
 
 	}
 
@@ -168,23 +170,24 @@ public class FreshBooksWidgetsAPI {
 			@PathParam("last_name") String lastName,
 			@PathParam("email") String email,
 			@PathParam("organisation") String organisation) {
+		String result = null;
 		// Retrieves widget based on its id
 		Widget widget = WidgetUtil.getWidget(widgetId);
 
-		if (widget == null) {
-			return null;
-		}
+		if (widget != null) {
 
-		try {
-			if (organisation.equals("undefined")) {
-				organisation = "";
+			try {
+				if (organisation.equals("undefined")) {
+					organisation = "";
+				}
+				// Calls FreshBooksUtil method to add client items in FreshBooks
+				result = FreshBooksUtil.addClient(widget, firstName, lastName,
+						email, organisation);
+			} catch (Exception e) {
+				throw ExceptionUtil.catchWebException(e);
 			}
-			// Calls FreshBooksUtil method to add client items in FreshBooks
-			return FreshBooksUtil.addClient(widget, firstName, lastName, email,
-					organisation);
-		} catch (Exception e) {
-			throw ExceptionUtil.catchWebException(e);
 		}
+		return result;
 	}
 
 	/**
@@ -214,19 +217,21 @@ public class FreshBooksWidgetsAPI {
 			@FormParam("last_name") String lastName,
 			@FormParam("email") String email,
 			@FormParam("lines_info") String linesInfo) {
+		String result = null;
 		// Retrieves widget based on its id
 		Widget widget = WidgetUtil.getWidget(widgetId);
 
-		if (widget == null) {
-			return null;
-		}
+		if (widget != null) {
 
-		try {
-			// Calls FreshBooksUtil method to add invoice in FreshBooks account
-			return FreshBooksUtil.addInvoice(widget, firstName, lastName,
-					email, linesInfo);
-		} catch (Exception e) {
-			throw ExceptionUtil.catchWebException(e);
+			try {
+				// Calls FreshBooksUtil method to add invoice in FreshBooks
+				// account
+				result = FreshBooksUtil.addInvoice(widget, firstName, lastName,
+						email, linesInfo);
+			} catch (Exception e) {
+				throw ExceptionUtil.catchWebException(e);
+			}
 		}
+		return result;
 	}
 }

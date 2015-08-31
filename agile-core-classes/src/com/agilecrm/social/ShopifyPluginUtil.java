@@ -17,7 +17,6 @@ import java.util.Map;
 
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jettison.json.JSONObject;
-import org.scribe.exceptions.OAuthException;
 import org.scribe.model.OAuthRequest;
 import org.scribe.model.Response;
 import org.scribe.model.Verb;
@@ -59,14 +58,13 @@ public class ShopifyPluginUtil
 	    oAuthRequest.addHeader("X-Shopify-Access-Token", token);
 	    try
 	    {
-		Response response = oAuthRequest.send();
-		Map<String, LinkedHashMap<String, Object>> results = new ObjectMapper().readValue(response.getStream(),
-			Map.class);
-		System.out.println(results);
-		List<LinkedHashMap<String, Object>> orders = (List<LinkedHashMap<String, Object>>) results
-			.get("orders");
-		return orders;
-
+			Response response = oAuthRequest.send();
+			Map<String, LinkedHashMap<String, Object>> results = new ObjectMapper().readValue(response.getStream(),
+				Map.class);
+			System.out.println(results);
+			List<LinkedHashMap<String, Object>> orders = (List<LinkedHashMap<String, Object>>) results
+				.get("orders");
+			return orders;
 	    }
 	    catch (Exception e)
 	    {
@@ -77,7 +75,14 @@ public class ShopifyPluginUtil
 	return null;
 
     }
-
+    
+    /**
+     * Checks is the customer exists in shopify based on the email.
+     * 
+     * @param widget
+     * @param email
+     * @return
+     */
     public static Integer isCustomerExist(Widget widget, String email)
     {
 		LinkedHashMap<String, Object> customer = getCustomer(widget, email);
@@ -87,6 +92,13 @@ public class ShopifyPluginUtil
 		return null;
     }
 
+    /**
+     * Gets the customer info based on the email id.
+     * 
+     * @param widget
+     * @param email
+     * @return
+     */
     public static LinkedHashMap<String, Object> getCustomer(Widget widget, String email)
     {
 		String token = widget.getProperty("token");
@@ -96,6 +108,14 @@ public class ShopifyPluginUtil
 		return getCustomer(url, token, email);
     }
 
+    /**
+     * Gets the customer info from shopify.
+     * 
+     * @param accessURl
+     * @param token
+     * @param email
+     * @return
+     */
     private static LinkedHashMap<String, Object> getCustomer(String accessURl, String token, String email)
     {
 
@@ -108,20 +128,25 @@ public class ShopifyPluginUtil
 	    Map<String, LinkedHashMap<String, Object>> results = new ObjectMapper().readValue(response.getStream(),
 		    Map.class);
 	    customer = (List<LinkedHashMap<String, Object>>) results.get("customers");
-
 	}catch (Exception e)
     {
     	ExceptionUtil.catchException(e);
     }
 
-	if (customer.size() > 0)
-	{
+	if (customer.size() > 0){
 	    return customer.get(0);
 	}
 	return new LinkedHashMap<String, Object>();
 
     }
 
+    /**
+     * Gets the access url based on the shop name and customer id.
+     * 
+     * @param shop
+     * @param customer_id
+     * @return
+     */
     private static String getAccessUrl(String shop, String customer_id)
     {
 		StringBuilder sb = new StringBuilder("https://" + shop + "/admin/orders.json?customer_id=" + customer_id+"&status=any");
@@ -150,7 +175,6 @@ public class ShopifyPluginUtil
 	try
 	{
 	    customer.put("first_name", firstname.value);
-
 	    customer.put("last_name", lastname.value);
 	    customer.put("email", email);
 	    customer.put("verified_email", true);
@@ -169,6 +193,14 @@ public class ShopifyPluginUtil
 
     }
 
+    /**
+     * Posts the data to the shopify.
+     * 
+     * @param requestURL
+     * @param token
+     * @param data
+     * @return
+     */
     private static String postData(String requestURL, String token, JSONObject data)
     {
 
@@ -193,8 +225,7 @@ public class ShopifyPluginUtil
 	    BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"));
 
 	    String inputLine;
-	    while ((inputLine = reader.readLine()) != null)
-	    {
+	    while ((inputLine = reader.readLine()) != null){
 	    	output += inputLine;
 	    }
 
@@ -264,14 +295,12 @@ public class ShopifyPluginUtil
 		    Map.class);
 	    
 	    for(Map.Entry<String, LinkedHashMap<String, Object>> m:results.entrySet()){
-		String key = m.getKey();
+	    	String key = m.getKey();
 			if(key.equalsIgnoreCase("errors")){
 			    status = true;
 			    break;
 			}
 	    }
-	  
-
 	}
 	catch (Exception e)
     {

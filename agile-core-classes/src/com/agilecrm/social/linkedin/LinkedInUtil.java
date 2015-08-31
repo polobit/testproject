@@ -106,11 +106,12 @@ public class LinkedInUtil
 			 * Id or name is private for the people who doesn't share their
 			 * information to third party applications, we skip those profiles
 			 */
-			if (person.getId() != null && person.getId().equalsIgnoreCase("private"))
+			if (person.getId() != null && person.getId().equalsIgnoreCase("private")){
 				continue;
-
-			if (person.getFirstName().equalsIgnoreCase("private") || person.getLastName().equalsIgnoreCase("private"))
+			}
+			if (person.getFirstName().equalsIgnoreCase("private") || person.getLastName().equalsIgnoreCase("private")){
 				continue;
+			}
 
 			// Add wrapper filled with details to the list
 			searchResults.add(wrapPersonDetailsInSearchResult(person));
@@ -145,16 +146,18 @@ public class LinkedInUtil
 		result.location = (person.getLocation() != null) ? person.getLocation().getName() : "";
 
 		// If degree of connection is 1, both profiles are connected
-		if (result.distance != "" && Integer.parseInt(result.distance) == 1)
+		if (result.distance != "" && Integer.parseInt(result.distance) == 1){
 			result.is_connected = true;
+		}
 
 		System.out.println("pic url : " + person.getPictureUrl());
 		/*
 		 * Changes http to https to avoid client side warnings by browser,
 		 * Changes certificate from m3 to m3-s to fix SSL broken image link
 		 */
-		if (result.picture != null)
+		if (result.picture != null){
 			result.picture = changeImageUrl(result.picture);
+		}
 
 		/*
 		 * Set number of connections, location and distance(degree of
@@ -185,7 +188,6 @@ public class LinkedInUtil
 			// Create LinkedInApiClient to fetch profile by URL
 			final LinkedInApiClient client = factory.createLinkedInApiClient(widget.getProperty("token"),
 					widget.getProperty("secret"));
-
 			// Creates a client specifying the fields to be returned
 			Person person = client.getProfileByUrl(linkedInURL, ProfileType.PUBLIC, EnumSet.of(ProfileField.ID));
 
@@ -237,8 +239,9 @@ public class LinkedInUtil
 	 */
 	public static String changeImageUrl(String url)
 	{
-		if (!StringUtils.isBlank(url) && url.contains("licdn.com"))
+		if (!StringUtils.isBlank(url) && url.contains("licdn.com")){
 			url = url.replace(url.substring(0, url.indexOf(".com") + 4), LINKEDIN_IMAGE_URL_FORMAT);
+		}
 
 		System.out.println("Changed URL in LinkedIn: " + url);
 		return url;
@@ -256,11 +259,13 @@ public class LinkedInUtil
 	{
 		System.out.println("Exception message: " + exception.getMessage());
 
-		if (exception.getMessage().contains("The token used in the OAuth request is not valid") || exception.getMessage().contains("[unauthorized]. restricted"))
+		if (exception.getMessage().contains("The token used in the OAuth request is not valid") || exception.getMessage().contains("[unauthorized]. restricted")){
 			return new Exception("Access granted to your linkedin account has expired.");
+		}
 		
-		if(exception.getMessage().contains("[invalid.profile.access]. You don't have access to the profile"))
+		if(exception.getMessage().contains("[invalid.profile.access]. You don't have access to the profile")){
 			return new Exception("LinkedIn doesn't allow you to access this profile");
+		}
 
 		/*
 		 * We extract the inner exception from LinkedIn exception, since it is
@@ -283,13 +288,10 @@ public class LinkedInUtil
 		Exception innerException = null;
 
 		if (exception.getMessage().contains(":"))
-			try
-			{
+			try{
 				innerException = (Exception) Class.forName(
 						exception.getMessage().substring(0, exception.getMessage().indexOf(":"))).newInstance();
-			}
-			catch (Exception e2)
-			{
+			}catch (Exception e2){
 				return exception;
 			}
 
@@ -297,8 +299,9 @@ public class LinkedInUtil
 		 * If inner exception, is not an exception and a proper message from
 		 * LinkedIn , we throw it as it is
 		 */
-		if (innerException == null)
+		if (innerException == null){
 			return exception;
+		}
 		return innerException;
 	}
 }

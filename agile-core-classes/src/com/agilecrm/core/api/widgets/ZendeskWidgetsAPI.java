@@ -52,15 +52,14 @@ public class ZendeskWidgetsAPI {
 			// Retrieves widget based on its id
 			Widget widget = WidgetUtil.getWidget(widgetId);
 
-			if (widget == null) {
-				return null;
+			if (widget != null) {
+				// Calls ZendeskUtil to retrieve tickets for contacts email
+				return ZendeskUtil.getContactTickets(widget, email);
 			}
-
-			// Calls ZendeskUtil to retrieve tickets for contacts email
-			return ZendeskUtil.getContactTickets(widget, email);
 		} catch (Exception e) {
 			throw ExceptionUtil.catchWebException(e);
 		}
+		return null;
 	}
 
 	/**
@@ -92,27 +91,27 @@ public class ZendeskWidgetsAPI {
 		try {
 			// Retrieves widget based on its id
 			Widget widget = WidgetUtil.getWidget(widgetId);
+			if (widget != null) {
+				String response = ZendeskUtil.addTicket(widget, name, email,
+						subject, description);
 
-			String response = ZendeskUtil.addTicket(widget, name, email,
-					subject, description);
-			if (widget == null) {
-				return null;
+				/*
+				 * Since response in coming in the form of String, check for
+				 * message 'Authentication Exception' in the response and throw
+				 * the error Manually with suitable message.
+				 */
+				if (response.contains("Authentication exception")) {
+					throw new Exception(
+							"Unable to add Ticket. Permission Denied.");
+				}
+
+				// Calls ZendeskUtil method to add a ticket in Zendesk
+				return response;
 			}
-
-			/*
-			 * Since response in coming in the form of String, check for message
-			 * 'Authentication Exception' in the response and throw the error
-			 * Manually with suitable message.
-			 */
-			if (response.contains("Authentication exception")) {
-				throw new Exception("Unable to add Ticket. Permission Denied.");
-			}
-
-			// Calls ZendeskUtil method to add a ticket in Zendesk
-			return response;
 		} catch (Exception e) {
 			throw ExceptionUtil.catchWebException(e);
 		}
+		return null;
 	}
 
 	/**
@@ -137,16 +136,15 @@ public class ZendeskWidgetsAPI {
 		try {
 			// Retrieves widget based on its id
 			Widget widget = WidgetUtil.getWidget(widgetId);
-
-			if (widget == null) {
-				return null;
+			if (widget != null) {
+				// Calls ZendeskUtil and updates ticket in Zendesk
+				return ZendeskUtil.updateTicket(widget, ticketNumber,
+						description);
 			}
-
-			// Calls ZendeskUtil and updates ticket in Zendesk
-			return ZendeskUtil.updateTicket(widget, ticketNumber, description);
 		} catch (Exception e) {
 			throw ExceptionUtil.catchWebException(e);
 		}
+		return null;
 	}
 
 	/**
@@ -163,17 +161,15 @@ public class ZendeskWidgetsAPI {
 		try {
 			// Retrieves widget based on its id
 			Widget widget = WidgetUtil.getWidget(widgetId);
-
-			if (widget == null) {
-				return null;
+			if (widget != null) {
+				// Calls ZendeskUtil and retrieves Zendesk account user
+				// information
+				return ZendeskUtil.getUserInfo(widget, "");
 			}
-
-			// Calls ZendeskUtil and retrieves Zendesk account user information
-			return ZendeskUtil.getUserInfo(widget, "");
 		} catch (Exception e) {
 			throw ExceptionUtil.catchWebException(e);
 		}
-
+		return null;
 	}
 
 	/**
@@ -196,16 +192,14 @@ public class ZendeskWidgetsAPI {
 		try {
 			// Retrieves widget based on its id
 			Widget widget = WidgetUtil.getWidget(widgetId);
-
-			if (widget == null) {
-				return null;
+			if (widget != null) {
+				// Calls ZendeskUtil and retrieves tickets by its status
+				return ZendeskUtil.getTicketsByStatus(widget, email, status);
 			}
-
-			// Calls ZendeskUtil and retrieves tickets by its status
-			return ZendeskUtil.getTicketsByStatus(widget, email, status);
 		} catch (Exception e) {
 			throw ExceptionUtil.catchWebException(e);
 		}
+		return null;
 	}
 
 	/**
@@ -223,19 +217,16 @@ public class ZendeskWidgetsAPI {
 	@Produces(MediaType.TEXT_PLAIN + "; charset=UTF-8;")
 	public String getZendeskProfile(@PathParam("widget-id") Long widgetId,
 			@PathParam("email") String email) {
-		String result = null;
 		try {
 			// Retrieves widget based on its id
 			Widget widget = WidgetUtil.getWidget(widgetId);
-
 			if (widget != null) {
-				result =ZendeskUtil.getZendeskProfile(widget, email);
+				// Retrieves user information from zendesk.
+				return ZendeskUtil.getZendeskProfile(widget, email);
 			}
-
-			// Retrieves user information from zendesk.
-			return  result;
 		} catch (Exception e) {
 			throw ExceptionUtil.catchWebException(e);
 		}
+		return null;
 	}
 }

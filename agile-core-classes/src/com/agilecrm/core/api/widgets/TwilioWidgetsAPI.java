@@ -60,19 +60,17 @@ public class TwilioWidgetsAPI
 	{
 		// Retrieve widget based on its id
 		Widget widget = WidgetUtil.getWidget(widgetId);
-
-		if (widget == null){
-			return null;
+		if (widget != null){
+			try
+			{
+				// Calls TwilioUtil method to retrieve numbers
+				return TwilioUtil.getOutgoingNumber(widget).toString();
+			}catch (Exception e)
+			{
+			    throw ExceptionUtil.catchWebException(e);
+			}
 		}
-
-		try
-		{
-			// Calls TwilioUtil method to retrieve numbers
-			return TwilioUtil.getOutgoingNumber(widget).toString();
-		}catch (Exception e)
-		{
-		    throw ExceptionUtil.catchWebException(e);
-		}
+		return null;
 	}
 
 	/**
@@ -89,18 +87,17 @@ public class TwilioWidgetsAPI
 	{
 		// Retrieve widget based on its id
 		Widget widget = WidgetUtil.getWidget(widgetId);
-
-		if (widget == null){
-			return null;
+		if (widget != null){
+			try
+			{
+				// Calls TwilioUtil method to verify a number in agile Twilio user
+				return TwilioUtil.verifyOutgoingNumbers(widget, from).toString();
+			}catch (Exception e)
+			{
+			    throw ExceptionUtil.catchWebException(e);
+			}
 		}
-		try
-		{
-			// Calls TwilioUtil method to verify a number in agile Twilio user
-			return TwilioUtil.verifyOutgoingNumbers(widget, from).toString();
-		}catch (Exception e)
-		{
-		    throw ExceptionUtil.catchWebException(e);
-		}
+		return null;
 	}
 
 	/**
@@ -117,19 +114,17 @@ public class TwilioWidgetsAPI
 	{
 		// Retrieve widget based on its id
 		Widget widget = WidgetUtil.getWidget(widgetId);
-
-		if (widget == null){
-			return null;
+		if (widget != null){
+			try
+			{
+				// Create a Twilio Application for Agile in Agile User Twilio account
+				return TwilioUtil.getTwilioAppSID(widget);
+			}catch (Exception e)
+			{
+			    throw ExceptionUtil.catchWebException(e);
+			}
 		}
-
-		try
-		{
-			// Create a Twilio Application for Agile in Agile User Twilio account
-			return TwilioUtil.getTwilioAppSID(widget);
-		}catch (Exception e)
-		{
-		    throw ExceptionUtil.catchWebException(e);
-		}
+		return null;
 	}
 
 	/**
@@ -149,20 +144,17 @@ public class TwilioWidgetsAPI
 	{
 		// Retrieve widget based on its id
 		Widget widget = WidgetUtil.getWidget(widgetId);
-
-		if (widget == null){
-			return null;
+		if (widget != null){
+			try
+			{
+				// Calls TwilioUtil method to generate a token to make calls
+				return TwilioUtil.generateTwilioToken(widget);
+			}catch (Exception e)
+			{
+			    throw ExceptionUtil.catchWebException(e);
+			}
 		}
-
-		try
-		{
-			// Calls TwilioUtil method to generate a token to make calls
-			return TwilioUtil.generateTwilioToken(widget);
-		}catch (Exception e)
-		{
-		    throw ExceptionUtil.catchWebException(e);
-		}
-
+		return null;
 	}
 
 	/**
@@ -180,20 +172,17 @@ public class TwilioWidgetsAPI
 	{
 		// Retrieve widget based on its id
 		Widget widget = WidgetUtil.getWidget(widgetId);
-
-		if (widget == null){
-			return null;
+		if (widget != null){
+			try
+			{
+				// Calls TwilioUtil method to retrieve call logs for the "to" number
+				return TwilioUtil.getCallLogsWithRecordingsFromTwilioIO(widget, to).toString();
+			}catch (Exception e)
+			{
+			    throw ExceptionUtil.catchWebException(e);
+			}
 		}
-		try
-		{
-
-			// Calls TwilioUtil method to retrieve call logs for the "to" number
-			return TwilioUtil.getCallLogsWithRecordingsFromTwilioIO(widget, to).toString();
-		}catch (Exception e)
-		{
-		    throw ExceptionUtil.catchWebException(e);
-		}
-
+		return null;
 	}
 
 	/**
@@ -210,18 +199,17 @@ public class TwilioWidgetsAPI
 	{
 		// Retrieve widget based on its id
 		Widget widget = WidgetUtil.getWidget(widgetId);
-
-		if (widget == null){
-			return null;
+		if (widget != null){
+			try
+			{
+				// Calls TwilioUtil method to retrive incoming numbers
+				return TwilioUtil.getIncomingNumber(widget).toString();
+			}catch (Exception e)
+			{
+			    throw ExceptionUtil.catchWebException(e);
+			}
 		}
-		try
-		{
-			// Calls TwilioUtil method to retrive incoming numbers
-			return TwilioUtil.getIncomingNumber(widget).toString();
-		}catch (Exception e)
-		{
-		    throw ExceptionUtil.catchWebException(e);
-		}
+		return null;
 	}
 
 	/**
@@ -276,16 +264,9 @@ public class TwilioWidgetsAPI
 			@PathParam("auth-token") String authToken)
 	{
 		System.out.println("In validateaccount" + accountSID + " " + authToken);
-		/*
-		 * TwilioRestClient client = new TwilioRestClient(accountSID, authToken,
-		 * null); System.out.println(client.getAccountSid());
-		 */
 		try
 		{
-			/*
-			 * // Calls TwilioUtil method to retrieve numbers return
-			 * TwilioUtil.getOutgoingNumberTwilioIO(client).toString();
-			 */
+			 // Calls TwilioUtil method to retrieve numbers return
 			return TwilioUtil.checkCredentials(accountSID, authToken);
 		}catch (Exception e)
 		{
@@ -317,7 +298,6 @@ public class TwilioWidgetsAPI
 		{
 		    throw ExceptionUtil.catchWebException(e);
 		}
-
 	}
 
 	/**
@@ -364,7 +344,6 @@ public class TwilioWidgetsAPI
 			@PathParam("twimlet-url") String twimletUrl)
 	{
 		System.out.println("In createAppSid" + accountSID + " " + authToken + " " + numberSid + " " + record);
-
 		try
 		{
 		    // Create a Twilio Application for Agile in Agile User Twilio account
@@ -389,7 +368,6 @@ public class TwilioWidgetsAPI
 			@PathParam("auth-token") String authToken, @PathParam("call-sid") String callSID,
 			@PathParam("parent") String isParent)
 	{
-
 		try
 		{
 			if (isParent.equals("true")){
@@ -401,7 +379,6 @@ public class TwilioWidgetsAPI
 		{
 		    throw ExceptionUtil.catchWebException(e);
 		}
-
 	}
 
 	/**
@@ -417,28 +394,25 @@ public class TwilioWidgetsAPI
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	public String saveCallActivity(@FormParam("direction") String direction,@FormParam("phone") String phone,@FormParam("status") String status,@FormParam("duration") String duration) {		
 	    
-	    	if (StringUtils.isBlank(phone)){
-	    		return "";
+	    	if (!(StringUtils.isBlank(phone))){
+	    		Contact contact = QueryDocumentUtil.getContactsByPhoneNumber(phone);
+
+	    		if (direction.equalsIgnoreCase("outbound-dial"))
+	    		{
+	    		    ActivityUtil.createLogForCalls(Call.SERVICE_TWILIO, phone, Call.OUTBOUND, status, duration, contact);
+
+	    		    // Trigger for outbound
+	    		    CallTriggerUtil.executeTriggerForCall(contact, Call.SERVICE_TWILIO, Call.OUTBOUND, status, duration);
+	    		}
+
+	    		if (direction.equalsIgnoreCase("inbound"))
+	    		{
+	    		    ActivityUtil.createLogForCalls(Call.SERVICE_TWILIO, phone, Call.INBOUND, status, duration, contact);
+
+	    		    // Trigger for inbound
+	    		    CallTriggerUtil.executeTriggerForCall(contact,  Call.SERVICE_TWILIO, Call.INBOUND, status, duration);
+	    		}
 	    	}
-
-		Contact contact = QueryDocumentUtil.getContactsByPhoneNumber(phone);
-
-		if (direction.equalsIgnoreCase("outbound-dial"))
-		{
-		    ActivityUtil.createLogForCalls(Call.SERVICE_TWILIO, phone, Call.OUTBOUND, status, duration, contact);
-
-		    // Trigger for outbound
-		    CallTriggerUtil.executeTriggerForCall(contact, Call.SERVICE_TWILIO, Call.OUTBOUND, status, duration);
-		}
-
-		if (direction.equalsIgnoreCase("inbound"))
-		{
-		    ActivityUtil.createLogForCalls(Call.SERVICE_TWILIO, phone, Call.INBOUND, status, duration, contact);
-
-		    // Trigger for inbound
-		    CallTriggerUtil.executeTriggerForCall(contact,  Call.SERVICE_TWILIO, Call.INBOUND, status, duration);
-		}
-	
 		return "";
 	}
 
@@ -476,7 +450,6 @@ public class TwilioWidgetsAPI
 	public String setVoiceMailRedirect(@PathParam("acc-sid") String accountSID,
 			@PathParam("auth-token") String authToken, @PathParam("call-sid") String callSID, @PathParam("file-selected") String fileSelected)
 	{
-
 		try
 		{
 			TwilioUtil.sendVoiceMailRedirect(accountSID, authToken, callSID, fileSelected);
@@ -485,7 +458,6 @@ public class TwilioWidgetsAPI
 		{
 		    throw ExceptionUtil.catchWebException(e);
 		}
-
 	}
 
 	/**
@@ -504,20 +476,17 @@ public class TwilioWidgetsAPI
 	{
 		// Retrieve widget based on its id
 		Widget widget = WidgetUtil.getWidget(widgetId);
-
-		if (widget == null){
-			return null;
+		if (widget != null){
+			try
+			{
+				// Calls TwilioUtil method to retrieve call logs for the "to" number
+				return TwilioUtil.getCallLogsByPage(widget, to, page, pageToken).toString();
+			}catch (Exception e)
+			{
+			    throw ExceptionUtil.catchWebException(e);
+			}
 		}
-
-		try
-		{
-			// Calls TwilioUtil method to retrieve call logs for the "to" number
-			return TwilioUtil.getCallLogsByPage(widget, to, page, pageToken).toString();
-		}catch (Exception e)
-		{
-		    throw ExceptionUtil.catchWebException(e);
-		}
-
+		return null;
 	}
 	
 	/**
@@ -530,7 +499,6 @@ public class TwilioWidgetsAPI
 	@GET
 	@Produces(MediaType.TEXT_PLAIN)
 	public String saveLastContactedTime(@QueryParam("id") Long contactId){
-		
 		try{
 			System.out.println("contact id ==== " + contactId);
 			Contact contact = ContactUtil.getContact(contactId);
@@ -542,7 +510,6 @@ public class TwilioWidgetsAPI
 		}catch (Exception e)
 		{
 		    throw ExceptionUtil.catchWebException(e);
-		}
-		
+		}	
 	}
 }

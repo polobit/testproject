@@ -90,14 +90,11 @@ public class ClickDeskUtil {
 		// ClickDesk returns 401 for improper details
 		if (response.contains("401")) {
 			return "Authentication failed. Please try again";
-		}
-
-		// ClickDesk returns 404 for IO exception, else exception returned from
-		// clickDesk is thrown
-		if (response.contains("404")) {
+		} else if (response.contains("404")) {
+			// ClickDesk returns 404 for IO exception, else exception returned
+			// from clickDesk is thrown
 			return "An error occured. Refresh and try again.";
 		}
-
 		return response;
 	}
 

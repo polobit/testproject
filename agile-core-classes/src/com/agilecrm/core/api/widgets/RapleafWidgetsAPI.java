@@ -42,16 +42,14 @@ public class RapleafWidgetsAPI {
 			@PathParam("email") String email) {
 		// Retrieves widget based on its id
 		Widget widget = WidgetUtil.getWidget(widgetId);
-
-		if (widget == null) {
-			return null;
+		if (widget != null) {
+			try {
+				// Retrieves details of persons from Rapleaf based on email
+				return Rapleaf.getRapportiveValue(widget, email).toString();
+			} catch (Exception e) {
+				throw ExceptionUtil.catchWebException(e);
+			}
 		}
-		try {
-			// Retrieves details of persons from Rapleaf based on email
-			return Rapleaf.getRapportiveValue(widget, email).toString();
-		} catch (Exception e) {
-			throw ExceptionUtil.catchWebException(e);
-		}
+		return null;
 	}
-
 }

@@ -48,16 +48,15 @@ public class ClickDeskWidgetsAPI {
 		// Retrieves widget based on its id
 		Widget widget = WidgetUtil.getWidget(widgetId);
 
-		if (widget == null) {
-			return null;
+		if (widget != null) {
+			try {
+				// Calls ClickDeskUtil method to retrieve chats
+				return ClickDeskUtil.getChats(widget, email, offset);
+			} catch (Exception e) {
+				throw ExceptionUtil.catchWebException(e);
+			}
 		}
-
-		try {
-			// Calls ClickDeskUtil method to retrieve chats
-			return ClickDeskUtil.getChats(widget, email, offset);
-		} catch (Exception e) {
-			throw ExceptionUtil.catchWebException(e);
-		}
+		return null;
 	}
 
 	/**
@@ -79,15 +78,14 @@ public class ClickDeskWidgetsAPI {
 		// Retrieves widget based on its id
 		Widget widget = WidgetUtil.getWidget(widgetId);
 
-		if (widget == null) {
-			return null;
+		if (widget != null) {
+			try {
+				// Calls ClickDeskUtil method to retrieve tickets
+				return ClickDeskUtil.getTickets(widget, email, offset);
+			} catch (Exception e) {
+				throw ExceptionUtil.catchWebException(e);
+			}
 		}
-
-		try {
-			// Calls ClickDeskUtil method to retrieve tickets
-			return ClickDeskUtil.getTickets(widget, email, offset);
-		} catch (Exception e) {
-			throw ExceptionUtil.catchWebException(e);
-		}
+		return null;
 	}
 }

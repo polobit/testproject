@@ -41,21 +41,18 @@ public class StripeWidgetsAPI
     @Produces(MediaType.TEXT_PLAIN)
     public String getStripeCustomerDetails(@PathParam("widget-id") Long widgetId, @PathParam("customerId") String customerId)
     {
-	try
-	{
-	    // Retrieves widget based on its id
-	    Widget widget = WidgetUtil.getWidget(widgetId);
-
-	    if (widget == null){
-	    	return null;
-	    }
-
-	    // Calls StripePluginUtil method to retrieve customer details
-	    return StripePluginUtil.getCustomerDetails(widget, customerId).toString();
-	}catch (Exception e)
-	{
-	    throw ExceptionUtil.catchWebException(e);
-	}
-
+		try
+		{
+		    // Retrieves widget based on its id
+		    Widget widget = WidgetUtil.getWidget(widgetId);
+		    if (widget != null){
+		    	// Calls StripePluginUtil method to retrieve customer details
+			    return StripePluginUtil.getCustomerDetails(widget, customerId).toString();
+		    }
+		}catch (Exception e)
+		{
+		    throw ExceptionUtil.catchWebException(e);
+		}
+		return null;
     }
 }

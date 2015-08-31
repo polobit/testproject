@@ -56,48 +56,47 @@ public class ChargifyWidgetsAPI {
 			@PathParam("email") String email) throws WebApplicationException {
 		try {
 			Widget widget = WidgetUtil.getWidget(widgetId);
-			// getting widget from widgetId
-			if (widget == null) {
-				return null;
+			// Getting widget from widgetId
+			if (widget != null) {
+				// Creating chargifyutil Object
+				ChargifyUtil ChargifyUtil = new ChargifyUtil(
+						widget.getProperty("chargify_api_key"),
+						widget.getProperty("chargify_subdomain"));
+
+				// Get customer array
+				JSONArray customerJSONArray = ChargifyUtil.getCustomerId(email
+						.toLowerCase());
+
+				System.out.println(customerJSONArray);
+
+				// Throw exception if now customer found for email
+				if (customerJSONArray.length() == 0) {
+					throw new Exception("Customer not found");
+				}
+
+				// Iterate through each object and format the response
+				if (customerJSONArray.length() > 0) {
+					JSONObject customerJson = customerJSONArray
+							.getJSONObject(0);
+
+					// Get subscriptions for the customer
+					String subscriptions = ChargifyUtil
+							.getSubscriptions(customerJson);
+
+					// Get invoices for the customer
+					String invoices = ChargifyUtil.getInvoices(customerJson);
+
+					// Constructing jsonObject with customer,subscriptions
+					// and invoices
+					return (new JSONObject().put("customer", customerJson).put(
+							"subscriptions", new JSONArray(subscriptions)).put(
+							"invoices", new JSONArray(invoices))).toString();
+
+				}
+				return "";
 			}
-			// creating chargifyutil Object
-			ChargifyUtil ChargifyUtil = new ChargifyUtil(
-					widget.getProperty("chargify_api_key"),
-					widget.getProperty("chargify_subdomain"));
 
-			// get customer array
-			JSONArray customerJSONArray = ChargifyUtil.getCustomerId(email
-					.toLowerCase());
-
-			System.out.println(customerJSONArray);
-
-			// throw exception if now customer found for email
-			if (customerJSONArray.length() == 0) {
-				throw new Exception("Customer not found");
-			}
-
-			String result = "";
-
-			// iterate through each object and format the response
-			if (customerJSONArray.length() > 0) {
-				JSONObject customerJson = customerJSONArray.getJSONObject(0);
-
-				// get subscriptions for the customer
-				String subscriptions = ChargifyUtil
-						.getSubscriptions(customerJson);
-
-				// Get invoices for the customer
-				String invoices = ChargifyUtil.getInvoices(customerJson);
-
-				// Constructing jsonObject with customer,subscriptions
-				// and invoices
-				result = (new JSONObject().put("customer", customerJson).put(
-						"subscriptions", new JSONArray(subscriptions)).put(
-						"invoices", new JSONArray(invoices))).toString();
-
-			}
-
-			return result;
+			return null;
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw ExceptionUtil.catchWebException(e);
@@ -126,19 +125,17 @@ public class ChargifyWidgetsAPI {
 			@PathParam("email") String email) {
 		// Retrieves widget based on its id
 		Widget widget = WidgetUtil.getWidget(widgetId);
-		if (widget == null) {
-			return null;
-		}
 
-		try {
-			ChargifyUtil ChargifyUtil = new ChargifyUtil(
-					widget.getProperty("chargify_api_key"), "agilecrm");
-			// Calls ChargifyUtil method to add Contact to Chargify account
-			return ChargifyUtil.createCustomer(firstName, lastName, email);
+		if (widget != null) {
+			try {
+				ChargifyUtil ChargifyUtil = new ChargifyUtil(
+						widget.getProperty("chargify_api_key"), "agilecrm");
+				// Calls ChargifyUtil method to add Contact to Chargify account
+				return ChargifyUtil.createCustomer(firstName, lastName, email);
+			} catch (Exception e) {
+				throw ExceptionUtil.catchWebException(e);
+			}
 		}
-		catch (Exception e)
-		{
-			throw ExceptionUtil.catchWebException(e);
-		}
+		return null;
 	}
 }

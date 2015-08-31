@@ -53,18 +53,16 @@ public class HelpScoutWidgetsAPI
 	{
 	    // Retrieves widget based on its id
 	    Widget widget = WidgetUtil.getWidget(widgetId);
-
-	    if (widget == null){
-	    	return null;
+	    if (widget != null){
+	    	 // Calls Help Scout to retrieve tickets/Mails for contacts email
+		    return HelpScoutUtil.getCustomerByEmail(widget, email);
 	    }
-
-	    // Calls Help Scout to retrieve tickets/Mails for contacts email
-	    return HelpScoutUtil.getCustomerByEmail(widget, email);
 	}
 	catch (Exception e)
 	{
 	    throw ExceptionUtil.catchWebException(e);
 	}
+	return null;
     }
 
     /**
@@ -86,17 +84,16 @@ public class HelpScoutWidgetsAPI
 	    // Retrieves widget based on its id
 	    Widget widget = WidgetUtil.getWidget(widgetId);
 
-	    if (widget == null){
-	    	return null;
+	    if (widget != null){
+	    	// Calls Help Scout to retrieve tickets/Mails for contacts email
+		    return HelpScoutUtil.getCreateFormData(widget);
 	    }
-
-	    // Calls Help Scout to retrieve tickets/Mails for contacts email
-	    return HelpScoutUtil.getCreateFormData(widget);
 	}
 	catch (Exception e)
 	{
 	    throw ExceptionUtil.catchWebException(e);
 	}
+	return null;
     }
 
     /**
@@ -120,16 +117,15 @@ public class HelpScoutWidgetsAPI
 	    // Retrieves widget based on its id
 	    Widget widget = WidgetUtil.getWidget(widgetId);
 
-	    if (widget == null){
-	    	return null;
+	    if (widget != null){
+	    	 // Calls Help Scout to retrieve tickets/Mails for contacts email
+		    return HelpScoutUtil.getCustomerConversations(widget, customerId);
 	    }
-
-	    // Calls Help Scout to retrieve tickets/Mails for contacts email
-	    return HelpScoutUtil.getCustomerConversations(widget, customerId);
 	}catch (Exception e)
 	{
 	    throw ExceptionUtil.catchWebException(e);
 	}
+	return null;
     }
 
     /**
@@ -170,19 +166,18 @@ public class HelpScoutWidgetsAPI
 	    // Retrieves widget based on its id
 	    Widget widget = WidgetUtil.getWidget(widgetId);
 
-	    if (widget == null){
-	    	return null;
+	    if (widget != null){
+	    	System.out.println(customerId + " " + subject + " " + email + " " + mailbox + " " + description);
+		    // Calls HelpScoutUtil method to create a conversation in HelpScout.
+		    return HelpScoutUtil.addConversation(widget, customerId, email, mailbox, subject, description, type,
+			    assignTo, tags);
 	    }
-	    System.out.println(customerId + " " + subject + " " + email + " " + mailbox + " " + description);
-	    // Calls HelpScoutUtil method to create a conversation in HelpScout.
-	    return HelpScoutUtil.addConversation(widget, customerId, email, mailbox, subject, description, type,
-		    assignTo, tags);
 	}
 	catch (Exception e)
 	{
 	    throw ExceptionUtil.catchWebException(e);
 	}
-
+	return null;
     }
 
 }

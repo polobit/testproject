@@ -135,12 +135,12 @@ public class HelpScoutUtil
 
 	    if (mailsPage.getCount() > 0)
 	    {
-		// Group the conversations/Mails based on their Mailbox.
-		JSONArray conversations = new JSONArray(gson.toJson(mailsPage.getItems()));
-		JSONObject mailbox = new JSONObject();
-		mailbox.put("name", mailboxes.getJSONObject(i).getString("name"));
-		mailbox.put("conversations", conversations);
-		customerConv.append("mailbox", mailbox);
+			// Group the conversations/Mails based on their Mailbox.
+			JSONArray conversations = new JSONArray(gson.toJson(mailsPage.getItems()));
+			JSONObject mailbox = new JSONObject();
+			mailbox.put("name", mailboxes.getJSONObject(i).getString("name"));
+			mailbox.put("conversations", conversations);
+			customerConv.append("mailbox", mailbox);
 	    }
 
 	}
@@ -317,11 +317,13 @@ public class HelpScoutUtil
 	ApiClient client = getHelpScoutApiClient(widget);
 	Gson gson = new Gson();
 	Page page = null;
+	
 	if (type.equalsIgnoreCase(PERSON_USER)){
 	    page = client.getUsers();
 	}else if (type.equalsIgnoreCase(PERSON_CUSTOMER)){
 	    page = client.getCustomers();
 	}
+	
 	if (page != null && page.getCount() > 0){
 	    return gson.toJson(page.getItems());
 	}else{

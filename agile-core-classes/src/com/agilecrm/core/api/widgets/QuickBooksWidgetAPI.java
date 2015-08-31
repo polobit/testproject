@@ -46,23 +46,20 @@ public class QuickBooksWidgetAPI
     {
 	// Retrieves widget based on its id
 	Widget widget = WidgetUtil.getWidget(widgetId);
-	if (widget == null)
-	{
-	    return null;
-	}
-
-	QuickBooksUtil utilObj = new QuickBooksUtil(widget.getProperty("token"), widget.getProperty("secret"),
-	        Globals.QUICKBOOKS_CONSUMER_KEY, Globals.QUICKBOOKS_CONSUMER_SECRET, widget.getProperty("company"));
-
-	try
-	{
-	    // Calls QuickBooksUtil method to retrieve invoices
-	    return utilObj.getQuickBooksProfile(email);
-	}catch (Exception e)
-	{
-	    throw ExceptionUtil.catchWebException(e);
-	}
-
+		if (widget != null)
+		{
+			QuickBooksUtil utilObj = new QuickBooksUtil(widget.getProperty("token"), widget.getProperty("secret"),
+			        Globals.QUICKBOOKS_CONSUMER_KEY, Globals.QUICKBOOKS_CONSUMER_SECRET, widget.getProperty("company"));
+			try
+			{
+			    // Calls QuickBooksUtil method to retrieve invoices
+			    return utilObj.getQuickBooksProfile(email);
+			}catch (Exception e)
+			{
+			    throw ExceptionUtil.catchWebException(e);
+			}
+		}
+		return null;
     }
 
     /**
@@ -87,21 +84,21 @@ public class QuickBooksWidgetAPI
     {
 	// Retrieves widget based on its id
 	Widget widget = WidgetUtil.getWidget(widgetId);
-	if (widget == null)
+	if (widget != null)
 	{
-	    return null;
-	}
-	try
-	{
-	    QuickBooksUtil utilObj = new QuickBooksUtil(widget.getProperty("token"), widget.getProperty("secret"),
-		    Globals.QUICKBOOKS_CONSUMER_KEY, Globals.QUICKBOOKS_CONSUMER_SECRET, widget.getProperty("company"));
+		try
+		{
+		    QuickBooksUtil utilObj = new QuickBooksUtil(widget.getProperty("token"), widget.getProperty("secret"),
+			    Globals.QUICKBOOKS_CONSUMER_KEY, Globals.QUICKBOOKS_CONSUMER_SECRET, widget.getProperty("company"));
 
-	    // Calls XeroUtil method to add Contact to Xero account
-	    return utilObj.createCustomer(firstName, lastName, email);
+		    // Calls XeroUtil method to add Contact to Xero account
+		    return utilObj.createCustomer(firstName, lastName, email);
+		}
+		catch (Exception e)
+		{
+		    throw ExceptionUtil.catchWebException(e);
+		}
 	}
-	catch (Exception e)
-	{
-	    throw ExceptionUtil.catchWebException(e);
-	}
+	return null;
     }
 }

@@ -49,25 +49,23 @@ public class FacebookWidgetsApi {
 		// Retrieves widget based on its id
 		Widget widget = WidgetUtil.getWidget(widgetId);
 
-		if (widget == null) {
-			return null;
+		if (widget != null) {
+			// Calls FacebookUtil method to retrieve customer details
+			try {
+				FacebookUtil facebookUtil = new FacebookUtil(
+						Globals.FACEBOOK_APP_ID, Globals.FACEBOOK_APP_SECRET,
+						widget.getProperty("token"));
+
+				return facebookUtil.searchContactsByName(firstname);
+			} catch (Exception e) {
+				throw ExceptionUtil.catchWebException(e);
+			}
 		}
-
-		// Calls FacebookUtil method to retrieve customer details
-		try {
-			FacebookUtil facebookUtil = new FacebookUtil(
-					Globals.FACEBOOK_APP_ID, Globals.FACEBOOK_APP_SECRET,
-					widget.getProperty("token"));
-
-			return facebookUtil.searchContactsByName(firstname);
-		} catch (Exception e) {
-			throw ExceptionUtil.catchWebException(e);
-		}
-
+		return null;
 	}
 
 	/**
-	 * get facebook profile base on userid
+	 * Get facebook profile base on userid
 	 * 
 	 * @param widgetId
 	 * @param id
@@ -82,22 +80,20 @@ public class FacebookWidgetsApi {
 		// Retrieves widget based on its id
 		Widget widget = WidgetUtil.getWidget(widgetId);
 
-		if (widget == null) {
-			return null;
+		if (widget != null) {
+			// Calls StripePluginUtil method to retrieve customer details
+			try {
+				FacebookUtil facebookUtil = new FacebookUtil(
+						Globals.FACEBOOK_APP_ID, Globals.FACEBOOK_APP_SECRET,
+						widget.getProperty("token"));
+				JSONObject res = facebookUtil.getFacebookProfileById(id);
+				System.out.println(res);
+				return res;
+			} catch (Exception e) {
+				throw ExceptionUtil.catchWebException(e);
+			}
 		}
-
-		// Calls StripePluginUtil method to retrieve customer details
-		try {
-			FacebookUtil facebookUtil = new FacebookUtil(
-					Globals.FACEBOOK_APP_ID, Globals.FACEBOOK_APP_SECRET,
-					widget.getProperty("token"));
-			JSONObject res = facebookUtil.getFacebookProfileById(id);
-			System.out.println(res);
-			return res;
-		} catch (Exception e) {
-			throw ExceptionUtil.catchWebException(e);
-		}
-
+		return null;
 	}
 
 	/**
@@ -115,20 +111,18 @@ public class FacebookWidgetsApi {
 		// Retrieves widget based on its id
 		Widget widget = WidgetUtil.getWidget(widgetId);
 
-		if (widget == null) {
-			return null;
+		if (widget != null) {
+			// Calls StripePluginUtil method to retrieve customer details
+			try {
+				FacebookUtil facebookUtil = new FacebookUtil(
+						Globals.FACEBOOK_APP_ID, Globals.FACEBOOK_APP_SECRET,
+						widget.getProperty("token"));
+				return facebookUtil.getFacebookCurrentUser();
+			} catch (Exception e) {
+				throw ExceptionUtil.catchWebException(e);
+			}
 		}
-
-		// Calls StripePluginUtil method to retrieve customer details
-		try {
-			FacebookUtil facebookUtil = new FacebookUtil(
-					Globals.FACEBOOK_APP_ID, Globals.FACEBOOK_APP_SECRET,
-					widget.getProperty("token"));
-			return facebookUtil.getFacebookCurrentUser();
-		} catch (Exception e) {
-			throw ExceptionUtil.catchWebException(e);
-		}
-
+		return null;
 	}
 
 }

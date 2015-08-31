@@ -45,8 +45,7 @@ public class XeroUtil
 				(new JSONObject(widget.prefs).put("email", email).put("widget_id", widget_id).put("callbackUrl",
 						callbackUrl)).toString(), "PUT");
 
-		if (res.contains("token_expired"))
-		{
+		if (res.contains("token_expired")){
 			throw new Exception(
 					"Authentication Error.\r\nThe access token has expired. Please reconfigure your Xero integration.");
 		}
@@ -85,6 +84,13 @@ public class XeroUtil
 				"PUT");
 	}
 
+	/**
+	 * Gets the organisation info.
+	 * 
+	 * @param widget
+	 * @return
+	 * @throws Exception
+	 */
 	public String getOrganisationInfo(Widget widget) throws Exception
 	{
 		// Call to get lineitems in xero for invoice id
@@ -92,13 +98,19 @@ public class XeroUtil
 				(new JSONObject(widget.prefs).put("callbackUrl", callbackUrl)).toString(), "PUT");
 	}
 	
+	/**
+	 * Refresh the xero access token.
+	 * 
+	 * @param widget
+	 * @return
+	 * @throws Exception
+	 */
 	public Widget refreshToken(Widget widget) throws Exception
 	{
 		String returnStr = HTTPUtil.accessHTTPURL(xeroPluginurl + "/refreshtoken",
-				(new JSONObject(widget.prefs).put("callbackUrl", callbackUrl)).toString(), "PUT");
-		
+				(new JSONObject(widget.prefs).put("callbackUrl", callbackUrl)).toString(), "PUT");	
 		System.out.println("New accessToken JSON: " + returnStr);
-		
+	
 		if (returnStr.contains("xero_access_token")) {
 			System.out.println("Before renew: "+widget.prefs);
 			JSONObject jsObj = new JSONObject(returnStr);
@@ -110,9 +122,7 @@ public class XeroUtil
 			widget.save();
 			System.out.println("After renew: "+widget.prefs);
 		}
-		
 		return widget;
-		
 	}
 
 }
