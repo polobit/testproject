@@ -680,7 +680,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 		this.dealSourcesView = new Base_Collection_View({ url : '/core/api/categories?entity_type=DEAL_SOURCE', templateKey : "admin-settings-deal-sources",
 			individual_tag_name : 'tr', sortKey : "name", postRenderCallback : function(el)
 			{
-				//initializeMilestoneListners(el);
+				initializeMilestoneListners(el);
 			} });
 		this.dealSourcesView.collection.fetch();
 		$('#content').find('#admin-prefs-tabs-content').find('#settings-milestones-tab-content').html(this.dealSourcesView.render().el);
