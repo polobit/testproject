@@ -283,8 +283,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			new Base_Model_View({ url : '/core/api/api-key', template : "admin-settings-api-key-model", postRenderCallback : function(el)
 			{
 				$('#content').find('#admin-prefs-tabs-content').html(el);
-				prettyPrint();
-				$(".prettyprint").css({"padding":"0px", "border":"none"});
+				prettify_api_add_events();
 				if (id)
 				{
 					switch (id) {
@@ -295,17 +294,6 @@ var AdminSettingsRouter = Backbone.Router.extend({
 						$(el).find('a[href="#api-key"]').trigger('click');
 						break;
 					}
-				}
-				try
-				{
-					if (ACCOUNT_PREFS.plan.plan_type.split("_")[0] == "PRO")
-						$("#tracking-webrules, .tracking-webrules-tab").hide();
-					else
-						$("#tracking-webrules-whitelist, .tracking-webrules-whitelist-tab").hide();
-				}
-				catch (e)
-				{
-					$("#tracking-webrules-whitelist, .tracking-webrules-whitelist-tab").hide();
 				}
 			} });
 		});

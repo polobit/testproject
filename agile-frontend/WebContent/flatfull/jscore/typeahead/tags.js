@@ -401,4 +401,19 @@ $(function(){
 			pieTags(App_Contacts.contactsListView.el, true);
 		}, 'core/api/tags?reload=true');
 	})
+	$('body').on('focusout', '.contact-detail-addtags', function(e)
+	{
+		e.preventDefault();
+		var contact_tag_temp = $(this).val();
+		$('body').on('mousedown', function(s)
+		{
+			s.preventDefault();
+			var t = s.target.id;
+			if (!contact_tag_temp && t != "contact-add-tags")
+			{
+				$("#addTagsForm").css("display", "none");
+				$("#add-tags").css("display", "block");
+			}
+		});
+	});
 });

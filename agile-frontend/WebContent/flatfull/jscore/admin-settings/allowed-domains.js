@@ -1,29 +1,3 @@
-$(function()
-{
-	$("#update_allowed_domains").click(function(e)
-	{
-		e.preventDefault();
-		$(this).attr("disabled", "disabled");
-		var allowed_domains = get_allowed_domains();
-		var new_allowed_domain = $("#new_allowed_domain").val();
-		if (!new_allowed_domain || is_duplicate_allowed_domain(new_allowed_domain, allowed_domains))
-		{
-			$(this).removeAttr("disabled");
-			return;
-		}
-		allowed_domains = allowed_domains ? allowed_domains + ", " + new_allowed_domain : new_allowed_domain;
-		put_allowed_domains(allowed_domains);
-	});
-
-	$(".allowed-domain-delete").click(function(e)
-	{
-		e.preventDefault();
-		$(this).closest("tr").remove();
-		var allowed_domains = get_allowed_domains();
-		put_allowed_domains(allowed_domains);
-	});
-});
-
 function get_allowed_domains()
 {
 	var allowed_domains_array = $("#allowed_domains_list").children();

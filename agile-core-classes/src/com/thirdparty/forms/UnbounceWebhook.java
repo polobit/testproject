@@ -25,51 +25,35 @@ import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.user.DomainUser;
 import com.googlecode.objectify.Key;
 
-/**
- * <h1>UnbounceWebhook</h1>
- *
- * <p>
- * Servlet to handle <b>Unbounce Webhook</b> requests
- * </p>
- *
- * @author agile
- * @version 1.0
- * @since 2013-12-31
- */
 @SuppressWarnings("serial")
 public class UnbounceWebhook extends HttpServlet
 {
-    /**
-     * This Method handles the Unbounce Webhook HTTP requests
-     *
-     * @param req
-     *            WufooWebhook HTTP request Object
-     * @param res
-     *            WufooWebhook HTTP response Object
-     * @return void
-     */
     protected void service(HttpServletRequest req, HttpServletResponse response) throws IOException, ServletException
     {
 	try
 	{
-	    // Read query parameter 'api-key' for Agile REST API Key & Contact
-	    // tags
+	    // Get API key
 	    String tagString = req.getParameter("api-key");
+
+	    // Send Error if API Key is missing
 	    if (StringUtils.isEmpty(tagString))
 	    {
 		response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Bad Request: API Key is missing");
 		return;
 	    }
 
-	    // Remove trailing spaces & split at "," to separate API Key &
-	    // contact tags
+	    // Format tagsString for spaces
 	    tagString = tagString.trim();
 	    tagString = tagString.replace("/, /g", ",");
+
+	    // Split tagString and separate tags, API key
 	    String[] tagsWithKey = tagString.split(",");
 	    String[] tags = Arrays.copyOfRange(tagsWithKey, 1, tagsWithKey.length);
 
-	    // Get owner from API Key to assign to contact
+	    // Get owner from API
 	    Key<DomainUser> owner = APIKey.getDomainUserKeyRelatedToAPIKey(tagsWithKey[0]);
+
+	    // Send Error if owner is not found
 	    if (owner == null)
 	    {
 		response.sendError(HttpServletResponse.SC_UNAUTHORIZED,
@@ -77,33 +61,43 @@ public class UnbounceWebhook extends HttpServlet
 		return;
 	    }
 
-	    // Get POST data from Unbounce and convert to JSON Object
-	    // 'finalJson'
+	    // Define properties list (ContactField)
+	    List<ContactField> properties = new ArrayList<ContactField>();
+
+	    // Get post data from unbounce and convert to json {"name": "value"}
 	    JSONObject obj = new JSONObject(req.getParameter("data.json"));
 	    JSONObject finalJson = convertUnbounceJson(obj);
 
-	    // Return if no email in finalJson to avoid duplicate contacts
-	    if (StringUtils.isBlank(finalJson.optString(Contact.EMAIL)))
+	    // Define contact
+	    Contact contact = null;
+
+	    // Check if email exists in json, if yes search for contact
+	    if (!StringUtils.isBlank(finalJson.optString(Contact.EMAIL)))
+		contact = ContactUtil.searchContactByEmail(finalJson.getString(Contact.EMAIL));
+	    else
 	    {
 		response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Bad Request: Email is missing");
 		return;
 	    }
-	    Contact contact = ContactUtil.searchContactByEmail(finalJson.getString(Contact.EMAIL));
+
+	    // If contact is null create new contact
 	    if (contact == null)
 		contact = new Contact();
 
-	    // Get contact properties from finalJson
-	    List<ContactField> properties = new ArrayList<ContactField>();
+	    // Build agile contact fields from finalJson
 	    FormsUtil.jsonToAgile(finalJson, properties, null);
 
-	    // Add / update contact properties & tags
-	    contact.setContactOwner(owner);
-	    contact.properties = FormsUtil.updateContactProperties(properties, contact.properties);
+	    if (owner != null)
+	    {
+		// Set contact owner, update properties and save contact
+		contact.setContactOwner(owner);
+		contact.properties = FormsUtil.updateContactProperties(properties, contact.properties);
 
-	    if (tags != null && tags.length > 0)
-		contact.addTags(FormsUtil.getValidTags(tags));
-	    else
-		contact.save();
+		if(tags != null && tags.length > 0)
+		    contact.addTags(FormsUtil.getValidTags(tags));
+		else
+		    contact.save();
+	    }
 	}
 	catch (Exception e)
 	{
@@ -116,26 +110,18 @@ public class UnbounceWebhook extends HttpServlet
 	}
     }
 
-    /**
-     * This method is used to convert <b>Unbounce POST data</b> to <b>JSON
-     * Object</b>
-     *
-     * @param json
-     *            New JSON Object
-     * @return finalJson
-     */
     public static JSONObject convertUnbounceJson(JSONObject json)
     {
 	try
 	{
-	    // Define & Initialize finalJson
+	    // Define finalJson
 	    JSONObject finalJson = new JSONObject();
 
 	    // Define name, value
 	    String name;
 	    String value;
 
-	    // Remove default keys from Unbounce POST data JSON
+	    // Remove default keys from unbounce data
 	    json.remove("variant");
 	    json.remove("page_uuid");
 	    json.remove("page_url");

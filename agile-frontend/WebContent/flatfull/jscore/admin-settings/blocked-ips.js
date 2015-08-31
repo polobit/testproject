@@ -1,29 +1,3 @@
-$(function()
-{
-	$("#update_blocked_ips").click(function(e)
-	{
-		e.preventDefault();
-		$(this).attr("disabled", "disabled");
-		var blocked_ips = get_blocked_ips();
-		var new_blocked_ip = $("#new_blocked_ip").val();
-		if (!new_blocked_ip || is_duplicate_blocked_ip(new_blocked_ip, blocked_ips) || !is_valid_ip(new_blocked_ip))
-		{
-			$(this).removeAttr("disabled");
-			return;
-		}
-		blocked_ips = blocked_ips ? blocked_ips + ", " + new_blocked_ip : new_blocked_ip;
-		put_blocked_ips(blocked_ips);
-	});
-
-	$(".blocked-ip-delete").click(function(e)
-	{
-		e.preventDefault();
-		$(this).closest("tr").remove();
-		var blocked_ips = get_blocked_ips();
-		put_blocked_ips(blocked_ips);
-	});
-});
-
 function get_blocked_ips()
 {
 	var blocked_ips_array = $("#blocked_ips_list").children();
