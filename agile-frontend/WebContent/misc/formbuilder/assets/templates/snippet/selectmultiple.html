@@ -3,8 +3,8 @@
   <label class="agile-label" for="<%= id %>"><%= label %></label>
   <div class="<%= inputsize %> agile-field">
     <select id="<%= id %>" name="<%if(agilefield){%><%= agilefield %><%}else{%><%= id %><%}%>" class="<%= inputheight %>" multiple="multiple" <% if(required) {%> required <% } %>>
-    	<option value="">Select</option>
-    	<% _.each(options, function(option) { %><option><%= option %></option><% }); %>
+    	<option value="">Select</option><% _.each(options, function(option) { %>
+    	<option value="<%= option %>"><%= option %></option><% }); %>
     </select>
   </div>
 </div>
