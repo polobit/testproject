@@ -116,6 +116,8 @@ public class MandrillUtil
 
 	String apiKey = emailSender.getMandrillAPIKey();
 	
+	System.out.println("API key obtained is..." + apiKey);
+	
 	// Verifies if subaccount exists
 	checkSubAccountExists(firstMailDefferedTask.domain, apiKey);
 	
