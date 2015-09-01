@@ -15,7 +15,7 @@
 		var el = $(this).closest("div");
 		$(this).css("display", "none");
 		el.find(".attachment-document-select").css("display", "inline");
-		var optionsTemplate = "<option value='{{id}}' network_type='{{titleFromEnums network_type}}' size='{{size}}'>{{name}}</option>";
+		var optionsTemplate = "<option value='{{id}}' network_type='{{titleFromEnums network_type}}' size='{{size}}' url='{{url}}'>{{name}}</option>";
         fillSelect('attachment-select','core/api/documents', 'documents',  function fillNew()
 		{
 			el.find("#attachment-select option:first").after("<option value='new'>Upload new doc</option>");
