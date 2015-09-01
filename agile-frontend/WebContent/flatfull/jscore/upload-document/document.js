@@ -350,6 +350,13 @@ function saveDocument(form_id, modal_id, saveBtn, isUpdate, json)
 				}
 			});
 		}
+		else if (Current_Route == "email-template-add") {
+			$('#tpl-attachment-select').find('select').find('option:last').after("<option value="+document.id+" selected='selected'>"+document.name+"</option>");
+			$('.add-tpl-attachment-confirm').trigger("click");
+			App_Settings.navigate("email-template-add", {
+					trigger : true
+				});
+		}
 			else {
 				App_Documents.navigate("documents", {
 					trigger : true

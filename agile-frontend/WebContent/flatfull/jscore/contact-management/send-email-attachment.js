@@ -71,7 +71,7 @@
 		    {
 		    	var docName = $( "#attachment-select option:selected").text();
 		    	$('#emailForm').find('#eattachment').css('display','block');
-		    	$('#emailForm').find('#attachment_id').find("#attachment_fname").text(docName);
+		    	$('#emailForm').find('#attachment_id').find("#attachment_fname").html('<a href='+$( "#attachment-select option:selected").attr('url')+'>'+docName+'</a>');
 		    	$('#emailForm').find(".attachment-document-select").css('display','none');
 		    	$('#emailForm').find('#eattachment_key').attr('name',"document_key");
 		    	$('#emailForm').find('#eattachment_key').attr('value',document_id);

@@ -26,4 +26,3 @@ function load_account_email_activity($account_activity)
 	$account_activity.find('#account-email-activity').html(emailActivityModelView.render().el);
 
 }
-
