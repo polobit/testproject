@@ -546,12 +546,12 @@ var AdminSettingsRouter = Backbone.Router.extend({
 				
 			}, saveCallback : function()
 			{
-				// On saved, navigate to integrations
-				Backbone.history.navigate("integrations", { trigger : true });
-
 				if(value == 'SES')
 					return;
 				
+				// On saved, navigate to integrations
+				Backbone.history.navigate("integrations", { trigger : true });
+
 				data = App_Admin_Settings.email_gateway.model.toJSON();
 
 				// Add webhook
