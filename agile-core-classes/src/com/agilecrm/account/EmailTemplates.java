@@ -76,6 +76,11 @@ public class EmailTemplates
 	 * Created time of email template
 	 */
 	public Long created_time = 0L;
+	
+	/**
+	 * Attached document id
+	 */
+	public String attachment_id = null;
 	/***************************************************************/
 
 	/**
