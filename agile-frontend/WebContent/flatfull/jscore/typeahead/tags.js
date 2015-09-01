@@ -409,7 +409,7 @@ $(function(){
 		{
 			s.preventDefault();
 			var t = s.target.id;
-			if (!contact_tag_temp && t != "contact-add-tags")
+			if (!contact_tag_temp && t != "contact-add-tags" && t != "addTags")
 			{
 				$("#addTagsForm").css("display", "none");
 				$("#add-tags").css("display", "block");
