@@ -112,6 +112,9 @@
 					<div class="show_field p-l p-t p-b" style="display:none;">
 						<input id="add_new_milestone" class="add_new_milestone form-control input-sm" style="width:145px;display:inline-block" type="text" placeholder="New Milestone">
 						<a class="btn btn-default btn-addon btn-sm add_milestone m-b-xxs m-t-n-xxs" data-toggle="modal" id="add_milestone" href="#">Add</a>
+						<span id="new_milestone_name_error_{{id}}" for="new_milestone_name" generated="true" class="help-inline" style="display:none;">This field is required.</span>
+						<span id="new_milestone_chars_error_{{id}}" for="new_milestone_name" generated="true" class="help-inline" style="display:none;">Special characters are not allowed other than underscore, space and hypen.</span>
+						<span id="new_milestone_existed_error_{{id}}" for="new_milestone_name" generated="true" class="help-inline" style="display:none;">Milestone with this name already exists.</span>
 					</div>
     				<div class="hidden"><input name="milestones" type="text" class="required form-control" value="{{milestones}}"/></div>
     		</div> 

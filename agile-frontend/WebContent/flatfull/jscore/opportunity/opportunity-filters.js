@@ -778,10 +778,18 @@ function initializeMilestoneListners(el){
     	var form = $(this).closest('form');
     	var new_milestone = form.find(".add_new_milestone").val().trim();
 
-    	if(!new_milestone || new_milestone.length <= 0 || !(/^[a-zA-Z0-9-_ ]*$/).test(new_milestone))
+    	/*if(!new_milestone || new_milestone.length <= 0 || !(/^[a-zA-Z0-9-_ ]*$/).test(new_milestone))
 		{
     		$('#milestone-error-modal').modal('show');
 			return;
+		}*/
+		if(form.find(".add_new_milestone").val().trim()==""){
+			$('#new_milestone_name_error_'+form.attr('id').split('milestonesForm_')[1]).show();
+			return false;
+		}
+		if(!(/^[a-zA-Z0-9-_ ]*$/).test(form.find(".add_new_milestone").val().trim())){
+			$('#new_milestone_chars_error_'+form.attr('id').split('milestonesForm_')[1]).show();
+			return false;
 		}
     	form.find('.show_field').css("display","none");
     	form.find(".show_milestone_field").closest("div").css("display","inline-block");
@@ -828,6 +836,10 @@ function initializeMilestoneListners(el){
     });
 
 	$('#milestone-listner').on('keypress', '.add_new_milestone', function(e) {
+		var form = $(this).closest('form');
+    	$('#new_milestone_name_error_'+form.attr('id').split('milestonesForm_')[1]).hide();
+		$('#new_milestone_existed_error_'+form.attr('id').split('milestonesForm_')[1]).hide();
+		$('#new_milestone_chars_error_'+form.attr('id').split('milestonesForm_')[1]).hide();
     	if(e.keyCode == 13)
     	{
     		var form = $(this).closest("form");
