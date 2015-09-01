@@ -673,6 +673,8 @@ function initializeMilestoneListners(el){
 	$('#milestone-listner').on('click', '.add-pipeline', function(e) {
 		$('#pipelineForm input').val('');
 		$('#pipelineForm input#milestones').val('New,Prospect,Proposal,Won,Lost');
+		$('#pipelineForm input#won_milestone').val('Won');
+		$('#pipelineForm input#lost_milestone').val('Lost');
 		$('#pipelineModal').find('.save-status').html('');
 	});
 	
@@ -744,6 +746,13 @@ function initializeMilestoneListners(el){
 		e.preventDefault();
 		if (!confirm("Are you sure you want to delete ?" ))
 			return;
+		
+		var formId = $(this).closest('form');
+		if($(this).closest('tr').find('.mark-won').length > 0){
+			formId.find('input[name="won_milestone"]').val('');
+		} else if($(this).closest('tr').find('.mark-lost').length > 0){
+			formId.find('input[name="lost_milestone"]').val('');
+		}
 		$(this).closest('tr').css("display", "none");
 		fill_ordered_milestone($(this).closest('form').attr('id'));
 	});
@@ -804,7 +813,14 @@ function initializeMilestoneListners(el){
     		
     		if(add_milestone)
     		{
-    			milestone_list.append("<tr data='"+new_milestone+"' style='display: table-row;'><td><div style='display:inline-block;vertical-align:top;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;width:80%'>"+new_milestone+"</div></td><td><div class='m-b-n-xs' style='display:none;'><a class='text-l-none-hover c-p'><i title='Drag' class='icon-move'></i></a><a class='milestone-delete' style='cursor: pointer;margin-left:10px; text-decoration: none;' data-toggle='modal' role='button' href='#'><i title='Delete Milestone' class='task-action icon icon-trash'></i></a></div></td></tr>");
+    			var html = "<tr data='" + new_milestone + "' style='display: table-row;'><td><div class='milestone-name-block inline-block v-top text-ellipsis' style='width:80%'>";
+    			html += new_milestone + "</div></td><td class='b-r-none'><div class='m-b-n-xs'>";
+    			html += "<a class='milestone-won text-l-none-hover c-p text-xs hover-show' style='visibility:hidden;' data-toggle='tooltip' title='Set as Won Milestone'><i class='icon-like'></i></a>";
+				html += "<a class='milestone-lost text-l-none-hover c-p text-xs m-l-sm hover-show' style='visibility:hidden;' data-toggle='tooltip' title='Set as Lost Milestone'><i class='icon-dislike'></i></a>";
+				html +=	"<a class='milestone-delete c-p m-l-sm text-l-none text-xs hover-show' style='visibility:hidden;' data-toggle='tooltip' title='Delete Milestone'><i class='icon icon-trash'></i>" +
+				"</a><a class='text-l-none-hover c-p text-xs m-l-sm hover-show' style='visibility:hidden;'><i title='Drag' class='icon-move'></i></a></div></td></tr>";
+				milestone_list.append(html);
+    			//milestone_list.append("<tr data='"+new_milestone+"' style='display: table-row;'><td><div style='display:inline-block;vertical-align:top;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;width:80%'>"+new_milestone+"</div></td><td><div class='m-b-n-xs' style='display:none;'><a class='text-l-none-hover c-p'><i title='Drag' class='icon-move'></i></a><a class='milestone-delete' style='cursor: pointer;margin-left:10px; text-decoration: none;' data-toggle='modal' role='button' href='#'><i title='Delete Milestone' class='task-action icon icon-trash'></i></a></div></td></tr>");
     	//		milestone_list.append("<li data='" + new_milestone + "'><div><span>" + new_milestone + "</span><a class='milestone-delete right' href='#'>&times</a></div></li>");
     			fill_ordered_milestone(form.attr('id'));
     		}

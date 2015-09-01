@@ -153,6 +153,14 @@ $(function(){
 	    	if($("body").hasClass("modal-open"))
 	    		$("body").removeClass("modal-open");
 	    });
+
+	    $('#tutorialModal').on("hidden.bs.modal", function(e){
+			var parent = $("#tutorialModal iframe").parent();
+			var $iframe = parent.html();
+			parent.html(" ");
+			parent.html($iframe);
+
+		});
 });
 
 /**

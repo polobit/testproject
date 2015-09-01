@@ -395,6 +395,10 @@
 										<td class="lhs-block">
 											<div id="LHS" name="LHS">
 												<select name="temp" class="lhs form-control" id="LHS">
+													<optgroup label="Tag">
+														<option value="tags" selected="selected">Tag</option>
+														<option value="tags_time">Tag And Created Date</option>
+													</optgroup>
 													<optgroup label="Date">
 														<option value="created_time">Created</option>
 														<option value="updated_time">Updated</option>
@@ -415,11 +419,11 @@
 											<div id="condition" name="CONDITION">
 												<select name="temp"  class="w-full form-control">
 													<option value="EQUALS"
-														class="name phone company title org_tag jobtitle email url phone city state zip country org_name custom_label custom_sfsadf org_custom_label org_custom_sfsadf">is</option>
+														class="name phone company title org_tag jobtitle email url phone city state zip country org_name custom_label custom_sfsadf org_custom_label org_custom_sfsadf tags tags_time">is</option>
 													<option value="EQUALS" class="owner_id" related="RHS" url="core/api/users" parse_key="id" parse_value="name">is</option>
 													<option value="NOTEQUALS" class="owner_id" related="RHS" url="core/api/users" parse_key="id" parse_value="name">isn't</option>
 													<option value="NOTEQUALS"
-														class="name company owner org_tag title email url phone city state zip country org_name custom_label custom_sfsadf org_custom_label org_custom_sfsadf">isn't</option>
+														class="name company owner org_tag title email url phone city state zip country org_name custom_label custom_sfsadf org_custom_label org_custom_sfsadf tags tags_time">isn't</option>
 													<option value="ON" class="updated_time created_time">on</option>
 													<option value="AFTER" class="created_time updated_time">is
 														after</option>
@@ -515,6 +519,10 @@
 										<td class="lhs-block">
 											<div id="LHS" name="LHS">
 												<select name="temp" class="lhs form-control" id="LHS">
+													<optgroup label="Tag">
+														<option value="tags" selected="selected">Tag</option>
+														<option value="tags_time">Tag And Created Date</option>
+													</optgroup>
 													<optgroup label="Date">
 														<option value="created_time">Created</option>
 														<option value="updated_time">Updated</option>
@@ -535,11 +543,11 @@
 											<div id="condition" name="CONDITION">
 												<select name="temp" class="form-control">
 													<option value="EQUALS"
-														class="name phone company title org_tag jobtitle email url phone city state zip country org_name custom_label custom_sfsadf org_custom_label org_custom_sfsadf">is</option>
+														class="name phone company title org_tag jobtitle email url phone city state zip country org_name custom_label custom_sfsadf org_custom_label org_custom_sfsadf tags tags_time">is</option>
 													<option value="EQUALS" class="owner_id" related="RHS" url="core/api/users" parse_key="id" parse_value="name">is</option>
 													<option value="NOTEQUALS" class="owner_id" related="RHS" url="core/api/users" parse_key="id" parse_value="name">isn't</option>
 													<option value="NOTEQUALS"
-														class="name company owner org_tag title email url phone city state zip country org_name custom_label custom_sfsadf org_custom_label org_custom_sfsadf">isn't</option>
+														class="name company owner org_tag title email url phone city state zip country org_name custom_label custom_sfsadf org_custom_label org_custom_sfsadf tags tags_time">isn't</option>
 													<option value="IS_GREATER_THAN" class="lead_score">greater than</option>
 													<option value="IS_LESS_THAN" class="lead_score">less than</option>
 													<option value="ON" class="updated_time created_time">on</option>

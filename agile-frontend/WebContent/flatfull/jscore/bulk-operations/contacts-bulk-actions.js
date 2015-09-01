@@ -374,15 +374,19 @@ $(function()
 				json.data = JSON.stringify(tags[0].value);
 				json.contact_ids = id_array;
 
-				postBulkOperationData(url, json, $('#tagsBulkForm'), undefined, function(data)
-				{
+				acl_util.canAddTag(json.data,function(result){
+					postBulkOperationData(url, json, $('#tagsBulkForm'), undefined, function(data)
+							{
+								enable_save_button(saveButton);
+								// Add the added tags to the collection of tags
+								$.each(tags[0].value, function(index, tag)
+								{
+									tagsCollection.add({ "tag" : tag });
+								});
+							}, 'Tags add scheduled');
+				}, function(error){
 					enable_save_button(saveButton);
-					// Add the added tags to the collection of tags
-					$.each(tags[0].value, function(index, tag)
-					{
-						tagsCollection.add({ "tag" : tag });
-					});
-				}, 'Tags add scheduled');
+				});
 			}
 			else 
 			{

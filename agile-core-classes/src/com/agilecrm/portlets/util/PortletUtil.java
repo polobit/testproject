@@ -440,6 +440,16 @@ public class PortletUtil {
 				dealsByMilestoneJSON.put("milestonesList",milestonesList);
 				dealsByMilestoneJSON.put("milestoneValuesList",milestoneValuesList);
 				dealsByMilestoneJSON.put("milestoneNumbersList",milestoneNumbersList);
+				if(milestone.won_milestone != null){
+					dealsByMilestoneJSON.put("wonMilestone",milestone.won_milestone);
+				}else{
+					dealsByMilestoneJSON.put("wonMilestone","Won");
+				}
+				if(milestone.lost_milestone != null){
+					dealsByMilestoneJSON.put("lostMilestone",milestone.lost_milestone);
+				}else{
+					dealsByMilestoneJSON.put("lostMilestone","Lost");
+				}
 			}
 		}
 		List<Milestone> milestoneList=MilestoneUtil.getMilestonesList();

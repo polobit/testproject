@@ -141,6 +141,11 @@ public class Opportunity extends Cursor implements Serializable
     public Long created_time = 0L;
 
     /**
+     * Created time of a deal.
+     */
+    public Long milestone_changed_time = 0L;
+
+    /**
      * Track a deal.
      */
     @NotSaved(IfDefault.class)
@@ -424,16 +429,31 @@ public class Opportunity extends Cursor implements Serializable
 	// old opportunity (or deal) having id.
 	Opportunity oldOpportunity = null;
 
+	String wonMilestone = "Won";
+	try
+	{
+	    wonMilestone = MilestoneUtil.getMilestone(pipeline_id).won_milestone;
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	}
+	System.out.println("-------------won date---------" + wonMilestone);
+
 	// cache old data to compare new and old in triggers
 	if (id != null)
 	    oldOpportunity = OpportunityUtil.getOpportunity(id);
 	if (oldOpportunity != null && StringUtils.isNotEmpty(this.milestone)
 		&& StringUtils.isNotEmpty(oldOpportunity.milestone))
 	{
-	    if (!this.milestone.equals(oldOpportunity.milestone) && this.milestone.equalsIgnoreCase("Won"))
+	    if (!this.pipeline_id.equals(oldOpportunity.getPipeline_id())
+		    || !this.milestone.equals(oldOpportunity.milestone))
+		this.milestone_changed_time = System.currentTimeMillis() / 1000;
+
+	    if (!this.milestone.equals(oldOpportunity.milestone) && this.milestone.equalsIgnoreCase(wonMilestone))
 		this.won_date = System.currentTimeMillis() / 1000;
 	}
-	else if (oldOpportunity == null && this.milestone.equalsIgnoreCase("Won"))
+	else if (oldOpportunity == null && this.milestone.equalsIgnoreCase(wonMilestone))
 	    this.won_date = System.currentTimeMillis() / 1000;
 	dao.put(this);
 

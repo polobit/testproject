@@ -1288,14 +1288,16 @@ $('.modal-footer').off("click").on('click', '.portlet-settings-save-modal', func
 	    				milestonesList=data1["milestonesList"];
 	    				milestoneValuesList=data1["milestoneValuesList"];
 	    				milestoneMap=data1["milestoneMap"];
+	    				wonMilestone=data1["wonMilestone"];
+						lostMilestone=data1["lostMilestone"];
 	    				
 	    				var funnel_data=[];
 	    				var temp;
 	    				
 	    				$.each(milestonesList,function(index,milestone){
 	    					var each_data=[];
-	    					if(milestone!='Lost'){
-	    						if(milestone!='Won')
+	    					if(milestone!=lostMilestone){
+	    						if(milestone!=wonMilestone)
 		    						each_data.push(milestone,milestoneValuesList[index]);
 		    					else
 		    						temp=index;

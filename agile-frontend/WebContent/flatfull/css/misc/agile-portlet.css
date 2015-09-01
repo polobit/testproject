@@ -850,12 +850,30 @@ border-radius: 2px;
 {
 	margin-top:-1px;
 }
+
 .stats-report-settings .portlet_header_icons {
 	visibility: hidden;
 }
 .stats-report-settings:hover .portlet_header_icons {
 	visibility: visible;
 }
+/* .screenshot {
+	display : none;
+	position: absolute;
+	min-width: 100%;
+	top:0px;
+	background-color: white;
+	z-index: 1000;
+	border: 1px solid #edf1f2;
+	text-align: center;
+	left:99%;
+} */
+.show_screeshot + .popover
+{
+	max-width: none;
+	
+}
+
 /* Mini Calendar */
 .portlet_body_calendar>#calendar_container
 {
