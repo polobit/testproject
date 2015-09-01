@@ -94,3 +94,70 @@ function showRatioGraphs(tag1, tag2)
 {
 	showLine('core/api/reports/ratio/' + tag1 + "/" + tag2 + "/" + getOptions(), 'ratio-chart', 'Ratio Analysis', tag1 + ' vs ' + tag2, true);
 }
+function initSalesCharts(callback){
+	
+head.js(LIB_PATH + 'lib/date-charts.js', LIB_PATH + 'lib/date-range-picker.js', CSS_PATH + "css/misc/date-picker.css", function()
+		{
+
+			// Bootstrap date range picker.
+			$('#reportrange').daterangepicker({ ranges : { 'Today' : [
+					'today', 'today'
+			], 'Yesterday' : [
+					'yesterday', 'yesterday'
+			], 'Last 7 Days' : [
+					Date.today().add({ days : -6 }), 'today'
+			], 'Last 30 Days' : [
+					Date.today().add({ days : -29 }), 'today'
+			], 'This Month' : [
+					Date.today().moveToFirstDayOfMonth(), Date.today().moveToLastDayOfMonth()
+			], 'Last Month' : [
+					Date.today().moveToFirstDayOfMonth().add({ months : -1 }), Date.today().moveToFirstDayOfMonth().add({ days : -1 })
+			] }, locale : { applyLabel : 'Apply', cancelLabel : 'Cancel', fromLabel : 'From', toLabel : 'To', customRangeLabel : 'Custom', daysOfWeek : [
+					'Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'
+			], monthNames : [
+					'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'
+			], firstDay : parseInt(CALENDAR_WEEK_START_DAY) } }, function(start, end)
+			{
+				var months_diff = Math.abs(start.getMonth() - end.getMonth() + (12 * (start.getFullYear() - end.getFullYear())));
+				$('#reportrange span').html(start.toString('MMMM d, yyyy') + ' - ' + end.toString('MMMM d, yyyy'));
+				$("#week-range").html(end.add({ days : -6 }).toString('MMMM d, yyyy') + ' - ' + end.add({ days : 6 }).toString('MMMM d, yyyy'));
+
+				callback();
+			});
+		});
+
+		// Init the callback when the frequency selector changes too
+		if ($('#frequency').length > 0)
+			{
+		// Get Frequency
+			callback();
+			$('#frequency').change(function()
+			{
+			callback();
+			});
+		}
+			// Init the callback when the track selector changes too
+		fillSelect("track", "/core/api/milestone/pipelines", undefined, function()
+		{
+			$('#track').change(function()
+			{
+				$('#reports-sales-track').text($("#track option:selected").text());
+				callback();
+			});
+		}, '<option class="default-select" value="{{id}}">{{name}}</option>', false, undefined, "All Tracks");
+
+		fillSelect("owner", "core/api/users", undefined, function()
+		{
+			$('#owner').change(function()
+			{
+				$('#reports-sales-owner').text($("#owner option:selected").text());
+				callback();
+			});
+
+		}, '<option class="default-select" value="{{id}}">{{name}}</option>', false, undefined, "All Owners");
+
+		callback();
+		
+		
+		
+	}
