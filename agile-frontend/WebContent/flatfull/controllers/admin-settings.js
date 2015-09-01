@@ -362,6 +362,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 				if (tracks_length == 1)
 					$('#milestone-listner').find('#deal-tracks-accordion').find('.collapse').addClass('in');
 				initializeMilestoneListners(el);
+				milestone_util.init(el);
 			} });
 		this.pipelineGridView.collection.fetch();
 		$('#milestone-listner').find('#admin-prefs-tabs-content').html(this.pipelineGridView.render().el);
