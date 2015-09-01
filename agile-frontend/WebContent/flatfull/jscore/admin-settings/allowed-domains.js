@@ -17,6 +17,12 @@ function put_allowed_domains(allowed_domains)
 			$("#allowed_domains_list").empty();
 			var domains_to_append = Handlebars.helpers.allowed_domain_list(data.allowed_domains);
 			$("#allowed_domains_list").append(domains_to_append);
+			$(".allowed-domain-delete").on('click', function(e) {
+        e.preventDefault();
+        $(this).closest("tr").remove();
+        var allowed_domains = get_allowed_domains();
+        put_allowed_domains(allowed_domains);
+      });
 			$("#update_allowed_domains").removeAttr("disabled");
 			$("#new_allowed_domain").val("");
 		} });

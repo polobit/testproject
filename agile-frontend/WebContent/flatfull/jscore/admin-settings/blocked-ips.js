@@ -17,6 +17,12 @@ function put_blocked_ips(blocked_ips)
 			$("#blocked_ips_list").empty();
 			var ips_to_append = Handlebars.helpers.blocked_ips_list(data.blocked_ips);
 			$("#blocked_ips_list").append(ips_to_append);
+			$(".blocked-ip-delete").on('click', function(e) {
+        e.preventDefault();
+        $(this).closest("tr").remove();
+        var blocked_ips = get_blocked_ips();
+        put_blocked_ips(blocked_ips);
+    });
 			$("#update_blocked_ips").removeAttr("disabled");
 			$("#new_blocked_ip").val("");
 		} });
