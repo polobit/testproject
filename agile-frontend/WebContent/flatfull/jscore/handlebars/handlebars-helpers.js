@@ -6393,7 +6393,8 @@ $(function()
 	 * 
 	 */
 	Handlebars.registerHelper('timeAgo',function(dateString){
-
+		
+		
 		var date=new Date();
 		 try
 			{
@@ -6401,7 +6402,7 @@ $(function()
 			 var re = new RegExp(find, 'g');
 			 dateString = dateString.replace(re, '/');
 			 dateString = dateString.match(/[^:]+(\:[^:]+)?/g);
-			 date=new Date(dateString[0]);
+			 date = new Date(dateString[0]+' UTC');
 			}
 			catch (err)
 			{
@@ -6433,6 +6434,8 @@ $(function()
 	    }
 	    return new Handlebars.SafeString(Math.floor(seconds) + " seconds ago");
 
+		
+	
 		
 	});
 	
