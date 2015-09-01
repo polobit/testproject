@@ -160,15 +160,6 @@
                         }
                     },
                     {
-                        "id": "purl_keyword",
-                        "title": "While tracking clicks, AgileCRM can show a keyword in the URL. Valid only when you are tracking clicks.",
-                        "category": "Settings",
-                        "fieldType": "input",
-                        "name": "purl_keyword",
-                        "label": "Purl Keyword:",
-                        "type": "text"
-                    },
-                    {
                         "label": "Simply choose timezone, day and time. Agile can schedule your email delivery."
                     },
                     {
@@ -946,10 +937,6 @@
                 {
                     "name": "track_clicks",
                     "value": "yes"
-                },
-                {
-                    "name": "purl_keyword",
-                    "value": ""
                 },
                 {
                     "name": "time_zone",
