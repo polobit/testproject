@@ -89,7 +89,8 @@ var ContactsRouter = Backbone.Router.extend({
 					LIB_PATH + 'lib/jquery.gridster.js',function(){*/
 				var el = $(getTemplate('portlets', {}));
 				$("#content").html(el);
-				$('[data-toggle="tooltip"]').tooltip();
+				$('.dashboart_tooltip').tooltip();
+
 				if ((navigator.userAgent.toLowerCase().indexOf('chrome') > -1&&navigator.userAgent.toLowerCase().indexOf('opr/') == -1) && !document.getElementById('agilecrm_extension'))
 				{
 					$("#chrome-extension-button").removeClass('hide');

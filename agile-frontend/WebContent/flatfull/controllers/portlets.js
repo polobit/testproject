@@ -338,6 +338,12 @@ function initializePortletsListeners_1(){
 				},
 				dataType : 'json'
 			});
+
+	});
+
+	$('#dashlet_heading #tutotial_modal').off('click');
+	$('#dashlet_heading').on('click', '#tutotial_modal', function(e){
+		$('#tutorialModal').modal("show");
 	});
 
 	$('.portlet_body #portlets-contacts-model-list > tr, #portlets-companies-model-list > tr, #portlets-contacts-email-opens-model-list > tr').off();

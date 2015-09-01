@@ -563,7 +563,7 @@
 	
 	var addTagsToCompany = function(){
 		 // Add Tags
-		var new_tags = get_new_tags('addTags');
+		var new_tags = get_new_tags('companyAddTags');
 		if(new_tags)new_tags=new_tags.trim();
 		
 		if(!new_tags || new_tags.length<=0 || (/^\s*$/).test(new_tags))
@@ -769,6 +769,13 @@
 			
 		   addTagsToCompany();
 		});
+		
+		$("body").on('keydown', "#companyAddTags",function(e) {
+		//$("#companyAddTags").die().live('keydown',function(e) {
+	    	if(e.which == 13 && !isTagsTypeaheadActive){
+	    		addTagsToCompany();
+	    		}
+	    	});
 		
 		// Deletes a contact from database
 		$("body").on('click', '#company-actions-delete', function(e)
