@@ -590,35 +590,37 @@
 	    	// Checks if tag already exists in contact
 			if($.inArray(new_tags, json.tags) >= 0)
 				return;
-	    	
-	    	json.tagsWithTime.push({"tag" : new_tags.toString()});
-   			
-	    	// Save the contact with added tags
-	    	var contact = new Backbone.Model();
-	        contact.url = 'core/api/contacts';
-	        contact.save(json,{
-	       		success: function(data){
-	       			
-	       			addTagToTimelineDynamically(new_tags, data.get("tagsWithTime"));
-	       			
-	       			// Get all existing tags of the contact to compare with the added tags
-	       			var old_tags = [];
-	       			$.each($('#added-tags-ul').children(), function(index, element){
-	       				old_tags.push($(element).attr('data'));
-       				});
-	       			
-	       			// Updates to both model and collection
-	       			App_Companies.companyDetailView.model.set(data.toJSON(), {silent : true});
-	       			
-	       			// Append to the list, when no match is found 
-	       			if ($.inArray(new_tags, old_tags) == -1) 
-	       				$('#added-tags-ul').append('<li  class="tag inline-block btn btn-xs btn-default m-r-xs" style="color:#363f44" data="' + new_tags + '"><span><a class="anchor m-r-xs custom-color" style="color:#363f44" href="#tags/'+ new_tags + '" >'+ new_tags + '</a><a class="close remove-company-tags" id="' + new_tags + '" tag="'+new_tags+'">&times</a></span></li>');
-	       			
-	       			console.log(new_tags);
-	       			// Adds the added tags (if new) to tags collection
-	       			tagsCollection.add(new BaseModel({"tag" : new_tags}));
-	       		}
-	        });
+			//Check tag acl before adding tag.
+			acl_util.canAddTag(new_tags.toString(),function(respnse){
+		    	json.tagsWithTime.push({"tag" : new_tags.toString()});
+	   			
+		    	// Save the contact with added tags
+		    	var contact = new Backbone.Model();
+		        contact.url = 'core/api/contacts';
+		        contact.save(json,{
+		       		success: function(data){
+		       			
+		       			addTagToTimelineDynamically(new_tags, data.get("tagsWithTime"));
+		       			
+		       			// Get all existing tags of the contact to compare with the added tags
+		       			var old_tags = [];
+		       			$.each($('#added-tags-ul').children(), function(index, element){
+		       				old_tags.push($(element).attr('data'));
+	       				});
+		       			
+		       			// Updates to both model and collection
+		       			App_Companies.companyDetailView.model.set(data.toJSON(), {silent : true});
+		       			
+		       			// Append to the list, when no match is found 
+		       			if ($.inArray(new_tags, old_tags) == -1) 
+		       				$('#added-tags-ul').append('<li  class="tag inline-block btn btn-xs btn-default m-r-xs" style="color:#363f44" data="' + new_tags + '"><span><a class="anchor m-r-xs custom-color" style="color:#363f44" href="#tags/'+ new_tags + '" >'+ new_tags + '</a><a class="close remove-company-tags" id="' + new_tags + '" tag="'+new_tags+'">&times</a></span></li>');
+		       			
+		       			console.log(new_tags);
+		       			// Adds the added tags (if new) to tags collection
+		       			tagsCollection.add(new BaseModel({"tag" : new_tags}));
+		       		}
+		        });
+			});
 		}
 	};
 	

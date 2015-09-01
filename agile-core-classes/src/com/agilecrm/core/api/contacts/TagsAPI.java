@@ -18,6 +18,8 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
 import org.apache.commons.lang.StringUtils;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.agilecrm.AgileQueues;
@@ -28,6 +30,7 @@ import com.agilecrm.contact.deferred.TagManagementDeferredTask;
 import com.agilecrm.contact.deferred.TagManagementDeferredTask.Action;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.contact.util.TagUtil;
+import com.agilecrm.user.access.exception.AccessDeniedException;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskOptions;
@@ -79,7 +82,6 @@ public class TagsAPI
 	TagUtil.addTag(tag);
     }
 
-   
     /**
      * Gets all the contacts which are associated with the given tag and returns
      * as list
@@ -92,7 +94,7 @@ public class TagsAPI
     @POST
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public List<Contact> getContactsList(@PathParam("tag") String tag, @FormParam("cursor") String cursor,
-    		@FormParam("page_size") String count, @FormParam("global_sort_key") String sortKey)
+	    @FormParam("page_size") String count, @FormParam("global_sort_key") String sortKey)
     {
 	try
 	{
@@ -108,7 +110,7 @@ public class TagsAPI
 	    return null;
 	}
     }
-    
+
     /**
      * Gets all the contacts which are associated with the given tag and returns
      * as list
@@ -137,6 +139,7 @@ public class TagsAPI
 	    return null;
 	}
     }
+
     /**
      * Fetches all the tags and iterates the list to put each tag in a json
      * object (key, value pairs). Here tag name is taken as both key and value,
@@ -362,4 +365,51 @@ public class TagsAPI
 	}
     }
 
+    /**
+     * Checks whether the given user has permission to add the tags.
+     * 
+     * @param tag
+     *            Tag to be added to the contact.
+     * @return true if the contact is updated after the given time or else
+     *         false.
+     */
+    @Path("/can_add_tag")
+    @GET
+    @Produces(MediaType.TEXT_PLAIN)
+    public String hasTagPermission(@QueryParam("tag") String tagsString)
+    {
+	if (StringUtils.isEmpty(tagsString))
+	    return null;
+
+	String[] tagsArray = null;
+	try
+	{
+	    JSONArray tagsJSONArray = new JSONArray(tagsString);
+
+	    tagsArray = new ObjectMapper().readValue(tagsJSONArray.toString(), String[].class);
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    tagsArray = tagsString.split(",");
+	}
+
+	if (tagsArray == null)
+	    return null;
+
+	System.out.println("---------tags list--------" + tagsArray[0]);
+	List<String> newTags = TagUtil.hasTagPermission(tagsArray);
+
+	if (newTags.size() > 0)
+	{
+	    System.out.println("No Permissions: Can not create new tags.");
+	    String str = newTags.get(0);
+	    for (int i = 1; i < newTags.size(); i++)
+		str += ", " + newTags.get(i);
+	    throw new AccessDeniedException("Tag '" + str
+		    + "' does not exist. You don't have permissions to create a new Tag.");
+	}
+
+	return null;
+    }
 }
