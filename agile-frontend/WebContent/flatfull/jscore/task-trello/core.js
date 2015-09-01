@@ -33,7 +33,8 @@ function findArrayForCollection(criteria, pending)
 			GROUPING_MAP[criteria] = map;
 			console.log('-------------------',map);
 			// Sort task list on count of task and then create collection
-			getArraySortOnCount(criteria, GROUPING_MAP[criteria].type, pending);
+			//getArraySortOnCount(criteria, GROUPING_MAP[criteria].type, pending);
+			createNestedCollection(criteria, GROUPING_MAP[criteria].type, pending);
 		});
 	else
 		// Creates nested collection

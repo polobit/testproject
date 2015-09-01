@@ -1,5 +1,7 @@
 (function(categories, $, undefined) {
 	
+	categories.CATEGORIES = {};
+	
 	/**
 	 * Check if the value of the given category is valid or not.
 	 */
@@ -60,6 +62,13 @@
 			type: 'GET',
 			dataType: 'json',
 			success: function(cats){
+				var obj = {};
+				$.each(cats,function(index,cat){
+					obj[cat.name] = cat.label;
+				});
+				
+				categories.CATEGORIES = obj;
+				
 				if (callback && typeof (callback) === "function")
 					callback(cats);
 				
@@ -223,6 +232,7 @@
 			e.preventDefault();
 			$(this).parent().hide();
 			$('#task-category').find('.show_field').show();
+			$('#add_new_task_category').focus();
 		});
 		
 		$('#category-tracks-accordion').on('click','#add_task_category',function(e){

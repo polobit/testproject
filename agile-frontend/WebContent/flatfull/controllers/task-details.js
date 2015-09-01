@@ -366,7 +366,7 @@ function update_task(value)
 
 	deserializeForm(value, $("#updateTaskForm"));
 	$("#updateTaskModal").modal('show');
-	categories.getCategoriesHtml(undefined,function(catsHtml){
+	categories.getCategoriesHtml(value,function(catsHtml){
 		$('#type',$("#updateTaskForm")).html(catsHtml);
 		// Fills owner select element
 		populateUsers("owners-list", $("#updateTaskForm"), value, 'taskOwner', function(data)
