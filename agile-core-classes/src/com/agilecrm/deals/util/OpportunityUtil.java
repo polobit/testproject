@@ -1621,10 +1621,10 @@ public class OpportunityUtil
 				startCalendar.set(Calendar.DAY_OF_MONTH, 1);
 				
 			}
-			if (StringUtils.equalsIgnoreCase(frequency, "yearly"))
+			/*if (StringUtils.equalsIgnoreCase(frequency, "yearly"))
 			{
 				startCalendar.set(Calendar.DAY_OF_YEAR, 1);
-			}
+			}*/
 			startCalendar.set(Calendar.HOUR_OF_DAY, 0);
 			startCalendar.set(Calendar.MINUTE, 0);
 			startCalendar.set(Calendar.SECOND, 0);
@@ -1651,8 +1651,8 @@ public class OpportunityUtil
 				endCalendar.set(Calendar.DAY_OF_MONTH, 1);
 				
 			}
-			if (StringUtils.equalsIgnoreCase(frequency, "yearly"))
-				endCalendar.set(Calendar.DAY_OF_YEAR, 1);
+		/*	if (StringUtils.equalsIgnoreCase(frequency, "yearly"))
+				endCalendar.set(Calendar.DAY_OF_YEAR, 1);*/
 			endCalendar.set(Calendar.HOUR_OF_DAY, 0);
 			endCalendar.set(Calendar.MINUTE, 0);
 			endCalendar.set(Calendar.SECOND, 0);
@@ -1666,16 +1666,16 @@ public class OpportunityUtil
 				totalAndPipeline.put(PIPELINE, 0);
 				String mmYY = (startCalendar.getTimeInMillis() / 1000) + "";
 				dealsObject.put(mmYY, totalAndPipeline);
-			/*	if (StringUtils.equalsIgnoreCase(frequency, "daily"))
+				if (StringUtils.equalsIgnoreCase(frequency, "daily"))
 					{type=Calendar.DAY_OF_MONTH;
 					startCalendar.add(type, 1);
-					}*/
-				if (StringUtils.equalsIgnoreCase(frequency, "yearly"))
+					}
+				/*if (StringUtils.equalsIgnoreCase(frequency, "yearly"))
 				{
 					type=Calendar.YEAR;
 					startCalendar.add(type, 1);
 					startCalendar.set(Calendar.DAY_OF_YEAR, 1);
-				}
+				}*/
 				if (StringUtils.equalsIgnoreCase(frequency, "monthly"))
 				{
 					type = Calendar.MONTH;
@@ -1744,8 +1744,8 @@ public class OpportunityUtil
 						}
 						
 						}
-					if(StringUtils.equalsIgnoreCase(frequency, "yearly")) 
-						calendar.set(Calendar.DAY_OF_YEAR, 1);
+				/*	if(StringUtils.equalsIgnoreCase(frequency, "yearly")) 
+						calendar.set(Calendar.DAY_OF_YEAR, 1);*/
 					calendar.set(Calendar.HOUR_OF_DAY, 0);
 					calendar.set(Calendar.MINUTE, 0);
 					calendar.set(Calendar.SECOND, 0);
