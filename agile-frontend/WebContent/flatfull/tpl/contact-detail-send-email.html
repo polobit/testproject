@@ -110,7 +110,6 @@
                     </div>
                 </div>   
                 
-               
 
                 <div class="control-group form-group" id="eattachment_error" style="display:none">
                     <div class="controls col-sm-8 col-sm-offset-2 text-danger">
@@ -126,7 +125,8 @@
 
                 <div class="control-group form-group m-b-sm">
                     <div class="col-sm-offset-2 col-sm-8">
-                        <div class="checkbox p-t-none">
+                        <div class="checkbox p-t-none"  id="enable_tracking">
+
                             <label class="i-checks i-checks-sm">
                             <input type="checkbox" name="track_clicks" checked="checked"><i></i>
                             Enable Tracking
@@ -147,27 +147,20 @@
 
                <div class="control-group form-group">
 					<div class="col-sm-offset-2 col-sm-8">
-						<div class="checkbox pull-right" id="enable_tracking" style="margin-top:-7px;">
-                   			<label class="i-checks i-checks-sm">
-                       		<input type="checkbox" name="track_clicks" checked="checked"><i></i>
-                       		Enable Tracking
-                   			</label>
-						</div>
-						<div class="pull-left"> 
                	        	<div class="controls">
-               	       		<a href="#" class="add-attachment-select text-info"><i class='icon-plus-sign'/></i> Add Attachment</a>
+               	       		<a href="#" class="add-attachment-select text-info"><i class="fa fa-paperclip m-r-xs"></i>Attach File</a>
 					   		<span class="attachment-document-select" style="display:none;">
-								<select id="attachment-select" style="margin-bottom: -1px;" name="document_id" class="form-control inline-block w overflow-auto">
+								<select id="attachment-select" style="margin-bottom: -1px;" name="document_id" class="form-control pull-left w overflow-auto text-xs input-xs">
 								</select>
-                            	<a href="#" class="btn btn-default btn-sm add-attachment-cancel">Cancel</a>
-                    			<a href="#" class="btn btn-sm btn-primary add-attachment-confirm">Add</a> 
+                            	<a href="#" class="add-attachment-confirm pull-left text-info text-xs  m-l-xs m-t-sm">Add</a> 
+                                <a href="#" class="add-attachment-cancel text-info pull-left text-xs m-l-xs m-t-sm">Cancel</a>
 								<!--&nbsp;
                             	<a href="#" class="add-attachment-cancel"><i class="icon-remove-circle"></i></a>-->
                             	<span class="attachment-status"></span>
 								<span class="save-status"></span>
 							</span>
 				  		 </div>			
-					</div> 
+					
 				</div>
 				<div class="clearfix"></div>           
 			</div>
