@@ -295,7 +295,18 @@ if(isSafari && isWin)
 	  ga('create', 'UA-44894190-1', 'auto');
 	  ga('send', 'pageview'); 
 	
-	</script> 
+
+	</script>
+
+	<!-- Surey page code-->
+	<script type="text/javascript" src="https://our.agilecrm.com/stats/min/agile-min.js">
+   </script>
+   <script type="text/javascript" >
+     _agile.set_account('jo22gpvhr34r2mccjaekgsm7oh', 'our');
+     _agile_set_whitelist('b3Vy');
+     _agile.track_page_view();
+     _agile_execute_web_rules();
+   </script>
 	
 </body>
 </html>

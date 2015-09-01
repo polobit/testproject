@@ -362,6 +362,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 				if (tracks_length == 1)
 					$('#milestone-listner').find('#deal-tracks-accordion').find('.collapse').addClass('in');
 				initializeMilestoneListners(el);
+				milestone_util.init(el);
 			} });
 		this.pipelineGridView.collection.fetch();
 		$('#milestone-listner').find('#admin-prefs-tabs-content').html(this.pipelineGridView.render().el);
@@ -453,7 +454,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 		this.tagsview1 = new Base_Collection_View({ url : 'core/api/tags/stats1', templateKey : "tag-management", individual_tag_name : 'li',
 			sort_collection : true, sortKey : 'tag', postRenderCallback : function(el)
 			{
-
+				acl_util.initTagACL(el);
 				initializeTagManagementListeners();
 			} });
 		this.tagsview1.appendItem = append_tag_management;
@@ -464,7 +465,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 		this.tagsview1.collection.fetch();
 
 		$('#content').find('#admin-prefs-tabs-content').html(this.tagsview1.render().el);
-
+		
 		$('#content').find('#AdminPrefsTab .select').removeClass('select');
 		$('#content').find('.tag-management-tab').addClass('select');
 		$(".active").removeClass("active");
