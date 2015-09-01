@@ -84,7 +84,7 @@
 
 	acl_util.canAddTag = function(tag,callback,errorCallback){
 		
-		if(CURRENT_DOMAIN_USER.is_admin){
+		if(CURRENT_DOMAIN_USER.is_admin || CURRENT_DOMAIN_USER.scopes.indexOf('ADD_NEW_TAG') >= 0){
 			if(callback)
 				callback(true);
 			else
