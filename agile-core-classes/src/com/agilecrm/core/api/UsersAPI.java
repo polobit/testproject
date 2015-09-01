@@ -318,16 +318,4 @@ public class UsersAPI
 	return null;
     }
 
-    @Path("allow-new-tag")
-    @POST
-    @Produces({ MediaType.APPLICATION_JSON })
-    public String setNewTagPermission(@FormParam("is_enable") Boolean isEnable)
-    {
-
-	if (isEnable != null)
-	    DomainUserUtil.setNewTagACL(isEnable);
-
-	return null;
-    }
-
 }

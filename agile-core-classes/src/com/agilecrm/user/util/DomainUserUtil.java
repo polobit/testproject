@@ -14,7 +14,6 @@ import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
 import com.agilecrm.user.DomainUser;
-import com.agilecrm.user.access.UserAccessScopes;
 import com.agilecrm.util.email.SendMail;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.datastore.QueryResultIterable;
@@ -685,34 +684,6 @@ public class DomainUserUtil
 	{
 
 	    NamespaceManager.set(oldnamespace);
-	}
-    }
-
-    public static void setNewTagACL(Boolean isEnable)
-    {
-	// TODO Auto-generated method stub
-	List<DomainUser> users = getUsers();
-	for (DomainUser user : users)
-	{
-	    if (!user.is_admin)
-	    {
-		try
-		{
-		    if (user.restricted_scopes == null)
-			user.restricted_scopes = new HashSet<UserAccessScopes>();
-		    if (isEnable)
-			user.scopes.add(UserAccessScopes.ADD_NEW_TAG);
-		    else
-			user.scopes.remove(UserAccessScopes.ADD_NEW_TAG);
-		    user.save();
-		}
-		catch (Exception e)
-		{
-		    e.printStackTrace();
-		    System.out.println("Exception is new tag acl - " + e.getMessage());
-		}
-	    }
-
 	}
     }
 

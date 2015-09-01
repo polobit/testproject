@@ -84,7 +84,7 @@
 
 	acl_util.canAddTag = function(tag,callback,errorCallback){
 		
-		if(CURRENT_DOMAIN_USER.is_admin || CURRENT_DOMAIN_USER.scopes.indexOf('ADD_NEW_TAG') >= 0){
+		if(CURRENT_DOMAIN_USER.is_admin || ACCOUNT_PREFS.tagsPermission){
 			if(callback)
 				callback(true);
 			else
@@ -140,23 +140,28 @@
 	};
 	
 	var setTagACL = function(el){
-		$.ajax({ type : 'GET', url : '/core/api/users', async : false, dataType : 'json',
-			success: function(data){
-				var isCheck = false;
-				$.each(data,function(index,domainUser){
-					if(!domainUser.is_admin && (domainUser.scopes && $.inArray("ADD_NEW_TAG", domainUser.scopes) != -1))
-						isCheck = true;
-						
-				});
-				if(isCheck)
-					$('#new_tag_acl',el).attr('checked','checked');
-			} });
+		if(ACCOUNT_PREFS){
+			if(ACCOUNT_PREFS.tagsPermission)
+				$('#new_tag_acl',el).attr('checked','checked');
+		}else {
+			$.ajax({ type : 'GET', url : '/core/api/account-prefs', async : false, dataType : 'json',
+				success: function(data){
+					
+					if(isCheck)
+						$('#new_tag_acl',el).attr('checked','checked');
+				} });
+		}
+		
 	};
 	
 	var updateTagAcl = function(isEnable){
 		var input = {};
 		input.is_enable = isEnable;
-		queuePostRequest('tag_acl', "/core/api/users/allow-new-tag", input, function(){}, function(){});
+		queuePostRequest('tag_acl', "/core/api/account-prefs/allow-new-tag", input, function(){
+			if(ACCOUNT_PREFS){
+				ACCOUNT_PREFS.tagsPermission = isEnable;
+			}
+		}, function(){});
 	};
 	
 	acl_util.initTagACL = function(el){

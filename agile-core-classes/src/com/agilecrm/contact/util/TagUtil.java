@@ -14,6 +14,8 @@ import org.json.JSONObject;
 
 import com.agilecrm.AgileQueues;
 import com.agilecrm.Globals;
+import com.agilecrm.account.AccountPrefs;
+import com.agilecrm.account.util.AccountPrefsUtil;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Tag;
 import com.agilecrm.contact.deferred.TagStatsDeferredTask;
@@ -24,7 +26,6 @@ import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.queues.backend.ModuleUtil;
 import com.agilecrm.search.util.SearchUtil;
 import com.agilecrm.user.DomainUser;
-import com.agilecrm.user.access.UserAccessScopes;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.CacheUtil;
 import com.agilecrm.validator.TagValidator;
@@ -487,7 +488,8 @@ public class TagUtil
 	DomainUser user = DomainUserUtil.getCurrentDomainUser();
 	if (user.is_admin)
 	    return true;
-	if (user.restricted_scopes != null && user.restricted_scopes.contains(UserAccessScopes.ADD_NEW_TAG))
+	AccountPrefs prefs = AccountPrefsUtil.getAccountPrefs();
+	if (prefs.tagsPermission != null && !prefs.tagsPermission)
 	{
 	    Set<String> newTagSet = new HashSet<String>();
 	    // If tags are not empty, considering they are simple tags and adds
@@ -539,7 +541,8 @@ public class TagUtil
 	DomainUser user = DomainUserUtil.getCurrentDomainUser();
 	if (user.is_admin)
 	    return newTags;
-	if (user.restricted_scopes != null && user.restricted_scopes.contains(UserAccessScopes.ADD_NEW_TAG))
+	AccountPrefs prefs = AccountPrefsUtil.getAccountPrefs();
+	if (prefs.tagsPermission != null && !prefs.tagsPermission)
 	{
 	    for (String tag : tags)
 	    {
@@ -559,7 +562,8 @@ public class TagUtil
 	DomainUser user = DomainUserUtil.getCurrentDomainUser();
 	if (user.is_admin)
 	    return true;
-	if (user.restricted_scopes != null && user.restricted_scopes.contains(UserAccessScopes.ADD_NEW_TAG))
+	AccountPrefs prefs = AccountPrefsUtil.getAccountPrefs();
+	if (prefs.tagsPermission != null && !prefs.tagsPermission)
 	{
 	    for (Tag tag : tags)
 	    {

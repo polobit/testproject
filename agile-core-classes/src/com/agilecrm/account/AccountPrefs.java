@@ -44,6 +44,8 @@ public class AccountPrefs
 
     public String timezone = "UTC";
 
+    public Boolean tagsPermission = true;
+
     /**
      * AccountPrefs Dao.
      */
