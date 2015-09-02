@@ -336,7 +336,7 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
 											.closest("div.controls")
 											.find(".tags")
 											.append(
-													'<li class="tag  btn btn-xs btn-primary m-r-xs inline-block"  data="' + TYPEHEAD_EMAILS[items] + '"><a href="'+TYPEHEAD_TYPE[items] + TYPEHEAD_TAGS[items] + '">' + items_temp + '</a><a class="close m-l-xs" id="remove_tag">&times</a></li>');
+													'<li class="tag  btn btn-xs btn-primary m-r-xs inline-block"  data="' + TYPEHEAD_EMAILS[items] + '"><a class="text-white" href="'+TYPEHEAD_TYPE[items] + TYPEHEAD_TAGS[items] + '">' + items_temp + '</a><a class="close text-white m-l-xs" id="remove_tag">&times</a></li>');
 
 								}
 
@@ -557,7 +557,7 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
 }
 
 // Removes tags ("Related to" field contacts)
-$('#remove_tag').die().live('click', function(event)
+$("body").on("click", '#remove_tag', function(event)
 {
 	event.preventDefault();
 	$(this).parent().remove();

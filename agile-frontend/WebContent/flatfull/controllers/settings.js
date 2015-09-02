@@ -16,7 +16,7 @@ var SettingsRouter = Backbone.Router
 			"settings" : "settings",
 
 			/* User preferences */
-			"user-prefs" : "userPrefs",
+			"user-prefs/:id" : "userPrefs",
 
 			/* Change Password */
 			"change-password" : "changePassword",
@@ -74,14 +74,29 @@ var SettingsRouter = Backbone.Router
 			 * Creates a Model to show and edit Personal Preferences, and sets
 			 * HTML Editor. Reloads the page on save success.
 			 */
-			userPrefs : function()
+			userPrefs : function(type)
 			{
+				var template_name = "settings-user-prefs";
+				var tab_class = "profile";
+				if(type == "reminders")
+				{
+					template_name = "settings-reminders";
+					tab_class = "reminders";
 
+				}
+				else if(type == "advanced")
+				{
+					template_name = "settings-advanced";
+					tab_class = "advanced";
+
+				}
 				$("#content").html(getTemplate("settings"), {});
+				$("#prefs-tabs-content").html(getTemplate("settings-user-prefs-tab"), {});
 				/* $('#prefs-tabs-content').html(getRandomLoadingImg()); */
-				var view = new Base_Model_View({ url : '/core/api/user-prefs', template : "settings-user-prefs", el : $('#prefs-tabs-content'), change : false,
+				var view = new Base_Model_View({ url : '/core/api/user-prefs', template : template_name, el : $('#settings-user-prefs-tab-content'), change : false,
 					reload : true, postRenderCallback : function(el)
 					{
+						initializeSettingsListeners();
 						// setup TinyMCE
 						setupTinyMCEEditor('textarea#WYSItextarea', true, [
 							"textcolor link image preview code"
@@ -96,6 +111,7 @@ var SettingsRouter = Backbone.Router
 				$('#PrefsTab .select').removeClass('select');
 				$('.user-prefs-tab').addClass('select');
 				$(".active").removeClass("active");
+				$("#prefs-tabs-content .prefs-"+tab_class).addClass("active");
 				// $('#content').html(view.render().el);
 			},
 
@@ -191,12 +207,16 @@ var SettingsRouter = Backbone.Router
 			{
 				$("#content").html(getTemplate("settings"), {});
 				var data = { "service" : "linkedin" };
-				var itemView = new Base_Model_View({ url : '/core/api/social-prefs/LINKEDIN', template : "settings-social-prefs", data : data });
+				var itemView = new Base_Model_View({ url : '/core/api/social-prefs/LINKEDIN', template : "settings-social-prefs", data : data, postRenderCallback : function(el){
+					initializeSettingsListeners();
+				} });
 
 				$('#prefs-tabs-content').html(itemView.render().el);
 
 				data = { "service" : "twitter" };
-				var itemView2 = new Base_Model_View({ url : '/core/api/social-prefs/TWITTER', template : "settings-social-prefs", data : data });
+				var itemView2 = new Base_Model_View({ url : '/core/api/social-prefs/TWITTER', template : "settings-social-prefs", data : data , postRenderCallback : function(el){
+					initializeSettingsListeners();
+				} });
 
 				$('#prefs-tabs-content').append(itemView2.render().el);
 				$('#PrefsTab .select').removeClass('select');
@@ -224,7 +244,7 @@ var SettingsRouter = Backbone.Router
 				var socialHeight = 0;
 				$.getJSON("/core/api/emails/synced-accounts", function(data)
 				{
-
+					initializeSettingsListeners();
 					if (typeof data !== undefined && data.hasOwnProperty('emailAccountsLimitReached') && data.emailAccountsLimitReached)
 						HAS_EMAIL_ACCOUNT_LIMIT_REACHED = true;
 					else
@@ -258,6 +278,7 @@ var SettingsRouter = Backbone.Router
 				var itemView2 = new Base_Model_View({ url : '/core/api/imap/', model : imapmodel, template : "settings-imap-prefs", change : false,
 					postRenderCallback : function(el)
 					{
+						initializeSettingsListeners();
 						var model = itemView2.model;
 						var id = model.id;
 						itemView2.model.set("password", "");
@@ -284,6 +305,7 @@ var SettingsRouter = Backbone.Router
 				var itemView2 = new Base_Model_View({ url : '/core/api/imap/', template : "settings-imap-prefs", change : false, isNew : true,
 					postRenderCallback : function(el)
 					{
+						initializeSettingsListeners();
 					}, saveCallback : function()
 					{
 						var model = itemView2.model;
@@ -315,6 +337,7 @@ var SettingsRouter = Backbone.Router
 				var itemView3 = new Base_Model_View({ url : '/core/api/office', template : "settings-office-prefs", isNew : true, change : false,
 					postRenderCallback : function(el)
 					{
+						initializeSettingsListeners();
 						itemView3.model.set("password", "");
 					}, saveCallback : function()
 					{
@@ -347,6 +370,7 @@ var SettingsRouter = Backbone.Router
 				var itemView3 = new Base_Model_View({ url : '/core/api/office/', model : office_model, template : "settings-office-prefs",
 					postRenderCallback : function(el)
 					{
+						initializeSettingsListeners();
 						itemView3.model.set("password", "");
 					}, saveCallback : function()
 					{
@@ -378,6 +402,7 @@ var SettingsRouter = Backbone.Router
 				var gmailShareView = new Base_Model_View({ url : 'core/api/social-prefs/share/' + id, model : gmail_model,
 					template : "settings-gmail-prefs-share", postRenderCallback : function(el)
 					{
+						initializeSettingsListeners();
 
 					}, saveCallback : function()
 					{
@@ -401,6 +426,7 @@ var SettingsRouter = Backbone.Router
 				this.emailTemplatesListView = new Base_Collection_View({ url : '/core/api/email/templates', restKey : "emailTemplates",
 					templateKey : "settings-email-templates", individual_tag_name : 'tr', postRenderCallback : function(el)
 					{
+						initializeSettingsListeners();
 						head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
 						{
 							console.log("In email tmplt postrender");
@@ -427,6 +453,7 @@ var SettingsRouter = Backbone.Router
 				var view = new Base_Model_View({ url : '/core/api/email/templates', isNew : true, template : "settings-email-template-add",
 					window : 'email-templates', postRenderCallback : function()
 					{
+						initializeEmailTemplateAddListeners();
 					} });
 
 				$('#prefs-tabs-content').html(view.render().el);
@@ -471,6 +498,7 @@ var SettingsRouter = Backbone.Router
 				var view = new Base_Model_View({ url : '/core/api/email/templates', model : currentTemplate, template : "settings-email-template-add",
 					window : 'email-templates', postRenderCallback : function()
 					{
+						initializeEmailTemplateAddListeners();
 					} });
 
 				$('#prefs-tabs-content').html(view.render().el);
@@ -494,6 +522,21 @@ var SettingsRouter = Backbone.Router
 				$('.email-templates-tab').addClass('select');
 				$(".active").removeClass("active");
 				// $("#content").html(view.el);
+				if ($('#attachment_id').val())
+				{
+					var el = $('#tpl-attachment-select').closest("div");
+					$('#tpl-attachment-select').hide();
+					el.find(".attachment-document-select").css("display", "inline");
+					var optionsTemplate = "<option value='{{id}}' network_type='{{titleFromEnums network_type}}' size='{{size}}' url='{{url}}'>{{name}}</option>";
+        			fillSelect('attachment-select','core/api/documents', 'documents',  function fillNew()
+					{
+						el.find("#attachment-select option:first").after("<option value='new'>Upload new doc</option>");
+						$('#attachment-select').find('option[value='+$('#attachment_id').val()+']').attr("selected","selected");
+						$('.add-tpl-attachment-confirm').trigger("click");
+						$('#tpl-attachment-select').hide();
+						$('#tpl-attachment-name').show();
+					}, optionsTemplate, false, el);
+				}
 			},
 
 			/**
@@ -509,6 +552,7 @@ var SettingsRouter = Backbone.Router
 					reload : true,
 					postRenderCallback : function(el)
 					{
+						initializeSettingsListeners();
 
 						// Update Notification prefs
 						notification_prefs = view.model.toJSON();
@@ -605,7 +649,8 @@ var SettingsRouter = Backbone.Router
 
 			scheduler : function()
 			{
-				$("#content").html(getTemplate("settings"), {});
+				 $('#content').html("<div id='online-cal-listners'>&nbsp;</div>");
+				$("#online-cal-listners").html(getTemplate("settings"), {});
 				var view = new Base_Model_View({
 					url : 'core/api/scheduleprefs',
 					type : 'GET',
@@ -634,6 +679,8 @@ var SettingsRouter = Backbone.Router
 									$(".mini-time").keydown(false).addClass("form-control");
 
 								});
+						
+						initializeOnlineCalendarListners(el);
 
 					} });
 				$('#prefs-tabs-content').html(view.render().el);
@@ -668,7 +715,9 @@ var SettingsRouter = Backbone.Router
 							dataType : "json",
 							success : function(data)
 							{
+								
 								$("#content").html(getTemplate("theme-layout-form"), {});
+								initializeThemeSettingsListeners();
 								$("#menuPosition").val(CURRENT_USER_PREFS.menuPosition);
 								$("#layout").val(CURRENT_USER_PREFS.layout);
 								if (CURRENT_USER_PREFS.animations == true)

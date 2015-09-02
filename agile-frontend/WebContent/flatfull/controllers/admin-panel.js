@@ -27,13 +27,9 @@ var AdminPanelRouter = Backbone.Router.extend({
 
 	"getDomainUserDetails/:id" : "getDomainUserDetails",
 
-	//search domain 
+	// search domain
 
 	"domainSearch" : "domainSearch"
-		
-	
-	
-	
 
 	},
 
@@ -47,7 +43,7 @@ var AdminPanelRouter = Backbone.Router.extend({
 		$.ajax({ url : 'core/api/admin_panel/getdomainstats?d=' + domainname, type : 'GET', success : function(data)
 		{
 			console.log(data);
-			
+
 			var emails = data.emailcount;
 			data.emailcount = JSON.parse(data.emailcount);
 			$(el).find('#account').html(getTemplate("domain-info", data));
@@ -60,9 +56,6 @@ var AdminPanelRouter = Backbone.Router.extend({
 		} });
 
 	},
-	
-	
-	
 
 	// function will be called from getDomainDetails Navigation
 	// todisplay get subscription object for particular domain
@@ -72,16 +65,14 @@ var AdminPanelRouter = Backbone.Router.extend({
 
 		$.ajax({ url : 'core/api/admin_panel/getcustomer?d=' + domainname, type : 'GET', success : function(data)
 		{
-			console.log("ssssssssssssssssssssssss");
-			console.log(data);
 			$(el).find('#planinfo').html(getTemplate("plan-info", data));
-			
+
 			if (data == null || data == "" || data == undefined)
 			{
 
 				$("#login_id").attr("href", "https://" + domainname + ".agilecrm.com/login");
 			}
-			
+
 			else
 				that.get_collection_of_charges_for_customer_from_adminpanel(el, data.id);
 		} });
@@ -106,7 +97,7 @@ var AdminPanelRouter = Backbone.Router.extend({
 	{
 		this.chargecollection = new Base_Collection_View({ url : "core/api/admin_panel/getcharges?d=" + customerid, templateKey : "admin-charge",
 
-		individual_tag_name : 'tr',sortKey : 'createdtime', descending : true });
+		individual_tag_name : 'tr', sortKey : 'createdtime', descending : true });
 		this.chargecollection.collection.fetch();
 
 		$('.past-chargecollection', el).html(this.chargecollection.render().el);
@@ -115,7 +106,7 @@ var AdminPanelRouter = Backbone.Router.extend({
 	// router to fill domain details template from admin panel
 	getDomainUserDetails : function(id)
 	{
-
+		 $('#content').html("<div id='admin-panel-listners'>&nbsp;</div>");
 		var self = this;
 		var domainname;
 		this.usersListViewCollection = new Base_Collection_View({ url : 'core/api/admin_panel/getParticularDomainUsers?d=' + id, templateKey : "all-domain",
@@ -127,20 +118,21 @@ var AdminPanelRouter = Backbone.Router.extend({
 				});
 
 				var mod_collection = self.usersListViewCollection.collection.models;
-			
-				
+
 				domainname = mod_collection[0].get('domain');
 				email = mod_collection[0].get('email');
 				self.get_customerobject_for_domain_from_adminpanel(el, domainname);
 				$('#account').html("<img src='img/21-0.gif'>");
 				self.get_account_stats_for_domain_from_adminpanel(el, domainname);
 
+				initializeAdminpanelListner(el);
+
 			},
 
 		});
 		this.usersListViewCollection.collection.fetch();
 
-		$('#content').html(this.usersListViewCollection.el);
+		$('#admin-panel-listners').html(this.usersListViewCollection.el);
 
 	},
 
@@ -216,7 +208,11 @@ var AdminPanelRouter = Backbone.Router.extend({
 	allDomainUsers : function()
 	{
 		allDomainUsersCollectionView = new Base_Collection_View({ url : 'core/api/admin_panel/getAllDomainUsers', templateKey : "all-domain-users",
-			individual_tag_name : 'tr', cursor : true, page_size : 25 });
+			individual_tag_name : 'tr', cursor : true, page_size : 25, postRenderCallback : function(el)
+			{
+				initializeAdminpanelListner(el);
+
+			} });
 
 		allDomainUsersCollectionView.collection.fetch();
 		$('#content').html(allDomainUsersCollectionView.el);
@@ -225,6 +221,7 @@ var AdminPanelRouter = Backbone.Router.extend({
 	// subscription
 	domainSubscribeDetails : function(id)
 	{
+		$("#content").html("<div id='subscribe_plan_change'></div>");
 
 		var subscribe_plan = new Base_Model_View({ url : "core/api/admin_panel/subscriptionofparticulardomain?d=" + id,
 			template : "all-domain-admin-subscribe-new", window : 'domainSubscribe',
@@ -238,6 +235,7 @@ var AdminPanelRouter = Backbone.Router.extend({
 			postRenderCallback : function(el)
 			{
 				var data = subscribe_plan.model.toJSON();
+				initializeSubscriptionListeners(el);
 
 				// console.log(data.get('billing_data_json_string'));
 
@@ -258,26 +256,28 @@ var AdminPanelRouter = Backbone.Router.extend({
 				// Show Coupon code input field
 				id = (id && id == "coupon") ? id : "";
 				showCouponCodeContainer(id);
-				$("#user_quantity").attr("value", data.plan.quantity);
+				$("#user_quantity",el).prop("value", data.plan.quantity);
 				price = update_price();
-				$( "#users_quantity").text(data.plan.quantity);
-     	    	$("#users_total_cost").text((data.plan.quantity * price).toFixed(2));
+				$("#users_quantity",el).text(data.plan.quantity);
+				$("#users_total_cost",el).text((data.plan.quantity * price).toFixed(2));
 
-				head.load(CSS_PATH + 'css/jslider.css', CSS_PATH + "css/misc/agile-plan-upgrade.css", LIB_PATH + 'lib/jquery.slider.min.js', function()
+				head.load(CSS_PATH + "css/misc/agile-plan-upgrade.css", LIB_PATH + 'lib/jquery.slider.min.js', function()
 				{
 					if ($.isEmptyObject(data))
 						setPlan("free");
 					else
 						setPlan(data);
-					//load_slider(el);
+					// load_slider(el);
 				});
+
+				
 			} });
-		$('#content').html(subscribe_plan.render().el);
+		$('#subscribe_plan_change').html(subscribe_plan.render().el);
 	},
 
 	purchasePlanFromAdminpanel : function()
 	{
-		// If plan is not defined i.e., reloaded, or plan not chosen
+		/*// If plan is not defined i.e., reloaded, or plan not chosen
 		// properly,
 		// then page is navigated back to subcription/ choose plan page
 		if (!plan_json.plan)
@@ -285,7 +285,7 @@ var AdminPanelRouter = Backbone.Router.extend({
 			this.navigate("all-domain-users", { trigger : true });
 
 			return;
-		}
+		}*/
 
 		var window = this;
 		// Plan json is posted along with credit card details
@@ -305,7 +305,7 @@ var AdminPanelRouter = Backbone.Router.extend({
 			}, saveCallback : function(data)
 			{
 				window.navigate("domainSubscribe/" + plan.domain_name, { trigger : true });
-				add_plan_change_info_as_note_to_owner(email,plan.plan_type,plan.plan_id,plan.quantity);
+				add_plan_change_info_as_note_to_owner(email, plan.plan_type, plan.plan_id, plan.quantity);
 				showNotyPopUp("information", "You have been upgraded successfully. Please logout and login again for the new changes to apply.", "top");
 			}
 
@@ -319,9 +319,10 @@ var AdminPanelRouter = Backbone.Router.extend({
 
 	domainSearch : function()
 	{
+		$("#content").html("<div id='domain-search-listners'></div>");
 		var el = $(getTemplate('all-domain-search', {}));
-		$("#content").html(el);
+		$("#domain-search-listners").html(el);
+		initializeDomainsearchListner();
 		hideTransitionBar();
 	}
-
 });

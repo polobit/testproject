@@ -2,11 +2,10 @@
 function startGettingDeals(criteria, pending)
 {
 	console.log('------started-----', pipeline_id);
-	var milestoneString = (trackListView.collection.get(pipeline_id)) ? trackListView.collection.get(pipeline_id).toJSON().milestones : "";
-
+	var milestoneString = trackListView.collection.get(pipeline_id).toJSON().milestones;
 	if (milestoneString.trim().length == 0)
 	{
-		var html = '<div class="alert-info alert"><div class="slate-content"><div class="box-left pull-left m-r-md"><img alt="Clipboard" src="/img/clipboard.png"></div><div class="box-right pull-left"><h4 class="m-t-none">You have no milestones defined</h4><br><a href="#milestones" class="btn btn-default btn-sm m-t-xs"><i class="icon icon-plus-sign"></i> Add Milestones</a></div><div class="clearfix"></div></div></div>';
+		var html = '<div class="slate" style="margin:0px;"><div class="slate-content"><div class="box-left"><img alt="Clipboard" src="/img/clipboard.png"></div><div class="box-right"><h3>You have no milestones defined</h3><br><a href="#milestones" class="btn"><i class="icon icon-plus-sign"></i> Add Milestones</a></div></div></div>';
 		$('#new-opportunity-list-paging').html(html);
 		return;
 	}
@@ -15,10 +14,11 @@ function startGettingDeals(criteria, pending)
 		if (readCookie('agile_deal_track') != pipeline_id)
 			createCookie('agile_deal_track', pipeline_id);
 	}
-	var milestones = trackListView.collection.get(pipeline_id).toJSON().milestones.split(',');
+	var currentTrack = trackListView.collection.get(pipeline_id).toJSON();
+	var milestones = currentTrack.milestones.split(',');
 	console.log(milestones);
-	createDealsNestedCollection(pipeline_id, milestones);
-
+	createDealsNestedCollection(pipeline_id,milestones,currentTrack);
+	
 }
 
 // Decide which array to pass for creation of collection.
@@ -33,7 +33,7 @@ function dealFiltersForCollection(criteria)
 }
 
 // Creates nested collection
-function createDealsNestedCollection(pipeline_id, milestones)
+function createDealsNestedCollection(pipeline_id,milestones,currentTrack)
 {
 	console.log("In createNestedCollection");
 
@@ -54,8 +54,12 @@ function createDealsNestedCollection(pipeline_id, milestones)
 		var newDealList;
 
 		// Add heading to task list in main collection
-		var url = initialURL + "&milestone=" + milestones[i];
-		newDealList = { "heading" : milestones[i], "url" : url };
+			var url = initialURL + "&milestone=" + milestones[i];
+			newDealList = { "heading" : milestones[i], "url" : url};
+			if(currentTrack.won_milestone == milestones[i])
+				newDealList.won_milestone = currentTrack.won_milestone;
+			else if(currentTrack.lost_milestone == milestones[i])
+				newDealList.lost_milestone = currentTrack.lost_milestone;
 
 		if (!newDealList)
 			return;
@@ -101,6 +105,7 @@ function initDealListCollection(milestones)
 			}
 
 			$('#opportunities-by-paging-model-list', el).find('.milestone-column').width(width + "%");
+			$('.mark-won, .mark-lost',el).tooltip();
 		} });
 
 	// Over write append function

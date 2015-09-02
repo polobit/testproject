@@ -319,8 +319,8 @@
 	function setupCompanyViews(cel, button_name) {
 
 		// Creates a view for custom views
-		head.load(CSS_PATH + 'css/bootstrap_submenu.css',  function()
-		{
+		/*head.load(CSS_PATH + 'css/bootstrap_submenu.css',  function()
+		{*/
 			var el = getTemplate("company-view-collection");
 			$("#view-list", cel).html(el);
 			updateSelectedSortKey($("#view-list", cel));
@@ -331,7 +331,7 @@
 			// the view is show in the custom view button.
 			//if (button_name)
 				//$("#view-list", cel).find('.custom_view').append(button_name);
-		});
+		// });
 	}
 	
 	var updateSelectedSortKey = function(el) {
@@ -434,13 +434,13 @@
 		 * If default filter is selected, removes filter cookies an load contacts
 		 * with out any query condition
 		 */
-		$('.default_company_filter').die().live('click', function(e)
+		$("body").on('click', '.default_company_filter', function(e)
 		{
 			e.preventDefault();
 			revertToDefaultCompanies();
 		});
 		
-		$('#companies-filter').die().live('click', function(e)
+		$("body").on('click', '#companies-filter', function(e)
 		{
 
 			e.preventDefault();
@@ -453,8 +453,8 @@
 			// reload
 			return;
 		});
-		
-		$('.company_static_filter').die().live('click', function(e)
+
+		$("body").on('click', '.company_static_filter', function(e)
 		{
 
 			e.preventDefault();
@@ -480,14 +480,15 @@
 			// now filters will work only on contact, not company
 		});
 		
-		$('#comp-sort-by-created_time-desc').die().live('click',function(e){
+		$("body").on('click', '#comp-sort-by-created_time-desc', function(e)
+		{
 			e.preventDefault();
 			createCookie('company_sort_field',$(this).attr('data'));
 			COMPANIES_HARD_RELOAD=true;
 			App_Companies.companies();
 		});
 		
-		$('#comp-sort-by-created_time-asc').die().live('click',function(e){
+		$("body").on('click', '#comp-sort-by-created_time-asc', function(e){
 			e.preventDefault();
 			createCookie('company_sort_field',$(this).attr('data'));
 			COMPANIES_HARD_RELOAD=true;
@@ -496,11 +497,12 @@
 	};
 	
 	company_list_view.init = function(cel){
-		initEvents();
+		// initEvents();
 		setupCompanyFilterList(cel);
 		setupCompanyViews(cel);
 	};
 	
+	initEvents();
 }(window.company_list_view = window.company_list_view || {}, $));
 
 /*****Company Details view******/
@@ -561,7 +563,7 @@
 	
 	var addTagsToCompany = function(){
 		 // Add Tags
-		var new_tags = get_new_tags('addTags');
+		var new_tags = get_new_tags('companyAddTags');
 		if(new_tags)new_tags=new_tags.trim();
 		
 		if(!new_tags || new_tags.length<=0 || (/^\s*$/).test(new_tags))
@@ -588,35 +590,37 @@
 	    	// Checks if tag already exists in contact
 			if($.inArray(new_tags, json.tags) >= 0)
 				return;
-	    	
-	    	json.tagsWithTime.push({"tag" : new_tags.toString()});
-   			
-	    	// Save the contact with added tags
-	    	var contact = new Backbone.Model();
-	        contact.url = 'core/api/contacts';
-	        contact.save(json,{
-	       		success: function(data){
-	       			
-	       			addTagToTimelineDynamically(new_tags, data.get("tagsWithTime"));
-	       			
-	       			// Get all existing tags of the contact to compare with the added tags
-	       			var old_tags = [];
-	       			$.each($('#added-tags-ul').children(), function(index, element){
-	       				old_tags.push($(element).attr('data'));
-       				});
-	       			
-	       			// Updates to both model and collection
-	       			App_Companies.companyDetailView.model.set(data.toJSON(), {silent : true});
-	       			
-	       			// Append to the list, when no match is found 
-	       			if ($.inArray(new_tags, old_tags) == -1) 
-	       				$('#added-tags-ul').append('<li  class="tag inline-block btn btn-xs btn-default m-r-xs" style="color:#363f44" data="' + new_tags + '"><span><a class="anchor m-r-xs custom-color" style="color:#363f44" href="#tags/'+ new_tags + '" >'+ new_tags + '</a><a class="close remove-company-tags" id="' + new_tags + '" tag="'+new_tags+'">&times</a></span></li>');
-	       			
-	       			console.log(new_tags);
-	       			// Adds the added tags (if new) to tags collection
-	       			tagsCollection.add(new BaseModel({"tag" : new_tags}));
-	       		}
-	        });
+			//Check tag acl before adding tag.
+			acl_util.canAddTag(new_tags.toString(),function(respnse){
+		    	json.tagsWithTime.push({"tag" : new_tags.toString()});
+	   			
+		    	// Save the contact with added tags
+		    	var contact = new Backbone.Model();
+		        contact.url = 'core/api/contacts';
+		        contact.save(json,{
+		       		success: function(data){
+		       			
+		       			addTagToTimelineDynamically(new_tags, data.get("tagsWithTime"));
+		       			
+		       			// Get all existing tags of the contact to compare with the added tags
+		       			var old_tags = [];
+		       			$.each($('#added-tags-ul').children(), function(index, element){
+		       				old_tags.push($(element).attr('data'));
+	       				});
+		       			
+		       			// Updates to both model and collection
+		       			App_Companies.companyDetailView.model.set(data.toJSON(), {silent : true});
+		       			
+		       			// Append to the list, when no match is found 
+		       			if ($.inArray(new_tags, old_tags) == -1) 
+		       				$('#added-tags-ul').append('<li  class="tag inline-block btn btn-xs btn-default m-r-xs" style="color:#363f44" data="' + new_tags + '"><span><a class="anchor m-r-xs custom-color" style="color:#363f44" href="#tags/'+ new_tags + '" >'+ new_tags + '</a><a class="close remove-company-tags" id="' + new_tags + '" tag="'+new_tags+'">&times</a></span></li>');
+		       			
+		       			console.log(new_tags);
+		       			// Adds the added tags (if new) to tags collection
+		       			tagsCollection.add(new BaseModel({"tag" : new_tags}));
+		       		}
+		        });
+			});
 		}
 	};
 	
@@ -707,31 +711,7 @@
 	
 	company_detail_tab.initEvents = function(){
 		
-		// Adding contact when user clicks Add contact button under Contacts tab in
-		// Company Page
-		$(".contact-add-contact").die().live('click', function(e)
-		{
-			e.preventDefault();
-
-			// This is a hacky method. ( See jscore/contact-management/modals.js for
-			// its use )
-			// 'forceCompany' is a global variable. It is used to enforce Company
-			// name on Add Contact modal.
-			// Prevents user from removing this company from the modal that is
-			// shown.
-			// Disables typeahead, as it won't be needed as there will be no Company
-			// input text box.
-			var json = App_Companies.companyDetailView.model.toJSON();
-			forceCompany.name = getContactName(json); // name of Company
-			forceCompany.id = json.id; // id of Company
-			forceCompany.doit = true; // yes force it. If this is false the
-			// Company won't be forced.
-			// Also after showing modal, it is set to false internally, so
-			// Company is not forced otherwise.
-			$('#personModal').modal('show');
-		});
-		
-		$('#contactDetailsTab a[href="#company-contacts"]').die().live('click', function(e)
+		$("body").on('click', '#contactDetailsTab a[href="#company-contacts"]', function(e)
 				{
 					e.preventDefault();
 					fill_company_related_contacts(App_Companies.companyDetailView.model.id, 'company-contacts');
@@ -741,7 +721,7 @@
 		 * Fetches all the deals related to the contact and shows the deals
 		 * collection as a table in its tab-content, when "Deals" tab is clicked.
 		 */
-		$('#contactDetailsTab a[href="#company-deals"]').die().live('click', function(e)
+		$("body").on('click', '#contactDetailsTab a[href="#company-deals"]', function(e)
 		{
 			e.preventDefault();
 			save_contact_tab_position_in_cookie("deals");
@@ -751,7 +731,7 @@
 		/**
 		 * Fetches all the cases related to the contact and shows the collection.
 		 */
-		$('#contactDetailsTab a[href="#company-cases"]').die().live('click', function(e)
+		$("body").on('click', '#contactDetailsTab a[href="#company-cases"]', function(e)
 		{
 			e.preventDefault();
 			save_contact_tab_position_in_cookie("cases");
@@ -763,7 +743,7 @@
 		 * Fetches all the notes related to the contact and shows the notes
 		 * collection as a table in its tab-content, when "Notes" tab is clicked.
 		 */
-		$('#contactDetailsTab a[href="#company-notes"]').die().live('click', function(e)
+		$("body").on('click', '#contactDetailsTab a[href="#company-notes"]', function(e)
 		{
 			e.preventDefault();
 			save_contact_tab_position_in_cookie("notes");
@@ -775,7 +755,7 @@
 		 * collection as a table in its tab-content, when "Documents" tab is
 		 * clicked.
 		 */
-		$('#contactDetailsTab a[href="#company-documents"]').die().live('click', function(e)
+		$("body").on('click', '#contactDetailsTab a[href="#company-documents"]', function(e)
 		{
 			e.preventDefault();
 			save_contact_tab_position_in_cookie("documents");
@@ -786,15 +766,22 @@
 		 * "click" event of add button of tags form in contact detail view
 		 * Pushes the added tags into tags array attribute of the contact and saves it
 		 */ 
-		$('#company-add-tags').die().live('click', function(e){
-			e.preventDefault();
+		$("body").on('click', '#company-add-tags', function(e)
+		{	e.preventDefault();
 			
 		   addTagsToCompany();
 		});
 		
+		$("body").on('keydown', "#companyAddTags",function(e) {
+		//$("#companyAddTags").die().live('keydown',function(e) {
+	    	if(e.which == 13 && !isTagsTypeaheadActive){
+	    		addTagsToCompany();
+	    		}
+	    	});
+		
 		// Deletes a contact from database
-		$('#company-actions-delete').die().live('click', function(e){
-			
+		$("body").on('click', '#company-actions-delete', function(e)
+		{	
 			e.preventDefault();
 			deleteCurrentCompany();
 		});
@@ -803,7 +790,7 @@
 		 * Changes, owner of the contact, when an option of change owner drop down
 		 * is selected.   
 		 */
-		$('.company-owner-list').die().live('click', function(){
+		$("body").on('click', '.company-owner-list', function(e){
 		
 			$('#change-owner-ul').css('display', 'none');
 			
@@ -813,7 +800,7 @@
 		/**
 		 * Deletes a tag of a contact (removes the tag from the contact and saves the contact)
 		 */ 
-		$('.remove-company-tags').die().live('click', function(e){
+		$("body").on('click', '.remove-company-tags', function(e){
 			e.preventDefault();
 			
 			var tag = $(this).attr("tag");
@@ -856,4 +843,14 @@
 	        });
 		});
 	};
+
+	company_detail_tab.initEvents();
+
 }(window.company_detail_tab = window.company_detail_tab || {}, $));
+
+/** 
+*Initialize events once
+*/
+$(function(){
+
+});

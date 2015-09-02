@@ -382,5 +382,7 @@ function show_campaign_save()
 	// Campaign save message
 	var $save_info = '<span style="color: green; margin-left: 85px;">Campaign saved.</span>';
 
-	$("#workflow-msg").html($save_info).show().fadeOut(3000);
+	$("#workflow-msg").html($save_info).show().fadeOut(3000));
+
+
 }

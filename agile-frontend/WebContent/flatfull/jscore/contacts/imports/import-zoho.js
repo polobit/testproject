@@ -1,7 +1,6 @@
 $(function(){
 	
-	
-	$('#zoho-import').die().live('click',function(e)
+	$('body').on('click', '#zoho-import', function(e)
 			{
 				e.preventDefault();
 				var newwindow = window.open("import_zoho.jsp", 'name', 'height=420,width=500');
@@ -15,7 +14,7 @@ $(function(){
 
 	
 
-	$('#zoho-prefs-delete').die().live('click', function(e)
+	$('body').on('click', '#zoho-prefs-delete', function(e)
 	{
 		e.preventDefault();
 		var disable = $(this).attr("disabled");

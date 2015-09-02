@@ -8,7 +8,6 @@
 /*
 we use setAttribute() to store the username and to autofill if he want to resubmit the form after correcting the error occurred. 
 */
-
 //flatfull path
 String flatfull_path="/flatfull";
 
@@ -89,17 +88,9 @@ String logo_url = accountPrefs.logo;
 <meta name="description" content="">
 <meta name="author" content="">
 
-<!-- Le styles -->
-
-<!-- <link href="/css/bootstrap-pink.min.css" rel="stylesheet">
-<link href="/css/bootstrap-responsive.min.css" rel="stylesheet">
-<link type="text/css" rel="stylesheet" href="/css/openid-min.css">
-<link type="text/css" rel="stylesheet" href="/css/signin.css"> -->
-
 <link rel="stylesheet" type="text/css" href="<%=flatfull_path%>/css/bootstrap.v3.min.css" />
-<link rel="stylesheet" type="text/css" href="<%=flatfull_path%>/css/font.css" />
 <link rel="stylesheet" type="text/css" href="<%=flatfull_path%>/css/app.css" />
-<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
 <style>
 body {
    background-image: url('../flatfull/images/flatfull/agile-login-page.png');
@@ -138,60 +129,6 @@ position: fixed;width: 100%;top: 0px;
 
 </style>
 
-<!-- 
-<style>
-@media ( min-width : 900px) {
-	body {
-		padding-top: 20px;
-	}
-	.navbar-search {
-		padding-left: 10%
-	}
-}
-
-.field {
-	height: 30px !important;
-	margin: 8px 0px !important;
-	padding-left: 10px !important;
-}
-
-.error {
-	color: red;
-}
-
-
-.login-page .openid_large_btn:hover {
-margin: 4px 0px 0px 4px;
-border: 2px solid #999;
-box-shadow: none;
--moz-box-shadow: none;
--webkit-box-shadow: none;
-}
-
-/* To move validation slides */
-#agile label
-{
-margin-bottom:0px;
-}
-
-</style>
- -->
-
-<!-- JQUery Core and UI CDN -->
-<!-- <script type='text/javascript'
-	src='https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js'></script>
-	<script type="text/javascript" src="/lib/bootstrap.min.js"></script> -->
-<script type='text/javascript' src='<%=flatfull_path%>/lib/jquery-new/jquery-2.1.1.min.js'></script>
-<script type="text/javascript" src="<%=flatfull_path%>/lib/bootstrap.v3.min.js"></script>
-<!-- <script type="text/javascript" src="/lib/jquery.validate.min.js"></script> -->
-<!-- <script type="text/javascript">
-	jQuery.validator.setDefaults({
-		debug : true,
-		success : "valid"
-	});
-	;
-</script> -->
-
 <script>
 var isIE = (window.navigator.userAgent.indexOf("MSIE") != -1); 
 var isIENew = (window.navigator.userAgent.indexOf("rv:11") != -1);  
@@ -213,27 +150,8 @@ if(isSafari && isWin)
 </head>
 
 <body>
-<!-- 
-	<div class='navbar navbar-fixed-top'>
-		<div class='navbar-inner'>
-			<div class='container'>
-				<a class='brand' href='#dashboard'>Agile CRM</a>
-				<div class="nav-collapse">
-					<ul class="nav pull-right">
-						<li class=""><a href="http://www.agilecrm.com" class="">
-								<i class="icon-chevron-left"></i> Back to home-page </a>
-						</li>
-					</ul>
-				</div>
-			</div>
-		</div>
-	</div> -->
 <div id="openid_btns">
-					   <% if(!StringUtils.isEmpty(error)){%>
-				        <div  class="alert error login-error login-position-fixed text-center m-b-none">
-							<a class="close" data-dismiss="alert" href="#" style="position:relative;top:-2px;">&times</a><%=error%> 
-						</div>
-						<%}%>	
+					   	
 	<div class="app app-header-fixed app-aside-fixed" id="app">
 
 		<div ui-view="" class="fade-in-right-big smooth">
@@ -315,16 +233,27 @@ if(isSafari && isWin)
 		</div>
 		</div>
 		</div>
+		<% if(!StringUtils.isEmpty(error)){%>
+				        <div  class="alert error login-error login-position-fixed text-center m-b-none">
+							<a class="close" data-dismiss="alert" href="#" style="position:relative;top:-2px;">&times</a><%=error%> 
+						</div>
+						<%}%>
 	</div>
+	
+	<!-- JQUery Core and UI CDN -->
+	<script type='text/javascript' src='//cdnjs.cloudflare.com/ajax/libs/jquery/1.10.2/jquery.min.js'></script>
+	<script src='//cdnjs.cloudflare.com/ajax/libs/headjs/1.0.3/head.min.js'></script>
 	<script src="//cdnjs.cloudflare.com/ajax/libs/jstimezonedetect/1.0.4/jstz.min.js" type="text/javascript"></script>
 	<script type="text/javascript">
 		$(document).ready(function()
 		{
+
+			// Pre load dashlet files when don is active
+			preload_dashlet_libs();
+
 			$('#account_timezone').val(jstz.determine().name());
-			console.log("starting of login");
 			$('.openid_large_btn').click(function(e)
 			{
-				console.log("ready to oauth form");
 				
 				// Gets Data Google/Yahoo and submits to LoginServlet
 				var data = $(this).attr('data');
@@ -333,39 +262,51 @@ if(isSafari && isWin)
 
 				e.preventDefault();
 			});
+			$('body').on('click', '.close', function(e){
+				 e.preventDefault();
+				 $(this).closest('div').fadeOut('slow', function() {
+				   });
+				 });
 			
-			// Submits the Agile form to LoginServlet
-			$("#agile").validate({
-				 submitHandler: function(form) {
-					   form.submit();
-					 }
-					});
-
 		});
 		
 		// Validates the form fields
 		function isValid()
 		{
-			$("#agile").validate();
-			return $("#agile").valid();
+			// $("#agile").validate();
+			// return $("#agile").valid();
 		}
-	
+
+		function preload_dashlet_libs(){ 
+			setTimeout(function(){head.load('<%=flatfull_path%>/final-lib/min/lib-all-min.js')}, 5000);
+		}
 	</script>
 	<!-- Clicky code -->
  	<script src="//static.getclicky.com/js" type="text/javascript"></script>
-	<script type="text/javascript">try{ clicky.init(100729733); }catch(e){}</script>
+	<script type="text/javascript">try{ clicky.init(100729733); }catch(e){}</script> 
 	
 	<!-- Google analytics code -->
 	<script>
-	  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
 	  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
 	  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
 	  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 	
 	  ga('create', 'UA-44894190-1', 'auto');
-	  ga('send', 'pageview');
+	  ga('send', 'pageview'); 
 	
+
 	</script>
+
+	<!-- Surey page code-->
+	<script type="text/javascript" src="https://our.agilecrm.com/stats/min/agile-min.js">
+   </script>
+   <script type="text/javascript" >
+     _agile.set_account('jo22gpvhr34r2mccjaekgsm7oh', 'our');
+     _agile_set_whitelist('b3Vy');
+     _agile.track_page_view();
+     _agile_execute_web_rules();
+   </script>
 	
 </body>
 </html>

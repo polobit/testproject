@@ -60,6 +60,7 @@ import com.agilecrm.user.access.util.UserAccessControlUtil.CRUDOperation;
 import com.agilecrm.user.notification.NotificationPrefs;
 import com.agilecrm.util.CacheUtil;
 import com.agilecrm.voicemail.VoiceMail;
+// import com.agilecrm.webpages.WebPage;
 import com.agilecrm.webrules.WebRule;
 import com.agilecrm.widgets.CustomWidget;
 import com.agilecrm.widgets.Widget;
@@ -204,6 +205,10 @@ public class ObjectifyGenericDao<T> extends DAOBase {
 
 		ObjectifyService.register(Office365CalendarPrefs.class);
 
+		// For page builder
+		// ObjectifyService.register(WebPage.class);
+
+
 	}
 
 	/**
@@ -216,7 +221,6 @@ public class ObjectifyGenericDao<T> extends DAOBase {
 	 * 
 	 * @param clazz
 	 */
-
 	public ObjectifyGenericDao(Class<T> clazz) {
 		this.clazz = clazz;
 	}
@@ -261,7 +265,6 @@ public class ObjectifyGenericDao<T> extends DAOBase {
 	 * @param entity
 	 */
 	public void delete(T entity) {
-
 		if (canDelete(entity))
 			ofy().delete(entity);
 	}
@@ -290,7 +293,6 @@ public class ObjectifyGenericDao<T> extends DAOBase {
 	 * @param entities
 	 */
 	public void deleteAll(Iterable<T> entities) {
-
 		ofy().delete(entities);
 	}
 
@@ -299,7 +301,6 @@ public class ObjectifyGenericDao<T> extends DAOBase {
 	 * 
 	 * @param keys
 	 */
-
 	public void deleteKeys(Iterable<Key<T>> keys) {
 		ofy().delete(keys);
 	}
@@ -309,7 +310,6 @@ public class ObjectifyGenericDao<T> extends DAOBase {
 	 * 
 	 * @param ids
 	 */
-
 	public void deleteBulkByIds(JSONArray ids) {
 		List<Key<T>> keys = new ArrayList<Key<T>>();
 
@@ -862,7 +862,6 @@ public class ObjectifyGenericDao<T> extends DAOBase {
 		// not provided then query is modified such that user can access only
 		// entities he had created
 		System.out.println("check read query");
-
 		UserAccessControlUtil.checkReadAccessAndModifyQuery(
 				clazz.getSimpleName(), query);
 
@@ -874,7 +873,6 @@ public class ObjectifyGenericDao<T> extends DAOBase {
 		List<T> results = new ArrayList<T>();
 
 		QueryResultIterator<T> iterator = query.iterator();
-
 		while (iterator.hasNext()) {
 			T result = iterator.next();
 
@@ -899,4 +897,5 @@ public class ObjectifyGenericDao<T> extends DAOBase {
 		}
 		return results;
 	}
+
 }

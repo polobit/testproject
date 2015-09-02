@@ -1,6 +1,6 @@
 $(function()
 {
-	$('#stripe_import').die().live('click', function(e)
+	$('body').on('click', '#stripe_import', function(e)
 	{
 		var callbackURL = window.location.origin + "/#sync/stripe-import";
 		console.log(callbackURL);
@@ -10,7 +10,7 @@ $(function()
 		return false;
 	});
 
-	$('#stripe-import-prefs-delete').die().live('click', function(e)
+	$('body').on('click', '#stripe-import-prefs-delete', function(e)
 	{
 		e.preventDefault();
 		var disable = $(this).attr("disabled");
@@ -26,7 +26,7 @@ $(function()
 
 	});
 	
-	$('#stripe_sync_prefs').die().live('click',function(e){
+	$('body').on('click', '#stripe_sync_prefs', function(e){
 		e.preventDefault();
 		var disabled = $(this).attr("disabled");
 		if(disabled){

@@ -62,7 +62,7 @@
 	}
 	
 	/* For toggling help modal popup */
-	$('#help-page').die().live('click', function(e){
+	$("body").on('click', '#help-page', function(e){
 		
 		var helpModal = $(getTemplate("show-help"),{});
 		helpModal.modal('show');
@@ -75,7 +75,7 @@
 	});
 	
 	/* For opening the footer icons in seperate popup window */
-	$('.email-share').die().live('click', function(e){
+	$("body").on('click', '.email-share', function(e){
 		e.preventDefault();
 		var x = 500;
 		var title = $(this).closest("a").attr('data');
@@ -85,7 +85,7 @@
 	});
 	
 	/* For sharing agile to friends */
-	$('#share-email').die().live('click', function(e){
+	$("body").on('click', '#share-email', function(e){
 		e.preventDefault();
 		
 		// If modal is already present removing it to submit new form
@@ -103,7 +103,7 @@
 				emailModal.modal('show');
 		
 				// When send button is clicked form is validated
-				$('#shareMail').die().live('click',function(e){
+				$("body").on('click', '#shareMail', function(e){
 					e.preventDefault();
 					
 					if(!isValidForm($('#sharemailForm')))

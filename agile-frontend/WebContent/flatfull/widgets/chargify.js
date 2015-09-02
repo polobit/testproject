@@ -137,7 +137,7 @@ $(function()
 				last_name == ' ';
 			showChargifyClient();
 
-			$('#chargify_add_contact').die().live('click', function(e)
+			$("body").on("click", "#chargify_add_contact", function(e)
 			{
 				e.preventDefault();
 

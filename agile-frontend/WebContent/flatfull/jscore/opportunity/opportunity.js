@@ -10,7 +10,7 @@ $(function () {
 	/**
 	 * When mouseover on any row of opportunities list, the popover of deal is shown
 	 **/
-	$('#opportunities-model-list > tr').live('mouseenter', function () {
+	$('#opportunity-listners').on('mouseenter', '#opportunities-model-list > tr', function(e) {
         var data = $(this).find('.data').attr('data');
 
         var currentDeal = App_Deals.opportunityCollectionView.collection.get(data);
@@ -51,14 +51,14 @@ $(function () {
     /**
      * On mouse out on the row hides the popover.
      **/
-	$('#opportunities-model-list > tr').live('mouseleave', function(){
+	$('#opportunity-listners').on('mouseleave', '#opportunities-model-list > tr', function(e) {
     	 $(this).popover('hide');
     });
 	
     /**
      * On click on the row hides the popover.
      **/
-	$('#opportunities-model-list > tr, .hide-popover').live('click', function(){
+	$('#opportunity-listners').on('click', '#opportunities-model-list > tr, .hide-popover', function(e) {
     	 $(this).closest('tr').popover('hide');
     });
     
@@ -66,24 +66,24 @@ $(function () {
     * When deal is added from contact-detail by selecting 'Add Opportunity' from actions 
     * and then close button of deal is clicked, it should navigate to contact-detail.
     **/
-	$('#close-deal').live('click', function(e){
+	$('#opportunity-listners').on('click', '#close-deal', function(e) {
     	e.preventDefault();
     	window.history.back();
     });
 	
-	$('#deal-milestone-regular').live('click', function(e){
+	$('#opportunity-listners').on('click', '#deal-milestone-regular', function(e) {
     	e.preventDefault();
     	eraseCookie('deal-milestone-view');
     	App_Deals.deals();
     });
 	
-	$('#deal-milestone-compact').live('click', function(e){
+	$('body').on('click', '#deal-milestone-compact', function(e) {
     	e.preventDefault();
     	createCookie('deal-milestone-view','compact');
     	App_Deals.deals();
     });
 	
-	$('#deal-milestone-fit').live('click', function(e){
+	$('body').on('click', '#deal-milestone-fit', function(e) {
     	e.preventDefault();
     	createCookie('deal-milestone-view','fit');
     	App_Deals.deals();
@@ -195,7 +195,6 @@ var tracks = new Base_Collection_View({url : '/core/api/milestone/pipelines'});
 							html+='<option value="'+mile.id+'_'+milestone+'">'+mile.name+' - '+milestone+'</option>';
 					});
 					html+='</optgroup>';
-					
 				});
 				$('#' + id, el).closest('.control-group').find('label b').text('Track & Milestone');
 			}
@@ -241,9 +240,12 @@ var tracks = new Base_Collection_View({url : '/core/api/milestone/pipelines'});
 			console.log(jsonModel);
 			
 			// If there is only one pipeline, select the option by default and hide the field.
-			if(jsonModel.length==1)
+			if(jsonModel.length==1){
 				html+='<option value="'+jsonModel[0].id+'" selected="selected">'+jsonModel[0].name+'</option>';
+				milestone_util.showMilestonePopup(jsonModel[0]);
+			}
 			else {
+				milestone_util.isNotyVisible = false;
 				$.each(jsonModel,function(index,mile){
 					console.log(mile.milestones,value);
 					if(!mile.name)
@@ -252,7 +254,7 @@ var tracks = new Base_Collection_View({url : '/core/api/milestone/pipelines'});
 						html+='<option value="'+mile.id+'" selected="selected">'+mile.name+'</option>';
 					else
 						html+='<option value="'+mile.id+'">'+mile.name+'</option>';
-					
+					milestone_util.showMilestonePopup(mile);
 				});
 			}
 			$('#pipeline',el).html(html);

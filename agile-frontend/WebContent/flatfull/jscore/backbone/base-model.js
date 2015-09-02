@@ -603,5 +603,8 @@ function disable_save_button(elem)
  */
 function enable_save_button(elem)
 {
+	if(!elem.attr('data-save-text'))
+		 elem.attr('data-save-text', 'save');
+		
 	elem.html(elem.attr('data-save-text')).removeAttr('disabled data-save-text');
 }

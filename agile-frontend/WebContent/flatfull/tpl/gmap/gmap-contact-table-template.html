@@ -1,11 +1,11 @@
 <script id="gmap-table-model-template" type="text/html">
 
 <td style="cursor:default;" class="select_checkbox">
-</td>
+</td>panel-heading
 
 
 {{#if contact}}
-<td class="data" data="{{contact.id}}">
+<td class="data-contact" data="{{contact.id}}">
 	<div class="row-fluid">
     	<div class="thumb-sm agile-img m-r-sm" style="margin-right:10px">
 {{#wrap_entity this.contact}}
@@ -33,7 +33,7 @@
 {{/if}}
 	</div>
 </td>
-<td style="white-space:nowrap;text-overflow:ellipsis;overflow:hidden"><a  target="_blank" href="{{ref}}">{{ref}}</a></td>
+<td class="referer"  style="white-space:nowrap;text-overflow:ellipsis;overflow:hidden"><a class="refererUrl" target="_blank" href="{{ref}}">{{ref}}</a></td>
 <td><div>{{capitalizeFirstLetter city country}}</div></td>
 <td>{{#if user_agent}}
 			{{#stringToJSON this "parsedUserAgent"}}
@@ -70,7 +70,6 @@
 		<div class="data">
 			<div class="data-container"></div>
 			<div class="panel panel-default">
-			<div class="panel-heading"></div>
 			<table id="contacts" class="table table-striped agile-ellipsis-dynamic"
 				url="core/api/bulk/update?action_type=DELETE">
 				<col width="0%">
@@ -90,7 +89,7 @@
                         <th></th>
 					</tr>
 				</thead>
-				<tbody id="gmap-table-model-list" class="gmap-table-model-list"
+				<tbody id="gmap-table-model-list" class="gmap-table-model-list agile-row"
 					route="contact/" style="overflow: scroll;overflow:hidden;">
 				</tbody>
 			</table>

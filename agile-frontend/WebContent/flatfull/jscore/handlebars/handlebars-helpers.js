@@ -679,15 +679,31 @@ $(function()
 					function(data)
 					{
 						var html = "";
+						var wonMsg = 'Deals with this milestone are considered as Won.';
+						var lostMsg = 'Deals with this milestone are considered as Lost.';
 						// var html = "<ul class='milestone-value-list
 						// tagsinput' style='padding:1px;list-style:none;'>";
 						if (data)
 						{
-							var milestones = data.split(",");
+							var milestones = data.milestones.split(",");
 							for ( var i in milestones)
 							{
-								html += "<tr data='" + milestones[i] + "' style='display: table-row;'><td><div class='inline-block v-top text-ellipsis' style='width:80%'>";
-								html += milestones[i] + "</div></td><td class='b-r-none'><div class='m-b-n-xs' style='display:none;'><a class='text-l-none-hover c-p text-xs'><i title='Drag' class='icon-move'></i></a><a class='milestone-delete c-p m-l-sm text-l-none text-xs'  data-toggle='modal' role='button' href='#'><i title='Delete Milestone' class='task-action icon icon-trash'></i></a></div></td></tr>";
+								html += "<tr data='" + milestones[i] + "' style='display: table-row;'><td><div class='milestone-name-block inline-block v-top text-ellipsis' style='width:80%'>";
+								if(milestones[i] == data.won_milestone){
+									html += milestones[i] + "<i data-toogle='tooltip' title='"+wonMsg+"' class='icon-like mark-won m-l-sm'></i></div></td><td class='b-r-none'><div class='m-b-n-xs'>";
+									html += "<a class='milestone-won text-l-none-hover c-p text-xs hover-show disabled' style='visibility:hidden;' data-toggle='tooltip' title='Set as Won Milestone'><i class='icon-like'></i></a>";
+									html += "<a class='milestone-lost text-l-none-hover c-p text-xs m-l-sm not-applicable hover-show' style='visibility:hidden;' data-toggle='tooltip' title='Set as Lost Milestone'><i class='icon-dislike'></i></a>";
+								} else if(milestones[i] == data.lost_milestone){
+									html += milestones[i] + "<i data-toogle='tooltip' title='"+lostMsg+"' class='icon-dislike mark-lost m-l-sm'></i></div></td><td class='b-r-none'><div class='m-b-n-xs'>";
+									html += "<a class='milestone-won text-l-none-hover c-p text-xs not-applicable hover-show' style='visibility:hidden;' data-toggle='tooltip' title='Set as Won Milestone'><i class='icon-like'></i></a>";
+									html += "<a class='milestone-lost text-l-none-hover c-p text-xs m-l-sm hover-show disabled' style='visibility:hidden;' data-toggle='tooltip' title='Set as Lost Milestone'><i class='icon-dislike'></i></a>";
+								} else{
+									html += milestones[i] + "</div></td><td class='b-r-none'><div class='m-b-n-xs'>";
+									html += "<a class='milestone-won text-l-none-hover c-p text-xs hover-show' style='visibility:hidden;' data-toggle='tooltip' title='Set as Won Milestone'><i class='icon-like'></i></a>";
+									html += "<a class='milestone-lost text-l-none-hover c-p text-xs m-l-sm hover-show' style='visibility:hidden;' data-toggle='tooltip' title='Set as Lost Milestone'><i class='icon-dislike'></i></a>";
+								}
+								html +=	"<a class='milestone-delete c-p m-l-sm text-l-none text-xs hover-show' style='visibility:hidden;' data-toggle='tooltip' title='Delete Milestone'><i class='icon icon-trash'></i>" +
+										"</a><a class='text-l-none-hover c-p text-xs m-l-sm hover-show' style='visibility:hidden;'><i title='Drag' class='icon-move'></i></a></div></td></tr>";
 								// html += "<li data='" + milestones[i] +
 								// "'><div><span>" + milestones[i] + "</span><a
 								// class='milestone-delete right'
@@ -998,7 +1014,6 @@ $(function()
 				element = element.split("properties_")[1];
 			if (element.indexOf("custom_") == 0)
 				element = element.split("custom_")[1];
-
 			element = element.replace("_", " ")
 
 			el = el.concat('<th>' + ucfirst(element) + '</th>');
@@ -1227,6 +1242,7 @@ $(function()
 		return CURRENT_DOMAIN_USER.domain;
 	});
 
+	
 	/*
 	 * To add comma in between the elements.
 	 */
@@ -2559,7 +2575,7 @@ $(function()
 		}
 		else if (value >= 40 && value < 75)
 		{
-			type = "bg-light dk text-tiny";
+			type = "bg-light text-tiny";
 			reputation = "Ok";
 		}
 		else if (value >= 75 && value < 90)
@@ -3638,6 +3654,13 @@ $(function()
 			return options.fn(this);
 	});
 
+	Handlebars.registerHelper('if_keyboard_shortcuts_enabled', function(options)
+	{
+		if (CURRENT_USER_PREFS.keyboard_shotcuts)
+			return options.fn(this);
+		return options.inverse(this);
+	});
+
 	Handlebars.registerHelper('campaigns_heading', function(value, options)
 	{
 		var val = 0;
@@ -3788,6 +3811,13 @@ $(function()
 		console.log(content);
 
 		return options.fn(content.match(/([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9._-]+)/gi)[0]);
+	});
+
+	Handlebars.registerHelper('if_keyboard_shortcuts_enabled', function(options)
+	{
+		if (CURRENT_USER_PREFS.keyboard_shotcuts)
+			return options.fn(this);
+		return options.inverse(this);
 	});
 
 	Handlebars.registerHelper('getCurrentContactPropertyBlock', function(value, options)
@@ -4710,7 +4740,7 @@ $(function()
 						}
 						else if (value >= 40 && value < 75)
 						{
-							type = "bg-light dk text-tiny";
+							type = "bg-light text-tiny";
 							reputation = "Ok";
 						}
 						else if (value >= 75 && value < 90)
@@ -6363,7 +6393,8 @@ $(function()
 	 * 
 	 */
 	Handlebars.registerHelper('timeAgo',function(dateString){
-
+		
+		
 		var date=new Date();
 		 try
 			{
@@ -6371,7 +6402,7 @@ $(function()
 			 var re = new RegExp(find, 'g');
 			 dateString = dateString.replace(re, '/');
 			 dateString = dateString.match(/[^:]+(\:[^:]+)?/g);
-			 date=new Date(dateString[0]);
+			 date = new Date(dateString[0]+' UTC');
 			}
 			catch (err)
 			{
@@ -6403,6 +6434,8 @@ $(function()
 	    }
 	    return new Handlebars.SafeString(Math.floor(seconds) + " seconds ago");
 
+		
+	
 		
 	});
 	
@@ -6597,6 +6630,8 @@ Handlebars.registerHelper('SALES_CALENDAR_URL', function()
 		description = 'Find current plan information, number of users and more.';
 	else if (p_name== 'Revenue Graph')
 		description = 'Forecasted revenue graph based on your Deals.';
+	else if (p_name== 'Mini Calendar')
+		description = 'A mini calendar with an overview of your agenda for the day.'
 	return description;
 			});
 
@@ -6696,4 +6731,12 @@ Handlebars.registerHelper('SALES_CALENDAR_URL', function()
 
 		       return options.fn(json);		        
 
+			});
+	
+	Handlebars.registerHelper('toggle_contacts_filter', function(options)
+			{	        
+		    if(readCookie(CONTACTS_DYNAMIC_FILTER_COOKIE_STATUS)=="hide"){
+			return "none";
+	       	}
+	    	
 			});

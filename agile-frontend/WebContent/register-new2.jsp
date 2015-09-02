@@ -7,7 +7,6 @@
 if (request.getAttribute("javax.servlet.forward.request_uri") == null) {
     response.sendRedirect("/register");
 }
-
 String _AGILE_VERSION = SystemProperty.applicationVersion.get();
 %>
 <!DOCTYPE html>
@@ -21,11 +20,6 @@ String _AGILE_VERSION = SystemProperty.applicationVersion.get();
 	content="width=device-width, initial-scale=1.0 maximum-scale=1">
 <meta name="description" content="">
 <meta name="author" content="">
-
-
-
-
-
 
 <style>
 body {
@@ -63,52 +57,9 @@ body {
 
 </style>
 <link rel="stylesheet" type="text/css" href="/flatfull/css/bootstrap.v3.min.css" />
-<link rel="stylesheet" type="text/css" href="/flatfull/css/font.css" />
 <link rel="stylesheet" type="text/css" href="/flatfull/css/app.css" />
 <link type="text/css" rel="stylesheet" href="/css/phonenumber-lib/intlTelInput.css" />
-<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
 
-
-<script type='text/javascript' src='/lib/jquery-new/jquery-2.1.1.min.js'></script>
-<script type="text/javascript" src="/lib/bootstrap.v3.min.js"></script>
-<script type="text/javascript" src="/lib/phonenumber-lib/intlTelInput.js"></script>
-
-
-<script>
-$(document).ready(function(){
-
-var telInput = $("#login_phone_number"),
-  errorMsg = $("#error-msg"),
-  validMsg = $("#valid-msg");
-
-// on blur: validate
-telInput.blur(function() { console.log("blur"); console.log($.trim(telInput.val()) + " : " + telInput.intlTelInput("isValidNumber"));
-  if ($.trim(telInput.val()) && telInput.intlTelInput("isValidNumber")) {
-        $(".custom-error").hide();
-  } else {
-     $(".custom-error").show();
-  }
-});
-
-
-	
-  
- 
-});
-</script>
-
-
-
-
-<script>
-$(document).ready(function(){
-
-	$("#login_phone_number").intlTelInput({
-				utilsScript: "lib/phonenumber-lib/utils.js",
-				responsiveDropdown : true
-			});
-});
-</script>
 <script type="text/javascript">
 var isSafari = (Object.prototype.toString.call(window.HTMLElement).indexOf('Constructor') > 0);
 var isWin = (window.navigator.userAgent.indexOf("Windows") != -1);
@@ -241,10 +192,43 @@ This is where you and your users will log in to your account
 </div>
 </div>
 
+<script type='text/javascript' src='//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js'></script>
+<script type="text/javascript" src="/lib/phonenumber-lib/intlTelInput.js"></script>
 <script src="/flatfull/registration/register.js?_v=<%=_AGILE_VERSION%>"   type="text/javascript"></script>
 <script type="text/javascript">
 var version = <%="\"" + VersioningUtil.getAppVersion(request) + "\""%>;
   var applicationId = <%="\"" + SystemProperty.applicationId.get() + "\""%>;
 	$("#password").value = "<%=request.getParameter("password")%>"
 </script>
+
+<script>
+$(document).ready(function(){
+
+	// Pre load dashlet files when don is active
+	preload_dashlet_libs();
+
+	var telInput = $("#login_phone_number"),
+	  errorMsg = $("#error-msg"),
+	  validMsg = $("#valid-msg");
+
+	// on blur: validate
+	telInput.blur(function() { console.log("blur"); console.log($.trim(telInput.val()) + " : " + telInput.intlTelInput("isValidNumber"));
+	  if ($.trim(telInput.val()) && telInput.intlTelInput("isValidNumber")) {
+	        $(".custom-error").hide();
+	  } else {
+	     $(".custom-error").show();
+	  
+}	});
+
+	$("#login_phone_number").intlTelInput({
+				utilsScript: "lib/phonenumber-lib/utils.js",
+				responsiveDropdown : true
+			});
+	
+});
+function preload_dashlet_libs(){ 
+	setTimeout(function(){head.load('/flatfull/final-lib/min/lib-all-min.js')}, 5000);
+}
+</script>
+
 </body>

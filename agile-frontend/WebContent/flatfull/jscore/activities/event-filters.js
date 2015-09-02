@@ -1,89 +1,6 @@
-$(function()
-{
-	$(".calendar_check").die().live('click', function(e)
-	{
-		showLoadingOnCalendar(true);
-		createRequestUrlBasedOnFilter();
-		var calendar = $(this).val();
-		var ownerids = '';
-		if (calendar == "agile")
-		{
-			if (this.checked == true)
-			{
-				ownerids = getOwnerIdsFromCookie(true);
-				renderFullCalenarEvents(ownerids);
-			}
-
-			else
-			{
-				ownerids = getOwnerIdsFromCookie(true);
-				removeFullCalendarEvents(ownerids);
-			}
-
-		}
-
-		if (calendar == "google"){
-			loadFullCalednarOrListView();
-		}
-		
-		if(calendar == "office"){
-			loadFullCalednarOrListView();
-		}
-
-	});
-
-	$(".calendar_user_check").die().live('click', function(e)
-	{
-		showLoadingOnCalendar(true);
-		// checkBothCalWhenNoCalSelected();
-		createRequestUrlBasedOnFilter();
-		// loadFullCalednarOrListView();
-		var user_id = $(this).val();
-		if (this.checked == true)
-		{
-			renderFullCalenarEvents(user_id);
-		}
-		else
-		{
-			removeFullCalendarEvents(user_id);
-		}
-
-		// $('.select_all_users').removeAttr("checked");
-
-	});
-
-	$('.select_all_users').die().live('click', function(event)
-	{ // on click
-		if (this.checked)
-		{ // check select status
-			$('.calendar_user_check').each(function()
-			{
-				this.checked = true;
-			});
-		}
-		else
-		{
-			$('.calendar_user_check').each(function()
-			{ // loop through each checkbox
-				if ($(this).val() != CURRENT_AGILE_USER.id)
-					this.checked = false;
-			});
-		}
-		createRequestUrlBasedOnFilter();
-		loadFullCalednarOrListView();
-	});
-
-	$('#event_time').die().live('change', function(event)
-	{ // on click
-		if ($("#event_time").val() == "future")
-			createCookie("agile_calendar_view", "calendar_list_view_future");
-		else
-			createCookie("agile_calendar_view", "calendar_list_view");
-		createRequestUrlBasedOnFilter();
-		loadFullCalednarOrListView();
-	});
-
-});
+/**
+ * creates request url based on values selected from calenar LHS filters
+ */
 
 function createRequestUrlBasedOnFilter()
 {
@@ -233,6 +150,9 @@ function loadFullCalednarOrListView()
 	}
 }
 
+/**
+ * when  no calenar selected i.e agile /google it enables checkboxes for both
+ */
 function checkBothCalWhenNoCalSelected()
 {
 	var selectedCal = [];
@@ -255,6 +175,11 @@ function checkBothCalWhenNoCalSelected()
 
 }
 
+
+/**
+ * 
+ * if google calendar sync is enabled then disappears link addtocalednar in lhs filters
+ */
 function putGoogleCalendarLink()
 {
 	var calEnable = false;
@@ -303,6 +228,10 @@ function putOfficeCalendarLink()
 	}
 }
 
+/**
+ * fetches and renders events in full calendar
+ * @param ownerid
+ */
 function renderFullCalenarEvents(ownerid)
 {
 	var start_end_time = JSON.parse(readCookie('fullcalendar_start_end_time'));
@@ -324,6 +253,10 @@ function renderFullCalenarEvents(ownerid)
 
 }
 
+/**
+ * removed full calendar events based on ids
+ * @param ownerid
+ */
 function removeFullCalendarEvents(ownerid)
 {
 	var start_end_time = JSON.parse(readCookie('fullcalendar_start_end_time'));
@@ -343,6 +276,12 @@ function removeFullCalendarEvents(ownerid)
 
 }
 
+
+/**
+ * if agile calenar is unchecked then from cookie it removes all userids and puts only current userid
+ * @param uncheckedagile
+ * @returns {String}
+ */
 function getOwnerIdsFromCookie(uncheckedagile)
 {
 	var eventFilters = JSON.parse(readCookie('event-lhs-filters'));
@@ -369,6 +308,10 @@ function getOwnerIdsFromCookie(uncheckedagile)
 	return agile_event_owners;
 }
 
+
+/**
+ * fetches google events
+ */
 function loadGoogleEventsandRender()
 {
 	var start_end_time = JSON.parse(readCookie('fullcalendar_start_end_time'));
@@ -418,6 +361,11 @@ function loadGoogleEventsandRender()
 	});
 }
 
+
+/**
+ * renders event to fullcalednar by changing color based on Owner id
+ * @param data
+ */
 function renderAddedEventToFullCalenarBasedOnCookie(data)
 {
 	try
@@ -463,6 +411,12 @@ function renderAddedEventToFullCalenarBasedOnCookie(data)
 	}
 }
 
+
+/**
+ * sets color to event based on owner id
+ * @param data
+ * @returns {___anonymous8560_8563}
+ */
 function renderEventBasedOnOwner(data)
 {
 	try
@@ -502,6 +456,12 @@ function renderEventBasedOnOwner(data)
 	return data;
 }
 
+
+/**
+ * while editing event in full calendar its priority will be set based on color of event
+ * @param event
+ * @returns {___anonymous10119_10123}
+ */
 function revertEventColorBasedOnPriority(event)
 {
 	if (event.className == "fc-b-l,fc-b-2x,fc-b-danger,fc-border-height,fc-event-month" || event.className == "high,fc-b-l,fc-b-2x,fc-b-light,fc-border-height,fc-event-month" || event.className == "fc-b-l fc-b-2x fc-b-danger fc-border-height fc-event-month" || event.className == "high fc-b-l fc-b-2x fc-b-light fc-border-height fc-event-month")
@@ -514,6 +474,10 @@ function revertEventColorBasedOnPriority(event)
 
 }
 
+/**
+ * shows loading symbol while fetching events
+ * @param loading
+ */
 function showLoadingOnCalendar(loading)
 {
 	if (loading)
