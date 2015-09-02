@@ -281,6 +281,10 @@ function getTemplateUrls(templateName)
 	{
 		template_relative_urls.push("webpages.js");
 	}
+	if (templateName.indexOf("billing-settings") == 0)
+	{
+		template_relative_urls.push("settings.js");
+	}
 	return template_relative_urls;
 }
 

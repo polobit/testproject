@@ -22,6 +22,8 @@ import com.stripe.model.Coupon;
 import com.stripe.model.Customer;
 import com.stripe.model.CustomerSubscriptionCollection;
 import com.stripe.model.Invoice;
+import com.stripe.net.RequestOptions;
+import com.stripe.net.RequestOptions.RequestOptionsBuilder;
 
 /**
  * <code>StringImpl</code> is implementation {@link AgileBilling}, This
@@ -296,6 +298,11 @@ public class StripeImpl implements AgileBilling {
 	 * */
 	public List<Invoice> getInvoices(JSONObject stripeCustomer)
 			throws StripeException {
+
+		RequestOptionsBuilder builder = new RequestOptionsBuilder();
+		builder.setStripeVersion("2015-08-07");
+		RequestOptions options = builder.build();
+
 		Map<String, Object> invoiceParams = new HashMap<String, Object>();
 
 		// Sets invoice parameters (Stripe customer id is required to get
@@ -306,7 +313,7 @@ public class StripeImpl implements AgileBilling {
 		 * Fetches all invoices for given stripe customer id and returns
 		 * invoices
 		 */
-		return Invoice.all(invoiceParams).getData();
+		return Invoice.all(invoiceParams, options).getData();
 	}
 
 	/**

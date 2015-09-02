@@ -1,40 +1,58 @@
 <script id="invoice-collection-template" type="html/text">
+<div class="panel-heading">
+			<div class="text-lg">Invoices</div>
+		</div>
 <div class="row">
-    <div class="span12">
-        <div class="page-header">
-            <h1>Invoice <small>AgileCrm</small></h1>
-        </div>
-    </div>
-</div>
-<div class="row">
-    <div class="span9">
+    <div class="col-md-12">
         <table class="table table-striped" id="sort-table">
             <thead>
                 <tr>
-                    <th>Description</th>
-                    <th>From Date</th>
-                    <th>To Date</th>
+                    <th>Plan</th>
+                    <th>Bill Date</th>
                     <th>Amount</th>
                 </tr>
             </thead>
-            <tbody id="invoice-model-list" class="model-list-cursor">
+
+            <tbody id="invoice-model-list" route="invoice/" class="model-list-cursor">
+
             </tbody>
         </table>
     </div>
 </div>
 </script>
 <script id="invoice-model-template" type="text/html">
-	{{#each lines.data}}	
-{{#if this.plan}}
-	<td class="data" data="{{this.id}}">
-    	{{this.plan.name}}
+{{#each lines.data}}
+{{#if_greater amount 0}}
+	<td class="data" data="{{../../id}}" >
+		{{#if this.plan}}
+{{#containString "Email" plan.name}}
+Emails
+{{else}}
+{{this.plan.name}}
+{{/containString}}
+        
+        {{/if}}
 	</td>
-	<td>{{epochToHumanDate "mm/dd/yyyy" period.start}}</td>
-	<td>{{epochToHumanDate "mm/dd/yyyy" period.end}}</td>
-	<td>{{this.plan.amount}}</td>
-
-{{/if}}
-{{/each}}		
+	<td data="{{../../id}}">
+		{{#if this.plan}}
+		{{#containString "Email" plan.name}}
+        {{epochToHumanDate "mm/dd/yyyy" period.start}}
+<br>
+<small>(charged @ ${{numeric_operation plan.amount 100 "/"}}/1000)</small>
+        {{else}}
+{{epochToHumanDate "mm/dd/yyyy" period.start}}
+<br>
+			<small>(for the period {{epochToHumanDate "mm/dd/yyyy" period.start}} to {{epochToHumanDate "mm/dd/yyyy" period.end}})</small>
+		{{/containString}}
+		{{/if}}
+    </td>
+	<td data="{{../../id}}">
+		{{#if this.plan}}
+${{get_amount_with_possitive amount}}
+		{{/if}}
+    </td>
+{{/if_greater}}
+{{/each}}
 </script>
 
 <script id="invoice-partial-collection-template" type="html/text">
@@ -52,15 +70,20 @@
         </table>
 </script>
 <script id="invoice-partial-model-template" type="text/html">
-	{{#each lines.data}}	
+{{#each lines.data}}
 {{#if this.plan}}
-	<td class="data" data="{{this.id}}">
+	<td class="data" data="{{../id}}" >
     	{{this.plan.name}}
 	</td>
-	<td>{{epochToHumanDate "mm/dd/yyyy" period.start}}</td>
-	<td>{{epochToHumanDate "mm/dd/yyyy" period.end}}</td>
-	<td>{{this.plan.amount}}</td>
-
+	<td data="{{../id}}">
+		{{epochToHumanDate "mm/dd/yyyy" period.start}}
+	</td>
+	<td data="{{../id}}">
+   		{{epochToHumanDate "mm/dd/yyyy" period.end}}
+    </td>
+	<td data="{{../id}}">
+    	${{numeric_operation plan.amount 100 "/"}}
+    </td>
 {{/if}}
-{{/each}}		
+{{/each}}
 </script>
