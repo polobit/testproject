@@ -298,7 +298,10 @@ function initializeSubscriptionListeners(){
 		
 		$('#subscribe_plan_change').on('click', '#purchase-email-plan', function(e){
 					
-					
+				if(!email_validation($("#email-plan-form")))
+				{
+					e.preventDefault();
+				}
 			          var emailQuantity = $("#email-quantity").val();
 			          var emailCost = $("#emails_total_cost").text();
 			          var emailRate = $("#email_rate").text();
@@ -464,10 +467,6 @@ function initializeSubscriptionListeners(){
 				}
 				
 				email_validation($("#email-plan-form"));
-				if(e.which == 13)
-				{
-					e.preventDefault();
-					}
 			});
     	
 }   
