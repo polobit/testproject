@@ -1,0 +1,192 @@
+ <script id="billing-settings-template" type="text/html"> 
+<div class="">
+<div class="bg-light lter b-b wrapper-md">
+<h1 class="m-n font-thin h3">Billing Settings<small></small></h1>
+</div>
+   
+    <!-- <div class="app-content-full  h-full enable-full-height"> -->  
+    <div>
+	<div class="hbox hbox-auto-xs hbox-auto-sm bg-light">
+	<div class="col w b-r">
+    <div class="vbox">
+      <div class="row-row">
+		<div id="BillingSettingsTab" class="list-group list-group-lg no-radius no-border no-bg m-b-none">
+		
+			<a href="#account-details" class="account-details-tab list-group-item  select">Account Details</a>
+			<a href="#invoice-details" class="invoice-details-tab list-group-item">Invoice Details</a>
+			
+		
+		</div>
+		</div>
+		</div>
+		</div>
+		<div class="tab-content wrapper-md p-t-none" style="padding-top: 5px !important;">
+			<div class="tabs" id="billing-settings-tab-content"></div>
+		</div>
+		
+	
+</div>
+</div>
+</div>
+</script>
+<script id="account-details-template" type="text/html">
+<div class="row">
+
+
+<div class="col-md-5" id="plan-details-pane"><div>
+<div class="panel panel-default">
+	<div class="panel-heading">
+		<p class="h4 text-center">Current Plan Details</p>
+	</div>
+	<div class="panel-body">
+		<div class="form-horizontal">
+          <div class="p-t-lg text-center m-b">
+ <img src="/flatfull/img/free-plan.png" height="110" width="132">
+                        </div>
+
+		{{#check_plan "FREE"}}
+		<div class="control-group form-group m-b-none p-l-xxl">
+				<label class="col-md-5 text-right">Subscribed Plan:</label>
+				<label class="col-md-5 text-left">Free</label>
+			</div>
+			<div class="control-group form-group m-b-none p-l-xxl">
+  				<label class="col-md-5 text-right">Number of Users:</label>
+				<label class="col-md-5 text-left">-</label>
+			</div>
+			
+			<div class="control-group form-group m-b-none p-l-xxl">
+  				<label class="col-md-5 text-right">Billing Cycle:</label>
+				<label class="col-md-5 text-left">-</label>
+			</div>
+
+		{{else}}
+{{#stringToJSON this "billingData"}}{{/stringToJSON}}
+	    <div class="control-group form-group m-b-none p-l-xxl">
+				<label class="col-md-5 text-right">Subscribed Plan:</label>
+				<label class="col-md-5 text-left">{{getAccountPlanName ../plan.plan_type}}</label>
+			</div>
+			<div class="control-group form-group m-b-none p-l-xxl">
+  				<label class="col-md-5 text-right">Number of Users:</label>
+				<label class="col-md-5 text-left">{{this.billingData.subscription.quantity}}</label>
+			</div>
+			
+			<div class="control-group form-group m-b-none p-l-xxl" >
+  				<label class="col-md-5 text-right">Billing Cycle:</label>
+				<label class="col-md-5 text-left">{{getAccountPlanInteval ../plan.plan_type}}</label>
+			</div>
+			
+		{{/check_plan}}
+         
+			
+		</div> 
+
+<div class="text-center">
+  <a class="btn btn-sm btn-primary" href="#subscribe">
+
+				Change Plan</a>
+</div>
+<!--<a style="margin-top:6px;float:right;cursor:pointer;text-decoration:none" id="user-plan-details-popover"><i class="icon-user"></i> Plan Details</a> -->
+</div>
+
+</div></div></div><div class="col-md-5" id="plan-details-pane"><div>
+<div class="panel panel-default">
+	<div class="panel-heading">
+		<p class="h4 text-center">Existing Credit Card</p>
+	</div>
+	<div class="panel-body">
+		<div class="form-horizontal">
+          <div class="p-t-lg text-center m-b">
+                           <img src="/flatfull/img/no-credit-card.png" height="110" width="132">
+                        </div>
+{{#stringToJSON this "billingData"}}{{/stringToJSON}}
+{{#if billingData}}
+	<div class="card-details">
+<div class="control-group p-b-md p-t-xs"></div>
+<div class="control-group form-group m-b-none p-l-xxl">
+  				<label class="col-md-5 text-right">Credit card:</label>
+				<label class="col-md-5 text-left">**** **** **** {{this.billingData.cards.data.0.last4}} </label>
+			</div>
+<div class="control-group form-group m-b-none p-l-xxl">
+  				<label class="col-md-5 text-right">Expiration:</label>
+				<label class="col-md-5 text-left">{{getMonthFromIndex this.billingData.cards.data.0.expMonth}}, {{this.billingData.cards.data.0.expYear}}  </label>
+			</div>
+	</div>
+{{else}}
+
+<div class="card-details">
+<div class="control-group p-b-md p-t-xs"></div>
+<div class="control-group form-group m-b-none p-l-xxl">
+  				<label class="col-md-5 text-right">Credit card:</label>
+				<label class="col-md-5 text-left">-</label>
+			</div>
+<div class="control-group form-group m-b-none p-l-xxl">
+  				<label class="col-md-5 text-right">Expiration:</label>
+				<label class="col-md-5 text-left">-</label>
+			</div>
+	</div>
+
+{{/if}}
+
+<div class="text-center">
+  <a class="btn btn-sm btn-primary" href="#subscribe">
+				Change Card</a>
+</div>
+
+</div>
+</div>
+</div> 
+
+	<!--<a style="margin-top:6px;float:right;cursor:pointer;text-decoration:none" id="user-plan-details-popover"><i class="icon-user"></i> Plan Details</a> -->
+</div>
+
+</div>
+</div>
+</script>
+<script id="invoice-details-template" type="text/html">
+
+	<div class="row m-t m-b-sm">
+	<div class="col-md-12">
+<div class="panel panel-default">
+		
+
+			<div id="invoice-details-holder"></div>
+</div>
+	
+</div>
+</div>
+
+</script>
+<script id="charge-collection-template" type="html/text">
+	{{#if this.length}}
+        <table class="table table-striped m-b-none" id="sort-table">
+            <thead>
+                <tr>
+					<th>Plan</th>
+					<th>Description</th>
+				 	<th>Date</th>
+                    <th>Amount</th>
+                </tr>
+            </thead>
+            <tbody id="charge-model-list" class="model-list-cursor">
+            </tbody>
+        </table>
+	{{else}}
+		<div class="wrapper-sm">
+			No recent payments.
+		</div>
+	{{/if}}
+</script>
+<script id="charge-model-template" type="text/html">
+ 
+{{#if paid}}
+
+ <td>{{plan.name}} (${{numeric_operation plan.amount 100 "/"}}/{{plan.interval}}) <br/> for the period {{epochToHumanDate "mm/dd/yyyy" period.start}} - {{epochToHumanDate "mm/dd/yyyy" period.end}}</td>
+ <td>{{description}}</td>
+ <td class="data text-muted" data="{{invoice}}"><i class="fa fa-clock-o m-r-xs"></i><time class="time-ago" datetime="{{epochToHumanDate "" created}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" created}}</time></td>	
+    <td >
+    	${{numeric_operation amount 100 "/"}} {{#if refunded}}  (Refunded) {{/if}}{{#unless refunded}}{{#if_not_equals amountRefunded 0}} (Refunded ${{numeric_operation amountRefunded 100 "/"}}){{/if_not_equals}}{{/unless}}
+	</td>
+{{/if}}
+</script>
+<script id="account-template" type="text/html">
+</script>
