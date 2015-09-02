@@ -60,7 +60,7 @@
     								<span class="sr-only">Toggle Dropdown</span>
   								</a>
   								<ul class="dropdown-menu" role="menu">
-    								<li><a class="btn btn-sm add_to_all" href="#{{name}}" widget-name="{{name}}">Add for all Users</a></li>    									
+    								<li><a class="btn btn-sm add_to_all" href="#{{name}}" widget-name="{{name}}">Add for all users</a></li>    									
   								</ul>
 							</div>
 						{{else}}
@@ -78,7 +78,7 @@
     											<span class="sr-only">Toggle Dropdown</span>
   											</a>
   											<ul class="dropdown-menu" role="menu">
-    											<li><a class="btn btn-sm add_to_all" href="#callscript" widget-name="{{name}}">Add for all Users</a></li>    									
+    											<li><a class="btn btn-sm add_to_all" href="#callscript" widget-name="{{name}}">Add for all users</a></li>    									
   											</ul>
 										</div>
 									{{else}}
@@ -96,7 +96,7 @@
     													<span class="sr-only">Toggle Dropdown</span>
   													</a>
   													<ul class="dropdown-menu" role="menu">
-    													<li><a class="btn btn-sm add_to_all" href="#{{name}}" widget-name="{{name}}">Add for all Users</a></li>    									
+    													<li><a class="btn btn-sm add_to_all" href="#{{name}}" widget-name="{{name}}">Add for all users</a></li>    									
   													</ul>
 												</div>
 											{{else}}
@@ -114,7 +114,7 @@
     										<span class="sr-only">Toggle Dropdown</span>
   										</a>
   										<ul class="dropdown-menu" role="menu">
-    										<li><a class="btn btn-sm add_to_all" href="#{{name}}" widget-name="{{name}}">Add for all Users</a></li>    									
+    										<li><a class="btn btn-sm add_to_all" href="#{{name}}" widget-name="{{name}}">Add for all users</a></li>    									
   										</ul>
 									</div>
 								{{else}}
@@ -140,17 +140,25 @@
 					<div class="clearfix"></div>
 					{{/if_equals}}  
 					<div style="/*margin: 40px auto; width: 50%;*/ display:inline;">
-					{{#isAdmin}}												
-						<div class="btn-group pos-abs m-l-n-lg">										
-  							<a class="btn btn-sm btn-default _upgrade" id="{{#is_blank name}}{{getRandomNumber}}{{else}}{{this}}{{/is_blank}}-upgrade">Add</a>
-  							<a type="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-    							<span class="caret"></span>
-    							<span class="sr-only">Toggle Dropdown</span>
-  							</a>
-  							<ul class="dropdown-menu" role="menu">    							
-								<li><a class="btn btn-sm _upgrade" id="{{#is_blank name}}{{getRandomNumber}}{{else}}{{this}}{{/is_blank}}-upgrade">Add for all Users</a></li>    									
-  							</ul>
-						</div>
+					{{#isAdmin}}
+						{{#if_equals name "Sip"}}
+							<a class="btn btn-sm btn-default _upgrade" id="{{#is_blank name}}{{getRandomNumber}}{{else}}{{this}}{{/is_blank}}-upgrade">Add</a>
+						{{else}}
+							{{#if_equals name "TwilioIO"}}
+								<a class="btn btn-sm btn-default _upgrade" id="{{#is_blank name}}{{getRandomNumber}}{{else}}{{this}}{{/is_blank}}-upgrade">Add</a>
+							{{else}}											
+								<div class="btn-group pos-abs m-l-n-lg">										
+  									<a class="btn btn-sm btn-default _upgrade" id="{{#is_blank name}}{{getRandomNumber}}{{else}}{{this}}{{/is_blank}}-upgrade">Add</a>
+  									<a type="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+    									<span class="caret"></span>
+    									<span class="sr-only">Toggle Dropdown</span>
+  									</a>
+  									<ul class="dropdown-menu" role="menu">    							
+										<li><a class="btn btn-sm _upgrade" id="{{#is_blank name}}{{getRandomNumber}}{{else}}{{this}}{{/is_blank}}-upgrade">Add for all users</a></li>    									
+  									</ul>
+								</div>
+							{{/if_equals}}
+						{{/if_equals}}
 					{{else}}
 						<a class="btn btn-sm btn-default _upgrade" id="{{#is_blank name}}{{getRandomNumber}}{{else}}{{this}}{{/is_blank}}-upgrade">Add</a>
 					{{/isAdmin}} 					                 						
@@ -240,7 +248,7 @@
     									<span class="sr-only">Toggle Dropdown</span>
   									</a>
   									<ul class="dropdown-menu" role="menu">
-    									<li><a class="btn btn-sm add_to_all" id="add-custom-widget">Add for all Users</a></li>    									
+    									<li><a class="btn btn-sm add_to_all" id="add-custom-widget">Add for all users</a></li>    									
   									</ul>
 								</div>
 							{{else}}

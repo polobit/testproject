@@ -228,6 +228,9 @@ public class ScribeUtil
 	    String serviceName, Token accessToken, String code) throws IOException
     {
 
+    
+    String isForAll = String.valueOf(req.getSession().getAttribute("isForAll"));
+    	
 	// We use Scribe for OAuth2 Authentication as well
 	if (serviceName.equalsIgnoreCase(ScribeServlet.SERVICE_TYPE_OAUTH_LOGIN))
 	{
