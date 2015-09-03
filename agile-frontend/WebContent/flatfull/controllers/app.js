@@ -84,7 +84,13 @@ function currentRoute(route)
 	}
 	if (GLOBAL_WEBRULE_FLAG)
 	{
-		_agile_execute_web_rules();
+		  if(typeof _agile_execute_action == "function")
+		  {
+		        _agile_webrules();
+		        return;
+		  }
+
+		 _agile_execute_web_rules();
 	}
 	// disposeEvents();
 
