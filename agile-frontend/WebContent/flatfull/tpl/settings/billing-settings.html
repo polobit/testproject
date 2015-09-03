@@ -46,11 +46,11 @@
 
 		{{#check_plan "FREE"}}
 		<div class="control-group form-group m-b-none p-l-xxl">
-				<label class="col-md-5 text-right">Subscribed Plan:</label>
+				<label class="col-md-5 text-right">Plan:</label>
 				<label class="col-md-5 text-left">Free</label>
 			</div>
 			<div class="control-group form-group m-b-none p-l-xxl">
-  				<label class="col-md-5 text-right">Number of Users:</label>
+  				<label class="col-md-5 text-right">Users:</label>
 				<label class="col-md-5 text-left">2</label>
 			</div>
 			
@@ -61,20 +61,21 @@
 
 		{{else}}
 {{#stringToJSON this "billingData"}}{{/stringToJSON}}
+
 	    <div class="control-group form-group m-b-none p-l-xxl">
-				<label class="col-md-5 text-right">Subscribed Plan:</label>
+				<label class="col-md-5 text-right">Plan:</label>
 				<label class="col-md-5 text-left">{{getAccountPlanName ../plan.plan_type}}</label>
 			</div>
 			<div class="control-group form-group m-b-none p-l-xxl">
-  				<label class="col-md-5 text-right">Number of Users:</label>
-				<label class="col-md-5 text-left">{{this.billingData.subscription.quantity}}</label>
+  				<label class="col-md-5 text-right">Users:</label>
+				<label class="col-md-5 text-left">{{this.plan.quantity}}</label>
 			</div>
 			
 			<div class="control-group form-group m-b-none p-l-xxl" >
   				<label class="col-md-5 text-right">Billing Cycle:</label>
 				<label class="col-md-5 text-left">{{getAccountPlanInteval ../plan.plan_type}}</label>
 			</div>
-			
+		
 		{{/check_plan}}
          
 			
@@ -105,11 +106,11 @@
 <div class="control-group p-b-md p-t-xs"></div>
 <div class="control-group form-group m-b-none p-l-xxl">
   				<label class="col-md-5 text-right">Credit Card:</label>
-				<label class="col-md-5 text-left">**** **** **** {{this.billingData.cards.data.0.last4}} </label>
+				<label class="col-md-5 text-left">**** {{this.billingData.cards.data.0.last4}} </label>
 			</div>
 <div class="control-group form-group m-b-none p-l-xxl">
   				<label class="col-md-5 text-right">Expiration:</label>
-				<label class="col-md-5 text-left">{{getMonthFromIndex this.billingData.cards.data.0.expMonth}}, {{this.billingData.cards.data.0.expYear}}  </label>
+				<label class="col-md-5 text-left">{{#if_less_than billingData.cards.data.0.expMonth 9}}0{{billingData.cards.data.0.expMonth}}{{else}}{{billingData.cards.data.0.expMonth}}{{/if_less_than}} / {{billingData.cards.data.0.expYear}}</label>
 			</div>
 	</div>
 {{else}}
@@ -127,9 +128,8 @@ You can upgrade your account at any time.
 
 <div class="text-center">
   <a class="btn btn-sm btn-primary" href="#subscribe" style="background-color: #87bd4b; border-color: #8bbf51;">
-				Update</a>
+				Update Card</a>
 </div>
-
 </div>
 </div>
 </div> 
@@ -142,8 +142,8 @@ You can upgrade your account at any time.
 {{#check_plan "FREE"}}
 {{else}}
 <div>
-<a href="#"  id="cancel-account" class="col-md-10 text-right text-lg text-info" style="
-">Cancel My Account</a>
+<a href="#"  id="cancel-account" class="col-md-10 text-right text-lg text-info m-t-n-md p-r-xs" style="font-size:12px;
+">Cancel Account</a>
 </div>
 {{/check_plan}}
 </script>
