@@ -109,8 +109,8 @@ function isDateCustomField(customDatefields,property){
 function setupViews(cel, button_name) {
 
 	// Creates a view for custom views
-	head.load(CSS_PATH + 'css/bootstrap_submenu.css',  function()
-	{
+	/*head.load(CSS_PATH + 'css/bootstrap_submenu.css',  function()
+	{*/
 		var el = getTemplate("contact-view-collection");
 		$("#view-list", cel).html(el);
 		/*$("#view-list", cel).find('.dropdown-menu').find(".dropdown-submenu").on("click",function(e){
@@ -128,7 +128,7 @@ function setupViews(cel, button_name) {
 			$('#contact-view-model-list>li').css('display','none');
 			$('#contact-view-model-list>li:first').css('display','list-item');
 		}
-	});
+	// });
 }
 
 function updateSelectedSortKey(el) {

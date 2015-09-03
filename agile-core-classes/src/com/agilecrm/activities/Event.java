@@ -268,6 +268,11 @@ public class Event extends Cursor
 		return null;
 	}
 
+	
+	/**
+	 * adds related contact ids
+	 * @param id
+	 */
 	public void addContacts(String id)
 	{
 		if (contacts == null)
@@ -383,6 +388,12 @@ public class Event extends Cursor
 		return "";
 	}
 
+	
+	/**
+	 * gets the owner based along with event entity
+	 * @param event1
+	 * @return
+	 */
 	@XmlElement
 	public DomainUser getOwner(Event event1)
 	{
@@ -407,6 +418,13 @@ public class Event extends Cursor
 		return null;
 	}
 
+	
+	/**
+	 * gets owner pic of along event entity
+	 * @param event2
+	 * @return
+	 * @throws Exception
+	 */
 	@XmlElement
 	public String getOwnerPic(Event event2) throws Exception
 	{

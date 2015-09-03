@@ -174,7 +174,7 @@ $(function(){
     				return;
     			}
     						
-    			var url = '/core/api/campaigns/enroll/' + contact_id + '/' + workflow_id;
+    			var url = '/core/api/campaigns/enroll/' + agile_crm_get_contact()['id'] + '/' + workflow_id;
     			
     			$.ajax({
     				url: url,
@@ -204,7 +204,7 @@ $(function(){
     					}
     					
     					// Navigate back to contact detail view
-    					Backbone.history.navigate("contact/" + contact_id, {
+    					Backbone.history.navigate("contact/" + agile_crm_get_contact()['id'], {
     						trigger: true
     					});
     				}

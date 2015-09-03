@@ -488,6 +488,7 @@ color;
 /* Not to overide z-index of datepicker due to timepicker modal */
 .datepicker {
 	z-index: 2050 !important;
+	min-width: 170px;
 }
 
 /*for information block */
@@ -1897,6 +1898,18 @@ text-overflow:ellipsis;
 	visibility:visible!important;
 }
 
+.milestones-table tbody tr:hover td:last-child .hover-show {
+	visibility: visible !important;
+}
+
+.milestones-table tbody tr:hover td:last-child .hover-hide {
+	visibility: hidden !important;
+}
+
+a.disabled i {
+	color: #dee5e7;
+}
+
 #deal-tracks-accordion .accordion-heading:hover #icons {
 	display: block!important;
 }
@@ -2565,3 +2578,16 @@ div.cat-addtocart-row.row1 span,div.cat-addtocart-row.row2 span {
 {
 	font-size:75%;
 }*/
+
+select.input-xs{
+	height: 25px;
+    line-height: 30px;
+    padding: 0px 6px;
+}
+.mce-panel{
+	    border: 0 solid #CFDADD;
+}
+
+.tooltip-inner {
+	max-width: 260px;
+}

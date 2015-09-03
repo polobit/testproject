@@ -22,6 +22,7 @@ $(function(){
 		 * If forceCompany - hide company input & show non-cancellable company name tag.
 		 * Else - enable things by default
 		 */
+		$("#personModal").off('show.bs.modal');
 		$("#personModal").on('show.bs.modal',function(data)
 		{
 			if(forceCompany.doit==true)
@@ -72,8 +73,8 @@ $(function(){
 		 */
 		$("#personModal").on('shown.bs.modal', function(data){
 			setup_tags_typeahead();
-			
-			var stat=$("#personForm #contact_company").attr('display');
+
+			var stat=$("#personForm #contact_company").css('display');
 			if( stat!='none')
 			{
 				/**
@@ -152,6 +153,14 @@ $(function(){
 	    	if($("body").hasClass("modal-open"))
 	    		$("body").removeClass("modal-open");
 	    });
+
+	    $('#tutorialModal').on("hidden.bs.modal", function(e){
+			var parent = $("#tutorialModal iframe").parent();
+			var $iframe = parent.html();
+			parent.html(" ");
+			parent.html($iframe);
+
+		});
 });
 
 /**

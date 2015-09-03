@@ -163,6 +163,13 @@ function set_p_portlets(base_model){
 		else
 			$('.gridster > div:visible > div:last',this.el).after($(App_Portlets.accountView.render().el).attr("id","ui-id-"+base_model.get("column_position")+"-"+base_model.get("row_position")).attr("data-sizey",base_model.get("size_y")).attr("data-sizex",base_model.get("size_x")).attr("data-col",base_model.get("column_position")).attr("data-row",base_model.get("row_position")).addClass('gs-w panel panel-default'));
 	}
+	else if(base_model.get('portlet_type')=="TASKSANDEVENTS" && base_model.get('name')=="Mini Calendar"){
+		App_Portlets.miniCal = new Base_Model_View({ model : base_model, template : "portlets-minicalendar-model", tagName : 'div' });
+		if($('.gridster > div:visible > div',this.el).length==0)
+			$('.gridster > div:visible',this.el).html($(App_Portlets.miniCal.render().el).attr("id","ui-id-"+base_model.get("column_position")+"-"+base_model.get("row_position")).attr("data-sizey",base_model.get("size_y")).attr("data-sizex",base_model.get("size_x")).attr("data-col",base_model.get("column_position")).attr("data-row",base_model.get("row_position")).addClass('gs-w panel panel-default mini-cal'));
+		else
+			$('.gridster > div:visible > div:last',this.el).after($(App_Portlets.miniCal.render().el).attr("id","ui-id-"+base_model.get("column_position")+"-"+base_model.get("row_position")).attr("data-sizey",base_model.get("size_y")).attr("data-sizex",base_model.get("size_x")).attr("data-col",base_model.get("column_position")).attr("data-row",base_model.get("row_position")).addClass('gs-w panel panel-default mini-cal'));
+		}
 	else if(base_model.get('portlet_type')=="USERACTIVITY" && base_model.get('name')=="User Activities"){
 			posi=base_model.get("column_position")+''+base_model.get("row_position")
 		App_Portlets.activitiesView[parseInt(posi)] = new Base_Model_View({ model : base_model, template : "portlets-activites-model", tagName : 'div' });
@@ -594,14 +601,16 @@ function set_p_portlets(base_model){
 				milestonesList=data["milestonesList"];
 				milestoneValuesList=data["milestoneValuesList"];
 				milestoneMap=data["milestoneMap"];
+				wonMilestone=data["wonMilestone"];
+				lostMilestone=data["lostMilestone"];
 				
 				var funnel_data=[];
 				var temp;
 				
 				$.each(milestonesList,function(index,milestone){
 					var each_data=[];
-					if(milestone!='Lost'){
-						if(milestone!='Won')
+					if(milestone!=lostMilestone){
+						if(milestone!=wonMilestone)
 							each_data.push(milestone,milestoneValuesList[index]);
 						else
 							temp=index;
@@ -827,7 +836,6 @@ function set_p_portlets(base_model){
 							}
 							cnt++;
 						}
-
 					});
 				});
 				
@@ -1368,6 +1376,20 @@ function set_p_portlets(base_model){
 		}
 	});
 	//enablePortletTimeAndDates(base_model);
+	head.js(LIB_PATH + 'lib/jquery-ui.min.js', 'lib/fullcalendar.min.js', function()
+			{
+				$('.portlet_body_calendar', this.el).each(function(){
+		if($(this).parent().attr('id')=='ui-id-'+column_position+'-'+row_position && base_model.get('name')=="Mini Calendar"){
+			$(this).find('.events_show').html(getRandomLoadingImg());
+			setPortletContentHeight(base_model);
+			App_Portlets.refetchEvents = false;
+			minicalendar($(this));
+			
+			if(base_model.get('is_minimized'))
+				$(this).hide();
+		}
+	});
+	});
 }
 
 /**
@@ -2082,7 +2104,24 @@ function setPortletContentHeight(base_model){
 		
 		$('#'+base_model.get("id")).parent().find('.portlet_body').css("overflow-x","hidden");
 		$('#'+base_model.get("id")).parent().find('.portlet_body').css("overflow-y","auto");
-	}*/else{
+
+	}*/
+	else if(base_model.get("name")=="Mini Calendar"){
+		if(base_model.get("size_y")==1){
+			$('#'+base_model.get("id")).parent().find('.portlet_body_calendar').css("height",(base_model.get("size_y")*200)+"px");
+			$('#'+base_model.get("id")).parent().find('.portlet_body_calendar').css("max-height",(base_model.get("size_y")*200)+"px");
+		}else if(base_model.get("size_y")==2){
+			$('#'+base_model.get("id")).parent().find('.portlet_body_calendar').css("height",(base_model.get("size_y")*200)+25+"px");
+			$('#'+base_model.get("id")).parent().find('.portlet_body_calendar').css("max-height",(base_model.get("size_y")*200)+25+"px");
+		}else if(base_model.get("size_y")==3){
+			$('#'+base_model.get("id")).parent().find('.portlet_body_calendar').css("height",(base_model.get("size_y")*200)+50+"px");
+			$('#'+base_model.get("id")).parent().find('.portlet_body_calendar').css("max-height",(base_model.get("size_y")*200)+50+"px");
+		}
+		
+		//$('#'+base_model.get("id")).parent().find('.portlet_body_calendar').css("overflow-x","auto");
+		//$('#'+base_model.get("id")).parent().find('.portlet_body_calendar').css("overflow-y","auto");
+	}
+	else{
 		if(base_model.get("size_y")==1){
 			$('#'+base_model.get("id")).parent().find('.portlet_body').css("height",(base_model.get("size_y")*200)-45+"px");
 			$('#'+base_model.get("id")).parent().find('.portlet_body').css("max-height",(base_model.get("size_y")*200)-45+"px");

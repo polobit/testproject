@@ -319,8 +319,8 @@
 	function setupCompanyViews(cel, button_name) {
 
 		// Creates a view for custom views
-		head.load(CSS_PATH + 'css/bootstrap_submenu.css',  function()
-		{
+		/*head.load(CSS_PATH + 'css/bootstrap_submenu.css',  function()
+		{*/
 			var el = getTemplate("company-view-collection");
 			$("#view-list", cel).html(el);
 			updateSelectedSortKey($("#view-list", cel));
@@ -331,7 +331,7 @@
 			// the view is show in the custom view button.
 			//if (button_name)
 				//$("#view-list", cel).find('.custom_view').append(button_name);
-		});
+		// });
 	}
 	
 	var updateSelectedSortKey = function(el) {
@@ -563,7 +563,7 @@
 	
 	var addTagsToCompany = function(){
 		 // Add Tags
-		var new_tags = get_new_tags('addTags');
+		var new_tags = get_new_tags('companyAddTags');
 		if(new_tags)new_tags=new_tags.trim();
 		
 		if(!new_tags || new_tags.length<=0 || (/^\s*$/).test(new_tags))
@@ -590,35 +590,37 @@
 	    	// Checks if tag already exists in contact
 			if($.inArray(new_tags, json.tags) >= 0)
 				return;
-	    	
-	    	json.tagsWithTime.push({"tag" : new_tags.toString()});
-   			
-	    	// Save the contact with added tags
-	    	var contact = new Backbone.Model();
-	        contact.url = 'core/api/contacts';
-	        contact.save(json,{
-	       		success: function(data){
-	       			
-	       			addTagToTimelineDynamically(new_tags, data.get("tagsWithTime"));
-	       			
-	       			// Get all existing tags of the contact to compare with the added tags
-	       			var old_tags = [];
-	       			$.each($('#added-tags-ul').children(), function(index, element){
-	       				old_tags.push($(element).attr('data'));
-       				});
-	       			
-	       			// Updates to both model and collection
-	       			App_Companies.companyDetailView.model.set(data.toJSON(), {silent : true});
-	       			
-	       			// Append to the list, when no match is found 
-	       			if ($.inArray(new_tags, old_tags) == -1) 
-	       				$('#added-tags-ul').append('<li  class="tag inline-block btn btn-xs btn-default m-r-xs" style="color:#363f44" data="' + new_tags + '"><span><a class="anchor m-r-xs custom-color" style="color:#363f44" href="#tags/'+ new_tags + '" >'+ new_tags + '</a><a class="close remove-company-tags" id="' + new_tags + '" tag="'+new_tags+'">&times</a></span></li>');
-	       			
-	       			console.log(new_tags);
-	       			// Adds the added tags (if new) to tags collection
-	       			tagsCollection.add(new BaseModel({"tag" : new_tags}));
-	       		}
-	        });
+			//Check tag acl before adding tag.
+			acl_util.canAddTag(new_tags.toString(),function(respnse){
+		    	json.tagsWithTime.push({"tag" : new_tags.toString()});
+	   			
+		    	// Save the contact with added tags
+		    	var contact = new Backbone.Model();
+		        contact.url = 'core/api/contacts';
+		        contact.save(json,{
+		       		success: function(data){
+		       			
+		       			addTagToTimelineDynamically(new_tags, data.get("tagsWithTime"));
+		       			
+		       			// Get all existing tags of the contact to compare with the added tags
+		       			var old_tags = [];
+		       			$.each($('#added-tags-ul').children(), function(index, element){
+		       				old_tags.push($(element).attr('data'));
+	       				});
+		       			
+		       			// Updates to both model and collection
+		       			App_Companies.companyDetailView.model.set(data.toJSON(), {silent : true});
+		       			
+		       			// Append to the list, when no match is found 
+		       			if ($.inArray(new_tags, old_tags) == -1) 
+		       				$('#added-tags-ul').append('<li  class="tag inline-block btn btn-xs btn-default m-r-xs" style="color:#363f44" data="' + new_tags + '"><span><a class="anchor m-r-xs custom-color" style="color:#363f44" href="#tags/'+ new_tags + '" >'+ new_tags + '</a><a class="close remove-company-tags" id="' + new_tags + '" tag="'+new_tags+'">&times</a></span></li>');
+		       			
+		       			console.log(new_tags);
+		       			// Adds the added tags (if new) to tags collection
+		       			tagsCollection.add(new BaseModel({"tag" : new_tags}));
+		       		}
+		        });
+			});
 		}
 	};
 	
@@ -709,30 +711,6 @@
 	
 	company_detail_tab.initEvents = function(){
 		
-		// Adding contact when user clicks Add contact button under Contacts tab in
-		// Company Page
-		$("body").on('click', '.contact-add-contact', function(e)
-		{
-			e.preventDefault();
-
-			// This is a hacky method. ( See jscore/contact-management/modals.js for
-			// its use )
-			// 'forceCompany' is a global variable. It is used to enforce Company
-			// name on Add Contact modal.
-			// Prevents user from removing this company from the modal that is
-			// shown.
-			// Disables typeahead, as it won't be needed as there will be no Company
-			// input text box.
-			var json = App_Companies.companyDetailView.model.toJSON();
-			forceCompany.name = getContactName(json); // name of Company
-			forceCompany.id = json.id; // id of Company
-			forceCompany.doit = true; // yes force it. If this is false the
-			// Company won't be forced.
-			// Also after showing modal, it is set to false internally, so
-			// Company is not forced otherwise.
-			$('#personModal').modal('show');
-		});
-		
 		$("body").on('click', '#contactDetailsTab a[href="#company-contacts"]', function(e)
 				{
 					e.preventDefault();
@@ -793,6 +771,13 @@
 			
 		   addTagsToCompany();
 		});
+		
+		$("body").on('keydown', "#companyAddTags",function(e) {
+		//$("#companyAddTags").die().live('keydown',function(e) {
+	    	if(e.which == 13 && !isTagsTypeaheadActive){
+	    		addTagsToCompany();
+	    		}
+	    	});
 		
 		// Deletes a contact from database
 		$("body").on('click', '#company-actions-delete', function(e)

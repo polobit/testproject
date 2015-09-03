@@ -362,6 +362,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 				if (tracks_length == 1)
 					$('#milestone-listner').find('#deal-tracks-accordion').find('.collapse').addClass('in');
 				initializeMilestoneListners(el);
+				milestone_util.init(el);
 			} });
 		this.pipelineGridView.collection.fetch();
 		$('#milestone-listner').find('#admin-prefs-tabs-content').html(this.pipelineGridView.render().el);
@@ -390,42 +391,27 @@ var AdminSettingsRouter = Backbone.Router.extend({
 
 		if (!CURRENT_DOMAIN_USER.is_admin)
 		{
-			$('#content').html(getTemplate('others-not-allowed', {}));
+			$('#content').html(getTemplate('others-not-allowed',{}));
 			return;
 		}
 
-		$("#content").html(getTemplate("admin-settings"), {});
-		$('#content').find('#AdminPrefsTab .select').removeClass('select');
-		$('#content').find('.stats-tab').addClass('select');
+		$("#content").html("<div id='email-stats-listners'></div>");
+		$("#email-stats-listners").html(getTemplate("admin-settings"), {});
+		$('#email-stats-listners').find('#AdminPrefsTab .select').removeClass('select');
+		$('#email-stats-listners').find('.stats-tab').addClass('select');
 		$(".active").removeClass("active");
-		$('#content').find('#admin-prefs-tabs-content').html(getRandomLoadingImg());
-		head.js(LIB_PATH + 'jscore/handlebars/handlebars-helpers.js' + '?_=' + _AGILE_VERSION, function()
+		$('#email-stats-listners').find('#admin-prefs-tabs-content').html(getRandomLoadingImg());
+		head.js(LIB_PATH + 'jscore/handlebars/handlebars-helpers.js'+ '?_=' + _AGILE_VERSION, function()
 		{
-			var email_stats = {};
-			var sms_stats = {};
-			var acct_stats = {};
-			$.ajax({ url : 'core/api/emails/email-stats', type : "GET", dataType : 'json', success : function(stats)
-			{
-				email_stats = stats;
-				$.ajax({ url : 'core/api/sms-gateway/SMSlogs', type : "GET", dataType : 'json', success : function(stats)
-				{
-					sms_stats = stats;
-					var totalLogs = {};
-					totalLogs = $.extend(email_stats, sms_stats);
-
-					$.ajax({ url : 'core/api/namespace-stats/getdomainstats', type : "GET", dataType : 'json', success : function(stats)
-					{
-						acct_stats = stats;
-						totalLogs = $.extend(totalLogs, acct_stats);
-						var emailStatsModelView = new Base_Model_View({ template : 'admin-settings-integrations-stats', data : totalLogs });
-
-						$('#content').find('#admin-prefs-tabs-content').html(emailStatsModelView.render(true).el);
-						hideTransitionBar();
-					} });
-
-				} });
-
-			} });
+			//var emailStatsModelView = new Base_Model_View({url:'core/api/namespace-stats/getdomainstats', template : 'admin-settings-integrations-stats-new', data : stats });
+			
+			$('#email-stats-listners').find('#admin-prefs-tabs-content').html(getTemplate('admin-settings-integrations-stats-new',{}));
+			$('#integration-stats a[href="#account-stats-new"]', $("#email-stats-listners")).tab('show');
+			$('#email-stats-listners').find('#account-stats-new').html(LOADING_ON_CURSOR);
+			account_stats_integrations.loadAccountStats($("#email-stats-listners"));
+			initializeStatsListners($("#email-stats-listners"));
+			hideTransitionBar();
+		
 		});
 
 	},
@@ -468,7 +454,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 		this.tagsview1 = new Base_Collection_View({ url : 'core/api/tags/stats1', templateKey : "tag-management", individual_tag_name : 'li',
 			sort_collection : true, sortKey : 'tag', postRenderCallback : function(el)
 			{
-
+				acl_util.initTagACL(el);
 				initializeTagManagementListeners();
 			} });
 		this.tagsview1.appendItem = append_tag_management;
@@ -479,7 +465,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 		this.tagsview1.collection.fetch();
 
 		$('#content').find('#admin-prefs-tabs-content').html(this.tagsview1.render().el);
-
+		
 		$('#content').find('#AdminPrefsTab .select').removeClass('select');
 		$('#content').find('.tag-management-tab').addClass('select');
 		$(".active").removeClass("active");

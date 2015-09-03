@@ -997,7 +997,11 @@ var WidgetsRouter = Backbone.Router
 																				{
 
 																								showNotyPopUp("information", "Contacts sync initiated", "top", 1000);
-																				} });
+																				},																
+																				postRenderCallback: function(){
+																					initializeImportListeners();
+																				}
+																                });
 
 																$("#prefs-tabs-content").html(this.quickbook_import_settings.render().el);
 

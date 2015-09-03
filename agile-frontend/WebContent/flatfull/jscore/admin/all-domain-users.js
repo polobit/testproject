@@ -1,5 +1,20 @@
 
 function initializeDomainsearchListner(el){
+	
+	$("#domain-search-listners").on("click", '#domain-search-results2', function(e) {
+		e.preventDefault(e);
+		
+		var email = $('#domainSearchText2').val();
+		console.log(" in all -domain users.js "+email);
+		$("#domainSearchText").val(email);
+		
+			Backbone.history.navigate("getDomainUserDetails/"+email , {
+                trigger: true
+            });
+	
+	});
+	
+	
 	$( "#domainSearchForm" ).submit(function( e ) 	{
 		e.preventDefault(e);
 		
@@ -18,18 +33,6 @@ function initializeDomainsearchListner(el){
 function initializeAdminpanelListner(el){
 // takes searchbox value and navigate this to router
 	
-	$("#admin-panel-listners").on("click", '#domain-search-results2', function(e) {
-		e.preventDefault(e);
-		
-		var email = $('#domainSearchText2').val();
-		console.log(" in all -domain users.js "+email);
-		$("#domainSearchText").val(email);
-		
-			Backbone.history.navigate("getDomainUserDetails/"+email , {
-                trigger: true
-            });
-	
-	});
 	
 	// deltes user from domain from admin panel
 	$("#admin-panel-listners").on("click", '.delete_user', function(e) {

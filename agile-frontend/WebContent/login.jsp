@@ -151,11 +151,7 @@ if(isSafari && isWin)
 
 <body>
 <div id="openid_btns">
-					   <% if(!StringUtils.isEmpty(error)){%>
-				        <div  class="alert error login-error login-position-fixed text-center m-b-none">
-							<a class="close" data-dismiss="alert" href="#" style="position:relative;top:-2px;">&times</a><%=error%> 
-						</div>
-						<%}%>	
+					   	
 	<div class="app app-header-fixed app-aside-fixed" id="app">
 
 		<div ui-view="" class="fade-in-right-big smooth">
@@ -237,6 +233,11 @@ if(isSafari && isWin)
 		</div>
 		</div>
 		</div>
+		<% if(!StringUtils.isEmpty(error)){%>
+				        <div  class="alert error login-error login-position-fixed text-center m-b-none">
+							<a class="close" data-dismiss="alert" href="#" style="position:relative;top:-2px;">&times</a><%=error%> 
+						</div>
+						<%}%>
 	</div>
 	
 	<!-- JQUery Core and UI CDN -->
@@ -261,6 +262,11 @@ if(isSafari && isWin)
 
 				e.preventDefault();
 			});
+			$('body').on('click', '.close', function(e){
+				 e.preventDefault();
+				 $(this).closest('div').fadeOut('slow', function() {
+				   });
+				 });
 			
 		});
 		
@@ -289,7 +295,18 @@ if(isSafari && isWin)
 	  ga('create', 'UA-44894190-1', 'auto');
 	  ga('send', 'pageview'); 
 	
-	</script> 
+
+	</script>
+
+	<!-- Surey page code-->
+	<script type="text/javascript" src="https://our.agilecrm.com/stats/min/agile-min.js">
+   </script>
+   <script type="text/javascript" >
+     _agile.set_account('jo22gpvhr34r2mccjaekgsm7oh', 'our');
+     _agile_set_whitelist('b3Vy');
+     _agile.track_page_view();
+     _agile_execute_web_rules();
+   </script>
 	
 </body>
 </html>
