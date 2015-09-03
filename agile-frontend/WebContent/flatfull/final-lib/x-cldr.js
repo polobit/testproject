@@ -1,4 +1,4 @@
-{"main": {
+var Globalize_Main_Data = {"main": {
     "en": {
       "identity": {
         "version": {
