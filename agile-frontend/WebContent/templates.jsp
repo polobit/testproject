@@ -101,9 +101,9 @@
 				<div class="bg-light lter b-b wrapper-md ng-scope">
     				<div>
      					<div>
- 							<h1 class="m-n font-thin h3 pull-left">
+ 							<h3 class="m-n font-thin pull-left">
  								<span id="template-heading">Select a Template</span>
- 							</h1>
+ 							</h3>
 							<div class="pull-right">
 					            <div class="inline-block">
 								    <div class="btn-group">
@@ -124,20 +124,18 @@
 								<% if(("email").equals(type)) {%>
 								<div class="span11 email-template hide" >
 									<div class="">
-										<h3>Your Email Temaplates</h3>
+										<h4 style = "font-size: 20px;">Your Email Templates</h4>
 									</div>
 									<div id="loading-email-template" class= "hide">
-										<img src="img/21-0.gif" alt="Empty image template">
-										<p>Loading...</p>
+										<img class="loading" style="padding-right:5px;opacity:0.5;" src= "/flatfull/img/ajax-loader-cursor.gif"></img>
 									</div>
 								</div>
 								<div class="span11 campaign-template hide">
 									<div class="">
-										<h3>Campaign Temaplates</h3>
+										<h4 style = "font-size: 20px;">Campaign Templates</h4>
 									</div>
 									<div id="loading-campaign-template" class= "hide">
-										<img src="img/21-0.gif" alt="Empty image template">
-										<p>Loading...</p>
+										<img class="loading" style="padding-right:5px;opacity:0.5;" src= "/flatfull/img/ajax-loader-cursor.gif"></img>
 									</div> 
 								</div>
 								<%} %>
@@ -266,6 +264,7 @@ function render_theme_previews()
 {
 	var title = '<h2>Select a Template</h2>';
 	var textarea_id = '<%= id%>';
+	var type_editor = '<%=type%>';
 	
 	var html_link = '<span style="display:inline; float: right; margin-top: -32px;">'
 					+'<a class="btn btn-sm  btn-default" href="cd_tiny_mce.jsp?id='+textarea_id+'">'
@@ -274,8 +273,9 @@ function render_theme_previews()
 					
 	
 	//$('#preview-container-title').html(title + html_link);
-					
-	$('#preview-container-content').append('<div class="span11"><div class=""><h3>Agile Templates</h3></div>');
+	
+	if("email"==type_editor)				
+	$('#preview-container-content').append('<div class="span11"><div class=""><h4 style = "font-size: 20px;">Agile Templates</h4></div>');
 	/*
 	heme-preview
 	
