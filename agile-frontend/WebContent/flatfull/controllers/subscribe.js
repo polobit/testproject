@@ -6,6 +6,7 @@
  * @author Yaswanth
  */
 var _data = null;
+_IS_EMAIL_PLAN_ACTIVE = false;
 var SubscribeRouter = Backbone.Router.extend({
 
 	routes : {
@@ -35,6 +36,16 @@ var SubscribeRouter = Backbone.Router.extend({
 	"email_subscription" : "email_subscription",
 	"attach-card" :  "addCreditCardNew",
 	"update-card" : "updateCardNew",
+	"updateCreditCard" : "cardUpdation",
+	},
+	
+	cardUpdation : function()
+	{
+		/*var view = new Base_Model_View({ url : '/core/api/subscription', template : "creditcard-update", postRenderCallback : function()
+			{
+			} });
+		$("#content").html(view.render().el);*/
+		$("#content").html(getTemplate("creditcard-update"));
 	},
 
 	billingSettings : function()
@@ -100,15 +111,17 @@ var SubscribeRouter = Backbone.Router.extend({
 				showNotyPopUp("information", "Emails have been purchased successfully.", "top");
 			},
 			postRenderCallback : function(el) {
+				_IS_EMAIL_PLAN_ACTIVE = true ;
 				card_expiry(el);
 				head.js(LIB_PATH + 'lib/countries.js', function()
 				{
 					print_country($("#country", el));
 				});
+				
 			},
 			
 		});
-
+		
 		$('#content').html(update_email.render().el);
 		$(".active").removeClass("active");
 		$("#planView").addClass("active");
@@ -121,6 +134,7 @@ var SubscribeRouter = Backbone.Router.extend({
 	 */
 	subscribe : function(id, plan)
 	{
+			
 		IS_HAVING_MANDRILL = false;		
 		$("#content").html("<div id='subscribe_plan_change'></div>");
 
@@ -240,13 +254,20 @@ var SubscribeRouter = Backbone.Router.extend({
 			
 			that.recent_invoice(subscription_model);
 			hideTransitionBar();
-			$('#email-quantity').attr('autofocus','autofocus');
+//			$('#email-quantity').attr('autofocus','autofocus');
 			document.getElementById('email-quantity').value="";
 			document.getElementById('email-quantity').name="";
 //			$('[autofocus]:first').focus();
 //		    document.getElementById('email-quantity').focus();
 			
 			$('.selected-plan', el).trigger('click');
+			if(_IS_EMAIL_PLAN_ACTIVE)
+			{
+			$(".nav-tabs li").removeClass("active");
+			$("#users-content").removeClass("active");
+			$("#emailtab").addClass("active");
+			$("#email-content").addClass("active");
+			}
 			
 		} });
 	
@@ -373,7 +394,6 @@ var SubscribeRouter = Backbone.Router.extend({
 				// To deserialize
 				var card_detail_form = el.find('form.card_details'), card_data = card_details.model.toJSON().billingData;
 
-				USER_CREDIRCARD_DETAILS = card_data;
 				plan_json.customer = JSON.parse(USER_CREDIRCARD_DETAILS);
 
 

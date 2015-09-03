@@ -41,7 +41,7 @@
 	<div class="panel-body">
 		<div class="form-horizontal">
           <div class="p-t-lg text-center m-b">
- <img src="/flatfull/img/free-plan.png" height="110" width="132">
+ <img src="/flatfull/img/free-plan.png" height="110" width="115">
                         </div>
 
 		{{#check_plan "FREE"}}
@@ -51,7 +51,7 @@
 			</div>
 			<div class="control-group form-group m-b-none p-l-xxl">
   				<label class="col-md-5 text-right">Number of Users:</label>
-				<label class="col-md-5 text-left">-</label>
+				<label class="col-md-5 text-left">2</label>
 			</div>
 			
 			<div class="control-group form-group m-b-none p-l-xxl">
@@ -95,15 +95,16 @@
 	</div>
 	<div class="panel-body">
 		<div class="form-horizontal">
-          <div class="p-t-lg text-center m-b">
-                           <img src="/flatfull/img/no-credit-card.png" height="110" width="132">
-                        </div>
+         
 {{#stringToJSON this "billingData"}}{{/stringToJSON}}
 {{#if billingData}}
+ <div class="p-t-lg text-center m-b">
+                           <img src="/flatfull/img/credit-card.png" height="110" width="115">
+                        </div>
 	<div class="card-details">
 <div class="control-group p-b-md p-t-xs"></div>
 <div class="control-group form-group m-b-none p-l-xxl">
-  				<label class="col-md-5 text-right">Credit card:</label>
+  				<label class="col-md-5 text-right">Credit Card:</label>
 				<label class="col-md-5 text-left">**** **** **** {{this.billingData.cards.data.0.last4}} </label>
 			</div>
 <div class="control-group form-group m-b-none p-l-xxl">
@@ -112,24 +113,21 @@
 			</div>
 	</div>
 {{else}}
-
-<div class="card-details">
-<div class="control-group p-b-md p-t-xs"></div>
-<div class="control-group form-group m-b-none p-l-xxl">
-  				<label class="col-md-5 text-right">Credit card:</label>
-				<label class="col-md-5 text-left">-</label>
-			</div>
-<div class="control-group form-group m-b-none p-l-xxl">
-  				<label class="col-md-5 text-right">Expiration:</label>
-				<label class="col-md-5 text-left">-</label>
+ <div class="p-t-lg text-center m-b">
+                           <img src="/flatfull/img/no-credit-card.png" height="110" width="115">
+                        </div>
+<div class="p-b p-t-md">
+<div style="width: 100%; text-align: center;">
+  				Sorry, we do not have your card details. <br>
+You can upgrade your account at any time.
 			</div>
 	</div>
 
 {{/if}}
 
 <div class="text-center">
-  <a class="btn btn-sm btn-primary" href="#subscribe">
-				Change Card</a>
+  <a class="btn btn-sm btn-primary" href="#subscribe" style="background-color: #87bd4b; border-color: #8bbf51;">
+				Update</a>
 </div>
 
 </div>
@@ -141,15 +139,22 @@
 
 </div>
 </div>
+{{#check_plan "FREE"}}
+{{else}}
+<div>
+<a href="#"  id="cancel-account" class="col-md-10 text-right text-lg text-info" style="
+">Cancel My Account</a>
+</div>
+{{/check_plan}}
 </script>
 <script id="invoice-details-template" type="text/html">
 
 	<div class="row m-t m-b-sm">
 	<div class="col-md-12">
 <div class="panel panel-default">
-		
 
 			<div id="invoice-details-holder"></div>
+
 </div>
 	
 </div>
