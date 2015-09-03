@@ -256,7 +256,7 @@ var SubscribeRouter = Backbone.Router.extend({
 			hideTransitionBar();
 //			$('#email-quantity').attr('autofocus','autofocus');
 			document.getElementById('email-quantity').value="";
-			document.getElementById('email-quantity').name="";
+//			document.getElementById('email-quantity').name="";
 //			$('[autofocus]:first').focus();
 //		    document.getElementById('email-quantity').focus();
 			
