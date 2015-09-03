@@ -122,7 +122,7 @@
 							<!-- Container for theme previews -->
 							<div id="preview-container-content" class="panel-heading">
 								<% if(("email").equals(type)) {%>
-								<div class="span11 email-template">
+								<div class="span11 email-template hide" >
 									<div class="">
 										<h3>Your Email Temaplates</h3>
 									</div>
@@ -131,7 +131,7 @@
 										<p>Loading...</p>
 									</div>
 								</div>
-								<div class="span11 campaign-template" >
+								<div class="span11 campaign-template hide">
 									<div class="">
 										<h3>Campaign Temaplates</h3>
 									</div>
@@ -356,10 +356,14 @@ function show_fancy_box(content_array)
 function show_email_templates(){
 	
 	//get list of workflows
-		$('#loading-email-template').removeClass("hide"); 
-		$('#loading-campaign-template').removeClass("hide"); 
-	$.getJSON(location.origin + '/core/api/workflows', function(workflows){
 		
+		
+	//$.getJSON(location.origin + '/core/api/workflows', function(workflows)
+			if(window.opener.getCampaignList())
+			{
+				$('#loading-campaign-template').removeClass("hide"); 
+				$('.campaign-template').removeClass("hide"); 
+		$.getJSON(location.origin + '/core/api/workflows', function(workflows){
 		var email_nodes = get_email_nodes(workflows);
 		if(CAMPAIGN_EMAIL_NODES){
 			 var el = getTemplate('campaign_templates', CAMPAIGN_EMAIL_NODES2);
@@ -377,7 +381,14 @@ function show_email_templates(){
 				});
 		}
 		
-		$.getJSON(location.origin + '/core/api/email/templates', function(templates){
+	});
+}
+
+$.getJSON(location.origin + '/core/api/email/templates/count', function(count){
+if(count){
+$('#loading-email-template').removeClass("hide"); 
+$('.email-template').removeClass("hide"); 
+	$.getJSON(location.origin + '/core/api/email/templates/', function(templates){
 			
 			USER_TEMPLATES_JSON = get_email_templates(templates);
 			
@@ -386,8 +397,12 @@ function show_email_templates(){
 			$('#loading-email-template').addClass("hide"); 
 			$('.email-template').append(el1);
 		});
-		
-	});
+
+
+}
+});
+
+	
 }
 
 function get_email_nodes(workflows){

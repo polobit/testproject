@@ -139,7 +139,17 @@ function getTwilioIncomingList(type)
 
 function getCampaignList(type)
 {
-	var workflows = $.ajax({ type : "GET", url : '/core/api/workflows', async : false, dataType : 'json' }).responseText;
+	
+
+	try{
+		var count = (window.parent.App_Workflows.workflow_list_view.collection.length);
+			return count;
+	}
+	catch(err){
+		return 0;
+	}
+	return 0;
+	/*var workflows = $.ajax({ type : "GET", url : '/core/api/workflows', async : false, dataType : 'json' }).responseText;
 
 	// Parse stringify json
 	var data = JSON.parse(workflows);
@@ -154,7 +164,7 @@ function getCampaignList(type)
 
 	});
 
-	return listOfWorkflows;
+	return listOfWorkflows;*/
 }
 
 /**
