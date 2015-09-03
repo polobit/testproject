@@ -130,7 +130,7 @@
 										<img class="loading" style="padding-right:5px;opacity:0.5;" src= "/flatfull/img/ajax-loader-cursor.gif"></img>
 									</div>
 								</div>
-								<div class="span11 campaign-template hide">
+								<div class="span11 campaign-template hide" style="margin-bottom:20px">
 									<div class="">
 										<h4 style = "font-size: 20px;">Campaign Templates</h4>
 									</div>
