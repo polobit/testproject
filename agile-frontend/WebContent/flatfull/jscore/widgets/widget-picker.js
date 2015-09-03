@@ -168,6 +168,12 @@ function initializeWidgetSettingsListeners(){
 			$('#Twilio-container').hide();
 
 		});	
+	
+	// Helps to know that widget is for all users.
+	$('#prefs-tabs-content .add_to_all').off();
+	$('#prefs-tabs-content').on('click', '.add_to_all', function(e){
+		isForAll = true;
+	});
 
 	$('#prefs-tabs-content #remove-widget').off();
 	$('#prefs-tabs-content').on('click', '#remove-widget', function(e)

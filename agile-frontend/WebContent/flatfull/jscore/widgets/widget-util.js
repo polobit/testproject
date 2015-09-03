@@ -1,3 +1,6 @@
+//Helps to know that widget is for all users.
+var isForAll = false;
+
 function initializeWidgetUtilListeners(){
 	
 }
