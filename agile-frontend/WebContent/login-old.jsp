@@ -127,7 +127,7 @@ if(isIE || isIENew)
 	<div class='navbar navbar-fixed-top'>
 		<div class='navbar-inner'>
 			<div class='container'>
-				<a class='brand' href='#dashboard'>Agile CRM</a>
+				<a class='brand' href='#'>Agile CRM</a>
 				<div class="nav-collapse">
 					<ul class="nav pull-right">
 						<li class=""><a href="http://www.agilecrm.com" class="">
