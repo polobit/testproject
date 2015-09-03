@@ -546,11 +546,14 @@ var AdminSettingsRouter = Backbone.Router.extend({
 				
 			}, saveCallback : function()
 			{
-				if(value == 'SES')
-					return;
+				
+				$('.ses-success-msg').show();
 				
 				// On saved, navigate to integrations
 				Backbone.history.navigate("integrations", { trigger : true });
+				
+				if(value == 'SES')
+					return;
 
 				data = App_Admin_Settings.email_gateway.model.toJSON();
 
