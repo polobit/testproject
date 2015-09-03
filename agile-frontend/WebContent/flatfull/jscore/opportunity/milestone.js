@@ -39,7 +39,11 @@ function setup_deals_in_milestones(id){
 							milestone_model_view.model.fetch({
 								success: function(data){
 									var jsonModel = data.toJSON();
+									console.log("jsonModel.lost_milestone----"+jsonModel.lost_milestone);
+									console.log("newMilestone----"+newMilestone);
+									console.log("old_milestone----"+old_milestone);
 									if(jsonModel.lost_milestone == newMilestone && newMilestone != old_milestone){
+										console.log("Success if block");
 										App_Deals.deal_lost_reason_for_update = "";
 										populateLostReasons($('#dealLostReasonModal'), undefined);
 										$('#deal_lost_reason',$('#dealLostReasonModal')).removeClass("hidden");
@@ -52,10 +56,17 @@ function setup_deals_in_milestones(id){
 											var dealModel = dealPipelineModel[0].get('dealCollection').get(id);
 											dealModel.collection.get(id).set({ "lost_reason_id" : App_Deals.deal_lost_reason_for_update });
 											update_milestone(dealModel, id, newMilestone, old_milestone,false);
+											$('#'+id).attr('data',newMilestone);
 										});
 									}else if(jsonModel.lost_milestone == old_milestone){
+										console.log("Success else block");
+										var dealPipelineModel = DEALS_LIST_COLLECTION.collection.where({ heading : old_milestone });
+										if(!dealPipelineModel)
+											return;
+										var dealModel = dealPipelineModel[0].get('dealCollection').get(id);
 										dealModel.collection.get(id).set({ "lost_reason_id" : "" });
 										update_milestone(dealModel, id, newMilestone, old_milestone,false);
+										$('#'+id).attr('data',newMilestone);
 									}
 									hideTransitionBar();
 								}
