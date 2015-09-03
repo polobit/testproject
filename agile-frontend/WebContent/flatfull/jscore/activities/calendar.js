@@ -595,6 +595,8 @@ function showCalendar()
 							}
 							// Show edit modal for the event
 							$("#updateActivityModal").modal('show');
+							
+							agile_type_ahead("event_relates_to_deals", $('#updateActivityModal'), deals_typeahead, false,null,null,"core/api/search/deals",false, true);
 
 							// Fills owner select element
 							populateUsersInUpdateActivityModal(event);

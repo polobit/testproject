@@ -23,6 +23,8 @@ $(function(){
 		fill_relation(el);
 		agile_type_ahead("task_related_to", el, contacts_typeahead);
 
+        agile_type_ahead("task_relates_to_deals", el, deals_typeahead, false,null,null,"core/api/search/deals",false, true);
+
 		// Fills owner select element
 		populateUsers("owners-list", $("#taskForm"), undefined, undefined,
 				function(data) {
@@ -48,6 +50,7 @@ $(function(){
 		// Displays contact name, to indicate the task is related to the contact
 		fill_relation(el);
 		agile_type_ahead("event_related_to", el, contacts_typeahead);
+        agile_type_ahead("task_relates_to_deals", el, deals_typeahead, false,null,null,"core/api/search/deals",false, true);
 
     });
     

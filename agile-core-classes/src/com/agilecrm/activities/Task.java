@@ -15,6 +15,7 @@ import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Note;
 import com.agilecrm.cursor.Cursor;
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.agilecrm.deals.Opportunity;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
 import com.agilecrm.user.AgileUser;
@@ -173,6 +174,17 @@ public class Task extends Cursor
     };
 
     public Status status = Status.YET_TO_START;
+    
+    /**
+     * Deal ids of related deals for a document.
+     */
+    @NotSaved
+    private List<String> deal_ids = new ArrayList<String>();
+    
+    /**
+     * Related deal objects fetched using deal ids.
+     */
+    private List<Key<Opportunity>> related_deals = new ArrayList<Key<Opportunity>>();
     /**************************************************************/
 
     // Dao
@@ -417,6 +429,12 @@ public class Task extends Cursor
 
 	    this.notes = null;
 	}
+	
+	if (deal_ids != null)
+	{
+	    for (String deal_id : this.deal_ids)
+		this.related_deals.add(new Key<Opportunity>(Opportunity.class, Long.parseLong(deal_id)));
+	}
     }
 
     /************************ New task view methods ******************************/
@@ -451,6 +469,34 @@ public class Task extends Cursor
     {
 	Task task = TaskUtil.getTask(id);
 	return task.getNotes();
+    }
+    
+    /**
+     * While saving a task it contains list of deal keys, but while
+     * retrieving includes complete deal object.
+     * 
+     * @return List of deal objects
+     */
+    @XmlElement
+    public List<Opportunity> getDeals()
+    {
+	return Opportunity.dao.fetchAllByKeys(this.related_deals);
+    }
+    
+    /**
+     * Gets deals related with document.
+     * 
+     * @return list of deal objects as xml element related with a document.
+     */
+    @XmlElement(name = "deal_ids")
+    public List<String> getDeal_ids()
+    {
+	deal_ids = new ArrayList<String>();
+
+	for (Key<Opportunity> dealKey : related_deals)
+	    deal_ids.add(String.valueOf(dealKey.getId()));
+
+	return deal_ids;
     }
 
     /***************************************************************************/

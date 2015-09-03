@@ -58,6 +58,10 @@ $(function() {
 
 		// Hide + Add note link
 		$(".task-add-note", $("#taskForm")).show();
+		$('#activityTaskModal').find('#new-task-related-contacts-label').parent().removeClass('hide');
+		$('#activityTaskModal').find('.new-task-related-contacts-input').addClass('hide');
+		$('#activityTaskModal').find('#new-task-related-deals-label').parent().removeClass('hide');
+		$('#activityTaskModal').find('.new-task-related-deals-input').addClass('hide');
 		
 	});
 	

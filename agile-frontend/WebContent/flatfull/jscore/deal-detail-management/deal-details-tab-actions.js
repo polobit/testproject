@@ -2,6 +2,8 @@ var dealrelatedView;
 var dealNotesView;
 var dealActivitiesView;
 var existingDealDocumentsView;
+var dealTasksView;
+var dealEventsView;
 
 var deal_details_tab = {
 		
@@ -92,7 +94,69 @@ var deal_details_tab = {
 		    dealActivitiesView.collection.fetch();
 	        $('#dealactivities').html(dealActivitiesView.el);
 		    }
-		    }
+		},
+
+		load_deal_tasks : function()
+		{
+			 var id = App_Deal_Details.dealDetailView.model.id;
+			 if(id){
+			 dealTasksView = new Base_Collection_View({
+		            url: '/core/api/opportunity/' + id + "/tasks",
+		            restKey: "task",
+		            templateKey: "deal-tasks",
+		            individual_tag_name: 'li',
+		            sortKey:"id",
+		            descending: true,
+		            postRenderCallback: function(el) {
+		            	head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
+		            		 $(".task-created-time", el).timeago();
+		              	})
+		              	$('li',el).each(function(){
+		            		if($(this).find('.priority_type').text().trim()== "HIGH") {
+		            			$(this).css("border-left","3px solid #f05050");
+		            		}else if($(this).find('.priority_type').text().trim() == "NORMAL"){
+		            			$(this).css("border-left","3px solid #7266ba");
+		            		}else if($(this).find('.priority_type').text().trim() == "LOW") {
+		            			$(this).css("border-left","3px solid #fad733");
+		            		}
+		            	});
+		            }
+		        });
+			 dealTasksView.collection.fetch();
+			 $('#dealtasks').html(dealTasksView.el);
+			 }
+		},
+
+		load_deal_events : function()
+		{
+			var id = App_Deal_Details.dealDetailView.model.id;
+			if(id){
+			dealEventsView = new Base_Collection_View({
+	            url: '/core/api/opportunity/' + id + "/events",
+	            restKey: "event",
+	            templateKey: "deal-events",
+	            individual_tag_name: 'li',
+	            sortKey:"created_time",
+	            descending: true,
+	            postRenderCallback: function(el) {
+	            	head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
+	            		 $(".event-created-time", el).timeago();
+	              	});
+	            	$('li',el).each(function(){
+	            	if($(this).find('.priority_type').text().trim() == "High") {
+            			$(this).css("border-left","3px solid #f05050");
+            		}else if($(this).find('.priority_type').text().trim() == "Normal"){
+            			$(this).css("border-left","3px solid #7266ba");
+            		}else if($(this).find('.priority_type').text().trim() == "Low") {
+            			$(this).css("border-left","3px solid #fad733");
+            		}
+	            	});
+	            }
+	        });
+			dealEventsView.collection.fetch();
+	        $('#dealevents').html(dealEventsView.el);
+			}
+		},
 		
 };
 
