@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<%@page import="com.agilecrm.util.VersioningUtil"%>
 <%@page import="com.agilecrm.subscription.SubscriptionUtil"%>
 <%@page import="com.agilecrm.subscription.ui.serialize.Plan"%>
 <%@page import="com.agilecrm.HomeServlet"%>
@@ -81,14 +82,17 @@ content="<%=domainUser.getInfo(DomainUser.LAST_LOGGED_IN_TIME)%>" />
 
 
 <%
-    String CSS_PATH = "/";
+  String CSS_PATH = "/";
   String FLAT_FULL_PATH = "flatfull/";
-//String CSS_PATH = "//cdnapp.agilecrm.com/";
+  //String CSS_PATH = "//cdnapp.agilecrm.com/";
+  if(!request.getServerName().contains("localhost")){
+	  FLAT_FULL_PATH = (VersioningUtil.getAppVersion(request) == null) ? "" + FLAT_FULL_PATH  : "" + FLAT_FULL_PATH;
+  }
 %>
 
 <!-- <link rel="stylesheet" type="text/css" href="<%=FLAT_FULL_PATH%>css/agile-all.css?_=<%=_AGILE_VERSION%>" />  -->
 <!-- <link rel="stylesheet" type="text/css" href="<%=FLAT_FULL_PATH%>css/lib-min.css"></link> -->
-<link rel="stylesheet" type="text/css" href="<%=FLAT_FULL_PATH%>css/min/lib-all-new.css"></link>
+<link rel="stylesheet" type="text/css" href="<%=FLAT_FULL_PATH%>css/min/lib-all-new.css?_=<%=_AGILE_VERSION%>"></link>
 
 
 <!--  bootstrap 3 files -->
@@ -120,8 +124,8 @@ content="<%=domainUser.getInfo(DomainUser.LAST_LOGGED_IN_TIME)%>" />
 
 <%=cssLink %>
 <!-- <link rel="stylesheet" type="text/css" href="<%=FLAT_FULL_PATH%>css/agile-app-framework.css">  -->
-<link rel="stylesheet" type="text/css" href="<%=FLAT_FULL_PATH%>css/min/misc-all-new.css"></link>
-<link rel="stylesheet" type="text/css" href="<%=FLAT_FULL_PATH%>css/min/core-all-new.css"></link>
+<link rel="stylesheet" type="text/css" href="<%=FLAT_FULL_PATH%>css/min/misc-all-new.css?_=<%=_AGILE_VERSION%>"></link>
+<link rel="stylesheet" type="text/css" href="<%=FLAT_FULL_PATH%>css/min/core-all-new.css?_=<%=_AGILE_VERSION%>"></link>
 
 
 <style>
@@ -333,7 +337,7 @@ if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Produ
 //var LIB_PATH = "//cdnapp.agilecrm.com/";
 var LIB_PATH = "";
 
-var LIB_PATH_FLATFULL = "flatfull/";
+var LIB_PATH_FLATFULL = '<%=FLAT_FULL_PATH%>';
 
 var FLAT_FULL_PATH = LIB_PATH_FLATFULL;
 
@@ -386,8 +390,8 @@ var JQUERY_LIB_PATH = "//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.j
 <!-- JQUery Core and UI CDN --> 
 <!-- The same ajax libraries are used by designer - if you are changing the version here, change in designer too -->
 head.load("https://code.jquery.com/jquery-1.10.2.min.js", LIB_PATH_FLATFULL + "lib/bootstrap.js",  LIB_PATH + 'final-lib/min/lib-all-min.js?_=' + _AGILE_VERSION, function(){
-          load_globalize();
-});
+        load_globalize();
+})
 // , LIB_PATH + 'lib/backbone-route-filter.js'
 
 if(HANDLEBARS_PRECOMPILATION)
@@ -422,22 +426,9 @@ function load_globalize()
   Globalize.load(Globalize_Main_Data);
   en = Globalize("en");
 
- /* head.js(LIB_PATH + 'lib/cldr.min.js', LIB_PATH + 'lib/cldr/event.js', LIB_PATH + 'lib/cldr/supplemental.js', LIB_PATH + 'lib/cldr/unresolved.js', function()
-  {
-      head.js(LIB_PATH + 'lib/globalize.min.js', LIB_PATH + 'lib/globalize/message.js', LIB_PATH + 'lib/globalize/number.js', LIB_PATH + 'lib/globalize/plural.js', LIB_PATH + 'lib/globalize/date.js' , function()
-      {
-        head.ready(function(){
-          $.getJSON('json/nodes/globalize/cldr.js', function(data){
-            Globalize.load(data);
-            en = Globalize("en");
-          })
-        });
-      });      
-  });*/
 }
-
-
 </script>
+
 
 <!-- ClickDesk Live Chat Service for websites -->
 <script type='text/javascript'>

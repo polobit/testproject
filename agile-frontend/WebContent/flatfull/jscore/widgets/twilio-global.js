@@ -215,9 +215,13 @@ $(function(){
 	$('body').on('click', '#twilio_verify_settings', function(e)
 			{
 				e.preventDefault();
-				
-				$('#widget-settings').html(getTemplate('twilio-initial', {}));
-				
+
+				getTemplate('twilio-initial', {}, undefined, function(template_ui){
+					if(!template_ui)
+						  return;
+					$('#widget-settings').html($(template_ui));	
+
+				}, "#widget-settings");
 			});
 	
 		/*
@@ -254,8 +258,13 @@ $(function(){
 								verified_data["id"] = Math.floor((Math.random()*10)+1);
 								
 								console.log(verified_data);
-								console.log(getTemplate('twilio-verify', verified_data));
-								$('#widget-settings').html(getTemplate('twilio-verify', verified_data));
+								getTemplate('twilio-verify', verified_data, undefined, function(template_ui){
+									if(!template_ui)
+										  return;
+
+									$('#widget-settings').html($(template_ui));	
+								}, "#widget-settings");
+
 							});
 						}
 					});

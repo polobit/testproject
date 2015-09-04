@@ -27,8 +27,12 @@ $(function(){
 	/* For toggling keyboard shortcuts modal popup */
     $("body").on('click', '#keyboard-shortcuts', function(e){
 		e.preventDefault();
-		var keyShortModal = $(getTemplate("shortcut-keys"),{});
-		keyShortModal.modal('show');
+
+		getTemplate("shortcut-keys", {}, undefined, function(template_ui){
+			if(!template_ui)
+				  return;
+			$(template_ui).modal('show');
+		}, null);
 	});
 });
 

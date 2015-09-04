@@ -58,14 +58,21 @@ var PortletsRouter = Backbone.Router
 				head.js(LIB_PATH + 'jscore/handlebars/handlebars-helpers.js?='
 						+ _AGILE_VERSION, LIB_PATH + 'lib/jquery.gridster.js',
 						function() {
-							var el = $(getTemplate('portlets', {}));
-							$("#content").html(el);
-							if (IS_FLUID) {
-								$('#content').find('div.row')
-										.removeClass('row').addClass(
-												'row-fluid');
-							}
-							loadPortlets(el);
+
+							getTemplate('portlets', {}, undefined, function(template_ui){
+								if(!template_ui)
+									  return;
+
+								var el = $('#content').html($(template_ui));
+								if (IS_FLUID) {
+									$('#content').find('div.row')
+											.removeClass('row').addClass(
+													'row-fluid');
+								}
+								loadPortlets(el);
+								
+							}, "#content");
+
 						});
 			}
 		});
@@ -329,8 +336,14 @@ function initializePortletsListeners_1(){
 
 				var obj = getActivityObject(data);
 				console.log(obj);
-				var emailinfo = $(getTemplate("infoModal", JSON.parse(obj)));
-				emailinfo.modal('show');
+
+				getTemplate("infoModal", JSON.parse(obj), undefined, function(template_ui){
+					if(!template_ui)
+						  return;
+					var emailinfo = $(template_ui);
+					emailinfo.modal('show');
+
+				}, null);
 
 			});
 	
@@ -639,8 +652,10 @@ function getStartAndEndDatesOnDue(duration){
 	if(duration == "now")
 		return (d.setMilliseconds(0)/1000);
 	// Today
-	if (duration == "1-day" || duration == "today")
-		console.log(getGMTTimeFromDate(d) / 1000);
+	if (duration == "1-day" || duration == "today"){
+		getGMTTimeFromDate(d) / 1000;
+	}
+		
 	
 	// This week
 	if (duration == "this-week" || duration == "this-week-start"){
@@ -836,8 +851,6 @@ function getStartAndEndDatesOnDue(duration){
 	}
 		
 
-	console.log((getGMTTimeFromDate(d) / 1000));
-
 	return (getGMTTimeFromDate(d) / 1000);
 }
 function getStartAndEndDatesEpochForPortlets(duration)
@@ -853,8 +866,10 @@ function getStartAndEndDatesEpochForPortlets(duration)
 	if(duration == "now")
 		return (d.setMilliseconds(0)/1000);
 	// Today
-	if (duration == "1-day" || duration == "today")
-		console.log(getGMTTimeFromDate(d) / 1000);
+	if (duration == "1-day" || duration == "today"){
+		getGMTTimeFromDate(d) / 1000;
+	}
+		
 	
 	// This week
 	if (duration == "this-week" || duration == "this-week-start"){

@@ -429,11 +429,16 @@ function save_task(formId, modalId, isUpdate, saveBtn)
 							else
 								App_Tasks.navigate("task/" + task.id, { trigger : true });
 							taskDetailView = data;
-							$("#content").html(getTemplate("task-detail", data.toJSON()));
-							task_details_tab.loadActivitiesView();
-							initializeTaskDetailListeners();
 
+							getTemplate("task-detail", data.toJSON(), undefined, function(template_ui){
+								if(!template_ui)
+									  return;
+								$('#content').html($(template_ui));	
+								task_details_tab.loadActivitiesView();
+								initializeTaskDetailListeners();
+							}, "#content");
 						}
+						
 					} });
 }
 

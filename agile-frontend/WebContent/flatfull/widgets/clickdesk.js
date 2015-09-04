@@ -17,21 +17,30 @@ function setupClickDeskAuth()
 
 	console.log('In ClickDesk Auth');
 
-	// Shows input fields to save the ClickDesk preferences
-	$('#ClickDesk').html(getTemplate('clickdesk-login', {}));
+	getTemplate('clickdesk-login', {}, undefined, function(template_ui){
+		if(!template_ui)
+			  return;
 
-	// On click of save button, check input and save details
-	$("body").on("click", "#save_clickdesk_prefs", function(e)
-	{
-		e.preventDefault();
+		// Shows input fields to save the ClickDesk preferences
+		$('#ClickDesk').html($(template_ui));
 
-		// Checks whether all input fields are given
-		if (!isValidForm($("#clickdesk_login_form")))
-			return;
+		// On click of save button, check input and save details
+		$("body #save_clickdesk_prefs").off("click");
+		$("body").on("click", "#save_clickdesk_prefs", function(e)
+		{
+			e.preventDefault();
 
-		// Saves ClickDesk preferences in ClickDesk widget object
-		saveClickDeskPrefs();
-	});
+			// Checks whether all input fields are given
+			if (!isValidForm($("#clickdesk_login_form")))
+				return;
+
+			// Saves ClickDesk preferences in ClickDesk widget object
+			saveClickDeskPrefs();
+		});
+
+	}, "#ClickDesk");
+
+	
 }
 
 /**
@@ -153,28 +162,35 @@ function getChats(callback)
  */
 function showChats(data)
 {
-	// Fill template with chats and append it to ClickDesk panel
-	$('#ClickDesk').html(getTemplate('clickdesk-profile', data));
 
-	/*
-	 * If chats array length is zero, show information in the chats panel and
-	 * return, else show chats in chats panel
-	 */
-	if (data.length == 0)
-	{
-		$('#clickdesk_chats_panel').html('<li class="list-group-item r-none b-l-none b-r-none">No chats</li>');
-		return;
-	}
+	getTemplate('clickdesk-profile', data, undefined, function(template_ui){
+		if(!template_ui)
+			  return;
 
-	// Fills chat template with chats and shows chat in chat panel
-	$('#clickdesk_chats_panel').html(getTemplate('clickdesk-chat-stream', data));
+		// Fill template with chats and append it to ClickDesk panel
+		$('#ClickDesk').html($(template_ui));
 
-	// Load jquery time ago function to show time ago in chats
-	head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
-	{
-		$(".time-ago", $('#clickdesk_chats_panel')).timeago();
-	});
+		/*
+		 * If chats array length is zero, show information in the chats panel and
+		 * return, else show chats in chats panel
+		 */
+		if (data.length == 0)
+		{
+			$('#clickdesk_chats_panel').html('<li class="list-group-item r-none b-l-none b-r-none">No chats</li>');
+			return;
+		}
 
+		// Fills chat template with chats and shows chat in chat panel
+		$('#clickdesk_chats_panel').html(getTemplate('clickdesk-chat-stream', data));
+
+		// Load jquery time ago function to show time ago in chats
+		head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
+		{
+			$(".time-ago", $('#clickdesk_chats_panel')).timeago();
+		});
+
+		
+	}, "#ClickDesk");
 }
 
 /**
@@ -239,14 +255,22 @@ function showChatModal(data)
 	// Remove the modal if already exists
 	$('#clickdesk_chat_showModal').remove();
 
-	// Append the form into the content
-	$('#content').append(getTemplate("clickdesk-show-chat", data));
+	getTemplate("clickdesk-show-chat", data, undefined, function(template_ui){
 
-	// show time ago in modal
-	$(".time-ago", $('#clickdesk_chat_showModal')).timeago();
+		if(!template_ui)
+			  return;
 
-	// Shows the modal after filling with details
-	$('#clickdesk_chat_showModal').modal("show");
+		// Append the form into the content
+		$('#content').append($(template_ui));
+
+		// show time ago in modal
+		$(".time-ago", $('#clickdesk_chat_showModal')).timeago();
+
+		// Shows the modal after filling with details
+		$('#clickdesk_chat_showModal').modal("show");
+
+	}, "#clickdesk_chat_showModal");
+
 }
 
 /**
@@ -298,11 +322,18 @@ function showMoreChats(data)
 		return;
 	}
 
-	// Get template and fill it with chats data and append it to chats panel
-	$('#clickdesk_chats_panel').append(getTemplate('clickdesk-chat-stream', data));
+	getTemplate('clickdesk-chat-stream', data, undefined, function(template_ui){
+		if(!template_ui)
+			  return;
 
-	// Call time ago on more chats
-	$(".time-ago", $('#clickdesk_chats_panel')).timeago();
+		// Get template and fill it with chats data and append it to chats panel
+		$('#clickdesk_chats_panel').append($(template_ui));
+
+		// Call time ago on more chats
+		$(".time-ago", $('#clickdesk_chats_panel')).timeago();
+
+	}, null);
+
 }
 
 /**
@@ -369,14 +400,22 @@ function showClickDeskTickets(data)
 		return;
 	}
 
-	// Fill template with tickets and append it to ClickDesk panel
-	$('#clickdesk_tickets_panel').html(getTemplate('clickdesk-ticket-stream', data));
+	getTemplate('clickdesk-ticket-stream', data, undefined, function(template_ui){
+		if(!template_ui)
+			  return;
+		
+		// Fill template with tickets and append it to ClickDesk panel
+		$('#clickdesk_tickets_panel').html($(template_ui));
 
-	// Load jquery time ago function to show time ago in tickets
-	head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
-	{
-		$(".time-ago", $('#clickdesk_tickets_panel')).timeago();
-	});
+		// Load jquery time ago function to show time ago in tickets
+		head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
+		{
+			$(".time-ago", $('#clickdesk_tickets_panel')).timeago();
+		});
+
+	}, "#clickdesk_tickets_panel");
+
+	
 }
 
 /**
@@ -439,14 +478,21 @@ function showTicketModal(data)
 	// Remove the modal if already exists
 	$('#clickdesk_ticket_showModal').remove();
 
-	// Append the form into the content
-	$('#content').append(getTemplate("clickdesk-show-ticket", data));
+	getTemplate("clickdesk-show-ticket", data, undefined, function(template_ui){
+		if(!template_ui)
+			  return;
+		
+		// Append the form into the content
+		$('#content').append($(template_ui));
 
-	// show time ago in modal
-	$(".time-ago", $('#clickdesk_ticket_showModal')).timeago();
+		// show time ago in modal
+		$(".time-ago", $('#clickdesk_ticket_showModal')).timeago();
 
-	// Shows the modal after filling with details
-	$('#clickdesk_ticket_showModal').modal("show");
+		// Shows the modal after filling with details
+		$('#clickdesk_ticket_showModal').modal("show");	
+
+	}, "#clickdesk_ticket_showModal");
+
 }
 
 /**
@@ -501,11 +547,19 @@ function showMoreTickets(data)
 		return;
 	}
 
-	// Get template and fill it with chats data and append it to chats panel
-	$('#clickdesk_tickets_panel').append(getTemplate('clickdesk-ticket-stream', data));
+	getTemplate('clickdesk-ticket-stream', data, undefined, function(template_ui){
+		if(!template_ui)
+			  return;
+		
+		// Get template and fill it with chats data and append it to chats panel
+		$('#clickdesk_tickets_panel').append($(template_ui));
 
-	// Call time ago on more chats
-	$(".time-ago", $('#clickdesk_tickets_panel')).timeago();
+		// Call time ago on more chats
+		$(".time-ago", $('#clickdesk_tickets_panel')).timeago();
+
+	}, "#content");
+
+	
 
 }
 
@@ -527,7 +581,14 @@ function clickDeskError(id, message)
 	 * Get error template and fill it with error message and show it in the div
 	 * with given id
 	 */
-	$('#' + id).html(getTemplate('clickdesk-error', error_json));
+	getTemplate('clickdesk-error', error_json, undefined, function(template_ui){
+		if(!template_ui)
+			  return;
+			
+		$('#' + id).html($(template_ui));
+
+	}, "#" + id);
+
 }
 
 /**

@@ -24,92 +24,112 @@ calendar : function()
 	// rendar default view
 
 	$('#content').html("<div id='calendar-listers'>&nbsp;</div>");
-	$('#calendar-listers').html(getTemplate("calendar", {}));
-	$('#calendar-listers').find("#calendar-filters").html(getTemplate("event-left-filter", users));
-	buildCalendarLhsFilters();
-	createRequestUrlBasedOnFilter();
-	var view = readCookie("agile_calendar_view");
 
-	if (view)
-	{
-		$("#list_event_time").removeClass('hide');
-		$("#user_calendars").hide();
-		loadGoogleEvents();
-		loadAgileEvents();
-	}
-	else
-	{
-		$("#list_event_time").addClass('hide');
-		$("#user_calendars").show();
-		$('#calendar-view-button').show();
+	getTemplate("calendar", {}, undefined, function(template_ui){
+		if(!template_ui)
+			  return;
 
-		$(".active").removeClass("active");
-		$("#calendarmenu").addClass("active");
-		$('#agile_event_list').addClass('hide');
+		$('#calendar-listers').html($(template_ui));	
 
-		// Typahead also uses jqueryui - if you are changing the version
-		// here,
-		// change it there too
-		head.js(LIB_PATH + 'lib/jquery-ui.min.js', 'lib/fullcalendar.min.js', function()
-		{
-			showCalendar();
-			hideTransitionBar();
-			initializeEventListners();
-		});
+		getTemplate("event-left-filter", users, undefined, function(template_ui1){
+				$('#calendar-listers').find("#calendar-filters").html($(template_ui1));
 
-		$('#grp_filter').css('display', 'none');
-		$('#event_tab').css('display', 'none');
-	}
+				buildCalendarLhsFilters();
+				createRequestUrlBasedOnFilter();
+				var view = readCookie("agile_calendar_view");
 
-	
+				if (view)
+				{
+					$("#list_event_time").removeClass('hide');
+					$("#user_calendars").hide();
+					loadGoogleEvents();
+					loadAgileEvents();
+					return;
+				}
+				
+				$("#list_event_time").addClass('hide');
+				$("#user_calendars").show();
+				$('#calendar-view-button').show();
+
+				$(".active").removeClass("active");
+				$("#calendarmenu").addClass("active");
+				$('#agile_event_list').addClass('hide');
+
+				// Typahead also uses jqueryui - if you are changing the version
+				// here,
+				// change it there too
+				head.js(LIB_PATH + 'lib/jquery-ui.min.js', 'lib/fullcalendar.min.js', function()
+				{
+					showCalendar();
+					hideTransitionBar();
+					initializeEventListners();
+				});
+
+				$('#grp_filter').css('display', 'none');
+				$('#event_tab').css('display', 'none');
+			
+
+		}, $('#calendar-listers').find("#calendar-filters"));
+	}, "#calendar-listers");
 },
 
 /* Show tasks list when All Tasks clicked under calendar page. */
 tasks : function()
 {
 
-	$('#content').html(getTemplate("tasks-list-header", {}));
+	getTemplate("tasks-list-header", {}, undefined, function(template_ui){
+		if(!template_ui)
+			  return;
+		$('#content').html($(template_ui));	
 
-	fillSelect("owner-tasks", '/core/api/users/current-user', 'domainUser', function fillOwner()
-	{
+		fillSelect("owner-tasks", '/core/api/users/current-user', 'domainUser', function fillOwner()
+		{
 
-		$('#content').find("#owner-tasks").prepend("<li><a href=''>All Tasks</a></li>");
-		$('#content').find("#owner-tasks").append("<li><a href='my-pending-tasks'>My Pending Tasks</a></li>");
+			$('#content').find("#owner-tasks").prepend("<li><a href=''>All Tasks</a></li>");
+			$('#content').find("#owner-tasks").append("<li><a href='my-pending-tasks'>My Pending Tasks</a></li>");
 
-		// To Updated task list based on user selection of type and owner
-		initOwnerslist();
-	}, "<li><a href='{{id}}'>My Tasks</a></li>", true);
+			// To Updated task list based on user selection of type and owner
+			initOwnerslist();
+		}, "<li><a href='{{id}}'>My Tasks</a></li>", true);
 
-	$(".active").removeClass("active");
-	$("#calendarmenu").addClass("active");
+		$(".active").removeClass("active");
+		$("#calendarmenu").addClass("active");
+
+	}, "#content");
 },
 
 /* Show new view of tasks. */
 tasks_new : function()
 {
 	$('#content').html("<div id='tasks-list-template'>&nbsp;</div>");
-	$('#tasks-list-template').html(getTemplate("new-tasks-list-header", {}));
 
-	fillSelect("new-owner-tasks", '/core/api/users/current-user', 'domainUser', function fillOwner()
-	{
-		$('#tasks-list-template').find("#new-owner-tasks").prepend("<li><a href=''>All Tasks</a></li>");
-		$('#tasks-list-template').find("#new-owner-tasks").append("<li><a href='all-pending-tasks' class='hide-on-status'>All Pending Tasks</a></li>");
-		$('#tasks-list-template').find("#new-owner-tasks").append("<li><a href='my-pending-tasks' class='hide-on-owner hide-on-status'>My Pending Tasks</a></li>");
-		initializeTasksListeners();
-		// Read stored selections from cookie and Creates nested collection
-		readDetailsFromCookie();
-		// Bind dropdown events
-		bindDropdownEvents();
+	getTemplate("new-tasks-list-header", {}, undefined, function(template_ui){
+		if(!template_ui)
+			  return;
+		$('#tasks-list-template').html($(template_ui));
 
-	}, "<li><a href='{{id}}' class='hide-on-owner'>My Tasks</a></li>", true);
+		fillSelect("new-owner-tasks", '/core/api/users/current-user', 'domainUser', function fillOwner()
+		{
+			$('#tasks-list-template').find("#new-owner-tasks").prepend("<li><a href=''>All Tasks</a></li>");
+			$('#tasks-list-template').find("#new-owner-tasks").append("<li><a href='all-pending-tasks' class='hide-on-status'>All Pending Tasks</a></li>");
+			$('#tasks-list-template').find("#new-owner-tasks").append("<li><a href='my-pending-tasks' class='hide-on-owner hide-on-status'>My Pending Tasks</a></li>");
+			initializeTasksListeners();
+			// Read stored selections from cookie and Creates nested collection
+			readDetailsFromCookie();
+			// Bind dropdown events
+			bindDropdownEvents();
 
-	$('.loading').remove();
+		}, "<li><a href='{{id}}' class='hide-on-owner'>My Tasks</a></li>", true);
 
-	$(".active").removeClass("active");
-	$("#calendarmenu").addClass("active");
+		$('.loading').remove();
 
-	// Hide owner's and status task selection options from dropdown
-	$(".hide-on-pending").hide();
+		$(".active").removeClass("active");
+		$("#calendarmenu").addClass("active");
+
+		// Hide owner's and status task selection options from dropdown
+		$(".hide-on-pending").hide();
+
+	}, "#tasks-list-template");
 
 },
 

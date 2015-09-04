@@ -397,7 +397,6 @@ function show_triggers_of_each_workflow(el)
  */
 function append_triggers_to_workflow(el)
 {
-
 	// Appends triggers to respective workflow
 	$('.workflow-triggers', el).each(function(index, td)
 	{
@@ -407,9 +406,16 @@ function append_triggers_to_workflow(el)
 		var trigger_collection = new BaseCollection(trigger_models, {});
 
 		// show triggers if exists for a workflow
-		if (trigger_collection.length !== 0)
-			$(td).html(getTemplate('workflow-triggers', { "triggers" : trigger_collection.toJSON() }));
+		if (trigger_collection.length !== 0){
 
+			getTemplate('workflow-triggers', { "triggers" : trigger_collection.toJSON() }, undefined, function(template_ui){
+				if(!template_ui)
+					  return;
+
+				$(td).html($(template_ui));	
+			}, $(td));
+
+		}
 	});
 }
 

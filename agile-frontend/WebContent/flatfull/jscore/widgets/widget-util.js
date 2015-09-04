@@ -599,98 +599,106 @@ function save_widget_prefs(pluginName, prefs, callback)
 
 function show_set_up_widget(widget_name, template_id, url, model)
 {
-	$("#content").html(getTemplate("settings"), {});
+	getTemplate('settings', {}, undefined, function(template_ui){
+		if(!template_ui)
+			  return;
 
-	var el;
-	var models;
-	$('#prefs-tabs-content').html(getRandomLoadingImg());
-	initializeWidgetUtilListeners();
-	if (model)
-	{
-		console.log(model)
-		el = $(getTemplate("widget-settings", model));
-	}
-	else
-	{
-		if (!App_Widgets.Catalog_Widgets_View || App_Widgets.Catalog_Widgets_View.collection.length == 0)
+		$('#content').html($(template_ui));	
+		var el;
+		var models;
+		$('#prefs-tabs-content').html(getRandomLoadingImg());
+		initializeWidgetUtilListeners();
+
+		if (model)
 		{
-			App_Widgets.Catalog_Widgets_View = new Base_Collection_View({ url : '/core/api/widgets/default' });
-
-			// Fetch the list of widgets
-			App_Widgets.Catalog_Widgets_View.collection.fetch({ success : function()
-			{
-
-				$.getJSON('core/api/widgets/' + widget_name, function(data)
-				{
-					show_set_up_widget(widget_name, template_id, url, data);
-				});
-			} });
-			return;
-		}
-		models = App_Widgets.Catalog_Widgets_View.collection.where({ name : widget_name });
-
-		el = $(getTemplate("widget-settings", models[0].toJSON()));
-	}
-	console.log(el);
-
-	if (widget_name == "Zendesk")
-		zendesk_save_widget_prefs();
-
-	else if (widget_name == "ClickDesk")
-		clickdesk_save_widget_prefs();
-
-	else if (widget_name == "HelpScout")
-		helpscout_save_widget_prefs();
-
-	else if (widget_name == "FreshBooks")
-		freshbook_save_widget_prefs();
-
-	else if (widget_name == "Rapleaf")
-		rapleaf_save_widget_prefs();
-
-	else if (widget_name == "Sip")
-		sip_save_widget_prefs();
-
-	else if (widget_name == "TwilioIO")
-		twilioio_save_widget_prefs();
-
-	else if (widget_name == "QuickBooks")
-		quickBooks_save_widget_prefs();
-
-	else if (widget_name == "Chargify")
-		chargify_save_widget_prefs();
-
-	else if (widget_name == "CallScript")
-		callscript_save_widget_prefs();
-
-	// Shows available widgets in the content
-	if (url)
-	{
-		$('#widget-settings', el).html(getTemplate(template_id, { "url" : url }));
-		console.log(el);
-	}
-	else
-	{
-		if (widget_name == "Shopify" && (model || models[0].attributes.id))
-		{
-			if (model)
-			{
-				$('#widget-settings', el).html(getTemplate(template_id, { "data" : jQuery.parseJSON(model.prefs) }));
-			}
-			else if (models[0].attributes.id)
-			{
-				$('#widget-settings', el).html(getTemplate(template_id, { "data" : jQuery.parseJSON(models[0].attributes.prefs) }));
-			}
+			el = $(getTemplate("widget-settings", model));
 		}
 		else
 		{
-			$('#widget-settings', el).html(getTemplate(template_id, {}));
+			if (!App_Widgets.Catalog_Widgets_View || App_Widgets.Catalog_Widgets_View.collection.length == 0)
+			{
+				App_Widgets.Catalog_Widgets_View = new Base_Collection_View({ url : '/core/api/widgets/default' });
+
+				// Fetch the list of widgets
+				App_Widgets.Catalog_Widgets_View.collection.fetch({ success : function()
+				{
+
+					$.getJSON('core/api/widgets/' + widget_name, function(data)
+					{
+						show_set_up_widget(widget_name, template_id, url, data);
+					});
+				} });
+				return;
+			}
+			models = App_Widgets.Catalog_Widgets_View.collection.where({ name : widget_name });
+
+			el = $(getTemplate("widget-settings", models[0].toJSON()));
+		}
+
+		console.log(el);
+
+		if (widget_name == "Zendesk")
+			zendesk_save_widget_prefs();
+
+		else if (widget_name == "ClickDesk")
+			clickdesk_save_widget_prefs();
+
+		else if (widget_name == "HelpScout")
+			helpscout_save_widget_prefs();
+
+		else if (widget_name == "FreshBooks")
+			freshbook_save_widget_prefs();
+
+		else if (widget_name == "Rapleaf")
+			rapleaf_save_widget_prefs();
+
+		else if (widget_name == "Sip")
+			sip_save_widget_prefs();
+
+		else if (widget_name == "TwilioIO")
+			twilioio_save_widget_prefs();
+
+		else if (widget_name == "QuickBooks")
+			quickBooks_save_widget_prefs();
+
+		else if (widget_name == "Chargify")
+			chargify_save_widget_prefs();
+
+		else if (widget_name == "CallScript")
+			callscript_save_widget_prefs();
+
+		// Shows available widgets in the content
+		if (url)
+		{
+			$('#widget-settings', el).html(getTemplate(template_id, { "url" : url }));
 			console.log(el);
 		}
-	}
-	$('#prefs-tabs-content').html(el);
-	$('#PrefsTab .select').removeClass('select');
-	$('.add-widget-prefs-tab').addClass('select');
+		else
+		{
+			if (widget_name == "Shopify" && (model || models[0].attributes.id))
+			{
+				if (model)
+				{
+					$('#widget-settings', el).html(getTemplate(template_id, { "data" : jQuery.parseJSON(model.prefs) }));
+				}
+				else if (models[0].attributes.id)
+				{
+					$('#widget-settings', el).html(getTemplate(template_id, { "data" : jQuery.parseJSON(models[0].attributes.prefs) }));
+				}
+			}
+			else
+			{
+				$('#widget-settings', el).html(getTemplate(template_id, {}));
+				console.log(el);
+			}
+		}
+		$('#prefs-tabs-content').html(el);
+		$('#PrefsTab .select').removeClass('select');
+		$('.add-widget-prefs-tab').addClass('select');
+
+
+
+	}, "#content");
 }
 
 function set_up_access(widget_name, template_id, data, url, model)

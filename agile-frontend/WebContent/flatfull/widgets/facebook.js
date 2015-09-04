@@ -15,73 +15,83 @@ function showFacebookMatchingProfile(first_name)
 		{
 			data.searchString = SEARCH_STRING;
 			// Fill Quickbooks widget template with Quickbooks clients data
-			console.log("data is:")
+			console.log("data is:");
 			console.log(data);
-			var template = $('#' + FACEBOOK_PLUGIN_NAME).html(getTemplate('facebook-matching-profiles', data));
 
-			$("body").on("mouseover", ".facebookImage", function(e)
-			{
-				// Unique Twitter Id from widget
-				Facebook_id = $(this).attr('id');
+			
 
-				// Aligns details to left in the pop over
-				$(this).popover({ placement : 'left', html: true });
+			getTemplate('facebook-matching-profiles', data, undefined, function(template_ui){
+				if(!template_ui)
+					  return;
 
-				/*
-				 * Called show to overcome pop over bug (not showing pop over on
-				 * mouse hover for first time)
-				 */
-				$(this).popover('show');
+				var template = $('#' + FACEBOOK_PLUGIN_NAME).html($(template_ui));
 
-				// on click of any profile, save it to the contact
-				$('#' + Facebook_id).on('click', function(e)
+				$("body").on("mouseover", ".facebookImage", function(e)
 				{
-					e.preventDefault();
+					// Unique Twitter Id from widget
+					Facebook_id = $(this).attr('id');
 
-					console.log(Facebook_id);
-
-					// Hide pop over after clicking on any picture
-					$(this).popover('hide');
-
-					console.log('on click in search');
-
-					// Web url of twitter for this profile
-					var url = "@" + Facebook_id;
-
-					web_url = url;
-					console.log(url);
-
-					var propertiesArray = [
-						{ "name" : "website", "value" : url, "subtype" : "FACEBOOK" }
-					];
-					if (!contact_image)
-					{
-						// Get image link which can be used to save image for
-						// contact
-						var facebook_image = $(this).attr('src');
-						propertiesArray.push({ "name" : "image", "value" : facebook_image });
-					}
+					// Aligns details to left in the pop over
+					$(this).popover({ placement : 'left', html: true });
 
 					/*
-					 * If contact title is undefined, saves headline of the
-					 * Twitter profile to the contact title
+					 * Called show to overcome pop over bug (not showing pop over on
+					 * mouse hover for first time)
 					 */
-					if (!agile_crm_get_contact_property("title"))
+					$(this).popover('show');
+
+					// on click of any profile, save it to the contact
+					$('#' + Facebook_id).on('click', function(e)
 					{
-						// var summary = $(this).attr("summary");
-						// propertiesArray.push({ "name" : "title", "value" :
-						// summary });
-					}
+						e.preventDefault();
 
-					console.log(propertiesArray);
+						console.log(Facebook_id);
 
-					agile_crm_update_contact_properties(propertiesArray);
+						// Hide pop over after clicking on any picture
+						$(this).popover('hide');
 
-					// show twitter profile by id
-					showFacebookProfile(Facebook_id);
+						console.log('on click in search');
 
+						// Web url of twitter for this profile
+						var url = "@" + Facebook_id;
+
+						web_url = url;
+						console.log(url);
+
+						var propertiesArray = [
+							{ "name" : "website", "value" : url, "subtype" : "FACEBOOK" }
+						];
+						if (!contact_image)
+						{
+							// Get image link which can be used to save image for
+							// contact
+							var facebook_image = $(this).attr('src');
+							propertiesArray.push({ "name" : "image", "value" : facebook_image });
+						}
+
+						/*
+						 * If contact title is undefined, saves headline of the
+						 * Twitter profile to the contact title
+						 */
+						if (!agile_crm_get_contact_property("title"))
+						{
+							// var summary = $(this).attr("summary");
+							// propertiesArray.push({ "name" : "title", "value" :
+							// summary });
+						}
+
+						console.log(propertiesArray);
+
+						agile_crm_update_contact_properties(propertiesArray);
+
+						// show twitter profile by id
+						showFacebookProfile(Facebook_id);
+
+					});
 				});
-			});
+				
+
+			}, "#" + FACEBOOK_PLUGIN_NAME);
 
 		}
 		else
@@ -122,7 +132,15 @@ function facebookError(message)
 	 * with given id
 	 */
 	console.log('error ');
-	$('#' + FACEBOOK_PLUGIN_NAME).html(getTemplate('facebook-error', error_json));
+	getTemplate('facebook-error', error_json, undefined, function(template_ui){
+		if(!template_ui)
+			  return;
+
+		$('#' + FACEBOOK_PLUGIN_NAME).html($(template_ui));
+
+	}, "#" + FACEBOOK_PLUGIN_NAME);
+
+	
 
 }
 
@@ -158,23 +176,30 @@ function showFacebookProfile(facebookid)
 			console.log(contact_image);
 			data.image = contact_image;
 			$('#Twitter_plugin_delete').show();
-			var template = $('#' + FACEBOOK_PLUGIN_NAME).html(getTemplate('facebook-profile', data));
 
-			$("body").on("click", "#facebook_post_btn", function(e)
-					{
-						console.log("post on a wall")
-						queueGetRequest("widget_queue", "/core/api/widgets/facebook/postonwall/" + FACEBOOK_PLUGIN_ID + "/" + facebookid + "/" + "hai", 'json',
-								function success(data)
-								{
-									console.log("am at success");
-								}, function error(data)
-								{
+			getTemplate('facebook-profile', data, undefined, function(template_ui){
+				if(!template_ui)
+					  return;
 
-									facebookError(data.responseText);
+				var template = $('#' + FACEBOOK_PLUGIN_NAME).html($(template_ui));
 
-								});
-					});
+				$("body").on("click", "#facebook_post_btn", function(e)
+				{
+					console.log("post on a wall")
+					queueGetRequest("widget_queue", "/core/api/widgets/facebook/postonwall/" + FACEBOOK_PLUGIN_ID + "/" + facebookid + "/" + "hai", 'json',
+							function success(data)
+							{
+								console.log("am at success");
+							}, function error(data)
+							{
 
+								facebookError(data.responseText);
+
+							});
+				});
+
+
+			}, "#" + FACEBOOK_PLUGIN_NAME);
 		}
 		else
 		{
@@ -289,9 +314,16 @@ function getUserNameOrUserID(url) {
 			e.preventDefault();
 
 			// Twitter_search_details['plugin_id'] = Twitter_Plugin_Id;
+			getTemplate('facebook-modified-search', { "searchString" : SEARCH_STRING }, undefined, function(template_ui){
+				if(!template_ui)
+					  return;
+				$('#' +FACEBOOK_PLUGIN_NAME).html($(template_ui));	
 
-			$('#' + FACEBOOK_PLUGIN_NAME).html(getTemplate('facebook-modified-search', { "searchString" : SEARCH_STRING }));
+
+			}, "#" + FACEBOOK_PLUGIN_NAME);
+			
 		});
+
 		$("body").on("click", "#facebook_search_close", function(e)
 		{
 			e.preventDefault();

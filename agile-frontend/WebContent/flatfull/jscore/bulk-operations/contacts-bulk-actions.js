@@ -755,51 +755,56 @@ $(function()
 						else
 							count = id_array.length;
 
-						var contacts_csv_modal = $(getTemplate('contacts-export-csv-modal'), {});
-						// $(contacts_csv_modal).find('.export-contacts-count').html("<b>"+count+"
-						// contacts</b>");
-						contacts_csv_modal.modal('show');
 
-						contacts_csv_modal.on('shown.bs.modal', function(){
-							// If Yes clicked
-							$("#contacts-export-csv-modal").on("click",'#contacts-export-csv-confirm', function(e)
-							{
-								e.preventDefault();
+						getTemplate('contacts-export-csv-modal', {}, undefined, function(template_ui){
+							if(!template_ui)
+								  return;
+							var contacts_csv_modal = $(template_ui);
+							contacts_csv_modal.modal('show');
 
-								if ($(this).attr('disabled'))
-									return;
-
-								$(this).attr('disabled', 'disabled');
-
-								// Shows message
-								$save_info = $('<img src="img/1-0.gif" height="18px" width="18px"></img>&nbsp;&nbsp;<span><small class="text-success" style="font-size:15px; display:inline-block"><i>Email will be sent shortly.</i></small></span>');
-								$(this).parent('.modal-footer').find('.contacts-export-csv-message').append($save_info);
-								$save_info.show();
-
-								var url = '/core/api/bulk/update?action_type=EXPORT_CONTACTS_CSV';
-
-								var json = {};
-								json.contact_ids = id_array;
-								json.data = JSON.stringify(CURRENT_DOMAIN_USER);
-								postBulkOperationData(url, json, undefined, undefined, function()
-								{
-
-									// hide modal after 3 secs
-									setTimeout(function()
+							contacts_csv_modal.on('shown.bs.modal', function(){
+									// If Yes clicked
+									$("#contacts-export-csv-modal").on("click",'#contacts-export-csv-confirm', function(e)
 									{
-										contacts_csv_modal.modal('hide');
-									}, 3000);
+										e.preventDefault();
 
-									// Uncheck contacts table and
-									// hide bulk actions button.
-									$('body').find('#bulk-actions').css('display', 'none');
-									$('body').find('#bulk-select').css('display', 'none');
-									$('table#contacts-table').find('.thead_check').removeAttr('checked');
-									$('table#contacts-table').find('.tbody_check').removeAttr('checked');
+										if ($(this).attr('disabled'))
+											return;
 
-								}, "no_noty");
-							});
-						});						
+										$(this).attr('disabled', 'disabled');
+
+										// Shows message
+										$save_info = $('<img src="img/1-0.gif" height="18px" width="18px"></img>&nbsp;&nbsp;<span><small class="text-success" style="font-size:15px; display:inline-block"><i>Email will be sent shortly.</i></small></span>');
+										$(this).parent('.modal-footer').find('.contacts-export-csv-message').append($save_info);
+										$save_info.show();
+
+										var url = '/core/api/bulk/update?action_type=EXPORT_CONTACTS_CSV';
+
+										var json = {};
+										json.contact_ids = id_array;
+										json.data = JSON.stringify(CURRENT_DOMAIN_USER);
+										postBulkOperationData(url, json, undefined, undefined, function()
+										{
+
+											// hide modal after 3 secs
+											setTimeout(function()
+											{
+												contacts_csv_modal.modal('hide');
+											}, 3000);
+
+											// Uncheck contacts table and
+											// hide bulk actions button.
+											$('body').find('#bulk-actions').css('display', 'none');
+											$('body').find('#bulk-select').css('display', 'none');
+											$('table#contacts-table').find('.thead_check').removeAttr('checked');
+											$('table#contacts-table').find('.tbody_check').removeAttr('checked');
+
+										}, "no_noty");
+									});
+							});			
+
+
+						}, null);
 
 					});
 	
@@ -830,57 +835,54 @@ $(function()
 						else
 							count = id_array.length;
 
-						var companies_csv_modal = $(getTemplate('companies-export-csv-modal'), {});
-						// $(contacts_csv_modal).find('.export-contacts-count').html("<b>"+count+"
-						// contacts</b>");
-						companies_csv_modal.modal('show');
 
-						companies_csv_modal.on('shown.bs.modal', function(){
-						// If Yes clicked
-						$("#companies-export-csv-modal").on("click", '#companies-export-csv-confirm', function(e)
-										{
-											e.preventDefault();
+						getTemplate('companies-export-csv-modal', {}, undefined, function(template_ui){
+							if(!template_ui)
+								  return;
+							var companies_csv_modal = $(template_ui);
+							companies_csv_modal.modal('show');
 
-											if ($(this).attr('disabled'))
-												return;
-
-											$(this).attr('disabled', 'disabled');
-
-											// Shows message
-											$save_info = $('<img src="img/1-0.gif" height="18px" width="18px"></img>&nbsp;&nbsp;<span><small class="text-success" style="font-size:15px; display:inline-block"><i>Email will be sent shortly.</i></small></span>');
-											$(this).parent('.modal-footer').find('.companies-export-csv-message').append($save_info);
-											$save_info.show();
-
-											var url = '/core/api/bulk/update?action_type=EXPORT_COMPANIES_CSV';
-
-											var json = {};
-											json.contact_ids = id_array;
-											json.data = JSON.stringify(CURRENT_DOMAIN_USER);
-											postBulkOperationData(url, json, undefined, undefined, function()
-											{
-
-												// hide modal after 3 secs
-												setTimeout(function()
+							companies_csv_modal.on('shown.bs.modal', function(){
+								// If Yes clicked
+								$("#companies-export-csv-modal").on("click", '#companies-export-csv-confirm', function(e)
 												{
-													companies_csv_modal.modal('hide');
-												}, 3000);
+													e.preventDefault();
 
-												// Uncheck contacts table and
-												// hide bulk actions button.
-												$('body').find('#bulk-actions').css('display', 'none');
-												$('body').find('#bulk-select').css('display', 'none');
-												$('table#companies,table#contacts-table').find('.thead_check').removeAttr('checked');
-												$('table#companies,table#contacts-table').find('.tbody_check').removeAttr('checked');
+													if ($(this).attr('disabled'))
+														return;
 
-											}, "no_noty");
-										});
+													$(this).attr('disabled', 'disabled');
 
+													// Shows message
+													$save_info = $('<img src="img/1-0.gif" height="18px" width="18px"></img>&nbsp;&nbsp;<span><small class="text-success" style="font-size:15px; display:inline-block"><i>Email will be sent shortly.</i></small></span>');
+													$(this).parent('.modal-footer').find('.companies-export-csv-message').append($save_info);
+													$save_info.show();
 
-						});
+													var url = '/core/api/bulk/update?action_type=EXPORT_COMPANIES_CSV';
 
+													var json = {};
+													json.contact_ids = id_array;
+													json.data = JSON.stringify(CURRENT_DOMAIN_USER);
+													postBulkOperationData(url, json, undefined, undefined, function()
+													{
 
-						
+														// hide modal after 3 secs
+														setTimeout(function()
+														{
+															companies_csv_modal.modal('hide');
+														}, 3000);
 
+														// Uncheck contacts table and
+														// hide bulk actions button.
+														$('body').find('#bulk-actions').css('display', 'none');
+														$('body').find('#bulk-select').css('display', 'none');
+														$('table#companies,table#contacts-table').find('.thead_check').removeAttr('checked');
+														$('table#companies,table#contacts-table').find('.tbody_check').removeAttr('checked');
+
+													}, "no_noty");
+												});
+								});
+						}, null);
 					});
 
 	$("body #select-all-available-contacts").off("click");

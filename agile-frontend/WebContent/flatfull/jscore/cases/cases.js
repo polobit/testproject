@@ -110,22 +110,6 @@ function initializeCasesListeners(el){
 				$(this).popover(
 						{ "rel" : "popover", "trigger" : "hover", "placement" : 'right', "original-title" : currentCase.toJSON().name, "content" : ele,
 							"html" : true, });
-
-				/**
-				 * Checks for last 'tr' and change placement of popover to 'top'
-				 * inorder to prevent scrolling on last row of list
-				 */
-				/*$('#cases-model-list > tr:last').popover(
-						{ "rel" : "popover", "trigger" : "hover", "placement" : 'right', "original-title" : currentCase.toJSON().name, "content" : ele,
-							"html" : true, });*/
-
-				/**
-				 * make sure first popover is shown on the right
-				 */
-				/*$('#cases-model-list > tr:first').popover(
-						{ "rel" : "popover", "trigger" : "hover", "placement" : 'right', "original-title" : currentCase.toJSON().name, "content" : ele,
-							"html" : true, });*/
-
 				$(this).popover('show');
 			});
 

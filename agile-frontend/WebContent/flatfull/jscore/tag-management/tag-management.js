@@ -223,14 +223,18 @@ var TAG_MODEL_VIEW = Backbone.View
 
 			},
 			render : function(callback) {
-				$(this.el)
-						.html(
-								getTemplate(this.options.template, this.model
-										.toJSON()));
-				$(this.el).data(this.model);
-				this.input = $('.edit-input', this.el);
-				// Add model as data to it's corresponding row
 
+				getTemplate(this.options.template, this.model.toJSON(), undefined, function(template_ui){
+					if(!template_ui)
+						  return;
+					
+					$(this.el).html($(template_ui));
+					$(this.el).data(this.model);
+					this.input = $('.edit-input', this.el);
+
+				}, this.el);
+
+				// Add model as data to it's corresponding row
 				return this;
 			}
 		});

@@ -72,10 +72,12 @@ var WebpagesRouter = Backbone.Router
 				this.webpage_json = undefined;
 				this.webpage_model = undefined;
 
-				$('#content').html(getTemplate('webpage-add', {
-					"is_new" : true
-				}));
-				initiate_tour("webpages-add", $('#content'));
+				getTemplate('webpage-add', {"is_new" : true}, undefined, function(template_ui){
+					if(!template_ui)
+						  return;
+					$('#content').html($(template_ui));	
+					initiate_tour("webpages-add", $('#content'));
+				}, "#content");
 			},
 
 			/**
@@ -135,12 +137,13 @@ var WebpagesRouter = Backbone.Router
 
 				this.webpage_json = this.webpage_model.get("rules");
 
-				var el = $(getTemplate('webpage-add', {}));
-				$('#content').html(el);
-
-				// Set the name
-				$('#name').val(this.webpage_model.get("name"));
-
+				getTemplate('webpage-add', {}, undefined, function(template_ui){
+					if(!template_ui)
+						  return;
+					var el = $('#content').html($(template_ui));	
+					// Set the name
+					$('#name').val(this.webpage_model.get("name"));
+				}, "#content");
 			},
 
 		});

@@ -188,18 +188,13 @@ $("#online-cal-listners").on("click","#save-scheduleurl", function(e){
 
         $("body #onlineCalendarAddToSite").remove();
 
-		onlineCalendarModel = $(getTemplate("online-calendar-addtosite", {}));
-		onlineCalendarModel.modal('show');
+		getTemplate('online-calendar-addtosite', {}, undefined, function(template_ui){
+			if(!template_ui)
+				  return;
+			onlineCalendarModel = $(template_ui);
+			onlineCalendarModel.modal('show');	
+		}, null);	
 
-		onlineCalendarModel.on("shown.bs.modal", function(){
-
-			console.log("fasdsad");
-
-			
-		});
-
-		
-		
 	});
 
 	// $("#onlineCalendarAddToSite .getStartedToAddToSite").off("click");	

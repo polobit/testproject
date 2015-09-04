@@ -25,7 +25,7 @@ var Handlebars_Compiled_Templates = {};
  * 
  * @returns compiled html with the context
  */
-function getTemplate(templateName, context, download, callback)
+function getTemplate(templateName, context, download, callback, loading_place_holder)
 {
 	var is_async = callback && typeof (callback) == "function";
 
@@ -85,6 +85,15 @@ function getTemplate(templateName, context, download, callback)
 		console.log("Not found " + templateName);
 		return;
 	}
+
+	// Shows loader icon if there is a loader placeholder
+	if(loading_place_holder)
+	{
+		try{
+			$(loading_place_holder).html(getRandomLoadingImg());
+		}catch(err){}
+	}
+		   
 
 	// Stores urls of templates to be downloaded.
 	var template_relative_urls = getTemplateUrls(templateName);
@@ -352,11 +361,12 @@ function downloadTemplate(url, callback)
 
 	var dataType = 'html';
 
+
 	// If Precompiled is enabled, we change the directory to precompiled. If
 	// pre-compiled flat is set true then template path is sent accordingly
 	if (HANDLEBARS_PRECOMPILATION)
 	{
-		url = "tpl/min/precompiled/" + FLAT_FULL_UI + url;
+		url = "tpl/min/precompiled/flatfull/" + url;
 	}
 	else
 		url = "tpl/min/" + FLAT_FULL_UI +  url;
@@ -370,12 +380,12 @@ function downloadTemplate(url, callback)
 
 	url += "?_=" + _AGILE_VERSION;
 	
-	console.log(url + " " + dataType);
-
 	// If callback is sent to this method then template is fetched synchronously
 	var is_async = false;
 	if (callback && typeof (callback) === "function")
 		is_async = true;
+
+	console.log(url + " " + dataType + " " + is_async);
 
 	jQuery.ajax({ url : url, dataType : dataType, success : function(result)
 	{

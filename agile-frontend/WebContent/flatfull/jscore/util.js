@@ -412,7 +412,6 @@ function text_gravatar_initials(items)
 	if (name.length == 0)
 		name = "X";
 
-	console.log(name);
 	return name;
 }
 

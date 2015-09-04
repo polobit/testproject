@@ -119,17 +119,21 @@ function connectedCallNoty(message, type)
 		        }).responseText
 		    );
 		
-//		console.log("json resp : ");
-//		console.log(responseJson);
-//		console.log(JSON.stringify(responseJson));
+		getTemplate("twilioio-voicemail",responseJson, undefined, function(template_ui){
+			if(!template_ui)
+				  return;
+			$('.noty_buttons').prepend($(template_ui));	
+		}, null);
+
 		
-		var voicemailHTML = $(getTemplate("twilioio-voicemail",responseJson), {});
-		$('.noty_buttons').prepend(voicemailHTML);
 		}
 		
 		// Add dialpad template in twilio content
-		var dialpad = $(getTemplate("twilioio-dialpad"), {});
-		$('.noty_buttons').prepend(dialpad);
+		getTemplate("twilioio-dialpad", {}, undefined, function(template_ui){
+			if(!template_ui)
+				  return;
+			$('.noty_buttons').prepend($(template_ui));	
+		}, null);
 
 		return;
 	}

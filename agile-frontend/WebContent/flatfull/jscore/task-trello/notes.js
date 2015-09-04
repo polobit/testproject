@@ -11,10 +11,16 @@ $(function()
 		var formId = getTaskFormId(this);
 		
 		// Append note form
-		$("#forNoteForm", "#" + formId).html(getTemplate('note-form'));	
-		$(".deal-note-label").show();
-		// Hide + Add note link
-		$(this).hide();
+		getTemplate('note-form', {}, undefined, function(template_ui){
+			if(!template_ui)
+				  return;
+
+			$("#forNoteForm", "#" + formId).html($(template_ui));	
+			$(".deal-note-label").show();
+			// Hide + Add note link
+			$(this).hide();
+
+		}, $("#forNoteForm", "#" + formId));
 	});			
 			
 });
@@ -26,7 +32,13 @@ function showNoteOnForm(formName, notes)
 
 	$.each(notes, function(index, note)
 	{
-		$("#notes", "#" + formName).append(getTemplate('notes-for-task', note));
+		getTemplate('notes-for-task', note, undefined, function(template_ui){
+			if(!template_ui)
+				  return;
+			$("#notes", "#" + formName).append($(template_ui));
+		}, null);
+
+		
 	});
 }
 

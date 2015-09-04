@@ -160,51 +160,56 @@ function deserialize_deal(value, template)
 	value = value.toJSON();
 
 	// Loads the form based on template value
-	var dealForm = $("#content").html(getTemplate(template, value));
 
-	deserializeForm(value, dealForm);
+	getTemplate(template, value, undefined, function(template_ui){
+		if(!template_ui)
+			  return;
+		var dealForm = $('#content').html($(template_ui));	
 
-	// Call setupTypeAhead to get contacts
-	agile_type_ahead("relates_to", dealForm, contacts_typeahead);
+		deserializeForm(value, dealForm);
 
-	// Fills owner select element
-	populateUsers("owners-list", dealForm, value, 'owner', function(data)
-	{
-		dealForm.find("#owners-list").html(data);
-		if (value.owner)
+		// Call setupTypeAhead to get contacts
+		agile_type_ahead("relates_to", dealForm, contacts_typeahead);
+
+		// Fills owner select element
+		populateUsers("owners-list", dealForm, value, 'owner', function(data)
 		{
-			$("#owners-list", dealForm).find('option[value=' + value['owner'].id + ']').attr("selected", "selected");
-			$("#owners-list", dealForm).closest('div').find('.loading-img').hide();
-		}
-	});
-
-	// Fills the pipelines list in the select menu.
-	populateTracks(dealForm, undefined, value, function(pipelinesList)
-	{
-
-		// Fills milestone select element
-		populateMilestones(dealForm, undefined, value.pipeline_id, value, function(data)
-		{
-			dealForm.find("#milestone").html(data);
-			if (value.milestone)
+			dealForm.find("#owners-list").html(data);
+			if (value.owner)
 			{
-				$("#milestone", dealForm).find('option[value=\"' + value.milestone + '\"]').attr("selected", "selected");
+				$("#owners-list", dealForm).find('option[value=' + value['owner'].id + ']').attr("selected", "selected");
+				$("#owners-list", dealForm).closest('div').find('.loading-img').hide();
 			}
-			$("#milestone", dealForm).closest('div').find('.loading-img').hide();
 		});
-	});
 
-	// Enable the datepicker
-	$('#close_date', dealForm).datepicker({ format : CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY});
+		// Fills the pipelines list in the select menu.
+		populateTracks(dealForm, undefined, value, function(pipelinesList)
+		{
 
-	add_custom_fields_to_form(value, function(data)
-	{
-		var el = show_custom_fields_helper(data["custom_fields"], []);
-		$("#custom-field-deals", dealForm).html(fill_custom_fields_values_generic($(el), value["custom_data"]));
-		$('.date_input', dealForm).datepicker({ format : CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY});
+			// Fills milestone select element
+			populateMilestones(dealForm, undefined, value.pipeline_id, value, function(data)
+			{
+				dealForm.find("#milestone").html(data);
+				if (value.milestone)
+				{
+					$("#milestone", dealForm).find('option[value=\"' + value.milestone + '\"]').attr("selected", "selected");
+				}
+				$("#milestone", dealForm).closest('div').find('.loading-img').hide();
+			});
+		});
 
-	}, "DEAL")
+		// Enable the datepicker
+		$('#close_date', dealForm).datepicker({ format : CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY});
 
+		add_custom_fields_to_form(value, function(data)
+		{
+			var el = show_custom_fields_helper(data["custom_fields"], []);
+			$("#custom-field-deals", dealForm).html(fill_custom_fields_values_generic($(el), value["custom_data"]));
+			$('.date_input', dealForm).datepicker({ format : CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY});
+
+		}, "DEAL")
+
+	}, "#content");
 }
 
 /**

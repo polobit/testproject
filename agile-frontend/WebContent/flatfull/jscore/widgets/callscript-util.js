@@ -15,20 +15,26 @@ function initializeCallScriptListeners(){
 	{
 		e.preventDefault();
 		// To solve chaining issue when cloned
-		var htmlContent = $(getTemplate("callscript-rule", {})).find('tr').clone();
+		getTemplate('callscript-rule', {}, undefined, function(template_ui){
+			if(!template_ui)
+				  return;
 
-		scramble_input_names($(htmlContent));
+			var htmlContent = $(template_ui).find('tr').clone();
+			scramble_input_names($(htmlContent));
 
-		// boolean parameter to avoid contacts/not-contacts fields in form
-		chainFilters(htmlContent, function()
-		{
+			// boolean parameter to avoid contacts/not-contacts fields in form
+			chainFilters(htmlContent, function()
+			{
 
-		}, false);
+			}, false);
 
-		// $(this).hide();
-		// var htmlContent = $(this).closest("tr").clone();
-		$(htmlContent).find("i.callscript-multiple-remove").css("display", "inline-block");
-		$(this).siblings("table").find("tbody").append(htmlContent);
+			// $(this).hide();
+			// var htmlContent = $(this).closest("tr").clone();
+			$(htmlContent).find("i.callscript-multiple-remove").css("display", "inline-block");
+			$(this).siblings("table").find("tbody").append(htmlContent);
+
+
+		}, null);
 	});
 
 	// Filter Contacts- Remove Multiple
@@ -271,11 +277,17 @@ function showCallScriptRule()
 	// Add rules to show rules page
 	if (callscriptPrefsJson != null)
 	{
-		$("#prefs-tabs-content").html(getTemplate("callscript-table", callscriptPrefsJson.csrules));
-		initializeSubscriptionListeners();
-		
-		// Apply drag drop (sortable)
-		setup_sortable_callscriptrules();
+		getTemplate("callscript-table", callscriptPrefsJson.csrules, undefined, function(template_ui){
+			if(!template_ui)
+				  return;
+
+			$("#prefs-tabs-content").html($(template_ui));
+			initializeSubscriptionListeners();
+			
+			// Apply drag drop (sortable)
+			setup_sortable_callscriptrules();
+
+		}, null);
 	}
 }
 
@@ -337,29 +349,37 @@ function editCallScriptRule(ruleCount)
 		
 		head.js(LIB_PATH + 'lib/agile.jquery.chained.min.js', function()
 		{
-			$("#prefs-tabs-content").html(getTemplate("callscript-rule"));
-			$("#prefs-tabs-content").find('#filter-settings').find("#loading-img-for-table").html(LOADING_HTML).show();
-			$("#prefs-tabs-content").find('#filter-settings').find(".chained-table").hide();
-			
-			chainFilters($("#prefs-tabs-content"), csrule, function()
-			{
-				$("#prefs-tabs-content").find('#filter-settings').find("#loading-img-for-table").hide();
-				$("#prefs-tabs-content").find('#filter-settings').find(".chained-table").show();
-				initializeSubscriptionListeners();
+
+			getTemplate('callscript-rule', {}, undefined, function(template_ui){
+				if(!template_ui)
+					  return;
+				$("#prefs-tabs-content").html($(template_ui));
+
+				$("#prefs-tabs-content").find('#filter-settings').find("#loading-img-for-table").html(LOADING_HTML).show();
+				$("#prefs-tabs-content").find('#filter-settings').find(".chained-table").hide();
 				
-				$(".callscript-multiple-remove").show();
-				$(".callscript-multiple-remove")[0].style.display = "none";
-			});
-			scramble_input_names($("#prefs-tabs-content").find('#filter-settings'));
+				chainFilters($("#prefs-tabs-content"), csrule, function()
+				{
+					$("#prefs-tabs-content").find('#filter-settings').find("#loading-img-for-table").hide();
+					$("#prefs-tabs-content").find('#filter-settings').find(".chained-table").show();
+					initializeSubscriptionListeners();
+					
+					$(".callscript-multiple-remove").show();
+					$(".callscript-multiple-remove")[0].style.display = "none";
+				});
+				scramble_input_names($("#prefs-tabs-content").find('#filter-settings'));
 
-			// Change heading
-			$(".addLable").html(" Edit Call Script Rule");
+				// Change heading
+				$(".addLable").html(" Edit Call Script Rule");
 
-			// Fill input tags
-			$("#name").val(csrule.name);
-			$("#displaytext").val(csrule.displaytext);
-			$("#position").val(csrule.position);
-			$("#rulecount").val(csrule.rulecount);			
+				// Fill input tags
+				$("#name").val(csrule.name);
+				$("#displaytext").val(csrule.displaytext);
+				$("#position").val(csrule.position);
+				$("#rulecount").val(csrule.rulecount);
+
+			}, "#prefs-tabs-content");
+
 		});
 	}
 }

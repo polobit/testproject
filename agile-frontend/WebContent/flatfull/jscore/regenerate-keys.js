@@ -9,7 +9,13 @@ function update_admin_settings_api_key_template(){
 		type : 'GET',
 		dataType : 'json', 
 		success : function(data){
-			$("#admin-prefs-tabs-content").html(getTemplate("admin-settings-api-key-model", data));
+
+			getTemplate("admin-settings-api-key-model", data, undefined, function(template_ui){
+				if(!template_ui)
+					  return;
+
+				$("#admin-prefs-tabs-content").html($(template_ui));
+			}, null);
 		}
 	})
 }

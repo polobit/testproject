@@ -88,9 +88,13 @@ function subscribeToPubNub(domain)
 			if (message.type == "EVENT_REMINDER")
 			{
 				if(CURRENT_DOMAIN_USER['email']==message.useremail){
-				var html = getTemplate("event-notification", message);
-				showNoty('information', html, "bottomRight", "EVENT_REMINDER",undefined,3000000);
-				return;
+					getTemplate("event-notification", message, undefined, function(template_ui){
+						if(!template_ui)
+							  return;
+						showNoty('information', $(template_ui), "bottomRight", "EVENT_REMINDER",undefined,3000000);	
+					}, null);
+
+					return;
 				}
 			
 			}
@@ -98,14 +102,24 @@ function subscribeToPubNub(domain)
 			
 			// shows call notification
 			if(message.type == "CALL"){
-				var html = getTemplate('call-notification', message);
-				showNoty('information', html, 'bottomRight', "CALL");
+				getTemplate('call-notification', message, undefined, function(template_ui){
+					if(!template_ui)
+						  return;
+
+					showNoty('information', $(template_ui), 'bottomRight', "CALL");
+				}, null);
+
 				return;
 			}
 
 			if(message.type == "UNKNOWN_CALL"){
-				var html = getTemplate("unknown-call-notification", message);
-				showNoty('information', html, "bottomRight", "UNKNOWN_CALL");
+				getTemplate("unknown-call-notification", message, undefined, function(template_ui){
+					if(!template_ui)
+						  return;
+
+					showNoty('information', $(template_ui), "bottomRight", "UNKNOWN_CALL");
+				}, null);
+
 				return;
 			}
 			
@@ -113,11 +127,21 @@ function subscribeToPubNub(domain)
 			{
 			   var custom_json = JSON.parse(message["custom_value"]);
 
-			   if(custom_json.owner_id == "ALL")
-				   showNoty('information', getTemplate('campaign-notify',message), 'bottomRight',"CAMPAIGN_NOTIFY");
-			   
-			   if(custom_json.owner_id == CURRENT_DOMAIN_USER['id'])
-				   showNoty('information', getTemplate('campaign-notify', message), 'bottomRight',"CAMPAIGN_NOTIFY");
+			   if(custom_json.owner_id == "ALL"){
+			   		getTemplate('campaign-notify',message, undefined, function(template_ui){
+						if(!template_ui)
+							  return;
+						showNoty('information', $(template_ui), 'bottomRight',"CAMPAIGN_NOTIFY");
+					}, null);
+			   }
+			   if(custom_json.owner_id == CURRENT_DOMAIN_USER['id']){
+
+			   		getTemplate('campaign-notify', message, undefined, function(template_ui){
+						if(!template_ui)
+							  return;
+						showNoty('information', $(template_ui), 'bottomRight',"CAMPAIGN_NOTIFY");
+					}, null);
+			   } 
 				   
 			   return;
 			}
@@ -143,28 +167,32 @@ function subscribeToPubNub(domain)
  */
 function _setupNotification(object)
 {
-
 	// Inorder to avoid navigating to the contact
 	if (object.notification == 'CONTACT_DELETED')
 		object.id = "";
 
 	// gets notification template.
-	var html = getTemplate('notify-html', object);
+	getTemplate('notify-html', object, undefined, function(template_ui){
+		if(!template_ui)
+			  return;
 
-	// Shows notification for link clicked, email opened and browsing.
-	notification_for_email_and_browsing(object, html);
+		var html = $(template_ui);	
+		// Shows notification for link clicked, email opened and browsing.
+		notification_for_email_and_browsing(object, html);
 
-	// Verify whether current_user key exists. It doesn't exists when tag added
-	// through campaign, or notification for email-clicked etc. since session
-	// doesn't exist.
-	if ('current_user_name' in object)
-	{
-		if (notification_prefs.prefs.currentDomainUserName == object.current_user_name)
-			return;
-	}
+		// Verify whether current_user key exists. It doesn't exists when tag added
+		// through campaign, or notification for email-clicked etc. since session
+		// doesn't exist.
+		if ('current_user_name' in object)
+		{
+			if (notification_prefs.prefs.currentDomainUserName == object.current_user_name)
+				return;
+		}
 
-	// notification for tags, contact and deal actions.
-	notification_for_contact_and_deal(object, html);
+		// notification for tags, contact and deal actions.
+		notification_for_contact_and_deal(object, html);
+
+	}, null);
 }
 
 /**

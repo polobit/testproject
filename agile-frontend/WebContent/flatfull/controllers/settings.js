@@ -77,9 +77,12 @@ var SettingsRouter = Backbone.Router
 			userPrefs : function()
 			{
 
-				$("#content").html(getTemplate("settings"), {});
-				/* $('#prefs-tabs-content').html(getRandomLoadingImg()); */
-				var view = new Base_Model_View({ url : '/core/api/user-prefs', template : "settings-user-prefs", el : $('#prefs-tabs-content'), change : false,
+				getTemplate("settings", {}, undefined, function(template_ui){
+					if(!template_ui)
+						  return;
+					$('#content').html($(template_ui));	
+
+					var view = new Base_Model_View({ url : '/core/api/user-prefs', template : "settings-user-prefs", el : $('#prefs-tabs-content'), change : false,
 					reload : true, postRenderCallback : function(el)
 					{
 						initializeSettingsListeners();
@@ -94,10 +97,11 @@ var SettingsRouter = Backbone.Router
 						});
 					} });
 
-				$('#PrefsTab .select').removeClass('select');
-				$('.user-prefs-tab').addClass('select');
-				$(".active").removeClass("active");
-				// $('#content').html(view.render().el);
+					$('#PrefsTab .select').removeClass('select');
+					$('.user-prefs-tab').addClass('select');
+					$(".active").removeClass("active");
+
+				}, "#content");
 			},
 
 			/**
@@ -106,82 +110,93 @@ var SettingsRouter = Backbone.Router
 			 */
 			changePassword : function()
 			{
-				$("#content").html(getTemplate("settings"), {});
 
-				$('#prefs-tabs-content').html(getTemplate("settings-change-password"), {});
-				$('#PrefsTab .select').removeClass('select');
-				$('.user-prefs-tab').addClass('select');
-				$(".active").removeClass("active");
+				getTemplate("settings", {}, undefined, function(template_ui){
+					if(!template_ui)
+						  return;
+					$('#content').html($(template_ui));	
+					getTemplate('settings-change-password', {}, undefined, function(template_ui1){
+						if(!template_ui1)
+							  return;
 
-				// Save button action of change password form, If it is out of
-				// this router wont navigate properly
-				$("#saveNewPassword").on(
-						"click",
-						function(e)
-						{
+						$('#prefs-tabs-content').html($(template_ui1));	
+						$('#PrefsTab .select').removeClass('select');
+						$('.user-prefs-tab').addClass('select');
+						$(".active").removeClass("active");
 
-							e.preventDefault();
-							var saveBtn = $(this);
-
-							// Returns, if the save button has disabled
-							// attribute
-							if ($(saveBtn).attr('disabled'))
-								return;
-
-							// Disables save button to prevent multiple click
-							// event issues
-							disable_save_button($(saveBtn));
-
-							var form_id = $(this).closest('form').attr("id");
-
-							if (!isValidForm('#' + form_id))
-							{
-
-								// Removes disabled attribute of save button
-								enable_save_button($(saveBtn));
-								return false;
-							}
-							// Returns if same password is given
-							if ($("#current_pswd").val() == $("#new_pswd").val())
-							{
-								$('#changePasswordForm').find('span.save-status').html(
-										"<span style='color:red;margin-left:10px;'>Current and New Password can not be the same</span>");
-								$('#changePasswordForm').find('span.save-status').find("span").fadeOut(5000);
-								enable_save_button($(saveBtn));
-								return false;
-							}
-
-							// Show loading symbol until model get saved
-							$('#changePasswordForm').find('span.save-status').html(getRandomLoadingImg());
-
-							var json = serializeForm(form_id);
-
-							$.ajax({
-								url : '/core/api/user-prefs/changePassword',
-								type : 'PUT',
-								data : json,
-								success : function()
+						// Save button action of change password form, If it is out of
+						// this router wont navigate properly
+						$("#saveNewPassword").on(
+								"click",
+								function(e)
 								{
-									$('#changePasswordForm').find('span.save-status').html(
-											"<span style='color:green;margin-left:10px;'>Password changed successfully</span>").fadeOut(5000);
-									enable_save_button($(saveBtn));
-									$('#' + form_id).each(function()
+
+									e.preventDefault();
+									var saveBtn = $(this);
+
+									// Returns, if the save button has disabled
+									// attribute
+									if ($(saveBtn).attr('disabled'))
+										return;
+
+									// Disables save button to prevent multiple click
+									// event issues
+									disable_save_button($(saveBtn));
+
+									var form_id = $(this).closest('form').attr("id");
+
+									if (!isValidForm('#' + form_id))
 									{
-										this.reset();
-									});
-									history.back(-1);
-								},
-								error : function(response)
-								{
-									$('#changePasswordForm').find('span.save-status').html("");
-									$('#changePasswordForm').find('input[name="current_pswd"]').closest(".controls").append(
-											"<span style='color:red;margin-left:10px;'>Incorrect Password</span>");
-									$('#changePasswordForm').find('input[name="current_pswd"]').closest(".controls").find("span").fadeOut(5000);
-									$('#changePasswordForm').find('input[name="current_pswd"]').focus();
-									enable_save_button($(saveBtn));
-								} });
 
-						});
+										// Removes disabled attribute of save button
+										enable_save_button($(saveBtn));
+										return false;
+									}
+									// Returns if same password is given
+									if ($("#current_pswd").val() == $("#new_pswd").val())
+									{
+										$('#changePasswordForm').find('span.save-status').html(
+												"<span style='color:red;margin-left:10px;'>Current and New Password can not be the same</span>");
+										$('#changePasswordForm').find('span.save-status').find("span").fadeOut(5000);
+										enable_save_button($(saveBtn));
+										return false;
+									}
+
+									// Show loading symbol until model get saved
+									$('#changePasswordForm').find('span.save-status').html(getRandomLoadingImg());
+
+									var json = serializeForm(form_id);
+
+									$.ajax({
+										url : '/core/api/user-prefs/changePassword',
+										type : 'PUT',
+										data : json,
+										success : function()
+										{
+											$('#changePasswordForm').find('span.save-status').html(
+													"<span style='color:green;margin-left:10px;'>Password changed successfully</span>").fadeOut(5000);
+											enable_save_button($(saveBtn));
+											$('#' + form_id).each(function()
+											{
+												this.reset();
+											});
+											history.back(-1);
+										},
+										error : function(response)
+										{
+											$('#changePasswordForm').find('span.save-status').html("");
+											$('#changePasswordForm').find('input[name="current_pswd"]').closest(".controls").append(
+													"<span style='color:red;margin-left:10px;'>Incorrect Password</span>");
+											$('#changePasswordForm').find('input[name="current_pswd"]').closest(".controls").find("span").fadeOut(5000);
+											$('#changePasswordForm').find('input[name="current_pswd"]').focus();
+											enable_save_button($(saveBtn));
+										} });
+
+								});
+
+					}, "#prefs-tabs-content");
+
+				}, "#content");
 			},
 
 			/**
@@ -190,23 +205,29 @@ var SettingsRouter = Backbone.Router
 			 */
 			socialPrefs : function()
 			{
-				$("#content").html(getTemplate("settings"), {});
-				var data = { "service" : "linkedin" };
-				var itemView = new Base_Model_View({ url : '/core/api/social-prefs/LINKEDIN', template : "settings-social-prefs", data : data, postRenderCallback : function(el){
-					initializeSettingsListeners();
-				} });
+				getTemplate('settings', {}, undefined, function(template_ui){
+					if(!template_ui)
+						  return;
+					$('#content').html($(template_ui));
 
-				$('#prefs-tabs-content').html(itemView.render().el);
+					var data = { "service" : "linkedin" };
+					var itemView = new Base_Model_View({ url : '/core/api/social-prefs/LINKEDIN', template : "settings-social-prefs", data : data, postRenderCallback : function(el){
+						initializeSettingsListeners();
+					} });
 
-				data = { "service" : "twitter" };
-				var itemView2 = new Base_Model_View({ url : '/core/api/social-prefs/TWITTER', template : "settings-social-prefs", data : data , postRenderCallback : function(el){
-					initializeSettingsListeners();
-				} });
+					$('#prefs-tabs-content').html(itemView.render().el);
 
-				$('#prefs-tabs-content').append(itemView2.render().el);
-				$('#PrefsTab .select').removeClass('select');
-				$('.social-prefs-tab').addClass('select');
-				$(".active").removeClass("active");
+					data = { "service" : "twitter" };
+					var itemView2 = new Base_Model_View({ url : '/core/api/social-prefs/TWITTER', template : "settings-social-prefs", data : data , postRenderCallback : function(el){
+						initializeSettingsListeners();
+					} });
+
+					$('#prefs-tabs-content').append(itemView2.render().el);
+					$('#PrefsTab .select').removeClass('select');
+					$('.social-prefs-tab').addClass('select');
+					$(".active").removeClass("active");
+
+				}, "#content");
 			},
 
 			/**
@@ -219,32 +240,44 @@ var SettingsRouter = Backbone.Router
 			 */
 			email : function()
 			{
-				$("#content").html(getTemplate("settings"), {});
-				$('#prefs-tabs-content').html(getTemplate("settings-email-prefs"), {});
 
-				this.imapListView = {};
-				this.officeListView = {};
-				this.gmailListView = {};
+				getTemplate('settings', {}, undefined, function(template_ui){
+					if(!template_ui)
+						  return;
+						
+					$('#content').html($(template_ui));	
 
-				var socialHeight = 0;
-				$.getJSON("/core/api/emails/synced-accounts", function(data)
-				{
-					initializeSettingsListeners();
-					if (typeof data !== undefined && data.hasOwnProperty('emailAccountsLimitReached') && data.emailAccountsLimitReached)
-						HAS_EMAIL_ACCOUNT_LIMIT_REACHED = true;
-					else
-						HAS_EMAIL_ACCOUNT_LIMIT_REACHED = false;
+					getTemplate('settings-email-prefs', {}, undefined, function(template_ui1){
+							if(!template_ui1)
+								  return;
+							$('#prefs-tabs-content').html($(template_ui1));	
+							this.imapListView = {};
+							this.officeListView = {};
+							this.gmailListView = {};
 
-					var limit = data.emailAccountsLimit;
+					}, "#prefs-tabs-content");
 
-					load_gmail_widgets(limit);
-					load_imap_widgets(limit);
-					load_office365_widgets(limit);
+					var socialHeight = 0;
+					$.getJSON("/core/api/emails/synced-accounts", function(data)
+					{
+						initializeSettingsListeners();
+						if (typeof data !== undefined && data.hasOwnProperty('emailAccountsLimitReached') && data.emailAccountsLimitReached)
+							HAS_EMAIL_ACCOUNT_LIMIT_REACHED = true;
+						else
+							HAS_EMAIL_ACCOUNT_LIMIT_REACHED = false;
 
-					$('#PrefsTab .select').removeClass('select');
-					$('.email-tab').addClass('select');
-					$(".active").removeClass("active");
-				});
+						var limit = data.emailAccountsLimit;
+
+						load_gmail_widgets(limit);
+						load_imap_widgets(limit);
+						load_office365_widgets(limit);
+
+						$('#PrefsTab .select').removeClass('select');
+						$('.email-tab').addClass('select');
+						$(".active").removeClass("active");
+					});
+
+				}, "#content");
 			},
 
 			/**
@@ -252,32 +285,38 @@ var SettingsRouter = Backbone.Router
 			 */
 			imapEdit : function(imap_id)
 			{
-				$("#content").html(getTemplate("settings"), {});
-				if (App_Settings.imapListView === undefined)
-				{
-					App_Settings.navigate("email", { trigger : true });
-					return;
-				}
-				var imapmodel = App_Settings.imapListView.collection.get(imap_id);
-				// Gets IMAP Prefs
-				var itemView2 = new Base_Model_View({ url : '/core/api/imap/', model : imapmodel, template : "settings-imap-prefs", change : false,
-					postRenderCallback : function(el)
-					{
-						initializeSettingsListeners();
-						var model = itemView2.model;
-						var id = model.id;
-						itemView2.model.set("password", "");
-						load_imap_properties(model, el);
-					}, saveCallback : function()
+				getTemplate('settings', {}, undefined, function(template_ui){
+					if(!template_ui)
+						  return;
+					$('#content').html($(template_ui));
+					if (App_Settings.imapListView === undefined)
 					{
 						App_Settings.navigate("email", { trigger : true });
 						return;
-					} });
-				// Appends IMAP
-				$('#prefs-tabs-content').html(itemView2.render().el);
-				$('#PrefsTab .select').removeClass('select');
-				$('.email-tab').addClass('select');
-				$(".active").removeClass("active");
+					}
+
+					var imapmodel = App_Settings.imapListView.collection.get(imap_id);
+					// Gets IMAP Prefs
+					var itemView2 = new Base_Model_View({ url : '/core/api/imap/', model : imapmodel, template : "settings-imap-prefs", change : false,
+						postRenderCallback : function(el)
+						{
+							initializeSettingsListeners();
+							var model = itemView2.model;
+							var id = model.id;
+							itemView2.model.set("password", "");
+							load_imap_properties(model, el);
+						}, saveCallback : function()
+						{
+							App_Settings.navigate("email", { trigger : true });
+							return;
+						} });
+					// Appends IMAP
+					$('#prefs-tabs-content').html(itemView2.render().el);
+					$('#PrefsTab .select').removeClass('select');
+					$('.email-tab').addClass('select');
+					$(".active").removeClass("active");
+
+				}, "#content");
 			},
 
 			/**
@@ -285,31 +324,36 @@ var SettingsRouter = Backbone.Router
 			 */
 			imapAdd : function()
 			{
-				$("#content").html(getTemplate("settings"), {});
-				// Gets IMAP Prefs
-				var itemView2 = new Base_Model_View({ url : '/core/api/imap/', template : "settings-imap-prefs", change : false, isNew : true,
-					postRenderCallback : function(el)
-					{
-						initializeSettingsListeners();
-					}, saveCallback : function()
-					{
-						var model = itemView2.model;
-						var json = model.toJSON();
-						if (typeof json.isUpdated !== 'undefined' && json.hasOwnProperty('isUpdated') && json.isUpdated)
-							App_Settings.navigate("email", { trigger : true });
-						else
+				getTemplate('settings', {}, undefined, function(template_ui){
+					if(!template_ui)
+						  return;
+					$('#content').html($(template_ui));	
+					// Gets IMAP Prefs
+					var itemView2 = new Base_Model_View({ url : '/core/api/imap/', template : "settings-imap-prefs", change : false, isNew : true,
+						postRenderCallback : function(el)
 						{
-							itemView2.render(true);
-							var el = itemView2.el;
+							initializeSettingsListeners();
+						}, saveCallback : function()
+						{
 							var model = itemView2.model;
-							load_imap_folders(el, model);
-						}
-					} });
-				// Appends IMAP
-				$('#prefs-tabs-content').html(itemView2.render().el);
-				$('#PrefsTab .select').removeClass('select');
-				$('.email-tab').addClass('select');
-				$(".active").removeClass("active");
+							var json = model.toJSON();
+							if (typeof json.isUpdated !== 'undefined' && json.hasOwnProperty('isUpdated') && json.isUpdated)
+								App_Settings.navigate("email", { trigger : true });
+							else
+							{
+								itemView2.render(true);
+								var el = itemView2.el;
+								var model = itemView2.model;
+								load_imap_folders(el, model);
+							}
+						} });
+					// Appends IMAP
+					$('#prefs-tabs-content').html(itemView2.render().el);
+					$('#PrefsTab .select').removeClass('select');
+					$('.email-tab').addClass('select');
+					$(".active").removeClass("active");
+
+				}, "#content");
 			},
 
 			/**
@@ -317,24 +361,30 @@ var SettingsRouter = Backbone.Router
 			 */
 			officeAdd : function()
 			{
-				$("#content").html(getTemplate("settings"), {});
-				// Gets Office Prefs
-				var itemView3 = new Base_Model_View({ url : '/core/api/office', template : "settings-office-prefs", isNew : true, change : false,
-					postRenderCallback : function(el)
-					{
-						initializeSettingsListeners();
-						itemView3.model.set("password", "");
-					}, saveCallback : function()
-					{
-						// $("#office-prefs-form").find("#office-password").val("");
-						App_Settings.navigate("email", { trigger : true });
-						return;
-					} });
-				// Appends Office
-				$('#prefs-tabs-content').html(itemView3.render().el);
-				$('#PrefsTab .select').removeClass('select');
-				$('.email-tab').addClass('select');
-				$(".active").removeClass("active");
+				getTemplate('settings', {}, undefined, function(template_ui){
+					if(!template_ui)
+						  return;
+					$('#content').html($(template_ui));	
+
+					// Gets Office Prefs
+					var itemView3 = new Base_Model_View({ url : '/core/api/office', template : "settings-office-prefs", isNew : true, change : false,
+						postRenderCallback : function(el)
+						{
+							initializeSettingsListeners();
+							itemView3.model.set("password", "");
+						}, saveCallback : function()
+						{
+							// $("#office-prefs-form").find("#office-password").val("");
+							App_Settings.navigate("email", { trigger : true });
+							return;
+						} });
+					// Appends Office
+					$('#prefs-tabs-content').html(itemView3.render().el);
+					$('#PrefsTab .select').removeClass('select');
+					$('.email-tab').addClass('select');
+					$(".active").removeClass("active");
+
+				}, "#content");
 			},
 
 			/**
@@ -342,33 +392,39 @@ var SettingsRouter = Backbone.Router
 			 */
 			officeEdit : function(id)
 			{
-				$("#content").html(getTemplate("settings"), {});
-				if (App_Settings.officeListView === undefined)
-				{
-					App_Settings.navigate("email", { trigger : true });
-					return;
-				}
+				getTemplate('settings', {}, undefined, function(template_ui){
+					if(!template_ui)
+						  return;
+					$('#content').html($(template_ui));	
 
-				var office_model = App_Settings.officeListView.collection.get(id);
-
-				// Gets Office Prefs
-				var itemView3 = new Base_Model_View({ url : '/core/api/office/', model : office_model, template : "settings-office-prefs",
-					postRenderCallback : function(el)
+					if (App_Settings.officeListView === undefined)
 					{
-						initializeSettingsListeners();
-						itemView3.model.set("password", "");
-					}, saveCallback : function()
-					{
-						// $("#office-prefs-form").find("#office-password").val("");
 						App_Settings.navigate("email", { trigger : true });
 						return;
-					} });
+					}
 
-				// Appends Office
-				$('#prefs-tabs-content').html(itemView3.render().el);
-				$('#PrefsTab .active').removeClass('select');
-				$('.email-tab').addClass('select');
-				$(".active").removeClass("active");
+					var office_model = App_Settings.officeListView.collection.get(id);
+
+					// Gets Office Prefs
+					var itemView3 = new Base_Model_View({ url : '/core/api/office/', model : office_model, template : "settings-office-prefs",
+						postRenderCallback : function(el)
+						{
+							initializeSettingsListeners();
+							itemView3.model.set("password", "");
+						}, saveCallback : function()
+						{
+							// $("#office-prefs-form").find("#office-password").val("");
+							App_Settings.navigate("email", { trigger : true });
+							return;
+						} });
+
+					// Appends Office
+					$('#prefs-tabs-content').html(itemView3.render().el);
+					$('#PrefsTab .active').removeClass('select');
+					$('.email-tab').addClass('select');
+					$(".active").removeClass("active");
+
+				}, "#content");
 			},
 
 			/**
@@ -376,30 +432,36 @@ var SettingsRouter = Backbone.Router
 			 */
 			gmailShare : function(id)
 			{
-				$("#content").html(getTemplate("settings"), {});
-				if (App_Settings.gmailListView === undefined)
-				{
-					App_Settings.navigate("email", { trigger : true });
-					return;
-				}
-				var gmail_model = App_Settings.gmailListView.collection.get(id);
-				// Gets GMAIL Prefs
-				var gmailShareView = new Base_Model_View({ url : 'core/api/social-prefs/share/' + id, model : gmail_model,
-					template : "settings-gmail-prefs-share", postRenderCallback : function(el)
-					{
-						initializeSettingsListeners();
+				getTemplate('settings', {}, undefined, function(template_ui){
+					if(!template_ui)
+						  return;
+					$('#content').html($(template_ui));	
 
-					}, saveCallback : function()
+					if (App_Settings.gmailListView === undefined)
 					{
 						App_Settings.navigate("email", { trigger : true });
 						return;
-					} });
+					}
+					var gmail_model = App_Settings.gmailListView.collection.get(id);
+					// Gets GMAIL Prefs
+					var gmailShareView = new Base_Model_View({ url : 'core/api/social-prefs/share/' + id, model : gmail_model,
+						template : "settings-gmail-prefs-share", postRenderCallback : function(el)
+						{
+							initializeSettingsListeners();
 
-				// Appends Gmail
-				$('#prefs-tabs-content').html(gmailShareView.render().el);
-				$('#PrefsTab .select').removeClass('select');
-				$('.email-tab').addClass('select');
-				$(".active").removeClass("active");
+						}, saveCallback : function()
+						{
+							App_Settings.navigate("email", { trigger : true });
+							return;
+						} });
+
+					// Appends Gmail
+					$('#prefs-tabs-content').html(gmailShareView.render().el);
+					$('#PrefsTab .select').removeClass('select');
+					$('.email-tab').addClass('select');
+					$(".active").removeClass("active");
+
+				}, "#content");
 			},
 
 			/**
@@ -407,8 +469,11 @@ var SettingsRouter = Backbone.Router
 			 */
 			emailTemplates : function()
 			{
-				$("#content").html(getTemplate("settings"), {});
-				this.emailTemplatesListView = new Base_Collection_View({ url : '/core/api/email/templates', restKey : "emailTemplates",
+				getTemplate('settings', {}, undefined, function(template_ui){
+					if(!template_ui)
+						  return;
+					$('#content').html($(template_ui));	
+					this.emailTemplatesListView = new Base_Collection_View({ url : '/core/api/email/templates', restKey : "emailTemplates",
 					templateKey : "settings-email-templates", individual_tag_name : 'tr', postRenderCallback : function(el)
 					{
 						initializeSettingsListeners();
@@ -419,12 +484,13 @@ var SettingsRouter = Backbone.Router
 						});
 					} });
 
-				this.emailTemplatesListView.collection.fetch();
-				$('#prefs-tabs-content').html(this.emailTemplatesListView.el);
-				$('#PrefsTab .select').removeClass('select');
-				$('.email-templates-tab').addClass('select');
-				$(".active").removeClass("active");
-				// $('#content').html(this.emailTemplatesListView.el);
+					this.emailTemplatesListView.collection.fetch();
+					$('#prefs-tabs-content').html(this.emailTemplatesListView.el);
+					$('#PrefsTab .select').removeClass('select');
+					$('.email-templates-tab').addClass('select');
+					$(".active").removeClass("active");
+
+				}, "#content");
 
 			},
 
@@ -434,30 +500,35 @@ var SettingsRouter = Backbone.Router
 			 */
 			emailTemplateAdd : function()
 			{
-				$("#content").html(getTemplate("settings"), {});
-				var view = new Base_Model_View({ url : '/core/api/email/templates', isNew : true, template : "settings-email-template-add",
+
+				getTemplate('settings', {}, undefined, function(template_ui){
+					if(!template_ui)
+						  return;
+					$('#content').html($(template_ui));
+					var view = new Base_Model_View({ url : '/core/api/email/templates', isNew : true, template : "settings-email-template-add",
 					window : 'email-templates', postRenderCallback : function()
 					{
 						initializeEmailTemplateAddListeners();
 					} });
 
-				$('#prefs-tabs-content').html(view.render().el);
+					$('#prefs-tabs-content').html(view.render().el);
 
-				// set up TinyMCE Editor
-				setupTinyMCEEditor('textarea#email-template-html', false, undefined, function()
-				{
+					// set up TinyMCE Editor
+					setupTinyMCEEditor('textarea#email-template-html', false, undefined, function()
+					{
 
-					// Reset tinymce
-					set_tinymce_content('email-template-html', '');
+						// Reset tinymce
+						set_tinymce_content('email-template-html', '');
 
-					// Register focus
-					register_focus_on_tinymce('email-template-html');
-				});
+						// Register focus
+						register_focus_on_tinymce('email-template-html');
+					});
 
-				$('#PrefsTab .select').removeClass('select');
-				$('.email-templates-tab').addClass('select');
-				$(".active").removeClass("active");
-				// $('#content').html(view.render().el);
+					$('#PrefsTab .select').removeClass('select');
+					$('.email-templates-tab').addClass('select');
+					$(".active").removeClass("active");
+
+				}, "#content");
 			},
 
 			/**
@@ -469,44 +540,49 @@ var SettingsRouter = Backbone.Router
 			 */
 			emailTemplateEdit : function(id)
 			{
-				$("#content").html(getTemplate("settings"), {});
-				// Navigates to list of email templates, if it is not defined
-				if (!this.emailTemplatesListView || this.emailTemplatesListView.collection.length == 0)
-				{
-					this.navigate("email-templates", { trigger : true });
-					return;
-				}
+				getTemplate('settings', {}, undefined, function(template_ui){
+					if(!template_ui)
+						  return;
+					$('#content').html($(template_ui));	
 
-				// Gets the template form its collection
-				var currentTemplate = this.emailTemplatesListView.collection.get(id);
-
-				var view = new Base_Model_View({ url : '/core/api/email/templates', model : currentTemplate, template : "settings-email-template-add",
-					window : 'email-templates', postRenderCallback : function()
+					// Navigates to list of email templates, if it is not defined
+					if (!this.emailTemplatesListView || this.emailTemplatesListView.collection.length == 0)
 					{
-						initializeEmailTemplateAddListeners();
-					} });
+						this.navigate("email-templates", { trigger : true });
+						return;
+					}
 
-				$('#prefs-tabs-content').html(view.render().el);
+					// Gets the template form its collection
+					var currentTemplate = this.emailTemplatesListView.collection.get(id);
 
-				/** TinyMCE * */
+					var view = new Base_Model_View({ url : '/core/api/email/templates', model : currentTemplate, template : "settings-email-template-add",
+						window : 'email-templates', postRenderCallback : function()
+						{
+							initializeEmailTemplateAddListeners();
+						} });
 
-				// set up TinyMCE Editor
-				setupTinyMCEEditor('textarea#email-template-html', false, undefined, function()
-				{
+					$('#prefs-tabs-content').html(view.render().el);
 
-					// Insert content into tinymce
-					set_tinymce_content('email-template-html', currentTemplate.toJSON().text);
+					/** TinyMCE * */
 
-					// Register focus
-					register_focus_on_tinymce('email-template-html');
-				});
+					// set up TinyMCE Editor
+					setupTinyMCEEditor('textarea#email-template-html', false, undefined, function()
+					{
 
-				/** End of TinyMCE* */
+						// Insert content into tinymce
+						set_tinymce_content('email-template-html', currentTemplate.toJSON().text);
 
-				$('#PrefsTab .select').removeClass('select');
-				$('.email-templates-tab').addClass('select');
-				$(".active").removeClass("active");
-				// $("#content").html(view.el);
+						// Register focus
+						register_focus_on_tinymce('email-template-html');
+					});
+
+					/** End of TinyMCE* */
+
+					$('#PrefsTab .select').removeClass('select');
+					$('.email-templates-tab').addClass('select');
+					$(".active").removeClass("active");
+
+				}, "#content");
 			},
 
 			/**
@@ -515,8 +591,13 @@ var SettingsRouter = Backbone.Router
 			 */
 			notificationPrefs : function()
 			{
-				$("#content").html(getTemplate("settings"), {});
-				var view = new Base_Model_View({
+
+				getTemplate('settings', {}, undefined, function(template_ui){
+					if(!template_ui)
+						  return;
+					$('#content').html($(template_ui));	
+
+					var view = new Base_Model_View({
 					url : 'core/api/notifications',
 					template : 'settings-notification-prefs',
 					reload : true,
@@ -552,11 +633,13 @@ var SettingsRouter = Backbone.Router
 						if (navigator.userAgent.indexOf('Safari') !== -1 && navigator.userAgent.indexOf('Chrome') === -1)
 							$('#notification-switch').parent().css('margin-top', '-32px');
 					} });
-				$('#prefs-tabs-content').html(view.render().el);
-				$('#PrefsTab .select').removeClass('select');
-				$('.notification-prefs-tab').addClass('select');
-				$(".active").removeClass("active");
-				// $('#content').html(view.render().el);
+
+					$('#prefs-tabs-content').html(view.render().el);
+					$('#PrefsTab .select').removeClass('select');
+					$('.notification-prefs-tab').addClass('select');
+					$(".active").removeClass("active");
+
+				}, "#content");
 			},
 
 			/**
@@ -565,63 +648,71 @@ var SettingsRouter = Backbone.Router
 			support : function()
 			{
 				load_clickdesk_code();
-				$("#content").html(getTemplate("support-form"), {});
-				$(".active").removeClass("active");
-				$("#helpView").addClass("active");
-				// var CLICKDESK_Live_Chat = "offline";
-				try
-				{
-					CLICKDESK_Live_Chat
-							.onStatus(function(status)
-							{
 
-								if (status == "online")
-									$("#clickdesk_status")
-											.html(
-													'Chat with our support representative.<br/> <a class="text-info c-p" onclick="CLICKDESK_LIVECHAT.show();">Start chat</a>.');
-								else
-									$("#clickdesk_status")
-											.html(
-													'No chat support representative is available at the moment. Please<br/> <a href="#contact-us" id="show_support">leave a message</a>.');
-							});
+				getTemplate('support-form', {}, undefined, function(template_ui){
+					if(!template_ui)
+						  return;
+					$('#content').html($(template_ui));	
+					$(".active").removeClass("active");
+					$("#helpView").addClass("active");
 
-				}
-				catch (e)
-				{
+					try
+					{
+						CLICKDESK_Live_Chat
+								.onStatus(function(status)
+								{
 
-					setTimeout(
-							function()
-							{
+									if (status == "online")
+										$("#clickdesk_status")
+												.html(
+														'Chat with our support representative.<br/> <a class="text-info c-p" onclick="CLICKDESK_LIVECHAT.show();">Start chat</a>.');
+									else
+										$("#clickdesk_status")
+												.html(
+														'No chat support representative is available at the moment. Please<br/> <a href="#contact-us" id="show_support">leave a message</a>.');
+								});
 
-								CLICKDESK_Live_Chat
-										.onStatus(function(status)
-										{
+					}
+					catch (e)
+					{
 
-											if (status == "online")
-												$("#clickdesk_status")
-														.html(
-																'Chat with our support representative.<br/> <a class="text-info c-p" onclick="CLICKDESK_LIVECHAT.show();">Start chat</a>.');
-											else
-												$("#clickdesk_status")
-														.html(
-																'No chat support representative is available at the moment. Please<br/> <a href="#contact-us" id="show_support">leave a message</a>.');
-										});
+						setTimeout(
+								function()
+								{
 
-							}, 5000);
+									CLICKDESK_Live_Chat
+											.onStatus(function(status)
+											{
 
-				}
+												if (status == "online")
+													$("#clickdesk_status")
+															.html(
+																	'Chat with our support representative.<br/> <a class="text-info c-p" onclick="CLICKDESK_LIVECHAT.show();">Start chat</a>.');
+												else
+													$("#clickdesk_status")
+															.html(
+																	'No chat support representative is available at the moment. Please<br/> <a href="#contact-us" id="show_support">leave a message</a>.');
+											});
 
-				hideTransitionBar();
-				// $("#clickdesk_status").html('No chat support representative
-				// is available at the moment. Please<br/> <a href="#contact-us"
-				// id="show_support">leave a message</a>.');
+								}, 5000);
+
+					}
+
+					hideTransitionBar();
+
+
+				}, "#content");
 			},
 
 			scheduler : function()
 			{
-				 $('#content').html("<div id='online-cal-listners'>&nbsp;</div>");
-				$("#online-cal-listners").html(getTemplate("settings"), {});
-				var view = new Base_Model_View({
+				$('#content').html("<div id='online-cal-listners'>&nbsp;</div>");
+				getTemplate('settings', {}, undefined, function(template_ui){
+					if(!template_ui)
+						  return;
+					$('#online-cal-listners').html($(template_ui));
+
+					var view = new Base_Model_View({
 					url : 'core/api/scheduleprefs',
 					type : 'GET',
 					template : 'settings-business-prefs',
@@ -658,6 +749,7 @@ var SettingsRouter = Backbone.Router
 				$('.scheduler-prefs-tab').addClass('select');
 				$(".active").removeClass("active");
 
+				}, "#online-cal-listners");
 			},
 
 			/**
@@ -665,11 +757,14 @@ var SettingsRouter = Backbone.Router
 			 */
 			contactUsEmail : function()
 			{
-				// $("#content").html(getTemplate("help-mail-form",
-				// CURRENT_DOMAIN_USER));
-				$("#content").html(getTemplate("help-mail-form"), {});
-				$(".active").removeClass("active");
-				$("#helpView").addClass("active");
+				getTemplate('help-mail-form', {}, undefined, function(template_ui){
+					if(!template_ui)
+						  return;
+					$('#content').html($(template_ui));	
+					$(".active").removeClass("active");
+					$("#helpView").addClass("active");
+
+				}, "#content");
 			},
 
 			/* theme and layout */
@@ -685,39 +780,29 @@ var SettingsRouter = Backbone.Router
 							dataType : "json",
 							success : function(data)
 							{
+								getTemplate('theme-layout-form', {}, undefined, function(template_ui){
+									if(!template_ui)
+										  return;
+									$('#content').html($(template_ui));	
+									initializeThemeSettingsListeners();
+									$("#menuPosition").val(CURRENT_USER_PREFS.menuPosition);
+									$("#layout").val(CURRENT_USER_PREFS.layout);
+									if (CURRENT_USER_PREFS.animations == true)
+										$("#animations").attr('checked', true);
+									$('.magicMenu  input:radio[name="theme"]').filter('[value=' + CURRENT_USER_PREFS.theme + ']').attr('checked', true);
+									if (data.menuPosition != CURRENT_USER_PREFS.menuPosition || data.layout != CURRENT_USER_PREFS.layout || data.theme != CURRENT_USER_PREFS.theme || data.animations != CURRENT_USER_PREFS.animations)
+										$(".theme-save-status").css("display", "inline");
+									hideTransitionBar();
+
+								}, "#content");
+
 								
-								$("#content").html(getTemplate("theme-layout-form"), {});
-								initializeThemeSettingsListeners();
-								$("#menuPosition").val(CURRENT_USER_PREFS.menuPosition);
-								$("#layout").val(CURRENT_USER_PREFS.layout);
-								if (CURRENT_USER_PREFS.animations == true)
-									$("#animations").attr('checked', true);
-								$('.magicMenu  input:radio[name="theme"]').filter('[value=' + CURRENT_USER_PREFS.theme + ']').attr('checked', true);
-								if (data.menuPosition != CURRENT_USER_PREFS.menuPosition || data.layout != CURRENT_USER_PREFS.layout || data.theme != CURRENT_USER_PREFS.theme || data.animations != CURRENT_USER_PREFS.animations)
-									$(".theme-save-status").css("display", "inline");
-								hideTransitionBar();
 							}, error : function()
 							{
 								hideTransitionBar();
 								showNotyPopUp("information", "error occured please try again", "top");
 							} });
-				/*
-				 * var view = new Base_Model_View({ url :
-				 * '/core/api/user-prefs', template : "theme-layout-form",
-				 * postRenderCallback: function(el){} });
-				 * $('#content').html(view.render().el); var data =
-				 * view.model.toJSON();
-				 * $("#menuPosition").val(CURRENT_USER_PREFS.menuPosition);
-				 * $("#layout").val(CURRENT_USER_PREFS.layout); $('.magicMenu
-				 * input:radio[name="theme"]').filter('[value='+CURRENT_USER_PREFS.theme+']').attr('checked',
-				 * true); if(data.menuPosition !=
-				 * CURRENT_USER_PREFS.menuPosition || data.layout !=
-				 * CURRENT_USER_PREFS.layout || data.theme !=
-				 * CURRENT_USER_PREFS.theme)
-				 * $(".theme-save-status").css("display","inline");
-				 */
-
-				// $(".active").removeClass("active");
+				
 			}
 
 		});

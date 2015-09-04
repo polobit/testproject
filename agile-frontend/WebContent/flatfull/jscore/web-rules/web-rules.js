@@ -62,17 +62,20 @@ $(function()
 			$('body').on('click', '.web-rule-multiple-add', function(e)
 			{
 				e.preventDefault();
-				// To solve chaining issue when cloned
-				var htmlContent = $(getTemplate("webrules-add", {})).find('.webrule-actions > div').clone();
-				
-				//scramble_input_names($(htmlContent));
 
-				
-				chainWebRules($(htmlContent)[0], undefined, true);
-				// var htmlContent = $(this).closest("tr").clone();
-				$(htmlContent).find("i.webrule-multiple-remove").css("display", "inline-block");
-				$(".webrule-actions").append(htmlContent);
-				
+				// To solve chaining issue when cloned
+				getTemplate('webrules-add', {}, undefined, function(template_ui){
+					if(!template_ui)
+						  return;
+
+					var htmlContent = $(template_ui).find('.webrule-actions > div').clone();
+					chainWebRules($(htmlContent)[0], undefined, true);
+					// var htmlContent = $(this).closest("tr").clone();
+					$(htmlContent).find("i.webrule-multiple-remove").css("display", "inline-block");
+					$(".webrule-actions").append(htmlContent);
+
+				}, null);
+
 			});
 			
 			// Filter Contacts- Remove Multiple
@@ -85,14 +88,21 @@ $(function()
 			$('body').on('click', 'i.filter-contacts-web-rule-multiple-add', function(e)
 			{
 				// To solve chaining issue when cloned
-				var htmlContent = $(getTemplate("webrules-add", {})).find('.web-rule-contact-condition-table tr').clone();
-				scramble_input_names($(htmlContent));
+				getTemplate('webrules-add', {}, undefined, function(template_ui){
+					if(!template_ui)
+						  return;
 
-				chainFilters(htmlContent, undefined, undefined, true);
+					var htmlContent = $(template_ui).find('.web-rule-contact-condition-table tr').clone();
+					scramble_input_names($(htmlContent));
 
-				// var htmlContent = $(this).closest("tr").clone();
-				$(htmlContent).find("i.filter-contacts-multiple-remove").css("display", "inline-block");
-				$(this).parents("tbody").append(htmlContent);
+					chainFilters(htmlContent, undefined, undefined, true);
+
+					// var htmlContent = $(this).closest("tr").clone();
+					$(htmlContent).find("i.filter-contacts-multiple-remove").css("display", "inline-block");
+					$(this).parents("tbody").append(htmlContent);
+
+				}, null);
+				
 			});
 			
 			
