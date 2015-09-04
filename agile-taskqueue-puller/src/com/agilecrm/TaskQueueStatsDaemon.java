@@ -366,7 +366,7 @@ public class TaskQueueStatsDaemon extends Thread
      * Initializes thread pool
      */
 
-    private synchronized void leaseTasksOld()
+    private synchronized boolean leaseTasksOld()
     {
 
 	try
@@ -405,21 +405,22 @@ public class TaskQueueStatsDaemon extends Thread
 	    {
 		System.out.println("waiting");
 		wait(wairPeriodInMilliSeconds);
-		leaseTasksOld();
+		return leaseTasksOld();
 	    }
 	    catch (InterruptedException e)
 	    {
 		// TODO Auto-generated catch block
 		e.printStackTrace();
 		wait(wairPeriodInMilliSeconds);
-		leaseTasksOld();
+		return leaseTasksOld();
 	    }
 	}
 	catch (Exception e)
 	{
 	    e.printStackTrace();
 	    logger.info(e.getMessage());
-	    leaseTasksOld();
+	    return leaseTasksOld();
 	}
+
     }
 }
