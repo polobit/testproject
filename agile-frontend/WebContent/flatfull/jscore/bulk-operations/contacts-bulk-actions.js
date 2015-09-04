@@ -1192,16 +1192,23 @@ function postBulkOperationData(url, data, form, contentType, callback, error_mes
 function getDynamicFilters()
 {
 	var dynamic_filter = null;
-	if(!App_Contacts.contactsListView)
-	{
-		return null;
-	}
+	
 	if (company_util.isCompany())
 	{
-		dynamic_filter = App_Contacts.contactsListView.post_data.filterJson;;
+		if(!App_Companies.companiesListView && !App_Companies.companiesListView.post_data)
+		{
+			return null;
+		}
+		
+		dynamic_filter = App_Companies.companiesListView.post_data.filterJson;
 	}
 	else
 	{
+		if(!App_Contacts.contactsListView && !App_Contacts.contactsListView.post_data)
+		{
+			return null;
+		}
+		
 		dynamic_filter = App_Contacts.contactsListView.post_data.filterJson;;
 	}
 
