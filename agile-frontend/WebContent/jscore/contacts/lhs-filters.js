@@ -74,8 +74,13 @@ function loadCustomFiledsFilters(fields, cel, is_company) {
 	}
 }
 
+function getSerializedFilter()
+{
+	return serializeLhsFilters($('#lhs-contact-filter-form'));
+}
+
 function submitLhsFilter() {
-	var formData = serializeLhsFilters($('#lhs-contact-filter-form'))
+	var formData = getSerializedFilter();
 	// erase filter cookies
 	eraseCookie('contact_filter');
 	eraseCookie('contact_filter_type');

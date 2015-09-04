@@ -9,9 +9,9 @@
 var _BULK_CONTACTS = undefined;
 var current_view_contacts_count = 0;
 var SELECT_ALL = false;
+var _BULKACTION_FILTER = undefined;
 $(function()
 {
-
 	/**
 	 * Bulk operations - Change owner Shows all the users as drop down list to
 	 * select one of them as the owner for the selected contacts.
@@ -1192,13 +1192,24 @@ function postBulkOperationData(url, data, form, contentType, callback, error_mes
 function getDynamicFilters()
 {
 	var dynamic_filter = null;
+	
 	if (company_util.isCompany())
 	{
-		dynamic_filter = readData('dynamic_company_filter')
+		if(!App_Companies.companiesListView && !App_Companies.companiesListView.post_data)
+		{
+			return null;
+		}
+		
+		dynamic_filter = App_Companies.companiesListView.post_data.filterJson;
 	}
 	else
 	{
-		dynamic_filter = readData('dynamic_contact_filter')
+		if(!App_Contacts.contactsListView && !App_Contacts.contactsListView.post_data)
+		{
+			return null;
+		}
+		
+		dynamic_filter = App_Contacts.contactsListView.post_data.filterJson;;
 	}
 
 	if (!dynamic_filter || dynamic_filter == null)
