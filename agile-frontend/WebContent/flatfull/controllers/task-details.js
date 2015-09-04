@@ -366,15 +366,18 @@ function update_task(value)
 
 	deserializeForm(value, $("#updateTaskForm"));
 	$("#updateTaskModal").modal('show');
-	// Fills owner select element
-	populateUsers("owners-list", $("#updateTaskForm"), value, 'taskOwner', function(data)
-	{
-		$("#updateTaskForm").find("#owners-list").html(data);
-		if (value.taskOwner)
+	categories.getCategoriesHtml(value,function(catsHtml){
+		$('#type',$("#updateTaskForm")).html(catsHtml);
+		// Fills owner select element
+		populateUsers("owners-list", $("#updateTaskForm"), value, 'taskOwner', function(data)
 		{
-			$("#owners-list", $("#updateTaskForm")).find('option[value=' + value['taskOwner'].id + ']').attr("selected", "selected");
-		}
-		$("#owners-list", $("#updateTaskForm")).closest('div').find('.loading-img').hide();
+			$("#updateTaskForm").find("#owners-list").html(data);
+			if (value.taskOwner)
+			{
+				$("#owners-list", $("#updateTaskForm")).find('option[value=' + value['taskOwner'].id + ']').attr("selected", "selected");
+			}
+			$("#owners-list", $("#updateTaskForm")).closest('div').find('.loading-img').hide();
+		});
 	});
 
     activateSliderAndTimerToTaskModal();

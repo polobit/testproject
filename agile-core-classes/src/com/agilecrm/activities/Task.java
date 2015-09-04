@@ -68,7 +68,7 @@ public class Task extends Cursor
     /**
      * Specifies type of the task
      */
-    public Type type;
+    public String type;
 
     /**
      * Priority type of the task, indicates the Urgency. Available priorities
@@ -196,7 +196,7 @@ public class Task extends Cursor
      * @param agileUserId
      *            Agile user id to create owner
      */
-    public Task(Type type, Long due)
+    public Task(String type, Long due)
     {
 	this.type = type;
 	this.due = due;
@@ -299,7 +299,6 @@ public class Task extends Cursor
 	catch (Exception e)
 	{
 	    e.printStackTrace();
-
 	}
 
 	return "";
