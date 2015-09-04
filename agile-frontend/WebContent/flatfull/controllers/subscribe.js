@@ -45,6 +45,33 @@ var SubscribeRouter = Backbone.Router.extend({
 			{
 			} });
 		$("#content").html(view.render().el);*/
+	/*	var card_details = new Base_Model_View({ url : "core/api/subscription", template : "creditcard-update", window : 'purchase-plan',
+			postRenderCallback : function(el)
+			{
+
+				// Load date and year for card expiry
+				card_expiry(el);
+
+				// To deserialize
+				var card_detail_form = el.find('form.card_details'), card_data = card_details.model.toJSON().billingData;
+
+				USER_CREDIRCARD_DETAILS = card_data;
+				plan_json.customer = JSON.parse(USER_CREDIRCARD_DETAILS);
+
+				var activeCard = getActiveCard (plan_json.customer);
+				
+				// Load countries and respective states
+					// Deserialize card details
+					if (!$.isEmptyObject(card_data))
+					{
+						// Deserialize method defined in
+						// agile_billing.js
+						deserialize_card_details(activeCard, $(card_detail_form));
+					}
+
+			}
+		});
+		$("#content").html(card_details.render().el);*/
 		$("#content").html(getTemplate("creditcard-update"));
 	},
 
