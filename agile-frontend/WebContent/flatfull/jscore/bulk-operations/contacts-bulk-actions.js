@@ -12,13 +12,6 @@ var SELECT_ALL = false;
 var _BULKACTION_FILTER = undefined;
 $(function()
 {
-
-	$("body").on("click", "._contact_bulk_action", function(e) {
-
-		_BULKACTION_FILTER = null;
-		_BULKACTION_FILTER = getSerializedFilter();
-	});
-
 	/**
 	 * Bulk operations - Change owner Shows all the users as drop down list to
 	 * select one of them as the owner for the selected contacts.
