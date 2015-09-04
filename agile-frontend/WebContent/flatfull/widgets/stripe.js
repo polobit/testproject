@@ -48,7 +48,11 @@ function setUpStripeCustomField(stripe_widget_prefs)
 
 		
 		// Fill template with custom fields and show it in Stripe widget panel
-		$('#Stripe').html(getTemplate('stripe-custom-field', stripe_widget_prefs));
+		getTemplate('stripe-custom-field', stripe_widget_prefs, undefined, function(template_ui){
+	 		if(!template_ui)
+	    		return;
+			$('#Stripe').html($(template_ui)); 
+		}, "#Stripe");
 
 	}, "json").error(function(data)
 	{
@@ -138,14 +142,22 @@ function showStripeProfile(stripe_custom_field_name)
 		// Get and Fill the template with data
 		var stripe_template = $(getTemplate("stripe-profile", data));
 
-		// Load jquery time ago function to show time ago in invoices
-		head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
-		{
-			$(".time-ago", stripe_template).timeago();
-		});
+		getTemplate('stripe-profile', data, undefined, function(template_ui){
+	 		if(!template_ui)
+	    		return;
+	    	var stripe_template = $(template_ui);
+	    	// Load jquery time ago function to show time ago in invoices
+			head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
+			{
+				$(".time-ago", stripe_template).timeago();
+			});
 
-		// Show the template in Stripe widget panel
-		$('#Stripe').html(stripe_template);
+			// Show the template in Stripe widget panel
+			$('#Stripe').html(stripe_template);
+			 
+		}, null);
+
+			
 	});
 
 }
@@ -204,7 +216,12 @@ function stripeError(id, message)
 	 * Get error template and fill it with error message and show it in the div
 	 * with given id
 	 */
-	$('#' + id).html(getTemplate('stripe-error', error_json));
+	
+	getTemplate('stripe-error', error_json, undefined, function(template_ui){
+ 		if(!template_ui)
+    		return;
+		$('#' + id).html($(template_ui)); 
+	}, '#' + id);
 }
 
 $(function()

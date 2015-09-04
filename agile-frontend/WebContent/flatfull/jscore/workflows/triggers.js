@@ -411,7 +411,6 @@ function append_triggers_to_workflow(el)
 			getTemplate('workflow-triggers', { "triggers" : trigger_collection.toJSON() }, undefined, function(template_ui){
 				if(!template_ui)
 					  return;
-
 				$(td).html($(template_ui));	
 			}, $(td));
 
