@@ -920,7 +920,7 @@ public class PortletUtil {
 				}
 			}
 			CategoriesUtil categoriesUtil = new CategoriesUtil();
-			List<Category> taskCategoriesList = categoriesUtil.getCategoriesByType(Category.EntityType.TASK.toString());
+			List<Category> taskCategoriesList = categoriesUtil.getAllCategoriesByType(Category.EntityType.TASK.toString());
 
 			if(json!=null && json.getString("group-by")!=null && json.getString("split-by")!=null && json.getString("startDate")!=null && json.getString("endDate")!=null && json.getString("group-by").equalsIgnoreCase("user") && json.getString("split-by").equalsIgnoreCase("category")){
 				int i=0;
