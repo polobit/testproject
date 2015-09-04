@@ -920,8 +920,8 @@ function quickBooks_save_widget_prefs(template_id, url)
 {
 	head.js('https://appcenter.intuit.com/Content/IA/intuit.ipp.anywhere.js', function()
 	{
-		$('#widget-settings', el).html(getTemplate(template_id, { "url" : url }));
-		console.log(el);
+		$('#widget-settings').html(getTemplate(template_id, { "url" : url }));
+		//console.log(el);
 		intuit.ipp.anywhere.setup({ menuProxy : 'http://example.com/myapp/BlueDotMenu', grantUrl : url });
 	});
 

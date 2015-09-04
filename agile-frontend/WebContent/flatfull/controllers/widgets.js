@@ -60,6 +60,7 @@ var WidgetsRouter = Backbone.Router
 																				sort_collection : false, individual_tag_name : 'div', postRenderCallback : function(el)
 																				{
 																								initializeWidgetSettingsListeners();
+																								
 																								build_custom_widget_form(el);
 																								setTimeout(function(){
 																									var socialHeight=0;
@@ -488,6 +489,8 @@ var WidgetsRouter = Backbone.Router
 													 }else{ 																 																 			
 													 	show_set_up_widget("Shopify","shopify-revoke-access");													 		
 													 }
+													 
+													 initializeShopifyListeners();
 												},
 
 
