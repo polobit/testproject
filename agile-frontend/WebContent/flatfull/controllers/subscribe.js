@@ -45,7 +45,7 @@ var SubscribeRouter = Backbone.Router.extend({
 			{
 			} });
 		$("#content").html(view.render().el);*/
-	/*	var card_details = new Base_Model_View({ url : "core/api/subscription", template : "creditcard-update", window : 'purchase-plan',
+		var card_details = new Base_Model_View({ url : "core/api/subscription", template : "creditcard-update", window : 'purchase-plan',
 			postRenderCallback : function(el)
 			{
 
@@ -71,8 +71,8 @@ var SubscribeRouter = Backbone.Router.extend({
 
 			}
 		});
-		$("#content").html(card_details.render().el);*/
-		$("#content").html(getTemplate("creditcard-update"));
+		$("#content").html(card_details.render().el);
+//		$("#content").html(getTemplate("creditcard-update"));
 	},
 
 	billingSettings : function()
