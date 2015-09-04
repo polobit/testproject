@@ -799,7 +799,7 @@ function showPortletSettings(el){
 		elData = $('#portletsCampaignStatsSettingsForm');
 		$("#duration", elData).find('option[value='+ base_model.get("settings").duration +']').attr("selected", "selected");
 		
-		var options="<option value='All'>All Campaign</option>" ;
+		var options="<option value='All'>All Campaigns</option>" ;
 		$.ajax({ type : 'GET', url : '/core/api/workflows', async : false, dataType : 'json',
 			success: function(data){
 				$.each(data,function(index,campaignfilter){
@@ -1918,9 +1918,9 @@ $('.modal-footer').off("click").on('click', '.portlet-settings-save-modal', func
 					selector3.addClass('pull-left p-xs w-half');
 				that.find('#emails-sent-count').text(getNumberWithCommasForPortlets(emailsSentCount));
 				that.find('#emails-sent-label').text("Emails sent");
-				that.find('#emails-opened').append('<div class="pull-left text-light stats_text" ><div class="text-sm text-ellipsis">Opened</div><div class="text-count text-center" style="color:rgb(250, 215, 51);">'+getNumberWithCommasForPortlets(emailsOpenedCount)+'</div></div>');
-				that.find('#emails-clicked').append('<div class="pull-left text-light stats_text"><div class="text-sm text-ellipsis">Clicked</div><div class="text-count text-center" style="color:rgb(18, 209, 18);">'+getNumberWithCommasForPortlets(emailsClickedCount)+'</div></div>');
-				that.find('#emails-unsubscribed').append('<div class="pull-left text-light stats_text"><div class="text-sm text-ellipsis">Unsubscribed</div><div class="text-count text-center" style="color:rgb(240, 80, 80);">'+getNumberWithCommasForPortlets(emailsUnsubscribed)+'</div></div>');
+				that.find('#emails-opened').html('<div class="pull-left text-light stats_text" ><div class="text-sm text-ellipsis">Opened</div><div class="text-count text-center" style="color:rgb(250, 215, 51);">'+getNumberWithCommasForPortlets(emailsOpenedCount)+'</div></div>');
+				that.find('#emails-clicked').html('<div class="pull-left text-light stats_text"><div class="text-sm text-ellipsis">Clicked</div><div class="text-count text-center" style="color:rgb(18, 209, 18);">'+getNumberWithCommasForPortlets(emailsClickedCount)+'</div></div>');
+				that.find('#emails-unsubscribed').html('<div class="pull-left text-light stats_text"><div class="text-sm text-ellipsis">Unsubscribed</div><div class="text-count text-center" style="color:rgb(240, 80, 80);">'+getNumberWithCommasForPortlets(emailsUnsubscribed)+'</div></div>');
 				/*var series=[];
 				series.push(["Emails Sent",emailsSentCount-emailsOpenedCount]);
 				series.push(["Emails Opened",emailsOpenedCount]);
