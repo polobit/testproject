@@ -9,8 +9,15 @@
 var _BULK_CONTACTS = undefined;
 var current_view_contacts_count = 0;
 var SELECT_ALL = false;
+var _BULKACTION_FILTER = undefined;
 $(function()
 {
+
+	$("body").on("click", "._contact_bulk_action", function(e) {
+
+		_BULKACTION_FILTER = null;
+		_BULKACTION_FILTER = getSerializedFilter();
+	});
 
 	/**
 	 * Bulk operations - Change owner Shows all the users as drop down list to
@@ -1194,11 +1201,11 @@ function getDynamicFilters()
 	var dynamic_filter = null;
 	if (company_util.isCompany())
 	{
-		dynamic_filter = readData('dynamic_company_filter')
+		dynamic_filter = _BULKACTION_FILTER;
 	}
 	else
 	{
-		dynamic_filter = readData('dynamic_contact_filter')
+		dynamic_filter = _BULKACTION_FILTER;
 	}
 
 	if (!dynamic_filter || dynamic_filter == null)
