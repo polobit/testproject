@@ -21,9 +21,11 @@ import org.json.JSONArray;
 import com.agilecrm.account.NavbarConstants;
 import com.agilecrm.activities.Activity;
 import com.agilecrm.activities.Call;
+import com.agilecrm.activities.Category;
 import com.agilecrm.activities.Event;
 import com.agilecrm.activities.Task;
 import com.agilecrm.activities.util.ActivityUtil;
+import com.agilecrm.activities.util.CategoriesUtil;
 import com.agilecrm.activities.util.EventUtil;
 import com.agilecrm.activities.util.TaskUtil;
 import com.agilecrm.contact.Contact;
@@ -912,17 +914,19 @@ public class PortletUtil {
 					}
 				}
 			}
+			CategoriesUtil categoriesUtil = new CategoriesUtil();
+			List<Category> taskCategoriesList = categoriesUtil.getCategoriesByType(Category.EntityType.TASK.toString());
 
 			if(json!=null && json.getString("group-by")!=null && json.getString("split-by")!=null && json.getString("startDate")!=null && json.getString("endDate")!=null && json.getString("group-by").equalsIgnoreCase("user") && json.getString("split-by").equalsIgnoreCase("category")){
 				int i=0;
 				for(DomainUser domainUser : usersList){
 					Map<String,Integer> splitByMap = new LinkedHashMap<String,Integer>();
-					for(Task.Type category : Task.Type.values()){
-						List<Task> tasksList = TaskUtil.getTasksRelatesToOwnerOfTypeAndCategory(domainUser.id,category.name(),null,Long.valueOf(json.getString("startDate")),Long.valueOf(json.getString("endDate")),json.getString("tasks"),null);
+					for(Category category : taskCategoriesList){
+						List<Task> tasksList = TaskUtil.getTasksRelatesToOwnerOfTypeAndCategory(domainUser.id,category.getName(),null,Long.valueOf(json.getString("startDate")),Long.valueOf(json.getString("endDate")),json.getString("tasks"),null);
 						if(tasksList!=null)
-							splitByMap.put(category.name(),tasksList.size());
+							splitByMap.put(category.getLabel(),tasksList.size());
 						else
-							splitByMap.put(category.name(),0);
+							splitByMap.put(category.getLabel(),0);
 					}
 					AgileUser agileUser = AgileUser.getCurrentAgileUserFromDomainUser(domainUser.id);
 					
@@ -964,29 +968,29 @@ public class PortletUtil {
 					i++;
 				}
 			}else if(json!=null && json.getString("group-by")!=null && json.getString("split-by")!=null && json.getString("startDate")!=null && json.getString("endDate")!=null && json.getString("group-by").equalsIgnoreCase("category") && json.getString("split-by").equalsIgnoreCase("user")){
-				for(Task.Type category : Task.Type.values()){
+				for(Category category : taskCategoriesList){
 					Map<String,Integer> splitByMap = new LinkedHashMap<String,Integer>();
 					for(DomainUser domainUser : usersList){
-						List<Task> tasksList = TaskUtil.getTasksRelatesToOwnerOfTypeAndCategory(domainUser.id,category.name(),null,Long.valueOf(json.getString("startDate")),Long.valueOf(json.getString("endDate")),json.getString("tasks"),null);
+						List<Task> tasksList = TaskUtil.getTasksRelatesToOwnerOfTypeAndCategory(domainUser.id,category.getName(),null,Long.valueOf(json.getString("startDate")),Long.valueOf(json.getString("endDate")),json.getString("tasks"),null);
 						if(tasksList!=null)
 							splitByMap.put(domainUser.name,tasksList.size());
 						else
 							splitByMap.put(domainUser.name,0);
 					}
-					groupByList.add(category.name());
+					groupByList.add(category.getLabel());
 					splitByList.add(splitByMap);
 				}
 			}else if(json!=null && json.getString("group-by")!=null && json.getString("split-by")!=null && json.getString("startDate")!=null && json.getString("endDate")!=null && json.getString("group-by").equalsIgnoreCase("category") && json.getString("split-by").equalsIgnoreCase("status")){
-				for(Task.Type category : Task.Type.values()){
+				for(Category category : taskCategoriesList){
 					Map<String,Integer> splitByMap = new LinkedHashMap<String,Integer>();
 					for(Task.Status status : Task.Status.values()){
-						List<Task> tasksList = TaskUtil.getTasksRelatesToOwnerOfTypeAndCategory(null,category.name(),status.name(),Long.valueOf(json.getString("startDate")),Long.valueOf(json.getString("endDate")),json.getString("tasks"),usersKeyList);
+						List<Task> tasksList = TaskUtil.getTasksRelatesToOwnerOfTypeAndCategory(null,category.getName(),status.name(),Long.valueOf(json.getString("startDate")),Long.valueOf(json.getString("endDate")),json.getString("tasks"),usersKeyList);
 						if(tasksList!=null)
 							splitByMap.put(status.name(),tasksList.size());
 						else
 							splitByMap.put(status.name(),0);
 					}
-					groupByList.add(category.name());
+					groupByList.add(category.getLabel());
 					splitByList.add(splitByMap);
 				}
 			}else if(json!=null && json.getString("group-by")!=null && json.getString("split-by")!=null && json.getString("startDate")!=null && json.getString("endDate")!=null && json.getString("group-by").equalsIgnoreCase("status") && json.getString("split-by").equalsIgnoreCase("user")){
@@ -1005,12 +1009,12 @@ public class PortletUtil {
 			}else if(json!=null && json.getString("group-by")!=null && json.getString("split-by")!=null && json.getString("startDate")!=null && json.getString("endDate")!=null && json.getString("group-by").equalsIgnoreCase("status") && json.getString("split-by").equalsIgnoreCase("category")){
 				for(Task.Status status : Task.Status.values()){
 					Map<String,Integer> splitByMap = new LinkedHashMap<String,Integer>();
-					for(Task.Type category : Task.Type.values()){
-						List<Task> tasksList = TaskUtil.getTasksRelatesToOwnerOfTypeAndCategory(null,category.name(),status.name(),Long.valueOf(json.getString("startDate")),Long.valueOf(json.getString("endDate")),json.getString("tasks"),usersKeyList);
+					for(Category category : taskCategoriesList){
+						List<Task> tasksList = TaskUtil.getTasksRelatesToOwnerOfTypeAndCategory(null,category.getName(),status.name(),Long.valueOf(json.getString("startDate")),Long.valueOf(json.getString("endDate")),json.getString("tasks"),usersKeyList);
 						if(tasksList!=null)
-							splitByMap.put(category.name(),tasksList.size());
+							splitByMap.put(category.getLabel(),tasksList.size());
 						else
-							splitByMap.put(category.name(),0);
+							splitByMap.put(category.getLabel(),0);
 					}
 					groupByList.add(status.name());
 					splitByList.add(splitByMap);
