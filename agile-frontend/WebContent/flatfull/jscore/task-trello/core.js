@@ -29,8 +29,13 @@ function startMakingCollection(criteria, pending)
 function findArrayForCollection(criteria, pending)
 {
 	if (criteria == "CATEGORY")
-		// Sort task list on count of task and then create collection
-		getArraySortOnCount(criteria, GROUPING_MAP[criteria].type, pending);
+		categories.getGroupingMap(function(map){
+			GROUPING_MAP[criteria] = map;
+			console.log('-------------------',map);
+			// Sort task list on count of task and then create collection
+			//getArraySortOnCount(criteria, GROUPING_MAP[criteria].type, pending);
+			createNestedCollection(criteria, GROUPING_MAP[criteria].type, pending);
+		});
 	else
 		// Creates nested collection
 		createNestedCollection(criteria, GROUPING_MAP[criteria].type, pending);

@@ -4656,9 +4656,10 @@ $(function()
 		if (!name)
 			return;
 
-		var name_json = { "HIGH" : "High", "LOW" : "Low", "NORMAL" : "Normal", "EMAIL" : "Email", "CALL" : "Call", "SEND" : "Send", "TWEET" : "Tweet",
-			"FOLLOW_UP" : "Follow Up", "MEETING" : "Meeting", "MILESTONE" : "Milestone", "OTHER" : "Other", "YET_TO_START" : "Yet To Start",
+		var name_json = { "HIGH" : "High", "LOW" : "Low", "NORMAL" : "Normal", "YET_TO_START" : "Yet To Start",
 			"IN_PROGRESS" : "In Progress", "COMPLETED" : "Completed", "TODAY" : "Today", "TOMORROW" : "Tomorrow", "OVERDUE" : "Overdue", "LATER" : "Later" };
+
+		$.extend(name_json,categories.CATEGORIES,name_json);
 
 		name = name.trim();
 
