@@ -5752,6 +5752,8 @@ $(function()
 			portlet_name = "Task Report";
 		else if(p_name=='Stats Report')
 			portlet_name = "Activity Overview";
+		else if(p_name=='Campaign stats')
+			portlet_name = "Campaign Stats"
 		else
 			portlet_name = p_name;
 		return portlet_name;
@@ -5800,6 +5802,8 @@ $(function()
 			icon_name = "icon-info";
 		else if (p_name == 'Revenue Graph')
 			icon_name = 'icon-graph';
+		else if (p_name == 'Campaign stats')
+			icon_name = 'icon-sitemap';
 		return icon_name;
 	});
 	/**
@@ -6632,6 +6636,8 @@ Handlebars.registerHelper('SALES_CALENDAR_URL', function()
 		description = 'Forecasted revenue graph based on your Deals.';
 	else if (p_name== 'Mini Calendar')
 		description = 'A mini calendar with an overview of your agenda for the day.'
+	else if (p_name == 'Campaign stats')
+		description = 'See how your campaigns are performing with stats on email opens and link clicks.'
 	return description;
 			});
 
@@ -6732,7 +6738,6 @@ Handlebars.registerHelper('SALES_CALENDAR_URL', function()
 		       return options.fn(json);		        
 
 			});
-	
 	Handlebars.registerHelper('toggle_contacts_filter', function(options)
 			{	        
 		    if(readCookie(CONTACTS_DYNAMIC_FILTER_COOKIE_STATUS)=="hide"){
@@ -6740,3 +6745,21 @@ Handlebars.registerHelper('SALES_CALENDAR_URL', function()
 	       	}
 	    	
 			});
+Handlebars.registerHelper('get_campaign_type_filter', function(filter_name)
+{
+	var campaign_type ='';
+	if(filter_name=='All')
+		campaign_type= 'All Campaigns';
+	else{
+		var filter=$.ajax({ type : 'GET', url : '/core/api/workflows/'+filter_name, async : false, dataType : 'json',
+		success : function(data)
+			{
+				if (data != null && data != undefined)
+					campaign_type = "" + data.name;
+			} });
+	}
+	return campaign_type;
+		
+});
+	
+

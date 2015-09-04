@@ -33,6 +33,7 @@ import com.agilecrm.contact.email.ContactEmail;
 import com.agilecrm.contact.email.util.ContactEmailUtil;
 import com.agilecrm.contact.filter.util.ContactFilterUtil;
 import com.agilecrm.contact.util.ContactUtil;
+import com.agilecrm.db.GoogleSQL;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.deals.Milestone;
 import com.agilecrm.deals.Opportunity;
@@ -59,7 +60,10 @@ import com.google.gson.JsonObject;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyService;
-
+import com.googlecode.objectify.Query;
+import com.agilecrm.db.util.GoogleSQLUtil;
+import com.google.appengine.api.NamespaceManager;
+import com.google.appengine.api.utils.SystemProperty;
 /**
  * <code>PortletUtil</code> is the utility class to fetch portlets with
  * respect to id, position.
@@ -112,6 +116,7 @@ public class PortletUtil {
 				allPortlets.add(new Portlet("Leaderboard",PortletType.USERACTIVITY));
 				allPortlets.add(new Portlet("Calls Per Person",PortletType.USERACTIVITY));
 				allPortlets.add(new Portlet("User Activities",PortletType.USERACTIVITY));
+				allPortlets.add(new Portlet("Campaign stats",PortletType.USERACTIVITY));
 			}
 			
 			allPortlets.add(new Portlet("Agile CRM Blog",PortletType.RSS));
@@ -1421,6 +1426,135 @@ public class PortletUtil {
 			return null;
 		}
 	}
+	/**
+	 * Fetches Campaign emails data
+	 * 
+	 * @return {JSONObject}
+	 */
+	public static  JSONObject getCampaignstatsForPortlets(JSONObject json) throws Exception
+	{
+		JSONObject datajson=new JSONObject();
+		int emailsClicked = 0;
+		int emailsOpened =0;
+		int emailsent = 0;
+		int unsubscribe =0;
+		String a="";
+		JSONArray campaignEmailsJSONArray;
+		long minTime=0L;
+		long maxTime=0L;
+		if(json!=null && json.get("duration")!=null){
+			if(json.getString("startDate")!=null)
+				minTime = Long.valueOf(json.getString("startDate"));
+			if(json.getString("endDate")!=null)
+				maxTime = Long.valueOf(json.getString("endDate"))-1;
+		
+			if(json.getString("duration")!=null && json.getString("duration").equalsIgnoreCase("24-hours")){
+			minTime = (new Date().getTime()/1000)-(24*60*60);
+			maxTime = new Date().getTime()/1000;
+		}
+		// start date in mysql date format.
+		String startDate = CampaignReportsUtil.getStartDate(String.valueOf(minTime*1000), String.valueOf(maxTime*1000), null, json.getString("timeZone"));
+		
+		// end date in mysql date format.
+		String endDate = CampaignReportsUtil.getEndDateForReports(String.valueOf(maxTime*1000), json.getString("timeZone"));
+		
+		String [] array = {"EMAIL_SENT","EMAIL_OPENED","EMAIL_CLICKED","UNSUBSCRIBED"};
+		//if (json.getString("campaigntype").equalsIgnoreCase("All"))
+		campaignEmailsJSONArray = getCountByLogTypesforPortlets(json.getString("campaigntype"),startDate,endDate,json.getString("timeZone"));
+			
+		//else
+			//{campaignEmailsJSONArray	=CampaignReportsSQLUtil.getEachCampaignStatsForTable(json.getString("campaigntype"),startDate,endDate,json.getString("timeZone"),a);
+				System.out.println("see"+campaignEmailsJSONArray);	//}
+		if(campaignEmailsJSONArray!=null && campaignEmailsJSONArray.length()>0)
+		{	
+		try{
+				for(int i=0;i<campaignEmailsJSONArray.length();i++){
+
+			if(campaignEmailsJSONArray.getJSONObject(i).getString("log_type").equals("EMAIL_OPENED"))
+			{emailsOpened = Integer.parseInt(campaignEmailsJSONArray.getJSONObject(i).getString("count"));continue;}
+			if(campaignEmailsJSONArray.getJSONObject(i).getString("log_type").equals("EMAIL_CLICKED"))
+			{emailsClicked = Integer.parseInt(campaignEmailsJSONArray.getJSONObject(i).getString("count"));continue;}
+			if(campaignEmailsJSONArray.getJSONObject(i).getString("log_type").equals("EMAIL_SENT"))
+			{emailsent = Integer.parseInt(campaignEmailsJSONArray.getJSONObject(i).getString("total"));continue;}
+			if(campaignEmailsJSONArray.getJSONObject(i).getString("log_type").equals("UNSUBSCRIBED"))
+			{unsubscribe = Integer.parseInt(campaignEmailsJSONArray.getJSONObject(i).getString("count"));continue;}
+			}
+			
+			}
+			catch(Exception e)
+			{
+				System.out.println(e);
+			}
+		}
+		
+	}
+		datajson.put("emailopened",emailsOpened);
+			datajson.put("emailclicked",emailsClicked);
+			datajson.put("emailsent",emailsent);
+			datajson.put("emailunsubscribed",unsubscribe);
+		return datajson;
+		}
+		
+		 public static JSONArray getCountByLogTypesforPortlets(String campaignType,String startDate, String endDate, String timeZone)
+    {
+    	
+			 String domain=NamespaceManager.get();
+			 String query;
+    	// For development
+    	if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Development)
+    	    domain = "localhost";
+
+    	//if (StringUtils.isEmpty(domain) ||  logType == null || logType.length == 0)
+    	  //  return null;
+    		
+    	// Returns (sign)HH:mm from total minutes.
+    	String timeZoneOffset = GoogleSQLUtil.convertMinutesToTime(timeZone);
+    	
+    	/* String query = "SELECT log_type,count(Distinct subscriber_id) AS count ,count(subscriber_id) AS total "+  
+    			" FROM stats.campaign_logs USE INDEX(domain_logtype_logtime_index) "+
+    	                "WHERE DOMAIN="+GoogleSQLUtil.encodeSQLColumnValue(domain) +" AND log_type = " + GoogleSQLUtil.encodeSQLColumnValue(logType[0]) + 
+    	                " AND log_time BETWEEN CONVERT_TZ("+GoogleSQLUtil.encodeSQLColumnValue(startDate)+","+GoogleSQLUtil.getConvertTZ2(timeZoneOffset)+") " + 
+    	                "AND CONVERT_TZ("+GoogleSQLUtil.encodeSQLColumnValue(endDate)+","+GoogleSQLUtil.getConvertTZ2(timeZoneOffset)+") GROUP BY log_type ";
+    	
+    	         for(int i = 0; i < logType.length; i++)
+    	         {
+    	        	 if(i == 0)
+    	        		 continue;
+    	        	 
+    	        	query += " UNION ALL ";
+    	        	 
+    	        	query +=  "SELECT log_type,count(Distinct subscriber_id) AS count , count(subscriber_id) AS total "+  
+    	    			" FROM stats.campaign_logs USE INDEX(domain_logtype_logtime_index) "+
+    	    	                "WHERE DOMAIN="+GoogleSQLUtil.encodeSQLColumnValue(domain)+ " AND log_type = " + GoogleSQLUtil.encodeSQLColumnValue(logType[i]) + 
+    	    	                " AND log_time BETWEEN CONVERT_TZ("+GoogleSQLUtil.encodeSQLColumnValue(startDate)+","+GoogleSQLUtil.getConvertTZ2(timeZoneOffset)+") " + 
+    	    	                "AND CONVERT_TZ("+GoogleSQLUtil.encodeSQLColumnValue(endDate)+","+GoogleSQLUtil.getConvertTZ2(timeZoneOffset)+") GROUP BY log_type ";
+    	        	 
+    	         } */
+			if(campaignType.equalsIgnoreCase("All"))	 
+				 query  =  "SELECT log_type,count(Distinct subscriber_id) AS count ,count(subscriber_id) AS total "+ 
+									" FROM stats.campaign_logs USE INDEX(domain_logtype_logtime_index) "+
+									"WHERE DOMAIN="+GoogleSQLUtil.encodeSQLColumnValue(domain) +" AND log_type in ('EMAIL_SENT','EMAIL_OPENED','EMAIL_CLICKED','UNSUBSCRIBED')"+
+									" AND log_time BETWEEN CONVERT_TZ("+GoogleSQLUtil.encodeSQLColumnValue(startDate)+","+GoogleSQLUtil.getConvertTZ2(timeZoneOffset)+") " +
+										 "AND CONVERT_TZ("+GoogleSQLUtil.encodeSQLColumnValue(endDate)+","+GoogleSQLUtil.getConvertTZ2(timeZoneOffset)+") GROUP BY log_type ";
+			else
+				 query = "SELECT log_type,count(DISTINCT subscriber_id) AS count,count(subscriber_id) AS total "+  
+									"FROM stats.campaign_logs USE INDEX(campid_domain_logtype_logtime_subid_index) "+
+									"WHERE DOMAIN="+GoogleSQLUtil.encodeSQLColumnValue(domain)+" AND campaign_id="+GoogleSQLUtil.encodeSQLColumnValue(campaignType)+" AND log_type in ('EMAIL_SENT','EMAIL_OPENED','EMAIL_CLICKED','UNSUBSCRIBED')"+
+									"AND log_time BETWEEN CONVERT_TZ("+GoogleSQLUtil.encodeSQLColumnValue(startDate)+","+GoogleSQLUtil.getConvertTZ2(timeZoneOffset)+") " + 
+									"AND CONVERT_TZ("+GoogleSQLUtil.encodeSQLColumnValue(endDate)+","+GoogleSQLUtil.getConvertTZ2(timeZoneOffset)+") GROUP BY log_type " ;
+                
+    	
+    	try
+    	{
+    	    return GoogleSQL.getJSONQuery(query);
+    	}
+    	catch (Exception e)
+    	{
+    	    e.printStackTrace();
+    	    return new JSONArray();
+    	}
+
+    }
 
 	public static JSONObject getAccountsList() throws Exception {
 		JSONObject json=new JSONObject();
