@@ -1,144 +1,150 @@
 <script id="admin-settings-api-key-model-template" type="text/html">
-<div class="col">
-   <div class="hbox h-auto m-b-lg">
-      <div class="tab-content">
-         <div id="api-analytics-accordion">
-            <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
-               <div class="panel panel-default">
-                  <div id="settings-api">
-                     <div class="panel-heading" role="tab" id="headingOne">
-                        <div class="panel-title">
-                           <a class="accordion-toggle" data-toggle="collapse" aria-controls="collapseOne" aria-expanded="true" data-parent="#accordion" href="#api-key">API Key</a>
-                        </div>
-                     </div>
-                     <div class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne" id="api-key">
-                        <div class="panel-body" id="api-accordion">
-                           <div class="tab-pane active" id="api">
-                              <b>API key</b> for REST clients (Java, PHP, .Net wrappers) and integrations (Zapier, Wufoo, Unbounce, Chrome extension and others).
-                              <div class="clearfix"></div>
-                              <br/>
-                              <pre  class="prettyprint" id="api_key_code">{{api_key}}<span class="pull-right inline-block"><a id="api_key_generate_icon" class="c-p m-t-xs m-r-xs"><i class="icon-repeat"></i></a><img border="0" src="/img/help.png" class="question-tag-tiny v-top"  rel="popover" data-placement="bottom" data-title="" data-content="Reset API Key" id="element" data-trigger="hover" data-original-title=""></span></pre>
-                              tracking-webrules
-                              <b>Javascript API key</b> only for tracking code on website.
-                              <div class="clearfix"></div>
-                              <br/>
-                              <pre class="prettyprint" id="jsapi_key_code">{{js_api_key}}<span class="inline-block pull-right"><a id="jsapi_key_generate_icon" class="c-p m-t-xs m-r-xs"><i class="icon-repeat"></i></a><img border="0" src="/img/help.png" class="question-tag-tiny v-top" rel="popover" data-placement="bottom" data-title="" data-content="Reset JavaScript API Key" id="element" data-trigger="hover" data-original-title=""></span></pre>
+   <div class="col">
+      <div class="hbox h-auto m-b-lg">
+         <div class="tab-content">
+            <div id="api-analytics-accordion">
+               <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+                  <div class="panel panel-default">
+                     <div id="settings-api">
+                        <div class="panel-heading" role="tab" id="headingOne">
+                           <div class="panel-title">
+                              <a class="accordion-toggle" data-toggle="collapse" aria-controls="collapseOne" aria-expanded="true" data-parent="#accordion" href="#api-key">API Key</a>
                            </div>
                         </div>
-                     </div>
-                  </div>
-               </div>
-               <div class="panel panel-default">
-                  <div id="settings-analytics">
-                     <div class="panel-heading" role="tab" id="headingTwo">
-                        <div class="panel-title">
-                           <a class="accordion-toggle" data-toggle="collapse" aria-controls="collapseTwo" aria-expanded="true" data-parent="#accordion" href="#analytics-code">Analytics Code</a>
-                        </div>
-                     </div>
-                     <div class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo" id="analytics-code">
-                        <div class="panel-body" id="api-accordion">
-                           <div class="tab-pane" id="analytics">
-                              <p>You can use javascript API to track page views on your site, add / delete contacts from your website or blog directly. Copy and paste the below code in your webpage's HTML just before the <b>&lt;/BODY&gt;</b> tag to enable tracking / API methods.</p>
-                              <ul class="nav nav-tabs" id="TrackingTab">
-                                 <li class="tracking-tab"><a data-toggle="tab" href="#tracking">Tracking code</a></li>
-                                 <li class="tracking-webrules-tab active"><a data-toggle="tab" href="#tracking-webrules">Tracking code with Web Rules enabled</a></li>
-                                 <li class="tracking-webrules-whitelist-tab active"><a data-toggle="tab" href="#tracking-webrules-whitelist">Tracking code with Web Rules Whitelist enabled</a></li>
-                              </ul>
-                              <div class="tab-content p-t-sm">
-                                 <!--  Tracking code templete -->
-                                 <div class="tab-pane" id="tracking">
-                                    <div class="clearfix"></div>
-                                    <div>
-                                       <pre  id="api_track_code" class="prettyprint">
-				&lt;script type="text/javascript" src="https://{{getCurrentDomain}}.agilecrm.com/stats/min/agile-min.js"&gt; 
-				&lt;/script&gt;
-				&lt;script type="text/javascript" &gt;
-				 _agile.set_account('{{js_api_key}}', '{{getCurrentDomain}}');
-				 _agile.track_page_view();
-				&lt;/script&gt;
-				</pre>
-                                    </div>
-                                 </div>
-                                 <!-- End of Tracking code templete -->
-                                 <!--  Tracking code with Web Rules templete -->
-                                 <div class="tab-pane active" id="tracking-webrules">
-                                    <div class="clearfix"></div>
-                                    <div>
-                                       <pre  id="api_track_webrules_code" class="prettyprint">
-				&lt;script type="text/javascript" src="https://{{getCurrentDomain}}.agilecrm.com/stats/min/agile-min.js"&gt; 
-				&lt;/script&gt;
-				&lt;script type="text/javascript" &gt;
-				 _agile.set_account('{{js_api_key}}', '{{getCurrentDomain}}');
-				 _agile.track_page_view();
-				 _agile_execute_web_rules();
-				&lt;/script&gt;
-				</pre>
-                                    </div>
-                                 </div>
-                                 <!-- Tracking code with Web Rules templete -->
-                                 <!--  Tracking code with Web Rules whitelist enabled -->
-                                 <div class="tab-pane active" id="tracking-webrules-whitelist">
-                                    <div class="clearfix"></div>
-                                    <div>
-                                       <pre class="prettyprint" id="api_track_webrules_code">
-			&lt;script type="text/javascript" src="https://{{getCurrentDomain}}.agilecrm.com/stats/min/agile-min.js"&gt;
-			&lt;/script&gt;
-			&lt;script type="text/javascript" &gt;
- 			 _agile.set_account('{{js_api_key}}', '{{getCurrentDomain}}');
- 			 _agile_set_whitelist('{{getBase64Domain}}');
- 			 _agile.track_page_view();
- 			 _agile_execute_web_rules();
-			&lt;/script&gt;
-			</pre>
-                                    </div>
-                                 </div>
-                                 <!-- / Tracking code with Web Rules whitelist enabled -->
+                        <div class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne" id="api-key">
+                           <div class="panel-body" id="api-accordion">
+                              <div class="tab-pane active" id="api">
+                                 <b>API key</b> for REST clients (Java, PHP, .Net wrappers) and integrations (Zapier, Wufoo, Unbounce, Chrome extension and others).
+                                 <div class="clearfix"></div>
+                                 <br/>
+                                 <pre  class="prettyprint" id="api_key_code">{{api_key}}<span class="pull-right inline-block"><a id="api_key_generate_icon" class="c-p m-t-xs m-r-xs"><i class="icon-repeat"></i></a><img border="0" src="/img/help.png" class="question-tag-tiny v-top"  rel="popover" data-placement="bottom" data-title="" data-content="Reset API Key" id="element" data-trigger="hover" data-original-title=""></span></pre>
+                                 tracking-webrules
+                                 <b>Javascript API key</b> only for tracking code on website.
+                                 <div class="clearfix"></div>
+                                 <br/>
+                                 <pre class="prettyprint" id="jsapi_key_code">{{js_api_key}}<span class="inline-block pull-right"><a id="jsapi_key_generate_icon" class="c-p m-t-xs m-r-xs"><i class="icon-repeat"></i></a><img border="0" src="/img/help.png" class="question-tag-tiny v-top" rel="popover" data-placement="bottom" data-title="" data-content="Reset JavaScript API Key" id="element" data-trigger="hover" data-original-title=""></span></pre>
                               </div>
                            </div>
                         </div>
                      </div>
                   </div>
-               </div>
-               <!-- Allowed domains template -->
-               <div class="panel panel-default">
-                  <div id="settings-allowed-domains">
-                     <div class="panel-heading" role="tab" id="headingTwo">
-                        <div class="panel-title">
-                           <a class="accordion-toggle" data-toggle="collapse" aria-controls="collapseTwo" aria-expanded="true" data-parent="#accordion" href="#allowed-domains">Allowed Domains</a>
+                  <div class="panel panel-default">
+                     <div id="settings-analytics">
+                        <div class="panel-heading" role="tab" id="headingTwo">
+                           <div class="panel-title">
+                              <a class="accordion-toggle" data-toggle="collapse" aria-controls="collapseTwo" aria-expanded="true" data-parent="#accordion" href="#analytics-code">Analytics Code</a>
+                           </div>
                         </div>
-                     </div>
-                     <div class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo" id="allowed-domains">
-                        <div class="panel-body" id="api-accordion">
-                           <div class="tab-pane" id="domains-allowed">
-                              <textarea class="required" name="allowed_domains" id="allowed_domains" style="resize:both; width: 350px;">{{allowed_domains}}</textarea><br><br>
-                              <a href="#analytics-code" class="btn btn-primary" id="update_allowed_domains">Save Changes</a>
+                        <div class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo" id="analytics-code">
+                           <div class="panel-body" id="api-accordion">
+                              <div class="tab-pane" id="analytics">
+                                 <p>You can use javascript API to track page views on your site, add / delete contacts from your website or blog directly. Copy and paste the below code in your webpage's HTML just before the <b>&lt;/BODY&gt;</b> tag to enable tracking / API methods.</p>
+                                 <ul class="nav nav-tabs" id="TrackingTab">
+                                    <li class="tracking-tab"><a data-toggle="tab" href="#tracking">Tracking code</a></li>
+                                    <li class="tracking-webrules-tab active"><a data-toggle="tab" href="#tracking-webrules">Tracking code with Web Rules enabled</a></li>
+                                    <li class="tracking-webrules-whitelist-tab active"><a data-toggle="tab" href="#tracking-webrules-whitelist">Tracking code with Web Rules Whitelist enabled</a></li>
+                                 </ul>
+                                 <div class="tab-content p-t-sm">
+                                    <!--  Tracking code templete -->
+                                    <div class="tab-pane" id="tracking">
+                                       <div class="clearfix"></div>
+                                       <div>
+                                          <pre  id="api_track_code" class="prettyprint">
+   				&lt;script type="text/javascript" src="https://{{getCurrentDomain}}.agilecrm.com/stats/min/agile-min.js"&gt; 
+   				&lt;/script&gt;
+   				&lt;script type="text/javascript" &gt;
+   				 _agile.set_account('{{js_api_key}}', '{{getCurrentDomain}}');
+   				 _agile.track_page_view();
+   				&lt;/script&gt;
+   				</pre>
+                                       </div>
+                                    </div>
+                                    <!-- End of Tracking code templete -->
+                                    <!--  Tracking code with Web Rules templete -->
+                                    <div class="tab-pane active" id="tracking-webrules">
+                                       <div class="clearfix"></div>
+                                       <div>
+                                          <pre  id="api_track_webrules_code" class="prettyprint">
+   				&lt;script type="text/javascript" src="https://{{getCurrentDomain}}.agilecrm.com/stats/min/agile-min.js"&gt; 
+   				&lt;/script&gt;
+   				&lt;script type="text/javascript" &gt;
+   				 _agile.set_account('{{js_api_key}}', '{{getCurrentDomain}}');
+   				 _agile.track_page_view();
+   				 _agile_execute_web_rules();
+   				&lt;/script&gt;
+   				</pre>
+                                       </div>
+                                    </div>
+                                    <!-- Tracking code with Web Rules templete -->
+                                    <!--  Tracking code with Web Rules whitelist enabled -->
+                                    <div class="tab-pane active" id="tracking-webrules-whitelist">
+                                       <div class="clearfix"></div>
+                                       <div>
+                                          <pre class="prettyprint" id="api_track_webrules_code">
+   			&lt;script type="text/javascript" src="https://{{getCurrentDomain}}.agilecrm.com/stats/min/agile-min.js"&gt;
+   			&lt;/script&gt;
+   			&lt;script type="text/javascript" &gt;
+    			 _agile.set_account('{{js_api_key}}', '{{getCurrentDomain}}');
+    			 _agile_set_whitelist('{{getBase64Domain}}');
+    			 _agile.track_page_view();
+    			 _agile_execute_web_rules();
+   			&lt;/script&gt;
+   			</pre>
+                                       </div>
+                                    </div>
+                                    <!-- / Tracking code with Web Rules whitelist enabled -->
+                                 </div>
+                              </div>
                            </div>
                         </div>
                      </div>
                   </div>
+                  <!-- Allowed domains template -->
+                  <div class="panel panel-default">
+                     <div id="settings-allowed-domains">
+                        <div class="panel-heading" role="tab" id="headingTwo">
+                           <div class="panel-title">
+                              <a class="accordion-toggle" data-toggle="collapse" aria-controls="collapseTwo" aria-expanded="true" data-parent="#accordion" href="#allowed-domains">Allowed Domains</a>
+                           </div>
+                        </div>
+                        <div class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo" id="allowed-domains">
+                           <div class="panel-body p-n" id="api-accordion">
+   					<table class="table table-hover custom-fields-table bg-white m-b-none">
+   						<colgroup><col width="50%"><col width="4%"></colgroup>
+   						<tbody id="allowed_domains_list">
+   							{{#allowed_domain_list allowed_domains}}{{/allowed_domain_list}}
+   						</tbody>
+   					</table>
+   					<div class="show_field p-l p-t p-b">
+   						<input type="text" id="new_allowed_domain" name="new_allowed_domain" style="width:250px;display:inline-block;" class="form-control input-sm" placeholder="New Allowed Domain">
+   						<a href="#analytics-code" class="btn btn-sm btn-primary" id="update_allowed_domains">Add</a>
+   					</div>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+                  <!-- end of Allowed Domains template -->
                </div>
-               <!-- end of Allowed Domains template -->
             </div>
          </div>
       </div>
    </div>
-</div>
-<div class="col w-md">
-   <div class="data-block">
-      <div class="p-l p-r">
-         <h4 class="m-t-none">
-            Help
-         </h4>
-         <p>Agile supports open standard REST. You can use any language which supports REST.</p>
-         We currently have the following libraries for your convenience<br/>
-         <ul class="p-l-md">
-            <li>Java - <a href="https://github.com/agilecrm/java-api" target="_blank" rel="nofollow" title="Link: https://github.com/agilecrm/java-api">GitHub</a></li>
-            <li>Javascript - <a href="https://github.com/agilecrm/javascript-api" target="_blank" rel="nofollow" title="Link: https://github.com/agilecrm/javascript-api">GitHub</a></li>
-            <li>PHP - <a href="https://github.com/agilecrm/php-api" target="_blank" rel="nofollow" title="Link: https://github.com/agilecrm/php-api">GitHub</a></li>
-            <li>.NET - <a href="https://github.com/agilecrm/c-sharp-api" target="_blank" rel="nofollow" title="Link: https://github.com/agilecrm/c-sharp-api">GitHub</a></li>
-         </ul>
-         We will be publishing API for other languages very soon.
+   <div class="col w-md">
+      <div class="data-block">
+         <div class="p-l p-r">
+            <h4 class="m-t-none">
+               Help
+            </h4>
+            <p>Agile supports open standard REST. You can use any language which supports REST.</p>
+            We currently have the following libraries for your convenience<br/>
+            <ul class="p-l-md">
+               <li>Java - <a href="https://github.com/agilecrm/java-api" target="_blank" rel="nofollow" title="Link: https://github.com/agilecrm/java-api">GitHub</a></li>
+               <li>Javascript - <a href="https://github.com/agilecrm/javascript-api" target="_blank" rel="nofollow" title="Link: https://github.com/agilecrm/javascript-api">GitHub</a></li>
+               <li>PHP - <a href="https://github.com/agilecrm/php-api" target="_blank" rel="nofollow" title="Link: https://github.com/agilecrm/php-api">GitHub</a></li>
+               <li>.NET - <a href="https://github.com/agilecrm/c-sharp-api" target="_blank" rel="nofollow" title="Link: https://github.com/agilecrm/c-sharp-api">GitHub</a></li>
+            </ul>
+            We will be publishing API for other languages very soon.
+         </div>
       </div>
    </div>
-</div>
 </script>
