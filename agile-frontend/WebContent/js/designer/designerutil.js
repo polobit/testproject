@@ -666,3 +666,31 @@ $('#from_email').die('click').live('click', function(e){
 		});
 });
 
+function getTaskCategories(type)
+{
+	var categories = {};
+	$.ajax({
+		  url: '/core/api/categories?entity_type=TASK',
+		  type: "GET",
+		  async:false,
+		  dataType:'json',
+		  success: function (tasks) {
+			  try{
+				  $.each (tasks,function(name,value){
+					  categories[value.label]=value.name;
+					  });
+			  }catch(e){
+				  categories = null;
+			  }
+			 
+		}
+		
+	});
+
+	if (categories == null)
+		return null;
+
+	// Parse stringify json
+	return categories;
+} 
+
