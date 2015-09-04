@@ -178,7 +178,10 @@ function saveNode(e) {
 		// Check if node id is undefined or not 
 		if( nodeId == undefined || nodeId == null ) {
 			// Add designer 
-			addNode(jsonDefinition, displayName, jsonValues, 200, 200);
+			if(jsonDefinition.x && jsonDefinition.y)
+				addNode(jsonDefinition, displayName, jsonValues, jsonDefinition.x, jsonDefinition.y);
+			else
+				addNode(jsonDefinition, displayName, jsonValues, 200, 200);
 		}
 		else {					
 	

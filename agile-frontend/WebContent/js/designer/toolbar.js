@@ -213,6 +213,9 @@ function addDraggingCapability() {
             // Get jsonDefinition and add it      	
             var jsonDefinition = $(ui.draggable).data("json");
             
+            jsonDefinition.x = ui.position.left;
+            jsonDefinition.y = ui.position.top;
+            
             if(!checkMaxNodesCount())
         		return;
             if(!checkWorkflowSize())
