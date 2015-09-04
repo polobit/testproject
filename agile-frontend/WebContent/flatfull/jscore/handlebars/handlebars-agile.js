@@ -366,7 +366,8 @@ function downloadTemplate(url, callback)
 	// pre-compiled flat is set true then template path is sent accordingly
 	if (HANDLEBARS_PRECOMPILATION)
 	{
-		url = "tpl/min/precompiled/flatfull/" + url;
+		var templateClodURL = FLAT_FULL_PATH.replace("flatfull/", "");
+		url = templateClodURL + "tpl/min/precompiled/flatfull/" + url;
 	}
 	else
 		url = "tpl/min/" + FLAT_FULL_UI +  url;

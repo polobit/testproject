@@ -85,9 +85,11 @@ content="<%=domainUser.getInfo(DomainUser.LAST_LOGGED_IN_TIME)%>" />
   String CSS_PATH = "/";
   String FLAT_FULL_PATH = "flatfull/";
   //String CSS_PATH = "//cdnapp.agilecrm.com/";
+
   if(!request.getServerName().contains("localhost")){
-	  FLAT_FULL_PATH = (VersioningUtil.getAppVersion(request) == null) ? "" + FLAT_FULL_PATH  : "" + FLAT_FULL_PATH;
+    FLAT_FULL_PATH = (VersioningUtil.getAppVersion(request) == null) ? "https://d1yumg3ugtcyzq.cloudfront.net/" + FLAT_FULL_PATH  : "https://d2zl2ik92yaru4.cloudfront.net/" + FLAT_FULL_PATH;
   }
+
 %>
 
 <!-- <link rel="stylesheet" type="text/css" href="<%=FLAT_FULL_PATH%>css/agile-all.css?_=<%=_AGILE_VERSION%>" />  -->
