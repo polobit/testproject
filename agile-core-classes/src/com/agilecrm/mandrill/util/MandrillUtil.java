@@ -75,16 +75,16 @@ public class MandrillUtil
      */
     public static void splitMandrillTasks(List<MailDeferredTask> tasks, EmailSender emailSender)
     {
-    	// Allows only 20% tasks to send through new Account
-    	int limit = (int) (tasks.size() * 0.2);
+    	// Allows only 50% tasks to send through new Account
+    	int limit = (int) (tasks.size() * 0.5);
     	
     	List<MailDeferredTask> tasksFragment = new ArrayList<MailDeferredTask>();
     	
-    	// Add 20% tasks
+    	// Add 50% tasks
     	for(int i=0; i < limit; i++)
     		tasksFragment.add(tasks.get(i));
     
-    	// New Mandrill key for 20% emails
+    	// New Mandrill key for 50% emails
     	emailSender.setMandrillAPIKey(Globals.MANDRILL_API_KEY_VALUE_2);
     	sendMandrillMails(tasksFragment, emailSender);
     	

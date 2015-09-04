@@ -565,8 +565,8 @@ public class Mandrill
 		if(isPaid == null)
 			isPaid = isPaid();
 		
-		// Key2 and paid pool for Agile's Paid users
-		apiKey = isPaid ? Globals.MANDRILL_API_KEY_VALUE_2 : Globals.MANDRIL_API_KEY_VALUE;
+		// Old key and paid pool for Agile's Paid users
+		apiKey = isPaid ? Globals.MANDRIL_API_KEY_VALUE : Globals.MANDRILL_API_KEY_VALUE_2;
 		String ipPool = isPaid ? Globals.MANDRILL_PAID_POOL :  MANDRILL_MAIN_POOL;
 		
 		mailJSON.put(MANDRILL_API_KEY, apiKey);

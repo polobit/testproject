@@ -160,8 +160,8 @@ public class EmailSender
     {
 	if (emailGateway == null)
 	{
-		// For Free plan return Old Mandrill Account
-		if(!billingRestriction.isEmailPlanPaid())
+		// For Paid plan return old Mandrill Account
+		if(billingRestriction.isEmailPlanPaid())
 			return Globals.MANDRIL_API_KEY_VALUE;
 	
 		return mandrillAPIKey;
