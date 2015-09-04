@@ -52,7 +52,9 @@
 			{{#if id}}
     			<input type="text" name="name" class="hide form-control" value="{{name}}">
     		{{/if}}
-			<input type="hidden" name="isDefault" value={{isDefault}}>
+			<input type="hidden" name="isDefault" value="{{isDefault}}">
+			<input type="hidden" name="won_milestone" value="{{won_milestone}}" />
+			<input type="hidden" name="lost_milestone" value="{{lost_milestone}}" />
 			<div class="panel-title"><a class="accordion-toggle pull-left text-l-none-hover" data-toggle="collapse" aria-controls="collapseOne" aria-expanded="true" data-parent="#deal-tracks-accordion" href="#dealtracks-{{id}}-accordion" style="width:90%;">{{name}}</a></div>
 			<div id="icons" class="pull-right pos-abs pos-r-0 pos-t-0 p-r m-t-xs" style="display:none;">
 			{{#isTracksEligible}}
@@ -77,17 +79,17 @@
 			<fieldset>
     		<div class="control-group m-b-none">  	 
                     <div id="milestone-values-{{id}}">
-					<table class="table table-hover  custom-fields-table bg-white table-hover m-b-none" >
-					<colgroup><col width="50%"><col width="4%"></colgroup>
+					<table class="table table-hover  milestones-table bg-white table-hover m-b-none" >
+					<colgroup><col width="50%"><col width="8%"></colgroup>
 					<tbody class="deal-tracks-tbody ui-sortable">
-					{{#milestone_ul milestones}}{{/milestone_ul}}
+					{{#milestone_ul this}}{{/milestone_ul}}
 					</tbody>
 					</table>
 					</div>
 					<div class="p-l p-t p-b"><a href="#" class="show_milestone_field text-info"><i class="icon-plus-sign"></i> Add Milestone</a></div>
 					<div class="show_field p-l p-t p-b" style="display:none;">
 						<input id="add_new_milestone" class="add_new_milestone form-control input-sm" style="width:145px;display:inline-block" type="text" placeholder="New Milestone">
-						<a class="btn btn-info btn-addon btn-sm add_milestone" data-toggle="modal" id="add_milestone" href="#">Add</a>
+						<a class="btn btn-info btn-addon btn-sm add_milestone m-b-xxs" data-toggle="modal" id="add_milestone" href="#">Add</a>
 					</div>
     				<div class="hidden"><input name="milestones" type="text" class="required form-control" value="{{milestones}}"/></div>
     		</div> 

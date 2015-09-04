@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
+import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -164,5 +165,41 @@ public class MilestoneAPI
     public int domainUserCount()
     {
 	return MilestoneUtil.getCount();
+    }
+
+    @POST
+    @Path("/won")
+    public void setWonMilestone(@FormParam("pipeline_id") Long pipelineId, @FormParam("milestone") String milestone)
+    {
+	try
+	{
+	    MilestoneUtil.setWonMilestone(pipelineId, milestone);
+	}
+	catch (Exception e)
+	{
+	    System.out.println("Exception : " + e.getMessage());
+	    e.printStackTrace();
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+		    .build());
+	}
+    }
+
+    @POST
+    @Path("/lost")
+    public void setLostMilestone(@FormParam("pipeline_id") Long pipelineId, @FormParam("milestone") String milestone)
+    {
+
+	try
+	{
+	    MilestoneUtil.setLostMilestone(pipelineId, milestone);
+	}
+	catch (Exception e)
+	{
+	    System.out.println("Exception : " + e.getMessage());
+	    e.printStackTrace();
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+		    .build());
+	}
+
     }
 }

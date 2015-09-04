@@ -52,8 +52,31 @@
 	        <textarea class="col-md-6 required" style="width: 75%; height: 45%; display: none;" name="text" id="email-template-html" placeholder="Email template html"></textarea>
 	        </div>
 	    </div>
+	    <div class="control-group form-group">
+	    	<div class="controls col-sm-offset-2 col-sm-9" id="tpl-attachment-select">
+	        	<a href="#" class="add-attachment-select text-info"><i class='icon-plus-sign'/></i> Add Attachment</a>
+	        	<span class="attachment-document-select" style="display:none;">
+	        		<select id="attachment-select" style="margin-bottom: -1px;" name="document_id" class="form-control inline-block w overflow-auto">
+	        		</select>
+	        		<a href="#" class="btn btn-default btn-sm add-tpl-attachment-cancel">Cancel</a>
+	        		<a href="#" class="btn btn-sm btn-primary add-tpl-attachment-confirm">Add</a>
+	        		<span id="attachment-select-required" for="attachment-select" generated="true" class="help-inline" style="display:none;">This field is required.</span>
+	        	</span>
+	        </div>
+	        <div class="controls col-sm-9 col-sm-offset-2" id="tpl-attachment-name" style="display:none">
+				<div class="email-attchment-bg form-control inline-block">
+					<div id="tpl_attachment_fname" class="text-ellipsis"></div>
+					{{#if attachment_id}}
+						<input type="hidden" id="attachment_id" name="attachment_id" value={{attachment_id}}/>
+					{{else}}
+						<input type="hidden" id="attachment_id" name="attachment_id" />
+					{{/if}}	
+				</div> 
+				<a href="#" class="add-tpl-attachment-cancel pos-rlt pos-t-n-xs"><i class="icon-remove-circle"></i></a>		
+			</div>
+	    </div>
 <hr>
-<div class="row">
+<div class="row p-b-md">
 	    
 <div class="col-sm-offset-2 col-sm-9">
 			<a href="#email-templates" class="btn btn-default btn-sm">Cancel</a>

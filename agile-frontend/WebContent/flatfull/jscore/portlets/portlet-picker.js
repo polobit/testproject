@@ -562,14 +562,16 @@ function set_p_portlets(base_model){
 				milestonesList=data["milestonesList"];
 				milestoneValuesList=data["milestoneValuesList"];
 				milestoneMap=data["milestoneMap"];
+				wonMilestone=data["wonMilestone"];
+				lostMilestone=data["lostMilestone"];
 				
 				var funnel_data=[];
 				var temp;
 				
 				$.each(milestonesList,function(index,milestone){
 					var each_data=[];
-					if(milestone!='Lost'){
-						if(milestone!='Won')
+					if(milestone!=lostMilestone){
+						if(milestone!=wonMilestone)
 							each_data.push(milestone,milestoneValuesList[index]);
 						else
 							temp=index;

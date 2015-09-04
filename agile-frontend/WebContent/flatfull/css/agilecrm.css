@@ -1898,6 +1898,18 @@ text-overflow:ellipsis;
 	visibility:visible!important;
 }
 
+.milestones-table tbody tr:hover td:last-child .hover-show {
+	visibility: visible !important;
+}
+
+.milestones-table tbody tr:hover td:last-child .hover-hide {
+	visibility: hidden !important;
+}
+
+a.disabled i {
+	color: #dee5e7;
+}
+
 #deal-tracks-accordion .accordion-heading:hover #icons {
 	display: block!important;
 }
