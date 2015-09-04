@@ -17,7 +17,7 @@ import com.agilecrm.contact.util.TagUtil;
 import com.agilecrm.contact.Note;
 
 /**
- * <h1>FormsUtil</h1><br>
+ * <code>FormsUtil</code><br>
  * <p>
  * This class contains <b>Utility methods</b> required by <b>Form Webhook
  * Servlets</b>
