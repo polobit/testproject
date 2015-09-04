@@ -169,7 +169,7 @@ function saveNode(e) {
         	jsonDefinition = jsonDefinition.org;
         
         // Get Display name
-        var displayName = $("#nodeui").find("[name=nodename]").val();
+        var displayName = $("#nodeui").find("[name=nodename]").val();  
                        
         
         // Get the node id and update the old node id
@@ -180,8 +180,18 @@ function saveNode(e) {
 			// Add designer 
 			if(jsonDefinition.x && jsonDefinition.y)
 				addNode(jsonDefinition, displayName, jsonValues, jsonDefinition.x, jsonDefinition.y);
-			else
-				addNode(jsonDefinition, displayName, jsonValues, 200, 200);
+			else{
+					var designer = window.parent.document.getElementById("designer").contentWindow.document.body;
+					var x_coordinate = $(designer).find('#designercontainer').scrollLeft();
+					var y_coordinate = $(designer).find('#designercontainer').scrollTop();
+					var cordinates = (x_coordinate + y_coordinate)/2;
+					$(designer).find('#designercontainer').scrollTop(cordinates);
+					//$(designer).find('#designercontainer').scrollLeft(cordinates);
+					if(x_coordinate !=undefined && y_coordinate  !=undefined )
+						addNode(jsonDefinition, displayName, jsonValues, cordinates+250,cordinates+250);
+					else
+						addNode(jsonDefinition, displayName, jsonValues, 200, 200);
+				}
 		}
 		else {					
 	
