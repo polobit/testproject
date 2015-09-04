@@ -28,17 +28,19 @@ function editTask(taskId, taskListId, taskListOwnerId)
 
 	// Show modal
 	$("#updateTaskModal").modal('show');
-
-	// Fills owner select element
-	populateUsers("owners-list", $("#updateTaskForm"), taskJson, 'taskOwner', function(data)
-	{
-		$("#updateTaskForm").find("#owners-list").html(data);
-		if (taskJson.taskOwner)
+	categories.getCategoriesHtml(taskJson,function(catsHtml){
+		$('#type',$("#updateTaskForm")).html(catsHtml);
+		// Fills owner select element
+		populateUsers("owners-list", $("#updateTaskForm"), taskJson, 'taskOwner', function(data)
 		{
-			$("#owners-list", $("#updateTaskForm")).find('option[value=' + taskJson['taskOwner'].id + ']').attr("selected", "selected");
-		}
-
-		$("#owners-list", $("#updateTaskForm")).closest('div').find('.loading-img').hide();
+			$("#updateTaskForm").find("#owners-list").html(data);
+			if (taskJson.taskOwner)
+			{
+				$("#owners-list", $("#updateTaskForm")).find('option[value=' + taskJson['taskOwner'].id + ']').attr("selected", "selected");
+			}
+	
+			$("#owners-list", $("#updateTaskForm")).closest('div').find('.loading-img').hide();
+		});
 	});
 
 	showNoteOnForm("updateTaskForm", taskJson.notes);

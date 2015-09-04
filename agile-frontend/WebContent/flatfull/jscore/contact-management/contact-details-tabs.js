@@ -244,11 +244,11 @@ $(function()
 		contact_details_tab.load_campaigns();
 	});
 
-    $('body').on('click', '#contactDetailsTab a[href="#company-contacts"]', function(e)
+    /*$('body').on('click', '#contactDetailsTab a[href="#company-contacts"]', function(e)
 	{
 		e.preventDefault();
 		fill_company_related_contacts(App_Contacts.contactDetailView.model.id, 'company-contacts');
-	});
+	});*/
 
 	/**
 	 * Sets cookie when user changes email dropdown under mail tab. Cookie

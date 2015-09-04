@@ -52,6 +52,7 @@ var PortletsRouter = Backbone.Router
 																	'flatfull/img/dashboard_images/Task-report.png',
 																	'flatfull/img/dashboard_images/Task.png',
 																	'flatfull/img/dashboard_images/User-Activities.png',
+																	'flatfull/img/dashboard_images/Campaign-stats.jpg',
 
 																]);
 														initializeAddPortletsListeners();
@@ -145,6 +146,8 @@ function addNewPortlet(portlet_type, p_name) {
 		obj.name="User Activities"
 	else if(p_name=="MiniCalendar")
 		obj.name="Mini Calendar";
+	else if(p_name=="Campaignstats")
+		obj.name="Campaign stats";
 	obj.portlet_type=portlet_type;
 	var max_row_position=0;
 	if(gridster!=undefined)
@@ -217,6 +220,10 @@ function addNewPortlet(portlet_type, p_name) {
 	}else if(portlet_type=="DEALS" && p_name=="RevenueGraph"){
 		json['duration']="this-quarter";
 		json['track']="anyTrack";
+	}
+	else if(portlet_type=="USERACTIVITY" && p_name=="Campaignstats"){
+		json['duration']="yesterday";
+		json['campaign_type']="All";
 	}
 	var portlet = new BaseModel();
 	portlet.url = 'core/api/portlets/addPortlet';
@@ -672,6 +679,8 @@ function initializeAddPortletsListeners(){
     			placement="left";
     			image="flatfull/img/dashboard_images/Mini-Calendar.jpg";
     		}
+    		else if(p_name=="Campaignstats")
+    			image="flatfull/img/dashboard_images/Campaign-stats.jpg";
     	$(this).popover({
     		"rel":"popover",
     		"trigger":"hover",

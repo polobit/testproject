@@ -19,10 +19,13 @@ var AdminSettingsRouter = Backbone.Router.extend({
 	"custom-fields" : "customFields",
 
 	/* Api & Analytics */
-	"api" : "api", "analytics-code" : "analyticsCode", "analytics-code/:id" : "analyticsCode",
+	"analytics-code" : "analyticsCode", "analytics-code/:id" : "analyticsCode",
 
 	/* Milestones */
 	"milestones" : "milestones",
+	
+	/* Categories */
+	"categories" : "categories",
 
 	/* Menu settings - select modules on menu bar */
 	"menu-settings" : "menu_settings",
@@ -275,69 +278,27 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			return;
 		}
 		$("#content").html(getTemplate("admin-settings"), {});
+		$('#content').find('#AdminPrefsTab .select').removeClass('select');
+		$('#content').find('.analytics-code-tab').addClass('select');
+
 		head.js(LIB_PATH + 'lib/prettify-min.js', function()
 		{
-			var view = new Base_Model_View({ url : '/core/api/api-key', template : "admin-settings-api-key-model", postRenderCallback : function(el)
+			new Base_Model_View({ url : '/core/api/api-key', template : "admin-settings-api-key-model", postRenderCallback : function(el)
 			{
-
-				initializeRegenerateKeysListeners();
-				$('#content').find('#admin-prefs-tabs-content').html(view.el);
-
-				$('#content').find('#AdminPrefsTab .select').removeClass('select');
-				$('#content').find('.analytics-code-tab').addClass('select');
-				prettyPrint();
+				$('#content').find('#admin-prefs-tabs-content').html(el);
+				prettify_api_add_events();
 				if (id)
 				{
-					$(el).find('#APITab a[href="#' + id + '"]').trigger('click');
+					switch (id) {
+					case "api-key":
+						break;
+					default:
+						$(el).find('a[href="#' + id + '"]').trigger('click');
+						$(el).find('a[href="#api-key"]').trigger('click');
+						break;
+					}
 				}
-
-				// initZeroClipboard("api_track_webrules_code_icon",
-				// "api_track_webrules_code");
-				// initZeroClipboard("api_key_code_icon", "api_key_code");
-				// initZeroClipboard("api_track_code_icon", "api_track_code");
-
-				try
-				{
-					if (ACCOUNT_PREFS.plan.plan_type.split("_")[0] == "PRO")
-						$("#tracking-webrules, .tracking-webrules-tab").hide();
-					else
-						$("#tracking-webrules-whitelist, .tracking-webrules-whitelist-tab").hide();
-				}
-				catch (e)
-				{
-					$("#tracking-webrules-whitelist, .tracking-webrules-whitelist-tab").hide();
-				}
-
 			} });
-
-			// $('#content').html(view.el);
-		});
-	},
-
-	/**
-	 * Shows API-KEY. Loads minified prettify.js to prettify the view
-	 */
-	api : function()
-	{
-		if (!CURRENT_DOMAIN_USER.is_admin)
-		{
-			$('#content').html(getTemplate('others-not-allowed', {}));
-			return;
-		}
-		head.js(LIB_PATH + 'lib/prettify-min.js', function()
-		{
-			var view = new Base_Model_View({ url : '/core/api/api-key', template : "admin-settings-api-model", postRenderCallback : function(el)
-			{
-
-				initializeRegenerateKeysListeners();
-				prettyPrint();
-			} });
-			$("#content").html(getTemplate("admin-settings"), {});
-			$('#content').find('#admin-prefs-tabs-content').html(view.el);
-			$('#content').find('#AdminPrefsTab .select').removeClass('select');
-			$('#content').find('.analytics-code-tab').addClass('select');
-			$(".active").removeClass("active");
-			// $('#content').html(view.el);
 		});
 	},
 
@@ -368,6 +329,32 @@ var AdminSettingsRouter = Backbone.Router.extend({
 		$('#milestone-listner').find('#admin-prefs-tabs-content').html(this.pipelineGridView.render().el);
 		$('#milestone-listner').find('#AdminPrefsTab .select').removeClass('select');
 		$('#milestone-listner').find('.milestones-tab').addClass('select');
+		$(".active").removeClass("active");
+	},
+	
+	/**
+	 * Creates a Model to show and edit milestones, reloads the page on save
+	 * success
+	 */
+	categories : function()
+	{
+		if (!CURRENT_DOMAIN_USER.is_admin)
+		{
+			$('#content').html(getTemplate('others-not-allowed',{}));
+			return;
+		}
+		$("#content").html(getTemplate("admin-settings"), {});
+		this.categoryGridView = new Base_Collection_View({ url : '/core/api/categories?entity_type=TASK', templateKey : "admin-settings-categories",
+			individual_tag_name : 'tr', sortKey : "order", postRenderCallback : function(el)
+			{
+				console.log("loaded categories : ", el);
+				categories.setup_categories(el);
+				categories.init();
+			} });
+		this.categoryGridView.collection.fetch();
+		$('#content').find('#admin-prefs-tabs-content').html(this.categoryGridView.render().el);
+		$('#content').find('#AdminPrefsTab .select').removeClass('select');
+		$('#content').find('.categories-tab').addClass('select');
 		$(".active").removeClass("active");
 	},
 

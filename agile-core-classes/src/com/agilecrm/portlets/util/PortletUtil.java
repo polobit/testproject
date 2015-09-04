@@ -21,9 +21,11 @@ import org.json.JSONArray;
 import com.agilecrm.account.NavbarConstants;
 import com.agilecrm.activities.Activity;
 import com.agilecrm.activities.Call;
+import com.agilecrm.activities.Category;
 import com.agilecrm.activities.Event;
 import com.agilecrm.activities.Task;
 import com.agilecrm.activities.util.ActivityUtil;
+import com.agilecrm.activities.util.CategoriesUtil;
 import com.agilecrm.activities.util.EventUtil;
 import com.agilecrm.activities.util.TaskUtil;
 import com.agilecrm.contact.Contact;
@@ -31,6 +33,7 @@ import com.agilecrm.contact.email.ContactEmail;
 import com.agilecrm.contact.email.util.ContactEmailUtil;
 import com.agilecrm.contact.filter.util.ContactFilterUtil;
 import com.agilecrm.contact.util.ContactUtil;
+import com.agilecrm.db.GoogleSQL;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.deals.Milestone;
 import com.agilecrm.deals.Opportunity;
@@ -57,7 +60,10 @@ import com.google.gson.JsonObject;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyService;
-
+import com.googlecode.objectify.Query;
+import com.agilecrm.db.util.GoogleSQLUtil;
+import com.google.appengine.api.NamespaceManager;
+import com.google.appengine.api.utils.SystemProperty;
 /**
  * <code>PortletUtil</code> is the utility class to fetch portlets with
  * respect to id, position.
@@ -110,6 +116,7 @@ public class PortletUtil {
 				allPortlets.add(new Portlet("Leaderboard",PortletType.USERACTIVITY));
 				allPortlets.add(new Portlet("Calls Per Person",PortletType.USERACTIVITY));
 				allPortlets.add(new Portlet("User Activities",PortletType.USERACTIVITY));
+				allPortlets.add(new Portlet("Campaign stats",PortletType.USERACTIVITY));
 			}
 			
 			allPortlets.add(new Portlet("Agile CRM Blog",PortletType.RSS));
@@ -912,17 +919,19 @@ public class PortletUtil {
 					}
 				}
 			}
+			CategoriesUtil categoriesUtil = new CategoriesUtil();
+			List<Category> taskCategoriesList = categoriesUtil.getCategoriesByType(Category.EntityType.TASK.toString());
 
 			if(json!=null && json.getString("group-by")!=null && json.getString("split-by")!=null && json.getString("startDate")!=null && json.getString("endDate")!=null && json.getString("group-by").equalsIgnoreCase("user") && json.getString("split-by").equalsIgnoreCase("category")){
 				int i=0;
 				for(DomainUser domainUser : usersList){
 					Map<String,Integer> splitByMap = new LinkedHashMap<String,Integer>();
-					for(Task.Type category : Task.Type.values()){
-						List<Task> tasksList = TaskUtil.getTasksRelatesToOwnerOfTypeAndCategory(domainUser.id,category.name(),null,Long.valueOf(json.getString("startDate")),Long.valueOf(json.getString("endDate")),json.getString("tasks"),null);
+					for(Category category : taskCategoriesList){
+						List<Task> tasksList = TaskUtil.getTasksRelatesToOwnerOfTypeAndCategory(domainUser.id,category.getName(),null,Long.valueOf(json.getString("startDate")),Long.valueOf(json.getString("endDate")),json.getString("tasks"),null);
 						if(tasksList!=null)
-							splitByMap.put(category.name(),tasksList.size());
+							splitByMap.put(category.getLabel(),tasksList.size());
 						else
-							splitByMap.put(category.name(),0);
+							splitByMap.put(category.getLabel(),0);
 					}
 					AgileUser agileUser = AgileUser.getCurrentAgileUserFromDomainUser(domainUser.id);
 					
@@ -964,29 +973,29 @@ public class PortletUtil {
 					i++;
 				}
 			}else if(json!=null && json.getString("group-by")!=null && json.getString("split-by")!=null && json.getString("startDate")!=null && json.getString("endDate")!=null && json.getString("group-by").equalsIgnoreCase("category") && json.getString("split-by").equalsIgnoreCase("user")){
-				for(Task.Type category : Task.Type.values()){
+				for(Category category : taskCategoriesList){
 					Map<String,Integer> splitByMap = new LinkedHashMap<String,Integer>();
 					for(DomainUser domainUser : usersList){
-						List<Task> tasksList = TaskUtil.getTasksRelatesToOwnerOfTypeAndCategory(domainUser.id,category.name(),null,Long.valueOf(json.getString("startDate")),Long.valueOf(json.getString("endDate")),json.getString("tasks"),null);
+						List<Task> tasksList = TaskUtil.getTasksRelatesToOwnerOfTypeAndCategory(domainUser.id,category.getName(),null,Long.valueOf(json.getString("startDate")),Long.valueOf(json.getString("endDate")),json.getString("tasks"),null);
 						if(tasksList!=null)
 							splitByMap.put(domainUser.name,tasksList.size());
 						else
 							splitByMap.put(domainUser.name,0);
 					}
-					groupByList.add(category.name());
+					groupByList.add(category.getLabel());
 					splitByList.add(splitByMap);
 				}
 			}else if(json!=null && json.getString("group-by")!=null && json.getString("split-by")!=null && json.getString("startDate")!=null && json.getString("endDate")!=null && json.getString("group-by").equalsIgnoreCase("category") && json.getString("split-by").equalsIgnoreCase("status")){
-				for(Task.Type category : Task.Type.values()){
+				for(Category category : taskCategoriesList){
 					Map<String,Integer> splitByMap = new LinkedHashMap<String,Integer>();
 					for(Task.Status status : Task.Status.values()){
-						List<Task> tasksList = TaskUtil.getTasksRelatesToOwnerOfTypeAndCategory(null,category.name(),status.name(),Long.valueOf(json.getString("startDate")),Long.valueOf(json.getString("endDate")),json.getString("tasks"),usersKeyList);
+						List<Task> tasksList = TaskUtil.getTasksRelatesToOwnerOfTypeAndCategory(null,category.getName(),status.name(),Long.valueOf(json.getString("startDate")),Long.valueOf(json.getString("endDate")),json.getString("tasks"),usersKeyList);
 						if(tasksList!=null)
 							splitByMap.put(status.name(),tasksList.size());
 						else
 							splitByMap.put(status.name(),0);
 					}
-					groupByList.add(category.name());
+					groupByList.add(category.getLabel());
 					splitByList.add(splitByMap);
 				}
 			}else if(json!=null && json.getString("group-by")!=null && json.getString("split-by")!=null && json.getString("startDate")!=null && json.getString("endDate")!=null && json.getString("group-by").equalsIgnoreCase("status") && json.getString("split-by").equalsIgnoreCase("user")){
@@ -1005,12 +1014,12 @@ public class PortletUtil {
 			}else if(json!=null && json.getString("group-by")!=null && json.getString("split-by")!=null && json.getString("startDate")!=null && json.getString("endDate")!=null && json.getString("group-by").equalsIgnoreCase("status") && json.getString("split-by").equalsIgnoreCase("category")){
 				for(Task.Status status : Task.Status.values()){
 					Map<String,Integer> splitByMap = new LinkedHashMap<String,Integer>();
-					for(Task.Type category : Task.Type.values()){
-						List<Task> tasksList = TaskUtil.getTasksRelatesToOwnerOfTypeAndCategory(null,category.name(),status.name(),Long.valueOf(json.getString("startDate")),Long.valueOf(json.getString("endDate")),json.getString("tasks"),usersKeyList);
+					for(Category category : taskCategoriesList){
+						List<Task> tasksList = TaskUtil.getTasksRelatesToOwnerOfTypeAndCategory(null,category.getName(),status.name(),Long.valueOf(json.getString("startDate")),Long.valueOf(json.getString("endDate")),json.getString("tasks"),usersKeyList);
 						if(tasksList!=null)
-							splitByMap.put(category.name(),tasksList.size());
+							splitByMap.put(category.getLabel(),tasksList.size());
 						else
-							splitByMap.put(category.name(),0);
+							splitByMap.put(category.getLabel(),0);
 					}
 					groupByList.add(status.name());
 					splitByList.add(splitByMap);
@@ -1417,6 +1426,135 @@ public class PortletUtil {
 			return null;
 		}
 	}
+	/**
+	 * Fetches Campaign emails data
+	 * 
+	 * @return {JSONObject}
+	 */
+	public static  JSONObject getCampaignstatsForPortlets(JSONObject json) throws Exception
+	{
+		JSONObject datajson=new JSONObject();
+		int emailsClicked = 0;
+		int emailsOpened =0;
+		int emailsent = 0;
+		int unsubscribe =0;
+		String a="";
+		JSONArray campaignEmailsJSONArray;
+		long minTime=0L;
+		long maxTime=0L;
+		if(json!=null && json.get("duration")!=null){
+			if(json.getString("startDate")!=null)
+				minTime = Long.valueOf(json.getString("startDate"));
+			if(json.getString("endDate")!=null)
+				maxTime = Long.valueOf(json.getString("endDate"))-1;
+		
+			if(json.getString("duration")!=null && json.getString("duration").equalsIgnoreCase("24-hours")){
+			minTime = (new Date().getTime()/1000)-(24*60*60);
+			maxTime = new Date().getTime()/1000;
+		}
+		// start date in mysql date format.
+		String startDate = CampaignReportsUtil.getStartDate(String.valueOf(minTime*1000), String.valueOf(maxTime*1000), null, json.getString("timeZone"));
+		
+		// end date in mysql date format.
+		String endDate = CampaignReportsUtil.getEndDateForReports(String.valueOf(maxTime*1000), json.getString("timeZone"));
+		
+		String [] array = {"EMAIL_SENT","EMAIL_OPENED","EMAIL_CLICKED","UNSUBSCRIBED"};
+		//if (json.getString("campaigntype").equalsIgnoreCase("All"))
+		campaignEmailsJSONArray = getCountByLogTypesforPortlets(json.getString("campaigntype"),startDate,endDate,json.getString("timeZone"));
+			
+		//else
+			//{campaignEmailsJSONArray	=CampaignReportsSQLUtil.getEachCampaignStatsForTable(json.getString("campaigntype"),startDate,endDate,json.getString("timeZone"),a);
+				System.out.println("see"+campaignEmailsJSONArray);	//}
+		if(campaignEmailsJSONArray!=null && campaignEmailsJSONArray.length()>0)
+		{	
+		try{
+				for(int i=0;i<campaignEmailsJSONArray.length();i++){
+
+			if(campaignEmailsJSONArray.getJSONObject(i).getString("log_type").equals("EMAIL_OPENED"))
+			{emailsOpened = Integer.parseInt(campaignEmailsJSONArray.getJSONObject(i).getString("count"));continue;}
+			if(campaignEmailsJSONArray.getJSONObject(i).getString("log_type").equals("EMAIL_CLICKED"))
+			{emailsClicked = Integer.parseInt(campaignEmailsJSONArray.getJSONObject(i).getString("count"));continue;}
+			if(campaignEmailsJSONArray.getJSONObject(i).getString("log_type").equals("EMAIL_SENT"))
+			{emailsent = Integer.parseInt(campaignEmailsJSONArray.getJSONObject(i).getString("total"));continue;}
+			if(campaignEmailsJSONArray.getJSONObject(i).getString("log_type").equals("UNSUBSCRIBED"))
+			{unsubscribe = Integer.parseInt(campaignEmailsJSONArray.getJSONObject(i).getString("count"));continue;}
+			}
+			
+			}
+			catch(Exception e)
+			{
+				System.out.println(e);
+			}
+		}
+		
+	}
+		datajson.put("emailopened",emailsOpened);
+			datajson.put("emailclicked",emailsClicked);
+			datajson.put("emailsent",emailsent);
+			datajson.put("emailunsubscribed",unsubscribe);
+		return datajson;
+		}
+		
+		 public static JSONArray getCountByLogTypesforPortlets(String campaignType,String startDate, String endDate, String timeZone)
+    {
+    	
+			 String domain=NamespaceManager.get();
+			 String query;
+    	// For development
+    	if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Development)
+    	    domain = "localhost";
+
+    	//if (StringUtils.isEmpty(domain) ||  logType == null || logType.length == 0)
+    	  //  return null;
+    		
+    	// Returns (sign)HH:mm from total minutes.
+    	String timeZoneOffset = GoogleSQLUtil.convertMinutesToTime(timeZone);
+    	
+    	/* String query = "SELECT log_type,count(Distinct subscriber_id) AS count ,count(subscriber_id) AS total "+  
+    			" FROM stats.campaign_logs USE INDEX(domain_logtype_logtime_index) "+
+    	                "WHERE DOMAIN="+GoogleSQLUtil.encodeSQLColumnValue(domain) +" AND log_type = " + GoogleSQLUtil.encodeSQLColumnValue(logType[0]) + 
+    	                " AND log_time BETWEEN CONVERT_TZ("+GoogleSQLUtil.encodeSQLColumnValue(startDate)+","+GoogleSQLUtil.getConvertTZ2(timeZoneOffset)+") " + 
+    	                "AND CONVERT_TZ("+GoogleSQLUtil.encodeSQLColumnValue(endDate)+","+GoogleSQLUtil.getConvertTZ2(timeZoneOffset)+") GROUP BY log_type ";
+    	
+    	         for(int i = 0; i < logType.length; i++)
+    	         {
+    	        	 if(i == 0)
+    	        		 continue;
+    	        	 
+    	        	query += " UNION ALL ";
+    	        	 
+    	        	query +=  "SELECT log_type,count(Distinct subscriber_id) AS count , count(subscriber_id) AS total "+  
+    	    			" FROM stats.campaign_logs USE INDEX(domain_logtype_logtime_index) "+
+    	    	                "WHERE DOMAIN="+GoogleSQLUtil.encodeSQLColumnValue(domain)+ " AND log_type = " + GoogleSQLUtil.encodeSQLColumnValue(logType[i]) + 
+    	    	                " AND log_time BETWEEN CONVERT_TZ("+GoogleSQLUtil.encodeSQLColumnValue(startDate)+","+GoogleSQLUtil.getConvertTZ2(timeZoneOffset)+") " + 
+    	    	                "AND CONVERT_TZ("+GoogleSQLUtil.encodeSQLColumnValue(endDate)+","+GoogleSQLUtil.getConvertTZ2(timeZoneOffset)+") GROUP BY log_type ";
+    	        	 
+    	         } */
+			if(campaignType.equalsIgnoreCase("All"))	 
+				 query  =  "SELECT log_type,count(Distinct subscriber_id) AS count ,count(subscriber_id) AS total "+ 
+									" FROM stats.campaign_logs USE INDEX(domain_logtype_logtime_index) "+
+									"WHERE DOMAIN="+GoogleSQLUtil.encodeSQLColumnValue(domain) +" AND log_type in ('EMAIL_SENT','EMAIL_OPENED','EMAIL_CLICKED','UNSUBSCRIBED')"+
+									" AND log_time BETWEEN CONVERT_TZ("+GoogleSQLUtil.encodeSQLColumnValue(startDate)+","+GoogleSQLUtil.getConvertTZ2(timeZoneOffset)+") " +
+										 "AND CONVERT_TZ("+GoogleSQLUtil.encodeSQLColumnValue(endDate)+","+GoogleSQLUtil.getConvertTZ2(timeZoneOffset)+") GROUP BY log_type ";
+			else
+				 query = "SELECT log_type,count(DISTINCT subscriber_id) AS count,count(subscriber_id) AS total "+  
+									"FROM stats.campaign_logs USE INDEX(campid_domain_logtype_logtime_subid_index) "+
+									"WHERE DOMAIN="+GoogleSQLUtil.encodeSQLColumnValue(domain)+" AND campaign_id="+GoogleSQLUtil.encodeSQLColumnValue(campaignType)+" AND log_type in ('EMAIL_SENT','EMAIL_OPENED','EMAIL_CLICKED','UNSUBSCRIBED')"+
+									"AND log_time BETWEEN CONVERT_TZ("+GoogleSQLUtil.encodeSQLColumnValue(startDate)+","+GoogleSQLUtil.getConvertTZ2(timeZoneOffset)+") " + 
+									"AND CONVERT_TZ("+GoogleSQLUtil.encodeSQLColumnValue(endDate)+","+GoogleSQLUtil.getConvertTZ2(timeZoneOffset)+") GROUP BY log_type " ;
+                
+    	
+    	try
+    	{
+    	    return GoogleSQL.getJSONQuery(query);
+    	}
+    	catch (Exception e)
+    	{
+    	    e.printStackTrace();
+    	    return new JSONArray();
+    	}
+
+    }
 
 	public static JSONObject getAccountsList() throws Exception {
 		JSONObject json=new JSONObject();
