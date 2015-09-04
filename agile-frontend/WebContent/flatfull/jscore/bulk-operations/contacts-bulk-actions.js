@@ -1199,13 +1199,17 @@ function postBulkOperationData(url, data, form, contentType, callback, error_mes
 function getDynamicFilters()
 {
 	var dynamic_filter = null;
+	if(!App_Contacts.contactsListView)
+	{
+		return null;
+	}
 	if (company_util.isCompany())
 	{
-		dynamic_filter = _BULKACTION_FILTER;
+		dynamic_filter = App_Contacts.contactsListView.post_data.filterJson;;
 	}
 	else
 	{
-		dynamic_filter = _BULKACTION_FILTER;
+		dynamic_filter = App_Contacts.contactsListView.post_data.filterJson;;
 	}
 
 	if (!dynamic_filter || dynamic_filter == null)
