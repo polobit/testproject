@@ -2074,8 +2074,14 @@ function taskReportBarGraph(selector,groupByList,series,text,base_model,domainUs
 		                		return '<img src="'+this.value+'" alt="" style="vertical-align: middle; width: 25px; height: 25px;border-radius:15px;" title="'+domainUserNamesList[userIndex]+'"/>';
 		                	else
 		                		return '<img src="'+gravatarImgForPortlets(25)+'" alt="" style="vertical-align: middle; width: 25px; height: 25px;border-radius:15px;" title="'+domainUserNamesList[userIndex]+'"/>';
-	                	}else
-	                		return this.value;
+	                	}else{
+	                		if(this.value.length>12){
+                				return this.value.slice(0, 12)+'...';
+                			}
+               				else{
+               					return this.value;
+               				}
+	                	}
 	                },
 	                style : {
 	    				color : '#98a6ad',
@@ -2157,7 +2163,15 @@ function taskReportBarGraph(selector,groupByList,series,text,base_model,domainUs
 				layout : 'vertical',
 				floating : true,
 				align : 'right',
-				verticalAlign : 'top'
+				verticalAlign : 'top',
+				labelFormatter: function() {
+                	if(this.name.length>12){
+                		return this.name.slice(0, 12)+'...';
+                	}
+               		else{
+               			return this.name;
+               		}
+    			}
 			}
 	    });
 	});
