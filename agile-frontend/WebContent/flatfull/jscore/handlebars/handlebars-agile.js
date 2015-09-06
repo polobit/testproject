@@ -366,8 +366,7 @@ function downloadTemplate(url, callback)
 	// pre-compiled flat is set true then template path is sent accordingly
 	if (HANDLEBARS_PRECOMPILATION)
 	{
-		var templateClodURL = FLAT_FULL_PATH.replace("flatfull/", "");
-		url = templateClodURL + "tpl/min/precompiled/flatfull/" + url;
+		url = "tpl/min/precompiled/" + FLAT_FULL_UI +  url;
 	}
 	else
 		url = "tpl/min/" + FLAT_FULL_UI +  url;
@@ -376,7 +375,7 @@ function downloadTemplate(url, callback)
 	if (url.endsWith("js") && HANDLEBARS_PRECOMPILATION)
 	{
 		dataType = 'script';
-		url = TEMPLATE_LIB_PATH + url;
+		url = LIB_PATH + url;
 	}
 
 	url += "?_=" + _AGILE_VERSION;

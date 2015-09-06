@@ -84,17 +84,20 @@ content="<%=domainUser.getInfo(DomainUser.LAST_LOGGED_IN_TIME)%>" />
 <%
   String CSS_PATH = "/";
   String FLAT_FULL_PATH = "flatfull/";
-  //String CSS_PATH = "//cdnapp.agilecrm.com/";
 
-  if(!request.getServerName().contains("localhost")){
-    FLAT_FULL_PATH = (VersioningUtil.getAppVersion(request) == null) ? "https://d1yumg3ugtcyzq.cloudfront.net/" + FLAT_FULL_PATH  : "https://d2zl2ik92yaru4.cloudfront.net/" + FLAT_FULL_PATH;
+  String CLOUDFRONT_TEMPLATE_LIB_PATH = "";
+    if(!request.getServerName().contains("localhost")){
+    CLOUDFRONT_TEMPLATE_LIB_PATH = "//d1yumg3ugtcyzq.cloudfront.net/";
+    // "//d2zl2ik92yaru4.cloudfront.net/"
   }
+
+  String CSS_PATH = CLOUDFRONT_TEMPLATE_LIB_PATH + FLAT_FULL_PATH;
 
 %>
 
 <!-- <link rel="stylesheet" type="text/css" href="<%=FLAT_FULL_PATH%>css/agile-all.css?_=<%=_AGILE_VERSION%>" />  -->
 <!-- <link rel="stylesheet" type="text/css" href="<%=FLAT_FULL_PATH%>css/lib-min.css"></link> -->
-<link rel="stylesheet" type="text/css" href="<%=FLAT_FULL_PATH%>css/min/lib-all-new.css?_=<%=_AGILE_VERSION%>"></link>
+<link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/min/lib-all-new.css?_=<%=_AGILE_VERSION%>"></link>
 
 
 <!--  bootstrap 3 files -->
@@ -108,11 +111,11 @@ content="<%=domainUser.getInfo(DomainUser.LAST_LOGGED_IN_TIME)%>" />
   
   System.out.println(CSS_PATH + "css/bootstrap.css />");
   
-  String cssLink = "<link rel=\"stylesheet\" type=\"text/css\" href=\"" + FLAT_FULL_PATH + "css/bootstrap.css\" />";
+  String cssLink = "<link rel=\"stylesheet\" type=\"text/css\" href=\"" + CSS_PATH + "css/bootstrap.css\" />";
   
   System.out.println(cssLink);
   if(ui != null)
-      cssLink = "<link rel=\"stylesheet\" type=\"text/css\" href=\"" + FLAT_FULL_PATH + "css/bootstrap-" + ui + ".css/>";
+      cssLink = "<link rel=\"stylesheet\" type=\"text/css\" href=\"" + CSS_PATH + "css/bootstrap-" + ui + ".css/>";
   else if(css != null)
   {
       cssLink = "<link rel=\"stylesheet\" type=\"text/css\" href=\"/cssloader?link="+css + "\"/>";
@@ -126,9 +129,8 @@ content="<%=domainUser.getInfo(DomainUser.LAST_LOGGED_IN_TIME)%>" />
 
 <%=cssLink %>
 <!-- <link rel="stylesheet" type="text/css" href="<%=FLAT_FULL_PATH%>css/agile-app-framework.css">  -->
-<link rel="stylesheet" type="text/css" href="<%=FLAT_FULL_PATH%>css/min/misc-all-new.css?_=<%=_AGILE_VERSION%>"></link>
-<link rel="stylesheet" type="text/css" href="<%=FLAT_FULL_PATH%>css/min/core-all-new.css?_=<%=_AGILE_VERSION%>"></link>
-
+<link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/min/misc-all-new.css?_=<%=_AGILE_VERSION%>"></link>
+<link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/min/core-all-new.css?_=<%=_AGILE_VERSION%>"></link>
 
 <style>
 .clickdesk_bubble {
@@ -343,6 +345,9 @@ var LIB_PATH_FLATFULL = '<%=FLAT_FULL_PATH%>';
 
 var FLAT_FULL_PATH = LIB_PATH_FLATFULL;
 
+// Target to cloudfront URL
+LIB_PATH_FLATFULL = '<%=CLOUDFRONT_TEMPLATE_LIB_PATH%>' + LIB_PATH_FLATFULL;
+
 LIB_PATH = LIB_PATH_FLATFULL;
 
 var FLAT_FULL_UI = "flatfull/";  
@@ -397,7 +402,7 @@ head.load("https://code.jquery.com/jquery-1.10.2.min.js", LIB_PATH_FLATFULL + "l
 // , LIB_PATH + 'lib/backbone-route-filter.js'
 
 if(HANDLEBARS_PRECOMPILATION)
-head.js(HANDLEBARS_LIB, "tpl/min/precompiled/" + FLAT_FULL_PATH + "tpl.js" + "?_=" + _AGILE_VERSION);
+head.js(HANDLEBARS_LIB, "<%=CLOUDFRONT_TEMPLATE_LIB_PATH%>tpl/min/precompiled/" + FLAT_FULL_PATH + "tpl.js" + "?_=" + _AGILE_VERSION);
 else
 head.js(HANDLEBARS_LIB);
 
@@ -412,9 +417,9 @@ head.ready(function() {
 // Remove the loadinng
 $('body').css('background-image', 'none');
 //$('#content').html('ready');
-$("img.init-loading", $('#content')).attr("src", "/img/ajax-loader-cursor.gif");
-head.js({"core" :   '/jscore/min/' + FLAT_FULL_PATH +'js-all-min.js' + "?_=" + _AGILE_VERSION});
-head.js({"stats" : 'stats/min/agile-min.js' + "?_=" + _AGILE_VERSION});
+$("img.init-loading", $('#content')).attr("src", "<%=CLOUDFRONT_TEMPLATE_LIB_PATH%>/img/ajax-loader-cursor.gif");
+head.js({"core" :   '<%=CLOUDFRONT_TEMPLATE_LIB_PATH%>/jscore/min/' + FLAT_FULL_PATH +'js-all-min.js' + "?_=" + _AGILE_VERSION});
+head.js({"stats" : '<%=CLOUDFRONT_TEMPLATE_LIB_PATH%>stats/min/agile-min.js' + "?_=" + _AGILE_VERSION});
 head.ready(["core", "stats"], function(){
   
   if(!HANDLEBARS_PRECOMPILATION)
