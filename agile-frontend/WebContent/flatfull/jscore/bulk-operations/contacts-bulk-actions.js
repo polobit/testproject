@@ -9,9 +9,9 @@
 var _BULK_CONTACTS = undefined;
 var current_view_contacts_count = 0;
 var SELECT_ALL = false;
+var _BULKACTION_FILTER = undefined;
 $(function()
 {
-
 	/**
 	 * Bulk operations - Change owner Shows all the users as drop down list to
 	 * select one of them as the owner for the selected contacts.
@@ -67,7 +67,7 @@ $(function()
 		 * Changes the owner by sending the new owner name as path parameter and
 		 * contact ids as form data of post request
 		 */
-		$("body").on("click", "#changeOwnerToBulk", function(e)
+		$("#changeOwnerToBulk").click(function(e)
 		{
 			e.preventDefault();
 
@@ -217,7 +217,7 @@ $(function()
 		 * Subscribes the selected contacts to a campaign by sending the
 		 * workflow id and selected contacts' ids.
 		 */
-		$("body").off('fill_campaigns').on("click", "#addBulkTocampaign", function(e)
+		$("#addBulkTocampaign").click(function(e)
 		{
 			e.preventDefault();
 
@@ -326,7 +326,7 @@ $(function()
 		 * Add the tags to the selected contacts by sending the contact ids and
 		 * tags through post request to the appropriate url
 		 */
-		 $("body").on("click", "#addTagsToContactsBulk", function(e)
+		 $("#addTagsToContactsBulk").click(function(e)
 		{
 			e.preventDefault();
 
@@ -477,7 +477,7 @@ $(function()
 		 * Add the tags to the selected contacts by sending the contact ids and
 		 * tags through post request to the appropriate url
 		 */
-		$("body").on("click", "#removeTagsToContactsBulk", function(e)
+		$("#removeTagsToContactsBulk").click(function(e)
 						{
 							e.preventDefault();
 
@@ -543,6 +543,7 @@ $(function()
 	 * Bulk operations - Sends email to the bulk of contacts by filling up the
 	 * send email details like from, subject and body.
 	 */
+	//$("body #bulk-email").off("click");
 	$("body").on("click", "#bulk-email", function(e)
 					{
 						e.preventDefault();
@@ -690,7 +691,7 @@ $(function()
 			Backbone.history.navigate("bulk-email", { trigger : true });
 
 		$("body #bulk-send-email").off("click");
-		$("body").on("click", "#bulk-send-email", function(e)
+		$("#bulk-send-email").click(function(e)
 		{
 			e.preventDefault();
 
@@ -780,7 +781,7 @@ $(function()
 								$(this).parent('.modal-footer').find('.contacts-export-csv-message').append($save_info);
 								$save_info.show();
 
-								var url = '/core/api/bulk/update?action_type=EXPORT_CONTACTS_CSV';
+											var url = '/core/api/bulk/update?action_type=EXPORT_CONTACTS_CSV';
 
 								var json = {};
 								json.contact_ids = id_array;
@@ -1191,13 +1192,24 @@ function postBulkOperationData(url, data, form, contentType, callback, error_mes
 function getDynamicFilters()
 {
 	var dynamic_filter = null;
+	
 	if (company_util.isCompany())
 	{
-		dynamic_filter = readData('dynamic_company_filter')
+		if(!App_Companies.companiesListView && !App_Companies.companiesListView.post_data)
+		{
+			return null;
+		}
+		
+		dynamic_filter = App_Companies.companiesListView.post_data.filterJson;
 	}
 	else
 	{
-		dynamic_filter = readData('dynamic_contact_filter')
+		if(!App_Contacts.contactsListView && !App_Contacts.contactsListView.post_data)
+		{
+			return null;
+		}
+		
+		dynamic_filter = App_Contacts.contactsListView.post_data.filterJson;;
 	}
 
 	if (!dynamic_filter || dynamic_filter == null)

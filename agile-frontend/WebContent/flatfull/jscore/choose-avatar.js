@@ -29,9 +29,9 @@ $(function(){
 				//$(".preview-avatar").attr("src", selectedSource);
 			}
 	});
-	$("#choose-avatar-modal").on('choose-image', '#choose-avatar-test', function(e) {
+	$("#content").on('choose-image', '#choose-avatar-test', function(e) {
 		$("#choose-avatar-modal").closest('.modal').modal('hide');
-		var selectedSource = $(this).closest('tbody').find("input[type='hidden']").val();
+		var selectedSource = $(this).find('tbody').find("input[type='hidden']").val();
 		
 		if(selectedSource)
 		{

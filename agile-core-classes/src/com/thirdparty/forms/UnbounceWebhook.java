@@ -58,8 +58,6 @@ public class UnbounceWebhook extends HttpServlet
 	    {
 		response.sendError(HttpServletResponse.SC_UNAUTHORIZED,
 		        "Unauthorized: No owner exists with this API Key - " + tagsWithKey[0]);
-		response.sendError(HttpServletResponse.SC_UNAUTHORIZED,
-		        "Unauthorized: No owner exists with this API Key - " + tagsWithKey[0]);
 		return;
 	    }
 
@@ -82,13 +80,6 @@ public class UnbounceWebhook extends HttpServlet
 		return;
 	    }
 
-	    // If First Name and Last Name are blank, send a bad request
-	    if (StringUtils.isBlank(finalJson.optString(Contact.FIRST_NAME))
-		    && StringUtils.isBlank(finalJson.optString(Contact.LAST_NAME)))
-	    {
-		response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Bad Request: First or Last Name is missing");
-		return;
-	    }
 	    // If contact is null create new contact
 	    if (contact == null)
 		contact = new Contact();
