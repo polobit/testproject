@@ -6,8 +6,6 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
-import java.nio.channels.Channel;
-import java.nio.channels.Channels;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -42,7 +40,6 @@ import com.agilecrm.contact.ContactField.FieldType;
 import com.agilecrm.contact.CustomFieldDef;
 import com.agilecrm.contact.CustomFieldDef.SCOPE;
 import com.agilecrm.contact.Note;
-import com.agilecrm.contact.export.util.ContactExportBlobUtil;
 import com.agilecrm.contact.util.BulkActionUtil;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.contact.util.CustomFieldDefUtil;
@@ -68,12 +65,7 @@ import com.agilecrm.util.email.SendMail;
 import com.agilecrm.validator.TagValidator;
 import com.google.agile.repackaged.appengine.tools.cloudstorage.GcsFileOptions;
 import com.google.appengine.api.NamespaceManager;
-import com.google.appengine.api.files.AppEngineFile;
-import com.google.appengine.api.files.FileService;
-import com.google.appengine.api.files.FileServiceFactory;
-import com.google.appengine.api.files.FileWriteChannel;
 import com.googlecode.objectify.Key;
-ort com.googlecode.objectify.Key;
 
 /**
  * <code>CSVUtil</code> is a utility class, which converts the given data of a
@@ -95,8 +87,6 @@ public class CSVUtil
     private ContactBillingRestriction dBbillingRestriction;
 
     private static final int MAX_ALLOWED_FIELD_VALUE_SIZE = 490;
-    
-    
 
     private UserAccessControl accessControl = null;
     private GCSServiceAgile service;
@@ -107,18 +97,18 @@ public class CSVUtil
 
     }
 
-    
     public CSVUtil(BillingRestriction billingRestriction, UserAccessControl accessControl)
     {
 	this.billingRestriction = billingRestriction;
 	dBbillingRestriction = (ContactBillingRestriction) DaoBillingRestriction.getInstace(
 		Contact.class.getSimpleName(), this.billingRestriction);
-	
-	 GcsFileOptions options = new GcsFileOptions.Builder().mimeType("text/csv").contentEncoding("UTF-8")
-		    .acl("public-read").addUserMetadata("domain", NamespaceManager.get()).build();
 
-	 service = new GCSServiceAgile(NamespaceManager.get() + "_failed_contacts_"
-		    + GoogleSQL.getFutureDate() + ".csv", "agile-export", options);
+	GcsFileOptions options = new GcsFileOptions.Builder().mimeType("text/csv").contentEncoding("UTF-8")
+		.acl("public-read").addUserMetadata("domain", NamespaceManager.get()).build();
+
+	service = new GCSServiceAgile(
+		NamespaceManager.get() + "_failed_contacts_" + GoogleSQL.getFutureDate() + ".csv", "agile-export",
+		options);
 
 	this.accessControl = accessControl;
 
@@ -1366,16 +1356,14 @@ public class CSVUtil
 	    // Builds Contact CSV
 	    writeFailedContactsInCSV(getCSVWriterForFailedContacts(), failedContacts, headings);
 
-	   service.getOutputchannel().close();
+	    service.getOutputchannel().close();
 
-	    // Retrieves partitions of data of a file having given path
-	    List<String> fileData = ContactExportBlobUtil.retrieveBlobFileData(path);
+	    byte[] data = service.getDataFromFile();
 
 	    // Send every partition as separate email
-	    for (String partition : fileData)
-		sendFailedContactImportFile(domainUser, partition, failedContacts.size(), status);
+	    sendFailedContactImportFile(domainUser, new String(data, "UTF-8"), failedContacts.size(), status);
 
-	    //service.deleteFile();
+	    // service.deleteFile();
 
 	}
 	catch (Exception e)
@@ -1392,24 +1380,15 @@ public class CSVUtil
      * @return
      */
 
-    public void writeFailedContactsInCSV(CSVWriter wirter, List<FailedContactBean> failedContacts, String[] headings)
+    public void writeFailedContactsInCSV(CSVWriter writer, List<FailedContactBean> failedContacts, String[] headings)
     {
 	try
 	{
-	    GcsFileOptions options = new GcsFileOptions.Builder().mimeType("text/csv").contentEncoding("UTF-8")
-		    .acl("public-read").addUserMetadata("domain", NamespaceManager.get()).build();
-
-	    GCSServiceAgile service = new GCSServiceAgile(NamespaceManager.get() + "_failed_contacts_"
-		    + GoogleSQL.getFutureDate() + ".csv", "agile-export", options);
-
-	    CSVWriter writer = new CSVWriter(Channels.newWriter(service.getOutputchannel(), "UTF8"));
 	    String[] heads = getHeading(headings);
 	    writer.writeNext(heads);
 	    for (FailedContactBean bean : failedContacts)
 	    {
-
 		writer.writeNext(toArray(toList(bean.getContact().properties), bean.getCauses(), heads.length));
-
 	    }
 
 	    writer.close();
@@ -1584,12 +1563,12 @@ public class CSVUtil
 
 	return formatedDate;
     }
-    
-    private CSVWriter getCSVWriterForFailedContacts()
+
+    private CSVWriter getCSVWriterForFailedContacts() throws IOException
     {
-	if(failedContactsWriter != null)
+	if (failedContactsWriter != null)
 	    return failedContactsWriter;
-	
-	failedContactsWriter = new CSVWriter(service.getOutputWriter());
+
+	return failedContactsWriter = new CSVWriter(service.getOutputWriter());
     }
 }

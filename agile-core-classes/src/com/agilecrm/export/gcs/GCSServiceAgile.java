@@ -1,12 +1,10 @@
 package com.agilecrm.export.gcs;
 
 import java.io.IOException;
-import java.io.Reader;
 import java.io.Writer;
 import java.net.URL;
+import java.nio.ByteBuffer;
 import java.nio.channels.Channels;
-
-import au.com.bytecode.opencsv.CSVReader;
 
 import com.google.agile.repackaged.appengine.tools.cloudstorage.GcsFileOptions;
 import com.google.agile.repackaged.appengine.tools.cloudstorage.GcsFilename;
@@ -78,11 +76,14 @@ public class GCSServiceAgile
 	return Channels.newWriter(getOutputchannel(), "UTF8");
     }
 
-    public Reader getReader()
+    public byte[] getDataFromFile() throws IOException
     {
-	CSVReader reader = new CSVReader(Channels.newWriter());
+	int fileSize = (int) gcsService.getMetadata(getFileName()).getLength();
+	ByteBuffer result = ByteBuffer.allocate(fileSize);
+	GcsInputChannel readChannel = gcsService.openPrefetchingReadChannel(getFileName(), 0, fileSize);
 
-	GcsInputChannel channel = gcsService.openPrefetchingReadChannel(getFileName(), 0, Integer.MAX_VALUE);
+	readChannel.read(result);
+	return result.array();
     }
 
     public String getFilePathToDownload()
