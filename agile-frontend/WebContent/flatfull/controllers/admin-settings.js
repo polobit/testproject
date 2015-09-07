@@ -532,14 +532,17 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			url : 'core/api/email-gateway',
 			template : 'settings-email-gateway', postRenderCallback : function(el)
 			{
+				// Mandrill image
 				if(id=="mandrill"){
 					$("#integrations-image",el).attr("src","img/crm-plugins/mandrill_logo.png");
 				}
 				
+				// SendGrid image
 				if(id=="sendgrid"){
 					$("#integrations-image",el).attr("src","img/crm-plugins/sendgrid_logo.png");
 				}
 				
+				// SES image
 				if(id=="ses"){
 					$("#integrations-image",el).attr("src","img/crm-plugins/ses_logo.png");
 				}
