@@ -84,6 +84,7 @@ import com.socialsuite.Stream;
 import com.socialsuite.cron.ScheduledUpdate;
 import com.thirdparty.google.ContactPrefs;
 import com.thirdparty.google.calendar.GoogleCalenderPrefs;
+import com.thirdparty.office365.calendar.Office365CalendarPrefs;
 
 /**
  * <code>ObjectifyGenericDao</code> is a generic class for all the entities,

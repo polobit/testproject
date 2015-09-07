@@ -7,6 +7,7 @@ public class OfficeCalendarTemplate {
 	private String title;
 	private String type;
 	private String backgroundColor;
+	private boolean allDay;
 
 	/**
 	 * @return the start
@@ -41,6 +42,13 @@ public class OfficeCalendarTemplate {
 	 */
 	public String getBackgroundColor() {
 		return backgroundColor;
+	}
+
+	/**
+	 * @return the allDay
+	 */
+	public boolean isAllDay() {
+		return allDay;
 	}
 
 	/**
@@ -83,6 +91,14 @@ public class OfficeCalendarTemplate {
 		this.backgroundColor = backgroundColor;
 	}
 
+	/**
+	 * @param allDay
+	 *            the allDay to set
+	 */
+	public void setAllDay(boolean allDay) {
+		this.allDay = allDay;
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -94,7 +110,8 @@ public class OfficeCalendarTemplate {
 		builder.append("OfficeCalendarTemplate [start=").append(start)
 				.append(", end=").append(end).append(", title=").append(title)
 				.append(", type=").append(type).append(", backgroundColor=")
-				.append(backgroundColor).append("]");
+				.append(backgroundColor).append(", allDay=").append(allDay)
+				.append("]");
 		return builder.toString();
 	}
 

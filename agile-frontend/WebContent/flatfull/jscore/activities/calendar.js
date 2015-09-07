@@ -395,11 +395,25 @@ function showCalendar()
 											left = jsEvent.currentTarget.offsetLeft - popover_min_width - 10;
 											leftorright = 'right';
 										}
-										// var event_width =
-										// jsEvent.currentTarget.offsetWidth;
-										var popoverElement = '<div class="fc-overlayw ' + leftorright + '" style="width:100%;min-width:' + popover_min_width + 'px;max-width:' + popover_min_width + 'px;left:' + left + 'px;top:' + top + 'px;position:absolute;z-index:10;display:none;">' + '<div class="panel bg-white b-a pos-rlt p-sm">' + '<span class="arrow ' + leftorright + ' ' + pullupornot + '" style="top:11px;"></span>' + '<div class="h4 font-thin m-b-sm"><div class="pull-left text-ellipsis p-b-xs" style="width:100%;">' + event.title + '</div></div>' + '<div class="line b-b b-light"></div>' + '<div><i class="icon-clock text-muted m-r-xs"></i>' + event.start
-												.format('dd-mmm-yyyy HH:MM') + '<div class="pull-right" style="width:10%;"><img class="r-2x" src="' + event.ownerPic + '" height="20px" width="20px" title="' + event.owner.name + '"/></div></div>' + '<div class="text-ellipsis">' + reletedContacts + '</div>' + '<div class="text-ellipsis">' + meeting_type + '</div>' + '</div>' + '</div>';
-										$(this).after(popoverElement);
+										
+										if(event.type == "officeCalendar"){
+											var popoverElement = '<div class="fc-overlayw ' + leftorright + '" style="min-width:' + popover_min_width + 'px;max-width:' + popover_min_width + 'px;left:' + left + 'px;top:' + top + 'px;position:absolute;z-index:10;display:none;">' + 
+																 '<div class="panel bg-white b-a pos-rlt p-sm">' + 
+																 '<span class="arrow ' + leftorright + ' ' + pullupornot + '" style="top:11px;"></span>' + 
+																 '<div class="m-b-sm"><div class="pull-left text-flow-ellipsis p-b-xs" style="width:100%;">' + event.title + '</div></div>' +
+																 '<div><i class="icon-clock text-muted m-r-xs"></i>' + event.start.format('dd-mmm-yyyy HH:MM') + '</div>' + 
+																 '<div class="text-ellipsis">' + reletedContacts + '</div>' + 
+																 '<div class="text-ellipsis">' + meeting_type + '</div>' + 
+																 '</div>' + '</div>';
+											$(this).after(popoverElement);
+										}else{
+											// var event_width =
+											// jsEvent.currentTarget.offsetWidth;
+											var popoverElement = '<div class="fc-overlayw ' + leftorright + '" style="width:100%;min-width:' + popover_min_width + 'px;max-width:' + popover_min_width + 'px;left:' + left + 'px;top:' + top + 'px;position:absolute;z-index:10;display:none;">' + '<div class="panel bg-white b-a pos-rlt p-sm">' + '<span class="arrow ' + leftorright + ' ' + pullupornot + '" style="top:11px;"></span>' + '<div class="h4 font-thin m-b-sm"><div class="pull-left text-ellipsis p-b-xs" style="width:100%;">' + event.title + '</div></div>' + '<div class="line b-b b-light"></div>' + '<div><i class="icon-clock text-muted m-r-xs"></i>' + event.start
+													.format('dd-mmm-yyyy HH:MM') + '<div class="pull-right" style="width:10%;"><img class="r-2x" src="' + event.ownerPic + '" height="20px" width="20px" title="' + event.owner.name + '"/></div></div>' + '<div class="text-ellipsis">' + reletedContacts + '</div>' + '<div class="text-ellipsis">' + meeting_type + '</div>' + '</div>' + '</div>';
+											$(this).after(popoverElement);									
+										}
+										
 										if ($('.fc-agenda-slots:visible').height() - jsEvent.currentTarget.offsetTop < $(this).parent().find('.fc-overlayw').height())
 										{
 											$(this).parent().find('.fc-overlayw').css("top",
@@ -416,9 +430,23 @@ function showCalendar()
 										{
 											left = jsEvent.currentTarget.offsetLeft - jsEvent.currentTarget.offsetWidth - ($('.fc-agenda-slots:visible').width() - jsEvent.currentTarget.offsetLeft - jsEvent.currentTarget.offsetWidth);
 										}
-										var popoverElement = '<div class="fc-overlayw ' + leftorright + '" style="width:100%;min-width:' + popover_min_width + 'px;max-width:' + popover_min_width + 'px;left:' + left + 'px;top:' + top + 'px;position:absolute;z-index:10;display:none;">' + '<div class="panel bg-white b-a pos-rlt p-sm">' + '<span class="arrow ' + leftorright + ' ' + pullupornot + '" style="top:11px;"></span>' + '<div class="h4 font-thin m-b-sm"><div class="pull-left text-ellipsis p-b-xs" style="width:100%;">' + event.title + '</div></div>' + '<div class="line b-b b-light"></div>' + '<div><i class="icon-clock text-muted m-r-xs"></i>' + event.start
-												.format('dd-mmm-yyyy HH:MM') + '<div class="pull-right" style="width:10%;"><img class="r-2x" src="' + event.ownerPic + '" height="20px" width="20px" title="' + event.owner.name + '"/></div></div>' + '<div class="text-ellipsis">' + reletedContacts + '</div>' + '<div class="text-ellipsis">' + meeting_type + '</div>' + '</div>' + '</div>';
-										$(this).after(popoverElement);
+										
+										if(event.type == "officeCalendar"){
+											var popoverElement = '<div class="fc-overlayw ' + leftorright + '" style="min-width:' + popover_min_width + 'px;max-width:' + popover_min_width + 'px;left:' + left + 'px;top:' + top + 'px;position:absolute;z-index:10;display:none;">' + 
+																 '<div class="panel bg-white b-a pos-rlt p-sm">' + 
+																 '<span class="arrow ' + leftorright + ' ' + pullupornot + '" style="top:11px;"></span>' + 
+																 '<div class="m-b-sm"><div class="pull-left text-flow-ellipsis p-b-xs" style="width:100%;">' + event.title + '</div></div>' +
+																 '<div><i class="icon-clock text-muted m-r-xs"></i>' + event.start.format('dd-mmm-yyyy HH:MM') + '</div>' + 
+																 '<div class="text-ellipsis">' + reletedContacts + '</div>' + 
+																 '<div class="text-ellipsis">' + meeting_type + '</div>' + 
+																 '</div>' + '</div>';
+											$(this).after(popoverElement);
+										}else{
+											var popoverElement = '<div class="fc-overlayw ' + leftorright + '" style="width:100%;min-width:' + popover_min_width + 'px;max-width:' + popover_min_width + 'px;left:' + left + 'px;top:' + top + 'px;position:absolute;z-index:10;display:none;">' + '<div class="panel bg-white b-a pos-rlt p-sm">' + '<span class="arrow ' + leftorright + ' ' + pullupornot + '" style="top:11px;"></span>' + '<div class="h4 font-thin m-b-sm"><div class="pull-left text-ellipsis p-b-xs" style="width:100%;">' + event.title + '</div></div>' + '<div class="line b-b b-light"></div>' + '<div><i class="icon-clock text-muted m-r-xs"></i>' + event.start
+													.format('dd-mmm-yyyy HH:MM') + '<div class="pull-right" style="width:10%;"><img class="r-2x" src="' + event.ownerPic + '" height="20px" width="20px" title="' + event.owner.name + '"/></div></div>' + '<div class="text-ellipsis">' + reletedContacts + '</div>' + '<div class="text-ellipsis">' + meeting_type + '</div>' + '</div>' + '</div>';
+											$(this).after(popoverElement);
+										}
+										
 										$(this).parent().find('.fc-overlayw').find('.arrow').css({ "top" : "-9px", "left" : "11px" });
 										if ($('.fc-agenda-slots:visible').width() - jsEvent.currentTarget.offsetLeft < popover_min_width)
 										{
@@ -475,6 +503,10 @@ function showCalendar()
 							var end_event = new Date(event.end).getTime() / 1000;
 							if (end_event - start_event == 3600)
 							{
+								$(element).height('');
+							}
+							
+							if(event.type == "officeCalendar"){
 								$(element).height('');
 							}
 						},

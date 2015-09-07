@@ -8,10 +8,12 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.TimeZone;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import com.agilecrm.account.util.AccountPrefsUtil;
 import com.agilecrm.util.HTTPUtil;
 import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyService;
@@ -22,7 +24,8 @@ public class Office365CalendarUtil {
 
 	private static String backgroundColor = "#C0E9FF";
 	private static String type = "officeCalendar";
-	private static String server = "http://54.87.153.50:8080/";
+	//private static String server = "http://54.87.153.50:8080/";
+	private static String server = "http://localhost:8080/";
 	private static String appName = "exchange-app-beta";
 	private static String serveltName = "appointment";
 
@@ -127,11 +130,14 @@ public class Office365CalendarUtil {
 				JSONObject resultObj = new JSONObject(obj);
 
 				String pattern = "EE MMM dd HH:mm:ss z yyyy";
+				
 				SimpleDateFormat parsedFormat = new SimpleDateFormat(pattern,
 						Locale.ENGLISH);
+				parsedFormat.setTimeZone(TimeZone.getTimeZone(AccountPrefsUtil.getTimeZone()));
 				SimpleDateFormat reqFormat = new SimpleDateFormat(
-						"MMM d, yyyy HH:mm:ss");
-
+						"MMM d, yyyy HH:mm:ss");			
+				reqFormat.setTimeZone(TimeZone.getTimeZone(AccountPrefsUtil.getTimeZone()));
+				System.out.println("test");
 				Date parsedDate;
 				String start = resultObj.getString("startDate");
 				if (start != null) {
@@ -145,7 +151,7 @@ public class Office365CalendarUtil {
 					parsedDate = parsedFormat.parse(end);
 					Calendar cal = Calendar.getInstance();
 					cal.setTime(parsedDate);
-					cal.add(Calendar.DATE, -1);
+					//cal.add(Calendar.DATE, -1);
 					Date extactDate = cal.getTime();
 					end = reqFormat.format(extactDate);
 				}
