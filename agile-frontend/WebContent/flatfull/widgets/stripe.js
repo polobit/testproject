@@ -140,7 +140,7 @@ function showStripeProfile(stripe_custom_field_name)
 	getStripeProfile(customer_id, function(data)
 	{
 		// Get and Fill the template with data
-		var stripe_template = $(getTemplate("stripe-profile", data));
+		
 
 		getTemplate('stripe-profile', data, undefined, function(template_ui){
 	 		if(!template_ui)

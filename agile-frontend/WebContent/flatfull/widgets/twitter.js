@@ -690,7 +690,7 @@ function getFirstFiveNetworkUpdates(Twitter_id)
 	function(data)
 	{
 		// Populates the template with the data and shows refresh button
-		$("#twitter_social_stream", agile_crm_get_current_view()).html(getTemplate("twitter-update-stream", data));
+
 
 		getTemplate('twitter-update-stream', data, undefined, function(template_ui){
 	 		if(!template_ui)
@@ -1559,7 +1559,7 @@ $(function()
 					$('#spinner-followers').hide();
 
 					// Show matching profiles in Twitter panel
-					$('#twitter_follower_panel').append(getTemplate('twitter-follower-following', result));
+					
 					getTemplate('twitter-follower-following', result, undefined, function(template_ui){
 				 		if(!template_ui)
 				    		return;

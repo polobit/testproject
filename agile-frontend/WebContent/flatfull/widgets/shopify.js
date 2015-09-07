@@ -29,8 +29,6 @@ function showShopifyClient(shop)
 												data.unshift({ "name" : name,"id":d[0].customer.id, "shop" : shop, "total_spent" : d[0].customer.total_spent, "currency" : d[0].currency });
 												console.log("customer info " + name);
 												console.log("final data " + data);
-												var template = getTemplate('shopify-profile', data);
-
 												getTemplate('shopify-profile', data, undefined, function(template_ui){
 											 		if(!template_ui)
 											    		return;
