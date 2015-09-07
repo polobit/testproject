@@ -97,7 +97,7 @@
 <div id="task-contact-img">
 {{#if contacts}}        	
 <div class="m-b-xs">
-        	<small class="text-xs text-muted">Related Contacts</small>
+        	<small class="text-xs text-muted">Contacts</small>
 </div>
 {{/if}}
 
@@ -111,20 +111,22 @@
         	{{/each}}
 </div>
 </div>
-<!-- <div class="m-t-sm">
+<div class="m-t-sm">
 
 <div id="task-contact-img">
 {{#if deals}}        	
 <div class="m-b-xs">
-        	<small class="text-xs text-muted">Related Deals</small>
+        	<small class="text-xs text-muted">Deals</small>
 </div>
 {{/if}}
 
 {{#each deals}}
-	<a href="#deal/{{id}}" class="activate-link thumb m-b-xs">{{name}} </a>{{probability}} %
+	<div>
+		<a href="#deal/{{id}}" class="activate-link thumb m-b-xs text-cap">{{name}}</a>({{currencySymbol}}{{numberWithCommas expected_value}}, {{probability}}%)
+	</div>
 {{/each}}
 </div>
-</div> -->
+</div>
 </div>
   </div>
 </div>
