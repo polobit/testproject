@@ -385,9 +385,15 @@ function initializeAdminSettingsListeners(){
 					else
 						{
 							set_up_account_stats(el, function(data){
-								delete_step1_el = $(getTemplate('warning', data));
-								$(".modal-body").css("padding", 0 ).html($(".modal-body", $(delete_step1_el)));
-								$(".modal-footer").html($(".modal-footer", $(delete_step1_el)).html());
+								getTemplate('warning', data, undefined, function(template_ui){
+							 		if(!template_ui)
+							    		return;
+							    	delete_step1_el = $(template_ui);
+									$('#content').html($(template_ui)); 
+									$(".modal-body").css("padding", 0 ).html($(".modal-body", $(delete_step1_el)));
+									$(".modal-footer").html($(".modal-footer", $(delete_step1_el)).html());
+								}, null);
+
 							})
 							return;
 						}

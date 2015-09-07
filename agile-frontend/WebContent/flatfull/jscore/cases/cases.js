@@ -107,10 +107,18 @@ function initializeCasesListeners(el){
 				
 				var ele = getTemplate("cases-detail-popover", currentCase.toJSON());
 
-				$(this).popover(
-						{ "rel" : "popover", "trigger" : "hover", "placement" : 'right', "original-title" : currentCase.toJSON().name, "content" : ele,
-							"html" : true, });
-				$(this).popover('show');
+				getTemplate('cases-detail-popover', obj, undefined, function(template_ui){
+			 		if(!template_ui)
+			    		return;
+			    	var ele = $(template_ui);
+					$(this).popover(
+							{ "rel" : "popover", "trigger" : "hover", "placement" : 'right', "original-title" : currentCase.toJSON().name, "content" : ele,
+								"html" : true, });
+					$(this).popover('show');
+				}, null);
+
+
+					
 			});
 
 	/**

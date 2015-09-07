@@ -670,8 +670,14 @@ function show_set_up_widget(widget_name, template_id, url, model)
 		// Shows available widgets in the content
 		if (url)
 		{
-			$('#widget-settings', el).html(getTemplate(template_id, { "url" : url }));
-			console.log(el);
+			getTemplate(template_id, { "url" : url }, undefined, function(template_ui){
+		 		if(!template_ui)
+		    		return;
+				$('#widget-settings', el).html($(template_ui)); 
+				console.log(el);
+			}, "#widget-settings");
+
+			
 		}
 		else
 		{
@@ -679,17 +685,31 @@ function show_set_up_widget(widget_name, template_id, url, model)
 			{
 				if (model)
 				{
-					$('#widget-settings', el).html(getTemplate(template_id, { "data" : jQuery.parseJSON(model.prefs) }));
+					getTemplate(template_id, { "data" : jQuery.parseJSON(model.prefs) }, undefined, function(template_ui){
+				 		if(!template_ui)
+				    		return;
+						$('#widget-settings', el).html($(template_ui)); 
+					}, '#widget-settings');
+
 				}
 				else if (models[0].attributes.id)
 				{
-					$('#widget-settings', el).html(getTemplate(template_id, { "data" : jQuery.parseJSON(models[0].attributes.prefs) }));
+					getTemplate(template_id, { "data" : jQuery.parseJSON(models[0].attributes.prefs) }, undefined, function(template_ui){
+				 		if(!template_ui)
+				    		return;
+						$('#widget-settings', el).html($(template_ui)); 
+					}, '#widget-settings');
 				}
 			}
 			else
 			{
-				$('#widget-settings', el).html(getTemplate(template_id, {}));
-				console.log(el);
+				getTemplate(template_id, {}, undefined, function(template_ui){
+				 		if(!template_ui)
+				    		return;
+						$('#widget-settings', el).html($(template_ui)); 
+						console.log(el);
+					}, '#widget-settings');
+				
 			}
 		}
 		$('#prefs-tabs-content').html(el);
@@ -703,79 +723,103 @@ function show_set_up_widget(widget_name, template_id, url, model)
 
 function set_up_access(widget_name, template_id, data, url, model)
 {
-	$("#content").html(getTemplate("settings"), {});
+	getTemplate('settings', obj, undefined, function(template_ui){
+ 		if(!template_ui)
+    		return;
+		$('#content').html($(template_ui)); 
+		var el;
+		var json;
+		var models;
 
-	var el;
-	var json;
-	var models;
+		$('#prefs-tabs-content').html(getRandomLoadingImg());
+		$('#PrefsTab .select').removeClass('select');
+		$('.add-widget-prefs-tab').addClass('select');
 
-	$('#prefs-tabs-content').html(getRandomLoadingImg());
-	$('#PrefsTab .select').removeClass('select');
-	$('.add-widget-prefs-tab').addClass('select');
+		if (model)
+		{
+			getTemplate('widget-settings', model, undefined, function(template_ui1){
+		 		if(!template_ui1)
+		    		return;
+				el = $(template_ui1);
+				json = model; 
+			}, null);
 
-	if (model)
-	{
-		el = $(getTemplate("widget-settings", model));
-		json = model;
-	}
-	else
-	{
-
-		if (!App_Widgets.Catalog_Widgets_View || App_Widgets.Catalog_Widgets_View.collection.length == 0)
+			
+		}
+		else
 		{
 
-			App_Widgets.Catalog_Widgets_View = new Base_Collection_View({ url : '/core/api/widgets/default' });
-
-			// Fetch the list of widgets
-			App_Widgets.Catalog_Widgets_View.collection.fetch({ success : function()
+			if (!App_Widgets.Catalog_Widgets_View || App_Widgets.Catalog_Widgets_View.collection.length == 0)
 			{
 
-				$.getJSON('core/api/widgets/' + widget_name, function(data1)
-				{
-					set_up_access(widget_name, template_id, data, url, data1)
-				});
-			} });
+				App_Widgets.Catalog_Widgets_View = new Base_Collection_View({ url : '/core/api/widgets/default' });
 
-			return;
+				// Fetch the list of widgets
+				App_Widgets.Catalog_Widgets_View.collection.fetch({ success : function()
+				{
+
+					$.getJSON('core/api/widgets/' + widget_name, function(data1)
+					{
+						set_up_access(widget_name, template_id, data, url, data1)
+					});
+				} });
+
+				return;
+
+			}
+
+			models = App_Widgets.Catalog_Widgets_View.collection.where({ name : widget_name });
+			json = models[0].toJSON();
+			getTemplate('widget-settings', json, undefined, function(template_ui1){
+		 		if(!template_ui1)
+		    		return;
+		    	el = $(template_ui1);
+				
+			}, null);
 
 		}
 
-		models = App_Widgets.Catalog_Widgets_View.collection.where({ name : widget_name });
-		json = models[0].toJSON();
-		el = $(getTemplate("widget-settings", json));
-	}
+		if (json.name == "Twilio")
+			json['outgoing_numbers'] = data;
 
-	if (json.name == "Twilio")
-		json['outgoing_numbers'] = data;
+		else if (json.name == "Linkedin" || json.name == "Twitter")
+			json['profile'] = data;
 
-	else if (json.name == "Linkedin" || json.name == "Twitter")
-		json['profile'] = data;
+		else
+			json['custom_data'] = data;
 
-	else
-		json['custom_data'] = data;
+		console.log(json);
 
-	console.log(json);
+		// merged_json = $.extend(merged_json, model, data);
 
-	// merged_json = $.extend(merged_json, model, data);
+		getTemplate(widget_name.toLowerCase() + "-revoke-access", json, undefined, function(template_ui1){
+	 		if(!template_ui1)
+	    		return;
+			$('#widget-settings', el).html($(template_ui1)); 
+			$('#prefs-tabs-content').html(el);
 
-	$('#widget-settings', el).html(getTemplate(widget_name.toLowerCase() + "-revoke-access", json));
+			$('#prefs-tabs-content').find('form').data('widget', json);
+			console.log(json);
+			console.log($('#prefs-tabs-content').find('form').data('widget'));
 
-	$('#prefs-tabs-content').html(el);
+			$('#PrefsTab .select').removeClass('select');
+			$('.add-widget-prefs-tab').addClass('select');
 
-	$('#prefs-tabs-content').find('form').data('widget', json);
-	console.log(json);
-	console.log($('#prefs-tabs-content').find('form').data('widget'));
+			$('body').on('click', '.revoke-widget', function(e)
+			{
 
-	$('#PrefsTab .select').removeClass('select');
-	$('.add-widget-prefs-tab').addClass('select');
+				console.log($(this).attr("widget-name"));
+				delete_widget(widget_name);
+				show_set_up_widget(widget_name, template_id, url, model);
+			});
+		}, "#widget-settings");
 
-	$('body').on('click', '.revoke-widget', function(e)
-	{
 
-		console.log($(this).attr("widget-name"));
-		delete_widget(widget_name);
-		show_set_up_widget(widget_name, template_id, url, model);
-	});
+			
+	}, "#content");
+
+
+		
 
 }
 
@@ -839,61 +883,74 @@ function widgetError(id, template_id, error, disable_check)
 function setUpError(widget_name, template_id, error_data, error_url, model)
 {
 
-	$("#content").html(getTemplate("settings"), {});
+	getTemplate('settings', {}, undefined, function(template_ui){
+ 		if(!template_ui)
+    		return;
+		$('#content').html($(template_ui)); 
+		var el;
+		var models;
+		var json;
 
-	var el;
-	var models;
-	var json;
+		$('#prefs-tabs-content').html(getRandomLoadingImg());
+		$('#PrefsTab .select').removeClass('select');
+		$('.add-widget-prefs-tab').addClass('select');
 
-	$('#prefs-tabs-content').html(getRandomLoadingImg());
-	$('#PrefsTab .select').removeClass('select');
-	$('.add-widget-prefs-tab').addClass('select');
-
-	if (model)
-	{
-		el = $(getTemplate("widget-settings", model));
-		json = model;
-	}
-	else
-	{
-
-		if (!App_Widgets.Catalog_Widgets_View || App_Widgets.Catalog_Widgets_View.collection.length == 0)
+		if (model)
+		{
+			el = $(getTemplate("widget-settings", model));
+			json = model;
+		}
+		else
 		{
 
-			App_Widgets.Catalog_Widgets_View = new Base_Collection_View({ url : '/core/api/widgets/default' });
-
-			// Fetch the list of widgets
-			App_Widgets.Catalog_Widgets_View.collection.fetch({ success : function()
+			if (!App_Widgets.Catalog_Widgets_View || App_Widgets.Catalog_Widgets_View.collection.length == 0)
 			{
 
-				$.getJSON('core/api/widgets/' + widget_name, function(data1)
+				App_Widgets.Catalog_Widgets_View = new Base_Collection_View({ url : '/core/api/widgets/default' });
+
+				// Fetch the list of widgets
+				App_Widgets.Catalog_Widgets_View.collection.fetch({ success : function()
 				{
-					setUpError(widget_name, template_id, error_data, error_url, data1)
-				});
-			} });
 
-			return;
+					$.getJSON('core/api/widgets/' + widget_name, function(data1)
+					{
+						setUpError(widget_name, template_id, error_data, error_url, data1)
+					});
+				} });
 
+				return;
+
+			}
+
+			models = App_Widgets.Catalog_Widgets_View.collection.where({ name : widget_name });
+			json = models[0].toJSON();
+			el = $(getTemplate("widget-settings", json));
 		}
 
-		models = App_Widgets.Catalog_Widgets_View.collection.where({ name : widget_name });
-		json = models[0].toJSON();
-		el = $(getTemplate("widget-settings", json));
-	}
+		json['error_message'] = error_data;
+		json['error_url'] = error_url;
+		// merged_json = $.extend(merged_json, model, data);
 
-	json['error_message'] = error_data;
-	json['error_url'] = error_url;
+		getTemplate(template_id, json, undefined, function(template_ui1){
+	 		if(!template_ui1)
+	    		return;
+			$('#widget-settings', el).html($(template_ui1)); 
+			$('#prefs-tabs-content').html(el);
 
-	// merged_json = $.extend(merged_json, model, data);
+			$('#prefs-tabs-content').find('form').data('widget', json);
 
-	$('#widget-settings', el).html(getTemplate(template_id, json));
+			$('#PrefsTab .select').removeClass('select');
+			$('.add-widget-prefs-tab').addClass('select');
+		}, "#widget-settings");
+	}, "#content");
 
-	$('#prefs-tabs-content').html(el);
 
-	$('#prefs-tabs-content').find('form').data('widget', json);
+		
 
-	$('#PrefsTab .select').removeClass('select');
-	$('.add-widget-prefs-tab').addClass('select');
+		
+
+
+		
 
 }
 

@@ -346,16 +346,22 @@ var WorkflowsRouter = Backbone.Router
 				// Fetches workflows if not filled
 				if ($('#campaign-reports-select').html() === null || $('#campaign-reports-select').html() === undefined)
 				{
-					$("#content").html(getTemplate("campaign-analysis", {}));
+					getTemplate('campaign-analysis', {}, undefined, function(template_ui){
+				 		if(!template_ui)
+				    		return;
+						$('#content').html($(template_ui)); 
+						var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
 
-					var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
+						// fill workflows
+						fillSelect('campaign-reports-select', '/core/api/workflows', 'workflow', function fillCampaign()
+						{
+							$('#campaign-reports-select').find('option[value=' + id + ']').attr('selected', 'selected');
 
-					// fill workflows
-					fillSelect('campaign-reports-select', '/core/api/workflows', 'workflow', function fillCampaign()
-					{
-						$('#campaign-reports-select').find('option[value=' + id + ']').attr('selected', 'selected');
+						}, optionsTemplate);
+					}, "#content");
 
-					}, optionsTemplate);
+
+						
 				}
 
 				getTemplate("campaign-analysis-tabs", { "id" : id }, undefined, function(template_ui){

@@ -19,11 +19,16 @@ var FacebookPageTabRouter = Backbone.Router.extend({
 					fb_get_ajax_success_cb("core/api/forms", function(response){
 
 							dataObj["forms"] = response;
-							$("#admin-prefs-tabs-content").html(getTemplate("fbpagetab", dataObj));
-							$('#fbPageTab-listners').find('#AdminPrefsTab .select').removeClass('select');
-							$('#fbPageTab-listners').find('.integrations-tab').addClass('select');
-							$(".active").removeClass("active");
-							initializeFbPageTabListners();
+							
+							getTemplate('fbpagetab', dataObj, undefined, function(template_ui){
+						 		if(!template_ui)
+						    		return;
+								$('#admin-prefs-tabs-content').html($(template_ui));
+								$('#fbPageTab-listners').find('#AdminPrefsTab .select').removeClass('select');
+								$('#fbPageTab-listners').find('.integrations-tab').addClass('select');
+								$(".active").removeClass("active");
+								initializeFbPageTabListners();
+							}, "#admin-prefs-tabs-content");
 					});
 				});
 			}, "#fbPageTab-listners");

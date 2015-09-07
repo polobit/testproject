@@ -1118,6 +1118,7 @@ var ContactsRouter = Backbone.Router.extend({
 			$(this).find("#phone").val(mob);
 		});
 		$("#personModal").modal();
+
 	}
 	
 	});

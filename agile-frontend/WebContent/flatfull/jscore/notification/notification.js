@@ -381,7 +381,12 @@ function check_browser_notification_settings(el)
 		e.preventDefault();
         // Checking modal existance
 		if($('#notification-enable-help-modal').length == 0){
-			   $("body").append(getTemplate("notification-enable-help-modal", {}));
+			   getTemplate('notification-enable-help-modal', {}, undefined, function(template_ui){
+			 		if(!template_ui)
+			    		return;
+					$("body").append($(template_ui)); 
+				}, null);
+
 		}
 
 		$('#notification-enable-help-modal').modal("show");
@@ -393,7 +398,12 @@ function check_browser_notification_settings(el)
 		e.preventDefault();
 		 // Checking modal existance
 		if($('#notification-disable-help-modal').length == 0){
-			   $("body").append(getTemplate("notification-disable-help-modal", {}));
+			   getTemplate('notification-disable-help-modal', {}, undefined, function(template_ui){
+			 		if(!template_ui)
+			    		return;
+					$("body").append($(template_ui)); 
+				}, null);
+
 		}
 
 		$('#notification-disable-help-modal').modal("show");

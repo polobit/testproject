@@ -316,6 +316,7 @@ function initializePortletsListeners_1(){
 				},
 				dataType : 'json'
 			});
+
 	});
 
 	$('.portlet_body #portlets-contacts-model-list > tr, #portlets-companies-model-list > tr, #portlets-contacts-email-opens-model-list > tr').off();
