@@ -47,7 +47,8 @@ $( document ).ready(function() {
 		// Fill details in form
 		setForm(el);
 
-		if($('#updateTaskModal').find('.update-task-related-contacts-input').find('ul').find('li').length>0)
+		if($('#updateTaskModal').find('.update-task-related-contacts-input').find('ul').find('li').length>0 
+			|| (Current_Route.indexOf("task")==0 && readCookie("task_tab_position")=="contacts"))
 		{
 			$('#updateTaskModal').find('#update-task-related-contacts-label').parent().addClass('hide');
 			$('#updateTaskModal').find('.update-task-related-contacts-input').removeClass('hide');
@@ -57,7 +58,8 @@ $( document ).ready(function() {
 			$('#updateTaskModal').find('#update-task-related-contacts-label').parent().removeClass('hide');
 			$('#updateTaskModal').find('.update-task-related-contacts-input').addClass('hide');
 		}
-		if($('#updateTaskModal').find('.update-task-related-deals-input').find('ul').find('li').length>0)
+		if($('#updateTaskModal').find('.update-task-related-deals-input').find('ul').find('li').length>0 
+			|| (Current_Route.indexOf("task")==0 && readCookie("task_tab_position")=="deals"))
 		{
 			$('#updateTaskModal').find('#update-task-related-deals-label').parent().addClass('hide');
 			$('#updateTaskModal').find('.update-task-related-deals-input').removeClass('hide');

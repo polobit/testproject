@@ -28,6 +28,7 @@ import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Note;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.contact.util.NoteUtil;
+import com.agilecrm.deals.Opportunity;
 import com.agilecrm.user.util.DomainUserUtil;
 
 /**
@@ -519,6 +520,26 @@ public class TasksAPI
 	task.save();
 
 	return task;
+    }
+    
+    /**
+     * get all deals related to task
+     */
+    @Path("/{task-id}/deals")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public List<Opportunity> getRelatedDeals(@PathParam("task-id") Long id)
+    {
+	try
+	{
+	    Task task = TaskUtil.getTask(id);
+	    return task.getDeals();
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    return null;
+	}
     }
 
     /***************************************************************************/

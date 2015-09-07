@@ -589,6 +589,48 @@ $(function()
 		// Update will highlight the date of in date picker
 		$("input.date").datepicker('update');
 
+		if($('#activityTaskModal').find('.new-task-related-contacts-input').find('ul').find('li').length>0)
+		{
+			$('#activityTaskModal').find('#new-task-related-contacts-label').parent().addClass('hide');
+			$('#activityTaskModal').find('.new-task-related-contacts-input').removeClass('hide');
+		}
+		else
+		{
+			$('#activityTaskModal').find('#new-task-related-contacts-label').parent().removeClass('hide');
+			$('#activityTaskModal').find('.new-task-related-contacts-input').addClass('hide');
+		}
+		if($('#activityTaskModal').find('.new-task-related-deals-input').find('ul').find('li').length>0)
+		{
+			$('#activityTaskModal').find('#new-task-related-deals-label').parent().addClass('hide');
+			$('#activityTaskModal').find('.new-task-related-deals-input').removeClass('hide');
+		}
+		else
+		{
+			$('#activityTaskModal').find('#new-task-related-deals-label').parent().removeClass('hide');
+			$('#activityTaskModal').find('.new-task-related-deals-input').addClass('hide');
+		}
+
+		if($('#activityModal').find('.new-event-related-contacts-input').find('ul').find('li').length>0)
+		{
+			$('#activityModal').find('#new-event-related-contacts-label').parent().addClass('hide');
+			$('#activityModal').find('.new-event-related-contacts-input').removeClass('hide');
+		}
+		else
+		{
+			$('#activityModal').find('#new-event-related-contacts-label').parent().removeClass('hide');
+			$('#activityModal').find('.new-event-related-contacts-input').addClass('hide');
+		}
+		if($('#activityModal').find('.new-event-related-deals-input').find('ul').find('li').length>0)
+		{
+			$('#activityModal').find('#new-event-related-deals-label').parent().addClass('hide');
+			$('#activityModal').find('.new-event-related-deals-input').removeClass('hide');
+		}
+		else
+		{
+			$('#activityModal').find('#new-event-related-deals-label').parent().removeClass('hide');
+			$('#activityModal').find('.new-event-related-deals-input').addClass('hide');
+		}
+
 	});
 
 	/**
