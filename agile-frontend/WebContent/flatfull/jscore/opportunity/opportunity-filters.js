@@ -592,13 +592,13 @@ $('#opportunity-listners').on('click', '.deals-list-view', function(e) {
         var data = $(this).find('.data').attr('data');
 
         var currentDeal = App_Deals.opportunityCollectionView.collection.get(data);
-       
+       	var that = this;
         getTemplate("opportunity-detail-popover", currentDeal.toJSON(), undefined, function(template_ui){
 			if(!template_ui)
 				  return;
 				
 			var ele = $(template_ui);	
-			$(this).popover({
+			$(that).popover({
 	        	"rel" : "popover",
 	        	"trigger" : "hover",
 	        	"placement" : 'right',
@@ -622,7 +622,7 @@ $('#opportunity-listners').on('click', '.deals-list-view', function(e) {
 	        	"container": 'body'
 	        });
 	        
-	        $(this).popover('show');
+	        $(that).popover('show');
 
 		}, null);
      });

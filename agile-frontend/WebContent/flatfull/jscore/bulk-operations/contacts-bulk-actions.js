@@ -835,7 +835,7 @@ $(function()
 						else
 							count = id_array.length;
 
-
+						
 						getTemplate('companies-export-csv-modal', {}, undefined, function(template_ui){
 							if(!template_ui)
 								  return;

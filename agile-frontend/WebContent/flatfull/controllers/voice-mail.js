@@ -5,7 +5,7 @@ var VoiceMailRouter = Backbone.Router.extend({
 	},
 
 	voicemail : function(){
-
+		var that = this;
 		getTemplate('settings', {}, undefined, function(template_ui){
 			if(!template_ui)
 				  return;
@@ -14,7 +14,7 @@ var VoiceMailRouter = Backbone.Router.extend({
 			$('#PrefsTab .select').removeClass('select');
 			$('.add-widget-prefs-tab').addClass('select');
 			
-			this.VoiceMailCollectionView = new Base_Collection_View({ url : 'core/api/voicemails', templateKey : "voice-mail", cursor : true, page_size : 20,
+			that.VoiceMailCollectionView = new Base_Collection_View({ url : 'core/api/voicemails', templateKey : "voice-mail", cursor : true, page_size : 20,
 				individual_tag_name : 'tr', postRenderCallback : function(el)
 				{
 					includeTimeAgo(el);
@@ -25,9 +25,9 @@ var VoiceMailRouter = Backbone.Router.extend({
 					includeTimeAgo(el);
 				} });
 			
-			this.VoiceMailCollectionView.collection.fetch();
-			console.log(this.VoiceMailCollectionView);
-			$('#prefs-tabs-content').html(this.VoiceMailCollectionView.render().el);
+			that.VoiceMailCollectionView.collection.fetch();
+			console.log(that.VoiceMailCollectionView);
+			$('#prefs-tabs-content').html(that.VoiceMailCollectionView.render().el);
 
 		}, "#content");
 	}

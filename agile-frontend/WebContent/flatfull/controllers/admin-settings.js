@@ -233,21 +233,21 @@ var AdminSettingsRouter = Backbone.Router.extend({
 
 			return;
 		}
-
+		var that = this;
 		getTemplate("admin-settings", {}, undefined, function(template_ui){
 			if(!template_ui)
 				  return;
 			$('#content').html($(template_ui));	
 
 			// If users list is not defined then take back to users template
-			if (!this.usersListView || !this.usersListView.collection.get(id))
+			if (!that.usersListView || !that.usersListView.collection.get(id))
 			{
-				this.navigate("users", { trigger : true });
+				that.navigate("users", { trigger : true });
 				return;
 			}
 
 			// Gets user from the collection based on id
-			var user = this.usersListView.collection.get(id);
+			var user = that.usersListView.collection.get(id);
 
 			var needLogout = false;
 			if (CURRENT_DOMAIN_USER.email == user.attributes.email)
@@ -316,24 +316,24 @@ var AdminSettingsRouter = Backbone.Router.extend({
 
 			return;
 		}
-
+		var that = this;
 		getTemplate("admin-settings", {}, undefined, function(template_ui){
 			if(!template_ui)
 				  return;
 			$('#content').html($(template_ui));	
 
-			this.customFieldsListView = new Base_Collection_View({ url : '/core/api/custom-fields/allScopes', restKey : "customFieldDefs",
+			that.customFieldsListView = new Base_Collection_View({ url : '/core/api/custom-fields/allScopes', restKey : "customFieldDefs",
 			templateKey : "admin-settings-customfields", individual_tag_name : 'tr', postRenderCallback : function(el)
 			{
 				initializeCustomFieldsListeners();
 
 			} });
 
-			this.customFieldsListView.appendItem = groupingCustomFields;
+			that.customFieldsListView.appendItem = groupingCustomFields;
 
-			this.customFieldsListView.collection.fetch();
+			that.customFieldsListView.collection.fetch();
 
-			$('#content').find('#admin-prefs-tabs-content').html(this.customFieldsListView.el);
+			$('#content').find('#admin-prefs-tabs-content').html(that.customFieldsListView.el);
 			$('#content').find('#AdminPrefsTab .select').removeClass('select');
 			$('#content').find('.custom-fields-tab').addClass('select');
 			$(".active").removeClass("active");
@@ -558,21 +558,21 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			}, "#content");
 			return;
 		}
-
+		var that = this;
 		getTemplate("admin-settings", {}, undefined, function(template_ui){
 			if(!template_ui)
 				  return;
 
 			$('#content').html($(template_ui));	
 
-			this.integrations = new Base_Collection_View({ url : 'core/api/widgets/integrations', templateKey : 'admin-settings-web-to-lead',
+			that.integrations = new Base_Collection_View({ url : 'core/api/widgets/integrations', templateKey : 'admin-settings-web-to-lead',
 			postRenderCallback : function()
 			{
 			} });
 
-			this.integrations.collection.fetch();
+			that.integrations.collection.fetch();
 
-			$('#content').find('#admin-prefs-tabs-content').html(this.integrations.render().el);
+			$('#content').find('#admin-prefs-tabs-content').html(that.integrations.render().el);
 			$('#content').find('#AdminPrefsTab .select').removeClass('select');
 			$('#content').find('.integrations-tab').addClass('select');
 			$(".active").removeClass("active");
@@ -593,27 +593,27 @@ var AdminSettingsRouter = Backbone.Router.extend({
 
 			return;
 		}
-
+		var that = this;
 		getTemplate("admin-settings", {}, undefined, function(template_ui){
 			if(!template_ui)
 				  return;
 
 			$('#content').html($(template_ui));	
 
-			this.tagsview1 = new Base_Collection_View({ url : 'core/api/tags/stats1', templateKey : "tag-management", individual_tag_name : 'li',
+			that.tagsview1 = new Base_Collection_View({ url : 'core/api/tags/stats1', templateKey : "tag-management", individual_tag_name : 'li',
 			sort_collection : true, sortKey : 'tag', postRenderCallback : function(el)
 			{
 
 				initializeTagManagementListeners();
 			} });
-			this.tagsview1.appendItem = append_tag_management;
+			that.tagsview1.appendItem = append_tag_management;
 
 			// var tagsView = new Base_Model_View({ url : 'core/api/tags', template
 			// : 'admin-settings-tags-model', });
-			console.log(this.tagsview1);
-			this.tagsview1.collection.fetch();
+			console.log(that.tagsview1);
+			that.tagsview1.collection.fetch();
 
-			$('#content').find('#admin-prefs-tabs-content').html(this.tagsview1.render().el);
+			$('#content').find('#admin-prefs-tabs-content').html(that.tagsview1.render().el);
 
 			$('#content').find('#AdminPrefsTab .select').removeClass('select');
 			$('#content').find('.tag-management-tab').addClass('select');
@@ -626,15 +626,16 @@ var AdminSettingsRouter = Backbone.Router.extend({
 	emailGateways : function(id)
 	{
 		console.log(App_Admin_Settings.integrations.collection);
+		var that = this;
 		getTemplate("admin-settings", {}, undefined, function(template_ui){
 			if(!template_ui)
 				  return;
 			$('#content').html($(template_ui));	
 
 			// On Reload, navigate to integrations
-			if (!this.integrations || this.integrations.collection == undefined)
+			if (!that.integrations || that.integrations.collection == undefined)
 			{
-				this.navigate("integrations", { trigger : true });
+				that.navigate("integrations", { trigger : true });
 				return;
 			}
 
@@ -644,7 +645,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 				value = 'MANDRILL';
 
 			var emailGateway;
-			$.each(this.integrations.collection.where({name:"EmailGateway"}),function(key,value){
+			$.each(that.integrations.collection.where({name:"EmailGateway"}),function(key,value){
 			
 				emailGateway = JSON.parse(value.attributes.prefs);
 			
@@ -665,7 +666,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			if(!emailGateway)
 				emailGateway = {"email_api":value, "api_user": "", "api_key":""}; 
 					
-			this.email_gateway = new Base_Model_View({ 
+			that.email_gateway = new Base_Model_View({ 
 				data : emailGateway,
 				url : 'core/api/email-gateway',
 				template : 'settings-email-gateway', postRenderCallback : function(el)
@@ -694,7 +695,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 
 			});
 
-			$('#content').find('#admin-prefs-tabs-content').html(this.email_gateway.render().el);
+			$('#content').find('#admin-prefs-tabs-content').html(that.email_gateway.render().el);
 			$('#content').find('.integrations-tab').addClass('select');
 			$(".active").removeClass("active");
 
@@ -706,15 +707,16 @@ var AdminSettingsRouter = Backbone.Router.extend({
 	smsGateways : function(id)
 	{
 		console.log("inside sms gateways");
+		var that = this;
 		getTemplate("admin-settings", {}, undefined, function(template_ui){
 			if(!template_ui)
 				  return;
 			$('#content').html($(template_ui));	
 
 			// On Reload, navigate to integrations
-			if (!this.integrations || this.integrations.collection == undefined)
+			if (!that.integrations || that.integrations.collection == undefined)
 			{
-				this.navigate("integrations", { trigger : true });
+				that.navigate("integrations", { trigger : true });
 				return;
 			}
 
@@ -792,7 +794,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 						$("#sms-gateway-error").remove();
 
 					$responceText = "<div style='color:#B94A48; font-size:14px' id='sms-gateway-error'><i>" + data.responseText + "</i></div>";
-					$("#sms-integration-error", this.el).append($responceText);
+					$("#sms-integration-error", that.el).append($responceText);
 				} });
 
 			$('#content').find('#admin-prefs-tabs-content').html(view.render().el);

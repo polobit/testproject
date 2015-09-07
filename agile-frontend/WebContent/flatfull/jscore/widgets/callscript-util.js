@@ -15,6 +15,7 @@ function initializeCallScriptListeners(){
 	{
 		e.preventDefault();
 		// To solve chaining issue when cloned
+		var that = this;
 		getTemplate('callscript-rule', {}, undefined, function(template_ui){
 			if(!template_ui)
 				  return;
@@ -31,7 +32,7 @@ function initializeCallScriptListeners(){
 			// $(this).hide();
 			// var htmlContent = $(this).closest("tr").clone();
 			$(htmlContent).find("i.callscript-multiple-remove").css("display", "inline-block");
-			$(this).siblings("table").find("tbody").append(htmlContent);
+			$(that).siblings("table").find("tbody").append(htmlContent);
 
 
 		}, null);
