@@ -205,45 +205,48 @@ function getMergeFields(type)
 	};
 	
 	// Get Custom Fields in template format
-	var custom_fields = get_webrules_custom_fields();
-	
-	console.log("Custom Fields are");
-	console.log(custom_fields);
-	
-	// Merges options json and custom fields json
-	var merged_json = merge_webrules_jsons({}, options, custom_fields);
-	return merged_json;
+	get_webrules_custom_fields(function(custom_fields){
+
+		console.log("Custom Fields are");
+		console.log(custom_fields);
+		
+		// Merges options json and custom fields json
+		var merged_json = merge_webrules_jsons({}, options, custom_fields);
+		return merged_json;
+
+		});
 }
 
 /**
  * Returns custom fields in format required for merge fields. 
  * E.g., Nick Name:{{Nick Name}}
  */
-function get_webrules_custom_fields()
+function get_webrules_custom_fields(callback)
 {
     var url = window.location.protocol + '//' + window.location.host;
 	
 	// Sends GET request for customfields.
-    var msg = $.ajax({type: "GET", url: url+'/core/api/custom-fields', async: false, dataType:'json'}).responseText;
+	accessUrlUsingAjax(url+'/core/api/custom-fields', function(resp){
+
+		var customfields = {}, data = resp;
 	
-	// Parse stringify json
-	var data = JSON.parse(msg);
+		// Iterate over data and get field labels of each custom field
+		$.each(data, function(index,obj)
+				{
+						// Iterate over single custom field to get field-label
+			            $.each(obj, function(key, value){
+							
+							// Needed only field labels for merge fields
+							if(key == 'field_label')
+								customfields[value] = "{{[" + value+"]}}"
+						});
+				});
+
+		if(callback)
+			callback(customfields);
+
+	});
 	
-	var customfields = {};
-	
-	// Iterate over data and get field labels of each custom field
-	$.each(data, function(index,obj)
-			{
-					// Iterate over single custom field to get field-label
-		            $.each(obj, function(key, value){
-						
-						// Needed only field labels for merge fields
-						if(key == 'field_label')
-							customfields[value] = "{{[" + value+"]}}"
-					});
-			});	
-	
-	return customfields;
 }
 
 /**

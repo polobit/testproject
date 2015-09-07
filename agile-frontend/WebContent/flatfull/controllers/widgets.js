@@ -1059,41 +1059,38 @@ var WidgetsRouter = Backbone.Router
 												            '/scribe?service=googleplus&return_url=' + encodeURIComponent(window.location.href) + "/googleplus");
 												    } else {
 												    	
-												    	var widgetDetails = $.parseJSON(
-											    		        $.ajax({
-											    		            url: "core/api/widgets/GooglePlus", 
-											    		            async: false,
-											    		            dataType: 'json'
-											    		        }).responseText
-											    		    );
-												    	
-												    	console.clear();
-												    	console.log("In google Plus widget Router");
-											    		console.log(widgetDetails);												    		
-											    		
-											    		if (widgetDetails) {
-								                        	 widgetPrefGP = JSON.parse(widgetDetails.prefs);
-								                        	
-								                        	var userData = $.parseJSON(
-												    		        $.ajax({
-												    		            url: "https://www.googleapis.com/plus/v1/people/me?access_token="+ widgetPrefGP['access_token'], 
-												    		            async: false,
-												    		            dataType: 'json'
-												    		        }).responseText
-												    		    );
-								                        	
-								                        	set_up_access(
+												    	var widgetDetails = "";
+
+												    	accessUrlUsingAjax("core/api/widgets/GooglePlus", function(resp){
+												    		    widgetDetails = $.parseJSON(resp);
+
+												    		    console.clear();
+												    			console.log("In google Plus widget Router");
+											    				console.log(widgetDetails);	
+
+									    		            	if(!widgetDetails)
+									    		            	{
+									    		            		 show_set_up_widget("GooglePlus", 'googleplus-login',
+								                            		'/scribe?service=googleplus&return_url=' + encodeURIComponent(window.location.href) + "/googleplus");												                            
+								                            		return;
+									    		            	}
+
+									    		            	widgetPrefGP = JSON.parse(widgetDetails.prefs);
+								                        		
+								                        		accessUrlUsingAjax("https://www.googleapis.com/plus/v1/people/me?access_token="+ widgetPrefGP['access_token'], function(resp1){
+
+								                        			var userData = resp1;
+								                        			set_up_access(
 										                            "GooglePlus",
 										                            'googleplus-login',
 										                            userData,
 										                            '/scribe?service=googleplus&return_url=' + encodeURIComponent(window.location.protocol + "//" + window.location.host + "/#GooglePlus/googleplus"));
-								                        	
-								                        	
-								                        } else {
-								                            show_set_up_widget("GooglePlus", 'googleplus-login',
-								                            		'/scribe?service=googleplus&return_url=' + encodeURIComponent(window.location.href) + "/googleplus");												                            
-								                            return;
-								                        }
+
+
+
+								                        		});
+												    	});
+												    	
 												    }
 
 												},//End of Gplus

@@ -13,10 +13,10 @@ var FacebookPageTabRouter = Backbone.Router.extend({
 
 				$('#fbPageTab-listners').html($(template_ui));	
 				
-				fb_get_ajax_success_cb("fbpage?action=GET_DETAILS", function(data){
+				accessUrlUsingAjax("fbpage?action=GET_DETAILS", function(data){
 
 					var dataObj = data;
-					fb_get_ajax_success_cb("core/api/forms", function(response){
+					accessUrlUsingAjax("core/api/forms", function(response){
 
 							dataObj["forms"] = response;
 							$("#admin-prefs-tabs-content").html(getTemplate("fbpagetab", dataObj));
@@ -33,13 +33,18 @@ var FacebookPageTabRouter = Backbone.Router.extend({
 });
 
 
-function fb_get_ajax_success_cb(url, callback){
+function accessUrlUsingAjax(url, callback){
 	$.ajax({ 
 		url : url, 
 		dataType : 'json',
 		success : function(response){
-				if(callback)
-					  callback($.parseJSON(response));
+
+			   try{
+			   	  response = $.parseJSON(response);
+			   }catch(err){}
+
+				if(callback){
+					 callback(response);
 		}
 	});
 }

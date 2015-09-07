@@ -111,20 +111,17 @@ function connectedCallNoty(message, type)
 		] });
 		
 		if(TWILIO_DIRECTION == "outbound-dial") {
-		var responseJson = $.parseJSON(
-		        $.ajax({
-		        	url: "core/api/voicemails",
-		            async: false,
-		            dataType: 'json'
-		        }).responseText
-		    );
-		
-		getTemplate("twilioio-voicemail",responseJson, undefined, function(template_ui){
-			if(!template_ui)
-				  return;
-			$('.noty_buttons').prepend($(template_ui));	
-		}, null);
 
+			accessUrlUsingAjax("core/api/voicemails", function(resp){
+
+					var responseJson = resp;
+					getTemplate("twilioio-voicemail",responseJson, undefined, function(template_ui){
+						if(!template_ui)
+							  return;
+						$('.noty_buttons').prepend($(template_ui));	
+					}, null);
+
+			});
 		
 		}
 		

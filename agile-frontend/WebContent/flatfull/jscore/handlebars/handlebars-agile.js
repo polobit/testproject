@@ -359,7 +359,7 @@ var TEMPLATE_LIB_PATH = "";
 function downloadTemplate(url, callback)
 {
 
-	var dataType = 'html';
+	var dataType = 'html', template_url = LIB_PATH;
 
 
 	// If Precompiled is enabled, we change the directory to precompiled. If
@@ -375,6 +375,7 @@ function downloadTemplate(url, callback)
 	if (url.endsWith("js") && HANDLEBARS_PRECOMPILATION)
 	{
 		dataType = 'script';
+		template_url = template_url.replace("flatfull/", "");
 		url = LIB_PATH + url;
 	}
 

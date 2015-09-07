@@ -131,14 +131,15 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			}, "#content");
 
 			return;
-		}
+		} 
 
+		var that = this;
 		getTemplate("admin-settings", {}, undefined, function(template_ui){
 			if(!template_ui)
 				  return;
 			$('#content').html($(template_ui));	
 
-			this.usersListView = new Base_Collection_View({ url : '/core/api/users', restKey : "domainUser", templateKey : "admin-settings-users",
+			that.usersListView = new Base_Collection_View({ url : '/core/api/users', restKey : "domainUser", templateKey : "admin-settings-users",
 			individual_tag_name : 'tr', postRenderCallback : function(el)
 			{
 
@@ -147,9 +148,9 @@ var AdminSettingsRouter = Backbone.Router.extend({
 					$(".last-login-time", el).timeago();
 				});
 			} });
-			this.usersListView.collection.fetch();
+			that.usersListView.collection.fetch();
 
-			$('#content').find('#admin-prefs-tabs-content').html(this.usersListView.el);
+			$('#content').find('#admin-prefs-tabs-content').html(that.usersListView.el);
 			$('#content').find('#AdminPrefsTab .select').removeClass('select');
 			$('#content').find('.users-tab').addClass('select');
 			$(".active").removeClass("active");

@@ -1386,50 +1386,7 @@ $(function()
 			}
 		}
 	});
-
-	// To show related to contacts for contacts as well as companies
-	Handlebars.registerHelper('related_to_contacts', function(data, options)
-	{
-		var el = "";
-		var count = data.length;
-		$.each(data, function(key, value)
-		{
-			var html = getTemplate("related-to-contacts", value);
-			if (--count == 0)
-			{
-				el = el.concat(html);
-				return;
-			}
-			el = el.concat(html + ", ");
-		});
-		return new Handlebars.SafeString(el);
-	});
-
-	// To show only one related to contacts or companies in deals
-	Handlebars.registerHelper('related_to_one', function(data, options)
-	{
-		// return "<span>" + getTemplate("related-to-contacts", data[0]) +
-		// "</span>";
-		var el = "";
-		var count = data.length;
-		$.each(data, function(key, value)
-		{
-			if (key <= 3)
-			{
-				var html = getTemplate("related-to-contacts", value);
-				if (--count == 0 || key == 3)
-				{
-					el = el.concat(html);
-					return;
-				}
-				el = el.concat(html + ", ");
-			}
-
-		});
-		return new Handlebars.SafeString(el);
-
-	});
-
+	
 	/**
 	 * To represent a number with commas in deals
 	 */
