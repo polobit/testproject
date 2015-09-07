@@ -1002,7 +1002,7 @@ function closeTwilioNoty()
 
 function showNoteAfterCall(callRespJson,messageObj)
 {
-	if(!(TWILIO_IS_VOICEMAIL == false)
+	if(!(TWILIO_IS_VOICEMAIL == false))
 		   return;
 
 	var	el = $("#noteForm");
