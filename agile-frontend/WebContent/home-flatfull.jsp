@@ -91,7 +91,7 @@ content="<%=domainUser.getInfo(DomainUser.LAST_LOGGED_IN_TIME)%>" />
     // "//d2zl2ik92yaru4.cloudfront.net/"
   }
 
-  String CSS_PATH = CLOUDFRONT_TEMPLATE_LIB_PATH + FLAT_FULL_PATH;
+  CSS_PATH = CLOUDFRONT_TEMPLATE_LIB_PATH + FLAT_FULL_PATH;
 
 %>
 
