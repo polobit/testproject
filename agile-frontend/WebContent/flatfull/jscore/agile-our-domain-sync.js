@@ -564,6 +564,12 @@ function add_plan_change_info_as_note_to_owner(cus_email, plan_type, plan_id,
 }
 
 $(function(){
+	
+	
+});
+
+function initialize_agile_domain_sync(){
+
 	try
 	{
 		if(_agile)
@@ -581,7 +587,8 @@ $(function(){
 		console.log();
 	}
 	
-});
+}
+
 // add note to owner when subscription is cancelled
 function add_cancel_subscription_info_as_note_to_owner(cus_email, callback)
 {

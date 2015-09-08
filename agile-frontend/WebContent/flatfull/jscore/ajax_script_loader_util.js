@@ -43,6 +43,8 @@ function loadMiscScripts() {
 
     // Load agile web stats
     load_urls_on_ajax_stop('stats/min/agile-min.js?_=' + _AGILE_VERSION, function(){
+
+    		initialize_agile_domain_sync();
     		_agile_execute_web_rules();
     });
 
