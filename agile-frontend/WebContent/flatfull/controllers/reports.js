@@ -456,6 +456,7 @@ var ReportsRouter = Backbone.Router
 
 				$(".active").removeClass("active");
 				$("#reportsmenu").addClass("active");
+				highlightDatepickerOption();
 			},
 
 			/**
@@ -484,6 +485,7 @@ var ReportsRouter = Backbone.Router
 
 				$(".active").removeClass("active");
 				$("#reportsmenu").addClass("active");
+				highlightDatepickerOption();
 			},
 
 			/**
@@ -512,6 +514,7 @@ var ReportsRouter = Backbone.Router
 
 				$(".active").removeClass("active");
 				$("#reportsmenu").addClass("active");
+				highlightDatepickerOption();
 			},
 			/**
 			 * Returns Cohorts Graphs with two tag1
@@ -539,6 +542,7 @@ var ReportsRouter = Backbone.Router
 
 				$(".active").removeClass("active");
 				$("#reportsmenu").addClass("active");
+				highlightDatepickerOption();
 			},
 
 			/**

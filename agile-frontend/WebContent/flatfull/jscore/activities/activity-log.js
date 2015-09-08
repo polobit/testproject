@@ -147,6 +147,24 @@ function initActivitiesDateRange()
 			Date.today().moveToFirstDayOfMonth(), Date.today().moveToLastDayOfMonth()
 	], 'Last Month' : [
 			Date.today().moveToFirstDayOfMonth().add({ months : -1 }), Date.today().moveToFirstDayOfMonth().add({ days : -1 })
+	], 'This Quarter' : [
+			Date.today().getMonth() < 3 ? new Date(Date.today().moveToFirstDayOfMonth().setMonth(0)) : 
+			(Date.today().getMonth() >= 3 && Date.today().getMonth() < 6) ? new Date(Date.today().moveToFirstDayOfMonth().setMonth(3)) :
+			(Date.today().getMonth() >= 6 && Date.today().getMonth() < 9) ? new Date(Date.today().moveToFirstDayOfMonth().setMonth(6)) : new Date(Date.today().moveToFirstDayOfMonth().setMonth(9)), 
+			Date.today().getMonth() < 3 ? new Date(Date.today().moveToLastDayOfMonth().setMonth(2)) : 
+			(Date.today().getMonth() >= 3 && Date.today().getMonth() < 6) ? new Date(Date.today().moveToLastDayOfMonth().setMonth(5)) :
+			(Date.today().getMonth() >= 6 && Date.today().getMonth() < 9) ? new Date(Date.today().moveToLastDayOfMonth().setMonth(8)) : new Date(Date.today().moveToLastDayOfMonth().setMonth(11))
+	], 'Last Quarter' : [
+			Date.today().getMonth() < 3 ? new Date(Date.today().add({ years : -1 }).moveToFirstDayOfMonth().setMonth(9)) : 
+			(Date.today().getMonth() >= 3 && Date.today().getMonth() < 6) ? new Date(Date.today().moveToFirstDayOfMonth().setMonth(0)) :
+			(Date.today().getMonth() >= 6 && Date.today().getMonth() < 9) ? new Date(Date.today().moveToFirstDayOfMonth().setMonth(3)) : new Date(Date.today().moveToFirstDayOfMonth().setMonth(6)), 
+			Date.today().getMonth() < 3 ? new Date(Date.today().add({ years : -1 }).moveToLastDayOfMonth().setMonth(11)) : 
+			(Date.today().getMonth() >= 3 && Date.today().getMonth() < 6) ? new Date(Date.today().moveToLastDayOfMonth().setMonth(2)) :
+			(Date.today().getMonth() >= 6 && Date.today().getMonth() < 9) ? new Date(Date.today().moveToLastDayOfMonth().setMonth(5)) : new Date(Date.today().moveToLastDayOfMonth().setMonth(8))
+	], 'This Year' : [
+			new Date(Date.today().moveToFirstDayOfMonth().setMonth(0)), new Date(Date.today().moveToLastDayOfMonth().setMonth(11))
+	], 'Last Year' : [
+			new Date(Date.today().moveToFirstDayOfMonth().add({ years : -1 }).setMonth(0)), new Date(Date.today().moveToLastDayOfMonth().add({ years : -1 }).setMonth(11))
 	] }, locale : { applyLabel : 'Apply', cancelLabel : 'Cancel', fromLabel : 'From', toLabel : 'To', customRangeLabel : 'Custom', daysOfWeek : [
 			'Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'
 	], monthNames : [
@@ -168,5 +186,12 @@ function initActivitiesDateRange()
 			$('#activities_date_range #range').html('Filter by date');
 			updateActivty(getParameters());
 		}
+	});
+	$('.daterangepicker > .ranges > ul').on("click", "li", function(e)
+	{
+		$('.daterangepicker > .ranges > ul > li').each(function(){
+			$(this).removeClass("active");
+		});
+		$(this).addClass("active");
 	});
 }
