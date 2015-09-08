@@ -466,13 +466,14 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			return;
 		}
 
+		var that = this;
 		$('#content').html("<div id='milestone-listner'>&nbsp;</div>");
 		getTemplate("admin-settings", {}, undefined, function(template_ui){
 			if(!template_ui)
 				  return;
 			$('#milestone-listner').html($(template_ui));
 
-			this.pipelineGridView = new Base_Collection_View({ url : '/core/api/milestone/pipelines', templateKey : "admin-settings-milestones",
+			that.pipelineGridView = new Base_Collection_View({ url : '/core/api/milestone/pipelines', templateKey : "admin-settings-milestones",
 			individual_tag_name : 'div', sortKey : "name", postRenderCallback : function(el)
 			{
 				setup_milestones(el);
@@ -482,9 +483,9 @@ var AdminSettingsRouter = Backbone.Router.extend({
 				initializeMilestoneListners(el);
 				milestone_util.init(el);
 			} });
-			this.pipelineGridView.collection.fetch();
+			that.pipelineGridView.collection.fetch();
 
-			$('#milestone-listner').find('#admin-prefs-tabs-content').html(this.pipelineGridView.render().el);
+			$('#milestone-listner').find('#admin-prefs-tabs-content').html(that.pipelineGridView.render().el);
 			$('#milestone-listner').find('#AdminPrefsTab .select').removeClass('select');
 			$('#milestone-listner').find('.milestones-tab').addClass('select');
 			$(".active").removeClass("active");

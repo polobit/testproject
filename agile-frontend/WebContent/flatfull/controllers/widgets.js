@@ -1026,17 +1026,11 @@ var WidgetsRouter = Backbone.Router
 														that.quickbook_import_settings = new Base_Model_View({ url : 'core/quickbook/import-settings',
 																		template : 'admin-settings-import-quickbook-settings', saveCallback : function(model)
 																		{
-
-																						showNotyPopUp("information", "Contacts sync initiated", "top", 1000);
+																					showNotyPopUp("information", "Contacts sync initiated", "top", 1000);
 																		}, postRenderCallback: function(){
 																					initializeImportListeners();
 																				}
-																                });
-
-																$("#prefs-tabs-content").html(this.quickbook_import_settings.render().el);
-
-																		} });
-
+																                });																
 														$("#prefs-tabs-content").html(that.quickbook_import_settings.render().el);
 
 													}, "#content");

@@ -104,9 +104,7 @@ var SettingsRouter = Backbone.Router
 						setupTinyMCEEditor('textarea#WYSItextarea', true, [
 							"textcolor link image preview code"
 						], function()
-						{
-
-							// Register focus
+						{   // Register focus
 							register_focus_on_tinymce('WYSItextarea');
 						});
 					} });
