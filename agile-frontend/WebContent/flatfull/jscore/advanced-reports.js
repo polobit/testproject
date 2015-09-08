@@ -141,7 +141,6 @@ head.js(LIB_PATH + 'lib/date-charts.js', LIB_PATH + 'lib/date-range-picker.js', 
 		{
 			$('#track').change(function()
 			{
-				$('#reports-sales-track').text($("#track option:selected").text());
 				callback();
 			});
 		}, '<option class="default-select" value="{{id}}">{{name}}</option>', false, undefined, "All Tracks");
@@ -150,7 +149,6 @@ head.js(LIB_PATH + 'lib/date-charts.js', LIB_PATH + 'lib/date-range-picker.js', 
 		{
 			$('#owner').change(function()
 			{
-				$('#reports-sales-owner').text($("#owner option:selected").text());
 				callback();
 			});
 
@@ -193,6 +191,7 @@ function showsalesReportGraphs()
 	// Adds start_time, end_time and timezone offset to params.
 	var d = new Date();
 	start_time=start_time+(d.getTimezoneOffset()*60*1000);
+	 end_time += (((23*60*60)+(59*60)+59)*1000);
 	end_time=end_time+(d.getTimezoneOffset()*60*1000);
 
 

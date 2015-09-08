@@ -10,7 +10,8 @@
 function setupCharts(callback)
 {
 
-	head.js(LIB_PATH + 'lib/flot/highcharts-3.js', LIB_PATH + 'lib/flot/highcharts-exporting.js', LIB_PATH + 'lib/flot/funnel.js',LIB_PATH + 'lib/flot/highcharts-grid.js', function()
+	head.js(LIB_PATH + 'lib/flot/highcharts-3.js', LIB_PATH + 'lib/flot/highcharts-exporting.js', LIB_PATH + 'lib/flot/funnel.js',LIB_PATH + 'lib/flot/highcharts-grid.js', 
+		LIB_PATH + 'lib/flot/no-data-to-display.js',function()
 	{
 
 		// Checks if callback is available, if available calls the callback
@@ -1485,7 +1486,16 @@ function showDealAreaSpline(url, selector, name, yaxis_name, show_loading)
 			    series: series,
 			    exporting: {
 			        enabled: false
-			    }
+			    },
+			    lang: {
+            				noData: "No Deals Found"
+        				},
+        					noData: {
+           								style: {
+             								 fontWeight: 'bold',
+               									fontSize: '25px',
+      	     									 }
+       								 }
 			});
 		});
 	});

@@ -578,8 +578,6 @@ var ReportsRouter = Backbone.Router
 							$("#content").html(getTemplate("report-sales", {}));
 
 							// Set the name
-							$('#reports-sales-track').text($("#track option:selected").text());
-							$('#reports-sales-owner').text($("#owner option:selected").text());
 
 							initSalesCharts(function()
 							{

@@ -411,7 +411,7 @@ public class DealsAPI
     public String getDealsDetailsByPipeline(@PathParam("pipeline-id") Long pipelineId, @QueryParam("min") Long min,
 	    @QueryParam("max") Long max)
     {
-	return OpportunityUtil.getDealsDetailsByPipeline(pipelineId, min, max).toString();
+	return OpportunityUtil.getDealsDetailsByPipeline(null,pipelineId, min, max,null).toString();
     }
 
     /**
@@ -947,6 +947,6 @@ public class DealsAPI
     public String getDealsDetailsByPipelineandOwner(@PathParam("owner-id") Long ownerId,@PathParam("pipeline-id") Long pipelineId,
     		@QueryParam("min") Long min, @QueryParam("max") Long max,@QueryParam("frequency") String frequency)
     {
-	return OpportunityUtil.getDealsDetailsByPipelineandOwner(ownerId,pipelineId, min, max,frequency).toString();
+	return OpportunityUtil.getDealsDetailsByPipeline(ownerId,pipelineId, min, max,frequency).toString();
     }
 }
