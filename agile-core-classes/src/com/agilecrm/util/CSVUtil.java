@@ -1363,7 +1363,7 @@ public class CSVUtil
 	    // Send every partition as separate email
 	    sendFailedContactImportFile(domainUser, new String(data, "UTF-8"), failedContacts.size(), status);
 
-	    // service.deleteFile();
+	    service.deleteFile();
 
 	}
 	catch (Exception e)
