@@ -222,20 +222,17 @@ var TAG_MODEL_VIEW = Backbone.View
 				this.input.val(this.model.get('tag'));
 
 			},
-			render : function(callback) {
-				var that = this;
-				getTemplate(that.options.template, that.model.toJSON(), undefined, function(template_ui){
-					if(!template_ui)
-						  return;
-					$(that.el).html($(template_ui));
-					$(that.el).data(that.model);
-					that.input = $('.edit-input', that.el);
-					// Add model as data to it's corresponding row
-					return that;
+		render : function(callback) {
+				$(this.el)
+						.html(
+								getTemplate(this.options.template, this.model
+										.toJSON()));
+				$(this.el).data(this.model);
+				this.input = $('.edit-input', this.el);
+				// Add model as data to it's corresponding row
 
-				}, that.el);
-
-				
+				return this;
+		
 			}
 		});
 
