@@ -180,7 +180,7 @@ function tinyMCECallBack(name, htmlVal)
  * @param type - to add specific fields for specific nodes
  *               like unsubscribe link to SendEmail node
  **/
-function getMergeFields(type)
+function getMergeFields(type, callback)
 {
 	var options=
 	{
@@ -213,6 +213,9 @@ function getMergeFields(type)
 		
 		// Merges options json and custom fields json
 		var merged_json = merge_webrules_jsons({}, options, custom_fields);
+		if(callback)
+			 return callback(merged_json);
+
 		return merged_json;
 
 		});
