@@ -499,7 +499,24 @@ function populateLostReasons(el, value){
 			hideTransitionBar();
 
 			if($('#pipeline_milestone',el).length>0){
-				$('#pipeline_milestone',el).trigger('change');
+				var temp = $('#pipeline_milestone',el).val();
+				var track = temp.substring(0, temp.indexOf('_'));
+				var milestone = temp.substring(temp.indexOf('_') + 1, temp.length + 1);
+				$('#pipeline_milestone',el).closest('form').find('#pipeline').val(track);
+				$('#pipeline_milestone',el).closest('form').find('#milestone').val(milestone);
+				console.log(track, '-----------', milestone);
+				var lost_milestone_flag = false;
+				$('#pipeline_milestone',el).find('option').each(function(){
+					if($(this).css("display") == "none" && $('#pipeline_milestone',el).val() == temp){
+						lost_milestone_flag = true;
+					}
+				});
+				if(lost_milestone_flag && $('#lost_reason',$('#pipeline_milestone',el).closest('.modal')).find('option').length>1){
+					$('#deal_lost_reason',$('#pipeline_milestone',el).closest('.modal')).removeClass("hidden");
+				}else{
+					$('#lost_reason',$('#pipeline_milestone',el).closest('.modal')).val("");
+					$('#deal_lost_reason',$('#pipeline_milestone',el).closest('.modal')).addClass("hidden");
+				}
 			}else{
 				if($('#lost_reason',el).find('option').length>1){
 					$('#dealLostReasonModal').modal('show');

@@ -316,6 +316,7 @@ $(function()
 			}
 		});
 		if(lost_milestone_flag && $('#lost_reason',$(this).closest('.modal')).find('option').length>1){
+			$('#lost_reason',$(this).closest('.modal')).val("");
 			$('#deal_lost_reason',$(this).closest('.modal')).removeClass("hidden");
 		}else{
 			$('#lost_reason',$(this).closest('.modal')).val("");
