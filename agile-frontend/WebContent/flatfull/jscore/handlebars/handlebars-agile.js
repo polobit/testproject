@@ -376,7 +376,7 @@ function downloadTemplate(url, callback)
 	{
 		dataType = 'script';
 		template_url = template_url.replace("flatfull/", "");
-		url = LIB_PATH + url;
+		url = template_url + url;
 	}
 
 	url += "?_=" + _AGILE_VERSION;
