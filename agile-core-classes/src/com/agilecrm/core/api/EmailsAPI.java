@@ -370,7 +370,7 @@ public class EmailsAPI
 			emailSender.isEmailWhiteLabelEnabled());
 
 	    emailSender.sendEmail(fromEmail, fromName, fromEmail, null, null, subject, replyToEmail, htmlEmail,
-		    textEmail, null, null,null);
+		    textEmail, null, new ArrayList<Long>(),new ArrayList<BlobKey>());
 
 	}
 	catch (Exception e)

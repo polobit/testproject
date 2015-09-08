@@ -19,10 +19,13 @@ var AdminSettingsRouter = Backbone.Router.extend({
 	"custom-fields" : "customFields",
 
 	/* Api & Analytics */
-	"api" : "api", "analytics-code" : "analyticsCode", "analytics-code/:id" : "analyticsCode",
+	"analytics-code" : "analyticsCode", "analytics-code/:id" : "analyticsCode",
 
 	/* Milestones */
 	"milestones" : "milestones",
+	
+	/* Categories */
+	"categories" : "categories",
 
 	/* Menu settings - select modules on menu bar */
 	"menu-settings" : "menu_settings",
@@ -477,6 +480,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 				if (tracks_length == 1)
 					$('#milestone-listner').find('#deal-tracks-accordion').find('.collapse').addClass('in');
 				initializeMilestoneListners(el);
+				milestone_util.init(el);
 			} });
 			this.pipelineGridView.collection.fetch();
 
@@ -487,6 +491,32 @@ var AdminSettingsRouter = Backbone.Router.extend({
 
 		}, "#milestone-listner");
 	
+	},
+	
+	/**
+	 * Creates a Model to show and edit milestones, reloads the page on save
+	 * success
+	 */
+	categories : function()
+	{
+		if (!CURRENT_DOMAIN_USER.is_admin)
+		{
+			$('#content').html(getTemplate('others-not-allowed',{}));
+			return;
+		}
+		$("#content").html(getTemplate("admin-settings"), {});
+		this.categoryGridView = new Base_Collection_View({ url : '/core/api/categories?entity_type=TASK', templateKey : "admin-settings-categories",
+			individual_tag_name : 'tr', sortKey : "order", postRenderCallback : function(el)
+			{
+				console.log("loaded categories : ", el);
+				categories.setup_categories(el);
+				categories.init();
+			} });
+		this.categoryGridView.collection.fetch();
+		$('#content').find('#admin-prefs-tabs-content').html(this.categoryGridView.render().el);
+		$('#content').find('#AdminPrefsTab .select').removeClass('select');
+		$('#content').find('.categories-tab').addClass('select');
+		$(".active").removeClass("active");
 	},
 
 	/**
@@ -604,7 +634,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			that.tagsview1 = new Base_Collection_View({ url : 'core/api/tags/stats1', templateKey : "tag-management", individual_tag_name : 'li',
 			sort_collection : true, sortKey : 'tag', postRenderCallback : function(el)
 			{
-
+				acl_util.initTagACL(el);
 				initializeTagManagementListeners();
 			} });
 			that.tagsview1.appendItem = append_tag_management;
@@ -615,7 +645,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			that.tagsview1.collection.fetch();
 
 			$('#content').find('#admin-prefs-tabs-content').html(that.tagsview1.render().el);
-
+		
 			$('#content').find('#AdminPrefsTab .select').removeClass('select');
 			$('#content').find('.tag-management-tab').addClass('select');
 			$(".active").removeClass("active");

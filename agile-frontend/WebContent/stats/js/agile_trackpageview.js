@@ -17,33 +17,26 @@ function agile_trackPageview(callback)
 	var session_id = agile_session.get();
 
 	// Current url
-	var url = document.location.href;
-	if (url !== undefined && url != null)
-		url = encodeURIComponent(url);
-	else
-		url = "";
+	var url = document.location.href || "";
 
 	// Get agile_id
 	var agile = agile_id.get();
+
+	// Initialize params
 	var params = "";
 
 	// If it is a new session
 	if (agile_session.new_session)
 	{
 		// Set the referrer
-		var document_referrer = document.referrer;
-		if (document_referrer !== undefined && document_referrer != null && document_referrer != "null")
-			document_referrer = encodeURIComponent(document_referrer);
-		else
-			document_referrer = "";
-		params = "guid={0}&sid={1}&url={2}&agile={3}&new=1&ref={4}".format(guid, session_id, url, agile, document_referrer);
+		var document_referrer = document.referrer || "";
+		params = "guid={0}&sid={1}&url={2}&agile={3}&new=1&ref={4}".format(guid, session_id, encodeURIComponent(url), agile, encodeURIComponent(document_referrer));
 	}
 	else
-		params = "guid={0}&sid={1}&url={2}&agile={3}".format(guid, session_id, url, agile);
+		params = "guid={0}&sid={1}&url={2}&agile={3}".format(guid, session_id, encodeURIComponent(url), agile);
 
 	if (agile_guid.get_email())
-
-		params += "&email=" + encodeURIComponent(agile_guid.get_email()); // get email			
+		params += "&email=" + encodeURIComponent(agile_guid.get_email());	
 
 	var agile_url = "https://" + agile_id.getNamespace() + ".agilecrm.com/stats?callback=?&" + params;
 

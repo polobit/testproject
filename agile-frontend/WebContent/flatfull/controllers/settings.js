@@ -16,7 +16,7 @@ var SettingsRouter = Backbone.Router
 			"settings" : "settings",
 
 			/* User preferences */
-			"user-prefs" : "userPrefs",
+			"user-prefs/:id" : "userPrefs",
 
 			/* Change Password */
 			"change-password" : "changePassword",
@@ -74,8 +74,22 @@ var SettingsRouter = Backbone.Router
 			 * Creates a Model to show and edit Personal Preferences, and sets
 			 * HTML Editor. Reloads the page on save success.
 			 */
-			userPrefs : function()
+			userPrefs : function(type)
 			{
+				var template_name = "settings-user-prefs";
+				var tab_class = "profile";
+				if(type == "reminders")
+				{
+					template_name = "settings-reminders";
+					tab_class = "reminders";
+				}
+				else if(type == "advanced")
+				{
+					template_name = "settings-advanced";
+					tab_class = "advanced";
+
+				}
+
 
 				getTemplate("settings", {}, undefined, function(template_ui){
 					if(!template_ui)
@@ -97,10 +111,11 @@ var SettingsRouter = Backbone.Router
 						});
 					} });
 
-					$('#PrefsTab .select').removeClass('select');
-					$('.user-prefs-tab').addClass('select');
-					$(".active").removeClass("active");
-
+				$('#PrefsTab .select').removeClass('select');
+				$('.user-prefs-tab').addClass('select');
+				$(".active").removeClass("active");
+				$("#prefs-tabs-content .prefs-"+tab_class).addClass("active");
+				// $('#content').html(view.render().el);
 				}, "#content");
 			},
 
@@ -585,6 +600,21 @@ var SettingsRouter = Backbone.Router
 					$(".active").removeClass("active");
 
 				}, "#content");
+				if ($('#attachment_id').val())
+				{
+					var el = $('#tpl-attachment-select').closest("div");
+					$('#tpl-attachment-select').hide();
+					el.find(".attachment-document-select").css("display", "inline");
+					var optionsTemplate = "<option value='{{id}}' network_type='{{titleFromEnums network_type}}' size='{{size}}' url='{{url}}'>{{name}}</option>";
+        			fillSelect('attachment-select','core/api/documents', 'documents',  function fillNew()
+					{
+						el.find("#attachment-select option:first").after("<option value='new'>Upload new doc</option>");
+						$('#attachment-select').find('option[value='+$('#attachment_id').val()+']').attr("selected","selected");
+						$('.add-tpl-attachment-confirm').trigger("click");
+						$('#tpl-attachment-select').hide();
+						$('#tpl-attachment-name').show();
+					}, optionsTemplate, false, el);
+				}
 			},
 
 			/**

@@ -244,11 +244,11 @@ $(function()
 		contact_details_tab.load_campaigns();
 	});
 
-    $('body').on('click', '#contactDetailsTab a[href="#company-contacts"]', function(e)
+    /*$('body').on('click', '#contactDetailsTab a[href="#company-contacts"]', function(e)
 	{
 		e.preventDefault();
 		fill_company_related_contacts(App_Contacts.contactDetailView.model.id, 'company-contacts');
-	});
+	});*/
 
 	/**
 	 * Sets cookie when user changes email dropdown under mail tab. Cookie
@@ -621,6 +621,10 @@ function initializeSendEmailListeners(){
 			set_tinymce_content('email-body', '');
 
 			$("#emailForm").find('textarea[name="body"]').val("");
+			
+			$('.add-attachment-cancel').trigger("click");
+
+			$('#eattachment_error').hide();
 			return;
 		}
 
@@ -683,6 +687,36 @@ function initializeSendEmailListeners(){
 
 			// Insert content into tinymce
 			set_tinymce_content('email-body', text);
+			
+			if (model.attachment_id && Current_Route != 'bulk-email' && Current_Route != 'company-bulk-email')
+			{
+				var el = $('.add-attachment-select').closest("div");
+				$('.add-attachment-select').hide();
+				el.find(".attachment-document-select").css("display", "inline");
+				var optionsTemplate = "<option value='{{id}}' network_type='{{titleFromEnums network_type}}' size='{{size}}' url='{{url}}'>{{name}}</option>";
+        		fillSelect('attachment-select','core/api/documents', 'documents',  function fillNew()
+				{
+					el.find("#attachment-select option:first").after("<option value='new'>Upload new doc</option>");
+					$('#attachment-select').find('option[value='+model.attachment_id+']').attr("selected","selected");
+					$('.add-attachment-confirm').trigger("click");
+
+				}, optionsTemplate, false, el);
+			}
+			else if (model.attachment_id && (Current_Route == 'bulk-email' || Current_Route == 'company-bulk-email'))
+			{
+				$('.add-attachment-select').hide();
+				$('#eattachment_error').show();
+			}
+			else if(!model.attachment_id && (Current_Route == 'bulk-email' || Current_Route == 'company-bulk-email'))
+			{
+				$('.add-attachment-select').hide();
+				$('#eattachment_error').hide();
+			}
+			else if(!model.attachment_id)
+			{
+				$('.add-attachment-cancel').trigger("click");
+				$('#eattachment_error').hide();
+			}
 		} });
 
 	});

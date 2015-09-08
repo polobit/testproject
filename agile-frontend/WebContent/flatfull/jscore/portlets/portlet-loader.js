@@ -32,6 +32,7 @@ function loadPortlets(el){
 	App_Portlets.accountInfo = new Array();
 	App_Portlets.activity=new Array();
 	App_Portlets.activitiesView= new Array();
+	App_Portlets.campaignstats = new Array();
 	/*
 	 * If Portlets_View is not defined , creates collection view, collection is
 	 * sorted based on position i.e., set when sorted using jquery ui sortable
@@ -201,6 +202,7 @@ function set_up_portlets(el, portlets_el){
 						$('#'+this.$resized_widget.attr('id')+' > .portlet_header').css("width","100%");*/
 					$('#'+this.$resized_widget.attr('id')+' > .portlet_header').find('ul').width(($('#'+this.$resized_widget.attr('id')+' > .portlet_body').find('ul').width()/$('#'+this.$resized_widget.attr('id')+' > .portlet_body').width()*100)+'%');
         		}
+
         		else if(tempModel.get("name")=="Mini Calendar")
         			{
 						var el=this.$resized_widget.find('.portlet_body_calendar');
@@ -777,7 +779,28 @@ function showPortletSettings(el){
 		$('.loading-img').hide();
 		$("#duration", elData).find('option[value='+ base_model.get("settings").duration +']').attr("selected", "selected");
 	}
-	
+	else if(base_model.get('portlet_type')=="USERACTIVITY" && base_model.get('name')=="Campaign stats"){
+		$('#portletsCampaignStatsSettingsModal').modal('show');
+		$('#portletsCampaignStatsSettingsModal > .modal-dialog > .modal-content > .modal-footer > .save-modal').attr('id',base_model.get("id")+'-save-modal');
+		$("#portlet-type",$('#portletsCampaignStatsSettingsModal')).val(base_model.get('portlet_type'));
+		$("#portlet-name",$('#portletsCampaignStatsSettingsModal')).val(base_model.get('name'));
+		
+		elData = $('#portletsCampaignStatsSettingsForm');
+		$("#duration", elData).find('option[value='+ base_model.get("settings").duration +']').attr("selected", "selected");
+		
+		var options="<option value='All'>All Campaigns</option>" ;
+		$.ajax({ type : 'GET', url : '/core/api/workflows', async : false, dataType : 'json',
+			success: function(data){
+				$.each(data,function(index,campaignfilter){
+					options+="<option value="+campaignfilter.id+">"+campaignfilter.name+"</option>";
+				});
+				$('#campaign_type', elData).html(options);
+				$("#campaign_type", elData).find('option[value='+ base_model.get("settings").campaign_type +']').attr("selected", "selected");
+				$('.loading-img').hide();
+			}
+		});
+		
+	}
 	if(base_model.get('name')=="Pending Deals" || base_model.get('name')=="Deals By Milestone" || base_model.get('name')=="Closures Per Person" || base_model.get('name')=="Deals Funnel"){
 		$('#due-date', elData).datepicker({
 			format : CURRENT_USER_PREFS.dateFormat
@@ -1277,14 +1300,16 @@ $('.modal-footer').off("click").on('click', '.portlet-settings-save-modal', func
 	    				milestonesList=data1["milestonesList"];
 	    				milestoneValuesList=data1["milestoneValuesList"];
 	    				milestoneMap=data1["milestoneMap"];
+	    				wonMilestone=data1["wonMilestone"];
+						lostMilestone=data1["lostMilestone"];
 	    				
 	    				var funnel_data=[];
 	    				var temp;
 	    				
 	    				$.each(milestonesList,function(index,milestone){
 	    					var each_data=[];
-	    					if(milestone!='Lost'){
-	    						if(milestone!='Won')
+	    					if(milestone!=lostMilestone){
+	    						if(milestone!=wonMilestone)
 		    						each_data.push(milestone,milestoneValuesList[index]);
 		    					else
 		    						temp=index;
@@ -1823,7 +1848,85 @@ $('.modal-footer').off("click").on('click', '.portlet-settings-save-modal', func
 		        		$('#'+el.split("-save-modal")[0]).parent().find('.portlet_body').find('.dealsWonValue').append("Total won value:"+totalVal);
 	        		},2000);
 	        	}*/
-	        	
+	        if(data.get('portlet_type')=="USERACTIVITY" && data.get('name')=="Campaign stats"){	
+				var start_date_str = "";
+				var end_date_str ="";
+				var emailsSentCount;
+				var emailsOpenedCount;
+				var emailsClickedCount;
+				var emailsUnsubscribed;
+		if(data.get('settings').duration=='yesterday'){
+				start_date_str = ''+data.get('settings').duration;
+				end_date_str = 'today';
+			}else if(data.get('settings').duration=='last-week'){
+				start_date_str = ''+data.get('settings').duration;
+				end_date_str = 'last-week-end';
+			}else if(data.get('settings').duration=='last-month'){
+				start_date_str = ''+data.get('settings').duration;
+				end_date_str = 'last-month-end';
+			}else if(data.get('settings').duration=='24-hours'){
+				start_date_str = ''+data.get('settings').duration;
+				end_date_str = 'now';
+			}else if(data.get('settings').duration=='this-week'){
+				start_date_str = ''+data.get('settings').duration;
+				end_date_str = 'this-week-end';
+			}else if(data.get('settings').duration=='this-month'){
+				start_date_str = ''+data.get('settings').duration;
+				end_date_str = 'this-month-end';
+			}else{
+				start_date_str = ''+data.get('settings').duration;
+				end_date_str = 'TOMORROW';
+			}
+			
+			var that = $('#'+el.split("-save-modal")[0]).parent();
+		var url = '/core/api/portlets/portletCampaignstats?duration='+data.get('settings').duration+'&start-date='+getStartAndEndDatesOnDue(start_date_str)+'&end-date='+getStartAndEndDatesOnDue(end_date_str)+'&time_zone='+(new Date().getTimezoneOffset())+'&campaign_type='+data.get('settings').campaign_type; 
+		setTimeout(function(){
+				if(that.find('#emails-sent-count').text().trim()=="")
+					that.find('#emails-sent-count').html("<img src='../flatfull/img/ajax-loader-cursor.gif' style='width:12px;height:10px;opacity:0.5;' />");
+			},1000);
+		fetchPortletsGraphData(url,function(data){
+			
+			emailsSentCount=data["emailsent"];
+				emailsOpenedCount=data["emailopened"];
+				emailsClickedCount=data["emailclicked"];
+				emailsUnsubscribed=data["emailunsubscribed"];
+				if(emailsSentCount==0){
+					that.find('#emails-sent').css('width','100%').css('height','100%');
+					that.find('#emails-sent').html('<div class="portlet-error-message">No Email activity</div>');
+				}
+				else{
+					var selector1=that.find('#emails-opened');
+					var selector2=that.find('#emails-clicked');
+					var selector3=that.find('#emails-unsubscribed');
+					selector1.css('display','block');
+					selector2.css('display','block');
+					selector3.css('display','block');
+					that.find('#emails-sent').addClass('pull-left p-xs b-b b-r b-light w-half overflow-hidden');
+					selector1.addClass('pull-left p-xs b-b b-light w-half');
+					selector2.addClass('pull-left p-xs b-r b-light w-half');
+					selector3.addClass('pull-left p-xs w-half');
+				that.find('#emails-sent-count').text(getNumberWithCommasForPortlets(emailsSentCount));
+				that.find('#emails-sent-label').text("Emails sent");
+				that.find('#emails-opened').html('<div class="pull-left text-light stats_text" ><div class="text-sm text-ellipsis">Opened</div><div class="text-count text-center" style="color:rgb(250, 215, 51);">'+getNumberWithCommasForPortlets(emailsOpenedCount)+'</div></div>');
+				that.find('#emails-clicked').html('<div class="pull-left text-light stats_text"><div class="text-sm text-ellipsis">Clicked</div><div class="text-count text-center" style="color:rgb(18, 209, 18);">'+getNumberWithCommasForPortlets(emailsClickedCount)+'</div></div>');
+				that.find('#emails-unsubscribed').html('<div class="pull-left text-light stats_text"><div class="text-sm text-ellipsis">Unsubscribed</div><div class="text-count text-center" style="color:rgb(240, 80, 80);">'+getNumberWithCommasForPortlets(emailsUnsubscribed)+'</div></div>');
+				/*var series=[];
+				series.push(["Emails Sent",emailsSentCount-emailsOpenedCount]);
+				series.push(["Emails Opened",emailsOpenedCount]);
+				campstatsPieChart(selector1,series,emailsSentCount,emailsOpenedCount);
+				
+				var series1=[];
+				series1.push(["Emails Sent",emailsSentCount-emailsClickedCount]);
+				series1.push(["Emails Clicked",emailsClickedCount]);
+				campstatsPieChart(selector2,series1,emailsSentCount,emailsClickedCount);
+				
+				var series2=[];
+				series2.push(["Emails Sent",emailsSentCount-emailsUnsubscribed]);
+				series2.push(["Emails Unsubscribed",emailsUnsubscribed]);
+				campstatsPieChart(selector3,series2,emailsSentCount,emailsUnsubscribed);*/
+				}
+				});
+			}
 	        	setPortletContentHeight(data);
     			$('#'+data.get('id')).parent().find('div:last').after('<span class="gs-resize-handle gs-resize-handle-both"></span>');
 	        	

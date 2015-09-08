@@ -46,7 +46,7 @@ function enableKeyboardShotcuts()
 		// Preferences
 		Mousetrap.bind('shift+p',function(){
 			if(isModalVisible())return;
-			App_Settings.navigate("user-prefs",{trigger:true});
+			App_Settings.navigate("user-prefs/profile",{trigger:true});
 		});
 		
 		// New contact

@@ -1,11 +1,15 @@
 <script id="portlets-add-model-template" type="text/html">
-		<div class="panel wrapper b-a text-center">
-			<div class="text-md"><i class="portlets-modal-icon icon {{get_portlet_icon name}}"></i>				
-				<b>{{get_portlet_name name}}</b></div><br>
-			<div class="text-flow-ellipsis line-clamp line-clamp-3 m-b widget-text" style="height:60px"  rel="tooltip" title="{{get_portlet_description name}}">
-				{{get_portlet_description name}}
-			</div>
-		{{#if_equals "Mini Calendar" name}}
+			<div class="show_screeshot"  
+						id="{{remove_spaces name}}">
+			<div class="panel wrapper b-a text-center">
+				<div class="text-md"><i class="portlets-modal-icon icon {{get_portlet_icon name}}"></i>				
+					<b>{{get_portlet_name name}}</b></div><br>
+				<div class="text-flow-ellipsis line-clamp line-clamp-3 m-b widget-text" style="height:60px"  rel="tooltip" title="{{get_portlet_description name}}">
+					{{get_portlet_description name}}
+					<!--<img class="show_screeshot v-top question-tag" id="{{remove_spaces name}}"
+							border="0" src="/img/help.png"/>-->
+				</div>
+			{{#if_equals "Mini Calendar" name}}
 			  {{#if is_added}}
 		<div>	<a class="btn btn-sm btn-default add-widget disabled" >Add</a></div>
 			{{else}}
@@ -16,7 +20,8 @@
 		
 		{{/if_equals}}
 			
-		</div>    
+		</div> 
+		</div>
 </script>
 <script id="portlets-add-collection-template" type="text/html">
 <div class="bg-light lter b-b wrapper-md">

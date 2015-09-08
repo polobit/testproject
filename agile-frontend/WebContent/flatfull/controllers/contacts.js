@@ -809,6 +809,17 @@ var ContactsRouter = Backbone.Router.extend({
 			// Show the email form with the email prefilled from the curtrent contact
 			model = this.contactDetailView.model.toJSON();
 		}
+		
+		if(App_Companies.companyDetailView){
+			var compEmailTemp = getPropertyValue(App_Companies.companyDetailView.model.toJSON().properties,'email');
+			if(id && id == compEmailTemp){
+				model = App_Companies.companyDetailView.model.toJSON();
+			}
+		}
+		var el = $("#content").html('<div id="send-email-listener-container"></div>').find('#send-email-listener-container').html(getTemplate("send-email", model));
+		
+		// Call setupTypeAhead to get contacts
+		agile_type_ahead("to", el, contacts_typeahead, null, null, "email-search", null, true, null, true);
 
 
 		$("#content").html('<div id="send-email-listener-container"></div>');

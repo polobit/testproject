@@ -702,15 +702,17 @@ function showTaskModal(forAddTask)
 	agile_type_ahead("task_related_to", el, contacts_typeahead);
 	$('#activityTaskModal').modal('show');
 	highlight_task();
-
-	// Fills owner select element
-	populateUsers("owners-list", $("#taskForm"), undefined, undefined, function(data)
-	{
-		$("#taskForm").find("#owners-list").html(data);
-		$("#owners-list", el).find('option[value=' + CURRENT_DOMAIN_USER.id + ']').attr("selected", "selected");
-		$("#owners-list", $("#taskForm")).closest('div').find('.loading-img').hide();
-
-		// Add selected task list details in add task modal
-		addTasklListDetails(forAddTask);
+	categories.getCategoriesHtml(undefined,function(catsHtml){
+		$('#type',el).html(catsHtml);
+		// Fills owner select element
+		populateUsers("owners-list", $("#taskForm"), undefined, undefined, function(data)
+		{
+			$("#taskForm").find("#owners-list").html(data);
+			$("#owners-list", el).find('option[value=' + CURRENT_DOMAIN_USER.id + ']').attr("selected", "selected");
+			$("#owners-list", $("#taskForm")).closest('div').find('.loading-img').hide();
+	
+			// Add selected task list details in add task modal
+			addTasklListDetails(forAddTask);
+		});
 	});
 }

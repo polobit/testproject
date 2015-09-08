@@ -289,7 +289,7 @@ function property_JSON(name, id, type)
 
 // Sends post request using backbone model to given url. It is a generic
 // function, can be called to save entity to database
-function saveEntity(object, url, callback)
+function saveEntity(object, url, callback, errorCallback)
 {
 	var model = new Backbone.Model();
 	model.url = url;
@@ -300,7 +300,11 @@ function saveEntity(object, url, callback)
 			// execute the callback, passing parameters as necessary
 			callback(data);
 		}
-	} });
+	}, error: function(model,response){
+			console.log(response);
+			if(errorCallback)
+   			errorCallback(model,response);
+   		}});
 }
 
 /**
