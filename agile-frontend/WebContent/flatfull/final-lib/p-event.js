@@ -1,17 +1,3 @@
-/**
- * CLDR JavaScript Library v0.4.1
- * http://jquery.com/
- *
- * Copyright 2013 Rafael Xavier de Souza
- * Released under the MIT license
- * http://jquery.org/license
- *
- * Date: 2015-02-25T13:51Z
- */
-/*!
- * CLDR JavaScript Library v0.4.1 2015-02-25T13:51Z MIT license © Rafael Xavier
- * http://git.io/h4lmVg
- */
 (function( factory ) {
 
 	if ( typeof define === "function" && define.amd ) {
@@ -32,24 +18,11 @@
 		validatePresence = Cldr._validatePresence,
 		validateType = Cldr._validateType;
 
-/*!
- * EventEmitter v4.2.7 - git.io/ee
- * Oliver Caldwell
- * MIT license
- * @preserve
- */
-
 var EventEmitter;
 /* jshint ignore:start */
 EventEmitter = (function () {
 	
 
-	/**
-	 * Class for managing events.
-	 * Can be extended to provide event functionality in other classes.
-	 *
-	 * @class EventEmitter Manages event registering and emitting.
-	 */
 	function EventEmitter() {}
 
 	// Shortcuts to improve speed and size
@@ -57,14 +30,7 @@ EventEmitter = (function () {
 	var exports = this;
 	var originalGlobalValue = exports.EventEmitter;
 
-	/**
-	 * Finds the index of the listener for the event in it's storage array.
-	 *
-	 * @param {Function[]} listeners Array of listeners to search through.
-	 * @param {Function} listener Method to look for.
-	 * @return {Number} Index of the specified listener, -1 if not found
-	 * @api private
-	 */
+	
 	function indexOfListener(listeners, listener) {
 		var i = listeners.length;
 		while (i--) {

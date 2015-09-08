@@ -1,18 +1,4 @@
-/**
- * Globalize v1.0.0
- *
- * http://github.com/jquery/globalize
- *
- * Copyright jQuery Foundation and other contributors
- * Released under the MIT license
- * http://jquery.org/license
- *
- * Date: 2015-04-23T12:02Z
- */
-/*!
- * Globalize v1.0.0 2015-04-23T12:02Z Released under the MIT license
- * http://git.io/TrdQbw
- */
+
 (function( root, factory ) {
 
 	// UMD returnExports

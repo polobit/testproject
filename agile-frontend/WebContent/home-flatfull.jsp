@@ -98,36 +98,6 @@ content="<%=domainUser.getInfo(DomainUser.LAST_LOGGED_IN_TIME)%>" />
 <!-- <link rel="stylesheet" type="text/css" href="<%=FLAT_FULL_PATH%>css/agile-all.css?_=<%=_AGILE_VERSION%>" />  -->
 <!-- <link rel="stylesheet" type="text/css" href="<%=FLAT_FULL_PATH%>css/lib-min.css"></link> -->
 <link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/min/lib-all-new.css?_=<%=_AGILE_VERSION%>"></link>
-
-
-<!--  bootstrap 3 files -->
-<%
-  String ui = request.getParameter("ui");
-  String css = request.getParameter("css");
-  String cssWrap = request.getParameter("cssWrap");
-  System.out.println(ui);
-  System.out.println(css);
-  System.out.println(cssWrap);
-  
-  System.out.println(CSS_PATH + "css/bootstrap.css />");
-  
-  String cssLink = "<link rel=\"stylesheet\" type=\"text/css\" href=\"" + CSS_PATH + "css/bootstrap.css\" />";
-  
-  System.out.println(cssLink);
-  if(ui != null)
-      cssLink = "<link rel=\"stylesheet\" type=\"text/css\" href=\"" + CSS_PATH + "css/bootstrap-" + ui + ".css/>";
-  else if(css != null)
-  {
-      cssLink = "<link rel=\"stylesheet\" type=\"text/css\" href=\"/cssloader?link="+css + "\"/>";
-      if(cssWrap != null)
-    cssLink += "\n<link rel=\"stylesheet\" type=\"text/css\" href=\"/cssloader?link="+cssWrap + "\"/>";
-  }
-      
-      
-  System.out.println(cssLink);    
-%>
-
-<%=cssLink %>
 <!-- <link rel="stylesheet" type="text/css" href="<%=FLAT_FULL_PATH%>css/agile-app-framework.css">  -->
 <link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/min/misc-all-new.css?_=<%=_AGILE_VERSION%>"></link>
 <link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/min/core-all-new.css?_=<%=_AGILE_VERSION%>"></link>
@@ -356,9 +326,8 @@ var _AGILE_VERSION = <%="\"" + _AGILE_VERSION + "\""%>;
 
 var HANDLEBARS_PRECOMPILATION = false || <%=production%>;
 
-
 var CSS_PATH = FLAT_FULL_UI;
-//var CSS_PATH = "//dpm72z3r2fvl4.cloudfront.net/";
+// var CSS_PATH = "//dpm72z3r2fvl4.cloudfront.net/";
 
 var IS_CONSOLE_ENABLED = <%=debug%>;
 var LOCAL_SERVER = <%=debug%>;
