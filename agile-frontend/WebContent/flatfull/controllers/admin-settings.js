@@ -19,10 +19,13 @@ var AdminSettingsRouter = Backbone.Router.extend({
 	"custom-fields" : "customFields",
 
 	/* Api & Analytics */
-	"api" : "api", "analytics-code" : "analyticsCode", "analytics-code/:id" : "analyticsCode",
+	"analytics-code" : "analyticsCode", "analytics-code/:id" : "analyticsCode",
 
 	/* Milestones */
 	"milestones" : "milestones",
+	
+	/* Categories */
+	"categories" : "categories",
 
 	/* Menu settings - select modules on menu bar */
 	"menu-settings" : "menu_settings",
@@ -275,69 +278,27 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			return;
 		}
 		$("#content").html(getTemplate("admin-settings"), {});
+		$('#content').find('#AdminPrefsTab .select').removeClass('select');
+		$('#content').find('.analytics-code-tab').addClass('select');
+
 		head.js(LIB_PATH + 'lib/prettify-min.js', function()
 		{
-			var view = new Base_Model_View({ url : '/core/api/api-key', template : "admin-settings-api-key-model", postRenderCallback : function(el)
+			new Base_Model_View({ url : '/core/api/api-key', template : "admin-settings-api-key-model", postRenderCallback : function(el)
 			{
-
-				initializeRegenerateKeysListeners();
-				$('#content').find('#admin-prefs-tabs-content').html(view.el);
-
-				$('#content').find('#AdminPrefsTab .select').removeClass('select');
-				$('#content').find('.analytics-code-tab').addClass('select');
-				prettyPrint();
+				$('#content').find('#admin-prefs-tabs-content').html(el);
+				prettify_api_add_events();
 				if (id)
 				{
-					$(el).find('#APITab a[href="#' + id + '"]').trigger('click');
+					switch (id) {
+					case "api-key":
+						break;
+					default:
+						$(el).find('a[href="#' + id + '"]').trigger('click');
+						$(el).find('a[href="#api-key"]').trigger('click');
+						break;
+					}
 				}
-
-				// initZeroClipboard("api_track_webrules_code_icon",
-				// "api_track_webrules_code");
-				// initZeroClipboard("api_key_code_icon", "api_key_code");
-				// initZeroClipboard("api_track_code_icon", "api_track_code");
-
-				try
-				{
-					if (ACCOUNT_PREFS.plan.plan_type.split("_")[0] == "PRO")
-						$("#tracking-webrules, .tracking-webrules-tab").hide();
-					else
-						$("#tracking-webrules-whitelist, .tracking-webrules-whitelist-tab").hide();
-				}
-				catch (e)
-				{
-					$("#tracking-webrules-whitelist, .tracking-webrules-whitelist-tab").hide();
-				}
-
 			} });
-
-			// $('#content').html(view.el);
-		});
-	},
-
-	/**
-	 * Shows API-KEY. Loads minified prettify.js to prettify the view
-	 */
-	api : function()
-	{
-		if (!CURRENT_DOMAIN_USER.is_admin)
-		{
-			$('#content').html(getTemplate('others-not-allowed', {}));
-			return;
-		}
-		head.js(LIB_PATH + 'lib/prettify-min.js', function()
-		{
-			var view = new Base_Model_View({ url : '/core/api/api-key', template : "admin-settings-api-model", postRenderCallback : function(el)
-			{
-
-				initializeRegenerateKeysListeners();
-				prettyPrint();
-			} });
-			$("#content").html(getTemplate("admin-settings"), {});
-			$('#content').find('#admin-prefs-tabs-content').html(view.el);
-			$('#content').find('#AdminPrefsTab .select').removeClass('select');
-			$('#content').find('.analytics-code-tab').addClass('select');
-			$(".active").removeClass("active");
-			// $('#content').html(view.el);
 		});
 	},
 
@@ -362,11 +323,38 @@ var AdminSettingsRouter = Backbone.Router.extend({
 				if (tracks_length == 1)
 					$('#milestone-listner').find('#deal-tracks-accordion').find('.collapse').addClass('in');
 				initializeMilestoneListners(el);
+				milestone_util.init(el);
 			} });
 		this.pipelineGridView.collection.fetch();
 		$('#milestone-listner').find('#admin-prefs-tabs-content').html(this.pipelineGridView.render().el);
 		$('#milestone-listner').find('#AdminPrefsTab .select').removeClass('select');
 		$('#milestone-listner').find('.milestones-tab').addClass('select');
+		$(".active").removeClass("active");
+	},
+	
+	/**
+	 * Creates a Model to show and edit milestones, reloads the page on save
+	 * success
+	 */
+	categories : function()
+	{
+		if (!CURRENT_DOMAIN_USER.is_admin)
+		{
+			$('#content').html(getTemplate('others-not-allowed',{}));
+			return;
+		}
+		$("#content").html(getTemplate("admin-settings"), {});
+		this.categoryGridView = new Base_Collection_View({ url : '/core/api/categories?entity_type=TASK', templateKey : "admin-settings-categories",
+			individual_tag_name : 'tr', sortKey : "order", postRenderCallback : function(el)
+			{
+				console.log("loaded categories : ", el);
+				categories.setup_categories(el);
+				categories.init();
+			} });
+		this.categoryGridView.collection.fetch();
+		$('#content').find('#admin-prefs-tabs-content').html(this.categoryGridView.render().el);
+		$('#content').find('#AdminPrefsTab .select').removeClass('select');
+		$('#content').find('.categories-tab').addClass('select');
 		$(".active").removeClass("active");
 	},
 
@@ -390,42 +378,27 @@ var AdminSettingsRouter = Backbone.Router.extend({
 
 		if (!CURRENT_DOMAIN_USER.is_admin)
 		{
-			$('#content').html(getTemplate('others-not-allowed', {}));
+			$('#content').html(getTemplate('others-not-allowed',{}));
 			return;
 		}
 
-		$("#content").html(getTemplate("admin-settings"), {});
-		$('#content').find('#AdminPrefsTab .select').removeClass('select');
-		$('#content').find('.stats-tab').addClass('select');
+		$("#content").html("<div id='email-stats-listners'></div>");
+		$("#email-stats-listners").html(getTemplate("admin-settings"), {});
+		$('#email-stats-listners').find('#AdminPrefsTab .select').removeClass('select');
+		$('#email-stats-listners').find('.stats-tab').addClass('select');
 		$(".active").removeClass("active");
-		$('#content').find('#admin-prefs-tabs-content').html(getRandomLoadingImg());
-		head.js(LIB_PATH + 'jscore/handlebars/handlebars-helpers.js' + '?_=' + _AGILE_VERSION, function()
+		$('#email-stats-listners').find('#admin-prefs-tabs-content').html(getRandomLoadingImg());
+		head.js(LIB_PATH + 'jscore/handlebars/handlebars-helpers.js'+ '?_=' + _AGILE_VERSION, function()
 		{
-			var email_stats = {};
-			var sms_stats = {};
-			var acct_stats = {};
-			$.ajax({ url : 'core/api/emails/email-stats', type : "GET", dataType : 'json', success : function(stats)
-			{
-				email_stats = stats;
-				$.ajax({ url : 'core/api/sms-gateway/SMSlogs', type : "GET", dataType : 'json', success : function(stats)
-				{
-					sms_stats = stats;
-					var totalLogs = {};
-					totalLogs = $.extend(email_stats, sms_stats);
-
-					$.ajax({ url : 'core/api/namespace-stats/getdomainstats', type : "GET", dataType : 'json', success : function(stats)
-					{
-						acct_stats = stats;
-						totalLogs = $.extend(totalLogs, acct_stats);
-						var emailStatsModelView = new Base_Model_View({ template : 'admin-settings-integrations-stats', data : totalLogs });
-
-						$('#content').find('#admin-prefs-tabs-content').html(emailStatsModelView.render(true).el);
-						hideTransitionBar();
-					} });
-
-				} });
-
-			} });
+			//var emailStatsModelView = new Base_Model_View({url:'core/api/namespace-stats/getdomainstats', template : 'admin-settings-integrations-stats-new', data : stats });
+			
+			$('#email-stats-listners').find('#admin-prefs-tabs-content').html(getTemplate('admin-settings-integrations-stats-new',{}));
+			$('#integration-stats a[href="#account-stats-new"]', $("#email-stats-listners")).tab('show');
+			$('#email-stats-listners').find('#account-stats-new').html(LOADING_ON_CURSOR);
+			account_stats_integrations.loadAccountStats($("#email-stats-listners"));
+			initializeStatsListners($("#email-stats-listners"));
+			hideTransitionBar();
+		
 		});
 
 	},
@@ -468,7 +441,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 		this.tagsview1 = new Base_Collection_View({ url : 'core/api/tags/stats1', templateKey : "tag-management", individual_tag_name : 'li',
 			sort_collection : true, sortKey : 'tag', postRenderCallback : function(el)
 			{
-
+				acl_util.initTagACL(el);
 				initializeTagManagementListeners();
 			} });
 		this.tagsview1.appendItem = append_tag_management;
@@ -479,7 +452,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 		this.tagsview1.collection.fetch();
 
 		$('#content').find('#admin-prefs-tabs-content').html(this.tagsview1.render().el);
-
+		
 		$('#content').find('#AdminPrefsTab .select').removeClass('select');
 		$('#content').find('.tag-management-tab').addClass('select');
 		$(".active").removeClass("active");

@@ -13,14 +13,17 @@ $(function()
 		$("#updateTaskModal").modal('show');
 
 		$('.update-task-timepicker').val(fillTimePicker(value.due));
-		// Fills owner select element
-		populateUsers("owners-list", $("#updateTaskForm"), value, 'taskOwner', function(data)
-		{
-			$("#updateTaskForm").find("#owners-list").html(data);
-			if (value.taskOwner)
-				$("#owners-list", $("#updateTaskForm")).find('option[value=' + value['taskOwner'].id + ']').attr("selected", "selected");
-
-			$("#owners-list", $("#updateTaskForm")).closest('div').find('.loading-img').hide();
+		categories.getCategoriesHtml(value,function(catsHtml){
+			$('#type',$("#updateTaskForm")).html(catsHtml);
+			// Fills owner select element
+			populateUsers("owners-list", $("#updateTaskForm"), value, 'taskOwner', function(data)
+			{
+				$("#updateTaskForm").find("#owners-list").html(data);
+				if (value.taskOwner)
+					$("#owners-list", $("#updateTaskForm")).find('option[value=' + value['taskOwner'].id + ']').attr("selected", "selected");
+	
+				$("#owners-list", $("#updateTaskForm")).closest('div').find('.loading-img').hide();
+			});
 		});
 
 		// Add notes in task modal

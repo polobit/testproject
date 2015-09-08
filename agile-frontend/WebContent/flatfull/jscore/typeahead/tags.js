@@ -144,7 +144,7 @@ function setup_tags_typeahead() {
     	if(e.which == 13 && !isTagsTypeaheadActive)
     		{
     			e.preventDefault();
-
+    			
     			var contact_json = App_Contacts.contactDetailView.model.toJSON();
     	
     			var tag = $(this).val().trim();
@@ -161,30 +161,40 @@ function setup_tags_typeahead() {
     			
     			tag = tag.trim();
     			
-    			// Get all existing tags of the contact to compare with the added tags
-    			var old_tags = [];
-    			$.each($('#added-tags-ul').children(), function(index, element){
-				
-    				old_tags.push($(element).attr('data'));
-    			});
-			
-    			// Append to the list, when no match is found 
-    			if ($.inArray(tag, old_tags) != -1) 
-    				return;
-   			
-    			contact_json.tagsWithTime.push({"tag" : tag});
-    	    	
-    			saveEntity(contact_json, 'core/api/contacts',  function(data) {
+    			acl_util.canAddTag(tag,function(canAdd){
+    				
+    				if(!canAdd){
+        				return;
+        			}
+    				
+    				// Get all existing tags of the contact to compare with the added tags
+        			var old_tags = [];
+        			$.each($('#added-tags-ul').children(), function(index, element){
+    				
+        				old_tags.push($(element).attr('data'));
+        			});
     			
-    				// Updates to both model and collection
-    				App_Contacts.contactDetailView.model.set(data.toJSON(), {silent : true});
-    				addTagToTimelineDynamically(tag, data.get("tagsWithTime"));
-    				tagsCollection.add(new BaseModel( {"tag" : tag} ));
-    			$("#addTagsForm").css("display", "none");
-    		    $("#add-tags").css("display", "block");
+        			// Append to the list, when no match is found 
+        			if ($.inArray(tag, old_tags) != -1) 
+        				return;
+       			
+        			contact_json.tagsWithTime.push({"tag" : tag});
+        	    	
+        			saveEntity(contact_json, 'core/api/contacts',  function(data) {
+        				// Updates to both model and collection
+        				App_Contacts.contactDetailView.model.set(data.toJSON(), {silent : true});
+        				addTagToTimelineDynamically(tag, data.get("tagsWithTime"));
+        				tagsCollection.add(new BaseModel( {"tag" : tag} ));
+        			$("#addTagsForm").css("display", "none");
+        		    $("#add-tags").css("display", "block");
 
-       				$('#added-tags-ul').append('<li class="inline-block tag btn btn-xs btn-default m-r-xs m-b-xs" data="' + tag + '" ><span><a class="anchor m-r-xs" href="#tags/'+ tag + '">'+ tag + '</a><a class="close remove-tags" id="' + tag + '" tag="'+tag+'">&times</a></span></li>');
+           				$('#added-tags-ul').append('<li class="inline-block tag btn btn-xs btn-default m-r-xs m-b-xs" data="' + tag + '" ><span><a class="anchor m-r-xs" href="#tags/'+ tag + '">'+ tag + '</a><a class="close remove-tags" id="' + tag + '" tag="'+tag+'">&times</a></span></li>');
+        			},function(model,response){
+        				console.log(response);
+    	       			alert(response.responseText);
+        			});
     			});
+    			
     		}
     });
     
@@ -391,4 +401,19 @@ $(function(){
 			pieTags(App_Contacts.contactsListView.el, true);
 		}, 'core/api/tags?reload=true');
 	})
+	$('body').on('focusout', '.contact-detail-addtags', function(e)
+	{
+		e.preventDefault();
+		var contact_tag_temp = $(this).val();
+		$('body').on('mousedown', function(s)
+		{
+			s.preventDefault();
+			var t = s.target.id;
+			if (!contact_tag_temp && t != "contact-add-tags" && t != "addTags")
+			{
+				$("#addTagsForm").css("display", "none");
+				$("#add-tags").css("display", "block");
+			}
+		});
+	});
 });

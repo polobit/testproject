@@ -7,6 +7,7 @@ package com.agilecrm.contact.sync.wrapper;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.scribe.utils.Preconditions;
 
 import com.agilecrm.contact.Contact;
@@ -21,12 +22,12 @@ import com.thirdparty.google.ContactPrefs;
 public abstract class ContactWrapper implements WrapperService
 {
 
-    /**  Contact Instance */
+    /** Contact Instance */
     protected Contact contact;
 
-    /**  Object */
+    /** Object */
     protected Object object;
-    
+
     protected ContactPrefs prefs;
 
     /*
@@ -46,7 +47,7 @@ public abstract class ContactWrapper implements WrapperService
 
 	return this;
     }
-    
+
     @Override
     public ContactWrapper getWrapper(Object object, ContactPrefs prefs)
     {
@@ -56,8 +57,7 @@ public abstract class ContactWrapper implements WrapperService
 	wrapper.prefs = prefs;
 	return this;
     }
-    
-    
+
     public ContactPrefs getPrefs()
     {
 	return prefs;
@@ -200,7 +200,7 @@ public abstract class ContactWrapper implements WrapperService
 	List<ContactField> fields = getMoreCustomInfo();
 
 	if (fields != null && fields.size() > 0)
-	contact.properties.addAll(fields);
+	    contact.properties.addAll(fields);
     }
 
     /*
@@ -233,4 +233,20 @@ public abstract class ContactWrapper implements WrapperService
 
     }
 
+    public String convertToAgileTag(String tag)
+    {
+	// Replacing special characters with underscore except space and
+	// underscore
+	String tagName = tag.replaceAll("[^\\p{L}\\p{N} _]", "_").trim();
+	// if tag name start with _ or digit we removing that character until tag name
+	// starts with alphabet
+	while (StringUtils.isNotBlank(tagName) && (tagName.startsWith("_") || Character.isDigit(tagName.charAt(0))))
+	{
+	    if (tagName.startsWith("_"))
+		tagName = tagName.replaceFirst("_", "").trim();
+	    if (Character.isDigit(tagName.charAt(0)))
+		tagName = tagName.replaceFirst("[0-9]", "").trim();
+	}
+	return tagName;
+    }
 }

@@ -1159,14 +1159,27 @@ public class OpportunityUtil
 	List<Opportunity> pendingDealsList = new ArrayList<Opportunity>();
 	try
 	{
-	    List<Opportunity> allDealsList = dao.ofy().query(Opportunity.class)
-		    .filter("close_date <=", (new Date()).getTime() / 1000).filter("archived", false).limit(50)
-		    .filter("ownerKey", new Key<DomainUser>(DomainUser.class, SessionManager.get().getDomainId()))
-		    .order("close_date").list();
-	    for (Opportunity opportunity : allDealsList)
+	    List<Milestone> milestoneList = MilestoneUtil.getMilestonesList();
+	    for (Milestone milestone : milestoneList)
 	    {
-		if (!opportunity.milestone.equals("Won") && !opportunity.milestone.equals("Lost"))
-		    pendingDealsList.add(opportunity);
+	    	List<Opportunity> allDealsList = dao.ofy().query(Opportunity.class)
+    			    .filter("close_date <=", (new Date()).getTime() / 1000).filter("archived", false).limit(50)
+    			    .filter("ownerKey", new Key<DomainUser>(DomainUser.class, SessionManager.get().getDomainId()))
+    			    .filter("pipeline", new Key<Milestone>(Milestone.class, milestone.id)).order("close_date").list();
+	    	for (Opportunity opportunity : allDealsList)
+		    {
+	    		if (milestone.won_milestone != null && milestone.lost_milestone != null)
+		    	{
+	    			if (!opportunity.milestone.equals(milestone.won_milestone) && !opportunity.milestone.equals(milestone.lost_milestone))
+    					pendingDealsList.add(opportunity);
+		    	}
+	    		else
+    			{
+    				if (!opportunity.milestone.equals("Won") && !opportunity.milestone.equals("Lost"))
+    					pendingDealsList.add(opportunity);
+    			}
+		    }
+	    	
 	    }
 	}
 	catch (Exception e)
@@ -1189,13 +1202,27 @@ public class OpportunityUtil
 	List<Opportunity> pendingDealsList = new ArrayList<Opportunity>();
 	try
 	{
-	    List<Opportunity> allDealsList = dao.ofy().query(Opportunity.class)
-		    .filter("close_date <=", (new Date()).getTime() / 1000).filter("archived", false).limit(50)
-		    .order("close_date").list();
-	    for (Opportunity opportunity : allDealsList)
+	    
+	    List<Milestone> milestoneList = MilestoneUtil.getMilestonesList();
+	    for (Milestone milestone : milestoneList)
 	    {
-		if (!opportunity.milestone.equals("Won") && !opportunity.milestone.equals("Lost"))
-		    pendingDealsList.add(opportunity);
+	    	List<Opportunity> allDealsList = dao.ofy().query(Opportunity.class)
+	    		    .filter("close_date <=", (new Date()).getTime() / 1000).filter("archived", false).limit(50)
+	    		    .filter("pipeline", new Key<Milestone>(Milestone.class, milestone.id)).order("close_date").list();
+	    	for (Opportunity opportunity : allDealsList)
+		    {
+	    		if (milestone.won_milestone != null && milestone.lost_milestone != null)
+		    	{
+	    			if (!opportunity.milestone.equals(milestone.won_milestone) && !opportunity.milestone.equals(milestone.lost_milestone))
+    					pendingDealsList.add(opportunity);
+		    	}
+	    		else
+    			{
+    				if (!opportunity.milestone.equals("Won") && !opportunity.milestone.equals("Lost"))
+    					pendingDealsList.add(opportunity);
+    			}
+		    }
+	    	
 	    }
 	}
 	catch (Exception e)
@@ -1416,8 +1443,28 @@ public class OpportunityUtil
 	List<Opportunity> ownDealsList = new ArrayList<Opportunity>();
 	try
 	{
-	    ownDealsList = dao.ofy().query(Opportunity.class).filter("milestone", "Won").filter("won_date >= ", minTime)
-		    .filter("won_date <= ", maxTime).filter("archived", false).list();
+		List<Milestone> milestoneList = MilestoneUtil.getMilestonesList();
+		for (Milestone milestone : milestoneList)
+		{
+			if (milestone.won_milestone != null)
+			{
+				List<Opportunity> list = dao.ofy().query(Opportunity.class).filter("milestone", milestone.won_milestone).filter("won_date >= ", minTime)
+					    .filter("won_date <= ", maxTime).filter("archived", false).filter("pipeline", new Key<Milestone>(Milestone.class, milestone.id)).list();
+				if (list != null)
+				{
+					ownDealsList.addAll(list);
+				}
+			}
+			else
+			{
+				List<Opportunity> list = dao.ofy().query(Opportunity.class).filter("milestone", "Won").filter("won_date >= ", minTime)
+					    .filter("won_date <= ", maxTime).filter("archived", false).filter("pipeline", new Key<Milestone>(Milestone.class, milestone.id)).list();
+				if (list != null)
+				{
+					ownDealsList.addAll(list);
+				}
+			}
+		}
 	}
 	catch (Exception e)
 	{
@@ -1508,9 +1555,22 @@ public class OpportunityUtil
 	int count = 0;
 	try
 	{
-	    count = dao.ofy().query(Opportunity.class).filter("milestone", "Won").filter("won_date >= ", minTime).filter("won_date <= ", maxTime)
-			    .filter("archived", false).filter("ownerKey", new Key<DomainUser>(DomainUser.class, domainUserId))
-			    .count();
+		List<Milestone> milestoneList = MilestoneUtil.getMilestonesList();
+		for (Milestone milestone : milestoneList)
+		{
+			if (milestone.won_milestone != null)
+			{
+				count += dao.ofy().query(Opportunity.class).filter("milestone", milestone.won_milestone).filter("won_date >= ", minTime).filter("won_date <= ", maxTime)
+					    .filter("archived", false).filter("ownerKey", new Key<DomainUser>(DomainUser.class, domainUserId))
+					    .filter("pipeline", new Key<Milestone>(Milestone.class, milestone.id)).count();
+			}
+			else
+			{
+				count += dao.ofy().query(Opportunity.class).filter("milestone", "Won").filter("won_date >= ", minTime).filter("won_date <= ", maxTime)
+					    .filter("archived", false).filter("ownerKey", new Key<DomainUser>(DomainUser.class, domainUserId))
+					    .filter("pipeline", new Key<Milestone>(Milestone.class, milestone.id)).count();
+			}
+		}
 	}
 	catch (Exception e)
 	{
@@ -1532,11 +1592,34 @@ public class OpportunityUtil
      */
     public static List<Opportunity> getWonDealsListOfUser(Long minTime, Long maxTime, Long domainUserId)
     {
+    List<Opportunity> ownDealsList = new ArrayList<Opportunity>();
 	try
 	{
-	    return dao.ofy().query(Opportunity.class).filter("milestone", "Won").filter("won_date >= ", minTime).filter("won_date <= ", maxTime)
-		    .filter("archived", false).filter("ownerKey", new Key<DomainUser>(DomainUser.class, domainUserId))
-		    .list();
+		List<Milestone> milestoneList = MilestoneUtil.getMilestonesList();
+		for (Milestone milestone : milestoneList)
+		{
+			if (milestone.won_milestone != null)
+			{
+				List<Opportunity> list = dao.ofy().query(Opportunity.class).filter("milestone", milestone.won_milestone).filter("won_date >= ", minTime).filter("won_date <= ", maxTime)
+					    .filter("archived", false).filter("ownerKey", new Key<DomainUser>(DomainUser.class, domainUserId))
+					    .filter("pipeline", new Key<Milestone>(Milestone.class, milestone.id)).list();
+				if (list != null)
+				{
+					ownDealsList.addAll(list);
+				}
+			}
+			else
+			{
+				List<Opportunity> list = dao.ofy().query(Opportunity.class).filter("milestone", "Won").filter("won_date >= ", minTime).filter("won_date <= ", maxTime)
+					    .filter("archived", false).filter("ownerKey", new Key<DomainUser>(DomainUser.class, domainUserId))
+					    .filter("pipeline", new Key<Milestone>(Milestone.class, milestone.id)).list();
+				if (list != null)
+				{
+					ownDealsList.addAll(list);
+				}
+			}
+		}
+		return ownDealsList;
 	}
 	catch (Exception e)
 	{

@@ -7,7 +7,7 @@ function change_availability_date(selected_date)
 	$('.availability').html("Availability on " + date.getDayName() + ", " + date.getMonthName() + ", " + date.getDate());
 }
 
-// Get slot details time n description
+// Get slot details time and description
 function getSlotDurations()
 {
 
@@ -398,6 +398,13 @@ function save_web_event(formId, confirmBtn)
 				} });
 }
 
+
+/**
+ * converts eppoch sec to format we given
+ * @param format
+ * @param date
+ * @returns
+ */
 function convertToHumanDate(format, date)
 {
 
@@ -417,6 +424,13 @@ function convertToHumanDate(format, date)
 	return d
 }
 
+
+/**
+ * using moment plug in we are converting dates
+ * @param format
+ * @param date
+ * @returns
+ */
 function convertToHumanDateUsingMoment(format, date)
 {
 
@@ -455,6 +469,9 @@ function addDotsAtEnd(title)
 	return title;
 }
 
+/**
+ * for team calendar when clicks on other user it resets to normal
+ */
 function resetToPrevious()
 {
 	$("#one").html("2");
@@ -468,6 +485,11 @@ function resetToPrevious()
 	$(".segment2").hide();
 
 }
+
+/**
+ * gets the meeting names and durations from global variable and returns
+ * @param slot_durations_one_user
+ */
 function fillSlotDetails(slot_durations_one_user)
 {
 	var slots_data = data = slot_details;
@@ -536,6 +558,11 @@ function fillSlotDetails(slot_durations_one_user)
 
 }
 
+
+/**
+ * to set height of panel for all meeting durations
+ * @returns {Number}
+ */
 function getPanelBodyMaxHeight()
 {
 	var max = 0;
@@ -550,6 +577,12 @@ function getPanelBodyMaxHeight()
 	return max;
 }
 
+
+/**
+ * if converts to array when user enters multiple names for same slot
+ * @param data
+ * @returns {Array}
+ */
 function generateNewDataArray(data)
 {
 	var finalJsonArray = [];

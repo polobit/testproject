@@ -1898,6 +1898,18 @@ text-overflow:ellipsis;
 	visibility:visible!important;
 }
 
+.milestones-table tbody tr:hover td:last-child .hover-show {
+	visibility: visible !important;
+}
+
+.milestones-table tbody tr:hover td:last-child .hover-hide {
+	visibility: hidden !important;
+}
+
+a.disabled i {
+	color: #dee5e7;
+}
+
 #deal-tracks-accordion .accordion-heading:hover #icons {
 	display: block!important;
 }
@@ -2073,6 +2085,14 @@ li.error {
 }
 .fc_border_height{
 	min-height: 20px;
+}
+select.input-xs{
+	height: 25px;
+    line-height: 30px;
+    padding: 0px 6px;
+}
+.mce-panel{
+	    border: 0 solid #CFDADD;
 }
 
 

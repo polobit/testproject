@@ -28,7 +28,7 @@ public interface WrapperService
      * @return the wrapper
      */
     public ContactWrapper getWrapper(Object object);
-    
+
     public ContactWrapper getWrapper(Object object, ContactPrefs prefs);
 
     /**
@@ -107,5 +107,12 @@ public interface WrapperService
      * @return the contact
      */
     public Contact buildContact();
+
+    /**
+     * Converts client tag into Agile tag replaces special characters with
+     * underscore. Replaces underscore with empty string if tag starts with
+     * underscore
+     */
+    public String convertToAgileTag(String tag);
 
 }

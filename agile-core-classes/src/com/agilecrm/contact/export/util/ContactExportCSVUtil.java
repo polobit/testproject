@@ -8,17 +8,26 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
+
+import org.json.JSONArray;
+import org.json.JSONException;
 
 import au.com.bytecode.opencsv.CSVWriter;
 
+import com.agilecrm.bulkaction.deferred.ContactExportPullTask;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.CustomFieldDef;
 import com.agilecrm.contact.CustomFieldDef.SCOPE;
 import com.agilecrm.contact.Note;
 import com.agilecrm.contact.export.ContactCSVExport;
+import com.agilecrm.contact.filter.ContactFilterIdsResultFetcher;
 import com.agilecrm.contact.util.CustomFieldDefUtil;
 import com.agilecrm.contact.util.NoteUtil;
+import com.agilecrm.queues.util.PullQueueUtil;
+import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.files.FileWriteChannel;
+import com.googlecode.objectify.Key;
 
 public class ContactExportCSVUtil
 {
@@ -163,7 +172,7 @@ public class ContactExportCSVUtil
      * note max for each contact if notes are more than 5 then it will ignore
      * rest of notes
      */
-    private static String[] addNotes(String[] contactData, List<Note> notes)
+    public static String[] addNotes(String[] contactData, List<Note> notes)
     {
 	int count = 0;
 	for (Note note : notes)
@@ -214,4 +223,23 @@ public class ContactExportCSVUtil
 	return exportedFileName.toString();
     }
 
+    public static void addToPullQueue(Long currentUserId, String contact_ids, String filter, String dynamicFilter)
+    {
+
+    }
+
+    public static boolean isTextSearchQuery(String filter)
+    {
+	if (filter.startsWith("#tags/"))
+	    return false;
+
+	if (filter.equals("#contacts"))
+	    return false;
+
+	if (filter.contains("system-"))
+	    return false;
+
+	return true;
+
+    }
 }

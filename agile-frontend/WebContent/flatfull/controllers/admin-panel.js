@@ -65,8 +65,6 @@ var AdminPanelRouter = Backbone.Router.extend({
 
 		$.ajax({ url : 'core/api/admin_panel/getcustomer?d=' + domainname, type : 'GET', success : function(data)
 		{
-			console.log("ssssssssssssssssssssssss");
-			console.log(data);
 			$(el).find('#planinfo').html(getTemplate("plan-info", data));
 
 			if (data == null || data == "" || data == undefined)
@@ -223,6 +221,7 @@ var AdminPanelRouter = Backbone.Router.extend({
 	// subscription
 	domainSubscribeDetails : function(id)
 	{
+		$("#content").html("<div id='subscribe_plan_change'></div>");
 
 		var subscribe_plan = new Base_Model_View({ url : "core/api/admin_panel/subscriptionofparticulardomain?d=" + id,
 			template : "all-domain-admin-subscribe-new", window : 'domainSubscribe',
@@ -236,6 +235,7 @@ var AdminPanelRouter = Backbone.Router.extend({
 			postRenderCallback : function(el)
 			{
 				var data = subscribe_plan.model.toJSON();
+				initializeSubscriptionListeners(el);
 
 				// console.log(data.get('billing_data_json_string'));
 
@@ -256,28 +256,28 @@ var AdminPanelRouter = Backbone.Router.extend({
 				// Show Coupon code input field
 				id = (id && id == "coupon") ? id : "";
 				showCouponCodeContainer(id);
-				$("#user_quantity").attr("value", data.plan.quantity);
+				$("#user_quantity",el).prop("value", data.plan.quantity);
 				price = update_price();
-				$("#users_quantity").text(data.plan.quantity);
-				$("#users_total_cost").text((data.plan.quantity * price).toFixed(2));
+				$("#users_quantity",el).text(data.plan.quantity);
+				$("#users_total_cost",el).text((data.plan.quantity * price).toFixed(2));
 
-				/*head.load(CSS_PATH + "css/misc/agile-plan-upgrade.css", LIB_PATH + 'lib/jquery.slider.min.js', function()
+				head.load(CSS_PATH + "css/misc/agile-plan-upgrade.css", LIB_PATH + 'lib/jquery.slider.min.js', function()
 				{
 					if ($.isEmptyObject(data))
 						setPlan("free");
 					else
 						setPlan(data);
 					// load_slider(el);
-				});*/
+				});
 
-				initializeAdminpanelListner(el);
+				
 			} });
-		$('#content').html(subscribe_plan.render().el);
+		$('#subscribe_plan_change').html(subscribe_plan.render().el);
 	},
 
 	purchasePlanFromAdminpanel : function()
 	{
-		// If plan is not defined i.e., reloaded, or plan not chosen
+		/*// If plan is not defined i.e., reloaded, or plan not chosen
 		// properly,
 		// then page is navigated back to subcription/ choose plan page
 		if (!plan_json.plan)
@@ -285,7 +285,7 @@ var AdminPanelRouter = Backbone.Router.extend({
 			this.navigate("all-domain-users", { trigger : true });
 
 			return;
-		}
+		}*/
 
 		var window = this;
 		// Plan json is posted along with credit card details
@@ -319,10 +319,10 @@ var AdminPanelRouter = Backbone.Router.extend({
 
 	domainSearch : function()
 	{
+		$("#content").html("<div id='domain-search-listners'></div>");
 		var el = $(getTemplate('all-domain-search', {}));
-		$("#content").html(el);
+		$("#domain-search-listners").html(el);
 		initializeDomainsearchListner();
 		hideTransitionBar();
 	}
-
 });
