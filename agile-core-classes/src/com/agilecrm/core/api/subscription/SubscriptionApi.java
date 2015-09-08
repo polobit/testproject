@@ -89,7 +89,9 @@ public class SubscriptionApi {
 	public Subscription subscribe(@Context HttpServletRequest request,
 			Subscription subscribe) throws PlanRestrictedException,
 			WebApplicationException {
+
 		try {
+
 			/*
 			 * If plan variable in subscription is not null and card details are
 			 * null then updateCreditcard is called
@@ -103,11 +105,12 @@ public class SubscriptionApi {
 			 * If card_details are null and plan in not null then update plan
 			 * for current domain subscription object
 			 */
+
 			else if (subscribe.card_details == null) {
 				if (subscribe.plan != null)
 					subscribe = changePlan(subscribe.plan, request);
 
-				else if (subscribe.emailPlan != null) {
+				if (subscribe.emailPlan != null) {
 					subscribe = addEmailPlan(subscribe.emailPlan);
 					return subscribe;
 				}

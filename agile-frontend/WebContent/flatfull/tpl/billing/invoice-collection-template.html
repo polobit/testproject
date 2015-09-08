@@ -4,6 +4,7 @@
 		</div>
 <div class="row">
     <div class="col-md-12">
+{{#if this.length}}
         <table class="table table-striped" id="sort-table">
             <thead>
                 <tr>
@@ -17,6 +18,11 @@
 
             </tbody>
         </table>
+{{else}}
+		<div class="wrapper-sm">
+			No recent payments.
+		</div>
+	{{/if}}
     </div>
 </div>
 </script>
@@ -52,6 +58,8 @@ ${{get_amount_with_possitive amount}}
 		{{/if}}
     </td>
 {{/if_greater}}
+{{else}}
+<div>No Recent Payments</div>
 {{/each}}
 </script>
 
