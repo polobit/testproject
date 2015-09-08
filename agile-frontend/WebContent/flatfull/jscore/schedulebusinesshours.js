@@ -50,7 +50,7 @@ function initializeOnlineCalendarListners(el){
 				console.log(business_hours);
 
 			// $("#schedule-preferences").html(getRandomLoadingImg());
-				$.ajax({ url : '/core/api/scheduleprefs', type : 'PUT', contentType : 'application/json', async : false, data : JSON.stringify(json),
+				$.ajax({ url : '/core/api/scheduleprefs', type : 'PUT', contentType : 'application/json', data : JSON.stringify(json),
 					success : function()
 					{
 						setTimeout(function()

@@ -27,16 +27,15 @@ var DealDetailsRouter = Backbone.Router.extend({
 			 * gets the tracks count when user comes to deals page and stores in
 			 * global variable
 			 */
-			if (!DEAL_TRACKS_COUNT)
-				DEAL_TRACKS_COUNT = getTracksCount();
-			load_deal_tab(el, "");
-			var deal_collection;
-			if (App_Deals.opportunityCollectionView && App_Deals.opportunityCollectionView.collection)
-				deal_collection = App_Deals.opportunityCollectionView.collection;
+			if (!DEAL_TRACKS_COUNT){
 
-			if (deal_collection != null && readCookie("agile_deal_view"))
-				deal_detail_view_navigation(id, deal_collection, el);
-			initializeDealDetailsListners(el);
+				getTracksCount(function(count){
+						DEAL_TRACKS_COUNT = count;
+					initializeDealTabWithCount(id, el);
+				});
+			} else {
+				initializeDealTabWithCount(id, el);
+			}
 
 		} });
 
@@ -216,13 +215,33 @@ function deserialize_deal(value, template)
  * 
  * @returns due tasks count upto today
  */
-function getTracksCount()
+function getTracksCount(callback)
 {
-	var msg = $.ajax({ type : "GET", url : 'core/api/milestone/tracks/count', async : false, dataType : 'json' }).responseText;
+	accessUrlUsingAjax('core/api/milestone/tracks/count', function(data){
 
-	if (!isNaN(msg))
-	{
-		return msg;
-	}
-	return 0;
+			if (!isNaN(data))
+			{
+				return callback(data);
+			}
+
+			return callback(0);
+
+	});
+}
+
+/**
+*
+*/
+function initializeDealTabWithCount(id, el){
+	
+	load_deal_tab(el, "");
+	var deal_collection;
+	if (App_Deals.opportunityCollectionView && App_Deals.opportunityCollectionView.collection)
+		deal_collection = App_Deals.opportunityCollectionView.collection;
+
+	if (deal_collection != null && readCookie("agile_deal_view"))
+		deal_detail_view_navigation(id, deal_collection, el);
+
+	initializeDealDetailsListners(el);
+
 }

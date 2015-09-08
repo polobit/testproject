@@ -419,8 +419,8 @@ $('body').css('background-image', 'none');
 //$('#content').html('ready');
 $("img.init-loading", $('#content')).attr("src", "<%=CLOUDFRONT_TEMPLATE_LIB_PATH%>/img/ajax-loader-cursor.gif");
 head.js({"core" :   '<%=CLOUDFRONT_TEMPLATE_LIB_PATH%>/jscore/min/' + FLAT_FULL_PATH +'js-all-min.js' + "?_=" + _AGILE_VERSION});
-head.js({"stats" : '<%=CLOUDFRONT_TEMPLATE_LIB_PATH%>stats/min/agile-min.js' + "?_=" + _AGILE_VERSION});
-head.ready(["core", "stats"], function(){
+// head.js({"stats" : '<%=CLOUDFRONT_TEMPLATE_LIB_PATH%>stats/min/agile-min.js' + "?_=" + _AGILE_VERSION});
+head.ready(["core"], function(){
   
   if(!HANDLEBARS_PRECOMPILATION)
     downloadTemplate("tpl.js");

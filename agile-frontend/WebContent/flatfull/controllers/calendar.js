@@ -19,18 +19,16 @@ routes : {
 calendar : function()
 {
 	eraseCookie("agile_calendar_view");
-	var users = getCalendarUsersDetails();
 	// read cookie for view if list_view is there then rendar list view else
 	// rendar default view
+	getCalendarUsersDetails(function(users){
 
-	$('#content').html("<div id='calendar-listers'>&nbsp;</div>");
-
-	getTemplate("calendar", {}, undefined, function(template_ui){
+		$('#content').html("<div id='calendar-listers'>&nbsp;</div>");
+		getTemplate("calendar", {}, undefined, function(template_ui){
 		if(!template_ui)
 			  return;
 
-		$('#calendar-listers').html($(template_ui));	
-
+		$('#calendar-listers').html($(template_ui));
 		getTemplate("event-left-filter", users, undefined, function(template_ui1){
 				$('#calendar-listers').find("#calendar-filters").html($(template_ui1));
 
@@ -69,8 +67,11 @@ calendar : function()
 				$('#event_tab').css('display', 'none');
 			
 
-		}, $('#calendar-listers').find("#calendar-filters"));
-	}, "#calendar-listers");
+			}, $('#calendar-listers').find("#calendar-filters"));
+		}, "#calendar-listers");
+
+
+	});	
 },
 
 /* Show tasks list when All Tasks clicked under calendar page. */
@@ -477,57 +478,58 @@ function loadAgileEvents()
 {
 	var calEnable = false;
 
-	$.ajax({ url : 'core/api/calendar-prefs/get', async : false, success : function(response)
+	accessUrlUsingAjax('core/api/calendar-prefs/get', function(response)
 	{
 		if (response)
 			calEnable = true;
 
-	} });
-	var jsonObject = $.parseJSON(readCookie('event-lhs-filters'));
-	var agile_event_owners = '';
-	if (jsonObject)
-	{
-		var owners = jsonObject.owner_ids;
-		if (owners && owners.length > 0)
+		var jsonObject = $.parseJSON(readCookie('event-lhs-filters'));
+		var agile_event_owners = '';
+		if (jsonObject)
 		{
-			$.each(owners, function(index, value)
+			var owners = jsonObject.owner_ids;
+			if (owners && owners.length > 0)
 			{
-				if (index >= 1)
-					agile_event_owners += ",";
-				agile_event_owners += value;
-			});
+				$.each(owners, function(index, value)
+				{
+					if (index >= 1)
+						agile_event_owners += ",";
+					agile_event_owners += value;
+				});
+			}
 		}
-	}
-	var view = readCookie("agile_calendar_view");
-	if (view == "calendar_list_view")
-	{
-		eventCollectionView = new Base_Collection_View({ url : 'core/api/events/list?ownerId=' + agile_event_owners + '', templateKey : "events",
-			individual_tag_name : 'tr', sort_collection : true, sortKey : 'start', descending : false, cursor : true, page_size : 25 });
-		eventCollectionView.appendItem = appendItem2;
-		eventCollectionView.collection.fetch();
-		if (calEnable)
+		var view = readCookie("agile_calendar_view");
+		if (view == "calendar_list_view")
 		{
-			$('#agile').html(this.eventCollectionView.render().el);
-			$('#agile_event_list').addClass('hide');
-		}
-		else
-			$('#agile_event').html(this.eventCollectionView.render().el);
+			eventCollectionView = new Base_Collection_View({ url : 'core/api/events/list?ownerId=' + agile_event_owners + '', templateKey : "events",
+				individual_tag_name : 'tr', sort_collection : true, sortKey : 'start', descending : false, cursor : true, page_size : 25 });
+			eventCollectionView.appendItem = appendItem2;
+			eventCollectionView.collection.fetch();
+			if (calEnable)
+			{
+				$('#agile').html(this.eventCollectionView.render().el);
+				$('#agile_event_list').addClass('hide');
+			}
+			else
+				$('#agile_event').html(this.eventCollectionView.render().el);
 
-	}
-	else if (view == "calendar_list_view_future")
-	{
-		eventCollectionView = new Base_Collection_View({ url : 'core/api/events/future/list?ownerId=' + agile_event_owners, templateKey : "future",
-			individual_tag_name : 'tr', sort_collection : true, sortKey : 'start', descending : false, cursor : true, page_size : 25 });
-		eventCollectionView.appendItem = appendItem1;
-		eventCollectionView.collection.fetch();
-		if (calEnable)
-		{
-			$('#agile').html(this.eventCollectionView.render().el);
-			$('#agile_event_list').addClass('hide');
 		}
-		else
-			$('#agile_event').html(this.eventCollectionView.render().el);
-	}
+		else if (view == "calendar_list_view_future")
+		{
+			eventCollectionView = new Base_Collection_View({ url : 'core/api/events/future/list?ownerId=' + agile_event_owners, templateKey : "future",
+				individual_tag_name : 'tr', sort_collection : true, sortKey : 'start', descending : false, cursor : true, page_size : 25 });
+			eventCollectionView.appendItem = appendItem1;
+			eventCollectionView.collection.fetch();
+			if (calEnable)
+			{
+				$('#agile').html(this.eventCollectionView.render().el);
+				$('#agile_event_list').addClass('hide');
+			}
+			else
+				$('#agile_event').html(this.eventCollectionView.render().el);
+		}
+
+	 });
 }
 
 function loadGoogleEvents()

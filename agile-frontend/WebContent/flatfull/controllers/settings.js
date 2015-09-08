@@ -469,11 +469,12 @@ var SettingsRouter = Backbone.Router
 			 */
 			emailTemplates : function()
 			{
+				var that = this;
 				getTemplate('settings', {}, undefined, function(template_ui){
 					if(!template_ui)
 						  return;
 					$('#content').html($(template_ui));	
-					this.emailTemplatesListView = new Base_Collection_View({ url : '/core/api/email/templates', restKey : "emailTemplates",
+					that.emailTemplatesListView = new Base_Collection_View({ url : '/core/api/email/templates', restKey : "emailTemplates",
 					templateKey : "settings-email-templates", individual_tag_name : 'tr', postRenderCallback : function(el)
 					{
 						initializeSettingsListeners();
@@ -484,8 +485,8 @@ var SettingsRouter = Backbone.Router
 						});
 					} });
 
-					this.emailTemplatesListView.collection.fetch();
-					$('#prefs-tabs-content').html(this.emailTemplatesListView.el);
+					that.emailTemplatesListView.collection.fetch();
+					$('#prefs-tabs-content').html(that.emailTemplatesListView.el);
 					$('#PrefsTab .select').removeClass('select');
 					$('.email-templates-tab').addClass('select');
 					$(".active").removeClass("active");
@@ -540,20 +541,21 @@ var SettingsRouter = Backbone.Router
 			 */
 			emailTemplateEdit : function(id)
 			{
+				var that = this;
 				getTemplate('settings', {}, undefined, function(template_ui){
 					if(!template_ui)
 						  return;
 					$('#content').html($(template_ui));	
 
 					// Navigates to list of email templates, if it is not defined
-					if (!this.emailTemplatesListView || this.emailTemplatesListView.collection.length == 0)
+					if (!that.emailTemplatesListView || that.emailTemplatesListView.collection.length == 0)
 					{
-						this.navigate("email-templates", { trigger : true });
+						that.navigate("email-templates", { trigger : true });
 						return;
 					}
 
 					// Gets the template form its collection
-					var currentTemplate = this.emailTemplatesListView.collection.get(id);
+					var currentTemplate = that.emailTemplatesListView.collection.get(id);
 
 					var view = new Base_Model_View({ url : '/core/api/email/templates', model : currentTemplate, template : "settings-email-template-add",
 						window : 'email-templates', postRenderCallback : function()

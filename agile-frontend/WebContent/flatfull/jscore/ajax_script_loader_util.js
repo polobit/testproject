@@ -41,7 +41,11 @@ function loadMiscScripts() {
     // Load Google Analytics code
     load_analytics_code();
 
-    
+    // Load agile web stats
+    load_urls_on_ajax_stop('stats/min/agile-min.js?_=' + _AGILE_VERSION, function(){
+    		_agile_execute_web_rules();
+    });
+
 	// load_urls_on_ajax_stop('lib/user-voice.js');
 
 	// load_clickdesk_code();

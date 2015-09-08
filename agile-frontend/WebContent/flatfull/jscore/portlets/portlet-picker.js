@@ -30,7 +30,11 @@ function set_p_portlets(base_model){
 	var itemView;
 	
 	if(base_model.get('portlet_type')=="CONTACTS" && base_model.get('name')=="Filter Based"){
-		App_Portlets.filteredContactsView = new Base_Model_View({ model : base_model, template : "portlets-contacts-filterbased-model", tagName : 'div' });
+		App_Portlets.filteredContactsView = new Base_Model_View({ model : base_model, template : "portlets-contacts-filterbased-model", tagName : 'div', postRenderCallback: function(el){
+			     portlet_utiity.get_filtered_contact_header(base_model, function(header_name){
+			     		$(el).find(".flitered_contact_portlet_header").html(header_name);	
+			     });
+		} });
 		
 		if($('.gridster > div:visible > div',this.el).length==0)
 			$('.gridster > div:visible',this.el).html($(App_Portlets.filteredContactsView.render().el).attr("id","ui-id-"+base_model.get("column_position")+"-"+base_model.get("row_position")).attr("data-sizey",base_model.get("size_y")).attr("data-sizex",base_model.get("size_x")).attr("data-col",base_model.get("column_position")).attr("data-row",base_model.get("row_position")).addClass('gs-w panel panel-default'));
@@ -64,7 +68,11 @@ function set_p_portlets(base_model){
 		else
 			$('.gridster > div:visible > div:last',this.el).after($(App_Portlets.pendingDealsView.render().el).attr("id","ui-id-"+base_model.get("column_position")+"-"+base_model.get("row_position")).attr("data-sizey",base_model.get("size_y")).attr("data-sizex",base_model.get("size_x")).attr("data-col",base_model.get("column_position")).attr("data-row",base_model.get("row_position")).addClass('gs-w panel panel-default'));
 	}else if(base_model.get('portlet_type')=="DEALS" && base_model.get('name')=="Deals By Milestone"){
-		App_Portlets.dealsByMilestoneView = new Base_Model_View({ model : base_model, template : "portlets-deals-deals-by-milestone-model", tagName : 'div' });
+		App_Portlets.dealsByMilestoneView = new Base_Model_View({ model : base_model, template : "portlets-deals-deals-by-milestone-model", tagName : 'div', postRenderCallback: function(el){
+			     portlet_utiity.get_deals_funnel_portlet_header(base_model, function(header_name){
+			     		$(el).find(".deals_funnel_portlet_header").html(header_name);	
+			     });
+		} });
 		if($('.gridster > div:visible > div',this.el).length==0)
 			$('.gridster > div:visible',this.el).html($(App_Portlets.dealsByMilestoneView.render().el).attr("id","ui-id-"+base_model.get("column_position")+"-"+base_model.get("row_position")).attr("data-sizey",base_model.get("size_y")).attr("data-sizex",base_model.get("size_x")).attr("data-col",base_model.get("column_position")).attr("data-row",base_model.get("row_position")).addClass('gs-w panel panel-default'));
 		else
@@ -82,7 +90,11 @@ function set_p_portlets(base_model){
 		else
 			$('.gridster > div:visible > div:last',this.el).after($(App_Portlets.dealsWonView.render().el).attr("id","ui-id-"+base_model.get("column_position")+"-"+base_model.get("row_position")).attr("data-sizey",base_model.get("size_y")).attr("data-sizex",base_model.get("size_x")).attr("data-col",base_model.get("column_position")).attr("data-row",base_model.get("row_position")).addClass('gs-w panel panel-default'));
 	}else if(base_model.get('portlet_type')=="DEALS" && base_model.get('name')=="Deals Funnel"){
-		App_Portlets.dealsFunnelView = new Base_Model_View({ model : base_model, template : "portlets-deals-deals-funnel-model", tagName : 'div' });
+		App_Portlets.dealsFunnelView = new Base_Model_View({ model : base_model, template : "portlets-deals-deals-funnel-model", tagName : 'div', postRenderCallback: function(el){
+			     portlet_utiity.get_deals_funnel_portlet_header(base_model, function(header_name){
+			     		$(el).find(".deals_funnel_portlet_header").html(header_name);	
+			     });
+		} });
 		if($('.gridster > div:visible > div',this.el).length==0)
 			$('.gridster > div:visible',this.el).html($(App_Portlets.dealsFunnelView.render().el).attr("id","ui-id-"+base_model.get("column_position")+"-"+base_model.get("row_position")).attr("data-sizey",base_model.get("size_y")).attr("data-sizex",base_model.get("size_x")).attr("data-col",base_model.get("column_position")).attr("data-row",base_model.get("row_position")).addClass('gs-w panel panel-default'));
 		else

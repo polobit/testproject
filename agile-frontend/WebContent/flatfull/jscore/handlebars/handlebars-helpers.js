@@ -2309,37 +2309,6 @@ $(function()
 	});
 
 	/**
-	 * Returns Contact Model from contactDetailView collection.
-	 * 
-	 */
-	Handlebars.registerHelper('contact_model', function(options)
-	{
-
-		if (App_Contacts.contactDetailView && App_Contacts.contactDetailView.model)
-		{
-
-			// To show Active Campaigns list immediately after campaign
-			// assigned.
-			if (CONTACT_ASSIGNED_TO_CAMPAIGN)
-			{
-				CONTACT_ASSIGNED_TO_CAMPAIGN = false;
-
-				// fetches updated contact json
-				var contact_json = $.ajax({ type : 'GET', url : '/core/api/contacts/' + App_Contacts.contactDetailView.model.get('id'), async : false,
-					dataType : 'json' }).responseText;
-
-				// Updates Contact Detail model
-				App_Contacts.contactDetailView.model.set(JSON.parse(contact_json));
-
-				return options.fn(JSON.parse(contact_json));
-			}
-
-			// if simply Campaigns tab clicked, use current collection
-			return options.fn(App_Contacts.contactDetailView.model.toJSON());
-		}
-	});
-
-	/**
 	 * Returns json object of active and done subscribers from contact object's
 	 * campaignStatus.
 	 */
@@ -2379,40 +2348,6 @@ $(function()
 	});
 
 	/**
-	 * Verifies given urls length and returns options hash based on restricted
-	 * count value.
-	 * 
-	 */
-	Handlebars.registerHelper("if_more_urls", function(url_json, url_json_length, options)
-	{
-		var RESTRICT_URLS_COUNT = 3;
-		var temp_urls_array = [];
-		var context_json = {};
-
-		// If length is less than restricted, compile
-		// else block with given url_json
-		if (url_json_length < RESTRICT_URLS_COUNT)
-			return options.inverse(url_json);
-
-		// Insert urls until restricted count reached
-		for (var i = 0; i < url_json.length; i++)
-		{
-			if (i === RESTRICT_URLS_COUNT)
-				break;
-
-			temp_urls_array.push(url_json[i]);
-		}
-
-		context_json.urls = temp_urls_array;
-
-		// More remained
-		context_json.more = url_json_length - RESTRICT_URLS_COUNT;
-
-		return options.fn(context_json);
-
-	});
-
-	/**
 	 * Returns first occurence string from string having underscores E.g,
 	 * mac_os_x to mac
 	 */
@@ -2423,32 +2358,6 @@ $(function()
 
 		// if '_' exists splits
 		return data.split('_')[0];
-	});
-
-	Handlebars.registerHelper('safe_tweet', function(data)
-	{
-		data = data.trim();
-		return new Handlebars.SafeString(data);
-	});
-	/**
-	 * Get stream icon for social suite streams.
-	 */
-	Handlebars.registerHelper('get_stream_icon', function(name)
-	{
-		if (!name)
-			return;
-
-		var icon_json = { "Home" : "icon-home", "Retweets" : "icon-retweet", "DM_Inbox" : "icon-download-alt", "DM_Outbox" : "icon-upload-alt",
-			"Favorites" : "icon-star", "Sent" : "icon-share-alt", "Search" : "icon-search", "Scheduled" : "icon-time", "All_Updates" : "icon-home",
-			"My_Updates" : "icon-share-alt" };
-
-		name = name.trim();
-
-		if (icon_json[name])
-			return icon_json[name];
-
-		return "icon-globe";
-
 	});
 
 	/**
@@ -4468,45 +4377,7 @@ $(function()
 			return options.fn(App_Contacts.contactDetailView.model.toJSON());
 		}
 	});
-
-	/**
-	 * Returns json object of active and done subscribers from contact object's
-	 * campaignStatus.
-	 */
-	Handlebars.registerHelper('contact_campaigns', function(object, data, options)
-	{
-
-		// if campaignStatus is not defined, return
-		if (object === undefined || object[data] === undefined)
-			return;
-
-		// Temporary json to insert active and completed campaigns
-		var campaigns = {};
-
-		var active_campaigns = [];
-		var completed_campaigns = [];
-
-		// campaignStatus object of contact
-		var campaignStatusArray = object[data];
-
-		for (var i = 0, len = campaignStatusArray.length; i < len; i++)
-		{
-			// push all active campaigns
-			if (campaignStatusArray[i].status.indexOf('ACTIVE') !== -1)
-				active_campaigns.push(campaignStatusArray[i])
-
-				// push all done campaigns
-			if (campaignStatusArray[i].status.indexOf('DONE') !== -1)
-				completed_campaigns.push(campaignStatusArray[i]);
-		}
-
-		campaigns["active"] = active_campaigns;
-		campaigns["done"] = completed_campaigns;
-
-		// apply obtained campaigns context within
-		// contact_campaigns block
-		return options.fn(campaigns);
-	});
+	
 
 	/**
 	 * Verifies given urls length and returns options hash based on restricted
@@ -4542,19 +4413,6 @@ $(function()
 
 	});
 
-	/**
-	 * Returns first occurence string from string having underscores E.g,
-	 * mac_os_x to mac
-	 */
-	Handlebars.registerHelper('normalize_os', function(data)
-	{
-		if (data === undefined || data.indexOf('_') === -1)
-			return data;
-
-		// if '_' exists splits
-		return data.split('_')[0];
-	});
-
 	Handlebars.registerHelper('safe_tweet', function(data)
 	{
 		data = data.trim();
@@ -4578,27 +4436,6 @@ $(function()
 			return icon_json[name];
 
 		return "icon-globe";
-
-	});
-
-	/**
-	 * Get task list name without underscore and caps, for new task UI.
-	 */
-	Handlebars.registerHelper('get_normal_name', function(name)
-	{
-		if (!name)
-			return;
-
-		var name_json = { "HIGH" : "High", "LOW" : "Low", "NORMAL" : "Normal", "EMAIL" : "Email", "CALL" : "Call", "SEND" : "Send", "TWEET" : "Tweet",
-			"FOLLOW_UP" : "Follow Up", "MEETING" : "Meeting", "MILESTONE" : "Milestone", "OTHER" : "Other", "YET_TO_START" : "Yet To Start",
-			"IN_PROGRESS" : "In Progress", "COMPLETED" : "Completed", "TODAY" : "Today", "TOMORROW" : "Tomorrow", "OVERDUE" : "Overdue", "LATER" : "Later" };
-
-		name = name.trim();
-
-		if (name_json[name])
-			return name_json[name];
-
-		return name;
 
 	});
 
@@ -5735,34 +5572,7 @@ $(function()
 			icon_name = 'icon-graph';
 		return icon_name;
 	});
-	/**
-	 * getting flitered contact portlet header name
-	 */
-	Handlebars.registerHelper('get_flitered_contact_portlet_header', function(filter_name)
-	{
-		var header_name = '';
-		if (filter_name == 'contacts')
-			header_name = "All Contacts";
-		else if (filter_name == 'companies')
-			header_name = "All Companies";
-		else if (filter_name == 'recent')
-			header_name = "Recent Contacts";
-		else if (filter_name == 'myContacts')
-			header_name = "My Contacts";
-		else if (filter_name == 'leads')
-			header_name = "Leads";
-		else
-		{
-			var contactFilter = $.ajax({ type : 'GET', url : '/core/api/filters/' + filter_name, async : false, dataType : 'json', success : function(data)
-			{
-				if (data != null && data != undefined)
-					header_name = "" + data.name;
-			} });
-		}
-		if (header_name == undefined || header_name == "")
-			header_name = "Contact List";
-		return header_name;
-	});
+	
 
 	Handlebars.registerHelper('if_equals_or', function()
 	{
@@ -5802,34 +5612,7 @@ $(function()
 		else
 			return options.inverse(this);
 	});
-	/**
-	 * getting flitered contact portlet header name
-	 */
-	Handlebars.registerHelper('get_deals_funnel_portlet_header', function(track_id)
-	{
-		var header_name = '';
-		App_Portlets.track_length = 0;
-		$.ajax({ type : 'GET', url : '/core/api/milestone/pipelines', async : false, dataType : 'json', success : function(data)
-		{
-			App_Portlets.track_length = data.length;
-			App_Portlets.deal_tracks = data;
-		} });
-		if (App_Portlets.track_length > 1)
-		{
-			if (track_id == 0)
-				header_name = "Default";
-			else
-			{
-				var milestone = $.ajax({ type : 'GET', url : '/core/api/milestone/' + track_id, async : false, dataType : 'json', success : function(data)
-				{
-					if (data != null && data != undefined)
-						header_name = "" + data.name + "";
-				} });
-			}
-		}
-		return header_name;
-	});
-
+	
 	/**
 	 * getting time in AM and PM format for event portlet
 	 */

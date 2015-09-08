@@ -486,7 +486,7 @@
 <script id="portlets-contacts-filterbased-model-template" type="text/html">
 		<div class="portlet_header portlet_edit_icons panel-heading" onmouseover="showPortletIcons(this); return false;" onmouseout="hidePortletIcons(this); return false;">
 			<h4 class="h4 text-ellipsis">
-				<span class="pull-left inline-block text-ellipsis" style="width:90%;">{{get_flitered_contact_portlet_header settings.filter}}</span>
+				<span class="pull-left inline-block text-ellipsis flitered_contact_portlet_header" style="width:90%;"></span>
 			</h4>
 			<div class="portlet_header_icons pull-right clear-fix text-muted p-t-xs pos-abs pos-r-0 pos-t-xs vis-hide">
 				<i id="{{id}}-settings" class="portlet-settings icon-wrench p-r-xs c-p"></i>
@@ -591,8 +591,7 @@
 						My Deals by Milestone
 					{{/if_equals}}
 				</span>
-				<small class="pull-right text-right p-t-xs portlet-header-small-text text-ellipsis" style="width: 30%;">
-					{{get_deals_funnel_portlet_header settings.track}}
+				<small class="pull-right text-right p-t-xs portlet-header-small-text text-ellipsis deals_funnel_portlet_header" style="width: 30%;">
 				</small>
 			</h4>
 			<div class="portlet_header_icons pull-right clear-fix text-muted p-t-xs pos-abs pos-r-0 pos-t-xs vis-hide">
@@ -649,8 +648,7 @@
 						My Deals Funnel
 					{{/if_equals}}
 				</span>
-				<small class="pull-right text-right p-t-xs portlet-header-small-text text-ellipsis" style="width: 30%;">
-					{{get_deals_funnel_portlet_header settings.track}}
+				<small class="pull-right text-right p-t-xs portlet-header-small-text text-ellipsis deals_funnel_portlet_header" style="width: 30%;">
 				</small>
 			</h4>
 			<div class="portlet_header_icons pull-right clear-fix text-muted p-t-xs pos-abs pos-r-0 pos-t-xs vis-hide">

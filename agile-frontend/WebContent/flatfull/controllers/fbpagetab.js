@@ -33,18 +33,22 @@ var FacebookPageTabRouter = Backbone.Router.extend({
 });
 
 
-function accessUrlUsingAjax(url, callback){
+function accessUrlUsingAjax(url, callback, error_callback){
 	$.ajax({ 
 		url : url, 
 		dataType : 'json',
 		success : function(response){
 
-			   try{
-			   	  response = $.parseJSON(response);
-			   }catch(err){}
+		   try{
+		   	  response = $.parseJSON(response);
+		   }catch(err){}
 
-				if(callback){
-					 callback(response);
+			if(callback)
+				 callback(response);
+		}, error : function(response){
+
+			if(error_callback)
+					 error_callback(response);
 		}
 	});
 }
