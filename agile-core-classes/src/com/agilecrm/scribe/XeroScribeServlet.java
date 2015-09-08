@@ -55,6 +55,8 @@ public class XeroScribeServlet extends HttpServlet
 		 * data return from xero contains accesstoken,tokensecret etc
 		 */
 		String data = req.getParameter("data");
+		String isForAll = (String)req.getParameter("isForAll");
+		System.out.println("isForAll "+isForAll);
 		System.out.println("data is :" + data);
 
 		if (data != null)
