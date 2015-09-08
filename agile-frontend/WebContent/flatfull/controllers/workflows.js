@@ -475,7 +475,7 @@ var WorkflowsRouter = Backbone.Router
 						// fill the selected campaign-id
 						head.js(LIB_PATH + 'jscore/triggers/flip.js', function()
 								{
-							$("#test").flip(
+							$(".flip-panel").flip(
 									{
 										  trigger: 'click',
 										  axis: 'y'
