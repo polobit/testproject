@@ -1697,6 +1697,7 @@ public class OpportunityUtil
 					pipelineId));
 		conditionsMap.put("close_date >= ", minTime);
 		conditionsMap.put("close_date <= ", maxTime);
+		conditionsMap.put("archived",false);
 		return dao.listByProperty(conditionsMap);
 	}
 
