@@ -930,4 +930,21 @@ public class DealsAPI
 	    je.printStackTrace();
 	}
     }
+    
+    /*fetches deals for specified time
+     * 
+     * @param min
+     * @param max
+     * @return deals
+     * @throws JSONException
+     */
+     @Path("details")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public String getNewDeals(@QueryParam("min") Long min, @QueryParam("max") Long max,@QueryParam("frequency") String type)
+    {
+
+     return OpportunityUtil.getIncomingDealsList(min,max,type).toString();
+    }
+
 }

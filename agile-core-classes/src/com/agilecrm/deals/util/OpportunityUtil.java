@@ -17,6 +17,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import com.agilecrm.AgileQueues;
+import com.agilecrm.activities.Category;
+import com.agilecrm.activities.util.CategoriesUtil;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.CustomFieldDef;
 import com.agilecrm.contact.CustomFieldDef.SCOPE;
@@ -1612,5 +1614,104 @@ public class OpportunityUtil
 
 	return dao.listByProperty(conditionsMap);
     }
+    /**
+     * Gets JSONObject of deals and Total pipeline values of deals with
+     * respect to da. These are used for graph building.
+     * 
+     * @param minTime
+     *            - Given time less than closed date.
+     * @param maxTime
+     *            - Given time greater than closed date.
+     * @return JsonObject .
+     */
+    public static JSONObject getIncomingDealsList(Long minTime, Long maxTime, String type)
+    {
+        JSONObject newDealsObject = new JSONObject();
+        String timeZone = "UTC";
+        UserPrefs userPrefs = UserPrefsUtil.getCurrentUserPrefs();
+        if (userPrefs != null && userPrefs.timezone != null)
+        {
+            timeZone = userPrefs.timezone;
+        }
+        List<Opportunity> opportunitiesList = getNewDealsList(minTime, maxTime);
+        //opportunitiesList.get(0).getDeal_source_id();
+        CategoriesUtil categoriesUtil =  new CategoriesUtil();
+        List<Category>sources=categoriesUtil.getAllCategoriesByType("DEAL_SOURCE");
+        JSONObject sourcecount = new JSONObject();
+            sourcecount.put("0", type.equalsIgnoreCase("deals")?0:0.0);
+        for (Category source : sources)
+        {
+        sourcecount.put(source.getId(), type.equalsIgnoreCase("deals")?0:0.0);
+        }
+        System.out.println(sources.get(0).getId());
+        Calendar startCalendar = Calendar.getInstance(TimeZone.getTimeZone(timeZone));
+        startCalendar.setTimeInMillis(minTime * 1000);
+        long startTimeMilli = startCalendar.getTimeInMillis();
 
+        // Sets calendar with end time.
+        Calendar endCalendar = Calendar.getInstance(TimeZone.getTimeZone(timeZone));
+        endCalendar.setTimeInMillis(maxTime * 1000);
+        long endTimeMilli = endCalendar.getTimeInMillis();
+        
+        while (startTimeMilli <= endTimeMilli)
+        {
+            //JSONObject dealsCount = new JSONObject();
+            //JSONObject sourcedealsCount = new JSONObject();
+            //dealsCount.put("count", 0);
+            String createdTime = (startCalendar.getTimeInMillis() / 1000) + "";
+            newDealsObject.put(createdTime, sourcecount);
+            startCalendar.add(Calendar.DAY_OF_MONTH, 1);
+            startCalendar.set(Calendar.HOUR_OF_DAY, 0);
+            startCalendar.set(Calendar.MINUTE, 0);
+            startCalendar.set(Calendar.SECOND, 0);
+            startCalendar.set(Calendar.MILLISECOND, 0);
+            startTimeMilli = startCalendar.getTimeInMillis();
+        }
+
+        
+        for (Opportunity opportunity : opportunitiesList)
+        {
+            try
+            {
+            /*
+             * //mm-yy DateFormat formatter = new SimpleDateFormat("MM-yy");
+             * //Get mm/yy String mmYY = formatter.format(new
+             * Date(opportunity.close_date * 1000));
+             */
+            Date opportunityDate = new Date(opportunity.created_time * 1000);
+            Long source_id= opportunity.getDeal_source_id();
+            System.out.println(categoriesUtil.getCategory(source_id));
+            Double revenue=opportunity.expected_value;
+            Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone(timeZone));
+            calendar.setTimeInMillis(opportunity.created_time * 1000);
+            calendar.set(Calendar.HOUR_OF_DAY, 0);
+            calendar.set(Calendar.MINUTE, 0);
+            calendar.set(Calendar.SECOND, 0);
+            calendar.set(Calendar.MILLISECOND, 0);
+
+            String createdtime = (calendar.getTimeInMillis() / 1000) + "";
+            double count=0;
+
+            // Read from previous object if present
+            if (newDealsObject.containsKey(createdtime))
+            {
+                JSONObject sourcecount1 = newDealsObject.getJSONObject(createdtime);
+                    count=sourcecount1.getInt(source_id.toString());
+                    if(type.equalsIgnoreCase("deals"))
+                        count++;
+                    else
+                        count=count+revenue;
+                sourcecount1.put(source_id.toString(),count);
+                newDealsObject.put(createdtime, sourcecount1);
+            }
+            
+            
+            }
+            catch (Exception e)
+            {
+            System.out.println("Exception :" + e);
+            }
+        }
+        return newDealsObject;
+    }
 }

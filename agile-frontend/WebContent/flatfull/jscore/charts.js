@@ -1321,3 +1321,186 @@ function getNumberWithCommasForCharts(value){
 	if (value)
 		return value.toFixed(2).toString().replace(/\B(?=(?:\d{3})+(?!\d))/g, ",").replace('.00', '');
 }
+function showDealsGrowthgraph(url, selector, name, yaxis_name, show_loading)
+{
+    
+    // Show loading image if required
+    if(typeof show_loading === 'undefined')
+    {
+        // Old calls were not showing loading image..
+    }
+    else
+        $('#' + selector).html(getRandomLoadingImg());
+    
+    
+    var chart;
+
+    // Loads Highcharts plugin using setupCharts and sets up line chart in the
+    // callback
+    setupCharts(function()
+    {
+
+        // Loads statistics details from backend 
+        fetchReportData(url, function(data)
+        {
+
+            // Categories are created time
+            var categories = [];
+            var frequency = $( "#frequency:visible").val();
+            // Data with deals
+            var series;
+            
+            var sortedKeys = [];
+            $.each(data,function(k,v){
+                sortedKeys.push(k);
+            });
+            sortedKeys.sort();
+            var sortedData = {};
+            $.each(sortedKeys,function(index,value){
+                sortedData[''+value] = data[''+value];
+            });
+
+            var min_tick_interval = 1;
+            var dataLength = 0;
+            // Iterates through data and adds keys into
+            // categories
+            $.each(sortedData, function(k, v)
+            {
+
+                // Initializes series with names with the first
+                // data point
+                if (series == undefined)
+                {
+                    var index = 0;
+                    series = [];
+                    $.each(v, function(k1, v1)
+                    {
+                        var series_data = {};
+                        series_data.name = k1;
+                        series_data.data = [];
+                        series[index++] = series_data;
+                    });
+                }
+
+                // Fill Data Values with series data
+                $.each(v, function(k1, v1)
+                {
+
+                    // Find series with the name k1 and to that,
+                    // push v1
+                    var series_data = find_series_with_name(series, k1);
+                    series_data.data.push(v1);
+                });
+                var dt = new Date(k * 1000);
+                categories.push(Highcharts.dateFormat('%e.%b.%Y',Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()))+'');
+                dataLength++;
+            });
+
+            if(Math.ceil((dataLength-1)/10)>0)
+            {
+                min_tick_interval = Math.ceil(dataLength/10);
+                if(min_tick_interval==3)
+                {
+                    min_tick_interval = 4;
+                }
+            }
+            $.ajax({ type : 'GET', url : '/core/api/categories?entity_type=DEAL_SOURCE', async : false, dataType : 'json',
+            success: function(data){
+                $.each(data,function(index,deals){
+                    for(var i=0;i<series.length;i++){
+                        if(series[i].name=="0")
+                                series[i].name="Unknown";
+                        else if(deals.id==series[i].name){
+                            series[i].name=deals.label;
+                        }
+                            
+                    }
+                });
+                } });
+
+
+            // After loading and processing all data, highcharts are initialized
+            // setting preferences and data to show
+            chart = new Highcharts.Chart({
+                chart: {
+                    renderTo: selector,
+                    type: 'area',
+                    marginRight: 130,
+                    marginBottom: 50
+                },
+                title: {
+                    text: name,
+                    x: -20,//center
+                    style : {
+                        textTransform : 'normal'
+                    }
+                },
+                xAxis: {
+                    categories: categories,
+                    tickmarkPlacement: 'on',
+                    minTickInterval : min_tick_interval
+                },
+                yAxis: {
+                    title: {
+                        text: yaxis_name
+                    },
+                    plotLines: [
+                        {
+                            value: 0,
+                            width: 1,
+                            color: '#808080'
+                        }
+                    ],
+                    min: 0
+                },
+                legend: {
+                    layout: 'vertical',
+                    align: 'right',
+                    verticalAlign: 'top',
+                    x: -10,
+                    y: 100,
+                    borderWidth: 0
+                },
+                 plotOptions: {
+                    area: {
+                stacking: 'normal',
+                lineColor: '#666666',
+                lineWidth: 1,
+                marker: {
+                    lineWidth: 1,
+                    lineColor: '#666666',
+                    fillColor: null
+                  }
+                 }
+                  },
+                //Tooltip to show details,
+                tooltip: {
+                    formatter: function(){
+                        if(frequency=="deals")
+                                {
+                        return '<div>' + 
+                                '<div class="p-n">'+this.x+'</div>' + 
+                                '<div class="p-n"><font color='+this.series.color+'>'+this.series.name+'</font> : '+getNumberWithCommasForCharts(this.y)+'</div>' +
+                                '</div>';
+                            }
+                        else
+                        {
+                        return '<div>' + 
+                                '<div class="p-n">'+this.x+'</div>' + 
+                                '<div class="p-n"><font color='+this.series.color+'>'+this.series.name+'</font> : '+getCurrencySymbolForCharts()+''+getNumberWithCommasForCharts(this.y)+'</div>' +
+                                '</div>';
+                            }
+                    },
+                    useHTML: true
+                },
+               
+                //Sets the series of data to be shown in the graph,shows total 
+                //and pipeline
+                series: series,
+                exporting: {
+                    enabled: false
+                }
+            });
+        });
+    });
+}
