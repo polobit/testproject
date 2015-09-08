@@ -163,7 +163,7 @@ var WorkflowsRouter = Backbone.Router
 					return;
 
 				this.workflow_json = this.workflow_model.get("rules");
-
+				var that = this;
 				getTemplate('workflow-add', {}, undefined, function(template_ui){
 					if(!template_ui)
 						  return;
@@ -175,9 +175,9 @@ var WorkflowsRouter = Backbone.Router
 					initializeWorkflowsListeners();
 
 					// Set the name
-					$('#workflow-name').val(this.workflow_model.get("name"));
+					$('#workflow-name').val(that.workflow_model.get("name"));
 
-					var unsubscribe = this.workflow_model.get("unsubscribe");
+					var unsubscribe = that.workflow_model.get("unsubscribe");
 
 					$('#unsubscribe-email').val(unsubscribe.unsubscribe_email);
 					$('#unsubscribe-tag').val(unsubscribe.tag);
@@ -346,16 +346,22 @@ var WorkflowsRouter = Backbone.Router
 				// Fetches workflows if not filled
 				if ($('#campaign-reports-select').html() === null || $('#campaign-reports-select').html() === undefined)
 				{
-					$("#content").html(getTemplate("campaign-analysis", {}));
+					getTemplate('campaign-analysis', {}, undefined, function(template_ui){
+				 		if(!template_ui)
+				    		return;
+						$('#content').html($(template_ui)); 
+						var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
 
-					var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
+						// fill workflows
+						fillSelect('campaign-reports-select', '/core/api/workflows', 'workflow', function fillCampaign()
+						{
+							$('#campaign-reports-select').find('option[value=' + id + ']').attr('selected', 'selected');
 
-					// fill workflows
-					fillSelect('campaign-reports-select', '/core/api/workflows', 'workflow', function fillCampaign()
-					{
-						$('#campaign-reports-select').find('option[value=' + id + ']').attr('selected', 'selected');
+						}, optionsTemplate);
+					}, "#content");
 
-					}, optionsTemplate);
+
+						
 				}
 
 				getTemplate("campaign-analysis-tabs", { "id" : id }, undefined, function(template_ui){
@@ -370,12 +376,17 @@ var WorkflowsRouter = Backbone.Router
 					head.js(LIB_PATH + 'lib/date-charts.js', LIB_PATH + 'lib/date-range-picker.js', CSS_PATH + "css/misc/date-picker.css", function()
 					{
 						// Load Reports Template
-						$("#campaign-analysis-tabs-content").html(getTemplate("campaign-email-reports", {}));
+						getTemplate('campaign-email-reports', {}, undefined, function(template_ui1){
+					 		if(!template_ui1)
+					    		return;
+							$('#campaign-analysis-tabs-content').html($(template_ui1)); 
+							// Set the name
+							// $('#reports-campaign-name').text(workflowName);
+							initChartsUI(id);
 
-						// Set the name
-						// $('#reports-campaign-name').text(workflowName);
+						}, "#campaign-analysis-tabs-content");
 
-						initChartsUI(id);
+
 
 					});
 

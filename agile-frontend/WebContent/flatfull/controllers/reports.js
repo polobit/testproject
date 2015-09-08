@@ -512,6 +512,7 @@ var ReportsRouter = Backbone.Router
 				$("#reportsmenu").addClass("active");
 			},
 
+
 			/**
 			 * Returns Cohorts Graphs with two tag1
 			 * 

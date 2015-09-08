@@ -395,6 +395,7 @@ function fill_logs_slate(id, type)
         $("#" + id).html($(template_ui));
     }, "#" + id);
 
+
 }
 
 function show_campaign_save()

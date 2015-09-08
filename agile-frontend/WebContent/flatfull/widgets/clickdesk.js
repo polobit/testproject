@@ -181,13 +181,19 @@ function showChats(data)
 		}
 
 		// Fills chat template with chats and shows chat in chat panel
-		$('#clickdesk_chats_panel').html(getTemplate('clickdesk-chat-stream', data));
+		getTemplate('clickdesk-chat-stream', data, undefined, function(template_ui1){
+	 		if(!template_ui1)
+	    		return;
+			$('#clickdesk_chats_panel').html($(template_ui1)); 
+			// Load jquery time ago function to show time ago in chats
+			head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
+			{
+				$(".time-ago", $('#clickdesk_chats_panel')).timeago();
+			});
+		}, "#clickdesk_chats_panel");
 
-		// Load jquery time ago function to show time ago in chats
-		head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
-		{
-			$(".time-ago", $('#clickdesk_chats_panel')).timeago();
-		});
+
+			
 
 		
 	}, "#ClickDesk");

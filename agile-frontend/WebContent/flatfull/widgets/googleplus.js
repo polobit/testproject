@@ -310,7 +310,12 @@ $(function()
 			$("body").on("click", ".peoplesearch", function(e)
 			{
 				e.preventDefault();
-				$('#' + WIDGET_NAME).html(getTemplate('googleplus-modified-search', searchDetails));
+				getTemplate('googleplus-modified-search', obj, undefined, function(template_ui){
+			 		if(!template_ui)
+			    		return;
+					$('#' + WIDGET_NAME).html($(template_ui)); 
+				},'#' + WIDGET_NAME);
+
 			});
 			
 			$("body").on("click", "#gpsearchbtn", function(e)

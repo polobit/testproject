@@ -380,14 +380,27 @@ function initializeAdminSettingsListeners(){
 					ACCOUNT_DELETE_REASON_JSON["reason_info"] = $("#account_delete_reason").val();
 					$(".modal-body").html(getRandomLoadingImg());
 					var delete_step1_el = "";
-					if(ACCOUNT_STATS)
-						delete_step1_el = $(getTemplate('warning', ACCOUNT_STATS));
+					if(ACCOUNT_STATS){
+						getTemplate('warning', ACCOUNT_STATS, undefined, function(template_ui1){
+					 		if(!template_ui1)
+					    		return;
+					    	delete_step1_el = $(template_ui1);
+							
+						}, null);
+
+					}
 					else
 						{
 							set_up_account_stats(el, function(data){
-								delete_step1_el = $(getTemplate('warning', data));
-								$(".modal-body").css("padding", 0 ).html($(".modal-body", $(delete_step1_el)));
-								$(".modal-footer").html($(".modal-footer", $(delete_step1_el)).html());
+								getTemplate('warning', data, undefined, function(template_ui){
+							 		if(!template_ui)
+							    		return;
+							    	delete_step1_el = $(template_ui);
+									$('#content').html($(template_ui)); 
+									$(".modal-body").css("padding", 0 ).html($(".modal-body", $(delete_step1_el)));
+									$(".modal-footer").html($(".modal-footer", $(delete_step1_el)).html());
+								}, null);
+
 							})
 							return;
 						}

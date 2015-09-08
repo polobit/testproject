@@ -19,7 +19,11 @@ function setupZendeskAuth()
 	console.log('In Zendesk Auth');
 
 	// Shows input fields to save the Zendesk preferences
-	$('#Zendesk').html(getTemplate('zendesk-login', {}));
+	getTemplate('zendesk-login', {}, undefined, function(template_ui){
+ 		if(!template_ui)
+    		return;
+		$('#Zendesk').html($(template_ui)); 
+	}, "#Zendesk");
 
 	// On click of save button, check input and save details
 	$("body").on('click','#save_prefs', function(e)
@@ -130,59 +134,73 @@ function getTicketsFromZendesk(callback)
 function showTicketsInZendesk(data)
 {
 	// Fill template with tickets and append it to Zendesk panel
-	$('#Zendesk').html(getTemplate('zendesk-profile', data));
+	
+	getTemplate('zendesk-profile', data, undefined, function(template_ui){
+ 		if(!template_ui)
+    		return;
+		$('#Zendesk').html($(template_ui)); 
 
-	// All tickets and first five tickets stored in variables to be used further
-	var all_tickets;
-	var first_five;
+		// All tickets and first five tickets stored in variables to be used further
+		var all_tickets;
+		var first_five;
 
-	try
-	{
-		/*
-		 * If error occurs while retrieving tickets, we get it as string in
-		 * data.all_tickets, parse tickets as JSON if tickets are returned since
-		 * we splice 5 tickets and use it to show. If error is returned it is
-		 * taken care in handle bars
-		 */
-		all_tickets = JSON.parse(data.all_tickets);
-		first_five = all_tickets.splice(0, 5);
-	}
-	catch (err)
-	{
-		/*
-		 * If tickets contain error, store in first_five to show error in Zedesk
-		 * widget panel
-		 */
-		first_five = data.all_tickets;
-	}
+		try
+		{
+			/*
+			 * If error occurs while retrieving tickets, we get it as string in
+			 * data.all_tickets, parse tickets as JSON if tickets are returned since
+			 * we splice 5 tickets and use it to show. If error is returned it is
+			 * taken care in handle bars
+			 */
+			all_tickets = JSON.parse(data.all_tickets);
+			first_five = all_tickets.splice(0, 5);
+		}
+		catch (err)
+		{
+			/*
+			 * If tickets contain error, store in first_five to show error in Zedesk
+			 * widget panel
+			 */
+			first_five = data.all_tickets;
+		}
 
-	// Get and fill the template with tickets
-	var all_tickets_template = $(getTemplate('zendesk-ticket-stream', first_five));
+		// Get and fill the template with tickets
+		getTemplate('endesk-ticket-stream', first_five, undefined, function(template_ui1){
+	 		if(!template_ui1)
+	    		return;
+	    	var all_tickets_template = $(template_ui1);
+	    	// show the tickets in Zendeks panel
+			$('#all_tickets_panel').html(all_tickets_template);
 
-	// show the tickets in Zendeks panel
-	$('#all_tickets_panel').html(all_tickets_template);
+			// Load jquery time ago function to show time ago in tickets
+			head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
+			{
+				$(".time-ago", all_tickets_template).timeago();
+			});
 
-	// Load jquery time ago function to show time ago in tickets
-	head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
-	{
-		$(".time-ago", all_tickets_template).timeago();
-	});
+			/*
+			 * On click of show more in tickets panel, we splice 5 tickets from
+			 * all_tickets and show every time
+			 */
+			 $("body").on('click','#more_tickets', function(e)
+			{
+				e.preventDefault();
 
-	/*
-	 * On click of show more in tickets panel, we splice 5 tickets from
-	 * all_tickets and show every time
-	 */
-	 $("body").on('click','#more_tickets', function(e)
-	{
-		e.preventDefault();
+				// If all tickets is not defined, return
+				if (!all_tickets)
+					return;
 
-		// If all tickets is not defined, return
-		if (!all_tickets)
-			return;
+				// More tickets are shown in the tickets panel
+				showMoreTickets(all_tickets.splice(0, 5));
+			});
+			
+		}, null);
 
-		// More tickets are shown in the tickets panel
-		showMoreTickets(all_tickets.splice(0, 5));
-	});
+	}, "#Zendesk");
+
+		
+
+	
 }
 
 /**
@@ -211,16 +229,21 @@ function showMoreTickets(more_tickets)
 	 * Get and fill the template with more tickets information, append to the
 	 * ticket stream and hide the spinner
 	 */
-	var more_tickets_template = $(getTemplate('zendesk-ticket-stream', more_tickets));
+	
+	getTemplate('zendesk-ticket-stream', more_tickets, undefined, function(template_ui){
+ 		if(!template_ui)
+    		return;
+		$('#all_tickets_panel').append(more_tickets_template);
+		$('#spinner-tickets').hide();
 
-	$('#all_tickets_panel').append(more_tickets_template);
-	$('#spinner-tickets').hide();
+		// Load jquery time ago function to show time ago in tickets
+		head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
+		{
+			$(".time-ago", more_tickets_template).timeago();
+		});
+	}, null);
 
-	// Load jquery time ago function to show time ago in tickets
-	head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
-	{
-		$(".time-ago", more_tickets_template).timeago();
-	});
+		
 }
 
 /**
@@ -246,10 +269,15 @@ function showTicketById(json, ticket_id)
 	$('#zendesk_showModal').remove();
 
 	// Append the form into the content
-	$('#content').append(getTemplate("zendesk-ticket-show", json));
+	
+	getTemplate('zendesk-ticket-show', json, undefined, function(template_ui){
+ 		if(!template_ui)
+    		return;
+    	$('#zendesk_showModal').modal("show"); 
+	}, null);
 
 	// Shows the modal after filling with details
-	$('#zendesk_showModal').modal("show");
+	
 }
 
 function registerClickEventsInZendesk()
@@ -310,38 +338,44 @@ function addTicketToZendesk()
 	$('#zendesk_messageModal').remove();
 
 	// Populate the modal template with the above JSON details in the form
-	var message_form_modal = getTemplate("zendesk-message", json);
+	
+	getTemplate('zendesk-message', json, undefined, function(template_ui){
+ 		if(!template_ui)
+    		return;
+		var message_form_modal = $(template_ui); 
+		 // Append the form into the content
+		$('#content').append(message_form_modal);
 
-	// Append the form into the content
-	$('#content').append(message_form_modal);
+		// Shows the modal after filling with details
+		$('#zendesk_messageModal').modal("show");
 
-	// Shows the modal after filling with details
-	$('#zendesk_messageModal').modal("show");
-
-	/*
-	 * On click of send button in the modal, calls send request method to add a
-	 * ticket in Zendesk
-	 */
-	$('#send_request').click(function(e)
-	{
-		e.preventDefault();
-		
-		//check button disabled or not
-		if ($("#send_request").attr('disabled'))
-			return;
-		
-		// Checks whether all the input fields are filled
-		if (!isValidForm($("#zendesk_messageForm")))
+		/*
+		 * On click of send button in the modal, calls send request method to add a
+		 * ticket in Zendesk
+		 */
+		$('#send_request').click(function(e)
 		{
-			return;
-		}
+			e.preventDefault();
+			
+			//check button disabled or not
+			if ($("#send_request").attr('disabled'))
+				return;
+			
+			// Checks whether all the input fields are filled
+			if (!isValidForm($("#zendesk_messageForm")))
+			{
+				return;
+			}
 
-		//disabling the send request button after first click
-		$("#send_request").attr("disabled", true);
+			//disabling the send request button after first click
+			$("#send_request").attr("disabled", true);
+			
+			// Sends request to Zendesk to add ticket
+			sendRequestToZendesk("/core/api/widgets/zendesk/add/" + Zendesk_Plugin_Id, "zendesk_messageForm", "zendesk_messageModal", "add-ticket-error-panel");
+		});
+	}, null);
+
 		
-		// Sends request to Zendesk to add ticket
-		sendRequestToZendesk("/core/api/widgets/zendesk/add/" + Zendesk_Plugin_Id, "zendesk_messageForm", "zendesk_messageModal", "add-ticket-error-panel");
-	});
 }
 
 /**
@@ -373,37 +407,43 @@ function updateTicketInZendesk(ticket_id)
 	$('#zendesk_messageModal').remove();
 
 	// Populate the modal template with the above JSON details in the form
-	var message_form_modal = getTemplate("zendesk-message", json);
+	
+	getTemplate('zendesk-message', json, undefined, function(template_ui){
+ 		if(!template_ui)
+    		return;
+    	var message_form_modal = $(template_ui);
+		 // Append the form into the content
+		$('#content').append(message_form_modal);
 
-	// Append the form into the content
-	$('#content').append(message_form_modal);
+		// Shows the modal after filling with details
+		$('#zendesk_messageModal').modal("show");
 
-	// Shows the modal after filling with details
-	$('#zendesk_messageModal').modal("show");
-
-	/*
-	 * On click of send button in the modal, calls send request method to update
-	 * a ticket in Zendesk
-	 */
-	$('#send_request').click(function(e)
-	{
-		e.preventDefault();
-		
-		//check button disabled or not
-		if ($("#send_request").attr('disabled'))
-			return;
-		
-		// Checks whether all the input fields are filled
-		if (!isValidForm($("#zendesk_messageForm")))
+		/*
+		 * On click of send button in the modal, calls send request method to update
+		 * a ticket in Zendesk
+		 */
+		$('#send_request').click(function(e)
 		{
-			return;
-		}
-		
-		//disabling the send request button after first click
-		$("#send_request").attr("disabled", true);
-		
-		sendRequestToZendesk("/core/api/widgets/zendesk/update/" + Zendesk_Plugin_Id, "zendesk_messageForm", "zendesk_messageModal", "add-ticket-error-panel");
-	});
+			e.preventDefault();
+			
+			//check button disabled or not
+			if ($("#send_request").attr('disabled'))
+				return;
+			
+			// Checks whether all the input fields are filled
+			if (!isValidForm($("#zendesk_messageForm")))
+			{
+				return;
+			}
+			
+			//disabling the send request button after first click
+			$("#send_request").attr("disabled", true);
+			
+			sendRequestToZendesk("/core/api/widgets/zendesk/update/" + Zendesk_Plugin_Id, "zendesk_messageForm", "zendesk_messageModal", "add-ticket-error-panel");
+		});
+	}, null);
+
+	
 }
 
 /**
@@ -465,7 +505,11 @@ function zendeskError(id, message)
 	 * Get error template and fill it with error message and show it in the div
 	 * with given id
 	 */
-	$('#' + id).html(getTemplate('zendesk-error', error_json));
+	getTemplate('zendesk-error', error_json, undefined, function(template_ui){
+ 		if(!template_ui)
+    		return;
+		 $('#' + id).html($(template_ui)); 
+	}, '#' + id);
 }
 
 /**

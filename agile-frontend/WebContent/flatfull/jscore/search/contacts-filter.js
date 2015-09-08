@@ -34,6 +34,7 @@ $(function(){
 	$('body').on('click', '.filter-contacts-multiple-add', function(e)
 	{
 		e.preventDefault();
+		var that = this;
 		// To solve chaining issue when cloned
 
 		getTemplate("filter-contacts", {}, undefined, function(template_ui){
@@ -53,7 +54,7 @@ $(function(){
 			$(htmlContent).find("i.filter-contacts-multiple-remove").css("display", "inline-block");
 			//hide camapign status
 			//$(htmlContent).find('#LHS select').find("optgroup[label='Activities']").remove();
-			$(this).prev('table').find("tbody").append(htmlContent);
+			$(that).prev('table').find("tbody").append(htmlContent);
 
 		}, null);
 	});
@@ -62,6 +63,7 @@ $(function(){
 	$('body').on('click', '.filter-contacts-multiple-add-or-rules', function(e)
 	{
 		e.preventDefault();
+		var that = this;
 		// To solve chaining issue when cloned
 		getTemplate("filter-contacts", {}, undefined, function(template_ui){
 			if(!template_ui)
@@ -80,7 +82,7 @@ $(function(){
 			$(htmlContent).find("i.filter-contacts-multiple-remove").css("display", "inline-block");
 			//hide camapign status
 			//$(htmlContent).find('#LHS select').find("optgroup[label='Activities']").remove()
-			$(this).prev('table').find("tbody").append(htmlContent);
+			$(that).prev('table').find("tbody").append(htmlContent);
 
 		}, null);
 		
@@ -91,7 +93,7 @@ $(function(){
 	{
 		e.preventDefault();
 		// To solve chaining issue when cloned
-
+		var that = this;
 		getTemplate("filter-contacts", {}, undefined, function(template_ui){
 			if(!template_ui)
 				  return;
@@ -107,7 +109,7 @@ $(function(){
 	//		$(this).hide();
 			// var htmlContent = $(this).closest("tr").clone();
 			$(htmlContent).find("i.filter-contacts-multiple-remove").css("display", "inline-block");
-			$(this).prev("table").find("tbody").append(htmlContent);
+			$(that).prev("table").find("tbody").append(htmlContent);
 
 		}, null);
 		
@@ -117,7 +119,7 @@ $(function(){
 	$('body').on('click', '.filter-companies-multiple-add-or-rules', function(e)
 	{
 		e.preventDefault();
-
+		var that = this;
 		// To solve chaining issue when cloned
 		getTemplate("filter-contacts", {}, undefined, function(template_ui){
 			if(!template_ui)
@@ -134,7 +136,7 @@ $(function(){
 	//		$(this).hide();
 			// var htmlContent = $(this).closest("tr").clone();
 			$(htmlContent).find("i.filter-contacts-multiple-remove").css("display", "inline-block");
-			$(this).prev("table").find("tbody").append(htmlContent);
+			$(that).prev("table").find("tbody").append(htmlContent);
 
 		}, null);
 

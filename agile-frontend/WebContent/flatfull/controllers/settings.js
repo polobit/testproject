@@ -240,7 +240,7 @@ var SettingsRouter = Backbone.Router
 			 */
 			email : function()
 			{
-
+				var that = this;
 				getTemplate('settings', {}, undefined, function(template_ui){
 					if(!template_ui)
 						  return;
@@ -251,9 +251,9 @@ var SettingsRouter = Backbone.Router
 							if(!template_ui1)
 								  return;
 							$('#prefs-tabs-content').html($(template_ui1));	
-							this.imapListView = {};
-							this.officeListView = {};
-							this.gmailListView = {};
+							that.imapListView = {};
+							that.officeListView = {};
+							that.gmailListView = {};
 
 					}, "#prefs-tabs-content");
 

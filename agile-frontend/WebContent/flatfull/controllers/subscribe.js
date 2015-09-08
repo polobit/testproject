@@ -676,14 +676,23 @@ var SubscribeRouter = Backbone.Router.extend({
 				
 				$("#user-plan-details-popover", el).on('click', function(e){
 					  var ele = getTemplate("account-plan-details-popover", subscribe_account_plan.model.get("planLimits"));
-					  console.log(ele);
-				        $(this).attr({
-				        	"rel" : "popover",
-				        	"data-placement" : 'right',
-				        	"data-original-title" : "Plan Details",
-				        	"data-content" :  ele,
-				        });
-				        $(this).popover('show');
+					  var that = this;
+					  getTemplate('account-plan-details-popover', subscribe_account_plan.model.get("planLimits"), undefined, function(template_ui){
+				 		if(!template_ui)
+				    		return;
+				    	var ele = $(template_ui);
+				    	console.log(ele);
+					        $(that).attr({
+					        	"rel" : "popover",
+					        	"data-placement" : 'right',
+					        	"data-original-title" : "Plan Details",
+					        	"data-content" :  ele,
+					        });
+					        $(that).popover('show');
+						
+					}, null);
+
+						  
 				});
 				
 			}

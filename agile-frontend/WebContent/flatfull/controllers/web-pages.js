@@ -136,13 +136,13 @@ var WebpagesRouter = Backbone.Router
 					return;
 
 				this.webpage_json = this.webpage_model.get("rules");
-
+				var that = this;
 				getTemplate('webpage-add', {}, undefined, function(template_ui){
 					if(!template_ui)
 						  return;
 					var el = $('#content').html($(template_ui));	
 					// Set the name
-					$('#name').val(this.webpage_model.get("name"));
+					$('#name').val(that.webpage_model.get("name"));
 				}, "#content");
 			},
 

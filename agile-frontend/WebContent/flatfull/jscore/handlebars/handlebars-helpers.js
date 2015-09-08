@@ -3956,15 +3956,31 @@ $(function()
 		var template;
 		if (type == "contacts")
 		{
-			template = $(getTemplate('csv_upload_options', context));
+			getTemplate('csv_upload_options', context, undefined, function(template_ui){
+		 		if(!template_ui)
+		    		return;
+		    	template = $(template_ui);
+				
+			}, null);
+
 		}
 		else if (type == "company")
 		{
-			template = $(getTemplate('csv_companies_upload_options', context));
+			getTemplate('csv_companies_upload_options', context, undefined, function(template_ui){
+		 		if(!template_ui)
+		    		return;
+		    	template = $(template_ui);
+				
+			}, null);
 		}
 		else if (type == "deals")
 		{
-			template = $(getTemplate('csv_deals_options', context));
+			getTemplate('csv_deals_options', context, undefined, function(template_ui){
+		 		if(!template_ui)
+		    		return;
+		    	template = $(template_ui);
+				
+			}, null);
 		}
 
 		// Replaces _ with spaces
@@ -4965,6 +4981,14 @@ $(function()
 	Handlebars.registerHelper('get_avatars_template', function(options)
 	{
 		var template = getTemplate("choose-avatar-images-modal", {});
+
+		getTemplate('choose-avatar-images-modal', {}, undefined, function(template_ui){
+	 		if(!template_ui)
+	    		return;
+	    	var template = $(template_ui);
+			 
+		}, null);
+
 		return template;
 	});
 
