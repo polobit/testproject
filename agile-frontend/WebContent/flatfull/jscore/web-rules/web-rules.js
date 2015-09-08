@@ -88,6 +88,7 @@ $(function()
 			$('body').on('click', 'i.filter-contacts-web-rule-multiple-add', function(e)
 			{
 				// To solve chaining issue when cloned
+				var that = this;
 				getTemplate('webrules-add', {}, undefined, function(template_ui){
 					if(!template_ui)
 						  return;
@@ -99,7 +100,7 @@ $(function()
 
 					// var htmlContent = $(this).closest("tr").clone();
 					$(htmlContent).find("i.filter-contacts-multiple-remove").css("display", "inline-block");
-					$(this).parents("tbody").append(htmlContent);
+					$(that).parents("tbody").append(htmlContent);
 
 				}, null);
 				

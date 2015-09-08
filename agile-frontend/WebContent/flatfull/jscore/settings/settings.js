@@ -380,8 +380,15 @@ function initializeAdminSettingsListeners(){
 					ACCOUNT_DELETE_REASON_JSON["reason_info"] = $("#account_delete_reason").val();
 					$(".modal-body").html(getRandomLoadingImg());
 					var delete_step1_el = "";
-					if(ACCOUNT_STATS)
-						delete_step1_el = $(getTemplate('warning', ACCOUNT_STATS));
+					if(ACCOUNT_STATS){
+						getTemplate('warning', ACCOUNT_STATS, undefined, function(template_ui1){
+					 		if(!template_ui1)
+					    		return;
+					    	delete_step1_el = $(template_ui1);
+							
+						}, null);
+
+					}
 					else
 						{
 							set_up_account_stats(el, function(data){

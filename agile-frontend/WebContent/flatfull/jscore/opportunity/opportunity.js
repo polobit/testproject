@@ -14,6 +14,7 @@ $(function () {
         var data = $(this).find('.data').attr('data');
 
         var currentDeal = App_Deals.opportunityCollectionView.collection.get(data);
+        var that = this;
         
         getTemplate("opportunity-detail-popover", currentDeal.toJSON(), undefined, function(template_ui){
 			if(!template_ui)
@@ -21,8 +22,8 @@ $(function () {
 			
 			var ele = $(template_ui);
 	        console.log(ele);
-	        console.log(this);
-	        $(this).popover({
+	        console.log(that);
+	        $(that).popover({
 	        	"rel" : "popover",
 	        	"trigger" : "hover",
 	        	"placement" : 'right',
@@ -46,7 +47,7 @@ $(function () {
 	        	"container": 'body'
 	        });
 
-	        $(this).popover('show');
+	        $(that).popover('show');
 
 		}, null);
 

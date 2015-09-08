@@ -232,6 +232,7 @@ var TAG_MODEL_VIEW = Backbone.View
 				// Add model as data to it's corresponding row
 
 				return this;
+		
 			}
 		});
 

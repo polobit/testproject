@@ -11,6 +11,7 @@ $(function()
 		var formId = getTaskFormId(this);
 		
 		// Append note form
+		var that = this;
 		getTemplate('note-form', {}, undefined, function(template_ui){
 			if(!template_ui)
 				  return;
@@ -18,7 +19,7 @@ $(function()
 			$("#forNoteForm", "#" + formId).html($(template_ui));	
 			$(".deal-note-label").show();
 			// Hide + Add note link
-			$(this).hide();
+			$(that).hide();
 
 		}, $("#forNoteForm", "#" + formId));
 	});			

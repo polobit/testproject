@@ -812,6 +812,7 @@ var ContactsRouter = Backbone.Router.extend({
 
 
 		$("#content").html('<div id="send-email-listener-container"></div>');
+		var that = this;
 		getTemplate("send-email", model, undefined, function(template_ui){
 			if(!template_ui)
 				  return;
@@ -873,7 +874,7 @@ var ContactsRouter = Backbone.Router.extend({
 				$("#emailForm", el).find('input[name="to"]').val('');
 
 			// Checks Zoomifier tag for contact
-			if (checkTagAgile("Zoomifier") && this.contactDetailView)
+			if (checkTagAgile("Zoomifier") && that.contactDetailView)
 			{
 				// Appends zoomifier link to attach their documents.
 				head.js(LIB_PATH + 'lib/zoomifier.contentpicker.min.js', function()
