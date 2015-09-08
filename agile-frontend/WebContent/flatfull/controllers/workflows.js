@@ -473,7 +473,19 @@ var WorkflowsRouter = Backbone.Router
 					//	var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
 
 						// fill the selected campaign-id
+						head.js(LIB_PATH + 'jscore/triggers/flip.js', function()
+								{
+							$("#test").flip(
+									{
+										  trigger: 'click',
+										  axis: 'y'
+										});
+
+								});
 						
+						$("#test").on('flip:click',function(){
+							  $('#test').flip('toggle');
+							});
 						$('#campaign-id').val(campaign_id);
 						initializeTriggerEventListners(campaign_id);
 					}
