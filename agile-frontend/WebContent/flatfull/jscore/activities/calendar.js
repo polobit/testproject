@@ -721,7 +721,7 @@ function getCalendarUsersDetails(callback)
 		var json_users = [];
 		if (data)
 		{
-			$.each(JSON.parse(data), function(i, user)
+			$.each(data, function(i, user)
 			{
 
 				if (CURRENT_DOMAIN_USER.id == user.domain_user_id)
