@@ -603,7 +603,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			this.tagsview1 = new Base_Collection_View({ url : 'core/api/tags/stats1', templateKey : "tag-management", individual_tag_name : 'li',
 			sort_collection : true, sortKey : 'tag', postRenderCallback : function(el)
 			{
-
+				acl_util.initTagACL(el);
 				initializeTagManagementListeners();
 			} });
 			this.tagsview1.appendItem = append_tag_management;
