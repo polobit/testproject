@@ -61,10 +61,7 @@ color: #FA782D;"></b>
 				</fieldset>
 			</form>		
 	
-{{#check_plan "FREE"}}
-{{#getSubscriptionBasedOnPlan billingData plan}}
-{{else}}
-{{#getSubscriptionBasedOnPlan billingData emailPlan}}
+{{#if billingData}}
 {{else}}
 <div class="line line-dashed b-b line-lg"></div>
 <form id="CCform" class="form-horizontal card_details" name="card_details">
@@ -88,7 +85,7 @@ color: #FA782D;"></b>
 					<label class="control-label col-sm-4">CVC<span class="field_req">*</span></label>
 					<div class="controls col-sm-5">
 						<input type="text" name="cvc" class="input required  digits form-control"
-							placeholder="Card security code" />
+							placeholder="Card Security Code" />
 
 					</div>
  <img src="/flatfull/img/cvc.png" style="width: 60px;">
@@ -110,12 +107,8 @@ color: #FA782D;"></b>
 		<form id="gateway" class="form-horizontal hide">
 			<input type="text" name="gateway" class="hidden form-control" value="Stripe" />
 		</form>
-{{/getSubscriptionBasedOnPlan}}
-{{/getSubscriptionBasedOnPlan}}
-{{else}}
-<form>
-</form>
-{{/check_plan}}
+
+{{/if}}
 
 <hr>
 <div class="row">

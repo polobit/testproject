@@ -45,6 +45,9 @@ var SubscribeRouter = Backbone.Router.extend({
 			saveCallback : function()
 			{
 				showNotyPopUp("information", "Card has been updated successfully.", "top");
+			}, errorCallback : function(data)
+			{
+				showNotyPopUp("information", "There was an error while processing your payment. Please try again later.", "top");
 			},
 			postRenderCallback : function(el)
 			{
@@ -128,6 +131,7 @@ var SubscribeRouter = Backbone.Router.extend({
 
 	purchaseEmail : function()
 	{
+		
 		var plan = email_json;
 		console.log("purchase email");
 		console.log(plan);
@@ -146,11 +150,12 @@ var SubscribeRouter = Backbone.Router.extend({
 			});
 
 		},
-		prePersist : function(el)
+		/*prePersist : function(el)
 		{
 			console.log(el);
+//			el.set({ emailPlan : true }, { silent : true });
 			console.log(this);
-		}
+		}*/
 
 		});
 
@@ -186,24 +191,24 @@ var SubscribeRouter = Backbone.Router.extend({
 		showTransitionBar();
 		var planDetails;
 
-		var subscribe_plan = new Base_Model_View({ url : "core/api/subscription?reload=true", template : "subscribe-new", window : 'subscribe',
+		this.subscribe_plan = new Base_Model_View({ url : "core/api/subscription?reload=true", template : "subscribe-new", window : 'subscribe',
 
 		postRenderCallback : function(el)
 		{
-			var data = subscribe_plan.model.toJSON();
-			_data = subscribe_plan.model.toJSON();
+			var data = that.subscribe_plan.model.toJSON();
+			_data = that.subscribe_plan.model.toJSON();
 			console.log(_data);
 
 			initializeSubscriptionListeners()
 
 			var _window = window;
-			that.email_subscription(subscribe_plan);
+			that.email_subscription(that.subscribe_plan);
 			// Setup account statistics
 			set_up_account_stats(el);
 
 			USER_BILLING_PREFS = data;
 
-			USER_CREDIRCARD_DETAILS = subscribe_plan.model.toJSON().billingData;
+			USER_CREDIRCARD_DETAILS = that.subscribe_plan.model.toJSON().billingData;
 
 			/*
 			 * if(!USER_CREDIRCARD_DETAILS && !(IS_NEW_USER && _plan_on_signup)) {
@@ -307,7 +312,7 @@ var SubscribeRouter = Backbone.Router.extend({
 		} });
 
 		addStyleForAPlan(id, planDetails);
-		$('#subscribe_plan_change').html(subscribe_plan.render().el);
+		$('#subscribe_plan_change').html(that.subscribe_plan.render().el);
 		$(".active").removeClass("active");
 		$("#planView").addClass("active");
 

@@ -96,8 +96,13 @@ public class SubscriptionApi {
 			 * If plan variable in subscription is not null and card details are
 			 * null then updateCreditcard is called
 			 */
-			if (subscribe.plan == null && subscribe.card_details != null) {
-				subscribe = updateCreditcard(subscribe.card_details);
+
+			if (subscribe.card_details != null) {
+				if (subscribe.plan != null || subscribe.emailPlan != null)
+					subscribe.createNewCustomer();
+				else
+					subscribe = updateCreditcard(subscribe.card_details);
+
 				return subscribe;
 			}
 
@@ -105,23 +110,14 @@ public class SubscriptionApi {
 			 * If card_details are null and plan in not null then update plan
 			 * for current domain subscription object
 			 */
+			if (subscribe.plan != null)
+				subscribe = changePlan(subscribe.plan, request);
 
-			else if (subscribe.card_details == null) {
-				if (subscribe.plan != null)
-					subscribe = changePlan(subscribe.plan, request);
+			else if (subscribe.emailPlan != null) {
+				subscribe = addEmailPlan(subscribe.emailPlan);
+				return subscribe;
 
-				if (subscribe.emailPlan != null) {
-					subscribe = addEmailPlan(subscribe.emailPlan);
-					return subscribe;
-				}
 			}
-			/*
-			 * If credit_card details and plan details are not null then it is
-			 * new subscription
-			 */
-
-			else if (subscribe.card_details != null && subscribe.plan != null)
-				subscribe = subscribe.createNewSubscription();
 
 			// Initializes task to clear tags
 			AccountLimitsRemainderDeferredTask task = new AccountLimitsRemainderDeferredTask(

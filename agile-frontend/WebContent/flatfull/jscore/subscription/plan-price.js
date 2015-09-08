@@ -307,7 +307,7 @@ function initializeSubscriptionListeners(){
 			          var emailRate = $("#email_rate").text();
 			          var currentDate = new Date();
 //			          email_json.billingDate = currentDate.setDate(currentDate.getDate()+30) / 1000; 
-			        
+			        email_json.billingData = App_Subscription.subscribe_plan.model.toJSON()['billingData'];
 			          email_json.emailRate = emailRate;
 			        email_json.emailCost = emailCost;
 			        email_json.quantity = emailQuantity;
@@ -377,7 +377,7 @@ function initializeSubscriptionListeners(){
 	        plan_json.plan = plan;
 	        plan_json.plan_type = plan.toUpperCase()+"_"+ cycle.toUpperCase();
 	        plan_json.cycle = cycle;
-	        
+	        plan_json.billingData = App_Subscription.subscribe_plan.model.toJSON()['billingData'];	        
 	    	// Set coupon Only for Pro users
 			delete plan_json["coupon_code"];
 			var couponCode = $("#coupon_code").val();

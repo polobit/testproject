@@ -82,7 +82,7 @@
 							<div class="control-group form-group m-b-xs">
 								<label class="col-sm-3 control-label p-t-none">Billing
 									Cycle : </label>
-								<div class="controls col-sm-6">{{cycle}}</div>
+								<div class="controls col-sm-6 text-cap">{{cycle}}</div>
 							</div>
 							<div class="control-group form-group m-b-xs">
 								<label class="col-sm-3 control-label p-t-none">Next
@@ -136,13 +136,8 @@ Months
 			<form id="gateway" class="form-horizontal hide">
 				<input type="text" name="gateway" class="hidden form-control" value="Stripe" />
 			</form>			
-	
 
-
-{{#check_plan "FREE"}}
-{{#getSubscriptionBasedOnPlan billingData plan}}
-{{else}}
-{{#getSubscriptionBasedOnPlan billingData emailPlan}}
+{{#if billingData}}
 {{else}}
 <div class="line line-dashed b-b line-lg"></div>
 <form id="CCform" class="form-horizontal card_details"
@@ -170,7 +165,7 @@ Months
 					<label class="control-label col-sm-3">CVC<span class="field_req">*</span></label>
 					<div class="controls col-sm-5">
 						<input type="text" name="cvc" class="input required  digits form-control"
-							placeholder="Card security code" />
+							placeholder="Card Security Code" />
 
 					</div>
  <img src="/flatfull/img/cvc.png" style="width: 60px;">
@@ -191,12 +186,8 @@ Months
 		<form id="gateway" class="form-horizontal hide">
 			<input type="text" name="gateway" class="hidden form-control" value="Stripe" />
 		</form>
-{{/getSubscriptionBasedOnPlan}}
-{{/getSubscriptionBasedOnPlan}}
-{{else}}
-<form>
-</form>
-{{/check_plan}}
+{{/if}}
+
 <hr>
 <div class="row">
             <div class="col-sm-offset-3 col-sm-9">
