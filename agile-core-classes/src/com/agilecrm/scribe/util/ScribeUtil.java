@@ -306,7 +306,7 @@ public class ScribeUtil
 	    saveXeroPrefs(req,accessToken, isForAll);
 	}
 		//Setting isForAll as false.
-		req.getSession().setAttribute("isForAll", false);
+		//req.getSession().setAttribute("isForAll", false);
     }
 
     /**
@@ -409,6 +409,7 @@ public class ScribeUtil
 	properties.put("token", accessToken.getToken());
 	properties.put("secret", accessToken.getSecret());
 	properties.put("time", String.valueOf(System.currentTimeMillis()));
+	properties.put("isForAll", isForAll);
 
 	// Gets widget name from the session
 	String serviceType = (String) req.getSession().getAttribute("service_type");
@@ -498,7 +499,8 @@ public class ScribeUtil
 	String serviceType = (String) req.getSession().getAttribute("service_type");
 
 	System.out.println("serviceName " + serviceType);
-
+	
+	properties.put("isForAll", isForAll);
 	// update widget with tokens
 	saveWidgetPrefsByName(serviceType, properties);
 

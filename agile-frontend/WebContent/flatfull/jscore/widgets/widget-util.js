@@ -554,6 +554,7 @@ function save_widget_prefs(pluginName, prefs, callback)
 	// URL to connect with widgets
 	widgetModel.url = '/core/api/widgets';
 	models[0].set('prefs', prefs);
+	models[0].set('isForAll', isForAll);
 
 	widgetModel.save(models[0].toJSON(), { success : function(data)
 	{
