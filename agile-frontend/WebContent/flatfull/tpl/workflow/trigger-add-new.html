@@ -314,65 +314,9 @@
                         </form>
                     </div>
                 </div>
+            	</div>
             </div>
-            </div>
-            <div class="col-md-3 col-sm-6 col-xs-12" style="height:240px">
-				
-				<div class ="flip-panel"  >
-                <div class="front">
-                    <div class="panel wrapper text-center">
-                        <!-- Icon and Title -->
-                        <div>
-                            <div>
-                                <i class="icon-user icon-3x"></i>
-                            </div>
-                            <b>Deal is added</b> 
-                        </div>
-                        <br>
-                        <div class="ellipsis-multiline m-b-md" rel="tooltip">
-                            Contact is added Contact is added Contact is added Contact is added Contact is added Contact is added Contact is added Contact is added Contact is added Contact is added Contact is added 
-                        </div>
-                        <!-- Add button -->
-                        <div>
-                            <a class="btn btn-sm btn-default add-trigger" data = "CONTACT_IS_ADDED"  >Go</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="back">
-                    <div class="panel wrapper text-center">
-                        <b>Contact is added<br></b><br>
-                        <form id="addTriggerForm" name="addTriggerForm" class="form-horizontal">
-                            <fieldset>
-                                <div class="control-group form-group">
-                                    <label class="control-label col-sm-4">Name
-                                    <span class="field_req">*</span>
-                                    </label>
-                                    <div class="controls col-sm-8">
-                                        <input type="text" id="name" class="required form-control flip-panel-off" name="name"  >
-                                    </div>
-                                </div>
-                                <div class="control-group form-group"  >
-                                    <label class="control-label col-sm-4" >Campaign <span class="field_req" >*</span></label>
-                                    <div class="controls col-sm-8" >
-                                        <select id="campaign-select" name="campaign_id" class="required form-control flip-panel-off inline-block" >
-                                            <option class="default-select" value=""  >Select...</option>
-                                            <option value="5915372557434880" >sadasd</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="line line-bg b-b"></div>
-                                <div class="form-actions col-sm-offset-2 col-sm-8">          							
-                                    <a href="#triggers" id="trigger-save" class="save btn btn-sm btn-primary">Save</a>
-                                    <a href="#" id="trigger-cancel" class="btn btn-default btn-sm">Cancel</a>
-                                </div>
-                            </fieldset>
-                        </form>
-                    </div>
-                </div>
-            </div>
-
-
-            <div class="col-md-3 col-sm-6 col-xs-12" style="height:240px">
+			<div class="col-md-3 col-sm-6 col-xs-12" style="height:240px">
                 <div class ="flip-panel"  >
                 <div class="front">
                     <div class="panel wrapper text-center">
@@ -381,7 +325,7 @@
                             <div>
                                 <i class="icon-user icon-3x"></i>
                             </div>
-                            <b>Deal is added</b> 
+                            <b>Deal is deleted</b> 
                         </div>
                         <br>
                         <div class="ellipsis-multiline m-b-md" rel="tooltip">
@@ -395,7 +339,7 @@
                 </div>
                 <div class="back">
                     <div class="panel wrapper text-center">
-                        <b>Contact is added<br></b><br>
+                        <b>Deal is deleted<br></b><br>
                         <form id="addTriggerForm" name="addTriggerForm" class="form-horizontal">
                             <fieldset>
                                 <div class="control-group form-group">
@@ -424,7 +368,73 @@
                         </form>
                     </div>
                 </div>
+				</div>
             </div>
+
+
+            <div class="col-md-3 col-sm-6 col-xs-12" style="height:240px">
+				
+				<div class ="flip-panel"  >
+                <div class="front">
+                    <div class="panel wrapper text-center" style="height: 258px;">
+                        <!-- Icon and Title -->
+                        <div>
+                            <div>
+                                <i class="icon-user icon-3x"></i>
+                            </div>
+                            <b>Deal milestone is changed</b> 
+                        </div>
+                        <br>
+                        <div class="ellipsis-multiline m-b-md" rel="tooltip">
+                            Contact is added Contact is added Contact is added Contact is added Contact is added Contact is added Contact is added Contact is added Contact is added Contact is added Contact is added 
+                        </div>
+                        <!-- Add button -->
+                        <div>
+                            <a class="btn btn-sm btn-default add-trigger" data = "CONTACT_IS_ADDED"  >Go</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="back">
+                    <div class="panel wrapper text-center">
+                        <b>Deal is added<br></b><br>
+                        <form id="addTriggerForm" name="addTriggerForm" class="form-horizontal">
+                            <fieldset>
+                                <div class="control-group form-group">
+                                    <label class="control-label col-sm-4">Name
+                                    <span class="field_req">*</span>
+                                    </label>
+                                    <div class="controls col-sm-8">
+                                        <input type="text" id="name" class="required form-control flip-panel-off" name="name"  >
+                                    </div>
+                                </div>
+								<div class="control-group form-group">
+									<div class="controls col-sm-offset-4 col-sm-8">
+                            			<select id="trigger-deal-milestone" name="trigger_deal_milestone" class="required form-control flip-panel-off"></select>
+									</div>
+                        		</div>
+                                <div class="control-group form-group"  >
+                                    <label class="control-label col-sm-4" >Campaign <span class="field_req" >*</span></label>
+                                    <div class="controls col-sm-8" >
+                                        <select id="campaign-select" name="campaign_id" class="required form-control flip-panel-off inline-block" >
+                                            <option class="default-select" value=""  >Select...</option>
+                                            <option value="5915372557434880" >sadasd</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="line line-bg b-b"></div>
+                                <div class="form-actions col-sm-offset-2 col-sm-8">          							
+                                    <a href="#triggers" id="trigger-save" class="save btn btn-sm btn-primary">Save</a>
+                                    <a href="#" id="trigger-cancel" class="btn btn-default btn-sm">Cancel</a>
+                                </div>
+                            </fieldset>
+                        </form>
+                    </div>
+                </div>
+				</div>
+            </div>
+
+
+            
         </div>
         <!-- Add tags end -->
         <div class="row">
