@@ -87,11 +87,11 @@ content="<%=domainUser.getInfo(DomainUser.LAST_LOGGED_IN_TIME)%>" />
 
   String CLOUDFRONT_TEMPLATE_LIB_PATH = "";
     if(!request.getServerName().contains("localhost")){
-    // CLOUDFRONT_TEMPLATE_LIB_PATH = "//d1yumg3ugtcyzq.cloudfront.net/";
+      CLOUDFRONT_TEMPLATE_LIB_PATH = "//doxhze3l6s7v9.cloudfront.net/beta/";
     // "//d2zl2ik92yaru4.cloudfront.net/"
   }
 
-  CSS_PATH = FLAT_FULL_PATH;
+  CSS_PATH = CLOUDFRONT_TEMPLATE_LIB_PATH + FLAT_FULL_PATH;
 
 %>
 
