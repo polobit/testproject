@@ -157,15 +157,11 @@ var SubscribeRouter = Backbone.Router.extend({
 					obj = {"invoice" : invoicedata,	"company" : companydata}
 					console.log("xxxxxxxxxxxxxxx");
 					console.log(obj);
-					head.js(LIB_PATH + 'jscore/handlebars/handlebars-helpers.js', function()
-					{
-						getTemplate('invoice-detail', obj, undefined, function(template_ui){
+					getTemplate('invoice-detail', obj, undefined, function(template_ui){
 							if(!template_ui)
 								  return;
 							$('#content').html($(template_ui));	
 						}, "#content");
-					});
-
 				}, 
 				function(response){
 					showNotyPopUp("information", "error occured please try again", "top");
