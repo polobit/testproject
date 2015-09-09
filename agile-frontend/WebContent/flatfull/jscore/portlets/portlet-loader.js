@@ -3,16 +3,16 @@ var portlet_template_loaded_map = {};
 
 $(function()
 {
-				$.getJSON('/core/api/users/agileusers', function(users)
+	$.getJSON('/core/api/users/agileusers', function(users)
+	{
+		$.each(users, function(i, user)
+		{
+			if (CURRENT_DOMAIN_USER.id == user.domain_user_id)
 			{
-				$.each(users, function(i, user)
-				{
-					if (CURRENT_DOMAIN_USER.id == user.domain_user_id)
-					{
-					CURRENT_AGILE_USER = user;
-					}
-				});
-			});
+				CURRENT_AGILE_USER = user;
+			}
+		});
+	});
 });
 /**
  * Loads all the portlets for the current agile user

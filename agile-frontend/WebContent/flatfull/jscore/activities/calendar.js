@@ -718,33 +718,28 @@ function getCalendarUsersDetails(callback)
 
 	accessUrlUsingAjax('/core/api/users/agileusers', function(data){
 
+		if(!data)
+			 return callback(data);
+
 		var json_users = [];
-		if (data)
+		$.each(data, function(i, user)
 		{
-			$.each(data, function(i, user)
+
+			if (CURRENT_DOMAIN_USER.id == user.domain_user_id)
 			{
-
-				if (CURRENT_DOMAIN_USER.id == user.domain_user_id)
-				{
-					CURRENT_AGILE_USER = user;
-
-				}
-				else
-				{
-					if (user.domainUser)
-					{
-						var json_user = {};
-						json_user.id = user.id;
-						json_user.name = user.domainUser.name;
-						json_user.domain_user_id = user.domainUser.id;
-						json_users.push(json_user);
-					}
-
-				}
-
-			});
-		}
-
+				CURRENT_AGILE_USER = user;
+				return false;
+			}
+			
+			if (user.domainUser)
+			{
+				var json_user = {};
+				json_user.id = user.id;
+				json_user.name = user.domainUser.name;
+				json_user.domain_user_id = user.domainUser.id;
+				json_users.push(json_user);
+			}
+		});
 		return callback(json_users);
 
 	});
