@@ -14,7 +14,7 @@ var ReportsRouter = Backbone.Router
 				"contact-reports" : "emailReports", "report-add" : "reportAdd", "report-edit/:id" : "reportEdit",
 				"report-results/:id" : "reportInstantResults", "report-charts/:type" : "reportCharts", "report-funnel/:tags" : "showFunnelReport",
 				"report-growth/:tags" : "showGrowthReport", "report-cohorts/:tag1/:tag2" : "showCohortsReport", "report-ratio/:tag1/:tag2" : "showRatioReport",
-				"report-lossReason":"showDealsLossReason"},
+				"report-lossReason":"showDealsLossReason","reports-wonDeals":"showDealsWonChart"},
 
 			/**
 			 * Shows reports categories
@@ -568,21 +568,41 @@ var ReportsRouter = Backbone.Router
 					addTagsDefaultTypeahead(element);
 				});
 			},
-			showDealsLossReason : function(tag1, tag2)
+			showDealsLossReason : function()
 			{
-
+				hideTransitionBar();
 				head.js(LIB_PATH + 'lib/date-charts.js', LIB_PATH + 'lib/date-range-picker.js', CSS_PATH + "css/misc/date-picker.css", function()
-				{
+						{
 
 					// Load Reports Template
 					$("#content").html(getTemplate("report-DealsLoss", {}));
 
 
 					initSalesCharts(function()
-					{
-						//showRatioGraphs(tag1, tag2);
-					});
-				});
+							{
+						showLossReasonGraphs();
+							});
+						});
+
+				$(".active").removeClass("active");
+				$("#reportsmenu").addClass("active");
+			},
+
+			showDealsWonChart : function()
+			{
+				hideTransitionBar();
+				head.js(LIB_PATH + 'lib/date-charts.js', LIB_PATH + 'lib/date-range-picker.js', CSS_PATH + "css/misc/date-picker.css", function()
+						{
+
+					// Load Reports Template
+					$("#content").html(getTemplate("report-DealsWon", {}));
+
+
+					initSalesCharts(function()
+							{
+						showWonPieChart();
+							});
+						});
 
 				$(".active").removeClass("active");
 				$("#reportsmenu").addClass("active");
