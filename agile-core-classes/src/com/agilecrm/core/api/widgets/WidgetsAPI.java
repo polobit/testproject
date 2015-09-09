@@ -186,7 +186,7 @@ public class WidgetsAPI {
 		// check if widget is custom widget and delete it.
 		if (WidgetType.CUSTOM == customWidget.widget_type) {
 			// removes the widget for all agile users
-			WidgetUtil.removeWidgetForAllUsers(widget_name);
+			WidgetUtil.removeCurrentUserCustomWidget(widget_name);
 
 			// Deleting the custom widget from the database.
 			customWidget.delete();

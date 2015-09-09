@@ -141,7 +141,7 @@ function saveClickDeskWidgetPrefs()
 
 function helpscout_save_widget_prefs()
 {
-	$('#save_api_key').unbind("click");
+	$('#save_api_key').off("click");
 
 	// Saves the API key
 	$('body').on('click', '#save_api_key', function(e)
@@ -222,7 +222,7 @@ function savefreshBooksWidgetPrefs()
 function rapleaf_save_widget_prefs()
 {
 
-	$('#save_api_key').unbind("click");
+	$('#save_api_key').off("click");
 
 	// Saves the API key
 	$('body').on('click', '#save_api_key', function(e)
@@ -929,7 +929,7 @@ function quickBooks_save_widget_prefs(template_id, url)
 }
 function chargify_save_widget_prefs()
 {
-	$('#chargify_save_api_key').unbind("click");
+	$('#chargify_save_api_key').off("click");
 
 	// Saves the API key
 	$('body').on('click', '#chargify_save_api_key', function(e)

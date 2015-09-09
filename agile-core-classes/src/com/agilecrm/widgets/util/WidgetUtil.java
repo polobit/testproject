@@ -7,6 +7,7 @@ import java.util.Map;
 
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.user.AgileUser;
+import com.agilecrm.widgets.CustomWidget;
 import com.agilecrm.widgets.Widget;
 import com.agilecrm.widgets.Widget.IntegrationType;
 import com.agilecrm.widgets.Widget.WidgetType;
@@ -205,6 +206,29 @@ public class WidgetUtil {
 	 */
 	public static void removeWidgetForAllUsers(String name) {
 		dao.deleteKeys(dao.listKeysByProperty("name", name));
+	}
+	
+	/**
+	 * 
+	 * 
+	 * @param name
+	 */
+	public static void removeCurrentUserCustomWidget(String name) {
+		Objectify ofy = ObjectifyService.begin();
+		
+		// Creates Current AgileUser key
+		Key<AgileUser> userKey = new Key<AgileUser>(AgileUser.class,
+					AgileUser.getCurrentAgileUser().id);
+
+		/*
+		 * Fetches list of widgets related to AgileUser key and adds is_added
+		 * field as true to default widgets if not present
+		 */
+		List<CustomWidget> widgets = ofy.query(CustomWidget.class).ancestor(userKey).filter("name", name).list();
+		
+		for (CustomWidget customWidget : widgets) {
+			customWidget.delete();
+		}
 	}
 
 	/**
