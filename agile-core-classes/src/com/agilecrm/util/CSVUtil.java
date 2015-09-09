@@ -1353,6 +1353,12 @@ public class CSVUtil
 	String path = null;
 	try
 	{
+	    if (failedContacts == null || failedContacts.size() == 0)
+	    {
+		// Send every partition as separate email
+		sendFailedContactImportFile(domainUser, null, 0, status);
+		return;
+	    }
 	    // Builds Contact CSV
 	    writeFailedContactsInCSV(getCSVWriterForFailedContacts(), failedContacts, headings);
 
