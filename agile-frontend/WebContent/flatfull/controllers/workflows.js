@@ -480,6 +480,10 @@ var WorkflowsRouter = Backbone.Router
 										  trigger: 'click',
 										  axis: 'y'
 										});
+							
+							$(".flip-panel-off").on('click',function(e){
+								e.stopPropagation();
+						      });
 
 								});
 						
