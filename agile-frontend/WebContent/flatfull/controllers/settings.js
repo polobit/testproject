@@ -641,8 +641,7 @@ var SettingsRouter = Backbone.Router
 						console.log("updated notification prefs are...");
 						console.log(notification_prefs);
 
-						head.load(CSS_PATH + 'css/bootstrap_switch.css', LIB_PATH + 'lib/bootstrapSwitch.js', LIB_PATH + 'lib/desktop-notify-min.js',
-								function()
+						head.load(CSS_PATH + 'css/bootstrap_switch.css', LIB_PATH + 'lib/bootstrapSwitch.js', function()
 								{
 									showSwitchChanges(el);
 									check_browser_notification_settings(el);
