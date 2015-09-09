@@ -764,6 +764,21 @@ public class OpportunityUtil
 		String last="";
 	    try
 	    {
+	    	String wonMilestone = "Won";
+	    	String lostMilestone = "Lost";
+	    	    Milestone mile = MilestoneUtil.getMilestone(opportunity.pipeline_id);
+	    	    if (mile.won_milestone != null)
+	    		wonMilestone = mile.won_milestone;
+	    	    if (mile.lost_milestone != null)
+	    		lostMilestone = mile.lost_milestone;
+
+	    	    // If the deal is won, change the probability to 100.
+	    	    if (opportunity.milestone.equalsIgnoreCase(wonMilestone))
+	    	    	opportunity.probability = 100;
+
+	    	    // If the deal is lost, change the probability to 0.
+	    	    if (opportunity.milestone.equalsIgnoreCase(lostMilestone))
+	    	    	opportunity.probability = 0;
 		// Total and Pipeline (total * probability)
 		double total = opportunity.expected_value;
 		double pipeline = opportunity.expected_value * opportunity.probability / 100;
