@@ -15,4 +15,4 @@ rm WebContent/jscore/min/flatfull/js-all-min.js
 
 git stash
 
-git checkout development_flatfull_modules
+git checkout agile-beta-development
