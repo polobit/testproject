@@ -11,10 +11,6 @@ import com.google.appengine.api.blobstore.BlobInfoFactory;
 import com.google.appengine.api.blobstore.BlobKey;
 import com.google.appengine.api.blobstore.BlobstoreService;
 import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
-import com.google.appengine.api.files.AppEngineFile;
-import com.google.appengine.api.files.FileService;
-import com.google.appengine.api.files.FileServiceFactory;
-import com.google.appengine.api.files.FileWriteChannel;
 
 public class ContactExportBlobUtil
 {
@@ -39,48 +35,42 @@ public class ContactExportBlobUtil
      *            - Flag to identify whether filter is given or not.
      * @return String
      */
-    public static String writeContactCSVToBlobstore(List<Contact> contacts, String[] header, Boolean isNoFilter, String fileName)
+    public static String writeContactCSVToBlobstore(List<Contact> contacts, String[] header, Boolean isNoFilter,
+	    String fileName)
     {
 	String path = null;
-	try
-	{
-	    // Get a file service
-	    FileService fileService = FileServiceFactory.getFileService();
-
-	    // Create a new Blob file with mime-type "text/csv"
-	    AppEngineFile file = fileService.createNewBlobFile("text/csv", fileName);
-
-	    // Open a channel to write to it
-	    boolean lock = false;
-	    FileWriteChannel writeChannel = fileService.openWriteChannel(file, lock);
-
-	    // Builds Contact CSV
-	    ContactExportCSVUtil.writeContactCSV(writeChannel, contacts, header, true);
-
-	    // Blob file Path
-	    path = file.getFullPath();
-	    
-	    System.out.println("Path of blob file in writeContactCSVToBlobstore " + path);
-
-	    // All contacts are obtained at a time.
-	    if (isNoFilter == true)
-	    {
-		System.out.println("No filter is given, so closing channel immediately.");
-
-		lock = true;
-		writeChannel = fileService.openWriteChannel(file, lock);
-
-		// Now finalize
-		writeChannel.closeFinally();
-	    }
-
-	}
-	catch (Exception e)
-	{
-	    e.printStackTrace();
-	    System.err.println("Exception occured in writeContactCSVToBlobstore " + e.getMessage());
-	}
-
+	/*
+	 * try { // Get a file service FileService fileService =
+	 * FileServiceFactory.getFileService();
+	 * 
+	 * // Create a new Blob file with mime-type "text/csv" AppEngineFile
+	 * file = fileService.createNewBlobFile("text/csv", fileName);
+	 * 
+	 * // Open a channel to write to it boolean lock = false;
+	 * FileWriteChannel writeChannel = fileService.openWriteChannel(file,
+	 * lock);
+	 * 
+	 * // Builds Contact CSV
+	 * ContactExportCSVUtil.writeContactCSV(writeChannel, contacts, header,
+	 * true);
+	 * 
+	 * // Blob file Path path = file.getFullPath();
+	 * 
+	 * System.out.println("Path of blob file in writeContactCSVToBlobstore "
+	 * + path);
+	 * 
+	 * // All contacts are obtained at a time. if (isNoFilter == true) {
+	 * System
+	 * .out.println("No filter is given, so closing channel immediately.");
+	 * 
+	 * lock = true; writeChannel = fileService.openWriteChannel(file, lock);
+	 * 
+	 * // Now finalize writeChannel.closeFinally(); }
+	 * 
+	 * } catch (Exception e) { e.printStackTrace();
+	 * System.err.println("Exception occured in writeContactCSVToBlobstore "
+	 * + e.getMessage()); }
+	 */
 	return path;
     }
 
@@ -96,50 +86,43 @@ public class ContactExportBlobUtil
      */
     public static void editExistingBlobFile(String path, List<Contact> contacts, String[] header, Boolean isCompleted)
     {
-	try
-	{
+	/*
+	 * try {
+	 * 
+	 * System.out.println("Editing existing blob file...");
+	 * 
+	 * // If path is null return; if (path == null) {
+	 * System.out.println("Given blob file path is null in editExistingBlobFile"
+	 * ); return; }
+	 * 
+	 * // Get a file service FileService fileService =
+	 * FileServiceFactory.getFileService(); AppEngineFile file = new
+	 * AppEngineFile(path);
+	 * 
+	 * FileWriteChannel writeChannel = null; boolean lock = false;
+	 * 
+	 * // if contacts list not completed, write to channel without closing
+	 * if (!isCompleted) { // Open a channel to write to it writeChannel =
+	 * fileService.openWriteChannel(file, lock);
+	 * 
+	 * ContactExportCSVUtil.writeContactCSV(writeChannel, contacts, header,
+	 * false); return;
+	 * 
+	 * }
+	 * 
+	 * System.out.println("Closing blob file finally...");
+	 * 
+	 * // Close channel completely when contacts list completed lock = true;
+	 * writeChannel = fileService.openWriteChannel(file, lock);
+	 * 
+	 * writeChannel.closeFinally();
+	 * 
+	 * } catch (Exception e) { e.printStackTrace();
+	 * System.err.println("Exception occured in editExistingBlobFile " +
+	 * e.getMessage()); }
+	 */
 
-	    System.out.println("Editing existing blob file...");
-
-	    // If path is null return;
-	    if (path == null)
-	    {
-		System.out.println("Given blob file path is null in editExistingBlobFile");
-		return;
-	    }
-
-	    // Get a file service
-	    FileService fileService = FileServiceFactory.getFileService();
-	    AppEngineFile file = new AppEngineFile(path);
-
-	    FileWriteChannel writeChannel = null;
-	    boolean lock = false;
-
-	    // if contacts list not completed, write to channel without closing
-	    if (!isCompleted)
-	    {
-		// Open a channel to write to it
-		writeChannel = fileService.openWriteChannel(file, lock);
-
-		ContactExportCSVUtil.writeContactCSV(writeChannel, contacts, header, false);
-		return;
-
-	    }
-
-	    System.out.println("Closing blob file finally...");
-
-	    // Close channel completely when contacts list completed
-	    lock = true;
-	    writeChannel = fileService.openWriteChannel(file, lock);
-
-	    writeChannel.closeFinally();
-
-	}
-	catch (Exception e)
-	{
-	    e.printStackTrace();
-	    System.err.println("Exception occured in editExistingBlobFile " + e.getMessage());
-	}
+	return;
     }
 
     /**
@@ -151,39 +134,36 @@ public class ContactExportBlobUtil
      */
     public static List<String> retrieveBlobFileData(String path)
     {
-	// if null return
-	if (path == null)
-	{
-	    System.out.println("Obtained file path is null in retrieveBlobFileData");
-	    return null;
-	}
+	/*
+	 * // if null return if (path == null) {
+	 * System.out.println("Obtained file path is null in retrieveBlobFileData"
+	 * ); return null; }
+	 * 
+	 * // Get a file service FileService fileService =
+	 * FileServiceFactory.getFileService(); AppEngineFile file = new
+	 * AppEngineFile(path);
+	 * 
+	 * // Now read from the file using the Blobstore API BlobKey blobKey =
+	 * fileService.getBlobKey(file);
+	 * 
+	 * // if blobKey null return if (blobKey == null) {
+	 * System.out.println("BlobKey of file having path " + path +
+	 * " is null"); return null; }
+	 * 
+	 * // Get blob info BlobInfo blobInfo = new
+	 * BlobInfoFactory().loadBlobInfo(blobKey);
+	 * 
+	 * // BlobstoreService blobStoreService = //
+	 * BlobstoreServiceFactory.getBlobstoreService();
+	 * 
+	 * // Get size Long blobSize = blobInfo.getSize();
+	 * System.out.println("blobSize = " + blobSize);
+	 * 
+	 * // Returns partitions of data in list return
+	 * ContactExportBlobUtil.readBlobFilePartionsInList(blobKey);
+	 */
 
-	// Get a file service
-	FileService fileService = FileServiceFactory.getFileService();
-	AppEngineFile file = new AppEngineFile(path);
-
-	// Now read from the file using the Blobstore API
-	BlobKey blobKey = fileService.getBlobKey(file);
-
-	// if blobKey null return
-	if (blobKey == null)
-	{
-	    System.out.println("BlobKey of file having path " + path + " is null");
-	    return null;
-	}
-
-	// Get blob info
-	BlobInfo blobInfo = new BlobInfoFactory().loadBlobInfo(blobKey);
-
-	// BlobstoreService blobStoreService =
-	// BlobstoreServiceFactory.getBlobstoreService();
-
-	// Get size
-	Long blobSize = blobInfo.getSize();
-	System.out.println("blobSize = " + blobSize);
-
-	// Returns partitions of data in list
-	return ContactExportBlobUtil.readBlobFilePartionsInList(blobKey);
+	return null;
     }
 
     /**
@@ -196,24 +176,21 @@ public class ContactExportBlobUtil
     {
 	System.out.println("Deleting Blob File under ContactCSVExport...");
 
-	try
-	{
-	    // Get a file service
-	    FileService fileService = FileServiceFactory.getFileService();
-	    AppEngineFile file = new AppEngineFile(path);
-
-	    // Now read from the file using the Blobstore API
-	    BlobKey blobKey = fileService.getBlobKey(file);
-
-	    // Delete blob from store before sending validation exception to
-	    // client
-	    BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
-	    blobstoreService.delete(blobKey);
-	}
-	catch (Exception e)
-	{
-	    System.err.println("Got Exception in deleteBlobFile " + e.getMessage());
-	}
+	/*
+	 * try { // Get a file service FileService fileService =
+	 * FileServiceFactory.getFileService(); AppEngineFile file = new
+	 * AppEngineFile(path);
+	 * 
+	 * // Now read from the file using the Blobstore API BlobKey blobKey =
+	 * fileService.getBlobKey(file);
+	 * 
+	 * // Delete blob from store before sending validation exception to //
+	 * client BlobstoreService blobstoreService =
+	 * BlobstoreServiceFactory.getBlobstoreService();
+	 * blobstoreService.delete(blobKey); } catch (Exception e) {
+	 * System.err.println("Got Exception in deleteBlobFile " +
+	 * e.getMessage()); }
+	 */
     }
 
     /**
@@ -345,7 +322,7 @@ public class ContactExportBlobUtil
 	return blobPartitionList;
 
     }
-    
+
     /**
      * Returns data stored in the blobfile with respect to given path.
      * 
@@ -355,26 +332,23 @@ public class ContactExportBlobUtil
      */
     public static String getBlobKeyFromPath(String path)
     {
-	// if null return
-	if (path == null)
-	{
-	    System.out.println("Obtained file path is null in retrieveBlobFileData");
-	    return null;
-	}
-
-	// Get a file service
-	FileService fileService = FileServiceFactory.getFileService();
-	AppEngineFile file = new AppEngineFile(path);
-
-	// Now read from the file using the Blobstore API
-	BlobKey blobKey = fileService.getBlobKey(file);
-	if (blobKey == null)
-	{
-	    System.out.println("BlobKey of file having path " + path + " is null");
-	    return null;
-	}
-
-	return blobKey.getKeyString();
-	}
+	/*
+	 * // if null return if (path == null) {
+	 * System.out.println("Obtained file path is null in retrieveBlobFileData"
+	 * ); return null; }
+	 * 
+	 * // Get a file service FileService fileService =
+	 * FileServiceFactory.getFileService(); AppEngineFile file = new
+	 * AppEngineFile(path);
+	 * 
+	 * // Now read from the file using the Blobstore API BlobKey blobKey =
+	 * fileService.getBlobKey(file); if (blobKey == null) {
+	 * System.out.println("BlobKey of file having path " + path +
+	 * " is null"); return null; }
+	 * 
+	 * return blobKey.getKeyString();
+	 */
+	return null;
+    }
 
 }

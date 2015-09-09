@@ -107,7 +107,7 @@ public class CSVUtil
 		.acl("public-read").addUserMetadata("domain", NamespaceManager.get()).build();
 
 	service = new GCSServiceAgile(
-		NamespaceManager.get() + "_failed_contacts_" + GoogleSQL.getFutureDate() + ".csv", "agile-exports",
+		NamespaceManager.get() + "_failed_contacts_" + GoogleSQL.getFutureDate() + ".csv", "agile-export",
 		options);
 
 	this.accessControl = accessControl;
