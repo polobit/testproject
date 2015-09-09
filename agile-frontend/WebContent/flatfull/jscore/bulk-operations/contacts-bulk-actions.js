@@ -1204,7 +1204,7 @@ function getDynamicFilters()
 	}
 	else
 	{
-		if(!App_Contacts.contactsListView && !App_Contacts.contactsListView.post_data)
+		if(!App_Contacts.contactsListView || !App_Contacts.contactsListView.post_data)
 		{
 			return null;
 		}
