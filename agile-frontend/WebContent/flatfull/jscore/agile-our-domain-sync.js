@@ -424,17 +424,22 @@ function add_tag_our_domain(tag, callback) {
  * @param tag
  */
 function addTagAgile(tag) {
-	// Checks if tag is already available.
-	if (checkTagAgile(tag))
-		return;
 
-	// Adds tag
-	_agile.add_tag(tag, function(data) {
-		Agile_Contact = data;
-		if (!checkTagAgile(tag))
-			Agile_Contact.tags.push(tag)
-			// set_profile_noty();
-	});
+	try{
+		// Checks if tag is already available.
+		if (checkTagAgile(tag))
+			return;
+
+		// Adds tag
+		_agile.add_tag(tag, function(data) {
+			Agile_Contact = data;
+			if (!checkTagAgile(tag))
+				Agile_Contact.tags.push(tag)
+				// set_profile_noty();
+		});
+		
+	}catch(err){}
+	
 }
 
 function add_property(name, value, type, callback) {
