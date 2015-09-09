@@ -230,6 +230,36 @@ public class SendEmail extends TaskletAdapter
 	    throws Exception
     {
 
+    	// Get From, Message
+    	String fromEmail = getStringValue(nodeJSON, subscriberJSON, data, FROM_EMAIL);
+    	String to = getStringValue(nodeJSON, subscriberJSON, data, TO);
+    	
+    	// If From email empty
+    	if(StringUtils.isBlank(fromEmail))
+    	{
+    		LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON),
+    			    "Email failed since \'From\' address is invalid.",
+    			    LogType.EMAIL_SENDING_FAILED.toString());
+
+    		// Execute Next One in Loop
+    		TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, null);
+
+    		return;
+    	}
+    	
+    	// If To email empty
+    	if(StringUtils.isBlank(to))
+    	{
+    		LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON),
+    			    "Email failed since \'To\' address is invalid.",
+    			    LogType.EMAIL_SENDING_FAILED.toString());
+
+    		// Execute Next One in Loop
+    		TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, null);
+
+    		return;
+    	}
+    	
 	// Verify Unsubscribed status
 	if (subscriberJSON.has("isUnsubscribedAll"))
 	{
@@ -469,32 +499,6 @@ public class SendEmail extends TaskletAdapter
 	String cc = getStringValue(nodeJSON, subscriberJSON, data, CC);
 	String bcc = getStringValue(nodeJSON, subscriberJSON, data, BCC);
 	
-	// If From email empty
-	if(StringUtils.isBlank(fromEmail))
-	{
-		LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON),
-			    "Email failed since \'From\' address is invalid.",
-			    LogType.EMAIL_SENDING_FAILED.toString());
-
-		// Execute Next One in Loop
-		TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, null);
-
-		return;
-	}
-	
-	// If To email empty
-	if(StringUtils.isBlank(to))
-	{
-		LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON),
-			    "Email failed since \'To\' address is invalid.",
-			    LogType.EMAIL_SENDING_FAILED.toString());
-
-		// Execute Next One in Loop
-		TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, null);
-
-		return;
-	}
-
 	String subject = getStringValue(nodeJSON, subscriberJSON, data, SUBJECT);
 
 	String onlineLinkForEmail = getOnlineLinkForEmail(campaignJSON, subscriberJSON, nodeJSON);
