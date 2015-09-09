@@ -507,7 +507,7 @@ function populateLostReasons(el, value){
 				console.log(track, '-----------', milestone);
 				var lost_milestone_flag = false;
 				$('#pipeline_milestone',el).find('option').each(function(){
-					if($(this).css("display") == "none" && $('#pipeline_milestone',el).val() == temp){
+					if($(this).css("display") == "none" && $(this).val() == temp){
 						lost_milestone_flag = true;
 					}
 				});
