@@ -27,9 +27,22 @@
             "name": "from_email",
             "id": "from_email",
             "required": "required",
-            "title": "Enter your email address.",
-            "fieldType": "input",
-            "type": "email"
+            "title": "Select your email address.",
+            "url": "/core/api/account-prefs/verified-emails/all",
+            "dynamicName": "email",
+            "dynamicValue": "email",
+            "arrange_type": "prepend",
+            "fieldType": "dynamicselect",
+             "type": "verified_email",
+             "options": {
+                "+ Add new": "verify_email"
+            }, 
+            "event": "onchange",
+            "eventHandler": "openVerifyEmailModal(this)",
+            "style": {
+            	"width": "77.5%",
+            	"padding": "0.4em"
+            }
         },
         {
             "label": "To",
@@ -187,15 +200,6 @@
             },
             "fieldType": "select",
             "type": "select"
-        },
-        {
-            "label": "Purl Keyword:",
-            "category": "Settings",
-            "name": "purl_keyword",
-            "id": "purl_keyword",
-            "title": "While tracking clicks, AgileCRM can show a keyword in the URL. Valid only when you are tracking clicks.",
-            "fieldType": "input",
-            "type": "text"
         },
         {
             "label": "Simply choose timezone, day and time. Agile can schedule your email delivery."

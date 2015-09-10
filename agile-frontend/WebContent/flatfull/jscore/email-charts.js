@@ -31,24 +31,28 @@ function initChartsUI(campaign_id, callback)
 				Date.today().moveToFirstDayOfMonth(), Date.today().moveToLastDayOfMonth()
 		], 'Last Month' : [
 				Date.today().moveToFirstDayOfMonth().add({ months : -1 }), Date.today().moveToFirstDayOfMonth().add({ days : -1 })
-		] } }, function(start, end)
+		] }, locale : { applyLabel : 'Apply', cancelLabel : 'Cancel', fromLabel : 'From', toLabel : 'To', customRangeLabel : 'Custom', daysOfWeek : [
+				'Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'
+		], monthNames : [
+				'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'
+		], firstDay : parseInt(CALENDAR_WEEK_START_DAY) } }, function(start, end)
 		{
 			var months_diff = Math.abs(start.getMonth() - end.getMonth() + (12 * (start.getFullYear() - end.getFullYear())));
 			$('#reportrange span').html(start.toString('MMMM d, yyyy') + ' - ' + end.toString('MMMM d, yyyy'));
 			$("#week-range").html(end.add({ days : -6 }).toString('MMMM d, yyyy') + ' - ' + end.add({ days : 6 }).toString('MMMM d, yyyy'));
 
-			//Updates table data
+			// Updates table data
 			get_email_table_reports(campaign_id);
-			
+
 			// Updates bar graphs on date change.
 			showEmailGraphs(campaign_id);
-			
+
 		});
 	});
 
-	//Updates table data
+	// Updates table data
 	get_email_table_reports(campaign_id);
-	
+
 	// shows graphs by default week date range.
 	showEmailGraphs(campaign_id);
 }
@@ -82,20 +86,28 @@ function getOptions()
 
 	// Get Date Range January 22, 2015 - January 28, 2015
 	var range = $('#range').html().split("-");
-	/*var temp = "January 22, 2015 - January 28, 2015";
-	var range = temp.split("-");*/
+	/*
+	 * var temp = "January 22, 2015 - January 28, 2015"; var range =
+	 * temp.split("-");
+	 */
 	// Returns milliseconds from start date. For e.g., August 6, 2013 converts
 	// to 1375727400000
-	var start_time = Date.parse($.trim(range[0])).valueOf();
+	//var start_time = Date.parse($.trim(range[0])).valueOf();
+	//Get the GMT start time
+	var start_time = getUTCMidNightEpochFromDate(new Date(range[0]));
 
 	var end_value = $.trim(range[1]);
-	
+
 	// To make end value as end time of day
-	if(end_value)
+	if (end_value)
 		end_value = end_value + " 23:59:59";
-	
+
 	// Returns milliseconds from end date.
-	var end_time = Date.parse(end_value).valueOf();
+	//var end_time = Date.parse(end_value).valueOf();
+	//Get the GMT end time
+	var end_time = getUTCMidNightEpochFromDate(new Date(end_value));
+
+	end_time += (((23*60*60)+(59*60)+59)*1000);
 
 	// Adds start_time, end_time and timezone offset to params.
 	options += ("start_time=" + start_time + "&end_time=" + end_time);
@@ -103,39 +115,40 @@ function getOptions()
 	// Add Timezone offset
 	var d = new Date();
 	options += ("&time_zone=" + d.getTimezoneOffset());
-	
+
 	// If Frequency is present - send frequency too
-	if($('#frequency').length > 0)
+	if ($('#frequency').length > 0)
 	{
 		// Get Frequency
-		var frequency = $( "#frequency").val();
+		var frequency = $("#frequency").val();
 		options += ("&frequency=" + frequency);
 	}
-	
+
 	// If Frequency is present - send frequency too
-	if($('#filter').length > 0)
+	if ($('#filter').length > 0)
 	{
 		// Get Frequency
-		var filter_id = $( "#filter").val();
-		if(filter_id !="" && filter_id != "ALL")
-		options += ("&filter=" + filter_id);
+		var filter_id = $("#filter").val();
+		if (filter_id != "" && filter_id != "ALL")
+			options += ("&filter=" + filter_id);
 	}
-	
+
 	// console.log("options " + options);
 	return options;
 }
 
 /**
  * Returns data required for table
- **/
+ */
 function get_email_table_reports(campaign_id)
 {
 	$("#email-table-reports").html(getRandomLoadingImg());
-	
-	$.getJSON('core/api/campaign-stats/email/table-reports/'+ campaign_id + getOptions(), function(data){
-	
+
+	$.getJSON('core/api/campaign-stats/email/table-reports/' + campaign_id + getOptions(), function(data)
+	{
+
 		console.log(data);
-		
+
 		// Load Reports Template
 		$("#email-table-reports").html(getTemplate("campaign-email-table-reports", data));
 

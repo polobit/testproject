@@ -1,6 +1,5 @@
 package com.agilecrm.contact.export.util;
 
-import java.nio.channels.Channels;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -9,16 +8,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import au.com.bytecode.opencsv.CSVWriter;
-
-import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.CustomFieldDef;
 import com.agilecrm.contact.CustomFieldDef.SCOPE;
 import com.agilecrm.contact.Note;
 import com.agilecrm.contact.export.ContactCSVExport;
 import com.agilecrm.contact.util.CustomFieldDefUtil;
-import com.agilecrm.contact.util.NoteUtil;
-import com.google.appengine.api.files.FileWriteChannel;
 
 public class ContactExportCSVUtil
 {
@@ -30,37 +24,28 @@ public class ContactExportCSVUtil
      * @param contactList
      * @param isFirstTime
      */
-    public static void writeContactCSV(FileWriteChannel writeChannel, List<Contact> contactList, String[] headers,
-	    Boolean isFirstTime)
-    {
-	try
-	{
-	    CSVWriter writer = new CSVWriter(Channels.newWriter(writeChannel, "UTF8"));
-
-	    if (isFirstTime)
-		writer.writeNext(headers);
-
-	    Map<String, Integer> indexMap = ContactExportCSVUtil.getIndexMapOfCSVHeaders(headers);
-
-	    for (Contact contact : contactList)
-	    {
-		if (contact == null)
-		    continue;
-
-		String str[] = ContactCSVExport.insertContactProperties(contact, indexMap, headers.length);
-		List<Note> notes = NoteUtil.getNotes(contact.id);
-		writer.writeNext(addNotes(str, notes));
-	    }
-
-	    // Close without finalizing
-	    writer.close();
-	}
-	catch (Exception e)
-	{
-	    e.printStackTrace();
-	    System.err.println("Exception occured in writeContactCSV " + e.getMessage());
-	}
-    }
+    /*
+     * public static void writeContactCSV(FileWriteChannel writeChannel,
+     * List<Contact> contactList, String[] headers, Boolean isFirstTime) { try {
+     * CSVWriter writer = new CSVWriter(Channels.newWriter(writeChannel,
+     * "UTF8"));
+     * 
+     * if (isFirstTime) writer.writeNext(headers);
+     * 
+     * Map<String, Integer> indexMap =
+     * ContactExportCSVUtil.getIndexMapOfCSVHeaders(headers);
+     * 
+     * for (Contact contact : contactList) { if (contact == null) continue;
+     * 
+     * String str[] = ContactCSVExport.insertContactProperties(contact,
+     * indexMap, headers.length); List<Note> notes =
+     * NoteUtil.getNotes(contact.id); writer.writeNext(addNotes(str, notes)); }
+     * 
+     * // Close without finalizing writer.close(); } catch (Exception e) {
+     * e.printStackTrace();
+     * System.err.println("Exception occured in writeContactCSV " +
+     * e.getMessage()); } }
+     */
 
     /**
      * Returns array of CSV Headers. Appends custom fields labels as CSV Headers
@@ -103,7 +88,7 @@ public class ContactExportCSVUtil
 		ContactCSVExport.FACEBOOK, ContactCSVExport.XING, ContactCSVExport.BLOG, ContactCSVExport.GOOGLE_PLUS,
 		ContactCSVExport.FLICKR, ContactCSVExport.GITHUB, ContactCSVExport.YOUTUBE };
 
-	return ContactExportCSVUtil.appendCustomFieldsToHeaders(headers, SCOPE.COMPANY);
+	return getHeaders(ContactExportCSVUtil.appendCustomFieldsToHeaders(headers, SCOPE.COMPANY));
     }
 
     /**
@@ -163,10 +148,8 @@ public class ContactExportCSVUtil
      * note max for each contact if notes are more than 5 then it will ignore
      * rest of notes
      */
-    private static String[] addNotes(String[] contactData, List<Note> notes)
+    public static String[] addNotes(String[] contactData, List<Note> notes)
     {
-	List<String> data = new ArrayList<String>();
-	data.addAll(Arrays.asList(contactData));
 	int count = 0;
 	for (Note note : notes)
 	{
@@ -175,20 +158,13 @@ public class ContactExportCSVUtil
 		sb.append(note.subject.trim());
 	    if (note.description != null)
 		sb.append("\n" + note.description);
-	    data.add(sb.toString());
+	    // ten notes are already added in header use that index.
+	    contactData[contactData.length - 10 + count] = sb.toString();
 	    count++;
 	    if (count == 10)
 		break;
 	}
-	// convert all data into string array
-	String[] finalData = new String[data.size()];
-	int i = 0;
-	for (String s : data)
-	{
-	    finalData[i] = s;
-	    i++;
-	}
-	return finalData;
+	return contactData;
     }
 
     /**
@@ -223,4 +199,23 @@ public class ContactExportCSVUtil
 	return exportedFileName.toString();
     }
 
+    public static void addToPullQueue(Long currentUserId, String contact_ids, String filter, String dynamicFilter)
+    {
+
+    }
+
+    public static boolean isTextSearchQuery(String filter)
+    {
+	if (filter.startsWith("#tags/"))
+	    return false;
+
+	if (filter.equals("#contacts"))
+	    return false;
+
+	if (filter.contains("system-"))
+	    return false;
+
+	return true;
+
+    }
 }

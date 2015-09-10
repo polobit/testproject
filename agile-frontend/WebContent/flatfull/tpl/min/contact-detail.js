@@ -1727,10 +1727,10 @@
 										
 										{{#if_equals index ../this.length}}
 											<span class="contact-custom-value">
-											{{#if_equals subtype "DATE"}} <time class="note-created-time" datetime="{{epochToHumanDate "" value}}">{{epochToHumanDate "dd mmm yyyy" value}}</time>{{else}}{{value}} {{/if_equals}}</span>
+											{{#if_equals subtype "DATE"}} <time class="note-created-time" datetime="{{epochToHumanDateInFormat "" value}}">{{epochToHumanDate "dd mmm yyyy" value}}</time>{{else}}{{value}} {{/if_equals}}</span>
 										{{else}}
 											<span class="contact-custom-value">
-											{{#if_equals subtype "DATE"}} <time class="note-created-time" datetime="{{epochToHumanDate "" value}}">{{epochToHumanDate "dd mmm yyyy" value}}</time>{{else}}{{value}} {{/if_equals}}</span>
+											{{#if_equals subtype "DATE"}} <time class="note-created-time" datetime="{{epochToHumanDateInFormat "" value}}">{{epochToHumanDate "dd mmm yyyy" value}}</time>{{else}}{{value}} {{/if_equals}}</span>
 										{{/if_equals}}
 										
 										

@@ -82,88 +82,56 @@ content="<%=domainUser.getInfo(DomainUser.LAST_LOGGED_IN_TIME)%>" />
 
 <%
     String CSS_PATH = "/";
-	String FLAT_FULL_PATH = "flatfull/";
+  String FLAT_FULL_PATH = "flatfull/";
 //String CSS_PATH = "//cdnapp.agilecrm.com/";
 %>
 
-<link rel="stylesheet" type="text/css" href="<%=FLAT_FULL_PATH%>css/agilecrm.css?_=<%=_AGILE_VERSION%>" />
-
-<!-- Unified CSS for All Lib -->
-
-<link rel="stylesheet" type="text/css" href="<%=FLAT_FULL_PATH%>css/misc/agile-tasks.css?_=<%=_AGILE_VERSION%>"></link>
-<link rel="stylesheet" type="text/css" href="<%=FLAT_FULL_PATH%>css/misc/agile-social-suite.css"></link>
- <link rel="stylesheet" type="text/css" href="<%=FLAT_FULL_PATH%>css/misc/agile-timline.css"></link>
- <link rel="stylesheet" type="text/css" href="<%=FLAT_FULL_PATH%>css/misc/agile-widgets.css?_=<%=_AGILE_VERSION%>"></link>
- <link rel="stylesheet" type="text/css" href="<%=FLAT_FULL_PATH%>css/chrome-extension-check.css"></link>
- <link rel="stylesheet" type="text/css" href="<%=FLAT_FULL_PATH%>css/bootstrap_submenu.css?_=<%=_AGILE_VERSION%>"></link>
-  <link rel="stylesheet" type="text/css" href="<%=FLAT_FULL_PATH%>css/lib/timepicker-min.css"></link>
-
-<!-- <link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/misc/date-picker.css"></link> -->
-
-
-<link rel="stylesheet" type="text/css" href="<%=FLAT_FULL_PATH%>css/lib.css"></link>
-<link rel="stylesheet" type="text/css" href="<%=FLAT_FULL_PATH%>css/contacts-new-ui.css">
-
+<!-- <link rel="stylesheet" type="text/css" href="<%=FLAT_FULL_PATH%>css/agile-all.css?_=<%=_AGILE_VERSION%>" />  -->
+<!-- <link rel="stylesheet" type="text/css" href="<%=FLAT_FULL_PATH%>css/lib-min.css"></link> -->
+<link rel="stylesheet" type="text/css" href="<%=FLAT_FULL_PATH%>css/min/lib-all-new.css"></link>
 
 
 <!--  bootstrap 3 files -->
 <%
-	String ui = request.getParameter("ui");
-	String css = request.getParameter("css");
-	String cssWrap = request.getParameter("cssWrap");
-	System.out.println(ui);
-	System.out.println(css);
-	System.out.println(cssWrap);
-	
-	System.out.println(CSS_PATH + "css/bootstrap.css />");
-	
-	String cssLink = "<link rel=\"stylesheet\" type=\"text/css\" href=\"" + FLAT_FULL_PATH + "css/bootstrap.css\" />";
-	
-	System.out.println(cssLink);
-	if(ui != null)
-	    cssLink = "<link rel=\"stylesheet\" type=\"text/css\" href=\"" + FLAT_FULL_PATH + "css/bootstrap-" + ui + ".css/>";
-	else if(css != null)
-	{
-	    cssLink = "<link rel=\"stylesheet\" type=\"text/css\" href=\"/cssloader?link="+css + "\"/>";
-	    if(cssWrap != null)
-		cssLink += "\n<link rel=\"stylesheet\" type=\"text/css\" href=\"/cssloader?link="+cssWrap + "\"/>";
-	}
-	    
-	    
-	System.out.println(cssLink);    
+  String ui = request.getParameter("ui");
+  String css = request.getParameter("css");
+  String cssWrap = request.getParameter("cssWrap");
+  System.out.println(ui);
+  System.out.println(css);
+  System.out.println(cssWrap);
+  
+  System.out.println(CSS_PATH + "css/bootstrap.css />");
+  
+  String cssLink = "<link rel=\"stylesheet\" type=\"text/css\" href=\"" + FLAT_FULL_PATH + "css/bootstrap.css\" />";
+  
+  System.out.println(cssLink);
+  if(ui != null)
+      cssLink = "<link rel=\"stylesheet\" type=\"text/css\" href=\"" + FLAT_FULL_PATH + "css/bootstrap-" + ui + ".css/>";
+  else if(css != null)
+  {
+      cssLink = "<link rel=\"stylesheet\" type=\"text/css\" href=\"/cssloader?link="+css + "\"/>";
+      if(cssWrap != null)
+    cssLink += "\n<link rel=\"stylesheet\" type=\"text/css\" href=\"/cssloader?link="+cssWrap + "\"/>";
+  }
+      
+      
+  System.out.println(cssLink);    
 %>
 
 <%=cssLink %>
- <link rel="stylesheet" type="text/css" href="<%=FLAT_FULL_PATH%>css/typeahead.css">
+<!-- <link rel="stylesheet" type="text/css" href="<%=FLAT_FULL_PATH%>css/agile-app-framework.css">  -->
+<link rel="stylesheet" type="text/css" href="<%=FLAT_FULL_PATH%>css/min/misc-all-new.css"></link>
+<link rel="stylesheet" type="text/css" href="<%=FLAT_FULL_PATH%>css/min/core-all-new.css"></link>
 
-<!--  font awesome files -->
-
- <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet"> 
-<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet"> 
-
- 
-<!--  agile app framework  -->
-<link rel="stylesheet" href="<%=FLAT_FULL_PATH%>css/flatfull/animate.css" type="text/css" />
-<link rel="stylesheet" href="<%=FLAT_FULL_PATH%>css/flatfull/font-awesome.min.css" type="text/css" />
-<link rel="stylesheet" href="<%=FLAT_FULL_PATH%>css/flatfull/simple-line-icons.css" type="text/css" />
-<link rel="stylesheet" type="text/css" href="<%=FLAT_FULL_PATH%>css/font.css">
-<link rel="stylesheet" type="text/css" href="<%=FLAT_FULL_PATH%>css/app.css">
-<link rel="stylesheet" type="text/css" href="<%=FLAT_FULL_PATH%>css/agile-css-framework.css">
-<link rel="stylesheet" type="text/css" href="<%=FLAT_FULL_PATH%>css/migration.css" />
-
-
-<!-- <link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/bootstrap-<%=template%>.min.css" /> -->
-<!-- <link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/bootstrap-responsive.min.css" /> -->
 
 <style>
 .clickdesk_bubble {
-	display: none !important;
+  display: none !important;
 }
-</style>
- <!-- <script src='http://cdnjs.cloudflare.com/ajax/libs/headjs/1.0.3/head.load.min.js'></script> -->
-<script src='//cdnjs.cloudflare.com/ajax/libs/headjs/1.0.3/head.js'></script>
-<!--  responsive table js -->
 
+
+</style>
+<!--  responsive table js -->
 <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
 <!--[if lt IE 9]>
 <script src="lib/ie/html5.js"></script>
@@ -176,267 +144,60 @@ content="<%=domainUser.getInfo(DomainUser.LAST_LOGGED_IN_TIME)%>" />
 
 
 
-<body>
-
- <!-- <div  class="settings panel panel-default ">
-  <button class="btn btn-default no-shadow pos-abt ng-scope toggle-inactive" ui-toggle-class="active" target=".settings">
-    <i class="fa fa-spin fa-gear"></i>
-  </button>
-  <div class="panel-heading ">
-    Settings
-  </div>
-  <div class="panel-body ng-scope"> 
-    <div class="m-b-sm">
-      <label class="i-checks i-checks i-checks-sm pull-right"><input type="checkbox" id="check-fix-head" class="tbody_check" value=""><i></i></label>
-      Fixed header 
-    </div>
-    <div class="m-b-sm">
-      <label class="i-checks i-checks i-checks-sm pull-right"><input type="checkbox" id="check-fix-aside" class="tbody_check" value=""><i></i></label>
-      Fixed aside 
-    </div>
-    <div class="m-b-sm">
-      <label class="i-checks i-checks i-checks-sm pull-right"><input type="checkbox" id="check-fold-aside" class="tbody_check" value=""><i></i></label>
-      Folded aside 
-    </div>
-    <div class="m-b-sm">
-      <label class="i-checks i-checks i-checks-sm pull-right"><input type="checkbox" id="check-dock-aside" class="tbody_check" value=""><i></i></label>
-      Dock aside
-    </div>
-    <div>
-      <label class="i-checks i-checks i-checks-sm pull-right"><input type="checkbox" id="check-box-layout" class="tbody_check" value=""><i></i></label>
-      Boxed layout
-    </div>
-  </div>
-  <div class="wrapper b-t b-light bg-light lter r-b magicMenu">
-    <div class="row row-sm">
-      <div class="col-xs-6">
-        <label class="i-checks i-checks-sm block m-b">
-          <input type="radio" name="a" target-aside-class="bg-black" target-logo-class="bg-black" target-topbar-class="bg-white-only" value="1" class="ng-valid ng-dirty ng-touched ng-valid-parse">
-          <span class="block bg-light clearfix pos-rlt">
-            <span class="active pos-abt w-full h-full bg-black-opacity text-center">
-              <i class="glyphicon glyphicon-ok text-white m-t-xs"></i>
-            </span>
-            <b class="bg-black header"></b>
-            <b class="bg-white header"></b>
-            <b class="bg-black"></b>
-          </span>
-        </label>
-
-        <label class="i-checks i-checks-sm block m-b">
-          <input type="radio" name="a" target-aside-class="bg-dark" target-logo-class="bg-dark" target-topbar-class="bg-white-only"  value="13" class="ng-valid ng-dirty ng-touched">
-          <span class="block bg-light clearfix pos-rlt">
-            <span class="active pos-abt w-full h-full bg-black-opacity text-center">
-              <i class="glyphicon glyphicon-ok text-white m-t-xs"></i>
-            </span>
-            <b class="bg-dark header"></b>
-            <b class="bg-white header"></b>
-            <b class="bg-dark"></b>
-          </span>
-        </label>
-
-        <label class="i-checks i-checks-sm block m-b">
-          <input type="radio"  name="a" target-aside-class="bg-black" target-logo-class="bg-white-only" target-topbar-class="bg-white-only" value="2">
-          <span class="block bg-light clearfix pos-rlt">
-            <span class="active pos-abt w-full h-full bg-black-opacity text-center">
-              <i class="glyphicon glyphicon-ok text-white m-t-xs"></i>
-            </span>
-            <b class="bg-white header"></b>
-            <b class="bg-white header"></b>
-            <b class="bg-black"></b>
-          </span>
-        </label>
-
-        <label class="i-checks block m-b">
-          <input type="radio"  name="a" target-aside-class="bg-dark" target-logo-class="bg-primary" target-topbar-class="bg-white-only"  value="3" >
-          <span class="block bg-light clearfix pos-rlt">
-            <span class="active pos-abt w-full h-full bg-black-opacity text-center">
-              <i class="glyphicon glyphicon-ok text-white m-t-xs"></i>
-            </span>
-            <b class="bg-primary header"></b>
-            <b class="bg-white header"></b>
-            <b class="bg-dark"></b>
-          </span>
-        </label>
-
-        <label class="i-checks i-checks-sm block m-b">
-          <input type="radio" name="a" target-aside-class="bg-black" target-logo-class="bg-info" target-topbar-class="bg-white-only"  value="4">
-          <span class="block bg-light clearfix pos-rlt">
-            <span class="active pos-abt w-full h-full bg-black-opacity text-center">
-              <i class="glyphicon glyphicon-ok text-white m-t-xs"></i>
-            </span>
-            <b class="bg-info header"></b>
-            <b class="bg-white header"></b>
-            <b class="bg-black"></b>
-          </span>
-        </label>
-
-        <label class="i-checks i-checks-sm block m-b">
-          <input type="radio" name="a" target-aside-class="bg-dark" target-logo-class="bg-success" target-topbar-class="bg-white-only"  value="5" >
-          <span class="block bg-light clearfix pos-rlt">
-            <span class="active pos-abt w-full h-full bg-black-opacity text-center">
-              <i class="glyphicon glyphicon-ok text-white m-t-xs"></i>
-            </span>
-            <b class="bg-success header"></b>
-            <b class="bg-white header"></b>
-            <b class="bg-dark"></b>
-          </span>
-        </label>
-
-        <label class="i-checks i-checks-sm block">
-          <input type="radio" name="a" target-aside-class="bg-dark" target-logo-class="bg-danger" target-topbar-class="bg-white-only"  name="39">
-          <span class="block bg-light clearfix pos-rlt">
-            <span class="active pos-abt w-full h-full bg-black-opacity text-center">
-              <i class="glyphicon glyphicon-ok text-white m-t-xs"></i>
-            </span>
-            <b class="bg-danger header"></b>
-            <b class="bg-white header"></b>
-            <b class="bg-dark"></b>
-          </span>
-        </label>
-      </div>
-      <div class="col-xs-6">
-        <label class="i-checks i-checks-sm block m-b">
-          <input type="radio" name="a" target-aside-class="bg-white" target-logo-class="bg-black" target-topbar-class="bg-black"  value="7" class="ng-valid ng-dirty ng-touched">
-          <span class="block bg-light clearfix pos-rlt">
-            <span class="active pos-abt w-full h-full bg-black-opacity text-center">
-              <i class="glyphicon glyphicon-ok text-white m-t-xs"></i>
-            </span>
-            <b class="bg-black header"></b>
-            <b class="bg-black header"></b>
-            <b class="bg-white"></b>
-          </span>
-        </label>
-
-        <label class="i-checks i-checks-sm block m-b">
-          <input type="radio" name="a" target-aside-class="bg-light" target-logo-class="bg-dark" target-topbar-class="bg-dark"  value="14" >
-          <span class="block bg-light clearfix pos-rlt">
-            <span class="active pos-abt w-full h-full bg-black-opacity text-center">
-              <i class="glyphicon glyphicon-ok text-white m-t-xs"></i>
-            </span>
-            <b class="bg-dark header"></b>
-            <b class="bg-dark header"></b>
-            <b class="bg-light"></b>
-          </span>
-        </label>
-
-        <label class="i-checks i-checks-sm block m-b">
-          <input type="radio" name="a" target-aside-class="bg-light-dker" target-logo-class="bg-info-dker" target-topbar-class="bg-info-dker"  value="8">
-          <span class="block bg-light clearfix pos-rlt">
-            <span class="active pos-abt w-full h-full bg-black-opacity text-center">
-              <i class="glyphicon glyphicon-ok text-white m-t-xs"></i>
-            </span>
-            <b class="bg-info dker header"></b>
-            <b class="bg-info dker header"></b>
-            <b class="bg-light dker"></b>
-          </span>
-        </label>
-
-        <label class="i-checks i-checks-sm block m-b">
-          <input type="radio" name="a" target-aside-class="bg-dark" target-logo-class="bg-primary" target-topbar-class="bg-primary"  value="9">
-          <span class="block bg-light clearfix pos-rlt">
-            <span class="active pos-abt w-full h-full bg-black-opacity text-center">
-              <i class="glyphicon glyphicon-ok text-white m-t-xs"></i>
-            </span>
-            <b class="bg-primary header"></b>
-            <b class="bg-primary header"></b>
-            <b class="bg-dark"></b>
-          </span>
-        </label>
-
-        <label class="i-checks i-checks-sm block m-b">
-          <input type="radio" name="a" target-aside-class="bg-black" target-logo-class="bg-info-dker" target-topbar-class="bg-info-dk"  value="10">
-          <span class="block bg-light clearfix pos-rlt">
-            <span class="active pos-abt w-full h-full bg-black-opacity text-center">
-              <i class="glyphicon glyphicon-ok text-white m-t-xs"></i>
-            </span>
-            <b class="bg-info dker header"></b>
-            <b class="bg-info dk header"></b>
-            <b class="bg-black"></b>
-          </span>
-        </label>
-
-        <label class="i-checks i-checks-sm block m-b">
-          <input type="radio"  name="a" target-aside-class="bg-dark" target-logo-class="bg-success" target-topbar-class="bg-success" value="11">
-          <span class="block bg-light clearfix pos-rlt">
-            <span class="active pos-abt w-full h-full bg-black-opacity text-center">
-              <i class="glyphicon glyphicon-ok text-white m-t-xs"></i>
-            </span>
-            <b class="bg-success header"></b>
-            <b class="bg-success header"></b>
-            <b class="bg-dark"></b>
-          </span>
-        </label>
-        
-        <label class="i-checks i-checks-sm block">
-          <input type="radio"  name="a" target-aside-class="bg-dark" target-logo-class="bg-danger-dker" target-topbar-class="bg-danger-dker" value="12">
-          <span class="block bg-light clearfix pos-rlt">
-            <span class="active pos-abt w-full h-full bg-black-opacity text-center">
-              <i class="glyphicon glyphicon-ok text-white m-t-xs"></i>
-            </span>
-            <b class="bg-danger dker header"></b>
-            <b class="bg-danger dker header"></b>
-            <b class="bg-dark"></b>
-          </span>
-        </label>
-      </div>
-    </div>
-  </div>
-</div>  -->
-
-
+<body class='<%if(!currentUserPrefs.animations) out.print("disable-anim");%>'>
 
 <div id="wrap" class="app app-aside-folded-inactive app-header-fixed app-aside-fixed 
 <% 
 if(currentUserPrefs.menuPosition.equals("top")){
-	out.print("app-aside-dock ");
+  out.print("app-aside-dock ");
 }else if(currentUserPrefs.menuPosition.equals("leftcol")){
-	out.print("app-aside-folded ");
-	}
+  out.print("app-aside-folded ");
+  }
 /* if(currentUserPrefs.layout.equals("fixed")){
-	out.print("container ");
-	} */
+  out.print("container ");
+  } */
 
 %>">
 
 <!-- Including header(Navigation Bar) page -->
-<jsp:include page="flatfull/header.jsp" />
+  <%@ include file="flatfull/header.html"%>
 
  <aside id="aside" class="app-aside hidden-xs 
  <%
- 	switch (Integer.parseInt(currentUserPrefs.theme)) {
- 		case 1:  out.print("bg-black ");
-   				 break;
- 		case 2:  out.print("bg-black ");
-				 break;
- 		case 3:  out.print("bg-dark ");
-				 break;
- 		case 4:  out.print("bg-black ");
-				 break;
- 		case 5:  out.print("bg-dark ");
-				 break;
- 		case 6:  out.print("bg-dark ");
-				 break;
- 		case 7:  out.print("bg-white b-r ");
-				 break;
- 		case 8:  out.print("bg-light dker b-r ");
-				 break;
- 		case 9:  out.print("bg-dark ");
-				 break;
- 		case 10:  out.print("bg-black ");
-				 break;
- 		case 11:  out.print("bg-dark ");
-				 break;
- 		case 12:  out.print("bg-dark ");
-				 break;
- 		case 13:  out.print("bg-dark ");
-				 break;
- 		case 14:  out.print("bg-light ");
-				 break;
- 		default:
-        		break;
+  switch (Integer.parseInt(currentUserPrefs.theme)) {
+    case 1:  out.print("bg-black ");
+           break;
+    case 2:  out.print("bg-black ");
+         break;
+    case 3:  out.print("bg-dark ");
+         break;
+    case 4:  out.print("bg-black ");
+         break;
+    case 5:  out.print("bg-dark ");
+         break;
+    case 6:  out.print("bg-dark ");
+         break;
+    case 7:  out.print("bg-white b-r ");
+         break;
+    case 8:  out.print("bg-light dker b-r ");
+         break;
+    case 9:  out.print("bg-dark ");
+         break;
+    case 10:  out.print("bg-black ");
+         break;
+    case 11:  out.print("bg-dark ");
+         break;
+    case 12:  out.print("bg-dark ");
+         break;
+    case 13:  out.print("bg-dark ");
+         break;
+    case 14:  out.print("bg-light ");
+         break;
+    default:
+            break;
  
- 	}
-  		
+  }
+      
  %>">
           <div class="aside-wrap">
         <div class="navi-wrap">
@@ -451,6 +212,12 @@ if(currentUserPrefs.menuPosition.equals("top")){
     <a  href="#contacts">
       <i class="icon icon-user"></i>
       <span>Contacts</span>
+    </a>
+  </li>
+  <li id="companiesmenu">
+    <a  href="#companies">
+      <i class="icon icon-building"></i>
+      <span>Companies</span>
     </a>
   </li>
    <li  id="dealsmenu">
@@ -493,6 +260,12 @@ if(currentUserPrefs.menuPosition.equals("top")){
       <span>Web Rules</span>
     </a>
   </li>
+  <!-- <li id="web-pages-menu">
+    <a href="#webpages">
+      <i class="fa fa-file-code-o"></i>
+      <span>Web Pages</span>
+    </a>
+  </li> -->
     <li id="activitiesmenu">
     <a  href="#activities">
       <i class="icon-cogs icon-white"></i>
@@ -505,9 +278,9 @@ if(currentUserPrefs.menuPosition.equals("top")){
       <span>Reports</span>
     </a>
   </li>
-  <li class='<%if(currentUserPrefs.menuPosition.equals("top")){out.print("dockedicons ");} else{out.print("fixedicons ");} %>' id="planView"> <a href="#subscribe"><i class="icon-shopping-cart"></i> <span> Plan &amp; Upgrade </span></a></li>
+  <!-- <li class='<%if(currentUserPrefs.menuPosition.equals("top")){out.print("dockedicons ");} else{out.print("fixedicons ");} %>' id="planView"> <a href="#subscribe"><i class="icon-shopping-cart"></i> <span> Plan &amp; Upgrade </span></a></li>
   <li class='pos-b-0 <%if(currentUserPrefs.menuPosition.equals("top")){out.print("dockedicons ");} else{out.print("fixedicons ");} %>' id ="helpView"><a href="#help"><i class="icon-question"></i>
-											<span> Help </span></a></li>
+                      <span> Help </span></a></li> -->
   </ul>
   </nav>
   </div>
@@ -529,22 +302,11 @@ src="img/21-0.gif"></img> -->
 <div class='notifications bottom-right'></div>
 
 <div id='templates'></div>
-<!-- <script type="text/javascript">
-function loadTpl()
-{
-var tpl;
-if (window.XMLHttpRequest)tpl=new XMLHttpRequest(); //for IE 6 & earlier
-else tpl=new ActiveXObject("Microsoft.XMLHTTP"); //for chrome & newer IEs
-tpl.open("GET","tpl/min/tpl.js",false); //script load from browser
-tpl.send();
-document.getElementById('templates').innerHTML=tpl.responseText; //insert in dummy div
-}
-</script>-->
 
 <!-- Templates
 Use = [<]%@ include file="tpl/min/tpl.js" %[>] -->
-		
-	
+    
+  
 
 <!-- Determine Console.logging - we log in local boxes -->
 <%
@@ -561,21 +323,14 @@ if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Produ
 
 %>
 
-
-                <%@ include file="tpl/min/precompiled/flatfull/tpl.html"%>   
-
-
+ <%@ include file="tpl/min/precompiled/flatfull/tpl.html"%> 
 </div>
 <!-- Including Footer page -->
 <jsp:include page="flatfull/footer.jsp" />
 
-
-<!-- <script src='https://dpm72z3r2fvl4.cloudfront.net/js/lib/headjs-min.js'></script> -->
-<!-- <script src='/lib/headjs-min.js'></script> -->
-
-
-
+<script src='//cdnjs.cloudflare.com/ajax/libs/headjs/1.0.3/head.min.js'></script>
 <script>
+
 //var LIB_PATH = "//dpm72z3r2fvl4.cloudfront.net/js/";
 //var LIB_PATH = "//cdnapp.agilecrm.com/";
 var LIB_PATH = "";
@@ -586,7 +341,7 @@ var FLAT_FULL_PATH = LIB_PATH_FLATFULL;
 
 LIB_PATH = LIB_PATH_FLATFULL;
 
-var FLAT_FULL_UI = "flatfull/";
+var FLAT_FULL_UI = "flatfull/";  
 
 var _AGILE_VERSION = <%="\"" + _AGILE_VERSION + "\""%>;
 
@@ -609,10 +364,10 @@ var CLICKDESK_CODE_LOADED = false;
 var _plan_on_signup = <%=mapper.writeValueAsString(plan)%>;
 
 // Get current user prefs json
-var CURRENT_USER_PREFS = <%=mapper.writeValueAsString(currentUserPrefs)%>;
+var CURRENT_USER_PREFS = <%=UserPrefsUtil.getMapperString(currentUserPrefs)%>;
 
 //Get current user prefs json
-var ACCOUNT_PREFS = <%=mapper.writeValueAsString(accountPrefs)%>;
+var ACCOUNT_PREFS = <%=mapper.writeValueAsString(accountPrefs)%>; 
 
 // Get current domain user json
 var CURRENT_DOMAIN_USER = <%=mapper.writeValueAsString(domainUser)%>;
@@ -628,35 +383,32 @@ var _billing_restriction = <%=mapper.writeValueAsString(restriction)%>;
 var JQUERY_LIB_PATH = "//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js";
 //var JQUERY_LIB_PATH = LIB_PATH + 'lib/jquery.min.js';
 
+// head.load("https://cdnjs.cloudflare.com/ajax/libs/jquery/1.10.2/jquery.min.js", LIB_PATH + 'final-lib/min/lib-all-min.js', LIB_PATH + 'lib/backbone-route-filter.js');
 
-<!-- JQUery Core and UI CDN -->	
+<!-- JQUery Core and UI CDN --> 
 <!-- The same ajax libraries are used by designer - if you are changing the version here, change in designer too -->
-head.load("https://code.jquery.com/jquery-1.10.2.min.js", "//code.jquery.com/jquery-migrate-1.2.1.min.js", LIB_PATH_FLATFULL + "/lib/agile/agile-jquery-migration.js", LIB_PATH_FLATFULL + "lib/bootstrap.js", LIB_PATH_FLATFULL + 'lib/bootstrap3-typeahead.js', LIB_PATH_FLATFULL + 'lib/jquery.validate.min.js', LIB_PATH_FLATFULL + 'lib/bootstrap-datepicker-min.js',LIB_PATH_FLATFULL + 'lib/date-formatter.js', LIB_PATH_FLATFULL + 'lib/bootstrap-timepicker-min.js');
-
-<!-- Backbone -->
-head.js(LIB_PATH + 'lib/underscore-min.js', LIB_PATH + 'lib/backbone-min.js', LIB_PATH + 'lib/infiniscroll.js');
-
-<!-- Handle bars -->
+head.load("https://code.jquery.com/jquery-1.10.2.min.js", LIB_PATH_FLATFULL + "lib/bootstrap.js",  LIB_PATH + 'final-lib/min/lib-all-min.js?_=' + _AGILE_VERSION)
+// , LIB_PATH + 'lib/backbone-route-filter.js'
 
 if(HANDLEBARS_PRECOMPILATION)
-head.js(HANDLEBARS_LIB,   "tpl/min/precompiled/" + FLAT_FULL_PATH + "tpl.js");
+head.js(HANDLEBARS_LIB, "tpl/min/precompiled/" + FLAT_FULL_PATH + "tpl.js" + "?_=" + _AGILE_VERSION);
 else
 head.js(HANDLEBARS_LIB);
-
-
-// head.js("//cdnjs.cloudflare.com/ajax/libs/handlebars.js/1.3.0/handlebars.min.js", "tpl/min/tpl.js");
+var en;
+load_globalize();
 
 <!-- Country Names from country codes -->
-head.js(LIB_PATH + 'lib/country-from-code.js');
+// // head.js(LIB_PATH + 'lib/country-from-code.js');
 
 <!-- Inital.js Text avatars -->
-head.js(LIB_PATH + 'lib/text-avatar/initial.min.js');
+// head.js(LIB_PATH + 'lib/text-avatar/initial.min.js');
 
 <!-- mustache.js -->
-head.js('//cdnjs.cloudflare.com/ajax/libs/mustache.js/0.8.1/mustache.min.js');
+// head.js('//cdnjs.cloudflare.com/ajax/libs/mustache.js/0.8.1/mustache.min.js');
 
 // Fetch/Create contact from our domain
 var Agile_Contact = {};
+
 
 head.ready(function() {
 // Remove the loadinng
@@ -666,25 +418,35 @@ $("img.init-loading", $('#content')).attr("src", "/img/ajax-loader-cursor.gif");
 head.js({"core" :   '/jscore/min/' + FLAT_FULL_PATH +'js-all-min.js' + "?_=" + _AGILE_VERSION});
 head.js({"stats" : 'stats/min/agile-min.js' + "?_=" + _AGILE_VERSION});
 head.ready(["core", "stats"], function(){
-	
-	if(!HANDLEBARS_PRECOMPILATION)
-		downloadTemplate("tpl.js");
+  
+  if(!HANDLEBARS_PRECOMPILATION)
+    downloadTemplate("tpl.js");
+  $('[data-toggle="tooltip"]').tooltip();
 });
-});
+});    
+function load_globalize()
+{
+  head.js(LIB_PATH + 'lib/cldr.min.js', LIB_PATH + 'lib/cldr/event.js', LIB_PATH + 'lib/cldr/supplemental.js', LIB_PATH + 'lib/cldr/unresolved.js', function()
+  {
+      head.js(LIB_PATH + 'lib/globalize.min.js', LIB_PATH + 'lib/globalize/message.js', LIB_PATH + 'lib/globalize/number.js', LIB_PATH + 'lib/globalize/plural.js', LIB_PATH + 'lib/globalize/date.js' , function()
+      {
+        head.ready(function(){
+          $.getJSON('json/nodes/globalize/cldr.js', function(data){
+            Globalize.load(data);
+            en = Globalize("en");
+          })
+        });
+    
+                
+    
+    
+      });
+                
+  });
+}
+
 
 </script>
-
-<!--  <script type="text/javascript" src="js/flatfull/app.min.js"></script>  -->
-
-
-
-
-
-<!--  responsive table -->
-
-<!-- <link rel="stylesheet" type="text/css" href="/css/responsive-table/responsive-tables.css"> -->
-
-
 
 <!-- Google analytics code -->
 <script>
@@ -692,12 +454,10 @@ head.ready(["core", "stats"], function(){
   (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
   m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
   })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
   ga('create', 'UA-44894190-1', 'auto');
   ga('send', 'pageview');
  
 </script>
-
 
 <!-- ClickDesk Live Chat Service for websites -->
 <script type='text/javascript'>

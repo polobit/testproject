@@ -8,7 +8,7 @@
                 <div class="box-right pull-left">
                     <h4 class="m-t-none">{{contactShortName}} is not associated with any cases. </h4>
                     <div class="text">
-						All Cases that have this contact in the 'Related to' field are shown here.
+						All Cases that have this {{#isCompany}}company{{else}}contact{{/isCompany}} in the 'Related to' field are shown here.
                     </div>
 					{{#hasMenuScope 'CASES'}}
                     <a href="#" class="contact-add-case btn btn-default btn-addon btn-sm blue btn-slate-action"><i class="icon-plus-sign"></i>  Add Case</a>

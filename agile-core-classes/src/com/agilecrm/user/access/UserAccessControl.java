@@ -10,6 +10,7 @@ import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
+import com.agilecrm.util.VersioningUtil;
 import com.googlecode.objectify.Query;
 
 /**
@@ -25,13 +26,17 @@ public abstract class UserAccessControl
 
     protected Object entityObject = null;
 
+    protected boolean skipCheck = false;
+
     private HashSet<UserAccessScopes> scopes = null;
 
     private HashSet<NavbarConstants> menuScopes = null;
 
+    private DomainUser user = null;
+
     public static enum AccessControlClasses
     {
-	Contact(ContactAccessControl.class), Opportunity(OpportunityAccessControl.class);
+	Contact(ContactAccessControl.class), Opportunity(OpportunityAccessControl.class), Tag(TagAccessControl.class);
 
 	Class<? extends UserAccessControl> clazz;
 
@@ -45,6 +50,11 @@ public abstract class UserAccessControl
     // Returns current user scopes
     public HashSet<UserAccessScopes> getCurrentUserScopes()
     {
+	if (user != null)
+	{
+	    return user.scopes;
+	}
+
 	if (scopes != null)
 	    return scopes;
 
@@ -130,12 +140,12 @@ public abstract class UserAccessControl
 	return menuScopes.contains(menuScope);
     }
 
-    public static UserAccessControl getAccessControl(String className, Object entityObject)
+    public static UserAccessControl getAccessControl(String className, Object entityObject, DomainUser user)
     {
 	try
 	{
 	    System.out.println("-----------" + AccessControlClasses.valueOf(className));
-	    return getAccessControl(AccessControlClasses.valueOf(className), entityObject);
+	    return getAccessControl(AccessControlClasses.valueOf(className), entityObject, user);
 	}
 	catch (Exception e)
 	{
@@ -144,12 +154,27 @@ public abstract class UserAccessControl
 
     }
 
-    public static UserAccessControl getAccessControl(AccessControlClasses access, Object entityObject)
+    public static UserAccessControl getAccessControl(AccessControlClasses access, Object entityObject, DomainUser user)
     {
 	try
 	{
+
+	    System.out.println("*********************");
+	    if (user == null)
+	    {
+		boolean skipCheck = VersioningUtil.isBackgroundThread();
+		if (skipCheck)
+		{
+		    System.out.println("skipping access check");
+		    return new WildcardAccessControl();
+		}
+
+	    }
+
 	    UserAccessControl accessControl = access.clazz.newInstance();
 	    accessControl.entityObject = entityObject;
+	    accessControl.user = user;
+
 	    accessControl.init();
 	    System.out.println("---------fd---------" + accessControl.canRead());
 	    return accessControl;

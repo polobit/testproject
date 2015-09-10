@@ -19,7 +19,7 @@ function setUpFreshbooksAuth()
 	$('#FreshBooks').html(getTemplate('freshbooks-login', {}));
 
 	// On click of save button, check input and save details
-	$('#freshbooks_save_token').die().live('click', function(e)
+	$("body").on("click", "#freshbooks_save_token", function(e)
 	{
 		e.preventDefault();
 
@@ -266,7 +266,7 @@ $(function()
 			 * On click of add client button in FreshBooks, calls method to add a client
 			 * in FreshBooks with contact's first name, last name and email
 			 */
-			$('#freshbooks_add_client').die().live('click', function(e)
+			$("body").on("click", "#freshbooks_add_client", function(e)
 			{
 				e.preventDefault();
 				addClientToFreshBooks(first_name, last_name, Email);

@@ -31,7 +31,7 @@ $(function()
 
 	showListOfContactNumbers();
 
-	$("#twilioio_more_call_logs").die().live('click', function(e)
+	$("body").on("click", '#twilioio_more_call_logs', function(e)
 	{
 		e.preventDefault();
 
@@ -82,7 +82,7 @@ function showListOfContactNumbers()
 	/*
 	 * On change of number in select box, we retrieve call logs for it and show
 	 */
-	$('#contact_number').die().live('change', function(e)
+	$("body").on("change", '#contact_number', function(e)
 	{
 		$('#twilio-logs-panel').html(TWILIOIO_LOGS_LOAD_IMAGE);
 		var to = $('#contact_number').val();
@@ -143,7 +143,7 @@ function getTwilioIOLogs(to)
 		/*
 		 * On click of play button in Twilio logs, call conversaion is played
 		 */
-		$("#record_sound_play").die().live("click", function(e)
+		$("body").on("click", '#record_sound_play', function(e)
 		{
 			e.preventDefault();
 
@@ -179,7 +179,7 @@ function getTwilioIOLogs(to)
 		});
 
 		// To stop the audio call when playing
-		$(".icon-stop").die().live('click', function(e)
+		$("body").on("click", '.icon-stop', function(e)
 		{
 			e.preventDefault();
 			audio.pause();
@@ -275,3 +275,24 @@ function twilioIOError(id, message)
 	 */
 	$('#' + id).html(getTemplate('twilio-error', error_json));
 }
+/**
+ * @ author - prakash - 15/6/15
+ * This method updates two fields of contact object - lastcalled and last contacted
+ * This method retrieves the current contact object and make the json call to server to save json time in server.
+ */
+function twilioIOSaveContactedTime()
+{
+	console.log ('in twilioIOSaveContactedTime');
+	var id = agile_crm_get_contact().id;
+	console.log('contact id = ' + id);
+	$.get("/core/api/widgets/twilio/save/time/?id=" + id , function(result)
+			{
+				console.log('processed In twilioIOSaveContactedTime');
+				console.log('Results : ' + result);
+				console.log('result = ' + result);
+			}).error(function(data)
+			{
+				console.log('Error - Results :' + data);
+			});
+}
+

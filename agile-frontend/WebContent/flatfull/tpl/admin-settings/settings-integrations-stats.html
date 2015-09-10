@@ -1,6 +1,45 @@
 
 <script type="text/html" id="admin-settings-integrations-stats-template">
-		
+<div class="m-b-sm" id="account-stats">
+<h4>Account Stats</h4>
+<div class="row">
+<div class="col-md-6 b-r b-light">
+<div class="panel panel-default">
+<table class="table table-bordered table-hover">
+   
+    <thead class="panel-heading">
+        <tr>
+            <th style="width:46%" class="font-normal">Name</th>
+            <th style="width:54%" class="font-normal">Count <span class="text-right block m-t-n-md text-muted">Your Plan Limits</span></th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>Contacts and Companies</td>
+            <td>{{contact_count}} <span class="text-right block m-t-n-md text-muted">{{getPlanLimits 'contactLimit'}}</span></td>
+        </tr>
+        <tr>
+            <td>Deals</td>
+            <td>{{deals_count}} <span class="text-right block m-t-n-md text-muted">Unlimited</span></td>
+        </tr>
+		<tr>
+            <td>Campaigns</td>
+            <td>{{compaign_count}} <span class="text-right block m-t-n-md text-muted">{{getPlanLimits 'workflowLimit'}}</span></td>
+        </tr>
+        <tr>
+            <td>Triggers</td>
+            <td>{{triggers_count}} <span class="text-right block m-t-n-md text-muted">{{getPlanLimits 'triggersLimit'}}</span></td>
+        </tr>
+		<tr>
+            <td>Web Rules</td>
+            <td>{{webrule_count}} <span class="text-right block m-t-n-md text-muted">{{getPlanLimits 'webRuleLimit'}}</span></td>
+        </tr>
+    </tbody>
+</table>
+</div>
+</div>
+</div>
+</div>		
 <div class="m-b-sm">
 <h4 class="h4 pull-left"> Email Stats </h4>
 				<div  class="pull-right">
@@ -9,7 +48,7 @@
 				</div>
 <div class="clearfix"></div>
 		</div>
-{{#unless _agile_email_gateway}}
+		{{#unless _agile_email_gateway}}
 			{{#if_equals "paused" status}}
 				<div class="alert alert-danger m-t" role="alert">
   					Important: Emails from your account are blocked due to poor reputation. Please contact our <a href="#contact-us">support</a> team if you wish to correct this.
@@ -17,6 +56,10 @@
 			{{/if_equals}}
 		{{/unless}}
 		<div>
+		
+		{{#if_equals "SEND_GRID" _agile_email_gateway}}
+			<div class="text-md">SendGrid stats are shown <a class="text-info" href="https://sendgrid.com/statistics" target="_blank">here</a></div><br/>
+		{{else}}
 		<div class="row">
         	<div class="col-md-6 b-r b-light">
         	<div class="panel panel-default">
@@ -49,6 +92,7 @@
         	</div>
     	</div>
     	</div>
+		{{/if_equals}}	
     	</div>
     	
 		<div class="m-b-sm"> 

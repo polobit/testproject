@@ -1,14 +1,45 @@
-$('.activity-deal-edit').live('click', function(e)
-{
-	e.preventDefault();
-	var data = $(this).closest('a').attr("data");
 
-	var currentDeal = getDealObject(data);
+function initializeActivitiesListner(el){
 
-	updatedeals(currentDeal);
-});
 
-$('.activity-event-edit').live('click', function(e)
+	// Click events to agents dropdown and department
+	$("#activities-listners").on("click", "ul#user-select li a, ul#entity_type li a", function(e)
+	{
+		e.preventDefault();
+
+		// Show selected name
+		var name = $(this).html(), id = $(this).attr("href");
+
+		$(this).closest("ul").data("selected_item", id);
+		$(this).closest(".btn-group").find(".selected_name").text(name);
+		var url = getParameters();
+
+		updateActivty(url);
+
+	});
+	$("#activities-listners").on("click", "ul#entity_type li a", function(e)
+	{
+		var entitytype = $(this).html();
+
+		var entity_attribute = $(this).attr("href");
+		createCookie("selectedentity", entity_attribute, 90);
+		createCookie("selectedentity_value", entitytype, 90);
+		$('.activity-sub-heading').html(entitytype);
+
+	});
+	$("#activities-listners").on("click", "ul#user-select li a", function(e)
+	{
+
+		var user = $(this).html();
+		var user_attribute = $(this).attr("href");
+		createCookie("selecteduser", user_attribute, 90);
+		createCookie("selecteduser_value", user, 90);
+
+	});
+
+
+
+	$("#activities-listners").on('click', '.activity-event-edit', function(e)
 {
 	e.preventDefault();
 	var data = $(this).closest('a').attr("data");
@@ -19,68 +50,21 @@ $('.activity-event-edit').live('click', function(e)
 
 });
 
-$(".activity-edit-note").die().live('click', function(e)
-{
-	e.preventDefault();
-	console.log($(this).attr('data'));
-	var data = $(this).attr('data');
 
-	var note = getNoteObject(data);
-	console.log(note);
 
-	// Clone modal, so we dont have to create a update modal.
-	// we can clone add change ids and use it as different modal
-
-	$('#noteUpdateModal').remove();
-
-	var noteModal = $("#noteModal").clone();
-
-	$("#noteForm > fieldset", noteModal).prepend('<input name="id" type="hidden"/>');
-	$("#noteForm", noteModal).parent().parent().find(".modal-header > h3").html('<i class="icon-edit"></i>&nbsp;Edit Note');
-	$("#noteForm", noteModal).attr('id', "noteUpdateForm");
-	noteModal.attr('id', "noteUpdateModal");
-	$("#note_validate", noteModal).attr("id", "note_update");
-	deserializeForm(JSON.parse(note), $("#noteUpdateForm", noteModal));
-
-	noteModal.modal('show');
-	
-});
-
-/*
- * $(".activity-delete-info").die().live('click', function(e) {
- * e.preventDefault(); console.log($(this).attr('data')); var data =
- * $(this).attr('data'); var deletednames = getActivityObject(data);
- * 
- * console.log(deletednames);
- * 
- * var ele = getTemplate("deletednames-detail-popover", deletednames);
- * $(this).attr({ "rel" : "popover", "data-placement" : 'right', "data-content" :
- * ele }); //$(this).popover('show');
- * 
- * });
- */
-
-$('.activity-task-edit').live('click', function(e)
+	$("#activities-listners").on('click', '.email-details', function(e) 
 {
 	e.preventDefault();
 	var data = $(this).closest('a').attr("data");
-	var currenttask = getTaskObject(data);
 
-	updateactivity__task(currenttask);
+	var obj = getActivityObject(data);
+	console.log(obj);
+	var emailinfo = $(getTemplate("infoModal", JSON.parse(obj)));
+	emailinfo.modal('show');
+
 });
 
-$('.email-details').live('click', function(e)
-		{
-			e.preventDefault();
-			var data = $(this).closest('a').attr("data");
-			
-			var obj=getActivityObject(data);
-			console.log(obj);
-			var emailinfo = $(getTemplate("infoModal", JSON.parse(obj)));
-			emailinfo.modal('show');
-		
-		});
-
+}
 function getDealObject(id)
 {
 
@@ -126,14 +110,45 @@ function update_event_activity(ele)
 
 	$('.update-end-timepicker').val(fillTimePicker(value.end));
 
+	if (value.type == "WEB_APPOINTMENT" && parseInt(value.start) > parseInt(new Date().getTime() / 1000))
+	{
+		$("[id='event_delete']").attr("id", "delete_web_event");
+		web_event_title = value.title;
+		if (value.contacts.length > 0)
+		{
+			var firstname = getPropertyValue(value.contacts[0].properties, "first_name");
+			if (firstname == undefined)
+				firstname = "";
+			var lastname = getPropertyValue(value.contacts[0].properties, "last_name");
+			if (lastname == undefined)
+				lastname = "";
+			web_event_contact_name = firstname + " " + lastname;
+		}
+	}
+	else
+	{
+		$("[id='delete_web_event']").attr("id", "event_delete");
+	}
+	if (value.description)
+	{
+		var description = '<label class="control-label"><b>Description </b></label><div class="controls"><textarea id="description" name="description" rows="3" class="input form-control" placeholder="Add Description"></textarea></div>'
+		$("#event_desc").html(description);
+		$("textarea#description").val(value.description);
+	}
+	else
+	{
+		var desc = '<div class="row-fluid">' + '<div class="control-group form-group m-b-none">' + '<a href="#" id="add_event_desctiption"><i class="icon-plus"></i> Add Description </a>' + '<div class="controls event_discription hide">' + '<textarea id="description" name="description" rows="3" class="input form-control w-full col-md-8" placeholder="Add Description"></textarea>' + '</div></div></div>'
+		$("#event_desc").html(desc);
+	}
 	// Fills owner select element
 	populateUsersInUpdateActivityModal(value);
 }
 
-function getModal(){
-	 var activity_object = App_Activity_log.activitiesview.collection.models[this];
-	 alert(activity_object);
-	 console.log(activity_object);
+function getModal()
+{
+	var activity_object = App_Activity_log.activitiesview.collection.models[this];
+	alert(activity_object);
+	console.log(activity_object);
 }
 
 function updateactivity__task(ele)
@@ -186,15 +201,17 @@ function updatedeals(ele)
 		}
 	});
 
-// Fills the pipelines list in the select menu.
-	populateTracks(dealForm, undefined, value, function(pipelinesList){
+	// Fills the pipelines list in the select menu.
+	populateTracks(dealForm, undefined, value, function(pipelinesList)
+	{
 
 		// Fills milestone select element
-		populateMilestones(dealForm, undefined, value.pipeline_id, value, function(data){
+		populateMilestones(dealForm, undefined, value.pipeline_id, value, function(data)
+		{
 			dealForm.find("#milestone").html(data);
-			if (value.milestone) {
-				$("#milestone", dealForm).find('option[value=\"'+value.milestone+'\"]')
-						.attr("selected", "selected");
+			if (value.milestone)
+			{
+				$("#milestone", dealForm).find('option[value=\"' + value.milestone + '\"]').attr("selected", "selected");
 			}
 			$("#milestone", dealForm).closest('div').find('.loading-img').hide();
 		});
@@ -255,7 +272,7 @@ function append_activity_log(base_model)
 	}
 
 	if (createdtime == -1)
-	{ 
+	{
 		$('#earllier').show();
 		$('#next-week-heading').addClass("ref-head");
 

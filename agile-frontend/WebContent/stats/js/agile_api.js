@@ -152,4 +152,13 @@ var _agile = {
 		get_all_users : function(callback)
 		{
 			agile_getAllUsers(callback);							// Get string of allowed domains
-		}};
+		},
+		create_case : function(callback)
+		{
+			agile_createCase(callback);								// Create case and add to contact with email set
+		},
+		update_deal : function(data, callback, email)
+		{
+			agile_updateDeal(data, callback, email);				// Update deal of contact
+		}
+};

@@ -95,12 +95,15 @@ public class JerseyApplication extends Application
 	s.add(com.agilecrm.core.api.shopify.ShopifyAppAPI.class);
 	s.add(com.agilecrm.core.api.portlets.PortletsAPI.class);
 	s.add(com.agilecrm.core.api.reports.ActivityReportsAPI.class);
-	s.add(com.agilecrm.core.api.OnlineSchedulingPrefsApi.class);
+	s.add(com.agilecrm.core.api.OnlineCalendarPrefsApi.class);
 	s.add(com.agilecrm.core.api.voicemail.VoiceMailAPI.class);
 	s.add(com.agilecrm.core.api.deals.DealsBulkActionsAPI.class);
 	s.add(com.agilecrm.core.api.forms.FormsAPI.class);
 	s.add(com.agilecrm.core.api.WebhooksAPI.class);
 	s.add(com.agilecrm.core.api.RestAPI.class);
+	s.add(com.agilecrm.core.api.calendar.CategoriesAPI.class);
+	// s.add(com.agilecrm.core.api.webpage.WebPageAPI.class);
+
 	return s;
     }
 }

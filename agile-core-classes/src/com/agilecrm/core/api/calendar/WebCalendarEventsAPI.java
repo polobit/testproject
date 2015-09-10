@@ -17,6 +17,7 @@ import org.json.JSONException;
 
 import com.agilecrm.activities.Event;
 import com.agilecrm.activities.WebCalendarEvent;
+import com.agilecrm.activities.util.EventUtil;
 import com.agilecrm.activities.util.WebCalendarEventUtil;
 import com.agilecrm.contact.Contact;
 
@@ -35,7 +36,9 @@ public class WebCalendarEventsAPI
 {
 
 	/**
-	 * Get slot duration and description for that.
+	 * Get slot duration and description for that slot based on user id.
+	 * @param id  user id
+	 * @return  {@link List}
 	 */
 	@Path("/getslotdetails")
 	@GET
@@ -58,12 +61,13 @@ public class WebCalendarEventsAPI
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public List<List<Long>> getSlots(@QueryParam("slot_time") int slot_time, @QueryParam("date") String date,
 			@QueryParam("timezone_name") String timezoneName, @QueryParam("epoch_time") Long epochTime,
-			@QueryParam("selected_time_epoch") Long startTime, @QueryParam("user_id") Long userid,
-			@QueryParam("agile_user_id") Long agileuserid, @QueryParam("timezone") int timezone) throws ParseException
+			@QueryParam("startTime") Long startTime, @QueryParam("endTime") Long endTime,
+			@QueryParam("user_id") Long userid, @QueryParam("agile_user_id") Long agileuserid,
+			@QueryParam("timezone") int timezone) throws ParseException
 	{
 		try
 		{
-			return WebCalendarEventUtil.getSlots(userid, slot_time, date, timezoneName, epochTime, startTime,
+			return WebCalendarEventUtil.getSlots(userid, slot_time, date, timezoneName, epochTime, startTime, endTime,
 					agileuserid, timezone);
 		}
 		catch (JSONException e)
@@ -74,6 +78,13 @@ public class WebCalendarEventsAPI
 		return null;
 	}
 
+	
+	
+	/**
+	 * 
+	 * @param wce contains list of values used for creating event
+	 * @return done if executes without errors
+	 */
 	@Path("/save")
 	@PUT
 	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
@@ -96,6 +107,26 @@ public class WebCalendarEventsAPI
 			System.out.println(e.getMessage());
 			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
 					.build());
+		}
+
+	}
+
+	
+	/**
+	 * when scheduled user cancels his appointment 
+	 * @param eventid  agile event id
+	 * @param cancel_reason
+	 */
+	@Path("/deletewebevent")
+	@GET
+	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	public void deleteWebEvent(@QueryParam("event_id") Long eventid, @QueryParam("cancel_reason") String cancel_reason)
+	{
+		System.out.println(eventid + " ---------------" + cancel_reason);
+		Event event = EventUtil.getEvent(eventid);
+		if (event != null)
+		{
+			EventUtil.deleteWebEventFromClinetEnd(event, cancel_reason);
 		}
 
 	}

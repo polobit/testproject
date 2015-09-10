@@ -1,5 +1,5 @@
 body {
-	padding-top: 60px;
+	padding-top: 120px;
 	/* 60px to make the container go all the way to the bottom of the topbar */
 	padding-bottom: 10px;
 	position: relative;
@@ -64,7 +64,7 @@ textarea {
 }
 
 #render {
-	min-height: 455px;
+	min-height: 454px;
 	font-family: monospace;
 }
 

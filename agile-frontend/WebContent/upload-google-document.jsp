@@ -85,6 +85,7 @@
       	 if (window.opener)
     	 {
       		var network = "GOOGLE";
+          window.opener.CUSTOM_DOCUMENT_SIZE = 0;
       		window.opener.saveDocumentURL(url, network, window.location.search);
       	    window.close();
       	 }

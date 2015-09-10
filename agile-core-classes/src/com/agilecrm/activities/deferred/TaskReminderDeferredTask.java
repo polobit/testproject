@@ -109,7 +109,7 @@ public class TaskReminderDeferredTask implements DeferredTask
 	    {
 		Mandrill.sendMail("vVC_RtuNFH_5A99TEWXPmA", true, "noreplay@agilecrm.com", "task-reminder-failure",
 		        "jagadeesh@invox.com", null, null, "transient exception  after taskListMap" + domain, null,
-		        "task reminder deferred task ", null, null, null);
+		        "task reminder deferred task ", null, null, null, null);
 
 		TaskReminderDeferredTask taskDeferredTask = new TaskReminderDeferredTask(domain, time, domainuserid,
 		        timezone, user_email);
@@ -169,7 +169,7 @@ public class TaskReminderDeferredTask implements DeferredTask
 	{
 	    Mandrill.sendMail("vVC_RtuNFH_5A99TEWXPmA", true, "noreplay@agilecrm.com", "task-reminder-failure",
 		    "jagadeesh@invox.com", null, null, "transient exception at after sending mail" + domain, null,
-		    "task reminder deferred task ", null, null, null);
+		    "task reminder deferred task ", null, null, null, null);
 
 	    TaskReminderDeferredTask taskDeferredTask = new TaskReminderDeferredTask(domain, time, domainuserid,
 		    timezone, user_email);
@@ -189,13 +189,13 @@ public class TaskReminderDeferredTask implements DeferredTask
 		String errorString = errors.toString();
 
 		Mandrill.sendMail("vVC_RtuNFH_5A99TEWXPmA", true, "noreplay@agilecrm.com", "task-reminder-failure",
-		        "jagadeesh@invox.com", null, null, "check exception", null, errorString, null, null, null);
+		        "jagadeesh@invox.com", null, null, "check exception", null, errorString, null, null, null, null);
 	    }
 	    catch (Exception ex)
 	    {
 		Mandrill.sendMail("vVC_RtuNFH_5A99TEWXPmA", true, "noreplay@agilecrm.com", "task-reminder-failure",
 		        "jagadeesh@invox.com", null, null, "exception occured while sending mail " + domain, null,
-		        "exception occured in send event reminder deferred task", null, null, null);
+		        "exception occured in send event reminder deferred task", null, null, null, null);
 
 		ex.printStackTrace();
 		System.err.println("Exception occured while sending task reminder mail " + e.getMessage());

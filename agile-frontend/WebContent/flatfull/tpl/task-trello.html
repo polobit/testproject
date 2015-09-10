@@ -58,7 +58,7 @@
 
 <script id="new-tasks-lists-model-template" type="text/html">
      <div class="list-header panel-heading" attr="{{heading}}" ownerID={{owner_id}}>
-<div class="pull-left"> 
+<div class="pull-left text-ellipsis" style="width:80%;"> 
          <span class="m-r-xs">{{get_normal_name heading}}</span>
         <!-- <span id="task-count-{{heading}}-{{owner_id}}" class="badge bg-primary txt-mute"></span> -->
          
@@ -91,9 +91,9 @@
  <div class="listed-task red ui-state-default" id="{{id}}">
 {{else}}
   {{#if_equals priority_type "LOW"}}
-    <div class="listed-task gray ui-state-default" id="{{id}}">
-  {{else}}
     <div class="listed-task yellow ui-state-default" id="{{id}}">
+  {{else}}
+    <div class="listed-task blue ui-state-default" id="{{id}}">
   {{/if_equals}}
 {{/if_equals}}
 
@@ -119,7 +119,7 @@
          {{/if_equals}}       
       {{/if}}      
 </div>
-<div class="task-right">
+<div class="task-right text-ellipsis" style="width:30%">
       <label class="label bg-light dk text-tiny" title="Category">{{get_normal_name type}}</label>
   </div>
     <div class="clearfix"></div>
@@ -130,7 +130,7 @@
         			<a href="#contact/{{id}}" class="activate-link task-related-contacts text-sm text-muted">{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}</a>
         		{{/if_contact_type}}
 				{{#if_contact_type "COMPANY"}}
-        			<a href="#contact/{{id}}" class="activate-link task-related-contacts text-sm text-muted">{{getPropertyValue properties "name"}}</a>
+        			<a href="#company/{{id}}" class="activate-link task-related-contacts text-sm text-muted">{{getPropertyValue properties "name"}}</a>
         		{{/if_contact_type}}
         	{{/each}}
 		 </div>

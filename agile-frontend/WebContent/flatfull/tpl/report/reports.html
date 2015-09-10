@@ -17,10 +17,11 @@
 		 <div id="slate">
          </div>
         {{#if this.length}}
-		<div class="col-md-9 col-sm-9 table-responsive">
+		<div class="col-md-9 col-sm-9">
 		<div class="panel panel-default">
 		<div class="panel-heading">Email Reports List</div>
-        <table class="table table-bordered table-striped showCheckboxes agile-table panel" url="core/api/reports/bulk">
+       <div class="table-responsive">
+        <table class="table table-bordered table-striped showCheckboxes agile-table panel table-layout-mob-view " url="core/api/reports/bulk">
             <thead>
                 <tr>
                     <th>Name</th>
@@ -31,6 +32,7 @@
             <tbody id="report-model-list" route="report-edit/">
             </tbody>
         </table>
+       </div>
 		</div>
 		</div>
 		{{/if}}
@@ -78,6 +80,11 @@
 <div class="row">
     <div class="col-sm-12 col-md-12">
     	<h3 class="pull-left font-thin h3">Reports</h3>
+
+		<div class="pull-right">
+			<a href="#add-dashlet" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="You can also configure more reports as dashlets on your dashboard" class="text-info m-t-sm inline-block">Configure Dashlet Reports</a>
+			
+   		</div>
     </div>
 </div>
 </div>
@@ -126,20 +133,38 @@
                 <i class="icon-cogs icon-3x"></i>
             </div>
             <b>Activity Reports</b>
-        </div>
+        </div>  
         <br />
+                
+        {{#isAllowedInCurrentPlan "is_activity_reports_enabled"}}
         <!-- Description -->
         <div class="ellipsis-multiline m-b-md" rel="tooltip" title="{{description}}">
-          	Get a periodic  email digest of various activities by users in Agile.
+            Get a periodic  email digest of various activities by users in Agile.
+            <div style="display:none;" class="activity-reports-upgrade" ><p class="text-danger">{{toSafeString message}}<p></div>
         </div>
         <!-- Add button -->
-        <div style="/*margin: 40px auto;	width: 50%;*/">
 			{{#hasMenuScope 'ACTIVITY'}}
-            	<a class="btn btn-default btn-sm" href="#activity-reports">Go</a>
+            	<div  style="/*margin: 40px auto;    width: 50%;*/ display:inline;">
+                    <a class="btn btn-sm btn-default"  href="#activity-reports" id="activity-reports-upgrade">Go</a>
+                </div>
+                
 			{{else}}
 				<span class="btn btn-default btn-sm disabled" >Go</span>
 			{{/hasMenuScope}}
-        </div>
+            {{else}}
+            <!-- Description -->
+            <div class="ellipsis-multiline m-b-md" rel="tooltip" title="{{description}}">
+            Get a periodic  email digest of various activities by users in Agile.
+            <div style="display:none;" class="activity-reports-upgrade" ><p class="text-danger">{{toSafeString message}}<p></div>
+             </div>
+        <!-- Add button -->
+            <div >
+                    <div class="btn btn-sm btn-default _upgrade" id="activity-reports-upgrade">Go</div>
+                </div>
+                 
+            {{/isAllowedInCurrentPlan}}
+             <div class="clearfix"></div>
+        
     </div>
 </div>
 {{/hasMenuScope}}
@@ -171,10 +196,10 @@
         <br />
         <!-- Description -->
         <div class="ellipsis-multiline m-b-md" rel="tooltip" title="{{description}}">
-          	Visually see how your leads are growing over time. Compare various channels and gain insight.
+          	Visually see how your leads are growing over time. Compare various channel to gain insight.
         </div>
         <!-- Add button -->
-        <div>
+        <div >
             <a class="btn btn-sm btn-default" href="#report-charts/growth">Go</a>
         </div>
     </div>
@@ -195,7 +220,7 @@
             See a funnel graph of how leads are passing through various stages in your sales cycle.
         </div>
         <!-- Add button -->
-        <div>
+        <div >
             <a class="btn btn-sm btn-default" href="#report-charts/funnel">Go</a>
         </div>
     </div>
@@ -208,15 +233,15 @@
             <div>
                 <i class="icon-group icon-3x"></i>
             </div>
-            <b>Cohorts Reports</b>
+            <b>Ratio Reports</b>
         </div>
         <br />
         <!-- Description -->
         <div class="ellipsis-multiline m-b-md" rel="tooltip" title="{{description}}">
-            See what percentage of leads are you converting over time.
+            See what percentage of leads are converting over time.
         </div>
         <!-- Add button -->
-        <div>
+        <div >
             <a class="btn btn-sm btn-default" href="#report-charts/cohorts">Go</a>
         </div>
     </div>
@@ -253,7 +278,7 @@
         </div>
         <!-- Add button -->
        
-        <div>
+        <div >
 			<a id="campaign_id" class="btn btn-sm btn-default" href="#">Go</a>
 
         </div>
@@ -278,7 +303,7 @@
           	See how your campaigns fare against each other.
         </div>
         <!-- Add button -->
-        <div>
+        <div >
             <a class="btn btn-sm btn-default" href="#campaign-stats" id="campaign-stats">Go</a>
         </div>
     </div>
@@ -309,14 +334,32 @@
             <b>User Activities</b>
         </div>
         <br />
+        
+        {{#isAllowedInCurrentPlan "is_email_gateway_allowed"}}
         <!-- Description -->
         <div class="ellipsis-multiline m-b-md" rel="tooltip" title="{{description}}">
           See a chronological activity report of your CRM users.
+          <div style="display:none;" class="activities-upgrade" ><p class="text-danger">{{toSafeString message}}<p></div>
         </div>
         <!-- Add button -->
-        <div>
-            <a class="btn btn-sm btn-default" href="#activities">Go</a>
-        </div>
+          
+                <div  style="/*margin: 40px auto;    width: 50%;*/ display:inline;">
+                      <a class="btn btn-sm btn-default" href="#activities">Go</a>
+                </div>
+            {{else}}
+            <!-- Description -->
+            <div class="ellipsis-multiline m-b-md" rel="tooltip" title="{{description}}">
+             See a chronological activity report of your CRM users.
+           <div style="display:none;" class="activities-upgrade" ><p class="text-danger">{{toSafeString message}}<p></div>
+            </div>
+        <!-- Add button -->
+            <div class="inline " style="/*margin: 40px auto;    width: 50%;*/ display:inline;">
+                    <div class="btn btn-sm btn-default _upgrade" id="activities-upgrade">Go</div>
+                </div>
+                 
+            {{/isAllowedInCurrentPlan}}
+             <div class="clearfix"></div>
+
     </div>
 </div>
 
@@ -337,7 +380,7 @@
           See a chronological contact activity report of your CRM contacts.
         </div>
         <!-- Add button -->
-        <div>
+        <div >
             <a class="btn btn-sm btn-default" href="#contact-activities">Go</a>
         </div>
     </div>

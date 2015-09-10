@@ -14,6 +14,7 @@ import com.agilecrm.Globals;
 import com.agilecrm.account.util.EmailGatewayUtil;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.email.bounce.EmailBounceStatus;
+import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.queues.backend.ModuleUtil;
 import com.agilecrm.util.DateUtil;
 import com.agilecrm.util.EmailLinksConversion;
@@ -25,7 +26,7 @@ import com.campaignio.tasklets.TaskletAdapter;
 import com.campaignio.tasklets.agile.util.AgileTaskletUtil;
 import com.campaignio.tasklets.util.TaskletUtil;
 import com.google.appengine.api.NamespaceManager;
-import com.thirdparty.SendGrid;
+import com.thirdparty.sendgrid.SendGrid;
 import com.thirdparty.mandrill.webhook.MandrillWebhook;
 
 /**
@@ -228,19 +229,37 @@ public class SendEmail extends TaskletAdapter
     public void run(JSONObject campaignJSON, JSONObject subscriberJSON, JSONObject data, JSONObject nodeJSON)
 	    throws Exception
     {
-	// No email
-	if (!subscriberJSON.getJSONObject("data").has("email"))
-	{
-	    LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON),
-		    "Email cannot be sent as there is no email-id for this contact.",
-		    LogType.EMAIL_SENDING_FAILED.toString());
 
-	    // Execute Next One in Loop
-	    TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, null);
+    	// Get From, Message
+    	String fromEmail = getStringValue(nodeJSON, subscriberJSON, data, FROM_EMAIL);
+    	String to = getStringValue(nodeJSON, subscriberJSON, data, TO);
+    	
+    	// If From email empty
+    	if(StringUtils.isBlank(fromEmail))
+    	{
+    		LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON),
+    			    "Email failed since \'From\' address is invalid.",
+    			    LogType.EMAIL_SENDING_FAILED.toString());
 
-	    return;
-	}
+    		// Execute Next One in Loop
+    		TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, null);
 
+    		return;
+    	}
+    	
+    	// If To email empty
+    	if(StringUtils.isBlank(to))
+    	{
+    		LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON),
+    			    "Email failed since \'To\' address is invalid.",
+    			    LogType.EMAIL_SENDING_FAILED.toString());
+
+    		// Execute Next One in Loop
+    		TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, null);
+
+    		return;
+    	}
+    	
 	// Verify Unsubscribed status
 	if (subscriberJSON.has("isUnsubscribedAll"))
 	{
@@ -479,7 +498,7 @@ public class SendEmail extends TaskletAdapter
 	String to = getStringValue(nodeJSON, subscriberJSON, data, TO);
 	String cc = getStringValue(nodeJSON, subscriberJSON, data, CC);
 	String bcc = getStringValue(nodeJSON, subscriberJSON, data, BCC);
-
+	
 	String subject = getStringValue(nodeJSON, subscriberJSON, data, SUBJECT);
 
 	String onlineLinkForEmail = getOnlineLinkForEmail(campaignJSON, subscriberJSON, nodeJSON);
@@ -502,6 +521,7 @@ public class SendEmail extends TaskletAdapter
 	String subscriberId = AgileTaskletUtil.getId(subscriberJSON);
 	String campaignId = AgileTaskletUtil.getId(campaignJSON);
 
+	
 	// Check if we need to convert links
 	if (trackClicks != null
 	        && (trackClicks.equalsIgnoreCase(TRACK_CLICKS_YES) || trackClicks
@@ -607,6 +627,9 @@ public class SendEmail extends TaskletAdapter
     {
 	String domain = NamespaceManager.get();
 
+	// Update campaign emailed time
+	ContactUtil.updateCampaignEmailedTime(Long.parseLong(subscriberId), System.currentTimeMillis()/1000, to);
+	
 	// For domain "clickdeskengage" - use SendGrid API
 	if (StringUtils.equals(domain, Globals.CLICKDESK_ENGAGE_DOMAIN))
 	{

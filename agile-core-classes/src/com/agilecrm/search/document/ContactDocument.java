@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.time.DateUtils;
 
 import com.agilecrm.contact.Contact;
@@ -86,6 +87,14 @@ public class ContactDocument extends com.agilecrm.search.document.Document imple
 
 		// Processes contact property fields and tags(in normalized form)
 		Map<String, String> fields = SearchUtil.getFieldsMap(contact, doc);
+		
+		/*
+		 * Adds first letter of firstname, lastname for Person and name for
+		 * Company to text search.
+		 */
+		SearchUtil.addNameFirstLetter(contact, doc);
+		//schema version for ignoring stale data.
+		doc.addField(Field.newBuilder().setName("schema_version").setNumber(1.0));
 
 		// Sets created date to document with out time component(Search API
 		// support date without time component)
@@ -105,11 +114,56 @@ public class ContactDocument extends com.agilecrm.search.document.Document imple
 		// Describes updated time document if updated time is not 0.
 		if (contact.updated_time > 0L)
 		{
+			fields.put("updated_time", contact.updated_time.toString());
 			Date updatedDate = DateUtils.truncate(new Date(contact.updated_time * 1000), Calendar.DATE);
 
 			doc.addField(Field.newBuilder().setName("updated_time").setDate(updatedDate));
 
 			doc.addField(Field.newBuilder().setName("updated_time_epoch").setNumber(contact.updated_time));
+		}
+		
+		// Describes last contacted time document if updated time is not 0.
+		if (contact.last_contacted > 0L)
+		{
+			fields.put("last_contacted", contact.last_contacted.toString());
+			Date updatedDate = DateUtils.truncate(new Date(contact.last_contacted * 1000), Calendar.DATE);
+
+			doc.addField(Field.newBuilder().setName("last_contacted").setDate(updatedDate));
+
+			doc.addField(Field.newBuilder().setName("last_contacted_epoch").setNumber(contact.last_contacted));
+		}
+		
+		// Describes last contacted time document if updated time is not 0.
+		if (contact.last_emailed > 0L)
+		{
+			fields.put("last_emailed", contact.last_emailed.toString());
+			Date updatedDate = DateUtils.truncate(new Date(contact.last_emailed * 1000), Calendar.DATE);
+
+			doc.addField(Field.newBuilder().setName("last_emailed").setDate(updatedDate));
+
+			doc.addField(Field.newBuilder().setName("last_emailed_epoch").setNumber(contact.last_emailed));
+		}
+		
+		// Describes last contacted time document if updated time is not 0.
+		if (contact.last_campaign_emaild > 0L)
+		{
+			fields.put("last_campaign_emaild", contact.last_campaign_emaild.toString());
+			Date updatedDate = DateUtils.truncate(new Date(contact.last_campaign_emaild * 1000), Calendar.DATE);
+
+			doc.addField(Field.newBuilder().setName("last_campaign_emaild").setDate(updatedDate));
+
+			doc.addField(Field.newBuilder().setName("last_campaign_emaild_epoch").setNumber(contact.last_campaign_emaild));
+		}
+		
+		// Describes last contacted time document if updated time is not 0.
+		if (contact.last_called > 0L)
+		{
+			fields.put("last_called", contact.last_called.toString());
+			Date updatedDate = DateUtils.truncate(new Date(contact.last_called * 1000), Calendar.DATE);
+
+			doc.addField(Field.newBuilder().setName("last_called").setDate(updatedDate));
+
+			doc.addField(Field.newBuilder().setName("last_called_epoch").setNumber(contact.last_called));
 		}
 
 		// Adds Other fields in contacts to document
@@ -126,6 +180,13 @@ public class ContactDocument extends com.agilecrm.search.document.Document imple
 		 */
 		doc.addField(Field.newBuilder().setName("search_tokens")
 				.setText(SearchUtil.getSearchTokens(contact.properties)));
+		
+		/*
+		 * Get all field names in contact seperated by space and adds it in
+		 * document "field_labels"
+		 */
+		doc.addField(Field.newBuilder().setName("field_labels")
+				.setText(StringUtils.join(fields.keySet(), " ")));
 
 		DomainUser user = contact.getOwner();
 

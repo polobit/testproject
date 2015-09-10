@@ -6,8 +6,8 @@ $(function () {
 	/*
 	 * Shows the mail details in detail on a popup modal, when '+'
 	 * symbol is clicked 
-	 */  
-	$("#tl-mail-popover").live('click',function(e){
+	 */ 
+	$('body').on('click', '#tl-mail-popover', function(e){
 		e.preventDefault();
 		
 		var htmlstring = $(this).closest('div').attr("data");
@@ -22,8 +22,8 @@ $(function () {
 	
 	/*
 	 * Shows the campaign log details on a popup modal
-	 */ 
-	$("#tl-log-popover").live('click',function(e){
+	 */
+	$('body').on('click', '#tl-log-popover', function(e){
 		e.preventDefault();
 		
 		var string = $(this).closest('div').attr("data");
@@ -37,7 +37,7 @@ $(function () {
 	/**
 	 * Shows analytics popup modal with full details.
 	 **/
-	$("#tl-analytics-popover").live('click',function(e){
+	$('body').on('click', '#tl-analytics-popover', function(e){
 		e.preventDefault();
 		
 		var string = $(this).closest('div.body').html();
@@ -51,21 +51,21 @@ $(function () {
 	/*
 	 * Shows the list of mails(mail sent to) as popover, when mouse is entered on
 	 * to address of the email
-	 */  
-	$("#tl-mail-to-popover").live('mouseenter',function(e){
+	 */ 
+	$('body').on('mouseenter', '#tl-mail-to-popover', function(e){
 		
 		$(this).popover({
         	template:'<div class="popover"><div class="arrow"></div><div class="popover-inner" style="padding:1px;width:340px;border-radius:2px"><div class="popover-content"><p></p></div></div></div>'
         });
 		
 		var string = $(this).text();
-		var html = new Handlebars.SafeString(string.replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/,/g, ",</br>").replace("To:","To:</br>").replace("read more", ""));
-		$(this).attr("data-content", html);
+		//var html = new Handlebars.SafeString(string.replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/,/g, ",</br>").replace("To:","To:</br>").replace("read more", ""));
+		$(this).attr("data-content", string);
         $(this).popover('show');
     });
 	
 	// Resizes the item height and open close effect for timeline elements
-	$('#timeline .item a.open-close').live("click", function(e){
+	$('body').on('click', '#timeline .item a.open-close', function(e){
 		$(this).siblings('.body').slideToggle(function(){
 			$('#timeline').isotope('reLayout');
 		});

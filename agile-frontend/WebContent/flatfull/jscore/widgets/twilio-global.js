@@ -17,8 +17,12 @@ TWILIO_DIRECTION = "";
 TWILIO_CALLED_NO = "";
 TWILIO_IS_VOICEMAIL = false;
 
-$(function()
-{
+function initializeTwilioGlobalListeners(){
+	
+}
+
+$(function(){
+
 	// After 15 sec procedure will start.
 	setTimeout(function()
 	{
@@ -29,7 +33,7 @@ $(function()
 		}
 	}, 10000); // 15 sec
 
-	$(".noty_twilio_mute").die().live('click', function(e)
+	$('body').on('click', '.noty_twilio_mute', function(e)
 			{
 				e.preventDefault();
 				console.log("Twilio call noty_twilio_mute from noty");
@@ -40,7 +44,7 @@ $(function()
 				$('.noty_buttons').find('.noty_twilio_mute').toggle();
 			});
 	
-	$(".noty_twilio_unmute").die().live('click', function(e)
+	$('body').on('click', '.noty_twilio_unmute', function(e)
 			{
 				e.preventDefault();
 				console.log("Twilio call noty_twilio_unmute from noty");
@@ -52,7 +56,7 @@ $(function()
 			});
 	
 	
-	$(".noty_twilio_hangup").die().live('click', function(e)
+	$('body').on('click', '.noty_twilio_hangup', function(e)
 	{
 		e.preventDefault();
 		console.log("Twilio call hang up from noty");
@@ -60,7 +64,7 @@ $(function()
 		Twilio.Device.disconnectAll();
 	});
 
-	$(".noty_twilio_dialpad").die().live('click', function(e)
+	$('body').on('click', '.noty_twilio_dialpad', function(e)
 	{
 		e.preventDefault();
 		console.log("Twilio call dailpad from noty");
@@ -69,8 +73,7 @@ $(function()
 	});
 	
 	//START voice mails
-	
-	$("#noty_twilio_voicemail").die().live('click', function(e){
+	$('body').on('click', '#noty_twilio_voicemail', function(e){
 		e.preventDefault();
 		var voiceMailCount = parseInt($(this).attr('data-length'));
 		if(voiceMailCount === 1) {
@@ -80,14 +83,13 @@ $(function()
 		}
 	});
 	
-	$(".voiceMailItem").die().live('click',function(e){
+	$('#prefs-tabs-content').on('click', '.voiceMailItem', function(e){
 		e.preventDefault();
 		sendVoiceAndEndCall($(this).attr('data-src'));
 	});
 		
 	//END voice mails related
-
-	$(".noty_twilio_answer").die().live('click', function(e)
+	$('body').on('click', '.noty_twilio_answer', function(e)
 	{
 		e.preventDefault();
 		console.log("Twilio call answered from noty");
@@ -95,7 +97,7 @@ $(function()
 		globalconnection.accept();
 	});
 
-	$(".noty_twilio_ignore").die().live('click', function(e)
+	$('body').on('click', '.noty_twilio_ignore', function(e)
 	{
 		e.preventDefault();
 		console.log("Twilio call ignore from noty");
@@ -103,7 +105,7 @@ $(function()
 		globalconnection.ignore();
 	});
 
-	$(".noty_twilio_cancel").die().live('click', function(e)
+	$('body').on('click', '.noty_twilio_cancel', function(e)
 	{
 		e.preventDefault();
 		console.log("Twilio call canceld from noty");
@@ -113,7 +115,7 @@ $(function()
 		Twilio.Device.disconnectAll();
 	});
 
-	$("#validate_account").die().live('click', function(e)
+	$('body').on('click', '#validate_account', function(e)
 	{
 		e.preventDefault();
 		console.log("In validate event");
@@ -147,7 +149,7 @@ $(function()
 		 */
 	});
 
-	$("#twilio_number").die().live('change', function(e)
+	$('body').on('change', '#twilio_number', function(e)
 	{
 		e.preventDefault();
 		$("#error-number-not-selected").hide();
@@ -158,14 +160,14 @@ $(function()
 
 		$("#twilio_number_sid").val(numberSID);
 	});
-
-	$("#twilio_from_number").die().live('change', function(e)
+	
+	$('body').on('change', '#twilio_from_number', function(e)
 	{
 		e.preventDefault();
 		$("#error-number-not-selected").hide();
 	});
 
-	$(".contact-make-twilio-call").die().live('click', function(e)
+	$('body').on('click', '.contact-make-twilio-call', function(e)
 	{
 		e.preventDefault();
 		TWILIO_CALLTYPE = "Outgoing";
@@ -189,13 +191,13 @@ $(function()
 		twiliocall($(this).attr("phone"), getContactName(contactDetailsObj));
 	});
 
-	$("#twilio_acc_sid", "#twilio_auth_token").die().live('click', function(e)
+	$('body').on('click', '#twilio_acc_sid, #twilio_auth_token', function(e)
 	{
 		e.preventDefault();
 		$("#note-number-not-available").hide();
 	});
 	
-	$(".twilioio-advance-settings").die().live('click', function(e)
+	$('body').on('click', '.twilioio-advance-settings', function(e)
 	 {
 		e.preventDefault();
 		
@@ -209,6 +211,55 @@ $(function()
 	    $("#twilio_recording").toggle();
 	    $("#twilio_twimlet_url_controls").toggle();
 	 });
+
+	$('body').on('click', '#twilio_verify_settings', function(e)
+			{
+				e.preventDefault();
+				
+				$('#widget-settings').html(getTemplate('twilio-initial', {}));
+				
+			});
+	
+		/*
+		 * If Twilio account doesn't have numbers, we need to verify numbers in
+		 * Twilio.On click of verify button in Twilio initial template,
+		 * verifyNumberFromTwilio is called to verify a number in Twilio
+		 */
+		$('body').on('click', '#twilio_verify', function(e)
+		{
+			e.preventDefault();
+
+			// Checks whether all input fields are given
+			if (!isValidForm($("#twilio_call_form")))
+				return;
+
+			// From number to make calls as entered by user
+			var from_number = $('#twilio_from').val();
+			console.log("Twilio verify from number: " + from_number);
+
+			$.getJSON("core/api/widgets/Twilio", function(data)
+					{
+						console.log(data);
+						
+						if(data)
+						{
+							/*
+							 * Verifies a number in Twilio and shows verification code in the Twilio
+							 * template with a procced button
+							 */
+							verifyNumberFromTwilio(from_number, data.id, function(verified_data)
+							{
+								verified_data["settings"] = true;
+								// Append the url with the random number in order to differentiate the same action performed more than once.
+								verified_data["id"] = Math.floor((Math.random()*10)+1);
+								
+								console.log(verified_data);
+								console.log(getTemplate('twilio-verify', verified_data));
+								$('#widget-settings').html(getTemplate('twilio-verify', verified_data));
+							});
+						}
+					});
+		});
 	
 });
 
@@ -945,7 +996,7 @@ function showNoteAfterCall(callRespJson,messageObj)
 		var noteSub = "";
 		var friendlyStatus = "";
 		var callStatus = callRespJson.status;
-		
+		 
 		if(callStatus != 404 && typeof callRespJson.duration != "undefined") {
 			
 			var phoneNumber = "";
@@ -996,6 +1047,11 @@ function showNoteAfterCall(callRespJson,messageObj)
 		 		$("#noteForm").find("#description").focus();
 				$('#noteModal').modal('show');
 				agile_type_ahead("note_related_to", el, contacts_typeahead);
+				//changed by prakash to add the last_called parameter and last_connected parameter of contact object on server side - 15/6/15
+					if(TWILIO_DIRECTION == "outbound-dial") {
+						twilioIOSaveContactedTime();	
+					}
+									
 			} else {
 				//add note automatically
 				$.post( "/core/api/widgets/twilio/autosavenote", {
@@ -1053,21 +1109,25 @@ function twilioSecondsToFriendly(time) {
 function searchForContact(from) {
 	console.log("searchForContact : " + from);	
 	var fromName = "";
-	var responseJson = $.parseJSON(
+
+	try {
+       var responseJson = $.parseJSON(
 	        $.ajax({
 	        	url: "core/api/contacts/search/phonenumber/"+from,
 	            async: false,
 	            dataType: 'json'
 	        }).responseText
 	    );
-	console.log("**** responseJson ****");
-	console.log(responseJson);
 	
-	if(responseJson != null) {
-		TWILIO_CONTACT_ID = responseJson.id;
-		console.log("TWILIO_CONTACT_ID : "+TWILIO_CONTACT_ID);
-		fromName = getContactName(responseJson);
-	}
+		if(responseJson != null) {
+			TWILIO_CONTACT_ID = responseJson.id;
+			console.log("TWILIO_CONTACT_ID : "+TWILIO_CONTACT_ID);
+			fromName = getContactName(responseJson);
+		}
+    } catch(e){
+       return "";
+    }
+    
 	return fromName;
 }
 
@@ -1189,17 +1249,21 @@ function twilioApiRequest(ApiCallUrl){
 function searchForContactImg(from) {
 	console.log("searchForContactImg : " + from);	
 	var contactImg = "";
-	var responseJson = $.parseJSON(
+	try {
+		var responseJson = $.parseJSON(
 	        $.ajax({
 	        	url: "core/api/contacts/search/phonenumber/"+from,
 	            async: false,
 	            dataType: 'json'
 	        }).responseText
 	    );
-	console.log("**** responseJson ****");
-	console.log(responseJson);
-	
-	return responseJson;
+		console.log("**** responseJson ****");
+		console.log(responseJson);
+		
+		return responseJson;
+	} catch(e) {
+		return null;
+	}	
 }
 
 // Add contact img in html for call noty text with contact url

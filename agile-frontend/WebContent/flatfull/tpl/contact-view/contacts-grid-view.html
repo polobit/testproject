@@ -8,7 +8,7 @@
        <i></i>                
      </label>
 	  <div class="pull-left m-r-xs thumb">
-        <img class="img-inital inline r r-2x" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 50}}" width="50px" height="50px"  />
+        <img class="img-inital inline r r-2x" title="{{getPropertyValue properties 'first_name'}} {{getPropertyValue properties 'last_name'}}" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 50}}" width="50px" height="50px"  />
       </div>
 	  <div class="pull-left text-ellipsis" style="width:70%;">
         <a href="#contact/{{id}}" class="text-first-capital">
@@ -34,7 +34,7 @@
            <i></i>                
         </label>
 	  	<div class="pull-left m-r-xs">
-        	<img class="thumbnail m-b-none" {{getCompanyImage "50" "display:inline;"}} />
+        	<img class="thumbnail m-b-none" title="{{getPropertyValue properties 'name'}}" {{getCompanyImage "50" "display:inline;"}} />
       	</div>
 	  	<div class="pull-left text-ellipsis" style="width:70%;">
         	<a href="#contact/{{id}}" class="text-first-capital">
@@ -61,7 +61,7 @@
                 <i></i>                
       		</label>
 	  <div class="pull-left m-r-xs">
-        <img class="thumbnail img-inital inline m-b-none" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 50}}" width="50px" height="50px"  />
+        <img title="{{getPropertyValue properties 'first_name'}} {{getPropertyValue properties 'last_name'}}" class="thumbnail img-inital inline m-b-none" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 50}}" width="50px" height="50px"  />
       </div>
 	  <div class="pull-left text-ellipsis" style="width:70%;">
         <a href="#contact/{{id}}" class="text-first-capital">
@@ -86,7 +86,7 @@
 		<input class="tbody_check right" type="checkbox"/>
 	<i></i></label>
 	  	<div class="pull-left m-r-xs">
-        	<img class="thumbnail m-b-none" {{getCompanyImage "50" "display:inline;"}} />
+        	<img class="thumbnail m-b-none" title="{{getPropertyValue properties 'name'}}" {{getCompanyImage "50" "display:inline;"}} />
       	</div>
 	  	<div class="pull-left text-ellipsis" style="width:70%;">
         	<a href="#contact/{{id}}" class="text-first-capital">
@@ -121,17 +121,17 @@
 					</a>
 					{{#collection_contact_type "PERSON"}}
 					<ul class="dropdown-menu" id="view-actions">
-						<li><a href="#" id="bulk-tags">Add Tags</a></li>
-						<li><a href="#" id="bulk-tags-remove">Remove Tags</a></li>
-                        <li class='divider'></li>  
+						<li><a href="#" id="bulk-tags" class="_BULKACTION_FILTER">Add Tags</a></li>
+						<li><a href="#" id="bulk-tags-remove" class="_contact_bulk_action">Remove Tags</a></li>
+                        <li class='divider' class="_BULKACTION_FILTER"></li>  
 						{{#hasMenuScope 'CAMPAIGN'}}
-						<li><a href="#" id="bulk-campaigns">Add to Campaign</a></li>
+						<li><a href="#" id="bulk-campaigns" class="_contact_bulk_action">Add to Campaign</a></li>
 						{{/hasMenuScope}}
-						<li><a href="#" id="bulk-email">Send Email</a></li>
+						<li><a href="#" id="bulk-email" class="_contact_bulk_action">Send Email</a></li>
                         <li class='divider'></li>
-						<li><a href="#" id="bulk-owner">Change Owner</a></li>
+						<li><a href="#" id="bulk-owner" class="_contact_bulk_action">Change Owner</a></li>
                          {{#hasScope "EXPORT_CONTACTS"}}
-                        <li><a href="#" id="bulk-contacts-export">Export Contacts as CSV</a></li>
+                        <li><a href="#" id="bulk-contacts-export" class="_contact_bulk_action">Export Contacts as CSV</a></li>
                          {{/hasScope}}
 						<li><a href="#" id="delete-checked-grid">Delete</a></li>
 					</ul>

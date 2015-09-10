@@ -5,11 +5,13 @@
  * @module Campaigns
  * 
  */
-$(function()
-{
+function initializeTriggersListeners(){
+}
+
+$(function(){
 
 	// Tag suggestions when 'Tag is added' and 'Tag is deleted' options selected
-	$('#trigger-type').die('change').live('change', function(e)
+	$('body').on('change', '#trigger-type', function(e)
 	{
 		e.preventDefault();
 
@@ -144,7 +146,7 @@ $(function()
 	});
 	
 	// When cancel clicked, take to Back page
-	$('#trigger-cancel').die().live('click', function(e)
+	$('body').on('click', '#trigger-cancel', function(e)
 	{
 		e.preventDefault();
 
@@ -152,7 +154,7 @@ $(function()
 			history.back(-1);
 	});
 	
-	$('#email-tracking-type').die().live('change', function(e){
+	$('body').on('change', '#email-tracking-type', function(e){
 		
 		e.preventDefault();
 		

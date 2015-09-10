@@ -1,9 +1,11 @@
 package com.agilecrm.user.util;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.lang.StringUtils;
@@ -15,7 +17,9 @@ import com.agilecrm.user.DomainUser;
 import com.agilecrm.util.email.SendMail;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.datastore.QueryResultIterable;
+import com.google.appengine.api.datastore.QueryResultIterator;
 import com.googlecode.objectify.Key;
+import com.googlecode.objectify.Query;
 
 /**
  * <code>DomainUserUtil</code> is utility class used to process data of
@@ -310,6 +314,30 @@ public class DomainUserUtil
 	    Map<String, Object> filter = new HashMap<String, Object>();
 	    filter.put("is_account_owner", true);
 	    return dao.fetchAll();
+	}
+	finally
+	{
+	    NamespaceManager.set(oldNamespace);
+	}
+    }
+
+    public static Set<String> getAllDomainsUsingIterator()
+    {
+	String oldNamespace = NamespaceManager.get();
+	NamespaceManager.set("");
+
+	try
+	{
+	    Set<String> domains = new HashSet<String>();
+	    Query<DomainUser> query = dao.ofy().query(DomainUser.class).filter("is_account_owner", true);
+	    QueryResultIterator<DomainUser> iterator = query.iterator();
+	    while (iterator.hasNext())
+	    {
+		DomainUser user = iterator.next();
+		// Temporary list
+		domains.add(user.domain);
+	    }
+	    return domains;
 	}
 	finally
 	{

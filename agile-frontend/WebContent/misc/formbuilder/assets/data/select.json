@@ -20,6 +20,11 @@
           "Option two"
         ]
       },
+      "required": {
+       "label": "Required",
+       "type": "checkbox",
+       "value": false
+      },
       "inputheight": {
         "label": "Input Height",
         "type": "select",
@@ -89,6 +94,11 @@
           "Option one",
           "Option two"
         ]
+      },
+      "required": {
+       "label": "Required",
+       "type": "checkbox",
+       "value": false
       },
       "inputheight": {
         "label": "Input Height",

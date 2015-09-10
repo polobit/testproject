@@ -24,11 +24,10 @@ var timeline_view = Backbone.View.extend({ initialize : function()
 	this.collection.add(App_Contacts.contactDetailView.model.toJSON().tagsWithTime, { silent : true });
 	this.collection.add(this.options.data, { silent : true });
 
-	//load_other_timline_entities();
+	// load_other_timline_entities();
 	this.queue = new Queue;
-//	this.render();
+	// this.render();
 	this.collection.bind('add', this.appendItem);
-	
 
 }, appendItem : function(model)
 {
@@ -100,7 +99,6 @@ function quedfunction(models)
 	});
 }
 
-
 function configure_timeline_comparator(collection)
 {
 
@@ -126,9 +124,13 @@ function configure_timeline_comparator(collection)
 				timeline_collection_view.month_year_marker_objects.push(context);
 			}
 
-		if (item.get('created_time'))
+		if (item.get('created_time') && item.get('entity_type') != "event")
 		{
 			return item.get('created_time');
+		}
+		if (item.get('entity_type') == "event")
+		{
+			return item.get('start');
 		}
 		else if (item.get('createdTime'))
 		{

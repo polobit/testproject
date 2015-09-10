@@ -4,6 +4,7 @@ define([
 	return { agile_form_load : function()
 	{
 		var url = window.location.protocol + '//' + window.location.host + '/' + 'core/api/forms/form?formId=' + formNumber;
+		
 		$.ajax({
 			url : url,
 			type: 'GET',
@@ -12,6 +13,16 @@ define([
 				saveform = JSON.parse(data.formJson);
 				$('#form-label').text('Edit Form');
 				new MyFormView({ title : "Original", collection : new MyFormSnippetsCollection(saveform) });
+				
+				//Loads form view in form.jsp page
+				if($('#agileFormHolder').length != 0) {
+					var formHtml = $("#render").val();
+			    	  if(formHtml != '') {
+			    		  $('#agileFormHolder').html(formHtml);
+			    		  $('#agileFormHolder style').remove();
+			    	  }
+				}
+				
 			}
 		});
 	}}

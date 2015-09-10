@@ -5,7 +5,7 @@
                 <div class="box-left pull-left m-r-md">
                     <img alt="Clipboard" src="/img/clipboard.png" />
                 </div>
-                <div class="box-right pull-left" style="width: calc(100% - 85px);">
+                <div class="box-right pull-left">
                     <h4 class="m-t-none">You have no documents for this Deal.</h4>
 					{{#hasMenuScope 'DOCUMENT'}}
                     <div class="text">
@@ -96,7 +96,7 @@
 							<a href="#contact/{{id}}">{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}</a>,
         				{{/if_contact_type}}
 						{{#if_contact_type "COMPANY"}}
-        					<a href="#contact/{{id}}">{{getPropertyValue properties "name"}}</a>,
+        					<a href="#company/{{id}}">{{getPropertyValue properties "name"}}</a>,
         				{{/if_contact_type}}
            		
            	{{/if}}

@@ -25,10 +25,70 @@ $('#app-aside-folded').on('click', function(e) {
 		$(".navi > ul > li#documentsmenu > a span").text("Documents");
 	}
 	
-	contactInnerTabsInvoke();
+	//contactInnerTabsInvoke();
 	
+    
 	});
 	
+$(document).ready(function(){
+
+
+    $("#contact-results li").click(function(){
+   $("#mobile-menu-settings").trigger('click');
+   });
+ 
+
+	if(( $(window).width() ) < 768 ) {
+	
+	$(".nav li a").click(function(){
+	  $("#mobile-menu").delay(2000).trigger("click");
+	});
+	
+
+   $("#mobile-menu-settings").on("click",function(){
+   if( $("#aside").hasClass("off-screen") ) {
+   $("#aside").removeClass("off-screen");
+   }
+   });
+
+  
+
+   $("#searchText").keyup(function(e){
+    if(e.which == 13) {
+   	$("#mobile-menu-settings").trigger('click');
+   }
+   });
+
+
+   $("#mobile-menu").on("click",function(){
+   if( $("#navbar").hasClass("show")) {
+   	$("#navbar").removeClass("show");
+   }
+   });
+
+   $("#navbar li a").on("click" , function(){
+   if($(this).hasClass("dropdown-toggle")) {
+	
+    }
+   else {
+   	$("#navbar").removeClass("show");
+   }
+   });
+   
+   }
+
+
+
+   });
+
+
+
+
+
+
+
+
+
 	
 	
 	

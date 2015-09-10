@@ -2,11 +2,10 @@ package com.agilecrm;
 
 public class Globals
 {
-
 	public static String[] URLS = { "agilecrm.com", "helptor.com", "-dot-sandbox-dot-agile-crm-cloud.appspot.com",
 			"-dot-sandbox-dot-agilecrmbeta.appspot.com", "-dot-addon-dot-agilecrmbeta.appspot.com",
 			"-dot-mcsandbox-dot-agile-crm-cloud.appspot.com", "-dot-sandbox-dot-agilesanbox.appspot.com",
-			"agilesanbox.com" };
+			"agilesanbox.com", "-dot-newui-dot-agilecrmbeta.appspot.com" };
 
 	public static String SUB_VERSION_URL = "-dot-agile-crm-cloud.appspot.com";
 
@@ -158,6 +157,8 @@ public class Globals
 	public static final String MANDRIL_API_KEY_VALUE = "iQ_811cc9NxpLG11Ue4ftA";
 	public static final String MANDRILL_TEST_API_KEY_VALUE = "MRiwkducZGEbXrLW1LC5oQ";
 
+	public static final String MANDRILL_PAID_POOL = "paid-pool";
+	
 	// Mailgun API key
 	public static final String MAILGUN_API_KEY_VALUE = "key-6rj8jh4d-ftsq2er2oqneoa7zi3e2-j3";
 

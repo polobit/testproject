@@ -2,11 +2,13 @@ define([
        "jquery", "underscore", "backbone"
       , "views/temp-snippet"
       , "helper/pubsub"
-      , "text!templates/app/renderform.html"
+      , "helper/formsettings"
+      , "text!templates/app/renderform.html",
 ], function(
   $, _, Backbone
   , TempSnippetView
   , PubSub
+  , FormSettings
   , _renderForm
 ){
   return Backbone.View.extend({
@@ -31,8 +33,9 @@ define([
       _.each(this.collection.renderAll(), function(snippet){
         that.$el.append(snippet);
       });
-      $("#render").val(that.renderForm({
-        text: _.map(this.collection.renderAllClean(), function(e){return e.html()}).join("\n")
+      $("#render").val(that.renderForm({preload : FormSettings.getSetting("agilepreloadfields"),
+	  method : FormSettings.getSetting("agileformmethod"), action : window.location.protocol + '//' + window.location.host + '/formsubmit',
+	  text: _.map(this.collection.renderAllClean(), function(e){return e.html();}).join("\n")
       }));
       this.$el.appendTo("#build form");
       this.delegateEvents();

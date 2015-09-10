@@ -41,6 +41,8 @@ import com.thirdparty.google.ContactPrefs;
 public abstract class ContactSyncService implements SyncService
 {
 
+    String bulk_action_tracker = String.valueOf(System.currentTimeMillis());
+
     /** NOTIFICATION_TEMPLATE. */
     protected static final String NOTIFICATION_TEMPLATE = "contact_sync_notification_template";
 
@@ -62,7 +64,7 @@ public abstract class ContactSyncService implements SyncService
     /** total_synced_contact. */
     protected int total_synced_contact;
 
-    private UserAccessControl accessControl = UserAccessControl.getAccessControl(AccessControlClasses.Contact, null);
+    private UserAccessControl accessControl = null;
 
     /**
      * creates ContactSyncService Instance at runtime follows Dynamic
@@ -79,6 +81,8 @@ public abstract class ContactSyncService implements SyncService
 	DomainUser user = DomainUserUtil.getDomainUser(key.getId());
 	if (user == null)
 	    return null;
+
+	accessControl = UserAccessControl.getAccessControl(AccessControlClasses.Contact, null, user);
 	UserInfo info = new UserInfo("agilecrm.com", user.email, user.name);
 	SessionManager.set(info);
 	return this;
@@ -309,11 +313,12 @@ public abstract class ContactSyncService implements SyncService
     private Contact saveContact(Contact contact)
     {
 	addTagToContact(contact);
-	if (ContactUtil.isDuplicateContact(contact))
+	// Temporary fix for stripe sync merging contacts
+	if (ContactUtil.isDuplicateContact(contact) && prefs.type != null && !prefs.type.equals(Type.STRIPE))
 	{
-
 	    contact = ContactUtil.mergeContactFields(contact);
 
+	    accessControl.setObject(contact);
 	    if (!accessControl.canDelete())
 	    {
 		syncStatus.put(ImportStatus.ACCESS_DENIED, syncStatus.get(ImportStatus.ACCESS_DENIED) + 1);
@@ -321,6 +326,8 @@ public abstract class ContactSyncService implements SyncService
 	    }
 	    try
 	    {
+
+		contact.bulkActionTracker = bulk_action_tracker;
 		contact.save();
 
 		syncStatus.put(ImportStatus.MERGED_CONTACTS, syncStatus.get(ImportStatus.MERGED_CONTACTS) + 1);
@@ -338,6 +345,7 @@ public abstract class ContactSyncService implements SyncService
 	{
 	    try
 	    {
+		contact.bulkActionTracker = bulk_action_tracker;
 		contact.save();
 	    }
 	    catch (AccessDeniedException e)

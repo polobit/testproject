@@ -43,7 +43,7 @@ $(function()
 	 * details, which are already added to time-line, when the contact is
 	 * getting to its detail view.
 	 */
-	$('#contactDetailsTab a[href="#timeline"]').live('click', function(e)
+	$('body').on('click', '#contactDetailsTab a[href="#timeline"]', function(e)
 	{
 		e.preventDefault();
 
@@ -52,7 +52,7 @@ $(function()
 		contact_details_tab.load_timeline();
 	});
 
-	$('.email-subject').die().live('click', function(e)
+	$('body').on('click', '.email-subject', function(e)
 	{
 		e.preventDefault();
 		var href = $(this).attr("href");
@@ -68,24 +68,27 @@ $(function()
 	});
 
 	// Hide More link and truncated webstats and show complete web stats.
-	/*$('#more-page-urls').die().live('click', function(e)
+	/*
+	 * $('#more-page-urls').die().live('click', function(e) {
+	 * e.preventDefault();
+	 * 
+	 * $(this).css('display', 'none');
+	 * $(this).parent().parent().find('#truncated-webstats').css('display',
+	 * 'none');
+	 * 
+	 * $(this).parent().parent().find('#complete-webstats').removeAttr('style');
+	 * });
+	 */
+
+	$('body').on('click', '#show-page-views', function(e)
 	{
 		e.preventDefault();
 
-		$(this).css('display', 'none');
-		$(this).parent().parent().find('#truncated-webstats').css('display', 'none');
-
-		$(this).parent().parent().find('#complete-webstats').removeAttr('style');
-	});*/
-	
-	$('#show-page-views').die().live('click', function(e){
-		e.preventDefault();
-		
 		$(this).closest('.activity-text-block').find('#complete-webstats').toggle();
 	});
 
 	// to remove contact from active campaign.
-	$('.remove-active-campaign').die().live('click', function(e)
+	$('body').on('click', '.remove-active-campaign', function(e)
 	{
 		e.preventDefault();
 
@@ -140,7 +143,7 @@ $(function()
 	 * Fetches all the notes related to the contact and shows the notes
 	 * collection as a table in its tab-content, when "Notes" tab is clicked.
 	 */
-	$('#contactDetailsTab a[href="#notes"]').live('click', function(e)
+	$('body').on('click', '#contactDetailsTab a[href="#notes"]', function(e)
 	{
 		e.preventDefault();
 		save_contact_tab_position_in_cookie("notes");
@@ -151,7 +154,7 @@ $(function()
 	 * Fetches all the events related to the contact and shows the events
 	 * collection as a table in its tab-content, when "Events" tab is clicked.
 	 */
-	$('#contactDetailsTab a[href="#events"]').live('click', function(e)
+	$('body').on('click', '#contactDetailsTab a[href="#events"]', function(e)
 	{
 		e.preventDefault();
 		save_contact_tab_position_in_cookie("events");
@@ -163,7 +166,7 @@ $(function()
 	 * collection as a table in its tab-content, when "Documents" tab is
 	 * clicked.
 	 */
-	$('#contactDetailsTab a[href="#documents"]').live('click', function(e)
+	$('body').on('click', '#contactDetailsTab a[href="#documents"]', function(e)
 	{
 		e.preventDefault();
 		save_contact_tab_position_in_cookie("documents");
@@ -174,7 +177,7 @@ $(function()
 	 * Fetches all the notes related to the contact and shows the tasks
 	 * collection as a table in its tab-content, when "Tasks" tab is clicked.
 	 */
-	$('#contactDetailsTab a[href="#tasks"]').live('click', function(e)
+	$('body').on('click', '#contactDetailsTab a[href="#tasks"]', function(e)
 	{
 		e.preventDefault();
 		save_contact_tab_position_in_cookie("tasks");
@@ -185,7 +188,7 @@ $(function()
 	 * Fetches all the deals related to the contact and shows the deals
 	 * collection as a table in its tab-content, when "Deals" tab is clicked.
 	 */
-	$('#contactDetailsTab a[href="#deals"]').live('click', function(e)
+	$('body').on('click', '#contactDetailsTab a[href="#deals"]', function(e)
 	{
 		e.preventDefault();
 		save_contact_tab_position_in_cookie("deals");
@@ -195,7 +198,7 @@ $(function()
 	/**
 	 * Fetches all the cases related to the contact and shows the collection.
 	 */
-	$('#contactDetailsTab a[href="#cases"]').live('click', function(e)
+	$('body').on('click', '#contactDetailsTab a[href="#cases"]', function(e)
 	{
 		e.preventDefault();
 		save_contact_tab_position_in_cookie("cases");
@@ -208,7 +211,7 @@ $(function()
 	 * associated email (gmail or imap) in Email-preferences of this CRM, when
 	 * "Mail" tab is clicked.
 	 */
-	$('#contactDetailsTab a[href="#mail"]').live('click', function(e)
+	$('body').on('click', '#contactDetailsTab a[href="#mail"]', function(e)
 	{
 		e.preventDefault();
 		email_server_type = "agilecrm"
@@ -221,7 +224,7 @@ $(function()
 	 * To do so the email should be run in analytics script provided by
 	 * agileCRM.
 	 */
-	$('#contactDetailsTab a[href="#stats"]').live('click', function(e)
+	 $('body').on('click', '#contactDetailsTab a[href="#stats"]', function(e)
 	{
 		e.preventDefault();
 		save_contact_tab_position_in_cookie("stats");
@@ -234,238 +237,42 @@ $(function()
 	 * and shows them in a table. Also shows a campaigns drop down list to
 	 * subscribe the contact to the selected campaign.
 	 */
-	$('#contactDetailsTab a[href="#campaigns"]').live('click', function(e)
+	$('body').on('click', '#contactDetailsTab a[href="#campaigns"]', function(e)
 	{
 		e.preventDefault();
 		save_contact_tab_position_in_cookie("campaigns");
 		contact_details_tab.load_campaigns();
 	});
 
-	$('#contactDetailsTab a[href="#company-contacts"]').live('click', function(e)
+    /*$('body').on('click', '#contactDetailsTab a[href="#company-contacts"]', function(e)
 	{
 		e.preventDefault();
 		fill_company_related_contacts(App_Contacts.contactDetailView.model.id, 'company-contacts');
-	});
+	});*/
 
 	/**
-	 * Sets cookie when user changes email dropdown under mail tab.
-	 * Cookie contains email server, email name
-	 * from next time application loads from emails from this email server and email 
+	 * Sets cookie when user changes email dropdown under mail tab. Cookie
+	 * contains email server, email name from next time application loads from
+	 * emails from this email server and email
 	 */
-	$('.agile-emails').die().live('click', function(e)
+	$('body').on('click', '.agile-emails', function(e)
 	{
 		e.preventDefault();
 		var email_server = $(this).attr('email-server');
 		var url = $(this).attr('data-url');
-		$('#email-type-select',App_Contacts.contactDetailView.el).html($(this).html());
-		//Here email_server_type means email/username of mail account
+		$('#email-type-select', App_Contacts.contactDetailView.el).html($(this).html());
+		// Here email_server_type means email/username of mail account
 		email_server_type = $(this).attr('email-server-type');
-		if(email_server && url && email_server!='agile')
+		if (email_server && url && (email_server != 'agile'))
 			url = url.concat(email_server_type);
 		var cookie_value = email_server_type + '|' + email_server;
 		save_email_server_type_in_cookie(cookie_value);
-		contact_details_tab.load_mail(url,email_server);
+		contact_details_tab.load_mail(url, email_server);
 	});
 
-	/**
-	 * Populates subject and description using email templates, on select option
-	 * change of "Fill From Templates" field.
-	 */
-	$('.emailSelect').die().live('change', function(e)
-	{
-		e.preventDefault();
+	
 
-		// To remove previous errors
-		$('#emailForm').find('.error').removeClass('error');
-		$('#emailForm').find('.help-inline').css('display', 'none');
-
-		var model_id = $('.emailSelect option:selected').attr('value');
-
-		// When default option selected make subject and body empty
-		if (!model_id)
-		{
-			// Fill subject and body of send email form
-			$("#emailForm").find('input[name="subject"]').val("");
-
-			set_tinymce_content('email-body', '');
-
-			$("#emailForm").find('textarea[name="body"]').val("");
-			return;
-		}
-
-		var emailTemplatesModel = Backbone.Model.extend({ url : '/core/api/email/templates/' + model_id, restKey : "emailTemplates" });
-		var templateModel = new emailTemplatesModel();
-		templateModel.fetch({ success : function(data)
-		{
-			var model = data.toJSON();
-
-			var subject = model.subject;
-			var text = model.text;
-
-			// Apply handlebars template on send-email route
-			if (Current_Route !== 'bulk-email' && Current_Route !== 'send-email')
-			{
-
-				// Get Current Contact
-				/*
-				 * var contact = App_Contacts.contactDetailView.model; var json =
-				 * contact.toJSON();
-				 */
-
-				/*
-				 * Get Contact properties json to fill the templates using
-				 * handlebars
-				 */
-				var json = get_contact_json_for_merge_fields();
-				var template;
-
-				// Templatize it
-				try
-				{
-					template = Handlebars.compile(subject);
-					subject = template(json);
-				}
-				catch (err)
-				{
-					subject = add_square_brackets_to_merge_fields(subject);
-
-					template = Handlebars.compile(subject);
-					subject = template(json);
-				}
-
-				try
-				{
-					template = Handlebars.compile(text);
-					text = template(json);
-				}
-				catch (err)
-				{
-					text = add_square_brackets_to_merge_fields(text);
-
-					template = Handlebars.compile(text);
-					text = template(json);
-				}
-			}
-
-			// Fill subject and body of send email form
-			$("#emailForm").find('input[name="subject"]').val(subject);
-
-			// Insert content into tinymce
-			set_tinymce_content('email-body', text);
-		} });
-
-	});
-
-	/**
-	 * Sends email to the target email. Before sending, validates and serializes
-	 * email form.
-	 */
-	$('#sendEmail')
-			.die()
-			.live(
-					'click',
-					function(e)
-					{
-						e.preventDefault();
-
-						if ($(this).attr('disabled'))
-							return;
-						var $form = $('#emailForm');					 
-						// Is valid
-						if(!isValidForm($form))
-						  	return;
-						var network_type = $('#attachment-select').find(":selected").attr('network_type');
-						// checking email attachment type , email doesn't allow
-						// google drive documents as attachments
-						if (network_type)
-						{
-							if (network_type.toUpperCase() === 'GOOGLE')
-								return;
-						}
-
-						// Saves tinymce content to textarea
-						save_content_to_textarea('email-body');
-
-						// serialize form.
-						var json = serializeForm("emailForm");
-						if ((json.contact_to_ids).join())
-							json.to += ((json.to != "") ? "," : "") + (json.contact_to_ids).join();
-
-						if ((json.contact_cc_ids).join())
-							json.email_cc += ((json.email_cc != "") ? "," : "") + (json.contact_cc_ids).join();
-
-						if ((json.contact_bcc_ids).join())
-							json.email_bcc += ((json.email_bcc != "") ? "," : "") + (json.contact_bcc_ids).join();
-
-						if (json.to == "" || json.to == null || json.to == undefined)
-						{
-							// Appends error info to form actions block.
-							$save_info = $('<span style="display:inline-block;color:#df382c;">This field is required.</span>');
-							$('#emailForm').find("#to").closest(".controls > div").append($save_info);
-							$('#emailForm').find("#to").focus();
-							// Hides the error message after 3 seconds
-							$save_info.show().delay(3000).hide(1);
-
-							enable_send_button($('#sendEmail'));
-							return;
-						}
-
-						// Is valid
-						if (!isValidForm($('#emailForm')))
-							return;
-
-						// Disables send button and change text to Sending...
-						disable_send_button($(this));
-
-						// Navigates to previous page on sending email
-						$
-								.ajax({
-									type : 'POST',
-									data : json,
-									url : 'core/api/emails/contact/send-email',
-									success : function()
-									{
-
-										// Enables Send Email button.
-										enable_send_button($('#sendEmail'));
-
-										window.history.back();
-
-									},
-									error : function(response)
-									{
-										enable_send_button($('#sendEmail'));
-
-										// Show cause of error in saving
-										$save_info = $('<div style="display:inline-block"><small><p style="color:#B94A48; font-size:14px"><i>' + response.responseText + '</i></p></small></div>');
-
-										// Appends error info to form actions
-										// block.
-										$($('#sendEmail')).closest(".form-actions", this.el).append($save_info);
-
-										// Hides the error message after 3
-										// seconds
-										if (response.status != 406)
-											$save_info.show().delay(10000).hide(1);
-									} });
-
-					});
-
-
-	/**
-	 * Close button click event of send email form. Navigates to contact detail
-	 * view.
-	 */
-	$('#send-email-close').die().live('click', function(e)
-	{
-		e.preventDefault();
-
-		window.history.back();
-	});
-
-	$('#email-reply').die().live(
-			'click',
-			function(e)
+    $('body').on('click', '#email-reply', function(e)
 			{
 				e.preventDefault();
 
@@ -526,21 +333,25 @@ $(function()
 
 			});
 
-	$('#email-reply-div').live('hover', function(e)
-	{
-		e.preventDefault();
-
-		$(this).find('#email-reply').toggle();
-	});
-
 	/**
 	 * Delete functionality for activity blocks in contact details
 	 */
-	$('.activity-delete').die().live('click', function(e)
+	$('body').on('click', '.activity-delete', function(e)
 	{
 		e.preventDefault();
 
 		var model = $(this).parents('li').data();
+
+		if (model && model.toJSON().type != "WEB_APPOINTMENT")
+		{
+			if (!confirm("Are you sure you want to delete?"))
+				return;
+		}
+		else if (model && model.toJSON().type == "WEB_APPOINTMENT" && parseInt(model.toJSON().start) < parseInt(new Date().getTime() / 1000))
+		{
+			if (!confirm("Are you sure you want to delete?"))
+				return;
+		}
 
 		if (model && model.collection)
 		{
@@ -549,6 +360,25 @@ $(function()
 
 		// Gets the id of the entity
 		var entity_id = $(this).attr('id');
+
+		if (model && model.toJSON().type == "WEB_APPOINTMENT" && parseInt(model.toJSON().start) > parseInt(new Date().getTime() / 1000))
+		{
+			web_event_title = model.toJSON().title;
+			if (model.toJSON().contacts.length > 0)
+			{
+				var firstname = getPropertyValue(model.toJSON().contacts[0].properties, "first_name");
+				if (firstname == undefined)
+					firstname = "";
+				var lastname = getPropertyValue(model.toJSON().contacts[0].properties, "last_name");
+				if (lastname == undefined)
+					lastname = "";
+				web_event_contact_name = firstname + " " + lastname;
+			}
+			$("#webEventCancelModel").modal('show');
+			$("#cancel_event_title").html("Delete event &#39" + web_event_title + "&#39");
+			$("#event_id_hidden").html("<input type='hidden' name='event_id' id='event_id' value='" + entity_id + "'/>");
+			return;
+		}
 
 		// Gets the url to which delete request is to be sent
 		var entity_url = $(this).attr('url');
@@ -583,39 +413,6 @@ $(function()
 			removeItemFromTimeline($("#" + entity_id, $("#timeline")));
 		} });
 	});
-
-	$('#cc-link, #bcc-link').die().live('click', function(e)
-	{
-		e.preventDefault();
-
-		// Hide link
-		$(this).hide();
-
-		if ($(this).attr('id') === 'cc-link')
-		{
-			$('#email_cc').closest('.control-group').show();
-
-			// Hide div.control-group to reduce space between subject
-			if ($(this).parent().find('#bcc-link').css('display') === 'none')
-				$(this).closest('.control-group').hide();
-
-			return;
-		}
-
-		if ($(this).parent().find('#cc-link').css('display') === 'none')
-			$(this).closest('.control-group').hide();
-
-		$('#email_bcc').closest('.control-group').show();
-	});
-
-	$('#from_email_link').die().live('click', function(e){
-		e.preventDefault();
-		$(this).closest('.control-group').hide();
-		$('#from_email').closest('.control-group').show();
-		$('#from_name').closest('.control-group').show();
-		return;
-	});
-	
 
 });
 
@@ -736,8 +533,8 @@ function load_contact_tab(el, contactJSON)
 {
 	timeline_collection_view = null;
 	var position = readCookie(contact_tab_position_cookie_name);
-	if(position==null || position==undefined || position=="")
-		position="timeline";
+	if (position == null || position == undefined || position == "")
+		position = "timeline";
 
 	$('#contactDetailsTab a[href="#' + position + '"]', el).tab('show');
 
@@ -789,12 +586,275 @@ function get_emails_to_reply(emails, configured_email)
 	return emails;
 }
 function save_email_server_type_in_cookie(cookie_value)
-{   
-	if(cookie_value)
+{
+	if (cookie_value)
 	{
 		var previous_cookie_value = readCookie(email_server_type_cookie_name);
 		if (previous_cookie_value === cookie_value)
 			return;
-		createCookie(email_server_type_cookie_name,cookie_value,30);
-	}	
+		createCookie(email_server_type_cookie_name, cookie_value, 30);
+	}
+}
+
+function initializeSendEmailListeners(){
+
+/**
+	 * Populates subject and description using email templates, on select option
+	 * change of "Fill From Templates" field.
+	 */
+	$('#send-email-listener-container').on('change', '.emailSelect', function(e)
+	{
+		e.preventDefault();
+
+		// To remove previous errors
+		$('#emailForm').find('.error').removeClass('error');
+		$('#emailForm').find('.help-inline').css('display', 'none');
+
+		var model_id = $('.emailSelect option:selected').prop('value');
+
+		// When default option selected make subject and body empty
+		if (!model_id)
+		{
+			// Fill subject and body of send email form
+			$("#emailForm").find('input[name="subject"]').val("");
+
+			set_tinymce_content('email-body', '');
+
+			$("#emailForm").find('textarea[name="body"]').val("");
+			
+			$('.add-attachment-cancel').trigger("click");
+
+			$('#eattachment_error').hide();
+			return;
+		}
+
+		var emailTemplatesModel = Backbone.Model.extend({ url : '/core/api/email/templates/' + model_id, restKey : "emailTemplates" });
+		var templateModel = new emailTemplatesModel();
+		templateModel.fetch({ success : function(data)
+		{
+			var model = data.toJSON();
+
+			var subject = model.subject;
+			var text = model.text;
+
+			// Apply handlebars template on send-email route
+			if (Current_Route !== 'bulk-email' && Current_Route !== 'send-email')
+			{
+
+				// Get Current Contact
+				/*
+				 * var contact = App_Contacts.contactDetailView.model; var json =
+				 * contact.toJSON();
+				 */
+
+				/*
+				 * Get Contact properties json to fill the templates using
+				 * handlebars
+				 */
+				var json = get_contact_json_for_merge_fields();
+				var template;
+
+				// Templatize it
+				try
+				{
+					template = Handlebars.compile(subject);
+					subject = template(json);
+				}
+				catch (err)
+				{
+					subject = add_square_brackets_to_merge_fields(subject);
+
+					template = Handlebars.compile(subject);
+					subject = template(json);
+				}
+
+				try
+				{
+					template = Handlebars.compile(text);
+					text = template(json);
+				}
+				catch (err)
+				{
+					text = add_square_brackets_to_merge_fields(text);
+
+					template = Handlebars.compile(text);
+					text = template(json);
+				}
+			}
+
+			// Fill subject and body of send email form
+			$("#emailForm").find('input[name="subject"]').val(subject);
+
+			// Insert content into tinymce
+			set_tinymce_content('email-body', text);
+			
+			if (model.attachment_id && Current_Route != 'bulk-email' && Current_Route != 'company-bulk-email')
+			{
+				var el = $('.add-attachment-select').closest("div");
+				$('.add-attachment-select').hide();
+				el.find(".attachment-document-select").css("display", "inline");
+				var optionsTemplate = "<option value='{{id}}' network_type='{{titleFromEnums network_type}}' size='{{size}}' url='{{url}}'>{{name}}</option>";
+        		fillSelect('attachment-select','core/api/documents', 'documents',  function fillNew()
+				{
+					el.find("#attachment-select option:first").after("<option value='new'>Upload new doc</option>");
+					$('#attachment-select').find('option[value='+model.attachment_id+']').attr("selected","selected");
+					$('.add-attachment-confirm').trigger("click");
+
+				}, optionsTemplate, false, el);
+			}
+			else if (model.attachment_id && (Current_Route == 'bulk-email' || Current_Route == 'company-bulk-email'))
+			{
+				$('.add-attachment-select').hide();
+				$('#eattachment_error').show();
+			}
+			else if(!model.attachment_id && (Current_Route == 'bulk-email' || Current_Route == 'company-bulk-email'))
+			{
+				$('.add-attachment-select').hide();
+				$('#eattachment_error').hide();
+			}
+			else if(!model.attachment_id)
+			{
+				$('.add-attachment-cancel').trigger("click");
+				$('#eattachment_error').hide();
+			}
+		} });
+
+	});
+
+	/**
+	 * Sends email to the target email. Before sending, validates and serializes
+	 * email form.
+	 */
+	$('#send-email-listener-container').on('click', '#sendEmail', function(e)
+					{
+						e.preventDefault();
+
+						if ($(this).attr('disabled'))
+							return;
+						var $form = $('#emailForm');
+						// Is valid
+						if (!isValidForm($form))
+							return;
+						var network_type = $('#attachment-select').find(":selected").attr('network_type');
+						// checking email attachment type , email doesn't allow
+						// google drive documents as attachments
+						if (network_type)
+						{
+							if (network_type.toUpperCase() === 'GOOGLE')
+								return;
+						}
+
+						// Saves tinymce content to textarea
+						save_content_to_textarea('email-body');
+
+						// serialize form.
+						var json = serializeForm("emailForm");
+						if ((json.contact_to_ids).join())
+							json.to += ((json.to != "") ? "," : "") + (json.contact_to_ids).join();
+
+						if ((json.contact_cc_ids).join())
+							json.email_cc += ((json.email_cc != "") ? "," : "") + (json.contact_cc_ids).join();
+
+						if ((json.contact_bcc_ids).join())
+							json.email_bcc += ((json.email_bcc != "") ? "," : "") + (json.contact_bcc_ids).join();
+
+						if (json.to == "" || json.to == null || json.to == undefined)
+						{
+							// Appends error info to form actions block.
+							$save_info = $('<span style="display:inline-block;color:#df382c;">This field is required.</span>');
+							$('#emailForm').find("#to").closest(".controls > div").append($save_info);
+							$('#emailForm').find("#to").focus();
+							// Hides the error message after 3 seconds
+							$save_info.show().delay(3000).hide(1);
+
+							enable_send_button($('#sendEmail'));
+							return;
+						}
+
+						// Is valid
+						if (!isValidForm($('#emailForm')))
+							return;
+
+						// Disables send button and change text to Sending...
+						disable_send_button($(this));
+
+						// Navigates to previous page on sending email
+						$
+								.ajax({
+									type : 'POST',
+									data : json,
+									url : 'core/api/emails/contact/send-email',
+									success : function()
+									{
+
+										// Enables Send Email button.
+										enable_send_button($('#sendEmail'));
+
+										window.history.back();
+
+									},
+									error : function(response)
+									{
+										enable_send_button($('#sendEmail'));
+
+										// Show cause of error in saving
+										$save_info = $('<div style="display:inline-block"><small><p style="color:#B94A48; font-size:14px"><i>' + response.responseText + '</i></p></small></div>');
+
+										// Appends error info to form actions
+										// block.
+										$($('#sendEmail')).closest(".form-actions", this.el).append($save_info);
+
+										// Hides the error message after 3
+										// seconds
+										if (response.status != 406)
+											$save_info.show().delay(10000).hide(1);
+									} });
+
+					});
+
+	/**
+	 * Close button click event of send email form. Navigates to contact detail
+	 * view.
+	 */
+	$('#send-email-listener-container').on('click', '#send-email-close', function(e)
+	{
+		e.preventDefault();
+
+		window.history.back();
+	});
+
+
+$('#send-email-listener-container').on('click', '#cc-link, #bcc-link', function(e)
+	{
+		e.preventDefault();
+
+		// Hide link
+		$(this).hide();
+
+		if ($(this).attr('id') === 'cc-link')
+		{
+			$('#email_cc').closest('.control-group').show();
+
+			// Hide div.control-group to reduce space between subject
+			if ($(this).parent().find('#bcc-link').css('display') === 'none')
+				$(this).closest('.control-group').hide();
+
+			return;
+		}
+
+		if ($(this).parent().find('#cc-link').css('display') === 'none')
+			$(this).closest('.control-group').hide();
+
+		$('#email_bcc').closest('.control-group').show();
+	});
+
+	$('#send-email-listener-container').on('click', '#from_email_link', function(e)
+	{
+		e.preventDefault();
+		$(this).closest('.control-group').hide();
+		$('#from_email').closest('.control-group').show();
+		$('#from_name').closest('.control-group').show();
+		return;
+	});
+
 }

@@ -76,38 +76,22 @@ cron:
 - description: Google Contacts daily Sync
   url: /backend/contactsutilservlet?type=GOOGLE&cron=true&duration=DAILY
   schedule: every day 23:30
-  target: agile-normal-bulk
+  target: agile-sync
 
 - description: Google Contacts weekly Sync
   url: /backend/contactsutilservlet?type=GOOGLE&cron=true&duration=WEEKLY
   schedule: every friday 23:50 
-  target: agile-normal-bulk
+  target: agile-sync
 
 - description: Google Contacts monthly Sync
   url: /backend/contactsutilservlet?type=GOOGLE&cron=true&duration=MONTHLY
   schedule: 1st friday of month 23:55
-  target: agile-normal-bulk
+  target: agile-sync
 
 - description: Account Billing Restrictions
   url: /backend/billing/restrictions
   schedule: every day 23:30
   target: agile-normal-bulk
-
-- description: Bulk Campaign Email Cron
-  url: /backend/cron/cron-pull?q=bulk-email-pull-queue
-  schedule: every 1 mins
-
-- description: Normal Campaign Email Cron
-  url: /backend/cron/cron-pull?q=normal-email-pull-queue
-  schedule: every 1 mins
-
-- description: Bulk Personal Emails Cron. 
-  url: /backend/cron/cron-pull?q=bulk-personal-email-pull-queue
-  schedule: every 1 mins
-
-- description: Normal Personal Email Cron.
-  url: /backend/cron/cron-pull?q=normal-personal-email-pull-queue
-  schedule: every 1 mins
 
 - description: Bulk Normal Campaign Cron
   url: /backend/cron/cron-pull?q=normal-campaign-pull-queue
@@ -124,4 +108,3 @@ cron:
 - description: Bulk Normal SMS Cron
   url: /backend/cron/cron-pull?q=normal-sms-pull-queue
   schedule: every 1 mins
-

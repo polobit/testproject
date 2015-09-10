@@ -59,7 +59,7 @@ function chainWebRules(el, data, isNew, actions)
 $(function()
 		{
 			// Filter Contacts- Clone Multiple
-			$(".web-rule-multiple-add").die().live('click', function(e)
+			$('body').on('click', '.web-rule-multiple-add', function(e)
 			{
 				e.preventDefault();
 				// To solve chaining issue when cloned
@@ -76,20 +76,18 @@ $(function()
 			});
 			
 			// Filter Contacts- Remove Multiple
-			$("i.webrule-multiple-remove").die().live('click', function(e)
+			$('body').on('click', 'i.webrule-multiple-remove', function(e)
 			{
 				$(this).closest(".chained-table > div").remove();
 			});
 			
 			// Filter Contacts- Clone Multiple
-			$("i.filter-contacts-web-rule-multiple-add").die().live('click', function(e)
+			$('body').on('click', 'i.filter-contacts-web-rule-multiple-add', function(e)
 			{
 				// To solve chaining issue when cloned
 				var htmlContent = $(getTemplate("webrules-add", {})).find('.web-rule-contact-condition-table tr').clone();
 				scramble_input_names($(htmlContent));
 
-				$(this).hide();
-				
 				chainFilters(htmlContent, undefined, undefined, true);
 
 				// var htmlContent = $(this).closest("tr").clone();
@@ -98,15 +96,14 @@ $(function()
 			});
 			
 			
-			/*$("#noty-type > select").die().live('change', function(){
+			/*$("#noty-type > select").live('change', function(){
 				console.log($(this).attr('class'));
 				var isHtml = $(this).val() ? $(this).val() == 'custom_html' : false;
 				if(isHtml)
 					setupHTMLEditor($("#noty-message > textarea"));
 			})*/
 			
-			
-			$(".web-rule-preview").die().live('click', function(e){
+			$('body').on('click', '.web-rule-preview', function(e){
 				e.preventDefault();
 				var that = this;
 				_agile_require_js("https://s3.amazonaws.com/agilewebgrabbers/scripts/agile-webrules-min.js", function(){
@@ -137,7 +134,7 @@ function loadTinyMCE(name)
 	
 }
 
-$("#tiny_mce_webrules_link").die().live("click", function(e){
+$('body').on('click', '#tiny_mce_webrules_link', function(e){
 	e.preventDefault();
 
 	// If not empty, redirect to tinymce

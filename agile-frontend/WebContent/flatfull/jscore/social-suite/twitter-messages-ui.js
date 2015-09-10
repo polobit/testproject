@@ -8,7 +8,7 @@ $(function()
 	/**
 	 * get stream and create tweet for posting on Twitter.
 	 */
-	$(".compose-message").die().live("click", function(e)
+	$('body').on('click', '.compose-message', function(e)
 	{
 		// Close all dropdowns of all tweets.
 		$('.more-options-list').toggle(false);
@@ -21,11 +21,28 @@ $(function()
 		displayFilledModal(streamId, null, null, "Tweet");
 	});
 
+	//twitter text field message limit to 140
+	$('body').on('keyup', '.twit-tweet-limit', function(e) {
+ 			var left;
+            left = 140 - $(this).val().length;
+ 
+            if(left < 0){
+                $('#twitter-counter').addClass("text-danger");
+                 $('#send_tweet').attr("disabled", true);
+            }else{
+                $('#twitter-counter').removeClass("text-danger");
+                $('#send_tweet').attr("disabled", false);
+            }
+ 
+            $('#twitter-counter').text(left);
+        });
+
+
 	/**
 	 * Get stream and create reply tweet and post it on Twitter to related
 	 * tweet.
 	 */
-	$(".reply-message").die().live("click", function(e)
+	$('body').on('click', '.reply-message', function(e)
 	{
 		// Close all dropdowns of all tweets.
 		$('.more-options-list').toggle(false);
@@ -43,7 +60,7 @@ $(function()
 	 * get stream and create tweet for posting on Twitter to user who RT owner's
 	 * tweet.
 	 */
-	$(".tweet-to-user").die().live("click", function(e)
+	$('body').on('click', '.tweet-to-user', function(e)
 	{
 		// Hide modal before showing message modal.
 		$("#socialsuite_RT_userlistModal").modal("hide");
@@ -63,7 +80,7 @@ $(function()
 	/**
 	 * Sends a direct message to the Twitter profile , who is tweet owner.
 	 */
-	$(".direct-message").die().live("click", function(e)
+	$('body').on('click', '.direct-message', function(e)
 	{
 		// Close all dropdowns of all tweets.
 		$('.more-options-list').toggle(false);
@@ -80,7 +97,7 @@ $(function()
 	/**
 	 * Get stream and perform retweet action on selected tweet.
 	 */
-	$(".retweet-status").die().live("click", function(e)
+	$('body').on('click', '.retweet-status', function(e)
 	{
 		$('#socialsuite_twitter_messageModal').remove();
 
@@ -122,7 +139,7 @@ $(function()
 	 * is "Sent" then remove tweet from stream and if stream is "Home" then
 	 * remove RT icon only.
 	 */
-	$(".undo-retweet-status").die().live("click", function(e)
+	$('body').on('click', '.undo-retweet-status', function(e)
 	{
 		// Ask for confirmation from user.
 		if (!confirm("Are you sure you want to undo retweet this status?"))
@@ -187,14 +204,14 @@ $(function()
 	});
 
 	// On copy paste from mouse right click call key press to check cross limit.
-	$('#twit-tweet').die().live("mouseleave", function(e)
+	$('body').on('mouseleave', '#twit-tweet', function(e)
 	{
 		$('#twit-tweet').keypress();
 	});
 
 	// On click of link in message modal, Add agile text to message text area in
 	// message modal.
-	$("#add_message").die().live("click", function(e)
+	$('body').on('click', '#add_message', function(e)
 	{
 		var quote = " Sell & Market like Fortune 500 with @agilecrm";
 

@@ -9,13 +9,13 @@ import com.agilecrm.account.util.AccountEmailStatsUtil;
 import com.agilecrm.account.util.EmailGatewayUtil;
 import com.agilecrm.mandrill.util.deferred.MailDeferredTask;
 import com.agilecrm.queues.util.PullQueueUtil;
-import com.agilecrm.subscription.limits.PlanLimits;
 import com.agilecrm.subscription.restrictions.db.BillingRestriction;
 import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
 import com.agilecrm.subscription.restrictions.entity.DaoBillingRestriction;
 import com.agilecrm.subscription.restrictions.entity.impl.EmailBillingRestriction;
 import com.agilecrm.util.EmailUtil;
 import com.google.appengine.api.NamespaceManager;
+import com.google.appengine.api.blobstore.BlobKey;
 
 public class EmailSender
 {
@@ -23,8 +23,6 @@ public class EmailSender
     public EmailBillingRestriction emailBillingRestriction = null;
     public EmailGateway emailGateway = null;
     public AccountEmailStats accountEmailStats = null;
-
-    public PlanLimits limits = null;
 
     private int totalEmailsSent = 0;
 
@@ -39,8 +37,6 @@ public class EmailSender
 	EmailSender emailSender = new EmailSender();
 
 	emailSender.billingRestriction = BillingRestrictionUtil.getBillingRestriction(true);
-	
-	emailSender.limits = emailSender.billingRestriction == null ? null : emailSender.billingRestriction.getCurrentLimits();
 
 	emailSender.emailBillingRestriction = (EmailBillingRestriction) DaoBillingRestriction.getInstace(
 	        DaoBillingRestriction.ClassEntities.Email.toString(), emailSender.billingRestriction);
@@ -54,20 +50,12 @@ public class EmailSender
 
     public boolean isEmailWhiteLabelEnabled()
     {
-    	
-	if (limits != null)
-	{
-		System.out.println("Limits is not null. Plan name: " + limits.getPlanName() + " White label: " + limits.isEmailWhiteLabelEnabled());
-	    return limits.isEmailWhiteLabelEnabled();
-	}
 
-    System.out.println("Domain is " + NamespaceManager.get());
-    
-	limits = billingRestriction.getCurrentLimits();
-	
-	System.out.println("Limits is null. Plan Name: " + limits.getPlanName() + " White label: " + limits.isEmailWhiteLabelEnabled());
-	
-	return limits.isEmailWhiteLabelEnabled();
+	isWhiteLabled = billingRestriction.isEmailWhiteLabelEnabled();
+	System.out.println("Email limit for domain " + NamespaceManager.get() + " whitelabel : " + isWhiteLabled
+	        + "pending emails : " + billingRestriction.one_time_emails_count);
+
+	return isWhiteLabled;
     }
 
     public boolean canSend()
@@ -169,7 +157,7 @@ public class EmailSender
 
     public void sendEmail(String fromEmail, String fromName, String to, String cc, String bcc, String subject,
 	    String replyTo, String html, String text, String mandrillMetadata, List<Long> documentIds,
-	    String... attachments) throws Exception
+	    List<BlobKey> blobKeys, String... attachments) throws Exception
     {
 
 	String domain = NamespaceManager.get();
@@ -178,7 +166,7 @@ public class EmailSender
 	    if (canSend())
 	    {
 		EmailGatewayUtil.sendEmail(emailGateway, domain, fromEmail, fromName, to, cc, bcc, subject, replyTo,
-		        html, text, mandrillMetadata, documentIds, attachments);
+		        html, text, mandrillMetadata, documentIds, blobKeys, attachments);
 
 		// Sets Billing restriction limit and account email stats
 		if (!EmailUtil.isToAgileEmail(to))
@@ -212,6 +200,15 @@ public class EmailSender
 
 	// Add to pull queue with from email as Tag
 	PullQueueUtil.addToPullQueue(queueName, mailDeferredTask, fromEmail);
+    }
+
+    public static void main(String[] args)
+    {
+	for (int i = 0; i < 100; i++)
+	{
+	    System.out.println(getEmailSender());
+	}
+
     }
 
 }

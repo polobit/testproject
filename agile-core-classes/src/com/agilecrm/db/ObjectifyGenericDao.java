@@ -14,13 +14,16 @@ import javax.persistence.Transient;
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
 
+import com.agilecrm.ContactSchemaUpdateStats;
 import com.agilecrm.account.APIKey;
 import com.agilecrm.account.AccountEmailStats;
 import com.agilecrm.account.AccountPrefs;
 import com.agilecrm.account.EmailTemplates;
 import com.agilecrm.account.MenuSetting;
+import com.agilecrm.account.VerifiedEmails;
 import com.agilecrm.activities.Activity;
 import com.agilecrm.activities.BulkActionLog;
+import com.agilecrm.activities.Category;
 import com.agilecrm.activities.Event;
 import com.agilecrm.activities.Task;
 import com.agilecrm.activities.WebCalendarEvent;
@@ -35,6 +38,7 @@ import com.agilecrm.contact.filter.ContactFilter;
 import com.agilecrm.deals.Milestone;
 import com.agilecrm.deals.Opportunity;
 import com.agilecrm.document.Document;
+import com.agilecrm.facebookpage.FacebookPage;
 import com.agilecrm.forms.Form;
 import com.agilecrm.portlets.Portlet;
 import com.agilecrm.reports.ActivityReports;
@@ -49,6 +53,7 @@ import com.agilecrm.user.ContactViewPrefs;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.IMAPEmailPrefs;
 import com.agilecrm.user.OfficeEmailPrefs;
+import com.agilecrm.user.OnlineCalendarPrefs;
 import com.agilecrm.user.SocialPrefs;
 import com.agilecrm.user.UserPrefs;
 import com.agilecrm.user.access.util.UserAccessControlUtil;
@@ -56,6 +61,7 @@ import com.agilecrm.user.access.util.UserAccessControlUtil.CRUDOperation;
 import com.agilecrm.user.notification.NotificationPrefs;
 import com.agilecrm.util.CacheUtil;
 import com.agilecrm.voicemail.VoiceMail;
+// import com.agilecrm.webpages.WebPage;
 import com.agilecrm.webrules.WebRule;
 import com.agilecrm.widgets.CustomWidget;
 import com.agilecrm.widgets.Widget;
@@ -188,6 +194,20 @@ public class ObjectifyGenericDao<T> extends DAOBase
 	ObjectifyService.register(Form.class);
 
 	ObjectifyService.register(BulkActionLog.class);
+
+	ObjectifyService.register(ContactSchemaUpdateStats.class);
+
+	ObjectifyService.register(Category.class);
+
+	ObjectifyService.register(OnlineCalendarPrefs.class);
+
+	// For facebook page intergration
+	ObjectifyService.register(FacebookPage.class);
+
+	ObjectifyService.register(VerifiedEmails.class);
+
+	// For page builder
+	// ObjectifyService.register(WebPage.class);
 
     }
 
@@ -479,7 +499,7 @@ public class ObjectifyGenericDao<T> extends DAOBase
 	    q.order(orderBy);
 	return fetchAll(q);
     }
-    
+
     /**
      * Fetches all the entities of type T
      * 
@@ -487,18 +507,18 @@ public class ObjectifyGenericDao<T> extends DAOBase
      */
     public List<T> fetchAllByOrder(String orderBy, Map<String, Object> map)
     {
-    	Query<T> query = ofy().query(clazz);
-    	if (map != null)
-    	    for (String propName : map.keySet())
-    	    {
-    		System.out.println(propName);
-    		query.filter(propName, map.get(propName));
-    	    }
+	Query<T> query = ofy().query(clazz);
+	if (map != null)
+	    for (String propName : map.keySet())
+	    {
+		System.out.println(propName);
+		query.filter(propName, map.get(propName));
+	    }
 
-    	if (!StringUtils.isEmpty(orderBy))
-    	    query.order(orderBy);
+	if (!StringUtils.isEmpty(orderBy))
+	    query.order(orderBy);
 
-    	return fetchAll(query);
+	return fetchAll(query);
     }
 
     /**
@@ -875,4 +895,68 @@ public class ObjectifyGenericDao<T> extends DAOBase
     {
 	return UserAccessControlUtil.check(clazz.getSimpleName(), entity, CRUDOperation.DELETE, false);
     }
+
+    public List<T> fetchAllByOrderWithoutCount(int max, String cursor, Map<String, Object> map, boolean forceLoad,
+	    boolean cache, String orderBy)
+    {
+	Query<T> query = ofy().query(clazz);
+	if (map != null)
+	    for (String propName : map.keySet())
+	    {
+		System.out.println(propName);
+		query.filter(propName, map.get(propName));
+	    }
+
+	if (!StringUtils.isEmpty(orderBy))
+	    query.order(orderBy);
+
+	return fetchAllWithCursorWithoutCount(max, cursor, query, forceLoad, cache);
+    }
+
+    public List<T> fetchAllWithCursorWithoutCount(int max, String cursor, Query<T> query, boolean forceLoad,
+	    boolean cache)
+    {
+	// Checks if read access is allowed to current user. If read access is
+	// not provided then query is modified such that user can access only
+	// entities he had created
+	System.out.println("check read query");
+	UserAccessControlUtil.checkReadAccessAndModifyQuery(clazz.getSimpleName(), query);
+
+	if (cursor != null)
+	    query.startCursor(Cursor.fromWebSafeString(cursor));
+
+	int index = 0;
+	String newCursor = null;
+	List<T> results = new ArrayList<T>();
+
+	QueryResultIterator<T> iterator = query.iterator();
+	while (iterator.hasNext())
+	{
+	    T result = iterator.next();
+
+	    // Add to list
+	    results.add(result);
+
+	    // Check if we have reached the limit
+	    if (++index == max)
+	    {
+		// Sets cursor for client
+		if (iterator.hasNext())
+		{
+		    Cursor cursorDb = iterator.getCursor();
+		    newCursor = cursorDb.toWebSafeString();
+
+		    // Store the cursor in the last element
+		    if (result instanceof com.agilecrm.cursor.Cursor)
+		    {
+			com.agilecrm.cursor.Cursor agileCursor = (com.agilecrm.cursor.Cursor) result;
+			agileCursor.cursor = newCursor;
+		    }
+		}
+		break;
+	    }
+	}
+	return results;
+    }
+
 }

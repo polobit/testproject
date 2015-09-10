@@ -4,6 +4,11 @@ var eventsView;
 var tasksView;
 var casesView;
 var documentsView;
+var campaignsView;
+var mailsView;
+var mailAccountsView;
+var email_errors_divs = [];
+var email_requests = [];
 
 var contact_details_tab = {
 		load_timeline : function()
@@ -32,6 +37,7 @@ var contact_details_tab = {
 	            	head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
 	            		 $(".note-created-time", el).timeago();
 	              	})
+	              	contact_detail_page_infi_scroll($('#contact-dtl', App_Contacts.contactDetailView.el), notesView);
 	            }
 	        });
 	        notesView.collection.fetch();
@@ -55,9 +61,9 @@ var contact_details_tab = {
 	            	if($(this).find('.priority_type').text().trim() == "High") {
             			$(this).css("border-left","3px solid #f05050");
             		}else if($(this).find('.priority_type').text().trim() == "Normal"){
-            			$(this).css("border-left","3px solid #fad733");
+            			$(this).css("border-left","3px solid #7266ba");
             		}else if($(this).find('.priority_type').text().trim() == "Low") {
-            			$(this).css("border-left","3px solid #edf1f2");
+            			$(this).css("border-left","3px solid #fad733");
             		}
 	            	});
 	            }
@@ -103,9 +109,9 @@ var contact_details_tab = {
 		            		if($(this).find('.priority_type').text().trim()== "HIGH") {
 		            			$(this).css("border-left","3px solid #f05050");
 		            		}else if($(this).find('.priority_type').text().trim() == "NORMAL"){
-		            			$(this).css("border-left","3px solid #fad733");
+		            			$(this).css("border-left","3px solid #7266ba");
 		            		}else if($(this).find('.priority_type').text().trim() == "LOW") {
-		            			$(this).css("border-left","3px solid #edf1f2");
+		            			$(this).css("border-left","3px solid #fad733");
 		            		}
 		            	});
 		            }
@@ -153,80 +159,45 @@ var contact_details_tab = {
 	        $('#cases', App_Contacts.contactDetailView.el).html(casesView.el);
 		},
 		load_mail : function(mail_server_url,email_server)
-		{			
+		{	
+			killAllPreviousRequests();
+			$('#mail #mails-span', App_Contacts.contactDetailView.el).remove();
 			$('#mails', App_Contacts.contactDetailView.el).html("");
-			$('#mail', App_Contacts.contactDetailView.el).append('<img class="mails-loading p-r-xs m-b"  src= "img/21-0.gif"></img>');
+			if(typeof mailsView !== 'undefined')
+			{
+				mailsView.render = null;
+				mailsView.collection = null;
+			}
 			var contact = App_Contacts.contactDetailView.model;
 			var json = contact.toJSON();
-			
 			// Get email of the contact in contact detail
-			var email = getAllPropertyValuesByName(json.properties, "email", ",");
-			
+			var email = getAllPropertyValuesByName(json.properties, "email", ",");			
 			// Shows an error alert, when there is no email to the contact
 			if (!email)
 			{
-				$('#mail', App_Contacts.contactDetailView.el)
-						.html(
-								'<div class="alert alert-danger m-t-sm"><a class="close" data-dismiss="alert" href="#">&times;</a>Sorry! this contact has no email to get the mails.</div>');
+				show_no_email_alert();
 				return;
 			}
 			var contact_details_tab_scope = this;
 			var has_email_configured = true;
-			var has_shared_email_configured = true;
-			
+			var has_shared_email_configured = true;			
 			if(email_server && mail_server_url)
 			{
 				if($('#has_email_configured', App_Contacts.contactDetailView.el).html() === 'true')
 					has_email_configured = true;
 				else
 					has_email_configured = false;
-				fetch_mails(contact_details_tab_scope,has_email_configured,mail_server_url,email_server,email);
+				if(email_server !== 'all')
+					fetchMails(contact_details_tab_scope,has_email_configured,mail_server_url,email_server,email);
+				else
+				{
+					var email_accounts_model = mailAccountsView.model.toJSON();
+					fetchAllMails(contact_details_tab_scope,has_email_configured,email_accounts_model,email);
+				}
 			}
 			else
 			{
-				var model = "";
-				var email_dropdown_html = "";
-				var from_email = "";
-				var mailAccountsView = new Base_Model_View({ url : 'core/api/emails/synced-accounts', template : "email-account-types",change:false,
-					postRenderCallback : function(el)
-					{	
-						model = mailAccountsView.model.toJSON();
-						if(model.hasEmailAccountsConfigured)
-							has_email_configured = true;
-						else
-							has_email_configured = false;
-						if(model.hasSharedEmailAccounts)
-							has_shared_email_configured = true;
-						else
-							has_shared_email_configured = false;
-						//Reading cookie info, fetches mail server type and email from cookie 
-						var cookie_info = fetch_mailserverurl_from_cookie(model);
-						if(cookie_info && cookie_info.length == 4)
-						{
-							mail_server_url = cookie_info[0];
-							email_dropdown_html = cookie_info[1];
-							email_server = cookie_info[2];
-							from_email = cookie_info[3];
-							if(from_email)
-								email_server_type = from_email;
-						}
-						//By default loads mails from Agile server
-						if(!email_server || !mail_server_url || !from_email || (!has_email_configured && !has_shared_email_configured))
-						{
-							email_server = "agile";
-							email_dropdown_html = '<i class="icon-cloud" style="margin-right:4px;font-size: 1.2em"></i>'+'Agile';
-							email_server_type = "agilecrm";
-						}					
-						fetch_mails(contact_details_tab_scope,has_email_configured,mail_server_url,email_server,email);
-						if(has_email_configured || has_shared_email_configured)
-						{
-							if(email_dropdown_html)
-								$('#email-type-select',App_Contacts.contactDetailView.el).html(email_dropdown_html);	 
-							$('#mail-account-types', App_Contacts.contactDetailView.el).css('display','block');
-						} 						
-					}
-				});
-				$('#mail-account-types', App_Contacts.contactDetailView.el).html(mailAccountsView.render().el);	    
+				loadMailTabView(contact_details_tab_scope,email_server,mail_server_url,email);
 			}		
 		},
 		load_stats : function()
@@ -235,7 +206,7 @@ var contact_details_tab = {
 			var json = contact.toJSON();
 			 
 			// Get email of the contact in contact detail
-			var email = getPropertyValue(json.properties, "email");
+			var email = getAllPropertyValuesByName(json.properties, "email", ",");
 			
 			// Shows an error alert, when there is no email to the contact 
 			if(!email){
@@ -290,7 +261,7 @@ var contact_details_tab = {
 		},
 		load_campaigns : function()
 		{
-			var campaignsView = new Base_Collection_View({
+			campaignsView = new Base_Collection_View({
 				url: '/core/api/campaigns/logs/contact/' + App_Contacts.contactDetailView.model.id,
 	            restKey: "logs",
 	            templateKey: "campaigns",
@@ -302,26 +273,92 @@ var contact_details_tab = {
 	            	head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
 	              		 $("time.log-created-time", el).timeago();
 	              	});
-	              // var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
-	             // fillSelect('campaignSelect','/core/api/workflows', 'workflow', 'no-callback ', optionsTemplate);
+	            	contact_detail_page_infi_scroll($('#contact-dtl', App_Contacts.contactDetailView.el), campaignsView);
 	            },
 	            appendItemCallback : function(el)
 				{
 					includeTimeAgo(el);
-				}  
+				} 
 	        });
-			campaignsView.collection.fetch();	
+
+			campaignsView.collection.fetch({
+				success: function(){
+
+					// Verify whether contact updated or not
+					checkContactUpdated();
+				}
+
+			});	
+
 	        $('#campaigns', App_Contacts.contactDetailView.el).html(campaignsView.el);
 		}
 };
+/**
+ * This method responsible for building mail tab UI in contact-details page.
+ * First it loads configured email accounts and then loads emails from selected
+ * email account. It has an option of showing all emails in one shot also.
+ */
+function loadMailTabView(contact_details_tab_scope,email_server,mail_server_url,email)
+{
+	var has_email_configured = true;
+	var has_shared_email_configured = true;
+	var model = "";
+	var email_dropdown_html = "";
+	var from_email = "";
+    mailAccountsView = new Base_Model_View({ url : 'core/api/emails/synced-accounts', template : "email-account-types",change:false,
+		postRenderCallback : function(el)
+		{	
+			model = mailAccountsView.model.toJSON();
+			if(model.hasEmailAccountsConfigured)
+				has_email_configured = true;
+			else
+				has_email_configured = false;
+			if(model.hasSharedEmailAccounts)
+				has_shared_email_configured = true;
+			else
+				has_shared_email_configured = false;
+			//Reading cookie info, fetches mail server type and email from cookie 
+			var cookie_info = fetch_mailserverurl_from_cookie(model);
+			if(cookie_info && cookie_info.length == 4)
+			{
+				mail_server_url = cookie_info[0];
+				email_dropdown_html = cookie_info[1];
+				email_server = cookie_info[2];
+				from_email = cookie_info[3];
+				if(from_email)
+					email_server_type = from_email;
+			}
+			//By default loads mails from Agile server
+			if(!email_server || !mail_server_url || !from_email || (!has_email_configured && !has_shared_email_configured))
+			{
+				email_server = "agile";
+				email_dropdown_html = '<i class="icon-cloud" style="margin-right:4px;font-size: 1.2em"></i>'+'Agile';
+				email_server_type = "agilecrm";
+			}
+			//Fetching emails from All registered email accounts
+			if(email_server ==='all' || mail_server_url === 'all')
+				fetchAllMails(contact_details_tab_scope,has_email_configured,model,email)
+			else
+				fetchMails(contact_details_tab_scope,has_email_configured,mail_server_url,email_server,email);
+			if(has_email_configured || has_shared_email_configured)
+			{
+				if(email_dropdown_html)
+					$('#email-type-select',App_Contacts.contactDetailView.el).html(email_dropdown_html);	 
+				$('#mail-account-types', App_Contacts.contactDetailView.el).css('display','block');
+			} 						
+		}
+	});
+	$('#mail-account-types', App_Contacts.contactDetailView.el).html(mailAccountsView.render().el);	 
+}
+
 /**
  * This function is used to get mails from specified server and email, 
  * if server or email is not specified then it fetches 
  * mails sent through Agile.
  */
-function fetch_mails(contact_details_tab_scope,has_email_configured,mail_server_url,email_server,email)
-{
-	
+function fetchMails(contact_details_tab_scope,has_email_configured,mail_server_url,email_server,email)
+{	
+	$('#mail', App_Contacts.contactDetailView.el).append('<span id="mails-span"> <img class="mails-loading p-r-xs m-b m-l-sm pull-left"  src= "/img/ajax-loader-cursor.gif"></img></span>');
 	this.configured_sync_email = "";
 	var cursor = true;
 
@@ -334,32 +371,145 @@ function fetch_mails(contact_details_tab_scope,has_email_configured,mail_server_
 	}
 	else
 		mail_server_url = mail_server_url + '&search_email='+encodeURIComponent(email);
-	
-//	$('#email-type-select-dropdown',App_Contacts.contactDetailView.el).attr('disabled', 'disabled');
 
 	// Fetches mails collection
-	var mailsView = new Base_Collection_View({ url : mail_server_url , cursor : cursor, page_size : 10,
-		templateKey : "email-social", sort_collection : true, sortKey : "date_secs", descending : true, individual_tag_name : "li",
-		postRenderCallback : function(el)
+	mailsView = new Base_Collection_View({ url : mail_server_url , cursor : cursor, page_size : 10,
+	templateKey : "email-social", sort_collection : true, sortKey : "date_secs", descending : true, individual_tag_name : "li",
+	postRenderCallback : function(el)
+	{
+		$('#mail', App_Contacts.contactDetailView.el).find("#no-email").css('display','block');
+		head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
 		{
-//			$('#email-type-select-dropdown',App_Contacts.contactDetailView.el).removeAttr('disabled');
-			$('#mail', App_Contacts.contactDetailView.el).find('.mails-loading').remove();
-			head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
+			$(".email-sent-time", el).each(function(index, element)
 			{
-				$(".email-sent-time", el).each(function(index, element)
-				{
-					$(element).timeago();
-				});
+				$(element).timeago();
 			});
-			
-			if(email_server_type!="agilecrm")
-				contact_details_tab_scope.configured_sync_email = email_server_type;
-			
-			if(!has_email_configured)
-				$('#email-prefs-verification',App_Contacts.contactDetailView.el).css('display', 'block');		
-		}});
+		});
+		
+		if(email_server_type!="agilecrm")
+			contact_details_tab_scope.configured_sync_email = email_server_type;
+	
+		if(!has_email_configured)
+			$('#email-prefs-verification',App_Contacts.contactDetailView.el).css('display', 'block');
+		contact_detail_page_infi_scroll($('#contact-dtl', App_Contacts.contactDetailView.el), mailsView);
+		$('#mail #mails-span', App_Contacts.contactDetailView.el).remove();
+	}});
 	mailsView.collection.fetch();
 	$('#mails', App_Contacts.contactDetailView.el).html(mailsView.render().el);
+}
+
+function fetchAllMails(contact_details_tab_scope,has_email_configured,email_accounts_model,email)
+{	
+	var all_emails = [];
+	var fetch_urls = email_accounts_model['fetchUrls'];
+	$('#contact-dtl', App_Contacts.contactDetailView.el).unbind("scroll");
+	loadAllMailsView(contact_details_tab_scope,has_email_configured,all_emails);
+    fetchMailsFromAllAccounts(contact_details_tab_scope,has_email_configured,fetch_urls,email);
+}
+
+/**
+ * 
+ * This function is used to fetch mails from all configured email
+ * accounts. It calls emails servers in asynchronous fashion.
+ * After getting response from each server call, view automatically
+ * gets sorted and rendered with new items
+ 
+ * @param contact_details_tab_scope
+ * @param has_email_configured
+ * @param fetch_urls
+ * @param email
+ */
+function fetchMailsFromAllAccounts(contact_details_tab_scope,has_email_configured,fetch_urls,email)
+{
+	var response_count = 0;
+	if(fetch_urls)
+	{
+		if(fetch_urls.length > 0)
+		{
+			$('#mail-account-types', App_Contacts.contactDetailView.el).prepend('<span id="mails-span"> <img class="all-mails-loading p-r-xs m-b m-l-sm pull-left"  src= "/img/ajax-loader-cursor.gif"></img></span>');
+			$('#mail-account-types', App_Contacts.contactDetailView.el).find('.all-mails-loading').css("display","block");
+		}
+		for(var i=0;i<fetch_urls.length;i++)
+		{
+			var xhr = $.ajax({ url : fetch_urls[i]+'&search_email='+encodeURIComponent(email),
+				async : true, 
+				success : function(emails)
+				{	
+					response_count++;
+					if(emails)
+					{	if(ifNoError(emails[0]))
+						{
+							if(!mailsView)
+							{				
+								setTimeout(function(){
+									mailsView.collection.add(emails);
+									mailsView.render(true);
+									showTransitionBar();
+								},5000);
+							}
+							else
+							{
+								mailsView.collection.add(emails);
+								mailsView.render(true);				
+							}
+						}
+						if(response_count === fetch_urls.length)
+						{
+							showMailsInfoMessages();
+						}
+				    }
+				},
+			    error : function(response)
+			    {
+			    	response_count++;
+			    	if(response_count === fetch_urls.length)
+			    	{
+			    		showMailsInfoMessages(response);
+			    	}
+			    }
+			});
+			email_requests.push(xhr);
+		}
+	}
+}
+/**
+ * /**
+ * This function is responsible for building mailsView.
+ * Mails view consists mails fetched from emails servers.
+ 
+ * @param contact_details_tab_scope
+ * @param has_email_configured
+ * @param fetched_emails
+ * 
+ */
+function loadAllMailsView(contact_details_tab_scope,has_email_configured,fetched_emails)
+{
+	if(typeof mailsView !== 'undefined')
+	{
+		mailsView.render = null;
+		mailsView = null;
+	}
+	this.configured_sync_email = "";
+	mailsView = new Base_Collection_View({data : fetched_emails,
+	templateKey : "email-social", sort_collection : true, sortKey : "date_secs", descending : true, individual_tag_name : "li",
+	postRenderCallback : function(el)
+	{
+		head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
+		{
+			$(".email-sent-time", el).each(function(index, element)
+			{
+				$(element).timeago();
+			});
+		});
+		
+		if(email_server_type!="agilecrm")
+			contact_details_tab_scope.configured_sync_email = email_server_type;
+	
+		if(!has_email_configured)
+			$('#email-prefs-verification',App_Contacts.contactDetailView.el).css('display', 'block');
+		//$('#mail #mails-span', App_Contacts.contactDetailView.el).remove();
+	}});
+	$('#mails', App_Contacts.contactDetailView.el).html(mailsView.render(true).el);
 }
 
 /**
@@ -387,12 +537,28 @@ function fetch_mailserverurl_from_cookie(model)
 				var shared = false;
 				if(email && email_server)
 				{
-					if(email_server.toLowerCase()==='google')
+					if(email_server.toLowerCase()==='all')
+					{
+						cookie_info[0] = 'all'
+						cookie_info[1] = 'All Mail';
+						cookie_info[2] = 'all';
+						cookie_info[3] = 'all';
+					}
+					else if(email_server.toLowerCase()==='google')
 					{
 						var hasGmail = false;
-						if(model.hasOwnProperty('gmailUserName') && (model.gmailUserName === email))					
-							hasGmail = true;
-						else if(typeof model.sharedGmailUserNames !== 'undefined' && model.hasOwnProperty('sharedGmailUserNames'))
+						if(typeof model.gmailUserNames !== 'undefined' && model.hasOwnProperty('gmailUserNames'))
+						{
+							for(var i=0;i<model.gmailUserNames.length;i++)
+							{
+								if(model.gmailUserNames[i] === email)
+								{
+									hasGmail = true;
+									break;
+								}
+							}
+						}
+						if(typeof model.sharedGmailUserNames !== 'undefined' && model.hasOwnProperty('sharedGmailUserNames'))
 						{
 							for(var i=0;i<model.sharedGmailUserNames.length;i++)
 							{
@@ -415,9 +581,18 @@ function fetch_mailserverurl_from_cookie(model)
 					else if(email_server.toLowerCase()==='imap')
 					{
 						var hasImap = false;
-						if(model.hasOwnProperty('imapUserName') && (model.imapUserName === email))
-							hasImap = true;	
-						else if(typeof model.sharedImapUserNames !== 'undefined' && model.sharedImapUserNames.length > 0)
+						if(typeof model.imapUserNames !== 'undefined' && model.hasOwnProperty('imapUserNames'))
+						{
+							for(var i=0;i<model.imapUserNames.length;i++)
+							{
+								if(model.imapUserNames[i] === email)
+								{
+									hasImap = true;
+									break;
+								}
+							}
+						}
+						if(typeof model.sharedImapUserNames !== 'undefined' && model.hasOwnProperty('sharedImapUserNames'))
 						{
 							for(var i=0;i<model.sharedImapUserNames.length;i++)
 							{
@@ -440,9 +615,18 @@ function fetch_mailserverurl_from_cookie(model)
 					else if(email_server.toLowerCase()==='exchange')
 					{
 						var hasExchange = false;
-						if(model.hasOwnProperty('exchangeUserName') && (model.exchangeUserName === email))
-							hasExchange = true;
-						else if(model.sharedExchangeUserNames !== 'undefined' && model.hasOwnProperty('sharedExchangeUserNames'))
+						if(typeof model.exchangeUserNames !== 'undefined' && model.hasOwnProperty('exchangeUserNames'))
+						{
+							for(var i=0;i<model.exchangeUserNames.length;i++)
+							{
+								if(model.exchangeUserNames[i] === email)
+								{
+									hasExchange = true;
+									break;
+								}
+							}
+						}
+						if(typeof model.sharedExchangeUserNames !== 'undefined' && model.hasOwnProperty('sharedExchangeUserNames'))
 						{
 							for(var i=0;i<model.sharedExchangeUserNames.length;i++)
 							{
@@ -474,5 +658,86 @@ function fetch_mailserverurl_from_cookie(model)
 		}
 	}
 	return cookie_info;
+}
+
+function contact_detail_page_infi_scroll(element_id, targetCollection)
+{
+	console.log("initialize_infinite_scrollbar",element_id);
+	
+	element_id.unbind("scroll");
+
+	if (element_id == undefined || element_id == null)
+	{
+		console.log("no elmnt");
+		return;
+	}
+	console.log(targetCollection);
+	targetCollection.infiniScroll = new Backbone.InfiniScroll(targetCollection.collection, {
+		target : element_id,
+		untilAttr : 'cursor',
+		param : 'cursor',
+		strict : false,
+		pageSize : targetCollection.page_size,
+		success : function(colleciton, response)
+		{
+			console.log('in success');
+			if (!colleciton.last().get("cursor"))
+			{
+				this.strict = true;
+				targetCollection.infiniScroll.disableFetch();
+			}
+			// Remove loading icon
+			$(targetCollection.infiniScroll.options.target).find('.scroll-loading').remove();
+		},
+		onFetch : function()
+		{
+			console.log('in fetch');
+			// Add loading icon
+			$(targetCollection.infiniScroll.options.target).append(
+					'<div class="scroll-loading"> <img src="/img/ajax-loader-cursor.gif" style="margin-left: 44%;"> </div>');
+		}
+		});
+}
+function showMailsInfoMessages()
+{
+	showMailsErrorMessages();
+	if(mailsView.collection.length > 0)
+	{
+		if(($('#all-emails-info',App_Contacts.contactDetailView.el).length === 0))
+		{
+			$('#mails',App_Contacts.contactDetailView.el).append('<div id="all-emails-info" class="alert alert-info">Showing relevant messages from all accounts. Maximum of 20 messages from each account </div>');
+		}
+	}
+	$('#mail-account-types', App_Contacts.contactDetailView.el).find('.all-mails-loading').remove();
+	$('#mail', App_Contacts.contactDetailView.el).find("#no-email").css('display','block');
+}
+function showMailsErrorMessages()
+{
+	for(var i=0;i<email_errors_divs.length;i++)
+		$('#mails',App_Contacts.contactDetailView.el).prepend(email_errors_divs[i]);
+	email_errors_divs = [];
+}
+function ifNoError(email)
+{
+	if(email && 'errormssg' in email && 'owner_email' in email)
+	{
+		var email_error_div = '<div class="alert alert-danger" > <a href="#" class="close" data-dismiss="alert">&times;</a><span class="text-dark">Unable to fetch emails from account "'+email.owner_email+'" Error:'+ email.errormssg+'</span>';
+		email_errors_divs.push(email_error_div);
+		return false;
+	}
+	return true;
+}
+function killAllPreviousRequests()
+{
+	for(var i=0;i<email_requests.length;i++)
+	{
+		var xhr = email_requests[i];
+		xhr.abort();
+	}
+	email_requests = [];
+}
+function show_no_email_alert()
+{
+	$('#mail', App_Contacts.contactDetailView.el).html('<div class="alert alert-danger m-t-sm"><a class="close" data-dismiss="alert" href="#">&times;</a>Sorry! this contact has no email to get the mails.</div>');
 }
 	

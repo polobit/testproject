@@ -21,11 +21,13 @@ var LOADING_ON_CURSOR = '<img class="loading" style="padding-right:5px" src= "im
 
 var DEFAULT_GRAVATAR_url = window.location.origin + "/" + LIB_PATH_FLATFULL + "images/flatfull/user-default.jpg";
 
-var ONBOARDING_SCHEDULE_URL = "https://our.agilecrm.com/calendar/Haaris_Farooqi";
+var ONBOARDING_SCHEDULE_URL = "https://our.agilecrm.com/calendar/Haaris_Farooqi,Sandeep";
 
-var SALES_SCHEDULE_URL = "https://our.agilecrm.com/calendar/Shravi_Sharma";
+var SALES_SCHEDULE_URL = "https://our.agilecrm.com/calendar/Shravi_Sharma,stephen";
 
-var SUPPORT_SCHEDULE_URL = "https://our.agilecrm.com/calendar/Raja_Shekar,Vamshi,Natesh,praveen,Abhishek_Pandey";
+var SUPPORT_SCHEDULE_URL = "https://our.agilecrm.com/calendar/Raja_Shekar,Natesh,Abhishek_Pandey";
+
+var CALENDAR_WEEK_START_DAY = CURRENT_USER_PREFS.calendar_wk_start_day;
 /**
  * Returns random loading images
  * 
@@ -287,7 +289,7 @@ function property_JSON(name, id, type)
 
 // Sends post request using backbone model to given url. It is a generic
 // function, can be called to save entity to database
-function saveEntity(object, url, callback)
+function saveEntity(object, url, callback, errorCallback)
 {
 	var model = new Backbone.Model();
 	model.url = url;
@@ -298,7 +300,11 @@ function saveEntity(object, url, callback)
 			// execute the callback, passing parameters as necessary
 			callback(data);
 		}
-	} });
+	}, error: function(model,response){
+			console.log(response);
+			if(errorCallback)
+   			errorCallback(model,response);
+   		}});
 }
 
 /**
@@ -455,7 +461,7 @@ function hideTransitionBar()
 			$('.butterbar').addClass('hide');
 	}, 10);
 }
-$('.modal:visible').die().live('shown.bs.modal', function()
+$('body').on('shown.bs.modal', '.modal:visible', function (e) 
 {
 	setTimeout(function()
 	{
@@ -463,3 +469,87 @@ $('.modal:visible').die().live('shown.bs.modal', function()
 			$('.modal-backdrop', $('.modal:visible')).height($('.modal-dialog', $('.modal:visible')).height() + 70);
 	}, 500);
 });
+/**
+ * Returns UTC mid night time.
+ * 
+ * @param date
+ * @returns
+ */
+function getUTCMidNightEpochFromDate(date)
+{
+	date = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate(), 0, 0, 0));
+
+	// returns UTC mid night time
+	return date.getTime();
+}
+
+/*
+ function to get the date in user selected format in useprefs page. Will take epoc time  as input
+*/
+
+function getDateInFormatFromEpoc(date)
+{
+	if(!date)
+		return;
+	if ((date / 100000000000) > 1)
+	{1
+		return en.dateFormatter({raw: getGlobalizeFormat()})(new Date(parseInt(date)));
+	}
+	return en.dateFormatter({raw: getGlobalizeFormat()})(new Date(parseInt(date) * 1000));
+
+}
+
+/*
+ function to get the date in user selected format in useprefs page. Will takes date object as input
+*/
+
+function getDateInFormat(date)
+{
+	if(!date)
+		return;
+	return en.dateFormatter({raw: getGlobalizeFormat()})(date);
+
+}
+
+function getGlobalizeFormat()
+{
+	var format = CURRENT_USER_PREFS.dateFormat;
+	
+	if(format.search("MM") != -1)
+		format = format.replace(/MM/g, "MMMM");
+	else if(format.search("M") != -1)
+		format = format.replace(/M/g, "MMM");
+	if(format.search("DD") != -1)
+		format = format.replace(/DD/g, "EEEE");
+	else if(format.search("D") != -1)
+		format = format.replace(/D/g, "EEE");
+	format = format.replace(/m/g, "M");
+	return format;
+}
+
+
+/* To convert UK formatted date to US formatted date
+   ukDate should be in dd/mm/yyyy format
+*/
+function convertDateFromUKtoUS(ukDate)
+{
+	if(!ukDate)
+		return "";
+	var date;
+	if(ukDate.search("/") != -1)
+		date = ukDate.split("/");
+	else
+		date = ukDate.split(".");
+	if(date.length == 3)
+	{	
+		var returnDate = new Date(date[1]+"/"+date[0]+"/"+date[2]);
+		if(!/Invalid|NaN/.test(returnDate))
+			return returnDate.format("mm/dd/yyyy");
+		else
+			return "";
+	}
+	else 
+		return "";
+}
+
+

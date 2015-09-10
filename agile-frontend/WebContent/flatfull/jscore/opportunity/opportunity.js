@@ -10,7 +10,7 @@ $(function () {
 	/**
 	 * When mouseover on any row of opportunities list, the popover of deal is shown
 	 **/
-	$('#opportunities-model-list > tr').live('mouseenter', function () {
+	$('#opportunity-listners').on('mouseenter', '#opportunities-model-list > tr', function(e) {
         var data = $(this).find('.data').attr('data');
 
         var currentDeal = App_Deals.opportunityCollectionView.collection.get(data);
@@ -51,14 +51,14 @@ $(function () {
     /**
      * On mouse out on the row hides the popover.
      **/
-	$('#opportunities-model-list > tr').live('mouseleave', function(){
+	$('#opportunity-listners').on('mouseleave', '#opportunities-model-list > tr', function(e) {
     	 $(this).popover('hide');
     });
 	
     /**
      * On click on the row hides the popover.
      **/
-	$('#opportunities-model-list > tr, .hide-popover').live('click', function(){
+	$('#opportunity-listners').on('click', '#opportunities-model-list > tr, .hide-popover', function(e) {
     	 $(this).closest('tr').popover('hide');
     });
     
@@ -66,24 +66,24 @@ $(function () {
     * When deal is added from contact-detail by selecting 'Add Opportunity' from actions 
     * and then close button of deal is clicked, it should navigate to contact-detail.
     **/
-	$('#close-deal').live('click', function(e){
+	$('#opportunity-listners').on('click', '#close-deal', function(e) {
     	e.preventDefault();
     	window.history.back();
     });
 	
-	$('#deal-milestone-regular').live('click', function(e){
+	$('#opportunity-listners').on('click', '#deal-milestone-regular', function(e) {
     	e.preventDefault();
     	eraseCookie('deal-milestone-view');
     	App_Deals.deals();
     });
 	
-	$('#deal-milestone-compact').live('click', function(e){
+	$('body').on('click', '#deal-milestone-compact', function(e) {
     	e.preventDefault();
     	createCookie('deal-milestone-view','compact');
     	App_Deals.deals();
     });
 	
-	$('#deal-milestone-fit').live('click', function(e){
+	$('body').on('click', '#deal-milestone-fit', function(e) {
     	e.preventDefault();
     	createCookie('deal-milestone-view','fit');
     	App_Deals.deals();
@@ -180,6 +180,9 @@ var tracks = new Base_Collection_View({url : '/core/api/milestone/pipelines'});
 					else
 						html+='<option value="'+mile.id+'_'+milestone+'">'+milestone+'</option>';
 				});
+				if(mile.lost_milestone){
+					html+='<option value="'+mile.id+'_'+mile.lost_milestone+'" style="display:none;">'+mile.lost_milestone+'</option>';
+				}
 				$('#' + id, el).closest('.control-group').find('label b').text('Milestone');
 			}
 			else {
@@ -194,8 +197,10 @@ var tracks = new Base_Collection_View({url : '/core/api/milestone/pipelines'});
 						else
 							html+='<option value="'+mile.id+'_'+milestone+'">'+mile.name+' - '+milestone+'</option>';
 					});
+					if(mile.lost_milestone){
+						html+='<option value="'+mile.id+'_'+mile.lost_milestone+'" style="display:none;">'+mile.name+' - '+mile.lost_milestone+'</option>';
+					}
 					html+='</optgroup>';
-					
 				});
 				$('#' + id, el).closest('.control-group').find('label b').text('Track & Milestone');
 			}
@@ -241,9 +246,12 @@ var tracks = new Base_Collection_View({url : '/core/api/milestone/pipelines'});
 			console.log(jsonModel);
 			
 			// If there is only one pipeline, select the option by default and hide the field.
-			if(jsonModel.length==1)
+			if(jsonModel.length==1){
 				html+='<option value="'+jsonModel[0].id+'" selected="selected">'+jsonModel[0].name+'</option>';
+				milestone_util.showMilestonePopup(jsonModel[0]);
+			}
 			else {
+				milestone_util.isNotyVisible = false;
 				$.each(jsonModel,function(index,mile){
 					console.log(mile.milestones,value);
 					if(!mile.name)
@@ -252,7 +260,7 @@ var tracks = new Base_Collection_View({url : '/core/api/milestone/pipelines'});
 						html+='<option value="'+mile.id+'" selected="selected">'+mile.name+'</option>';
 					else
 						html+='<option value="'+mile.id+'">'+mile.name+'</option>';
-					
+					milestone_util.showMilestonePopup(mile);
 				});
 			}
 			$('#pipeline',el).html(html);
@@ -419,7 +427,10 @@ function appendCustomfields(el){
 			 $(el).find('#opportunities-model-list tr').each(function(index,element){
 				 var row = '';
 				 $.each(customfields, function(i,customfield){
-						 row += '<td class="deal_custom_replace"><div class="text-ellipsis" style="width:6em">'+dealCustomFieldValue(customfield.field_label,deals[index].attributes.custom_data)+'</div></td>';
+				 		if(customfield.field_type == "DATE")
+				 			row += '<td class="deal_custom_replace"><div class="text-ellipsis" style="width:6em">'+dealCustomFieldValueForDate(customfield.field_label,deals[index].attributes.custom_data)+'</div></td>';
+				 		else
+							row += '<td class="deal_custom_replace"><div class="text-ellipsis" style="width:6em">'+dealCustomFieldValue(customfield.field_label,deals[index].attributes.custom_data)+'</div></td>';
 					});
 				 $(this).append(row);
 			 });
@@ -442,4 +453,108 @@ function dealCustomFieldValue(name, data){
 		}
 	});
 	return value;
+}
+
+function dealCustomFieldValueForDate(name, data){
+	var value = '';
+	$.each(data,function(index, field){
+		if(field.name == name){
+			if(!field.value)
+				return '';
+			var dateString = new Date(field.value);
+			if(dateString == "Invalid Date")
+				value = getDateInFormatFromEpoc(field.value);
+			else
+				value = en.dateFormatter({raw: getGlobalizeFormat()})(dateString);
+			
+		}
+	});
+	return value;
+}
+
+function populateLostReasons(el, value){
+	if(!$('#deal_lost_reason',el).hasClass("hidden")){
+		$('#deal_lost_reason',el).addClass("hidden");
+	}
+	var tracks = new Base_Collection_View({url : '/core/api/categories?entity_type=DEAL_LOST_REASON', sortKey : "label"});
+	tracks.collection.fetch({
+		success: function(data){
+			var jsonModel = data.toJSON();
+			var html = '<option value="">Select...</option>';
+			console.log(jsonModel);
+			
+			$.each(jsonModel,function(index,lostReason){
+				if (value && value.lost_reason_id == lostReason.id){
+					html+='<option value="'+lostReason.id+'" selected="selected">'+lostReason.label+'</option>';
+					$('#deal_lost_reason',el).removeClass("hidden");
+				}else{
+					html+='<option value="'+lostReason.id+'">'+lostReason.label+'</option>';
+				}
+			});
+			$('#lost_reason', el).html(html);
+			console.log('adding');
+			$('#lost_reason', el).closest('div').find('.loading-img').hide();
+
+			// Hide loading bar
+			hideTransitionBar();
+
+			if($('#pipeline_milestone',el).length>0){
+				var temp = $('#pipeline_milestone',el).val();
+				var track = temp.substring(0, temp.indexOf('_'));
+				var milestone = temp.substring(temp.indexOf('_') + 1, temp.length + 1);
+				$('#pipeline_milestone',el).closest('form').find('#pipeline').val(track);
+				$('#pipeline_milestone',el).closest('form').find('#milestone').val(milestone);
+				console.log(track, '-----------', milestone);
+				var lost_milestone_flag = false;
+				$('#pipeline_milestone',el).find('option').each(function(){
+					if($(this).css("display") == "none" && $(this).val() == temp){
+						lost_milestone_flag = true;
+					}
+				});
+				if(lost_milestone_flag && $('#lost_reason',$('#pipeline_milestone',el).closest('.modal')).find('option').length>1){
+					$('#deal_lost_reason',$('#pipeline_milestone',el).closest('.modal')).removeClass("hidden");
+				}else{
+					$('#lost_reason',$('#pipeline_milestone',el).closest('.modal')).val("");
+					$('#deal_lost_reason',$('#pipeline_milestone',el).closest('.modal')).addClass("hidden");
+				}
+			}else{
+				if($('#lost_reason',el).find('option').length>1){
+					$('#dealLostReasonModal').modal('show');
+				}
+			}
+		}
+	}); 
+}
+
+function populateDealSources(el, value){
+	if(!$('#deal_deal_source',el).hasClass("hidden")){
+		$('#deal_deal_source',el).addClass("hidden");
+	}
+	var tracks = new Base_Collection_View({url : '/core/api/categories?entity_type=DEAL_SOURCE', sortKey : "label"});
+	tracks.collection.fetch({
+		success: function(data){
+			var jsonModel = data.toJSON();
+			var html = '<option value="">Select...</option>';
+			console.log(jsonModel);
+			
+			$.each(jsonModel,function(index,dealSource){
+				if (value && value.deal_source_id == dealSource.id){
+					html+='<option value="'+dealSource.id+'" selected="selected">'+dealSource.label+'</option>';
+					$('#deal_deal_source',el).removeClass("hidden");
+				}else{
+					html+='<option value="'+dealSource.id+'">'+dealSource.label+'</option>';
+				}
+			});
+			$('#deal_source', el).html(html);
+			console.log('adding');
+			$('#deal_source', el).closest('div').find('.loading-img').hide();
+
+			// Hide loading bar
+			hideTransitionBar();
+
+			if($('#deal_source',el).find('option').length>1){
+				$('#deal_deal_source',el).removeClass("hidden");
+			}
+		}
+	}); 
 }

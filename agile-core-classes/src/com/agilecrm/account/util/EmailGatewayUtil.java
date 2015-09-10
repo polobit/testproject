@@ -1,6 +1,9 @@
 package com.agilecrm.account.util;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
@@ -15,6 +18,7 @@ import com.agilecrm.Globals;
 import com.agilecrm.account.EmailGateway;
 import com.agilecrm.account.EmailGateway.EMAIL_API;
 import com.agilecrm.contact.email.EmailSender;
+import com.agilecrm.db.GoogleSQL;
 import com.agilecrm.mandrill.util.MandrillUtil;
 import com.agilecrm.mandrill.util.deferred.MailDeferredTask;
 import com.agilecrm.queues.util.PullQueueUtil;
@@ -24,11 +28,14 @@ import com.agilecrm.widgets.Widget;
 import com.agilecrm.widgets.Widget.IntegrationType;
 import com.agilecrm.widgets.Widget.WidgetType;
 import com.agilecrm.widgets.util.WidgetUtil;
+import com.agilecrm.workflows.util.WorkflowUtil;
 import com.campaignio.logger.Log.LogType;
+import com.campaignio.logger.util.CampaignLogsSQLUtil;
 import com.campaignio.logger.util.LogUtil;
 import com.google.appengine.api.NamespaceManager;
+import com.google.appengine.api.blobstore.BlobKey;
 import com.google.appengine.api.taskqueue.TaskHandle;
-import com.thirdparty.SendGrid;
+import com.thirdparty.sendgrid.SendGrid;
 import com.thirdparty.mandrill.Mandrill;
 
 /**
@@ -63,8 +70,8 @@ public class EmailGatewayUtil
 	    if (widget == null)
 	    {
 		widget = new Widget("EmailGateway",
-		        "Email gateway supports third party email apis integration into Agile.", "", "", "", "",
-		        WidgetType.INTEGRATIONS, IntegrationType.EMAIL);
+			"Email gateway supports third party email apis integration into Agile.", "", "", "", "",
+			WidgetType.INTEGRATIONS, IntegrationType.EMAIL);
 	    }
 
 	    ObjectMapper map = new ObjectMapper();
@@ -80,6 +87,45 @@ public class EmailGatewayUtil
 	{
 	    e.printStackTrace();
 	    return null;
+	}
+    }
+
+    public static void addEmailLogs(List<MailDeferredTask> tasks)
+    {
+	Map<String, String> campaignNameMap = new HashMap<String, String>();
+	List<Object[]> queryList = new ArrayList<Object[]>();
+	for (MailDeferredTask mailDeferredTask : tasks)
+	{
+	    String campaignName = null;
+	    if (StringUtils.isEmpty(mailDeferredTask.campaignId))
+	    {
+		continue;
+	    }
+
+	    if (!campaignNameMap.containsKey(mailDeferredTask.campaignId + "-" + mailDeferredTask.domain))
+	    {
+		campaignName = WorkflowUtil.getCampaignName(mailDeferredTask.campaignId);
+		campaignNameMap.put(mailDeferredTask.campaignId + "-" + mailDeferredTask.domain, campaignName);
+	    }
+	    else
+	    {
+		campaignName = campaignNameMap.get(mailDeferredTask.campaignId + "-" + mailDeferredTask.domain);
+	    }
+
+	    Object[] newLog = new Object[] { mailDeferredTask.domain, mailDeferredTask.campaignId, campaignName,
+		    mailDeferredTask.subscriberId, GoogleSQL.getFutureDate(), "Subject: " + mailDeferredTask.subject,
+		    LogType.EMAIL_SENT.toString() };
+
+	    queryList.add(newLog);
+
+	}
+
+	if (queryList.size() > 0)
+	{
+	    Long start_time = System.currentTimeMillis();
+	    CampaignLogsSQLUtil.addToCampaignLogs(queryList);
+	    System.out.println("batch request completed : " + (System.currentTimeMillis() - start_time));
+	    System.out.println("Logs size : " + queryList.size());
 	}
     }
 
@@ -166,7 +212,7 @@ public class EmailGatewayUtil
 	else
 	    response = Mandrill.sendMail(emailGateway.api_key, false, "api_test@agilecrm.com", "API Test",
 		    "naresh@agilecrm.com", null, null, "Mandrill test email from " + NamespaceManager.get(), null,
-		    "Test Email.", "Test Email", null, null);
+		    "Test Email.", "Test Email", null, null, null);
 
 	try
 	{
@@ -309,7 +355,7 @@ public class EmailGatewayUtil
      */
     public static void sendEmail(EmailGateway emailGateway, String domain, String fromEmail, String fromName,
 	    String to, String cc, String bcc, String subject, String replyTo, String html, String text,
-	    String mandrillMetadata, List<Long> documentIds, String... attachments)
+	    String mandrillMetadata, List<Long> documentIds, List<BlobKey> blobKeys, String... attachments)
     {
 	try
 	{
@@ -321,10 +367,10 @@ public class EmailGatewayUtil
 	    }
 
 	    // If no gateway setup, sends email through Agile Mandrill
-	    if (emailGateway == null)
+	    if (emailGateway == null || (EMAIL_API.SEND_GRID.equals(emailGateway.email_api) && ((documentIds != null && documentIds.size() != 0) || (blobKeys != null && blobKeys.size() != 0))))
 	    {
 		Mandrill.sendMail(null, true, fromEmail, fromName, to, cc, bcc, subject, replyTo, html, text,
-		        mandrillMetadata, documentIds, attachments);
+			mandrillMetadata, documentIds, blobKeys, attachments);
 
 		return;
 	    }
@@ -332,12 +378,12 @@ public class EmailGatewayUtil
 	    // If Mandrill
 	    if (EMAIL_API.MANDRILL.equals(emailGateway.email_api))
 		Mandrill.sendMail(emailGateway.api_key, true, fromEmail, fromName, to, cc, bcc, subject, replyTo, html,
-		        text, mandrillMetadata, documentIds, attachments);
+			text, mandrillMetadata, documentIds, blobKeys, attachments);
 
 	    // If SendGrid
 	    else if (EMAIL_API.SEND_GRID.equals(emailGateway.email_api))
 		SendGrid.sendMail(emailGateway.api_user, emailGateway.api_key, fromEmail, fromName, to, cc, bcc,
-		        subject, replyTo, html, text, null, attachments);
+			subject, replyTo, html, text, null, attachments);
 
 	}
 	catch (Exception e)
@@ -350,7 +396,7 @@ public class EmailGatewayUtil
 	    System.out.println("Sending email again from exception in EmailGatewayUtil... " + e.getMessage());
 
 	    Mandrill.sendMail(null, true, fromEmail, fromName, to, cc, bcc, subject, replyTo, html, text,
-		    mandrillMetadata, documentIds, attachments);
+		    mandrillMetadata, documentIds, blobKeys, attachments);
 
 	}
     }
@@ -373,12 +419,12 @@ public class EmailGatewayUtil
      */
     public static void sendEmail(String domain, String fromEmail, String fromName, String to, String cc, String bcc,
 	    String subject, String replyTo, String html, String text, String mandrillMetadata, List<Long> documentIds,
-	    String... attachments)
+	    List<BlobKey> blobKeys, String... attachments)
     {
 	EmailGateway emailGateway = EmailGatewayUtil.getEmailGateway();
 
 	sendEmail(emailGateway, domain, fromEmail, fromName, to, cc, bcc, subject, replyTo, html, text,
-	        mandrillMetadata, documentIds, attachments);
+		mandrillMetadata, documentIds, blobKeys, attachments);
     }
 
     /**
@@ -404,7 +450,7 @@ public class EmailGatewayUtil
 	    String replyTo, String html, String text, String mandrillMetadata, String subscriberId, String campaignId)
     {
 	MailDeferredTask mailDeferredTask = new MailDeferredTask(emailGatewayType, apiUser, apiKey, domain, fromEmail,
-	        fromName, to, cc, bcc, subject, replyTo, html, text, mandrillMetadata, subscriberId, campaignId);
+		fromName, to, cc, bcc, subject, replyTo, html, text, mandrillMetadata, subscriberId, campaignId);
 
 	// Add to pull queue with from email as Tag
 	PullQueueUtil.addToPullQueue(queueName, mailDeferredTask, fromEmail);
@@ -418,11 +464,61 @@ public class EmailGatewayUtil
      */
     public static void sendMails(List<TaskHandle> tasks)
     {
+	sendMailsMailDeferredTask(convertTaskHandlestoMailDeferredTasks(tasks));
+    }
 
-	TaskHandle firstTaskHandle = tasks.get(0);
+    public static List<MailDeferredTask> convertTaskHandlestoMailDeferredTasks(List<TaskHandle> tasks)
+    {
+	List<MailDeferredTask> mailDeferredTasks = new ArrayList<MailDeferredTask>();
+	for (TaskHandle handle : tasks)
+	{
+	    try
+	    {
+		mailDeferredTasks.add((MailDeferredTask) SerializationUtils.deserialize(handle.getPayload()));
+	    }
+	    catch (Exception e)
+	    {
+		e.printStackTrace();
+	    }
 
-	MailDeferredTask mailDeferredTask = (MailDeferredTask) SerializationUtils.deserialize(firstTaskHandle
-	        .getPayload());
+	}
+	return mailDeferredTasks;
+    }
+
+    /**
+     * Adds email exceeded log
+     * 
+     * @param tasks
+     *            - Leased tasks
+     */
+    public static void addEmailExceededLog(List<MailDeferredTask> tasks)
+    {
+	try
+	{
+	    for (MailDeferredTask mailDeferredTask : tasks)
+	    {
+
+		// For personal bulk emails, no need to add log
+		if (StringUtils.isBlank(mailDeferredTask.campaignId)
+			&& StringUtils.isBlank(mailDeferredTask.subscriberId))
+		    break;
+
+		LogUtil.addLogToSQL(mailDeferredTask.campaignId, mailDeferredTask.subscriberId,
+			"Emails limit exceeded. Please increase your quota.", LogType.EMAIL_SENDING_FAILED.toString());
+
+	    }
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    System.err.println("Exception occured while adding exceeded log in EmailGatewayUtil..." + e.getMessage());
+	}
+    }
+
+    public static void sendMailsMailDeferredTask(List<MailDeferredTask> tasks)
+    {
+
+	MailDeferredTask mailDeferredTask = tasks.get(0);
 
 	String domain = mailDeferredTask.domain;
 
@@ -447,6 +543,8 @@ public class EmailGatewayUtil
 		else if (emailGateway.email_api == EMAIL_API.SEND_GRID)
 		    SendGridUtil.sendSendGridMails(tasks, emailSender);
 
+		addEmailLogs(tasks);
+
 		emailSender.setCount(tasks.size());
 		emailSender.updateStats();
 
@@ -466,38 +564,6 @@ public class EmailGatewayUtil
 	finally
 	{
 	    NamespaceManager.set(oldNamespace);
-	}
-    }
-
-    /**
-     * Adds email exceeded log
-     * 
-     * @param tasks
-     *            - Leased tasks
-     */
-    public static void addEmailExceededLog(List<TaskHandle> tasks)
-    {
-	try
-	{
-	    for (TaskHandle task : tasks)
-	    {
-		MailDeferredTask mailDeferredTask = (MailDeferredTask) SerializationUtils
-		        .deserialize(task.getPayload());
-
-		// For personal bulk emails, no need to add log
-		if (StringUtils.isBlank(mailDeferredTask.campaignId)
-		        && StringUtils.isBlank(mailDeferredTask.subscriberId))
-		    break;
-
-		LogUtil.addLogToSQL(mailDeferredTask.campaignId, mailDeferredTask.subscriberId,
-		        "Emails limit exceeded. Please increase your quota.", LogType.EMAIL_SENDING_FAILED.toString());
-
-	    }
-	}
-	catch (Exception e)
-	{
-	    e.printStackTrace();
-	    System.err.println("Exception occured while adding exceeded log in EmailGatewayUtil..." + e.getMessage());
 	}
     }
 }

@@ -6,7 +6,6 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
-import java.nio.channels.Channels;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -41,17 +40,18 @@ import com.agilecrm.contact.ContactField.FieldType;
 import com.agilecrm.contact.CustomFieldDef;
 import com.agilecrm.contact.CustomFieldDef.SCOPE;
 import com.agilecrm.contact.Note;
-import com.agilecrm.contact.export.util.ContactExportBlobUtil;
 import com.agilecrm.contact.util.BulkActionUtil;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.contact.util.CustomFieldDefUtil;
 import com.agilecrm.contact.util.bulk.BulkActionNotifications;
 import com.agilecrm.contact.util.bulk.BulkActionNotifications.BulkAction;
+import com.agilecrm.db.GoogleSQL;
 import com.agilecrm.deals.CustomFieldData;
 import com.agilecrm.deals.Milestone;
 import com.agilecrm.deals.Opportunity;
 import com.agilecrm.deals.util.MilestoneUtil;
 import com.agilecrm.exception.InvalidTagException;
+import com.agilecrm.export.gcs.GCSServiceAgile;
 import com.agilecrm.subscription.restrictions.db.BillingRestriction;
 import com.agilecrm.subscription.restrictions.entity.DaoBillingRestriction;
 import com.agilecrm.subscription.restrictions.entity.impl.ContactBillingRestriction;
@@ -59,15 +59,12 @@ import com.agilecrm.subscription.restrictions.exception.PlanRestrictedException;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.access.UserAccessControl;
-import com.agilecrm.user.access.UserAccessControl.AccessControlClasses;
 import com.agilecrm.user.access.exception.AccessDeniedException;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.email.SendMail;
 import com.agilecrm.validator.TagValidator;
-import com.google.appengine.api.files.AppEngineFile;
-import com.google.appengine.api.files.FileService;
-import com.google.appengine.api.files.FileServiceFactory;
-import com.google.appengine.api.files.FileWriteChannel;
+import com.google.agile.repackaged.appengine.tools.cloudstorage.GcsFileOptions;
+import com.google.appengine.api.NamespaceManager;
 import com.googlecode.objectify.Key;
 
 /**
@@ -85,22 +82,35 @@ import com.googlecode.objectify.Key;
 public class CSVUtil
 {
     BillingRestriction billingRestriction;
+    String bulk_action_tracker = String.valueOf(System.currentTimeMillis());
+
     private ContactBillingRestriction dBbillingRestriction;
 
     private static final int MAX_ALLOWED_FIELD_VALUE_SIZE = 490;
 
-    private UserAccessControl accessControl = UserAccessControl.getAccessControl(AccessControlClasses.Contact, null);
+    private UserAccessControl accessControl = null;
+    private GCSServiceAgile service;
+    private CSVWriter failedContactsWriter = null;
 
     private CSVUtil()
     {
 
     }
 
-    public CSVUtil(BillingRestriction billingRestriction)
+    public CSVUtil(BillingRestriction billingRestriction, UserAccessControl accessControl)
     {
 	this.billingRestriction = billingRestriction;
 	dBbillingRestriction = (ContactBillingRestriction) DaoBillingRestriction.getInstace(
-	        Contact.class.getSimpleName(), this.billingRestriction);
+		Contact.class.getSimpleName(), this.billingRestriction);
+
+	GcsFileOptions options = new GcsFileOptions.Builder().mimeType("text/csv").contentEncoding("UTF-8")
+		.acl("public-read").addUserMetadata("domain", NamespaceManager.get()).build();
+
+	service = new GCSServiceAgile(
+		NamespaceManager.get() + "_failed_contacts_" + GoogleSQL.getFutureDate() + ".csv", "agile-export",
+		options);
+
+	this.accessControl = accessControl;
 
     }
 
@@ -229,14 +239,14 @@ public class CSVUtil
     public void createContactsFromCSV(InputStream blobStream, Contact contact, String ownerId)
 	    throws PlanRestrictedException, IOException
     {
-    	
-    	// Creates domain user key, which is set as a contact owner
-    Key<DomainUser> ownerKey = new Key<DomainUser>(DomainUser.class, Long.parseLong(ownerId));
 
-    DomainUser domainUser = DomainUserUtil.getDomainUser(ownerKey.getId());
+	// Creates domain user key, which is set as a contact owner
+	Key<DomainUser> ownerKey = new Key<DomainUser>(DomainUser.class, Long.parseLong(ownerId));
 
-    BulkActionUtil.setSessionManager(domainUser);
-    	
+	DomainUser domainUser = DomainUserUtil.getDomainUser(ownerKey.getId());
+
+	BulkActionUtil.setSessionManager(domainUser);
+
 	// Refreshes count of contacts
 	billingRestriction.refreshContacts();
 
@@ -261,12 +271,10 @@ public class CSVUtil
 
 	List<ContactField> properties = contact.properties;
 
-
-
 	System.out.println(csvData.size());
 
 	System.out.println("available scopes for user " + domainUser.email + ", scopes = "
-	        + accessControl.getCurrentUserScopes());
+		+ accessControl.getCurrentUserScopes());
 
 	// Counters to count number of contacts saved contacts
 	int savedContacts = 0;
@@ -368,7 +376,7 @@ public class CSVUtil
 			    {
 				addressJSON.put(field.value, csvValues[j]);
 				tempContact.properties.add(new ContactField(Contact.ADDRESS, addressJSON.toString(),
-				        field.type.toString()));
+					field.type.toString()));
 			    }
 
 			}
@@ -389,7 +397,7 @@ public class CSVUtil
 		    if (field.type.equals(FieldType.CUSTOM))
 		    {
 			List<CustomFieldDef> customFields = CustomFieldDefUtil.getCustomFieldsByScopeAndType(
-			        SCOPE.CONTACT, "DATE");
+				SCOPE.CONTACT, "DATE");
 			for (CustomFieldDef customFieldDef : customFields)
 			{
 			    if (field.name.equalsIgnoreCase(customFieldDef.field_label))
@@ -453,7 +461,7 @@ public class CSVUtil
 		    {
 			accessDeniedToUpdate++;
 			failedContacts.add(new FailedContactBean(getDummyContact(properties, csvValues),
-			        "Access denied to update contact"));
+				"Access denied to update contact"));
 
 			continue;
 		    }
@@ -471,7 +479,7 @@ public class CSVUtil
 		    {
 			++limitExceeded;
 			failedContacts.add(new FailedContactBean(getDummyContact(properties, csvValues),
-			        "limit is exceeded"));
+				"limit is exceeded"));
 			continue;
 		    }
 
@@ -483,6 +491,7 @@ public class CSVUtil
 		    }
 		}
 
+		tempContact.bulkActionTracker = bulk_action_tracker;
 		tempContact.save();
 	    }// end of try
 	    catch (InvalidTagException e)
@@ -857,7 +866,7 @@ public class CSVUtil
 	dBbillingRestriction.send_warning_message();
 
 	SendMail.sendMail(domainUser.email, "CSV Companies Import Status", SendMail.CSV_IMPORT_NOTIFICATION,
-	        new Object[] { domainUser, status });
+		new Object[] { domainUser, status });
 
 	if (savedCompany != 0 || mergedCompany != 0)
 	    ActivityUtil.createLogForImport(ActivityType.COMPANY_IMPORT, EntityType.CONTACT, savedCompany,
@@ -917,7 +926,7 @@ public class CSVUtil
 	    List<ContactField> properties, String[] csvValues)
     {
 	if (StringUtils.isBlank(contact.getContactFieldValue(Contact.FIRST_NAME))
-	        && StringUtils.isBlank(contact.getContactFieldValue(Contact.LAST_NAME)))
+		&& StringUtils.isBlank(contact.getContactFieldValue(Contact.LAST_NAME)))
 	{
 	    buildCSVImportStatus(statusMap, ImportStatus.NAME_MANDATORY, 1);
 	    failed.add(new FailedContactBean(getDummyContact(properties, csvValues), "Name field can't be blank"));
@@ -1252,7 +1261,7 @@ public class CSVUtil
 	    try
 	    {
 		if (!StringUtils.isEmpty(opportunity.name) && opportunity.pipeline_id != null
-		        && opportunity.milestone != null && !wrongMilestone)
+			&& opportunity.milestone != null && !wrongMilestone)
 		{
 		    opportunity.save();
 		    savedDeals++;
@@ -1296,7 +1305,7 @@ public class CSVUtil
 	}
 
 	SendMail.sendMail(domainUser.email, "CSV Deals Import Status", "csv_deal_import", new Object[] { domainUser,
-	        status });
+		status });
 
 	if (savedDeals > 0)
 	    ActivityUtil.createLogForImport(ActivityType.DEAL_IMPORT, EntityType.DEAL, savedDeals, 0);
@@ -1313,7 +1322,7 @@ public class CSVUtil
     private boolean isValidEmail(final String hex)
     {
 	String EMAIL_PATTERN = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
-	        + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
+		+ "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
 	Pattern pattern = Pattern.compile(EMAIL_PATTERN);
 	Matcher matcher = pattern.matcher(hex);
 	return matcher.matches();
@@ -1344,36 +1353,23 @@ public class CSVUtil
 	String path = null;
 	try
 	{
-	    // Get a file service
-	    FileService fileService = FileServiceFactory.getFileService();
-
-	    // Create a new Blob file with mime-type "text/csv"
-	    AppEngineFile file = fileService.createNewBlobFile("text/csv", "Failed Contacts.csv");
-
-	    // Open a channel to write to it
-	    boolean lock = false;
-	    FileWriteChannel writeChannel = fileService.openWriteChannel(file, lock);
-
+	    if (failedContacts == null || failedContacts.size() == 0)
+	    {
+		// Send every partition as separate email
+		sendFailedContactImportFile(domainUser, null, 0, status);
+		return;
+	    }
 	    // Builds Contact CSV
-	    writeFailedContactsInCSV(writeChannel, failedContacts, headings);
+	    writeFailedContactsInCSV(getCSVWriterForFailedContacts(), failedContacts, headings);
 
-	    // Blob file Path
-	    path = file.getFullPath();
+	    service.getOutputchannel().close();
 
-	    lock = true;
-	    writeChannel = fileService.openWriteChannel(file, lock);
-
-	    writeChannel.closeFinally();
-
-	    // Retrieves partitions of data of a file having given path
-	    List<String> fileData = ContactExportBlobUtil.retrieveBlobFileData(path);
+	    byte[] data = service.getDataFromFile();
 
 	    // Send every partition as separate email
-	    for (String partition : fileData)
-		sendFailedContactImportFile(domainUser, partition, failedContacts.size(), status);
+	    sendFailedContactImportFile(domainUser, new String(data, "UTF-8"), failedContacts.size(), status);
 
-	    // Deletes blob
-	    ContactExportBlobUtil.deleteBlobFile(path);
+	    service.deleteFile();
 
 	}
 	catch (Exception e)
@@ -1390,19 +1386,15 @@ public class CSVUtil
      * @return
      */
 
-    public void writeFailedContactsInCSV(FileWriteChannel channel, List<FailedContactBean> failedContacts,
-	    String[] headings)
+    public void writeFailedContactsInCSV(CSVWriter writer, List<FailedContactBean> failedContacts, String[] headings)
     {
 	try
 	{
-	    CSVWriter writer = new CSVWriter(Channels.newWriter(channel, "UTF8"));
 	    String[] heads = getHeading(headings);
 	    writer.writeNext(heads);
 	    for (FailedContactBean bean : failedContacts)
 	    {
-
 		writer.writeNext(toArray(toList(bean.getContact().properties), bean.getCauses(), heads.length));
-
 	    }
 
 	    writer.close();
@@ -1576,5 +1568,13 @@ public class CSVUtil
 	}
 
 	return formatedDate;
+    }
+
+    private CSVWriter getCSVWriterForFailedContacts() throws IOException
+    {
+	if (failedContactsWriter != null)
+	    return failedContactsWriter;
+
+	return failedContactsWriter = new CSVWriter(service.getOutputWriter());
     }
 }

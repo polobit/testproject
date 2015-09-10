@@ -40,6 +40,7 @@ import com.agilecrm.activities.util.ActivitySave;
 import com.agilecrm.activities.util.ActivityUtil;
 import com.agilecrm.activities.util.EventUtil;
 import com.agilecrm.activities.util.TaskUtil;
+import com.agilecrm.bulkaction.deferred.ContactExportPullTask;
 import com.agilecrm.cases.Case;
 import com.agilecrm.cases.util.CaseUtil;
 import com.agilecrm.contact.Contact;
@@ -49,10 +50,13 @@ import com.agilecrm.contact.Note;
 import com.agilecrm.contact.Tag;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.contact.util.NoteUtil;
+import com.agilecrm.contact.util.bulk.BulkActionNotifications;
+import com.agilecrm.contact.util.bulk.BulkActionNotifications.BulkAction;
 import com.agilecrm.deals.Opportunity;
 import com.agilecrm.deals.util.OpportunityUtil;
 import com.agilecrm.document.Document;
 import com.agilecrm.document.util.DocumentUtil;
+import com.agilecrm.queues.util.PullQueueUtil;
 import com.agilecrm.search.query.util.QueryDocumentUtil;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
@@ -60,6 +64,7 @@ import com.agilecrm.user.access.exception.AccessDeniedException;
 import com.agilecrm.user.access.util.UserAccessControlUtil;
 import com.agilecrm.user.access.util.UserAccessControlUtil.CRUDOperation;
 import com.agilecrm.util.HTTPUtil;
+import com.google.appengine.api.NamespaceManager;
 
 /**
  * <code>ContactsAPI</code> includes REST calls to interact with {@link Contact}
@@ -1100,6 +1105,7 @@ public class ContactsAPI
 		for (Note note : notes)
 		{
 		    note.addContactIds(contact.id.toString());
+		    note.owner_id = String.valueOf(note.getDomainOwner().id);
 		    note.save();
 		}
 
@@ -1197,6 +1203,36 @@ public class ContactsAPI
 
 	// Return result
 	return currentDate.toString();
+    }
+
+    /* Fetch current time from contact's time zone */
+    @Path("/export")
+    @POST
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    public void exportContacts(@FormParam("contact_ids") String contact_ids, @QueryParam("filter") String filter,
+	    @FormParam("dynamic_filter") String dynamicFilter, @FormParam("data") String data)
+    {
+	if (StringUtils.isBlank(data))
+	{
+	    System.out.println("Not proceeding further as data is null.");
+	    return;
+	}
+
+	Long currentUserId = SessionManager.get().getDomainId();
+	ContactExportPullTask task = new ContactExportPullTask(contact_ids, filter, dynamicFilter, currentUserId,
+		NamespaceManager.get());
+
+	PullQueueUtil.addToPullQueue("export-pull-queue", task, NamespaceManager.get());
+
+	// filter, dynamicFilter, data);
+
+	// ContactExportEmailUtil.exportContactCSVAsEmail(data, downloadUrl,
+	// String.valueOf(count),
+	// ContactExportType.CONTACT);
+	// ActivityUtil.createLogForImport(ActivityType.CONTACT_EXPORT,
+	// EntityType.CONTACT, count, 0);
+
+	BulkActionNotifications.publishconfirmation(BulkAction.EXPORT_CONTACTS_CSV);
     }
 
 }

@@ -4,7 +4,11 @@
 <div class="row">
     <div class="col-md-12">
         
-            <h3 class="pull-left font-thin h3">Deals <small>Opportunities</small></h3>
+            <h3 class="pull-left font-thin h3">Deals <small>Opportunities</small>
+			<div id="milestone-set-msg" class="alert alert-warning p-sm" role="alert" style="margin-left:100px;display:none;">
+  				For better deal reports and sales forecasting, please set your 'Won' and 'Lost' milestones in the <a href="#milestones" style="font-style:italic;text-decoration: initial;color: #337ab7;">Deal settings</a> page.
+			</div>
+			</h3>
 <div class="pull-right">
             <div class="btn-group inline-block m-r-sm" id="deals-tracks">
 			</div>
@@ -111,10 +115,15 @@
 </script>
 <script id="opportunities-by-paging-model-template" type="text/html">
 	<div class='dealtitle-angular panel-heading'>
-		<div class='milestone-heading text-left text-ellipsis'> <span class="miltstone-title text-base text-ellipsis inline-block v-bottom pull-left" style="width:calc(100% -  45px)">{{heading}}</span><span id="{{remove_spaces heading}}_count" class="txt-mute badge pull-right m-t-xs"></span><span class="pull-right pos-abs pos-r-sm pos-t-xs"><img class="loading_img" src="/img/ajax-loader-cursor.gif" width="12px"></span></div>
+		<div class='milestone-heading text-left text-ellipsis'> <span class="miltstone-title text-base text-ellipsis inline-block v-bottom pull-left" style="width:calc(100% - 75px);">{{heading}}</span>
+			<div class="pull-right">
+			{{#if lost_milestone}}<i data-toogle="tooltip" title="" class="icon-dislike mark-lost" data-original-title="Deals with this milestone are considered as Lost." style="font-size: 14px;position: relative;top: 2px;"></i>{{/if}}
+			{{#if won_milestone}}<i data-toogle="tooltip" title="" class="icon-like mark-won" data-original-title="Deals with this milestone are considered as Won." style="font-size: 14px;position: relative;top: 2px;"></i>{{/if}}
+			<span id="{{remove_spaces heading}}_count" class="txt-mute badge m-t-xs"></span><span class="pull-right pos-abs pos-r-sm pos-t-xs"><img class="loading_img" src="/img/ajax-loader-cursor.gif" width="12px"></span>
+		</div></div>
 		<span></span>
 	</div>
-	<div id="{{remove_spaces heading}}-list-container" class='milestones panel-body p-n bg-light lter' milestone='{{heading}}'>
+	<div id="{{remove_spaces heading}}-list-container" class='milestones panel-body p-n' milestone='{{heading}}'>
 		
 	</div>
 </script>
@@ -138,8 +147,9 @@
 		<div class="clearfix"></div>
 	</div>
 	<div class="agile-overflow-ellipsis" style="white-space:initial;">
-
+{{#if expected_value}}
 		<span>{{currencySymbol}}{{numberWithCommas expected_value}}</span>
+{{/if}}
 	</div>
 	{{#if this.contacts}}
 	<div class="agile-overflow-ellipsis" style="display:block;margin-top:0px;">
@@ -192,10 +202,13 @@
 		<div class="clearfix"></div>
 	</div>
 	<div class="agile-overflow-ellipsis" style="white-space:initial;">
-
+{{#if expected_value}}
 		<span>{{currencySymbol}}{{numberWithCommas expected_value}}</span>
+{{/if}}
 		{{#if this.contacts}}
-			<span class="m-t-none m-b-none m-l-xs m-r-xs" style="border:1px solid #d5d5d5"></span>
+			{{#if expected_value}}
+				<span class="m-t-none m-b-none m-l-xs m-r-xs" style="border:1px solid #d5d5d5"></span>
+			{{/if}}
 			{{#related_to_one contacts}}{{/related_to_one}}
 		{{/if}}{{#if_greater this.contacts.length "5"}}<span>,..</span>{{/if_greater}}
 	</div>
@@ -230,7 +243,7 @@
 		<a class="text-info" href="#contact/{{id}}">{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}</a>
     {{/if_contact_type}}
 	{{#if_contact_type "COMPANY"}}
-     	<a class="text-info" href="#contact/{{id}}">{{getPropertyValue properties "name"}}</a>
+     	<a class="text-info" href="#company/{{id}}">{{getPropertyValue properties "name"}}</a>
     {{/if_contact_type}}
 </script>
 <script id="opportunity-track-list-collection-template" type="text/html">

@@ -18,6 +18,10 @@ function deserializeForm(data, form)
 	// Iterates through the data(which is to be populated in the form) and finds
 	// field elements in the form based on the name of the field and populates
 	// it. i represents key of the map, el is the value corresponding to key
+
+	// Reset tags html
+    // $(form).find(".contacts.tags").html("");
+
 	$
 			.each(
 					data,
@@ -64,13 +68,15 @@ function deserializeForm(data, form)
 								{
 									try
 									{
-										fel.val(new Date(el * 1000).format('mm/dd/yyyy'));
+										fel.val(getDateInFormatFromEpoc(el));
 									}
 									catch (err)
 									{
 
 									}
-									fel.datepicker({ format : 'mm/dd/yyyy', });
+
+									fel.datepicker({ format : CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY});
+
 								}
 
 								/*
@@ -166,6 +172,10 @@ function deserializeForm(data, form)
 													 * first_name and last_name
 													 */
 													tag_name = getContactName(contact);
+													
+													var hrefLink = '#contact/'+contact.id;
+													if(contact.type == 'COMPANY')
+														hrefLink = '#company/'+contact.id;
 
 													/*
 													 * Creates a tag for each
@@ -177,16 +187,17 @@ function deserializeForm(data, form)
 													 * contact full name
 													 */													
 													fel.append(
-																	'<li class="tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block" data="' + tag_id + '"  style="display: inline-block; "><a class="text-white v-middle" href="#contact/' + contact.id + '">' + tag_name + '</a><a class="close m-l-xs" id="remove_tag">&times</a></li>');
+																	'<li class="tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block" data="' + tag_id + '"  style="display: inline-block; "><a class="text-white v-middle" href="' + hrefLink + '">' + tag_name + '</a><a class="close m-l-xs" id="remove_tag">&times</a></li>');
 												});
 							}
-							
+
 							/*
-							 * Deserialize related deals, related deals are represented by list
-							 * deals prepended the respective input field. If
-							 * field has class dealtagsinput and deal_tag is ul and
-							 * attribute of the field in an entity, then this field
-							 * is considered as the tags field, it de-serializes
+							 * Deserialize related deals, related deals are
+							 * represented by list deals prepended the
+							 * respective input field. If field has class
+							 * dealtagsinput and deal_tag is ul and attribute of
+							 * the field in an entity, then this field is
+							 * considered as the tags field, it de-serializes
 							 * the related deals.
 							 */
 							else if (fel.hasClass('tagsinput') && tag == "ul" && fel.hasClass('deals'))
@@ -224,8 +235,8 @@ function deserializeForm(data, form)
 													 * name of li element is
 													 * contact full name
 													 */
-													fel.append(
-																	'<li class="tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block" data="' + tag_id + '"><a href="#deal/' + deal.id + '" class="text-white v-middle">' + tag_name + '</a><a class="close m-l-xs" id="remove_tag">&times</a></li>');
+													fel
+															.append('<li class="tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block" data="' + tag_id + '"><a href="#deal/' + deal.id + '" class="text-white v-middle">' + tag_name + '</a><a class="close m-l-xs" id="remove_tag">&times</a></li>');
 												});
 							}
 
@@ -249,20 +260,21 @@ function deserializeForm(data, form)
 									$('#multipleSelect', form).multiSelect('select', option);
 								});
 							}
-							
+
 							/**
-							 * Deserialize multiple checkboxes. 
+							 * Deserialize multiple checkboxes.
 							 */
-							else if (fel.hasClass('multiple-checkbox')) {
+							else if (fel.hasClass('multiple-checkbox'))
+							{
 
 								/*
 								 * Iterates through options of the select and
 								 * call multiSelect function to select the
 								 * option
 								 */
-								for(var i=0 ; i < el.length; i++)
+								for (var i = 0; i < el.length; i++)
 								{
-									$('input:checkbox[value="'+el[i]+'"]', fel).attr("checked", "checked");
+									$('input:checkbox[value="' + el[i] + '"]', fel).attr("checked", "checked");
 								}
 							}
 
@@ -376,11 +388,14 @@ function deserializeChainedSelect(form, el, el_self)
 }
 
 function deserializeChainedElement(data, rule_element)
-{	$(rule_element).removeClass('hide');
-	//hide campaign status filter.
-	if(data && data.LHS && data.LHS != 'campaign_status') {
-		$(rule_element).find('#LHS select').find("optgroup[label='Activities']").remove();
-	}
+{
+	$(rule_element).removeClass('hide');
+	// hide campaign status filter.
+	/*
+	 * if(data && data.LHS && data.LHS != 'campaign_status') {
+	 * $(rule_element).find('#LHS
+	 * select').find("optgroup[label='Activities']").remove(); }
+	 */
 	$.each(data, function(i, value)
 	{
 		var input_element = ($(rule_element).find('*[name="' + i + '"]').children())[0];
@@ -398,9 +413,11 @@ function deserializeChainedElement(data, rule_element)
 			{
 				value = getLocalTimeFromGMTMilliseconds(value);
 
-				$(input_element).val(new Date(parseInt(value)).format('mm/dd/yyyy'));
+				$(input_element).val(getDateInFormatFromEpoc(value));
 
-				$(input_element).datepicker({ format : 'mm/dd/yyyy', });
+
+				$(input_element).datepicker({ format : CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY });
+
 
 				$(input_element).datepicker('update');
 
@@ -417,7 +434,7 @@ function deserializeChainedElement(data, rule_element)
 		$.each(option_element, function(index, element)
 		{
 			// Selects the option
-			if ($(element).attr('value') == value)
+			if ($(element).prop('value') == value)
 			{
 				$(element).attr("selected", "selected");
 				var url = $(element).attr("url");
@@ -493,9 +510,10 @@ function deserializeChainedElementWebrule(data, rule_element)
 		$.each(option_element, function(index, element)
 		{
 			// Selects the option
-			if ($(element).attr('value') == value)
+			if ($(element).prop('value') == value)
 			{
-				if((value == "UNSUBSCRIBE_CAMPAIGN" || value == "ASSIGN_CAMPAIGN") && data['RHS']) {
+				if ((value == "UNSUBSCRIBE_CAMPAIGN" || value == "ASSIGN_CAMPAIGN") && data['RHS'])
+				{
 					$(element).attr('data', data['RHS']);
 				}
 				$(element).attr("selected", "selected");
@@ -562,40 +580,49 @@ function deserializeChainedSelect1(form, el, element)
 		deserializeChainedElementWebrule(data, rule_element);
 	})
 }
-	
-	function deserializeLhsFilters(element, data)
+
+function deserializeLhsFilters(element, data)
 {
 	var json_object = JSON.parse(data);
-	var tagsConditionsCount =0;
+	var tagsConditionsCount = 0;
 	var campaignConditionsCount = 0;
-	$.each(json_object.rules, function(index, filter) {
+	$.each(json_object.rules, function(index, filter)
+	{
 		var LHS = filter.LHS;
 		var CONDITION = filter.CONDITION;
 		var RHS_VALUE = filter.RHS;
 		var RHS_NEW_VALUE = filter.RHS_NEW;
 		var fieldName = LHS.replace(/ +/g, '_');
 		fieldName = fieldName.replace(/#/g, '\\#').replace(/@/g, '\\@');
-		var currentElemnt = $(element).find('#'+fieldName+'_div');
-		if(LHS == 'tags' || LHS == 'campaign_status') {
-			$('#'+LHS+'_div').parent().find('a').addClass('bold-text');
-			$('#'+LHS+'_div').removeClass('hide');
-			if((tagsConditionsCount == 0 && LHS == 'tags') || (campaignConditionsCount == 0 && LHS == 'campaign_status')) {
-				currentElemnt = $('#'+LHS+'-lhs-filter-table').find("div.lhs-contact-filter-row:last")
-				$('#'+LHS+'_div').prev().find('i').toggleClass('fa-plus').toggleClass('fa-minus');
-			} else {
-				var htmlContent = $('#'+LHS+'-lhs-filter-table').find("div.hide.master-"+LHS+"-add-div").clone();
+		var currentElemnt = $(element).find('#' + fieldName + '_div');
+		if (LHS == 'tags' || LHS == 'campaign_status')
+		{
+			$('#' + LHS + '_div').parent().find('a').addClass('bold-text');
+			$('#' + LHS + '_div').removeClass('hide');
+			if ((tagsConditionsCount == 0 && LHS == 'tags') || (campaignConditionsCount == 0 && LHS == 'campaign_status'))
+			{
+				currentElemnt = $('#' + LHS + '-lhs-filter-table').find("div.lhs-contact-filter-row:last")
+				$('#' + LHS + '_div').prev().find('i').toggleClass('fa-plus').toggleClass('fa-minus');
+			}
+			else
+			{
+				var htmlContent = $('#' + LHS + '-lhs-filter-table').find("div.hide.master-" + LHS + "-add-div").clone();
 				htmlContent.removeClass('hide').addClass('lhs-contact-filter-row');
 				addTagsDefaultTypeahead(htmlContent);
-				$(htmlContent).appendTo('#'+LHS+'-lhs-filter-table');
-				currentElemnt = $('#'+LHS+'-lhs-filter-table').find("div.lhs-contact-filter-row:last");
+				$(htmlContent).appendTo('#' + LHS + '-lhs-filter-table');
+				currentElemnt = $('#' + LHS + '-lhs-filter-table').find("div.lhs-contact-filter-row:last");
 			}
-			if(LHS == 'tags') {
+			if (LHS == 'tags')
+			{
 				tagsConditionsCount++;
 			}
-			if(LHS == 'campaign_status') {
+			if (LHS == 'campaign_status')
+			{
 				campaignConditionsCount++;
 			}
-		} else {
+		}
+		else
+		{
 			$(currentElemnt).prev().find('i').toggleClass('fa-plus-square-o').toggleClass('fa-minus-square-o');
 		}
 		$(currentElemnt).parent().find("a#lhs-filters-header").addClass('bold-text');
@@ -603,22 +630,29 @@ function deserializeChainedSelect1(form, el, element)
 		$(currentElemnt).removeClass('hide');
 		$(currentElemnt).find('[name="CONDITION"]').val(CONDITION);
 		$(currentElemnt).find('[name="CONDITION"]').trigger('change');
-		var RHS_ELEMENT = $(currentElemnt).find('.'+CONDITION).find('#RHS').children();
-		var RHS_NEW_ELEMENT = $(currentElemnt).find('.'+CONDITION).find('#RHS_NEW').children();
-		if ($(RHS_ELEMENT).hasClass("date")) {
+		var RHS_ELEMENT = $(currentElemnt).find('.' + CONDITION).find('#RHS').children();
+		var RHS_NEW_ELEMENT = $(currentElemnt).find('.' + CONDITION).find('#RHS_NEW').children();
+		if ($(RHS_ELEMENT).hasClass("date"))
+		{
 			RHS_VALUE = getLocalTimeFromGMTMilliseconds(RHS_VALUE);
-			$(RHS_ELEMENT).val(new Date(parseInt(RHS_VALUE)).format('mm/dd/yyyy'));
-			$(RHS_ELEMENT).attr('prev-val', new Date(parseInt(RHS_VALUE)).format('mm/dd/yyyy'));
+
+			$(RHS_ELEMENT).val(getDateInFormatFromEpoc(RHS_VALUE));
+			$(RHS_ELEMENT).attr('prev-val', getDateInFormatFromEpoc(RHS_VALUE));
 		} else {
+
 			$(RHS_ELEMENT).val(RHS_VALUE);
 			$(RHS_ELEMENT).attr('prev-val', RHS_VALUE);
 		}
-		if(RHS_NEW_ELEMENT) {
-			if ($(RHS_NEW_ELEMENT).hasClass("date")) {
+		if (RHS_NEW_ELEMENT)
+		{
+			if ($(RHS_NEW_ELEMENT).hasClass("date"))
+			{
 				RHS_NEW_VALUE = getLocalTimeFromGMTMilliseconds(RHS_NEW_VALUE);
-				$(RHS_NEW_ELEMENT).val(new Date(parseInt(RHS_NEW_VALUE)).format('mm/dd/yyyy'));
-				$(RHS_NEW_ELEMENT).attr('prev-val', new Date(parseInt(RHS_NEW_VALUE)).format('mm/dd/yyyy'));
+
+				$(RHS_NEW_ELEMENT).val(getDateInFormatFromEpoc(RHS_NEW_VALUE));
+				$(RHS_NEW_ELEMENT).attr('prev-val', getDateInFormatFromEpoc(RHS_NEW_VALUE));
 			} else {
+
 				$(RHS_NEW_ELEMENT).val(RHS_NEW_VALUE);
 				$(RHS_NEW_ELEMENT).attr('prev-val', RHS_NEW_VALUE);
 			}

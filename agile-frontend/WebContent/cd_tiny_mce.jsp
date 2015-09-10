@@ -1,6 +1,10 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <%@page import="java.util.Calendar"%>
-
+<%@page import="org.json.JSONObject"%>
+<%@page import="org.json.JSONException"%>
+<%@page import="org.codehaus.jackson.map.ObjectMapper"%>
+<%@page import="java.net.URLEncoder"%>
+<%@page import="com.agilecrm.user.util.UserPrefsUtil"%>
 <html xmlns="http://www.w3.org/1999/xhtml">
 
 <head>
@@ -26,9 +30,79 @@
 	String LIB_PATH = "/";
 %>
 	
+<%
+String template_json = request.getParameter("data");
+
+if(template_json != null){
+	
+try
+{
+	JSONObject template_object = new JSONObject(template_json);
+
+	if (template_object.has("text")){
+		template_json  = template_object.get("text").toString();
+		
+		template_json = template_json.replaceAll("(<script|<SCRIPT)", "<!--<script").replaceAll(
+			"(</script>|</SCRIPT>)", "<script>-->");
+	}
+
+}
+catch (JSONException e)
+{
+	System.out.println("Exception while commenting scripts in template: "+ e.getMessage());
+}
+
+}
+ObjectMapper mapper = new ObjectMapper();
+
+System.out.println("Request parameter in tinymce: "+template_json); 
+
+%>
 <!-- Bootstrap  -->
 <link rel="stylesheet" type="text/css"	href="<%= CSS_PATH%>css/bootstrap-<%=template%>.min.css" />
-<link rel="stylesheet" type="text/css"	href="<%= CSS_PATH%>css/bootstrap-responsive.min.css" />
+
+<!-- New UI 
+<link rel="stylesheet" type="text/css" href="flatfull/css/bootstrap.css"> -->
+<link rel="stylesheet" type="text/css" href="flatfull/css/app.css">  
+
+<style type="text/css">
+ .alert-warning {
+    color: #8a6d3b;
+    background-color: #fcf8e3;
+    border-color: #faebcc;
+}
+.alert {
+    padding: 15px;
+    margin-bottom: 20px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+}
+
+.btn {
+    display: inline-block;
+    padding: 6px 12px;
+    margin-bottom: 0;
+    font-size: 14px;
+    font-weight: normal;
+    line-height: 1.42857143;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    -ms-touch-action: manipulation;
+    touch-action: manipulation;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    background-image: none;
+    border: 1px solid transparent;
+    border-radius: 1px;
+}
+
+div[role="presentation"] { 
+}
+</style>
 	
 <script type="text/javascript" src="lib/jquery.min.js"></script>
 <script type="text/javascript" src="js/designer/tinymce/tinymce.min.js"></script>
@@ -102,10 +176,19 @@ function set_up_merge_fields(editor)
 	return menu;
 }
 
+function setTinyMCEImageUploadURL(url){
+	
+	var elem = $('input')[0];
+	
+    $(elem).val(url).trigger("change");
+    
+}
+
 
 $(function()
 {	
 try{
+		var templateJSON = <%= mapper.writeValueAsString(template_json)%>;
 		
 	    var textarea_id = getUrlVars()["id"];
 	    var url = getUrlVars()["url"];
@@ -113,9 +196,16 @@ try{
 		// Load HTML into Tiny MCE.
 		if(textarea_id !== undefined && url === undefined)
 		{
-		var initHTML = window.opener.$('#' + textarea_id).val();
+			var initHTML
+			if(templateJSON){
+				initHTML = (templateJSON);
+				//initHTML = templateJSON.text;
+			}
+			else
+			initHTML = window.opener.$('#' + textarea_id).val();
 		$('#content').val(initHTML);
-		
+		var isWarning = should_warn(initHTML);
+		showWarning(isWarning);
 		 // Initialize tinymce editor with content
         init_tinymce();
 		
@@ -132,6 +222,8 @@ try{
 	    			
 	    			$('#content').val(value);
 	    			
+	    			var isWarning = should_warn(value);
+	    			showWarning(isWarning);
 	    			// Initialize tinymce editor after content obtained
                     init_tinymce();
 	    			});
@@ -174,7 +266,6 @@ try{
 			return;
 		}
 		
-		// Return Back here
 		window.opener.tinyMCECallBack(getUrlVars()["id"], html);
 		window.close();
 		
@@ -272,11 +363,80 @@ function init_tinymce()
                 	
                 	window.location = '/templates.jsp?id=tinyMCEhtml_email&t='+type;
                 }
+            }); 
+            
+            editor.on('change', function(e) {
+                var isWarning = should_warn(tinyMCE.activeEditor.getContent());
+                showWarning(isWarning);
             });
             
         }
         
     });
+}
+
+function should_warn(content)
+{
+	try{
+		if(content.indexOf('https://s3.amazonaws.com/AgileEmailTemplates') >= 0)
+			return false;
+		if(content.indexOf('http://www.stampready.net') >= 0)
+			return false;
+		
+		var isStyle = false;
+		var isTrue = false;
+		$.each($(content),function(index,attribute){
+			var attributeType=$(attribute);
+			var node_name = attributeType["context"].nodeName;
+			var node_name_type = attributeType[0].nodeName;
+			if(node_name == "STYLE" && node_name == "STYLE"){
+				{
+				isTrue= "style";
+				isStyle = true;
+				return false;
+				}
+			}
+			});	
+		if(!isStyle)
+		$.each($(content),function(index,attribute){
+			var attributeType=$(attribute);
+			var node_name = attributeType["context"].nodeName;
+			var node_name_type = attributeType[0].nodeName;
+			if(node_name == "LINK" && node_name == "LINK"){
+				{
+				isTrue= "link";
+				return false;
+				}
+			}
+			});
+		return isTrue;
+	}catch (e)
+	{
+		console.log("Error while warning for inline css");
+		console.log(e);
+		return true;
+	}
+	
+}
+
+function showWarning(isWarning)
+{
+	if(isWarning){
+		if(isWarning == 'style'){
+			$('#inline-css-verification-link').css('display','none');
+			$('#inline-css-verification-css').css('display','inline-block');
+		}
+		if(isWarning == 'link'){
+			$('#inline-css-verification-css').css('display','none');
+			$('#inline-css-verification-link').css('display','inline-block');
+		}
+	}
+	else{
+		$('#inline-css-verification-link').css('display','none');
+		$('#inline-css-verification-css').css('display','none');
+	}
+		
+	
 }
 
 </script>
@@ -293,13 +453,35 @@ function init_tinymce()
                 <div style="margin: 0 0 10px 0">
                     <div style="display:none; float: left;" id="navigate-back">
                         <!-- Back link to navigate to history back  -->
-                        <a href="#" class="btn btn-large"> &lt; Back </a>
+                        <a href="#" class="btn btn-default btn-large"> &lt; Back </a>
                     </div>
                     <div style="display: block; float:right;">
-                        <a href="#" id="top_save_html" class="btn btn-large" style="cursor:pointer; font-weight: bold;">Save</a>
+                        <a href="#" id="top_save_html" class="btn btn-default btn-large" style="cursor:pointer; font-weight: bold;">Save</a>
                     </div>
                     <div style="clear: both;"></div>
                 </div>
+                <div id="inline-css-verification-css" style="display: none;">
+           			<div class="alert danger info-block alert-warning text-black">
+                		<div>
+                			<i class="icon-warning-sign"></i>
+							<strong>Using embedded CSS?
+							<!--<a href="#trigger-add" style="float: right;cursor: pointer;font-weight: normal;">How to add trigger?</a>-->
+							</strong>
+                			<p>Your email appears to be using embedded CSS (as it has a &lt;style&gt;tag defined). Such emails may not render properly in some email clients. We recommend you to convert the CSS styling to Inline styling for better compatibility. Try an  <a style="display:inline" onclick="parent.window.open('http://templates.mailchimp.com/resources/inline-css/')" class="block">online converter</a></p>
+                		</div>
+            		</div>
+        		</div>
+        		<div id="inline-css-verification-link" style="display: none;">
+           			<div class="alert danger info-block alert-warning text-black">
+                		<div>
+                			<i class="icon-warning-sign"></i>
+							<strong>Using external resources?
+							<!--<a href="#trigger-add" style="float: right;cursor: pointer;font-weight: normal;">How to add trigger?</a>-->
+							</strong>
+                			<p>Your email appears to be using some external resources (as it has a &lt;link&gt; tag in it). Such emails may not render properly in some email clients. We recommend removing all external links for CSS or Fonts, for better compatibility.</p>
+                		</div>
+            		</div>
+        		</div>
             </div>
             <!-- .block_head ends -->
             <div class="block_content center">
@@ -308,7 +490,7 @@ function init_tinymce()
                     <p id="loading-msg">Loading HTML Editor...</p>
                     <textarea name="content" id='content' rows="30" cols="90" style="display:none;"></textarea>
                     <br/>
-                    <p><a href="#" id="save_html" class="btn btn-large pull-right" style="font-weight: bold;">Save</a></p>
+                    <p style="text-align: right;"><a href="#" id="save_html" class="btn btn-default btn-large" style="font-weight: bold;">Save</a></p>
                 </form>
             </div>
         </div>
@@ -317,4 +499,3 @@ function init_tinymce()
 
 </body>
 </html>
-

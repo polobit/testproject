@@ -12,6 +12,8 @@ class="c-p text-l-none text-l-none-hover block" style="width:85%;">
 		<select id="{{replace_spaces field_label}}-filters" name="CONDITION" class="form-control">
 			<option value="EQUALS" >is</option>
 			<option value="NOTEQUALS" >isn't</option>
+			<option value="DEFINED">is defined</option>
+			<option value="NOT_DEFINED">is not defined</option>
 		</select>
 		<div class="EQUALS NOTEQUALS condition_container m-t-xs">
 			<span id="RHS">
@@ -32,6 +34,8 @@ class="c-p text-l-none text-l-none-hover block" style="width:85%;">
 			<option value="IS_LESS_THAN">less than</option>
 			<option value="IS_GREATER_THAN">greater than</option>
 			<option value="BETWEEN">between</option>
+			<option value="DEFINED">is defined</option>
+			<option value="NOT_DEFINED">is not defined</option>
 		</select>
 		<div class="EQUALS IS_GREATER_THAN IS_LESS_THAN condition_container m-t-xs">
 			<span id="RHS">
@@ -63,10 +67,12 @@ class="c-p text-l-none text-l-none-hover block" style="width:85%;">
 		<option value="BETWEEN">is between</option>
 		<option value="LAST">in last</option>
 		<option value="NEXT">in next</option>
+		<option value="DEFINED">is defined</option>
+		<option value="NOT_DEFINED">is not defined</option>
 	</select>
 	<div class="AFTER BEFORE ON condition_container m-t-xs">
 		<span id="RHS">
-			<input type="text" placeholder="MM/DD/YYYY" prev-val="" class="date required form-control" >
+			<input type="text" placeholder="{{dateFormat}}" prev-val="" class="date required form-control" >
 		</span>
 	</div>
 	<div class="LAST NEXT condition_container hide m-t-xs">
@@ -77,10 +83,10 @@ class="c-p text-l-none text-l-none-hover block" style="width:85%;">
 	<div class="BETWEEN condition_container hide m-t-xs">
 		<div class="clear" />
 		<span id="RHS">
-			<input type="text" placeholder="MM/DD/YYYY" prev-val="" class="date required form-control">
+			<input type="text" placeholder="{{dateFormat}}" prev-val="" class="date required form-control">
 		</span>
 		<span id="RHS_NEW">
-			<input type="text" placeholder="MM/DD/YYYY" prev-val="" class="date required form-control">
+			<input type="text" placeholder="{{dateFormat}}" prev-val="" class="date required form-control">
 		</span>
 	</div>
 	<div class="m-t-xs"><a class="hide pull-right clear-filter-condition-lhs"><i class="icon-trash text-l-none-hover c-p text-muted text-sm"></i></a></div>
@@ -95,6 +101,8 @@ class="c-p text-l-none text-l-none-hover block" style="width:85%;">
 		<select id="{{replace_spaces field_label}}-filters" name="CONDITION" class="form-control">
 			<option value="EQUALS" >is</option>
 			<option value="NOTEQUALS" >isn't</option>
+			<option value="DEFINED">is defined</option>
+			<option value="NOT_DEFINED">is not defined</option>
 		</select>
 		<div class="EQUALS NOTEQUALS condition_container m-t-xs">
 			<span id="RHS">
@@ -239,7 +247,7 @@ class="c-p text-l-none text-l-none-hover block" style="width:85%;">
 		</div>
 	</div>
 </div>
-<!--div class="control-group form-group lhs-row-filter" >
+<div class="control-group form-group lhs-row-filter" >
 	<a data-toggle="collapse" id="lhs-filters-header" 
 		class="c-p text-l-none text-l-none-hover" >
 		Campaign Status
@@ -257,12 +265,12 @@ class="c-p text-l-none text-l-none-hover block" style="width:85%;">
 					<option value="REMOVED">Removed</option>
 					<option value="BOUNCED">Bounced</option>
 					<option value="UNSUBSCRIBED">Unsubscribed</option>
-					<option value="SPAM_REPORTED">Reported Spam</option>
+					<option value="SPAM">Spam Reported</option>
 				</select>
 		
-				<div class="NOT_ADDED ACTIVE DONE REMOVED UNSUBSCRIBED BOUNCED SPAM_REPORTED condition_container m-t-xs">
+				<div class="NOT_ADDED ACTIVE DONE REMOVED UNSUBSCRIBED BOUNCED SPAM condition_container m-t-xs">
 					<span id="RHS">
-						<select id="campaign_select" class="required form-control" name="temp1" prev-val="">
+						<select id="campaign_select_master" class="required form-control" name="temp1" prev-val="">
 							<option value="">Select value</option>
 						</select>
 					</span>
@@ -277,12 +285,13 @@ class="c-p text-l-none text-l-none-hover block" style="width:85%;">
 					<option value="ACTIVE">Active</option>
 					<option value="DONE">Completed</option>
 					<option value="REMOVED">Removed</option>
-					<option value="BOUNCED">Bounced</option>
+					<option value="HARDBOUNCED">Hard Bounced</option>
+					<option value="SOFTBOUNCED">Soft Bounced</option>
 					<option value="UNSUBSCRIBED">Unsubscribed</option>
-					<option value="SPAM_REPORTED">Reported Spam</option>
+					<option value="SPAM">Spam Reported</option>
 				</select>
 		
-				<div class="NOT_ADDED ACTIVE DONE REMOVED UNSUBSCRIBED BOUNCED SPAM_REPORTED condition_container m-t-xs">
+				<div class="NOT_ADDED ACTIVE DONE REMOVED UNSUBSCRIBED HARDBOUNCED SOFTBOUNCED SPAM condition_container m-t-xs">
 					<span id="RHS">
 						<select id="campaign_select" class="required form-control" name="temp1" prev-val="">
 							<option value="">Select value</option>
@@ -293,9 +302,9 @@ class="c-p text-l-none text-l-none-hover block" style="width:85%;">
 				<div class="clearfix"></div>
 			</div>
 		</div>
-		<a href="#" class="filter-multiple-add-lhs m-t-xs text-l-none pos-rlt" style="top:-25px" data-name="campaign_status"><i class="icon-plus"></i> Add</a>
+		<a href="#" class="filter-multiple-add-lhs m-t-xs ext-l-none pull-left text-muted pos-rlt" style="top:-10px" data-name="campaign_status"><i class="icon-plus"></i> Add</a>
 	</div>
-</div-->
+</div>
 <div class="control-group form-group lhs-row-filter" >
 	<a data-toggle="collapse" id="lhs-filters-header" 
 		class="c-p text-l-none text-l-none-hover" >
@@ -341,7 +350,7 @@ class="c-p text-l-none text-l-none-hover block" style="width:85%;">
 		</select>
 		<div class="AFTER BEFORE ON condition_container m-t-xs">
 			<span id="RHS">
-				<input type="text" data-date-format="mm/dd/yyyy" prev-val="" placeholder="MM/DD/YYYY" class="form-control required date">
+				<input type="text" data-date-format="{{dateFormat}}" prev-val="" placeholder="{{dateFormat}}" class="form-control required date">
 			</span>
 		</div>
 		<div class="LAST NEXT condition_container hide m-t-xs">
@@ -352,10 +361,10 @@ class="c-p text-l-none text-l-none-hover block" style="width:85%;">
 		<div class="BETWEEN condition_container hide m-t-xs">
 			<div class="clear" />
 			<span id="RHS">
-				<input type="text" data-date-format="mm/dd/yyyy" prev-val="" class="form-control date required" placeholder="MM/DD/YYYY">
+				<input type="text" data-date-format="{{dateFormat}}" prev-val="" class="form-control date required" placeholder="{{dateFormat}}">
 			</span>
 			<span id="RHS_NEW"> 
-				<input type="text" data-date-format="mm/dd/yyyy" prev-val="" placeholder="MM/DD/YYYY" class="form-control date required">
+				<input type="text" data-date-format="{{dateFormat}}" prev-val="" placeholder="{{dateFormat}}" class="form-control date required">
 			</span>
 		</div>
 		<div class="m-t-xs"><a class="hide pull-right clear-filter-condition-lhs"><i class="icon-trash text-l-none-hover c-p text-muted text-sm"></i></a></div>
@@ -363,6 +372,46 @@ class="c-p text-l-none text-l-none-hover block" style="width:85%;">
 		</div>
 	</div>
 </div>
+<div class="control-group form-group lhs-row-filter" >
+	<a data-toggle="collapse" id="lhs-filters-header" 
+		class="c-p text-l-none text-l-none-hover" >
+		Last Contacted
+		<i class="fa fa-plus-square-o inline pos-abs pos-r pos-t-xs"></i></a>
+	<div class="controls m-t-xs hide" id="last_contacted_div">
+		<div class="lhs-contact-filter-row pos-rlt">
+		<input type="hidden" name="LHS" value="last_contacted" class="form-control"/>
+		<select id="between_filter" name="CONDITION" class="form-control" >
+			<option value="ON">on</option>
+			<option value="AFTER">is after</option>
+			<option value="BEFORE">is before</option>
+			<option value="BETWEEN">is between</option>
+			<option value="LAST">in last</option>
+		</select>
+		<div class="AFTER BEFORE ON condition_container m-t-xs">
+			<span id="RHS">
+				<input type="text" data-date-format="mm/dd/yyyy" prev-val="" placeholder="{{dateFormat}}" class="form-control required date">
+			</span>
+		</div>
+		<div class="LAST condition_container hide m-t-xs">
+			<span id="RHS">
+				<input type="number" placeholder="Number of days" prev-val="" class="form-control required">
+			</span>
+		</div>
+		<div class="BETWEEN condition_container hide m-t-xs">
+			<div class="clear" />
+			<span id="RHS">
+				<input type="text" data-date-format="mm/dd/yyyy" prev-val="" class="form-control date required" placeholder="{{dateFormat}}">
+			</span>
+			<span id="RHS_NEW"> 
+				<input type="text" data-date-format="mm/dd/yyyy" prev-val="" placeholder="{{dateFormat}}" class="form-control date required">
+			</span>
+		</div>
+		<div class="m-t-xs"><a class="hide pull-right clear-filter-condition-lhs"><i class="icon-trash text-l-none-hover c-p text-muted text-sm"></i></a></div>
+		<div class="clearfix"></div>
+		</div>
+	</div>
+</div>
+
 <div id="custom-filter-fields" ></div>
 	
 </div>
@@ -391,6 +440,50 @@ class="c-p text-l-none text-l-none-hover block" style="width:85%;">
 <input type="hidden" name="contact_type" id="contact_type" value="COMPANY" class="form-control"/>
 <div id="tagslist" style="word-wrap: break-word;">
 <fieldset>
+
+<div class="control-group form-group lhs-row-filter">
+	<a data-toggle="collapse" id="lhs-filters-header" 
+		class="c-p text-l-none text-l-none-hover" >
+		Tags
+		<i class="fa fa-plus-square-o inline pos-abs pos-r pos-t-xs"></i></a>
+	<div class="controls m-t-xs hide" id="tags_div">
+		<div id="tags-lhs-filter-table" class="ignore-collection">
+				<div class="hide master-tags-add-div pos-rlt">
+					<input class="form-control" type="hidden" name="LHS" value="tags" />
+					<select id="tags-filter" class="form-control" name="CONDITION">
+						<option value="EQUALS" class="tags">is</option>
+						<option value="NOTEQUALS" class="tags">isn't</option>
+					</select>
+					<div class="EQUALS NOTEQUALS condition_container m-t-xs">
+						<span id="RHS">
+							<input type="text" placeholder="Value" prev-val="" class="required form-control">
+						</span>
+					</div>
+					<div class="m-t-xs"><a class="pull-right"><i class="filter-tags-multiple-remove-lhs icon-trash text-l-none-hover c-p"></i></a></div>
+					<div class="clearfix"></div>
+				</div>
+				<div class="lhs-contact-filter-row pos-rlt m-t-xs">
+					<input type="hidden" name="LHS" value="tags" />
+					<select id="tags-filter" class="form-control" name="CONDITION">
+						<option value="EQUALS" class="tags">is</option>
+						<option value="NOTEQUALS" class="tags">isn't</option>
+					</select>
+					<div class="EQUALS NOTEQUALS condition_container m-t-xs">
+						<span id="RHS">
+							<input type="text" placeholder="Value" prev-val="" class="required form-control">
+						</span>
+					</div>
+					<div class="m-t-xs">
+						<a class="pull-right"><i class="filter-tags-multiple-remove-lhs icon-trash text-l-none-hover c-p"></a></i>
+					</div>
+					<div class="clearfix"></div>
+				</div>
+		</div>	
+		<a href="#" class="filter-multiple-add-lhs m-t-xs ext-l-none pull-left text-muted pos-rlt" style="top:-10px" data-name="tags"><i class="icon-plus"></i> Add</a>
+		<div class="clearfix" style="height:10px"></div>	
+	</div>
+</div>
+
 <div class="control-group form-group lhs-row-filter" >
 	<a data-toggle="collapse" id="lhs-filters-header" 
 		class="c-p text-l-none text-l-none-hover" >
@@ -468,7 +561,7 @@ class="c-p text-l-none text-l-none-hover block" style="width:85%;">
 		</select>
 		<div class="AFTER BEFORE ON condition_container m-t-xs">
 			<span id="RHS">
-				<input type="text" data-date-format="mm/dd/yyyy" prev-val="" placeholder="MM/DD/YYYY" class="form-control required date">
+				<input type="text" data-date-format="{{dateFormat}}" prev-val="" placeholder="{{dateFormat}}" class="form-control required date">
 			</span>
 		</div>
 		<div class="LAST NEXT hide condition_container m-t-xs">
@@ -479,10 +572,10 @@ class="c-p text-l-none text-l-none-hover block" style="width:85%;">
 		<div class="BETWEEN hide condition_container m-t-xs">
 			<div class="clear" />
 			<span id="RHS">
-				<input type="text" data-date-format="mm/dd/yyyy" prev-val="" class="form-control date required" placeholder="MM/DD/YYYY">
+				<input type="text" data-date-format="{{dateFormat}}" prev-val="" class="form-control date required" placeholder="{{dateFormat}}">
 			</span>
 			<span id="RHS_NEW"> 
-				<input type="text" data-date-format="mm/dd/yyyy" prev-val="" placeholder="MM/DD/YYYY" class="form-control date required">
+				<input type="text" data-date-format="{{dateFormat}}" prev-val="" placeholder="{{dateFormat}}" class="form-control date required">
 			</span>
 		</div>
 		<div class="m-t-xs"><a class="hide pull-right clear-filter-condition-lhs"><i class="icon-trash text-l-none-hover c-p text-muted text-sm"></i></a></div>

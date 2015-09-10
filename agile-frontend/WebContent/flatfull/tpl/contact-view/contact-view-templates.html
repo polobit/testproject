@@ -15,11 +15,11 @@
     	<div class="table-resp" style="width:15em;">
     	<div class="thumb-sm agile-img m-r-sm" style="margin-right:10px">
         	{{#if_contact_type "PERSON"}}
-        		<img class="img-inital r r-2x"  data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}"/>
+        		<img class="img-inital r r-2x"  title="{{getPropertyValue properties 'first_name'}} {{getPropertyValue properties 'last_name'}}" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}"/>
         	{{/if_contact_type}}
         
 			{{#if_contact_type "COMPANY"}}
-        		<img class="r r-2x" {{getCompanyImage "40" "display:inline;"}}/>
+        		<img class="r r-2x" title="{{getPropertyValue properties 'name'}}" {{getCompanyImage "40" "display:inline;"}}/>
         	{{/if_contact_type}}
     	</div>
     	<div class="agile-thumb agile-thumb-view" style="width:calc(100% - 60px);">
@@ -30,11 +30,19 @@
         	{{/if_contact_type}}
         
 			{{#if_contact_type "COMPANY"}}
-        		<a class="text-cap">{{getPropertyValue properties "name"}}</a>
-        		<small class="text-muted m-t-xs">{{getPropertyValue properties "url"}}</small>
+        		<a class="text-cap">{{getPropertyValue properties "name"}}</a></br>
+        		<div><small class="text-muted m-t-xs">{{getPropertyValue properties "url"}}</small></div>
         	{{/if_contact_type}}
 	</div>
 	</div>
+	</td>
+</script>
+
+<script id = "contacts-custom-view-name-template" type="text/html">
+	<td class="data" data="{{id}}">
+    	<div class="text-ellipsis" style="width:15em;">
+    		<a class="text-cap">{{getPropertyValue properties "name"}}</>
+    	</div>
 	</td>
 </script>
 
@@ -107,7 +115,7 @@
 <script id = "contacts-custom-view-created_time-template" type="text/html">
 	<td class='data' data='{{id}}'>
     <div class="text-ellipsis" style="width:15em;">
-		<a class="text-cap">{{epochToHumanDate "dd mmm yyyy" created_time}}</a>
+		<a class="text-cap">{{epochToHumanDateInFormat  created_time}}</a>
     </div>
 	</td>
 </script>
@@ -116,7 +124,7 @@
 	<td class='data' data='{{id}}'>
     <div class="text-ellipsis" style="width:15em;">
 		{{#if updated_time}}
-			{{epochToHumanDate "dd mmm yyyy" updated_time}}
+			{{epochToHumanDateInFormat  updated_time}}
 		{{/if}}
     </div>
 	</td>
@@ -130,7 +138,23 @@
 	</td>
 </script>
 
+<script id = "contacts-custom-view-url-template" type="text/html">
+	<td class='data' data='{{id}}'>
+    <div class="text-ellipsis" style="width:15em;">
+		<a href="{{getPropertyValue properties 'url'}}" class="text-cap">{{getPropertyValue properties "url"}}</a>
+    </div>
+	</td>
+</script>
+
 <script id = "contacts-custom-view-lead_owner-template" type="text/html">
+	<td class='data' data='{{id}}'>
+       <div class="text-ellipsis" style="width:15em;">
+	   	<a class="text-cap">{{owner.name}}</a>
+       </div>
+	</td>
+</script>
+
+<script id = "contacts-custom-view-owner-template" type="text/html">
 	<td class='data' data='{{id}}'>
        <div class="text-ellipsis" style="width:15em;">
 	   	<a class="text-cap">{{owner.name}}</a>
@@ -154,9 +178,28 @@
 	</td>
 </script>
 
+<script id = "contacts-custom-view-last_contacted-template" type="text/html">
+	<td class='data' data='{{id}}'>
+       <div class="text-ellipsis" style="width:15em;">
+       {{#if_equals last_contacted 0}}
+       
+	   	{{else}}
+	   	 <span>{{epochToHumanDateInFormat  last_contacted}}</span>	
+	   	 		{{#if_equals last_contacted last_emailed}}<i class="fa fa-envelope-o text-muted m-l-xs"></i>
+	   	 		{{else}}
+	   	 			{{#if_equals last_contacted last_campaign_emaild}}<i class="fa fa-sitemap text-muted m-l-xs"></i>
+	   	 			{{else}}
+	   	 				{{#if_equals last_contacted last_called}}<i class="fa fa-phone text-muted m-l-xs"></i>{{/if_equals}}
+	   	 			{{/if_equals}}
+	   	 		{{/if_equals}}
+	   	 {{/if_equals}} 
+       </div>
+	</td>
+</script>
+
 
 <script id ="contacts-custom-view-custom-template" type="text/html">
-	<td class='data' data=''>
+	<td class='data' data='{{id}}'>
        <div class="text-ellipsis" style="width:15em;">
 		  <span>{{value}}</span>
        </div>
@@ -164,9 +207,44 @@
 </script>
 
 <script id = "contacts-custom-view-custom-date-template" type="text/html">
-	<td class='data' data=''>
+	<td class='data' data='{{id}}'>
        <div class="text-ellipsis" style="width:15em;">
-	   	  <span>{{epochToHumanDate "dd mmm yyyy" value}}</span>
+	   	  <span>{{stringToHumanDateInFormat value}}</span>
+       </div>
+	</td>
+</script>
+
+<script id = "contacts-custom-view-last_contacted-template" type="text/html">
+	<td class='data' data='{{id}}'>
+       <div class="text-ellipsis" style="width:15em;">
+       {{#if_equals last_contacted 0}}
+       
+	   	{{else}}
+	   	 <span>{{epochToHumanDateInFormat  last_contacted}}</span>	
+	   	 		{{#if_equals last_contacted last_emailed}}<i class="fa fa-envelope-o text-muted m-l-xs"></i>
+	   	 		{{else}}
+	   	 			{{#if_equals last_contacted last_campaign_emaild}}<i class="fa fa-sitemap text-muted m-l-xs"></i>
+	   	 			{{else}}
+	   	 				{{#if_equals last_contacted last_called}}<i class="fa fa-phone text-muted m-l-xs"></i>{{/if_equals}}
+	   	 			{{/if_equals}}
+	   	 		{{/if_equals}}
+	   	 {{/if_equals}} 
+       </div>
+	</td>
+</script>
+
+<script id = "contacts-custom-view-last_emailed-template" type="text/html">
+	<td class='data' data='{{id}}'>
+       <div class="text-ellipsis" style="width:15em;">
+	   	  <span>{{epochToHumanDate "dd mmm yyyy" last_emailed}}</span>
+       </div>
+	</td>
+</script>
+
+<script id = "contacts-custom-view-last_called-template" type="text/html">
+	<td class='data' data='{{id}}'>
+       <div class="text-ellipsis" style="width:15em;">
+	   	  <span>{{epochToHumanDate "dd mmm yyyy" last_called}}</span>
        </div>
 	</td>
 </script>

@@ -7,10 +7,13 @@
 
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>Upload New Custom Document</title>
-<link rel="stylesheet" type="text/css" href="css/bootstrap-<%=request.getParameter("t")%>.min.css" />
-<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+
+<link rel="stylesheet" type="text/css" href="/css/bootstrap.v3.min.css" />
+<link rel="stylesheet" type="text/css" href="/flatfull/css/app.css" />
+
+<script type='text/javascript' src='/lib/jquery-new/jquery-2.1.1.min.js'></script>
+<script type="text/javascript" src="/lib/bootstrap.v3.min.js"></script>
 <script type="text/javascript" src="/lib/jquery.validate.min.js"></script>
-<script type="text/javascript" src="/lib/bootstrap.min.js"></script>
 
 <script type="text/javascript">
 jQuery.validator.setDefaults({
@@ -19,7 +22,6 @@ jQuery.validator.setDefaults({
 });;
 </script>
 <script type="text/javascript">
-
 //Get URL
 var url = "https://s3.amazonaws.com/agilecrm/" + unescape(getUrlVars()["key"]) + "?id=" + unescape(getUrlVars()["id"]);
 
@@ -59,10 +61,26 @@ $(function()
 	}
 	 
 	$("input:file").change(function (){
-		var fileName = $(this).val();
-	    $(".filename").html(fileName);
-	    // To remove error message while change
-	    isValid();
+		var size = this.files[0].size;
+		
+		if(this.files[0].size > 10485760)
+	    {
+	    	
+	    	$("#fileextension").replaceWith($("#fileextension").clone(true));
+	    	$save_info = $('<div style="display:inline-block"><small><p style="color:#B94A48; font-size:14px"><i>'
+												+ 'Document size exceeds the 10MB limit.'
+												+ '</i></p></small></div>');
+	    	$("#upl_doc").after($save_info);
+	    	$save_info.show().delay(4000).hide(1);
+	    }
+	    else
+	    {
+	    	window.opener.CUSTOM_DOCUMENT_SIZE = size;
+			var fileName = $(this).val();
+		    $(".filename").html(fileName);
+		    // To remove error message while change
+		    isValid();
+		}
 	  });
 }); 
 
@@ -103,34 +121,28 @@ function isValid(){
 </head>
 
 
-<body class='center' style="height:90%;width:90%;padding:5px">
-
-<br/>
-
-<div class="well" style="height:215px; width:390px ">
-
-<legend>Upload Document</legend>
-
-
+<body class='wrapper-md'>
+<div class="row">
+<div class="col-md-3 col-sm-6 col-xs-12">
+<div class="panel panel-default" style="height:215px;">
+<div class="panel-heading">Upload Document</div>
+<div class="panel-body">
 <form id="form" action="https://agilecrm.s3.amazonaws.com/" method="post" enctype="multipart/form-data" onsubmit="return isValid();"> 
-
 <input type="hidden" id="key" name="key" value="panel/uploaded-logo/<%=request.getParameter("d")%>" /> 
-
 <input type="hidden" name="acl" value="public-read" /> 
 <input type="hidden" name="content-type" value="image/*" />
-
 <input type="hidden" name="success_action_redirect" value="<%=request.getRequestURL()%>?id=<%=request.getParameter("id")%>" /> 
-
-<input type="hidden" name="AWSAccessKeyId" value="AKIAJ62OAFOKCJTDANVA" />
-<input type="hidden" name="policy" value="IHsKImV4cGlyYXRpb24iOiAiMjAyMC0wMS0wMVQxMjowMDowMC4wMDBaIiwKICAiY29uZGl0aW9ucyI6IFsKICAgIHsiYnVja2V0IjogImFnaWxlY3JtIiB9LAogICAgeyJhY2wiOiAicHVibGljLXJlYWQiIH0sCiAgICBbInN0YXJ0cy13aXRoIiwgIiRrZXkiLCAicGFuZWwvdXBsb2FkZWQtbG9nbyJdLAogICAgWyJzdGFydHMtd2l0aCIsICIkQ29udGVudC1UeXBlIiwgImltYWdlLyJdLAogICAgWyAiY29udGVudC1sZW5ndGgtcmFuZ2UiLCA1MTIsIDQxOTQzMDRdLAogICAgWyJzdGFydHMtd2l0aCIsICIkc3VjY2Vzc19hY3Rpb25fcmVkaXJlY3QiLCAiIiBdCiAgXQp9" />
-<input type="hidden" name="signature" value="kTLzXhH6RYKpZ/+5oToI59iSl5Q=" />
-
-
+<input type="hidden" name="AWSAccessKeyId" value="AKIAIBK7MQYG5BPFHSRQ" />
+<input type="hidden" name="policy" value="IHsKImV4cGlyYXRpb24iOiAiMjAyMC0wMS0wMVQxMjowMDowMC4wMDBaIiwKICAiY29uZGl0aW9ucyI6IFsKICAgIHsiYnVja2V0IjogImFnaWxlY3JtIiB9LAogICAgeyJhY2wiOiAicHVibGljLXJlYWQiIH0sCiAgICBbInN0YXJ0cy13aXRoIiwgIiRrZXkiLCAicGFuZWwvdXBsb2FkZWQtbG9nbyJdLAogICAgWyJzdGFydHMtd2l0aCIsICIkQ29udGVudC1UeXBlIiwgImltYWdlLyJdLAogICAgWyAiY29udGVudC1sZW5ndGgtcmFuZ2UiLCA1MTIsIDEwNDg1NzYwXSwKICAgIFsic3RhcnRzLXdpdGgiLCAiJHN1Y2Nlc3NfYWN0aW9uX3JlZGlyZWN0IiwgIiIgXQogIF0KfQ==" />
+<input type="hidden" name="signature" value="lJaO/ZQyMANyulpZrP/FcxVLz5M=" />
 <p><input name="file" id='fileextension' type="file" /></p>
 <br/>
-<input name="upload" value="Upload" class='submit btn btn-primary' type="submit"/> 
+<input name="upload" id="upl_doc" value="Upload" class='submit btn btn-primary m-r-xs' type="submit"/> 
 </form> 
 </div>
-
+</div>
+</div>
+</div>
+</div>
 </body>
 </html>

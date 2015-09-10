@@ -1,19 +1,19 @@
 
 $(function(){
 	
-	$(".voice-mail-add").die().live('click', function(e){
+	$('body').on('click', '.voice-mail-add', function(e){
 		e.preventDefault();
 		$("#uploadVoiceMailModal").modal('show');
 	});
 	
-	$('#uploadVoiceMailModal').on('show.bs.modal', function() {
+	$('body').on('show.bs.modal', '#uploadVoiceMailModal', function(e) {
 		// Removes alert message of error related date and time.
 		$('#' + this.id).find('.alert').css('display', 'none');		
 		// Removes error class of input fields
 		$('#' + this.id).find('.error').removeClass('error');
 	});
 	
-	$(".addFileLink").live('click', function(e) {
+	$('body').on('click', '.addFileLink', function(e) {
 		e.preventDefault();
 		$(this).closest('form').find('#error').html("");
 		var form_id = $(this).closest('form').attr("id");
@@ -26,7 +26,7 @@ $(function(){
 		return false;
 	});
 	
-    $('#voicemail_validate').live('click',function(e){
+	$('body').on('click', '#voicemail_validate', function(e){
  		e.preventDefault();
  		var modal_id = $(this).closest('.voice-mail-modal').attr("id");
     	var form_id = $(this).closest('.voice-mail-modal').find('form').attr("id");
@@ -47,7 +47,7 @@ $(function(){
     
     //audio javascript controls
     
-   $(".audioPlay").live('click', function(e){
+	$('body').on('click', '.audioPlay', function(e){
 	   e.preventDefault();
 //	   alert("audioPlay");
 	   audio = $(this).find("audio");
@@ -66,7 +66,7 @@ $(function(){
 		});
    });
    
-   $(".audioPause").live('click', function(e){
+   $('body').on('click', '.audioPause', function(e){
 	   e.preventDefault();
 //	   alert("audioPause");
 	   audio = $(this).find("audio");

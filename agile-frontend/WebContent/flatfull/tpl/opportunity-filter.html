@@ -131,13 +131,13 @@
 						</select>
 					<div class="equals" >
 							<input type="text" id="close_date" name="close_date"
-								 placeholder="MM/DD/YYYY" class="date input form-control" />
+								 placeholder="{{dateFormat}}" class="date input form-control" />
 					</div>
 					<div class="between hide" >
 							<input type="text" id="close_date_start" name="close_date_start"
-								placeholder="MM/DD/YYYY" class="date input form-control" />
+								placeholder="{{dateFormat}}" class="date input form-control" />
 							<input type="text" id="close_date_end" name="colse_date_end"
-								placeholder="MM/DD/YYYY" class="date input form-control" />
+								placeholder="{{dateFormat}}" class="date input form-control" />
 					</div>
 					</div>
 				</div>
@@ -152,13 +152,13 @@
 						</select>
 					<div class="equals" >
 							<input type="text" id="created_time" name="created_time"
-								placeholder="MM/DD/YYYY" class="date input form-control" />
+								placeholder="{{dateFormat}}" class="date input form-control" />
 					</div>
 					<div class="between hide" >
 							<input type="text" id="created_time_start" name="created_time_start"
-								placeholder="MM/DD/YYYY" class="date input form-control" />
+								placeholder="{{dateFormat}}" class="date input form-control" />
 							<input type="text" id="created_time_end" name="created_time_end"
-								placeholder="MM/DD/YYYY" class="date input form-control" />
+								placeholder="{{dateFormat}}" class="date input form-control" />
 					</div>
 					</div>
 				</div> -->
@@ -219,13 +219,13 @@
 						</select></label>
 					<div class="controls equals" >
 							<input type="text" id="{{replace_spaces field_label}}" name="{{replace_spaces field_label}}"
-								 placeholder="MM/DD/YYYY" class="date input form-control" />
+								 placeholder="{{dateFormat}}" class="date input form-control" />
 					</div>
 					<div class="controls between hide" >
 							<input type="text" id="{{replace_spaces field_label}}_start" name="{{replace_spaces field_label}}_start"
-								placeholder="MM/DD/YYYY" class="date input form-control" /> to
+								placeholder="{{dateFormat}}" class="date input form-control" /> to
 							<input type="text" id="{{replace_spaces field_label}}_end" name="{{replace_spaces field_label}}_end"
-								placeholder="MM/DD/YYYY" class="date input form-control" />
+								placeholder="{{dateFormat}}" class="date input form-control" />
 					</div>
 			</div>
 			{{/if_equals}}

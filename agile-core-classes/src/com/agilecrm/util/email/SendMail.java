@@ -117,6 +117,9 @@ public class SendMail
 
     public static final String STRIPE_IMPORT_NOTIFICATION = "contact_sync_notification_template";
     public static final String STRIPE_IMPORT_NOTIFICATION_SUBJECT = "Stripe Import Report";
+    
+    public static final String FROM_VERIFICATION_EMAIL = "from_verification_email";
+    public static final String FROM_VERIFICATION_EMAIL_SUBJECT = "Verify your Email";
 
     /**
      * From Name of email.
@@ -238,17 +241,17 @@ public class SendMail
 	    // Setting empty namespace to send without any subaccount
 	    String oldNamespace = NamespaceManager.get();
 	    NamespaceManager.set("");
-	    
+
 	    // Send Email
 	    Mandrill.sendMail(false, from, fromName, to, null, null, subject, from, emailHTML, emailBody, null, null,
-		    args);
-	    
+		    null, args);
+
 	    NamespaceManager.set(oldNamespace);
 	}
 	catch (Exception e)
 	{
 	    e.printStackTrace();
-	    System.err.println("Exception occured in SendMail..."+ e.getMessage());
+	    System.err.println("Exception occured in SendMail..." + e.getMessage());
 	}
     }
 

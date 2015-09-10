@@ -150,6 +150,17 @@ public class Note extends Cursor
 	this.owner = owner;
     }
 
+    /**
+     * Remove related contact owner. Used for delete note of specific contact. 
+     * 
+     * @param contactKey
+     */
+    @JsonIgnore
+    public void removeRelatedContacts(Key<Contact> contactKey)
+    {
+	this.related_contacts.remove(contactKey);
+    }
+
     @JsonIgnore
     public void addRelatedContacts(String contactId)
     {

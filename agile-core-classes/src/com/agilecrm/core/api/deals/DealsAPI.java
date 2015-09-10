@@ -34,8 +34,6 @@ import com.agilecrm.deals.Opportunity;
 import com.agilecrm.deals.deferred.DealsDeferredTask;
 import com.agilecrm.deals.util.MilestoneUtil;
 import com.agilecrm.deals.util.OpportunityUtil;
-import com.agilecrm.export.util.DealExportBlobUtil;
-import com.agilecrm.export.util.DealExportEmailUtil;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
 import com.agilecrm.user.DomainUser;
@@ -200,9 +198,27 @@ public class DealsAPI
     @Path("/byMilestone/{milestone}")
     @GET
     @Produces({ MediaType.APPLICATION_JSON })
-    public List<Opportunity> getOpportunitiesWithMilestone(@PathParam("milestone") String milestone)
+    public List<Opportunity> getOpportunitiesWithMilestone(@PathParam("milestone") String milestone,
+	    @QueryParam("cursor") String cursor, @QueryParam("page_size") String count)
     {
-	return OpportunityUtil.getDeals(null, milestone, null);
+	int counts = 0;
+	if (count != null)
+	{
+	    counts = Integer.parseInt(count);
+	    if (counts > 50)
+		counts = 50;
+
+	    System.out.println("Test page size = " + counts);
+
+	    return OpportunityUtil.getDealsWithMilestone(null, milestone, null, counts, cursor);
+	}
+	else
+	{
+	    counts = 5;
+	    System.out.println("Test page size1 = " + counts);
+	    return OpportunityUtil.getDealsWithMilestone(null, milestone, null, counts, cursor);
+	}
+
     }
 
     /**
@@ -500,64 +516,27 @@ public class DealsAPI
      * add it as a attachment and send the email.
      */
     @Path("/export")
-    @GET
-    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public void exportOpportunities(@QueryParam("cursor") String cursor, @QueryParam("page_size") String count)
-    {
-	// Append the URL with the current userId to set the session manager in
-	// the backend.
-	OpportunityUtil.postDataToDealBackend("/core/api/opportunity/backend/export/"
-		+ SessionManager.get().getDomainId());
-    }
-
-    /**
-     * Export list of opportunities. Create a CSV file with list of deals and
-     * add it as a attachment and send the email.
-     */
-    @Path("/backend/export/{current_user_id}")
     @POST
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public void exportOpportunitiesBackend(@PathParam("current_user_id") Long currentUserId,
-	    @QueryParam("cursor") String cursor, @QueryParam("page_size") String count)
+    public void exportOpportunities(@FormParam("filter") String filter)
     {
-	// Set the session manager to get the user preferences and the other
-	// details required.
-	if (SessionManager.get() != null)
+	org.json.JSONObject filterJSON;
+	try
 	{
-	    SessionManager.get().setDomainId(currentUserId);
+	    filterJSON = new org.json.JSONObject(filter);
+	    System.out.println("------------" + filterJSON.toString());
+
+	    // Append the URL with the current userId to set the session manager
+	    // in
+	    // the backend.
+	    OpportunityUtil.postDataToDealBackend("/core/api/opportunity/backend/export/"
+		    + SessionManager.get().getDomainId(), filter);
 	}
-	else
+	catch (JSONException e)
 	{
-	    DomainUser user = DomainUserUtil.getDomainUser(currentUserId);
-	    SessionManager.set(new UserInfo(null, user.email, user.name));
-	    SessionManager.get().setDomainId(user.id);
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
 	}
-	String currentCursor = null;
-	String previousCursor = null;
-	int firstTime = 0;
-	String path = null;
-	List<Opportunity> deals = null;
-	long total = 0;
-	int max = 1000;
-	do
-	{
-	    deals = OpportunityUtil.getOpportunities(max, currentCursor);
-	    currentCursor = deals.get(deals.size() - 1).cursor;
-	    firstTime++;
-	    if (firstTime == 1)
-		path = DealExportBlobUtil.writeDealCSVToBlobstore(deals, false);
-	    else
-		DealExportBlobUtil.editExistingBlobFile(path, deals, false);
-	    total += deals.size();
-	} while (deals.size() > 0 && !StringUtils.equals(previousCursor, currentCursor));
-	DealExportBlobUtil.editExistingBlobFile(path, null, true);
-	List<String> fileData = DealExportBlobUtil.retrieveBlobFileData(path);
-	if (count == null)
-	    count = String.valueOf(total);
-	// Send every partition as separate email
-	for (String partition : fileData)
-	    DealExportEmailUtil.exportDealCSVAsEmail(DomainUserUtil.getDomainUser(currentUserId), partition,
-		    String.valueOf(count));
     }
 
     /**
@@ -883,6 +862,68 @@ public class DealsAPI
 	    String uri = "/core/api/opportunity/backend/change-milestone/" + SessionManager.get().getDomainId();
 
 	    OpportunityUtil.postDataToDealBackend(uri, filters, ids, form);
+	}
+	catch (Exception je)
+	{
+	    je.printStackTrace();
+	}
+    }
+
+    /**
+     * Call backends for updating deals pipeline and milestone.
+     */
+    @Path("/bulk/contacts/add-tag")
+    @POST
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    public void addTagToDealRelatedContacts(@FormParam("ids") String ids, @FormParam("filter") String filters,
+	    @FormParam("form") String form)
+    {
+	try
+	{
+	    if (StringUtils.isNotEmpty(ids))
+	    {
+		JSONArray idsArray = new JSONArray(ids);
+		System.out.println("------------" + idsArray.length());
+	    }
+
+	    org.json.JSONObject filterJSON = new org.json.JSONObject(filters);
+	    System.out.println("------------" + filterJSON.toString());
+
+	    String uri = "/core/api/opportunity/backend/contacts/add-tag/" + SessionManager.get().getDomainId();
+
+	    OpportunityUtil.postDataToDealBackend(uri, filters, ids, form);
+	}
+	catch (Exception je)
+	{
+	    je.printStackTrace();
+	}
+    }
+
+    /**
+     * Call backends for updating deals owner.
+     */
+    @Path("/bulk/contacts/add-campaign/{workflow_id}")
+    @POST
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    public void addDealRelatedContactsToCampaigns(@PathParam("workflow_id") Long workflowId,
+	    @FormParam("ids") String ids, @FormParam("filter") String filters)
+    {
+	try
+	{
+	    if (StringUtils.isNotEmpty(ids))
+	    {
+		JSONArray idsArray = new JSONArray(ids);
+		System.out.println("------------" + idsArray.length());
+	    }
+
+	    org.json.JSONObject filterJSON = new org.json.JSONObject(filters);
+	    System.out.println("------------" + filterJSON.toString());
+	    System.out.println("Workflow_id" + workflowId);
+
+	    String uri = "/core/api/opportunity/backend/contacts/add-campaign/" + workflowId + "/"
+		    + SessionManager.get().getDomainId();
+
+	    OpportunityUtil.postDataToDealBackend(uri, filters, ids);
 	}
 	catch (Exception je)
 	{

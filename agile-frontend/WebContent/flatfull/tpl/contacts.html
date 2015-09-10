@@ -107,15 +107,15 @@
 						<span class="caret"></span>
 					</a>
 					<ul class="dropdown-menu" id="view-actions">
-						<li><a href="#" id="bulk-tags">Add Tags</a></li>
-						<li><a href="#" id="bulk-tags-remove">Remove Tags</a></li>
+						<li><a href="#" id="bulk-tags" class="_contact_bulk_action">Add Tags</a></li>
+						<li><a href="#" id="bulk-tags-remove" class="_contact_bulk_action">Remove Tags</a></li>
                         <li class='divider'></li>  
-						<li><a href="#" id="bulk-campaigns">Add to Campaign</a></li>
-						<li><a href="#" id="bulk-email">Send Email</a></li>
+						<li><a href="#" id="bulk-campaigns" class="_contact_bulk_action">Add to Campaign</a></li>
+						<li><a href="#" id="bulk-email" class="_contact_bulk_action">Send Email</a></li>
                         <li class='divider'></li>
-						<li><a href="#" id="bulk-owner">Change Owner</a></li>
+						<li><a href="#" id="bulk-owner" class="_contact_bulk_action">Change Owner</a></li>
                         {{#hasScope "EXPORT_CONTACTS"}}
-                        <li><a href="#" id="bulk-contacts-export">Export Contacts as CSV</a></li>
+                        <li><a href="#" id="bulk-contacts-export" class="_contact_bulk_action">Export Contacts as CSV</a></li>
                         {{/hasScope}}
 						<li><a href="#" class="delete-checked-contacts">Delete</a></li>
 					</ul>
@@ -304,7 +304,7 @@
 					</tr>
 				</thead>
 				<tbody id="companies-model-list" class="companies-model-list"
-					route="contact/" >
+					route="company/" >
 				</tbody>
 			</table>
 			</div>

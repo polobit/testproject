@@ -84,10 +84,11 @@
         {{/unless}}
         {{#if this.length}}
 			{{add_tag "Campaigns"}}
-            <div class="col-md-9 col-sm-9 table-responsive">
+            <div class="col-md-9 col-sm-9">
 			<div class="panel panel-default">
 			    <div class="panel-heading">Campaigns List</div>
-                <table class="table table-striped showCheckboxes m-b-none agile-table panel" url="core/api/workflows/bulk" id="workflows-tour-step">
+                <div class="table-responsive">
+                <table class="table table-striped showCheckboxes m-b-none agile-table panel table-layout-mob-view" url="core/api/workflows/bulk" id="workflows-tour-step">
                     <thead>
                         <tr>
                             <th class="hide">Id</th>
@@ -100,6 +101,7 @@
                     <tbody id="workflows-model-list" route="workflow/" class="c-p"> </tbody>
                 </table>
 				</div>
+                </div>
             </div>
         {{/if}}
     <div class="col-md-3 col-sm-3" id="learn-workflows">
@@ -109,10 +111,11 @@
             </h4>
             
             <p>
-                Workflow is an intelligent sales and marketing automation process for sending your contacts relevant information at the right time.Use it to automate most of your follow-up activities.
+                Workflow is a smart sales & marketing automation process to send your contacts the relevant information at just the right time. Leverage on it to automate most of your follow-up activities.
+
             </p>
             <p>
-                e.g. You can send an email to all users who have signed up on your site. And then based on their behavior in the control panel, you can send them targeted messages periodically.
+                eg: You can send an email to all contacts who have signed up on your website. Then, based on their behaviour in the control panel, you can nurture them with targeted messages periodically.
             </p>
             <br>
             <h4 class="m-t-none h4 m-b-sm">
@@ -120,7 +123,7 @@
             </h4>
             
             <p>
-                Triggers are pre-defined conditions set up by you. If the condition is satisfied, you can choose an action to follow using workflow automation.
+                Triggers are pre-defined conditions set up by you. If a condition is satisfied, you can choose an action to follow using workflow automation.
             </p>
             <p>
                 e.g. If a user registers on your website, you can automate the workflow to send a welcome email. The user registering on site is the trigger.

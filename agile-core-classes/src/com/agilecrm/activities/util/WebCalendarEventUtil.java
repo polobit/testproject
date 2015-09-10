@@ -6,14 +6,19 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.TimeZone;
+import java.util.TreeSet;
 
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
@@ -30,8 +35,12 @@ import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Contact.Type;
 import com.agilecrm.contact.ContactField;
 import com.agilecrm.contact.util.ContactUtil;
+import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.OnlineCalendarPrefs;
+import com.agilecrm.user.UserPrefs;
 import com.agilecrm.user.util.DomainUserUtil;
+import com.agilecrm.user.util.OnlineCalendarUtil;
 import com.agilecrm.user.util.UserPrefsUtil;
 import com.agilecrm.util.DateUtil;
 import com.agilecrm.util.IcalendarUtil;
@@ -63,16 +72,19 @@ public class WebCalendarEventUtil
 	 * @throws JSONException
 	 */
 	public static List<List<Long>> getSlots(Long userid, int slotTime, String date, String timezoneName,
-			Long epochTime, Long selectedTime, Long agileuserid, int timezone) throws ParseException, JSONException
+			Long epochTime, Long startTime, Long endTime, Long agileuserid, int timezone) throws ParseException,
+			JSONException
 	{
 		DomainUser domain_user = DomainUserUtil.getDomainUser(userid);
-
-		Long startTime = selectedTime;
-		Long endTime = startTime + 86400;
-
-		System.out.println("------------------  Timezonename " + timezoneName + " start time " + startTime
-				+ "  -- end time  " + endTime);
+		OnlineCalendarPrefs prefs = OnlineCalendarUtil.getCalendarPrefs(userid);
 		String domainUser_timezone = UserPrefsUtil.getUserTimezoneFromUserPrefs(domain_user.id);
+		String business_hours = null;
+		if (prefs != null)
+		{
+			business_hours = prefs.business_hours;
+		}
+		if (StringUtils.isEmpty(business_hours))
+			business_hours = domain_user.business_hours;
 		if (StringUtils.isEmpty(domainUser_timezone))
 		{
 			domainUser_timezone = domain_user.timezone;
@@ -115,7 +127,7 @@ public class WebCalendarEventUtil
 			{
 				List<Long> slots = possibleSlots.get(i);
 				Long main = slots.get(0);
-				if (checkBussinessHour(main, domainUser_timezone, new JSONArray(domain_user.business_hours), slotTime))
+				if (checkBussinessHour(main, domainUser_timezone, new JSONArray(business_hours), slotTime))
 				{
 					listOfLists.add(slots);
 				}
@@ -144,34 +156,6 @@ public class WebCalendarEventUtil
 		// used to store business hours
 		List<Long> business_hours = new ArrayList<>();
 
-		if (StringUtils.isEmpty(usertimezone))
-		{
-			AccountPrefs acprefs = AccountPrefsUtil.getAccountPrefs();
-			usertimezone = acprefs.timezone;
-			if (StringUtils.isEmpty(usertimezone))
-			{
-				usertimezone = "UTC";
-			}
-		}
-		// according domain user timezone gets the weekday
-		// i.e in java sun,mon,tue,wed,thu,fri,sat 1,2,3,4,5,6,7 respectivly
-		TimeZone tz = TimeZone.getTimeZone(usertimezone);
-		Calendar calendar = Calendar.getInstance();
-		calendar.setTimeInMillis(eppoch * 1000);
-		calendar.setTimeZone(tz);
-		int week_day = getWeekDayAccordingToJS(calendar.get(Calendar.DAY_OF_WEEK));
-
-		int date = calendar.get(Calendar.DATE);
-
-		int year = calendar.get(Calendar.YEAR);
-		int month = calendar.get(Calendar.MONTH);
-
-		// in backend business hours will be stored as
-		// [{"isActive":true,"timeTill":"03:00","timeFrom":"14:00"},{"isActive":false,"timeTill":null,"timeFrom":null},...]
-		// 0 position is monday and 1 position is tuesday according to business
-		// hours plugin
-		JSONObject business = new JSONObject(business_hours_array.get(week_day).toString());
-
 		// from time is "9" formTime_mins is "00"
 		String fromTime = null;
 		String fromTime_mins = null;
@@ -187,6 +171,40 @@ public class WebCalendarEventUtil
 		String night_endTime = null;
 		String night_endTimeMins = null;
 
+		// check for timezone
+		if (StringUtils.isEmpty(usertimezone))
+		{
+			AccountPrefs acprefs = AccountPrefsUtil.getAccountPrefs();
+			usertimezone = acprefs.timezone;
+			if (StringUtils.isEmpty(usertimezone))
+			{
+				usertimezone = "UTC";
+			}
+		}
+		// according domain user timezone gets the weekday
+		// i.e in java sun,mon,tue,wed,thu,fri,sat 1,2,3,4,5,6,7 respectivly
+		TimeZone tz = TimeZone.getTimeZone(usertimezone);
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTimeInMillis(eppoch * 1000);
+		calendar.setTimeZone(tz);
+
+		// business hours will be stored like array of json objects.
+		// starts from Monday.
+		// according to js Monday is 1
+		// according DB storage of business hours Monday is 0.
+		int week_day = getWeekDayAccordingToJS(calendar.get(Calendar.DAY_OF_WEEK));
+
+		int date = calendar.get(Calendar.DATE);
+
+		int year = calendar.get(Calendar.YEAR);
+		int month = calendar.get(Calendar.MONTH);
+
+		// in backend business hours will be stored as
+		// [{"isActive":true,"timeTill":"03:00","timeFrom":"14:00"},{"isActive":false,"timeTill":null,"timeFrom":null},...]
+		// 0 position is monday and 1 position is tuesday according to business
+		// hours plugin
+		JSONObject business = new JSONObject(business_hours_array.get(week_day).toString());
+
 		// if(isActive) true i.e working day if not return empty list
 		if (business.getString("isActive") == "true")
 		{
@@ -198,6 +216,7 @@ public class WebCalendarEventUtil
 			tillTime_mins = business.getString("timeTill").split(":")[1];
 
 		}
+
 		if (StringUtils.isNotEmpty(fromTime) && StringUtils.isNotEmpty(tillTime))
 		{
 			Long endtime = null;
@@ -206,6 +225,9 @@ public class WebCalendarEventUtil
 			Long starttime = getEppochTime(date, month, year, Integer.parseInt(fromTime),
 					Integer.parseInt(fromTime_mins), tz);
 			starttime = starttime - 60;
+
+			// if fromTime < tillTime considered as morning shift
+			// else considered as night shift
 
 			if (Integer.parseInt(fromTime) < Integer.parseInt(tillTime))
 			{
@@ -286,7 +308,7 @@ public class WebCalendarEventUtil
 	 *            int weekday. according jquery business hours plugin monday to
 	 *            sun represented as 0 to 6 according to java sunday to sat
 	 *            represented as 1 to 7 as we are storing business hours in
-	 *            jsonarray we have to get appropriate week num to get business
+	 *            jsonarray we have to get appropriate week number to get business
 	 *            hours
 	 * @return weekday according jquery business hours plugin
 	 */
@@ -326,7 +348,7 @@ public class WebCalendarEventUtil
 	}
 
 	/**
-	 * if noght ours is the business hours then it will give the weekday before
+	 * if night ours is the business hours then it will give the weekday before
 	 * actual weekday to calculate business hours for before day also
 	 * 
 	 * @param if wkday is monday
@@ -648,7 +670,7 @@ public class WebCalendarEventUtil
 	 * @throws ParseException
 	 * @throws IOException
 	 */
-	public static String createEvents(WebCalendarEvent wce, Contact contact) throws JSONException
+	public static synchronized String createEvents(WebCalendarEvent wce, Contact contact) throws JSONException
 	{
 		System.out.println("In createEvents");
 
@@ -662,7 +684,7 @@ public class WebCalendarEventUtil
 		String selectedDateSlot = wce.date;
 
 		String timezone = wce.timezone;
-
+		List<Long> selected_slot = new ArrayList<Long>();
 		DomainUser _user = new DomainUser();
 		_user.name = wce.userName;
 		_user.email = wce.email;
@@ -704,10 +726,17 @@ public class WebCalendarEventUtil
 			List<Long> slot = new ArrayList<Long>();
 			slot.add(explrObject.getLong("start"));
 			slot.add(explrObject.getLong("end"));
-
+			// slot is assigned to selected slot to check availabity out side
+			selected_slot = slot;
 			// Add slot in WebCalendarEvent entity field
 			wce.selectedSlots.add(slot);
 		}
+
+		// checks for the availability of slot
+
+		boolean isAvailable = checkSlotAvailability(wce, selected_slot);
+		if (!isAvailable)
+			return "slot booked";
 
 		// Looping on list, Each selected slot will create new agile event.
 		for (List<Long> slot : wce.selectedSlots)
@@ -716,24 +745,23 @@ public class WebCalendarEventUtil
 			WebCalendarEvent saveMe = new WebCalendarEvent();
 
 			// Assign proper name on basis of slot time duration
-			if (wce.slot_time.compareTo((long) 15) == 0)
-				saveMe.name = meeting_duration.getString("15mins");
-			;
-			if (wce.slot_time.compareTo((long) 30) == 0)
-				saveMe.name = meeting_duration.getString("30mins");
-			;
-			if (wce.slot_time.compareTo((long) 60) == 0)
-				saveMe.name = meeting_duration.getString("60mins");
-			;
+			/*
+			 * if (wce.slot_time.compareTo((long) 15) == 0) saveMe.name =
+			 * meeting_duration.getString("15mins"); ; if
+			 * (wce.slot_time.compareTo((long) 30) == 0) saveMe.name =
+			 * meeting_duration.getString("30mins"); ; if
+			 * (wce.slot_time.compareTo((long) 60) == 0) saveMe.name =
+			 * meeting_duration.getString("60mins"); ;
+			 */
 
 			// Assign slot time
 			saveMe.slot_time = wce.slot_time;
 
 			// Get assigned slot name
-			wce.name = saveMe.name;
+			// wce.name = saveMe.name;
 
 			// WCE save
-			saveMe.save();
+			// saveMe.save();
 
 			// Check if the email exists with the current email address
 			boolean isDuplicate = ContactUtil.isExists(contact.getContactFieldValue("EMAIL").toLowerCase());
@@ -784,6 +812,14 @@ public class WebCalendarEventUtil
 				newEvnt.color = "#36C";
 				newEvnt.type = EventType.WEB_APPOINTMENT;
 
+				if (StringUtils.isNotEmpty(wce.phoneNumber) && !"Meeting Type".equalsIgnoreCase(wce.phoneNumber))
+				{
+					newEvnt.meeting_type = wce.phoneNumber.trim();
+				}
+				if (StringUtils.isNotEmpty(wce.notes))
+				{
+					newEvnt.description = wce.notes;
+				}
 				epoch_start_date = newEvnt.start;
 				String cid = contact.id.toString(); // related contact
 
@@ -819,9 +855,8 @@ public class WebCalendarEventUtil
 				}
 
 				EmailGatewayUtil.sendEmail(null, wce.email, wce.userName, user.email, null, null,
-						"Appointment Scheduled", null, usermail, null, null, null, attachments_to_agile_user);
+						"Appointment Scheduled", null, usermail, null, null, null, null, attachments_to_agile_user);
 			}
-
 			else
 			{
 				// Create agile event
@@ -837,16 +872,16 @@ public class WebCalendarEventUtil
 				client_event.created_time = System.currentTimeMillis() / 1000;
 				newEvnt.color = "#36C";
 				newEvnt.type = EventType.WEB_APPOINTMENT;
+				if (StringUtils.isNotEmpty(wce.phoneNumber) && !"Meeting Type".equalsIgnoreCase(wce.phoneNumber))
+				{
+					newEvnt.meeting_type = wce.phoneNumber.trim();
+				}
+				if (StringUtils.isNotEmpty(wce.notes))
+				{
+					newEvnt.description = wce.notes;
+				}
 
 				epoch_start_date = newEvnt.start;
-				String cid = null; // related contact
-
-				// Add contact in event
-				if (cid != null)
-				{
-					newEvnt.contacts = new ArrayList<String>();
-					boolean add = newEvnt.contacts.add(cid);
-				}
 
 				// save agile event
 				newEvnt.save();
@@ -859,22 +894,24 @@ public class WebCalendarEventUtil
 				{
 
 					usermail = "<p>" + wce.userName + " (" + wce.email
-							+ ") has scheduled an appointment </p><span>Type: '" + wce.name + "' (" + wce.slot_time
-							+ "mins)</span><br/><span>Meeting Type: " + wce.phoneNumber + "</span><br/><span>Note: "
+							+ ") has scheduled an appointment </p><span>Duration: " + wce.slot_time
+							+ "mins</span><br/><span>Meeting Type: " + wce.phoneNumber + "</span><br/><span>Note: "
 							+ wce.notes + "</span><br/><p><a href=https://" + user.domain
 							+ ".agilecrm.com/#calendar>View this new event in Agile Calendar</a></p>";
 				}
 				else
 				{
 					usermail = "<p>" + wce.userName + " (" + wce.email
-							+ ") has scheduled an appointment </p><span>Type: '" + wce.name + "' (" + wce.slot_time
-							+ "mins)</span><br/><span>Note: " + wce.notes + "</span><br/><p><a href=https://"
+							+ ") has scheduled an appointment </p><span>Duration: " + wce.slot_time
+							+ "mins</span><br/><span>Note: " + wce.notes + "</span><br/><p><a href=https://"
 							+ user.domain + ".agilecrm.com/#calendar>View this new event in Agile Calendar</a></p>";
 				}
 
 				EmailGatewayUtil.sendEmail(null, wce.email, wce.userName, user.email, null, null,
-						"Appointment Scheduled", null, usermail, null, null, null, attachments_to_agile_user);
+						"Appointment Scheduled", null, usermail, null, null, null, null, attachments_to_agile_user);
+
 			}
+
 		}
 
 		// If user want confirmation, send confirmation email.
@@ -890,17 +927,16 @@ public class WebCalendarEventUtil
 			if (StringUtils.isNotEmpty(wce.phoneNumber) && !"Meeting Type".equalsIgnoreCase(wce.phoneNumber))
 			{
 				client_mail = "<p>You have a new appointment with <b>" + user.name + "</b> (" + user.email
-						+ ")</p><span>Type: '" + wce.name + "' (" + wce.slot_time + "mins)</span><br/><span>Phone: "
-						+ wce.phoneNumber + "</span><br/><span>Note: " + wce.notes + "</span><br/><p><a href="
-						+ cancel_link
+						+ ")</p><span>Duration: " + wce.slot_time + "mins</span><br/><span>Phone: " + wce.phoneNumber
+						+ "</span><br/><span>Note: " + wce.notes + "</span><br/><p><a href=" + cancel_link
 						+ ">Cancel this appointment</a></p><p>This event has been scheduled using <a href=" + link
 						+ ">Agile CRM</a></p>";
 			}
 			else
 			{
 				client_mail = "<p>You have a new appointment with <b>" + user.name + "</b> (" + user.email
-						+ ")</p><span>Type: '" + wce.name + "' (" + wce.slot_time + "mins)</span><br/><span>Note: "
-						+ wce.notes + "</span><br/><p><a href=" + cancel_link
+						+ ")</p><span>Duration: " + wce.slot_time + "mins</span><br/><span>Note: " + wce.notes
+						+ "</span><br/><p><a href=" + cancel_link
 						+ ">Cancel this appointment</a></p><p>This event has been scheduled using <a href=" + link
 						+ ">Agile CRM</a></p>";
 			}
@@ -908,12 +944,19 @@ public class WebCalendarEventUtil
 			String[] attachments = { "text/calendar", "mycalendar.ics", iCal.toString() };
 
 			EmailGatewayUtil.sendEmail(null, user.email, user.name, wce.email, null, null, "Appointment Scheduled",
-					null, client_mail, null, null, null, attachments);
+					null, client_mail, null, null, null, null, attachments);
 
 		}
 		return "Done";
 	}
 
+	/**
+	 * fetches slots
+	 * 
+	 * @param id
+	 * @param meeting_types
+	 * @return
+	 */
 	public static List<String> getSlotDetails(Long id, String meeting_types)
 	{
 		JSONObject slot = new JSONObject();
@@ -1073,6 +1116,13 @@ public class WebCalendarEventUtil
 		return dateFormat.format(new Date());
 	}
 
+	/**
+	 * based on hours returns AM /PM from JSP page
+	 * 
+	 * @param hours
+	 * @return
+	 */
+
 	public static String returnTimeInAmPm(String hours)
 	{
 		if ("null".equalsIgnoreCase(hours))
@@ -1080,7 +1130,7 @@ public class WebCalendarEventUtil
 		String str = hours.substring(0, 2);
 		String mins = hours.substring(3);
 		if ("00".equals(str) || "24".equals(str))
-			return "12:" + mins + "am";
+			return "00:" + mins + "am";
 		else if ("12".equals(str))
 			return "12:" + mins + "pm";
 		Map<String, String> time_map = new HashMap<>();
@@ -1098,4 +1148,211 @@ public class WebCalendarEventUtil
 		}
 
 	}
+
+	/**
+	 * checks the selcted slot availabilty while creating event intracting with
+	 * 
+	 * {@link checkSlotInListOfLists}
+	 * 
+	 * @param wce
+	 * @return
+	 */
+
+	public static boolean checkSlotAvailability(WebCalendarEvent wce, List<Long> slot)
+	{
+		List<List<Long>> filledGoogleSlots = GoogleCalendarUtil.getFilledGoogleSlots(wce.domainUserId,
+				(int) (long) wce.slot_time, wce.timezone_offset, wce.timezone, wce.midnight_start_time,
+				wce.midnight_end_time);
+		List<List<Long>> filledAgileSlots = getFilledAgileSlots(wce.agileUserId, (int) (long) wce.slot_time,
+				wce.midnight_start_time, wce.midnight_end_time);
+		boolean googleAvailability = checkSlotInListOfLists(filledGoogleSlots, slot);
+		boolean agileAvailability = checkSlotInListOfLists(filledAgileSlots, slot);
+		if (googleAvailability && agileAvailability)
+			return true;
+		return false;
+	}
+
+	/**
+	 * 
+	 * @param filledslots
+	 * @param selectedslot
+	 * @return
+	 */
+	public static boolean checkSlotInListOfLists(List<List<Long>> filledslots, List<Long> selectedslot)
+	{
+		if (filledslots == null || filledslots.isEmpty())
+			return true;
+		Long start_time = selectedslot.get(0);
+		Long end_time = selectedslot.get(1);
+		for (List<Long> slot : filledslots)
+		{
+			if ((slot.get(0) <= start_time && slot.get(1) > start_time)
+					|| (slot.get(0) < end_time && slot.get(1) >= end_time))
+			{
+				return false;
+			}
+		}
+		return true;
+	}
+
+	/**
+	 * converts the buffer time to seconds or milliseconds
+	 * 
+	 * @param hours
+	 * @param secOrMil
+	 *            units for buffertime mins / hours
+	 * @return
+	 */
+	public static long convertHoursToMilliSeconds(int bufferTime, String secOrMil)
+	{
+
+		long milliSecs = 0L;
+		try
+		{
+			if ("minutes".equalsIgnoreCase(secOrMil))
+			{
+				milliSecs = (long) (bufferTime * 60 * 1000);
+			}
+			else if ("hours".equalsIgnoreCase(secOrMil))
+			{
+				milliSecs = (long) bufferTime * 60 * 60 * 1000;
+			}
+		}
+		catch (Exception e)
+		{
+			System.out.println("exception occured while calculating buffertime" + e.getMessage());
+		}
+
+		return milliSecs;
+
+	}
+
+	/**
+	 * from team calendar removes duplicate schedulids
+	 * jagadeesh.agilecrm.com/calednar/jagadeesh,jagadeesh
+	 * 
+	 * @param scheduleid
+	 * @return
+	 */
+	public static List<String> removeDuplicateScheduleIds(String scheduleid)
+	{
+		String[] names = scheduleid.split(",");
+		List<String> list = Arrays.asList(names);
+		Set<String> toRetain = new TreeSet<String>(String.CASE_INSENSITIVE_ORDER);
+		toRetain.addAll(list);
+		Set<String> set = new LinkedHashSet<String>(list);
+		set.retainAll(new LinkedHashSet<String>(toRetain));
+		list = new ArrayList<String>(set);
+		return list;
+	}
+
+	/**
+	 * creates json object from with required values for team online calendar
+	 * 
+	 * @param online_prefs
+	 * @param _domain_user
+	 * @param agile_user
+	 * @return
+	 */
+	public static JSONObject createNewJSONFromOnlineCalendarPage(OnlineCalendarPrefs online_prefs,
+			DomainUser _domain_user, AgileUser agile_user)
+	{
+		JSONObject domain_user_json = new JSONObject();
+		try
+		{
+			domain_user_json.put("id", _domain_user.id);
+			domain_user_json.put("name", _domain_user.name);
+			domain_user_json.put("agile_user_id", agile_user.id);
+			if (online_prefs != null)
+			{
+				domain_user_json.put("meeting_durations", online_prefs.meeting_durations);
+				domain_user_json.put("meeting_types", online_prefs.meeting_types.split(","));
+				domain_user_json.put("slot_details", getSlotDetails(null, online_prefs.meeting_durations));
+				domain_user_json.put("buffer_time",
+						convertHoursToMilliSeconds(online_prefs.bufferTime, online_prefs.bufferTimeUnit));
+			}
+			else
+			{
+				domain_user_json.put("meeting_durations", _domain_user.meeting_durations);
+				domain_user_json.put("meeting_types", _domain_user.meeting_types.split(","));
+				domain_user_json.put("slot_details", getSlotDetails(null, _domain_user.meeting_durations));
+			}
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+		// TODO: handle exception
+		return domain_user_json;
+	}
+
+	/**
+	 * creates list of values to show all user details in team calendar
+	 * 
+	 * @param business_hours
+	 *            array current day business hours
+	 * @param us_prefs
+	 *            current user prefs
+	 * @param _domain_user
+	 *            current domain user
+	 * @return
+	 */
+	public static List<String> getProfileListWithValuesForTeamCalednar(JSONArray business_hours, UserPrefs us_prefs,
+			DomainUser _domain_user)
+	{
+
+		List<String> profile = new ArrayList<String>();
+		try
+		{
+			JSONObject _hours = new JSONObject(business_hours.get(
+					getWeekDayAccordingToJS(Calendar.getInstance().get(Calendar.DAY_OF_WEEK))).toString());
+
+			String from_time = WebCalendarEventUtil.returnTimeInAmPm(_hours.getString("timeFrom"));
+
+			String end_time = WebCalendarEventUtil.returnTimeInAmPm(_hours.getString("timeTill"));
+			if (StringUtils.isEmpty(us_prefs.pic))
+				us_prefs.pic = "/img/gravatar.png";
+			profile.add(us_prefs.pic);
+			profile.add(_domain_user.name);
+			if (StringUtils.isNotEmpty(from_time) && StringUtils.isNotEmpty(end_time))
+				profile.add(from_time + " - " + end_time);
+			else
+				profile.add("Today is holiday");
+			profile.add(StringUtils.isNotEmpty(us_prefs.timezone) ? us_prefs.timezone : AccountPrefsUtil
+					.getAccountPrefs().timezone);
+			profile.add(String.valueOf(_domain_user.id));
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+		return profile;
+	}
+
+	/**
+	 * if url is jagadeesh.agilecrm.com/calenar/jagadeesh/1-3 only 1 and 3 slots
+	 * will be shown and remaining will be hidden. if user enters 1-1-2 this
+	 * method removes duplicates slots
+	 * @param slots
+	 * @return  array of removed slots
+	 */
+	public static String[] getSlotsArrayFromUrl(String slots)
+	{
+		String[] slots_array = null;
+		slots_array = slots.split("-");
+		List<String> list = Arrays.asList(slots_array);
+		Set<String> set = new HashSet<String>(list);
+		String[] result = new String[set.size()];
+		String after_sorting[] = set.toArray(result);
+		if (after_sorting.length == slots_array.length)
+		{
+			slots_array = slots_array;
+		}
+		else
+		{
+			slots_array = after_sorting;
+		}
+		return slots_array;
+	}
+
 }

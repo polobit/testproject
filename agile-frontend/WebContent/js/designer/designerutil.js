@@ -139,7 +139,17 @@ function getTwilioIncomingList(type)
 
 function getCampaignList(type)
 {
-	var workflows = $.ajax({ type : "GET", url : '/core/api/workflows', async : false, dataType : 'json' }).responseText;
+	
+
+	try{
+		var count = (window.parent.App_Workflows.workflow_list_view.collection.length);
+			return count;
+	}
+	catch(err){
+		return 0;
+	}
+	return 0;
+	/*var workflows = $.ajax({ type : "GET", url : '/core/api/workflows', async : false, dataType : 'json' }).responseText;
 
 	// Parse stringify json
 	var data = JSON.parse(workflows);
@@ -154,7 +164,7 @@ function getCampaignList(type)
 
 	});
 
-	return listOfWorkflows;
+	return listOfWorkflows;*/
 }
 
 /**
@@ -473,11 +483,20 @@ function getMergeFieldsWithOptGroups(uiFieldDefinition, selectEventHandler)
 			"Score" : "{{score}}",
 			"Created Date" : "{{created_date}}", 
 			"Modified Date" : "{{modified_date}}", 
-			"Email" : "{{email}}", 
+			"Email" : "{{email}}",
+			"Email Work":"{{email_work}}", 
+			"Email Personal":"{{email_home}}", 
 			"Company" : "{{company}}", 
 			"Title" : "{{title}}",
 			"Website" : "{{website}}", 
-			"Phone" : "{{phone}}"
+			"Phone" : "{{phone}}",
+			"Phone Work" : "{{phone_work}}",
+			"Phone Home" : "{{phone_home}}",
+			"Phone Mobile" : "{{phone_mobile}}",
+			"Phone Main" : "{{phone_main}}",
+			"Phone Home fax" : "{{phone_home_fax}}",
+			"Phone Work fax" : "{{phone_work_fax}}",
+			"Phone Other" : "{{phone_other}}"
 		},
 		"Custom Fields":{
 		},
@@ -546,4 +565,150 @@ function getMergeFieldsWithOptGroups(uiFieldDefinition, selectEventHandler)
 	
 	console.log(selectoption);
 	return selectoption;
+}
+
+function get_domain_user()
+{
+	return window.parent.CURRENT_DOMAIN_USER;
+}
+
+function openVerifyEmailModal(el)
+{
+	if (window.parent.$('#workflow-verify-email').size() != 0)
+		window.parent.$('#workflow-verify-email').remove();
+	
+	var selected = $(el).find(':selected').val();
+	
+	if(selected == 'verify_email')
+		window.parent.workflow_alerts("Verify a new From address", undefined , "workflow-verify-email-modal"
+
+			,function(modal){
+
+				// Focus on input
+				modal.on('shown.bs.modal', function () {
+  					$(this).find('input').focus();
+
+  					parent.send_verify_email();
+				});
+
+				// On hidden
+				modal.on('hidden.bs.modal', function (e) {
+  
+  					var given_email = $(this).find('input').val();
+  					
+  					resetAndFillFromSelect(given_email);
+				});
+			});
+}
+
+function rearrange_from_email_options($select, data)
+{
+
+	if(!data)
+		return;
+
+	var unverified = [];
+
+	$.each(data, function(index, obj){
+
+			if(obj.verified == "NO")
+				unverified.push(obj.email);
+
+	});
+
+  	$select.find('option').each(function(){
+
+  			var email = $(this).val()
+
+  			if(unverified.indexOf(email) != -1)
+  			{
+  				$(this).attr('unverified', 'unverified');
+  				$(this).text(email + ' (unverified)');
+  			}
+  	});
+
+}
+
+function resetAndFillFromSelect(selected_val)
+{
+	// Make send email node from email empty
+	$('#from_email').empty();
+		
+		var options =   {
+						"+ Add new": "verify_email"
+					};
+
+		fetchAndFillSelect('core/api/account-prefs/verified-emails/all', "email", "email", undefined, options, $('#from_email'), "prepend", function($select, data){
+		  	
+			$select.find("option:first").before("<option value='{{owner.email}}'>Contact's Owner</option>");
+
+			if(selected_val)
+				$select.val(selected_val).attr("selected", "selected");
+			else
+				$select.val("Contact's Owner").attr("selected", "selected");
+
+			rearrange_from_email_options($select, data);
+		});
+}
+
+// On Click, fetch verified emails and update
+$('#from_email').die('click').live('click', function(e){
+		
+		e.preventDefault();
+		
+		// current value selected
+		var selected_val = $(this).val();
+		
+		if(selected_val == "{{owner.email}}" || selected_val == "verify_email")
+			return;
+
+		// If not unverified, no need to check
+		if(!($('#from_email').find('option[value="'+selected_val+'"]').attr("unverified")))
+			return;
+
+		// resetAndFillFromSelect(selected_val);
+
+		$.getJSON('core/api/account-prefs/verified-emails/'+ selected_val, function(data){
+
+				if(data && data["verified"] == "YES")
+					$('#from_email').find('option[value="'+selected_val+'"]').attr("selected", "selected").removeAttr("unverified").text(""+selected_val+"");
+
+		});
+});
+
+function getTaskCategories(type)
+{
+	var categories = {};
+	$.ajax({
+		  url: '/core/api/categories?entity_type=TASK',
+		  type: "GET",
+		  async:false,
+		  dataType:'json',
+		  success: function (tasks) {
+			  try{
+				  $.each (tasks,function(name,value){
+					  categories[value.label]=value.name;
+					  });
+			  }catch(e){
+				  categories = null;
+			  }
+			 
+		}
+		
+	});
+
+	if (categories == null)
+		return null;
+
+	// Parse stringify json
+	return categories;
+} 
+
+function show_templates(ele, target_id)
+{
+	// current value
+	var curValue = $(ele).find(':selected').val();
+
+	// inserts text based on cursor.
+	load_email_templates(curValue);
 }

@@ -13,15 +13,18 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
+import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import net.sf.json.JSONSerializer;
 
+import com.agilecrm.activities.Activity;
 import com.agilecrm.activities.Event;
 import com.agilecrm.activities.Task;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.deals.Opportunity;
 import com.agilecrm.portlets.Portlet;
 import com.agilecrm.portlets.util.PortletUtil;
+import com.agilecrm.user.DomainUser;
 
 /**
  * <code>PortletsAPI</code> includes REST calls to interact with
@@ -135,6 +138,26 @@ public class PortletsAPI {
 		}
 	}
 	/**
+	 * Saves position of portlet, used to show portlets in ascending order 
+	 * according to position
+	 * 
+	 * @param portlets
+	 *             {@link List} of {@link Portlet}
+	 */
+	@Path("saveOnboardingPrefs")
+	@POST
+	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	public Portlet saveOnboardingPortletPrefs(Portlet portlet)throws Exception{
+		if (portlet == null)
+			return null;
+
+		Portlet portlt = PortletUtil.getPortlet(portlet.id);
+		portlt.prefs=portlet.prefs;
+		portlt.save();
+		return portlt;
+	}
+	/**
 	 * Updates a portlet
 	 * 
 	 * @param portlet
@@ -194,6 +217,7 @@ public class PortletsAPI {
 			sortKey = "-created_time";
 		return PortletUtil.getContactsList(json,sortKey);
 	}
+	
 	/**
 	 * Gets Emails opened portlet data
 	 * 
@@ -245,9 +269,9 @@ public class PortletsAPI {
 	@Path("/portletAgenda")
 	@GET
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public List<Event> getPortletAgendaList(@QueryParam("start_time") String startTime, @QueryParam("end_time") String endTime)throws Exception {
+	public List<Event> getPortletAgendaList(@QueryParam("duration") String duration,@QueryParam("start_time") String startTime, @QueryParam("end_time") String endTime)throws Exception {
 		PortletUtil.checkPrivilegesForPortlets("EVENTS");
-		return PortletUtil.getAgendaList(startTime,endTime);
+		return PortletUtil.getAgendaList(startTime,endTime,duration);
 	}
 	/**
 	 * Gets Today Tasks portlet data
@@ -257,9 +281,9 @@ public class PortletsAPI {
 	@Path("/portletTodayTasks")
 	@GET
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public List<Task> getPortletTodayTasksList(@QueryParam("start_time") String startTime, @QueryParam("end_time") String endTime)throws Exception {
+	public List<Task> getPortletTodayTasksList(@QueryParam("duration") String duration,@QueryParam("start_time") String startTime, @QueryParam("end_time") String endTime)throws Exception {
 		PortletUtil.checkPrivilegesForPortlets("TASKS");
-		return PortletUtil.getTodayTasksList(startTime,endTime);
+		return PortletUtil.getTodayTasksList(startTime,endTime,duration);
 	}
 	/**
 	 * Gets Deals By Milestone portlet data
@@ -361,11 +385,15 @@ public class PortletsAPI {
 	@Path("/portletCallsPerPerson")
 	@GET
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public JSONObject getPortletCallsPerPerson(@QueryParam("duration") String duration,@QueryParam("start-date") String startDate,@QueryParam("end-date") String endDate)throws Exception {
+	public JSONObject getPortletCallsPerPerson(@QueryParam("duration") String duration,@QueryParam("start-date") String startDate,@QueryParam("end-date") String endDate,@QueryParam("user") String user)throws Exception {
 		JSONObject json=new JSONObject();
 		json.put("duration",duration);
 		json.put("startDate", startDate);
 		json.put("endDate", endDate);
+		if(user!=null && !user.equals(""))
+			json.put("user", (JSONArray)JSONSerializer.toJSON(user));
+		else
+			json.put("user", null);
 		PortletUtil.checkPrivilegesForPortlets("ACTIVITY");
 		return PortletUtil.getPortletCallsPerPerson(json);
 	}
@@ -377,12 +405,17 @@ public class PortletsAPI {
 	@Path("/portletTaskReport")
 	@GET
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public JSONObject getTaskReportPortletData(@QueryParam("group-by") String groubBy,@QueryParam("split-by") String splitBy,@QueryParam("start-date") String startDate,@QueryParam("end-date") String endDate)throws Exception {
+	public JSONObject getTaskReportPortletData(@QueryParam("group-by") String groubBy,@QueryParam("split-by") String splitBy,@QueryParam("start-date") String startDate,@QueryParam("end-date") String endDate,@QueryParam("tasks") String tasks,@QueryParam("user") String user)throws Exception {
 		JSONObject json=new JSONObject();
 		json.put("group-by",groubBy);
 		json.put("split-by",splitBy);
 		json.put("startDate",startDate);
 		json.put("endDate",endDate);
+		json.put("tasks",tasks);
+		if(user!=null && !user.equals(""))
+			json.put("user", (JSONArray)JSONSerializer.toJSON(user));
+		else
+			json.put("user", null);
 		PortletUtil.checkPrivilegesForPortlets("TASKS");
 		return PortletUtil.getTaskReportPortletData(json);
 	}
@@ -418,5 +451,89 @@ public class PortletsAPI {
 		json.put("reportType",reportType);
 		PortletUtil.checkPrivilegesForPortlets("ACTIVITY");
 		return PortletUtil.getPortletStatsReportData(json);
+	}
+	/**
+	 * Gets Leaderboard portlet data
+	 * 
+	 * @return {@Link JSONObject}
+	 */
+	@Path("/portletLeaderboard")
+	@GET
+	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	public JSONObject getPortletLeaderboardData(@QueryParam("duration") String duration,@QueryParam("start-date") String startDate,@QueryParam("end-date") String endDate,@QueryParam("revenue") Boolean revenue,@QueryParam("dealsWon") Boolean dealsWon,@QueryParam("calls") Boolean calls,@QueryParam("tasks") Boolean tasks,@QueryParam("user") String user)throws Exception {
+		JSONObject json=new JSONObject();
+		json.put("duration",duration);
+		json.put("startDate",startDate);
+		json.put("endDate",endDate);
+		json.put("revenue",revenue);
+		json.put("dealsWon",dealsWon);
+		json.put("calls",calls);
+		json.put("tasks",tasks);
+		if(user!=null && !user.equals(""))
+			json.put("user", (JSONArray)JSONSerializer.toJSON(user));
+		else
+			json.put("user", null);
+		PortletUtil.checkPrivilegesForPortlets("ACTIVITY");
+		return PortletUtil.getPortletLeaderboardData(json);
+	}
+	/**
+	 * Gets all current domain users
+	 * 
+	 * @return {@Link JSONObject}
+	 */
+	@Path("/portletUsers")
+	@GET
+	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	public List<DomainUser> getCurrentDomainUsersForPortlets()throws Exception {
+		return PortletUtil.getCurrentDomainUsersForPortlets();
+	}
+	
+	
+	/**
+	 * Gets Activity portlet data
+	 * 
+	 * @return {List Activity}
+	 */
+	@Path("/portletCustomerActivity")
+	@GET
+	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	public List<Activity> getPortletActivityData(@QueryParam("cursor") String cursor, @QueryParam("page_size") String count)throws Exception {
+		
+		PortletUtil.checkPrivilegesForPortlets("ACTIVITY");
+		if(count!=null){
+		return PortletUtil.getPortletActivitydata(Integer.parseInt(count), cursor);
+		}
+		else
+			return null;
+	}
+	
+	/**
+	 * Gets Account portlet data
+	 * 
+	 * @return {JSONObject}
+	 */
+	@Path("/portletAccount")
+	@GET
+	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	public JSONObject getPortletAccountList()throws Exception {
+	
+		return PortletUtil.getAccountsList();
+	}
+	/**
+	 * Gets campaign emails stats based on log_Type
+	 * 
+	 * @return {@Link JSONObject}
+	 */
+	@Path("/portletCampaignstats")
+	@GET
+	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	public JSONObject getCampaignstatsForPortlets(@QueryParam("duration") String duration,@QueryParam("start-date") String startDate,@QueryParam("end-date") String endDate,@QueryParam("time_zone") String timeZone,@QueryParam("campaign_type") String campaigntype ) throws Exception{
+		JSONObject json=new JSONObject();
+		json.put("duration",duration);
+		json.put("startDate",startDate);
+		json.put("endDate",endDate);
+		json.put("timeZone",timeZone);
+		json.put("campaigntype",campaigntype);
+		return PortletUtil.getCampaignstatsForPortlets(json);
 	}
 }

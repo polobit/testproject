@@ -1,33 +1,4 @@
 var plan_json = [];
-var INTERVALS = ["monthly", "yearly", "biennial"];
-//Plans with costs
-var PLANS_COSTS_JSON = {};
-PLANS_COSTS_JSON.starter = "14.99";
-PLANS_COSTS_JSON.regular = "49.99";
-PLANS_COSTS_JSON.pro = "79.99";
-
-// Plans intervals JSON
-var PLANS_DISCOUNTS_JSON = {};
-PLANS_DISCOUNTS_JSON.monthly = "0";
-PLANS_DISCOUNTS_JSON.yearly = "20";
-PLANS_DISCOUNTS_JSON.biennial = "40";
-
-var PLANS_DISCOUNTS_JSON_NEW = {};
-
-PLANS_DISCOUNTS_JSON_NEW.starter = {};
-PLANS_DISCOUNTS_JSON_NEW.starter.monthly = "0";
-PLANS_DISCOUNTS_JSON_NEW.starter.yearly = "33.355";
-PLANS_DISCOUNTS_JSON_NEW.starter.biennial = "40";
-
-PLANS_DISCOUNTS_JSON_NEW.regular = {};
-PLANS_DISCOUNTS_JSON_NEW.regular.monthly = "0";
-PLANS_DISCOUNTS_JSON_NEW.regular.yearly = "20";
-PLANS_DISCOUNTS_JSON_NEW.regular.biennial = "40";
-
-PLANS_DISCOUNTS_JSON_NEW.pro = {};
-PLANS_DISCOUNTS_JSON_NEW.pro.monthly = "0";
-PLANS_DISCOUNTS_JSON_NEW.pro.yearly = "18.75";
-PLANS_DISCOUNTS_JSON_NEW.pro.biennial = "40";
 
 var PLAN_DETAILS = {
 		getPlanPrice : function(plan_name) {
@@ -99,7 +70,35 @@ var USER_DETAILS = {
 				return 2;
 			
 			return userJSON.plan.quantity;
+		},
+		getPlanTypeByStripe : function(userJSON){
+			var billing_data = JSON.parse(userJSON.billingData);
+			if(!billing_data.subscription)
+				return "free";
+		
+			if(billing_data.subscription.plan.name)
+			{			
+				if(billing_data.subscription.plan.name.toUpperCase().replace(/\s/g, '').split("-").length == 1) return billing_data.subscription.plan.name.toUpperCase().replace(/\s/g, '').replace("-", '_');
+	
+				// Returns lite-yearly....
+				return billing_data.subscription.plan.name.toUpperCase().replace(/\s/g, '').split("-")[0];
+			}
+			return "LITE"
+		},
+		getPlanIntervalByStripe : function(userJSON){
+			if(!userJSON)
+				return "MONTHLY";
+			var billing_data = JSON.parse(userJSON.billingData);
+			if(!billing_data.subscription || !billing_data.subscription.plan.name)
+				return "MONTHLY";
+			
+			var plan = billing_data.subscription.plan.name;
+			
+			if(plan)
+			  return billing_data.subscription.plan.name.toUpperCase().replace(/\s/g, '').split("-")[1];
+			
 		}
+
 }
 
 
@@ -127,7 +126,7 @@ function setCost(price)
 function update_price()
 {	
 	// Get the selected plan cost
-	var plan_name = $("[name='pro_vs_lite']:checked").val();
+	var plan_name = $("#plan_type").val();
 	return $("#" + plan_name + "_plan_price").text();	
 }
 
@@ -165,24 +164,35 @@ function setPriceTemplete(user_plan, element)
 function setPlan(user_plan)
 {
 	try{
-		var interval = "yearly", plan_type = "regular";
+
+	    var interval = "yearly", plan_type = "regular";
 		if(IS_NEW_USER && _plan_on_signup)
 		{
 			plan_type = _plan_on_signup.plan_type.toLowerCase();
-			interval = "MONTHLY";
+			interval = "monthly";
 		}
 		else if(user_plan != "free" && user_plan != "super")
 		{
-			plan_type = USER_DETAILS.getPlanType(USER_BILLING_PREFS);
-			interval = USER_DETAILS.getPlanInterval(USER_BILLING_PREFS);
-			
-			plan_type = plan_type.toLowerCase();
-			interval = interval.toLowerCase();
+			var stripe_subscription = getSubscription(user_plan.billingData, user_plan.plan);
+			if(stripe_subscription || CURRENT_DOMAIN_USER.domain == "admin")
+			{
+				plan_type = USER_DETAILS.getPlanTypeByStripe(USER_BILLING_PREFS);
+				interval = USER_DETAILS.getPlanIntervalByStripe(USER_BILLING_PREFS);
+				
+				plan_type = plan_type.toLowerCase();
+				interval = interval.toLowerCase();
+			}
+			else
+			{
+				interval = "monthly";
+				plan_type = "free";
+			}
 		}
 	
 		
-		$("input[value='" + plan_type + "']").trigger("click");
-		$("ul.tagsli a." + interval).trigger("click");
+		$("#plan_type").val(plan_type).trigger("change");
+		//$("ul.tagsli a." + interval).trigger("click");
+		$("#billing_cycle").val(interval).trigger("change");
 		
 		
 		
@@ -197,10 +207,11 @@ function setPlan(user_plan)
 
 
 
-$(function()
-		{
+function initializeSubscriptionListeners(){
 		
-		$('.plan-collection-in').die().live('click', function(e){
+		$('#subscribe_plan_change').off("click");
+
+		$('#subscribe_plan_change').on('click', '.plan-collection-in', function(e){
 			 
 			$(this).find("[name='pro_vs_lite']").attr('checked','checked');
 			var plan_type = "";
@@ -220,7 +231,8 @@ $(function()
 	  		
 	  		removeStyleForAPlan();
 	  		var id = $(this).parent(); 	
-	  		addStyleForAPlan(id,null);	  
+	  		addStyleForAPlan(id,null); 
+	  		$("#plan_type").val(id.attr("id").split("_")[0]);
 	  		
 	      	// Cost
 	  		setCost(update_price());
@@ -228,7 +240,7 @@ $(function()
 	  	});
 
 		// Tags selection
-		$("ul.tagsli a").die().live("click", function(e){
+		$('#subscribe_plan_change #plans-panel').off('click').on('click', 'ul.tagsli a', function(e){
 			
 			e.preventDefault();
 			
@@ -252,22 +264,68 @@ $(function()
 			// Cost
 	  		setCost(update_price());
 		});
+		
+		$('#subscribe_plan_change').on('change', '#billing_cycle', function(e){
+			e.preventDefault();
+			var plan_interval = $(this).val();
+			
+			for(var key in PLANS_COSTS_JSON) {
+				var amount = PLANS_COSTS_JSON[key];
+				var discount = 	PLAN_DETAILS.getDiscount(key, plan_interval);
+				var discount_amount = amount - ((discount/100) * amount);
+				$('#'+ key +'_plan_price').html(discount_amount.toFixed(2));
+			}
+			var price = update_price();
+			var value = $("#user_quantity").val();
+			$( "#users_quantity").text(value);
+ 	     	$("#users_total_cost").text((value * price).toFixed(2));
+			
+		});
+		$('#subscribe_plan_change').on('change', '#user_quantity', function(e){
+			e.preventDefault();
+			var value = $(this).val();
+			price = update_price();
+			$( "#users_quantity").text(value);
+ 	     	$("#users_total_cost").text((value * price).toFixed(2));
+		});
+		
+		$('#subscribe_plan_change').on('change', '#plan_type', function(e){
+			var plan_type = $(this).val();
+			$("#"+ plan_type +"_plan > .plan-collection-in").click();
+			if($(this).val() == "free")
+			{
+				$("#plans-panel .plan-collection-bot").css("opacity","0.5");
+				setCost(update_price());
+			}
+		});
 	    
-      	$('#purchase-plan').die().live('click', function(e){
-	          var quantity = $("#users_quantity").text();
+		$('#subscribe_plan_change').on('click', '#purchase-plan', function(e){
+	          /*var quantity = $("#users_quantity").text();
 	          var cost = $("#users_total_cost").text();
-	          var plan = $("input[name='pro_vs_lite']:checked").val();
+	          var plan = $("input[name='pro_vs_lite']:checked").val();*/
+      		
+      		  var quantity = $("#user_quantity").val();
+	          var cost = $("#users_total_cost").text();
+	          var plan = $("#plan_type").val();
 	          var discount = "", months = "";
-	          
-	          if(!plan)
+	          var billing_cycle = $("#billing_cycle").val();
+	          if(!plan || plan == "free")
 	         {
 	        	  alert("Please select a plan to proceed");
 	        	  return false;
 	         }
 	       
-	          if($('.monthly').hasClass("plan-select")){cycle = "Monthly";months = 1; discount = PLAN_DETAILS.getDiscount(plan, "monthly")}
+	          /*if($('.monthly').hasClass("plan-select")){cycle = "Monthly";months = 1; discount = PLAN_DETAILS.getDiscount(plan, "monthly")}
 	          else if($('.yearly').hasClass("plan-select")){cycle = "Yearly";months = 12;discount = PLAN_DETAILS.getDiscount(plan, "yearly")}
-	          else if($('.biennial').hasClass("plan-select")){cycle = "biennial";months = 24;discount = PLAN_DETAILS.getDiscount(plan, "biennial")}
+	          else if($('.biennial').hasClass("plan-select")){cycle = "biennial";months = 24;discount = PLAN_DETAILS.getDiscount(plan, "biennial")}*/
+	          
+	          if(billing_cycle == "monthly"){
+	        	  cycle = "Monthly";months = 1; discount = PLAN_DETAILS.getDiscount(plan, "monthly")
+	          }else if(billing_cycle == "yearly"){
+	        	  cycle = "Yearly";months = 12;discount = PLAN_DETAILS.getDiscount(plan, "yearly")
+	          }else if(billing_cycle == "biennial"){
+	        	  cycle = "biennial";months = 24;discount = PLAN_DETAILS.getDiscount(plan, "biennial")
+	          }
 	          
 	          var variable = [];
 			  var amount = PLANS_COSTS_JSON[plan];
@@ -335,10 +393,7 @@ $(function()
       	});
       	
      // Check coupon functionality
-    	$("#check_valid_coupon").die().live(
-    			'click',
-    			function() {
-
+	 $('#subscribe_plan_change').on('click', '#check_valid_coupon', function(e){
     				// Get coupon input value
     				var couponId = $("#coupon_code").val();
     				if (!couponId) {
@@ -359,7 +414,7 @@ $(function()
 
     			});
     	
-});	   
+}   
 
 function is_new_signup_payment()
 {

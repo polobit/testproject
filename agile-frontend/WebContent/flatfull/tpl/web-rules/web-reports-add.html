@@ -34,7 +34,7 @@
 							<table
 								class="bg-transparent web-rule-contact-condition-table chained-table">
 								<tbody>
-									<tr class="chained controls " name="rules">
+									<tr class="chained controls" name="rules">
 										<td>
 											<div name="ruleType">
 												<input type="text" class="hide" name="temp" class="required form-control"
@@ -43,7 +43,7 @@
 										</td>
 										<td class="lhs-block v-top">
 											<div id="LHS" name="LHS" class="m-r-xs">
-												<select name="temp" class="lhs form-control" id="LHS" style="width: 125px;">
+												<select name="temp" class="lhs form-control" id="LHS">
 													<optgroup label="Page conditions" id="page-conditions">
 														<option value="page" selected="selected">Page URL</option>
 														<option value="referrer">Referrer URL</option>
@@ -75,7 +75,7 @@
 										</td>
 										<td class="codition-block v-top">
 											<div id="condition" name="CONDITION" class="m-r-xs">
-												<select name="temp" class="form-control" style="min-width:60px">
+												<select name="temp" class="form-control">
 													<option value="MATCHES" class="page referrer" placeholder="Enter URL">contains</option>
 													<option value="NOT_CONTAINS" class="referrer page" placeholder="Enter URL">doesn't contain</option>
 													<option value="EQUALS" class="referrer page" placeholder="Enter URL">is</option>
@@ -151,7 +151,7 @@
 													type="text" name="temp" class="email required"/> <input id="updated_date" type="text"
 													name="updated_date"
 													class="ON AFTER BEFORE BETWEEN input required date form-control"
-													placeholder="MM/DD/YY" />
+													placeholder="{{dateFormat}}" data-date-format="{{dateFormat}}" />
 													<input type="text" name="temp"
 													class="IS_GREATER_THAN IS_LESS_THAN number required form-control" placeholder="Enter Score"/>
 													<select class="form-control">
@@ -414,7 +414,7 @@
 											<div id="RHS-NEW" name="RHS_NEW">
 												<input id="date_between" type="text" name="temp"
 													 class="BETWEEN input date required form-control"
-													placeholder="MM/DD/YY" />
+													placeholder="{{dateFormat}}"  data-date-format="{{dateFormat}}"/>
 											</div>
 										</td>
 										<td class="v-top">
@@ -438,20 +438,20 @@
 													id="date_between" type="text"
 													name="temp"
 													class="BETWEEN EQUALS AFTER BEFORE input date required xs form-control"
-													placeholder="MM/DD/YY" />
+													placeholder="{{dateFormat}}" data-date-format="{{dateFormat}}" />
 											</div>
 										</td>
 										<td class="controls v-top">
 											<div id="nested_rhs" name="nested_rhs">
 												<input id="date_between" type="text" name="temp"
 													class="BETWEEN input date required form-control"
-													placeholder="MM/DD/YY" />
+													placeholder="{{dateFormat}} data-date-format="{{dateFormat}}"" />
 											</div>
 										</td>
 
-										<td class="v-top" style="width:45px">
+										<td class="v-top">
 											<i
-											class="filter-contacts-multiple-remove icon-remove-circle c-p"
+											class="filter-contacts-multiple-remove icon-remove-circle c-p text-md"
 											style="display: none;"></i>
 											<i
 											class="filter-contacts-web-rule-multiple-add icon-plus inline-block m-r-sm m-l-xs c-p"></i></td>
@@ -509,7 +509,7 @@
 									</tr>
 									<tr>	
 										<td class="controls v-top">
-											<div name="RHS" id="WEB_RULE_RHS" class="exclude-dynamic-option-css m-r-xs" style="margin-top:3px;max-width:45% !important">
+											<div name="RHS" id="WEB_RULE_RHS" class="exclude-dynamic-option-css m-r-xs" style="margin-top:3px;">
 												</select>
 												<input type="number" name="temp" class="ADD_SCORE required number form-control" placeholder="Enter score to add"></input>
 												<input type="number" name="temp" class="SUBTRACT_SCORE required number form-control" placeholder="Enter score to substract"></input>

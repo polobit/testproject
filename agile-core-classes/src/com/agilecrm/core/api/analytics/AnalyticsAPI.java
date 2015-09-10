@@ -40,7 +40,7 @@ public class AnalyticsAPI {
 	@Produces({ MediaType.APPLICATION_JSON })
 	public List<Analytics> getAnalyticsGroupedBySessions(
 			@QueryParam("e") String searchEmail) {
-		JSONArray pageViewsList = AnalyticsSQLUtil.getPageViews(searchEmail);
+		JSONArray pageViewsList = AnalyticsSQLUtil.getPageViewsOfAllEmails(searchEmail);
 
 		JSONArray mergedStats = AnalyticsUtil
 				.mergePageViewsBasedOnSessions(pageViewsList);
@@ -73,7 +73,7 @@ public class AnalyticsAPI {
 		if (StringUtils.isEmpty(domain))
 			return 0;
 
-		return AnalyticsSQLUtil.getPageViewsCountForGivenDomain(domain);
+		return AnalyticsUtil.hasJSAPIForDomain() ? 1 : 0;
 	}
 
 	@Path("sessions-count")

@@ -35,6 +35,7 @@ var SubscribeRouter = Backbone.Router.extend({
 	 */
 	subscribe : function(id)
 	{
+		$("#content").html("<div id='subscribe_plan_change'></div>");
 		if(IS_NEW_USER && _plan_on_signup && _plan_on_signup.plan_type && _plan_on_signup.plan_type == "FREE")
 		{
 			_plan_on_signup = null;
@@ -48,7 +49,7 @@ var SubscribeRouter = Backbone.Router.extend({
 		 * states list using countries.js plugin account stats in subscription
 		 * page
 		 */
-		var subscribe_plan = new Base_Model_View({ url : "core/api/subscription", template : "subscribe-new", window : 'subscribe',
+		var subscribe_plan = new Base_Model_View({ url : "core/api/subscription?reload=true", template : "subscribe-new", window : 'subscribe',
 		/*
 		 * postRenderCallback : function(el) { // Setup account statistics
 		 * set_up_account_stats(el); // Load date and year for card expiry
@@ -58,6 +59,10 @@ var SubscribeRouter = Backbone.Router.extend({
 		 */
 		postRenderCallback : function(el)
 		{
+
+			
+			initializeSubscriptionListeners();
+			
 			var data = subscribe_plan.model.toJSON();
 			var _window = window;
 
@@ -65,6 +70,7 @@ var SubscribeRouter = Backbone.Router.extend({
 			set_up_account_stats(el);
 
 			USER_BILLING_PREFS = data;
+
 			
 			USER_CREDIRCARD_DETAILS = subscribe_plan.model.toJSON().billingData;
 			
@@ -73,10 +79,22 @@ var SubscribeRouter = Backbone.Router.extend({
 				Backbone.history.navigate("subscribe", {trigger : true});
 				return;
 			}
-			
-			var planType = data.plan.plan_type;						
+			var billing_data = JSON.parse(data.billingData);
+			var stripe_subscription = getSubscription(data.billingData, data.plan);
+			var planType = "";						
  			var id = null;
- 			var planDetails = "<span class='text-head-black'>Current Plan</span></br><span class='text-head-black'>"+data.plan.quantity+" Users</span>";
+ 			var quantity;
+ 			if(stripe_subscription == null)
+ 			{
+ 				quantity = "2";
+ 				planType = "FREE";
+ 			}
+ 			else
+ 			{
+ 				quantity = billing_data.subscription.quantity;
+ 				planType = billing_data.subscription.plan.name.toUpperCase();
+ 			}
+ 			var planDetails = "<span class='text-head-black'>Current Plan</span></br><span class='text-head-black'>"+quantity+" Users</span>";
  			if(planType.indexOf('STARTER') == 0){
  				var id = $('#starter_plan');
  			}else if(planType.indexOf('REGULAR') == 0){
@@ -87,6 +105,7 @@ var SubscribeRouter = Backbone.Router.extend({
  			
  			if(id){
  				addStyleForAPlan(id,planDetails);
+ 				$("#plan_type").val(id.attr("id").split("_")[0]);
  			}
 									
 			element = setPriceTemplete(data.plan.plan_type, el);
@@ -94,17 +113,23 @@ var SubscribeRouter = Backbone.Router.extend({
 			// Show Coupon code input field
 			id = (id && id == "coupon") ? id : "";
 			showCouponCodeContainer(id);
+			$("#user_quantity").val(quantity);
+			price = update_price();
+			$( "#users_quantity").text(quantity);
+     	    $("#users_total_cost").text((quantity * price).toFixed(2));
 
-			head.load(CSS_PATH + 'css/jslider.css', CSS_PATH + "css/misc/agile-plan-upgrade.css", LIB_PATH + 'lib/jquery.slider.min.js', function()
-			{
+			/*head.load(CSS_PATH + "css/misc/agile-plan-upgrade.css", LIB_PATH + 'lib/jquery.slider.min.js', function()
+			{ */
 				if ($.isEmptyObject(data))
 					setPlan("free");
 				else
 					setPlan(data);
-				load_slider(el);
-			});
+				
+			//	load_slider(el);
+			// });
+
 		} });
-		$('#content').html(subscribe_plan.render().el);
+		$('#subscribe_plan_change').html(subscribe_plan.render().el);
 		$(".active").removeClass("active");
 		$("#planView").addClass("active");
 	},
@@ -180,6 +205,7 @@ var SubscribeRouter = Backbone.Router.extend({
 		var upgrade_plan = new Base_Model_View({ url : "core/api/subscription", template : "purchase-plan-new", isNew : true,
 			postRenderCallback : function(el)
 			{
+				initializeSubscriptionListeners();
 				head.js(LIB_PATH + 'lib/countries.js', function()
 				{
 					print_country($("#country", el));
@@ -263,6 +289,7 @@ var SubscribeRouter = Backbone.Router.extend({
 				showNotyPopUp("information", "Your plan has been updated successfully. Please logout and login again for the new changes to apply.", "top");
 			},
 			postRenderCallback : function(el) {
+				initializeSubscriptionListeners();
 				card_expiry(el);
 				head.js(LIB_PATH + 'lib/countries.js', function()
 				{
@@ -341,6 +368,7 @@ var SubscribeRouter = Backbone.Router.extend({
 		var upgrade_plan = new Base_Model_View({ url : "core/api/subscription", template : "purchase-plan", isNew : true, data : plan,
 			postRenderCallback : function(el)
 			{
+				initializeSubscriptionListeners();
 				// Discount
 				showCouponDiscountAmount(plan_json, el);
 				card_expiry(el);
@@ -349,6 +377,16 @@ var SubscribeRouter = Backbone.Router.extend({
 			{
 				window.navigate("subscribe", { trigger : true });
 				showNotyPopUp("information", "Your plan has been updated successfully", "top");
+
+				try
+				{
+					push_actual_plan(data.plan)
+				}
+				catch(err)
+				{
+					console.log(err);
+				}
+
 			},
 			errorCallback : function(data)
 			{
@@ -392,7 +430,7 @@ var SubscribeRouter = Backbone.Router.extend({
 								return parseInt(value) >= 5;
 							}, " Should purchase a minimum of 5000 emails.");
 					
-					$("#email-quantity", el).die().live('keyup', function(e){
+					$("#email-quantity", el).on('keyup', function(e){ 
 						isValidForm($("#email-plan-form", el));
 						if(e.which == 13)
 							{
@@ -485,7 +523,7 @@ var SubscribeRouter = Backbone.Router.extend({
 					if(++counter <= 1)
 					{
 						
-						$("#account_email_plan_upgrade", el).die().live('click' , function(e){
+						$("#account_email_plan_upgrade", el).on('click' , function(e){
 							e.preventDefault();
 							that.email_subscription(subscribe_email_plan.model);
 						})
@@ -568,7 +606,8 @@ var SubscribeRouter = Backbone.Router.extend({
 		var counter = 0;
 		$(".active").removeClass("active");
 		$("#planView").addClass("active");
-		$("#content").html(LOADING_HTML);
+		$("#content").html("");
+		showTransitionBar();
 		
 		/*
 		 * Creates new view with a render callback to setup expiry dates
@@ -578,12 +617,13 @@ var SubscribeRouter = Backbone.Router.extend({
 		 */
 		$.getJSON("core/api/subscription?reload=true", function(data){
 			_billing_restriction = data.cachedData;
-			//init_acl_restriction();
-			$("#content").html(getTemplate("subscribe", data))
-		
+			init_acl_restriction();
+			$("#content").html(getTemplate("subscribe", data));
+			initializeAccountSettingsListeners();
+			initializeInvoicesListeners();
 			var subscription_model = new BaseModel(data);
 			
-			$("#change-card").die().live('click' , function(e){
+			$("#show_plan_page").on('click' , '#change-card', function(e){
 				e.preventDefault();
 				//alert("here");
 				that.showCreditCardForm(subscription_model, function(model){
@@ -598,7 +638,11 @@ var SubscribeRouter = Backbone.Router.extend({
 			that.show_card_details(subscription_model);
 			
 			that.recent_invoice(subscription_model);
-	});
+		}).done(function(){
+			hideTransitionBar();
+		}).fail(function(){
+			hideTransitionBar();
+		});
 		
 		
 	},
@@ -625,14 +669,14 @@ var SubscribeRouter = Backbone.Router.extend({
 			
 			if(++counter <= 1)
 			{
-				$("#attach_card_notification", el).die().live('click' , function(e){
+				$("#attach_card_notification", el).on('click' , function(e){
 					e.preventDefault();
 					that.showCreditCardForm(subscribe_account_plan.model, function(model){
 						Backbone.history.navigate("subscribe-plan", { trigger : true });
 					})
 				})
 				
-				$("#user-plan-details-popover", el).live('click', function(e){
+				$("#user-plan-details-popover", el).on('click', function(e){
 					  var ele = getTemplate("account-plan-details-popover", subscribe_account_plan.model.get("planLimits"));
 					  console.log(ele);
 				        $(this).attr({
@@ -687,7 +731,7 @@ var SubscribeRouter = Backbone.Router.extend({
 		 */
 		postRenderCallback : function(el)
 		{
-				$("#account_email_attach_card", el).die().live('click' , function(e){
+				$("#account_email_attach_card", el).on('click' , function(e){
 					e.preventDefault();
 					//alert("here");
 					that.showCreditCardForm(subscribe_email_plan.model, function(model){
@@ -696,7 +740,7 @@ var SubscribeRouter = Backbone.Router.extend({
 					});
 				});
 				
-				$("#account_email_plan_upgrade", el).die().live('click' , function(e){
+				$("#account_email_plan_upgrade", el).on('click' , function(e){
 					e.preventDefault();
 					that.email_subscription(subscribe_email_plan.model);
 					//alert("here");
@@ -714,7 +758,7 @@ var SubscribeRouter = Backbone.Router.extend({
 				        	//"trigger" : "hover"
 				        });
 					  
-				$("#email-plan-details-popover", el).live('click', function(e){
+				$("#email-plan-details-popover", el).on('click', function(e){
 						  $(this).popover('show');
 					  });
 				
@@ -755,6 +799,7 @@ var SubscribeRouter = Backbone.Router.extend({
 			{
 				$('.modal-backdrop').remove();	
 				$("#credit-card-form-modal").modal('hide');
+				$('body').removeClass('modal-open');
 				
 				$("#change-card").show();
 				
@@ -790,7 +835,7 @@ var SubscribeRouter = Backbone.Router.extend({
 		 */
 		postRenderCallback : function(el)
 		{
-			$("#change-card", el).die().live('click' , function(e){
+			$("#change-card", el).on('click' , function(e){
 				e.preventDefault();
 				//alert("here");
 				that.showCreditCardForm(stripe_customer_details.model, function(model){
@@ -938,22 +983,20 @@ function is_free_plan()
  */
 function addStyleForAPlan(id,planDetails){
 	if(id){
-		id.addClass('m-t-n-md');
-		id.find('.panel-heading').addClass('bg-warning').addClass('dker');
-		id.find('.price-panel').addClass('bg-warning');
-		id.find('.panel-footer').addClass('bg-light');
+		id.css("opacity","1");
+		
 		if(planDetails){
 			id.find('.user-plan').html(planDetails);
-			id.find('.djc_addtocart_link').text('Add users');
+			// id.find('.djc_addtocart_link').text('Add users');
 		}
 	}	
 }
 
 function removeStyleForAPlan(){
 	var id = $('#plans-panel');
-	id.find('.m-t-n-md').removeClass('m-t-n-md');
-	id.find('.panel-heading').removeClass('bg-warning').removeClass('dker');
-	id.find('.price-panel').removeClass('bg-warning');
-	id.find('.panel-footer').removeClass('bg-light');		
+	id.find(".plan-collection-bot").css("opacity","0.5");
+	
+	
+			
 	
 }

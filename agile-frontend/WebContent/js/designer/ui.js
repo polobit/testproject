@@ -114,9 +114,50 @@ function generateDynamicSelectUI(uiFieldDefinition, url, keyField, valField)
 	var keyField = uiFieldDefinition.dynamicName;
 	var valField = uiFieldDefinition.dynamicValue;
 	var appendNameField = uiFieldDefinition.appendToDynamicName;
-		
+	var type = uiFieldDefinition.type;
+
+	// Append or prepend
+	var arrange_type = uiFieldDefinition.arrange_type;
+	
+
+	// Select events
+	var eventHandler = uiFieldDefinition.eventHandler;
+	var event = uiFieldDefinition.event;
+
 	var selectContainer = $("<select name='" + uiFieldDefinition.name + "' title='" + uiFieldDefinition.title + "'> " + "</select>");
-	var options = uiFieldDefinition.options;
+
+	if(event && eventHandler)
+		selectContainer = $("<select id='"+uiFieldDefinition.id+"' "+getStyleAttribute(uiFieldDefinition.style)+" name='" + uiFieldDefinition.name + "' title='" + uiFieldDefinition.title + "'" + event +"='"+eventHandler+"' type='"+(type == undefined ? 'select' : type)+"'></select>");
+	
+	// For From Email select, options need to rearranged
+	if(uiFieldDefinition.id == "from_email" && uiFieldDefinition.name == "from_email")
+	{
+		// Remove Contact's owner
+		delete uiFieldDefinition.options["Contact's Owner"];
+
+		fetchAndFillSelect(url,keyField, valField, appendNameField, uiFieldDefinition.options, selectContainer, arrange_type, function($selectContainer, data){
+
+		  		$selectContainer.find("option:first").before("<option value='{{owner.email}}'>Contact's Owner</option>");
+
+				// Make Contact's owner selected
+				 $selectContainer.val("Contact's Owner").attr('selected', 'selected');
+				
+				// Rearranges options
+				rearrange_from_email_options($selectContainer, data);				
+		});
+
+		return selectContainer;
+	}
+
+	// Fetches data and fill select
+	fetchAndFillSelect(url,keyField, valField, appendNameField, uiFieldDefinition.options, selectContainer, arrange_type)
+	
+	return selectContainer;
+}
+
+function fetchAndFillSelect(url, keyField, valField, appendNameField, options, selectContainer, arrange_type, callback)
+{
+
 	var selectOptionAttributes ="";
 	
 	
@@ -129,13 +170,13 @@ function generateDynamicSelectUI(uiFieldDefinition, url, keyField, valField)
 					if(key.indexOf("*") == 0)
 					{
 						key  = key.substr(1);
-						selectOptionAttributes += "<option selected value='" + value + "'>" + key + "</option>";
+						selectOptionAttributes += "<option selected='selected' value='" + value + "'>" + key + "</option>";
 					}
 					else
 						selectOptionAttributes += "<option value='" + value + "'>" + key + "</option>";
 				});
 	 }
-	
+
 	$.ajax({
 		  url: url,
 		  async: false,
@@ -171,14 +212,20 @@ function generateDynamicSelectUI(uiFieldDefinition, url, keyField, valField)
     				else
     				    option = "<option value='" + value + "'>" + key + "</option>";
         				
-        			// Append to container	
-        			$(option).appendTo(selectContainer);	        				        								
+    				if(arrange_type && arrange_type == "prepend")
+    					$(option).prependTo(selectContainer);
+    				else
+    				{	
+    					// Append to container	
+        				$(option).appendTo(selectContainer);	        				        								
+        			}
 				}											   	   	   	  	   	  				
 		});
+
+		  if(callback && typeof (callback) === "function")
+		  	callback(selectContainer, data);
 		  }
 	});
-	
-	return selectContainer;
 }
 
 
@@ -216,6 +263,11 @@ function generateSelectUI(uiFieldDefinition, selectEventHandler) {
     	
     }
     
+    if(uiFieldDefinition.fieldType == "categories")
+    {
+    	options = getTaskCategories("categories");
+    }
+
     if(options == null)
     	options = "";
     
@@ -412,7 +464,7 @@ function loadTinyMCE(name)
 	
 }
 
-function load_email_templates()
+function load_email_templates(subtype)
 {
 	// If not empty, redirect to tinymce
 	if($('#tinyMCEhtml_email').val() !== "")
@@ -422,7 +474,12 @@ function load_email_templates()
 	}
 	
 	var strWindowFeatures = "height=650, width=800,menubar=no,location=yes,resizable=yes,scrollbars=yes,status=yes";
-	var new_window = window.open('templates.jsp?id=tinyMCEhtml_email&t=email', 'name',strWindowFeatures);
+	var new_window;
+	if(subtype != undefined)
+		new_window = window.open('templates.jsp?id=tinyMCEhtml_email&t=email&subtype='+subtype, 'name',strWindowFeatures);
+	
+	else
+		new_window = window.open('templates.jsp?id=tinyMCEhtml_email&t=email', 'name',strWindowFeatures);
 	
 	if(window.focus)
 		{
@@ -446,14 +503,27 @@ function generateHTMLEditor(uiFieldDefinition, container) {
 	if(uiFieldDefinition.value != undefined)
 		value = uiFieldDefinition.value;
 
-	var htmlDiv = "<label>HTML: <a href='#' onclick='load_email_templates(); return false;'>(Select a Template / Load from Editor)</a></label><br/><br/>";
+	var htmlDiv = "<label>HTML: <a href='#' onclick='load_email_templates(); return false;'>(Select a Template / Load from Editor)</a></label><br/><br/> ";
+	
+	htmlDiv += "<textarea  id='tinyMCE" + textAreaName +"' name='" + textAreaName + "' style='width:100%' rows='13' cols='75'>" + value + "</textarea> ";		
+	htmlDiv += "<div style='clear:both;'></div><br/><p style='margin: 0;position: relative;top: 20px;'><i>You can leave empty if you do not wish to send html emails. Plain text emails would be sent. Only HTML emails would be tracked.</i></p>";	
+
+	$(htmlDiv).appendTo(container);	
+}
+
+function generatrTemplates(uiFieldDefinition, container) {
+	
+	var textAreaName = uiFieldDefinition.name;
+	
+	var value = "";
+	if(uiFieldDefinition.value != undefined)
+		value = uiFieldDefinition.value;
+
+	var htmlDiv = "<select style='position:relative;float:right;cursor:pointer;margin-right: 10px;'><option value='agile_templates'>Agile Templates</option><option value='user_templates'>User Templates</option><option value='campaign_templates'>Agile Templates</option></select>";
 	
 	/*if(uiFieldDefinition.style)
 		htmlDiv += "<textarea  id='tinyMCE" + textAreaName +"' style='width:100%' name='" + textAreaName + "' rows='13' cols='75'>" + value + "</textarea>";		
 	else*/
-	htmlDiv += "<textarea  id='tinyMCE" + textAreaName +"' name='" + textAreaName + "' style='width:100%' rows='13' cols='75'>" + value + "</textarea>";		
-	htmlDiv += "<div style='clear:both;'></div><br/><p style='margin: 0;position: relative;top: 20px;'><i>You can leave empty if you do not wish to send html emails. Plain text emails would be sent. Only HTML emails would be tracked.</i></p>";	
-
 	$(htmlDiv).appendTo(container);	
 }
 
@@ -598,7 +668,6 @@ function _generateUIFields(selector, ui) {
             //addLabel(uiFieldDefinition.label, container);
             
             generateHTMLEditor(uiFieldDefinition, container);
-            
             continue;
         }
 
@@ -638,6 +707,12 @@ function _generateUIFields(selector, ui) {
            
            $(uiField).appendTo(container);
            continue;
+        }
+        
+        if(uiFieldType == "html_template")
+        {
+        	generatrTemplates (uiFieldDefinition, container);
+            continue;
         }
         
         if(uiFieldType == "milestones")
@@ -740,6 +815,25 @@ function _generateUIFields(selector, ui) {
            continue;
         }
         
+        if(uiFieldType == "anchor")
+        {
+        	uiField = generateAnchorUI(uiFieldDefinition);
+        	
+        	$(uiField).appendTo(container)
+        	continue;
+        }
+        
+        if(uiFieldType == "categories")
+        {
+           addLabel(uiFieldDefinition.label, container);
+          
+           
+           uiField = generateSelectUI(uiFieldDefinition);
+           
+           $(uiField).appendTo(container);
+           continue;
+        }
+
         
         // Else Input, textarea,		                
         addLabel(uiFieldDefinition.label, container);
@@ -753,6 +847,22 @@ function _generateUIFields(selector, ui) {
 
 }
 
+
+function generateAnchorUI(uiFieldDefinition)
+{
+	var style = "style=''", href="#";
+
+	if(uiFieldDefinition.href)
+		href = uiFieldDefinition.href;
+	
+	if(uiFieldDefinition.style)
+		style = getStyleAttribute(uiFieldDefinition.style);
+
+	if(uiFieldDefinition.event)
+		return "<a href='"+href+"'" + " " + style + " " + uiFieldDefinition.event+"='"+uiFieldDefinition.callback+";return;'>"+uiFieldDefinition.text+"</a>";
+
+	return "<a href='"+href+"'"  + " " + style+">"+uiFieldDefinition.text+"</a>";
+}
 
 // Constructs the UI elements from nodeDefinition. IF UI key is elements, it constructs tabs based on categories and add elements 
 // Automatically
@@ -868,6 +978,7 @@ function resetUI(selector)
 	
 }
 
+//checks if the given string contains a string
 function contains(string, substring){
 	
 	if(string == undefined || string.length == 0)

@@ -10,6 +10,8 @@
 <%@page import="org.apache.commons.lang.StringUtils"%>
 <%@page import="org.codehaus.jackson.map.ObjectMapper"%>
 <%@page import="com.agilecrm.user.util.DomainUserUtil"%>
+<%@page import="com.agilecrm.user.util.OnlineCalendarUtil"%>
+<%@page import="com.agilecrm.user.OnlineCalendarPrefs"%>
 <%@page import="com.agilecrm.user.DomainUser"%>
 <%@page import="com.agilecrm.user.util.UserPrefsUtil"%>
 <%@page import="com.agilecrm.user.UserPrefs"%>
@@ -23,163 +25,172 @@
 <%@page import="java.util.Arrays"%>
 
 <%
+/**
+ * checks for team calendar or individual calendar. gets required details to process 
+ *a request and keeps them in global variable to avoid multiple queries to db.
+ */
 String url = request.getRequestURL().toString();
-System.out.println(url);
 String[] ar=url.split("/");
 String scheduleid=ar[ar.length-2];
+
+
 String slots=null;
-List<List<String>> profile_list=new ArrayList<List<String>>();
-JSONObject single_user_map_object=new JSONObject();
 String meeting_types=null;
+//stores all users requred details to for team calendar
 JSONObject map_object=new JSONObject();
+JSONObject single_user_map_object=new JSONObject();
+		
+		
 boolean multiple_users=false;
-String [] slots_array=null;
-List<JSONArray> business_hours_array=new ArrayList<JSONArray>();
 Boolean userAvailable = false;
 Boolean emailAvailable = false;
+
+
+String [] slots_array=null;
+List<JSONArray> business_hours_array=new ArrayList<JSONArray>();
+List<List<String>> profile_list=new ArrayList<List<String>>();
+List<Long>_multiple_users=new ArrayList<Long>();
+
+
 String profile_pic = "/img/gravatar.png";
 String user_name = null;
 String domain_name=null;
 Long user_id = 0L;
 Long agile_user_id = 0L;
-String schedule_prefs=null;
 String meeting_durations=null;
-List<Long>_multiple_users=new ArrayList<Long>();
+
+
 URL ur=new URL(url);
-String d_name= NamespaceUtil.getNamespaceFromURL(ur);
+String d_name=domain_name= NamespaceUtil.getNamespaceFromURL(ur);
+String _AGILE_VERSION = SystemProperty.applicationVersion.get();
+int calendar_wk_start_day=0;
+
+//determines weathers single user calendar or tem calendar or single user with limited slots
 if(scheduleid.equalsIgnoreCase("calendar")){
     scheduleid=ar[ar.length-1];
 }
 else{
      slots=ar[ar.length-1];
-     slots_array=slots.split("-");
-     List<String> list = Arrays.asList(slots_array);
-     Set<String> set = new HashSet<String>(list);
-     String[] result = new String[set.size()];
-    String after_sorting[]=  set.toArray(result);
-    if(after_sorting.length==slots_array.length){
-	slots_array=slots_array;
-    }
-    else{
-	slots_array=after_sorting;
-    }
-     
+     slots_array=WebCalendarEventUtil.getSlotsArrayFromUrl(slots);
 }
+
+//if schedule id contains , it is team calendar
+//if team calendar then we don't consider available meeting slots
 if(scheduleid.contains(",")){
-    multiple_users=true;
-    slots_array=null;
- String [] names=scheduleid.split(",");
- List<String> list=Arrays.asList(names);
- Set<String> toRetain = new TreeSet<String>(String.CASE_INSENSITIVE_ORDER);
- toRetain.addAll(list);
- Set<String> set = new LinkedHashSet<String>(list);
- set.retainAll(new LinkedHashSet<String>(toRetain));
- list = new ArrayList<String>(set);
+    multiple_users=true; slots_array=null;
+    List<String> list=WebCalendarEventUtil.removeDuplicateScheduleIds(scheduleid);
  String _multiple_schedule_ids[]=list.toArray(new String[list.size()]);
  for(int i=0;i<=_multiple_schedule_ids.length-1;i++){
-     System.out.println(_multiple_schedule_ids[i]);
-    DomainUser _domain_user= DomainUserUtil.getDomainUserFromScheduleId(_multiple_schedule_ids[i], d_name);
-    if(_domain_user!=null){
-	AgileUser agile_user=AgileUser.getCurrentAgileUserFromDomainUser(_domain_user.id);
-	 if(agile_user==null)
-	     continue;
-	 _multiple_users.add(_domain_user.id);
-	 
-	 JSONObject domain_user_json=new JSONObject();
-	 domain_user_json.put("id",_domain_user.id);
-	 domain_user_json.put("name",_domain_user.name);
-	 domain_user_json.put("agile_user_id",agile_user.id);
-	 domain_user_json.put("meeting_durations",_domain_user.meeting_durations);
-	 domain_user_json.put("meeting_types",_domain_user.meeting_types.split(","));
-	 domain_user_json.put("slot_details",WebCalendarEventUtil. getSlotDetails(null,_domain_user.meeting_durations));
-	 map_object.put(String.valueOf(_domain_user.id), domain_user_json);
-	UserPrefs us_prefs=UserPrefsUtil.getUserPrefs(agile_user);
-	List<String> profile=new ArrayList<String>();
-	
-	JSONArray business_hours=new JSONArray(_domain_user.business_hours);
-	
-	business_hours_array.add(business_hours);
-	JSONObject _hours=new JSONObject(business_hours.get(WebCalendarEventUtil.getWeekDayAccordingToJS(Calendar.getInstance().get(Calendar.DAY_OF_WEEK))).toString());
-	
-	String from_time=WebCalendarEventUtil.returnTimeInAmPm(_hours.getString("timeFrom"));
-	
-	String end_time=WebCalendarEventUtil.returnTimeInAmPm(_hours.getString("timeTill"));
-	System.out.println(_hours+"-----------------");
-	if(StringUtils.isEmpty(us_prefs.pic))
-	    us_prefs.pic  ="/img/gravatar.png";
-	profile.add(us_prefs.pic);
-	profile.add(_domain_user.name);
-	if(StringUtils.isNotEmpty(from_time) && StringUtils.isNotEmpty(end_time))
-	profile.add(from_time+" - "+end_time);
-	else
-		profile.add("Today is holiday");
-	profile.add(StringUtils.isNotEmpty(us_prefs.timezone)?us_prefs.timezone:AccountPrefsUtil.getAccountPrefs().timezone);
-	profile.add(String.valueOf(_domain_user.id));
-	profile_list.add(profile);
-    }
- }
- 
- if(_multiple_users.size()==1){
-     multiple_users=false;
- }
-    
-}
-if (scheduleid != null && !multiple_users)
-{  
-   DomainUser domainUser=null;
-  emailAvailable = true;
-  if(_multiple_users.size()==1 && _multiple_users.size()!=0)
-      domainUser=DomainUserUtil.getDomainUser(_multiple_users.get(0));
-  if(domainUser==null)
-    domainUser = DomainUserUtil.getDomainUserFromScheduleId(scheduleid,d_name);
-//	  DomainUser domainUser = DomainUserUtil.getDomainUserFromEmail("jagadeesh@invox.com");
-		  
-  System.out.println("Domain user " + domainUser);
+     System.out.println(_multiple_schedule_ids[i]+"  schedule id");
+     OnlineCalendarPrefs online_prefs=null;
+      online_prefs=OnlineCalendarUtil.getOnlineCalendarPrefs(_multiple_schedule_ids[i]);
+      if(online_prefs==null)
+    	  continue;
 	  
-  if(domainUser != null)
-	  {
-          userAvailable = true;
-          
-	      AgileUser agileUser = AgileUser.getCurrentAgileUserFromDomainUser(domainUser.id);
-	      System.out.println("agileUser " + agileUser);
-	      if(agileUser==null){
-		  out.print("Sorry, user is not enrolled with Agile CRM.");
-		  return;
-	      }
-	      	
-	      UserPrefs userPrefs = UserPrefsUtil.getUserPrefs(agileUser);
-	      System.out.println("userPrefs " + userPrefs.pic);
-	      profile_pic = userPrefs.pic;
-	      user_name = domainUser.name;
-	      user_id = domainUser.id;
-	      agile_user_id = agileUser.id;
-	      domain_name = domainUser.domain;
-	      meeting_durations=domainUser.meeting_durations;
-	      single_user_map_object.put(String.valueOf(user_id),WebCalendarEventUtil.getSlotDetails(null, meeting_durations));
-	      meeting_types=domainUser.meeting_types;
-	     
-	      
-	      	
-	      if(StringUtils.isEmpty(userPrefs.pic))
-	          profile_pic  ="/img/gravatar.png";
-	  }  
-}
-else if(_multiple_users.size()>0){
-    userAvailable = true;emailAvailable=true;
-  
-}
-    
-    
-ObjectMapper mapper = new ObjectMapper();
+	  DomainUser _domain_user= DomainUserUtil.getDomainUser(OnlineCalendarUtil.getDomainUserID(online_prefs));
+	    if(_domain_user!=null){
+		AgileUser agile_user=AgileUser.getCurrentAgileUserFromDomainUser(_domain_user.id);
+		 if(agile_user==null)
+		     continue;
+		 _multiple_users.add(_domain_user.id);
+		
+		 map_object.put(String.valueOf(_domain_user.id), WebCalendarEventUtil.createNewJSONFromOnlineCalendarPage(online_prefs,_domain_user,agile_user));
+		UserPrefs us_prefs=UserPrefsUtil.getUserPrefs(agile_user);
+		
+		JSONArray business_hours=new JSONArray(online_prefs.business_hours);
+		
+		business_hours_array.add(business_hours);
+	
+		profile_list.add(WebCalendarEventUtil.getProfileListWithValuesForTeamCalednar(business_hours,us_prefs,_domain_user));
+	}
+
+		}
+
+		//if multiple schedule ids were given in url but no matching found
+		if (_multiple_users.size() == 1)
+		{
+	      multiple_users = false;
+		}
+
+	}
+
+	//will execute for only individual calendars
+	if (scheduleid != null && !multiple_users)
+	{
+		System.out.println(scheduleid + "  --- schedule id if only one user");
+		DomainUser domainUser = null;
+
+		OnlineCalendarPrefs online_prefs = OnlineCalendarUtil.getOnlineCalendarPrefs(scheduleid);
+		if (_multiple_users.size() == 1 && _multiple_users.size() != 0)
+	    domainUser = DomainUserUtil.getDomainUser(_multiple_users.get(0));
+		if (domainUser == null)
+	     domainUser = DomainUserUtil.getDomainUserFromScheduleId(scheduleid, d_name);
+		if (domainUser == null && online_prefs != null)
+		{
+	     domainUser = DomainUserUtil.getDomainUser(OnlineCalendarUtil.getDomainUserID(online_prefs));
+		}
+
+		System.out.println("Domain user " + domainUser);
+
+		if (domainUser != null)
+		{
+     	userAvailable = true;
+	    emailAvailable = true;
+
+	   AgileUser agileUser = AgileUser.getCurrentAgileUserFromDomainUser(domainUser.id);
+	  System.out.println("agileUser " + agileUser);
+	   if (agileUser == null)
+	   {
+		out.print("Sorry, user is not enrolled with Agile CRM.");
+		return;
+	   }
+
+	UserPrefs userPrefs = UserPrefsUtil.getUserPrefs(agileUser);
+	System.out.println("userPrefs " + userPrefs.pic);
+	profile_pic = userPrefs.pic;
+	user_name = domainUser.name;
+	user_id = domainUser.id;
+	agile_user_id = agileUser.id;
+	domain_name = domainUser.domain;
+	calendar_wk_start_day = Integer.parseInt(userPrefs.calendar_wk_start_day);
+	if (online_prefs == null)
+	{
+		meeting_durations = domainUser.meeting_durations;
+		meeting_types = domainUser.meeting_types;
+	}
+	else if (online_prefs != null)
+	{
+		meeting_durations = online_prefs.meeting_durations;
+		meeting_types = online_prefs.meeting_types;
+		single_user_map_object.put("buffer_time", WebCalendarEventUtil.convertHoursToMilliSeconds(
+				online_prefs.bufferTime, online_prefs.bufferTimeUnit));
+	}
+	single_user_map_object.put(String.valueOf(user_id),
+			WebCalendarEventUtil.getSlotDetails(null, meeting_durations));
+
+	if (StringUtils.isEmpty(userPrefs.pic))
+		profile_pic = "/img/gravatar.png";
+		}
+	}
+	else if (_multiple_users.size() > 0)
+	{
+		userAvailable = true;
+		emailAvailable = true;
+
+	}
+
+	ObjectMapper mapper = new ObjectMapper();
 %>
 <!DOCTYPE html>
 <%@page import="com.google.appengine.api.utils.SystemProperty"%>
+<%@ page contentType="text/html; charset=UTF-8" %>
 <html>
 <head>
 
 <title>Online Appointment Scheduling - <%=user_name %></title>
 <link rel="stylesheet" href="../../css/web-calendar-event/bootstrap.min.css">
-<link rel="stylesheet" href="../../css/web-calendar-event/style.css">
+<link rel="stylesheet" href="../../css/web-calendar-event/style.css?_=<%=_AGILE_VERSION%>">
+<link rel="stylesheet" type="text/css" href="/css/web-calendar-event/agile-css-framework.css?_=<%=_AGILE_VERSION%>">
 <!-- <link rel="stylesheet" href="../../css/web-calendar-event/font-awesome.min.css"> -->
 <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css">
 
@@ -198,9 +209,9 @@ ObjectMapper mapper = new ObjectMapper();
 <script type="text/javascript" src="../../lib/web-calendar-event/utils.js"></script>
 <script type="text/javascript"
 	src="../../lib/web-calendar-event/layout.js?ver=1.0.2"></script>
-<script type="text/javascript" src="../../jscore/web-calendar-event/time.js"></script>
-<script type="text/javascript" src="../../jscore/web-calendar-event/util.js"></script>
-<script type="text/javascript" src="../../jscore/web-calendar-event/ui.js"></script>
+<script type="text/javascript" src="../../jscore/web-calendar-event/time.js?_=<%=_AGILE_VERSION%>"></script>
+<script type="text/javascript" src="../../jscore/web-calendar-event/util.js?_=<%=_AGILE_VERSION%>"></script>
+<script type="text/javascript" src="../../jscore/web-calendar-event/ui.js?_=<%=_AGILE_VERSION%>"></script>
 </head>
 
 <body onload="bodyLoad();">
@@ -211,9 +222,9 @@ ObjectMapper mapper = new ObjectMapper();
      %>
 	
 		<img src="<%=profile_pic%>" id="avatar" class="thumbnail" title="<%=user_name%>"/>
-		<p class="lead" style="color: #777;font-size: 19px;text-align: center;font-weight:normal">Welcome to my scheduling page. Please follow the instructions to book a appointment.</p>
+		<p class="lead" style="color: #777;font-size: 19px;text-align: center;font-weight:normal">Welcome to my scheduling page. Please follow the instructions to book an appointment.</p>
 <%}else{ %>
-<p class="lead" style="color: #777;font-size: 19px;text-align: center;font-weight:normal"> Welcome to our scheduling page. Please follow the instructions to book a appointment.</p>
+<p class="lead" style="color: #777;font-size: 19px;text-align: center;font-weight:normal"> Welcome to our scheduling page. Please follow the instructions to book an appointment.</p>
 			<div class="col-sm-10 segment segment0">
 			<div class="numberlt" id="users_div">1</div>
 			<div class="event-title">Select a Person</div>
@@ -1161,6 +1172,7 @@ ObjectMapper mapper = new ObjectMapper();
 var User_Name = <%=mapper.writeValueAsString(user_name)%>;
 var User_Id = <%=user_id%>;
 var Agile_User_Id = <%=agile_user_id%>;
+var CALENDAR_WEEK_START_DAY=<%=calendar_wk_start_day%>
 var selecteddate="";
 var SELECTED_TIMEZONE="";
 var current_date_mozilla="";
@@ -1174,17 +1186,10 @@ var business_hours_array=<%=business_hours_array%>;
 var multiple_schedule_ids=<%=multiple_users%>;
 var meeting_types=[];
 var slot_details=[];
- var User_Name = <%=mapper.writeValueAsString(user_name)%>;
- var single_user_mapobject=<%=single_user_map_object%>;
- var User_Id = <%=user_id%>;
- var Agile_User_Id = <%=agile_user_id%>;
- var selecteddate="";
- var SELECTED_TIMEZONE="";
- var current_date_mozilla="";
- var domainname=<%=mapper.writeValueAsString(domain_name)%>;
- var meeting_duration=<%=mapper.writeValueAsString(meeting_durations)%>;
- var slot_array=<%=mapper.writeValueAsString(slots_array)%>;
- var CURRENT_DAY_OPERATION=null;
+var single_user_mapobject=<%=single_user_map_object%>;
+var CURRENT_DAY_OPERATION=null;
+var MEETING_DURATION_AND_NAMES=null;
+var BUFFERTIME=null;
  </script>
 
 	<script type="text/javascript">
@@ -1222,7 +1227,7 @@ var slot_details=[];
 					// Initialize date picker
 					$('#datepick').DatePicker({ flat : true, date : [
 							'2014-07-6', '2016-07-28'
-					], current : '' + currentDate, format : 'Y-m-d', calendars : 1,starts: 0, mode : 'single', view : 'days', onRender: function(date) {
+					], current : '' + currentDate, format : 'Y-m-d', calendars : 1,starts: CALENDAR_WEEK_START_DAY, mode : 'single', view : 'days', onRender: function(date) {
 						return {
 							disabled: (date.valueOf() < Date.now()-ms),
 							className: date.valueOf() < Date.now()-ms ? 'datepickerNotInMonth' : false

@@ -7,6 +7,7 @@
  * @module Search author: Yaswanth
  */
 var filter_name;
+var CONTACTS_DYNAMIC_FILTER_COOKIE_STATUS = "toggle_dynamic_filter_" + CURRENT_DOMAIN_USER.id;
 
 /**
  * Change name of input[name='temp'] to more random i.e. temp-<unique_number>.
@@ -22,14 +23,15 @@ function scramble_input_names(el)
 		scrambled_index+=1;
 	});
 }
-
-$(function()
+SEARCHABLE_CONTACT_CUSTOM_FIELDS = undefined;
+COMPANY_CUSTOM_FIELDS = undefined;
+function initializeContactFiltersListeners()
 {
-	SEARCHABLE_CONTACT_CUSTOM_FIELDS = undefined;
-	COMPANY_CUSTOM_FIELDS = undefined;
-	
+}
+$(function(){
+
 	// Filter Contacts- Clone Multiple
-	$(".filter-contacts-multiple-add").die().live('click', function(e)
+	$('body').on('click', '.filter-contacts-multiple-add', function(e)
 	{
 		e.preventDefault();
 		// To solve chaining issue when cloned
@@ -45,12 +47,12 @@ $(function()
 		// var htmlContent = $(this).closest("tr").clone();
 		$(htmlContent).find("i.filter-contacts-multiple-remove").css("display", "inline-block");
 		//hide camapign status
-		$(htmlContent).find('#LHS select').find("optgroup[label='Activities']").remove();
+		//$(htmlContent).find('#LHS select').find("optgroup[label='Activities']").remove();
 		$(this).prev('table').find("tbody").append(htmlContent);
 	});
 	
 	// Filter Contacts- Clone Multiple
-	$(".filter-contacts-multiple-add-or-rules").die().live('click', function(e)
+	$('body').on('click', '.filter-contacts-multiple-add-or-rules', function(e)
 	{
 		e.preventDefault();
 		// To solve chaining issue when cloned
@@ -66,12 +68,12 @@ $(function()
 		// var htmlContent = $(this).closest("tr").clone();
 		$(htmlContent).find("i.filter-contacts-multiple-remove").css("display", "inline-block");
 		//hide camapign status
-		$(htmlContent).find('#LHS select').find("optgroup[label='Activities']").remove()
+		//$(htmlContent).find('#LHS select').find("optgroup[label='Activities']").remove()
 		$(this).prev('table').find("tbody").append(htmlContent);
 	});
 	
 	// Filter Contacts- Clone Multiple
-	$(".filter-companies-multiple-add").die().live('click', function(e)
+	$('body').on('click', '.filter-companies-multiple-add', function(e)
 	{
 		e.preventDefault();
 		// To solve chaining issue when cloned
@@ -90,7 +92,7 @@ $(function()
 	});
 	
 	// Filter Contacts- Clone Multiple
-	$(".filter-companies-multiple-add-or-rules").die().live('click', function(e)
+	$('body').on('click', '.filter-companies-multiple-add-or-rules', function(e)
 	{
 		e.preventDefault();
 		// To solve chaining issue when cloned
@@ -111,19 +113,17 @@ $(function()
 	
 
 	// Filter Contacts- Remove Multiple
-	$("i.filter-contacts-multiple-remove").die().live('click', function(e)
+	$('body').on('click', 'i.filter-contacts-multiple-remove', function(e)
 	{
 		$(this).closest("tr").remove();
 	});
 
 	// Fetch filter result without changing route on click
-	$('.filter').live('click', function(e)
+	$('body').on('click', '.filter', function(e)
 	{
 
 		e.preventDefault();
-		eraseCookie('company_filter');
 		eraseData('dynamic_contact_filter');
-		eraseData('dynamic_company_filter');
 
 		var filter_id = $(this).attr('id');
 		var filter_type = $(this).attr('filter_type');
@@ -146,20 +146,20 @@ $(function()
 	 * If default filter is selected, removes filter cookies an load contacts
 	 * with out any query condition
 	 */
-	$('.default_filter').live('click', function(e)
+	$('body').on('click', '.default_filter', function(e)
 	{
 		e.preventDefault();
 		revertToDefaultContacts();
 	});
 
-	$('.default_contact_remove_tag').die().live('click', function(e)
+	$('body').on('click', '.default_contact_remove_tag', function(e)
 	{
 		e.preventDefault();
 		// Navigate to show form
 		Backbone.history.navigate("contacts", { trigger : true });
 	});
 
-	$('#companies-filter').live('click', function(e)
+	$('body').on('click', '#companies-filter', function(e)
 	{
 
 		e.preventDefault();
@@ -171,28 +171,10 @@ $(function()
 		App_Contacts.contacts(); // /Show Companies list, explicitly hard
 		// reload
 		return;
-		/*
-		 * {{ OLD-CODE below }} if(readCookie('contact_view')) {
-		 * App_Contacts.contact_custom_view.collection.url =
-		 * "core/api/contacts/companies"
-		 * App_Contacts.contact_custom_view.collection.fetch();
-		 * //$('.filter-dropdown',
-		 * App_Contacts.contact_custom_view.el).append(filter_name); } /* If
-		 * contactsListView is defined (default view) then load filter results
-		 * in default view
-		 * 
-		 * if(App_Contacts.contactsListView &&
-		 * App_Contacts.contactsListView.collection) { // Set url to default
-		 * view to load filter results
-		 * App_Contacts.contactsListView.collection.url =
-		 * "core/api/contacts/companies";
-		 * App_Contacts.contactsListView.collection.fetch();
-		 * //$('.filter-dropdown',
-		 * App_Contacts.contactsListView.el).append(filter_name); }
-		 */
+		
 	});
 
-	$('.lhs_chanined_parent').die().live('change', function(e)
+	$('body').on('change', '.lhs_chanined_parent', function(e)
 	{
 		e.preventDefault();
 
@@ -203,7 +185,7 @@ $(function()
 		}
 	});
 	
-	$("#condition > select").die().live('change', function(e){
+	$('body').on('change', '#condition > select', function(e){
 		e.preventDefault();
 
 		if ($(this).find("option:selected").hasClass('tags'))
@@ -214,7 +196,7 @@ $(function()
 		
 	})
 	
-	$("#contact_type").die().live('change', function(e)
+	$('body').on('change', '#contact_type', function(e)
 	{
 		if($(this).val() == 'COMPANY') {
 			$('#companies-filter-wrapper').show();
@@ -224,7 +206,6 @@ $(function()
 			$('#contacts-filter-wrapper').show();
 		}
 	});
-	
 	
 });
 
@@ -248,7 +229,7 @@ function setupContactFilterList(cel, tag_id)
 	var filter_id = null;
 		contactFiltersListView = new Base_Collection_View(
 			{
-				url : '/core/api/filters',
+				url : '/core/api/filters?type=PERSON',
 				sort_collection : false,
 				restKey : "ContactFilter",
 				templateKey : "contact-filter-list",
@@ -286,8 +267,6 @@ function setupContactFilterList(cel, tag_id)
 
 						el.find('.filter-dropdown').append(filter_name);
 					}
-					else if (filter_name = readCookie('company_filter'))
-						el.find('.filter-dropdown').append(filter_name);
 
 					if (!filter_name)
 						return;
@@ -355,6 +334,16 @@ function chainFiltersForContactAndCompany(el, data, callback) {
 	}
 }
 
+function chainFiltersForContact(el, data, callback) {
+	if(data) {
+		chainFilters($(el).find('.chained-table.contact.and_rules'), data.rules, undefined, false, false);
+		chainFilters($(el).find('.chained-table.contact.or_rules'), data.or_rules, callback, false, false);			
+	} else {
+		chainFilters($(el).find('.chained-table.contact.and_rules'), undefined, undefined, false, false);
+		chainFilters($(el).find('.chained-table.contact.or_rules'), undefined, callback, false, false);
+	}
+}
+
 /**
  * Chains fields using jquery.chained library. It deserialzed data into form
  * 
@@ -375,8 +364,8 @@ function chainFilters(el, data, callback, is_webrules, is_company)
 	} else {
 		if(!SEARCHABLE_CONTACT_CUSTOM_FIELDS)
 		{			
-			if(window.location.hash.indexOf("contact-filter") != -1)
-			   $("#content").html(getRandomLoadingImg());
+			/*if(window.location.hash.indexOf("contact-filter") != -1)
+			   $("#content").html(getRandomLoadingImg());*/
 			fillContactCustomFieldsInFilters(el, function(){
 				show_chained_fields(el, data, true);
 				if (callback && typeof (callback) === "function")
@@ -469,7 +458,7 @@ function show_chained_fields(el, data, forceShow)
 
 	// If there is a change in lhs field, and it has tags in it then tags are
 	// loaded into its respective RHS block
-	$('.lhs', el).die().live('change', function(e)
+	$('.lhs', el).on('change', function(e)
 	{
 		e.preventDefault();
 		var value = $(this).val();
@@ -570,6 +559,9 @@ function fillCustomFields(fields, el, callback, is_webrules)
 			lhs_element.removeClass('hide');
 		var field = fields[i];
 
+		condition.append('<option value="EQUALS" custom_chained_class= "'+field.field_label+ " " + _AGILE_CUSTOM_DIVIDER_ +'  custom_field" class="'+field.field_label + _AGILE_CUSTOM_DIVIDER_ + ' custom_field" field_type="'+field.field_type+'" field_name="'+field.field_label+'">is</option>');
+		condition.append('<option value="NOTEQUALS" custom_chained_class= "'+field.field_label+ " " +_AGILE_CUSTOM_DIVIDER_+'  custom_field" class="'+field.field_label + _AGILE_CUSTOM_DIVIDER_ + ' custom_field" field_type="'+field.field_type+'" field_name="'+field.field_label+'">isn\'t</option>');
+
 		if(field.field_type == "DATE")
 		{
 			lhs_element.append('<option value="'+field.field_label+'_time" field_type="'+field.field_type+'">'+field.field_label+'</option>');
@@ -577,6 +569,11 @@ function fillCustomFields(fields, el, callback, is_webrules)
 			var element = condition.find("option.created_time"); 
 			add_custom_class_to_filter_elements(element, field.field_label+'_time');
 			$(element).addClass(field.field_label+'_time' + _AGILE_CUSTOM_DIVIDER_);
+			if(!is_webrules)
+			{
+				condition.append('<option value="DEFINED" custom_chained_class= "'+field.field_label+'_time'+ " " + _AGILE_CUSTOM_DIVIDER_ +'  custom_field" class="'+field.field_label +'_time '+ _AGILE_CUSTOM_DIVIDER_ + ' custom_field" field_type="'+field.field_type+'" field_name="'+field.field_label+'">is defined</option>');
+				condition.append('<option value="NOT_DEFINED" custom_chained_class= "'+field.field_label+'_time'+ " " +_AGILE_CUSTOM_DIVIDER_+'  custom_field" class="'+field.field_label +'_time																																				 '+ _AGILE_CUSTOM_DIVIDER_ + ' custom_field" field_type="'+field.field_type+'" field_name="'+field.field_label+'">is not defined</option>');
+			}
 		} else if(field.field_type == "NUMBER")
 		{
 			lhs_element.append('<option value="'+field.field_label+'_number" field_type="'+field.field_type+'">'+field.field_label+'</option>');
@@ -584,14 +581,23 @@ function fillCustomFields(fields, el, callback, is_webrules)
 			var element = condition.find("option.lead_score");
 			add_custom_class_to_filter_elements(element, field.field_label+'_number');
 			$(element).addClass(field.field_label+'_number' + _AGILE_CUSTOM_DIVIDER_);
+			if(!is_webrules)
+			{
+				condition.append('<option value="DEFINED" custom_chained_class= "'+field.field_label+'_number'+ " " + _AGILE_CUSTOM_DIVIDER_ +'  custom_field" class="'+field.field_label +'_number '+ _AGILE_CUSTOM_DIVIDER_ + ' custom_field" field_type="'+field.field_type+'" field_name="'+field.field_label+'">is defined</option>');
+				condition.append('<option value="NOT_DEFINED" custom_chained_class= "'+field.field_label+'_number'+ " " +_AGILE_CUSTOM_DIVIDER_+'  custom_field" class="'+field.field_label +'_number '+ _AGILE_CUSTOM_DIVIDER_ + ' custom_field" field_type="'+field.field_type+'" field_name="'+field.field_label+'">is not defined</option>');
+			}
+		
 		}
 		else
 		{
 			lhs_element.append('<option value="'+field.field_label+'" field_type="'+field.field_type+'" >'+field.field_label+'</option>');
-		}
+			if(!is_webrules)
+			{
+				condition.append('<option value="DEFINED" custom_chained_class= "'+field.field_label+ " " + _AGILE_CUSTOM_DIVIDER_ +'  custom_field" class="'+field.field_label + _AGILE_CUSTOM_DIVIDER_ + ' custom_field" field_type="'+field.field_type+'" field_name="'+field.field_label+'">is defined</option>');
+				condition.append('<option value="NOT_DEFINED" custom_chained_class= "'+field.field_label+ " " +_AGILE_CUSTOM_DIVIDER_+'  custom_field" class="'+field.field_label + _AGILE_CUSTOM_DIVIDER_ + ' custom_field" field_type="'+field.field_type+'" field_name="'+field.field_label+'">is not defined</option>');
+			}
 		
-		condition.append('<option value="EQUALS" custom_chained_class= "'+field.field_label+ " " + _AGILE_CUSTOM_DIVIDER_ +'  custom_field" class="'+field.field_label + _AGILE_CUSTOM_DIVIDER_ + ' custom_field" field_type="'+field.field_type+'" field_name="'+field.field_label+'">is</option>');
-		condition.append('<option value="NOTEQUALS" custom_chained_class= "'+field.field_label+ " " +_AGILE_CUSTOM_DIVIDER_+'  custom_field" class="'+field.field_label + _AGILE_CUSTOM_DIVIDER_ + ' custom_field" field_type="'+field.field_type+'" field_name="'+field.field_label+'">isn\'t</option>');
+		}
 		
 		// Contacts and not contains should only be in webrules form
 		if(is_webrules)
@@ -644,4 +650,13 @@ function add_custom_class_to_filter_elements(element, className)
 	console.log(custom_class)
 	
 	$(element).attr('custom_chained_class', custom_class);
+}
+
+function showDynamicFilters(el){
+	if(readCookie(CONTACTS_DYNAMIC_FILTER_COOKIE_STATUS)=="hide"){
+		$('#contacts-lhs-filters-toggle').hide();
+	}
+	else{
+		$('#contacts-lhs-filters-toggle').show();
+	}
 }

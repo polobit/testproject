@@ -4,12 +4,15 @@ import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Map;
+import java.util.TimeZone;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.agilecrm.contact.filter.ContactFilter;
 import com.agilecrm.search.ui.serialize.SearchRule;
+import com.agilecrm.user.UserPrefs;
+import com.agilecrm.user.util.UserPrefsUtil;
 import com.agilecrm.util.DateUtil;
 
 /**
@@ -113,24 +116,75 @@ public class TagSearchUtil
     public static JSONObject getTagCount(ContactFilter contactFilter, String tags[], String startTime, String endTime, int type) throws Exception
     {
 	JSONObject tagsCountJSONObject = new JSONObject();
+	UserPrefs userPrefs = UserPrefsUtil.getCurrentUserPrefs();
+	String timezone = "UTC";
+	if (userPrefs != null && userPrefs.timezone != null)
+	{
+		timezone = userPrefs.timezone;
+	}
 
 	// Sets calendar with start time.
-	Calendar startCalendar = Calendar.getInstance();
+	Calendar startCalendar = Calendar.getInstance(TimeZone.getTimeZone(timezone));
 	startCalendar.setTimeInMillis(Long.parseLong(startTime));
 	long startTimeMilli = startCalendar.getTimeInMillis();
 
 	// Sets calendar with end time.
-	Calendar endCalendar = Calendar.getInstance();
+	Calendar endCalendar = Calendar.getInstance(TimeZone.getTimeZone(timezone));
 	endCalendar.setTimeInMillis(Long.parseLong(endTime));
 	long endTimeMilli = endCalendar.getTimeInMillis();
+	
+	String current_timezone = DateUtil.getCurrentUserTimezoneOffset();
+	long timezoneOffsetInMilliSecs = 0L;
+	if (current_timezone != null)
+	{
+		timezoneOffsetInMilliSecs = Long.valueOf(current_timezone)*60*1000;
+	}
 
 	if (endTimeMilli < startTimeMilli)
 	    return null;
 
+	int i = 0;
 	do
 	{
 	    // Get End Time by adding a day, week or month
-	    startCalendar.add(type, 1);
+		if(i == 0 && type == Calendar.MONTH)
+		{
+		//Get first month end date and set mid night time i.e 23:59:59
+		startCalendar.set(Calendar.DAY_OF_MONTH, startCalendar.getActualMaximum(Calendar.DAY_OF_MONTH));
+		startCalendar.set(Calendar.HOUR_OF_DAY, startCalendar.getActualMaximum(Calendar.HOUR_OF_DAY));
+		startCalendar.set(Calendar.MINUTE, startCalendar.getActualMaximum(Calendar.MINUTE));
+		startCalendar.set(Calendar.SECOND, startCalendar.getActualMaximum(Calendar.SECOND));
+		startCalendar.setTimeInMillis(startCalendar.getTimeInMillis());
+		}
+		else if(type == Calendar.MONTH)
+		{
+		//Get month end date and set mid night time i.e 23:59:59
+		startCalendar.set(Calendar.DAY_OF_MONTH, startCalendar.getActualMaximum(Calendar.DAY_OF_MONTH));
+		startCalendar.set(Calendar.HOUR_OF_DAY, startCalendar.getActualMaximum(Calendar.HOUR_OF_DAY));
+		startCalendar.set(Calendar.MINUTE, startCalendar.getActualMaximum(Calendar.MINUTE));
+		startCalendar.set(Calendar.SECOND, startCalendar.getActualMaximum(Calendar.SECOND));
+		startCalendar.setTimeInMillis(startCalendar.getTimeInMillis());
+		}
+		else
+		{
+		// Get End Time by adding a day or week and set mid night time i.e 23:59:59
+		startCalendar.add(type, 1);
+		/*startCalendar.setTimeInMillis(startCalendar.getTimeInMillis()-(24*60*60*1000));
+		startCalendar.set(Calendar.HOUR_OF_DAY, startCalendar.getActualMaximum(Calendar.HOUR_OF_DAY));
+		startCalendar.set(Calendar.MINUTE, startCalendar.getActualMaximum(Calendar.MINUTE));
+		startCalendar.set(Calendar.SECOND, startCalendar.getActualMaximum(Calendar.SECOND));
+		startCalendar.setTimeInMillis(startCalendar.getTimeInMillis()+timezoneOffsetMilliSecs);*/
+		startCalendar.setTimeInMillis(startCalendar.getTimeInMillis()-1000);
+		}
+		
+		if(endTimeMilli < startCalendar.getTimeInMillis())
+		{
+		startCalendar.set(Calendar.DAY_OF_MONTH, endCalendar.get(Calendar.DAY_OF_MONTH));
+		startCalendar.set(Calendar.HOUR_OF_DAY, endCalendar.getActualMaximum(Calendar.HOUR_OF_DAY));
+		startCalendar.set(Calendar.MINUTE, endCalendar.getActualMaximum(Calendar.MINUTE));
+		startCalendar.set(Calendar.SECOND, endCalendar.getActualMaximum(Calendar.SECOND));
+		startCalendar.setTimeInMillis(endCalendar.getTimeInMillis());
+		}
 
 	    // Get Tag Count for each tag
 	    JSONObject tagsCount = new JSONObject();
@@ -141,9 +195,12 @@ public class TagSearchUtil
 	    }
 
 	    // Put time and tags array
-	    tagsCountJSONObject.put(startTimeMilli / 1000 + "", tagsCount);
+	    tagsCountJSONObject.put((startTimeMilli + timezoneOffsetInMilliSecs) / 1000 + "", tagsCount);
 
-	    startTimeMilli = startCalendar.getTimeInMillis();
+	    startTimeMilli = startCalendar.getTimeInMillis()+1000;
+	    startCalendar.setTimeInMillis(startCalendar.getTimeInMillis()+1000);
+	    
+	    i++;
 	}
 	while (startTimeMilli <= endTimeMilli);
 
@@ -173,29 +230,76 @@ public class TagSearchUtil
     {
 	JSONObject tagsCountJSONObject = new JSONObject();
 
+	UserPrefs userPrefs = UserPrefsUtil.getCurrentUserPrefs();
+	String timezone = "UTC";
+	if (userPrefs != null && userPrefs.timezone != null)
+	{
+		timezone = userPrefs.timezone;
+	}
+
 	// Sets calendar with start time.
-	Calendar startCalendar = Calendar.getInstance();
+	Calendar startCalendar = Calendar.getInstance(TimeZone.getTimeZone(timezone));
 	startCalendar.setTimeInMillis(Long.parseLong(startTime));
 	long startTimeMilli = startCalendar.getTimeInMillis();
 
 	// Sets calendar with end time.
-	Calendar endCalendar = Calendar.getInstance();
+	Calendar endCalendar = Calendar.getInstance(TimeZone.getTimeZone(timezone));
 	endCalendar.setTimeInMillis(Long.parseLong(endTime));
 	long endTimeMilli = endCalendar.getTimeInMillis();
+	
+	String current_timezone = DateUtil.getCurrentUserTimezoneOffset();
+	long timezoneOffsetInMilliSecs = 0L;
+	if (current_timezone != null)
+	{
+		timezoneOffsetInMilliSecs = Long.valueOf(current_timezone)*60*1000;
+	}
 
 	if (endTimeMilli < startTimeMilli)
 	    return null;
 
+	int i = 0;
 	do
 	{
 	    // Get End Time by adding a day, week or month
-	    startCalendar.add(type, 1);
+		if(i == 0 && type == Calendar.MONTH)
+		{
+		//Get first month end date and set mid night time i.e 23:59:59
+		startCalendar.set(Calendar.DAY_OF_MONTH, startCalendar.getActualMaximum(Calendar.DAY_OF_MONTH));
+		startCalendar.set(Calendar.HOUR_OF_DAY, startCalendar.getActualMaximum(Calendar.HOUR_OF_DAY));
+		startCalendar.set(Calendar.MINUTE, startCalendar.getActualMaximum(Calendar.MINUTE));
+		startCalendar.set(Calendar.SECOND, startCalendar.getActualMaximum(Calendar.SECOND));
+		startCalendar.setTimeInMillis(startCalendar.getTimeInMillis());
+		}
+		else if(type == Calendar.MONTH)
+		{
+		//Get month end date and set mid night time i.e 23:59:59
+		startCalendar.set(Calendar.DAY_OF_MONTH, startCalendar.getActualMaximum(Calendar.DAY_OF_MONTH));
+		startCalendar.set(Calendar.HOUR_OF_DAY, startCalendar.getActualMaximum(Calendar.HOUR_OF_DAY));
+		startCalendar.set(Calendar.MINUTE, startCalendar.getActualMaximum(Calendar.MINUTE));
+		startCalendar.set(Calendar.SECOND, startCalendar.getActualMaximum(Calendar.SECOND));
+		startCalendar.setTimeInMillis(startCalendar.getTimeInMillis());
+		}
+		else
+		{
+		// Get End Time by adding a day or week and set mid night time i.e 23:59:59
+		startCalendar.add(type, 1);
+		startCalendar.setTimeInMillis(startCalendar.getTimeInMillis()-1000);
+		}
+		
+		if(endTimeMilli < startCalendar.getTimeInMillis())
+		{
+		startCalendar.set(Calendar.DAY_OF_MONTH, endCalendar.get(Calendar.DAY_OF_MONTH));
+		startCalendar.set(Calendar.HOUR_OF_DAY, endCalendar.getActualMaximum(Calendar.HOUR_OF_DAY));
+		startCalendar.set(Calendar.MINUTE, endCalendar.getActualMaximum(Calendar.MINUTE));
+		startCalendar.set(Calendar.SECOND, endCalendar.getActualMaximum(Calendar.SECOND));
+		startCalendar.setTimeInMillis(endCalendar.getTimeInMillis());
+		}
 
 	    // Get Tag Count for each tag
 	    JSONObject tagsCount = new JSONObject();
 
 	    int tag1Count = getTagCount(contactFilter, tag1, startTimeMilli + "", startCalendar.getTimeInMillis() + "");
-	    int tag2Count = getTagCount(contactFilter, tag2, startTimeMilli + "", startCalendar.getTimeInMillis() + "");
+	    int tag2Count = getNextTagCount(contactFilter, tag1, startTimeMilli + "", startCalendar.getTimeInMillis() + "", tag2);
 
 
 	    // Get Tag Ratio
@@ -207,9 +311,12 @@ public class TagSearchUtil
 
 	    tagsCount.put("Conversion", tagRatio1);
 	    // Put time and tags array
-	    tagsCountJSONObject.put(startTimeMilli / 1000 + "", tagsCount);
+	    tagsCountJSONObject.put((startTimeMilli + timezoneOffsetInMilliSecs) / 1000 + "", tagsCount);
 
-	    startTimeMilli = startCalendar.getTimeInMillis();
+	    startTimeMilli = startCalendar.getTimeInMillis()+1000;
+	    startCalendar.setTimeInMillis(startCalendar.getTimeInMillis()+1000);
+	    
+	    i++;
 	}
 	while (startTimeMilli <= endTimeMilli);
 
@@ -349,5 +456,62 @@ public class TagSearchUtil
 
 	float percentage = ((count1 - count2) * 100f / count1);
 	return round(percentage, decimalPlace);
+    }
+    
+    /**
+     * Returns the next tag count for a given filter from main tag start to end time
+     * 
+     * @param ContactFilter
+     *            - the filter to be used. If null, it uses all contacts
+     * @param tag
+     *            - main tag to search for
+     * @param startTime
+     *            - start time of the range
+     * @param end
+     *            - end time of the range
+     * @param nextTag
+     *            - next tag to search for
+     *            
+     * @return {@link Map}
+     */
+    public static int getNextTagCount(ContactFilter contactFilter, String tag, String startTime, String endTime, String nextTag)
+    {
+
+	// Create Contact Filter if not present
+	if (contactFilter == null)
+	{
+	    contactFilter = new ContactFilter();
+	}
+
+	// Add the tag find rule
+	contactFilter.rules.add(getSearchRule(tag, startTime, endTime));
+	
+	SearchRule searchRule = new SearchRule();
+	searchRule.LHS = "tags_time";
+	searchRule.CONDITION = SearchRule.RuleCondition.EQUALS;
+	searchRule.RHS = nextTag;
+	
+	searchRule.RHS_NEW = null;
+	searchRule.nested_condition = SearchRule.RuleCondition.AFTER;
+	searchRule.nested_lhs = "1";
+	searchRule.nested_rhs = "1";
+	
+	contactFilter.rules.add(searchRule);
+
+	// Get Count
+	try
+	{
+	    int count = contactFilter.queryContactsCount();
+	    return count;
+	}
+	catch (Exception e)
+	{
+	}
+	finally
+	{
+	    //contactFilter.rules.remove(contactFilter.rules.size() - 1);
+	    System.out.println(contactFilter);
+	}
+	return 0;
     }
 }

@@ -14,8 +14,7 @@ import com.campaignio.tasklets.TaskletAdapter;
 import com.campaignio.tasklets.agile.util.AgileTaskletUtil;
 import com.campaignio.tasklets.util.TaskletUtil;
 
-public class ChangeDealMilestone extends TaskletAdapter
-{
+public class ChangeDealMilestone extends TaskletAdapter {
 	/**
 	 * Current milestone
 	 */
@@ -36,45 +35,55 @@ public class ChangeDealMilestone extends TaskletAdapter
 	 */
 	public static String OWNER_ID = "owner_id";
 
-	public void run(JSONObject campaignJSON, JSONObject subscriberJSON, JSONObject data, JSONObject nodeJSON)
-			throws Exception
-	{
-		String fromMilestone = getStringValue(nodeJSON, subscriberJSON, data, CURRENT_MILESTONE);
-		String toMilestone = getStringValue(nodeJSON, subscriberJSON, data, NEW_MILESTONE);
-		String givenOwnerId = getStringValue(nodeJSON, subscriberJSON, data, OWNER_ID);
+	public void run(JSONObject campaignJSON, JSONObject subscriberJSON,
+			JSONObject data, JSONObject nodeJSON) throws Exception {
+		String fromMilestone = getStringValue(nodeJSON, subscriberJSON, data,
+				CURRENT_MILESTONE);
+		String toMilestone = getStringValue(nodeJSON, subscriberJSON, data,
+				NEW_MILESTONE);
+		String givenOwnerId = getStringValue(nodeJSON, subscriberJSON, data,
+				OWNER_ID);
 
-		try
-		{
+		try {
 			String contactId = AgileTaskletUtil.getId(subscriberJSON);
 
-			Map<String, String> toMilestoneDetails = AgileTaskletUtil.getTrackDetails(toMilestone);
-			Map<String, String> fromMilestoneDetails = AgileTaskletUtil.getTrackDetails(fromMilestone);
-			// Get Contact Owner Id.
-			Long contactOwnerId = ContactUtil.getContactOwnerId(Long.parseLong(contactId));
+			// Get milestone and pipeline IDs of the given milestone
+			// (default_LongID)
+			Map<String, String> toMilestoneDetails = AgileTaskletUtil
+					.getTrackDetails(toMilestone);
+			Map<String, String> fromMilestoneDetails = AgileTaskletUtil
+					.getTrackDetails(fromMilestone);
 
-			LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON),
+			// Get Contact Owner Id.
+			Long contactOwnerId = ContactUtil.getContactOwnerId(Long
+					.parseLong(contactId));
+
+			LogUtil.addLogToSQL(
+					AgileTaskletUtil.getId(campaignJSON),
+					AgileTaskletUtil.getId(subscriberJSON),
 					"Changed Deal's milestone from "
-							+ (fromMilestone.equals(ANY_MILESTONE) ? "Any" : fromMilestoneDetails.get("milestone"))
+							+ (fromMilestone.equals(ANY_MILESTONE) ? "Any"
+									: fromMilestoneDetails.get("milestone"))
 							+ " to " + toMilestoneDetails.get("milestone"),
 					Log.LogType.CHANGED_DEAL_MILESTONE.toString());
 
-			if (fromMilestone.equals(ANY_MILESTONE))
-			{
+			if (fromMilestone.equals(ANY_MILESTONE)) {
 				fromMilestoneDetails.put("milestone", null);
 				fromMilestoneDetails.put("pipelineID", null);
 			}
 			// Change milestone with given values
-			changeMilestoneToRelatedDeals(contactId, fromMilestoneDetails, toMilestoneDetails,
+			changeMilestoneToRelatedDeals(contactId, fromMilestoneDetails,
+					toMilestoneDetails,
 					AgileTaskletUtil.getOwnerId(givenOwnerId, contactOwnerId));
-		}
-		catch (Exception e)
-		{
+		} catch (Exception e) {
 			e.printStackTrace();
-			System.err.println("Exception occured while changing milestone..." + e.getMessage());
+			System.err.println("Exception occured while changing milestone..."
+					+ e.getMessage());
 		}
 
 		// Execute Next One in Loop
-		TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, null);
+		TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data,
+				nodeJSON, null);
 	}
 
 	/**
@@ -89,32 +98,25 @@ public class ChangeDealMilestone extends TaskletAdapter
 	 * @param ownerId
 	 *            - Owner id
 	 */
-	private void changeMilestoneToRelatedDeals(String contactId, Map<String, String> fromMilestoneDetails,
-			Map<String, String> toMilestoneDetails, Long ownerId)
-	{
-
-		// If any milestone return null
-		// if (StringUtils.equals(fromMilestoneDetails, ANY_MILESTONE))
-		// fromMilestoneDetails = null;
-		// List<Opportunity> deals =
-		// OpportunityUtil.getOpportunitiesByFilter(ownerId == null ? null :
-		// ownerId.toString(),
-		// currentMilestone, contactId, null, 0, null, null);
-		List<Opportunity> deals = OpportunityUtil.getOpportunitiesByFilterWithoutDefaultPipeLine(
+	private void changeMilestoneToRelatedDeals(String contactId,
+			Map<String, String> fromMilestoneDetails,
+			Map<String, String> toMilestoneDetails, Long ownerId) {
+		// Get list of opportunities
+		List<Opportunity> deals = OpportunityUtil.getOpportunitiesByFilter(
 				ownerId == null ? null : ownerId.toString(),
 				fromMilestoneDetails.get("milestone"),
 				contactId,
 				null,
 				0,
 				null,
-				fromMilestoneDetails.get("pipelineID") == null ? null : Long.parseLong(fromMilestoneDetails
-						.get("pipelineID")));
+				fromMilestoneDetails.get("pipelineID") == null ? null : Long
+						.parseLong(fromMilestoneDetails.get("pipelineID")));
 
 		System.out.println("Deals size id " + deals.size());
 
-		for (Opportunity opportunity : deals)
-		{
-			opportunity.pipeline_id = Long.parseLong(toMilestoneDetails.get("pipelineID"));
+		for (Opportunity opportunity : deals) {
+			opportunity.pipeline_id = Long.parseLong(toMilestoneDetails
+					.get("pipelineID"));
 			opportunity.milestone = toMilestoneDetails.get("milestone");
 			opportunity.save();
 		}

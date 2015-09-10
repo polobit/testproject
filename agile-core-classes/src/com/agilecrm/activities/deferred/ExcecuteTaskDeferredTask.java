@@ -101,7 +101,7 @@ public class ExcecuteTaskDeferredTask implements DeferredTask
 	{
 	    Mandrill.sendMail("vVC_RtuNFH_5A99TEWXPmA", true, "noreplay@agilecrm.com", "task-reminder-failure",
 		    "jagadeesh@invox.com", null, null, "transient exception " + domain, null, "execute task reminder",
-		    null, null, null);
+		    null, null, null, null);
 	    ExcecuteTaskDeferredTask task_deferred = new ExcecuteTaskDeferredTask(domain);
 	    Queue queue = QueueFactory.getQueue("due-task-reminder");
 	    TaskOptions options = TaskOptions.Builder.withPayload(task_deferred);
@@ -121,13 +121,13 @@ public class ExcecuteTaskDeferredTask implements DeferredTask
 
 		Mandrill.sendMail("vVC_RtuNFH_5A99TEWXPmA", true, "noreplay@agilecrm.com", "task-reminder-failure",
 		        "jagadeesh@invox.com", null, null, "exception at taskreminder deferred task " + domain, null,
-		        errorString, null, null, null);
+		        errorString, null, null, null, null);
 	    }
 	    catch (Exception ex)
 	    {
 		Mandrill.sendMail("vVC_RtuNFH_5A99TEWXPmA", true, "noreplay@agilecrm.com", "task-reminder-failure",
 		        "jagadeesh@invox.com", null, null, "exception occured while sending mail " + domain, null,
-		        "exception occured task reminder deferred task", null, null, null);
+		        "exception occured task reminder deferred task", null, null, null, null);
 		ex.printStackTrace();
 		System.err.println("Exception occured while sending task notification status mail " + e.getMessage());
 	    }

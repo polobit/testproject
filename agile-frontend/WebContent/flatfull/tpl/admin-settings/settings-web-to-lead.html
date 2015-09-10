@@ -1,5 +1,6 @@
 
-<script id="admin-settings-web-to-lead-collection-template" type="text/html">
+<script id="admin-settings-web-to-lead-collection-template"
+	type="text/html">
 <div class="row">
 	<div class="col-md-12">
           <h4 class="m-b-sm m-t-none h4"> Web to Lead <small></small></h3>
@@ -74,6 +75,25 @@
 				</div><br/><a href="https://www.agilecrm.com/gravity-forms" target="_blank" class="text-info">Learn More</a>
 			</div>
 		</div>
+		
+		<!-- <div class="col-md-4 col-sm-6 col-xs-12 text-center">
+			<div class="panel wrapper text-center b-a">
+				<div class="pos-rlt">
+						<span class="label label-danger pos-abs pos-r-0">Beta</span>
+						<a href="https://www.agilecrm.com/gravity-forms" target="_blank" class="t-l-none square-thumb">
+							<center>
+							<img alt="facebook page tab" src="img/crm-plugins/facebook.png" class="img-responsive thumb-xl ">
+							</center>
+						</a>
+					<div class="clearfix"></div>
+				</div>
+				<br/>
+				<div class="ellipsis-multiline m-t-sm" style="-webkit-line-clamp: 3;word-break: break-word;width: 220px !important;height: 45px !important;"  rel="tooltip" title="Add a form to your Facebook page and gather leads.">
+					Add a form to your Facebook page and gather leads.
+				</div><br/><a href="#fbpagetab" class="btn btn-sm btn-default">Enable</a>
+			</div>
+		</div> -->
+		
 		</div>
 	 </div>
 	</div>
@@ -178,10 +198,12 @@
 	  </div>
 	</div>
 </div>
+<!-- Email Gateways -->
 <div class="row">
 	<div class="col-md-12">
-			<h4 class="m-b-sm">Email Gateways</h4>
+		<h4 class="m-b-sm">Email Gateways</h4>
 		<div class="row">
+			<!-- Mandrill -->
 			<div class="col-md-4 col-sm-6 col-xs-12 text-center" id="mandrill-email-api-integration">
 				<div class="panel wrapper text-center b-a">
 					<div class="pos-rlt">
@@ -192,7 +214,7 @@
                         <div class="clearfix"></div>
 					</div>
 					<br>
-					<div    rel="tooltip" title="Mandrill is a transactional email product by MailChimp.">
+					<div rel="tooltip" title="Mandrill is a transactional email product by MailChimp.">
 					Send your emails via your Mandrill account. Mandrill is a scalable and affordable email infrastructure service.
 					</div><br/>
 					<div align="left">
@@ -201,25 +223,87 @@
 								<a href="#" class="btn btn-sm btn-danger " id="email-gateway-delete">Disable</a>
 								<a href="#email-gateways/mandrill" class="btn btn-sm btn-default">Settings</a>
 							{{else}}
-								{{#check_plan "FREE"}}
-									<a class="btn btn-sm btn-default" disabled="disabled">Enable</a><span class="m-l-xs"><i>Paid accounts only</i></span>
-								{{else}}
-									<a href="#email-gateways/mandrill" class="btn btn-sm btn-default">Enable</a>
-								{{/check_plan}}	
+								 {{#isAllowedInCurrentPlan "is_email_gateway_allowed"}}
+					                <div>
+                      					<a href="#email-gateways/mandrill" class="btn btn-sm btn-default">Enable</a> 
+                					</div>
+           						 {{else}}
+            						<div style="/*margin: 40px auto;    width: 50%;*/ display:inline;">
+            						<div class="btn btn-sm btn-default _upgrade" id="mandrill-upgrade">Enable</div>
+                 							<div style="display:inline;float:right;display:none;" class="text-right mandrill-upgrade" ><p><i>{{toSafeString message}}</i><p>
+	                 						</div>
+	                 				</div>
+            					 {{/isAllowedInCurrentPlan}}
 							{{/gateway_exists}}
-							{{else}}
-								{{#check_plan "FREE"}}
-									<a class="btn btn-sm btn-danger" disabled="disabled">Enable</a><span class="m-l-xs"><i>Paid accounts only</i></span>
-										{{else}}
-											<a href="#email-gateways/mandrill" class="btn btn-sm btn-default">Enable</a> 
-								{{/check_plan}}	
-							{{/if}}
+						{{else}}
+							 {{#isAllowedInCurrentPlan "is_email_gateway_allowed"}}
+					                <div>
+                      					<a href="#email-gateways/mandrill" class="btn btn-sm btn-default">Enable</a> 
+                					</div>
+           						 {{else}}
+            						<div style="/*margin: 40px auto;    width: 50%;*/ display:inline;">
+            						<div class="btn btn-sm btn-default _upgrade" id="mandrill-upgrade">Enable</div>
+                 							<div style="display:inline;float:right;display:none;" class="text-right mandrill-upgrade" ><p><i>{{toSafeString message}}</i><p>
+	                 						</div>
+	                 				</div>
+            				{{/isAllowedInCurrentPlan}}
+						{{/if}}
 					</div>
+					<div class="clearfix"></div>
+				</div>
+			</div>
+			<!-- End of Mandrill -->
+			<!-- SendGrid -->
+			<div class="col-md-4 col-sm-6 col-xs-12 text-center" id="mandrill-email-api-integration">
+				<div class="panel wrapper text-center b-a">
+					<div class="pos-rlt">
+					<center><img alt="sms-integration" src="img/crm-plugins/sendgrid_logo.png" class=" thumb-xl img-responsive">
+                	</center>
+					<div class="clearfix"></div>
+				</div>
+				<br>
+				<div class="m-t-sm" rel="tooltip" ">
+				Send your emails via your SendGrid account. Sendgrid is a reliable platform to deliver transactional and marketing emails.
+				</div><br/>
+				<div align="left"> 
+					{{#if this.length}}	
+						{{#gateway_exists "SEND_GRID" this}}
+							<a href="#integrations" class="btn btn-sm btn-danger " id="email-gateway-delete"  data={{id}} >Disable</a>
+							<a href="#email-gateways/sendgrid" class="btn btn-sm btn-default">Settings</a>
+						{{else}}
+							 {{#isAllowedInCurrentPlan "is_email_gateway_allowed"}}
+					         	<div>
+                      				<a href="#email-gateways/sendgrid" class="btn btn-sm btn-default">Enable</a>
+                			 	</div>
+           					 {{else}}
+            					<div style="display:inline;">
+            						<div class="btn btn-sm btn-default _upgrade" id="sendgrid-upgrade">Enable</div>
+                 					<div style="display:inline;float:right;display:none;" class="text-right sendgrid-upgrade" calc(100% - 100px);"><i>{{toSafeString message}}</i>
+	                 				</div>
+	                 			</div>
+            				 {{/isAllowedInCurrentPlan}}
+						{{/gateway_exists}}
+					{{else}}
+						{{#isAllowedInCurrentPlan "is_email_gateway_allowed"}}
+					    	<div>
+                      			<a href="#email-gateways/sendgrid" class="btn btn-sm btn-default">Enable</a>
+                			</div>
+           				{{else}}
+            				<div style="display:inline;">
+            					<div class="btn btn-sm btn-default _upgrade" id="sendgrid-upgrade">Enable</div>
+                 				<div style="display:inline;float:right;display:none;width: calc(100% - 100px);" class="text-right sendgrid-upgrade"><i>{{toSafeString message}}</i>
+	                 			</div>
+	                 		</div>
+            			{{/isAllowedInCurrentPlan}}
+					{{/if}}
 				</div>
 			</div>
 		</div>
+		<!-- End of SendGrid -->
 	</div>
 </div>
+</div>
+
 <div class="row">
 	<div class="col-md-12" id="SMSGateway">
 	<h4 class="m-b-sm">SMS Gateways</h4>
@@ -242,20 +326,34 @@
 					{{#if this.length}}	
 						{{#gateway_exists "TWILIO" this}}
 							<a href="#integrations" class="btn btn-sm btn-danger " id="sms-gateway-delete"  data={{id}} >Disable</a>
-								<a href="#sms-gateways/twilio" class="btn btn-sm btn-">Settings</a>
+								<a href="#sms-gateways/twilio" class="btn btn-sm btn-default">Settings</a>
 						{{else}}
-							{{#check_plan "FREE"}}
-								<a class="btn btn-sm btn-default btn-addon" disabled="disabled"><i class="icon-plus m-r-xs"></i>Enable</a><span class="m-l-xs"><i>Paid accounts only</i></span>
-							{{else}}
-								<a href="#sms-gateways/twilio" class="btn btn-sm btn-default">Enable</a>
-							{{/check_plan}}	
+							{{#isAllowedInCurrentPlan "is_sms_gateway_allowed"}}
+					            <div>
+                      					<a href="#sms-gateways/twilio" class="btn btn-sm btn-default">Enable</a>
+                					</div>
+           						 {{else}}
+            						<div style="/*margin: 40px auto;    width: 50%;*/ display:inline;">
+            						<div class="btn btn-sm btn-default _upgrade" id="twilio-upgrade">Enable</div>
+                 							<div style="display:inline;float:right;display:none;width: calc(100% - 100px);" class="text-right twilio-upgrade" ><i>{{toSafeString message}}</i>
+	                 						</div>
+	                 				</div>
+            				{{/isAllowedInCurrentPlan}}	
 						{{/gateway_exists}}
 					{{else}}
-						{{#check_plan "FREE"}}
-							<a class="btn btn-sm btn-default" disabled="disabled">Enable</a><span class="m-l-xs"><i>Paid accounts only</i></span>
-						{{else}}
-							<a href="#sms-gateways/twilio" class="btn btn-sm btn-default">Enable</a> 
-						{{/check_plan}}	
+			
+						{{#isAllowedInCurrentPlan "is_sms_gateway_allowed"}}
+					            <div>
+                      					<a href="#sms-gateways/twilio" class="btn btn-sm btn-default">Enable</a>
+                					</div>
+           						 {{else}}
+            						<div style="/*margin: 40px auto;    width: 50%;*/ display:inline;">
+            						<div class="btn btn-sm btn-default _upgrade" id="twilio-upgrade">Enable</div>
+                 							<div style="display:inline;float:right;display:none;width: calc(100% - 100px);" class="text-right twilio-upgrade" ><i>{{toSafeString message}}</i>
+	                 						</div>
+	                 				</div>
+            				{{/isAllowedInCurrentPlan}}
+
 					{{/if}}
 				</div>
 			</div>
@@ -280,18 +378,30 @@
 							<a href="#integrations" class="btn btn-sm btn-danger " id="sms-gateway-delete"  data={{id}} >Disable</a>
 								<a href="#sms-gateways/plivo" class="btn btn-sm btn-default">Settings</a>
 						{{else}}
-							{{#check_plan "FREE"}}
-								<a class="btn btn-sm btn-default" disabled="disabled">Enable</a><span class="m-l-xs"><i>Paid accounts only</i></span>
-							{{else}}
-								<a href="#sms-gateways/plivo" class="btn btn-sm btn-default">Enable</a>
-							{{/check_plan}}	
+							 {{#isAllowedInCurrentPlan "is_sms_gateway_allowed"}}
+					                <div>
+                      					<a href="#sms-gateways/plivo" class="btn btn-sm btn-default">Enable</a>
+                					</div>
+           						 {{else}}
+            						<div style="/*margin: 40px auto;    width: 50%;*/ display:inline;">
+            						<div class="btn btn-sm btn-default _upgrade" id="plivo-upgrade">Enable</div>
+                 							<div style="display:inline;float:right;display:none;" class="text-right plivo-upgrade" calc(100% - 100px);"><i>{{toSafeString message}}</i>
+	                 						</div>
+	                 				</div>
+            				{{/isAllowedInCurrentPlan}}
 						{{/gateway_exists}}
 					{{else}}
-						{{#check_plan "FREE"}}
-							<a class="btn btn-sm btn-default" disabled="disabled">Enable</a><span class="m-l-xs"><i>Paid accounts only</i></span>
-						{{else}}
-							<a href="#sms-gateways/plivo" class="btn btn-sm btn-default">Enable</a> 
-						{{/check_plan}}	
+					 {{#isAllowedInCurrentPlan "is_sms_gateway_allowed"}}
+					            <div>
+                      					<a href="#sms-gateways/plivo" class="btn btn-sm btn-default">Enable</a>
+                					</div>
+           						 {{else}}
+            						<div style="/*margin: 40px auto;    width: 50%;*/ display:inline;">
+            						<div class="btn btn-sm btn-default _upgrade" id="plivo-upgrade">Enable</div>
+                 							<div style="display:inline;float:right;display:none;width: calc(100% - 100px);" class="text-right plivo-upgrade" ><i>{{toSafeString message}}</i>
+	                 						</div>
+	                 				</div>
+            				{{/isAllowedInCurrentPlan}}
 					{{/if}}
 				</div>
 			</div>
@@ -300,10 +410,10 @@
 	</div>
 </div>
 
-</script>	
+</script>
 
 
-<script id = "sms-integration-alert-modal-template" type="text/html">
+<script id="sms-integration-alert-modal-template" type="text/html">
 	<div class="modal fade" id="SMSGateway-integration-alert">
 	 <div class="modal-dialog">
     <div class="modal-content">

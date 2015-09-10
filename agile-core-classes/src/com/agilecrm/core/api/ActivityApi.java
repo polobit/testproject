@@ -11,11 +11,23 @@ import javax.ws.rs.core.MediaType;
 
 import com.agilecrm.activities.Activity;
 import com.agilecrm.activities.util.ActivityUtil;
+import com.agilecrm.util.DateUtil;
+
+
+/**
+ * <code>ActivityApi</code> class is intracts with ActivitySave to get activities based on time and filter
+ */
 
 @Path("/api/activitylog")
 public class ActivityApi
 {
 
+	/**
+	 * fetchs all activities based on cursor.
+	 * @param cursor 
+	 * @param count
+	 * @return List of actiities
+	 */
     @Path("/getAllActivities")
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
@@ -31,6 +43,18 @@ public class ActivityApi
 	return null;
     }
 
+    
+    /**
+     * fetches activities based on filters
+     * @param entitytype  "DEAL,CONTACT,DOCUMENT,CALL
+     * @param userid  
+     * @param cursor
+     * @param count
+     * @param starttime
+     * @param endtime
+     * @return
+     */
+    
     @Path("/getActivitiesOnSelectedCondition")
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
@@ -39,8 +63,14 @@ public class ActivityApi
 	    @QueryParam("page_size") String count, @QueryParam("start_time") Long starttime,
 	    @QueryParam("end_time") Long endtime)
     {
+    String time_zone = DateUtil.getCurrentUserTimezoneOffset();
 	if (starttime != null && endtime != null)
 	{
+		if (time_zone !=null )
+	    {
+	    	starttime -= (Long.parseLong(time_zone)*60*1000);
+	    	endtime -= (Long.parseLong(time_zone)*60*1000);
+	    }
 	    starttime = starttime / 1000;
 	    endtime = endtime / 1000;
 	}
@@ -50,7 +80,7 @@ public class ActivityApi
     }
 
     /**
-     * 
+     * fetches activities based on entityid
      * @param cursor
      * @param max
      * @return
@@ -83,13 +113,19 @@ public class ActivityApi
 	return null;
     }
 
+    
+    /**
+     * gets single activity entity based on activity id;
+     * @param id
+     * @return
+     */
     @Path("{id}")
     @GET
     @Produces({ MediaType.APPLICATION_JSON })
     public Activity getActivity(@PathParam("id") Long id)
     {
 	Activity activity = ActivityUtil.getActivity(id);
-	System.out.println("task id " + activity);
+	System.out.println("activity id " + activity);
 
 	return activity;
     }

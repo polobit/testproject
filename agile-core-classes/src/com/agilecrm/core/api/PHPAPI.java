@@ -70,9 +70,8 @@ public class PHPAPI
 		if (key.equals("tags"))
 		{
 		    String tagString = obj.getString(key);
-		    tagString = tagString.trim();
-		    tagString = tagString.replace("/ /g", " ");
-		    tagString = tagString.replace("/, /g", ",");
+		    tagString = tagString.trim().replaceAll(" +", " ");
+		    tagString = tagString.replaceAll(", ", ",");
 		    tags = tagString.split(",");
 		}
 		// Prepare Contact Field and add to properties list
@@ -742,9 +741,8 @@ public class PHPAPI
 		else if (key.equals("tags"))
 		{
 		    String tagString = obj.getString(key);
-		    tagString = tagString.trim();
-		    tagString = tagString.replace("/ /g", " ");
-		    tagString = tagString.replace("/, /g", ",");
+		    tagString = tagString.trim().replaceAll(" +", " ");
+		    tagString = tagString.replaceAll(", ", ",");
 		    tags = tagString.split(",");
 		}
 		else

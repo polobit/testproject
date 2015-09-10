@@ -268,15 +268,29 @@
                         "type": "text"
                     },
                     {
-                        "label": "From (Email):",
-                        "category": "Info",
-                        "name": "from_email",
-                        "id": "from_email",
-                        "required": "required",
-                        "title": "Enter your email address.",
-                        "fieldType": "input",
-                        "type": "email"
-                    },
+    					"label": "From (Email):",
+    					"category": "Info",
+    					"name": "from_email",
+    					"id": "from_email",
+    					"required": "required",
+    					"title": "Select your email address.",
+    					"url": "/core/api/account-prefs/verified-emails/all",
+    					"dynamicName": "email",
+    					"dynamicValue": "email",
+    					"arrange_type": "prepend",
+    					"fieldType": "dynamicselect",
+    					"type": "verified_email",
+    					"options": {
+        					"Contact's Owner": "{{owner.email}}",
+        					"+ Add new": "verify_email"
+    					},
+    					"event": "onchange",
+    					"eventHandler": "openVerifyEmailModal(this)",
+    					"style": {
+        					"width": "77.5%",
+        					"padding": "0.4em"
+    					}
+					},
                     {
                         "label": "To",
                         "category": "Info",
@@ -429,13 +443,7 @@
                         "type": "select"
                     },
                     {
-                        "label": "Purl Keyword:",
-                        "category": "Settings",
-                        "name": "purl_keyword",
-                        "id": "purl_keyword",
-                        "title": "While tracking clicks, AgileCRM can show a keyword in the URL. Valid only when you are tracking clicks.",
-                        "fieldType": "input",
-                        "type": "text"
+                        "label": "Simply choose timezone, day and time. Agile can schedule your email delivery."
                     },
                     {
                         "label": "Time zone",
@@ -1164,7 +1172,7 @@
                 },
                 {
                     "name": "from_email",
-                    "value": "offers@animalchow.com"
+                    "value": "{{owner.email}}"
                 },
                 {
                     "name": "to_email",
@@ -1189,10 +1197,6 @@
                 {
                     "name": "track_clicks",
                     "value": "no"
-                },
-                {
-                    "name": "purl_keyword",
-                    "value": ""
                 },
                 {
                     "name": "time_zone",

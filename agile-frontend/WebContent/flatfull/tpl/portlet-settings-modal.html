@@ -255,7 +255,7 @@
 			<div class="control-group form-group">
 				<label class="control-label">Due Date</label>
 				<div class="controls">
-                    <span><input id="due-date" type="text" name="due-date" class="required date form-control" placeholder="MM/DD/YYYY" /></span>
+                    <span><input id="due-date" type="text" placeholder="Select Date" name="due-date" class="required date form-control"/></span>
                 </div>
 			</div>
 		</form>
@@ -408,6 +408,19 @@
 					</select>
 				</div>
 			</div>
+			<div class="control-group form-group">
+				<label class="control-label">User</label>
+				<div class="controls">
+					<span class="m-xs block">
+						<a href="#" id="calls-user-select-all" class="text-info">Select all</a> |
+						<a href="#" id="calls-user-select-none" class="text-info">Select none</a>
+					</span>
+					<select id="calls-user-list" name="calls-user-list" class="required form-control" multiple>
+						
+					</select>
+					<img class="loading-img" src="img/21-0.gif"></img>
+				</div>
+			</div>
 		</form>
 	</div>
 	<div class="modal-footer">
@@ -430,12 +443,21 @@
 		<input type="hidden" id="portlet-name" />
 		<form id="portletsTaskReportSettingsForm" name="portletsTaskReportSettingsForm" method="post" >
 			<div class="control-group form-group">
-				<label class="control-label">Group by</label>
+				<label class="control-label">Report by</label>
 				<div class="controls">
 					<select id="group-by-task-report" name="group-by" class="required form-control">
 						<option value="user">User</option>
 						<option value="category">Category</option>
 						<option value="status">Status</option>
+					</select>
+				</div>
+			</div>
+			<div class="control-group form-group" id="tasks-control-group">
+				<label class="control-label">Tasks</label>
+				<div class="controls">
+					<select id="tasks-task-report" name="tasks" class="required form-control">
+						<option value="all-tasks" id="all-tasks">All Tasks</option>
+						<option value="completed-tasks" id="completed-tasks">Completed Tasks</option>
 					</select>
 				</div>
 			</div>
@@ -453,10 +475,26 @@
 				<label class="control-label">Duration</label>
 				<div class="controls">
 					<select id="duration" name="duration" class="required form-control">
-						<option value="1-day" >1 Day</option>
-						<option value="1-week">1 Week</option>
-						<option value="1-month">1 Month</option>
+						<option value="1-day" >Today</option>
+						<option value="yesterday" >Yesterday</option>
+						<option value="this-week" >This Week</option>
+						<option value="1-week">Last 7 Days</option>
+						<option value="this-month" >This Month</option>
+						<option value="1-month">Last 30 Days</option>
 					</select>
+				</div>
+			</div>
+			<div class="control-group form-group">
+				<label class="control-label">User</label>
+				<div class="controls">
+					<span class="m-xs block">
+						<a href="#" id="task-report-user-select-all" class="text-info">Select all</a> |
+						<a href="#" id="task-report-user-select-none" class="text-info">Select none</a>
+					</span>
+					<select id="task-report-user-list" name="task-report-user-list" class="required form-control" multiple>
+						
+					</select>
+					<img class="loading-img" src="img/21-0.gif"></img>
 				</div>
 			</div>
 		</form>
@@ -506,6 +544,184 @@
 </div>
 </div>
 
+<div id="portletsAgendaSettingsModal" class="modal  fade">
+<div class="modal-dialog">
+    <div class="modal-content">
+	<div class="modal-header">
+		<button class="close" data-dismiss="modal">x</button>
+		<h3 class="modal-title">Dashlet Settings</h3>
+	</div>
+	<div class="modal-body">
+		<input type="hidden" id="portlet-type" />
+		<input type="hidden" id="portlet-name" />
+		<form id="portletsAgendaSettingsForm" name="portletsAgendaSettingsForm" method="post" >
+			<div class="control-group form-group">
+				<label class="control-label">Duration</label>
+				<div class="controls">
+					<select id="duration" name="duration" class="required form-control">
+						<option value="next-7-days">Next 7 Days</option>
+						<option value="this-week">This Week</option>
+						<option value="today-and-tomorrow">Today & Tomorrow</option>
+						<option value="1-day">Today</option>
+					</select>
+				</div>
+			</div>
+		</form>
+	</div>
+	<div class="modal-footer">
+		<a id="save-modal" class="portlet-settings-save-modal save-modal btn btn-sm btn-primary" href="#">Save</a>
+		<!--  <a id="cancel-modal" href="#portlets" class="btn" data-dismiss="modal" onclick="hidePortletSettings(this);">Cancel</a>  -->
+	</div>
+</div>
+</div>
+</div>
+
+<div id="portletsTodayTasksSettingsModal" class="modal  fade">
+<div class="modal-dialog">
+    <div class="modal-content">
+	<div class="modal-header">
+		<button class="close" data-dismiss="modal">x</button>
+		<h3 class="modal-title">Dashlet Settings</h3>
+	</div>
+	<div class="modal-body">
+		<input type="hidden" id="portlet-type" />
+		<input type="hidden" id="portlet-name" />
+		<form id="portletsTodayTasksSettingsForm" name="portletsTodayTasksSettingsForm" method="post" >
+			<div class="control-group form-group">
+				<label class="control-label">Duration</label>
+				<div class="controls">
+					<select id="duration" name="duration" class="required form-control">
+						<option value="next-7-days">Next 7 Days</option>
+						<option value="this-week">This Week</option>
+						<option value="today-and-tomorrow">Today & Tomorrow</option>
+						<option value="1-day">Today</option>
+						<option value="all-over-due">All Over Due</option>
+					</select>
+				</div>
+			</div>
+		</form>
+	</div>
+	<div class="modal-footer">
+		<a id="save-modal" class="portlet-settings-save-modal save-modal btn btn-sm btn-primary" href="#">Save</a>
+		<!--  <a id="cancel-modal" href="#portlets" class="btn" data-dismiss="modal" onclick="hidePortletSettings(this);">Cancel</a>  -->
+	</div>
+</div>
+</div>
+</div>
+
+<div id="portletsLeaderboardSettingsModal" class="modal  fade">
+<div class="modal-dialog">
+    <div class="modal-content">
+	<div class="modal-header">
+		<button class="close" data-dismiss="modal">x</button>
+		<h3 class="modal-title">Dashlet Settings</h3>
+	</div>
+	<div class="modal-body">
+		<input type="hidden" id="portlet-type" />
+		<input type="hidden" id="portlet-name" />
+		<form id="portletsLeaderboardSettingsForm" name="portletsLeaderboardSettingsForm" method="post" >
+			<div class="control-group form-group">
+				<label class="control-label col-sm-2">Board<span class="field_req">*</span></label>
+				<!-- <div class="controls">
+					<select id="category" name="category" class="required form-control" multiple>
+						<option value="revenue">Revenue</option>
+						<option value="dealsWon">Deals Won</option>
+						<option value="calls">Calls</option>
+						<option value="tasks">Tasks</option>
+					</select>
+				</div> -->
+				<div class="controls col-sm-10">
+					<span class="m-xs block">
+						<a href="#" id="category-select-all" class="text-info">Select all</a> |
+						<a href="#" id="category-select-none" class="text-info">Select none</a>
+					</span>
+					<select id="category-list" name="category-list" class="required form-control" multiple="multiple">
+						<option value="revenue">Revenue</option>
+						<option value="dealsWon">Deals Won</option>
+						<option value="calls">Calls</option>
+						<option value="tasks">Tasks</option>
+					</select>
+				</div>
+			</div>
+			<div class="control-group form-group">
+				<label class="control-label col-sm-2">User<span class="field_req">*</span></label>
+				<div class="controls col-sm-10">
+					<span class="m-xs block">
+						<a href="#" id="user-select-all" class="text-info">Select all</a> |
+						<a href="#" id="user-select-none" class="text-info">Select none</a>
+					</span>
+					<select id="user-list" name="user-list" class="required form-control" multiple>
+						
+					</select>
+					<img class="loading-img" src="img/21-0.gif"></img>
+				</div>
+			</div>
+			<div class="control-group form-group">
+				<label class="control-label">Duration<span class="field_req">*</span></label>
+				<div class="controls">
+					<select id="duration" name="duration" class="required form-control">
+						<option value="this-quarter">This Quarter</option>
+						<option value="last-quarter">Last Quarter</option>
+						<option value="this-month">This Month</option>
+						<option value="last-month">Last Month</option>
+						<option value="this-week">This Week</option>
+						<option value="last-week">Last Week</option>
+					</select>
+				</div>
+			</div>
+		</form>
+	</div>
+	<div class="modal-footer">
+		<a id="save-modal" class="portlet-settings-save-modal save-modal btn btn-sm btn-primary" href="#">Save</a>
+		<!--  <a id="cancel-modal" href="#portlets" class="btn" data-dismiss="modal" onclick="hidePortletSettings(this);">Cancel</a>  -->
+	</div>
+</div>
+</div>
+</div>
+
+<div id="portletsDealsRevenueGraphSettingsModal" class="modal  fade">
+<div class="modal-dialog">
+    <div class="modal-content">
+	<div class="modal-header">
+		<button class="close" data-dismiss="modal">x</button>
+		<h3 class="modal-title">Dashlet Settings</h3>
+	</div>
+	<div class="modal-body">
+		<input type="hidden" id="portlet-type" />
+		<input type="hidden" id="portlet-name" />
+		<form id="portletsDealsRevenueGraphSettingsForm" name="portletsDealsRevenueGraphSettingsForm" method="post" >
+			<div class="control-group form-group">
+				<label class="control-label">Duration</label>
+				<div class="controls">
+					<select id="duration" name="duration" class="required form-control">
+						<option value="last-quarter">Last Quarter</option>
+						<option value="this-quarter">This Quarter</option>
+						<option value="next-quarter">Next Quarter</option>
+						<option value="this-and-next-quarter">This & Next Quarter</option>
+						<option value="this-year">This Year</option>
+						<option value="next-year">Next Year</option>
+					</select>
+				</div>
+			</div>
+			<div class="control-group form-group" id="portletsDealsRevenueGraphTrack">
+				<label class="control-label">Track</label>
+				<div class="controls">
+					<select id="track" name="track" class="required form-control">
+						
+					</select>
+					<img class="loading-img" src="img/21-0.gif"></img>
+				</div>
+			</div>
+		</form>
+	</div>
+	<div class="modal-footer">
+		<a id="save-modal" class="portlet-settings-save-modal save-modal btn btn-sm btn-primary" href="#">Save</a>
+		<!--  <a id="cancel-modal" href="#portlets" class="btn" data-dismiss="modal" onclick="hidePortletSettings(this);">Cancel</a>  -->
+	</div>
+</div>
+</div>
+</div>
+
 <div id="portletDeleteModal" class="modal  fade">
 <div class="modal-dialog">
     <div class="modal-content">
@@ -517,8 +733,55 @@
 		Delete this dashlet?
 	</div>
 	<div class="modal-footer">
-		<a id="portlet-delete-cancel-modal" href="#" class="btn btn-sm btn-danger" data-dismiss="modal">No</a>
+		<a id="portlet-delete-cancel-modal" href="#" class="btn btn-sm btn-default" data-dismiss="modal">No</a>
 		<a id="" class="portlet-delete-modal save-modal btn btn-sm btn-primary" href="#">Yes</a>
+	</div>
+</div>
+</div>
+</div>
+
+<div id="portletsCampaignStatsSettingsModal" class="modal  fade">
+<div class="modal-dialog">
+    <div class="modal-content">
+	<div class="modal-header">
+		<button class="close" data-dismiss="modal">x</button>
+		<h3 class="modal-title">Dashlet Settings</h3>
+	</div>
+	<div class="modal-body">
+		<input type="hidden" id="portlet-type" />
+		<input type="hidden" id="portlet-name" />
+		<form id="portletsCampaignStatsSettingsForm" name="portletsCampaignStatsSettingsForm" method="post" >
+			<div class="control-group form-group">
+				<label class="control-label">Duration</label>
+				<div class="controls">
+					<select id="duration" name="duration" class="required form-control">
+						<option value="1-day" >Today</option>
+						<option value="yesterday" >Yesterday</option>
+						<option value="24-hours" >Last 24 Hours</option>
+						<option value="this-week" >This Week</option>
+						<option value="last-week" >Last Week</option>
+						<option value="1-week">Last 7 Days</option>
+						<option value="this-month" >This Month</option>
+						<option value="last-month" >Last Month</option>
+						<option value="1-month">Last 30 Days</option>
+					</select>
+					
+				</div>
+			</div>
+			<div class="control-group form-group">
+				<label class="control-label">Campaign Type</label>
+				<div class="controls">
+					<select id="campaign_type" name="campaign_type" class="required form-control">
+						
+					</select>
+					
+				</div>
+			</div>
+		</form>
+	</div>
+	<div class="modal-footer">
+		<a id="save-modal" class="portlet-settings-save-modal save-modal btn btn-sm btn-primary" href="#">Save</a>
+		<!--  <a id="cancel-modal" href="#portlets" class="btn" data-dismiss="modal" onclick="hidePortletSettings(this);">Cancel</a>  -->
 	</div>
 </div>
 </div>

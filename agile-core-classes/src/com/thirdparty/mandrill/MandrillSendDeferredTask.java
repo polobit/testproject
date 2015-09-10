@@ -4,19 +4,16 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.List;
 
 import org.json.JSONObject;
 
-import com.agilecrm.document.Document;
-import com.agilecrm.document.util.DocumentUtil;
+import com.agilecrm.file.readers.IFileInputStream;
 import com.google.appengine.api.taskqueue.DeferredTask;
 
 /**
  * <code>MandrillSendDeferredTask</code> sends emails included with attachments
  * to Mandrill server. It uses streams for writing/reading data, it sends data
  * in Base64 encoded format.
- * 
  * 
  * @author Ramesh
  * 
@@ -30,13 +27,13 @@ public class MandrillSendDeferredTask implements DeferredTask
     private static final long serialVersionUID = -4648054298508104500L;
     private String mailJSONString = null;
     private String messageJSONString = null;
-    private List<Long> documentIds = null;
+    private IFileInputStream inputStream = null;
 
-    public MandrillSendDeferredTask(String mailJSONString, String messageJSONString, List<Long> documentIds)
+    public MandrillSendDeferredTask(String mailJSONString, String messageJSONString, IFileInputStream inputStream)
     {
 	this.mailJSONString = mailJSONString;
 	this.messageJSONString = messageJSONString;
-	this.documentIds = documentIds;
+	this.inputStream = inputStream;
     }
 
     @Override
@@ -86,28 +83,27 @@ public class MandrillSendDeferredTask implements DeferredTask
 
 	    outStream = outConn.getOutputStream();
 
-	    Long documentId = documentIds.get(0);
-	    com.agilecrm.document.Document document = DocumentUtil.getDocument(documentId);
-
 	    outStream.write(mailJSONString.getBytes("UTF-8"));
 	    outStream.write(messageJSONString.getBytes("UTF-8"));
-	    String attachmentStartString = getAttachmentStartString(document);
+	    String attachmentStartString = getAttachmentStartString(inputStream.getFileName());
 	    outStream.write(attachmentStartString.getBytes("UTF-8"));
 
-	    URL inUrl = new URL(document.url);
-	    inConn = (HttpURLConnection) inUrl.openConnection();
-	    inConn.setDoInput(true);
-	    inConn.setConnectTimeout(600000);
-	    inConn.setReadTimeout(600000);
-	    inStream = inConn.getInputStream();
+	    inStream = inputStream.getInputStream();
 
+	    Long startTime = System.currentTimeMillis();
 	    EncodingStreamWriter streamWriter = new EncodingStreamWriter(inStream, outStream);
 	    streamWriter.write();
 	    String attachmentEndString = "\"}]";
 	    String endString = "}}";
 	    outStream.write(attachmentEndString.getBytes("UTF-8"));
 	    outStream.write(endString.getBytes("UTF-8"));
+	    System.out.println(System.currentTimeMillis() - startTime);
+	    Long startTime1 = System.currentTimeMillis();
+
 	    response = streamWriter.getResponse(outConn);
+	    System.out.println(System.currentTimeMillis() - startTime1);
+
+	    System.out.println(response);
 	}
 	catch (Exception e)
 	{
@@ -117,12 +113,9 @@ public class MandrillSendDeferredTask implements DeferredTask
 	{
 	    try
 	    {
-		if (inStream != null)
-		    inStream.close();
+		inputStream.closeResources();
 		if (outStream != null)
 		    outStream.close();
-		if (inConn != null)
-		    inConn.disconnect();
 		if (outConn != null)
 		    outConn.disconnect();
 	    }
@@ -139,14 +132,13 @@ public class MandrillSendDeferredTask implements DeferredTask
      * @param document
      * @return
      */
-    private String getAttachmentStartString(Document document) throws Exception
+    private String getAttachmentStartString(String fileNameWithExtension) throws Exception
     {
 	String attachmentJSONString = null;
 	JSONObject attachmentJSON = new JSONObject();
-	String fileName = document.extension;
-	String[] extensions = fileName.split("\\.");
+	String[] extensions = fileNameWithExtension.split("\\.");
 	String extension = extensions[extensions.length - 1];
-	attachmentJSON.put("name", document.extension);
+	attachmentJSON.put("name", fileNameWithExtension);
 	String type = "application/".concat(extension);
 	attachmentJSON.put("type", type);
 	String attachmentJSONtempString = attachmentJSON.toString().replace("}", ",");

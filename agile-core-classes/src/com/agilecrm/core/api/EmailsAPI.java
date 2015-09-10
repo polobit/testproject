@@ -1,7 +1,12 @@
 package com.agilecrm.core.api;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
@@ -20,10 +25,18 @@ import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.agilecrm.account.EmailGateway;
+
+import com.agilecrm.account.EmailGateway.EMAIL_API;
+import com.agilecrm.account.VerifiedEmails.Verified;
+
+import com.agilecrm.account.VerifiedEmails;
+
 import com.agilecrm.account.util.EmailGatewayUtil;
+import com.agilecrm.account.util.VerifiedEmailsUtil;
 import com.agilecrm.activities.util.ActivitySave;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.email.ContactEmail;
@@ -36,8 +49,11 @@ import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.EmailPrefs;
 import com.agilecrm.util.EmailUtil;
 import com.agilecrm.util.HTTPUtil;
+import com.agilecrm.util.VersioningUtil;
+import com.agilecrm.util.email.SendMail;
 import com.campaignio.tasklets.agile.util.AgileTaskletUtil;
 import com.google.appengine.api.NamespaceManager;
+import com.google.appengine.api.blobstore.BlobKey;
 import com.thirdparty.mandrill.EmailContentLengthLimitExceededException;
 import com.thirdparty.mandrill.Mandrill;
 import com.thirdparty.mandrill.subaccounts.MandrillSubAccounts;
@@ -69,7 +85,7 @@ public class EmailsAPI
     public void createEmail(@QueryParam("from") String fromEmail, @QueryParam("to") String to,
 	    @QueryParam("subject") String subject, @QueryParam("body") String body) throws Exception
     {
-	EmailUtil.sendMail(fromEmail, fromEmail, to, null, null, subject, fromEmail, body, null, null);
+	EmailUtil.sendMail(fromEmail, fromEmail, to, null, null, subject, fromEmail, body, null, null,null);
     }
 
     /**
@@ -91,7 +107,8 @@ public class EmailsAPI
 	    @FormParam("from_email") String fromEmail, @FormParam("to") String to, @FormParam("email_cc") String cc,
 	    @FormParam("email_bcc") String bcc, @FormParam("subject") String subject, @FormParam("body") String body,
 	    @FormParam("signature") String signature, @FormParam("track_clicks") boolean trackClicks,
-	    @FormParam("document_id") String document_id) throws Exception
+	    @FormParam("document_key") String document_id, @FormParam("blob_key") String blobKeyString)
+	    throws Exception
     {
 	try
 	{
@@ -105,18 +122,28 @@ public class EmailsAPI
 		bcc = AgileTaskletUtil.normalizeStringSeparatedByDelimiter(',', bcc);
 
 	    List<Long> documentIds = new ArrayList<Long>();
+	    List<BlobKey> blobKeys = new ArrayList<BlobKey>();
 	    if (StringUtils.isNotBlank(document_id))
 	    {
 		Long documentId = Long.parseLong(document_id);
 		documentIds.add(documentId);
 	    }
+	    else if (StringUtils.isNotBlank(blobKeyString))
+	    {
+		BlobKey blobKey = new BlobKey(blobKeyString);
+		blobKeys.add(blobKey);
+	    }
 	    if (MandrillUtil.isEmailContentSizeValid(body, document_id))
 	    {
 		// Saves Contact Email.
 		ContactEmailUtil.saveContactEmailAndSend(fromEmail, fromName, to, cc, bcc, subject, body, signature,
-			null, trackClicks, documentIds);
+			null, trackClicks, documentIds, blobKeys);
 
-		ActivitySave.createEmailSentActivityToContact(to, subject, body);
+		// Returns set of To Emails
+		Set<String> toEmailSet = ContactEmailUtil.getToEmailSet(to);
+
+		for (String toEmail : toEmailSet)
+		    ActivitySave.createEmailSentActivityToContact(EmailUtil.getEmail(toEmail), subject, body);
 	    }
 
 	}
@@ -143,8 +170,9 @@ public class EmailsAPI
     @Path("contact-us")
     @POST
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public void sendEmail(@QueryParam("from") String fromEmail, @QueryParam("to") String to,
-	    @QueryParam("subject") String subject, @QueryParam("body") String body) throws Exception
+    @Consumes({ MediaType.APPLICATION_FORM_URLENCODED })
+    public void sendEmail(@FormParam("from") String fromEmail, @FormParam("to") String to,
+	    @FormParam("subject") String subject, @FormParam("body") String body) throws Exception
     {
 	String oldNamespace = NamespaceManager.get();
 
@@ -152,7 +180,7 @@ public class EmailsAPI
 	{
 	    // To avoid sending through subaccount
 	    NamespaceManager.set("");
-	    Mandrill.sendMail(false, fromEmail, fromEmail, to, null, null, subject, fromEmail, body, null, null, null);
+	    Mandrill.sendMail(false, fromEmail, fromEmail, to, null, null, subject, fromEmail, body, null, null, null,null);
 	}
 	catch (Exception e)
 	{
@@ -242,13 +270,17 @@ public class EmailsAPI
     public String getEmailActivityFromMandrill() throws Exception
     {
 	EmailGateway emailGateway = EmailGatewayUtil.getEmailGateway();
+	
+	// If SendGrid, return 
+	if(emailGateway != null && emailGateway.email_api.equals(EMAIL_API.SEND_GRID))
+		return new JSONObject().put("_agile_email_gateway", emailGateway.email_api.toString()).toString();
 
 	String apiKey = null;
 
 	// Get emailGateway api-key
 	if (emailGateway != null)
 	    apiKey = emailGateway.api_key;
-
+	
 	String domain = NamespaceManager.get();
 
 	// Returns mandrill subaccount info if created, otherwise error json.
@@ -286,6 +318,8 @@ public class EmailsAPI
 	    subAccountJSON.put("created_at", "");
 	    subAccountJSON.put("notes", "");
 	    subAccountJSON.put("first_sent_at", "");
+	    
+	    subAccountJSON.put("_agile_email_gateway", "MANDRILL");
 
 	    return subAccountJSON.toString();
 	}
@@ -336,7 +370,7 @@ public class EmailsAPI
 			emailSender.isEmailWhiteLabelEnabled());
 
 	    emailSender.sendEmail(fromEmail, fromName, fromEmail, null, null, subject, replyToEmail, htmlEmail,
-		    textEmail, null, null);
+		    textEmail, null, new ArrayList<Long>(),new ArrayList<BlobKey>());
 
 	}
 	catch (Exception e)
@@ -427,6 +461,40 @@ public class EmailsAPI
 	    e.printStackTrace();
 	    return null;
 	}
+    }
+    
+    @Path("verify-from-email")
+    @POST
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    public void sendVerificationEmail(@FormParam("email") String email)
+    {
+    	
+    	VerifiedEmails verifiedEmails = VerifiedEmailsUtil.getVerifiedEmailsByEmail(email);
+    	
+    	// Email verified already
+    	if(verifiedEmails != null && verifiedEmails.verified.equals(Verified.YES))
+    		throw new WebApplicationException(Response.status(javax.ws.rs.core.Response.Status.BAD_REQUEST)
+    			    .entity("Email verified already.").build());
+    	
+    	boolean exists = false;
+    	
+    	if(verifiedEmails != null && verifiedEmails.verified.equals(Verified.NO))
+    		exists = true;
+    	
+    	// If null, create new object
+    	if(verifiedEmails == null)
+    		verifiedEmails = new VerifiedEmails(email, String.valueOf(System.currentTimeMillis()));
+    	
+    	verifiedEmails.save();
+    	
+    	// Send Verification email
+    	verifiedEmails.sendEmail();
+    	
+    	// If email exists already and not verified yet, send email again and throw exception
+    	if(exists)
+        		throw new WebApplicationException(Response.status(javax.ws.rs.core.Response.Status.BAD_REQUEST)
+        			    .entity("Email not verified yet.").build());
+    	
     }
 
 }

@@ -40,10 +40,10 @@ import com.googlecode.objectify.Query;
  * activity database.
  * <p>
  * This utility class includes methods needs to return activities based on user,
- * entoty_id, entity_type and activity_type.
+ * entity_id, entity_type and activity_type.
  * </p>
  * 
- * @author
+ * @author 
  * 
  */
 public class ActivityUtil
@@ -418,6 +418,17 @@ public class ActivityUtil
 	return activity;
     }
 
+    
+    /**
+     * creates bulk action activity when performed on Contact bulk actions
+     * @param new_data is changed data
+     * @param old_data  is old data
+     * @param changed_field is changed field
+     * @param label   
+     * @param bulk_email_subject
+     * @param entityType   is to decide which action was perfomed i.e deal, contact or etc
+     * @return
+     */
     public static Activity createBulkActionActivity(String new_data, String old_data, String changed_field,
 	    String label, String bulk_email_subject, EntityType entityType)
     {
@@ -452,7 +463,7 @@ public class ActivityUtil
     {
 	try
 	{
-	    return dao.fetchAllByOrder(max, cursor, null, true, false, "-time");
+	    return dao.fetchAllByOrderWithoutCount(max, cursor, null, true, false, "-time");
 	}
 	catch (Exception e)
 	{
@@ -560,6 +571,14 @@ public class ActivityUtil
 	}
     }
 
+    /**
+     * fetches the activities based on 
+     * @param entitytype  TASK,EVENT,DEAL,CONTACT,DOCUMENT
+     * @param userid action performed by
+     * @param max  max records to fetch
+     * @param cursor 
+     * @return  list of activities
+     */
     public static List<Activity> getActivitites(String entitytype, Long userid, int max, String cursor)
     {
 	Map<String, Object> searchMap = new HashMap<String, Object>();
@@ -699,17 +718,17 @@ public class ActivityUtil
     }
 
     /**
-     * stores log for related to field change
-     * 
-     * @param contacts
-     * @param jsn
-     * @param opportunity
+     * stores log for related contact changes  
+     * @param contacts  old contacts from db
+     * @param jsn  new contacts from user interface
+     * @param opportunity entity
      * @throws JSONException
      */
     public static void getDealRelatedContacts(List<Contact> contacts, JSONArray jsn, Opportunity opportunity)
 	    throws JSONException
     {
 
+    	//fetches the contact ids from contacts to identify which contacts were removed and which are added
 	List<String> old_cont_ids = getContactIds(contacts);
 
 	if (jsn == null)
@@ -736,11 +755,11 @@ public class ActivityUtil
     }
 
     /**
-     * stores log for related_to filed change
+     * stores log for related_to filed change for events
      * 
-     * @param contacts
-     * @param jsn
-     * @param event
+     * @param contacts old contacts
+     * @param jsn   new contact ids from user interface
+     * @param event 
      * @throws JSONException
      */
     public static void getEventRelatedContacts(List<Contact> contacts, JSONArray jsn, Event event) throws JSONException
@@ -774,9 +793,9 @@ public class ActivityUtil
     /**
      * stores log for related_to filed change
      * 
-     * @param contacts
-     * @param jsn
-     * @param task
+     * @param contacts old contacts
+     * @param jsn  new contacts
+     * @param task 
      * @throws JSONException
      */
     public static void getTaskRelatedContacts(List<Contact> contacts, JSONArray jsn, Task task) throws JSONException
@@ -826,22 +845,7 @@ public class ActivityUtil
 
     }
 
-    /**
-     * 
-     * @param epoch
-     *            if date fields were modified while updation i.e
-     *            startdate,duedate,end end etc.. simply converting them to
-     *            normal time from epoch and stores in activity entity. because
-     *            if multiple fields updated at a time we are not creating each
-     *            log. so all will be stored as a single log
-     * @return
-     */
-    public static String getTimeFromEppoch(Long epoch)
-    {
-	String date = new java.text.SimpleDateFormat("EEE, d MMM yyyy HH:mm").format(new java.util.Date(epoch * 1000));
-
-	return date;
-    }
+    
 
     /**
      * 
@@ -1305,7 +1309,7 @@ public class ActivityUtil
     }
 
     /**
-     * gets the list of task names by giving array of event ids
+     * gets the list of task names by giving array of workflow ids
      * 
      * @param js
      * @return
@@ -1332,6 +1336,14 @@ public class ActivityUtil
 	return list;
     }
 
+    /**
+     * creates log for each call activity i.e twillio or sip
+     * @param serviceType {out going or incoming}
+     * @param toOrFromNumber 
+     * @param callType {tw}
+     * @param callStatus
+     * @param callDuration
+     */
     public static void createLogForCalls(String serviceType, String toOrFromNumber, String callType, String callStatus,
 	    String callDuration)
     {
@@ -1536,6 +1548,11 @@ public class ActivityUtil
 	}
     }
 
+    /**
+     * gets the  status of calls
+     * @param status
+     * @return
+     */
     public static String getEnumValueOfTwilioStatus(String status)
     {
 	if (status.equalsIgnoreCase("completed"))
@@ -1743,6 +1760,30 @@ public class ActivityUtil
 	    return str.replace("_", " ").toLowerCase();
 	}
 	return str.toLowerCase();
+    }
+    
+    /**
+     * Gets the count of answered calls.
+     * 
+     * @param activityType
+     *            - Given activity type.
+     * 
+     * @return list of activities based on activity type.
+     */
+    public static int getCompletedCallsCountOfUser(Long ownerId, long minTime,
+	    long maxTime)
+    {
+    	try
+    	{
+    		return dao.ofy().query(Activity.class).filter("activity_type", ActivityType.CALL)
+    		        .filter("user", new Key<DomainUser>(DomainUser.class, ownerId)).filter("time >= ", minTime)
+    		        .filter("time <= ", maxTime).filter("custom3", Call.ANSWERED).count();
+    	}
+    	catch(Exception e)
+    	{
+    		e.printStackTrace();
+    		return 0;
+    	}
     }
 
 }

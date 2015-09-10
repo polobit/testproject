@@ -47,8 +47,12 @@ public class SearchAPI
     public Collection searchContacts(@QueryParam("q") String keyword, @QueryParam("page_size") String count,
 	    @QueryParam("cursor") String cursor, @QueryParam("type") String type)
     {
+	// If user didn't give the page size, set it to 10 by default. This
+	// condition is to use this call in the API calls.
+	if (StringUtils.isEmpty(count))
+	    count = "10";
 	return new AppengineSearch<Contact>(Contact.class).getSimpleSearchResults(keyword, Integer.parseInt(count),
-	        cursor, type);
+		cursor, type);
     }
 
     @Path("{keyword}")
@@ -58,7 +62,7 @@ public class SearchAPI
 	    @QueryParam("cursor") String cursor, @QueryParam("type") String type)
     {
 	return new AppengineSearch<Contact>(Contact.class).getSimpleSearchResults(keyword, Integer.parseInt(count),
-	        cursor, type);
+		cursor, type);
     }
 
     /**
@@ -84,7 +88,7 @@ public class SearchAPI
 	    return new QueryDocument(new Document().index, null).simpleSearch(keyword, Integer.parseInt(count), cursor);
 
 	return new QueryDocument(new Document().index, null).simpleSearchWithType(keyword, Integer.parseInt(count),
-	        cursor, type);
+		cursor, type);
     }
 
     /**
@@ -110,7 +114,7 @@ public class SearchAPI
 	    return new QueryDocument(new Document().index, null).simpleSearch(keyword, Integer.parseInt(count), cursor);
 
 	return new QueryDocument(new Document().index, null).simpleSearchWithType(keyword, Integer.parseInt(count),
-	        cursor, type);
+		cursor, type);
     }
 
     /**
@@ -187,7 +191,7 @@ public class SearchAPI
 	    @QueryParam("cursor") String cursor, @QueryParam("type") String type)
     {
 	return new AppengineSearch<Opportunity>(Opportunity.class).getSimpleSearchResults(keyword,
-	        Integer.parseInt(count), cursor, type);
+		Integer.parseInt(count), cursor, type);
 
     }
 }

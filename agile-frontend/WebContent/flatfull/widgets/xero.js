@@ -27,9 +27,10 @@ function showXeroClient()
 		// If data is not defined return
 		if (data)
 		{
-			//To get the latest invoices on top.
-			if(data.invoice != undefined && data.invoice.Invoice != undefined){				
-				data.invoice.Invoice = data.invoice.Invoice.reverse();
+			if(data.invoice != undefined && data.invoice.Invoice != undefined){	
+				if($.isArray(data.invoice.Invoice)){
+					data.invoice.Invoice = data.invoice.Invoice.reverse();
+				}
 			}	
 			
 			// Fill Xero widget template with FreshBooks clients data
@@ -198,8 +199,7 @@ $(function()
 				last_name = ' ';
 
 			showXeroClient();
-
-			$('#xero_add_contact').die().live('click', function(e)
+			$("body").on('click','#xero_add_contact', function(e)
 			{
 				e.preventDefault();
 
@@ -207,10 +207,10 @@ $(function()
 			});
 
 			// attach event to invoices + icon to get lineitems
-			$('.invoices').die().live('click', function(e)
+			$("body").on('click','.invoices', function(e)
 			{
 				e.preventDefault();
-				var invoiceId = $(this).attr('value');
+				var invoiceId = $(this).prop('value');
 
 				// checking for data existence in div
 				if ($('#collapse-' + invoiceId).text().trim() === "")

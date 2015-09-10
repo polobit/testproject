@@ -57,9 +57,9 @@ Created Task {{#if this.entityObject}}<a href="#task/{{entity_id}}">{{safe_strin
 <div class="activities_second_line m-t-none"><small>
 
 {{#if custom2}}
-<i class="icon-tasks"></i>  {{#unless this.entityObject}}Task deleted later. {{/unless}}Task assigned to {{custom1}} due <span class="time-ago" datetime="{{epochToHumanDate "ddd mmm dd yyyy h:MM TT" entityObject.due}}">{{epochToHumanDate "ddd mmm dd yyyy h:MM TT" custom2}}</span>. {{#if related_contact_ids}}Task related to {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}" class="text-info">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}.{{/if}}
+<i class="icon-tasks"></i>  {{#unless this.entityObject}}Task deleted later. {{/unless}}Task assigned to {{custom1}} due <span class="time-ago" datetime="{{epochToHumanDate "ddd mmm dd yyyy h:MM TT" entityObject.due}}">{{epochToHumanDate "ddd mmm dd yyyy h:MM TT" custom2}}</span>. {{#if related_contact_ids}}Task related to {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}.{{/if}}
 {{else}}
-<i class="icon-tasks"></i> {{#unless this.entityObject}}Task deleted later. {{/unless}}Task assigned to {{entityObject.taskOwner.name}} due <span class="time-ago" datetime="{{epochToHumanDate "ddd mmm dd yyyy h:MM TT" entityObject.due}}">{{epochToHumanDate "ddd mmm dd yyyy h:MM TT" entityObject.due}}</span>. {{#if related_contact_ids}}Task related to {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}" class="text-info">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}.{{/if}}
+<i class="icon-tasks"></i> {{#unless this.entityObject}}Task deleted later. {{/unless}}Task assigned to {{entityObject.taskOwner.name}} due <span class="time-ago" datetime="{{epochToHumanDate "ddd mmm dd yyyy h:MM TT" entityObject.due}}">{{epochToHumanDate "ddd mmm dd yyyy h:MM TT" entityObject.due}}</span>. {{#if related_contact_ids}}Task related to {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}.{{/if}}
 
 {{/if}}
 </small>
@@ -72,7 +72,7 @@ Created Task {{#if this.entityObject}}<a href="#task/{{entity_id}}">{{safe_strin
 {{#if_equals "TASK_COMPLETED" activity_type}}
 Completed Task {{#if this.entityObject}}<a href="#task/{{entity_id}}">{{safe_string label}}</a>{{else}} '{{safe_string label}}'{{/if}} <br/>
 <div class="activities_second_line m-t-none"><small>
- <i class="icon-tasks"></i>{{#if this.entityObject}} Task due {{epochToHumanDate "ddd mmm dd yyyy h:MM TT" entityObject.due}} was completed.{{else}} Task deleted later.{{/if}} {{#if related_contact_ids}}Task related to {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}" class="text-info">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}.{{/if}} 
+ <i class="icon-tasks"></i>{{#if this.entityObject}} Task due {{epochToHumanDate "ddd mmm dd yyyy h:MM TT" entityObject.due}} was completed.{{else}} Task deleted later.{{/if}} {{#if related_contact_ids}}Task related to {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}.{{/if}} 
 </small></div>
 {{/if_equals}}
 
@@ -81,7 +81,7 @@ Completed Task {{#if this.entityObject}}<a href="#task/{{entity_id}}">{{safe_str
 {{#if_equals "TASK_DELETE" activity_type}}
  Deleted Task '{{safe_string label}}' 
 <div class="activities_second_line m-t-none"><small>
-{{#if related_contact_ids}}<i class="icon-tasks"></i> Task related to {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}" class="text-info">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}. {{/if}} 
+{{#if related_contact_ids}}<i class="icon-tasks"></i> Task related to {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}. {{/if}} 
 </small></div>
 {{/if_equals}}
 
@@ -854,8 +854,9 @@ Deleted  {{custom1}} Campaigns<br/>
 <div class="row">
     <div class="col-md-12" id="activity_header">
         
-            <h3 class="activity-heading font-thin h3  pull-left"><span>Activities</span>&nbsp;<small class="activity-sub-heading" ></small>&nbsp;<small class="activity-user" ></small></h3>
-		<div class="pull-right">
+            <h3 class="activity-heading font-thin h3  pull-left"><span>User Activities</span>&nbsp;<small class="activity-sub-heading" ></small>&nbsp;<small class="activity-user" ></small></h3>
+            
+		<div class="pull-right" id="activity-log-header-div">
 		<div class="btn-group pull-right type-task-button c-p">
                 <div class="btn btn-default btn-sm selected_name" id="selectedentity_type">All Activities</div>
                 <a class="btn btn-default dropdown-toggle btn-sm" data-toggle="dropdown" href="#">
@@ -883,7 +884,7 @@ Deleted  {{custom1}} Campaigns<br/>
                 <ul class="dropdown-menu" id="user-select"></ul>
             </div>
 
-            <div id="activities_date_range" class="btn-group pull-right activity-date-filter c-p m-r">
+            <div id="activities_date_range" class="btn-group pull-right activity-date-filter c-p m-r m-t-none">
             <span class="inline-block" style="padding: 3px 10px;">
                <i class="icon-calendar icon-large m-r-xs"></i>
                 <span id="range" class="text-xs">Filter by date</span>
@@ -892,7 +893,10 @@ Deleted  {{custom1}} Campaigns<br/>
                 <span class="caret  inline-block p-t-xs"></span>
               </span>
             </div>
-            
+            <div class="btn-group m-r pull-right" role="group">
+                <a href="#activities" class="btn btn-default btn-sm bg-light">User Activities</a> 
+                <a href="#contact-activities" class="btn btn-default btn-sm" onclick="$(this).prev().removeClass('bg-light')">Contact Activities</a>
+            </div>
             
           
 

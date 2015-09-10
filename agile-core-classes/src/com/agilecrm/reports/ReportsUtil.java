@@ -30,6 +30,7 @@ import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil.Err
 import com.agilecrm.subscription.restrictions.entity.DaoBillingRestriction;
 import com.agilecrm.subscription.restrictions.entity.DaoBillingRestriction.ClassEntities;
 import com.agilecrm.subscription.restrictions.exception.PlanRestrictedException;
+import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.access.util.UserAccessControlUtil;
 import com.agilecrm.util.email.SendMail;
 import com.google.appengine.api.NamespaceManager;
@@ -69,7 +70,7 @@ public class ReportsUtil
 
 	    // Call process filters to get reports for one domain, and add
 	    // domain details
-	    Map<String, Object> results = processReports(report);
+	    Map<String, Object> results = processReports(report, null);
 
 	    // Report heading. It holds the field values chosen in the report
 	    LinkedHashSet<String> reportHeadings = new LinkedHashSet<String>();
@@ -112,8 +113,6 @@ public class ReportsUtil
 		System.out.println("available = " + resultsCollection.size());
 		if (resultsCollection.size() == 0)
 		    continue;
-
-		results.put("count", resultsCollection.size());
 	    }
 
 	    results.put("duration", WordUtils.capitalizeFully((report.duration.toString())));
@@ -132,11 +131,12 @@ public class ReportsUtil
      * @param user
      * @return
      */
-    public static Map<String, Object> processReports(Reports report)
+    public static Map<String, Object> processReports(Reports report, DomainUser user)
     {
 	SearchRule.addContactTypeRule(report.rules, Type.PERSON);
 
-	UserAccessControlUtil.checkReadAccessAndModifyTextSearchQuery(Contact.class.getSimpleName(), report.rules);
+	UserAccessControlUtil
+		.checkReadAccessAndModifyTextSearchQuery(Contact.class.getSimpleName(), report.rules, user);
 
 	// Iterate through each filter and add results collection
 	// To store reports in collection
@@ -146,6 +146,19 @@ public class ReportsUtil
 
 	domain_details.put("report", report);
 	domain_details.put("domain", NamespaceManager.get());
+	try
+	{
+	    Contact con = (Contact) reportList.toArray()[0];
+	    domain_details.put("count", con.count);
+	    if (con.count > 10000)
+		domain_details.put("count", "10000+");
+	    if (con.count > 100)
+		domain_details.put("limit_message", "We are showing only 100 contacts in this email.");
+	}
+	catch (Exception e)
+	{
+	    System.out.println("Error in getting contacts count in reports.");
+	}
 
 	// If report_type if of contacts customize object to show properties
 	if (report.report_type.equals(Reports.ReportType.Contact))
@@ -278,8 +291,12 @@ public class ReportsUtil
 			else
 			{
 			    fieldValue = contactJSON.get(field).toString();
+			    
+			    if (fieldValue.equals("0") && (field.equalsIgnoreCase("last_contacted") || field.equalsIgnoreCase("last_emailed") || field.equalsIgnoreCase("last_called")))
+			    	fieldValue = " ";
 
-			    if (field.contains("time"))
+			    if ((field.contains("time") || field.equalsIgnoreCase("last_contacted") || field.equalsIgnoreCase("last_emailed") || field.equalsIgnoreCase("last_called")) 
+			    		&& !fieldValue.equals(" "))
 				fieldValue = SearchUtil.getDateWithoutTimeComponent(Long.parseLong(fieldValue) * 1000);
 			}
 
@@ -414,10 +431,10 @@ public class ReportsUtil
 
 	BillingRestrictionUtil.throwLimitExceededException(ErrorMessages.REPORT, false);
     }
-    
+
     public static Integer count()
     {
 	return Reports.dao.count();
     }
-    
+
 }

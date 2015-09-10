@@ -14,6 +14,8 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.time.DateUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
@@ -92,6 +94,7 @@ public class SearchUtil
 		{
 		    doc.addField(Field.newBuilder().setName(normalizeTextSearchString(field_name) + "_time_epoch")
 			    .setNumber(Double.valueOf(contactField.value)));
+		    fields.put(normalizeTextSearchString(field_name) + "_time", contactField.value);
 		}
 		catch (NumberFormatException e)
 		{
@@ -109,6 +112,7 @@ public class SearchUtil
 		{
 		    doc.addField(Field.newBuilder().setName(normalizeTextSearchString(field_name) + "_number")
 			    .setNumber(Double.valueOf(contactField.value)));
+		    fields.put(normalizeTextSearchString(field_name) + "_number", contactField.value);
 		}
 		catch (Exception e)
 		{
@@ -130,6 +134,16 @@ public class SearchUtil
 		fields.put(field_name, normalized_value);
 		continue;
 	    }
+	    
+		if (customField == null && field_name.equals(Contact.ADDRESS)) {
+			splitAddressAndAddToSearch(fields, doc, contactField);
+			continue;
+		}
+		if (customField == null && (field_name.equals(Contact.FIRST_NAME) || field_name.equals(Contact.LAST_NAME))) {
+			 doc.addField(Field.newBuilder().setName(field_name).setText(StringUtils.lowerCase(normalized_value)));
+		    fields.put(field_name, normalized_value);
+			continue;
+		}
 
 	    /*
 	     * If key already exist appends contact field value to respective
@@ -156,7 +170,7 @@ public class SearchUtil
 	 * Removes spaces in each tag, and concat all tags with space between
 	 * them(ex: ["agile dev", "clickdesk dev"] to "agiledev clickdeskdev")
 	 */
-	String tags = normalizeSet(contact.getContactTags());
+	String tags = normalizeTagsSet(contact.getContactTags());
 
 	// put String tags
 	if (tags != null)
@@ -169,6 +183,108 @@ public class SearchUtil
 
 	return fields;
     }
+    
+    /**
+     * Splits the address in text search so that it can be used for filtering.
+     * @param fields
+     * @param doc
+     * @param contactField
+     */
+    private static void splitAddressAndAddToSearch(Map<String, String> fields, Document.Builder doc, ContactField contactField)
+	{
+		String city = null, country = null, state=null, zip=null;
+		// Trims the spaces in field value
+	    String normalized_value = normalizeString(contactField.value);
+	    String field_name = normalizeTextSearchString(contactField.name);
+		try
+		{
+			JSONObject addressJSON = new JSONObject(contactField.value);
+			try {
+				city = addressJSON.getString("city");
+				} catch(JSONException e){
+			}
+			try {
+				country = addressJSON.getString("country");
+				} catch(JSONException e){
+			}
+			try {
+				state = addressJSON.getString("state");
+				} catch(JSONException e){
+			}
+			try {
+				zip = addressJSON.getString("zip");
+				} catch(JSONException e){
+			}
+			if(StringUtils.isNotEmpty(city)) {
+				if (fields.containsKey("city"))
+				{
+				    String value = fields.get("city") + " " + normalizeString(city);
+				    value = normalizeString(value);
+				    doc.addField(Field.newBuilder().setName("city").setText(value));
+				    fields.put("city", value);
+				} else {				
+					String value = normalizeString(city);
+					doc.addField(Field.newBuilder().setName("city").setText(value));
+					fields.put("city", value);
+				}
+			}
+			if(StringUtils.isNotEmpty(country)) {
+				if (fields.containsKey("country"))
+				{
+				    String value = fields.get("country") + " " + normalizeString(country);
+				    value = normalizeString(value);
+				    doc.addField(Field.newBuilder().setName("country").setText(value));
+				    fields.put("country", value);
+				} else {				
+					String value = normalizeString(country);
+					doc.addField(Field.newBuilder().setName("country").setText(value));
+					fields.put("country", value);
+				}
+			}
+			if(StringUtils.isNotEmpty(zip)) {
+				if (fields.containsKey("zip"))
+				{
+				    String value = fields.get("zip") + " " + normalizeString(zip);
+				    value = normalizeString(value);
+				    doc.addField(Field.newBuilder().setName("zip").setText(value));
+				    fields.put("zip", value);
+				} else {
+					String value = normalizeString(zip);
+					doc.addField(Field.newBuilder().setName("zip").setText(value));
+					fields.put("zip", value);
+				}
+			}
+			if(StringUtils.isNotEmpty(state)) {
+				if (fields.containsKey("state"))
+				{
+				    String value = fields.get("state") + " " + normalizeString(state);
+				    value = normalizeString(value);
+				    doc.addField(Field.newBuilder().setName("state").setText(value));
+				    fields.put("state", value);
+				} else {		
+					String value = normalizeString(state);
+					doc.addField(Field.newBuilder().setName("state").setText(value));
+					fields.put("state", value);
+				}
+			}
+
+		}
+		catch (JSONException e)
+		{
+			System.err.print("Got exception in adding addressJSON to ext search " + e.getMessage());
+		}
+		if (fields.containsKey(field_name))
+		{
+		    String value = fields.get(field_name) + " " + normalized_value;
+
+		    doc.addField(Field.newBuilder().setName(field_name).setText(value));
+			fields.put(field_name, value);
+		} else {
+			doc.addField(Field.newBuilder().setName(field_name).setText(normalized_value));
+			fields.put(field_name, normalized_value);
+		}
+		
+	}
 
     /**
      * Removes spaces from the string
@@ -225,6 +341,10 @@ public class SearchUtil
 	    // special character is replaced with _<special char name>_
 	    if (value.startsWith("_"))
 		value = value.substring(1);
+	    //replace first numeric character with NUM_
+	    if (value.length() >0 && value.substring(0, 1).matches("[0-9]")) {
+	    	value = value.replaceFirst(value.substring(0, 1), "NUM_");
+	    }
 
 	    System.out.println("value to map : " + value);
 	}
@@ -278,17 +398,17 @@ public class SearchUtil
 	 */
 	for (ContactField contactField : properties)
 	{
-	    if (contactField.name.equals("first_name"))
+	    if ("first_name".equals(contactField.name))
 	    {
 		firstName = contactField.value;
 	    }
 
-	    else if (contactField.name.equals("last_name"))
+	    else if ("last_name".equals(contactField.name))
 	    {
 		lastName = contactField.value;
 	    }
 
-	    else if (contactField.name.equals("address"))
+	    else if ("address".equals(contactField.name))
 	    {
 		// Creates HashMap from Address JSON string
 		try
@@ -331,6 +451,31 @@ public class SearchUtil
 	// Returns normalized set
 	return normalizeSet(tokens);
     }
+    
+    /**
+     * Adds first letter of firstname, lastname for Person and 
+	 * name for Company to text search.
+     * @param contact
+     * @param doc
+     */
+    public static void addNameFirstLetter(Contact contact, Document.Builder doc)
+    {
+    	ContactField firstNameField = contact.getContactFieldByName(Contact.FIRST_NAME);
+		ContactField lastNameField = contact.getContactFieldByName(Contact.LAST_NAME);
+		ContactField nameField = contact.getContactFieldByName(Contact.NAME);
+		String first_name = firstNameField != null ? firstNameField.value : "";
+		String last_name = lastNameField != null ? lastNameField.value : "";
+		String name = nameField != null ? nameField.value : "";
+		if(StringUtils.isNotEmpty(first_name)) {
+			doc.addField(Field.newBuilder().setName("first_name_start").setText(first_name.substring(0, 1)));
+		}
+		if(StringUtils.isNotEmpty(last_name)) {
+			doc.addField(Field.newBuilder().setName("last_name_start").setText(last_name.substring(0, 1)));
+		}
+		if(StringUtils.isNotEmpty(name)) {
+			doc.addField(Field.newBuilder().setName("name_start").setText(name.substring(0, 1)));
+		}
+	}
 
     public static String getDateWithoutTimeComponent(Long millSeconds)
     {
@@ -409,11 +554,15 @@ public class SearchUtil
 		if (emailBounceStatus == null || emailBounceStatus.campaign_id == null)
 		    continue;
 
-		emailStatus = emailBounceStatus.campaign_id + "_" + "BOUNCED";
+		if (emailBounceStatus.emailBounceType.equals(EmailBounceType.HARD_BOUNCE))
+			emailStatus = emailBounceStatus.campaign_id + "_" + "HARDBOUNCED";
 
+		if (emailBounceStatus.emailBounceType.equals(EmailBounceType.SOFT_BOUNCE))
+			emailStatus = emailBounceStatus.campaign_id + "_" + "SOFTBOUNCED";
+			
 		// If SPAM, replace with SPAM
 		if (emailBounceStatus.emailBounceType.equals(EmailBounceType.SPAM))
-		    emailStatus = emailStatus.replace("BOUNCED", "SPAM");
+			emailStatus = emailBounceStatus.campaign_id + "_" + "SPAM";
 
 		campaignSearchStatus.add(emailBounceStatus.campaign_id.toString());
 		campaignSearchStatus.add(emailStatus);
@@ -442,5 +591,38 @@ public class SearchUtil
 	return campaignStatus;
 
     }
+    
+	/**
+	 * Removes spaces from the string and replace hipen with _AGILE_HIPEN_
+	 * 
+	 * @param value
+	 * @return {@link String}
+	 */
+	public static String normalizeTag(String value) {
+
+		if (StringUtils.isEmpty(value))
+			return "";
+
+		return (value).replace("-", "_AGILE_HIPEN_").replace(" ", "");
+	}
+
+	/**
+	 * Normalizes the set values: Removes spaces and replace hipen with
+	 * _AGILE_HIPEN_
+	 * 
+	 * 
+	 * @param values
+	 *            {@link Set}
+	 * @return {@link String}
+	 */
+	public static String normalizeTagsSet(Set<String> values) {
+		String normalizedString = "";
+
+		// Concat all tags in to one string normalized and space seperated
+		for (String tag : values) {
+			normalizedString += " " + normalizeTag(tag);
+		}
+		return normalizedString.trim();
+	}
 
 }

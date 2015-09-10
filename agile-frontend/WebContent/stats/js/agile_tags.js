@@ -95,8 +95,7 @@ function agile_getTags(callback, email)
 		else
 			email = agile_guid.get_email();
 	}
-	var tags = agile_read_cookie("agile-tags");
-	var params = "email={0}&tags={1}".format(encodeURIComponent(email), encodeURIComponent(tags));
+	var params = "email={0}".format(encodeURIComponent(email));
 
 	// Get
 	var agile_url = agile_id.getURL() + "/contacts/get-tags?callback=?&id=" + agile_id.get() + "&" + params;
