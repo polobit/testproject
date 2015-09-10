@@ -69,7 +69,6 @@ function set_url(apiKey, domain)
  */
 function send_ical_info_email(emailModal)
 {
-	emailModal.on("shown.bs.modal", function(e){
 	// When Send Clicked, validate the form and send email.
 	emailModal.on("shown.bs.modal", function(e){
 
