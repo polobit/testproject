@@ -70,6 +70,8 @@ function set_url(apiKey, domain)
 function send_ical_info_email(emailModal)
 {
 	// When Send Clicked, validate the form and send email.
+	emailModal.on("shown.bs.modal", function(e){
+
 	$("#share-ical-by-email")
 			.on(
 					'click',
@@ -99,6 +101,7 @@ function send_ical_info_email(emailModal)
 						});
 
 					});
+		});
 }
 
 $(function()
