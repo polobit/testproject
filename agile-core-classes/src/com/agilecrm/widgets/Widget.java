@@ -155,7 +155,7 @@ public class Widget
      */
     @Parent
     @Indexed
-    private Key<AgileUser> user;
+	protected Key<AgileUser> user;
 
     /**
      * Stores {@link Boolean} info whether the widget is added
