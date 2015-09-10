@@ -10,14 +10,16 @@
         <form id="icalForm" name="icalForm" method="post">
             <fieldset>
                 <div class="control-group form-group">
-                    <label class="control-label"><b>Subscribe to your events</b></label>
-                        <div class="controls">
-                        <a name="ical-feed" id="ical-feed"/></a>
-                        </div>
+                    <label class="control-label"><b>Subscribe to your events</b><br/>
+                    Subscribe to your events on your mobile device <a href="" target="_blank"><img style="vertical-align: text-bottom;" src="../flatfull/img/apple_logo.png"/></a>
+                    </label>
+                     <div class="cd-highlight" style="position: relative;padding: 30px;border: 1px solid #f6f6f6;">
+ 			<div class="cd-zero-clipboard" style="display: inline-block;position: absolute;top: 0;right: 0;"><span id="apikey_clip_button" class="btn-clipboard btn btn-success" data-clipboard-text="">Copy</span></div>
+			  <a class="prettyprint linenums mar-no pad-all-22 text-center" id="ical-feed"></a></div>
                     </div>
-             </fieldset>
-         </form>
-         <table>
+                    </div>
+                    
+                     <table>
              <tr>
                  <td><b>Adding to Google Calendar:</b></td>
              </tr> 
@@ -48,7 +50,10 @@
              <td><p>The Calendar is added to Calendar view under <b>Other Calendars</b>.</p></td>
              </tr>
          </table>
-         <a href="#" id="send-ical-email"><i class="icon-envelope-alt"></i> Send Calendar Feed URL via Email</a>
+             </fieldset>
+         </form>
+        
+         <a class="text-info" href="#" id="send-ical-email"><i class="icon-envelope"></i> Send Calendar Feed URL via Email</a>
      </div>
 </div>
 </div>

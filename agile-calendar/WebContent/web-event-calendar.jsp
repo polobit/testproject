@@ -58,6 +58,7 @@ String domain_name=null;
 Long user_id = 0L;
 Long agile_user_id = 0L;
 String meeting_durations=null;
+String welcome_title="<p class='lead' style='color: #777;font-size: 19px;font-weight:normal'>Welcome to our scheduling page. Please follow the instructions to book an appointment.</p>";
 
 
 URL ur=new URL(url);
@@ -162,6 +163,10 @@ if(scheduleid.contains(",")){
 	{
 		meeting_durations = online_prefs.meeting_durations;
 		meeting_types = online_prefs.meeting_types;
+		welcome_title= online_prefs.user_calendar_title;
+	     if(StringUtils.isNotBlank(welcome_title)&&!welcome_title.contains("</p>")){
+	    	welcome_title="<p class='lead' style='color: #777;font-size: 19px;font-weight:normal'>"+welcome_title+"</p>";
+	     }
 		single_user_map_object.put("buffer_time", WebCalendarEventUtil.convertHoursToMilliSeconds(
 				online_prefs.bufferTime, online_prefs.bufferTimeUnit));
 	}
@@ -222,7 +227,7 @@ if(scheduleid.contains(",")){
      %>
 	
 		<img src="<%=profile_pic%>" id="avatar" class="thumbnail" title="<%=user_name%>"/>
-		<p class="lead" style="color: #777;font-size: 19px;text-align: center;font-weight:normal">Welcome to my scheduling page. Please follow the instructions to book an appointment.</p>
+	<div class="text-center"><%=welcome_title%></div>
 <%}else{ %>
 <p class="lead" style="color: #777;font-size: 19px;text-align: center;font-weight:normal"> Welcome to our scheduling page. Please follow the instructions to book an appointment.</p>
 			<div class="col-sm-10 segment segment0">
