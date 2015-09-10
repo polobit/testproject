@@ -40,7 +40,7 @@ public class AnalyticsAPI {
 	@Produces({ MediaType.APPLICATION_JSON })
 	public List<Analytics> getAnalyticsGroupedBySessions(
 			@QueryParam("e") String searchEmail) {
-		JSONArray pageViewsList = AnalyticsSQLUtil.getPageViews(searchEmail);
+		JSONArray pageViewsList = AnalyticsSQLUtil.getPageViewsOfAllEmails(searchEmail);
 
 		JSONArray mergedStats = AnalyticsUtil
 				.mergePageViewsBasedOnSessions(pageViewsList);

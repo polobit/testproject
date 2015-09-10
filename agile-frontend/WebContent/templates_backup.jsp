@@ -2,9 +2,7 @@
 <%@page import="org.apache.commons.lang.StringUtils"%>
 <%@page import="com.agilecrm.user.UserPrefs"%>
 <%@page import="com.agilecrm.user.util.UserPrefsUtil"%>
-
- 
-<html lang="en"   style = "overflow-y: hidden;">
+<html lang="en">
 
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -32,26 +30,25 @@
 	%>
 	
 	<!-- Bootstrap  -->
-	<link rel="stylesheet" type="text/css" href="flatfull/css/bootstrap.css">
-	<link rel="stylesheet" type="text/css"	href="<%= CSS_PATH%>flatfull/css/bootstrap-responsive.min.css" />
+	<link rel="stylesheet" type="text/css"	href="<%= CSS_PATH%>css/bootstrap-<%=template%>.min.css" />
+	<link rel="stylesheet" type="text/css"	href="<%= CSS_PATH%>css/bootstrap-responsive.min.css" />
 	
 	<!-- Fancy box -->
-	<link rel="stylesheet" type="text/css" href="<%= CSS_PATH%>flatfull/css/jquery.fancybox.css?v=2.1.5" media="screen" />
-	<link rel="stylesheet" type="text/css" href="flatfull/css/agilecrm.css?_=sandbox.1">
-	<link rel="stylesheet" type="text/css" href="flatfull/css/app.css">
-	<link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
+	<link rel="stylesheet" type="text/css" href="<%= CSS_PATH%>css/jquery.fancybox.css?v=2.1.5" media="screen" />
+
 	<title>AgileCRM Email Templates</title>
-	<script type="text/javascript" src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+
+	<script type="text/javascript" src="<%= LIB_PATH%>lib/jquery.min.js"></script>
 	<script type="text/javascript" src="<%= LIB_PATH%>flatfull/lib/jquery-new/jquery.redirect.js"></script>
 	
 	<script type="text/javascript" src="moment.js"></script>
-	<script type="text/javascript" src="<%= LIB_PATH%>flatfull/lib/handlebars-1.0.0.beta.6-min.js"></script>
+	<script type="text/javascript" src="<%= LIB_PATH%>lib/handlebars-1.0.0.beta.6-min.js"></script>
 	
-	<script type="text/javascript" src="<%= LIB_PATH%>flatfull/lib/bootstrap.js"></script>
+	<script type="text/javascript" src="<%= LIB_PATH%>lib/bootstrap.min.js"></script>
 
     <!-- Add fancyBox main JS and CSS files -->
-	<script type="text/javascript" src="<%= LIB_PATH%>flatfull/lib/jquery.fancybox.js?v=2.1.5"></script> 
-	
+	<script type="text/javascript" src="<%= LIB_PATH%>lib/jquery.fancybox.js?v=2.1.5"></script>
+	<link rel="stylesheet" type="text/css" href="/css/agilecrm.css?_=sandbox.1">
 	
 	<style>
 		 div.theme-preview
@@ -93,72 +90,15 @@
 </head>
 
 <body>
-
-<div id="agilecrm-container">
-	<div id="content" class="app-content-body" style = "background-color:#edf1f2 !important">
-		<div>
-			<div class="app-content-body custom-animated custom-fadeInUp">
-				<div class="bg-light lter b-b wrapper-md ng-scope">
-    				<div>
-     					<div>
- 							<h3 class="m-n font-thin pull-left">
- 								<span id="template-heading">Select a Template</span>
- 							</h3>
-							<div class="pull-right">
-					            <div class="inline-block">
-								    <div class="btn-group">
-       									<a class="btn btn-sm btn-default" href="cd_tiny_mce.jsp?id=<%= id%>">Create your own</a> 
-									</div>
-								</div>
-            				</div>
-        					<div class="clearfix"></div>
-    					</div>
-					</div>
-				</div>
-				<div class="hbox hbox-auto-xs hbox-auto-sm">
-					<div class="col contacts-div">
-   	 					<div class=""> 
-   	 					<div id="preview-container" class="data">
-							<!-- Container for theme previews -->
-							<div id="preview-container-content" class="panel-heading">
-								<% if(("email").equals(type)) {%>
-								<div class="span11 email-template hide" >
-									<div class="">
-										<h4 style = "font-size: 20px;">Your Email Templates</h4>
-									</div>
-									<div id="loading-email-template" class= "hide">
-										<img class="loading" style="padding-right:5px;opacity:0.5;" src= "/flatfull/img/ajax-loader-cursor.gif"></img>
-									</div>
-								</div>
-								<div class="span11 campaign-template hide" style="margin-bottom:20px">
-									<div class="">
-										<h4 style = "font-size: 20px;">Campaign Templates</h4>
-									</div>
-									<div id="loading-campaign-template" class= "hide">
-										<img class="loading" style="padding-right:5px;opacity:0.5;" src= "/flatfull/img/ajax-loader-cursor.gif"></img>
-									</div> 
-								</div>
-								<%} %>
-							</div>
-						</div>
-   	 					</div>
-   	 				</div>
-   	 			</div>
-   	 		</div>
-   	 	</div>
-   	</div>
-</div>
-
-
-<!-- <div class="container">
+<div class="container">
 	<div class="row">
 		<div id="preview-container" class="span12">
-			Container for theme previews
+			<!-- Container for theme previews -->
 			<div id="preview-container-title" class="page-header"></div>
 			<div id="preview-container-content"></div>
 		</div>
 	</div>
-</div> -->
+</div>
 <script>
 
 // Global variable to reuse obtained email templates json
@@ -187,59 +127,59 @@ $(function(){
       
     	  
    		// Gets email_templates_structure.js
-		get_templates_json(url, function(e){ 
-			
-			$('.tablerows_clicked').on( "click", function() {
-				var element = e.currentTarget;
-				/* load_in_editor($(element).attr("data"),"campaign_template"); */
-			});
-			 // When any theme is clicked, opens respective layouts
-			 $('div.theme-preview>a').on( "click", function(e){
-			    
-				e.preventDefault();
-			     	    
-			    // Get label to identify clicked theme in json
-			    var title = $(this).parent().find('input').val();
-			    var layouts=[];
-
-	    	    // load all layouts of clicked theme
-	    	    $.each(TEMPLATES_JSON["templates"], function(index, value){
-	    			
-	    	    	// to exit from nested loops
-	    	    	var flag = true;
-	    	    	
-	    			$.each(value.themes, function(index, theme){
-	    				
-	    				if(theme.title === title){
-
-	    					layouts = theme.layouts;
-	    				
-	    					flag = false;
-	    					
-	    					return false;
-	    				
-	    				}
-	    			});
-	    			
-	    			return flag;
-	    			
-	    		});
-	    	    
-	        	// Init fancy on layouts
-	        	show_fancy_box(layouts);
-	       });
-		});
+		get_templates_json(url);
    		
+		
+		$('.tablerows_clicked').die().live('click', function(e){
+			console.log("bhasuri");
+			var element = e.currentTarget;
+			load_in_editor($(element).attr("data"),"campaign_template");
+		});
+		 // When any theme is clicked, opens respective layouts
+		 $('div.theme-preview>a').die().live('click', function(e){
+		    
+			e.preventDefault();
+		     	    
+		    // Get label to identify clicked theme in json
+		    var title = $(this).parent().find('input').val();
+		    var layouts=[];
+
+    	    // load all layouts of clicked theme
+    	    $.each(TEMPLATES_JSON["templates"], function(index, value){
+    			
+    	    	// to exit from nested loops
+    	    	var flag = true;
+    	    	
+    			$.each(value.themes, function(index, theme){
+    				
+    				if(theme.title === title){
+
+    					layouts = theme.layouts;
+    				
+    					flag = false;
+    					
+    					return false;
+    				
+    				}
+    			});
+    			
+    			return flag;
+    			
+    		});
+    	    
+        	// Init fancy on layouts
+        	show_fancy_box(layouts);
+       });
+       
 });
 
 /**
  * Fetches email_templates_structure.js and render themes.
  **/
- function get_templates_json(url,callback)
+ function get_templates_json(url)
 {
 	 var textarea_id = '<%= id%>';
-	 var template_type = '<%= type%>';
-	 if(textarea_id == 'tinyMCEhtml_email' && template_type == 'email')
+	 if(textarea_id == 'tinyMCEhtml_email')
 		 show_email_templates();
 		// Fetch email_templates_structure.js and render
 		$.getJSON(location.origin + url, function(data){
@@ -249,9 +189,6 @@ $(function(){
 			
 			// render theme previews
 			render_theme_previews();
-			
-			if (callback && typeof (callback) === "function")
-				callback(data);
 		
 		});
 	
@@ -264,22 +201,14 @@ function render_theme_previews()
 {
 	var title = '<h2>Select a Template</h2>';
 	var textarea_id = '<%= id%>';
-	var type_editor = '<%=type%>';
 	
 	var html_link = '<span style="display:inline; float: right; margin-top: -32px;">'
-					+'<a class="btn btn-sm  btn-default" href="cd_tiny_mce.jsp?id='+textarea_id+'">'
+					+'<a class="btn" href="cd_tiny_mce.jsp?id='+textarea_id+'">'
 						+'Create your own'
 					+'</a></span>'
-					
 	
-	//$('#preview-container-title').html(title + html_link);
+	$('#preview-container-title').html(title + html_link);
 	
-	if("email"==type_editor)				
-	$('#preview-container-content').append('<div class="span11"><div class=""><h4 style = "font-size: 20px;">Agile Templates</h4></div>');
-	/*
-	heme-preview
-	
-	*/
 	$.each(TEMPLATES_JSON["templates"], function(index, value){
 
 		// Initialize the theme preview container 
@@ -356,53 +285,29 @@ function show_fancy_box(content_array)
 function show_email_templates(){
 	
 	//get list of workflows
+	$.getJSON(location.origin + '/core/api/workflows', function(workflows){
 		
-		
-	//$.getJSON(location.origin + '/core/api/workflows', function(workflows)
-			if(window.opener.getCampaignList())
-			{
-				$('#loading-campaign-template').removeClass("hide"); 
-				$('.campaign-template').removeClass("hide"); 
-		$.getJSON(location.origin + '/core/api/workflows', function(workflows){
 		var email_nodes = get_email_nodes(workflows);
 		if(CAMPAIGN_EMAIL_NODES){
-			 var el = getTemplate('campaign_templates', CAMPAIGN_EMAIL_NODES2);
-			 $('#loading-campaign-template').addClass("hide"); 
-			$('.campaign-template').append(el); 
+			var el = getTemplate('campaign_templates', CAMPAIGN_EMAIL_NODES2);
 			
-				$('.campaign-templates-panel').on('hidden.bs.collapse', function (e) {
-					var current_target = e.currentTarget;
-					$(current_target).find('.icon-minus').toggleClass('icon-plus icon-minus');
-			});
-				$('.campaign-templates-panel').on('show.bs.collapse', function (e) {
-					var current_target = e.currentTarget;
-					$(current_target).find('.icon-plus').toggleClass('icon-plus icon-minus');
-		
-				});
+			$('#preview-container-content').prepend(el);
+			
+			var el1 = getTemplate('campaign_templates1', CAMPAIGN_EMAIL_NODES2);
+			
+			$('#preview-container-content').prepend(el1);
 		}
 		
-	});
-}
-
-$.getJSON(location.origin + '/core/api/email/templates/count', function(count){
-if(count){
-$('#loading-email-template').removeClass("hide"); 
-$('.email-template').removeClass("hide"); 
-	$.getJSON(location.origin + '/core/api/email/templates/', function(templates){
+		$.getJSON(location.origin + '/core/api/email/templates', function(templates){
 			
 			USER_TEMPLATES_JSON = get_email_templates(templates);
 			
 			var el1 = getTemplate('user_templates',templates)
-			
-			$('#loading-email-template').addClass("hide"); 
-			$('.email-template').append(el1);
+
+			$('#preview-container-content').prepend(el1);
 		});
-
-
-}
-});
-
-	
+		
+	});
 }
 
 function get_email_nodes(workflows){
@@ -440,7 +345,6 @@ function get_email_nodes(workflows){
 				CAMPAIGN_EMAIL_NODES[node.id]=node;	
 		}
 		});
-		if(CAMPAIGN_EMAIL_NODES1.length)
 		CAMPAIGN_EMAIL_NODES2[workflow.id]=CAMPAIGN_EMAIL_NODES1;
 		CAMPAIGN_EMAIL_NODES1 = [];
 		
@@ -558,17 +462,7 @@ Handlebars.registerHelper('epochToHumanDate_eachkeys', function(format, value){
 		var campaign_details = value[0];
 		return campaign_details.created_time;
 		
-	});
-	
-	function collapse_it(event)
-	{
-		console.log(event);
-		$('div>.'+event+'>a>i').toggleClass('icon-plus icon-minus');
-		if($('div>.'+event+'>a>i').hasClass('icon-plus'))
-		$('tr.'+event).addClass('hide')
-		else
-		$('tr	.'+event).removeClass('hide')
-	}
+	})
 </script>
 
 <!-- Preview Templates  -->
@@ -581,9 +475,9 @@ Handlebars.registerHelper('epochToHumanDate_eachkeys', function(format, value){
 {{/unless}}
 
 {{#if this}}
-	<div class="span11">
-		<div class="" style = "margin-bottom: 20px;">
-			<h4>{{label}}</h4>
+	<div class="span12">
+		<div class="page-header">
+			<h3>{{label}}</h3>
 		</div>
 	
 		<div>
@@ -608,205 +502,166 @@ Handlebars.registerHelper('epochToHumanDate_eachkeys', function(format, value){
 </script>
 
 <script id="user_templates-template" type="text/x-handlebars-template">
-{{#unless this}}
-	<div id="logs-slate" style="margin-top: 20px;margin-left: 20px;">
-		<div class="alert alert-info">
-    		<div class="slate-content">
-				<div class="box-left pull-left m-r-md">
- 	           		<img alt="Clipboard" src="/img/clipboard.png">
-				</div>
-				<div class="box-right pull-left">
-            		<h4 class="m-t-none">No template found.</h4>
-        		</div>
-    		</div>
-			<div class="clearfix"></div>
-		</div>
-	</div>
-{{/unless}}
-
-{{#if this}}
-
-<div class="span11" style="margin-top: 20px;">
-	<div>
-		<div id="preview-container-content">
-			<table class="table table-striped showCheckboxes panel agile-table" url="">
-				<thead>
-    				<tr>
-						<th class="hide header">Id</th>                    
-						<th style="width:30%;">Name</th>
-        				<th style="width:30%;">Subject</th>
-        				<th style="width:40%;"></th>
-    				</tr>
-				</thead>
-				<tbody id="settings-email-templates-model-list" route="email-template/" class="agile-edit-row">
-					{{#each this}}
-						<tr onClick = 'load_in_editor("{{id}}","user_template")' style="cursor:pointer">
-							<td class='data hide' data='{{id}}'>{{id}}</td>
-							<td>
-								<div class="table-resp">
-    								{{name}}
-    							</div>
-    						</td> 
-   		 					<td>
-    							<div class="table-resp">
-    								{{subject}}
-    							</div>
-    						</td>   
-    						<td class="text-muted" style="color: #b2b0b1;">
-       							{{#if created_time}}
-          							<div class="text-muted table-resp text-xs"> <i class="fa fa-clock-o m-r-xs"></i>
-    	       							Created <time class="created_time time-ago" value="{{created_time}}" datetime="{{epochToHumanDate "" created_time}}">{{epochToHumanDate "ddd mmm dd yyyy" created_time}}</time>
-          							</div>
-       							{{/if}}
-    						</td>
-						</tr>
-					{{/each}}
-				</tbody>
-			</table>
-		</div>
-	</div>
+<div class="span12"><div class="page-header">
+<h3>User Email templates</h3>
 </div>
+<div>
+<div id="preview-container-content">
+<table class="table table-striped showCheckboxes panel agile-table" url="">
+<thead>
+    <tr>
+		<th class="hide header">Id</th>                    
+		<th style="width:30%;" class="header">Name</th>
+        <th style="width:30%;" class="header">Subject</th>
+        <th style="width:40%;" class="header"></th>
+    </tr>
 
-{{/if}}
+</thead>
+<tbody id="settings-email-templates-model-list" route="email-template/" class="agile-edit-row">
+{{#each this}}
+<tr onClick = 'load_in_editor("{{id}}","user_template")' style="cursor:pointer">
+<td class='data hide' data='{{id}}'>{{id}}</td>
+<td>
+		<div class="table-resp">
+    		{{name}}
+    	</div>
+    </td> 
+    <td>
+    	<div class="table-resp">
+    		{{subject}}
+    	</div>
+    </td>   
+    <td class="text-muted" style="color: #b2b0b1;">
+       {{#if created_time}}
+          <div class="text-muted table-resp text-xs"> <i class="fa fa-clock-o m-r-xs"></i>
+    	       Created <time class="created_time time-ago" value="{{created_time}}" datetime="{{epochToHumanDate "" created_time}}">{{epochToHumanDate "ddd mmm dd yyyy" created_time}}</time>
+          </div>
+       {{/if}}
+    </td>
+</tr>
+
+{{/each}}
+</tbody>
+</table>
+</div>
+</div>
 </script>
 
 <script id="campaign_templates1-template" type="text/x-handlebars-template">
+<div class="span12"><div class="page-header">
+<h3>Campaign Templates</h3>
+</div>
 <div>
-	<div id="preview-container-content">
-		<table class="table table-striped showCheckboxes panel agile-table" url="">
-			<thead>
-   				<tr>
-					<th class="hide header">Id</th>                    
-					<th style="width:30%;" class="header">Campaign Name</th>
-        			<th style="width:30%;" class="header">Subject</th>
-        			<th style="width:40%;" class="header"></th>
-    			</tr>
-			</thead>
-			<tbody id="settings-email-templates-model-list" route="email-template/" class="agile-edit-row">
-				{{#eachkeys this}}
-					{{#if_greater value.length "1"}}
-						<tr onClick = 'load_in_editor1("{{key}}","user_template")' style="cursor:pointer">
-							<td class='data hide' data='{{value.id}}'>{{value.id}}</td>
-							<td>
-								<div class="table-resp" >
-    								<div style = "text-overflow: ellipsis;  white-space: nowrap;  overflow: hidden;width: 80%;float: left;">
-										{{get_campaign_name value}}
-									</div>
-									<div style = "float: left;" class = "id_{{key}}" >
-    									<a href="#" style="float: right;" onclick = "collapse_it('id_{{key}}')"><i class="icon-plus"></i></a>
-									</div>
-    							</div>
-						    </td> 
-   	 						<td>
-   							</td>   
-    						<td class="text-muted" style="color: #b2b0b1;">
-          						<div class="text-muted table-resp text-xs"> <i class="fa fa-clock-o m-r-xs"></i>
-    	       						Created <time class="created_time time-ago" value="{{get_created_time value}}" datetime="{{epochToHumanDate_eachkeys "ddd mmm dd yyyy" value}}">{{epochToHumanDate_eachkeys "ddd mmm dd yyyy" value}}</time>
-          						</div>
-    						</td>
-						</tr>
-						{{#eachkeys value}}
-							<tr class = "hide id_{{../key}}">
-								<td class='data hide' data='{{key}}'>{{key}}</td>
-								<td>
-									<div class="table-resp">
-    									<div style = "text-overflow: ellipsis;  white-space: nowrap;  overflow: hidden;float: left;width: 80%;">
-										</div>
-    								</div>
-    							</td> 
-    							<td>
-    								<div class="table-resp">
-    									{{value.subject}} 
-    								</div>
-    							</td>   
-    							<td class="text-muted" style="color: #b2b0b1;">
-       								{{#if value.created_time}}
-          								<div class="text-muted table-resp text-xs"> <i class="fa fa-clock-o m-r-xs"></i>
-    	       								Created <time class="created_time time-ago" value="{{value.created_time}}" datetime="{{epochToHumanDate "" value.created_time}}">{{epochToHumanDate "ddd mmm dd yyyy" value.created_time}}</time>
-          								</div>
-       								{{/if}}
-    							</td>
-							</tr>
-						{{/eachkeys}}
-					{{else}}
-						<tr onClick = 'load_in_editor1("{{key}}","user_template")' style="cursor:pointer">
-							{{#eachkeys value}}
-								<td class='data hide' data='{{key}}'>{{key}}</td>
-								<td>
-									<div class="table-resp">
-    									<div style = "text-overflow: ellipsis;  white-space: nowrap;  overflow: hidden;float: left;width: 80%;">
-											{{value.campaign_name}}
-										</div>
-    								</div>
-    							</td> 
-    							<td>
-    								<div class="table-resp">
-    									{{value.subject}}
-    								</div>
-    							</td>   
-    							<td class="text-muted" style="color: #b2b0b1;">
-       								{{#if value.created_time}}
-          								<div class="text-muted table-resp text-xs"> <i class="fa fa-clock-o m-r-xs"></i>
-    	      								Created <time class="created_time time-ago" value="{{value.created_time}}" datetime="{{epochToHumanDate "" value.created_time}}">{{epochToHumanDate "ddd mmm dd yyyy" value.created_time}}</time>
-         								</div>
-       								{{/if}}
-    							</td>
-							{{/eachkeys}}
-						{{/if_greater}}
-					</tr>
-				{{/eachkeys}}
-			</tbody>
-		</table>
-	</div>
+<div id="preview-container-content">
+<table class="table table-striped showCheckboxes panel agile-table" url="">
+<thead>
+    <tr>
+		<th class="hide header">Id</th>                    
+		<th style="width:30%;" class="header">Campaign Name</th>
+        <th style="width:30%;" class="header">Subject</th>
+        <th style="width:40%;" class="header"></th>
+    </tr>
+
+</thead>
+<tbody id="settings-email-templates-model-list" route="email-template/" class="agile-edit-row">
+{{#eachkeys this}}
+
+<tr onClick = 'load_in_editor("{{key}}","user_template")' style="cursor:pointer">
+
+
+{{#if_greater value.length "1"}}
+<td class='data hide' data='{{value.id}}'>{{value.id}}</td>
+<td>
+		<div class="table-resp">
+    		{{get_campaign_name value}}
+    		<a href="#" style="float: right;" class="multiple-add"><i class="icon-plus"></i></a>
+    	</div>
+    	</div>
+    </td> 
+    <td>
+    </td>   
+    <td class="text-muted" style="color: #b2b0b1;">
+          <div class="text-muted table-resp text-xs"> <i class="fa fa-clock-o m-r-xs"></i>
+    	       Created <time class="created_time time-ago" value="{{get_created_time value}}" datetime="{{epochToHumanDate_eachkeys "ddd mmm dd yyyy" value}}">{{epochToHumanDate_eachkeys "ddd mmm dd yyyy" value}}</time>
+          </div>
+    </td>
+
+
+
+{{else}}
+
+{{#eachkeys value}}
+<td class='data hide' data='{{key}}'>{{key}}</td>
+<td>
+		<div class="table-resp">
+    		{{value.campaign_name}}
+    	</div>
+    </td> 
+    <td>
+    	<div class="table-resp">
+    		{{value.subject}}
+    	</div>
+    </td>   
+    <td class="text-muted" style="color: #b2b0b1;">
+       {{#if value.created_time}}
+          <div class="text-muted table-resp text-xs"> <i class="fa fa-clock-o m-r-xs"></i>
+    	       Created <time class="created_time time-ago" value="{{value.created_time}}" datetime="{{epochToHumanDate "" value.created_time}}">{{epochToHumanDate "ddd mmm dd yyyy" value.created_time}}</time>
+          </div>
+       {{/if}}
+    </td>
+
+{{/eachkeys}}
+{{/if_greater}}
+
+
+</tr>
+
+{{/eachkeys}}
+</tbody>
+</table>
+</div>
 </div>
 </script>
 
 <script id="campaign_templates-template" type="text/x-handlebars-template">
-
-{{#unless this}}
-	<div id="logs-slate" style="margin-top: 20px;margin-left: 20px;">
-		<div class="alert alert-info">
-    		<div class="slate-content">
-				<div class="box-left pull-left m-r-md">
- 	           		<img alt="Clipboard" src="/img/clipboard.png">
-				</div>
-				<div class="box-right pull-left">
-            		<h4 class="m-t-none">None of the campaign match this criteria.</h4>
-        		</div>
-    		</div>
-			<div class="clearfix"></div>
-		</div>
+<div class="span12">
+	<div class="page-header">
+		<h3>Campaign templates</h3>
 	</div>
-{{/unless}}
 
-{{#if this}}
-
-<div class="span11" style="margin-top: 20px;">
 	<div>
 		<div id="preview-container-content">
-			<div class="accordion" id="campaigns-accordion">
-				<div id="campaign-names-list">
+			<div class="accordion" id="campaigns-accordion">alfkjd
+				<div id="campaign-names-list1">
 					{{#eachkeys this}}
-						<div  class = "div-striped" style = "  padding: 10px;   margin-bottom: 3px;">
-							<form id="campaign_form_{{key}}" class="form-horizontal m-b-none pipeline" method=post>
-								<div id="{{key}}-campaign-email-subject" class="accordion-group overflow-hidden campaign-templates-panel"  >
-									<div class="accordion-heading">
-											{{get_campaign_name value}}
-											<a class="accordion-toggle collapsed text-l-none-hover" style="width:90%" data-toggle="collapse" data-parent="#campaigns-accordion" href="#campaign-name-{{key}}-accordion">
-											<i class="icon-plus" style="float: right;"></i>
+						<div>
+							<form id="campaign_form_{{key}}" class="form-horizontal m-t-sm m-b-none pipeline" method=post>
+								<div id="{{key}}-campaign-email-subject" class="accordion-group overflow-hidden m-b-xs"  >
+									<div class="accordion-heading" style="background:#f5f5f5;">ddd
+										<h4>
+											<div>
+											{{get_campaign_name value}}sss
+											<a class="accordion-toggle collapsed pull-left text-l-none-hover" style="width:90%" data-toggle="collapse" data-parent="#campaigns-accordion" href="#campaign-name-{{key}}-accordion">
+											<i class="icon-plus" style="float: right;margin-right: -58px;"></i>
 											</a>
+											</div>
+										</h4>
 										<div class="clearfix"></div>
 									</div>
 									<div class="collapse" id="campaign-name-{{key}}-accordion">
 										<fieldset>
     										<div class="control-group m-b-none">  	 
 												<div id ="email-subject-{{key}}">
-													<table class="table agile-ellipsis-dynamic custom-fields-table m-b-xxs" style = "margin-top: 6px;" >
+													<table class="table table-bordered agile-ellipsis-dynamic custom-fields-table m-b-xxs" >
+														<colgroup><col width="50%"><col width="3%"></colgroup>
 														<tbody class="campaigns-tbody ui-sortable">
 															{{#eachkeys value}}
 																<tr class="tablerows_clicked" style="display: table-row;"  data="{{value.id}}">
 																	<td>
-																		<div class="p-l-sm inline-block v-top text-ellipsis" style="width:80%"><a onClick = 'load_in_editor("{{value.id}}","campaign_template")'>{{value.subject}}</a></div>
+																		<div class="p-l-sm inline-block v-top text-ellipsis" style="width:80%">{{value.subject}}</div>
+																	</td>
+																	<td class="p-r-none">
+																		<div class="m-b-n-xs" style="display:none;"></div>
 																	</td>
 																</tr>
 															{{/eachkeys}}
@@ -826,9 +681,68 @@ Handlebars.registerHelper('epochToHumanDate_eachkeys', function(format, value){
 	</div>
 </div>
 
-{{/if}}
-
+</div>
 </script>
 
 </body>
 </html>
+
+
+
+
+
+
+
+
+<div class="span11">
+	<div class="page-header">
+		<h3>Campaign templates</h3>
+	</div>
+
+	<div>
+		<div id="preview-container-content">
+			<div class="accordion" id="campaigns-accordion">
+				<div id="campaign-names-list">
+					{{#eachkeys this}}
+						<div>
+							<form id="campaign_form_{{key}}" class="form-horizontal m-t-sm m-b-none pipeline" method=post>
+								<div id="{{key}}-campaign-email-subject" class="accordion-group overflow-hidden m-b-xs"  >
+									<div class="accordion-heading" style="background:#f5f5f5;">
+										<h4><a class="accordion-toggle collapsed pull-left text-l-none-hover" style="width:90%" data-toggle="collapse" data-parent="#campaigns-accordion" href="#campaign-name-{{key}}-accordion">{{get_campaign_name value}}</a>
+										</h4>
+										<div class="clearfix"></div>
+									</div>
+									<div class="collapse" id="campaign-name-{{key}}-accordion">
+										<fieldset>
+    										<div class="control-group m-b-none">  	 
+												<div id ="email-subject-{{key}}">
+													<table class="table table-bordered agile-ellipsis-dynamic custom-fields-table m-b-xxs" >
+														<colgroup><col width="50%"><col width="3%"></colgroup>
+														<tbody class="campaigns-tbody ui-sortable">
+															{{#eachkeys value}}
+																<tr class="tablerows_clicked" style="display: table-row;"  data="{{value.id}}">
+																	<td>
+																		<div class="p-l-sm inline-block v-top text-ellipsis" style="width:80%">{{value.subject}}</div>
+																	</td>
+																	<td class="p-r-none">
+																		<div class="m-b-n-xs" style="display:none;"></div>
+																	</td>
+																</tr>
+															{{/eachkeys}}
+														</tbody>
+													</table>
+												</div>
+    										</div> 
+    									</fieldset>
+    	 							</div>
+								</div>
+							</form>
+						</div>
+					{{/eachkeys}}
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+</div>
