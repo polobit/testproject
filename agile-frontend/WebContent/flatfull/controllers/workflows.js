@@ -461,7 +461,7 @@ var WorkflowsRouter = Backbone.Router
 			triggerAddNew : function(campaign_id)
 			{
 				$('#content').html("<div id='trigger-listers'>&nbsp;</div>");
-				this.triggerModelview = new Base_Model_View({template : "trigger-categories", isNew : true, window : 'triggers',
+				this.triggerModelview = new Base_Model_View({ url : 'core/api/triggers', template : "trigger-categories", isNew : true, window : 'triggers',
 					/**
 					 * Callback after page rendered.
 					 * 
@@ -473,23 +473,7 @@ var WorkflowsRouter = Backbone.Router
 					//	var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
 
 						// fill the selected campaign-id
-						head.js(LIB_PATH + 'jscore/triggers/flip.js', function()
-								{
-							$(".flip-panel").flip(
-									{
-										  trigger: 'click',
-										  axis: 'y'
-										});
-							
-							$(".flip-panel-off").on('click',function(e){
-								e.stopPropagation();
-						      });
-
-								});
 						
-						$("#test").on('flip:click',function(){
-							  $('#test').flip('toggle');
-							});
 						$('#campaign-id').val(campaign_id);
 						initializeTriggerEventListners(campaign_id);
 					}

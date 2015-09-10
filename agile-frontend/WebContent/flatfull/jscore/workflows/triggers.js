@@ -450,6 +450,10 @@ function initializeTriggerEventListners()
 		//$('#trigger-type', el).val(type).attr("selected", "selected").trigger('change');
 
 	});
+
+	$('#trigger-listers').on('click', '.save-trigger', function(e){
+	console.log("yes");
+});
 }
 
 
