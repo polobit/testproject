@@ -3,16 +3,16 @@ var portlet_template_loaded_map = {};
 
 $(function()
 {
-				$.getJSON('/core/api/users/agileusers', function(users)
+	$.getJSON('/core/api/users/agileusers', function(users)
+	{
+		$.each(users, function(i, user)
+		{
+			if (CURRENT_DOMAIN_USER.id == user.domain_user_id)
 			{
-				$.each(users, function(i, user)
-				{
-					if (CURRENT_DOMAIN_USER.id == user.domain_user_id)
-					{
-					CURRENT_AGILE_USER = user;
-					}
-				});
-			});
+				CURRENT_AGILE_USER = user;
+			}
+		});
+	});
 });
 /**
  * Loads all the portlets for the current agile user
@@ -424,7 +424,7 @@ function showPortletSettings(el){
 		var options ='<option value="">Select...</option>'
 			+'<option value="contacts">All Contacts</option>'
 			+'<option value="myContacts">My Contacts</option>';
-		$.ajax({ type : 'GET', url : '/core/api/filters?type=PERSON', async : false, dataType : 'json',
+		$.ajax({ type : 'GET', url : '/core/api/filters?type=PERSON', dataType : 'json',
 			success: function(data){
 				$.each(data,function(index,contactFilter){
 					options+="<option value="+contactFilter.id+">"+contactFilter.name+"</option>";
@@ -502,27 +502,22 @@ function showPortletSettings(el){
 		if(App_Portlets.deal_tracks!=undefined && App_Portlets.deal_tracks!=null)
 			tracks = App_Portlets.deal_tracks;
 		else{
-			$.ajax({ type : 'GET', url : '/core/api/milestone/pipelines', async : false, dataType : 'json',
+			$.ajax({ type : 'GET', url : '/core/api/milestone/pipelines', dataType : 'json',
 				success: function(data){
 					App_Portlets.track_length = data.length;
 					App_Portlets.deal_tracks = data;
 					tracks = App_Portlets.deal_tracks;
+
+					portlet_utiity.addTracks(tracks, base_model, elData);
 				} });
+
+			return;
 		}
+
+
+		portlet_utiity.addTracks(tracks, base_model, elData);
 		
-		var options = '';
-		$.each(tracks,function(index,trackObj){
-			if(base_model.get('settings').track==0 && trackObj.name=="Default")
-				options+="<option value="+trackObj.id+" selected='selected'>"+trackObj.name+"</option>";
-			else if(base_model.get('settings').track==trackObj.id)
-				options+="<option value="+trackObj.id+" selected='selected'>"+trackObj.name+"</option>";
-			else
-				options+="<option value="+trackObj.id+">"+trackObj.name+"</option>";
-		});
 		
-		$('#track', elData).html(options);
-		$('.loading-img').hide();
-		$("#deals", elData).find('option[value='+ base_model.get("settings").deals +']').attr("selected", "selected");
 		//$("#due-date", elData).val(new Date(base_model.get("settings")["due-date"]*1000).format('mm/dd/yyyy'));
 	}else if(base_model.get('portlet_type')=="DEALS" && base_model.get('name')=="Closures Per Person"){
 		$('#portletsDealsClosuresPerPersonSettingsModal').modal('show');
@@ -556,27 +551,21 @@ function showPortletSettings(el){
 		if(App_Portlets.deal_tracks!=undefined && App_Portlets.deal_tracks!=null)
 			tracks = App_Portlets.deal_tracks;
 		else{
-			$.ajax({ type : 'GET', url : '/core/api/milestone/pipelines', async : false, dataType : 'json',
+			$.ajax({ type : 'GET', url : '/core/api/milestone/pipelines', dataType : 'json',
 				success: function(data){
 					App_Portlets.track_length = data.length;
 					App_Portlets.deal_tracks = data;
 					tracks = App_Portlets.deal_tracks;
+
+					portlet_utiity.addTracks(tracks, base_model, elData);
+					
 				} });
+
+			 return;
 		}
 		
-		var options = '';
-		$.each(tracks,function(index,trackObj){
-			if(base_model.get('settings').track==0 && trackObj.name=="Default")
-				options+="<option value="+trackObj.id+" selected='selected'>"+trackObj.name+"</option>";
-			else if(base_model.get('settings').track==trackObj.id)
-				options+="<option value="+trackObj.id+" selected='selected'>"+trackObj.name+"</option>";
-			else
-				options+="<option value="+trackObj.id+">"+trackObj.name+"</option>";
-		});
+		portlet_utiity.addTracks(tracks, base_model, elData);
 		
-		$('#track', elData).html(options);
-		$('.loading-img').hide();
-		$("#deals", elData).find('option[value='+ base_model.get("settings").deals +']').attr("selected", "selected");
 		//$("#due-date", elData).val(new Date(base_model.get("settings")["due-date"]*1000).format('mm/dd/yyyy'));
 	}else if(base_model.get('portlet_type')=="DEALS" && base_model.get('name')=="Deals Assigned"){
 		$('#portletsDealsAssignedSettingsModal').modal('show');
@@ -598,7 +587,7 @@ function showPortletSettings(el){
 		
 		if(base_model.get("settings")["calls-user-list"]!=undefined){
 			var options ='';
-			$.ajax({ type : 'GET', url : '/core/api/users', async : false, dataType : 'json',
+			$.ajax({ type : 'GET', url : '/core/api/users', dataType : 'json',
 				success: function(data){
 					$.each(data,function(index,domainUser){
 						if(!domainUser.is_disabled)
@@ -612,7 +601,7 @@ function showPortletSettings(el){
 				} });
 		}else{
 			var options ='';
-			$.ajax({ type : 'GET', url : '/core/api/users', async : false, dataType : 'json',
+			$.ajax({ type : 'GET', url : '/core/api/users', dataType : 'json',
 				success: function(data){
 					$.each(data,function(index,domainUser){
 						if(!domainUser.is_disabled)
@@ -651,7 +640,7 @@ function showPortletSettings(el){
 
 		if(base_model.get("settings")["task-report-user-list"]!=undefined){
 			var options ='';
-			$.ajax({ type : 'GET', url : '/core/api/users', async : false, dataType : 'json',
+			$.ajax({ type : 'GET', url : '/core/api/users', dataType : 'json',
 				success: function(data){
 					$.each(data,function(index,domainUser){
 						if(!domainUser.is_disabled)
@@ -665,7 +654,7 @@ function showPortletSettings(el){
 				} });
 		}else{
 			var options ='';
-			$.ajax({ type : 'GET', url : '/core/api/users', async : false, dataType : 'json',
+			$.ajax({ type : 'GET', url : '/core/api/users', dataType : 'json',
 				success: function(data){
 					$.each(data,function(index,domainUser){
 						if(!domainUser.is_disabled)
@@ -727,7 +716,7 @@ function showPortletSettings(el){
 
 		if(base_model.get("settings").user!=undefined){
 			var options ='';
-			$.ajax({ type : 'GET', url : '/core/api/portlets/portletUsers', async : false, dataType : 'json',
+			$.ajax({ type : 'GET', url : '/core/api/portlets/portletUsers', dataType : 'json',
 				success: function(data){
 					$.each(data,function(index,domainUser){
 						if(!domainUser.is_disabled)
@@ -741,7 +730,7 @@ function showPortletSettings(el){
 				} });
 		}else{
 			var options ='';
-			$.ajax({ type : 'GET', url : '/core/api/portlets/portletUsers', async : false, dataType : 'json',
+			$.ajax({ type : 'GET', url : '/core/api/portlets/portletUsers', dataType : 'json',
 				success: function(data){
 					$.each(data,function(index,domainUser){
 						if(!domainUser.is_disabled)
@@ -777,7 +766,7 @@ function showPortletSettings(el){
 		}else{
 			options += '<option value="anyTrack">Any</option>';
 		}
-		$.ajax({ type : 'GET', url : '/core/api/milestone/pipelines', async : false, dataType : 'json',
+		$.ajax({ type : 'GET', url : '/core/api/milestone/pipelines', dataType : 'json',
 				success: function(data){
 					$.each(data,function(index,trackObj){
 						if(base_model.get('settings').track==trackObj.id)
@@ -3002,4 +2991,90 @@ function getaspectratio(el)
 }
 
 
+var portlet_utiity = {
+
+  addTracks: function(tracks, base_model, elData){
+  		var options = '';
+		$.each(tracks,function(index,trackObj){
+			if(base_model.get('settings').track==0 && trackObj.name=="Default")
+				options+="<option value="+trackObj.id+" selected='selected'>"+trackObj.name+"</option>";
+			else if(base_model.get('settings').track==trackObj.id)
+				options+="<option value="+trackObj.id+" selected='selected'>"+trackObj.name+"</option>";
+			else
+				options+="<option value="+trackObj.id+">"+trackObj.name+"</option>";
+		});
+		
+		$('#track', elData).html(options);
+		$('.loading-img').hide();
+		$("#deals", elData).find('option[value='+ base_model.get("settings").deals +']').attr("selected", "selected");
+  },
+
+  /**
+	 * getting flitered contact portlet header name
+	 */
+  get_filtered_contact_header : function(base_model, callback){
+
+  		if (filter_name == 'contacts')
+			return callback("All Contacts");
+		else if (filter_name == 'companies')
+			return callback("All Companies");
+		else if (filter_name == 'recent')
+			return header_name = "Recent Contacts";
+		else if (filter_name == 'myContacts')
+			return callback("My Contacts");
+		else if (filter_name == 'leads')
+			return callback("Leads");
+		else
+		{
+
+			var contactFilter = $.ajax({ type : 'GET', url : '/core/api/filters/' + base_model.get("settings").filter, dataType : 'json', success : function(data)
+			{
+				var header_name = '';
+				if (data != null && data != undefined)
+					header_name = "" + data.name;
+
+				if (!header_name){
+					header_name = "Contact List";
+				}
+					
+				return callback(header_name);
+
+			} });
+		}
+
+  }, 
+
+  /**
+	 * getting flitered contact portlet header name
+	 */
+  get_deals_funnel_portlet_header : function(base_model, callback){
+
+  	var track_id = base_model.get("settings").track;
+
+  	App_Portlets.track_length = 0;
+	$.ajax({ type : 'GET', url : '/core/api/milestone/pipelines', dataType : 'json', success : function(data)
+	{
+		App_Portlets.track_length = data.length;
+		App_Portlets.deal_tracks = data;
+
+		if (App_Portlets.track_length > 1)
+		{
+			if (track_id == 0)
+				return callback("Default");
+			else
+			{
+				var milestone = $.ajax({ type : 'GET', url : '/core/api/milestone/' + track_id, dataType : 'json', success : function(data)
+				{
+					if (data != null && data != undefined)
+						return callback("" + data.name + "");
+				} });
+			}
+		}
+
+	} });
+	
+ },
+
+
+};
 

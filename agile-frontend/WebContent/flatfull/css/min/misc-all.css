@@ -289,7 +289,6 @@ padding: 0 8px 0 0;
 	border-radius: 0 0 4px 4px;*/
     overflow: auto;
     
-    
 }
 .portlet_body table td
 {
@@ -805,9 +804,9 @@ border-radius: 2px;
  	overflow:hidden!important;
  }
  .portlet-error-message{
- 	padding: 11px 15px;
-	font-size: 15px;
-	font-style: italic;
+ 	padding: 50px 15px;
+	font-size: 14px;
+	text-align: center;
 	color: #98a6ad;
  }
  .portlet-error-privilege-message{
@@ -824,7 +823,7 @@ border-radius: 2px;
  	font-weight: 300!important;
 }
 .ob-portlet-font-check{
-	padding-left: 2px;
+	/* padding-left: 2px; */
 }
 .ob-portlet-font-no-check{
 	padding-left: 2px;
@@ -839,6 +838,7 @@ border-radius: 2px;
   	opacity: 0;
   	color: #98a6ad;
 }
+
 .leader-board li {
   	width: 25%;
   	border-right: 1px solid #ddd;
@@ -962,6 +962,230 @@ border-radius: 2px;
 .portlet_header small {
 	color: #98a6ad!important;
  	font-weight: 300!important;
+}
+
+ 
+.scroll > div > div
+{
+	border-bottom:1px solid #edf1f2; 
+}
+.scroll > div > div:last-child {
+  border-bottom: none;
+}
+.scroll div[id*="heading"] 
+{
+ border-bottom:1px solid #edf1f2;
+ border-top:1px solid #edf1f2;
+ 
+}
+ 
+
+.activity_body 
+{
+	margin-top:-1px;
+}
+
+.stats-report-settings .portlet_header_icons {
+	visibility: hidden;
+}
+.stats-report-settings:hover .portlet_header_icons {
+	visibility: visible;
+}
+/* .screenshot {
+	display : none;
+	position: absolute;
+	min-width: 100%;
+	top:0px;
+	background-color: white;
+	z-index: 1000;
+	border: 1px solid #edf1f2;
+	text-align: center;
+	left:99%;
+} */
+.show_screeshot + .popover
+{
+	max-width: none;
+	
+}
+
+/* Mini Calendar */
+.portlet_body_calendar>#calendar_container
+{
+	font-size : 12px;
+}
+.portlet_body_calendar>#calendar_container>.fc-content>.fc-view>.fc-border-separate>tbody>tr
+ {
+  line-height: .45;
+ }
+ 
+.portlet_body_calendar>#calendar_container>.fc-header>tbody>tr>td
+{
+	height : 11px;
+	background-color:#fff;
+	color:black;
+	 cursor: move;
+}
+.portlet_body_calendar>#calendar_container>.fc-header>tbody>tr>td .fc-button>.fc-button-inner, .portlet_body_calendar>#calendar_container>.fc-header>tbody>tr>td .fc-state-default{
+	background:#fff;
+	border-color:#fff;
+	margin-right:5px
+}
+.portlet_body_calendar>#calendar_container>.fc-header>tbody>tr>.fc-header-center h2
+{
+	font-size:16px;
+	line-height : 15px;
+	padding-right:	5px;
+	 text-transform: lowercase; 
+	 color:#58666e
+}
+
+.portlet_body_calendar>#calendar_container>.fc-content>.fc-view>.fc-border-separate>tbody>tr>td>div>.fc-day-number
+{
+	float : none;
+	text-align : center;
+	position: relative;
+	/*vertical-align:middle;*/
+	
+}
+
+
+.portlet_body_calendar>#calendar_container>.fc-header>tbody>tr .fc-button-content
+{
+	height : 1.5em;
+}
+ 
+.portlet_body_calendar>#calendar_container>.fc-content>.fc-view div>.fc-event{
+	width : 4px!important;
+	z-index: auto!important;
+	border-left:0;
+	min-height:0;
+}
+
+.portlet_body_calendar>#calendar_container>.fc-content>.fc-view>.fc-border-separate th, .portlet_body_calendar>#calendar_container>.fc-content>.fc-view>.fc-border-separate td
+{
+	border-width:1px 0 0 0;
+	border-color:rgba(128, 128, 128, 0.06);
+}
+
+/* .portlet_body_calendar>#calendar_container>.fc-content>.fc-view>.fc-border-separate th.fc-first, .portlet_body_calendar>#calendar_container>.fc-content>.fc-view>.fc-border-separate td.fc-first
+{
+	border-left-width:1px
+} */
+
+.portlet_body_calendar tr:last-child td
+{
+	border-bottom:none;
+}
+
+.portlet_body_calendar::-webkit-scrollbar {
+ width: 5px;
+ margin-right: 4px !important;
+ background:#eee;
+}
+
+.portlet_body_calendar::-webkit-scrollbar-thumb {
+ background: #bebebe;
+}
+.portlet_body_calendar .events_show{
+	background-color:#CBE0E7;
+	height:100%;
+}
+
+.events_show::-webkit-scrollbar-thumb {
+ background: #bebebe;
+}
+.events_show::-webkit-scrollbar {
+ width: 5px;
+ margin-right: 4px !important;
+ background:#eee;
+}
+.events_show{
+	overflow-y:auto
+}
+
+
+.portlet_body_calendar>#calendar_container>.fc-content>.fc-view div>.fc-event>.fc-overlay{
+ min-width: 210px!important;
+ max-width: 210px!important;
+}
+.portlet_body_calendar>#calendar_container>.fc-content>.fc-view 
+{
+	overflow:inherit;
+}
+.mini-cal>.gs-resize-handle-both
+{
+	z-index:0;
+}
+ .portlet_body_calendar>#calendar_container>.fc-header>tbody>tr>.fc-header-left, .portlet_body_calendar>#calendar_container>.fc-header>tbody>tr>.fc-header-right{
+  width: 45%;
+  text-align: center;
+  color:lightgray;
+} 
+ .portlet_body_calendar thead{
+color:lightgray;
+}
+.portlet_body_calendar>#calendar_container>.fc-header .fc-button{
+	visibility:hidden;
+}
+.portlet_body_calendar ul
+{
+list-style:inherit!important;
+padding-left:28px;
+}
+
+.portlet_body_calendar .fc-overlay .pull-up{
+top:15px;
+}
+
+.portlet_body_calendar .fc-overlay.bottom{
+  left: -100px;
+  top: -79px;
+  padding: 0 10px;
+  margin: 0;
+}
+
+.arrow.bottom{
+top:70px;
+}
+
+.plus-button:after {
+  content: '+';
+  font-size: 10px;
+}
+
+.portlet_body_calendar .fc-header-title  {
+	padding-top:5px
+ }
+.portlet_body_calendar .fc-header-title h2:first-letter { 
+text-transform: uppercase;
+ }
+ .portlet-calendar-error-message
+{
+	padding: 20px 10px;
+	font-size: 14px;
+	font-style: italic;
+	text-align: center;
+	color: #98a6ad;
+	word-wrap: break-word;
+}
+
+.text-count{
+font-size:30px;
+    position: relative;
+    top: 50%;
+    transform: translateY(-80%);
+}
+
+.stats_text
+{
+	width:100%;
+	height:100%;
+}
+
+.graph >.highcharts-container
+{
+	height: 100%!important;
+	width : 100%!important;
 }
 /* ************* Social Suite CSS ***************** */
 .RTuserlist-modal,.a,.social-app-content>li,.tweet-body>ul,.tweet-body>li,.tweet-actions>ul,.tweet-actions>li,.tweet-footer>ul,.tweet-footer>li
@@ -1857,6 +2081,10 @@ padding: 6px 0 6px 0;
 
 .listed-task.gray:after {
 	background: #edf1f2;
+}
+
+.listed-task.blue:after {
+	background: #7266ba;
 }
 
 .listed-task:first-child {
@@ -6767,7 +6995,7 @@ border-width: 2px!important;
 }
 
 .fc-b-warning{
-border-color: #fad733!important;
+border-color: #7266ba!important;
 }
 
 .fc-border-height {
@@ -6778,7 +7006,7 @@ border-color: #fad733!important;
 border-color: #edf1f2!important;
 }
 .fc-b-info{
-border-color: #23b7e5!important;
+border-color: #fad733!important;
 }
 .fc-b-danger {
   border-color: #f05050!important;
@@ -6786,6 +7014,195 @@ border-color: #23b7e5!important;
 #milestone_val > span.help-inline{
 	font-size: 13.5px;
 }
+
+
+/* Popup alerts (Chrome extension)*/
+.agent-popup-alert {
+	z-index:99999;
+	position: fixed;
+	top: 53px;
+	right: 20px;
+	max-width: 400px;
+	background: #fff;
+	border-radius: 5px;
+	border: 1px solid #e5e5e5;
+	-webkit-box-shadow: rgba(0, 0, 0, 0.2) 0 0 30px -3px;
+	box-shadow: rgba(0, 0, 0, 0.2) 0 0 30px -3px;
+	-moz-box-shadow: rgba(0, 0, 0, 0.2) 0 0 30px -3px;
+}
+
+.agent-popup-alert .popup-content {
+	margin: 15px 25px 15px 80px;
+	overflow: hidden;
+}
+
+.agent-popup-alert .button-sesction {
+	margin: 0px 10px 15px 80px;
+}
+
+.agent-popup-alert .agent-popup-alert-dismiss {
+	position: absolute;
+	top: 10px;
+	right: 10px;
+}
+
+.agent-popup-alert .clickdesk-image {
+	position: absolute;
+	top: 20px;
+	left: 18px;
+}
+
+.agent-popup-alert .clickdesk-image img {
+	height: 40px;
+}
+
+.google-apps-icon{
+	height: 32px;
+  margin-top: 14px;
+  margin-left: 5px;
+}
+/* End of Popup alerts (Chrome extension)*/
+.online-meeting-padding{
+  padding: 6px 15px !important;
+  background-color: #edf1f2;
+}
+.online-meeting-border{
+	border: 1px solid #ddd;
+}
+.business-hours-margin{
+	margin-top: 12px;
+}
+.online-padding{
+margin-left:13px;
+}
+
+//added custom css for bootstrap modals on venkat demand
+
+
+
+-----------------------------------------------------
+.addtosite-modal{
+	bottom: auto;
+  display: block;
+  left: auto;
+  position: relative;
+  right: auto;
+  top: auto;
+  z-index: 1;
+  overflow: hidden;
+}
+.addtosite-modal-dialogue{
+	left: auto;
+  color: #404040;
+  margin-top: auto;
+  margin-left: auto;
+  margin-right: auto;
+}
+.addtosite-modal-content{
+	box-shadow: none;
+  border-radius: 0;
+}
+
+.addtosite-modal-header{
+	padding: 15px;
+  position: relative;
+  border: 0;
+}
+.addtosite-modal-title{
+	  font-size: 18px;
+  font-weight: 300;
+}
+.addtosite-modal-body{
+	min-height: 90px;
+}
+.addtosite-modal-footer{
+	padding: 10px 15px;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  background-color: rgba(0,0,0,0.025);
+  color: #5c7174;
+  border-color: rgba(0,0,0,0.04);
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+
+.addtosite-modal-header:after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 15px;
+  right: 15px;
+  height: 1px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  }
+  .text-15 {
+  font-size: 15px;
+  }
+  
+  .addtosite-model-header-border{
+  border-bottom: none !important;
+}
+.addtosite-body-content{
+	border: 1px solid #ddd;
+    padding: 30px;
+    text-align: center;border-radius: 6px;
+}
+.margin-left-18{
+	margin-left: 18px;
+}
+  
+#contact-results > li.active{
+	background-color: #fafafa;
+}
+#deals-results > li.active{
+	background-color: #fafafa;
+}
+#document-results > li.active{
+	background-color: #fafafa;
+}
+#case-results > li.active{
+	background-color: #fafafa;
+}
+
+  .jslider .jslider-bg i,
+  .jslider .jslider-pointer { background: url(../img/jslider.png) no-repeat 0 0; }
+
+  .jslider { display: block; width: 100%; height: 1em; position: relative; top: 0.6em; font-family: Arial, sans-serif; }
+  .jslider table { width: 100%; border-collapse: collapse; border: 0; }
+  .jslider td, .jslider th { padding: 0; vertical-align: top; text-align: left; border: 0; }
+
+  .jslider table,
+  .jslider table tr,
+  .jslider table tr td { width: 100%; vertical-align: top; }
+
+  .jslider .jslider-bg { position: relative; }
+  .jslider .jslider-bg i { height: 5px; position: absolute; font-size: 0; top: 0; }
+  .jslider .jslider-bg .l { width: 90%; background-position: 0 0; left: 0; }
+  .jslider .jslider-bg .f { width: 80%; left: 10%; background-repeat: repeat-x; background-position: 0 -20px; }
+  .jslider .jslider-bg .r { width: 10%; left: 90%; background-position: right 0; }
+  .jslider .jslider-bg .v { position: absolute; width: 60%; left: 20%; top: 0; height: 5px; background-repeat: repeat-x; background-position: 0 -40px; }
+
+  .jslider .jslider-pointer { width: 13px; height: 15px; background-position: 0 -60px; position: absolute; left: 20%; top: -4px; margin-left: -6px; cursor: pointer; cursor: hand; }
+  .jslider .jslider-pointer-hover { background-position: -20px -60px; }
+  .jslider .jslider-pointer-to { left: 80%; }
+
+  .jslider .jslider-label { font-size: 9px; line-height: 12px; color: black; opacity: 0.4; white-space: nowrap; padding: 0px 2px; position: absolute; top: -18px; left: 0px; }
+  .jslider .jslider-label-to { left: auto; right: 0; }
+
+  .jslider .jslider-value { font-size: 9px; white-space: nowrap; padding: 1px 2px 0; position: absolute; top: -19px; left: 20%; background: white; line-height: 12px; -moz-border-radius: 2px; -webkit-border-radius: 2px; -o-border-radius: 2px; border-radius: 2px; }
+  .jslider .jslider-value-to { left: 80%; }
+
+  .jslider .jslider-label small,
+  .jslider .jslider-value small { position: relative; top: -0.4em; }
+
+  .jslider .jslider-scale { position: relative; top: 9px; }
+  .jslider .jslider-scale span { position: absolute; height: 5px; border-left: 1px solid #999; font-size: 0; }
+  .jslider .jslider-scale ins { font-size: 9px; text-decoration: none; position: absolute; left: 0px; top: 5px; color: #999; }
+
+  .jslider-single .jslider-pointer-to,
+  .jslider-single .jslider-value-to,
+  .jslider-single .jslider-bg .v,
+  .jslider-limitless .jslider-label { display: none; }
 @font-face {
 	font-family: 'Simple-Line-Icons';
 	src:url('../fonts/Simple-Line-Icons.eot');

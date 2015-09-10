@@ -51,27 +51,42 @@ function contactTableView(base_model,customDatefields,view) {
 						if(!property)
 						{
 							json.id = contact.id;
-							$(el).append(getTemplate('contacts-custom-view-custom', json));
+							getTemplate('contacts-custom-view-custom', json, undefined, function(template_ui){
+								if(!template_ui)
+									  return;
+								$(el).append($(template_ui));
+							}, null);
 							return;
 						}
 						if(isDateCustomField(customDatefields,property)){
 							console.log('got true');
 							json = property;
 							json.id = contact.id;
-							$(el).append(getTemplate('contacts-custom-view-custom-date', json));
+							getTemplate('contacts-custom-view-custom-date', json, undefined, function(template_ui){
+								if(!template_ui)
+									  return;
+								$(el).append($(template_ui));
+							}, null);
 						}
 						else
 						{
 							json = property;
 							json.id = contact.id;
-							$(el).append(getTemplate('contacts-custom-view-custom', json));
+							getTemplate('contacts-custom-view-custom', json, undefined, function(template_ui){
+								if(!template_ui)
+									  return;
+								$(el).append($(template_ui));
+							}, null);
+							
 						}
 						return;
 					}
 					
-			/*		$('#contacts-custom-view-model-template').append(
-							getTemplate('contacts-custom-view-' + field_name, contact));*/
-					$(el).append(getTemplate('contacts-custom-view-' + field_name, contact));
+					getTemplate('contacts-custom-view-' + field_name, contact, undefined, function(template_ui){
+						if(!template_ui)
+							  return;
+						$(el).append($(template_ui));
+					}, null);
 				});
 				
 	// Appends model to model-list template in collection template
@@ -111,23 +126,27 @@ function setupViews(cel, button_name) {
 	// Creates a view for custom views
 	/*head.load(CSS_PATH + 'css/bootstrap_submenu.css',  function()
 	{*/
-		var el = getTemplate("contact-view-collection");
-		$("#view-list", cel).html(el);
-		/*$("#view-list", cel).find('.dropdown-menu').find(".dropdown-submenu").on("click",function(e){
-		    e.stopImmediatePropagation();
-		});*/
-		// If button_name is defined, then view is selected then the name of
-		// the view is show in the custom view button.
-		if (button_name)
-			$("#view-list", cel).find('.custom_view').append(button_name);
-		//updates the selected sort item to bold
-		updateSelectedSortKey($("#view-list", cel));
-		addClickEventsForSorting($("#view-list", cel));
-		if(readCookie('company_filter') || readCookie('contact_filter_type') == 'COMPANY')
-		{
-			$('#contact-view-model-list>li').css('display','none');
-			$('#contact-view-model-list>li:first').css('display','list-item');
-		}
+		getTemplate("contact-view-collection", {}, undefined, function(template_ui){
+			if(!template_ui)
+				  return;
+			
+			var el = $(template_ui);
+			$("#view-list", cel).html(el);
+			
+			// If button_name is defined, then view is selected then the name of
+			// the view is show in the custom view button.
+			if (button_name)
+				$("#view-list", cel).find('.custom_view').append(button_name);
+			//updates the selected sort item to bold
+			updateSelectedSortKey($("#view-list", cel));
+			addClickEventsForSorting($("#view-list", cel));
+			if(readCookie('company_filter') || readCookie('contact_filter_type') == 'COMPANY')
+			{
+				$('#contact-view-model-list>li').css('display','none');
+				$('#contact-view-model-list>li:first').css('display','list-item');
+			}
+
+		}, $("#view-list", cel));
 	// });
 }
 

@@ -199,21 +199,27 @@ function refreshAccessToken()
 
 	var reqData = "reqType=googleplusrefresh&widgetId=" + pluginId + "&refreshToken=" + widgetPref['refresh_token'] + "&code_token=" + widgetPref['code_token'];
 
-	$.ajax({ type : "POST", url : "/scribe", async : false, data : reqData, success : function(data, textStatus, jqXHR)
+	$.ajax({ type : "POST", url : "/scribe", data : reqData, success : function(data, textStatus, jqXHR)
 	{
 		// data - response from server
-		widgetDetails = getWidgetDetails();
-		widgetPref = JSON.parse(widgetDetails.prefs);
+		getWidgetDetails(function(prefs){
+			   widgetDetails = prefs;
+			   widgetPref = JSON.parse(widgetDetails.prefs);
+		});
+		
 	}, error : function(jqXHR, textStatus, errorThrown)
 	{
 
 	} });
 }
 
-function getWidgetDetails()
+function getWidgetDetails(callback)
 {
-	return $.parseJSON($.ajax({ url : "core/api/widgets/GooglePlus", async : false, dataType : 'json' }).responseText);
-
+	accessUrlUsingAjax("core/api/widgets/GooglePlus", function(response){
+		if(callback)
+			   callback(response);
+	});
+	
 }
 
 function googlePlusApiCall(apiURL, reqData)
@@ -304,7 +310,12 @@ $(function()
 			$("body").on("click", ".peoplesearch", function(e)
 			{
 				e.preventDefault();
-				$('#' + WIDGET_NAME).html(getTemplate('googleplus-modified-search', searchDetails));
+				getTemplate('googleplus-modified-search', obj, undefined, function(template_ui){
+			 		if(!template_ui)
+			    		return;
+					$('#' + WIDGET_NAME).html($(template_ui)); 
+				},'#' + WIDGET_NAME);
+
 			});
 			
 			$("body").on("click", "#gpsearchbtn", function(e)

@@ -302,15 +302,21 @@ function save_task(formId, modalId, isUpdate, saveBtn)
 
 						var task = data.toJSON();
 
-						var due_task_count = getDueTasksCount();
-						if (due_task_count == 0)
-							$(".navbar_due_tasks").css("display", "none");
-						else
-							$(".navbar_due_tasks").css("display", "inline-block");
-						if(due_task_count !=0)
-							$('#due_tasks_count').html(due_task_count);
-						else
-							$('#due_tasks_count').html("");
+						getDueTasksCount(function(count){
+
+								var due_task_count = count;
+
+								if (due_task_count == 0)
+									$(".navbar_due_tasks").css("display", "none");
+								else
+									$(".navbar_due_tasks").css("display", "inline-block");
+								if(due_task_count !=0)
+									$('#due_tasks_count').html(due_task_count);
+								else
+									$('#due_tasks_count').html("");
+
+						});
+						
 
 						if (Current_Route == 'calendar')
 						{
@@ -429,11 +435,16 @@ function save_task(formId, modalId, isUpdate, saveBtn)
 							else
 								App_Tasks.navigate("task/" + task.id, { trigger : true });
 							taskDetailView = data;
-							$("#content").html(getTemplate("task-detail", data.toJSON()));
-							task_details_tab.loadActivitiesView();
-							initializeTaskDetailListeners();
 
+							getTemplate("task-detail", data.toJSON(), undefined, function(template_ui){
+								if(!template_ui)
+									  return;
+								$('#content').html($(template_ui));	
+								task_details_tab.loadActivitiesView();
+								initializeTaskDetailListeners();
+							}, "#content");
 						}
+						
 					} });
 }
 
@@ -669,15 +680,16 @@ function complete_task(taskId, collection, ui, callback)
  * 
  * @returns due tasks count upto today
  */
-function getDueTasksCount()
+function getDueTasksCount(callback)
 {
-	var msg = $.ajax({ type : "GET", url : 'core/api/tasks/overdue/uptotoday', async : false, dataType : 'json' }).responseText;
+	accessUrlUsingAjax('core/api/tasks/overdue/uptotoday', function(response){
+			if (!isNaN(response))
+			{
+				return callback(response);
+			}
+			return callback(0);
 
-	if (!isNaN(msg))
-	{
-		return msg;
-	}
-	return 0;
+	});
 }
 
 /**

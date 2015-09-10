@@ -14,38 +14,43 @@ $(function () {
         var data = $(this).find('.data').attr('data');
 
         var currentDeal = App_Deals.opportunityCollectionView.collection.get(data);
-       
-        //console.log(currentDeal.toJSON());
+        var that = this;
         
-        var ele = getTemplate("opportunity-detail-popover", currentDeal.toJSON());
-        console.log(ele);
-        console.log(this);
-        $(this).popover({
-        	"rel" : "popover",
-        	"trigger" : "hover",
-        	"placement" : 'right',
-        	"original-title" : currentDeal.toJSON().name,
-        	"content" :  ele,
-        	"html" : true,
-        	"container": 'body'
-        });
+        getTemplate("opportunity-detail-popover", currentDeal.toJSON(), undefined, function(template_ui){
+			if(!template_ui)
+				  return;
+			
+			var ele = $(template_ui);
+	        console.log(ele);
+	        console.log(that);
+	        $(that).popover({
+	        	"rel" : "popover",
+	        	"trigger" : "hover",
+	        	"placement" : 'right',
+	        	"original-title" : currentDeal.toJSON().name,
+	        	"content" :  ele,
+	        	"html" : true,
+	        	"container": 'body'
+	        });
        
-        /**
-         * Checks for last 'tr' and change placement of popover to 'top' inorder
-         * to prevent scrolling on last row of list
-         **/
-       $('#opportunities-model-list > tr:last').popover({
-        	"rel" : "popover",
-        	"trigger" : "hover",
-        	"placement" : 'top',
-        	"original-title" : currentDeal.toJSON().name,
-        	"content" :  ele,
-        	"html" : true,
-        	"container": 'body'
-        });
-        
-        $(this).popover('show');
-      
+	        /**
+	         * Checks for last 'tr' and change placement of popover to 'top' inorder
+	         * to prevent scrolling on last row of list
+	         **/
+	       $('#opportunities-model-list > tr:last').popover({
+	        	"rel" : "popover",
+	        	"trigger" : "hover",
+	        	"placement" : 'top',
+	        	"original-title" : currentDeal.toJSON().name,
+	        	"content" :  ele,
+	        	"html" : true,
+	        	"container": 'body'
+	        });
+
+	        $(that).popover('show');
+
+		}, null);
+
      });
 	
     /**

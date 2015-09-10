@@ -256,18 +256,20 @@ $("#icalModal").on('click', '#send-ical-email', function(event)
 		var icalURL = $('#icalModal').find('#ical-feed').text();
 		model.ical_url = icalURL;
 
-		var emailModal = $(getTemplate("share-ical-by-email", model));
+		getTemplate("share-ical-by-email", model, undefined, function(template_ui){
+			if(!template_ui)
+				  return;
+			
+			var emailModal = $(template_ui);
+			var description = $(emailModal).find('textarea').val();
+			description = description.replace(/<br\/>/g, "\r\n");
+			$(emailModal).find('textarea').val(description);
+			emailModal.modal('show');
 
-		var description = $(emailModal).find('textarea').val();
+			// Send ical info email
+			send_ical_info_email(emailModal);
+		}, null);
 
-		description = description.replace(/<br\/>/g, "\r\n");
-
-		$(emailModal).find('textarea').val(description);
-
-		emailModal.modal('show');
-
-		// Send ical info email
-		send_ical_info_email(emailModal);
 	} });
 });
 

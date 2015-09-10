@@ -8,10 +8,12 @@ function campaignAlert(alertType)
 		return;
 	var alertJSON={};
 	var alertTemplate;
+	var templateName = "";
+
 	if(alertType == "nodeLimit")
 		{
 		alertJSON = _billing_restriction.currentLimits;
-		alertTemplate = $(getTemplate('campaign-node-limit-modal',alertJSON));
+		templateName = "campaign-node-limit-modal";
 		}
 
 	 
@@ -19,20 +21,21 @@ function campaignAlert(alertType)
 		{
 		alertJSON["title"]="No Twilio Number";
 		alertJSON["message"]="The Twilio SMS gateway you configured does not have a purchased number. Please purchase a number from Twilio to start sending SMS.";
-		alertTemplate = $(getTemplate('SMSGateway-integration-alert-modal',alertJSON));
+		templateName = "SMSGateway-integration-alert-modal";
 		}
 	
 	if(alertType == "Unauthorised")
 		{
 		alertJSON["title"]="SMS Gateway not Configured";
 		alertJSON["message"]="You need to enable SMS Gateway integration to use this option. Please enable it in Admin Settings -> Integrations";
-		alertTemplate = $(getTemplate('SMSGateway-integration-alert-modal',alertJSON));
+		templateName = "SMSGateway-integration-alert-modal";
 		}
 
-	//alertTemplate = $(getTemplate('SMSGateway-integration-alert-modal',alertJSON));	
-	//console.log();
-	alertTemplate.modal('show');
-	
+		getTemplate(templateName, alertJSON, undefined, function(template_ui){
+			if(!template_ui)
+				  return;
+			$(template_ui).modal('show');
+		}, null);
 }
 
 function workflow_alerts(title, message , template, callback){
@@ -41,12 +44,17 @@ function workflow_alerts(title, message , template, callback){
 	JSONValues["title"] = title;
 	JSONValues["message"] = message;
 	
-	var $modal = $(getTemplate(template,JSONValues));
+	getTemplate(template, JSONValues, undefined, function(template_ui){
+		if(!template_ui)
+			  return;
+			
+		var $modal = $(template_ui);
+		$modal.modal('show');	
 
-	$modal.modal('show');	
+		if(callback && typeof (callback) === "function")
+			callback($modal);
 
-	if(callback && typeof (callback) === "function")
-		callback($modal);
+	}, null);
 }
 
 function send_verify_email()

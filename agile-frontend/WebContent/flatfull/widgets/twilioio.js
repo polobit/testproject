@@ -74,20 +74,25 @@ function showListOfContactNumbers()
 	numbers['to'] = TwilioIONumbers;
 
 	// Get template and show details in Twilio widget
-	$('#TwilioIO').html(getTemplate('twilioio-profile', numbers));
-	
-	// Retreive Twilio call logs and show it in Twilio widget panel
-	getTwilioIOLogs(TwilioIONumbers[0].value);
+	getTemplate('twilioio-profile', numbers, undefined, function(template_ui){
+ 		if(!template_ui)
+    		return;
+		$('#TwilioIO').html($(template_ui)); 
+		// Retreive Twilio call logs and show it in Twilio widget panel
+		getTwilioIOLogs(TwilioIONumbers[0].value);
 
-	/*
-	 * On change of number in select box, we retrieve call logs for it and show
-	 */
-	$("body").on("change", '#contact_number', function(e)
-	{
-		$('#twilio-logs-panel').html(TWILIOIO_LOGS_LOAD_IMAGE);
-		var to = $('#contact_number').val();
-		getTwilioIOLogs(to);
-	});
+		/*
+		 * On change of number in select box, we retrieve call logs for it and show
+		 */
+		$("body").on("change", '#contact_number', function(e)
+		{
+			$('#twilio-logs-panel').html(TWILIOIO_LOGS_LOAD_IMAGE);
+			var to = $('#contact_number').val();
+			getTwilioIOLogs(to);
+		});
+	}, '#TwilioIO');
+	
+		
 }
 
 /**
@@ -128,66 +133,73 @@ function getTwilioIOLogs(to)
 		var pageInfo = logsJson.splice( 0, 1 )[0]; 
 		
 		// get and fill template with logs and show
-		var twilio_logs_template = $(getTemplate('twilio-logs', logsJson));
+		
+		getTemplate('twilio-logs', logsJson, undefined, function(template_ui){
+ 		if(!template_ui)
+    		return;
+    	var twilio_logs_template = $(template_ui);
 		$('#twilio-logs-panel').html(twilio_logs_template);
 
-		// Load jquery time ago function to show time ago in logs
-		head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
-		{
-			$(".time-ago", twilio_logs_template).timeago();
-		});
-
-		// Add more button if more than 10 call logs present
-		addMoreButton(pageInfo);
-
-		/*
-		 * On click of play button in Twilio logs, call conversaion is played
-		 */
-		$("body").on("click", '#record_sound_play', function(e)
-		{
-			e.preventDefault();
-
-			/**
-			 * We make play button on a widget disabled on click of it. This is
-			 * done to avoid continuous click in a short time, like double click
-			 * on add button
-			 */
-			/*
-			 * if ($(this).attr("disabled")) return; // set attribute disabled
-			 * as disabled $(this).attr("disabled", "disabled");
-			 */
-
-			// condition to check whether the sound is already playing
-			if (audio != null)
+			// Load jquery time ago function to show time ago in logs
+			head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
 			{
+				$(".time-ago", twilio_logs_template).timeago();
+			});
+
+			// Add more button if more than 10 call logs present
+			addMoreButton(pageInfo);
+
+			/*
+			 * On click of play button in Twilio logs, call conversaion is played
+			 */
+			$("body").on("click", '#record_sound_play', function(e)
+			{
+				e.preventDefault();
+
+				/**
+				 * We make play button on a widget disabled on click of it. This is
+				 * done to avoid continuous click in a short time, like double click
+				 * on add button
+				 */
+				/*
+				 * if ($(this).attr("disabled")) return; // set attribute disabled
+				 * as disabled $(this).attr("disabled", "disabled");
+				 */
+
+				// condition to check whether the sound is already playing
+				if (audio != null)
+				{
+					audio.pause();
+					$(".icon-stop").addClass("icon-play");
+					$(".icon-stop").removeClass("icon-stop");
+
+				}
+
+				// Sound URL from Twilio to play call
+				var sound_url = "https://api.twilio.com" + $(this).attr("sound_url");
+				console.log("Twilio sound URL: " + sound_url);
+
+				// plays call conversion
+				play_sound(sound_url, "true");
+				$(this).addClass("icon-stop");
+				$(this).removeClass("icon-play");
+
+				// $(this).removeAttr("disabled");
+			});
+
+			// To stop the audio call when playing
+			$("body").on("click", '.icon-stop', function(e)
+			{
+				e.preventDefault();
 				audio.pause();
-				$(".icon-stop").addClass("icon-play");
-				$(".icon-stop").removeClass("icon-stop");
+				audio = null;
+				$(this).addClass("icon-play");
+				$(this).removeClass("icon-stop");
 
-			}
+			});
+	}, null);
 
-			// Sound URL from Twilio to play call
-			var sound_url = "https://api.twilio.com" + $(this).attr("sound_url");
-			console.log("Twilio sound URL: " + sound_url);
-
-			// plays call conversion
-			play_sound(sound_url, "true");
-			$(this).addClass("icon-stop");
-			$(this).removeClass("icon-play");
-
-			// $(this).removeAttr("disabled");
-		});
-
-		// To stop the audio call when playing
-		$("body").on("click", '.icon-stop', function(e)
-		{
-			e.preventDefault();
-			audio.pause();
-			audio = null;
-			$(this).addClass("icon-play");
-			$(this).removeClass("icon-stop");
-
-		});
+			
 
 	}).error(function(data)
 	{
@@ -236,17 +248,24 @@ function getNextLogs(to, page, pageToken)
 		var pageInfo = logsJson.splice( 0, 1 )[0]; 
 		
 		// get and fill template with logs and show
-		var twilio_logs_template = $(getTemplate('twilio-logs', logsJson));
-		$('#twilio-logs-panel').append(twilio_logs_template);
+		
+		getTemplate('twilio-logs', logsJson, undefined, function(template_ui){
+	 		if(!template_ui)
+	    		return;
+	    	var twilio_logs_template = $(template_ui);
+	    	$('#twilio-logs-panel').append(twilio_logs_template);
 
-		// Load jquery time ago function to show time ago in logs
-		head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
-		{
-			$(".time-ago", twilio_logs_template).timeago();
-		});
+			// Load jquery time ago function to show time ago in logs
+			head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
+			{
+				$(".time-ago", twilio_logs_template).timeago();
+			});
 
-		// Add more button if more than 10 call logs present
-		addMoreButton(pageInfo);
+			// Add more button if more than 10 call logs present
+			addMoreButton(pageInfo);
+			
+		}, null);
+			
 	}).error(function(data)
 	{
 		$("#twilioio_more_call_logs").html("Retry...");
@@ -273,7 +292,12 @@ function twilioIOError(id, message)
 	 * Get error template and fill it with error message and show it in the div
 	 * with given id
 	 */
-	$('#' + id).html(getTemplate('twilio-error', error_json));
+	
+	getTemplate('twilio-error', error_json, undefined, function(template_ui){
+ 		if(!template_ui)
+    		return;
+		$('#' + id).html($(template_ui)); 
+	}, '#' + id);
 }
 /**
  * @ author - prakash - 15/6/15

@@ -15,8 +15,6 @@ var PortletsRouter = Backbone.Router
 				} else {
 					head
 							.js(
-									LIB_PATH
-											+ 'jscore/handlebars/handlebars-helpers.js',
 									LIB_PATH + 'lib/jquery.gridster.js',
 									function() {
 										this.Catalog_Portlets_View = new Base_Collection_View(
@@ -79,17 +77,23 @@ var PortletsRouter = Backbone.Router
 			// $("#portletstreamDetails",$('#portletStreamModal')).html(this.Catalog_Portlets_View.el);},
 
 			portlets : function() {
-				head.js(LIB_PATH + 'jscore/handlebars/handlebars-helpers.js?='
-						+ _AGILE_VERSION, LIB_PATH + 'lib/jquery.gridster.js',
+				head.js(LIB_PATH + 'lib/jquery.gridster.js',
 						function() {
-							var el = $(getTemplate('portlets', {}));
-							$("#content").html(el);
-							if (IS_FLUID) {
-								$('#content').find('div.row')
-										.removeClass('row').addClass(
-												'row-fluid');
-							}
-							loadPortlets(el);
+
+							getTemplate('portlets', {}, undefined, function(template_ui){
+								if(!template_ui)
+									  return;
+
+								var el = $('#content').html($(template_ui));
+								if (IS_FLUID) {
+									$('#content').find('div.row')
+											.removeClass('row').addClass(
+													'row-fluid');
+								}
+								loadPortlets(el);
+								
+							}, "#content");
+
 						});
 			}
 		});
@@ -350,7 +354,10 @@ function initializePortletsListeners_1(){
 
 	$('#dashlet_heading #tutotial_modal').off('click');
 	$('#dashlet_heading').on('click', '#tutotial_modal', function(e){
+		e.preventDefault();
+		$('#tutorialModal').html(getTemplate("tutorial-modal"));
 		$('#tutorialModal').modal("show");
+
 	});
 
 	$('.portlet_body #portlets-contacts-model-list > tr, #portlets-companies-model-list > tr, #portlets-contacts-email-opens-model-list > tr').off();
@@ -371,8 +378,14 @@ function initializePortletsListeners_1(){
 
 				var obj = getActivityObject(data);
 				console.log(obj);
-				var emailinfo = $(getTemplate("infoModal", JSON.parse(obj)));
-				emailinfo.modal('show');
+
+				getTemplate("infoModal", JSON.parse(obj), undefined, function(template_ui){
+					if(!template_ui)
+						  return;
+					var emailinfo = $(template_ui);
+					emailinfo.modal('show');
+
+				}, null);
 
 			});
 	
@@ -758,8 +771,10 @@ function getStartAndEndDatesOnDue(duration){
 	if(duration == "now")
 		return (d.setMilliseconds(0)/1000);
 	// Today
-	if (duration == "1-day" || duration == "today")
-		console.log(getGMTTimeFromDate(d) / 1000);
+	if (duration == "1-day" || duration == "today"){
+		getGMTTimeFromDate(d) / 1000;
+	}
+		
 	
 	// This week
 	if (duration == "this-week" || duration == "this-week-start"){
@@ -955,8 +970,6 @@ function getStartAndEndDatesOnDue(duration){
 	}
 		
 
-	console.log((getGMTTimeFromDate(d) / 1000));
-
 	return (getGMTTimeFromDate(d) / 1000);
 }
 function getStartAndEndDatesEpochForPortlets(duration)
@@ -972,8 +985,10 @@ function getStartAndEndDatesEpochForPortlets(duration)
 	if(duration == "now")
 		return (d.setMilliseconds(0)/1000);
 	// Today
-	if (duration == "1-day" || duration == "today")
-		console.log(getGMTTimeFromDate(d) / 1000);
+	if (duration == "1-day" || duration == "today"){
+		getGMTTimeFromDate(d) / 1000;
+	}
+		
 	
 	// This week
 	if (duration == "this-week" || duration == "this-week-start"){
