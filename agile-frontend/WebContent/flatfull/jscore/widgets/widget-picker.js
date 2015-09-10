@@ -175,6 +175,11 @@ function initializeWidgetSettingsListeners(){
 		isForAll = true;
 	});
 
+	$('#prefs-tabs-content .add-widget').off();
+	$('#prefs-tabs-content').on('click', '.add-widget', function(e){
+		isForAll = false;
+	});
+	
 	$('#prefs-tabs-content #remove-widget').off();
 	$('#prefs-tabs-content').on('click', '#remove-widget', function(e)
 	{

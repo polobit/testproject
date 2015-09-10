@@ -227,7 +227,10 @@ public class WidgetUtil {
 		List<CustomWidget> widgets = ofy.query(CustomWidget.class).ancestor(userKey).filter("name", name).list();
 		
 		for (CustomWidget customWidget : widgets) {
-			customWidget.delete();
+			// check if widget is custom widget and delete it.
+			if (WidgetType.CUSTOM == customWidget.widget_type) {
+				customWidget.delete();
+			}
 		}
 	}
 

@@ -176,21 +176,9 @@ public class WidgetsAPI {
 	@DELETE
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	public void removeCustomWidget(@QueryParam("widget_name") String widget_name) {
-		// Getting the widget based on the name.
-		CustomWidget customWidget = CustomWidgets.getCustomWidget(widget_name);
-
-		if (customWidget == null) {
-			return;
-		}
-
-		// check if widget is custom widget and delete it.
-		if (WidgetType.CUSTOM == customWidget.widget_type) {
 			// removes the widget for all agile users
 			WidgetUtil.removeCurrentUserCustomWidget(widget_name);
-
-			// Deleting the custom widget from the database.
-			customWidget.delete();
-		}
+			System.out.println("TEst code.....");
 	}
 
 	/**
