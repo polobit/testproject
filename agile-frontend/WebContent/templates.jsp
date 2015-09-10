@@ -633,9 +633,9 @@ Handlebars.registerHelper('epochToHumanDate_eachkeys', function(format, value){
 				<thead>
     				<tr>
 						<th class="hide header">Id</th>                    
-						<th style="width:30%;" class="header">Name</th>
-        				<th style="width:30%;" class="header">Subject</th>
-        				<th style="width:40%;" class="header"></th>
+						<th style="width:30%;">Name</th>
+        				<th style="width:30%;">Subject</th>
+        				<th style="width:40%;"></th>
     				</tr>
 				</thead>
 				<tbody id="settings-email-templates-model-list" route="email-template/" class="agile-edit-row">
