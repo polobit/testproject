@@ -238,6 +238,7 @@ $("#icalModal").on('click', '#send-ical-email', function(event)
 
 	$("#icalModal").modal('hide');
 
+
 	// Removes previous modals if exist.
 	if ($('#share-ical-by-email').size() != 0)
 		$('#share-ical-by-email').remove();

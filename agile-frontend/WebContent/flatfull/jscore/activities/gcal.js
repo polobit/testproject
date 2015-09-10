@@ -5,27 +5,11 @@
  */
 
 // or better
-function isDefined(x)
-{
-	var undefined;
-	return typeof x !== undefined;
-}
 
-function _init_gcal_options()
-{
-	var fc = $.fullCalendar;
-	fc.sourceFetchers = [];
-	// Transforms the event sources to Google Calendar Events
-	fc.sourceFetchers.push(function(sourceOptions, start, end)
-	{
-		if (sourceOptions.dataType == 'agile-gcal')
-		{
 
-			// Check whether to show the google calendar events or not.
+function loadUserEventsfromGoogle(users){
 
-			$.getJSON('/core/api/users/agileusers', function(users)
-			{
-				$.each(users, function(i, user)
+	$.each(users, function(i, user)
 				{
 					if (CURRENT_DOMAIN_USER.id == user.domain_user_id)
 					{
@@ -43,7 +27,36 @@ function _init_gcal_options()
 						});
 					}
 				});
-			});
+}
+
+function isDefined(x)
+{
+	var undefined;
+	return typeof x !== undefined;
+}
+
+function _init_gcal_options(users)
+{
+	var fc = $.fullCalendar;
+	fc.sourceFetchers = [];
+	// Transforms the event sources to Google Calendar Events
+	fc.sourceFetchers.push(function(sourceOptions, start, end)
+	{
+		if (sourceOptions.dataType == 'agile-gcal')
+		{
+
+			if(users){
+
+				loadUserEventsfromGoogle(users);
+				return;
+
+			}
+			// Check whether to show the google calendar events or not.
+
+			$.getJSON('/core/api/users/agileusers', function(users)
+				{
+					loadUserEventsfromGoogle(users);
+				});
 
 		}
 	});

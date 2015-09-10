@@ -107,10 +107,10 @@ function get_google_calendar_event_source(data, callback)
  * Shows the calendar
  */
 var fullCal;
-function showCalendar()
+function showCalendar(users)
 {
 
-	_init_gcal_options();
+	_init_gcal_options(users);
 	putGoogleCalendarLink();
 	var calendarView = (!readCookie('calendarDefaultView')) ? 'month' : readCookie('calendarDefaultView');
 	$('#' + calendarView).addClass('bg-light');
