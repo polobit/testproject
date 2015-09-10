@@ -2,12 +2,15 @@ package com.analytics.util;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
 
 import com.agilecrm.db.GoogleSQL;
 import com.agilecrm.db.util.GoogleSQLUtil;
+import com.agilecrm.util.EmailUtil;
 import com.campaignio.tasklets.agile.URLVisited;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.utils.SystemProperty;
@@ -110,6 +113,42 @@ public class AnalyticsSQLUtil
 		// Gets UNIQUE session ids based on Email from database
 		String sessions = "(SELECT DISTINCT sid FROM page_views WHERE email ="
 				+ GoogleSQLUtil.encodeSQLColumnValue(email) + " AND domain = "
+				+ GoogleSQLUtil.encodeSQLColumnValue(domain) + ") p2";
+
+		String joinQuery = q1 + " INNER JOIN " + sessions + " ON p1.sid=p2.sid AND p1.domain = "
+				+ GoogleSQLUtil.encodeSQLColumnValue(domain);
+
+		String pageViews = "SELECT * FROM (" + joinQuery + ") pg";
+
+		// System.out.println("sids query is: " + sessions);
+		// System.out.println("Select query: " + pageViews);
+
+		try
+		{
+			return GoogleSQL.getJSONQuery(pageViews);
+		}
+		catch (Exception e1)
+		{
+			e1.printStackTrace();
+			return null;
+		}
+	}
+	
+	/**
+	 * Gets all sessions from table having sids equal with given email
+	 * 
+	 * @param email
+	 *            - string with or without comma
+	 */
+	public static JSONArray getPageViewsOfAllEmails(String email)
+	{
+		String domain = NamespaceManager.get();
+
+		String q1 = "SELECT p1.*, UNIX_TIMESTAMP(stats_time) AS created_time FROM page_views p1";
+
+		// Gets UNIQUE session ids based on Email from database
+		String sessions = "(SELECT DISTINCT sid FROM page_views WHERE email IN ("
+				+ getEmails(EmailUtil.getStringTokenSet(email, ",")) + ") AND domain = "
 				+ GoogleSQLUtil.encodeSQLColumnValue(domain) + ") p2";
 
 		String joinQuery = q1 + " INNER JOIN " + sessions + " ON p1.sid=p2.sid AND p1.domain = "
@@ -360,5 +399,22 @@ public class AnalyticsSQLUtil
     	    return new JSONArray();
     	}
 
+	}
+	
+	private static String getEmails(Set<String> emails)
+	{
+		String emailString = "";
+		
+		if(emails == null || emails.size()==0)
+			return emailString;
+		
+		for(String email : emails)
+		{
+			if(StringUtils.isNotBlank(email))
+				emailString += GoogleSQLUtil.encodeSQLColumnValue(email) + ",";
+		}
+		
+		return StringUtils.removeEnd(emailString, ",");
+		
 	}
 }
