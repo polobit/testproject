@@ -54,7 +54,7 @@ Emails
     </td>
 	<td data="{{../../id}}">
 		{{#if this.plan}}
-{{#if amount}}{{amountWithDollar amount}}{{else}}{{centsToDollarsWithDollar amount}}{{/if}}
+${{get_amount_with_possitive amount}}
 		{{/if}}
     </td>
 {{/if_greater}}
