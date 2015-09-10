@@ -346,4 +346,19 @@
         <property name="order" direction="asc"/>
     </datastore-index>
 
+    <datastore-index kind="Category" ancestor="false" source="auto">
+        <property name="entity_type" direction="asc"/>
+        <property name="label" direction="asc"/>
+    </datastore-index>
+	
+	<datastore-index kind="Category" ancestor="false" source="auto">
+        <property name="entity_type" direction="asc"/>
+        <property name="order" direction="asc"/>
+    </datastore-index>
+	
+	<datastore-index kind="Category" ancestor="false" source="auto">
+		<property name="name" direction="asc"/>
+        <property name="entity_type" direction="asc"/>
+    </datastore-index>
+
 </datastore-indexes>

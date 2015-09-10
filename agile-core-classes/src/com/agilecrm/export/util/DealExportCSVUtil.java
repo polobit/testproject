@@ -1,28 +1,20 @@
 package com.agilecrm.export.util;
 
-import java.nio.channels.Channels;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import au.com.bytecode.opencsv.CSVWriter;
-
-import com.agilecrm.activities.Activity.ActivityType;
-import com.agilecrm.activities.Activity.EntityType;
-import com.agilecrm.activities.util.ActivityUtil;
 import com.agilecrm.contact.CustomFieldDef;
 import com.agilecrm.contact.CustomFieldDef.SCOPE;
 import com.agilecrm.contact.util.CustomFieldDefUtil;
-import com.agilecrm.deals.Opportunity;
 import com.agilecrm.export.DealCSVExport;
-import com.google.appengine.api.files.FileWriteChannel;
 
 public class DealExportCSVUtil
 {
 
-    /**
+    /* *//**
      * Builds deals csv and write to blob file.
      * 
      * @param writeChannel
@@ -31,50 +23,37 @@ public class DealExportCSVUtil
      * @param isFirstTime
      *            to state whether this is the new or appending to the old one.
      */
-    public static void writeDealCSV(FileWriteChannel writeChannel, List<Opportunity> dealList, Boolean isFirstTime)
-    {
-	try
-	{
-
-	    CSVWriter writer = new CSVWriter(Channels.newWriter(writeChannel, "UTF8"));
-
-	    String[] headers = DealExportCSVUtil.getCSVHeadersForDeal();
-
-	    if (isFirstTime)
-		writer.writeNext(headers);
-
-	    Map<String, Integer> indexMap = DealExportCSVUtil.getIndexMapOfCSVHeaders(headers);
-
-	    System.out.println("Writing deals to CSV file.");
-	    for (Opportunity deal : dealList)
-	    {
-		try
-		{
-		    if (deal == null)
-			continue;
-
-		    String str[] = DealCSVExport.insertDealFields(deal, indexMap, headers.length);
-		    if (str.length > 0)
-			writer.writeNext(str);
-		}
-		catch (Exception e)
-		{
-		    System.out.println("Exception in deal - " + deal.name);
-		}
-	    }
-
-	    ActivityUtil.createLogForImport(ActivityType.DEAL_EXPORT, EntityType.DEAL, dealList.size(), 0);
-
-	    System.out.println("Completed writing deals to CSV file.");
-	    // Close without finalizing
-	    writer.close();
-	}
-	catch (Exception e)
-	{
-	    e.printStackTrace();
-	    System.err.println("Exception occured in writeDealCSV " + e.getMessage());
-	}
-    }
+    /*
+     * public static void writeDealCSV(FileWriteChannel writeChannel,
+     * List<Opportunity> dealList, Boolean isFirstTime) { try {
+     * 
+     * CSVWriter writer = new CSVWriter(Channels.newWriter(writeChannel,
+     * "UTF8"));
+     * 
+     * String[] headers = DealExportCSVUtil.getCSVHeadersForDeal();
+     * 
+     * if (isFirstTime) writer.writeNext(headers);
+     * 
+     * Map<String, Integer> indexMap =
+     * DealExportCSVUtil.getIndexMapOfCSVHeaders(headers);
+     * 
+     * System.out.println("Writing deals to CSV file."); for (Opportunity deal :
+     * dealList) { try { if (deal == null) continue;
+     * 
+     * String str[] = DealCSVExport.insertDealFields(deal, indexMap,
+     * headers.length); if (str.length > 0) writer.writeNext(str); } catch
+     * (Exception e) { System.out.println("Exception in deal - " + deal.name); }
+     * }
+     * 
+     * ActivityUtil.createLogForImport(ActivityType.DEAL_EXPORT,
+     * EntityType.DEAL, dealList.size(), 0);
+     * 
+     * System.out.println("Completed writing deals to CSV file."); // Close
+     * without finalizing writer.close(); } catch (Exception e) {
+     * e.printStackTrace();
+     * System.err.println("Exception occured in writeDealCSV " +
+     * e.getMessage()); } }
+     */
 
     /**
      * Returns array of CSV Headers. Appends custom fields labels as CSV Headers

@@ -251,7 +251,7 @@ function build_custom_widget_form(el)
 						console.log('In post render callback');
 						console.log(el);
                         
-						$('#custom_widget_form').off('change').on('change', '#script_type', function(e)
+						$('#custom-widget').off('change').on('change', '#script_type', function(e)
 						{
 							var script_type = $('#script_type').val();
 							if (script_type == "script")
