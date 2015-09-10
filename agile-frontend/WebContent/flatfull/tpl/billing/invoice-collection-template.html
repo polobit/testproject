@@ -8,9 +8,9 @@
         <table class="table table-striped" id="sort-table">
             <thead>
                 <tr>
-                    <th>Plan</th>
-                    <th>Bill Date</th>
-                    <th>Amount</th>
+                    <th style="padding-left:15px;">Plan</th>
+                    <th style="padding-left:15px;">Bill Date</th>
+                    <th style="padding-left:15px;">Amount</th>
                 </tr>
             </thead>
 
@@ -54,7 +54,7 @@ Emails
     </td>
 	<td data="{{../../id}}">
 		{{#if this.plan}}
-${{get_amount_with_possitive amount}}
+{{#if amount}}{{amountWithDollar amount}}{{else}}{{centsToDollarsWithDollar amount}}{{/if}}
 		{{/if}}
     </td>
 {{/if_greater}}

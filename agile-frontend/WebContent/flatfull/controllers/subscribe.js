@@ -151,7 +151,7 @@ var SubscribeRouter = Backbone.Router.extend({
 
 		}, errorCallback : function(data)
 		{
-			showNotyPopUp("information", "<div style='color:#B94A48; font-size:14px'>" + data.responseText + "</div>", "top");
+			showNotyPopUp("information",  data.responseText , "top");
 		}
 		/*prePersist : function(el)
 		{
@@ -433,6 +433,7 @@ var SubscribeRouter = Backbone.Router.extend({
 			postRenderCallback : function(el)
 			{
 				initializeSubscriptionListeners();
+				_IS_EMAIL_PLAN_ACTIVE = false;
 				// Discount
 				showCouponDiscountAmount(plan_json, el);
 				card_expiry(el);
@@ -452,7 +453,7 @@ var SubscribeRouter = Backbone.Router.extend({
 
 			}, errorCallback : function(data)
 			{
-				showNotyPopUp("information", "<div style='color:#B94A48; font-size:14px'>" + data.responseText + "</div>", "top");
+				showNotyPopUp("information", data.responseText, "top");
 			}
 
 		});

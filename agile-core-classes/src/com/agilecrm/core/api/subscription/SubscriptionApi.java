@@ -132,6 +132,7 @@ public class SubscriptionApi {
 			throw e;
 		} catch (Exception e) {
 			e.printStackTrace();
+
 			/*
 			 * If Exception is raised during subscription send the exception
 			 * message to client

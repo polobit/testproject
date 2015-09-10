@@ -15,7 +15,7 @@
 <a href="#subscribe"  class="pull-right m-r-sm text-info">Change Emails</a>
 			</div>
 		<div class="panel-body">
-			<form id="planform" class="form-horizontal update_plan" name="emailPlan">
+			<form id="email-plan-form" class="form-horizontal" name="emailPlan">
 				<fieldset>
 					<div class="alert alert-info hide"></div>
 						
@@ -59,7 +59,10 @@ color: #FA782D;"></b>
 					
 
 				</fieldset>
-			</form>		
+			</form>	
+       <form id="gateway" class="form-horizontal hide">
+			<input type="text" name="gateway" class="hidden form-control" value="Stripe" />
+		</form> 	
 	
 {{#if billingData}}
 {{else}}

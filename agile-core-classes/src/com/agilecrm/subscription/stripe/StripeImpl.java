@@ -540,7 +540,12 @@ public class StripeImpl implements AgileBilling {
 
 	@Override
 	public JSONObject addCreditCard(CreditCard card) throws Exception {
-		Customer customer = Customer.create(StripeUtil.getCustomerParams(card));
+		Customer customer = null;
+		try {
+			customer = Customer.create(StripeUtil.getCustomerParams(card));
+		} catch (Exception e) {
+			e.getMessage();
+		}
 
 		// Returns Customer object as JSONObject
 		return StripeUtil.getJSONFromCustomer(customer);
