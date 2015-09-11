@@ -1,11 +1,19 @@
 /**
- * Creates backbone router to access preferences of the user portlets
+ * Creates backbone router to access preferences of the user 
  */
 var PortletsRouter = Backbone.Router
 		.extend({
 			routes : {
 				// "portlets" : "portlets",
 				"add-dashlet" : "adddashlet"
+			},
+			before : {
+				"*any" : function(fragment, args, next)
+					{
+						head.js( CLOUDFRONT_PATH + "/jscore/min/flatfull/portlets-min.js", function(){ 
+							next(); 
+						});
+					}
 			},
 			adddashlet : function() {
 				if (gridster == undefined) {
