@@ -465,13 +465,39 @@ function initializeTriggerEventListners()
 
 function initializeTriggerListEventListners(id,trigger_type)
 {
-$('#trigger-selector').on('change', '#trigger-type', function(e)
+
+	$('#trigger-selector').on('click', '#trigger-cancel', function(e)
+ 	{
+		e.preventDefault();
+
+		if (history !== undefined)
+			Backbone.history.loadUrl;
+	});
+
+console.log($('#trigger-selector'));
+	$('#trigger-selector, #trigger-edit-selector').on('change', '#email-tracking-type', function(e)
+		{
+			
+			e.preventDefault();
+		
+			if($(this).val() == 'ANY' || $(this).val() == 'PERSONAL')
+				{
+					// Show milestones select element
+					$('form#addTriggerForm').find('select#email-tracking-campaign-id').closest('div.control-group').css('display', 'none');
+					return;
+				}
+		
+			// show email tracking campaigns
+			show_email_tracking_campaigns();
+		});
+
+	$('#trigger-selector, #trigger-edit-selector').on('change', '#trigger-type', function(e)
 	{
 		e.preventDefault();
 
 		var type = $(this).val();
-		if(type != undefined)
-			type = trigger_type;
+		/*if(type != undefined)
+			type = trigger_type;*/
 		// Hide trigger milestones div for other trigger conditions.
 		if (type !== 'DEAL_MILESTONE_IS_CHANGED'){
 			$('form#addTriggerForm').find('select#trigger-deal-milestone').closest('div.control-group').css('display', 'none');

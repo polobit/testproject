@@ -434,6 +434,9 @@ var WorkflowsRouter = Backbone.Router
 			 */
 			triggerAdd : function(id,trigger_type)
 			{
+
+				$('#content').html("<div id='trigger-selector'>&nbsp;</div>");
+
 				this.triggerModelview = new Base_Model_View({ url : 'core/api/triggers', template : "trigger-add", isNew : true, window : 'triggers',
 				/**
 				 * Callback after page rendered.
@@ -481,9 +484,12 @@ var WorkflowsRouter = Backbone.Router
 					var type = trigger_type;
 					var campaign_id = id;
 					
-					// Shows the Value field with given value
-					$('#trigger-type', el).val(type).attr("selected", "selected").trigger('change');
+					setTimeout(function(){
+							// Shows the Value field with given value
+						$('#trigger-type', el).val(type).attr("selected", "selected").trigger('change');
+					}, 100);
 
+					
 						 
 						if (campaign_id)
 						{
@@ -525,7 +531,7 @@ var WorkflowsRouter = Backbone.Router
 
 				var view = this.triggerModelview.render();
 
-				$('#content').html(view.el);
+				$('#trigger-selector').html(view.el);
 			},
 
 			/**
@@ -547,10 +553,13 @@ var WorkflowsRouter = Backbone.Router
 				// Gets trigger with respect to id
 				var currentTrigger = this.triggersCollectionView.collection.get(id);
 
+				$('#content').html("<div id='trigger-edit-selector'>&nbsp;</div>");
+
 				var view = new Base_Model_View({ url : 'core/api/triggers', model : currentTrigger, template : "trigger-add", window : 'triggers',
 					postRenderCallback : function(el)
 					{
 						initializeTriggersListeners();
+
 						// Loads jquery.chained.min.js
 						head.js(LIB_PATH + 'lib/agile.jquery.chained.min.js', function()
 						{
@@ -577,6 +586,8 @@ var WorkflowsRouter = Backbone.Router
 
 						// To get the input values
 						var type = currentTrigger.toJSON()['type'];
+
+						initializeTriggerListEventListners(id,type);
 
 						// Shows the Value field with given value
 						$('#trigger-type', el).val(type).attr("selected", "selected").trigger('change');
@@ -749,7 +760,7 @@ var WorkflowsRouter = Backbone.Router
 
 				});
 
-				$("#content").html(view.render().el);
+				$("#trigger-edit-selector").html(view.render().el);
 			},
 
 			/**
