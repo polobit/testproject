@@ -264,8 +264,8 @@ public class EmailsAPI
     {
 	EmailGateway emailGateway = EmailGatewayUtil.getEmailGateway();
 	
-	// If SendGrid, return 
-	if(emailGateway != null && emailGateway.email_api.equals(EMAIL_API.SEND_GRID))
+	// If not Mandrill, return 
+	if(emailGateway != null && !(emailGateway.email_api.equals(EMAIL_API.MANDRILL)))
 		return new JSONObject().put("_agile_email_gateway", emailGateway.email_api.toString()).toString();
 
 	String apiKey = null;
