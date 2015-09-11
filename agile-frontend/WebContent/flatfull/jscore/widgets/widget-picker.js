@@ -88,6 +88,7 @@ function initializeWidgetSettingsListeners(){
 	 * anchor tag and gets the model from the collection with widget name and
 	 * add widget then navigates back to the contact-details page
 	 */
+	$('#prefs-tabs-content').off();
 	$('#prefs-tabs-content .install-custom-widget').off();
 	$('#prefs-tabs-content, #custom-widget').on('click', '.install-custom-widget', function(e)
 	{
@@ -183,13 +184,18 @@ function initializeWidgetSettingsListeners(){
 	$('#prefs-tabs-content #remove-widget').off();
 	$('#prefs-tabs-content').on('click', '#remove-widget', function(e)
 	{
+
 		// Fetch widget name from the widget on which delete is clicked
 		var widget_name = $(this).attr('widget-name');
-
+		
+		
 		// If not confirmed to delete, return
 		if (!confirm("Are you sure to remove " + widget_name))
 			return;
 
+		//Deletes the cutom widget form the widget entity.
+		delete_widget(widget_name);
+		
 		/*
 		 * Sends Delete request with widget name as path parameter, and on
 		 * success fetches the widgets to reflect the changes is_added, to show
