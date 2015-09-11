@@ -50,6 +50,16 @@ var ContactsRouter = Backbone.Router.extend({
 			"contacts/call-lead/:first/:last/:mob" : "addLeadDirectly"
 	},
 
+	before : {
+				"*any" : function(fragment, args, next)
+					{
+						head.js( CLOUDFRONT_PATH + "/jscore/min/flatfull/portlets-min.js?_=" +_AGILE_VERSION, function(){
+							next();
+						});
+					}
+
+			},
+
 	initialize : function()
 	{
 		/*
