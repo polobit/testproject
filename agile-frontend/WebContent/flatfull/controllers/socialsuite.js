@@ -30,6 +30,15 @@ var SocialSuiteRouter = Backbone.Router.extend({
 	// Scheduled updates on new page
 	"scheduledmessages" : "scheduledmessages" },
 
+	before : 
+	{	
+		'*any': function(fragment, args, next) {
+			head.js(CLOUDFRONT_PATH + "/jscore/min/flatfull/social-suite-all-min.js?_=" +_AGILE_VERSION , function(){
+				next();
+			})
+			
+		}
+	},
 	/**
 	 * On click on social tab this function is called, to initialize social
 	 * suite, it will include js files.

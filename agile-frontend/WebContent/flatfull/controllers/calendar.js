@@ -21,57 +21,61 @@ calendar : function()
 	eraseCookie("agile_calendar_view");
 	// read cookie for view if list_view is there then rendar list view else
 	// rendar default view
-	getCalendarUsersDetails(function(users){
+	
 
 		$('#content').html("<div id='calendar-listers'>&nbsp;</div>");
+		$('#calendar-listers').html(LOADING_ON_CURSOR);
 		getTemplate("calendar", {}, undefined, function(template_ui){
 		if(!template_ui)
 			  return;
 
+		getCalendarUsersDetails(function(users){
+
 		$('#calendar-listers').html($(template_ui));
-		getTemplate("event-left-filter", users, undefined, function(template_ui1){
-				$('#calendar-listers').find("#calendar-filters").html($(template_ui1));
+				getTemplate("event-left-filter", users, undefined, function(template_ui1){
+						$('#calendar-listers').find("#calendar-filters").html($(template_ui1));
 
-				buildCalendarLhsFilters();
-				createRequestUrlBasedOnFilter();
-				var view = readCookie("agile_calendar_view");
+						buildCalendarLhsFilters();
+						createRequestUrlBasedOnFilter();
+						var view = readCookie("agile_calendar_view");
 
-				if (view)
-				{
-					$("#list_event_time").removeClass('hide');
-					$("#user_calendars").hide();
-					loadGoogleEvents();
-					loadAgileEvents();
-					return;
-				}
-				
-				$("#list_event_time").addClass('hide');
-				$("#user_calendars").show();
-				$('#calendar-view-button').show();
+						if (view)
+						{
+							$("#list_event_time").removeClass('hide');
+							$("#user_calendars").hide();
+							loadGoogleEvents();
+							loadAgileEvents();
+							return;
+						}
+						
+						$("#list_event_time").addClass('hide');
+						$("#user_calendars").show();
+						$('#calendar-view-button').show();
 
-				$(".active").removeClass("active");
-				$("#calendarmenu").addClass("active");
-				$('#agile_event_list').addClass('hide');
+						$(".active").removeClass("active");
+						$("#calendarmenu").addClass("active");
+						$('#agile_event_list').addClass('hide');
 
-				// Typahead also uses jqueryui - if you are changing the version
-				// here,
-				// change it there too
-				head.js(LIB_PATH + 'lib/jquery-ui.min.js', LIB_PATH + 'lib/fullcalendar.min.js', function()
-				{
-					showCalendar();
-					hideTransitionBar();
-					initializeEventListners();
-				});
+						// Typahead also uses jqueryui - if you are changing the version
+						// here,
+						// change it there too
+						head.js(LIB_PATH + 'lib/jquery-ui.min.js', LIB_PATH + 'lib/fullcalendar.min.js', function()
+						{
+							showCalendar(users);
+							hideTransitionBar();
+							initializeEventListners();
+						});
 
-				$('#grp_filter').css('display', 'none');
-				$('#event_tab').css('display', 'none');
-			
+						$('#grp_filter').css('display', 'none');
+						$('#event_tab').css('display', 'none');
+					
 
-			}, $('#calendar-listers').find("#calendar-filters"));
-		}, "#calendar-listers");
+					}, $('#calendar-listers').find("#calendar-filters"));
+		});	
+	}, "#calendar-listers");
 
 
-	});	
+	
 },
 
 /* Show tasks list when All Tasks clicked under calendar page. */
