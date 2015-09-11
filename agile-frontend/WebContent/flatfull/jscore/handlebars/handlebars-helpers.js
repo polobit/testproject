@@ -6243,7 +6243,7 @@ $(function()
 	 * 
 	 */
 	Handlebars.registerHelper('getDefaultImage',function(){
-		return new Handlebars.SafeString(LIB_PATH_FLATFULL + 'images/flatfull/user-default.jpg');
+		return new Handlebars.SafeString(FLAT_FULL_PATH + 'images/flatfull/user-default.jpg');
 		
 	});
 	

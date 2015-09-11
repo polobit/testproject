@@ -23,23 +23,21 @@ var ReportsRouter = Backbone.Router
 				if (!tight_acl.checkPermission('REPORT'))
 					return;
 
-				head.js(LIB_PATH + 'jscore/handlebars/handlebars-helpers.js', function()
-				{
-					$("#content").html("<div id='reports-listerners-container'></div>");
-					getTemplate('report-categories', {}, undefined, function(template_ui){
-						if(!template_ui)
-							  return;
-						$('#reports-listerners-container').html($(template_ui));
+				$("#content").html("<div id='reports-listerners-container'></div>");
+				getTemplate('report-categories', {}, undefined, function(template_ui){
+					if(!template_ui)
+						  return;
+					$('#reports-listerners-container').html($(template_ui));
 
-						initializeReportsListeners();
-						hideTransitionBar();
-						$(".active").removeClass("active");
-						$("#reportsmenu").addClass("active");
+					initializeReportsListeners();
+					hideTransitionBar();
+					$(".active").removeClass("active");
+					$("#reportsmenu").addClass("active");
 
-						$('[data-toggle="tooltip"]').tooltip();	
+					$('[data-toggle="tooltip"]').tooltip();	
 
-					}, "#reports-listerners-container");
-				});
+				}, "#reports-listerners-container");
+				
 			},
 
 	/**

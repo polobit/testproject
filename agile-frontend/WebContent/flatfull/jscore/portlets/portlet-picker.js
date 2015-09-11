@@ -1388,7 +1388,7 @@ function set_p_portlets(base_model){
 		}
 	});
 	//enablePortletTimeAndDates(base_model);
-	head.js(LIB_PATH + 'lib/jquery-ui.min.js', 'lib/fullcalendar.min.js', function()
+	head.js(LIB_PATH + 'lib/jquery-ui.min.js', LIB_PATH + 'lib/fullcalendar.min.js', function()
 			{
 				$('.portlet_body_calendar', this.el).each(function(){
 		if($(this).parent().attr('id')=='ui-id-'+column_position+'-'+row_position && base_model.get('name')=="Mini Calendar"){

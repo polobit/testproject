@@ -23,8 +23,6 @@ var PortletsRouter = Backbone.Router
 				} else {
 					head
 							.js(
-									LIB_PATH
-											+ 'jscore/handlebars/handlebars-helpers.js',
 									LIB_PATH + 'lib/jquery.gridster.js',
 									function() {
 										this.Catalog_Portlets_View = new Base_Collection_View(
@@ -87,8 +85,7 @@ var PortletsRouter = Backbone.Router
 			// $("#portletstreamDetails",$('#portletStreamModal')).html(this.Catalog_Portlets_View.el);},
 
 			portlets : function() {
-				head.js(LIB_PATH + 'jscore/handlebars/handlebars-helpers.js?='
-						+ _AGILE_VERSION, LIB_PATH + 'lib/jquery.gridster.js',
+				head.js(LIB_PATH + 'lib/jquery.gridster.js',
 						function() {
 
 							getTemplate('portlets', {}, undefined, function(template_ui){
