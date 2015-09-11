@@ -429,6 +429,7 @@ function setup_sortable_callscriptrules()
 		 * This event is called after sorting stops to save new positions of
 		 * rules
 		 */
+		$('.csr-sortable').off("sortstop");
 		$('.csr-sortable').on("sortstop", function(event, ui) {
 					
 			// Get new array of rule

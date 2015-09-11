@@ -19,6 +19,7 @@ function setUpFreshbooksAuth()
 	$('#FreshBooks').html(getTemplate('freshbooks-login', {}));
 
 	// On click of save button, check input and save details
+    $("body").off("click", "#freshbooks_save_token");
 	$("body").on("click", "#freshbooks_save_token", function(e)
 	{
 		e.preventDefault();

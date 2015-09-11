@@ -703,6 +703,7 @@ var WidgetsRouter = Backbone.Router
 																												initializeWidgetSettingsListeners();
 																												console.log('In post render callback');
 																												console.log(el);
+                                                                                                                 $('body').off('change', '#script_type');
 
 																												$('body').on('change', '#script_type', function(e)
 																												{

@@ -259,6 +259,7 @@ function build_custom_widget_form(el)
 {
 	var divClone;
 	
+    $('#prefs-tabs-content').off('click', '#add-custom-widget');
 	$('#prefs-tabs-content').on('click', '#add-custom-widget', function(e)
 			{
 				$('#custom-widget-btn').removeClass('open');
@@ -304,6 +305,7 @@ function build_custom_widget_form(el)
 				//Is Custom widget for all.
 				$('#custom_isForAll').val(isForAll);
 				
+                $('#prefs-tabs-content').off('click', '#cancel_custom_widget');
 				$('#prefs-tabs-content').on('click', '#cancel_custom_widget', function(e)
 				{
 					// Restore element back to original

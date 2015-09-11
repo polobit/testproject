@@ -7,6 +7,7 @@ function initializeWidgetUtilListeners(){
 
 $(function(){
 	
+    $('#content').off('click', '#widget-prefs-save');
 	$('#content').on('click', '#widget-prefs-save', function(e)
 	{
 		e.preventDefault();
@@ -105,6 +106,7 @@ function clickdesk_save_widget_prefs()
 	$('#save_clickdesk_prefs').unbind("click");
 
 	// On click of save button, check input and save details
+    $('body').off('click', '#save_clickdesk_prefs');
 	$('body').on('click', '#save_clickdesk_prefs', function(e)
 	{
 		e.preventDefault();
@@ -144,6 +146,7 @@ function helpscout_save_widget_prefs()
 	$('#save_api_key').off("click");
 
 	// Saves the API key
+    $('body').off('click', '#save_api_key');
 	$('body').on('click', '#save_api_key', function(e)
 	{
 		e.preventDefault();
@@ -184,6 +187,7 @@ function freshbook_save_widget_prefs()
 	$('#freshbooks_save_token').unbind("click");
 
 	// On click of save button, check input and save details
+    $('body').off('click', '#freshbooks_save_token');
 	$('body').on('click', '#freshbooks_save_token', function(e)
 	{
 		e.preventDefault();
@@ -225,6 +229,7 @@ function rapleaf_save_widget_prefs()
 	$('#save_api_key').off("click");
 
 	// Saves the API key
+    $('body').off('click', '#save_api_key');
 	$('body').on('click', '#save_api_key', function(e)
 	{
 		e.preventDefault();
@@ -270,6 +275,7 @@ function zendesk_save_widget_prefs()
 	$('#save_prefs').unbind("click");
 
 	// On click of save button, check input and save details
+    $('body').off('click', '#save_prefs');
 	$('body').on('click', '#save_prefs', function(e)
 	{
 		e.preventDefault();
@@ -331,6 +337,7 @@ function sip_save_widget_prefs()
 	$('#save_prefs').unbind("click");
 
 	// On click of save button, check input and save details
+    $('body').off('click', '#save_prefs');
 	$('body').on('click', '#save_prefs', function(e)
 	{
 		e.preventDefault();
@@ -395,6 +402,7 @@ function twilioio_save_widget_prefs()
 	$('#save_prefs').unbind("click");
 
 	// On click of save button, check input and save details
+    $('body').off('click', '#save_prefs');
 	$('body').on('click', '#save_prefs', function(e)
 	{
 		e.preventDefault();
@@ -483,6 +491,7 @@ function callscript_save_widget_prefs()
 	$('#save_prefs').unbind("click");
 
 	// On click of save button, check input and save details
+    $('body').off('click', '#save_prefs');
 	$('body').on('click', '#save_prefs', function(e)
 	{
 		e.preventDefault();		
@@ -765,6 +774,7 @@ function set_up_access(widget_name, template_id, data, url, model)
 	$('#PrefsTab .select').removeClass('select');
 	$('.add-widget-prefs-tab').addClass('select');
 
+    $('body').off('click', '.revoke-widget');
 	$('body').on('click', '.revoke-widget', function(e)
 	{
 
@@ -898,6 +908,7 @@ function xero_save_widget_prefs()
 	$('#xero_save_token').unbind("click");
 	
 	// On click of save button, check input and save details
+    $('body').off('click', '#xero_save_token');
 	$('body').on('click', '#xero_save_token', function(e)
 	{
 		e.preventDefault();
@@ -932,6 +943,7 @@ function chargify_save_widget_prefs()
 	$('#chargify_save_api_key').off("click");
 
 	// Saves the API key
+    $('body').off('click', '#chargify_save_api_key');
 	$('body').on('click', '#chargify_save_api_key', function(e)
 	{
 		e.preventDefault();
