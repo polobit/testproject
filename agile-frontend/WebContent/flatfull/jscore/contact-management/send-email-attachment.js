@@ -15,7 +15,7 @@
 		var el = $(this).closest("div");
 		$(this).css("display", "none");
 		el.find(".attachment-document-select").css("display", "inline");
-		var optionsTemplate = "<option value='{{id}}' network_type='{{titleFromEnums network_type}}' size='{{size}}'>{{name}}</option>";
+		var optionsTemplate = "<option value='{{id}}' network_type='{{titleFromEnums network_type}}' size='{{size}}' url='{{url}}'>{{name}}</option>";
         fillSelect('attachment-select','core/api/documents', 'documents',  function fillNew()
 		{
 			el.find("#attachment-select option:first").after("<option value='new'>Upload new doc</option>");
@@ -33,11 +33,11 @@
 		if(typeof network_type !=='undefined' && network_type.toUpperCase() === 'GOOGLE')
 		{
 			$(this).closest("span").find(".attachment-status").html("<span style='color:#df382c;margin-top:10px; display:block'>Can not attach Google Drive doc to email. You can add a link instead in the email.</span>");
-			$(this).css({'border': '1px solid #df382c','outline': 'none'   });				             	            
+			//$(this).css({'border': '1px solid #df382c','outline': 'none'   });				             	            
 		}
 		else if(document_size >= 5242880){
 			$(this).closest("span").find(".attachment-status").html("<span style='color:#df382c;margin-top:10px; display:block'>Document size exceeds the 5MB limit.</span>");
-			$(this).css({'border': '1px solid #df382c','outline': 'none'   });
+			//$(this).css({'border': '1px solid #df382c','outline': 'none'   });
 		}
 		else
 		{
@@ -71,7 +71,7 @@
 		    {
 		    	var docName = $( "#attachment-select option:selected").text();
 		    	$('#emailForm').find('#eattachment').css('display','block');
-		    	$('#emailForm').find('#attachment_id').find("#attachment_fname").text(docName);
+		    	$('#emailForm').find('#attachment_id').find("#attachment_fname").html('<a href='+$( "#attachment-select option:selected").attr('url')+'>'+docName+'</a>');
 		    	$('#emailForm').find(".attachment-document-select").css('display','none');
 		    	$('#emailForm').find('#eattachment_key').attr('name',"document_key");
 		    	$('#emailForm').find('#eattachment_key').attr('value',document_id);
@@ -119,4 +119,5 @@
     		} 
     	});
     }
+
 	

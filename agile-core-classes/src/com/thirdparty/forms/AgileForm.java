@@ -21,6 +21,7 @@ import org.apache.commons.lang.StringUtils;
 import com.agilecrm.account.APIKey;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
+import com.agilecrm.contact.ContactField.FieldType;
 import com.agilecrm.contact.CustomFieldDef;
 import com.agilecrm.contact.Note;
 import com.agilecrm.contact.util.ContactUtil;
@@ -184,8 +185,10 @@ public class AgileForm extends HttpServlet
 
 		if (isAddressField(key))
 		    addressJson.put(key, value);
-		else
+		else if (!isNotSystemContactProperty(key))
 		    properties.add(new ContactField(key, value, null));
+		else if (!isNotCustomContactProperty(key))
+		    properties.add(buildCustomContactProperty(key, value, null));
 	    }
 	    catch (org.json.JSONException e)
 	    {
@@ -372,5 +375,15 @@ public class AgileForm extends HttpServlet
 	else if (APIKey.isValidJSKey(key))
 	    return APIKey.getDomainUserKeyRelatedToJSAPIKey(key);
 	return null;
+    }
+
+    public static ContactField buildCustomContactProperty(String name, String value, String subType)
+    {
+	ContactField field = new ContactField();
+	field.type = FieldType.CUSTOM;
+	field.name = name;
+	field.value = value;
+	field.subtype = subType;
+	return field;
     }
 }

@@ -101,9 +101,9 @@ public class JerseyApplication extends Application
 	s.add(com.agilecrm.core.api.forms.FormsAPI.class);
 	s.add(com.agilecrm.core.api.WebhooksAPI.class);
 	s.add(com.agilecrm.core.api.RestAPI.class);
-	
+	s.add(com.agilecrm.core.api.calendar.CategoriesAPI.class);
 	// s.add(com.agilecrm.core.api.webpage.WebPageAPI.class);
-	
+
 	return s;
     }
 }

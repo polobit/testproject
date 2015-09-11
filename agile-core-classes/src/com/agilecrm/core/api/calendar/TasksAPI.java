@@ -257,7 +257,7 @@ public class TasksAPI
     {
 	JSONArray tasksJSONArray = new JSONArray(model_ids);
 	ActivitySave.createLogForBulkDeletes(EntityType.TASK, tasksJSONArray, String.valueOf(tasksJSONArray.length()),
-	        "");
+		"");
 	Task.dao.deleteBulkByIds(tasksJSONArray);
     }
 
@@ -384,7 +384,7 @@ public class TasksAPI
      */
     @Path("/countoftype")
     @GET
-    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    @Produces({ MediaType.APPLICATION_JSON + ";charset=UTF-8;", MediaType.APPLICATION_XML })
     public String getCountOfTasksCategoryType(@QueryParam("criteria") String criteria, @QueryParam("type") String type,
 	    @QueryParam("owner") String owner, @QueryParam("pending") boolean pending) throws Exception
     {
@@ -412,7 +412,7 @@ public class TasksAPI
 	}
 
 	return TaskUtil.getTasksRelatedToOwnerOfTypeAndDue(criteria, type, owner, pending, null, null, startTime,
-	        endTime);
+		endTime);
     }
 
     /**

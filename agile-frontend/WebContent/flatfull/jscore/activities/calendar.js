@@ -720,6 +720,10 @@ function today()
 }
 
 
+/**
+ * gets the agileusers to build calendar filters
+ * @returns {Array}
+ */
 function getCalendarUsersDetails()
 {
 

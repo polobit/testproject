@@ -23,12 +23,15 @@ $(function(){
 		fill_relation(el);
 		agile_type_ahead("task_related_to", el, contacts_typeahead);
 
-		// Fills owner select element
-		populateUsers("owners-list", $("#taskForm"), undefined, undefined,
-				function(data) {
-					$("#taskForm").find("#owners-list").html(data);
-					$("#owners-list", el).find('option[value='+ CURRENT_DOMAIN_USER.id +']').attr("selected", "selected");
-					$("#owners-list", $("#taskForm")).closest('div').find('.loading-img').hide();					
+		categories.getCategoriesHtml(undefined,function(catsHtml){
+			$('#type',el).html(catsHtml);
+			// Fills owner select element
+			populateUsers("owners-list", $("#taskForm"), undefined, undefined,
+					function(data) {
+						$("#taskForm").find("#owners-list").html(data);
+						$("#owners-list", el).find('option[value='+ CURRENT_DOMAIN_USER.id +']').attr("selected", "selected");
+						$("#owners-list", $("#taskForm")).closest('div').find('.loading-img').hide();					
+			});
 		});
 
        activateSliderAndTimerToTaskModal();
@@ -174,7 +177,7 @@ $(function(){
     				return;
     			}
     						
-    			var url = '/core/api/campaigns/enroll/' + contact_id + '/' + workflow_id;
+    			var url = '/core/api/campaigns/enroll/' + agile_crm_get_contact()['id'] + '/' + workflow_id;
     			
     			$.ajax({
     				url: url,
@@ -204,7 +207,7 @@ $(function(){
     					}
     					
     					// Navigate back to contact detail view
-    					Backbone.history.navigate("contact/" + contact_id, {
+    					Backbone.history.navigate("contact/" + agile_crm_get_contact()['id'], {
     						trigger: true
     					});
     				}

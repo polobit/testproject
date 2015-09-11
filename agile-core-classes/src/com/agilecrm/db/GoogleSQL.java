@@ -10,15 +10,12 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 import java.util.Properties;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import com.campaignio.logger.Log.LogType;
 import com.google.appengine.api.utils.SystemProperty;
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 
@@ -313,15 +310,23 @@ public class GoogleSQL
 
     private static Connection getConnection() throws PropertyVetoException, SQLException
     {
-	if (SystemProperty.environment.value() != SystemProperty.Environment.Value.Development)
+	if (SystemProperty.environment.value() != null
+		&& SystemProperty.environment.value() != SystemProperty.Environment.Value.Development)
 	{
 	    return getGoogleSQLConnection();
 	}
+
+	// String url =
+	// "jdbc:mysql://173.194.84.175:3306/stats?user=root&password=mysql123";
+	String url = "jdbc:mysql://173.194.84.175:3306/stats?user=root&password=mysql123";
+
 	if (cpds != null)
 	    return cpds.getConnection();
 
 	Properties property = new Properties(System.getProperties());
 	property.put("com.mchange.v2.log.MLog", "log4j");
+	property.put("autoReconnect", "true");
+
 	// property.put("com.mchange.v2.log.FallbackMLog.DEFAULT_CUTOFF_LEVEL",
 	// "OFF");
 	System.setProperties(property);
@@ -330,7 +335,7 @@ public class GoogleSQL
 	cpds.setDriverClass("com.mysql.jdbc.Driver"); // loads the jdbc driver
 	// cpds.setJdbcUrl("jdbc:mysql://localhost:3306/stats?user=root&password=mysql123");
 	// jdbc:mysql://localhost:3306/stats?user=root&password=mysql123
-	cpds.setJdbcUrl("jdbc:mysql://173.194.84.175:3306/stats?user=root&password=mysql123");
+	cpds.setJdbcUrl(url);
 	// cpds.setUser("root");
 	// cpds.setPassword("mysql123");
 
@@ -350,48 +355,13 @@ public class GoogleSQL
 
     public static void main(String[] args)
     {
-	try
-	{
-	    System.out.println("setting");
-
-	    // Connection conn = getConnection();
-	    /*
-	     * for (int i = 0; i < 5; i++) { Long before_time =
-	     * System.currentTimeMillis(); conn = getConnection(); Long
-	     * after_time = System.currentTimeMillis();
-	     * System.out.println("Time taken to connect: " + (after_time -
-	     * before_time)); System.out.println(conn.isClosed()); }
-	     */
-	    List<Object[]> o = new ArrayList<Object[]>();
-	    for (int i = 0; i < 5; i++)
-	    {
-		Object[] newLog = new Object[] { "local", "1" + i, "new 1", "123", getFutureDate(),
-			"Subject: " + "test subject", LogType.EMAIL_SENT.toString() };
-
-		o.add(newLog);
-
-	    }
-
-	    // / CampaignLogsSQLUtil.addToCampaignLogs(o);
-
-	    // CampaignLogsSQLUtil.addToCampaignLogs("local", "888", "mme",
-	    // "1000", "message", "hhh");
-	    // int[] b = CampaignLogsSQLUtil.addToCampaignLogs(list);
-	}
-	catch (Exception e)
-	{
-	    e.printStackTrace();
-	}
-	finally
-	{
-	    cpds.close();
-	}
+	System.out.println(getFutureDate());
     }
 
     public static String getFutureDate()
     {
 
-	DateFormat dateFormat = new SimpleDateFormat("yyyy:MM:dd hh:mm:ss");
+	DateFormat dateFormat = new SimpleDateFormat("yyyy:MM:dd HH:mm:ss");
 
 	Calendar calendar = Calendar.getInstance();
 
@@ -402,4 +372,5 @@ public class GoogleSQL
 	return futuredate;
 
     }
+
 }

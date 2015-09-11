@@ -36,7 +36,9 @@ public class WebCalendarEventsAPI
 {
 
 	/**
-	 * Get slot duration and description for that.
+	 * Get slot duration and description for that slot based on user id.
+	 * @param id  user id
+	 * @return  {@link List}
 	 */
 	@Path("/getslotdetails")
 	@GET
@@ -76,6 +78,13 @@ public class WebCalendarEventsAPI
 		return null;
 	}
 
+	
+	
+	/**
+	 * 
+	 * @param wce contains list of values used for creating event
+	 * @return done if executes without errors
+	 */
 	@Path("/save")
 	@PUT
 	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
@@ -102,6 +111,12 @@ public class WebCalendarEventsAPI
 
 	}
 
+	
+	/**
+	 * when scheduled user cancels his appointment 
+	 * @param eventid  agile event id
+	 * @param cancel_reason
+	 */
 	@Path("/deletewebevent")
 	@GET
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })

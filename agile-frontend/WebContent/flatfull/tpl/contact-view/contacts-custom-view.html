@@ -34,17 +34,17 @@
 						<span class="caret"></span>
 					</a>
 					<ul class="dropdown-menu" id="view-actions">
-						<li><a href="#" id="bulk-tags">Add Tags</a></li>
-						<li><a href="#" id="bulk-tags-remove">Remove Tags</a></li>
+						<li><a href="#" id="bulk-tags" class="_contact_bulk_action">Add Tags</a></li>
+						<li><a href="#" id="bulk-tags-remove" class="_contact_bulk_action">Remove Tags</a></li>
                         <li class='divider'></li>  
 						{{#hasMenuScope 'CAMPAIGN'}}
-						<li><a href="#" id="bulk-campaigns">Add to Campaign</a></li>
+						<li><a href="#" id="bulk-campaigns" class="_contact_bulk_action">Add to Campaign</a></li>
 						{{/hasMenuScope}}
-						<li><a href="#" id="bulk-email">Send Email</a></li>
+						<li><a href="#" id="bulk-email" class="_contact_bulk_action">Send Email</a></li>
                         <li class='divider'></li>
-						<li><a href="#" id="bulk-owner">Change Owner</a></li>
+						<li><a href="#" id="bulk-owner" class="_contact_bulk_action">Change Owner</a></li>
                          {{#hasScope "EXPORT_CONTACTS"}}
-                        <li><a href="#" id="bulk-contacts-export">Export Contacts as CSV</a></li>
+                        <li><a href="#" id="bulk-contacts-export" class="_contact_bulk_action">Export Contacts as CSV</a></li>
                          {{/hasScope}}
 						<li><a href="#" class="delete-checked-contacts">Delete</a></li>
 					</ul>
@@ -62,7 +62,7 @@
 </div>
 
     <div class="hbox hbox-auto-xs hbox-auto-sm">
-    <div class="col w-md b-r ">
+    <div class="col w-md b-r" id="contacts-lhs-filters-toggle" style="display:{{toggle_contacts_filter}}">
 		<div class="data-block">
 			<div  id="lhs_filters_conatiner">
 				
@@ -77,7 +77,11 @@
 			<div id="slate"></div>
 		{{else}}
         <div class="data">
-         <div class="panel-heading" style="background:#f6f8f8;">Contacts List</div>
+         <div class="panel-heading" style="background:#f6f8f8;">Contacts List
+<a id="contacts-left-filters-toggle" class="m-l-xs" data-toggle="tooltip" data-placement="right" title="" data-original-title="Filters">
+			<i id="icon-filter" class="fa fa-bars icon-white"></i>
+		</a>
+</div>
             <div class="dta-contatiner table-responsive">
 				<div class="panel panel-default" style="overflow-x:auto;border-left:none;">
 			    
@@ -106,7 +110,12 @@
 			<div id="slate"></div>
 		{{else}}
         <div class="data">
- <div class="panel-heading" style="background:#f6f8f8;">Contacts List</div>
+ <div class="panel-heading" style="background:#f6f8f8;">Contacts List
+
+<a id="contacts-left-filters-toggle" class="m-l-xs" data-toggle="tooltip" data-placement="right" title="" data-original-title="Filters">
+			<i id="icon-filter" class="fa fa-bars icon-white"></i>
+		</a>
+</div>
             <div class="dta-contatiner table-responsive">
 				<div class="panel panel-default" style="overflow-x:auto;border-left:none;">
 			    

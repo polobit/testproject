@@ -128,6 +128,8 @@ content="<%=domainUser.getInfo(DomainUser.LAST_LOGGED_IN_TIME)%>" />
 .clickdesk_bubble {
   display: none !important;
 }
+
+
 </style>
 <!--  responsive table js -->
 <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
@@ -276,9 +278,9 @@ if(currentUserPrefs.menuPosition.equals("top")){
       <span>Reports</span>
     </a>
   </li>
-  <li class='<%if(currentUserPrefs.menuPosition.equals("top")){out.print("dockedicons ");} else{out.print("fixedicons ");} %>' id="planView"> <a href="#subscribe"><i class="icon-shopping-cart"></i> <span> Plan &amp; Upgrade </span></a></li>
+  <!-- <li class='<%if(currentUserPrefs.menuPosition.equals("top")){out.print("dockedicons ");} else{out.print("fixedicons ");} %>' id="planView"> <a href="#subscribe"><i class="icon-shopping-cart"></i> <span> Plan &amp; Upgrade </span></a></li>
   <li class='pos-b-0 <%if(currentUserPrefs.menuPosition.equals("top")){out.print("dockedicons ");} else{out.print("fixedicons ");} %>' id ="helpView"><a href="#help"><i class="icon-question"></i>
-                      <span> Help </span></a></li>
+                      <span> Help </span></a></li> -->
   </ul>
   </nav>
   </div>
@@ -362,7 +364,7 @@ var CLICKDESK_CODE_LOADED = false;
 var _plan_on_signup = <%=mapper.writeValueAsString(plan)%>;
 
 // Get current user prefs json
-var CURRENT_USER_PREFS = <%=mapper.writeValueAsString(currentUserPrefs)%>;
+var CURRENT_USER_PREFS = <%=UserPrefsUtil.getMapperString(currentUserPrefs)%>;
 
 //Get current user prefs json
 var ACCOUNT_PREFS = <%=mapper.writeValueAsString(accountPrefs)%>; 

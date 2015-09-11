@@ -7,6 +7,7 @@
  * @module Search author: Yaswanth
  */
 var filter_name;
+var CONTACTS_DYNAMIC_FILTER_COOKIE_STATUS = "toggle_dynamic_filter_" + CURRENT_DOMAIN_USER.id;
 
 /**
  * Change name of input[name='temp'] to more random i.e. temp-<unique_number>.
@@ -646,4 +647,13 @@ function add_custom_class_to_filter_elements(element, className)
 	console.log(custom_class)
 	
 	$(element).attr('custom_chained_class', custom_class);
+}
+
+function showDynamicFilters(el){
+	if(readCookie(CONTACTS_DYNAMIC_FILTER_COOKIE_STATUS)=="hide"){
+		$('#contacts-lhs-filters-toggle').hide();
+	}
+	else{
+		$('#contacts-lhs-filters-toggle').show();
+	}
 }
