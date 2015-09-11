@@ -133,19 +133,10 @@ function initializeReportsListeners(){
 	$('#reports-listerners-container').on('click', '#activity_advanced', function(e) 
 	{
 		e.preventDefault();
-
+		$("#activity_advanced span i").toggleClass("fa-minus");
+		$("#activity_advanced span i").toggleClass("fa-plus");
 	});
 
-	$('#reports-listerners-container').on('shown', '#activity-advanced-block', function(e) 
-	{
-		$('#activity_advanced').html('<span><i class="icon-minus"></i></span> Advanced');
-
-	});
-
-    $('#reports-listerners-container').on('hidden', '#activity-advanced-block', function(e) 
-	{
-		$('#activity_advanced').html('<span><i class="icon-plus"></i></span> Advanced');
-	});
 
 	$('#reports-listerners-container').on('click', '#report_advanced', function(e) 
 	{
@@ -155,16 +146,6 @@ function initializeReportsListeners(){
 
 	});
             
-	$('#reports-listerners-container').on('shown', '#report-advanced-block', function(e)
-	{
-		$('#report_advanced').html('<span><i class="icon-minus"></i></span> Advanced');
-
-	});
-			
-	$('#reports-listerners-container').on('hidden', '#report-advanced-block', function(e)
-	{
-		$('#report_advanced').html('<span><i class="icon-plus"></i></span> Advanced');
-	});
 	
 	$('#reports-listerners-container').on('change', '#duration', function(e)
 			{

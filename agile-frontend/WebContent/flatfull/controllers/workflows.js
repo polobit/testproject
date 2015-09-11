@@ -373,8 +373,8 @@ var WorkflowsRouter = Backbone.Router
 					// Hide bulk subscribers block
 					$('#subscribers-block').hide();
 
-					head.js(LIB_PATH + 'lib/date-charts.js', LIB_PATH + 'lib/date-range-picker.js', CSS_PATH + "css/misc/date-picker.css", function()
-					{
+					initReportLibs(function()
+							{
 						// Load Reports Template
 						getTemplate('campaign-email-reports', {}, undefined, function(template_ui1){
 					 		if(!template_ui1)
@@ -382,8 +382,13 @@ var WorkflowsRouter = Backbone.Router
 							$('#campaign-analysis-tabs-content').html($(template_ui1)); 
 							// Set the name
 							// $('#reports-campaign-name').text(workflowName);
-							initChartsUI(id);
+							initChartsUI(function(){
+								// Updates table data
+								get_email_table_reports(id);
 
+								// shows graphs by default week date range.
+								showEmailGraphs(id);
+							});
 						}, "#campaign-analysis-tabs-content");
 
 
