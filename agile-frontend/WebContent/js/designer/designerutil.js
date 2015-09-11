@@ -139,7 +139,17 @@ function getTwilioIncomingList(type)
 
 function getCampaignList(type)
 {
-	var workflows = $.ajax({ type : "GET", url : '/core/api/workflows', async : false, dataType : 'json' }).responseText;
+	
+
+	try{
+		var count = (window.parent.App_Workflows.workflow_list_view.collection.length);
+			return count;
+	}
+	catch(err){
+		return 0;
+	}
+	return 0;
+	/*var workflows = $.ajax({ type : "GET", url : '/core/api/workflows', async : false, dataType : 'json' }).responseText;
 
 	// Parse stringify json
 	var data = JSON.parse(workflows);
@@ -154,7 +164,7 @@ function getCampaignList(type)
 
 	});
 
-	return listOfWorkflows;
+	return listOfWorkflows;*/
 }
 
 /**
@@ -666,3 +676,39 @@ $('#from_email').die('click').live('click', function(e){
 		});
 });
 
+function getTaskCategories(type)
+{
+	var categories = {};
+	$.ajax({
+		  url: '/core/api/categories?entity_type=TASK',
+		  type: "GET",
+		  async:false,
+		  dataType:'json',
+		  success: function (tasks) {
+			  try{
+				  $.each (tasks,function(name,value){
+					  categories[value.label]=value.name;
+					  });
+			  }catch(e){
+				  categories = null;
+			  }
+			 
+		}
+		
+	});
+
+	if (categories == null)
+		return null;
+
+	// Parse stringify json
+	return categories;
+} 
+
+function show_templates(ele, target_id)
+{
+	// current value
+	var curValue = $(ele).find(':selected').val();
+
+	// inserts text based on cursor.
+	load_email_templates(curValue);
+}
