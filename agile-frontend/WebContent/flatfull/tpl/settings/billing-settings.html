@@ -156,9 +156,16 @@ You can upgrade your account at any time.
 	<div class="row m-t m-b-sm">
 	<div class="col-md-12">
 <div class="panel panel-default">
-
+{{#if billingData}}
 			<div id="invoice-details-holder"></div>
-
+{{else}}
+<div class="panel-heading">
+			<div class="text-lg">Invoices</div>
+		</div>
+		<div class="wrapper-sm">
+			No recent payments.
+		</div>
+	{{/if}}
 </div>
 	
 </div>
