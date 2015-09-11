@@ -142,7 +142,7 @@ var Base_Model_View = Backbone.View
 							 * page, since on change in model i.e., data fetched
 							 * render is called again)
 							 */
-							that.model.save_success = false;
+							that.model.save_called = false;
 							that.render(true);
 						}
 					});
@@ -339,6 +339,7 @@ var Base_Model_View = Backbone.View
 				//$save_info = $('<div style="display:inline-block"><img src="img/1-0.gif" height="15px" width="15px"></img></div>');
 				//$(".form-actions", this.el).append($save_info);
 				//$save_info.show();
+
 
 				// Add a dummy variable to not call postrenderCallback after save if window or navigate options present in model view
 				this.model.save_called = true;
@@ -552,7 +553,7 @@ var Base_Model_View = Backbone.View
 				if (callback && typeof (callback) === "function") {
 
 					// No render callback if navigation/reload present in view
-					if(this.model.save_success && (this.options.window || this.options.navigate || this.options.reload)){
+					if(this.model.save_called && (this.options.window || this.options.navigate || this.options.reload)){
 						    this.model.save_called = false;
                             return;
 					}
