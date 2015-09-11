@@ -331,14 +331,16 @@ var Base_Model_View = Backbone.View
 
 				var prePersist = this.options.prePersist;
 				
-				if (prePersist && typeof (prePersist) === "function") {
-				    
+				if (prePersist && typeof (prePersist) === "function") {				    
 				     prePersist(this.model);
 				    }
 				// Loading while saving
 				//$save_info = $('<div style="display:inline-block"><img src="img/1-0.gif" height="15px" width="15px"></img></div>');
 				//$(".form-actions", this.el).append($save_info);
 				//$save_info.show();
+
+				// Add a dummy variable to not call postrenderCallback after save if window or navigate options present in model view
+				this.model.save_called = true;
 
 				// Calls save on the model
 				this.model
@@ -359,8 +361,8 @@ var Base_Model_View = Backbone.View
 									success : function(model, response) 
 									{	
 										// Removes disabled attribute of save button
-										enable_save_button($(e.currentTarget));
-										
+										enable_save_button($(e.currentTarget));										
+
 										if (saveCallback && typeof (saveCallback) === "function") {
 											console.log(response)
 											// execute the callback, passing parameters as necessary
@@ -547,7 +549,13 @@ var Base_Model_View = Backbone.View
 				 */
 				
 				if (callback && typeof (callback) === "function") {
-					
+
+					// No render callback if navigation/reload present in view
+					if(this.model.save_success && (this.options.window || this.options.navigate || this.options.reload){
+						    this.model.save_called = false;
+                            return;
+					}
+
 					// execute the callback, passing parameters as necessary
 					callback($(this.el),this.model.toJSON());
 				}
