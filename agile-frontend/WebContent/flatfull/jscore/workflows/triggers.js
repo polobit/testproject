@@ -8,7 +8,13 @@
 function initializeTriggersListeners(){
 }
 
-$(function(){
+/**
+ * Commented old code for trigger edit. 
+ * Made it compatible with new listeners code. 
+ * This function is called on trigger-edit route to 
+ * initialize change events of trigger
+ */
+/*$(function(){
 
 	// Tag suggestions when 'Tag is added' and 'Tag is deleted' options selected
 	$('body').on('change', '#trigger-type', function(e)
@@ -169,7 +175,7 @@ $(function(){
 		show_email_tracking_campaigns();
 		
 	});
-});
+});*/
 
 /**
  * Shows hidden trigger-milestones select element and fills with milestones
@@ -254,7 +260,7 @@ function populate_contact_filters_in_trigger(trigger_form, filter_select_id, val
 
 	var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
 	
-	fillSelect(filter_select_id, '/core/api/filters', 'workflow', function fillContactFilter()
+	fillSelect('contact-filter', '/core/api/filters', 'workflow', function fillContactFilter()
 	{
 		if (value)
 		{
@@ -444,20 +450,18 @@ function show_email_tracking_campaigns()
 
 function initializeTriggerEventListners()
 {
-	$("#trigger-listers").on('click', '.add-trigger', function(e){
-		console.log(e);
+	$("#trigger-listener").on('click', '.add-trigger', function(e){
+		 
 		var type = e.target.getAttribute("data");
 		var campaign_id = $('#campaign-id').val();
-		App_Workflows.trigger_add_new(campaign_id,type);
-		//$('#trigger-type', el).val(type).attr("selected", "selected").trigger('change');
-
+		App_Workflows.triggerAdd(campaign_id,type);
+		 
 	});
 
 	$('#trigger-listers').on('click', '.save-trigger', function(e){
 	console.log("yes");
 });
 }
-
 
 function initializeTriggerListEventListners(id,trigger_type)
 {
