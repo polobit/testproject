@@ -61,6 +61,7 @@ function setUpStripeCustomField(stripe_widget_prefs)
 	 * preferences are saved including stripe_field_name and Stripe profile of
 	 * customer is shown
 	 */
+    $("body").off("click", '#save_stripe_name');
 	$("body").on("click", '#save_stripe_name', function(e)
 	{
 		e.preventDefault();
@@ -106,6 +107,7 @@ function showStripeProfile(stripe_custom_field_name)
 	if (!customer_id)
 	{
 		
+         $("body").off("click", '#stripe_contact_id_save');
 		 $("body").on("click", '#stripe_contact_id_save', function(e){
 			   
 			   e.preventDefault();

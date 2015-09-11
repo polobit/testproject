@@ -82,6 +82,7 @@ function showTwitterMatchingProfiles(data)
 	 * Displays Twitter profile details on mouse hover and saves profile on
 	 * click
 	 */
+    $(".twitterImage").off('mouseenter');
 	$(".twitterImage").on('mouseenter', function()
 	{
 		// Unique Twitter Id from widget
@@ -103,6 +104,7 @@ function showTwitterMatchingProfiles(data)
 		$(this).popover('show');
 
 		// on click of any profile, save it to the contact
+        $('#' + Twitter_id).off('click');
 		$('#' + Twitter_id).on('click', function(e)
 		{
 			e.preventDefault();
@@ -470,6 +472,7 @@ function showTwitterProfile(Twitter_id)
 function registerClickEventsInTwitter(Twitter_id, twitter_connected, stream_data)
 {
 	// On click of see more link, more updates are retrieved
+    $("body").off('click','.twitter_stream');
 	$("body").on('click','.twitter_stream', function(e)
 	{
 
@@ -524,6 +527,7 @@ function registerClickEventsInTwitter(Twitter_id, twitter_connected, stream_data
 	 * On click of less button, hides update stream and shows current update by
 	 * toggling
 	 */
+    $("body").off('click','#twitter_less');
 	$("body").on('click','#twitter_less', function(e)
 	{
 		e.preventDefault();
@@ -563,6 +567,7 @@ function registerClickEventsInTwitter(Twitter_id, twitter_connected, stream_data
 	 * On click of refresh icon in the Twitter panel, all the new updates are
 	 * shown
 	 */
+    $("body").off('click','#twitter_refresh_stream');
 	$("body").on('click','#twitter_refresh_stream', function(e)
 	{
 		e.preventDefault();
@@ -858,6 +863,7 @@ function sendTwitterMessage(Twitter_id, message)
 	// Append the form into the content
 	$('#content').append(message_form_modal);
 
+    $('#twitter_messageModal').off('shown');
 	$('#twitter_messageModal').on('shown', function()
 	{
 
@@ -920,6 +926,7 @@ function tweetInTwitter(Twitter_id)
 	// Append the form into the content
 	$('#content').append(message_form_modal);
 
+    $('#twitter_messageModal').off('shown');
 	$('#twitter_messageModal').on('shown', function()
 	{
 
@@ -1283,6 +1290,7 @@ $(function()
 			}
 
 			// Deletes Twitter profile on click of delete button in template
+            $("body").off('click','#Twitter_plugin_delete');
 			$("body").on('click','#Twitter_plugin_delete', function(e)
 			{
 				e.preventDefault();
@@ -1296,6 +1304,7 @@ $(function()
 			});
 
 			// Sends a message to Twitter when clicked on send message button
+            $("body").off('click','#twitter_message');
 			$("body").on('click','#twitter_message', function(e)
 			{
 				e.preventDefault();
@@ -1303,6 +1312,7 @@ $(function()
 			});
 
 			// Sends an follow request to Twitter when clicked on follow button
+            $("body").off('click','#twitter_follow');
 			$("body").on('click','#twitter_follow', function(e)
 			{
 				e.preventDefault();
@@ -1316,6 +1326,7 @@ $(function()
 			});
 
 			// Sends an UnFollow request to Twitter when clicked on UnFollow button
+            $("body").off('click','#twitter_unfollow');
 			$("body").on('click','#twitter_unfollow', function(e)
 			{
 				e.preventDefault();
@@ -1323,6 +1334,7 @@ $(function()
 			});
 
 			// On mouse enter unfollow
+            $("body").off('mouseenter','#twitter_unfollow');
 			$("body").on('mouseenter','#twitter_unfollow', function(e)
 			{
 				$('#twitter_unfollow').text("Unfollow");
@@ -1331,6 +1343,7 @@ $(function()
 			});
 
 			// On mouse leave following
+            $("body").off('mouseleave','#twitter_unfollow');
 			$("body").on('mouseleave','#twitter_unfollow', function(e)
 			{
 				$('#twitter_unfollow').text("Following");
@@ -1339,6 +1352,7 @@ $(function()
 			});
 
 			// ReTweets a tweet in Twitter on click of ReTweet link
+            $("body").off('click','.twitter_retweet');
 			$("body").on('click','.twitter_retweet', function(e)
 			{
 				e.preventDefault();
@@ -1352,6 +1366,7 @@ $(function()
 			});
 
 			// Sends a tweet to the contact Twitter profile
+            $("body").off('click','#twitter_tweet');
 			$("body").on('click','#twitter_tweet', function(e)
 			{
 				e.preventDefault();
@@ -1360,6 +1375,7 @@ $(function()
 			});
 
 			// on click of name link to modify search, search template is shown
+            $("body").off('click','.twitter_modify_search');
 			$("body").on('click','.twitter_modify_search', function(e)
 			{
 				e.preventDefault();
@@ -1373,6 +1389,7 @@ $(function()
 			 * On click of search button in modify template, matching profiles are
 			 * fetched
 			 */
+            $("body").off('click','#twitter_search_btn');
 			$("body").on('click','#twitter_search_btn', function(e)
 			{
 				e.preventDefault();
@@ -1383,6 +1400,7 @@ $(function()
 			/*
 			 * On click of close, show past results with past searched data
 			 */
+            $("body").off('click','#twitter_search_close');
 			$("body").on('click','#twitter_search_close', function(e)
 			{
 				e.preventDefault();
@@ -1394,6 +1412,7 @@ $(function()
 			});
 
 			// On click of followers in twitter panel
+            $("body").off('click','#twitter_followers');
 			$("body").on('click','#twitter_followers', function(e1)
 			{
 				e1.preventDefault();
@@ -1434,6 +1453,7 @@ $(function()
 						// Show matching profiles in Twitter panel
 						$('#twitter_follower_panel', agile_crm_get_current_view()).html(getTemplate("twitter-follower-following", result));
 						
+                        $("body").off('mouseover','.twitterImage');
 						$("body").on('mouseover','.twitterImage', function(e1)
 						{
 							// Unique Twitter Id from widget
@@ -1459,6 +1479,7 @@ $(function()
 				});
 			});
 
+            $("body").off('click','#more_followers');
 			$("body").on('click','#more_followers', function(e2)
 			{
 				e2.preventDefault();
@@ -1490,6 +1511,7 @@ $(function()
 			});
 
 			// On click of following in twitter panel
+            $("body").off('click','#twitter_following');
 			$("body").on('click','#twitter_following', function(e1)
 			{
 				e1.preventDefault();
@@ -1524,7 +1546,8 @@ $(function()
 
 						// Show matching profiles in Twitter panel
 						$('#twitter_following_panel', agile_crm_get_current_view()).html(getTemplate("twitter-follower-following", result));
-
+                        
+                        $("body").off('mouseover','.twitterImage');
 						$("body").on('mouseover','.twitterImage', function(e1)
 						{
 							// Unique Twitter Id from widget
@@ -1550,6 +1573,7 @@ $(function()
 				});
 			});
 
+            $("body").off('click','#more_following');
 			$("body").on('click','#more_following', function(e2)
 			{
 				e2.preventDefault();

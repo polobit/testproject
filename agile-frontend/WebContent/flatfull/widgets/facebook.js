@@ -18,7 +18,8 @@ function showFacebookMatchingProfile(first_name)
 			console.log("data is:")
 			console.log(data);
 			var template = $('#' + FACEBOOK_PLUGIN_NAME).html(getTemplate('facebook-matching-profiles', data));
-
+            
+            $("body").off("mouseover", ".facebookImage");
 			$("body").on("mouseover", ".facebookImage", function(e)
 			{
 				// Unique Twitter Id from widget
@@ -34,6 +35,7 @@ function showFacebookMatchingProfile(first_name)
 				$(this).popover('show');
 
 				// on click of any profile, save it to the contact
+                $('#' + Facebook_id).off('click');
 				$('#' + Facebook_id).on('click', function(e)
 				{
 					e.preventDefault();
@@ -159,7 +161,8 @@ function showFacebookProfile(facebookid)
 			data.image = contact_image;
 			$('#Twitter_plugin_delete').show();
 			var template = $('#' + FACEBOOK_PLUGIN_NAME).html(getTemplate('facebook-profile', data));
-
+            
+            $("body").off("click", "#facebook_post_btn");
 			$("body").on("click", "#facebook_post_btn", function(e)
 					{
 						console.log("post on a wall")
@@ -277,6 +280,7 @@ function getUserNameOrUserID(url) {
 			showFacebookMatchingProfile(SEARCH_STRING);
 		}
 
+        $("body").off("click", "#facebook_search_btn");
 		$("body").on("click", "#facebook_search_btn", function(e)
 		{
 			e.preventDefault();
@@ -284,6 +288,7 @@ function getUserNameOrUserID(url) {
 			getModifiedFacebookMatchingProfiles();
 		});
 
+        $("body").off("click", ".facebook_modify_search");
 		$("body").on("click", ".facebook_modify_search", function(e)
 		{
 			e.preventDefault();
@@ -292,6 +297,8 @@ function getUserNameOrUserID(url) {
 
 			$('#' + FACEBOOK_PLUGIN_NAME).html(getTemplate('facebook-modified-search', { "searchString" : SEARCH_STRING }));
 		});
+        
+        $("body").off("click", "#facebook_search_close");
 		$("body").on("click", "#facebook_search_close", function(e)
 		{
 			e.preventDefault();
@@ -303,6 +310,7 @@ function getUserNameOrUserID(url) {
 		});
 		
 		// Deletes Twitter profile on click of delete button in template
+        $("body").off("click", "#Facebook_plugin_delete");
 		$("body").on("click", "#Facebook_plugin_delete", function(e)
 		{
 			e.preventDefault();
