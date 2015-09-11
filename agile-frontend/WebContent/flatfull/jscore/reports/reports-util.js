@@ -1,4 +1,3 @@
- 
   /**activity and contact report add edit functionality **/
 
     var report_utility = {
