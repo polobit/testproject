@@ -266,6 +266,7 @@ $(function()
 			 * On click of add client button in FreshBooks, calls method to add a client
 			 * in FreshBooks with contact's first name, last name and email
 			 */
+			$("body").off("click", "#freshbooks_add_client");
 			$("body").on("click", "#freshbooks_add_client", function(e)
 			{
 				e.preventDefault();
