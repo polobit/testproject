@@ -551,7 +551,7 @@ var Base_Model_View = Backbone.View
 				if (callback && typeof (callback) === "function") {
 
 					// No render callback if navigation/reload present in view
-					if(this.model.save_success && (this.options.window || this.options.navigate || this.options.reload){
+					if(this.model.save_success && (this.options.window || this.options.navigate || this.options.reload)){
 						    this.model.save_called = false;
                             return;
 					}
