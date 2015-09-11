@@ -141,15 +141,7 @@ function getCampaignList(type)
 {
 	
 
-	try{
-		var count = (window.parent.App_Workflows.workflow_list_view.collection.length);
-			return count;
-	}
-	catch(err){
-		return 0;
-	}
-	return 0;
-	/*var workflows = $.ajax({ type : "GET", url : '/core/api/workflows', async : false, dataType : 'json' }).responseText;
+	var workflows = $.ajax({ type : "GET", url : '/core/api/workflows', async : false, dataType : 'json' }).responseText;
 
 	// Parse stringify json
 	var data = JSON.parse(workflows);
@@ -164,8 +156,25 @@ function getCampaignList(type)
 
 	});
 
-	return listOfWorkflows;*/
+	return listOfWorkflows;
 }
+
+/**
+ * Returns count of workflow list
+ */
+ function getCampaignCount(type)
+ {
+
+ 	try{
+		var count = (window.parent.App_Workflows.workflow_list_view.collection.length);
+			return count;
+	}
+	catch(err){
+		return 0;
+	}
+	return 0;
+	
+ }
 
 /**
  * Returns custom fields in format required for merge fields. E.g., Nick
