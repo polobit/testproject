@@ -261,6 +261,7 @@ function build_custom_widget_form(el)
 	
 	$('#prefs-tabs-content').on('click', '#add-custom-widget', function(e)
 			{
+				$('#custom-widget-btn').removeClass('open');
 				divClone = $("#custom-widget").clone();
 				var widget_custom_view = new Base_Model_View({ url : "/core/api/widgets/custom", template : "add-custom-widget", isNew : true,
 					postRenderCallback : function(el)
