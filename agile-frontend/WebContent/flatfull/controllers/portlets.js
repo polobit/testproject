@@ -3,22 +3,26 @@
  */
 var PortletsRouter = Backbone.Router
 		.extend({
+
 			routes : {
-				// "portlets" : "portlets",
 				"add-dashlet" : "adddashlet"
 			},
 			adddashlet : function() {
-				if (gridster == undefined) {
+
+				if (!gridster) {
 					App_Portlets.navigate("dashboard", {
 						trigger : true
 					});
-				} else {
+					return;
+				} 
+
 					head
 							.js(
 									LIB_PATH
 											+ 'jscore/handlebars/handlebars-helpers.js',
 									LIB_PATH + 'lib/jquery.gridster.js',
 									function() {
+										$('#content').html("<div id='portlets-add-listener'></div>");
 										this.Catalog_Portlets_View = new Base_Collection_View(
 												{
 													url : '/core/api/portlets/default',
@@ -64,40 +68,13 @@ var PortletsRouter = Backbone.Router
 										// 
 										this.Catalog_Portlets_View.collection
 												.fetch();
-										$('#content').html(
+										$('#content').find('#portlets-add-listener').html(
 												this.Catalog_Portlets_View
 														.render().el);
 
 									});
 										
-				}
-			},
-			// Show form modal
-			// $('#portletStreamModal').modal('show');
-
-			// Add social network types template
-			// $("#portletstreamDetails",$('#portletStreamModal')).html(this.Catalog_Portlets_View.el);},
-
-			portlets : function() {
-				head.js(LIB_PATH + 'jscore/handlebars/handlebars-helpers.js?='
-						+ _AGILE_VERSION, LIB_PATH + 'lib/jquery.gridster.js',
-						function() {
-
-							getTemplate('portlets', {}, undefined, function(template_ui){
-								if(!template_ui)
-									  return;
-
-								var el = $('#content').html($(template_ui));
-								if (IS_FLUID) {
-									$('#content').find('div.row')
-											.removeClass('row').addClass(
-													'row-fluid');
-								}
-								loadPortlets(el);
-								
-							}, "#content");
-
-						});
+				
 			}
 		});
 
@@ -106,175 +83,12 @@ function preload(arrayOfImages) {
         $('<img />').attr('src',this).appendTo('body').css('display','none');
     });
 }
-// For adding new portlets
-function addNewPortlet(portlet_type, p_name) {
-	var obj={};
-	var json={};
-	var curDate=new Date();
-	if(p_name=="FilterBased")
-		obj.name="Filter Based";
-	else if(p_name=="EmailsOpened")
-		obj.name="Emails Opened";
-	else if(p_name=="EmailsSent")
-		obj.name="Emails Sent";
-	else if(p_name=="PendingDeals")
-		obj.name="Pending Deals";
-	else if(p_name=="Agenda")
-		obj.name="Agenda";
-	else if(p_name=="TodayTasks")
-		obj.name="Today Tasks";
-	else if(p_name=="DealsByMilestone")
-		obj.name="Deals By Milestone";
-	else if(p_name=="ClosuresPerPerson")
-		obj.name="Closures Per Person";
-	else if(p_name=="DealsWon")
-		obj.name="Deals Won";
-	else if(p_name=="DealsFunnel")
-		obj.name="Deals Funnel";
-	else if(p_name=="GrowthGraph")
-		obj.name="Growth Graph";
-	else if(p_name=="DealsAssigned")
-		obj.name="Deals Assigned";
-	else if(p_name=="CallsPerPerson")
-		obj.name="Calls Per Person";
-	else if(p_name=="AgileCRMBlog")
-		obj.name="Agile CRM Blog";
-	else if(p_name=="AccountDetails")
-		obj.name="Account Details";
-	else if(p_name=="TaskReport")
-		obj.name="Task Report";
-	else if(p_name=="StatsReport")
-		obj.name="Stats Report";
-	else if(p_name=="Leaderboard")
-		obj.name="Leaderboard";
-	else if(p_name=="RevenueGraph")
-		obj.name="Revenue Graph";
-	else if(p_name=="UserActivities")
-		obj.name="User Activities"
-	else if(p_name=="MiniCalendar")
-		obj.name="Mini Calendar";
-	else if(p_name=="Campaignstats")
-		obj.name="Campaign stats";
-	obj.portlet_type=portlet_type;
-	var max_row_position=0;
-	if(gridster!=undefined)
-		/*gridster.$widgets.each(function(){
-			if(parseInt($(this).attr("data-row"))>max_row_position)
-				max_row_position = parseInt($(this).attr("data-row")) * parseInt($(this).attr("data-sizey"));
-		});*/
-		var next_position = gridster.next_position(1,1);
-	obj.column_position=next_position.col;
-	obj.row_position=next_position.row;
-	obj.size_x=next_position.size_x;
-	obj.size_y=next_position.size_y;
-	if(portlet_type=="CONTACTS" && p_name=="FilterBased")
-		json['filter']="myContacts";
-	else if(portlet_type=="CONTACTS" && p_name=="EmailsOpened")
-		json['duration']="2-days";
-	else if(portlet_type=="USERACTIVITY" && p_name=="EmailsSent")
-		json['duration']="1-day";
-	else if(portlet_type=="CONTACTS" && p_name=="GrowthGraph"){
-		json['tags']="";
-		json['frequency']='daily';
-		//json['start-date']=new Date(curDate.getFullYear(),curDate.getMonth(),curDate.getDate()-6,0,0,0).getTime();
-		//json['end-date']=new Date(curDate.getFullYear(),curDate.getMonth(),curDate.getDate(),0,0,0).getTime();
-		json['duration']="1-week";
-	}
-	else if(portlet_type=="DEALS" && p_name=="PendingDeals"){
-		json['deals']="my-deals";
-	}
-	else if(portlet_type=="DEALS" && (p_name=="DealsByMilestone" || p_name=="DealsFunnel")){
-		json['deals']="my-deals";
-		json['track']=0;
-		//json['due-date']=Math.round((new Date()).getTime()/1000);
-	}else if(portlet_type=="DEALS" && p_name=="ClosuresPerPerson"){
-		json['group-by']="number-of-deals";
-		json['due-date']=Math.round((new Date()).getTime()/1000);
-	}else if(portlet_type=="DEALS" && p_name=="DealsWon")
-		json['duration']="1-week";
-	else if(portlet_type=="DEALS" && p_name=="DealsAssigned")
-		json['duration']="1-day";
-	else if(portlet_type=="USERACTIVITY" && p_name=="CallsPerPerson"){
-		json['group-by']="number-of-calls";
-		json['duration']="1-day";
-	}else if(portlet_type=="TASKSANDEVENTS" && p_name=="TaskReport"){
-		json['group-by']="user";
-		json['split-by']="category";
-		json['duration']="1-week";
-		json['tasks']="all-tasks";
-	}else if(portlet_type=="USERACTIVITY" && p_name=="StatsReport"){
-		json['duration']="yesterday";
-	}else if(portlet_type=="TASKSANDEVENTS" && p_name=="Agenda")
-		json['duration']="today-and-tomorrow";
-	else if(portlet_type=="TASKSANDEVENTS" && p_name=="TodayTasks")
-		json['duration']="today-and-tomorrow";
-	else if(portlet_type=="ACCOUNT" && p_name=="AccountDetails"){
-      		//json['account']="account";
-	}
-	else if(portlet_type=="RSS" && p_name=="AgileCRMBlog")
-		//else if(portlet_type=="CUSTOMERACTIVITY" && p_name=="CustomerActivities")
-		obj.size_y=2;
-	else if(portlet_type=="USERACTIVITY" && p_name=="Leaderboard"){
-		json['duration']="this-month";
-		var categoryJson={};
-		categoryJson['revenue']=true;
-		categoryJson['dealsWon']=true;
-		categoryJson['calls']=true;
-		categoryJson['tasks']=true;
-		json['category']=categoryJson;
-		obj.size_y=2;
-		obj.size_x=2;
-	}else if(portlet_type=="DEALS" && p_name=="RevenueGraph"){
-		json['duration']="this-quarter";
-		json['track']="anyTrack";
-	}
-	else if(portlet_type=="USERACTIVITY" && p_name=="Campaignstats"){
-		json['duration']="yesterday";
-		json['campaign_type']="All";
-	}
-	var portlet = new BaseModel();
-	portlet.url = 'core/api/portlets/addPortlet';
-	portlet.set({ "prefs" : JSON.stringify(json) }, { silent : true });
-	var model;
-	var scrollPosition;
-	portlet.save(obj, {
-        success: function (data) {
-        	//hidePortletsPopup();
-        	model=new BaseModel(data.toJSON());
-//        	var el = $(getTemplate('portlets-collection',model));
-        	if($('#zero-portlets').is(':visible'))
-        		$('#zero-portlets').hide();
-        	if($('#no-portlets').is(':visible'))
-    			$('#no-portlets').hide();
-        	App_Portlets.navigate("dashboard", { trigger : true });	
-        	//Portlets_View.collection.add(model);
-        	
-//        	scrollPosition = ((parseInt($('#ui-id-'+model.column_position+'-'+model.row_position).attr('data-row'))-1)*200)+5;
-//        	//move the scroll bar for showing the newly added portlet
-//        	window.scrollTo(0,scrollPosition);
-//        	//scrollPosition = 0;
-        },
-        error: function (model, response) {
-        	hidePortletsPopup();
-        	var model=data.toJSON();
-        	//var el = $(getTemplate('portlets-model', model));
-        	if($('#zero-portlets').is(':visible'))
-        		$('#zero-portlets').hide();
-        	if($('#no-portlets').is(':visible'))
-    			$('#no-portlets').hide();
-        	Portlets_View.collection.add(model);
-        	scrollPosition = ((parseInt($('#ui-id-'+model.column_position+'-'+model.row_position).attr('data-row'))-1)*200)+5;
-        	//move the scroll bar for showing the newly added portlet
-        	window.scrollTo(0,scrollPosition);
-        	scrollPosition = 0;
-        }});
-	
 
-}
 function hidePortletsPopup() {
 	$('#portletStreamModal').modal('hide');
 	$('.modal-backdrop').hide();
 }
+
 function deletePortlet(el) {
 	var p_id = el.id.split("-close")[0];
 	$('#portletDeleteModal').modal('show');
@@ -304,7 +118,9 @@ function deletePortlet(el) {
 		$('#portletDeleteModal > .modal-dialog > .modal-content > .modal-body')
 				.html(
 						"Are you sure you want to delete Dashlet - Leaderboard "
-								+ getDurationForPortlets(model.get("settings").duration)
+								+ portlet_utility.getDurationForPortlets(model.get("settings").duration, function(duration){
+									return duration;
+								})
 								+ "?");
 	else if(model.get("name")=="Mini Calendar")
 		$('#portletDeleteModal > .modal-dialog > .modal-content > .modal-body')
@@ -314,9 +130,12 @@ function deletePortlet(el) {
 		$('#portletDeleteModal > .modal-dialog > .modal-content > .modal-body')
 				.html(
 						"Are you sure you want to delete Dashlet - Activity Overview "
-								+ getDurationForPortlets(model.get("settings").duration)
+								+ portlet_utility.getDurationForPortlets(model.get("settings").duration, function(duration){
+									return duration;
+								})
 								+ "?");
 }
+
 function initializePortletsListeners_1(){
 
 	$('#portletDeleteModal').off("click").on(
@@ -559,21 +378,6 @@ function initializePortletsListeners_1(){
 	$('.portlet_body').on(
 		"click",'#portlets-tasks-model-list > tr',
 		function(e) {
-			/*
-			 * App_Portlets.currentPosition =
-			 * ''+$(this).parents('.gs-w').find('.column_position').text().trim()+''+$(this).parents('.gs-w').find('.row_position').text().trim();
-			 * var value = $(this).data().toJSON(); deserializeForm(value,
-			 * $("#updateTaskForm")); $("#updateTaskModal").modal('show'); //
-			 * Fills owner select element populateUsers("owners-list",
-			 * $("#updateTaskForm"), value, 'taskOwner', function(data) {
-			 * $("#updateTaskForm").find("#owners-list").html(data); if
-			 * (value.taskOwner) { $("#owners-list", $("#updateTaskForm")).find(
-			 * 'option[value=' + value['taskOwner'].id + ']') .attr("selected",
-			 * "selected"); } $("#owners-list",
-			 * $("#updateTaskForm")).closest('div').find('.loading-img').hide();
-			 * }); // Add notes in task modal showNoteOnForm("updateTaskForm",
-			 * value.notes);
-			 */
 			var hrefFlag = false;
 			if (e.target.tagName.toLowerCase() == "a"
 					|| e.target.tagName.toLowerCase() == "i" 
@@ -631,13 +435,13 @@ function initializePortletsListeners_1(){
 
     $('.gridster-portlets').on("click",'.portlet-settings',function(e) {
 		e.preventDefault();
-		showPortletSettings(this.id);
+		portlet_utility.showPortletSettings(this.id);
 	});
    
 }
 
 function initializeAddPortletsListeners(){
- $('.col-md-3').on("mouseenter",'.show_screeshot',function(e){
+ 	$('.col-md-3').on("mouseenter",'.show_screeshot',function(e){
     	var p_name=$(this).attr('id');
     	var image;
     	var placement="right"
@@ -710,27 +514,57 @@ function initializeAddPortletsListeners(){
     	$(this).popover('show');
     });
 
-	}
-/*
- * $("#add-portlet").live("click", function(e){ e.preventDefault();
- * this.Catalog_Portlets_View = new Base_Collection_View({ url :
- * '/core/api/portlets/default', restKey : "portlet", templateKey :
- * "portlets-add", sort_collection : false, individual_tag_name : 'div',
- * postRenderCallback : function(el){
- * if($('#deals',$('#portletStreamModal')).children().length==0)
- * $('#deals',$('#portletStreamModal')).parent().hide();
- * if($('#taksAndEvents',$('#portletStreamModal')).children().length==0)
- * $('#taksAndEvents',$('#portletStreamModal')).parent().hide();
- * if($('#userActivity',$('#portletStreamModal')).children().length==0)
- * $('#userActivity',$('#portletStreamModal')).parent().hide(); } });
- * 
- * this.Catalog_Portlets_View.appendItem = organize_portlets; //
- * this.Catalog_Portlets_View.collection.fetch(); // Show form modal
- * $('#portletStreamModal').modal('show'); // Add social network types template
- * $("#portletstreamDetails",$('#portletStreamModal')).html(this.Catalog_Portlets_View.el);
- * 
- * });
- */
+	$('#portlets-add-listener').on("click", '.add-portlet', function(){
+		var portlet_type = $(this).attr("portlet_type");
+		var p_name = $(this).attr("portlet_name");
+		var obj={};
+		var json=portlet_utility.getDefaultPortletSettings(portlet_type, p_name);
+		obj.name = p_name;
+		var curDate=new Date();
+		obj.portlet_type=portlet_type;
+		var max_row_position=0;
+		var next_position = gridster.next_position(1,1);
+		obj.column_position=next_position.col;
+		obj.row_position=next_position.row;
+		obj.size_x=next_position.size_x;
+		obj.size_y=next_position.size_y;
+		if(portlet_type=="RSS" && p_name=="Agile CRM Blog")
+			obj.size_y=2;
+		else if(portlet_type=="USERACTIVITY" && p_name=="Leaderboard"){
+			obj.size_y=2;
+			obj.size_x=2;
+		}
+
+		var portlet = new BaseModel();
+		portlet.url = 'core/api/portlets/addPortlet';
+		portlet.set({ "prefs" : JSON.stringify(json) }, { silent : true });
+		var model;
+		var scrollPosition;
+		portlet.save(obj, {
+       		success: function (data) {
+	        	model=new BaseModel(data.toJSON());
+        		if($('#zero-portlets').is(':visible'))
+        			$('#zero-portlets').hide();
+        		if($('#no-portlets').is(':visible'))
+    				$('#no-portlets').hide();
+        		App_Portlets.navigate("dashboard", { trigger : true });	
+        },
+        error: function (model, response) {
+        	hidePortletsPopup();
+        	var model=data.toJSON();
+        	if($('#zero-portlets').is(':visible'))
+        		$('#zero-portlets').hide();
+        	if($('#no-portlets').is(':visible'))
+    			$('#no-portlets').hide();
+        	Portlets_View.collection.add(model);
+        	scrollPosition = ((parseInt($('#ui-id-'+model.column_position+'-'+model.row_position).attr('data-row'))-1)*200)+5;
+        	//move the scroll bar for showing the newly added portlet
+        	window.scrollTo(0,scrollPosition);
+        	scrollPosition = 0;
+        }});
+	});
+
+}
 /**
  * Makes the pending task as completed by calling complete_task function
  */
@@ -741,27 +575,35 @@ function hidePortletErrors(ele) {
 
 
 function addWidgetToGridster(base_model) {
+
+	if(!gridster)
+		 return;
+
 	var add_flag = true;
-	if (gridster != undefined) {
-		gridster.$widgets.each(function(index, widget) {
-			if (widget.id == 'ui-id-' + base_model.get("column_position") + '-'
-					+ base_model.get("row_position") + '')
-				add_flag = false;
-		});
-		if (add_flag) {
-			gridster.add_widget($('#ui-id-' + base_model.get("column_position")
-					+ '-' + base_model.get("row_position")), base_model
-					.get("size_x"), base_model.get("size_y"), base_model
-					.get("column_position"), base_model.get("row_position"));
-			gridster.set_dom_grid_height();
-			window.scrollTo(0,
-					((parseInt($(
-							'#ui-id-' + base_model.get("column_position") + '-'
-									+ base_model.get("row_position")).attr(
-							'data-row')) - 1) * 200) + 5);
-		}
-	}
+	gridster.$widgets.each(function(index, widget) {
+		if (widget.id == 'ui-id-' + base_model.get("column_position") + '-'
+				+ base_model.get("row_position") + '')
+			add_flag = false;
+	});
+
+
+	if (!add_flag) 
+		return;
+
+	gridster.add_widget($('#ui-id-' + base_model.get("column_position")
+			+ '-' + base_model.get("row_position")), base_model
+			.get("size_x"), base_model.get("size_y"), base_model
+			.get("column_position"), base_model.get("row_position"));
+	gridster.set_dom_grid_height();
+	window.scrollTo(0,
+			((parseInt($(
+					'#ui-id-' + base_model.get("column_position") + '-'
+							+ base_model.get("row_position")).attr(
+					'data-row')) - 1) * 200) + 5);
+	
+	
 }
+
 function getStartAndEndDatesOnDue(duration){
 	var d = new Date();
 
