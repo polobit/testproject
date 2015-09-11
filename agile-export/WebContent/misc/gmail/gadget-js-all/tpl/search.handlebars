@@ -1,0 +1,59 @@
+{{#check_json_length this "1"}}
+		<div class="well well-small gadget-contact-details-tab" style='margin:0px;border-radius:0px;box-shadow:none;background-color:white;border:0px; border-left:0px; border-right:0px;'>
+			<div class="show-form" data-content="{{value.email}}">
+<!--email list -->
+				<div class="contact-list">
+					<div class="agile-no-contact row-fluid">
+						<div class="contact-list-width" style="max-width:95%; display:inline-block; vertical-align:middle;">
+							<div style="text-overflow: ellipsis; white-space: nowrap; overflow: hidden;">
+								{{#if value.name}}
+									<a class="gadget-search-contact" style="cursor:pointer; margin:0px 10px 0px 0px; text-decoration:underline; font-weight:bold;"><i class="icon-search" style="text-decoration:none; margin-right:5px;"></i><span>Search</span></a><span title="{{value.name}}  ({{value.email}})" style="cursor:default;"> {{value.fname}} {{value.lname}} ({{value.email}}) <span style="margin-left:10px;">in Agile Contacts</span></span>
+								{{else}}
+									<a class="gadget-search-contact" style="cursor:pointer; margin:0px 8px 0px 5px; text-decoration:underline; font-weight:bold;"><i class="icon-search" style="text-decoration:none; margin-right:5px;"></i><span>Search</span></a><span title="{{value.email}}" style="cursor:default;"> {{value.email}} <span style="margin-left:10px;">in Agile Contacts</span></span>
+								{{/if}}
+							</div>
+						</div>
+						<img class="contact-search-waiting" style="margin-left:20px; display:none; width:13px; vertical-align:middle;" src="https://googleapps.agilecrm.com/img/ajax-loader-cursor.gif"></img>
+					</div>
+			    </div>
+			</div>
+		</div>
+	{{else}}
+<!--Search email panel -->			
+			<div class="well well-small gadget-contact-details-tab" style="margin:0px 0px -1px 0px;box-shadow:none;border-radius:0px;background-color:#f2f2f2;border:0px;">
+				<div class="show-form">
+					<div>
+						<div class="row-fluid">
+							
+	<!-- Search mail UI area start-->
+							<div style="line-height:22px;">
+								<div class="search-pannel-inner">
+									
+									<div style="display: inline-block;vertical-align: middle;">
+										<a class="gadget-search-contact search-mail-button" style="cursor:pointer; margin:0px 10px 0px 0px; text-decoration:underline; font-weight:bold;"><i class="icon-search" style="text-decoration:none; margin-right:5px;"></i><span>Search</span></a>
+									</div>
+									<div class="btn-group" style="display: inline-block;vertical-align: middle;margin: 0 10px 0 0;">
+										<select id="search_drop_down" class="agile-mail-dropdown" style="width:auto; margin:0px;">
+											<!-- dropdown menu links -->
+											{{#each this}}											
+												{{#if name}}
+													<option class="mail-list" data-content="{{email}}" >{{name}} ({{email}})</option>
+												{{else}}
+													<option class="mail-list" data-content="{{email}}" >{{email}}</option>
+												{{/if}}
+											{{/each}}	
+										</select>
+									</div>
+									<div style="display: inline-block;vertical-align: middle;">
+										<span style="display:inline-block;">in Agile Contacts</span>
+										<img class="contact-search-waiting" style="margin-left:20px; display:none; width:13px;" src="https://googleapps.agilecrm.com/img/ajax-loader-cursor.gif"></img>
+										<i class="contact-search-status" style="display:none; color:indianred; margin-left:20px;">Contact not found</i>
+									</div>
+								</div>
+							</div>
+	<!-- Search mail UI area end-->						
+						</div>
+					</div>
+				</div>
+			</div>
+	{{/check_json_length}}

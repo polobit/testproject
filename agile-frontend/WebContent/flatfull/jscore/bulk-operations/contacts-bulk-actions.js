@@ -1195,7 +1195,7 @@ function getDynamicFilters()
 	
 	if (company_util.isCompany())
 	{
-		if(!App_Companies.companiesListView && !App_Companies.companiesListView.post_data)
+		if(!App_Companies.companiesListView || !App_Companies.companiesListView.post_data)
 		{
 			return null;
 		}
@@ -1204,7 +1204,7 @@ function getDynamicFilters()
 	}
 	else
 	{
-		if(!App_Contacts.contactsListView && !App_Contacts.contactsListView.post_data)
+		if(!App_Contacts.contactsListView || !App_Contacts.contactsListView.post_data)
 		{
 			return null;
 		}

@@ -3,10 +3,12 @@ package com.agilecrm.export.gcs;
 import java.io.IOException;
 import java.io.Writer;
 import java.net.URL;
+import java.nio.ByteBuffer;
 import java.nio.channels.Channels;
 
 import com.google.agile.repackaged.appengine.tools.cloudstorage.GcsFileOptions;
 import com.google.agile.repackaged.appengine.tools.cloudstorage.GcsFilename;
+import com.google.agile.repackaged.appengine.tools.cloudstorage.GcsInputChannel;
 import com.google.agile.repackaged.appengine.tools.cloudstorage.GcsOutputChannel;
 import com.google.agile.repackaged.appengine.tools.cloudstorage.GcsService;
 import com.google.agile.repackaged.appengine.tools.cloudstorage.GcsServiceFactory;
@@ -74,13 +76,29 @@ public class GCSServiceAgile
 	return Channels.newWriter(getOutputchannel(), "UTF8");
     }
 
+    public byte[] getDataFromFile() throws IOException
+    {
+	int fileSize = (int) gcsService.getMetadata(getFileName()).getLength();
+	ByteBuffer result = ByteBuffer.allocate(fileSize);
+	GcsInputChannel readChannel = gcsService.openPrefetchingReadChannel(getFileName(), 0, fileSize);
+
+	readChannel.read(result);
+	return result.array();
+    }
+
     public String getFilePathToDownload()
     {
 	return "https://storage.googleapis.com/" + bucketName + "/" + fileName;
     }
 
+    public void deleteFile() throws IOException
+    {
+	gcsService.delete(getFileName());
+    }
+
     public static void main(String[] args)
     {
-	new GCSServiceAgile();
+	int i = (1 << 20) - (1 << 15);
+	System.out.println(i);
     }
 }

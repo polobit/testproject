@@ -1,0 +1,60 @@
+<body>
+	<div>
+		<div
+			style="background-color: #8A6086; font-family: Arial, sans-serif; padding: 5px">
+			<div
+				style="min-height: 36px; font-size: 14px; font-weight: bold; padding-bottom: 4px">
+				<table style="width: 100%; background-color: #8A6086;">
+					<tbody>
+						<tr>
+							<td valign="middle" height="32px"
+								style="padding: 0; color: white">Unsubscribe</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div style="clear: both;"></div>
+			<div
+				style="font-size: 14px; background-color: #fff; padding: 10px 7px 12px 7px">
+				<table width="100%" cellpadding="5" cellspacing="0">
+					<tbody>
+						<tr>
+							<td
+								style="padding-right: 20px; padding-left: 20px; line-height: 20px; font-size: 14px; font-family: Lucida Grande, verdana">
+								{{#company}}<p>You have been unsubscribed successfully from all communication from {{company}}.</p>{{/company}}
+								{{^campaign_name}}
+									{{^company}}
+										<p>You have been unsubscribed successfully from all communication</p>
+								    {{/company}}
+								{{/campaign_name}}
+								{{#campaign_name}}<p>You have been successfully removed from campaign - {{campaign_name}}</p>{{/campaign_name}}
+							</td>
+						</tr>
+					</tbody>
+				</table>
+				<div style="height:80px;">
+                    <table width="100%" cellpadding="5" cellspacing="0">
+                    <tr>
+                    <td>
+                    {{^campaign_name}}
+                    	<div style="padding-left: 20px; float: left;">
+				  			<span style="vertical-align: middle;">Unsubscribed by mistake?</span>
+							<a href="https://{{domain}}.agilecrm.com/resubscribe?e={{email}}&amp;cid={{campaign_id}}" style="display:inline-block; text-decoration:none; padding:4px 10px 4px;margin-bottom:0;font-size:13px;line-height:18px;color:#333333;text-align:center;vertical-align:middle;cursor:pointer;background-color:#f5f5f5; background-image:-webkit-linear-gradient(top, #ffffff, #e6e6e6);background-image:-o-linear-gradient(top, #ffffff, #e6e6e6);background-repeat:repeat-x;filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#e6e6e6', GradientType=0);border-color:rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);border:1px solid #cccccc;border-bottom-color:#b3b3b3;-webkit-border-radius:4px;-moz-border-radius:4px;border-radius:4px;-moz-box-shadow:inset 0 1px 0 rgba(255,255,255,.2), 0 1px 2px rgba(0,0,0,.05);">Resubscribe</a>
+						</div>
+					{{/campaign_name}}
+					</td>
+					<td>
+						<div style="text-align:right;float:right;margin-top: 30px;">
+							<span style="display:inherit;font-style:italic;font-family:Times New Roman;font-size:10px;padding-right: 75px;">
+							Powered	by</span>
+							<a href="https://www.agilecrm.com?utm_source=powered-by&amp;utm_medium=unsubscribe&amp;utm_campaign={{domain}}" target="_blank"> <img style="border:0;width: 125px;/* height: auto; */" src="https://s3.amazonaws.com/agilecrm/panel/uploaded-logo/1383722651000?id=upload-container" alt="Logo for AgileCRM">
+					   		</a>
+  				    	</div>
+  				    </td>
+  				    </tr>
+  				    </table>
+  		        </div>
+			</div>
+		</div>
+		</div>
+</body>

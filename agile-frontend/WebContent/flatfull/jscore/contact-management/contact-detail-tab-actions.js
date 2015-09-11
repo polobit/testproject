@@ -144,6 +144,10 @@ $(function()
 			});
 		});
 
+		populateLostReasons(el, undefined);
+
+		populateDealSources(el, undefined);
+
 		// Enable the datepicker
 
 		$('#close_date', el).datepicker({ format : CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY});
