@@ -263,11 +263,6 @@ var ReportsRouter = Backbone.Router
 						if (count != 0)
 							return;
 
-							var json = activityReport.toJSON();
-							var time=json.activity_start_time;
-							
-							
-							deserializeForm(json,$('#activityReportsForm',el));
 						// Gets a report to edit, from reports collection, based
 						// on id
 						fillSelect("custom-fields-optgroup", "core/api/custom-fields/scope?scope=CONTACT", undefined, function()
