@@ -172,69 +172,73 @@ var timeline_entity_loader = {
 
 	get_stats : function(email, contact, el)
 	{
-		// If there are no web-stats - return
-		if (!(readCookie('_agile_jsapi') != null && readCookie('_agile_jsapi') == "true") && (NO_WEB_STATS_SETUP && get_web_stats_count_for_domain() == '0'))
-		{
-			// Remove loading image of mails
-			$('#time-line', el).find('.loading-img-stats').remove();
+		get_web_stats_count_for_domain(function(count){
 
-			return;
-		}
+			// If there are no web-stats - return
+			if (!(readCookie('_agile_jsapi') != null && readCookie('_agile_jsapi') == "true") && (NO_WEB_STATS_SETUP && count == '0'))
+			{
+				// Remove loading image of mails
+				$('#time-line', el).find('.loading-img-stats').remove();
 
-		// Made global variable false and set cookie
-		NO_WEB_STATS_SETUP = false;
-		createCookie('_agile_jsapi', true, 500);
+				return;
+			}
 
-		var StatsCollection = Backbone.Collection.extend({});
+			// Made global variable false and set cookie
+			NO_WEB_STATS_SETUP = false;
+			createCookie('_agile_jsapi', true, 500);
 
-		this.timline_fetch_data('core/api/web-stats?e=' + encodeURIComponent(email), function(data)
-		{
+			var StatsCollection = Backbone.Collection.extend({});
 
-			this.statsCollection = new StatsCollection(data);
-			data = statsCollection;
-
-			is_mails_fetched = true;
-			is_logs_fetched = false;
-			is_array_urls_fetched = false;
-
-			// show_timeline_padcontent(is_logs_fetched, is_mails_fetched,
-			// is_array_urls_fetched);
-
-			$('#time-line', el).find('.loading-img-stats').remove();
-
-			// Checks whether data is empty or not.
-			if (data.toJSON() && data.toJSON().length > 0)
+			this.timline_fetch_data('core/api/web-stats?e=' + encodeURIComponent(email), function(data)
 			{
 
-				// Gets address of the contact from its browsing history
-				var address = getPropertyValue(contact.properties, "address");
+				this.statsCollection = new StatsCollection(data);
+				data = statsCollection;
 
-				if (!address)
+				is_mails_fetched = true;
+				is_logs_fetched = false;
+				is_array_urls_fetched = false;
+
+				// show_timeline_padcontent(is_logs_fetched, is_mails_fetched,
+				// is_array_urls_fetched);
+
+				$('#time-line', el).find('.loading-img-stats').remove();
+
+				// Checks whether data is empty or not.
+				if (data.toJSON() && data.toJSON().length > 0)
 				{
-					var addressJSON = {};
 
-					if (data.toJSON()[0].city != "")
+					// Gets address of the contact from its browsing history
+					var address = getPropertyValue(contact.properties, "address");
+
+					if (!address)
 					{
-						addressJSON.city = ucfirst(data.toJSON()[0].city);
-						addressJSON.state = ucfirst(data.toJSON()[0].region);
-						addressJSON.country = getCode(data.toJSON()[0].country);
+						var addressJSON = {};
 
-						// If contact has no address property push the new one
-						contact.properties.push({ "name" : "address", "value" : JSON.stringify(addressJSON) });
-
-						// Update contact with the browsing address
-						var contactModel = new Backbone.Model();
-						contactModel.url = 'core/api/contacts';
-						contactModel.save(contact, { success : function(obj)
+						if (data.toJSON()[0].city != "")
 						{
-						} });
-					}
-				}
-				if(App_Contacts.contactDetailView.model.get('id') == contact.id)
-				timeline_collection_view.addItems(data.toJSON());
+							addressJSON.city = ucfirst(data.toJSON()[0].city);
+							addressJSON.state = ucfirst(data.toJSON()[0].region);
+							addressJSON.country = getCode(data.toJSON()[0].country);
 
-				addTagAgile(CODE_SETUP_TAG);
-			}
+							// If contact has no address property push the new one
+							contact.properties.push({ "name" : "address", "value" : JSON.stringify(addressJSON) });
+
+							// Update contact with the browsing address
+							var contactModel = new Backbone.Model();
+							contactModel.url = 'core/api/contacts';
+							contactModel.save(contact, { success : function(obj)
+							{
+							} });
+						}
+					}
+					if(App_Contacts.contactDetailView.model.get('id') == contact.id)
+					timeline_collection_view.addItems(data.toJSON());
+
+					addTagAgile(CODE_SETUP_TAG);
+				}
+			});
+
 		});
 	}
 

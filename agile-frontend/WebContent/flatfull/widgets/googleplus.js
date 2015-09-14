@@ -8,48 +8,45 @@
 function showMatchedPeople(search)
 {
 
-	var retData = getMatchingPeople(search);
+	getMatchingPeople(search, function(retData){
 
-	if (typeof retData.errors == "undefined")
-	{
-		var data = retData.items;
-		// If no matches found display message
-		if (data.length == 0)
+		if (typeof retData.errors == "undefined")
 		{
+			var data = retData.items;
+			// If no matches found display message
+			if (data.length == 0)
+			{
+				if (searchDetails['keywords'] && searchDetails['keywords'] != "")
+					displayError(
+							WIDGET_NAME,
+							"<p class='text-base' style='margin-bottom:0px;'>No matches found for <a href='#' class='peoplesearch'>" + searchDetails['keywords'] + "</a>",
+							true);
+				else
+					displayError(WIDGET_NAME,
+							"<p class='text-base' style='margin-bottom:0px;'>No matches found. <a href='#' class='peoplesearch'>Modify search</a>", true);
+				return;
+			}
+
+			var el;
 			if (searchDetails['keywords'] && searchDetails['keywords'] != "")
-				displayError(
-						WIDGET_NAME,
-						"<p class='text-base' style='margin-bottom:0px;'>No matches found for <a href='#' class='peoplesearch'>" + searchDetails['keywords'] + "</a>",
-						true);
+				el = "<div class='panel-body text-base'><p>Search results for " + "<a href='#' class='peoplesearch'>" + searchDetails['keywords'] + "</a></p>";
 			else
-				displayError(WIDGET_NAME,
-						"<p class='text-base' style='margin-bottom:0px;'>No matches found. <a href='#' class='peoplesearch'>Modify search</a>", true);
-			return;
+				el = "<div class='panel-body text-base'><p>Search results. " + "<a href='#' class='peoplesearch'>Modify search</a></p>";
+
+			el = el.concat(getTemplate("googleplus-search-result", data));
+			el = el + "</div></div><div class='clearfix'></div>";
+
+			// Show matching profiles in widget panel
+			$('#' + WIDGET_NAME).html(el);
 		}
 
-		var el;
-		if (searchDetails['keywords'] && searchDetails['keywords'] != "")
-			el = "<div class='panel-body text-base'><p>Search results for " + "<a href='#' class='peoplesearch'>" + searchDetails['keywords'] + "</a></p>";
-		else
-			el = "<div class='panel-body text-base'><p>Search results. " + "<a href='#' class='peoplesearch'>Modify search</a></p>";
-
-		el = el.concat(getTemplate("googleplus-search-result", data));
-		el = el + "</div></div><div class='clearfix'></div>";
-
-		// Show matching profiles in widget panel
-		$('#' + WIDGET_NAME).html(el);
-	}
-	else
-	{
-		// console.log(retData);
-		return;
-	}
+	});
 
 }
 
 function showGooglePlusProfile(id)
 {
-	var resData = {};
+	/*var resData = {};
 
 	if (typeof PROFILE_DATA["" + id] == "undefined")
 	{
@@ -58,138 +55,121 @@ function showGooglePlusProfile(id)
 	else
 	{
 		resData = PROFILE_DATA["" + id];
-	}
+	}*/
 
-	var resData = getGooglePlusUserDetails(id);
+	getGooglePlusUserDetails(id, function(resData){
 
-	if (typeof resData.errors == "undefined")
-	{
+		if (typeof resData.errors == "undefined")
+		{
+			var el = getTemplate("googleplus-profile", resData);
+			$('#' + WIDGET_NAME).html(el);
+			showGooglePlusPosts(id);
+		}
 
-		var el;
-		el = getTemplate("googleplus-profile", resData);
-		$('#' + WIDGET_NAME).html(el);
-		showGooglePlusPosts(id);
-	}
-	else
-	{
-		// console.log(resData);
-		return;
-	}
+	});
 }
 
 function showGooglePlusPosts(id, nextPageToken)
 {
-	var GPostsData = {};
+	getGooglePlusPosts(id, nextPageToken, function(GPostsData){
 
-	if (typeof nextPageToken != "undefined")
-	{
-		GPostsData = getGooglePlusPosts(id, nextPageToken);
-	}
-	else
-	{
-		GPostsData = getGooglePlusPosts(id);
-	}
+		if (typeof nextPageToken != "undefined")
+		{
+			$('#gplus_social_stream').append(getTemplate("googleplus-posts", GPostsData));
+			$('#gplusstreammore').attr("ntoken", GPostsData['nextPageToken']);
+		}
+		else
+		{
+			$('#gpostscontainer').html(getTemplate("googleplus-profile-tabs", GPostsData));
+			if(!GPostsData.items.length)
+				$('#recentPostsText').html('<div style="text-align: center;font-size: 13px;padding: 5px 0 6px 0;">No Posts.</div>');
+		}
 
-//	console.clear();
-//	console.log(GPostsData);
-
-	if (typeof nextPageToken != "undefined")
-	{
-		$('#gplus_social_stream').append(getTemplate("googleplus-posts", GPostsData));
-		$('#gplusstreammore').attr("ntoken", GPostsData['nextPageToken']);
-	}
-	else
-	{
-		$('#gpostscontainer').html(getTemplate("googleplus-profile-tabs", GPostsData));
-		if(!GPostsData.items.length)
-			$('#recentPostsText').html('<div style="text-align: center;font-size: 13px;padding: 5px 0 6px 0;">No Posts.</div>');
-	}
-
-	head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
-	{
-		$(".time-ago").timeago();
+		head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
+		{
+			$(".time-ago").timeago();
+		});
 	});
 
 }
 
-function getGooglePlusUserDetails(id)
+function getGooglePlusUserDetails(id, callback)
 {
 	var apiURL = "https://www.googleapis.com/plus/v1/people/" + id;
 	var reqData = "fields=aboutMe%2CcurrentLocation%2CdisplayName%2Cdomain%2Cgender%2Cid%2Cimage%2CisPlusUser%2Coccupation%2Corganizations%2CplacesLived%2Curl";
 		
-	var apiCallReturnData = googlePlusApiCall(apiURL, reqData);	
-	var errorObj = apiCallReturnData.error;	
-	if(typeof errorObj != "undefined") {
-		if (errorObj.code == 401 && errorObj.message == "Invalid Credentials")
-		{
-//			alert("Refreshing access token");
-			refreshAccessToken();
-		}
-		else
-		{
-			displayError(WIDGET_NAME, errorObj.message);
-			return;
-		}
-	}
-	else {
-		return apiCallReturnData;
-	}
-	
-	return googlePlusApiCall(apiURL, reqData);
+	googlePlusApiCall(apiURL, reqData, function(apiCallReturnData){
 
+		var errorObj = apiCallReturnData.error;	
+		if(typeof errorObj != "undefined") {
+			if (errorObj.code == 401 && errorObj.message == "Invalid Credentials")
+			{
+				refreshAccessToken();
+			}
+			else
+			{
+				displayError(WIDGET_NAME, errorObj.message);
+				return;
+			}
+		}
+		else {
+			return callback(apiCallReturnData);
+		}
+
+	});	
+	
 }
 
-function getGooglePlusPosts(id, nextPageToken)
+function getGooglePlusPosts(id, nextPageToken, callback)
 {
 	var apiURL = "https://www.googleapis.com/plus/v1/people/" + id + "/activities/public";
 	var reqData = "fields=id%2Citems(actor(displayName%2Cid%2Cimage%2Curl)%2Cid%2Ckind%2Clocation%2Cobject(actor%2Cattachments(content%2CdisplayName%2Cid%2Cimage%2CobjectType%2Cthumbnails%2Curl)%2Ccontent%2Cid%2CobjectType%2CoriginalContent%2Curl)%2Cpublished%2Ctitle%2Cupdated%2Curl%2Cverb)%2CnextPageToken%2CselfLink%2Cupdated&maxResults=4";
 	if (typeof nextPageToken != "undefined")
 		reqData += "&pageToken=" + nextPageToken;
 	
-	var apiCallReturnData = googlePlusApiCall(apiURL, reqData);	
-	var errorObj = apiCallReturnData.error;	
-	if(typeof errorObj != "undefined") {
-		if (errorObj.code == 401 && errorObj.message == "Invalid Credentials")
-		{
-//			alert("Refreshing access token");
-			refreshAccessToken();
-		}
-		else
-		{
-			displayError(WIDGET_NAME, errorObj.message);
-			return;
-		}
-	}
-	else {
-		return apiCallReturnData;
-	}
-	
-	return googlePlusApiCall(apiURL, reqData);
+	googlePlusApiCall(apiURL, reqData, function(apiCallReturnData){
 
+		var errorObj = apiCallReturnData.error;	
+		if(typeof errorObj != "undefined") {
+			if (errorObj.code == 401 && errorObj.message == "Invalid Credentials")
+			{
+				refreshAccessToken();
+			}
+			else
+			{
+				displayError(WIDGET_NAME, errorObj.message);
+				return;
+			}
+		}
+		else {
+			return callback(apiCallReturnData);
+		}
+	});	
 }
 
-function getMatchingPeople(search)
+function getMatchingPeople(search, callback)
 {
 	var apiURL = "https://www.googleapis.com/plus/v1/people";
 	var reqData = "query=" + search + "&maxResults=20";
-	var apiCallReturnData = googlePlusApiCall(apiURL, reqData);	
-	var errorObj = apiCallReturnData.error;	
-	if(typeof errorObj != "undefined") {
-		if (errorObj.code == 401 && errorObj.message == "Invalid Credentials")
-		{
-//			alert("Refreshing access token");
-			refreshAccessToken();
+	googlePlusApiCall(apiURL, reqData, function(apiCallReturnData){
+
+		var errorObj = apiCallReturnData.error;	
+		if(typeof errorObj != "undefined") {
+			if (errorObj.code == 401 && errorObj.message == "Invalid Credentials")
+			{
+				refreshAccessToken();
+			}
+			else
+			{
+				displayError(WIDGET_NAME, errorObj.message);
+				return;
+			}
 		}
-		else
-		{
-			displayError(WIDGET_NAME, errorObj.message);
-			return;
+		else {
+			return callback(apiCallReturnData);
 		}
-	}
-	else {
-		return apiCallReturnData;
-	}
-	return googlePlusApiCall(apiURL, reqData);
+
+	});	
 }
 
 // utility functions
@@ -222,12 +202,18 @@ function getWidgetDetails(callback)
 	
 }
 
-function googlePlusApiCall(apiURL, reqData)
+function googlePlusApiCall(apiURL, reqData, callback)
 {
 
-	var jsonRequest = $.ajax({ type : "GET", url : apiURL, async : false, data : reqData + "&access_token=" + widgetPref['access_token'], dataType : "json" });
-	return $.parseJSON(jsonRequest.responseText);
-
+	$.ajax({ 
+		type : "GET", 
+		url : apiURL, 
+		data : reqData + "&access_token=" + widgetPref['access_token'],
+		dataType : "json",
+		success: function(data){
+			callback($.parseJSON(data));
+		}
+	});
 }
 
 function displayError(id, error, disable_check)

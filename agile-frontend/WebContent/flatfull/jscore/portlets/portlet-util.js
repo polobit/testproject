@@ -910,7 +910,7 @@ var portlet_utility = {
 				elData = $('#portletsCampaignStatsSettingsModal');
 				$("#duration", elData).find('option[value='+ base_model.get("settings").duration +']').attr("selected", "selected");
 				var options="<option value='All'>All Campaigns</option>" ;
-				$.ajax({ type : 'GET', url : '/core/api/workflows', async : false, dataType : 'json',
+				$.ajax({ type : 'GET', url : '/core/api/workflows', dataType : 'json',
 					success: function(data){
 						$.each(data,function(index,campaignfilter){
 							options+="<option value="+campaignfilter.id+">"+campaignfilter.name+"</option>";

@@ -213,17 +213,18 @@ var contact_details_tab = {
 				$('#stats', App_Contacts.contactDetailView.el).html('<div class="alert alert-danger m-t-sm"><a class="close" data-dismiss="alert" href="#">&times;</a>Sorry! this contact has no email to get the stats.</div>');
 				return;	
 			}
-			
-			// To avoid unnecessary JSAPI count, first verify in cookie
-			if(!(readCookie('_agile_jsapi') != null && readCookie('_agile_jsapi') == "true") && (NO_WEB_STATS_SETUP && get_web_stats_count_for_domain() == '0'))
-			{
-				$('#stats', App_Contacts.contactDetailView.el).html('<h4><p>You have not yet setup the Javascript API on your website.</p><p>Please <a href="#analytics-code">set it up</a> to see the contact\'s site visits here.</p></h4>');
-				return;
-			}
-				
-			
-			// Add tag if data is not 0
-	        addTagAgile(CODE_SETUP_TAG);
+
+			get_web_stats_count_for_domain(function(count){
+
+				// To avoid unnecessary JSAPI count, first verify in cookie
+				if(!(readCookie('_agile_jsapi') != null && readCookie('_agile_jsapi') == "true") && (NO_WEB_STATS_SETUP && count == '0'))
+				{
+					$('#stats', App_Contacts.contactDetailView.el).html('<h4><p>You have not yet setup the Javascript API on your website.</p><p>Please <a href="#analytics-code">set it up</a> to see the contact\'s site visits here.</p></h4>');
+					return;
+				}
+
+				// Add tag if data is not 0
+		        addTagAgile(CODE_SETUP_TAG);
 
 				var statsView = new Base_Collection_View({
 				url: 'core/api/web-stats?e=' + encodeURIComponent(email),
@@ -245,19 +246,21 @@ var contact_details_tab = {
 	            		$(first_model_element).find('#show-page-views').trigger('click');
 	            	
 	            }
-	        });
-			
-	        statsView.collection.fetch();
-	        
-	        // Organises collection based on created_time in decreasing order
-	        statsView.collection.comparator = function(model)
-	        {
-	        	if (model.get('created_time'))
-		            return -model.get('created_time');
-		                                      
-	        }
-	        console.log($('#stats', App_Contacts.contactDetailView.el));
-	        $('#stats', App_Contacts.contactDetailView.el).html(statsView.render().el);
+		        });
+				
+		        statsView.collection.fetch();
+		        
+		        // Organises collection based on created_time in decreasing order
+		        statsView.collection.comparator = function(model)
+		        {
+		        	if (model.get('created_time'))
+			            return -model.get('created_time');
+			                                      
+		        }
+		        console.log($('#stats', App_Contacts.contactDetailView.el));
+		        $('#stats', App_Contacts.contactDetailView.el).html(statsView.render().el);
+
+			});
 		},
 		load_campaigns : function()
 		{
@@ -432,7 +435,6 @@ function fetchMailsFromAllAccounts(contact_details_tab_scope,has_email_configure
 		for(var i=0;i<fetch_urls.length;i++)
 		{
 			var xhr = $.ajax({ url : fetch_urls[i]+'&search_email='+encodeURIComponent(email),
-				async : true, 
 				success : function(emails)
 				{	
 					response_count++;

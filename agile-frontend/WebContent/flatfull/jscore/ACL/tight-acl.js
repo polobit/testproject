@@ -143,7 +143,7 @@
 			if(ACCOUNT_PREFS.tagsPermission)
 				$('#new_tag_acl',el).attr('checked','checked');
 		}else {
-			$.ajax({ type : 'GET', url : '/core/api/account-prefs', async : false, dataType : 'json',
+			$.ajax({ type : 'GET', url : '/core/api/account-prefs', dataType : 'json',
 				success: function(data){
 					
 					if(isCheck)
