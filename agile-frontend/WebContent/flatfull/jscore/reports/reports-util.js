@@ -1,6 +1,5 @@
   /**activity and contact report add edit functionality **/
-
-    var report_utility = {
+var report_utility = {
     	/**Loads add report for activity email report**/
                load_activities : function(el){	
             	  // Fills owner select element

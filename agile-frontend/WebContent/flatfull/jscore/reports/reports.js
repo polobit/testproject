@@ -4,13 +4,13 @@ var REPORT;
  * contact reports
  */
 function initializeReportsListeners(){
+
 	$('#reports-listerners-container').on('click', '#reports-email-now', function(e)
 			{
 		// e.preventDefault();
 		e.stopPropagation();
 
 		var id = $(this).attr('data');
-
 
 		$('#report-send-confirmation').modal('show');
 		$("#report-send-confirm")
@@ -89,41 +89,19 @@ function initializeReportsListeners(){
 			} });
 
 			});
+
 	$('#reports-listerners-container').on('click', '#report-instant-results', function(e) 
 			{
 		e.stopPropagation();
-		var id = $(this).attr('data');
-		console.log(id);
-		/*
-		 * Backbone.history.navigate("report-results/" + id, { trigger: true });
-		 */
-			});
+		
+	});
 
-	$('#reports-listerners-container').on('change', '#frequency', function(e) 
+	$('#reports-listerners-container').on('change', '#frequency, #duration', function(e) 
 			{
-		var frequency = $("#frequency").val();
-		if (frequency == "DAILY")
-		{
-			$("#activity_report_weekday").css("display", "none");
-			$("#activity_report_day").css("display", "none");
-			$("#activity_report_time").css("display", "block");
 
-		}
-		else if (frequency == "WEEKLY")
-		{
-			$("#activity_report_day").css("display", "none");
-			$("#activity_report_time").css("display", "block");
-			$("#activity_report_weekday").css("display", "block");
-
-		}
-		else if (frequency == "MONTHLY")
-		{
-			$("#activity_report_weekday").css("display", "none");
-			$("#activity_report_time").css("display", "block");
-			$("#activity_report_day").css("display", "block");
-
-		}
-			});
+		var container = $(this).attr("id") == "duration" ? "contact" : "activity";
+		updateWeekDayReportVisibility($(this).val(), container);
+	});
 
 	/*
 	 * author jaagdeesh
@@ -131,6 +109,7 @@ function initializeReportsListeners(){
 	$('#reports-listerners-container').on('click', '#report-dashlat-navigate', function(e)
 			{
 		e.preventDefault();
+
 		Backbone.history.navigate("add-dashlet", { trigger : true });
 
 			});
@@ -138,44 +117,20 @@ function initializeReportsListeners(){
 	$('#reports-listerners-container').on('click', '#activity_advanced', function(e) 
 			{
 		e.preventDefault();
-		$("#activity_advanced span i").toggleClass("fa-minus");
-		$("#activity_advanced span i").toggleClass("fa-plus");
-			});
+
+		var el = $("#activity_advanced span i");
+		el.toggleClass("fa-minus").toggleClass("fa-plus");
+
+		});
 
 
 	$('#reports-listerners-container').on('click', '#report_advanced', function(e) 
 			{
 		e.preventDefault();
-		$("#report_advanced span i").toggleClass("fa-minus");
-		$("#report_advanced span i").toggleClass("fa-plus");
 
-			});
+		var el = $("#report_advanced span i");
+		el.toggleClass("fa-minus").toggleClass("fa-plus");
 
-
-	$('#reports-listerners-container').on('change', '#duration', function(e)
-			{
-		var frequency = $("#duration").val();
-		if (frequency == "DAILY")
-		{
-			$("#contact_report_weekday").css("display", "none");
-			$("#contact_report_day").css("display", "none");
-			$("#contact_report_time").css("display", "block");
-
-		}
-		else if (frequency == "WEEKLY")
-		{
-			$("#contact_report_day").css("display", "none");
-			$("#contact_report_time").css("display", "block");
-			$("#contact_report_weekday").css("display", "block");
-
-		}
-		else if (frequency == "MONTHLY")
-		{
-			$("#contact_report_weekday").css("display", "none");
-			$("#contact_report_time").css("display", "block");
-			$("#contact_report_day").css("display", "block");
-
-		}
 			});
 }
 
@@ -365,9 +320,35 @@ function getNextMonthEppoch(time, day, month)
 	{
 		month_in_year = month_in_year + 2;
 	}
+
 	date.setMonth(month_in_year);
 	date.setDate(day);
 	date.setHours(hour);
 	date.setMinutes(min);
 	return (date.getTime()) / 1000;
+}
+
+
+function updateWeekDayReportVisibility(report_value, container_id){
+
+		var day_visibility = "none", weekday_visibility = "none", time_visibility = "none";
+		if (report_value == "DAILY")
+		{
+			time_visibility = "block";
+		}
+		else if (report_value == "WEEKLY")
+		{
+			weekday_visibility = "block";
+			time_visibility = "block";
+		}
+		else if (report_value == "MONTHLY")
+		{
+			time_visibility = "block";
+			day_visibility = "block";
+		}
+
+		$("#" + container_id + "_report_weekday").css("display",weekday_visibility );
+		$("#" + container_id + "_report_day").css("display", day_visibility);
+		$("#" + container_id + "_report_time").css("display", time_visibility);
+
 }

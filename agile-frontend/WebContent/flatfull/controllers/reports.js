@@ -6,39 +6,39 @@
 var ReportsRouter = Backbone.Router
 		.extend({
 
-			routes : {
+	routes : {
 
-			/* Reports */
-			"reports" : "reports", "email-reports" : "emailReportTypes", "activity-reports" : "activityReports", "activity-report-add" : "activityReportAdd",
-				"activity-report-edit/:id" : "activityReportEdit", 
-				"contact-reports" : "emailReports", "report-add" : "reportAdd", "report-edit/:id" : "reportEdit",
-				"report-results/:id" : "reportInstantResults", "report-charts/:type" : "reportCharts", "report-funnel/:tags" : "showFunnelReport",
-				"report-growth/:tags" : "showGrowthReport", "report-ratio/:tag1/:tag2" : "showRatioReport" },
+		/* Reports */
+		"reports" : "reports", "email-reports" : "emailReportTypes", "activity-reports" : "activityReports", "activity-report-add" : "activityReportAdd",
+		"activity-report-edit/:id" : "activityReportEdit", 
+		"contact-reports" : "emailReports", "report-add" : "reportAdd", "report-edit/:id" : "reportEdit",
+		"report-results/:id" : "reportInstantResults", "report-charts/:type" : "reportCharts", "report-funnel/:tags" : "showFunnelReport",
+		"report-growth/:tags" : "showGrowthReport", "report-ratio/:tag1/:tag2" : "showRatioReport" },
 
-			/**
-			 * Shows reports categories
-			 */
-			reports : function()
-			{
-				if (!tight_acl.checkPermission('REPORT'))
-					return;
+		/**
+		 * Shows reports categories
+		 */
+		reports : function()
+		{
+			if (!tight_acl.checkPermission('REPORT'))
+				return;
 
-				$("#content").html("<div id='reports-listerners-container'></div>");
-				getTemplate('report-categories', {}, undefined, function(template_ui){
-					if(!template_ui)
-						  return;
-					$('#reports-listerners-container').html($(template_ui));
+			$("#content").html("<div id='reports-listerners-container'></div>");
+			getTemplate('report-categories', {}, undefined, function(template_ui){
+				if(!template_ui)
+					  return;
+				$('#reports-listerners-container').html($(template_ui));
 
-					initializeReportsListeners();
-					hideTransitionBar();
-					$(".active").removeClass("active");
-					$("#reportsmenu").addClass("active");
+				initializeReportsListeners();
+				hideTransitionBar();
+				$(".active").removeClass("active");
+				$("#reportsmenu").addClass("active");
 
-					$('[data-toggle="tooltip"]').tooltip();	
+				$('[data-toggle="tooltip"]').tooltip();	
 
-				}, "#reports-listerners-container");
-				
-			},
+			}, "#reports-listerners-container");
+			
+		},
 
 	/**
 	 * Shows email-reports categories
