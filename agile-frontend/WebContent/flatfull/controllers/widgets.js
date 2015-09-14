@@ -47,7 +47,7 @@ var WidgetsRouter = Backbone.Router
 
 												"sync" : "contactSync", "sync/contacts" : "google_apps_contacts", "sync/calendar" : "google_apps_calendar", "sync/stripe-import" : "stripe_sync",
 																"sync/shopify" : "shopify", "sync/salesforce" : "salesforce", "sync/zoho-import" : "zoho_sync", "sync/quickbook" : "quickbook_import",
-																"sync/xero" : "xero_import","sync/freshbooks":"freshbooks_sync","sync/freshbooks/setting":"freshbooks_sync_setting","sync/officecalendar":"office365Calendar"},
+																"sync/xero" : "xero_import","sync/freshbooks":"freshbooks_sync","sync/freshbooks/setting":"freshbooks_sync_setting"},
 
 												/**
 												 * Adds social widgets (twitter, linkedIn and RapLeaf) to a contact
@@ -761,21 +761,20 @@ var WidgetsRouter = Backbone.Router
 
 
 																this.contact_sync_google = new Base_Model_View({ url : 'core/api/contactprefs/google', template : 'admin-settings-import-google-contacts',postRenderCallback: function(el){initializeImportListeners();} });
-																this.contact_sync_office365 = new Base_Model_View({ url : 'core/api/officecalendar', template : 'admin-settings-office365-sync-details',postRenderCallback: function(el){initializeImportListeners();} });
+															
 																
 																// Adds header
 																$('#prefs-tabs-content').html(
 																		'<div class="row prefs-datasync"><div class="col-md-12"><h4 class="m-b">Google <small>import Contacts from Google</small></h4><div class="row"><div id="contact-prefs" class="col-md-4 col-sm-6 col-xs-12"></div>'
 																		+ '<div id="calendar-prefs" class="col-md-4 col-sm-6 col-xs-12"></div><div id="email-prefs" class="col-md-4 col-sm-6 col-xs-12"></div></div></div></div>'
-																		+ '<div class="row prefs-datasync"><div class="col-md-12 no-mg-l"><h4 class="m-b">E-commerce <small>import Contacts from E-commerce</small></h4><div class="row"><div id ="shopify" class="col-md-4 col-sm-6 col-xs-12"></div></div></div></div>'
-																		+ '<div class="row prefs-datasync"><div class="col-md-12"><h4 class="m-b">Office365 <small> calendar events Sync</small></h4><div class="row"><div id ="office365-calendar-sync" class="col-md-4 col-sm-6 col-xs-12"></div></div></div></div>'
+																		+ '<div class="row prefs-datasync"><div class="col-md-12 no-mg-l"><h4 class="m-b">E-commerce <small>import Contacts from E-commerce</small></h4><div class="row"><div id ="shopify" class="col-md-4 col-sm-6 col-xs-12"></div></div></div></div>'																	
 																		+ '<div class="row prefs-datasync"><div class="col-md-12"><h4 class="m-b">Payment <small>import Contacts from payment gateway</small></h4><div class="row"><div id ="stripe" class="col-md-4 col-sm-6 col-xs-12"></div></div></div></div>'
 																		+ '<div class="row prefs-datasync"><div class="col-md-12"><h4 class="m-b">Accounting <small>import Contacts from Accounting</small></h4><div class="row"><div id ="freshbook" class="col-md-4 col-sm-6 col-xs-12"></div><div class="col-md-4 col-sm-6 col-xs-12" id ="quickbook"></div></div></div></div>'
 																);
 
 																// Adds Gmail Prefs
 																$('#contact-prefs').append(this.contact_sync_google.render().el);
-																$('#office365-calendar-sync').append(this.contact_sync_office365.render().el);
+																
 																
 																this.calendar_sync_google = new Base_Model_View({ url : 'core/api/calendar-prefs/get', template : 'import-google-calendar',postRenderCallback: function(el){initializeImportListeners();} });
 
@@ -898,25 +897,7 @@ var WidgetsRouter = Backbone.Router
 																				return;
 																}
 																$("#prefs-tabs-content").html(this.setup_google_calendar.render(true).el);
-												},
-												
-												office365Calendar : function() {
-
-													$("#content").html(getTemplate("settings"), {});
-
-													$('#PrefsTab .select').removeClass('select');
-													$('.contact-sync-tab').addClass('select');
-
-													this.office365_sync_setting = new Base_Model_View({
-														url : 'core/api/officecalendar',
-														template : 'admin-settings-office365-calendar-prefs',
-														saveCallback : function(model) {
-															window.location.href = '#sync';
-														}
-													});
-													$("#prefs-tabs-content").html(
-															this.office365_sync_setting.render().el);
-												},
+												},																				
 
 												stripe_sync : function()
 												{
