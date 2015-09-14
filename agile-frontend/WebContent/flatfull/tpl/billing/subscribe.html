@@ -255,7 +255,12 @@
 		<label class="control-label col-sm-3">Monthly</label>
 			<div class="controls col-sm-6">
 				<span class="text-danger text-xlg">$<span id="users_total_cost">49.99</span></span>
-				<p class="help-block m-t-none">For <span class="text-danger" id="users_quantity">2</span> {{#if_greater quantity 1}}users{{else}}user{{/if_greater}}</p>
+{{quantity}}
+				<p class="help-block m-t-none">For <span class="text-danger" id="users_quantity">{{quantity}}</span>{{#if_equals quantity 1}}
+  User
+{{else}}
+Users
+{{/if_equals}}</p>
 			</div>
 		</div>
 	</form>
@@ -545,7 +550,7 @@ users.
 
 		<div>
 		
-			<div id="customer-details-holder" class="p-t-sm"></div>
+			<div id="customer-details-holder"></div>
 		</div>
 		
 		<div class="clearfix"></div>
@@ -651,7 +656,7 @@ users.
 						<label class="control-label col-sm-3">Expiry<span class="field_req">*</span></label>
 						<div class="controls col-sm-6">
 							<select name="exp_month" id="exp_month" class="input form-control exp_month inline-block m-r" style="width: 48%;" placeholder="Expiry Month" onchange="$(&quot;#exp_year&quot;).valid();"></select>
-							 <select name="exp_year" id="exp_year" class="input required form-control  digits inline-block" style="width: 47%;" placeholder="Expiry Year"></select>
+							 <select name="exp_year" id="exp_year" class="input required form-control digits exp_year atleastThreeMonths inline-block" style="width: 47%;" placeholder="Expiry Year"></select>
 						</div>
 					</div>
 				

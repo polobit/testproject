@@ -191,7 +191,7 @@ function setPlan(user_plan)
 		
 		$("#plan_type").val(plan_type).trigger("change");
 		//$("ul.tagsli a." + interval).trigger("click");
-		$("#billing_cycle").val(interval).trigger("click");
+		$("#billing_cycle").val(interval).trigger("change");
 		
 		
 		
@@ -204,7 +204,7 @@ function setPlan(user_plan)
 
 function initializeSubscriptionListeners(){
 
-	    $('#subscribe_plan_change').off();
+	    $('#subscribe_plan_change').off("click");
 	
 		$('#subscribe_plan_change').on('click', '.plan-collection-in', function(e){
 			 
@@ -467,6 +467,13 @@ function initializeSubscriptionListeners(){
 				}
 				
 				email_validation($("#email-plan-form"));
+				jQuery.validator.addMethod("email_plan_minimum", function(value, element) {
+					
+					if (this.optional(element))
+						return true;
+
+					return parseInt(value) >= 5;
+				}, " Should purchase a minimum of 5000 emails.");
 			});
     	
 }   

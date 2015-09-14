@@ -16,6 +16,10 @@ var SubscribeRouter = Backbone.Router.extend({
     "subscribe" : "subscribe",
 	
 	"subscribe/:id/:plan" : "subscribe",
+	
+	"subscribe-plan" : "subscribe", 
+	
+	"subscribe-plan/:id" : "subscribe",
 
 	/* billing settings */
 	
@@ -53,7 +57,7 @@ var SubscribeRouter = Backbone.Router.extend({
 				showNotyPopUp("information", "Card has been updated successfully.", "top");
 			}, errorCallback : function(data)
 			{
-				showNotyPopUp("information", "<div style='color:#B94A48; font-size:14px'>" + data.responseText + "</div>", "top");
+				showNotyPopUp("information", data.responseText , "top");
 			},
 			postRenderCallback : function(el)
 			{
@@ -124,10 +128,12 @@ var SubscribeRouter = Backbone.Router.extend({
 			that.recent_invoice(subscription_model);
 			
 		} });
-
+		$("#invoice-details-holder").html(getRandomLoadingImg());
+//		$('#content').find('#billing-settings-tab-content').html("");
 		$('#content').find('#BillingSettingsTab .select').removeClass('select');
 		$('#content').find('.invoice-details-tab').addClass('select');
 		$(".active").removeClass("active");
+		
 
 	},
 
@@ -533,15 +539,20 @@ var SubscribeRouter = Backbone.Router.extend({
 	recent_invoice : function(subscription)
 	{
 		if (!subscription.get("billingData"))
-			return;
+			{
+			$("#invoice-details-holder").html("");
+			$('#invoice-details-holder').append("<div class='text-lg p-l-sm'>Invoices</div><div class='wrapper-sm'>No recent payments.	</div>");
+			return ;
+			}
+			
 
 
 		var invoice = new Base_Collection_View({ url : "core/api/subscription/invoices", templateKey : "invoice", window : 'subscribe',
-			individual_tag_name : 'tr' });
+			individual_tag_name : 'tr', sortKey :'created', descending :true });
 		
 		// Fetches the invoice payments
 		invoice.collection.fetch();
-
+		
 		$("#invoice-details-holder").html(invoice.render().el);
 
 	},

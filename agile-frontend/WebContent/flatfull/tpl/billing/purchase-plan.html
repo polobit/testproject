@@ -88,7 +88,7 @@
 								<label class="col-sm-3 control-label p-t-none">Next
 									Billing Date : </label>
 								<div class="controls col-sm-6">
-									{{epochToHumanDate "dd mmm yyyy" date}}
+									{{epochToHumanDate "mmm dd, yyyy" date}}
 								</div>
 							</div>
 							
@@ -100,12 +100,8 @@
 								<label class="col-sm-3 control-label">Total
 									Cost : </label>
 								<div class="controls col-sm-6">
-									<span style="
-    font-size: 22px;
-    color: #FA782D;
-    font-weight: bold;
-">$</span><b style="font-size: 22px;
-color: #FA782D;">{{cost}}</b>
+									<span style="font-size: 22px;color: #FA782D;font-weight: bold;">$</span>
+<b style="font-size: 22px;color: #FA782D;">{{cost}}</b>
 									<p class="help-block m-b-none">
 										{{quantity}} 
 
