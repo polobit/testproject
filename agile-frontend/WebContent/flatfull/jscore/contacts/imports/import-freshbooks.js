@@ -42,28 +42,25 @@ $(function()
 												});
 												return false;
 								}
-								$.ajax({ url : 'core/api/freshbooks/save/' + token + '/' + url + '', async : false, success : function(data)
+								$.ajax({ url : 'core/api/freshbooks/save/' + token + '/' + url + '', success : function(data)
 								{
-												if (data)
-												{
-																console.log(data);
-
-												}
+									console.log(data);
+									var location = window.location.hash;
+									if (location == "#sync/freshbooks/setting")
+									{
+										window.location.reload();
+									}
+									else if (location == "#sync/freshbooks")
+									{
+										window.location = window.location.origin + "#sync/freshbooks/setting";
+									}
+									else
+									{
+										window.location = window.location.origin + "#sync";
+									}
 
 								} });
-								var location = window.location.hash;
-								if (location == "#sync/freshbooks/setting")
-								{
-												window.location.reload();
-								}
-								else if (location == "#sync/freshbooks")
-								{
-												window.location = window.location.origin + "#sync/freshbooks/setting";
-								}
-								else
-								{
-												window.location = window.location.origin + "#sync";
-								}
+								
 				});
 				
 	 function isBlank(str) {

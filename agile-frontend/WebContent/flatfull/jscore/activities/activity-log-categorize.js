@@ -1,4 +1,6 @@
 
+//binds events to activites route
+
 function initializeActivitiesListner(el){
 
 
@@ -44,66 +46,65 @@ function initializeActivitiesListner(el){
 	e.preventDefault();
 	var data = $(this).closest('a').attr("data");
 
-	var currentevent = getEventObject(data);
-
-	update_event_activity(currentevent);
-
+	getEventObject(data, function(resp){
+		update_event_activity(resp);
+	});
 });
 
 
 
-	$("#activities-listners").on('click', '.email-details', function(e) 
+$("#activities-listners").on('click', '.email-details', function(e) 
 {
 	e.preventDefault();
 	var data = $(this).closest('a').attr("data");
 
-	var obj = getActivityObject(data);
-	console.log(obj);
+	getActivityObject(data, function(resp){
 
-	getTemplate("infoModal", JSON.parse(obj), undefined, function(template_ui){
-		if(!template_ui)
-			  return;
-		var emailinfo = $(template_ui);
-		emailinfo.modal('show');
-	}, null);
+		console.log(resp);
+		getTemplate("infoModal", resp, undefined, function(template_ui){
+			if(!template_ui)
+				  return;
+
+			var emailinfo = $(template_ui);
+			emailinfo.modal('show');
+		}, null);
+	});
 
 });
 
+
 }
-function getDealObject(id)
+
+/**
+* fetches the event object based on id
+**/
+function getEventObject(id, callback)
 {
 
-	return $.ajax({ type : "GET", url : 'core/api/opportunity/' + id, async : false }).responseText;
+	accessUrlUsingAjax('core/api/events/getEventObject/' + id, function(data){
+			if(callback)
+				 callback(data);
+	});
 
 }
 
-function getEventObject(id)
+
+/**
+* when user clicks on email from activities route we show email content in model
+**/
+function getActivityObject(id, callback)
 {
 
-	return $.ajax({ type : "GET", url : 'core/api/events/getEventObject/' + id, async : false }).responseText;
-
+	accessUrlUsingAjax('core/api/activitylog/' + id, function(data){
+			if(callback)
+				 callback(data);
+	});
 }
 
-function getTaskObject(id)
-{
 
-	return $.ajax({ type : "GET", url : 'core/api/tasks/getTaskObject/' + id, async : false }).responseText;
-
-}
-
-function getNoteObject(id)
-{
-
-	return $.ajax({ type : "GET", url : 'core/api/notes/' + id, async : false }).responseText;
-
-}
-
-function getActivityObject(id)
-{
-
-	return $.ajax({ type : "GET", url : 'core/api/activitylog/' + id, async : false }).responseText;
-
-}
+/**
+* when user clicks on event save it will be called
+**/
 
 function update_event_activity(ele)
 {
@@ -149,13 +150,12 @@ function update_event_activity(ele)
 	populateUsersInUpdateActivityModal(value);
 }
 
-function getModal()
-{
-	var activity_object = App_Activity_log.activitiesview.collection.models[this];
-	alert(activity_object);
-	console.log(activity_object);
-}
 
+
+/**
+* will be called when user enters update task
+*
+**/
 function updateactivity__task(ele)
 {
 	var value = JSON.parse(ele);
@@ -175,6 +175,12 @@ function updateactivity__task(ele)
 	// Add notes in task modal
 	showNoteOnForm("updateTaskForm", value.notes);
 }
+
+
+/**
+*
+* deal will be updated if user clicks on update deal from deal details.js
+**/
 
 function updatedeals(ele)
 {
@@ -234,6 +240,10 @@ function updatedeals(ele)
 	}, "DEAL")
 }
 
+
+/**
+*activites will be differentiated based on created time like today , yesterday and later 
+**/
 function get_activity_created_time(due)
 {
 	// Get Todays Date

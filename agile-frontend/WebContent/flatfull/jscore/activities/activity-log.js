@@ -21,9 +21,17 @@ function includeTimeAgo(element)
  */
 function updateActivty(params)
 {
+	//if values found from cookie then params will be not null. else params will be null
+
+	if(!params)	
+	url = '/core/api/activitylog/getAllActivities';
+	else
+	url = '/core/api/activitylog/getActivitiesOnSelectedCondition' + params;
+
+
 	console.log("entered into update activity function  " + new Date().getTime() + "  time with milliseconds " + new Date())
 	// Creates backbone collection view
-	this.activitiesview = new Base_Collection_View({ url : '/core/api/activitylog/getActivitiesOnSelectedCondition' + params, sortKey : 'time',
+	this.activitiesview = new Base_Collection_View({ url : url, sortKey : 'time',
 		descending : true, templateKey : "activity-list-log", sort_collection : false, cursor : true, scroll_symbol : 'scroll', page_size : 20,
 		individual_tag_name : 'li', postRenderCallback : function(el)
 		{
@@ -133,6 +141,12 @@ function getParameters()
 	return params;
 }
 
+
+
+/**
+*used to initialize date range picker and if value found from cookie the gets the request params and sends value
+**/
+
 function initActivitiesDateRange()
 {
 	$('#activities_date_range').daterangepicker({ ranges : { 'Today' : [
@@ -159,10 +173,12 @@ function initActivitiesDateRange()
 			createCookie("selectedEndTime", end.toString('MMMM d, yyyy'), 90);
 			$('#activities_date_range #range').html(start.toString('MMMM d, yyyy') + ' - ' + end.toString('MMMM d, yyyy'));
 
+			//renders activity view
 			updateActivty(getParameters());
 		}
 		else
 		{
+			//if clicks on clear button then simply clears cookie
 			eraseCookie("selectedStartTime");
 			eraseCookie("selectedEndTime");
 			$('#activities_date_range #range').html('Filter by date');

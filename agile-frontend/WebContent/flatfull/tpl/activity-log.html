@@ -14,7 +14,8 @@
 				</div>
             </div>
         </div>
-        {{/unless}}
+{{/unless}}
+
 {{#if this.length}}
 <div class="list-group list-group-sp">
 <section class="scroll">
@@ -32,10 +33,9 @@
     </form>
 </section>
 </div>
-
-	<!--<ul style="margin:0px" id="activity-list-log-model-list" ></ul>-->
-
+<!--<ul style="margin:0px" id="activity-list-log-model-list" ></ul>-->
 {{/if}}
+
 </script>
 
 
@@ -43,8 +43,8 @@
 <script id="activity-list-log-model-template" type="text/html">
     <div class="pos-rlt list-group-item">
 	<div class="pull-left avatar thumb-xs m-r m-t-xs">
-			{{#if this.userPic}}
-				<img class="user-img ref-roundedimg"  alt="" src="{{userPic}}" title="{{this.user.name}}">
+			{{#if this.user.ownerPic}}
+				<img class="user-img ref-roundedimg"  alt="" src="{{this.user.ownerPic}}" title="{{this.user.name}}">
 			{{else}}
 				<img class="user-img ref-roundedimg"  alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
 			{{/if}}
@@ -848,6 +848,7 @@ Deleted  {{custom1}} Campaigns<br/>
 <div class="clearfix"></div>
 
 </script>
+
 <script id="activity-list-header-template" type="text/html">
 <div class="custom-animated custom-fadeInUp">
 <div class="wrapper-md lter bg-light b-b ">
@@ -897,15 +898,8 @@ Deleted  {{custom1}} Campaigns<br/>
                 <a href="#activities" class="btn btn-default btn-sm bg-light">User Activities</a> 
                 <a href="#contact-activities" class="btn btn-default btn-sm" onclick="$(this).prev().removeClass('bg-light')">Contact Activities</a>
             </div>
-            
-          
-
-            
         </div>
         <div class="clearfix"></div>
-   
-
-    
 </div>
 </div>
 </div>
