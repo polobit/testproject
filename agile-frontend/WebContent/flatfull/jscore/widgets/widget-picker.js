@@ -303,6 +303,9 @@ function build_custom_widget_form(el)
 				$('#custom-widget', el).html(widget_custom_view.render(true).el);
 				
 				//Is Custom widget for all.
+				if(!($(this).hasClass('add_to_all'))){
+					isForAll = false;
+				}
 				$('#custom_isForAll').val(isForAll);
 				
                 $('#prefs-tabs-content').off('click', '#cancel_custom_widget');
