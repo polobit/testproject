@@ -6,20 +6,12 @@ var WidgetsRouter = Backbone.Router
 
 												routes : {
 
-												"add-widget" : "addWidget",
-
-												"Linkedin" : "Linkedin", "Linkedin/:id" : "Linkedin",
-
-												"Twitter" : "Twitter", "Twitter/:id" : "Twitter",
-												
+												"add-widget" : "addWidget", "Linkedin" : "Linkedin", "Linkedin/:id" : "Linkedin",
+												"Twitter" : "Twitter", "Twitter/:id" : "Twitter",												
 												"GooglePlus" : "GooglePlus", "GooglePlus/:id" : "GooglePlus",
-
 												"Rapleaf" : "Rapleaf", "Rapleaf/:id" : "Rapleaf",
-
 												"ClickDesk" : "ClickDesk", "ClickDesk/:id" : "ClickDesk",
-
 												"HelpScout" : "HelpScout", "HelpScout/:id" : "HelpScout",
-
 												"Zendesk" : "Zendesk", "Zendesk/:id" : "Zendesk",
 
 												"Sip" : "Sip", "Sip/:id" : "Sip",
@@ -63,18 +55,18 @@ var WidgetsRouter = Backbone.Router
 														that.Catalog_Widgets_View = new Base_Collection_View({ url : '/core/api/widgets/default', restKey : "widget", templateKey : "widgets-add",
 																				sort_collection : false, individual_tag_name : 'div', postRenderCallback : function(el)
 																				{
-																								initializeWidgetSettingsListeners();
-																								build_custom_widget_form(el);
-																								setTimeout(function(){
-																									var socialHeight=0;
-																									$('#social > div',el).each(function(){
-																										if($(this).height() > socialHeight)
-																											socialHeight = $(this).height();
-																									});
-																									$('#social > div',el).each(function(){
-																										$(this).height(socialHeight);
-																									});
-																								},1000);
+																					initializeWidgetSettingsListeners();
+																					build_custom_widget_form(el);
+																					setTimeout(function(){
+																						var socialHeight=0;
+																						$('#social > div',el).each(function(){
+																							if($(this).height() > socialHeight)
+																								socialHeight = $(this).height();
+																						});
+																						$('#social > div',el).each(function(){
+																							$(this).height(socialHeight);
+																						});
+																					},1000);
 
 																				} });
 

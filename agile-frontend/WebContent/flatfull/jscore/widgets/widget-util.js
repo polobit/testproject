@@ -744,7 +744,6 @@ function set_up_access(widget_name, template_id, data, url, model)
 				json = model; 
 			}, null);
 
-			
 		}
 		else
 		{
@@ -945,14 +944,8 @@ function setUpError(widget_name, template_id, error_data, error_url, model)
 	}, "#content");
 
 
-		
-
-		
-
-
-		
-
 }
+
 
 function xero_save_widget_prefs()
 {
