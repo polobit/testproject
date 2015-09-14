@@ -17,9 +17,9 @@ var SubscribeRouter = Backbone.Router.extend({
 	
 	"subscribe/:id/:plan" : "subscribe",
 	
-	"subscribe-plan" : "subscribe", 
+	"subscribe-plan" : "subscribePlan", 
 	
-	"subscribe-plan/:id" : "subscribe",
+	"subscribe-plan/:id" : "subscribePlan",
 
 	/* billing settings */
 	
@@ -48,6 +48,11 @@ var SubscribeRouter = Backbone.Router.extend({
 	"getInvoiceDetails/:id" : "getInvoiceDetails",
 	
 	 },
+	 
+	 subscribePlan : function()
+	{
+		Backbone.history.navigate("subscribe", { trigger : true });
+	},
 
 	cardUpdation : function()
 	{

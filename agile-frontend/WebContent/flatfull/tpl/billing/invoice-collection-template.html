@@ -23,6 +23,7 @@
 </div>
 </script>
 <script id="invoice-model-template" type="text/html">
+
 {{#each lines.data}}
 {{#if_greater amount 0}}
 	<td class="data" data="{{../../id}}" >
@@ -49,9 +50,7 @@ Emails
 		{{/if}}
     </td>
 	<td data="{{../../id}}">
-		{{#if this.plan}}
-${{get_amount_with_possitive amount}}
-		{{/if}}
+${{numeric_operation ../../amountDue 100 "/"}}
     </td>
 {{/if_greater}}
 {{else}}
@@ -74,6 +73,7 @@ ${{get_amount_with_possitive amount}}
         </table>
 </script>
 <script id="invoice-partial-model-template" type="text/html">
+--{{amountDue}}
 {{#each lines.data}}
 {{#if this.plan}}
 	<td class="data" data="{{../id}}" >
