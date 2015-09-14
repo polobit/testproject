@@ -1,6 +1,6 @@
 /**
- * Initializes the date-range-picker and other filters. Calls the callback when the date range is
- * selected.
+ * Initializes the date-range-picker and other filters. Calls the callback when
+ * the date range is selected.
  * 
  * @param campaign_id -
  *            to show charts w.r.t campaign-id.
@@ -9,8 +9,10 @@
  */
 function initFunnelCharts(callback)
 {
+
 	// Init the callback for daterange
 	initDateRange(callback);
+	
 	// Init the callback when the frequency selector changes too
 	if ($('#frequency').length > 0)
 	{
@@ -49,7 +51,6 @@ function showGrowthGraphs(tags)
 	showAreaSpline('core/api/reports/growth/' + tags + getOptions(), 'growth-chart', '', '', true);
 }
 
-
 /**
  * Shows Ratio Graphs based on the tags
  */
@@ -57,9 +58,10 @@ function showRatioGraphs(tag1, tag2)
 {
 	showLine('core/api/reports/ratio/' + tag1 + "/" + tag2 + "/" + getOptions(), 'ratio-chart', 'Ratio Analysis', tag1 + ' vs ' + tag2, true);
 }
-/**Initialising date range for various report**/
 
-function initDateRange(callback){
+/** Initialising date range for various report* */
+function initDateRange(callback)
+{
 	initReportLibs(function()
 	{
 
@@ -85,10 +87,11 @@ function initDateRange(callback){
 			var months_diff = Math.abs(start.getMonth() - end.getMonth() + (12 * (start.getFullYear() - end.getFullYear())));
 			$('#reportrange span').html(start.toString('MMMM d, yyyy') + ' - ' + end.toString('MMMM d, yyyy'));
 			$("#week-range").html(end.add({ days : -6 }).toString('MMMM d, yyyy') + ' - ' + end.add({ days : 6 }).toString('MMMM d, yyyy'));
-			//when the date range changes 
+			// when the date range changes
 			callback();
 		});
+		
 		callback();
-	
+
 	});
 }
