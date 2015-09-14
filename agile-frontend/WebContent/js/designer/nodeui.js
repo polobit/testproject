@@ -88,6 +88,8 @@ function constructNodeFromDefinition(nodeJSONDefinition, jsonData, nodeId) {
     	init_tags_typeahead();
     }
     
+    nodeJSONDefinition.parentY = window.parent.scrollY;
+    
     if(nodeJSONDefinition["name"] == "Send Message" && (jsonData == undefined || jsonData == "json/nodes/sms/sendmessage.js"))
         $("#nodeui").find("[name=to]").val("{{phone}}");
     
@@ -122,7 +124,8 @@ function constructNodeFromDefinition(nodeJSONDefinition, jsonData, nodeId) {
         }
     });
     
-
+     window.parent.scrollTo(0,0);
+     
     if (nodeJSONDefinition.language != undefined) 
     	$("#nodeui .translate").val(nodeJSONDefinition.language);
 
@@ -178,17 +181,30 @@ function saveNode(e) {
 		// Check if node id is undefined or not 
 		if( nodeId == undefined || nodeId == null ) {
 			// Add designer 
-			if(jsonDefinition.x && jsonDefinition.y)
+			if(jsonDefinition.x && jsonDefinition.y){
+				jsonDefinition.x += $('#designercontainer').scrollLeft();
+				jsonDefinition.y += $('#designercontainer').scrollTop();
+				window.parent.scrollTo(0,jsonDefinition.parentY);
 				addNode(jsonDefinition, displayName, jsonValues, jsonDefinition.x, jsonDefinition.y);
+			}
 			else{
 					var designer = window.parent.document.getElementById("designer").contentWindow.document.body;
-					var x_coordinate = $(designer).find('#designercontainer').scrollLeft();
-					var y_coordinate = $(designer).find('#designercontainer').scrollTop();
-					var cordinates = (x_coordinate + y_coordinate)/2;
-					$(designer).find('#designercontainer').scrollTop(cordinates);
+					var x_coordinate = $('#designercontainer').scrollLeft();
+					var y_coordinate = $('#designercontainer').scrollTop();
+					//var cordinates = (x_coordinate + y_coordinate)/2;
+					//window.parent.scrollTo(0,y_coordinate);
+					//$('#designercontainer').scrollTop(cordinates);
 					//$(designer).find('#designercontainer').scrollLeft(cordinates);
+					window.parent.scrollTo(0,jsonDefinition.parentY);
+					
+					
+					if(jsonDefinition.parentY==0)
+						jsonDefinition.parentY=250;
+					
+					if(jsonDefinition.parentX==0)
+						jsonDefinition.parentX=250;
 					if(x_coordinate !=undefined && y_coordinate  !=undefined )
-						addNode(jsonDefinition, displayName, jsonValues, cordinates+250,cordinates+250);
+						addNode(jsonDefinition, displayName, jsonValues, x_coordinate+250,y_coordinate+jsonDefinition.parentY);
 					else
 						addNode(jsonDefinition, displayName, jsonValues, 200, 200);
 				}

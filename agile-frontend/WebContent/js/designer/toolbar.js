@@ -215,6 +215,7 @@ function addDraggingCapability() {
             
             jsonDefinition.x = ui.position.left;
             jsonDefinition.y = ui.position.top;
+            //jsonDefinition.parentY = window.parent.scrollY;
             
             if(!checkMaxNodesCount())
         		return;
