@@ -16,18 +16,30 @@ import com.agilecrm.contact.ContactField.FieldType;
 import com.agilecrm.contact.util.TagUtil;
 import com.agilecrm.contact.Note;
 
+/**
+ * <code>FormsUtil</code><br>
+ * <p>
+ * This class contains <b>Utility methods</b> required by <b>Form Webhook
+ * Servlets</b>
+ * </p>
+ *
+ * @author agile
+ * @version 1.0
+ * @since 2013-12-31
+ */
 public class FormsUtil
 {
     /**
-     * Get agile field from form field titles
+     * Get <b>Agile Field Names</b> from <b>Form Field Titles</b>
      * 
      * @param fieldName
+     *            form field name as provided by form vendor
      * @return fieldName || agileFieldName
      */
     public static String getFieldName(String fieldName)
     {
-	// String arrays with all possible form field titles from (wufoo /
-	// unbounce / gravity)
+	// String arrays with all possible form field titles from (Wufoo /
+	// Unbounce / Gravity)
 	String firstNameAlias[] = { Contact.FIRST_NAME, "Name", "First", "name", "first", "firstname", "first name" };
 	String lastNameAlias[] = { Contact.LAST_NAME, "Last", "last", "lastname", "last name" };
 	String companyNameAlias[] = { Contact.COMPANY, "organisation", "organization" };
@@ -56,9 +68,9 @@ public class FormsUtil
 	String addressZipAlias[] = { "Zip", "Zip code", "Postal code", "Postal / Zip Code", "zip", "postal code",
 	        "zip code", "pin code", "pin" };
 
-	// Maps with key as agile contact property, value as list of aliases for
+	// Maps with key as agile contact property label, value as list of
+	// aliases for
 	// that property with sub type
-
 	HashMap<String, List<String>> firstName = new HashMap<String, List<String>>();
 	firstName.put(Contact.FIRST_NAME, Arrays.asList(firstNameAlias));
 
@@ -182,7 +194,9 @@ public class FormsUtil
      * Compare oldProperties with newProperties, and update Contact Properties
      * 
      * @param newProperties
+     *            List of new contact properties
      * @param oldProperties
+     *            List of old contact properties
      * @return updatedProperties
      */
     public static List<ContactField> updateContactProperties(List<ContactField> newProperties,
@@ -213,8 +227,11 @@ public class FormsUtil
      * Build CUSTOM ContactField form name, value, and subtype of property
      * 
      * @param name
+     *            Name of contact property
      * @param value
+     *            Value of contact property
      * @param subtype
+     *            subtype of contact property
      * @return field
      */
     public static ContactField buildProperty(String name, String value, String subtype)
@@ -549,7 +566,7 @@ public class FormsUtil
 	countryCode.put("Zimbabwe", "ZW");
 	return countryCode;
     }
-    
+
     public static String[] getValidTags(String[] tags)
     {
 	List<String> validTags = new ArrayList<String>();

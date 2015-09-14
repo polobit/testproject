@@ -90,13 +90,20 @@ public class MandrillSendDeferredTask implements DeferredTask
 
 	    inStream = inputStream.getInputStream();
 
+	    Long startTime = System.currentTimeMillis();
 	    EncodingStreamWriter streamWriter = new EncodingStreamWriter(inStream, outStream);
 	    streamWriter.write();
 	    String attachmentEndString = "\"}]";
 	    String endString = "}}";
 	    outStream.write(attachmentEndString.getBytes("UTF-8"));
 	    outStream.write(endString.getBytes("UTF-8"));
+	    System.out.println(System.currentTimeMillis() - startTime);
+	    Long startTime1 = System.currentTimeMillis();
+
 	    response = streamWriter.getResponse(outConn);
+	    System.out.println(System.currentTimeMillis() - startTime1);
+
+	    System.out.println(response);
 	}
 	catch (Exception e)
 	{

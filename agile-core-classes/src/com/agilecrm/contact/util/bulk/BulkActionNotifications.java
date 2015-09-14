@@ -38,7 +38,7 @@ public class BulkActionNotifications
 	 */
 
 	ENROLL_CAMPAIGN("%s Contacts added to campaign"), OWNER_CHANGE("Owner changed for %s contacts"), CONTACTS_IMPORT(
-		"%s contacts uploaded"), REMOVE_ACTIVE_SUBSCRIBERS("%s subscribers successfully removed from campaign"),
+		"%s contacts uploaded"), REMOVE_ACTIVE_SUBSCRIBERS("%s subscriber(s) successfully removed from campaign."),
 
 	/**
 	 * Send mail bulk action

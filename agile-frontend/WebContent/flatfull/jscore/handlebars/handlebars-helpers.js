@@ -4656,9 +4656,10 @@ $(function()
 		if (!name)
 			return;
 
-		var name_json = { "HIGH" : "High", "LOW" : "Low", "NORMAL" : "Normal", "EMAIL" : "Email", "CALL" : "Call", "SEND" : "Send", "TWEET" : "Tweet",
-			"FOLLOW_UP" : "Follow Up", "MEETING" : "Meeting", "MILESTONE" : "Milestone", "OTHER" : "Other", "YET_TO_START" : "Yet To Start",
+		var name_json = { "HIGH" : "High", "LOW" : "Low", "NORMAL" : "Normal", "YET_TO_START" : "Yet To Start",
 			"IN_PROGRESS" : "In Progress", "COMPLETED" : "Completed", "TODAY" : "Today", "TOMORROW" : "Tomorrow", "OVERDUE" : "Overdue", "LATER" : "Later" };
+
+		$.extend(name_json,categories.CATEGORIES,name_json);
 
 		name = name.trim();
 
@@ -5752,6 +5753,8 @@ $(function()
 			portlet_name = "Task Report";
 		else if(p_name=='Stats Report')
 			portlet_name = "Activity Overview";
+		else if(p_name=='Campaign stats')
+			portlet_name = "Campaign Stats"
 		else
 			portlet_name = p_name;
 		return portlet_name;
@@ -5800,6 +5803,8 @@ $(function()
 			icon_name = "icon-info";
 		else if (p_name == 'Revenue Graph')
 			icon_name = 'icon-graph';
+		else if (p_name == 'Campaign stats')
+			icon_name = 'icon-sitemap';
 		return icon_name;
 	});
 	/**
@@ -6632,6 +6637,8 @@ Handlebars.registerHelper('SALES_CALENDAR_URL', function()
 		description = 'Forecasted revenue graph based on your Deals.';
 	else if (p_name== 'Mini Calendar')
 		description = 'A mini calendar with an overview of your agenda for the day.'
+	else if (p_name == 'Campaign stats')
+		description = 'See how your campaigns are performing with stats on email opens and link clicks.'
 	return description;
 			});
 
@@ -6732,7 +6739,6 @@ Handlebars.registerHelper('SALES_CALENDAR_URL', function()
 		       return options.fn(json);		        
 
 			});
-	
 	Handlebars.registerHelper('toggle_contacts_filter', function(options)
 			{	        
 		    if(readCookie(CONTACTS_DYNAMIC_FILTER_COOKIE_STATUS)=="hide"){
@@ -6740,3 +6746,75 @@ Handlebars.registerHelper('SALES_CALENDAR_URL', function()
 	       	}
 	    	
 			});
+Handlebars.registerHelper('get_campaign_type_filter', function(filter_name)
+{
+	var campaign_type ='';
+	if(filter_name=='All')
+		campaign_type= 'All Campaigns';
+	else{
+		var filter=$.ajax({ type : 'GET', url : '/core/api/workflows/'+filter_name, async : false, dataType : 'json',
+		success : function(data)
+			{
+				if (data != null && data != undefined)
+					campaign_type = "" + data.name;
+			} });
+	}
+	return campaign_type;
+		
+});
+	
+	Handlebars.registerHelper('toggle_contacts_filter', function(options)
+			{	        
+		    if(readCookie(CONTACTS_DYNAMIC_FILTER_COOKIE_STATUS)=="hide"){
+		    	return "none";
+	       	}
+			});
+
+	Handlebars.registerHelper('totalTimeFormat', function(timeInSec)
+			{
+				if (timeInSec == "0")
+					return "0 sec";
+
+				return SecondsToCampaignTime(timeInSec);
+			});
+
+	// To show allowed domains as list
+	Handlebars.registerHelper('allowed_domain_list', function(data)
+			{
+				var html = "";
+				if (data)
+				{
+					var allowed_domains = data.split(",");
+					for ( var i in allowed_domains)
+					{
+						allowed_domains[i] = allowed_domains[i].trim();
+						html += "<tr data='" + allowed_domains[i] + "' style='display: table-row;'><td><div class='inline-block v-top text-ellipsis' style='width:80%'>";
+						html += allowed_domains[i] + "</div></td><td class='b-r-none'><div class='m-b-n-xs' style='display:none;'><a class='allowed-domain-delete c-p m-l-sm text-l-none text-xs'  data-toggle='modal' role='button' href='#'><i title='Delete Allowed Domain' class='task-action icon icon-trash'></i></a></div></td></tr>";
+					}
+				}
+				return html;
+			});
+
+	// To show blocked ips as list
+	Handlebars.registerHelper('blocked_ips_list', function(data)
+			{
+				var html = "";
+				if (data)
+				{
+					var blocked_ips = data.split(",");
+					for ( var i in blocked_ips)
+					{
+						blocked_ips[i] = blocked_ips[i].trim();
+						html += "<tr data='" + blocked_ips[i] + "' style='display: table-row;'><td><div class='inline-block v-top text-ellipsis' style='width:80%'>";
+						html += blocked_ips[i] + "</div></td><td class='b-r-none'><div class='m-b-n-xs' style='display:none;'><a class='blocked-ip-delete c-p m-l-sm text-l-none text-xs'  data-toggle='modal' role='button' href='#'><i title='Delete Blocked IP' class='task-action icon icon-trash'></i></a></div></td></tr>";
+					}
+				}
+				return html;
+			});
+
+	// Is new allowed domain
+	Handlebars.registerHelper("hide_allowed_domains_text", function(data, options){
+		if (data && data != "localhost, *")
+			return options.inverse(this);
+		return options.fn(this);
+	});
