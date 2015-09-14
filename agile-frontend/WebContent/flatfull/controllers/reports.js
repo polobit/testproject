@@ -278,7 +278,6 @@ var ReportsRouter = Backbone.Router
 								report_utility.edit_contacts(el, report);
 							});
 	
-									});
 
 						}, '<option value="custom_{{field_label}}">{{field_label}}</option>', true, el);
 

@@ -17,58 +17,10 @@ function initializeReportsListeners(){
 						e.stopPropagation();
 
 						var id = $(this).attr('data');
-
+						var url='core/api/reports/send/' + id;
 						$('#report-send-confirmation').modal('show');
-						$("#report-send-confirm")
-								.click(
-										function(event)
-										{
-											event.preventDefault();
-
-											if ($(this).attr("disabled"))
-												return;
-
-											$(this).attr("disabled", "disabled");
-
-											$
-													.get(
-															'core/api/reports/send/' + id,
-															function(data)
-															{
-
-																console.log("sending email");
-																$save_info = $('<div style="display:inline-block"><small><p class="text-success"><i>Report will be sent shortly</i></p></small></div>');
-
-																$('.report-message').html($save_info);
-
-																$save_info.show();
-
-																setTimeout(function()
-																{
-																	$('#report-send-confirmation').modal('hide');
-																	$('.report-message').empty();
-																	$("#report-send-confirm").removeAttr("disabled");
-																}, 2000);
-
-															})
-													.fail(
-															function(response)
-															{
-																$save_info = $('<div style="display:inline-block"><small><p style="color:#B94A48; font-size:14px"><i>' + response.responseText + '</i></p></small></div>');
-
-																$('.report-message').html($save_info);
-
-																$save_info.show();
-
-																setTimeout(function()
-																{
-																	$('#report-send-confirmation').modal('hide');
-																	$('.report-message').empty();
-																	$("#report-send-confirm").removeAttr("disabled");
-																}, 2000);
-
-															});
-										});
+						initializeReportSendConfirm(url);
+						
 					});
 
 	$('#reports-listerners-container').on(

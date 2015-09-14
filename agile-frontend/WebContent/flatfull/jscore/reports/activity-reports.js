@@ -16,9 +16,10 @@ function initializeActivityReportsListeners()
 		e.stopPropagation();
 		
 		var id = $(this).attr('data');
-		
+		var date = Math.floor(Date.now() / 1000);
+		var url='/core/api/activity-reports/email/' + id + '?end_time=' + date;
 		$('#report-send-confirmation').modal('show');
-		initializeReportSendConfirm(id);
+		initializeReportSendConfirm(url);
 	});
 
 	$('#reports-listerners-container').on('click', '#activity-type-list-select-all', function(e){
@@ -91,9 +92,8 @@ function initializeReportSendConfirm(){
 /**
  * Confirmation box event to send email reports
  */
-function initializeReportSendConfirm(id)
+function initializeReportSendConfirm(url)
 {
-	var date = Math.floor(Date.now() / 1000);
 
 	$("#report-send-confirm")
 			.click(
@@ -107,7 +107,7 @@ function initializeReportSendConfirm(id)
 						$(this).attr("disabled", "disabled");
 						$
 								.get(
-										'/core/api/activity-reports/email/' + id + '?end_time=' + date,
+										url,
 										function(data)
 										{
 
