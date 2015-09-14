@@ -1,4 +1,6 @@
 
+//binds events to activites route
+
 function initializeActivitiesListner(el){
 
 
@@ -51,7 +53,7 @@ function initializeActivitiesListner(el){
 
 
 
-	$("#activities-listners").on('click', '.email-details', function(e) 
+$("#activities-listners").on('click', '.email-details', function(e) 
 {
 	e.preventDefault();
 	var data = $(this).closest('a').attr("data");
@@ -73,7 +75,9 @@ function initializeActivitiesListner(el){
 
 }
 
-
+/**
+* fetches the event object based on id
+**/
 function getEventObject(id, callback)
 {
 
@@ -84,6 +88,10 @@ function getEventObject(id, callback)
 
 }
 
+
+/**
+* when user clicks on email from activities route we show email content in model
+**/
 function getActivityObject(id, callback)
 {
 
@@ -92,6 +100,11 @@ function getActivityObject(id, callback)
 				 callback(data);
 	});
 }
+
+
+/**
+* when user clicks on event save it will be called
+**/
 
 function update_event_activity(ele)
 {
@@ -137,6 +150,12 @@ function update_event_activity(ele)
 	populateUsersInUpdateActivityModal(value);
 }
 
+
+
+/**
+* will be called when user enters update task
+*
+**/
 function updateactivity__task(ele)
 {
 	var value = JSON.parse(ele);
@@ -156,6 +175,12 @@ function updateactivity__task(ele)
 	// Add notes in task modal
 	showNoteOnForm("updateTaskForm", value.notes);
 }
+
+
+/**
+*
+* deal will be updated if user clicks on update deal from deal details.js
+**/
 
 function updatedeals(ele)
 {
@@ -215,6 +240,10 @@ function updatedeals(ele)
 	}, "DEAL")
 }
 
+
+/**
+*activites will be differentiated based on created time like today , yesterday and later 
+**/
 function get_activity_created_time(due)
 {
 	// Get Todays Date
