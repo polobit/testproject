@@ -1636,7 +1636,7 @@ public class OpportunityUtil
         List<Opportunity> opportunitiesList = getNewDealsList(minTime, maxTime);
         //opportunitiesList.get(0).getDeal_source_id();
         CategoriesUtil categoriesUtil =  new CategoriesUtil();
-        List<Category>sources=categoriesUtil.getAllCategoriesByType("DEAL_SOURCE");
+        List<Category>sources=categoriesUtil.getCategoriesByType("DEAL_SOURCE");
         JSONObject sourcecount = new JSONObject();
             sourcecount.put("0", type.equalsIgnoreCase("deals")?0:0.0);
         for (Category source : sources)
