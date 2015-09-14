@@ -91,8 +91,8 @@ var ReportsRouter = Backbone.Router
 
 				initializeActivityReportsListeners();
 				initializeReportsListeners();
-				if (count != 0)
-					return;
+				// if (count != 0)
+					// return;
 								
 				// Fills owner select element
 				fillSelect("users-list", '/core/api/users', 'domainUser', function()

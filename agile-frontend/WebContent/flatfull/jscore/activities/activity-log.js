@@ -21,9 +21,16 @@ function includeTimeAgo(element)
  */
 function updateActivty(params)
 {
+
+	if(!params)	
+	url = '/core/api/activitylog/getAllActivities';
+	else
+	url = '/core/api/activitylog/getActivitiesOnSelectedCondition' + params;
+
+
 	console.log("entered into update activity function  " + new Date().getTime() + "  time with milliseconds " + new Date())
 	// Creates backbone collection view
-	this.activitiesview = new Base_Collection_View({ url : '/core/api/activitylog/getActivitiesOnSelectedCondition' + params, sortKey : 'time',
+	this.activitiesview = new Base_Collection_View({ url : url, sortKey : 'time',
 		descending : true, templateKey : "activity-list-log", sort_collection : false, cursor : true, scroll_symbol : 'scroll', page_size : 20,
 		individual_tag_name : 'li', postRenderCallback : function(el)
 		{

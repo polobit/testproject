@@ -14,7 +14,8 @@ var ActivitylogRouter = Backbone.Router.extend({
 		if (!tight_acl.checkPermission('ACTIVITY'))
 			return;
 		
-		head.js(LIB_PATH + 'lib/date-charts.js', LIB_PATH + 'lib/date-range-picker.js', CSS_PATH + "css/misc/date-picker.css", function()
+		$('#content').html(LOADING_ON_CURSOR);
+		head.js(LIB_PATH + 'lib/date-charts.js', LIB_PATH + 'lib/date-range-picker.js', function()
 		{
 
 			$('#content').html("<div id='activities-listners'>&nbsp;</div>");
@@ -28,13 +29,10 @@ var ActivitylogRouter = Backbone.Router.extend({
 					DEAL_TRACKS_COUNT = count;
 
 					$('#activities-listners').html($(template_ui));
-
 					initActivitiesDateRange();
 					$(".activity-log-button").hide();
 					var selecteduser = readCookie("selecteduser");
 					var selectedentity = readCookie("selectedentity");
-
-					console.log("values read from activity cookie  selected user " + selecteduser + "  selected entityname " + selectedentity);
 
 					var optionsTemplate = "<li><a  href='{{id}}'>{{name}}</li>";
 
@@ -43,6 +41,7 @@ var ActivitylogRouter = Backbone.Router.extend({
 					{
 						$('#activities-listners').find("#user-select").append("<li><a href=''>All Users</a></li>");
 
+						var request_params = "";
 						var selected_start_time = readCookie("selectedStartTime");
 						var selected_end_time = readCookie("selectedEndTime");
 
@@ -55,11 +54,7 @@ var ActivitylogRouter = Backbone.Router.extend({
 							{
 								$('#activities_date_range #range').html(selected_start_time + ' - ' + selected_end_time);
 							}
-							console.log("activites function called  " + new Date().getTime() + "  time with milliseconds " + new Date())
-							updateActivty(getParameters());
-
-							console.log("activites function ended rendering  " + new Date().getTime() + "  time with milliseconds " + new Date())
-
+							
 							var username_value = readCookie("selecteduser_value");
 							var entity_value = readCookie("selectedentity_value");
 
@@ -73,34 +68,13 @@ var ActivitylogRouter = Backbone.Router.extend({
 								$('#selectedentity_type').html(entity_value);
 								$('.activity-sub-heading').html(entity_value);
 							}
+
+							request_params = getParameters();
 						}
-						else
-						{
+						
 
-							var activitiesview = new Base_Collection_View({ url : '/core/api/activitylog/getAllActivities', sortKey : 'time', descending : true,
-								templateKey : "activity-list-log", cursor : true, scroll_symbol : 'scroll', page_size : 20, individual_tag_name : 'li',
-								postRenderCallback : function(el)
-								{
-									head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
-									{
-										$("time", el).timeago();
+						updateActivty(request_params);
 
-									});
-									initializeActivitiesListner(el);
-									initializeEventListners(el);
-
-								}, appendItemCallback : function(el)
-								{
-									includeTimeAgo(el);
-								} });
-
-							activitiesview.appendItem = append_activity_log;
-
-							activitiesview.collection.fetch();
-							// Renders data to tasks list page.
-							$('#activity-list-based-condition').html(activitiesview.el);
-
-						}
 						$(".activity-log-button").show();
 
 						
@@ -115,16 +89,22 @@ var ActivitylogRouter = Backbone.Router.extend({
 			$("#activitiesmenu").addClass("active");
 		})
 	},
+
+	/**
+	*
+	*/
 	contactActivities : function(id)
-	{ // begin contact activities
+	{ 
 
-		head.js(LIB_PATH + 'lib/date-charts.js', LIB_PATH + 'lib/date-range-picker.js', CSS_PATH + "css/misc/date-picker.css", function()
+		$('#content').html(LOADING_ON_CURSOR);
+		// Begin contact activities
+		head.js(LIB_PATH + 'lib/date-charts.js', LIB_PATH + 'lib/date-range-picker.js',  function()
 		{
-
 
 			getTemplate('contact-activity-header', {}, undefined, function(template_ui){
 				if(!template_ui)
 					  return;
+
 				$('#content').html($(template_ui));	
 
 				var urlPath = "core/api/campaigns/logs/ContactActivities";
