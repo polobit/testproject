@@ -39,7 +39,6 @@ import com.agilecrm.bulkaction.deferred.ContactsOwnerChangeDeferredTask;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.email.EmailSender;
 import com.agilecrm.contact.email.util.ContactBulkEmailUtil;
-import com.agilecrm.contact.export.util.ContactExportBlobUtil;
 import com.agilecrm.contact.export.util.ContactExportCSVUtil;
 import com.agilecrm.contact.filter.ContactFilter;
 import com.agilecrm.contact.filter.ContactFilterIdsResultFetcher;
@@ -369,7 +368,6 @@ public class BulkOperationsAPI
      *            array of tags as string
      * @throws JSONException
      */
-    @SuppressWarnings("unchecked")
     @Path("contact/tags/{current_user}")
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
@@ -963,7 +961,6 @@ public class BulkOperationsAPI
 
 	List<Contact> contacts_list = new ArrayList<Contact>();
 	String[] header = ContactExportCSVUtil.getCSVHeadersForCompany();
-	String path = null;
 
 	DomainUser user = DomainUserUtil.getDomainUser(currentUserId);
 
@@ -1005,7 +1002,6 @@ public class BulkOperationsAPI
 	    } while (contacts_list.size() > 0 && !StringUtils.equals(previousCursor, currentCursor));
 
 	    // Close channel after contacts completed
-	    ContactExportBlobUtil.editExistingBlobFile(path, null, header, true);
 	}
 	else if (!StringUtils.isEmpty(contact_ids))
 	{
@@ -1055,7 +1051,6 @@ public class BulkOperationsAPI
 	companyExporter.finalize();
 	companyExporter.sendEmail(user.email);
 	ActivityUtil.createLogForImport(ActivityType.COMPANY_EXPORT, EntityType.CONTACT, count, 0);
-	String blobKey = ContactExportBlobUtil.getBlobKeyFromPath(path);
 
 	// creates a log for company export
 

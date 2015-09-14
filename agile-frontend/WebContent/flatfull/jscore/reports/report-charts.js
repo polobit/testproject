@@ -26,23 +26,19 @@ function initializeChartReportsListeners(){
 		if(report_type == 'GROWTH')
 		{
 			Backbone.history.navigate("report-growth/" + tags, { trigger : true });
+			return;
 		}
 		else if(report_type == 'FUNNEL')
 		{
 			Backbone.history.navigate("report-funnel/" + tags, { trigger : true });
+			return;
 		}
 		else if(report_type == 'RATIO')
 		{
 			var tag1 = object["tag1"];
 			var tag2 = object["tag2"];
 			Backbone.history.navigate("report-ratio/" + tag1 + "/" + tag2, { trigger : true });
-		}
-		else if(report_type == 'COHORTS')
-		{
-			var tag1 = object["tag1"];
-			var tag2 = object["tag2"];
-			
-			Backbone.history.navigate("report-cohorts/" + tag1 + "/" + tag2, { trigger : true });
+			return;
 		}
 		
 		

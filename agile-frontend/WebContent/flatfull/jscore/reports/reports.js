@@ -8,11 +8,9 @@ function initializeReportsListeners(){
 
 						var id = $(this).attr('data');
 
-						var confirmationModal = $('<div id="report-send-confirmation" class="modal fade in">' + '<div class="modal-dialog">' + '<div class="modal-content">' + '<div class="modal-header" >' + '<a href="#" data-dismiss="modal" class="close">&times;</a>' + '<h3>Send Report</h3></div>' + '<div class="modal-body">' + '<p>You are about to send report.</p>' + '<p>Do you want to proceed?</p>' + '</div>' + '<div class="modal-footer">' + '<div><span class="report-message" style="margin-right:5px"></span></div>' + '<div>' + '<a href="#" id="report-send-confirm" class="btn btn-primary">Yes</a>' + '<a  href="#" class="btn btn-default" data-dismiss="modal" >No</a>' + '</div>' + '</div>' + '</div>' + '</div>' + '</div>' + '</div>');
 
-						confirmationModal.modal('show');
-
-						$("#report-send-confirm", confirmationModal)
+						$('#report-send-confirmation').modal('show');
+						$("#report-send-confirm")
 								.click(
 										function(event)
 										{
@@ -38,7 +36,9 @@ function initializeReportsListeners(){
 
 																setTimeout(function()
 																{
-																	(confirmationModal).modal('hide');
+																	$('#report-send-confirmation').modal('hide');
+																	 $('.report-message').empty();
+																	   $("#report-send-confirm").removeAttr("disabled");
 																}, 2000);
 
 															})
@@ -53,7 +53,9 @@ function initializeReportsListeners(){
 
 																setTimeout(function()
 																{
-																	(confirmationModal).modal('hide');
+																	$('#report-send-confirmation').modal('hide');
+																	 $('.report-message').empty();
+																	   $("#report-send-confirm").removeAttr("disabled");
 																}, 2000);
 
 															});
@@ -133,19 +135,10 @@ function initializeReportsListeners(){
 	$('#reports-listerners-container').on('click', '#activity_advanced', function(e) 
 	{
 		e.preventDefault();
-
+		$("#activity_advanced span i").toggleClass("fa-minus");
+		$("#activity_advanced span i").toggleClass("fa-plus");
 	});
 
-	$('#reports-listerners-container').on('shown', '#activity-advanced-block', function(e) 
-	{
-		$('#activity_advanced').html('<span><i class="icon-minus"></i></span> Advanced');
-
-	});
-
-    $('#reports-listerners-container').on('hidden', '#activity-advanced-block', function(e) 
-	{
-		$('#activity_advanced').html('<span><i class="icon-plus"></i></span> Advanced');
-	});
 
 	$('#reports-listerners-container').on('click', '#report_advanced', function(e) 
 	{
@@ -155,16 +148,6 @@ function initializeReportsListeners(){
 
 	});
             
-	$('#reports-listerners-container').on('shown', '#report-advanced-block', function(e)
-	{
-		$('#report_advanced').html('<span><i class="icon-minus"></i></span> Advanced');
-
-	});
-			
-	$('#reports-listerners-container').on('hidden', '#report-advanced-block', function(e)
-	{
-		$('#report_advanced').html('<span><i class="icon-plus"></i></span> Advanced');
-	});
 	
 	$('#reports-listerners-container').on('change', '#duration', function(e)
 			{

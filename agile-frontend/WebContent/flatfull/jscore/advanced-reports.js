@@ -1,5 +1,5 @@
 /**
- * Initializes the date-range-picker. Calls the callback when the date range is
+ * Initializes the date-range-picker and other filters. Calls the callback when the date range is
  * selected.
  * 
  * @param campaign_id -
@@ -9,7 +9,58 @@
  */
 function initFunnelCharts(callback)
 {
-	head.js(LIB_PATH + 'lib/date-charts.js', LIB_PATH + 'lib/date-range-picker.js', CSS_PATH + "css/misc/date-picker.css", function()
+	// Init the callback for daterange
+	initDateRange(callback);
+	// Init the callback when the frequency selector changes too
+	if ($('#frequency').length > 0)
+	{
+		// Get Frequency
+		$('#frequency').change(function()
+		{
+			callback();
+		});
+	}
+
+	fillSelect("filter", "core/api/filters", undefined, function()
+	{
+		$('#filter').change(function()
+		{
+			callback();
+		});
+
+	}, '<option class="default-select" value="{{id}}">{{name}}</option>', false, undefined, "All Contacts");
+
+}
+
+/**
+ * Shows Funnel Graphs based on the tags
+ */
+function showFunnelGraphs(tags)
+{
+	console.log("Showing funnel logs");
+	showFunnel('core/api/reports/funnel/' + tags + getOptions(), 'funnel-chart', 'Funnel Reports', true);
+}
+
+/**
+ * Shows Growth Graphs based on the tags
+ */
+function showGrowthGraphs(tags)
+{
+	showAreaSpline('core/api/reports/growth/' + tags + getOptions(), 'growth-chart', '', '', true);
+}
+
+
+/**
+ * Shows Ratio Graphs based on the tags
+ */
+function showRatioGraphs(tag1, tag2)
+{
+	showLine('core/api/reports/ratio/' + tag1 + "/" + tag2 + "/" + getOptions(), 'ratio-chart', 'Ratio Analysis', tag1 + ' vs ' + tag2, true);
+}
+/**Initialising date range for various report**/
+
+function initDateRange(callback){
+	initReportLibs(function()
 	{
 
 		// Bootstrap date range picker.
@@ -37,60 +88,7 @@ function initFunnelCharts(callback)
 
 			callback();
 		});
-	});
-
-	// Init the callback when the frequency selector changes too
-	if ($('#frequency').length > 0)
-	{
-		// Get Frequency
 		callback();
-		$('#frequency').change(function()
-		{
-			callback();
-		});
-	}
-
-	fillSelect("filter", "core/api/filters", undefined, function()
-	{
-		$('#filter').change(function()
-		{
-			callback();
-		});
-
-	}, '<option class="default-select" value="{{id}}">{{name}}</option>', false, undefined, "All Contacts");
-
-	callback();
-}
-
-/**
- * Shows Funnel Graphs based on the tags
- */
-function showFunnelGraphs(tags)
-{
-	console.log("Showing funnel logs");
-	showFunnel('core/api/reports/funnel/' + tags + getOptions(), 'funnel-chart', 'Funnel Reports', true);
-}
-
-/**
- * Shows Grwoth Graphs based on the tags
- */
-function showGrowthGraphs(tags)
-{
-	showAreaSpline('core/api/reports/growth/' + tags + getOptions(), 'growth-chart', '', '', true);
-}
-
-/**
- * Shows Grwoth Graphs based on the tags
- */
-function showCohortsGraphs(tag1, tag2)
-{
-	showCohorts('core/api/reports/cohorts/' + tag1 + "/" + tag2 + "/" + getOptions(), 'cohorts-chart', 'Cohort Analysis', tag1 + ' vs ' + tag2, true);
-}
-
-/**
- * Shows Ratio Graphs based on the tags
- */
-function showRatioGraphs(tag1, tag2)
-{
-	showLine('core/api/reports/ratio/' + tag1 + "/" + tag2 + "/" + getOptions(), 'ratio-chart', 'Ratio Analysis', tag1 + ' vs ' + tag2, true);
+	
+	});
 }
