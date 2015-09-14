@@ -10,7 +10,7 @@ var ReportsRouter = Backbone.Router
 
 			/* Reports */
 			"reports" : "reports", "email-reports" : "emailReportTypes", "activity-reports" : "activityReports", "activity-report-add" : "activityReportAdd",
-				"activity-report-edit/:id" : "activityReportEdit", "acivity-report-results/:id" : "activityReportInstantResults",
+				"activity-report-edit/:id" : "activityReportEdit", 
 				"contact-reports" : "emailReports", "report-add" : "reportAdd", "report-edit/:id" : "reportEdit",
 				"report-results/:id" : "reportInstantResults", "report-charts/:type" : "reportCharts", "report-funnel/:tags" : "showFunnelReport",
 				"report-growth/:tags" : "showGrowthReport", "report-ratio/:tag1/:tag2" : "showRatioReport" },
@@ -57,7 +57,7 @@ var ReportsRouter = Backbone.Router
 
 		
 	},
-	
+	/** shows list of activity reports added **/
 	activityReports : function()
 	{
 		$("#content").html("<div id='reports-listerners-container'></div>");
@@ -72,7 +72,9 @@ var ReportsRouter = Backbone.Router
 		$(".active").removeClass("active");
 		$("#reportsmenu").addClass("active");
 	},
-	
+	/** adds new activity report with various condtion like 
+	 * user, type of activity ,user email ,frequency and advanced conditions 
+	 */
 	activityReportAdd : function(){
 		
 		if(!tight_acl.checkPermission('REPORT'))

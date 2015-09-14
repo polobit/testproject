@@ -1204,11 +1204,15 @@ function showDealAreaSpline(url, selector, name, yaxis_name, show_loading)
 		});
 	});
 }
+
+/** get the symbol for currency to be used in various charts **/
 function getCurrencySymbolForCharts(){
 	var value = ((CURRENT_USER_PREFS.currency != null) ? CURRENT_USER_PREFS.currency : "USD-$");
 	var symbol = ((value.length < 4) ? "$" : value.substring(4, value.length));
 	return symbol;
 }
+
+/** get the comma separated number for charts **/
 function getNumberWithCommasForCharts(value){
 	value = parseFloat(value);
 	value = Math.round(value);

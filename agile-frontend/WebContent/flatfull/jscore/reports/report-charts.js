@@ -1,3 +1,6 @@
+/** Initializes listener to perform various event function related to
+ * graph reports
+ */
 function initializeChartReportsListeners(){
 	$('#reports-listerners-container').on('click', '.report-chorts', function(e){
 		e.preventDefault();

@@ -1,103 +1,106 @@
-// Stores report object, so it can be used while creating report table headings
+//Stores report object, so it can be used while creating report table headings
 var REPORT;
+/** Initializes listener to perform various event function related to
+ * contact reports
+ */
 function initializeReportsListeners(){
 	$('#reports-listerners-container').on('click', '#reports-email-now', function(e)
-					{
-						// e.preventDefault();
-						e.stopPropagation();
+			{
+		// e.preventDefault();
+		e.stopPropagation();
 
-						var id = $(this).attr('data');
+		var id = $(this).attr('data');
 
 
-						$('#report-send-confirmation').modal('show');
-						$("#report-send-confirm")
-								.click(
-										function(event)
+		$('#report-send-confirmation').modal('show');
+		$("#report-send-confirm")
+		.click(
+				function(event)
+				{
+					event.preventDefault();
+
+					if ($(this).attr("disabled"))
+						return;
+
+					$(this).attr("disabled", "disabled");
+
+					$
+					.get(
+							'core/api/reports/send/' + id,
+							function(data)
+							{
+
+								console.log("sending email");
+								$save_info = $('<div style="display:inline-block"><small><p class="text-success"><i>Report will be sent shortly</i></p></small></div>');
+
+								$('.report-message').html($save_info);
+
+								$save_info.show();
+
+								setTimeout(function()
 										{
-											event.preventDefault();
+									$('#report-send-confirmation').modal('hide');
+									$('.report-message').empty();
+									$("#report-send-confirm").removeAttr("disabled");
+										}, 2000);
 
-											if ($(this).attr("disabled"))
-												return;
+							})
+							.fail(
+									function(response)
+									{
+										$save_info = $('<div style="display:inline-block"><small><p style="color:#B94A48; font-size:14px"><i>' + response.responseText + '</i></p></small></div>');
 
-											$(this).attr("disabled", "disabled");
+										$('.report-message').html($save_info);
 
-											$
-													.get(
-															'core/api/reports/send/' + id,
-															function(data)
-															{
+										$save_info.show();
 
-																console.log("sending email");
-																$save_info = $('<div style="display:inline-block"><small><p class="text-success"><i>Report will be sent shortly</i></p></small></div>');
+										setTimeout(function()
+												{
+											$('#report-send-confirmation').modal('hide');
+											$('.report-message').empty();
+											$("#report-send-confirm").removeAttr("disabled");
+												}, 2000);
 
-																$('.report-message').html($save_info);
-
-																$save_info.show();
-
-																setTimeout(function()
-																{
-																	$('#report-send-confirmation').modal('hide');
-																	 $('.report-message').empty();
-																	   $("#report-send-confirm").removeAttr("disabled");
-																}, 2000);
-
-															})
-													.fail(
-															function(response)
-															{
-																$save_info = $('<div style="display:inline-block"><small><p style="color:#B94A48; font-size:14px"><i>' + response.responseText + '</i></p></small></div>');
-
-																$('.report-message').html($save_info);
-
-																$save_info.show();
-
-																setTimeout(function()
-																{
-																	$('#report-send-confirmation').modal('hide');
-																	 $('.report-message').empty();
-																	   $("#report-send-confirm").removeAttr("disabled");
-																}, 2000);
-
-															});
-										});
-					});
+									});
+				});
+			});
 
 	$('#reports-listerners-container').on('click', '#campaign_id', function(e)
 			{
-				e.preventDefault();
-				e.stopPropagation();
-				$.ajax({ url : '/core/api/workflows?page_size=1', type : 'GET', dataType : "json",
-					accept : { json : 'application/json', xml : 'application/xml' }, success : function(data)
-					{
-						if (data[0])
-						{
-							window.document.location = "#email-reports/" + data[0].id;
-							$(window).scrollTop(0);
-						}
-						else
-							window.document.location = "#workflows";
+		e.preventDefault();
+		e.stopPropagation();
+		$.ajax({ url : '/core/api/workflows?page_size=1', type : 'GET', dataType : "json",
+			accept : { json : 'application/json', xml : 'application/xml' }, success : function(data)
+			{
+				if (data[0])
+				{
+					window.document.location = "#email-reports/" + data[0].id;
+					$(window).scrollTop(0);
+				}
+				else
+					window.document.location = "#workflows";
 
-						return;
+				return;
 
-					}, error : function(response)
-					{
-						alert("error occured Please try again");
-						window.document.location = "#reports";
-					} });
+			}, error : function(response)
+			{
+				alert("error occured Please try again");
+				window.document.location = "#reports";
+			} });
 
 			});
 	$('#reports-listerners-container').on('click', '#report-instant-results', function(e) 
-	{
+			{
 		e.stopPropagation();
 		var id = $(this).attr('data');
 		console.log(id);
 		/*
 		 * Backbone.history.navigate("report-results/" + id, { trigger: true });
 		 */
-	});
+			});
 
 	$('#reports-listerners-container').on('change', '#frequency', function(e) 
-	{
+			{
 		var frequency = $("#frequency").val();
 		if (frequency == "DAILY")
 		{
@@ -120,60 +123,60 @@ function initializeReportsListeners(){
 			$("#activity_report_day").css("display", "block");
 
 		}
-	});
+			});
 
 	/*
 	 * author jaagdeesh
 	 */
 	$('#reports-listerners-container').on('click', '#report-dashlat-navigate', function(e)
-	{
+			{
 		e.preventDefault();
 		Backbone.history.navigate("add-dashlet", { trigger : true });
 
-	});
+			});
 
 	$('#reports-listerners-container').on('click', '#activity_advanced', function(e) 
-	{
+			{
 		e.preventDefault();
 		$("#activity_advanced span i").toggleClass("fa-minus");
 		$("#activity_advanced span i").toggleClass("fa-plus");
-	});
+			});
 
 
 	$('#reports-listerners-container').on('click', '#report_advanced', function(e) 
-	{
+			{
 		e.preventDefault();
 		$("#report_advanced span i").toggleClass("fa-minus");
 		$("#report_advanced span i").toggleClass("fa-plus");
 
-	});
-            
-	
+			});
+
+
 	$('#reports-listerners-container').on('change', '#duration', function(e)
 			{
-				var frequency = $("#duration").val();
-				if (frequency == "DAILY")
-				{
-					$("#contact_report_weekday").css("display", "none");
-					$("#contact_report_day").css("display", "none");
-					$("#contact_report_time").css("display", "block");
+		var frequency = $("#duration").val();
+		if (frequency == "DAILY")
+		{
+			$("#contact_report_weekday").css("display", "none");
+			$("#contact_report_day").css("display", "none");
+			$("#contact_report_time").css("display", "block");
 
-				}
-				else if (frequency == "WEEKLY")
-				{
-					$("#contact_report_day").css("display", "none");
-					$("#contact_report_time").css("display", "block");
-					$("#contact_report_weekday").css("display", "block");
+		}
+		else if (frequency == "WEEKLY")
+		{
+			$("#contact_report_day").css("display", "none");
+			$("#contact_report_time").css("display", "block");
+			$("#contact_report_weekday").css("display", "block");
 
-				}
-				else if (frequency == "MONTHLY")
-				{
-					$("#contact_report_weekday").css("display", "none");
-					$("#contact_report_time").css("display", "block");
-					$("#contact_report_day").css("display", "block");
+		}
+		else if (frequency == "MONTHLY")
+		{
+			$("#contact_report_weekday").css("display", "none");
+			$("#contact_report_time").css("display", "block");
+			$("#contact_report_day").css("display", "block");
 
-				}
-	});
+		}
+			});
 }
 
 function reportsContactTableView(base_model, customDatefields, view)
@@ -212,7 +215,7 @@ function reportsContactTableView(base_model, customDatefields, view)
 	// Iterates through, each field name and appends the field according to
 	// order of the fields
 	$.each(fields, function(index, field_name)
-	{
+			{
 
 		if (field_name.indexOf("custom_") != -1)
 		{
@@ -223,11 +226,11 @@ function reportsContactTableView(base_model, customDatefields, view)
 
 			var template_name = "contacts-custom-view-custom";
 			if (isDateCustomField(customDatefields, property))
-				 template_name = 'contacts-custom-view-custom-date';
+				template_name = 'contacts-custom-view-custom-date';
 
 			getTemplate(template_name, property, undefined, function(template_ui){
 				if(!template_ui)
-					  return;
+					return;
 
 				final_html_content += $(template_ui);
 			}, null);
@@ -239,13 +242,13 @@ function reportsContactTableView(base_model, customDatefields, view)
 			field_name = field_name.split("properties_")[1];
 
 		getTemplate('contacts-custom-view-' + field_name, contact, undefined, function(template_ui){
-	 		if(!template_ui)
-	    		return;
-	    	final_html_content += $(template_ui);
-			
+			if(!template_ui)
+				return;
+			final_html_content += $(template_ui);
+
 		}, null);
 
-	});
+			});
 
 	// Appends model to model-list template in collection template
 	$(("#" + templateKey + '-model-list'), view.el).append('<' + element_tag + '>' + final_html_content + '</' + element_tag + '>');
@@ -262,9 +265,9 @@ function deserialize_multiselect(data, el)
 	if (!data['fields_set'])
 		return;
 	$.each(data['fields_set'], function(index, field)
-	{
+			{
 		$('#multipleSelect', el).multiSelect('select', field);
-	});
+			});
 
 	$('.ms-selection', el).children('ul').addClass('multiSelect').attr("name", "fields_set").attr("id", "fields_set").sortable();
 }
