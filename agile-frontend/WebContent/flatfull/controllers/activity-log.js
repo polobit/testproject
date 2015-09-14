@@ -9,6 +9,8 @@ var ActivitylogRouter = Backbone.Router.extend({
 	/* Shows page */
 	"activities" : "activities", "contact-activities" : "contactActivities", "contact-activities/:type" : "contactActivities" },
 
+
+
 	activities : function(id)
 	{
 		if (!tight_acl.checkPermission('ACTIVITY'))
@@ -24,13 +26,17 @@ var ActivitylogRouter = Backbone.Router.extend({
 				if(!template_ui)
 					  return;
 					
-				getTracksCount(function(count){
+					getTracksCount(function(count){
+
+					//fetches the deal track count sothat if more than one track found we have to show deal actiivity along with track also.
 
 					DEAL_TRACKS_COUNT = count;
 
 					$('#activities-listners').html($(template_ui));
 					initActivitiesDateRange();
 					$(".activity-log-button").hide();
+
+					//selected user and entyty type will be retrived from cookie
 					var selecteduser = readCookie("selecteduser");
 					var selectedentity = readCookie("selectedentity");
 
@@ -60,19 +66,24 @@ var ActivitylogRouter = Backbone.Router.extend({
 
 							if (username_value)
 							{
+								//sets the value to user name if it is found in cookie
 								$('#selectedusername').html(username_value);
 
 							}
 							if (entity_value)
 							{
+								//sets the value to entity type from cookie
 								$('#selectedentity_type').html(entity_value);
+
+								//sets the value to activity subheading
 								$('.activity-sub-heading').html(entity_value);
 							}
-
+							//constructs request query parameters
 							request_params = getParameters();
 						}
 						
 
+						//function will render activity table
 						updateActivty(request_params);
 
 						$(".activity-log-button").show();

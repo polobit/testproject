@@ -207,11 +207,11 @@ public class Activity extends Cursor
     }
 
     
-    /**
+  /*  *//**
      * 
      * @return user pic of the user who performed activity
      * @throws Exception
-     */
+     *//*
     @XmlElement(name = "userPic")
     public String getUserPic() throws Exception
     {
@@ -234,7 +234,7 @@ public class Activity extends Cursor
 	}
 
 	return "";
-    }
+    }*/
 
     /**
      * Deletes the task from database
