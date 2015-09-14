@@ -388,7 +388,9 @@ function downloadTemplate(url, callback)
 
 	console.log(url + " " + dataType + " " + is_async);
 
-	jQuery.ajax({ url : url, dataType : dataType, cache:'true', success : function(result)
+	var is_cached = !LOCAL_SERVER;
+
+	jQuery.ajax({ url : url, dataType : dataType, cache:is_cached, success : function(result)
 	{
 		// If HTMl, add to body
 		if (dataType == 'html')
