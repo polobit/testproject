@@ -356,31 +356,7 @@ html[dir=rtl] .wrapper,html[dir=rtl] .container,html[dir=rtl] label {
 				        if(StringUtils.isBlank(campaignId))
 				            return;
 				        
-				        Workflow workflow = WorkflowUtil.getWorkflow(Long.parseLong(campaignId));
-				            
-				        if(workflow == null)
-				        {
-				            System.err.println("Workflow is null...");
-				        }
-				        else
-				        {	
-				        	String tag =  workflow.unsubscribe.tag;
-				        
-				        	System.out.println("Workflow unsubscribe tags to be removed - " + tag);
-				        
-				        	// Remove unsubscribe tag
-				        	if (!StringUtils.isBlank(tag))
-								contact.removeTags(AgileTaskletUtil.normalizeStringSeparatedByDelimiter(',', tag).split(","));
-				        	
-				        	// Remove unsubscribe status
-				        	UnsubscribeStatusUtil.removeUnsubscribeStatus(contact, campaignId);
-				        	
-				        	// Remove campaign status to delete from Removed Subscribers list
-				        	CampaignStatusUtil.setStatusOfCampaign(String.valueOf(contact.id), campaignId, workflow.name, Status.DONE);
-				        	
-				        	// Remove Unsubscribe logs 
-				        	LogUtil.deleteSQLLogs(campaignId, String.valueOf(contact.id), LogType.UNSUBSCRIBED);
-				        }
+				        UnsubscribeStatusUtil.resubscribeContact(contact, Long.parseLong(campaignId));
 				        
 					}
 					catch (Exception e)

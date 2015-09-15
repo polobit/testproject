@@ -270,6 +270,29 @@ var contact_details_tab = {
 	            page_size : 20,
 	            sort_collection:false,
 	            postRenderCallback: function(el) {            	
+
+	            	$('.resubscribe', el).one('click', function(e){
+	            		e.preventDefault();
+
+	            		var workflow_id = $(this).attr("data");
+
+	            		$.ajax({
+	            			url : "core/api/campaigns/resubscribe", 
+	            			data: {"id":App_Contacts.contactDetailView.model.id, "workflow-id" : workflow_id},
+	            			method : "POST",
+	            			success: function(data){
+	            				contact_details_tab.load_campaigns();
+	            				
+	            				showNotyPopUp("information", "Contact resubscribed successfully.", "top");
+	            			},
+	            			error: function (response) {
+	            				showNotyPopUp("warning", "Contact resubscribed failed. Please try again.", "top");
+	            				}
+
+	            			});
+
+	            	});
+
 	            	head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
 	              		 $("time.log-created-time", el).timeago();
 	              	});

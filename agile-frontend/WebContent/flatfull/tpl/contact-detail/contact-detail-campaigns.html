@@ -69,6 +69,17 @@
          {{/contact_campaigns}}
     </div>
 
+	{{!--To resubscribe contact--}}
+	{{#if unsubscribeStatus}}
+    	{{#each this.unsubscribeStatus}}
+        	{{#if_equals "ALL" unsubscribeType}}
+            	<div class="pull-right">
+					<a href="#" class="resubscribe" data="{{campaign_id}}">Resubscribe</a>
+				</div>
+        	{{/if_equals}}
+    	{{/each}}
+	{{/if}}
+
 {{/contact_model}}
 
 </div>
