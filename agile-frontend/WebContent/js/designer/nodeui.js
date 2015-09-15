@@ -193,8 +193,15 @@ function saveNode(e) {
 					var y_coordinate = $('#designercontainer').scrollTop();
 					//var cordinates = (x_coordinate + y_coordinate)/2;
 					//window.parent.scrollTo(0,y_coordinate);
-					//$('#designercontainer').scrollTop(cordinates);
+					//$('#designercontainer').scrollTop(cordinates);  
 					//$(designer).find('#designercontainer').scrollLeft(cordinates);
+					var a = window.parent.document.getElementById("designer").contentWindow.document.body;
+					if($(a).find("#addontabs").attr("data")){
+						window.parent.scrollTo(0,$(a).find("#addontabs").attr("data")); 
+						y_coordinate += 300; 
+						//jsonDefinition.parentY = $(a).find("#addontabs").attr("data");
+					}
+					else
 					window.parent.scrollTo(0,jsonDefinition.parentY);
 					
 					

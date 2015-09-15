@@ -18,6 +18,8 @@ function showAddonsTab(){
     
     // Make it default as first tab
     $('#addontabs').tabs('select', 0);
+    
+    $('#addontabs').attr("data",window.parent.scrollY);
     	
    	$('#addontabs').dialog({
 				            title:'Nodes',
