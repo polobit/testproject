@@ -15,9 +15,9 @@ cd $DIR
 
 cd "$1"
 
-#git checkout .
+git checkout .
 
-#git stash
+git stash
 
 git checkout sandbox_sync_conversion
 
