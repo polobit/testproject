@@ -27,6 +27,7 @@ import com.agilecrm.document.util.DocumentUtil;
 import com.agilecrm.subscription.Subscription;
 import com.agilecrm.subscription.SubscriptionUtil;
 import com.agilecrm.subscription.limits.cron.deferred.AccountLimitsRemainderDeferredTask;
+import com.agilecrm.subscription.restrictions.db.BillingRestriction;
 import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
 import com.agilecrm.subscription.restrictions.exception.PlanRestrictedException;
 import com.agilecrm.subscription.stripe.StripeUtil;
@@ -565,6 +566,58 @@ public class AdminPanelAPI
     		 e.printStackTrace();
     		 System.out.println("error occured while resume mandrill..." + e.getMessage());
     	}
+    }
+    
+    @Path("/users_count")
+    @GET
+    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    public String getsubscriptionOfDomainForOur(@QueryParam("d") String domainname) throws StripeException
+    {
+	if (StringUtils.isEmpty(NamespaceManager.get()) || (!NamespaceManager.get().equals("admin") && !NamespaceManager.get().equals("our")))
+	{
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+		    .entity("Sorry you don't have privileges to access this page.").build());
+	}
+	String oldNameSpace = NamespaceManager.get();
+	try{
+		NamespaceManager.set(domainname);
+		JSONObject json = new JSONObject();
+		int remainingEmails = 0;
+		BillingRestriction restrictions = BillingRestrictionUtil.getBillingRestrictionFromDB();
+		int count = restrictions.one_time_emails_count;
+		int max = restrictions.max_emails_count;
+			
+			// if max is greater than zero, we consider user is subscrbed to email plan
+			if(max > 0)
+			{
+				// In case of count is less than zero we return 0;
+				if(count < 0)
+					remainingEmails =  0;
+				else
+				remainingEmails = count;
+			}
+			
+			// If max is zero then it is free plan
+			else if(max == 0)
+			{
+				// Count comes as a negavie value here
+				int remaining =  5000 + count;
+				if(remaining < 0)
+					remainingEmails = 0;
+				else
+				remainingEmails = remaining;
+			}
+		json.put("userCount", DomainUserUtil.count());
+		json.put("remainingEmails", remainingEmails);
+		return json.toString();
+
+	}catch(Exception e){
+		e.printStackTrace();
+		throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+			    .build());
+	}finally{
+		NamespaceManager.set(oldNameSpace);
+	}
     }
 
 }

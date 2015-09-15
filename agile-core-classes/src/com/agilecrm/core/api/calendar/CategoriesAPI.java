@@ -4,11 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
@@ -60,7 +62,8 @@ public class CategoriesAPI
     {
 	if (StringUtils.isEmpty(entityType))
 	    return categoriesUtil.getAllCategories();
-	return categoriesUtil.getAllCategoriesByType(entityType);
+	
+	return categoriesUtil.getCategoriesByType(entityType);
     }
 
     /**
@@ -78,11 +81,23 @@ public class CategoriesAPI
 	if (category.getId() != null)
 	    return updateCategory(category);
 
+	if (!category.getEntity_type().equals(Category.EntityType.DEAL_LOST_REASON) 
+			&& !category.getEntity_type().equals(Category.EntityType.DEAL_SOURCE))
 	if (!categoriesUtil.validate(category.getLabel()))
 	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
 		    .entity("Invalid category name.").build());
-
-	if (categoriesUtil.getCategoryByName(category.getLabel()).size() > 0)
+	
+	if (category.getEntity_type().equals(Category.EntityType.DEAL_LOST_REASON)
+			&& categoriesUtil.getCategoryByNameAndType(category.getLabel(), category.getEntity_type().toString()).size() > 0)
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+		    .entity("Reason with this name already exists.").build());
+	
+	if (category.getEntity_type().equals(Category.EntityType.DEAL_SOURCE)
+			&& categoriesUtil.getCategoryByNameAndType(category.getLabel(), category.getEntity_type().toString()).size() > 0)
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+		    .entity("Source with this name already exists.").build());
+	
+	if (categoriesUtil.getCategoryByNameAndType(category.getLabel(), category.getEntity_type().toString()).size() > 0)
 	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
 		    .entity("Category with this name already exists.").build());
 
@@ -175,6 +190,29 @@ public class CategoriesAPI
 	try
 	{
 	    categoriesUtil.deleteCategory(Long.parseLong(id));
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+		    .entity("Unable to delete Category. Please check the input.").build());
+	}
+    }
+    
+    /**
+     * Delete category based on the id.
+     * 
+     * @param id
+     *            id of the category.
+     */
+    @Path("{id}")
+	@DELETE
+	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public void deleteCategoryById(@PathParam("id") Long id)
+    {
+	try
+	{
+	    categoriesUtil.deleteCategory(id);
 	}
 	catch (Exception e)
 	{

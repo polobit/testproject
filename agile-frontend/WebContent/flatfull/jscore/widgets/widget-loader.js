@@ -60,7 +60,7 @@ function loadWidgets(el, contact)
 		 * loaded. This avoid unnecessary loading.
 		 */
 		var flag = false;
-
+        $(el).off('view_loaded');
 		$(el).on('view_loaded', function(e)
 		{
 
@@ -85,6 +85,7 @@ function loadWidgets(el, contact)
 	 * and sets "is_minimized" field of widget as true, we check this while
 	 * loading widgets and skip loading widget if it is minimized
 	 */
+    $('#prefs-tabs-content').off('click', '.widget-minimize');
 	$('#prefs-tabs-content').on('click', '.widget-minimize', function(e)
 	{
 		e.preventDefault();
@@ -120,6 +121,7 @@ function loadWidgets(el, contact)
 	 * widget as false, we check this while loading widgets and skip loading
 	 * widget if it is minimized
 	 */
+    $('#prefs-tabs-content').off('click', '.widget-maximize');
 	$('#prefs-tabs-content').on('click', '.widget-maximize', function(e)
 	{
 		e.preventDefault();
@@ -303,6 +305,7 @@ function enableWidgetSoring(el)
 		 * This event is called after sorting stops to save new positions of
 		 * widgets
 		 */
+        $('.widget-sortable', el).off("sortstop");
 		$('.widget-sortable', el).on(
 				"sortstop",
 				function(event, ui)
