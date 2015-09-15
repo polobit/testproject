@@ -46,7 +46,7 @@ angular.module('builder.settings', [])
             autoSave: [
                 {
                     name: 'enableAutoSave',
-                    value: true,
+                    value: false,
                     category: 'autoSave',
                     description: 'Enable/Disable automatic saving when changes are made to the project or page. This may cause some delays on Firefox and Internet Explorer browsers.',
                 },
@@ -68,7 +68,7 @@ angular.module('builder.settings', [])
             elements: [
                 {
                     name: 'enableFreeElementDragging',
-                    value: false,
+                    value: true,
                     category: 'Elements',
                     description: 'When this is enabled you will be able to drag elements anywhere on the screen without any restrictions. Elements will be positioned absolutely so you should not use columns or rows with this mode. To use, first select an element then drag.'
                 }

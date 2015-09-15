@@ -12,7 +12,7 @@ angular.module('builder.elements', [])
         var mainStyle = $('<style id="elements-css"></style>').appendTo($scope.frameHead),
             customCss = '';
 
-        $http.get('backend/load-custom-elements.php').success(function(data) {
+        $http.get(AGILE_LP_ROOT + 'landingpages/custom-elements').success(function(data) {
 
             for (var i = data.length - 1; i >= 0; i--) {
                 var config = eval(data[i].config);

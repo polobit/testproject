@@ -129,15 +129,42 @@ angular.module('builder.projects', [])
 		 * 
 		 * @return void
 		 */
-		load: function() {
-            this.active = localStorage.get('architect-project');
+		load: function(name) {
 
-            if (this.active) {
-                this.changePage(localStorage.get('activePage'));
-            } else {
-                this.createNewProject();
-                this.changePage('index');
-            }
+            this.get(name).success(function(data) { 
+				project.active = data;
+            	if (project.active) {
+                	project.changePage(localStorage.get('activePage'));
+            	} else {
+                	project.createNewProject();
+                	project.changePage('index');
+            	}
+			});
+
+		},
+
+		/**
+		* Loads existing page from datastore
+		* @author reddy
+		*/
+		loadExistingPage: function(pageId) {
+
+            this.getPageFromDatastore(pageId).success(function(data) { 
+
+            	var returnDataFormat = {"pages": []};
+            	returnDataFormat.pages[0] = data;
+            	$("#landingpagename",parent.document).val(returnDataFormat.pages[0].name);
+            	returnDataFormat.pages[0].name = "index";
+				project.active = returnDataFormat;
+
+            	if (project.active) {
+                	project.changePage(localStorage.get('activePage'));
+            	} else {
+                	project.createNewProject();
+                	project.changePage('index');
+            	}
+			});
+
 		},
 
         createNewProject: function() {
@@ -158,6 +185,8 @@ angular.module('builder.projects', [])
 		 * @return promise
 		 */
 		save: function(what) {
+
+			
 			if ($rootScope.savingChanges || ! project.active) {
 				return false;
 			}
@@ -178,7 +207,60 @@ angular.module('builder.projects', [])
 				page.css = css.compile();
 			}
 
-            localStorage.set('architect-project', this.active);
+            // localStorage.set('architect-project', this.active);
+
+            var projectPageData = project.active.pages[0];
+
+            var landingPageName = $("#landingpagename",parent.document).val();
+
+            if(landingPageName == "") {
+            	alertify.log("Page name is required.", "error");
+            	$rootScope.savingChanges = false;
+            	return;
+            }
+
+            var reqMethod = "POST";
+
+            var webPageObject = {
+			  "name": landingPageName,
+			  "html": projectPageData.html,
+			  "css": projectPageData.css,
+			  "js": projectPageData.js,
+			  "title": projectPageData.title,
+			  "tags": projectPageData.tags,
+			  "description": projectPageData.description
+			};
+
+            if(typeof projectPageData.id != "undefined") {
+            	webPageObject["id"] = projectPageData.id;
+            	reqMethod = "PUT";
+            }
+
+			var req = {
+			 method: reqMethod,
+			 url: AGILE_LP_ROOT + 'core/api/landingpages',
+			 headers: {
+			   'Content-Type': "application/json"
+			 },
+			 data: JSON.stringify(webPageObject)
+			};
+
+            return $http(req).success(function(data) {
+
+            	var returnDataFormat = {"pages": []};
+            	returnDataFormat.pages[0] = data;
+            	returnDataFormat.pages[0].name = "index";
+				project.active = returnDataFormat;
+
+				$("#landingpagename-msg",parent.document).html('<span style="color: green; margin-left: 85px;">Page saved.</span>').show().fadeOut(3000);
+
+				alertify.log("Saved successfully.", "success");
+
+			}).error(function(data) {
+				alertify.log(data.substring(0, 500), 'error', 2500);
+			}).finally(function(data) {
+				$rootScope.savingChanges = false;
+			});
 
             $timeout(function() {
                 $rootScope.savingChanges = false;
@@ -211,7 +293,15 @@ angular.module('builder.projects', [])
 		 * @return promise
 		 */
 		get: function(id) {
-			return $http.get('projects/'+id);
+			return $http.get(AGILE_LP_ROOT + 'landingpages/get-template?id='+id);
+		},
+
+		/**
+		* Get page content from datastore
+		* @author reddy
+		*/
+		getPageFromDatastore: function(id) {
+			return $http.get(AGILE_LP_ROOT + 'core/api/landingpages/'+id);
 		},
 
 		/**

@@ -15,7 +15,7 @@ angular.module('builder', ['pascalprecht.translate', 'angularFileUpload', 'ngAni
 	$rootScope.keys           = keys;
 	$rootScope.selectedLocale = selectedLocale;
 	$rootScope.baseUrl        = window.baseUrl || window.location.origin + window.location.pathname;
-    $rootScope.isDemo         = document.URL.indexOf('architect-lite.vebto.com') > -1;
+    $rootScope.isDemo         = false;
     $rootScope.selected       = {};
 }])
 
@@ -47,7 +47,13 @@ angular.module('builder', ['pascalprecht.translate', 'angularFileUpload', 'ngAni
 		},
 
         initProject: function() {
-            project.load();
+
+        	if(AGILE_LP_OPTIONS['action'] == "edit" && AGILE_LP_OPTIONS['templateId'] != "") {
+        		project.loadExistingPage(AGILE_LP_OPTIONS['templateId']);
+        	} else {
+        		project.load(AGILE_LP_OPTIONS['templateId']);
+        	}
+
         },
 
 		initDom: function() {		

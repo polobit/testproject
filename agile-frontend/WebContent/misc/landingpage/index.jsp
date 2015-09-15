@@ -9,6 +9,28 @@
 	<link rel="stylesheet" href="public/css/builder.css">
     <link href='http://fonts.googleapis.com/css?family=Roboto:400,500,600' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="public/css/font-awesome.min.css">
+
+<%
+String templateId = request.getParameter("tmpid");
+String action = request.getParameter("action");
+%>
+
+<script>
+var AGILE_LP_ROOT = window.location.origin + "/";
+var AGILE_LP_OPTIONS = {};
+AGILE_LP_OPTIONS['action'] = "new";
+AGILE_LP_OPTIONS['templateId'] = "";
+
+<% if(action != null) { %>
+    AGILE_LP_OPTIONS['action'] = '<%=action%>';
+<% } %>
+
+<% if(templateId != null) { %>
+    AGILE_LP_OPTIONS['templateId'] = '<%=templateId%>';
+<% } %>
+
+</script>
+
 </head>
 
 <body ng-app="builder">
@@ -57,8 +79,8 @@
 
                         <div class="nav-item" data-name="elements"><i class="icon icon-puzzle-outline"></i> <span>{{ 'elements' | translate }}</span></div>
                         <div class="nav-item" data-name="inspector"><i class="icon icon-brush-1"></i> <span>{{ 'inspector' | translate }}</span></div>
-                        <div class="nav-item" data-name="pages"><i class="icon icon-docs"></i> <span>{{ 'pages' | translate }}</span></div>
-                        <div class="nav-item" data-name="settings"><i class="icon icon-cog-outline"></i> <span>{{ 'settings' | translate }}</span></div>
+                        <div class="nav-item" data-name="pages"><i class="icon icon-docs"></i> <span>{{ 'Page Info' | translate }}</span></div>
+                        <div class="nav-item hidden" data-name="settings"><i class="icon icon-cog-outline"></i> <span>{{ 'settings' | translate }}</span></div>
                         <div class="nav-item" ng-click="toggleCodeEditor()" ng-class="{ active: codeEditors.currentlyOpen }" not-selectable><i class="icon icon-code"></i> <span>{{ 'codeEditor' | translate }}</span></div>
 
                         <div class="push-bottom">
@@ -415,6 +437,8 @@
                             </section>
                         </aside>
                         <div id="pages" ng-class="{ open: panels.active === 'pages' }" class="panel" data-name="pages" ng-controller="PagesController" bl-pretty-scrollbar>
+                        
+                        <div class="hidden">
                             <ul class="list-unstyled">
                                 <li ng-repeat="page in project.active.pages track by $index" ng-click="project.changePage(page.name)" ng-class="{active: page.name == project.activePage.name}">
                                     <span class="name">{{ page.name }}</span>
@@ -429,9 +453,10 @@
                                     <button bl-tooltip="copyPage" ng-click="copyPage()"><i class="icon icon-docs-1"></i></button>
                                 </div>
                             </div>
+                        </div>
 
-                            <div class="page-settings">
-                                <div class="form-group">
+                            <div class="page-settings" style="border:none;">
+                                <div class="form-group hidden">
                                     <label for="page-name">{{ 'pageName' | translate }}</label>
                                     <input type="text" ng-disabled="project.activePage.name == 'Index'" class="form-control" ng-model="project.activePage.name" id="page-name">
                                 </div>
@@ -452,7 +477,7 @@
                                 </div>
                             </div>
 
-                            <div class="buttons-bottom">
+                            <div class="buttons-bottom hidden">
                                 <button class="btn btn-danger" ng-click="emptyProject()">{{ 'emptyProject' | translate }}</button>
                             </div>
                         </div>
@@ -495,9 +520,9 @@
                             </div>
                             <div class="bottom-navigation">
                                 <button ng-click="preview()" bl-tooltip="preview" placement="top"><i class="icon icon-eye"></i></button>
-                                <button ng-click="openPanel('export')" bl-tooltip="export" placement="top"><i class="icon icon-export"></i></button>
+                                <button class="hidden" ng-click="openPanel('export')" bl-tooltip="export" placement="top"><i class="icon icon-export"></i></button>
                                 <button ng-click="toggleDevicesPanel()" ng-class="{ active: devicesPanelOpen }" bl-tooltip="changeDevice" placement="top"><i class="icon icon-mobile"></i></button>
-                                <button bl-tooltip="save" placement="top" ng-click="project.save()" ng-disabled="savingChanges">
+                                <button class="hidden" bl-tooltip="save" placement="top" ng-click="project.save()" ng-disabled="savingChanges">
                                     <i class="icon" ng-class="savingChanges ? 'icon-spin6 icon-spin' : 'icon-floppy-1'"></i>
                                 </button>
                             </div>
