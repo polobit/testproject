@@ -61,7 +61,6 @@ import com.agilecrm.user.access.util.UserAccessControlUtil.CRUDOperation;
 import com.agilecrm.user.notification.NotificationPrefs;
 import com.agilecrm.util.CacheUtil;
 import com.agilecrm.voicemail.VoiceMail;
-// import com.agilecrm.webpages.WebPage;
 import com.agilecrm.webrules.WebRule;
 import com.agilecrm.widgets.CustomWidget;
 import com.agilecrm.widgets.Widget;
@@ -206,8 +205,6 @@ public class ObjectifyGenericDao<T> extends DAOBase
 
 	ObjectifyService.register(VerifiedEmails.class);
 
-	// For page builder
-	// ObjectifyService.register(WebPage.class);
 
     }
 

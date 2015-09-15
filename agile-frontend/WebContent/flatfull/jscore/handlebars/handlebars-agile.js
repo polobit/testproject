@@ -170,10 +170,6 @@ function getTemplateUrls(templateName)
 	{
 		template_relative_urls.push("web-rules.js");
 	}
-	if (templateName.indexOf("webpage") == 0)
-	{
-		template_relative_urls.push("web-pages.js");
-	}
 	if (templateName.indexOf("workflow") == 0 || templateName.indexOf("campaign") == 0 || templateName.indexOf("trigger") == 0 || templateName
 			.indexOf("automation") == 0)
 	{
