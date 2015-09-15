@@ -1,0 +1,40 @@
+{
+    "templates": [
+        {
+            "category": "General",
+            "description": "hello templates",
+            "list": [
+                {
+                    "id": "agency",
+                    "displayname": "Agency",
+                    "description": "this is sample text"
+                },
+                {
+                    "id": "freelancer",
+                    "displayname": "Freelancer",
+                    "description": "this is sample text"
+                },
+                {
+                    "id": "grayscale",
+                    "displayname": "Grayscale",
+                    "description": "this is sample text"
+                },
+                {
+                    "id": "landing-page",
+                    "displayname": "Landing Page",
+                    "description": "this is sample text"
+                },
+                {
+                    "id": "squad",
+                    "displayname": "Squad",
+                    "description": "this is sample text"
+                },
+                {
+                    "id": "stylish-portfolio",
+                    "displayname": "Stylish Portfolio",
+                    "description": "this is sample text"
+                }
+            ]
+        }
+    ]
+}
