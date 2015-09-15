@@ -86,6 +86,7 @@ var portlet_utility = {
 	 * getting default portlet settings for all portlets
 	 */
 	getDefaultPortletSettings : function(portlet_type, p_name){
+		
 		var json={};
 		if(portlet_type=="CONTACTS" && p_name=="Filter Based")
 			json['filter']="myContacts";

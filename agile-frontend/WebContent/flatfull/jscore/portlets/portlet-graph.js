@@ -1,6 +1,8 @@
+
 var portlet_graph_utility = {
 
 	dealsByMilestonePieGraph : function(selector,milestonesList,milestoneValuesList,milestoneNumbersList){
+		
 		head.js(LIB_PATH + 'lib/flot/highcharts-3.js',LIB_PATH + 'lib/flot/no-data-to-display.js', function(){
 			var emptyFlag = true;
 			$.each(milestoneValuesList,function(index,value){

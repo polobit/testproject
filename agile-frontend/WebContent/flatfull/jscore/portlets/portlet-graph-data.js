@@ -186,6 +186,7 @@ var portlet_graph_data_utility = {
 	},
 
 	growthGraphData : function(base_model, selector, url){
+		
 			var sizey = parseInt($('#'+selector).parent().attr("data-sizey"));
 			var topPos = 50*sizey;
 			if(sizey==2 || sizey==3)
