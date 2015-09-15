@@ -161,42 +161,43 @@ function set_up_portlets(el, portlets_el){
         		else if(tempModel.get("name")=="Mini Calendar")
         			{
 						var el=this.$resized_widget.find('.portlet_body_calendar');
-						var aspectratio;
-        			if(this.$resized_widget.attr('data-sizey')==1){
-						$('#'+this.$resized_widget.attr('id')+' > .portlet_body_calendar').css("height",this.$resized_widget.attr('data-sizey')*200+"px");
-						$('#'+this.$resized_widget.attr('id')+' > .portlet_body_calendar').css("max-height",this.$resized_widget.attr('data-sizey')*200+"px");
-						aspectratio=getaspectratio(el);
-						 $('#calendar_container').fullCalendar('option','aspectRatio',aspectratio);	
-						$(el).find('.fc-header').css('height','25px');
-						$(el).find('.show').css('padding-top','5px');
-						 
+						var aspectratio, height = this.$resized_widget.attr('data-sizey');
+
+
+	        			if(this.$resized_widget.attr('data-sizey')==1){
+	        				height = height*200;
+
+							$(el).find('.fc-header').css('height','25px');
+							$(el).find('.show').css('padding-top','5px');
+							 
+							
+							
+						}else if(this.$resized_widget.attr('data-sizey')==2){
+							height = height*200+25;
+
+							$(el).find('.fc-header').css('height','145px');
+							$(el).find('.show').css('padding-top','70px');
+							
+							
+						}
+						else if(this.$resized_widget.attr('data-sizey')==3){
+							height = height*200+50;
+
+							$(el).find('.fc-header').css('height','250px');
+							$(el).find('.show').css('padding-top','120px');
+							
+							
+							
+						}
+
+						var css = {"height" : height+"px", "max-height" : height+"px"};
+
+						$('#'+this.$resized_widget.attr('id')+' > .portlet_body_calendar').css(css);
+						$('#calendar_container').fullCalendar('option','aspectRatio',getaspectratio(el));	
 						
-						
-					}else if(this.$resized_widget.attr('data-sizey')==2){
-						$('#'+this.$resized_widget.attr('id')+' > .portlet_body_calendar').css("height",this.$resized_widget.attr('data-sizey')*200+25+"px");
-						$('#'+this.$resized_widget.attr('id')+' > .portlet_body_calendar').css("max-height",this.$resized_widget.attr('data-sizey')*200+25+"px");
-						aspectratio=getaspectratio(el);
-						 $('#calendar_container').fullCalendar('option','aspectRatio',aspectratio);	
-						$(el).find('.fc-header').css('height','145px');
-						$(el).find('.show').css('padding-top','70px');
-						
-						
-					}
-					else if(this.$resized_widget.attr('data-sizey')==3){
-						$('#'+this.$resized_widget.attr('id')+' > .portlet_body_calendar').css("height",this.$resized_widget.attr('data-sizey')*200+50+"px");
-						$('#'+this.$resized_widget.attr('id')+' > .portlet_body_calendar').css("max-height",this.$resized_widget.attr('data-sizey')*200+50+"px");	
-						aspectratio=getaspectratio(el);
-						 $('#calendar_container').fullCalendar('option','aspectRatio',aspectratio);	
-						$(el).find('.fc-header').css('height','250px');
-						$(el).find('.show').css('padding-top','120px');
-						
-						
-						
-					}
-					
-					  
 						var top=parseInt($(el).find('.fc-widget-content').css('height'))/2-7;
 						$(el).find('.fc-day-number').css('top',top);
+
         			}
         		
 
