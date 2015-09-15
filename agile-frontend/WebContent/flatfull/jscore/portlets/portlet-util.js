@@ -81,6 +81,23 @@ var portlet_utility = {
 		} });
 	
  	},
+	/**
+	 * getting campaign_type for campaign portlet header
+	 */
+ 	get_campaign_stats_portlet_header: function(base_model, callback){
+ 		var campaign_id = base_model.get("settings").campaign_type;
+
+ 		if(campaign_id=='All')
+ 			return callback('All Campaigns');
+ 		else{
+ 			var campaign=$.ajax({ type : 'GET', url : '/core/api/workflows/'+campaign_id, dataType : 'json',
+ 			success : function(data)
+ 				{
+ 					if (data != null && data != undefined)
+ 						return callback("" + data.name);
+ 				} });
+ 		}
+ 	},
 
  	/**
 	 * getting default portlet settings for all portlets
@@ -282,6 +299,12 @@ var portlet_utility = {
 			     		$(el).find(".deals_funnel_portlet_header").html(header_name);	
 			    });
 			    break;
+			case "Campaign stats":
+				that.get_campaign_stats_portlet_header(base_model, function(header_name){
+		     		$(el).find(".campaign_stats_header").html(header_name);	
+		    });
+		    break;
+				
 		}
 	},
 

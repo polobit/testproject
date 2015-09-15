@@ -66,7 +66,7 @@ function loadPortlets(el){
 }
 
 /**
- * set the portlets size and position on dashboard **/
+ * set the portlets size and position on dashboard 
  * 
  * @param el
  * @param portlets_el
