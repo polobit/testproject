@@ -43,8 +43,8 @@ public class VersioningUtil
 	/**
 	 * Returns cloudfornt URL with extension app/ or beta/ depending
 	 */
-	CLOUDFRONT_BASE_URL = IS_LOCAL_DEVELOPMENT_SERVER ? "" : (CLOUDFRONT_SERVER_URL + (IS_PRODUCTION_APP ? "app/"
-		+ RELEASE_VERSION + "/" : "beta/"));
+	CLOUDFRONT_BASE_URL = IS_LOCAL_DEVELOPMENT_SERVER ? "" : (CLOUDFRONT_SERVER_URL
+		+ (IS_PRODUCTION_APP ? "app/" + RELEASE_VERSION : "beta/" + RELEASE_VERSION) + "/");
 
 	// Static files are placed separately as they are not uploaded after
 	// every release.
