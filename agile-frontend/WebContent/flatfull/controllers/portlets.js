@@ -202,17 +202,17 @@ function initializePortletsListeners_1(){
 				e.preventDefault();
 				var data = $(this).closest('a').attr("data");
 
-				var obj = getActivityObject(data);
-				console.log(obj);
+				getActivityObject(data, function(resp){
 
-				getTemplate("infoModal", JSON.parse(obj), undefined, function(template_ui){
-					if(!template_ui)
-						  return;
-					var emailinfo = $(template_ui);
-					emailinfo.modal('show');
+						console.log(resp);
+						getTemplate("infoModal", resp, undefined, function(template_ui){
+							if(!template_ui)
+								  return;
 
-				}, null);
-
+							var emailinfo = $(template_ui);
+							emailinfo.modal('show');
+						}, null);
+					});
 			});
 	
 	$('.portlet_body .activity-event-edit').off();
@@ -220,10 +220,11 @@ function initializePortletsListeners_1(){
 	{
 		e.preventDefault();
 		var data = $(this).closest('a').attr("data");
+				
+		getEventObject(data, function(resp){
+				update_event_activity(resp);
+		});
 
-		var currentevent = getEventObject(data);
-
-		update_event_activity(currentevent);
 
 	});
 
