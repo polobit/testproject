@@ -272,11 +272,17 @@ function getTemplateUrls(templateName)
 	}
 	if (templateName.indexOf("socialsuite") == 0)
 	{
-		template_relative_urls.push("socialsuite.js");
+		if(HANDLEBARS_PRECOMPILATION)
+			template_relative_urls.push("socialsuite-all.js");
+		else
+		{
+			template_relative_urls.push("socialsuite.js");
+		}
 
 		if (HANDLEBARS_PRECOMPILATION)
 			template_relative_urls.push("socialsuite.html");
 	}
+
 
 	if (templateName.indexOf("portlet") == 0)
 	{
