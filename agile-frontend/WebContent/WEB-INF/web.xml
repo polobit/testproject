@@ -945,4 +945,21 @@
 		<url-pattern>/remote_api</url-pattern>
 	</servlet-mapping>
 	
+	<servlet>
+		<servlet-name>LandingPagesTemplateServlet</servlet-name>
+		<servlet-class>com.agilecrm.landingpages.TemplateServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>LandingPagesTemplateServlet</servlet-name>
+		<url-pattern>/landingpages/get-template</url-pattern>
+	</servlet-mapping>
+	<servlet>
+		<servlet-name>LandingPagesCustomElementServlet</servlet-name>
+		<servlet-class>com.agilecrm.landingpages.CustomElementServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>LandingPagesCustomElementServlet</servlet-name>
+		<url-pattern>/landingpages/custom-elements</url-pattern>
+	</servlet-mapping>
+	
 </web-app>

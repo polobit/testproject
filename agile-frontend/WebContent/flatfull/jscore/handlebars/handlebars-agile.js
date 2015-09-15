@@ -277,6 +277,10 @@ function getTemplateUrls(templateName)
 	{
 		template_relative_urls.push("facebookpage.js");
 	}
+	if (templateName.indexOf("landingpages") == 0)
+	{
+		template_relative_urls.push("landingpages.js");
+	}
 	return template_relative_urls;
 }
 

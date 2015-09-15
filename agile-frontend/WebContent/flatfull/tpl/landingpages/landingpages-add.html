@@ -1,0 +1,40 @@
+<script id="landingpages-add-template" type="text/html">
+<div class="custom-animated custom-fadeInUp hide-rainbow">
+<div class="wrapper-md">
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel wrapper">
+            <form id="landingPageBuilderForm">
+                <fieldset>
+                    <div class="control-group form-group">
+                        <label class="control-label"><b>Name of page:</b> <span class="field_req">*</span></label>
+                        <div class="controls">
+							<div class="row">
+								<div class="col-md-5 col-sm-4 col-xs-4">
+									<input name="landingpagename" type="text" id="landingpagename" class="col-md-3 form-control required w-md" placeholder="Name of page"/>
+								</div>
+								<div class="col-md-3 col-sm-3 col-xs-4">
+									<span id="landingpagename-msg" class="text-center"></span>
+								</div>
+								<div class="col-md-4 col-sm-5 col-xs-4">
+									<button class="btn btn-primary btn-sm  right pos-rlt m-r-xs saveLandingPageButton" >Save Page</button>
+								</div>
+                           		<div class="save-workflow-img right m-r-xs m-t-sm pos-rlt inline-block"></div>
+							</div>
+						</div>
+                    </div>
+					<div id="landingPageBuilderHolder">
+                    <IFRAME SRC="misc/landingpage/index.jsp?tmpid={{templateId}}&action={{action}}" id="landingPageBuilder" frameBorder="0" name="landingPageBuilder" WIDTH="100%" HEIGHT="900px"></IFRAME>
+                    </div>
+					<br />
+					<button class="btn btn-sm btn-primary saveLandingPageButton">Save Page</button>
+                    <div class="save-workflow-img inline-block"></div>
+                    <br />
+                </fieldset>
+            </form>
+        </div>
+    </div>
+</div>
+</div>
+</div>
+</script>
