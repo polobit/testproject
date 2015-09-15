@@ -16,7 +16,7 @@ var SettingsRouter = Backbone.Router
 			"settings" : "settings",
 
 			/* User preferences */
-			"user-prefs" : "userPrefs",
+			"user-prefs/:id" : "userPrefs",
 
 			/* Change Password */
 			"change-password" : "changePassword",
@@ -74,12 +74,26 @@ var SettingsRouter = Backbone.Router
 			 * Creates a Model to show and edit Personal Preferences, and sets
 			 * HTML Editor. Reloads the page on save success.
 			 */
-			userPrefs : function()
+			userPrefs : function(type)
 			{
+				var template_name = "settings-user-prefs";
+				var tab_class = "profile";
+				if(type == "reminders")
+				{
+					template_name = "settings-reminders";
+					tab_class = "reminders";
 
+				}
+				else if(type == "advanced")
+				{
+					template_name = "settings-advanced";
+					tab_class = "advanced";
+
+				}
 				$("#content").html(getTemplate("settings"), {});
+				$("#prefs-tabs-content").html(getTemplate("settings-user-prefs-tab"), {});
 				/* $('#prefs-tabs-content').html(getRandomLoadingImg()); */
-				var view = new Base_Model_View({ url : '/core/api/user-prefs', template : "settings-user-prefs", el : $('#prefs-tabs-content'), change : false,
+				var view = new Base_Model_View({ url : '/core/api/user-prefs', template : template_name, el : $('#settings-user-prefs-tab-content'), change : false,
 					reload : true, postRenderCallback : function(el)
 					{
 						initializeSettingsListeners();
@@ -97,6 +111,7 @@ var SettingsRouter = Backbone.Router
 				$('#PrefsTab .select').removeClass('select');
 				$('.user-prefs-tab').addClass('select');
 				$(".active").removeClass("active");
+				$("#prefs-tabs-content .prefs-"+tab_class).addClass("active");
 				// $('#content').html(view.render().el);
 			},
 
@@ -507,6 +522,21 @@ var SettingsRouter = Backbone.Router
 				$('.email-templates-tab').addClass('select');
 				$(".active").removeClass("active");
 				// $("#content").html(view.el);
+				if ($('#attachment_id').val())
+				{
+					var el = $('#tpl-attachment-select').closest("div");
+					$('#tpl-attachment-select').hide();
+					el.find(".attachment-document-select").css("display", "inline");
+					var optionsTemplate = "<option value='{{id}}' network_type='{{titleFromEnums network_type}}' size='{{size}}' url='{{url}}'>{{name}}</option>";
+        			fillSelect('attachment-select','core/api/documents', 'documents',  function fillNew()
+					{
+						el.find("#attachment-select option:first").after("<option value='new'>Upload new doc</option>");
+						$('#attachment-select').find('option[value='+$('#attachment_id').val()+']').attr("selected","selected");
+						$('.add-tpl-attachment-confirm').trigger("click");
+						$('#tpl-attachment-select').hide();
+						$('#tpl-attachment-name').show();
+					}, optionsTemplate, false, el);
+				}
 			},
 
 			/**

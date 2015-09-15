@@ -673,6 +673,8 @@ function initializeMilestoneListners(el){
 	$('#milestone-listner').on('click', '.add-pipeline', function(e) {
 		$('#pipelineForm input').val('');
 		$('#pipelineForm input#milestones').val('New,Prospect,Proposal,Won,Lost');
+		$('#pipelineForm input#won_milestone').val('Won');
+		$('#pipelineForm input#lost_milestone').val('Lost');
 		$('#pipelineModal').find('.save-status').html('');
 	});
 	
@@ -744,6 +746,13 @@ function initializeMilestoneListners(el){
 		e.preventDefault();
 		if (!confirm("Are you sure you want to delete ?" ))
 			return;
+		
+		var formId = $(this).closest('form');
+		if($(this).closest('tr').find('.mark-won').length > 0){
+			formId.find('input[name="won_milestone"]').val('');
+		} else if($(this).closest('tr').find('.mark-lost').length > 0){
+			formId.find('input[name="lost_milestone"]').val('');
+		}
 		$(this).closest('tr').css("display", "none");
 		fill_ordered_milestone($(this).closest('form').attr('id'));
 	});
@@ -769,10 +778,18 @@ function initializeMilestoneListners(el){
     	var form = $(this).closest('form');
     	var new_milestone = form.find(".add_new_milestone").val().trim();
 
-    	if(!new_milestone || new_milestone.length <= 0 || !(/^[a-zA-Z0-9-_ ]*$/).test(new_milestone))
+    	/*if(!new_milestone || new_milestone.length <= 0 || !(/^[a-zA-Z0-9-_ ]*$/).test(new_milestone))
 		{
     		$('#milestone-error-modal').modal('show');
 			return;
+		}*/
+		if(form.find(".add_new_milestone").val().trim()==""){
+			$('#new_milestone_name_error_'+form.attr('id').split('milestonesForm_')[1]).show();
+			return false;
+		}
+		if(!(/^[a-zA-Z0-9-_ ]*$/).test(form.find(".add_new_milestone").val().trim())){
+			$('#new_milestone_chars_error_'+form.attr('id').split('milestonesForm_')[1]).show();
+			return false;
 		}
     	form.find('.show_field').css("display","none");
     	form.find(".show_milestone_field").closest("div").css("display","inline-block");
@@ -804,7 +821,14 @@ function initializeMilestoneListners(el){
     		
     		if(add_milestone)
     		{
-    			milestone_list.append("<tr data='"+new_milestone+"' style='display: table-row;'><td><div style='display:inline-block;vertical-align:top;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;width:80%'>"+new_milestone+"</div></td><td><div class='m-b-n-xs' style='display:none;'><a class='text-l-none-hover c-p'><i title='Drag' class='icon-move'></i></a><a class='milestone-delete' style='cursor: pointer;margin-left:10px; text-decoration: none;' data-toggle='modal' role='button' href='#'><i title='Delete Milestone' class='task-action icon icon-trash'></i></a></div></td></tr>");
+    			var html = "<tr data='" + new_milestone + "' style='display: table-row;'><td><div class='milestone-name-block inline-block v-top text-ellipsis' style='width:80%'>";
+    			html += new_milestone + "</div></td><td class='b-r-none'><div class='m-b-n-xs'>";
+    			html += "<a class='milestone-won text-l-none-hover c-p text-xs hover-show' style='visibility:hidden;' data-toggle='tooltip' title='Set as Won Milestone'><i class='icon-like'></i></a>";
+				html += "<a class='milestone-lost text-l-none-hover c-p text-xs m-l-sm hover-show' style='visibility:hidden;' data-toggle='tooltip' title='Set as Lost Milestone'><i class='icon-dislike'></i></a>";
+				html +=	"<a class='milestone-delete c-p m-l-sm text-l-none text-xs hover-show' style='visibility:hidden;' data-toggle='tooltip' title='Delete Milestone'><i class='icon icon-trash'></i>" +
+				"</a><a class='text-l-none-hover c-p text-xs m-l-sm hover-show' style='visibility:hidden;'><i title='Drag' class='icon-move'></i></a></div></td></tr>";
+				milestone_list.append(html);
+    			//milestone_list.append("<tr data='"+new_milestone+"' style='display: table-row;'><td><div style='display:inline-block;vertical-align:top;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;width:80%'>"+new_milestone+"</div></td><td><div class='m-b-n-xs' style='display:none;'><a class='text-l-none-hover c-p'><i title='Drag' class='icon-move'></i></a><a class='milestone-delete' style='cursor: pointer;margin-left:10px; text-decoration: none;' data-toggle='modal' role='button' href='#'><i title='Delete Milestone' class='task-action icon icon-trash'></i></a></div></td></tr>");
     	//		milestone_list.append("<li data='" + new_milestone + "'><div><span>" + new_milestone + "</span><a class='milestone-delete right' href='#'>&times</a></div></li>");
     			fill_ordered_milestone(form.attr('id'));
     		}
@@ -812,6 +836,10 @@ function initializeMilestoneListners(el){
     });
 
 	$('#milestone-listner').on('keypress', '.add_new_milestone', function(e) {
+		var form = $(this).closest('form');
+    	$('#new_milestone_name_error_'+form.attr('id').split('milestonesForm_')[1]).hide();
+		$('#new_milestone_existed_error_'+form.attr('id').split('milestonesForm_')[1]).hide();
+		$('#new_milestone_chars_error_'+form.attr('id').split('milestonesForm_')[1]).hide();
     	if(e.keyCode == 13)
     	{
     		var form = $(this).closest("form");
@@ -859,4 +887,252 @@ function initializeMilestoneListners(el){
     	});
     	
     });
+
+	$("#milestone-listner").on('click', '.add_lost_reason', function(e){
+		e.preventDefault();
+		if($('#lost_reason_name').val().trim()==""){
+			$('#lost_reason_name_error').show();
+			return false;
+		}
+		if(!(/^[a-zA-Z0-9-_ ]*$/).test($('#lost_reason_name').val().trim())){
+			$('#lost_reason_chars_error').show();
+			return false;
+		}
+		var obj = serializeForm('lostReasonsForm');
+		var model = new BaseModel();
+		model.url = 'core/api/categories';
+		model.save(obj, {
+        success: function (data) {
+        	var model = data.toJSON();
+	        App_Admin_Settings.dealLostReasons.collection.add(new BaseModel(model));
+	        $('.show_field').find('#lost_reason_name').val("");
+	        $('.show_field').hide();
+	        $('.show_lost_reason_add').show();
+        },
+        error: function (model, response) {
+        	if(response.status==400 && response.responseText=="Reason with this name already exists."){
+        		$('#lost_reason_existed_error').show();
+        	}
+        }});
+	});
+
+	$("#milestone-listner").on('keypress', '#lost_reason_name', function(e){
+		$('#lost_reason_name_error').hide();
+		$('#lost_reason_existed_error').hide();
+		$('#lost_reason_chars_error').hide();
+		if(e.keyCode == 13)
+    	{
+    		e.preventDefault();
+    		var form = $(this).closest("form");
+    		form.find(".add_lost_reason").click();
+    	}
+	});
+
+	$('#milestone-listner').on("click", '.lost-reason-edit', function(e){
+		$(this).closest('tr').find('.lost_reason_name_div').hide();
+		$(this).closest('tr').find('.lost_reason_name_input').show();
+	});
+
+	$('#milestone-listner').on("keypress", '.update_lost_reason', function(e){
+		if(e.which == 13){
+			e.preventDefault();
+			if($(this).val().trim()==""){
+				$('#lost_reason_name_error_'+$(this).attr("id")).show();
+				return false;
+			}
+			if(!(/^[a-zA-Z0-9-_ ]*$/).test($(this).val().trim())){
+				$('#lost_reason_chars_error_'+$(this).attr("id")).show();
+				return false;
+			}
+			var obj = serializeForm('lostReasonsForm_'+$(this).attr("id"));
+			var model = new BaseModel();
+			model.url = 'core/api/categories';
+			model.save(obj, {
+        	success: function (data) {
+        		var model = data.toJSON();
+	       		App_Admin_Settings.dealLostReasons.collection.get(model).set(new BaseModel(model));
+	        	$('.lost_reason_name_input').hide();
+	        	$('.lost_reason_name_div').show();
+        	},
+        	error: function (model, response) {
+        		if(response.status==400 && response.responseText=="Reason with this name already exists."){
+        			$('#lost_reason_existed_error').show();
+        		}
+        	}});
+		}else{
+			$('#lost_reason_name_error_'+$(this).attr("id")).hide();
+			$('#lost_reason_existed_error_'+$(this).attr("id")).hide();
+			$('#lost_reason_chars_error_'+$(this).attr("id")).hide();
+		}
+	});
+
+	$('#milestone-listner').on("click", '.updates_lost_reason', function(e){
+		if($(this).parent().find('input:text').val().trim()==""){
+			$('#lost_reason_name_error_'+$(this).parent().find('input:text').attr("id")).show();
+			return false;
+		}
+		if(!(/^[a-zA-Z0-9-_ ]*$/).test($(this).parent().find('input:text').val().trim())){
+			$('#lost_reason_chars_error_'+$(this).parent().find('input:text').attr("id")).show();
+			return false;
+		}
+		var obj = serializeForm('lostReasonsForm_'+$(this).parent().find('input:text').attr("id"));
+		var model = new BaseModel();
+		model.url = 'core/api/categories';
+		model.save(obj, {
+        success: function (data) {
+        	var model = data.toJSON();
+	       	App_Admin_Settings.dealLostReasons.collection.get(model).set(new BaseModel(model));
+	       	$('.lost_reason_name_input').hide();
+	       	$('.lost_reason_name_div').show();
+        },
+        error: function (model, response) {
+        	if(response.status==400 && response.responseText=="Reason with this name already exists."){
+        		$('#lost_reason_existed_error').show();
+        	}
+        }});
+	});
+
+	$("#milestone-listner").on('click', '.lost-reason-delete', function(e){
+		if(confirm("Are you sure you want to delete ?")){
+			e.preventDefault();
+			var that = $(this);
+			var obj = serializeForm($(this).closest('form').attr("id"));
+			var model = new BaseModel();
+			model.url = 'core/api/categories/'+obj.id;
+			model.set({ "id" : obj.id });
+			model.destroy({
+        	success: function (data) {
+        		var model = data.toJSON();
+	      	  App_Admin_Settings.dealLostReasons.collection.remove(new BaseModel(model));
+	      	  that.closest('tr').remove();
+        	},
+        	error: function (model, response) {
+        	
+        	}});
+		}
+	});
+
+	$("#milestone-listner").on('click', '.add_deal_source', function(e){
+		e.preventDefault();
+		if($('#deal_source_name').val().trim()==""){
+			$('#deal_source_name_error').show();
+			return false;
+		}
+		if(!(/^[a-zA-Z0-9-_ ]*$/).test($('#deal_source_name').val().trim())){
+			$('#deal_source_chars_error').show();
+			return false;
+		}
+		var obj = serializeForm('dealSourcesForm');
+		var model = new BaseModel();
+		model.url = 'core/api/categories';
+		model.save(obj, {
+        success: function (data) {
+        	var model = data.toJSON();
+	        App_Admin_Settings.dealSourcesView.collection.add(new BaseModel(model));
+	        $('.show_field').find('#deal_source_name').val("");
+	        $('.show_field').hide();
+	        $('.show_deal_source_add').show();
+        },
+        error: function (model, response) {
+        	if(response.status==400 && response.responseText=="Source with this name already exists."){
+        		$('#deal_source_existed_error').show();
+        	}
+        }});
+	});
+
+	$("#milestone-listner").on('keypress', '#deal_source_name', function(e){
+		$('#deal_source_name_error').hide();
+		$('#deal_source_existed_error').hide();
+		$('#deal_source_chars_error').hide();
+		if(e.keyCode == 13)
+    	{
+    		e.preventDefault();
+    		var form = $(this).closest("form");
+    		form.find(".add_deal_source").click();
+    	}
+	});
+
+	$('#milestone-listner').on("click", '.deal-source-edit', function(e){
+		$(this).closest('tr').find('.deal_source_name_div').hide();
+		$(this).closest('tr').find('.deal_source_name_input').show();
+	});
+
+	$('#milestone-listner').on("keypress", '.update_deal_source', function(e){
+		if(e.which == 13){
+			e.preventDefault();
+			if($(this).val().trim()==""){
+				$('#deal_source_name_error_'+$(this).attr("id")).show();
+				return false;
+			}
+			if(!(/^[a-zA-Z0-9-_ ]*$/).test($(this).val().trim())){
+				$('#deal_source_chars_error_'+$(this).attr("id")).show();
+				return false;
+			}
+			var obj = serializeForm('dealSourcesForm_'+$(this).attr("id"));
+			var model = new BaseModel();
+			model.url = 'core/api/categories';
+			model.save(obj, {
+        	success: function (data) {
+        		var model = data.toJSON();
+	       		App_Admin_Settings.dealSourcesView.collection.get(model).set(new BaseModel(model));
+	        	$('.deal_source_name_input').hide();
+	        	$('.deal_source_name_div').show();
+        	},
+        	error: function (model, response) {
+        		if(response.status==400 && response.responseText=="Source with this name already exists."){
+        			$('#deal_source_existed_error').show();
+        		}
+        	}});
+		}else{
+			$('#deal_source_name_error_'+$(this).attr("id")).hide();
+			$('#deal_source_existed_error_'+$(this).attr("id")).hide();
+			$('#deal_source_chars_error_'+$(this).attr("id")).hide();
+		}
+	});
+
+	$('#milestone-listner').on("click", '.updates_deal_source', function(e){
+		if($(this).parent().find('input:text').val().trim()==""){
+			$('#deal_source_name_error_'+$(this).parent().find('input:text').attr("id")).show();
+			return false;
+		}
+		if(!(/^[a-zA-Z0-9-_ ]*$/).test($(this).parent().find('input:text').val().trim())){
+			$('#deal_source_chars_error_'+$(this).parent().find('input:text').attr("id")).show();
+			return false;
+		}
+		var obj = serializeForm('dealSourcesForm_'+$(this).parent().find('input:text').attr("id"));
+		var model = new BaseModel();
+		model.url = 'core/api/categories';
+		model.save(obj, {
+        success: function (data) {
+        	var model = data.toJSON();
+	       	App_Admin_Settings.dealSourcesView.collection.get(model).set(new BaseModel(model));
+	        $('.deal_source_name_input').hide();
+	        $('.deal_source_name_div').show();
+        },
+        error: function (model, response) {
+        	if(response.status==400 && response.responseText=="Source with this name already exists."){
+        		$('#deal_source_existed_error').show();
+        	}
+        }});
+	});
+
+	$("#milestone-listner").on('click', '.deal-source-delete', function(e){
+		if(confirm("Are you sure you want to delete ?")){
+			e.preventDefault();
+			var that = $(this);
+			var obj = serializeForm($(this).closest('form').attr("id"));
+			var model = new BaseModel();
+			model.url = 'core/api/categories/'+obj.id;
+			model.set({ "id" : obj.id });
+			model.destroy({
+        	success: function (data) {
+        		var model = data.toJSON();
+	      	  App_Admin_Settings.dealSourcesView.collection.remove(new BaseModel(model));
+	      	  that.closest('tr').remove();
+        	},
+        	error: function (model, response) {
+        	
+        	}});
+		}
+	});
 }

@@ -33,6 +33,29 @@ var PortletsRouter = Backbone.Router
 															$('#taksAndEvents').parents('.wrapper-md').hide();
 														if($('#userActivity').children().length==0)
 															$('#userActivity').parents('.wrapper-md').hide();
+														preload([
+   																	'flatfull/img/dashboard_images/Mini-Calendar.jpg',
+   																	'flatfull/img/dashboard_images/stats.png',
+   																	'flatfull/img/dashboard_images/Leaderboard.png',
+   																	'flatfull/img/dashboard_images/account-information.png',
+   																	'flatfull/img/dashboard_images/Activities.png',
+   																	'flatfull/img/dashboard_images/Agile-Blog.png',
+   																	'flatfull/img/dashboard_images/Calls.png',
+   																	'flatfull/img/dashboard_images/Deals-Funnel.png',
+   																	'flatfull/img/dashboard_images/Email-opened.png',
+   																	'flatfull/img/dashboard_images/Events.png',
+   																	'flatfull/img/dashboard_images/Milestone.png',
+																	'flatfull/img/dashboard_images/My-contacts.png',
+   																	'flatfull/img/dashboard_images/Pending-Deals.png',
+   																	'flatfull/img/dashboard_images/Revenue-graph.png',
+																	'flatfull/img/dashboard_images/Tag-Graph.png',
+																	'flatfull/img/dashboard_images/Task-report.png',
+																	'flatfull/img/dashboard_images/Task.png',
+																	'flatfull/img/dashboard_images/User-Activities.png',
+																	'flatfull/img/dashboard_images/Campaign-stats.jpg',
+
+																]);
+														initializeAddPortletsListeners();
 													}
 												});
 
@@ -46,6 +69,7 @@ var PortletsRouter = Backbone.Router
 														.render().el);
 
 									});
+										
 				}
 			},
 			// Show form modal
@@ -69,6 +93,12 @@ var PortletsRouter = Backbone.Router
 						});
 			}
 		});
+
+function preload(arrayOfImages) {
+    $(arrayOfImages).each(function () {
+        $('<img />').attr('src',this).appendTo('body').css('display','none');
+    });
+}
 // For adding new portlets
 function addNewPortlet(portlet_type, p_name) {
 	var obj={};
@@ -114,6 +144,10 @@ function addNewPortlet(portlet_type, p_name) {
 		obj.name="Revenue Graph";
 	else if(p_name=="UserActivities")
 		obj.name="User Activities"
+	else if(p_name=="MiniCalendar")
+		obj.name="Mini Calendar";
+	else if(p_name=="Campaignstats")
+		obj.name="Campaign stats";
 	obj.portlet_type=portlet_type;
 	var max_row_position=0;
 	if(gridster!=undefined)
@@ -186,6 +220,10 @@ function addNewPortlet(portlet_type, p_name) {
 	}else if(portlet_type=="DEALS" && p_name=="RevenueGraph"){
 		json['duration']="this-quarter";
 		json['track']="anyTrack";
+	}
+	else if(portlet_type=="USERACTIVITY" && p_name=="Campaignstats"){
+		json['duration']="yesterday";
+		json['campaign_type']="All";
 	}
 	var portlet = new BaseModel();
 	portlet.url = 'core/api/portlets/addPortlet';
@@ -261,6 +299,10 @@ function deletePortlet(el) {
 						"Are you sure you want to delete Dashlet - Leaderboard "
 								+ getDurationForPortlets(model.get("settings").duration)
 								+ "?");
+	else if(model.get("name")=="Mini Calendar")
+		$('#portletDeleteModal > .modal-dialog > .modal-content > .modal-body')
+	.html("Are you sure you want to delete Dashlet - Mini Calendar?");
+	
 	else
 		$('#portletDeleteModal > .modal-dialog > .modal-content > .modal-body')
 				.html(
@@ -303,6 +345,12 @@ function initializePortletsListeners_1(){
 				},
 				dataType : 'json'
 			});
+
+	});
+
+	$('#dashlet_heading #tutotial_modal').off('click');
+	$('#dashlet_heading').on('click', '#tutotial_modal', function(e){
+		$('#tutorialModal').modal("show");
 	});
 
 	$('.portlet_body #portlets-contacts-model-list > tr, #portlets-companies-model-list > tr, #portlets-contacts-email-opens-model-list > tr').off();
@@ -569,7 +617,84 @@ function initializePortletsListeners_1(){
 		e.preventDefault();
 		showPortletSettings(this.id);
 	});
+   
 }
+
+function initializeAddPortletsListeners(){
+ $('.col-md-3').on("mouseenter",'.show_screeshot',function(e){
+    	var p_name=$(this).attr('id');
+    	var image;
+    	var placement="right"
+    		if(p_name=="FilterBased")
+    			image="flatfull/img/dashboard_images/My-contacts.png";
+    		else if(p_name=="EmailsOpened")
+    			image="flatfull/img/dashboard_images/Email-opened.png";
+    		else if(p_name=="PendingDeals")
+    			image="flatfull/img/dashboard_images/Pending-Deals.png";
+    		else if(p_name=="Agenda")
+    			image="flatfull/img/dashboard_images/Events.png";
+    		else if(p_name=="TodayTasks")
+    			image="flatfull/img/dashboard_images/Task.png";
+    		else if(p_name=="DealsByMilestone")
+    				image="flatfull/img/dashboard_images/Milestone.png";
+    		else if(p_name=="DealsFunnel")
+    		{
+    				image="flatfull/img/dashboard_images/Deals-Funnel.png";
+    			placement="left";
+    		}
+    		else if(p_name=="GrowthGraph")
+    		{
+    			placement="left";
+    				image="flatfull/img/dashboard_images/Tag-Graph.png";
+    		}
+    		else if(p_name=="CallsPerPerson")
+    		{
+    			placement="left";
+    				image="flatfull/img/dashboard_images/Calls.png";
+    		}
+    		else if(p_name=="AgileCRMBlog")
+    			image="flatfull/img/dashboard_images/Agile-Blog.png";
+    		else if(p_name=="AccountDetails")
+    			image="flatfull/img/dashboard_images/account-information.png";
+    		else if(p_name=="TaskReport"){
+    				placement="left";
+    				image="flatfull/img/dashboard_images/Task-report.png";		
+    			}
+    		else if(p_name=="StatsReport")
+    			image="flatfull/img/dashboard_images/stats.png";
+    		else if(p_name=="Leaderboard")
+    				image="flatfull/img/dashboard_images/Leaderboard.png";
+    		else if(p_name=="RevenueGraph")
+    		{
+    			placement="left";
+    			image="flatfull/img/dashboard_images/Revenue-graph.png";
+    		}
+    		else if(p_name=="UserActivities")
+    		{
+    			placement="left";
+    			image="flatfull/img/dashboard_images/User-Activities.png";
+    		}
+    		else if(p_name=="MiniCalendar")
+    		{
+    			placement="left";
+    			image="flatfull/img/dashboard_images/Mini-Calendar.jpg";
+    		}
+    		else if(p_name=="Campaignstats")
+    			image="flatfull/img/dashboard_images/Campaign-stats.jpg";
+    	$(this).popover({
+    		"rel":"popover",
+    		"trigger":"hover",
+    		"placement":placement,
+    		"html" : "true",
+    		"content" : function(){
+    			return '<img src='+image+'>';
+
+    		}
+    	});
+    	$(this).popover('show');
+    });
+
+	}
 /*
  * $("#add-portlet").live("click", function(e){ e.preventDefault();
  * this.Catalog_Portlets_View = new Base_Collection_View({ url :

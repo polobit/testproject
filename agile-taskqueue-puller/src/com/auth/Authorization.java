@@ -88,6 +88,7 @@ public class Authorization
 
     public static Credential getCredentials() throws Exception
     {
+
 	if (credentials != null)
 	{
 	    if (credentials.getExpirationTimeMilliseconds() > (System.currentTimeMillis() - 120000))
@@ -95,8 +96,14 @@ public class Authorization
 
 	    try
 	    {
+		logger.info("*************************************");
+		logger.info(credentials.getAccessToken());
+		logger.info(credentials.getExpirationTimeMilliseconds());
+		logger.info(Thread.currentThread().getName());
 		credentials.refreshToken();
-		return credentials;
+		logger.info(credentials.getAccessToken());
+		logger.info(credentials.getExpirationTimeMilliseconds());
+		logger.info("**************************************");
 	    }
 	    catch (IOException e)
 	    {
@@ -114,7 +121,8 @@ public class Authorization
 	{
 	    Credential cred = getCredentials();
 
-	    Taskqueue tq = new Taskqueue.Builder(httpTransport, JSON_FACTORY, cred).setApplicationName(Globals.PROJECT_NAME)
+	    Taskqueue tq = new Taskqueue.Builder(httpTransport, JSON_FACTORY, cred)
+		    .setApplicationName(Globals.PROJECT_NAME)
 		    .setTaskqueueRequestInitializer(new TaskqueueRequestInitializer()
 		    {
 

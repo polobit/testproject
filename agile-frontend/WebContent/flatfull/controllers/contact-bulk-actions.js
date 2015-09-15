@@ -137,7 +137,7 @@ var ContactBulkActionRouter = Backbone.Router.extend({
 			Backbone.history.navigate("companies", { trigger : true });
 		else
 		{
-			var el = $("#content").html('<div id="send-email-listener-container"></div>').find('#send-email-listener-container').html(getTemplate("send-email-company", {}));
+			var el = $("#content").html('<div id="send-email-listener-container"></div>').find('#send-email-listener-container').html(getTemplate("send-email", {}));
 			$("#emailForm").find('.add-attachment-select').hide();
 			$('body').trigger('fill_emails');
 			initializeSendEmailListeners();

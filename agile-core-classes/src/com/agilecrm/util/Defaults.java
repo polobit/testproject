@@ -99,7 +99,7 @@ public class Defaults
 	Task task = new Task();
 	task.subject = "Give feedback about Agile";
 	task.is_complete = false;
-	task.type = Type.SEND;
+	task.type = Type.SEND.toString();
 	task.priority_type = PriorityType.HIGH;
 	DateUtil date = new DateUtil().addDays(15).toMidnight().addMinutes(16 * 60);
 	task.due = date.getTime().getTime() / 1000;
@@ -109,7 +109,7 @@ public class Defaults
 	Task task1 = new Task();
 	task1.subject = "<a href=\"https://www.facebook.com/crmagile\" target=\"_blank\" rel=\"nofollow\" title=\"Link: https://www.facebook.com/crmagile\">Like Agile on Facebook</a>";
 	task1.is_complete = false;
-	task1.type = Type.SEND;
+	task1.type = Type.SEND.toString();
 	task1.priority_type = PriorityType.LOW;
 	DateUtil date1 = new DateUtil().addDays(1).toMidnight().addMinutes(16 * 60);
 	task1.due = date1.getTime().getTime() / 1000;
@@ -119,7 +119,7 @@ public class Defaults
 	Task task2 = new Task();
 	task2.subject = "Call Grandmother";
 	task2.is_complete = false;
-	task2.type = Type.CALL;
+	task2.type = Type.CALL.toString();
 	task2.priority_type = PriorityType.NORMAL;
 	DateUtil date2 = new DateUtil().addDays(2).toMidnight().addMinutes(16 * 60);
 	task2.due = date2.getTime().getTime() / 1000;
@@ -129,7 +129,7 @@ public class Defaults
 	Task task3 = new Task();
 	task3.subject = "<a href=\"https://twitter.com/share?url=https%3A%2F%2Fwww.agilecrm.com&amp;text=Sell%20like%20Fortune%20500%20with%20%23AgileCRM%20-%20\" target=\"_blank\"rel=\"nofollow\" title=\"Link: https://twitter.com/share?url=https%3A%2F%2Fwww.agilecrm.com&amp;text=Sell%20like%20Fortune%20500%20with%20%23AgileCRM%20-%20\">Tweet about Agile</a>";
 	task3.is_complete = false;
-	task3.type = Type.TWEET;
+	task3.type = Type.TWEET.toString();
 	task3.priority_type = PriorityType.NORMAL;
 	DateUtil date3 = new DateUtil().addMinutes(60);
 	task3.due = date3.getTime().getTime() / 1000;
@@ -139,7 +139,7 @@ public class Defaults
 	Task task4 = new Task();
 	task4.subject = "Meet Homer to finalize the Deal (Bring Donuts!)";
 	task4.is_complete = false;
-	task4.type = Type.MEETING;
+	task4.type = Type.MEETING.toString();
 	task4.priority_type = PriorityType.HIGH;
 	DateUtil date4 = new DateUtil().addDays(5).toMidnight().addMinutes(16 * 60);
 	task4.due = date4.getTime().getTime() / 1000;

@@ -3,7 +3,9 @@ package com.agilecrm.core.api.prefs;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -55,7 +57,7 @@ public class AccountPrefsAPI
 	prefs.save();
 	return prefs;
     }
-    
+
     @Path("/verified-emails/all")
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
@@ -63,15 +65,28 @@ public class AccountPrefsAPI
     {
 	return VerifiedEmailsUtil.getAllEmails();
     }
-    
+
     @Path("/verified-emails/{email}")
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public VerifiedEmails getVerifiedEmailsByEmail(@PathParam("email") String email)
     {
-    	if(StringUtils.isBlank(email))
-    		return null;
-    	
+	if (StringUtils.isBlank(email))
+	    return null;
+
 	return VerifiedEmailsUtil.getVerifiedEmailsByEmail(email);
+    }
+
+    @Path("allow-new-tag")
+    @POST
+    @Produces({ MediaType.APPLICATION_JSON })
+    public AccountPrefs setNewTagPermission(@FormParam("is_enable") Boolean isEnable)
+    {
+
+	AccountPrefs prefs = null;
+	if (isEnable != null)
+	    prefs = AccountPrefsUtil.setNewTagACL(isEnable);
+
+	return null;
     }
 }

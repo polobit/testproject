@@ -14,13 +14,19 @@ import org.json.JSONObject;
 
 import com.agilecrm.AgileQueues;
 import com.agilecrm.Globals;
+import com.agilecrm.account.AccountPrefs;
+import com.agilecrm.account.util.AccountPrefsUtil;
+import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Tag;
 import com.agilecrm.contact.deferred.TagStatsDeferredTask;
 import com.agilecrm.contact.deferred.TagsDeferredTask;
 import com.agilecrm.contact.deferred.tags.TagDBUpdateDeferredTask;
 import com.agilecrm.cursor.Cursor;
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.agilecrm.queues.backend.ModuleUtil;
 import com.agilecrm.search.util.SearchUtil;
+import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.CacheUtil;
 import com.agilecrm.validator.TagValidator;
 import com.google.appengine.api.NamespaceManager;
@@ -471,5 +477,100 @@ public class TagUtil
 	    tagBuilder.deleteCharAt(0);
 	}
 	return trimSpecialCharsAtStart(tagBuilder.toString());
+    }
+
+    public static boolean hasTagPermission(Contact contact)
+    {
+	// Do not check for backends.
+	if (!ModuleUtil.getCurrentModuleName().equals("default"))
+	    return true;
+
+	DomainUser user = DomainUserUtil.getCurrentDomainUser();
+	if (user.is_admin)
+	    return true;
+	AccountPrefs prefs = AccountPrefsUtil.getAccountPrefs();
+	if (prefs.tagsPermission != null && !prefs.tagsPermission)
+	{
+	    Set<String> newTagSet = new HashSet<String>();
+	    // If tags are not empty, considering they are simple tags and adds
+	    // them
+	    // to tagsWithTime
+	    if (!contact.tags.isEmpty())
+	    {
+		for (String tag : contact.tags)
+		{
+
+		    Tag tagObject = new Tag(tag);
+		    if (!contact.tagsWithTime.contains(tagObject))
+		    {
+			newTagSet.add(tag);
+		    }
+		}
+	    }
+
+	    boolean newTag = false;
+
+	    for (Tag tag : contact.tagsWithTime)
+	    {
+		// Check if it is null, it can be null tag is created using
+		// developers api
+		if (tag.createdTime == null || tag.createdTime == 0L)
+		{
+		    newTagSet.add(tag.tag);
+		}
+	    }
+
+	    for (String tag : newTagSet)
+	    {
+		if (getTag(tag) == null)
+		    return false;
+	    }
+	}
+
+	return true;
+
+    }
+
+    public static List<String> hasTagPermission(String[] tags)
+    {
+	List<String> newTags = new ArrayList<String>();
+	// Do not check for backends.
+	if (!ModuleUtil.getCurrentModuleName().equals("default"))
+	    return newTags;
+
+	DomainUser user = DomainUserUtil.getCurrentDomainUser();
+	if (user.is_admin)
+	    return newTags;
+	AccountPrefs prefs = AccountPrefsUtil.getAccountPrefs();
+	if (prefs.tagsPermission != null && !prefs.tagsPermission)
+	{
+	    for (String tag : tags)
+	    {
+		if (getTag(tag) == null)
+		    newTags.add(tag);
+	    }
+	}
+	return newTags;
+    }
+
+    public static boolean hasTagPermission(Tag[] tags)
+    {
+	// Do not check for backends.
+	if (!ModuleUtil.getCurrentModuleName().equals("default"))
+	    return true;
+
+	DomainUser user = DomainUserUtil.getCurrentDomainUser();
+	if (user.is_admin)
+	    return true;
+	AccountPrefs prefs = AccountPrefsUtil.getAccountPrefs();
+	if (prefs.tagsPermission != null && !prefs.tagsPermission)
+	{
+	    for (Tag tag : tags)
+	    {
+		if (getTag(tag.tag) == null)
+		    return false;
+	    }
+	}
+	return true;
     }
 }

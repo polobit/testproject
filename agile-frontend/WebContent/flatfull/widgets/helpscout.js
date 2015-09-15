@@ -150,6 +150,7 @@ function addTicketToHelpScout()
 			$('#helpscout_messageModal').modal("show");
 
 			// To show the radio button (for type) as buttons with toggle state.
+            $("body").off("click", "#helpscout_messageModal input[type='radio']");
 			$("body").on("click", "#helpscout_messageModal input[type='radio']", function(e)
 					{	
 						$('#helpscout_messageModal label.btn').toggleClass("active");
@@ -174,6 +175,7 @@ function addTicketToHelpScout()
 	 * On click of send button in the modal, calls send request method to add a
 	 * Conversation in HelpScout.
 	 */
+    $("body").off("click", "#helpscout_send_request");
 	$("body").on("click", "#helpscout_send_request", function(e)
 			{
 				e.preventDefault();
@@ -298,6 +300,7 @@ $(function()
 			showHelpScoutMails();
 
 			// On click of add ticket, add ticket method is called
+            $("body").off("click", "#add_conv");
 			$("body").on("click", "#add_conv", function(e)
 			{
 				e.preventDefault();

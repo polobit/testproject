@@ -16,7 +16,7 @@
 
 			System.out.println("Domain user " + domainUser);
 			
-			String logoutURL = "/login";
+			String logoutURL = "/login?sur=true";
 			UserInfo user = SessionManager.get();
 		
 %>
@@ -209,8 +209,12 @@
 						
 								<li data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Calendar"><a href="#calendar"><i class="icon icon-calendar"></i></a></li>
 								<li id="due_tasks"  data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Tasks"><a class="pos-rlt" href="#tasks"><i class="icon-list"></i>
-								
+
 											<span title="Tasks due" class="navbar_due_tasks  pull-right-xs"><span  id="due_tasks_count" class="badge badge-sm up bg-danger"></span></span></a></li>
+								<li id="recent-menu" class="dropdown" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Activity"><a
+								class="dropdown-toggle" data-toggle="dropdown" href=""> <i class='fa fa-history text-md text-muted'></i>
+							</a><ul class="dropdown-menu animated fadeInRight" style="width:23em; right:-11px;"></ul>
+							</li> 
 							<li class="nav-bar-search">
 								<form id="searchForm" class=" navbar-search  navbar-search navbar-form navbar-form-sm navbar-left shift">
 					<div class="input-group">
@@ -230,22 +234,16 @@
 							
 						</ul>
 
-						<ul class="nav  navbar-nav  navbar-right">				
-							<li id="recent-menu" class="dropdown" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Activity"><a
-								class="dropdown-toggle" data-toggle="dropdown" href=""> <i class='fa fa-history text-md text-muted'></i>
-							</a><ul class="dropdown-menu animated fadeInRight" style="width:23em; right:-11px;"></ul>
-							</li>
-								
-
+						<ul class="nav  navbar-nav  navbar-right">			
 							<li class="dropdown" id="menu1"><a class="dropdown-toggle"
 								data-toggle="dropdown" href="">New <b class="caret"></b></a>
 								<ul class="dropdown-menu animated fadeInRight">
 									<li><a href="#personModal"  data-toggle="modal" id="person">
-											Contact</a></li>
+											<div class="pull-left">Contact</div><% if(currentUserPrefs.keyboard_shotcuts) {out.print("<div style='color: #D2C9C9;font-size: 12px;' class='pull-right'>Shift + N</div>");} %><div class="clearfix"></div></a></li>
 									<li><a href="#companyModal"  data-toggle="modal"
 										id="company"> Company</a></li>
 									<li><a href="#"  id="show-activity"> Event</a></li>
-									<li><a href="#" class=" add-task"> Task</a></li>
+									<li><a href="#" class=" add-task"> <div class="pull-left">Task</div><% if(currentUserPrefs.keyboard_shotcuts) {out.print("<div style='color: #D2C9C9;font-size: 12px;' class='pull-right'>Shift + T</div>");} %><div class="clearfix"></div></a></li>
 
 									<%
 										if(domainUser.menu_scopes.contains(NavbarConstants.DEALS)){
@@ -290,8 +288,10 @@
 											%> --%> <span class="text-sm m-r-md"> <b><%=user.getEmail()%></b></span>
 
 									</a></li>
-									<li><a href="#user-prefs"><!-- <i class="icon-cog"></i> -->
-											Preferences</a></li>
+
+									<li><a href="#user-prefs/profile"><!-- <i class="icon-cog"></i> -->
+
+											<div class="pull-left">Preferences</div><% if(currentUserPrefs.keyboard_shotcuts) {out.print("<div style='color: #D2C9C9;font-size: 12px;' class='pull-right'>Shift + P</div>");} %><div class="clearfix"></div></a></li>
 
 									<%
 									    if (domainUser != null && domainUser.is_admin)
@@ -302,8 +302,13 @@
 									%>
 									<li><a href="#themeandlayout"><!-- <i class="icon-off"></i> -->
 											Theme & Layout</a></li>
+									<li class="divider"></li>
+									<li><a href="#subscribe"><!-- <i class="icon-cog"></i> -->
+											Upgrade</a></li>
 									<li><a href="https://www.agilecrm.com/product-updates" target="_blank"><!-- <i class="icon-off"></i> -->
 											Product Updates</a></li>
+									<li><a href="#help"><!-- <i class="icon-off"></i> -->
+											Help</a></li>
 									<!-- <li><a href="https://www.agilecrm.com/support.html" target="_blank"><i class="icon-facetime-video"></i> Help
 											Videos</a></li>
 								 	<li><a href="#" onclick="$('li#fat-menu').removeClass('open');clickdesk_show_livechat_popup();"><i class="icon-comment"></i> Live Chat</a></li>  -->

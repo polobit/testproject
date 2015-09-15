@@ -136,7 +136,8 @@ $(function()
 			if (last_name == undefined || last_name == null)
 				last_name == ' ';
 			showChargifyClient();
-
+            
+            $("body").off("click", "#chargify_add_contact");
 			$("body").on("click", "#chargify_add_contact", function(e)
 			{
 				e.preventDefault();

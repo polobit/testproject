@@ -277,6 +277,21 @@ function save_task(formId, modalId, isUpdate, saveBtn)
 
 	if (!isUpdate)
 		json.due = new Date(json.due).getTime();
+	
+	if(isUpdate){
+		
+		if($('#'+formId).find('ul#notes').length>0){
+			var notes = [];
+			$('#'+formId+' li.task-note').each(function()
+			{
+				notes.push($(this).attr('data'));
+			});
+
+			console.log(notes);
+
+			json.notes = notes;
+		}
+	}
 	var startarray = (json.task_ending_time).split(":");
 	json.due = new Date((json.due) * 1000).setHours(startarray[0], startarray[1]) / 1000.0;
 
@@ -690,15 +705,17 @@ function showTaskModal(forAddTask)
 	agile_type_ahead("task_related_to", el, contacts_typeahead);
 	$('#activityTaskModal').modal('show');
 	highlight_task();
-
-	// Fills owner select element
-	populateUsers("owners-list", $("#taskForm"), undefined, undefined, function(data)
-	{
-		$("#taskForm").find("#owners-list").html(data);
-		$("#owners-list", el).find('option[value=' + CURRENT_DOMAIN_USER.id + ']').attr("selected", "selected");
-		$("#owners-list", $("#taskForm")).closest('div').find('.loading-img').hide();
-
-		// Add selected task list details in add task modal
-		addTasklListDetails(forAddTask);
+	categories.getCategoriesHtml(undefined,function(catsHtml){
+		$('#type',el).html(catsHtml);
+		// Fills owner select element
+		populateUsers("owners-list", $("#taskForm"), undefined, undefined, function(data)
+		{
+			$("#taskForm").find("#owners-list").html(data);
+			$("#owners-list", el).find('option[value=' + CURRENT_DOMAIN_USER.id + ']').attr("selected", "selected");
+			$("#owners-list", $("#taskForm")).closest('div').find('.loading-img').hide();
+	
+			// Add selected task list details in add task modal
+			addTasklListDetails(forAddTask);
+		});
 	});
 }

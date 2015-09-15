@@ -140,6 +140,7 @@ $(function()
 										last_name = ' ';
 						showShopifyClient(shop);
 
+                        $("body").off("click", '#shopify_add_contact');
 						$("body").on("click", '#shopify_add_contact', function(e)
 						{
 										e.preventDefault();
@@ -147,6 +148,7 @@ $(function()
 										addContactToShopify(shop);
 						});
 
+                        $("body").off("click", '.order');
 						$("body").on("click", '.order', function(e)
 						{
 										e.preventDefault();
