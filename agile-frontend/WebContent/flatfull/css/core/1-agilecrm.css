@@ -2643,4 +2643,20 @@ select.input-xs{
 	border: 1px solid #dee5e7;
   border-top: 0px;
 }
+.ical-apple-logo{
+	vertical-align: middle;
+}
+.ical-copy-text{
+margin-bottom: 17px;
+}
+.ical-url-box{
+	position: relative; padding: 5px;
+}
+.ical-feed-url{
+	margin-left: 50px;
+}
+.ical-send-ical-link{
+	text-align: center;
+    margin-left: 134px;
+}
 
