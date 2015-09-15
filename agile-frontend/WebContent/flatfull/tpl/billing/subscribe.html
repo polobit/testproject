@@ -242,7 +242,7 @@
 	<label class="control-label col-sm-3">Billing Cycle</label> 
 		<div class="controls col-sm-6">
 			<select name="cycle" id="billing_cycle" class="form-control">
-				<option value="monthly">Monthly</option>
+				<option value="monthly" selected>Monthly</option>
 				<option value="yearly">Yearly (20% off)</option>
 				<option value="biennial">2 Years  (40% off)</option>
 			</select>
@@ -364,10 +364,7 @@ Users
                 
               </div>
             </div>
- 
-            
-            
-            
+    
           </form>
 {{else}}
           <form class="bs-example form-horizontal">
@@ -632,59 +629,4 @@ users.
 </div>                    
 </div>
 </form>
-</script>
-<script id="creditcard-update-template" type="text/html">
-
-<div class="wrapper-md">
-<div class="row">
-
-  <div class="col-md-9">
-<div class="panel panel-default">
-  <div class="panel-heading">Update Card
-  </div>
-<div class="panel-body">
-<form id="CCform" class="form-horizontal card_details" name="card_details">
-			<fieldset>
-				
-					<div class="control-group form-group">
-						<label class="control-label col-sm-3">Card Number <span class="field_req">*</span></label>
-						<div class="controls col-sm-6">
-							<input type="text" name="number" class="input required  digits form-control" placeholder="Enter Your Card Number" style="width: 99%;">
-						</div>
-					</div>
-					<div class="control-group form-group">
-						<label class="control-label col-sm-3">Expiry<span class="field_req">*</span></label>
-						<div class="controls col-sm-6">
-							<select name="exp_month" id="exp_month" class="input form-control exp_month inline-block m-r" style="width: 48%;" placeholder="Expiry Month" onchange="$(&quot;#exp_year&quot;).valid();"></select>
-							 <select name="exp_year" id="exp_year" class="input required form-control digits exp_year atleastThreeMonths inline-block" style="width: 47%;" placeholder="Expiry Year"></select>
-						</div>
-					</div>
-				
-				<div class="control-group form-group">
-					<label class="control-label col-sm-3">CVC<span class="field_req">*</span></label>
-					<div class="controls col-sm-6" style="width: 42%;">
-						<input type="text" name="cvc" class="input required  digits form-control" placeholder="Card Security Code">
-
-					</div>
- <img src="/flatfull/img/cvc.png" style="width: 60px;">
-				</div>
-
-				<div class="control-group form-group">
-					<label class="control-label col-sm-3"></label>
-					<div class="controls col-sm-6" style="width: 42%;">
-						<a class="save btn btn-sm btn-primary" href="#subscribe" id="updatecard">
-				Update</a>
-					</div>
-				</div>
-					
-			</fieldset>
-		</form>
-        <form id="gateway" class="form-horizontal hide">
-				<input type="text" name="gateway" class="hidden form-control" value="Stripe" />
-			</form>	
-</div>
-</div>
-</div>
-</div>
-</div>
 </script>

@@ -284,6 +284,7 @@ function initializeSubscriptionListeners(){
 			price = update_price();
 			$( "#users_quantity").text(value);
  	     	$("#users_total_cost").text((value * price).toFixed(2));
+ 	     	var quantity = $("#user_quantity").val();
 		});
 		
 		$('#subscribe_plan_change').on('change', '#plan_type', function(e){
