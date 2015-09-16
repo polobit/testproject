@@ -272,11 +272,17 @@ function getTemplateUrls(templateName)
 	}
 	if (templateName.indexOf("socialsuite") == 0)
 	{
-		template_relative_urls.push("socialsuite.js");
+		if(HANDLEBARS_PRECOMPILATION)
+			template_relative_urls.push("socialsuite-all.js");
+		else
+		{
+			template_relative_urls.push("socialsuite.js");
+		}
 
 		if (HANDLEBARS_PRECOMPILATION)
 			template_relative_urls.push("socialsuite.html");
 	}
+
 
 	if (templateName.indexOf("portlet") == 0)
 	{
@@ -388,7 +394,9 @@ function downloadTemplate(url, callback)
 
 	console.log(url + " " + dataType + " " + is_async);
 
-	jQuery.ajax({ url : url, dataType : dataType, success : function(result)
+	var is_cached = !LOCAL_SERVER;
+
+	jQuery.ajax({ url : url, dataType : dataType, cache:is_cached, success : function(result)
 	{
 		// If HTMl, add to body
 		if (dataType == 'html')

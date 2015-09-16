@@ -19,6 +19,38 @@ import com.google.appengine.api.utils.SystemProperty;
  */
 public class VersioningUtil
 {
+    private static final String APP_ID;
+    private static final String RELEASE_VERSION;
+
+    private static final boolean IS_LOCAL_DEVELOPMENT_SERVER;
+    private static final boolean IS_PRODUCTION_APP;
+
+    /**
+     * Cloudfront paths
+     */
+    private static final String CLOUDFRONT_SERVER_URL = "//doxhze3l6s7v9.cloudfront.net/";
+    private static final String CLOUDFRONT_BASE_URL;
+
+    private static final String CLOUDFRONT_STATIC_FILES_PATH;
+
+    static
+    {
+	APP_ID = SystemProperty.applicationId.get();
+	IS_LOCAL_DEVELOPMENT_SERVER = (SystemProperty.environment.value() == SystemProperty.Environment.Value.Development);
+	IS_PRODUCTION_APP = "agile-crm-cloud".equals(APP_ID);
+	RELEASE_VERSION = SystemProperty.applicationVersion.get().split("\\.")[0];
+
+	/**
+	 * Returns cloudfornt URL with extension app/ or beta/ depending
+	 */
+	CLOUDFRONT_BASE_URL = IS_LOCAL_DEVELOPMENT_SERVER ? "" : (CLOUDFRONT_SERVER_URL + (IS_PRODUCTION_APP ? "app/"
+		+ RELEASE_VERSION + "/" : "beta/"));
+
+	// Static files are placed separately as they are not uploaded after
+	// every release.
+	CLOUDFRONT_STATIC_FILES_PATH = CLOUDFRONT_SERVER_URL + (IS_PRODUCTION_APP ? "app/static/" : "beta/static/");
+
+    }
 
     /**
      * Returns default url to main version
@@ -142,5 +174,66 @@ public class VersioningUtil
 	}
 
 	return false;
+    }
+
+    /**
+     * Returns app release version
+     * 
+     * @return
+     */
+    public static String getVersion()
+    {
+	return RELEASE_VERSION;
+    }
+
+    /**
+     * Returns application id
+     * 
+     * @return
+     */
+    public static String getApplicationAPPId()
+    {
+	return APP_ID;
+    }
+
+    /**
+     * Return true if environment is local system
+     * 
+     * @return
+     */
+    public static boolean isLocalHost()
+    {
+	return IS_LOCAL_DEVELOPMENT_SERVER;
+    }
+
+    /**
+     * Return true if it is production app. Can be used with not condition to
+     * check it is beta version
+     * 
+     * @return
+     */
+    public static final boolean isProductionAPP()
+    {
+	return IS_PRODUCTION_APP;
+    }
+
+    public static final String getCloudFrontBaseURL()
+    {
+	return CLOUDFRONT_BASE_URL;
+    }
+
+    /**
+     * Static lib files are places seperately
+     * 
+     * @return
+     */
+    public static final String getStaticFilesBaseURL()
+    {
+	return CLOUDFRONT_STATIC_FILES_PATH;
+    }
+
+    public static void main(String[] args)
+    {
+	System.out.println(isBackgroundThread());
     }
 }
