@@ -1,6 +1,6 @@
 var Portlets_View, gridster;
 
-/** if CURRENT_AGILE_USER is not set, set it from user.domain **/
+/** If CURRENT_AGILE_USER is not set, set it from user.domain **/
 $(function()
 {
 	$.getJSON('/core/api/users/agileusers', function(users)
@@ -237,40 +237,52 @@ function set_up_portlets(el, portlets_el){
         }
     }).data('gridster');
 
-    $(window).resize(function(){
+    $(window).resize(function()
+    {
     	if(gridster!=undefined)
     		$('.gridster-portlets').css("height","auto");
+
     	if($(window).width()<768 && gridster!=undefined){
     		gridster.disable();
     		gridster.disable_resize();
-    	}else if(gridster!=undefined){
+    	}
+    	else if(gridster!=undefined)
+    	{
     		gridster.enable();
     		gridster.enable_resize();
     		gridster.set_dom_grid_height();
     	}
-		if($(window).width()<975 && $(window).width()>768 && $('.portlet_body_calendar').is(':visible')){
+
+		if($(window).width()<975 && $(window).width()>768 && $('.portlet_body_calendar').is(':visible'))
+		{
 				$('.portlet_body_calendar').each(function(){
 				$(this).find('#calendar_container').find('.fc-widget-header').each(function(){
 				$(this).text($(this).text().substring(0, 1));
 				});
 			});
-		}else if($(window).width()>975 && $('.portlet_body_calendar').is(':visible')){
-				$('.portlet_body_calendar').each(function(){
-				var weeksArray = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-				$(this).find('#calendar_container').find('.fc-widget-header').each(function(index){
-				$(this).text(weeksArray[index]);
+		}
+		else if($(window).width()>975 && $('.portlet_body_calendar').is(':visible'))
+		{
+				$('.portlet_body_calendar').each(function()
+				{
+					var weeksArray = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+					$(this).find('#calendar_container').find('.fc-widget-header').each(function(index)
+					{
+						$(this).text(weeksArray[index]);
+					});
 				});
-			});
 		}
     });
 
     if($(window).width()<768 && gridster!=undefined){
 		gridster.disable();
 		gridster.disable_resize();
-	}else if(gridster!=undefined){
+	}
+	else if(gridster!=undefined){
 		gridster.enable();
 		gridster.enable_resize();
 	}
+
     $(window).trigger('resize');
 }
 
@@ -345,9 +357,11 @@ $('.modal-footer').off("click").on('click', '.portlet-settings-save-modal', func
 	var column_position = portlet.get('column_position');
 	var row_position = portlet.get('row_position');
 	portlet.set({ "prefs" : JSON.stringify(json) }, { silent : true });
+
 	portlet.url="core/api/portlets";
 	var model = new BaseModel();
 	model.url = 'core/api/portlets';
+
 	if(flag)
 	{
 		model.save(portlet.toJSON(), 
@@ -378,14 +392,15 @@ $('#portletsTaskReportSettingsModal').off("change").on('change', '#group-by-task
 		if($(this).val()==$('#group-by-task-report').val())
 			$(this).hide();
 		else{
-			if($('#tasks-task-report').val()=="completed-tasks" && $(this).val()!="status"){
-				$(this).show();
-				$(this).attr("selected",true);
-			}else if($('#tasks-task-report').val()=="all-tasks"){
-				$(this).show();
-				$(this).attr("selected",true);
+				if($('#tasks-task-report').val()=="completed-tasks" && $(this).val()!="status"){
+					$(this).show();
+					$(this).attr("selected",true);
+				}
+				else if($('#tasks-task-report').val()=="all-tasks"){
+					$(this).show();
+					$(this).attr("selected",true);
+				}
 			}
-		}
 	});
 	if($('#group-by-task-report').val()=="status"){
 		$('#tasks-task-report > option#all-tasks').attr("selected",true);
@@ -408,7 +423,9 @@ $('.modal-content').off("change").on('change', '#tasks-task-report', function(e)
 
 $('.gridster-portlets').off("mouseover").on('mouseover', '.stats_report_portlet_body', function(e) {
 	if($('.stats_report_portlet_body').parent().find('.gs-resize-handle'))
+	{
 		$('.stats_report_portlet_body').parent().find('.gs-resize-handle').remove();
+	}
 });
 
 $('.portlet_body').off("change").on('change', '.onboarding-check', function(e) {
@@ -551,7 +568,7 @@ $('.events_show').on('click','.minical-portlet-event',function(e){
 				if (firstname == undefined)
 						firstname = "";
 					var lastname = getPropertyValue(model.contacts[0].properties, "last_name");
-					if (lastname == undefined)
+				if (lastname == undefined)
 						lastname = "";
 				web_event_contact_name = firstname + " " + lastname;
 			}
@@ -591,18 +608,18 @@ $('.events_show').on('click','.minical-portlet-event-add',function(e)
 	App_Portlets.currentPortletName = 'Mini Calendar';
 	var start = new Date(parseInt($(this).attr('id')));
 							$('#activityModal').modal('show');
-							highlight_event();
+				highlight_event();
 
-							// Set Date for Event
-							//var dateFormat = 'mm/dd/yyyy';
-							$('#task-date-1').val(getDateInFormat(start));
-							$("#event-date-1").val(getDateInFormat(start));
-							$("#event-date-2").val(getDateInFormat(start));
+					// Set Date for Event
+					//var dateFormat = 'mm/dd/yyyy';
+					$('#task-date-1').val(getDateInFormat(start));
+					$("#event-date-1").val(getDateInFormat(start));
+					$("#event-date-2").val(getDateInFormat(start));
 
-							// Set Time for Event
-							//if ((start.getHours() == 00) && (start.getHours() == 00) && (start.getMinutes() == 00))
-								$('#event-time-1').val('');
-								$('#event-time-2').val('');						
+					// Set Time for Event
+					//if ((start.getHours() == 00) && (start.getHours() == 00) && (start.getMinutes() == 00))
+					$('#event-time-1').val('');
+					$('#event-time-2').val('');						
   });
 
 }
@@ -612,30 +629,32 @@ function initBlogPortletSync(el)
 {
 	head.js(LIB_PATH + 'lib/jquery.feeds.min.js',
 		function()
-			{
+		{
 
-			  $('#portlet_blog_sync_container',el)
-					.feeds(
-						   {
-							feeds : { blog : "https://www.agilecrm.com/blog/feed/" },
-							max : 3,
-							entryTemplate : function(entry)
-							 {
-								return '' + '<a href="' + entry.link + '" title = "' + entry.title + '" target="_blank" >' + entry.title + '</a><div style="color:#999;font-size:11px;line-height: 13px;margin-bottom:5px">' 
-								+ new Date(entry.publishedDate).format('mmm d, yyyy') + '</div><p style="padding-top:5px;margin-bottom:15px">' 
-								+ entry.contentSnippet.replace('<a', '<a target="_blank"') + '</p>';
-							 },
-								onComplete : function(e){
-								$('#portlet_blog_sync_container',el).append('<span class="pull-right"><a href="https://www.agilecrm.com/blog" target="_blank">Agile CRM Blog</a></span>');
-								}
-							});
-			});
+		  $('#portlet_blog_sync_container',el)
+				.feeds(
+					   {
+						feeds : { blog : "https://www.agilecrm.com/blog/feed/" },
+						max : 3,
+						entryTemplate : function(entry)
+						 {
+							return '' + '<a href="' + entry.link + '" title = "' + entry.title + '" target="_blank" >' + entry.title + '</a><div style="color:#999;font-size:11px;line-height: 13px;margin-bottom:5px">' 
+							+ new Date(entry.publishedDate).format('mmm d, yyyy') + '</div><p style="padding-top:5px;margin-bottom:15px">' 
+							+ entry.contentSnippet.replace('<a', '<a target="_blank"') + '</p>';
+						 },
+							onComplete : function(e){
+							$('#portlet_blog_sync_container',el).append('<span class="pull-right"><a href="https://www.agilecrm.com/blog" target="_blank">Agile CRM Blog</a></span>');
+							}
+						});
+		});
 
 }
 
 $('body').on('click', '.onboarding-skip', function(e) {
 	var parent_el=$(this).parent();
+
 	parent_el.find('span').css("text-decoration","line-through");
+
 	if(!parent_el.find('small').hasClass('onboarding-undo'))
 		parent_el.find('span').after("<small class='p-l-sm onboarding-undo c-p'>(undo)</small>");
 	$(this).remove();
@@ -643,9 +662,11 @@ $('body').on('click', '.onboarding-skip', function(e) {
 
 $('body').on('click', '.onboarding-undo', function(e) {
 	var parent_el=$(this).parent();
+
 	parent_el.find('span').css("text-decoration","none");
 	parent_el.find('label').remove();
 	parent_el.find('span').before("<label class='i-checks i-checks-sm onboarding-check' style='padding-right:4px;'><input type='checkbox'><i></i></label>");
+	
 	if(!parent_el.find('small').hasClass('onboarding-skip'))
 		parent_el.find('span').after("<small class='p-l-sm onboarding-skip c-p'>(skip)</small>");
 	$(this).remove();
@@ -662,7 +683,7 @@ function gravatarImgForPortlets(width){
 	if (initials.length == 0)
 		backup_image = "&d=" + DEFAULT_GRAVATAR_url + "\" ";
 	var data_name = '';
-	return new Handlebars.SafeString('https://secure.gravatar.com/avatar/' + Agile_MD5("") + '.jpg?s=' + width + '' + backup_image + data_name);
+		return new Handlebars.SafeString('https://secure.gravatar.com/avatar/' + Agile_MD5("") + '.jpg?s=' + width + '' + backup_image + data_name);
 }
 
 /** Loading google events for Events Portet**/
@@ -674,60 +695,60 @@ function loadGoogleEventsForPortlets(p_el,startTime,endTime){
 		if (response)
 		{
 
-			head.js('https://apis.google.com/js/client.js', '/lib/calendar/gapi-helper.js', function()
+		head.js('https://apis.google.com/js/client.js', '/lib/calendar/gapi-helper.js', function()
+		{
+			setupGC(function()
 			{
-				setupGC(function()
-				{
 
-					gapi.auth.setToken({ access_token : response.access_token, state : "https://www.googleapis.com/auth/calendar" });
+				gapi.auth.setToken({ access_token : response.access_token, state : "https://www.googleapis.com/auth/calendar" });
 
-					var current_date = new Date();
-					var timezone_offset = current_date.getTimezoneOffset();
-					var startDate = new Date(startTime * 1000);
-					var gDateStart = startDate.toISOString();
-       				var endDate = new Date(endTime * 1000);
-       				var gDateEnd = endDate.toISOString();
+				var current_date = new Date();
+				var timezone_offset = current_date.getTimezoneOffset();
+				var startDate = new Date(startTime * 1000);
+				var gDateStart = startDate.toISOString();
+   				var endDate = new Date(endTime * 1000);
+   				var gDateEnd = endDate.toISOString();
 
-					// Retrieve the events from primary
-					var request = gapi.client.calendar.events
-								.list({ 'calendarId' : 'primary', maxResults : 25, singleEvents : true, orderBy : 'startTime', timeMin : gDateStart, timeMax : gDateEnd });
-						request.execute(function(resp)
+				// Retrieve the events from primary
+				var request = gapi.client.calendar.events
+							.list({ 'calendarId' : 'primary', maxResults : 25, singleEvents : true, orderBy : 'startTime', timeMin : gDateStart, timeMax : gDateEnd });
+					request.execute(function(resp)
+					{
+						console.log(resp);
+						for (var i = 0; i < resp.items.length; i++)
 						{
-							console.log(resp);
-							for (var i = 0; i < resp.items.length; i++)
+							var fc_event = google2fcEvent(resp.items[i]);
+							fc_event.startEpoch = new Date(fc_event.start).getTime()/1000;
+							fc_event.endEpoch = new Date(fc_event.end).getTime()/1000;
+							if (isNaN(fc_event.endEpoch))
 							{
-								var fc_event = google2fcEvent(resp.items[i]);
-								fc_event.startEpoch = new Date(fc_event.start).getTime()/1000;
-								fc_event.endEpoch = new Date(fc_event.end).getTime()/1000;
-								if (isNaN(fc_event.endEpoch))
-								{
-									fc_event.endEpoch = new Date(fc_event.google.end.date).getTime()/1000;
-								}
-								console.log(fc_event);
-								events.push(fc_event);
+								fc_event.endEpoch = new Date(fc_event.google.end.date).getTime()/1000;
+							}
+							console.log(fc_event);
+							events.push(fc_event);
 
-							}
-							App_Portlets.googleEventCollectionView = new Base_Collection_View({ data : events, templateKey : "portlets-google-events", individual_tag_name : 'tr',
-								sort_collection : true, sortKey : 'start', descending : false, 
-								postRenderCallback : function(el){
-									if($(p_el).parent().parent().find('#normal-events').find('table').find('tr').length>0)
+						}
+						App_Portlets.googleEventCollectionView = new Base_Collection_View({ data : events, templateKey : "portlets-google-events", individual_tag_name : 'tr',
+							sort_collection : true, sortKey : 'start', descending : false, 
+							postRenderCallback : function(el){
+								if($(p_el).parent().parent().find('#normal-events').find('table').find('tr').length>0)
+								{
+									$(p_el).parent().parent().find('#google-events').addClass('m-t-n-md').css("border-top","1px solid #eee");
+								}
+								setTimeout(function(){
+									if($(p_el).parent().parent().find('#normal-events').find('table').find('tr').length==0 && $(p_el).parent().parent().find('#google-events').find('table').find('tr').length==0)
 									{
-										$(p_el).parent().parent().find('#google-events').addClass('m-t-n-md').css("border-top","1px solid #eee");
+										$(p_el).parent().parent().find('#normal-events').html('<div class="portlet-error-message">No calendar events</div>');
 									}
-									setTimeout(function(){
-										if($(p_el).parent().parent().find('#normal-events').find('table').find('tr').length==0 && $(p_el).parent().parent().find('#google-events').find('table').find('tr').length==0)
-										{
-											$(p_el).parent().parent().find('#normal-events').html('<div class="portlet-error-message">No calendar events</div>');
-										}
-									},1000);
-								} });
-							//googleEventCollectionView.appendItem = appendGoogleEvent;
-							if($(p_el).parent().parent().find('#google-events').find('table').find('tr').length==0)
-							{
-								$(p_el).parent().parent().find('#google-events').html(App_Portlets.googleEventCollectionView.render(true).el);
-							}
-							hideTransitionBar();
-						});
+								},1000);
+							} });
+						//googleEventCollectionView.appendItem = appendGoogleEvent;
+						if($(p_el).parent().parent().find('#google-events').find('table').find('tr').length==0)
+						{
+							$(p_el).parent().parent().find('#google-events').html(App_Portlets.googleEventCollectionView.render(true).el);
+						}
+						hideTransitionBar();
+					});
 
 				});
 			});
