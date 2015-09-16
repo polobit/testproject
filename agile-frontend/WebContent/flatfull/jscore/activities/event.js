@@ -221,17 +221,18 @@ function initializeEventListners(el)
 {
 
 
-$("#ical_appointment_links").on('click', '#subscribe-ical', function(event)
+/*$("#ical_appointment_links").on('click', '#subscribe-ical', function(event)
 {
 	event.preventDefault();
 	set_api_key();
-});
+});*/
 
 
 /**
  * When Send Mail is clicked from Ical Modal, it hides the ical modal and shows
  * the ical-send email modal.
  */
+$("#icalModal #send-ical-email").off('click');
 $("#icalModal").on('click', '#send-ical-email', function(event)
 {
 	event.preventDefault();
