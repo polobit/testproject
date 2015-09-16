@@ -48,7 +48,7 @@ function enableKeyboardShotcuts()
 		// New contact
 		Mousetrap.bind('shift+n',function(){
 			if(!isModalVisible())
-				$('#personModal').modal('show'); 
+				addContactBasedOnCustomfields(); 
 		});
 
 		// New company
@@ -173,7 +173,7 @@ function enableKeyboardShotcuts()
 			if(isModalVisible())return;
 			
 			if(isRoute('contact'))
-				$('#personModal').modal('show');
+				addContactBasedOnCustomfields();
 			else if(isRoute('cases'))
 				showCases();
 			else if(isRoute('deals'))

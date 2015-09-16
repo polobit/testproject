@@ -1,6 +1,6 @@
 <script id="continue-contact-template" type="text/html">
 <div class="bg-light lter b-b wrapper-md">
-	<h3 class="h3 font-thin m-n">Continue Editing
+	<h3 class="h3 font-thin m-n">{{#if id}}Continue Editing{{else}}<i class="icon-plus-sign"></i>&nbsp;Add Contact{{/if}}
 	</h3>
 </div>
 <div class="wrapper-md">
@@ -456,14 +456,22 @@
                         </div>
                     </div>
                 </div>
-                <input type="text" name="id" class="hide form-control" value="{{id}}" />
+                {{#if id}}
+                    <input type="text" name="id" class="hide form-control" value="{{id}}" />
+
                 <input type="text" name="created_time" class="hide form-control" value="{{created_time}}" />
 
-                <input type="text" name="image" id="image" class="hide form-control" value="{{getPropertyValue properties "image"}}" />             
+                <input type="text" name="image" id="image" class="hide form-control" value="{{getPropertyValue properties "image"}}" />  
+                {{/if}}           
                 <div class="row">
 	            <div class="controls col-sm-9 pull-right">
-					<a href="#home" class="btn btn-sm btn-default" id="close">Close</a>
-                    <a href="#" type="submit" class="save btn btn-sm btn-primary" id="update">Update</a>
+                    {{#if id}}
+    					<a href="#home" class="btn btn-sm btn-default" id="close">Close</a>
+                        <a href="#" type="submit" class="save btn btn-sm btn-primary" id="update">Update</a>
+                    {{else}}
+                        <a href="#contacts" class="btn btn-sm btn-default">Close</a>
+                        <a href="#" class="save btn btn-sm btn-primary" id="update">Save </a>
+                    {{/if}}
 					<span class="form-action-error"></span>
                     <span class="save-status"></span>
                 </div>
