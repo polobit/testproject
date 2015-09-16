@@ -281,7 +281,7 @@ function getTemplateUrls(templateName)
 	{
 		template_relative_urls.push("webpages.js");
 	}
-	if (templateName.indexOf("billing-settings") == 0)
+	if (templateName.indexOf("billing-settings") == 0 || templateName.indexOf("creditcard-update") == 0)
 	{
 		template_relative_urls.push("settings.js");
 	}

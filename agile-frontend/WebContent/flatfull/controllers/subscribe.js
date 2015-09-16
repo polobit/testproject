@@ -56,8 +56,11 @@ var SubscribeRouter = Backbone.Router.extend({
 
 	cardUpdation : function()
 	{
-		if(!$("#exp_month").val())
-			Backbone.history.navigate("billing-settings", { trigger : true });
+		/*if(!$("#exp_month").val()){
+			Backbone.history.navigate("dashboard", { trigger : true });
+			return;
+		}*/
+			
 		var card_details = new Base_Model_View({ url : "core/api/subscription", template : "creditcard-update", window : 'subscribe',
 			saveCallback : function()
 			{
@@ -122,8 +125,7 @@ var SubscribeRouter = Backbone.Router.extend({
 
 	invoiceDetailsList : function()
 	{
-		if($("#invoice-details-holder").text() == "")
-			Backbone.history.navigate("billing-settings", { trigger : true });
+		$("#content").html(getTemplate("billing-settings"), {});
 		$("#billing-settings-tab-content").html(getTemplate("invoice-details"), {});
 		var that = this;
 		var subscribe_plan = new Base_Model_View({ url : "core/api/subscription?reload=true", template : "subscribe-new", window : 'subscribe',
@@ -549,11 +551,9 @@ var SubscribeRouter = Backbone.Router.extend({
 		if (!subscription.get("billingData"))
 			{
 			$("#invoice-details-holder").html("");
-			$('#invoice-details-holder').append("<div class='text-lg p-l-sm p-t-sm'>Invoices</div><hr><div class='text-center p-b-lg'><b>You do not have any invoices yet</b><br>Generated invoices will be shown here.</div>");
+			$('#invoice-details-holder').append("<div class='text-lg p-l-sm p-t-sm'>Invoices</div><hr><div class='text-center p-b-lg'><p class='m-b-none' style='font-size: 18px;'>You do not have any invoices yet</p><p>Generated invoices will be shown here.</p></div>");
 			return ;
 			}
-			
-
 
 		var invoice = new Base_Collection_View({ url : "core/api/subscription/invoices"+"?page_size=20", templateKey : "invoice", window : 'subscribe',
 			individual_tag_name : 'tr', sortKey :'created', descending :true });
