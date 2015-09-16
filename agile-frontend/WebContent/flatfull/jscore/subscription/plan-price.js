@@ -155,7 +155,7 @@ function setPriceTemplete(user_plan, element)
 		$(element).find('#' + plan_type + '_plan_select').attr('checked','checked');
 		$(element).find('.'+ interval).addClass("plan-select");
 		$(element).find('#users_select_slider').val(quantity);
-		
+		$(element).find('#billing_cycle').val(interval);
 		return element;	
 	
 	
