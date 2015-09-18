@@ -146,6 +146,10 @@ $(function(){
 					console.log($(element).parent('div').attr('id'));
 					index_array.push(index);
 					console.log(index_array);
+					if($(".grid-view").length!=0){
+						id_array.push($(element).parent().parent().parent('div').attr('id'));
+					}
+					else
 					id_array.push($(element).parent('div').attr('id'));
 					//data_array.push($(element).parent('div').data().toJSON());
 					checked = true;
