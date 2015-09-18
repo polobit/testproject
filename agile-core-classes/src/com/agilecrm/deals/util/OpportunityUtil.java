@@ -1713,6 +1713,8 @@ public class OpportunityUtil
 		if (sourceId != null)
 			conditionsMap.put("dealSource", new Key<Category>(Category.class, sourceId));
 		conditionsMap.put("archived", false);
+		conditionsMap.put("milestone_changed_time >= ", minTime);
+		conditionsMap.put("milestone_changed_time <= ", maxTime);
 		if (pipelineId != null)
 		{
 			milestone1 = MilestoneUtil.getMilestone(pipelineId);
@@ -1720,8 +1722,6 @@ public class OpportunityUtil
 			{
 				conditionsMap.put("milestone", milestone1.lost_milestone);
 				conditionsMap.put("pipeline", new Key<Milestone>(Milestone.class, milestone1.id));
-				conditionsMap.put("close_date >= ", minTime);
-				conditionsMap.put("close_date <= ", maxTime);
 				List<Opportunity> list = dao.listByProperty(conditionsMap);
 				if (list != null)
 				{
@@ -1732,8 +1732,6 @@ public class OpportunityUtil
 			{
 				conditionsMap.put("milestone", "Lost");
 				conditionsMap.put("pipeline", new Key<Milestone>(Milestone.class, milestone1.id));
-				conditionsMap.put("close_date >= ", minTime);
-				conditionsMap.put("close_date <= ", maxTime);
 				List<Opportunity> list = dao.listByProperty(conditionsMap);
 				if (list != null)
 				{
@@ -1750,8 +1748,6 @@ public class OpportunityUtil
 				{
 					conditionsMap.put("milestone", milestone.lost_milestone);
 					conditionsMap.put("pipeline", new Key<Milestone>(Milestone.class, milestone.id));
-					conditionsMap.put("close_date >= ", minTime);
-					conditionsMap.put("close_date <= ", maxTime);
 					List<Opportunity> list = dao.listByProperty(conditionsMap);
 					if (list != null)
 					{
@@ -1762,8 +1758,6 @@ public class OpportunityUtil
 				{
 					conditionsMap.put("milestone", "Lost");
 					conditionsMap.put("pipeline", new Key<Milestone>(Milestone.class, milestone.id));
-					conditionsMap.put("close_date >= ", minTime);
-					conditionsMap.put("close_date <= ", maxTime);
 					List<Opportunity> list = dao.listByProperty(conditionsMap);
 					if (list != null)
 					{
