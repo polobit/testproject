@@ -956,7 +956,7 @@ function get_contacts_bulk_ids()
 			// If element is checked add store it's id in an array
 			if ($(element).is(':checked'))
 			{
-				id_array.push($(element).parent('div').attr('id'));
+				id_array.push($(element).parent().parent().parent('div').attr('id'));
 			}
 		});
 
