@@ -74,6 +74,8 @@ if(is_free_plan && is_first_time_user)
 }
 
 String _AGILE_VERSION = SystemProperty.applicationVersion.get();
+
+String _VERSION_ID = VersioningUtil.getVersion();
 %>
 
 
@@ -85,11 +87,8 @@ content="<%=domainUser.getInfo(DomainUser.LAST_LOGGED_IN_TIME)%>" />
   String CSS_PATH = "/";
   String FLAT_FULL_PATH = "flatfull/";
 
-  String CLOUDFRONT_TEMPLATE_LIB_PATH = "";
-    if(!request.getServerName().contains("localhost")){
-      CLOUDFRONT_TEMPLATE_LIB_PATH = "//doxhze3l6s7v9.cloudfront.net/beta/";
-    // "//d2zl2ik92yaru4.cloudfront.net/"
-  }
+  String CLOUDFRONT_TEMPLATE_LIB_PATH = VersioningUtil.getCloudFrontBaseURL();
+    
 
   CSS_PATH = CLOUDFRONT_TEMPLATE_LIB_PATH + FLAT_FULL_PATH;
 
@@ -396,8 +395,10 @@ head.js({"core" :   '<%=CLOUDFRONT_TEMPLATE_LIB_PATH%>/jscore/min/' + FLAT_FULL_
 head.ready(["core"], function(){
   
   if(!HANDLEBARS_PRECOMPILATION)
-    downloadTemplate("tpl.js");
-  $('[data-toggle="tooltip"]').tooltip();
+    downloadTemplate("tpl.js", function(){
+      $('[data-toggle="tooltip"]').tooltip();    
+    });
+  
 });
 });    
 function load_globalize()

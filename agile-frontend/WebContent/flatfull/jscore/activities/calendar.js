@@ -728,7 +728,7 @@ function getCalendarUsersDetails(callback)
 			if (CURRENT_DOMAIN_USER.id == user.domain_user_id)
 			{
 				CURRENT_AGILE_USER = user;
-				return false;
+				return;
 			}
 			
 			if (user.domainUser)

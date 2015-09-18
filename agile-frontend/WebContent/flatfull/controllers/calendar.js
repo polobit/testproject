@@ -26,13 +26,16 @@ calendar : function()
 		$('#content').html("<div id='calendar-listers'>&nbsp;</div>");
 		$('#calendar-listers').html(LOADING_ON_CURSOR);
 		getTemplate("calendar", {}, undefined, function(template_ui){
+
 		if(!template_ui)
 			  return;
 
 		getCalendarUsersDetails(function(users){
 
 		$('#calendar-listers').html($(template_ui));
+
 				getTemplate("event-left-filter", users, undefined, function(template_ui1){
+					
 						$('#calendar-listers').find("#calendar-filters").html($(template_ui1));
 
 						buildCalendarLhsFilters();
