@@ -1710,8 +1710,6 @@ public class OpportunityUtil
 		Milestone milestone1;
 		if (ownerId != null)
 			conditionsMap.put("ownerKey", new Key<DomainUser>(DomainUser.class, ownerId));
-		else
-			conditionsMap.put("ownerKey!=",null);
 		if (sourceId != null)
 			conditionsMap.put("dealSource", new Key<Category>(Category.class, sourceId));
 		conditionsMap.put("archived", false);
