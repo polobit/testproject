@@ -2591,3 +2591,24 @@ select.input-xs{
 .tooltip-inner {
 	max-width: 260px;
 }
+
+
+.contacts-grid-view-temp:hover div.grid-view-actions {
+  display: block;
+}
+
+div.grid-view-actions {
+  display: none;
+}
+
+.grid-edit-color{
+color:rgb(118, 114, 114) !important
+}
+.grid-delete-color{
+
+color:rgb(240, 92, 92)
+}
+
+.grid-tag-color{
+background-color: #e4eaec !important;color:rgb(113, 85, 87);
+}

@@ -1,10 +1,10 @@
 <script id="contacts-grid-model-template" type="text/html">
 
-<div class="p-b col-md-4 {{id}}">
+<div class="contacts-grid-view-temp p-b col-md-4 {{id}}">
   {{#if_contact_type "PERSON"}}
-    <div class="b r-5x p-sm bg-white" id={{id}} style="height:110px;">
+    <div class="b r-5x p-sm bg-white" id={{id}} style="height:100px;">
 	<div class="left pos-abs"><label class="i-checks i-checks-sm">
-       <input type="checkbox" class="tbody_check" value="">
+       <input type="checkbox" class="tbody_check grid-view-checkbox" value="">
        <i></i>                
      </label></div>
      <div style="margin-left: 25px;">
@@ -19,18 +19,20 @@
         	{{getPropertyValue properties "email"}}
         
 </div>
+    <div class="pull-right grid-view-actions"><span  class="m-r-xs c-p"><a href="#contact/{{id}}"><i data-toggle="tooltip" data-placement="left" title="" data-original-title="Edit" class="fa fa-pencil-square grid-edit-color"></i></a></span><span class='c-p' con_id="{{id}}" id="contact-actions-grid-delete"><i data-toggle="tooltip" data-placement="left" title="" data-original-title="Delete" class="fa fa-trash grid-delete-color"></i></span></div>
+
 </div>
 <div class="clearfix"></div>
-<div class="w-full text-ellipsis m-t-xs m-t">
+<div class="w-full text-ellipsis m-t-xs m-t" style="margin-left:24px;">
         {{#each tags}}
-        <span class="label text-muted bg-light dk text-tiny overflow-visible inline-block font-normal">{{this}}</span>
+        <span class="label bg-light dk text-tiny overflow-visible font-normal grid-tag-color">{{this}}</span>
         {{/each}}
 	  </div>
     </div>
   {{/if_contact_type}}
 
   {{#if_contact_type "COMPANY"}}
-    <div class="b r-5x p-sm" style="background-color:#f5f5dc;height:100px;" id={{id}}>
+    <div class="b r-5x p-sm" style="background-color:#fff;height:100px;" id={{id}}>
 		<label class="i-checks i-checks-sm right">
            <input type="checkbox" class="tbody_check" value="">
            <i></i>                
@@ -55,12 +57,12 @@
 </script>
 
 <script id="contacts-grid-table-model-template" type="text/html">
-<div class="p-b col-md-4 {{id}}">
+<div class="contacts-grid-view-temp p-b col-md-4 {{id}}">
   {{#if_contact_type "PERSON"}}
-    <div class="b r-5x p-sm" style="background-color:#f5f5dc;height:97px;"id={{id}}>
+    <div class="b r-5x p-sm" style="background-color:#fff;"id={{id}}>
 	<div class="left pos-abs">
            <label class="i-checks">
-                <input type="checkbox" class="tbody_check" value="">
+                <input type="checkbox" class="tbody_check grid-view-checkbox" value="">
                 <i></i>                
       		</label>
     </div>
@@ -76,18 +78,18 @@
         	{{getPropertyValue properties "email"}}
         
 </div>
-</div>
+<div class="pull-right grid-view-actions"><span  class="m-r-xs c-p"><a href="#contact/{{id}}"><i data-toggle="tooltip" data-placement="left" title="" data-original-title="Edit" class="fa fa-pencil-square grid-edit-color"></i></a></span><span class='c-p' con_id="{{id}}" id="contact-actions-grid-delete"><i data-toggle="tooltip" data-placement="left" title="" data-original-title="Delete" class="fa fa-trash grid-delete-color"></i></span></div>
 <div class="clearfix"></div>
 <div class="w-full text-ellipsis m-t-xs">
         {{#each tags}}
-        <span class="label bg-light dk text-tiny overflow-visible inline-block font-normal">{{this}}</span>
+        <span class="label bg-light dk text-tiny overflow-visible font-normal grid-tag-color" >{{this}}</span>
         {{/each}}
 	  </div>
     </div>
   {{/if_contact_type}}
 
   {{#if_contact_type "COMPANY"}}
-    <div class="b r-5x p-sm" style="background-color:#f5f5dc;height:75px;" id={{id}}>
+    <div class="b r-5x p-sm" style="background-color:#fff;height:75px;" id={{id}}>
 	<label class="i-checks i-checks-sm">
 		<input class="tbody_check right" type="checkbox"/>
 	<i></i></label>
@@ -112,7 +114,7 @@
 
 <script id="contacts-grid-collection-template" type="text/html">
 <div class="custom-animated custom-fadeInUp">
-<div class="wrapper-md lter bg-light b-b">
+<div class="wrapper-md lter bg-light b-b" style="height:74px;">
 <div class="row">
     <div class="col-md-12">
 
@@ -174,18 +176,29 @@
 			</div>
         </div>
     </div>
-    <div class="col wrapper contacts-div">
-<div>Contacts List
-<a id="contacts-left-filters-toggle" class="m-l-xs" data-toggle="tooltip" data-placement="right" title="" data-original-title="Filters">
-			<i id="icon-filter" class="fa fa-bars icon-white"></i>
-		</a></div>
+    <div class="col contacts-div">
+
 		<div class="filter-criteria"></div>
+    <div class="panel-heading" style="background:#f6f8f8;">Contacts List
+
+      <a id="contacts-left-filters-toggle" class="m-l-xs" data-toggle="tooltip" data-placement="right" title="" data-original-title="Filters">
+            <i id="icon-filter" class="fa fa-bars icon-white"></i>
+          </a>
+{{#if this.length}}
+          <span class="pull-right m-r-sm"> <label class="i-checks">
+                <input type="checkbox" id="select_grid_contacts1" class="thead_check" value="">
+                <i></i>                
+          </label>Select All</span>
+  {{/if}}
+      </div>
+      {{#unless this.length}}
         <div id="slate">
         </div>
+        {{/unless}}
         {{#if this.length}}
         <div class="data">
             <div class="data-container">
-                <div id="contacts-grid-model-list" class="contacts-model-list grid-view showCheckboxes" route="contact/"  url="core/api/bulk/update?action_type=DELETE"></div>
+                <div id="contacts-grid-model-list" class="contacts-model-list grid-view showCheckboxes row wrapper-md" route="contact/"  url="core/api/bulk/update?action_type=DELETE"></div>
             </div>
         </div>
         {{/if}}
@@ -196,18 +209,25 @@
 </script>
 <script id="contacts-grid-table-collection-template" type="text/html">
 	<div class="filter-criteria"></div>
-<div id="panel-heading">
-Contacts List
-<a id="contacts-left-filters-toggle" class="m-l-xs" data-toggle="tooltip" data-placement="right" title="" data-original-title="Filters">
-			<i id="icon-filter" class="fa fa-bars icon-white"></i>
-		</a>
-        </div>
+  <div class="panel-heading" style="background:#f6f8f8;">Contacts List
+
+      <a id="contacts-left-filters-toggle" class="m-l-xs" data-toggle="tooltip" data-placement="right" title="" data-original-title="Filters">
+      <i id="icon-filter" class="fa fa-bars icon-white"></i>
+      </a>
+      {{#if this.length}}
+       <span class="pull-right m-r-sm"> <label class="i-checks">
+                <input type="checkbox" id="select_grid_contacts1" class="thead_check" value="">
+                <i></i>                
+          </label>Select All</span>
+          {{/if}}
+      
+  </div>
         <div id="slate">
         </div>
         {{#if this.length}}
         <div class="data">
             <div class="data-container">
-                <div id="contacts-grid-table-model-list" class="contacts-model-list grid-view showCheckboxes" route="contact/"  url="core/api/bulk/update?action_type=DELETE" style="overflow:auto;margin-left:-20px;"></div>
+                <div id="contacts-grid-table-model-list" class="contacts-model-list grid-view showCheckboxes row wrapper-md" route="contact/"  url="core/api/bulk/update?action_type=DELETE" style="overflow:auto;margin-left:-20px;"></div>
             </div>
         </div>
         {{/if}}

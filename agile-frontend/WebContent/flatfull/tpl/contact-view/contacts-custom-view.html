@@ -73,9 +73,16 @@
     </div>
     <div class="col contacts-div">
 		{{#unless this.length}}
+			
 			<div class="filter-criteria">
 					
 			</div>
+			<div class="panel-heading" style="background:#f6f8f8;">Contacts List
+
+			<a id="contacts-left-filters-toggle" class="m-l-xs" data-toggle="tooltip" data-placement="right" title="" data-original-title="Filters">
+			<i id="icon-filter" class="fa fa-bars icon-white"></i>
+		</a>
+</div>
 			<div id="slate"></div>
 		{{else}}
         <div class="data">
@@ -109,7 +116,15 @@
 </script>
 <script id="contacts-custom-view-table-collection-template" type="text/html">
 {{#unless this.length}}
+<div>
+<div class="panel-heading" style="background:#f6f8f8;">Contacts List
+
+		<a id="contacts-left-filters-toggle" class="m-l-xs" data-toggle="tooltip" data-placement="right" title="" data-original-title="Filters">
+			<i id="icon-filter" class="fa fa-bars icon-white"></i>
+		</a>
+</div>
 			<div id="slate"></div>
+</div>
 		{{else}}
         <div class="data">
  <div class="panel-heading" style="background:#f6f8f8;">Contacts List
