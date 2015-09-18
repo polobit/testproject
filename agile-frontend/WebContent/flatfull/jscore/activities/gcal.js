@@ -7,7 +7,7 @@
 // or better
 
 
-function loadUserEventsfromGoogle(users){
+function loadUserEventsfromGoogle(users, start, end){
 
 	$.each(users, function(i, user)
 				{
@@ -47,7 +47,7 @@ function _init_gcal_options(users)
 
 			if(users){
 
-				loadUserEventsfromGoogle(users);
+				loadUserEventsfromGoogle(users, start, end);
 				return;
 
 			}
@@ -55,7 +55,7 @@ function _init_gcal_options(users)
 
 			$.getJSON('/core/api/users/agileusers', function(users)
 				{
-					loadUserEventsfromGoogle(users);
+					loadUserEventsfromGoogle(users, start, end);
 				});
 
 		}
