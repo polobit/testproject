@@ -88,9 +88,12 @@ content="<%=domainUser.getInfo(DomainUser.LAST_LOGGED_IN_TIME)%>" />
   String FLAT_FULL_PATH = "flatfull/";
 
   String CLOUDFRONT_TEMPLATE_LIB_PATH = VersioningUtil.getCloudFrontBaseURL();
+  
+  System.out.println(CLOUDFRONT_TEMPLATE_LIB_PATH);
     
+  String CLOUDFRONT_STATIC_FILES_PATH = VersioningUtil.getStaticFilesBaseURL();
 
-  CSS_PATH = CLOUDFRONT_TEMPLATE_LIB_PATH + FLAT_FULL_PATH;
+  CSS_PATH = CLOUDFRONT_STATIC_FILES_PATH;
 
 %>
 
@@ -308,20 +311,17 @@ if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Produ
 <script src='//cdnjs.cloudflare.com/ajax/libs/headjs/1.0.3/head.min.js'></script>
 <script>
 
-//var LIB_PATH = "//dpm72z3r2fvl4.cloudfront.net/js/";
+//var LIB_PATH = "//-dpm72z3r2fvl4.cloudfront.net/js/";
 //var LIB_PATH = "//cdnapp.agilecrm.com/";
-var LIB_PATH = "";
+var LIB_PATH = '<%=CLOUDFRONT_STATIC_FILES_PATH%>';
 
-var LIB_PATH_FLATFULL = '<%=FLAT_FULL_PATH%>';
-
-var FLAT_FULL_PATH = LIB_PATH_FLATFULL;
+var FLAT_FULL_PATH = '<%=FLAT_FULL_PATH%>';
 
 // Target to cloudfront URL
-LIB_PATH_FLATFULL = '<%=CLOUDFRONT_TEMPLATE_LIB_PATH%>' + LIB_PATH_FLATFULL;
+var LIB_PATH_FLATFULL = '<%=CLOUDFRONT_TEMPLATE_LIB_PATH + FLAT_FULL_PATH%>'
 
 var CLOUDFRONT_PATH = '<%=CLOUDFRONT_TEMPLATE_LIB_PATH%>';
 
-LIB_PATH = LIB_PATH_FLATFULL;
 
 var FLAT_FULL_UI = "flatfull/";  
 
@@ -329,7 +329,7 @@ var _AGILE_VERSION = <%="\"" + _AGILE_VERSION + "\""%>;
 
 var HANDLEBARS_PRECOMPILATION = false || <%=production%>;
 
-var CSS_PATH = FLAT_FULL_UI;
+var CSS_PATH = '<%=CSS_PATH%>';
 // var CSS_PATH = "//dpm72z3r2fvl4.cloudfront.net/";
 
 var IS_CONSOLE_ENABLED = <%=debug%>;
@@ -368,13 +368,13 @@ var JQUERY_LIB_PATH = "//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.j
 
 <!-- JQUery Core and UI CDN --> 
 <!-- The same ajax libraries are used by designer - if you are changing the version here, change in designer too -->
-head.load("https://cdnjs.cloudflare.com/ajax/libs/jquery/1.10.2/jquery.min.js", LIB_PATH_FLATFULL + "lib/bootstrap.js",  LIB_PATH + 'final-lib/min/lib-all-min.js?_=' + _AGILE_VERSION, function(){
+head.load("https://cdnjs.cloudflare.com/ajax/libs/jquery/1.10.2/jquery.min.js", LIB_PATH + "lib/bootstrap.js",  LIB_PATH + 'final-lib/min/lib-all-min.js?_=' + _AGILE_VERSION, function(){
         load_globalize();
 })
 // , LIB_PATH + 'lib/backbone-route-filter.js'
 
 if(HANDLEBARS_PRECOMPILATION)
-head.js(HANDLEBARS_LIB, "<%=CLOUDFRONT_TEMPLATE_LIB_PATH%>tpl/min/precompiled/" + FLAT_FULL_PATH + "tpl.js" + "?_=" + _AGILE_VERSION);
+head.js(HANDLEBARS_LIB, CLOUDFRONT_PATH + "tpl/min/precompiled/" + FLAT_FULL_PATH + "tpl.js" + "?_=" + _AGILE_VERSION);
 else
 head.js(HANDLEBARS_LIB);
 
@@ -390,7 +390,7 @@ head.ready(function() {
 $('body').css('background-image', 'none');
 //$('#content').html('ready');
 $("img.init-loading", $('#content')).attr("src", "<%=CLOUDFRONT_TEMPLATE_LIB_PATH%>/img/ajax-loader-cursor.gif");
-head.js({"core" :   '<%=CLOUDFRONT_TEMPLATE_LIB_PATH%>/jscore/min/' + FLAT_FULL_PATH +'js-all-min.js' + "?_=" + _AGILE_VERSION});
+head.js({"core" :   CLOUDFRONT_PATH + 'jscore/min/' + FLAT_FULL_PATH +'js-all-min.js' + "?_=" + _AGILE_VERSION});
 // head.js({"stats" : '<%=CLOUDFRONT_TEMPLATE_LIB_PATH%>stats/min/agile-min.js' + "?_=" + _AGILE_VERSION});
 head.ready(["core"], function(){
   
