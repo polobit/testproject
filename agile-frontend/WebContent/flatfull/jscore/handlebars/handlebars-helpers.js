@@ -6818,3 +6818,26 @@ Handlebars.registerHelper('get_campaign_type_filter', function(filter_name)
 			return options.inverse(this);
 		return options.fn(this);
 	});
+
+	Handlebars.registerHelper("is_unsubscribed_all", function(options){
+		
+		var contact_model = App_Contacts.contactDetailView.model.toJSON();
+
+		// First name
+		var first_name = getPropertyValue(contact_model["properties"], "first_name");
+
+		if(contact_model && contact_model["unsubscribeStatus"] && contact_model["unsubscribeStatus"].length > 0)
+		{
+			var statuses = contact_model["unsubscribeStatus"];
+
+			for(var i=0, len = statuses.length; i < len; i++)
+			{
+				var status = statuses[i];
+
+				if(status.unsubscribeType && status.unsubscribeType == "ALL")
+					return options.fn({"first_name": first_name, "campaign_id": status.campaign_id});
+			}
+		}
+
+		return options.inverse(this);
+	});

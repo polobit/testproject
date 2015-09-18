@@ -278,10 +278,12 @@ var contact_details_tab = {
 
 	            		$.ajax({
 	            			url : "core/api/campaigns/resubscribe", 
-	            			data: {"id":App_Contacts.contactDetailView.model.id, "workflow-id" : workflow_id},
+	            			data: {"id": App_Contacts.contactDetailView.model.id, "workflow-id" : workflow_id},
 	            			method : "POST",
-	            			success: function(data){
-	            				contact_details_tab.load_campaigns();
+	            			success: function(){
+
+	            				// To update model
+	            				checkContactUpdated();
 	            				
 	            				showNotyPopUp("information", "Contact resubscribed successfully.", "top");
 	            			},

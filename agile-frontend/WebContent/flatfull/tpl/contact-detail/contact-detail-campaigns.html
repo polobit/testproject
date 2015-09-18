@@ -30,9 +30,13 @@
 						</span></span> 
 					{{/each}}
                     </div>
-	{{#canEditCurrentContact "1"}}
-            <a class="add-to-campaign"  href="#"><i class="icon-plus"></i> Add {{getCurrentContactProperty "first_name"}} to Campaign</a>
-	{{/canEditCurrentContact}}
+	       {{#canEditCurrentContact "1"}}
+              {{^is_unsubscribed_all}}
+                <a class="add-to-campaign"  href="#"><i class="icon-plus"></i> Add {{getCurrentContactProperty "first_name"}} to Campaign</a>
+              {{else}}
+                {{first_name}} has unsubscribed from all Campaigns. <a href="#" class="resubscribe" data="{{campaign_id}}">Resubscribe</a>
+              {{/is_unsubscribed_all}}
+	        {{/canEditCurrentContact}}
             <form id="add-to-campaign-form" class="show_campaigns_list" style="display:none;">
             	<div class="control-group form-group">
                 	<div class="controls">
@@ -48,9 +52,13 @@
          </div>
          
          {{else}}
-         {{#canEditCurrentContact "1"}}
-        	 <a class="add-to-campaign" style="margin-top:1%;" href="#"><i class="icon-plus"></i> Add {{getCurrentContactProperty "first_name"}} to Campaign</a>
-		{{/canEditCurrentContact}}
+            {{#canEditCurrentContact "1"}}
+              {{^is_unsubscribed_all}}
+        	     <a class="add-to-campaign" style="margin-top:1%;" href="#"><i class="icon-plus"></i> Add {{getCurrentContactProperty "first_name"}} to Campaign</a>
+              {{else}}
+                {{first_name}} has unsubscribed from all Campaigns. <a href="#" class="resubscribe" data="{{campaign_id}}">Resubscribe</a>
+              {{/is_unsubscribed_all}}
+		        {{/canEditCurrentContact}}
          	<form id="add-to-campaign-form" class="show_campaigns_list" style="display: none;">
 				<div class="control-group form-group">
                 	<div class="controls">
@@ -68,17 +76,6 @@
          {{/if}}
          {{/contact_campaigns}}
     </div>
-
-	{{!--To resubscribe contact--}}
-	{{#if unsubscribeStatus}}
-    	{{#each this.unsubscribeStatus}}
-        	{{#if_equals "ALL" unsubscribeType}}
-            	<div class="pull-right">
-					<a href="#" class="resubscribe" data="{{campaign_id}}">Resubscribe</a>
-				</div>
-        	{{/if_equals}}
-    	{{/each}}
-	{{/if}}
 
 {{/contact_model}}
 
