@@ -88,6 +88,7 @@ var DealsRouter = Backbone.Router.extend({
 		setTimeout(function()
 		{
 			$('a.deal-notes').tooltip();
+			$('.deal_won_date').tooltip();
 		}, 2000);
 	},
 

@@ -94,6 +94,28 @@
 
 <div>
 
+{{#if won_date}}
+  {{#if milestone_changed_time}}
+    {{#if_equals milestone_changed_time won_date}}
+      <div class="m-t-sm">
+        <div>
+            <small class="text-xs text-muted">Won Date</small>
+        </div>
+        <div>{{{epochToHumanDateInFormat won_date}}}</div>
+      </div>
+    {{/if_equals}}
+  {{else}}
+      {{#if won_date}}
+        <div class="m-t-sm">
+          <div>
+             <small class="text-xs text-muted">Won Date</small>
+          </div>
+          <div>{{{epochToHumanDateInFormat won_date}}}</div>
+        </div>
+      {{/if}}
+  {{/if}}
+{{/if}}
+
                            
 
 <div class="deal-custom-data"> 

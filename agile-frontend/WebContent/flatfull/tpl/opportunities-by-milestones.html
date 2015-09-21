@@ -212,6 +212,38 @@
 			{{#related_to_one contacts}}{{/related_to_one}}
 		{{/if}}{{#if_greater this.contacts.length "5"}}<span>,..</span>{{/if_greater}}
 	</div>
+	{{#if won_date}}
+  		{{#if milestone_changed_time}}
+    		{{#if_equals milestone_changed_time won_date}}
+      			<div style="cursor:default;" class="pull-left inline-block p-b-xs deal_won_date" id="deal_won_date_{{id}}" data-toggle="tooltip" title="Won date">
+      				<small>{{epochToHumanDateInFormat won_date}}</small>
+      			</div>
+      			<div class="clearfix"></div>
+      		{{else}}
+      			<div style="cursor:default;" class="pull-left inline-block p-b-xs hide deal_won_date" id="deal_won_date_{{id}}" data-toggle="tooltip" title="Won date">
+      				<small></small>
+      			</div>
+      			<div class="clearfix"></div>
+    		{{/if_equals}}
+ 	 	{{else}}
+      		{{#if won_date}}
+        		<div style="cursor:default;" class="pull-left inline-block p-b-xs deal_won_date" id="deal_won_date_{{id}}" data-toggle="tooltip" title="Won date">
+      				<small>{{epochToHumanDateInFormat won_date}}</small>
+      			</div>
+      			<div class="clearfix"></div>
+      		{{else}}
+      			<div style="cursor:default;" class="pull-left inline-block p-b-xs hide deal_won_date" id="deal_won_date_{{id}}" data-toggle="tooltip" title="Won date">
+      				<small></small>
+      			</div>
+      			<div class="clearfix"></div>
+      		{{/if}}
+  		{{/if}}
+  	{{else}}
+  		<div style="cursor:default;" class="pull-left inline-block p-b-xs hide deal_won_date" id="deal_won_date_{{id}}" data-toggle="tooltip" title="Won date">
+      		<small></small>
+      	</div>
+      	<div class="clearfix"></div>
+	{{/if}}
 	<div class="pull-left">
 		<small class="text-muted">
 			{{#if close_date}}
@@ -229,9 +261,9 @@
 			<a title="Restore" class="deal-restore c-p text-l-none" style="text-decoration:none;"> <i style="width: 0.9em!important;" class="icon-mail-reply"></i> </a>
 			{{/if_equals}}
 			{{#if_equals archived false}}
-			<a title="Edit" class="deal-edit c-p text-l-none" style="text-decoration:none;"> <i style="width: 0.9em!important;" class="icon-pencil"></i> </a>
+			<a title="Edit" class="deal-edit c-p text-l-none" style="text-decoration:none;"> <i style="width: 0.9em!important;" class="fa fa-pencil-square"></i> </a>
             {{/if_equals}}
-			<a title="Delete" class="deal-delete c-p text-l-none" style="text-decoration:none;"><i style="width: 0.9em!important;" class="icon-trash"></i></a>
+			<a title="Delete" class="deal-delete c-p text-l-none" style="text-decoration:none;"><i style="width: 0.9em!important;" class="fa fa-trash"></i></a>
         </span>
 </div>
 <div class="clearfix"></div>
