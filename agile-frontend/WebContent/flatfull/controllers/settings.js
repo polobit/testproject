@@ -90,30 +90,35 @@ var SettingsRouter = Backbone.Router
 
 				}
 
-
 				getTemplate("settings", {}, undefined, function(template_ui){
+
 					if(!template_ui)
 						  return;
 					$('#content').html($(template_ui));	
 
-					var view = new Base_Model_View({ url : '/core/api/user-prefs', template : "settings-user-prefs", el : $('#prefs-tabs-content'), change : false,
-					reload : true, postRenderCallback : function(el)
-					{
-						initializeSettingsListeners();
-						// setup TinyMCE
-						setupTinyMCEEditor('textarea#WYSItextarea', true, [
-							"textcolor link image preview code"
-						], function()
-						{   // Register focus
-							register_focus_on_tinymce('WYSItextarea');
-						});
-					} });
+					getTemplate("settings", {}, undefined, function(template_ui1){
+						$("#prefs-tabs-content").html($(template_ui1));
 
-				$('#PrefsTab .select').removeClass('select');
-				$('.user-prefs-tab').addClass('select');
-				$(".active").removeClass("active");
-				$("#prefs-tabs-content .prefs-"+tab_class).addClass("active");
-				// $('#content').html(view.render().el);
+						var view = new Base_Model_View({ url : '/core/api/user-prefs', template : template_name, el : $('#settings-user-prefs-tab-content'), change : false,
+						reload : true, postRenderCallback : function(el)
+						{
+							initializeSettingsListeners();
+							// setup TinyMCE
+							setupTinyMCEEditor('textarea#WYSItextarea', true, [
+								"textcolor link image preview code"
+							], function()
+							{   // Register focus
+								register_focus_on_tinymce('WYSItextarea');
+							});
+						} });
+
+						$('#PrefsTab .select').removeClass('select');
+						$('.user-prefs-tab').addClass('select');
+						$(".active").removeClass("active");
+						$("#prefs-tabs-content .prefs-"+tab_class).addClass("active");
+
+					});
+
 				}, "#content");
 			},
 

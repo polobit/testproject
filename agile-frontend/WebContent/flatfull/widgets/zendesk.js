@@ -183,6 +183,7 @@ function showTicketsInZendesk(data)
 			 * On click of show more in tickets panel, we splice 5 tickets from
 			 * all_tickets and show every time
 			 */
+			 $('body').off('click', '.revoke-widget');
 			 $("body").on('click','#more_tickets', function(e)
 			{
 				e.preventDefault();

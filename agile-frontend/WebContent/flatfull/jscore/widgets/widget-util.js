@@ -755,9 +755,10 @@ function set_up_access(widget_name, template_id, data, url, model)
 		    		return;
 				el = $(template_ui1);
 				json = model; 
+				setup_widget_revoke_access(el, json, data, widget_name, template_id, url, model);
 			}, null);
 
-			
+			return;
 		}
 		else
 		{
@@ -792,48 +793,10 @@ function set_up_access(widget_name, template_id, data, url, model)
 
 		}
 
-		if (json.name == "Twilio")
-			json['outgoing_numbers'] = data;
-
-		else if (json.name == "Linkedin" || json.name == "Twitter")
-			json['profile'] = data;
-
-		else
-			json['custom_data'] = data;
-
-		console.log(json);
-
-		// merged_json = $.extend(merged_json, model, data);
-
-		getTemplate(widget_name.toLowerCase() + "-revoke-access", json, undefined, function(template_ui1){
-	 		if(!template_ui1)
-	    		return;
-			$('#widget-settings', el).html($(template_ui1)); 
-			$('#prefs-tabs-content').html(el);
-
-			$('#prefs-tabs-content').find('form').data('widget', json);
-			console.log(json);
-			console.log($('#prefs-tabs-content').find('form').data('widget'));
-
-			$('#PrefsTab .select').removeClass('select');
-			$('.add-widget-prefs-tab').addClass('select');
-
-			$('body').on('click', '.revoke-widget', function(e)
-			{
-
-				console.log($(this).attr("widget-name"));
-				delete_widget(widget_name);
-				show_set_up_widget(widget_name, template_id, url, model);
-			});
-		}, "#widget-settings");
-
-
+		setup_widget_revoke_access(el, json, data, widget_name, template_id, url, model);
 			
 	}, "#content");
-
-
-		
-
+	
 }
 
 function fill_form(id, widget_name, template_id)
@@ -955,15 +918,9 @@ function setUpError(widget_name, template_id, error_data, error_url, model)
 			$('#PrefsTab .select').removeClass('select');
 			$('.add-widget-prefs-tab').addClass('select');
 		}, "#widget-settings");
+
+
 	}, "#content");
-
-
-		
-
-		
-
-
-		
 
 }
 
@@ -1042,4 +999,47 @@ function saveChargifyWidgetPrefs()
 		console.log('In chargify save success');
 		console.log(data);
 	});
+}
+
+
+function setup_widget_revoke_access(el, json, data, widget_name, template_id, url, model){
+
+	if (json.name == "Twilio")
+		json['outgoing_numbers'] = data;
+
+	else if (json.name == "Linkedin" || json.name == "Twitter")
+		json['profile'] = data;
+
+	else
+		json['custom_data'] = data;
+
+	console.log(json);
+
+	// merged_json = $.extend(merged_json, model, data);
+
+	getTemplate(widget_name.toLowerCase() + "-revoke-access", json, undefined, function(template_ui1){
+
+ 		if(!template_ui1)
+    		return;
+		$('#widget-settings', el).html($(template_ui1)); 
+		$('#prefs-tabs-content').html(el);
+
+		$('#prefs-tabs-content').find('form').data('widget', json);
+		console.log(json);
+		console.log($('#prefs-tabs-content').find('form').data('widget'));
+
+		$('#PrefsTab .select').removeClass('select');
+		$('.add-widget-prefs-tab').addClass('select');
+
+		$('body').off('click', '.revoke-widget');
+		$('body').on('click', '.revoke-widget', function(e)
+		{
+			console.log($(this).attr("widget-name"));
+			delete_widget(widget_name);
+			show_set_up_widget(widget_name, template_id, url, model);
+		});
+
+	}, "#widget-settings");
+
+
 }

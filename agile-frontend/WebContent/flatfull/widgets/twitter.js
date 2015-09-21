@@ -87,6 +87,7 @@ function showTwitterMatchingProfiles(data)
 		 * Displays Twitter profile details on mouse hover and saves profile on
 		 * click
 		 */
+		$(".twitterImage").off('mouseenter');
 		$(".twitterImage").on('mouseenter', function()
 		{
 			// Unique Twitter Id from widget
@@ -108,6 +109,7 @@ function showTwitterMatchingProfiles(data)
 			$(this).popover('show');
 
 			// on click of any profile, save it to the contact
+			$('#' + Twitter_id).off('click');
 			$('#' + Twitter_id).on('click', function(e)
 			{
 				e.preventDefault();
@@ -913,6 +915,7 @@ function sendTwitterMessage(Twitter_id, message)
     	// Append the form into the content
 		$('#content').append(message_form_modal);
 
+		$('#twitter_messageModal').off('shown');
 		$('#twitter_messageModal').on('shown', function()
 		{
 
@@ -981,6 +984,7 @@ function tweetInTwitter(Twitter_id)
     	// Append the form into the content
 		$('#content').append(message_form_modal);
 
+		$('#twitter_messageModal').off('shown');
 		$('#twitter_messageModal').on('shown', function()
 		{
 
