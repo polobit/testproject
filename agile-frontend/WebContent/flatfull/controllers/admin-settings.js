@@ -471,6 +471,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 
 			return;
 		}
+		
 		var that = this;
 		$('#content').html("<div id='milestone-listner'>&nbsp;</div>");
 		getTemplate("admin-settings", {}, undefined, function(template_ui){
@@ -515,6 +516,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			$('#content').html(getTemplate('others-not-allowed',{}));
 			return;
 		}
+
 		$("#content").html(getTemplate("admin-settings"), {});
 		this.categoryGridView = new Base_Collection_View({ url : '/core/api/categories?entity_type=TASK', templateKey : "admin-settings-categories",
 			individual_tag_name : 'tr', sortKey : "order", postRenderCallback : function(el)
