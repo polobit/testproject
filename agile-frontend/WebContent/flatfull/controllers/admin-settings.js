@@ -380,7 +380,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 				var view = new Base_Model_View({ url : '/core/api/api-key', template : "admin-settings-api-key-model", postRenderCallback : function(el)
 				{
 
-					initializeRegenerateKeysListeners();
+					
 					$('#content').find('#admin-prefs-tabs-content').html(view.el);
 
 					$('#content').find('#AdminPrefsTab .select').removeClass('select');
@@ -407,6 +407,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 					{
 						$("#tracking-webrules-whitelist, .tracking-webrules-whitelist-tab").hide();
 					}
+					initializeRegenerateKeysListeners();
 
 				} });
 			});
