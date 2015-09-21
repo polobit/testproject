@@ -723,7 +723,7 @@ function show_set_up_widget(widget_name, template_id, url, model)
 
 function set_up_access(widget_name, template_id, data, url, model)
 {
-	getTemplate('settings', obj, undefined, function(template_ui){
+	getTemplate('settings', {}, undefined, function(template_ui){
  		if(!template_ui)
     		return;
 		$('#content').html($(template_ui)); 
