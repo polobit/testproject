@@ -1071,7 +1071,7 @@ var WidgetsRouter = Backbone.Router
 												    	var widgetDetails = "";
 
 												    	accessUrlUsingAjax("core/api/widgets/GooglePlus", function(resp){
-												    		    widgetDetails = $.parseJSON(resp);
+												    		    widgetDetails = resp;
 
 												    		    console.clear();
 												    			console.log("In google Plus widget Router");

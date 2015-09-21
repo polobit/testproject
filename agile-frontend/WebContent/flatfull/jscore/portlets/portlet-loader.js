@@ -3014,6 +3014,8 @@ var portlet_utiity = {
 	 */
   get_filtered_contact_header : function(base_model, callback){
 
+  		var filter_name = base_model.get("settings").filter;
+
   		if (filter_name == 'contacts')
 			return callback("All Contacts");
 		else if (filter_name == 'companies')
@@ -3027,7 +3029,7 @@ var portlet_utiity = {
 		else
 		{
 
-			var contactFilter = $.ajax({ type : 'GET', url : '/core/api/filters/' + base_model.get("settings").filter, dataType : 'json', success : function(data)
+			var contactFilter = $.ajax({ type : 'GET', url : '/core/api/filters/' + filter_name, dataType : 'json', success : function(data)
 			{
 				var header_name = '';
 				if (data != null && data != undefined)

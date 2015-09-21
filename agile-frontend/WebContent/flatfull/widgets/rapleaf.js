@@ -15,7 +15,7 @@ function setupRapleafAuth()
 	 * Shows an input filed to save Rapleaf preferences (API key provided by
 	 * Rapleaf)
 	 */
-	getTemplate('allorapleaf-loginwed', obj, undefined, function(template_ui){
+	getTemplate('allorapleaf-loginwed', {}, undefined, function(template_ui){
  		if(!template_ui)
     		return;
 		$('#Rapleaf').html($(template_ui)); 

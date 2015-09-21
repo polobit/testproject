@@ -232,7 +232,7 @@ function initializeEventListners(el)
  * When Send Mail is clicked from Ical Modal, it hides the ical modal and shows
  * the ical-send email modal.
  */
-$("#icalModal #send-ical-email").off('click');
+$("#icalModal").off('click');
 $("#icalModal").on('click', '#send-ical-email', function(event)
 {
 	event.preventDefault();
