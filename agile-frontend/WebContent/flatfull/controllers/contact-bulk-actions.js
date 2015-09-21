@@ -41,6 +41,10 @@ var ContactBulkActionRouter = Backbone.Router.extend({
 					  return;
 				$('#content').html($(template_ui));	
 				$('body').trigger('fill_owners');
+
+
+
+
 			}, "#content");
 			
 		}
@@ -174,7 +178,7 @@ var ContactBulkActionRouter = Backbone.Router.extend({
 					  return;
 					
 				$('#send-email-listener-container').html($(template_ui));	
-				("#emailForm").find('.add-attachment-select').hide();
+				$("#emailForm").find('.add-attachment-select').hide();
 				$('body').trigger('fill_emails');
 				initializeSendEmailListeners();
 				sendEmailAttachmentListeners("send-email-listener-container");
