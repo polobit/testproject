@@ -471,6 +471,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 
 			return;
 		}
+		
 		var that = this;
 		$('#content').html("<div id='milestone-listner'>&nbsp;</div>");
 		getTemplate("admin-settings", {}, undefined, function(template_ui){
@@ -493,7 +494,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			} });
 			that.pipelineGridView.collection.fetch();
 
-			$('#milestone-listner').find('#admin-prefs-tabs-content').find('#settings-milestones-tab-content').html(this.pipelineGridView.render().el);
+			$('#milestone-listner').find('#admin-prefs-tabs-content').find('#settings-milestones-tab-content').html(that.pipelineGridView.render().el);
 			$('#milestone-listner').find('#AdminPrefsTab .select').removeClass('select');
 			$('#milestone-listner').find('.milestones-tab').addClass('select');
 			$(".active").removeClass("active");
@@ -515,6 +516,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			$('#content').html(getTemplate('others-not-allowed',{}));
 			return;
 		}
+
 		$("#content").html(getTemplate("admin-settings"), {});
 		this.categoryGridView = new Base_Collection_View({ url : '/core/api/categories?entity_type=TASK', templateKey : "admin-settings-categories",
 			individual_tag_name : 'tr', sortKey : "order", postRenderCallback : function(el)
@@ -699,7 +701,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 				if(emailGateway["email_api"].toUpperCase() != value)//checks if the current email gateway is the same as the clicked one
 				{
 				modalAlert("sms-integration-alert-modal","You have a Email Gateway already configured. Please disable that to configure a new one.","Email Gateway Configured");
-				this.navigate("integrations", { trigger : true });
+				that.navigate("integrations", { trigger : true });
 				return;	
 				}
 			}	
@@ -775,7 +777,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			}
 
 			var smsGateway;
-			$.each(this.integrations.collection.models, function(key, value)
+			$.each(that.integrations.collection.models, function(key, value)
 			{
 				var prefJSON = JSON.parse(value.attributes.prefs);
 				if (prefJSON["sms_api"])
@@ -791,7 +793,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 				{
 					modalAlert("sms-integration-alert-modal", "You have a SMS Gateway already configured. Please disable that to configure a new one.",
 							"SMS Gateway Configured");
-					this.navigate("integrations", { trigger : true });
+					that.navigate("integrations", { trigger : true });
 					return;
 				}
 			}
