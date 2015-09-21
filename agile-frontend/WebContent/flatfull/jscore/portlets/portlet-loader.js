@@ -3096,7 +3096,7 @@ var portlet_utiity = {
 
  	}
 
-	if(selected == "ms-category-list"){
+	if(selector == "ms-category-list"){
 
 		$('#ms-category-list', elData).remove();
 		$('#ms-user-list', elData).remove();
