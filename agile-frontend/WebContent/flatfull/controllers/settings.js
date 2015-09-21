@@ -9,7 +9,6 @@ var EMAIL_PREFS_WIDGET_SIZE = 0;
 
 var SettingsRouter = Backbone.Router
 		.extend({
-
 			routes : {
 
 			/* Settings */
