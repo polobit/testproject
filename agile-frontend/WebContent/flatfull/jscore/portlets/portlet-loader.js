@@ -774,10 +774,12 @@ function showPortletSettings(el){
 						else
 							options+="<option value="+trackObj.id+">"+trackObj.name+"</option>";
 					});
-				} });
-		$('#track', elData).html(options);
+						$('#track', elData).html(options);
 		$('.loading-img').hide();
 		$("#duration", elData).find('option[value='+ base_model.get("settings").duration +']').attr("selected", "selected");
+					
+				} });
+	
 	}
 	else if(base_model.get('portlet_type')=="USERACTIVITY" && base_model.get('name')=="Campaign stats"){
 		$('#portletsCampaignStatsSettingsModal').modal('show');
