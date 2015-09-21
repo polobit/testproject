@@ -365,7 +365,7 @@ var TEMPLATE_LIB_PATH = "";
 function downloadTemplate(url, callback)
 {
 
-	var dataType = 'html', template_url = LIB_PATH;
+	var dataType = 'html', template_url = CLOUDFRONT_PATH;
 
 
 	// If Precompiled is enabled, we change the directory to precompiled. If
