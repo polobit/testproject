@@ -782,6 +782,10 @@ var WidgetsRouter = Backbone.Router
 																+ '<div class="row prefs-datasync"><div class="col-md-12"><h4 class="m-b">Accounting <small>import Contacts from Accounting</small></h4><div class="row"><div id ="freshbook" class="col-md-4 col-sm-6 col-xs-12"></div><div class="col-md-4 col-sm-6 col-xs-12" id ="quickbook"></div></div></div></div>'
 														);
 
+														// Adds Gmail Prefs
+														$('#contact-prefs').append(that.contact_sync_google.render().el);
+																
+
 														that.calendar_sync_google = new Base_Model_View({ url : 'core/api/calendar-prefs/get', template : 'import-google-calendar',postRenderCallback: function(el){initializeImportListeners();} });
 																
 																
