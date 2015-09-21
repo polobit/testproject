@@ -104,10 +104,10 @@ content="<%=domainUser.getInfo(DomainUser.LAST_LOGGED_IN_TIME)%>" />
 
 <!-- <link rel="stylesheet" type="text/css" href="<%=FLAT_FULL_PATH%>css/agile-all.css?_=<%=_AGILE_VERSION%>" />  -->
 <!-- <link rel="stylesheet" type="text/css" href="<%=FLAT_FULL_PATH%>css/lib-min.css"></link> -->
-<link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/min/lib-all-new.css?_=<%=_AGILE_VERSION%>"></link>
+<link rel="stylesheet" type="text/css" href="css/min/lib-all-new.css?_=<%=_AGILE_VERSION%>"></link>
 <!-- <link rel="stylesheet" type="text/css" href="<%=FLAT_FULL_PATH%>css/agile-app-framework.css">  -->
-<link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/min/misc-all-new.css?_=<%=_AGILE_VERSION%>"></link>
-<link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/min/core-all-new.css?_=<%=_AGILE_VERSION%>"></link>
+<link rel="stylesheet" type="text/css" href="css/min/misc-all-new.css?_=<%=_AGILE_VERSION%>"></link>
+<link rel="stylesheet" type="text/css" href="css/min/core-all-new.css?_=<%=_AGILE_VERSION%>"></link>
 
 <style>
 .clickdesk_bubble {
