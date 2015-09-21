@@ -366,16 +366,12 @@ public class AgileTaskletUtil {
 			// Score
 			subscriberJSON.put("score", contact.lead_score);
 
-			// Returns Created and Updated date in GMT with given format.
-			subscriberJSON.put("created_date", DateUtil
-					.getGMTDateInGivenFormat(contact.created_time * 1000,
-							"MM/dd/yyyy"));
+			// Returns Created and Updated date with given format.
+			subscriberJSON.put("created_date", DateUtil.getDateInGivenFormat(contact.created_time * 1000, "MM/dd/yyyy", timezone));
 
 			// If contact is updated
 			if (contact.updated_time != 0L) {
-				subscriberJSON.put("modified_date", DateUtil
-						.getGMTDateInGivenFormat(contact.updated_time * 1000,
-								"MM/dd/yyyy"));
+				subscriberJSON.put("modified_date", DateUtil.getDateInGivenFormat(contact.updated_time * 1000, "MM/dd/yyyy", timezone));
 
 				// Contact updated time
 				subscriberJSON.put("modified_time", contact.updated_time);
@@ -441,7 +437,7 @@ public class AgileTaskletUtil {
 	 *            Contact object that subscribes to workflow.
 	 * @return JsonObject of contact.
 	 */
-	public static JSONObject getCompanyJSON(Contact contact) {
+	public static JSONObject getCompanyJSON(Contact contact, String timezone) {
 		if (contact == null)
 			return null;
 
@@ -505,14 +501,14 @@ public class AgileTaskletUtil {
 
 			// Returns Created and Updated date in GMT with given format.
 			subscriberJSON.put("created_date", DateUtil
-					.getGMTDateInGivenFormat(contact.created_time * 1000,
-							"MM/dd/yyyy"));
+					.getDateInGivenFormat(contact.created_time * 1000,
+							"MM/dd/yyyy", timezone));
 
 			// Insert only if updated
 			if (contact.updated_time != 0L) {
 				subscriberJSON.put("modified_date", DateUtil
-						.getGMTDateInGivenFormat(contact.updated_time * 1000,
-								"MM/dd/yyyy"));
+						.getDateInGivenFormat(contact.updated_time * 1000,
+								"MM/dd/yyyy", timezone));
 
 				// Updated time
 				subscriberJSON.put("modified_time", contact.updated_time);

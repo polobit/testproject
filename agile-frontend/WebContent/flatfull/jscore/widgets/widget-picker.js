@@ -169,17 +169,33 @@ function initializeWidgetSettingsListeners(){
 			$('#Twilio-container').hide();
 
 		});	
+	
+	// Helps to know that widget is for all users.
+	$('#prefs-tabs-content .add_to_all').off();
+	$('#prefs-tabs-content').on('click', '.add_to_all', function(e){
+		isForAll = true;
+	});
 
+	$('#prefs-tabs-content .add-widget').off();
+	$('#prefs-tabs-content').on('click', '.add-widget', function(e){
+		isForAll = false;
+	});
+	
 	$('#prefs-tabs-content #remove-widget').off();
 	$('#prefs-tabs-content').on('click', '#remove-widget', function(e)
 	{
+
 		// Fetch widget name from the widget on which delete is clicked
 		var widget_name = $(this).attr('widget-name');
-
+		
+		
 		// If not confirmed to delete, return
 		if (!confirm("Are you sure to remove " + widget_name))
 			return;
 
+		//Deletes the cutom widget form the widget entity.
+		delete_widget(widget_name);
+		
 		/*
 		 * Sends Delete request with widget name as path parameter, and on
 		 * success fetches the widgets to reflect the changes is_added, to show
@@ -243,8 +259,10 @@ function build_custom_widget_form(el)
 {
 	var divClone;
 	
+    $('#prefs-tabs-content').off('click', '#add-custom-widget');
 	$('#prefs-tabs-content').on('click', '#add-custom-widget', function(e)
 			{
+				$('#custom-widget-btn').removeClass('open');
 				divClone = $("#custom-widget").clone();
 				var widget_custom_view = new Base_Model_View({ url : "/core/api/widgets/custom", template : "add-custom-widget", isNew : true,
 					postRenderCallback : function(el)
@@ -252,7 +270,7 @@ function build_custom_widget_form(el)
 						console.log('In post render callback');
 						console.log(el);
                         
-						$('#custom_widget_form').off('change').on('change', '#script_type', function(e)
+						$('#custom-widget').off('change').on('change', '#script_type', function(e)
 						{
 							var script_type = $('#script_type').val();
 							if (script_type == "script")
@@ -284,6 +302,13 @@ function build_custom_widget_form(el)
 
 				$('#custom-widget', el).html(widget_custom_view.render(true).el);
 				
+				//Is Custom widget for all.
+				if(!($(this).hasClass('add_to_all'))){
+					isForAll = false;
+				}
+				$('#custom_isForAll').val(isForAll);
+				
+                $('#prefs-tabs-content').off('click', '#cancel_custom_widget');
 				$('#prefs-tabs-content').on('click', '#cancel_custom_widget', function(e)
 				{
 					// Restore element back to original

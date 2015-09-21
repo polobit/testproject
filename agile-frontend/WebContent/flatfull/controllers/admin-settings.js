@@ -43,7 +43,12 @@ var AdminSettingsRouter = Backbone.Router.extend({
 
 	"email-gateways/:id" : "emailGateways",
 
-	"sms-gateways/:id" : "smsGateways"
+	"sms-gateways/:id" : "smsGateways",
+
+	"lost-reasons" : "lostReasons",
+
+	"deal-sources" : "dealSources"
+
 
 	},
 
@@ -465,13 +470,13 @@ var AdminSettingsRouter = Backbone.Router.extend({
 
 			return;
 		}
-
 		var that = this;
 		$('#content').html("<div id='milestone-listner'>&nbsp;</div>");
 		getTemplate("admin-settings", {}, undefined, function(template_ui){
 			if(!template_ui)
 				  return;
 			$('#milestone-listner').html($(template_ui));
+			$('#milestone-listner').find('#admin-prefs-tabs-content').html(getTemplate("settings-milestones-tab"), {});
 
 			that.pipelineGridView = new Base_Collection_View({ url : '/core/api/milestone/pipelines', templateKey : "admin-settings-milestones",
 			individual_tag_name : 'div', sortKey : "name", postRenderCallback : function(el)
@@ -482,16 +487,20 @@ var AdminSettingsRouter = Backbone.Router.extend({
 					$('#milestone-listner').find('#deal-tracks-accordion').find('.collapse').addClass('in');
 				initializeMilestoneListners(el);
 				milestone_util.init(el);
+				//that.lostReasons();
+				//that.dealSources();
 			} });
 			that.pipelineGridView.collection.fetch();
 
-			$('#milestone-listner').find('#admin-prefs-tabs-content').html(that.pipelineGridView.render().el);
+			$('#milestone-listner').find('#admin-prefs-tabs-content').find('#settings-milestones-tab-content').html(this.pipelineGridView.render().el);
 			$('#milestone-listner').find('#AdminPrefsTab .select').removeClass('select');
 			$('#milestone-listner').find('.milestones-tab').addClass('select');
 			$(".active").removeClass("active");
 
 		}, "#milestone-listner");
 	
+		$('.settings-milestones').addClass('active');
+		$('#milestone-listner').find('#admin-prefs-tabs-content').parent().removeClass('bg-white');
 	},
 	
 	/**
@@ -836,6 +845,60 @@ var AdminSettingsRouter = Backbone.Router.extend({
 
 
 		}, "#content");
+	},
+	
+	/**
+	 * Fetch all lost reasons
+	 */
+	lostReasons : function()
+	{
+		if (!CURRENT_DOMAIN_USER.is_admin)
+		{
+			$('#content').html(getTemplate('others-not-allowed',{}));
+			return;
+		}
+		$('#content').html("<div id='milestone-listner'>&nbsp;</div>");
+		$("#milestone-listner").html(getTemplate("admin-settings"), {});
+		$('#milestone-listner').find('#admin-prefs-tabs-content').html(getTemplate("settings-milestones-tab"), {});
+		this.dealLostReasons = new Base_Collection_View({ url : '/core/api/categories?entity_type=DEAL_LOST_REASON', templateKey : "admin-settings-lost-reasons",
+			individual_tag_name : 'tr', sortKey : "name", postRenderCallback : function(el)
+			{
+				initializeMilestoneListners(el);
+			} });
+		this.dealLostReasons.collection.fetch();
+		$('#content').find('#admin-prefs-tabs-content').find('#settings-milestones-tab-content').html(this.dealLostReasons.render().el);
+		$('#content').find('#AdminPrefsTab .select').removeClass('select');
+		$('#content').find('.milestones-tab').addClass('select');
+		$(".active").removeClass("active");
+		$('.settings-lost-reasons').addClass('active');
+		$('#milestone-listner').find('#admin-prefs-tabs-content').parent().removeClass('bg-white');
+	},
+
+	/**
+	 * Fetch all deal sources
+	 */
+	dealSources : function()
+	{
+		if (!CURRENT_DOMAIN_USER.is_admin)
+		{
+			$('#content').html(getTemplate('others-not-allowed',{}));
+			return;
+		}
+		$('#content').html("<div id='milestone-listner'>&nbsp;</div>");
+		$("#milestone-listner").html(getTemplate("admin-settings"), {});
+		$('#milestone-listner').find('#admin-prefs-tabs-content').html(getTemplate("settings-milestones-tab"), {});
+		this.dealSourcesView = new Base_Collection_View({ url : '/core/api/categories?entity_type=DEAL_SOURCE', templateKey : "admin-settings-deal-sources",
+			individual_tag_name : 'tr', sortKey : "name", postRenderCallback : function(el)
+			{
+				initializeMilestoneListners(el);
+			} });
+		this.dealSourcesView.collection.fetch();
+		$('#content').find('#admin-prefs-tabs-content').find('#settings-milestones-tab-content').html(this.dealSourcesView.render().el);
+		$('#content').find('#AdminPrefsTab .select').removeClass('select');
+		$('#content').find('.milestones-tab').addClass('select');
+		$(".active").removeClass("active");
+		$('.settings-deal-sources').addClass('active');
+		$('#milestone-listner').find('#admin-prefs-tabs-content').parent().removeClass('bg-white');
 	}
 
 });

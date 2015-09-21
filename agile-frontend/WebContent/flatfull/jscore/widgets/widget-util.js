@@ -1,9 +1,13 @@
+//Helps to know that widget is for all users.
+var isForAll = false;
+
 function initializeWidgetUtilListeners(){
 	
 }
 
 $(function(){
 	
+    $('#content').off('click', '#widget-prefs-save');
 	$('#content').on('click', '#widget-prefs-save', function(e)
 	{
 		e.preventDefault();
@@ -102,6 +106,7 @@ function clickdesk_save_widget_prefs()
 	$('#save_clickdesk_prefs').unbind("click");
 
 	// On click of save button, check input and save details
+    $('body').off('click', '#save_clickdesk_prefs');
 	$('body').on('click', '#save_clickdesk_prefs', function(e)
 	{
 		e.preventDefault();
@@ -138,9 +143,10 @@ function saveClickDeskWidgetPrefs()
 
 function helpscout_save_widget_prefs()
 {
-	$('#save_api_key').unbind("click");
+	$('#save_api_key').off("click");
 
 	// Saves the API key
+    $('body').off('click', '#save_api_key');
 	$('body').on('click', '#save_api_key', function(e)
 	{
 		e.preventDefault();
@@ -181,6 +187,7 @@ function freshbook_save_widget_prefs()
 	$('#freshbooks_save_token').unbind("click");
 
 	// On click of save button, check input and save details
+    $('body').off('click', '#freshbooks_save_token');
 	$('body').on('click', '#freshbooks_save_token', function(e)
 	{
 		e.preventDefault();
@@ -219,9 +226,10 @@ function savefreshBooksWidgetPrefs()
 function rapleaf_save_widget_prefs()
 {
 
-	$('#save_api_key').unbind("click");
+	$('#save_api_key').off("click");
 
 	// Saves the API key
+    $('body').off('click', '#save_api_key');
 	$('body').on('click', '#save_api_key', function(e)
 	{
 		e.preventDefault();
@@ -267,6 +275,7 @@ function zendesk_save_widget_prefs()
 	$('#save_prefs').unbind("click");
 
 	// On click of save button, check input and save details
+    $('body').off('click', '#save_prefs');
 	$('body').on('click', '#save_prefs', function(e)
 	{
 		e.preventDefault();
@@ -328,6 +337,7 @@ function sip_save_widget_prefs()
 	$('#save_prefs').unbind("click");
 
 	// On click of save button, check input and save details
+    $('body').off('click', '#save_prefs');
 	$('body').on('click', '#save_prefs', function(e)
 	{
 		e.preventDefault();
@@ -392,6 +402,7 @@ function twilioio_save_widget_prefs()
 	$('#save_prefs').unbind("click");
 
 	// On click of save button, check input and save details
+    $('body').off('click', '#save_prefs');
 	$('body').on('click', '#save_prefs', function(e)
 	{
 		e.preventDefault();
@@ -480,6 +491,7 @@ function callscript_save_widget_prefs()
 	$('#save_prefs').unbind("click");
 
 	// On click of save button, check input and save details
+    $('body').off('click', '#save_prefs');
 	$('body').on('click', '#save_prefs', function(e)
 	{
 		e.preventDefault();		
@@ -551,6 +563,7 @@ function save_widget_prefs(pluginName, prefs, callback)
 	// URL to connect with widgets
 	widgetModel.url = '/core/api/widgets';
 	models[0].set('prefs', prefs);
+	models[0].set('isForAll', isForAll);
 
 	widgetModel.save(models[0].toJSON(), { success : function(data)
 	{
@@ -957,8 +970,9 @@ function setUpError(widget_name, template_id, error_data, error_url, model)
 function xero_save_widget_prefs()
 {
 	$('#xero_save_token').unbind("click");
-	alert("hello in xero save")
+	
 	// On click of save button, check input and save details
+    $('body').off('click', '#xero_save_token');
 	$('body').on('click', '#xero_save_token', function(e)
 	{
 		e.preventDefault();
@@ -982,17 +996,18 @@ function quickBooks_save_widget_prefs(template_id, url)
 {
 	head.js('https://appcenter.intuit.com/Content/IA/intuit.ipp.anywhere.js', function()
 	{
-		$('#widget-settings', el).html(getTemplate(template_id, { "url" : url }));
-		console.log(el);
+		$('#widget-settings').html(getTemplate(template_id, { "url" : url }));
+		//console.log(el);
 		intuit.ipp.anywhere.setup({ menuProxy : 'http://example.com/myapp/BlueDotMenu', grantUrl : url });
 	});
 
 }
 function chargify_save_widget_prefs()
 {
-	$('#chargify_save_api_key').unbind("click");
+	$('#chargify_save_api_key').off("click");
 
 	// Saves the API key
+    $('body').off('click', '#chargify_save_api_key');
 	$('body').on('click', '#chargify_save_api_key', function(e)
 	{
 		e.preventDefault();

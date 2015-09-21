@@ -1614,7 +1614,7 @@ function load_clickdesk_code()
 	var s = document.getElementsByTagName('script')[0];
 	s.parentNode.insertBefore(glcspt, s);
 }
-
+_
 function executeWebRulesOnRoute(){
  	  if(typeof _agile_execute_action == "function")
 	  {
@@ -1645,57 +1645,64 @@ calendar : function()
 	eraseCookie("agile_calendar_view");
 	// read cookie for view if list_view is there then rendar list view else
 	// rendar default view
-	getCalendarUsersDetails(function(users){
+	
 
 		$('#content').html("<div id='calendar-listers'>&nbsp;</div>");
+		$('#calendar-listers').html(LOADING_ON_CURSOR);
 		getTemplate("calendar", {}, undefined, function(template_ui){
+
 		if(!template_ui)
 			  return;
 
+		getCalendarUsersDetails(function(users){
+
 		$('#calendar-listers').html($(template_ui));
-		getTemplate("event-left-filter", users, undefined, function(template_ui1){
-				$('#calendar-listers').find("#calendar-filters").html($(template_ui1));
 
-				buildCalendarLhsFilters();
-				createRequestUrlBasedOnFilter();
-				var view = readCookie("agile_calendar_view");
+				getTemplate("event-left-filter", users, undefined, function(template_ui1){
+					
+						$('#calendar-listers').find("#calendar-filters").html($(template_ui1));
 
-				if (view)
-				{
-					$("#list_event_time").removeClass('hide');
-					$("#user_calendars").hide();
-					loadGoogleEvents();
-					loadAgileEvents();
-					return;
-				}
-				
-				$("#list_event_time").addClass('hide');
-				$("#user_calendars").show();
-				$('#calendar-view-button').show();
+						buildCalendarLhsFilters();
+						createRequestUrlBasedOnFilter();
+						var view = readCookie("agile_calendar_view");
 
-				$(".active").removeClass("active");
-				$("#calendarmenu").addClass("active");
-				$('#agile_event_list').addClass('hide');
+						if (view)
+						{
+							$("#list_event_time").removeClass('hide');
+							$("#user_calendars").hide();
+							loadGoogleEvents();
+							loadAgileEvents();
+							return;
+						}
+						
+						$("#list_event_time").addClass('hide');
+						$("#user_calendars").show();
+						$('#calendar-view-button').show();
 
-				// Typahead also uses jqueryui - if you are changing the version
-				// here,
-				// change it there too
-				head.js(LIB_PATH + 'lib/jquery-ui.min.js', 'lib/fullcalendar.min.js', function()
-				{
-					showCalendar();
-					hideTransitionBar();
-					initializeEventListners();
-				});
+						$(".active").removeClass("active");
+						$("#calendarmenu").addClass("active");
+						$('#agile_event_list').addClass('hide');
 
-				$('#grp_filter').css('display', 'none');
-				$('#event_tab').css('display', 'none');
-			
+						// Typahead also uses jqueryui - if you are changing the version
+						// here,
+						// change it there too
+						head.js(LIB_PATH + 'lib/jquery-ui.min.js', LIB_PATH + 'lib/fullcalendar.min.js', function()
+						{
+							showCalendar(users);
+							hideTransitionBar();
+							initializeEventListners();
+						});
 
-			}, $('#calendar-listers').find("#calendar-filters"));
-		}, "#calendar-listers");
+						$('#grp_filter').css('display', 'none');
+						$('#event_tab').css('display', 'none');
+					
+
+					}, $('#calendar-listers').find("#calendar-filters"));
+		});	
+	}, "#calendar-listers");
 
 
-	});	
+	
 },
 
 /* Show tasks list when All Tasks clicked under calendar page. */
@@ -2858,6 +2865,10 @@ var ContactBulkActionRouter = Backbone.Router.extend({
 					  return;
 				$('#content').html($(template_ui));	
 				$('body').trigger('fill_owners');
+
+
+
+
 			}, "#content");
 			
 		}
@@ -2991,7 +3002,7 @@ var ContactBulkActionRouter = Backbone.Router.extend({
 					  return;
 					
 				$('#send-email-listener-container').html($(template_ui));	
-				("#emailForm").find('.add-attachment-select').hide();
+				$("#emailForm").find('.add-attachment-select').hide();
 				$('body').trigger('fill_emails');
 				initializeSendEmailListeners();
 				sendEmailAttachmentListeners("send-email-listener-container");
@@ -3261,6 +3272,16 @@ var ContactsRouter = Backbone.Router.extend({
 			/* CALL-with mobile number */
 			"contacts/call-lead/:first/:last/:mob" : "addLeadDirectly"
 	},
+
+	before : {
+				"*any" : function(fragment, args, next)
+					{
+						head.js( CLOUDFRONT_PATH + "/jscore/min/flatfull/portlets-min.js?_=" +_AGILE_VERSION, function(){
+							next();
+						});
+					}
+
+			},
 
 	initialize : function()
 	{
@@ -4822,13 +4843,21 @@ function accessUrlUsingAjax(url, callback, error_callback){
 		$("#content").html(this.formsListView.el);
 	} });
 /**
- * Creates backbone router to access preferences of the user portlets
+ * Creates backbone router to access preferences of the user 
  */
 var PortletsRouter = Backbone.Router
 		.extend({
 			routes : {
 				// "portlets" : "portlets",
 				"add-dashlet" : "adddashlet"
+			},
+			before : {
+				"*any" : function(fragment, args, next)
+					{
+						head.js( CLOUDFRONT_PATH + "/jscore/min/flatfull/portlets-min.js", function(){ 
+							next(); 
+						});
+					}
 			},
 			adddashlet : function() {
 				if (gridster == undefined) {
@@ -4838,8 +4867,6 @@ var PortletsRouter = Backbone.Router
 				} else {
 					head
 							.js(
-									LIB_PATH
-											+ 'jscore/handlebars/handlebars-helpers.js',
 									LIB_PATH + 'lib/jquery.gridster.js',
 									function() {
 										this.Catalog_Portlets_View = new Base_Collection_View(
@@ -4902,8 +4929,7 @@ var PortletsRouter = Backbone.Router
 			// $("#portletstreamDetails",$('#portletStreamModal')).html(this.Catalog_Portlets_View.el);},
 
 			portlets : function() {
-				head.js(LIB_PATH + 'jscore/handlebars/handlebars-helpers.js?='
-						+ _AGILE_VERSION, LIB_PATH + 'lib/jquery.gridster.js',
+				head.js(LIB_PATH + 'lib/jquery.gridster.js',
 						function() {
 
 							getTemplate('portlets', {}, undefined, function(template_ui){
@@ -6013,7 +6039,22 @@ function getStartAndEndDatesEpochForPortlets(duration)
 
 	return (getUTCMidNightEpochFromDate(d) / 1000);
 }
-var ReferelRouter = Backbone.Router.extend({
+
+
+/**
+ * Convert time in human readable format.
+ */
+function displayTimeAgo(elmnt)
+{
+	head.js('lib/jquery.timeago.js', function()
+	{
+		$(".time-ago", elmnt).timeago();
+	});
+	
+	console.log($("article.stream-item").parent());
+	
+	$("article.stream-item").parent().addClass("social-striped");
+}var ReferelRouter = Backbone.Router.extend({
 
 	routes : {
 
@@ -6065,23 +6106,21 @@ var ReportsRouter = Backbone.Router
 				if (!tight_acl.checkPermission('REPORT'))
 					return;
 
-				head.js(LIB_PATH + 'jscore/handlebars/handlebars-helpers.js', function()
-				{
-					$("#content").html("<div id='reports-listerners-container'></div>");
-					getTemplate('report-categories', {}, undefined, function(template_ui){
-						if(!template_ui)
-							  return;
-						$('#reports-listerners-container').html($(template_ui));
+				$("#content").html("<div id='reports-listerners-container'></div>");
+				getTemplate('report-categories', {}, undefined, function(template_ui){
+					if(!template_ui)
+						  return;
+					$('#reports-listerners-container').html($(template_ui));
 
-						initializeReportsListeners();
-						hideTransitionBar();
-						$(".active").removeClass("active");
-						$("#reportsmenu").addClass("active");
+					initializeReportsListeners();
+					hideTransitionBar();
+					$(".active").removeClass("active");
+					$("#reportsmenu").addClass("active");
 
-						$('[data-toggle="tooltip"]').tooltip();	
+					$('[data-toggle="tooltip"]').tooltip();	
 
-					}, "#reports-listerners-container");
-				});
+				}, "#reports-listerners-container");
+				
 			},
 
 	/**
@@ -7301,8 +7340,7 @@ var SettingsRouter = Backbone.Router
 						console.log("updated notification prefs are...");
 						console.log(notification_prefs);
 
-						head.load(CSS_PATH + 'css/bootstrap_switch.css', LIB_PATH + 'lib/bootstrapSwitch.js', LIB_PATH + 'lib/desktop-notify-min.js',
-								function()
+						head.load(CSS_PATH + 'css/bootstrap_switch.css', LIB_PATH + 'lib/bootstrapSwitch.js', function()
 								{
 									showSwitchChanges(el);
 									check_browser_notification_settings(el);
@@ -7571,6 +7609,15 @@ var SocialSuiteRouter = Backbone.Router.extend({
 	// Scheduled updates on new page
 	"scheduledmessages" : "scheduledmessages" },
 
+	before : 
+	{	
+		'*any': function(fragment, args, next) {
+			head.js(CLOUDFRONT_PATH + "/jscore/min/flatfull/social-suite-all-min.js?_=" +_AGILE_VERSION , function(){
+				next();
+			})
+			
+		}
+	},
 	/**
 	 * On click on social tab this function is called, to initialize social
 	 * suite, it will include js files.
@@ -7900,15 +7947,11 @@ var SubscribeRouter = Backbone.Router.extend({
 					obj = {"invoice" : invoicedata,	"company" : companydata}
 					console.log("xxxxxxxxxxxxxxx");
 					console.log(obj);
-					head.js(LIB_PATH + 'jscore/handlebars/handlebars-helpers.js', function()
-					{
-						getTemplate('invoice-detail', obj, undefined, function(template_ui){
+					getTemplate('invoice-detail', obj, undefined, function(template_ui){
 							if(!template_ui)
 								  return;
 							$('#content').html($(template_ui));	
 						}, "#content");
-					});
-
 				}, 
 				function(response){
 					showNotyPopUp("information", "error occured please try again", "top");
@@ -9499,6 +9542,13 @@ var WebreportsRouter = Backbone.Router.extend({
 	routes : {
 	/* Settings */
 	"web-rules" : "webrules", "webrules-add" : "web_reports_add", "webrule-edit/:id" : "web_reports_edit" },
+
+		before : {
+		"*any" : function(fragment, args, next)
+		{
+			head.js(CLOUDFRONT_PATH + "jscore/min/flatfull/web-rules-min.js", next);
+		}
+	},
 	webrules : function()
 	{
 		var that = this;
@@ -10676,7 +10726,7 @@ var WidgetsRouter = Backbone.Router
 												    	var widgetDetails = "";
 
 												    	accessUrlUsingAjax("core/api/widgets/GooglePlus", function(resp){
-												    		    widgetDetails = $.parseJSON(resp);
+												    		    widgetDetails = resp;
 
 												    		    console.clear();
 												    			console.log("In google Plus widget Router");
@@ -12484,17 +12534,22 @@ function add_tag_our_domain(tag, callback) {
  * @param tag
  */
 function addTagAgile(tag) {
-	// Checks if tag is already available.
-	if (checkTagAgile(tag))
-		return;
 
-	// Adds tag
-	_agile.add_tag(tag, function(data) {
-		Agile_Contact = data;
-		if (!checkTagAgile(tag))
-			Agile_Contact.tags.push(tag)
-			// set_profile_noty();
-	});
+	try{
+		// Checks if tag is already available.
+		if (checkTagAgile(tag))
+			return;
+
+		// Adds tag
+		_agile.add_tag(tag, function(data) {
+			Agile_Contact = data;
+			if (!checkTagAgile(tag))
+				Agile_Contact.tags.push(tag)
+				// set_profile_noty();
+		});
+		
+	}catch(err){}
+	
 }
 
 function add_property(name, value, type, callback) {
@@ -12624,6 +12679,12 @@ function add_plan_change_info_as_note_to_owner(cus_email, plan_type, plan_id,
 }
 
 $(function(){
+	
+	
+});
+
+function initialize_agile_domain_sync(){
+
 	try
 	{
 		if(_agile)
@@ -12641,7 +12702,8 @@ $(function(){
 		console.log();
 	}
 	
-});
+}
+
 // add note to owner when subscription is cancelled
 function add_cancel_subscription_info_as_note_to_owner(cus_email, callback)
 {
@@ -13060,6 +13122,8 @@ function loadMiscScripts() {
 
     // Load agile web stats
     load_urls_on_ajax_stop('stats/min/agile-min.js?_=' + _AGILE_VERSION, function(){
+
+    		initialize_agile_domain_sync();
     		_agile_execute_web_rules();
     });
 
@@ -15493,6 +15557,8 @@ function set_url(apiKey, domain)
 function send_ical_info_email(emailModal)
 {
 	// When Send Clicked, validate the form and send email.
+	emailModal.on("shown.bs.modal", function(e){
+
 	$("#share-ical-by-email")
 			.on(
 					'click',
@@ -15522,6 +15588,7 @@ function send_ical_info_email(emailModal)
 						});
 
 					});
+		});
 }
 
 $(function()
@@ -17847,7 +17914,7 @@ var LOADING_ON_CURSOR = '<img class="loading" style="padding-right:5px" src= "im
  * Default image shown for contacts if image is not available
  */
 
-var DEFAULT_GRAVATAR_url = window.location.origin + "/" + LIB_PATH_FLATFULL + "images/flatfull/user-default.jpg";
+var DEFAULT_GRAVATAR_url = window.location.origin + "/" + FLAT_FULL_PATH + "images/flatfull/user-default.jpg";
 
 var ONBOARDING_SCHEDULE_URL = "https://our.agilecrm.com/calendar/Haaris_Farooqi,Sandeep";
 
@@ -18681,7 +18748,7 @@ function canRunBulkOperations()
 	tight_acl.REPORTS_PER = false;
 	tight_acl.ACTIVITY_PER = false;
 	var obj = {};
-	
+
 	/*
 	 * Initialize the permissions when user changes the route using the menu scopes in the current domain user object.
 	 */
@@ -18742,15 +18809,14 @@ function canRunBulkOperations()
 			tight_acl.REPORTS_PER = true;
 			App_ACL.notAllowed(obj);
 		}
-	};
+	}
 	
 	/*
 	 * Check the permission based up on the given scope.
 	 */
 	tight_acl.checkPermission = function(scope){
 		return CURRENT_DOMAIN_USER.menu_scopes.indexOf(scope) > -1;
-	};
-	
+	}
 }(window.tight_acl = window.tight_acl || {}, $));
 
 (function(acl_util, $, undefined) {
@@ -19519,10 +19585,10 @@ function get_google_calendar_event_source(data, callback)
  * Shows the calendar
  */
 var fullCal;
-function showCalendar()
+function showCalendar(users)
 {
 
-	_init_gcal_options();
+	_init_gcal_options(users);
 	putGoogleCalendarLink();
 	var calendarView = (!readCookie('calendarDefaultView')) ? 'month' : readCookie('calendarDefaultView');
 	$('#' + calendarView).addClass('bg-light');
@@ -20130,33 +20196,28 @@ function getCalendarUsersDetails(callback)
 
 	accessUrlUsingAjax('/core/api/users/agileusers', function(data){
 
+		if(!data)
+			 return callback(data);
+
 		var json_users = [];
-		if (data)
+		$.each(data, function(i, user)
 		{
-			$.each(JSON.parse(data), function(i, user)
+
+			if (CURRENT_DOMAIN_USER.id == user.domain_user_id)
 			{
-
-				if (CURRENT_DOMAIN_USER.id == user.domain_user_id)
-				{
-					CURRENT_AGILE_USER = user;
-
-				}
-				else
-				{
-					if (user.domainUser)
-					{
-						var json_user = {};
-						json_user.id = user.id;
-						json_user.name = user.domainUser.name;
-						json_user.domain_user_id = user.domainUser.id;
-						json_users.push(json_user);
-					}
-
-				}
-
-			});
-		}
-
+				CURRENT_AGILE_USER = user;
+				return;
+			}
+			
+			if (user.domainUser)
+			{
+				var json_user = {};
+				json_user.id = user.id;
+				json_user.name = user.domainUser.name;
+				json_user.domain_user_id = user.domainUser.id;
+				json_users.push(json_user);
+			}
+		});
 		return callback(json_users);
 
 	});
@@ -20388,26 +20449,20 @@ function checkBothCalWhenNoCalSelected()
  */
 function putGoogleCalendarLink()
 {
-	var calEnable = false;
-
-	$.ajax({ url : 'core/api/calendar-prefs/get', async : false, success : function(response)
+	$.ajax({ url : 'core/api/calendar-prefs/get', success : function(response)
 	{
 		if (response)
-			calEnable = true;
+		{
+			$("#google_cal").removeClass('hide');
+			$("#google_cal_link").addClass('hide');
+		}
+		else
+		{
+			$("#google_cal").addClass('hide');
+			$("#google_cal_link").removeClass('hide');
+		}
 
 	} });
-
-	if (calEnable)
-	{
-		$("#google_cal").removeClass('hide');
-		$("#google_cal_link").addClass('hide');
-	}
-
-	else
-	{
-		$("#google_cal").addClass('hide');
-		$("#google_cal_link").removeClass('hide');
-	}
 }
 
 
@@ -20899,22 +20954,24 @@ function initializeEventListners(el)
 {
 
 
-$("#ical_appointment_links").on('click', '#subscribe-ical', function(event)
+/*$("#ical_appointment_links").on('click', '#subscribe-ical', function(event)
 {
 	event.preventDefault();
 	set_api_key();
-});
+});*/
 
 
 /**
  * When Send Mail is clicked from Ical Modal, it hides the ical modal and shows
  * the ical-send email modal.
  */
+$("#icalModal").off('click');
 $("#icalModal").on('click', '#send-ical-email', function(event)
 {
 	event.preventDefault();
 
 	$("#icalModal").modal('hide');
+
 
 	// Removes previous modals if exist.
 	if ($('#share-ical-by-email').size() != 0)
@@ -21779,27 +21836,11 @@ function changeEndTime(startTime, endTime)
  */
 
 // or better
-function isDefined(x)
-{
-	var undefined;
-	return typeof x !== undefined;
-}
 
-function _init_gcal_options()
-{
-	var fc = $.fullCalendar;
-	fc.sourceFetchers = [];
-	// Transforms the event sources to Google Calendar Events
-	fc.sourceFetchers.push(function(sourceOptions, start, end)
-	{
-		if (sourceOptions.dataType == 'agile-gcal')
-		{
 
-			// Check whether to show the google calendar events or not.
+function loadUserEventsfromGoogle(users, start, end){
 
-			$.getJSON('/core/api/users/agileusers', function(users)
-			{
-				$.each(users, function(i, user)
+	$.each(users, function(i, user)
 				{
 					if (CURRENT_DOMAIN_USER.id == user.domain_user_id)
 					{
@@ -21817,7 +21858,36 @@ function _init_gcal_options()
 						});
 					}
 				});
-			});
+}
+
+function isDefined(x)
+{
+	var undefined;
+	return typeof x !== undefined;
+}
+
+function _init_gcal_options(users)
+{
+	var fc = $.fullCalendar;
+	fc.sourceFetchers = [];
+	// Transforms the event sources to Google Calendar Events
+	fc.sourceFetchers.push(function(sourceOptions, start, end)
+	{
+		if (sourceOptions.dataType == 'agile-gcal')
+		{
+
+			if(users){
+
+				loadUserEventsfromGoogle(users, start, end);
+				return;
+
+			}
+			// Check whether to show the google calendar events or not.
+
+			$.getJSON('/core/api/users/agileusers', function(users)
+				{
+					loadUserEventsfromGoogle(users, start, end);
+				});
 
 		}
 	});
@@ -25233,25 +25303,28 @@ $(function()
 					{
 						e.preventDefault();
 
-						if (!canRunBulkOperations())
-						{
-							showModalConfirmation(
-									"Bulk Change Owner",
-									"You may not have permission to update some of the contacts selected. " + "Proceeding with this operation will change the owner for only the contacts " + "you are allowed to update.<br/><br/> Do you want to proceed?",
-									show_bulk_owner_change_page, function()
-									{
-										// No callback
-										return;
-									}, function()
-									{
+						load_bulk_operations_template(function(){
 
-									});
-						}
-						else
-						{
-							show_bulk_owner_change_page();
-						}
+								if (!canRunBulkOperations())
+								{
+									showModalConfirmation(
+											"Bulk Change Owner",
+											"You may not have permission to update some of the contacts selected. " + "Proceeding with this operation will change the owner for only the contacts " + "you are allowed to update.<br/><br/> Do you want to proceed?",
+											show_bulk_owner_change_page, function()
+											{
+												// No callback
+												return;
+											}, function()
+											{
 
+											});
+								}
+								else
+								{
+									show_bulk_owner_change_page();
+								}
+
+						});
 					});
 
 	function show_bulk_owner_change_page()
@@ -25408,56 +25481,61 @@ $(function()
 
 	function show_bulk_campaign_assign_page()
 	{
-		var id_array = [];
-		var filter;
-		if (SELECT_ALL == true)
-			filter = getSelectionCriteria();
-		else
-			id_array = get_contacts_bulk_ids();
 
-		console.log(filter);
+		load_bulk_operations_template(function(){
 
-        $("body").off('fill_campaigns').on("fill_campaigns", function(event)
-		{
-			var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
-			fillSelect('campaignBulkSelect', '/core/api/workflows', 'workflow', 'no-callback ', optionsTemplate);
-		});
+			var id_array = [];
+			var filter;
+			if (SELECT_ALL == true)
+				filter = getSelectionCriteria();
+			else
+				id_array = get_contacts_bulk_ids();
 
-		// Navigate to show form
-		Backbone.history.navigate("bulk-campaigns", { trigger : true });
+			console.log(filter);
 
-		/**
-		 * Subscribes the selected contacts to a campaign by sending the
-		 * workflow id and selected contacts' ids.
-		 */
-		$("#addBulkTocampaign").click(function(e)
-		{
-			e.preventDefault();
-
-			var $form = $('#campaignsBulkForm');
-
-			// Button Disabled or Validate Form Failed
-			if ($(this).attr('disabled') == 'disabled' || !isValidForm($form))
+	        $("body").off('fill_campaigns').on("fill_campaigns", function(event)
 			{
-				return;
-			}
+				var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
+				fillSelect('campaignBulkSelect', '/core/api/workflows', 'workflow', 'no-callback ', optionsTemplate);
+			});
 
-			var saveButton = $(this);
+			// Navigate to show form
+			Backbone.history.navigate("bulk-campaigns", { trigger : true });
 
-			disable_save_button(saveButton);
-			// Show loading symbol until model get saved
-			// $('#campaignsBulkForm').find('span.save-status').html(getRandomLoadingImg());
-
-			var workflow_id = $('#campaignBulkSelect option:selected').prop('value');
-			var url = '/core/api/bulk/update?workflow_id=' + workflow_id + "&action_type=ASIGN_WORKFLOW";
-
-			var json = {};
-			json.contact_ids = id_array;
-			postBulkOperationData(url, json, $form, undefined, function(data)
+			/**
+			 * Subscribes the selected contacts to a campaign by sending the
+			 * workflow id and selected contacts' ids.
+			 */
+			$("#addBulkTocampaign").click(function(e)
 			{
-				enable_save_button(saveButton);
-			}, 'Campaign assigning scheduled');
+				e.preventDefault();
+
+				var $form = $('#campaignsBulkForm');
+
+				// Button Disabled or Validate Form Failed
+				if ($(this).attr('disabled') == 'disabled' || !isValidForm($form))
+				{
+					return;
+				}
+
+				var saveButton = $(this);
+
+				disable_save_button(saveButton);
+				// Show loading symbol until model get saved
+				// $('#campaignsBulkForm').find('span.save-status').html(getRandomLoadingImg());
+
+				var workflow_id = $('#campaignBulkSelect option:selected').prop('value');
+				var url = '/core/api/bulk/update?workflow_id=' + workflow_id + "&action_type=ASIGN_WORKFLOW";
+
+				var json = {};
+				json.contact_ids = id_array;
+				postBulkOperationData(url, json, $form, undefined, function(data)
+				{
+					enable_save_button(saveButton);
+				}, 'Campaign assigning scheduled');
+			});
 		});
+		
 	}
 
 	/**
@@ -25466,7 +25544,9 @@ $(function()
 	 */
 	$("body").on("click", "#bulk-tags", function(e)
 			{
-						e.preventDefault();
+					e.preventDefault();
+
+					load_bulk_operations_template(function(){
 
 						if (!canRunBulkOperations())
 						{
@@ -25506,6 +25586,8 @@ $(function()
 							show_add_tag_bulkaction_form()
 						}
 					});
+
+			});
 
 	function show_add_tag_bulkaction_form()
 	{
@@ -25618,44 +25700,46 @@ $(function()
 					{
 						e.preventDefault();
 
-						if (!canRunBulkOperations())
-						{
-							showModalConfirmation(
-									"Bulk Remove Tag",
-									"You may not have permission to update some of the contacts selected. Proceeding with this operation will delete tag to only the contacts you are allowed to update.<br/><br/> Do you want to proceed?",
+						load_bulk_operations_template(function(){
 
-									show_remove_tag_bulkaction_form, function()
-									{
-										// No callback
-										return;
-									}, function()
-									{
-										return;
-									});
-						}
-						if (is_free_plan() && has_more_than_limit())
-						{
-							continueAction = false;
-							showModalConfirmation(
-									"Remove tags",
-									"You can apply this bulk action only on 25 contacts in the FREE Plan. Please choose lesser number of contacts or upgrade your account.",
-									function()
-									{
-										Backbone.history.navigate("subscribe", { trigger : true });
-									}, function()
-									{
-										// No callback
-										return;
-									}, function()
-									{
-										return;
-									}, "Upgrade", "Close");
-						}
-						else
-						{
-							show_remove_tag_bulkaction_form()
-						}
+							if (!canRunBulkOperations())
+							{
+								showModalConfirmation(
+										"Bulk Remove Tag",
+										"You may not have permission to update some of the contacts selected. Proceeding with this operation will delete tag to only the contacts you are allowed to update.<br/><br/> Do you want to proceed?",
 
+										show_remove_tag_bulkaction_form, function()
+										{
+											// No callback
+											return;
+										}, function()
+										{
+											return;
+										});
+							}
+							if (is_free_plan() && has_more_than_limit())
+							{
+								continueAction = false;
+								showModalConfirmation(
+										"Remove tags",
+										"You can apply this bulk action only on 25 contacts in the FREE Plan. Please choose lesser number of contacts or upgrade your account.",
+										function()
+										{
+											Backbone.history.navigate("subscribe", { trigger : true });
+										}, function()
+										{
+											// No callback
+											return;
+										}, function()
+										{
+											return;
+										}, "Upgrade", "Close");
+							}
+							else
+							{
+								show_remove_tag_bulkaction_form()
+							}
+						});
 					});
 
 	function show_remove_tag_bulkaction_form()
@@ -25761,8 +25845,10 @@ $(function()
 					{
 						e.preventDefault();
 
-							// Selected Contact ids
-							var id_array = get_contacts_bulk_ids();
+					load_bulk_operations_template(function(){
+
+						// Selected Contact ids
+						var id_array = get_contacts_bulk_ids();
 
 						if (!canRunBulkOperations())
 						{
@@ -25846,8 +25932,9 @@ $(function()
 
 							show_bulk_email_form(id_array)
 						}
-
 					});
+
+				});
 
 	function show_bulk_email_form(id_array)
 	{
@@ -26410,7 +26497,7 @@ function getDynamicFilters()
 	
 	if (company_util.isCompany())
 	{
-		if(!App_Companies.companiesListView && !App_Companies.companiesListView.post_data)
+		if(!App_Companies.companiesListView || !App_Companies.companiesListView.post_data)
 		{
 			return null;
 		}
@@ -26419,7 +26506,7 @@ function getDynamicFilters()
 	}
 	else
 	{
-		if(!App_Contacts.contactsListView && !App_Contacts.contactsListView.post_data)
+		if(!App_Contacts.contactsListView || !App_Contacts.contactsListView.post_data)
 		{
 			return null;
 		}
@@ -26467,6 +26554,20 @@ function has_more_than_limit()
 		return true;
 
 	return false;
+}
+
+
+function load_bulk_operations_template(callback){
+
+	getTemplate("bulk-actions-company-owner", {}, undefined, function(template_ui){
+				if(!template_ui)
+					  return;
+
+				if(callback)
+				   callback();
+
+	}, "#content");
+
 }/**
  * table-checkboxes.js Prepends check-boxes to each row of desired tables (which are 
  * having showCheckboxes class), in order to perform bulk operations (Delete, Change owner etc..)
@@ -41472,6 +41573,62 @@ function gmap_create_table_view(Search_Url){
 	 gmapContactsListView.collection.fetch();
 	$('#gmap-table-view').html(gmapContactsListView.el);
 }
+var TEMPLATE_LIB_PATH = "";
+
+/**
+ * Downloads the template synchronously (stops other browsing actions) from the
+ * given url and returns it
+ * 
+ * @param {String}
+ *            url location to download the template
+ * @returns down-loaded template content
+ */
+function downloadTemplate(url, callback)
+{
+
+	var dataType = 'html', template_url = CLOUDFRONT_PATH;
+
+
+	// If Precompiled is enabled, we change the directory to precompiled. If
+	// pre-compiled flat is set true then template path is sent accordingly
+	if (HANDLEBARS_PRECOMPILATION)
+	{
+		url = "tpl/min/precompiled/" + FLAT_FULL_UI +  url;
+	}
+	else
+		url = "tpl/min/" + FLAT_FULL_UI +  url;
+
+	// If JS
+	if (url.endsWith("js") && HANDLEBARS_PRECOMPILATION)
+	{
+		dataType = 'script';
+		template_url = template_url.replace("flatfull/", "");
+		url = template_url + url;
+	}
+
+	url += "?_=" + _AGILE_VERSION;
+	
+	// If callback is sent to this method then template is fetched synchronously
+	var is_async = false;
+	if (callback && typeof (callback) === "function")
+		is_async = true;
+
+	console.log(url + " " + dataType + " " + is_async);
+
+	var is_cached = !LOCAL_SERVER;
+
+	jQuery.ajax({ url : url, dataType : dataType, cache:is_cached, success : function(result)
+	{
+		// If HTMl, add to body
+		if (dataType == 'html')
+			$('body').append((result));
+
+		if (is_async)
+			callback(result);
+	}, async : is_async });
+
+	return "";
+}
 // We store one template compiled - if repetitive templates are called, we save time on compilations
 var Handlebars_Compiled_Templates = {};
 
@@ -41746,11 +41903,17 @@ function getTemplateUrls(templateName)
 	}
 	if (templateName.indexOf("socialsuite") == 0)
 	{
-		template_relative_urls.push("socialsuite.js");
+		if(HANDLEBARS_PRECOMPILATION)
+			template_relative_urls.push("socialsuite-all.js");
+		else
+		{
+			template_relative_urls.push("socialsuite.js");
+		}
 
 		if (HANDLEBARS_PRECOMPILATION)
 			template_relative_urls.push("socialsuite.html");
 	}
+
 
 	if (templateName.indexOf("portlet") == 0)
 	{
@@ -41819,61 +41982,6 @@ String.prototype.endsWith = function(suffix)
 {
 	return this.indexOf(suffix, this.length - suffix.length) !== -1;
 };
-
-var TEMPLATE_LIB_PATH = "";
-
-/**
- * Downloads the template synchronously (stops other browsing actions) from the
- * given url and returns it
- * 
- * @param {String}
- *            url location to download the template
- * @returns down-loaded template content
- */
-function downloadTemplate(url, callback)
-{
-
-	var dataType = 'html', template_url = LIB_PATH;
-
-
-	// If Precompiled is enabled, we change the directory to precompiled. If
-	// pre-compiled flat is set true then template path is sent accordingly
-	if (HANDLEBARS_PRECOMPILATION)
-	{
-		url = "tpl/min/precompiled/" + FLAT_FULL_UI +  url;
-	}
-	else
-		url = "tpl/min/" + FLAT_FULL_UI +  url;
-
-	// If JS
-	if (url.endsWith("js") && HANDLEBARS_PRECOMPILATION)
-	{
-		dataType = 'script';
-		template_url = template_url.replace("flatfull/", "");
-		url = template_url + url;
-	}
-
-	url += "?_=" + _AGILE_VERSION;
-	
-	// If callback is sent to this method then template is fetched synchronously
-	var is_async = false;
-	if (callback && typeof (callback) === "function")
-		is_async = true;
-
-	console.log(url + " " + dataType + " " + is_async);
-
-	jQuery.ajax({ url : url, dataType : dataType, success : function(result)
-	{
-		// If HTMl, add to body
-		if (dataType == 'html')
-			$('body').append((result));
-
-		if (is_async)
-			callback(result);
-	}, async : is_async });
-
-	return "";
-}
 
 /**
  * Iterates the given "items", to find a match with the given "name", if found
@@ -48789,7 +48897,7 @@ function getDealCustomProperties(items)
 	 * 
 	 */
 	Handlebars.registerHelper('getDefaultImage',function(){
-		return new Handlebars.SafeString(LIB_PATH_FLATFULL + 'images/flatfull/user-default.jpg');
+		return new Handlebars.SafeString(FLAT_FULL_PATH + 'images/flatfull/user-default.jpg');
 		
 	});
 	
@@ -49503,37 +49611,35 @@ function show_desktop_notification(imageURL, title, message, link, tag,timeout) 
 	if(!timeout){
 		timeout=30000;
 	}
-	head.js(LIB_PATH +'lib/desktop-notify-min.js',function(){
 		
-		var notification = notify.createNotification(title, {
-			   body : message,
-			   icon : imageURL,
-			   tag : tag,
-			   onClickCallback : function() {
-					
-				   window.focus();
-					
-				   // Open respective block
-					Backbone.history.navigate(link, {
-						trigger : true
-					});
+	var notification = notify.createNotification(title, {
+		   body : message,
+		   icon : imageURL,
+		   tag : tag,
+		   onClickCallback : function() {
+				
+			   window.focus();
+				
+			   // Open respective block
+				Backbone.history.navigate(link, {
+					trigger : true
+				});
 
-					notification.close();
-				 }
-			  });
+				notification.close();
+			 }
+		  });
+	
+	setTimeout(function() {
+		notification.close();
+	}, timeout);
+	
+	// Show when tab is inactive
+	if (!window.closed)
+	{	
+		if (notification_prefs.notification_sound != 'no_sound')
+			play_sound(notification_prefs.notification_sound);
 		
-		setTimeout(function() {
-			notification.close();
-		}, timeout);
-		
-		// Show when tab is inactive
-		if (!window.closed)
-		{	
-			if (notification_prefs.notification_sound != 'no_sound')
-				play_sound(notification_prefs.notification_sound);
-			
-		}
-	});
+	}
 }
 
 /**
@@ -49544,32 +49650,27 @@ function show_desktop_notification(imageURL, title, message, link, tag,timeout) 
  */
 function request_notification_permission() {
 	
-	head.js(LIB_PATH +'lib/desktop-notify-min.js',function(){
 		
-		if (notify.permissionLevel() == notify.PERMISSION_DEFAULT) {
-
-            $('body').on('click', '#set-desktop-notification', function(){
-				notify.requestPermission(function() {
-					if(notify.permissionLevel() == notify.PERMISSION_GRANTED)
-					{	
-						$('#set-desktop-notification').css('display', 'none');
-					    $('#desktop-notification-content')
-							.html(
-									"<i>Desktop Notifications are now enabled. <a href=\"#\" id=\"disable-notification\" class=\"text-info\" style=\"text-decoration:underline;\">Disable</a></i>");
-					}
-					else
-					{
-						$('#set-desktop-notification').css('display', 'none');
-			            $('#desktop-notification-content').html(
-							"<i>Desktop Notifications are now disabled. <a href=\"#\" id=\"enable-notification\" class=\"text-info\" style=\"text-decoration:underline;\">Enable</a></i>")
-	                 }	
-				});
-			});
-
-		}
-		
-	});
-
+	if (notify.permissionLevel() != notify.PERMISSION_DEFAULT)
+		  return;
+	 
+    $('body').on('click', '#set-desktop-notification', function(){
+		notify.requestPermission(function() {
+			if(notify.permissionLevel() == notify.PERMISSION_GRANTED)
+			{	
+				$('#set-desktop-notification').css('display', 'none');
+			    $('#desktop-notification-content')
+					.html(
+							"<i>Desktop Notifications are now enabled. <a href=\"#\" id=\"disable-notification\" class=\"text-info\" style=\"text-decoration:underline;\">Disable</a></i>");
+			}
+			else
+			{
+				$('#set-desktop-notification').css('display', 'none');
+	            $('#desktop-notification-content').html(
+					"<i>Desktop Notifications are now disabled. <a href=\"#\" id=\"enable-notification\" class=\"text-info\" style=\"text-decoration:underline;\">Enable</a></i>")
+             }	
+		});
+	});	
 }
 /**
  * notification.js is a script file to show notifications.pubnub is used to emit
@@ -53384,16 +53485,16 @@ var portlet_template_loaded_map = {};
 
 $(function()
 {
-				$.getJSON('/core/api/users/agileusers', function(users)
+	$.getJSON('/core/api/users/agileusers', function(users)
+	{
+		$.each(users, function(i, user)
+		{
+			if (CURRENT_DOMAIN_USER.id == user.domain_user_id)
 			{
-				$.each(users, function(i, user)
-				{
-					if (CURRENT_DOMAIN_USER.id == user.domain_user_id)
-					{
-					CURRENT_AGILE_USER = user;
-					}
-				});
-			});
+				CURRENT_AGILE_USER = user;
+			}
+		});
+	});
 });
 /**
  * Loads all the portlets for the current agile user
@@ -56395,6 +56496,8 @@ var portlet_utiity = {
 	 */
   get_filtered_contact_header : function(base_model, callback){
 
+  		var filter_name = base_model.get("settings").filter;
+
   		if (filter_name == 'contacts')
 			return callback("All Contacts");
 		else if (filter_name == 'companies')
@@ -56408,7 +56511,7 @@ var portlet_utiity = {
 		else
 		{
 
-			var contactFilter = $.ajax({ type : 'GET', url : '/core/api/filters/' + base_model.get("settings").filter, dataType : 'json', success : function(data)
+			var contactFilter = $.ajax({ type : 'GET', url : '/core/api/filters/' + filter_name, dataType : 'json', success : function(data)
 			{
 				var header_name = '';
 				if (data != null && data != undefined)
@@ -57849,7 +57952,7 @@ function set_p_portlets(base_model){
 		}
 	});
 	//enablePortletTimeAndDates(base_model);
-	head.js(LIB_PATH + 'lib/jquery-ui.min.js', 'lib/fullcalendar.min.js', function()
+	head.js(LIB_PATH + 'lib/jquery-ui.min.js', LIB_PATH + 'lib/fullcalendar.min.js', function()
 			{
 				$('.portlet_body_calendar', this.el).each(function(){
 		if($(this).parent().attr('id')=='ui-id-'+column_position+'-'+row_position && base_model.get('name')=="Mini Calendar"){
@@ -59626,16 +59729,10 @@ function reportsContactTableView(base_model, customDatefields, view)
 			if (!property)
 				property = {};
 
-			var template_name = "contacts-custom-view-custom";
 			if (isDateCustomField(customDatefields, property))
-				 template_name = 'contacts-custom-view-custom-date';
-
-			getTemplate(template_name, property, undefined, function(template_ui){
-				if(!template_ui)
-					  return;
-
-				final_html_content += $(template_ui);
-			}, null);
+				final_html_content += getTemplate('contacts-custom-view-custom-date', property);
+			else
+				final_html_content += getTemplate('contacts-custom-view-custom', property);
 
 			return;
 		}
@@ -59643,13 +59740,7 @@ function reportsContactTableView(base_model, customDatefields, view)
 		if (field_name.indexOf("properties_") != -1)
 			field_name = field_name.split("properties_")[1];
 
-		getTemplate('contacts-custom-view-' + field_name, contact, undefined, function(template_ui){
-	 		if(!template_ui)
-	    		return;
-	    	final_html_content += $(template_ui);
-			
-		}, null);
-
+		final_html_content += getTemplate('contacts-custom-view-' + field_name, contact);
 	});
 
 	// Appends model to model-list template in collection template
@@ -61978,21 +62069,6 @@ function registerStreamAgain(streamId)
 
 	// Show waiting symbol.
 	$("#stream-spinner-modal-" + streamId).show();
-}
-
-/**
- * Convert time in human readable format.
- */
-function displayTimeAgo(elmnt)
-{
-	head.js('lib/jquery.timeago.js', function()
-	{
-		$(".time-ago", elmnt).timeago();
-	});
-	
-	console.log($("article.stream-item").parent());
-	
-	$("article.stream-item").parent().addClass("social-striped");
 }
 /**
  * Calls updateNotification method to update or add new tweet notification with
@@ -65353,20 +65429,17 @@ var TAG_MODEL_VIEW = Backbone.View
 				this.input.val(this.model.get('tag'));
 
 			},
-			render : function(callback) {
-				var that = this;
-				getTemplate(that.options.template, that.model.toJSON(), undefined, function(template_ui){
-					if(!template_ui)
-						  return;
-					$(that.el).html($(template_ui));
-					$(that.el).data(that.model);
-					that.input = $('.edit-input', that.el);
-					// Add model as data to it's corresponding row
-					return that;
+		render : function(callback) {
+				$(this.el)
+						.html(
+								getTemplate(this.options.template, this.model
+										.toJSON()));
+				$(this.el).data(this.model);
+				this.input = $('.edit-input', this.el);
+				// Add model as data to it's corresponding row
 
-				}, that.el);
-
-				
+				return this;
+		
 			}
 		});
 
@@ -72397,7 +72470,7 @@ function tinyMCECallBack(name, htmlVal)
  * @param type - to add specific fields for specific nodes
  *               like unsubscribe link to SendEmail node
  **/
-function getMergeFields(type)
+function getMergeFields(type, callback)
 {
 	var options=
 	{
@@ -72430,6 +72503,9 @@ function getMergeFields(type)
 		
 		// Merges options json and custom fields json
 		var merged_json = merge_webrules_jsons({}, options, custom_fields);
+		if(callback)
+			 return callback(merged_json);
+
 		return merged_json;
 
 		});
@@ -75669,6 +75745,7 @@ function initializeWidgetSettingsListeners(){
 	 * anchor tag and gets the model from the collection with widget name and
 	 * add widget then navigates back to the contact-details page
 	 */
+	$('#prefs-tabs-content').off();
 	$('#prefs-tabs-content .install-custom-widget').off();
 	$('#prefs-tabs-content, #custom-widget').on('click', '.install-custom-widget', function(e)
 	{
@@ -76596,7 +76673,7 @@ function show_set_up_widget(widget_name, template_id, url, model)
 
 function set_up_access(widget_name, template_id, data, url, model)
 {
-	getTemplate('settings', obj, undefined, function(template_ui){
+	getTemplate('settings', {}, undefined, function(template_ui){
  		if(!template_ui)
     		return;
 		$('#content').html($(template_ui)); 

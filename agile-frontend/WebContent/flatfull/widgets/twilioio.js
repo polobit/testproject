@@ -31,6 +31,7 @@ $(function()
 
 	showListOfContactNumbers();
 
+    $("body").off("click", '#twilioio_more_call_logs');
 	$("body").on("click", '#twilioio_more_call_logs', function(e)
 	{
 		e.preventDefault();

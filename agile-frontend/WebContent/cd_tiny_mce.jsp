@@ -1,6 +1,10 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <%@page import="java.util.Calendar"%>
-
+<%@page import="org.json.JSONObject"%>
+<%@page import="org.json.JSONException"%>
+<%@page import="org.codehaus.jackson.map.ObjectMapper"%>
+<%@page import="java.net.URLEncoder"%>
+<%@page import="com.agilecrm.user.util.UserPrefsUtil"%>
 <html xmlns="http://www.w3.org/1999/xhtml">
 
 <head>
@@ -26,7 +30,35 @@
 	String LIB_PATH = "/";
 %>
 	
-<!-- Bootstrap -->
+<%
+String template_json = request.getParameter("data");
+
+if(template_json != null){
+	
+try
+{
+	JSONObject template_object = new JSONObject(template_json);
+
+	if (template_object.has("text")){
+		template_json  = template_object.get("text").toString();
+		
+		template_json = template_json.replaceAll("(<script|<SCRIPT)", "<!--<script").replaceAll(
+			"(</script>|</SCRIPT>)", "<script>-->");
+	}
+
+}
+catch (JSONException e)
+{
+	System.out.println("Exception while commenting scripts in template: "+ e.getMessage());
+}
+
+}
+ObjectMapper mapper = new ObjectMapper();
+
+System.out.println("Request parameter in tinymce: "+template_json); 
+
+%>
+<!-- Bootstrap  -->
 <link rel="stylesheet" type="text/css"	href="<%= CSS_PATH%>css/bootstrap-<%=template%>.min.css" />
 
 <!-- New UI 
@@ -156,6 +188,7 @@ function setTinyMCEImageUploadURL(url){
 $(function()
 {	
 try{
+		var templateJSON = <%= mapper.writeValueAsString(template_json)%>;
 		
 	    var textarea_id = getUrlVars()["id"];
 	    var url = getUrlVars()["url"];
@@ -163,7 +196,13 @@ try{
 		// Load HTML into Tiny MCE.
 		if(textarea_id !== undefined && url === undefined)
 		{
-		var initHTML = window.opener.$('#' + textarea_id).val();
+			var initHTML
+			if(templateJSON){
+				initHTML = (templateJSON);
+				//initHTML = templateJSON.text;
+			}
+			else
+			initHTML = window.opener.$('#' + textarea_id).val();
 		$('#content').val(initHTML);
 		var isWarning = should_warn(initHTML);
 		showWarning(isWarning);
@@ -464,4 +503,3 @@ function showWarning(isWarning)
 
 </body>
 </html>
-

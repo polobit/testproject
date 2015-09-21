@@ -40,18 +40,23 @@ public class VersioningUtil
 	IS_PRODUCTION_APP = "agile-crm-cloud".equals(APP_ID);
 	RELEASE_VERSION = SystemProperty.applicationVersion.get().split("\\.")[0];
 
+	System.out.println("is local server : " + IS_LOCAL_DEVELOPMENT_SERVER);
+	
 	/**
 	 * Returns cloudfornt URL with extension app/ or beta/ depending
 	 */
 	CLOUDFRONT_BASE_URL = IS_LOCAL_DEVELOPMENT_SERVER ? "" : (CLOUDFRONT_SERVER_URL
 		+ (IS_PRODUCTION_APP ? "app/" + RELEASE_VERSION : "beta/" + RELEASE_VERSION) + "/");
-
-	System.out.println("is local server : " + IS_LOCAL_DEVELOPMENT_SERVER);
+	System.out.println("CLOUDFRONT_BASE_URL : " + CLOUDFRONT_BASE_URL);
+	
+	
 
 	// Static files are placed separately as they are not uploaded after
 	// every release.
 	CLOUDFRONT_STATIC_FILES_PATH = IS_LOCAL_DEVELOPMENT_SERVER ? "" : CLOUDFRONT_SERVER_URL
 		+ (IS_PRODUCTION_APP ? "app/static/" : "beta/static/") + "flatfull/";
+	
+	System.out.println("CLOUDFRONT_STATIC_FILES_PATH : " + CLOUDFRONT_STATIC_FILES_PATH);
 
     }
 

@@ -1,5 +1,5 @@
 function initializeShopifyListeners(){
-
+$('#prefs-tabs-content').off('click', '#revoke-shopify');
 $('#prefs-tabs-content').on('click', '#revoke-shopify', function(e)
 {
 				if (confirm("Are you sure to delete Shopify?"))
@@ -9,7 +9,7 @@ $('#prefs-tabs-content').on('click', '#revoke-shopify', function(e)
 				}
 				return false;
 });
-
+$('#prefs-tabs-content').off('click', '#widget_shopify');
 $('#prefs-tabs-content').on('click', '#widget_shopify', function(e)
 {
 				var shopName = $('#shop').val();

@@ -26,6 +26,7 @@ function setupZendeskAuth()
 	}, "#Zendesk");
 
 	// On click of save button, check input and save details
+    $("body").off('click','#save_prefs');
 	$("body").on('click','#save_prefs', function(e)
 	{
 		e.preventDefault();
@@ -285,6 +286,7 @@ function registerClickEventsInZendesk()
 	/*
 	 * On click of update ticket link for ticket, update ticket method is called
 	 */
+    $("body").off('click','#ticket_update');
 	$("body").on('click','#ticket_update', function(e)
 	{
 		e.preventDefault();
@@ -295,6 +297,7 @@ function registerClickEventsInZendesk()
 	});
 
 	// On click of show ticket, show ticket by ticket id method is called
+    $("body").off('click','#ticket_show');
 	$("body").on('click','#ticket_show', function(e)
 	{
 		e.preventDefault();
@@ -574,6 +577,7 @@ $(function()
 			showZendeskProfile();
 
 			// On click of add ticket, add ticket method is called
+            $("body").off('click','#add_ticket');
 			$("body").on('click','#add_ticket', function(e)
 			{
 				e.preventDefault();
@@ -584,12 +588,14 @@ $(function()
 			 * On mouse enter of ticket, show tab link which has a link to show detailed
 			 * description of ticket and comment on it
 			 */
+             $("body").off('mouseenter','.zendesk_ticket_hover');
 			 $("body").on('mouseenter','.zendesk_ticket_hover', function(e)
 			{
 				$(this).find('.zendesk_tab_link').show();
 			});
 
 			// On mouse leave of chat, hides tab link
+            $("body").off('mouseleave','.zendesk_ticket_hover');
 			$("body").on('mouseleave','.zendesk_ticket_hover', function(e)
 			{
 				$('.zendesk_tab_link').hide();

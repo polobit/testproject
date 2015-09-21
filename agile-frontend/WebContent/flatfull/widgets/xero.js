@@ -216,6 +216,7 @@ $(function()
 				last_name = ' ';
 
 			showXeroClient();
+            $("body").off('click','#xero_add_contact');
 			$("body").on('click','#xero_add_contact', function(e)
 			{
 				e.preventDefault();
@@ -224,6 +225,7 @@ $(function()
 			});
 
 			// attach event to invoices + icon to get lineitems
+            $("body").off('click','.invoices');
 			$("body").on('click','.invoices', function(e)
 			{
 				e.preventDefault();

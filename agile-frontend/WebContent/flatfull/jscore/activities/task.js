@@ -277,6 +277,21 @@ function save_task(formId, modalId, isUpdate, saveBtn)
 
 	if (!isUpdate)
 		json.due = new Date(json.due).getTime();
+	
+	if(isUpdate){
+		
+		if($('#'+formId).find('ul#notes').length>0){
+			var notes = [];
+			$('#'+formId+' li.task-note').each(function()
+			{
+				notes.push($(this).attr('data'));
+			});
+
+			console.log(notes);
+
+			json.notes = notes;
+		}
+	}
 	var startarray = (json.task_ending_time).split(":");
 	json.due = new Date((json.due) * 1000).setHours(startarray[0], startarray[1]) / 1000.0;
 

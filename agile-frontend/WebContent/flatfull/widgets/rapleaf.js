@@ -15,30 +15,25 @@ function setupRapleafAuth()
 	 * Shows an input filed to save Rapleaf preferences (API key provided by
 	 * Rapleaf)
 	 */
-	getTemplate('allorapleaf-loginwed', {}, undefined, function(template_ui){
- 		if(!template_ui)
-    		return;
-		$('#Rapleaf').html($(template_ui)); 
-		console.log('In Rapleaf Auth');
+	$('#Rapleaf').html(getTemplate('rapleaf-login', ""));
 
-		// Saves the API key
-		$("body").on("click", '#save_api_key', function(e)
+	console.log('In Rapleaf Auth');
+
+	// Saves the API key
+    $("body").off("click", '#save_api_key');
+	$("body").on("click", '#save_api_key', function(e)
+	{
+		e.preventDefault();
+
+		// Checks whether all input fields are given
+		if (!isValidForm($("#rapleaf_login_form")))
 		{
-			e.preventDefault();
+			return;
+		}
 
-			// Checks whether all input fields are given
-			if (!isValidForm($("#rapleaf_login_form")))
-			{
-				return;
-			}
-
-			// Saves Rapleaf preferences in Rapleaf widget object
-			saveRaplefPrefs();
-		});
-	}, "#Rapleaf");
-
-
-		
+		// Saves Rapleaf preferences in Rapleaf widget object
+		saveRaplefPrefs();
+	});
 }
 
 /**
@@ -94,12 +89,7 @@ function showRapleafDetails()
 	queueGetRequest("widget_queue", url, 'json', function success(data)
 	{
 		// Get and fill the template with data and show it in Rapleaf panel
-		getTemplate('rapleaf-profile', data, undefined, function(template_ui){
-	 		if(!template_ui)
-	    		return;
-			$('#Rapleaf').html($(template_ui)); 
-		}, "#Rapleaf");
-
+		$('#Rapleaf').html(getTemplate('rapleaf-profile', data))
 
 	}, function error(data)
 	{
@@ -127,12 +117,7 @@ function rapleafError(id, message)
 	 * Get error template and fill it with error message and show it in the div
 	 * with given id
 	 */
-	getTemplate('rapleaf-error', error_json, undefined, function(template_ui){
- 		if(!template_ui)
-    		return;
-		$('#' + id).html($(template_ui)); 
-	}, '#' + id);
-
+	$('#' + id).html(getTemplate('rapleaf-error', error_json));
 }
 
 $(function()

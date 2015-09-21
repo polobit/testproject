@@ -42,6 +42,14 @@ public class CustomWidgets
 	}
 
 	/**
+	 * Fetch all custom widgets in admin account
+	 */
+	public static List<? extends Widget> getUserCustomWidgets()
+	{
+		return CustomWidget.getCurrentWidgets();
+	}
+	
+	/**
 	 * Fetches custom widget by its name
 	 * 
 	 * @param name
