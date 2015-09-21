@@ -7,14 +7,6 @@ var PortletsRouter = Backbone.Router
 				// "portlets" : "portlets",
 				"add-dashlet" : "adddashlet"
 			},
-			before : {
-				"*any" : function(fragment, args, next)
-					{
-						head.js( CLOUDFRONT_PATH + "/jscore/min/flatfull/portlets-min.js", function(){ 
-							next(); 
-						});
-					}
-			},
 			adddashlet : function() {
 				if (gridster == undefined) {
 					App_Portlets.navigate("dashboard", {

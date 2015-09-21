@@ -246,7 +246,7 @@ try{
 	{
 		
 	// Gets MergeFields and append them to select option.
-	// MERGE_FIELDS = getMergeFields();
+	MERGE_FIELDS = getMergeFields();
 	
 	}
 	catch(err){
@@ -304,9 +304,9 @@ function validateInput()
  **/
 function init_tinymce()
 {
-	window.opener.getMergeFields('send_email', function(fields){
+	// window.opener.getMergeFields('send_email', function(fields){
 
-			MERGE_FIELDS =  fields;
+		// MERGE_FIELDS =  fields;
 
 			// Hide message and show textarea
 			$('#loading-msg').hide();
@@ -376,7 +376,7 @@ function init_tinymce()
 		        }
 		        
 		    });
-	});
+	// });
 }
 
 function should_warn(content)

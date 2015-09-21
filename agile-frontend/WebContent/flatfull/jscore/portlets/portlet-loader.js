@@ -597,7 +597,11 @@ function showPortletSettings(el){
 					$.each(base_model.get("settings")["calls-user-list"], function(){
 						$("#calls-user-list", elData).find('option[value='+ this +']').attr("selected", "selected");
 					});
+
 					$('.loading-img').hide();
+
+					portlet_utiity.enable_users_multi_select_option('ms-calls-user-list', elData);
+
 				} });
 		}else{
 			var options ='';
@@ -609,16 +613,12 @@ function showPortletSettings(el){
 					});
 					$('#calls-user-list', elData).html(options);
 					$('.loading-img').hide();
+
+					portlet_utiity.enable_users_multi_select_option('ms-calls-user-list', elData);
 				} });
 		}
-		$('#ms-calls-user-list', elData).remove();
-		head.js(LIB_PATH + 'lib/jquery.multi-select.js', function(){
-			$('#calls-user-list',elData).multiSelect();
-			$('#ms-calls-user-list .ms-selection', elData).children('ul').addClass('multiSelect').attr("name", "calls-user-list").attr("id", "calls-user");
-			$('#ms-calls-user-list .ms-selectable .ms-list', elData).css("height","130px");
-			$('#ms-calls-user-list .ms-selection .ms-list', elData).css("height","130px");
-			$('#ms-calls-user-list', elData).addClass('portlet-user-ms-container');					
-		});
+
+		
 		
 	}else if(base_model.get('portlet_type')=="TASKSANDEVENTS" && base_model.get('name')=="Task Report"){
 		$('#portletsTaskReportSettingsModal').modal('show');
@@ -651,6 +651,8 @@ function showPortletSettings(el){
 						$("#task-report-user-list", elData).find('option[value='+ this +']').attr("selected", "selected");
 					});
 					$('.loading-img').hide();
+
+					portlet_utiity.enable_users_multi_select_option('ms-task-report-user-list', elData);
 				} });
 		}else{
 			var options ='';
@@ -662,16 +664,11 @@ function showPortletSettings(el){
 					});
 					$('#task-report-user-list', elData).html(options);
 					$('.loading-img').hide();
+
+					portlet_utiity.enable_users_multi_select_option('ms-task-report-user-list', elData);
 				} });
 		}
-		$('#ms-task-report-user-list', elData).remove();
-		head.js(LIB_PATH + 'lib/jquery.multi-select.js', function(){
-			$('#task-report-user-list',elData).multiSelect();
-			$('#ms-task-report-user-list .ms-selection', elData).children('ul').addClass('multiSelect').attr("name", "task-report-user-list").attr("id", "task-report-user");
-			$('#ms-task-report-user-list .ms-selectable .ms-list', elData).css("height","130px");
-			$('#ms-task-report-user-list .ms-selection .ms-list', elData).css("height","130px");
-			$('#ms-task-report-user-list', elData).addClass('portlet-user-ms-container');					
-		});
+		
 
 	}else if(base_model.get('portlet_type')=="USERACTIVITY" && base_model.get('name')=="Stats Report"){
 		$('#portletsStatsReportSettingsModal').modal('show');
@@ -727,6 +724,9 @@ function showPortletSettings(el){
 						$("#user-list", elData).find('option[value='+ this +']').attr("selected", "selected");
 					});
 					$('.loading-img').hide();
+
+					portlet_utiity.enable_users_multi_select_option('ms-category-list', elData);
+
 				} });
 		}else{
 			var options ='';
@@ -738,21 +738,11 @@ function showPortletSettings(el){
 					});
 					$('#user-list', elData).html(options);
 					$('.loading-img').hide();
+
+					portlet_utiity.enable_users_multi_select_option('ms-category-list', elData);
 				} });
 		}
-		$('#ms-category-list', elData).remove();
-		$('#ms-user-list', elData).remove();
-		head.js(LIB_PATH + 'lib/jquery.multi-select.js', function(){
-			$('#category-list, #user-list',elData).multiSelect();
-			$('#ms-category-list .ms-selection', elData).children('ul').addClass('multiSelect').attr("name", "category-list").attr("id", "category");
-			$('#ms-user-list .ms-selection', elData).children('ul').addClass('multiSelect').attr("name", "user-list").attr("id", "user");
-			$('#ms-user-list .ms-selectable .ms-list', elData).css("height","130px");
-			$('#ms-user-list .ms-selection .ms-list', elData).css("height","130px");
-			$('#ms-category-list .ms-selectable .ms-list', elData).css("height","105px");
-			$('#ms-category-list .ms-selection .ms-list', elData).css("height","105px");
-			$('#ms-user-list', elData).addClass('portlet-user-ms-container');
-			$('#ms-category-list', elData).addClass('portlet-category-ms-container');					
-		});
+		
 	}else if(base_model.get('portlet_type')=="DEALS" && base_model.get('name')=="Revenue Graph"){
 		$('#portletsDealsRevenueGraphSettingsModal').modal('show');
 		$('#portletsDealsRevenueGraphSettingsModal > .modal-dialog > .modal-content > .modal-footer > .save-modal').attr('id',base_model.get("id")+'-save-modal');
@@ -773,13 +763,14 @@ function showPortletSettings(el){
 							options+="<option value="+trackObj.id+" selected='selected'>"+trackObj.name+"</option>";
 						else
 							options+="<option value="+trackObj.id+">"+trackObj.name+"</option>";
+					$('#track', elData).html(options);
+					$('.loading-img').hide();
 					});
-						$('#track', elData).html(options);
-		$('.loading-img').hide();
-		$("#duration", elData).find('option[value='+ base_model.get("settings").duration +']').attr("selected", "selected");
+
 					
 				} });
-	
+		
+		$("#duration", elData).find('option[value='+ base_model.get("settings").duration +']').attr("selected", "selected");
 	}
 	else if(base_model.get('portlet_type')=="USERACTIVITY" && base_model.get('name')=="Campaign stats"){
 		$('#portletsCampaignStatsSettingsModal').modal('show');
@@ -3079,6 +3070,52 @@ var portlet_utiity = {
 	
  },
 
+ enable_users_multi_select_option: function(selector, elData){
+
+ 	if(selector == "ms-calls-user-list"){
+ 		$('#ms-calls-user-list', elData).remove();
+		head.js(LIB_PATH + 'lib/jquery.multi-select.js', function(){
+			$('#calls-user-list',elData).multiSelect();
+			$('#ms-calls-user-list .ms-selection', elData).children('ul').addClass('multiSelect').attr("name", "calls-user-list").attr("id", "calls-user");
+			$('#ms-calls-user-list .ms-selectable .ms-list', elData).css("height","130px");
+			$('#ms-calls-user-list .ms-selection .ms-list', elData).css("height","130px");
+			$('#ms-calls-user-list', elData).addClass('portlet-user-ms-container');					
+		});
+ 	}
+ 	
+
+ 	if(selector == "ms-calls-user-list"){
+
+ 		$('#ms-task-report-user-list', elData).remove();
+		head.js(LIB_PATH + 'lib/jquery.multi-select.js', function(){
+			$('#task-report-user-list',elData).multiSelect();
+			$('#ms-task-report-user-list .ms-selection', elData).children('ul').addClass('multiSelect').attr("name", "task-report-user-list").attr("id", "task-report-user");
+			$('#ms-task-report-user-list .ms-selectable .ms-list', elData).css("height","130px");
+			$('#ms-task-report-user-list .ms-selection .ms-list', elData).css("height","130px");
+			$('#ms-task-report-user-list', elData).addClass('portlet-user-ms-container');					
+		});
+
+ 	}
+
+	if(selector == "ms-category-list"){
+
+		$('#ms-category-list', elData).remove();
+		$('#ms-user-list', elData).remove();
+		head.js(LIB_PATH + 'lib/jquery.multi-select.js', function(){
+			$('#category-list, #user-list',elData).multiSelect();
+			$('#ms-category-list .ms-selection', elData).children('ul').addClass('multiSelect').attr("name", "category-list").attr("id", "category");
+			$('#ms-user-list .ms-selection', elData).children('ul').addClass('multiSelect').attr("name", "user-list").attr("id", "user");
+			$('#ms-user-list .ms-selectable .ms-list', elData).css("height","130px");
+			$('#ms-user-list .ms-selection .ms-list', elData).css("height","130px");
+			$('#ms-category-list .ms-selectable .ms-list', elData).css("height","105px");
+			$('#ms-category-list .ms-selection .ms-list', elData).css("height","105px");
+			$('#ms-user-list', elData).addClass('portlet-user-ms-container');
+			$('#ms-category-list', elData).addClass('portlet-category-ms-container');					
+		});
+	}
+	
+
+ },
+
 
 };
-

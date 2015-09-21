@@ -848,25 +848,26 @@ var WidgetsRouter = Backbone.Router
 																							// App_Settings.contact_sync_google.model;
 																			} };
 
-																var options = { url : "core/api/contactprefs/GOOGLE", template : "admin-settings-import-google-contacts-setup",
-																				postRenderCallback : function(el)
-																				{
-																													
-																								initializeWidgetSettingsListeners();
-																								initializeImportListeners();
-																								console.log(el);
-																								// App_Settings.setup_google_contacts.model =
-																								// App_Settings.contact_sync_google.model;
-																				} };
+															var fetch_prefs = true;
+																if (that.contact_sync_google && that.contact_sync_google.model)
+																{
+																				options["model"] = that.contact_sync_google.model;
+																				fetch_prefs = false;
+																}
+																else
+																{
+																				that.contact_sync_google = new Base_Model_View({ url : 'core/api/contactprefs/google', template : 'import-google-contacts', });
+																}
 
-															that.setup_google_contacts = new Base_Model_View(options);
+																that.setup_google_contacts = new Base_Model_View(options);
 
-															if (fetch_prefs)
-															{
-																			$("#prefs-tabs-content").html(that.setup_google_contacts.render().el);
-																			return;
-															}
-															$("#prefs-tabs-content").html(that.setup_google_contacts.render(true).el);
+																if (fetch_prefs)
+																{
+																				$("#prefs-tabs-content").html(that.setup_google_contacts.render().el);
+																				return;
+																}
+																$("#prefs-tabs-content").html(that.setup_google_contacts.render(true).el);
+												
 
 														}, "#content");
 																
