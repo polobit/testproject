@@ -101,231 +101,6 @@ function update_collection_with_prefs(data)
 	}
 }
 
-function clickdesk_save_widget_prefs()
-{
-	$('#save_clickdesk_prefs').unbind("click");
-
-	// On click of save button, check input and save details
-    $('body').off('click', '#save_clickdesk_prefs');
-	$('body').on('click', '#save_clickdesk_prefs', function(e)
-	{
-		e.preventDefault();
-
-		// Checks whether all input fields are given
-		if (!isValidForm($("#clickdesk_login_form")))
-			return;
-
-		// Saves ClickDesk preferences in ClickDesk
-		// widget object
-		saveClickDeskWidgetPrefs();
-	});
-}
-
-/**
- * Calls method in script API (agile_widget.js) to save ClickDesk preferences in
- * ClickDesk widget object
- */
-function saveClickDeskWidgetPrefs()
-{
-	// Retrieve and store the ClickDesk preferences entered by the
-	// user as JSON
-	var ClickDesk_prefs = {};
-	ClickDesk_prefs["clickdesk_username"] = $("#clickdesk_username").val();
-	ClickDesk_prefs["clickdesk_api_key"] = $("#clickdesk_api_key").val();
-
-	// Saves the preferences into widget with ClickDesk widget name
-	save_widget_prefs("ClickDesk", JSON.stringify(ClickDesk_prefs), function(data)
-	{
-		console.log('In clickdesk save success');
-		console.log(data);
-	});
-}
-
-function helpscout_save_widget_prefs()
-{
-	$('#save_api_key').off("click");
-
-	// Saves the API key
-    $('body').off('click', '#save_api_key');
-	$('body').on('click', '#save_api_key', function(e)
-	{
-		e.preventDefault();
-
-		// Checks whether all input fields are given
-		if (!isValidForm($("#helpscout_login_form")))
-		{
-			return;
-		}
-
-		// Saves HelpScout preferences in HelpScout
-		// widget object
-		saveHelpScoutWidgetPrefs();
-	});
-
-}
-
-/**
- * Calls method in script API (agile_widget.js) to save HelpScout preferences in
- * HelpScout widget object
- */
-function saveHelpScoutWidgetPrefs()
-{
-	// Retrieve and store the HelpScout API key entered by the user
-	var HelpScout_prefs = {};
-	HelpScout_prefs["helpscout_api_key"] = $("#helpscout_api_key").val();
-
-	// Saves the preferences into widget with Rapleaf widget name
-	save_widget_prefs("HelpScout", JSON.stringify(HelpScout_prefs), function(data)
-	{
-		console.log('In HelpScout save success');
-		console.log(data);
-	});
-}
-
-function freshbook_save_widget_prefs()
-{
-	$('#freshbooks_save_token').unbind("click");
-
-	// On click of save button, check input and save details
-    $('body').off('click', '#freshbooks_save_token');
-	$('body').on('click', '#freshbooks_save_token', function(e)
-	{
-		e.preventDefault();
-
-		// Checks whether all input fields are given
-		if (!isValidForm($("#freshbooks_login_form")))
-		{
-			return;
-		}
-
-		// Saves FreshBooks preferences in FreshBooks
-		// widget object
-		savefreshBooksWidgetPrefs();
-	});
-}
-
-/**
- * Calls method in script API (agile_widget.js) to save FreshBooks preferences
- * in FreshBooks widget object
- */
-function savefreshBooksWidgetPrefs()
-{
-	// Store the data given by the user as JSON
-	var freshbooks_prefs = {};
-	freshbooks_prefs["freshbooks_apiKey"] = $("#freshbooks_apiKey").val();
-	freshbooks_prefs["freshbooks_url"] = $("#freshbooks_url").val();
-
-	// Saves the preferences into widget with FreshBooks widget name
-	save_widget_prefs("FreshBooks", JSON.stringify(freshbooks_prefs), function(data)
-	{
-		console.log('In freshbooks save success');
-		console.log(data);
-	});
-}
-
-function rapleaf_save_widget_prefs()
-{
-
-	$('#save_api_key').off("click");
-
-	// Saves the API key
-    $('body').off('click', '#save_api_key');
-	$('body').on('click', '#save_api_key', function(e)
-	{
-		e.preventDefault();
-
-		// Checks whether all input fields are given
-		if (!isValidForm($("#rapleaf_login_form")))
-		{
-			return;
-		}
-
-		// Saves Rapleaf preferences in Rapleaf widget
-		// object
-		saveRaplefWidgetPrefs();
-	});
-}
-
-/**
- * Calls method in script API (agile_widget.js) to save Rapleaf preferences in
- * Rapleaf widget object
- */
-function saveRaplefWidgetPrefs()
-{
-	// Retrieve and store the Rapleaf API key entered by the user
-	var Rapleaf_prefs = {};
-	Rapleaf_prefs["rapleaf_api_key"] = $("#rapleaf_api_key").val();
-
-	// Saves the preferences into widget with Rapleaf widget name
-	save_widget_prefs("Rapleaf", JSON.stringify(Rapleaf_prefs), function(data)
-	{
-		console.log('In Rapleaf save success');
-		console.log(data);
-	});
-}
-
-/**
- * Shows setup if user adds Zendesk widget for the first time or clicks on reset
- * icon on Zendesk panel in the UI
- * 
- */
-function zendesk_save_widget_prefs()
-{
-
-	$('#save_prefs').unbind("click");
-
-	// On click of save button, check input and save details
-    $('body').off('click', '#save_prefs');
-	$('body').on('click', '#save_prefs', function(e)
-	{
-		e.preventDefault();
-
-		// Checks whether all input fields are given
-		try{
-			if (!isValidForm($("#zendesk_login_form")))
-			{
-				return;
-			}
-
-		}catch(err){
-			return;
-		}
-		
-		// Saves Zendesk preferences in ClickDesk widget
-		// object
-		saveZendeskWidgetPrefs();
-
-	});
-
-}
-
-/**
- * Calls method in script API (agile_widget.js) to save Zendesk preferences in
- * Zendesk widget object
- */
-function saveZendeskWidgetPrefs()
-{
-	// Retrieve and store the Zendesk preferences entered by the
-	// user as JSON
-	var zendesk_prefs = {};
-	zendesk_prefs["zendesk_username"] = $("#zendesk_username").val();
-	zendesk_prefs["zendesk_password"] = $("#zendesk_password").val();
-//	zendesk_prefs["zendesk_url"] = $("#zendesk_url").val();
-	
-    var zenDeskURL = $("#zendesk_url").val();
-    if(zenDeskURL.indexOf("https") == -1) {//if not found
-    	zenDeskURL = zenDeskURL.replace("http", "https");
-    }
-    zendesk_prefs["zendesk_url"] = zenDeskURL;
-
-	// Saves the preferences into widget with zendesk widget name
-	save_widget_prefs("Zendesk", JSON.stringify(zendesk_prefs), function(data)
-	{
-		console.log('In zendesk save success');
-		console.log(data);
-	});
-}
-
 /**
  * Shows setup if user adds Sip widget for the first time or clicks on reset
  * icon on Sip panel in the UI
@@ -388,96 +163,6 @@ function saveSipWidgetPrefs()
 	{
 		console.log('In sip save success');
 		console.log(data);
-	});
-}
-
-/**
- * Shows setup if user adds TwilioIO widget for the first time or clicks on
- * reset icon on TwilioIO panel in the UI
- * 
- */
-function twilioio_save_widget_prefs()
-{
-
-	$('#save_prefs').unbind("click");
-
-	// On click of save button, check input and save details
-    $('body').off('click', '#save_prefs');
-	$('body').on('click', '#save_prefs', function(e)
-	{
-		e.preventDefault();
-
-		$("#error-number-not-selected").hide();
-
-		if ($(this).text() == "Saving..." || $(this).text() == "Loading...")
-		{
-			console.log("Do not hit me again " + $(this).text());
-			return;
-		}
-
-		// Checks whether all input fields are given
-		try{
-			if (!isValidForm($("#twilioio_login_form")))
-			{
-				return;
-			}
-		}catch(err){
-			return;
-		}
-		
-
-		if ($("#twilio_from_numbers option:selected").val() == "" && $("#twilio_numbers option:selected").val() == "")
-		{
-			$("#error-number-not-selected").show();
-			return;
-		}
-
-		// Saves twilioio preferences in ClickDesk widget object
-		saveTwilioIOWidgetPrefs();
-
-	});
-
-}
-
-/**
- * Calls method in script API (agile_widget.js) to save TwilioIO preferences in
- * TwilioIO widget object
- */
-function saveTwilioIOWidgetPrefs()
-{
-	$("#save_prefs").text("Saving...");
-	$("#save_prefs").attr("disabled", true);
-
-	// Retrieve and store the TwilioIO preferences entered by the user as JSON
-	var twilioio_prefs = {};
-	twilioio_prefs["twilio_acc_sid"] = $("#twilio_acc_sid").val();
-	twilioio_prefs["twilio_auth_token"] = $("#twilio_auth_token").val();
-	twilioio_prefs["twilio_from_number"] = $("#twilio_from_numbers option:selected").val();
-	twilioio_prefs["twilio_number"] = $("#twilio_numbers option:selected").val();
-	twilioio_prefs["twilio_number_sid"] = $("#twilio_number_sid").val();
-	twilioio_prefs["twilio_twimlet_url"] = $("#twilio_twimlet_url").val();
-	
-	if ($('#twilio_record').is(':checked'))
-		twilioio_prefs["twilio_record"] = "true";
-	else
-		twilioio_prefs["twilio_record"] = "false";
-
-	console.log(twilioio_prefs);
-
-	// Create application and update twilio number setting (add url)
-	// twilioio_prefs["twilio_app_sid"] = createAppSid(twilioio_prefs);
-
-	createAppSid(twilioio_prefs, function(data)
-	{
-		twilioio_prefs["twilio_app_sid"] = data;
-		console.log(twilioio_prefs);
-
-		// Saves the preferences into widget with sip widget name
-		save_widget_prefs("TwilioIO", JSON.stringify(twilioio_prefs), function(data)
-		{
-			console.log('In TwilioIO save success');
-			console.log(data);
-		});
 	});
 }
 
@@ -576,8 +261,10 @@ function save_widget_prefs(pluginName, prefs, callback)
 		models[0].set(data);
 		
 		// If plugin name is CallScript do not redirect
-		if (pluginName != "CallScript")
-		window.location.href = "#add-widget";
+		if (pluginName != "CallScript"){
+			window.location.href = "#add-widget";
+		}
+		
 
 		console.log("data******");
 		console.log(data);
@@ -607,6 +294,7 @@ function save_widget_prefs(pluginName, prefs, callback)
 		
 		if (callback && typeof (callback) === "function")
 			callback(data);
+
 	} });
 }
 
@@ -618,6 +306,7 @@ function show_set_up_widget(widget_name, template_id, url, model)
 	var models;
 	$('#prefs-tabs-content').html(getRandomLoadingImg());
 	initializeWidgetUtilListeners();
+
 	if (model)
 	{
 		console.log(model)
@@ -646,31 +335,7 @@ function show_set_up_widget(widget_name, template_id, url, model)
 	}
 	console.log(el);
 
-	if (widget_name == "Zendesk")
-		zendesk_save_widget_prefs();
-
-	else if (widget_name == "ClickDesk")
-		clickdesk_save_widget_prefs();
-
-	else if (widget_name == "HelpScout")
-		helpscout_save_widget_prefs();
-
-	else if (widget_name == "FreshBooks")
-		freshbook_save_widget_prefs();
-
-	else if (widget_name == "Rapleaf")
-		rapleaf_save_widget_prefs();
-
-	else if (widget_name == "Sip")
-		sip_save_widget_prefs();
-
-	else if (widget_name == "TwilioIO")
-		twilioio_save_widget_prefs();
-
-	else if (widget_name == "QuickBooks")
-		quickBooks_save_widget_prefs();
-
-	else if (widget_name == "Chargify")
+	if (widget_name == "Chargify")
 		chargify_save_widget_prefs();
 
 	else if (widget_name == "CallScript")
@@ -903,41 +568,6 @@ function setUpError(widget_name, template_id, error_data, error_url, model)
 
 }
 
-function xero_save_widget_prefs()
-{
-	$('#xero_save_token').unbind("click");
-	
-	// On click of save button, check input and save details
-    $('body').off('click', '#xero_save_token');
-	$('body').on('click', '#xero_save_token', function(e)
-	{
-		e.preventDefault();
-
-		// Retrieve and store the ClickDesk preferences
-		// entered by the user as
-		// JSON
-		var Xero_prefs = {};
-
-		// Saves the preferences into widget with
-		// ClickDesk widget name
-		save_widget_prefs("Xero", JSON.stringify(Xero_prefs), function(data)
-		{
-			console.log('In xero save success');
-			console.log(data);
-		});
-	});
-}
-
-function quickBooks_save_widget_prefs(template_id, url)
-{
-	head.js('https://appcenter.intuit.com/Content/IA/intuit.ipp.anywhere.js', function()
-	{
-		$('#widget-settings').html(getTemplate(template_id, { "url" : url }));
-		//console.log(el);
-		intuit.ipp.anywhere.setup({ menuProxy : 'http://example.com/myapp/BlueDotMenu', grantUrl : url });
-	});
-
-}
 function chargify_save_widget_prefs()
 {
 	$('#chargify_save_api_key').off("click");
