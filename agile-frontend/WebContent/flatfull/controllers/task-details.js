@@ -515,6 +515,8 @@ function saveTaskNote(form, noteModal, element, note)
 					notesView.collection.add(new BaseModel(note), { sort : false });
 					notesView.collection.sort();
 					taskDetailView = data;
+					
+
 				} });
 
 			}
