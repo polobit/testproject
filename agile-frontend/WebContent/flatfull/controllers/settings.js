@@ -96,7 +96,7 @@ var SettingsRouter = Backbone.Router
 						  return;
 					$('#content').html($(template_ui));	
 
-					getTemplate("settings", {}, undefined, function(template_ui1){
+					getTemplate("settings-user-prefs-tab", {}, undefined, function(template_ui1){
 						$("#prefs-tabs-content").html($(template_ui1));
 
 						var view = new Base_Model_View({ url : '/core/api/user-prefs', template : template_name, el : $('#settings-user-prefs-tab-content'), change : false,
