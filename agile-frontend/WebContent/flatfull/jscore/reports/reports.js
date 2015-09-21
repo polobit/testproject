@@ -238,16 +238,10 @@ function reportsContactTableView(base_model, customDatefields, view)
 			if (!property)
 				property = {};
 
-			var template_name = "contacts-custom-view-custom";
 			if (isDateCustomField(customDatefields, property))
-				 template_name = 'contacts-custom-view-custom-date';
-
-			getTemplate(template_name, property, undefined, function(template_ui){
-				if(!template_ui)
-					  return;
-
-				final_html_content += $(template_ui);
-			}, null);
+				final_html_content += getTemplate('contacts-custom-view-custom-date', property);
+			else
+				final_html_content += getTemplate('contacts-custom-view-custom', property);
 
 			return;
 		}
@@ -255,13 +249,7 @@ function reportsContactTableView(base_model, customDatefields, view)
 		if (field_name.indexOf("properties_") != -1)
 			field_name = field_name.split("properties_")[1];
 
-		getTemplate('contacts-custom-view-' + field_name, contact, undefined, function(template_ui){
-	 		if(!template_ui)
-	    		return;
-	    	final_html_content += $(template_ui);
-			
-		}, null);
-
+		final_html_content += getTemplate('contacts-custom-view-' + field_name, contact);
 	});
 
 	// Appends model to model-list template in collection template
