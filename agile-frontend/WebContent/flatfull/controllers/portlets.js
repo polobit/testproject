@@ -602,6 +602,7 @@ function initializePortletsListeners_1(){
 	$('.gridster-portlets').on(
 		"click",'.portlets-tasks-select',
 		function(e) {
+			
 					e.stopPropagation();
 					if ($(this).is(':checked')) {
 						// Complete
