@@ -656,10 +656,12 @@ users.
 </script>
 
 <script id="latest-invoice-template" type="text/html">
-{{#if_greater amount 0}}
-Plan: {{lines.data.[0].plan.name}}<br>
-{{else}}
-Plan: {{lines.data.[1].plan.name}}<br>
-{{/if_greater}}
-Amount: ${{numeric_operation this.total 100 "/"}}
+<div class="col-md-3">
+{{#if lines.data}}
+{{#if this.plan}}
+Plan: {{this.plan.name}}<br>
+Amount: {{this.amount}}
+{{/if}}
+{{/if}}
+</div>
 </script>

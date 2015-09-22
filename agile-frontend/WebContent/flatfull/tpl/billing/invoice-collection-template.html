@@ -109,16 +109,12 @@ ${{numeric_operation ../../amountDue 100 "/"}}
 <div class="row">
     <div class="col-md-12">
 {{#if this.length}}
-        <table>
+        <table class="table table-striped agile-table" id="sort-table">
             <thead>
                 <tr>
-                    Plan:
-				</tr>
-<br>
-				<tr>
-                    Amount:
-				</tr>
-                
+                    <th style="padding-left:15px;">Plan</th>
+                    <th style="padding-left:15px;">Amount</th>
+                </tr>
             </thead>
 
             <tbody id="latest-invoice-model-list" route="invoice/" class="model-list-cursor">
@@ -136,8 +132,8 @@ ${{numeric_operation ../../amountDue 100 "/"}}
 <script id="latest-invoice-model-template" type="text/html">
 
 {{#if lines.data}}
-{{lines.data[0].total}}
-	<tr>
+
+	<td>
 		{{#if this.plan}}
 {{#containString "Email" plan.name}}
 Emails
@@ -146,11 +142,11 @@ Emails
 {{/containString}}
         
         {{/if}}
-	</tr>
+	</td>
 {{#if_greater amount 0}}
-	<tr>
+	<td>
 ${{numeric_operation ../../amountDue 100 "/"}}
-    </tr>
+    </td>
 {{/if_greater}}
 {{/if}}
 </script>

@@ -24,7 +24,7 @@ var SubscribeRouter = Backbone.Router
 
 			/* billing settings */
 
-//			"billing-settings" : "billingSettings",
+			"billing-settings" : "billingSettings",
 
 			"account-details" : "accountDetails",
 
@@ -97,7 +97,7 @@ var SubscribeRouter = Backbone.Router
 				$("#content").html(card_details.render().el);
 			},
 
-			/*billingSettings : function()
+			billingSettings : function()
 			{
 
 				$("#content").html(getTemplate("billing-settings"), {});
@@ -109,7 +109,7 @@ var SubscribeRouter = Backbone.Router
 				$('#content').find('.account-details-tab').addClass('select');
 				$(".active").removeClass("active");
 
-			},*/
+			},
 
 			accountDetails : function()
 			{
@@ -290,7 +290,7 @@ var SubscribeRouter = Backbone.Router
 					that.setup_email_plan(subscription_model);
 
 					that.show_card_details(subscription_model);
-
+					
 					that.invoice_latest(subscription_model);
 
 					hideTransitionBar();
@@ -580,31 +580,28 @@ var SubscribeRouter = Backbone.Router
 			invoice_latest : function(subscription)
 			{
 
+
 				if (!subscription.get("billingData"))
 				{
 					$("#invoice-details-holder").html("");
-					$('#invoice-details-holder').append("<div class='text-lg p-l-sm p-t-sm'>No invoices</div>");
+					$('#invoice-details-holder')
+							.append(
+									"<div class='text-lg p-l-sm p-t-sm'>No invoices</div>");
 					return;
 				}
 
-				// Send an ajax request
+				var invoice_list = new Base_Model_View({ url : "core/api/subscription/invoices", template : "latest-invoice", window : 'subscribe',
 
-				$.get("core/api/subscription/invoices", {}, function(invoice)
-				{
+					postRenderCallback : function(el)
+					{
 
-					if (!invoice && invoice.length <= 0)
-						return;
+					} });
+				var list = invoice_list.model.toJSON();
 
-					// Sort invoice
-					invoice = new BaseCollection(invoice, { sortKey : "created", descending : true }).toJSON();
-					// Send data to a template
-					$("#recent_invoice").html(getTemplate("latest-invoice", invoice[0]));
-
-				})
-
+				$("#recent_invoice").html(getTemplate("latest-invoice"), list[0]);
 
 			},
-
+			
 			// gets collection of charges of aa paricular customer based on
 			recent_invoice : function(subscription)
 			{
