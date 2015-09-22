@@ -1,4 +1,9 @@
 function initializeRegenerateKeysListeners() {
+    $(".prettyprint").css({
+            "padding": "0px",
+            "border": "none"
+    });
+
     $("#api_key_code").off('click').on("click", "#api_key_generate_icon", function(e) {
         e.preventDefault();
         regenerate_api_key('core/api/api-key/key');
@@ -41,10 +46,7 @@ function regenerate_api_key(url) {
 
 function prettify_api_add_events() {
     prettyPrint();
-    $(".prettyprint").css({
-        "padding": "0px",
-        "border": "none"
-    });
+
     initializeRegenerateKeysListeners();
     $("#update_allowed_domains").on('click', function(e) {
         e.preventDefault();
