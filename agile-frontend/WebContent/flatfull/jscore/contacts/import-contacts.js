@@ -4,6 +4,7 @@ function initializeImportEvents(id){
 if(!id)
 	  id = "content";
 
+$('#' + id  + " .upload").off('click');
 $('#' + id).on('click', '.upload', function(e)
 	{
 
@@ -25,11 +26,12 @@ $('#' + id).on('click', '.upload', function(e)
 	// table, still calls
 	// fileUploadInit,
 	// so user can uploadimport-comp again if required
+	$('#' + id  + " #import-cancel").off('click');
 	$('#' + id).on('click', '#import-cancel', function(e){
 
 		// Sends empty JSON to remove
 		// contact uploaded
-		var $firstDiv = $('#content').first();
+		var $firstDiv = $('#content').children().first();
 		getTemplate('import-contacts', {}, undefined, function(template_ui){
 					if(!template_ui)
 						  return;
@@ -41,11 +43,12 @@ $('#' + id).on('click', '.upload', function(e)
 	});
 	
 	// cancel option for deals import
+	$('#' + id  + " #deal-cancel").off('click');
 	$('#' + id).on('click', '#deal-cancel', function(e){
 
 				// Sends empty JSON to remove
 				// contact uploaded
-				var $firstDiv = $('#content').first();
+				var $firstDiv = $('#content').children().first();
 
 				getTemplate('import-deals', {}, undefined, function(template_ui){
 					if(!template_ui)
@@ -56,7 +59,7 @@ $('#' + id).on('click', '.upload', function(e)
 				}, $firstDiv);				
 			});
 
-
+$('#' + id  + " #import-contacts").off('click');
 $('#' + id).on('click', '#import-contacts', function(e)
 					{
 
@@ -341,6 +344,7 @@ $('#' + id).on('click', '#import-contacts', function(e)
 /**
  * validation for csv import companies
  */
+$('#' + id  + " #import-comp").off('click');
 $('#' + id).on('click', '#import-comp', function(e)
 				{
 
@@ -521,6 +525,7 @@ $('#' + id).on('click', '#import-comp', function(e)
 /**
  * import deals validations
  */
+$('#' + id  + " #import-deals").off('click');
 $('#' + id).on('click', '#import-deals', function(e)
 				{
 
