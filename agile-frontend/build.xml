@@ -7,6 +7,7 @@
 
     <property environment="env"/>
         <property file="../agile-java-server/build.properties"/>
+        <property name="APPENGINE_DIR" value="${env.GAE_HOME}lib"/>
     <property name="debuglevel" value="source,lines,vars"/>
     <path id="libpath">
         <fileset dir="${LIB_DIR}" includes="*.jar"/>
@@ -65,8 +66,13 @@
         </javac>
     </target>
     <target depends="clean, build" name="create-target">
-         <exec dir="util" executable="/bin/bash">
+        <exec dir="util" executable="/bin/bash">
             <arg value="deploy.sh"/>
+        </exec> 
+        <exec dir="util" executable="/bin/bash">
+            <arg value="./ec2-lib-sync.sh"/>
+            <arg line="${RELEASE_VERSION}"/>
+            <arg line="${PRODUCTION}"/>
         </exec>
         <!--Copy static content to target -->
         <copy todir="${TARGET_DIR}/${ant.project.name}.war">

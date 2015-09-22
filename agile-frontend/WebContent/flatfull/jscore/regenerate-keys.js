@@ -9,16 +9,22 @@ function initializeRegenerateKeysListeners() {
     });
 }
 
-function update_admin_settings_api_key_template() {
-    $.ajax({
-        url: 'core/api/api-key',
-        type: 'GET',
-        dataType: 'json',
-        success: function(data) {
-            $("#admin-prefs-tabs-content").html(getTemplate("admin-settings-api-key-model", data));
-            prettify_api_add_events();
-        }
-    })
+function update_admin_settings_api_key_template(){
+	$.ajax({
+		url : 'core/api/api-key',
+		type : 'GET',
+		dataType : 'json', 
+		success : function(data){
+
+			getTemplate("admin-settings-api-key-model", data, undefined, function(template_ui){
+				if(!template_ui)
+					  return;
+
+				$("#admin-prefs-tabs-content").html($(template_ui));
+				 prettify_api_add_events();
+			}, null);
+		}
+	})
 }
 
 function regenerate_api_key(url) {

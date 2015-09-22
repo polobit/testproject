@@ -143,11 +143,11 @@ function showError(message)
 }
 
 // Gets MergeFields
-function getMergeFields()
+/*function getMergeFields()
 {
 	// get merge fields
     return window.opener.getMergeFields('send_email');
-}
+}*/
 
 /**
  * Sets merge fields in Editor as menu button and adds click event
@@ -304,75 +304,79 @@ function validateInput()
  **/
 function init_tinymce()
 {
-	
-	// Hide message and show textarea
-	$('#loading-msg').hide();
-	$('textarea#content').show();
-	
-	// Initialize tinymce
-	tinymce.init({
-        mode: "textareas",
-		theme: "modern",
-        plugins: [
-            "advlist autolink lists link image charmap print preview hr anchor pagebreak",
-            "searchreplace wordcount visualblocks visualchars code fullscreen fullpage",
-            "insertdatetime media nonbreaking save table contextmenu directionality",
-            "paste textcolor"
-        ],
-        toolbar1 : "bold italic underline | alignleft aligncenter alignright alignjustify | bullist numlist | outdent indent blockquote | forecolor backcolor | link image | preview",
-		toolbar2 : "formatselect fontselect fontsizeselect | merge_fields | templates",
-        valid_elements: "*[*]",
-        browser_spellcheck : true,
-        gecko_spellcheck: true,
-        relative_urls : false,
-		convert_urls : false,
-		forced_root_block : false,
-        extended_valid_elements : "*[*]",
-        setup: function(editor) {
-            
-        	// Agile Merge Fields
-            editor.addButton('merge_fields', {
-                type: 'menubutton',
-                text: 'Agile Contact Fields',
-                icon: false,
-                menu: set_up_merge_fields(editor)
-            });
-            
-            // Templates button
-            editor.addButton('templates', {
-                text: 'Templates',
-                icon: false,
-                onclick: function() {
-                	
-                	// Confirm before going to Templates
-                	if(!confirm("Your changes will be lost. Are you sure you want to go back to templates?"))
-                		return;
-                	
-                	var type= 'email';
+	// window.opener.getMergeFields('send_email', function(fields){
 
-                	// When loaded from templates page
-                	if(window.opener == null)
-                	{
-                		window.history.back();
-                		return;
-                	}
-                	
-                	// For Webrules templates, open Webrules
-                	if(window.opener.location.hash.indexOf('webrule') != -1)
-                		type= 'web_rules';
-                	
-                	window.location = '/templates.jsp?id=tinyMCEhtml_email&t='+type;
-                }
-            }); 
-            
-            editor.on('change', function(e) {
-                var isWarning = should_warn(tinyMCE.activeEditor.getContent());
-                showWarning(isWarning);
-            });
-            
-        }
-        
-    });
+		// MERGE_FIELDS =  fields;
+
+			// Hide message and show textarea
+			$('#loading-msg').hide();
+			$('textarea#content').show();
+			
+			// Initialize tinymce
+			tinymce.init({
+		        mode: "textareas",
+				theme: "modern",
+		        plugins: [
+		            "advlist autolink lists link image charmap print preview hr anchor pagebreak",
+		            "searchreplace wordcount visualblocks visualchars code fullscreen fullpage",
+		            "insertdatetime media nonbreaking save table contextmenu directionality",
+		            "paste textcolor"
+		        ],
+		        toolbar1 : "bold italic underline | alignleft aligncenter alignright alignjustify | bullist numlist | outdent indent blockquote | forecolor backcolor | link image | preview",
+				toolbar2 : "formatselect fontselect fontsizeselect | merge_fields | templates",
+		        valid_elements: "*[*]",
+		        browser_spellcheck : true,
+		        gecko_spellcheck: true,
+		        relative_urls : false,
+				convert_urls : false,
+				forced_root_block : false,
+		        extended_valid_elements : "*[*]",
+		        setup: function(editor) {
+		            
+		        	// Agile Merge Fields
+		            editor.addButton('merge_fields', {
+		                type: 'menubutton',
+		                text: 'Agile Contact Fields',
+		                icon: false,
+		                menu: set_up_merge_fields(editor)
+		            });
+		            
+		            // Templates button
+		            editor.addButton('templates', {
+		                text: 'Templates',
+		                icon: false,
+		                onclick: function() {
+		                	
+		                	// Confirm before going to Templates
+		                	if(!confirm("Your changes will be lost. Are you sure you want to go back to templates?"))
+		                		return;
+		                	
+		                	var type= 'email';
+
+		                	// When loaded from templates page
+		                	if(window.opener == null)
+		                	{
+		                		window.history.back();
+		                		return;
+		                	}
+		                	
+		                	// For Webrules templates, open Webrules
+		                	if(window.opener.location.hash.indexOf('webrule') != -1)
+		                		type= 'web_rules';
+		                	
+		                	window.location = '/templates.jsp?id=tinyMCEhtml_email&t='+type;
+		                }
+		            }); 
+		            
+		            editor.on('change', function(e) {
+		                var isWarning = should_warn(tinyMCE.activeEditor.getContent());
+		                showWarning(isWarning);
+		            });
+		            
+		        }
+		        
+		    });
+	// });
 }
 
 function should_warn(content)

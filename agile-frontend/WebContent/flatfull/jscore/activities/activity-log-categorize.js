@@ -59,8 +59,13 @@ function initializeActivitiesListner(el){
 
 	var obj = getActivityObject(data);
 	console.log(obj);
-	var emailinfo = $(getTemplate("infoModal", JSON.parse(obj)));
-	emailinfo.modal('show');
+
+	getTemplate("infoModal", JSON.parse(obj), undefined, function(template_ui){
+		if(!template_ui)
+			  return;
+		var emailinfo = $(template_ui);
+		emailinfo.modal('show');
+	}, null);
 
 });
 
