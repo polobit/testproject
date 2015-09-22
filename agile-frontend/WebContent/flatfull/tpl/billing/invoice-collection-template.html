@@ -1,4 +1,8 @@
 <script id="invoice-collection-template" type="html/text">
+	<div class="row m-t m-b-sm">
+<div class="col-md-1"></div>
+	<div class="col-md-10">
+<div class="panel panel-default">
 <div class="panel-heading">
 			<div class="text-lg">Invoices</div>
 		</div>
@@ -21,12 +25,18 @@
 {{/if}}
     </div>
 </div>
+</div>
+	
+</div>
+</div>
 </script>
 <script id="invoice-model-template" type="text/html">
 
 {{#each lines.data}}
 {{#if_greater amount 0}}
-	<td class="data" data="{{../../id}}" >
+<td class="data hide" data="{{../../id}}" >
+</td>
+	<td>
 		{{#if this.plan}}
 {{#containString "Email" plan.name}}
 Emails
@@ -36,7 +46,7 @@ Emails
         
         {{/if}}
 	</td>
-	<td data="{{../../id}}">
+	<td>
 		{{#if this.plan}}
 		{{#containString "Email" plan.name}}
         {{epochToHumanDate "mm/dd/yyyy" period.start}}
@@ -49,7 +59,7 @@ Emails
 		{{/containString}}
 		{{/if}}
     </td>
-	<td data="{{../../id}}">
+	<td>
 ${{numeric_operation ../../amountDue 100 "/"}}
     </td>
 {{/if_greater}}
@@ -76,7 +86,7 @@ ${{numeric_operation ../../amountDue 100 "/"}}
 --{{amountDue}}
 {{#each lines.data}}
 {{#if this.plan}}
-	<td class="data" data="{{../id}}" >
+	<td data="{{../id}}" >
     	{{this.plan.name}}
 	</td>
 	<td data="{{../id}}">

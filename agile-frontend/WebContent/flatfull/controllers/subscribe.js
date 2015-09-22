@@ -290,6 +290,8 @@ var SubscribeRouter = Backbone.Router
 					that.setup_email_plan(subscription_model);
 
 					that.show_card_details(subscription_model);
+					
+//					that.invoice_latest(subscription_model);
 
 					hideTransitionBar();
 					document.getElementById('email-quantity').value = "";
@@ -575,6 +577,35 @@ var SubscribeRouter = Backbone.Router
 				$('#customer-details-holder').html(stripe_customer_details.render(true).el);
 			},
 
+			invoice_latest : function(subscription)
+			{
+				if (!subscription.get("billingData"))
+				{
+					$("#invoice-details-holder").html("");
+					$('#invoice-details-holder')
+							.append(
+									"<div class='text-lg p-l-sm p-t-sm'>No invoices</div>");
+					return;
+				}
+
+				var subscribe_plan = new Base_Model_View({ url : "core/api/subscription?reload=true", template : "latest-invoice", window : 'subscribe',
+
+					postRenderCallback : function(el)
+					{
+
+					} });
+				
+				
+				this.invoice = new Base_Collection_View({ url : "core/api/subscription/invoices" + "?page_size=1", templateKey : "invoice",
+					window : 'subscribe', individual_tag_name : 'tr', sortKey : 'created', descending : true });
+console.log(this.invoice.collection);
+				// Fetches the invoice payments
+				this.invoice.collection.fetch();
+
+				$("#recent_invoice").html(this.invoice.render().el);
+
+			},
+			
 			// gets collection of charges of aa paricular customer based on
 			recent_invoice : function(subscription)
 			{

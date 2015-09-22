@@ -1,5 +1,6 @@
 <script id="invoice-detail-template" type="html/text">
-<div class="col-md-10 m-l-xxxl p-l-xxl">
+<div class="col-md-2"></div>
+<div class="col-md-8 p-t">
    <div class="row" style="background-color: whitesmoke;" id="row-div">
       <table width="100%" id="sort-table">
          <colgroup>
@@ -94,7 +95,7 @@ Emails
 					{{/each}}
 {{#each lines.data}}
 {{#if_greater amount 0}}
-<td></td>
+<td style="border-top: 0px;"></td>
 <td class="pull-right">Total :</td>
 <td data="{{../../id}}">
 ${{numeric_operation ../../amountDue 100 "/"}}
@@ -139,13 +140,6 @@ ${{numeric_operation ../../amountDue 100 "/"}}
 </script>
 <script id="invoice-details-template" type="text/html">
 
-	<div class="row m-t m-b-sm">
-	<div class="col-md-12">
-<div class="panel panel-default">
-			<div id="invoice-details-holder"></div>
-</div>
-	
-</div>
-</div>
+<div id="invoice-details-holder"></div>
 
 </script>

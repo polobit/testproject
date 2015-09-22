@@ -224,3 +224,7 @@ div.plan-collection-in.customplan:hover span.plan-collection-icon,.enterprise_se
 	{
 	background: url(../../img/template.png) 0px 0px no-repeat !important;
 }
+
+#sort-table .headerSortUp::after{
+top:12px!important;
+}

@@ -539,6 +539,8 @@ users.
 		<div class="panel panel-default wrapper-md">
 
 			<p class="b-b b-light p-b-xs">Credit Card Details
+<a href="#updateCreditCard" class="text-info pull-right" style="
+    font-size: 12px;">Change</a>
 			</p>
 
 		<div>
@@ -572,8 +574,14 @@ users.
 
 
 	</div>
+ 
 </div>
 </div> <!-- End of col-md-3 -->
+<div class="col-md-3">
+<a href="#invoice-details" class="text-info pull-right">View Invoices</a>
+</div>
+<div class="col-md-3" id="recent_invoice">
+</div>
 </div> <!-- End of row -->
 </div>
 </script>
@@ -625,4 +633,10 @@ users.
 </div>                    
 </div>
 </form>
+</script>
+
+<script id="latest-invoice-template" type="text/html">
+<div class="col-md-3">
+<a href="#invoice-details" class="text-info">More..</a>
+</div>
 </script>
