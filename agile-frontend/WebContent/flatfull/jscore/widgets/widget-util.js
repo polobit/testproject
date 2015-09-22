@@ -610,7 +610,7 @@ function save_widget_prefs(pluginName, prefs, callback)
 	} });
 }
 
-function show_set_up_widget(widget_name, template_id, url, model)
+function show_set_up_widget(widget_name, template_id, url, model, callback)
 {
 	getTemplate('settings', {}, undefined, function(template_ui){
 		if(!template_ui)
@@ -638,7 +638,7 @@ function show_set_up_widget(widget_name, template_id, url, model)
 
 					$.getJSON('core/api/widgets/' + widget_name, function(data)
 					{
-						show_set_up_widget(widget_name, template_id, url, data);
+						show_set_up_widget(widget_name, template_id, url, data, callback);
 					});
 				} });
 				return;
@@ -688,6 +688,10 @@ function show_set_up_widget(widget_name, template_id, url, model)
 		    		return;
 				$('#widget-settings', el).html($(template_ui)); 
 				console.log(el);
+
+				if(callback)
+			 		callback(el);
+
 			}, "#widget-settings");
 
 			
@@ -702,6 +706,10 @@ function show_set_up_widget(widget_name, template_id, url, model)
 				 		if(!template_ui)
 				    		return;
 						$('#widget-settings', el).html($(template_ui)); 
+
+						if(callback)
+			 				callback(el);
+
 					}, '#widget-settings');
 
 				}
@@ -711,6 +719,10 @@ function show_set_up_widget(widget_name, template_id, url, model)
 				 		if(!template_ui)
 				    		return;
 						$('#widget-settings', el).html($(template_ui)); 
+
+						if(callback)
+			 				callback(el);
+
 					}, '#widget-settings');
 				}
 			}
@@ -721,11 +733,20 @@ function show_set_up_widget(widget_name, template_id, url, model)
 				    		return;
 						$('#widget-settings', el).html($(template_ui)); 
 						console.log(el);
+
+						if(callback)
+			 				callback(el);
+
 					}, '#widget-settings');
 				
 			}
 		}
+
 		$('#prefs-tabs-content').html(el);
+
+		if(callback)
+			 callback(el);
+
 		$('#PrefsTab .select').removeClass('select');
 		$('.add-widget-prefs-tab').addClass('select');
 
@@ -808,15 +829,19 @@ function fill_form(id, widget_name, template_id)
 	console.log(model.get("prefs"));
 	console.log(model.length);
 
-	show_set_up_widget(widget_name, template_id);
+	show_set_up_widget(widget_name, template_id, undefined, undefined, function(){
 
-	if (model && model.get("prefs"))
-	{
-		var prefsJSON = JSON.parse(model.get("prefs"));
-		console.log("prefsJSON:");
-		console.log(prefsJSON);
-		fill_fields(prefsJSON);
-	}
+		if (model && model.get("prefs"))
+		{
+			var prefsJSON = JSON.parse(model.get("prefs"));
+			console.log("prefsJSON:");
+			console.log(prefsJSON);
+			fill_fields(prefsJSON);
+		}
+
+	});
+
+	
 }
 
 function show_shopify_prefs(id, widget_name, template_id)
