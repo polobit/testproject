@@ -25,7 +25,7 @@ git pull origin sandbox_sync_conversion
 
 ant create-target  -DRELEASE_VERSION="$2" -DPRODUCTION=false;
 
-appcfg.sh -A agilecrmbeta -V "$2" update target/agile-java-server/"$1".war/
+appcfg.sh -A agilecrmbeta -V "$2" "$PROJECT_TARGET_LOCATION"/agile-java-server/"$1".war/
 
 #cd ../
 
