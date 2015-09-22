@@ -19,15 +19,12 @@ git checkout .
 
 git stash
 
-git checkout sandbox_sync_conversion
+git checkout sandbox_flatfull_modules
 
-git pull origin sandbox_sync_conversion
+git pull origin sandbox_flatfull_modules
 
-ant create-target  -DRELEASE_VERSION="$2" -DPRODUCTION=false;
+ant create-target  -DRELEASE_VERSION=$2 -DPRODUCTION=true;
 
-appcfg.sh -A agilecrmbeta -V "$2" update target/agile-java-server/"$1".war/
+#appcfg.sh -A agile-crm-cloud -V "async" update target/agile-java-server/"$1".war/
 
 #cd ../
-
-
-
