@@ -15,6 +15,8 @@ cd $DIR
 
 cd "$1"
 
+echo "$PROJECT_TARGET_LOCATION";
+
 git checkout .
 
 git stash
@@ -25,7 +27,8 @@ git pull origin sandbox_sync_conversion
 
 ant create-target  -DRELEASE_VERSION="$2" -DPRODUCTION=false;
 
-appcfg.sh -A agilecrmbeta -V "$2" "$PROJECT_TARGET_LOCATION"/agile-java-server/"$1".war/
+
+appcfg.sh -A agilecrmbeta -V "$2" update "$PROJECT_TARGET_LOCATION"/agile-java-server/"$1".war/
 
 #cd ../
 
