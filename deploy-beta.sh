@@ -23,9 +23,9 @@ git checkout sandbox_sync_conversion
 
 git pull origin sandbox_sync_conversion
 
-ant create-target  -DRELEASE_VERSION="async" -DPRODUCTION=false;
+ant create-target  -DRELEASE_VERSION="$2" -DPRODUCTION=false;
 
-appcfg.sh -A agilecrmbeta -V "async" update target/agile-java-server/"$1".war/
+appcfg.sh -A agilecrmbeta -V "$2" update target/agile-java-server/"$1".war/
 
 #cd ../
 
