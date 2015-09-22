@@ -202,7 +202,7 @@ For a startup that relies a lot on on-line business, Agile CRM has been an inval
 {{#stringToJSON this "billingData"}}{{/stringToJSON}}
 {{#if billingData}}
 	<div class="card-details">
-		Credit Card: **** {{billingData.cards.data.0.last4}} <br/>
+		Card: **** {{billingData.cards.data.0.last4}} <br/>
 		Expiration: {{#if_less_than billingData.cards.data.0.expMonth 9}}0{{billingData.cards.data.0.expMonth}}{{else}}{{billingData.cards.data.0.expMonth}}{{/if_less_than}}/{{billingData.cards.data.0.expYear}}  
 	</div>
 

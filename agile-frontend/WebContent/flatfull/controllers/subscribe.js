@@ -291,7 +291,7 @@ var SubscribeRouter = Backbone.Router
 
 					that.show_card_details(subscription_model);
 					
-//					that.invoice_latest(subscription_model);
+					that.invoice_latest(subscription_model);
 
 					hideTransitionBar();
 					document.getElementById('email-quantity').value = "";
@@ -579,6 +579,8 @@ var SubscribeRouter = Backbone.Router
 
 			invoice_latest : function(subscription)
 			{
+
+
 				if (!subscription.get("billingData"))
 				{
 					$("#invoice-details-holder").html("");
@@ -588,21 +590,15 @@ var SubscribeRouter = Backbone.Router
 					return;
 				}
 
-				var subscribe_plan = new Base_Model_View({ url : "core/api/subscription?reload=true", template : "latest-invoice", window : 'subscribe',
+				var invoice_list = new Base_Model_View({ url : "core/api/subscription/invoices", template : "latest-invoice", window : 'subscribe',
 
 					postRenderCallback : function(el)
 					{
 
 					} });
-				
-				
-				this.invoice = new Base_Collection_View({ url : "core/api/subscription/invoices" + "?page_size=1", templateKey : "invoice",
-					window : 'subscribe', individual_tag_name : 'tr', sortKey : 'created', descending : true });
-console.log(this.invoice.collection);
-				// Fetches the invoice payments
-				this.invoice.collection.fetch();
+				var list = invoice_list.model.toJSON();
 
-				$("#recent_invoice").html(this.invoice.render().el);
+				$("#recent_invoice").html(getTemplate("latest-invoice"), list[0]);
 
 			},
 			
