@@ -763,10 +763,11 @@ function showPortletSettings(el){
 							options+="<option value="+trackObj.id+" selected='selected'>"+trackObj.name+"</option>";
 						else
 							options+="<option value="+trackObj.id+">"+trackObj.name+"</option>";
-					});
-
 					$('#track', elData).html(options);
 					$('.loading-img').hide();
+					});
+
+					
 				} });
 		
 		$("#duration", elData).find('option[value='+ base_model.get("settings").duration +']').attr("selected", "selected");
@@ -3118,4 +3119,3 @@ var portlet_utiity = {
 
 
 };
-
