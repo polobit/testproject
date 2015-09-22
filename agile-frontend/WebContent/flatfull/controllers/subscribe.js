@@ -24,7 +24,7 @@ var SubscribeRouter = Backbone.Router
 
 			/* billing settings */
 
-			"billing-settings" : "billingSettings",
+//			"billing-settings" : "billingSettings",
 
 			"account-details" : "accountDetails",
 
@@ -97,7 +97,7 @@ var SubscribeRouter = Backbone.Router
 				$("#content").html(card_details.render().el);
 			},
 
-			billingSettings : function()
+			/*billingSettings : function()
 			{
 
 				$("#content").html(getTemplate("billing-settings"), {});
@@ -109,7 +109,7 @@ var SubscribeRouter = Backbone.Router
 				$('#content').find('.account-details-tab').addClass('select');
 				$(".active").removeClass("active");
 
-			},
+			},*/
 
 			accountDetails : function()
 			{
