@@ -246,7 +246,7 @@ try{
 	{
 		
 	// Gets MergeFields and append them to select option.
-	MERGE_FIELDS = getMergeFields();
+	MERGE_FIELDS = window.opener.getMergeFields();
 	
 	}
 	catch(err){
