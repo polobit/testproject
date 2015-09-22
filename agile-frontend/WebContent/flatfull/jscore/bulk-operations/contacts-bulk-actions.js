@@ -557,7 +557,7 @@ $(function()
 	 * Bulk operations - Sends email to the bulk of contacts by filling up the
 	 * send email details like from, subject and body.
 	 */
-	//$("body #bulk-email").off("click");
+	$("body #bulk-email").off("click");
 	$("body").on("click", "#bulk-email", function(e)
 					{
 						e.preventDefault();
@@ -1277,12 +1277,9 @@ function has_more_than_limit()
 function load_bulk_operations_template(callback){
 
 	getTemplate("bulk-actions-company-owner", {}, undefined, function(template_ui){
-				if(!template_ui)
-					  return;
-
 				if(callback)
 				   callback();
 
-	}, "#content");
+	}, null);
 
 }
