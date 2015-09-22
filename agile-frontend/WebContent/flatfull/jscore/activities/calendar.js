@@ -48,7 +48,13 @@ function load_events_from_google(callback)
 					return
 				}
 			}
+			else{
+				return;
+			}
 		}
+		else{
+				return;
+			}
 //		if ((type_of_cal && type_of_cal.length != 2 && type_of_cal[0] == 'agile') || type_of_cal.length == 0)
 //		{
 //			return;
