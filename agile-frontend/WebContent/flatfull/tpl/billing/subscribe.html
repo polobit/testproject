@@ -533,6 +533,26 @@ users.
 
    </div> <!-- End of panel wrapper-md -->
 
+{{else}}
+   <div class="panel wrapper-md m-t-xl">
+      <p class="b-b b-light p-b-xs">
+         Current Plan
+      </p>
+      
+You are currently on a FREE plan with {{#if plan.quantity}}
+                            {{plan.quantity}}
+                            {{else}}
+                            1
+                            {{/if}} {{#if_equals quantity 1}}  user.
+{{else}}
+users.
+{{/if_equals}}
+
+   </div> <!-- End of panel wrapper-md -->
+
+  
+{{/getSubscriptionBasedOnPlan}}
+{{#if billingData}}
 <div class="row">
 	<div class="col-md-12">
 		<div class="panel panel-default wrapper-md">
@@ -550,32 +570,12 @@ users.
 		<div class="clearfix"></div>
 
 		</div>
-
-{{else}}
-   <div class="panel wrapper-md m-t-xl">
-      <p class="b-b b-light p-b-xs">
-         Current Plan Details
-      </p>
-      
-You are currently on a FREE plan with {{#if plan.quantity}}
-                            {{plan.quantity}}
-                            {{else}}
-                            1
-                            {{/if}} {{#if_equals quantity 1}}  user.
-{{else}}
-users.
-{{/if_equals}}
-
-   </div> <!-- End of panel wrapper-md -->
-
-  
-{{/getSubscriptionBasedOnPlan}}
-
-
-	</div>
+</div>
  
 </div>
+{{/if}}
 </div> <!-- End of col-md-3 -->
+{{#if billingData}}
 <div class="col-md-3">
 <div class="panel panel-default wrapper-md m-b-none">
 
@@ -596,6 +596,7 @@ users.
 </div>
 {{/check_plan}}
 		</div>
+{{/if}}
 		
 		<div class="clearfix"></div>
 
@@ -657,7 +658,7 @@ users.
 
 <script id="latest-invoice-template" type="text/html">
 {{#if_greater amount 0}}
-Plan: {{lines.data.[0].plan.name}}<br>
+Plan: {{lines.data.[0].plan.name}}-{{lines.data.[1].plan.name}}<br>
 {{else}}
 Plan: {{lines.data.[1].plan.name}}<br>
 {{/if_greater}}
