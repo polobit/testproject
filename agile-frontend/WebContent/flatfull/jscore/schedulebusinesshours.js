@@ -51,7 +51,7 @@ function initializeOnlineCalendarListners(el){
 				console.log(business_hours);
 
 			// $("#schedule-preferences").html(getRandomLoadingImg());
-				$.ajax({ url : '/core/api/scheduleprefs', type : 'PUT', contentType : 'application/json', async : false, data : JSON.stringify(json),
+				$.ajax({ url : '/core/api/scheduleprefs', type : 'PUT', contentType : 'application/json', data : JSON.stringify(json),
 					success : function()
 					{
 						setTimeout(function()
@@ -189,18 +189,13 @@ $("#online-cal-listners").on("click","#save-scheduleurl", function(e){
 
         $("body #onlineCalendarAddToSite").remove();
 
-		onlineCalendarModel = $(getTemplate("online-calendar-addtosite", {}));
-		onlineCalendarModel.modal('show');
+		getTemplate('online-calendar-addtosite', {}, undefined, function(template_ui){
+			if(!template_ui)
+				  return;
+			onlineCalendarModel = $(template_ui);
+			onlineCalendarModel.modal('show');	
+		}, null);	
 
-		onlineCalendarModel.on("shown.bs.modal", function(){
-
-			console.log("fasdsad");
-
-			
-		});
-
-		
-		
 	});
 /*
      $("#online-cal-listners a[href='#calendar-tab']").unbind("click");

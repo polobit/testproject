@@ -140,51 +140,37 @@ var SubscribeRouter = Backbone.Router.extend({
 		var companydata;
 		var obj;
 		
-		if (invoice_id)
-		{
-			$.ajax({
-				url: 'core/api/subscription/getinvoice?d=' +invoice_id, 
-				type : 'GET',
-				async : false,
-				success : function(data)
-				{	
-					console.log("Invoice object");
-					console.log(data);
-					invoicedata = data;
-					
-				},
-				error : function(response)
-				{
-					showNotyPopUp("information", "error occured please try again", "top");
-				}
-			}).responseText;
-			
-			$.ajax({
-				url : '/core/api/account-prefs', 
-				type : 'GET',
-				async : false,
-				 dataType: 'json',
-				success : function(data)
-				{	
+		if (!invoice_id)
+			  return;
+		
+		accessUrlUsingAjax('core/api/subscription/getinvoice?d=' +invoice_id, function(data){
+			console.log("Invoice object");
+			console.log(data);
+			invoicedata = data;
+
+			accessUrlUsingAjax('/core/api/account-prefs', 
+				function(data){
 					console.log("Account prefs");
 					console.log(data);
 					companydata = data;
-					
-				},
-				error : function(response)
-				{
+
+					obj = {"invoice" : invoicedata,	"company" : companydata}
+					console.log("xxxxxxxxxxxxxxx");
+					console.log(obj);
+					getTemplate('invoice-detail', obj, undefined, function(template_ui){
+							if(!template_ui)
+								  return;
+							$('#content').html($(template_ui));	
+						}, "#content");
+				}, 
+				function(response){
 					showNotyPopUp("information", "error occured please try again", "top");
-				}
-			}).responseText;
-			
-			obj = {"invoice" : invoicedata,	"company" : companydata}
-			console.log("xxxxxxxxxxxxxxx");
-			console.log(obj);
-			head.js(LIB_PATH + 'jscore/handlebars/handlebars-helpers.js', function()
-			{
-				$('#content').html(getTemplate('invoice-detail',obj));
-			});
-		}
+				});
+
+		}, function(response){
+				showNotyPopUp("information", "error occured please try again", "top");
+		});
+		
 		 	
 	},	
 
@@ -618,26 +604,34 @@ var SubscribeRouter = Backbone.Router.extend({
 		$.getJSON("core/api/subscription?reload=true", function(data){
 			_billing_restriction = data.cachedData;
 			init_acl_restriction();
-			$("#content").html(getTemplate("subscribe", data));
-			initializeAccountSettingsListeners();
-			initializeInvoicesListeners();
-			var subscription_model = new BaseModel(data);
-			
-			$("#show_plan_page").on('click' , '#change-card', function(e){
-				e.preventDefault();
-				//alert("here");
-				that.showCreditCardForm(subscription_model, function(model){
-					//$("#content").html(getTemplate("subscribe", model.toJSON()))
-				});
-			});
+
+			getTemplate('subscribe', data, undefined, function(template_ui){
+				if(!template_ui)
+					  return;
+				$('#content').html($(template_ui));
+
+				initializeAccountSettingsListeners();
+				initializeInvoicesListeners();
+				var subscription_model = new BaseModel(data);
 				
-			that.setup_account_plan(subscription_model);
+				$("#show_plan_page").on('click' , '#change-card', function(e){
+					e.preventDefault();
+					//alert("here");
+					that.showCreditCardForm(subscription_model, function(model){
+					});
+				});
+					
+				that.setup_account_plan(subscription_model);
+				
+				that.setup_email_plan(subscription_model);
+				
+				that.show_card_details(subscription_model);
+				
+				that.recent_invoice(subscription_model);
+
+			}, "#content");
+
 			
-			that.setup_email_plan(subscription_model);
-			
-			that.show_card_details(subscription_model);
-			
-			that.recent_invoice(subscription_model);
 		}).done(function(){
 			hideTransitionBar();
 		}).fail(function(){
@@ -678,15 +672,23 @@ var SubscribeRouter = Backbone.Router.extend({
 				
 				$("#user-plan-details-popover", el).on('click', function(e){
 					  var ele = getTemplate("account-plan-details-popover", subscribe_account_plan.model.get("planLimits"));
-					  console.log(ele);
-				        $(this).attr({
-				        	"rel" : "popover",
-				        	"data-placement" : 'right',
-				        	"data-original-title" : "Plan Details",
-				        	"data-content" :  ele,
-				        	//"trigger" : "hover"
-				        });
-				        $(this).popover('show');
+					  var that = this;
+					  getTemplate('account-plan-details-popover', subscribe_account_plan.model.get("planLimits"), undefined, function(template_ui){
+				 		if(!template_ui)
+				    		return;
+				    	var ele = $(template_ui);
+				    	console.log(ele);
+					        $(that).attr({
+					        	"rel" : "popover",
+					        	"data-placement" : 'right',
+					        	"data-original-title" : "Plan Details",
+					        	"data-content" :  ele,
+					        });
+					        $(that).popover('show');
+						
+					}, null);
+
+						  
 				});
 				
 			}
@@ -736,15 +738,12 @@ var SubscribeRouter = Backbone.Router.extend({
 					//alert("here");
 					that.showCreditCardForm(subscribe_email_plan.model, function(model){
 						that.email_subscription(subscribe_email_plan.model);
-						//$("#content").html(getTemplate("subscribe", model.toJSON()))
 					});
 				});
 				
 				$("#account_email_plan_upgrade", el).on('click' , function(e){
 					e.preventDefault();
 					that.email_subscription(subscribe_email_plan.model);
-					//alert("here");
-						//$("#content").html(getTemplate("subscribe", model.toJSON()))
 					});
 				
 				
@@ -839,7 +838,6 @@ var SubscribeRouter = Backbone.Router.extend({
 				e.preventDefault();
 				//alert("here");
 				that.showCreditCardForm(stripe_customer_details.model, function(model){
-					//$("#content").html(getTemplate("subscribe", model.toJSON()))
 				});
 			});
 			

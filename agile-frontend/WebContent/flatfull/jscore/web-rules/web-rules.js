@@ -62,17 +62,20 @@ $(function()
 			$('body').on('click', '.web-rule-multiple-add', function(e)
 			{
 				e.preventDefault();
-				// To solve chaining issue when cloned
-				var htmlContent = $(getTemplate("webrules-add", {})).find('.webrule-actions > div').clone();
-				
-				//scramble_input_names($(htmlContent));
 
-				
-				chainWebRules($(htmlContent)[0], undefined, true);
-				// var htmlContent = $(this).closest("tr").clone();
-				$(htmlContent).find("i.webrule-multiple-remove").css("display", "inline-block");
-				$(".webrule-actions").append(htmlContent);
-				
+				// To solve chaining issue when cloned
+				getTemplate('webrules-add', {}, undefined, function(template_ui){
+					if(!template_ui)
+						  return;
+
+					var htmlContent = $(template_ui).find('.webrule-actions > div').clone();
+					chainWebRules($(htmlContent)[0], undefined, true);
+					// var htmlContent = $(this).closest("tr").clone();
+					$(htmlContent).find("i.webrule-multiple-remove").css("display", "inline-block");
+					$(".webrule-actions").append(htmlContent);
+
+				}, null);
+
 			});
 			
 			// Filter Contacts- Remove Multiple
@@ -85,14 +88,22 @@ $(function()
 			$('body').on('click', 'i.filter-contacts-web-rule-multiple-add', function(e)
 			{
 				// To solve chaining issue when cloned
-				var htmlContent = $(getTemplate("webrules-add", {})).find('.web-rule-contact-condition-table tr').clone();
-				scramble_input_names($(htmlContent));
+				var that = this;
+				getTemplate('webrules-add', {}, undefined, function(template_ui){
+					if(!template_ui)
+						  return;
 
-				chainFilters(htmlContent, undefined, undefined, true);
+					var htmlContent = $(template_ui).find('.web-rule-contact-condition-table tr').clone();
+					scramble_input_names($(htmlContent));
 
-				// var htmlContent = $(this).closest("tr").clone();
-				$(htmlContent).find("i.filter-contacts-multiple-remove").css("display", "inline-block");
-				$(this).parents("tbody").append(htmlContent);
+					chainFilters(htmlContent, undefined, undefined, true);
+
+					// var htmlContent = $(this).closest("tr").clone();
+					$(htmlContent).find("i.filter-contacts-multiple-remove").css("display", "inline-block");
+					$(that).parents("tbody").append(htmlContent);
+
+				}, null);
+				
 			});
 			
 			
@@ -169,7 +180,7 @@ function tinyMCECallBack(name, htmlVal)
  * @param type - to add specific fields for specific nodes
  *               like unsubscribe link to SendEmail node
  **/
-function getMergeFields(type)
+function getMergeFields(type, callback)
 {
 	var options=
 	{
@@ -195,45 +206,51 @@ function getMergeFields(type)
 	};
 	
 	// Get Custom Fields in template format
-	var custom_fields = get_webrules_custom_fields();
-	
-	console.log("Custom Fields are");
-	console.log(custom_fields);
-	
-	// Merges options json and custom fields json
-	var merged_json = merge_webrules_jsons({}, options, custom_fields);
-	return merged_json;
+	get_webrules_custom_fields(function(custom_fields){
+
+		console.log("Custom Fields are");
+		console.log(custom_fields);
+		
+		// Merges options json and custom fields json
+		var merged_json = merge_webrules_jsons({}, options, custom_fields);
+		if(callback)
+			 return callback(merged_json);
+
+		return merged_json;
+
+		});
 }
 
 /**
  * Returns custom fields in format required for merge fields. 
  * E.g., Nick Name:{{Nick Name}}
  */
-function get_webrules_custom_fields()
+function get_webrules_custom_fields(callback)
 {
     var url = window.location.protocol + '//' + window.location.host;
 	
 	// Sends GET request for customfields.
-    var msg = $.ajax({type: "GET", url: url+'/core/api/custom-fields', async: false, dataType:'json'}).responseText;
+	accessUrlUsingAjax(url+'/core/api/custom-fields', function(resp){
+
+		var customfields = {}, data = resp;
 	
-	// Parse stringify json
-	var data = JSON.parse(msg);
+		// Iterate over data and get field labels of each custom field
+		$.each(data, function(index,obj)
+				{
+						// Iterate over single custom field to get field-label
+			            $.each(obj, function(key, value){
+							
+							// Needed only field labels for merge fields
+							if(key == 'field_label')
+								customfields[value] = "{{[" + value+"]}}"
+						});
+				});
+
+		if(callback)
+			callback(customfields);
+
+	});
 	
-	var customfields = {};
-	
-	// Iterate over data and get field labels of each custom field
-	$.each(data, function(index,obj)
-			{
-					// Iterate over single custom field to get field-label
-		            $.each(obj, function(key, value){
-						
-						// Needed only field labels for merge fields
-						if(key == 'field_label')
-							customfields[value] = "{{[" + value+"]}}"
-					});
-			});	
-	
-	return customfields;
 }
 
 /**

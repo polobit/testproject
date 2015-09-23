@@ -49,7 +49,7 @@ var ContactsRouter = Backbone.Router.extend({
 			/* CALL-with mobile number */
 			"contacts/call-lead/:first/:last/:mob" : "addLeadDirectly"
 	},
-
+	
 	initialize : function()
 	{
 		/*
@@ -64,43 +64,31 @@ var ContactsRouter = Backbone.Router.extend({
 	{
 
 		$(".active").removeClass("active");
-
-		/*var time_int = parseInt($('meta[name="last-login-time"]').attr('content'));
-		var time_date = new Date(time_int * 1000);
-
-		head.js(LIB_PATH + 'lib/jquery.timeago.js', LIB_PATH + 'jscore/handlebars/handlebars-helpers.js', function()
-		{
-			var el = $(getTemplate('dashboard1', { time_sec : (time_date).toString().toLowerCase(), time_format : time_date.getTime()/1000 }));
-			$("#content").html(el);
-			
-			$("#last-login-time").timeago();
-			
-			setup_dashboard(el);
-			// loadDynamicTimeline("my-timeline", el);
-		});*/
 		if(CURRENT_DOMAIN_USER.domain == "admin")
 		{
 			Backbone.history.navigate("domainSearch" , {
                 trigger: true
             });
-			
-		}else{
-			/*head.js(LIB_PATH + 'jscore/handlebars/handlebars-helpers.js'+ _AGILE_VERSION,
-					LIB_PATH + 'lib/jquery.gridster.js',function(){*/
-				var el = $(getTemplate('portlets', {}));
-				$("#content").html(el);
-				$('.dashboart_tooltip').tooltip();
+            return;
+		}
 
+		getTemplate('portlets', {}, undefined, function(template_ui){
+				if(!template_ui)
+					  return;
+
+				var el = $(template_ui);
+				$("#content").html(el);
+
+				$('[data-toggle="tooltip"]').tooltip();
 				if ((navigator.userAgent.toLowerCase().indexOf('chrome') > -1&&navigator.userAgent.toLowerCase().indexOf('opr/') == -1) && !document.getElementById('agilecrm_extension'))
 				{
 					$("#chrome-extension-button").removeClass('hide');
 				}
-				/*if (IS_FLUID){
-					$('#content').find('div.row').removeClass('row').addClass('row-fluid');
-				}*/
+
 				loadPortlets(el);
-			// });
-		}
+
+		}, "#content");
+
 	},
 	
 	/**
@@ -749,8 +737,15 @@ var ContactsRouter = Backbone.Router.extend({
 	 */
 	importContacts : function()
 	{
-		$('#content').html('<div id="import-contacts-event-listener"></div>').find('#import-contacts-event-listener').html(getTemplate("import-contacts", {}));
-        initializeImportEvents('import-contacts-event-listener');
+		$('#content').html('<div id="import-contacts-event-listener"></div>');
+		getTemplate("import-contacts", {}, undefined, function(template_ui){
+			if(!template_ui)
+				  return;
+
+			$('#import-contacts-event-listener').html($(template_ui));	
+			initializeImportEvents('import-contacts-event-listener');
+
+		}, "#import-contacts-event-listener");       
 	},
 	
 
@@ -761,9 +756,17 @@ var ContactsRouter = Backbone.Router.extend({
 	 */
 	addContactToCampaign : function()
 	{
-		$("#content").html(getTemplate("contact-detail-campaign", {}));
 
-		$('body').trigger('fill_campaigns_contact');
+		getTemplate("contact-detail-campaign", {}, undefined, function(template_ui){
+			if(!template_ui)
+				  return;
+
+			$("#content").html($(template_ui));	
+			$('body').trigger('fill_campaigns_contact');
+
+		}, "#content"); 
+
+		
 	},
 
 	/**
@@ -818,119 +821,135 @@ var ContactsRouter = Backbone.Router.extend({
 		// Call setupTypeAhead to get contacts
 		agile_type_ahead("to", el, contacts_typeahead, null, null, "email-search", null, true, null, true);
 
-		agile_type_ahead("email_cc", el, contacts_typeahead, null, null, "email-search", null, true, null, true);
 
-		agile_type_ahead("email_bcc", el, contacts_typeahead, null, null, "email-search", null, true, null, true);
+		$("#content").html('<div id="send-email-listener-container"></div>');
+		var that = this;
+		getTemplate("send-email", model, undefined, function(template_ui){
+			if(!template_ui)
+				  return;
 
-		// To append name to email
-		if (id)
-		{
-			var name;
+			var el = $("#send-email-listener-container").html($(template_ui));
 
-			// For Reply all, id may contains multiple emails. If contains multiple, skip
-			if (model && id.indexOf(',') == -1)
+			// Call setupTypeAhead to get contacts
+			agile_type_ahead("to", el, contacts_typeahead, null, null, "email-search", null, true, null, true);
+
+			agile_type_ahead("email_cc", el, contacts_typeahead, null, null, "email-search", null, true, null, true);
+
+			agile_type_ahead("email_bcc", el, contacts_typeahead, null, null, "email-search", null, true, null, true);
+
+			// To append name to email
+			if (id)
 			{
-				if (model.type == "PERSON")
+				var name;
+
+				// For Reply all, id may contains multiple emails. If contains multiple, skip
+				if (model && id.indexOf(',') == -1)
 				{
-
-					var first_name = getPropertyValue(model.properties, "first_name");
-					var last_name = getPropertyValue(model.properties, "last_name");
-
-					if (first_name || last_name)
+					if (model.type == "PERSON")
 					{
-						name = first_name ? first_name : "";
-						name = (name + " " + (last_name ? last_name : "")).trim();
+
+						var first_name = getPropertyValue(model.properties, "first_name");
+						var last_name = getPropertyValue(model.properties, "last_name");
+
+						if (first_name || last_name)
+						{
+							name = first_name ? first_name : "";
+							name = (name + " " + (last_name ? last_name : "")).trim();
+						}
+					}
+					else
+					{
+						var company_name = getPropertyValue(model.properties, "name");
+						name = (company_name ? company_name : "").trim();
 					}
 				}
-				else
+
+				if (name && name.length)
 				{
-					var company_name = getPropertyValue(model.properties, "name");
-					name = (company_name ? company_name : "").trim();
+					var data = id;
+
+					// If already appended with name, skip
+					if(id.indexOf('<') == -1 && id.indexOf('>') == -1)
+						data = name + ' <' + id.trim() + '>';
+
+					$('#to', el)
+							.closest("div.controls")
+							.find(".tags")
+							.append(
+									'<li class="tag  btn btn-xs btn-primary m-r-xs inline-block" data="' + data + '"><a href="#contact/' + model.id + '">' + name + '</a><a class="close" id="remove_tag">&times</a></li>');
 				}
-			}
-
-			if (name && name.length)
-			{
-				var data = id;
-
-				// If already appended with name, skip
-				if(id.indexOf('<') == -1 && id.indexOf('>') == -1)
-					data = name + ' <' + id.trim() + '>';
-
-				$('#to', el)
-						.closest("div.controls")
-						.find(".tags")
-						.append(
-								'<li class="tag  btn btn-xs btn-primary m-r-xs inline-block" data="' + data + '"><a href="#contact/' + model.id + '">' + name + '</a><a class="close" id="remove_tag">&times</a></li>');
+				else
+					$("#emailForm", el).find('input[name="to"]').val(id);
 			}
 			else
-				$("#emailForm", el).find('input[name="to"]').val(id);
-		}
-		else
-			$("#emailForm", el).find('input[name="to"]').val('');
+				$("#emailForm", el).find('input[name="to"]').val('');
 
-		// Checks Zoomifier tag for contact
-		if (checkTagAgile("Zoomifier") && this.contactDetailView)
-		{
-			// Appends zoomifier link to attach their documents.
-			head.js(LIB_PATH + 'lib/zoomifier.contentpicker.min.js', function()
+			// Checks Zoomifier tag for contact
+			if (checkTagAgile("Zoomifier") && that.contactDetailView)
 			{
-				$("#emailForm", el).find('textarea[name="body"]').closest(".controls")
-						.append('<div><a style="cursor:pointer;" onclick="Javascript:loadZoomifierDocSelector();"><i class="icon-plus-sign"></i> Attach Zoomifier Doc</a></div>');
-			});
-		}
-
-		// Populate from address and templates
-		populate_send_email_details(el);
-		
-		if(subject)
-			$("#emailForm",el).find('input[name="subject"]').val(subject);
-		
-		if(cc)
-		{
-			$("#emailForm",el).find('#email_cc').closest('.control-group').show();
-			$("#emailForm",el).find('input[name="email_cc"]').val(cc);
-		}
-		
-		if(bcc)
-		{
-			$("#emailForm",el).find('#email_bcc').closest('.control-group').show();
-			$("#emailForm",el).find('input[name="email_bcc"]').val(bcc);
-		}
-		
-		// Setup HTML Editor
-		if(id)
-		{		
-			setupTinyMCEEditor('textarea#email-body', false, undefined, function(){
-				
-					if(!body)
-						body = '';
-				
-					// Add tinymce content
-					set_tinymce_content('email-body', body);
-					
-					// Register focus
-					register_focus_on_tinymce('email-body');
-			
+				// Appends zoomifier link to attach their documents.
+				head.js(LIB_PATH + 'lib/zoomifier.contentpicker.min.js', function()
+				{
+					$("#emailForm", el).find('textarea[name="body"]').closest(".controls")
+							.append('<div><a style="cursor:pointer;" onclick="Javascript:loadZoomifierDocSelector();"><i class="icon-plus-sign"></i> Attach Zoomifier Doc</a></div>');
 				});
-		}
-		else
-		{	
-			setupTinyMCEEditor('textarea#email-body', true, undefined, function(){
+			}
 
-					if(!body)
-						body = '';
-				
-					// Add tinymce content
-					set_tinymce_content('email-body', body);
+			// Populate from address and templates
+			populate_send_email_details(el);
+			
+			if(subject)
+				$("#emailForm",el).find('input[name="subject"]').val(subject);
+			
+			if(cc)
+			{
+				$("#emailForm",el).find('#email_cc').closest('.control-group').show();
+				$("#emailForm",el).find('input[name="email_cc"]').val(cc);
+			}
+			
+			if(bcc)
+			{
+				$("#emailForm",el).find('#email_bcc').closest('.control-group').show();
+				$("#emailForm",el).find('input[name="email_bcc"]').val(bcc);
+			}
+			
+			// Setup HTML Editor
+			if(id)
+			{		
+				setupTinyMCEEditor('textarea#email-body', false, undefined, function(){
 					
-					// Register focus
-					register_focus_on_tinymce('email-body')
-			});
-		}
-		
-		initializeSendEmailListeners();
-		sendEmailAttachmentListeners("send-email-listener-container");
+						if(!body)
+							body = '';
+					
+						// Add tinymce content
+						set_tinymce_content('email-body', body);
+						
+						// Register focus
+						register_focus_on_tinymce('email-body');
+				
+					});
+			}
+			else
+			{	
+				setupTinyMCEEditor('textarea#email-body', true, undefined, function(){
+
+						if(!body)
+							body = '';
+					
+						// Add tinymce content
+						set_tinymce_content('email-body', body);
+						
+						// Register focus
+						register_focus_on_tinymce('email-body')
+				});
+			}
+			
+			initializeSendEmailListeners();
+			sendEmailAttachmentListeners("send-email-listener-container");
+			
+			
+		}, "#send-email-listener-container"); 
+	
 	},
 	
 	/**
@@ -1111,6 +1130,7 @@ var ContactsRouter = Backbone.Router.extend({
 			$(this).find("#phone").val(mob);
 		});
 		$("#personModal").modal();
+
 	}
 	
 	});

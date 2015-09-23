@@ -1,7 +1,3 @@
-// Created by Jonathan Eatherly, (https://github.com/joneath)
-// MIT license
-// Version 0.1
-
 (function() {
   Backbone.InfiniScroll = function(collection, options) {
     options = options || { };
