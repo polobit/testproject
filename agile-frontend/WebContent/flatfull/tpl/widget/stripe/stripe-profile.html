@@ -166,8 +166,8 @@
 
 {{#if_equals custom_data.length "0"}}
 				<p>Stripe id for each contact is stored in a text custom field. You have no custom fields defined. Please <a href="#custom-fields">create one</a>.</p>
-	{{else}}
-				{{#stringToJSON this "prefs"}}{{/stringToJSON}}
+{{else}}
+
 <p>Stripe id for each contact is stored in a text custom field. Select the custom field to be used.</p><form id="reportsForm">
 <fieldset class="m-l-md">
 		<div class="control-group m-l-n-md">
@@ -188,10 +188,8 @@
 			</div>
 		</fieldset>
 				<div class="m-t-sm m-r-none m-b-xs m-l-none">
-					<a class='btn btn-default btn-sm  p-t-xs p-b-xs p-l-xs p-r-xs m-l-xs' widget-name="Stripe" id="widget-prefs-save">Save</a>
-					<a class='btn btn-danger btn-sm revoke-widget m-l-xs' widget-name="Stripe">Revoke Access</a>
-
-					
+					<a class='btn btn-default btn-sm  p-t-xs p-b-xs p-l-xs p-r-xs m-l-xs save-agile-widget' widget-name="Stripe" id="widget-prefs-save">Save</a>
+					<a class='btn btn-danger btn-sm revoke-widget m-l-xs' widget-name="Stripe">Revoke Access</a>					
 					<a href="#add-widget" class='btn btn-default btn-sm' widget-name="Stripe">Cancel</a>
 				</div> 
 	</div>

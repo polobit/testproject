@@ -108,6 +108,8 @@ var WidgetsRouter = Backbone.Router
 								"is_added" : true
 							}));
 							_plan_restrictions.process_widgets(data);
+							console.log(data);
+							console.log("****");
 						}
 					});
 
@@ -178,12 +180,16 @@ var WidgetsRouter = Backbone.Router
 			 * Manages Twitter widget
 			 */
 			Twitter : function(id) {
-				if(!id){
-					addOAuthWidget("Twitter", "twitter-login",
-						('/scribe?service=twitter&isForAll=' + isForAll	+ '&return_url=' + encodeURIComponent(window.location.href) + '/twitter')
-					);
-				}else{
-					addWidgetProfile(id, "Twitter", "twitter-revoke-access", "core/api/widgets/social/profile/");
+				if (!id) {
+					addOAuthWidget(
+							"Twitter",
+							"twitter-login",
+							('/scribe?service=twitter&isForAll=' + isForAll
+									+ '&return_url='
+									+ encodeURIComponent(window.location.href) + '/twitter'));
+				} else {
+					addWidgetProfile(id, "Twitter", "twitter-revoke-access",
+							"core/api/widgets/social/profile/");
 				}
 
 			},
@@ -192,12 +198,16 @@ var WidgetsRouter = Backbone.Router
 			 * Manages Facebook widget
 			 */
 			Facebook : function(id) {
-				if(!id){
-					addOAuthWidget("Facebook", "facebook-login",
-						('/scribe?service=facebook&isForAll='+isForAll+'&return_url=' + encodeURIComponent(window.location.href) + '/facebook')
-					);
-				}else{
-					addWidgetProfile(id, "Facebook", "facebook-revoke-access", "/core/api/widgets/facebook/currentUserProfile/");
+				if (!id) {
+					addOAuthWidget(
+							"Facebook",
+							"facebook-login",
+							('/scribe?service=facebook&isForAll=' + isForAll
+									+ '&return_url='
+									+ encodeURIComponent(window.location.href) + '/facebook'));
+				} else {
+					addWidgetProfile(id, "Facebook", "facebook-revoke-access",
+							"/core/api/widgets/facebook/currentUserProfile/");
 				}
 
 			},
@@ -206,12 +216,19 @@ var WidgetsRouter = Backbone.Router
 			 * Manages Facebook widget
 			 */
 			Xero : function(id) {
-				if(!id){
-					addOAuthWidget("Xero", "xero-login",
-						("http://integrations.clickdesk.com:8080/ClickdeskPlugins/agile-xero-oauth?callbackUrl=" + encodeURIComponent(window.location.protocol + "//" + window.location.host + "/XeroServlet?isForAll="+isForAll+"&data="))
-					);
-				}else{
-					addWidgetProfile(id, "Xero", "xero-revoke-access", "core/api/widgets/Xero");
+				if (!id) {
+					addOAuthWidget(
+							"Xero",
+							"xero-login",
+							("http://integrations.clickdesk.com:8080/ClickdeskPlugins/agile-xero-oauth?callbackUrl=" + encodeURIComponent(window.location.protocol
+									+ "//"
+									+ window.location.host
+									+ "/XeroServlet?isForAll="
+									+ isForAll
+									+ "&data=")));
+				} else {
+					addWidgetProfile(id, "Xero", "xero-revoke-access",
+							"core/api/widgets/Xero");
 				}
 
 			},
@@ -220,12 +237,17 @@ var WidgetsRouter = Backbone.Router
 			 * Manages Stripe widget
 			 */
 			QuickBooks : function(id) {
-				if(!id){
-					addOAuthWidget("QuickBooks", "quickbooks-login",
-						('/OAuthServlet?service=quickbooks&isForAll='+isForAll+'&return_url=' + encodeURIComponent(window.location.href) + '/quickbooks')
-					);
-				}else{
-					addWidgetProfile(id, "QuickBooks", "quickbooks-revoke-access", "core/api/widgets/QuickBooks");
+				if (!id) {
+					addOAuthWidget(
+							"QuickBooks",
+							"quickbooks-login",
+							('/OAuthServlet?service=quickbooks&isForAll='
+									+ isForAll + '&return_url='
+									+ encodeURIComponent(window.location.href) + '/quickbooks'));
+				} else {
+					addWidgetProfile(id, "QuickBooks",
+							"quickbooks-revoke-access",
+							"core/api/widgets/QuickBooks");
 				}
 
 			},
@@ -234,49 +256,668 @@ var WidgetsRouter = Backbone.Router
 			 * Manages Shopify widget
 			 */
 			Shopify : function(id) {
-				if(!id){
-					addOAuthWidget("Shopify", "shopify-login","");
-				}else{
-					addWidgetProfile(id, "Shopify", "shopify-revoke-access", "/core/api/widgets/default");
+				if (!id) {
+					addOAuthWidget("Shopify", "shopify-login", "");
+				} else {
+					addWidgetProfile(id, "Shopify", "shopify-revoke-access",
+							"/core/api/widgets/default");
 				}
-				//addConfigurableWidget(id, "Shopify", "shopify-login");
-			}
-
+				// addConfigurableWidget(id, "Shopify", "shopify-login");
+			},
 
 			/**
 			 * Manages GooglePlus widget
 			 */
-			// GooglePlus : function(id) {
-			// 	if(!id){
-			// 		addOAuthWidget("GooglePlus", "googleplus-login",
-			// 			('/scribe?service=googleplus&isForAll='+isForAll+'&return_url=' + encodeURIComponent(window.location.href) + "/googleplus")
-			// 		);
-			// 	}else{
-			// 		addWidgetProfile(id, "GooglePlus", "googleplus-revoke-access", "/core/api/widgets/facebook/currentUserProfile/");
-			// 	}
+			GooglePlus : function(id) {
+				if (!id) {
+					addOAuthWidget(
+							"GooglePlus",
+							"googleplus-login",
+							('/scribe?service=googleplus&isForAll=' + isForAll
+									+ '&return_url='
+									+ encodeURIComponent(window.location.href) + '/googleplus'));
+				} else {
+					addWidgetProfile(id, "GooglePlus",
+							"googleplus-revoke-access",
+							"core/api/widgets/GooglePlus");
+				}
 
-			// }
+			},
+
+			/**
+			 * Manages Stripe widget
+			 */
+			Stripe : function(id) {
+				if (!id) {
+					addOAuthWidget(
+							"Stripe",
+							"stripe-login",
+							('/scribe?service=stripe&isForAll=' + isForAll
+									+ '&return_url='
+									+ encodeURIComponent(window.location.href) + '/stripe'));
+				} else {
+					addWidgetProfile(id, "Stripe", "stripe-revoke-access",
+							"core/api/widgets/Stripe");
+				}
+
+			},
+
+			/**
+			 * Manages CallScript widget
+			 */
+			CallScript : function(id) {
+				if (!id) {
+					addCallScriptRule();
+				} else {
+					showCallScriptRule();
+				}
+			},
+
+			/**
+			 * Manages widget added by user
+			 */
+			Custom : function(id) {
+				if (id) {
+					alert('clicked');
+					console.log($(this))
+					divClone = $(this).clone();
+					var widget_custom_view = new Base_Model_View(
+							{
+								url : "/core/api/widgets/custom",
+								template : "add-custom-widget",
+								isNew : true,
+								postRenderCallback : function(el) {
+									initializeWidgetSettingsListeners();
+									console.log('In post render callback');
+									console.log(el);
+
+									$('body').on(
+											'change',
+											'#script_type',
+											function(e) {
+												var script_type = $(
+														'#script_type').val();
+												if (script_type == "script") {
+													$('#script_div').show();
+													$('#url_div').hide();
+													return;
+												}
+
+												if (script_type == "url") {
+													$('#script_div').hide();
+													$('#url_div').show();
+												}
+											});
+
+								},
+								saveCallback : function(model) {
+									console.log('In save callback');
+
+									console.log(model);
+
+									if (model == null)
+										alert("A widget with this name exists already. Please choose a different name");
+
+									App_Widgets.Catalog_Widgets_View.collection
+											.add(model);
+									$("#custom-widget").replaceWith(divClone);
+								}
+							});
+
+					$('#custom-widget', el).html(
+							widget_custom_view.render(true).el);
+
+					$('#cancel_custom_widget').die().live('click', function(e) {
+						// Restore element back to original
+						$("#custom-widget").replaceWith(divClone);
+					});
+
+				}
+				// fill_form(id, "Custom", 'custom-widget-settings');
+			},
+
+			/**
+			 * Contact synchronization with Google
+			 */
+			contactSync : function() {
+
+				$("#content").html(getTemplate("settings"), {});
+
+				$('#PrefsTab .select').removeClass('select');
+				$('.contact-sync-tab').addClass('select');
+				// Gets Social Prefs (Same as Linkedin/Twitter) for Gmail
+
+				this.contact_sync_google = new Base_Model_View({
+					url : 'core/api/contactprefs/google',
+					template : 'admin-settings-import-google-contacts',
+					postRenderCallback : function(el) {
+						initializeImportListeners();
+					}
+				});
+				this.contact_sync_office365 = new Base_Model_View({
+					url : 'core/api/officecalendar',
+					template : 'admin-settings-office365-sync-details',
+					postRenderCallback : function(el) {
+						initializeImportListeners();
+					}
+				});
+
+				// Adds header
+				$('#prefs-tabs-content')
+						.html(
+								'<div class="row prefs-datasync"><div class="col-md-12"><h4 class="m-b">Google <small>import Contacts from Google</small></h4><div class="row"><div id="contact-prefs" class="col-md-4 col-sm-6 col-xs-12"></div>'
+										+ '<div id="calendar-prefs" class="col-md-4 col-sm-6 col-xs-12"></div><div id="email-prefs" class="col-md-4 col-sm-6 col-xs-12"></div></div></div></div>'
+										+ '<div class="row prefs-datasync"><div class="col-md-12 no-mg-l"><h4 class="m-b">E-commerce <small>import Contacts from E-commerce</small></h4><div class="row"><div id ="shopify" class="col-md-4 col-sm-6 col-xs-12"></div></div></div></div>'
+										+ '<div class="row prefs-datasync"><div class="col-md-12"><h4 class="m-b">Office365 <small> calendar events Sync</small></h4><div class="row"><div id ="office365-calendar-sync" class="col-md-4 col-sm-6 col-xs-12"></div></div></div></div>'
+										+ '<div class="row prefs-datasync"><div class="col-md-12"><h4 class="m-b">Payment <small>import Contacts from payment gateway</small></h4><div class="row"><div id ="stripe" class="col-md-4 col-sm-6 col-xs-12"></div></div></div></div>'
+										+ '<div class="row prefs-datasync"><div class="col-md-12"><h4 class="m-b">Accounting <small>import Contacts from Accounting</small></h4><div class="row"><div id ="freshbook" class="col-md-4 col-sm-6 col-xs-12"></div><div class="col-md-4 col-sm-6 col-xs-12" id ="quickbook"></div></div></div></div>');
+
+				// Adds Gmail Prefs
+				$('#contact-prefs')
+						.append(this.contact_sync_google.render().el);
+				$('#office365-calendar-sync').append(
+						this.contact_sync_office365.render().el);
+
+				this.calendar_sync_google = new Base_Model_View({
+					url : 'core/api/calendar-prefs/get',
+					template : 'import-google-calendar',
+					postRenderCallback : function(el) {
+						initializeImportListeners();
+					}
+				});
+
+				// console.log(getTemplate("import-google-contacts", {}));
+				$('#calendar-prefs').append(
+						this.calendar_sync_google.render().el);
+
+				/* Add E-commerce Prefs template */
+				this.shopify_sync = new Base_Model_View(
+						{
+							url : 'core/api/shopify/import-settings',
+							template : 'admin-settings-import-shopify-contact-syncPrefs',
+							postRenderCallback : function(el) {
+								initializeImportListeners();
+							}
+						});
+				$('#shopify').append(this.shopify_sync.render().el);
+
+				this.freshbooks_sync = new Base_Model_View(
+						{
+							url : 'core/api/freshbooks/import-settings',
+							template : 'admin-settings-import-freshbooks-contacts-syncPrefs',
+							postRenderCallback : function(el) {
+								initializeImportListeners();
+							}
+						});
+				$('#freshbook').append(this.freshbooks_sync.render().el);
+				/* salesforce import template */
+				// this.salesforce = new
+				// Base_Model_View({url:'core/api/salesforce/get-prefs',template:'admin-settings-salesforce-contact-sync'});
+				// $('#force').append(this.salesforce.render().el);
+				/* salesforce import template */
+				// this.salesforce = new
+				// Base_Model_View({url:'core/api/salesforce/get-prefs',template:'admin-settings-salesforce-contact-sync'});
+				// $('#force').append(this.salesforce.render().el);
+				// adding zoho crm contact sync template preferences
+				this.zoho_sync = new Base_Model_View({
+					url : 'core/api/zoho/import-settings',
+					template : 'admin-settings-import-zoho-contact-sync',
+					postRenderCallback : function(el) {
+						initializeImportListeners();
+					}
+				});
+				$('#zoho').append(this.zoho_sync.render().el);
+				// model for quickbook import
+				this.quickbook_sync = new Base_Model_View({
+					url : 'core/quickbook/import-settings',
+					template : 'admin-settings-import-quickbook',
+					postRenderCallback : function(el) {
+						initializeImportListeners();
+					}
+				});
+				$('#quickbook').append(this.quickbook_sync.render().el);
+
+				// model for xero import
+				this.xero_sync = new Base_Model_View({
+					url : 'core/xero/import-settings',
+					template : 'admin-settings-import-xeroSync',
+					postRenderCallback : function(el) {
+						initializeImportListeners();
+					}
+				});
+				$('#xero').append(this.xero_sync.render().el);
+
+				/*
+				 * Add stripe payment gateway contact sync template preferences
+				 */
+				this.stripe_sync = new Base_Model_View({
+					url : 'core/api/stripe/import-settings',
+					template : 'admin-settings-import-stripe-contact-sync',
+					postRenderCallback : function(el) {
+						initializeImportListeners();
+					}
+				});
+
+				$('#stripe').append(this.stripe_sync.render().el);
+
+				var data = {
+					"service" : "Gmail",
+					"return_url" : encodeURIComponent(window.location.href)
+				};
+				var itemView = new Base_Model_View({
+					url : '/core/api/social-prefs/GMAIL',
+					template : "settings-social-prefs",
+					data : data,
+					postRenderCallback : function(el) {
+						initializeImportListeners();
+					}
+				});
+				itemView.model.fetch();
+
+				// Adds Gmail Prefs
+				$('#email-prefs').html(itemView.render().el);
+
+				// Gets IMAP Prefs
+				/*
+				 * var itemView2 = new Base_Model_View({ url : '/core/api/imap',
+				 * template : "settings-imap-prefs" }); // Appends IMAP
+				 * $('#prefs-tabs-content').append(itemView2.render().el);
+				 * $('#PrefsTab .select').removeClass('select');
+				 * $('.email-tab').addClass('select');
+				 */
+			},
+
+			google_apps_contacts : function() {
+
+				$("#content").html(getTemplate("settings"), {});
+
+				$('#PrefsTab .select').removeClass('select');
+				$('.contact-sync-tab').addClass('select');
+
+				var options = {
+					url : "core/api/contactprefs/GOOGLE",
+					template : "admin-settings-import-google-contacts-setup",
+					postRenderCallback : function(el) {
+
+						initializeWidgetSettingsListeners();
+						initializeImportListeners();
+						console.log(el);
+						// App_Settings.setup_google_contacts.model =
+						// App_Settings.contact_sync_google.model;
+					}
+				};
+
+				var fetch_prefs = true;
+				if (this.contact_sync_google && this.contact_sync_google.model) {
+					options["model"] = this.contact_sync_google.model;
+					fetch_prefs = false;
+				} else {
+					this.contact_sync_google = new Base_Model_View({
+						url : 'core/api/contactprefs/google',
+						template : 'import-google-contacts',
+					});
+				}
+
+				this.setup_google_contacts = new Base_Model_View(options);
+
+				if (fetch_prefs) {
+					$("#prefs-tabs-content").html(
+							this.setup_google_contacts.render().el);
+					return;
+				}
+				$("#prefs-tabs-content").html(
+						this.setup_google_contacts.render(true).el);
+			},
+
+			google_apps_calendar : function() {
+				$("#content").html(getTemplate("settings"), {});
+
+				$('#PrefsTab .select').removeClass('select');
+				$('.contact-sync-tab').addClass('select');
+
+				var options = {
+
+					url : "core/api/calendar-prefs/get",
+					template : "import-google-calendar-setup"
+				};
+
+				var fetch_prefs = true;
+				if (this.calendar_sync_google
+						&& this.calendar_sync_google.model) {
+					options["model"] = this.calendar_sync_google.model;
+					fetch_prefs = false;
+				}
+
+				this.setup_google_calendar = new Base_Model_View(options);
+
+				if (fetch_prefs) {
+					$("#prefs-tabs-content").html(
+							this.setup_google_calendar.render().el);
+					return;
+				}
+				$("#prefs-tabs-content").html(
+						this.setup_google_calendar.render(true).el);
+			},
+
+			office365Calendar : function() {
+
+				$("#content").html(getTemplate("settings"), {});
+
+				$('#PrefsTab .select').removeClass('select');
+				$('.contact-sync-tab').addClass('select');
+
+				this.office365_sync_setting = new Base_Model_View({
+					url : 'core/api/officecalendar',
+					template : 'admin-settings-office365-calendar-prefs',
+					saveCallback : function(model) {
+						window.location.href = '#sync';
+					}
+				});
+				$("#prefs-tabs-content").html(
+						this.office365_sync_setting.render().el);
+			},
+
+			stripe_sync : function() {
+
+				$("#content").html(getTemplate("settings"), {});
+
+				$('#PrefsTab .select').removeClass('select');
+				$('.contact-sync-tab').addClass('select');
+
+				this.stripe_sync_setting = new Base_Model_View(
+						{
+							url : 'core/api/stripe/import-settings',
+							template : 'admin-settings-import-stripe-contact-sync-prefs',
+							saveCallback : function(model) {
+								showNotyPopUp("information",
+										"Contacts sync initiated", "top", 1000);
+							}
+						});
+
+				$("#prefs-tabs-content").html(
+						this.stripe_sync_setting.render().el);
+			},
+
+			shopify : function() {
+
+				$("#content").html(getTemplate("settings"), {});
+
+				$('#PrefsTab .select').removeClass('select');
+				$('.contact-sync-tab').addClass('select');
+
+				this.shopify_sync_setting = new Base_Model_View({
+					url : 'core/api/shopify/import-settings',
+					template : 'admin-settings-import-shopify-prefs',
+					saveCallback : function(model) {
+
+						showNotyPopUp("information", "Contacts sync initiated",
+								"top", 1000);
+					}
+				});
+
+				$("#prefs-tabs-content").html(
+						this.shopify_sync_setting.render().el);
+			},
+
+			freshbooks_sync : function() {
+
+				$("#content").html(getTemplate("settings"), {});
+
+				$('#PrefsTab .select').removeClass('select');
+				$('.contact-sync-tab').addClass('select');
+
+				this.freshbooks_sync_setting = new Base_Model_View(
+						{
+							url : 'core/api/freshbooks/import-settings',
+							template : 'admin-settings-import-freshbooks-contacts-form',
+							saveCallback : function(model) {
+
+								showNotyPopUp("information",
+										"Contacts sync initiated", "top", 1000);
+							}
+						});
+
+				$("#prefs-tabs-content").html(
+						this.freshbooks_sync_setting.render().el);
+			},
+
+			freshbooks_sync_setting : function() {
+				$("#content").html(getTemplate("settings"), {});
+
+				$('#PrefsTab .select').removeClass('select');
+				$('.contact-sync-tab').addClass('select');
+				this.freshbooks_import_settings = new Base_Model_View({
+					url : 'core/api/freshbooks/import-settings',
+					template : 'admin-settings-import-freshbooks-settings',
+					postRenderCallback : function(el) {
+						initializeImportListeners();
+					},
+					saveCallback : function(model) {
+
+						showNotyPopUp("information", "Contacts sync initiated",
+								"top", 1000);
+					}
+				});
+
+				$("#prefs-tabs-content").html(
+						this.freshbooks_import_settings.render().el);
+			},
+
+			zoho_sync : function() {
+
+				$("#content").html(getTemplate("settings"), {});
+
+				$('#PrefsTab .select').removeClass('select');
+				$('.contact-sync-tab').addClass('select');
+
+				this.zoho_sync_settings = new Base_Model_View({
+					url : 'core/api/zoho/import-settings',
+					template : 'admin-settings-import-zoho-prefs',
+					saveCallback : function(model) {
+						showNotyPopUp("information", "Contacts sync initiated",
+								"top", 1000);
+					}
+				});
+
+				$("#prefs-tabs-content").html(
+						this.zoho_sync_settings.render().el);
+
+			},
+
+			quickbook_import : function() {
+
+				$("#content").html(getTemplate("settings"), {});
+
+				$('#PrefsTab .select').removeClass('select');
+				$('.contact-sync-tab').addClass('select');
+				this.quickbook_import_settings = new Base_Model_View({
+					url : 'core/quickbook/import-settings',
+					template : 'admin-settings-import-quickbook-settings',
+					saveCallback : function(model) {
+
+						showNotyPopUp("information", "Contacts sync initiated",
+								"top", 1000);
+					},
+					postRenderCallback : function() {
+						initializeImportListeners();
+					}
+				});
+
+				$("#prefs-tabs-content").html(
+						this.quickbook_import_settings.render().el);
+
+			},
+
+			xero_import : function() {
+
+				$("#content").html(getTemplate("settings"), {});
+
+				$('#PrefsTab .select').removeClass('select');
+				$('.contact-sync-tab').addClass('select');
+				this.xero_import_settings = new Base_Model_View({
+					url : 'core/xero/import-settings',
+					template : 'admin-settings-import-xero-settings',
+					saveCallback : function(model) {
+
+						showNotyPopUp("information", "Contacts sync initiated",
+								"top", 1000);
+					}
+				});
+
+				$("#prefs-tabs-content").html(
+						this.xero_import_settings.render().el);
+
+			},
+
+			// Reddy code
+			/**
+			 * Manages GooglePlus widget
+			 */
+			GooglePlus : function(id) {
+				if (!id) {
+					show_set_up_widget("GooglePlus", 'googleplus-login',
+							'/scribe?service=googleplus&isForAll=' + isForAll
+									+ '&return_url='
+									+ encodeURIComponent(window.location.href)
+									+ "/googleplus");
+				} else {
+					var widgetDetails = $.parseJSON($.ajax({
+						url : "core/api/widgets/GooglePlus",
+						async : false,
+						dataType : 'json'
+					}).responseText);
+
+					console.clear();
+					console.log("In google Plus widget Router");
+					console.log(widgetDetails);
+
+					if (widgetDetails) {
+						widgetPrefGP = JSON.parse(widgetDetails.prefs);
+						var userData = $
+								.parseJSON($
+										.ajax({
+											url : "https://www.googleapis.com/plus/v1/people/me?access_token="
+													+ widgetPrefGP['access_token'],
+											async : false,
+											dataType : 'json'
+										}).responseText);
+
+						set_up_access(
+								"GooglePlus",
+								'googleplus-login',
+								userData,
+								'/scribe?service=googleplus&return_url='
+										+ encodeURIComponent(window.location.protocol
+												+ "//"
+												+ window.location.host
+												+ "/#GooglePlus/googleplus"));
+
+					} else {
+						show_set_up_widget(
+								"GooglePlus",
+								'googleplus-login',
+								'/scribe?service=googleplus&isForAll='
+										+ isForAll
+										+ '&return_url='
+										+ encodeURIComponent(window.location.href)
+										+ "/googleplus");
+						return;
+					}
+				}
+
+			}// End of Gplus
 		});
 
-function addWidgetProfile(widgetId, widgetName, template, url){
+function addWidgetProfile(widgetId, widgetName, template, url) {
 	loadSettingsUI(function() {
 
 		// Get route model
-		getWidgetModelFromName(widgetId, "", function(model) {
+		getWidgetModelFromName(
+				widgetId,
+				"",
+				function(model) {
 
-		$.getJSON((url + widgetId), function(data){
-				if(data){
-					model["profile"] = data;	
-				}else{
-					model["profile"] = jQuery.parseJSON(model.prefs);
-				}
-				
-				var widget_el = getTemplate("widget-settings", model);
-				$('#prefs-tabs-content').html(widget_el);
-				var widgetProfile = getTemplate(template, model);
-				$('#widget-settings').html(widgetProfile);
-			});
-		});
+					$
+							.getJSON(
+									(url + widgetId),
+									function(data) {
+										var widget_el = getTemplate(
+												"widget-settings", model);
+										$('#prefs-tabs-content')
+												.html(widget_el);
+
+										if (data) {
+											model["profile"] = data;
+										} else {
+											// Loading GooglePlus profile
+											if (widgetName == "GooglePlus") {
+												var widgetPrefGP = JSON
+														.parse(model.prefs);
+												var userData = $
+														.parseJSON($
+																.ajax({
+																	url : "https://www.googleapis.com/plus/v1/people/me?access_token="
+																			+ widgetPrefGP['access_token'],
+																	async : false,
+																	dataType : 'json'
+																}).responseText);
+												model["profile"] = userData;
+												// Loading Stripe profile
+											} else if (widgetName == "Stripe") {
+												$
+														.getJSON(
+																"core/api/custom-fields/type/scope?scope=CONTACT&type=TEXT",
+																function(data) {
+																	model["custom_data"] = data;
+
+																	// App_Widgets.Catalog_Widgets_View.collection.model
+																	var widgetModel = new Widget_Model_Events(
+																			{
+																				template : template,
+																				url : url,
+																				isNew : true,
+																				data : model,
+																				postRenderCallback : function(
+																						el) {
+																					deserializeWidget(
+																							model,
+																							el);
+																				}
+																			});
+
+																	$(
+																			'#widget-settings')
+																			.html(
+																					widgetModel
+																							.render().el);
+																	return;
+																});
+												model["profile"] = jQuery
+														.parseJSON(model.prefs);
+											} else {
+												model["profile"] = jQuery
+														.parseJSON(model.prefs);
+											}
+										}
+
+										// App_Widgets.Catalog_Widgets_View.collection.model
+										var widgetModel = new Widget_Model_Events(
+												{
+													template : template,
+													url : url,
+													isNew : true,
+													data : model,
+													postRenderCallback : function(
+															el) {
+														deserializeWidget(
+																model, el);
+													}
+												});
+
+										$('#widget-settings').html(
+												widgetModel.render().el);
+									});
+				});
 
 	});
 
@@ -302,7 +943,7 @@ function addOAuthWidget(widgetName, template, url) {
 				isNew : true,
 				data : model,
 				postRenderCallback : function(el) {
-			
+
 				}
 			});
 

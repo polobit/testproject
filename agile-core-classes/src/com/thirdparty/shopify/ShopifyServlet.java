@@ -90,7 +90,7 @@ public class ShopifyServlet extends HttpServlet
 	    shopifyWidget.addProperty("token", token);
 	    shopifyWidget.addProperty("shop", shop);
 	    if(temp != null){
-			shopifyWidget.isForAll = Boolean.valueOf(temp);
+			shopifyWidget.isForAll = Boolean.parseBoolean(temp);
 			req.getSession().removeAttribute("isForAll");
 		}
 	    shopifyWidget.save();

@@ -7,71 +7,6 @@ function initializeWidgetUtilListeners(){
 
 $(function(){
 	
-    $('#content').off('click', '#widget-prefs-save');
-	$('#content').on('click', '#widget-prefs-save', function(e)
-	{
-		e.preventDefault();
-
-		if ($(this).attr('disabled') == "disabled")
-			return;
-
-		$(this).attr('disabled', 'disabled');
-
-		// Read from from
-		var form = $(this).parents('form');
-
-		// Gets widget object
-		var data = $(form).data('widget');
-
-		var form_id = $(form).attr('id');
-
-		if (!isValidForm($(form)))
-		{
-			$(this).removeAttr('disabled')
-			return;
-		}
-
-		// Serializes form daa
-		var form_data = serializeForm(form_id);
-
-		try
-		{
-
-			if (data.prefs)
-				data["prefs"] = JSON.parse(data["prefs"]);
-			else
-				data["prefs"] = {};
-
-			console.log(data["prefs"]);
-		}
-		catch (err)
-		{
-		}
-
-		// Update prefs
-		$.each(form_data, function(key, value)
-		{
-			data["prefs"][key] = value;
-		});
-
-		if (data.prefs)
-		{
-			data.prefs = JSON.stringify(data.prefs);
-
-			update_collection_with_prefs(data);
-		}
-
-		var that = this;
-
-		// Save entity
-		saveEntity(data, "core/api/widgets", function(result)
-		{
-			$(form).data('widget', result.toJSON());
-			$(that).removeAttr('disabled');
-			Backbone.history.navigate("add-widget", { trigger : true });
-		})
-	});
-
 });
 
 function update_collection_with_prefs(data)
@@ -440,9 +375,7 @@ function set_up_access(widget_name, template_id, data, url, model)
 	$('.add-widget-prefs-tab').addClass('select');
 
     $('body').off('click', '.revoke-widget');
-	$('body').on('click', '.revoke-widget', function(e)
-	{
-
+	$('body').on('click', '.revoke-widget', function(e){
 		console.log($(this).attr("widget-name"));
 		delete_widget(widget_name);
 		show_set_up_widget(widget_name, template_id, url, model);

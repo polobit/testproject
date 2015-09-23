@@ -14,7 +14,17 @@ var Widget_Model_Events = Base_Model_View.extend({
 
    events : {
    	  "click .save-agile-widget" : "saveWidgetPrefs",
-   	  "click .connect_shopify" : "connectShopify"
+   	  "click .connect_shopify" : "connectShopify",
+   	  "click .revoke-widget" : "revokeWidget"
+   },
+
+   revokeWidget : function(e){
+   		e.preventDefault();
+      	var ele = $(e.currentTarget);
+      	
+   		var widgetName = $(ele).closest("#widget-settings").attr("widget-name");
+   		delete_widget(widgetName);
+   		window.location.href = "#add-widget";
    },
 
    saveWidgetPrefs : function(e){
@@ -56,7 +66,7 @@ var Widget_Model_Events = Base_Model_View.extend({
       var shopName = $('#shop').val();
 		if (shopName != ""){
 			var domain = window.location.origin;
-			window.location = "/scribe?service_type=shopify&url=shopify&shop=" + shopName + "&domain=" + domain + "";
+			window.location = "/scribe?service_type=shopify&url=shopify&isForAll="+isForAll+"&shop=" + shopName + "&domain=" + domain + "";
 		}else{
 			alert("Enter Shop name");
 			$('#shop').focus();
