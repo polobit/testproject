@@ -118,20 +118,25 @@ function connectedCallNoty(message, type)
 					getTemplate("twilioio-voicemail",responseJson, undefined, function(template_ui){
 						if(!template_ui)
 							  return;
-						$('.noty_buttons').prepend($(template_ui));	
-					}, null);
+							
+						$('.noty_buttons').prepend($(template_ui));
 
+						// Add dialpad template in twilio content
+						$('.noty_buttons').prepend(getTemplate("twilioio-dialpad"));
+
+					}, null);
 			});
 		
+		} else {
+
+			// Add dialpad template in twilio content
+			getTemplate("twilioio-dialpad", {}, undefined, function(template_ui){
+				if(!template_ui)
+					  return;
+				$('.noty_buttons').prepend($(template_ui));	
+			}, null);
 		}
 		
-		// Add dialpad template in twilio content
-		getTemplate("twilioio-dialpad", {}, undefined, function(template_ui){
-			if(!template_ui)
-				  return;
-			$('.noty_buttons').prepend($(template_ui));	
-		}, null);
-
 		return;
 	}
 

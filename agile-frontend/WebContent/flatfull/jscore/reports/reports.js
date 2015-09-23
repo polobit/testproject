@@ -217,46 +217,52 @@ function reportsContactTableView(base_model, customDatefields, view)
 	 * itemView.render().el); // ----------- this line fails on Firefox
 	 */
 
-	var modelData = view.options.modelData; // Reads the modelData (customView
-	// object)
-	var fields = modelData['fields_set']; // Reads fields_set from modelData
-	var contact = base_model.toJSON(); // Converts base_model (contact) in to
-	// JSON
-	var final_html_content = "";
-	var element_tag = view.options.individual_tag_name;
-	var templateKey = view.options.templateKey;
+	getTemplate('contacts-custom-view-custom', {}, undefined, function(ui){
 
-	// Iterates through, each field name and appends the field according to
-	// order of the fields
-	$.each(fields, function(index, field_name)
-	{
+			var modelData = view.options.modelData; // Reads the modelData (customView
+			// object)
+			var fields = modelData['fields_set']; // Reads fields_set from modelData
+			var contact = base_model.toJSON(); // Converts base_model (contact) in to
+			// JSON
+			var final_html_content = "";
+			var element_tag = view.options.individual_tag_name;
+			var templateKey = view.options.templateKey;
 
-		if (field_name.indexOf("custom_") != -1)
-		{
-			field_name = field_name.split("custom_")[1];
-			var property = getProperty(contact.properties, field_name);
-			if (!property)
-				property = {};
+			// Iterates through, each field name and appends the field according to
+			// order of the fields
+			$.each(fields, function(index, field_name)
+			{
 
-			if (isDateCustomField(customDatefields, property))
-				final_html_content += getTemplate('contacts-custom-view-custom-date', property);
-			else
-				final_html_content += getTemplate('contacts-custom-view-custom', property);
+				if (field_name.indexOf("custom_") != -1)
+				{
+					field_name = field_name.split("custom_")[1];
+					var property = getProperty(contact.properties, field_name);
+					if (!property)
+						property = {};
 
-			return;
-		}
+					if (isDateCustomField(customDatefields, property))
+						final_html_content += getTemplate('contacts-custom-view-custom-date', property);
+					else
+						final_html_content += getTemplate('contacts-custom-view-custom', property);
 
-		if (field_name.indexOf("properties_") != -1)
-			field_name = field_name.split("properties_")[1];
+					return;
+				}
 
-		final_html_content += getTemplate('contacts-custom-view-' + field_name, contact);
-	});
+				if (field_name.indexOf("properties_") != -1)
+					field_name = field_name.split("properties_")[1];
 
-	// Appends model to model-list template in collection template
-	$(("#" + templateKey + '-model-list'), view.el).append('<' + element_tag + '>' + final_html_content + '</' + element_tag + '>');
+				final_html_content += getTemplate('contacts-custom-view-' + field_name, contact);
+			});
 
-	// Sets data to tr
-	$(('#' + templateKey + '-model-list'), view.el).find('tr:last').data(base_model);
+			// Appends model to model-list template in collection template
+			$(("#" + templateKey + '-model-list'), view.el).append('<' + element_tag + '>' + final_html_content + '</' + element_tag + '>');
+
+			// Sets data to tr
+			$(('#' + templateKey + '-model-list'), view.el).find('tr:last').data(base_model);
+
+
+
+	 }, null);
 
 }
 

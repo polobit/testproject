@@ -3084,7 +3084,7 @@ var portlet_utiity = {
  	}
  	
 
- 	if(selector == "ms-calls-user-list"){
+ 	if(selector == "ms-task-report-user-list"){
 
  		$('#ms-task-report-user-list', elData).remove();
 		head.js(LIB_PATH + 'lib/jquery.multi-select.js', function(){
