@@ -11,7 +11,6 @@ import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Contact.Type;
 import com.agilecrm.contact.filter.ContactFilterResultFetcher;
 import com.thirdparty.google.ContactPrefs.SYNC_TYPE;
-import com.thirdparty.google.contacts.ContactsSynctoGoogle;
 
 /**
  * <code>TwoWaySyncService</code> can be implemented by third party who needs to
@@ -20,7 +19,7 @@ import com.thirdparty.google.contacts.ContactsSynctoGoogle;
  * @author jitendra
  * 
  */
-public abstract class TwoWaySyncService extends ContactSyncService
+public abstract class TwoWaySyncService extends ContactSyncService implements ITwoWaySyncService
 {
     private Long last_synced_to_client = 0l;
 
@@ -70,7 +69,7 @@ public abstract class TwoWaySyncService extends ContactSyncService
 	ContactsSynctoGoogle.updateContacts(prefs);
     }
 
-    private void uploadContactsToClient()
+    public void uploadContactsToClient()
     {
 	uploadNewContactsToClient();
 	uploadUpdatedContactsToClient();

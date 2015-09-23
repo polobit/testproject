@@ -7,7 +7,7 @@ import java.util.List;
 import org.codehaus.jettison.json.JSONArray;
 
 import com.agilecrm.contact.sync.service.OneWaySyncService;
-import com.agilecrm.contact.sync.wrapper.WrapperService;
+import com.agilecrm.contact.sync.wrapper.IContactWrapper;
 import com.agilecrm.contact.sync.wrapper.impl.ZohoContactWrapperImpl;
 import com.thirdparty.zoho.ZohoUtils;
 
@@ -47,7 +47,7 @@ public class ZohoSyncImpl extends OneWaySyncService
      * @see com.agilecrm.contact.sync.service.SyncService#getWrapperService()
      */
     @Override
-    public Class<? extends WrapperService> getWrapperService()
+    public Class<? extends IContactWrapper> getWrapperService()
     {
 	return ZohoContactWrapperImpl.class;
     }
