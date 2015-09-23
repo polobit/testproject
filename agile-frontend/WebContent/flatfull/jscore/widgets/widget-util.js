@@ -639,7 +639,7 @@ function show_set_up_widget(widget_name, template_id, url, model, callback)
 
 						$.getJSON('core/api/widgets/' + widget_name, function(data)
 						{
-							getTemplate("widget-settings", {}, undefined, undefined, function(){
+							getTemplate("widget-settings", {}, undefined, function(ui){
 								hideTransitionBar();
 								show_set_up_widget(widget_name, template_id, url, data, callback);
 							});
