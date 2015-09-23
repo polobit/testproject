@@ -217,7 +217,7 @@ function fill_slate(id, el, key) {
 		else if((route_path == "companies") ){
 
 			template_name = "empty-collection-model";
-			json = CONTENT_JSON[route_path]);
+			json = CONTENT_JSON[route_path];
 			
 		}
 			
