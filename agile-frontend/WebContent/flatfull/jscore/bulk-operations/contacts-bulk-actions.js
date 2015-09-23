@@ -800,7 +800,7 @@ $(function()
 										$(this).parent('.modal-footer').find('.contacts-export-csv-message').append($save_info);
 										$save_info.show();
 
-										var url = '/core/api/bulk/update?action_type=EXPORT_CONTACTS_CSV';
+										var url = '/core/api/contacts/export?action_type=EXPORT_CONTACTS_CSV';
 
 										var json = {};
 										json.contact_ids = id_array;
