@@ -486,8 +486,9 @@ function initializeSubscriptionListeners()
 		{
 			$("#emails_total_cost").html(quantity * 2);
 			$("#email_rate").html("$2");
-			return;
 		}
+		else
+		{
 		if (emails < 100000)
 		{
 			$("#emails_total_cost").html(quantity * 4);
@@ -504,7 +505,7 @@ function initializeSubscriptionListeners()
 			$("#emails_total_cost").html(quantity * 2);
 			$("#email_rate").html("$2");
 		}
-
+		}
 		email_validation($("#email-plan-form"));
 		jQuery.validator.addMethod("email_plan_minimum", function(value, element)
 		{
