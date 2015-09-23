@@ -135,8 +135,16 @@ edit : function(e)
 		return this;
 	}
 
-	$(this.el).html(getTemplate(this.options.template, this.model.toJSON()));
-	$(this.el).data(this.model);
+	var that = this
+	// console.log(this.model.toJSON());
+	getTemplate(that.options.template, that.model.toJSON(), undefined, function(el)
+	{
+		$(that.el).html(el);
+		$(that.el).data(that.model);
+	}, this.el);
+
+	// $(this.el).html(getTemplate(this.options.template, this.model.toJSON()));
+	// $(this.el).data(this.model);
 	// Add model as data to it's corresponding row
 
 	return this;
@@ -461,7 +469,7 @@ var Base_Collection_View = Backbone.View
 				var ui_function = this.buildCollectionUI;
 				// Populate template with collection and view element is created
 				// with content, is used to fill heading of the table
-				getTemplate((this.options.templateKey + '-collection'), this.collection.toJSON(), "yes", ui_function);
+				getTemplate((this.options.templateKey + '-collection'), this.collection.toJSON(), "yes", ui_function, this.el);
 
 				if (this.page_size && (this.collection.length < this.page_size))
 				{

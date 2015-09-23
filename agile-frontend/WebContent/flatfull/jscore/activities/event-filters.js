@@ -181,26 +181,20 @@ function checkBothCalWhenNoCalSelected()
  */
 function putGoogleCalendarLink()
 {
-	var calEnable = false;
-
-	$.ajax({ url : 'core/api/calendar-prefs/get', async : false, success : function(response)
+	$.ajax({ url : 'core/api/calendar-prefs/get', success : function(response)
 	{
 		if (response)
-			calEnable = true;
+		{
+			$("#google_cal").removeClass('hide');
+			$("#google_cal_link").addClass('hide');
+		}
+		else
+		{
+			$("#google_cal").addClass('hide');
+			$("#google_cal_link").removeClass('hide');
+		}
 
 	} });
-
-	if (calEnable)
-	{
-		$("#google_cal").removeClass('hide');
-		$("#google_cal_link").addClass('hide');
-	}
-
-	else
-	{
-		$("#google_cal").addClass('hide');
-		$("#google_cal_link").removeClass('hide');
-	}
 }
 
 function putOfficeCalendarLink()

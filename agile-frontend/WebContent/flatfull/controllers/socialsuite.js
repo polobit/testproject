@@ -30,6 +30,17 @@ var SocialSuiteRouter = Backbone.Router.extend({
 	// Scheduled updates on new page
 	"scheduledmessages" : "scheduledmessages" },
 
+	before : 
+	{	
+		'*any': function(fragment, args, next) {
+			// Gets template to display.
+		getTemplate('socialsuite-show-streams', {}, undefined, function(template_ui){
+			next();
+
+		}, "#content");
+			
+		}
+	},
 	/**
 	 * On click on social tab this function is called, to initialize social
 	 * suite, it will include js files.
@@ -46,13 +57,19 @@ var SocialSuiteRouter = Backbone.Router.extend({
 		$("#socialsuitemenu").addClass("active");
 
 		// Gets template to display.
-		$('#content').html(getTemplate('socialsuite-show-streams'), {});
+		getTemplate('socialsuite-show-streams', {}, undefined, function(template_ui){
+			if(!template_ui)
+				  return;
+			$('#content').html($(template_ui));	
 
-		/* Creates pubnub object and channel dedicated for new user or relogin */
-		initToPubNub();
+			/* Creates pubnub object and channel dedicated for new user or relogin */
+			initToPubNub();
 
-		// Display added streams
-		this.streams();
+			// Display added streams
+			socialsuitecall.streams();
+
+		}, "#content");
+		
 	}, // socialsuite end
 
 	/**
@@ -71,10 +88,15 @@ var SocialSuiteRouter = Backbone.Router.extend({
 			
 			if(tab_content_elements && tab_content_elements.length > 0)
 				console.log("do nothing");
-			else
-				$('#content').html(getTemplate('socialsuite-show-streams'), {});		
+			else{
+				getTemplate('socialsuite-show-streams', {}, undefined, function(template_ui){
+					if(!template_ui)
+						  return;
+					$('#content').html($(template_ui));	
+				}, "#content");
+
+			}	
 		}
-	  
 
 		// Check scheduled updates.
 		checkScheduledUpdates();

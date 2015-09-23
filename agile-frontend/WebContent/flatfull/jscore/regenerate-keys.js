@@ -1,4 +1,9 @@
 function initializeRegenerateKeysListeners() {
+    $(".prettyprint").css({
+            "padding": "0px",
+            "border": "none"
+    });
+
     $("#api_key_code").off('click').on("click", "#api_key_generate_icon", function(e) {
         e.preventDefault();
         regenerate_api_key('core/api/api-key/key');
@@ -9,16 +14,22 @@ function initializeRegenerateKeysListeners() {
     });
 }
 
-function update_admin_settings_api_key_template() {
-    $.ajax({
-        url: 'core/api/api-key',
-        type: 'GET',
-        dataType: 'json',
-        success: function(data) {
-            $("#admin-prefs-tabs-content").html(getTemplate("admin-settings-api-key-model", data));
-            prettify_api_add_events();
-        }
-    })
+function update_admin_settings_api_key_template(){
+	$.ajax({
+		url : 'core/api/api-key',
+		type : 'GET',
+		dataType : 'json', 
+		success : function(data){
+
+			getTemplate("admin-settings-api-key-model", data, undefined, function(template_ui){
+				if(!template_ui)
+					  return;
+
+				$("#admin-prefs-tabs-content").html($(template_ui));
+				 prettify_api_add_events();
+			}, null);
+		}
+	})
 }
 
 function regenerate_api_key(url) {
@@ -35,10 +46,7 @@ function regenerate_api_key(url) {
 
 function prettify_api_add_events() {
     prettyPrint();
-    $(".prettyprint").css({
-        "padding": "0px",
-        "border": "none"
-    });
+
     initializeRegenerateKeysListeners();
     $("#update_allowed_domains").on('click', function(e) {
         e.preventDefault();

@@ -54,9 +54,13 @@ var WidgetsRouter = Backbone.Router
 												 */
 												addWidget : function()
 												{
-																$("#content").html(getTemplate("settings"), {});
+													var that = this;
+													getTemplate('settings', {}, undefined, function(template_ui){
+														if(!template_ui)
+															  return;
+														$('#content').html($(template_ui));	
 
-																this.Catalog_Widgets_View = new Base_Collection_View({ url : '/core/api/widgets/default', restKey : "widget", templateKey : "widgets-add",
+														that.Catalog_Widgets_View = new Base_Collection_View({ url : '/core/api/widgets/default', restKey : "widget", templateKey : "widgets-add",
 																				sort_collection : false, individual_tag_name : 'div', postRenderCallback : function(el)
 																				{
 																								initializeWidgetSettingsListeners();
@@ -75,24 +79,28 @@ var WidgetsRouter = Backbone.Router
 
 																				} });
 
-																
+
+														
 																// Append widgets into view by organizing them
-																this.Catalog_Widgets_View.appendItem = organize_widgets;
+																that.Catalog_Widgets_View.appendItem = organize_widgets;
+																
+																
+															// Fetch the list of widgets
+															that.Catalog_Widgets_View.collection.fetch({
+																success: function(data) {
+																	console.log(data.where({"is_added" : true}));
+																	_plan_restrictions.process_widgets(data);
+																}
+															});
 																console.log(organize_widgets);
 																
-																// Fetch the list of widgets
-																this.Catalog_Widgets_View.collection.fetch({
-																	success: function(data) {
-																		console.log(data.where({"is_added" : true}));
-																		_plan_restrictions.process_widgets(data);
-																	}
-																});
+															// Shows available widgets in the content
+															$('#prefs-tabs-content').html(that.Catalog_Widgets_View.el);
 
-																// Shows available widgets in the content
-																$('#prefs-tabs-content').html(this.Catalog_Widgets_View.el);
+															$('#PrefsTab .select').removeClass('select');
+															$('.add-widget-prefs-tab').addClass('select');
 
-																$('#PrefsTab .select').removeClass('select');
-																$('.add-widget-prefs-tab').addClass('select');
+													}, "#content");
 												},
 
 												/**
@@ -752,276 +760,301 @@ var WidgetsRouter = Backbone.Router
 												 */
 												contactSync : function()
 												{
+													var that = this;
+													getTemplate('settings', {}, undefined, function(template_ui){
+														if(!template_ui)
+															  return;
+														$('#content').html($(template_ui));	
 
-																$("#content").html(getTemplate("settings"), {});
-
-																$('#PrefsTab .select').removeClass('select');
-																$('.contact-sync-tab').addClass('select');
-																// Gets Social Prefs (Same as Linkedin/Twitter) for Gmail
+														$('#PrefsTab .select').removeClass('select');
+														$('.contact-sync-tab').addClass('select');
+														// Gets Social Prefs (Same as Linkedin/Twitter) for Gmail
 
 
-																this.contact_sync_google = new Base_Model_View({ url : 'core/api/contactprefs/google', template : 'admin-settings-import-google-contacts',postRenderCallback: function(el){initializeImportListeners();} });
+														that.contact_sync_google = new Base_Model_View({ url : 'core/api/contactprefs/google', template : 'admin-settings-import-google-contacts',postRenderCallback: function(el){initializeImportListeners();} });
 															
+														// Adds header
+														$('#prefs-tabs-content').html(
+																'<div class="row prefs-datasync"><div class="col-md-12"><h4 class="m-b">Google <small>import Contacts from Google</small></h4><div class="row"><div id="contact-prefs" class="col-md-4 col-sm-6 col-xs-12"></div>'
+																+ '<div id="calendar-prefs" class="col-md-4 col-sm-6 col-xs-12"></div><div id="email-prefs" class="col-md-4 col-sm-6 col-xs-12"></div></div></div></div>'
+																+ '<div class="row prefs-datasync"><div class="col-md-12 no-mg-l"><h4 class="m-b">E-commerce <small>import Contacts from E-commerce</small></h4><div class="row"><div id ="shopify" class="col-md-4 col-sm-6 col-xs-12"></div></div></div></div>'																	
+																+ '<div class="row prefs-datasync"><div class="col-md-12"><h4 class="m-b">Payment <small>import Contacts from payment gateway</small></h4><div class="row"><div id ="stripe" class="col-md-4 col-sm-6 col-xs-12"></div></div></div></div>'
+																+ '<div class="row prefs-datasync"><div class="col-md-12"><h4 class="m-b">Accounting <small>import Contacts from Accounting</small></h4><div class="row"><div id ="freshbook" class="col-md-4 col-sm-6 col-xs-12"></div><div class="col-md-4 col-sm-6 col-xs-12" id ="quickbook"></div></div></div></div>'
+														);
+
+														// Adds Gmail Prefs
+														$('#contact-prefs').append(that.contact_sync_google.render().el);
 																
-																// Adds header
-																$('#prefs-tabs-content').html(
-																		'<div class="row prefs-datasync"><div class="col-md-12"><h4 class="m-b">Google <small>import Contacts from Google</small></h4><div class="row"><div id="contact-prefs" class="col-md-4 col-sm-6 col-xs-12"></div>'
-																		+ '<div id="calendar-prefs" class="col-md-4 col-sm-6 col-xs-12"></div><div id="email-prefs" class="col-md-4 col-sm-6 col-xs-12"></div></div></div></div>'
-																		+ '<div class="row prefs-datasync"><div class="col-md-12 no-mg-l"><h4 class="m-b">E-commerce <small>import Contacts from E-commerce</small></h4><div class="row"><div id ="shopify" class="col-md-4 col-sm-6 col-xs-12"></div></div></div></div>'																	
-																		+ '<div class="row prefs-datasync"><div class="col-md-12"><h4 class="m-b">Payment <small>import Contacts from payment gateway</small></h4><div class="row"><div id ="stripe" class="col-md-4 col-sm-6 col-xs-12"></div></div></div></div>'
-																		+ '<div class="row prefs-datasync"><div class="col-md-12"><h4 class="m-b">Accounting <small>import Contacts from Accounting</small></h4><div class="row"><div id ="freshbook" class="col-md-4 col-sm-6 col-xs-12"></div><div class="col-md-4 col-sm-6 col-xs-12" id ="quickbook"></div></div></div></div>'
-																);
 
-																// Adds Gmail Prefs
-																$('#contact-prefs').append(this.contact_sync_google.render().el);
+														that.calendar_sync_google = new Base_Model_View({ url : 'core/api/calendar-prefs/get', template : 'import-google-calendar',postRenderCallback: function(el){initializeImportListeners();} });
 																
 																
-																this.calendar_sync_google = new Base_Model_View({ url : 'core/api/calendar-prefs/get', template : 'import-google-calendar',postRenderCallback: function(el){initializeImportListeners();} });
+														// console.log(getTemplate("import-google-contacts", {}));
+														$('#calendar-prefs').append(that.calendar_sync_google.render().el);
 
-																// console.log(getTemplate("import-google-contacts", {}));
-																$('#calendar-prefs').append(this.calendar_sync_google.render().el);
+														/* Add E-commerce Prefs template */
+														that.shopify_sync = new Base_Model_View({ url : 'core/api/shopify/import-settings',
+																		template : 'admin-settings-import-shopify-contact-syncPrefs',postRenderCallback: function(el){initializeImportListeners();} });
+														$('#shopify').append(that.shopify_sync.render().el);
+														
+														that.freshbooks_sync = new Base_Model_View({url:'core/api/freshbooks/import-settings',template:'admin-settings-import-freshbooks-contacts-syncPrefs',postRenderCallback: function(el){initializeImportListeners();}});
+														$('#freshbook').append(that.freshbooks_sync.render().el);
+														// adding zoho crm contact sync template preferences
+														that.zoho_sync = new Base_Model_View({ url : 'core/api/zoho/import-settings', template : 'admin-settings-import-zoho-contact-sync' ,postRenderCallback: function(el){initializeImportListeners();}});
+														$('#zoho').append(that.zoho_sync.render().el);
+														// model for quickbook import
+														that.quickbook_sync = new Base_Model_View({ url : 'core/quickbook/import-settings', template : 'admin-settings-import-quickbook',postRenderCallback: function(el){initializeImportListeners();} });
+														$('#quickbook').append(that.quickbook_sync.render().el);
 
-																/* Add E-commerce Prefs template */
-																this.shopify_sync = new Base_Model_View({ url : 'core/api/shopify/import-settings',
-																				template : 'admin-settings-import-shopify-contact-syncPrefs',postRenderCallback: function(el){initializeImportListeners();} });
-																$('#shopify').append(this.shopify_sync.render().el);
-																
-																this.freshbooks_sync = new Base_Model_View({url:'core/api/freshbooks/import-settings',template:'admin-settings-import-freshbooks-contacts-syncPrefs',postRenderCallback: function(el){initializeImportListeners();}});
-																$('#freshbook').append(this.freshbooks_sync.render().el);
-																/* salesforce import template */
-																// this.salesforce = new
-																// Base_Model_View({url:'core/api/salesforce/get-prefs',template:'admin-settings-salesforce-contact-sync'});
-																// $('#force').append(this.salesforce.render().el);
-																/* salesforce import template */
-																// this.salesforce = new
-																// Base_Model_View({url:'core/api/salesforce/get-prefs',template:'admin-settings-salesforce-contact-sync'});
-																// $('#force').append(this.salesforce.render().el);
-																// adding zoho crm contact sync template preferences
-																this.zoho_sync = new Base_Model_View({ url : 'core/api/zoho/import-settings', template : 'admin-settings-import-zoho-contact-sync' ,postRenderCallback: function(el){initializeImportListeners();}});
-																$('#zoho').append(this.zoho_sync.render().el);
-																// model for quickbook import
-																this.quickbook_sync = new Base_Model_View({ url : 'core/quickbook/import-settings', template : 'admin-settings-import-quickbook',postRenderCallback: function(el){initializeImportListeners();} });
-																$('#quickbook').append(this.quickbook_sync.render().el);
+														// model for xero import
+														that.xero_sync = new Base_Model_View({ url : 'core/xero/import-settings', template : 'admin-settings-import-xeroSync',postRenderCallback: function(el){initializeImportListeners();} });
+														$('#xero').append(that.xero_sync.render().el);
 
-																// model for xero import
-																this.xero_sync = new Base_Model_View({ url : 'core/xero/import-settings', template : 'admin-settings-import-xeroSync',postRenderCallback: function(el){initializeImportListeners();} });
-																$('#xero').append(this.xero_sync.render().el);
+														/*
+														 * Add stripe payment gateway contact sync template preferences
+														 */
+														that.stripe_sync = new Base_Model_View({ url : 'core/api/stripe/import-settings', template : 'admin-settings-import-stripe-contact-sync' ,postRenderCallback: function(el){initializeImportListeners();}});
 
-																/*
-																 * Add stripe payment gateway contact sync template preferences
-																 */
-																this.stripe_sync = new Base_Model_View({ url : 'core/api/stripe/import-settings', template : 'admin-settings-import-stripe-contact-sync' ,postRenderCallback: function(el){initializeImportListeners();}});
+														$('#stripe').append(that.stripe_sync.render().el);
 
-																$('#stripe').append(this.stripe_sync.render().el);
+														var data = { "service" : "Gmail", "return_url" : encodeURIComponent(window.location.href) };
+														var itemView = new Base_Model_View({ url : '/core/api/social-prefs/GMAIL', template : "settings-social-prefs", data : data,postRenderCallback: function(el){initializeImportListeners();} });
+														itemView.model.fetch();
 
-																var data = { "service" : "Gmail", "return_url" : encodeURIComponent(window.location.href) };
-																var itemView = new Base_Model_View({ url : '/core/api/social-prefs/GMAIL', template : "settings-social-prefs", data : data,postRenderCallback: function(el){initializeImportListeners();} });
-																itemView.model.fetch();
+														// Adds Gmail Prefs
+														$('#email-prefs').html(itemView.render().el);
 
-																// Adds Gmail Prefs
-																$('#email-prefs').html(itemView.render().el);
-
-																// Gets IMAP Prefs
-																/*
-																 * var itemView2 = new Base_Model_View({ url : '/core/api/imap',
-																 * template : "settings-imap-prefs" }); // Appends IMAP
-																 * $('#prefs-tabs-content').append(itemView2.render().el);
-																 * $('#PrefsTab .select').removeClass('select');
-																 * $('.email-tab').addClass('select');
-																 */
+													}, "#content");
 												},
 
 												google_apps_contacts : function()
 												{
+														var that = this;
+														getTemplate('settings', {}, undefined, function(template_ui){
+															if(!template_ui)
+																  return;
+															$('#content').html($(template_ui));	
 
-																$("#content").html(getTemplate("settings"), {});
+															$('#PrefsTab .select').removeClass('select');
+															$('.contact-sync-tab').addClass('select');
 
-																$('#PrefsTab .select').removeClass('select');
-																$('.contact-sync-tab').addClass('select');
+															var options = { url : "core/api/contactprefs/GOOGLE", template : "admin-settings-import-google-contacts-setup",
+																			postRenderCallback : function(el)
+																			{
+																				            
+																							initializeWidgetSettingsListeners();
+																							initializeImportListeners();
+																							// App_Settings.setup_google_contacts.model =
+																							// App_Settings.contact_sync_google.model;
+																			} };
 
-																var options = { url : "core/api/contactprefs/GOOGLE", template : "admin-settings-import-google-contacts-setup",
-																				postRenderCallback : function(el)
-																				{
-																													
-																								initializeWidgetSettingsListeners();
-																								initializeImportListeners();
-																								console.log(el);
-																								// App_Settings.setup_google_contacts.model =
-																								// App_Settings.contact_sync_google.model;
-																				} };
-
-																var fetch_prefs = true;
-																if (this.contact_sync_google && this.contact_sync_google.model)
+															var fetch_prefs = true;
+																if (that.contact_sync_google && that.contact_sync_google.model)
 																{
-																				options["model"] = this.contact_sync_google.model;
+																				options["model"] = that.contact_sync_google.model;
 																				fetch_prefs = false;
 																}
 																else
 																{
-																				this.contact_sync_google = new Base_Model_View({ url : 'core/api/contactprefs/google', template : 'import-google-contacts', });
+																				that.contact_sync_google = new Base_Model_View({ url : 'core/api/contactprefs/google', template : 'import-google-contacts', });
 																}
 
-																this.setup_google_contacts = new Base_Model_View(options);
+																that.setup_google_contacts = new Base_Model_View(options);
 
 																if (fetch_prefs)
 																{
-																				$("#prefs-tabs-content").html(this.setup_google_contacts.render().el);
+																				$("#prefs-tabs-content").html(that.setup_google_contacts.render().el);
 																				return;
 																}
-																$("#prefs-tabs-content").html(this.setup_google_contacts.render(true).el);
+																$("#prefs-tabs-content").html(that.setup_google_contacts.render(true).el);
+												
+
+														}, "#content");
+																
 												},
 
 												google_apps_calendar : function()
 												{
-																$("#content").html(getTemplate("settings"), {});
+													var that = this;
+													getTemplate('settings', {}, undefined, function(template_ui){
+														if(!template_ui)
+															  return;
+														$('#content').html($(template_ui));	
+														$('#PrefsTab .select').removeClass('select');
+														$('.contact-sync-tab').addClass('select');
 
-																$('#PrefsTab .select').removeClass('select');
-																$('.contact-sync-tab').addClass('select');
+														var options = {
 
-																var options = {
+														url : "core/api/calendar-prefs/get", template : "import-google-calendar-setup" };
 
-																url : "core/api/calendar-prefs/get", template : "import-google-calendar-setup" };
+														var fetch_prefs = true;
+														if (that.calendar_sync_google && that.calendar_sync_google.model)
+														{
+																		options["model"] = that.calendar_sync_google.model;
+																		fetch_prefs = false;
+														}
 
-																var fetch_prefs = true;
-																if (this.calendar_sync_google && this.calendar_sync_google.model)
-																{
-																				options["model"] = this.calendar_sync_google.model;
-																				fetch_prefs = false;
-																}
+														that.setup_google_calendar = new Base_Model_View(options);
 
-																this.setup_google_calendar = new Base_Model_View(options);
+														if (fetch_prefs)
+														{
+																		$("#prefs-tabs-content").html(that.setup_google_calendar.render().el);
+																		return;
+														}
+														$("#prefs-tabs-content").html(that.setup_google_calendar.render(true).el);
 
-																if (fetch_prefs)
-																{
-																				$("#prefs-tabs-content").html(this.setup_google_calendar.render().el);
-																				return;
-																}
-																$("#prefs-tabs-content").html(this.setup_google_calendar.render(true).el);
+													}, "#content");
 												},																				
+												
 
 												stripe_sync : function()
 												{
+													var that = this;
+													getTemplate('settings', {}, undefined, function(template_ui){
+														if(!template_ui)
+															  return;
+														$('#content').html($(template_ui));	
 
-																$("#content").html(getTemplate("settings"), {});
+														$('#PrefsTab .select').removeClass('select');
+														$('.contact-sync-tab').addClass('select');
 
-																$('#PrefsTab .select').removeClass('select');
-																$('.contact-sync-tab').addClass('select');
+														that.stripe_sync_setting = new Base_Model_View({ url : 'core/api/stripe/import-settings',
+																		template : 'admin-settings-import-stripe-contact-sync-prefs', saveCallback : function(model)
+																		{
+																						showNotyPopUp("information", "Contacts sync initiated", "top", 1000);
+																		} });
 
-																this.stripe_sync_setting = new Base_Model_View({ url : 'core/api/stripe/import-settings',
-																				template : 'admin-settings-import-stripe-contact-sync-prefs', saveCallback : function(model)
-																				{
-																								showNotyPopUp("information", "Contacts sync initiated", "top", 1000);
-																				} });
+														$("#prefs-tabs-content").html(that.stripe_sync_setting.render().el);
 
-																$("#prefs-tabs-content").html(this.stripe_sync_setting.render().el);
+													}, "#content");
+	
 												},
 
 												shopify : function()
 												{
+													var that = this;
+													getTemplate('settings', {}, undefined, function(template_ui){
+														if(!template_ui)
+															  return;
+														$('#content').html($(template_ui));
+														$('#PrefsTab .select').removeClass('select');
+														$('.contact-sync-tab').addClass('select');
 
-																$("#content").html(getTemplate("settings"), {});
+														that.shopify_sync_setting = new Base_Model_View({ url : 'core/api/shopify/import-settings', template : 'admin-settings-import-shopify-prefs',
+																		saveCallback : function(model)
+																		{
 
-																$('#PrefsTab .select').removeClass('select');
-																$('.contact-sync-tab').addClass('select');
+																						showNotyPopUp("information", "Contacts sync initiated", "top", 1000);
+																		} });
 
-																this.shopify_sync_setting = new Base_Model_View({ url : 'core/api/shopify/import-settings', template : 'admin-settings-import-shopify-prefs',
-																				saveCallback : function(model)
-																				{
-
-																								showNotyPopUp("information", "Contacts sync initiated", "top", 1000);
-																				} });
-
-																$("#prefs-tabs-content").html(this.shopify_sync_setting.render().el);
+														$("#prefs-tabs-content").html(that.shopify_sync_setting.render().el);	
+													}, "#content");			
 												},
 												
 												freshbooks_sync : function()
 												{
+													var that = this;
+													getTemplate('settings', {}, undefined, function(template_ui){
+														if(!template_ui)
+															  return;
+														$('#content').html($(template_ui));
 
-																$("#content").html(getTemplate("settings"), {});
+														$('#PrefsTab .select').removeClass('select');
+														$('.contact-sync-tab').addClass('select');
 
-																$('#PrefsTab .select').removeClass('select');
-																$('.contact-sync-tab').addClass('select');
+														that.freshbooks_sync_setting = new Base_Model_View({ url : 'core/api/freshbooks/import-settings', template : 'admin-settings-import-freshbooks-contacts-form',
+																		saveCallback : function(model)
+																		{
 
-																this.freshbooks_sync_setting = new Base_Model_View({ url : 'core/api/freshbooks/import-settings', template : 'admin-settings-import-freshbooks-contacts-form',
-																				saveCallback : function(model)
-																				{
+																						showNotyPopUp("information", "Contacts sync initiated", "top", 1000);
+																		} });
 
-																								showNotyPopUp("information", "Contacts sync initiated", "top", 1000);
-																				} });
-
-																$("#prefs-tabs-content").html(this.freshbooks_sync_setting.render().el);
+														$("#prefs-tabs-content").html(that.freshbooks_sync_setting.render().el);	
+													}, "#content");	
 												},
 												
 												freshbooks_sync_setting:function(){
-																$("#content").html(getTemplate("settings"), {});
+													var that = this;
+													getTemplate('settings', {}, undefined, function(template_ui){
+														if(!template_ui)
+															  return;
+														$('#content').html($(template_ui));	
+														$('#PrefsTab .select').removeClass('select');
+														$('.contact-sync-tab').addClass('select');
+														that.freshbooks_import_settings = new Base_Model_View({ url : 'core/api/freshbooks/import-settings', template : 'admin-settings-import-freshbooks-settings',
+															            postRenderCallback: function(el){initializeImportListeners();},
+																		saveCallback : function(model)
+																		{
 
-																$('#PrefsTab .select').removeClass('select');
-																$('.contact-sync-tab').addClass('select');
-																this.freshbooks_import_settings = new Base_Model_View({ url : 'core/api/freshbooks/import-settings', template : 'admin-settings-import-freshbooks-settings',
-																				postRenderCallback: function(el){initializeImportListeners();},
-																				saveCallback : function(model)
-																				{
+																						showNotyPopUp("information", "Contacts sync initiated", "top", 1000);
+																		} });
 
-																								showNotyPopUp("information", "Contacts sync initiated", "top", 1000);
-																				} });
+														$("#prefs-tabs-content").html(that.freshbooks_import_settings.render().el);			
 
-																$("#prefs-tabs-content").html(this.freshbooks_import_settings.render().el);			
+													}, "#content");
 												},
 
 												zoho_sync : function()
 												{
+													var that = this;
+													getTemplate('settings', {}, undefined, function(template_ui){
+														if(!template_ui)
+															  return;
+														$('#content').html($(template_ui));	
+														$('#PrefsTab .select').removeClass('select');
+														$('.contact-sync-tab').addClass('select');
 
-																$("#content").html(getTemplate("settings"), {});
+														that.zoho_sync_settings = new Base_Model_View({ url : 'core/api/zoho/import-settings', template : 'admin-settings-import-zoho-prefs',
+																		saveCallback : function(model)
+																		{
+																						showNotyPopUp("information", "Contacts sync initiated", "top", 1000);
+																		} });
 
-																$('#PrefsTab .select').removeClass('select');
-																$('.contact-sync-tab').addClass('select');
-
-																this.zoho_sync_settings = new Base_Model_View({ url : 'core/api/zoho/import-settings', template : 'admin-settings-import-zoho-prefs',
-																				saveCallback : function(model)
-																				{
-																								showNotyPopUp("information", "Contacts sync initiated", "top", 1000);
-																				} });
-
-																$("#prefs-tabs-content").html(this.zoho_sync_settings.render().el);
-
+														$("#prefs-tabs-content").html(that.zoho_sync_settings.render().el);
+													}, "#content");
 												},
 
 												quickbook_import : function()
 												{
+													var that = this;
+													getTemplate('settings', {}, undefined, function(template_ui){
+														if(!template_ui)
+															  return;
+														$('#content').html($(template_ui));	
+														$('#PrefsTab .select').removeClass('select');
+														$('.contact-sync-tab').addClass('select');
+														that.quickbook_import_settings = new Base_Model_View({ url : 'core/quickbook/import-settings',
+																		template : 'admin-settings-import-quickbook-settings', saveCallback : function(model)
+																		{
+																					showNotyPopUp("information", "Contacts sync initiated", "top", 1000);
+																		}, postRenderCallback: function(){
+																					initializeImportListeners();
+																				}
+																                });																
+														$("#prefs-tabs-content").html(that.quickbook_import_settings.render().el);
 
-																$("#content").html(getTemplate("settings"), {});
-
-																$('#PrefsTab .select').removeClass('select');
-																$('.contact-sync-tab').addClass('select');
-																this.quickbook_import_settings = new Base_Model_View({ url : 'core/quickbook/import-settings',
-																				template : 'admin-settings-import-quickbook-settings', saveCallback : function(model)
-																				{
-
-																								showNotyPopUp("information", "Contacts sync initiated", "top", 1000);
-																				},postRenderCallback: function(){
-																                     initializeImportListeners();
-															                    }});
-
-																$("#prefs-tabs-content").html(this.quickbook_import_settings.render().el);
-
+													}, "#content");
 												},
 
 												xero_import : function()
 												{
+													var that = this;
+													getTemplate('settings', {}, undefined, function(template_ui){
+														if(!template_ui)
+															  return;
+														$('#content').html($(template_ui));	
 
-																$("#content").html(getTemplate("settings"), {});
+														$('#PrefsTab .select').removeClass('select');
+														$('.contact-sync-tab').addClass('select');
+														that.xero_import_settings = new Base_Model_View({ url : 'core/xero/import-settings', template : 'admin-settings-import-xero-settings',
+																		saveCallback : function(model)
+																		{
 
-																$('#PrefsTab .select').removeClass('select');
-																$('.contact-sync-tab').addClass('select');
-																this.xero_import_settings = new Base_Model_View({ url : 'core/xero/import-settings', template : 'admin-settings-import-xero-settings',
-																				saveCallback : function(model)
-																				{
+																						showNotyPopUp("information", "Contacts sync initiated", "top", 1000);
+																		} });
 
-																								showNotyPopUp("information", "Contacts sync initiated", "top", 1000);
-																				} });
-
-																$("#prefs-tabs-content").html(this.xero_import_settings.render().el);
-
+														$("#prefs-tabs-content").html(that.xero_import_settings.render().el);
+													}, "#content");
 												},
 												
 												//Reddy code
@@ -1033,40 +1066,38 @@ var WidgetsRouter = Backbone.Router
 												        show_set_up_widget("GooglePlus", 'googleplus-login',
 												            '/scribe?service=googleplus&isForAll='+isForAll+'&return_url=' + encodeURIComponent(window.location.href) + "/googleplus");
 												    } else {												    
-												    	var widgetDetails = $.parseJSON(
-											    		        $.ajax({
-											    		            url: "core/api/widgets/GooglePlus", 
-											    		            async: false,
-											    		            dataType: 'json'
-											    		        }).responseText
-											    		    );
-												    	
-												    	console.clear();
-												    	console.log("In google Plus widget Router");
-											    		console.log(widgetDetails);												    		
-											    		
-											    		if (widgetDetails) {
-								                        	 widgetPrefGP = JSON.parse(widgetDetails.prefs);								                        	 
-								                        	var userData = $.parseJSON(
-												    		        $.ajax({
-												    		            url: "https://www.googleapis.com/plus/v1/people/me?access_token="+ widgetPrefGP['access_token'], 
-												    		            async: false,
-												    		            dataType: 'json'
-												    		        }).responseText
-												    		    );
-								                        	
-								                        	set_up_access(
+												    	var widgetDetails = "";
+
+												    	accessUrlUsingAjax("core/api/widgets/GooglePlus", function(resp){
+												    		    widgetDetails = resp;
+
+												    		    console.clear();
+												    			console.log("In google Plus widget Router");
+											    				console.log(widgetDetails);	
+
+									    		            	if(!widgetDetails)
+									    		            	{
+									    		            		 show_set_up_widget("GooglePlus", 'googleplus-login',
+								                            		'/scribe?service=googleplus&return_url=' + encodeURIComponent(window.location.href) + "/googleplus");												                            
+								                            		return;
+									    		            	}
+
+									    		            	widgetPrefGP = JSON.parse(widgetDetails.prefs);
+								                        		
+								                        		accessUrlUsingAjax("https://www.googleapis.com/plus/v1/people/me?access_token="+ widgetPrefGP['access_token'], function(resp1){
+
+								                        			var userData = resp1;
+								                        			set_up_access(
 										                            "GooglePlus",
 										                            'googleplus-login',
 										                            userData,
 										                            '/scribe?service=googleplus&return_url=' + encodeURIComponent(window.location.protocol + "//" + window.location.host + "/#GooglePlus/googleplus"));
-								                        	
-								                        	
-								                        } else {								                        	
-								                            show_set_up_widget("GooglePlus", 'googleplus-login',
-								                            		'/scribe?service=googleplus&isForAll='+isForAll+'&return_url=' + encodeURIComponent(window.location.href) + "/googleplus");												                            
-								                            return;
-								                        }
+
+
+
+								                        		});
+												    	});
+												    	
 												    }
 
 												},//End of Gplus

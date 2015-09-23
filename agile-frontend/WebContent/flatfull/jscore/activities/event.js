@@ -221,22 +221,24 @@ function initializeEventListners(el)
 {
 
 
-$("#ical_appointment_links").on('click', '#subscribe-ical', function(event)
+/*$("#ical_appointment_links").on('click', '#subscribe-ical', function(event)
 {
 	event.preventDefault();
 	set_api_key();
-});
+});*/
 
 
 /**
  * When Send Mail is clicked from Ical Modal, it hides the ical modal and shows
  * the ical-send email modal.
  */
+$("#icalModal").off('click');
 $("#icalModal").on('click', '#send-ical-email', function(event)
 {
 	event.preventDefault();
 
 	$("#icalModal").modal('hide');
+
 
 	// Removes previous modals if exist.
 	if ($('#share-ical-by-email').size() != 0)
@@ -256,18 +258,20 @@ $("#icalModal").on('click', '#send-ical-email', function(event)
 		var icalURL = $('#icalModal').find('#ical-feed').text();
 		model.ical_url = icalURL;
 
-		var emailModal = $(getTemplate("share-ical-by-email", model));
+		getTemplate("share-ical-by-email", model, undefined, function(template_ui){
+			if(!template_ui)
+				  return;
+			
+			var emailModal = $(template_ui);
+			var description = $(emailModal).find('textarea').val();
+			description = description.replace(/<br\/>/g, "\r\n");
+			$(emailModal).find('textarea').val(description);
+			emailModal.modal('show');
 
-		var description = $(emailModal).find('textarea').val();
+			// Send ical info email
+			send_ical_info_email(emailModal);
+		}, null);
 
-		description = description.replace(/<br\/>/g, "\r\n");
-
-		$(emailModal).find('textarea').val(description);
-
-		emailModal.modal('show');
-
-		// Send ical info email
-		send_ical_info_email(emailModal);
 	} });
 });
 

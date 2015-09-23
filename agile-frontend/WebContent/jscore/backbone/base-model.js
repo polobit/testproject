@@ -533,6 +533,7 @@ var Base_Model_View = Backbone.View
 				 * is called by sending el(current view html element) as
 				 * parameters
 				 */
+				
 				if (callback && typeof (callback) === "function") {
 					// execute the callback, passing parameters as necessary
 					callback($(this.el),this.model.toJSON());
