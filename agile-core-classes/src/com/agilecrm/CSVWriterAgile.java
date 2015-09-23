@@ -12,6 +12,7 @@ import java.util.List;
 import au.com.bytecode.opencsv.CSVWriter;
 
 import com.agilecrm.export.gcs.GCSServiceAgile;
+import com.agilecrm.util.VersioningUtil;
 import com.google.agile.repackaged.appengine.tools.cloudstorage.GcsFileOptions;
 import com.google.appengine.api.NamespaceManager;
 
@@ -48,7 +49,11 @@ public class CSVWriterAgile
 	GcsFileOptions options = new GcsFileOptions.Builder().mimeType("text/csv").contentEncoding("UTF-8")
 		.acl("public-read").addUserMetadata("domain", NamespaceManager.get()).build();
 
-	GCSServiceAgile service = new GCSServiceAgile(fileName, "agile-exports", options);
+	String buckName = "agile-exports";
+	if (!VersioningUtil.isProductionAPP())
+	    buckName = "agile-export";
+
+	GCSServiceAgile service = new GCSServiceAgile(fileName, buckName, options);
 
 	Writer writer = service.getOutputWriter();
 
