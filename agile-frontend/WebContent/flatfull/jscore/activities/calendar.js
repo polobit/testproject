@@ -238,6 +238,7 @@ function showCalendar(users)
 									
 									$.getJSON(eventsURL, function(doc)
 									{
+										try{
 										$.each(doc, function(index, data)
 										{
 											// decides the color of event based
@@ -251,6 +252,10 @@ function showCalendar(users)
 
 											callback(doc);
 
+										}
+										}
+										catch(err){
+												$("#loading_calendar_events").hide();
 										}
 									});
 								} }, { dataType : 'agile-gcal' }
