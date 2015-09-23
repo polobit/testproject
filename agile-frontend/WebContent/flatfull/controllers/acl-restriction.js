@@ -5,6 +5,12 @@ var ACLRestriction = Backbone.Router.extend({
 		"not-allowed" : "notAllowed",
 		},	
 		notAllowed : function(obj){
-			$('#content').html(getTemplate("not-allowed", obj));
+
+			getTemplate('not-allowed', obj, undefined, function(template_ui){
+				if(!template_ui)
+					  return;
+				$('#content').html($(template_ui));	
+			}, "#content");
+
 		}
 });

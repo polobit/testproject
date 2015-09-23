@@ -17,9 +17,16 @@ taskDetailView : function(id)
 		{
 			var task = App_Calendar.allTasksListView.collection.get(id);
 			taskDetailView = task;
-			$("#content").html(getTemplate("task-detail", task.toJSON()));
-			initializeTaskDetailListeners();
-			task_details_tab.loadActivitiesView();
+			getTemplate("task-detail", task.toJSON(), undefined, function(template_ui){
+				if(!template_ui)
+					  return;
+				$('#content').html($(template_ui));	
+
+				initializeTaskDetailListeners();
+				task_details_tab.loadActivitiesView();
+
+			}, "#content");
+			
 
 		}
 		else if (App_Calendar.tasksListView)
@@ -28,9 +35,14 @@ taskDetailView : function(id)
 			if (task)
 			{
 				taskDetailView = task;
-				$("#content").html(getTemplate("task-detail", task.toJSON()));
-				initializeTaskDetailListeners();
-				task_details_tab.loadActivitiesView();
+				getTemplate("task-detail", task.toJSON(), undefined, function(template_ui){
+					if(!template_ui)
+						  return;
+					$('#content').html($(template_ui));	
+
+					initializeTaskDetailListeners();
+					task_details_tab.loadActivitiesView();
+				}, "#content");
 			}
 			else
 			{
@@ -38,9 +50,14 @@ taskDetailView : function(id)
 				$.ajax({ url : "core/api/tasks/getTaskObject/" + id, success : function(response)
 				{
 					taskDetailView = new taskModel(response);
-					$("#content").html(getTemplate("task-detail", taskDetailView.toJSON()));
-					initializeTaskDetailListeners();
-					task_details_tab.loadActivitiesView();
+					getTemplate("task-detail", taskDetailView.toJSON(), undefined, function(template_ui){
+						if(!template_ui)
+							  return;
+						$('#content').html($(template_ui));	
+
+						initializeTaskDetailListeners();
+						task_details_tab.loadActivitiesView();
+					}, "#content");					
 				} });
 			}
 		}
@@ -50,9 +67,15 @@ taskDetailView : function(id)
 			$.ajax({ url : "core/api/tasks/getTaskObject/" + id, success : function(response)
 			{
 				taskDetailView = new taskModel(response);
-				$("#content").html(getTemplate("task-detail", taskDetailView.toJSON()));
-				initializeTaskDetailListeners();
-				task_details_tab.loadActivitiesView();
+
+				getTemplate("task-detail", taskDetailView.toJSON(), undefined, function(template_ui){
+					if(!template_ui)
+						  return;
+					$('#content').html($(template_ui));	
+
+					initializeTaskDetailListeners();
+					task_details_tab.loadActivitiesView();
+				}, "#content");				
 			} });
 
 		}
@@ -238,11 +261,14 @@ function initializeTaskDetailListeners(){
 		$.ajax({ url : 'core/api/tasks/' + id, type : 'DELETE', success : function(response)
 		{
 			document.location.href = document.location.origin + "#/tasks";
-			var due_task_count = getDueTasksCount();
-			if(due_task_count !=0)
-				$('#due_tasks_count').html(due_task_count);
-			else
-				$('#due_tasks_count').html("");
+			getDueTasksCount(function(count){
+				var due_task_count = count;
+				if(due_task_count !=0)
+					$('#due_tasks_count').html(due_task_count);
+				else
+					$('#due_tasks_count').html("");
+			});
+			
 		} })
 	});
 
@@ -488,6 +514,9 @@ function saveTaskNote(form, noteModal, element, note)
 
 					notesView.collection.add(new BaseModel(note), { sort : false });
 					notesView.collection.sort();
+					taskDetailView = data;
+					
+
 				} });
 
 			}

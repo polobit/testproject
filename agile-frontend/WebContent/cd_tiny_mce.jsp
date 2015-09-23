@@ -143,11 +143,11 @@ function showError(message)
 }
 
 // Gets MergeFields
-function getMergeFields()
+/*function getMergeFields()
 {
 	// get merge fields
     return window.opener.getMergeFields('send_email');
-}
+}*/
 
 /**
  * Sets merge fields in Editor as menu button and adds click event
@@ -246,7 +246,7 @@ try{
 	{
 		
 	// Gets MergeFields and append them to select option.
-	MERGE_FIELDS = getMergeFields();
+	MERGE_FIELDS = window.opener.getMergeFields();
 	
 	}
 	catch(err){
@@ -299,12 +299,7 @@ function validateInput()
 	return true;
 }
 
-/**
- * Initialize the tinymce editor 
- **/
-function init_tinymce()
-{
-	
+function initialize_tinymce_editor(){
 	// Hide message and show textarea
 	$('#loading-msg').hide();
 	$('textarea#content').show();
@@ -373,6 +368,23 @@ function init_tinymce()
         }
         
     });
+}
+
+/**
+ * Initialize the tinymce editor 
+ **/
+function init_tinymce()
+{
+	
+	if(!MERGE_FIELDS || !Object.keys(MERGE_FIELDS).length){
+		window.opener.getMergeFields('send_email', function(fields){
+			MERGE_FIELDS =  fields;
+			initialize_tinymce_editor();
+		});
+	} else {
+		initialize_tinymce_editor();
+	}
+	
 }
 
 function should_warn(content)
