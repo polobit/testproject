@@ -79,11 +79,11 @@ AGILE_LP_OPTIONS['templateId'] = "";
 
                         <div class="nav-item" data-name="elements"><i class="icon icon-puzzle-outline"></i> <span>{{ 'elements' | translate }}</span></div>
                         <div class="nav-item" data-name="inspector"><i class="icon icon-brush-1"></i> <span>{{ 'inspector' | translate }}</span></div>
-                        <div class="nav-item" data-name="pages"><i class="icon icon-docs"></i> <span>{{ 'Page Info' | translate }}</span></div>
+                        <div class="nav-item hidden" data-name="pages"><i class="icon icon-docs"></i> <span>{{ 'Page Info' | translate }}</span></div>
                         <div class="nav-item hidden" data-name="settings"><i class="icon icon-cog-outline"></i> <span>{{ 'settings' | translate }}</span></div>
                         <div class="nav-item" ng-click="toggleCodeEditor()" ng-class="{ active: codeEditors.currentlyOpen }" not-selectable><i class="icon icon-code"></i> <span>{{ 'codeEditor' | translate }}</span></div>
 
-                        <div class="push-bottom">
+                        <div class="push-bottom hidden">
                             <button class="nav-item" ng-click="undo()" ng-disabled="!undoManager.canUndo" not-selectable><i class="icon icon-reply"></i> <span>{{ 'undo' | translate }}</span></button>
                             <button class="nav-item" ng-click="redo()" ng-disabled="!undoManager.canRedo" not-selectable><i class="icon icon-forward"></i> <span>{{ 'redo' | translate }}</span></button>
                         </div>
