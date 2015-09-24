@@ -637,7 +637,7 @@ users.
 ">
 <div class="controls text-center">
 <div class="input-group">
-              <input type="text" class="input input-small number email_plan_minimum required form-control text-center m-b-none" style="/* margin: 0px auto 10px; */width: 100%;" id="email-quantity" name="quantity" placeholder="Emails" maxlength="12">
+              <input type="text" class="input input-small number email_plan_minimum number_input required form-control text-center m-b-none" style="/* margin: 0px auto 10px; */width: 100%;" id="email-quantity" name="quantity" placeholder="Emails" maxlength="12">
               <span class="input-group-addon" style="
 ">*1000</span>
             </div>
@@ -657,7 +657,7 @@ users.
 </script>
 
 <script id="latest-invoice-template" type="text/html">
-{{#if_greater amount 0}}
+{{#if_greater lines.data.[0].amount 0}}
 Plan: {{lines.data.[0].plan.name}}<br>
 {{else}}
 Plan: {{lines.data.[1].plan.name}}<br>

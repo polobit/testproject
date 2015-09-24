@@ -57,11 +57,6 @@ var SubscribeRouter = Backbone.Router
 
 			cardUpdation : function()
 			{
-				/*
-				 * if(!$("#exp_month").val()){
-				 * Backbone.history.navigate("dashboard", { trigger : true });
-				 * return; }
-				 */
 
 				var card_details = new Base_Model_View({ url : "core/api/subscription", template : "creditcard-update", window : 'subscribe',
 					saveCallback : function()
@@ -99,21 +94,35 @@ var SubscribeRouter = Backbone.Router
 
 			billingSettings : function()
 			{
-
-				$("#content").html(getTemplate("billing-settings"), {});
-				var view = new Base_Model_View({ url : '/core/api/subscription', template : "account-details", postRenderCallback : function()
+				getTemplate('billing-settings', {}, undefined, function(template_ui)
 				{
-				} });
-				$('#content').find('#billing-settings-tab-content').html(view.render().el);
-				$('#content').find('#BillingSettingsTab .select').removeClass('select');
-				$('#content').find('.account-details-tab').addClass('select');
+					if (!template_ui)
+						return;
+					$('#content').html($(template_ui));
+
+					var view = new Base_Model_View({ url : '/core/api/subscription', template : "account-details", postRenderCallback : function()
+					{
+					} });
+					$('#content').find('#billing-settings-tab-content').html(view.render().el);
+					$('#content').find('#BillingSettingsTab .select').removeClass('select');
+					$('#content').find('.account-details-tab').addClass('select');
+
+				}, "#content");
+
 				$(".active").removeClass("active");
 
 			},
 
 			accountDetails : function()
 			{
-				$("#content").html(getTemplate("billing-settings"), {});
+				getTemplate('billing-settings', {}, undefined, function(template_ui)
+				{
+					if (!template_ui)
+						return;
+					$('#content').html($(template_ui));
+					
+					
+				}, "#content");
 				var view = new Base_Model_View({ url : '/core/api/subscription', template : "account-details", postRenderCallback : function()
 				{
 				} });
@@ -126,8 +135,24 @@ var SubscribeRouter = Backbone.Router
 
 			invoiceDetailsList : function()
 			{
-				$("#content").html(getTemplate("billing-settings"), {});
-				$("#billing-settings-tab-content").html(getTemplate("invoice-details"), {});
+				getTemplate('billing-settings', {}, undefined, function(template_ui)
+				{
+					if (!template_ui)
+						return;
+					$('#content').html($(template_ui));
+					
+				}, "#content");
+				getTemplate('invoice-details', {}, undefined, function(template_ui)
+				{
+					if (!template_ui)
+						return;
+					$('#billing-settings-tab-content').html($(template_ui));
+					$("#invoice-details-holder").html(getRandomLoadingImg());
+					// $('#content').find('#billing-settings-tab-content').html("");
+					$('#content').find('#BillingSettingsTab .select').removeClass('select');
+					$('#content').find('.invoice-details-tab').addClass('select');
+					$(".active").removeClass("active");
+				}, "#billing-settings-tab-content");
 				var that = this;
 				var subscribe_plan = new Base_Model_View({ url : "core/api/subscription?reload=true", template : "subscribe-new", window : 'subscribe',
 
@@ -139,11 +164,7 @@ var SubscribeRouter = Backbone.Router
 					that.recent_invoice(subscription_model);
 
 				} });
-				$("#invoice-details-holder").html(getRandomLoadingImg());
-				// $('#content').find('#billing-settings-tab-content').html("");
-				$('#content').find('#BillingSettingsTab .select').removeClass('select');
-				$('#content').find('.invoice-details-tab').addClass('select');
-				$(".active").removeClass("active");
+				
 
 			},
 
@@ -173,7 +194,7 @@ var SubscribeRouter = Backbone.Router
 
 				}, errorCallback : function(data)
 				{
-					showNotyPopUp("information", data.responseText, "top");
+					showNotyPopUp("warning", data.responseText, "top");
 				}
 				/*
 				 * prePersist : function(el) { console.log(el); }
@@ -319,44 +340,43 @@ var SubscribeRouter = Backbone.Router
 				var companydata;
 				var obj;
 
-				if (invoice_id)
+				if (!invoice_id)
+					return;
+
+				accessUrlUsingAjax('core/api/subscription/getinvoice?d=' + invoice_id, function(data)
 				{
-					var invoice_model_view = new Base_Model_View({ url : 'core/api/subscription/getinvoice?d=' + invoice_id, type : 'GET',
-						template : "account", postRenderCallback : function(el)
-						{
-							console.log("Invoice object");
-							console.log(data);
-							invoicedata = data;
-						}, saveCallback : function(data)
-						{
-							console.log("getInvoice save callback");
-						}
+					console.log("Invoice object");
+					console.log(data);
+					invoicedata = data;
 
-					});
-					var account_prefs_model = new Base_Model_View({ url : '/core/api/account-prefs', type : 'GET', template : "account", dataType : 'json',
-						postRenderCallback : function(el)
-						{
-							console.log("Account prefs");
-							console.log(data);
-							companydata = data;
-						}, saveCallback : function(data)
-						{
-							console.log("getInvoice save callback");
-						}
-
-					});
-
-					obj = { "invoice" : invoicedata, "company" : companydata }
-					console.log("xxxxxxxxxxxxxxx");
-					console.log(obj);
-					head.js(LIB_PATH + 'jscore/handlebars/handlebars-helpers.js', function()
+					accessUrlUsingAjax('/core/api/account-prefs', function(data)
 					{
-						$('#billing-settings-tab-content').html("");
-						$('#billing-settings-tab-content').html(getTemplate('invoice-detail', obj));
+						console.log("Account prefs");
+						console.log(data);
+						companydata = data;
+
+						obj = { "invoice" : invoicedata, "company" : companydata }
+						console.log("xxxxxxxxxxxxxxx");
+						console.log(obj);
+						head.js(LIB_PATH + 'jscore/handlebars/handlebars-helpers.js', function()
+						{
+							getTemplate('invoice-detail', obj, undefined, function(template_ui)
+							{
+								if (!template_ui)
+									return;
+								$('#content').html($(template_ui));
+							}, "#content");
+						});
+
+					}, function(response)
+					{
+						showNotyPopUp("information", "error occured please try again", "top");
 					});
 
-					console.log("end of getInvoiceDetails route");
-				}
+				}, function(response)
+				{
+					showNotyPopUp("information", "error occured please try again", "top");
+				});
 
 			},
 
@@ -531,27 +551,11 @@ var SubscribeRouter = Backbone.Router
 				 * respective states list using countries.js plugin account
 				 * stats in subscription page
 				 */
-				var subscribe_email_plan = new Base_Model_View({
-					url : "core/api/subscription",
-					template : "email-update",
-					model : subscription,
+				var subscribe_email_plan = new Base_Model_View({ url : "core/api/subscription", template : "email-update", model : subscription,
 					window : 'subscribe',
 
 					postRenderCallback : function(el)
 					{
-						getTemplate("email-plan-subscription-details-popover", subscribe_email_plan.model.toJSON(), "Yes", function(content)
-						{
-							$("#email-plan-details-popover", el).attr(
-									{ "rel" : "popover", "data-placement" : 'right', "data-original-title" : "Plan Details", "data-content" : content,
-									// "trigger" : "hover"
-									});
-
-							$("#email-plan-details-popover", el).on('click', function(e)
-							{
-								$(this).popover('show');
-							});
-
-						});
 
 					} });
 
@@ -597,11 +601,18 @@ var SubscribeRouter = Backbone.Router
 
 					// Sort invoice
 					invoice = new BaseCollection(invoice, { sortKey : "created", descending : true }).toJSON();
+//					var object = JSON.parse(JSON.stringify(invoice[0]));
 					// Send data to a template
-					$("#recent_invoice").html(getTemplate("latest-invoice", invoice[0]));
+					getTemplate('latest-invoice', invoice[0] , undefined, function(template_ui)
+					{
+						if (!template_ui)
+							return;
+						$('#recent_invoice').html(template_ui);
+						
+					}, "#recent_invoice");
+					
 
 				})
-
 
 			},
 

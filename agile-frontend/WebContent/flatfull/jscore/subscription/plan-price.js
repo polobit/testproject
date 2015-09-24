@@ -489,7 +489,12 @@ function initializeSubscriptionListeners()
 		}
 		else
 		{
-		if (emails < 100000)
+		if(emails < 5000)
+		{
+			$("#emails_total_cost").html(quantity * 0);
+			$("#email_rate").html("$4");
+		}
+		else if (emails < 100000)
 		{
 			$("#emails_total_cost").html(quantity * 4);
 			$("#email_rate").html("$4");
