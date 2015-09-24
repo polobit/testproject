@@ -3,16 +3,16 @@ var portlet_template_loaded_map = {};
 
 $(function()
 {
-				$.getJSON('/core/api/users/agileusers', function(users)
+	$.getJSON('/core/api/users/agileusers', function(users)
+	{
+		$.each(users, function(i, user)
+		{
+			if (CURRENT_DOMAIN_USER.id == user.domain_user_id)
 			{
-				$.each(users, function(i, user)
-				{
-					if (CURRENT_DOMAIN_USER.id == user.domain_user_id)
-					{
-					CURRENT_AGILE_USER = user;
-					}
-				});
-			});
+				CURRENT_AGILE_USER = user;
+			}
+		});
+	});
 });
 /**
  * Loads all the portlets for the current agile user
@@ -424,7 +424,7 @@ function showPortletSettings(el){
 		var options ='<option value="">Select...</option>'
 			+'<option value="contacts">All Contacts</option>'
 			+'<option value="myContacts">My Contacts</option>';
-		$.ajax({ type : 'GET', url : '/core/api/filters?type=PERSON', async : false, dataType : 'json',
+		$.ajax({ type : 'GET', url : '/core/api/filters?type=PERSON', dataType : 'json',
 			success: function(data){
 				$.each(data,function(index,contactFilter){
 					options+="<option value="+contactFilter.id+">"+contactFilter.name+"</option>";
@@ -502,27 +502,22 @@ function showPortletSettings(el){
 		if(App_Portlets.deal_tracks!=undefined && App_Portlets.deal_tracks!=null)
 			tracks = App_Portlets.deal_tracks;
 		else{
-			$.ajax({ type : 'GET', url : '/core/api/milestone/pipelines', async : false, dataType : 'json',
+			$.ajax({ type : 'GET', url : '/core/api/milestone/pipelines', dataType : 'json',
 				success: function(data){
 					App_Portlets.track_length = data.length;
 					App_Portlets.deal_tracks = data;
 					tracks = App_Portlets.deal_tracks;
+
+					portlet_utiity.addTracks(tracks, base_model, elData);
 				} });
+
+			return;
 		}
+
+
+		portlet_utiity.addTracks(tracks, base_model, elData);
 		
-		var options = '';
-		$.each(tracks,function(index,trackObj){
-			if(base_model.get('settings').track==0 && trackObj.name=="Default")
-				options+="<option value="+trackObj.id+" selected='selected'>"+trackObj.name+"</option>";
-			else if(base_model.get('settings').track==trackObj.id)
-				options+="<option value="+trackObj.id+" selected='selected'>"+trackObj.name+"</option>";
-			else
-				options+="<option value="+trackObj.id+">"+trackObj.name+"</option>";
-		});
 		
-		$('#track', elData).html(options);
-		$('.loading-img').hide();
-		$("#deals", elData).find('option[value='+ base_model.get("settings").deals +']').attr("selected", "selected");
 		//$("#due-date", elData).val(new Date(base_model.get("settings")["due-date"]*1000).format('mm/dd/yyyy'));
 	}else if(base_model.get('portlet_type')=="DEALS" && base_model.get('name')=="Closures Per Person"){
 		$('#portletsDealsClosuresPerPersonSettingsModal').modal('show');
@@ -556,27 +551,21 @@ function showPortletSettings(el){
 		if(App_Portlets.deal_tracks!=undefined && App_Portlets.deal_tracks!=null)
 			tracks = App_Portlets.deal_tracks;
 		else{
-			$.ajax({ type : 'GET', url : '/core/api/milestone/pipelines', async : false, dataType : 'json',
+			$.ajax({ type : 'GET', url : '/core/api/milestone/pipelines', dataType : 'json',
 				success: function(data){
 					App_Portlets.track_length = data.length;
 					App_Portlets.deal_tracks = data;
 					tracks = App_Portlets.deal_tracks;
+
+					portlet_utiity.addTracks(tracks, base_model, elData);
+					
 				} });
+
+			 return;
 		}
 		
-		var options = '';
-		$.each(tracks,function(index,trackObj){
-			if(base_model.get('settings').track==0 && trackObj.name=="Default")
-				options+="<option value="+trackObj.id+" selected='selected'>"+trackObj.name+"</option>";
-			else if(base_model.get('settings').track==trackObj.id)
-				options+="<option value="+trackObj.id+" selected='selected'>"+trackObj.name+"</option>";
-			else
-				options+="<option value="+trackObj.id+">"+trackObj.name+"</option>";
-		});
+		portlet_utiity.addTracks(tracks, base_model, elData);
 		
-		$('#track', elData).html(options);
-		$('.loading-img').hide();
-		$("#deals", elData).find('option[value='+ base_model.get("settings").deals +']').attr("selected", "selected");
 		//$("#due-date", elData).val(new Date(base_model.get("settings")["due-date"]*1000).format('mm/dd/yyyy'));
 	}else if(base_model.get('portlet_type')=="DEALS" && base_model.get('name')=="Deals Assigned"){
 		$('#portletsDealsAssignedSettingsModal').modal('show');
@@ -598,7 +587,7 @@ function showPortletSettings(el){
 		
 		if(base_model.get("settings")["calls-user-list"]!=undefined){
 			var options ='';
-			$.ajax({ type : 'GET', url : '/core/api/users', async : false, dataType : 'json',
+			$.ajax({ type : 'GET', url : '/core/api/users', dataType : 'json',
 				success: function(data){
 					$.each(data,function(index,domainUser){
 						if(!domainUser.is_disabled)
@@ -608,11 +597,15 @@ function showPortletSettings(el){
 					$.each(base_model.get("settings")["calls-user-list"], function(){
 						$("#calls-user-list", elData).find('option[value='+ this +']').attr("selected", "selected");
 					});
+
 					$('.loading-img').hide();
+
+					portlet_utiity.enable_users_multi_select_option('ms-calls-user-list', elData);
+
 				} });
 		}else{
 			var options ='';
-			$.ajax({ type : 'GET', url : '/core/api/users', async : false, dataType : 'json',
+			$.ajax({ type : 'GET', url : '/core/api/users', dataType : 'json',
 				success: function(data){
 					$.each(data,function(index,domainUser){
 						if(!domainUser.is_disabled)
@@ -620,16 +613,12 @@ function showPortletSettings(el){
 					});
 					$('#calls-user-list', elData).html(options);
 					$('.loading-img').hide();
+
+					portlet_utiity.enable_users_multi_select_option('ms-calls-user-list', elData);
 				} });
 		}
-		$('#ms-calls-user-list', elData).remove();
-		head.js(LIB_PATH + 'lib/jquery.multi-select.js', function(){
-			$('#calls-user-list',elData).multiSelect();
-			$('#ms-calls-user-list .ms-selection', elData).children('ul').addClass('multiSelect').attr("name", "calls-user-list").attr("id", "calls-user");
-			$('#ms-calls-user-list .ms-selectable .ms-list', elData).css("height","130px");
-			$('#ms-calls-user-list .ms-selection .ms-list', elData).css("height","130px");
-			$('#ms-calls-user-list', elData).addClass('portlet-user-ms-container');					
-		});
+
+		
 		
 	}else if(base_model.get('portlet_type')=="TASKSANDEVENTS" && base_model.get('name')=="Task Report"){
 		$('#portletsTaskReportSettingsModal').modal('show');
@@ -651,7 +640,7 @@ function showPortletSettings(el){
 
 		if(base_model.get("settings")["task-report-user-list"]!=undefined){
 			var options ='';
-			$.ajax({ type : 'GET', url : '/core/api/users', async : false, dataType : 'json',
+			$.ajax({ type : 'GET', url : '/core/api/users', dataType : 'json',
 				success: function(data){
 					$.each(data,function(index,domainUser){
 						if(!domainUser.is_disabled)
@@ -662,10 +651,12 @@ function showPortletSettings(el){
 						$("#task-report-user-list", elData).find('option[value='+ this +']').attr("selected", "selected");
 					});
 					$('.loading-img').hide();
+
+					portlet_utiity.enable_users_multi_select_option('ms-task-report-user-list', elData);
 				} });
 		}else{
 			var options ='';
-			$.ajax({ type : 'GET', url : '/core/api/users', async : false, dataType : 'json',
+			$.ajax({ type : 'GET', url : '/core/api/users', dataType : 'json',
 				success: function(data){
 					$.each(data,function(index,domainUser){
 						if(!domainUser.is_disabled)
@@ -673,16 +664,11 @@ function showPortletSettings(el){
 					});
 					$('#task-report-user-list', elData).html(options);
 					$('.loading-img').hide();
+
+					portlet_utiity.enable_users_multi_select_option('ms-task-report-user-list', elData);
 				} });
 		}
-		$('#ms-task-report-user-list', elData).remove();
-		head.js(LIB_PATH + 'lib/jquery.multi-select.js', function(){
-			$('#task-report-user-list',elData).multiSelect();
-			$('#ms-task-report-user-list .ms-selection', elData).children('ul').addClass('multiSelect').attr("name", "task-report-user-list").attr("id", "task-report-user");
-			$('#ms-task-report-user-list .ms-selectable .ms-list', elData).css("height","130px");
-			$('#ms-task-report-user-list .ms-selection .ms-list', elData).css("height","130px");
-			$('#ms-task-report-user-list', elData).addClass('portlet-user-ms-container');					
-		});
+		
 
 	}else if(base_model.get('portlet_type')=="USERACTIVITY" && base_model.get('name')=="Stats Report"){
 		$('#portletsStatsReportSettingsModal').modal('show');
@@ -727,7 +713,7 @@ function showPortletSettings(el){
 
 		if(base_model.get("settings").user!=undefined){
 			var options ='';
-			$.ajax({ type : 'GET', url : '/core/api/portlets/portletUsers', async : false, dataType : 'json',
+			$.ajax({ type : 'GET', url : '/core/api/portlets/portletUsers', dataType : 'json',
 				success: function(data){
 					$.each(data,function(index,domainUser){
 						if(!domainUser.is_disabled)
@@ -738,10 +724,13 @@ function showPortletSettings(el){
 						$("#user-list", elData).find('option[value='+ this +']').attr("selected", "selected");
 					});
 					$('.loading-img').hide();
+
+					portlet_utiity.enable_users_multi_select_option('ms-category-list', elData);
+
 				} });
 		}else{
 			var options ='';
-			$.ajax({ type : 'GET', url : '/core/api/portlets/portletUsers', async : false, dataType : 'json',
+			$.ajax({ type : 'GET', url : '/core/api/portlets/portletUsers', dataType : 'json',
 				success: function(data){
 					$.each(data,function(index,domainUser){
 						if(!domainUser.is_disabled)
@@ -749,21 +738,11 @@ function showPortletSettings(el){
 					});
 					$('#user-list', elData).html(options);
 					$('.loading-img').hide();
+
+					portlet_utiity.enable_users_multi_select_option('ms-category-list', elData);
 				} });
 		}
-		$('#ms-category-list', elData).remove();
-		$('#ms-user-list', elData).remove();
-		head.js(LIB_PATH + 'lib/jquery.multi-select.js', function(){
-			$('#category-list, #user-list',elData).multiSelect();
-			$('#ms-category-list .ms-selection', elData).children('ul').addClass('multiSelect').attr("name", "category-list").attr("id", "category");
-			$('#ms-user-list .ms-selection', elData).children('ul').addClass('multiSelect').attr("name", "user-list").attr("id", "user");
-			$('#ms-user-list .ms-selectable .ms-list', elData).css("height","130px");
-			$('#ms-user-list .ms-selection .ms-list', elData).css("height","130px");
-			$('#ms-category-list .ms-selectable .ms-list', elData).css("height","105px");
-			$('#ms-category-list .ms-selection .ms-list', elData).css("height","105px");
-			$('#ms-user-list', elData).addClass('portlet-user-ms-container');
-			$('#ms-category-list', elData).addClass('portlet-category-ms-container');					
-		});
+		
 	}else if(base_model.get('portlet_type')=="DEALS" && base_model.get('name')=="Revenue Graph"){
 		$('#portletsDealsRevenueGraphSettingsModal').modal('show');
 		$('#portletsDealsRevenueGraphSettingsModal > .modal-dialog > .modal-content > .modal-footer > .save-modal').attr('id',base_model.get("id")+'-save-modal');
@@ -777,17 +756,20 @@ function showPortletSettings(el){
 		}else{
 			options += '<option value="anyTrack">Any</option>';
 		}
-		$.ajax({ type : 'GET', url : '/core/api/milestone/pipelines', async : false, dataType : 'json',
+		$.ajax({ type : 'GET', url : '/core/api/milestone/pipelines', dataType : 'json',
 				success: function(data){
 					$.each(data,function(index,trackObj){
 						if(base_model.get('settings').track==trackObj.id)
 							options+="<option value="+trackObj.id+" selected='selected'>"+trackObj.name+"</option>";
 						else
 							options+="<option value="+trackObj.id+">"+trackObj.name+"</option>";
+					$('#track', elData).html(options);
+					$('.loading-img').hide();
 					});
+
+					
 				} });
-		$('#track', elData).html(options);
-		$('.loading-img').hide();
+		
 		$("#duration", elData).find('option[value='+ base_model.get("settings").duration +']').attr("selected", "selected");
 	}
 	else if(base_model.get('portlet_type')=="USERACTIVITY" && base_model.get('name')=="Campaign stats"){
@@ -3002,4 +2984,138 @@ function getaspectratio(el)
 }
 
 
+var portlet_utiity = {
 
+  addTracks: function(tracks, base_model, elData){
+  		var options = '';
+		$.each(tracks,function(index,trackObj){
+			if(base_model.get('settings').track==0 && trackObj.name=="Default")
+				options+="<option value="+trackObj.id+" selected='selected'>"+trackObj.name+"</option>";
+			else if(base_model.get('settings').track==trackObj.id)
+				options+="<option value="+trackObj.id+" selected='selected'>"+trackObj.name+"</option>";
+			else
+				options+="<option value="+trackObj.id+">"+trackObj.name+"</option>";
+		});
+		
+		$('#track', elData).html(options);
+		$('.loading-img').hide();
+		$("#deals", elData).find('option[value='+ base_model.get("settings").deals +']').attr("selected", "selected");
+  },
+
+  /**
+	 * getting flitered contact portlet header name
+	 */
+  get_filtered_contact_header : function(base_model, callback){
+
+  		var filter_name = base_model.get("settings").filter;
+
+  		if (filter_name == 'contacts')
+			return callback("All Contacts");
+		else if (filter_name == 'companies')
+			return callback("All Companies");
+		else if (filter_name == 'recent')
+			return header_name = "Recent Contacts";
+		else if (filter_name == 'myContacts')
+			return callback("My Contacts");
+		else if (filter_name == 'leads')
+			return callback("Leads");
+		else
+		{
+
+			var contactFilter = $.ajax({ type : 'GET', url : '/core/api/filters/' + filter_name, dataType : 'json', success : function(data)
+			{
+				var header_name = '';
+				if (data != null && data != undefined)
+					header_name = "" + data.name;
+
+				if (!header_name){
+					header_name = "Contact List";
+				}
+					
+				return callback(header_name);
+
+			} });
+		}
+
+  }, 
+
+  /**
+	 * getting flitered contact portlet header name
+	 */
+  get_deals_funnel_portlet_header : function(base_model, callback){
+
+  	var track_id = base_model.get("settings").track;
+
+  	App_Portlets.track_length = 0;
+	$.ajax({ type : 'GET', url : '/core/api/milestone/pipelines', dataType : 'json', success : function(data)
+	{
+		App_Portlets.track_length = data.length;
+		App_Portlets.deal_tracks = data;
+
+		if (App_Portlets.track_length > 1)
+		{
+			if (track_id == 0)
+				return callback("Default");
+			else
+			{
+				var milestone = $.ajax({ type : 'GET', url : '/core/api/milestone/' + track_id, dataType : 'json', success : function(data)
+				{
+					if (data != null && data != undefined)
+						return callback("" + data.name + "");
+				} });
+			}
+		}
+
+	} });
+	
+ },
+
+ enable_users_multi_select_option: function(selector, elData){
+
+ 	if(selector == "ms-calls-user-list"){
+ 		$('#ms-calls-user-list', elData).remove();
+		head.js(LIB_PATH + 'lib/jquery.multi-select.js', function(){
+			$('#calls-user-list',elData).multiSelect();
+			$('#ms-calls-user-list .ms-selection', elData).children('ul').addClass('multiSelect').attr("name", "calls-user-list").attr("id", "calls-user");
+			$('#ms-calls-user-list .ms-selectable .ms-list', elData).css("height","130px");
+			$('#ms-calls-user-list .ms-selection .ms-list', elData).css("height","130px");
+			$('#ms-calls-user-list', elData).addClass('portlet-user-ms-container');					
+		});
+ 	}
+ 	
+
+ 	if(selector == "ms-task-report-user-list"){
+
+ 		$('#ms-task-report-user-list', elData).remove();
+		head.js(LIB_PATH + 'lib/jquery.multi-select.js', function(){
+			$('#task-report-user-list',elData).multiSelect();
+			$('#ms-task-report-user-list .ms-selection', elData).children('ul').addClass('multiSelect').attr("name", "task-report-user-list").attr("id", "task-report-user");
+			$('#ms-task-report-user-list .ms-selectable .ms-list', elData).css("height","130px");
+			$('#ms-task-report-user-list .ms-selection .ms-list', elData).css("height","130px");
+			$('#ms-task-report-user-list', elData).addClass('portlet-user-ms-container');					
+		});
+
+ 	}
+
+	if(selector == "ms-category-list"){
+
+		$('#ms-category-list', elData).remove();
+		$('#ms-user-list', elData).remove();
+		head.js(LIB_PATH + 'lib/jquery.multi-select.js', function(){
+			$('#category-list, #user-list',elData).multiSelect();
+			$('#ms-category-list .ms-selection', elData).children('ul').addClass('multiSelect').attr("name", "category-list").attr("id", "category");
+			$('#ms-user-list .ms-selection', elData).children('ul').addClass('multiSelect').attr("name", "user-list").attr("id", "user");
+			$('#ms-user-list .ms-selectable .ms-list', elData).css("height","130px");
+			$('#ms-user-list .ms-selection .ms-list', elData).css("height","130px");
+			$('#ms-category-list .ms-selectable .ms-list', elData).css("height","105px");
+			$('#ms-category-list .ms-selection .ms-list', elData).css("height","105px");
+			$('#ms-user-list', elData).addClass('portlet-user-ms-container');
+			$('#ms-category-list', elData).addClass('portlet-category-ms-container');					
+		});
+	}
+	
+
+ },
+
+
+};

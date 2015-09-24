@@ -82,11 +82,17 @@ function initializeSocialSuite()
 		// Fill elements on form related to stream.
 		fillStreamDetail();
 
-		// Add social network types template
-		$("#streamDetails").html(getTemplate('socialsuite-social-network'), {});
+		getTemplate('socialsuite-social-network', {}, undefined, function(template_ui){
+			if(!template_ui)
+				  return;
+			// Add social network types template
+			$('#streamDetails').html($(template_ui));
 
-		// Show form modal
-		$('#addStreamModal').modal('show');
+			// Show form modal
+			$('#addStreamModal').modal('show');
+
+		}, "#streamDetails");
+		
 	});
 
 	/**

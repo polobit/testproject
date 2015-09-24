@@ -1303,3 +1303,15 @@ border-collapse: separate;
 .text-head-black{
 	color:#333;
 }
+
+.text-white {
+  color: #fff;
+}
+
+.anchor-blue {
+  color: #23b7e5 !important;
+}
+
+.widget-alert{
+  background-color: #F5980E;
+}

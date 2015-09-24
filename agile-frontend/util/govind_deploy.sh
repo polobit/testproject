@@ -3,16 +3,18 @@ cd ../
 
 git stash
 
-git checkout govind_agile_merged_sandbox
+./../deploy-beta.sh agile-frontend async
 
-git pull origin govind_agile_merged_sandbox
+# git checkout sandbox_sync_conversion
 
-ant create-target
+# git pull origin sandbox_sync_conversion
 
-appcfg.sh -A agilecrmbeta -V newui update ../target/agile-java-server/agile-frontend.war/
+# ant create-target
+
+appcfg.sh -A agilecrmbeta -V async update ../target/agile-java-server/agile-frontend.war/
 
 rm WebContent/jscore/min/flatfull/js-all-min.js
 
 git stash
 
-git checkout development_modules
+git checkout agile-beta-development

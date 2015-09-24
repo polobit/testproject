@@ -14,10 +14,6 @@ function getEpochTimeFromDate(selectedDate)
 function getGMTTimeFromDate(date)
 {
 	var current_sys_date = new Date();
-	console.log(new Date().getHours());
-	console.log(new Date().getMinutes());
-	console.log(new Date().getSeconds());
-	console.log(date.getYear() + "," + date.getMonth() + "," + date.getDate());
 	date = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 0, 0, 0);
 
 	// Adding offset to date returns GMT time

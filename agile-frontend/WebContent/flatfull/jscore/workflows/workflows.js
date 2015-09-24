@@ -203,18 +203,24 @@ $(function(){
         	$('#workflow-designer-help-modal').remove();
         }
 
-		var workflow_help_modal = $(getTemplate('workflow-designer-help-modal'),{});
-		workflow_help_modal.modal('show');
+        getTemplate('workflow-designer-help-modal', {}, undefined, function(template_ui){
+            if(!template_ui)
+                  return;
 
-		// Plays video on modal shown
-		$(workflow_help_modal).on("shown.bs.modal", function(){
-			$(this).children('div.modal-dialog').find('div#workflow-help-detail').html('<h3 style="margin-left:165px">Easy. Peasy.</h3><iframe width="420" height="345" src="//www.youtube.com/embed/0Z-oqK6mWiE?enablejsapi=10&amp;autoplay=1" frameborder="0" allowfullscreen></iframe>');
-		});
+            var workflow_help_modal = $(template_ui);
+            workflow_help_modal.modal('show');
 
-		// Stops video on modal hide
-		$(workflow_help_modal).on("hide.bs.modal", function(){
-			$(this).find("iframe").removeAttr("src");
-		});
+            // Plays video on modal shown
+            $(workflow_help_modal).on("shown.bs.modal", function(){
+                $(this).children('div.modal-dialog').find('div#workflow-help-detail').html('<h3 style="margin-left:165px">Easy. Peasy.</h3><iframe width="420" height="345" src="//www.youtube.com/embed/0Z-oqK6mWiE?enablejsapi=10&amp;autoplay=1" frameborder="0" allowfullscreen></iframe>');
+            });
+
+            // Stops video on modal hide
+            $(workflow_help_modal).on("hide.bs.modal", function(){
+                $(this).find("iframe").removeAttr("src");
+            });
+
+        }, null);
 	});
 	
 	$('body').on('click', '#workflow-unsubscribe-option', function (e) {
@@ -382,7 +388,14 @@ function fill_logs_slate(id, type)
 		    }
 		}
 
-	$("#" + id).html(getTemplate("empty-collection-model", LOGS_PAD_CONTENT[type]));
+	getTemplate("empty-collection-model", LOGS_PAD_CONTENT[type], undefined, function(template_ui){
+        if(!template_ui)
+              return;
+            
+        $("#" + id).html($(template_ui));
+    }, "#" + id);
+
+
 }
 
 function show_campaign_save()

@@ -277,6 +277,21 @@ function save_task(formId, modalId, isUpdate, saveBtn)
 
 	if (!isUpdate)
 		json.due = new Date(json.due).getTime();
+	
+	if(isUpdate){
+		
+		if($('#'+formId).find('ul#notes').length>0){
+			var notes = [];
+			$('#'+formId+' li.task-note').each(function()
+			{
+				notes.push($(this).attr('data'));
+			});
+
+			console.log(notes);
+
+			json.notes = notes;
+		}
+	}
 	var startarray = (json.task_ending_time).split(":");
 	json.due = new Date((json.due) * 1000).setHours(startarray[0], startarray[1]) / 1000.0;
 
@@ -302,15 +317,21 @@ function save_task(formId, modalId, isUpdate, saveBtn)
 
 						var task = data.toJSON();
 
-						var due_task_count = getDueTasksCount();
-						if (due_task_count == 0)
-							$(".navbar_due_tasks").css("display", "none");
-						else
-							$(".navbar_due_tasks").css("display", "inline-block");
-						if(due_task_count !=0)
-							$('#due_tasks_count').html(due_task_count);
-						else
-							$('#due_tasks_count').html("");
+						getDueTasksCount(function(count){
+
+								var due_task_count = count;
+
+								if (due_task_count == 0)
+									$(".navbar_due_tasks").css("display", "none");
+								else
+									$(".navbar_due_tasks").css("display", "inline-block");
+								if(due_task_count !=0)
+									$('#due_tasks_count').html(due_task_count);
+								else
+									$('#due_tasks_count').html("");
+
+						});
+						
 
 						if (Current_Route == 'calendar')
 						{
@@ -429,11 +450,16 @@ function save_task(formId, modalId, isUpdate, saveBtn)
 							else
 								App_Tasks.navigate("task/" + task.id, { trigger : true });
 							taskDetailView = data;
-							$("#content").html(getTemplate("task-detail", data.toJSON()));
-							task_details_tab.loadActivitiesView();
-							initializeTaskDetailListeners();
 
+							getTemplate("task-detail", data.toJSON(), undefined, function(template_ui){
+								if(!template_ui)
+									  return;
+								$('#content').html($(template_ui));	
+								task_details_tab.loadActivitiesView();
+								initializeTaskDetailListeners();
+							}, "#content");
 						}
+						
 					} });
 }
 
@@ -623,6 +649,9 @@ function complete_task(taskId, collection, ui, callback)
 	new_task.url = '/core/api/tasks';
 	new_task.save(taskJSON, { success : function(model, response)
 	{
+		if(!Current_Route)
+			  Current_Route = "/";
+
 		if (Current_Route.indexOf("contact/") > -1)
 		{
 			collection.get(taskId).set(model);
@@ -632,15 +661,20 @@ function complete_task(taskId, collection, ui, callback)
 			collection.remove(model);
 		}
 
-		var due_task_count = getDueTasksCount();
-		if (due_task_count == 0)
+		getDueTasksCount(function(due_task_count){
+
+			if (due_task_count == 0)
 			$(".navbar_due_tasks").css("display", "none");
-		else
-			$(".navbar_due_tasks").css("display", "inline-block");
-		if(due_task_count !=0)
-			$('#due_tasks_count').html(due_task_count);
-		else
-			$('#due_tasks_count').html("");
+			else
+				$(".navbar_due_tasks").css("display", "inline-block");
+			if(due_task_count !=0)
+				$('#due_tasks_count').html(due_task_count);
+			else
+				$('#due_tasks_count').html("");
+		
+		});
+
+		
 		if (ui)
 			ui.fadeOut(500);
 
@@ -669,15 +703,16 @@ function complete_task(taskId, collection, ui, callback)
  * 
  * @returns due tasks count upto today
  */
-function getDueTasksCount()
+function getDueTasksCount(callback)
 {
-	var msg = $.ajax({ type : "GET", url : 'core/api/tasks/overdue/uptotoday', async : false, dataType : 'json' }).responseText;
+	accessUrlUsingAjax('core/api/tasks/overdue/uptotoday', function(response){
+			if (!isNaN(response))
+			{
+				return callback(response);
+			}
+			return callback(0);
 
-	if (!isNaN(msg))
-	{
-		return msg;
-	}
-	return 0;
+	});
 }
 
 /**

@@ -1067,7 +1067,6 @@
 				Arrays.sort(allTimeZones);  
 				
                 String timeZone = AccountPrefsUtil.getAccountPrefs().timezone;
-                
                 if(StringUtils.isEmpty(timeZone))
                 	
                 	out.println("\""+"*Select time zone"+"\":\""+"empty_timezone"+"\",");
