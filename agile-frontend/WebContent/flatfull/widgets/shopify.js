@@ -29,15 +29,22 @@ function showShopifyClient(shop)
 												data.unshift({ "name" : name,"id":d[0].customer.id, "shop" : shop, "total_spent" : d[0].customer.total_spent, "currency" : d[0].currency });
 												console.log("customer info " + name);
 												console.log("final data " + data);
-												var template = getTemplate('shopify-profile', data);
-												console.log("libpath is" + LIB_PATH);
-												console.log(template)
-												head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
-												{
-																$(".time-ago", template).timeago();
-												});
+												getTemplate('shopify-profile', data, undefined, function(template_ui){
+											 		if(!template_ui)
+											    		return;
+											    	var template = $(template_ui);
+											    	console.log("libpath is" + LIB_PATH);
+													console.log(template)
+													head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
+													{
+																	$(".time-ago", template).timeago();
+													});
 
-												$('#Shopify').html(template);
+													$('#Shopify').html(template);
+													 
+												}, null);
+
+													
 
 								}
 								else
@@ -71,7 +78,11 @@ function showShopifyClient(shop)
 function createContact(message)
 {
 
-				$('#' + Shopify_PLUGIN_NAME).html(getTemplate('shopify-profile-addcontact'));
+				getTemplate('shopify-profile-addcontact', {}, undefined, function(template_ui){
+			 		if(!template_ui)
+			    		return;
+					$('#' + Shopify_PLUGIN_NAME).html($(template_ui)); 
+				}, '#' + Shopify_PLUGIN_NAME);
 }
 
 function addContactToShopify(shop)
@@ -93,7 +104,11 @@ function shopifyError(id, message)
 				 */
 
 				console.log('shopify error ');
-				$('#' + id).html(getTemplate('shopify-error', error_json));
+				getTemplate('shopify-error', error_json, undefined, function(template_ui){
+			 		if(!template_ui)
+			    		return;
+					$('#' + id).html($(template_ui)); 
+				}, '#' + id);
 
 }
 
@@ -140,6 +155,7 @@ $(function()
 										last_name = ' ';
 						showShopifyClient(shop);
 
+                        $("body").off("click", '#shopify_add_contact');
 						$("body").on("click", '#shopify_add_contact', function(e)
 						{
 										e.preventDefault();
@@ -147,6 +163,7 @@ $(function()
 										addContactToShopify(shop);
 						});
 
+                        $("body").off("click", '.order');
 						$("body").on("click", '.order', function(e)
 						{
 										e.preventDefault();
@@ -162,8 +179,14 @@ $(function()
 										{
 														console.log("success data"+ data);
 														console.log("in success order fetch.");
-														$('#collapse-' + orderId).html(getTemplate('shopify-line-item', data));
-														$('#SHOPIFY_PROFILE_LOAD_IMAGE').remove();
+														
+														getTemplate('shopify-line-item', data, undefined, function(template_ui){
+													 		if(!template_ui)
+													    		return;
+															$('#collapse-' + orderId).html($(template_ui)); 
+															$('#SHOPIFY_PROFILE_LOAD_IMAGE').remove();
+														}, '#collapse-' + orderId);
+															
 										}, error : function(data)
 										{
 														console.log("in item fetch error" + data);

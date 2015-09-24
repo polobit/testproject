@@ -1,5 +1,5 @@
 <script id="widgets-add-model-template" type="text/html"> 
-<div class="panel wrapper widget-add" >
+<div class="panel wrapper widget-add pos-rlt" style="height: 220px;">
    {{#if_equals name "Sip"}}  
    <center>  
     <span class="thumbnail m-b-none text-2x thumb-xl text-center  bg-transparent"><span class="block"><i class="icon icon-phone"></i>SIP <span class="label label-danger text-xs"> Beta</span></span></span>
@@ -7,7 +7,7 @@
    {{else}} 
       {{#if_equals name "CallScript"}}
      <center>    
-        <span  class="thumbnail text-2x text-center  bg-transparent m-b-none thumb-xl m-t-sm" style="font-size:21px;"><span class="block"><i class="icon icon-comment m-r-xs"></i>Call Script</span></span>
+        <span  class="thumbnail text-2x text-center  bg-transparent m-b-none thumb-xl m-t-sm" style="font-size:21px;width:150px;"><span class="block"><i class="icon icon-comment m-r-xs"></i>Call Script</span></span>
      </center>  
     {{else}}
       <center> 
@@ -16,21 +16,22 @@
    {{/if_equals}}
    {{/if_equals}}
 	<br />
-    <div class="text-flow-ellipsis line-clamp line-clamp-3 m-b widget-text" style="height:60px"  rel="tooltip" title="{{description}}">
+    <div class="text-flow-ellipsis line-clamp line-clamp-3 widget-text" style="height:60px"  rel="tooltip" title="{{description}}">
 		{{description}}
 	</div>
-    <div>
+    <div class="text-center">
+
 		{{#if_equals widget_type "CUSTOM"}}
 			{{#if is_added}}
 				{{add_tag "Widgets"}}
-				<div class="btn-group inline-block">
-        			<a class="btn btn-sm btn-danger" id="delete-widget" widget-name="{{name}}">Delete</a>
-        			<a class="btn btn-sm btn-danger dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
-					<ul class="dropdown-menu text-base">
-						<li><a id="remove-widget" widget-name="{{name}}">Uninstall</a></li>
-					</ul>
-				</div>
-				<!--<a href="#Custom-widget/{{id}}" class="btn btn-sm btn-default inline-block m-t-n-md" id="setting-widget" set-widget-name="{{name}}">Settings</a>-->
+					<div class="btn-group inline-block">
+        				<a class="btn btn-sm btn-danger" id="delete-widget" widget-name="{{name}}">Delete</a>
+        				<a class="btn btn-sm btn-danger dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
+						<ul class="dropdown-menu text-base">
+							<li><a id="remove-widget" widget-name="{{name}}">Uninstall</a></li>
+						</ul>
+					</div>
+					<!--<a href="#Custom-widget/{{id}}" class="btn btn-sm btn-default inline-block m-t-n-md" id="setting-widget" set-widget-name="{{name}}">Settings</a>-->
     		{{else}}
     			<a class="btn btn-sm btn-default install-custom-widget" href="#Custom-widget" widget-name="{{name}}">Add</a>
 				<a class="btn btn-sm btn-danger" id="remove-widget" widget-name="{{name}}">Uninstall</a>    		
@@ -38,8 +39,7 @@
 		{{else}}
 			{{#if is_added}}
 				{{add_tag "Widgets"}}
-    			<a class="btn btn-sm btn-danger" id="delete-widget" widget-name="{{name}}">Delete</a>
-                {{#if_equals name "CallScript"}}  
+				{{#if_equals name "CallScript"}}  
                    <a href="#callscript/{{id}}" class="btn btn-sm btn-default" id="setting-widget" set-widget-name="{{name}}">Settings</a>
                 {{else}}{{#if_equals name "Twilio"}}
                            <a></a>
@@ -47,41 +47,154 @@
 				           <a href="#{{name}}/{{id}}" class="btn btn-sm btn-default" id="setting-widget" set-widget-name="{{name}}">Settings</a>
                         {{/if_equals}}
                 {{/if_equals}}
+    			<a class="btn btn-sm btn-danger m-r-xs" id="delete-widget" widget-name="{{name}}">Delete</a>
+				<div class="clearfix"></div>
     		{{else}}
 				{{#if allowedToAdd}}
 					{{#if_equals widget_type "SOCIAL"}}
-						<a class="btn btn-sm btn-default add-widget" href="#{{name}}" widget-name="{{name}}">Add</a>
+						{{#isAdmin}}
+							{{#if_equals name "Sip"}}
+								<a class="btn btn-sm btn-default add-widget" href="#{{name}}" widget-name="{{name}}">Add</a>
+							{{else}}
+								{{#if_equals name "TwilioIO"}}
+									<a class="btn btn-sm btn-default add-widget" href="#{{name}}" widget-name="{{name}}">Add</a>
+								{{else}}											
+								<div class="btn-group pos-abs m-l-n-lg">
+  									<a type="button" class="btn btn-sm btn-default add-widget" href="#{{name}}" widget-name="{{name}}">Add</a>
+  									<a type="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+    									<span class="caret"></span>
+    									<span class="sr-only">Toggle Dropdown</span>
+  									</a>
+  									<ul class="dropdown-menu" role="menu">
+    									<li><a class="btn btn-sm add_to_all" href="#{{name}}" widget-name="{{name}}">Add for all users</a></li>    									
+  									</ul>
+								</div>
+							 {{/if_equals}}
+						  {{/if_equals}}
 						{{else}}
+							<a class="btn btn-sm btn-default add-widget" href="#{{name}}" widget-name="{{name}}">Add</a>
+						{{/isAdmin}}
+						<div class="clearfix"></div>
+					{{else}}
 							{{#if_equals widget_type "CALL"}}
                                {{#if_equals name "CallScript"}}
-                                          <a class="btn btn-sm btn-default add-widget" href="#callscript" widget-name="{{name}}">Add</a>
+                                 {{#isAdmin}}
+									{{#if_equals name "Sip"}}
+										<a class="btn btn-sm btn-default add-widget" href="#callscript" widget-name="{{name}}">Add</a>
+									{{else}}
+										{{#if_equals name "TwilioIO"}}
+											<a class="btn btn-sm btn-default add-widget" href="#callscript" widget-name="{{name}}">Add</a>
+										{{else}}																			
+											<div class="btn-group pos-abs m-l-n-lg">
+  												<a class="btn btn-sm btn-default add-widget" href="#callscript" widget-name="{{name}}">Add</a>
+  												<a type="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+    												<span class="caret"></span>
+    												<span class="sr-only">Toggle Dropdown</span>
+  												</a>
+  												<ul class="dropdown-menu" role="menu">
+    												<li><a class="btn btn-sm add_to_all" href="#callscript" widget-name="{{name}}">Add for all users</a></li>    									
+  												</ul>
+											</div>
+										{{/if_equals}}
+									{{/if_equals}}
+									{{else}}
+										<a class="btn btn-sm btn-default add-widget" href="#callscript" widget-name="{{name}}">Add</a>
+									{{/isAdmin}}
+									<div class="clearfix"></div>
                                {{else}}{{#if_equals name "Twilio"}}
                                             <a></a>
                                        {{else}}
-                                            <a class="btn btn-sm btn-default add-widget" href="#{{name}}" widget-name="{{name}}">Add</a>
+                                            {{#isAdmin}}				
+											{{#if_equals name "Sip"}}
+													<a class="btn btn-sm btn-default add-widget" href="#{{name}}" widget-name="{{name}}">Add</a>
+											{{else}}
+												{{#if_equals name "TwilioIO"}}
+													<a class="btn btn-sm btn-default add-widget" href="#{{name}}" widget-name="{{name}}">Add</a>
+											{{else}}								
+												<div class="btn-group pos-abs m-l-n-lg">
+  													<a class="btn btn-sm btn-default add-widget" href="#{{name}}" widget-name="{{name}}">Add</a>
+  													<a type="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+    													<span class="caret"></span>
+    													<span class="sr-only">Toggle Dropdown</span>
+  													</a>
+  													<ul class="dropdown-menu" role="menu">
+    													<li><a class="btn btn-sm add_to_all" href="#{{name}}" widget-name="{{name}}">Add for all users</a></li>    									
+  													</ul>
+												</div>
+											{{/if_equals}}
+										{{/if_equals}}
+											{{else}}
+												<a class="btn btn-sm btn-default add-widget" href="#{{name}}" widget-name="{{name}}">Add</a>
+											{{/isAdmin}}
+											<div class="clearfix"></div> 
 							           {{/if_equals}}
 							   {{/if_equals}}
-							   {{else}}
-							   <a class="btn btn-sm btn-default add-widget" href="#{{name}}" widget-name="{{name}}">Add</a>
-							   
-							{{/if_equals}}
+							   {{else}}							   
+							   {{#isAdmin}}			
+									{{#if_equals name "Sip"}}
+										<a class="btn btn-sm btn-default add-widget" href="#{{name}}" widget-name="{{name}}">Add</a>
+									{{else}}
+										{{#if_equals name "TwilioIO"}}
+											<a class="btn btn-sm btn-default add-widget" href="#{{name}}" widget-name="{{name}}">Add</a>
+										{{else}}										
+											<div class="btn-group pos-abs m-l-n-lg">										
+  												<a class="btn btn-sm btn-default add-widget" href="#{{name}}" widget-name="{{name}}">Add</a>
+  												<a type="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+    												<span class="caret"></span>
+    												<span class="sr-only">Toggle Dropdown</span>
+  												</a>
+  												<ul class="dropdown-menu" role="menu">
+    												<li><a class="btn btn-sm add_to_all" href="#{{name}}" widget-name="{{name}}">Add for all users</a></li>    									
+  												</ul>
+											</div>
+										{{/if_equals}}
+									{{/if_equals}}
+								{{else}}
+									<a class="btn btn-sm btn-default add-widget" href="#{{name}}" widget-name="{{name}}">Add</a>
+								{{/isAdmin}} 
+								<div class="clearfix"></div>							   
 					{{/if_equals}}
+				{{/if_equals}}
+				{{else}}
+					{{#if_equals widget_type "CALL"}}
+						<div>
+							<div style="display:inline;display:none;width: 85%;left: 8%;z-index: 9;" class="{{#is_blank name}}{{getRandomNumber}}{{else}}{{this}}{{/is_blank}}-upgrade btn-warning alert widget-alert fade in p-xs m-b-xs pos-abs">
+								Requires Regular or Pro plan <strong><a href="#subscribe-plan" class='c-p'>upgrade</a></strong>.
+							</div>
+						</div>
+						<div class="clearfix"></div>
 					{{else}}
-
-							<div style="/*margin: 40px auto;    width: 50%;*/ display:inline;">
-							<a class="btn btn-sm btn-default _upgrade" id="{{#is_blank name}}{{getRandomNumber}}{{else}}{{this}}{{/is_blank}}-upgrade"><i class="icon-plus" style="margin-right:5px"></i>Add</a>
-                 							
-				{{#if_equals widget_type "CALL"}}
-				<div style="display:inline;float:right;display:none;" class="text-right {{#is_blank name}}{{getRandomNumber}}{{else}}{{this}}{{/is_blank}}-upgrade" ><p><i>
-				Requires Regular or<br/>Pro plan. <a href="#subscribe-plan" class='c-p text-info'>Upgrade</a></i><p>
-	               </div>
-	               </div>
+						<div>
+							<div class="btn-warning alert widget-alert fade in {{name}}-upgrade p-xs m-b-xs pos-abs" style="display:inline;display:none;width: 85%;left: 8%;z-index: 9;">
+								Please <strong><a href="#subscribe-plan" class='c-p'>upgrade</a></strong> to add more widgets.
+							</div>
+						</div>
+					<div class="clearfix"></div>
+					{{/if_equals}}  
+					<div style="/*margin: 40px auto; width: 50%;*/ display:inline;">
+					{{#isAdmin}}
+						{{#if_equals name "Sip"}}
+							<a class="btn btn-sm btn-default _upgrade" id="{{#is_blank name}}{{getRandomNumber}}{{else}}{{this}}{{/is_blank}}-upgrade">Add</a>
+						{{else}}
+							{{#if_equals name "TwilioIO"}}
+								<a class="btn btn-sm btn-default _upgrade" id="{{#is_blank name}}{{getRandomNumber}}{{else}}{{this}}{{/is_blank}}-upgrade">Add</a>
+							{{else}}											
+								<div class="btn-group pos-abs m-l-n-lg">										
+  									<a class="btn btn-sm btn-default _upgrade" id="{{#is_blank name}}{{getRandomNumber}}{{else}}{{this}}{{/is_blank}}-upgrade">Add</a>
+  									<a type="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+    									<span class="caret"></span>
+    									<span class="sr-only">Toggle Dropdown</span>
+  									</a>
+  									<ul class="dropdown-menu" role="menu">    							
+										<li><a class="btn btn-sm _upgrade" id="{{#is_blank name}}{{getRandomNumber}}{{else}}{{this}}{{/is_blank}}-upgrade">Add for all users</a></li>    									
+  									</ul>
+								</div>
+							{{/if_equals}}
+						{{/if_equals}}
 					{{else}}
-				 <div style="display:inline;float:right;display:none;" class="text-right {{name}}-upgrade" ><i>Please <a href="#subscribe-plan" class='c-p text-info'>upgrade</a> <br/> to add more widgets</i>
-	                 						</div>
-	                 				</div>
-
-				{{/if_equals}}  	
+						<a class="btn btn-sm btn-default _upgrade" id="{{#is_blank name}}{{getRandomNumber}}{{else}}{{this}}{{/is_blank}}-upgrade">Add</a>
+					{{/isAdmin}} 					                 						
+					<div class="clearfix"></div>
 				{{/if}}
     		{{/if}}
 		{{/if_equals}}
@@ -154,12 +267,25 @@
        
 			<div id="custom" class="row">
 				<div class="col-md-4" id="custom-widget" >
-					<div class="panel wrapper widget-add">
+					<div class="panel wrapper widget-add" style="min-height:220px;">
     					<center><div class="thumbnail m-b-none img-responsive thumb-xl bg-transparent"><i class="icon-puzzle-piece icon-3x"></i></div></center>
-    					<h3>Custom widget</h3>
+    					<h3 class="text-center">Custom widget</h3>
     				
-    					<div>
-    						<a class="btn btn-sm btn-default m-t-md" id="add-custom-widget">Add custom widget</a>
+    					 <div class="text-center">
+							{{#isAdmin}}											
+								<div class="btn-group pos-abs m-t-md" id="custom-widget-btn" style="margin-left:-70px;">
+  									<a type="button" class="btn btn-sm btn-default" id="add-custom-widget">Add custom widget</a>
+  									<a type="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+    									<span class="caret"></span>
+    									<span class="sr-only">Toggle Dropdown</span>
+  									</a>
+  									<ul class="dropdown-menu" role="menu">
+    									<li><a class="btn btn-sm add_to_all" id="add-custom-widget">Add for all users</a></li>    									
+  									</ul>
+								</div>
+							{{else}}
+								<a class="btn btn-sm btn-default m-t-md" id="add-custom-widget">Add custom widget</a>
+							{{/isAdmin}}
 						</div>
 					</div>
 				</div>
@@ -176,7 +302,8 @@
 	<div class="panel-body">
 		<form  id="custom_widget_form" name="custom_widget_login_form" method="post">
 	    	<fieldset>
-				
+
+				<input type="hidden" id="custom_isForAll" class="input-medium required form-control" value="" name="custom_isForAll"></input>
 				<input type="hidden" id="widget_type" class="input-medium required form-control" value="CUSTOM" name="widget_type"></input>
 				<div class="control-group form-group"><div class="controls"><input type="text" id="name" class="input-medium required widget_input_box form-control"  placeholder="Widget name" value="" name="name"></input></div></div>
 				<div class="control-group form-group"><div class="controls"><input type="text" id="description" class="input-medium required widget_input_box form-control"  placeholder="Description" value="" name="description"></input></div></div>
@@ -219,13 +346,13 @@
  
 <script id="widget-settings-template" type="text/html">
 <div class="row">
-<div class="col-md-4 col-sm-6 col-xs-12">
-<div class="panel wrapper" >
+<div class="col-md-4 col-sm-6 col-xs-12" >
+<div class="panel wrapper" style="min-height: 220px;">
 {{#if_equals name "Sip"}}
     <center><span class="thumbnail m-b-none text-2x thumb-xl text-center  bg-transparent"><span class="block"><i class="icon icon-phone m-r"></i>SIP</span></span></center>
 {{else}}
     {{#if_equals name "CallScript"}}
-        <center><span class="thumbnail text-2x text-center  bg-transparent m-b-none thumb-xl" style="font-size:21px;"><span class="block"><i class="icon icon-comment m-r-xs"></i>Call Script</span></span></center>
+        <center><span class="thumbnail text-2x text-center  bg-transparent m-b-none thumb-xl" style="font-size:21px;width:150px;"><span class="block"><i class="icon icon-comment m-r-xs"></i>Call Script</span></span></center>
     {{else}}
         <center><img class="thumbnail bg-transparent thumb-xl img-responsive" src="{{logo_url}}" /></center>
     {{/if_equals}}

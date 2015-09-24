@@ -111,26 +111,32 @@ function connectedCallNoty(message, type)
 		] });
 		
 		if(TWILIO_DIRECTION == "outbound-dial") {
-		var responseJson = $.parseJSON(
-		        $.ajax({
-		        	url: "core/api/voicemails",
-		            async: false,
-		            dataType: 'json'
-		        }).responseText
-		    );
+
+			accessUrlUsingAjax("core/api/voicemails", function(resp){
+
+					var responseJson = resp;
+					getTemplate("twilioio-voicemail",responseJson, undefined, function(template_ui){
+						if(!template_ui)
+							  return;
+							
+						$('.noty_buttons').prepend($(template_ui));
+
+						// Add dialpad template in twilio content
+						$('.noty_buttons').prepend(getTemplate("twilioio-dialpad"));
+
+					}, null);
+			});
 		
-//		console.log("json resp : ");
-//		console.log(responseJson);
-//		console.log(JSON.stringify(responseJson));
-		
-		var voicemailHTML = $(getTemplate("twilioio-voicemail",responseJson), {});
-		$('.noty_buttons').prepend(voicemailHTML);
+		} else {
+
+			// Add dialpad template in twilio content
+			getTemplate("twilioio-dialpad", {}, undefined, function(template_ui){
+				if(!template_ui)
+					  return;
+				$('.noty_buttons').prepend($(template_ui));	
+			}, null);
 		}
 		
-		// Add dialpad template in twilio content
-		var dialpad = $(getTemplate("twilioio-dialpad"), {});
-		$('.noty_buttons').prepend(dialpad);
-
 		return;
 	}
 

@@ -73,80 +73,89 @@ function showTwitterMatchingProfiles(data)
 		el = "<div class='panel-body'><p class='text-base'>Search results. " + "<a href='#' class='twitter_modify_search'>Modify search</a></p>";
 
 	el = el.concat(getTemplate("twitter-search-result", data));
-	el = el + "</div><div class='clearfix'></div>";
 
-	// Show matching profiles in Twitter panel
-	$('#Twitter', agile_crm_get_current_view()).html(el);
+	getTemplate('twitter-search-result', data, undefined, function(template_ui){
+ 		if(!template_ui)
+    		return;
+		el = el.concat($(template_ui)); 
+		el = el + "</div><div class='clearfix'></div>";
 
-	/*
-	 * Displays Twitter profile details on mouse hover and saves profile on
-	 * click
-	 */
-	$(".twitterImage").on('mouseenter', function()
-	{
-		// Unique Twitter Id from widget
-		Twitter_id = $(this).attr('id');
+		// Show matching profiles in Twitter panel
+		$('#Twitter', agile_crm_get_current_view()).html(el);
 
-		console.log(this);
-		
-		
-		// Aligns details to left in the pop over
-		$(this).popover({ placement : 'left',
-			html : true
-		});
-
-		
 		/*
-		 * Called show to overcome pop over bug (not showing pop over on mouse
-		 * hover for first time)
+		 * Displays Twitter profile details on mouse hover and saves profile on
+		 * click
 		 */
-		$(this).popover('show');
-
-		// on click of any profile, save it to the contact
-		$('#' + Twitter_id).on('click', function(e)
+		$(".twitterImage").off('mouseenter');
+		$(".twitterImage").on('mouseenter', function()
 		{
-			e.preventDefault();
+			// Unique Twitter Id from widget
+			Twitter_id = $(this).attr('id');
 
-			// Hide pop over after clicking on any picture
-			$(this).popover('hide');
+			console.log(this);
+			
+			
+			// Aligns details to left in the pop over
+			$(this).popover({ placement : 'left',
+				html : true
+			});
 
-			console.log('on click in search');
-
-			// Web url of twitter for this profile
-			var url = "@" + $(this).attr('screen_name');
-
-			web_url = url;
-			console.log(url);
-
-			var propertiesArray = [
-				{ "name" : "website", "value" : url, "subtype" : "TWITTER" }
-			];
-			if (!contact_image)
-			{
-				// Get image link which can be used to save image for contact
-				var twitter_image = $(this).attr('src');
-				propertiesArray.push({ "name" : "image", "value" : twitter_image });
-			}
-
+			
 			/*
-			 * If contact title is undefined, saves headline of the Twitter
-			 * profile to the contact title
+			 * Called show to overcome pop over bug (not showing pop over on mouse
+			 * hover for first time)
 			 */
-			if (!agile_crm_get_contact_property("title"))
+			$(this).popover('show');
+
+			// on click of any profile, save it to the contact
+			$('#' + Twitter_id).off('click');
+			$('#' + Twitter_id).on('click', function(e)
 			{
-				var summary = $(this).attr("summary");
-				propertiesArray.push({ "name" : "title", "value" : summary });
-			}
+				e.preventDefault();
 
-			console.log(propertiesArray);
+				// Hide pop over after clicking on any picture
+				$(this).popover('hide');
 
-			agile_crm_update_contact_properties(propertiesArray);
+				console.log('on click in search');
 
-			// show twitter profile by id
-			showTwitterProfile(Twitter_id);
+				// Web url of twitter for this profile
+				var url = "@" + $(this).attr('screen_name');
 
+				web_url = url;
+				console.log(url);
+
+				var propertiesArray = [
+					{ "name" : "website", "value" : url, "subtype" : "TWITTER" }
+				];
+				if (!contact_image)
+				{
+					// Get image link which can be used to save image for contact
+					var twitter_image = $(this).attr('src');
+					propertiesArray.push({ "name" : "image", "value" : twitter_image });
+				}
+
+				/*
+				 * If contact title is undefined, saves headline of the Twitter
+				 * profile to the contact title
+				 */
+				if (!agile_crm_get_contact_property("title"))
+				{
+					var summary = $(this).attr("summary");
+					propertiesArray.push({ "name" : "title", "value" : summary });
+				}
+
+				console.log(propertiesArray);
+
+				agile_crm_update_contact_properties(propertiesArray);
+
+				// show twitter profile by id
+				showTwitterProfile(Twitter_id);
+
+			});
 		});
-	});
+	}, null);
+		
 
 }
 
@@ -396,53 +405,67 @@ function showTwitterProfile(Twitter_id)
 		Twitter_current_update_id = data.current_update_id;
 
 		// Gets Twitter profile template and populate the fields with details
-		$('#Twitter', agile_crm_get_current_view()).html(getTemplate("twitter-profile", data));
+		
+		getTemplate('twitter-profile', data, undefined, function(template_ui){
+	 		if(!template_ui)
+	    		return;
+			$('#Twitter', agile_crm_get_current_view()).html($(template_ui)); 
+			// Checks if the agile user is following the contact's Twitter profile
+			if (data.is_connected)
+				// If following unFollow and compose tweet buttons are shown
+				$('#twitter_unfollow').show();
 
-		// Checks if the agile user is following the contact's Twitter profile
-		if (data.is_connected)
-			// If following unFollow and compose tweet buttons are shown
-			$('#twitter_unfollow').show();
-
-		else
-		{
-			/*
-			 * Checks if follow request is sent, if not sent follow button is
-			 * shown
-			 */
-			if (!data.is_follow_request_sent)
-				$('#twitter_follow').show();
 			else
-				/*
-				 * If follow request sent, then button is disabled showing the
-				 * text as follow request sent
-				 */
-				$('#twitter_follow').text("Follow Request Sent").attr("disabled", "disabled").show();
-		}
-
-		// If updates are available, show recent updates in Twitter profile
-		if (data.updateStream && data.updateStream.length != 0)
-		{
-			// Current update heading and refresh button is shown
-			$('#twitter_refresh_stream').show();
-
-			// Sets the update stream into a local variable for this method
-			stream_data = data.updateStream;
-
-			var element = $(getTemplate("twitter-update-stream", data.updateStream))
-
-			head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
 			{
-				$(".time-ago", element).timeago();
-			});
+				/*
+				 * Checks if follow request is sent, if not sent follow button is
+				 * shown
+				 */
+				if (!data.is_follow_request_sent)
+					$('#twitter_follow').show();
+				else
+					/*
+					 * If follow request sent, then button is disabled showing the
+					 * text as follow request sent
+					 */
+					$('#twitter_follow').text("Follow Request Sent").attr("disabled", "disabled").show();
+			}
 
-			// Template is populated with update details and shown
-			$('#twitter_social_stream').append(element);
+			// If updates are available, show recent updates in Twitter profile
+			if (data.updateStream && data.updateStream.length != 0)
+			{
+				// Current update heading and refresh button is shown
+				$('#twitter_refresh_stream').show();
 
-			return;
-		}
+				// Sets the update stream into a local variable for this method
+				stream_data = data.updateStream;
 
-		// Current current update is shown
-		$('#twitter_current_activity').show();
+				
+
+				getTemplate('twitter-update-stream', data.updateStream, undefined, function(template_ui){
+			 		if(!template_ui)
+			    		return;
+			    	var element = $(template_ui);
+			    	head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
+					{
+						$(".time-ago", element).timeago();
+					});
+
+					// Template is populated with update details and shown
+					$('#twitter_social_stream').append(element);
+
+					return;
+					
+				}, null);
+
+					
+			}
+
+			// Current current update is shown
+			$('#twitter_current_activity').show();
+		}, '#Twitter', agile_crm_get_current_view());
+
+			
 
 	}, "json").error(function(data)
 	{
@@ -470,6 +493,7 @@ function showTwitterProfile(Twitter_id)
 function registerClickEventsInTwitter(Twitter_id, twitter_connected, stream_data)
 {
 	// On click of see more link, more updates are retrieved
+    $("body").off('click','.twitter_stream');
 	$("body").on('click','.twitter_stream', function(e)
 	{
 
@@ -524,6 +548,7 @@ function registerClickEventsInTwitter(Twitter_id, twitter_connected, stream_data
 	 * On click of less button, hides update stream and shows current update by
 	 * toggling
 	 */
+    $("body").off('click','#twitter_less');
 	$("body").on('click','#twitter_less', function(e)
 	{
 		e.preventDefault();
@@ -563,6 +588,7 @@ function registerClickEventsInTwitter(Twitter_id, twitter_connected, stream_data
 	 * On click of refresh icon in the Twitter panel, all the new updates are
 	 * shown
 	 */
+    $("body").off('click','#twitter_refresh_stream');
 	$("body").on('click','#twitter_refresh_stream', function(e)
 	{
 		e.preventDefault();
@@ -625,12 +651,19 @@ function anyFiveNetworkUpdates(Twitter_id, tweet_id, stream_data, element)
 		/*
 		 * Populate the template with update stream details and show in panel
 		 */
-		$("#twitter_social_stream").append(getTemplate("twitter-update-stream", data));
+		
 
-		$(".time-ago", $("#twitter_social_stream")).timeago();
+		getTemplate('twitter-update-stream', data, undefined, function(template_ui){
+	 		if(!template_ui)
+	    		return;
+			$("#twitter_social_stream").append($(template_ui)); 
+			$(".time-ago", $("#twitter_social_stream")).timeago();
 
-		// Current activity is hidden
-		$('#twitter_current_activity').hide();
+			// Current activity is hidden
+			$('#twitter_current_activity').hide();
+		}, null);
+
+			
 
 	}).error(function(data)
 	{
@@ -662,21 +695,28 @@ function getFirstFiveNetworkUpdates(Twitter_id)
 	function(data)
 	{
 		// Populates the template with the data and shows refresh button
-		$("#twitter_social_stream", agile_crm_get_current_view()).html(getTemplate("twitter-update-stream", data));
-		$('#twitter_current_activity').hide();
-		$('#twitter_refresh_stream').show();
 
-		$(".time-ago", $("#twitter_social_stream")).timeago();
 
-		// Checks if stream available,
-		if (data.length == 0)
-		{
-			// See Less is shown and see more is hidden
-			$("#twitter_stream").hide();
-			$('#twitter_current_activity').show();
-			$('#twitter_less').show();
-			return;
-		}
+		getTemplate('twitter-update-stream', data, undefined, function(template_ui){
+	 		if(!template_ui)
+	    		return;
+			$("#twitter_social_stream", agile_crm_get_current_view()).html($(template_ui)); 
+			$('#twitter_current_activity').hide();
+			$('#twitter_refresh_stream').show();
+
+			$(".time-ago", $("#twitter_social_stream")).timeago();
+
+			// Checks if stream available,
+			if (data.length == 0)
+			{
+				// See Less is shown and see more is hidden
+				$("#twitter_stream").hide();
+				$('#twitter_current_activity').show();
+				$('#twitter_less').show();
+				return;
+			}
+		}, "#twitter_social_stream", agile_crm_get_current_view());
+			
 
 	}).error(function(data)
 	{
@@ -707,23 +747,30 @@ function allNetworkUpdates(Twitter_id, stream_data)
 		$('#tweet_load').remove();
 
 		// Populates the template with the data
-		$("#twitter_social_stream", agile_crm_get_current_view()).html(getTemplate("twitter-update-stream", data));
+		
 
-		$(".time-ago", $("#twitter_social_stream")).timeago();
+		getTemplate('twitter-update-stream', data, undefined, function(template_ui){
+	 		if(!template_ui)
+	    		return;
+			$("#twitter_social_stream", agile_crm_get_current_view()).html($(template_ui)); 
+			$(".time-ago", $("#twitter_social_stream")).timeago();
 
-		// Checks if stream available,
-		if (data.length == 0)
-		{
-			// See Less is shown and see more is hidden
-			$("#twitter_stream").hide();
-			$('#twitter_less').show();
-			return;
-		}
+			// Checks if stream available,
+			if (data.length == 0)
+			{
+				// See Less is shown and see more is hidden
+				$("#twitter_stream").hide();
+				$('#twitter_less').show();
+				return;
+			}
 
-		// See more,refresh buttons are shown and less is hidden
-		$("#twitter_stream").show();
-		$('#twitter_less').hide();
-		$('#twitter_current_activity').hide();
+			// See more,refresh buttons are shown and less is hidden
+			$("#twitter_stream").show();
+			$('#twitter_less').hide();
+			$('#twitter_current_activity').hide();
+		}, "#twitter_social_stream", agile_crm_get_current_view());
+
+			
 
 	}).error(function(data)
 	{
@@ -733,10 +780,17 @@ function allNetworkUpdates(Twitter_id, stream_data)
 		$('#twitter_less').hide();
 
 		if (stream_data && stream_data.length != 0)
+		{
 			/*
 			 * Populates the template with the initial update stream on error
 			 */
-			$("#twitter_social_stream", agile_crm_get_current_view()).html(getTemplate("twitter-update-stream", stream_data));
+			getTemplate('twitter-update-stream', stream_data, undefined, function(template_ui){
+		 		if(!template_ui)
+		    		return;
+				$("#twitter_social_stream", agile_crm_get_current_view()).html($(template_ui)); 
+			}, "#twitter_social_stream", agile_crm_get_current_view());
+		}
+
 
 		$(".time-ago", $("#twitter_social_stream")).timeago();
 
@@ -853,41 +907,49 @@ function sendTwitterMessage(Twitter_id, message)
 	$('#twitter_messageModal').remove();
 
 	// Populate the modal template with the above json details in the form
-	var message_form_modal = getTemplate("twitter-message", json);
+	
+	getTemplate('twitter-message', json, undefined, function(template_ui){
+ 		if(!template_ui)
+    		return;
+    	var message_form_modal = $(template_ui);
+    	// Append the form into the content
+		$('#content').append(message_form_modal);
 
-	// Append the form into the content
-	$('#content').append(message_form_modal);
-
-	$('#twitter_messageModal').on('shown', function()
-	{
-
-		head.js(LIB_PATH + 'lib/bootstrap-limit.js', function()
+		$('#twitter_messageModal').off('shown');
+		$('#twitter_messageModal').on('shown', function()
 		{
-			$(".twit-message-limit").limit({ maxChars : 125, counter : "#twitter-counter" });
-			$('#twitter_messageModal').find('#twit-message').focus();
+
+			head.js(LIB_PATH + 'lib/bootstrap-limit.js', function()
+			{
+				$(".twit-message-limit").limit({ maxChars : 125, counter : "#twitter-counter" });
+				$('#twitter_messageModal').find('#twit-message').focus();
+			});
 		});
-	});
 
-	//
+		//
 
-	// Shows the modal after filling with details
-	$('#twitter_messageModal').modal("show");
+		// Shows the modal after filling with details
+		$('#twitter_messageModal').modal("show");
 
-	// On click of send button in the modal, message request is sent
-	$('#send_request').click(function(e)
-	{
-		e.preventDefault();
-
-		// Checks whether all the input fields are filled
-		if (!isValidForm($("#twitter_messageForm")))
+		// On click of send button in the modal, message request is sent
+		$('#send_request').click(function(e)
 		{
-			return;
-		}
+			e.preventDefault();
 
-		$(this).text("Saving..");
-		sendRequest("/core/api/widgets/social/message/" + Twitter_Plugin_Id + "/" + Twitter_id, "twitter_messageForm", "twitter_messageModal");
+			// Checks whether all the input fields are filled
+			if (!isValidForm($("#twitter_messageForm")))
+			{
+				return;
+			}
 
-	});
+			$(this).text("Saving..");
+			sendRequest("/core/api/widgets/social/message/" + Twitter_Plugin_Id + "/" + Twitter_id, "twitter_messageForm", "twitter_messageModal");
+
+		});
+		
+	}, null);
+
+		
 }
 
 /**
@@ -915,39 +977,46 @@ function tweetInTwitter(Twitter_id)
 	$('#twitter_messageModal').remove();
 
 	// Populate the modal template with the above json details in the form
-	var message_form_modal = getTemplate("twitter-message", json);
+	getTemplate('twitter-message', json, undefined, function(template_ui){
+ 		if(!template_ui)
+    		return;
+    	var message_form_modal = $(template_ui);
+    	// Append the form into the content
+		$('#content').append(message_form_modal);
 
-	// Append the form into the content
-	$('#content').append(message_form_modal);
-
-	$('#twitter_messageModal').on('shown', function()
-	{
-
-		head.js(LIB_PATH + 'lib/bootstrap-limit.js', function()
+		$('#twitter_messageModal').off('shown');
+		$('#twitter_messageModal').on('shown', function()
 		{
-			$(".twit-tweet-limit").limit({ maxChars : 125, counter : "#twitter-counter" });
-			$('#twitter_messageModal').find('#twit-tweet').focus();
+
+			head.js(LIB_PATH + 'lib/bootstrap-limit.js', function()
+			{
+				$(".twit-tweet-limit").limit({ maxChars : 125, counter : "#twitter-counter" });
+				$('#twitter_messageModal').find('#twit-tweet').focus();
+			});
 		});
-	});
 
-	// Shows the modal after filling with details
-	$('#twitter_messageModal').modal("show");
+		// Shows the modal after filling with details
+		$('#twitter_messageModal').modal("show");
 
-	// On click of send button in the modal, tweet request is sent
-	$('#send_request').click(function(e)
-	{
-		e.preventDefault();
-
-		// Checks whether all the input fields are filled
-		if (!isValidForm($("#twitter_messageForm")))
+		// On click of send button in the modal, tweet request is sent
+		$('#send_request').click(function(e)
 		{
-			return;
-		}
+			e.preventDefault();
 
-		$(this).text("Saving..");
-		sendRequest("/core/api/widgets/social/tweet/" + Twitter_Plugin_Id, "twitter_messageForm", "twitter_messageModal");
+			// Checks whether all the input fields are filled
+			if (!isValidForm($("#twitter_messageForm")))
+			{
+				return;
+			}
 
-	});
+			$(this).text("Saving..");
+			sendRequest("/core/api/widgets/social/tweet/" + Twitter_Plugin_Id, "twitter_messageForm", "twitter_messageModal");
+
+		});
+		
+	}, null);
+
+		
 }
 
 /**
@@ -1211,7 +1280,12 @@ function twitterMainError(id, error, disable_check)
 	 * Get error template and fill it with error message and show it in the div
 	 * with given id
 	 */
-	$('#' + id, agile_crm_get_current_view()).html(getTemplate('twitter-error-panel', error_json));
+	
+	getTemplate('twitter-error-panel', error_json, undefined, function(template_ui){
+ 		if(!template_ui)
+    		return;
+		$('#' + id, agile_crm_get_current_view()).html($(template_ui)); 
+	}, '#' + id, agile_crm_get_current_view());
 
 }
 
@@ -1283,6 +1357,7 @@ $(function()
 			}
 
 			// Deletes Twitter profile on click of delete button in template
+            $("body").off('click','#Twitter_plugin_delete');
 			$("body").on('click','#Twitter_plugin_delete', function(e)
 			{
 				e.preventDefault();
@@ -1296,6 +1371,7 @@ $(function()
 			});
 
 			// Sends a message to Twitter when clicked on send message button
+            $("body").off('click','#twitter_message');
 			$("body").on('click','#twitter_message', function(e)
 			{
 				e.preventDefault();
@@ -1303,6 +1379,7 @@ $(function()
 			});
 
 			// Sends an follow request to Twitter when clicked on follow button
+            $("body").off('click','#twitter_follow');
 			$("body").on('click','#twitter_follow', function(e)
 			{
 				e.preventDefault();
@@ -1316,6 +1393,7 @@ $(function()
 			});
 
 			// Sends an UnFollow request to Twitter when clicked on UnFollow button
+            $("body").off('click','#twitter_unfollow');
 			$("body").on('click','#twitter_unfollow', function(e)
 			{
 				e.preventDefault();
@@ -1323,6 +1401,7 @@ $(function()
 			});
 
 			// On mouse enter unfollow
+            $("body").off('mouseenter','#twitter_unfollow');
 			$("body").on('mouseenter','#twitter_unfollow', function(e)
 			{
 				$('#twitter_unfollow').text("Unfollow");
@@ -1331,6 +1410,7 @@ $(function()
 			});
 
 			// On mouse leave following
+            $("body").off('mouseleave','#twitter_unfollow');
 			$("body").on('mouseleave','#twitter_unfollow', function(e)
 			{
 				$('#twitter_unfollow').text("Following");
@@ -1339,6 +1419,7 @@ $(function()
 			});
 
 			// ReTweets a tweet in Twitter on click of ReTweet link
+            $("body").off('click','.twitter_retweet');
 			$("body").on('click','.twitter_retweet', function(e)
 			{
 				e.preventDefault();
@@ -1352,6 +1433,7 @@ $(function()
 			});
 
 			// Sends a tweet to the contact Twitter profile
+            $("body").off('click','#twitter_tweet');
 			$("body").on('click','#twitter_tweet', function(e)
 			{
 				e.preventDefault();
@@ -1360,19 +1442,26 @@ $(function()
 			});
 
 			// on click of name link to modify search, search template is shown
+            $("body").off('click','.twitter_modify_search');
 			$("body").on('click','.twitter_modify_search', function(e)
 			{
 				e.preventDefault();
 
 				Twitter_search_details['plugin_id'] = Twitter_Plugin_Id;
 
-				$('#Twitter', agile_crm_get_current_view()).html(getTemplate('twitter-modified-search', Twitter_search_details));
+				
+				getTemplate('twitter-modified-search', Twitter_search_details, undefined, function(template_ui){
+			 		if(!template_ui)
+			    		return;
+					$('#Twitter', agile_crm_get_current_view()).html($(template_ui)); 
+				}, '#Twitter', agile_crm_get_current_view());
 			});
 
 			/*
 			 * On click of search button in modify template, matching profiles are
 			 * fetched
 			 */
+            $("body").off('click','#twitter_search_btn');
 			$("body").on('click','#twitter_search_btn', function(e)
 			{
 				e.preventDefault();
@@ -1383,6 +1472,7 @@ $(function()
 			/*
 			 * On click of close, show past results with past searched data
 			 */
+            $("body").off('click','#twitter_search_close');
 			$("body").on('click','#twitter_search_close', function(e)
 			{
 				e.preventDefault();
@@ -1394,6 +1484,7 @@ $(function()
 			});
 
 			// On click of followers in twitter panel
+            $("body").off('click','#twitter_followers');
 			$("body").on('click','#twitter_followers', function(e1)
 			{
 				e1.preventDefault();
@@ -1432,24 +1523,30 @@ $(function()
 					getListOfProfilesByIDsinTwitter(temp, function(result)
 					{
 						// Show matching profiles in Twitter panel
-						$('#twitter_follower_panel', agile_crm_get_current_view()).html(getTemplate("twitter-follower-following", result));
 						
-						$("body").on('mouseover','.twitterImage', function(e1)
-						{
-							// Unique Twitter Id from widget
-							var id = $(this).attr('id');
+						getTemplate('twitter-follower-following', result, undefined, function(template_ui){
+					 		if(!template_ui)
+					    		return;
+							$('#twitter_follower_panel', agile_crm_get_current_view()).html($(template_ui)); 
+							$("body").on('mouseover','.twitterImage', function(e1)
+							{
+								// Unique Twitter Id from widget
+								var id = $(this).attr('id');
 
-							// Aligns details to left in the pop over
-							$('#' + id).popover({ placement : 'left',
-								html : true
+								// Aligns details to left in the pop over
+								$('#' + id).popover({ placement : 'left',
+									html : true
+								});
+
+								/*
+								 * Called show to overcome pop over bug (not showing pop
+								 * over on mouse hover for first time)
+								 */
+								$('#' + id).popover('show');
 							});
-
-							/*
-							 * Called show to overcome pop over bug (not showing pop
-							 * over on mouse hover for first time)
-							 */
-							$('#' + id).popover('show');
-						});
+						}, '#twitter_follower_panel', agile_crm_get_current_view());
+						
+							
 					}, function(error)
 					{
 						Twitter_follower_ids = undefined;
@@ -1459,6 +1556,7 @@ $(function()
 				});
 			});
 
+            $("body").off('click','#more_followers');
 			$("body").on('click','#more_followers', function(e2)
 			{
 				e2.preventDefault();
@@ -1481,7 +1579,12 @@ $(function()
 					$('#spinner-followers').hide();
 
 					// Show matching profiles in Twitter panel
-					$('#twitter_follower_panel').append(getTemplate('twitter-follower-following', result));
+					
+					getTemplate('twitter-follower-following', result, undefined, function(template_ui){
+				 		if(!template_ui)
+				    		return;
+						$('#twitter_follower_panel').append($(template_ui)); 
+					}, null);
 				}, function(error)
 				{
 					$('#spinner-followers').hide();
@@ -1490,6 +1593,7 @@ $(function()
 			});
 
 			// On click of following in twitter panel
+            $("body").off('click','#twitter_following');
 			$("body").on('click','#twitter_following', function(e1)
 			{
 				e1.preventDefault();
@@ -1523,24 +1627,31 @@ $(function()
 					{
 
 						// Show matching profiles in Twitter panel
-						$('#twitter_following_panel', agile_crm_get_current_view()).html(getTemplate("twitter-follower-following", result));
+						
+						getTemplate('twitter-follower-following', result, undefined, function(template_ui){
+					 		if(!template_ui)
+					    		return;
+							$('#twitter_following_panel', agile_crm_get_current_view()).html($(template_ui));
+							$("body").on('mouseover','.twitterImage', function(e1)
+							{
+								// Unique Twitter Id from widget
+								var id = $(this).attr('id');
+                        
+                        $("body").off('mouseover','.twitterImage');
+								// Aligns details to left in the pop over
+								$('#' + id).popover({ placement : 'left',
+									html : true
+								});
 
-						$("body").on('mouseover','.twitterImage', function(e1)
-						{
-							// Unique Twitter Id from widget
-							var id = $(this).attr('id');
+								/*
+								 * Called show to overcome pop over bug (not showing pop
+								 * over on mouse hover for first time)
+								 */
+								$('#' + id).popover('show');
+							}); 
+						}, '#twitter_following_panel', agile_crm_get_current_view());
 
-							// Aligns details to left in the pop over
-							$('#' + id).popover({ placement : 'left',
-								html : true
-							});
-
-							/*
-							 * Called show to overcome pop over bug (not showing pop
-							 * over on mouse hover for first time)
-							 */
-							$('#' + id).popover('show');
-						});
+							
 					}, function(error)
 					{
 						Twitter_following_ids = undefined;
@@ -1550,6 +1661,7 @@ $(function()
 				});
 			});
 
+            $("body").off('click','#more_following');
 			$("body").on('click','#more_following', function(e2)
 			{
 				e2.preventDefault();
@@ -1571,7 +1683,11 @@ $(function()
 					$('#spinner-following').hide();
 
 					// Show matching profiles in Twitter panel
-					$('#twitter_following_panel').append(getTemplate('twitter-follower-following', result));
+					getTemplate('twitter-follower-following', result, undefined, function(template_ui){
+				 		if(!template_ui)
+				    		return;
+				    	$('#twitter_following_panel').append($(template_ui)); 
+					}, null);
 				}, function(error)
 				{
 					$('#spinner-following').hide();
