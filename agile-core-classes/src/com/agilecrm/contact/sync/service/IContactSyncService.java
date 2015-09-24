@@ -6,7 +6,7 @@ package com.agilecrm.contact.sync.service;
 import java.util.List;
 
 import com.agilecrm.contact.Contact;
-import com.agilecrm.contact.sync.wrapper.WrapperService;
+import com.agilecrm.contact.sync.wrapper.IContactWrapper;
 import com.thirdparty.google.ContactPrefs;
 
 /**
@@ -16,7 +16,7 @@ import com.thirdparty.google.ContactPrefs;
  * 
  * @author jitendra
  */
-public interface SyncService
+public interface IContactSyncService
 {
 
     /** max limit of contact to be saved in agile per call. */
@@ -30,7 +30,7 @@ public interface SyncService
      *            the prefs
      * @return the sync service
      */
-    public SyncService createService(ContactPrefs prefs);
+    public IContactSyncService createService(ContactPrefs prefs);
 
     /**
      * initialize Contact Sync into agile.
@@ -50,5 +50,5 @@ public interface SyncService
      * 
      * @return the wrapper service
      */
-    public Class<? extends WrapperService> getWrapperService();
+    public Class<? extends IContactWrapper> getWrapperService();
 }

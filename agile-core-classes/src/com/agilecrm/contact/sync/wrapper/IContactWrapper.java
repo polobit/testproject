@@ -12,7 +12,7 @@ import com.thirdparty.google.ContactPrefs;
  * info and easy way to create contact every third party client needs to
  * implement wrapper service
  */
-public interface WrapperService
+public interface IContactWrapper
 {
 
     /**
