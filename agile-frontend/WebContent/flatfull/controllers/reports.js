@@ -621,17 +621,20 @@ var ReportsRouter = Backbone.Router
 						{
 
 					// Load Reports Template
-					$("#content").html(getTemplate("report-DealsLoss", {}));
-
+				getTemplate("report-DealsLoss", {}, undefined, function(template_ui){
+						if(!template_ui)
+							  return;
+						$('#content').html($(template_ui));	
 
 					initSalesCharts(function()
 							{
 						showLossReasonGraphs();
 							});
-						});
 
-				$(".active").removeClass("active");
-				$("#reportsmenu").addClass("active");
+					$(".active").removeClass("active");
+					$("#reportsmenu").addClass("active");
+				}, "#content");
+			});
 			},
 
 			showDealsWonChart : function()
@@ -641,17 +644,20 @@ var ReportsRouter = Backbone.Router
 						{
 
 					// Load Reports Template
-					$("#content").html(getTemplate("report-DealsWon", {}));
-
+				getTemplate("report-DealsWon", {}, undefined, function(template_ui){
+						if(!template_ui)
+							  return;
+						$('#content').html($(template_ui));	
 
 					initSalesCharts(function()
 							{
 						showWonPieChart();
 							});
-						});
 
 				$(".active").removeClass("active");
 				$("#reportsmenu").addClass("active");
+				}, "#content");
+			  });	
 			},
 
 	});
