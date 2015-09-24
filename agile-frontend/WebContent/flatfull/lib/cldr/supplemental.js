@@ -78,9 +78,6 @@
 
 	};
 
-
-
-
 	var initSuper = Cldr.prototype.init;
 
 	/**

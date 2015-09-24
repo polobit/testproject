@@ -1,5 +1,5 @@
 /**
- * Creates backbone router to access preferences of the user portlets
+ * Creates backbone router to access preferences of the user 
  */
 var PortletsRouter = Backbone.Router
 		.extend({
@@ -15,8 +15,6 @@ var PortletsRouter = Backbone.Router
 				} else {
 					head
 							.js(
-									LIB_PATH
-											+ 'jscore/handlebars/handlebars-helpers.js',
 									LIB_PATH + 'lib/jquery.gridster.js',
 									function() {
 										this.Catalog_Portlets_View = new Base_Collection_View(
@@ -33,6 +31,29 @@ var PortletsRouter = Backbone.Router
 															$('#taksAndEvents').parents('.wrapper-md').hide();
 														if($('#userActivity').children().length==0)
 															$('#userActivity').parents('.wrapper-md').hide();
+														preload([
+   																	'flatfull/img/dashboard_images/Mini-Calendar.jpg',
+   																	'flatfull/img/dashboard_images/stats.png',
+   																	'flatfull/img/dashboard_images/Leaderboard.png',
+   																	'flatfull/img/dashboard_images/account-information.png',
+   																	'flatfull/img/dashboard_images/Activities.png',
+   																	'flatfull/img/dashboard_images/Agile-Blog.png',
+   																	'flatfull/img/dashboard_images/Calls.png',
+   																	'flatfull/img/dashboard_images/Deals-Funnel.png',
+   																	'flatfull/img/dashboard_images/Email-opened.png',
+   																	'flatfull/img/dashboard_images/Events.png',
+   																	'flatfull/img/dashboard_images/Milestone.png',
+																	'flatfull/img/dashboard_images/My-contacts.png',
+   																	'flatfull/img/dashboard_images/Pending-Deals.png',
+   																	'flatfull/img/dashboard_images/Revenue-graph.png',
+																	'flatfull/img/dashboard_images/Tag-Graph.png',
+																	'flatfull/img/dashboard_images/Task-report.png',
+																	'flatfull/img/dashboard_images/Task.png',
+																	'flatfull/img/dashboard_images/User-Activities.png',
+																	'flatfull/img/dashboard_images/Campaign-stats.jpg',
+
+																]);
+														initializeAddPortletsListeners();
 													}
 												});
 
@@ -46,6 +67,7 @@ var PortletsRouter = Backbone.Router
 														.render().el);
 
 									});
+										
 				}
 			},
 			// Show form modal
@@ -55,20 +77,32 @@ var PortletsRouter = Backbone.Router
 			// $("#portletstreamDetails",$('#portletStreamModal')).html(this.Catalog_Portlets_View.el);},
 
 			portlets : function() {
-				head.js(LIB_PATH + 'jscore/handlebars/handlebars-helpers.js?='
-						+ _AGILE_VERSION, LIB_PATH + 'lib/jquery.gridster.js',
+				head.js(LIB_PATH + 'lib/jquery.gridster.js',
 						function() {
-							var el = $(getTemplate('portlets', {}));
-							$("#content").html(el);
-							if (IS_FLUID) {
-								$('#content').find('div.row')
-										.removeClass('row').addClass(
-												'row-fluid');
-							}
-							loadPortlets(el);
+
+							getTemplate('portlets', {}, undefined, function(template_ui){
+								if(!template_ui)
+									  return;
+
+								var el = $('#content').html($(template_ui));
+								if (IS_FLUID) {
+									$('#content').find('div.row')
+											.removeClass('row').addClass(
+													'row-fluid');
+								}
+								loadPortlets(el);
+								
+							}, "#content");
+
 						});
 			}
 		});
+
+function preload(arrayOfImages) {
+    $(arrayOfImages).each(function () {
+        $('<img />').attr('src',this).appendTo('body').css('display','none');
+    });
+}
 // For adding new portlets
 function addNewPortlet(portlet_type, p_name) {
 	var obj={};
@@ -116,6 +150,8 @@ function addNewPortlet(portlet_type, p_name) {
 		obj.name="User Activities"
 	else if(p_name=="MiniCalendar")
 		obj.name="Mini Calendar";
+	else if(p_name=="Campaignstats")
+		obj.name="Campaign stats";
 	obj.portlet_type=portlet_type;
 	var max_row_position=0;
 	if(gridster!=undefined)
@@ -188,6 +224,10 @@ function addNewPortlet(portlet_type, p_name) {
 	}else if(portlet_type=="DEALS" && p_name=="RevenueGraph"){
 		json['duration']="this-quarter";
 		json['track']="anyTrack";
+	}
+	else if(portlet_type=="USERACTIVITY" && p_name=="Campaignstats"){
+		json['duration']="yesterday";
+		json['campaign_type']="All";
 	}
 	var portlet = new BaseModel();
 	portlet.url = 'core/api/portlets/addPortlet';
@@ -309,6 +349,15 @@ function initializePortletsListeners_1(){
 				},
 				dataType : 'json'
 			});
+
+	});
+
+	$('#dashlet_heading #tutotial_modal').off('click');
+	$('#dashlet_heading').on('click', '#tutotial_modal', function(e){
+		e.preventDefault();
+		$('#tutorialModal').html(getTemplate("tutorial-modal"));
+		$('#tutorialModal').modal("show");
+
 	});
 
 	$('.portlet_body #portlets-contacts-model-list > tr, #portlets-companies-model-list > tr, #portlets-contacts-email-opens-model-list > tr').off();
@@ -329,8 +378,14 @@ function initializePortletsListeners_1(){
 
 				var obj = getActivityObject(data);
 				console.log(obj);
-				var emailinfo = $(getTemplate("infoModal", JSON.parse(obj)));
-				emailinfo.modal('show');
+
+				getTemplate("infoModal", JSON.parse(obj), undefined, function(template_ui){
+					if(!template_ui)
+						  return;
+					var emailinfo = $(template_ui);
+					emailinfo.modal('show');
+
+				}, null);
 
 			});
 	
@@ -539,6 +594,7 @@ function initializePortletsListeners_1(){
 	$('.gridster-portlets').on(
 		"click",'.portlets-tasks-select',
 		function(e) {
+			
 					e.stopPropagation();
 					if ($(this).is(':checked')) {
 						// Complete
@@ -575,7 +631,84 @@ function initializePortletsListeners_1(){
 		e.preventDefault();
 		showPortletSettings(this.id);
 	});
+   
 }
+
+function initializeAddPortletsListeners(){
+ $('.col-md-3').on("mouseenter",'.show_screeshot',function(e){
+    	var p_name=$(this).attr('id');
+    	var image;
+    	var placement="right"
+    		if(p_name=="FilterBased")
+    			image="flatfull/img/dashboard_images/My-contacts.png";
+    		else if(p_name=="EmailsOpened")
+    			image="flatfull/img/dashboard_images/Email-opened.png";
+    		else if(p_name=="PendingDeals")
+    			image="flatfull/img/dashboard_images/Pending-Deals.png";
+    		else if(p_name=="Agenda")
+    			image="flatfull/img/dashboard_images/Events.png";
+    		else if(p_name=="TodayTasks")
+    			image="flatfull/img/dashboard_images/Task.png";
+    		else if(p_name=="DealsByMilestone")
+    				image="flatfull/img/dashboard_images/Milestone.png";
+    		else if(p_name=="DealsFunnel")
+    		{
+    				image="flatfull/img/dashboard_images/Deals-Funnel.png";
+    			placement="left";
+    		}
+    		else if(p_name=="GrowthGraph")
+    		{
+    			placement="left";
+    				image="flatfull/img/dashboard_images/Tag-Graph.png";
+    		}
+    		else if(p_name=="CallsPerPerson")
+    		{
+    			placement="left";
+    				image="flatfull/img/dashboard_images/Calls.png";
+    		}
+    		else if(p_name=="AgileCRMBlog")
+    			image="flatfull/img/dashboard_images/Agile-Blog.png";
+    		else if(p_name=="AccountDetails")
+    			image="flatfull/img/dashboard_images/account-information.png";
+    		else if(p_name=="TaskReport"){
+    				placement="left";
+    				image="flatfull/img/dashboard_images/Task-report.png";		
+    			}
+    		else if(p_name=="StatsReport")
+    			image="flatfull/img/dashboard_images/stats.png";
+    		else if(p_name=="Leaderboard")
+    				image="flatfull/img/dashboard_images/Leaderboard.png";
+    		else if(p_name=="RevenueGraph")
+    		{
+    			placement="left";
+    			image="flatfull/img/dashboard_images/Revenue-graph.png";
+    		}
+    		else if(p_name=="UserActivities")
+    		{
+    			placement="left";
+    			image="flatfull/img/dashboard_images/User-Activities.png";
+    		}
+    		else if(p_name=="MiniCalendar")
+    		{
+    			placement="left";
+    			image="flatfull/img/dashboard_images/Mini-Calendar.jpg";
+    		}
+    		else if(p_name=="Campaignstats")
+    			image="flatfull/img/dashboard_images/Campaign-stats.jpg";
+    	$(this).popover({
+    		"rel":"popover",
+    		"trigger":"hover",
+    		"placement":placement,
+    		"html" : "true",
+    		"content" : function(){
+    			return '<img src='+image+'>';
+
+    		}
+    	});
+    	$(this).popover('show');
+    });
+
+	}
 /*
  * $("#add-portlet").live("click", function(e){ e.preventDefault();
  * this.Catalog_Portlets_View = new Base_Collection_View({ url :
@@ -639,8 +772,10 @@ function getStartAndEndDatesOnDue(duration){
 	if(duration == "now")
 		return (d.setMilliseconds(0)/1000);
 	// Today
-	if (duration == "1-day" || duration == "today")
-		console.log(getGMTTimeFromDate(d) / 1000);
+	if (duration == "1-day" || duration == "today"){
+		getGMTTimeFromDate(d) / 1000;
+	}
+		
 	
 	// This week
 	if (duration == "this-week" || duration == "this-week-start"){
@@ -836,8 +971,6 @@ function getStartAndEndDatesOnDue(duration){
 	}
 		
 
-	console.log((getGMTTimeFromDate(d) / 1000));
-
 	return (getGMTTimeFromDate(d) / 1000);
 }
 function getStartAndEndDatesEpochForPortlets(duration)
@@ -853,8 +986,10 @@ function getStartAndEndDatesEpochForPortlets(duration)
 	if(duration == "now")
 		return (d.setMilliseconds(0)/1000);
 	// Today
-	if (duration == "1-day" || duration == "today")
-		console.log(getGMTTimeFromDate(d) / 1000);
+	if (duration == "1-day" || duration == "today"){
+		getGMTTimeFromDate(d) / 1000;
+	}
+		
 	
 	// This week
 	if (duration == "this-week" || duration == "this-week-start"){
@@ -1052,4 +1187,20 @@ function getStartAndEndDatesEpochForPortlets(duration)
 	console.log((getUTCMidNightEpochFromDate(d) / 1000));
 
 	return (getUTCMidNightEpochFromDate(d) / 1000);
+}
+
+
+/**
+ * Convert time in human readable format.
+ */
+function displayTimeAgo(elmnt)
+{
+	head.js('lib/jquery.timeago.js', function()
+	{
+		$(".time-ago", elmnt).timeago();
+	});
+	
+	console.log($("article.stream-item").parent());
+	
+	$("article.stream-item").parent().addClass("social-striped");
 }

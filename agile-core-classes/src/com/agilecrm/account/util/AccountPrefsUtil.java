@@ -15,54 +15,65 @@ import com.googlecode.objectify.ObjectifyService;
  */
 public class AccountPrefsUtil
 {
-	/**
-	 * AccountPrefs Dao.
-	 */
-	private static ObjectifyGenericDao<AccountPrefs> dao = new ObjectifyGenericDao<AccountPrefs>(AccountPrefs.class);
+    /**
+     * AccountPrefs Dao.
+     */
+    private static ObjectifyGenericDao<AccountPrefs> dao = new ObjectifyGenericDao<AccountPrefs>(AccountPrefs.class);
 
-	/**
-	 * Returns AccountPrefs if exists, otherwise returns default accountprefs.
-	 * 
-	 * @return AccountPrefs.
-	 */
-	public static AccountPrefs getAccountPrefs()
+    /**
+     * Returns AccountPrefs if exists, otherwise returns default accountprefs.
+     * 
+     * @return AccountPrefs.
+     */
+    public static AccountPrefs getAccountPrefs()
+    {
+	Objectify ofy = ObjectifyService.begin();
+	AccountPrefs prefs = ofy.query(AccountPrefs.class).get();
+
+	if (prefs == null)
 	{
-		Objectify ofy = ObjectifyService.begin();
-		AccountPrefs prefs = ofy.query(AccountPrefs.class).get();
-
-		if (prefs == null)
-		{
-			return getDefaultPrefs();
-		}
-
-		return prefs;
+	    return getDefaultPrefs();
 	}
 
-	/**
-	 * Returns Default AccountPrefs.
-	 * 
-	 * @return Default AccountPrefs.
-	 */
-	private static AccountPrefs getDefaultPrefs()
+	return prefs;
+    }
+
+    /**
+     * Returns Default AccountPrefs.
+     * 
+     * @return Default AccountPrefs.
+     */
+    private static AccountPrefs getDefaultPrefs()
+    {
+	AccountPrefs prefs = new AccountPrefs("My company");
+
+	dao.put(prefs);
+	return prefs;
+    }
+
+    /**
+     * Returns account prefs timezone.
+     * 
+     * @return String
+     */
+    public static String getTimeZone()
+    {
+	AccountPrefs prefs = getAccountPrefs();
+
+	if (prefs == null)
+	    return "UTC";
+
+	return prefs.timezone;
+    }
+
+    public static AccountPrefs setNewTagACL(Boolean isEnable)
+    {
+	AccountPrefs prefs = getAccountPrefs();
+	if (isEnable != null)
 	{
-		AccountPrefs prefs = new AccountPrefs("My company");
-
-		dao.put(prefs);
-		return prefs;
+	    prefs.tagsPermission = isEnable;
+	    prefs.save();
 	}
-
-	/**
-	 * Returns account prefs timezone.
-	 * 
-	 * @return String
-	 */
-	public static String getTimeZone()
-	{
-		AccountPrefs prefs = getAccountPrefs();
-
-		if (prefs == null)
-			return "UTC";
-
-		return prefs.timezone;
-	}
+	return prefs;
+    }
 }

@@ -9,7 +9,7 @@
       <context-root>agile-frontend</context-root>
     </web>
   </module>
-  <module>
+  <!-- <module>
     <web>
       <web-uri>agile-calendar.war</web-uri>
       <context-root>agile-calendar</context-root>
@@ -44,5 +44,5 @@
       <web-uri>agile-sync.war</web-uri>
       <context-root>agile-sync</context-root>
     </web>
-  </module>
+  </module> -->
 </application>

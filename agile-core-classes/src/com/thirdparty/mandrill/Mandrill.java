@@ -299,7 +299,7 @@ public class Mandrill
 	    List<BlobKey> blobKeys, String... attachments)
     {
 	return sendMail(null, async, fromEmail, fromName, to, cc, bcc, subject, replyTo, html, text, metadata,
-	        documentIds, blobKeys, attachments);
+		documentIds, blobKeys, attachments);
     }
 
     /**
@@ -323,8 +323,8 @@ public class Mandrill
      * 
      * @return JSONObject
      */
-    private static JSONObject getMessageJSON(String subaccount, String fromEmail, String fromName, String to,
-	    String cc, String bcc, String replyTo, String subject, String html, String text, String metadata,
+    public static JSONObject getMessageJSON(String subaccount, String fromEmail, String fromName, String to, String cc,
+	    String bcc, String replyTo, String subject, String html, String text, String metadata,
 	    String... attachments)
     {
 	JSONObject messageJSON = new JSONObject();
@@ -395,7 +395,7 @@ public class Mandrill
 
 	    if (!StringUtils.isBlank(bcc))
 		recipientsArray = buildRecipientJSON(recipientsArray, EmailUtil.getStringTokenSet(bcc, ","),
-		        MANDRILL_BCC);
+			MANDRILL_BCC);
 
 	}
 	catch (Exception e)

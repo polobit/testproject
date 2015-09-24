@@ -6,6 +6,7 @@ import org.apache.commons.lang.StringUtils;
 import org.json.JSONObject;
 
 import com.agilecrm.AgileQueues;
+import com.agilecrm.account.util.AccountPrefsUtil;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.email.EmailSender;
 import com.agilecrm.util.EmailLinksConversion;
@@ -46,6 +47,10 @@ public class ContactBulkEmailUtil
 
 			String domain = NamespaceManager.get();
 			int len = contactList.size();
+			
+			// Custom date labels to convert epoch to Date format
+			List<String> dateCustomFieldLabels = AgileTaskletUtil.getDateCustomLabelsFromCache();
+			String timezone = AccountPrefsUtil.getTimeZone();
 
 			for (Contact contact : contactList)
 			{
@@ -64,7 +69,7 @@ public class ContactBulkEmailUtil
 
 					// Converts contact to JSON
 					JSONObject subscriberJSON = (contact.type.equals(Contact.Type.COMPANY)) ? AgileTaskletUtil
-							.getCompanyJSON(contact) : AgileTaskletUtil.getSubscriberJSON(contact);
+							.getCompanyJSON(contact, timezone) : AgileTaskletUtil.getSubscriberJSON(contact, dateCustomFieldLabels, timezone);
 
 					if (subscriberJSON != null)
 					{

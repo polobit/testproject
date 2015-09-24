@@ -70,6 +70,8 @@ public class MilestoneUtil
 	Milestone milestone = new Milestone("New,Prospect,Proposal,Won,Lost");
 	milestone.name = "Default";
 	milestone.isDefault = true;
+	milestone.won_milestone = "Won";
+	milestone.lost_milestone = "Lost";
 	milestone.save();
 	return milestone;
     }
@@ -193,5 +195,55 @@ public class MilestoneUtil
 
 	milestone.save();
 	return milestone;
+    }
+
+    public static void setWonMilestone(Long pipelineId, String wonMilestone) throws Exception
+    {
+	try
+	{
+	    Milestone mile = getMilestone(pipelineId);
+	    if (mile == null)
+		throw new Exception("Track not found. Pleas check the id.");
+	    mile.won_milestone = null;
+	    String[] milestones = mile.milestones.split(",");
+	    for (String milestone : milestones)
+	    {
+		if (milestone.equalsIgnoreCase(wonMilestone))
+		    mile.won_milestone = milestone;
+	    }
+	    if (mile.won_milestone != null)
+		mile.save();
+	    else
+		throw new Exception("Unable to find the given milestone. Please check the input.");
+	}
+	catch (Exception e)
+	{
+	    throw e;
+	}
+    }
+
+    public static void setLostMilestone(Long pipelineId, String lostMilestone) throws Exception
+    {
+	try
+	{
+	    Milestone mile = getMilestone(pipelineId);
+	    if (mile == null)
+		throw new Exception("Track not found. Pleas check the id.");
+	    mile.lost_milestone = null;
+	    String[] milestones = mile.milestones.split(",");
+	    for (String milestone : milestones)
+	    {
+		if (milestone.equalsIgnoreCase(lostMilestone))
+		    mile.lost_milestone = milestone;
+	    }
+	    if (mile.lost_milestone != null)
+		mile.save();
+	    else
+		throw new Exception("Unable to find the given milestone. Please check the input.");
+	}
+	catch (Exception e)
+	{
+	    throw e;
+	}
     }
 }

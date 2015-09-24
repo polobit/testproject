@@ -276,6 +276,7 @@
 														class="first_name last_name company owner org_tag title email phone city state zip country org_name custom_label custom_sfsadf org_custom_label org_custom_sfsadf">isn't</option>
 													<option value="EQUALS" class="tags tags_time">is</option>
 													<option value="NOTEQUALS" class="tags">isn't</option>
+													<option value="EQUALS" class="lead_score">equals</option>
 													<option value="BETWEEN_NUMBER" class="lead_score">between</option>
 													<option value="IS_GREATER_THAN" class="lead_score">greater than</option>
 													<option value="IS_LESS_THAN" class="lead_score">less than</option>
@@ -395,6 +396,10 @@
 										<td class="lhs-block">
 											<div id="LHS" name="LHS">
 												<select name="temp" class="lhs form-control" id="LHS">
+													<optgroup label="Tag">
+														<option value="tags" selected="selected">Tag</option>
+														<option value="tags_time">Tag And Created Date</option>
+													</optgroup>
 													<optgroup label="Date">
 														<option value="created_time">Created</option>
 														<option value="updated_time">Updated</option>
@@ -415,11 +420,11 @@
 											<div id="condition" name="CONDITION">
 												<select name="temp"  class="w-full form-control">
 													<option value="EQUALS"
-														class="name phone company title org_tag jobtitle email url phone city state zip country org_name custom_label custom_sfsadf org_custom_label org_custom_sfsadf">is</option>
+														class="name phone company title org_tag jobtitle email url phone city state zip country org_name custom_label custom_sfsadf org_custom_label org_custom_sfsadf tags tags_time">is</option>
 													<option value="EQUALS" class="owner_id" related="RHS" url="core/api/users" parse_key="id" parse_value="name">is</option>
 													<option value="NOTEQUALS" class="owner_id" related="RHS" url="core/api/users" parse_key="id" parse_value="name">isn't</option>
 													<option value="NOTEQUALS"
-														class="name company owner org_tag title email url phone city state zip country org_name custom_label custom_sfsadf org_custom_label org_custom_sfsadf">isn't</option>
+														class="name company owner org_tag title email url phone city state zip country org_name custom_label custom_sfsadf org_custom_label org_custom_sfsadf tags tags_time">isn't</option>
 													<option value="ON" class="updated_time created_time">on</option>
 													<option value="AFTER" class="created_time updated_time">is
 														after</option>
@@ -431,6 +436,10 @@
 														last</option>
 													<option value="NEXT" class="created_time updated_time">in next
 														</option>
+													<option value="EQUALS" class="lead_score">equals</option>
+													<option value="BETWEEN_NUMBER" class="lead_score">between</option>
+													<option value="IS_GREATER_THAN" class="lead_score">greater than</option>
+													<option value="IS_LESS_THAN" class="lead_score">less than</option>
 													<option value="EQUALS" class="tag org_tag">is</option>
 													<option value="ANYOF" class="tag">is any of</option>
 													<option value="DEFINED" class="email name phone url custom_label custom_sfsadf org_custom_label org_custom_sfsadf">is defined</option>
@@ -449,7 +458,8 @@
 													class="MATCHES  required form-control"/>
 												<input type="text" name="temp"
 													class="IS_GREATER_THAN IS_LESS_THAN number required form-control"/> 
-													
+												<input type="text" name="temp" 
+													class="BETWEEN_NUMBER number required form-control"/>
                                                 <input type="text" name="tag" 
 													class="tags tags_time required form-control m-n" /> 
                                                 <input type="text" name="temp" class="email required form-control"/>
@@ -462,6 +472,8 @@
 											<div id="RHS-NEW" name="RHS_NEW">
 												<input id="date_between" type="text" name="temp" data-date-format="{{dateFormat}}"
 													class="BETWEEN input date required form-control"  placeholder="{{dateFormat}}" />
+												<input type="text" name="temp" 
+													class="BETWEEN_NUMBER number required form-control"/>
 											</div>
 										</td>
 										<td class="nested-condition-block v-top">
@@ -515,6 +527,10 @@
 										<td class="lhs-block">
 											<div id="LHS" name="LHS">
 												<select name="temp" class="lhs form-control" id="LHS">
+													<optgroup label="Tag">
+														<option value="tags" selected="selected">Tag</option>
+														<option value="tags_time">Tag And Created Date</option>
+													</optgroup>
 													<optgroup label="Date">
 														<option value="created_time">Created</option>
 														<option value="updated_time">Updated</option>
@@ -535,11 +551,13 @@
 											<div id="condition" name="CONDITION">
 												<select name="temp" class="form-control">
 													<option value="EQUALS"
-														class="name phone company title org_tag jobtitle email url phone city state zip country org_name custom_label custom_sfsadf org_custom_label org_custom_sfsadf">is</option>
+														class="name phone company title org_tag jobtitle email url phone city state zip country org_name custom_label custom_sfsadf org_custom_label org_custom_sfsadf tags tags_time">is</option>
 													<option value="EQUALS" class="owner_id" related="RHS" url="core/api/users" parse_key="id" parse_value="name">is</option>
 													<option value="NOTEQUALS" class="owner_id" related="RHS" url="core/api/users" parse_key="id" parse_value="name">isn't</option>
 													<option value="NOTEQUALS"
-														class="name company owner org_tag title email url phone city state zip country org_name custom_label custom_sfsadf org_custom_label org_custom_sfsadf">isn't</option>
+														class="name company owner org_tag title email url phone city state zip country org_name custom_label custom_sfsadf org_custom_label org_custom_sfsadf tags tags_time">isn't</option>
+													<option value="EQUALS" class="lead_score">equals</option>
+													<option value="BETWEEN_NUMBER" class="lead_score">between</option>
 													<option value="IS_GREATER_THAN" class="lead_score">greater than</option>
 													<option value="IS_LESS_THAN" class="lead_score">less than</option>
 													<option value="ON" class="updated_time created_time">on</option>
@@ -571,7 +589,8 @@
 													class="MATCHES NOT_CONTAINS form-control required"/>
 												<input type="text" name="temp" 
 													class="IS_GREATER_THAN IS_LESS_THAN number required form-control"/> 
-													
+												<input type="text" name="temp" 
+													class="BETWEEN_NUMBER number required form-control"/>
                                                 <input type="text" name="tag" 
 													class="tags tags_time required m-n form-control" /> 
                                                 <input type="text" name="temp" class="email required form-control"/>
@@ -584,6 +603,8 @@
 											<div id="RHS-NEW" name="RHS_NEW">
 												<input id="date_between" type="text" name="temp" data-date-format="{{dateFormat}}"
 													class="BETWEEN input date required form-control"  placeholder="{{dateFormat}}" />
+												<input type="text" name="temp" 
+													class="BETWEEN_NUMBER number required form-control"/>
 											</div>
 										</td>
 										<td class="nested-condition-block v-top">

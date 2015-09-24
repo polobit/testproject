@@ -22,22 +22,12 @@
             "type": "text"
         },
         {
-            "label": "Category",
+			"label": "Category",
             "category": "Info",
             "name": "category",
             "id": "category",
             "title": "Select the category type",
-            "options": {
-                "Call": "CALL",
-                "Email": "EMAIL",
-                "Follow-up": "FOLLOW_UP",
-                "Meeting": "MEETING",
-                "Milestone": "MILESTONE",
-                "Send": "SEND",
-                "Tweet": "TWEET",
-                "Other": "OTHER"
-            },
-            "fieldType": "select",
+            "fieldType": "categories",
             "type": "select"
         },
         {

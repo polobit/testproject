@@ -14,38 +14,43 @@ $(function () {
         var data = $(this).find('.data').attr('data');
 
         var currentDeal = App_Deals.opportunityCollectionView.collection.get(data);
-       
-        //console.log(currentDeal.toJSON());
+        var that = this;
         
-        var ele = getTemplate("opportunity-detail-popover", currentDeal.toJSON());
-        console.log(ele);
-        console.log(this);
-        $(this).popover({
-        	"rel" : "popover",
-        	"trigger" : "hover",
-        	"placement" : 'right',
-        	"original-title" : currentDeal.toJSON().name,
-        	"content" :  ele,
-        	"html" : true,
-        	"container": 'body'
-        });
+        getTemplate("opportunity-detail-popover", currentDeal.toJSON(), undefined, function(template_ui){
+			if(!template_ui)
+				  return;
+			
+			var ele = $(template_ui);
+	        console.log(ele);
+	        console.log(that);
+	        $(that).popover({
+	        	"rel" : "popover",
+	        	"trigger" : "hover",
+	        	"placement" : 'right',
+	        	"original-title" : currentDeal.toJSON().name,
+	        	"content" :  ele,
+	        	"html" : true,
+	        	"container": 'body'
+	        });
        
-        /**
-         * Checks for last 'tr' and change placement of popover to 'top' inorder
-         * to prevent scrolling on last row of list
-         **/
-       $('#opportunities-model-list > tr:last').popover({
-        	"rel" : "popover",
-        	"trigger" : "hover",
-        	"placement" : 'top',
-        	"original-title" : currentDeal.toJSON().name,
-        	"content" :  ele,
-        	"html" : true,
-        	"container": 'body'
-        });
-        
-        $(this).popover('show');
-      
+	        /**
+	         * Checks for last 'tr' and change placement of popover to 'top' inorder
+	         * to prevent scrolling on last row of list
+	         **/
+	       $('#opportunities-model-list > tr:last').popover({
+	        	"rel" : "popover",
+	        	"trigger" : "hover",
+	        	"placement" : 'top',
+	        	"original-title" : currentDeal.toJSON().name,
+	        	"content" :  ele,
+	        	"html" : true,
+	        	"container": 'body'
+	        });
+
+	        $(that).popover('show');
+
+		}, null);
+
      });
 	
     /**
@@ -180,6 +185,9 @@ var tracks = new Base_Collection_View({url : '/core/api/milestone/pipelines'});
 					else
 						html+='<option value="'+mile.id+'_'+milestone+'">'+milestone+'</option>';
 				});
+				if(mile.lost_milestone){
+					html+='<option value="'+mile.id+'_'+mile.lost_milestone+'" style="display:none;">'+mile.lost_milestone+'</option>';
+				}
 				$('#' + id, el).closest('.control-group').find('label b').text('Milestone');
 			}
 			else {
@@ -194,8 +202,10 @@ var tracks = new Base_Collection_View({url : '/core/api/milestone/pipelines'});
 						else
 							html+='<option value="'+mile.id+'_'+milestone+'">'+mile.name+' - '+milestone+'</option>';
 					});
+					if(mile.lost_milestone){
+						html+='<option value="'+mile.id+'_'+mile.lost_milestone+'" style="display:none;">'+mile.name+' - '+mile.lost_milestone+'</option>';
+					}
 					html+='</optgroup>';
-					
 				});
 				$('#' + id, el).closest('.control-group').find('label b').text('Track & Milestone');
 			}
@@ -241,9 +251,12 @@ var tracks = new Base_Collection_View({url : '/core/api/milestone/pipelines'});
 			console.log(jsonModel);
 			
 			// If there is only one pipeline, select the option by default and hide the field.
-			if(jsonModel.length==1)
+			if(jsonModel.length==1){
 				html+='<option value="'+jsonModel[0].id+'" selected="selected">'+jsonModel[0].name+'</option>';
+				milestone_util.showMilestonePopup(jsonModel[0]);
+			}
 			else {
+				milestone_util.isNotyVisible = false;
 				$.each(jsonModel,function(index,mile){
 					console.log(mile.milestones,value);
 					if(!mile.name)
@@ -252,7 +265,7 @@ var tracks = new Base_Collection_View({url : '/core/api/milestone/pipelines'});
 						html+='<option value="'+mile.id+'" selected="selected">'+mile.name+'</option>';
 					else
 						html+='<option value="'+mile.id+'">'+mile.name+'</option>';
-					
+					milestone_util.showMilestonePopup(mile);
 				});
 			}
 			$('#pipeline',el).html(html);
@@ -462,4 +475,91 @@ function dealCustomFieldValueForDate(name, data){
 		}
 	});
 	return value;
+}
+
+function populateLostReasons(el, value){
+	if(!$('#deal_lost_reason',el).hasClass("hidden")){
+		$('#deal_lost_reason',el).addClass("hidden");
+	}
+	var tracks = new Base_Collection_View({url : '/core/api/categories?entity_type=DEAL_LOST_REASON', sortKey : "label"});
+	tracks.collection.fetch({
+		success: function(data){
+			var jsonModel = data.toJSON();
+			var html = '<option value="">Select...</option>';
+			console.log(jsonModel);
+			
+			$.each(jsonModel,function(index,lostReason){
+				if (value && value.lost_reason_id == lostReason.id){
+					html+='<option value="'+lostReason.id+'" selected="selected">'+lostReason.label+'</option>';
+					$('#deal_lost_reason',el).removeClass("hidden");
+				}else{
+					html+='<option value="'+lostReason.id+'">'+lostReason.label+'</option>';
+				}
+			});
+			$('#lost_reason', el).html(html);
+			console.log('adding');
+			$('#lost_reason', el).closest('div').find('.loading-img').hide();
+
+			// Hide loading bar
+			hideTransitionBar();
+
+			if($('#pipeline_milestone',el).length>0){
+				var temp = $('#pipeline_milestone',el).val();
+				var track = temp.substring(0, temp.indexOf('_'));
+				var milestone = temp.substring(temp.indexOf('_') + 1, temp.length + 1);
+				$('#pipeline_milestone',el).closest('form').find('#pipeline').val(track);
+				$('#pipeline_milestone',el).closest('form').find('#milestone').val(milestone);
+				console.log(track, '-----------', milestone);
+				var lost_milestone_flag = false;
+				$('#pipeline_milestone',el).find('option').each(function(){
+					if($(this).css("display") == "none" && $(this).val() == temp){
+						lost_milestone_flag = true;
+					}
+				});
+				if(lost_milestone_flag && $('#lost_reason',$('#pipeline_milestone',el).closest('.modal')).find('option').length>1){
+					$('#deal_lost_reason',$('#pipeline_milestone',el).closest('.modal')).removeClass("hidden");
+				}else{
+					$('#lost_reason',$('#pipeline_milestone',el).closest('.modal')).val("");
+					$('#deal_lost_reason',$('#pipeline_milestone',el).closest('.modal')).addClass("hidden");
+				}
+			}else{
+				if($('#lost_reason',el).find('option').length>1){
+					$('#dealLostReasonModal').modal('show');
+				}
+			}
+		}
+	}); 
+}
+
+function populateDealSources(el, value){
+	if(!$('#deal_deal_source',el).hasClass("hidden")){
+		$('#deal_deal_source',el).addClass("hidden");
+	}
+	var tracks = new Base_Collection_View({url : '/core/api/categories?entity_type=DEAL_SOURCE', sortKey : "label"});
+	tracks.collection.fetch({
+		success: function(data){
+			var jsonModel = data.toJSON();
+			var html = '<option value="">Select...</option>';
+			console.log(jsonModel);
+			
+			$.each(jsonModel,function(index,dealSource){
+				if (value && value.deal_source_id == dealSource.id){
+					html+='<option value="'+dealSource.id+'" selected="selected">'+dealSource.label+'</option>';
+					$('#deal_deal_source',el).removeClass("hidden");
+				}else{
+					html+='<option value="'+dealSource.id+'">'+dealSource.label+'</option>';
+				}
+			});
+			$('#deal_source', el).html(html);
+			console.log('adding');
+			$('#deal_source', el).closest('div').find('.loading-img').hide();
+
+			// Hide loading bar
+			hideTransitionBar();
+
+			if($('#deal_source',el).find('option').length>1){
+				$('#deal_deal_source',el).removeClass("hidden");
+			}
+		}
+	}); 
 }

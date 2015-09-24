@@ -133,10 +133,16 @@ function show_noty_on_top_of_panel(content) {
 			'60px');
 
 	$('body').find('#wrap').find('#notify-container').remove();
-	$('body').find('#wrap').prepend(getTemplate("sticky-noty", content));
-	$('body').find('#wrap').find('.navbar-fixed-top').css('margin-top', '34px');
-	$('body').find('#wrap').find('#agilecrm-container').css('padding-top',
-			'96px');
+	
+	getTemplate("sticky-noty", content, undefined, function(template_ui){
+		if(!template_ui)
+			  return;
+		$('body').find('#wrap').prepend($(template_ui));
+		$('body').find('#wrap').find('.navbar-fixed-top').css('margin-top', '34px');
+		$('body').find('#wrap').find('#agilecrm-container').css('padding-top',
+				'96px');
+
+	}, null);
 }
 
 /**
