@@ -78,7 +78,14 @@ public class TagSearchUtil
 	{
 	    contactFilter = new ContactFilter();
 	}
-
+	
+	SearchRule searchRule = new SearchRule();
+	searchRule.LHS = "tags";
+	searchRule.CONDITION = SearchRule.RuleCondition.EQUALS;
+	searchRule.RHS = tag;
+	
+	contactFilter.rules.add(searchRule);
+	
 	// Add the tag find rule
 	contactFilter.rules.add(getSearchRule(tag, startTime, endTime));
 
@@ -482,7 +489,14 @@ public class TagSearchUtil
 	{
 	    contactFilter = new ContactFilter();
 	}
-
+	
+	SearchRule searchRule1 = new SearchRule();
+	searchRule1.LHS = "tags";
+	searchRule1.CONDITION = SearchRule.RuleCondition.EQUALS;
+	searchRule1.RHS = tag;
+	
+	contactFilter.rules.add(searchRule1);
+	
 	// Add the tag find rule
 	contactFilter.rules.add(getSearchRule(tag, startTime, endTime));
 	

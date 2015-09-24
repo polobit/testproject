@@ -630,17 +630,29 @@ function show_set_up_widget(widget_name, template_id, url, model, callback)
 		{
 			if (!App_Widgets.Catalog_Widgets_View || App_Widgets.Catalog_Widgets_View.collection.length == 0)
 			{
-				App_Widgets.Catalog_Widgets_View = new Base_Collection_View({ url : '/core/api/widgets/default' });
+				
+					App_Widgets.Catalog_Widgets_View = new Base_Collection_View({ url : '/core/api/widgets/default' });
 
-				// Fetch the list of widgets
-				App_Widgets.Catalog_Widgets_View.collection.fetch({ success : function()
-				{
-
-					$.getJSON('core/api/widgets/' + widget_name, function(data)
+					// Fetch the list of widgets
+					App_Widgets.Catalog_Widgets_View.collection.fetch({ success : function()
 					{
+<<<<<<< HEAD
 						show_set_up_widget(widget_name, template_id, url, data, callback);
 					});
 				} });
+=======
+
+						$.getJSON('core/api/widgets/' + widget_name, function(data)
+						{
+							getTemplate("widget-settings", {}, undefined, function(ui){
+								hideTransitionBar();
+								show_set_up_widget(widget_name, template_id, url, data, callback);
+							});
+						});
+					} });
+				
+				
+>>>>>>> 72e5e0093927f8585173d3860be8a2f76ceacb78
 				return;
 			}
 			models = App_Widgets.Catalog_Widgets_View.collection.where({ name : widget_name });

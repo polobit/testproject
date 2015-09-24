@@ -6,17 +6,17 @@ package com.agilecrm.contact.sync;
 import org.scribe.utils.Preconditions;
 
 import com.agilecrm.contact.sync.config.SyncPrefs;
-import com.agilecrm.contact.sync.service.SyncService;
+import com.agilecrm.contact.sync.service.IContactSyncService;
 import com.thirdparty.google.ContactPrefs;
 
 /**
  * <code>SyncPrefBuilder</code> build {@link SyncPrefs} based on client and it
- * will return {@link SyncService}
+ * will return {@link IContactSyncService}
  * 
  * @author jitendra
  * 
  */
-public class SyncPrefsBuilder
+public class SyncServiceBuilder
 {
     /**
      * Holds ContactPrefs instance
@@ -26,7 +26,7 @@ public class SyncPrefsBuilder
     /**
      * Holds SyncService Instance
      */
-    private SyncService api;
+    private IContactSyncService api;
 
     /**
      * initialize {@link ContactPrefs}.
@@ -35,7 +35,7 @@ public class SyncPrefsBuilder
      *            the prefs
      * @return SyncPrefsBuilder
      */
-    public SyncPrefsBuilder config(ContactPrefs prefs)
+    public SyncServiceBuilder config(ContactPrefs prefs)
     {
 	Preconditions.checkNotNull(prefs, "ContactPrefs can't be null");
 	this.prefs = prefs;
@@ -44,13 +44,13 @@ public class SyncPrefsBuilder
 
     /**
      * create Service based in Sync Client ie third party and return
-     * {@link SyncService}
+     * {@link IContactSyncService}
      * 
      * @param clazz
-     *            which extends {@link SyncService}
+     *            which extends {@link IContactSyncService}
      * @return SyncService
      */
-    public SyncService getService(Class<? extends SyncService> clazz)
+    public IContactSyncService getService(Class<? extends IContactSyncService> clazz)
     {
 	Preconditions.checkNotNull(clazz, "service Provider class can't be empty");
 	try
