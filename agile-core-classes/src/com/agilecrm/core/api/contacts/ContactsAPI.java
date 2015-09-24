@@ -1235,4 +1235,26 @@ public class ContactsAPI
 	BulkActionNotifications.publishconfirmation(BulkAction.EXPORT_CONTACTS_CSV);
     }
 
+    @Path("/email/chrome/{email}")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public Contact updateContactOfChrome(@PathParam("email") String email) throws JSONException
+    {
+	Contact contact = null;
+	// Get contact based on email.
+	contact = ContactUtil.searchContactByEmail(email);
+	// ContactId
+	String contactId = null;
+	// Saves email with contact-id
+	if (contact != null)
+	{
+	    contactId = contact.id.toString();
+
+	    contact.setLastEmailed(System.currentTimeMillis() / 1000);
+	    contact.update();
+
+	}
+	return contact;
+    }
+
 }
