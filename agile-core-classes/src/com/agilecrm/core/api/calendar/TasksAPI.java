@@ -521,5 +521,22 @@ public class TasksAPI
 	return task;
     }
 
+    /**
+     * All tasks by created time
+     * 
+     * @return tasks list
+     */
+    @Path("/new/tasks")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public List<Task> getNewTasks(@QueryParam("page_size") String count, @QueryParam("cursor") String cursor)
+    {
+	if (count != null)
+	{
+	    return TaskUtil.getNewTasks(Integer.parseInt(count), cursor);
+	}
+
+	return TaskUtil.getNewTasks(null, null);
+    }
     /***************************************************************************/
 }
