@@ -24,18 +24,21 @@ var ReportsRouter = Backbone.Router
 				if (!tight_acl.checkPermission('REPORT'))
 					return;
 
-				head.js(LIB_PATH + 'jscore/handlebars/handlebars-helpers.js', function()
-				{
-					$("#content").html("<div id='reports-listerners-container'></div>");
-					$("#reports-listerners-container").html(getTemplate('report-categories', {}));
+				$("#content").html("<div id='reports-listerners-container'></div>");
+				getTemplate('report-categories', {}, undefined, function(template_ui){
+					if(!template_ui)
+						  return;
+					$('#reports-listerners-container').html($(template_ui));
+
 					initializeReportsListeners();
 					hideTransitionBar();
 					$(".active").removeClass("active");
 					$("#reportsmenu").addClass("active");
 
-					$('[data-toggle="tooltip"]').tooltip();
+					$('[data-toggle="tooltip"]').tooltip();	
 
-				});
+				}, "#reports-listerners-container");
+				
 			},
 
 	/**
@@ -43,9 +46,17 @@ var ReportsRouter = Backbone.Router
 	 */
 	emailReportTypes : function()
 	{
-		$("#content").html(getTemplate('email-report-categories', {}));
-		$(".active").removeClass("active");
-		$("#reportsmenu").addClass("active");
+		getTemplate('email-report-categories', {}, undefined, function(template_ui){
+			if(!template_ui)
+				  return;
+			$('#content').html($(template_ui));	
+
+			$(".active").removeClass("active");
+			$("#reportsmenu").addClass("active");
+
+		}, "#content");
+
+		
 	},
 	
 	activityReports : function()
@@ -443,20 +454,27 @@ var ReportsRouter = Backbone.Router
 
 				head.load(LIB_PATH + 'lib/date-charts.js', LIB_PATH + 'lib/date-range-picker.js', CSS_PATH + "css/misc/date-picker.css", function()
 				{
-					// Load Reports Template
-					$("#content").html(getTemplate("report-funnel", {}));
+					getTemplate("report-funnel", {}, undefined, function(template_ui){
+						if(!template_ui)
+							  return;
 
-					// Set the name
-					$('#reports-funnel-tags').text(tags);
+						// Load Reports Template
+						$('#content').html($(template_ui));
+						// Set the name
+						$('#reports-funnel-tags').text(tags);
 
-					initFunnelCharts(function()
-					{
-						showFunnelGraphs(tags);
-					});
+						initFunnelCharts(function()
+						{
+							showFunnelGraphs(tags);
+						});
+
+						$(".active").removeClass("active");
+						$("#reportsmenu").addClass("active");
+						
+
+					}, "#content");
+
 				});
-
-				$(".active").removeClass("active");
-				$("#reportsmenu").addClass("active");
 			},
 
 			/**
@@ -472,20 +490,27 @@ var ReportsRouter = Backbone.Router
 				{
 
 					// Load Reports Template
-					$("#content").html(getTemplate("report-growth", {}));
+					getTemplate("report-growth", {}, undefined, function(template_ui){
+						if(!template_ui)
+							  return;
+						$('#content').html($(template_ui));	
 
-					// Set the name
-					$('#reports-growth-tags').text(tags);
+						// Set the name
+						$('#reports-growth-tags').text(tags);
 
-					initFunnelCharts(function()
-					{
-						showGrowthGraphs(tags);
-					});
+						initFunnelCharts(function()
+						{
+							showGrowthGraphs(tags);
+						});
+
+					}, "#content");
+					
 				});
 
 				$(".active").removeClass("active");
 				$("#reportsmenu").addClass("active");
 			},
+
 
 			/**
 			 * Returns Cohorts Graphs with two tag1
@@ -500,15 +525,22 @@ var ReportsRouter = Backbone.Router
 				{
 
 					// Load Reports Template
-					$("#content").html(getTemplate("report-cohorts", {}));
+					getTemplate("report-cohorts", {}, undefined, function(template_ui){
+						if(!template_ui)
+							  return;
+						$('#content').html($(template_ui));	
 
-					// Set the name
-					$('#reports-cohorts-tags').text(tag1 + " versus " + tag2);
+						// Set the name
+						$('#reports-cohorts-tags').text(tag1 + " versus " + tag2);
 
-					initFunnelCharts(function()
-					{
-						showCohortsGraphs(tag1, tag2);
-					});
+						initFunnelCharts(function()
+						{
+							showCohortsGraphs(tag1, tag2);
+						});
+
+					}, "#content");
+					
+					
 				});
 
 				$(".active").removeClass("active");
@@ -527,19 +559,26 @@ var ReportsRouter = Backbone.Router
 				{
 
 					// Load Reports Template
-					$("#content").html(getTemplate("report-ratio", {}));
+					getTemplate("report-ratio", {}, undefined, function(template_ui){
+						if(!template_ui)
+							  return;
+						$('#content').html($(template_ui));	
 
-					// Set the name
-					$('#reports-ratio-tags').text(tag1 + " versus " + tag2);
+						// Set the name
+						$('#reports-ratio-tags').text(tag1 + " versus " + tag2);
 
-					initFunnelCharts(function()
-					{
-						showRatioGraphs(tag1, tag2);
-					});
+						initFunnelCharts(function()
+						{
+							showRatioGraphs(tag1, tag2);
+						});
+
+						$(".active").removeClass("active");
+						$("#reportsmenu").addClass("active");
+
+					}, "#content");
+					
 				});
 
-				$(".active").removeClass("active");
-				$("#reportsmenu").addClass("active");
 			},
 
 			/**
@@ -547,27 +586,34 @@ var ReportsRouter = Backbone.Router
 			 */
 			reportCharts : function(type)
 			{
-				var el = "";
+				var template_name = "report-growth";
+
 				if (type)
-					el = $(getTemplate("report-" + type + "-form", {}));
-				else
-					el = $(getTemplate("report-growth", {}));
+					template_name = "report-" + type + "-form";
 
 				$("#content").html("<div id='reports-listerners-container'></div>");
-				$("#reports-listerners-container").html(el);
-				initializeChartReportsListeners();
+				getTemplate(template_name, {}, undefined, function(template_ui){
+					if(!template_ui)
+						  return;
+					var el = $(template_ui);
+					$("#reports-listerners-container").html(el);
+					initializeChartReportsListeners();
 
-				if (type && (type == 'growth' || type == 'funnel'))
-				{
-					setup_tags_typeahead();
-					return;
-				}
-				$.each($("[id=tags-reports]", el), function(i, element)
-				{
-					console.log(element);
-					addTagsDefaultTypeahead(element);
-				});
+					if (type && (type == 'growth' || type == 'funnel'))
+					{
+						setup_tags_typeahead();
+						return;
+					}
+					$.each($("[id=tags-reports]", el), function(i, element)
+					{
+						console.log(element);
+						addTagsDefaultTypeahead(element);
+					});
+
+
+				}, "#reports-listerners-container");
 			},
+
 			showDealsLossReason : function()
 			{
 				hideTransitionBar();
@@ -607,4 +653,5 @@ var ReportsRouter = Backbone.Router
 				$(".active").removeClass("active");
 				$("#reportsmenu").addClass("active");
 			},
+
 	});

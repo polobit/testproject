@@ -312,6 +312,7 @@ function showTwilioDetails(token, from_number)
 	/*
 	 * On change of number in select box, we retrieve call logs for it and show
 	 */
+    $("body").off("change", '#contact_number');
 	$("body").on("change", '#contact_number', function(e)
 	{
 		var to = $('#contact_number').val();
@@ -355,6 +356,7 @@ function getTwilioLogs(to)
 		/*
 		 * On click of play button in Twilio logs, call conversaion is played
 		 */
+        $("body").off("click", '#record_sound_play');
 		$("body").on("click", '#record_sound_play', function(e)
 		{
 			e.preventDefault();
@@ -391,6 +393,7 @@ function getTwilioLogs(to)
 		});
 		
 		// To stop the audio call when playing
+        $("body").off("click", '.icon-stop');
 		$("body").on("click", '.icon-stop', function(e)
 		{			
 			e.preventDefault();
@@ -605,6 +608,7 @@ function registerClickEvents(from_number)
 	 * On click of Twilio hang up, logs are retrieved again and and all
 	 * connections are disconnected, hangup is hidden and call butoon is shown
 	 */
+    $("body").off("click", '#twilio_hangup');
 	$("body").on("click", '#twilio_hangup', function(e)
 	{
 		e.preventDefault();
@@ -622,6 +626,7 @@ function registerClickEvents(from_number)
 		$("#twilio_call").show();
 	});
 
+    $("body").off("click", '#twilio_dialpad');
 	$("body").on("click", '#twilio_dialpad', function(e)
 	{
 		e.preventDefault();
@@ -632,6 +637,7 @@ function registerClickEvents(from_number)
 	/*
 	 * On click of play button in Twilio logs, call conversaion is played
 	 */
+     $("body").off("click", '#record_sound_play');
 	 $("body").on("click", '#record_sound_play', function(e)
 	{
 		e.preventDefault();
@@ -660,6 +666,7 @@ function registerClickEvents(from_number)
 	 * On click of call in Twilio panel, shows a record modal asking for
 	 * confirmation to make call and whether to record it
 	 */
+    $("body").off("click", '#twilio_call');
 	$("body").on("click", '#twilio_call', function(e)
 	{
 		e.preventDefault();
@@ -691,6 +698,7 @@ function registerClickEvents(from_number)
 	 * On click of button in record modal, calls connect method of Twilio to
 	 * make call
 	 */
+    $("body").off("click", '.enable-call');
 	$("body").on("click", '.enable-call', function(e)
 			{
 				e.preventDefault();
@@ -849,6 +857,7 @@ $(function()
 			 * Twilio.On click of verify button in Twilio initial template,
 			 * verifyNumberFromTwilio is called to verify a number in Twilio
 			 */
+            $("body").off("click", '#twilio_verify');
 			$("body").on("click", '#twilio_verify', function(e)
 			{
 				e.preventDefault();
@@ -878,6 +887,7 @@ $(function()
 			 * the verification status of the number and generate token to make calls,
 			 * else set up to verify number is shown again
 			 */
+            $("body").off("click", '#twilio_proceed');
 			$("body").on("click", '#twilio_proceed', function(e)
 			{
 				e.preventDefault();
