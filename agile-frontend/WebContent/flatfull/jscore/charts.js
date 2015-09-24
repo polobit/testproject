@@ -1404,7 +1404,7 @@ function showDealsGrowthgraph(url, selector, name, yaxis_name, show_loading)
                     min_tick_interval = 4;
                 }
             }
-            $.ajax({ type : 'GET', url : '/core/api/categories?entity_type=DEAL_SOURCE', async : false, dataType : 'json',
+            $.ajax({ type : 'GET', url : '/core/api/categories?entity_type=DEAL_SOURCE', dataType : 'json',
             success: function(data){
                 $.each(data,function(index,deals){
                     for(var i=0;i<series.length;i++){
@@ -1416,12 +1416,20 @@ function showDealsGrowthgraph(url, selector, name, yaxis_name, show_loading)
                             
                     }
                 });
-                } });
+                chartRenderforIncoming(selector,categories,name,yaxis_name,min_tick_interval,frequency,series);
+                } 
+            });
 
 
             // After loading and processing all data, highcharts are initialized
             // setting preferences and data to show
-            chart = new Highcharts.Chart({
+            
+        });
+    });
+}
+
+function chartRenderforIncoming(selector,categories,name,yaxis_name,min_tick_interval,frequency,series){
+	chart = new Highcharts.Chart({
                 chart: {
                     renderTo: selector,
                     type: 'area',
@@ -1501,6 +1509,4 @@ function showDealsGrowthgraph(url, selector, name, yaxis_name, show_loading)
                     enabled: false
                 }
             });
-        });
-    });
 }
