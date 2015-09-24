@@ -285,7 +285,7 @@ public class SendEmail extends TaskletAdapter
 	// Verify HardBounce status
 	if (subscriberJSON.has("isBounce"))
 	{
-	    if (subscriberJSON.get("isBounce").equals(EmailBounceStatus.EmailBounceType.HARD_BOUNCE.toString()))
+	    if (subscriberJSON.getString("isBounce").equals(EmailBounceStatus.EmailBounceType.HARD_BOUNCE.toString()))
 	    {
 		// Add log
 		LogUtil.addLogToSQL(
