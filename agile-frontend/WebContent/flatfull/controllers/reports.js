@@ -621,14 +621,17 @@ var ReportsRouter = Backbone.Router
 						{
 
 							// Load Reports Template
-							$("#content").html(getTemplate("report-sales", {}));
-
+						getTemplate("report-sales", {}, undefined, function(template_ui){
+						if(!template_ui)
+							  return;
+						$('#content').html($(template_ui));	
 							// Set the name
 
 							initSalesCharts(function()
 							{
 								showsalesReportGraphs();
 							});
-						});
+						}, "#content");
+					});
 			}
 		});
