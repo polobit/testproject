@@ -458,9 +458,6 @@ function initializeTriggerEventListners()
 		 
 	});
 
-	$('#trigger-listers').on('click', '.save-trigger', function(e){
-	console.log("yes");
-});
 }
 
 function initializeTriggerListEventListners(id,trigger_type)
@@ -471,10 +468,10 @@ function initializeTriggerListEventListners(id,trigger_type)
 		e.preventDefault();
 
 		if (history !== undefined)
-			Backbone.history.loadUrl;
+			Backbone.history.loadUrl();
 	});
 
-console.log($('#trigger-selector'));
+
 	$('#trigger-selector, #trigger-edit-selector').on('change', '#email-tracking-type', function(e)
 		{
 			
@@ -627,5 +624,5 @@ console.log($('#trigger-selector'));
 			show_email_tracking_campaigns();
 
 	});
- 
 }
+ 
