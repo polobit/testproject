@@ -11,6 +11,7 @@ import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Contact.Type;
 import com.agilecrm.contact.filter.ContactFilterResultFetcher;
 import com.thirdparty.google.ContactPrefs.SYNC_TYPE;
+import com.thirdparty.google.contacts.ContactsSynctoGoogle;
 
 /**
  * <code>TwoWaySyncService</code> can be implemented by third party who needs to
