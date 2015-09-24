@@ -1382,7 +1382,7 @@ function pieforReports(url, selector, name)
 								url_path='/core/api/categories?entity_type=DEAL_LOST_REASON';
 							else
 								url_path='/core/api/categories?entity_type=DEAL_SOURCE'
-							  $.ajax({ type : 'GET', url : url_path, async : false, dataType : 'json',
+							  $.ajax({ type : 'GET', url : url_path, dataType : 'json',
           				  success: function(data){
                 			$.each(data,function(index,deals){
                    				 for(var i=0;i<pieData.length;i++){
