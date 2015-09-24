@@ -21,11 +21,14 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.agilecrm.activities.Event;
+import com.agilecrm.activities.util.ActivitySave;
 import com.agilecrm.activities.util.EventUtil;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
 import com.agilecrm.contact.Note;
 import com.agilecrm.contact.util.ContactUtil;
+import com.agilecrm.session.SessionManager;
+import com.agilecrm.session.UserInfo;
 import com.agilecrm.util.PHPAPIUtil;
 
 @Path("/rest/api")
@@ -504,6 +507,56 @@ public class RestAPI
 	}
 	return null;
 
+    }
+
+    /**
+     * Saves new company into database, by verifying the existence of duplicates
+     * with its name. If any duplicate is found throws web exception.
+     * 
+     * @param contact
+     * @return
+     */
+    @POST
+    @Path("company")
+    @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    public Contact createCompany(Contact contact)
+    {
+	// Check if the email exists with the current email address
+	boolean isDuplicate = ContactUtil.isExists(contact.getContactFieldValue("EMAIL"));
+
+	// Throw non-200 if it exists
+	if (isDuplicate)
+	{
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+		    .entity("Sorry, duplicate contact found with the same email address.").build());
+	}
+
+	boolean isDuplicateCompany = ContactUtil.isCompanyExist(contact.getContactFieldValue("NAME"));
+
+	// Throw non-200 if it exists
+	if (isDuplicateCompany)
+	{
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+		    .entity("Sorry, duplicate company found with the same name.").build());
+	}
+	contact.save();
+	UserInfo user_info = SessionManager.get();
+	if (user_info != null && !("agilecrm.com/js").equals(user_info.getClaimedId())
+		&& !("agilecrm.com/dev").equals(user_info.getClaimedId())
+		&& !("agilecrm.com/php").equals(user_info.getClaimedId()))
+	{
+	    try
+	    {
+		ActivitySave.createTagAddActivity(contact);
+	    }
+	    catch (Exception e)
+	    {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	    }
+	}
+	return contact;
     }
 
 }

@@ -309,6 +309,30 @@ $(function()
 		$(this).closest('form').find('#pipeline').val(track);
 		$(this).closest('form').find('#milestone').val(milestone);
 		console.log(track, '-----------', milestone);
+		var lost_milestone_flag = false;
+		$(this).find('option').each(function(){
+			if($(this).css("display") == "none" && $(this).val() == temp){
+				lost_milestone_flag = true;
+			}
+		});
+		if(lost_milestone_flag && $('#lost_reason',$(this).closest('.modal')).find('option').length>1){
+			$('#lost_reason',$(this).closest('.modal')).val("");
+			$('#deal_lost_reason',$(this).closest('.modal')).removeClass("hidden");
+		}else{
+			$('#lost_reason',$(this).closest('.modal')).val("");
+			$('#deal_lost_reason',$(this).closest('.modal')).addClass("hidden");
+		}
+	});
+
+	$('body').on('click', '#deal_lost_reason_save', function(e){
+		e.preventDefault();
+		$(this).attr('disabled',true);
+		$(this).text('Saving...');
+		var dealPipelineModel = DEALS_LIST_COLLECTION.collection.where({ heading : App_Deals.newMilestone });
+		var dealModel = dealPipelineModel[0].get('dealCollection').get(App_Deals.lost_reason_milesone_id);
+		dealModel.collection.get(App_Deals.lost_reason_milesone_id).set({ "lost_reason_id" : $(this).closest('.modal').find('form').find('#lost_reason').val() });
+		update_milestone(App_Deals.dealModel, App_Deals.lost_reason_milesone_id, App_Deals.newMilestone, App_Deals.old_milestone, false, $(this).closest('.modal').find('form').find('#lost_reason').val());
+		$('#dealLostReasonModal').modal('hide');
 	});
 
 });
@@ -382,6 +406,10 @@ function updateDeal(ele, editFromMilestoneView)
 		$("#custom-field-deals", dealForm).html(fill_custom_fields_values_generic($(el), value["custom_data"]));
 
 	}, "DEAL")
+
+	populateLostReasons(dealForm, value);
+
+	populateDealSources(dealForm, value);
 }
 
 /**
@@ -434,6 +462,10 @@ function show_deal()
 			}
 		});
 	});
+
+	populateLostReasons(el, undefined);
+
+	populateDealSources(el, undefined);
 
 	// Enable the datepicker
 	$('#close_date', el).datepicker({

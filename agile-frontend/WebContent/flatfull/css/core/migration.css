@@ -1488,3 +1488,36 @@ a#email-reply{
 #email-reply-div:hover a#email-reply{
   display: block;
 }
+
+
+
+
+
+
+
+
+/* ending hack for new ui contact details big tag will come down  */
+
+/* start milestone lost reasons */
+
+#lost-reasons-table tbody tr:last-child {
+	border-bottom: 1px solid #edf1f2;
+}
+
+#lost-reasons-table tbody tr:hover td div.lost-reason-icons {
+	visibility: visible;
+}
+
+/* end milestone lost reasons */
+
+/* start milestone deal sources */
+
+#deal-sources-table tbody tr:last-child {
+  border-bottom: 1px solid #edf1f2;
+}
+
+#deal-sources-table tbody tr:hover td div.lost-reason-icons {
+  visibility: visible;
+}
+
+/* end milestone deal sources */

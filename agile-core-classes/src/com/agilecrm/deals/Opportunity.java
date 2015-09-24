@@ -13,6 +13,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.annotate.JsonIgnore;
 
+import com.agilecrm.activities.Category;
 import com.agilecrm.activities.util.ActivitySave;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Note;
@@ -203,6 +204,30 @@ public class Opportunity extends Cursor implements Serializable
      * Won date for a deal.
      */
     public Long won_date = null;
+    
+    /**
+     * Lost reason Id of the deal.
+     */
+    @NotSaved
+    public Long lost_reason_id = 0L;
+    
+    /**
+     * Key object of lost reason
+     */
+    @NotSaved(IfDefault.class)
+    private Key<Category> lostReason = null;
+    
+    /**
+     * Deal source Id of the deal.
+     */
+    @NotSaved
+    public Long deal_source_id = 0L;
+    
+    /**
+     * Key object of deal source
+     */
+    @NotSaved(IfDefault.class)
+    private Key<Category> dealSource = null;
 
     /**
      * ObjectifyDao of Opportunity.
@@ -392,6 +417,20 @@ public class Opportunity extends Cursor implements Serializable
     {
 	return Note.dao.fetchAllByKeys(this.related_notes);
     }
+    
+    public Long getLost_reason_id()
+    {
+	if (lostReason != null)
+	    return lostReason.getId();
+	return 0L;
+    }
+    
+    public Long getDeal_source_id()
+    {
+	if (dealSource != null)
+	    return dealSource.getId();
+	return 0L;
+    }
 
     /**
      * Sets owner_key to the Case. Annotated with @JsonIgnore to prevent auto
@@ -542,6 +581,18 @@ public class Opportunity extends Cursor implements Serializable
 	if (owner_id != null)
 	    ownerKey = new Key<DomainUser>(DomainUser.class, Long.parseLong(owner_id));
 	System.out.println("OwnerKey" + ownerKey);
+	
+	// Sets Deal lostReason.
+	if (lost_reason_id != null && lost_reason_id > 0)
+	{
+		this.lostReason = new Key<Category>(Category.class, lost_reason_id);
+	}
+		
+	// Sets deal source.
+	if (deal_source_id != null && deal_source_id > 0)
+	{
+		this.dealSource = new Key<Category>(Category.class, deal_source_id);
+	}
 
 	// Session doesn't exist when adding deal from Campaigns.
 	if (SessionManager.get() == null)
@@ -636,7 +687,8 @@ public class Opportunity extends Cursor implements Serializable
 		.append(", entity_type=").append(entity_type).append(", notes=").append(notes)
 		.append(", related_notes=").append(related_notes).append(", note_description=")
 		.append(note_description).append(", pipeline=").append(pipeline).append(", pipeline_id=")
-		.append(pipeline_id).append(", archived=").append(archived).append("]");
+		.append(pipeline_id).append(", archived=").append(archived).append(", lost_reason_id=").append(lost_reason_id)
+		.append(", deal_source_id=").append(deal_source_id).append("]");;
 	return builder.toString();
     }
 }

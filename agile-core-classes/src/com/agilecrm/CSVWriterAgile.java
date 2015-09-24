@@ -48,7 +48,7 @@ public class CSVWriterAgile
 	GcsFileOptions options = new GcsFileOptions.Builder().mimeType("text/csv").contentEncoding("UTF-8")
 		.acl("public-read").addUserMetadata("domain", NamespaceManager.get()).build();
 
-	GCSServiceAgile service = new GCSServiceAgile(fileName, "agile-export", options);
+	GCSServiceAgile service = new GCSServiceAgile(fileName, "agile-exports", options);
 
 	Writer writer = service.getOutputWriter();
 

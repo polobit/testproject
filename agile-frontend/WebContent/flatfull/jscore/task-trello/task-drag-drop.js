@@ -202,14 +202,18 @@ function saveAfterDrop(oldTask, criteria, newTaskListId, newTaskListOwnerId, tas
 
 		// Change count of new task list.
 		changeTaskCount(modelNewTaskList[0].toJSON(), true);
-		var due_task_count=getDueTasksCount();
-		if(due_task_count==0)
-			$(".navbar_due_tasks").css("display", "none");
-		else
-			$(".navbar_due_tasks").css("display", "block");
-		if(due_task_count !=0)
-			$('#due_tasks_count').html(due_task_count);
-		else
-			$('#due_tasks_count').html("");
+		getDueTasksCount(function(count){
+			var due_task_count= count;
+			if(due_task_count==0)
+				$(".navbar_due_tasks").css("display", "none");
+			else
+				$(".navbar_due_tasks").css("display", "block");
+			if(due_task_count !=0)
+				$('#due_tasks_count').html(due_task_count);
+			else
+				$('#due_tasks_count').html("");
+
+		});
+		
 	} });
 }

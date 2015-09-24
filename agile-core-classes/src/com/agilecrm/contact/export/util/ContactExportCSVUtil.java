@@ -1,6 +1,5 @@
 package com.agilecrm.contact.export.util;
 
-import java.nio.channels.Channels;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -8,26 +7,12 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-
-import au.com.bytecode.opencsv.CSVWriter;
-
-import com.agilecrm.bulkaction.deferred.ContactExportPullTask;
-import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.CustomFieldDef;
 import com.agilecrm.contact.CustomFieldDef.SCOPE;
 import com.agilecrm.contact.Note;
 import com.agilecrm.contact.export.ContactCSVExport;
-import com.agilecrm.contact.filter.ContactFilterIdsResultFetcher;
 import com.agilecrm.contact.util.CustomFieldDefUtil;
-import com.agilecrm.contact.util.NoteUtil;
-import com.agilecrm.queues.util.PullQueueUtil;
-import com.google.appengine.api.NamespaceManager;
-import com.google.appengine.api.files.FileWriteChannel;
-import com.googlecode.objectify.Key;
 
 public class ContactExportCSVUtil
 {
@@ -39,37 +24,28 @@ public class ContactExportCSVUtil
      * @param contactList
      * @param isFirstTime
      */
-    public static void writeContactCSV(FileWriteChannel writeChannel, List<Contact> contactList, String[] headers,
-	    Boolean isFirstTime)
-    {
-	try
-	{
-	    CSVWriter writer = new CSVWriter(Channels.newWriter(writeChannel, "UTF8"));
-
-	    if (isFirstTime)
-		writer.writeNext(headers);
-
-	    Map<String, Integer> indexMap = ContactExportCSVUtil.getIndexMapOfCSVHeaders(headers);
-
-	    for (Contact contact : contactList)
-	    {
-		if (contact == null)
-		    continue;
-
-		String str[] = ContactCSVExport.insertContactProperties(contact, indexMap, headers.length);
-		List<Note> notes = NoteUtil.getNotes(contact.id);
-		writer.writeNext(addNotes(str, notes));
-	    }
-
-	    // Close without finalizing
-	    writer.close();
-	}
-	catch (Exception e)
-	{
-	    e.printStackTrace();
-	    System.err.println("Exception occured in writeContactCSV " + e.getMessage());
-	}
-    }
+    /*
+     * public static void writeContactCSV(FileWriteChannel writeChannel,
+     * List<Contact> contactList, String[] headers, Boolean isFirstTime) { try {
+     * CSVWriter writer = new CSVWriter(Channels.newWriter(writeChannel,
+     * "UTF8"));
+     * 
+     * if (isFirstTime) writer.writeNext(headers);
+     * 
+     * Map<String, Integer> indexMap =
+     * ContactExportCSVUtil.getIndexMapOfCSVHeaders(headers);
+     * 
+     * for (Contact contact : contactList) { if (contact == null) continue;
+     * 
+     * String str[] = ContactCSVExport.insertContactProperties(contact,
+     * indexMap, headers.length); List<Note> notes =
+     * NoteUtil.getNotes(contact.id); writer.writeNext(addNotes(str, notes)); }
+     * 
+     * // Close without finalizing writer.close(); } catch (Exception e) {
+     * e.printStackTrace();
+     * System.err.println("Exception occured in writeContactCSV " +
+     * e.getMessage()); } }
+     */
 
     /**
      * Returns array of CSV Headers. Appends custom fields labels as CSV Headers
