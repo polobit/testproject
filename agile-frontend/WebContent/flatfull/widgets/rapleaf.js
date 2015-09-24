@@ -20,6 +20,7 @@ function setupRapleafAuth()
 	console.log('In Rapleaf Auth');
 
 	// Saves the API key
+    $("body").off("click", '#save_api_key');
 	$("body").on("click", '#save_api_key', function(e)
 	{
 		e.preventDefault();

@@ -222,7 +222,7 @@ var TAG_MODEL_VIEW = Backbone.View
 				this.input.val(this.model.get('tag'));
 
 			},
-			render : function(callback) {
+		render : function(callback) {
 				$(this.el)
 						.html(
 								getTemplate(this.options.template, this.model
@@ -232,6 +232,7 @@ var TAG_MODEL_VIEW = Backbone.View
 				// Add model as data to it's corresponding row
 
 				return this;
+		
 			}
 		});
 

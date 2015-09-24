@@ -79,6 +79,14 @@ function showNotyPopUp(type, message, position, timeout, clickCallback) {
 			notySetup(type, message, position, timeout, clickCallback)
 		});
 	
+	//for topCenter position
+	if(position == "topCenter")
+		head.js(LIB_PATH + 'lib/noty/jquery.noty.js', LIB_PATH
+				+ 'lib/noty/layouts/topCenter.js', LIB_PATH
+				+ 'lib/noty/themes/default.js', function(){
+			          notySetup(type,message,position,timeout,clickCallback)
+		});
+	
 	// for bottomRight position
 	if(position == "bottomRight")
 		head.js(LIB_PATH + 'lib/noty/jquery.noty.js',  LIB_PATH

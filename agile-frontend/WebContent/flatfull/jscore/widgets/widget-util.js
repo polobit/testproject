@@ -610,7 +610,7 @@ function save_widget_prefs(pluginName, prefs, callback)
 	} });
 }
 
-function show_set_up_widget(widget_name, template_id, url, model, callback)
+function show_set_up_widget(widget_name, template_id, url, model)
 {
 	getTemplate('settings', {}, undefined, function(template_ui){
 		if(!template_ui)
@@ -630,23 +630,17 @@ function show_set_up_widget(widget_name, template_id, url, model, callback)
 		{
 			if (!App_Widgets.Catalog_Widgets_View || App_Widgets.Catalog_Widgets_View.collection.length == 0)
 			{
-				
-					App_Widgets.Catalog_Widgets_View = new Base_Collection_View({ url : '/core/api/widgets/default' });
+				App_Widgets.Catalog_Widgets_View = new Base_Collection_View({ url : '/core/api/widgets/default' });
 
-					// Fetch the list of widgets
-					App_Widgets.Catalog_Widgets_View.collection.fetch({ success : function()
+				// Fetch the list of widgets
+				App_Widgets.Catalog_Widgets_View.collection.fetch({ success : function()
+				{
+
+					$.getJSON('core/api/widgets/' + widget_name, function(data)
 					{
-
-						$.getJSON('core/api/widgets/' + widget_name, function(data)
-						{
-							getTemplate("widget-settings", {}, undefined, function(ui){
-								hideTransitionBar();
-								show_set_up_widget(widget_name, template_id, url, data, callback);
-							});
-						});
-					} });
-				
-				
+						show_set_up_widget(widget_name, template_id, url, data);
+					});
+				} });
 				return;
 			}
 			models = App_Widgets.Catalog_Widgets_View.collection.where({ name : widget_name });
@@ -694,10 +688,6 @@ function show_set_up_widget(widget_name, template_id, url, model, callback)
 		    		return;
 				$('#widget-settings', el).html($(template_ui)); 
 				console.log(el);
-
-				if(callback)
-			 		callback(el);
-
 			}, "#widget-settings");
 
 			
@@ -712,10 +702,6 @@ function show_set_up_widget(widget_name, template_id, url, model, callback)
 				 		if(!template_ui)
 				    		return;
 						$('#widget-settings', el).html($(template_ui)); 
-
-						if(callback)
-			 				callback(el);
-
 					}, '#widget-settings');
 
 				}
@@ -725,10 +711,6 @@ function show_set_up_widget(widget_name, template_id, url, model, callback)
 				 		if(!template_ui)
 				    		return;
 						$('#widget-settings', el).html($(template_ui)); 
-
-						if(callback)
-			 				callback(el);
-
 					}, '#widget-settings');
 				}
 			}
@@ -739,20 +721,11 @@ function show_set_up_widget(widget_name, template_id, url, model, callback)
 				    		return;
 						$('#widget-settings', el).html($(template_ui)); 
 						console.log(el);
-
-						if(callback)
-			 				callback(el);
-
 					}, '#widget-settings');
 				
 			}
 		}
-
 		$('#prefs-tabs-content').html(el);
-
-		if(callback)
-			 callback(el);
-
 		$('#PrefsTab .select').removeClass('select');
 		$('.add-widget-prefs-tab').addClass('select');
 
@@ -835,19 +808,15 @@ function fill_form(id, widget_name, template_id)
 	console.log(model.get("prefs"));
 	console.log(model.length);
 
-	show_set_up_widget(widget_name, template_id, undefined, undefined, function(){
+	show_set_up_widget(widget_name, template_id);
 
-		if (model && model.get("prefs"))
-		{
-			var prefsJSON = JSON.parse(model.get("prefs"));
-			console.log("prefsJSON:");
-			console.log(prefsJSON);
-			fill_fields(prefsJSON);
-		}
-
-	});
-
-	
+	if (model && model.get("prefs"))
+	{
+		var prefsJSON = JSON.parse(model.get("prefs"));
+		console.log("prefsJSON:");
+		console.log(prefsJSON);
+		fill_fields(prefsJSON);
+	}
 }
 
 function show_shopify_prefs(id, widget_name, template_id)

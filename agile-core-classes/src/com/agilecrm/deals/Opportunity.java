@@ -13,6 +13,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.annotate.JsonIgnore;
 
+import com.agilecrm.activities.Category;
 import com.agilecrm.activities.util.ActivitySave;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Note;
@@ -141,6 +142,11 @@ public class Opportunity extends Cursor implements Serializable
     public Long created_time = 0L;
 
     /**
+     * Created time of a deal.
+     */
+    public Long milestone_changed_time = 0L;
+
+    /**
      * Track a deal.
      */
     @NotSaved(IfDefault.class)
@@ -198,6 +204,30 @@ public class Opportunity extends Cursor implements Serializable
      * Won date for a deal.
      */
     public Long won_date = null;
+    
+    /**
+     * Lost reason Id of the deal.
+     */
+    @NotSaved
+    public Long lost_reason_id = 0L;
+    
+    /**
+     * Key object of lost reason
+     */
+    @NotSaved(IfDefault.class)
+    private Key<Category> lostReason = null;
+    
+    /**
+     * Deal source Id of the deal.
+     */
+    @NotSaved
+    public Long deal_source_id = 0L;
+    
+    /**
+     * Key object of deal source
+     */
+    @NotSaved(IfDefault.class)
+    private Key<Category> dealSource = null;
 
     /**
      * ObjectifyDao of Opportunity.
@@ -387,6 +417,20 @@ public class Opportunity extends Cursor implements Serializable
     {
 	return Note.dao.fetchAllByKeys(this.related_notes);
     }
+    
+    public Long getLost_reason_id()
+    {
+	if (lostReason != null)
+	    return lostReason.getId();
+	return 0L;
+    }
+    
+    public Long getDeal_source_id()
+    {
+	if (dealSource != null)
+	    return dealSource.getId();
+	return 0L;
+    }
 
     /**
      * Sets owner_key to the Case. Annotated with @JsonIgnore to prevent auto
@@ -424,16 +468,31 @@ public class Opportunity extends Cursor implements Serializable
 	// old opportunity (or deal) having id.
 	Opportunity oldOpportunity = null;
 
+	String wonMilestone = "Won";
+	try
+	{
+	    wonMilestone = MilestoneUtil.getMilestone(pipeline_id).won_milestone;
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	}
+	System.out.println("-------------won date---------" + wonMilestone);
+
 	// cache old data to compare new and old in triggers
 	if (id != null)
 	    oldOpportunity = OpportunityUtil.getOpportunity(id);
 	if (oldOpportunity != null && StringUtils.isNotEmpty(this.milestone)
 		&& StringUtils.isNotEmpty(oldOpportunity.milestone))
 	{
-	    if (!this.milestone.equals(oldOpportunity.milestone) && this.milestone.equalsIgnoreCase("Won"))
+	    if (!this.pipeline_id.equals(oldOpportunity.getPipeline_id())
+		    || !this.milestone.equals(oldOpportunity.milestone))
+		this.milestone_changed_time = System.currentTimeMillis() / 1000;
+
+	    if (!this.milestone.equals(oldOpportunity.milestone) && this.milestone.equalsIgnoreCase(wonMilestone))
 		this.won_date = System.currentTimeMillis() / 1000;
 	}
-	else if (oldOpportunity == null && this.milestone.equalsIgnoreCase("Won"))
+	else if (oldOpportunity == null && this.milestone.equalsIgnoreCase(wonMilestone))
 	    this.won_date = System.currentTimeMillis() / 1000;
 	dao.put(this);
 
@@ -499,6 +558,18 @@ public class Opportunity extends Cursor implements Serializable
 	if (owner_id != null)
 	    ownerKey = new Key<DomainUser>(DomainUser.class, Long.parseLong(owner_id));
 	System.out.println("OwnerKey" + ownerKey);
+	
+	// Sets Deal lostReason.
+	if (lost_reason_id != null && lost_reason_id > 0)
+	{
+		this.lostReason = new Key<Category>(Category.class, lost_reason_id);
+	}
+		
+	// Sets deal source.
+	if (deal_source_id != null && deal_source_id > 0)
+	{
+		this.dealSource = new Key<Category>(Category.class, deal_source_id);
+	}
 
 	// Session doesn't exist when adding deal from Campaigns.
 	if (SessionManager.get() == null)
@@ -593,7 +664,8 @@ public class Opportunity extends Cursor implements Serializable
 		.append(", entity_type=").append(entity_type).append(", notes=").append(notes)
 		.append(", related_notes=").append(related_notes).append(", note_description=")
 		.append(note_description).append(", pipeline=").append(pipeline).append(", pipeline_id=")
-		.append(pipeline_id).append(", archived=").append(archived).append("]");
+		.append(pipeline_id).append(", archived=").append(archived).append(", lost_reason_id=").append(lost_reason_id)
+		.append(", deal_source_id=").append(deal_source_id).append("]");;
 	return builder.toString();
     }
 }

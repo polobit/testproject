@@ -1,5 +1,6 @@
 package com.campaignio.tasklets.util;
 
+import org.apache.commons.lang.StringUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -42,6 +43,14 @@ public class MergeFieldsUtil
 
 	}
 
+	/**
+	 * Returns first name of a contact with all the first characters in upper
+	 * case
+	 * 
+	 * @param subscriberJSON
+	 * @return string
+	 * 
+	 */
 	public static String firstNameFix(JSONObject subscriberJSON)
 	{
 		String firstName;
@@ -51,7 +60,7 @@ public class MergeFieldsUtil
 			if (firstName.equals("null"))
 				return "";
 
-			return getFirstUpperCaseChar(firstName);
+			return getUpperCase(getFirstWord(firstName));
 		}
 		catch (JSONException e)
 		{
@@ -67,6 +76,12 @@ public class MergeFieldsUtil
 
 	}
 
+	/**
+	 * Returns a string with all the characters before space in upper case
+	 * 
+	 * @param name
+	 * @return string
+	 */
 	public static String getFirstUpperCaseChar(String name)
 	{
 		String firstUpperCaseCharacter = "";
@@ -78,6 +93,14 @@ public class MergeFieldsUtil
 		return firstUpperCaseCharacter.trim();
 	}
 
+	/**
+	 * Returns last name of a contact with all the first characters in upper
+	 * case
+	 * 
+	 * @param subscriberJSON
+	 * @return string
+	 * 
+	 */
 	public static String lastNameFix(JSONObject subscriberJSON)
 	{
 		String lastName;
@@ -87,7 +110,7 @@ public class MergeFieldsUtil
 			if (lastName.equals("null"))
 				return "";
 
-			return getFirstUpperCaseChar(lastName);
+			return getUpperCase(getFirstWord(lastName));
 		}
 		catch (JSONException e)
 		{
@@ -133,5 +156,26 @@ public class MergeFieldsUtil
 			System.out.println("Exception in addSignatureMergeField.." + e.getMessage());
 			return null;
 		}
+	}
+
+	/**
+	 * Returns first word in a string. Checks for a space and returns the first
+	 * word with first letter in upper case
+	 * 
+	 * @param name
+	 * @return string
+	 */
+	public static String getFirstWord(String name)
+	{
+		if (!StringUtils.isEmpty(name))
+			return name.contains(" ") ? name.split(" ")[0] : name;
+
+		return "";
+	}
+
+	public static String getUpperCase(String word)
+	{
+		String a = Character.toString(word.charAt(0)).toUpperCase() + word.substring(1);
+		return a;
 	}
 }

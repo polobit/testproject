@@ -35,7 +35,7 @@ function insertSelectedMergeField(ele, target_id)
  *            to add specific fields for specific nodes like unsubscribe link to
  *            SendEmail node
  */
-function getMergeFields(type)
+function getMergeFields(type, callback)
 {
 
 	var options = { "Select Merge Field" : "", "First Name" : "{{first_name}}", "First Name Fix" : "{{first_name_fix}}", "Last Name" : "{{last_name}}", "Last Name Fix" : "{{last_name_fix}}", "Name Fix" : "{{name_fix}}", "Score" : "{{score}}",
@@ -79,6 +79,9 @@ function getMergeFields(type)
 	}
 
 	merged_json["Powered by"] = "{{{powered_by}}}";
+
+	if(callback)
+		return callback(merged_json);
 
 	return merged_json;
 }
@@ -139,6 +142,8 @@ function getTwilioIncomingList(type)
 
 function getCampaignList(type)
 {
+	
+
 	var workflows = $.ajax({ type : "GET", url : '/core/api/workflows', async : false, dataType : 'json' }).responseText;
 
 	// Parse stringify json
@@ -156,6 +161,23 @@ function getCampaignList(type)
 
 	return listOfWorkflows;
 }
+
+/**
+ * Returns count of workflow list
+ */
+ function getCampaignCount(type)
+ {
+
+ 	try{
+		var count = (window.parent.App_Workflows.workflow_list_view.collection.length);
+			return count;
+	}
+	catch(err){
+		return 0;
+	}
+	return 0;
+	
+ }
 
 /**
  * Returns custom fields in format required for merge fields. E.g., Nick
@@ -666,3 +688,39 @@ $('#from_email').die('click').live('click', function(e){
 		});
 });
 
+function getTaskCategories(type)
+{
+	var categories = {};
+	$.ajax({
+		  url: '/core/api/categories?entity_type=TASK',
+		  type: "GET",
+		  async:false,
+		  dataType:'json',
+		  success: function (tasks) {
+			  try{
+				  $.each (tasks,function(name,value){
+					  categories[value.label]=value.name;
+					  });
+			  }catch(e){
+				  categories = null;
+			  }
+			 
+		}
+		
+	});
+
+	if (categories == null)
+		return null;
+
+	// Parse stringify json
+	return categories;
+} 
+
+function show_templates(ele, target_id)
+{
+	// current value
+	var curValue = $(ele).find(':selected').val();
+
+	// inserts text based on cursor.
+	load_email_templates(curValue);
+}

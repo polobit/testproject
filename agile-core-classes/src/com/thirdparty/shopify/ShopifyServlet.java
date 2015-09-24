@@ -79,12 +79,20 @@ public class ShopifyServlet extends HttpServlet
     private String saveWidgetPref(HttpServletRequest req, String token)
     {
 	Widget shopifyWidget = DefaultWidgets.getDefaultWidgetByName("Shopify");
+	
+	String temp = (String)req.getSession().getAttribute("isForAll");	
+	System.out.println("is for all "+temp);
+	
 	if (shopifyWidget != null)
 	{
 	    String shop = req.getParameter("shop");
 	    shop = shop + ".myshopify.com";
 	    shopifyWidget.addProperty("token", token);
 	    shopifyWidget.addProperty("shop", shop);
+	    if(temp != null){
+			shopifyWidget.isForAll = Boolean.valueOf(temp);
+			req.getSession().removeAttribute("isForAll");
+		}
 	    shopifyWidget.save();
 	}
 	return shopifyWidget.id.toString();

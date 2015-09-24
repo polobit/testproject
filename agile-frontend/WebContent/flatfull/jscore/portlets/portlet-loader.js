@@ -3,16 +3,16 @@ var portlet_template_loaded_map = {};
 
 $(function()
 {
-				$.getJSON('/core/api/users/agileusers', function(users)
+	$.getJSON('/core/api/users/agileusers', function(users)
+	{
+		$.each(users, function(i, user)
+		{
+			if (CURRENT_DOMAIN_USER.id == user.domain_user_id)
 			{
-				$.each(users, function(i, user)
-				{
-					if (CURRENT_DOMAIN_USER.id == user.domain_user_id)
-					{
-					CURRENT_AGILE_USER = user;
-					}
-				});
-			});
+				CURRENT_AGILE_USER = user;
+			}
+		});
+	});
 });
 /**
  * Loads all the portlets for the current agile user
@@ -32,6 +32,7 @@ function loadPortlets(el){
 	App_Portlets.accountInfo = new Array();
 	App_Portlets.activity=new Array();
 	App_Portlets.activitiesView= new Array();
+	App_Portlets.campaignstats = new Array();
 	/*
 	 * If Portlets_View is not defined , creates collection view, collection is
 	 * sorted based on position i.e., set when sorted using jquery ui sortable
@@ -201,6 +202,7 @@ function set_up_portlets(el, portlets_el){
 						$('#'+this.$resized_widget.attr('id')+' > .portlet_header').css("width","100%");*/
 					$('#'+this.$resized_widget.attr('id')+' > .portlet_header').find('ul').width(($('#'+this.$resized_widget.attr('id')+' > .portlet_body').find('ul').width()/$('#'+this.$resized_widget.attr('id')+' > .portlet_body').width()*100)+'%');
         		}
+
         		else if(tempModel.get("name")=="Mini Calendar")
         			{
 						var el=this.$resized_widget.find('.portlet_body_calendar');
@@ -422,7 +424,7 @@ function showPortletSettings(el){
 		var options ='<option value="">Select...</option>'
 			+'<option value="contacts">All Contacts</option>'
 			+'<option value="myContacts">My Contacts</option>';
-		$.ajax({ type : 'GET', url : '/core/api/filters?type=PERSON', async : false, dataType : 'json',
+		$.ajax({ type : 'GET', url : '/core/api/filters?type=PERSON', dataType : 'json',
 			success: function(data){
 				$.each(data,function(index,contactFilter){
 					options+="<option value="+contactFilter.id+">"+contactFilter.name+"</option>";
@@ -500,27 +502,22 @@ function showPortletSettings(el){
 		if(App_Portlets.deal_tracks!=undefined && App_Portlets.deal_tracks!=null)
 			tracks = App_Portlets.deal_tracks;
 		else{
-			$.ajax({ type : 'GET', url : '/core/api/milestone/pipelines', async : false, dataType : 'json',
+			$.ajax({ type : 'GET', url : '/core/api/milestone/pipelines', dataType : 'json',
 				success: function(data){
 					App_Portlets.track_length = data.length;
 					App_Portlets.deal_tracks = data;
 					tracks = App_Portlets.deal_tracks;
+
+					portlet_utiity.addTracks(tracks, base_model, elData);
 				} });
+
+			return;
 		}
+
+
+		portlet_utiity.addTracks(tracks, base_model, elData);
 		
-		var options = '';
-		$.each(tracks,function(index,trackObj){
-			if(base_model.get('settings').track==0 && trackObj.name=="Default")
-				options+="<option value="+trackObj.id+" selected='selected'>"+trackObj.name+"</option>";
-			else if(base_model.get('settings').track==trackObj.id)
-				options+="<option value="+trackObj.id+" selected='selected'>"+trackObj.name+"</option>";
-			else
-				options+="<option value="+trackObj.id+">"+trackObj.name+"</option>";
-		});
 		
-		$('#track', elData).html(options);
-		$('.loading-img').hide();
-		$("#deals", elData).find('option[value='+ base_model.get("settings").deals +']').attr("selected", "selected");
 		//$("#due-date", elData).val(new Date(base_model.get("settings")["due-date"]*1000).format('mm/dd/yyyy'));
 	}else if(base_model.get('portlet_type')=="DEALS" && base_model.get('name')=="Closures Per Person"){
 		$('#portletsDealsClosuresPerPersonSettingsModal').modal('show');
@@ -554,27 +551,21 @@ function showPortletSettings(el){
 		if(App_Portlets.deal_tracks!=undefined && App_Portlets.deal_tracks!=null)
 			tracks = App_Portlets.deal_tracks;
 		else{
-			$.ajax({ type : 'GET', url : '/core/api/milestone/pipelines', async : false, dataType : 'json',
+			$.ajax({ type : 'GET', url : '/core/api/milestone/pipelines', dataType : 'json',
 				success: function(data){
 					App_Portlets.track_length = data.length;
 					App_Portlets.deal_tracks = data;
 					tracks = App_Portlets.deal_tracks;
+
+					portlet_utiity.addTracks(tracks, base_model, elData);
+					
 				} });
+
+			 return;
 		}
 		
-		var options = '';
-		$.each(tracks,function(index,trackObj){
-			if(base_model.get('settings').track==0 && trackObj.name=="Default")
-				options+="<option value="+trackObj.id+" selected='selected'>"+trackObj.name+"</option>";
-			else if(base_model.get('settings').track==trackObj.id)
-				options+="<option value="+trackObj.id+" selected='selected'>"+trackObj.name+"</option>";
-			else
-				options+="<option value="+trackObj.id+">"+trackObj.name+"</option>";
-		});
+		portlet_utiity.addTracks(tracks, base_model, elData);
 		
-		$('#track', elData).html(options);
-		$('.loading-img').hide();
-		$("#deals", elData).find('option[value='+ base_model.get("settings").deals +']').attr("selected", "selected");
 		//$("#due-date", elData).val(new Date(base_model.get("settings")["due-date"]*1000).format('mm/dd/yyyy'));
 	}else if(base_model.get('portlet_type')=="DEALS" && base_model.get('name')=="Deals Assigned"){
 		$('#portletsDealsAssignedSettingsModal').modal('show');
@@ -596,7 +587,7 @@ function showPortletSettings(el){
 		
 		if(base_model.get("settings")["calls-user-list"]!=undefined){
 			var options ='';
-			$.ajax({ type : 'GET', url : '/core/api/users', async : false, dataType : 'json',
+			$.ajax({ type : 'GET', url : '/core/api/users', dataType : 'json',
 				success: function(data){
 					$.each(data,function(index,domainUser){
 						if(!domainUser.is_disabled)
@@ -606,11 +597,15 @@ function showPortletSettings(el){
 					$.each(base_model.get("settings")["calls-user-list"], function(){
 						$("#calls-user-list", elData).find('option[value='+ this +']').attr("selected", "selected");
 					});
+
 					$('.loading-img').hide();
+
+					portlet_utiity.enable_users_multi_select_option('ms-calls-user-list', elData);
+
 				} });
 		}else{
 			var options ='';
-			$.ajax({ type : 'GET', url : '/core/api/users', async : false, dataType : 'json',
+			$.ajax({ type : 'GET', url : '/core/api/users', dataType : 'json',
 				success: function(data){
 					$.each(data,function(index,domainUser){
 						if(!domainUser.is_disabled)
@@ -618,16 +613,12 @@ function showPortletSettings(el){
 					});
 					$('#calls-user-list', elData).html(options);
 					$('.loading-img').hide();
+
+					portlet_utiity.enable_users_multi_select_option('ms-calls-user-list', elData);
 				} });
 		}
-		$('#ms-calls-user-list', elData).remove();
-		head.js(LIB_PATH + 'lib/jquery.multi-select.js', function(){
-			$('#calls-user-list',elData).multiSelect();
-			$('#ms-calls-user-list .ms-selection', elData).children('ul').addClass('multiSelect').attr("name", "calls-user-list").attr("id", "calls-user");
-			$('#ms-calls-user-list .ms-selectable .ms-list', elData).css("height","130px");
-			$('#ms-calls-user-list .ms-selection .ms-list', elData).css("height","130px");
-			$('#ms-calls-user-list', elData).addClass('portlet-user-ms-container');					
-		});
+
+		
 		
 	}else if(base_model.get('portlet_type')=="TASKSANDEVENTS" && base_model.get('name')=="Task Report"){
 		$('#portletsTaskReportSettingsModal').modal('show');
@@ -649,7 +640,7 @@ function showPortletSettings(el){
 
 		if(base_model.get("settings")["task-report-user-list"]!=undefined){
 			var options ='';
-			$.ajax({ type : 'GET', url : '/core/api/users', async : false, dataType : 'json',
+			$.ajax({ type : 'GET', url : '/core/api/users', dataType : 'json',
 				success: function(data){
 					$.each(data,function(index,domainUser){
 						if(!domainUser.is_disabled)
@@ -660,10 +651,12 @@ function showPortletSettings(el){
 						$("#task-report-user-list", elData).find('option[value='+ this +']').attr("selected", "selected");
 					});
 					$('.loading-img').hide();
+
+					portlet_utiity.enable_users_multi_select_option('ms-task-report-user-list', elData);
 				} });
 		}else{
 			var options ='';
-			$.ajax({ type : 'GET', url : '/core/api/users', async : false, dataType : 'json',
+			$.ajax({ type : 'GET', url : '/core/api/users', dataType : 'json',
 				success: function(data){
 					$.each(data,function(index,domainUser){
 						if(!domainUser.is_disabled)
@@ -671,16 +664,11 @@ function showPortletSettings(el){
 					});
 					$('#task-report-user-list', elData).html(options);
 					$('.loading-img').hide();
+
+					portlet_utiity.enable_users_multi_select_option('ms-task-report-user-list', elData);
 				} });
 		}
-		$('#ms-task-report-user-list', elData).remove();
-		head.js(LIB_PATH + 'lib/jquery.multi-select.js', function(){
-			$('#task-report-user-list',elData).multiSelect();
-			$('#ms-task-report-user-list .ms-selection', elData).children('ul').addClass('multiSelect').attr("name", "task-report-user-list").attr("id", "task-report-user");
-			$('#ms-task-report-user-list .ms-selectable .ms-list', elData).css("height","130px");
-			$('#ms-task-report-user-list .ms-selection .ms-list', elData).css("height","130px");
-			$('#ms-task-report-user-list', elData).addClass('portlet-user-ms-container');					
-		});
+		
 
 	}else if(base_model.get('portlet_type')=="USERACTIVITY" && base_model.get('name')=="Stats Report"){
 		$('#portletsStatsReportSettingsModal').modal('show');
@@ -725,7 +713,7 @@ function showPortletSettings(el){
 
 		if(base_model.get("settings").user!=undefined){
 			var options ='';
-			$.ajax({ type : 'GET', url : '/core/api/portlets/portletUsers', async : false, dataType : 'json',
+			$.ajax({ type : 'GET', url : '/core/api/portlets/portletUsers', dataType : 'json',
 				success: function(data){
 					$.each(data,function(index,domainUser){
 						if(!domainUser.is_disabled)
@@ -736,10 +724,13 @@ function showPortletSettings(el){
 						$("#user-list", elData).find('option[value='+ this +']').attr("selected", "selected");
 					});
 					$('.loading-img').hide();
+
+					portlet_utiity.enable_users_multi_select_option('ms-category-list', elData);
+
 				} });
 		}else{
 			var options ='';
-			$.ajax({ type : 'GET', url : '/core/api/portlets/portletUsers', async : false, dataType : 'json',
+			$.ajax({ type : 'GET', url : '/core/api/portlets/portletUsers', dataType : 'json',
 				success: function(data){
 					$.each(data,function(index,domainUser){
 						if(!domainUser.is_disabled)
@@ -747,21 +738,11 @@ function showPortletSettings(el){
 					});
 					$('#user-list', elData).html(options);
 					$('.loading-img').hide();
+
+					portlet_utiity.enable_users_multi_select_option('ms-category-list', elData);
 				} });
 		}
-		$('#ms-category-list', elData).remove();
-		$('#ms-user-list', elData).remove();
-		head.js(LIB_PATH + 'lib/jquery.multi-select.js', function(){
-			$('#category-list, #user-list',elData).multiSelect();
-			$('#ms-category-list .ms-selection', elData).children('ul').addClass('multiSelect').attr("name", "category-list").attr("id", "category");
-			$('#ms-user-list .ms-selection', elData).children('ul').addClass('multiSelect').attr("name", "user-list").attr("id", "user");
-			$('#ms-user-list .ms-selectable .ms-list', elData).css("height","130px");
-			$('#ms-user-list .ms-selection .ms-list', elData).css("height","130px");
-			$('#ms-category-list .ms-selectable .ms-list', elData).css("height","105px");
-			$('#ms-category-list .ms-selection .ms-list', elData).css("height","105px");
-			$('#ms-user-list', elData).addClass('portlet-user-ms-container');
-			$('#ms-category-list', elData).addClass('portlet-category-ms-container');					
-		});
+		
 	}else if(base_model.get('portlet_type')=="DEALS" && base_model.get('name')=="Revenue Graph"){
 		$('#portletsDealsRevenueGraphSettingsModal').modal('show');
 		$('#portletsDealsRevenueGraphSettingsModal > .modal-dialog > .modal-content > .modal-footer > .save-modal').attr('id',base_model.get("id")+'-save-modal');
@@ -775,20 +756,44 @@ function showPortletSettings(el){
 		}else{
 			options += '<option value="anyTrack">Any</option>';
 		}
-		$.ajax({ type : 'GET', url : '/core/api/milestone/pipelines', async : false, dataType : 'json',
+		$.ajax({ type : 'GET', url : '/core/api/milestone/pipelines', dataType : 'json',
 				success: function(data){
 					$.each(data,function(index,trackObj){
 						if(base_model.get('settings').track==trackObj.id)
 							options+="<option value="+trackObj.id+" selected='selected'>"+trackObj.name+"</option>";
 						else
 							options+="<option value="+trackObj.id+">"+trackObj.name+"</option>";
+					$('#track', elData).html(options);
+					$('.loading-img').hide();
 					});
+
+					
 				} });
-		$('#track', elData).html(options);
-		$('.loading-img').hide();
+		
 		$("#duration", elData).find('option[value='+ base_model.get("settings").duration +']').attr("selected", "selected");
 	}
-	
+	else if(base_model.get('portlet_type')=="USERACTIVITY" && base_model.get('name')=="Campaign stats"){
+		$('#portletsCampaignStatsSettingsModal').modal('show');
+		$('#portletsCampaignStatsSettingsModal > .modal-dialog > .modal-content > .modal-footer > .save-modal').attr('id',base_model.get("id")+'-save-modal');
+		$("#portlet-type",$('#portletsCampaignStatsSettingsModal')).val(base_model.get('portlet_type'));
+		$("#portlet-name",$('#portletsCampaignStatsSettingsModal')).val(base_model.get('name'));
+		
+		elData = $('#portletsCampaignStatsSettingsForm');
+		$("#duration", elData).find('option[value='+ base_model.get("settings").duration +']').attr("selected", "selected");
+		
+		var options="<option value='All'>All Campaigns</option>" ;
+		$.ajax({ type : 'GET', url : '/core/api/workflows', async : false, dataType : 'json',
+			success: function(data){
+				$.each(data,function(index,campaignfilter){
+					options+="<option value="+campaignfilter.id+">"+campaignfilter.name+"</option>";
+				});
+				$('#campaign_type', elData).html(options);
+				$("#campaign_type", elData).find('option[value='+ base_model.get("settings").campaign_type +']').attr("selected", "selected");
+				$('.loading-img').hide();
+			}
+		});
+		
+	}
 	if(base_model.get('name')=="Pending Deals" || base_model.get('name')=="Deals By Milestone" || base_model.get('name')=="Closures Per Person" || base_model.get('name')=="Deals Funnel"){
 		$('#due-date', elData).datepicker({
 			format : CURRENT_USER_PREFS.dateFormat
@@ -1288,14 +1293,16 @@ $('.modal-footer').off("click").on('click', '.portlet-settings-save-modal', func
 	    				milestonesList=data1["milestonesList"];
 	    				milestoneValuesList=data1["milestoneValuesList"];
 	    				milestoneMap=data1["milestoneMap"];
+	    				wonMilestone=data1["wonMilestone"];
+						lostMilestone=data1["lostMilestone"];
 	    				
 	    				var funnel_data=[];
 	    				var temp;
 	    				
 	    				$.each(milestonesList,function(index,milestone){
 	    					var each_data=[];
-	    					if(milestone!='Lost'){
-	    						if(milestone!='Won')
+	    					if(milestone!=lostMilestone){
+	    						if(milestone!=wonMilestone)
 		    						each_data.push(milestone,milestoneValuesList[index]);
 		    					else
 		    						temp=index;
@@ -1834,7 +1841,85 @@ $('.modal-footer').off("click").on('click', '.portlet-settings-save-modal', func
 		        		$('#'+el.split("-save-modal")[0]).parent().find('.portlet_body').find('.dealsWonValue').append("Total won value:"+totalVal);
 	        		},2000);
 	        	}*/
-	        	
+	        if(data.get('portlet_type')=="USERACTIVITY" && data.get('name')=="Campaign stats"){	
+				var start_date_str = "";
+				var end_date_str ="";
+				var emailsSentCount;
+				var emailsOpenedCount;
+				var emailsClickedCount;
+				var emailsUnsubscribed;
+		if(data.get('settings').duration=='yesterday'){
+				start_date_str = ''+data.get('settings').duration;
+				end_date_str = 'today';
+			}else if(data.get('settings').duration=='last-week'){
+				start_date_str = ''+data.get('settings').duration;
+				end_date_str = 'last-week-end';
+			}else if(data.get('settings').duration=='last-month'){
+				start_date_str = ''+data.get('settings').duration;
+				end_date_str = 'last-month-end';
+			}else if(data.get('settings').duration=='24-hours'){
+				start_date_str = ''+data.get('settings').duration;
+				end_date_str = 'now';
+			}else if(data.get('settings').duration=='this-week'){
+				start_date_str = ''+data.get('settings').duration;
+				end_date_str = 'this-week-end';
+			}else if(data.get('settings').duration=='this-month'){
+				start_date_str = ''+data.get('settings').duration;
+				end_date_str = 'this-month-end';
+			}else{
+				start_date_str = ''+data.get('settings').duration;
+				end_date_str = 'TOMORROW';
+			}
+			
+			var that = $('#'+el.split("-save-modal")[0]).parent();
+		var url = '/core/api/portlets/portletCampaignstats?duration='+data.get('settings').duration+'&start-date='+getStartAndEndDatesOnDue(start_date_str)+'&end-date='+getStartAndEndDatesOnDue(end_date_str)+'&time_zone='+(new Date().getTimezoneOffset())+'&campaign_type='+data.get('settings').campaign_type; 
+		setTimeout(function(){
+				if(that.find('#emails-sent-count').text().trim()=="")
+					that.find('#emails-sent-count').html("<img src='../flatfull/img/ajax-loader-cursor.gif' style='width:12px;height:10px;opacity:0.5;' />");
+			},1000);
+		fetchPortletsGraphData(url,function(data){
+			
+			emailsSentCount=data["emailsent"];
+				emailsOpenedCount=data["emailopened"];
+				emailsClickedCount=data["emailclicked"];
+				emailsUnsubscribed=data["emailunsubscribed"];
+				if(emailsSentCount==0){
+					that.find('#emails-sent').css('width','100%').css('height','100%');
+					that.find('#emails-sent').html('<div class="portlet-error-message">No Email activity</div>');
+				}
+				else{
+					var selector1=that.find('#emails-opened');
+					var selector2=that.find('#emails-clicked');
+					var selector3=that.find('#emails-unsubscribed');
+					selector1.css('display','block');
+					selector2.css('display','block');
+					selector3.css('display','block');
+					that.find('#emails-sent').addClass('pull-left p-xs b-b b-r b-light w-half overflow-hidden');
+					selector1.addClass('pull-left p-xs b-b b-light w-half');
+					selector2.addClass('pull-left p-xs b-r b-light w-half');
+					selector3.addClass('pull-left p-xs w-half');
+				that.find('#emails-sent-count').text(getNumberWithCommasForPortlets(emailsSentCount));
+				that.find('#emails-sent-label').text("Emails sent");
+				that.find('#emails-opened').html('<div class="pull-left text-light stats_text" ><div class="text-sm text-ellipsis">Opened</div><div class="text-count text-center" style="color:rgb(250, 215, 51);">'+getNumberWithCommasForPortlets(emailsOpenedCount)+'</div></div>');
+				that.find('#emails-clicked').html('<div class="pull-left text-light stats_text"><div class="text-sm text-ellipsis">Clicked</div><div class="text-count text-center" style="color:rgb(18, 209, 18);">'+getNumberWithCommasForPortlets(emailsClickedCount)+'</div></div>');
+				that.find('#emails-unsubscribed').html('<div class="pull-left text-light stats_text"><div class="text-sm text-ellipsis">Unsubscribed</div><div class="text-count text-center" style="color:rgb(240, 80, 80);">'+getNumberWithCommasForPortlets(emailsUnsubscribed)+'</div></div>');
+				/*var series=[];
+				series.push(["Emails Sent",emailsSentCount-emailsOpenedCount]);
+				series.push(["Emails Opened",emailsOpenedCount]);
+				campstatsPieChart(selector1,series,emailsSentCount,emailsOpenedCount);
+				
+				var series1=[];
+				series1.push(["Emails Sent",emailsSentCount-emailsClickedCount]);
+				series1.push(["Emails Clicked",emailsClickedCount]);
+				campstatsPieChart(selector2,series1,emailsSentCount,emailsClickedCount);
+				
+				var series2=[];
+				series2.push(["Emails Sent",emailsSentCount-emailsUnsubscribed]);
+				series2.push(["Emails Unsubscribed",emailsUnsubscribed]);
+				campstatsPieChart(selector3,series2,emailsSentCount,emailsUnsubscribed);*/
+				}
+				});
+			}
 	        	setPortletContentHeight(data);
     			$('#'+data.get('id')).parent().find('div:last').after('<span class="gs-resize-handle gs-resize-handle-both"></span>');
 	        	
@@ -2899,4 +2984,138 @@ function getaspectratio(el)
 }
 
 
+var portlet_utiity = {
 
+  addTracks: function(tracks, base_model, elData){
+  		var options = '';
+		$.each(tracks,function(index,trackObj){
+			if(base_model.get('settings').track==0 && trackObj.name=="Default")
+				options+="<option value="+trackObj.id+" selected='selected'>"+trackObj.name+"</option>";
+			else if(base_model.get('settings').track==trackObj.id)
+				options+="<option value="+trackObj.id+" selected='selected'>"+trackObj.name+"</option>";
+			else
+				options+="<option value="+trackObj.id+">"+trackObj.name+"</option>";
+		});
+		
+		$('#track', elData).html(options);
+		$('.loading-img').hide();
+		$("#deals", elData).find('option[value='+ base_model.get("settings").deals +']').attr("selected", "selected");
+  },
+
+  /**
+	 * getting flitered contact portlet header name
+	 */
+  get_filtered_contact_header : function(base_model, callback){
+
+  		var filter_name = base_model.get("settings").filter;
+
+  		if (filter_name == 'contacts')
+			return callback("All Contacts");
+		else if (filter_name == 'companies')
+			return callback("All Companies");
+		else if (filter_name == 'recent')
+			return header_name = "Recent Contacts";
+		else if (filter_name == 'myContacts')
+			return callback("My Contacts");
+		else if (filter_name == 'leads')
+			return callback("Leads");
+		else
+		{
+
+			var contactFilter = $.ajax({ type : 'GET', url : '/core/api/filters/' + filter_name, dataType : 'json', success : function(data)
+			{
+				var header_name = '';
+				if (data != null && data != undefined)
+					header_name = "" + data.name;
+
+				if (!header_name){
+					header_name = "Contact List";
+				}
+					
+				return callback(header_name);
+
+			} });
+		}
+
+  }, 
+
+  /**
+	 * getting flitered contact portlet header name
+	 */
+  get_deals_funnel_portlet_header : function(base_model, callback){
+
+  	var track_id = base_model.get("settings").track;
+
+  	App_Portlets.track_length = 0;
+	$.ajax({ type : 'GET', url : '/core/api/milestone/pipelines', dataType : 'json', success : function(data)
+	{
+		App_Portlets.track_length = data.length;
+		App_Portlets.deal_tracks = data;
+
+		if (App_Portlets.track_length > 1)
+		{
+			if (track_id == 0)
+				return callback("Default");
+			else
+			{
+				var milestone = $.ajax({ type : 'GET', url : '/core/api/milestone/' + track_id, dataType : 'json', success : function(data)
+				{
+					if (data != null && data != undefined)
+						return callback("" + data.name + "");
+				} });
+			}
+		}
+
+	} });
+	
+ },
+
+ enable_users_multi_select_option: function(selector, elData){
+
+ 	if(selector == "ms-calls-user-list"){
+ 		$('#ms-calls-user-list', elData).remove();
+		head.js(LIB_PATH + 'lib/jquery.multi-select.js', function(){
+			$('#calls-user-list',elData).multiSelect();
+			$('#ms-calls-user-list .ms-selection', elData).children('ul').addClass('multiSelect').attr("name", "calls-user-list").attr("id", "calls-user");
+			$('#ms-calls-user-list .ms-selectable .ms-list', elData).css("height","130px");
+			$('#ms-calls-user-list .ms-selection .ms-list', elData).css("height","130px");
+			$('#ms-calls-user-list', elData).addClass('portlet-user-ms-container');					
+		});
+ 	}
+ 	
+
+ 	if(selector == "ms-task-report-user-list"){
+
+ 		$('#ms-task-report-user-list', elData).remove();
+		head.js(LIB_PATH + 'lib/jquery.multi-select.js', function(){
+			$('#task-report-user-list',elData).multiSelect();
+			$('#ms-task-report-user-list .ms-selection', elData).children('ul').addClass('multiSelect').attr("name", "task-report-user-list").attr("id", "task-report-user");
+			$('#ms-task-report-user-list .ms-selectable .ms-list', elData).css("height","130px");
+			$('#ms-task-report-user-list .ms-selection .ms-list', elData).css("height","130px");
+			$('#ms-task-report-user-list', elData).addClass('portlet-user-ms-container');					
+		});
+
+ 	}
+
+	if(selector == "ms-category-list"){
+
+		$('#ms-category-list', elData).remove();
+		$('#ms-user-list', elData).remove();
+		head.js(LIB_PATH + 'lib/jquery.multi-select.js', function(){
+			$('#category-list, #user-list',elData).multiSelect();
+			$('#ms-category-list .ms-selection', elData).children('ul').addClass('multiSelect').attr("name", "category-list").attr("id", "category");
+			$('#ms-user-list .ms-selection', elData).children('ul').addClass('multiSelect').attr("name", "user-list").attr("id", "user");
+			$('#ms-user-list .ms-selectable .ms-list', elData).css("height","130px");
+			$('#ms-user-list .ms-selection .ms-list', elData).css("height","130px");
+			$('#ms-category-list .ms-selectable .ms-list', elData).css("height","105px");
+			$('#ms-category-list .ms-selection .ms-list', elData).css("height","105px");
+			$('#ms-user-list', elData).addClass('portlet-user-ms-container');
+			$('#ms-category-list', elData).addClass('portlet-category-ms-container');					
+		});
+	}
+	
+
+ },
+
+
+};

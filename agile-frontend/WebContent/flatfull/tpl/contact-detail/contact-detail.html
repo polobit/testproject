@@ -38,11 +38,15 @@
 								
 								<a class="dropdown-toggle" data-toggle="dropdown"><span class="fa fa-angle-down text-lg"></span></a>
 								<ul class="dropdown-menu pull-right">
-                                    <li><a href='#contact-edit'><i class="icon-edit"></i>
-                                     Edit {{#if_keyboard_shortcuts_enabled}}
-                                     <span style='color: #D2C9C9;font-size: 12px;' class='pull-right'>Shift + E</span>
+                                   <li><a href='#contact-edit'>
+                                     <div class="pull-left"><i class="icon-edit"></i>Edit</div> {{#if_keyboard_shortcuts_enabled}}
+                                     <div style='color: #D2C9C9;font-size: 12px;' class='pull-right'>Shift + E</div>
                                      {{/if_keyboard_shortcuts_enabled}}
+                                     <div class="clearfix"></div>
                                      </a></li>
+
+                                     
+                                     
 <li class="divider"></li>
 									<li><a href='#' class="contact-add-note"><i
 											class="icon-file"></i> Add Note</a></li>
@@ -126,31 +130,65 @@
 									{{#multiple_Property_Element "website" properties}} {{#each
 									this}} {{#if_equals subtype "TWITTER"}}
 									
-									 <span class="m-r-xs"><a target="_blank"
+									 <span class="m-r-xs"><a target="_blank" data-toggle="tooltip" data-placement="bottom" data-original-title="Twitter"
 										href="https://twitter.com/{{getTwitterHandleByURL value}}"
 										style="text-decoration: none"> <i
 											class="{{get_social_icon "
-											TWITTER"}}    text-base text-muted"></i>
+											TWITTER"}}    text-base text-muted tooltip_info" ></i>
 									</a>
 									</span> {{else}}  {{#if_equals subtype "SKYPE"}} <span
-										class="m-r-xs"><a class="text-l-none" target="_blank"
+										class="m-r-xs"><a class="text-l-none tooltip_info" target="_blank" data-toggle="tooltip" data-placement="bottom" data-original-title="Skype"
 										href="{{getSkypeURL value}}"> <i
 											class="{{get_social_icon "
-											SKYPE"}}   text-base text-muted"></i>
+											SKYPE"}}   text-base text-muted tooltip_info"></i>
 									</a>
 									</span>{{else}} {{#if_equals subtype "FACEBOOK"}} <span
-										class="m-r-xs"><a target="_blank" class="text-l-none"
+										class="m-r-xs"><a target="_blank" class="text-l-none tooltip_info" data-toggle="tooltip" data-placement="bottom" data-original-title="Facebook"
 										href="{{buildFacebookProfileURL value}}"> <i
 											class="{{get_social_icon "
-											FACEBOOK"}}   text-base text-muted"></i>
+											FACEBOOK"}}   text-base text-muted tooltip_info"></i>
 									</a>
-									</span>{{else}}
-
-								{{#if_equals subtype "GOOGLE-PLUS"}} <span
-										class="m-r-xs"><a target="_blank"
-										href="https://plus.google.com/{{getTwitterHandleByURL value}}/" class="text-l-none"> <i
+									</span>{{else}} {{#if_equals subtype "LINKEDIN"}} <span
+										class="m-r-xs"><a target="_blank" class="text-l-none tooltip_info" data-toggle="tooltip" data-placement="bottom" data-original-title="LinkedIn"
+										href="{{getHyperlinkFromURL value}}"> <i
 											class="{{get_social_icon "
-											GOOGLE-PLUS"}} text-base text-muted"></i>
+											LINKEDIN"}}   text-base text-muted tooltip_info"></i>
+									</a>
+									</span>{{else}}	{{#if_equals subtype "GOOGLE-PLUS"}} <span
+										class="m-r-xs"><a target="_blank" data-toggle="tooltip" data-placement="bottom" data-original-title="Google+"
+										href="https://plus.google.com/{{getTwitterHandleByURL value}}/" class="text-l-none tooltip_info"> <i
+											class="{{get_social_icon "
+											GOOGLE-PLUS"}} text-base text-muted tooltip_info"></i>
+									</a>
+									</span>{{else}}	{{#if_equals subtype "URL"}} <span
+										class="m-r-xs"><a target="_blank" data-toggle="tooltip" data-placement="bottom" data-original-title="Website"
+										href="{{getHyperlinkFromURL value}}" class="text-l-none tooltip_info"> <i
+											class="{{get_social_icon subtype}} text-base text-muted tooltip_info"></i>
+									</a>
+									</span>{{else}} {{#if_equals subtype "XING"}} <span
+										class="m-r-xs"><a target="_blank" data-toggle="tooltip" data-placement="bottom" data-original-title="Xing"
+										href="{{getHyperlinkFromURL value}}" class="text-l-none tooltip_info"> <i
+											class="{{get_social_icon "XING"}} text-base text-muted tooltip_info"></i>
+									</a>
+									</span>{{else}} {{#if_equals subtype "FEED"}} <span
+										class="m-r-xs"><a target="_blank" data-toggle="tooltip" data-placement="bottom" data-original-title="Blog"
+										href="{{getHyperlinkFromURL value}}" class="text-l-none tooltip_info"> <i
+											class="{{get_social_icon "FEED"}} text-base text-muted tooltip_info"></i>
+									</a>
+									</span>{{else}} {{#if_equals subtype "FLICKR"}} <span
+										class="m-r-xs"><a target="_blank" data-toggle="tooltip" data-placement="bottom" data-original-title="Flickr"
+										href="{{getHyperlinkFromURL value}}" class="text-l-none tooltip_info"> <i
+											class="{{get_social_icon "FLICKR"}} text-base text-muted tooltip_info"></i>
+									</a>
+									</span>{{else}} {{#if_equals subtype "GITHUB"}} <span
+										class="m-r-xs"><a target="_blank" data-toggle="tooltip" data-placement="bottom" data-original-title="GitHub"
+										href="{{getHyperlinkFromURL value}}" class="text-l-none tooltip_info"> <i
+											class="{{get_social_icon "GITHUB"}} text-base text-muted tooltip_info"></i>
+									</a>
+									</span>{{else}} {{#if_equals subtype "YOUTUBE"}} <span
+										class="m-r-xs"><a target="_blank" data-toggle="tooltip" data-placement="bottom" data-original-title="YouTube"
+										href="{{getHyperlinkFromURL value}}" class="text-l-none tooltip_info"> <i
+											class="{{get_social_icon "YOUTUBE"}} text-base text-muted tooltip_info"></i>
 									</a>
 									</span>{{else}}
 									<span class="m-r-xs"> <a
@@ -159,7 +197,12 @@
 									</a>
 									</span>
 								
-									 {{/if_equals}} {{/if_equals}} {{/if_equals}} {{/if_equals}} {{/each}} {{/multiple_Property_Element}}
+									 {{/if_equals}} {{/if_equals}} {{/if_equals}} {{/if_equals}}{{/if_equals}}{{/if_equals}}{{/if_equals}}{{/if_equals}}{{/if_equals}}{{/if_equals}}{{/if_equals}} {{/each}}
+									
+
+                                       
+
+									  {{/multiple_Property_Element}}
 									{{/property_is_exists}}
 									</div>
 											

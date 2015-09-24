@@ -64,8 +64,8 @@ public class TaskletThread implements Work
 		{
 		    DeferredTask deferredTask = convertResponseToDeferredTask(task);
 
-		    // if (deferredTask != null)
-		    // deferredTask.run();
+		    if (deferredTask != null)
+			deferredTask.run();
 		}
 	    }
 

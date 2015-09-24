@@ -30,7 +30,7 @@ import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Note;
 import com.agilecrm.contact.sync.TimeZoneUtil;
 import com.agilecrm.contact.sync.service.OneWaySyncService;
-import com.agilecrm.contact.sync.wrapper.WrapperService;
+import com.agilecrm.contact.sync.wrapper.IContactWrapper;
 import com.agilecrm.contact.sync.wrapper.impl.ShopifyContactWrapperImpl;
 import com.agilecrm.contact.util.NoteUtil;
 
@@ -165,7 +165,7 @@ public class ShopifySyncImpl extends OneWaySyncService
      * service
      */
     @Override
-    public Class<? extends WrapperService> getWrapperService()
+    public Class<? extends IContactWrapper> getWrapperService()
     {
 	return ShopifyContactWrapperImpl.class;
     }

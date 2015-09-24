@@ -1,6 +1,6 @@
 /**
  * Function to remove common tags from cookie array and tags array
- *
+ * 
  * @param tags
  */
 function agile_removeCommonTags(a, b)
@@ -23,7 +23,7 @@ function agile_removeCommonTags(a, b)
 
 /**
  * Function to remove / add tags to cookie and update agile-tags cookie
- *
+ * 
  * @param tags
  * @param action
  */
@@ -62,7 +62,7 @@ function agile_cookieTags(tags, action)
 
 /**
  * Function to updated lead score when no email is set
- *
+ * 
  * @param action
  * @param score
  * @returns
@@ -70,28 +70,28 @@ function agile_cookieTags(tags, action)
 function agile_cookieScore(action, score)
 {
 	var cookieScore = agile_read_cookie(agile_guid.cookie_score);
-	if(!cookieScore)
+	if (!cookieScore)
 	{
-		if(action == "add" || action == "delete")
+		if (action == "add" || action == "delete")
 			agile_create_cookie(agile_guid.cookie_score, score, 365 * 5);
 		return;
 	}
 	score = parseInt(score);
 	agile_delete_cookie(agile_guid.cookie_score);
 
-	if(action == "add")
+	if (action == "add")
 		cookieScore = parseInt(cookieScore) + score;
-	if(action == "delete")
+	if (action == "delete")
 		cookieScore = parseInt(cookieScore) - score;
 
-	if(cookieScore != 0)
+	if (cookieScore != 0)
 		agile_create_cookie(agile_guid.cookie_score, cookieScore.toString(), 365 * 5);
 	return;
 }
 
 /**
  * Function to subscribe / unsubscribe multiple campaigns when no email
- *
+ * 
  * @param action
  * @param data
  * @returns
@@ -100,9 +100,9 @@ function agile_cookieScore(action, score)
 function agile_cookieCampaigns(action, data)
 {
 	var cookieCampaigns = agile_read_cookie(agile_guid.cookie_campaigns);
-	if(!cookieCampaigns)
+	if (!cookieCampaigns)
 	{
-		if(action == "add")
+		if (action == "add")
 		{
 			cookieCampaigns = [];
 			cookieCampaigns.push(data.id);
@@ -113,10 +113,10 @@ function agile_cookieCampaigns(action, data)
 	cookieCampaigns = cookieCampaigns.split(",");
 	agile_delete_cookie(agile_guid.cookie_campaigns);
 
-	if(action == "add" || action == "delete")
+	if (action == "add" || action == "delete")
 	{
 		cookieCampaigns = agile_updateCookieCampaigns(action, data, cookieCampaigns);
-		if(cookieCampaigns.length > 0)
+		if (cookieCampaigns.length > 0)
 			agile_create_cookie(agile_guid.cookie_campaigns, cookieCampaigns.toString(), 365 * 5);
 	}
 	return;
@@ -124,22 +124,25 @@ function agile_cookieCampaigns(action, data)
 
 function agile_updateCookieCampaigns(action, data, cookieCampaigns)
 {
-	for(var i=0; i<cookieCampaigns.length; i++)
+	for ( var i = 0; i < cookieCampaigns.length; i++)
 	{
-		if(cookieCampaigns[i] == data.id){
-			if(action == "add")
+		if (cookieCampaigns[i] == data.id)
+		{
+			if (action == "add")
 				return cookieCampaigns;
-			else if(action == "delete"){
+			else if (action == "delete")
+			{
 				cookieCampaigns.splice(i, 1);
 				return cookieCampaigns;
 			}
 		}
 	}
-	if(action == "add"){
+	if (action == "add")
+	{
 		cookieCampaigns.push(data.id);
 		return cookieCampaigns;
 	}
-	if(action == "delete")
+	if (action == "delete")
 		return cookieCampaigns;
 }
 
@@ -156,7 +159,8 @@ function agile_formCallback(error, button, url, agile_form, contact_id, form_dat
 	{
 		if (contact_id)
 		{
-			var form_name = agile_form.getElementsByTagName("legend")[0] ? agile_form.getElementsByTagName("legend")[0].innerHTML : form_data["_agile_form_name"];
+			var form_name = form_data["_agile_form_name"] || (agile_form.getElementsByTagName("legend")[0] ? agile_form.getElementsByTagName("legend")[0].innerHTML
+					: "");
 			var trigger_url = agile_id.getURL() + "/formsubmit?id=" + agile_id.get() + "&contactid=" + contact_id + "&formname=" + encodeURIComponent(form_name) + "&formdata=" + encodeURIComponent(JSON
 					.stringify(form_data)) + "&new=" + new_contact;
 			agile_json(trigger_url);
