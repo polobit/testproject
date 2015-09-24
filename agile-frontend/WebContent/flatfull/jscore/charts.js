@@ -1387,77 +1387,88 @@ function pieforReports(url, selector, name)
                 			$.each(data,function(index,deals){
                    				 for(var i=0;i<pieData.length;i++){
                      			   if(pieData[i][0]=="0")
-                        	      		  pieData[i][0]="Unknown";
+                        	      		 pieData[i][0]="Unknown";
                         		else if(deals.id==pieData[i][0]){
                             		pieData[i][0]=deals.label;
-                        }
+                        		}
+                        		 createAPieChart(selector, name, animation, AllData, pieData);
                             
                   		  }
                 			});
-            	    }		 });
-							// Initializes Highcharts,
-							chart = new Highcharts.Chart(
-									{
-										chart : { renderTo : selector, type : 'pie', plotBackgroundColor : null, plotBorderWidth : null, plotShadow : false,
-											marginTop : 50 },
-										colors: ['#7266ba','#23b7e5','#27c24c','#fad733','#f05050'],
-										title : { text : name },
-										 tooltip: {
-		        						formatter: function(){
-		        								return '<table>' + 
-		        		        '<tr><td class="p-n">'+this.series.name+'s: </td>' + 
-		        		        '<td class="p-n"><b>'+AllData[this.point.x][1]+'</b></td></tr>' + 
-		        		        '<tr><td class="p-n">Total Value: </td>' + 
-		        		        '<td class="p-n"><b>'+getPortletsCurrencySymbol()+''+AllData[this.point.x][2].toLocaleString()+'</b></td></tr>' +
-		        		        '</table>';
-		        				},
-		          								  shared: true,
-		          									  useHTML: true,
-		           								 borderWidth : 1,
-		    									backgroundColor : '#313030',
-		    										shadow : false,
-		    									borderColor: '#000',
-		    								borderRadius : 3,
-		    								style : {
-		    								color : '#EFEFEF'
-		    							}
-		       							 },
-										legend : { itemWidth : 75, },
-										plotOptions : {
-											pie : {
-												 animation: animation,
-												allowPointSelect : true,
-												cursor : 'pointer',
-												borderWidth : 0,
-												dataLabels : { enabled : true,useHTML: true,
-													formatter : function()
-													{
-														return 	'<div class="text-center"><span style="color:'+this.point.color+'"><b>'+this.point.name+'</b></span><br/>' +
-		    	            			'<span style="color:'+this.point.color+'"><b>'+Math.round(this.point.percentage)+'%</b></span></div>';
-													}, distance : 20 }, showInLegend : false, innerSize : '60%', size : '90%', shadow : false, borderWidth : 0 },
-											series : { events : { mouseOver : function()
-											{
-												$('.tooltip-default-message').hide();
-											}, mouseOut : function(e)
-											{
-												$('.tooltip-default-message').show();
-											} },
-											borderWidth : 0 } },
 
-										series : [
-											{ type : 'pie', name : 'Deal', data : pieData, startAngle : 90 }
-										], exporting : { enabled : false },
-
-										 lang: {
-            								noData: "No Deals Found"
-        									},
-        									 noData: {
-           												 style: {
-             											   fontWeight: 'bold',
-               												fontSize: '25px',
-      	     												 }
-       												 }
-										 } );
+            	    }		
+            	     });
+							
 						});
 	});
+	}
+
+
+	function createAPieChart(selector, name, animation, AllData, pieData){
+
+		// Initializes Highcharts,
+	chart = new Highcharts.Chart(
+			{
+				chart : { renderTo : selector, type : 'pie', plotBackgroundColor : null, plotBorderWidth : null, plotShadow : false,
+					marginTop : 50 },
+				colors: ['#7266ba','#23b7e5','#27c24c','#fad733','#f05050'],
+				title : { text : name },
+				 tooltip: {
+				formatter: function(){
+						return '<table>' + 
+        '<tr><td class="p-n">'+this.series.name+'s: </td>' + 
+        '<td class="p-n"><b>'+AllData[this.point.x][1]+'</b></td></tr>' + 
+        '<tr><td class="p-n">Total Value: </td>' + 
+        '<td class="p-n"><b>'+getPortletsCurrencySymbol()+''+AllData[this.point.x][2].toLocaleString()+'</b></td></tr>' +
+        '</table>';
+		},
+							  shared: true,
+								  useHTML: true,
+							 borderWidth : 1,
+						backgroundColor : '#313030',
+							shadow : false,
+						borderColor: '#000',
+					borderRadius : 3,
+					style : {
+					color : '#EFEFEF'
+				}
+					 },
+				legend : { itemWidth : 75, },
+				plotOptions : {
+					pie : {
+						 animation: animation,
+						allowPointSelect : true,
+						cursor : 'pointer',
+						borderWidth : 0,
+						dataLabels : { enabled : true,useHTML: true,
+							formatter : function()
+							{
+								return 	'<div class="text-center"><span style="color:'+this.point.color+'"><b>'+this.point.name+'</b></span><br/>' +
+    			'<span style="color:'+this.point.color+'"><b>'+Math.round(this.point.percentage)+'%</b></span></div>';
+							}, distance : 20 }, showInLegend : false, innerSize : '60%', size : '90%', shadow : false, borderWidth : 0 },
+					series : { events : { mouseOver : function()
+					{
+						$('.tooltip-default-message').hide();
+					}, mouseOut : function(e)
+					{
+						$('.tooltip-default-message').show();
+					} },
+					borderWidth : 0 } },
+
+				series : [
+					{ type : 'pie', name : 'Deal', data : pieData, startAngle : 90 }
+				], exporting : { enabled : false },
+
+				 lang: {
+					noData: "No Deals Found"
+					},
+					 noData: {
+									 style: {
+									   fontWeight: 'bold',
+										fontSize: '25px',
+											 }
+								 }
+				 } );
+
+
 	}
