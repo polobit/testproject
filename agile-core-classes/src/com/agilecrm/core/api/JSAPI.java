@@ -158,44 +158,26 @@ public class JSAPI
 
 	    if (contact.tags.size() > 0)
 	    {
-		try
-		{
-		    String[] tags = new String[contact.tags.size()];
-		    contact.tags.toArray(tags);
-		    contact.addTags(tags);
-		    if (StringUtils.isNotBlank(campaignIds))
-			JSAPIUtil.subscribeCampaigns(campaignIds, contact);
-		}
-		catch (WebApplicationException e)
-		{
-		    return JSAPIUtil.generateJSONErrorResponse(Errors.INVALID_TAGS);
-		}
+		String[] tags = new String[contact.tags.size()];
+		contact.tags.toArray(tags);
+		contact.addTags(tags);
 	    }
 	    else
 	    {
-		try
-		{
-		    // If zero, save it
-		    contact.save();
-		    if (StringUtils.isNotBlank(campaignIds))
-			JSAPIUtil.subscribeCampaigns(campaignIds, contact);
-		}
-		catch (PlanRestrictedException e)
-		{
-		    return JSAPIUtil.generateJSONErrorResponse(Errors.CONTACT_LIMIT_REACHED);
-		}
+		// If zero, save it
+		contact.save();
 	    }
+	    if (StringUtils.isNotBlank(campaignIds))
+		JSAPIUtil.subscribeCampaigns(campaignIds, contact);
 	    return mapper.writeValueAsString(contact);
 	}
-	catch (JsonGenerationException e)
+	catch (PlanRestrictedException e)
 	{
-	    e.printStackTrace();
-	    return null;
+	    return JSAPIUtil.generateJSONErrorResponse(Errors.CONTACT_LIMIT_REACHED);
 	}
-	catch (JsonMappingException e)
+	catch (WebApplicationException e)
 	{
-	    e.printStackTrace();
-	    return null;
+	    return JSAPIUtil.generateJSONErrorResponse(Errors.INVALID_TAGS);
 	}
 	catch (IOException e)
 	{

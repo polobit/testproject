@@ -7,7 +7,6 @@ import org.json.JSONObject;
 
 import com.agilecrm.activities.Task;
 import com.agilecrm.activities.Task.PriorityType;
-import com.agilecrm.activities.Task.Type;
 import com.agilecrm.contact.util.ContactUtil;
 import com.campaignio.logger.Log.LogType;
 import com.campaignio.logger.util.LogUtil;
@@ -143,8 +142,8 @@ public class AddTask extends TaskletAdapter
 
 	// Creates log for AddTask
 	LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON), "Task: "
-	        + subject + "<br/> Category: " + category + "<br/> Type: " + priority + " <br/> Date: "
-	        + new Date(epochTime * 1000), LogType.ADD_TASK.toString());
+		+ subject + "<br/> Category: " + category + "<br/> Type: " + priority + " <br/> Date: "
+		+ new Date(epochTime * 1000), LogType.ADD_TASK.toString());
 
 	// Execute Next One in Loop
 	TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, null);
@@ -171,7 +170,7 @@ public class AddTask extends TaskletAdapter
     private void addTask(String subject, String category, String priority, Long dueDateInEpoch, String contactId,
 	    String givenOwnerId, Long contactOwnerId)
     {
-	Task task = new Task(Type.valueOf(category), dueDateInEpoch);
+	Task task = new Task(category, dueDateInEpoch);
 
 	// Intialize task contacts with contact id
 	task.contacts = new ArrayList<String>();

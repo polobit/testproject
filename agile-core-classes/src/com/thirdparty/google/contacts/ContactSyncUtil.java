@@ -29,6 +29,7 @@ import com.google.gdata.data.extensions.FullName;
 import com.google.gdata.data.extensions.GivenName;
 import com.google.gdata.data.extensions.Im;
 import com.google.gdata.data.extensions.Name;
+import com.google.gdata.data.extensions.OrgTitle;
 import com.google.gdata.data.extensions.Organization;
 import com.google.gdata.data.extensions.PhoneNumber;
 import com.google.gdata.data.extensions.StructuredPostalAddress;
@@ -150,17 +151,7 @@ public class ContactSyncUtil
 
 	addEmailsToGoogleContact(contact, createContact);
 	addPhoneNumbersToGoogleContact(contact, createContact);
-
-	// Adds Company to contact
-	ContactField companyField = contact.getContactField(Contact.COMPANY);
-	if (companyField != null && !StringUtils.isEmpty(companyField.value))
-	{
-	    Organization company = new Organization(null, false, "http://schemas.google.com/g/2005#work");
-	    com.google.gdata.data.extensions.OrgName name = new com.google.gdata.data.extensions.OrgName(
-		    companyField.value);
-	    company.setOrgName(name);
-	    createContact.addOrganization(company);
-	}
+	addOrganizationDetailsToGoogleContact(contact, createContact);
 
 	// If group is defined then group id is added which save contact in
 	// specified group.
@@ -262,6 +253,39 @@ public class ContactSyncUtil
 
 	    googleContactEntry.addPhoneNumber(primaryPhone);
 	}
+    }
+    
+    /**
+     * This method is responsible for adding organization details to 
+     * a Google contact.
+     * @param contact
+     * @param createContact
+     */
+    public static void addOrganizationDetailsToGoogleContact(Contact contact, ContactEntry createContact)
+    {
+    	// Adds Organization details to contact
+    	ContactField companyField = contact.getContactField(Contact.COMPANY);
+    	if (companyField != null && !StringUtils.isEmpty(companyField.value))
+    	{
+    		List<Organization> organizations = createContact.getOrganizations();
+    	    Organization company = new Organization(null, false, "http://schemas.google.com/g/2005#work");
+    	    com.google.gdata.data.extensions.OrgName name = new com.google.gdata.data.extensions.OrgName(
+    		    companyField.value);
+    	    company.setOrgName(name);
+    	    ContactField jobTitleField = contact.getContactField(Contact.TITLE);
+    	    if(jobTitleField!=null && StringUtils.isNotBlank(jobTitleField.value)){
+    	    	company.setOrgTitle(new OrgTitle(jobTitleField.value));
+    	    }
+    	    if(organizations!=null & organizations.size()>0)
+    	    {
+    	    	if(organizations.size() == 1)
+    	    		organizations.set(0,company);//updating the existing organization
+    	    	else
+    	    		createContact.addOrganization(company);//creating new organization for a contact
+    	    }
+    	    else
+    	    	createContact.addOrganization(company);
+    	}
     }
 
     /**

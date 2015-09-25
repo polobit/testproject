@@ -157,6 +157,14 @@ public class ScribeServlet extends HttpServlet
 			String shop = req.getParameter("shop");
 			String callback = req.getParameter("url");
 			req.getSession().setAttribute("url", callback);
+			
+			String isForAll = (String)req.getParameter("isForAll");	
+			System.out.println(callback+"is for all "+isForAll);
+			if(isForAll != null){
+				System.out.println("isFor All "+isForAll);
+				req.getSession().setAttribute("isForAll", isForAll);
+			}
+			
 			if (shop.contains(".myshopify.com"))
 			{
 				shop = shop.split("\\.")[0];
@@ -200,6 +208,9 @@ public class ScribeServlet extends HttpServlet
 			out.println("</script>");
 			return;
 		}
+		
+		//To Know that add widget for all.
+		boolean isForAll = Boolean.parseBoolean(req.getParameter("isForAll"));
 
 		// Get service name from request
 		String serviceName = req.getParameter("service");
@@ -276,7 +287,9 @@ public class ScribeServlet extends HttpServlet
 		String pluginId = req.getParameter("plugin_id");
 		if (pluginId != null)
 			req.getSession().setAttribute("plugin_id", pluginId);
-
+		
+		req.getSession().setAttribute("isForAll", isForAll);
+		
 		System.out.println("In setup of scribe response: " + resp);
 
 		System.out.println(url);
@@ -361,7 +374,7 @@ public class ScribeServlet extends HttpServlet
 		// return URL is retrieved from session
 		String returnURL = (String) req.getSession().getAttribute("return_url");
 		System.out.println("return url " + returnURL);
-
+		
 		// If return URL is null, redirect to dashboard
 		System.out.println(returnURL);
 		if (returnURL == null)

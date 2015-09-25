@@ -28,17 +28,19 @@ function editTask(taskId, taskListId, taskListOwnerId)
 
 	// Show modal
 	$("#updateTaskModal").modal('show');
-
-	// Fills owner select element
-	populateUsers("owners-list", $("#updateTaskForm"), taskJson, 'taskOwner', function(data)
-	{
-		$("#updateTaskForm").find("#owners-list").html(data);
-		if (taskJson.taskOwner)
+	categories.getCategoriesHtml(taskJson,function(catsHtml){
+		$('#type',$("#updateTaskForm")).html(catsHtml);
+		// Fills owner select element
+		populateUsers("owners-list", $("#updateTaskForm"), taskJson, 'taskOwner', function(data)
 		{
-			$("#owners-list", $("#updateTaskForm")).find('option[value=' + taskJson['taskOwner'].id + ']').attr("selected", "selected");
-		}
-
-		$("#owners-list", $("#updateTaskForm")).closest('div').find('.loading-img').hide();
+			$("#updateTaskForm").find("#owners-list").html(data);
+			if (taskJson.taskOwner)
+			{
+				$("#owners-list", $("#updateTaskForm")).find('option[value=' + taskJson['taskOwner'].id + ']').attr("selected", "selected");
+			}
+	
+			$("#owners-list", $("#updateTaskForm")).closest('div').find('.loading-img').hide();
+		});
 	});
 
 	showNoteOnForm("updateTaskForm", taskJson.notes);
@@ -211,15 +213,19 @@ function completeTask(taskId, taskListId, taskListOwnerId)
 	newTask.url = 'core/api/tasks';
 	newTask.save(taskJson, { success : function(data)
 	{
-		var due_task_count=getDueTasksCount();
-		if(due_task_count==0)
-			$(".navbar_due_tasks").css("display", "none");
-		else
-			$(".navbar_due_tasks").css("display", "block");
-		if(due_task_count !=0)
-			$('#due_tasks_count').html(due_task_count);
-		else
-			$('#due_tasks_count').html("");
+		getDueTasksCount(function(count){
+			var due_task_count= count;
+			if(due_task_count==0)
+				$(".navbar_due_tasks").css("display", "none");
+			else
+				$(".navbar_due_tasks").css("display", "block");
+			if(due_task_count !=0)
+				$('#due_tasks_count').html(due_task_count);
+			else
+				$('#due_tasks_count').html("");
+
+		});
+		
 		updateTask(true, data, taskJson);
 
 		// Maintain changes in UI

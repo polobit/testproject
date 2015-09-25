@@ -59,7 +59,12 @@ function navigateToDetailsPage(data, name)
 		if(!tight_acl.checkPermission('DEALS')){
 			var obj = {};
 			obj.entity = 'Deals';
-			$(getTemplate('no-permission',obj)).modal('show');
+			getTemplate('no-permission',obj, undefined, function(template_ui){
+				if(!template_ui)
+					  return;
+
+				$(template_ui).modal('show');
+			}, null);
 			return;
 		}
 		// updateDeal(new BaseModel(model));
@@ -75,9 +80,17 @@ function navigateToDetailsPage(data, name)
 		if(!tight_acl.checkPermission('DOCUMENT')){
 			var obj = {};
 			obj.entity = 'Documents';
-			$(getTemplate('no-permission',obj)).modal('show');
+
+			getTemplate('no-permission',obj, undefined, function(template_ui){
+				if(!template_ui)
+					  return;
+
+				$(template_ui).modal('show');
+			}, null);
+
 			return;
 		}
+
 		console.log(model);
 		updateDocument(new BaseModel(model));
 		return;
@@ -86,10 +99,16 @@ function navigateToDetailsPage(data, name)
 	if(!tight_acl.checkPermission('CASES')){
 		var obj = {};
 		obj.entity = 'Cases';
-		$(getTemplate('no-permission',obj)).modal('show');
+		getTemplate('no-permission',obj, undefined, function(template_ui){
+			if(!template_ui)
+				  return;
+
+			$(template_ui).modal('show');
+		}, null);
+
 		return;
 	}
-		updatecases(new BaseModel(model));
+	updatecases(new BaseModel(model));
 }
 
 /**

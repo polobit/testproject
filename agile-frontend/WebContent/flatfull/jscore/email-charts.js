@@ -175,7 +175,11 @@ function get_email_table_reports(campaign_id)
 		console.log(data);
 
 		// Load Reports Template
-		$("#email-table-reports").html(getTemplate("campaign-email-table-reports", data));
+		getTemplate("campaign-email-table-reports", data, undefined, function(template_ui){
+			if(!template_ui)
+				  return;
+			$("#email-table-reports").html($(template_ui));	
+		}, "#email-table-reports");
 
 	});
 }

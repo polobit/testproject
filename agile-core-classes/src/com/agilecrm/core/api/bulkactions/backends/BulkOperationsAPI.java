@@ -39,10 +39,7 @@ import com.agilecrm.bulkaction.deferred.ContactsOwnerChangeDeferredTask;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.email.EmailSender;
 import com.agilecrm.contact.email.util.ContactBulkEmailUtil;
-import com.agilecrm.contact.export.util.ContactExportBlobUtil;
 import com.agilecrm.contact.export.util.ContactExportCSVUtil;
-import com.agilecrm.contact.export.util.ContactExportEmailUtil;
-import com.agilecrm.contact.export.util.ContactExportEmailUtil.ContactExportType;
 import com.agilecrm.contact.filter.ContactFilter;
 import com.agilecrm.contact.filter.ContactFilterIdsResultFetcher;
 import com.agilecrm.contact.filter.ContactFilterResultFetcher;
@@ -52,6 +49,8 @@ import com.agilecrm.contact.util.BulkActionUtil;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.contact.util.bulk.BulkActionNotifications;
 import com.agilecrm.contact.util.bulk.BulkActionNotifications.BulkAction;
+import com.agilecrm.export.ExportBuilder;
+import com.agilecrm.export.Exporter;
 import com.agilecrm.session.UserInfo;
 import com.agilecrm.subscription.restrictions.db.BillingRestriction;
 import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
@@ -369,7 +368,6 @@ public class BulkOperationsAPI
      *            array of tags as string
      * @throws JSONException
      */
-    @SuppressWarnings("unchecked")
     @Path("contact/tags/{current_user}")
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
@@ -839,9 +837,15 @@ public class BulkOperationsAPI
 	System.out.println("Namespace is in exportContactsCSV " + NamespaceManager.get());
 
 	List<Contact> contacts_list = new ArrayList<Contact>();
-	String[] header = ContactExportCSVUtil.getCSVHeadersForContact();
 	String path = null;
 
+	DomainUser user = DomainUserUtil.getDomainUser(currentUserId);
+	if (user == null)
+	    return;
+
+	int i = 0;
+
+	Exporter<Contact> exporter = ExportBuilder.buildContactExporter();
 	// If filter is not empty, 500 contacts are fetched on every
 	// iteration
 	if (!StringUtils.isEmpty(filter))
@@ -850,20 +854,13 @@ public class BulkOperationsAPI
 
 	    String currentCursor = null;
 	    String previousCursor = null;
-	    int firstTime = 0;
 
 	    do
 	    {
 		count += contacts_list.size();
 
-		// Create new file for first time, then append content to the
-		// existing file.
-		++firstTime;
-		if (firstTime == 1)
-		    path = ContactExportBlobUtil.writeContactCSVToBlobstore(contacts_list, header, false,
-			    ContactExportCSVUtil.getExportFileName("Contacts_"));
-		else
-		    ContactExportBlobUtil.editExistingBlobFile(path, contacts_list, header, false);
+		exporter.writeEntitesToCSV(contacts_list);
+
 		System.out.println("Contacts Export completed so far: " + count);
 
 		previousCursor = contacts_list.get(contacts_list.size() - 1).cursor;
@@ -880,21 +877,15 @@ public class BulkOperationsAPI
 		break;
 	    } while (contacts_list.size() > 0 && !StringUtils.equals(previousCursor, currentCursor));
 
-	    // Close channel after contacts completed
-	    ContactExportBlobUtil.editExistingBlobFile(path, null, header, true);
+	    exporter.finalize();
 	}
 	else if (!StringUtils.isEmpty(contact_ids))
 	{
 	    BulkActionUtil.setSessionManager(currentUserId);
 	    contacts_list = ContactUtil.getContactsBulk(new JSONArray(contact_ids));
 
+	    exporter.writeEntitesToCSV(contacts_list);
 	    count += contacts_list.size();
-
-	    // Create new file and write to blob and close the channel. All
-	    // contacts are fetched at a time, so no need of editing existing
-	    // file.
-	    path = ContactExportBlobUtil.writeContactCSVToBlobstore(contacts_list, header, true,
-		    ContactExportCSVUtil.getExportFileName("Contacts_"));
 	}
 	else if (!StringUtils.isEmpty(dynamicFilter))
 	{
@@ -905,20 +896,12 @@ public class BulkOperationsAPI
 
 	    String currentCursor = null;
 	    String previousCursor = null;
-	    int firstTime = 0;
 
 	    do
 	    {
 		count += contacts_list.size();
 
-		// Create new file for first time, then append content to the
-		// existing file.
-		++firstTime;
-		if (firstTime == 1)
-		    path = ContactExportBlobUtil.writeContactCSVToBlobstore(contacts_list, header, false,
-			    ContactExportCSVUtil.getExportFileName("Contacts_"));
-		else
-		    ContactExportBlobUtil.editExistingBlobFile(path, contacts_list, header, false);
+		exporter.writeEntitesToCSV(contacts_list);
 		System.out.println("Contacts Export completed so far: " + count);
 
 		previousCursor = contacts_list.get(contacts_list.size() - 1).cursor;
@@ -935,18 +918,14 @@ public class BulkOperationsAPI
 
 		break;
 	    } while (contacts_list.size() > 0 && !StringUtils.equals(previousCursor, currentCursor));
-
-	    // Close channel after contacts completed
-	    ContactExportBlobUtil.editExistingBlobFile(path, null, header, true);
 	}
 
-	String blobKey = ContactExportBlobUtil.getBlobKeyFromPath(path);
-	CacheUtil.setCache(blobKey, "export_csv", 24 * 60 * 60 * 1000);
+	exporter.finalize();
+	exporter.sendEmail(user.email);
 
-	String downloadUrl = "https://" + new JSONObject(data).getString("domain")
-		+ ".agilecrm.com/download-attachment?key=" + blobKey;
-	ContactExportEmailUtil.exportContactCSVAsEmail(data, downloadUrl, String.valueOf(count),
-		ContactExportType.CONTACT);
+	// ContactExportEmailUtil.exportContactCSVAsEmail(data, downloadUrl,
+	// String.valueOf(count),
+	// ContactExportType.CONTACT);
 	ActivityUtil.createLogForImport(ActivityType.CONTACT_EXPORT, EntityType.CONTACT, count, 0);
 
 	BulkActionNotifications.publishconfirmation(BulkAction.EXPORT_CONTACTS_CSV);
@@ -982,7 +961,13 @@ public class BulkOperationsAPI
 
 	List<Contact> contacts_list = new ArrayList<Contact>();
 	String[] header = ContactExportCSVUtil.getCSVHeadersForCompany();
-	String path = null;
+
+	DomainUser user = DomainUserUtil.getDomainUser(currentUserId);
+
+	if (user == null)
+	    return;
+
+	Exporter<Contact> companyExporter = ExportBuilder.buildCompanyExporter();
 
 	// If filter is not empty, 500 contacts are fetched on every
 	// iteration
@@ -998,14 +983,8 @@ public class BulkOperationsAPI
 	    {
 		count += contacts_list.size();
 
-		// Create new file for first time, then append content to the
-		// existing file.
-		++firstTime;
-		if (firstTime == 1)
-		    path = ContactExportBlobUtil.writeContactCSVToBlobstore(contacts_list, header, false,
-			    ContactExportCSVUtil.getExportFileName("Companies_"));
-		else
-		    ContactExportBlobUtil.editExistingBlobFile(path, contacts_list, header, false);
+		companyExporter.writeEntitesToCSV(contacts_list);
+
 		System.out.println("Companies Export completed so far: " + count);
 
 		previousCursor = contacts_list.get(contacts_list.size() - 1).cursor;
@@ -1023,7 +1002,6 @@ public class BulkOperationsAPI
 	    } while (contacts_list.size() > 0 && !StringUtils.equals(previousCursor, currentCursor));
 
 	    // Close channel after contacts completed
-	    ContactExportBlobUtil.editExistingBlobFile(path, null, header, true);
 	}
 	else if (!StringUtils.isEmpty(contact_ids))
 	{
@@ -1032,11 +1010,7 @@ public class BulkOperationsAPI
 
 	    count += contacts_list.size();
 
-	    // Create new file and write to blob and close the channel. All
-	    // contacts are fetched at a time, so no need of editing existing
-	    // file.
-	    path = ContactExportBlobUtil.writeContactCSVToBlobstore(contacts_list, header, true,
-		    ContactExportCSVUtil.getExportFileName("Companies_"));
+	    companyExporter.writeEntitesToCSV(contacts_list);
 	}
 	else if (!StringUtils.isEmpty(dynamicFilter))
 	{
@@ -1055,12 +1029,8 @@ public class BulkOperationsAPI
 
 		// Create new file for first time, then append content to the
 		// existing file.
-		++firstTime;
-		if (firstTime == 1)
-		    path = ContactExportBlobUtil.writeContactCSVToBlobstore(contacts_list, header, false,
-			    ContactExportCSVUtil.getExportFileName("Companies_"));
-		else
-		    ContactExportBlobUtil.editExistingBlobFile(path, contacts_list, header, false);
+		companyExporter.writeEntitesToCSV(contacts_list);
+
 		System.out.println("Companies Export completed so far: " + count);
 
 		previousCursor = contacts_list.get(contacts_list.size() - 1).cursor;
@@ -1077,18 +1047,11 @@ public class BulkOperationsAPI
 
 		break;
 	    } while (contacts_list.size() > 0 && !StringUtils.equals(previousCursor, currentCursor));
-
-	    // Close channel after contacts completed
-	    ContactExportBlobUtil.editExistingBlobFile(path, null, header, true);
 	}
+	companyExporter.finalize();
+	companyExporter.sendEmail(user.email);
 	ActivityUtil.createLogForImport(ActivityType.COMPANY_EXPORT, EntityType.CONTACT, count, 0);
-	String blobKey = ContactExportBlobUtil.getBlobKeyFromPath(path);
-	CacheUtil.setCache(blobKey, "export_csv", 24 * 60 * 60 * 1000);
 
-	String downloadUrl = "https://" + new JSONObject(data).getString("domain")
-		+ ".agilecrm.com/download-attachment?key=" + blobKey;
-	ContactExportEmailUtil.exportContactCSVAsEmail(data, downloadUrl, String.valueOf(count),
-		ContactExportType.COMPANY);
 	// creates a log for company export
 
 	BulkActionNotifications.publishconfirmation(BulkAction.EXPORT_COMPANIES_CSV);

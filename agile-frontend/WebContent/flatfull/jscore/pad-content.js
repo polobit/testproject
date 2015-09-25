@@ -201,18 +201,29 @@ function fill_slate(id, el, key) {
 	// If content for current route is available in the CONTENT_JSON, slate
 	// template is made with the content related to current route
 	if (CONTENT_JSON[route_path]){
-		if((route_path == "contacts") && readCookie('company_filter'))
-			$("#" + id, el).html(
-					getTemplate("empty-collection-model",
-							CONTENT_JSON["companies"]));
-		else if((route_path == "filter_results") && company_util.isCompany())
-			$("#" + id, el).html(
-					getTemplate("empty-collection-model",
-							CONTENT_JSON["filter_results_companies"]));
-		else
-			$("#" + id, el).html(
-				getTemplate("empty-collection-model",
-						CONTENT_JSON[route_path]));
+
+		var template_name = "", json = {};
+
+		if((route_path == "contacts") && readCookie('company_filter')){
+			template_name = "empty-collection-model";
+			json = CONTENT_JSON["companies"];
+		} 	
+		else if((route_path == "filter_results") && company_util.isCompany()){
+			template_name = "empty-collection-model";
+			json = CONTENT_JSON["filter_results_companies"];
+		}
+			
+		else{
+			template_name = "empty-collection-model";
+			json = CONTENT_JSON[route_path];
+		}
+		
+		getTemplate(template_name, json, undefined, function(template_ui){
+			if(!template_ui)
+				  return;
+			$("#" + id, el).html($(template_ui));	
+		}, $("#" + id, el));
+		
 	}
 }
 

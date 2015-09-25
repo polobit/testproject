@@ -30,7 +30,11 @@ function set_p_portlets(base_model){
 	var itemView;
 	
 	if(base_model.get('portlet_type')=="CONTACTS" && base_model.get('name')=="Filter Based"){
-		App_Portlets.filteredContactsView = new Base_Model_View({ model : base_model, template : "portlets-contacts-filterbased-model", tagName : 'div' });
+		App_Portlets.filteredContactsView = new Base_Model_View({ model : base_model, template : "portlets-contacts-filterbased-model", tagName : 'div', postRenderCallback: function(el){
+			     portlet_utiity.get_filtered_contact_header(base_model, function(header_name){
+			     		$(el).find(".flitered_contact_portlet_header").html(header_name);	
+			     });
+		} });
 		
 		if($('.gridster > div:visible > div',this.el).length==0)
 			$('.gridster > div:visible',this.el).html($(App_Portlets.filteredContactsView.render().el).attr("id","ui-id-"+base_model.get("column_position")+"-"+base_model.get("row_position")).attr("data-sizey",base_model.get("size_y")).attr("data-sizex",base_model.get("size_x")).attr("data-col",base_model.get("column_position")).attr("data-row",base_model.get("row_position")).addClass('gs-w panel panel-default'));
@@ -64,7 +68,11 @@ function set_p_portlets(base_model){
 		else
 			$('.gridster > div:visible > div:last',this.el).after($(App_Portlets.pendingDealsView.render().el).attr("id","ui-id-"+base_model.get("column_position")+"-"+base_model.get("row_position")).attr("data-sizey",base_model.get("size_y")).attr("data-sizex",base_model.get("size_x")).attr("data-col",base_model.get("column_position")).attr("data-row",base_model.get("row_position")).addClass('gs-w panel panel-default'));
 	}else if(base_model.get('portlet_type')=="DEALS" && base_model.get('name')=="Deals By Milestone"){
-		App_Portlets.dealsByMilestoneView = new Base_Model_View({ model : base_model, template : "portlets-deals-deals-by-milestone-model", tagName : 'div' });
+		App_Portlets.dealsByMilestoneView = new Base_Model_View({ model : base_model, template : "portlets-deals-deals-by-milestone-model", tagName : 'div', postRenderCallback: function(el){
+			     portlet_utiity.get_deals_funnel_portlet_header(base_model, function(header_name){
+			     		$(el).find(".deals_funnel_portlet_header").html(header_name);	
+			     });
+		} });
 		if($('.gridster > div:visible > div',this.el).length==0)
 			$('.gridster > div:visible',this.el).html($(App_Portlets.dealsByMilestoneView.render().el).attr("id","ui-id-"+base_model.get("column_position")+"-"+base_model.get("row_position")).attr("data-sizey",base_model.get("size_y")).attr("data-sizex",base_model.get("size_x")).attr("data-col",base_model.get("column_position")).attr("data-row",base_model.get("row_position")).addClass('gs-w panel panel-default'));
 		else
@@ -82,7 +90,11 @@ function set_p_portlets(base_model){
 		else
 			$('.gridster > div:visible > div:last',this.el).after($(App_Portlets.dealsWonView.render().el).attr("id","ui-id-"+base_model.get("column_position")+"-"+base_model.get("row_position")).attr("data-sizey",base_model.get("size_y")).attr("data-sizex",base_model.get("size_x")).attr("data-col",base_model.get("column_position")).attr("data-row",base_model.get("row_position")).addClass('gs-w panel panel-default'));
 	}else if(base_model.get('portlet_type')=="DEALS" && base_model.get('name')=="Deals Funnel"){
-		App_Portlets.dealsFunnelView = new Base_Model_View({ model : base_model, template : "portlets-deals-deals-funnel-model", tagName : 'div' });
+		App_Portlets.dealsFunnelView = new Base_Model_View({ model : base_model, template : "portlets-deals-deals-funnel-model", tagName : 'div', postRenderCallback: function(el){
+			     portlet_utiity.get_deals_funnel_portlet_header(base_model, function(header_name){
+			     		$(el).find(".deals_funnel_portlet_header").html(header_name);	
+			     });
+		} });
 		if($('.gridster > div:visible > div',this.el).length==0)
 			$('.gridster > div:visible',this.el).html($(App_Portlets.dealsFunnelView.render().el).attr("id","ui-id-"+base_model.get("column_position")+"-"+base_model.get("row_position")).attr("data-sizey",base_model.get("size_y")).attr("data-sizex",base_model.get("size_x")).attr("data-col",base_model.get("column_position")).attr("data-row",base_model.get("row_position")).addClass('gs-w panel panel-default'));
 		else
@@ -178,6 +190,13 @@ function set_p_portlets(base_model){
 			$('.gridster > div:visible',this.el).html($(App_Portlets.activitiesView[parseInt(posi)].render().el).attr("id","ui-id-"+base_model.get("column_position")+"-"+base_model.get("row_position")).attr("data-sizey",base_model.get("size_y")).attr("data-sizex",base_model.get("size_x")).attr("data-col",base_model.get("column_position")).attr("data-row",base_model.get("row_position")).addClass('gs-w panel panel-default'));
 		else
 			$('.gridster > div:visible > div:last',this.el).after($(App_Portlets.activitiesView[parseInt(posi)].render().el).attr("id","ui-id-"+base_model.get("column_position")+"-"+base_model.get("row_position")).attr("data-sizey",base_model.get("size_y")).attr("data-sizex",base_model.get("size_x")).attr("data-col",base_model.get("column_position")).attr("data-row",base_model.get("row_position")).addClass('gs-w panel panel-default'));
+	}
+	else if(base_model.get('portlet_type')=="USERACTIVITY" && base_model.get('name')=="Campaign stats"){
+		App_Portlets.campaignstatsview = new Base_Model_View({ model : base_model, template : "portlets-campaign-stats-report-model", tagName : 'div' });
+		if($('.gridster > div:visible > div',this.el).length==0)
+			$('.gridster > div:visible',this.el).html($(App_Portlets.campaignstatsview.render().el).attr("id","ui-id-"+base_model.get("column_position")+"-"+base_model.get("row_position")).attr("data-sizey",base_model.get("size_y")).attr("data-sizex",base_model.get("size_x")).attr("data-col",base_model.get("column_position")).attr("data-row",base_model.get("row_position")).addClass('gs-w panel panel-default'));
+		else
+			$('.gridster > div:visible > div:last',this.el).after($(App_Portlets.campaignstatsview.render().el).attr("id","ui-id-"+base_model.get("column_position")+"-"+base_model.get("row_position")).attr("data-sizey",base_model.get("size_y")).attr("data-sizex",base_model.get("size_x")).attr("data-col",base_model.get("column_position")).attr("data-row",base_model.get("row_position")).addClass('gs-w panel panel-default'));
 	}
 	//var itemView = new Base_Model_View({ model : base_model, template : "portlets-model", tagName : 'div', });
 
@@ -369,6 +388,38 @@ function set_p_portlets(base_model){
 		App_Portlets.activity[parseInt(pos)].appendItem = append_activity;
 		App_Portlets.activity[parseInt(pos)].collection.fetch();
 		
+	}
+	else if(base_model.get('portlet_type')=="USERACTIVITY" && base_model.get('name')=="Campaign stats"){
+		var start_date_str = "";
+		var end_date_str ="";
+		if(base_model.get('settings').duration=='yesterday'){
+				start_date_str = ''+base_model.get('settings').duration;
+				end_date_str = 'today';
+			}else if(base_model.get('settings').duration=='last-week'){
+				start_date_str = ''+base_model.get('settings').duration;
+				end_date_str = 'last-week-end';
+			}else if(base_model.get('settings').duration=='last-month'){
+				start_date_str = ''+base_model.get('settings').duration;
+				end_date_str = 'last-month-end';
+			}else if(base_model.get('settings').duration=='24-hours'){
+				start_date_str = ''+base_model.get('settings').duration;
+				end_date_str = 'now';
+			}else if(base_model.get('settings').duration=='this-week'){
+				start_date_str = ''+base_model.get('settings').duration;
+				end_date_str = 'this-week-end';
+			}else if(base_model.get('settings').duration=='this-month'){
+				start_date_str = ''+base_model.get('settings').duration;
+				end_date_str = 'this-month-end';
+			}else{
+				start_date_str = ''+base_model.get('settings').duration;
+				end_date_str = 'TOMORROW';
+			}
+		App_Portlets.campaignstats[parseInt(pos)] = new Base_Model_View({ url : '/core/api/portlets/portletCampaignstats?duration='+base_model.get('settings').duration+'&start-date='+getStartAndEndDatesOnDue(start_date_str)+'&end-date='+getStartAndEndDatesOnDue(end_date_str)+'&time_zone='+(new Date().getTimezoneOffset())+'&campaign_type='+base_model.get('settings').campaign_type, template : 'portlets-campaign-stats-body-model', individual_tag_name : 'tr',
+			postRenderCallback : function(p_el){
+				//displayTimeAgo(p_el);
+				addWidgetToGridster(base_model);
+			} });
+		//App_Portlets.campaignstats[parseInt(pos)].collection.fetch();
 	}
 	$('.portlet_body',this.el).each(function(){
 		if($(this).parent().attr('id')=='ui-id-'+column_position+'-'+row_position && base_model.get('name')=="Filter Based"){
@@ -1176,6 +1227,92 @@ function set_p_portlets(base_model){
 			setPortletContentHeight(base_model);
 		}
 		//addWidgetToGridster(base_model);
+		else if($(this).parent().attr('id')=='ui-id-'+column_position+'-'+row_position && base_model.get('name')=="Campaign stats"){
+			var start_date_str = "";
+		var end_date_str ="";
+		var emailsSentCount;
+		var emailsOpenedCount;
+		var emailsClickedCount;
+		var emailsUnsubscribed;
+		if(base_model.get('settings').duration=='yesterday'){
+				start_date_str = ''+base_model.get('settings').duration;
+				end_date_str = 'today';
+			}else if(base_model.get('settings').duration=='last-week'){
+				start_date_str = ''+base_model.get('settings').duration;
+				end_date_str = 'last-week-end';
+			}else if(base_model.get('settings').duration=='last-month'){
+				start_date_str = ''+base_model.get('settings').duration;
+				end_date_str = 'last-month-end';
+			}else if(base_model.get('settings').duration=='24-hours'){
+				start_date_str = ''+base_model.get('settings').duration;
+				end_date_str = 'now';
+			}else if(base_model.get('settings').duration=='this-week'){
+				start_date_str = ''+base_model.get('settings').duration;
+				end_date_str = 'this-week-end';
+			}else if(base_model.get('settings').duration=='this-month'){
+				start_date_str = ''+base_model.get('settings').duration;
+				end_date_str = 'this-month-end';
+			}else{
+				start_date_str = ''+base_model.get('settings').duration;
+				end_date_str = 'TOMORROW';
+			}
+			
+			
+			var that = $(this);
+		var url = '/core/api/portlets/portletCampaignstats?duration='+base_model.get('settings').duration+'&start-date='+getStartAndEndDatesOnDue(start_date_str)+'&end-date='+getStartAndEndDatesOnDue(end_date_str)+'&time_zone='+(new Date().getTimezoneOffset())+'&campaign_type='+base_model.get('settings').campaign_type; 
+		setTimeout(function(){
+				if(that.find('#emails-sent-count').text().trim()=="")
+					that.find('#emails-sent-count').html("<img src='../flatfull/img/ajax-loader-cursor.gif' style='width:12px;height:10px;opacity:0.5;' />");
+			},1000);
+		fetchPortletsGraphData(url,function(data){
+			emailsSentCount=data["emailsent"];
+				emailsOpenedCount=data["emailopened"];
+				emailsClickedCount=data["emailclicked"];
+				emailsUnsubscribed=data["emailunsubscribed"];
+				if(emailsSentCount==0){
+					that.find('#emails-sent').css('width','100%').css('height','100%');
+					that.find('#emails-sent').html('<div class="portlet-error-message">No Email activity</div>');
+				}
+				else{
+					var selector1=that.find('#emails-opened');
+					var selector2=that.find('#emails-clicked');
+					var selector3=that.find('#emails-unsubscribed');
+					selector1.css('display','block');
+					selector2.css('display','block');
+					selector3.css('display','block');
+					that.find('#emails-sent').addClass('pull-left p-xs b-b b-r b-light w-half overflow-hidden');
+					selector1.addClass('pull-left p-xs b-b b-light w-half');
+					selector2.addClass('pull-left p-xs b-r b-light w-half');
+					selector3.addClass('pull-left p-xs w-half');
+					
+				that.find('#emails-sent-count').text(getNumberWithCommasForPortlets(emailsSentCount));
+				that.find('#emails-sent-label').text("Emails sent");
+				that.find('#emails-opened').html('<div class="pull-left text-light stats_text"><div class="text-sm text-ellipsis">Opened</div><div class="text-count text-center" style="color:rgb(250, 215, 51);">'+getNumberWithCommasForPortlets(emailsOpenedCount)+'</div></div>');
+				that.find('#emails-clicked').html('<div class="pull-left text-light stats_text"><div class="text-sm text-ellipsis">Clicked</div><div class="text-count text-center" style="color:rgb(18, 209, 18);">'+getNumberWithCommasForPortlets(emailsClickedCount)+'</div></div>');
+				that.find('#emails-unsubscribed').html('<div class="pull-left text-light stats_text"><div class="text-sm text-ellipsis">Unsubscribed</div><div class="text-count text-center" style="color:rgb(240, 80, 80);">'+getNumberWithCommasForPortlets(emailsUnsubscribed)+'</div>');
+				/*var series=[];
+				series.push(["Emails Sent",emailsSentCount-emailsOpenedCount]);
+				series.push(["Emails Opened",emailsOpenedCount]);
+				campstatsPieChart(selector1,series,emailsSentCount,emailsOpenedCount);
+				
+				var series1=[];
+				series1.push(["Emails Sent",emailsSentCount-emailsClickedCount]);
+				series1.push(["Emails Clicked",emailsClickedCount]);
+				campstatsPieChart(selector2,series1,emailsSentCount,emailsClickedCount);
+				
+				var series2=[];
+				series2.push(["Emails Sent",emailsSentCount-emailsUnsubscribed]);
+				series2.push(["Emails Unsubscribed",emailsUnsubscribed]);
+				campstatsPieChart(selector3,series2,emailsSentCount,emailsUnsubscribed);*/
+				
+				}
+				
+				addWidgetToGridster(base_model);
+		});
+			//$(this).html(getRandomLoadingImg());
+			//$(this).html($(App_Portlets.campaignstats[parseInt(pos)].render().el));
+			setPortletContentHeight(base_model);
+		}
 	});
 	$('.stats_report_portlet_body', this.el).each(function(){
 		/*if($(this).parent().attr('id')=='ui-id-'+column_position+'-'+row_position && base_model.get('name')=="Stats Report"){
@@ -1251,7 +1388,7 @@ function set_p_portlets(base_model){
 		}
 	});
 	//enablePortletTimeAndDates(base_model);
-	head.js(LIB_PATH + 'lib/jquery-ui.min.js', 'lib/fullcalendar.min.js', function()
+	head.js(LIB_PATH + 'lib/jquery-ui.min.js', LIB_PATH + 'lib/fullcalendar.min.js', function()
 			{
 				$('.portlet_body_calendar', this.el).each(function(){
 		if($(this).parent().attr('id')=='ui-id-'+column_position+'-'+row_position && base_model.get('name')=="Mini Calendar"){
@@ -2074,8 +2211,14 @@ function taskReportBarGraph(selector,groupByList,series,text,base_model,domainUs
 		                		return '<img src="'+this.value+'" alt="" style="vertical-align: middle; width: 25px; height: 25px;border-radius:15px;" title="'+domainUserNamesList[userIndex]+'"/>';
 		                	else
 		                		return '<img src="'+gravatarImgForPortlets(25)+'" alt="" style="vertical-align: middle; width: 25px; height: 25px;border-radius:15px;" title="'+domainUserNamesList[userIndex]+'"/>';
-	                	}else
-	                		return this.value;
+	                	}else{
+	                		if(this.value.length>12){
+                				return this.value.slice(0, 12)+'...';
+                			}
+               				else{
+               					return this.value;
+               				}
+	                	}
 	                },
 	                style : {
 	    				color : '#98a6ad',
@@ -2157,7 +2300,15 @@ function taskReportBarGraph(selector,groupByList,series,text,base_model,domainUs
 				layout : 'vertical',
 				floating : true,
 				align : 'right',
-				verticalAlign : 'top'
+				verticalAlign : 'top',
+				labelFormatter: function() {
+                	if(this.name.length>12){
+                		return this.name.slice(0, 12)+'...';
+                	}
+               		else{
+               			return this.name;
+               		}
+    			}
 			}
 	    });
 	});
@@ -2292,6 +2443,7 @@ function emailsOpenedPieChart(selector,data,emailsSentCount,emailsOpenedCount){
 function showUserName(obj){
 	alert("hai");
 }
+
 function portletDealRevenueGraph(selector,series,base_model,categories){
 	
 	head.js(LIB_PATH + 'lib/flot/highcharts-3.js', function(){
@@ -2441,4 +2593,137 @@ function append_activity(base_model)
 		$('#next-week-activity', this.el).show();
 		
 	}
+}
+function campstatsPieChart(selector,data,count1,count2){
+	head.js(LIB_PATH + 'lib/flot/highcharts-3.js',LIB_PATH + 'lib/flot/no-data-to-display.js', function(){
+		var color;
+		//var innersize='100%';
+		var dis=0;
+		if(data[1][0]=='Emails Opened')
+			color='rgb(250, 215, 51)';
+		if(data[1][0]=='Emails Clicked')
+			color='rgb(18, 209, 18)';
+		if(data[1][0]=='Emails Unsubscribed')
+			color='rgb(240, 80, 80)';
+		$(selector).find('.graph').highcharts({
+	        chart: {
+	            type: 'pie',
+				 labelsEnabled: false,
+				autoMargins: false,
+				marginTop: 0,
+					marginBottom: -6,
+					marginLeft: 0,
+					marginRight: 0,
+					pullOutRadius: 0,
+					            events: {
+                load: function(e) {
+                    console.log(this);
+                    this.options.plotOptions.series.dataLabels.distance =  ((this.chartHeight+this.chartWidth) / 7.5) * -1;
+                    this.series[0].update(this.options);
+                },
+                redraw: function(e) {
+                 console.log(this); 
+					var pos_left,pos_top;
+                    var chart = this;
+					if($(selector).parents('.portlet_body').height()<=200)
+					{
+						pos_top=chart.chartHeight/2.72;
+					}
+					else if($(selector).parents('.portlet_body').height()>200 && $(selector).parents('.portlet_body').height()<=450 )
+					{
+						pos_top=chart.chartHeight/2.16;
+					}
+					
+					else 
+					{
+						pos_top=chart.chartHeight/2.04;
+					}
+					if($(selector).parents('.portlet_body').width()<=405)
+						pos_left=chart.chartWidth/2.00;
+					else if($(selector).parents('.portlet_body').width()>405 && $(selector).parents('.portlet_body').width()<=836 )
+					{
+						pos_left=chart.chartWidth/2.05;
+						
+					}
+					
+					else 
+					{
+						pos_left=chart.chartWidth/2.00;
+						
+					}
+                        
+						chart.series[0].data[1].dataLabel.attr({
+                            x:pos_left,
+							y:pos_top
+                        });
+                }
+        },
+	          
+	        },
+	        colors : ['#e8eff0',color],
+	        title: {
+	            text: ''
+	        },
+	        tooltip: {
+	        	enabled: false
+	        },
+	        legend: {
+				enabled:false,
+	        	
+	        },
+	        plotOptions: {
+	        	series: {
+					dataLabels: {
+						align : 'center',
+	            		enabled: true,
+	            		useHTML: true,
+	            		connectorWidth: 0,
+	    	            formatter: function () {
+	    	            	 var ff = '';
+	    	            	
+							if(this.point.name=="Emails Opened")
+	    	            		ff = 	'<div class="text-center"><span style="color:'+this.point.color+'"><b>'+Math.round(this.point.percentage).toString()+'%</b></span></div>';
+								
+							if(this.point.name=="Emails Clicked")
+	    	            		ff = 	'<div class="text-center"><span style="color:'+this.point.color+'"><b>'+Math.round(this.point.percentage).toString()+'%</b></span></div>';
+	    	            	if(this.point.name=="Emails Unsubscribed")
+	    	            		ff = 	'<div class="text-center"><span style="color:'+this.point.color+'"><b>'+Math.round(this.point.percentage).toString()+'%</b></span></div>';
+	    	            	
+							return ff; 
+							
+	    	            },
+	            		/*format: '<b>{point.name}</b>: {point.percentage:.1f}',*/
+	                    distance: 0,
+	                },
+	                borderWidth : 0,
+	                states: {
+	                	hover: {
+	                		enabled: false
+	                	}
+	                }
+	            },
+	            pie: {
+					borderWidth: 0,
+					size : '100%',
+					innerSize: '100%',
+				},
+	                showInLegend: true,
+	                enableMouseTracking: false,
+	                point: {
+	                	events: {
+		                	legendItemClick: function () {
+		                        return false;
+		                    }
+		                }
+	                }
+	            },
+	        series: [{
+	           // name: 'Deal',
+	            data: data
+	        }],
+	        exporting: {
+		        enabled: false
+		    }
+	    });
+	});
 }

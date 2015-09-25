@@ -29,8 +29,7 @@ import com.agilecrm.widgets.util.WidgetUtil;
  * @since July 2014
  */
 @Path("/api/widgets/chargify")
-public class ChargifyWidgetsAPI
-{
+public class ChargifyWidgetsAPI {
 
 	/**
 	 * getChargifyClientProfile method will be called from AgileCRM when widget
@@ -52,54 +51,57 @@ public class ChargifyWidgetsAPI
 	@Path("clients/{widget-id}/{email}")
 	@GET
 	@Produces(MediaType.TEXT_PLAIN)
-	public String getChargifyClientProfile(@PathParam("widget-id") Long widgetId, @PathParam("email") String email)
-			throws WebApplicationException
-	{
-		try
-		{
+	public String getChargifyClientProfile(
+			@PathParam("widget-id") Long widgetId,
+			@PathParam("email") String email) throws WebApplicationException {
+		try {
 			Widget widget = WidgetUtil.getWidget(widgetId);
 			// getting widget from widgetId
-			if (widget == null)
+			if (widget == null) {
 				return null;
+			}
 			// creating chargifyutil Object
-			ChargifyUtil ChargifyUtil = new ChargifyUtil(widget.getProperty("chargify_api_key"),
+			ChargifyUtil ChargifyUtil = new ChargifyUtil(
+					widget.getProperty("chargify_api_key"),
 					widget.getProperty("chargify_subdomain"));
 
 			// get customer array
-			JSONArray customerJSONArray = ChargifyUtil.getCustomerId(email.toLowerCase());
+			JSONArray customerJSONArray = ChargifyUtil.getCustomerId(email
+					.toLowerCase());
 
 			System.out.println(customerJSONArray);
 
 			// throw exception if now customer found for email
-			if (customerJSONArray.length() == 0)
+			if (customerJSONArray.length() == 0) {
 				throw new Exception("Customer not found");
+			}
 
 			String result = "";
 
 			// iterate through each object and format the response
-			if (customerJSONArray.length() > 0)
-			{
+			if (customerJSONArray.length() > 0) {
 				JSONObject customerJson = customerJSONArray.getJSONObject(0);
 
 				// get subscriptions for the customer
-				String subscriptions = ChargifyUtil.getSubscriptions(customerJson);
+				String subscriptions = ChargifyUtil
+						.getSubscriptions(customerJson);
 
 				// get invoices for the customer
 				String invoices = ChargifyUtil.getInvoices(customerJson);
 
-				// constructing jsonObject on combaining customer,subscriptions
+				// constructing jsonObject on combining customer,subscriptions
 				// and invoices
-				result = (new JSONObject().put("customer", customerJson).put("subscriptions",
-						new JSONArray(subscriptions)).put("invoices", new JSONArray(invoices))).toString();
+				result = (new JSONObject().put("customer", customerJson).put(
+						"subscriptions", new JSONArray(subscriptions)).put(
+						"invoices", new JSONArray(invoices))).toString();
 
 			}
 
 			return result;
-		}
-		catch (Exception e)
-		{
+		} catch (Exception e) {
 			e.printStackTrace();
-			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+			throw new WebApplicationException(Response
+					.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
 					.build());
 		}
 	}
@@ -121,24 +123,23 @@ public class ChargifyWidgetsAPI
 	@GET
 	@Produces(MediaType.TEXT_PLAIN)
 	public String addCustomerToChargify(@PathParam("widget-id") Long widgetId,
-			@PathParam("first_name") String firstName, @PathParam("last_name") String lastName,
-			@PathParam("email") String email)
-	{
+			@PathParam("first_name") String firstName,
+			@PathParam("last_name") String lastName,
+			@PathParam("email") String email) {
 		// Retrieves widget based on its id
 		Widget widget = WidgetUtil.getWidget(widgetId);
-		if (widget == null)
-		{
+		if (widget == null) {
 			return null;
 		}
-		try
-		{
-			ChargifyUtil ChargifyUtil = new ChargifyUtil(widget.getProperty("chargify_api_key"), "agilecrm");
+
+		try {
+			ChargifyUtil ChargifyUtil = new ChargifyUtil(
+					widget.getProperty("chargify_api_key"), "agilecrm");
 			// calls ChargifyUtil method to add Contact to Chargify account
 			return ChargifyUtil.createCustomer(firstName, lastName, email);
-		}
-		catch (Exception e)
-		{
-			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+		} catch (Exception e) {
+			throw new WebApplicationException(Response
+					.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
 					.build());
 		}
 	}

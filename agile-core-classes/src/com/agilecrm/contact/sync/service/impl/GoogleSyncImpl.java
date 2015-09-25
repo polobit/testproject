@@ -15,7 +15,7 @@ import org.json.JSONObject;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.sync.ImportStatus;
 import com.agilecrm.contact.sync.service.TwoWaySyncService;
-import com.agilecrm.contact.sync.wrapper.WrapperService;
+import com.agilecrm.contact.sync.wrapper.IContactWrapper;
 import com.agilecrm.contact.sync.wrapper.impl.GoogleContactWrapperImpl;
 import com.google.appengine.api.NamespaceManager;
 import com.google.gdata.client.Query;
@@ -399,7 +399,7 @@ public class GoogleSyncImpl extends TwoWaySyncService
      * @see com.agilecrm.contact.sync.service.SyncService#getWrapperService()
      */
     @Override
-    public Class<? extends WrapperService> getWrapperService()
+    public Class<? extends IContactWrapper> getWrapperService()
     {
 	// TODO Auto-generated method stub
 	return GoogleContactWrapperImpl.class;
