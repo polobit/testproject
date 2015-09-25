@@ -338,6 +338,8 @@ function initializeSubscriptionListeners()
 				var quantity = $("#user_quantity").val();
 				var cost = $("#users_total_cost").text();
 				var plan = $("#plan_type").val();
+				if("pro" == plan)
+					plan = "enterprise";
 				var discount = "", months = "";
 				var billing_cycle = $("#billing_cycle").val();
 				if (!plan || plan == "free")
