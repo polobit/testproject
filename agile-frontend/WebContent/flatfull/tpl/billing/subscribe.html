@@ -12,9 +12,12 @@
 		<div class="tab-container">
 {{#check_plan "FREE"}}
 <div class="" style="font-size: 13px; /* line-height: 16px; *//* padding: 8px 8px 8px; *//* width: auto; */ position: relative;
-/* top: -49px; */margin: 0 auto;z-index: 9;width: 202px;bottom: -29px;"><span style="padding: 5px 15px 5px 15px;border: 1px solid #f0c36d;background-color: #f9edbe;">You are currently on FREE plan</span></div>
+/* top: -49px; */margin: 0 auto;z-index: 9;width: 202px;bottom: -8px;"><span style="padding: 5px 15px 5px 15px;border: 1px solid #f0c36d;background-color: #f9edbe;">You are currently on FREE plan</span></div>
+
+			<ul class="nav nav-tabs" id="subTab" style="margin-top: -18px;">
+{{else}}
+<ul class="nav nav-tabs" id="subTab">
 {{/check_plan}}
-			<ul class="nav nav-tabs" id="subTab">
 										    <li role="presentation" class="active" data-tab="1">
 												<a href="#users-content" role="tab" name="users-content" data-toggle="tab" aria-control="users-content" id="users">Plans</a>
 											</li>
@@ -541,8 +544,11 @@ users.
 {{#if billingData}}
 <div class="row">
 	<div class="col-md-12">
+{{#check_plan "FREE"}}
+        <div class="panel panel-default wrapper-md m-t-xl">
+{{else}}
 		<div class="panel panel-default wrapper-md">
-
+{{/check_plan}}
 			<p class="b-b b-light p-b-xs">Credit Card
 <a href="#updateCreditCard" class="text-info pull-right" style="
     font-size: 12px;">Change</a>
