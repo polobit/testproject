@@ -10,6 +10,10 @@
 <div class="row">
 	<div class="col-md-9">
 		<div class="tab-container">
+{{#check_plan "FREE"}}
+<div class="" style="font-size: 13px; /* line-height: 16px; *//* padding: 8px 8px 8px; *//* width: auto; */ position: relative;
+/* top: -49px; */margin: 0 auto;z-index: 9;width: 202px;bottom: -29px;"><span style="padding: 5px 15px 5px 15px;border: 1px solid #f0c36d;background-color: #f9edbe;">You are currently on FREE plan</span></div>
+{{/check_plan}}
 			<ul class="nav nav-tabs" id="subTab">
 										    <li role="presentation" class="active" data-tab="1">
 												<a href="#users-content" role="tab" name="users-content" data-toggle="tab" aria-control="users-content" id="users">Plans</a>
@@ -17,12 +21,8 @@
 											<li role="presentation" id="emailtab" data-tab="2">
 												<a href="#email-content" name="email-content" aria-control="email-content" role="tab" data-toggle="tab" id="emails">Email</a>
 											</li>
-{{#check_plan "FREE"}}
-<div class="text-center" style="font-size: 13px; line-height: 16px;padding: 8px 8px 8px;width: auto; position: relative;
-"><span style="padding: 5px 15px 5px 15px;border: 1px solid #f0c36d;background-color: #f9edbe;">You are currently on FREE plan</span></div>
-{{/check_plan}}
 </ul>
-            <div class="tab-content" style=" display: block;">
+            <div class="tab-content  pos-rlt" style=" display: block;">
             	<div class="tab-pane active" role="tab-panel" id="users-content">
 <div class="panel-body p-t-none">
               		 <div class="row">
