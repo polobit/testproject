@@ -19,7 +19,7 @@ var LOADING_ON_CURSOR = '<img class="loading" style="padding-right:5px" src= "im
  * Default image shown for contacts if image is not available
  */
 
-var DEFAULT_GRAVATAR_url = window.location.origin + "/" + LIB_PATH_FLATFULL + "images/flatfull/user-default.jpg";
+var DEFAULT_GRAVATAR_url = window.location.origin + "/" + FLAT_FULL_PATH + "images/flatfull/user-default.jpg";
 
 var ONBOARDING_SCHEDULE_URL = "https://our.agilecrm.com/calendar/Haaris_Farooqi,Sandeep";
 
@@ -289,7 +289,7 @@ function property_JSON(name, id, type)
 
 // Sends post request using backbone model to given url. It is a generic
 // function, can be called to save entity to database
-function saveEntity(object, url, callback)
+function saveEntity(object, url, callback, errorCallback)
 {
 	var model = new Backbone.Model();
 	model.url = url;
@@ -300,7 +300,11 @@ function saveEntity(object, url, callback)
 			// execute the callback, passing parameters as necessary
 			callback(data);
 		}
-	} });
+	}, error: function(model,response){
+			console.log(response);
+			if(errorCallback)
+   			errorCallback(model,response);
+   		}});
 }
 
 /**
@@ -412,7 +416,6 @@ function text_gravatar_initials(items)
 	if (name.length == 0)
 		name = "X";
 
-	console.log(name);
 	return name;
 }
 

@@ -7,6 +7,7 @@ import java.util.List;
 import org.apache.log4j.Level;
 
 import com.Globals;
+import com.agilecrm.api.stats.APIStats;
 import com.agilecrm.logger.AgileAPILogger;
 import com.agilecrm.queues.PullScheduler;
 import com.agilecrm.threads.TaskExcecutorThreadPool;
@@ -77,12 +78,10 @@ public class TaskQueueStatsDaemon extends Thread
 
     private Taskqueue getTaskqueue()
     {
-	if (taskQueue != null)
-	{
-	    return taskQueue;
-	}
 
-	return taskQueue = Authorization.getTaskqeues(TASK_QUEUE_NAME);
+	taskQueue = Authorization.getTaskqeues(TASK_QUEUE_NAME);
+
+	return taskQueue;
     }
 
     private int getTotalTasks() throws IOException
@@ -253,6 +252,7 @@ public class TaskQueueStatsDaemon extends Thread
 		    .lease(Globals.PROJECT_NAME, TASK_QUEUE_NAME, PullScheduler.DEFAULT_COUNT_LIMIT,
 			    PullScheduler.DEFAULT_LEASE_PERIOD).set(Globals.GROUP_BY_TAG_PARAM, true);
 
+	    APIStats.incrementCounter();
 	    logger.info(lease.buildHttpRequestUrl().toString());
 	    com.google.api.services.taskqueue.model.Tasks tasks = lease.execute();
 
@@ -366,7 +366,7 @@ public class TaskQueueStatsDaemon extends Thread
      * Initializes thread pool
      */
 
-    private synchronized void leaseTasksOld()
+    private synchronized boolean leaseTasksOld()
     {
 
 	try
@@ -405,21 +405,22 @@ public class TaskQueueStatsDaemon extends Thread
 	    {
 		System.out.println("waiting");
 		wait(wairPeriodInMilliSeconds);
-		leaseTasksOld();
+		return leaseTasksOld();
 	    }
 	    catch (InterruptedException e)
 	    {
 		// TODO Auto-generated catch block
 		e.printStackTrace();
 		wait(wairPeriodInMilliSeconds);
-		leaseTasksOld();
+		return leaseTasksOld();
 	    }
 	}
 	catch (Exception e)
 	{
 	    e.printStackTrace();
 	    logger.info(e.getMessage());
-	    leaseTasksOld();
+	    return leaseTasksOld();
 	}
+
     }
 }

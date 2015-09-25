@@ -367,7 +367,7 @@ public class EmailGatewayUtil
 	    }
 
 	    // If no gateway setup, sends email through Agile Mandrill
-	    if (emailGateway == null || (EMAIL_API.SEND_GRID.equals(emailGateway.email_api) && (documentIds.size() != 0 || blobKeys.size() != 0)))
+	    if (emailGateway == null || (EMAIL_API.SEND_GRID.equals(emailGateway.email_api) && ((documentIds != null && documentIds.size() != 0) || (blobKeys != null && blobKeys.size() != 0))))
 	    {
 		Mandrill.sendMail(null, true, fromEmail, fromName, to, cc, bcc, subject, replyTo, html, text,
 			mandrillMetadata, documentIds, blobKeys, attachments);

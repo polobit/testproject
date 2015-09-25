@@ -20,7 +20,7 @@ function setup_deals_in_milestones(id){
 		      },
 		      // When deal is dropped its milestone is changed 
 		      update : function(event, ui) {
-		    	  console.log(">>>>>>>>>>>>>>>>>> deals id");
+		      	  console.log(">>>>>>>>>>>>>>>>>> deals id");
 		    	  console.log(ui);
 		    	  console.log(ui.item[0]);
 		    	  console.log(ui.item[0].id);
@@ -34,7 +34,34 @@ function setup_deals_in_milestones(id){
 						var dealModel = dealPipelineModel[0].get('dealCollection').get(id);
 						var newMilestone = ($('#'+id).closest('ul').attr("milestone")).trim();
 						console.log('new...',newMilestone);
-						update_milestone(dealModel, id, newMilestone, old_milestone);
+						if(dealModel && dealModel.collection){
+							App_Deals.dealModel = dealModel;
+							App_Deals.newMilestone = newMilestone;
+							App_Deals.old_milestone = old_milestone;
+							App_Deals.lost_reason_milesone_id = id;
+							var milestone_model_view = new Base_Model_View({ url : '/core/api/milestone/'+dealModel.collection.get(id).get('pipeline_id'), template : "" });
+							milestone_model_view.model.fetch({
+								success: function(data){
+									var jsonModel = data.toJSON();
+									console.log("jsonModel.lost_milestone----"+jsonModel.lost_milestone);
+									console.log("newMilestone----"+newMilestone);
+									console.log("old_milestone----"+old_milestone);
+									if(jsonModel.lost_milestone == newMilestone && newMilestone != old_milestone){
+										console.log("Success if block");
+										App_Deals.deal_lost_reason_for_update = "";
+										populateLostReasons($('#dealLostReasonModal'), undefined);
+										$('#deal_lost_reason',$('#dealLostReasonModal')).removeClass("hidden");
+										$('#dealLostReasonModal > .modal-dialog > .modal-content > .modal-footer > a#deal_lost_reason_save').text('Save');
+										$('#dealLostReasonModal > .modal-dialog > .modal-content > .modal-footer > a#deal_lost_reason_save').attr('disabled',false);
+										$('#'+id).attr('data',newMilestone);
+									}
+									hideTransitionBar();
+								}
+							});
+						}
+						if(dealModel){
+							update_milestone(dealModel, id, newMilestone, old_milestone,true, "");
+						}
 						$('#'+id).attr('data',newMilestone);
 					
 		        }
@@ -47,12 +74,13 @@ function setup_deals_in_milestones(id){
  * To change the milestone of the deal when it is 
  * dropped in other milestone columns and saves or updates deal object.
  */
-function update_milestone(data, id, newMilestone, oldMilestone){
+function update_milestone(data, id, newMilestone, oldMilestone, updateCollectionFlag, lost_reason_id){
 	
 	var DealJSON = data.toJSON();
 	
 	console.log(DealJSON);
 	DealJSON.milestone = newMilestone;
+	DealJSON.lost_reason_id = lost_reason_id;
 	// Replace notes object with note ids
 	var notes = [];
 	$.each(DealJSON.notes, function(index, note)
@@ -76,7 +104,9 @@ function update_milestone(data, id, newMilestone, oldMilestone){
 		// If the milestone is changed, to show that change in edit popup if opened without reloading the app.
 		success : function(model, response) {
 			console.log('moved deal----',model);
-			update_deal_collection(model.toJSON(), id, newMilestone, oldMilestone);
+			if (updateCollectionFlag) {
+				update_deal_collection(model.toJSON(), id, newMilestone, oldMilestone);
+			}
 		}
 	});
 
@@ -133,6 +163,7 @@ function setup_milestones(el){
 			          {
 			            // Set helper cell sizes to match the original sizes
 			            $(this).width($originals.eq(index).width());
+			            console.log('-----------'+$originals.eq(index).width());
 			            $(this).css("background","#f5f5f5");
 			            $(this).css("border-bottom","1px solid #ddd");
 			          });

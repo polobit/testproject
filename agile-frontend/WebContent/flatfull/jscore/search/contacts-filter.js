@@ -7,6 +7,7 @@
  * @module Search author: Yaswanth
  */
 var filter_name;
+var CONTACTS_DYNAMIC_FILTER_COOKIE_STATUS = "toggle_dynamic_filter_" + CURRENT_DOMAIN_USER.id;
 
 /**
  * Change name of input[name='temp'] to more random i.e. temp-<unique_number>.
@@ -33,42 +34,58 @@ $(function(){
 	$('body').on('click', '.filter-contacts-multiple-add', function(e)
 	{
 		e.preventDefault();
+		var that = this;
 		// To solve chaining issue when cloned
-		var htmlContent = $($(getTemplate("filter-contacts", {})).find('.chained-table.contact')[0]).find('tr').clone();
-		$(htmlContent).removeClass('hide');
-		scramble_input_names($(htmlContent));
 
-		// boolean parameter to avoid contacts/not-contacts fields in form
-		chainFilters(htmlContent, function(){
-		}, false);
+		getTemplate("filter-contacts", {}, undefined, function(template_ui){
+			if(!template_ui)
+				  return;
+			
+			var htmlContent = $($(template_ui).find('.chained-table.contact')[0]).find('tr').clone();
+			$(htmlContent).removeClass('hide');
+			scramble_input_names($(htmlContent));
 
-//		$(this).hide();
-		// var htmlContent = $(this).closest("tr").clone();
-		$(htmlContent).find("i.filter-contacts-multiple-remove").css("display", "inline-block");
-		//hide camapign status
-		//$(htmlContent).find('#LHS select').find("optgroup[label='Activities']").remove();
-		$(this).prev('table').find("tbody").append(htmlContent);
+			// boolean parameter to avoid contacts/not-contacts fields in form
+			chainFilters(htmlContent, function(){
+			}, false);
+
+	//		$(this).hide();
+			// var htmlContent = $(this).closest("tr").clone();
+			$(htmlContent).find("i.filter-contacts-multiple-remove").css("display", "inline-block");
+			//hide camapign status
+			//$(htmlContent).find('#LHS select').find("optgroup[label='Activities']").remove();
+			$(that).prev('table').find("tbody").append(htmlContent);
+
+		}, null);
 	});
 	
 	// Filter Contacts- Clone Multiple
 	$('body').on('click', '.filter-contacts-multiple-add-or-rules', function(e)
 	{
 		e.preventDefault();
+		var that = this;
 		// To solve chaining issue when cloned
-		var htmlContent = $($(getTemplate("filter-contacts", {})).find('.chained-table.contact')[1]).find('tr').clone();
-		$(htmlContent).removeClass('hide');
-		scramble_input_names($(htmlContent));
+		getTemplate("filter-contacts", {}, undefined, function(template_ui){
+			if(!template_ui)
+				  return;
 
-		// boolean parameter to avoid contacts/not-contacts fields in form
-		chainFilters(htmlContent, function(){
-		}, false);
+			var htmlContent = $($(template_ui).find('.chained-table.contact')[1]).find('tr').clone();
+			$(htmlContent).removeClass('hide');
+			scramble_input_names($(htmlContent));
 
-//		$(this).hide();
-		// var htmlContent = $(this).closest("tr").clone();
-		$(htmlContent).find("i.filter-contacts-multiple-remove").css("display", "inline-block");
-		//hide camapign status
-		//$(htmlContent).find('#LHS select').find("optgroup[label='Activities']").remove()
-		$(this).prev('table').find("tbody").append(htmlContent);
+			// boolean parameter to avoid contacts/not-contacts fields in form
+			chainFilters(htmlContent, function(){
+			}, false);
+
+	//		$(this).hide();
+			// var htmlContent = $(this).closest("tr").clone();
+			$(htmlContent).find("i.filter-contacts-multiple-remove").css("display", "inline-block");
+			//hide camapign status
+			//$(htmlContent).find('#LHS select').find("optgroup[label='Activities']").remove()
+			$(that).prev('table').find("tbody").append(htmlContent);
+
+		}, null);
+		
 	});
 	
 	// Filter Contacts- Clone Multiple
@@ -76,40 +93,55 @@ $(function(){
 	{
 		e.preventDefault();
 		// To solve chaining issue when cloned
-		var htmlContent = $($(getTemplate("filter-contacts", {})).find('.chained-table.company')[0]).find('tr').clone();
-		$(htmlContent).removeClass('hide');
-		scramble_input_names($(htmlContent));
+		var that = this;
+		getTemplate("filter-contacts", {}, undefined, function(template_ui){
+			if(!template_ui)
+				  return;
 
-		// boolean parameter to avoid contacts/not-contacts fields in form
-		chainFilters(htmlContent,undefined, function(){
-		}, false, true);
+			var htmlContent = $($(template_ui).find('.chained-table.company')[0]).find('tr').clone();
+			$(htmlContent).removeClass('hide');
+			scramble_input_names($(htmlContent));
 
-//		$(this).hide();
-		// var htmlContent = $(this).closest("tr").clone();
-		$(htmlContent).find("i.filter-contacts-multiple-remove").css("display", "inline-block");
-		$(this).prev("table").find("tbody").append(htmlContent);
+			// boolean parameter to avoid contacts/not-contacts fields in form
+			chainFilters(htmlContent,undefined, function(){
+			}, false, true);
+
+	//		$(this).hide();
+			// var htmlContent = $(this).closest("tr").clone();
+			$(htmlContent).find("i.filter-contacts-multiple-remove").css("display", "inline-block");
+			$(that).prev("table").find("tbody").append(htmlContent);
+
+		}, null);
+		
 	});
 	
 	// Filter Contacts- Clone Multiple
 	$('body').on('click', '.filter-companies-multiple-add-or-rules', function(e)
 	{
 		e.preventDefault();
+		var that = this;
 		// To solve chaining issue when cloned
-		var htmlContent = $($(getTemplate("filter-contacts", {})).find('.chained-table.company')[1]).find('tr').clone();
-		$(htmlContent).removeClass('hide');
-		scramble_input_names($(htmlContent));
+		getTemplate("filter-contacts", {}, undefined, function(template_ui){
+			if(!template_ui)
+				  return;
 
-		// boolean parameter to avoid contacts/not-contacts fields in form
-		chainFilters(htmlContent,undefined, function(){
-		}, false, true);
+			var htmlContent = $($(template_ui).find('.chained-table.company')[1]).find('tr').clone();
+			$(htmlContent).removeClass('hide');
+			scramble_input_names($(htmlContent));
 
-//		$(this).hide();
-		// var htmlContent = $(this).closest("tr").clone();
-		$(htmlContent).find("i.filter-contacts-multiple-remove").css("display", "inline-block");
-		$(this).prev("table").find("tbody").append(htmlContent);
+			// boolean parameter to avoid contacts/not-contacts fields in form
+			chainFilters(htmlContent,undefined, function(){
+			}, false, true);
+
+	//		$(this).hide();
+			// var htmlContent = $(this).closest("tr").clone();
+			$(htmlContent).find("i.filter-contacts-multiple-remove").css("display", "inline-block");
+			$(that).prev("table").find("tbody").append(htmlContent);
+
+		}, null);
+
+		
 	});
-	
-	
 
 	// Filter Contacts- Remove Multiple
 	$('body').on('click', 'i.filter-contacts-multiple-remove', function(e)
@@ -646,4 +678,13 @@ function add_custom_class_to_filter_elements(element, className)
 	console.log(custom_class)
 	
 	$(element).attr('custom_chained_class', custom_class);
+}
+
+function showDynamicFilters(el){
+	if(readCookie(CONTACTS_DYNAMIC_FILTER_COOKIE_STATUS)=="hide"){
+		$('#contacts-lhs-filters-toggle').hide();
+	}
+	else{
+		$('#contacts-lhs-filters-toggle').show();
+	}
 }

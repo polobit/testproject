@@ -104,7 +104,16 @@ $("#updateActivityModal").on(
 
 											App_Portlets.todayEventsCollection[parseInt(App_Portlets.currentPosition)].render(true);
 
-										}
+										}	
+										else if (App_Portlets.currentPortletName && App_Portlets.currentPortletName == 'Mini Calendar')
+									      {
+												var a=new Date(parseInt($('.minical-portlet-event').attr('data-date')));	
+												a.setHours(0,0,0,0);
+												createCookie("current_date_calendar",a);
+										       $('#calendar_container').fullCalendar( 'refetchEvents' );
+										       App_Portlets.refetchEvents = true;
+										       //eraseCookie('current_date_calendar');
+									      }
 										else if (App_Deal_Details.dealDetailView && Current_Route == "deal/" + App_Deal_Details.dealDetailView.model.get('id'))
 										{
 
@@ -117,7 +126,6 @@ $("#updateActivityModal").on(
 												}
 											}
 										}
-
 
 										// $('#updateActivityModal').find('span.save-status
 										// img').remove();
@@ -224,22 +232,24 @@ function initializeEventListners(el)
 {
 
 
-$("#ical_appointment_links").on('click', '#subscribe-ical', function(event)
+/*$("#ical_appointment_links").on('click', '#subscribe-ical', function(event)
 {
 	event.preventDefault();
 	set_api_key();
-});
+});*/
 
 
 /**
  * When Send Mail is clicked from Ical Modal, it hides the ical modal and shows
  * the ical-send email modal.
  */
+$("#icalModal").off('click');
 $("#icalModal").on('click', '#send-ical-email', function(event)
 {
 	event.preventDefault();
 
 	$("#icalModal").modal('hide');
+
 
 	// Removes previous modals if exist.
 	if ($('#share-ical-by-email').size() != 0)
@@ -259,18 +269,20 @@ $("#icalModal").on('click', '#send-ical-email', function(event)
 		var icalURL = $('#icalModal').find('#ical-feed').text();
 		model.ical_url = icalURL;
 
-		var emailModal = $(getTemplate("share-ical-by-email", model));
+		getTemplate("share-ical-by-email", model, undefined, function(template_ui){
+			if(!template_ui)
+				  return;
+			
+			var emailModal = $(template_ui);
+			var description = $(emailModal).find('textarea').val();
+			description = description.replace(/<br\/>/g, "\r\n");
+			$(emailModal).find('textarea').val(description);
+			emailModal.modal('show');
 
-		var description = $(emailModal).find('textarea').val();
+			// Send ical info email
+			send_ical_info_email(emailModal);
+		}, null);
 
-		description = description.replace(/<br\/>/g, "\r\n");
-
-		$(emailModal).find('textarea').val(description);
-
-		emailModal.modal('show');
-
-		// Send ical info email
-		send_ical_info_email(emailModal);
 	} });
 });
 
@@ -1033,6 +1045,22 @@ function save_event(formId, modalName, isUpdate, saveBtn, callback)
 							App_Portlets.todayEventsCollection[parseInt(App_Portlets.currentPosition)].render(true);
 
 						}
+						else if (App_Portlets.currentPortletName && App_Portlets.currentPortletName == 'Mini Calendar')
+					      {
+							if($('.minical-portlet-event').attr('data-date')!=undefined){
+								var a=new Date(parseInt($('.minical-portlet-event').attr('data-date')));	
+								a.setHours(0,0,0,0);
+								createCookie("current_date_calendar",a);
+							}
+							else{
+								var a=new Date(parseInt($('.minical-portlet-event-add').attr('data-date')));	
+								a.setHours(0,0,0,0);
+								createCookie("current_date_calendar",a);
+							}
+							$('#calendar_container').fullCalendar( 'refetchEvents' );
+						       App_Portlets.refetchEvents = true;
+						       //eraseCookie('current_date_calendar');
+					      }
 						else if (App_Deal_Details.dealDetailView && Current_Route == "deal/" + App_Deal_Details.dealDetailView.model.get('id'))
 						{
 
@@ -1070,6 +1098,7 @@ function save_event(formId, modalName, isUpdate, saveBtn, callback)
 
 							});
 						}
+						
 						else
 							App_Calendar.navigate("calendar", { trigger : true });
 

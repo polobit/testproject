@@ -5,17 +5,11 @@ import java.util.List;
 
 import org.apache.commons.lang.ArrayUtils;
 
-import com.agilecrm.deals.Opportunity;
-import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.blobstore.BlobInfo;
 import com.google.appengine.api.blobstore.BlobInfoFactory;
 import com.google.appengine.api.blobstore.BlobKey;
 import com.google.appengine.api.blobstore.BlobstoreService;
 import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
-import com.google.appengine.api.files.AppEngineFile;
-import com.google.appengine.api.files.FileService;
-import com.google.appengine.api.files.FileServiceFactory;
-import com.google.appengine.api.files.FileWriteChannel;
 
 public class DealExportBlobUtil
 {
@@ -40,53 +34,44 @@ public class DealExportBlobUtil
      *            - Flag to identify whether filter is given or not.
      * @return String
      */
-    public static String writeDealCSVToBlobstore(List<Opportunity> deals, Boolean isNoFilter)
-    {
-	String path = null;
-	try
-	{
-	    // Get a file service
-	    FileService fileService = FileServiceFactory.getFileService();
+    /*
+     * public static String writeDealCSVToBlobstore(List<Opportunity> deals,
+     * Boolean isNoFilter) { String path = null; try { // Get a file service
+     * FileService fileService = FileServiceFactory.getFileService();
+     * 
+     * // Create a new Blob file with mime-type "text/csv" AppEngineFile file =
+     * fileService.createNewBlobFile("text/csv", NamespaceManager.get() +
+     * "_Deals.csv");
+     * 
+     * // Open a channel to write to it boolean lock = false; FileWriteChannel
+     * writeChannel = fileService.openWriteChannel(file, lock);
+     * 
+     * // Builds deal CSV DealExportCSVUtil.writeDealCSV(writeChannel, deals,
+     * true);
+     * 
+     * // Blob file Path path = file.getFullPath();
+     * 
+     * System.out.println("Path of blob file in writeDealCSVToBlobstore " +
+     * path);
+     * 
+     * // All deals are obtained at a time. if (isNoFilter == true) {
+     * System.out.
+     * println("No filter is given, so closing channel immediately.");
+     * 
+     * lock = true; writeChannel = fileService.openWriteChannel(file, lock);
+     * 
+     * // Now finalize writeChannel.closeFinally();
+     * 
+     * }
+     * 
+     * } catch (Exception e) { e.printStackTrace();
+     * System.err.println("Exception occured in writeDealCSVToBlobstore " +
+     * e.getMessage()); }
+     * 
+     * return path; }
+     */
 
-	    // Create a new Blob file with mime-type "text/csv"
-	    AppEngineFile file = fileService.createNewBlobFile("text/csv", NamespaceManager.get() + "_Deals.csv");
-
-	    // Open a channel to write to it
-	    boolean lock = false;
-	    FileWriteChannel writeChannel = fileService.openWriteChannel(file, lock);
-
-	    // Builds deal CSV
-	    DealExportCSVUtil.writeDealCSV(writeChannel, deals, true);
-
-	    // Blob file Path
-	    path = file.getFullPath();
-
-	    System.out.println("Path of blob file in writeDealCSVToBlobstore " + path);
-
-	    // All deals are obtained at a time.
-	    if (isNoFilter == true)
-	    {
-		System.out.println("No filter is given, so closing channel immediately.");
-
-		lock = true;
-		writeChannel = fileService.openWriteChannel(file, lock);
-
-		// Now finalize
-		writeChannel.closeFinally();
-
-	    }
-
-	}
-	catch (Exception e)
-	{
-	    e.printStackTrace();
-	    System.err.println("Exception occured in writeDealCSVToBlobstore " + e.getMessage());
-	}
-
-	return path;
-    }
-
-    /**
+    /*   *//**
      * Appends content to existing blob file.
      * 
      * @param path
@@ -96,97 +81,78 @@ public class DealExportBlobUtil
      * @param isCompleted
      *            - flag to identity whether all deals completed or not
      */
-    public static void editExistingBlobFile(String path, List<Opportunity> deals, Boolean isCompleted)
-    {
-	try
-	{
+    /*
+     * public static void editExistingBlobFile(String path, List<Opportunity>
+     * deals, Boolean isCompleted) { try {
+     * 
+     * System.out.println("Editing existing blob file...");
+     * 
+     * // If path is null return; if (path == null) {
+     * System.out.println("Given blob file path is null in editExistingBlobFile"
+     * ); return; }
+     * 
+     * // Get a file service FileService fileService =
+     * FileServiceFactory.getFileService(); AppEngineFile file = new
+     * AppEngineFile(path);
+     * 
+     * FileWriteChannel writeChannel = null; boolean lock = false;
+     * 
+     * // if Deals list not completed, write to channel without closing if
+     * (!isCompleted) { // Open a channel to write to it writeChannel =
+     * fileService.openWriteChannel(file, lock);
+     * 
+     * DealExportCSVUtil.writeDealCSV(writeChannel, deals, false); return;
+     * 
+     * }
+     * 
+     * System.out.println("Closing blob file finally...");
+     * 
+     * // Close channel completely when Deals list completed lock = true;
+     * writeChannel = fileService.openWriteChannel(file, lock);
+     * 
+     * writeChannel.closeFinally();
+     * 
+     * } catch (Exception e) { e.printStackTrace();
+     * System.err.println("Exception occured in editExistingBlobFile " +
+     * e.getMessage()); } }
+     */
 
-	    System.out.println("Editing existing blob file...");
-
-	    // If path is null return;
-	    if (path == null)
-	    {
-		System.out.println("Given blob file path is null in editExistingBlobFile");
-		return;
-	    }
-
-	    // Get a file service
-	    FileService fileService = FileServiceFactory.getFileService();
-	    AppEngineFile file = new AppEngineFile(path);
-
-	    FileWriteChannel writeChannel = null;
-	    boolean lock = false;
-
-	    // if Deals list not completed, write to channel without closing
-	    if (!isCompleted)
-	    {
-		// Open a channel to write to it
-		writeChannel = fileService.openWriteChannel(file, lock);
-
-		DealExportCSVUtil.writeDealCSV(writeChannel, deals, false);
-		return;
-
-	    }
-
-	    System.out.println("Closing blob file finally...");
-
-	    // Close channel completely when Deals list completed
-	    lock = true;
-	    writeChannel = fileService.openWriteChannel(file, lock);
-
-	    writeChannel.closeFinally();
-
-	}
-	catch (Exception e)
-	{
-	    e.printStackTrace();
-	    System.err.println("Exception occured in editExistingBlobFile " + e.getMessage());
-	}
-    }
-
-    /**
+    /*   *//**
      * Returns data stored in the blobfile with respect to given path.
      * 
      * @param path
      *            - blob file path.
      * @return String
      */
-    public static List<String> retrieveBlobFileData(String path)
-    {
-	// if null return
-	if (path == null)
-	{
-	    System.out.println("Obtained file path is null in retrieveBlobFileData");
-	    return null;
-	}
-
-	// Get a file service
-	FileService fileService = FileServiceFactory.getFileService();
-	AppEngineFile file = new AppEngineFile(path);
-
-	// Now read from the file using the Blobstore API
-	BlobKey blobKey = fileService.getBlobKey(file);
-
-	// if blobKey null return
-	if (blobKey == null)
-	{
-	    System.out.println("BlobKey of file having path " + path + " is null");
-	    return null;
-	}
-
-	// Get blob info
-	BlobInfo blobInfo = new BlobInfoFactory().loadBlobInfo(blobKey);
-
-	// BlobstoreService blobStoreService =
-	// BlobstoreServiceFactory.getBlobstoreService();
-
-	// Get size
-	Long blobSize = blobInfo.getSize();
-	System.out.println("blobSize = " + blobSize);
-
-	// Returns partitions of data in list
-	return DealExportBlobUtil.readBlobFilePartionsInList(blobKey);
-    }
+    /*
+     * public static List<String> retrieveBlobFileData(String path) { // if null
+     * return if (path == null) {
+     * System.out.println("Obtained file path is null in retrieveBlobFileData");
+     * return null; }
+     * 
+     * // Get a file service FileService fileService =
+     * FileServiceFactory.getFileService(); AppEngineFile file = new
+     * AppEngineFile(path);
+     * 
+     * // Now read from the file using the Blobstore API BlobKey blobKey =
+     * fileService.getBlobKey(file);
+     * 
+     * // if blobKey null return if (blobKey == null) {
+     * System.out.println("BlobKey of file having path " + path + " is null");
+     * return null; }
+     * 
+     * // Get blob info BlobInfo blobInfo = new
+     * BlobInfoFactory().loadBlobInfo(blobKey);
+     * 
+     * // BlobstoreService blobStoreService = //
+     * BlobstoreServiceFactory.getBlobstoreService();
+     * 
+     * // Get size Long blobSize = blobInfo.getSize();
+     * System.out.println("blobSize = " + blobSize);
+     * 
+     * // Returns partitions of data in list return
+     * DealExportBlobUtil.readBlobFilePartionsInList(blobKey); }
+     */
 
     /**
      * Removes blob file with respect to path.
@@ -194,29 +160,24 @@ public class DealExportBlobUtil
      * @param path
      *            - blob file path
      */
-    public static void deleteBlobFile(String path)
-    {
-	System.out.println("Deleting Blob File under DealCSVExport...");
-
-	try
-	{
-	    // Get a file service
-	    FileService fileService = FileServiceFactory.getFileService();
-	    AppEngineFile file = new AppEngineFile(path);
-
-	    // Now read from the file using the Blobstore API
-	    BlobKey blobKey = fileService.getBlobKey(file);
-
-	    // Delete blob from store before sending validation exception to
-	    // client
-	    BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
-	    blobstoreService.delete(blobKey);
-	}
-	catch (Exception e)
-	{
-	    System.err.println("Got Exception in deleteBlobFile " + e.getMessage());
-	}
-    }
+    /*
+     * public static void deleteBlobFile(String path) {
+     * System.out.println("Deleting Blob File under DealCSVExport...");
+     * 
+     * try { // Get a file service FileService fileService =
+     * FileServiceFactory.getFileService(); AppEngineFile file = new
+     * AppEngineFile(path);
+     * 
+     * // Now read from the file using the Blobstore API BlobKey blobKey =
+     * fileService.getBlobKey(file);
+     * 
+     * // Delete blob from store before sending validation exception to //
+     * client BlobstoreService blobstoreService =
+     * BlobstoreServiceFactory.getBlobstoreService();
+     * blobstoreService.delete(blobKey); } catch (Exception e) {
+     * System.err.println("Got Exception in deleteBlobFile " + e.getMessage());
+     * } }
+     */
 
     /**
      * Reads entire blob data

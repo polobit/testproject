@@ -45,6 +45,10 @@ public class Milestone
 
     public boolean isDefault = false;
 
+    public String lost_milestone = null;
+
+    public String won_milestone = null;
+
     /**
      * Milestone Dao
      */

@@ -1,6 +1,19 @@
 var Portlets_View;
 var portlet_template_loaded_map = {};
 
+$(function()
+{
+	$.getJSON('/core/api/users/agileusers', function(users)
+	{
+		$.each(users, function(i, user)
+		{
+			if (CURRENT_DOMAIN_USER.id == user.domain_user_id)
+			{
+				CURRENT_AGILE_USER = user;
+			}
+		});
+	});
+});
 /**
  * Loads all the portlets for the current agile user
  * 
@@ -19,6 +32,7 @@ function loadPortlets(el){
 	App_Portlets.accountInfo = new Array();
 	App_Portlets.activity=new Array();
 	App_Portlets.activitiesView= new Array();
+	App_Portlets.campaignstats = new Array();
 	/*
 	 * If Portlets_View is not defined , creates collection view, collection is
 	 * sorted based on position i.e., set when sorted using jquery ui sortable
@@ -93,7 +107,7 @@ function set_up_portlets(el, portlets_el){
         autogenerate_stylesheet: true,
         draggable: {
         	limit: true,
-        	ignore_dragging: [".portlet_body",".portlet_body *",".portlet-panel",".portlet-panel *"],
+        	ignore_dragging: [".portlet_body",".portlet_body *",".portlet-panel",".portlet-panel *",".fc-content *",".events_show *"],
         	stop: function(event,ui){
         		
         		//$('#'+this.$player.attr('id')).attr('id','ui-id-'+this.$player.attr('data-col')+'-'+this.$player.attr('data-row'));
@@ -128,6 +142,35 @@ function set_up_portlets(el, portlets_el){
         resize: {
         	enabled: true,
         	max_size: [3,3],
+			resize: function(event,ui){
+				var temp=Portlets_View.collection.get($('#'+this.$resized_widget.attr('id')+' > div.portlets').attr('id'));
+				if(temp.get("name")=="Mini Calendar"){
+					var el=this.$resized_widget.find('#calendar_container');
+					if($('#'+this.$resized_widget.attr('id')).height()<=200){
+						$('#'+this.$resized_widget.attr('id')+' > .portlet_body_calendar').css("height","200px");
+						$('#'+this.$resized_widget.attr('id')+' > .portlet_body_calendar').css("max-height","200px");
+						$(el).find('.fc-header').css('height','25px');
+						//$(el).find('.fc-header').css('padding-top','5px');
+						$(el).parent().find('.show').css('padding-top','5px');
+					}else if($('#'+this.$resized_widget.attr('id')).height()>200 && $('#'+this.$resized_widget.attr('id')).height()<=450 ){
+						$('#'+this.$resized_widget.attr('id')+' > .portlet_body_calendar').css("height",$('#'+this.$resized_widget.attr('id')).height()+"px");
+						$('#'+this.$resized_widget.attr('id')+' > .portlet_body_calendar').css("max-height",$('#'+this.$resized_widget.attr('id')).height()+"px");
+						$(el).find('.fc-header').css('height','145px');
+						$(el).find('.show').css('padding-top','70px');
+						}
+						else{
+							$('#'+this.$resized_widget.attr('id')+' > .portlet_body_calendar').css("height",$('#'+this.$resized_widget.attr('id')).height()+"px");
+						$('#'+this.$resized_widget.attr('id')+' > .portlet_body_calendar').css("max-height",$('#'+this.$resized_widget.attr('id')).height()+"px");
+						$(el).find('.fc-header').css('height','250px');
+						$(el).find('.show').css('padding-top','120px');
+						}
+				//var el=this.$resized_widget.find('#calendar_container');
+				
+				 $(el).fullCalendar('option','aspectRatio',getaspectratio($(el).parent()));
+					var top=parseInt($(el).find('.fc-widget-content').css('height'))/2-7;
+					$(el).find('.fc-day-number').css('top',top);
+				}	
+			},
         	stop: function(event,ui){
         		
         		//for resizing portlet body
@@ -141,9 +184,9 @@ function set_up_portlets(el, portlets_el){
         		$(window).trigger('resize');
         		
         		$('#'+this.$resized_widget.attr('id')+' > div.portlet_body').css('overflow-x','hidden').css('overflow-y','auto');
-
+					
         		var tempModel = Portlets_View.collection.get($('#'+this.$resized_widget.attr('id')+' > div.portlets').attr('id'));
-
+        		
         		var that = this;
         		if(tempModel.get("name")=="Leaderboard"){
         			/*$('#'+this.$resized_widget.attr('id')+' > .portlet_body').find('ul').find('li').each(function(indexVal){
@@ -159,6 +202,47 @@ function set_up_portlets(el, portlets_el){
 						$('#'+this.$resized_widget.attr('id')+' > .portlet_header').css("width","100%");*/
 					$('#'+this.$resized_widget.attr('id')+' > .portlet_header').find('ul').width(($('#'+this.$resized_widget.attr('id')+' > .portlet_body').find('ul').width()/$('#'+this.$resized_widget.attr('id')+' > .portlet_body').width()*100)+'%');
         		}
+
+        		else if(tempModel.get("name")=="Mini Calendar")
+        			{
+						var el=this.$resized_widget.find('.portlet_body_calendar');
+						var aspectratio;
+        			if(this.$resized_widget.attr('data-sizey')==1){
+						$('#'+this.$resized_widget.attr('id')+' > .portlet_body_calendar').css("height",this.$resized_widget.attr('data-sizey')*200+"px");
+						$('#'+this.$resized_widget.attr('id')+' > .portlet_body_calendar').css("max-height",this.$resized_widget.attr('data-sizey')*200+"px");
+						aspectratio=getaspectratio(el);
+						 $('#calendar_container').fullCalendar('option','aspectRatio',aspectratio);	
+						$(el).find('.fc-header').css('height','25px');
+						$(el).find('.show').css('padding-top','5px');
+						 
+						
+						
+					}else if(this.$resized_widget.attr('data-sizey')==2){
+						$('#'+this.$resized_widget.attr('id')+' > .portlet_body_calendar').css("height",this.$resized_widget.attr('data-sizey')*200+25+"px");
+						$('#'+this.$resized_widget.attr('id')+' > .portlet_body_calendar').css("max-height",this.$resized_widget.attr('data-sizey')*200+25+"px");
+						aspectratio=getaspectratio(el);
+						 $('#calendar_container').fullCalendar('option','aspectRatio',aspectratio);	
+						$(el).find('.fc-header').css('height','145px');
+						$(el).find('.show').css('padding-top','70px');
+						
+						
+					}
+					else if(this.$resized_widget.attr('data-sizey')==3){
+						$('#'+this.$resized_widget.attr('id')+' > .portlet_body_calendar').css("height",this.$resized_widget.attr('data-sizey')*200+50+"px");
+						$('#'+this.$resized_widget.attr('id')+' > .portlet_body_calendar').css("max-height",this.$resized_widget.attr('data-sizey')*200+50+"px");	
+						aspectratio=getaspectratio(el);
+						 $('#calendar_container').fullCalendar('option','aspectRatio',aspectratio);	
+						$(el).find('.fc-header').css('height','250px');
+						$(el).find('.show').css('padding-top','120px');
+						
+						
+						
+					}
+					
+					  
+						var top=parseInt($(el).find('.fc-widget-content').css('height'))/2-7;
+						$(el).find('.fc-day-number').css('top',top);
+        			}
         		
 
 				var models = [];
@@ -191,6 +275,7 @@ function set_up_portlets(el, portlets_el){
 				// Saves new width and height in server
 				$.ajax({ type : 'POST', url : '/core/api/portlets/widthAndHeight', data : JSON.stringify(models),
 					contentType : "application/json; charset=utf-8", dataType : 'json' });
+
 			}
         }
     }).data('gridster');
@@ -205,6 +290,20 @@ function set_up_portlets(el, portlets_el){
     		gridster.enable_resize();
     		gridster.set_dom_grid_height();
     	}
+		if($(window).width()<975 && $(window).width()>768 && $('.portlet_body_calendar').is(':visible')){
+				$('.portlet_body_calendar').each(function(){
+				$(this).find('#calendar_container').find('.fc-widget-header').each(function(){
+				$(this).text($(this).text().substring(0, 1));
+				});
+			});
+		}else if($(window).width()>975 && $('.portlet_body_calendar').is(':visible')){
+				$('.portlet_body_calendar').each(function(){
+				var weeksArray = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+				$(this).find('#calendar_container').find('.fc-widget-header').each(function(index){
+				$(this).text(weeksArray[index]);
+				});
+			});
+		}
     });
     if($(window).width()<768 && gridster!=undefined){
 		gridster.disable();
@@ -325,7 +424,7 @@ function showPortletSettings(el){
 		var options ='<option value="">Select...</option>'
 			+'<option value="contacts">All Contacts</option>'
 			+'<option value="myContacts">My Contacts</option>';
-		$.ajax({ type : 'GET', url : '/core/api/filters?type=PERSON', async : false, dataType : 'json',
+		$.ajax({ type : 'GET', url : '/core/api/filters?type=PERSON', dataType : 'json',
 			success: function(data){
 				$.each(data,function(index,contactFilter){
 					options+="<option value="+contactFilter.id+">"+contactFilter.name+"</option>";
@@ -403,27 +502,22 @@ function showPortletSettings(el){
 		if(App_Portlets.deal_tracks!=undefined && App_Portlets.deal_tracks!=null)
 			tracks = App_Portlets.deal_tracks;
 		else{
-			$.ajax({ type : 'GET', url : '/core/api/milestone/pipelines', async : false, dataType : 'json',
+			$.ajax({ type : 'GET', url : '/core/api/milestone/pipelines', dataType : 'json',
 				success: function(data){
 					App_Portlets.track_length = data.length;
 					App_Portlets.deal_tracks = data;
 					tracks = App_Portlets.deal_tracks;
+
+					portlet_utiity.addTracks(tracks, base_model, elData);
 				} });
+
+			return;
 		}
+
+
+		portlet_utiity.addTracks(tracks, base_model, elData);
 		
-		var options = '';
-		$.each(tracks,function(index,trackObj){
-			if(base_model.get('settings').track==0 && trackObj.name=="Default")
-				options+="<option value="+trackObj.id+" selected='selected'>"+trackObj.name+"</option>";
-			else if(base_model.get('settings').track==trackObj.id)
-				options+="<option value="+trackObj.id+" selected='selected'>"+trackObj.name+"</option>";
-			else
-				options+="<option value="+trackObj.id+">"+trackObj.name+"</option>";
-		});
 		
-		$('#track', elData).html(options);
-		$('.loading-img').hide();
-		$("#deals", elData).find('option[value='+ base_model.get("settings").deals +']').attr("selected", "selected");
 		//$("#due-date", elData).val(new Date(base_model.get("settings")["due-date"]*1000).format('mm/dd/yyyy'));
 	}else if(base_model.get('portlet_type')=="DEALS" && base_model.get('name')=="Closures Per Person"){
 		$('#portletsDealsClosuresPerPersonSettingsModal').modal('show');
@@ -457,27 +551,21 @@ function showPortletSettings(el){
 		if(App_Portlets.deal_tracks!=undefined && App_Portlets.deal_tracks!=null)
 			tracks = App_Portlets.deal_tracks;
 		else{
-			$.ajax({ type : 'GET', url : '/core/api/milestone/pipelines', async : false, dataType : 'json',
+			$.ajax({ type : 'GET', url : '/core/api/milestone/pipelines', dataType : 'json',
 				success: function(data){
 					App_Portlets.track_length = data.length;
 					App_Portlets.deal_tracks = data;
 					tracks = App_Portlets.deal_tracks;
+
+					portlet_utiity.addTracks(tracks, base_model, elData);
+					
 				} });
+
+			 return;
 		}
 		
-		var options = '';
-		$.each(tracks,function(index,trackObj){
-			if(base_model.get('settings').track==0 && trackObj.name=="Default")
-				options+="<option value="+trackObj.id+" selected='selected'>"+trackObj.name+"</option>";
-			else if(base_model.get('settings').track==trackObj.id)
-				options+="<option value="+trackObj.id+" selected='selected'>"+trackObj.name+"</option>";
-			else
-				options+="<option value="+trackObj.id+">"+trackObj.name+"</option>";
-		});
+		portlet_utiity.addTracks(tracks, base_model, elData);
 		
-		$('#track', elData).html(options);
-		$('.loading-img').hide();
-		$("#deals", elData).find('option[value='+ base_model.get("settings").deals +']').attr("selected", "selected");
 		//$("#due-date", elData).val(new Date(base_model.get("settings")["due-date"]*1000).format('mm/dd/yyyy'));
 	}else if(base_model.get('portlet_type')=="DEALS" && base_model.get('name')=="Deals Assigned"){
 		$('#portletsDealsAssignedSettingsModal').modal('show');
@@ -499,36 +587,38 @@ function showPortletSettings(el){
 		
 		if(base_model.get("settings")["calls-user-list"]!=undefined){
 			var options ='';
-			$.ajax({ type : 'GET', url : '/core/api/users', async : false, dataType : 'json',
+			$.ajax({ type : 'GET', url : '/core/api/users', dataType : 'json',
 				success: function(data){
 					$.each(data,function(index,domainUser){
-						options+="<option value="+domainUser.id+">"+domainUser.name+"</option>";
+						if(!domainUser.is_disabled)
+							options+="<option value="+domainUser.id+">"+domainUser.name+"</option>";
 					});
 					$('#calls-user-list', elData).html(options);
 					$.each(base_model.get("settings")["calls-user-list"], function(){
 						$("#calls-user-list", elData).find('option[value='+ this +']').attr("selected", "selected");
 					});
+
 					$('.loading-img').hide();
+
+					portlet_utiity.enable_users_multi_select_option('ms-calls-user-list', elData);
+
 				} });
 		}else{
 			var options ='';
-			$.ajax({ type : 'GET', url : '/core/api/users', async : false, dataType : 'json',
+			$.ajax({ type : 'GET', url : '/core/api/users', dataType : 'json',
 				success: function(data){
 					$.each(data,function(index,domainUser){
-						options+="<option value="+domainUser.id+" selected='selected'>"+domainUser.name+"</option>";
+						if(!domainUser.is_disabled)
+							options+="<option value="+domainUser.id+" selected='selected'>"+domainUser.name+"</option>";
 					});
 					$('#calls-user-list', elData).html(options);
 					$('.loading-img').hide();
+
+					portlet_utiity.enable_users_multi_select_option('ms-calls-user-list', elData);
 				} });
 		}
-		$('#ms-calls-user-list', elData).remove();
-		head.js(LIB_PATH + 'lib/jquery.multi-select.js', function(){
-			$('#calls-user-list',elData).multiSelect();
-			$('#ms-calls-user-list .ms-selection', elData).children('ul').addClass('multiSelect').attr("name", "calls-user-list").attr("id", "calls-user");
-			$('#ms-calls-user-list .ms-selectable .ms-list', elData).css("height","130px");
-			$('#ms-calls-user-list .ms-selection .ms-list', elData).css("height","130px");
-			$('#ms-calls-user-list', elData).addClass('portlet-user-ms-container');					
-		});
+
+		
 		
 	}else if(base_model.get('portlet_type')=="TASKSANDEVENTS" && base_model.get('name')=="Task Report"){
 		$('#portletsTaskReportSettingsModal').modal('show');
@@ -550,36 +640,35 @@ function showPortletSettings(el){
 
 		if(base_model.get("settings")["task-report-user-list"]!=undefined){
 			var options ='';
-			$.ajax({ type : 'GET', url : '/core/api/users', async : false, dataType : 'json',
+			$.ajax({ type : 'GET', url : '/core/api/users', dataType : 'json',
 				success: function(data){
 					$.each(data,function(index,domainUser){
-						options+="<option value="+domainUser.id+">"+domainUser.name+"</option>";
+						if(!domainUser.is_disabled)
+							options+="<option value="+domainUser.id+">"+domainUser.name+"</option>";
 					});
 					$('#task-report-user-list', elData).html(options);
 					$.each(base_model.get("settings")["task-report-user-list"], function(){
 						$("#task-report-user-list", elData).find('option[value='+ this +']').attr("selected", "selected");
 					});
 					$('.loading-img').hide();
+
+					portlet_utiity.enable_users_multi_select_option('ms-task-report-user-list', elData);
 				} });
 		}else{
 			var options ='';
-			$.ajax({ type : 'GET', url : '/core/api/users', async : false, dataType : 'json',
+			$.ajax({ type : 'GET', url : '/core/api/users', dataType : 'json',
 				success: function(data){
 					$.each(data,function(index,domainUser){
-						options+="<option value="+domainUser.id+" selected='selected'>"+domainUser.name+"</option>";
+						if(!domainUser.is_disabled)
+							options+="<option value="+domainUser.id+" selected='selected'>"+domainUser.name+"</option>";
 					});
 					$('#task-report-user-list', elData).html(options);
 					$('.loading-img').hide();
+
+					portlet_utiity.enable_users_multi_select_option('ms-task-report-user-list', elData);
 				} });
 		}
-		$('#ms-task-report-user-list', elData).remove();
-		head.js(LIB_PATH + 'lib/jquery.multi-select.js', function(){
-			$('#task-report-user-list',elData).multiSelect();
-			$('#ms-task-report-user-list .ms-selection', elData).children('ul').addClass('multiSelect').attr("name", "task-report-user-list").attr("id", "task-report-user");
-			$('#ms-task-report-user-list .ms-selectable .ms-list', elData).css("height","130px");
-			$('#ms-task-report-user-list .ms-selection .ms-list', elData).css("height","130px");
-			$('#ms-task-report-user-list', elData).addClass('portlet-user-ms-container');					
-		});
+		
 
 	}else if(base_model.get('portlet_type')=="USERACTIVITY" && base_model.get('name')=="Stats Report"){
 		$('#portletsStatsReportSettingsModal').modal('show');
@@ -624,41 +713,36 @@ function showPortletSettings(el){
 
 		if(base_model.get("settings").user!=undefined){
 			var options ='';
-			$.ajax({ type : 'GET', url : '/core/api/portlets/portletUsers', async : false, dataType : 'json',
+			$.ajax({ type : 'GET', url : '/core/api/portlets/portletUsers', dataType : 'json',
 				success: function(data){
 					$.each(data,function(index,domainUser){
-						options+="<option value="+domainUser.id+">"+domainUser.name+"</option>";
+						if(!domainUser.is_disabled)
+							options+="<option value="+domainUser.id+">"+domainUser.name+"</option>";
 					});
 					$('#user-list', elData).html(options);
 					$.each(base_model.get("settings").user, function(){
 						$("#user-list", elData).find('option[value='+ this +']').attr("selected", "selected");
 					});
 					$('.loading-img').hide();
+
+					portlet_utiity.enable_users_multi_select_option('ms-category-list', elData);
+
 				} });
 		}else{
 			var options ='';
-			$.ajax({ type : 'GET', url : '/core/api/portlets/portletUsers', async : false, dataType : 'json',
+			$.ajax({ type : 'GET', url : '/core/api/portlets/portletUsers', dataType : 'json',
 				success: function(data){
 					$.each(data,function(index,domainUser){
-						options+="<option value="+domainUser.id+" selected='selected'>"+domainUser.name+"</option>";
+						if(!domainUser.is_disabled)
+							options+="<option value="+domainUser.id+" selected='selected'>"+domainUser.name+"</option>";
 					});
 					$('#user-list', elData).html(options);
 					$('.loading-img').hide();
+
+					portlet_utiity.enable_users_multi_select_option('ms-category-list', elData);
 				} });
 		}
-		$('#ms-category-list', elData).remove();
-		$('#ms-user-list', elData).remove();
-		head.js(LIB_PATH + 'lib/jquery.multi-select.js', function(){
-			$('#category-list, #user-list',elData).multiSelect();
-			$('#ms-category-list .ms-selection', elData).children('ul').addClass('multiSelect').attr("name", "category-list").attr("id", "category");
-			$('#ms-user-list .ms-selection', elData).children('ul').addClass('multiSelect').attr("name", "user-list").attr("id", "user");
-			$('#ms-user-list .ms-selectable .ms-list', elData).css("height","130px");
-			$('#ms-user-list .ms-selection .ms-list', elData).css("height","130px");
-			$('#ms-category-list .ms-selectable .ms-list', elData).css("height","105px");
-			$('#ms-category-list .ms-selection .ms-list', elData).css("height","105px");
-			$('#ms-user-list', elData).addClass('portlet-user-ms-container');
-			$('#ms-category-list', elData).addClass('portlet-category-ms-container');					
-		});
+		
 	}else if(base_model.get('portlet_type')=="DEALS" && base_model.get('name')=="Revenue Graph"){
 		$('#portletsDealsRevenueGraphSettingsModal').modal('show');
 		$('#portletsDealsRevenueGraphSettingsModal > .modal-dialog > .modal-content > .modal-footer > .save-modal').attr('id',base_model.get("id")+'-save-modal');
@@ -672,20 +756,44 @@ function showPortletSettings(el){
 		}else{
 			options += '<option value="anyTrack">Any</option>';
 		}
-		$.ajax({ type : 'GET', url : '/core/api/milestone/pipelines', async : false, dataType : 'json',
+		$.ajax({ type : 'GET', url : '/core/api/milestone/pipelines', dataType : 'json',
 				success: function(data){
 					$.each(data,function(index,trackObj){
 						if(base_model.get('settings').track==trackObj.id)
 							options+="<option value="+trackObj.id+" selected='selected'>"+trackObj.name+"</option>";
 						else
 							options+="<option value="+trackObj.id+">"+trackObj.name+"</option>";
+					$('#track', elData).html(options);
+					$('.loading-img').hide();
 					});
+
+					
 				} });
-		$('#track', elData).html(options);
-		$('.loading-img').hide();
+		
 		$("#duration", elData).find('option[value='+ base_model.get("settings").duration +']').attr("selected", "selected");
 	}
-	
+	else if(base_model.get('portlet_type')=="USERACTIVITY" && base_model.get('name')=="Campaign stats"){
+		$('#portletsCampaignStatsSettingsModal').modal('show');
+		$('#portletsCampaignStatsSettingsModal > .modal-dialog > .modal-content > .modal-footer > .save-modal').attr('id',base_model.get("id")+'-save-modal');
+		$("#portlet-type",$('#portletsCampaignStatsSettingsModal')).val(base_model.get('portlet_type'));
+		$("#portlet-name",$('#portletsCampaignStatsSettingsModal')).val(base_model.get('name'));
+		
+		elData = $('#portletsCampaignStatsSettingsForm');
+		$("#duration", elData).find('option[value='+ base_model.get("settings").duration +']').attr("selected", "selected");
+		
+		var options="<option value='All'>All Campaigns</option>" ;
+		$.ajax({ type : 'GET', url : '/core/api/workflows', async : false, dataType : 'json',
+			success: function(data){
+				$.each(data,function(index,campaignfilter){
+					options+="<option value="+campaignfilter.id+">"+campaignfilter.name+"</option>";
+				});
+				$('#campaign_type', elData).html(options);
+				$("#campaign_type", elData).find('option[value='+ base_model.get("settings").campaign_type +']').attr("selected", "selected");
+				$('.loading-img').hide();
+			}
+		});
+		
+	}
 	if(base_model.get('name')=="Pending Deals" || base_model.get('name')=="Deals By Milestone" || base_model.get('name')=="Closures Per Person" || base_model.get('name')=="Deals Funnel"){
 		$('#due-date', elData).datepicker({
 			format : CURRENT_USER_PREFS.dateFormat
@@ -1185,14 +1293,16 @@ $('.modal-footer').off("click").on('click', '.portlet-settings-save-modal', func
 	    				milestonesList=data1["milestonesList"];
 	    				milestoneValuesList=data1["milestoneValuesList"];
 	    				milestoneMap=data1["milestoneMap"];
+	    				wonMilestone=data1["wonMilestone"];
+						lostMilestone=data1["lostMilestone"];
 	    				
 	    				var funnel_data=[];
 	    				var temp;
 	    				
 	    				$.each(milestonesList,function(index,milestone){
 	    					var each_data=[];
-	    					if(milestone!='Lost'){
-	    						if(milestone!='Won')
+	    					if(milestone!=lostMilestone){
+	    						if(milestone!=wonMilestone)
 		    						each_data.push(milestone,milestoneValuesList[index]);
 		    					else
 		    						temp=index;
@@ -1731,7 +1841,85 @@ $('.modal-footer').off("click").on('click', '.portlet-settings-save-modal', func
 		        		$('#'+el.split("-save-modal")[0]).parent().find('.portlet_body').find('.dealsWonValue').append("Total won value:"+totalVal);
 	        		},2000);
 	        	}*/
-	        	
+	        if(data.get('portlet_type')=="USERACTIVITY" && data.get('name')=="Campaign stats"){	
+				var start_date_str = "";
+				var end_date_str ="";
+				var emailsSentCount;
+				var emailsOpenedCount;
+				var emailsClickedCount;
+				var emailsUnsubscribed;
+		if(data.get('settings').duration=='yesterday'){
+				start_date_str = ''+data.get('settings').duration;
+				end_date_str = 'today';
+			}else if(data.get('settings').duration=='last-week'){
+				start_date_str = ''+data.get('settings').duration;
+				end_date_str = 'last-week-end';
+			}else if(data.get('settings').duration=='last-month'){
+				start_date_str = ''+data.get('settings').duration;
+				end_date_str = 'last-month-end';
+			}else if(data.get('settings').duration=='24-hours'){
+				start_date_str = ''+data.get('settings').duration;
+				end_date_str = 'now';
+			}else if(data.get('settings').duration=='this-week'){
+				start_date_str = ''+data.get('settings').duration;
+				end_date_str = 'this-week-end';
+			}else if(data.get('settings').duration=='this-month'){
+				start_date_str = ''+data.get('settings').duration;
+				end_date_str = 'this-month-end';
+			}else{
+				start_date_str = ''+data.get('settings').duration;
+				end_date_str = 'TOMORROW';
+			}
+			
+			var that = $('#'+el.split("-save-modal")[0]).parent();
+		var url = '/core/api/portlets/portletCampaignstats?duration='+data.get('settings').duration+'&start-date='+getStartAndEndDatesOnDue(start_date_str)+'&end-date='+getStartAndEndDatesOnDue(end_date_str)+'&time_zone='+(new Date().getTimezoneOffset())+'&campaign_type='+data.get('settings').campaign_type; 
+		setTimeout(function(){
+				if(that.find('#emails-sent-count').text().trim()=="")
+					that.find('#emails-sent-count').html("<img src='../flatfull/img/ajax-loader-cursor.gif' style='width:12px;height:10px;opacity:0.5;' />");
+			},1000);
+		fetchPortletsGraphData(url,function(data){
+			
+			emailsSentCount=data["emailsent"];
+				emailsOpenedCount=data["emailopened"];
+				emailsClickedCount=data["emailclicked"];
+				emailsUnsubscribed=data["emailunsubscribed"];
+				if(emailsSentCount==0){
+					that.find('#emails-sent').css('width','100%').css('height','100%');
+					that.find('#emails-sent').html('<div class="portlet-error-message">No Email activity</div>');
+				}
+				else{
+					var selector1=that.find('#emails-opened');
+					var selector2=that.find('#emails-clicked');
+					var selector3=that.find('#emails-unsubscribed');
+					selector1.css('display','block');
+					selector2.css('display','block');
+					selector3.css('display','block');
+					that.find('#emails-sent').addClass('pull-left p-xs b-b b-r b-light w-half overflow-hidden');
+					selector1.addClass('pull-left p-xs b-b b-light w-half');
+					selector2.addClass('pull-left p-xs b-r b-light w-half');
+					selector3.addClass('pull-left p-xs w-half');
+				that.find('#emails-sent-count').text(getNumberWithCommasForPortlets(emailsSentCount));
+				that.find('#emails-sent-label').text("Emails sent");
+				that.find('#emails-opened').html('<div class="pull-left text-light stats_text" ><div class="text-sm text-ellipsis">Opened</div><div class="text-count text-center" style="color:rgb(250, 215, 51);">'+getNumberWithCommasForPortlets(emailsOpenedCount)+'</div></div>');
+				that.find('#emails-clicked').html('<div class="pull-left text-light stats_text"><div class="text-sm text-ellipsis">Clicked</div><div class="text-count text-center" style="color:rgb(18, 209, 18);">'+getNumberWithCommasForPortlets(emailsClickedCount)+'</div></div>');
+				that.find('#emails-unsubscribed').html('<div class="pull-left text-light stats_text"><div class="text-sm text-ellipsis">Unsubscribed</div><div class="text-count text-center" style="color:rgb(240, 80, 80);">'+getNumberWithCommasForPortlets(emailsUnsubscribed)+'</div></div>');
+				/*var series=[];
+				series.push(["Emails Sent",emailsSentCount-emailsOpenedCount]);
+				series.push(["Emails Opened",emailsOpenedCount]);
+				campstatsPieChart(selector1,series,emailsSentCount,emailsOpenedCount);
+				
+				var series1=[];
+				series1.push(["Emails Sent",emailsSentCount-emailsClickedCount]);
+				series1.push(["Emails Clicked",emailsClickedCount]);
+				campstatsPieChart(selector2,series1,emailsSentCount,emailsClickedCount);
+				
+				var series2=[];
+				series2.push(["Emails Sent",emailsSentCount-emailsUnsubscribed]);
+				series2.push(["Emails Unsubscribed",emailsUnsubscribed]);
+				campstatsPieChart(selector3,series2,emailsSentCount,emailsUnsubscribed);*/
+				}
+				});
+			}
 	        	setPortletContentHeight(data);
     			$('#'+data.get('id')).parent().find('div:last').after('<span class="gs-resize-handle gs-resize-handle-both"></span>');
 	        	
@@ -1889,6 +2077,141 @@ $('.modal-content').on('click', '#task-report-user-select-none', function(e) {
 		$('#task-report-user-list').multiSelect('deselect_all');
 });
 
+$('.gridster-portlets').on('mouseover','.portlet_body_calendar',function(e){
+	$(this).find('.portlet_header_icons').removeClass('vis-hide');
+	$(this).find('.fc-button').css('visibility','visible');	
+});
+
+$('.gridster-portlets').on('mouseout','.portlet_body_calendar',function(e){
+$(this).find('.portlet_header_icons').addClass('vis-hide');
+$(this).find('.fc-button').css('visibility','hidden');
+});
+
+$('.events_show').on('click','.minical-portlet-event',function(e){
+	App_Portlets.currentPosition = '' + $(this).parents('.gs-w').find('.column_position').text().trim() + '' + $(this).parents('.gs-w').find('.row_position').text().trim();
+	App_Portlets.currentPortletName = 'Mini Calendar';
+	var id = $(this).attr('id');
+	if(id && !isNaN(id)){
+		var events_array= $('#calendar_container',$(this).parentsUntil('.mini-cal').eq($(this).parentsUntil('.mini-cal').length-1)).fullCalendar('clientEvents', id, function(event) {
+			return (event.start >= date && event.start < endDate);
+		});
+		//$('#'+id,$('#calendar_container')).trigger('click');
+		var model = events_array[0];
+		App_Portlets.currentEventObj = model;
+		var eventsURL = '/core/api/events/'+events_array[0].id;
+		var event;
+		$.getJSON(eventsURL, function(doc)
+		{
+			event=doc;
+			var start = getDate(event.start);
+			var end = getDate(event.end);
+			if(!model)
+			return;
+		if(model.color == "#f05050" || model.color == "red")
+			model.color = "red";
+		else if(model.color == "#7266ba" || model.color == "#36C")
+			model.color = "#36C";
+		else
+			model.color = "green";
+		// Deserialize
+		deserializeForm(model, $("#updateActivityForm"));
+		
+		$("#update-event-date-1").val(getDateInFormat(start));
+		$("#update-event-date-2").val(getDateInFormat(end));
+		// Set time for update Event
+		$('#update-event-time-1')
+				.val(
+						(start.getHours() < 10 ? "0" : "") + start.getHours() + ":" + (start.getMinutes() < 10 ? "0" : "") + start.getMinutes());
+		$('#update-event-time-2')
+				.val(
+						(end.getHours() < 10 ? "0" : "") + end.getHours() + ":" + (end.getMinutes() < 10 ? "0" : "") + end.getMinutes());
+
+		// hide end date & time for all day events
+		if (model.allDay)
+		{
+			$("#update-event-date-2").closest('.row').hide();
+			$('#update-event-time-1').closest('.control-group').hide();
+		}
+		else
+		{
+			$('#update-event-time-1').closest('.control-group').show();
+			$("#update-event-date-2").closest('.row').show();
+		}
+
+		if (model.type == "WEB_APPOINTMENT" && (model.start.getTime() / 1000) > parseInt(new Date().getTime() / 1000))
+		{
+			$("[id='event_delete']").attr("id", "delete_web_event");
+			web_event_title = model.title;
+			if (model.contacts.length > 0)
+			{
+				var firstname = getPropertyValue(model.contacts[0].properties, "first_name");
+				if (firstname == undefined)
+						firstname = "";
+					var lastname = getPropertyValue(model.contacts[0].properties, "last_name");
+					if (lastname == undefined)
+						lastname = "";
+				web_event_contact_name = firstname + " " + lastname;
+			}
+		}
+		else
+		{
+			$("[id='delete_web_event']").attr("id", "event_delete");
+		}
+
+		if (model.description)
+		{
+			var description = '<label class="control-label"><b>Description </b></label><div class="controls"><textarea id="description" name="description" rows="3" class="input form-control" placeholder="Add Description"></textarea></div>'
+			$("#event_desc").html(description);
+			$("textarea#description").val(model.description);
+		}
+		else
+		{
+			var desc = '<div class="row-fluid">' + '<div class="control-group form-group m-b-none">' + '<a href="#" id="add_event_desctiption"><i class="icon-plus"></i> Add Description </a>' + '<div class="controls event_discription hide">' + '<textarea id="description" name="description" rows="3" class="input form-control w-full col-md-8" placeholder="Add Description"></textarea>' + '</div></div></div>'
+			$("#event_desc").html(desc);
+		}
+		// Fills owner select element
+		populateUsersInUpdateActivityModal(model);
+
+		// Show edit modal for the event
+		$("#updateActivityModal").modal('show');
+		$('#'+id,$('#calendar_container')).trigger('click');
+		return false;
+	
+		});
+	}
+});
+
+$('.events_show').on('click','.minical-portlet-event-add',function(e){
+	// Show a new event
+	App_Portlets.currentPosition = '' + $(this).parents('.gs-w').find('.column_position').text().trim() + '' + $(this).parents('.gs-w').find('.row_position').text().trim();
+	App_Portlets.currentPortletName = 'Mini Calendar';
+	var start = new Date(parseInt($(this).attr('id')));
+							$('#activityModal').modal('show');
+							highlight_event();
+
+							// Set Date for Event
+							//var dateFormat = 'mm/dd/yyyy';
+							$('#task-date-1').val(getDateInFormat(start));
+							$("#event-date-1").val(getDateInFormat(start));
+							$("#event-date-2").val(getDateInFormat(start));
+
+							// Set Time for Event
+							//if ((start.getHours() == 00) && (start.getHours() == 00) && (start.getMinutes() == 00))
+							//{
+								$('#event-time-1').val('');
+								$('#event-time-2').val('');
+							//}
+							/* else
+							{
+								$('#event-time-1')
+										.val(
+												(start.getHours() < 10 ? "0" : "") + start.getHours() + ":" + (start.getMinutes() < 10 ? "0" : "") + start
+														.getMinutes());
+								$('#event-time-2').val(
+										(start.getHours() < 10 ? "0" : "") + start.getHours() + ":" + (start.getMinutes() < 10 ? "0" : "") + start.getMinutes());
+							} */
+});
+
 }
 function showPortletSettingsForm(formId){
 	$('#portletSettingsModal > .modal-body > form').each(function(){
@@ -1991,6 +2314,7 @@ function getDurationForPortlets(duration){
 		
 		return time_period;
 }
+
 function loadGoogleEventsForPortlets(p_el,startTime,endTime){
 	$.getJSON('core/api/calendar-prefs/get', function(response)
 	{
@@ -2059,3 +2383,739 @@ function loadGoogleEventsForPortlets(p_el,startTime,endTime){
 		}
 	});
 }
+var jso=[];
+function minicalendar(el)
+{
+	eraseCookie('current_date_calendar');
+	init_cal(el);
+	var totalEvents = 0;
+	var eventsCount = 0;
+	var dayClasses = [];
+	
+	
+						$('#calendar_container',el).fullCalendar({
+								
+
+							aspectRatio:getaspectratio(el),
+							selectable: true,
+							header : { left : 'prev',right:'next', center :'title'  },
+							weekMode:'liquid',
+							
+							eventSources :[
+							{
+							events : function(start, end, callback)
+								{
+								if($(el).parent().attr('data-sizey')==2)
+									$(el).find('.fc-header').css('height','145px');		
+								else if($(el).parent().attr('data-sizey')==3)
+									$(el).find('.fc-header').css('height','250px');		
+								
+									jso=[];
+									var date=new Date();
+									   var todayDate=new Date(date.getFullYear(), date.getMonth(), date.getDate(),00,00,00);
+									   var endDate=new Date(date.getFullYear(), date.getMonth(), date.getDate(),23,59,59);
+											if(readCookie('current_date_calendar')!=null)
+											{
+												var days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+												var cookie_date=new Date(readCookie('current_date_calendar'));
+												if(cookie_date.getTime()!=todayDate.getTime()){
+													todayDate=cookie_date;
+												endDate=new Date(cookie_date.getFullYear(), cookie_date.getMonth(), cookie_date.getDate(),23,59,59);
+												$(el).find('.events_show').empty().append('<div class="show p-t-xs text-md text-center">'+days[cookie_date.getDay()]+', ' +cookie_date.format('dd mmm')+' </div><ul class="list"></ul>');
+	
+												}
+												else
+													$(el).find('.events_show').empty().append('<div class="show p-t-xs text-md text-center">Today </div><ul class="list"></ul>');
+											}
+											else if(start<todayDate &&  todayDate<end){
+												$(el).find('.events_show').empty().append('<div class="show p-t-xs text-md text-center">Today </div><ul class="list"></ul>');
+											
+									   }
+									
+											if($(el).parent().attr('data-sizey')==2)
+											   $(el).find('.show').css('padding-top','70px');
+										   else if($(el).parent().attr('data-sizey')==3)
+											   $(el).find('.show').css('padding-top','120px');
+										var top=parseInt($(el).find('.fc-widget-content').css('height'))/2-7;
+									$(el).find('.fc-day-number').css('top',top);  
+									
+									var eventsURL = '/core/api/events?start=' + start.getTime() / 1000 + "&end=" + end.getTime() / 1000 + "&owner_id=" +CURRENT_AGILE_USER.id;
+									
+									
+										$.getJSON(eventsURL, function(doc)
+									{
+										$.each(doc, function(index, data)
+										{
+					
+											if (data.color == 'red' || data.color == '#f05050')
+												data.color='#f05050';
+											else if (data.color == '#36C' || data.color == '#23b7e5' || data.color == 'blue')
+												data.color='#7266ba';
+											else if (data.color == 'green' || data.color == '#bbb')
+												data.color='#fad733';
+											
+											
+									   var e_date= new Date(data.start*1000);
+											var end_date=new Date(data.end*1000);
+											//var a=Math.round((end_date-e_date)/(1000*60*60*24));
+											var a=(end_date.getMonth()-e_date.getMonth())+(end_date.getDate()-e_date.getDate());
+												if(a==0){
+													var new_json1=JSON.parse(JSON.stringify(data));
+													jso.push(new_json1);
+												}
+												else{
+													for(var i=0;i<=a;i++){
+														var new_json={};
+														new_json=JSON.parse(JSON.stringify(data));
+													if(i==0){
+														new_json.start=e_date.getTime()/1000;
+														new_json.end=new Date(e_date.getFullYear(),e_date.getMonth(),e_date.getDate()+i,23,59,59).getTime()/1000;
+														}
+													else if(i<a){		
+														new_json.start=new Date(e_date.getFullYear(),e_date.getMonth(),e_date.getDate()+i,00,00,00).getTime()/1000;
+														new_json.end=new Date(e_date.getFullYear(),e_date.getMonth(),e_date.getDate()+i,23,59,59).getTime()/1000;
+														}
+													else{
+														new_json.start=new Date(e_date.getFullYear(),e_date.getMonth(),e_date.getDate()+i,00,00,00).getTime()/1000;
+														new_json.end=end_date.getTime()/1000;
+														}
+												jso.push(new_json);
+												} }
+											});
+										
+									if (doc)
+										{
+
+											console.log(jso);
+											 $.each(jso,function(index,ev){
+											if(ev.start >= (todayDate.getTime()/1000) && ev.start <= (endDate.getTime()/1000)) {
+												if($(el).find('.portlet-calendar-error-message').length!=0)
+												{
+													$(el).find('.portlet-calendar-error-message').css('display','none');
+													$(el).find('.minical-portlet-event-add').css('display','none');
+												}
+											var e_date= new Date(ev.start*1000);
+											var len=$(el).find('.list').find('li').length;
+											if(len!=0){
+												$(el).find('.list').find('small').each(function(x) 
+												{
+													if(e_date.format('HH:MM')<$(this).text())
+													{$(this).parents('li').before('<li class="p-t-xs p-r-xs" style="color:'+ev.color+'"><span style="color : #58666e" class="text-cap word-break"><a class="minical-portlet-event" id='+ev.id+' data-date='+todayDate.getTime()+'>'+ev.title+'</a><br><small class="block m-t-n-xxs">'+ e_date.format('HH:MM') + ' </small></span></li>');
+													return false;}
+													if(x==len-1)
+														$(this).parents('.list').append('<li class="p-t-xs p-r-xs" style="color:'+ev.color+'"><span style="color : #58666e" class="text-cap word-break"><a class="minical-portlet-event" id='+ev.id+' data-date='+todayDate.getTime()+'>'+ev.title+'</a><br><small class="block m-t-n-xxs">'+ e_date.format('HH:MM') + ' </small></span></li>') ;
+
+												 });
+													}
+													else
+											$(el).find('.list').append('<li class="p-t-xs p-r-xs" style="color:'+ev.color+'"><span style="color : #58666e" class="text-cap word-break"><a class="minical-portlet-event" id='+ev.id+' data-date='+todayDate.getTime()+'>'+ev.title+'</a><br><small class="block m-t-n-xxs">'+ e_date.format('HH:MM') + ' </small></span></li>');
+											}
+											}); 
+											
+											
+											callback(jso);
+									   }
+										
+									
+										
+									});
+									
+									
+						} },{dataType :'agile-events'}
+							
+						
+							],
+						    
+							  
+							  
+							     eventRender: function (event, element, view) { 
+							    									 	var year = event.start.getFullYear(), month = event.start.getMonth() + 1, date = event.start.getDate();
+					                   var result = year + '-' + (month < 10 ? '0' + month : month) + '-' + (date < 10 ? '0' + date : date);
+					                   $(element).addClass(result);
+					                   $(element).attr('id',event.id);
+					                   	dayClasses.push(result);
+									   $('.fc-event').find('.fc-event-inner').css('display','none');
+
+										var count=$(el).find('.'+result).length;
+										if(count>3){
+											return false;
+											//$(element).hide();
+										}  
+								} ,
+								eventAfterRender: function (event, element, view) {
+									
+									eventsCount++;
+								if(totalEvents == 0){
+										totalEvents = $(el).find('#calendar_container').find('.fc-event').length;
+									}
+									var h=parseInt($(el).find('.fc-widget-content').css('height'));
+									var head=parseInt($(el).find('.fc-header').css('height'));
+									var top=element.position().top+h-25;
+									var left=element.position().left+5;
+											$(element).css('top',top);
+											$(element).css('left',left);
+									   
+		 if(eventsCount==totalEvents || eventsCount==(2*totalEvents)){
+			 var temp;
+			 var dayEventsTotalCount = totalEvents;
+			 if($(el).find('.fc-border-separate').find('tbody').find('tr:last').css('display')!="none"){
+			 if($(el).find('.fc-border-separate').find('tbody').find('tr').length==6 && ($(el).parent().attr('data-sizey')==1))
+				 $(el).find('.fc-border-separate').find('tbody').find('tr').find('.fc-first').find('div:first').css('min-height','23px');
+			 }
+			 $(el).find('.fc-border-separate').find('tbody').find('tr').each(function(index){
+				 if($(el).find('.fc-border-separate').find('tbody').find('tr').eq(index).find('.fc-first').find('.fc-day-content').find('div').height()> $(el).find('.fc-border-separate').find('tbody').find('tr').eq(index+1).find('.fc-first').find('.fc-day-content').find('div').height())
+					 temp= $(el).find('.fc-border-separate').find('tbody').find('tr').eq(index+1).find('.fc-first').find('.fc-day-content').find('div').height();
+				 else
+					 temp= $(el).find('.fc-border-separate').find('tbody').find('tr').eq(index).find('.fc-first').find('.fc-day-content').find('div').height();
+			 });
+			  $(el).find('.fc-border-separate').find('tbody').find('tr').each(function(index){
+				  $(this).find('.fc-first').find('.fc-day-content').find('div').css('height',temp);
+			  });
+											totalEvents = 0;
+											eventsCount = 0;
+											jso=[];
+          var classNamesArray = [];
+         $(el).find('#calendar_container').find('.fc-event').each(function(index){
+          if($.inArray($(this).attr('class').split(" ")[$(this).attr('class').split(" ").length-1], classNamesArray)==-1){
+           classNamesArray.push($(this).attr('class').split(" ")[$(this).attr('class').split(" ").length-1]);
+          }
+         });
+         $.each(classNamesArray,function(index, value){
+         	var dayEventsCount = 0;
+          $.each(dayClasses, function(index1, value1){
+           if(dayClasses[index1]==classNamesArray[index]){
+            dayEventsCount++;
+           }
+          });
+          if(eventsCount==(2*dayEventsTotalCount)){
+           dayEventsCount = dayEventsCount/2;
+          }
+          var pos = $('.'+this,el).eq(0).position();
+		  var eventsLength = $('.'+this,el).length;
+          var addPixels = Math.round(($(el).find('.fc-widget-header').eq(1).width()-10)/2);
+          if(eventsLength==1){
+           pos.left += addPixels;
+          }else if(eventsLength==2){
+           pos.left += addPixels;
+           pos.left -= 3;
+          }else if(eventsLength==3){
+           pos.left += addPixels;
+           pos.left -= 6;
+          }else{
+           pos.left += addPixels;
+           pos.left -= 10;
+          }
+		  pos.top += 8;
+          if($(el).parent().attr('data-sizey')==2){
+          // pos.top -= 20;
+          }else if($(el).parent().attr('data-sizey')==3){
+           //pos.top -= 35;
+          }
+          $('.'+this,el).each(function(index){
+            if(index>0){
+             $(this,el).css({"top": pos.top, "left":pos.left+(6*index)});
+             if(index>2){
+              $(this,el).hide();
+             }
+            }else if(index==0){
+             $(this,el).css({"top": pos.top, "left":pos.left});
+            }
+           });
+		   if(dayEventsCount>3){
+           var icon_pos = pos.left+(3*6);
+           $('.'+this,el).eq(eventsLength-1).after('<div class="plus-button pos-abs c-p" style="top: '+(pos.top-7)+'px;left: '+icon_pos+'px; color:lightgray;" title="'+(dayEventsCount-3)+' more">&nbsp;</div>');
+          }
+         });
+		dayClasses = [];
+         }
+		},
+								eventMouseover : function(event, jsEvent, view)
+						{
+							$(el).find('.portlet_header_icons').removeClass('vis-hide');
+							$(el).find('.fc-button').css('visibility','visible');
+							el.parent().css('z-index',3);
+							var reletedContacts = '';
+							var meeting_type = '';
+							if(CURRENT_AGILE_USER.domainUser.ownerPic=="" || CURRENT_AGILE_USER.domainUser.ownerPic=="no image")
+									event.ownerPic=gravatarImgForPortlets(25);
+							if (event.contacts)
+							{
+								if (event.contacts.length > 0)
+									reletedContacts += '<i class="icon-user text-muted m-r-xs"></i>';
+							}
+							if (event.contacts)
+							{
+								for (var i = 0; i < event.contacts.length; i++)
+								{
+									if (event.contacts[i].type == "PERSON")
+									{
+										var last_name = getPropertyValue(event.contacts[i].properties, "last_name");
+										if (last_name == undefined)
+											last_name = "";
+										reletedContacts += '<a class="text-info" href="#contact/' + event.contacts[i].id + '">' + getPropertyValue(
+												event.contacts[i].properties, "first_name") + ' ' + last_name + '</a>';
+									}
+									else
+									{
+										try
+										{
+											reletedContacts += '<a class="text-info" href="#company/' + event.contacts[i].id + '">' + getPropertyValue(
+													event.contacts[i].properties, "name") + '</a>';
+										}
+										catch (err)
+										{
+											console.log("error");
+										}
+									}
+									if (i != event.contacts.length - 1)
+										reletedContacts += ', ';
+								}
+							}
+							if (event.meeting_type && event.description)
+							{
+								meeting_type = '<i class="icon-comment-alt text-muted m-r-xs"></i><span>Meeting Type - ' + event.meeting_type + '</span><br/><span title=' + event.description + '>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' + event.description + '</span>';
+							}
+
+							else if (event.description)
+							{
+								meeting_type = '<i class="icon-comment-alt text-muted m-r-xs"></i><span title=' + event.description + '>' + event.description + '</span>';
+							}
+							var leftorright = 'bottom';
+							var pullupornot = '';
+							var popoverElement = '';
+							if(event.type=="AGILE"){
+								popoverElement = '<div class="fc-overlay ' + leftorright + '" style="width:100%;">' + '<div class="panel bg-white b-a pos-rlt p-sm">' + '<span class="arrow ' + leftorright + ' ' + pullupornot + '"></span>' + '<div class="h4 font-thin m-b-sm"><div class="pull-left text-ellipsis p-b-xs" style="width:100%;">' + event.title + '</div></div>' + '<div class="line b-b b-light"></div>' + '<div><i class="icon-clock text-muted m-r-xs"></i>' + event.start
+									.format('dd-mmm-yyyy HH:MM') + '<div class="pull-right" style="width:10%;"><img class="r-2x" src="' + event.ownerPic + '" height="20px" width="20px" title="' + event.owner.name + '"/></div></div>' + '<div class="text-ellipsis">' + reletedContacts + '</div>' + '<div class="text-ellipsis">' + meeting_type + '</div>' + '</div>' + '</div>';
+								$(this).append(popoverElement);
+								$(this).find('.fc-overlay').find('.arrow').css('top','70px');
+							}else{
+								popoverElement = '<div class="fc-overlay ' + leftorright + '" style="width:100%;">' + '<div class="panel bg-white b-a pos-rlt p-sm">' + '<span class="arrow ' + leftorright + ' ' + pullupornot + '"></span>' + '<div class="h4 font-thin m-b-sm"><div class="pull-left text-ellipsis p-b-xs" style="width:100%;">' + event.title + '</div></div>' + '<div class="line b-b b-light"></div>' + '<div><i class="icon-clock text-muted m-r-xs"></i>' + event.start
+									.format('dd-mmm-yyyy HH:MM') + '<div class="pull-right" style="width:10%;"></div></div>' + '<div class="text-ellipsis">' + reletedContacts + '</div>' + '<div class="text-ellipsis">' + meeting_type + '</div>' + '</div>' + '</div>';
+								$(this).append(popoverElement);
+							}
+							if(event.start.getDay()==4 || event.start.getDay()==5 || event.start.getDay()==6){
+								$(this).find('.fc-overlay').css('left','-180px');
+								$(this).find('.fc-overlay').find('.arrow').css('left','91%');
+							}
+							if(reletedContacts!='' || meeting_type!=''){
+								$(this).find('.fc-overlay').css('top','-95px');
+								$(this).find('.fc-overlay').find('.arrow').css('top','84px');
+							}
+							if(reletedContacts!='' && meeting_type!=''){
+								$(this).find('.fc-overlay').css('top','-108px');
+								$(this).find('.fc-overlay').find('.arrow').css('top','98px');
+							}
+							$(this).find('.fc-overlay').show();
+						},
+						eventMouseout : function(event, jsEvent, view)
+						{
+							el.parent().css('z-index',2);
+							$(this).find('.fc-overlay').hide();
+							$(this).find('.fc-overlay').remove();
+						},
+								
+								dayClick : function(date,allDay,jsEvent,view){
+									//createCookie("current_date_calendar", date);
+									App_Portlets.refetchEvents = false;
+									var days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+									var current_date = new Date();
+									if(date.getFullYear()==current_date.getFullYear() && date.getMonth()==current_date.getMonth() && date.getDate()==current_date.getDate()){
+										$(el).find('.events_show').empty().append('<div class="show p-t-xs text-md text-center">Today</div><ul class="list"></ul>');
+									}else{
+										$(el).find('.events_show').empty().append('<div class="show p-t-xs text-md text-center">'+days[date.getDay()]+', ' +date.format('dd mmm')+' </div><ul class="list"></ul>');
+									}
+									if($(el).parent().attr('data-sizey')==2)
+											   $(el).find('.show').css('padding-top','70px');
+										   else if($(el).parent().attr('data-sizey')==3)
+											   $(el).find('.show').css('padding-top','120px');
+									var endDate = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 23, 59, 59);
+									var array= $('#calendar_container',el).fullCalendar('clientEvents', function(event) {
+										return (event.start >= date && event.start < endDate);
+								});
+								if(array.length!=0){
+								$.each(array,function(index){
+									var len=$(el).find('.list').find('li').length;
+												if(len!=0){
+												$(el).find('.list').find('small').each(function(x) 
+												{
+													if(array[index].start.format('HH:MM')<$(this).text())
+													{$(this).parents('li').before('<li class="p-t-xs p-r-xs" style="color : '+array[index].color+'"><span style="color : #58666e" class="text-cap word-break"><a class="minical-portlet-event" id='+array[index].id+' data-date='+date.getTime()+'>'+array[index].title+'</a><br><small class="block m-t-n-xxs">'+ array[index].start.format('HH:MM') + ' </small></span></li>');
+													return false;}
+													
+													if(x==len-1)
+														$(this).parents('.list').append('<li class="p-t-xs p-r-xs" style="color : '+array[index].color+'"><span style="color : #58666e" class="text-cap word-break"><a class="minical-portlet-event" id='+array[index].id+' data-date='+date.getTime()+'>'+array[index].title+'</a><br><small class="block m-t-n-xxs">'+ array[index].start.format('HH:MM') + ' </small></span></li>');
+												 });
+									}
+									else
+									$(el).find('.list').append('<li class="p-t-xs p-r-xs" style="color : '+array[index].color+'"><span style="color : #58666e" class="text-cap word-break"><a class="minical-portlet-event" id='+array[index].id+' data-date='+date.getTime()+'>'+array[index].title+'</a><br><small class="block m-t-n-xxs">'+ array[index].start.format('HH:MM') + ' </small></span></li>');
+									
+								});
+								}
+								else if(!App_Portlets.refetchEvents){
+									$(el).find('.events_show').append('<div class="portlet-calendar-error-message">No appointments for the day</div><div class="text-center"><a class="minical-portlet-event-add text-info" id='+date.getTime()+' data-date='+date.getTime()+'>+Add</a></div>');
+								}
+								}
+							    	
+						}); 
+
+							
+}
+
+function loadingGoogleEvents(el,startTime,endTime){
+	
+	$.getJSON('core/api/calendar-prefs/get', function(response)
+	{
+		if(response==undefined)
+		{
+			setTimeout(function(){
+				if($(el).find('.list').find('li').length==0 && $(el).find('.portlet-calendar-error-message').length==0)
+											{
+												var date=new Date();
+												$(el).find('.events_show').append('<div class="portlet-calendar-error-message">No appointments for the day</div><div class="text-center"><a class="minical-portlet-event-add text-info" id='+date.getTime()+' data-date='+date.getTime()+'>+Add</a></div>');
+											}
+			},10000);
+			eraseCookie('current_date_calendar');
+		}
+		console.log(response);
+		if (response)
+		{
+			if(typeof gapi != "undefined" && isDefined(gapi) && isDefined(gapi.client) && isDefined(gapi.client.calendar)) 
+			{googledata(el,response,startTime,endTime);
+				return;
+			}
+		
+
+			head.js('https://apis.google.com/js/client.js', '/lib/calendar/gapi-helper.js', function()
+			{
+				setupGC(function()
+				{
+
+					googledata(el,response,startTime,endTime);
+					return;
+				});
+			});
+		}
+	});
+	
+}
+
+function init_cal(el){
+	var fc = $.fullCalendar;
+	fc.sourceFetchers = [];
+	// Transforms the event sources to Google Calendar Events
+	fc.sourceFetchers.push(function(sourceOptions, start, end) {
+		if (sourceOptions.dataType == 'agile-events')
+		 loadingGoogleEvents(el,start.getTime()/1000,end.getTime()/1000);
+	});
+	
+}
+
+function googledata(el,response,startTime,endTime)
+{
+	gapi.auth.setToken({ access_token : response.access_token, state : "https://www.googleapis.com/auth/calendar" });
+
+					var current_date = new Date();
+					var timezone_offset = current_date.getTimezoneOffset();
+					var startDate = new Date((startTime * 1000)-(timezone_offset*60*1000));
+       				var gDateStart = startDate.toISOString();
+       				var endDate = new Date((endTime * 1000)-(timezone_offset*60*1000));
+       				var gDateEnd = endDate.toISOString();
+					// Retrieve the events from primary
+					var request = gapi.client.calendar.events
+								.list({ 'calendarId' : 'primary', maxResults : 25, singleEvents : true, orderBy : 'startTime', timeMin : gDateStart, timeMax : gDateEnd });
+						request.execute(function(resp)
+						{
+							var events = new Array();
+							console.log(resp);
+							for (var j = 0; j < resp.items.length; j++)
+							{
+								var fc_event = google2fcEvent(resp.items[j]);
+								  fc_event.startDate=new Date(fc_event.start);
+								  fc_event.end=new Date(fc_event.end);
+								  fc_event.color='#3a3f51';
+								  fc_event.backgroundColor='#3a3f51';
+								   if(fc_event.allDay==true){
+									  fc_event.start = new Date(fc_event.startDate.getTime()+fc_event.startDate.getTimezoneOffset()*60*1000);
+									  fc_event.end= new Date(new Date(fc_event.google.end.date).getTime()+fc_event.startDate.getTimezoneOffset()*60*1000);
+									  var a=(fc_event.end.getMonth()-fc_event.startDate.getMonth())+(fc_event.end.getDate()-fc_event.start.getDate());
+									  if(a==1){
+										  fc_event.start=fc_event.start.getTime()/1000;
+										  fc_event.end=(fc_event.end.getTime()-1)/1000;
+										  $('#calendar_container',el).fullCalendar('renderEvent',fc_event);
+											events.push(fc_event);
+									  }
+									  else{
+													for(var i=0;i<a;i++){
+														var new_json={};
+														new_json=JSON.parse(JSON.stringify(fc_event));
+													if(i==0){
+														new_json.start=fc_event.start.getTime()/1000;
+														new_json.end=new Date(fc_event.start.getFullYear(),fc_event.startDate.getMonth(),fc_event.startDate.getDate()+i,23,59,59).getTime()/1000;
+														}
+													else if(i<a){		
+														new_json.start=new Date(fc_event.start.getFullYear(),fc_event.start.getMonth(),fc_event.start.getDate()+i,00,00,00).getTime()/1000;
+														new_json.end=new Date(fc_event.start.getFullYear(),fc_event.start.getMonth(),fc_event.start.getDate()+i,23,59,59).getTime()/1000;
+														}
+													else{
+														new_json.start=new Date(fc_event.start.getFullYear(),fc_event.start.getMonth(),fc_event.start.getDate()+i,00,00,00).getTime()/1000;
+														new_json.end=fc_event.end.getTime()/1000;
+														}
+														console.log(new_json);
+														$('#calendar_container',el).fullCalendar('renderEvent',new_json);
+														events.push(new_json);
+													}
+												}
+									  
+								  } 
+								  else{
+								//var a=Math.round((fc_event.end-fc_event.start)/(1000*60*60*24));
+								var a=(fc_event.end.getMonth()-fc_event.startDate.getMonth())+(fc_event.end.getDate()-fc_event.startDate.getDate());
+											
+												if(a==0){
+													fc_event.start=fc_event.startDate.getTime()/1000;
+													fc_event.end=fc_event.end.getTime()/1000;
+													$('#calendar_container',el).fullCalendar('renderEvent',fc_event);
+													events.push(fc_event);
+												}
+												else{
+													for(var i=0;i<=a;i++){
+														var new_json={};
+														new_json=JSON.parse(JSON.stringify(fc_event));
+													if(i==0){
+														new_json.start=fc_event.startDate.getTime()/1000;
+														new_json.end=new Date(fc_event.startDate.getFullYear(),fc_event.startDate.getMonth(),fc_event.startDate.getDate()+i,23,59,59).getTime()/1000;
+														}
+													else if(i<a){		
+														new_json.start=new Date(fc_event.startDate.getFullYear(),fc_event.startDate.getMonth(),fc_event.startDate.getDate()+i,00,00,00).getTime()/1000;
+														new_json.end=new Date(fc_event.startDate.getFullYear(),fc_event.startDate.getMonth(),fc_event.startDate.getDate()+i,23,59,59).getTime()/1000;
+														}
+													else{
+														new_json.start=new Date(fc_event.startDate.getFullYear(),fc_event.startDate.getMonth(),fc_event.startDate.getDate()+i,00,00,00).getTime()/1000;
+														new_json.end=fc_event.end.getTime()/1000;
+														}
+														console.log(new_json);
+														$('#calendar_container',el).fullCalendar('renderEvent',new_json);
+														events.push(new_json);
+													}
+												}
+								  }
+								
+
+							}
+							var len=$(".events_show").find('.list').find('li').length;
+							var date=new Date();
+							 $.each(events,function(index,ev){
+											 var todayDate=new Date(date.getFullYear(), date.getMonth(), date.getDate(),00,00,00);
+									   var endDate=new Date(date.getFullYear(), date.getMonth(), date.getDate(),23,59,59);
+									   
+									   if(readCookie('current_date_calendar')!=null)
+											{
+												var cookie_date=new Date(readCookie('current_date_calendar'));
+												todayDate=cookie_date;
+												endDate=new Date(cookie_date.getFullYear(), cookie_date.getMonth(), cookie_date.getDate(),23,59,59);
+												
+											}
+											if(ev.start.getTime() >= (todayDate.getTime()) && ev.start.getTime() <= (endDate.getTime())) {	
+											if(len!=0){
+												$(el).find('.list').find('small').each(function( index ) 
+												{
+													if(ev.start.format('HH:MM')<$(this).text())
+													{$(this).parents('li').before('<li class="p-t-xs p-r-xs" style="color:'+ev.color+'"><span style="color : #58666e" class="text-cap word-break"><a class="minical-portlet-event" id='+ev.id+' data-date='+date.getTime()+'>'+ev.title+'</a><br><small class="block m-t-n-xxs">'+ ev.start.format('HH:MM') + ' </small></span></li>');
+													return false;}
+													/* else
+													$(this).parents('li').after('<li class="p-t-xs p-r-xs" style="color:'+ev.color+'"><span style="color : #58666e" class="text-cap word-break"><a class="minical-portlet-event" id='+ev.id+' data='+ev+'>'+ev.title+'</a><br><small class="block m-t-n-xxs">'+ ev.start.format('HH:MM') + ' </small></span></li>') ;
+												 */
+												 });
+											}
+											else
+											 $(el).find('.list').append('<li class="p-t-xs p-r-xs" style="color:'+ev.color+'"><span style="color : #58666e" class="text-cap word-break"><a class="minical-portlet-event" id='+ev.id+' data-date='+date.getTime()+'>'+ev.title+'</a><br><small class="block m-t-n-xxs">'+ ev.start.format('HH:MM') + ' </small></span></li>');
+											}
+											});
+											eraseCookie('current_date_calendar');
+											setTimeout(function(){
+												//eraseCookie('current_date_calendar');
+											if($(el).find('.list').find('li').length==0 && $(el).find('.portlet-calendar-error-message').length==0)
+											{
+												$(el).find('.events_show').append('<div class="portlet-calendar-error-message">No appointments for the day</div><div class="text-center"><a class="minical-portlet-event-add text-info" id='+date.getTime()+' data-date='+date.getTime()+'>+Add</a></div>');
+											}
+											},10000);
+											
+							
+						});
+}
+function getaspectratio(el)
+{
+	var width;
+	var height;
+	if($(el).parent().attr('data-sizex')==1)
+	{
+		$(el).find('#calendar_container').css("padding","0px");
+		width=$(el).find('#calendar_container').width();
+		if($(el).parent().attr('data-sizey')==1)
+		height=$(el).height()-25;
+		else if($(el).parent().attr('data-sizey')==2)
+				height=$(el).height()-200;
+			else
+				height=$(el).height()-350;
+	}
+	if($(el).parent().attr('data-sizex')==2)
+	{
+		$(el).find('#calendar_container').css("padding","0px 50px 0px");
+		width=$(el).find('#calendar_container').width();
+		if($(el).parent().attr('data-sizey')==1)
+		height=$(el).height()-25;
+		else if($(el).parent().attr('data-sizey')==2)
+				height=$(el).height()-200;
+			else
+				height=$(el).height()-350;
+	}
+	if($(el).parent().attr('data-sizex')==3)
+	{
+		$(el).find('#calendar_container').css("padding","0px 100px 0px");
+		width=$(el).find('#calendar_container').width();
+		if($(el).parent().attr('data-sizey')==1)
+		height=$(el).height()-25;//width=$(el).find('#calendar_container').width()
+		else if($(el).parent().attr('data-sizey')==2)
+				height=$(el).height()-200;
+			else
+				height=$(el).height()-350
+	}
+	return (width/height);
+}
+
+
+var portlet_utiity = {
+
+  addTracks: function(tracks, base_model, elData){
+  		var options = '';
+		$.each(tracks,function(index,trackObj){
+			if(base_model.get('settings').track==0 && trackObj.name=="Default")
+				options+="<option value="+trackObj.id+" selected='selected'>"+trackObj.name+"</option>";
+			else if(base_model.get('settings').track==trackObj.id)
+				options+="<option value="+trackObj.id+" selected='selected'>"+trackObj.name+"</option>";
+			else
+				options+="<option value="+trackObj.id+">"+trackObj.name+"</option>";
+		});
+		
+		$('#track', elData).html(options);
+		$('.loading-img').hide();
+		$("#deals", elData).find('option[value='+ base_model.get("settings").deals +']').attr("selected", "selected");
+  },
+
+  /**
+	 * getting flitered contact portlet header name
+	 */
+  get_filtered_contact_header : function(base_model, callback){
+
+  		var filter_name = base_model.get("settings").filter;
+
+  		if (filter_name == 'contacts')
+			return callback("All Contacts");
+		else if (filter_name == 'companies')
+			return callback("All Companies");
+		else if (filter_name == 'recent')
+			return header_name = "Recent Contacts";
+		else if (filter_name == 'myContacts')
+			return callback("My Contacts");
+		else if (filter_name == 'leads')
+			return callback("Leads");
+		else
+		{
+
+			var contactFilter = $.ajax({ type : 'GET', url : '/core/api/filters/' + filter_name, dataType : 'json', success : function(data)
+			{
+				var header_name = '';
+				if (data != null && data != undefined)
+					header_name = "" + data.name;
+
+				if (!header_name){
+					header_name = "Contact List";
+				}
+					
+				return callback(header_name);
+
+			} });
+		}
+
+  }, 
+
+  /**
+	 * getting flitered contact portlet header name
+	 */
+  get_deals_funnel_portlet_header : function(base_model, callback){
+
+  	var track_id = base_model.get("settings").track;
+
+  	App_Portlets.track_length = 0;
+	$.ajax({ type : 'GET', url : '/core/api/milestone/pipelines', dataType : 'json', success : function(data)
+	{
+		App_Portlets.track_length = data.length;
+		App_Portlets.deal_tracks = data;
+
+		if (App_Portlets.track_length > 1)
+		{
+			if (track_id == 0)
+				return callback("Default");
+			else
+			{
+				var milestone = $.ajax({ type : 'GET', url : '/core/api/milestone/' + track_id, dataType : 'json', success : function(data)
+				{
+					if (data != null && data != undefined)
+						return callback("" + data.name + "");
+				} });
+			}
+		}
+
+	} });
+	
+ },
+
+ enable_users_multi_select_option: function(selector, elData){
+
+ 	if(selector == "ms-calls-user-list"){
+ 		$('#ms-calls-user-list', elData).remove();
+		head.js(LIB_PATH + 'lib/jquery.multi-select.js', function(){
+			$('#calls-user-list',elData).multiSelect();
+			$('#ms-calls-user-list .ms-selection', elData).children('ul').addClass('multiSelect').attr("name", "calls-user-list").attr("id", "calls-user");
+			$('#ms-calls-user-list .ms-selectable .ms-list', elData).css("height","130px");
+			$('#ms-calls-user-list .ms-selection .ms-list', elData).css("height","130px");
+			$('#ms-calls-user-list', elData).addClass('portlet-user-ms-container');					
+		});
+ 	}
+ 	
+
+ 	if(selector == "ms-task-report-user-list"){
+
+ 		$('#ms-task-report-user-list', elData).remove();
+		head.js(LIB_PATH + 'lib/jquery.multi-select.js', function(){
+			$('#task-report-user-list',elData).multiSelect();
+			$('#ms-task-report-user-list .ms-selection', elData).children('ul').addClass('multiSelect').attr("name", "task-report-user-list").attr("id", "task-report-user");
+			$('#ms-task-report-user-list .ms-selectable .ms-list', elData).css("height","130px");
+			$('#ms-task-report-user-list .ms-selection .ms-list', elData).css("height","130px");
+			$('#ms-task-report-user-list', elData).addClass('portlet-user-ms-container');					
+		});
+
+ 	}
+
+	if(selector == "ms-category-list"){
+
+		$('#ms-category-list', elData).remove();
+		$('#ms-user-list', elData).remove();
+		head.js(LIB_PATH + 'lib/jquery.multi-select.js', function(){
+			$('#category-list, #user-list',elData).multiSelect();
+			$('#ms-category-list .ms-selection', elData).children('ul').addClass('multiSelect').attr("name", "category-list").attr("id", "category");
+			$('#ms-user-list .ms-selection', elData).children('ul').addClass('multiSelect').attr("name", "user-list").attr("id", "user");
+			$('#ms-user-list .ms-selectable .ms-list', elData).css("height","130px");
+			$('#ms-user-list .ms-selection .ms-list', elData).css("height","130px");
+			$('#ms-category-list .ms-selectable .ms-list', elData).css("height","105px");
+			$('#ms-category-list .ms-selection .ms-list', elData).css("height","105px");
+			$('#ms-user-list', elData).addClass('portlet-user-ms-container');
+			$('#ms-category-list', elData).addClass('portlet-category-ms-container');					
+		});
+	}
+	
+
+ },
+
+
+};

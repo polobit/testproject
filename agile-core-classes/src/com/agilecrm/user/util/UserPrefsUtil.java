@@ -150,7 +150,7 @@ public class UserPrefsUtil
 
 	    System.out.println(o.toString());
 
-	    return mappedString;
+	    return o.toString();
 	}
 	catch (JSONException e)
 	{

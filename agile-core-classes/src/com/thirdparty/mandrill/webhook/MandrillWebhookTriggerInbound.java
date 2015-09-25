@@ -127,7 +127,8 @@ public class MandrillWebhookTriggerInbound extends HttpServlet
 		    }
 
 		    System.out.println("saving contact");
-		    contact.setContactOwner(owner);
+		    if(newContact)
+		      contact.setContactOwner(owner);
 
 		    try
 		    {

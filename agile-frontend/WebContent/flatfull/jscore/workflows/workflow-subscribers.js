@@ -51,7 +51,7 @@ function toggle_active_contacts_bulk_actions_dropdown(clicked_ele, isBulk)
 	$('#content').find('#subscribers-bulk-select').css('display', 'none');
 
 	// When checked show Delete button
-	if ($(clicked_ele).attr('checked') == 'checked')
+	if ($(clicked_ele).is(':checked'))
 	{
 		$('#content').find('#subscribers-block').css('display', 'block');
 		
@@ -214,5 +214,12 @@ function fill_subscribers_slate(id, type)
 		    }
 		}
 
-	$("#" + id).html(getTemplate("empty-collection-model", SUBSCRIBERS_PAD_CONTENT[type]));
+	
+	getTemplate("empty-collection-model", SUBSCRIBERS_PAD_CONTENT[type], undefined, function(template_ui){
+		if(!template_ui)
+			  return;
+
+		$("#" + id).html($(template_ui));
+	}, "#" + id);
+
 }
