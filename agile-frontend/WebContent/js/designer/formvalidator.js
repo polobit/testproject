@@ -52,6 +52,33 @@ function initValidator(selector, callback) {
 	     return true;
 	     
 	  });
+
+	  // Merge Fields validation
+	  $.tools.validator.fn(":input, textarea", function(input, value){
+
+	     if(value == undefined)
+	    	 value = '';
+	     
+	     // if Handlebars undefined
+	     if(!window.parent.Handlebars)
+	     	return true;
+
+	     var template = window.parent.Handlebars.compile(value);
+
+	     try{
+	    	 template({});
+	     }
+	     catch(err){
+	    	 var error = err.toString();
+
+		     // Only shows error missing closes. Skip other errors
+		     if(error.indexOf('CLOSE') != -1)
+		     	return error.split('----')[0];
+	     }
+		  
+	     return true;
+	     
+	  });
 	
     // Adds wall effect to show the the first error
     $.tools.validator.addEffect("wall", function (errors, event) {
