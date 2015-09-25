@@ -23,6 +23,8 @@ import com.google.gdata.client.contacts.ContactsService;
 import com.google.gdata.data.contacts.ContactEntry;
 import com.google.gdata.data.contacts.ContactFeed;
 import com.google.gdata.data.contacts.GroupMembershipInfo;
+import com.google.gdata.data.extensions.City;
+import com.google.gdata.data.extensions.Country;
 import com.google.gdata.data.extensions.Email;
 import com.google.gdata.data.extensions.FamilyName;
 import com.google.gdata.data.extensions.FullName;
@@ -32,6 +34,9 @@ import com.google.gdata.data.extensions.Name;
 import com.google.gdata.data.extensions.OrgTitle;
 import com.google.gdata.data.extensions.Organization;
 import com.google.gdata.data.extensions.PhoneNumber;
+import com.google.gdata.data.extensions.PostCode;
+import com.google.gdata.data.extensions.Region;
+import com.google.gdata.data.extensions.Street;
 import com.google.gdata.data.extensions.StructuredPostalAddress;
 import com.thirdparty.google.ContactPrefs;
 import com.thirdparty.google.ContactPrefs.SYNC_TYPE;
@@ -152,6 +157,7 @@ public class ContactSyncUtil
 	addEmailsToGoogleContact(contact, createContact);
 	addPhoneNumbersToGoogleContact(contact, createContact);
 	addOrganizationDetailsToGoogleContact(contact, createContact);
+	addAddressToGoogleContact(contact, createContact);
 
 	// If group is defined then group id is added which save contact in
 	// specified group.
@@ -287,6 +293,79 @@ public class ContactSyncUtil
     	    	createContact.addOrganization(company);
     	}
     }
+    
+    /**
+	 * Adds Structural postal address into Google contact
+	 * 
+	 * @param contact
+	 * @param googleContactEntry
+	 */
+	public static void addAddressToGoogleContact(Contact contact, ContactEntry googleContactEntry)
+	{
+		try
+		{
+			// Adds Address for contact
+			ContactField addressField = contact.getContactField(Contact.ADDRESS);
+			if (addressField != null && !StringUtils.isEmpty(addressField.value))
+			{
+				StructuredPostalAddress structuredPostalAddress = new StructuredPostalAddress();
+				try
+				{
+					List<StructuredPostalAddress> postalAddresses = googleContactEntry.getStructuredPostalAddresses();
+					org.json.JSONObject addressJSON = new org.json.JSONObject(addressField.value);
+					if (addressJSON.has("address") && StringUtils.isNotBlank(addressJSON.getString("address")))
+						structuredPostalAddress.setStreet(new Street(addressJSON.getString("address")));
+
+					if (addressJSON.has("city") && StringUtils.isNotBlank(addressJSON.getString("city")))
+						structuredPostalAddress.setCity(new City(addressJSON.getString("city")));
+
+					if (addressJSON.has("country") && StringUtils.isNotBlank(addressJSON.getString("country")))
+						structuredPostalAddress.setCountry(new Country(null, addressJSON.getString("country")));
+
+					if (addressJSON.has("state") && StringUtils.isNotBlank(addressJSON.getString("state")))
+						structuredPostalAddress.setRegion(new Region(addressJSON.getString("state")));
+
+					if (addressJSON.has("zip") && StringUtils.isNotBlank(addressJSON.getString("zip")))
+						structuredPostalAddress.setPostcode(new PostCode(addressJSON.getString("zip")));
+
+					String addressSubType = addressField.subtype;
+
+					if (StringUtils.isNotBlank(addressSubType))
+					{
+						if (addressSubType.equalsIgnoreCase("HOME"))
+							structuredPostalAddress.setRel("http://schemas.google.com/g/2005#"
+									+ addressSubType.toLowerCase());
+						else if (addressSubType.equalsIgnoreCase("WORK"))
+							structuredPostalAddress.setRel("http://schemas.google.com/g/2005#"
+									+ addressSubType.toLowerCase());
+						else
+							structuredPostalAddress.setLabel("Postal");
+					}
+					else
+						structuredPostalAddress.setLabel("Postal");
+
+					if (postalAddresses != null & postalAddresses.size() > 0)
+					{
+						if (postalAddresses.size() == 1)
+							postalAddresses.set(0, structuredPostalAddress);
+						else
+							googleContactEntry.addStructuredPostalAddress(structuredPostalAddress);
+					}
+					else
+						googleContactEntry.addStructuredPostalAddress(structuredPostalAddress);
+
+				}
+				catch (org.json.JSONException e)
+				{
+					e.printStackTrace();
+				}
+			}
+		}
+		catch (Exception e)
+		{
+			System.out.println("Error occured in adding address to google contact" + e.getMessage());
+		}
+	}
 
     /**
      * Retrieves contacts from google based on emails in the contact. Used to
