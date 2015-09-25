@@ -1381,7 +1381,12 @@ function pieforReports(url, selector, name)
 							if(selector=="lossreasonpie-chart")
 								url_path='/core/api/categories?entity_type=DEAL_LOST_REASON';
 							else
-								url_path='/core/api/categories?entity_type=DEAL_SOURCE'
+								url_path='/core/api/categories?entity_type=DEAL_SOURCE';
+							if(pieData!=undefined && pieData.length==0){
+								createAPieChart(selector, name, animation, AllData, pieData);
+							}
+							else{
+
 							  $.ajax({ type : 'GET', url : url_path, dataType : 'json',
           				  success: function(data){
                 			$.each(data,function(index,deals){
@@ -1398,7 +1403,7 @@ function pieforReports(url, selector, name)
 
             	    }		
             	     });
-							
+					}
 						});
 	});
 	}
