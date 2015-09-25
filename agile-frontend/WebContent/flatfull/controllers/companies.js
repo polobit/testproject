@@ -106,11 +106,11 @@ var CompaniesRouter = Backbone.Router
 		}
 
 		// Checks if user is using custom view. It check for grid view
-		if (grid_view || readCookie("agile_contact_view"))
+		/*if (grid_view || readCookie("agile_contact_view"))
 		{
 			template_key = "contacts-grid";
 			individual_tag_name = "div";
-		}
+		}*/
 
 		// Default url for contacts route
 		var url = '/core/api/contacts/companies/list';
