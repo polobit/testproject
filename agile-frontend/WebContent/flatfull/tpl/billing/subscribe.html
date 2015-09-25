@@ -17,7 +17,11 @@
 											<li role="presentation" id="emailtab" data-tab="2">
 												<a href="#email-content" name="email-content" aria-control="email-content" role="tab" data-toggle="tab" id="emails">Email</a>
 											</li>
-			</ul>
+{{#check_plan "FREE"}}
+<div class="text-center" style="font-size: 13px; line-height: 16px;padding: 8px 8px 8px;width: auto; position: relative;
+"><span style="padding: 5px 15px 5px 15px;border: 1px solid #f0c36d;background-color: #f9edbe;">You are currently on FREE plan</span></div>
+{{/check_plan}}
+</ul>
             <div class="tab-content" style=" display: block;">
             	<div class="tab-pane active" role="tab-panel" id="users-content">
 <div class="panel-body p-t-none">
@@ -532,24 +536,6 @@ users.
 
 
    </div> <!-- End of panel wrapper-md -->
-
-{{else}}
-   <div class="panel wrapper-md m-t-xl">
-      <p class="b-b b-light p-b-xs">
-         Current Plan
-      </p>
-      
-You are currently on a FREE plan with {{#if plan.quantity}}
-                            {{plan.quantity}}
-                            {{else}}
-                            1
-                            {{/if}} {{#if_equals quantity 1}}  user.
-{{else}}
-users.
-{{/if_equals}}
-
-   </div> <!-- End of panel wrapper-md -->
-
   
 {{/getSubscriptionBasedOnPlan}}
 {{#if billingData}}
