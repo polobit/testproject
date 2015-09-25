@@ -149,9 +149,9 @@ var SubscribeRouter = Backbone.Router
 					$('#billing-settings-tab-content').html($(template_ui));
 					$("#invoice-details-holder").html(getRandomLoadingImg());
 					// $('#content').find('#billing-settings-tab-content').html("");
-					$('#content').find('#BillingSettingsTab .select').removeClass('select');
-					$('#content').find('.invoice-details-tab').addClass('select');
-					$(".active").removeClass("active");
+//					$('#content').find('#BillingSettingsTab .select').removeClass('select');
+//					$('#content').find('.invoice-details-tab').addClass('select');
+//					$(".active").removeClass("active");
 				}, "#billing-settings-tab-content");
 				var that = this;
 				var subscribe_plan = new Base_Model_View({ url : "core/api/subscription?reload=true", template : "subscribe-new", window : 'subscribe',
@@ -279,7 +279,7 @@ var SubscribeRouter = Backbone.Router
 					{
 						id = $('#regular_plan');
 					}
-					else if (planType.indexOf('PRO') == 0)
+					else if (planType.indexOf('ENTERPRISE') == 0)
 					{
 						id = $('#pro_plan');
 					}
@@ -466,6 +466,7 @@ var SubscribeRouter = Backbone.Router
 			 */
 			purchasePlan : function()
 			{
+
 				// If plan is not defined i.e., reloaded, or plan not chosen
 				// properly,
 				// then page is navigated back to subscription/ choose plan page

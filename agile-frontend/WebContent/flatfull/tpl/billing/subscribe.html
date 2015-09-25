@@ -657,6 +657,5 @@ users.
 </script>
 
 <script id="latest-invoice-template" type="text/html">
-Amount: ${{numeric_operation this.total 100 "/"}}<br>
-Date: {{epochToHumanDate "mm/dd/yyyy" periodStart}}
+ Thank you for your last payment of ${{numeric_operation this.total 100 "/"}} on {{epochToHumanDate "mmm dd, yyyy" periodStart}}.
 </script>

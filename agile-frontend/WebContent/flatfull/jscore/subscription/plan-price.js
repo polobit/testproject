@@ -486,8 +486,16 @@ function initializeSubscriptionListeners()
 
 		if (IS_HAVING_MANDRILL)
 		{
-			$("#emails_total_cost").html(quantity * 2);
-			$("#email_rate").html("$2");
+			if(emails < 5000)
+			{
+				$("#emails_total_cost").html(quantity * 0);
+				$("#email_rate").html("$2");
+			}
+			else
+			{
+				$("#emails_total_cost").html(quantity * 2);
+				$("#email_rate").html("$2");
+			}
 		}
 		else
 		{
