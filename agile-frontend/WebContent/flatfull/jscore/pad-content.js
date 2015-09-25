@@ -214,15 +214,14 @@ function fill_slate(id, el, key) {
 			json = CONTENT_JSON["filter_results_companies"];
 		}
 
-		else if((route_path == "companies") ){
-
-			template_name = "empty-collection-model";
+		if((route_path == "filter_results")){
+			template_name = "empty-collection-contacts-model";
 			json = CONTENT_JSON[route_path];
-			
-		}
+		} 
+
 			
 		else{
-			template_name = "empty-collection-contacts-model";
+			template_name = "empty-collection-model";
 			json = CONTENT_JSON[route_path];
 		}
 		

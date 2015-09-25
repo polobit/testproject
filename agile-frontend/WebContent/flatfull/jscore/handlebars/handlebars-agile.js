@@ -374,6 +374,59 @@ function getPropertyValue(items, name)
 	}
 }
 
+
+/**
+ * appends , between contact fields
+ * @param items
+ * @param name
+ * @returns {String}
+ */
+
+function getPropertyValueByCheckingExistance(items, name)
+{
+	if (items == undefined)
+		return;
+
+	for (var i = 0, l = items.length; i < l; i++)
+	{
+		if (items[i].name == name){
+			if(items[i].value){
+				return ',';
+			}
+			
+		}
+	}
+}
+
+
+/**
+ * checks the contact properties existance
+ * @param items
+ * @param name
+ * @param name1
+ * @returns {String}
+ */
+function checkPropertyValueExistance(items,name,name1){
+
+	if (items == undefined)
+		return "none";
+
+	var valueExists=false;
+	for (var i = 0, l = items.length; i < l; i++)
+	{
+		if (items[i].name == name || items[i].name1 == name1){
+			if(items[i].value){
+				valueExists=true;
+			}
+			
+		}
+	}
+	if(valueExists==true)
+		return 'block';
+	else
+		return 'none';
+}
+
 /**
  * Iterates the given "items", to find all matches with the given "name" and
  * concats each matched value by given separator

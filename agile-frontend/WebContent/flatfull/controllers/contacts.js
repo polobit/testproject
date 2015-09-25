@@ -288,7 +288,7 @@ var ContactsRouter = Backbone.Router.extend({
 					setupContactFilterList(cel, tag_id);
 					setUpContactView(cel);
 				}
-				
+				$('[data-toggle="tooltip"]').tooltip();
 				start_tour("contacts", el);
 			} });
 
@@ -306,6 +306,7 @@ var ContactsRouter = Backbone.Router.extend({
 		}
 		$(".active").removeClass("active");
 		$("#contactsmenu").addClass("active");
+		$('[data-toggle="tooltip"]').tooltip();
 	
 
 	},

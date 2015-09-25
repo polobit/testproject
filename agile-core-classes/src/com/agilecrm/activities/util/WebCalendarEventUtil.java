@@ -1127,6 +1127,9 @@ public class WebCalendarEventUtil
 	{
 		if ("null".equalsIgnoreCase(hours))
 			return null;
+		
+		return hours;
+	/*
 		String str = hours.substring(0, 2);
 		String mins = hours.substring(3);
 		if ("00".equals(str) || "24".equals(str))
@@ -1146,7 +1149,7 @@ public class WebCalendarEventUtil
 		{
 			return time_map.get(str) + ":" + mins + "pm";
 		}
-
+*/
 	}
 
 	/**
