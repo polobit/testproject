@@ -6604,18 +6604,19 @@ Handlebars.registerHelper('get_campaign_type_filter', function(filter_name)
 		return options.fn(this);
 	});
 	
-	Handlebars.registerHelper('proToEnterprise', function(options)
+	Handlebars.registerHelper('proToEnterprise', function(plan, options)
 			{
 		        if (plan)
 			    {
+		        	var temp;
 				  if (plan.planType == "PRO_MONTHLY")
 				  {
-					plan.planType = "ENTERPRISE_MONTHLY";
+					temp = "ENTERPRISE_MONTHLY";
 				  }
 				  else if (plan.planType == "PRO_YEARLY")
 				  {
-						plan.planType = "ENTERPRISE_YEARLY";
+						temp = "ENTERPRISE_YEARLY";
 				  }
-				  return plan.plan_type;
+				  return temp;
 			    }
 		    });
