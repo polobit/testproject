@@ -52,7 +52,7 @@ public class TicketWebhook extends HttpServlet
 
 			// Mandrill Inbound event format -
 			// https://mandrill.zendesk.com/hc/en-us/articles/205583197-Inbound-Email-Processing-Overview#inbound-events-format
-			JSONObject mandrillInboundJSON = new JSONObject(mandrillResponse);
+			JSONObject mandrillInboundJSON = new JSONArray(mandrillResponse).getJSONObject(0);
 
 			if (!mandrillInboundJSON.has("msg"))
 				return;
