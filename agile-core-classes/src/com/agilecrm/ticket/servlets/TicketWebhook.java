@@ -26,7 +26,7 @@ public class TicketWebhook extends HttpServlet
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
 	 *      response)
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
 		PrintWriter pw = response.getWriter();
 		pw.write("Get");
@@ -38,7 +38,7 @@ public class TicketWebhook extends HttpServlet
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
 	 *      response)
 	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException,
+	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException,
 			IOException
 	{
 		try
