@@ -1,6 +1,7 @@
 package com.agilecrm.ticket.servlets;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -27,7 +28,10 @@ public class TicketWebhook extends HttpServlet
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
-		doPost(request, response);
+		PrintWriter pw = response.getWriter();
+		pw.write("Get");
+		System.out.println("Get method called..");
+		//doPost(request, response);
 	}
 
 	/**
