@@ -13,10 +13,18 @@ import org.apache.commons.lang.exception.ExceptionUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import com.agilecrm.user.util.DomainUserUtil;
+import com.agilecrm.ticket.tasks.TicketsDeferredTask;
+import com.google.appengine.api.taskqueue.Queue;
+import com.google.appengine.api.taskqueue.QueueFactory;
+import com.google.appengine.api.taskqueue.TaskOptions;
 
 /**
- * Servlet implementation class TicketWebhook
+ * <code>TicketWebhook</code> is the root class for handling inbound events from
+ * Mandrill. Mandrill posts the inbound event data to this servlet. Inbound data format can be found below.
+ * 
+ * @author Sasi on 28-Sep-2015
+ * @see <a href="https://mandrill.zendesk.com/hc/en-us/articles/205583197-Inbound-Email-Processing-Overview#inbound-events-format">Mandrill Inbound data format</a>
+ * 
  */
 public class TicketWebhook extends HttpServlet
 {
@@ -31,15 +39,14 @@ public class TicketWebhook extends HttpServlet
 		PrintWriter pw = response.getWriter();
 		pw.write("Get");
 		System.out.println("Get method called..");
-		//doPost(request, response);
+		// doPost(request, response);
 	}
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
 	 *      response)
 	 */
-	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException,
-			IOException
+	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
 		try
 		{
@@ -50,51 +57,17 @@ public class TicketWebhook extends HttpServlet
 			if (StringUtils.isBlank(mandrillResponse))
 				return;
 
-			// Mandrill Inbound event format -
-			// https://mandrill.zendesk.com/hc/en-us/articles/205583197-Inbound-Email-Processing-Overview#inbound-events-format
 			JSONObject mandrillInboundJSON = new JSONArray(mandrillResponse).getJSONObject(0);
-
-			if (!mandrillInboundJSON.has("msg"))
-				return;
-
-			JSONObject msgJSON = mandrillInboundJSON.getJSONObject("msg");
-
-			if (!msgJSON.has("headers"))
-				return;
-
-			JSONArray recipientsArray = msgJSON.getJSONArray("to");
-
-			if (recipientsArray == null || recipientsArray.length() == 0)
-				return;
-
-			String toAddress = "";
-			for (int i = 0; i < recipientsArray.length(); i++)
-			{
-				JSONArray recipientJSON = recipientsArray.getJSONArray(i);
-
-				toAddress = recipientJSON.getString(0);
-
-				if (toAddress.endsWith("helptor"))
-					break;
-			}
-
-			String[] toAddressArray = toAddress.split("+");
-
-			if (toAddressArray.length != 2)
-				return;
-
-			String domainName = toAddressArray[0], groupID = toAddressArray[1];
-
-			System.out.println("DomainName: " + domainName);
-			System.out.println("GroupID: " + groupID);
 			
-			if (DomainUserUtil.count(domainName) <= 0)
-			{
-				System.out.println("Invalid domain: " + domainName);
-				return;
-			}
+			TicketsDeferredTask task = new TicketsDeferredTask(mandrillInboundJSON.toString());
 
-			JSONObject mimeHeaders = msgJSON.getJSONObject("headers");
+			// Initialize task here
+			Queue queue = QueueFactory.getQueue("tickets-queue");
+
+			// Create Task and push it into Task Queue
+			TaskOptions taskOptions = TaskOptions.Builder.withPayload(task);
+
+			queue.add(taskOptions);
 		}
 		catch (Exception e)
 		{

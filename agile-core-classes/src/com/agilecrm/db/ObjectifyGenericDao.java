@@ -48,6 +48,9 @@ import com.agilecrm.subscription.Subscription;
 import com.agilecrm.subscription.restrictions.db.BillingRestriction;
 import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
 import com.agilecrm.subscription.restrictions.entity.DaoBillingRestriction;
+import com.agilecrm.ticket.entitys.TicketGroups;
+import com.agilecrm.ticket.entitys.TicketNotes;
+import com.agilecrm.ticket.entitys.Tickets;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.ContactViewPrefs;
 import com.agilecrm.user.DomainUser;
@@ -211,6 +214,11 @@ public class ObjectifyGenericDao<T> extends DAOBase
 	// ObjectifyService.register(WebPage.class);
 	
 	ObjectifyService.register(Office365CalendarPrefs.class);
+	
+	//Ticket related entity's
+	ObjectifyService.register(Tickets.class);
+	ObjectifyService.register(TicketNotes.class);
+	ObjectifyService.register(TicketGroups.class);
 
     }
 
