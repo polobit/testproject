@@ -6595,7 +6595,7 @@ Handlebars.registerHelper('get_campaign_type_filter', function(filter_name)
 					}
 				}
 				return html;
-			});
+			});					
 
 	// Is new allowed domain
 	Handlebars.registerHelper("hide_allowed_domains_text", function(data, options){
@@ -6604,19 +6604,20 @@ Handlebars.registerHelper('get_campaign_type_filter', function(filter_name)
 		return options.fn(this);
 	});
 	
-	Handlebars.registerHelper('proToEnterprise', function(plan, options)
+	Handlebars.registerHelper('proToEnterprise', function(plan_type, options)
 			{
-		        if (plan)
-			    {
-		        	var temp;
-				  if (plan.planType == "PRO_MONTHLY")
+		          var temp;
+		          if(plan_type == "PRO_MONTHLY")																																																																																			if (plan.planType == "PRO_MONTHLY")
 				  {
 					temp = "ENTERPRISE_MONTHLY";
 				  }
-				  else if (plan.planType == "PRO_YEARLY")
+				  else if (plan_type == "PRO_YEARLY")
 				  {
 						temp = "ENTERPRISE_YEARLY";
 				  }
+				  else if (plan_type == "PRO_BIENNIAL")
+				  {
+						temp = "ENTERPRISE_BIENNIAL";
+				  }
 				  return temp;
-			    }
 		    });

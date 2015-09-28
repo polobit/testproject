@@ -530,8 +530,9 @@
    <div class="panel panel-default wrapper-md m-t-xl">
       <p class="b-b b-light p-b-xs">
          Current Plan
-      </p>{{#containString "PRO" ../plan.plan_type}}
-{{proToEnterprise ../plan}}
+      </p>
+{{#containString "PRO" ../plan.plan_type}}
+{{proToEnterprise ../plan.plan_type}}
 {{else}}
 {{/containString}}
  You are currently on {{getAccountPlanName ../plan.plan_type}} ({{getAccountPlanInteval ../plan.plan_type}}) plan with {{quantity}}  {{#if_equals quantity 1}}
