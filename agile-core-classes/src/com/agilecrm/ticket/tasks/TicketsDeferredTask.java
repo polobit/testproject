@@ -98,7 +98,7 @@ public class TicketsDeferredTask implements DeferredTask
 			if (isNewTicket)
 			{
 				TicketUtil.createTicket(groupID, true, msgJSON.getString("from_name"), msgJSON.getString("from_email"),
-						msgJSON.getString("subject"), msgJSON.getJSONArray("cc").toString(), msgJSON.getString("text"), msgJSON.getString("html"), Source.EMAIL, false,
+						msgJSON.getString("subject"), "", msgJSON.getString("text"), msgJSON.getString("html"), Source.EMAIL, false,
 						mimeHeaders.getString("X-Originating-Ip"), CREATED_BY.REQUESTER, NOTE_TYPE.PUBLIC);
 			}
 			else
