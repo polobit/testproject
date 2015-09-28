@@ -37,7 +37,7 @@ public class TicketGroups
 	/**
 	 * Stores list of agent id's
 	 */
-	public List<Key<DomainUser>> agentsKeyList = new ArrayList<Key<DomainUser>>();
+	public List<Key<DomainUser>> agents_key_list = new ArrayList<Key<DomainUser>>();
 	
 	
 	public TicketGroups()

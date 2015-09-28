@@ -21,21 +21,11 @@ import com.google.appengine.api.taskqueue.DeferredTask;
  */
 public class TicketsDeferredTask implements DeferredTask
 {
-	String jsonString = "";
-	JSONObject mandrillInboundJSON = null;
+	String mandrillResponse = "";
 
-	public TicketsDeferredTask(String jsonString)
+	public TicketsDeferredTask(String mandrillResponse)
 	{
-		this.jsonString = jsonString;
-
-		try
-		{
-			mandrillInboundJSON = new JSONObject(this.jsonString);
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-		}
+		this.mandrillResponse = mandrillResponse;
 	}
 
 	/**
@@ -48,6 +38,8 @@ public class TicketsDeferredTask implements DeferredTask
 	{
 		try
 		{
+			JSONObject mandrillInboundJSON = new JSONArray(mandrillResponse).getJSONObject(0);
+			
 			if (mandrillInboundJSON == null || !mandrillInboundJSON.has("msg"))
 				return;
 

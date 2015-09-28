@@ -20,10 +20,13 @@ import com.google.appengine.api.taskqueue.TaskOptions;
 
 /**
  * <code>TicketWebhook</code> is the root class for handling inbound events from
- * Mandrill. Mandrill posts the inbound event data to this servlet. Inbound data format can be found below.
+ * Mandrill. Mandrill posts the inbound event data to this servlet. Inbound data
+ * format can be found below.
  * 
  * @author Sasi on 28-Sep-2015
- * @see <a href="https://mandrill.zendesk.com/hc/en-us/articles/205583197-Inbound-Email-Processing-Overview#inbound-events-format">Mandrill Inbound data format</a>
+ * @see <a
+ *      href="https://mandrill.zendesk.com/hc/en-us/articles/205583197-Inbound-Email-Processing-Overview#inbound-events-format">Mandrill
+ *      Inbound data format</a>
  * 
  */
 public class TicketWebhook extends HttpServlet
@@ -57,9 +60,7 @@ public class TicketWebhook extends HttpServlet
 			if (StringUtils.isBlank(mandrillResponse))
 				return;
 
-			JSONObject mandrillInboundJSON = new JSONArray(mandrillResponse).getJSONObject(0);
-			
-			TicketsDeferredTask task = new TicketsDeferredTask(mandrillInboundJSON.toString());
+			TicketsDeferredTask task = new TicketsDeferredTask(mandrillResponse);
 
 			// Initialize task here
 			Queue queue = QueueFactory.getQueue("tickets-queue");

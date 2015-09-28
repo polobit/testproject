@@ -33,7 +33,7 @@ public class TicketGroupUtil
 
 			supportGroup.group_name = "Support";
 			supportGroup.updated_time = Calendar.getInstance().getTimeInMillis();
-			supportGroup.agentsKeyList = DomainUserUtil.getDomainUserKeys(namespace);
+			supportGroup.agents_key_list = DomainUserUtil.getDomainUserKeys(namespace);
 
 			TicketGroups.ticketGroupsDao.put(supportGroup);
 		}
@@ -90,7 +90,7 @@ public class TicketGroupUtil
 
 	public static void main(String[] args)
 	{
-		System.out.println(Base62.fromDecimalToOtherBase(62, 48146463));
-		System.out.println(Base62.fromOtherBaseToDecimal(62, "3G15r"));
+		System.out.println(Base62.fromDecimalToOtherBase(62, 5249485793918976l));
+		System.out.println(Base62.fromOtherBaseToDecimal(62, "O2e8kqKQa"));
 	}
 }
