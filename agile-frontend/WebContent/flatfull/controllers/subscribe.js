@@ -284,7 +284,7 @@ var SubscribeRouter = Backbone.Router
 					{
 						id = $('#regular_plan');
 					}
-					else if (planType.indexOf('ENTERPRISE') == 0)
+					else if (planType.indexOf('ENTERPRISE') == 0 || planType.indexOf('PRO') == 0)
 					{
 						id = $('#pro_plan');
 					}
@@ -589,7 +589,7 @@ var SubscribeRouter = Backbone.Router
 
 			invoice_latest : function(subscription)
 			{
-
+				$('#recent_invoice').html(getRandomLoadingImg());
 				if (!subscription.get("billingData"))
 				{
 					$("#invoice-details-holder").html("");
