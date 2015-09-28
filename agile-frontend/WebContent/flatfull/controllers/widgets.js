@@ -186,7 +186,7 @@ var WidgetsRouter = Backbone.Router
 							"twitter-login",
 							('/scribe?service=twitter&isForAll=' + isForAll
 									+ '&return_url='
-									+ encodeURIComponent(window.location.href) + '/twitter'));
+									+ encodeURIComponent(window.location.href)));
 				} else {
 					addWidgetProfile(id, "Twitter", "twitter-revoke-access",
 							"core/api/widgets/social/profile/");
@@ -234,7 +234,7 @@ var WidgetsRouter = Backbone.Router
 			},
 
 			/**
-			 * Manages Stripe widget
+			 * Manages Quickbooks widget
 			 */
 			QuickBooks : function(id) {
 				if (!id) {
@@ -275,7 +275,7 @@ var WidgetsRouter = Backbone.Router
 							"googleplus-login",
 							('/scribe?service=googleplus&isForAll=' + isForAll
 									+ '&return_url='
-									+ encodeURIComponent(window.location.href) + '/googleplus'));
+									+ encodeURIComponent(window.location.href)));
 				} else {
 					addWidgetProfile(id, "GooglePlus",
 							"googleplus-revoke-access",
@@ -294,7 +294,7 @@ var WidgetsRouter = Backbone.Router
 							"stripe-login",
 							('/scribe?service=stripe&isForAll=' + isForAll
 									+ '&return_url='
-									+ encodeURIComponent(window.location.href) + '/stripe'));
+									+ encodeURIComponent(window.location.href)));
 				} else {
 					addWidgetProfile(id, "Stripe", "stripe-revoke-access",
 							"core/api/widgets/Stripe");
@@ -767,65 +767,7 @@ var WidgetsRouter = Backbone.Router
 				$("#prefs-tabs-content").html(
 						this.xero_import_settings.render().el);
 
-			},
-
-			// Reddy code
-			/**
-			 * Manages GooglePlus widget
-			 */
-			GooglePlus : function(id) {
-				if (!id) {
-					show_set_up_widget("GooglePlus", 'googleplus-login',
-							'/scribe?service=googleplus&isForAll=' + isForAll
-									+ '&return_url='
-									+ encodeURIComponent(window.location.href)
-									+ "/googleplus");
-				} else {
-					var widgetDetails = $.parseJSON($.ajax({
-						url : "core/api/widgets/GooglePlus",
-						async : false,
-						dataType : 'json'
-					}).responseText);
-
-					console.clear();
-					console.log("In google Plus widget Router");
-					console.log(widgetDetails);
-
-					if (widgetDetails) {
-						widgetPrefGP = JSON.parse(widgetDetails.prefs);
-						var userData = $
-								.parseJSON($
-										.ajax({
-											url : "https://www.googleapis.com/plus/v1/people/me?access_token="
-													+ widgetPrefGP['access_token'],
-											async : false,
-											dataType : 'json'
-										}).responseText);
-
-						set_up_access(
-								"GooglePlus",
-								'googleplus-login',
-								userData,
-								'/scribe?service=googleplus&return_url='
-										+ encodeURIComponent(window.location.protocol
-												+ "//"
-												+ window.location.host
-												+ "/#GooglePlus/googleplus"));
-
-					} else {
-						show_set_up_widget(
-								"GooglePlus",
-								'googleplus-login',
-								'/scribe?service=googleplus&isForAll='
-										+ isForAll
-										+ '&return_url='
-										+ encodeURIComponent(window.location.href)
-										+ "/googleplus");
-						return;
-					}
-				}
-
-			}// End of Gplus
+			}
 		});
 
 function addWidgetProfile(widgetId, widgetName, template, url) {

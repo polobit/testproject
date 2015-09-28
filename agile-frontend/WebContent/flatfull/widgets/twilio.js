@@ -773,7 +773,7 @@ function twilioError(id, message)
 	 */
 	$('#' + id).html(getTemplate('twilio-error', error_json));
 	//$('#' + id).append('<a href="#add-widget" >widget settings page.</a>');
-	$('#' + id).append('<a class="btn" id="delete-widget" widget-name="Twilio" style="margin-top: 5px;">Delete Widget</a>');
+	$('#' + id).append('<div class="wrapper-sm p-t-none"><a class="btn btn-default" id="delete-widget" widget-name="Twilio" style="margin-top: 5px;">Delete Widget</a></div>');
 }
 
 /**

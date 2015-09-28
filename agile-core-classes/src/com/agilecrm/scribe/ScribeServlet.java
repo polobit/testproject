@@ -20,8 +20,8 @@ import com.agilecrm.scribe.util.ScribeUtil;
  * to configure a connection, as follows
  * 
  * <pre>
- * OAuthService service = new ServiceBuilder().provider(LinkedInApi.class).apiKey(YOUR_API_KEY).apiSecret(YOUR_API_SECRET)
- * 		.build();
+ * OAuthService service = new ServiceBuilder().provider(LinkedInApi.class)
+ * 		.apiKey(YOUR_API_KEY).apiSecret(YOUR_API_SECRET).build();
  * </pre>
  * <p>
  * providing the api keys and secret key given by the provider, scribe connects
@@ -31,8 +31,7 @@ import com.agilecrm.scribe.util.ScribeUtil;
  * 
  */
 @SuppressWarnings("serial")
-public class ScribeServlet extends HttpServlet
-{
+public class ScribeServlet extends HttpServlet {
 	public static final String SERVICE_TYPE_LINKED_IN = "linkedin";
 	public static final String SERVICE_TYPE_TWITTER = "twitter";
 	public static final String SERVICE_TYPE_GMAIL = "gmail";
@@ -73,27 +72,23 @@ public class ScribeServlet extends HttpServlet
 	 * saved in widget.
 	 */
 	@Override
-	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException
-	{
+	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
+			throws ServletException, IOException {
 
 		// this parameter is used to redirect to a
 		String reqType = req.getParameter("reqType");
 		// use to refresh google plus token
-		if (reqType != null && reqType.equalsIgnoreCase("googleplusrefresh"))
-		{
+		if (reqType != null && reqType.equalsIgnoreCase("googleplusrefresh")) {
 			System.out.println("In googleplusrefresh");
 
 			String widgetId = req.getParameter("widgetId");
 			String refreshToken = req.getParameter("refreshToken");
 			String code = req.getParameter("code_token");
-			try
-			{
+
+			try {
 				ScribeUtil.updateGooglePlusPrefs(widgetId, code, refreshToken);
 				return;
-
-			}
-			catch (Exception e)
-			{
+			} catch (Exception e) {
 				// e.printStackTrace();
 				return;
 			}
@@ -112,8 +107,8 @@ public class ScribeServlet extends HttpServlet
 	 * 
 	 * @return
 	 */
-	public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException
-	{
+	public void doGet(HttpServletRequest req, HttpServletResponse resp)
+			throws IOException {
 		/*
 		 * OAuth1.0 - Check if it is first time or returning from OAuth1.0
 		 * authentication.If token and verifier is present, we just store or
@@ -139,8 +134,8 @@ public class ScribeServlet extends HttpServlet
 		 * 
 		 * sometimes code is given as string "null"
 		 */
-		if ((code != null && !("null".equals(code))) || (oAuthToken != null && oAuthVerifier != null))
-		{
+		if ((code != null && !("null".equals(code)))
+				|| (oAuthToken != null && oAuthVerifier != null)) {
 			saveToken(req, resp);
 			return;
 		}
@@ -152,25 +147,25 @@ public class ScribeServlet extends HttpServlet
 		 */
 		String serviceType = req.getParameter("service_type");
 
-		if (serviceType != null && serviceType.equalsIgnoreCase(SHOPIFY_SERVICE))
-		{
+		if (serviceType != null
+				&& serviceType.equalsIgnoreCase(SHOPIFY_SERVICE)) {
 			String shop = req.getParameter("shop");
 			String callback = req.getParameter("url");
 			req.getSession().setAttribute("url", callback);
-			
-			String isForAll = (String)req.getParameter("isForAll");	
-			System.out.println(callback+"is for all "+isForAll);
-			if(isForAll != null){
-				System.out.println("isFor All "+isForAll);
+
+			String isForAll = (String) req.getParameter("isForAll");
+			System.out.println(callback + "is for all " + isForAll);
+			if (isForAll != null) {
+				System.out.println("isFor All " + isForAll);
 				req.getSession().setAttribute("isForAll", isForAll);
 			}
-			
-			if (shop.contains(".myshopify.com"))
-			{
+
+			if (shop.contains(".myshopify.com")) {
 				shop = shop.split("\\.")[0];
 			}
 			String domain = req.getParameter("domain");
-			resp.sendRedirect("http://shopify4j.appspot.com/shopify?shop=" + shop + "&domain=" + domain);
+			resp.sendRedirect("http://shopify4j.appspot.com/shopify?shop="
+					+ shop + "&domain=" + domain);
 			return;
 		}
 
@@ -195,12 +190,11 @@ public class ScribeServlet extends HttpServlet
 	 *            {@link HttpServletResponse}
 	 * @throws IOException
 	 */
-	public void setupOAuth(HttpServletRequest req, HttpServletResponse resp) throws IOException
-	{
+	public void setupOAuth(HttpServletRequest req, HttpServletResponse resp)
+			throws IOException {
 
 		// handle facebook popup windows
-		if ("facebook".equalsIgnoreCase(req.getParameter("act")))
-		{
+		if ("facebook".equalsIgnoreCase(req.getParameter("act"))) {
 			PrintWriter out = resp.getWriter();
 			resp.setContentType("text/html");
 			out.println("<script type=\"text/javascript\">");
@@ -208,8 +202,8 @@ public class ScribeServlet extends HttpServlet
 			out.println("</script>");
 			return;
 		}
-		
-		//To Know that add widget for all.
+
+		// To Know that add widget for all.
 		boolean isForAll = Boolean.parseBoolean(req.getParameter("isForAll"));
 
 		// Get service name from request
@@ -225,9 +219,9 @@ public class ScribeServlet extends HttpServlet
 		System.out.println("in set up of scribe " + serviceName);
 
 		// On OAuth cancel
-		if (serviceName == null)
-		{
-			String return_url = (String) req.getSession().getAttribute("return_url");
+		if (serviceName == null) {
+			String return_url = (String) req.getSession().getAttribute(
+					"return_url");
 
 			System.out.println("return url in oauth cancel " + return_url);
 			// Redirect URL
@@ -240,15 +234,15 @@ public class ScribeServlet extends HttpServlet
 		Token token = null;
 
 		// OAuth 2.0
-		if (serviceName.equalsIgnoreCase(SERVICE_TYPE_STRIPE) || serviceName.equalsIgnoreCase(SERVICE_TYPE_GOOGLE)
+		if (serviceName.equalsIgnoreCase(SERVICE_TYPE_STRIPE)
+				|| serviceName.equalsIgnoreCase(SERVICE_TYPE_GOOGLE)
 				|| serviceName.equalsIgnoreCase(SERVICE_TYPE_GOOGLE_CALENDAR)
 				|| serviceName.equalsIgnoreCase(SERVICE_TYPE_GMAIL)
 				|| serviceName.equalsIgnoreCase(SERVICE_TYPE_OAUTH_LOGIN)
 				|| serviceName.equalsIgnoreCase(SERVICE_TYPE_GOOGLE_DRIVE)
 				|| serviceName.equalsIgnoreCase(SERVICE_TYPE_FACEBOOK)
 				|| serviceName.equalsIgnoreCase(SERVICE_TYPE_STRIPE_IMPORT)
-				|| serviceName.equalsIgnoreCase(SERVICE_TYPE_GOOGLE_PLUS))
-		{
+				|| serviceName.equalsIgnoreCase(SERVICE_TYPE_GOOGLE_PLUS)) {
 			// After building service, redirects to authorization page
 			url = service.getAuthorizationUrl(null);
 			String query = req.getParameter("query");
@@ -257,16 +251,10 @@ public class ScribeServlet extends HttpServlet
 				req.getSession().setAttribute("query", query);
 
 			System.out.println("Redirect URL OAuth2: " + url);
-		}
-
-		else if (serviceName.equalsIgnoreCase(SERVICE_TYPE_ZOHO))
-		{
+		} else if (serviceName.equalsIgnoreCase(SERVICE_TYPE_ZOHO)) {
 			System.out.println("wait");
-		}
-
-		// OAuth 1.0
-		else
-		{
+		} else {
+			// OAuth 1.0
 			token = service.getRequestToken();
 
 			// After building service, redirects to authorization page
@@ -287,9 +275,9 @@ public class ScribeServlet extends HttpServlet
 		String pluginId = req.getParameter("plugin_id");
 		if (pluginId != null)
 			req.getSession().setAttribute("plugin_id", pluginId);
-		
+
 		req.getSession().setAttribute("isForAll", isForAll);
-		
+
 		System.out.println("In setup of scribe response: " + resp);
 
 		System.out.println(url);
@@ -308,14 +296,16 @@ public class ScribeServlet extends HttpServlet
 	 *            {@link HttpServletResponse}
 	 * @throws IOException
 	 */
-	public static void saveToken(HttpServletRequest req, HttpServletResponse resp) throws IOException
-	{
-
+	public static void saveToken(HttpServletRequest req,
+			HttpServletResponse resp) throws IOException {
+		Long widgetID = null;
 		// Retrieve Token and Service Name from session
-		String serviceName = (String) req.getSession().getAttribute("oauth.service");
+		String serviceName = (String) req.getSession().getAttribute(
+				"oauth.service");
 
 		if (serviceName == null)
-			serviceName = (String) req.getSession().getAttribute("service_type");
+			serviceName = (String) req.getSession()
+					.getAttribute("service_type");
 		System.out.println("service name " + serviceName);
 		String code = null;
 		Token requestToken = null;
@@ -323,7 +313,8 @@ public class ScribeServlet extends HttpServlet
 		OAuthService service = null;
 
 		// OAuth 2.0 requires code parameter
-		if (serviceName.equalsIgnoreCase(SERVICE_TYPE_STRIPE) || serviceName.equalsIgnoreCase(SERVICE_TYPE_GOOGLE)
+		if (serviceName.equalsIgnoreCase(SERVICE_TYPE_STRIPE)
+				|| serviceName.equalsIgnoreCase(SERVICE_TYPE_GOOGLE)
 				|| serviceName.equalsIgnoreCase(SERVICE_TYPE_GOOGLE_CALENDAR)
 				|| serviceName.equalsIgnoreCase(SERVICE_TYPE_GMAIL)
 				|| serviceName.equalsIgnoreCase(SERVICE_TYPE_OAUTH_LOGIN)
@@ -335,13 +326,13 @@ public class ScribeServlet extends HttpServlet
 			code = req.getParameter("code");
 
 		// OAuth 1.0 requires token and verifier
-		else
-		{
+		else {
 			/*
 			 * If request token in not null, new token is created using
 			 * oAuthToken, which gets the access token from the provider
 			 */
-			requestToken = (Token) req.getSession().getAttribute("oauth.request_token");
+			requestToken = (Token) req.getSession().getAttribute(
+					"oauth.request_token");
 
 			if (requestToken == null)
 				return;
@@ -369,18 +360,19 @@ public class ScribeServlet extends HttpServlet
 
 		System.out.println("service name in save token " + serviceName);
 
-		ScribeUtil.saveTokens(req, resp, service, serviceName, accessToken, code);
-
-		// return URL is retrieved from session
-		String returnURL = (String) req.getSession().getAttribute("return_url");
-		System.out.println("return url " + returnURL);
-		
-		// If return URL is null, redirect to dashboard
-		System.out.println(returnURL);
-		if (returnURL == null)
-			resp.sendRedirect("/");
-		else
+		widgetID = ScribeUtil.saveTokens(req, resp, service, serviceName,
+				accessToken, code);
+		String returnURL;
+		if (widgetID != null) {
+			// return URL is retrieved from session
+			returnURL = (String) req.getSession().getAttribute("return_url")
+					+ "/" + widgetID;
+			System.out.println("return url " + returnURL);
+			// If return URL is null, redirect to dashboard
 			resp.sendRedirect(returnURL);
+		} else {
+			resp.sendRedirect("/#add-widget");
+		}
 
 		// Delete return url Attribute
 		req.getSession().removeAttribute("return_url");

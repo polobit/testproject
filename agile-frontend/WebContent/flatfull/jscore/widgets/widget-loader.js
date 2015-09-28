@@ -85,8 +85,8 @@ function loadWidgets(el, contact)
 	 * and sets "is_minimized" field of widget as true, we check this while
 	 * loading widgets and skip loading widget if it is minimized
 	 */
-    $('#prefs-tabs-content').off('click', '.widget-minimize');
-	$('#prefs-tabs-content').on('click', '.widget-minimize', function(e)
+    $('#widgets').off('click', '.widget-minimize');
+	$('#widgets').on('click', '.widget-minimize', function(e)
 	{
 		e.preventDefault();
 		var widget_name = $(this).attr('widget');
@@ -121,8 +121,8 @@ function loadWidgets(el, contact)
 	 * widget as false, we check this while loading widgets and skip loading
 	 * widget if it is minimized
 	 */
-    $('#prefs-tabs-content').off('click', '.widget-maximize');
-	$('#prefs-tabs-content').on('click', '.widget-maximize', function(e)
+    $('#widgets').off('click', '.widget-maximize');
+	$('#widgets').on('click', '.widget-maximize', function(e)
 	{
 		e.preventDefault();
 		var widget_name = $(this).attr('widget');
