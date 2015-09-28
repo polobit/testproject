@@ -177,7 +177,7 @@ function showTicketsInZendesk(data)
 	    	var all_tickets_template = template_ui1;
 	    	// show the tickets in Zendeks panel
 	    	console.log(all_tickets_template);
-	    	alert("data ");
+	    	
 			$('#all_tickets_panel').html(all_tickets_template);
 
 			// Load jquery time ago function to show time ago in tickets
