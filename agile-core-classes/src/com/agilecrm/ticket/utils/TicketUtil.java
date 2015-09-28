@@ -1,13 +1,9 @@
 package com.agilecrm.ticket.utils;
 
 import java.util.Calendar;
-import java.util.List;
 
 import org.apache.commons.lang.exception.ExceptionUtils;
 
-import com.agilecrm.contact.Contact;
-import com.agilecrm.contact.util.ContactUtil;
-import com.agilecrm.ticket.entitys.TicketNotes;
 import com.agilecrm.ticket.entitys.Tickets;
 import com.agilecrm.ticket.entitys.TicketNotes.CREATED_BY;
 import com.agilecrm.ticket.entitys.TicketNotes.NOTE_TYPE;
@@ -16,6 +12,7 @@ import com.agilecrm.ticket.entitys.Tickets.Priority;
 import com.agilecrm.ticket.entitys.Tickets.Source;
 import com.agilecrm.ticket.entitys.Tickets.Status;
 import com.agilecrm.ticket.entitys.Tickets.Type;
+import com.google.appengine.api.NamespaceManager;
 import com.googlecode.objectify.Key;
 
 /**
@@ -25,13 +22,72 @@ import com.googlecode.objectify.Key;
  */
 public class TicketUtil
 {
-	public static void createTicket(Long group_id, Boolean assigned_to_group, String requester_name, String requester_email,
+	/**
+	 * 
+	 * @param namespace
+	 * @param group_id
+	 * @param assigned_to_group
+	 * @param requester_name
+	 * @param requester_email
+	 * @param subject
+	 * @param cc_emails
+	 * @param plain_text
+	 * @param html_text
+	 * @param source
+	 * @param attachments
+	 * @param ipAddress
+	 * @param created_by
+	 * @param note_type
+	 */
+	public static Tickets createTicket(String namespace, Long group_id, Boolean assigned_to_group, String requester_name, String requester_email,
 			String subject, String cc_emails, String plain_text, String html_text, Source source, Boolean attachments,
 			String ipAddress, CREATED_BY created_by, NOTE_TYPE note_type)
 	{
+		String oldNamespace = NamespaceManager.get();
+		Tickets ticket = null;
 		try
 		{
-			Tickets ticket = new Tickets(group_id, assigned_to_group, requester_name, requester_email, subject,
+			NamespaceManager.set(namespace);
+			
+			ticket = createTicket(group_id, assigned_to_group, requester_name, requester_email, subject, cc_emails, plain_text, html_text, source, attachments, ipAddress, created_by, note_type);
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+		finally
+		{
+			NamespaceManager.set(oldNamespace);
+		}
+
+		return ticket;
+	}
+	
+	/**
+	 * 
+	 * @param group_id
+	 * @param assigned_to_group
+	 * @param requester_name
+	 * @param requester_email
+	 * @param subject
+	 * @param cc_emails
+	 * @param plain_text
+	 * @param html_text
+	 * @param source
+	 * @param attachments
+	 * @param ipAddress
+	 * @param created_by
+	 * @param note_type
+	 */
+	public static Tickets createTicket(Long group_id, Boolean assigned_to_group, String requester_name, String requester_email,
+			String subject, String cc_emails, String plain_text, String html_text, Source source, Boolean attachments,
+			String ipAddress, CREATED_BY created_by, NOTE_TYPE note_type)
+	{
+		Tickets ticket = null;
+		
+		try
+		{
+			 ticket = new Tickets(group_id, assigned_to_group, requester_name, requester_email, subject,
 					cc_emails, plain_text, source, attachments);
 
 			Long createTime = Calendar.getInstance().getTimeInMillis();
@@ -49,7 +105,9 @@ public class TicketUtil
 			
 			Key<Tickets> key = Tickets.ticketsDao.put(ticket);
 
-			TicketNotesUtil.createTicketNotes(key.getId(), group_id, created_by, requester_name, requester_email,
+			System.out.println("key: " + key.getId());
+			
+			TicketNotesUtil.createTicketNotes(NamespaceManager.get(), key.getId(), group_id, created_by, requester_name, requester_email,
 					plain_text, html_text, note_type, null);
 		}
 		catch (Exception e)
@@ -57,5 +115,7 @@ public class TicketUtil
 			System.out.println("ExceptionUtils.getFullStackTrace(e): " + ExceptionUtils.getFullStackTrace(e));
 			e.printStackTrace();
 		}
+		
+		return ticket;
 	}
 }
