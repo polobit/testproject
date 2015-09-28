@@ -135,35 +135,36 @@ var SubscribeRouter = Backbone.Router
 
 			invoiceDetailsList : function()
 			{
+				var that = this;
 				getTemplate('billing-settings', {}, undefined, function(template_ui)
 				{
 					if (!template_ui)
 						return;
 					$('#content').html($(template_ui));
 					
+					getTemplate('invoice-details', {}, undefined, function(template_ui)
+					{
+						if (!template_ui)
+							return;
+						$('#billing-settings-tab-content').html($(template_ui));
+						$("#invoice-details-holder").html(getRandomLoadingImg());
+						
+					}, "#billing-settings-tab-content");
+					
+					var subscribe_plan = new Base_Model_View({ url : "core/api/subscription?reload=true", template : "subscribe-new", window : 'subscribe',
+
+					postRenderCallback : function(el)
+					{
+
+						var data = subscribe_plan.model.toJSON();
+						var subscription_model = new BaseModel(data);
+						that.recent_invoice(subscription_model);
+
+					} });
+					
 				}, "#content");
-				getTemplate('invoice-details', {}, undefined, function(template_ui)
-				{
-					if (!template_ui)
-						return;
-					$('#billing-settings-tab-content').html($(template_ui));
-					$("#invoice-details-holder").html(getRandomLoadingImg());
-					// $('#content').find('#billing-settings-tab-content').html("");
-//					$('#content').find('#BillingSettingsTab .select').removeClass('select');
-//					$('#content').find('.invoice-details-tab').addClass('select');
-//					$(".active").removeClass("active");
-				}, "#billing-settings-tab-content");
-				var that = this;
-				var subscribe_plan = new Base_Model_View({ url : "core/api/subscription?reload=true", template : "subscribe-new", window : 'subscribe',
-
-				postRenderCallback : function(el)
-				{
-
-					var data = subscribe_plan.model.toJSON();
-					var subscription_model = new BaseModel(data);
-					that.recent_invoice(subscription_model);
-
-				} });
+				
+				
 				
 
 			},
@@ -269,6 +270,10 @@ var SubscribeRouter = Backbone.Router
 					{
 						quantity = data.plan.quantity;
 						planType = data.plan.plan_type.toUpperCase();
+//						if("PRO_MONTHLY" == planType)
+//							planType = "ENTERPRISE_MONTHLY";
+//						else if("PRO_YEARLY" == planType)
+//							planType = "ENTERPRISE_YEARLY";
 					}
 					planDetails = "<span class='text-head-black'>Current Plan</span></br><span class='text-head-black'>" + quantity + " Users</span>";
 					if (planType.indexOf('STARTER') == 0)
