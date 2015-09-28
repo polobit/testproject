@@ -212,23 +212,17 @@
 			{{#related_to_one contacts}}{{/related_to_one}}
 		{{/if}}{{#if_greater this.contacts.length "5"}}<span>,..</span>{{/if_greater}}
 	</div>
-	{{#if won_date}}
-  		{{#if milestone_changed_time}}
-    		{{#if_equals milestone_changed_time won_date}}
+
+	{{#if_equals pipeline.won_milestone milestone}}
+		{{#if won_date}}
+			<div style="cursor:default;" class="pull-left inline-block p-b-xs deal_won_date" id="deal_won_date_{{id}}" data-toggle="tooltip" title="Won date">
+      			<small>{{epochToHumanDateInFormat won_date}}</small>
+      		</div>
+      		<div class="clearfix"></div>
+      	{{else}}
+      		{{#if milestone_changed_time}}
       			<div style="cursor:default;" class="pull-left inline-block p-b-xs deal_won_date" id="deal_won_date_{{id}}" data-toggle="tooltip" title="Won date">
-      				<small>{{epochToHumanDateInFormat won_date}}</small>
-      			</div>
-      			<div class="clearfix"></div>
-      		{{else}}
-      			<div style="cursor:default;" class="pull-left inline-block p-b-xs hide deal_won_date" id="deal_won_date_{{id}}" data-toggle="tooltip" title="Won date">
-      				<small></small>
-      			</div>
-      			<div class="clearfix"></div>
-    		{{/if_equals}}
- 	 	{{else}}
-      		{{#if won_date}}
-        		<div style="cursor:default;" class="pull-left inline-block p-b-xs deal_won_date" id="deal_won_date_{{id}}" data-toggle="tooltip" title="Won date">
-      				<small>{{epochToHumanDateInFormat won_date}}</small>
+      				<small>{{epochToHumanDateInFormat milestone_changed_time}}</small>
       			</div>
       			<div class="clearfix"></div>
       		{{else}}
@@ -237,13 +231,14 @@
       			</div>
       			<div class="clearfix"></div>
       		{{/if}}
-  		{{/if}}
-  	{{else}}
-  		<div style="cursor:default;" class="pull-left inline-block p-b-xs hide deal_won_date" id="deal_won_date_{{id}}" data-toggle="tooltip" title="Won date">
+		{{/if}}
+	{{else}}
+		<div style="cursor:default;" class="pull-left inline-block p-b-xs hide deal_won_date" id="deal_won_date_{{id}}" data-toggle="tooltip" title="Won date">
       		<small></small>
       	</div>
       	<div class="clearfix"></div>
-	{{/if}}
+	{{/if_equals}}
+
 	<div class="pull-left">
 		<small class="text-muted">
 			{{#if close_date}}
