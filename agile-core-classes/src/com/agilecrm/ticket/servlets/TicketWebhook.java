@@ -62,7 +62,7 @@ public class TicketWebhook extends HttpServlet
 			if (!msgJSON.has("headers"))
 				return;
 
-			JSONArray recipientsArray = mandrillInboundJSON.getJSONArray("to");
+			JSONArray recipientsArray = msgJSON.getJSONArray("to");
 
 			if (recipientsArray == null || recipientsArray.length() == 0)
 				return;
@@ -94,7 +94,7 @@ public class TicketWebhook extends HttpServlet
 				return;
 			}
 
-			JSONObject mimeHeaders = mandrillInboundJSON.getJSONObject("headers");
+			JSONObject mimeHeaders = msgJSON.getJSONObject("headers");
 		}
 		catch (Exception e)
 		{
