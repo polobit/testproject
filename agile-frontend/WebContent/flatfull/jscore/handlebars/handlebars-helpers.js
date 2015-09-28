@@ -6606,17 +6606,20 @@ Handlebars.registerHelper('get_campaign_type_filter', function(filter_name)
 	
 	Handlebars.registerHelper('proToEnterprise', function(plan_type, options)
 			{
-		          if(plan_type == "PRO_MONTHLY")																																																																																			if (plan.planType == "PRO_MONTHLY")
+				  var temp;
+				  if(plan_type.indexOf("PRO") >= 0)
+					plan_type= plan_type.replace("PRO","ENTERPRISE");
+		          if(plan_type == "ENTERPRISE_MONTHLY")																																																																																			if (plan.planType == "PRO_MONTHLY")
 				  {
-		        	  plan_type = "ENTERPRISE_MONTHLY";
+		        	  temp = "Enterprise (Monthly)";
 				  }
-				  else if (plan_type == "PRO_YEARLY")
+				  else if (plan_type == "ENTERPRISE_YEARLY")
 				  {
-					  plan_type = "ENTERPRISE_YEARLY";
+					  temp = "Enterprise (Yearly)";
 				  }
-				  else if (plan_type == "PRO_BIENNIAL")
+				  else if (plan_type == "ENTERPRISE_BIENNIAL")
 				  {
-					  plan_type = "ENTERPRISE_BIENNIAL";
+					  temp = "Enterprise (Biennial)";
 				  }
-				  return plan_type;
+				  return temp;
 		    });
