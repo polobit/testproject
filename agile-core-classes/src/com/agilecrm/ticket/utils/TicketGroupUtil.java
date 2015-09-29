@@ -58,7 +58,7 @@ public class TicketGroupUtil
 	{
 		try
 		{
-			return getTicketGroupById(groupID);
+			return TicketGroups.ticketGroupsDao.get(groupID);
 		}
 		catch (Exception e)
 		{

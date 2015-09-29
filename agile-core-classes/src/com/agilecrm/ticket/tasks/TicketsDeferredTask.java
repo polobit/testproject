@@ -86,8 +86,6 @@ public class TicketsDeferredTask implements DeferredTask
 			System.out.println("DomainName: " + namespace);
 			System.out.println("GroupID: " + groupID);
 
-			TicketGroups ticketGroup = TicketGroupUtil.getTicketGroupById(groupID);
-
 			if (DomainUserUtil.count(namespace) <= 0)
 			{
 				System.out.println("Invalid domain: " + namespace);
@@ -97,6 +95,7 @@ public class TicketsDeferredTask implements DeferredTask
 			// Setting namespace
 			NamespaceManager.set(namespace);
 
+			TicketGroups ticketGroup = TicketGroupUtil.getTicketGroupById(groupID);
 			if (ticketGroup == null)
 			{
 				System.out.println("Invalid groupID: " + groupID);
