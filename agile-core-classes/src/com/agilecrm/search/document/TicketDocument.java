@@ -2,6 +2,8 @@ package com.agilecrm.search.document;
 
 import java.util.List;
 
+import org.apache.commons.lang.exception.ExceptionUtils;
+
 import com.agilecrm.search.BuilderInterface;
 import com.agilecrm.ticket.entitys.Tickets;
 import com.agilecrm.ticket.utils.TicketUtil;
@@ -26,6 +28,8 @@ public class TicketDocument implements BuilderInterface
 	{
 		try
 		{
+			System.out.println("Starting documenting ticket...");
+
 			Tickets ticket = (Tickets) entity;
 
 			Document.Builder document = Document.newBuilder();
@@ -103,6 +107,7 @@ public class TicketDocument implements BuilderInterface
 		}
 		catch (Exception e)
 		{
+			System.out.println("ExceptionUtils.getFullStackTrace(e): " + ExceptionUtils.getFullStackTrace(e));
 			e.printStackTrace();
 		}
 	}
@@ -127,6 +132,7 @@ public class TicketDocument implements BuilderInterface
 		}
 		catch (Exception e)
 		{
+			System.out.println("ExceptionUtils.getFullStackTrace(e): " + ExceptionUtils.getFullStackTrace(e));
 			e.printStackTrace();
 		}
 	}
