@@ -158,6 +158,7 @@ public class Globals
     public static final String MANDRIL_API_KEY_VALUE = "iQ_811cc9NxpLG11Ue4ftA";
     public static final String MANDRILL_TEST_API_KEY_VALUE = "MRiwkducZGEbXrLW1LC5oQ";
     
+    // Mandrill API Key for FREE
     public static final String MANDRILL_API_KEY_VALUE_2 = "RSn1Y3FmVLr59WKZqlKDGQ";
     
     
