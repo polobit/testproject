@@ -424,21 +424,14 @@ var ContactsRouter = Backbone.Router.extend({
 	 */
 	contactDetails : function(id, contact)
 	{
-		//Removed previous contact timeline tags from the isotope, if existed
-		if(App_Contacts.contactDetailView!=undefined && App_Contacts.contactDetailView.model!=undefined && App_Contacts.contactDetailView.model.collection!=undefined){
-			getTemplate("timeline1", App_Contacts.contactDetailView.model.collection.models, undefined, function(result)
+		//Removed previous contact timeline nodes from the queue, if existed
+		if(timeline_collection_view)
+		{
+			$.each(timeline_collection_view, function()
 			{
-				try
+				if(this.queue)
 				{
-						$("#timeline", $(App_Contacts.contactDetailView.el)).isotope('remove', $(result), function(ele)
-								{
-									timeline_collection_view.queue.running = false;
-									timeline_collection_view.queue.next();
-								});
-				}
-				catch(err)
-				{
-					console.log(err);
+					this.queue.pop();
 				}
 			});
 		}
@@ -540,7 +533,6 @@ var ContactsRouter = Backbone.Router.extend({
 
 			if (App_Contacts.contactsListView && App_Contacts.contactsListView.collection && App_Contacts.contactsListView.collection.get(id))
 				App_Contacts.contactsListView.collection.get(id).attributes = contact.attributes;
-
 
 			load_contact_tab(el, contact.toJSON());
 
