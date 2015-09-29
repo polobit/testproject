@@ -41,15 +41,16 @@ public class TicketUtil
 	 */
 	public static Tickets createTicket(String namespace, Long group_id, Boolean assigned_to_group, String requester_name, String requester_email,
 			String subject, String cc_emails, String plain_text, String html_text, Source source, Boolean attachments,
-			String ipAddress, CREATED_BY created_by, NOTE_TYPE note_type)
+			String ipAddress)
 	{
 		String oldNamespace = NamespaceManager.get();
 		Tickets ticket = null;
+		
 		try
 		{
 			NamespaceManager.set(namespace);
 			
-			ticket = createTicket(group_id, assigned_to_group, requester_name, requester_email, subject, cc_emails, plain_text, html_text, source, attachments, ipAddress, created_by, note_type);
+			ticket = createTicket(group_id, assigned_to_group, requester_name, requester_email, subject, cc_emails, plain_text, html_text, source, attachments, ipAddress);
 		}
 		catch (Exception e)
 		{
@@ -81,7 +82,7 @@ public class TicketUtil
 	 */
 	public static Tickets createTicket(Long group_id, Boolean assigned_to_group, String requester_name, String requester_email,
 			String subject, String cc_emails, String plain_text, String html_text, Source source, Boolean attachments,
-			String ipAddress, CREATED_BY created_by, NOTE_TYPE note_type)
+			String ipAddress)
 	{
 		Tickets ticket = null;
 		
@@ -106,9 +107,6 @@ public class TicketUtil
 			Key<Tickets> key = Tickets.ticketsDao.put(ticket);
 
 			System.out.println("key: " + key.getId());
-			
-			TicketNotesUtil.createTicketNotes(NamespaceManager.get(), key.getId(), group_id, created_by, requester_name, requester_email,
-					plain_text, html_text, note_type, null);
 		}
 		catch (Exception e)
 		{
