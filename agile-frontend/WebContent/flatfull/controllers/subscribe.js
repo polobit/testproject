@@ -301,6 +301,7 @@ var SubscribeRouter = Backbone.Router
 					price = update_price();
 					$("#user_quantity").val(quantity);
 					$("#users_quantity").text(quantity);
+					(quantity && quantity > 1) ? $("#users_quantity_text").text("Users") : $("#users_quantity_text").text("User");
 					$("#users_total_cost").text((quantity * price).toFixed(2));
 					if ($.isEmptyObject(data))
 						setPlan("free");
@@ -617,8 +618,10 @@ var SubscribeRouter = Backbone.Router
 						
 					}, "#recent_invoice");
 					
-
 				})
+				.fail(function() {
+					$('#recent_invoice').html("You do not have any invoices yet.");
+				});
 
 			},
 
