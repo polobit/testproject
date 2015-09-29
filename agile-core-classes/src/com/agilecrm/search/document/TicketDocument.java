@@ -44,27 +44,32 @@ public class TicketDocument implements BuilderInterface
 			if (ticket.assignee_id != null)
 				document.addField(Field.newBuilder().setName("assignee_id").setText(ticket.assignee_id + ""));
 
-			// Set ticket created time
-			document.addField(Field.newBuilder().setName("created_time").setNumber(Math.floor(ticket.created_time)));
+			/**
+			 * Set ticket created time. Epoch number is greater than limits
+			 * provided by setNumber method so converting millis epoch to normal
+			 * epoch
+			 */
+			document.addField(Field.newBuilder().setName("created_time")
+					.setNumber(Math.floor(ticket.created_time / 1000)));
 
 			// Set ticket last updated time
 			document.addField(Field.newBuilder().setName("last_updated_time")
-					.setNumber(Math.floor(ticket.last_updated_time)));
+					.setNumber(Math.floor(ticket.last_updated_time / 1000)));
 
 			// Set ticket last updated by
 			document.addField(Field.newBuilder().setName("last_updated_by").setText(ticket.last_updated_by.toString()));
 
 			// Set ticket first replied time
 			document.addField(Field.newBuilder().setName("first_replied_time")
-					.setNumber(Math.floor(ticket.first_replied_time)));
+					.setNumber(Math.floor(ticket.first_replied_time / 1000)));
 
 			// Set ticket last agent updated time
 			document.addField(Field.newBuilder().setName("last_agent_replied_time")
-					.setNumber(Math.floor(ticket.last_agent_replied_time)));
+					.setNumber(Math.floor(ticket.last_agent_replied_time / 1000)));
 
 			// Set ticket last customer updated time
 			document.addField(Field.newBuilder().setName("last_customer_replied_time")
-					.setNumber(Math.floor(ticket.last_customer_replied_time)));
+					.setNumber(Math.floor(ticket.last_customer_replied_time / 1000)));
 
 			// Set ticket status
 			document.addField(Field.newBuilder().setName("status").setText(ticket.status.toString()));
