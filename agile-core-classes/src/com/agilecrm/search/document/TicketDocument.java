@@ -38,11 +38,11 @@ public class TicketDocument implements BuilderInterface
 			document.setId(ticket.id + "");
 
 			// Set ticket group id
-			document.addField(Field.newBuilder().setName("group_id").setNumber(ticket.group_id));
+			document.addField(Field.newBuilder().setName("group_id").setText(ticket.group_id + ""));
 
 			// Set ticket assignee id if exists
 			if (ticket.assignee_id != null)
-				document.addField(Field.newBuilder().setName("assignee_id").setNumber(ticket.assignee_id));
+				document.addField(Field.newBuilder().setName("assignee_id").setText(ticket.assignee_id + ""));
 
 			// Set ticket created time
 			document.addField(Field.newBuilder().setName("created_time").setNumber(Math.floor(ticket.created_time)));
