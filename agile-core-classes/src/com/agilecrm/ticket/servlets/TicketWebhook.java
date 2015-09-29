@@ -10,8 +10,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 import com.agilecrm.ticket.tasks.TicketsDeferredTask;
 import com.google.appengine.api.taskqueue.Queue;
@@ -24,9 +22,9 @@ import com.google.appengine.api.taskqueue.TaskOptions;
  * format can be found below.
  * 
  * @author Sasi on 28-Sep-2015
+ * @see {@link TicketsDeferredTask}
  * @see <a
- *      href="https://mandrill.zendesk.com/hc/en-us/articles/205583197-Inbound-Email-Processing-Overview#inbound-events-format">Mandrill
- *      Inbound data format</a>
+ *      href="https://mandrill.zendesk.com/hc/en-us/articles/205583197-Inbound-Email-Processing-Overview#inbound-events-format">Mandrill Inbound data format</a>
  * 
  */
 public class TicketWebhook extends HttpServlet
@@ -61,14 +59,15 @@ public class TicketWebhook extends HttpServlet
 				return;
 
 			TicketsDeferredTask task = new TicketsDeferredTask(mandrillResponse);
-
-			// Initialize task here
-			Queue queue = QueueFactory.getQueue("tickets-queue");
-
-			// Create Task and push it into Task Queue
-			TaskOptions taskOptions = TaskOptions.Builder.withPayload(task);
-
-			queue.add(taskOptions);
+			task.run();
+			
+//			// Initialize task here
+//			Queue queue = QueueFactory.getQueue("tickets-queue");
+//
+//			// Create Task and push it into Task Queue
+//			TaskOptions taskOptions = TaskOptions.Builder.withPayload(task);
+//
+//			queue.add(taskOptions);
 		}
 		catch (Exception e)
 		{

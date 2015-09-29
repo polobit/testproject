@@ -64,6 +64,11 @@ public class Tickets extends Cursor
 	 * Stores epoch time when ticket is created
 	 */
 	public Long created_time = 0L;
+	
+	/**
+	 * Stores epoch time when ticket is last updated
+	 */
+	public Long last_updated_time = 0L;
 
 	public static enum LAST_UPDATED_BY
 	{
@@ -155,12 +160,17 @@ public class Tickets extends Cursor
 	/**
 	 * Stores true if any of its notes have attachments
 	 */
-	public Boolean attachments = false;
+	public Boolean attachments_exists = false;
 
 	/**
 	 * Stores true if ticket is deleted from client
 	 */
 	public Boolean is_archived = false;
+	
+	/**
+	 * Stores true if ticket is deleted from client
+	 */
+	public String requester_ip_address = "";
 
 	/**
 	 * Default constructor
@@ -172,7 +182,7 @@ public class Tickets extends Cursor
 
 	public Tickets(Long group_id, Boolean assigned_to_group, String requester_name, String requester_email,
 			String subject, String cc_emails, String first_notes_text, Source source,
-			Boolean attachments)
+			Boolean attachments_exists)
 	{
 		super();
 		this.group_id = group_id;
@@ -183,7 +193,7 @@ public class Tickets extends Cursor
 		this.cc_emails = cc_emails;
 		this.first_notes_text = first_notes_text;
 		this.source = source;
-		this.attachments = attachments;
+		this.attachments_exists = attachments_exists;
 	}
 
 	/**

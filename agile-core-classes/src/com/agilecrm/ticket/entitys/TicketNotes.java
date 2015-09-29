@@ -1,6 +1,7 @@
 package com.agilecrm.ticket.entitys;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import javax.persistence.Id;
@@ -134,6 +135,7 @@ public class TicketNotes
 		this.original_html_text = original_html_text;
 		this.note_type = note_type;
 		this.attachments_list = attachments_list;
+		this.created_time = Calendar.getInstance().getTimeInMillis();
 	}
 
 

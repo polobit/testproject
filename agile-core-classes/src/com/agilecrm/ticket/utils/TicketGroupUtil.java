@@ -6,7 +6,6 @@ import com.agilecrm.ticket.entitys.TicketGroups;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.campaignio.urlshortener.util.Base62;
 import com.google.appengine.api.NamespaceManager;
-import com.google.appengine.api.datastore.EntityNotFoundException;
 
 /**
  * 
@@ -51,38 +50,19 @@ public class TicketGroupUtil
 
 	/**
 	 * 
-	 * @param groupID
-	 * @return
-	 * @throws Exception
-	 */
-	public static TicketGroups getTicketGroupById(Long groupID) throws Exception
-	{
-		return TicketGroups.ticketGroupsDao.get(groupID);
-	}
-	
-	/**
-	 * 
 	 * @param namespace
 	 * @param groupID
 	 * @return
 	 */
-	public static TicketGroups getTicketGroupById(String namespace, Long groupID)
+	public static TicketGroups getTicketGroupById(Long groupID)
 	{
-		String oldNamespace = NamespaceManager.get();
-
 		try
 		{
-			NamespaceManager.set(namespace);
-			
 			return getTicketGroupById(groupID);
 		}
 		catch (Exception e)
 		{
 			e.printStackTrace();
-		}
-		finally
-		{
-			NamespaceManager.set(oldNamespace);
 		}
 
 		return null;

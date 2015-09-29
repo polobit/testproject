@@ -1,5 +1,8 @@
 package com.agilecrm.ticket.tasks;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -19,8 +22,12 @@ import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.taskqueue.DeferredTask;
 
 /**
+ * <code>TicketsDeferredTask</code>
  * 
  * @author Sasi on 28-Sep-2015
+ * @see <a
+ *      href="https://mandrill.zendesk.com/hc/en-us/articles/205583197-Inbound-Email-Processing-Overview#inbound-events-format">Mandrill
+ *      Inbound data format</a>
  * 
  */
 public class TicketsDeferredTask implements DeferredTask
@@ -43,7 +50,7 @@ public class TicketsDeferredTask implements DeferredTask
 		try
 		{
 			JSONObject mandrillInboundJSON = new JSONArray(mandrillResponse).getJSONObject(0);
-			
+
 			if (mandrillInboundJSON == null || !mandrillInboundJSON.has("msg"))
 				return;
 
@@ -79,13 +86,17 @@ public class TicketsDeferredTask implements DeferredTask
 			System.out.println("DomainName: " + namespace);
 			System.out.println("GroupID: " + groupID);
 
-			TicketGroups ticketGroup = TicketGroupUtil.getTicketGroupById(namespace, groupID);
+			TicketGroups ticketGroup = TicketGroupUtil.getTicketGroupById(groupID);
 
 			if (DomainUserUtil.count(namespace) <= 0)
 			{
 				System.out.println("Invalid domain: " + namespace);
 				return;
 			}
+
+			// Setting namespace
+			NamespaceManager.set(namespace);
+
 			if (ticketGroup == null)
 			{
 				System.out.println("Invalid groupID: " + groupID);
@@ -97,21 +108,63 @@ public class TicketsDeferredTask implements DeferredTask
 			boolean isNewTicket = true;
 
 			if (mimeHeaders.has("In-Reply-To"))
-				isNewTicket = false;
+			{
+				String inReplyTo = mimeHeaders.getString("In-Reply-To");
+
+				if (inReplyTo.endsWith("@helptor.com"))
+					isNewTicket = false;
+			}
+
+			String ccEmails = "";
+			JSONArray ccEmailsArray = new JSONArray();
+
+			// CC emails will be sent as JSON array
+			if (msgJSON.has("cc"))
+				ccEmailsArray = msgJSON.getJSONArray("cc");
+
+			for (int i = 0; i < ccEmailsArray.length(); i++)
+				ccEmails += ccEmailsArray.getJSONArray(i).getString(0) + " ";
+
+			// Check if any attachments exists
+			Boolean attachmentExists = msgJSON.has("attachments") || msgJSON.has("images");
+
+			// Save attachments and get URLs
+			// Need to implement attachments saving code here
+			List<String> attachmentURLs = new ArrayList<String>();
+
+			Tickets ticket = null;
 
 			if (isNewTicket)
 			{
-				Tickets ticket = TicketUtil.createTicket(namespace,groupID, true, msgJSON.getString("from_name"), msgJSON.getString("from_email"),
-						msgJSON.getString("subject"), "", msgJSON.getString("text"), msgJSON.getString("html"), Source.EMAIL, false,
+				// Creating new Ticket in Ticket table
+				ticket = TicketUtil.createTicket(groupID, true, msgJSON.getString("from_name"),
+						msgJSON.getString("from_email"), msgJSON.getString("subject"), ccEmails.trim(),
+						msgJSON.getString("text"), msgJSON.getString("html"), Source.EMAIL, attachmentExists,
 						mimeHeaders.getString("X-Originating-Ip"));
-				
-				TicketNotes ticketNotes = TicketNotesUtil.createTicketNotes(namespace, ticket.id, groupID,  CREATED_BY.REQUESTER,  msgJSON.getString("from_name"), msgJSON.getString("from_email"),
-						 msgJSON.getString("text"), msgJSON.getString("html"), NOTE_TYPE.PUBLIC, null);
 			}
 			else
 			{
+				// Fetch the ticket ID from In-Reply-To mime header
+				String temp = mimeHeaders.getString("In-Reply-To").replace("@helptor.com", "");
+				Long ticketID = Long.parseLong(temp);
 
+				ticket = TicketUtil.getTicketByID(ticketID);
+
+				// Check if ticket exists
+				if (ticket == null)
+				{
+					System.out.println("Invalid ticketID: " + temp);
+					return;
+				}
+
+				// Updating existing ticket
+				TicketUtil.updateTicket(ticketID, ccEmails.trim(), msgJSON.getString("text"), attachmentExists);
 			}
+
+			// Creating new Notes in TicketNotes table
+			TicketNotes ticketNotes = TicketNotesUtil.createTicketNotes(ticket.id, groupID, CREATED_BY.REQUESTER,
+					msgJSON.getString("from_name"), msgJSON.getString("from_email"), msgJSON.getString("text"),
+					msgJSON.getString("html"), NOTE_TYPE.PUBLIC, attachmentURLs);
 		}
 		catch (Exception e)
 		{
