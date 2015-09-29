@@ -726,6 +726,10 @@ function show_set_up_widget(widget_name, template_id, url, model, callback)
 				    		return;
 						$('#widget-settings', el).html($(template_ui)); 
 
+						if(widget_name == "CallScript"){
+							adjust_form();
+						}
+
 						if(callback)
 			 				callback(el);
 
@@ -843,6 +847,10 @@ function fill_form(id, widget_name, template_id)
 			console.log("prefsJSON:");
 			console.log(prefsJSON);
 			fill_fields(prefsJSON);
+		}
+
+		if(widget_name == "CallScript"){
+			adjust_form();
 		}
 
 	});
