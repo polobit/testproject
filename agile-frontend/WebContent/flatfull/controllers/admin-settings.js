@@ -746,6 +746,28 @@ var AdminSettingsRouter = Backbone.Router.extend({
 					{
 						console.log(data);
 					});
+				},
+				errorCallback : function(response)
+				{
+					disable_save_button($('.save', '#email-gateway-integration-form'));
+
+					// Show cause of error in saving
+					var $save_info = $('<div style="display:inline-block"><small><p style="color:#B94A48; font-size:14px"><i>'
+												+ response.responseText
+												+ '</i></p></small></div>');
+
+					// Appends error info to form actions
+					// block.
+					$('.save', '#email-gateway-integration-form').closest(".form-actions", this.el).append(
+							$save_info);
+
+					// Hides the error message after 3
+					// seconds
+					if(response.status != 406)
+						$save_info.show().delay(3000).hide(1, function(){
+
+							enable_save_button($('.save', '#email-gateway-integration-form'));
+						});
 				}
 
 			});
