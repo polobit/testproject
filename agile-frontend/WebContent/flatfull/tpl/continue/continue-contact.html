@@ -57,13 +57,10 @@
                             </ul>
                         </div>
                         <input name="tags" type="text" id="tags-new-person" class="tags-typeahead form-control" />
+                        <div class="invalid-tags-person" style="color:red;display:none;">Tag name should start with an alphabet and can not contain special characters other than underscore and space.</div>
                     </div>
                 </div>
-				<div class="control-group invalid-tags-person" style="display:none;">
-					<label class="control-label"></label>
-					<div style="color:red;">Tag name should start with an alphabet and can not contain special characters other than underscore and space.</div>
-				</div>
-                {{show_custom_fields custom_fields properties}}
+		        {{show_custom_fields custom_fields properties}}
                 
                 <p></p>
                 <div class="control-group form-group">
@@ -165,7 +162,7 @@
                         </div>
                     </div>
                     <div class="controls second col-sm-9">
-                        <div class="website multiple-template" style=" display:none" data="website">
+                        <div class="website multiple-template" data="website">
                             <input type="text" class="form-control pull-left m-r-xs inline-block" id="website" style="width:105px" name="website" placeholder="Website" /> 
                             <select class="website-select form-control pull-left m-r-xs" style="width:100px">
                                 <option></option>
