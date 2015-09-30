@@ -34,6 +34,7 @@ import com.agilecrm.deals.Opportunity;
 import com.agilecrm.deals.deferred.DealsDeferredTask;
 import com.agilecrm.deals.util.MilestoneUtil;
 import com.agilecrm.deals.util.OpportunityUtil;
+import com.agilecrm.reports.ReportsUtil;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
 import com.agilecrm.user.DomainUser;
@@ -947,6 +948,7 @@ public class DealsAPI
     public String getDealsDetailsByPipelineandOwner(@PathParam("owner-id") Long ownerId,@PathParam("pipeline-id") Long pipelineId,
     		@QueryParam("min") Long min, @QueryParam("max") Long max,@QueryParam("frequency") String frequency)
     {
+    	ReportsUtil.check(min*1000,max*1000);
 	return OpportunityUtil.getDealsDetailsByPipeline(ownerId,pipelineId, min, max,frequency).toString();
     }
 }

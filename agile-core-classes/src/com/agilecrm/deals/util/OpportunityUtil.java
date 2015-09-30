@@ -632,8 +632,8 @@ public class OpportunityUtil
 			Long pipelineId, long minTime, long maxTime,String frequency)
     {
 	// Final JSON Constants
-	String TOTAL = "total";
-	String PIPELINE = "pipeline";
+	String TOTAL = "Total";
+	String PIPELINE = "Pipeline";
 	int type=Calendar.DAY_OF_MONTH;
 	// Deals Object
 	JSONObject dealsObject = new JSONObject();
@@ -667,13 +667,13 @@ public class OpportunityUtil
 		}
 		else
 		{
-			startCalendar.setTimeInMillis((minTime * 1000) + (24 * 60 * 60 * 1000));
+			startCalendar.setTimeInMillis(minTime * 1000);
 		}
 		if(frequency!=null){
 			if (StringUtils.equalsIgnoreCase(frequency, "monthly"))
 				startCalendar.set(Calendar.DAY_OF_MONTH, 1);
 				
-				if (StringUtils.equalsIgnoreCase(frequency, "Quartely"))
+				if (StringUtils.equalsIgnoreCase(frequency, "Quarterly"))
 				{
 					int a= startCalendar.get(Calendar.MONTH)/3;
 					a=a*3;
@@ -702,7 +702,7 @@ public class OpportunityUtil
 		if(frequency!=null){
 		if (StringUtils.equalsIgnoreCase(frequency, "monthly"))
 			 endCalendar.set(Calendar.DAY_OF_MONTH, 1);
-			if (StringUtils.equalsIgnoreCase(frequency, "Quartely"))
+			if (StringUtils.equalsIgnoreCase(frequency, "Quarterly"))
 			{
 				int a= endCalendar.get(Calendar.MONTH)/3;
 				a=a*3;
@@ -737,7 +737,7 @@ public class OpportunityUtil
 					startCalendar.add(type, 1);
 					startCalendar.set(Calendar.DAY_OF_MONTH, 1);
 				}
-				if (StringUtils.equalsIgnoreCase(frequency, "Quartely"))
+				if (StringUtils.equalsIgnoreCase(frequency, "Quarterly"))
 				{
 					type = Calendar.MONTH;
 					startCalendar.add(type, 3);
@@ -795,7 +795,7 @@ public class OpportunityUtil
 		if(frequency!=null){
 		if(StringUtils.equalsIgnoreCase(frequency, "monthly")) 
 			calendar.set(Calendar.DAY_OF_MONTH, 1);
-		if(StringUtils.equalsIgnoreCase(frequency, "Quartely"))
+		if(StringUtils.equalsIgnoreCase(frequency, "Quarterly"))
 		{
 			int a= calendar.get(Calendar.MONTH)/3;
 			a=a*3;
