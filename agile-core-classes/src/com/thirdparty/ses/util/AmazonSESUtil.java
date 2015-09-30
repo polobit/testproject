@@ -121,7 +121,7 @@ public class AmazonSESUtil
 		
 			// For Production
 			if(SystemProperty.applicationId.get().equals("agile-crm-cloud"))
-				host = host + "ses-live-app";
+				host = host + "ses-beta-app";
 			
 		}
 		
