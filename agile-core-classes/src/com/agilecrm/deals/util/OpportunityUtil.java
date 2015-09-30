@@ -766,7 +766,7 @@ public class OpportunityUtil
 	    {
 	    	String wonMilestone = "Won";
 	    	String lostMilestone = "Lost";
-	    	    Milestone mile = MilestoneUtil.getMilestone(opportunity.pipeline_id);
+	    	    Milestone mile = MilestoneUtil.getMilestone(opportunity.getPipeline_id());
 	    	    if (mile.won_milestone != null)
 	    		wonMilestone = mile.won_milestone;
 	    	    if (mile.lost_milestone != null)
