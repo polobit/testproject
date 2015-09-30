@@ -170,13 +170,6 @@ var WidgetsRouter = Backbone.Router
 			},
 
 			/**
-			 * Manages Quickbooks widget
-			 */
-			QuickBooks : function(id) {
-				addConfigurableWidget(id, "QuickBooks", "quickbooks-login");
-			},
-
-			/**
 			 * Manages Twitter widget
 			 */
 			Twitter : function(id) {
@@ -204,7 +197,7 @@ var WidgetsRouter = Backbone.Router
 							"facebook-login",
 							('/scribe?service=facebook&isForAll=' + isForAll
 									+ '&return_url='
-									+ encodeURIComponent(window.location.href) + '/facebook'));
+									+ encodeURIComponent(window.location.href)));
 				} else {
 					addWidgetProfile(id, "Facebook", "facebook-revoke-access",
 							"/core/api/widgets/facebook/currentUserProfile/");
@@ -243,7 +236,7 @@ var WidgetsRouter = Backbone.Router
 							"quickbooks-login",
 							('/OAuthServlet?service=quickbooks&isForAll='
 									+ isForAll + '&return_url='
-									+ encodeURIComponent(window.location.href) + '/quickbooks'));
+									+ encodeURIComponent(window.location.href)));
 				} else {
 					addWidgetProfile(id, "QuickBooks",
 							"quickbooks-revoke-access",

@@ -89,11 +89,10 @@ public class WidgetsAPI {
 	public Widget createWidget(Widget widget) {
 		System.out.println("In widgets api create");
 
-		if (widget == null) {
-			return null;
+		if (widget != null) {
+			widget.save();
 		}
 
-		widget.save();
 		return widget;
 	}
 
@@ -175,9 +174,9 @@ public class WidgetsAPI {
 	@DELETE
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	public void removeCustomWidget(@QueryParam("widget_name") String widget_name) {
-			// removes the widget for all agile users
-			WidgetUtil.removeCurrentUserCustomWidget(widget_name);
-			System.out.println("TEst code.....");
+		// removes the widget for all agile users
+		WidgetUtil.removeCurrentUserCustomWidget(widget_name);
+		System.out.println("TEst code.....");
 	}
 
 	/**

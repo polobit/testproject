@@ -189,15 +189,16 @@ function save_widget_prefs(pluginName, prefs, callback)
 	{
 		// Checks if Widget_View is defined and adds
 		// widget to collection
-		if (Widgets_View && Widgets_View.collection)
+		if (Widgets_View && Widgets_View.collection){
 			Widgets_View.collection.add(new BaseModel(data.toJSON()));
+		}
 
 		data.set('is_added', true);
 		models[0].set(data);
 		
 		// If plugin name is CallScript do not redirect
 		if (pluginName != "CallScript"){
-			window.location.href = "#add-widget";
+			window.location.href = ("#"+pluginName+"/"+data.id);
 		}
 		
 
@@ -206,29 +207,25 @@ function save_widget_prefs(pluginName, prefs, callback)
 
 		update_collection_with_prefs(data);
 
-		if (pluginName == "Sip")
-		{
+		if (pluginName == "Sip"){
 			// Stop old stack.
-			if (Sip_Start == true)
-			{
+			if (Sip_Start == true){
 				Sip_Updated = true;
 				sipUnRegister();
 			}
-
 			// Register on Sip.
 			sipStart();
 		}
 
-		if (pluginName == "TwilioIO")
-		{
+		if (pluginName == "TwilioIO"){
 			Twilio_Setup_Called = false;
-
 			// Get widget, Create token and set twilio device
 			globalTwilioIOSetup();
 		}
 		
-		if (callback && typeof (callback) === "function")
+		if (callback && typeof (callback) === "function"){
 			callback(data);
+		}
 
 	} });
 }

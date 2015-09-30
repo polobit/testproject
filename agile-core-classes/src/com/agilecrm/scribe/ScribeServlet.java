@@ -369,11 +369,11 @@ public class ScribeServlet extends HttpServlet {
 					+ "/" + widgetID;
 			System.out.println("return url " + returnURL);
 			// If return URL is null, redirect to dashboard
-			resp.sendRedirect(returnURL);
 		} else {
-			resp.sendRedirect("/#add-widget");
+			returnURL = "/#add-widget";
 		}
 
+		resp.sendRedirect(returnURL);
 		// Delete return url Attribute
 		req.getSession().removeAttribute("return_url");
 	}

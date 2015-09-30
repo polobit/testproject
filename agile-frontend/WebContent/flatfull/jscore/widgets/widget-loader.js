@@ -318,7 +318,7 @@ function enableWidgetSoring(el)
 					 */
 					$('.widget-sortable > li', el).each(function(index, element)
 					{
-						var model_name = $(element).find('.widgets').attr('id');
+						var model_name = $(element).find('.collapse').attr('id');
 
 						// Get Model, model is set as data to widget element
 						var model = $('#' + model_name).data('model');

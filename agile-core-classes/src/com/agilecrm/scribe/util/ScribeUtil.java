@@ -673,7 +673,6 @@ public class ScribeUtil {
 		if (widget != null && widget.id > 0) {
 			WidgetID = widget.id;
 		}
-
 		return WidgetID;
 	}
 
