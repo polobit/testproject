@@ -575,7 +575,12 @@ users.
 {{#if billingData}}
 	{{#if_equals "FREE" ../plan.plan_type}}
 		{{#if ../emailPlan}}
-			<div class="col-md-3">
+			{{#if emailPlan.length}}
+				<div class="col-md-3">
+			{{else}}
+				<div class="col-md-3 hide">
+			{{/if}}
+
 		{{else}}
 			<div class="col-md-3 hide">
 		{{/if}}
