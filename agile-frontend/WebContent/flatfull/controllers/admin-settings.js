@@ -758,6 +758,9 @@ var AdminSettingsRouter = Backbone.Router.extend({
 					if(msg.indexOf('SignatureDoesNotMatch') != -1)
                         msg = msg.replace('SignatureDoesNotMatch', 'Signature Mismatch');
 
+                    if(msg.indexOf('InvalidClientTokenId') != -1)
+                    	msg = msg.replace('InvalidClientTokenId', 'Invalid Access Key');
+
 					// Show cause of error in saving
 					var $save_info = $('<div style="display:inline-block"><small><p style="color:#B94A48; font-size:14px"><i>'
 												+ msg
