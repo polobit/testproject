@@ -749,16 +749,23 @@ var AdminSettingsRouter = Backbone.Router.extend({
 				},
 				errorCallback : function(response)
 				{
-					disable_save_button($('.save', '#email-gateway-integration-form'));
+					var $save = $('.save', '#email-gateway-integration-form');
+
+					disable_save_button($save);
+
+					var msg = response.responseText;
+
+					if(msg.indexOf('SignatureDoesNotMatch') != -1)
+                        msg = msg.replace('SignatureDoesNotMatch', 'Signature Mismatch');
 
 					// Show cause of error in saving
 					var $save_info = $('<div style="display:inline-block"><small><p style="color:#B94A48; font-size:14px"><i>'
-												+ response.responseText
+												+ msg
 												+ '</i></p></small></div>');
 
 					// Appends error info to form actions
 					// block.
-					$('.save', '#email-gateway-integration-form').closest(".form-actions", this.el).append(
+					$save.closest(".form-actions", this.el).append(
 							$save_info);
 
 					// Hides the error message after 3
@@ -766,7 +773,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 					if(response.status != 406)
 						$save_info.show().delay(3000).hide(1, function(){
 
-							enable_save_button($('.save', '#email-gateway-integration-form'));
+							enable_save_button($save);
 						});
 				}
 
