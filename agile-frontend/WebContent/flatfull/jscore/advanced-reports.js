@@ -9,7 +9,7 @@
  */
 function initFunnelCharts(callback)
 {
-	head.js(LIB_PATH + 'lib/date-charts.js', LIB_PATH + 'lib/date-range-picker.js', CSS_PATH + "css/misc/date-picker.css", function()
+	head.js(LIB_PATH + 'lib/date-charts.js', LIB_PATH + 'lib/date-range-picker.js' + '?_=' + _AGILE_VERSION, CSS_PATH + "css/misc/date-picker.css", function()
 	{
 		$('.daterangepicker').remove();
 		// Bootstrap date range picker.
@@ -26,23 +26,23 @@ function initFunnelCharts(callback)
 		], 'Last Month' : [
 				Date.today().moveToFirstDayOfMonth().add({ months : -1 }), Date.today().moveToFirstDayOfMonth().add({ days : -1 })
 		], 'This Quarter' : [
-				Date.today().getMonth() < 3 ? new Date(Date.today().moveToFirstDayOfMonth().setMonth(0)) : 
-				(Date.today().getMonth() >= 3 && Date.today().getMonth() < 6) ? new Date(Date.today().moveToFirstDayOfMonth().setMonth(3)) :
-				(Date.today().getMonth() >= 6 && Date.today().getMonth() < 9) ? new Date(Date.today().moveToFirstDayOfMonth().setMonth(6)) : new Date(Date.today().moveToFirstDayOfMonth().setMonth(9)), 
-				Date.today().getMonth() < 3 ? new Date(Date.today().moveToLastDayOfMonth().setMonth(2)) : 
-				(Date.today().getMonth() >= 3 && Date.today().getMonth() < 6) ? new Date(Date.today().moveToLastDayOfMonth().setMonth(5)) :
-				(Date.today().getMonth() >= 6 && Date.today().getMonth() < 9) ? new Date(Date.today().moveToLastDayOfMonth().setMonth(8)) : new Date(Date.today().moveToLastDayOfMonth().setMonth(11))
+				Date.today().getMonth() < 3 ? new Date(Date.today().setMonth(0)).moveToFirstDayOfMonth() : 
+				(Date.today().getMonth() >= 3 && Date.today().getMonth() < 6) ? new Date(Date.today().setMonth(3)).moveToFirstDayOfMonth() :
+				(Date.today().getMonth() >= 6 && Date.today().getMonth() < 9) ? new Date(Date.today().setMonth(6)).moveToFirstDayOfMonth() : new Date(Date.today().setMonth(9)).moveToFirstDayOfMonth(), 
+				Date.today().getMonth() < 3 ? new Date(Date.today().setMonth(2).moveToLastDayOfMonth()) : 
+				(Date.today().getMonth() >= 3 && Date.today().getMonth() < 6) ? new Date(Date.today().setMonth(5)).moveToLastDayOfMonth() :
+				(Date.today().getMonth() >= 6 && Date.today().getMonth() < 9) ? new Date(Date.today().setMonth(8)).moveToLastDayOfMonth() : new Date(Date.today().setMonth(11)).moveToLastDayOfMonth()
 		], 'Last Quarter' : [
-				Date.today().getMonth() < 3 ? new Date(Date.today().add({ years : -1 }).moveToFirstDayOfMonth().setMonth(9)) : 
-				(Date.today().getMonth() >= 3 && Date.today().getMonth() < 6) ? new Date(Date.today().moveToFirstDayOfMonth().setMonth(0)) :
-				(Date.today().getMonth() >= 6 && Date.today().getMonth() < 9) ? new Date(Date.today().moveToFirstDayOfMonth().setMonth(3)) : new Date(Date.today().moveToFirstDayOfMonth().setMonth(6)), 
-				Date.today().getMonth() < 3 ? new Date(Date.today().add({ years : -1 }).moveToLastDayOfMonth().setMonth(11)) : 
-				(Date.today().getMonth() >= 3 && Date.today().getMonth() < 6) ? new Date(Date.today().moveToLastDayOfMonth().setMonth(2)) :
-				(Date.today().getMonth() >= 6 && Date.today().getMonth() < 9) ? new Date(Date.today().moveToLastDayOfMonth().setMonth(5)) : new Date(Date.today().moveToLastDayOfMonth().setMonth(8))
+				Date.today().getMonth() < 3 ? new Date(Date.today().add({ years : -1 }).setMonth(9)).moveToFirstDayOfMonth() : 
+				(Date.today().getMonth() >= 3 && Date.today().getMonth() < 6) ? new Date(Date.today().setMonth(0)).moveToFirstDayOfMonth() :
+				(Date.today().getMonth() >= 6 && Date.today().getMonth() < 9) ? new Date(Date.today().setMonth(3)).moveToFirstDayOfMonth() : new Date(Date.today().setMonth(6)).moveToFirstDayOfMonth(), 
+				Date.today().getMonth() < 3 ? new Date(Date.today().add({ years : -1 }).setMonth(11)).moveToLastDayOfMonth() : 
+				(Date.today().getMonth() >= 3 && Date.today().getMonth() < 6) ? new Date(Date.today().setMonth(2)).moveToLastDayOfMonth() :
+				(Date.today().getMonth() >= 6 && Date.today().getMonth() < 9) ? new Date(Date.today().setMonth(5)).moveToLastDayOfMonth() : new Date(Date.today().setMonth(8)).moveToLastDayOfMonth()
 		], 'This Year' : [
-				new Date(Date.today().moveToFirstDayOfMonth().setMonth(0)), new Date(Date.today().moveToLastDayOfMonth().setMonth(11))
+				new Date(Date.today().setMonth(0)).moveToFirstDayOfMonth(), new Date(Date.today().setMonth(11)).moveToLastDayOfMonth()
 		], 'Last Year' : [
-				new Date(Date.today().moveToFirstDayOfMonth().add({ years : -1 }).setMonth(0)), new Date(Date.today().moveToLastDayOfMonth().add({ years : -1 }).setMonth(11))
+				new Date(Date.today().setMonth(0)).add({ years : -1 }).moveToFirstDayOfMonth(), new Date(Date.today().setMonth(11)).add({ years : -1 }).moveToLastDayOfMonth()
 		] }, locale : { applyLabel : 'Apply', cancelLabel : 'Cancel', customRangeLabel : 'Custom', daysOfWeek : [
 				'Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'
 		], monthNames : [
