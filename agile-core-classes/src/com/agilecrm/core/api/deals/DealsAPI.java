@@ -34,6 +34,7 @@ import com.agilecrm.deals.Opportunity;
 import com.agilecrm.deals.deferred.DealsDeferredTask;
 import com.agilecrm.deals.util.MilestoneUtil;
 import com.agilecrm.deals.util.OpportunityUtil;
+import com.agilecrm.reports.ReportsUtil;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
 import com.agilecrm.user.DomainUser;
@@ -943,7 +944,7 @@ public class DealsAPI
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public String getNewDeals(@QueryParam("min") Long min, @QueryParam("max") Long max,@QueryParam("frequency") String type)
     {
-
+    	 ReportsUtil.check(min*1000,max*1000);
      return OpportunityUtil.getIncomingDealsList(min,max,type).toString();
     }
 

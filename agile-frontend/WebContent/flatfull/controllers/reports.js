@@ -614,6 +614,7 @@ var ReportsRouter = Backbone.Router
 				}, "#reports-listerners-container");
 			},
 			showIncomingDeals : function(){
+				hideTransitionBar();
 				head.js(LIB_PATH + 'lib/date-charts.js', LIB_PATH + 'lib/date-range-picker.js',function()
 						{
 
