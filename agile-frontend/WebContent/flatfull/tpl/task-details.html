@@ -122,7 +122,10 @@
 
 {{#each deals}}
 	<div>
-		<a href="#deal/{{id}}" class="activate-link thumb m-b-xs text-cap">{{name}}</a>({{currencySymbol}}{{numberWithCommas expected_value}}, {{probability}}%)
+  		<div style="width:60%" class="text-ellipsis pull-left">
+			<a href="#deal/{{id}}" class="activate-link thumb m-b-xs text-cap text-ellipsis" style="width: 100%;">{{name}}</a>
+		</div>
+  		<div style="width:40%" class="pull-left text-ellipsis">({{currencySymbol}}{{numberWithCommas expected_value}}, {{probability}}%)</div>
 	</div>
 {{/each}}
 </div>
@@ -369,6 +372,7 @@
 				<!-- <colgroup><col width="10px"><col width="40%"><col width="20%"><col width="25%"><col width="12%"></colgroup> -->
 				<thead>
 					<tr>
+						<th style="width:0.1%;"></th>
 						<th>Opportunity</th>
                         <!-- <th>Related To</th> -->
                         <th>Value</th>
@@ -406,7 +410,8 @@
 </script>
 
 <script id="task-related-deals-model-template" type="text/html">
-<td data="{{id}}" class="data">
+<td data="{{id}}" class="data"></td>
+<td>
 	<div class="text-ellipsis"> 
 		<a class="text-cap">{{name}}</a>
 	</div>

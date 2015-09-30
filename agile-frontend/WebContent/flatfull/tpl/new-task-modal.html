@@ -102,9 +102,10 @@
 						</div>	
 					</div>	
 					<div class="row">
-					  <div class="congrol-group form-group col-md-6">
-						<label class="control-label"><a href="#" id="new-task-related-contacts-label"><i class="icon-plus"></i> Add Contacts</a></label>
-						<div class="controls new-task-related-contacts-input hide">
+					  <div class="congrol-group form-group col-md-12">
+						<!-- <label class="control-label"><a href="#" id="new-task-related-contacts-label"><i class="icon-plus"></i> Add Contacts</a></label> -->
+						<label class="control-label new-task-related-contacts-label"><b>Related Contacts</b></label>
+						<div class="controls new-task-related-contacts-input">
 							<div>
 								<div class="pull-left">
 									<ul name="contacts" class="contacts tags tagsinput p-n"></ul>
@@ -116,14 +117,17 @@
 							</div>
 						</div>
 					  </div>
-					  <div class="control-group form-group col-md-6">
-							<label class="control-label"><a href="#" id="new-task-related-deals-label"><i class="icon-plus"></i> Add Deals</a></label>
-							<div class="controls new-task-related-deals-input hide" id="dealTypeAhead">
+					 </div>
+					 <div class="row">
+					  <div class="control-group form-group col-md-12">
+							<!-- <label class="control-label"><a href="#" id="new-task-related-deals-label"><i class="icon-plus"></i> Add Deals</a></label>  -->
+							<label class="control-label new-task-related-deals-label"><b>Related Deals</b></label>
+							<div class="controls new-task-related-deals-input" id="dealTypeAhead">
 								<div>
 									<div>
 										<ul name="deal_ids" class="deals tagsinput deal_tags p-n"></ul>
 									</div>
-									<input type="text" id="task_relates_to_deals" name="related_deals"
+									<input type="text" id="task_relates_to_deals" 
 									placeholder="Related Deals" class="typeahead typeahead_deals form-control"
 									data-provide="typeahead" data-mode="multiple" />
 								</div>

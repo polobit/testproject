@@ -601,47 +601,55 @@ $(function()
 		// Update will highlight the date of in date picker
 		$("input.date").datepicker('update');
 
-		if($('#activityTaskModal').find('.new-task-related-contacts-input').find('ul').find('li').length>0)
+		/*if($('#activityTaskModal').find('.new-task-related-contacts-input').find('ul').find('li').length>0)
 		{
 			$('#activityTaskModal').find('#new-task-related-contacts-label').parent().addClass('hide');
 			$('#activityTaskModal').find('.new-task-related-contacts-input').removeClass('hide');
+			$('#activityTaskModal').find('.new-task-related-contacts-label').removeClass('hide');
 		}
 		else
 		{
 			$('#activityTaskModal').find('#new-task-related-contacts-label').parent().removeClass('hide');
 			$('#activityTaskModal').find('.new-task-related-contacts-input').addClass('hide');
+			$('#activityTaskModal').find('.new-task-related-contacts-label').addClass('hide');
 		}
 		if($('#activityTaskModal').find('.new-task-related-deals-input').find('ul').find('li').length>0)
 		{
 			$('#activityTaskModal').find('#new-task-related-deals-label').parent().addClass('hide');
 			$('#activityTaskModal').find('.new-task-related-deals-input').removeClass('hide');
+			$('#activityTaskModal').find('.new-task-related-deals-label').removeClass('hide');
 		}
 		else
 		{
 			$('#activityTaskModal').find('#new-task-related-deals-label').parent().removeClass('hide');
 			$('#activityTaskModal').find('.new-task-related-deals-input').addClass('hide');
+			$('#activityTaskModal').find('.new-task-related-deals-label').addClass('hide');
 		}
 
 		if($('#activityModal').find('.new-event-related-contacts-input').find('ul').find('li').length>0)
 		{
 			$('#activityModal').find('#new-event-related-contacts-label').parent().addClass('hide');
 			$('#activityModal').find('.new-event-related-contacts-input').removeClass('hide');
+			$('#activityModal').find('.new-event-related-contacts-label').removeClass('hide');
 		}
 		else
 		{
 			$('#activityModal').find('#new-event-related-contacts-label').parent().removeClass('hide');
 			$('#activityModal').find('.new-event-related-contacts-input').addClass('hide');
+			$('#activityModal').find('.new-event-related-contacts-label').addClass('hide');
 		}
 		if($('#activityModal').find('.new-event-related-deals-input').find('ul').find('li').length>0)
 		{
 			$('#activityModal').find('#new-event-related-deals-label').parent().addClass('hide');
 			$('#activityModal').find('.new-event-related-deals-input').removeClass('hide');
+			$('#activityModal').find('.new-event-related-deals-label').removeClass('hide');
 		}
 		else
 		{
 			$('#activityModal').find('#new-event-related-deals-label').parent().removeClass('hide');
 			$('#activityModal').find('.new-event-related-deals-input').addClass('hide');
-		}
+			$('#activityModal').find('.new-event-related-deals-label').addClass('hide');
+		}*/
 
 	});
 
@@ -670,26 +678,30 @@ $(function()
 
 		$("input.date").datepicker('update');
 
-		if($('#updateActivityModal').find('.update-event-related-contacts-input').find('ul').find('li').length>0)
+		/*if($('#updateActivityModal').find('.update-event-related-contacts-input').find('ul').find('li').length>0)
 		{
 			$('#updateActivityModal').find('#update-event-related-contacts-label').parent().addClass('hide');
 			$('#updateActivityModal').find('.update-event-related-contacts-input').removeClass('hide');
+			$('#updateActivityModal').find('.update-event-related-contacts-label').removeClass('hide');
 		}
 		else
 		{
 			$('#updateActivityModal').find('#update-event-related-contacts-label').parent().removeClass('hide');
 			$('#updateActivityModal').find('.update-event-related-contacts-input').addClass('hide');
+			$('#updateActivityModal').find('.update-event-related-contacts-label').addClass('hide');
 		}
 		if($('#updateActivityModal').find('.update-event-related-deals-input').find('ul').find('li').length>0)
 		{
 			$('#updateActivityModal').find('#update-event-related-deals-label').parent().addClass('hide');
 			$('#updateActivityModal').find('.update-event-related-deals-input').removeClass('hide');
+			$('#updateActivityModal').find('.update-event-related-deals-label').removeClass('hide');
 		}
 		else
 		{
 			$('#updateActivityModal').find('#update-event-related-deals-label').parent().removeClass('hide');
 			$('#updateActivityModal').find('.update-event-related-deals-input').addClass('hide');
-		}
+			$('#updateActivityModal').find('.update-event-related-deals-label').addClass('hide');
+		}*/
 
 	});
 
@@ -761,10 +773,12 @@ $(function()
 		$('#event-time-1').closest('.control-group').show();
 		$('#event-date-2').closest('.row').show();
 
-		$('#activityModal').find('#new-event-related-contacts-label').parent().removeClass('hide');
+		/*$('#activityModal').find('#new-event-related-contacts-label').parent().removeClass('hide');
 		$('#activityModal').find('.new-event-related-contacts-input').addClass('hide');
+		$('#activityModal').find('.new-event-related-contacts-label').addClass('hide');
 		$('#activityModal').find('#new-event-related-deals-label').parent().removeClass('hide');
 		$('#activityModal').find('.new-event-related-deals-input').addClass('hide');
+		$('#activityModal').find('.new-event-related-deals-label').addClass('hide');*/
 	});
 
 	$('#webEventCancelModel').on('hidden.bs.modal', function()
@@ -775,29 +789,33 @@ $(function()
 		});
 	});
 
-	$('#activityModal').on('click', '#new-event-related-contacts-label', function(e){
+	/*$('#activityModal').on('click', '#new-event-related-contacts-label', function(e){
 		e.preventDefault();
 		$(this).parent().parent().find('.new-event-related-contacts-input').removeClass('hide');
+		$(this).parent().parent().find('.new-event-related-contacts-label').removeClass('hide');
 		$(this).parent().addClass('hide');
 	});
 
 	$('#activityModal').on('click', '#new-event-related-deals-label', function(e){
 		e.preventDefault();
 		$(this).parent().parent().find('.new-event-related-deals-input').removeClass('hide');
+		$(this).parent().parent().find('.new-event-related-deals-label').removeClass('hide');
 		$(this).parent().addClass('hide');
 	});
 
 	$('#updateActivityModal').on('click', '#update-event-related-contacts-label', function(e){
 		e.preventDefault();
 		$(this).parent().parent().find('.update-event-related-contacts-input').removeClass('hide');
+		$(this).parent().parent().find('.update-event-related-contacts-label').removeClass('hide');
 		$(this).parent().addClass('hide');
 	});
 
 	$('#updateActivityModal').on('click', '#update-event-related-deals-label', function(e){
 		e.preventDefault();
 		$(this).parent().parent().find('.update-event-related-deals-input').removeClass('hide');
+		$(this).parent().parent().find('.update-event-related-deals-label').removeClass('hide');
 		$(this).parent().addClass('hide');
-	});
+	});*/
 
 });
 

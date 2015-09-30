@@ -47,54 +47,62 @@ $( document ).ready(function() {
 		// Fill details in form
 		setForm(el);
 
-		if($('#updateTaskModal').find('.update-task-related-contacts-input').find('ul').find('li').length>0 
+		/*if($('#updateTaskModal').find('.update-task-related-contacts-input').find('ul').find('li').length>0 
 			|| (Current_Route.indexOf("task")==0 && readCookie("task_tab_position")=="contacts"))
 		{
 			$('#updateTaskModal').find('#update-task-related-contacts-label').parent().addClass('hide');
 			$('#updateTaskModal').find('.update-task-related-contacts-input').removeClass('hide');
+			$('#updateTaskModal').find('.update-task-related-contacts-label').removeClass('hide');
 		}
 		else
 		{
 			$('#updateTaskModal').find('#update-task-related-contacts-label').parent().removeClass('hide');
 			$('#updateTaskModal').find('.update-task-related-contacts-input').addClass('hide');
+			$('#updateTaskModal').find('.update-task-related-contacts-label').addClass('hide');
 		}
 		if($('#updateTaskModal').find('.update-task-related-deals-input').find('ul').find('li').length>0 
 			|| (Current_Route.indexOf("task")==0 && readCookie("task_tab_position")=="deals"))
 		{
 			$('#updateTaskModal').find('#update-task-related-deals-label').parent().addClass('hide');
 			$('#updateTaskModal').find('.update-task-related-deals-input').removeClass('hide');
+			$('#updateTaskModal').find('.update-task-related-deals-label').removeClass('hide');
 		}
 		else
 		{
 			$('#updateTaskModal').find('#update-task-related-deals-label').parent().removeClass('hide');
 			$('#updateTaskModal').find('.update-task-related-deals-input').addClass('hide');
-		}
+			$('#updateTaskModal').find('.update-task-related-deals-label').addClass('hide');
+		}*/
 
 	});
 
-	$('#activityTaskModal').on('click', '#new-task-related-contacts-label', function(e){
+	/*$('#activityTaskModal').on('click', '#new-task-related-contacts-label', function(e){
 		e.preventDefault();
 		$(this).parent().parent().find('.new-task-related-contacts-input').removeClass('hide');
+		$(this).parent().parent().find('.new-task-related-contacts-label').removeClass('hide');
 		$(this).parent().addClass('hide');
 	});
 
 	$('#activityTaskModal').on('click', '#new-task-related-deals-label', function(e){
 		e.preventDefault();
 		$(this).parent().parent().find('.new-task-related-deals-input').removeClass('hide');
+		$(this).parent().parent().find('.new-task-related-deals-label').removeClass('hide');
 		$(this).parent().addClass('hide');
 	});
 
 	$('#updateTaskModal').on('click', '#update-task-related-contacts-label', function(e){
 		e.preventDefault();
 		$(this).parent().parent().find('.update-task-related-contacts-input').removeClass('hide');
+		$(this).parent().parent().find('.update-task-related-contacts-label').removeClass('hide');
 		$(this).parent().addClass('hide');
 	});
 
 	$('#updateTaskModal').on('click', '#update-task-related-deals-label', function(e){
 		e.preventDefault();
 		$(this).parent().parent().find('.update-task-related-deals-input').removeClass('hide');
+		$(this).parent().parent().find('.update-task-related-deals-label').removeClass('hide');
 		$(this).parent().addClass('hide');
-	});
+	});*/
 
 });
 

@@ -354,6 +354,9 @@ $(function(){
 	{
 		e.preventDefault();
 		update_task(taskDetailView.toJSON());
+		setTimeout(function(){
+			$('#update_task_relates_to_deals').focus();
+		},1000);
 	});
 
 });
