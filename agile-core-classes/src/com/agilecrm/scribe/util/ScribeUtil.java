@@ -255,7 +255,7 @@ public class ScribeUtil {
 	 */
 	public static Long saveTokens(HttpServletRequest req,
 			HttpServletResponse resp, OAuthService service, String serviceName,
-			Token accessToken, String code) throws IOException {
+			Token accessToken, String code) throws IOException, Exception {
 
 		Long widgetID = null;
 
@@ -347,28 +347,24 @@ public class ScribeUtil {
 	 *            the code
 	 */
 	private static void saveShopifyPrefs(HttpServletRequest req, String code,
-			String isForAll) {
+			String isForAll) throws Exception {
 		String shopDomain = req.getParameter("shop");
 		String accessURl = new ShopifyAccessURLBuilder(shopDomain).code(code)
 				.clientKey(Globals.SHOPIFY_API_KEY)
 				.scretKey(Globals.SHOPIFY_SECRET_KEY).buildAccessUrl();
 		OAuthRequest oAuthRequest = new OAuthRequest(Verb.POST, accessURl);
 		Response response = oAuthRequest.send();
-		try {
-			HashMap<String, String> properties = new ObjectMapper().readValue(
-					response.getBody(),
-					new TypeReference<HashMap<String, String>>() {
 
-					});
-			ContactPrefs shopifyPrefs = new ContactPrefs();
-			shopifyPrefs.token = properties.get("access_token").toString();
-			shopifyPrefs.type = Type.SHOPIFY;
-			shopifyPrefs.othersParams = shopDomain;
-			shopifyPrefs.save();
+		HashMap<String, String> properties = new ObjectMapper().readValue(
+				response.getBody(),
+				new TypeReference<HashMap<String, String>>() {
 
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+				});
+		ContactPrefs shopifyPrefs = new ContactPrefs();
+		shopifyPrefs.token = properties.get("access_token").toString();
+		shopifyPrefs.type = Type.SHOPIFY;
+		shopifyPrefs.othersParams = shopDomain;
+		shopifyPrefs.save();
 
 	}
 
@@ -381,7 +377,7 @@ public class ScribeUtil {
 	 *            {@link String} access token after OAuth
 	 */
 	public static void saveStripeImportPref(HttpServletRequest req,
-			Token accessToken, String isForAll) {
+			Token accessToken, String isForAll) throws Exception {
 
 		String code = req.getParameter("code");
 		OAuthRequest oAuthRequest = new OAuthRequest(Verb.POST, String.format(
@@ -392,30 +388,27 @@ public class ScribeUtil {
 				+ Globals.DEV_STRIPE_API_KEY);
 
 		Response response = oAuthRequest.send();
-		try {
-			HashMap<String, String> properties = new ObjectMapper().readValue(
-					response.getBody(),
-					new TypeReference<HashMap<String, String>>() {
-					});
 
-			ContactPrefs prefs = new ContactPrefs();
-			// retrieve User Account information from stripe
-			Account account = Account.retrieve(prefs.apiKey);
-			prefs.userName = account.getEmail();
+		HashMap<String, String> properties = new ObjectMapper().readValue(
+				response.getBody(),
+				new TypeReference<HashMap<String, String>>() {
+				});
 
-			if (properties.containsKey("refresh_token")) {
+		ContactPrefs prefs = new ContactPrefs();
+		// retrieve User Account information from stripe
+		Account account = Account.retrieve(prefs.apiKey);
+		prefs.userName = account.getEmail();
 
-				prefs.refreshToken = properties.get("refresh_token");
-				prefs.apiKey = properties.get("access_token");
-				prefs.type = Type.STRIPE;
-				prefs.othersParams = "first";
-			}
+		if (properties.containsKey("refresh_token")) {
 
-			prefs.save();
-
-		} catch (Exception e) {
-			e.printStackTrace();
+			prefs.refreshToken = properties.get("refresh_token");
+			prefs.apiKey = properties.get("access_token");
+			prefs.type = Type.STRIPE;
+			prefs.othersParams = "first";
 		}
+
+		prefs.save();
+
 	}
 
 	/**

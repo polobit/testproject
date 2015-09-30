@@ -321,12 +321,12 @@ public class ScribeServlet extends HttpServlet {
 				|| serviceName.equalsIgnoreCase(SERVICE_TYPE_GOOGLE_DRIVE)
 				|| serviceName.equalsIgnoreCase(SERVICE_TYPE_FACEBOOK)
 				|| serviceName.equalsIgnoreCase(SERVICE_TYPE_STRIPE_IMPORT)
-				|| serviceName.equalsIgnoreCase(SERVICE_TYPE_GOOGLE_PLUS))
+				|| serviceName.equalsIgnoreCase(SERVICE_TYPE_GOOGLE_PLUS)) {
 
 			code = req.getParameter("code");
 
-		// OAuth 1.0 requires token and verifier
-		else {
+			// OAuth 1.0 requires token and verifier
+		} else {
 			/*
 			 * If request token in not null, new token is created using
 			 * oAuthToken, which gets the access token from the provider
@@ -360,20 +360,35 @@ public class ScribeServlet extends HttpServlet {
 
 		System.out.println("service name in save token " + serviceName);
 
-		widgetID = ScribeUtil.saveTokens(req, resp, service, serviceName,
-				accessToken, code);
-		String returnURL;
-		if (widgetID != null) {
-			// return URL is retrieved from session
-			returnURL = (String) req.getSession().getAttribute("return_url")
-					+ "/" + widgetID;
-			System.out.println("return url " + returnURL);
-			// If return URL is null, redirect to dashboard
-		} else {
-			returnURL = "/#add-widget";
+		String widgetName = (Character.toUpperCase(serviceName.charAt(0)) + serviceName
+				.substring(1));
+		String resultType = "error";
+		String statusMSG = "Error occurred while saving " + widgetName
+				+ " widget";
+		String returnURL = "/#add-widget";
+
+		try {
+			widgetID = ScribeUtil.saveTokens(req, resp, service, serviceName,
+					accessToken, code);
+
+			if (widgetID != null) {
+				// return URL is retrieved from session
+				returnURL = (String) req.getSession()
+						.getAttribute("return_url") + "/" + widgetID;
+				resultType = "success";
+				statusMSG = widgetName + " widget saved successfully.";
+				System.out.println("return url " + returnURL);
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+
+			statusMSG += " : " + e.getMessage();
 		}
 
+		req.getSession().setAttribute("widgetMsgType", resultType);
+		req.getSession().setAttribute("widgetMsg", statusMSG);
 		resp.sendRedirect(returnURL);
+
 		// Delete return url Attribute
 		req.getSession().removeAttribute("return_url");
 	}

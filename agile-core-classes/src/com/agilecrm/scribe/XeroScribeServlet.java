@@ -59,22 +59,35 @@ public class XeroScribeServlet extends HttpServlet {
 		System.out.println("isForAll " + isForAll);
 		System.out.println("data is :" + data);
 
+		String returnURL = (String) req.getSession().getAttribute("return_url");
+		String resultType = "error";
+		String statusMSG = "Error occurred while saving Xero widget";
+
 		if (data != null) {
 			System.out.println(data);
-			widgetID = saveXeroPrefs(data, isForAll);
-			String returnURL = (String) req.getSession().getAttribute(
-					"return_url");
-			if (widgetID != null) {
-				System.out.println("return url " + returnURL);
-				// If return URL is null, redirect to dashboard
-				System.out.println(returnURL);
-				if (returnURL == null) {
-					returnURL = "/#Xero/" + widgetID;
+			try {
+				widgetID = saveXeroPrefs(data, isForAll);
+				if (widgetID != null) {
+					System.out.println("return url " + returnURL);
+					// If return URL is null, redirect to dashboard
+					System.out.println(returnURL);
+					if (returnURL == null) {
+						returnURL = "/#Xero/" + widgetID;
+					}
+					resultType = "success";
+					statusMSG = "Xero widget saved successfully.";
+				} else {
+					returnURL = "/#add-widgets";
 				}
-			} else {
+			} catch (Exception e) {
 				returnURL = "/#add-widgets";
+				statusMSG += " : " + e.getMessage();
 			}
+
+			req.getSession().setAttribute("widgetMsgType", resultType);
+			req.getSession().setAttribute("widgetMsg", statusMSG);
 			resp.sendRedirect(returnURL);
+
 			// Delete return url Attribute
 			req.getSession().removeAttribute("return_url");
 		}
@@ -90,7 +103,7 @@ public class XeroScribeServlet extends HttpServlet {
 	 * @throws IOException
 	 */
 	public static Long saveXeroPrefs(String data, String isForAll)
-			throws IOException {
+			throws Exception {
 		Long widgetID = null;
 		System.out.println("In Xero save");
 
