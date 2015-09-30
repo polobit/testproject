@@ -9,7 +9,6 @@
 </head>
 <body>
 <%
-	TicketGroupUtil.createDefaultGroup("sasi");
 %>
 </body>
 </html>
