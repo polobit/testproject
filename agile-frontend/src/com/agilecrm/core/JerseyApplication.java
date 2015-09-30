@@ -5,6 +5,8 @@ import java.util.Set;
 
 import javax.ws.rs.core.Application;
 
+import com.agilecrm.ticket.rest.TicketGroupRest;
+import com.agilecrm.ticket.rest.TicketsRest;
 public class JerseyApplication extends Application
 {
     @Override
@@ -106,6 +108,10 @@ public class JerseyApplication extends Application
 	// Email Unsubscription
 	s.add(com.agilecrm.core.api.campaigns.UnsubscribeEmailAPI.class);
 	// s.add(com.agilecrm.core.api.webpage.WebPageAPI.class);
+	
+	// Ticket Rest classes
+		s.add(TicketsRest.class);
+		s.add(TicketGroupRest.class);
 
 	return s;
     }

@@ -1,40 +1,57 @@
 package com.agilecrm.ticket.utils;
 
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang.exception.ExceptionUtils;
 
 import com.agilecrm.search.document.TicketDocument;
+import com.agilecrm.ticket.entitys.TicketGroups;
 import com.agilecrm.ticket.entitys.Tickets;
 import com.agilecrm.ticket.entitys.Tickets.LAST_UPDATED_BY;
 import com.agilecrm.ticket.entitys.Tickets.Priority;
 import com.agilecrm.ticket.entitys.Tickets.Source;
 import com.agilecrm.ticket.entitys.Tickets.Status;
 import com.agilecrm.ticket.entitys.Tickets.Type;
+import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.googlecode.objectify.Key;
 
 /**
+ * <code>TicketUtil</code> is a utility class to provide CRUD operations on
+ * Tickets.
  * 
  * @author Sasi on 28-Sep-2015
+ * @See {@link TicketDocument}
  * 
  */
-public class TicketUtil
+public class TicketsUtil
 {
-	public static Tickets getTicketByID(Long ticketID)
+	public static List<Tickets> getTicketsByGroupID(Long groupID, Status status, String cursor, String pageSize, String sortKey)
 	{
-		try
-		{
-			return Tickets.ticketsDao.get(ticketID);
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-		}
-
-		return null;
+		Map<String, Object> searchMap = new HashMap<String, Object>();
+		searchMap.put("status", status);
+		searchMap.put("group_id", new Key<TicketGroups>(TicketGroups.class, groupID));
+		
+		return Tickets.ticketsDao.fetchAllByOrder(20, cursor, searchMap, false, true, sortKey);
 	}
 
 	/**
+	 * Returns a Ticket object for given ticket ID
+	 * 
+	 * @param ticketID
+	 * @return Ticket object
+	 * @throws EntityNotFoundException 
+	 */
+	public static Tickets getTicketByID(Long ticketID) throws EntityNotFoundException
+	{
+		return Tickets.ticketsDao.get(ticketID);
+	}
+
+	/**
+	 * Creates new ticket in {@link Tickets} table and adds to text search
+	 * {@link TicketDocument}.
 	 * 
 	 * @param group_id
 	 * @param assigned_to_group
@@ -47,12 +64,12 @@ public class TicketUtil
 	 * @param source
 	 * @param attachments
 	 * @param ipAddress
-	 * @param created_by
-	 * @param note_type
+	 * 
+	 * @return {@link Tickets} object
 	 */
 	public static Tickets createTicket(Long group_id, Boolean assigned_to_group, String requester_name,
-			String requester_email, String subject, String cc_emails, String plain_text, String html_text,
-			Source source, Boolean attachments, String ipAddress)
+			String requester_email, String subject, String cc_emails, String plain_text, Source source,
+			Boolean attachments, String ipAddress)
 	{
 		Tickets ticket = null;
 
@@ -70,12 +87,13 @@ public class TicketUtil
 			ticket.type = Type.PROBLEM;
 			ticket.priority = Priority.LOW;
 			ticket.requester_ip_address = ipAddress;
-
 			// Get country and city from ipaddress
-
 			Key<Tickets> key = Tickets.ticketsDao.put(ticket);
 
 			System.out.println("key: " + key.getId());
+
+			ticket.short_id = getTicketShortID(key.getId()) + "";
+			Tickets.ticketsDao.put(ticket);
 
 			// Create search document
 			new TicketDocument().add(ticket);
@@ -90,19 +108,22 @@ public class TicketUtil
 	}
 
 	/**
+	 * Updates existing {@link Tickets} as well as text search document
+	 * {@link TicketDocument}
 	 * 
 	 * @param ticketID
 	 * @param cc_emails
-	 * @param plain_text
+	 * @param last_reply_plain_text
 	 * @param attachments_exists
-	 * @return
+	 * @return {@link Tickets} object
 	 */
-	public static Tickets updateTicket(Long ticketID, String cc_emails, String plain_text, Boolean attachments_exists)
+	public static Tickets updateTicket(Long ticketID, String cc_emails, String last_reply_plain_text,
+			Boolean attachments_exists)
 	{
 		try
 		{
-			// Get ticket by ticket ID
-			Tickets ticket = TicketUtil.getTicketByID(ticketID);
+			// Get existing ticket
+			Tickets ticket = TicketsUtil.getTicketByID(ticketID);
 
 			Long updatedTime = Calendar.getInstance().getTimeInMillis();
 
@@ -110,7 +131,7 @@ public class TicketUtil
 			ticket.last_updated_time = updatedTime;
 			ticket.last_customer_replied_time = updatedTime;
 			ticket.last_updated_by = LAST_UPDATED_BY.REQUESTER;
-			ticket.last_reply_text = plain_text;
+			ticket.last_reply_text = last_reply_plain_text;
 			ticket.user_replies_count += 1;
 
 			if (!ticket.attachments_exists)
@@ -132,6 +153,11 @@ public class TicketUtil
 		return null;
 	}
 
+	/**
+	 * 
+	 * @param ticketID
+	 * @return
+	 */
 	public static Long getTicketShortID(Long ticketID)
 	{
 		return ticketID;

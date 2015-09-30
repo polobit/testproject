@@ -5,11 +5,27 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import com.agilecrm.cursor.Cursor;
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.agilecrm.ticket.utils.TicketsUtil;
+import com.agilecrm.user.DomainUser;
+import com.googlecode.objectify.Key;
 import com.googlecode.objectify.annotation.Unindexed;
 
 /**
+ * <code>Tickets</code> root class for Ticketing. Every webhook returned from
+ * Mandrill will be saved as Ticket in Tickets table.
+ * 
+ * <p>
+ * Tickets inherits {@link Cursor} to include Cursor class variables within this
+ * class.
+ * </p>
+ * 
+ * <p>
+ * {@link TicketsUtil} class contains utility methods for performing CRUD
+ * operations on Tickets.
+ * </p>
  * 
  * @author Sasi on 28-Sep-2015
+ * @see {@link TicketsUtil}
  * 
  */
 @XmlRootElement
@@ -23,7 +39,7 @@ public class Tickets extends Cursor
 	/**
 	 * Stores ticket group id to which it belongs
 	 */
-	public Long group_id = 0L;
+	public Key<TicketGroups> group_id = null;
 
 	/**
 	 * Stores true if ticket is assigned to a group
@@ -33,7 +49,7 @@ public class Tickets extends Cursor
 	/**
 	 * Stores user ID to whom ticket is assigned
 	 */
-	public Long assignee_id = 0L;
+	public Key<DomainUser> assignee_id = null;
 
 	/**
 	 * Stores name of customer who created ticket
@@ -48,7 +64,12 @@ public class Tickets extends Cursor
 	/**
 	 * Stores contact id of customer
 	 */
-	public Long contact_id = 0L;
+	public String contact_id = "";
+
+	/**
+	 * Stores contact id of customer
+	 */
+	public String short_id = "";
 
 	/**
 	 * Stores ticket subject
@@ -64,7 +85,7 @@ public class Tickets extends Cursor
 	 * Stores epoch time when ticket is created
 	 */
 	public Long created_time = 0L;
-	
+
 	/**
 	 * Stores epoch time when ticket is last updated
 	 */
@@ -166,7 +187,7 @@ public class Tickets extends Cursor
 	 * Stores true if ticket is deleted from client
 	 */
 	public Boolean is_archived = false;
-	
+
 	/**
 	 * Stores true if ticket is deleted from client
 	 */
@@ -181,11 +202,10 @@ public class Tickets extends Cursor
 	}
 
 	public Tickets(Long group_id, Boolean assigned_to_group, String requester_name, String requester_email,
-			String subject, String cc_emails, String first_notes_text, Source source,
-			Boolean attachments_exists)
+			String subject, String cc_emails, String first_notes_text, Source source, Boolean attachments_exists)
 	{
 		super();
-		this.group_id = group_id;
+		this.group_id = new Key<TicketGroups>(TicketGroups.class, group_id);
 		this.assigned_to_group = assigned_to_group;
 		this.requester_name = requester_name;
 		this.requester_email = requester_email;

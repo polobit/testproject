@@ -6,7 +6,7 @@ import org.apache.commons.lang.exception.ExceptionUtils;
 
 import com.agilecrm.search.BuilderInterface;
 import com.agilecrm.ticket.entitys.Tickets;
-import com.agilecrm.ticket.utils.TicketUtil;
+import com.agilecrm.ticket.utils.TicketsUtil;
 import com.agilecrm.util.StringUtils2;
 import com.google.appengine.api.search.Document;
 import com.google.appengine.api.search.Field;
@@ -15,6 +15,9 @@ import com.google.appengine.api.search.IndexSpec;
 import com.google.appengine.api.search.SearchServiceFactory;
 
 /**
+ * <code>TicketDocument</code> class is a text search entity for {@link Tickets}
+ * class . This class implements {@link BuilderInterface} interface and override
+ * methods in it to perform CRUD operations on text search.
  * 
  * @author Sasi on 29-sep-2015
  * 
@@ -23,6 +26,10 @@ public class TicketDocument implements BuilderInterface
 {
 	String indexName = "tickets";
 
+	/**
+	 * Adds the Ticket entity to text search DB.
+	 * 
+	 */
 	@Override
 	public void add(Object entity)
 	{
@@ -46,8 +53,8 @@ public class TicketDocument implements BuilderInterface
 
 			/**
 			 * Set ticket created time. Epoch number is greater than limits
-			 * provided by setNumber method so converting millis epoch to normal
-			 * epoch
+			 * provided by setNumber method, so converting millis epoch to
+			 * normal epoch.
 			 */
 			document.addField(Field.newBuilder().setName("created_time")
 					.setNumber(Math.floor(ticket.created_time / 1000)));
@@ -55,9 +62,6 @@ public class TicketDocument implements BuilderInterface
 			// Set ticket last updated time
 			document.addField(Field.newBuilder().setName("last_updated_time")
 					.setNumber(Math.floor(ticket.last_updated_time / 1000)));
-
-			// Set ticket last updated by
-			document.addField(Field.newBuilder().setName("last_updated_by").setText(ticket.last_updated_by.toString()));
 
 			// Set ticket first replied time
 			document.addField(Field.newBuilder().setName("first_replied_time")
@@ -70,6 +74,9 @@ public class TicketDocument implements BuilderInterface
 			// Set ticket last customer updated time
 			document.addField(Field.newBuilder().setName("last_customer_replied_time")
 					.setNumber(Math.floor(ticket.last_customer_replied_time / 1000)));
+
+			// Set ticket last updated by
+			document.addField(Field.newBuilder().setName("last_updated_by").setText(ticket.last_updated_by.toString()));
 
 			// Set ticket status
 			document.addField(Field.newBuilder().setName("status").setText(ticket.status.toString()));
@@ -86,7 +93,7 @@ public class TicketDocument implements BuilderInterface
 			String requesterName = ticket.requester_name;
 			String requesterEmail = ticket.requester_email;
 			String plainText = ticket.last_reply_text;
-			String shortTicketID = TicketUtil.getTicketShortID(ticket.id) + "";
+			String shortTicketID = ticket.short_id;
 
 			// Set requester name
 			document.addField(Field.newBuilder().setName("requester_name").setText(requesterName));
@@ -97,7 +104,7 @@ public class TicketDocument implements BuilderInterface
 			// Set mail content
 			document.addField(Field.newBuilder().setName("mail_content").setText(plainText));
 
-			// Set requester email
+			// Setting search tokens
 			document.addField(Field
 					.newBuilder()
 					.setName("search_tokens")
@@ -107,7 +114,6 @@ public class TicketDocument implements BuilderInterface
 
 			// Set email tags
 			// document.addField(Field.newBuilder().setName("tags").setText(ticket.source.toString()));
-
 			System.out.println(getIndex().put(document));
 		}
 		catch (Exception e)
@@ -117,6 +123,9 @@ public class TicketDocument implements BuilderInterface
 		}
 	}
 
+	/**
+	 * Updates existing document.
+	 */
 	@Override
 	public void edit(Object entity)
 	{
@@ -142,6 +151,9 @@ public class TicketDocument implements BuilderInterface
 		}
 	}
 
+	/**
+	 * 
+	 */
 	@Override
 	public void delete(String id)
 	{
@@ -155,6 +167,9 @@ public class TicketDocument implements BuilderInterface
 		return SearchServiceFactory.getSearchService().getIndex(indexSpec);
 	}
 
+	/**
+	 * 
+	 */
 	@Override
 	public List getResults(List<Long> ids)
 	{

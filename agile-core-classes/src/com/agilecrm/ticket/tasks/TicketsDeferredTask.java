@@ -15,7 +15,7 @@ import com.agilecrm.ticket.entitys.Tickets;
 import com.agilecrm.ticket.entitys.Tickets.Source;
 import com.agilecrm.ticket.utils.TicketGroupUtil;
 import com.agilecrm.ticket.utils.TicketNotesUtil;
-import com.agilecrm.ticket.utils.TicketUtil;
+import com.agilecrm.ticket.utils.TicketsUtil;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.campaignio.urlshortener.util.Base62;
 import com.google.appengine.api.NamespaceManager;
@@ -25,8 +25,7 @@ import com.google.appengine.api.taskqueue.DeferredTask;
  * <code>TicketsDeferredTask</code>
  * 
  * @author Sasi on 28-Sep-2015
- * @see <a
- *      href="https://mandrill.zendesk.com/hc/en-us/articles/205583197-Inbound-Email-Processing-Overview#inbound-events-format">Mandrill
+ * @see <a href="https://mandrill.zendesk.com/hc/en-us/articles/205583197-Inbound-Email-Processing-Overview#inbound-events-format">Mandrill
  *      Inbound data format</a>
  * 
  */
@@ -92,8 +91,10 @@ public class TicketsDeferredTask implements DeferredTask
 				return;
 			}
 
+			String oldNamespace = NamespaceManager.get();
+			
 			// Setting namespace
-			NamespaceManager.set(namespace);
+			NamespaceManager.set(oldNamespace);
 
 			TicketGroups ticketGroup = TicketGroupUtil.getTicketGroupById(groupID);
 			if (ticketGroup == null)
@@ -136,9 +137,9 @@ public class TicketsDeferredTask implements DeferredTask
 			if (isNewTicket)
 			{
 				// Creating new Ticket in Ticket table
-				ticket = TicketUtil.createTicket(groupID, true, msgJSON.getString("from_name"),
+				ticket = TicketsUtil.createTicket(groupID, true, msgJSON.getString("from_name"),
 						msgJSON.getString("from_email"), msgJSON.getString("subject"), ccEmails.trim(),
-						msgJSON.getString("text"), msgJSON.getString("html"), Source.EMAIL, attachmentExists,
+						msgJSON.getString("text"),  Source.EMAIL, attachmentExists,
 						mimeHeaders.getString("X-Originating-Ip"));
 			}
 			else
@@ -147,7 +148,7 @@ public class TicketsDeferredTask implements DeferredTask
 				String temp = mimeHeaders.getString("In-Reply-To").replace("@helptor.com", "");
 				Long ticketID = Long.parseLong(temp);
 
-				ticket = TicketUtil.getTicketByID(ticketID);
+				ticket = TicketsUtil.getTicketByID(ticketID);
 
 				// Check if ticket exists
 				if (ticket == null)
@@ -157,13 +158,15 @@ public class TicketsDeferredTask implements DeferredTask
 				}
 
 				// Updating existing ticket
-				TicketUtil.updateTicket(ticketID, ccEmails.trim(), msgJSON.getString("text"), attachmentExists);
+				TicketsUtil.updateTicket(ticketID, ccEmails.trim(), msgJSON.getString("text"), attachmentExists);
 			}
 
 			// Creating new Notes in TicketNotes table
 			TicketNotes ticketNotes = TicketNotesUtil.createTicketNotes(ticket.id, groupID, CREATED_BY.REQUESTER,
 					msgJSON.getString("from_name"), msgJSON.getString("from_email"), msgJSON.getString("text"),
 					msgJSON.getString("html"), NOTE_TYPE.PUBLIC, attachmentURLs);
+			
+			NamespaceManager.set(oldNamespace);
 		}
 		catch (Exception e)
 		{
