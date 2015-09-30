@@ -232,11 +232,11 @@ public class EmailGatewayUtil
 
 	// SendGrid Error
 	if (responseJSON != null && responseJSON.has("errors"))
-	    throw new Exception("Error saving: " + responseJSON.getString("errors"));
+	    throw new Exception("Error Saving: " + responseJSON.getString("errors"));
 
 	// Mandrill Error
 	if (responseJSON != null && responseJSON.has("status") && responseJSON.getString("status").equals("error"))
-	    throw new Exception("Error saving: " + responseJSON.getString("message"));
+	    throw new Exception("Error Saving: " + responseJSON.getString("message"));
 
     }
 
