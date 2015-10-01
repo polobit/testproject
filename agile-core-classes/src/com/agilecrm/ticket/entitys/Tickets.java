@@ -76,7 +76,7 @@ public class Tickets extends Cursor
 	/**
 	 * Stores contact id of customer
 	 */
-	public Key<Contact> contact_id = null;
+	public Key<Contact> contact_key = null;
 
 	@NotSaved
 	public Long contactID = null;
@@ -239,6 +239,9 @@ public class Tickets extends Cursor
 
 		if (assignee_id != null)
 			assigneeID = assignee_id.getId();
+		
+		if (contact_key != null)
+			contactID = contact_key.getId();
 	}
 
 	/**
