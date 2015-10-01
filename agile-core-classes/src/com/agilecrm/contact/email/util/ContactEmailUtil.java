@@ -92,7 +92,7 @@ public class ContactEmailUtil
 	 */
 	public static void saveContactEmailAndSend(String fromEmail, String fromName, String to, String cc, String bcc,
 			String subject, String body, String signature, Contact contact, boolean trackClicks,
-			List<Long> documentIds, List<BlobKey> blobKeys) throws Exception
+			List<Long> documentIds, List<BlobKey> blobKeys, String attachment_name, String attachment_url) throws Exception
 	{
 
 		// Personal Email open tracking id
@@ -133,7 +133,7 @@ public class ContactEmailUtil
 		{
 			contactId = contact.id.toString();
 			saveContactEmail(fromEmail, fromName, to, cc, bcc, subject, emailBody, signature, contact.id,
-					openTrackerId, documentIds);
+					openTrackerId, documentIds, attachment_name, attachment_url);
 		}
 		else
 		{
@@ -151,7 +151,7 @@ public class ContactEmailUtil
 				{
 					contactId = contact.id.toString();
 					saveContactEmail(fromEmail, fromName, to, cc, bcc, subject, emailBody, signature, contact.id,
-							openTrackerId, documentIds);
+							openTrackerId, documentIds, attachment_name, attachment_url);
 
 					contact.setLastEmailed(System.currentTimeMillis() / 1000);
 					contact.update();
@@ -212,11 +212,22 @@ public class ContactEmailUtil
 	 *            <Long> documentIds - documentsIds as attachments to email
 	 */
 	public static void saveContactEmail(String fromEmail, String fromName, String to, String cc, String bcc,
-			String subject, String body, String signature, Long contactId, long trackerId, List<Long> documentIds)
+			String subject, String body, String signature, Long contactId, long trackerId, List<Long> documentIds, 
+			String attachment_name, String attachment_url)
 	{
 
 		// combine body and signature.
 		body = body + "<div><br/>" + signature + "</div>";
+		
+		// Adding attachment name to the content of email
+		if (attachment_name !=null && !attachment_name.equals("") && attachment_url != null && !attachment_url.equals(""))
+		{
+			body = body + "<div><a href='"+attachment_url+"' style='color:#23b7e5;'><i class='fa fa-paperclip m-r-xs'></i>" + attachment_name + "</a></div>";
+		}
+		else if (attachment_name !=null && !attachment_name.equals(""))
+		{
+			body = body + "<div><i class='fa fa-paperclip m-r-xs'></i>" + attachment_name + "</div>";
+		}
 
 		// Remove trailing commas for to emails
 		ContactEmail contactEmail = new ContactEmail(contactId, fromEmail, to, subject, body);

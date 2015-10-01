@@ -1,11 +1,7 @@
 package com.agilecrm.core.api;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
@@ -25,16 +21,12 @@ import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.agilecrm.account.EmailGateway;
-
 import com.agilecrm.account.EmailGateway.EMAIL_API;
-import com.agilecrm.account.VerifiedEmails.Verified;
-
 import com.agilecrm.account.VerifiedEmails;
-
+import com.agilecrm.account.VerifiedEmails.Verified;
 import com.agilecrm.account.util.EmailGatewayUtil;
 import com.agilecrm.account.util.VerifiedEmailsUtil;
 import com.agilecrm.activities.util.ActivitySave;
@@ -49,8 +41,6 @@ import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.EmailPrefs;
 import com.agilecrm.util.EmailUtil;
 import com.agilecrm.util.HTTPUtil;
-import com.agilecrm.util.VersioningUtil;
-import com.agilecrm.util.email.SendMail;
 import com.campaignio.tasklets.agile.util.AgileTaskletUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.blobstore.BlobKey;
@@ -107,7 +97,8 @@ public class EmailsAPI
 	    @FormParam("from_email") String fromEmail, @FormParam("to") String to, @FormParam("email_cc") String cc,
 	    @FormParam("email_bcc") String bcc, @FormParam("subject") String subject, @FormParam("body") String body,
 	    @FormParam("signature") String signature, @FormParam("track_clicks") boolean trackClicks,
-	    @FormParam("document_key") String document_id, @FormParam("blob_key") String blobKeyString)
+	    @FormParam("document_key") String document_id, @FormParam("blob_key") String blobKeyString, 
+	    @FormParam("attachment_name") String attachment_name, @FormParam("attachment_url") String attachment_url)
 	    throws Exception
     {
 	try
@@ -137,7 +128,7 @@ public class EmailsAPI
 	    {
 		// Saves Contact Email.
 		ContactEmailUtil.saveContactEmailAndSend(fromEmail, fromName, to, cc, bcc, subject, body, signature,
-			null, trackClicks, documentIds, blobKeys);
+			null, trackClicks, documentIds, blobKeys, attachment_name, attachment_url);
 
 		// Returns set of To Emails
 		Set<String> toEmailSet = ContactEmailUtil.getToEmailSet(to);
