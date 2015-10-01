@@ -28,7 +28,7 @@ public class TicketNotes
 	/**
 	 * Stores ticket id
 	 */
-	public Key<Tickets> ticket_key = null;
+	private Key<Tickets> ticket_key = null;
 
 	/**
 	 * Util attribute to send ticket id to client
@@ -39,7 +39,7 @@ public class TicketNotes
 	/**
 	 * Stores ticket group id to which it belongs
 	 */
-	public Key<TicketGroups> group_key = null;
+	private Key<TicketGroups> group_key = null;
 
 	/**
 	 * Util attribute to send group id to client
@@ -50,7 +50,7 @@ public class TicketNotes
 	/**
 	 * Stores user ID to whom ticket is assigned
 	 */
-	public Key<DomainUser> assignee_key = null;
+	private Key<DomainUser> assignee_key = null;
 
 	/**
 	 * Util attribute to send assignee id to client
