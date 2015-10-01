@@ -18,6 +18,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import com.agilecrm.AgileQueues;
+import com.agilecrm.activities.Category;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.CustomFieldDef;
 import com.agilecrm.contact.CustomFieldDef.SCOPE;
@@ -629,7 +630,7 @@ public class OpportunityUtil
      *         month.
      */
     public static JSONObject getDealsDetailsByPipeline(Long ownerId,
-			Long pipelineId, long minTime, long maxTime,String frequency)
+			Long pipelineId,Long source, long minTime, long maxTime,String frequency)
     {
 	// Final JSON Constants
 	String TOTAL = "Total";
@@ -650,13 +651,15 @@ public class OpportunityUtil
 	}
 	if(ownerId!=null && ownerId==0)
 		ownerId=null;
+	if(source!=null && source==0)
+		source=null;
 	String timeZone = "UTC";
 	UserPrefs userPrefs = UserPrefsUtil.getCurrentUserPrefs();
 	if (userPrefs != null && userPrefs.timezone != null)
 	{
 		timeZone = userPrefs.timezone;
 	}
-	List<Opportunity> opportunitiesList = getDealsWithOwnerandPipeline(ownerId,pipelineId, minTime, maxTime);
+	List<Opportunity> opportunitiesList = getDealsWithOwnerandPipeline(ownerId,pipelineId,source, minTime, maxTime);
 	if (opportunitiesList != null && opportunitiesList.size() > 0)
 	{
 		Calendar startCalendar = Calendar.getInstance(TimeZone.getTimeZone(timeZone));
@@ -1700,13 +1703,15 @@ public class OpportunityUtil
      */
     
 	public static List<Opportunity> getDealsWithOwnerandPipeline(Long ownerId,
-			Long pipelineId, long minTime, long maxTime) {
+			Long pipelineId,Long source, long minTime, long maxTime) {
 		UserAccessControlUtil
 				.checkReadAccessAndModifyQuery("Opportunity", null);
 		Map<String, Object> conditionsMap = new HashMap<String, Object>();
 		if (ownerId != null)
 			conditionsMap.put("ownerKey", new Key<DomainUser>(DomainUser.class,
 					ownerId));
+		if (source != null)
+			conditionsMap.put("dealSource", new Key<Category>(Category.class, source));
 		if (pipelineId != null)
 			conditionsMap.put("pipeline", new Key<Milestone>(Milestone.class,
 					pipelineId));

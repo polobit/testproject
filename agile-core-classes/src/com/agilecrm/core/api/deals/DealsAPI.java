@@ -412,7 +412,7 @@ public class DealsAPI
     public String getDealsDetailsByPipeline(@PathParam("pipeline-id") Long pipelineId, @QueryParam("min") Long min,
 	    @QueryParam("max") Long max)
     {
-	return OpportunityUtil.getDealsDetailsByPipeline(null,pipelineId, min, max,null).toString();
+	return OpportunityUtil.getDealsDetailsByPipeline(null,pipelineId,null, min, max,null).toString();
     }
 
     /**
@@ -942,13 +942,13 @@ public class DealsAPI
      * @return string having sum of expected values and pipeline values of the
      *         deals of same month.
      */
-    @Path("stats/details/{owner-id}/{pipeline-id}")
+    @Path("stats/details/{owner-id}/{pipeline-id}/{source}")
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public String getDealsDetailsByPipelineandOwner(@PathParam("owner-id") Long ownerId,@PathParam("pipeline-id") Long pipelineId,
-    		@QueryParam("min") Long min, @QueryParam("max") Long max,@QueryParam("frequency") String frequency)
+    		@PathParam("source") Long source,@QueryParam("min") Long min, @QueryParam("max") Long max,@QueryParam("frequency") String frequency)
     {
     	ReportsUtil.check(min*1000,max*1000);
-	return OpportunityUtil.getDealsDetailsByPipeline(ownerId,pipelineId, min, max,frequency).toString();
+	return OpportunityUtil.getDealsDetailsByPipeline(ownerId,pipelineId,source min, max,frequency).toString();
     }
 }

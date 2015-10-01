@@ -154,6 +154,14 @@ head.js(LIB_PATH + 'lib/date-charts.js', LIB_PATH + 'lib/date-range-picker.js', 
 
 		}, '<option class="default-select" value="{{id}}">{{name}}</option>', false, undefined, "All Owners");
 
+		fillSelect("source", "/core/api/categories?entity_type=DEAL_SOURCE", undefined, function()
+		{
+			$('#source').change(function()
+			{
+				callback();
+			});
+
+		}, '<option class="default-select" value="{{id}}">{{label}}</option>', false, undefined, "All Sources");
 		callback();
 
 		
@@ -214,6 +222,15 @@ function showsalesReportGraphs()
 
 	}
 
+	if ($('#source').length > 0)
+	{
+		// Get source
+		var source = 0;
+		if($("#source").val() != "" &&  $("#source").val() != "All Sources")
+			source=$("#source").val();
+			options +=('/'+ source);
+
+	}
 	options += ("?min=" + start_time/1000 + "&max=" + end_time/1000);
 	if ($('#frequency').length > 0)
 	{
