@@ -126,7 +126,7 @@ public class MandrillUtil
 		// each in campaign). If CC or BCC or multiple To with comma
 		// separated given then send email without merging
 		if (!StringUtils.isBlank(mailDeferredTask.cc) || !StringUtils.isBlank(mailDeferredTask.bcc)
-			|| isToExists(toArray, mailDeferredTask.to) || mailDeferredTask.to.contains(","))
+				|| isToExists(toArray, mailDeferredTask.to) || mailDeferredTask.to.contains(","))
 		{
 		    sendWithoutMerging(mailDeferredTask, emailSender.getMandrillAPIKey());
 		    continue;
@@ -543,4 +543,5 @@ public class MandrillUtil
 	}
 	return true;
     }
+    
 }
