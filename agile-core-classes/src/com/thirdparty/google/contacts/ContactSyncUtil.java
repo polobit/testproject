@@ -270,32 +270,39 @@ public class ContactSyncUtil
 	 */
 	public static void addOrganizationDetailsToGoogleContact(Contact contact, ContactEntry createContact)
 	{
-		// Adds Organization details to contact
-		ContactField companyField = contact.getContactField(Contact.COMPANY);
-		if (companyField != null && !StringUtils.isEmpty(companyField.value))
+		try
 		{
-			List<Organization> organizations = createContact.getOrganizations();
-			Organization company = new Organization(null, false, "http://schemas.google.com/g/2005#work");
-			com.google.gdata.data.extensions.OrgName name = new com.google.gdata.data.extensions.OrgName(
-					companyField.value);
-			company.setOrgName(name);
-			ContactField jobTitleField = contact.getContactField(Contact.TITLE);
-			if (jobTitleField != null && StringUtils.isNotBlank(jobTitleField.value))
+			// Adds Organization details to contact
+			ContactField companyField = contact.getContactField(Contact.COMPANY);
+			if (companyField != null && !StringUtils.isEmpty(companyField.value))
 			{
-				company.setOrgTitle(new OrgTitle(jobTitleField.value));
-			}
-			if (organizations != null & organizations.size() > 0)
-			{
-				if (organizations.size() == 1)
-					organizations.set(0, company);// updating the existing
-													// organization
+				List<Organization> organizations = createContact.getOrganizations();
+				Organization company = new Organization(null, false, "http://schemas.google.com/g/2005#work");
+				com.google.gdata.data.extensions.OrgName name = new com.google.gdata.data.extensions.OrgName(
+						companyField.value);
+				company.setOrgName(name);
+				ContactField jobTitleField = contact.getContactField(Contact.TITLE);
+				if (jobTitleField != null && StringUtils.isNotBlank(jobTitleField.value))
+				{
+					company.setOrgTitle(new OrgTitle(jobTitleField.value));
+				}
+				if (organizations != null & organizations.size() > 0)
+				{
+					if (organizations.size() == 1)
+						organizations.set(0, company);// updating the existing
+														// organization
+					else
+						createContact.addOrganization(company);// creating new
+																// organization for
+																// a contact
+				}
 				else
-					createContact.addOrganization(company);// creating new
-															// organization for
-															// a contact
+					createContact.addOrganization(company);
 			}
-			else
-				createContact.addOrganization(company);
+		}
+		catch(Exception e)
+		{
+			System.out.println("Error occured while adding organization details "+e.getMessage());
 		}
 	}
 
