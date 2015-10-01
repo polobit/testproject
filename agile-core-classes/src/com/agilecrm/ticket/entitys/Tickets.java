@@ -3,6 +3,8 @@ package com.agilecrm.ticket.entitys;
 import javax.persistence.Id;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
+
 import com.agilecrm.contact.Contact;
 import com.agilecrm.cursor.Cursor;
 import com.agilecrm.db.ObjectifyGenericDao;
@@ -39,6 +41,7 @@ public class Tickets extends Cursor
 	/**
 	 * Stores ticket group id to which it belongs
 	 */
+	@JsonIgnore
 	private Key<TicketGroups> group_id = null;
 
 	/**
@@ -55,6 +58,7 @@ public class Tickets extends Cursor
 	/**
 	 * Stores user ID to whom ticket is assigned
 	 */
+	@JsonIgnore
 	private Key<DomainUser> assignee_id = null;
 
 	/**
@@ -76,6 +80,7 @@ public class Tickets extends Cursor
 	/**
 	 * Stores contact id of customer
 	 */
+	@JsonIgnore
 	private Key<Contact> contact_key = null;
 
 	@NotSaved

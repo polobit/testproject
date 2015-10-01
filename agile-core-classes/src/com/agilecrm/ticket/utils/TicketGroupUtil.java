@@ -155,7 +155,7 @@ public class TicketGroupUtil
 
 	public static void main(String[] args)
 	{
-		System.out.println(Base62.fromDecimalToOtherBase(62, 5249485793918976l));
+		System.out.println(Base62.fromDecimalToOtherBase(62, 5307087345156096l));
 		System.out.println(Base62.fromOtherBaseToDecimal(62, "O2e8kqKQa"));
 	}
 }
