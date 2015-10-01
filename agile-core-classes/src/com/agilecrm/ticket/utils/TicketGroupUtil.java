@@ -32,6 +32,7 @@ public class TicketGroupUtil
 		TicketGroups supportGroup = new TicketGroups();
 
 		supportGroup.group_name = "Support";
+		supportGroup.is_default = true;
 		supportGroup.updated_time = Calendar.getInstance().getTimeInMillis();
 		supportGroup.agents_key_list = DomainUserUtil.getDomainUserKeys(NamespaceManager.get());
 

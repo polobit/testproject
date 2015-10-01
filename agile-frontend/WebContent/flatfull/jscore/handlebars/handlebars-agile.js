@@ -293,6 +293,10 @@ function getTemplateUrls(templateName)
 	{
 		template_relative_urls.push("facebookpage.js");
 	}
+	if (templateName.indexOf("ticket") == 0)
+	{
+		template_relative_urls.push("tickets.js");
+	}
 	if (templateName.indexOf("webpages") == 0)
 	{
 		template_relative_urls.push("webpages.js");

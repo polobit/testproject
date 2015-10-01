@@ -270,6 +270,22 @@ if(currentUserPrefs.menuPosition.equals("top")){
   <!-- <li class='<%if(currentUserPrefs.menuPosition.equals("top")){out.print("dockedicons ");} else{out.print("fixedicons ");} %>' id="planView"> <a href="#subscribe"><i class="icon-shopping-cart"></i> <span> Plan &amp; Upgrade </span></a></li>
   <li class='pos-b-0 <%if(currentUserPrefs.menuPosition.equals("top")){out.print("dockedicons ");} else{out.print("fixedicons ");} %>' id ="helpView"><a href="#help"><i class="icon-question"></i>
                       <span> Help </span></a></li> -->
+   <li class="line dk"></li>
+    <li class="hidden-folded padder m-t m-b-sm text-muted text-xs">
+                <span>Support</span>
+              </li>
+   <li id="workflowsmenu">
+    <a  href="#tickets">
+      <i class="icon icon-ticket"></i>
+      <span>Tickets</span>
+    </a>
+  </li>  
+   <li id="workflowsmenu">
+    <a  href="#ticket-groups">
+      <i class="icon icon-users"></i>
+      <span>Ticket Groups</span>
+    </a>
+  </li>                   
   </ul>
   </nav>
   </div>

@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.agilecrm.ticket.entitys.TicketGroups;
 import com.agilecrm.ticket.entitys.TicketNotes;
 import com.agilecrm.ticket.entitys.Tickets;
 import com.agilecrm.ticket.entitys.TicketNotes.CREATED_BY;

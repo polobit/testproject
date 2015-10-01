@@ -47,18 +47,28 @@ public class TicketGroups
 	 * Stores list of Domain User IDs
 	 */
 	public List<Key<DomainUser>> agents_key_list = new ArrayList<Key<DomainUser>>();
-	
+
 	/**
 	 * Stores list of agent id's
 	 */
 	@NotSaved
 	public List<String> agents_keys = new ArrayList<String>();
 
-	 /**
-     * Stores current domain user key as owner.
-     */
-    public Key<DomainUser> owner_key = null;
-    
+	/**
+	 * Stores current domain user key as owner.
+	 */
+	public Key<DomainUser> owner_key = null;
+	
+	/**
+	 * Stores current domain user key as owner.
+	 */
+	public Long owner_id = null;
+	
+	/**
+	 * Stores current domain user key as owner.
+	 */
+	public Boolean is_default = false;
+
 	public TicketGroups()
 	{
 		super();
