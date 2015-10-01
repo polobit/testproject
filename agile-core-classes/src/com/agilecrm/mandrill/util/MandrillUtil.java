@@ -124,7 +124,7 @@ public class MandrillUtil
 	// Initialize mailJSON with common fields
 	JSONObject mailJSON = getMandrillMailJSON(apiKey, firstMailDefferedTask.domain,
 		firstMailDefferedTask.fromEmail, firstMailDefferedTask.fromName, firstMailDefferedTask.replyTo,
-		firstMailDefferedTask.metadata, emailSender.isEmailWhiteLabelEnabled());
+		firstMailDefferedTask.metadata, emailSender.billingRestriction.isEmailPlanPaid());
 
 	JSONArray mergeVarsArray = new JSONArray();
 	JSONArray toArray = new JSONArray();
@@ -263,13 +263,6 @@ public class MandrillUtil
 	    JSONObject messageJSON = getMessageJSON(subaccount, fromEmail, fromName, replyTo, metadata);
 	    mailJSON.put(Mandrill.MANDRILL_MESSAGE, messageJSON);
 	    mailJSON.put(Mandrill.MANDRILL_ASYNC, true);
-
-	    // By Default Main pool
-	    mailJSON.put(Mandrill.MANDRILL_IP_POOL, Mandrill.MANDRILL_MAIN_POOL);
-
-	    // For paid plans, Paid Pool
-	    if (isPaid)
-		mailJSON.put(Mandrill.MANDRILL_IP_POOL, Globals.MANDRILL_PAID_POOL);
 
 	    return mailJSON;
 	}
