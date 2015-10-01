@@ -93,6 +93,25 @@
 {{/if}}
 
 <div>
+{{#if_equals pipeline.won_milestone milestone}}
+  {{#if won_date}}
+    <div class="m-t-sm">
+      <div>
+         <small class="text-xs text-muted">Won Date</small>
+      </div>
+      <div>{{epochToHumanDateInFormat won_date}}</div>
+    </div>
+  {{else}}
+    {{#if milestone_changed_time}}
+      <div class="m-t-sm">
+        <div>
+          <small class="text-xs text-muted">Won Date</small>
+        </div>
+        <div>{{epochToHumanDateInFormat milestone_changed_time}}</div>
+      </div>
+    {{/if}}
+  {{/if}}
+{{/if_equals}}
 
                            
 
