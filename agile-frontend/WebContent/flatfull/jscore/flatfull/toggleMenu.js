@@ -87,10 +87,15 @@ $(document).ready(function(){
    $(".need_help").popover({ placement : 'left',
 					html:true,
 					container: 'body'
-				});
-   //$(".need_help").popover('show'); 
+				}).on("click", function(){
+						var $this = $('.popover').find("#need_help_header");
+						$this.closest(".popover").addClass("custom_popover");
+
+    			   }); 
+
 
    });
+});
 
 //checks if there are any custom fields and if if present navigates to contact-add page otherwise opens person-modal
 function addContactBasedOnCustomfields(){

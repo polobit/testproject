@@ -2571,6 +2571,12 @@ div.cat-addtocart-row.row1 span,div.cat-addtocart-row.row2 span {
 	padding: 10px 0 0 0;
 }
 
+
+.custom_popover{
+	border-radius:4px;
+	position: fixed;
+	background-color: #f6f6f6;
+}
 #djc_additionallink span,#djc_additionallink a:hover {
 	color: #000;
 }
@@ -2969,3 +2975,10 @@ width: 915px;
  word-wrap:break- all;
  white-space:normal!important;
  } 
+.custom_popover.left > .arrow:after{
+	border-left-color: #f6f6f6;
+}
+.custom_popover .popover-content{
+	padding-top: 5px;
+	padding-bottom:5px;
+}
