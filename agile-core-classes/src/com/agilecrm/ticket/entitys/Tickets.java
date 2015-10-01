@@ -3,6 +3,7 @@ package com.agilecrm.ticket.entitys;
 import javax.persistence.Id;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import com.agilecrm.contact.Contact;
 import com.agilecrm.cursor.Cursor;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.ticket.utils.TicketsUtil;
@@ -38,13 +39,13 @@ public class Tickets extends Cursor
 	/**
 	 * Stores ticket group id to which it belongs
 	 */
-	public Key<TicketGroups> group_key = null;
+	public Key<TicketGroups> group_id = null;
 
 	/**
 	 * Util attribute to send group id to client
 	 */
 	@NotSaved
-	public Long group_id = null;
+	public Long groupID = null;
 
 	/**
 	 * Stores true if ticket is assigned to a group
@@ -54,13 +55,13 @@ public class Tickets extends Cursor
 	/**
 	 * Stores user ID to whom ticket is assigned
 	 */
-	public Key<DomainUser> assignee_key = null;
+	public Key<DomainUser> assignee_id = null;
 
 	/**
 	 * Util attribute to send assignee id to client
 	 */
 	@NotSaved
-	public Long assignee_id = null;
+	public Long assigneeID = null;
 
 	/**
 	 * Stores name of customer who created ticket
@@ -75,7 +76,10 @@ public class Tickets extends Cursor
 	/**
 	 * Stores contact id of customer
 	 */
-	public String contact_id = "";
+	public Key<Contact> contact_id = null;
+
+	@NotSaved
+	public Long contactID = null;
 
 	/**
 	 * Stores contact id of customer
@@ -216,7 +220,7 @@ public class Tickets extends Cursor
 			String subject, String cc_emails, String first_notes_text, Source source, Boolean attachments_exists)
 	{
 		super();
-		this.group_key = new Key<TicketGroups>(TicketGroups.class, group_id);
+		this.group_id = new Key<TicketGroups>(TicketGroups.class, group_id);
 		this.assigned_to_group = assigned_to_group;
 		this.requester_name = requester_name;
 		this.requester_email = requester_email;
@@ -230,11 +234,11 @@ public class Tickets extends Cursor
 	@javax.persistence.PostLoad
 	private void PostLoad()
 	{
-		if (group_key != null)
-			group_id = group_key.getId();
+		if (group_id != null)
+			groupID = group_id.getId();
 
-		if (assignee_key != null)
-			assignee_id = assignee_key.getId();
+		if (assignee_id != null)
+			assigneeID = assignee_id.getId();
 	}
 
 	/**
