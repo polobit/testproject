@@ -174,7 +174,6 @@ public class ScribeServlet extends HttpServlet {
 		 * service type
 		 */
 		setupOAuth(req, resp);
-		return;
 
 	}
 
@@ -245,10 +244,12 @@ public class ScribeServlet extends HttpServlet {
 				|| serviceName.equalsIgnoreCase(SERVICE_TYPE_GOOGLE_PLUS)) {
 			// After building service, redirects to authorization page
 			url = service.getAuthorizationUrl(null);
+			
 			String query = req.getParameter("query");
 
-			if (query != null)
+			if (query != null) {
 				req.getSession().setAttribute("query", query);
+			}
 
 			System.out.println("Redirect URL OAuth2: " + url);
 		} else if (serviceName.equalsIgnoreCase(SERVICE_TYPE_ZOHO)) {
