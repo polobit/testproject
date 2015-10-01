@@ -380,5 +380,10 @@
 		<property name="name" direction="asc"/>
         <property name="entity_type" direction="asc"/>
     </datastore-index>
+    
+    <datastore-index kind="Task" ancestor="false" source="auto">
+        <property name="related_deals" direction="asc"/>
+        <property name="due" direction="asc"/>
+    </datastore-index>
 
 </datastore-indexes>
