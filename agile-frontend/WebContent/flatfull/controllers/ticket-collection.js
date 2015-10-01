@@ -14,7 +14,7 @@ var TicketCollectionRouter = Backbone.Router.extend({
 	tickets : function() {
 
 		this.ticketsCollection = new Base_Collection_View({
-			url : '/core/api/tickets?group_id=5249485793918976&status=NEW',
+			url : '/core/api/tickets?status=NEW',
 			// restKey : "workflow",
 			//sort_collection : false,
 			templateKey : "ticket",
