@@ -402,8 +402,12 @@
 		<property name="name" direction="asc"/>
         <property name="entity_type" direction="asc"/>
     </datastore-index>
-    
-
+	
+	<datastore-index kind="Tickets" ancestor="false" source="manual">
+        <property name="group_id" direction="asc"/>
+        <property name="status" direction="asc"/>
+        <property name="last_updated_time" direction="desc"/>
+    </datastore-index>
     <datastore-index kind="Task" ancestor="false" source="auto">
         <property name="related_deals" direction="asc"/>
         <property name="due" direction="asc"/>

@@ -10,6 +10,7 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
 
 import com.agilecrm.ticket.entitys.Tickets;
@@ -18,12 +19,20 @@ import com.agilecrm.ticket.utils.TicketsUtil;
 
 /**
  * 
- * @author Sasi 30-sep-2015
+ * @author Sasi 30-Sep-2015
  * 
  */
 @Path("/api/tickets")
 public class TicketsRest
 {
+	/**
+	 * 
+	 * @param groupID
+	 * @param cursor
+	 * @param pageSize
+	 * @param status
+	 * @return list of tickets
+	 */
 	@GET
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	public List<Tickets> getTicketsByGroup(@QueryParam("group_id") Long groupID, @QueryParam("cursor") String cursor,
@@ -31,6 +40,9 @@ public class TicketsRest
 	{
 		try
 		{
+			if (groupID == null || StringUtils.isBlank(status))
+				throw new Exception("Required paramaters missing.");
+
 			return TicketsUtil.getTicketsByGroupID(groupID, Status.valueOf(status), cursor, pageSize,
 					"-last_updated_time");
 		}
