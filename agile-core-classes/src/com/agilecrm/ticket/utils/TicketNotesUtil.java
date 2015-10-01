@@ -1,8 +1,12 @@
 package com.agilecrm.ticket.utils;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import com.agilecrm.ticket.entitys.TicketGroups;
 import com.agilecrm.ticket.entitys.TicketNotes;
+import com.agilecrm.ticket.entitys.Tickets;
 import com.agilecrm.ticket.entitys.TicketNotes.CREATED_BY;
 import com.agilecrm.ticket.entitys.TicketNotes.NOTE_TYPE;
 import com.googlecode.objectify.Key;
@@ -13,6 +17,14 @@ import com.googlecode.objectify.Key;
  */
 public class TicketNotesUtil
 {
+	public static List<TicketNotes> getTicketNotes(Long ticketID, String sortOrder)
+	{
+		Map<String, Object> searchMap = new HashMap<String, Object>();
+		searchMap.put("ticket_key", new Key<Tickets>(Tickets.class, ticketID));
+
+		return TicketNotes.ticketNotesDao.listByPropertyAndOrder(searchMap, sortOrder);
+	}
+
 	/**
 	 * 
 	 * @param ticket_id
@@ -37,10 +49,10 @@ public class TicketNotesUtil
 		Key<TicketNotes> key = TicketNotes.ticketNotesDao.put(ticketNotes);
 
 		System.out.println("Notes key: " + key.getId());
-		
+
 		return ticketNotes;
 	}
-	
+
 	public static String parsePlainText(String original_plain_text)
 	{
 		// parse plain text

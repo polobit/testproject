@@ -10,8 +10,10 @@ import javax.xml.bind.annotation.XmlRootElement;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.user.DomainUser;
 import com.googlecode.objectify.Key;
+import com.googlecode.objectify.annotation.NotSaved;
 
 /**
+ * <code>TicketNotes</code> class contains Tickets sent by requester and agent.
  * 
  * @author Sasi on 28-Sep-2015
  * 
@@ -26,17 +28,35 @@ public class TicketNotes
 	/**
 	 * Stores ticket id
 	 */
-	public Key<Tickets> ticket_id = null;
+	public Key<Tickets> ticket_key = null;
+
+	/**
+	 * Util attribute to send ticket id to client
+	 */
+	@NotSaved
+	public Long ticket_id = null;
 
 	/**
 	 * Stores ticket group id to which it belongs
 	 */
-	public Key<TicketGroups> group_id = null;
+	public Key<TicketGroups> group_key = null;
+
+	/**
+	 * Util attribute to send group id to client
+	 */
+	@NotSaved
+	public Long group_id = null;
 
 	/**
 	 * Stores user ID to whom ticket is assigned
 	 */
-	public Key<DomainUser> assignee_id = null;
+	public Key<DomainUser> assignee_key = null;
+
+	/**
+	 * Util attribute to send assignee id to client
+	 */
+	@NotSaved
+	public Long assignee_id = null;
 
 	public static enum CREATED_BY
 	{
@@ -121,8 +141,8 @@ public class TicketNotes
 			String original_html_text, NOTE_TYPE note_type, List<String> attachments_list)
 	{
 		super();
-		this.ticket_id = new Key<Tickets>(Tickets.class, ticket_id);
-		this.group_id = new Key<TicketGroups>(TicketGroups.class, group_id);
+		this.ticket_key = new Key<Tickets>(Tickets.class, ticket_id);
+		this.group_key = new Key<TicketGroups>(TicketGroups.class, group_id);
 		this.created_by = created_by;
 		this.requester_name = requester_name;
 		this.requester_email = requester_email;
@@ -133,6 +153,19 @@ public class TicketNotes
 		this.note_type = note_type;
 		this.attachments_list = attachments_list;
 		this.created_time = Calendar.getInstance().getTimeInMillis();
+	}
+
+	@javax.persistence.PostLoad
+	private void PostLoad()
+	{
+		if (ticket_key != null)
+			ticket_id = ticket_key.getId();
+
+		if (group_key != null)
+			group_id = group_key.getId();
+
+		if (assignee_key != null)
+			assignee_id = assignee_key.getId();
 	}
 
 	/**

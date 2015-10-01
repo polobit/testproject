@@ -8,6 +8,7 @@ import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.ticket.utils.TicketsUtil;
 import com.agilecrm.user.DomainUser;
 import com.googlecode.objectify.Key;
+import com.googlecode.objectify.annotation.NotSaved;
 
 /**
  * <code>Tickets</code> root class for Ticketing. Every webhook returned from
@@ -37,7 +38,13 @@ public class Tickets extends Cursor
 	/**
 	 * Stores ticket group id to which it belongs
 	 */
-	public Key<TicketGroups> group_id = null;
+	public Key<TicketGroups> group_key = null;
+
+	/**
+	 * Util attribute to send group id to client
+	 */
+	@NotSaved
+	public Long group_id = null;
 
 	/**
 	 * Stores true if ticket is assigned to a group
@@ -47,7 +54,13 @@ public class Tickets extends Cursor
 	/**
 	 * Stores user ID to whom ticket is assigned
 	 */
-	public Key<DomainUser> assignee_id = null;
+	public Key<DomainUser> assignee_key = null;
+
+	/**
+	 * Util attribute to send assignee id to client
+	 */
+	@NotSaved
+	public Long assignee_id = null;
 
 	/**
 	 * Stores name of customer who created ticket
@@ -203,7 +216,7 @@ public class Tickets extends Cursor
 			String subject, String cc_emails, String first_notes_text, Source source, Boolean attachments_exists)
 	{
 		super();
-		this.group_id = new Key<TicketGroups>(TicketGroups.class, group_id);
+		this.group_key = new Key<TicketGroups>(TicketGroups.class, group_id);
 		this.assigned_to_group = assigned_to_group;
 		this.requester_name = requester_name;
 		this.requester_email = requester_email;
@@ -212,6 +225,16 @@ public class Tickets extends Cursor
 		this.first_notes_text = first_notes_text;
 		this.source = source;
 		this.attachments_exists = attachments_exists;
+	}
+
+	@javax.persistence.PostLoad
+	private void PostLoad()
+	{
+		if (group_key != null)
+			group_id = group_key.getId();
+
+		if (assignee_key != null)
+			assignee_id = assignee_key.getId();
 	}
 
 	/**

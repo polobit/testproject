@@ -111,6 +111,11 @@ public class JerseyApplication extends Application
 	s.add(com.agilecrm.ticket.rest.TicketsRest.class);
 	s.add(com.agilecrm.ticket.rest.TicketGroupRest.class);
 
-	return s;
-    }
+		// Ticket Rest classes
+		s.add(com.agilecrm.ticket.rest.TicketsRest.class);
+		s.add(com.agilecrm.ticket.rest.TicketNotesRest.class);
+		s.add(com.agilecrm.ticket.rest.TicketGroupRest.class);
+
+		return s;
+	}
 }

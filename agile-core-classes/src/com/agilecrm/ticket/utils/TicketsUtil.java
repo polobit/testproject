@@ -32,7 +32,7 @@ public class TicketsUtil
 	{
 		Map<String, Object> searchMap = new HashMap<String, Object>();
 		searchMap.put("status", status);
-		searchMap.put("group_id", new Key<TicketGroups>(TicketGroups.class, groupID));
+		searchMap.put("group_key", new Key<TicketGroups>(TicketGroups.class, groupID));
 		
 		return Tickets.ticketsDao.fetchAllByOrder(20, cursor, searchMap, false, true, sortKey);
 	}
@@ -78,9 +78,11 @@ public class TicketsUtil
 			ticket = new Tickets(group_id, assigned_to_group, requester_name, requester_email, subject, cc_emails,
 					plain_text, source, attachments);
 
-			Long createTime = Calendar.getInstance().getTimeInMillis();
+			Long createdTime = Calendar.getInstance().getTimeInMillis();
 
-			ticket.created_time = createTime;
+			ticket.created_time = createdTime;
+			ticket.last_updated_time = createdTime;
+			ticket.last_customer_replied_time = createdTime;
 			ticket.last_updated_by = LAST_UPDATED_BY.REQUESTER;
 			ticket.last_reply_text = plain_text;
 			ticket.status = Status.NEW;
