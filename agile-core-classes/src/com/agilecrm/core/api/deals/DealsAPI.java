@@ -939,13 +939,13 @@ public class DealsAPI
      * @return deals
      * @throws JSONException
      */
-     @Path("details")
+     @Path("details/{owner-Id}")
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public String getNewDeals(@QueryParam("min") Long min, @QueryParam("max") Long max,@QueryParam("frequency") String type)
+    public String getNewDeals(@PathParam("owner-Id") Long ownerId,@QueryParam("min") Long min, @QueryParam("max") Long max,@QueryParam("frequency") String frequency,@QueryParam("type") String type)
     {
     	 ReportsUtil.check(min*1000,max*1000);
-     return OpportunityUtil.getIncomingDealsList(min,max,type).toString();
+     return OpportunityUtil.getIncomingDealsList(ownerId,min,max,frequency,type).toString();
     }
 
 }

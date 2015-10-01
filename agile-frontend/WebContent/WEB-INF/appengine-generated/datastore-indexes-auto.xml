@@ -360,5 +360,10 @@
 		<property name="name" direction="asc"/>
         <property name="entity_type" direction="asc"/>
     </datastore-index>
+    
+    <datastore-index kind="Opportunity" ancestor="false" source="auto">
+        <property name="created_time" direction="asc"/>
+		<property name="ownerKey" direction="asc"/>
+    </datastore-index>
 
 </datastore-indexes>

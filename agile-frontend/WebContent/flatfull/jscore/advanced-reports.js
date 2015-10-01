@@ -59,6 +59,25 @@ function initFunnelCharts(callback)
 
 	}, '<option class="default-select" value="{{id}}">{{name}}</option>', false, undefined, "All Contacts");
 
+	if ($('#type').length > 0)
+	{
+		// Get Frequency
+		callback();
+		$('#type').change(function()
+		{
+			callback();
+		});
+	}
+	fillSelect("owner", "core/api/users", undefined, function()
+			{
+				$('#owner').change(function()
+				{
+
+					callback();
+				});
+
+	}, '<option class="default-select" value="{{id}}">{{name}}</option>', false, undefined, "All Owners");
+
 	callback();
 }
 
@@ -97,7 +116,7 @@ function showRatioGraphs(tag1, tag2)
   function showDealsGrowthReport()
 {
 // Options
-    var options = "?";
+    var options = "";
 
     // Get Date Range January 22, 2015 - January 28, 2015
     var range = $('#range').html().split("-");
@@ -128,17 +147,30 @@ function showRatioGraphs(tag1, tag2)
     end_time=end_time+(d.getTimezoneOffset()*60*1000);
     end_time=end_time/1000;
 
-    
+    if ($('#owner').length > 0)
+	{
+		// Get User
+		var owner_id=0;
+		if ($("#owner").val() != "" && $("#owner").val() != "All Owners")
+			owner_id=$("#owner").val();
+			options += owner_id;
+	}
     // Adds start_time, end_time to params.
-    options += ("min=" + start_time + "&max=" + end_time);
+    options += ("?min=" + start_time + "&max=" + end_time);
         if ($('#frequency').length > 0)
     {
         // Get Frequency
         var frequency = $("#frequency").val();
         options += ("&frequency=" + frequency);
     }
+        if ($('#type').length > 0)
+        {
+            // Get Frequency
+            var type = $("#type").val();
+            options += ("&type=" + type);
+        }
 
 
-    showDealsGrowthgraph('core/api/opportunity/details' + options, 'deals-chart', '', '',true);
+    showDealsGrowthgraph('core/api/opportunity/details/' + options, 'deals-chart', '', '',true);
 
 }

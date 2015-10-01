@@ -1346,10 +1346,12 @@ function showDealsGrowthgraph(url, selector, name, yaxis_name, show_loading)
 
             // Categories are created time
             var categories = [];
-            var frequency = $( "#frequency:visible").val();
+            var tempcategories=[];
+            var type = $( "#type:visible").val();
+            var frequency= $("#frequency:visible").val();
             // Data with deals
             var series;
-            
+            var AllData=[];
             var sortedKeys = [];
             $.each(data,function(k,v){
                 sortedKeys.push(k);
@@ -1366,34 +1368,136 @@ function showDealsGrowthgraph(url, selector, name, yaxis_name, show_loading)
             // categories
             $.each(sortedData, function(k, v)
             {
-
+            	var totalData=[];
+            	totalData.push(k);
+            	var total=0;
                 // Initializes series with names with the first
                 // data point
                 if (series == undefined)
                 {
                     var index = 0;
-                    series = [];
+                    series = []; 
                     $.each(v, function(k1, v1)
                     {
+                    	
                         var series_data = {};
                         series_data.name = k1;
                         series_data.data = [];
                         series[index++] = series_data;
+                        //totalData.push(total);
                     });
+                
                 }
+
 
                 // Fill Data Values with series data
                 $.each(v, function(k1, v1)
                 {
-
+                	total=total+v1;
                     // Find series with the name k1 and to that,
                     // push v1
                     var series_data = find_series_with_name(series, k1);
                     series_data.data.push(v1);
                 });
+                     totalData.push(total);
+                tempcategories.push(k*1000);
+				dataLength++;
+				AllData.push(totalData);
+			});
+				
+				var cnt=0;
+				$.each(sortedData, function(k, v)
+			{
                 var dt = new Date(k * 1000);
-                categories.push(Highcharts.dateFormat('%e.%b.%Y',Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()))+'');
-                dataLength++;
+                var dte = new Date(tempcategories[cnt]);
+                if(frequency=="daily")
+					{
+						categories.push(Highcharts.dateFormat('%e.%b',Date.UTC(dte.getFullYear(), dte.getMonth(), dte.getDate()))+'');
+					}
+				else if(frequency=="weekly")
+					{
+						if(cnt!=dataLength-1)
+						{
+							var next_dte = new Date(tempcategories[cnt+1]);
+							categories.push(Highcharts.dateFormat('%e.%b', Date.UTC(dte.getFullYear(), dte.getMonth(), dte.getDate()))+' - '+Highcharts.dateFormat('%e.%b', Date.UTC(next_dte.getFullYear(), next_dte.getMonth(), next_dte.getDate()-1)));
+						}
+						else
+						{
+							var end_date = new Date(Date.parse($.trim($('#range').html().split("-")[1])).valueOf());
+							categories.push(Highcharts.dateFormat('%e.%b', Date.UTC(dte.getFullYear(), dte.getMonth(), dte.getDate()))+' - '+Highcharts.dateFormat('%e.%b', Date.UTC(end_date.getFullYear(), end_date.getMonth(), end_date.getDate())));
+						}
+					}
+				else if(frequency=="monthly")
+					{
+						if(cnt!=dataLength-1)
+						{
+							var next_dte = new Date(tempcategories[cnt+1]);
+							var current_date = new Date();
+							var from_date = '';
+							var to_date = '';
+							if(cnt!=0)
+							{
+								if(current_date.getFullYear()!=dte.getFullYear())
+								{
+									from_date = Highcharts.dateFormat('%b.%Y', Date.UTC(dte.getFullYear(), dte.getMonth(), dte.getDate()));
+								}
+								else
+								{
+									from_date = Highcharts.dateFormat('%b', Date.UTC(dte.getFullYear(), dte.getMonth(), dte.getDate()));
+								
+								}
+							
+								categories.push(from_date);
+							}
+							else
+							{
+								var start_date=new Date(Date.parse($.trim($('#range').html().split("-")[0])).valueOf());
+								if(current_date.getFullYear()!=dte.getFullYear())
+								{
+									from_date = Highcharts.dateFormat('%e.%b.%Y', Date.UTC(start_date.getFullYear(), start_date.getMonth(), start_date.getDate()));
+								}
+								else
+								{
+									from_date = Highcharts.dateFormat('%e.%b', Date.UTC(start_date.getFullYear(), start_date.getMonth(), start_date.getDate()));
+								
+								}
+								//if(current_date.getFullYear()!=next_dte.getFullYear())
+								
+									to_date = Highcharts.dateFormat('%e.%b.%Y', Date.UTC(next_dte.getFullYear(), next_dte.getMonth(), next_dte.getDate()-1));
+								
+								categories.push(from_date+' - '+to_date);
+							}
+						}
+						else
+						{
+							var current_date = new Date();
+							var from_date ='';
+							var start_date=new Date(Date.parse($.trim($('#range').html().split("-")[0])).valueOf());
+							var to_date = '';
+							var end_date = new Date(Date.parse($.trim($('#range').html().split("-")[1])).valueOf());
+							if(current_date.getFullYear()!=dte.getFullYear())
+							{
+								if(cnt==0)
+									from_date = Highcharts.dateFormat('%e.%b.%Y', Date.UTC(start_date.getFullYear(), start_date.getMonth(), start_date.getDate()));
+								else
+									from_date = Highcharts.dateFormat('%e.%b.%Y', Date.UTC(dte.getFullYear(), dte.getMonth(), dte.getDate()));
+							
+								to_date = Highcharts.dateFormat('%e.%b.%Y', Date.UTC(end_date.getFullYear(), end_date.getMonth(), end_date.getDate()));
+							}
+							else
+							{
+								if(cnt==0)
+								  from_date = Highcharts.dateFormat('%e.%b', Date.UTC(start_date.getFullYear(), start_date.getMonth(), start_date.getDate()));
+								else
+									from_date = Highcharts.dateFormat('%e.%b', Date.UTC(dte.getFullYear(), dte.getMonth(), dte.getDate()));
+								
+								to_date = Highcharts.dateFormat('%e.%b', Date.UTC(end_date.getFullYear(), end_date.getMonth(), end_date.getDate()));
+								
+							}
+							categories.push(from_date+' - '+to_date);
+						}
+					}
+                 cnt++;
             });
 
             if(Math.ceil((dataLength-1)/10)>0)
@@ -1404,6 +1508,10 @@ function showDealsGrowthgraph(url, selector, name, yaxis_name, show_loading)
                     min_tick_interval = 4;
                 }
             }
+            if(series==undefined)
+            	 chartRenderforIncoming(selector,categories,name,yaxis_name,min_tick_interval,type,series,AllData);
+            else
+            {
             $.ajax({ type : 'GET', url : '/core/api/categories?entity_type=DEAL_SOURCE', dataType : 'json',
             success: function(data){
                 $.each(data,function(index,deals){
@@ -1416,9 +1524,10 @@ function showDealsGrowthgraph(url, selector, name, yaxis_name, show_loading)
                             
                     }
                 });
-                chartRenderforIncoming(selector,categories,name,yaxis_name,min_tick_interval,frequency,series);
+                chartRenderforIncoming(selector,categories,name,yaxis_name,min_tick_interval,type,series,AllData);
                 } 
             });
+        	}
 
 
             // After loading and processing all data, highcharts are initialized
@@ -1428,7 +1537,7 @@ function showDealsGrowthgraph(url, selector, name, yaxis_name, show_loading)
     });
 }
 
-function chartRenderforIncoming(selector,categories,name,yaxis_name,min_tick_interval,frequency,series){
+function chartRenderforIncoming(selector,categories,name,yaxis_name,min_tick_interval,type,series,AllData){
 	chart = new Highcharts.Chart({
                 chart: {
                     renderTo: selector,
@@ -1484,19 +1593,21 @@ function chartRenderforIncoming(selector,categories,name,yaxis_name,min_tick_int
                 //Tooltip to show details,
                 tooltip: {
                     formatter: function(){
-                        if(frequency=="deals")
+                        if(type=="deals")
                                 {
                         return '<div>' + 
                                 '<div class="p-n">'+this.x+'</div>' + 
                                 '<div class="p-n"><font color='+this.series.color+'>'+this.series.name+'</font> : '+getNumberWithCommasForCharts(this.y)+'</div>' +
-                                '</div>';
+                                '</div>'+
+                                '<div class="p-n"><font color='+this.series.color+'>Total</font> : '+getNumberWithCommasForCharts(AllData[this.point.x][1])+'</div>';
                             }
                         else
                         {
                         return '<div>' + 
                                 '<div class="p-n">'+this.x+'</div>' + 
                                 '<div class="p-n"><font color='+this.series.color+'>'+this.series.name+'</font> : '+getCurrencySymbolForCharts()+''+getNumberWithCommasForCharts(this.y)+'</div>' +
-                                '</div>';
+                                '</div>'+
+                                 '<div class="p-n"><font color='+this.series.color+'>Total</font> : '+getCurrencySymbolForCharts()+''+getNumberWithCommasForCharts(AllData[this.point.x][1])+'</div>';;
                             }
                     },
                     useHTML: true

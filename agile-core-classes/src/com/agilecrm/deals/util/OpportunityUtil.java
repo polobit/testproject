@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -1624,16 +1625,20 @@ public class OpportunityUtil
      *            - Given time greater than closed date.
      * @return JsonObject .
      */
-    public static JSONObject getIncomingDealsList(Long minTime, Long maxTime, String type)
+    public static JSONObject getIncomingDealsList(Long ownerId,Long minTime, Long maxTime,String frequency, String type)
     {
         JSONObject newDealsObject = new JSONObject();
         String timeZone = "UTC";
+        List<Opportunity> opportunitiesList;
         UserPrefs userPrefs = UserPrefsUtil.getCurrentUserPrefs();
         if (userPrefs != null && userPrefs.timezone != null)
         {
             timeZone = userPrefs.timezone;
         }
-        List<Opportunity> opportunitiesList = getNewDealsList(minTime, maxTime);
+        if(ownerId!=null && ownerId!=0)
+        	opportunitiesList = getNewDealsListWithOwner(ownerId,minTime, maxTime);
+        else
+        	opportunitiesList = getNewDealsList(minTime, maxTime);
         //opportunitiesList.get(0).getDeal_source_id();
         CategoriesUtil categoriesUtil =  new CategoriesUtil();
         List<Category>sources=categoriesUtil.getCategoriesByType("DEAL_SOURCE");
@@ -1646,12 +1651,19 @@ public class OpportunityUtil
         System.out.println(sources.get(0).getId());
         Calendar startCalendar = Calendar.getInstance(TimeZone.getTimeZone(timeZone));
         startCalendar.setTimeInMillis(minTime * 1000);
-        long startTimeMilli = startCalendar.getTimeInMillis();
+        
 
         // Sets calendar with end time.
         Calendar endCalendar = Calendar.getInstance(TimeZone.getTimeZone(timeZone));
         endCalendar.setTimeInMillis(maxTime * 1000);
+        if (StringUtils.equalsIgnoreCase(frequency, "monthly"))
+		 {
+        	startCalendar.set(Calendar.DAY_OF_MONTH, 1);
+        	endCalendar.set(Calendar.DAY_OF_MONTH, 1);
+		 }
+        long startTimeMilli = startCalendar.getTimeInMillis();
         long endTimeMilli = endCalendar.getTimeInMillis();
+        
         
         while (startTimeMilli <= endTimeMilli)
         {
@@ -1660,7 +1672,19 @@ public class OpportunityUtil
             //dealsCount.put("count", 0);
             String createdTime = (startCalendar.getTimeInMillis() / 1000) + "";
             newDealsObject.put(createdTime, sourcecount);
-            startCalendar.add(Calendar.DAY_OF_MONTH, 1);
+            if (StringUtils.equalsIgnoreCase(frequency, "daily"))
+			{
+			startCalendar.add(Calendar.DAY_OF_MONTH, 1);
+			}
+            if (StringUtils.equalsIgnoreCase(frequency, "monthly"))
+            {
+			startCalendar.add(Calendar.MONTH, 1);
+			startCalendar.set(Calendar.DAY_OF_MONTH, 1);
+            }
+            if (StringUtils.equalsIgnoreCase(frequency, "weekly"))
+            {
+            startCalendar.add(Calendar.WEEK_OF_YEAR, 1);
+            }
             startCalendar.set(Calendar.HOUR_OF_DAY, 0);
             startCalendar.set(Calendar.MINUTE, 0);
             startCalendar.set(Calendar.SECOND, 0);
@@ -1671,6 +1695,7 @@ public class OpportunityUtil
         
         for (Opportunity opportunity : opportunitiesList)
         {
+        	String last="";
             try
             {
             /*
@@ -1678,18 +1703,39 @@ public class OpportunityUtil
              * //Get mm/yy String mmYY = formatter.format(new
              * Date(opportunity.close_date * 1000));
              */
-            Date opportunityDate = new Date(opportunity.created_time * 1000);
             Long source_id= opportunity.getDeal_source_id();
             System.out.println(categoriesUtil.getCategory(source_id));
             Double revenue=opportunity.expected_value;
             Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone(timeZone));
             calendar.setTimeInMillis(opportunity.created_time * 1000);
+            
+            if(StringUtils.equalsIgnoreCase(frequency, "monthly")) 
+    			calendar.set(Calendar.DAY_OF_MONTH, 1);
+    		if(StringUtils.equalsIgnoreCase(frequency,"weekly"))
+    			{
+    			
+    			Iterator iter = newDealsObject.keys();
+    			while (iter.hasNext()) {
+    			    String key = (String) iter.next();
+    			    if((calendar.getTimeInMillis()/1000+"").compareToIgnoreCase(key.toString())>-1)
+    			     {
+    			    	last=key;
+    			    	continue;	
+    			     }
+    			    break;
+    			}
+    			
+    			}
             calendar.set(Calendar.HOUR_OF_DAY, 0);
             calendar.set(Calendar.MINUTE, 0);
             calendar.set(Calendar.SECOND, 0);
             calendar.set(Calendar.MILLISECOND, 0);
 
-            String createdtime = (calendar.getTimeInMillis() / 1000) + "";
+            String createdtime ;
+            if(StringUtils.equalsIgnoreCase(frequency,"weekly"))
+            	createdtime=last;
+            else
+            	createdtime= (calendar.getTimeInMillis() / 1000) + "";
             double count=0;
 
             // Read from previous object if present
@@ -1713,5 +1759,20 @@ public class OpportunityUtil
             }
         }
         return newDealsObject;
+    }
+    public static List<Opportunity> getNewDealsListWithOwner(Long ownerId,Long minTime, Long maxTime)
+    {
+	List<Opportunity> newDealsList = new ArrayList<Opportunity>();
+	try
+	{
+	    newDealsList = dao.ofy().query(Opportunity.class).filter("ownerKey",new Key<DomainUser>(DomainUser.class, ownerId)).filter("created_time >= ", minTime)
+		    .filter("created_time <= ", maxTime).list();
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	}
+	return newDealsList;
+
     }
 }
