@@ -29,7 +29,6 @@ import com.googlecode.objectify.annotation.Unindexed;
  * 
  */
 @XmlRootElement
-@Unindexed
 public class Tickets extends Cursor
 {
 	// Key
