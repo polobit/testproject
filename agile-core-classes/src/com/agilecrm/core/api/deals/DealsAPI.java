@@ -949,6 +949,6 @@ public class DealsAPI
     		@PathParam("source") Long source,@QueryParam("min") Long min, @QueryParam("max") Long max,@QueryParam("frequency") String frequency)
     {
     	ReportsUtil.check(min*1000,max*1000);
-	return OpportunityUtil.getDealsDetailsByPipeline(ownerId,pipelineId,source min, max,frequency).toString();
+	return OpportunityUtil.getDealsDetailsByPipeline(ownerId,pipelineId,source, min, max,frequency).toString();
     }
 }
