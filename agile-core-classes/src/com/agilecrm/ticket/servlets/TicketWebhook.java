@@ -144,7 +144,7 @@ public class TicketWebhook extends HttpServlet
 			String oldNamespace = NamespaceManager.get();
 
 			// Setting namespace
-			NamespaceManager.set(oldNamespace);
+			NamespaceManager.set(namespace);
 
 			/**
 			 * Verifying for valid Group or not
