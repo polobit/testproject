@@ -8,7 +8,6 @@ import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.ticket.utils.TicketsUtil;
 import com.agilecrm.user.DomainUser;
 import com.googlecode.objectify.Key;
-import com.googlecode.objectify.annotation.Unindexed;
 
 /**
  * <code>Tickets</code> root class for Ticketing. Every webhook returned from

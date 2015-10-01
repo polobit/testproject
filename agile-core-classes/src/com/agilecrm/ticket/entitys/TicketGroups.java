@@ -27,7 +27,6 @@ import com.googlecode.objectify.annotation.Unindexed;
  * 
  */
 @XmlRootElement
-@Unindexed
 public class TicketGroups
 {
 	// Key

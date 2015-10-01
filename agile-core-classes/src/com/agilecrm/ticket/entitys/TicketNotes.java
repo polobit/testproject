@@ -8,8 +8,8 @@ import javax.persistence.Id;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import com.agilecrm.db.ObjectifyGenericDao;
-import com.agilecrm.ticket.entitys.Tickets.LAST_UPDATED_BY;
-import com.googlecode.objectify.annotation.Unindexed;
+import com.agilecrm.user.DomainUser;
+import com.googlecode.objectify.Key;
 
 /**
  * 
@@ -17,38 +17,37 @@ import com.googlecode.objectify.annotation.Unindexed;
  * 
  */
 @XmlRootElement
-@Unindexed
 public class TicketNotes
 {
 	// Key
 	@Id
 	public Long id;
-	
+
 	/**
 	 * Stores ticket id
 	 */
-	public Long ticket_id = 0L;
-	
+	public Key<Tickets> ticket_id = null;
+
 	/**
 	 * Stores ticket group id to which it belongs
 	 */
-	public Long group_id = 0L;
+	public Key<TicketGroups> group_id = null;
 
 	/**
 	 * Stores user ID to whom ticket is assigned
 	 */
-	public Long assignee_id = 0L;
-	
+	public Key<DomainUser> assignee_id = null;
+
 	public static enum CREATED_BY
 	{
 		AGENT, REQUESTER
 	};
-	
+
 	/**
 	 * Stores last updated by text either agent or customer
 	 */
 	public CREATED_BY created_by = CREATED_BY.REQUESTER;
-	
+
 	/**
 	 * Stores name of customer who created ticket
 	 */
@@ -58,37 +57,37 @@ public class TicketNotes
 	 * Stores email of customer who created ticket
 	 */
 	public String requester_email = "";
-	
+
 	/**
 	 * Stores epoch time when notes is created
 	 */
 	public Long created_time = 0L;
-	
+
 	/**
 	 * Stores description exists in case of Rules & Macros
 	 */
 	public String event_description = "";
-	
+
 	/**
 	 * Stores notes content in plain text format
 	 */
 	public String plain_text = "";
-	
+
 	/**
 	 * Stores notes content in html text format
 	 */
 	public String html_text = "";
-	
+
 	/**
 	 * Stores original notes content in plain text format
 	 */
 	public String original_plain_text = "";
-	
+
 	/**
 	 * Stores original notes content in html text format
 	 */
 	public String original_html_text = "";
-	
+
 	public static enum NOTE_TYPE
 	{
 		PUBLIC, PRIVATE
@@ -98,13 +97,12 @@ public class TicketNotes
 	 * Stores type of notes
 	 */
 	public NOTE_TYPE note_type = NOTE_TYPE.PUBLIC;
-	
-	
+
 	/**
 	 * Stores list of attachments URL's saved in Google cloud
 	 */
 	public List<String> attachments_list = new ArrayList<String>();
-	
+
 	/**
 	 * Stores requested viewed time in epoch format
 	 */
@@ -117,15 +115,14 @@ public class TicketNotes
 	{
 		super();
 	}
-	
 
 	public TicketNotes(Long ticket_id, Long group_id, CREATED_BY created_by, String requester_name,
-			String requester_email, String plain_text, String html_text,
-			String original_plain_text, String original_html_text, NOTE_TYPE note_type, List<String> attachments_list)
+			String requester_email, String plain_text, String html_text, String original_plain_text,
+			String original_html_text, NOTE_TYPE note_type, List<String> attachments_list)
 	{
 		super();
-		this.ticket_id = ticket_id;
-		this.group_id = group_id;
+		this.ticket_id = new Key<Tickets>(Tickets.class, ticket_id);
+		this.group_id = new Key<TicketGroups>(TicketGroups.class, group_id);
 		this.created_by = created_by;
 		this.requester_name = requester_name;
 		this.requester_email = requester_email;
@@ -138,9 +135,9 @@ public class TicketNotes
 		this.created_time = Calendar.getInstance().getTimeInMillis();
 	}
 
-
 	/**
 	 * Initialize DataAccessObject
 	 */
-	public static ObjectifyGenericDao<TicketNotes> ticketNotesDao = new ObjectifyGenericDao<TicketNotes>(TicketNotes.class);
+	public static ObjectifyGenericDao<TicketNotes> ticketNotesDao = new ObjectifyGenericDao<TicketNotes>(
+			TicketNotes.class);
 }
