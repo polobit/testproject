@@ -15,6 +15,7 @@ import org.apache.commons.lang.exception.ExceptionUtils;
 
 import com.agilecrm.ticket.entitys.Tickets;
 import com.agilecrm.ticket.entitys.Tickets.Status;
+import com.agilecrm.ticket.utils.TicketGroupUtil;
 import com.agilecrm.ticket.utils.TicketsUtil;
 
 /**
@@ -35,15 +36,20 @@ public class TicketsRest
 	 */
 	@GET
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public List<Tickets> getTicketsByGroup(@QueryParam("group_id") Long groupID, @QueryParam("cursor") String cursor,
+	public List<Tickets> getTicketsByGroup(@QueryParam("group_id") String groupID, @QueryParam("cursor") String cursor,
 			@QueryParam("page_size") String pageSize, @QueryParam("status") String status)
 	{
 		try
 		{
-			if (groupID == null || StringUtils.isBlank(status))
+			if (StringUtils.isBlank(status))
 				throw new Exception("Required paramaters missing.");
 
-			return TicketsUtil.getTicketsByGroupID(groupID, Status.valueOf(status), cursor, pageSize,
+			//Set default group id if Group ID is null
+			if(StringUtils.isBlank(groupID)){
+				groupID = TicketGroupUtil.getDefaultTicketGroup().id + "";
+			}
+			
+			return TicketsUtil.getTicketsByGroupID(Long.parseLong(groupID), Status.valueOf(status), cursor, pageSize,
 					"-last_updated_time");
 		}
 		catch (Exception e)

@@ -7,6 +7,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -15,11 +16,12 @@ import org.apache.commons.lang.exception.ExceptionUtils;
 
 import com.agilecrm.ticket.entitys.TicketGroups;
 import com.agilecrm.ticket.utils.TicketGroupUtil;
+import com.googlecode.objectify.Key;
 
 /**
  * 
  * @author Sasi 30-sep-2015
- *
+ * 
  */
 @Path("/api/tickets/groups")
 public class TicketGroupRest
@@ -29,6 +31,14 @@ public class TicketGroupRest
 	public List<TicketGroups> getGroups()
 	{
 		return TicketGroupUtil.getAllGroups();
+	}
+
+	@GET
+	@Path("/create-default")
+	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	public TicketGroups createDefaultGroup()
+	{
+		return TicketGroupUtil.createDefaultGroup();
 	}
 
 	/**
@@ -53,7 +63,7 @@ public class TicketGroupRest
 						+ " already exists. Please choose a different Group name");
 
 			TicketGroups.ticketGroupsDao.put(ticketGroup);
-			
+
 			return ticketGroup;
 		}
 		catch (Exception e)
@@ -62,5 +72,15 @@ public class TicketGroupRest
 			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
 					.build());
 		}
+	}
+
+	@GET
+	@Path("/delete")
+	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	public String deleteGroup(@QueryParam("id") Long groupID)
+	{
+		TicketGroups.ticketGroupsDao.deleteKey(new Key<TicketGroups>(TicketGroups.class, groupID));
+
+		return "Success";
 	}
 }

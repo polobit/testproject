@@ -129,6 +129,18 @@ public class TicketGroupUtil
 	{
 		return TicketGroups.ticketGroupsDao.get(groupID);
 	}
+	
+	/**
+	 * 
+	 * @param namespace
+	 * @param groupID
+	 * @return
+	 * @throws EntityNotFoundException
+	 */
+	public static TicketGroups getDefaultTicketGroup() throws EntityNotFoundException
+	{
+		return TicketGroups.ticketGroupsDao.getByProperty("is_default", true);
+	}
 
 	/**
 	 * 
