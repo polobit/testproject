@@ -323,7 +323,7 @@ if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Produ
 
 %>
 
-<%@ include file="tpl/min/precompiled/flatfull/tpl.html"%>
+<%@ include file="tpl/min/precompiled/flatfull/tpl.html"%> 
 </div>
 <!-- Including Footer page -->
 <jsp:include page="flatfull/footer.jsp" />
@@ -424,14 +424,11 @@ head.ready(["core", "stats"], function(){
   $('[data-toggle="tooltip"]').tooltip();
   
    //Code to display alerts of widgets.
-   var msgType = '<%=session.getAttribute("widgetMsgType") %>';
-	if(msgType != 'null'){
-		var widgetMSG = '<%=session.getAttribute("widgetMsg") %>';
-		showNotyPopUp(msgType, widgetMSG , "bottomRight");
-	}  
+	showNotyPopUp('<%=session.getAttribute("widgetMsgType") %>', '<%=session.getAttribute("widgetMsg") %>' , "bottomRight");
+   
 	//Resting the variables.
-	<%  session.setAttribute("widgetMsgType", null);
-	session.setAttribute("widgetMsg", null); %>
+	<%  session.removeAttribute("widgetMsgType");
+	session.removeAttribute("widgetMsg"); %>
 });
 });    
 function load_globalize()
