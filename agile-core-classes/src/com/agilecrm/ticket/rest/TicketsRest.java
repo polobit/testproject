@@ -32,7 +32,7 @@ public class TicketsRest
 		try
 		{
 			return TicketsUtil.getTicketsByGroupID(groupID, Status.valueOf(status), cursor, pageSize,
-					"last_updated_time");
+					"-last_updated_time");
 		}
 		catch (Exception e)
 		{
