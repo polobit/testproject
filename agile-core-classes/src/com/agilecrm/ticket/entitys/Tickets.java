@@ -248,4 +248,14 @@ public class Tickets extends Cursor
 	 * Initialize DataAccessObject.
 	 */
 	public static ObjectifyGenericDao<Tickets> ticketsDao = new ObjectifyGenericDao<Tickets>(Tickets.class);
+
+	public Key<TicketGroups> getGroup_id()
+	{
+		return group_id;
+	}
+
+	public Key<DomainUser> getAssignee_id()
+	{
+		return assignee_id;
+	}
 }

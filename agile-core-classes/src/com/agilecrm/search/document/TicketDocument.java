@@ -45,11 +45,11 @@ public class TicketDocument implements BuilderInterface
 			document.setId(ticket.id + "");
 
 			// Set ticket group id
-			document.addField(Field.newBuilder().setName("group_id").setText(ticket.group_id + ""));
+			document.addField(Field.newBuilder().setName("group_id").setText(ticket.getGroup_id().getId() + ""));
 
 			// Set ticket assignee id if exists
-			if (ticket.assignee_id != null)
-				document.addField(Field.newBuilder().setName("assignee_id").setText(ticket.assignee_id + ""));
+			if (ticket.getAssignee_id() != null)
+				document.addField(Field.newBuilder().setName("assignee_id").setText(ticket.getAssignee_id().getId() + ""));
 
 			/**
 			 * Set ticket created time. Epoch number is greater than limits
