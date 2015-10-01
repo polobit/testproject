@@ -32,7 +32,7 @@ public class TicketsUtil
 	{
 		Map<String, Object> searchMap = new HashMap<String, Object>();
 		searchMap.put("status", status);
-		searchMap.put("group_key", new Key<TicketGroups>(TicketGroups.class, groupID));
+		searchMap.put("group_id", new Key<TicketGroups>(TicketGroups.class, groupID));
 		
 		return Tickets.ticketsDao.fetchAllByOrder(20, cursor, searchMap, false, true, sortKey);
 	}
