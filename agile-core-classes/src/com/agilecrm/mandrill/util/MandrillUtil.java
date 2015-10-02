@@ -254,11 +254,30 @@ public class MandrillUtil
     {
 	try
 	{
-	    if (!StringUtils.isEmpty(apiKey))
-		System.out.println("Sending emails in MandrillUtil through subaccount api..." + apiKey);
+	    // If Null
+		if (StringUtils.isEmpty(apiKey))
+	    {
+	    	System.out.println("Sending emails in MandrillUtil through subaccount api..." + apiKey);
+	    	apiKey = isPaid ? Globals.MANDRIL_API_KEY_VALUE : Globals.MANDRILL_API_KEY_VALUE_2; 
+		}
 
 	    // Complete mail json to be sent
-	    JSONObject mailJSON = Mandrill.setMandrillAPIKey(apiKey, subaccount, isPaid);
+//	    JSONObject mailJSON = Mandrill.setMandrillAPIKey(apiKey, subaccount, isPaid);
+	    
+	    JSONObject mailJSON = new JSONObject();
+	    
+	    // By Default, naresh1 has Test Key
+	    if (StringUtils.equals(subaccount, "naresh1"))
+	    	apiKey = Globals.MANDRILL_TEST_API_KEY_VALUE;
+	    
+	    // IP Pool for Paid Customers
+	    if(apiKey != null && Globals.MANDRIL_API_KEY_VALUE.equals(apiKey))
+	    {
+	    	String ipPool = isPaid ? Globals.MANDRILL_PAID_POOL :  Mandrill.MANDRILL_MAIN_POOL;
+	    	mailJSON.put(Mandrill.MANDRILL_IP_POOL, ipPool);
+	    }
+	    
+	    mailJSON.put(Mandrill.MANDRILL_API_KEY, apiKey);
 
 	    JSONObject messageJSON = getMessageJSON(subaccount, fromEmail, fromName, replyTo, metadata);
 	    mailJSON.put(Mandrill.MANDRILL_MESSAGE, messageJSON);
@@ -268,6 +287,7 @@ public class MandrillUtil
 	}
 	catch (Exception e)
 	{
+		System.err.println("Exception occured in getMandrillMailJSON method...." + e.getMessage());
 	    return null;
 	}
     }
