@@ -16,18 +16,18 @@
 					height="40px !important" /></a>
 			</div>
 			<div class="pull-left text-ellipsis"
-				style="width: 70%; line-height: 18px;">
+				style="width: calc(100% - 45px);line-height: 18px;color:#7C7C7C;">
 				<a href="#contact/{{id}}"
 					class="text-first-capital agile-contact-grid-view">
 					{{getPropertyValue properties "first_name"}} {{getPropertyValue
 					properties "last_name"}} </a>
 
-				<div style="display:{{checkPropertyValueExistance properties "company" "title"}}">
-					<span class="grid-view-elipsis" data-toggle="tooltip"
+				<div style="color:#7C7C7C; display:{{checkPropertyValueExistance properties "company" "title"}}">
+					<span class="grid-view-elipsis" style="vertical-align: bottom;" data-toggle="tooltip"
 						data-placement="bottom" title=""
 						data-original-title="{{getPropertyValue properties "company"}}">{{getPropertyValue
 						properties "company"}}</span>{{getPropertyValueExists properties
-					"company"}}&nbsp;<span class="grid-view-elipsis" data-toggle="tooltip"
+					"company"}}&nbsp;<span class="grid-view-elipsis" style="vertical-align: bottom;"  data-toggle="tooltip"
 						data-placement="bottom" title=""
 						data-original-title="{{getPropertyValue properties "title"}}">
 						{{getPropertyValue properties "title"}}</span>
@@ -84,18 +84,18 @@
 					height="40px !important" />
 			</div>
 			<div class="pull-left text-ellipsis"
-				style="width: 70%; line-height: 18px;">
+				style="width: calc(100% - 45px);line-height: 18px;">
 				<a href="#contact/{{id}}"
 					class="text-first-capital agile-contact-grid-view">
 					{{getPropertyValue properties "first_name"}} {{getPropertyValue
 					properties "last_name"}} </a>
 
-				<div style="display:{{checkPropertyValueExistance properties "company" "title"}}">
-					<span class="grid-view-elipsis" data-toggle="tooltip"
+				<div style="color:#7C7C7C;display:{{checkPropertyValueExistance properties "company" "title"}}">
+					<span class="grid-view-elipsis" style="vertical-align: bottom;"  data-toggle="tooltip"
 						data-placement="bottom" title=""
 						data-original-title="{{getPropertyValue properties "company"}}">{{getPropertyValue
 						properties "company"}}</span>{{getPropertyValueExists properties
-					"company"}}&nbsp;<span class="grid-view-elipsis" data-toggle="tooltip"
+					"company"}}&nbsp;<span class="grid-view-elipsis" style="vertical-align: bottom;"  data-toggle="tooltip"
 						data-placement="bottom" title=""
 						data-original-title="{{getPropertyValue properties "title"}}">
 						{{getPropertyValue properties "title"}}</span>

@@ -2614,7 +2614,7 @@ background-color: #e4eaec !important;color:rgb(113, 85, 87);
 }
 
 .grid-view-elipsis{
-	max-width: 85px;
+	max-width: 50%;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -2623,7 +2623,7 @@ background-color: #e4eaec !important;color:rgb(113, 85, 87);
 }
 
 .grid-view-elipsis-job{
-	max-width: 85px;
+	max-width: 50%;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;

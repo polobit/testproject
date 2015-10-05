@@ -189,6 +189,8 @@ $(function(){
        					{
        						$('#deleteGridContactModal').modal('hide');
        						App_Contacts.contactsListView.collection.remove(model);
+       						if(App_Contacts.contact_custom_view)
+       						App_Contacts.contact_custom_view.collection.remove(model);
        						App_Contacts.contacts();
        					}
        				});
