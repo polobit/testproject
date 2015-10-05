@@ -1424,7 +1424,7 @@ function pieforReports(url, selector, name)
         '<tr><td class="p-n">'+this.series.name+'s: </td>' + 
         '<td class="p-n"><b>'+AllData[this.point.x][1]+'</b></td></tr>' + 
         '<tr><td class="p-n">Total Value: </td>' + 
-        '<td class="p-n"><b>'+getPortletsCurrencySymbol()+''+AllData[this.point.x][2].toLocaleString()+'</b></td></tr>' +
+        '<td class="p-n"><b>'+getCurrencySymbolForCharts()+''+AllData[this.point.x][2].toLocaleString()+'</b></td></tr>' +
         '</table>';
 		},
 							  shared: true,
