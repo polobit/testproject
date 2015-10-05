@@ -961,5 +961,13 @@
 		<servlet-name>LandingPagesCustomElementServlet</servlet-name>
 		<url-pattern>/landingpages/custom-elements</url-pattern>
 	</servlet-mapping>
+	<servlet>
+		<servlet-name>LandingPageServingServlet</servlet-name>
+		<servlet-class>com.agilecrm.landingpages.LandingPageServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>LandingPageServingServlet</servlet-name>
+		<url-pattern>/landing/*</url-pattern>
+	</servlet-mapping>
 	
 </web-app>
