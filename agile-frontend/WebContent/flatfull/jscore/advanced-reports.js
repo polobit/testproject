@@ -257,5 +257,5 @@ var options='';
 	options += ("?min=" + start_time/1000 + "&max=" + end_time/1000);
 	
 	
-	pieforReports('core/api/opportunity/details/'+options,'wonpie-chart','');
+	pieforReports('core/api/opportunity/wonDetails/'+options,'wonpie-chart','');
 }

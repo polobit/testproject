@@ -969,7 +969,7 @@ public class DealsAPI
 	 * 
 	 * @return deals
 	 */
-	@Path("/details/{owner-id}")
+	@Path("/wonDetails/{owner-id}")
 	@GET
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	public String getDealsWonforReports(@PathParam("owner-id") Long ownerId, 
