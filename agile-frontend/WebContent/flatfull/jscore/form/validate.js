@@ -149,8 +149,10 @@ function isValidForm(form) {
 		if(value.length > max_len)
 			return false;
 		return true;
-	}," Maximum length is 500 characters only.");
-	
+	}, function(params, element) {
+		  return 'Maximum length is ' + $(element).attr("max_len") + ' characters only.'
+		}
+	);
 	$(form).validate({
 		rules : {
 			atleastThreeMonths : true,
