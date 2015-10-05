@@ -163,7 +163,7 @@ head.js(LIB_PATH + 'lib/date-charts.js', LIB_PATH + 'lib/date-range-picker.js', 
 				callback();
 			});
 
-		}, '<option class="default-select" value="{{id}}">{{name}}</option>', false, undefined, "All Sources");
+		}, '<option class="default-select" value="{{id}}">{{label}}</option>', false, undefined, "All Sources");
 		callback();		
 		
 	}

@@ -34,6 +34,7 @@ import com.agilecrm.deals.Opportunity;
 import com.agilecrm.deals.deferred.DealsDeferredTask;
 import com.agilecrm.deals.util.MilestoneUtil;
 import com.agilecrm.deals.util.OpportunityUtil;
+import com.agilecrm.reports.ReportsUtil;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
 import com.agilecrm.user.DomainUser;
@@ -953,6 +954,7 @@ public class DealsAPI
 	public String getDealsbyLossReason(@PathParam("owner-id") Long ownerId, @PathParam("pipeline-id") Long pipelineId,
 			@PathParam("source-id") Long sourceId, @QueryParam("min") Long min, @QueryParam("max") Long max)
 	{
+		ReportsUtil.check(min*1000, max*1000);
 		return OpportunityUtil.getDealswithLossReason(ownerId, pipelineId, sourceId, min, max).toString();
 	}
 	
@@ -973,6 +975,7 @@ public class DealsAPI
 	public String getDealsWonforReports(@PathParam("owner-id") Long ownerId, 
 			@QueryParam("min") Long min, @QueryParam("max") Long max)
 	{
+		ReportsUtil.check(min*1000, max*1000);
 		return OpportunityUtil.getWonDealsforpiechart(ownerId, min, max).toString();
 	}
 
