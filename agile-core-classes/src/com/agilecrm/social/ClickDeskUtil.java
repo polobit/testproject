@@ -49,23 +49,7 @@ public class ClickDeskUtil {
 				"application/json", "application/json; charset=utf-8");
 		System.out.println("ClickDesk response : " + response);
 
-		/*
-		 * Exceptions from ClickDesk server are returned as HTML strings, if
-		 * response is not JSON, it is an exception
-		 */
-		try {
-			return new JSONArray(response);
-		} catch (Exception e) {
-			System.out.println("In ClickDesk exception: ");
-			e.printStackTrace();
-
-			/*
-			 * Checks for the response and modifies it to throw proper
-			 * exceptions
-			 */
-			throw new Exception(checkResponse(response));
-		}
-
+		return new JSONArray(response);
 	}
 
 	/**

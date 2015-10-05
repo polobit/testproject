@@ -105,6 +105,9 @@ function save_widget_prefs(pluginName, prefs, callback) {
 				callback(data);
 			}
 
+		}, error : function(data){
+			console.log(data);
+			alert("error occurred"+data);
 		}
 	});
 }
