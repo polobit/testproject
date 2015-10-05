@@ -212,6 +212,33 @@
 			{{#related_to_one contacts}}{{/related_to_one}}
 		{{/if}}{{#if_greater this.contacts.length "5"}}<span>,..</span>{{/if_greater}}
 	</div>
+
+	{{#if_equals pipeline.won_milestone milestone}}
+		{{#if won_date}}
+			<div style="cursor:default;" class="pull-left inline-block deal_won_date" id="deal_won_date_{{id}}" data-toggle="tooltip" title="Won date">
+      			<small>{{epochToHumanDateInFormat won_date}}</small>
+      		</div>
+      		<div class="clearfix"></div>
+      	{{else}}
+      		{{#if milestone_changed_time}}
+      			<div style="cursor:default;" class="pull-left inline-block deal_won_date" id="deal_won_date_{{id}}" data-toggle="tooltip" title="Won date">
+      				<small>{{epochToHumanDateInFormat milestone_changed_time}}</small>
+      			</div>
+      			<div class="clearfix"></div>
+      		{{else}}
+      			<div style="cursor:default;" class="pull-left inline-block hide deal_won_date" id="deal_won_date_{{id}}" data-toggle="tooltip" title="Won date">
+      				<small></small>
+      			</div>
+      			<div class="clearfix"></div>
+      		{{/if}}
+		{{/if}}
+	{{else}}
+		<div style="cursor:default;" class="pull-left inline-block hide deal_won_date" id="deal_won_date_{{id}}" data-toggle="tooltip" title="Won date">
+      		<small></small>
+      	</div>
+      	<div class="clearfix"></div>
+	{{/if_equals}}
+
 	<div class="pull-left">
 		<small class="text-muted">
 			{{#if close_date}}
@@ -223,15 +250,15 @@
 <div class="pull-right">
 <span class="pull-right deal-options vis-hide">
 			{{#if_equals archived false}}
-			<a title="Archive" class="deal-archive c-p text-l-none" style="text-decoration:none;"> <i style="width: 0.9em!important;" class="icon-archive"></i> </a>
+			<a title="Archive" class="deal-archive c-p text-l-none" style="text-decoration:none;color:#727272;"> <i style="width: 0.9em!important;" class="icon-archive"></i> </a>
 			{{/if_equals}}
 			{{#if_equals archived true}}
-			<a title="Restore" class="deal-restore c-p text-l-none" style="text-decoration:none;"> <i style="width: 0.9em!important;" class="icon-mail-reply"></i> </a>
+			<a title="Restore" class="deal-restore c-p text-l-none" style="text-decoration:none;color:#727272;"> <i style="width: 0.9em!important;" class="icon-mail-reply"></i> </a>
 			{{/if_equals}}
 			{{#if_equals archived false}}
-			<a title="Edit" class="deal-edit c-p text-l-none" style="text-decoration:none;"> <i style="width: 0.9em!important;" class="icon-pencil"></i> </a>
+			<a title="Edit" class="deal-edit c-p text-l-none" style="text-decoration:none;color:#727272;"> <i style="width: 0.9em!important;" class="fa fa-pencil-square"></i> </a>
             {{/if_equals}}
-			<a title="Delete" class="deal-delete c-p text-l-none" style="text-decoration:none;"><i style="width: 0.9em!important;" class="icon-trash"></i></a>
+			<a title="Delete" class="deal-delete c-p text-l-none" style="text-decoration:none;color:#727272;"><i style="width: 0.9em!important;" class="fa fa-trash"></i></a>
         </span>
 </div>
 <div class="clearfix"></div>

@@ -203,6 +203,11 @@ public class BillingRestriction
 
 	return true;
     }
+    
+    public boolean isEmailPlanPaid()
+    {
+    	return (one_time_emails_count != null && one_time_emails_count > 0);
+    }
 
     /**
      * Checks if account can be downgraded

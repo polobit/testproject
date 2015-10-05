@@ -23,8 +23,11 @@ var ContactsRouter = Backbone.Router.extend({
 		"contact/:id" : "contactDetails",
 		
 		"import" : "importContacts",
-		
+
+		//add contact when customfields are there
 		"contact-edit" : "editContact",
+		
+		"contact-add" : "addContact",
 		
 		"contact-duplicate" : "duplicateContact",
 		
@@ -1122,7 +1125,46 @@ var ContactsRouter = Backbone.Router.extend({
 			$(this).find("#phone").val(mob);
 		});
 		$("#personModal").modal();
+	},
+
+	addContact : function(){
+		$.getJSON("core/api/custom-fields/scope?scope=CONTACT", function(data)
+		{
+			if(data.length > 0){
+				var json = {custom_fields:data,properties:[]};
+				getTemplate("continue-contact", json, undefined, function(template_ui){
+					if(!template_ui)
+						  return;
+					$("#content").html($(template_ui));	
+					// Add placeholder and date picker to date custom fields
+					$('.date_input').attr("placeholder", "Select Date");
+
+					$('.date_input').datepicker({ format : CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY});
+
+					// To set typeahead for tags
+					setup_tags_typeahead();
+
+					// Iterates through properties and ui clones
+					
+					var fxn_display_company = function(data, item)
+					{
+						$("#content [name='contact_company_id']")
+								.html(
+										'<li class="inline-block tag btn btn-xs btn-primary m-r-xs m-b-xs" data="' + data + '"><span><a class="text-white m-r-xs" href="#contact/' + data + '">' + item + '</a><a class="close" id="remove_tag">&times</a></span></li>');
+						$("#content #contact_company").hide();
+					}
+					agile_type_ahead("contact_company", $('#content'), contacts_typeahead, fxn_display_company, 'type=COMPANY', '<b>No Results</b> <br/> Will add a new one');
+
+				}, "#content"); 
+
+					
+			}else{
+				Backbone.history.navigate("contacts" , {trigger: true});
+				$("#personModal").modal("show");
+			}		
+					
+		});
 
 	}
-	
+		
 	});
