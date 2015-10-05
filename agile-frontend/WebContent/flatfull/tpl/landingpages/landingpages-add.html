@@ -26,6 +26,59 @@
 					<div id="landingPageBuilderHolder">
                     <IFRAME SRC="misc/landingpage/index.jsp?tmpid={{templateId}}&action={{action}}" id="landingPageBuilder" frameBorder="0" name="landingPageBuilder" WIDTH="100%" HEIGHT="900px"></IFRAME>
                     </div>
+                    <br />
+                    <br />
+                    <div>
+                        <a href="#" class="text-info" id="builder-page-option" data-toggle="collapse" data-target="#builder-page-block">
+                            <span><i class="icon-plus"></i></span> Page Options
+                        </a>
+                    </div>
+                    <br/>
+                    <div class="collapse" id="builder-page-block">
+                        
+                        <div class="row">
+                         <div class="control-group form-group">
+                            <label class="control-label col-sm-2">
+                                <b>Meta Title:</b>
+                            </label>
+                            <div class="controls col-sm-4">
+                                <input type="text" name="metatitle" id="metatitle" class="form-control">
+                            </div>
+                        </div>
+                        </div>
+                        <div class="text-sm text-light"></div>
+                        <br/>
+                        <br/>
+
+                        <div class="row">
+                         <div class="control-group form-group">
+                            <label class="control-label col-sm-2">
+                                <b>Meta Description:</b>
+                            </label>
+                            <div class="controls col-sm-4">
+                                <textarea class="form-control" name="metadesc" id="metadesc"></textarea>
+                            </div>
+                        </div>
+                        </div>
+                        <div class="text-sm text-light"></div>
+                        <br/>
+                        <br>
+
+                        <div class="row">
+                         <div class="control-group form-group">
+                            <label class="control-label col-sm-2">
+                                <b>Meta Keywords:</b>
+                            </label>
+                            <div class="controls col-sm-4">
+                                <input type="text" name="metakeywords" id="metakeywords" class="form-control">
+                            </div>
+                        </div>
+                        </div>
+                        <div class="text-sm text-light"></div>
+                        <br/>
+                        <br>
+                    </div>
+                    <br />
 					<br />
 					<button class="btn btn-sm btn-primary saveLandingPageButton">Save Page</button>
                     <div class="save-workflow-img inline-block"></div>

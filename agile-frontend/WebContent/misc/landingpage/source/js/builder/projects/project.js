@@ -154,6 +154,9 @@ angular.module('builder.projects', [])
             	var returnDataFormat = {"pages": []};
             	returnDataFormat.pages[0] = data;
             	$("#landingpagename",parent.document).val(returnDataFormat.pages[0].name);
+            	$("#metatitle",parent.document).val(returnDataFormat.pages[0].title);
+            	$("#metadesc",parent.document).val(returnDataFormat.pages[0].tags);
+            	$("#metakeywords",parent.document).val(returnDataFormat.pages[0].description);
             	returnDataFormat.pages[0].name = "index";
 				project.active = returnDataFormat;
 
@@ -212,6 +215,9 @@ angular.module('builder.projects', [])
             var projectPageData = project.active.pages[0];
 
             var landingPageName = $("#landingpagename",parent.document).val();
+            projectPageData['title'] = $("#metatitle",parent.document).val();
+            projectPageData['tags'] = $("#metadesc",parent.document).val();
+            projectPageData['description'] = $("#metakeywords",parent.document).val();
 
             if(landingPageName == "") {
             	alertify.log("Page name is required.", "error");

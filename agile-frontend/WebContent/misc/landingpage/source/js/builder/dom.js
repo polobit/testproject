@@ -217,6 +217,10 @@ angular.module('builder')
     				'<meta http-equiv="X-UA-Compatible" content="IE=edge">'+
     				'<meta name="viewport" content="width=device-width, initial-scale=1">';
 
+    		meta.title = $("#metatitle",parent.document).val();
+    		meta.description = $("#metadesc",parent.document).val();
+    		meta.tags = $("#metakeywords",parent.document).val();
+
 			//add title if exists
 			if (meta.title) {
 				head += '<title>'+meta.title+'</title>';
