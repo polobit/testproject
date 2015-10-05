@@ -81,6 +81,7 @@ public class LandingPagesAPI
     @Produces(MediaType.APPLICATION_JSON)
 	public LandingPage updateLandingPage(LandingPage landingPage)
 	{
+		landingPage.updated_time = System.currentTimeMillis() / 1000;
 		landingPage.save();
 		return landingPage;
 	}
