@@ -2592,7 +2592,6 @@ select.input-xs{
 	max-width: 260px;
 }
 
-
 .contacts-grid-view-temp:hover div.grid-view-actions {
   display: block;
 }
@@ -2618,7 +2617,6 @@ background-color: #e4eaec !important;color:rgb(113, 85, 87);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
- 
   display: inline-block;
 }
 
@@ -2634,4 +2632,17 @@ background-color: #e4eaec !important;color:rgb(113, 85, 87);
 .grid-view-action-button{
 	position: absolute;
   right: 22px;
+}
+.show_shortcuts li ul li:hover .shortcuts.enable{
+	display: block!important;
+}
+
+.contactView ul.dropdown-menu li:hover .shortcuts {
+	display: block!important;
+}
+
+.shortcuts{
+	color : #D2C9C9;
+	font-size: 12px;
+	display:none;
 }

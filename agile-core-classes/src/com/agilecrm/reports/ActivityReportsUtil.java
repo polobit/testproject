@@ -733,7 +733,7 @@ public class ActivityReportsUtil
 	    String result = null;
 
 	    if (!StringUtils.isEmpty(name))
-		result = "to <a href=\"https://" + user.domain + ".agilecrm.com/#contact" + contact.id
+		result = "to <a href=\"https://" + user.domain + ".agilecrm.com/#contact/" + contact.id
 		        + "\" target=\"_blank\">" + name + "</a>";
 
 	    activity.custom4 = result;
@@ -1058,7 +1058,7 @@ public class ActivityReportsUtil
 		JSONArray contacts = new JSONArray(activity.related_contact_ids);
 		for (int i = 0; i < contacts.length(); i++)
 		{
-		    result += "<a href=\"https://" + domain + ".agilecrm.com/#contact"
+		    result += "<a href=\"https://" + domain + ".agilecrm.com/#contact/"
 			    + contacts.getJSONObject(i).getString("contactid") + "\" target=\"_blank\">"
 			    + contacts.getJSONObject(i).getString("contactname") + "</a>";
 		    if (i + 1 != contacts.length())

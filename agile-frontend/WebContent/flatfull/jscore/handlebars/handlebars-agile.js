@@ -179,10 +179,6 @@ function getTemplateUrls(templateName)
 	{
 		template_relative_urls.push("web-rules.js");
 	}
-	if (templateName.indexOf("webpage") == 0)
-	{
-		template_relative_urls.push("web-pages.js");
-	}
 	if (templateName.indexOf("workflow") == 0 || templateName.indexOf("campaign") == 0 || templateName.indexOf("trigger") == 0 || templateName
 			.indexOf("automation") == 0)
 	{
@@ -295,6 +291,14 @@ function getTemplateUrls(templateName)
 	if (templateName.indexOf("fbpagetab") == 0)
 	{
 		template_relative_urls.push("facebookpage.js");
+	}
+	if (templateName.indexOf("webpages") == 0)
+	{
+		template_relative_urls.push("webpages.js");
+	}
+	if (templateName.indexOf("billing-settings") == 0 || templateName.indexOf("creditcard-update") == 0)
+	{
+		template_relative_urls.push("settings.js");
 	}
 	return template_relative_urls;
 }
@@ -587,18 +591,18 @@ function get_website_icon(item){
 
 function get_social_icon(name){
 	if (!name)
-	return "icon-globe";
+	return "fa fa-globe";
 
-    var icon_json = { "TWITTER" : "icon-social-tumblr", "LINKEDIN" : "fa fa-linkedin", "URL" : "icon-globe", "GOOGLE-PLUS" : "fa fa-google-plus",
-	"FACEBOOK" : "icon-social-facebook", "GITHUB" : "fa fa-github", "FEED" : "icon-rss", "XING" : "fa fa-xing", "SKYPE" : "icon-skype",
-	"YOUTUBE" : "fa fa-youtube-play", "FLICKR" : "fa fa-flickr" };
+    var icon_json = { "TWITTER" : "fa fa-twitter", "LINKEDIN" : "fa fa-linkedin-square", "URL" : "fa fa-globe", "GOOGLE-PLUS" : "fa fa-google-plus-square",
+	"FACEBOOK" : "fa fa-facebook-square", "GITHUB" : "fa fa-github", "FEED" : "icon-rss", "XING" : "fa fa-xing-square", "SKYPE" : "icon-skype",
+	"YOUTUBE" : "fa fa-youtube-square", "FLICKR" : "fa fa-flickr" };
 
     name = name.trim();
 
     if (icon_json[name])
 	return icon_json[name];
 
-    return "icon-globe";
+    return "fa fa-globe";
 }
 
 function get_subtype(item){
