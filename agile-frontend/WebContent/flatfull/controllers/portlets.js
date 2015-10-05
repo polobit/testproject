@@ -8,16 +8,6 @@ var PortletsRouter = Backbone.Router
 				"add-dashlet" : "adddashlet"
 			},
 
-			before : {
-				"*any" : function(fragment, args, next) {
-					head.js(CLOUDFRONT_PATH
-							+ "/jscore/min/flatfull/portlets-min.js",
-							function() {
-								next();
-							});
-				}
-			},
-
 			adddashlet : function() {
 
 				// Back to dashboard if gridster not initalized
