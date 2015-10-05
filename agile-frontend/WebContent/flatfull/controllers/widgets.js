@@ -99,8 +99,7 @@ var WidgetsRouter = Backbone.Router
 
 					// Append widgets into view by organizing them
 					that.Catalog_Widgets_View.appendItem = organize_widgets;
-					console.log(organize_widgets);
-
+					
 					// Fetch the list of widgets
 					that.Catalog_Widgets_View.collection.fetch({
 						success : function(data) {
@@ -306,68 +305,7 @@ var WidgetsRouter = Backbone.Router
 				}
 			},
 
-			/**
-			 * Manages widget added by user
-			 */
-			Custom : function(id) {
-				if (id) {
-					alert('clicked');
-					console.log($(this))
-					divClone = $(this).clone();
-					var widget_custom_view = new Base_Model_View(
-							{
-								url : "/core/api/widgets/custom",
-								template : "add-custom-widget",
-								isNew : true,
-								postRenderCallback : function(el) {
-									initializeWidgetSettingsListeners();
-									console.log('In post render callback');
-									console.log(el);
-
-									$('body').on(
-											'change',
-											'#script_type',
-											function(e) {
-												var script_type = $(
-														'#script_type').val();
-												if (script_type == "script") {
-													$('#script_div').show();
-													$('#url_div').hide();
-													return;
-												}
-
-												if (script_type == "url") {
-													$('#script_div').hide();
-													$('#url_div').show();
-												}
-											});
-
-								},
-								saveCallback : function(model) {
-									console.log('In save callback');
-
-									console.log(model);
-
-									if (model == null)
-										alert("A widget with this name exists already. Please choose a different name");
-
-									App_Widgets.Catalog_Widgets_View.collection
-											.add(model);
-									$("#custom-widget").replaceWith(divClone);
-								}
-							});
-
-					$('#custom-widget', el).html(
-							widget_custom_view.render(true).el);
-
-					$('#cancel_custom_widget').die().live('click', function(e) {
-						// Restore element back to original
-						$("#custom-widget").replaceWith(divClone);
-					});
-
-				}
-				// fill_form(id, "Custom", 'custom-widget-settings');
-			},
+			
 
 			/**
 			 * Contact synchronization with Google
@@ -763,222 +701,6 @@ var WidgetsRouter = Backbone.Router
 			}
 		});
 
-function addWidgetProfile(widgetId, widgetName, template, url) {
-	loadSettingsUI(function() {
-
-		// Get route model
-		getWidgetModelFromName(
-				widgetId,
-				"",
-				function(model) {
-
-					$
-							.getJSON(
-									(url + widgetId),
-									function(data) {
-										var widget_el = getTemplate(
-												"widget-settings", model);
-										$('#prefs-tabs-content')
-												.html(widget_el);
-
-										if (data) {
-											model["profile"] = data;
-										} else {
-											// Loading GooglePlus profile
-											if (widgetName == "GooglePlus") {
-												var widgetPrefGP = JSON
-														.parse(model.prefs);
-												var userData = $
-														.parseJSON($
-																.ajax({
-																	url : "https://www.googleapis.com/plus/v1/people/me?access_token="
-																			+ widgetPrefGP['access_token'],
-																	async : false,
-																	dataType : 'json'
-																}).responseText);
-												model["profile"] = userData;
-												// Loading Stripe profile
-											} else if (widgetName == "Stripe") {
-												$
-														.getJSON(
-																"core/api/custom-fields/type/scope?scope=CONTACT&type=TEXT",
-																function(data) {
-																	model["custom_data"] = data;
-
-																	// App_Widgets.Catalog_Widgets_View.collection.model
-																	var widgetModel = new Widget_Model_Events(
-																			{
-																				template : template,
-																				url : url,
-																				isNew : true,
-																				data : model,
-																				postRenderCallback : function(
-																						el) {
-																					deserializeWidget(
-																							model,
-																							el);
-																				}
-																			});
-
-																	$(
-																			'#widget-settings')
-																			.html(
-																					widgetModel
-																							.render().el);
-																	return;
-																});
-												model["profile"] = jQuery
-														.parseJSON(model.prefs);
-											} else {
-												model["profile"] = jQuery
-														.parseJSON(model.prefs);
-											}
-										}
-
-										// App_Widgets.Catalog_Widgets_View.collection.model
-										var widgetModel = new Widget_Model_Events(
-												{
-													template : template,
-													url : url,
-													isNew : true,
-													data : model,
-													postRenderCallback : function(
-															el) {
-														deserializeWidget(
-																model, el);
-													}
-												});
-
-										$('#widget-settings').html(
-												widgetModel.render().el);
-									});
-				});
-
-	});
-
-}
-
-function addOAuthWidget(widgetName, template, url) {
-	loadSettingsUI(function() {
-
-		// Get route model
-		getWidgetModelFromName(widgetName, "name", function(model) {
-
-			if (model) {
-				model["url"] = url;
-			}
-
-			var widget_el = getTemplate("widget-settings", model);
-			$('#prefs-tabs-content').html(widget_el);
-
-			// App_Widgets.Catalog_Widgets_View.collection.model
-			var widgetModel = new Widget_Model_Events({
-				template : template,
-				url : 'core/api/widgets',
-				isNew : true,
-				data : model,
-				postRenderCallback : function(el) {
-
-				}
-			});
-
-			$('#widget-settings').html(widgetModel.render().el);
-		});
-
-	});
-}
-
-/**
- * Add model widget.
- */
-function addConfigurableWidget(widgetId, widgetName, templateName) {
-
-	loadSettingsUI(function() {
-
-		var type = "";
-		var selector = "";
-
-		if (!widgetId) {
-			type = "name";
-			selector = widgetName;
-		} else {
-			selector = widgetId;
-		}
-
-		// Get route model
-		getWidgetModelFromName(selector, type, function(model) {
-
-			var widget_el = getTemplate("widget-settings", model);
-			$('#prefs-tabs-content').html(widget_el);
-
-			// App_Widgets.Catalog_Widgets_View.collection.model
-			var widgetModel = new Widget_Model_Events({
-				template : templateName,
-				url : 'core/api/widgets',
-				isNew : true,
-				data : model,
-				postRenderCallback : function(el) {
-					deserializeWidget(model, el);
-				}
-			});
-
-			$('#widget-settings').html(widgetModel.render().el);
-
-			if (model.name == "TwilioIO") {
-				fill_twilioio_numbers();
-			}
-
-		});
-
-	});
-}
-
-function loadSettingsUI(callback) {
-	getTemplate('settings', {}, undefined, function(template_ui) {
-		if (!template_ui)
-			return;
-
-		$('#content').html($(template_ui));
-		$('#prefs-tabs-content').html(getRandomLoadingImg());
-
-		$('#PrefsTab .select').removeClass('select');
-		$('.add-widget-prefs-tab').addClass('select');
-
-		if (callback)
-			callback();
-
-	}, "#content");
-
-}
-
-function getWidgetModelFromName(widgetId, type, callback) {
-
-	getAgileConfiguredWidgetCollection(function(widgetCollection) {
-
-		var model = "";
-		if (type == "name") {
-			models = widgetCollection.where({
-				name : widgetId
-			});
-			model = models[0];
-		} else {
-			model = widgetCollection.get(widgetId);
-		}
-
-		if (!model) {
-
-			Backbone.history.navigate('add-widget', {
-				trigger : true
-			});
-			return;
-		}
-
-		callback(model.toJSON());
-
-	});
-
-}
-
 function getAgileConfiguredWidgetCollection(callback) {
 
 	if (App_Widgets.Catalog_Widgets_View
@@ -1002,10 +724,17 @@ function getAgileConfiguredWidgetCollection(callback) {
 	});
 }
 
-function deserializeWidget(widget, el) {
+function renderWidgetView(templateName, url, model, renderEle){
 
-	if (!widget.prefs)
-		return;
+	var widgetModel = new Widget_Model_Events({
+		template : templateName,
+		url : url,
+		isNew : true,
+		data : model,
+		postRenderCallback : function(el) {
+			deserializeWidget(model, el);
+		}
+	});
 
-	deserializeForm(JSON.parse(widget.prefs), $(el).find("form"));
+	$(renderEle).html(widgetModel.render().el);
 }

@@ -421,7 +421,7 @@ public class ScribeUtil {
 	 *            {@link String} access token after OAuth
 	 */
 	public static Long saveLinkedInOrTwitterPrefs(HttpServletRequest req,
-			Token accessToken, String isForAll) {
+			Token accessToken, String isForAll) throws Exception {
 		System.out.println("Saving LinkedIn or Twitter Prefs");
 
 		Map<String, String> properties = new HashMap<String, String>();
@@ -628,7 +628,7 @@ public class ScribeUtil {
 	}
 
 	public static Long saveWidgetPrefsByName(String widgetName,
-			Map<String, String> properties) {
+			Map<String, String> properties) throws Exception {
 		Long widgetID = null;
 		Widget widget = DefaultWidgets.getDefaultWidgetByName(widgetName);
 		// If widget is null returns, since no widget exists with id.
@@ -641,7 +641,6 @@ public class ScribeUtil {
 
 	public static Long saveWidgetPrefs(Widget widget,
 			Map<String, String> properties) {
-
 		Long WidgetID = null;
 
 		System.out.println("Response from Plugin:" + properties.toString());
@@ -686,7 +685,8 @@ public class ScribeUtil {
 	 * @throws IOException
 	 */
 	public static Long saveFacebookPrefs(HttpServletRequest req, String code,
-			OAuthService service, String isForAll) throws IOException {
+			OAuthService service, String isForAll) throws IOException,
+			Exception {
 		System.out.println("In Facebook save");
 
 		Verifier verifier = new Verifier(code);
@@ -817,7 +817,7 @@ public class ScribeUtil {
 	}
 
 	public static Long saveGooglePlusPrefs(HttpServletRequest req, String code,
-			String isForAll) {
+			String isForAll) throws Exception {
 		System.out.println("Saving GPlus Prefs");
 
 		// Exchanges access token/refresh token with extracted Authorization

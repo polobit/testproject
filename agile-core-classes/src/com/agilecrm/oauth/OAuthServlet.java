@@ -102,20 +102,35 @@ public class OAuthServlet extends HttpServlet {
 		properties.put("time", String.valueOf(System.currentTimeMillis()));
 		properties.put("isForAll", isForAll);
 		String returnURL = null;
+		String resultType = "success";
+		String statusMSG = "QuickBooks Widget saved successfully";
+
 		if (SERVICE_TYPE_QUICKBOOKS.equalsIgnoreCase(serviceType)) {
-			widgetID = ScribeUtil.saveWidgetPrefsByName("quickbooks",
-					properties);
-			if (widgetID != null) {
-				returnURL = "/#QuickBooks/" + widgetID;
-			} else {
-				returnURL = getRedirectURI(req) + "/#add-widget";
+			try {
+				widgetID = ScribeUtil.saveWidgetPrefsByName("quickbooks",
+						properties);
+				if (widgetID != null) {
+					returnURL = "/#QuickBooks/" + widgetID;
+				} else {
+					returnURL = getRedirectURI(req) + "/#add-widget";
+					resultType = "error";
+					statusMSG = "QuickBooks widgets not saved";
+				}
+			} catch (Exception e) {
+				resultType = "error";
+				statusMSG = "Error Occured while saving QuickBooks : "
+						+ e.getMessage();
 			}
+
 		} else if (serviceType.equalsIgnoreCase("quickbook-import")) {
 			ScribeUtil.saveQuickBookPrefs(properties);
 			String redirectURL = (String) req.getSession().getAttribute(
 					"referer");
 			returnURL = redirectURL + "#sync/quickbook";
 		}
+
+		req.getSession().setAttribute("widgetMsgType", resultType);
+		req.getSession().setAttribute("widgetMsg", statusMSG);
 		resp.sendRedirect(returnURL);
 		// resp.getWriter().println("<script>window.opener.force_plugins_route(); window.close();</script>");
 
