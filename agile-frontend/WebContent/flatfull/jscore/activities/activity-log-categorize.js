@@ -22,8 +22,8 @@ function initializeActivitiesListner(el){
 		var entitytype = $(this).html();
 
 		var entity_attribute = $(this).attr("href");
-		createCookie("selectedentity", entity_attribute, 90);
-		createCookie("selectedentity_value", entitytype, 90);
+
+		buildActivityFilters(entitytype,entity_attribute,"entityDropDown");
 		$('.activity-sub-heading').html(entitytype);
 
 	});
@@ -32,15 +32,15 @@ function initializeActivitiesListner(el){
 
 		var user = $(this).html();
 		var user_attribute = $(this).attr("href");
-		createCookie("selecteduser", user_attribute, 90);
-		createCookie("selecteduser_value", user, 90);
+
+		buildActivityFilters(user,user_attribute,"userDropDown");
 
 	});
 
 
 
 	$("#activities-listners").on('click', '.activity-event-edit', function(e)
-{
+	{
 	e.preventDefault();
 	var data = $(this).closest('a').attr("data");
 

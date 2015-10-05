@@ -2,16 +2,20 @@ package com.agilecrm.scribe;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Arrays;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang.StringUtils;
 import org.scribe.model.Token;
 import org.scribe.model.Verifier;
 import org.scribe.oauth.OAuthService;
 
+import com.agilecrm.DataSyncUrlConstants;
 import com.agilecrm.scribe.util.ScribeUtil;
 
 /**
@@ -144,14 +148,23 @@ public class ScribeServlet extends HttpServlet
 			saveToken(req, resp);
 			return;
 		}
+		else{
+			String window_opened_service=req.getParameter("window_opened");
+			if(StringUtils.isNotBlank(window_opened_service)){
+				req.getSession().setAttribute("window_opened_service", true);
+			}
 
+		}
+
+		resp.getWriter().print("Please wait...");
 		/*
 		 * If the request is from imports we get this parameter, This happens
 		 * when we have the user google tokens with us, there is no need of
 		 * authenticating him again
 		 */
 		String serviceType = req.getParameter("service_type");
-
+		
+		
 		if (serviceType != null && serviceType.equalsIgnoreCase(SHOPIFY_SERVICE))
 		{
 			String shop = req.getParameter("shop");
@@ -289,7 +302,6 @@ public class ScribeServlet extends HttpServlet
 			req.getSession().setAttribute("plugin_id", pluginId);
 		
 		req.getSession().setAttribute("isForAll", isForAll);
-		
 		System.out.println("In setup of scribe response: " + resp);
 
 		System.out.println(url);
@@ -374,7 +386,9 @@ public class ScribeServlet extends HttpServlet
 		// return URL is retrieved from session
 		String returnURL = (String) req.getSession().getAttribute("return_url");
 		System.out.println("return url " + returnURL);
-		
+		if(ScribeUtil.isWindowPopUpOpened(serviceName,returnURL,req,resp)){
+			return;
+		}
 		// If return URL is null, redirect to dashboard
 		System.out.println(returnURL);
 		if (returnURL == null)
@@ -385,4 +399,6 @@ public class ScribeServlet extends HttpServlet
 		// Delete return url Attribute
 		req.getSession().removeAttribute("return_url");
 	}
+	
+	
 }

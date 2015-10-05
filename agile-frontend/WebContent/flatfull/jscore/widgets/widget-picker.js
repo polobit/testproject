@@ -32,6 +32,7 @@
     $('.add-widget-prefs-tab').addClass('select');
 }*/
 
+
 /**
  * Organizes widgets into different categories like (SOCIAL, SUPPORT, EMAIL,
  * CALL, BILLING.. etc) to show in the add widget page, based on the widget_type
@@ -75,6 +76,9 @@ function organize_widgets(base_model)
 	if (widget_type == "CUSTOM")
 		$('#custom', this.el).append($(itemView.render().el).addClass('col-md-4 col-sm-6 col-xs-12'));
 }
+
+
+
 
 /**
  * Add/ Delete button are shown in the widget based on the attribute is_added in

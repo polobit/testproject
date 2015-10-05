@@ -1,5 +1,7 @@
 package com.agilecrm.core.api.contacts;
 
+import java.util.List;
+
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.PUT;
@@ -46,6 +48,17 @@ public class ContactPrefsAPI
 	System.out.println("in contact prefs api");
 	return ContactPrefsUtil.getPrefsByType(Type.GOOGLE);
     }
+    
+    
+    @Path("/allPrefs")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public List<ContactPrefs> getAllContactPrefs()
+    {
+    	
+    	return ContactPrefsUtil.getAllprefs();
+    }
+
 
     @Path("/{type}")
     @PUT
@@ -90,10 +103,39 @@ public class ContactPrefsAPI
     @Path("{type}")
     @DELETE
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public void deleteContactPrefs(@PathParam("type") String type)
+    public void deleteContactPrefs(@PathParam("type") Type type)
     {
 
-	ContactPrefsUtil.delete(Type.GOOGLE);
+    	if(type==Type.GOOGLE)
+        	ContactPrefsUtil.delete(Type.GOOGLE);
+        	if(type==Type.STRIPE)
+        	ContactPrefsUtil.delete(Type.STRIPE);
+        	if(type==Type.SHOPIFY)
+            	ContactPrefsUtil.delete(Type.SHOPIFY);
+        	if(type==Type.QUICKBOOK)
+            	ContactPrefsUtil.delete(Type.QUICKBOOK);
+        	if(type==Type.FRESHBOOKS)
+            ContactPrefsUtil.delete(Type.FRESHBOOKS);
+
+    }
+    
+    
+    @Path("/delete/{type}")
+    @DELETE
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public void deleteContactSyncPrefs(@PathParam("type") Type type)
+    {
+
+    	if(type==Type.GOOGLE)
+    	ContactPrefsUtil.delete(Type.GOOGLE);
+    	if(type==Type.STRIPE)
+    	ContactPrefsUtil.delete(Type.STRIPE);
+    	if(type==Type.SHOPIFY)
+        	ContactPrefsUtil.delete(Type.SHOPIFY);
+    	if(type==Type.QUICKBOOK)
+        	ContactPrefsUtil.delete(Type.QUICKBOOK);
+    	if(type==Type.FRESHBOOKS)
+        ContactPrefsUtil.delete(Type.FRESHBOOKS);
 
     }
 }

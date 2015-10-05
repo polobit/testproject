@@ -6,6 +6,7 @@ package com.agilecrm.scribe.util;
 
 import java.io.IOException;
 import java.net.URLEncoder;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -14,6 +15,7 @@ import java.util.Map.Entry;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
 import org.json.JSONArray;
@@ -826,4 +828,36 @@ public class ScribeUtil
 		// saveWidgetPrefsByName(serviceType, properties);
 	}
     
+	
+	public static boolean isWindowPopUpOpened(String serviceName, String returnURL, HttpServletRequest req, HttpServletResponse resp){
+		  
+		  // Get session param
+		boolean openedService=false;
+		Object obj=req.getSession().getAttribute("window_opened_service");
+		if(obj!=null)
+		  openedService = (boolean)obj;
+		  if(!openedService)
+		      return false;
+		  
+		  // Delete return url Attribute
+		  	  req.getSession().removeAttribute("window_opened_service");
+		    
+		      
+		      String[] syncPrefServices=new String[]{"google","stripe_import","shopify","google_calendar","quickbook-import"};
+		      if(StringUtils.isBlank(returnURL))
+		       returnURL = "/";
+		      
+		      if(Arrays.asList(syncPrefServices).contains(serviceName)){
+		       try {
+		        resp.getWriter().print("<script>parent.window.opener.executeDataSyncReturnCallback('" + returnURL + "'); window.close();</script>");
+		   } catch (Exception e) {
+		   }
+		      
+		       return true;
+		      }
+		      
+		      return false;
+		 }
+	
+	
 }

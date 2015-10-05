@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.agilecrm.DataSyncUrlConstants;
 import com.agilecrm.contact.sync.Type;
 import com.agilecrm.contact.sync.SyncFrequency;
 import com.agilecrm.session.SessionManager;
@@ -75,6 +76,31 @@ public class ContactPrefsUtil
     {
 	return ContactPrefs.dao.fetchAll();
     }
+    
+    
+    public static List<ContactPrefs> getAllprefs()
+    {
+    List<String> prefsTyes=new ArrayList<String>();
+ 	List<ContactPrefs> contactPrefs= ContactPrefs.dao.fetchAll();
+	for(ContactPrefs prefs:contactPrefs){
+		prefsTyes.add(prefs.type.toString());
+	}
+	
+	return addSyncTemplates(prefsTyes,contactPrefs);
+    }
+    
+    public static List<ContactPrefs> addSyncTemplates(List<String> configuredSync,List<ContactPrefs> finalSyncPrefs){
+    	DataSyncUrlConstants dataSyncUrls=null;
+    	dataSyncUrls=DataSyncUrlConstants.getDataSyncUrlInstance();
+    	List<String> defaultSyncTemplates=dataSyncUrls.dataSyncTypes;
+    	for(String defaults:defaultSyncTemplates){
+    		if(!configuredSync.contains(defaults)){
+    			finalSyncPrefs.add(dataSyncUrls.getDataSyncWidget(defaults));
+    		}
+    	}
+    	return finalSyncPrefs;
+    }
+
 
     public static List<ContactPrefs> getprefs(SyncFrequency duration)
     {

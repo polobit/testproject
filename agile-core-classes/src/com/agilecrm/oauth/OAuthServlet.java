@@ -50,6 +50,10 @@ public class OAuthServlet extends HttpServlet
 			}
 			else
 			{
+				String window_opened_service=req.getParameter("window_opened");
+				if(StringUtils.isNotBlank(window_opened_service)){
+					req.getSession().setAttribute("window_opened_service", true);
+				}
 				req.getSession().setAttribute("referer", req.getHeader("referer"));
 			}
 			if (serviceType != null)
@@ -113,6 +117,9 @@ public class OAuthServlet extends HttpServlet
 		{
 			ScribeUtil.saveQuickBookPrefs(properties);
 			String redirectURL = (String) req.getSession().getAttribute("referer");
+			
+			if(ScribeUtil.isWindowPopUpOpened(serviceType, redirectURL+"#sync/quickbook", req, resp))
+			
 			resp.sendRedirect(redirectURL + "#sync/quickbook");
 			return;
 		}
@@ -156,8 +163,10 @@ public class OAuthServlet extends HttpServlet
 
 		if (returnURL != null)
 			req.getSession().setAttribute("return_url", returnURL);
+		resp.getWriter().print("please wail ...");
 
 		resp.sendRedirect(authUrl + "&oauth_callback=" + getRedirectURI(req) + "/OAuthServlet");
+		resp.getWriter().print("please wail ...");
 	}
 
 	public OAuthProvider getOAuthProvider(String serviceType)

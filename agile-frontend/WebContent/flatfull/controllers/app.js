@@ -38,6 +38,7 @@ $(function()
 	App_ACL = new ACLRestriction();
 	App_FacebookPageTabRouter = new FacebookPageTabRouter();
 	App_Companies = new CompaniesRouter();
+	App_Datasync = new DataSyncRouter();
 
 	// Binds an event to activate infinite page scrolling
 	Backbone.history.bind("all", currentRoute)
