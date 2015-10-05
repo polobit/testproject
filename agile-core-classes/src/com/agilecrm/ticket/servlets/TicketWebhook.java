@@ -15,6 +15,7 @@ import org.apache.commons.lang.exception.ExceptionUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import com.agilecrm.Globals;
 import com.agilecrm.ticket.entitys.TicketGroups;
 import com.agilecrm.ticket.entitys.TicketNotes;
 import com.agilecrm.ticket.entitys.Tickets;
@@ -106,7 +107,7 @@ public class TicketWebhook extends HttpServlet
 			{
 				toAddress = recipientsArray.getJSONArray(i).getString(0);
 
-				if (toAddress.endsWith("helptor"))
+				if (toAddress.endsWith(Globals.INBOUND_EMAIL_SUFFIX))
 					break;
 			}
 
@@ -116,7 +117,7 @@ public class TicketWebhook extends HttpServlet
 			 * Replacing helptor.com text with space so that we'll get a string
 			 * of namespace and group ID separated by delimeter '+'
 			 */
-			String[] toAddressArray = toAddress.replace("@helptor.com", "").split("\\+");
+			String[] toAddressArray = toAddress.replace(Globals.INBOUND_EMAIL_SUFFIX, "").split("\\+");
 
 			if (toAddressArray.length != 2)
 				return;
@@ -177,7 +178,7 @@ public class TicketWebhook extends HttpServlet
 				 * helptor.com. We will send this as param when agent replies
 				 * to this ticket.
 				 */
-				if (inReplyTo.endsWith("@helptor.com"))
+				if (inReplyTo.endsWith(Globals.INBOUND_EMAIL_SUFFIX))
 					isNewTicket = false;
 			}
 
@@ -211,7 +212,7 @@ public class TicketWebhook extends HttpServlet
 			else
 			{
 				// Fetch ticket ID from In-Reply-To mime header
-				String temp = mimeHeaders.getString("In-Reply-To").replace("@helptor.com", "");
+				String temp = mimeHeaders.getString("In-Reply-To").replace(Globals.INBOUND_EMAIL_SUFFIX, "");
 				Long ticketID = Long.parseLong(temp);
 
 				ticket = TicketsUtil.getTicketByID(ticketID);

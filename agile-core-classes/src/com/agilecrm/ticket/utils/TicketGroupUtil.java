@@ -34,11 +34,11 @@ public class TicketGroupUtil
 		supportGroup.group_name = "Support";
 		supportGroup.is_default = true;
 		supportGroup.updated_time = Calendar.getInstance().getTimeInMillis();
-		supportGroup.agents_key_list = DomainUserUtil.getDomainUserKeys(NamespaceManager.get());
+		supportGroup.setAgents_key_list(DomainUserUtil.getDomainUserKeys(NamespaceManager.get()));
 
 		Key<DomainUser> ownerKey = new Key<DomainUser>(DomainUser.class, DomainUserUtil.getDomainOwner(NamespaceManager
 				.get()).id);
-		supportGroup.owner_key = ownerKey;
+		supportGroup.setOwner_key(ownerKey);
 
 		TicketGroups.ticketGroupsDao.put(supportGroup);
 
@@ -82,9 +82,10 @@ public class TicketGroupUtil
 
 		ticketGroup = new TicketGroups();
 		ticketGroup.group_name = groupName;
-		ticketGroup.agents_key_list = agents_key_list;
 		ticketGroup.updated_time = Calendar.getInstance().getTimeInMillis();
-		ticketGroup.owner_key = DomainUserUtil.getCurentUserKey();
+		
+		ticketGroup.setAgents_key_list(agents_key_list);
+		ticketGroup.setOwner_key(DomainUserUtil.getCurentUserKey());
 
 		TicketGroups.ticketGroupsDao.put(ticketGroup);
 
@@ -105,7 +106,7 @@ public class TicketGroupUtil
 			agents_key_list.add(new Key<DomainUser>(DomainUser.class, domainUserID));
 		}
 
-		ticketGroup.agents_key_list = agents_key_list;
+		ticketGroup.setAgents_key_list(agents_key_list);
 		ticketGroup.updated_time = Calendar.getInstance().getTimeInMillis();
 
 		TicketGroups.ticketGroupsDao.put(ticketGroup);

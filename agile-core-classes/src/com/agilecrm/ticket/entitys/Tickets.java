@@ -42,7 +42,7 @@ public class Tickets extends Cursor
 	 * Stores ticket group id to which it belongs
 	 */
 	@JsonIgnore
-	private Key<TicketGroups> group_id = null;
+	public Key<TicketGroups> group_id = null;
 
 	/**
 	 * Util attribute to send group id to client
@@ -59,7 +59,7 @@ public class Tickets extends Cursor
 	 * Stores user ID to whom ticket is assigned
 	 */
 	@JsonIgnore
-	private Key<DomainUser> assignee_id = null;
+	public Key<DomainUser> assignee_id = null;
 
 	/**
 	 * Util attribute to send assignee id to client
@@ -81,7 +81,7 @@ public class Tickets extends Cursor
 	 * Stores contact id of customer
 	 */
 	@JsonIgnore
-	private Key<Contact> contact_key = null;
+	public Key<Contact> contact_key = null;
 
 	@NotSaved
 	public Long contactID = null;

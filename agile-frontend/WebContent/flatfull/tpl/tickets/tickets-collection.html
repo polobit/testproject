@@ -57,20 +57,28 @@
 			<div class="data-block">
 				<div class="wrapper hidden-sm hidden-xs">
 					<ul class="nav nav-pills nav-stacked nav-sm">
-				        <li class="active"><a>Inbox</a></li>
+				        <li class="active"><a>New</a></li>
+				        <li><a>Open</a></li>
 				        <li><a>Starred</a></li>
-				        <li><a>Sent</a></li>
-				        <li><a>Important</a></li>
-				        <li><a>Draft</a></li>
-				        <li><a>Trash</a></li>
+				        <li><a>Closed</a></li>
 				      </ul>
+				</div>
+				<div class="wrapper hidden-sm hidden-xs">
+					<h4>Filters</h4><hr class="m-t-sm m-b-sm">
+					<span>No filters available</span>
 				</div>
 			</div>
 		</div>
 		<div class="col contacts-div">
 			<div class="data">
 	        	<div class="panel-heading" style="background:#f6f8f8;">
-	        		Tickets List
+	        		<label class="i-checks i-checks-sm text-cap">
+					    <input type="checkbox" data="{{id}}" class="usr-grp-checkbox" value="{{id}}">
+					    <i></i> Tickets List
+					</label>
+	    			<a id="contacts-left-filters-toggle" class="m-l-xs" data-toggle="tooltip" data-placement="right" data-original-title="Filters">
+						<i id="icon-filter" class="fa fa-bars icon-white"></i>
+					</a>
 				</div>
 	            <div class="dta-contatiner table-responsive">
 					<div class="panel panel-default" style="overflow-x:auto;border-left:none;">
@@ -78,8 +86,8 @@
 		        			<div id="slate"></div>
 				        {{/unless}}
 				        {{#if this.length}}
-							<table class="table table-striped showCheckboxes m-b-none agile-table panel table-layout-mob-view" url="core/api/workflows/bulk" id="workflows-tour-step">
-				                <tbody id="ticket-model-list" route="ticket/" class="c-p"> </tbody>
+							<table class="table table-striped showCheckboxes m-b-none agile-table panel table-layout-mob-view" url="core/api/tickets/bulk">
+				                <tbody id="ticket-model-list" route="ticket/" class="c-p"></tbody>
 				            </table>
 				        {{/if}}
 					</div>

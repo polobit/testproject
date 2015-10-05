@@ -1,8 +1,11 @@
 package com.agilecrm.ticket.rest;
 
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -13,9 +16,14 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.apache.commons.lang.exception.ExceptionUtils;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import com.agilecrm.ticket.entitys.TicketGroups;
 import com.agilecrm.ticket.utils.TicketGroupUtil;
+import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.util.DomainUserUtil;
 import com.googlecode.objectify.Key;
 
 /**
@@ -30,7 +38,16 @@ public class TicketGroupRest
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	public List<TicketGroups> getGroups()
 	{
-		return TicketGroupUtil.getAllGroups();
+		try
+		{
+			return TicketGroupUtil.getAllGroups();
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+
+		return new ArrayList<TicketGroups>();
 	}
 
 	@GET
@@ -54,7 +71,12 @@ public class TicketGroupRest
 	{
 		try
 		{
-			String groupName = ticketGroup.group_name.trim().toLowerCase();
+			String groupName = ticketGroup.group_name.trim();
+
+			List<Long> agents_keys = ticketGroup.agents_keys;
+
+			if (agents_keys == null || agents_keys.size() == 0)
+				throw new Exception("Please atleast one User to create Ticket Group.");
 
 			TicketGroups existingGroup = TicketGroupUtil.getTicketGroupByName(groupName);
 
@@ -62,6 +84,15 @@ public class TicketGroupRest
 				throw new Exception("Ticket Group with name" + groupName
 						+ " already exists. Please choose a different Group name");
 
+			List<Key<DomainUser>> agents_key_list = new ArrayList<Key<DomainUser>>();
+
+			for (Long agent_key : agents_keys)
+				agents_key_list.add(new Key<DomainUser>(DomainUser.class, agent_key));
+
+			ticketGroup.setAgents_key_list(agents_key_list);
+			ticketGroup.setOwner_key(DomainUserUtil.getCurentUserKey());
+			ticketGroup.updated_time = Calendar.getInstance().getTimeInMillis();
+			
 			TicketGroups.ticketGroupsDao.put(ticketGroup);
 
 			return ticketGroup;
@@ -72,6 +103,34 @@ public class TicketGroupRest
 			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
 					.build());
 		}
+	}
+
+	/**
+	 * Deletes tickets by ID
+	 * 
+	 * @param ticketGroup
+	 * @return ticketGroup
+	 * @throws JSONException
+	 */
+	@POST
+	@Path("/bulk")
+	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	public String deleteGroups(@FormParam("ids") String model_ids) throws JSONException
+	{
+		try
+		{
+			JSONArray groupIDsArray = new JSONArray(model_ids);
+			TicketGroups.ticketGroupsDao.deleteBulkByIds(groupIDsArray);
+		}
+		catch (Exception e)
+		{
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
+			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+					.build());
+		}
+
+		return new JSONObject().put("status", "success").toString();
 	}
 
 	@GET

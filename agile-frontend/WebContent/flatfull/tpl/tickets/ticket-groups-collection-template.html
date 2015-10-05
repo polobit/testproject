@@ -1,0 +1,72 @@
+<script id="ticket-groups-collection-template" type="text/html">
+<div class="custom-animated custom-fadeInUp">
+    <div class="wrapper-md lter bg-light b-b">
+        <div class="row">
+            <div class="col-sm-12 col-md-12">
+                <h3 class="pull-left font-thin h3">Ticket Groups</small></h3>
+                <div class="pull-right">
+                    <div class="btn-group right pos-rlt pull-right">
+                        <a href="#add-ticket-group" class="btn btn-default btn-sm" id="addTicketGroup"><i class="icon-plus-sign"></i> Add Group</a>
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+    </div>
+    <div class="wrapper-md">
+        <div class="row">
+            {{#unless this.length}}
+                <div class="col-md-9 col-sm-9">
+                    <div id="slate"></div>
+                </div>
+            {{/unless}}
+            {{#if this.length}}
+                <div class="col-md-9 col-sm-9">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">Groups List</div>
+                        <div class="table-responsive">
+                            <table class="table table-striped showCheckboxes m-b-none agile-table panel table-layout-mob-view" url="core/api/tickets/groups/bulk">
+                                <thead>
+                                    <tr>
+                                        <th class="hide">Id</th>
+                                        <th style="width:20%">Name</th>
+                                        <th style="width:35%">Group Email</th>
+                                        <th style="width:25%">&nbsp;</th>
+                                        <th style="width:17%">&nbsp;</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="ticket-groups-model-list" route="ticket-group/" class="c-p"> </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            {{/if}}
+            <div class="col-md-3 col-sm-3">
+        
+                <h4 class="m-t-none h4 m-b-sm">
+                    What is Workflow Automation?
+                </h4>
+                
+                <p>
+                    Workflow is a smart sales & marketing automation process to send your contacts the relevant information at just the right time. Leverage on it to automate most of your follow-up activities.
+
+                </p>
+                <p>
+                    eg: You can send an email to all contacts who have signed up on your website. Then, based on their behaviour in the control panel, you can nurture them with targeted messages periodically.
+                </p>
+                <br>
+                <h4 class="m-t-none h4 m-b-sm">
+                    What are Triggers?
+                </h4>
+                
+                <p>
+                    Triggers are pre-defined conditions set up by you. If a condition is satisfied, you can choose an action to follow using workflow automation.
+                </p>
+                <p>
+                    e.g. If a user registers on your website, you can automate the workflow to send a welcome email. The user registering on site is the trigger.
+                </p>
+            </div>
+        </div> 
+    </div>    
+</div>   
+</script>

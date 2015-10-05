@@ -196,4 +196,6 @@ public class Globals {
 
 	public static final String TAG_VALIDATION_REGEX = "^[A-Za-z][A-Za-z0-9_ :-]*$";
 
+	// Inbound email address suffix
+	public static final String INBOUND_EMAIL_SUFFIX = "@helptor.com";
 }

@@ -105,7 +105,7 @@ var CONTENT_JSON = {
 	},
 	"no-tickets" : {
 		"title" : "You do not have any Tickets currently.",
-		"description" : "Contacts are your customers or prospects that you interact with using Agile.",
+		"description" : "Tickets can be problem, incident, question or task escalated by your customer.",
 		"image" : "/img/clipboard.png"
 	},
 	"dashboard" : {
