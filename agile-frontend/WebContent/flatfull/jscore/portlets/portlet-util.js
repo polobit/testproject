@@ -190,6 +190,9 @@ var portlet_utility = {
 	 */
 	getStartAndEndDurations : function(base_model, callback) {
 		var durationJson = {};
+		if (!base_model.get('settings')) {
+			return;
+		}
 		var duration = base_model.get('settings').duration;
 
 		durationJson['start_date_str'] = ''
@@ -411,7 +414,7 @@ var portlet_utility = {
 			end_date_str = durationJson['end_date_str'];
 		});
 
-		if (base_model.get('settings').user != undefined) {
+		if (base_model.get('settings') && base_model.get('settings').user != undefined) {
 			users = JSON.stringify(base_model.get('settings').user);
 		}
 
@@ -450,7 +453,9 @@ var portlet_utility = {
 						sort_collection : false,
 						individual_tag_name : 'tr',
 						postRenderCallback : function(p_el) {
-							displayTimeAgo(p_el);
+							head.js(LIB_PATH + 'lib/jquery.timeago.js', function() {
+								$(".time-ago", p_el).timeago();
+							});
 							portlet_utility.addWidgetToGridster(base_model);
 						}
 					});
@@ -491,7 +496,9 @@ var portlet_utility = {
 						sort_collection : false,
 						individual_tag_name : 'tr',
 						postRenderCallback : function(p_el) {
-							displayTimeAgo(p_el);
+							head.js(LIB_PATH + 'lib/jquery.timeago.js', function() {
+								$(".time-ago", p_el).timeago();
+							});
 							portlet_utility.addWidgetToGridster(base_model);
 						}
 					});
@@ -507,7 +514,9 @@ var portlet_utility = {
 				templateKey : 'portlets-opportunities',
 				individual_tag_name : 'tr',
 				postRenderCallback : function(p_el) {
-					displayTimeAgo(p_el);
+					head.js(LIB_PATH + 'lib/jquery.timeago.js', function() {
+						$(".time-ago", p_el).timeago();
+					});
 					portlet_utility.addWidgetToGridster(base_model);
 				}
 			});
