@@ -451,7 +451,7 @@ var ReportsRouter = Backbone.Router
 			showFunnelReport : function(tags)
 			{
 
-				head.load(LIB_PATH + 'lib/date-charts.js', LIB_PATH + 'lib/date-range-picker.js', CSS_PATH + "css/misc/date-picker.css", function()
+				head.load(LIB_PATH + 'lib/date-charts.js', LIB_PATH + 'lib/date-range-picker.js' + '?_=' + _AGILE_VERSION, CSS_PATH + "css/misc/date-picker.css", function()
 				{
 					getTemplate("report-funnel", {}, undefined, function(template_ui){
 						if(!template_ui)
@@ -470,6 +470,7 @@ var ReportsRouter = Backbone.Router
 						$(".active").removeClass("active");
 						$("#reportsmenu").addClass("active");
 						
+						highlightDatepickerOption();
 
 					}, "#content");
 
@@ -485,7 +486,7 @@ var ReportsRouter = Backbone.Router
 			showGrowthReport : function(tags)
 			{
 
-				head.js(LIB_PATH + 'lib/date-charts.js', LIB_PATH + 'lib/date-range-picker.js', CSS_PATH + "css/misc/date-picker.css", function()
+				head.js(LIB_PATH + 'lib/date-charts.js', LIB_PATH + 'lib/date-range-picker.js' + '?_=' + _AGILE_VERSION, CSS_PATH + "css/misc/date-picker.css", function()
 				{
 
 					// Load Reports Template
@@ -508,6 +509,7 @@ var ReportsRouter = Backbone.Router
 
 				$(".active").removeClass("active");
 				$("#reportsmenu").addClass("active");
+				highlightDatepickerOption();
 			},
 
 
@@ -520,7 +522,7 @@ var ReportsRouter = Backbone.Router
 			showCohortsReport : function(tag1, tag2)
 			{
 
-				head.js(LIB_PATH + 'lib/date-charts.js', LIB_PATH + 'lib/date-range-picker.js', CSS_PATH + "css/misc/date-picker.css", function()
+				head.js(LIB_PATH + 'lib/date-charts.js', LIB_PATH + 'lib/date-range-picker.js' + '?_=' + _AGILE_VERSION, CSS_PATH + "css/misc/date-picker.css", function()
 				{
 
 					// Load Reports Template
@@ -544,6 +546,7 @@ var ReportsRouter = Backbone.Router
 
 				$(".active").removeClass("active");
 				$("#reportsmenu").addClass("active");
+				highlightDatepickerOption();
 			},
 			/**
 			 * Returns Cohorts Graphs with two tag1
@@ -554,7 +557,7 @@ var ReportsRouter = Backbone.Router
 			showRatioReport : function(tag1, tag2)
 			{
 
-				head.js(LIB_PATH + 'lib/date-charts.js', LIB_PATH + 'lib/date-range-picker.js', CSS_PATH + "css/misc/date-picker.css", function()
+				head.js(LIB_PATH + 'lib/date-charts.js', LIB_PATH + 'lib/date-range-picker.js' + '?_=' + _AGILE_VERSION, CSS_PATH + "css/misc/date-picker.css", function()
 				{
 
 					// Load Reports Template
@@ -574,9 +577,12 @@ var ReportsRouter = Backbone.Router
 						$(".active").removeClass("active");
 						$("#reportsmenu").addClass("active");
 
+						highlightDatepickerOption();
+
 					}, "#content");
 					
 				});
+
 
 			},
 
