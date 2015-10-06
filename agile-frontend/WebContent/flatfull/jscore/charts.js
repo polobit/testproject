@@ -1599,7 +1599,7 @@ function chartRenderforIncoming(selector,categories,name,yaxis_name,min_tick_int
                                 '<div class="p-n">'+this.x+'</div>' + 
                                 '<div class="p-n"><font color='+this.series.color+'>'+this.series.name+'</font> : '+getNumberWithCommasForCharts(this.y)+'</div>' +
                                 '</div>'+
-                                '<div class="p-n"><font color='+this.series.color+'>Total</font> : '+getNumberWithCommasForCharts(AllData[this.point.x][1])+'</div>';
+                                '<div class="p-n">Total : '+getNumberWithCommasForCharts(AllData[this.point.x][1])+'</div>';
                             }
                         else
                         {
@@ -1607,7 +1607,7 @@ function chartRenderforIncoming(selector,categories,name,yaxis_name,min_tick_int
                                 '<div class="p-n">'+this.x+'</div>' + 
                                 '<div class="p-n"><font color='+this.series.color+'>'+this.series.name+'</font> : '+getCurrencySymbolForCharts()+''+getNumberWithCommasForCharts(this.y)+'</div>' +
                                 '</div>'+
-                                 '<div class="p-n"><font color='+this.series.color+'>Total</font> : '+getCurrencySymbolForCharts()+''+getNumberWithCommasForCharts(AllData[this.point.x][1])+'</div>';;
+                                 '<div class="p-n">Total : '+getCurrencySymbolForCharts()+''+getNumberWithCommasForCharts(AllData[this.point.x][1])+'</div>';;
                             }
                     },
                     useHTML: true
