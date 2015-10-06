@@ -43,7 +43,7 @@ function initFunnelCharts(callback)
 	if ($('#frequency').length > 0)
 	{
 		// Get Frequency
-		callback();
+		
 		$('#frequency').change(function()
 		{
 			callback();
@@ -62,7 +62,7 @@ function initFunnelCharts(callback)
 	if ($('#type').length > 0)
 	{
 		// Get Frequency
-		callback();
+		
 		$('#type').change(function()
 		{
 			callback();
