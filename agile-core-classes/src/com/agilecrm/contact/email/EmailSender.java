@@ -39,7 +39,7 @@ public class EmailSender
     {
 	EmailSender emailSender = new EmailSender();
 
-	emailSender.billingRestriction = BillingRestrictionUtil.getBillingRestriction(true);
+	emailSender.billingRestriction = BillingRestrictionUtil.getBillingRestrictionFromDB();
 
 	emailSender.emailBillingRestriction = (EmailBillingRestriction) DaoBillingRestriction.getInstace(
 	        DaoBillingRestriction.ClassEntities.Email.toString(), emailSender.billingRestriction);
