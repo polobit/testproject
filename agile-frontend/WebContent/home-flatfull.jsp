@@ -274,18 +274,18 @@ if(currentUserPrefs.menuPosition.equals("top")){
     <li class="hidden-folded padder m-t m-b-sm text-muted text-xs">
                 <span>Support</span>
               </li>
-   <li id="workflowsmenu">
+  <li id="tickets">
     <a  href="#tickets">
       <i class="icon icon-ticket"></i>
       <span>Tickets</span>
     </a>
   </li>  
-   <li id="workflowsmenu">
+   <li id="ticket-groups">
     <a  href="#ticket-groups">
       <i class="icon icon-users"></i>
       <span>Ticket Groups</span>
     </a>
-  </li>                   
+  </li>              
   </ul>
   </nav>
   </div>
