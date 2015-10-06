@@ -327,7 +327,19 @@ public class TaskQueueStatsDaemon extends Thread
 
 		if (localTask == null || localTask.size() == 0)
 		{
-		    break;
+		    try
+		    {
+			System.out.println("waiting");
+			wait(wairPeriodInMilliSeconds);
+		    }
+		    catch (InterruptedException e)
+		    {
+			logger.log(Level.WARN, e.getMessage() + ", " + Thread.currentThread().getName());
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			wait(wairPeriodInMilliSeconds);
+		    }
+		    continue;
 		}
 
 		logger.info("fetched Tasks in Thread" + Thread.currentThread().getName() + " , " + " Total fetched : "
@@ -338,21 +350,6 @@ public class TaskQueueStatsDaemon extends Thread
 		t.run();
 
 	    } while (true);
-
-	    try
-	    {
-		System.out.println("waiting");
-		wait(wairPeriodInMilliSeconds);
-		leaseTasks();
-	    }
-	    catch (InterruptedException e)
-	    {
-		logger.log(Level.WARN, e.getMessage() + ", " + Thread.currentThread().getName());
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-		wait(wairPeriodInMilliSeconds);
-		leaseTasks();
-	    }
 	}
 	catch (Exception e)
 	{
@@ -421,6 +418,5 @@ public class TaskQueueStatsDaemon extends Thread
 	    logger.info(e.getMessage());
 	    return leaseTasksOld();
 	}
-
     }
 }

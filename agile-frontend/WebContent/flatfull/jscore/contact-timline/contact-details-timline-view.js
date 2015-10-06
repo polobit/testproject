@@ -1,5 +1,5 @@
 var noAnimationBruteForce = true;
-var timeline_collection_view;
+var timeline_collection_view = {};
 var MONTH_YEARS;
 var month_years = [];
 
@@ -93,8 +93,8 @@ function quedfunction(models)
 	{
 		$("#timeline", $(App_Contacts.contactDetailView.el)).isotope('insert', $(result), function(ele)
 		{
-			timeline_collection_view.queue.running = false;
-			timeline_collection_view.queue.next();
+			timeline_collection_view[App_Contacts.contactDetailView.model.get('id')].queue.running = false;
+			timeline_collection_view[App_Contacts.contactDetailView.model.get('id')].queue.next();
 		});
 	});
 }
@@ -108,10 +108,10 @@ function configure_timeline_comparator(collection)
 		var month_year = entity_created_month_year(item.toJSON());
 
 		if (month_year)
-			if (timeline_collection_view && timeline_collection_view.month_year_marker.indexOf(month_year) == -1)
+			if (timeline_collection_view[item.id] && timeline_collection_view[item.id].month_year_marker.indexOf(month_year) == -1)
 			{
 
-				timeline_collection_view.month_year_marker.push(month_year);
+				timeline_collection_view[item.id].month_year_marker.push(month_year);
 
 				var monthYear = month_year.split('-');
 				var timestamp = getTimestamp(monthYear[0], monthYear[1]) / 1000;
@@ -121,7 +121,7 @@ function configure_timeline_comparator(collection)
 				collection.add(context);
 
 				console.log(context);
-				timeline_collection_view.month_year_marker_objects.push(context);
+				timeline_collection_view[item.id].month_year_marker_objects.push(context);
 			}
 
 		if (item.get('created_time') && item.get('entity_type') != "event")

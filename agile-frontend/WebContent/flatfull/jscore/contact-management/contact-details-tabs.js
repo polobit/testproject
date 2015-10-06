@@ -531,7 +531,7 @@ function save_contact_tab_position_in_cookie(tab_href)
 
 function load_contact_tab(el, contactJSON)
 {
-	timeline_collection_view = null;
+	timeline_collection_view[contactJSON.id] = null;
 	var position = readCookie(contact_tab_position_cookie_name);
 	if (position == null || position == undefined || position == "")
 		position = "timeline";

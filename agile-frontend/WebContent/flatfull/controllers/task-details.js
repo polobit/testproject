@@ -17,9 +17,16 @@ taskDetailView : function(id)
 		{
 			var task = App_Calendar.allTasksListView.collection.get(id);
 			taskDetailView = task;
-			$("#content").html(getTemplate("task-detail", task.toJSON()));
-			initializeTaskDetailListeners();
-			task_details_tab.loadActivitiesView();
+			getTemplate("task-detail", task.toJSON(), undefined, function(template_ui){
+				if(!template_ui)
+					  return;
+				$('#content').html($(template_ui));	
+
+				initializeTaskDetailListeners();
+				task_details_tab.loadActivitiesView();
+
+			}, "#content");
+			
 
 		}
 		else if (App_Calendar.tasksListView)
@@ -28,9 +35,14 @@ taskDetailView : function(id)
 			if (task)
 			{
 				taskDetailView = task;
-				$("#content").html(getTemplate("task-detail", task.toJSON()));
-				initializeTaskDetailListeners();
-				task_details_tab.loadActivitiesView();
+				getTemplate("task-detail", task.toJSON(), undefined, function(template_ui){
+					if(!template_ui)
+						  return;
+					$('#content').html($(template_ui));	
+
+					initializeTaskDetailListeners();
+					task_details_tab.loadActivitiesView();
+				}, "#content");
 			}
 			else
 			{
@@ -38,9 +50,14 @@ taskDetailView : function(id)
 				$.ajax({ url : "core/api/tasks/getTaskObject/" + id, success : function(response)
 				{
 					taskDetailView = new taskModel(response);
-					$("#content").html(getTemplate("task-detail", taskDetailView.toJSON()));
-					initializeTaskDetailListeners();
-					task_details_tab.loadActivitiesView();
+					getTemplate("task-detail", taskDetailView.toJSON(), undefined, function(template_ui){
+						if(!template_ui)
+							  return;
+						$('#content').html($(template_ui));	
+
+						initializeTaskDetailListeners();
+						task_details_tab.loadActivitiesView();
+					}, "#content");					
 				} });
 			}
 		}
@@ -50,9 +67,15 @@ taskDetailView : function(id)
 			$.ajax({ url : "core/api/tasks/getTaskObject/" + id, success : function(response)
 			{
 				taskDetailView = new taskModel(response);
-				$("#content").html(getTemplate("task-detail", taskDetailView.toJSON()));
-				initializeTaskDetailListeners();
-				task_details_tab.loadActivitiesView();
+
+				getTemplate("task-detail", taskDetailView.toJSON(), undefined, function(template_ui){
+					if(!template_ui)
+						  return;
+					$('#content').html($(template_ui));	
+
+					initializeTaskDetailListeners();
+					task_details_tab.loadActivitiesView();
+				}, "#content");				
 			} });
 
 		}
@@ -107,6 +130,14 @@ function initializeTaskDetailListeners(){
 		e.preventDefault();
 		save_task_tab_position_in_cookie("activity");
 		task_details_tab.loadActivitiesView();
+	});
+
+	$('#task-tab-container-header #taskDetailsTab a[href="#deals"]').off();
+	$('#task-tab-container-header').on('click', '#taskDetailsTab a[href="#deals"]', function(e)
+	{
+		e.preventDefault();
+		save_task_tab_position_in_cookie("deals");
+		task_details_tab.loadTaskRelatedDealsView();
 	});
 	
 	$('#change-owner-element .task-owner-list').off();
@@ -238,11 +269,14 @@ function initializeTaskDetailListeners(){
 		$.ajax({ url : 'core/api/tasks/' + id, type : 'DELETE', success : function(response)
 		{
 			document.location.href = document.location.origin + "#/tasks";
-			var due_task_count = getDueTasksCount();
-			if(due_task_count !=0)
-				$('#due_tasks_count').html(due_task_count);
-			else
-				$('#due_tasks_count').html("");
+			getDueTasksCount(function(count){
+				var due_task_count = count;
+				if(due_task_count !=0)
+					$('#due_tasks_count').html(due_task_count);
+				else
+					$('#due_tasks_count').html("");
+			});
+			
 		} })
 	});
 
@@ -313,6 +347,16 @@ $(function(){
 	{
 		e.preventDefault();
 		update_task(taskDetailView.toJSON());
+	});
+
+	$('#content .task-add-deal').off('click');
+	$('#content').on('click', '.task-add-deal', function(e) 
+	{
+		e.preventDefault();
+		update_task(taskDetailView.toJSON());
+		setTimeout(function(){
+			$('#update_task_relates_to_deals').focus();
+		},1000);
 	});
 
 });
@@ -489,6 +533,8 @@ function saveTaskNote(form, noteModal, element, note)
 					notesView.collection.add(new BaseModel(note), { sort : false });
 					notesView.collection.sort();
 					taskDetailView = data;
+					
+
 				} });
 
 			}

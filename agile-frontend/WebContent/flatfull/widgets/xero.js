@@ -34,13 +34,18 @@ function showXeroClient()
 			}	
 			
 			// Fill Xero widget template with FreshBooks clients data
-			var template = $('#Xero').html(getTemplate('xero-profile', data));
-			console.log("libpath is" + LIB_PATH);
-			console.log(template)
-			head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
-			{
-				$(".time-ago", template).timeago();
-			});
+			getTemplate('xero-profile', data, undefined, function(template_ui){
+		 		if(!template_ui)
+		    		return;
+		    	var template = $('#Xero').html($(template_ui)); 
+				console.log("libpath is" + LIB_PATH);
+				console.log(template)
+				head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
+				{
+					$(".time-ago", template).timeago();
+				});
+			}, "#Xero");
+				
 
 		}
 		else
@@ -71,7 +76,11 @@ function showXeroClient()
 			 * the div with given id
 			 */
 			console.log('invoices screen  ');
-			$('#' + Xero_PLUGIN_NAME).html(getTemplate('xero-profile-addinvoice', invoice_json));
+			getTemplate('xero-profile-addinvoice', invoice_json, undefined, function(template_ui){
+		 		if(!template_ui)
+		    		return;
+				$('#' + Xero_PLUGIN_NAME).html($(template_ui)); 
+			}, '#' + Xero_PLUGIN_NAME);
 		}
 		else
 		{
@@ -99,7 +108,11 @@ function xeroError(id, message)
 	 * with given id
 	 */
 	console.log('error ');
-	$('#' + id).html(getTemplate('xero-error', error_json));
+	getTemplate('xero-error', error_json, undefined, function(template_ui){
+ 		if(!template_ui)
+    		return;
+		$('#' + id).html($(template_ui)); 
+	}, '#' + id);
 
 }
 
@@ -114,7 +127,11 @@ function createContact(message)
 	 * with given id
 	 */
 	console.log('error ');
-	$('#' + Xero_PLUGIN_NAME).html(getTemplate('xero-profile-addcontact', contact_json));
+	getTemplate('xero-profile-addcontact', contact_json, undefined, function(template_ui){
+ 		if(!template_ui)
+    		return;
+		$('#' + Xero_PLUGIN_NAME).html($(template_ui)); 
+	}, '#' + Xero_PLUGIN_NAME);
 }
 
 function addContactToXero(first_name, last_name)
@@ -199,6 +216,7 @@ $(function()
 				last_name = ' ';
 
 			showXeroClient();
+            $("body").off('click','#xero_add_contact');
 			$("body").on('click','#xero_add_contact', function(e)
 			{
 				e.preventDefault();
@@ -207,6 +225,7 @@ $(function()
 			});
 
 			// attach event to invoices + icon to get lineitems
+            $("body").off('click','.invoices');
 			$("body").on('click','.invoices', function(e)
 			{
 				e.preventDefault();
@@ -222,12 +241,17 @@ $(function()
 						if (data.Status = 'OK')
 						{
 							console.log((JSON.parse(data)).Invoices.Invoice);
-							$('#collapse-' + invoiceId).html(getTemplate('xero-invoice-lineitems', (JSON.parse(data)).Invoices.Invoice));
+							
+							getTemplate('xero-invoice-lineitems', (JSON.parse(data)).Invoices.Invoice, undefined, function(template_ui){
+						 		if(!template_ui)
+						    		return;
+								$('#collapse-' + invoiceId).html($(template_ui)); 
+							}, '#collapse-' + invoiceId);
 						}
 						else
 						{
-							console.log("error")
-							xeroError(Xero_PLUGIN_NAME, data)
+							console.log("error");
+							xeroError(Xero_PLUGIN_NAME, data);
 						}
 						$('#XERO_PROFILE_LOAD_IMAGE').remove();
 					});

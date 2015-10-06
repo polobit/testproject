@@ -319,19 +319,16 @@
 	function setupCompanyViews(cel, button_name) {
 
 		// Creates a view for custom views
-		/*head.load(CSS_PATH + 'css/bootstrap_submenu.css',  function()
-		{*/
-			var el = getTemplate("company-view-collection");
+		getTemplate("company-view-collection", {}, undefined, function(template_ui){
+			if(!template_ui)
+				  return;
+				
+			var el = $(template_ui);
 			$("#view-list", cel).html(el);
 			updateSelectedSortKey($("#view-list", cel));
-			/*$("#view-list", cel).find('.dropdown-menu').find(".dropdown-submenu").on("click",function(e){
-			    e.stopImmediatePropagation();
-			});*/
-			// If button_name is defined, then view is selected then the name of
-			// the view is show in the custom view button.
-			//if (button_name)
-				//$("#view-list", cel).find('.custom_view').append(button_name);
-		// });
+
+		}, $("#view-list", cel));
+			
 	}
 	
 	var updateSelectedSortKey = function(el) {

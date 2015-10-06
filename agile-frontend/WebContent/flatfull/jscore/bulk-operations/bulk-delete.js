@@ -247,15 +247,20 @@ function bulk_delete_operation(url, id_array, index_array, table, is_grid_view, 
 		success: function() {
 			
 			if(url=='core/api/tasks/bulk'){
-				var due_task_count=getDueTasksCount();
-				if(due_task_count==0)
-					$(".navbar_due_tasks").css("display", "none");
-				else
-					$(".navbar_due_tasks").css("display", "block");
-				if(due_task_count !=0)
-					$('#due_tasks_count').html(due_task_count);
-				else
-					$('#due_tasks_count').html("");
+				getDueTasksCount(function(count){
+					var due_task_count= count;
+
+					if(due_task_count==0)
+						$(".navbar_due_tasks").css("display", "none");
+					else
+						$(".navbar_due_tasks").css("display", "block");
+					if(due_task_count !=0)
+						$('#due_tasks_count').html(due_task_count);
+					else
+						$('#due_tasks_count').html("");
+				
+				});
+				
 			}
 			
 			$(".bulk-delete-loading").remove();	

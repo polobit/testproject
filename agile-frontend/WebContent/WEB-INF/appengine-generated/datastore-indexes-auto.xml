@@ -288,6 +288,11 @@
         <property name="task_completed_time" direction="asc"/>
     </datastore-index>
     
+    <datastore-index kind="Task" ancestor="false" source="auto">
+        <property name="is_complete" direction="asc"/>
+        <property name="created_time" direction="desc"/>
+    </datastore-index>
+    
     <datastore-index kind="Opportunity" ancestor="false" source="auto">
         <property name="archived" direction="asc"/>
         <property name="milestone" direction="asc"/>
@@ -345,6 +350,21 @@
         <property name="entity_type" direction="asc"/>
         <property name="order" direction="asc"/>
     </datastore-index>
+    
+    <datastore-index kind="Opportunity" ancestor="false" source="auto">
+        <property name="archived" direction="asc"/>
+        <property name="milestone" direction="asc"/>
+        <property name="pipeline" direction="asc"/>
+        <property name="close_date" direction="asc"/>
+    </datastore-index>
+	
+	<datastore-index kind="Opportunity" ancestor="false" source="auto">
+        <property name="archived" direction="asc"/>
+        <property name="milestone" direction="asc"/>
+        <property name="ownerKey" direction="asc"/>
+        <property name="pipeline" direction="asc"/>
+        <property name="close_date" direction="asc"/>
+    </datastore-index>
 
     <datastore-index kind="Category" ancestor="false" source="auto">
         <property name="entity_type" direction="asc"/>
@@ -359,6 +379,15 @@
 	<datastore-index kind="Category" ancestor="false" source="auto">
 		<property name="name" direction="asc"/>
         <property name="entity_type" direction="asc"/>
+    </datastore-index>
+    
+    <datastore-index kind="Task" ancestor="false" source="auto">
+        <property name="related_deals" direction="asc"/>
+        <property name="due" direction="asc"/>
+     </datastore-index>
+    <datastore-index kind="Opportunity" ancestor="false" source="auto">
+        <property name="created_time" direction="asc"/>
+		<property name="ownerKey" direction="asc"/>
     </datastore-index>
 
 </datastore-indexes>
