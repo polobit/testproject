@@ -1294,8 +1294,6 @@ var portlet_utility = {
 			break;
 		}
 		case "Calls Per Person": {
-			that.addPortletSettingsModalContent(base_model,
-					"portletsCallsPerPersonSettingsModal");
 			elData = $('#portletsCallsPerPersonSettingsModal');
 			$("#group-by", elData).find(
 					'option[value=' + base_model.get("settings")["group-by"]
@@ -1307,12 +1305,12 @@ var portlet_utility = {
 					.attr("selected", "selected");
 
 			portlet_utility.setUsersInPortletSettings("calls-user-list",
-					base_model, "calls-user-list", "calls-user", elData);
+					base_model, "calls-user-list", "calls-user", elData, function(){
+						that.addPortletSettingsModalContent(base_model, "portletsCallsPerPersonSettingsModal");
+					});
 			break;
 		}
 		case "Task Report": {
-			that.addPortletSettingsModalContent(base_model,
-					"portletsTaskReportSettingsModal");
 			elData = $('#portletsTaskReportSettingsModal');
 			$("#group-by-task-report", elData).find(
 					'option[value=' + base_model.get("settings")["group-by"]
@@ -1337,7 +1335,9 @@ var portlet_utility = {
 
 			portlet_utility.setUsersInPortletSettings("task-report-user-list",
 					base_model, "task-report-user-list", "task-report-user",
-					elData);
+					elData, function(){
+						that.addPortletSettingsModalContent(base_model, "portletsTaskReportSettingsModal");
+					});
 			break;
 		}
 		case "Stats Report": {
@@ -1374,8 +1374,6 @@ var portlet_utility = {
 			break;
 		}
 		case "Leaderboard": {
-			that.addPortletSettingsModalContent(base_model,
-					"portletsLeaderboardSettingsModal");
 			elData = $('#portletsLeaderboardSettingsModal');
 			var leaderboardCate = base_model.get("settings").category;
 			$("#duration", elData)
@@ -1401,7 +1399,9 @@ var portlet_utility = {
 						"selected", "selected");
 
 			portlet_utility.setUsersInPortletSettings("user-list", base_model,
-					"user-list", "user", elData);
+					"user-list", "user", elData, function(){
+						that.addPortletSettingsModalContent(base_model, "portletsLeaderboardSettingsModal");
+					});
 
 			$('#ms-category-list', elData).remove();
 			head.js(LIB_PATH + 'lib/jquery.multi-select.js', function() {
@@ -1514,61 +1514,74 @@ var portlet_utility = {
 	 * settings.
 	 */
 	setUsersInPortletSettings : function(ele_id, base_model, ele_name, ele,
-			elData) {
+			elData, callback) {
 
-		var user_ele = base_model.get("settings")[ele_id];
-
-		if (user_ele) {
-			var options = '';
-			$.ajax({
-				type : 'GET',
-				url : '/core/api/users',
-				dataType : 'json',
-				success : function(data) {
-					$.each(data, function(index, domainUser) {
-						if (!domainUser.is_disabled)
-							options += "<option value=" + domainUser.id + ">"
-									+ domainUser.name + "</option>";
-					});
-					$('#' + ele_id, elData).html(options);
-					$.each(user_ele, function() {
-						$("#calls-user-list", elData).find(
-								'option[value=' + this + ']').attr("selected",
-								"selected");
-					});
-					$('.loading-img').hide();
-				}
-			});
-		} else {
-			var options = '';
-			$.ajax({
-				type : 'GET',
-				url : '/core/api/users',
-				dataType : 'json',
-				success : function(data) {
-					$.each(data, function(index, domainUser) {
-						if (!domainUser.is_disabled)
-							options += "<option value=" + domainUser.id
-									+ " selected='selected'>" + domainUser.name
-									+ "</option>";
-					});
-					$('#' + ele_id, elData).html(options);
-					$('.loading-img').hide();
-				}
-			});
-		}
-		$('#ms-' + ele_id, elData).remove();
 		head.js(LIB_PATH + 'lib/jquery.multi-select.js', function() {
-			$('#' + ele_id, elData).multiSelect();
-			$('#ms-' + ele_id + ' .ms-selection', elData).children('ul')
-					.addClass('multiSelect').attr("name", ele_name).attr("id",
-							ele);
-			$('#ms-' + ele_id + ' .ms-selectable .ms-list', elData).css(
-					"height", "130px");
-			$('#ms-' + ele_id + ' .ms-selection .ms-list', elData).css(
-					"height", "130px");
-			$('#ms-' + ele_id, elData).addClass('portlet-user-ms-container');
-		});
+			var user_ele = base_model.get("settings")[ele_id];
+
+			if (user_ele) {
+				var options = '';
+				$.ajax({
+					type : 'GET',
+					url : '/core/api/users',
+					dataType : 'json',
+					success : function(data) {
+						$.each(data, function(index, domainUser) {
+							if (!domainUser.is_disabled)
+								options += "<option value=" + domainUser.id + ">"
+										+ domainUser.name + "</option>";
+						});
+						$('#' + ele_id, elData).html(options);
+						$.each(user_ele, function() {
+							$("#calls-user-list", elData).find(
+									'option[value=' + this + ']').attr("selected",
+									"selected");
+						});
+						$('.loading-img').hide();
+
+						$('#ms-' + ele_id, elData).remove();
+						$('#' + ele_id, elData).multiSelect();
+						$('#ms-' + ele_id + ' .ms-selection', elData).children('ul')
+								.addClass('multiSelect').attr("name", ele_name).attr("id",
+										ele);
+						$('#ms-' + ele_id + ' .ms-selectable .ms-list', elData).css(
+								"height", "130px");
+						$('#ms-' + ele_id + ' .ms-selection .ms-list', elData).css(
+								"height", "130px");
+						$('#ms-' + ele_id, elData).addClass('portlet-user-ms-container');
+					}
+				});
+			} else {
+				var options = '';
+				$.ajax({
+					type : 'GET',
+					url : '/core/api/users',
+					dataType : 'json',
+					success : function(data) {
+						$.each(data, function(index, domainUser) {
+							if (!domainUser.is_disabled)
+								options += "<option value=" + domainUser.id
+										+ " selected='selected'>" + domainUser.name
+										+ "</option>";
+						});
+						$('#' + ele_id, elData).html(options);
+						$('.loading-img').hide();
+
+						$('#ms-' + ele_id, elData).remove();
+						$('#' + ele_id, elData).multiSelect();
+						$('#ms-' + ele_id + ' .ms-selection', elData).children('ul')
+								.addClass('multiSelect').attr("name", ele_name).attr("id",
+										ele);
+						$('#ms-' + ele_id + ' .ms-selectable .ms-list', elData).css(
+								"height", "130px");
+						$('#ms-' + ele_id + ' .ms-selection .ms-list', elData).css(
+								"height", "130px");
+						$('#ms-' + ele_id, elData).addClass('portlet-user-ms-container');
+					}
+				});
+			}
+		});	
+		return callback();
 	},
 
 	/**
