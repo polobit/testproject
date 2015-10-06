@@ -1099,6 +1099,7 @@ var portlet_utility = {
 		switch (portlet_name) {
 		case "Filter Based": {
 			$('#filter', elData).find('option').remove();
+			$('.loading-img', elData).show();
 			that.addPortletSettingsModalContent(base_model,
 					"portletsContactsFilterBasedSettingsModal");
 			elData = $('#portletsContactsFilterBasedSettingsForm');
