@@ -687,6 +687,8 @@ var AdminSettingsRouter = Backbone.Router.extend({
 
 			if (id == 'mandrill')
 				value = 'MANDRILL';
+			else if (id == 'ses')
+                value = 'SES';
 
 			var emailGateway;
 			$.each(that.integrations.collection.where({name:"EmailGateway"}),function(key,value){
@@ -722,11 +724,20 @@ var AdminSettingsRouter = Backbone.Router.extend({
 					if(id=="sendgrid"){
 						$("#integrations-image",el).attr("src","img/crm-plugins/sendgrid_logo.png");
 					}
+
+					if(id=="ses"){
+						$("#integrations-image",el).attr("src","img/crm-plugins/ses_logo.png");
+				    }
 					
 				}, saveCallback : function()
 				{
+					$('.ses-success-msg').show();
+					
 					// On saved, navigate to integrations
 					Backbone.history.navigate("integrations", { trigger : true });
+
+					if(value == 'SES')
+ 						return;
 
 					data = App_Admin_Settings.email_gateway.model.toJSON();
 
@@ -735,6 +746,38 @@ var AdminSettingsRouter = Backbone.Router.extend({
 					{
 						console.log(data);
 					});
+				},
+				errorCallback : function(response)
+				{
+					var $save = $('.save', '#email-gateway-integration-form');
+
+					disable_save_button($save);
+
+					var msg = response.responseText;
+
+					if(msg.indexOf('SignatureDoesNotMatch') != -1)
+                        msg = msg.replace('SignatureDoesNotMatch', 'Signature Mismatch');
+
+                    if(msg.indexOf('InvalidClientTokenId') != -1)
+                    	msg = msg.replace('InvalidClientTokenId', 'Invalid Access Key');
+
+					// Show cause of error in saving
+					var $save_info = $('<div style="display:inline-block"><small><p style="color:#B94A48; font-size:14px"><i>'
+												+ msg
+												+ '</i></p></small></div>');
+
+					// Appends error info to form actions
+					// block.
+					$save.closest(".form-actions", this.el).append(
+							$save_info);
+
+					// Hides the error message after 3
+					// seconds
+					if(response.status != 406)
+						$save_info.show().delay(3000).hide(1, function(){
+
+							enable_save_button($save);
+						});
 				}
 
 			});

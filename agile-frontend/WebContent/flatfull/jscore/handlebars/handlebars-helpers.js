@@ -2213,7 +2213,7 @@ $(function()
 			// Iterates inorder to insert each field into json
 			for (var i = 0; i < email_fields.length; i++)
 			{
-				// Splits based on colon. E.g "To: naresh@agilecrm.com "
+				// Splits based on colon. E.g "To: naresh@agilecrm.com   "
 				var arrcolon = email_fields[i].split(":");
 
 				// Inserts LHS of colon as key. E.g., To
@@ -2223,7 +2223,7 @@ $(function()
 				// accessible
 
 				// Inserts RHS of colon as value. E.g.,
-				// naresh@agilecrm.com
+				// naresh@agilecrm.com  
 				var value = arrcolon.slice(1).join(":"); // join the
 				// remaining string
 				// based on colon,
@@ -4277,7 +4277,7 @@ $(function()
 			// Iterates inorder to insert each field into json
 			for (var i = 0; i < email_fields.length; i++)
 			{
-				// Splits based on colon. E.g "To: naresh@agilecrm.com "
+				// Splits based on colon. E.g "To: naresh@agilecrm.com   "
 				var arrcolon = email_fields[i].split(":");
 
 				// Inserts LHS of colon as key. E.g., To
@@ -4285,7 +4285,7 @@ $(function()
 				key = key.trim(); // if key starts with space, it can't
 				// accessible
 
-				// Inserts RHS of colon as value. E.g., naresh@agilecrm.com
+				// Inserts RHS of colon as value. E.g., naresh@agilecrm.com  
 				var value = arrcolon.slice(1).join(":"); // join the
 				// remaining string
 				// based on colon,
@@ -6603,3 +6603,23 @@ Handlebars.registerHelper('get_campaign_type_filter', function(filter_name)
 			return options.inverse(this);
 		return options.fn(this);
 	});
+	
+	Handlebars.registerHelper('proToEnterprise', function(plan_type, options)
+			{
+		var temp = "Free";
+
+		  if(plan_type.indexOf("PRO") >= 0)
+			plan_type= plan_type.replace("PRO","ENTERPRISE");
+
+		  var fragments = plan_type.split("_");
+
+		  var interval = "Monthly";
+		  if(fragments.length > 1)
+		  {
+		  	 interval = ucfirst(fragments[1]);
+		  	 temp = ucfirst(fragments[0]);
+
+		  	 return temp + " (" + interval+")";
+		  }
+
+		    });

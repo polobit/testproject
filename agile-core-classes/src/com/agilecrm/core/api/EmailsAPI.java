@@ -1,11 +1,7 @@
 package com.agilecrm.core.api;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
@@ -25,7 +21,6 @@ import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.agilecrm.account.EmailGateway;
@@ -49,8 +44,6 @@ import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.EmailPrefs;
 import com.agilecrm.util.EmailUtil;
 import com.agilecrm.util.HTTPUtil;
-import com.agilecrm.util.VersioningUtil;
-import com.agilecrm.util.email.SendMail;
 import com.campaignio.tasklets.agile.util.AgileTaskletUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.blobstore.BlobKey;
@@ -271,8 +264,8 @@ public class EmailsAPI
     {
 	EmailGateway emailGateway = EmailGatewayUtil.getEmailGateway();
 	
-	// If SendGrid, return 
-	if(emailGateway != null && emailGateway.email_api.equals(EMAIL_API.SEND_GRID))
+	// If not Mandrill, return 
+	if(emailGateway != null && !(emailGateway.email_api.equals(EMAIL_API.MANDRILL)))
 		return new JSONObject().put("_agile_email_gateway", emailGateway.email_api.toString()).toString();
 
 	String apiKey = null;

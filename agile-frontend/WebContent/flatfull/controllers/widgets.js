@@ -1111,7 +1111,7 @@ var WidgetsRouter = Backbone.Router
 																				show_set_up_widget("CallScript", 'callscript-login');
 																else
 																				fill_form(id, "CallScript", 'callscript-login');
-																                adjust_form();
+																                
 
 												},
 												
@@ -1119,8 +1119,9 @@ var WidgetsRouter = Backbone.Router
 												 * Show CallScript rules
 												 */
 												CallScriptShow : function()
-												{	
+												{														
 													showCallScriptRule();
+													initializeCallScriptListeners();
 												},
 												
 												/**

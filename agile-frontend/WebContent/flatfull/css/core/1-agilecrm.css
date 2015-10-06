@@ -2660,3 +2660,17 @@ margin-bottom: 17px;
     margin-left: 134px;
 }
 
+
+.show_shortcuts li ul li:hover .shortcuts.enable{
+	display: block!important;
+}
+
+.contactView ul.dropdown-menu li:hover .shortcuts {
+	display: block!important;
+}
+
+.shortcuts{
+	color : #D2C9C9;
+	font-size: 12px;
+	display:none;
+}
