@@ -362,26 +362,26 @@ function show_email_templates(){
 			if(window.opener.getCampaignCount())
 			{
 				$('#loading-campaign-template').removeClass("hide"); 
-				$('.campaign-template').removeClass("hide"); 
-		$.getJSON(location.origin + '/core/api/workflows', function(workflows){
-		var email_nodes = get_email_nodes(workflows);
-		if(CAMPAIGN_EMAIL_NODES){
-			 var el = getTemplate('campaign_templates', CAMPAIGN_EMAIL_NODES2);
-			 $('#loading-campaign-template').addClass("hide"); 
-			$('.campaign-template').append(el); 
-			
-				$('.campaign-templates-panel').on('hidden.bs.collapse', function (e) {
-					var current_target = e.currentTarget;
-					$(current_target).find('.icon-minus').toggleClass('icon-plus icon-minus');
+				
+				$.getJSON(location.origin + '/core/api/workflows', function(workflows){
+				var email_nodes = get_email_nodes(workflows);
+				if(Object.keys(CAMPAIGN_EMAIL_NODES).length){
+					$('.campaign-template').removeClass("hide"); 
+					 var el = getTemplate('campaign_templates', CAMPAIGN_EMAIL_NODES2);
+					 $('#loading-campaign-template').addClass("hide"); 
+					$('.campaign-template').append(el); 
+					
+						$('.campaign-templates-panel').on('hidden.bs.collapse', function (e) {
+							var current_target = e.currentTarget;
+							$(current_target).find('.icon-minus').toggleClass('icon-plus icon-minus');
+					});
+						$('.campaign-templates-panel').on('show.bs.collapse', function (e) {
+							var current_target = e.currentTarget;
+							$(current_target).find('.icon-plus').toggleClass('icon-plus icon-minus');
+				
+						});
+				}
 			});
-				$('.campaign-templates-panel').on('show.bs.collapse', function (e) {
-					var current_target = e.currentTarget;
-					$(current_target).find('.icon-plus').toggleClass('icon-plus icon-minus');
-		
-				});
-		}
-		
-	});
 }
 
 $.getJSON(location.origin + '/core/api/email/templates/count', function(count){

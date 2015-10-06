@@ -5884,10 +5884,9 @@ $(function()
 	 */
 	Handlebars.registerHelper("isTracksEligible", function(options)
 	{
-		var planName = _billing_restriction.currentLimits.planName;
-		if (planName == 'PRO' || planName == 'REGULAR')
-			return options.fn(this);
-
+		if(_billing_restriction.currentLimits.addTracks)
+			   return options.fn(this);
+			
 		return options.inverse(this);
 	});
 
@@ -6623,3 +6622,17 @@ Handlebars.registerHelper('get_campaign_type_filter', function(filter_name)
 		  }
 
 		    });
+	Handlebars.registerHelper('invoice_description', function(description) {
+
+		if (!description)
+			return description;
+
+		if (description.indexOf("Unused time on") != -1) {
+			description = "Balance from previous transaction";
+		} else if (description.indexOf("Remaining") != -1) {
+			description = "Changed on " + description.substring(description.indexOf("after") + 5);
+		}
+
+		return description + " ";
+
+	});

@@ -38,6 +38,7 @@ import com.agilecrm.deals.Opportunity;
 import com.agilecrm.deals.deferred.DealsDeferredTask;
 import com.agilecrm.deals.util.MilestoneUtil;
 import com.agilecrm.deals.util.OpportunityUtil;
+import com.agilecrm.reports.ReportsUtil;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
 import com.agilecrm.user.DomainUser;
@@ -981,5 +982,20 @@ public class DealsAPI
 	    e.printStackTrace();
 	    return null;
 	}
+    }
+    /*fetches deals for specified time
+     * 
+     * @param min
+     * @param max
+     * @return deals
+     * @throws JSONException
+     */
+     @Path("details/{owner-Id}")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public String getNewDeals(@PathParam("owner-Id") Long ownerId,@QueryParam("min") Long min, @QueryParam("max") Long max,@QueryParam("frequency") String frequency,@QueryParam("type") String type)
+    {
+    	 ReportsUtil.check(min*1000,max*1000);
+     return OpportunityUtil.getIncomingDealsList(ownerId,min,max,frequency,type).toString();
     }
 }

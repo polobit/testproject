@@ -384,6 +384,10 @@
     <datastore-index kind="Task" ancestor="false" source="auto">
         <property name="related_deals" direction="asc"/>
         <property name="due" direction="asc"/>
+     </datastore-index>
+    <datastore-index kind="Opportunity" ancestor="false" source="auto">
+        <property name="created_time" direction="asc"/>
+		<property name="ownerKey" direction="asc"/>
     </datastore-index>
 
 </datastore-indexes>
