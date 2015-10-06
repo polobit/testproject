@@ -630,7 +630,7 @@ public class OpportunityUtil
      *         month.
      */
     public static JSONObject getDealsDetailsByPipeline(Long ownerId,
-			Long pipelineId,Long source, long minTime, long maxTime,String frequency)
+			Long pipelineId,Long sourceId, long minTime, long maxTime,String frequency)
     {
 	// Final JSON Constants
 	String TOTAL = "Total";
@@ -651,22 +651,50 @@ public class OpportunityUtil
 	}
 	if(ownerId!=null && ownerId==0)
 		ownerId=null;
-	if(source!=null && source==0)
-		source=null;
+	if(sourceId!=null && sourceId==0)
+		sourceId=null;
 	String timeZone = "UTC";
 	UserPrefs userPrefs = UserPrefsUtil.getCurrentUserPrefs();
 	if (userPrefs != null && userPrefs.timezone != null)
 	{
 		timeZone = userPrefs.timezone;
 	}
-	List<Opportunity> opportunitiesList = getDealsWithOwnerandPipeline(ownerId,pipelineId,source, minTime, maxTime);
+	List<Opportunity> opportunitiesList = getDealsWithOwnerandPipeline(ownerId,pipelineId, minTime, maxTime);
+	List<Opportunity> opportunitiesList_temp=new ArrayList<Opportunity>();
 	if (opportunitiesList != null && opportunitiesList.size() > 0)
 	{
+		if(sourceId!=null){
+			for (Opportunity opportunity : opportunitiesList)
+			{
+				try
+				{
+					Long source=opportunity.getDeal_source_id();
+						if(sourceId==1)
+						{
+							if (source==0L)
+								opportunitiesList_temp.add(opportunity);
+							else
+								continue;
+						}
+						else if (source.equals(sourceId))
+							opportunitiesList_temp.add(opportunity);
+						else 
+							continue;
+				}
+				catch (Exception e)
+				{
+					System.out.println("Exception :" + e);
+				}
+			}
+		}
+		else
+			opportunitiesList_temp=opportunitiesList;
+		if (opportunitiesList_temp != null && opportunitiesList_temp.size() > 0){
 		Calendar startCalendar = Calendar.getInstance(TimeZone.getTimeZone(timeZone));
 		System.out.println("Start Calendar timezone id-----"+startCalendar.getTimeZone().getID());
 		if (minTime == 0)
 		{
-			startCalendar.setTimeInMillis(opportunitiesList.get(0).close_date * 1000);
+			startCalendar.setTimeInMillis(opportunitiesList_temp.get(0).close_date * 1000);
 		}
 		else
 		{
@@ -696,7 +724,7 @@ public class OpportunityUtil
 		System.out.println("End Calendar timezone id-----"+endCalendar.getTimeZone().getID());
 		if (maxTime == 1543842319)
 		{
-			endCalendar.setTimeInMillis(opportunitiesList.get(opportunitiesList.size()-1).close_date * 1000);
+			endCalendar.setTimeInMillis(opportunitiesList_temp.get(opportunitiesList_temp.size()-1).close_date * 1000);
 		}
 		else
 		{
@@ -762,7 +790,8 @@ public class OpportunityUtil
 			
 		}
 	}
-	for (Opportunity opportunity : opportunitiesList)
+	}
+	for (Opportunity opportunity : opportunitiesList_temp)
 	{
 		String last="";
 	    try
@@ -1703,20 +1732,13 @@ public class OpportunityUtil
      */
     
 	public static List<Opportunity> getDealsWithOwnerandPipeline(Long ownerId,
-			Long pipelineId,Long source, long minTime, long maxTime) {
+			Long pipelineId, long minTime, long maxTime) {
 		UserAccessControlUtil
 				.checkReadAccessAndModifyQuery("Opportunity", null);
 		Map<String, Object> conditionsMap = new HashMap<String, Object>();
 		if (ownerId != null)
 			conditionsMap.put("ownerKey", new Key<DomainUser>(DomainUser.class,
 					ownerId));
-		if (source != null)
-		{
-			if(source==1)
-				conditionsMap.put("dealSource"," ");
-			else
-			conditionsMap.put("dealSource", new Key<Category>(Category.class, source));
-		}
 		if (pipelineId != null)
 			conditionsMap.put("pipeline", new Key<Milestone>(Milestone.class,
 					pipelineId));
