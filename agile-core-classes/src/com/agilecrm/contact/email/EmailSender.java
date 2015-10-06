@@ -60,6 +60,16 @@ public class EmailSender
 
 	return isWhiteLabled;
     }
+    
+    /**
+     * Verifies whether Master plan paid or not
+     * 
+     * @return boolean
+     */
+    public boolean isPaid()
+    {
+    	return !billingRestriction.planDetails.isFreePlan();
+    }
 
     public boolean canSend()
     {
@@ -161,7 +171,7 @@ public class EmailSender
 	if (emailGateway == null)
 	{
 		// For Paid plan return old Mandrill Account
-		if(billingRestriction.isEmailPlanPaid())
+		if(isPaid())
 			return Globals.MANDRIL_API_KEY_VALUE;
 	
 		return mandrillAPIKey;
