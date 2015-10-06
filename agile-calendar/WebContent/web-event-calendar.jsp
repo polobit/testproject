@@ -59,11 +59,8 @@ String domain_name=null;
 Long user_id = 0L;
 Long agile_user_id = 0L;
 String meeting_durations=null;
-<<<<<<< HEAD
 String welcome_title="<p class='lead' style='color: #777;font-size: 19px;font-weight:normal'>Welcome to our scheduling page. Please follow the instructions to book an appointment.</p>";
-=======
 String baseUrl=VersioningUtil.getStaticFilesBaseURL();
->>>>>>> 182b0d0efe61d421386f560238927abe0e7b93d5
 
 
 URL ur=new URL(url);
