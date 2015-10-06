@@ -603,7 +603,7 @@ var SubscribeRouter = Backbone.Router
 				$.get("core/api/subscription/invoices", {}, function(invoice)
 				{
 
-					if (!invoice && invoice.length <= 0)
+					if (!invoice || invoice.length <= 0)
 						return;
 
 					// Sort invoice

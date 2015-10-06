@@ -156,6 +156,7 @@ public class StripeUtil {
 		// Converts Customer JSON to customer object
 		Customer customer = new Gson().fromJson(customerJSON.toString(),
 				Customer.class);
+
 		if (customer != null && !customer.getLivemode()) {
 			RequestOptionsBuilder builder = new RequestOptionsBuilder()
 					.setApiKey(Globals.STRIPE_TEST_API_KEY);
@@ -165,6 +166,7 @@ public class StripeUtil {
 
 			return Customer.retrieve(customer.getId(), options);
 		}
+
 		// Retrieves the customer from stripe based on id
 		return Customer.retrieve(customer.getId());
 	}

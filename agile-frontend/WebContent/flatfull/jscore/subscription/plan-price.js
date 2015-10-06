@@ -175,7 +175,7 @@ function setPlan(user_plan)
 			}
 			else
 			{
-				interval = "monthly";
+				interval = "yearly";
 				plan_type = "free";
 			}
 		}
