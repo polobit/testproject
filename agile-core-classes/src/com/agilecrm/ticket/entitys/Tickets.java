@@ -291,7 +291,7 @@ public class Tickets extends Cursor
 
 		if (assignee_id != null)
 			assigneeID = assignee_id.getId();
-		
+
 		if (contact_key != null)
 			contactID = contact_key.getId();
 	}

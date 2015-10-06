@@ -88,8 +88,6 @@ function constructNodeFromDefinition(nodeJSONDefinition, jsonData, nodeId) {
     	init_tags_typeahead();
     }
     
-    nodeJSONDefinition.parentY = window.parent.scrollY;
-    
     if(nodeJSONDefinition["name"] == "Send Message" && (jsonData == undefined || jsonData == "json/nodes/sms/sendmessage.js"))
         $("#nodeui").find("[name=to]").val("{{phone}}");
     
@@ -124,8 +122,7 @@ function constructNodeFromDefinition(nodeJSONDefinition, jsonData, nodeId) {
         }
     });
     
-     window.parent.scrollTo(0,0);
-     
+
     if (nodeJSONDefinition.language != undefined) 
     	$("#nodeui .translate").val(nodeJSONDefinition.language);
 
@@ -172,7 +169,7 @@ function saveNode(e) {
         	jsonDefinition = jsonDefinition.org;
         
         // Get Display name
-        var displayName = $("#nodeui").find("[name=nodename]").val();  
+        var displayName = $("#nodeui").find("[name=nodename]").val();
                        
         
         // Get the node id and update the old node id
@@ -181,40 +178,7 @@ function saveNode(e) {
 		// Check if node id is undefined or not 
 		if( nodeId == undefined || nodeId == null ) {
 			// Add designer at given location
-			if(jsonDefinition.x && jsonDefinition.y){
-				jsonDefinition.x += $('#designercontainer').scrollLeft();
-				jsonDefinition.y += $('#designercontainer').scrollTop();
-				window.parent.scrollTo(0,jsonDefinition.parentY);
-				addNode(jsonDefinition, displayName, jsonValues, jsonDefinition.x, jsonDefinition.y);
-			}
-			else{
-					var designer = window.parent.document.getElementById("designer").contentWindow.document.body;
-					var x_coordinate = $('#designercontainer').scrollLeft();
-					var y_coordinate = $('#designercontainer').scrollTop();
-					//var cordinates = (x_coordinate + y_coordinate)/2;
-					//window.parent.scrollTo(0,y_coordinate);
-					//$('#designercontainer').scrollTop(cordinates);  
-					//$(designer).find('#designercontainer').scrollLeft(cordinates);
-					var a = window.parent.document.getElementById("designer").contentWindow.document.body;
-					if($(a).find("#addontabs").attr("data")){
-						window.parent.scrollTo(0,$(a).find("#addontabs").attr("data")); 
-						y_coordinate += 300; 
-						//jsonDefinition.parentY = $(a).find("#addontabs").attr("data");
-					}
-					else
-					window.parent.scrollTo(0,jsonDefinition.parentY);
-					
-					
-					if(jsonDefinition.parentY==0)
-						jsonDefinition.parentY=250;
-					
-					if(jsonDefinition.parentX==0)
-						jsonDefinition.parentX=250;
-					if(x_coordinate !=undefined && y_coordinate  !=undefined )
-						addNode(jsonDefinition, displayName, jsonValues, x_coordinate+250,y_coordinate+jsonDefinition.parentY);
-					else
-						addNode(jsonDefinition, displayName, jsonValues, 200, 200);
-				}
+			addNode(jsonDefinition, displayName, jsonValues, 200, 200);
 		}
 		else {					
 	

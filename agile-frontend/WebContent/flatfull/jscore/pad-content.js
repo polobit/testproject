@@ -186,6 +186,13 @@ var CONTENT_JSON = {
 		"button_text" : "Add Webpage",
 		"route" : "#webpage-add",
 		"image" : "/img/clipboard.png"
+	},
+	"ticket-macros" : {
+		"title" : "You do not have any Macros currently.",
+		"description" : "Macros can be used to perform different actions on tickets",
+		"button_text" : "Add Macro",
+		"route" : "#macro-add",
+		"image" : "/img/clipboard.png"
 	}
 	/*"web-rules" : {/All_Activities
 		

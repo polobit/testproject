@@ -64,6 +64,14 @@
 										<option value="SHOPIFY_EVENT" id="shopify-event">Shopify Event</option>
 										<optgroup label="Form">
 										<option value="FORM_SUBMIT" id="form-event">Form Submit</option>
+
+										<optgroup label="Ticket">
+										<option value="NEW_TICKET_IS_ADDED">New ticket is added</option>
+										<option value="NOTE_ADDED_BY_USER">Note is added by user</option>
+										<option value="NOTE_ADDED_BY_CUSTOMER">Note is added by customer</option>
+										<option value="TICKET_IS_CLOSED">ticket is closed</option>
+										<!-- <option value="SLA_CROSSED">SLA crossed</option> -->
+
 									</select>
                                 </div>
                             </div>
@@ -774,6 +782,99 @@
             </div>
         </div>
         <!-- Add tags end -->
+
+
+		<!-- Ticket Triggers -->
+		 <div class="row">
+            <div class="col-md-12">
+                <h4 class="m-t-md">Ticket</h4>
+            </div>
+        </div>
+		 <div id="general" class="row">
+            <div class="col-md-3 col-sm-6 col-xs-12">
+                <div class="panel wrapper text-center">
+                    <!-- Icon and Title -->
+                    <div>
+                        <div>
+                            <i class="fa-ticket icon-3x"></i>
+                        </div>
+                        <b>Ticket Added</b>
+                    </div>
+                    <br/>
+                    <div class="ellipsis-multiline m-b-md" rel="tooltip">
+                        Runs a Campaign on a contact When new ticket is added.
+                    </div>
+                    <!-- Add button -->
+                    <div>
+                        <a class="btn btn-sm btn-default add-trigger" data="NEW_TICKET_IS_ADDED">Go</a>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="col-md-3 col-sm-6 col-xs-12">
+                <div class="panel wrapper text-center">
+                    <!-- Icon and Title -->
+                    <div>
+                        <div>
+                            <i class="fa-folder icon-3x"></i>
+                        </div>
+                        <b>Ticket Closed</b>
+                    </div>
+                    <br/>
+                    <div class="ellipsis-multiline m-b-md" rel="tooltip">
+                        Runs a Campaign on a contact When ticket is closed.
+                    </div>
+                    <!-- Add button -->
+                    <div>
+                        <a class="btn btn-sm btn-default add-trigger" data="TICKET_IS_CLOSED">Go</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-3 col-sm-6 col-xs-12">
+                <div class="panel wrapper text-center">
+                    <!-- Icon and Title -->
+                    <div>
+                        <div>
+                            <i class="fa-user icon-3x"></i>
+                        </div>
+                        <b>Note Added by User</b>
+                    </div>
+                    <br/>
+                    <div class="ellipsis-multiline m-b-md" rel="tooltip">
+                        Runs a Campaign on a contact When new note is added by user.
+                    </div>
+                    <!-- Add button -->
+                    <div>
+                        <a class="btn btn-sm btn-default add-trigger" data="NOTE_ADDED_BY_USER">Go</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-3 col-sm-6 col-xs-12">
+                <div class="panel wrapper text-center">
+                    <!-- Icon and Title -->
+                    <div>
+                        <div>
+                            <i class="fa-users icon-3x"></i>
+                        </div>
+                        <b>Note Added by Customer</b>
+                    </div>
+                    <br/>
+                    <div class="ellipsis-multiline m-b-md" rel="tooltip">
+                        Runs a Campaign on a contact When new note is added by customer.
+                    </div>
+                    <!-- Add button -->
+                    <div>
+                        <a class="btn btn-sm btn-default add-trigger" data="NOTE_ADDED_BY_CUSTOMER">Go</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+		<!-- End of Ticket Triggers --> 
+
+
     </div>
     <!-- End of row -->
 </div>

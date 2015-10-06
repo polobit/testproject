@@ -140,6 +140,7 @@
 <!-- Place holder for the toolkit - designer and toolbars -->
 
 <div id = "maincontainer">
+
 	<div id = "designercontainer">
 
 		<div id="designer" class="ui-widget-content">
@@ -148,24 +149,25 @@
 			<div id = "paintarea" style="padding-top:15px">
 				
 				<!-- Toolbar fixed to LHS-->
-				<div class="toolbar_content" style="position: fixed;top: 12px;">
+				<div class="toolbar_content">
 				
 				<!-- Tool bar Padding, name & Horizontal line (Yasin/3-09-10) -->
-				 <div id="toolbartabs" style="width:70px;margin:0 6px 6px;font-size:9px;">
+				 <div id="toolbartabs" style="width:86px;margin:0 6px 6px;font-size:9px;">
 					<ul>
 						<!-- <li><a href="#toolbar" style="padding: 0.5em 0.4em">Email</a></li>
 						<li><a href="#advanced" style="padding: 0.5em 0.4em">SMS</a></li>
 						 -->
 						 <li><a href="#toolbar" >1</a></li>
-						<li><a href="#advanced" >2</a></li>
+						 <li><a href="#advanced" >2</a></li>
+						 <li><a href="#more-advanced" >3</a></li>
 						 
 					</ul>
 				  
 				    <div id="toolbar" class="ui-widget ui-widget-content ui-corner-all " style="font-size:9px;padding:0;">
-						<div id="leftmenunodetemplate" class="nodetitle" style="display:none;" align="center">
+						<div id="leftmenunodetemplate" class="nodetitle" style="display:none;text-align: center;" align="center">
 							<div style="cursor:move;">
-							<img border="0" style="margin:6px 6px;"/>
-							<label class="ui-widget" id="name"></label>
+								<div><img border="0" style="margin:6px 6px;"/></div>
+								<label class="ui-widget" id="name"></label>
 							</div>
 							<hr style="width:70%" class="ui-widget-content"/>
 					    </div>
@@ -173,19 +175,24 @@
 				
 				  <div id="advanced" class="ui-widget ui-widget-content ui-corner-all " style="font-size:9px;padding:0;">
 				    </div>
+				     
+				   <div id="more-advanced" class="ui-widget ui-widget-content ui-corner-all " style="font-size:9px;padding:0;">
+				    </div>
 				    
-				    <div id="leftmenunodetemplatetab" class="nodetiletab" style="display:none;" align="center">
+				     <div id="leftmenunodetemplatetab" class="nodetiletab" style="display:none;text-align: center;" align="center">
 							<div style="cursor:move;">
-							<img border="0" style="margin:6px 6px;"/>
-							<label class="ui-widget"  id="name"></label>
+								<div><img border="0" style="margin:6px 6px;"/></div>
+								<label class="ui-widget"  id="name"></label>
 							</div>
 							<hr style="width:70%" class="ui-widget-content"/>
 					 </div>
+				    
+				    
 				  </div> 
 				  
 				  
 <!-- Catalog Add more image(below toolbar)  (yasin/3-09-10)  --> 
-<div class="addmorebutton ui-widget ui-widget-content ui-corner-all" style="position: fixed; top: 700px;"> 
+<div class="addmorebutton ui-widget ui-widget-content ui-corner-all"> 
 	     <div align="center"> 
 		 <img  style="cursor:pointer;" id="showcatalog" src="css/designer/images/draw2d/add-more.png" /></div> 
 </div> 
