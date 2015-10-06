@@ -1663,7 +1663,7 @@ public class OpportunityUtil
 							else
 								continue;
 						}
-						else if (source==sourceId)
+						else if (source.equals(sourceId))
 							opportunitiesList_temp.add(opportunity);
 						else 
 							continue;
@@ -1739,13 +1739,6 @@ public class OpportunityUtil
 		Milestone milestone1;
 		if (ownerId != null)
 			conditionsMap.put("ownerKey", new Key<DomainUser>(DomainUser.class, ownerId));
-		/*if (sourceId != null)
-		{
-				if(sourceId==1)
-					conditionsMap.put("dealSource !="," ");
-				else
-					conditionsMap.put("dealSource", new Key<Category>(Category.class, sourceId));
-		}*/
 			
 		conditionsMap.put("archived", false);
 		conditionsMap.put("milestone_changed_time >= ", minTime);

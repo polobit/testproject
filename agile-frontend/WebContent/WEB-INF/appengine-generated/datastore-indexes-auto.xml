@@ -351,27 +351,11 @@
     
     <datastore-index kind="Opportunity" ancestor="false" source="manual">
         <property name="archived" direction="asc"/>
-        <property name="dealSource" direction="asc"/>
-        <property name="milestone" direction="asc"/>
-        <property name="pipeline" direction="asc"/>
-        <property name="ownerKey" direction="asc"/>
-        <property name="milestone_changed_time" direction="asc"/>
-    </datastore-index>
-    
-    <datastore-index kind="Opportunity" ancestor="false" source="manual">
-        <property name="archived" direction="asc"/>
-        <property name="dealSource" direction="asc"/>
         <property name="milestone" direction="asc"/>
         <property name="pipeline" direction="asc"/>
         <property name="milestone_changed_time" direction="asc"/>
     </datastore-index>
     
-      <datastore-index kind="Opportunity" ancestor="false" source="manual">
-        <property name="archived" direction="asc"/>
-        <property name="milestone" direction="asc"/>
-        <property name="pipeline" direction="asc"/>
-        <property name="milestone_changed_time" direction="asc"/>
-    </datastore-index>
     
     <datastore-index kind="Category" ancestor="false" source="manual">
         <property name="entity_type" direction="asc"/>

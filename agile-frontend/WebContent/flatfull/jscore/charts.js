@@ -1416,7 +1416,7 @@ function pieforReports(url, selector, name)
 			{
 				chart : { renderTo : selector, type : 'pie', plotBackgroundColor : null, plotBorderWidth : null, plotShadow : false,
 					marginTop : 50 },
-				colors: ['#7266ba','#23b7e5','#27c24c','#fad733','#f05050'],
+				colors: ['#7266ba','#23b7e5','#27c24c','#fad733','#f05050','#6E6658','#611680','#167F80','#801634','#D3E6C7'],
 				title : { text : name },
 				 tooltip: {
 				formatter: function(){
