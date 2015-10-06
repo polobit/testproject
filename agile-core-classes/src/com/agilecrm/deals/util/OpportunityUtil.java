@@ -1644,10 +1644,39 @@ public class OpportunityUtil
 		{
 			timeZone = userPrefs.timezone;
 		}
-		List<Opportunity> opportunitiesList = getLostDealsWithOwnerandPipeline(ownerId, pipelineId, sourceId, minTime,
+		List<Opportunity> opportunitiesList = getLostDealsWithOwnerandPipeline(ownerId, pipelineId, minTime,
 				maxTime);
+		List<Opportunity> opportunitiesList_temp=new ArrayList<Opportunity>();
 		if (opportunitiesList != null && opportunitiesList.size() > 0)
 		{
+			for (Opportunity opportunity : opportunitiesList)
+			{
+				try
+				{
+					Long source=opportunity.getDeal_source_id();
+					if(sourceId!=null)
+					{
+						if(sourceId==1)
+						{
+							if (source==0L)
+								opportunitiesList_temp.add(opportunity);
+							else
+								continue;
+						}
+						else if (source==sourceId)
+							opportunitiesList_temp.add(opportunity);
+						else 
+							continue;
+					}
+					else
+						opportunitiesList_temp.add(opportunity);
+				}
+				catch (Exception e)
+				{
+					System.out.println("Exception :" + e);
+				}
+			}
+			if(opportunitiesList_temp!=null && opportunitiesList_temp.size() > 0){
 			CategoriesUtil categoriesUtil = new CategoriesUtil();
 			List<Category> reasons = categoriesUtil.getCategoriesByType("DEAL_LOST_REASON");
 			JSONObject countandToal = new JSONObject();
@@ -1658,12 +1687,12 @@ public class OpportunityUtil
 			{
 				sourcecount.put(reason.getId(), countandToal);
 			}
+			}
 		}
-		for (Opportunity opportunity : opportunitiesList)
+		for (Opportunity opportunity : opportunitiesList_temp)
 		{
 			try
-			{
-
+			{	
 				Long lost_id = opportunity.getLost_reason_id();
 				Double value = opportunity.expected_value;
 
@@ -1700,7 +1729,7 @@ public class OpportunityUtil
 	 *  @param   sourceId      
 	 * @return List
 	 */
-	public static List<Opportunity> getLostDealsWithOwnerandPipeline(Long ownerId, Long pipelineId, Long sourceId,
+	public static List<Opportunity> getLostDealsWithOwnerandPipeline(Long ownerId, Long pipelineId,
 			long minTime, long maxTime)
 			{
 		UserAccessControlUtil.checkReadAccessAndModifyQuery("Opportunity", null);
@@ -1710,8 +1739,14 @@ public class OpportunityUtil
 		Milestone milestone1;
 		if (ownerId != null)
 			conditionsMap.put("ownerKey", new Key<DomainUser>(DomainUser.class, ownerId));
-		if (sourceId != null)
-			conditionsMap.put("dealSource", new Key<Category>(Category.class, sourceId));
+		/*if (sourceId != null)
+		{
+				if(sourceId==1)
+					conditionsMap.put("dealSource !="," ");
+				else
+					conditionsMap.put("dealSource", new Key<Category>(Category.class, sourceId));
+		}*/
+			
 		conditionsMap.put("archived", false);
 		conditionsMap.put("milestone_changed_time >= ", minTime);
 		conditionsMap.put("milestone_changed_time <= ", maxTime);
