@@ -155,7 +155,7 @@
 
 	> #editor-header {
 		height: 30px;
-		background-color: @panel-background;
+		background-color: @panel-box-background;
 		color: @panel-color;
 		overflow: hidden;
         border-top-left-radius: 3px;
@@ -167,7 +167,7 @@
 			text-transform: capitalize;
 			outline: none;
 			border: none;
-			border-right: 1px solid @panel-box-background;
+			border-right: 1px solid @panel-border-color;
 			height: 29px;
 		}
 
@@ -179,10 +179,11 @@
 			width: 54px;
 			text-align: center;
 			border: none;
-            background-color: lighten(@panel-box-background, 5%);
+            background-color: #f0f3f4;
+            color: #141719;
 
 			&.active {
-                background-color: lighten(@panel-box-background, 20%);
+                background-color: #f6f8f8;
 			}
 		}
 
@@ -210,7 +211,7 @@
 			color: @panel-color;
 			&:hover {
 				cursor: pointer;
-				color: #fff;
+				color: #000;
 			}
 		}
 	}

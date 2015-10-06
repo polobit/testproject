@@ -122,7 +122,7 @@
 
 .accordion-heading {
     background-color: @panel-box-background;
-    color: #8da8b8;
+    color: #141719;
     border-radius: 3px;
     //border-bottom: @panel-border;
     height: 50px;
@@ -150,11 +150,11 @@
 	flex: 0 0 @left-panel-width;
 	height: 100%;
 	background: @panel-background;
-	box-shadow: 1px 0px 2px rgba(0,0,0,.5);
 	z-index: 9;
 	.user-select(none);
 	.transition(left 0.2s linear);
     position: relative;
+    border: 1px solid @panel-border-color;
     .clearfix();
 
     .panel-inner {
@@ -167,7 +167,7 @@
 
     .main-nav {
         width: 70px;
-        background: #09181f;
+        background: #f0f3f4;
         float: left;
         height: 100%;
         position: relative;
@@ -198,7 +198,7 @@
                     width: 14px;
                     height: 14px;
                     border-radius: 7px;
-                    background-color: #09181f;
+                    background-color: #f0f3f4;
                 }
             }
 
@@ -269,7 +269,7 @@
             line-height: 1.4;
 
             &.active {
-                color: #fff;
+                color: #000;
             }
 
             &:hover {
@@ -377,7 +377,7 @@
             display: block;
             float: left;
             cursor: pointer;
-            background-color: lighten(@panel-background, 5%);
+            background-color: #f6f8f8;
             width: 20%;
             outline: none !important;
 
@@ -456,7 +456,7 @@
             position: relative;
 
             > .text {
-                color: #b1d2e5;
+                color: #141719;
                 padding: 0 10px;
                 height: 50%;
                 display: flex;
