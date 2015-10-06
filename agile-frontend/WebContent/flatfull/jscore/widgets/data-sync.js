@@ -92,9 +92,20 @@ function initializeDataSyncListners(){
 }
 
 
-function executeDataSyncReturnCallback(returnUrl){
+function executeDataSyncReturnCallback(returnUrl,serviceName){
 		
+		if(serviceName=='google_calendar'){
+			App_Datasync.google_calendar();
+			return;
+		}
+
 		DATA_SYNC_FORCE_FETCH=true;
+		if(serviceName=='shopify'){
+			App_Datasync.shopify();
+			return;
+		}
+
+		
 		returnUrl=returnUrl.substr(returnUrl.indexOf('#'));
 		Backbone.history.navigate(returnUrl , {
                 trigger: true

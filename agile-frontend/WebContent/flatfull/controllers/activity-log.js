@@ -14,7 +14,7 @@ var ActivitylogRouter = Backbone.Router.extend({
 		if (!tight_acl.checkPermission('ACTIVITY'))
 			return;
 		
-		head.js(LIB_PATH + 'lib/date-charts.js', LIB_PATH + 'lib/date-range-picker.js', CSS_PATH + "css/misc/date-picker.css", function()
+		head.js(LIB_PATH + 'lib/date-charts.js', LIB_PATH + 'lib/date-range-picker.js',function()
 		{
 
 			$('#content').html("<div id='activities-listners'>&nbsp;</div>");
@@ -32,11 +32,7 @@ var ActivitylogRouter = Backbone.Router.extend({
 					initActivitiesDateRange();
 					$(".activity-log-button").hide();
 
-					var activityFilters=readCookie(ACTIVITY_FILTER);
-
-					var selecteduser = readCookie("selecteduser");
-					var selectedentity = readCookie("selectedentity");
-
+					var activityFilters=JSON.parse(readCookie(ACTIVITY_FILTER));
 
 					var optionsTemplate = "<li><a  href='{{id}}'>{{name}}</li>";
 
@@ -50,8 +46,8 @@ var ActivitylogRouter = Backbone.Router.extend({
 						if (activityFilters&&(activityFilters.user || activityFilters.entity))
 						{
 
-							$('ul#user-select li a').closest("ul").data("selected_item", activityFilters.user);
-							$('ul#entity_type li a').closest("ul").data("selected_item", activityFilters.entity);
+							$('ul#user-select li a').closest("ul").data("selected_item", activityFilters.userid);
+							$('ul#entity_type li a').closest("ul").data("selected_item", activityFilters.entityid);
 								updateActivty(getParameters());
 
 								$('#selectedusername').html(activityFilters.user);

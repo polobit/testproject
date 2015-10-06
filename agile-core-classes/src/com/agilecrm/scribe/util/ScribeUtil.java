@@ -849,7 +849,7 @@ public class ScribeUtil
 		      
 		      if(Arrays.asList(syncPrefServices).contains(serviceName)){
 		       try {
-		        resp.getWriter().print("<script>parent.window.opener.executeDataSyncReturnCallback('" + returnURL + "'); window.close();</script>");
+		        resp.getWriter().print("<script>parent.window.opener.executeDataSyncReturnCallback('" + returnURL + "','"+serviceName+"'); window.close();</script>");
 		   } catch (Exception e) {
 		   }
 		      

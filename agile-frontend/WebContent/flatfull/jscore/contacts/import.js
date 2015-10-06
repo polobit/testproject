@@ -15,22 +15,6 @@
 function initializeImportListeners(){
 
 	
-	$('#prefs-tabs-content #google-import-prefs-delete').off();
-	 $('#prefs-tabs-content').on('click', '#google-import-prefs-delete', function(e){
-		e.preventDefault();
-		var disabled = $(this).attr("disabled");
-		if(disabled)
-			return;
-		
-		$(this).attr("disabled", "disabled");
-		
-		$(this).after(getRandomLoadingImg());
-		
-		console.log(App_Widgets.contact_sync_google.model.destroy({success : function(){
-			App_Widgets.contact_sync_google.model.clear();
-			App_Widgets.contact_sync_google.render(true);
-		}}));
-	});
 
 	
 	
@@ -99,43 +83,6 @@ $('#prefs-tabs-content').on('click', '#xeroconnect', function(e){
 	window.location = "/scribe?service=xero&return_url=" + encodeURIComponent(callbackURL);
 	return false;
 });
-
-$('#prefs-tabs-content #sync-google-calendar').off();
-$("#prefs-tabs-content").on('click', '#sync-google-calendar', function(e)
-	{
-		e.preventDefault();
-
-		// URL to return, after fetching token and secret key from LinkedIn
-		var callbackURL = window.location.href;
-
-		// For every request of import, it will ask to grant access
-		window.location = "/scribe?service=google_calendar&return_url=" + encodeURIComponent(callbackURL);
-	});
-
-	$('#prefs-tabs-content #sync-google-calendar-delete').off();
-	$("#prefs-tabs-content").on('click', '#sync-google-calendar-delete', function(e)
-	{
-		e.preventDefault();
-
-		var disabled = $(this).attr("disabled");
-		if (disabled)
-			return;
-
-		$(this).attr("disabled", "disabled");
-
-		$(this).after(getRandomLoadingImg());
-		App_Widgets.calendar_sync_google.model.url = "/core/api/calendar-prefs"
-		console.log(App_Widgets.calendar_sync_google.model.destroy({ success : function()
-		{
-
-			App_Widgets.calendar_sync_google.model.clear();
-			App_Widgets.calendar_sync_google.model.url = "/core/api/calendar-prefs/get"
-			App_Widgets.calendar_sync_google.render(true);
-			erase_google_calendar_prefs_cookie();
-
-		} }));
-	});
-	
 }
 
 function show_success_message_after_save_button(message, el)

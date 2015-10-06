@@ -9,7 +9,6 @@ var DataSync_Event_Modal_View = Base_Model_View.extend({
         'click #import_shopify': 'importShopify',
         'change #sync-type': 'googleContactsSyncTypeChange',
         'click .save-contact-prefs': 'syncGoogleContacts',
-        'click #import_shopify': 'importShopify',
         'click #stripe-import-prefs-delete': 'importStripePrefsDelete',
         'click #stripe_sync_prefs': 'syncStripePrefs',
         'click #shopify-setting': 'syncShopify',
@@ -230,6 +229,9 @@ var DataSync_Event_Modal_View = Base_Model_View.extend({
      deleteGoogleCalendarPrefs: function(e) {
 
      	e.preventDefault();
+
+     	if (!confirm("Are you sure you want to delete?"))
+    			return false;
        var ele = $(e.currentTarget);
 
 		var disabled = $(this).attr("disabled");

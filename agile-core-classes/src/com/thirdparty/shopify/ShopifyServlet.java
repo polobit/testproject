@@ -13,6 +13,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.agilecrm.contact.sync.Type;
+import com.agilecrm.scribe.util.ScribeUtil;
 import com.agilecrm.widgets.Widget;
 import com.agilecrm.widgets.util.DefaultWidgets;
 import com.thirdparty.google.ContactPrefs;
@@ -45,6 +46,8 @@ public class ShopifyServlet extends HttpServlet
 	    else
 	    {
 		saveToken(req, token);
+		if(ScribeUtil.isWindowPopUpOpened("shopify", "/#sync/shopify", req, res))
+			return;
 		res.sendRedirect("/#sync/shopify");
 		return ;
 	    }

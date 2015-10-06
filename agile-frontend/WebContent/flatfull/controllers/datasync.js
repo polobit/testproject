@@ -33,20 +33,8 @@ dataSync : function()
                     individual_tag_name: 'div',
                     templateKey: 'data-sync',
                     postRenderCallback: function(el) {
-
-
-                        that.calendar_sync_google = new GoogleCalendar_Event_Modal_View({
-                            url: 'core/api/calendar-prefs/get',
-                            template: 'import-google-calendar',
-                            postRenderCallback: function(el) {
-                                initializeImportListeners();
-                            }
-                        });
-                        // console.log(getTemplate("import-google-contacts", {}));
-                        $('#calendar-prefs').append(that.calendar_sync_google.render().el);
-
+                    	that.google_calendar(el);
                         initializeDataSyncListners();
-
 
                     }
                 });
@@ -58,6 +46,21 @@ dataSync : function()
 
             }, "#content");
 	
+},
+
+
+google_calendar:function(el){
+
+
+	 this.calendar_sync_google = new GoogleCalendar_Event_Modal_View({
+                            url: 'core/api/calendar-prefs/get',
+                            template: 'import-google-calendar',
+                            postRenderCallback: function(el) {
+                                initializeImportListeners();
+                            }
+                        });
+                        // console.log(getTemplate("import-google-contacts", {}));
+                        $('#calendar-prefs').html(this.calendar_sync_google.render().el);
 },
 
 	 google_contacts_sync: function() {

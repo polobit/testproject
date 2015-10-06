@@ -100,7 +100,7 @@ public class OAuthServlet extends HttpServlet
 		}
 
 		String userId = (userInfo == null) ? null : userInfo.getEmail();
-		String isForAll = (String)req.getSession().getAttribute("isForAll");
+		String isForAll = req.getSession().getAttribute("isForAll")!=null?(String)req.getSession().getAttribute("isForAll"):null;
 		
 		Map<String, String> properties = new HashMap<String, String>();
 		properties.put("token", consumer.getToken());
@@ -119,6 +119,7 @@ public class OAuthServlet extends HttpServlet
 			String redirectURL = (String) req.getSession().getAttribute("referer");
 			
 			if(ScribeUtil.isWindowPopUpOpened(serviceType, redirectURL+"#sync/quickbook", req, resp))
+				return;
 			
 			resp.sendRedirect(redirectURL + "#sync/quickbook");
 			return;

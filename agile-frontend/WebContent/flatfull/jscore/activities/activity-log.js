@@ -23,7 +23,7 @@ function buildActivityFilters(name,valueid,clickedFrom){
 		ACTIVITY_FILTER_JSON.userid=valueid;
 		}
 
-		createCookie(ACTIVITY_FILTER,ACTIVITY_FILTER_JSON);
+		createCookie(ACTIVITY_FILTER,JSON.stringify(ACTIVITY_FILTER_JSON));
 
 
 }
@@ -42,7 +42,6 @@ function buildActivityFilters(name,valueid,clickedFrom){
  */
 function updateActivty(params)
 {
-	console.log("entered into update activity function  " + new Date().getTime() + "  time with milliseconds " + new Date())
 	// Creates backbone collection view
 	this.activitiesview = new Base_Collection_View({ url : '/core/api/activitylog/getActivitiesOnSelectedCondition' + params, sortKey : 'time',
 		descending : true, templateKey : "activity-list-log", sort_collection : false, cursor : true, scroll_symbol : 'scroll', page_size : 20,
