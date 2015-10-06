@@ -1098,6 +1098,7 @@ var portlet_utility = {
 
 		switch (portlet_name) {
 		case "Filter Based": {
+			$('#filter', elData).find('option').remove();
 			that.addPortletSettingsModalContent(base_model,
 					"portletsContactsFilterBasedSettingsModal");
 			elData = $('#portletsContactsFilterBasedSettingsForm');
