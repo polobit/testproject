@@ -525,203 +525,220 @@ var portlet_graph_utility = {
 				.js(
 						LIB_PATH + 'lib/flot/highcharts-3.js',
 						function() {
-							$('#' + selector)
-									.highcharts(
-											{
-												chart : {
-													type : 'bar',
-													marginRight : 20,
-													plotBorderWidth : 1,
-													plotBorderColor : '#F4F4F5'
-												},
-												title : {
-													text : ''
-												},
-												xAxis : {
-													categories : domainUserImgList,
-													labels : {
-														formatter : function() {
-															var userIndex = 0;
-															for ( var i = 0; i < domainUserImgList.length; i++) {
-																if (this.value == domainUserImgList[i]
-																		&& domainUserImgList[i]
-																				.substring(
-																						0,
-																						8) != "no image")
-																	userIndex = i;
-																else if (this.value == domainUserImgList[i]
-																		&& domainUserImgList[i]
-																				.substring(
-																						0,
-																						8) == "no image")
-																	userIndex = parseInt(domainUserImgList[i]
-																			.substring(
-																					9,
-																					10));
-															}
-															if (this.value != undefined
-																	&& this.value != ""
-																	&& this.value
-																			.substring(
-																					0,
-																					8) != "no image")
-																return '<img src="'
-																		+ this.value
-																		+ '" alt="" style="vertical-align: middle; width: 25px; height: 25px;border-radius:15px;" title="'
-																		+ domainUsersList[userIndex]
-																		+ '"/>';
-															else
-																return '<img src="'
-																		+ gravatarImgForPortlets(25)
-																		+ '" alt="" style="vertical-align: middle; width: 25px; height: 25px;border-radius:15px;" title="'
-																		+ domainUsersList[userIndex]
-																		+ '"/>';
-														},
-														style : {
-															color : '#98a6ad',
-															fontSize : '11px'
-														},
-														useHTML : true
-													},
-													gridLineWidth : 0,
-													gridLineColor : '#F4F4F5',
-													lineWidth : 0,
-													tickWidth : 0
-												},
-												yAxis : {
-													min : 0,
-													title : {
-														text : text
-													},
-													allowDecimals : false,
-													gridLineWidth : 1,
-													gridLineColor : '#F4F4F5',
-													labels : {
-														style : {
-															color : '#98a6ad',
-															fontSize : '11px'
-														}
-													}
-												},
-												tooltip : {
-													formatter : function() {
-														var tt = '';
-														if (text == "Calls Duration (Mins)")
-															tt = '<table>'
-																	+ '<tr><td style="color:'
-																	+ this.points[0].series.color
-																	+ ';padding:0">'
-																	+ this.points[0].series.name
-																	+ ': </td>'
-																	+ '<td style="padding:0"><b>'
-																	+ portlet_utility
-																			.getPortletsTimeConversion(callsDurationList[this.points[0].point.x])
-																	+ '</b></td></tr>'
-																	+ '<tr><td style="color:'
-																	+ this.points[0].series.color
-																	+ ';padding:0">Calls: </td>'
-																	+ '<td style="padding:0"><b>'
-																	+ totalCallsCountList[this.points[0].point.x]
-																	+ '</b></td></tr>'
-																	+ '</table>';
-														else {
-															tt += '<table>';
-															if (this.points[0] != undefined
-																	&& this.points[0].series != undefined) {
-																tt += '<tr><td style="color:'
-																		+ this.points[0].series.color
-																		+ ';padding:0">'
-																		+ this.points[0].series.name
-																		+ ': </td>'
-																		+ '<td style="padding:0"><b>'
-																		+ this.points[0].point.y
-																		+ '</b></td></tr>';
-															}
-															if (this.points[1] != undefined
-																	&& this.points[1].series != undefined) {
-																tt += '<tr><td style="color:'
-																		+ this.points[1].series.color
-																		+ ';padding:0">'
-																		+ this.points[1].series.name
-																		+ ': </td>'
-																		+ '<td style="padding:0"><b>'
-																		+ this.points[1].point.y
-																		+ '</b></td></tr>';
-															}
-															if (this.points[2] != undefined
-																	&& this.points[2].series != undefined) {
-																tt += '<tr><td style="color:'
-																		+ this.points[2].series.color
-																		+ ';padding:0">'
-																		+ this.points[2].series.name
-																		+ ': </td>'
-																		+ '<td style="padding:0"><b>'
-																		+ this.points[2].point.y
-																		+ '</b></td></tr>';
-															}
-															if (this.points[3] != undefined
-																	&& this.points[3].series != undefined) {
-																tt += '<tr><td style="color:'
-																		+ this.points[3].series.color
-																		+ ';padding:0">'
-																		+ this.points[3].series.name
-																		+ ': </td>'
-																		+ '<td style="padding:0"><b>'
-																		+ this.points[3].point.y
-																		+ '</b></td></tr>';
-															}
-															tt += '</table>';
-														}
-														return tt;
-													},
-													shared : true,
-													useHTML : true,
-													borderWidth : 1,
-													backgroundColor : '#313030',
-													shadow : false,
-													borderColor : '#000',
-													borderRadius : 3,
-													style : {
-														color : '#EFEFEF'
-													}
-												},
-												plotOptions : {
-													series : {
-														stacking : 'normal',
-														borderWidth : 0
-													},
-													column : {
-														pointPadding : 0.2,
-														borderWidth : 0
-													},
-													bar : {
-														shadow : false
-													}
-												},
-												series : series,
-												exporting : {
-													enabled : false
-												},
-												colors : [ "#27c24c",
-														"#23b7e5", "#f05050",
-														"#7266ba", "#fad733",
-														"#aaeeee", "#ff0066",
-														"#eeaaee", "#55BF3B",
-														"#DF5353" ],
-												legend : {
-													itemStyle : {
-														fontSize : '10px',
-														color : '#98a6ad'
-													},
-													borderWidth : 0,
-													layout : 'vertical',
-													floating : true,
-													align : 'right',
-													verticalAlign : 'top'
-												}
-											});
+							
+							$('#'+selector).highcharts({
+								chart: {
+						            type: 'bar',
+						            marginRight: 100,
+						            plotBorderWidth: 1,
+						            plotBorderColor: '#F4F4F5'
+						        },
+						        title: {
+						            text: ''
+						        },
+						        xAxis: {
+						            categories: domainUserImgList,
+						            labels: {
+						                formatter: function() {
+						                	var userIndex=0;
+						                	for(var i=0;i<domainUserImgList.length;i++){
+						                		if(this.value==domainUserImgList[i] && domainUserImgList[i].substring(0,8)!="no image")
+						                			userIndex=i;
+						                		else if(this.value==domainUserImgList[i] && domainUserImgList[i].substring(0,8)=="no image")
+							                			userIndex=parseInt(domainUserImgList[i].substring(9,10));
+						                	}
+						                	if(this.value!=undefined && this.value!="" && this.value.substring(0,8)!="no image")
+						                		return '<img src="'+this.value+'" alt="" style="vertical-align: middle; width: 25px; height: 25px;border-radius:15px;" title="'+domainUsersList[userIndex]+'"/>';
+						                	else
+						                		return '<img src="'+gravatarImgForPortlets(25)+'" alt="" style="vertical-align: middle; width: 25px; height: 25px;border-radius:15px;" title="'+domainUsersList[userIndex]+'"/>';
+						                },
+						                style : {
+						    				color : '#98a6ad',
+						    				fontSize : '11px'
+						    			},
+						                useHTML: true
+						            },
+						            gridLineWidth : 0,
+						    		gridLineColor : '#F4F4F5',
+						    		lineWidth : 0,
+						    		tickWidth : 0
+						        },
+						        yAxis: {
+						            min: 0,
+						            title: {
+						                text: text
+						            },
+						            allowDecimals: false,
+						            gridLineWidth : 1,
+						    		gridLineColor : '#F4F4F5',
+						    		labels : {
+						    			style : {
+						    				color : '#98a6ad',
+						    				fontSize : '11px'
+						    			}
+						    		}
+						        },
+						        tooltip: {
+						        	formatter: function(){
+						        		var tt = '';
+						        		if(text=="Calls Duration (Mins)")
+						        			tt = '<table>' + 
+					        		              '<tr><td style="color:'+this.points[0].series.color+';padding:0">'+this.points[0].series.name+': </td>' +
+					        		              '<td style="padding:0"><b>'+portlet_utility.getPortletsTimeConversion(callsDurationList[this.points[0].point.x])+'</b></td></tr>' +
+					        		              '<tr><td style="color:'+this.points[0].series.color+';padding:0">Calls: </td>' + 
+					        		        	  '<td style="padding:0"><b>'+totalCallsCountList[this.points[0].point.x]+'</b></td></tr>' +
+					        		        	  '</table>';
+						        		else{
+						        			tt += '<table>';
+						        			if(this.points[0]!=undefined && this.points[0].series!=undefined){
+						        				tt += 	'<tr><td style="color:'+this.points[0].series.color+';padding:0">'+this.points[0].series.name+': </td>' +
+							                      		'<td style="padding:0"><b>'+this.points[0].point.y+'</b></td></tr>';
+						        			}
+						        			if(this.points[1]!=undefined && this.points[1].series!=undefined){
+						        				tt += 	'<tr><td style="color:'+this.points[1].series.color+';padding:0">'+this.points[1].series.name+': </td>' +
+							                      		'<td style="padding:0"><b>'+this.points[1].point.y+'</b></td></tr>';
+						        			}
+						        			if(this.points[2]!=undefined && this.points[2].series!=undefined){
+						        				tt += 	'<tr><td style="color:'+this.points[2].series.color+';padding:0">'+this.points[2].series.name+': </td>' +
+							                      		'<td style="padding:0"><b>'+this.points[2].point.y+'</b></td></tr>';
+						        			}
+						        			if(this.points[3]!=undefined && this.points[3].series!=undefined){
+						        				tt += 	'<tr><td style="color:'+this.points[3].series.color+';padding:0">'+this.points[3].series.name+': </td>' +
+							                      		'<td style="padding:0"><b>'+this.points[3].point.y+'</b></td></tr>';
+						        			}
+						        			tt += '</table>';
+						        		}
+						        		return tt;
+						        	},
+						            shared: true,
+						            useHTML: true,
+						            borderWidth : 1,
+						    		backgroundColor : '#313030',
+						    		shadow : false,
+						    		borderColor: '#000',
+						    		borderRadius : 3,
+						    		style : {
+						    			color : '#EFEFEF'
+						    		}
+						        },
+						        plotOptions: {
+						        	series: {
+						        		pointWidth: 10,
+						                stacking: 'normal',
+						                borderWidth : 0
+						            },
+						            column: {
+						                pointPadding: 0.2,
+						                borderWidth: 0
+						            },
+						            bar : {
+						    			shadow : false
+						    		}
+						        },
+						        series: series,
+						        exporting: {
+							        enabled: false
+							    },
+							    colors : [ "#27c24c", "#23b7e5", "#f05050", "#7266ba", "#fad733","#aaeeee", "#ff0066", "#eeaaee", "#55BF3B", "#DF5353" ],
+							    legend : {
+									itemStyle : {
+										fontSize : '10px',
+										color : '#98a6ad'
+									},
+									borderWidth : 0,
+									layout : 'vertical',
+									floating : true,
+									align : 'right',
+									verticalAlign : 'top'
+								}
+						    });
+							
 						});
 	},
+	
+	
+	/**
+	 * To plot calls per person data  as a pie graph
+	 */
+	callsByPersonPieGraph :function(selector,categoryList,valueList){
+
+	head.js(LIB_PATH + 'lib/flot/highcharts-3.js',LIB_PATH + 'lib/flot/no-data-to-display.js', function(){
+		var emptyFlag = true;
+		$.each(valueList,function(index,value){
+			if(value>0)
+				emptyFlag = false;
+		});
+		if(categoryList.length==0 || emptyFlag){
+			
+			$('#'+selector).html('<div class="portlet-error-message">No Calls Found</div>');
+		}else{
+			var data = [];
+			$.each(categoryList,function(index,value){
+				data.push([value,valueList[index]]);
+			});
+			$('#'+selector).highcharts({
+		        chart: {
+		            type: 'pie',
+		            marginRight: 20
+		        },
+		        colors : ['#7266ba','#23b7e5','#fad733','#27c24c','#f05050',"#aaeeee", "#ff0066", "#eeaaee", "#55BF3B", "#DF5353", "#7798BF","#aaeeee"],
+		        title: {
+		            text: ''
+		        },
+		        tooltip: {
+		        	formatter: function(){
+		        		return '<table>' + 
+		        		        '<tr><td class="p-n">Total '+categoryList[this.point.x]+' : </td>' + 
+		        		        '<td class="p-n"><b>'+  valueList[this.point.x]+'</b></td></tr>' +
+		        		        '</table>';
+		        	},
+		            shared: true,
+		            useHTML: true,
+		            borderWidth : 1,
+		    		backgroundColor : '#313030',
+		    		shadow : false,
+		    		borderColor: '#000',
+		    		borderRadius : 3,
+		    		style : {
+		    			color : '#EFEFEF'
+		    		}
+		        },
+		        plotOptions: {
+		        	series: {
+		                borderWidth : 0
+		            },
+		            pie: {
+		            	borderWidth: 0,
+		            	innerSize : '50%',
+		            	dataLabels: {
+		            		enabled: true,
+		            		useHTML: true,
+		            		/*connectorWidth: 0,*/
+		            		softConnector: true,
+		    	            formatter: function () {
+		    	            	return 	'<div class="text-center"><span style="color:'+this.point.color+'"><b>'+this.point.name+'</b></span><br/>' +
+		    	            			'<span style="color:'+this.point.color+'"><b>'+Math.round(this.point.percentage)+'%</b></span></div>';
+		    	            },
+		            		/*format: '<b>{point.name}</b>: {point.percentage:.1f}',*/
+		                    distance: 30,
+		                    x: 2,
+		                    y: -10
+		                },
+		                showInLegend: false
+		            }
+		        },
+		        series: [{
+		            name: "",
+		            data: data
+		        }],
+		        exporting: {
+			        enabled: false
+			    }
+		    });
+		}
+	});
+	},
+	
 
 	/**
 	 * To display task report portlet as bar graph

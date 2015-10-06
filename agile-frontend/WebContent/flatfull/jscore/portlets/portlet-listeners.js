@@ -577,7 +577,7 @@ function initializePortletsListeners() {
 		e.preventDefault();
 		var data = $(this).closest('a').attr("data");
 
-		getActivityObject(data, function(resp) {
+		portlet_utility.getActivityObject(data, function(resp) {
 
 			console.log(resp);
 			getTemplate("infoModal", resp, undefined, function(template_ui) {

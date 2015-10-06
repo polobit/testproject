@@ -1101,22 +1101,37 @@ var portlet_utility = {
 			that.addPortletSettingsModalContent(base_model,
 					"portletsContactsFilterBasedSettingsModal");
 			elData = $('#portletsContactsFilterBasedSettingsForm');
-			var options = '<option value="">Select...</option>'
-					+ '<option value="contacts">All Contacts</option>'
-					+ '<option value="myContacts">My Contacts</option>';
+			var existed_filter = base_model.get("settings").filter;
+			var options = '<option value="">Select...</option>';
+			if (existed_filter == "contacts") {
+				options += "<option selected='selected' value='contacts'>All Contacts</option>";
+			}
+			else {
+				options += "<option value='contacts'>All Contacts</option>";
+			}
+			if (existed_filter == "myContacts") {
+				options += "<option selected='selected' value='myContacts'>My Contacts</option>";
+			}
+			else {
+				options += "<option value='myContacts'>My Contacts</option>";
+			}
 			$.ajax({
 				type : 'GET',
 				url : '/core/api/filters?type=PERSON',
 				dataType : 'json',
 				success : function(data) {
 					$.each(data, function(index, contactFilter) {
-						options += "<option value=" + contactFilter.id + ">"
+						if (contactFilter.id == existed_filter) {
+							options += "<option selected='selected' value=" + contactFilter.id + ">"
 								+ contactFilter.name + "</option>";
+						}
+						else {
+							options += "<option value=" + contactFilter.id + ">"
+								+ contactFilter.name + "</option>";
+						}
+						
 					});
 					$('#filter', elData).html(options);
-					$("#filter", elData).find(
-							'option[value=' + base_model.get("settings").filter
-									+ ']').attr("selected", "selected");
 					$('.loading-img').hide();
 				}
 			});
@@ -1442,10 +1457,10 @@ var portlet_utility = {
 							options += "<option value=" + trackObj.id + ">"
 									+ trackObj.name + "</option>";
 					});
+					$('#track', elData).html(options);
+					$('.loading-img').hide();
 				}
 			});
-			$('#track', elData).html(options);
-			$('.loading-img').hide();
 			$("#duration", elData)
 					.find(
 							'option[value='
@@ -1533,7 +1548,7 @@ var portlet_utility = {
 						});
 						$('#' + ele_id, elData).html(options);
 						$.each(user_ele, function() {
-							$("#calls-user-list", elData).find(
+							$("#" + ele_id, elData).find(
 									'option[value=' + this + ']').attr("selected",
 									"selected");
 						});
@@ -1919,6 +1934,18 @@ var portlet_utility = {
 						0,
 						((parseInt($('#' + portletId).attr('data-row')) - 1) * 200) + 5);
 
+	},
+
+	getActivityObject : function(id, callback) {
+		
+		$.ajax({ 
+			type : "GET", 
+			url : 'core/api/activitylog/' + id,
+			success : function(data) {
+				return callback(data);
+			}
+		});
+	
 	}
 
 };
