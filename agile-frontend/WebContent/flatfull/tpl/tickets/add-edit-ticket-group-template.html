@@ -21,12 +21,14 @@
 									<input type="text" name="group_name" id="group_name" value="{{group_name}}" class="required form-control">
 								</div>
 							</div>
-							<div class="control-group form-group">
-								<label class="control-label col-sm-2">Group Email</label>
-								<div class="controls col-sm-9">
-									<input type="text" class="form-control" value="{{group_email}}" READONLY>
+							{{#if group_email}}
+								<div class="control-group form-group">
+									<label class="control-label col-sm-2">Group Email</label>
+									<div class="controls col-sm-9">
+										<input type="text" class="form-control" value="{{group_email}}" READONLY>
+									</div>
 								</div>
-							</div>
+							{{/if}}	
 							<div class="control-group form-group">
 								<label class="control-label col-sm-2">Users<span class="field_req">*</span></label>
 								<div id="users-collection" class="controls col-sm-9 multiple-checkbox" name="agents_keys">

@@ -32,7 +32,7 @@ var TicketsUtilRouter = Backbone.Router.extend({
 			slateKey : "no-tickets"
 		});
 
-		$(".active").removeClass("active");
+		$('nav').find(".active").removeClass("active");
 		$("#tickets").addClass("active");
 
 		App_Ticket_Module.ticketsCollection.collection.fetch();
@@ -66,7 +66,14 @@ var TicketsUtilRouter = Backbone.Router.extend({
 			url : "/core/api/ticket/" + id,
 			postRenderCallback : function(el, data) {
 
-				App_Ticket_Module.renderNotesCollection(id, $('#notes_collection'), function(){});
+				App_Ticket_Module.loadHtmlEditor($('#reply-editor', el), function(){
+
+					App_Ticket_Module.setMinHeight($('#reply-notes-container', el));
+
+					App_Ticket_Module.renderNotesCollection(id, $('#notes-collection-container'), function(){
+
+					});
+				});
 			}
 		});
 
@@ -90,14 +97,14 @@ var TicketsUtilRouter = Backbone.Router.extend({
 			}
 		});
 
-		$(".active").removeClass("active");
-		$("#ticket-groups").addClass("active");
-
 		App_Ticket_Module.groupsCollection.collection.fetch();
 
 		$("#content").html(App_Ticket_Module.groupsCollection.el);
 	},
 
+	/**
+	 * Add ticket group
+	 */
 	addTicketGroup: function(){
 
 		var addTicketGroupView = new Base_Model_View({
@@ -116,6 +123,9 @@ var TicketsUtilRouter = Backbone.Router.extend({
 		$('#content').html(addTicketGroupView.render().el);
 	},
 
+	/**
+	 * Edit ticket group
+	 */
 	editTicketGroup: function(id){
 
 		if(!App_Ticket_Module.groupsCollection || !App_Ticket_Module.groupsCollection.collection){
@@ -161,9 +171,11 @@ var TicketsUtilRouter = Backbone.Router.extend({
 			// restKey : "workflow",
 			//sort_collection : false,
 			templateKey : "ticket-notes",
-			individual_tag_name : 'tr',
+			individual_tag_name : 'div',
 			postRenderCallback : function(el) {
 
+				if(callback)
+					callback();
 			}
 		});
 
@@ -204,5 +216,34 @@ var TicketsUtilRouter = Backbone.Router.extend({
 					callback();
 			}
 		});
+	},
+
+	loadHtmlEditor : function($ele, callback){
+
+		head.js(LIB_PATH+'lib/summer-note/summernote.js',
+				CSS_PATH+'css/summernote/summernote.css', function()
+		{	
+			$ele.summernote({
+			      toolbar : [
+			        [
+			          'style',
+			          [ 'bold', 'italic', 'underline',
+			            'clear' ] ],
+			        [ 'fontsize', [ 'fontsize' ] ],
+			        [ 'insert', [ 'link' ] ] ],
+			        height:'130'
+			});
+
+			if(callback)
+				callback();
+		});
+	},
+
+	setMinHeight : function($ele){
+
+		var offset_top = $ele.offset().top;
+		var window_height = window.innerHeight;
+
+		$ele.css('min-height', window_height - offset_top + 'px');
 	}
 });

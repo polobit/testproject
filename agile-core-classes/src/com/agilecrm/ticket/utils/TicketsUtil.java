@@ -1,5 +1,6 @@
 package com.agilecrm.ticket.utils;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
@@ -9,6 +10,9 @@ import org.apache.commons.lang.exception.ExceptionUtils;
 
 import com.agilecrm.search.document.TicketDocument;
 import com.agilecrm.ticket.entitys.TicketGroups;
+import com.agilecrm.ticket.entitys.TicketNotes;
+import com.agilecrm.ticket.entitys.TicketNotes.CREATED_BY;
+import com.agilecrm.ticket.entitys.TicketNotes.NOTE_TYPE;
 import com.agilecrm.ticket.entitys.Tickets;
 import com.agilecrm.ticket.entitys.Tickets.LAST_UPDATED_BY;
 import com.agilecrm.ticket.entitys.Tickets.Priority;
@@ -96,7 +100,7 @@ public class TicketsUtil
 
 			ticket.short_id = getTicketShortID(key.getId()) + "";
 			Tickets.ticketsDao.put(ticket);
-
+			
 			// Create search document
 			new TicketDocument().add(ticket);
 		}

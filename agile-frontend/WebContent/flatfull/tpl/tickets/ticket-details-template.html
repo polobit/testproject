@@ -1,0 +1,81 @@
+<script id="ticket-details-template" type="text/html">
+<div class="data">
+    	<div class="panel-heading" style="background:#f6f8f8;">
+    		{{subject}}
+    		<div class="pull-right" style="margin-top: -5px;">
+            	<div class="btn-group">
+		          <label class="btn btn-sm btn-default"><i class="fa fa-angle-left"></i></label>
+		          <label class="btn btn-sm btn-default"><i class="fa fa-angle-right"></i></label>
+		        </div>
+  			</div>
+		</div>
+        <div id="reply-notes-container" class="dta-contatiner bg-white">
+			<div class="panel-body p-n">
+				<div class="col-md-8">
+					<div id="reply-editor">
+
+					</div>
+					<div class="m-t-sm w-full" style="display: inline-block;">
+						<div class="col-md-7 p-n">
+							<input type="text" name="cc_emails" class="form-control input-sm" placeholder="CC Emails">
+						</div>
+						<div class="col-md-5 p-n">
+							<button class="btn btn-primary btn-sm pull-right">Send Reply</button>
+							<button class="btn btn-default btn-sm pull-right m-r-xs">Add Note</button>
+						</div>
+					</div><hr>
+					<div id="notes-collection-container">
+						Loading...
+					</div>
+			    </div>
+			    <div class="col-md-4 m-t">
+			    	<div class="panel panel-default">
+				    	<div id="ticket-details" class="panel-heading" style="background:#f6f8f8;">
+				    		Ticket Details
+						</div>
+						<div class="panel-body">
+				    		<table cellspacing="10">
+				    			<tr>
+				    				<td>Ticket #</td>
+				    				<td>{{short_id}}</td>
+				    			</tr>
+				    			<tr>
+				    				<td>Group</td>
+				    				<td>{{groupID}}</td>
+				    			</tr>
+				    			<tr>
+				    				<td>Name</td>
+				    				<td>{{requester_name}}</td>
+				    			</tr>
+				    			<tr>
+				    				<td>Email</td>
+				    				<td>{{requester_email}}</td>
+				    			</tr>
+				    			<tr>
+				    				<td>Type</td>
+				    				<td>{{type}}</td>
+				    			</tr>
+				    			<tr>
+				    				<td>Priority</td>
+				    				<td>{{priority}}</td>
+				    			</tr>
+				    			<tr>
+				    				<td>Source</td>
+				    				<td>{{source}}</td>
+				    			</tr>
+				    			<tr>
+				    				<td>Created Date</td>
+				    				<td>{{epochToHumanDate "mmm dd yyyy HH:MM" created_time}}</td>
+				    			</tr>
+				    			<tr>
+				    				<td>Last Updated</td>
+				    				<td>{{epochToHumanDate "mmm dd yyyy HH:MM" last_updated_time}}</td>
+				    			</tr>
+				    		</table>	
+						</div>
+					</div>
+			    </div>
+			</div>
+        </div>
+    </div>
+</script>
