@@ -59,23 +59,21 @@ function initValidator(selector, callback) {
 	     if(value == undefined)
 	    	 value = '';
 	     
-	     // if Handlebars undefined
-	     if(!window.parent.Handlebars)
+	     // if Mustache undefined
+	     if(!Mustache)
 	     	return true;
 
-	     var template = window.parent.Handlebars.compile(value);
-
 	     try{
-	    	 template({});
+	    	Mustache.parse(value);
 	     }
 	     catch(err){
 	    	 var error = err.toString();
 
 		     // Only shows error missing closes. Skip other errors
-		     if(error.indexOf('CLOSE') != -1)
+		     if(error.indexOf('Unclosed tag') != -1)
 		     {
-		     	var msg = error.toString().split('\n')[1];
-		     	return "Parse error: " + msg;
+		     	var index = error.toString().split('at ')[1];
+		     	return "Parse error: Unclosed tag at " + value.substring(index - 15);
 		     }
 	     }
 		  
