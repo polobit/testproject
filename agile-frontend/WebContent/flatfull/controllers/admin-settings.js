@@ -385,7 +385,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 
 					$('#content').find('#AdminPrefsTab .select').removeClass('select');
 					$('#content').find('.analytics-code-tab').addClass('select');
-					prettyPrint();
+					// prettyPrint();
 					if (id)
 					{
 						$(el).find('#APITab a[href="#' + id + '"]').trigger('click');
@@ -407,7 +407,9 @@ var AdminSettingsRouter = Backbone.Router.extend({
 					{
 						$("#tracking-webrules-whitelist, .tracking-webrules-whitelist-tab").hide();
 					}
-					initializeRegenerateKeysListeners();
+
+					prettify_api_add_events();
+					// initializeRegenerateKeysListeners();
 
 				} });
 			});
