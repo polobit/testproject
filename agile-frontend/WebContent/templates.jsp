@@ -359,7 +359,7 @@ function show_email_templates(){
 		
 		
 	//$.getJSON(location.origin + '/core/api/workflows', function(workflows)
-			if(window.opener.getCampaignList())
+			if(window.opener.getCampaignCount())
 			{
 				$('#loading-campaign-template').removeClass("hide"); 
 				$('.campaign-template').removeClass("hide"); 

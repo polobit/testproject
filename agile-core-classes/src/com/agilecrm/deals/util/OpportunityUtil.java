@@ -1100,27 +1100,36 @@ public class OpportunityUtil
 	List<Opportunity> pendingDealsList = new ArrayList<Opportunity>();
 	try
 	{
-	    List<Milestone> milestoneList = MilestoneUtil.getMilestonesList();
+		List<Milestone> milestoneList = MilestoneUtil.getMilestonesList();
 	    for (Milestone milestone : milestoneList)
 	    {
+	    	List<String> milestoneNamesList = new ArrayList<String>();
+	    	String[] milestoneNamesArray = milestone.milestones.split(",");
+	    	if (milestone.won_milestone !=null && milestone.lost_milestone != null)
+	    	{
+	    		for (String string : milestoneNamesArray) 
+	    		{
+					if (!string.equals(milestone.won_milestone) && !string.equals(milestone.lost_milestone))
+					{
+						milestoneNamesList.add(string);
+					}
+				}
+	    	}
+	    	else
+	    	{
+	    		for (String string : milestoneNamesArray) 
+	    		{
+					if (!string.equals("Won") && !string.equals("Lost"))
+					{
+						milestoneNamesList.add(string);
+					}
+				}
+	    	}
 	    	List<Opportunity> allDealsList = dao.ofy().query(Opportunity.class)
-    			    .filter("close_date <=", (new Date()).getTime() / 1000).filter("archived", false).limit(50)
-    			    .filter("ownerKey", new Key<DomainUser>(DomainUser.class, SessionManager.get().getDomainId()))
-    			    .filter("pipeline", new Key<Milestone>(Milestone.class, milestone.id)).order("close_date").list();
-	    	for (Opportunity opportunity : allDealsList)
-		    {
-	    		if (milestone.won_milestone != null && milestone.lost_milestone != null)
-		    	{
-	    			if (!opportunity.milestone.equals(milestone.won_milestone) && !opportunity.milestone.equals(milestone.lost_milestone))
-    					pendingDealsList.add(opportunity);
-		    	}
-	    		else
-    			{
-    				if (!opportunity.milestone.equals("Won") && !opportunity.milestone.equals("Lost"))
-    					pendingDealsList.add(opportunity);
-    			}
-		    }
-	    	
+	    		    .filter("close_date <=", (new Date()).getTime() / 1000).filter("archived", false).limit(50)
+	    		    .filter("ownerKey", new Key<DomainUser>(DomainUser.class, SessionManager.get().getDomainId()))
+	    		    .filter("pipeline", new Key<Milestone>(Milestone.class, milestone.id)).filter("milestone in", milestoneNamesList).order("close_date").list();
+	    	pendingDealsList.addAll(allDealsList);
 	    }
 	}
 	catch (Exception e)
@@ -1147,23 +1156,32 @@ public class OpportunityUtil
 	    List<Milestone> milestoneList = MilestoneUtil.getMilestonesList();
 	    for (Milestone milestone : milestoneList)
 	    {
+	    	List<String> milestoneNamesList = new ArrayList<String>();
+	    	String[] milestoneNamesArray = milestone.milestones.split(",");
+	    	if (milestone.won_milestone !=null && milestone.lost_milestone != null)
+	    	{
+	    		for (String string : milestoneNamesArray) 
+	    		{
+					if (!string.equals(milestone.won_milestone) && !string.equals(milestone.lost_milestone))
+					{
+						milestoneNamesList.add(string);
+					}
+				}
+	    	}
+	    	else
+	    	{
+	    		for (String string : milestoneNamesArray) 
+	    		{
+					if (!string.equals("Won") && !string.equals("Lost"))
+					{
+						milestoneNamesList.add(string);
+					}
+				}
+	    	}
 	    	List<Opportunity> allDealsList = dao.ofy().query(Opportunity.class)
 	    		    .filter("close_date <=", (new Date()).getTime() / 1000).filter("archived", false).limit(50)
-	    		    .filter("pipeline", new Key<Milestone>(Milestone.class, milestone.id)).order("close_date").list();
-	    	for (Opportunity opportunity : allDealsList)
-		    {
-	    		if (milestone.won_milestone != null && milestone.lost_milestone != null)
-		    	{
-	    			if (!opportunity.milestone.equals(milestone.won_milestone) && !opportunity.milestone.equals(milestone.lost_milestone))
-    					pendingDealsList.add(opportunity);
-		    	}
-	    		else
-    			{
-    				if (!opportunity.milestone.equals("Won") && !opportunity.milestone.equals("Lost"))
-    					pendingDealsList.add(opportunity);
-    			}
-		    }
-	    	
+	    		    .filter("pipeline", new Key<Milestone>(Milestone.class, milestone.id)).filter("milestone in", milestoneNamesList).order("close_date").list();
+	    	pendingDealsList.addAll(allDealsList);
 	    }
 	}
 	catch (Exception e)

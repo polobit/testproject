@@ -214,5 +214,12 @@ function fill_subscribers_slate(id, type)
 		    }
 		}
 
-	$("#" + id).html(getTemplate("empty-collection-model", SUBSCRIBERS_PAD_CONTENT[type]));
+	
+	getTemplate("empty-collection-model", SUBSCRIBERS_PAD_CONTENT[type], undefined, function(template_ui){
+		if(!template_ui)
+			  return;
+
+		$("#" + id).html($(template_ui));
+	}, "#" + id);
+
 }

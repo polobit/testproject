@@ -22,10 +22,14 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import com.agilecrm.activities.Activity;
+import com.agilecrm.activities.Event;
 import com.agilecrm.activities.Activity.ActivityType;
 import com.agilecrm.activities.Activity.EntityType;
+import com.agilecrm.activities.Task;
 import com.agilecrm.activities.util.ActivitySave;
 import com.agilecrm.activities.util.ActivityUtil;
+import com.agilecrm.activities.util.EventUtil;
+import com.agilecrm.activities.util.TaskUtil;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Note;
 import com.agilecrm.contact.util.ContactUtil;
@@ -928,6 +932,54 @@ public class DealsAPI
 	catch (Exception je)
 	{
 	    je.printStackTrace();
+	}
+    }
+    
+    /**
+     * fetches tasks of a deal in deal details page
+     * 
+     * @param dealid
+     * @param cursor
+     * @param count
+     * @return
+     * @throws JSONException
+     */
+    @Path("/{dealid}/tasks")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public List<Task> getTasksOfDeal(@PathParam("dealid") Long dealId, @QueryParam("cursor") String cursor,
+	    @QueryParam("page_size") String count) throws Exception
+    {
+    	List<Task> taskList = null;
+    	try {
+    		taskList = TaskUtil.getDealSortedTasks(null, dealId);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+	return taskList;
+    }
+    
+    /**
+     * Events of a deal, which is in deal detail view
+     * 
+     * @param id
+     *            contact id to get its related entities (events)
+     * @return list of events related to a contact
+     */
+    @Path("/{deal-id}/events")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public List<Event> getEvents(@PathParam("deal-id") Long id)
+    {
+	try
+	{
+	    return EventUtil.getDealEvents(id);
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    return null;
 	}
     }
 }

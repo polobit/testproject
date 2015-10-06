@@ -1,3 +1,4 @@
+<%@page import="com.agilecrm.util.VersioningUtil"%>
 <%@page import="com.agilecrm.account.util.AccountPrefsUtil"%>
 <%@page import="com.agilecrm.account.AccountPrefs"%>
 <%@page import="com.agilecrm.activities.util.WebCalendarEventUtil"%>
@@ -58,6 +59,7 @@ String domain_name=null;
 Long user_id = 0L;
 Long agile_user_id = 0L;
 String meeting_durations=null;
+String baseUrl=VersioningUtil.getStaticFilesBaseURL();
 
 
 URL ur=new URL(url);
@@ -190,7 +192,7 @@ if(scheduleid.contains(",")){
 <title>Online Appointment Scheduling - <%=user_name %></title>
 <link rel="stylesheet" href="../../css/web-calendar-event/bootstrap.min.css">
 <link rel="stylesheet" href="../../css/web-calendar-event/style.css?_=<%=_AGILE_VERSION%>">
-<link rel="stylesheet" type="text/css" href="/css/web-calendar-event/agile-css-framework.css?_=<%=_AGILE_VERSION%>">
+<link rel="stylesheet" type="text/css" href="<%=baseUrl%>css/agile-css-framework.css?_=<%=_AGILE_VERSION%>">
 <!-- <link rel="stylesheet" href="../../css/web-calendar-event/font-awesome.min.css"> -->
 <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css">
 

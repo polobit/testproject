@@ -217,7 +217,7 @@
 					<div rel="tooltip" title="Mandrill is a transactional email product by MailChimp.">
 					Send your emails via your Mandrill account. Mandrill is a scalable and affordable email infrastructure service.
 					</div><br/>
-					<div align="left">
+					<div>
 						{{#if this.length}}	
 							{{#gateway_exists "MANDRILL" this}}
 								<a href="#" class="btn btn-sm btn-danger " id="email-gateway-delete">Disable</a>
@@ -228,10 +228,16 @@
                       					<a href="#email-gateways/mandrill" class="btn btn-sm btn-default">Enable</a> 
                 					</div>
            						 {{else}}
-            						<div style="/*margin: 40px auto;    width: 50%;*/ display:inline;">
+            						<div>
+            						<div style="display:none;width: 65%;left: 18%;z-index: 9;background-color:#f7ecc2!important; border:1px solid rgb(255, 194, 55);" class="mandrill-upgrade fade in p-xs m-b-xs pos-abs">
+        									Please  
+        									<strong><a href="#subscribe-plan" style="color:#337ab7;" class='c-p'>upgrade</a></strong> to Enterprise plan
+        							</div>
+
+        							<div class="clearfix"></div>
             						<div class="btn btn-sm btn-default _upgrade" id="mandrill-upgrade">Enable</div>
-                 							<div style="display:inline;float:right;display:none;" class="text-right mandrill-upgrade" ><p><i>{{toSafeString message}}</i><p>
-	                 						</div>
+                 					<!--<div style="display:inline;float:right;display:none;" class="text-right mandrill-upgrade" ><p><i>{{toSafeString message}}</i><p>
+	                 						</div>-->
 	                 				</div>
             					 {{/isAllowedInCurrentPlan}}
 							{{/gateway_exists}}
@@ -241,10 +247,16 @@
                       					<a href="#email-gateways/mandrill" class="btn btn-sm btn-default">Enable</a> 
                 					</div>
            						 {{else}}
-            						<div style="/*margin: 40px auto;    width: 50%;*/ display:inline;">
+            						<div>
+            						<div style="display:none;width: 65%;left: 18%;z-index: 9;background-color:#f7ecc2!important; border:1px solid rgb(255, 194, 55);" class="mandrill-upgrade fade in p-xs m-b-xs pos-abs">
+        								Please  
+        									<strong><a href="#subscribe-plan" style="color:#337ab7;" class='c-p'>upgrade</a></strong> to Enterprise plan
+        							</div>
+
+        							<div class="clearfix"></div>
             						<div class="btn btn-sm btn-default _upgrade" id="mandrill-upgrade">Enable</div>
-                 							<div style="display:inline;float:right;display:none;" class="text-right mandrill-upgrade" ><p><i>{{toSafeString message}}</i><p>
-	                 						</div>
+                 					<!--<div style="display:inline;float:right;display:none;" class="text-right mandrill-upgrade" ><p><i>{{toSafeString message}}</i><p>
+	                 						</div>-->
 	                 				</div>
             				{{/isAllowedInCurrentPlan}}
 						{{/if}}
@@ -265,7 +277,7 @@
 				<div class="m-t-sm" rel="tooltip" ">
 				Send your emails via your SendGrid account. Sendgrid is a reliable platform to deliver transactional and marketing emails.
 				</div><br/>
-				<div align="left"> 
+				<div> 
 					{{#if this.length}}	
 						{{#gateway_exists "SEND_GRID" this}}
 							<a href="#integrations" class="btn btn-sm btn-danger " id="email-gateway-delete"  data={{id}} >Disable</a>
@@ -276,10 +288,16 @@
                       				<a href="#email-gateways/sendgrid" class="btn btn-sm btn-default">Enable</a>
                 			 	</div>
            					 {{else}}
-            					<div style="display:inline;">
+            					<div>
+            						<div style="display:none;width: 65%;left: 18%;z-index: 9;background-color:#f7ecc2!important; border:1px solid rgb(255, 194, 55);" class="sendgrid-upgrade fade in p-xs m-b-xs pos-abs">
+        									Please  
+        									<strong><a href="#subscribe-plan" style="color:#337ab7;" class='c-p'>upgrade</a></strong> to Enterprise plan
+        							</div>
+
+        							<div class="clearfix"></div>
             						<div class="btn btn-sm btn-default _upgrade" id="sendgrid-upgrade">Enable</div>
-                 					<div style="display:inline;float:right;display:none;" class="text-right sendgrid-upgrade" calc(100% - 100px);"><i>{{toSafeString message}}</i>
-	                 				</div>
+                 					<!--<div style="display:inline;float:right;display:none;" class="text-right sendgrid-upgrade" calc(100% - 100px);"><i>{{toSafeString message}}</i>
+	                 				</div>-->
 	                 			</div>
             				 {{/isAllowedInCurrentPlan}}
 						{{/gateway_exists}}
@@ -289,10 +307,16 @@
                       			<a href="#email-gateways/sendgrid" class="btn btn-sm btn-default">Enable</a>
                 			</div>
            				{{else}}
-            				<div style="display:inline;">
+            				<div>
+            				    <div style="display:none;width: 65%;left: 18%;z-index: 9;background-color:#f7ecc2!important; border:1px solid rgb(255, 194, 55);" class="sendgrid-upgrade fade in p-xs m-b-xs pos-abs">
+        									Please  
+        									<strong><a href="#subscribe-plan" style="color:#337ab7;" class='c-p'>upgrade</a></strong> to Enterprise plan
+        							</div>
+
+        						<div class="clearfix"></div>
             					<div class="btn btn-sm btn-default _upgrade" id="sendgrid-upgrade">Enable</div>
-                 				<div style="display:inline;float:right;display:none;width: calc(100% - 100px);" class="text-right sendgrid-upgrade"><i>{{toSafeString message}}</i>
-	                 			</div>
+                 				<!--<div style="display:inline;float:right;display:none;width: calc(100% - 100px);" class="text-right sendgrid-upgrade"><i>{{toSafeString message}}</i>
+	                 			</div>-->
 	                 		</div>
             			{{/isAllowedInCurrentPlan}}
 					{{/if}}
@@ -300,6 +324,64 @@
 			</div>
 		</div>
 		<!-- End of SendGrid -->
+		<!-- SES -->
+			<div class="col-md-4 col-sm-6 col-xs-12 text-center">
+				<div class="panel wrapper text-center b-a">
+					<div class="pos-rlt">
+					<center><img alt="sms-integration" src="img/crm-plugins/ses_logo.png" class=" thumb-xl img-responsive">
+                	</center>
+					<div class="clearfix"></div>
+				</div>
+				<br>
+				<div class="m-t-sm" rel="tooltip">
+				Amazon SES is an easy and cost-effective email gateway service to send automated emails to your customers.
+				</div><br/>
+				<div> 
+					{{#if this.length}}	
+						{{#gateway_exists "SES" this}}
+							<a href="#integrations" class="btn btn-sm btn-danger " id="email-gateway-delete"  data={{id}} >Disable</a>
+							<a href="#email-gateways/ses" class="btn btn-sm btn-default">Settings</a>
+						{{else}}
+							 {{#isAllowedInCurrentPlan "is_email_gateway_allowed"}}
+					         	<div>
+                      				<a href="#email-gateways/ses" class="btn btn-sm btn-default">Enable</a>
+                			 	</div>
+           					 {{else}}
+            					<div>
+            						<div style="display:none;width: 65%;left: 18%;z-index: 9;background-color:#f7ecc2!important; border:1px solid rgb(255, 194, 55);" class="ses-upgrade fade in p-xs m-b-xs pos-abs">
+        									Please  
+        									<strong><a href="#subscribe-plan" style="color:#337ab7;" class='c-p'>upgrade</a></strong> to Enterprise plan
+        							</div>
+
+        							<div class="clearfix"></div>
+            						<div class="btn btn-sm btn-default _upgrade" id="ses-upgrade">Enable</div>
+                 					<!--<div style="display:inline;float:right;display:none;" class="text-right ses-upgrade" calc(100% - 100px);"><i>{{toSafeString message}}</i></div>-->
+	                 			</div>
+            				 {{/isAllowedInCurrentPlan}}
+						{{/gateway_exists}}
+					{{else}}
+						{{#isAllowedInCurrentPlan "is_email_gateway_allowed"}}
+					    	<div>
+                      			<a href="#email-gateways/ses" class="btn btn-sm btn-default">Enable</a>
+                			</div>
+           				{{else}}
+            				<div>
+            					<div style="display:none;width: 65%;left: 18%;z-index: 9;background-color:#f7ecc2!important; border:1px solid rgb(255, 194, 55);" class="ses-upgrade fade in p-xs m-b-xs pos-abs">
+        									Please  
+        									<strong><a href="#subscribe-plan" style="color:#337ab7;" class='c-p'>upgrade</a></strong> to Enterprise plan
+        						</div>
+        						<div class="clearfix"></div>
+        						<div class="btn btn-sm btn-default _upgrade" id="ses-upgrade">Enable</div>
+                 				<!--<div style="display:inline;float:right;display:none;width: calc(100% - 100px);" class="text-right ses-upgrade"><i>{{toSafeString message}}</i>
+	                 			</div> -->
+	                 		</div>
+            			{{/isAllowedInCurrentPlan}}
+					{{/if}}
+				</div>
+			</div>
+		</div>
+		<!-- End of SES -->
+		
 	</div>
 </div>
 </div>
@@ -322,7 +404,7 @@
 				<div >
 				Twilio provides APIs for text messages and VoIP. User your Twilio account to send SMS from Campaigns.
 				</div><br/>
-				<div align="left"> 
+				<div> 
 					{{#if this.length}}	
 						{{#gateway_exists "TWILIO" this}}
 							<a href="#integrations" class="btn btn-sm btn-danger " id="sms-gateway-delete"  data={{id}} >Disable</a>
@@ -333,11 +415,14 @@
                       					<a href="#sms-gateways/twilio" class="btn btn-sm btn-default">Enable</a>
                 					</div>
            						 {{else}}
-            						<div style="/*margin: 40px auto;    width: 50%;*/ display:inline;">
-            						<div class="btn btn-sm btn-default _upgrade" id="twilio-upgrade">Enable</div>
-                 							<div style="display:inline;float:right;display:none;width: calc(100% - 100px);" class="text-right twilio-upgrade" ><i>{{toSafeString message}}</i>
-	                 						</div>
-	                 				</div>
+            						<div>
+										<div style="display:none;width: 65%;left: 18%;z-index: 9;background-color:#f7ecc2!important; border:1px solid rgb(255, 194, 55);" class="twilio-upgrade fade in p-xs m-b-xs pos-abs">
+											 Please  
+									      <strong><a href="#subscribe-plan" style="color:#337ab7;" class='c-p'>upgrade</a></strong> to Regular or Enterprise plan
+										</div>
+										<div class="clearfix"></div>
+										<div class="btn btn-sm btn-default _upgrade" id="twilio-upgrade">Enable</div>
+									</div>
             				{{/isAllowedInCurrentPlan}}	
 						{{/gateway_exists}}
 					{{else}}
@@ -347,11 +432,14 @@
                       					<a href="#sms-gateways/twilio" class="btn btn-sm btn-default">Enable</a>
                 					</div>
            						 {{else}}
-            						<div style="/*margin: 40px auto;    width: 50%;*/ display:inline;">
-            						<div class="btn btn-sm btn-default _upgrade" id="twilio-upgrade">Enable</div>
-                 							<div style="display:inline;float:right;display:none;width: calc(100% - 100px);" class="text-right twilio-upgrade" ><i>{{toSafeString message}}</i>
-	                 						</div>
-	                 				</div>
+            						<div>
+										<div style="display:none;width: 65%;left: 18%;z-index: 9;background-color:#f7ecc2!important; border:1px solid rgb(255, 194, 55);" class="twilio-upgrade fade in p-xs m-b-xs pos-abs">
+											 Please  
+									      <strong><a href="#subscribe-plan" style="color:#337ab7;" class='c-p'>upgrade</a></strong> to Regular or Enterprise plan
+										</div>
+										<div class="clearfix"></div>
+										<div class="btn btn-sm btn-default _upgrade" id="twilio-upgrade">Enable</div>
+									</div>
             				{{/isAllowedInCurrentPlan}}
 
 					{{/if}}
@@ -372,7 +460,7 @@
 				<div class="m-t-sm"   rel="tooltip" ">
 				Plivo provides Voice and SMS API for businesses of all sizes.  Use your Plivo account to send SMS from Campaigns.
 				</div><br/>
-				<div align="left"> 
+				<div> 
 					{{#if this.length}}	
 						{{#gateway_exists "PLIVO" this}}
 							<a href="#integrations" class="btn btn-sm btn-danger " id="sms-gateway-delete"  data={{id}} >Disable</a>
@@ -383,11 +471,14 @@
                       					<a href="#sms-gateways/plivo" class="btn btn-sm btn-default">Enable</a>
                 					</div>
            						 {{else}}
-            						<div style="/*margin: 40px auto;    width: 50%;*/ display:inline;">
-            						<div class="btn btn-sm btn-default _upgrade" id="plivo-upgrade">Enable</div>
-                 							<div style="display:inline;float:right;display:none;" class="text-right plivo-upgrade" calc(100% - 100px);"><i>{{toSafeString message}}</i>
-	                 						</div>
-	                 				</div>
+            						<div>
+			                          <div style="display:none;width: 65%;left: 18%;z-index: 9;background-color:#f7ecc2!important; border:1px solid rgb(255, 194, 55);" class="plivo-upgrade fade in p-xs m-b-xs pos-abs">
+			                            Please  
+			                              <strong><a href="#subscribe-plan" style="color:#337ab7;" class='c-p'>upgrade</a></strong> to Regular or Enterprise plan
+			                          </div>
+			                          <div class="clearfix"></div>
+			            			  <div class="btn btn-sm btn-default _upgrade" id="plivo-upgrade">Enable</div>		
+				                 	</div>
             				{{/isAllowedInCurrentPlan}}
 						{{/gateway_exists}}
 					{{else}}
@@ -396,10 +487,13 @@
                       					<a href="#sms-gateways/plivo" class="btn btn-sm btn-default">Enable</a>
                 					</div>
            						 {{else}}
-            						<div style="/*margin: 40px auto;    width: 50%;*/ display:inline;">
-            						<div class="btn btn-sm btn-default _upgrade" id="plivo-upgrade">Enable</div>
-                 							<div style="display:inline;float:right;display:none;width: calc(100% - 100px);" class="text-right plivo-upgrade" ><i>{{toSafeString message}}</i>
-	                 						</div>
+            						<div>
+                          				<div style="display:none;width: 65%;left: 18%;z-index: 9;background-color:#f7ecc2!important; border:1px solid rgb(255, 194, 55);" class="plivo-upgrade fade in p-xs m-b-xs pos-abs">
+                            				Please  
+                              				<strong><a href="#subscribe-plan" style="color:#337ab7;" class='c-p'>upgrade</a></strong> to Regular or Enterprise plan
+                          				</div>
+                          				<div class="clearfix"></div>
+            						  <div class="btn btn-sm btn-default _upgrade" id="plivo-upgrade">Enable</div>		
 	                 				</div>
             				{{/isAllowedInCurrentPlan}}
 					{{/if}}

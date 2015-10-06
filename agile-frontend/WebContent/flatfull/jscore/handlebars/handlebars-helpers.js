@@ -1403,50 +1403,7 @@ $(function()
 			}
 		}
 	});
-
-	// To show related to contacts for contacts as well as companies
-	Handlebars.registerHelper('related_to_contacts', function(data, options)
-	{
-		var el = "";
-		var count = data.length;
-		$.each(data, function(key, value)
-		{
-			var html = getTemplate("related-to-contacts", value);
-			if (--count == 0)
-			{
-				el = el.concat(html);
-				return;
-			}
-			el = el.concat(html + ", ");
-		});
-		return new Handlebars.SafeString(el);
-	});
-
-	// To show only one related to contacts or companies in deals
-	Handlebars.registerHelper('related_to_one', function(data, options)
-	{
-		// return "<span>" + getTemplate("related-to-contacts", data[0]) +
-		// "</span>";
-		var el = "";
-		var count = data.length;
-		$.each(data, function(key, value)
-		{
-			if (key <= 3)
-			{
-				var html = getTemplate("related-to-contacts", value);
-				if (--count == 0 || key == 3)
-				{
-					el = el.concat(html);
-					return;
-				}
-				el = el.concat(html + ", ");
-			}
-
-		});
-		return new Handlebars.SafeString(el);
-
-	});
-
+	
 	/**
 	 * To represent a number with commas in deals
 	 */
@@ -2256,7 +2213,7 @@ $(function()
 			// Iterates inorder to insert each field into json
 			for (var i = 0; i < email_fields.length; i++)
 			{
-				// Splits based on colon. E.g "To: naresh@agilecrm.com "
+				// Splits based on colon. E.g "To: naresh@agilecrm.com   "
 				var arrcolon = email_fields[i].split(":");
 
 				// Inserts LHS of colon as key. E.g., To
@@ -2266,7 +2223,7 @@ $(function()
 				// accessible
 
 				// Inserts RHS of colon as value. E.g.,
-				// naresh@agilecrm.com
+				// naresh@agilecrm.com  
 				var value = arrcolon.slice(1).join(":"); // join the
 				// remaining string
 				// based on colon,
@@ -2369,37 +2326,6 @@ $(function()
 	});
 
 	/**
-	 * Returns Contact Model from contactDetailView collection.
-	 * 
-	 */
-	Handlebars.registerHelper('contact_model', function(options)
-	{
-
-		if (App_Contacts.contactDetailView && App_Contacts.contactDetailView.model)
-		{
-
-			// To show Active Campaigns list immediately after campaign
-			// assigned.
-			if (CONTACT_ASSIGNED_TO_CAMPAIGN)
-			{
-				CONTACT_ASSIGNED_TO_CAMPAIGN = false;
-
-				// fetches updated contact json
-				var contact_json = $.ajax({ type : 'GET', url : '/core/api/contacts/' + App_Contacts.contactDetailView.model.get('id'), async : false,
-					dataType : 'json' }).responseText;
-
-				// Updates Contact Detail model
-				App_Contacts.contactDetailView.model.set(JSON.parse(contact_json));
-
-				return options.fn(JSON.parse(contact_json));
-			}
-
-			// if simply Campaigns tab clicked, use current collection
-			return options.fn(App_Contacts.contactDetailView.model.toJSON());
-		}
-	});
-
-	/**
 	 * Returns json object of active and done subscribers from contact object's
 	 * campaignStatus.
 	 */
@@ -2439,40 +2365,6 @@ $(function()
 	});
 
 	/**
-	 * Verifies given urls length and returns options hash based on restricted
-	 * count value.
-	 * 
-	 */
-	Handlebars.registerHelper("if_more_urls", function(url_json, url_json_length, options)
-	{
-		var RESTRICT_URLS_COUNT = 3;
-		var temp_urls_array = [];
-		var context_json = {};
-
-		// If length is less than restricted, compile
-		// else block with given url_json
-		if (url_json_length < RESTRICT_URLS_COUNT)
-			return options.inverse(url_json);
-
-		// Insert urls until restricted count reached
-		for (var i = 0; i < url_json.length; i++)
-		{
-			if (i === RESTRICT_URLS_COUNT)
-				break;
-
-			temp_urls_array.push(url_json[i]);
-		}
-
-		context_json.urls = temp_urls_array;
-
-		// More remained
-		context_json.more = url_json_length - RESTRICT_URLS_COUNT;
-
-		return options.fn(context_json);
-
-	});
-
-	/**
 	 * Returns first occurence string from string having underscores E.g,
 	 * mac_os_x to mac
 	 */
@@ -2483,32 +2375,6 @@ $(function()
 
 		// if '_' exists splits
 		return data.split('_')[0];
-	});
-
-	Handlebars.registerHelper('safe_tweet', function(data)
-	{
-		data = data.trim();
-		return new Handlebars.SafeString(data);
-	});
-	/**
-	 * Get stream icon for social suite streams.
-	 */
-	Handlebars.registerHelper('get_stream_icon', function(name)
-	{
-		if (!name)
-			return;
-
-		var icon_json = { "Home" : "icon-home", "Retweets" : "icon-retweet", "DM_Inbox" : "icon-download-alt", "DM_Outbox" : "icon-upload-alt",
-			"Favorites" : "icon-star", "Sent" : "icon-share-alt", "Search" : "icon-search", "Scheduled" : "icon-time", "All_Updates" : "icon-home",
-			"My_Updates" : "icon-share-alt" };
-
-		name = name.trim();
-
-		if (icon_json[name])
-			return icon_json[name];
-
-		return "icon-globe";
-
 	});
 
 	/**
@@ -4114,15 +3980,31 @@ $(function()
 		var template;
 		if (type == "contacts")
 		{
-			template = $(getTemplate('csv_upload_options', context));
+			getTemplate('csv_upload_options', context, undefined, function(template_ui){
+		 		if(!template_ui)
+		    		return;
+		    	template = $(template_ui);
+				
+			}, null);
+
 		}
 		else if (type == "company")
 		{
-			template = $(getTemplate('csv_companies_upload_options', context));
+			getTemplate('csv_companies_upload_options', context, undefined, function(template_ui){
+		 		if(!template_ui)
+		    		return;
+		    	template = $(template_ui);
+				
+			}, null);
 		}
 		else if (type == "deals")
 		{
-			template = $(getTemplate('csv_deals_options', context));
+			getTemplate('csv_deals_options', context, undefined, function(template_ui){
+		 		if(!template_ui)
+		    		return;
+		    	template = $(template_ui);
+				
+			}, null);
 		}
 
 		// Replaces _ with spaces
@@ -4395,7 +4277,7 @@ $(function()
 			// Iterates inorder to insert each field into json
 			for (var i = 0; i < email_fields.length; i++)
 			{
-				// Splits based on colon. E.g "To: naresh@agilecrm.com "
+				// Splits based on colon. E.g "To: naresh@agilecrm.com   "
 				var arrcolon = email_fields[i].split(":");
 
 				// Inserts LHS of colon as key. E.g., To
@@ -4403,7 +4285,7 @@ $(function()
 				key = key.trim(); // if key starts with space, it can't
 				// accessible
 
-				// Inserts RHS of colon as value. E.g., naresh@agilecrm.com
+				// Inserts RHS of colon as value. E.g., naresh@agilecrm.com  
 				var value = arrcolon.slice(1).join(":"); // join the
 				// remaining string
 				// based on colon,
@@ -4535,45 +4417,7 @@ $(function()
 			return options.fn(App_Contacts.contactDetailView.model.toJSON());
 		}
 	});
-
-	/**
-	 * Returns json object of active and done subscribers from contact object's
-	 * campaignStatus.
-	 */
-	Handlebars.registerHelper('contact_campaigns', function(object, data, options)
-	{
-
-		// if campaignStatus is not defined, return
-		if (object === undefined || object[data] === undefined)
-			return;
-
-		// Temporary json to insert active and completed campaigns
-		var campaigns = {};
-
-		var active_campaigns = [];
-		var completed_campaigns = [];
-
-		// campaignStatus object of contact
-		var campaignStatusArray = object[data];
-
-		for (var i = 0, len = campaignStatusArray.length; i < len; i++)
-		{
-			// push all active campaigns
-			if (campaignStatusArray[i].status.indexOf('ACTIVE') !== -1)
-				active_campaigns.push(campaignStatusArray[i])
-
-				// push all done campaigns
-			if (campaignStatusArray[i].status.indexOf('DONE') !== -1)
-				completed_campaigns.push(campaignStatusArray[i]);
-		}
-
-		campaigns["active"] = active_campaigns;
-		campaigns["done"] = completed_campaigns;
-
-		// apply obtained campaigns context within
-		// contact_campaigns block
-		return options.fn(campaigns);
-	});
+	
 
 	/**
 	 * Verifies given urls length and returns options hash based on restricted
@@ -4607,19 +4451,6 @@ $(function()
 
 		return options.fn(context_json);
 
-	});
-
-	/**
-	 * Returns first occurence string from string having underscores E.g,
-	 * mac_os_x to mac
-	 */
-	Handlebars.registerHelper('normalize_os', function(data)
-	{
-		if (data === undefined || data.indexOf('_') === -1)
-			return data;
-
-		// if '_' exists splits
-		return data.split('_')[0];
 	});
 
 	Handlebars.registerHelper('safe_tweet', function(data)
@@ -5196,6 +5027,14 @@ $(function()
 	Handlebars.registerHelper('get_avatars_template', function(options)
 	{
 		var template = getTemplate("choose-avatar-images-modal", {});
+
+		getTemplate('choose-avatar-images-modal', {}, undefined, function(template_ui){
+	 		if(!template_ui)
+	    		return;
+	    	var template = $(template_ui);
+			 
+		}, null);
+
 		return template;
 	});
 
@@ -5807,34 +5646,7 @@ $(function()
 			icon_name = 'icon-sitemap';
 		return icon_name;
 	});
-	/**
-	 * getting flitered contact portlet header name
-	 */
-	Handlebars.registerHelper('get_flitered_contact_portlet_header', function(filter_name)
-	{
-		var header_name = '';
-		if (filter_name == 'contacts')
-			header_name = "All Contacts";
-		else if (filter_name == 'companies')
-			header_name = "All Companies";
-		else if (filter_name == 'recent')
-			header_name = "Recent Contacts";
-		else if (filter_name == 'myContacts')
-			header_name = "My Contacts";
-		else if (filter_name == 'leads')
-			header_name = "Leads";
-		else
-		{
-			var contactFilter = $.ajax({ type : 'GET', url : '/core/api/filters/' + filter_name, async : false, dataType : 'json', success : function(data)
-			{
-				if (data != null && data != undefined)
-					header_name = "" + data.name;
-			} });
-		}
-		if (header_name == undefined || header_name == "")
-			header_name = "Contact List";
-		return header_name;
-	});
+	
 
 	Handlebars.registerHelper('if_equals_or', function()
 	{
@@ -5874,34 +5686,7 @@ $(function()
 		else
 			return options.inverse(this);
 	});
-	/**
-	 * getting flitered contact portlet header name
-	 */
-	Handlebars.registerHelper('get_deals_funnel_portlet_header', function(track_id)
-	{
-		var header_name = '';
-		App_Portlets.track_length = 0;
-		$.ajax({ type : 'GET', url : '/core/api/milestone/pipelines', async : false, dataType : 'json', success : function(data)
-		{
-			App_Portlets.track_length = data.length;
-			App_Portlets.deal_tracks = data;
-		} });
-		if (App_Portlets.track_length > 1)
-		{
-			if (track_id == 0)
-				header_name = "Default";
-			else
-			{
-				var milestone = $.ajax({ type : 'GET', url : '/core/api/milestone/' + track_id, async : false, dataType : 'json', success : function(data)
-				{
-					if (data != null && data != undefined)
-						header_name = "" + data.name + "";
-				} });
-			}
-		}
-		return header_name;
-	});
-
+	
 	/**
 	 * getting time in AM and PM format for event portlet
 	 */
@@ -6458,7 +6243,7 @@ $(function()
 	 * 
 	 */
 	Handlebars.registerHelper('getDefaultImage',function(){
-		return new Handlebars.SafeString(LIB_PATH_FLATFULL + 'images/flatfull/user-default.jpg');
+		return new Handlebars.SafeString(FLAT_FULL_PATH + 'images/flatfull/user-default.jpg');
 		
 	});
 	
@@ -6818,3 +6603,23 @@ Handlebars.registerHelper('get_campaign_type_filter', function(filter_name)
 			return options.inverse(this);
 		return options.fn(this);
 	});
+	
+	Handlebars.registerHelper('proToEnterprise', function(plan_type, options)
+			{
+		var temp = "Free";
+
+		  if(plan_type.indexOf("PRO") >= 0)
+			plan_type= plan_type.replace("PRO","ENTERPRISE");
+
+		  var fragments = plan_type.split("_");
+
+		  var interval = "Monthly";
+		  if(fragments.length > 1)
+		  {
+		  	 interval = ucfirst(fragments[1]);
+		  	 temp = ucfirst(fragments[0]);
+
+		  	 return temp + " (" + interval+")";
+		  }
+
+		    });
