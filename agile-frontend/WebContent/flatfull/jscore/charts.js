@@ -1330,7 +1330,7 @@ function showDealAreaSpline(url, selector, name, yaxis_name, show_loading)
 							categories.push(from_date+' - '+to_date);
 						}
 					}
-					else if(frequency=="Quartely")
+					else if(frequency=="Quarterly")
 					{
 						if(cnt!=dataLength-1)
 						{

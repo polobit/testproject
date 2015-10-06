@@ -156,6 +156,8 @@ head.js(LIB_PATH + 'lib/date-charts.js', LIB_PATH + 'lib/date-range-picker.js', 
 
 		fillSelect("source", "/core/api/categories?entity_type=DEAL_SOURCE", undefined, function()
 		{
+			console.log($('#source'));
+			$('#source option').eq(0).after($('<option class="default-select" value="1">Unknown</option>'));
 			$('#source').change(function()
 			{
 				callback();

@@ -1711,7 +1711,12 @@ public class OpportunityUtil
 			conditionsMap.put("ownerKey", new Key<DomainUser>(DomainUser.class,
 					ownerId));
 		if (source != null)
+		{
+			if(source==1)
+				conditionsMap.put("dealSource"," ");
+			else
 			conditionsMap.put("dealSource", new Key<Category>(Category.class, source));
+		}
 		if (pipelineId != null)
 			conditionsMap.put("pipeline", new Key<Milestone>(Milestone.class,
 					pipelineId));
