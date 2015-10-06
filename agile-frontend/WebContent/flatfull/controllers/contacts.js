@@ -1068,6 +1068,9 @@ var ContactsRouter = Backbone.Router.extend({
 
 				// show list of filters dropdown in contacts list
 				setupContactFilterList(el, App_Contacts.tag_id);
+				if(tag_id)
+				setUpContactView(el,true);
+			    else
 				setUpContactView(el);
 				if(is_lhs_filter) {
 					var count = 0;

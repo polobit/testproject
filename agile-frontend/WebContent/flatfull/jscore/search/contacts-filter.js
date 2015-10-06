@@ -690,7 +690,12 @@ function showDynamicFilters(el){
 }
 
 
-function setUpContactView(cel){
+function setUpContactView(cel,tagExists){
+
+	if(tagExists){
+		$('#contacts-view-options', cel).html("<a style='display:none;' data-toggle='tooltip' data-placement='bottom' data-original-title='Grid View' class='btn btn-default btn-sm contacts-view' data='grid'><i class='fa fa-th-large' style='margin-right:3px;'></i></a>");
+		return;
+	}
 	if (readCookie("agile_contact_view"))
 	{
 		$('#contacts-view-options', cel).html("<a data-toggle='tooltip' data-placement='bottom' data-original-title='List View' class='btn btn-default btn-sm contacts-view' data='list'><i class='fa fa-list'  style='margin-right:3px'></i></a>");
