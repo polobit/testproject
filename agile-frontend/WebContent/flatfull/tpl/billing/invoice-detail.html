@@ -74,25 +74,33 @@
                      </tr>
                   </thead>
                   <tbody>
-					{{#each lines.data}}
-                     <tr>
-                        {{#if this.plan}} 
-								<td>
-{{#containString "Email" plan.name}}
-Emails
-{{else}}
-{{plan.name}} (${{numeric_operation plan.amount 100 "/"}}/{{plan.interval}})
-{{/containString}}
-</td>
-								<td>{{#containString "Email" plan.name}}
-		{{numeric_operation this.quantity 1000 "*"}} Emails
-		<br>
-        <small>(charged @ ${{numeric_operation plan.amount 100 "/"}}/1000)</small>
-        {{else}}{{epochToHumanDate "mm/dd/yyyy" period.start}} - {{epochToHumanDate "mm/dd/yyyy" period.end}}{{/containString}}</td>
-                            {{/if}}
-                        <td>{{#if_less_than amount 0}}-{{/if_less_than}}${{get_amount_with_possitive amount}}</td>
-                     </tr>
-					{{/each}}
+			{{#each lines.data}}
+            <tr>
+            {{#if this.plan}} 
+			<td>
+				{{#containString "Email" plan.name}}
+					Emails
+				{{else}}
+					{{plan.name}} (${{numeric_operation plan.amount 100 "/"}}/{{plan.interval}})
+				{{/containString}}
+			</td>
+			<td>
+				{{#containString "Email" plan.name}}
+				{{numeric_operation this.quantity 1000 "*"}} Emails
+				<br>
+       			 <small>(charged @ ${{numeric_operation plan.amount 100 "/"}}/1000)</small>
+        		{{else}}
+				{{#if description}}
+               	 {{invoice_description description}}
+				{{else}}
+				 Changed on {{epochToHumanDate "dd mmm yyyy" period.start}}
+				{{/if}}
+				{{/containString}}
+			</td>
+            {{/if}}
+            <td>{{#if_less_than amount 0}}-{{/if_less_than}}${{get_amount_with_possitive amount}}</td>
+            </tr>
+			{{/each}}
 {{#each lines.data}}
 {{#if_greater amount 0}}
 <td></td>
