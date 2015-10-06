@@ -5884,10 +5884,9 @@ $(function()
 	 */
 	Handlebars.registerHelper("isTracksEligible", function(options)
 	{
-		var planName = _billing_restriction.currentLimits.planName;
-		if (planName == 'PRO' || planName == 'REGULAR')
-			return options.fn(this);
-
+		if(_billing_restriction.currentLimits.addTracks)
+			   return options.fn(this);
+			
 		return options.inverse(this);
 	});
 
