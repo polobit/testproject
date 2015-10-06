@@ -13,7 +13,7 @@ var ReportsRouter = Backbone.Router
 				"activity-report-edit/:id" : "activityReportEdit", "acivity-report-results/:id" : "activityReportInstantResults",
 				"contact-reports" : "emailReports", "report-add" : "reportAdd", "report-edit/:id" : "reportEdit",
 				"report-results/:id" : "reportInstantResults", "report-charts/:type" : "reportCharts", "report-funnel/:tags" : "showFunnelReport",
-				"report-growth/:tags" : "showGrowthReport", "report-cohorts/:tag1/:tag2" : "showCohortsReport", "report-ratio/:tag1/:tag2" : "showRatioReport","report-deals":"showIncomingDeals" },
+				"report-growth/:tags" : "showGrowthReport", "report-cohorts/:tag1/:tag2" : "showCohortsReport", "report-ratio/:tag1/:tag2" : "showRatioReport","report-deals":"showIncomingDeals","report-calls/:type" : "showCallsReport" },
 
 			/**
 			 * Shows reports categories
@@ -451,7 +451,7 @@ var ReportsRouter = Backbone.Router
 			showFunnelReport : function(tags)
 			{
 
-				head.load(LIB_PATH + 'lib/date-charts.js', LIB_PATH + 'lib/date-range-picker.js', CSS_PATH + "css/misc/date-picker.css", function()
+				head.load(LIB_PATH + 'lib/date-charts.js', LIB_PATH + 'lib/date-range-picker.js' + '?_=' + _AGILE_VERSION, CSS_PATH + "css/misc/date-picker.css", function()
 				{
 					getTemplate("report-funnel", {}, undefined, function(template_ui){
 						if(!template_ui)
@@ -470,6 +470,7 @@ var ReportsRouter = Backbone.Router
 						$(".active").removeClass("active");
 						$("#reportsmenu").addClass("active");
 						
+						highlightDatepickerOption();
 
 					}, "#content");
 
@@ -485,7 +486,7 @@ var ReportsRouter = Backbone.Router
 			showGrowthReport : function(tags)
 			{
 
-				head.js(LIB_PATH + 'lib/date-charts.js', LIB_PATH + 'lib/date-range-picker.js', CSS_PATH + "css/misc/date-picker.css", function()
+				head.js(LIB_PATH + 'lib/date-charts.js', LIB_PATH + 'lib/date-range-picker.js' + '?_=' + _AGILE_VERSION, CSS_PATH + "css/misc/date-picker.css", function()
 				{
 
 					// Load Reports Template
@@ -508,6 +509,234 @@ var ReportsRouter = Backbone.Router
 
 				$(".active").removeClass("active");
 				$("#reportsmenu").addClass("active");
+				highlightDatepickerOption();
+			},
+			
+			
+				
+		/**
+			 * Returns calls report
+			 * 
+			 * @param tags -
+			 *            comma separated tags
+			 */
+			showCallsReport : function(reportType)
+			{
+
+				head.js(LIB_PATH + 'lib/date-charts.js', LIB_PATH + 'lib/date-range-picker.js', CSS_PATH + "css/misc/date-picker.css", function()
+				{
+					
+					/** Default dropdown value to be considered*/ 
+					var graphOn='number-of-calls';
+					
+					/**Default template id to be loaded*/
+					var templateId="report-calls";
+					
+					/**when it is a call outcome selection*/
+					if(reportType == 'pie-graph'){
+						//templateId="report-calls-piechart";
+						templateId=templateId+"-piechart";
+						
+					}
+					
+					getTemplate(templateId, {}, undefined, function(template_ui){
+						if(!template_ui)
+							  return;
+
+						// Load Reports Template
+						$('#content').html($(template_ui));
+					
+					/**Reinitialize the variable which holds the user preference abt report type*/
+	               if(reportType == 'average-calls'){
+						graphOn='average-calls';
+						$('select[id="typeCall"]').find('option[value="average-calls"]').attr("selected",true);
+						
+					}else{
+						$('select[id="typeCall"]').find('option[value="number-of-calls"]').attr("selected",true);
+					}
+	               
+	               initReportsForCalls(function()
+							{
+	            	   
+	            	   /** Get date range selected for every call back call */
+	            	   
+	            		var options = "?";
+
+						var range = $('#range').html().split("-");
+						var start_time=new Date(range[0]).getTime() / 1000;
+
+						var end_value = $.trim(range[1]);
+
+						
+						if (end_value)
+							end_value = end_value + " 23:59:59";
+
+						var end_time=new Date(end_value).getTime() / 1000;
+						options += ("start-date=" + start_time + "&end-date=" + end_time);
+						
+						var url='core/api/portlets/portletCallsPerPerson/' + options;
+						
+						graphOn=$("#typeCall option:selected").val();
+					    
+					    var userDropDown=$('#users option:selected').val();
+					    
+					    if(userDropDown != undefined){
+					    	if(userDropDown != 'All' && userDropDown != ""){
+								var usersUrl=url;
+								url=url+'&user=["'+userDropDown+'"]';
+							}
+					    	
+					    }
+					    prepareNewReport(url);
+					    
+					    /**Function block to be executed for every call back*/
+							
+							function prepareNewReport(url){
+							
+								 
+			                        var selector="email-reports";
+									
+									var answeredCallsCountList=[];
+									var busyCallsCountList=[];
+									var failedCallsCountList=[];
+									var voiceMailCallsCountList=[];
+									var callsDurationList=[];
+									var totalCallsCountList=[];
+									var domainUsersList=[];
+									var domainUserImgList=[];
+									var averageCallList=[];
+									var sizey = parseInt($('#'+selector).parent().attr("data-sizey"));
+									var topPos = 50*sizey;
+									if(sizey==2 || sizey==3)
+										topPos += 50;
+									$('#'+selector).html("<div class='text-center v-middle opa-half' style='margin-top:"+topPos+"px'><img src='../flatfull/img/ajax-loader-cursor.gif' style='width:12px;height:10px;opacity:0.5;' /></div>");
+									
+									portlet_graph_data_utility.fetchPortletsGraphData(url,function(data){
+										if(data.status==403){
+											$('#'+selector).html("<div class='portlet-error-message'><i class='icon-warning-sign icon-1x'></i>&nbsp;&nbsp;Sorry, you do not have the privileges to access this.</div>");
+											return;
+										}
+										answeredCallsCountList=data["answeredCallsCountList"];
+										busyCallsCountList=data["busyCallsCountList"];
+										failedCallsCountList=data["failedCallsCountList"];
+										voiceMailCallsCountList=data["voiceMailCallsCountList"];
+										callsDurationList=data["callsDurationList"];
+										totalCallsCountList=data["totalCallsCountList"];
+										domainUsersList=data["domainUsersList"];
+										domainUserImgList=data["domainUserImgList"];
+										pieGraphRegions=['Answered Calls','Busy Calls','Failed Calls','Voice Mail Calls'];
+										
+										var series=[];
+										var text='';
+										var colors;
+										
+										/**This executes for plotting pie chart*/
+										
+										if(reportType == 'pie-graph'){ /**When it is a pie graph and dropdown is Number of calls */
+											
+											var answeredCallCount=0;
+											var CompleteCallsCount=[];
+											$.each(answeredCallsCountList,function(index,answeredCall){
+												answeredCallCount +=answeredCall;
+											});
+											CompleteCallsCount.push(answeredCallCount);
+											var busyCallCount=0;
+											$.each(busyCallsCountList,function(index,busyCall){
+												busyCallCount +=busyCall;
+											});
+											CompleteCallsCount.push(busyCallCount);
+											var failedCallCount=0;
+											$.each(failedCallsCountList,function(index,failedCall){
+												failedCallCount +=failedCall;
+											});
+											CompleteCallsCount.push(failedCallCount);
+											var voicemailCallCount=0;
+											$.each(voiceMailCallsCountList,function(index,voicemailCall){
+												voicemailCallCount +=voicemailCall;
+											});
+											CompleteCallsCount.push(voicemailCallCount);
+											
+											
+											portlet_graph_utility.callsByPersonPieGraph(selector,pieGraphRegions,CompleteCallsCount);
+											return;
+											
+										}
+										
+										/**This executes for plotting the Bar graph*/ 
+										if(graphOn == "number-of-calls"){
+											var tempData={};
+											tempData.name="Answered";
+											tempData.data=answeredCallsCountList;
+											series[0]=tempData;
+											
+											tempData={};
+											tempData.name="Busy";
+											tempData.data=busyCallsCountList;
+											series[1]=tempData;
+											
+											tempData={};
+											tempData.name="Failed";
+											tempData.data=failedCallsCountList;
+											series[2]=tempData;
+											
+											tempData={};
+											tempData.name="Voicemail";
+											tempData.data=voiceMailCallsCountList;
+											series[3]=tempData;
+											text="No. of Calls";
+											colors=['green','blue','red','violet'];
+										}else if(graphOn == "average-calls"){
+											
+												var tempData={};
+												tempData.name="Average Call Duration ";
+											    $.each(callsDurationList,function(index,duration){
+											    if(duration > 0){
+											    	
+											    	var durationInMins=duration/60;
+													var callsDurationAvg=durationInMins/answeredCallsCountList[index];
+													averageCallList.push(callsDurationAvg);
+											    	
+											    }else{
+											    	averageCallList.push(0);
+											    }
+												
+											    });
+											    tempData.data=averageCallList;
+											    tempData.showInLegend=false;
+											    series[0]=tempData;
+											    text="Average Call Duration in Minutes";
+											    colors=['green'];
+										}
+										else{
+											var tempData={};
+											tempData.name="Total Call Duration  ";
+											var callsDurationInMinsList = [];
+											$.each(callsDurationList,function(index,duration){
+												if(duration > 0){
+													callsDurationInMinsList[index] = duration/60;
+												}else{
+													callsDurationInMinsList[index] = 0;
+												}
+												
+											});
+											tempData.data=callsDurationInMinsList;
+											tempData.showInLegend=false;
+											series[0]=tempData;
+											text="Calls Duration (Mins)";
+											colors=['green'];
+										}
+										
+										portlet_graph_utility.callsPerPersonBarGraph(selector,domainUsersList,series,totalCallsCountList,callsDurationList,text,colors,domainUserImgList);
+							});
+						
+							return;
+						}
+							
+							});
+
+					}, "#content");
+				});
+				
 			},
 
 
@@ -520,7 +749,7 @@ var ReportsRouter = Backbone.Router
 			showCohortsReport : function(tag1, tag2)
 			{
 
-				head.js(LIB_PATH + 'lib/date-charts.js', LIB_PATH + 'lib/date-range-picker.js', CSS_PATH + "css/misc/date-picker.css", function()
+				head.js(LIB_PATH + 'lib/date-charts.js', LIB_PATH + 'lib/date-range-picker.js' + '?_=' + _AGILE_VERSION, CSS_PATH + "css/misc/date-picker.css", function()
 				{
 
 					// Load Reports Template
@@ -544,6 +773,7 @@ var ReportsRouter = Backbone.Router
 
 				$(".active").removeClass("active");
 				$("#reportsmenu").addClass("active");
+				highlightDatepickerOption();
 			},
 			/**
 			 * Returns Cohorts Graphs with two tag1
@@ -554,7 +784,7 @@ var ReportsRouter = Backbone.Router
 			showRatioReport : function(tag1, tag2)
 			{
 
-				head.js(LIB_PATH + 'lib/date-charts.js', LIB_PATH + 'lib/date-range-picker.js', CSS_PATH + "css/misc/date-picker.css", function()
+				head.js(LIB_PATH + 'lib/date-charts.js', LIB_PATH + 'lib/date-range-picker.js' + '?_=' + _AGILE_VERSION, CSS_PATH + "css/misc/date-picker.css", function()
 				{
 
 					// Load Reports Template
@@ -574,9 +804,12 @@ var ReportsRouter = Backbone.Router
 						$(".active").removeClass("active");
 						$("#reportsmenu").addClass("active");
 
+						highlightDatepickerOption();
+
 					}, "#content");
 					
 				});
+
 
 			},
 
