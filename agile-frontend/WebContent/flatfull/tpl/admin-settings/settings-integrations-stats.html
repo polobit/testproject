@@ -59,6 +59,10 @@
 		
 		{{#if_equals "SEND_GRID" _agile_email_gateway}}
 			<div class="text-md">SendGrid stats are shown <a class="text-info" href="https://sendgrid.com/statistics" target="_blank">here</a></div><br/>
+		{{/if_equals}}
+		{{!--SES Stats--}}
+		{{#if_equals "SES" _agile_email_gateway}}
+			<div class="text-md">Amazon SES stats are shown <a class="text-info" href="https://aws.amazon.com/" target="_blank">here</a></div><br/>
 		{{else}}
 		<div class="row">
         	<div class="col-md-6 b-r b-light">

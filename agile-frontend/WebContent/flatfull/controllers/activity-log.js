@@ -14,7 +14,7 @@ var ActivitylogRouter = Backbone.Router.extend({
 		if (!tight_acl.checkPermission('ACTIVITY'))
 			return;
 		
-		head.js(LIB_PATH + 'lib/date-charts.js', LIB_PATH + 'lib/date-range-picker.js', CSS_PATH + "css/misc/date-picker.css", function()
+		head.js(LIB_PATH + 'lib/date-charts.js', LIB_PATH + 'lib/date-range-picker.js' + '?_=' + _AGILE_VERSION, CSS_PATH + "css/misc/date-picker.css", function()
 		{
 
 			$('#content').html("<div id='activities-listners'>&nbsp;</div>");
@@ -118,7 +118,7 @@ var ActivitylogRouter = Backbone.Router.extend({
 	contactActivities : function(id)
 	{ // begin contact activities
 
-		head.js(LIB_PATH + 'lib/date-charts.js', LIB_PATH + 'lib/date-range-picker.js', CSS_PATH + "css/misc/date-picker.css", function()
+		head.js(LIB_PATH + 'lib/date-charts.js', LIB_PATH + 'lib/date-range-picker.js' + '?_=' + _AGILE_VERSION, CSS_PATH + "css/misc/date-picker.css", function()
 		{
 
 

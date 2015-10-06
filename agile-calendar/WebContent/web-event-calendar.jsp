@@ -1,3 +1,4 @@
+<%@page import="com.agilecrm.util.VersioningUtil"%>
 <%@page import="com.agilecrm.account.util.AccountPrefsUtil"%>
 <%@page import="com.agilecrm.account.AccountPrefs"%>
 <%@page import="com.agilecrm.activities.util.WebCalendarEventUtil"%>
@@ -58,6 +59,11 @@ String domain_name=null;
 Long user_id = 0L;
 Long agile_user_id = 0L;
 String meeting_durations=null;
+<<<<<<< HEAD
+String welcome_title="<p class='lead' style='color: #777;font-size: 19px;font-weight:normal'>Welcome to our scheduling page. Please follow the instructions to book an appointment.</p>";
+=======
+String baseUrl=VersioningUtil.getStaticFilesBaseURL();
+>>>>>>> 182b0d0efe61d421386f560238927abe0e7b93d5
 
 
 URL ur=new URL(url);
@@ -162,6 +168,10 @@ if(scheduleid.contains(",")){
 	{
 		meeting_durations = online_prefs.meeting_durations;
 		meeting_types = online_prefs.meeting_types;
+		welcome_title= online_prefs.user_calendar_title;
+	     if(StringUtils.isNotBlank(welcome_title)&&!welcome_title.contains("</p>")){
+	    	welcome_title="<p class='lead' style='color: #777;font-size: 19px;font-weight:normal'>"+welcome_title+"</p>";
+	     }
 		single_user_map_object.put("buffer_time", WebCalendarEventUtil.convertHoursToMilliSeconds(
 				online_prefs.bufferTime, online_prefs.bufferTimeUnit));
 	}
@@ -190,7 +200,7 @@ if(scheduleid.contains(",")){
 <title>Online Appointment Scheduling - <%=user_name %></title>
 <link rel="stylesheet" href="../../css/web-calendar-event/bootstrap.min.css">
 <link rel="stylesheet" href="../../css/web-calendar-event/style.css?_=<%=_AGILE_VERSION%>">
-<link rel="stylesheet" type="text/css" href="/css/web-calendar-event/agile-css-framework.css?_=<%=_AGILE_VERSION%>">
+<link rel="stylesheet" type="text/css" href="<%=baseUrl%>css/agile-css-framework.css?_=<%=_AGILE_VERSION%>">
 <!-- <link rel="stylesheet" href="../../css/web-calendar-event/font-awesome.min.css"> -->
 <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css">
 
@@ -222,7 +232,7 @@ if(scheduleid.contains(",")){
      %>
 	
 		<img src="<%=profile_pic%>" id="avatar" class="thumbnail" title="<%=user_name%>"/>
-		<p class="lead" style="color: #777;font-size: 19px;text-align: center;font-weight:normal">Welcome to my scheduling page. Please follow the instructions to book an appointment.</p>
+	<div class="text-center"><%=welcome_title%></div>
 <%}else{ %>
 <p class="lead" style="color: #777;font-size: 19px;text-align: center;font-weight:normal"> Welcome to our scheduling page. Please follow the instructions to book an appointment.</p>
 			<div class="col-sm-10 segment segment0">

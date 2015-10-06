@@ -245,3 +245,16 @@ function initializeDealTabWithCount(id, el){
 	initializeDealDetailsListners(el);
 
 }
+
+/**
+ * Displays task modal, to add a deal related to the task in deal detail
+ * view. Also prepends the deal name to related deal to field of activity modal.
+ */
+function fill_relation_deal_task(el)
+{
+
+	var json = App_Deal_Details.dealDetailView.model.toJSON();
+	var deal_name = json.name;
+	$('.deal_tags', el).html('<li class="tag inline-block v-middle m-r-xs btn btn-xs btn-primary" data="' + json.id + '">' + deal_name + '</li>');
+
+}

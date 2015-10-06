@@ -87,8 +87,8 @@ $(function(){
 		}
 	});
 	
-    $('#prefs-tabs-content').off('click', '.voiceMailItem');
-	$('#prefs-tabs-content').on('click', '.voiceMailItem', function(e){
+    $('body').off('click', '.voiceMailItem');
+	$('body').on('click', '.voiceMailItem', function(e){
 		e.preventDefault();
 		sendVoiceAndEndCall($(this).attr('data-src'));
 	});

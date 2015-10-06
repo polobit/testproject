@@ -2,6 +2,7 @@ package com.agilecrm.contact.email;
 
 import java.util.List;
 
+import com.agilecrm.Globals;
 import com.agilecrm.account.AccountEmailStats;
 import com.agilecrm.account.EmailGateway;
 import com.agilecrm.account.EmailGateway.EMAIL_API;
@@ -24,6 +25,8 @@ public class EmailSender
     public EmailGateway emailGateway = null;
     public AccountEmailStats accountEmailStats = null;
 
+    private String mandrillAPIKey = Globals.MANDRIL_API_KEY_VALUE;
+    
     private int totalEmailsSent = 0;
 
     boolean isWhiteLabled = false;
@@ -147,12 +150,27 @@ public class EmailSender
 	    billingRestriction.one_time_emails_count = billingRestriction.one_time_emails_count - count;
     }
 
+    
+    public void setMandrillAPIKey(String apiKey)
+    {
+    	this.mandrillAPIKey = apiKey;
+    }
+    
     public String getMandrillAPIKey()
     {
-	if (emailGateway == null || !(emailGateway.email_api.equals(EMAIL_API.MANDRILL)))
-	    return null;
+	if (emailGateway == null)
+	{
+		// For Paid plan return old Mandrill Account
+		if(billingRestriction.isEmailPlanPaid())
+			return Globals.MANDRIL_API_KEY_VALUE;
+	
+		return mandrillAPIKey;
+	}
+		
+	if(emailGateway.email_api.equals(EMAIL_API.MANDRILL))
+	    return emailGateway.api_key;
 
-	return emailGateway.api_key;
+	return null;
     }
 
     public void sendEmail(String fromEmail, String fromName, String to, String cc, String bcc, String subject,
@@ -200,15 +218,6 @@ public class EmailSender
 
 	// Add to pull queue with from email as Tag
 	PullQueueUtil.addToPullQueue(queueName, mailDeferredTask, fromEmail);
-    }
-
-    public static void main(String[] args)
-    {
-	for (int i = 0; i < 100; i++)
-	{
-	    System.out.println(getEmailSender());
-	}
-
     }
 
 }
