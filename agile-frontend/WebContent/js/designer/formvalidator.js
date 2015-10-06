@@ -73,7 +73,7 @@ function initValidator(selector, callback) {
 		     if(error.indexOf('Unclosed tag') != -1)
 		     {
 		     	var index = error.toString().split('at ')[1];
-		     	return "Parse error: Unclosed tag at " + value.substring(index - 15);
+		     	return "Missing closed '}' at ..." + value.substring(index - 15);
 		     }
 	     }
 		  
