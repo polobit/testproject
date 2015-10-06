@@ -26,7 +26,7 @@ angular.module('builder.directives', [])
   			
   			$scope.$on('builder.dom.loaded', function() {
 	      		$scope.frameHead.append('<base href="'+$scope.baseUrl+'">');
-	      		$scope.frameHead.append('<link id="main-sheet" rel="stylesheet" href="public/css/bootstrap.min.css">');
+	      		$scope.frameHead.append('<link id="main-sheet" rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">');
 	      		$scope.frameHead.append('<link rel="stylesheet" href="public/css/iframe.css">');
 	      		$scope.frameHead.append('<link href="public/css/font-awesome.min.css" rel="stylesheet">');
 	      		$rootScope.customCss = $('<style id="editor-css"></style>').appendTo($scope.frameHead);
