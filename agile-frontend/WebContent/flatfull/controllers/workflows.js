@@ -373,7 +373,7 @@ var WorkflowsRouter = Backbone.Router
 					// Hide bulk subscribers block
 					$('#subscribers-block').hide();
 
-					head.js(LIB_PATH + 'lib/date-charts.js', LIB_PATH + 'lib/date-range-picker.js', CSS_PATH + "css/misc/date-picker.css", function()
+					head.js(LIB_PATH + 'lib/date-charts.js', LIB_PATH + 'lib/date-range-picker.js' + '?_=' + _AGILE_VERSION, CSS_PATH + "css/misc/date-picker.css", function()
 					{
 						// Load Reports Template
 						getTemplate('campaign-email-reports', {}, undefined, function(template_ui1){

@@ -751,9 +751,12 @@ var SettingsRouter = Backbone.Router
 					var view = new Base_Model_View({
 					url : 'core/api/scheduleprefs',
 					type : 'GET',
-					template : 'settings-business-prefs',
+					template : 'settings-online-calendar-new',
 					postRenderCallback : function(el)
 					{
+						$('#online-calendar a[href="#calendar-tab"]', el).tab('show');
+						//online_calendar_tabs.loadScheduleUrlTab("#online-cal-listners");
+
 						var onlineschedulingURL = "https://" + CURRENT_DOMAIN_USER.domain + ".agilecrm.com/calendar/" + view.model.get('schedule_id');
 
 						$("#scheduleurl").attr("href", onlineschedulingURL);
@@ -762,7 +765,7 @@ var SettingsRouter = Backbone.Router
 						$("#scheduleurl").removeClass("nounderline");
 
 						head.js(CSS_PATH + 'css/businesshours/businesshours.css', CSS_PATH + 'css/businesshours/jquerytimepicker.css',
-								LIB_PATH + 'lib/businesshours/businesshours.js', LIB_PATH + 'lib/businesshours/jquerytimepicker.js', function()
+								LIB_PATH + 'lib/businesshours/businesshours.js', LIB_PATH + 'lib/businesshours/jquerytimepicker.js',LIB_PATH+'lib/summer-note/summernote.js',CSS_PATH+'css/summernote/summernote.css', function()
 								{
 									var json = JSON.parse(view.model.get('business_hours'));
 									console.log();
@@ -774,6 +777,22 @@ var SettingsRouter = Backbone.Router
 									}, });
 
 									$(".mini-time").keydown(false).addClass("form-control");
+									
+									
+									$(".online_summer_note")
+								     .summernote({
+	
+									      toolbar : [
+									        [
+									          'style',
+									          [ 'bold', 'italic', 'underline',
+									            'clear' ] ],
+									        [ 'fontsize', [ 'fontsize' ] ],
+									        [ 'insert', [ 'link' ] ] ],
+									        height:'100'
+									     });
+										 
+										 $(".online_summer_note").code(view.model.get('user_calendar_title'));
 
 								});
 						
