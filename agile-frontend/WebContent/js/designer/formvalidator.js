@@ -73,7 +73,10 @@ function initValidator(selector, callback) {
 
 		     // Only shows error missing closes. Skip other errors
 		     if(error.indexOf('CLOSE') != -1)
-		     	return error.split('----')[0];
+		     {
+		     	var msg = error.toString().split('\n')[1];
+		     	return "Parse error: " + msg;
+		     }
 	     }
 		  
 	     return true;
