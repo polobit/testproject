@@ -6,6 +6,7 @@ var TicketsUtilRouter = Backbone.Router.extend({
 
 		/* Tickets */
 		"tickets" : "tickets",
+		"ticket/:id" : "ticketDetails",
 
 		/*Ticket Groups*/
 		"ticket-groups" : "ticketGroups",
@@ -18,7 +19,9 @@ var TicketsUtilRouter = Backbone.Router.extend({
 	 */
 	tickets : function() {
 
-		this.ticketsCollection = new Base_Collection_View({
+		$("#content").html(getTemplate('tickets-container'));
+
+		App_Ticket_Module.ticketsCollection = new Base_Collection_View({
 			url : '/core/api/tickets?status=NEW',
 			// restKey : "workflow",
 			//sort_collection : false,
@@ -26,15 +29,48 @@ var TicketsUtilRouter = Backbone.Router.extend({
 			individual_tag_name : 'tr',
 			cursor : true,
 			page_size : 20,
-			slateKey : "no-tickets",
-			postRenderCallback : function(el) {
-				
+			slateKey : "no-tickets"
+		});
+
+		$(".active").removeClass("active");
+		$("#tickets").addClass("active");
+
+		App_Ticket_Module.ticketsCollection.collection.fetch();
+
+		$("#right-pane").html(App_Ticket_Module.ticketsCollection.el);
+	},
+
+	/**
+	 * Shows individual ticket details and notes collection
+	**/
+	ticketDetails: function(id){
+
+		if(!App_Ticket_Module.ticketsCollection || !App_Ticket_Module.ticketsCollection.collection){
+
+			Backbone.history.navigate( "tickets", { trigger : true });
+			return;
+		}
+
+		var ticketModal = App_Ticket_Module.ticketsCollection.collection.get(id);
+
+		if(!ticketModal || ticketModal == null || ticketModal == undefined)
+		{
+			Backbone.history.navigate( "tickets", { trigger : true });
+			return;
+		}	
+
+		var ticketView = new Base_Model_View({
+			model : ticketModal, 
+			isNew : true, 
+			template : "ticket-details",
+			url : "/core/api/ticket/" + id,
+			postRenderCallback : function(el, data) {
+
+				App_Ticket_Module.renderNotesCollection(id, $('#notes_collection'), function(){});
 			}
 		});
 
-		this.ticketsCollection.collection.fetch();
-
-		$("#content").html(this.ticketsCollection.el);
+		$("#right-pane").html(ticketView.render().el);
 	},
 
 	/**
@@ -53,6 +89,9 @@ var TicketsUtilRouter = Backbone.Router.extend({
 
 			}
 		});
+
+		$(".active").removeClass("active");
+		$("#ticket-groups").addClass("active");
 
 		App_Ticket_Module.groupsCollection.collection.fetch();
 
@@ -112,6 +151,30 @@ var TicketsUtilRouter = Backbone.Router.extend({
 		$('#content').html(editTicketGroupView.render().el);
 	},
 
+	/**
+	 * Fetches all notes related to given ticket id and renders html to provided element.
+	**/
+	renderNotesCollection : function(ticket_id, $ele, callback){
+
+		App_Ticket_Module.notesCollection = new Base_Collection_View({
+			url : '/core/api/tickets/notes?ticket_id=' + ticket_id,
+			// restKey : "workflow",
+			//sort_collection : false,
+			templateKey : "ticket-notes",
+			individual_tag_name : 'tr',
+			postRenderCallback : function(el) {
+
+			}
+		});
+
+		App_Ticket_Module.notesCollection.collection.fetch();
+
+		$ele.html(App_Ticket_Module.notesCollection.el);
+	},
+
+	/**
+	 * Fetches all domain users and renders html to the provided element.
+	**/
 	renderUsersCollection : function($ele, callback){
 
 		//Fetching users collection
