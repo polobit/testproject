@@ -43,7 +43,7 @@ function initFunnelCharts(callback)
 	if ($('#frequency').length > 0)
 	{
 		// Get Frequency
-		callback();
+		
 		$('#frequency').change(function()
 		{
 			callback();
@@ -58,6 +58,25 @@ function initFunnelCharts(callback)
 		});
 
 	}, '<option class="default-select" value="{{id}}">{{name}}</option>', false, undefined, "All Contacts");
+
+	if ($('#type').length > 0)
+	{
+		// Get Frequency
+		
+		$('#type').change(function()
+		{
+			callback();
+		});
+	}
+	fillSelect("owner", "core/api/users", undefined, function()
+			{
+				$('#owner').change(function()
+				{
+
+					callback();
+				});
+
+	}, '<option class="default-select" value="{{id}}">{{name}}</option>', false, undefined, "All Owners");
 
 	callback();
 }
@@ -93,4 +112,65 @@ function showCohortsGraphs(tag1, tag2)
 function showRatioGraphs(tag1, tag2)
 {
 	showLine('core/api/reports/ratio/' + tag1 + "/" + tag2 + "/" + getOptions(), 'ratio-chart', 'Ratio Analysis', tag1 + ' vs ' + tag2, true);
+}
+  function showDealsGrowthReport()
+{
+// Options
+    var options = "";
+
+    // Get Date Range January 22, 2015 - January 28, 2015
+    var range = $('#range').html().split("-");
+    /*
+     * var temp = "January 22, 2015 - January 28, 2015"; var range =
+     * temp.split("-");
+     */
+    // Returns milliseconds from start date. For e.g., August 6, 2013 converts
+    // to 1375727400000
+    //var start_time = Date.parse($.trim(range[0])).valueOf();
+    //Get the GMT start time
+    var start_time = getUTCMidNightEpochFromDate(new Date(range[0]));
+    var d = new Date();
+    start_time=start_time+(d.getTimezoneOffset()*60*1000);
+    start_time=start_time/1000;
+    var end_value = $.trim(range[1]);
+
+    // To make end value as end time of day
+    if (end_value)
+        end_value = end_value + " 23:59:59";
+
+    // Returns milliseconds from end date.
+    //var end_time = Date.parse(end_value).valueOf();
+    //Get the GMT end time
+    var end_time = getUTCMidNightEpochFromDate(new Date(end_value));
+
+    end_time += (((23*60*60)+(59*60)+59)*1000);
+    end_time=end_time+(d.getTimezoneOffset()*60*1000);
+    end_time=end_time/1000;
+
+    if ($('#owner').length > 0)
+	{
+		// Get User
+		var owner_id=0;
+		if ($("#owner").val() != "" && $("#owner").val() != "All Owners")
+			owner_id=$("#owner").val();
+			options += owner_id;
+	}
+    // Adds start_time, end_time to params.
+    options += ("?min=" + start_time + "&max=" + end_time);
+        if ($('#frequency').length > 0)
+    {
+        // Get Frequency
+        var frequency = $("#frequency").val();
+        options += ("&frequency=" + frequency);
+    }
+        if ($('#type').length > 0)
+        {
+            // Get Frequency
+            var type = $("#type").val();
+            options += ("&type=" + type);
+        }
+
+
+    showDealsGrowthgraph('core/api/opportunity/details/' + options, 'deals-chart', '', '',true);
+
 }

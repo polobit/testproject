@@ -13,7 +13,7 @@ var ReportsRouter = Backbone.Router
 				"activity-report-edit/:id" : "activityReportEdit", "acivity-report-results/:id" : "activityReportInstantResults",
 				"contact-reports" : "emailReports", "report-add" : "reportAdd", "report-edit/:id" : "reportEdit",
 				"report-results/:id" : "reportInstantResults", "report-charts/:type" : "reportCharts", "report-funnel/:tags" : "showFunnelReport",
-				"report-growth/:tags" : "showGrowthReport", "report-cohorts/:tag1/:tag2" : "showCohortsReport", "report-ratio/:tag1/:tag2" : "showRatioReport" },
+				"report-growth/:tags" : "showGrowthReport", "report-cohorts/:tag1/:tag2" : "showCohortsReport", "report-ratio/:tag1/:tag2" : "showRatioReport","report-deals":"showIncomingDeals" },
 
 			/**
 			 * Shows reports categories
@@ -595,22 +595,41 @@ var ReportsRouter = Backbone.Router
 					if(!template_ui)
 						  return;
 
-					var el = $(template_ui);
-					$("#reports-listerners-container").html(el);
-					initializeChartReportsListeners();
+							var el = $(template_ui);
+				$("#reports-listerners-container").html(el);
+				initializeChartReportsListeners();
 
-					if (type && (type == 'growth' || type == 'funnel'))
-					{
-						setup_tags_typeahead();
-						return;
-					}
-					$.each($("[id=tags-reports]", el), function(i, element)
-					{
-						console.log(element);
-						addTagsDefaultTypeahead(element);
-					});
+				if (type && (type == 'growth' || type == 'funnel'))
+				{
+					setup_tags_typeahead();
+					return;
+				}
+				$.each($("[id=tags-reports]", el), function(i, element)
+				{
+					console.log(element);
+					addTagsDefaultTypeahead(element);
+				});
 
 
 				}, "#reports-listerners-container");
+			},
+			showIncomingDeals : function(){
+				hideTransitionBar();
+				head.js(LIB_PATH + 'lib/date-charts.js', LIB_PATH + 'lib/date-range-picker.js',function()
+						{
+
+							// Load Reports Template
+						getTemplate("report-deals", {}, undefined, function(template_ui){
+						if(!template_ui)
+							  return;
+						$('#content').html($(template_ui));	
+
+							initFunnelCharts(function()
+							{
+								showDealsGrowthReport();
+							});
+						}, "#content");
+					});
 			}
+			
 	});
