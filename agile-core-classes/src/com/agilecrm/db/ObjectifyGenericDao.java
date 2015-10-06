@@ -55,6 +55,7 @@ import com.agilecrm.ticket.entitys.TicketFilters;
 import com.agilecrm.ticket.entitys.TicketGroups;
 import com.agilecrm.ticket.entitys.TicketNotes;
 import com.agilecrm.ticket.entitys.Tickets;
+import com.agilecrm.ticket.macros.TicketMacros;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.ContactViewPrefs;
 import com.agilecrm.user.DomainUser;
