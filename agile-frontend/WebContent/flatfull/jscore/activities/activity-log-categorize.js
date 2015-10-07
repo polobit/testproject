@@ -13,9 +13,9 @@ function initializeActivitiesListner(el){
 
 		$(this).closest("ul").data("selected_item", id);
 		$(this).closest(".btn-group").find(".selected_name").text(name);
-		var url = getParameters();
+		var url = getActivityFilterParameters();
 
-		updateActivty(url);
+		renderActivityView(url);
 
 	});
 	$("#activities-listners").on("click", "ul#entity_type li a", function(e)
@@ -81,28 +81,28 @@ function getDealObject(id)
 function getEventObject(id)
 {
 
-	return $.ajax({ type : "GET", url : 'core/api/events/getEventObject/' + id, async : false }).responseText;
+	return $.ajax({ type : "GET", url : 'core/api/events/getEventObject/' + id, async : true }).responseText;
 
 }
 
 function getTaskObject(id)
 {
 
-	return $.ajax({ type : "GET", url : 'core/api/tasks/getTaskObject/' + id, async : false }).responseText;
+	return $.ajax({ type : "GET", url : 'core/api/tasks/getTaskObject/' + id, async : true }).responseText;
 
 }
 
 function getNoteObject(id)
 {
 
-	return $.ajax({ type : "GET", url : 'core/api/notes/' + id, async : false }).responseText;
+	return $.ajax({ type : "GET", url : 'core/api/notes/' + id, async : true }).responseText;
 
 }
 
 function getActivityObject(id)
 {
 
-	return $.ajax({ type : "GET", url : 'core/api/activitylog/' + id, async : false }).responseText;
+	return $.ajax({ type : "GET", url : 'core/api/activitylog/' + id, async : true }).responseText;
 
 }
 
