@@ -422,7 +422,7 @@ var portlet_utility = {
 		case "Filter Based": {
 			App_Portlets.filteredContacts[parseInt(pos)] = new Base_Collection_View(
 					{
-						url : '/core/api/portlets/portletContacts?filter='
+						url : '/core/api/portlets/contacts?filter='
 								+ base_model.get('settings').filter
 								+ '&sortKey=-created_time',
 						templateKey : "portlets-contacts",
@@ -441,7 +441,7 @@ var portlet_utility = {
 		case "Emails Opened": {
 			App_Portlets.emailsOpened[parseInt(pos)] = new Base_Collection_View(
 					{
-						url : '/core/api/portlets/portletEmailsOpened?duration='
+						url : '/core/api/portlets/emails-opened?duration='
 								+ base_model.get('settings').duration
 								+ '&start-date='
 								+ portlet_utility
@@ -477,7 +477,7 @@ var portlet_utility = {
 							+ row_position);
 			selector = 'emails-opened-pie-chart-' + column_position + '-'
 					+ row_position;
-			var url = '/core/api/portlets/portletEmailsOpenedPie?duration='
+			var url = '/core/api/portlets/emails-opened-pie-chart?duration='
 					+ base_model.get('settings').duration + '&start-date='
 					+ portlet_utility.getStartAndEndDatesOnDue(start_date_str)
 					+ '&end-date='
@@ -490,7 +490,7 @@ var portlet_utility = {
 		case "Pending Deals": {
 			App_Portlets.pendingDeals[parseInt(pos)] = new Base_Collection_View(
 					{
-						url : '/core/api/portlets/portletPendingDeals?deals='
+						url : '/core/api/portlets/pending-deals?deals='
 								+ base_model.get('settings').deals,
 						templateKey : 'portlets-opportunities',
 						sort_collection : false,
@@ -509,7 +509,7 @@ var portlet_utility = {
 		}
 		case "Deals Won": {
 			App_Portlets.dealsWon[parseInt(pos)] = new Base_Collection_View({
-				url : '/core/api/portlets/portletDealsWon?duration='
+				url : '/core/api/portlets/deals-won?duration='
 						+ base_model.get('settings').duration,
 				templateKey : 'portlets-opportunities',
 				individual_tag_name : 'tr',
@@ -528,7 +528,7 @@ var portlet_utility = {
 		case "Agenda": {
 			App_Portlets.todayEventsCollection[parseInt(pos)] = new Base_Collection_View(
 					{
-						url : '/core/api/portlets/portletAgenda?duration='
+						url : '/core/api/portlets/agenda?duration='
 								+ base_model.get('settings').duration
 								+ '&start_time='
 								+ portlet_utility
@@ -557,7 +557,7 @@ var portlet_utility = {
 		case "Today Tasks": {
 			App_Portlets.tasksCollection[parseInt(pos)] = new Base_Collection_View(
 					{
-						url : '/core/api/portlets/portletTodayTasks?duration='
+						url : '/core/api/portlets/today-tasks?duration='
 								+ base_model.get('settings').duration
 								+ '&start_time='
 								+ portlet_utility
@@ -582,7 +582,7 @@ var portlet_utility = {
 
 			App_Portlets.leaderboard[parseInt(pos)] = new Base_Model_View(
 					{
-						url : '/core/api/portlets/portletLeaderboard?duration='
+						url : '/core/api/portlets/leaderboard?duration='
 								+ base_model.get('settings').duration
 								+ '&start-date='
 								+ portlet_utility
@@ -635,7 +635,7 @@ var portlet_utility = {
 		}
 		case "Account Details": {
 			App_Portlets.accountInfo[parseInt(pos)] = new Base_Model_View({
-				url : '/core/api/portlets/portletAccount',
+				url : '/core/api/portlets/account-details',
 				template : "portlets-account-body-model",
 				postRenderCallback : function(p_el) {
 					portlet_utility.addWidgetToGridster(base_model);
@@ -649,7 +649,7 @@ var portlet_utility = {
 		}
 		case "User Activities": {
 			App_Portlets.activity[parseInt(pos)] = new Base_Collection_View({
-				url : '/core/api/portlets/portletCustomerActivity',
+				url : '/core/api/portlets/customer-activity',
 				sortKey : 'time',
 				descending : true,
 				templateKey : "portlets-activities-list-log",
@@ -679,7 +679,7 @@ var portlet_utility = {
 		}
 		case "Campaign stats": {
 			var emailsSentCount, emailsOpenedCount, emailsClickedCount, emailsUnsubscribed, that = portlet_ele;
-			var url = '/core/api/portlets/portletCampaignstats?duration='
+			var url = '/core/api/portlets/campaign-stats?duration='
 					+ base_model.get('settings').duration + '&start-date='
 					+ portlet_utility.getStartAndEndDatesOnDue(start_date_str)
 					+ '&end-date='
@@ -767,7 +767,7 @@ var portlet_utility = {
 			break;
 		}
 		case "Deals By Milestone": {
-			var url = '/core/api/portlets/portletDealsByMilestone?deals='
+			var url = '/core/api/portlets/deals-by-milestone?deals='
 					+ base_model.get('settings').deals + '&track='
 					+ base_model.get('settings').track;
 			portlet_graph_data_utility.dealsByMilestoneGraphData(base_model,
@@ -776,7 +776,7 @@ var portlet_utility = {
 			break;
 		}
 		case "Closures Per Person": {
-			var url = '/core/api/portlets/portletClosuresPerPerson?due-date='
+			var url = '/core/api/portlets/deals-closed-per-person?due-date='
 					+ base_model.get('settings')["due-date"];
 			portlet_graph_data_utility.closuresPerPersonGraphData(base_model,
 					selector, url);
@@ -784,7 +784,7 @@ var portlet_utility = {
 			break;
 		}
 		case "Deals Funnel": {
-			var url = '/core/api/portlets/portletDealsFunnel?deals='
+			var url = '/core/api/portlets/deals-funnel?deals='
 					+ base_model.get('settings').deals + '&track='
 					+ base_model.get('settings').track;
 			portlet_graph_data_utility.dealsFunnelGraphData(base_model,
@@ -793,7 +793,7 @@ var portlet_utility = {
 			break;
 		}
 		case "Emails Sent": {
-			var url = '/core/api/portlets/portletEmailsSent?duration='
+			var url = '/core/api/portlets/emails-sent?duration='
 					+ base_model.get('settings').duration;
 			portlet_graph_data_utility.emailsSentGrapgData(base_model,
 					selector, url);
@@ -801,7 +801,7 @@ var portlet_utility = {
 			break;
 		}
 		case "Growth Graph": {
-			var url = '/core/api/portlets/portletGrowthGraph?tags='
+			var url = '/core/api/portlets/growth-graph?tags='
 					+ base_model.get('settings').tags
 					+ '&frequency='
 					+ base_model.get('settings').frequency
@@ -840,7 +840,7 @@ var portlet_utility = {
 			break;
 		}
 		case "Deals Assigned": {
-			var url = '/core/api/portlets/portletDealsAssigned?duration='
+			var url = '/core/api/portlets/deals-assigned?duration='
 					+ base_model.get('settings').duration;
 			portlet_graph_data_utility.dealsAssignedGraphData(base_model,
 					selector, url);
@@ -852,7 +852,7 @@ var portlet_utility = {
 				users = JSON
 						.stringify(base_model.get('settings')["calls-user-list"]);
 			}
-			var url = '/core/api/portlets/portletCallsPerPerson?duration='
+			var url = '/core/api/portlets/calls-per-person?duration='
 					+ base_model.get('settings').duration + '&start-date='
 					+ portlet_utility.getStartAndEndDatesOnDue(start_date_str)
 					+ '&end-date='
@@ -874,7 +874,7 @@ var portlet_utility = {
 				users = JSON
 						.stringify(base_model.get('settings')["task-report-user-list"]);
 			}
-			var url = '/core/api/portlets/portletTaskReport?group-by='
+			var url = '/core/api/portlets/task-report?group-by='
 					+ base_model.get('settings')["group-by"] + '&split-by='
 					+ base_model.get('settings')["split-by"] + '&start-date='
 					+ portlet_utility.getStartAndEndDatesOnDue(start_date_str)
@@ -909,7 +909,7 @@ var portlet_utility = {
 			portlet_ele = $('#ui-id-' + column_position + '-' + row_position,
 					el).find('.stats_report_portlet_body');
 			var that = portlet_ele;
-			var newContactsurl = '/core/api/portlets/portletStatsReport?reportType=newContacts&duration='
+			var newContactsurl = '/core/api/portlets/activity-overview-report?reportType=newContacts&duration='
 					+ base_model.get('settings').duration
 					+ '&start-date='
 					+ portlet_utility.getStartAndEndDatesOnDue(start_date_str)
@@ -937,7 +937,7 @@ var portlet_utility = {
 										"New contacts");
 							});
 
-			var wonDealsurl = '/core/api/portlets/portletStatsReport?reportType=wonDeals&duration='
+			var wonDealsurl = '/core/api/portlets/activity-overview-report?reportType=wonDeals&duration='
 					+ base_model.get('settings').duration
 					+ '&start-date='
 					+ portlet_utility.getStartAndEndDatesOnDue(start_date_str)
@@ -973,7 +973,7 @@ var portlet_utility = {
 														+ " deals");
 							});
 
-			var newDealsurl = '/core/api/portlets/portletStatsReport?reportType=newDeals&duration='
+			var newDealsurl = '/core/api/portlets/activity-overview-report?reportType=newDeals&duration='
 					+ base_model.get('settings').duration
 					+ '&start-date='
 					+ portlet_utility.getStartAndEndDatesOnDue(start_date_str)
@@ -1009,7 +1009,7 @@ var portlet_utility = {
 														+ "");
 							});
 
-			var campaignEmailsSentsurl = '/core/api/portlets/portletStatsReport?reportType=campaignEmailsSent&duration='
+			var campaignEmailsSentsurl = '/core/api/portlets/activity-overview-report?reportType=campaignEmailsSent&duration='
 					+ base_model.get('settings').duration
 					+ '&start-date='
 					+ portlet_utility.getStartAndEndDatesOnDue(start_date_str)
@@ -1210,7 +1210,7 @@ var portlet_utility = {
 					"portletsDealsByMilestoneSettingsModal");
 			elData = $('#portletsDealsByMilestoneSettingsModal');
 			var that = this;
-			var url = '/core/api/portlets/portletDealsByMilestone?deals='
+			var url = '/core/api/portlets/deals-by-milestone?deals='
 					+ base_model.get('settings').deals + '&track='
 					+ base_model.get('settings').track;
 			if (App_Portlets.track_length != undefined
@@ -1268,7 +1268,7 @@ var portlet_utility = {
 					"portletsDealsFunnelSettingsModal");
 			elData = $('#portletsDealsFunnelSettingsModal');
 			var that = this;
-			var url = '/core/api/portlets/portletDealsFunnel?deals='
+			var url = '/core/api/portlets/deals-funnel?deals='
 					+ base_model.get('settings').deals + '&track='
 					+ base_model.get('settings').track;
 			if (App_Portlets.track_length != undefined
