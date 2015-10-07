@@ -24,35 +24,37 @@ import com.agilecrm.widgets.util.WidgetUtil;
  * 
  */
 @Path("/api/widgets/stripe")
-public class StripeWidgetsAPI
-{
+public class StripeWidgetsAPI {
 
-    /**
-     * Connects to Stripe and fetches the data based on customer id.
-     * 
-     * @param widgetId
-     *            {@link Long} plugin-id/widget id, to get {@link Widget} object
-     * @param customerId
-     *            {@link String} id of the stripe customer
-     * @return {@link String}
-     */
-    @Path("{widget-id}/{customerId}")
-    @GET
-    @Produces(MediaType.TEXT_PLAIN)
-    public String getStripeCustomerDetails(@PathParam("widget-id") Long widgetId, @PathParam("customerId") String customerId)
-    {
-		try
-		{
-		    // Retrieves widget based on its id
-		    Widget widget = WidgetUtil.getWidget(widgetId);
-		    if (widget != null){
-		    	// Calls StripePluginUtil method to retrieve customer details
-			    return StripePluginUtil.getCustomerDetails(widget, customerId).toString();
-		    }
-		}catch (Exception e)
-		{
-		    throw ExceptionUtil.catchWebException(e);
+	/**
+	 * Connects to Stripe and fetches the data based on customer id.
+	 * 
+	 * @param widgetId
+	 *            {@link Long} plugin-id/widget id, to get {@link Widget} object
+	 * @param customerId
+	 *            {@link String} id of the stripe customer
+	 * @return {@link String}
+	 */
+	@Path("{widget-id}/{customerId}")
+	@GET
+	@Produces(MediaType.TEXT_PLAIN)
+	public String getStripeCustomerDetails(
+			@PathParam("widget-id") Long widgetId,
+			@PathParam("customerId") String customerId) {
+		try {
+			// Retrieves widget based on its id
+			Widget widget = WidgetUtil.getWidget(widgetId);
+
+			if (widget == null)
+				return null;
+
+			/*
+			 * Calls StripePluginUtil method to retrieve customer details
+			 */
+			return StripePluginUtil.getCustomerDetails(widget, customerId)
+					.toString();
+		} catch (Exception e) {
+			throw ExceptionUtil.catchWebException(e);
 		}
-		return null;
-    }
+	}
 }

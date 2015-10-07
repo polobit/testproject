@@ -1,11 +1,14 @@
 package com.agilecrm;
 
-public class Globals
-{
-	public static String[] URLS = { "agilecrm.com", "helptor.com", "-dot-sandbox-dot-agile-crm-cloud.appspot.com",
-			"-dot-sandbox-dot-agilecrmbeta.appspot.com", "-dot-addon-dot-agilecrmbeta.appspot.com",
-			"-dot-mcsandbox-dot-agile-crm-cloud.appspot.com", "-dot-sandbox-dot-agilesanbox.appspot.com",
-			"agilesanbox.com", "-dot-newui-dot-agilecrmbeta.appspot.com" };
+public class Globals {
+	public static String[] URLS = { "agilecrm.com", "helptor.com",
+			"-dot-sandbox-dot-agile-crm-cloud.appspot.com",
+			"-dot-sandbox-dot-agilecrmbeta.appspot.com",
+			"-dot-addon-dot-agilecrmbeta.appspot.com",
+			"-dot-mcsandbox-dot-agile-crm-cloud.appspot.com",
+			"-dot-sandbox-dot-agilesanbox.appspot.com", "agilesanbox.com",
+			"-dot-newui-dot-agilecrmbeta.appspot.com",
+			"-dot-async-dot-agilecrmbeta.appspot.com" };
 
 	public static String SUB_VERSION_URL = "-dot-agile-crm-cloud.appspot.com";
 
@@ -86,6 +89,7 @@ public class Globals
 	// "ca_33Ms3QZgGsn0nqkvilqNUFYU9BcDyNVC";
 
 	public static final String STRIPE_LIVE_API_KEY = "sk_live_kV3JFirLAOXsEUcYYO3YsCJ5";
+	public static final String STRIPE_TEST_API_KEY = "sk_test_qxs4FCoEJ3o5aED4d1rIWiCE";
 	public static final String STRIPE_LIVE_CLIENT_ID = "ca_33Ms3QZgGsn0nqkvilqNUFYU9BcDyNVC";
 
 	// development keys
@@ -142,7 +146,7 @@ public class Globals
 	public static final int TRIAL_USERS_COUNT = 2;
 
 	// Cheat Code
-	public static final String MASTER_CODE_INTO_SYSTEM = "AgileRock*";
+	public static final String MASTER_CODE_INTO_SYSTEM = "AgileRocks#@!";
 
 	public static final String BULK_ACTION_BACKENDS_URL = "agile-normal-bulk";
 
@@ -157,8 +161,11 @@ public class Globals
 	public static final String MANDRIL_API_KEY_VALUE = "iQ_811cc9NxpLG11Ue4ftA";
 	public static final String MANDRILL_TEST_API_KEY_VALUE = "MRiwkducZGEbXrLW1LC5oQ";
 
+	// Mandrill API Key for FREE
+	public static final String MANDRILL_API_KEY_VALUE_2 = "RSn1Y3FmVLr59WKZqlKDGQ";
+
 	public static final String MANDRILL_PAID_POOL = "paid-pool";
-	
+
 	// Mailgun API key
 	public static final String MAILGUN_API_KEY_VALUE = "key-6rj8jh4d-ftsq2er2oqneoa7zi3e2-j3";
 

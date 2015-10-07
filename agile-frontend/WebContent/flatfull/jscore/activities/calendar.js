@@ -48,7 +48,13 @@ function load_events_from_google(callback)
 					return
 				}
 			}
+			else{
+				return;
+			}
 		}
+		else{
+				return;
+			}
 //		if ((type_of_cal && type_of_cal.length != 2 && type_of_cal[0] == 'agile') || type_of_cal.length == 0)
 //		{
 //			return;
@@ -118,10 +124,10 @@ function get_google_calendar_event_source(data, callback)
  * Shows the calendar
  */
 var fullCal;
-function showCalendar()
+function showCalendar(users)
 {
 
-	_init_gcal_options();
+	_init_gcal_options(users);
 	putGoogleCalendarLink();
 	putOfficeCalendarLink();
 	
@@ -232,6 +238,7 @@ function showCalendar()
 									
 									$.getJSON(eventsURL, function(doc)
 									{
+										try{
 										$.each(doc, function(index, data)
 										{
 											// decides the color of event based
@@ -245,6 +252,10 @@ function showCalendar()
 
 											callback(doc);
 
+										}
+										}
+										catch(err){
+												$("#loading_calendar_events").hide();
 										}
 									});
 								} }, { dataType : 'agile-gcal' }
@@ -682,6 +693,8 @@ function showCalendar()
 							}
 							// Show edit modal for the event
 							$("#updateActivityModal").modal('show');
+							
+							agile_type_ahead("event_relates_to_deals", $('#updateActivityModal'), deals_typeahead, false,null,null,"core/api/search/deals",false, true);
 
 							// Fills owner select element
 							populateUsersInUpdateActivityModal(event);
@@ -781,18 +794,7 @@ $(function(){
 	});
 
 	// loadDefaultFilters();
-
-	// Save current agile user in global.
-	$.getJSON('/core/api/users/agileusers', function(users)
-	{
-		$.each(users, function(i, user)
-		{
-			if (CURRENT_DOMAIN_USER.id == user.domain_user_id)
-			{
-				CURRENT_AGILE_USER = user;
-			}
-		});
-	});
+	
 });
 function changeView(view)
 {
@@ -809,36 +811,34 @@ function today()
  * gets the agileusers to build calendar filters
  * @returns {Array}
  */
-function getCalendarUsersDetails()
+function getCalendarUsersDetails(callback)
 {
 
-	var users = $.ajax({ type : "GET", url : '/core/api/users/agileusers', async : false }).responseText;
-	var json_users = [];
-	if (users)
-	{
-		$.each(JSON.parse(users), function(i, user)
+	accessUrlUsingAjax('/core/api/users/agileusers', function(data){
+
+		if(!data)
+			 return callback(data);
+
+		var json_users = [];
+		$.each(data, function(i, user)
 		{
 
 			if (CURRENT_DOMAIN_USER.id == user.domain_user_id)
 			{
 				CURRENT_AGILE_USER = user;
-
+				return;
 			}
-			else
+			
+			if (user.domainUser)
 			{
-				if (user.domainUser)
-				{
-					var json_user = {};
-					json_user.id = user.id;
-					json_user.name = user.domainUser.name;
-					json_user.domain_user_id = user.domainUser.id;
-					json_users.push(json_user);
-				}
-
+				var json_user = {};
+				json_user.id = user.id;
+				json_user.name = user.domainUser.name;
+				json_user.domain_user_id = user.domainUser.id;
+				json_users.push(json_user);
 			}
-
 		});
-	}
+		return callback(json_users);
 
-	return json_users;
+	});
 }

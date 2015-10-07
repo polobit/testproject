@@ -120,10 +120,6 @@ function setUpError(widget_name, template_id, error_data, error_url, model) {
 	var models;
 	var json;
 
-	$('#prefs-tabs-content').html(getRandomLoadingImg());
-	$('#PrefsTab .select').removeClass('select');
-	$('.add-widget-prefs-tab').addClass('select');
-
 	if (model) {
 		el = $(getTemplate("widget-settings", model));
 		json = model;
@@ -132,7 +128,8 @@ function setUpError(widget_name, template_id, error_data, error_url, model) {
 		if (!App_Widgets.Catalog_Widgets_View
 				|| App_Widgets.Catalog_Widgets_View.collection.length == 0) {
 
-			App_Widgets.Catalog_Widgets_View = new Base_Collection_View({ url : '/core/api/widgets/default' });
+						if(callback)
+			 				callback(el);
 
 			// Fetch the list of widgets
 			App_Widgets.Catalog_Widgets_View.collection.fetch({ success : function() {
@@ -154,20 +151,45 @@ function setUpError(widget_name, template_id, error_data, error_url, model) {
 
 	json['error_message'] = error_data;
 	json['error_url'] = error_url;
-
-	// merged_json = $.extend(merged_json, model, data);
-
-	$('#widget-settings', el).html(getTemplate(template_id, json));
-
-	$('#prefs-tabs-content').html(el);
-
-	$('#prefs-tabs-content').find('form').data('widget', json);
-
-	$('#PrefsTab .select').removeClass('select');
-	$('.add-widget-prefs-tab').addClass('select');
-
 }
 
+function set_up_access(widget_name, template_id, data, url, model){
+	getTemplate('settings', {}, undefined, function(template_ui){
+ 		if(!template_ui)
+    		return;
+		$('#content').html($(template_ui)); 
+		var el;
+		var json;
+		var models;
+
+		$('#prefs-tabs-content').html(getRandomLoadingImg());
+		$('#PrefsTab .select').removeClass('select');
+		$('.add-widget-prefs-tab').addClass('select');
+
+		if (model){
+			getTemplate('widget-settings', model, undefined, function(template_ui1){
+		 		if(!template_ui1)
+		    		return;
+				el = $(template_ui1);
+				json = model; 
+				setup_widget_revoke_access(el, json, data, widget_name, template_id, url, model);
+			}, null);
+
+			return;
+		} else {
+
+			$('#widget-settings', el).html(getTemplate(template_id, json));
+
+			App_Widgets.Catalog_Widgets_View = new Base_Collection_View({ url : '/core/api/widgets/default' });
+
+			$('#prefs-tabs-content').find('form').data('widget', json);
+
+			$.getJSON('core/api/widgets/' + widget_name, function(data1){
+				set_up_access(widget_name, template_id, data, url, data1)
+			});
+		} 
+	});
+}
 
 function addWidgetProfile(widgetId, widgetName, template, url) {
 	loadSettingsUI(function() {
@@ -217,7 +239,6 @@ function addWidgetProfile(widgetId, widgetName, template, url) {
 				});
 		});
 	});
-
 }
 
 // 
@@ -290,9 +311,7 @@ function loadSettingsUI(callback) {
 
 		if (callback)
 			callback();
-
 	}, "#content");
-
 }
 
 function getWidgetModelFromName(widgetId, type, callback) {
@@ -316,10 +335,8 @@ function getWidgetModelFromName(widgetId, type, callback) {
 }
 
 function deserializeWidget(widget, el) {
-
 	if (!widget.prefs){
 		return;
 	}
-
 	deserializeForm(JSON.parse(widget.prefs), $(el).find("form"));
 }

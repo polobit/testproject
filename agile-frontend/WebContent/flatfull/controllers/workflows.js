@@ -96,13 +96,17 @@ var WorkflowsRouter = Backbone.Router
 				this.workflow_json = undefined;
 				this.workflow_model = undefined;
 
-				$("#content").html('<div id="workflows-listener-container"></div>').find('#workflows-listener-container').html(getTemplate('workflow-add', { "is_new" : true }));
-				initializeWorkflowsListeners();
-
-				initiate_tour("workflows-add", $('#content'));	
+				$("#content").html('<div id="workflows-listener-container"></div>');
+				getTemplate('workflow-add', { "is_new" : true }, undefined, function(template_ui){
+					if(!template_ui)
+						  return;
+					$('#workflows-listener-container').html($(template_ui));	
+					initializeWorkflowsListeners();
+					initiate_tour("workflows-add", $('#content'));						
+					// Init SendVerify Email
+					send_verify_email();
+				}, "#workflows-listener-container");
 				
-				// Init SendVerify Email
-				send_verify_email()
 			},
 
 			/**
@@ -159,23 +163,30 @@ var WorkflowsRouter = Backbone.Router
 					return;
 
 				this.workflow_json = this.workflow_model.get("rules");
+				var that = this;
+				getTemplate('workflow-add', {}, undefined, function(template_ui){
+					if(!template_ui)
+						  return;
 
-				var el = $(getTemplate('workflow-add', {}));
-				$("#content").html('<div id="workflows-listener-container"></div>').find('#workflows-listener-container').html(el);
-				initializeWorkflowsListeners();
+					var el = $(template_ui);
 
-				// Set the name
-				$('#workflow-name').val(this.workflow_model.get("name"));
+					$("#content").html('<div id="workflows-listener-container"></div>');
+					$('#workflows-listener-container').html(el);
+					initializeWorkflowsListeners();
 
-				var unsubscribe = this.workflow_model.get("unsubscribe");
+					// Set the name
+					$('#workflow-name').val(that.workflow_model.get("name"));
 
-				$('#unsubscribe-email').val(unsubscribe.unsubscribe_email);
-				$('#unsubscribe-tag').val(unsubscribe.tag);
-				$('#unsubscribe-action').val(unsubscribe.action);
-				$('#unsubscribe-action').trigger('change');
+					var unsubscribe = that.workflow_model.get("unsubscribe");
 
-				// Init SendVerify Email
-				send_verify_email()
+					$('#unsubscribe-email').val(unsubscribe.unsubscribe_email);
+					$('#unsubscribe-tag').val(unsubscribe.tag);
+					$('#unsubscribe-action').val(unsubscribe.action);
+					$('#unsubscribe-action').trigger('change');
+
+					// Init SendVerify Email
+					send_verify_email();
+				}, "#content");
 			},
 
 			/**
@@ -192,8 +203,13 @@ var WorkflowsRouter = Backbone.Router
 					return;
 				}
 
-				$("#content").html('<div id="workflows-listener-container"></div>').find('#workflows-listener-container').html(getTemplate('workflow-categories', {}));
-				initializeWorkflowsListeners();
+				$("#content").html('<div id="workflows-listener-container"></div>');
+				getTemplate('workflow-categories', {}, undefined, function(template_ui){
+					if(!template_ui)
+						  return;
+					$('#workflows-listener-container').html($(template_ui));
+					initializeWorkflowsListeners();	
+				}, "#workflows-listener-container");
 			},
 
 			/**
@@ -228,13 +244,16 @@ var WorkflowsRouter = Backbone.Router
 					that.workflow_json = JSON.stringify(data);
 				} });
 
-				$("#content").html('<div id="workflows-listener-container"></div>').find('#workflows-listener-container').html(getTemplate('workflow-add', { "is_new" : true }));
-				initializeWorkflowsListeners();
+				$("#content").html('<div id="workflows-listener-container"></div>');
+				getTemplate('workflow-add', { "is_new" : true }, undefined, function(template_ui){
+					if(!template_ui)
+						  return;
+					$('#workflows-listener-container').html($(template_ui));
+					initializeWorkflowsListeners();
+					// Init SendVerify Email
+					send_verify_email();
 
-
-				// Init SendVerify Email
-				send_verify_email()
-
+				}, "#workflows-listener-container");
 			},
 
 			/**
@@ -252,52 +271,48 @@ var WorkflowsRouter = Backbone.Router
 			logsToCampaign : function(id, log_type, log_filter_title)
 			{
 
-				// Render tabs
-				$('#campaign-analysis-tabs').html(getTemplate("campaign-analysis-tabs", { "id" : id }));
+				getTemplate("campaign-analysis-tabs", { "id" : id }, undefined, function(template_ui){
+					if(!template_ui)
+						  return;
 
-//				if (!this.workflow_list_view || this.workflow_list_view.collection.length == 0)
-//				{
-//					this.navigate("workflows", { trigger : true });
-//					return;
-//				}
+					// Render tabs
+					$('#campaign-analysis-tabs').html($(template_ui));	
 
-				/* Set the designer JSON. This will be deserialized */
-//				this.workflow_model = this.workflow_list_view.collection.get(id);
-//				var workflowName = this.workflow_model.get("name");
-
-				if (log_type == undefined || log_type == "ALL")
+					if (log_type == undefined || log_type == "ALL")
 					log_type = "";
-				else
-					log_type = '?log-type=' + log_type;
+					else
+						log_type = '?log-type=' + log_type;
 
-				var logsListView = new Base_Collection_View({ url : '/core/api/campaigns/logs/' + id + log_type, templateKey : "campaign-logs",
-					cursor : true,page_size :20, individual_tag_name : 'tr', sort_collection :false, postRenderCallback : function(el)
-					{
-						initializeTriggersListeners();
-						head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
+					var logsListView = new Base_Collection_View({ url : '/core/api/campaigns/logs/' + id + log_type, templateKey : "campaign-logs",
+						cursor : true,page_size :20, individual_tag_name : 'tr', sort_collection :false, postRenderCallback : function(el)
 						{
-							$("time.log-created-time", el).timeago();
+							initializeTriggersListeners();
+							head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
+							{
+								$("time.log-created-time", el).timeago();
+							});
+
+							// $('#logs-campaign-name').text(workflowName);
+
+							$('#log-filter-title').html(log_filter_title);
+						},appendItemCallback : function(el)
+						{
+							includeTimeAgo(el);
+						}  
 						});
 
-						// $('#logs-campaign-name').text(workflowName);
-
-						$('#log-filter-title').html(log_filter_title);
-					},appendItemCallback : function(el)
+					logsListView.collection.fetch({ success : function(collection)
 					{
-						includeTimeAgo(el);
-					}  
-					});
+						if (collection.length === 0)
+							fill_logs_slate('logs-slate', log_type.split('=')[1]);
+					} });
 
-				logsListView.collection.fetch({ success : function(collection)
-				{
-					if (collection.length === 0)
-						fill_logs_slate('logs-slate', log_type.split('=')[1]);
-				} });
+					$('#campaign-analysis-tabs-content').html(logsListView.el);
 
-				$('#campaign-analysis-tabs-content').html(logsListView.el);
+					$('#campaign-tabs .select').removeClass('select');
+					$('.campaign-logs-tab').addClass('select');
 
-				$('#campaign-tabs .select').removeClass('select');
-				$('.campaign-logs-tab').addClass('select');
+				}, "#campaign-analysis-tabs");
 			},
 
 			/** Gets list of campaign-stats * */
@@ -305,13 +320,17 @@ var WorkflowsRouter = Backbone.Router
 			{
 
 				// Load Reports Template
-				$("#content").html(getTemplate("campaign-stats-chart", {}));
+				getTemplate("campaign-stats-chart", {}, undefined, function(template_ui){
+					if(!template_ui)
+						  return;
+					$('#content').html($(template_ui));	
 
-				// Show bar graph for campaign stats
-				showBar('/core/api/campaign-stats/stats/', 'campaign-stats-chart', 'Campaigns Comparison', 'Email Stats', null);
+					// Show bar graph for campaign stats
+					showBar('/core/api/campaign-stats/stats/', 'campaign-stats-chart', 'Campaigns Comparison', 'Email Stats', null);
 
-				$(".active").removeClass("active");
-				$("#workflowsmenu").addClass("active");
+					$(".active").removeClass("active");
+					$("#workflowsmenu").addClass("active");
+				}, "#content");
 			},
 
 			/**
@@ -327,53 +346,59 @@ var WorkflowsRouter = Backbone.Router
 				// Fetches workflows if not filled
 				if ($('#campaign-reports-select').html() === null || $('#campaign-reports-select').html() === undefined)
 				{
-					$("#content").html(getTemplate("campaign-analysis", {}));
+					getTemplate('campaign-analysis', {}, undefined, function(template_ui){
+				 		if(!template_ui)
+				    		return;
+						$('#content').html($(template_ui)); 
+						var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
 
-					var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
+						// fill workflows
+						fillSelect('campaign-reports-select', '/core/api/workflows', 'workflow', function fillCampaign()
+						{
+							$('#campaign-reports-select').find('option[value=' + id + ']').attr('selected', 'selected');
 
-					// fill workflows
-					fillSelect('campaign-reports-select', '/core/api/workflows', 'workflow', function fillCampaign()
-					{
-						$('#campaign-reports-select').find('option[value=' + id + ']').attr('selected', 'selected');
+						}, optionsTemplate);
+					}, "#content");
 
-					}, optionsTemplate);
+
+						
 				}
 
-				// Render tabs with id
-				$('#campaign-analysis-tabs').html(getTemplate("campaign-analysis-tabs", { "id" : id }));
-				
-				// Hide bulk subscribers block
-				$('#subscribers-block').hide();
+				getTemplate("campaign-analysis-tabs", { "id" : id }, undefined, function(template_ui){
+					if(!template_ui)
+						  return;
 
-//				if (!this.workflow_list_view || this.workflow_list_view.collection.length == 0)
-//				{
-//					this.navigate("workflows", { trigger : true });
-//					return;
-//				}
+					// Render tabs with id
+					$('#campaign-analysis-tabs').html($(template_ui));
+					// Hide bulk subscribers block
+					$('#subscribers-block').hide();
 
-//				/* Set the designer JSON. This will be deserialized */
-//				this.workflow_model = this.workflow_list_view.collection.get(id);
-//				var workflowName = this.workflow_model.get("name");
+					head.js(LIB_PATH + 'lib/date-charts.js', LIB_PATH + 'lib/date-range-picker.js' + '?_=' + _AGILE_VERSION, CSS_PATH + "css/misc/date-picker.css", function()
+					{
+						// Load Reports Template
+						getTemplate('campaign-email-reports', {}, undefined, function(template_ui1){
+					 		if(!template_ui1)
+					    		return;
+							$('#campaign-analysis-tabs-content').html($(template_ui1)); 
+							// Set the name
+							// $('#reports-campaign-name').text(workflowName);
+							initChartsUI(id);
 
-				head.js(LIB_PATH + 'lib/date-charts.js', LIB_PATH + 'lib/date-range-picker.js', CSS_PATH + "css/misc/date-picker.css", function()
-				{
-					// Load Reports Template
-					$("#campaign-analysis-tabs-content").html(getTemplate("campaign-email-reports", {}));
+						}, "#campaign-analysis-tabs-content");
 
-					// Set the name
-					// $('#reports-campaign-name').text(workflowName);
 
-					initChartsUI(id);
 
-				});
+					});
 
-				$(".active").removeClass("active");
-				$("#workflowsmenu").addClass("active");
+					$(".active").removeClass("active");
+					$("#workflowsmenu").addClass("active");
 
-				$('#campaign-tabs .select').removeClass('select');
-				$('.campaign-stats-tab').addClass('select');
-				
-				hideTransitionBar();
+					$('#campaign-tabs .select').removeClass('select');
+					$('.campaign-stats-tab').addClass('select');
+					
+					hideTransitionBar();
+
+				}, "#campaign-analysis-tabs");
 			},
 
 			/** Gets list of triggers */
@@ -863,27 +888,24 @@ var WorkflowsRouter = Backbone.Router
 			allSubscribers : function(id)
 			{
 				// Render tabs
-				$('#campaign-analysis-tabs').html(getTemplate("campaign-analysis-tabs", { "id" : id }));
-
-//				if (!this.workflow_list_view || this.workflow_list_view.collection.length == 0)
-//				{
-//					this.navigate("workflows", { trigger : true });
-//					return;
-//				}
-
-				var all_subscribers_collection = get_campaign_subscribers_collection(id, 'core/api/workflows/all-subscribers/' + id,
+				getTemplate("campaign-analysis-tabs", { "id" : id }, undefined, function(template_ui){
+					if(!template_ui)
+						  return;
+					$('#campaign-analysis-tabs').html($(template_ui));
+					var all_subscribers_collection = get_campaign_subscribers_collection(id, 'core/api/workflows/all-subscribers/' + id,
 						'workflow-other-subscribers');
-				all_subscribers_collection.collection.fetch({ success : function(collection)
-				{
-					if (collection.length === 0)
-						fill_subscribers_slate('subscribers-slate', "all-subscribers");
-				} });
-				$("#campaign-analysis-tabs-content").html(all_subscribers_collection.el);
-				// Hide bulk subscribers block
-				$('#subscribers-block').hide();
+					all_subscribers_collection.collection.fetch({ success : function(collection)
+					{
+						if (collection.length === 0)
+							fill_subscribers_slate('subscribers-slate', "all-subscribers");
+					} });
+					$("#campaign-analysis-tabs-content").html(all_subscribers_collection.el);
+					// Hide bulk subscribers block
+					$('#subscribers-block').hide();
 
-				$('#campaign-tabs .select').removeClass('select');
-				$('.campaign-subscribers-tab').addClass('select');
+					$('#campaign-tabs .select').removeClass('select');
+					$('.campaign-subscribers-tab').addClass('select');	
+					}, "#campaign-analysis-tabs");
 			},
 
 			/**

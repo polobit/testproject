@@ -83,9 +83,8 @@ function currentRoute(route)
 		tour = null;
 	}
 	if (GLOBAL_WEBRULE_FLAG)
-	{
-		_agile_execute_web_rules();
-	}
+		executeWebRulesOnRoute();
+
 	// disposeEvents();
 
 	// load_clickdesk_code();
@@ -115,4 +114,12 @@ function load_clickdesk_code()
 	glcspt.src = glcpath + 'livechat-new.js';
 	var s = document.getElementsByTagName('script')[0];
 	s.parentNode.insertBefore(glcspt, s);
+}
+_
+function executeWebRulesOnRoute(){
+ 	  if(typeof _agile_execute_action == "function")
+	  {
+	        _agile_webrules();
+	        return;
+	  }
 }

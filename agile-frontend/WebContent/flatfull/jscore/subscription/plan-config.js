@@ -5,6 +5,7 @@ var PLANS_COSTS_JSON = {};
 PLANS_COSTS_JSON.starter = "14.99";
 PLANS_COSTS_JSON.regular = "49.99";
 PLANS_COSTS_JSON.pro = "79.99";
+PLANS_COSTS_JSON.enterprise = "79.99";
 
 // Plans intervals JSON
 var PLANS_DISCOUNTS_JSON = {};
@@ -28,6 +29,11 @@ PLANS_DISCOUNTS_JSON_NEW.pro = {};
 PLANS_DISCOUNTS_JSON_NEW.pro.monthly = "0";
 PLANS_DISCOUNTS_JSON_NEW.pro.yearly = "18.75";
 PLANS_DISCOUNTS_JSON_NEW.pro.biennial = "40";
+
+PLANS_DISCOUNTS_JSON_NEW.enterprise = {};
+PLANS_DISCOUNTS_JSON_NEW.enterprise.monthly = "0";
+PLANS_DISCOUNTS_JSON_NEW.enterprise.yearly = "18.75";
+PLANS_DISCOUNTS_JSON_NEW.enterprise.biennial = "40";
 
 function is_new_signup_payment()
 {

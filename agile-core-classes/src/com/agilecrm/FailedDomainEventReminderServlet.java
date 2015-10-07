@@ -36,6 +36,7 @@ public class FailedDomainEventReminderServlet extends HttpServlet
 	{
 	    if (domain != null)
 		EventReminder.getEventReminder(domain, null);
+	    res.setContentType("text/html");
 
 	}
 	catch (IOException e)

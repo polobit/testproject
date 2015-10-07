@@ -55,6 +55,12 @@ function setup_deals_in_milestones(id){
 										$('#dealLostReasonModal > .modal-dialog > .modal-content > .modal-footer > a#deal_lost_reason_save').attr('disabled',false);
 										$('#'+id).attr('data',newMilestone);
 									}
+									if(jsonModel.won_milestone == newMilestone && newMilestone != old_milestone){
+										$('#deal_won_date_' + id).find('small').text(getDateInFormatFromEpoc(new Date().getTime()/1000));
+										$('#deal_won_date_' + id).removeClass("hide");
+									}else if(jsonModel.won_milestone != newMilestone && newMilestone != old_milestone){
+										$('#deal_won_date_' + id).addClass("hide");
+									}
 									hideTransitionBar();
 								}
 							});

@@ -15,9 +15,9 @@
  */
 function initChartsUI(campaign_id, callback)
 {
-	head.js(LIB_PATH + 'lib/date-charts.js', LIB_PATH + 'lib/date-range-picker.js', CSS_PATH + "css/misc/date-picker.css", function()
+	head.js(LIB_PATH + 'lib/date-charts.js', LIB_PATH + 'lib/date-range-picker.js' + '?_=' + _AGILE_VERSION, CSS_PATH + "css/misc/date-picker.css", function()
 	{
-
+		
 		// Bootstrap date range picker.
 		$('#reportrange').daterangepicker({ ranges : { 'Today' : [
 				'today', 'today'
@@ -31,6 +31,24 @@ function initChartsUI(campaign_id, callback)
 				Date.today().moveToFirstDayOfMonth(), Date.today().moveToLastDayOfMonth()
 		], 'Last Month' : [
 				Date.today().moveToFirstDayOfMonth().add({ months : -1 }), Date.today().moveToFirstDayOfMonth().add({ days : -1 })
+		], 'This Quarter' : [
+				Date.today().getMonth() < 3 ? new Date(Date.today().setMonth(0)).moveToFirstDayOfMonth() : 
+				(Date.today().getMonth() >= 3 && Date.today().getMonth() < 6) ? new Date(Date.today().setMonth(3)).moveToFirstDayOfMonth() :
+				(Date.today().getMonth() >= 6 && Date.today().getMonth() < 9) ? new Date(Date.today().setMonth(6)).moveToFirstDayOfMonth() : new Date(Date.today().setMonth(9)).moveToFirstDayOfMonth(), 
+				Date.today().getMonth() < 3 ? new Date(Date.today().setMonth(2).moveToLastDayOfMonth()) : 
+				(Date.today().getMonth() >= 3 && Date.today().getMonth() < 6) ? new Date(Date.today().setMonth(5)).moveToLastDayOfMonth() :
+				(Date.today().getMonth() >= 6 && Date.today().getMonth() < 9) ? new Date(Date.today().setMonth(8)).moveToLastDayOfMonth() : new Date(Date.today().setMonth(11)).moveToLastDayOfMonth()
+		], 'Last Quarter' : [
+				Date.today().getMonth() < 3 ? new Date(Date.today().add({ years : -1 }).setMonth(9)).moveToFirstDayOfMonth() : 
+				(Date.today().getMonth() >= 3 && Date.today().getMonth() < 6) ? new Date(Date.today().setMonth(0)).moveToFirstDayOfMonth() :
+				(Date.today().getMonth() >= 6 && Date.today().getMonth() < 9) ? new Date(Date.today().setMonth(3)).moveToFirstDayOfMonth() : new Date(Date.today().setMonth(6)).moveToFirstDayOfMonth(), 
+				Date.today().getMonth() < 3 ? new Date(Date.today().add({ years : -1 }).setMonth(11)).moveToLastDayOfMonth() : 
+				(Date.today().getMonth() >= 3 && Date.today().getMonth() < 6) ? new Date(Date.today().setMonth(2)).moveToLastDayOfMonth() :
+				(Date.today().getMonth() >= 6 && Date.today().getMonth() < 9) ? new Date(Date.today().setMonth(5)).moveToLastDayOfMonth() : new Date(Date.today().setMonth(8)).moveToLastDayOfMonth()
+		], 'This Year' : [
+				new Date(Date.today().setMonth(0)).moveToFirstDayOfMonth(), new Date(Date.today().setMonth(11)).moveToLastDayOfMonth()
+		], 'Last Year' : [
+				new Date(Date.today().setMonth(0)).add({ years : -1 }).moveToFirstDayOfMonth(), new Date(Date.today().setMonth(11)).add({ years : -1 }).moveToLastDayOfMonth()
 		] }, locale : { applyLabel : 'Apply', cancelLabel : 'Cancel', fromLabel : 'From', toLabel : 'To', customRangeLabel : 'Custom', daysOfWeek : [
 				'Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'
 		], monthNames : [
@@ -47,6 +65,13 @@ function initChartsUI(campaign_id, callback)
 			// Updates bar graphs on date change.
 			showEmailGraphs(campaign_id);
 
+		});
+		$('.daterangepicker > .ranges > ul').on("click", "li", function(e)
+		{
+			$('.daterangepicker > .ranges > ul > li').each(function(){
+				$(this).removeClass("active");
+			});
+			$(this).addClass("active");
 		});
 	});
 
@@ -150,7 +175,11 @@ function get_email_table_reports(campaign_id)
 		console.log(data);
 
 		// Load Reports Template
-		$("#email-table-reports").html(getTemplate("campaign-email-table-reports", data));
+		getTemplate("campaign-email-table-reports", data, undefined, function(template_ui){
+			if(!template_ui)
+				  return;
+			$("#email-table-reports").html($(template_ui));	
+		}, "#email-table-reports");
 
 	});
 }
