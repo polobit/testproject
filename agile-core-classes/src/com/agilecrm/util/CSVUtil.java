@@ -492,7 +492,7 @@ public class CSVUtil
 		}
 
 		tempContact.bulkActionTracker = bulk_action_tracker;
-		tempContact.save();
+		tempContact.save(false);
 	    }// end of try
 	    catch (InvalidTagException e)
 	    {

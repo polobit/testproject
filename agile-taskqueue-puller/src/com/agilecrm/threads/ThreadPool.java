@@ -49,7 +49,7 @@ public class ThreadPool
 
 	try
 	{
-	    installer.install(options);
+	    installer.installOnAllThreads(options);
 	}
 	catch (IOException e)
 	{
