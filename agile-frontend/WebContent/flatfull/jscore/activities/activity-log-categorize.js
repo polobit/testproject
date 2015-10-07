@@ -2,6 +2,7 @@
 function initializeActivitiesListner(el){
 
 
+	$("#activities-listners").off();
 	// Click events to agents dropdown and department
 	$("#activities-listners").on("click", "ul#user-select li a, ul#entity_type li a", function(e)
 	{
@@ -73,7 +74,7 @@ function initializeActivitiesListner(el){
 function getDealObject(id)
 {
 
-	return $.ajax({ type : "GET", url : 'core/api/opportunity/' + id, async : false }).responseText;
+	return $.ajax({ type : "GET", url : 'core/api/opportunity/' + id, async : true }).responseText;
 
 }
 

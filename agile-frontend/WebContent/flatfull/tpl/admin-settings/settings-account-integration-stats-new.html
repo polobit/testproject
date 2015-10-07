@@ -93,39 +93,44 @@
 		{{#if_equals "SEND_GRID" _agile_email_gateway}}
 			<div class="text-md">SendGrid stats are shown <a class="text-info" style="color: #23b7e5 !important;" href="https://sendgrid.com/statistics" target="_blank">here</a></div><br/>
 		{{else}}
-		<div class="row">
-        	<div class="col-md-6 b-light">
-        	<div class="panel panel-default">
-            	<div class="panel-heading">Emails Sent</div>
-            	
-				<table class="table table-bordered table-hover">
-					<tbody>
-						<tr><td>This Hour</td><td>{{numberWithCommas sent_hourly}}</td></tr>
-						<tr><td>This Week</td><td>{{numberWithCommas sent_weekly}}</td></tr>
-						<tr><td>This Month</td><td>{{numberWithCommas sent_monthly}}</td></tr>
-						<tr><td>Overall</td><td>{{numberWithCommas sent_total}}</td></tr>
-					</tbody>
-				</table>
-				
-        	</div>
-        	</div>
-        	<div class="col-md-6">
-        	<div class="panel panel-default">
-            	<div class="panel-heading">Bounces (Last 30 Days)</div>
-            	
-				<table class="table table-bordered table-hover">
-					<tbody>
-						<tr><td>Hard Bounce</td><td>{{numberWithCommas last_30_days.hard_bounces}}</td></tr>
-						<tr><td>Soft Bounce</td><td>{{numberWithCommas last_30_days.soft_bounces}}</td></tr>
-						<tr><td>Rejects</td><td>{{numberWithCommas last_30_days.rejects}}</td></tr>
-						<tr><td>Spam Complaints</td><td>{{numberWithCommas last_30_days.complaints}}</td></tr>
-					</tbody>
-				</table>
-				
-        	</div>
-    	</div>
-    	</div>
-		{{/if_equals}}	
+			{{!--SES Stats--}}
+			{{#if_equals "SES" _agile_email_gateway}}
+				<div class="text-md">Amazon SES stats are shown <a class="text-info" href="https://aws.amazon.com/" target="_blank">here</a></div><br/>
+			{{else}}
+				<div class="row">
+	        		<div class="col-md-6 b-light">
+	        		<div class="panel panel-default">
+	            		<div class="panel-heading">Emails Sent</div>
+	            	
+						<table class="table table-bordered table-hover">
+							<tbody>
+								<tr><td>This Hour</td><td>{{numberWithCommas sent_hourly}}</td></tr>
+								<tr><td>This Week</td><td>{{numberWithCommas sent_weekly}}</td></tr>
+								<tr><td>This Month</td><td>{{numberWithCommas sent_monthly}}</td></tr>
+								<tr><td>Overall</td><td>{{numberWithCommas sent_total}}</td></tr>
+							</tbody>
+						</table>
+					
+		        	</div>
+		        	</div>
+		        	<div class="col-md-6">
+		        	<div class="panel panel-default">
+		            	<div class="panel-heading">Bounces (Last 30 Days)</div>
+		            	
+						<table class="table table-bordered table-hover">
+							<tbody>
+								<tr><td>Hard Bounce</td><td>{{numberWithCommas last_30_days.hard_bounces}}</td></tr>
+								<tr><td>Soft Bounce</td><td>{{numberWithCommas last_30_days.soft_bounces}}</td></tr>
+								<tr><td>Rejects</td><td>{{numberWithCommas last_30_days.rejects}}</td></tr>
+								<tr><td>Spam Complaints</td><td>{{numberWithCommas last_30_days.complaints}}</td></tr>
+							</tbody>
+						</table>
+						
+		        	</div>
+		    	</div>
+		    	</div>
+			{{/if_equals}}	
+		{{/if_equals}}
     	</div>
 
 </script>

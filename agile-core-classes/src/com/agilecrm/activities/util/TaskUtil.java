@@ -14,6 +14,7 @@ import org.apache.commons.lang.WordUtils;
 import com.agilecrm.activities.Task;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.agilecrm.deals.Opportunity;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
@@ -913,4 +914,26 @@ public class TaskUtil
 	    return null;
 	}
     }
+    
+    /**
+	 * * Returns tasks related to a deal and of a particular type, if not
+	 * type gives all.
+	 * 
+	 * @param taskType
+	 *            - type of task
+	 * @param dealId
+	 *            - Id of the deal related to task.
+	 * @return List of tasks related to a deal
+	 * @throws Exception
+	 */
+	public static List<Task> getDealSortedTasks(String taskType, Long dealId) throws Exception
+	{
+		Query<Task> query = dao.ofy().query(Task.class)
+				.filter("related_deals =", new Key<Opportunity>(Opportunity.class, dealId)).order("due");
+
+		if (!StringUtils.isEmpty(taskType))
+			query.filter("type =", taskType);
+
+		return query.list();
+	}
 }

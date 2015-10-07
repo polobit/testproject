@@ -2591,3 +2591,86 @@ select.input-xs{
 .tooltip-inner {
 	max-width: 260px;
 }
+.note-editor {
+ border: 1px solid #E0E0E0 !important;
+}
+
+.note-statusbar {
+ border: none !important;
+ border-top: 1px solid #E0E0E0 !important;
+}
+
+.note-editor .note-statusbar .note-resizebar {
+ border-top: none !important;
+}
+
+
+.cd-highlight{
+	position: relative;padding: 30px;border: 1px solid #f6f6f6;
+}
+.cd-zero-clipboard {
+  position: relative;
+}
+
+.pad-all-22 {
+  padding: 22px !important;
+}
+
+
+.prettyprint.linenums {
+  word-wrap: break-word;
+  white-space: pre-wrap;
+  margin-bottom: 12px;
+  background: #fff !important;
+  margin-left: 0px !important;
+  padding-left: 0px !important;
+  -webkit-box-shadow: none !important;
+  -moz-box-shadow: none !important;
+  -o-box-shadow: none !important;
+  box-shadow: none !important;
+  border: 1px solid rgba(235, 235, 235, 0.47) !important;
+  font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial,
+ sans-serif !important;
+  font-size: 12px !important;
+}
+
+
+.mar-no {
+  margin: 0 !important;
+}
+
+.online-cal-tabs-border{
+	border: 1px solid #dee5e7;
+  border-top: 0px;
+}
+.ical-apple-logo{
+	vertical-align: middle;
+}
+.ical-copy-text{
+margin-bottom: 17px;
+}
+.ical-url-box{
+	position: relative; padding: 5px;
+}
+.ical-feed-url{
+	margin-left: 50px;
+}
+.ical-send-ical-link{
+	text-align: center;
+    margin-left: 134px;
+}
+
+
+.show_shortcuts li ul li:hover .shortcuts.enable{
+	display: block!important;
+}
+
+.contactView ul.dropdown-menu li:hover .shortcuts {
+	display: block!important;
+}
+
+.shortcuts{
+	color : #D2C9C9;
+	font-size: 12px;
+	display:none;
+}

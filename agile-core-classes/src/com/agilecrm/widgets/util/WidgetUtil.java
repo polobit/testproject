@@ -197,6 +197,32 @@ public class WidgetUtil {
 			return null;
 		}
 	}
+	
+	/**
+	 * Gets the widget based on the widget name and user id.
+	 * 
+	 * @param name
+	 *            {@link String}. Name of the widget
+	 * @param agileUserId
+	 *            {@link Long} agile user id
+	 * @return {@link Widget}
+	 */
+	public static Widget getCustomWidget(String name, Long agileUserId) {
+		try {
+			Objectify ofy = ObjectifyService.begin();
+
+			// Gets the Current AgileUser key to query on widgets
+			Key<AgileUser> userKey = new Key<AgileUser>(AgileUser.class,
+					agileUserId);
+
+			// Queries on widget name, with current AgileUser Key
+			return ofy.query(CustomWidget.class).ancestor(userKey)
+					.filter("name", name).get();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
 
 	/**
 	 * Removes the widget for all the users based on the widget name.

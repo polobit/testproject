@@ -15,7 +15,7 @@ var SettingsRouter = Backbone.Router
 			"settings" : "settings",
 
 			/* User preferences */
-			"user-prefs/:id" : "userPrefs",
+			"user-prefs" : "userPrefs",
 
 			/* Change Password */
 			"change-password" : "changePassword",
@@ -73,51 +73,54 @@ var SettingsRouter = Backbone.Router
 			 * Creates a Model to show and edit Personal Preferences, and sets
 			 * HTML Editor. Reloads the page on save success.
 			 */
-			userPrefs : function(type)
+			userPrefs : function()
 			{
-				var template_name = "settings-user-prefs";
-				var tab_class = "profile";
-				if(type == "reminders")
-				{
-					template_name = "settings-reminders";
-					tab_class = "reminders";
-				}
-				else if(type == "advanced")
-				{
-					template_name = "settings-advanced";
-					tab_class = "advanced";
-
-				}
-
+				//var data;
+				var that =this;
 				getTemplate("settings", {}, undefined, function(template_ui){
-
 					if(!template_ui)
 						  return;
 					$('#content').html($(template_ui));	
-
 					getTemplate("settings-user-prefs-tab", {}, undefined, function(template_ui1){
-						$("#prefs-tabs-content").html($(template_ui1));
+						if(!template_ui1)
+							  return;
+						$('#prefs-tabs-content').html($(template_ui1));
+					
+						/* $('#prefs-tabs-content').html(getRandomLoadingImg()); */
 
-						var view = new Base_Model_View({ url : '/core/api/user-prefs', template : template_name, el : $('#settings-user-prefs-tab-content'), change : false,
-						reload : true, postRenderCallback : function(el)
-						{
-							initializeSettingsListeners();
-							// setup TinyMCE
-							setupTinyMCEEditor('textarea#WYSItextarea', true, [
-								"textcolor link image preview code"
-							], function()
-							{   // Register focus
-								register_focus_on_tinymce('WYSItextarea');
+						$.getJSON("/core/api/user-prefs", function(data){
+
+							var prefsData = new BaseModel(data);
+							that.userPrefsProfile(prefsData);
+							$('#prefs-tabs-content a[href="#settings-user-prefs"]').on('click', function(e) {
+								e.preventDefault();
+								that.userPrefsProfile(prefsData);
+								
 							});
-						} });
 
+							$('#prefs-tabs-content a[href="#settings-reminders"]').on('click', function(e) {
+								e.preventDefault();
+								that.userPrefsReminders(prefsData);
+								
+							});
+							$('#prefs-tabs-content a[href="#settings-advanced"]').on('click', function(e) {
+								e.preventDefault();
+								that.userPrefsAdvanced(prefsData);
+								
+							});
+
+						}).done(function(){
+							hideTransitionBar();
+						}).fail(function(){
+							hideTransitionBar();
+						});
+							
 						$('#PrefsTab .select').removeClass('select');
 						$('.user-prefs-tab').addClass('select');
 						$(".active").removeClass("active");
-						$("#prefs-tabs-content .prefs-"+tab_class).addClass("active");
-
-					});
-
+						$("#prefs-tabs-content .prefs-profile").addClass("active");
+						// $('#content').html(view.render().el);
+					}, null);	
 				}, "#content");
 			},
 
@@ -748,9 +751,12 @@ var SettingsRouter = Backbone.Router
 					var view = new Base_Model_View({
 					url : 'core/api/scheduleprefs',
 					type : 'GET',
-					template : 'settings-business-prefs',
+					template : 'settings-online-calendar-new',
 					postRenderCallback : function(el)
 					{
+						$('#online-calendar a[href="#calendar-tab"]', el).tab('show');
+						//online_calendar_tabs.loadScheduleUrlTab("#online-cal-listners");
+
 						var onlineschedulingURL = "https://" + CURRENT_DOMAIN_USER.domain + ".agilecrm.com/calendar/" + view.model.get('schedule_id');
 
 						$("#scheduleurl").attr("href", onlineschedulingURL);
@@ -759,7 +765,7 @@ var SettingsRouter = Backbone.Router
 						$("#scheduleurl").removeClass("nounderline");
 
 						head.js(CSS_PATH + 'css/businesshours/businesshours.css', CSS_PATH + 'css/businesshours/jquerytimepicker.css',
-								LIB_PATH + 'lib/businesshours/businesshours.js', LIB_PATH + 'lib/businesshours/jquerytimepicker.js', function()
+								LIB_PATH + 'lib/businesshours/businesshours.js', LIB_PATH + 'lib/businesshours/jquerytimepicker.js',LIB_PATH+'lib/summer-note/summernote.js',CSS_PATH+'css/summernote/summernote.css', function()
 								{
 									var json = JSON.parse(view.model.get('business_hours'));
 									console.log();
@@ -771,6 +777,22 @@ var SettingsRouter = Backbone.Router
 									}, });
 
 									$(".mini-time").keydown(false).addClass("form-control");
+									
+									
+									$(".online_summer_note")
+								     .summernote({
+	
+									      toolbar : [
+									        [
+									          'style',
+									          [ 'bold', 'italic', 'underline',
+									            'clear' ] ],
+									        [ 'fontsize', [ 'fontsize' ] ],
+									        [ 'insert', [ 'link' ] ] ],
+									        height:'100'
+									     });
+										 
+										 $(".online_summer_note").code(view.model.get('user_calendar_title'));
 
 								});
 						
@@ -835,7 +857,66 @@ var SettingsRouter = Backbone.Router
 								hideTransitionBar();
 								showNotyPopUp("information", "error occured please try again", "top");
 							} });
+
+				/*
+				 * var view = new Base_Model_View({ url :
+				 * '/core/api/user-prefs', template : "theme-layout-form",
+				 * postRenderCallback: function(el){} });
+				 * $('#content').html(view.render().el); var data =
+				 * view.model.toJSON();
+				 * $("#menuPosition").val(CURRENT_USER_PREFS.menuPosition);
+				 * $("#layout").val(CURRENT_USER_PREFS.layout); $('.magicMenu
+				 * input:radio[name="theme"]').filter('[value='+CURRENT_USER_PREFS.theme+']').attr('checked',
+				 * true); if(data.menuPosition !=
+				 * CURRENT_USER_PREFS.menuPosition || data.layout !=
+				 * CURRENT_USER_PREFS.layout || data.theme !=
+				 * CURRENT_USER_PREFS.theme)
+				 * $(".theme-save-status").css("display","inline");
+				 */
+
+				// $(".active").removeClass("active");
+			},
+
+			//preferences profile tab
+			userPrefsProfile : function(data)
+			{
+				var prefs_profile_view = new Base_Model_View({ url : "core/api/user-prefs", model : data, template : "settings-user-prefs", change : false, reload : true,
+					postRenderCallback : function(el)
+					{	
+
+
+						setupTinyMCEEditor('textarea#WYSItextarea', true, ["textcolor link image preview code"], function()
+								{
+
+									// Register focus
+									register_focus_on_tinymce('WYSItextarea');
+								});
+						
+					}});
+					$("#settings-user-prefs-tab-content").html(prefs_profile_view.render(true).el);
 				
+			},
+
+			//preferences reminders tab
+			userPrefsReminders : function(data)
+			{
+				var prefs_reminders_view = new Base_Model_View({ url : 'core/api/user-prefs', model : data, template : 'settings-reminders', change : false, reload : true,
+				postRenderCallback : function(el){
+						
+					}
+				});
+				$("#settings-user-prefs-tab-content").html(prefs_reminders_view.render(true).el);
+			},
+
+			//preferences advanced tab
+			userPrefsAdvanced : function(data)
+			{
+				var prefs_advanced_view = new Base_Model_View({ url : 'core/api/user-prefs', model : data, template : 'settings-advanced', change : false, reload : true, 
+					postRenderCallback : function(el){
+						
+					}
+				});
+				$("#settings-user-prefs-tab-content").html(prefs_advanced_view.render(true).el);
 			}
 
 		});
