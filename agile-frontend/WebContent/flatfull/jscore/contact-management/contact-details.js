@@ -191,6 +191,7 @@ $(function(){
        						App_Contacts.contactsListView.collection.remove(model);
        						if(App_Contacts.contact_custom_view)
        						App_Contacts.contact_custom_view.collection.remove(model);
+       						CONTACTS_HARD_RELOAD=true;
        						App_Contacts.contacts();
        					}
        				});

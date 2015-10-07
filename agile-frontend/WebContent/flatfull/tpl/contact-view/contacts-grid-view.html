@@ -23,13 +23,10 @@
 					properties "last_name"}} </a>
 
 				<div style="color:#7C7C7C; display:{{checkPropertyValueExistance properties "company" "title"}}">
-					<span class="grid-view-elipsis" style="vertical-align: bottom;" data-toggle="tooltip"
-						data-placement="bottom" title=""
-						data-original-title="{{getPropertyValue properties "company"}}">{{getPropertyValue
+					<span class="grid-view-elipsis" style="vertical-align: bottom;" title="{{getPropertyValue properties "company"}}">{{getPropertyValue
 						properties "company"}}</span>{{getPropertyValueExists properties
-					"company"}}&nbsp;<span class="grid-view-elipsis" style="vertical-align: bottom;"  data-toggle="tooltip"
-						data-placement="bottom" title=""
-						data-original-title="{{getPropertyValue properties "title"}}">
+					"company" "title"}}&nbsp;<span class="grid-view-elipsis" style="vertical-align: bottom;"
+						title="{{getPropertyValue properties "title"}}">
 						{{getPropertyValue properties "title"}}</span>
 				</div>
 
@@ -76,12 +73,12 @@
 		</div>
 		<div style="margin-left: 25px;height: 71px;">
 			<div class="pull-left m-r-xs">
-				<img
+				<a href="#contact/{{id}}"><img
 					title="{{getPropertyValue properties 'first_name'}} {{getPropertyValue properties 'last_name'}}"
 					class="thumbnail img-inital inline m-b-none"
 					data-name="{{dataNameAvatar properties}}"
 					src="{{gravatarurl properties 50}}" width="40px !important"
-					height="40px !important" />
+					height="40px !important" /></a>
 			</div>
 			<div class="pull-left text-ellipsis"
 				style="width: calc(100% - 45px);line-height: 18px;">
@@ -91,13 +88,9 @@
 					properties "last_name"}} </a>
 
 				<div style="color:#7C7C7C;display:{{checkPropertyValueExistance properties "company" "title"}}">
-					<span class="grid-view-elipsis" style="vertical-align: bottom;"  data-toggle="tooltip"
-						data-placement="bottom" title=""
-						data-original-title="{{getPropertyValue properties "company"}}">{{getPropertyValue
+					<span class="grid-view-elipsis" style="vertical-align: bottom;"  title="{{getPropertyValue properties "company"}}">{{getPropertyValue
 						properties "company"}}</span>{{getPropertyValueExists properties
-					"company"}}&nbsp;<span class="grid-view-elipsis" style="vertical-align: bottom;"  data-toggle="tooltip"
-						data-placement="bottom" title=""
-						data-original-title="{{getPropertyValue properties "title"}}">
+					"company" "title"}}&nbsp;<span class="grid-view-elipsis" style="vertical-align: bottom;" title="{{getPropertyValue properties "title"}}">
 						{{getPropertyValue properties "title"}}</span>
 				</div>
 				<div>{{getPropertyValue properties "email"}}</div>
@@ -125,7 +118,7 @@
 
 	</script>
 
-	<script id="contacts-grid-collection-template" type="text/html">
+<script id="contacts-grid-collection-template" type="text/html">
 <div class="custom-animated custom-fadeInUp">
 <div class="wrapper-md lter bg-light b-b" style="height:74px;">
 <div class="row">
@@ -181,7 +174,7 @@
     </div>
     </div>
     </div>
-<div class="hbox hbox-auto-xs hbox-auto-sm bg-light">
+<div class="hbox hbox-auto-xs hbox-auto-sm">
     <div class="col w-md b-r" id="contacts-lhs-filters-toggle" style="display:{{toggle_contacts_filter}}">
         <div class="data-block">
             <div  id="lhs_filters_conatiner">

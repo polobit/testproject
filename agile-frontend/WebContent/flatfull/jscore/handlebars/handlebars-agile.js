@@ -386,20 +386,30 @@ function getPropertyValue(items, name)
  * @returns {String}
  */
 
-function getPropertyValueByCheckingExistance(items, name)
+function getPropertyValueByCheckingExistance(items, companyname,jobtitle)
 {
 	if (items == undefined)
 		return;
 
+	var companyExists=false;
+	var jobTitleExists=false;
 	for (var i = 0, l = items.length; i < l; i++)
 	{
-		if (items[i].name == name){
+		if (items[i].name == companyname){
 			if(items[i].value){
-				return ',';
+				companyExists=true;
+			}
+			
+		}
+		else if (items[i].name == jobtitle){
+			if(items[i].value){
+				jobTitleExists=true;
 			}
 			
 		}
 	}
+	if(companyExists&&jobTitleExists)
+		return ',';
 }
 
 
@@ -418,7 +428,7 @@ function checkPropertyValueExistance(items,name,name1){
 	var valueExists=false;
 	for (var i = 0, l = items.length; i < l; i++)
 	{
-		if (items[i].name == name || items[i].name1 == name1){
+		if (items[i].name == name || items[i].name == name1){
 			if(items[i].value){
 				valueExists=true;
 			}

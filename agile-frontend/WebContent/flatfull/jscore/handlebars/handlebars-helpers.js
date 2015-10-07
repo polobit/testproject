@@ -22,9 +22,9 @@ $(function()
 	/**
 	 * displays , in between 2 conatct fields.
 	 */
-	Handlebars.registerHelper('getPropertyValueExists', function(items, name)
+	Handlebars.registerHelper('getPropertyValueExists', function(items, companyname,jobtitle)
 	{
-		return getPropertyValueByCheckingExistance(items, name);
+		return getPropertyValueByCheckingExistance(items, companyname,jobtitle);
 	});
 
 	
