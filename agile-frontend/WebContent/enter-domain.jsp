@@ -42,12 +42,20 @@ if(redirectTo  != null)
 
 <style>
 
-body {
+/*body {
 background-image:url('..<%=flatfull_path%>/images/flatfull/buildings.jpg');
 background-repeat:no-repeat;
 background-position:center center;
 background-size:100% 100%;
 background-attachment:fixed;
+}*/
+
+body {
+  background-image:url('..<%=flatfull_path%>/images/flatfull/agile-registration-page.png');
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: 100% 100%;
+  background-attachment: fixed;
 }
 
 .text-white
@@ -72,6 +80,16 @@ text-decoration:underline;
 .close {
 	  color: #000 !important;
 }
+
+@media all and (max-width: 767px) {
+
+body {
+  background-size: cover;
+
+}
+  
+}
+
 
 /* @media (min-width: 900px) {
 body {
@@ -125,7 +143,7 @@ padding-left:10px!important;
 			<div class="list-group list-group-sm">
 				<div class="list-group-item">
           			<input id='subdomain' type="text" placeholder="Company"
-						   	   name="subdomain" class="input-xlarge field required form-control no-border w pull-left" autocapitalize="off"><div class="inline-block m-t-xs">.agilecrm.com</div><div class="clearfix"></div>
+						   	   name="subdomain" class="input-xlarge  required form-control no-border w pull-left" autocapitalize="off"><div class="inline-block m-t-xs">.agilecrm.com</div><div class="clearfix"></div>
 				</div>
 			</div>
 			<input class="btn btn-lg btn-primary btn-block" type="submit" value="Submit">

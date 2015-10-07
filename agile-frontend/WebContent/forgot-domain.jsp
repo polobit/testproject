@@ -56,12 +56,20 @@ if(!StringUtils.isEmpty(email))
 
 <style>
 
-body {
+/*body {
 background-image:url('..<%=flatfull_path%>/images/flatfull/buildings.jpg');
 background-repeat:no-repeat;
 background-position:center center;
 background-size:100% 100%;
 background-attachment:fixed;
+}*/
+
+body {
+  background-image:url('..<%=flatfull_path%>/images/flatfull/agile-registration-page.png');
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: 100% 100%;
+  background-attachment: fixed;
 }
 
 .text-white
@@ -86,8 +94,18 @@ text-decoration:underline;
 .close {
 	  color: #000 !important;
 }
-<!-- 
-@media (min-width: 900px) {
+
+
+@media all and (max-width: 767px) {
+
+body {
+  background-size: cover;
+
+}
+  
+}
+
+<!-- @media (min-width: 900px) {
 body {
 	padding-top: 30px;
 	}
@@ -109,8 +127,8 @@ body {
 
 .alert-success {
 	  color: #3c763d !important;
-}
--->
+} -->
+
 </style> 
 
  <!-- JQUery Core and UI CDN -->
@@ -186,7 +204,7 @@ jQuery.validator.setDefaults({
 				
 				<div class="list-group list-group-sm">
 					<div class="list-group-item">
-						<input class="input-xlarge field required email form-control no-border" name='email' maxlength="50" minlength="6" type="email" required placeholder="Email" autocapitalize="off">
+						<input class="input-xlarge  required email form-control no-border" name='email' maxlength="50" minlength="6" type="email" required placeholder="Email" autocapitalize="off">
 					</div>
 				</div>
 					  <input type='submit' value="Submit" class='btn btn-lg btn-primary btn-block forgot_domain_btn'>

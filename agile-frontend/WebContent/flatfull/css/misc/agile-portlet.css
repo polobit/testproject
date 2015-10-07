@@ -120,6 +120,7 @@ padding: 0 8px 0 0;
 	border-right: 1px solid #ddd;*/
 	color: #58666e!important;
 	background-color: #fff!important;
+	position: relative;
 }
 .portlet_header_name{
 	width: 80%;

@@ -1521,3 +1521,15 @@ a#email-reply{
 }
 
 /* end milestone deal sources */
+
+/*starting mobile compatibility V2 */
+
+#continueform .single-error {
+  position: relative;
+}
+
+#continueform span.help-inline[generated|=true] {
+  right: 25px;
+  top: 5px;
+  position: absolute;
+}
