@@ -1,3 +1,8 @@
+
+var ACTIVITY_FILTER="activity-filters-cookie";
+
+var ACTIVITY_FILTER_JSON={};
+
 function includeTimeAgo(element)
 {
 	head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
@@ -6,6 +11,22 @@ function includeTimeAgo(element)
 	});
 }
 
+
+function buildActivityFilters(name,valueid,clickedFrom){
+   
+		if(clickedFrom=='entityDropDown'){
+		ACTIVITY_FILTER_JSON.entity=name;
+		ACTIVITY_FILTER_JSON.entityId=valueid;
+		}
+		else if(clickedFrom=='userDropDown'){
+		ACTIVITY_FILTER_JSON.user=name;
+		ACTIVITY_FILTER_JSON.userid=valueid;
+		}
+
+		createCookie(ACTIVITY_FILTER,JSON.stringify(ACTIVITY_FILTER_JSON));
+
+
+}
 /**
  * To show the dates or time in words of time-ago plugin.
  * 
@@ -21,7 +42,6 @@ function includeTimeAgo(element)
  */
 function updateActivty(params)
 {
-	console.log("entered into update activity function  " + new Date().getTime() + "  time with milliseconds " + new Date())
 	// Creates backbone collection view
 	this.activitiesview = new Base_Collection_View({ url : '/core/api/activitylog/getActivitiesOnSelectedCondition' + params, sortKey : 'time',
 		descending : true, templateKey : "activity-list-log", sort_collection : false, cursor : true, scroll_symbol : 'scroll', page_size : 20,
@@ -173,17 +193,15 @@ function initActivitiesDateRange()
 	{
 		if (start && end)
 		{
-			createCookie("selectedStartTime", start.toString('MMMM d, yyyy'), 90);
-			createCookie("selectedEndTime", end.toString('MMMM d, yyyy'), 90);
 			$('#activities_date_range #range').html(start.toString('MMMM d, yyyy') + ' - ' + end.toString('MMMM d, yyyy'));
 
 			updateActivty(getParameters());
 		}
 		else
 		{
-			eraseCookie("selectedStartTime");
-			eraseCookie("selectedEndTime");
-			$('#activities_date_range #range').html('Filter by date');
+			var from_date = Date.parse('today');
+			var to_date = Date.today().add({ days : parseInt(-6) });
+			$('#activities_date_range #range').html(to_date.toString('MMMM d, yyyy') + " - " + from_date.toString('MMMM d, yyyy'));
 			updateActivty(getParameters());
 		}
 	});

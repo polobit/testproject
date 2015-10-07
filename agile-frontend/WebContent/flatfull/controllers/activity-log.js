@@ -14,7 +14,7 @@ var ActivitylogRouter = Backbone.Router.extend({
 		if (!tight_acl.checkPermission('ACTIVITY'))
 			return;
 		
-		head.js(LIB_PATH + 'lib/date-charts.js', LIB_PATH + 'lib/date-range-picker.js' + '?_=' + _AGILE_VERSION, CSS_PATH + "css/misc/date-picker.css", function()
+		head.js(LIB_PATH + 'lib/date-charts.js', LIB_PATH + 'lib/date-range-picker.js' + '?_=' + _AGILE_VERSION, function()
 		{
 
 			$('#content').html("<div id='activities-listners'>&nbsp;</div>");
@@ -31,10 +31,8 @@ var ActivitylogRouter = Backbone.Router.extend({
 
 					initActivitiesDateRange();
 					$(".activity-log-button").hide();
-					var selecteduser = readCookie("selecteduser");
-					var selectedentity = readCookie("selectedentity");
 
-					console.log("values read from activity cookie  selected user " + selecteduser + "  selected entityname " + selectedentity);
+					var activityFilters=JSON.parse(readCookie(ACTIVITY_FILTER));
 
 					var optionsTemplate = "<li><a  href='{{id}}'>{{name}}</li>";
 
@@ -43,36 +41,19 @@ var ActivitylogRouter = Backbone.Router.extend({
 					{
 						$('#activities-listners').find("#user-select").append("<li><a href=''>All Users</a></li>");
 
-						var selected_start_time = readCookie("selectedStartTime");
-						var selected_end_time = readCookie("selectedEndTime");
+						
 
-						if (selecteduser || selectedentity || (selected_start_time && selected_end_time))
+						if (activityFilters&&(activityFilters.user || activityFilters.entity))
 						{
 
-							$('ul#user-select li a').closest("ul").data("selected_item", selecteduser);
-							$('ul#entity_type li a').closest("ul").data("selected_item", selectedentity);
-							if (selected_start_time && selected_end_time)
-							{
-								$('#activities_date_range #range').html(selected_start_time + ' - ' + selected_end_time);
-							}
-							console.log("activites function called  " + new Date().getTime() + "  time with milliseconds " + new Date())
-							updateActivty(getParameters());
+							$('ul#user-select li a').closest("ul").data("selected_item", activityFilters.userid);
+							$('ul#entity_type li a').closest("ul").data("selected_item", activityFilters.entityid);
+								updateActivty(getParameters());
 
-							console.log("activites function ended rendering  " + new Date().getTime() + "  time with milliseconds " + new Date())
-
-							var username_value = readCookie("selecteduser_value");
-							var entity_value = readCookie("selectedentity_value");
-
-							if (username_value)
-							{
-								$('#selectedusername').html(username_value);
-
-							}
-							if (entity_value)
-							{
-								$('#selectedentity_type').html(entity_value);
-								$('.activity-sub-heading').html(entity_value);
-							}
+								$('#selectedusername').html(activityFilters.user);
+								$('#selectedentity_type').html(activityFilters.entity);
+								$('.activity-sub-heading').html(activityFilters.entity);
+							
 						}
 						else
 						{
