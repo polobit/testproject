@@ -150,46 +150,50 @@ function getPortletNormalName(name){
 	
 }
 
-function append_activity(base_model)
-{
+function append_activity(base_model) {
 
-	var itemView = new Base_List_View({ model : base_model, "view" : "inline", template : this.options.templateKey + "-model"});
+	var itemView = new Base_List_View({
+		model : base_model,
+		"view" : "inline",
+		template : this.options.templateKey + "-model"
+	});
 
 	// add to the right box - overdue, today, tomorrow etc.
 	var createdtime = get_activity_created_time(base_model.get('time'));
 
 	// Today
-	if (createdtime == 0)
-	{
-		$('#earllier',this.el).show();
-		$('#next-week-heading', this.el).show();
-		var heading = $('#today-heading', this.el);
+	if (createdtime == 0) {
+		$('#earllier', this.el).show();
 
-		$('#today-activity', this.el).append(itemView.render().el);
-		$('#today-activity', this.el).parent('table').css("display", "block");
-		$('#today-activity', this.el).show();
+		var $todayActivityEle = $('#today-activity', this.el);
+
+		$todayActivityEle.append(itemView.render().el);
+		$todayActivityEle.parent('table').css("display", "block");
+		$todayActivityEle.show();
 
 		$('#today-heading', this.el).show();
 	}
 
-	if (createdtime == -1)
-	{
-		$('#earllier',this.el).show();
-		$('#next-week-heading', this.el).show();
-		var heading = $('#tomorrow-heading', this.el);
+	if (createdtime == -1) {
+		$('#earllier', this.el).show();
 
-		$('#tomorrow-activity', this.el).append(itemView.render().el);
-		$('#tomorrow-activity', this.el).parent('table').css("display", "block");
-		$('#tomorrow-activity', this.el).show();
+		var heading = $('#tomorrow-heading', this.el);
+		var $tomorrowActivityEle = $('#tomorrow-activity', this.el);
+
+		$tomorrowActivityEle.append(itemView.render().el);
+		$tomorrowActivityEle.parent('table').css("display", "block");
+		$tomorrowActivityEle.show();
 
 		heading.show();
 	}
-	if (createdtime < -1)
-	{
 
-		$('#next-week-activity', this.el).append(itemView.render().el);
-		$('#next-week-activity', this.el).parent('table').css("display", "block");
-		$('#next-week-activity', this.el).show();
-		
+	if (createdtime < -1) {
+		var $nextWeekActivityEle = $('#next-week-activity', this.el);
+
+		$nextWeekActivityEle.append(itemView.render().el);
+		$nextWeekActivityEle.parent('table').css("display", "block");
+		$nextWeekActivityEle.show();
+		$('#next-week-heading', this.el).show();
+
 	}
 }
