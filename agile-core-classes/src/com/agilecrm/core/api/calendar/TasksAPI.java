@@ -28,6 +28,7 @@ import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Note;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.contact.util.NoteUtil;
+import com.agilecrm.deals.Opportunity;
 import com.agilecrm.user.util.DomainUserUtil;
 
 /**
@@ -520,6 +521,43 @@ public class TasksAPI
 
 	return task;
     }
+    
+    /**
+     * get all deals related to task
+     */
+    @Path("/{task-id}/deals")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public List<Opportunity> getRelatedDeals(@PathParam("task-id") Long id)
+    {
+	try
+	{
+	    Task task = TaskUtil.getTask(id);
+	    return task.getDeals();
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    return null;
+	}
+    }
 
+    /**
+     * All tasks by created time
+     * 
+     * @return tasks list
+     */
+    @Path("/new/tasks")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public List<Task> getNewTasks(@QueryParam("page_size") String count, @QueryParam("cursor") String cursor)
+    {
+	if (count != null)
+	{
+	    return TaskUtil.getNewTasks(Integer.parseInt(count), cursor);
+	}
+
+	return TaskUtil.getNewTasks(null, null);
+    }
     /***************************************************************************/
 }

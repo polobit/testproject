@@ -59,7 +59,12 @@ public class PlanLimits
     protected Boolean smsGateway = true;
 
     protected Boolean ACL = true;
-
+    
+    /**
+     * Milestone Limits
+     */
+    protected Boolean addTracks = false;
+    
     protected Boolean mobileIntegration = true;
     protected Boolean googleSync = true;
     protected Boolean ecommerceSync = true;
@@ -126,6 +131,11 @@ public class PlanLimits
     public Integer getWidgets()
     {
 	return widgets;
+    }
+    
+    public Boolean getAddTracks()
+    {
+	return addTracks;
     }
 
     public Plan getPlan()

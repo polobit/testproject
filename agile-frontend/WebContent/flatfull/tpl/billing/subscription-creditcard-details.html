@@ -1,65 +1,49 @@
 <script id="subscription-card-detail-template" type="text/html">
-<div class="span6">
-	<div class="well">
-		<form id="CCform" class="form-horizontal card_details"
+<form id="CCform" class="form-horizontal card_details"
 			name="card_details">
 			<fieldset>
 
-				<div class="control-group">
-					<legend>Update Card</legend>
-					<label class="control-label">Name<span class="field_req">*</span></label>
-					<div class="controls">
+				<div class="control-group form-group">
+					<label class="control-label col-sm-4">Name<span class="field_req">*</span></label>
+					<div class="controls col-sm-6">
 						<input type="text" name="name" class="input required form-control"
 							placeholder="Cardholder's name" />
 					</div>
 				</div>
-				<div style="display: inline-block">
-					<div class="control-group">
-						<label class="control-label">Card Number <span
+				
+					<div class="control-group form-group">
+						<label class="control-label col-sm-4">Card Number <span
 							class="field_req">*</span></label>
-						<div class="controls">
-							<input type="text" name="number" class="input required form-control digits"
+						<div class="controls col-sm-6">
+							<input type="text" name="number" class="input required  digits form-control"
 								placeholder="Enter Your Card Number" />
 						</div>
 					</div>
-						<div class="control-group">
-						<label class="control-label">Expiry<span
+						<div class="control-group form-group">
+						<label class="control-label col-sm-4">Expiry<span
 							class="field_req">*</span></label>
-						<div class="controls">
+						<div class="controls col-sm-6">
 							<select name="exp_month" id="exp_month"
-								class="input span2 form-control exp_month" placeholder="Expiry Month"
-								style="width: 94px" onChange="$(&quot;#exp_year&quot;).valid();"></select>
-							<span style="margin-left: 10px; margin-right: 10px">/ </span> <select
+								class="input form-control exp_month inline-block" style="width:44%;" placeholder="Expiry Month"
+								 onChange="$(&quot;#exp_year&quot;).valid();"></select>
+							<span class="m-l-sm m-r-sm">/ </span> <select
 								name="exp_year" id="exp_year"
-								class="input required form-control digits span2 exp_year atleastThreeMonths"
-								placeholder="Expiry Year" style="width: 94px"></select>
+								class="input required form-control  digits  exp_year atleastThreeMonths inline-block" style="width:44%;"
+								placeholder="Expiry Year" ></select>
 						</div>
 					</div>
-				</div>
-				<div class="control-group">
-					<label class="control-label">CVC<span class="field_req">*</span></label>
-					<div class="controls">
-						<input type="text" name="cvc" class="input required form-control digits"
+				
+				<div class="control-group form-group">
+					<label class="control-label col-sm-4">CVC<span class="field_req">*</span></label>
+					<div class="controls col-sm-6">
+						<input type="text" name="cvc" class="input required  digits form-control"
 							placeholder="Card security code" />
+
 					</div>
+
 				</div>
-				<div class="control-group">
-					<label class="control-label">Country<span class="field_req">*</span></label>
-					<div class="controls">
-						<select class="country form-control required" id="country"
-							name="address_country"
-							onchange="print_state('state',this.selectedIndex);"></select>
-					</div>
-				</div>
-				<div class="control-group">
-					<label class="control-label">State<span class="field_req">*</span></label>
-					<div class="controls">
-						<select class="required form-control" name="address_state" id="state"
-							name="address_country">
-						</select>
-					</div>
-				</div>
-				<!-- <div class="control-group">	
+					
+				<!-- <div class="control-group form-group">	
                     <label class="control-label">Gateway<span class="field_req">*</span></label>
                     <div class="controls">
                     			<select class="required form-control" name="gateway">
@@ -74,10 +58,4 @@
 		<form id="gateway" class="form-horizontal hide">
 			<input type="text" name="gateway" class="hidden form-control" value="Stripe" />
 		</form>
-		<div class="form-actions" align="center">
-			<a href="#"	class="btn btn-sm btn-default close" data-dismiss="modal">Close</a>
-			<a href="#" type="submit" id="updateCreditCard"	class="save btn btn-sm btn-primary">Update</a> 
-		</div>
-	</div>
-</div>
 </script>

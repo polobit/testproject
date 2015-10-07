@@ -379,3 +379,24 @@ function getNextMonthEppoch(time, day, month)
 	date.setMinutes(min);
 	return (date.getTime()) / 1000;
 }
+
+/**This is being invoked from call category -call logs under reports:where it should redirect to activities with calls as a entity type*/
+$(function()
+		{
+	
+	$("body").on("click", "a#call-activity-link", function(e){
+	console.log("clicked");
+	var entitytype = "Calls";
+
+	var entity_attribute = "CALL";
+	createCookie("selectedentity", entity_attribute, 90);
+	createCookie("selectedentity_value", entitytype, 90);
+	
+	$('.activity-sub-heading').html(entitytype);
+	
+	//ActivitylogRouter.activities("id");
+	App_Activity_log.navigate("activities", { trigger : true });
+	
+});
+	
+		});

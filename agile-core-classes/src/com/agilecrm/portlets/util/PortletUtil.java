@@ -665,7 +665,7 @@ public class PortletUtil {
 		long minTime=0L;
 		long maxTime=0L;
 		JSONObject callsPerPersonJSON=new JSONObject();
-		if(json!=null && json.get("duration")!=null){
+		if(json!=null){
 			/*if(json.get("duration").toString().equalsIgnoreCase("1-day")){
 				DateUtil startDateUtil = new DateUtil();
 	    		minTime = startDateUtil.removeDays(1).toMidnight().getTime().getTime() / 1000;

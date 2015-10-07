@@ -7,7 +7,6 @@
 
     <property environment="env"/>
         <property file="../agile-java-server/build.properties"/>
-        <property name="APPENGINE_DIR" value="${env.GAE_HOME}lib"/>
     <property name="debuglevel" value="source,lines,vars"/>
     <path id="libpath">
         <fileset dir="${LIB_DIR}" includes="*.jar"/>
