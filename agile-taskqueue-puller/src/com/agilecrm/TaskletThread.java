@@ -11,7 +11,9 @@ import org.apache.log4j.Logger;
 
 import com.Globals;
 import com.agilecrm.account.util.EmailGatewayUtil;
+import com.agilecrm.bulkaction.deferred.ContactExportPullTask;
 import com.agilecrm.mandrill.util.deferred.MailDeferredTask;
+import com.agilecrm.threads.ThreadPool;
 import com.agilecrm.threads.Work;
 import com.google.api.client.googleapis.batch.BatchRequest;
 import com.google.api.client.googleapis.batch.json.JsonBatchCallback;
@@ -54,8 +56,6 @@ public class TaskletThread implements Work
 
 	    if (tasks.size() > 0 && isMailTask(tasks.get(0)))
 	    {
-		System.out
-			.println("********************************************************************************************************");
 		EmailGatewayUtil.sendMailsMailDeferredTask(convertTaskHandlestoMailDeferredTasks(tasks));
 	    }
 	    else
@@ -63,6 +63,11 @@ public class TaskletThread implements Work
 		for (Task task : tasks)
 		{
 		    DeferredTask deferredTask = convertResponseToDeferredTask(task);
+
+		    if (deferredTask instanceof ContactExportPullTask)
+		    {
+			ThreadPool.getThreadPoolExecutor().execute(deferredTask);
+		    }
 
 		    if (deferredTask != null)
 			deferredTask.run();
