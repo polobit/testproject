@@ -191,11 +191,11 @@ var CompaniesRouter = Backbone.Router
 		if (is_lhs_filter)
 		{
 			template_key = "companies-custom-view-table";
-			if (grid_view || readCookie("agile_contact_view"))
+			/*if (grid_view || readCookie("agile_contact_view"))
 			{
 				template_key = "contacts-grid-table";
 				individual_tag_name = "div";
-			}
+			}*/
 		}
 		
 		/*
