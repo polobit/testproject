@@ -428,15 +428,9 @@ var ContactsRouter = Backbone.Router.extend({
 	contactDetails : function(id, contact)
 	{
 		//Removed previous contact timeline nodes from the queue, if existed
-		if(timeline_collection_view)
+		if(timeline_collection_view && timeline_collection_view.queue)
 		{
-			$.each(timeline_collection_view, function()
-			{
-				if(this.queue)
-				{
-					this.queue.pop();
-				}
-			});
+			timeline_collection_view.queue.pop();
 		}
 		
 		//For getting custom fields

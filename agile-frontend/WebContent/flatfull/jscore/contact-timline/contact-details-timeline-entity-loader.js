@@ -2,7 +2,6 @@ var timeline_entity_loader = {
 
 	init : function(contact)
 	{
-		timeline_collection_view = {};
 		this.active_connections = 0;
 		MONTH_YEARS = [];
 		var _this = this;
@@ -11,11 +10,11 @@ var timeline_entity_loader = {
 		{
 			// customize_isotope()
 			configure_timeline();
-			timeline_collection_view[contact.id] = new timeline_view();
+			timeline_collection_view = new timeline_view();
 			console.log(_this);
 			_this.load_other_timline_entities(contact);
 
-			timeline_collection_view[contact.id].render();
+			timeline_collection_view.render();
 			// timeline_collection_view.render();
 
 		});
@@ -51,7 +50,7 @@ var timeline_entity_loader = {
 			}
 			
 			if(App_Contacts.contactDetailView.model.get('id') == contactId)
-			timeline_collection_view[contactId].addItems(entities);
+			timeline_collection_view.addItems(entities);
 		});
 	},
 	load_stats : function(contact)
@@ -84,7 +83,7 @@ var timeline_entity_loader = {
 						
 						});
 					if(App_Contacts.contactDetailView.model.get('id') == contact.id)
-					timeline_collection_view[contact.id].addItems(array);
+					timeline_collection_view.addItems(array);
 				}
 			})
 		}
@@ -116,7 +115,7 @@ var timeline_entity_loader = {
 
 											});
 							if(App_Contacts.contactDetailView.model.get('id') == contactId)
-							timeline_collection_view[contactId].addItems(log_models);
+							timeline_collection_view.addItems(log_models);
 						})
 	}, timline_fetch_data : function(url, callback)
 	{
@@ -232,7 +231,7 @@ var timeline_entity_loader = {
 					}
 				}
 				if(App_Contacts.contactDetailView.model.get('id') == contact.id)
-				timeline_collection_view[contact.id].addItems(data.toJSON());
+				timeline_collection_view.addItems(data.toJSON());
 
 				addTagAgile(CODE_SETUP_TAG);
 			}
