@@ -1,8 +1,8 @@
 /**
- *  Document colleciton events
+ *  DataSync inner model view events
  */
 
- var DATA_SYNC_URL="core/api/contactprefs"
+var DATA_SYNC_URL="core/api/contactprefs"
 var DataSync_Event_Modal_View = Base_Model_View.extend({
 
     events: {
@@ -204,6 +204,9 @@ var DataSync_Event_Modal_View = Base_Model_View.extend({
 
 
 
+/**
+binds all click events  for google calendar model
+*/
 
 	var GoogleCalendar_Event_Modal_View = Base_Model_View.extend({
 

@@ -1,3 +1,8 @@
+/**
+
+	appends datasync widgets by fetching collection in single call
+*/
+
 function organize_sync_widgets(base_model)
 {
 	var itemView = new Base_List_View({ model : base_model, template : 'admin-settings-import-skeleton', tagName : 'div', });
@@ -19,6 +24,11 @@ function organize_sync_widgets(base_model)
 }
 
 
+
+/**
+
+single click for all data sync collection events
+*/
 function initializeDataSyncListners(){
 
 
@@ -91,6 +101,10 @@ function initializeDataSyncListners(){
 	
 }
 
+/**
+
+	function call to close newly opend window after authentication done. 
+*/
 
 function executeDataSyncReturnCallback(returnUrl,serviceName){
 		
@@ -113,6 +127,12 @@ function executeDataSyncReturnCallback(returnUrl,serviceName){
 }
 
 var DATA_SYNC_FORCE_FETCH=false;
+
+/**
+
+fetches the model from collection if collection exists
+else fetchs colection and returns model
+*/
 function getSyncModelFromName(name, callback){
 
        // Checks force fetch
@@ -141,6 +161,12 @@ function getSyncModelFromName(name, callback){
        }
   }
 
+
+/**
+
+iterates over collection and fetches model based on type
+name is type i.e GOOGLE or STRIPE or SHOPIFY etc
+*/
   function getModalfromName(collection, name){
 
 	for (var i in collection){
@@ -152,6 +178,10 @@ function getSyncModelFromName(name, callback){
       
   }
 
+/**
+
+renders inner sync view and binds all model events to DataSync_Event_Modal_View
+*/
 
   function renderInnerSyncView(url,templateName,data,callback){
 

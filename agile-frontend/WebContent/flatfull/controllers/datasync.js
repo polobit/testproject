@@ -1,3 +1,10 @@
+/**
+ new DataSync router
+ separated from widgets
+*/
+
+
+
 var DataSyncRouter = Backbone.Router.extend({
 
 routes : {
