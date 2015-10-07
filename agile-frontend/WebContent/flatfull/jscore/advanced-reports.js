@@ -39,7 +39,7 @@ function initFunnelCharts(callback)
 			}
 			else
 			$('#reportrange span').html(Date.today().add({ days : -6 }).toString('MMMM d, yyyy')+'-'+Date.today().toString('MMMM d, yyyy'));	
-
+			callback();
 		});
 	});
 
