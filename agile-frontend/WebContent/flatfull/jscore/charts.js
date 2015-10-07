@@ -1546,7 +1546,7 @@ function chartRenderforIncoming(selector,categories,name,yaxis_name,min_tick_int
                     marginRight: 130,
                     marginBottom: 50
                 },
-                colors: ['#7266ba','#23b7e5','#27c24c','#fad733','#f05050','#6E6658','#611680','#167F80','#801634','#D3E6C7'],
+                colors: ['#7266ba','#23b7e5','#27c24c','#fad733','#f05050','#FF9900','#7AF168','#167F80','#0560A2','#D3E6C7'],
                 title: {
                     text: name,
                     x: -20,//center
@@ -1725,7 +1725,7 @@ function pieforReports(url, selector, name,show_loading)
 			{
 				chart : { renderTo : selector, type : 'pie', plotBackgroundColor : null, plotBorderWidth : null, plotShadow : false,
 					marginTop : 50 },
-				colors: ['#7266ba','#23b7e5','#27c24c','#fad733','#f05050','#6E6658','#611680','#167F80','#801634','#D3E6C7'],
+				colors: ['#7266ba','#23b7e5','#27c24c','#fad733','#f05050','#FF9900','#7AF168','#167F80','#0560A2','#D3E6C7'],
 				title : { text : name },
 				 tooltip: {
 				formatter: function(){
