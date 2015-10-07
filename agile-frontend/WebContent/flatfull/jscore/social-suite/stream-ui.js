@@ -191,41 +191,14 @@ function initializeSocialSuite()
 							$(this).css('background-color', '#EDEDED');
 						}
 
-						switch (mouseoverStream) {
-						case "Search":
-							$("#stream_description_label").html('<i class="icon-search"></i> Relevant Tweets matching a specified Search Keyword.');
-							break;
-						case "Home":
-							$("#stream_description_label").html('<i class="icon-home"></i> Tweets and retweets of user and followers.');
-							break;
-						case "Mentions":
-							$("#stream_description_label").html('<img src="../img/socialsuite/mentions.png" style="width: 15px;height: 15px;"> Mentions (all tweets containing a users\'s @screen_name).');
-							break;
-						case "Retweets":
-							$("#stream_description_label").html('<i class="icon-retweet"></i> User\'s tweets retweeted by others.');
-							break;
-						case "DM_Inbox":
-							$("#stream_description_label").html('<i class="icon-download-alt"></i> Direct messages sent to the user.');
-							break;
-						case "DM_Outbox":
-							$("#stream_description_label").html('<i class="icon-upload-alt"></i> Direct messages sent by the user.');
-							break;
-						case "Favorites":
-							$("#stream_description_label").html('<i class="icon-star"></i> User\'s favorite tweets.');
-							break;
-						case "Sent":
-							$("#stream_description_label").html('<i class="icon-share-alt"></i> Tweets sent by the user.');
-							break;
-						case "Scheduled":
-							$("#stream_description_label").html('<i class="icon-time"></i> Tweets scheduled for sending later.');
-							break;
-						case "All_Updates":
-							$("#stream_description_label").html('<i class="icon-home"></i> Updates and shares from user\'s connections and groups.');
-							break;
-						case "My_Updates":
-							$("#stream_description_label").html('<i class="icon-share-alt"></i> Updates authored by the user.');
-							break;
-						}// switch end
+						getTemplate('socialsuite-hover-helptext', {"item":mouseoverStream}, undefined, function(template_ui){
+							if(!template_ui)
+								  return;
+							$("#stream_description_label").removeClass('description-hidden');
+							$('#stream_description_label').html(template_ui);	
+						}, null);
+
+						
 					});
 
 	/**
