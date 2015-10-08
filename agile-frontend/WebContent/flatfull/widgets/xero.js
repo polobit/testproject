@@ -216,6 +216,7 @@ function startXeroWidget(contact_id){
 		last_name = ' ';
 
 	showXeroClient(contact_id);
+
     $("#widgets").off('click','#xero_add_contact');
 	$("#widgets").on('click','#xero_add_contact', function(e)
 	{
