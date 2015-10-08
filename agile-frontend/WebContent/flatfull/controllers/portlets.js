@@ -145,3 +145,18 @@ function hidePortletErrors(ele) {
 	if ($('#' + ele.id).next().is(':visible'))
 		$('#' + ele.id).next().hide();
 }
+
+/**
+ * Convert time in human readable format.
+ */
+function displayTimeAgo(elmnt)
+{
+	head.js('lib/jquery.timeago.js', function()
+	{
+		$(".time-ago", elmnt).timeago();
+	});
+	
+	console.log($("article.stream-item").parent());
+	
+	$("article.stream-item").parent().addClass("social-striped");
+}

@@ -583,7 +583,7 @@ public class Mandrill
     }
 
     /**
-     * Returns false if Emails Plan is Free
+     * Returns false if Plan is Free
      * 
      * @return boolean
      */
@@ -593,8 +593,10 @@ public class Mandrill
 	{
 	    BillingRestriction billingRestriction = BillingRestrictionUtil.getBillingRestriction(true);
 
-	    if (billingRestriction != null)
-	    	return billingRestriction.isEmailPlanPaid();
+	    return !billingRestriction.planDetails.isFreePlan();
+	    
+//	    if (billingRestriction != null)
+//	    	return billingRestriction.isEmailPlanPaid();
 	}
 	catch (Exception e)
 	{
