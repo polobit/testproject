@@ -889,13 +889,13 @@ function SecondsToCampaignTime(time)
 	var seconds = time - minutes * 60;
 	var friendlyTime = "";
 	if (hours == 1)
-		friendlyTime = hours + " hour ";
+		friendlyTime = hours + " hour";
 	if (hours > 1)
-		friendlyTime = hours + " hour ";
+		friendlyTime = hours + " hour";
 	if (minutes > 0)
-		friendlyTime += minutes + " min ";
+		friendlyTime += minutes + " min";
 	if (seconds > 0)
-		friendlyTime += seconds + " sec ";
+		friendlyTime += seconds + " sec";
 	if (friendlyTime != "")
 		return friendlyTime;
 }
