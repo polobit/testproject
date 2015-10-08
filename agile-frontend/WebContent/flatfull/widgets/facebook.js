@@ -172,9 +172,7 @@ function showFacebookProfile(facebookid, contact_id)
 							console.log("am at success");
 						}, function error(data)
 						{
-
 							facebookError(data.responseText);
-
 						});
 			});
 
@@ -249,27 +247,28 @@ function startFacebookWidget(contact_id)
 			console.log("In getID facebook");
 			var getURL = "https://graph.facebook.com/"+fbUserId;
 			console.log(getURL);
-			var fbProfileDetails = $.parseJSON(
-    		        $.ajax({
-    		            url: getURL, 
-    		            async: false,
-    		            dataType: 'json'
-    		        }).responseText
-    		    );
-			console.log(fbProfileDetails);
+
+			$.ajax({
+    		            url: getURL,
+    		            dataType: 'json',
+    		            success : function(fbProfileDetails){
+    		            	console.log(fbProfileDetails);
 			
-			if(typeof fbProfileDetails.id != 'undefined') {
-				fbUserId = fbProfileDetails.id;				
-				var propertiesArray = [{ "name" : "website", "value" : "@"+fbUserId, "subtype" : "FACEBOOK" }];
-				console.log(propertiesArray);
-				agile_crm_update_contact_properties(propertiesArray);
-			} else {
-				if(typeof fbProfileDetails.error != 'undefined') {
-//						facebookError(fbProfileDetails.error.message);
-					facebookError("Facebook profile do not exist.("+fbProfileLink+")");
-					return;
-				}
-			}
+							if(typeof fbProfileDetails.id != 'undefined') {
+								fbUserId = fbProfileDetails.id;				
+								var propertiesArray = [{ "name" : "website", "value" : "@"+fbUserId, "subtype" : "FACEBOOK" }];
+								console.log(propertiesArray);
+								agile_crm_update_contact_properties(propertiesArray);
+							} else {
+								if(typeof fbProfileDetails.error != 'undefined') {
+									facebookError("Facebook profile do not exist.("+fbProfileLink+")");
+									return;
+								}
+							}
+    		            }
+    		        });
+			
+			
 		}
 		showFacebookProfile(fbUserId, contact_id);
 	}

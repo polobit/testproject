@@ -134,8 +134,6 @@ function getGooglePlusUserDetails(id)
 	else {
 		return apiCallReturnData;
 	}
-	
-	return googlePlusApiCall(apiURL, reqData);
 
 }
 
@@ -163,9 +161,6 @@ function getGooglePlusPosts(id, nextPageToken)
 	else {
 		return apiCallReturnData;
 	}
-	
-	return googlePlusApiCall(apiURL, reqData);
-
 }
 
 function getMatchingPeople(search)
@@ -189,7 +184,6 @@ function getMatchingPeople(search)
 	else {
 		return apiCallReturnData;
 	}
-	return googlePlusApiCall(apiURL, reqData);
 }
 
 // utility functions
