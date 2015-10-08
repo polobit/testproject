@@ -8,6 +8,10 @@ var TicketsUtilRouter = Backbone.Router.extend({
 		"tickets" : "tickets",
 		"ticket/:id" : "ticketDetails",
 
+		/*Tickets by group*/
+		"tickets/group/:id" : "ticketsByGroup",
+		"tickets/group/:id/:status" : "ticketsByGroup",
+
 		/*Ticket Groups*/
 		"ticket-groups" : "ticketGroups",
 		"add-ticket-group" : "addTicketGroup",
@@ -18,26 +22,39 @@ var TicketsUtilRouter = Backbone.Router.extend({
 	 * Shows list of Tickets
 	 */
 	tickets : function() {
+		Backbone.history.navigate('#tickets/group/'+ DEFAULT_GROUP_ID +'/new', {trigger: true});
+	},
 
-		$("#content").html(getTemplate('tickets-container'));
+	ticketsByGroup: function(group_id, status){
 
-		App_Ticket_Module.ticketsCollection = new Base_Collection_View({
-			url : '/core/api/tickets?status=NEW',
-			// restKey : "workflow",
-			//sort_collection : false,
-			templateKey : "ticket",
-			individual_tag_name : 'tr',
-			cursor : true,
-			page_size : 20,
-			slateKey : "no-tickets"
+		Ticket_Status = status;
+
+		//Renders root template, fetches tickets count & loads Groups drop down
+		Tickets_Util.initialize(group_id, function(){
+
+			App_Ticket_Module.ticketsCollection = new Base_Collection_View({
+				url : '/core/api/tickets?status=' + Ticket_Status + '&group_id=' + Group_ID,
+				sortKey:"created_time",
+				descending:true,
+				templateKey : "ticket",
+				individual_tag_name : 'div',
+				cursor : true,
+				page_size : 20,
+				slateKey : "no-tickets"
+			});
+
+			//Activating main menu
+			$('nav').find(".active").removeClass("active");
+			$("#tickets").addClass("active");
+
+			//Activating ticket type pill
+			$('ul.ticket-types').find('.active').removeClass('active');
+			$('ul.ticket-types').find('li a.' + Ticket_Status).parent().addClass('active');
+
+			App_Ticket_Module.ticketsCollection.collection.fetch();
+
+			$(".tickets-collection-pane").html(App_Ticket_Module.ticketsCollection.el);
 		});
-
-		$('nav').find(".active").removeClass("active");
-		$("#tickets").addClass("active");
-
-		App_Ticket_Module.ticketsCollection.collection.fetch();
-
-		$("#right-pane").html(App_Ticket_Module.ticketsCollection.el);
 	},
 
 	/**
@@ -59,6 +76,8 @@ var TicketsUtilRouter = Backbone.Router.extend({
 			return;
 		}	
 
+		Current_Ticket_ID = id;
+
 		var ticketView = new Base_Model_View({
 			model : ticketModal, 
 			isNew : true, 
@@ -66,14 +85,17 @@ var TicketsUtilRouter = Backbone.Router.extend({
 			url : "/core/api/ticket/" + id,
 			postRenderCallback : function(el, data) {
 
-				App_Ticket_Module.loadHtmlEditor($('#reply-editor', el), function(){
+				//Initializing click events on ticket details view
+				initializeTicketNotesEvent(el);
 
-					App_Ticket_Module.setMinHeight($('#reply-notes-container', el));
+				//Initialize tooltips
+				$('[data-toggle="tooltip"]', el).tooltip();
 
-					App_Ticket_Module.renderNotesCollection(id, $('#notes-collection-container'), function(){
+				App_Ticket_Module.renderNotesCollection(id, $('#notes-collection-container', el), function(){});
 
-					});
-				});
+				// App_Ticket_Module.loadHtmlEditor($('#summernote', el), function(){
+
+				// });
 			}
 		});
 
@@ -168,9 +190,9 @@ var TicketsUtilRouter = Backbone.Router.extend({
 
 		App_Ticket_Module.notesCollection = new Base_Collection_View({
 			url : '/core/api/tickets/notes?ticket_id=' + ticket_id,
-			// restKey : "workflow",
-			//sort_collection : false,
 			templateKey : "ticket-notes",
+			sortKey:"created_time",
+			descending:false,
 			individual_tag_name : 'div',
 			postRenderCallback : function(el) {
 
@@ -237,13 +259,5 @@ var TicketsUtilRouter = Backbone.Router.extend({
 			if(callback)
 				callback();
 		});
-	},
-
-	setMinHeight : function($ele){
-
-		var offset_top = $ele.offset().top;
-		var window_height = window.innerHeight;
-
-		$ele.css('min-height', window_height - offset_top + 'px');
 	}
 });

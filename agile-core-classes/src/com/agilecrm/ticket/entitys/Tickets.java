@@ -207,6 +207,11 @@ public class Tickets extends Cursor
 	 * Stores true if ticket is deleted from client
 	 */
 	public Boolean is_archived = false;
+	
+	/**
+	 * Stores true if ticket is favorite
+	 */
+	public Boolean is_favorite = false;
 
 	/**
 	 * Stores true if ticket is deleted from client

@@ -1,14 +1,11 @@
 package com.agilecrm;
 
-public class Globals {
-	public static String[] URLS = { "agilecrm.com", "helptor.com",
-			"-dot-sandbox-dot-agile-crm-cloud.appspot.com",
-			"-dot-sandbox-dot-agilecrmbeta.appspot.com",
-			"-dot-addon-dot-agilecrmbeta.appspot.com",
-			"-dot-mcsandbox-dot-agile-crm-cloud.appspot.com",
-			"-dot-sandbox-dot-agilesanbox.appspot.com", "agilesanbox.com",
-			"-dot-newui-dot-agilecrmbeta.appspot.com",
-			"-dot-async-dot-agilecrmbeta.appspot.com" };
+public class Globals
+{
+	public static String[] URLS = { "agilecrm.com", "helptor.com", "-dot-sandbox-dot-agile-crm-cloud.appspot.com",
+			"-dot-sandbox-dot-agilecrmbeta.appspot.com", "-dot-addon-dot-agilecrmbeta.appspot.com",
+			"-dot-mcsandbox-dot-agile-crm-cloud.appspot.com", "-dot-sandbox-dot-agilesanbox.appspot.com",
+			"agilesanbox.com", "-dot-newui-dot-agilecrmbeta.appspot.com", "-dot-async-dot-agilecrmbeta.appspot.com" };
 
 	public static String SUB_VERSION_URL = "-dot-agile-crm-cloud.appspot.com";
 
@@ -198,4 +195,9 @@ public class Globals {
 
 	// Inbound email address suffix
 	public static final String INBOUND_EMAIL_SUFFIX = "@helptor.com";
+	// Gravatar image URL
+	public static final String GRAVATAR_SECURE_IMAGE_URL = "https://secure.gravatar.com/avatar/"; 
+
+	// Default image url
+	public static final String GRAVATAR_SECURE_DEFAULT_IMAGE_URL = "https://clickdesk.agilecrm.com/flatfull/images/flatfull/user-default.jpg";
 }

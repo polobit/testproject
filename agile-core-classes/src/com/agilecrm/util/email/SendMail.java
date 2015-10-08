@@ -121,6 +121,9 @@ public class SendMail
     public static final String FROM_VERIFICATION_EMAIL = "from_verification_email";
     public static final String FROM_VERIFICATION_EMAIL_SUBJECT = "Verify your Email";
 
+    //Ticket template names
+    public static final String TICKET_REPLY = "ticket_reply_email";
+    
     /**
      * From Name of email.
      */

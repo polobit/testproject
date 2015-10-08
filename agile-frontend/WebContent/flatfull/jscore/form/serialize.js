@@ -52,6 +52,16 @@ function serializeForm(form_id) {
 	}).get());
 	console.log(arr);
 	
+	//Included to set content editable data
+	arr = arr.concat($('#' + form_id + ' div[contenteditable="true"]').map(function() {
+
+		var $editable_div = $('div[contenteditable="true"]');
+
+		return {
+			"name" : $editable_div.attr('data-name'),
+			"value" : $editable_div.html()
+		};
+	}).get());
 
 	// Serialize tags
 	arr = arr.concat(get_tags(form_id));

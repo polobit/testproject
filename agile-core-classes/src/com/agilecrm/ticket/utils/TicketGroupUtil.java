@@ -83,7 +83,7 @@ public class TicketGroupUtil
 		ticketGroup = new TicketGroups();
 		ticketGroup.group_name = groupName;
 		ticketGroup.updated_time = Calendar.getInstance().getTimeInMillis();
-		
+
 		ticketGroup.setAgents_key_list(agents_key_list);
 		ticketGroup.setOwner_key(DomainUserUtil.getCurentUserKey());
 
@@ -130,7 +130,7 @@ public class TicketGroupUtil
 	{
 		return TicketGroups.ticketGroupsDao.get(groupID);
 	}
-	
+
 	/**
 	 * 
 	 * @param namespace
@@ -140,7 +140,14 @@ public class TicketGroupUtil
 	 */
 	public static TicketGroups getDefaultTicketGroup() throws EntityNotFoundException
 	{
-		return TicketGroups.ticketGroupsDao.getByProperty("is_default", true);
+		TicketGroups ticketGroup = null;
+
+		ticketGroup = TicketGroups.ticketGroupsDao.getByProperty("is_default", true);
+
+		if (ticketGroup == null)
+			ticketGroup = createDefaultGroup();
+
+		return ticketGroup;
 	}
 
 	/**

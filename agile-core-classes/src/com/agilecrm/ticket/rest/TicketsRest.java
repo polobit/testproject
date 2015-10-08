@@ -12,6 +12,7 @@ import javax.ws.rs.core.Response;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
+import org.json.JSONObject;
 
 import com.agilecrm.ticket.entitys.Tickets;
 import com.agilecrm.ticket.entitys.Tickets.Status;
@@ -44,13 +45,50 @@ public class TicketsRest
 			if (StringUtils.isBlank(status))
 				throw new Exception("Required paramaters missing.");
 
-			//Set default group id if Group ID is null
-			if(StringUtils.isBlank(groupID)){
+			// Set default group id if Group ID is null
+			if (StringUtils.isBlank(groupID))
+				groupID = TicketGroupUtil.getDefaultTicketGroup().id + "";
+
+			if (StringUtils.equalsIgnoreCase(status, "starred"))
+				return TicketsUtil.getFavoriteTickets(Long.parseLong(groupID));
+
+			return TicketsUtil.getTicketsByGroupID(Long.parseLong(groupID), Status.valueOf(status.toUpperCase()), cursor, pageSize,
+					"-last_updated_time");
+		}
+		catch (Exception e)
+		{
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
+			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+					.build());
+		}
+	}
+
+	/**
+	 * 
+	 * @param groupID
+	 * @param cursor
+	 * @param pageSize
+	 * @param status
+	 * @return list of tickets
+	 */
+	@GET
+	@Path("/count")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String getTicketsCountByType(@QueryParam("group_id") String groupID, @QueryParam("status") String status)
+	{
+		try
+		{
+			// Set default group id if Group ID is null
+			if (groupID == null)
+			{
 				groupID = TicketGroupUtil.getDefaultTicketGroup().id + "";
 			}
-			
-			return TicketsUtil.getTicketsByGroupID(Long.parseLong(groupID), Status.valueOf(status), cursor, pageSize,
-					"-last_updated_time");
+
+			int count = StringUtils.equalsIgnoreCase(status, "starred") ? TicketsUtil.getFavoriteTicketsCount(Long
+					.parseLong(groupID)) : TicketsUtil.getTicketsCountByType(Long.parseLong(groupID),
+					Status.valueOf(status));
+
+			return new JSONObject().put("count", count).toString();
 		}
 		catch (Exception e)
 		{

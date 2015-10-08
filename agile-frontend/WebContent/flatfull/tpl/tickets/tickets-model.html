@@ -1,6 +1,15 @@
 <script id="ticket-model-template" type="text/html">
-	<td class="hide data" data="{{id}}">{{id}}</td>
-	<td class="text-ellipsis" title="{{requester_name}} ({{requester_email}})">{{requester_name}} ({{requester_email}})</td>
-	<td class="text-ellipsis" title="{{subject}} {{last_reply_text}}">{{subject}} <span class="text-muted m-t-xs">{{last_reply_text}}</span></td>
-	<td><time class="campaign-created-time b-b-dotted" datetime="{{epochToHumanDate "" last_updated_time}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" last_updated_time}}</time></td>
+	<li class="list-group-item clearfix b-l-3x ng-scope b-l-info data"  data="{{id}}" style="margin-bottom: -1px;">
+      <a class="avatar thumb pull-left m-r" href="javascript: void(0);">
+        <img src="{{emailGravatarurl 50 requester_email}}">
+      </a>
+      <div class="pull-right text-sm text-muted">
+        <span class="hidden-xs ng-binding">{{epochToHumanDate "mmm dd yyyy HH:MM" last_updated_time}}</span>
+        {{#if attachments_exists}}<i class="fa fa-paperclip m-l-sm" aria-hidden="false"></i>{{/if}}
+      </div>
+      <div class="clear">
+        <div><a class="text-md ng-binding" href="#ticket/{{id}}">{{subject}}</a></div>
+        <div class="text-ellipsis m-t-xs">{{first_notes_text}}</div>
+      </div>      
+    </li>
 </script>

@@ -1,6 +1,5 @@
 package com.agilecrm.ticket.utils;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
@@ -10,9 +9,6 @@ import org.apache.commons.lang.exception.ExceptionUtils;
 
 import com.agilecrm.search.document.TicketDocument;
 import com.agilecrm.ticket.entitys.TicketGroups;
-import com.agilecrm.ticket.entitys.TicketNotes;
-import com.agilecrm.ticket.entitys.TicketNotes.CREATED_BY;
-import com.agilecrm.ticket.entitys.TicketNotes.NOTE_TYPE;
 import com.agilecrm.ticket.entitys.Tickets;
 import com.agilecrm.ticket.entitys.Tickets.LAST_UPDATED_BY;
 import com.agilecrm.ticket.entitys.Tickets.Priority;
@@ -32,13 +28,69 @@ import com.googlecode.objectify.Key;
  */
 public class TicketsUtil
 {
-	public static List<Tickets> getTicketsByGroupID(Long groupID, Status status, String cursor, String pageSize, String sortKey)
+	/**
+	 * Returns list of tickets by type
+	 * 
+	 * @param groupID
+	 * @param status
+	 * @param cursor
+	 * @param pageSize
+	 * @param sortKey
+	 * @return
+	 */
+	public static List<Tickets> getTicketsByGroupID(Long groupID, Status status, String cursor, String pageSize,
+			String sortKey)
 	{
 		Map<String, Object> searchMap = new HashMap<String, Object>();
 		searchMap.put("status", status);
 		searchMap.put("group_id", new Key<TicketGroups>(TicketGroups.class, groupID));
-		
+
 		return Tickets.ticketsDao.fetchAllByOrder(20, cursor, searchMap, false, true, sortKey);
+	}
+	
+	/**
+	 * 
+	 * @param groupID
+	 * @param status
+	 * @return
+	 */
+	public static int getTicketsCountByType(Long groupID, Status status)
+	{
+		Map<String, Object> searchMap = new HashMap<String, Object>();
+		searchMap.put("status", status);
+		searchMap.put("group_id", new Key<TicketGroups>(TicketGroups.class, groupID));
+
+		return Tickets.ticketsDao.getCountByProperty(searchMap);
+	}
+	
+	/**
+	 * 
+	 * @param groupID
+	 * @param status
+	 * @return
+	 */
+	public static List<Tickets> getFavoriteTickets(Long groupID)
+	{
+		Map<String, Object> searchMap = new HashMap<String, Object>();
+		searchMap.put("is_favorite", true);
+		searchMap.put("group_id", new Key<TicketGroups>(TicketGroups.class, groupID));
+
+		return Tickets.ticketsDao.listByProperty(searchMap);
+	}
+	
+	/**
+	 * 
+	 * @param groupID
+	 * @param status
+	 * @return
+	 */
+	public static int getFavoriteTicketsCount(Long groupID)
+	{
+		Map<String, Object> searchMap = new HashMap<String, Object>();
+		searchMap.put("is_favorite", true);
+		searchMap.put("group_id", new Key<TicketGroups>(TicketGroups.class, groupID));
+
+		return Tickets.ticketsDao.getCountByProperty(searchMap);
 	}
 
 	/**
@@ -46,7 +98,7 @@ public class TicketsUtil
 	 * 
 	 * @param ticketID
 	 * @return Ticket object
-	 * @throws EntityNotFoundException 
+	 * @throws EntityNotFoundException
 	 */
 	public static Tickets getTicketByID(Long ticketID) throws EntityNotFoundException
 	{
@@ -100,7 +152,7 @@ public class TicketsUtil
 
 			ticket.short_id = getTicketShortID(key.getId()) + "";
 			Tickets.ticketsDao.put(ticket);
-			
+
 			// Create search document
 			new TicketDocument().add(ticket);
 		}
@@ -122,41 +174,36 @@ public class TicketsUtil
 	 * @param last_reply_plain_text
 	 * @param attachments_exists
 	 * @return {@link Tickets} object
+	 * @throws EntityNotFoundException
 	 */
 	public static Tickets updateTicket(Long ticketID, String cc_emails, String last_reply_plain_text,
-			Boolean attachments_exists)
+			LAST_UPDATED_BY last_updated_by, Long updated_time, Long customer_replied_time,
+			Long last_agent_replied_time, Boolean attachments_exists) throws EntityNotFoundException
 	{
-		try
-		{
-			// Get existing ticket
-			Tickets ticket = TicketsUtil.getTicketByID(ticketID);
+		// Get existing ticket
+		Tickets ticket = TicketsUtil.getTicketByID(ticketID);
 
-			Long updatedTime = Calendar.getInstance().getTimeInMillis();
+		ticket.cc_emails = cc_emails;
+		ticket.last_updated_time = updated_time;
+		ticket.last_updated_by = last_updated_by;
+		ticket.last_reply_text = last_reply_plain_text;
+		ticket.user_replies_count += 1;
 
-			ticket.cc_emails = cc_emails;
-			ticket.last_updated_time = updatedTime;
-			ticket.last_customer_replied_time = updatedTime;
-			ticket.last_updated_by = LAST_UPDATED_BY.REQUESTER;
-			ticket.last_reply_text = last_reply_plain_text;
-			ticket.user_replies_count += 1;
+		if (customer_replied_time != null)
+			ticket.last_customer_replied_time = customer_replied_time;
 
-			if (!ticket.attachments_exists)
-				ticket.attachments_exists = attachments_exists;
+		if (last_agent_replied_time != null)
+			ticket.last_agent_replied_time = last_agent_replied_time;
 
-			Tickets.ticketsDao.put(ticket);
+		if (!ticket.attachments_exists)
+			ticket.attachments_exists = attachments_exists;
 
-			// Update search document
-			new TicketDocument().edit(ticket);
+		Tickets.ticketsDao.put(ticket);
 
-			return ticket;
-		}
-		catch (Exception e)
-		{
-			System.out.println("ExceptionUtils.getFullStackTrace(e): " + ExceptionUtils.getFullStackTrace(e));
-			e.printStackTrace();
-		}
+		// Update search document
+		new TicketDocument().edit(ticket);
 
-		return null;
+		return ticket;
 	}
 
 	/**

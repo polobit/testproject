@@ -1,77 +1,37 @@
 <script id="tickets-container-template" type="text/html">
-<div class="custom-animated custom-fadeInUp">
-	<div class="bg-light lter b-b wrapper-md ng-scope">
-	    <div>
-	      <div>
-	 		<h1 class="m-n font-thin h3 pull-left">
-	 			<span id="contact-heading">Tickets</span>
-	 		</h1>
-	        <div class="pull-left"> <div class="btn-group m-l-lg m-r-sm" id="bulk-actions" style="display: none;">
-				<div class="btn btn-sm btn-default">Bulk Actions</div>
-					<a class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" href="#">
-						<span class="caret"></span>
-					</a>
-					<ul class="dropdown-menu" id="view-actions">
-						<li><a href="#" id="bulk-tags" class="_contact_bulk_action">Add Tags</a></li>
-						<li><a href="#" id="bulk-tags-remove" class="_contact_bulk_action">Remove Tags</a></li>
-	                    <li class="divider"></li>  
-						
-						<li><a href="#" id="bulk-campaigns" class="_contact_bulk_action">Add to Campaign</a></li>
-						
-						<li><a href="#" id="show-callcampaignModal">Start Call Campaign</a></li>
-						<li><a href="#" id="bulk-email" class="_contact_bulk_action">Send Email</a></li>
-	                    <li class="divider"></li>
-						<li><a href="#" id="bulk-owner" class="_contact_bulk_action">Change Owner</a></li>
-	                     
-	                    <li><a href="#" id="bulk-contacts-export" class="_contact_bulk_action">Export Contacts as CSV</a></li>
-	                     
-						<li><a href="#" class="delete-checked-contacts">Delete</a></li>
-					</ul>
-				</div>
-				<div class="btn-group inline-block" style="display: none;" id="bulk-select"></div>
-			</div>
-			<div class="pull-right">
-				<div id="view-list" class="inline-block"><div class="btn-group m-r-sm">
-			    	<button class="btn btn-default btn-sm custom_view">
-			    		<i class="icon-list" style="margin-right:3px"></i>
-			    	</button>
-			    	<button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
-			    		<span class="caret"></span>
-			    	</button>
-			    </div>
-	   			<div class="btn-group">
-			        <a href="#contacts" onclick="$('.person').click();" class="btn btn-default btn-sm"><i class="icon-users"></i> Support</a>
-			        <a class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
-					<ul class="dropdown-menu pull-right">
-						<li><a href="#import">Import from CSV</a></li>
-					</ul>
-				</div>
-			</div>
-	      </div>
-	      <div class="clearfix"></div>
-	    </div>
-	   </div> 
-	</div>
-	<div class="hbox hbox-auto-xs hbox-auto-sm">
-		<div class="col w-md b-r" id="contacts-lhs-filters-toggle" style="display:">
-			<div class="data-block">
-				<div class="wrapper hidden-sm hidden-xs">
-					<ul class="nav nav-pills nav-stacked nav-sm">
-				        <li class="active"><a>New</a></li>
-				        <li><a>Open</a></li>
-				        <li><a>Starred</a></li>
-				        <li><a>Closed</a></li>
-				      </ul>
-				</div>
-				<div class="wrapper hidden-sm hidden-xs">
-					<h4>Filters</h4><hr class="m-t-sm m-b-sm">
-					<span>No filters available</span>
-				</div>
-			</div>
+<div id="tickets-container" class="hbox hbox-auto-xs hbox-auto-sm">
+	<div class="col w-md bg-light dk b-r bg-auto">
+		<div class="wrapper b-b bg">
+			<button class="btn btn-sm btn-default pull-right visible-sm visible-xs"><i class="fa fa-bars"></i></button>
+      		<a class="btn btn-sm btn-danger w-xs font-bold" href="#ticket/new-ticket">Compose</a>
 		</div>
-		<div id="right-pane" class="col tickets-div">
-			
-	    </div>
+		<div class="wrapper hidden-sm hidden-xs" id="email-menu">
+			<ul class="nav nav-pills nav-stacked nav-sm ticket-types">
+				<li class="active">
+					<a class="new" href="#tickets/group/{{group_id}}/new">
+						New <badge class="badge bg-danger pull-right"></badge>
+					</a>
+				</li>
+		        <li>
+		        	<a class="open" href="#tickets/group/{{group_id}}/open">
+		        		Open <badge class="badge bg-info pull-right"></badge>
+		        	</a>
+		        </li>
+		        <li>
+		        	<a class="starred" href="#tickets/group/{{group_id}}/starred">
+		        		Starred <badge class="badge bg-primary pull-right"></badge>
+		        	</a>
+		        </li>
+		        <li>
+		        	<a class="closed" href="#tickets/group/{{group_id}}/closed">
+		        		Closed <badge class="badge bg-success pull-right"></badge>
+		        	</a>
+		        </li>
+			</ul>
+		</div>
 	</div>
-</div>		
+	<div id="right-pane" class="col">
+
+	</div>
+</div>
 </script>

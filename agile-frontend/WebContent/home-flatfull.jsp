@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<%@page import="com.agilecrm.ticket.utils.TicketGroupUtil"%>
 <%@page import="com.agilecrm.util.VersioningUtil"%>
 <%@page import="com.agilecrm.subscription.SubscriptionUtil"%>
 <%@page import="com.agilecrm.subscription.ui.serialize.Plan"%>
@@ -81,6 +82,8 @@ if(is_free_plan && is_first_time_user)
 String _AGILE_VERSION = SystemProperty.applicationVersion.get();
 
 String _VERSION_ID = VersioningUtil.getVersion();
+
+Long default_group_id = TicketGroupUtil.getDefaultTicketGroup().id;
 %>
 
 
@@ -275,17 +278,11 @@ if(currentUserPrefs.menuPosition.equals("top")){
                 <span>Support</span>
               </li>
   <li id="tickets">
-    <a  href="#tickets">
+    <a  href="#tickets/group/<%=default_group_id%>/new">
       <i class="icon icon-ticket"></i>
       <span>Tickets</span>
     </a>
-  </li>  
-   <li id="ticket-groups">
-    <a  href="#ticket-groups">
-      <i class="icon icon-users"></i>
-      <span>Ticket Groups</span>
-    </a>
-  </li>              
+  </li>             
   </ul>
   </nav>
   </div>
@@ -381,6 +378,9 @@ var CURRENT_DOMAIN_USER = <%=mapper.writeValueAsString(domainUser)%>;
 
 //online scheduling url will be filled  only when user goes to calendar route 
 var ONLINE_SCHEDULING_URL ="" ;
+
+//default group id
+var DEFAULT_GROUP_ID = <%= default_group_id%> ;
 
 var HANDLEBARS_LIB = LOCAL_SERVER ? "/lib/handlebars-v1.3.0.js" : "//cdnjs.cloudflare.com/ajax/libs/handlebars.js/1.3.0/handlebars.min.js";
 

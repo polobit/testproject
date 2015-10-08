@@ -1,5 +1,17 @@
 <script id="ticket-notes-model-template" type="text/html">
-	<div class="col-md-12" style="padding: 10px; border: 1px solid #dee5e7;">
+	<div class="wrapper b-b">
+	    {{#if_equals created_by 'REQUESTER'}}
+	    	<img class="img-circle thumb-xs m-r-sm" src="{{emailGravatarurl 50 requester_email}}">
+	   		From <a href="javascript:void(0);" class="ng-binding">{{requester_name}} ({{requester_email}})</a> on {{epochToHumanDate "mmm dd yyyy HH:MM" created_time}}
+	   	{{else}}
+	   		<img class="img-circle thumb-xs m-r-sm" src="{{domain_user.ownerPic}}">
+	   		User <a href="javascript:void(0);" class="ng-binding">{{domain_user.name}} ({{domain_user.email}}) wrote </a> on {{epochToHumanDate "mmm dd yyyy HH:MM" created_time}}
+	   	{{/if_equals}}	
+	</div>
+	<div class="wrapper">
+    	{{{html_text}}}
+  	</div>
+	<!--<div class="col-md-12" style="padding: 10px; border: 1px solid #dee5e7;">
 		<div class="col-md-12 p-n">
 			<a class="pull-left thumb-sm avatar">
             	<img src="http://flatfull.com/themes/angulr/html/img/a1.jpg">
@@ -17,5 +29,5 @@
 		<div class="col-md-12" style="border-top: 1px solid #f6f6f6; margin-top: 10px; padding-left: 0; padding-right: 0; padding-top: 10px;">
 			{{plain_text}}
 		</div>
-	</div>
+	</div>-->
 </script>

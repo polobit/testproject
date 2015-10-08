@@ -1,30 +1,12 @@
 <script id="ticket-collection-template" type="text/html">
-	<div class="data">
-    	<!-- <div class="panel-heading" style="background:#f6f8f8;">
-    		<label class="i-checks i-checks-sm text-cap">
-			    <input type="checkbox" data="{{id}}" class="usr-grp-checkbox" value="{{id}}">
-			    <i></i> Tickets List
-			</label>
-			<a id="contacts-left-filters-toggle" class="m-l-xs" data-toggle="tooltip" data-placement="right" data-original-title="Filters">
-				<i id="icon-filter" class="fa fa-bars icon-white"></i>
-			</a>
-		</div> -->
-        <div class="dta-contatiner table-responsive">
-			<div class="panel panel-default" style="overflow-x:auto;border-left:none;">
-		    	{{#unless this.length}}
-        			<div id="slate"></div>
-		        {{/unless}}
-		        {{#if this.length}}
-					<table class="table table-striped showCheckboxes m-b-none agile-table panel table-layout-mob-view" url="core/api/tickets/bulk">
-						<thead>
-							<th style="width: 25%;"></th>
-							<th style="width: 50%;"></th>
-							<th style="width: 20%;"></th>
-						</thead>
-		                <tbody id="ticket-model-list" route="ticket/" class="c-p"></tbody>
-		            </table>
-		        {{/if}}
-			</div>
-        </div>
-    </div>
+	<div class="tickets-div">
+		{{#unless this.length}}
+			<div id="slate"></div>
+	    {{/unless}}
+	    {{#if this.length}}
+	    	<ul id="ticket-model-list" route="ticket/" class="list-group list-group-lg no-radius m-b-none m-t-n-xxs" url="core/api/tickets/bulk">
+
+			</ul>
+	    {{/if}}
+	</div>
 </script>

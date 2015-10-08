@@ -3,6 +3,7 @@ package com.agilecrm.ticket.servlets;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -21,6 +22,7 @@ import com.agilecrm.ticket.entitys.TicketNotes;
 import com.agilecrm.ticket.entitys.Tickets;
 import com.agilecrm.ticket.entitys.TicketNotes.CREATED_BY;
 import com.agilecrm.ticket.entitys.TicketNotes.NOTE_TYPE;
+import com.agilecrm.ticket.entitys.Tickets.LAST_UPDATED_BY;
 import com.agilecrm.ticket.entitys.Tickets.Source;
 import com.agilecrm.ticket.utils.TicketGroupUtil;
 import com.agilecrm.ticket.utils.TicketNotesUtil;
@@ -98,8 +100,8 @@ public class TicketWebhook extends HttpServlet
 				return;
 
 			/**
-			 * Finding the exact recipient address as recipient addresses
-			 * may contains many. To address will be in below format -
+			 * Finding the exact recipient address as recipient addresses may
+			 * contains many. To address will be in below format -
 			 * namespace+groupID@helptor.com
 			 */
 			String toAddress = "";
@@ -175,8 +177,8 @@ public class TicketWebhook extends HttpServlet
 
 				/**
 				 * In-Reply-To mime header should contain address ends with
-				 * helptor.com. We will send this as param when agent replies
-				 * to this ticket.
+				 * helptor.com. We will send this as param when agent replies to
+				 * this ticket.
 				 */
 				if (inReplyTo.endsWith(Globals.INBOUND_EMAIL_SUFFIX))
 					isNewTicket = false;
@@ -224,14 +226,17 @@ public class TicketWebhook extends HttpServlet
 					return;
 				}
 
+				Long ticketUpdatedTime = Calendar.getInstance().getTimeInMillis();
+
 				// Updating existing ticket
-				TicketsUtil.updateTicket(ticketID, ccEmails.trim(), msgJSON.getString("text"), attachmentExists);
+				TicketsUtil.updateTicket(ticketID, ccEmails.trim(), msgJSON.getString("text"),
+						LAST_UPDATED_BY.REQUESTER, ticketUpdatedTime, ticketUpdatedTime, null, attachmentExists);
 			}
 
 			// Creating new Notes in TicketNotes table
-			TicketNotes ticketNotes = TicketNotesUtil.createTicketNotes(ticket.id, groupID, CREATED_BY.REQUESTER,
-					msgJSON.getString("from_name"), msgJSON.getString("from_email"), msgJSON.getString("text"),
-					msgJSON.getString("html"), NOTE_TYPE.PUBLIC, attachmentURLs);
+			TicketNotes ticketNotes = TicketNotesUtil.createTicketNotes(ticket.id, groupID, ticket.assigneeID,
+					CREATED_BY.REQUESTER, msgJSON.getString("from_name"), msgJSON.getString("from_email"),
+					msgJSON.getString("text"), msgJSON.getString("html"), NOTE_TYPE.PUBLIC, attachmentURLs);
 
 			NamespaceManager.set(oldNamespace);
 		}
