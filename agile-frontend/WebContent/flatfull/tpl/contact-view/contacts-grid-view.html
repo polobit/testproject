@@ -2,7 +2,7 @@
 
 <div class="contacts-grid-view-temp p-b col-md-4 {{id}}">
 	{{#if_contact_type "PERSON"}}
-	<div class="b r-5x p-sm bg-white" id="{{id}}" style="height: 120px;">
+	<div class="b r-5x p-sm bg-white" id="{{id}}" style="height: 110px;">
 		<div class="left pos-abs">
 			<label class="i-checks i-checks-sm"> <input type="checkbox"
 				class="tbody_check grid-view-checkbox" value=""> <i></i>
@@ -16,12 +16,14 @@
 					height="40px !important" /></a>
 			</div>
 			<div class="pull-left text-ellipsis"
-				style="width: calc(100% - 45px);line-height: 18px;color:#7C7C7C;">
+				style="width: calc(100% - 30%);line-height: 18px;color:#7C7C7C;">
 				<a href="#contact/{{id}}"
 					class="text-first-capital agile-contact-grid-view">
 					{{getPropertyValue properties "first_name"}} {{getPropertyValue
 					properties "last_name"}} </a>
-
+			</div>
+			<div class="pull-left text-ellipsis"
+				style="width: calc(100% - 45px);line-height: 18px;color:#7C7C7C;">
 				<div style="color:#7C7C7C; display:{{checkPropertyValueExistance properties "company" "title"}}">
 					<span class="grid-view-elipsis" style="vertical-align: bottom;" title="{{getPropertyValue properties "company"}}">{{getPropertyValue
 						properties "company"}}</span>{{getPropertyValueExists properties
@@ -29,12 +31,12 @@
 						title="{{getPropertyValue properties "title"}}">
 						{{getPropertyValue properties "title"}}</span>
 				</div>
+				</div>
 
-				<div>{{getPropertyValue properties "email"}}</div>
+				<div class="text-ellipsis">{{getPropertyValue properties "email"}}</div>
 
 
 
-			</div>
 			<div class="pull-right grid-view-actions grid-view-action-button">
 				<span class="m-r-xs c-p"><a href="#contact/{{id}}"><i
 						data-toggle="tooltip" data-placement="left" title=""
@@ -47,7 +49,7 @@
 
 		</div>
 		<div class="clearfix"></div>
-		<div class="w-full text-ellipsis m-t-xs m-t"
+		<div class="w-full text-ellipsis m-t-sm"
 			style="padding-left: 24px;">
 			{{#each tags}} <span
 				class="label bg-light dk text-tiny overflow-visible font-normal grid-tag-color">{{this}}</span>
@@ -81,11 +83,12 @@
 					height="40px !important" /></a>
 			</div>
 			<div class="pull-left text-ellipsis"
-				style="width: calc(100% - 45px);line-height: 18px;">
+				style="width: calc(100% - 30%);line-height: 18px;color:#7C7C7C;">
 				<a href="#contact/{{id}}"
 					class="text-first-capital agile-contact-grid-view">
 					{{getPropertyValue properties "first_name"}} {{getPropertyValue
 					properties "last_name"}} </a>
+				</div>
 
 				<div style="color:#7C7C7C;display:{{checkPropertyValueExistance properties "company" "title"}}">
 					<span class="grid-view-elipsis" style="vertical-align: bottom;"  title="{{getPropertyValue properties "company"}}">{{getPropertyValue
@@ -93,9 +96,9 @@
 					"company" "title"}}&nbsp;<span class="grid-view-elipsis" style="vertical-align: bottom;" title="{{getPropertyValue properties "title"}}">
 						{{getPropertyValue properties "title"}}</span>
 				</div>
-				<div>{{getPropertyValue properties "email"}}</div>
+				<div class="text-ellipsis">{{getPropertyValue properties "email"}}</div>
 
-			</div>
+			
 			<div class="pull-right grid-view-actions grid-view-action-button">
 				<span class="m-r-xs c-p"><a href="#contact/{{id}}"><i
 						data-toggle="tooltip" data-placement="left" title=""
@@ -127,7 +130,7 @@
 <div class="pull-left">
 			<h3 class="inline-block font-thin h3"><span id="contact-heading">Contacts</span><span id="contacts-count" class="m-l-xs">{{contacts_count}}</span></h3>
 <div class="inline-block ">
-			<div class="btn-group m-l-md" id="bulk-actions"
+			<div class="btn-group m-l-lg m-r-sm" id="bulk-actions"
 				style="display: none;">
 					<div class="btn btn-sm btn-default">Bulk Actions</div>
 					<a class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" href="#">

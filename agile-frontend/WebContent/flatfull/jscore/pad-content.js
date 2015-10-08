@@ -23,7 +23,6 @@ var CONTENT_JSON = {
 	},
 	"filter_results" : {
 		"title" : "No contacts matching this criteria.",
-		"description" : "Change your search query by refining the filters to get the required details.",
 		//"learn_more" : "click here to learn more",
 		//"button_text" : "Add Contacts",
 		"route" : "#",
@@ -213,12 +212,6 @@ function fill_slate(id, el, key) {
 			template_name = "empty-collection-model";
 			json = CONTENT_JSON["filter_results_companies"];
 		}
-
-		if((route_path == "filter_results")){
-			template_name = "empty-collection-contacts-model";
-			json = CONTENT_JSON[route_path];
-		} 
-
 			
 		else{
 			template_name = "empty-collection-model";

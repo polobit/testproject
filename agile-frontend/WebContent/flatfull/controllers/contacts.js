@@ -121,7 +121,8 @@ var ContactsRouter = Backbone.Router.extend({
 		/*if(readData('dynamic_contact_filter') &&readData('dynamic_contact_filter').indexOf('campaign_status') >= 0 ) {
 			eraseData('dynamic_contact_filter');
 		}*/
-
+		//custom scroll element for grid view
+		var custom_scrollable_element=null;
 		var max_contacts_count = 20;
 		var is_company = false;
 		var template_key = "contacts";
@@ -138,6 +139,7 @@ var ContactsRouter = Backbone.Router.extend({
 		{
 			template_key = "contacts-grid";
 			individual_tag_name = "div";
+			custom_scrollable_element="#contacts-grid-model-list";
 		}
 		
 		// Default url for contacts route
@@ -248,12 +250,14 @@ var ContactsRouter = Backbone.Router.extend({
 		} 
 
 		var slateKey = getContactPadcontentKey(url);
+		
 		if(is_lhs_filter) {
 			template_key = "contacts-table";
 			if (grid_view || readCookie("agile_contact_view"))
 			{
 				template_key = "contacts-grid-table";
 				individual_tag_name = "div";
+				custom_scrollable_element="#contacts-grid-model-list";
 			}
 		}
 
@@ -261,7 +265,7 @@ var ContactsRouter = Backbone.Router.extend({
 		 * cursor and page_size options are taken to activate
 		 * infiniScroll
 		 */
-		this.contactsListView = new Base_Collection_View({ url : url, sort_collection : false, templateKey : template_key, individual_tag_name : individual_tag_name,
+		this.contactsListView = new Base_Collection_View({ url : url,custom_scrollable_element:custom_scrollable_element, sort_collection : false, templateKey : template_key, individual_tag_name : individual_tag_name,
 			cursor : true, page_size : 25, global_sort_key : sort_key, slateKey : slateKey, request_method : 'POST', post_data: {filterJson: postData}, postRenderCallback : function(el, collection)
 			{
 
