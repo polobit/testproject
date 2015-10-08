@@ -2646,3 +2646,8 @@ background-color: #e4eaec !important;color:rgb(113, 85, 87);
 	font-size: 12px;
 	display:none;
 }
+
+#contacts-view-options .tooltip-inner {
+  white-space:nowrap;
+  max-width:none;
+}

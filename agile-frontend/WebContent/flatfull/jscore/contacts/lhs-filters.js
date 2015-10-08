@@ -393,7 +393,7 @@ $('#' + container_id).on('change', '#lhs-contact-filter-form #RHS_NEW select', f
 	$(this).blur();
 });
 
-$('#' + container_id).on('custom_blur keyup', '#lhs-contact-filter-form #RHS_NEW input:not(.date)', function(e)
+$('#' + container_id).on('blur keyup', '#lhs-contact-filter-form #RHS_NEW input:not(.date)', function(e)
 {
 	if (e.type == 'focusout' || e.keyCode == '13')
 	{

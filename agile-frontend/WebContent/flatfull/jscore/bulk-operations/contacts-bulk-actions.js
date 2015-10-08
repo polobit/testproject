@@ -820,6 +820,8 @@ $(function()
 											$('body').find('#bulk-select').css('display', 'none');
 											$('table#contacts-table').find('.thead_check').removeAttr('checked');
 											$('table#contacts-table').find('.tbody_check').removeAttr('checked');
+											$(".grid-checkboxes").find(".thead_check").removeAttr("checked");
+                                            $(".contacts-grid-view-temp").find(".tbody_check").removeAttr("checked");
 
 										}, "no_noty");
 									});
