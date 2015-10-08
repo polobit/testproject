@@ -115,6 +115,7 @@ public class MandrillUtil
 	MailDeferredTask firstMailDefferedTask = tasks.get(0);
 
 	String apiKey = emailSender.getMandrillAPIKey();
+	boolean isPaid = emailSender.isPaid();
 	
 	System.out.println("API key obtained is..." + apiKey);
 	
@@ -124,7 +125,7 @@ public class MandrillUtil
 	// Initialize mailJSON with common fields
 	JSONObject mailJSON = getMandrillMailJSON(apiKey, firstMailDefferedTask.domain,
 		firstMailDefferedTask.fromEmail, firstMailDefferedTask.fromName, firstMailDefferedTask.replyTo,
-		firstMailDefferedTask.metadata, emailSender.billingRestriction.isEmailPlanPaid());
+		firstMailDefferedTask.metadata, isPaid);
 
 	JSONArray mergeVarsArray = new JSONArray();
 	JSONArray toArray = new JSONArray();

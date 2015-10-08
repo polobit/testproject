@@ -583,27 +583,27 @@ var portlet_graph_utility = {
 						        		var tt = '';
 						        		if(text=="Calls Duration (Mins)")
 						        			tt = '<table>' + 
-					        		              '<tr><td style="color:'+this.points[0].series.color+';padding:0">'+this.points[0].series.name+': </td>' +
+					        		              '<tr><td style="color:'+this.points[0].series.color+';padding:0">'+this.points[0].series.name+':&nbsp; </td>' +
 					        		              '<td style="padding:0"><b>'+portlet_utility.getPortletsTimeConversion(callsDurationList[this.points[0].point.x])+'</b></td></tr>' +
-					        		              '<tr><td style="color:'+this.points[0].series.color+';padding:0">Calls: </td>' + 
+					        		              '<tr><td style="color:'+this.points[0].series.color+';padding:0">Calls:&nbsp; </td>' + 
 					        		        	  '<td style="padding:0"><b>'+totalCallsCountList[this.points[0].point.x]+'</b></td></tr>' +
 					        		        	  '</table>';
 						        		else{
 						        			tt += '<table>';
 						        			if(this.points[0]!=undefined && this.points[0].series!=undefined){
-						        				tt += 	'<tr><td style="color:'+this.points[0].series.color+';padding:0">'+this.points[0].series.name+': </td>' +
+						        				tt += 	'<tr><td style="color:'+this.points[0].series.color+';padding:0">'+this.points[0].series.name+':&nbsp; </td>' +
 							                      		'<td style="padding:0"><b>'+this.points[0].point.y+'</b></td></tr>';
 						        			}
 						        			if(this.points[1]!=undefined && this.points[1].series!=undefined){
-						        				tt += 	'<tr><td style="color:'+this.points[1].series.color+';padding:0">'+this.points[1].series.name+': </td>' +
+						        				tt += 	'<tr><td style="color:'+this.points[1].series.color+';padding:0">'+this.points[1].series.name+':&nbsp; </td>' +
 							                      		'<td style="padding:0"><b>'+this.points[1].point.y+'</b></td></tr>';
 						        			}
 						        			if(this.points[2]!=undefined && this.points[2].series!=undefined){
-						        				tt += 	'<tr><td style="color:'+this.points[2].series.color+';padding:0">'+this.points[2].series.name+': </td>' +
+						        				tt += 	'<tr><td style="color:'+this.points[2].series.color+';padding:0">'+this.points[2].series.name+':&nbsp; </td>' +
 							                      		'<td style="padding:0"><b>'+this.points[2].point.y+'</b></td></tr>';
 						        			}
 						        			if(this.points[3]!=undefined && this.points[3].series!=undefined){
-						        				tt += 	'<tr><td style="color:'+this.points[3].series.color+';padding:0">'+this.points[3].series.name+': </td>' +
+						        				tt += 	'<tr><td style="color:'+this.points[3].series.color+';padding:0">'+this.points[3].series.name+':&nbsp; </td>' +
 							                      		'<td style="padding:0"><b>'+this.points[3].point.y+'</b></td></tr>';
 						        			}
 						        			tt += '</table>';
