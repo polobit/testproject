@@ -19,6 +19,7 @@ import org.json.JSONException;
 
 import com.agilecrm.AgileQueues;
 import com.agilecrm.activities.Category;
+import com.agilecrm.activities.util.CategoriesUtil;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.CustomFieldDef;
 import com.agilecrm.contact.CustomFieldDef.SCOPE;
@@ -638,6 +639,7 @@ public class OpportunityUtil
 	int type=Calendar.DAY_OF_MONTH;
 	// Deals Object
 	JSONObject dealsObject = new JSONObject();
+	CategoriesUtil categoriesUtil = new CategoriesUtil();
 
 	/*if (pipelineId == null || pipelineId == 0L)
 	    pipelineId = MilestoneUtil.getMilestones().id;*/
@@ -666,6 +668,7 @@ public class OpportunityUtil
 		if(sourceId!=null){
 			for (Opportunity opportunity : opportunitiesList)
 			{
+				boolean flag=true;
 				try
 				{
 					Long source=opportunity.getDeal_source_id();
@@ -674,9 +677,21 @@ public class OpportunityUtil
 							if (source==0L)
 								opportunitiesList_temp.add(opportunity);
 							else
-								continue;
+								{
+								List<Category> sources = categoriesUtil.getCategoriesByType("DEAL_SOURCE");
+								for(Category source_id : sources)
+								{
+									if(source.toString().equals(source_id.getId().toString())){
+										flag=false;
+										break;
+									}
+										
+								}
+								if(flag)
+									opportunitiesList_temp.add(opportunity);
+								}
 						}
-						else if (source.equals(sourceId))
+						else if (source.toString().equals(sourceId.toString()))
 							opportunitiesList_temp.add(opportunity);
 						else 
 							continue;
