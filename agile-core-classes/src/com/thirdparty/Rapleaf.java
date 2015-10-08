@@ -16,6 +16,7 @@ import com.agilecrm.widgets.Widget;
  * @author invox-4
  * 
  */
+
 public class Rapleaf {
 	public static final String DATA = "Email";
 
@@ -100,13 +101,15 @@ public class Rapleaf {
 		System.out.println("Rapleaf response " + rapleafResponse);
 
 		// If response is null or empty, return failure
-		if (rapleafResponse == null || rapleafResponse.equals("{}"))
+		if (rapleafResponse == null || rapleafResponse.equals("{}")) {
 			return new JSONObject().put(RAPPORTIVE_RESULT,
 					RAPPORTIVE_RESULT_FAILURE);
+		}
 
 		// If it is not JSON, an exception is raised
-		if (!rapleafResponse.startsWith("{"))
+		if (!rapleafResponse.startsWith("{")) {
 			throw new Exception(rapleafResponse);
+		}
 
 		// Converts JSON string into JSONObject
 		JSONObject rapleafJSONObject = new JSONObject(rapleafResponse);

@@ -49,7 +49,7 @@ public class QuickBooksUtil
 		this.tokenSecret, APIURL + query, "POST", "", "quickbooks");
 
 	validateResponse(response);
-	// System.out.println("response is \n" + response);
+
 	return response;
 
     }
@@ -69,14 +69,10 @@ public class QuickBooksUtil
 	// build query wit multiple email
 	for (int i = 0; i < emailArr.length; i++)
 	{
-	    if (i == 0)
-	    {
-		query.append("%27" + emailArr[i].replace("@", "%40") + "%27%20");
-	    }
-	    else
-	    {
-
-		query.append("%20%2C" + "%27" + emailArr[i].replace("@", "%40") + "%27");
+	    if (i == 0){
+	    	query.append("%27" + emailArr[i].replace("@", "%40") + "%27%20");
+	    }else {
+	    	query.append("%20%2C" + "%27" + emailArr[i].replace("@", "%40") + "%27");
 	    }
 	}
 	query.append("%29");
@@ -137,22 +133,21 @@ public class QuickBooksUtil
 	    // email
 	    JSONObject queryres = new JSONObject(getCustomersByEmail(email)).getJSONObject("QueryResponse");
 
-	    if (queryres.isNull("Customer"))
-		return "Contact not Found";
+	    if (queryres.isNull("Customer")){
+	    	return "Contact not Found";
+	    }
 
 	    JSONArray tempjsarr = queryres.getJSONArray("Customer");
 	    qbUser.put("Customer", tempjsarr.get(0));
 
-	    // Call getInvoicesByContactRef to get Invoice based on contact
-	    // Id
+	    // Call getInvoicesByContactRef to get Invoice based on contactId
 	    String invoices = getInvoicesByContactRef(((JSONObject) tempjsarr.get(0)).getString("Id"));
 
 	    queryres = new JSONObject(invoices).getJSONObject("QueryResponse");
 
-	    if (queryres.isNull("Invoice"))
-	    {
-		qbUser.put("Invoices", invoicesarr);
-		return qbUser.toString();
+	    if (queryres.isNull("Invoice")){
+			qbUser.put("Invoices", invoicesarr);
+			return qbUser.toString();
 	    }
 	    invoicesarr = queryres.getJSONArray("Invoice");
 	    qbUser.put("Invoices", invoicesarr);
@@ -191,21 +186,23 @@ public class QuickBooksUtil
 	    throw new Exception(err);
 	}
 
-	if (!responseJSON.has("Fault"))
+	if (!responseJSON.has("Fault")){
 	    return;
+	}
 
 	JSONArray errorJSONArray = responseJSON.getJSONObject("Fault").getJSONArray("Error");
 
 	String details = errorJSONArray.getJSONObject(0).getString("Detail");
 
-	if (details.contains("Business Validation Error"))
+	if (details.contains("Business Validation Error")){
 	    throw new Exception(
 		    "Not a valid customer name.\nNames must have at least one character and cannot include tabs, newlines or ':'.");
-	else if (details.contains("name supplied already"))
+	}else if (details.contains("name supplied already")){
 	    throw new Exception("Customer already exists");
-	else if (details.contains("String length specified does not match the supported length"))
+	}else if (details.contains("String length specified does not match the supported length")){
 	    throw new Exception("String length specified does not match the supported length");
-	else
+	}else{
 	    throw new Exception(details);
+	}
     }
 }

@@ -60,14 +60,14 @@ public class LinkedInProfile
 			/*
 			 * Distance is 1 for direct connections and 0 for their own profile
 			 */
-			if (!(person.getDistance() > 1l))
+			if (!(person.getDistance() > 1l)){
 				result.is_connected = true;
+			}
 	
 			// Retrieves work positions of the person
 			result.searchResult = LinkedInExperience.fetchExperienceOfPerson(person, linkedInId, client);
 	
 			return result;
-	
 		}
 		catch (Exception e)
 		{
@@ -181,5 +181,3 @@ public class LinkedInProfile
 		}
 	}
 }
-
-

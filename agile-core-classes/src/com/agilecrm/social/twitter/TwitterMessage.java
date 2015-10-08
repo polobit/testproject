@@ -44,15 +44,16 @@ public class TwitterMessage
 			 * follows agile user Twitter profile, agile user can send a direct
 			 * message to contact
 			 */
-			if (!twitter.showFriendship(agileUserTwitterId, Long.parseLong(twitterId)).isSourceFollowedByTarget())
+			if (!twitter.showFriendship(agileUserTwitterId, Long.parseLong(twitterId)).isSourceFollowedByTarget()){
 				return "You can send a message only to persons who is following you";
-
+			}
 			DirectMessage directMessage = twitter.sendDirectMessage(Long.parseLong(twitterId), message
 					+ TwitterUtil.AGILE_TWITTER_SOURCE_MESSAGE);
 
 			// If returned DM id is zero, message is not sent
-			if (directMessage.getId() == 0)
+			if (directMessage.getId() == 0){
 				return "Unsuccessful try again";
+			}
 			return "Message sent Successfully";
 		}
 		catch (TwitterRuntimeException e)

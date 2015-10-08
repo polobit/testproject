@@ -20,9 +20,7 @@ import com.agilecrm.widgets.Widget;
  */
 public class ZendeskUtil {
 
-	/**
-	 * ClickDesk plugins Server URL
-	 */
+	// ClickDesk plugins Server URL
 	public static final String pluginURL = "http://integrations.clickdesk.com:8080/ClickdeskPlugins/";
 
 	/**
@@ -47,14 +45,13 @@ public class ZendeskUtil {
 		JSONObject prefsJSON = new JSONObject().put("pluginPrefsJSON",
 				pluginPrefsJSON).put("visitorJSON", contactPrefsJSON);
 
-		// send request to plugins server and return response.
+		// Send request to plugins server and return response.
 		String tickets = new String(HTTPUtil.accessHTTPURL(
 				pluginURL + "core/agile/zendesk/get", prefsJSON.toString(),
 				"PUT").getBytes("UTF-8"), "UTF-8");
 		return tickets;
 	}
 
-	// Each Chat
 	/**
 	 * Calls chat method of pluginName type class in ClickDeskPlugins server
 	 * using REST API to add ticket in Zendesk
@@ -85,7 +82,7 @@ public class ZendeskUtil {
 				.put("visitorJSON", contactPrefsJSON)
 				.put("messageJSON", messageJSON);
 
-		// send request to plugins server and return response
+		// Send request to plugins server and return response
 		return HTTPUtil.accessHTTPURL(pluginURL + "core/agile/zendesk/add",
 				json.toString(), "PUT");
 
@@ -116,7 +113,7 @@ public class ZendeskUtil {
 		JSONObject json = new JSONObject().put("pluginPrefsJSON",
 				pluginPrefsJSON).put("messageJSON", messageJSON);
 
-		// send request to plugins server and return response
+		// Send request to plugins server and return response
 		return HTTPUtil.accessHTTPURL(pluginURL + "core/agile/zendesk/update",
 				json.toString(), "PUT");
 
@@ -136,38 +133,30 @@ public class ZendeskUtil {
 		JSONObject pluginPrefsJSON = buildPluginPrefsJSON(widget);
 		JSONObject contactPrefsJSON = new JSONObject().put("visitor_email",
 				email);
-
 		JSONObject prefsJSON = new JSONObject().put("pluginPrefsJSON",
 				pluginPrefsJSON).put("visitorJSON", contactPrefsJSON);
 
-		// send request to plugins server
+		// Send request to plugins server
 		String response = HTTPUtil.accessHTTPURL(pluginURL
 				+ "core/agile/zendesk/users", prefsJSON.toString(), "PUT");
 
 		System.out.println("zendeks users " + response);
 
-		if (response != null && response.length() > 0) {
+		// Exceptions from plugins server are returned as strings, if response
+		// is not JSON, it is an exception
+		try {
+			new JSONObject(response);
+		} catch (Exception e) {
 			/*
-			 * Exceptions from plugins server are returned as strings, if
-			 * response is not JSON, it is an exception
+			 * Zendesk returns 401 and 302 for improper details, 404 is thrown
+			 * in case of IO exceptions
 			 */
-			try {
-				new JSONObject(response);
-			} catch (Exception e) {
-				/*
-				 * Zendesk returns 401 and 302 for improper details, 404 is
-				 * thrown in case of IO exceptions
-				 */
-				if (response.contains("404")) {
-					throw new IOException("");
-				}
-				if (response.contains("401") || response.contains("302")) {
-					throw new Exception(
-							"Authentication failed. Please try again");
-				}
+			if (response.contains("404")) {
+				throw new IOException("");
 			}
-		} else {
-			response = null;
+			if (response.contains("401") || response.contains("302")) {
+				throw new Exception("Authentication failed. Please try again");
+			}
 		}
 		return response;
 	}
@@ -190,7 +179,6 @@ public class ZendeskUtil {
 		JSONObject contactPrefsJSON = new JSONObject().put("visitor_email",
 				email);
 		JSONObject messageJSON = new JSONObject().put("ticket_status", status);
-
 		JSONObject prefsJSON = new JSONObject()
 				.put("pluginPrefsJSON", pluginPrefsJSON)
 				.put("visitorJSON", contactPrefsJSON)
@@ -217,7 +205,7 @@ public class ZendeskUtil {
 		// Get the info of Zendesk logged in user
 		String userInfo = getUserInfo(widget, email);
 		System.out.println("UserInfo in zendesk " + userInfo);
-		String userProfile = null;
+
 		JSONObject zendeskInfo = new JSONObject();
 
 		/**
@@ -235,9 +223,8 @@ public class ZendeskUtil {
 		// Retrieve tickets for the contact
 		String allTickets = getContactTickets(widget, email);
 		zendeskInfo.put("all_tickets", allTickets);
-		userProfile = zendeskInfo.toString();
 
-		return userProfile;
+		return zendeskInfo.toString();
 	}
 
 	/**

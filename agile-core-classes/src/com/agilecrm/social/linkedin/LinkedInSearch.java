@@ -51,8 +51,9 @@ public class LinkedInSearch
 			String lastName = contact.getContactFieldValue(Contact.LAST_NAME);
 	
 			// If first name of last name is null or empty return null
-			if (StringUtils.isBlank(firstName) && StringUtils.isBlank(lastName))
+			if (StringUtils.isBlank(firstName) && StringUtils.isBlank(lastName)){
 				return new ArrayList<SocialSearchResult>();
+			}
 	
 			firstName = (firstName != null) ? firstName : "";
 			lastName = (lastName != null) ? lastName : "";
@@ -108,8 +109,9 @@ public class LinkedInSearch
 			Map<SearchParameter, String> searchParameters = new EnumMap<SearchParameter, String>(SearchParameter.class);
 	
 			// check if keywords exists
-			if (StringUtils.isBlank(keywords))
+			if (StringUtils.isBlank(keywords)){
 				return searchResults;
+			}
 	
 			System.out.println("Keywords searched: " + keywords);
 			searchParameters.put(SearchParameter.KEYWORDS, keywords);

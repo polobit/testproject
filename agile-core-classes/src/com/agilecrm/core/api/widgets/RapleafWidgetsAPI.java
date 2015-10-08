@@ -1,17 +1,13 @@
 package com.agilecrm.core.api.widgets;
 
-import java.io.IOException;
-import java.net.SocketTimeoutException;
-
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 
 import com.agilecrm.widgets.Widget;
+import com.agilecrm.widgets.util.ExceptionUtil;
 import com.agilecrm.widgets.util.WidgetUtil;
 import com.thirdparty.Rapleaf;
 
@@ -46,27 +42,14 @@ public class RapleafWidgetsAPI {
 			@PathParam("email") String email) {
 		// Retrieves widget based on its id
 		Widget widget = WidgetUtil.getWidget(widgetId);
-
-		if (widget == null)
-			return null;
-		try {
-			// Retrieves details of persons from Rapleaf based on email
-			return Rapleaf.getRapportiveValue(widget, email).toString();
-		} catch (SocketTimeoutException e) {
-			throw new WebApplicationException(Response
-					.status(Response.Status.BAD_REQUEST)
-					.entity("Request timed out. Refresh and Please try again.")
-					.build());
-		} catch (IOException e) {
-			throw new WebApplicationException(Response
-					.status(Response.Status.BAD_REQUEST)
-					.entity("An error occurred. Refresh and Please try again.")
-					.build());
-		} catch (Exception e) {
-			throw new WebApplicationException(Response
-					.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
-					.build());
+		if (widget != null) {
+			try {
+				// Retrieves details of persons from Rapleaf based on email
+				return Rapleaf.getRapportiveValue(widget, email).toString();
+			} catch (Exception e) {
+				throw ExceptionUtil.catchWebException(e);
+			}
 		}
+		return null;
 	}
-
 }

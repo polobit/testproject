@@ -18,12 +18,14 @@ import com.agilecrm.util.HTTPUtil;
  * @see ChargifyUtil
  * @since July 2014
  */
+
 public class ChargifyUtil {
-	/** fields to hold chargify configuration detials */
+	/** Fields to hold chargify configuration detials */
 	private String chargifyApiKey = null;
 	private String chargifyNamespace = null;
 	public static final String CHARGIFY_API_URL = "https://$<ns>.chargify.com/";
 
+	/** Initializes instance variables */
 	public ChargifyUtil(String chargifyApiKey, String chargifyNamespace)
 			throws Exception {
 		// API key & namespace are mandatory for accessing resources in
@@ -41,7 +43,7 @@ public class ChargifyUtil {
 	}
 
 	/**
-	 * Get the subscriptions.
+	 * Gets the subscriptions based on the customer object.
 	 * 
 	 * @param customerJson
 	 * @return subscriptions json for the customers as string
@@ -55,18 +57,18 @@ public class ChargifyUtil {
 			throw new Exception(customerId);
 		}
 
-		// preparing chargify URL for fetching customer subscriptions
+		// Preparing chargify URL for fetching customer subscriptions
 		String url = CHARGIFY_API_URL.replace("$<ns>", chargifyNamespace)
 				+ "customers/" + customerId + "/subscriptions.json";
 
-		// accessing chargify resource
+		// Accessing chargify resource
 		return HTTPUtil.accessURLUsingAuthentication(url, chargifyApiKey, "x",
 				"GET", null, false, "application/json", "application/json");
-
 	}
 
 	/**
-	 * Gets the invoices.
+	 * <<<<<<< HEAD Gets the invoices. ======= Gets the invoices based on the
+	 * customer object. >>>>>>> c81edee... code clean up
 	 * 
 	 * @param customerJson
 	 * @return invoice json array as string
@@ -100,11 +102,11 @@ public class ChargifyUtil {
 	public JSONArray getCustomerId(String email) throws Exception {
 		String emailArr[] = email.split(",");
 
-		// preparing chargify URL for fetching customers
+		// Preparing chargify URL for fetching customers
 		String url = CHARGIFY_API_URL.replace("$<ns>", chargifyNamespace)
 				+ "customers.json";
 
-		// accessing chargify resource
+		// Accessing chargify resource
 		String response = HTTPUtil.accessURLUsingAuthentication(url,
 				chargifyApiKey, "x", "GET", null, false, null,
 				"application/json");
@@ -115,13 +117,13 @@ public class ChargifyUtil {
 
 		System.out.println("customersArray " + customersArray);
 
-		// throw exception if no customers found in chargify acc.
+		// Throw exception if no customers found in chargify acc.
 		if (customersArray.length() == 0) {
 			throw new Exception(chargifyNamespace
 					+ " domain of doesn't contain any customers");
 		}
 
-		// iterate through customers array and fetch only
+		// Iterate through customers array and fetch only.
 		for (int i = 0; i < customersArray.length(); i++) {
 			JSONObject eachCustomerJson = customersArray.getJSONObject(i)
 					.getJSONObject("customer");
@@ -146,13 +148,13 @@ public class ChargifyUtil {
 	 */
 	public String createCustomer(String firstname, String lastname, String email)
 			throws Exception {
-		// preparing chargify URL for fetching customer subscriptions
+		// Preparing chargify URL for fetching customer subscriptions.
 		String url = CHARGIFY_API_URL.replace("$<ns>", chargifyNamespace)
 				+ "customers.json";
 		JSONObject customerJSON = new JSONObject().put("first_name", firstname)
 				.put("last_name", lastname).put("email", email);
 		System.out.println(customerJSON.toString());
-		// accessing chargify resource
+		// Accessing chargify resource.
 		return HTTPUtil.accessURLUsingAuthentication(url, chargifyApiKey, "x",
 				"POST", new JSONObject().put("customer", customerJSON)
 						.toString(), false, "application/json",

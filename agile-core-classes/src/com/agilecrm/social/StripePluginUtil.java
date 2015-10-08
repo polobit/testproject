@@ -46,8 +46,9 @@ public class StripePluginUtil
 	JSONObject customer_info = new JSONObject();
 	String apiKey = widget.getProperty("access_token");
 
-	if (StringUtils2.isNullOrEmpty(new String[] { customerId }))
+	if (StringUtils2.isNullOrEmpty(new String[] { customerId })){
 	    throw new Exception("Please provide the Stripe customer id for this contact");
+	}
 
 	/*
 	 * Retrieves Stripe customer based on Stripe customer ID and Stripe
