@@ -97,91 +97,92 @@ function shopifyError(id, message)
 
 }
 
-$(function()
-		{
-						// Shopify widget name as a global variable
-						Shopify_PLUGIN_NAME = "Shopify";
+function startShopifyWidget(contact_id){
 
-						console.log(" welcome to shopify plugin..")
+			console.log(contact_id);
 
-						SHOPIFY_PROFILE_LOAD_IMAGE = '<center><img id="shopify_profile_load" src="img/ajax-loader-cursor.gif" style="margin-top: 10px;margin-bottom: 14px;"></img></center>';
+			// Shopify widget name as a global variable
+			Shopify_PLUGIN_NAME = "Shopify";
 
-						// Retrieves widget which is fetches using widget name
-						var shopify_widget = agile_crm_get_widget(Shopify_PLUGIN_NAME);
+			console.log(" welcome to shopify plugin..")
 
-						console.log('In Shopify');
-						console.log("found widget " + shopify_widget);
+			SHOPIFY_PROFILE_LOAD_IMAGE = '<center><img id="shopify_profile_load" src="img/ajax-loader-cursor.gif" style="margin-top: 10px;margin-bottom: 14px;"></img></center>';
 
-						// ID of the Shopify widget as global variable
-						Shopify_Plugin_Id = shopify_widget.id;
+			// Retrieves widget which is fetches using widget name
+			var shopify_widget = agile_crm_get_widget(Shopify_PLUGIN_NAME);
 
-						var shopify_widget_prefs = JSON.parse(shopify_widget.prefs);
-						var shop = shopify_widget_prefs['shop'];
-						console.log("shop name" + shop);
+			console.log('In Shopify');
+			console.log("found widget " + shopify_widget);
 
-						console.log("showing shopify plugin id " + Shopify_Plugin_Id);
+			// ID of the Shopify widget as global variable
+			Shopify_Plugin_Id = shopify_widget.id;
 
-						// Email as global variable
-						Email = agile_crm_get_contact_property('email');
+			var shopify_widget_prefs = JSON.parse(shopify_widget.prefs);
+			var shop = shopify_widget_prefs['shop'];
+			console.log("shop name" + shop);
 
-						console.log("email search found " + Email);
+			console.log("showing shopify plugin id " + Shopify_Plugin_Id);
 
-						// Email list as global variable
-						EmailList = agile_crm_get_contact_properties_list("email");
+			// Email as global variable
+			Email = agile_crm_get_contact_property('email');
 
-						console.log("List of email in contact " + EmailList);
+			console.log("email search found " + Email);
 
-						var first_name = agile_crm_get_contact_property("first_name");
-						var last_name = agile_crm_get_contact_property("last_name");
-						console.log("found first name " + first_name);
-						console.log("found last name" + last_name);
+			// Email list as global variable
+			EmailList = agile_crm_get_contact_properties_list("email");
 
-						if (last_name == undefined || last_name == null)
-										last_name = ' ';
-						showShopifyClient(shop);
+			console.log("List of email in contact " + EmailList);
 
-                        $("body").off("click", '#shopify_add_contact');
-						$("body").on("click", '#shopify_add_contact', function(e)
-						{
-										e.preventDefault();
+			var first_name = agile_crm_get_contact_property("first_name");
+			var last_name = agile_crm_get_contact_property("last_name");
+			console.log("found first name " + first_name);
+			console.log("found last name" + last_name);
 
-										addContactToShopify(shop);
-						});
+			if (last_name == undefined || last_name == null)
+							last_name = ' ';
+			showShopifyClient(shop);
 
-                        $("body").off("click", '.order');
-						$("body").on("click", '.order', function(e)
-						{
-										e.preventDefault();
-										var orderId = $(this).prop('value');
-										console.log("order id is " + orderId);
-										// checking for data existence in div
-										/*
-										 * if ($('#collapse-' + orderId).text().trim() === "") {
-										 */
-										$('#collapse-' + orderId).html(SHOPIFY_PROFILE_LOAD_IMAGE);
+            $("body").off("click", '#shopify_add_contact');
+			$("body").on("click", '#shopify_add_contact', function(e)
+			{
+							e.preventDefault();
 
-										$.ajax({ url : "/core/api/widgets/shopify/items/" + Shopify_Plugin_Id + "/" + orderId, dataType : "json", success : function(data)
-										{
-														console.log("success data"+ data);
-														console.log("in success order fetch.");
-														$('#collapse-' + orderId).html(getTemplate('shopify-line-item', data));
-														$('#SHOPIFY_PROFILE_LOAD_IMAGE').remove();
-										}, error : function(data)
-										{
-														console.log("in item fetch error" + data);
-														shopifyError(Shopify_PLUGIN_NAME, data)
-														$('#SHOPIFY_PROFILE_LOAD_IMAGE').remove();
-										} });
-							
-										if ($('#collapse-' + orderId).hasClass("collapse"))
-										{
-														$('#collapse-' + orderId).removeClass("collapse");
-										}
-										else
-										{
-														$('#collapse-' + orderId).addClass("collapse");
-										}
+							addContactToShopify(shop);
+			});
 
-						});
+            $("body").off("click", '.order');
+			$("body").on("click", '.order', function(e)
+			{
+							e.preventDefault();
+							var orderId = $(this).prop('value');
+							console.log("order id is " + orderId);
+							// checking for data existence in div
+							/*
+							 * if ($('#collapse-' + orderId).text().trim() === "") {
+							 */
+							$('#collapse-' + orderId).html(SHOPIFY_PROFILE_LOAD_IMAGE);
 
-		});
+							$.ajax({ url : "/core/api/widgets/shopify/items/" + Shopify_Plugin_Id + "/" + orderId, dataType : "json", success : function(data)
+							{
+											console.log("success data"+ data);
+											console.log("in success order fetch.");
+											$('#collapse-' + orderId).html(getTemplate('shopify-line-item', data));
+											$('#SHOPIFY_PROFILE_LOAD_IMAGE').remove();
+							}, error : function(data)
+							{
+											console.log("in item fetch error" + data);
+											shopifyError(Shopify_PLUGIN_NAME, data)
+											$('#SHOPIFY_PROFILE_LOAD_IMAGE').remove();
+							} });
+				
+							if ($('#collapse-' + orderId).hasClass("collapse"))
+							{
+											$('#collapse-' + orderId).removeClass("collapse");
+							}
+							else
+							{
+											$('#collapse-' + orderId).addClass("collapse");
+							}
+
+			});
+}

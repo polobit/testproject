@@ -206,13 +206,24 @@ function set_up_widgets(el, widgets_el)
 		{
 			if (widget_template_loaded_map[model.get('name').toLowerCase()])
 			{
-				queueGetRequest("_widgets_" + contact_id, url, "script");
+				queueGetRequest("_widgets_" + contact_id, url, "script", function(data, queueName){
+					try{
+					console.log("start" + model.get('name') + "Widget");
+					  eval("start" + model.get('name') + "Widget")(queueName.replace("_widgets_", ""));	
+					}catch(err){console.log(err);}
+					
+				}, undefined, 'true');
 			}
 			else
 				downloadTemplate(model.get('name').toLowerCase() + ".js", function()
 				{
 					widget_template_loaded_map[model.get('name').toLowerCase()] = true;
-					queueGetRequest("_widgets_" + contact_id, url, "script");
+					queueGetRequest("_widgets_" + contact_id, url, "script", function(data, queueName){
+						try{
+							console.log("start" + model.get('name') + "Widget");
+					  		eval("start" + model.get('name') + "Widget")(queueName.replace("_widgets_", ""));	
+						}catch(err){console.log(err);}						
+					}, undefined, 'true');
 				});
 		}
 
@@ -355,7 +366,7 @@ function enableWidgetSoring(el)
  * @param errorCallback
  *            Function to be executed on error
  */
-function queueGetRequest(queueName, url, dataType, successCallback, errorCallback)
+function queueGetRequest(queueName, url, dataType, successCallback, errorCallback, isCacheEnable)
 {
 	console.log(queueName + ", " + url);
 	// Loads ajaxq to initialize queue
@@ -363,10 +374,11 @@ function queueGetRequest(queueName, url, dataType, successCallback, errorCallbac
 	{
 		try
 		{
+			isCacheEnable = (isCacheEnable) ? true : false;
 			/*
 			 * Initialize a queue, with GET request
 			 */
-			$.ajaxq(queueName, { url : url, cache : false, dataType : dataType,
+			$.ajaxq(queueName, { url : url, cache : isCacheEnable, dataType : dataType,
 
 			// function to be executed on success, if successCallback is
 			// defined
@@ -374,7 +386,7 @@ function queueGetRequest(queueName, url, dataType, successCallback, errorCallbac
 			{
 				console.log("Sucesses", url);
 				if (successCallback && typeof (successCallback) === "function")
-					successCallback(data);
+					successCallback(data, queueName);
 			},
 
 			// function to be executed on success, if errorCallback is
@@ -383,7 +395,7 @@ function queueGetRequest(queueName, url, dataType, successCallback, errorCallbac
 			{
 				console.log("error", url);
 				if (errorCallback && typeof (errorCallback) === "function")
-					errorCallback(data);
+					errorCallback(data, queueName);
 			},
 
 			// function to be executed on completion of queue
