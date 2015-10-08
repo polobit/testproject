@@ -50,7 +50,8 @@ var ContactsRouter = Backbone.Router.extend({
 		"contacts/call-lead/:first/:last" : "addLead",
 			
 			/* CALL-with mobile number */
-			"contacts/call-lead/:first/:last/:mob" : "addLeadDirectly"
+			"contacts/call-lead/:first/:last/:mob" : "addLeadDirectly",
+			"call-contacts" : "callcontacts"
 	},
 	
 	initialize : function()
@@ -427,6 +428,14 @@ var ContactsRouter = Backbone.Router.extend({
 	 */
 	contactDetails : function(id, contact)
 	{
+		$('[data-toggle="tooltip"]').tooltip();
+
+
+		//If call campaign is running then show the campaign
+		if(CALL_CAMPAIGN.last_clicked == "start-bulk-campaign"){
+			startCallCampaign(CALL_CAMPAIGN.contact_id_list);
+			CALL_CAMPAIGN.last_clicked = "";
+		} 
 		//Removed previous contact timeline nodes from the queue, if existed
 		if(timeline_collection_view)
 		{
@@ -1164,6 +1173,37 @@ var ContactsRouter = Backbone.Router.extend({
 			}		
 					
 		});
+
+	},
+	
+		callcontacts : function()
+	{
+		
+		$(".active").removeClass("active");
+		var total_count = CALL_CAMPAIGN.total_count;
+		var callSetting = {};
+		callSetting['total_count'] = total_count;
+		callSetting['time']=[10,20,30,40,50,60];
+		
+		getTemplate("call-campaign-setting", callSetting, undefined, function(template_ui){
+			if(!template_ui)
+				  return;
+			  
+			$(".butterbar").hide();
+			$("#content").html($(template_ui));	
+			$('[data-toggle="tooltip"]').tooltip();
+
+
+
+
+
+
+
+
+
+		}, "#content"); 
+
+
 
 	}
 		
