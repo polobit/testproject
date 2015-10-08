@@ -1646,7 +1646,7 @@ public class OpportunityUtil
     public static JSONObject getIncomingDealsList(Long ownerId,Long minTime, Long maxTime,String frequency, String type)
     {
         JSONObject newDealsObject = new JSONObject();
-        boolean flag_reason=true;
+       
         String timeZone = "UTC";
         List<Opportunity> opportunitiesList;
         UserPrefs userPrefs = UserPrefsUtil.getCurrentUserPrefs();
@@ -1715,6 +1715,7 @@ public class OpportunityUtil
         for (Opportunity opportunity : opportunitiesList)
         {
         	String last="";
+        	 boolean flag_reason=true;
             try
             {
             /*
@@ -1818,8 +1819,8 @@ public class OpportunityUtil
 
 		JSONObject sourcecount = new JSONObject();
 		CategoriesUtil categoriesUtil = new CategoriesUtil();
-		boolean flag=true;
-		boolean flag_reason=true;
+		
+		
 		if (minTime == 0 || pipelineId == 0)
 		{
 			pipelineId = null;
@@ -1842,6 +1843,7 @@ public class OpportunityUtil
 		{
 			for (Opportunity opportunity : opportunitiesList)
 			{
+				boolean flag=true;
 				try
 				{
 					Long source=opportunity.getDeal_source_id();
@@ -1894,6 +1896,7 @@ public class OpportunityUtil
 		}
 		for (Opportunity opportunity : opportunitiesList_temp)
 		{
+			boolean flag_reason=true;
 			try
 			{	
 				Long lost_id = opportunity.getLost_reason_id();
@@ -2018,7 +2021,7 @@ public class OpportunityUtil
 			long maxTime){
 		JSONObject dealswoncount = new JSONObject();
 		CategoriesUtil categoriesUtil = new CategoriesUtil();
-		boolean flag_reason=true;
+
 		if (ownerId == 0)
 		{
 			ownerId = null;
@@ -2046,6 +2049,7 @@ public class OpportunityUtil
 		}
 		for (Opportunity opportunity : opportunitiesList)
 		{
+			boolean flag_reason=true;
 			try
 			{
 
