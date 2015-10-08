@@ -1711,7 +1711,7 @@ public class OpportunityUtil
             startTimeMilli = startCalendar.getTimeInMillis();
         }
 
-        
+        System.out.println("Total opportunitite....."+opportunitiesList.size());
         for (Opportunity opportunity : opportunitiesList)
         {
         	String last="";
@@ -1731,6 +1731,7 @@ public class OpportunityUtil
 			}
 			if(flag_reason)
 				source_id=0L;
+			System.out.println("source"+source_id);
             Double revenue=opportunity.expected_value;
             Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone(timeZone));
             calendar.setTimeInMillis(opportunity.created_time * 1000);
@@ -1835,8 +1836,7 @@ public class OpportunityUtil
 		{
 			timeZone = userPrefs.timezone;
 		}
-		List<Opportunity> opportunitiesList = getLostDealsWithOwnerandPipeline(ownerId, pipelineId, minTime,
-				maxTime);
+		List<Opportunity> opportunitiesList = getLostDealsWithOwnerandPipeline(ownerId, pipelineId, minTime,maxTime);
 		List<Opportunity> opportunitiesList_temp=new ArrayList<Opportunity>();
 		if (opportunitiesList != null && opportunitiesList.size() > 0)
 		{
