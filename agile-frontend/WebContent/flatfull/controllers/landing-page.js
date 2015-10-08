@@ -10,7 +10,7 @@ var LandingPageRouter = Backbone.Router.extend({
 
 	getListOfLandingPages : function(){
 
-        $('#content').html("<div id='landingpages-listeners'>&nbsp;</div>");
+        $('#content').html("<div id='landingpages-listeners'></div>");
         
         this.LandingPageCollectionView = new Base_Collection_View({ url : 'core/api/landingpages', templateKey : "landingpages", cursor : true, page_size : 20,
             individual_tag_name : 'tr', postRenderCallback : function(el)
@@ -30,25 +30,32 @@ var LandingPageRouter = Backbone.Router.extend({
 	},
 
 	showLandingPageBuilder : function() {
-        $('#content').html("<div id='landingpages-listeners'>&nbsp;</div>");
+        $('#content').html("<div id='landingpages-listeners'></div>");
         initializeLandingPageListeners();
+
+        getTemplate("landingpages-add", {}, undefined, function(ui){
+            $("#landingpages-listeners").html($(ui));
+        }, "#landingpages-listeners");
         
-		$("#landingpages-listeners").html(getTemplate("landingpages-add"), {});
         hideTransitionBar();
 	},
 
 	getListOfTemplates : function() {
-        $('#content').html("<div id='landingpages-listeners'>&nbsp;</div>");
+        $('#content').html("<div id='landingpages-listeners'></div>");
 
         $.getJSON("misc/landingpage/templates/templates.json", function(data) {
-            $("#landingpages-listeners").html(getTemplate("landingpages-categories",data.templates[0]),{});
+
+            getTemplate("landingpages-categories", data.templates[0], undefined, function(ui){
+                $("#landingpages-listeners").html($(ui));
+            }, "#landingpages-listeners");
+
             hideTransitionBar();
         });
 
 	},
 
 	loadSelectedTemplate : function(defaultTemplateId) {
-		$('#content').html("<div id='landingpages-listeners'>&nbsp;</div>");
+		$('#content').html("<div id='landingpages-listeners'></div>");
         initializeLandingPageListeners();
 
         var data = {
@@ -56,13 +63,16 @@ var LandingPageRouter = Backbone.Router.extend({
             "action" : "new"
         };
 
-		$("#landingpages-listeners").html(getTemplate("landingpages-add",data), {});
+        getTemplate("landingpages-add", data, undefined, function(ui){
+            $("#landingpages-listeners").html($(ui));
+        }, "#landingpages-listeners");
+
         hideTransitionBar();
 
 	},
 
     loadSavedLandingPage : function(pageId) {
-        $('#content').html("<div id='landingpages-listeners'>&nbsp;</div>");
+        $('#content').html("<div id='landingpages-listeners'></div>");
         initializeLandingPageListeners();
 
         var data = {
@@ -70,7 +80,10 @@ var LandingPageRouter = Backbone.Router.extend({
             "action" : "edit"
         };        
 
-        $("#landingpages-listeners").html(getTemplate("landingpages-add",data), {});
+        getTemplate("landingpages-add", data, undefined, function(ui){
+            $("#landingpages-listeners").html($(ui));
+        }, "#landingpages-listeners");
+
         hideTransitionBar();
 
     }

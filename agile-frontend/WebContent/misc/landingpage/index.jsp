@@ -91,7 +91,7 @@ AGILE_LP_OPTIONS['templateId'] = "";
                     <div class="panel-inner">
                         <div class="panel" ng-class="{ open: panels.active === 'elements' }" data-name="elements" bl-pretty-scrollbar bl-panels-accordion>
                             <section id="el-panel-top">
-                                <div id="panel-search" class="panel-heading-input">
+                                <div id="panel-search" class="panel-heading-input hidden">
                                     <input type="text" class="form-control" id="el-search" placeholder="{{ 'searchElements' | translate }}" ng-model="query" ng-model-options="{ debounce: 300 }">
                                 </div>
 
