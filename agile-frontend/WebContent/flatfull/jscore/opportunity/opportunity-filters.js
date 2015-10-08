@@ -14,7 +14,6 @@ $(function()
 		show_deal();
 	});
 
-	
 
 	$('#opportunityUpdateModal, #opportunityModal').on('click', '#opportunity_archive', function(e)
 	{
@@ -697,7 +696,7 @@ $('#opportunity-listners').on('click', '.deals-list-view', function(e) {
 
 function initializeMilestoneListners(el){
 	
-	$('#milestone-listner').off('click', '.add-pipeline');	
+	$('#milestone-listner').off();	
 	$('#milestone-listner').on('click', '.add-pipeline', function(e) {
 		$('#pipelineForm input').val('');
 		$('#pipelineForm input#milestones').val('New,Prospect,Proposal,Won,Lost');
