@@ -92,7 +92,7 @@ public class TicketNotesUtil
 
 		List<TicketNotes> notesList = getTicketNotes(ticket.id, "-created_time");
 
-		String inReplyToAddress = NamespaceManager.get() + "+" + ticket.id + Globals.INBOUND_EMAIL_SUFFIX;
+		String inReplyToAddress = ticket.id + Globals.INBOUND_EMAIL_SUFFIX;
 
 		TicketGroups group = TicketGroupUtil.getTicketGroupById(ticket.groupID);
 
