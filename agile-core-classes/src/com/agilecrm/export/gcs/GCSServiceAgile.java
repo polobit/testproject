@@ -79,10 +79,16 @@ public class GCSServiceAgile
     public byte[] getDataFromFile() throws IOException
     {
 	int fileSize = (int) gcsService.getMetadata(getFileName()).getLength();
+	System.out.println("file size : " + fileSize);
 	ByteBuffer result = ByteBuffer.allocate(fileSize);
-	GcsInputChannel readChannel = gcsService.openPrefetchingReadChannel(getFileName(), 0, fileSize);
+	System.out.println("result : " + result);
+	System.out.println("file name : " + getFileName());
+	System.out.println("file size : " + fileSize);
+	GcsInputChannel readChannel = gcsService.openReadChannel(getFileName(), 0);
 
+	System.out.println("read channel : " + readChannel);
 	readChannel.read(result);
+	System.out.println("result " + result);
 	return result.array();
     }
 
