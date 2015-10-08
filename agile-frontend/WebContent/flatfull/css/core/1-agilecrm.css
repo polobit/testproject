@@ -2755,13 +2755,15 @@ height: 22px;
 	border: 1px solid rgb(228, 228, 228)
 }
 
-.call-campaign-running #contact-dtl{
-top: 101px;
-}
-
 .call-campaign-running .app-content-full{
 top: 101px;
 }
+
+.call-campaign-running.app-aside-dock .dock-view-fixing {
+top: 165px!important;
+}
+
+
 
 .height-min-50
 {
