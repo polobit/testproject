@@ -23,8 +23,11 @@ var ContactsRouter = Backbone.Router.extend({
 		"contact/:id" : "contactDetails",
 		
 		"import" : "importContacts",
-		
+
+		//add contact when customfields are there
 		"contact-edit" : "editContact",
+		
+		"contact-add" : "addContact",
 		
 		"contact-duplicate" : "duplicateContact",
 		
@@ -47,7 +50,8 @@ var ContactsRouter = Backbone.Router.extend({
 		"contacts/call-lead/:first/:last" : "addLead",
 			
 			/* CALL-with mobile number */
-			"contacts/call-lead/:first/:last/:mob" : "addLeadDirectly"
+			"contacts/call-lead/:first/:last/:mob" : "addLeadDirectly",
+			"call-contacts" : "callcontacts"
 	},
 	
 	initialize : function()
@@ -424,23 +428,18 @@ var ContactsRouter = Backbone.Router.extend({
 	 */
 	contactDetails : function(id, contact)
 	{
-		//Removed previous contact timeline tags from the isotope, if existed
-		if(App_Contacts.contactDetailView!=undefined && App_Contacts.contactDetailView.model!=undefined && App_Contacts.contactDetailView.model.collection!=undefined){
-			getTemplate("timeline1", App_Contacts.contactDetailView.model.collection.models, undefined, function(result)
-			{
-				try
-				{
-						$("#timeline", $(App_Contacts.contactDetailView.el)).isotope('remove', $(result), function(ele)
-								{
-									timeline_collection_view.queue.running = false;
-									timeline_collection_view.queue.next();
-								});
-				}
-				catch(err)
-				{
-					console.log(err);
-				}
-			});
+		$('[data-toggle="tooltip"]').tooltip();
+
+
+		//If call campaign is running then show the campaign
+		if(CALL_CAMPAIGN.last_clicked == "start-bulk-campaign"){
+			startCallCampaign(CALL_CAMPAIGN.contact_id_list);
+			CALL_CAMPAIGN.last_clicked = "";
+		} 
+		//Removed previous contact timeline nodes from the queue, if existed
+		if(timeline_collection_view && timeline_collection_view.queue)
+		{
+			timeline_collection_view.queue.pop();
 		}
 		
 		//For getting custom fields
@@ -540,7 +539,6 @@ var ContactsRouter = Backbone.Router.extend({
 
 			if (App_Contacts.contactsListView && App_Contacts.contactsListView.collection && App_Contacts.contactsListView.collection.get(id))
 				App_Contacts.contactsListView.collection.get(id).attributes = contact.attributes;
-
 
 			load_contact_tab(el, contact.toJSON());
 
@@ -1130,7 +1128,77 @@ var ContactsRouter = Backbone.Router.extend({
 			$(this).find("#phone").val(mob);
 		});
 		$("#personModal").modal();
+	},
+
+	addContact : function(){
+		$.getJSON("core/api/custom-fields/scope?scope=CONTACT", function(data)
+		{
+			if(data.length > 0){
+				var json = {custom_fields:data,properties:[]};
+				getTemplate("continue-contact", json, undefined, function(template_ui){
+					if(!template_ui)
+						  return;
+					$("#content").html($(template_ui));	
+					// Add placeholder and date picker to date custom fields
+					$('.date_input').attr("placeholder", "Select Date");
+
+					$('.date_input').datepicker({ format : CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY});
+
+					// To set typeahead for tags
+					setup_tags_typeahead();
+
+					// Iterates through properties and ui clones
+					
+					var fxn_display_company = function(data, item)
+					{
+						$("#content [name='contact_company_id']")
+								.html(
+										'<li class="inline-block tag btn btn-xs btn-primary m-r-xs m-b-xs" data="' + data + '"><span><a class="text-white m-r-xs" href="#contact/' + data + '">' + item + '</a><a class="close" id="remove_tag">&times</a></span></li>');
+						$("#content #contact_company").hide();
+					}
+					agile_type_ahead("contact_company", $('#content'), contacts_typeahead, fxn_display_company, 'type=COMPANY', '<b>No Results</b> <br/> Will add a new one');
+
+				}, "#content"); 
+
+					
+			}else{
+				Backbone.history.navigate("contacts" , {trigger: true});
+				$("#personModal").modal("show");
+			}		
+					
+		});
+
+	},
+	
+		callcontacts : function()
+	{
+		
+		$(".active").removeClass("active");
+		var total_count = CALL_CAMPAIGN.total_count;
+		var callSetting = {};
+		callSetting['total_count'] = total_count;
+		callSetting['time']=[10,20,30,40,50,60];
+		
+		getTemplate("call-campaign-setting", callSetting, undefined, function(template_ui){
+			if(!template_ui)
+				  return;
+			  
+			$(".butterbar").hide();
+			$("#content").html($(template_ui));	
+			$('[data-toggle="tooltip"]').tooltip();
+
+
+
+
+
+
+
+
+
+		}, "#content"); 
+
+
 
 	}
-	
+		
 	});

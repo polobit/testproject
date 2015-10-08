@@ -238,6 +238,7 @@ function showCalendar(users)
 									
 									$.getJSON(eventsURL, function(doc)
 									{
+										try{
 										$.each(doc, function(index, data)
 										{
 											// decides the color of event based
@@ -251,6 +252,10 @@ function showCalendar(users)
 
 											callback(doc);
 
+										}
+										}
+										catch(err){
+												$("#loading_calendar_events").hide();
 										}
 									});
 								} }, { dataType : 'agile-gcal' }
@@ -688,6 +693,8 @@ function showCalendar(users)
 							}
 							// Show edit modal for the event
 							$("#updateActivityModal").modal('show');
+							
+							agile_type_ahead("event_relates_to_deals", $('#updateActivityModal'), deals_typeahead, false,null,null,"core/api/search/deals",false, true);
 
 							// Fills owner select element
 							populateUsersInUpdateActivityModal(event);

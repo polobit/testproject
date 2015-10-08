@@ -16,7 +16,7 @@ import javax.mail.internet.InternetAddress;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.sync.ImportStatus;
 import com.agilecrm.contact.sync.service.OneWaySyncService;
-import com.agilecrm.contact.sync.wrapper.WrapperService;
+import com.agilecrm.contact.sync.wrapper.IContactWrapper;
 import com.agilecrm.contact.sync.wrapper.impl.StripeContactWrapperImpl;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.subscription.stripe.StripeUtil;
@@ -245,7 +245,7 @@ public class StripeSyncImpl extends OneWaySyncService
      * @see com.agilecrm.contact.sync.service.SyncService#getWrapperService()
      */
     @Override
-    public Class<? extends WrapperService> getWrapperService()
+    public Class<? extends IContactWrapper> getWrapperService()
     {
 	// TODO Auto-generated method stub
 	return StripeContactWrapperImpl.class;
