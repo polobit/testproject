@@ -588,7 +588,16 @@ var portlet_graph_utility = {
 					        		              '<tr><td style="color:'+this.points[0].series.color+';padding:0">Calls:&nbsp; </td>' + 
 					        		        	  '<td style="padding:0"><b>'+totalCallsCountList[this.points[0].point.x]+'</b></td></tr>' +
 					        		        	  '</table>';
-						        		else{
+						        		else if(text=="Average Call Duration (Mins)"){
+						        			
+						        			tt += '<table>';
+						        			if(this.points[0]!=undefined && this.points[0].series!=undefined){
+						        				tt += 	'<tr><td style="color:'+this.points[0].series.color+';padding:0">'+this.points[0].series.name+':&nbsp; </td>' +
+							                      		'<td style="padding:0"><b>'+portlet_utility.getPortletsTimeConversion(Math.round(this.points[0].point.y))+'</b></td></tr>';
+						        			}
+						        			tt += '</table>';
+						        			
+						        		}else{
 						        			tt += '<table>';
 						        			if(this.points[0]!=undefined && this.points[0].series!=undefined){
 						        				tt += 	'<tr><td style="color:'+this.points[0].series.color+';padding:0">'+this.points[0].series.name+':&nbsp; </td>' +
@@ -688,8 +697,8 @@ var portlet_graph_utility = {
 		        tooltip: {
 		        	formatter: function(){
 		        		return '<table>' + 
-		        		        '<tr><td class="p-n">Total '+categoryList[this.point.x]+' : </td>' + 
-		        		        '<td class="p-n"><b>'+  valueList[this.point.x]+'</b></td></tr>' +
+		        		        '<tr><td class="p-n">Total '+categoryList[this.point.x]+':&nbsp; </td>' + 
+		        		        '<td class="p-n"><b>'+ valueList[this.point.x]+'</b></td></tr>' +
 		        		        '</table>';
 		        	},
 		            shared: true,

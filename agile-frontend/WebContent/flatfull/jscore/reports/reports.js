@@ -384,16 +384,10 @@ function getNextMonthEppoch(time, day, month)
 $(function()
 		{
 	
-	$("body").on("click", "a#call-activity-link", function(e){
-	console.log("clicked");
+	$("body").on("click","a#call-activity-link", function(e){
 	var entitytype = "Calls";
-
 	var entity_attribute = "CALL";
-	createCookie("selectedentity", entity_attribute, 90);
-	createCookie("selectedentity_value", entitytype, 90);
-	
-	$('.activity-sub-heading').html(entitytype);
-	
+	buildActivityFilters(entitytype,entity_attribute,"entityDropDown");
 	//ActivitylogRouter.activities("id");
 	App_Activity_log.navigate("activities", { trigger : true });
 	
