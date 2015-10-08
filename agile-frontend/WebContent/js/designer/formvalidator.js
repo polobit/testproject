@@ -57,27 +57,18 @@ function initValidator(selector, callback) {
 	  $.tools.validator.fn(":input, textarea", function(input, value){
 
 	     if(value == undefined)
-	    	 value = '';
-	     
-	     // if Mustache undefined
-	     if(!Mustache)
-	     	return true;
+			value='';
+		        
+        // Regex to identify merge fields
+        var reg = /{{[a-zA-Z0-9\s_.,&/\\*-]*[a-zA-Z0-9\s]}(?!})|{{{[a-zA-Z0-9\s_.,&/\\*-]*[a-zA-Z0-9\s]}}(?!})/g;
 
-	     try{
-	    	Mustache.parse(value);
-	     }
-	     catch(err){
-	    	 var error = err.toString();
+         var merge_fields = value.match(reg);
 
-		     // Only shows error missing closes. Skip other errors
-		     if(error.indexOf('Unclosed tag') != -1)
-		     {
-		     	var index = error.toString().split('at ')[1];
-		     	return "Missing closed '}' at ..." + value.substring(index - 15);
-		     }
-	     }
-		  
-	     return true;
+        for (var i in merge_fields) {
+           return "Missing closed '}' at ..." + merge_fields[i];
+        }
+
+        return true;
 	     
 	  });
 	
