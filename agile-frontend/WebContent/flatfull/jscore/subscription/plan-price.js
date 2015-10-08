@@ -157,7 +157,7 @@ function setPlan(user_plan)
 	try
 	{
 		var interval = "yearly", plan_type = "regular";
-		if (_plan_on_signup!=null)
+		if (IS_NEW_USER && _plan_on_signup)
 		{
 			plan_type = _plan_on_signup.plan_type.toLowerCase();
 			interval = "yearly";
