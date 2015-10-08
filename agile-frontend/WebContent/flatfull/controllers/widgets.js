@@ -604,51 +604,6 @@ var WidgetsRouter = Backbone.Router
 
 					$("#prefs-tabs-content").html(that.xero_import_settings.render().el);
 				}, "#content");
-			},
-			
-			//Reddy code
-			/**
-			 * Manages GooglePlus widget
-			 */
-			GooglePlus: function(id) {
-			    if (!id) {														    	
-			        show_set_up_widget("GooglePlus", 'googleplus-login',
-			            '/scribe?service=googleplus&isForAll='+isForAll+'&return_url=' + encodeURIComponent(window.location.href) + "/googleplus");
-			    } else {												    
-			    	var widgetDetails = "";
-
-			    	accessUrlUsingAjax("core/api/widgets/GooglePlus", function(resp){
-			    		    widgetDetails = resp;
-
-			    		    console.clear();
-			    			console.log("In google Plus widget Router");
-		    				console.log(widgetDetails);	
-
-    		            	if(!widgetDetails)
-    		            	{
-    		            		 show_set_up_widget("GooglePlus", 'googleplus-login',
-                        		'/scribe?service=googleplus&return_url=' + encodeURIComponent(window.location.href) + "/googleplus");												                            
-                        		return;
-    		            	}
-
-    		            	widgetPrefGP = JSON.parse(widgetDetails.prefs);
-                    		
-                    		accessUrlUsingAjax("https://www.googleapis.com/plus/v1/people/me?access_token="+ widgetPrefGP['access_token'], function(resp1){
-
-                    			var userData = resp1;
-                    			set_up_access(
-	                            "GooglePlus",
-	                            'googleplus-login',
-	                            userData,
-	                            '/scribe?service=googleplus&return_url=' + encodeURIComponent(window.location.protocol + "//" + window.location.host + "/#GooglePlus/googleplus"));
-
-
-
-                    		});
-			    	});
-			    	
-			    }
-
 			}
 });
 

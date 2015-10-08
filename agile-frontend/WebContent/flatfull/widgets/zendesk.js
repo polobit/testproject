@@ -11,7 +11,7 @@
  * @param plugin_id
  *            To get the widget and save tokens in it.
  */
-function setupZendeskAuth()
+function setupZendeskAuth(contact_id)
 {
 	// Shows loading image until set up is shown
 	$('#Zendesk').html(ZENDESK_UPDATE_LOAD_IMAGE);
@@ -37,7 +37,7 @@ function setupZendeskAuth()
 			return;
 		}
 		// Saves Zendesk preferences in ClickDesk widget object
-		saveZendeskPrefs();
+		saveZendeskPrefs(contact_id);
 
 	});
 }
@@ -46,7 +46,7 @@ function setupZendeskAuth()
  * Calls method in script API (agile_widget.js) to save Zendesk preferences in
  * Zendesk widget object
  */
-function saveZendeskPrefs()
+function saveZendeskPrefs(contact_id)
 {
 	// Retrieve and store the Zendesk preferences entered by the user as JSON
 	var zendesk_prefs = {};
@@ -58,14 +58,14 @@ function saveZendeskPrefs()
 	agile_crm_save_widget_prefs(ZENDESK_PLUGIN_NAME, JSON.stringify(zendesk_prefs), function(data)
 	{
 		// Retrieves and shows Zendesk tickets in the Zendesk widget UI
-		showZendeskProfile();
+		showZendeskProfile(contact_id);
 	});
 }
 
 /**
  * Show data retrieved from Zendesk in the Zendesk widget
  */
-function showZendeskProfile()
+function showZendeskProfile(contact_id)
 {
 	// show loading until tickets are retrieved
 	$('#Zendesk').html(ZENDESK_UPDATE_LOAD_IMAGE);
@@ -572,7 +572,7 @@ function startZendeskWidget(contact_id){
 	 */
 	if (zendesk_widget.prefs == undefined)
 	{
-		setupZendeskAuth();
+		setupZendeskAuth(contact_id);
 		return;
 	}
 
@@ -580,7 +580,7 @@ function startZendeskWidget(contact_id){
 	 * If Zendesk widget preferences are defined, shows tickets from Zendesk
 	 * associated with current contact's email
 	 */
-	showZendeskProfile();
+	showZendeskProfile(contact_id);
 
 	// On click of add ticket, add ticket method is called
     $("#widgets").off('click','#add_ticket');
