@@ -484,6 +484,7 @@ $('#' + container_id).on('change keyup', '#lhs-contact-filter-form #RHS_NEW inpu
 
     				var data=$(this).attr("data");
     				if(data=="list"){
+    					CONTACTS_HARD_RELOAD=true;
     					eraseCookie("agile_contact_view");
     				}
     				else if(data=="grid"){
