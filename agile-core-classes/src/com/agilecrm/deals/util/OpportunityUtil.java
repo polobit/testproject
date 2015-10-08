@@ -1665,7 +1665,7 @@ public class OpportunityUtil
             sourcecount.put("0", type.equalsIgnoreCase("deals")?0:0.0);
         for (Category source : sources)
         {
-        sourcecount.put(source.getId(), type.equalsIgnoreCase("deals")?0:0.0);
+        sourcecount.put(source.getId().toString(), type.equalsIgnoreCase("deals")?0:0.0);
         }
         System.out.println(sources.get(0).getId());
         Calendar startCalendar = Calendar.getInstance(TimeZone.getTimeZone(timeZone));
@@ -1726,7 +1726,7 @@ public class OpportunityUtil
             System.out.println(categoriesUtil.getCategory(source_id));
             List<Category> sources_id = categoriesUtil.getCategoriesByType("DEAL_SOURCE");
 			for (Category source_temp : sources_id){
-				if(source_temp.getId().equals(source_id))
+				if(source_temp.getId().toString().equals(source_id.toString()))
 					flag_reason=false;
 			}
 			if(flag_reason)
@@ -1856,7 +1856,7 @@ public class OpportunityUtil
 								List<Category> sources = categoriesUtil.getCategoriesByType("DEAL_SOURCE");
 								for(Category source_id : sources)
 								{
-									if(source.equals(source_id.getId())){
+									if(source.toString().equals(source_id.getId().toString())){
 										flag=false;
 										break;
 									}
@@ -1867,7 +1867,7 @@ public class OpportunityUtil
 								}
 								
 						}
-						else if (source.equals(sourceId))
+						else if (source.toString().equals(sourceId.toString()))
 							opportunitiesList_temp.add(opportunity);
 						else 
 							continue;
@@ -1900,7 +1900,7 @@ public class OpportunityUtil
 				Double value = opportunity.expected_value;
 				List<Category> reasons = categoriesUtil.getCategoriesByType("DEAL_LOST_REASON");
 				for (Category reason : reasons){
-					if(reason.getId().equals(lost_id))
+					if(reason.getId().toString().equals(lost_id.toString()))
 						flag_reason=false;
 				}
 				if(flag_reason)
@@ -2017,6 +2017,8 @@ public class OpportunityUtil
 	public static JSONObject getWonDealsforpiechart(Long ownerId, long minTime,
 			long maxTime){
 		JSONObject dealswoncount = new JSONObject();
+		CategoriesUtil categoriesUtil = new CategoriesUtil();
+		boolean flag_reason=true;
 		if (ownerId == 0)
 		{
 			ownerId = null;
@@ -2031,7 +2033,7 @@ public class OpportunityUtil
 				maxTime,ownerId);
 		if (opportunitiesList != null && opportunitiesList.size() > 0)
 		{
-			CategoriesUtil categoriesUtil = new CategoriesUtil();
+			
 			List<Category> sources = categoriesUtil.getCategoriesByType("DEAL_SOURCE");
 			JSONObject countandvalue = new JSONObject();
 			countandvalue.put("count", 0);
@@ -2049,6 +2051,14 @@ public class OpportunityUtil
 
 				Long source_id = opportunity.getDeal_source_id();
 				Double value = opportunity.expected_value;
+				
+				List<Category> sources = categoriesUtil.getCategoriesByType("DEAL_SOURCE");
+				for (Category reason : sources){
+					if(reason.getId().toString().equals(source_id.toString()))
+						flag_reason=false;
+				}
+				if(flag_reason)
+					source_id=0L;
 
 				// Read from previous object if present
 				if (dealswoncount.containsKey(source_id.toString()))
