@@ -250,8 +250,8 @@ if(scheduleid.contains(",")){
 		   <div style="display: inline-block;width: 150px;margin-right: 5px;">
 		   <img src="<%=pr_pic%>" id="multi-user-avatar" class="thumbnail" style="cursor:pointer;" data="<%=domain_user_id%>" title="<%=pr_name%>"/>
 		<span id="user_name" style="display:block;white-space: nowrap;text-overflow: ellipsis;overflow: hidden;width: 100%;font-size:16px;" title="<%=pr_name %>"><%=pr_name %>&nbsp;&nbsp;&nbsp;</span>
-		<span id="workhours-<%= domain_user_id%>" style="display:inline-block;color:#8E8F8F;font-size:16px;" title="Working Hours"><%=workHours %></span>
-		<span style="display:inline-block;color:#8E8F8F;font-size:16px;" title="Timezone"><%=timezone %></span>
+		<span id="workhours-<%= domain_user_id%>" style="display:inline-block;color:#8E8F8F;font-size:16px;" title="Working Hours"><%="<script>document.write(getTimeInVisitorTimezoneWhileLoading('"+workHours+"','"+timezone+"'));</script>"%></span>
+		<span id="timezone-<%= domain_user_id%>" style="display:none;color:#8E8F8F;font-size:16px;" title="Timezone"><%=timezone %></span>
 		</div>
 		</div>
 		
@@ -1252,7 +1252,7 @@ var BUFFERTIME=null;
 							var array=business_hours_array[k];
 							var s=array[convertWeekDayToArray(new Date(dates).getDay())];
 							if(s.isActive){
-								$("#workhours-"+multi_user_ids[k]).html(getNormalBusinessHouts(s.timeFrom)+" - "+getNormalBusinessHouts(s.timeTill));
+								$("#workhours-"+multi_user_ids[k]).html(getTimeInVisitorTimezone(s.timeFrom)+" - "+getTimeInVisitorTimezone(s.timeTill));
 							}
 							else{
 								$("#workhours-"+multi_user_ids[k]).html("No working hours");
