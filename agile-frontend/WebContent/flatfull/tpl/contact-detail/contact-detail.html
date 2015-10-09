@@ -373,6 +373,7 @@
 									<i class="icon icon-call-end text-sm m-r-xs v-middle"></i>
 									</div>
 									<div class="text-sm">
+<!--
                                         <a href='#' class="contact-make-sip-call" style="display:none;" phone="{{value}}">
                                            {{value}}
                                         </a>            
@@ -380,8 +381,14 @@
                                            phone="{{value}}">
                                            {{value}}
                                         </a>    
+-->
 										<a href="tel:{{remove_spaces value}}" class="contact-make-call">{{value}}</a> 
                                         {{#if subtype}}<span class="label bg-light dk text-tiny">{{subtype}}</span> {{/if}}
+
+										<div class="pull-right contact-call-button-div" data-toggle="tooltip" data-placement="top" title="">
+        								  <button class="btn btn-default btn-xs contact-call-button" style="font-size:9px;padding: 0px 3px;"  aria-expanded="false" disabled phone="{{value}}">Call</button>
+    									</div>
+
 									</div>
 									<div class="clearfix"></div>
 									{{/each}}
