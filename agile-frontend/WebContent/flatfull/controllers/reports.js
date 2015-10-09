@@ -868,9 +868,8 @@ var ReportsRouter = Backbone.Router
 			showrevenuegraph : function()
 			{
 				hideTransitionBar();
-				head.js(LIB_PATH + 'lib/date-charts.js', LIB_PATH + 'lib/date-range-picker.js', CSS_PATH + "css/misc/date-picker.css", function()
-						{
-
+				initReportLibs(function()
+				{
 							// Load Reports Template
 						getTemplate("report-sales", {}, undefined, function(template_ui){
 						if(!template_ui)

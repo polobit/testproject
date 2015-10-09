@@ -205,64 +205,7 @@ function initSalesCharts(callback){
 head.js(LIB_PATH + 'lib/date-charts.js', LIB_PATH + 'lib/date-range-picker.js', CSS_PATH + "css/misc/date-picker.css", function()
 		{
 
-	$('.daterangepicker').remove();
-	// Bootstrap date range picker.
-	$('#reportrange').daterangepicker({ ranges : { 'Today' : [
-			'today', 'today'
-	], 'Yesterday' : [
-			'yesterday', 'yesterday'
-	], 'Last 7 Days' : [
-			Date.today().add({ days : -6 }), 'today'
-	], 'Last 30 Days' : [
-			Date.today().add({ days : -29 }), 'today'
-	], 'This Month' : [
-			Date.today().moveToFirstDayOfMonth(), Date.today().moveToLastDayOfMonth()
-	], 'Last Month' : [
-			Date.today().moveToFirstDayOfMonth().add({ months : -1 }), Date.today().moveToFirstDayOfMonth().add({ days : -1 })
-	], 'This Quarter' : [
-			Date.today().getMonth() < 3 ? new Date(Date.today().setMonth(0)).moveToFirstDayOfMonth() : 
-			(Date.today().getMonth() >= 3 && Date.today().getMonth() < 6) ? new Date(Date.today().setMonth(3)).moveToFirstDayOfMonth() :
-			(Date.today().getMonth() >= 6 && Date.today().getMonth() < 9) ? new Date(Date.today().setMonth(6)).moveToFirstDayOfMonth() : new Date(Date.today().setMonth(9)).moveToFirstDayOfMonth(), 
-			Date.today().getMonth() < 3 ? new Date(Date.today().setMonth(2).moveToLastDayOfMonth()) : 
-			(Date.today().getMonth() >= 3 && Date.today().getMonth() < 6) ? new Date(Date.today().setMonth(5)).moveToLastDayOfMonth() :
-			(Date.today().getMonth() >= 6 && Date.today().getMonth() < 9) ? new Date(Date.today().setMonth(8)).moveToLastDayOfMonth() : new Date(Date.today().setMonth(11)).moveToLastDayOfMonth()
-	], 'Last Quarter' : [
-			Date.today().getMonth() < 3 ? new Date(Date.today().add({ years : -1 }).setMonth(9)).moveToFirstDayOfMonth() : 
-			(Date.today().getMonth() >= 3 && Date.today().getMonth() < 6) ? new Date(Date.today().setMonth(0)).moveToFirstDayOfMonth() :
-			(Date.today().getMonth() >= 6 && Date.today().getMonth() < 9) ? new Date(Date.today().setMonth(3)).moveToFirstDayOfMonth() : new Date(Date.today().setMonth(6)).moveToFirstDayOfMonth(), 
-			Date.today().getMonth() < 3 ? new Date(Date.today().add({ years : -1 }).setMonth(11)).moveToLastDayOfMonth() : 
-			(Date.today().getMonth() >= 3 && Date.today().getMonth() < 6) ? new Date(Date.today().setMonth(2)).moveToLastDayOfMonth() :
-			(Date.today().getMonth() >= 6 && Date.today().getMonth() < 9) ? new Date(Date.today().setMonth(5)).moveToLastDayOfMonth() : new Date(Date.today().setMonth(8)).moveToLastDayOfMonth()
-	], 'This Year' : [
-			new Date(Date.today().setMonth(0)).moveToFirstDayOfMonth(), new Date(Date.today().setMonth(11)).moveToLastDayOfMonth()
-	], 'Last Year' : [
-			new Date(Date.today().setMonth(0)).add({ years : -1 }).moveToFirstDayOfMonth(), new Date(Date.today().setMonth(11)).add({ years : -1 }).moveToLastDayOfMonth()
-	] }, locale : { applyLabel : 'Apply', cancelLabel : 'Cancel', customRangeLabel : 'Custom', daysOfWeek : [
-			'Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'
-	], monthNames : [
-			'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'
-	], firstDay : parseInt(CALENDAR_WEEK_START_DAY) } }, function(start, end)
-	{
-		if(start&& end){
-		var months_diff = Math.abs(start.getMonth() - end.getMonth() + (12 * (start.getFullYear() - end.getFullYear())));
-		$('#reportrange span').html(start.toString('MMMM d, yyyy') + ' - ' + end.toString('MMMM d, yyyy'));
-		$("#week-range").html(end.add({ days : -6 }).toString('MMMM d, yyyy') + ' - ' + end.add({ days : 6 }).toString('MMMM d, yyyy'));
-		
-	}
-			else
-			$('#reportrange span').html(Date.today().add({ days : -6 }).toString('MMMM d, yyyy')+'-'+Date.today().toString('MMMM d, yyyy'));	
-
-		callback();
-	});
-	$('.daterangepicker > .ranges > ul').on("click", "li", function(e)
-	{
-		$('.daterangepicker > .ranges > ul > li').each(function(){
-			$(this).removeClass("active");
-		});
-		$(this).addClass("active");
-			});
-			});
-
+	initDateRange(callback);
 		// Init the callback when the frequency selector changes too
 		if ($('#frequency').length > 0)
 			{
