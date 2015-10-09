@@ -40,7 +40,14 @@ var TicketsUtilRouter = Backbone.Router.extend({
 				individual_tag_name : 'div',
 				cursor : true,
 				page_size : 20,
-				slateKey : "no-tickets"
+				slateKey : "no-tickets",
+				postRenderCallback: function(el){
+					head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
+					{
+						$("time", el).timeago();
+								
+					});
+				}
 			});
 
 			//Activating main menu

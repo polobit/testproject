@@ -26,6 +26,7 @@ import com.agilecrm.util.HTTPUtil;
 import com.agilecrm.util.MD5Util;
 import com.agilecrm.util.email.MustacheUtil;
 import com.agilecrm.util.email.SendMail;
+import com.campaignio.urlshortener.util.Base62;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.googlecode.objectify.Key;
@@ -92,8 +93,6 @@ public class TicketNotesUtil
 
 		List<TicketNotes> notesList = getTicketNotes(ticket.id, "-created_time");
 
-		String inReplyToAddress = ticket.id + Globals.INBOUND_EMAIL_SUFFIX;
-
 		TicketGroups group = TicketGroupUtil.getTicketGroupById(ticket.groupID);
 
 		String groupName = group.group_name;
@@ -121,8 +120,11 @@ public class TicketNotesUtil
 
 		System.out.println("notesArray: " + notesArray);
 
-		sendEmail(ticket.requester_email, ticket.subject, agentName, group.group_email, inReplyToAddress,
-				ticket.cc_emails, SendMail.TICKET_REPLY, json);
+		String fromAddress = NamespaceManager.get() + "+" + TicketGroupUtil.getShortGroupID(group.id) + "+"
+				+ TicketsUtil.getTicketShortID(ticket.id) + Globals.INBOUND_EMAIL_SUFFIX;
+
+		sendEmail(ticket.requester_email, ticket.subject, agentName, fromAddress, ticket.cc_emails,
+				SendMail.TICKET_REPLY, json);
 	}
 
 	/**
@@ -157,8 +159,8 @@ public class TicketNotesUtil
 		return json;
 	}
 
-	public static void sendEmail(String toAddress, String subject, String fromName, String fromEmail, String inReplyTo,
-			String ccEmails, String template, JSONObject dataJSON) throws Exception
+	public static void sendEmail(String toAddress, String subject, String fromName, String fromEmail, String ccEmails,
+			String template, JSONObject dataJSON) throws Exception
 	{
 		// Read template - HTML
 		String emailHTML = MustacheUtil.templatize(template + SendMail.TEMPLATE_HTML_EXT, dataJSON);
@@ -181,9 +183,6 @@ public class TicketNotesUtil
 		// All email params are inserted into Message json
 		JSONObject messageJSON = Mandrill.getMessageJSON("", fromEmail, fromName, toAddress, ccEmails, "", "", subject,
 				emailHTML, emailBody, "", "");
-
-		messageJSON.put(Mandrill.MANDRILL_HEADERS,
-				messageJSON.getJSONObject(Mandrill.MANDRILL_HEADERS).put("In-Reply-To", inReplyTo));
 
 		String response = null;
 
@@ -212,6 +211,9 @@ public class TicketNotesUtil
 	public static List<TicketNotes> inclDomainUsers(List<TicketNotes> notes)
 	{
 		Set<Key<DomainUser>> domainUserKeys = new HashSet<Key<DomainUser>>();
+
+		System.out.println("domainUserKeys: " + domainUserKeys);
+
 		Map<Long, DomainUser> map = new HashMap<Long, DomainUser>();
 
 		for (TicketNotes note : notes)
@@ -224,7 +226,9 @@ public class TicketNotesUtil
 
 		List<DomainUser> domainUsers = DomainUserUtil.dao
 				.fetchAllByKeys(new ArrayList<Key<DomainUser>>(domainUserKeys));
-		
+
+		System.out.println("domainUsers: " + domainUsers);
+
 		for (DomainUser domainUser : domainUsers)
 			map.put(domainUser.id, domainUser);
 

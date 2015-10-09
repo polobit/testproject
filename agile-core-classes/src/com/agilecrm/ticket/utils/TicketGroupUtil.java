@@ -161,9 +161,23 @@ public class TicketGroupUtil
 		return TicketGroups.ticketGroupsDao.getByProperty("group_name", groupName);
 	}
 
-	public static void main(String[] args)
+	/**
+	 * 
+	 * @param id
+	 * @return
+	 */
+	public static String getShortGroupID(Long id)
 	{
-		System.out.println(Base62.fromDecimalToOtherBase(62, 5307087345156096l));
-		System.out.println(Base62.fromOtherBaseToDecimal(62, "O2e8kqKQa"));
+		return Base62.fromDecimalToOtherBase(62, id) + "";
+	}
+
+	/**
+	 * 
+	 * @param id
+	 * @return
+	 */
+	public static Long getLongGroupID(String id)
+	{
+		return Base62.fromOtherBaseToDecimal(62, id);
 	}
 }

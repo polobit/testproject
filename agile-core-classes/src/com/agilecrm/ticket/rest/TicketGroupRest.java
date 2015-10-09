@@ -27,6 +27,8 @@ import com.agilecrm.user.util.DomainUserUtil;
 import com.googlecode.objectify.Key;
 
 /**
+ * <code>TicketGroupRest</code> class responsible for providing CRUD operations
+ * on {@link TicketGroups}.
  * 
  * @author Sasi 30-sep-2015
  * 
@@ -34,6 +36,9 @@ import com.googlecode.objectify.Key;
 @Path("/api/tickets/groups")
 public class TicketGroupRest
 {
+	/**
+	 * @return List of {@link TicketGroups}
+	 */
 	@GET
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	public List<TicketGroups> getGroups()
@@ -44,12 +49,16 @@ public class TicketGroupRest
 		}
 		catch (Exception e)
 		{
-			e.printStackTrace();
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
+			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+					.build());
 		}
-
-		return new ArrayList<TicketGroups>();
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
 	@GET
 	@Path("/create-default")
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
@@ -62,7 +71,7 @@ public class TicketGroupRest
 	 * Saves new Ticket Group
 	 * 
 	 * @param ticketGroup
-	 * @return ticketGroup
+	 * @return created {@link TicketGroups}
 	 */
 	@POST
 	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
@@ -92,7 +101,7 @@ public class TicketGroupRest
 			ticketGroup.setAgents_key_list(agents_key_list);
 			ticketGroup.setOwner_key(DomainUserUtil.getCurentUserKey());
 			ticketGroup.updated_time = Calendar.getInstance().getTimeInMillis();
-			
+
 			TicketGroups.ticketGroupsDao.put(ticketGroup);
 
 			return ticketGroup;

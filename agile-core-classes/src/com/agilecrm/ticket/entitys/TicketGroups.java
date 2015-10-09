@@ -104,7 +104,7 @@ public class TicketGroups
 			}
 		}
 
-		group_email = NamespaceManager.get() + "+" + Base62.fromDecimalToOtherBase(62, this.id) + Globals.INBOUND_EMAIL_SUFFIX;
+		group_email = NamespaceManager.get() + "+" + TicketGroupUtil.getShortGroupID(id) + Globals.INBOUND_EMAIL_SUFFIX;
 	}
 
 	@JsonIgnore

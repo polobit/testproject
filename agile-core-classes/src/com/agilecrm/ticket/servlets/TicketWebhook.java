@@ -121,7 +121,7 @@ public class TicketWebhook extends HttpServlet
 			 */
 			String[] toAddressArray = toAddress.replace(Globals.INBOUND_EMAIL_SUFFIX, "").split("\\+");
 
-			if (toAddressArray.length != 2)
+			if (toAddressArray.length < 2)
 				return;
 
 			String namespace = toAddressArray[0];
@@ -130,7 +130,7 @@ public class TicketWebhook extends HttpServlet
 			 * GroupID is converted with Base62. So to get original GroupID
 			 * converting back to decimal with Base62.
 			 */
-			Long groupID = Base62.fromOtherBaseToDecimal(62, toAddressArray[1]);
+			Long groupID = TicketGroupUtil.getLongGroupID(toAddressArray[1]);
 
 			System.out.println("DomainName: " + namespace);
 			System.out.println("GroupID: " + groupID);
@@ -159,30 +159,14 @@ public class TicketWebhook extends HttpServlet
 				return;
 			}
 
-			/**
-			 * Fetch the mime headers which contains info like ip address,
-			 * In-Reply-To (used to find parent ticket) etc
-			 */
-			JSONObject mimeHeaders = msgJSON.getJSONObject("headers");
-
 			boolean isNewTicket = true;
 
 			/**
-			 * In-Reply-To mime header used to find out whether received Ticket
-			 * is new or reply to existing ticket.
+			 * If received ticket is reply to existing ticket then email address
+			 * will be in the form of namespace+groupid+ticketid@helptor.com
 			 */
-			if (mimeHeaders.has("In-Reply-To"))
-			{
-				String inReplyTo = mimeHeaders.getString("In-Reply-To");
-
-				/**
-				 * In-Reply-To mime header should contain address ends with
-				 * helptor.com. We will send this as param when agent replies to
-				 * this ticket.
-				 */
-				if (inReplyTo.endsWith(Globals.INBOUND_EMAIL_SUFFIX))
-					isNewTicket = false;
-			}
+			if (toAddressArray.length == 3)
+				isNewTicket = false;
 
 			String ccEmails = "";
 			JSONArray ccEmailsArray = new JSONArray();
@@ -206,23 +190,22 @@ public class TicketWebhook extends HttpServlet
 			if (isNewTicket)
 			{
 				// Creating new Ticket in Ticket table
-				ticket = TicketsUtil.createTicket(groupID, true, msgJSON.getString("from_name"),
-						msgJSON.getString("from_email"), msgJSON.getString("subject"), ccEmails.trim(),
-						msgJSON.getString("text"), Source.EMAIL, attachmentExists,
-						mimeHeaders.getString("X-Originating-Ip"));
+				ticket = TicketsUtil.createTicket(groupID, true, msgJSON.getString("from_name"), msgJSON
+						.getString("from_email"), msgJSON.getString("subject"), ccEmails.trim(), msgJSON
+						.getString("text"), Source.EMAIL, attachmentExists,
+						msgJSON.getJSONObject("headers").getString("X-Originating-Ip"));
 			}
 			else
 			{
 				// Fetch ticket ID from In-Reply-To mime header
-				String temp = mimeHeaders.getString("In-Reply-To").replace(Globals.INBOUND_EMAIL_SUFFIX, "");
-				Long ticketID = Long.parseLong(temp);
+				Long ticketID = Long.parseLong(toAddressArray[2]);
 
 				ticket = TicketsUtil.getTicketByID(ticketID);
 
 				// Check if ticket exists
 				if (ticket == null)
 				{
-					System.out.println("Invalid ticketID: " + temp);
+					System.out.println("Invalid ticketID: " + ticketID);
 					return;
 				}
 

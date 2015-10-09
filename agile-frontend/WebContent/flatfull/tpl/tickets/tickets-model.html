@@ -4,11 +4,14 @@
         <img src="{{emailGravatarurl 50 requester_email}}">
       </a>
       <div class="pull-right text-sm text-muted">
-        <span class="hidden-xs ng-binding">{{epochToHumanDate "mmm dd yyyy HH:MM" last_updated_time}}</span>
+        <time class="time-ago" datetime="{{epochToHumanDate "" last_updated_time}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" last_updated_time}}</time>
+        <!-- <span class="hidden-xs ng-binding">{{epochToHumanDate "mmm dd yyyy HH:MM" last_updated_time}}</span> -->
         {{#if attachments_exists}}<i class="fa fa-paperclip m-l-sm" aria-hidden="false"></i>{{/if}}
       </div>
       <div class="clear">
-        <div><a class="text-md ng-binding" href="#ticket/{{id}}">{{subject}}</a></div>
+        <div>
+          <a class="text-md ng-binding" href="#ticket/{{id}}" style="color: #58666e !important;">{{subject}}</a>
+        </div>
         <div class="text-ellipsis m-t-xs">{{first_notes_text}}</div>
       </div>      
     </li>
