@@ -499,9 +499,10 @@ public class Opportunity extends Cursor implements Serializable
 	    if (!this.milestone.equals(oldOpportunity.milestone) && this.milestone.equalsIgnoreCase(wonMilestone))
 		this.won_date = System.currentTimeMillis() / 1000;
 	    
+	    System.out.println("New Opportunity-----"+this);
 	    //If old deal, new deal are same and lost reason is there, 
 	    //can update milestone changed time with old milestone changed time
-	    if (this.pipeline_id != null && this.milestone != null && this.pipeline_id.equals(oldOpportunity.getPipeline_id())
+	    if (this != null && this.pipeline_id != null && this.milestone != null && this.pipeline_id.equals(oldOpportunity.getPipeline_id())
 		    && this.milestone.equals(oldOpportunity.milestone) 
 		    && (this.lost_reason_id != null || this.lost_reason_id != 0) 
 		    && (oldOpportunity.lost_reason_id == null || oldOpportunity.lost_reason_id == 0))
