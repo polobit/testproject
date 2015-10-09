@@ -670,7 +670,7 @@ public class WebCalendarEventUtil
 	 * @throws ParseException
 	 * @throws IOException
 	 */
-	public static synchronized String createEvents(WebCalendarEvent wce, Contact contact) throws JSONException
+	public static String createEvents(WebCalendarEvent wce, Contact contact) throws JSONException
 	{
 		System.out.println("In createEvents");
 

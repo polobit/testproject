@@ -1321,3 +1321,304 @@ function getNumberWithCommasForCharts(value){
 	if (value)
 		return value.toFixed(2).toString().replace(/\B(?=(?:\d{3})+(?!\d))/g, ",").replace('.00', '');
 }
+function showDealsGrowthgraph(url, selector, name, yaxis_name, show_loading)
+{
+    
+    // Show loading image if required
+    if(typeof show_loading === 'undefined')
+    {
+        // Old calls were not showing loading image..
+    }
+    else
+        $('#' + selector).html(getRandomLoadingImg());
+    
+    
+    var chart;
+
+    // Loads Highcharts plugin using setupCharts and sets up line chart in the
+    // callback
+    setupCharts(function()
+    {
+
+        // Loads statistics details from backend 
+        fetchReportData(url, function(data)
+        {
+
+            // Categories are created time
+            var categories = [];
+            var tempcategories=[];
+            var type = $( "#type:visible").val();
+            var frequency= $("#frequency:visible").val();
+            // Data with deals
+            var series;
+            var AllData=[];
+            var sortedKeys = [];
+            $.each(data,function(k,v){
+                sortedKeys.push(k);
+            });
+            sortedKeys.sort();
+            var sortedData = {};
+            $.each(sortedKeys,function(index,value){
+                sortedData[''+value] = data[''+value];
+            });
+
+            var min_tick_interval = 1;
+            var dataLength = 0;
+            // Iterates through data and adds keys into
+            // categories
+            $.each(sortedData, function(k, v)
+            {
+            	var totalData=[];
+            	totalData.push(k);
+            	var total=0;
+                // Initializes series with names with the first
+                // data point
+                if (series == undefined)
+                {
+                    var index = 0;
+                    series = []; 
+                    $.each(v, function(k1, v1)
+                    {
+                    	
+                        var series_data = {};
+                        series_data.name = k1;
+                        series_data.data = [];
+                        series[index++] = series_data;
+                        //totalData.push(total);
+                    });
+                
+                }
+
+
+                // Fill Data Values with series data
+                $.each(v, function(k1, v1)
+                {
+                	total=total+v1;
+                    // Find series with the name k1 and to that,
+                    // push v1
+                    var series_data = find_series_with_name(series, k1);
+                    series_data.data.push(v1);
+                });
+                     totalData.push(total);
+                tempcategories.push(k*1000);
+				dataLength++;
+				AllData.push(totalData);
+			});
+				
+				var cnt=0;
+				$.each(sortedData, function(k, v)
+			{
+                var dt = new Date(k * 1000);
+                var dte = new Date(tempcategories[cnt]);
+                if(frequency=="daily")
+					{
+						categories.push(Highcharts.dateFormat('%e.%b',Date.UTC(dte.getFullYear(), dte.getMonth(), dte.getDate()))+'');
+					}
+				else if(frequency=="weekly")
+					{
+						if(cnt!=dataLength-1)
+						{
+							var next_dte = new Date(tempcategories[cnt+1]);
+							categories.push(Highcharts.dateFormat('%e.%b', Date.UTC(dte.getFullYear(), dte.getMonth(), dte.getDate()))+' - '+Highcharts.dateFormat('%e.%b', Date.UTC(next_dte.getFullYear(), next_dte.getMonth(), next_dte.getDate()-1)));
+						}
+						else
+						{
+							var end_date = new Date(Date.parse($.trim($('#range').html().split("-")[1])).valueOf());
+							categories.push(Highcharts.dateFormat('%e.%b', Date.UTC(dte.getFullYear(), dte.getMonth(), dte.getDate()))+' - '+Highcharts.dateFormat('%e.%b', Date.UTC(end_date.getFullYear(), end_date.getMonth(), end_date.getDate())));
+						}
+					}
+				else if(frequency=="monthly")
+					{
+						if(cnt!=dataLength-1)
+						{
+							var next_dte = new Date(tempcategories[cnt+1]);
+							var current_date = new Date();
+							var from_date = '';
+							var to_date = '';
+							if(cnt!=0)
+							{
+								if(current_date.getFullYear()!=dte.getFullYear())
+								{
+									from_date = Highcharts.dateFormat('%b.%Y', Date.UTC(dte.getFullYear(), dte.getMonth(), dte.getDate()));
+								}
+								else
+								{
+									from_date = Highcharts.dateFormat('%b', Date.UTC(dte.getFullYear(), dte.getMonth(), dte.getDate()));
+								
+								}
+							
+								categories.push(from_date);
+							}
+							else
+							{
+								var start_date=new Date(Date.parse($.trim($('#range').html().split("-")[0])).valueOf());
+								if(current_date.getFullYear()!=dte.getFullYear())
+								{
+									from_date = Highcharts.dateFormat('%e.%b.%Y', Date.UTC(start_date.getFullYear(), start_date.getMonth(), start_date.getDate()));
+								}
+								else
+								{
+									from_date = Highcharts.dateFormat('%e.%b', Date.UTC(start_date.getFullYear(), start_date.getMonth(), start_date.getDate()));
+								
+								}
+								//if(current_date.getFullYear()!=next_dte.getFullYear())
+								
+									to_date = Highcharts.dateFormat('%e.%b.%Y', Date.UTC(next_dte.getFullYear(), next_dte.getMonth(), next_dte.getDate()-1));
+								
+								categories.push(from_date+' - '+to_date);
+							}
+						}
+						else
+						{
+							var current_date = new Date();
+							var from_date ='';
+							var start_date=new Date(Date.parse($.trim($('#range').html().split("-")[0])).valueOf());
+							var to_date = '';
+							var end_date = new Date(Date.parse($.trim($('#range').html().split("-")[1])).valueOf());
+							if(current_date.getFullYear()!=dte.getFullYear())
+							{
+								if(cnt==0)
+									from_date = Highcharts.dateFormat('%e.%b.%Y', Date.UTC(start_date.getFullYear(), start_date.getMonth(), start_date.getDate()));
+								else
+									from_date = Highcharts.dateFormat('%e.%b.%Y', Date.UTC(dte.getFullYear(), dte.getMonth(), dte.getDate()));
+							
+								to_date = Highcharts.dateFormat('%e.%b.%Y', Date.UTC(end_date.getFullYear(), end_date.getMonth(), end_date.getDate()));
+							}
+							else
+							{
+								if(cnt==0)
+								  from_date = Highcharts.dateFormat('%e.%b', Date.UTC(start_date.getFullYear(), start_date.getMonth(), start_date.getDate()));
+								else
+									from_date = Highcharts.dateFormat('%e.%b', Date.UTC(dte.getFullYear(), dte.getMonth(), dte.getDate()));
+								
+								to_date = Highcharts.dateFormat('%e.%b', Date.UTC(end_date.getFullYear(), end_date.getMonth(), end_date.getDate()));
+								
+							}
+							categories.push(from_date+' - '+to_date);
+						}
+					}
+                 cnt++;
+            });
+
+            if(Math.ceil((dataLength-1)/10)>0)
+            {
+                min_tick_interval = Math.ceil(dataLength/10);
+                if(min_tick_interval==3)
+                {
+                    min_tick_interval = 4;
+                }
+            }
+            if(series==undefined)
+            	 chartRenderforIncoming(selector,categories,name,yaxis_name,min_tick_interval,type,series,AllData);
+            else
+            {
+            $.ajax({ type : 'GET', url : '/core/api/categories?entity_type=DEAL_SOURCE', dataType : 'json',
+            success: function(data){
+                $.each(data,function(index,deals){
+                    for(var i=0;i<series.length;i++){
+                        if(series[i].name=="0")
+                                series[i].name="Unknown";
+                        else if(deals.id==series[i].name){
+                            series[i].name=deals.label;
+                        }
+                            
+                    }
+                });
+                chartRenderforIncoming(selector,categories,name,yaxis_name,min_tick_interval,type,series,AllData);
+                } 
+            });
+        	}
+
+
+            // After loading and processing all data, highcharts are initialized
+            // setting preferences and data to show
+            
+        });
+    });
+}
+
+function chartRenderforIncoming(selector,categories,name,yaxis_name,min_tick_interval,type,series,AllData){
+	chart = new Highcharts.Chart({
+                chart: {
+                    renderTo: selector,
+                    type: 'area',
+                    marginRight: 130,
+                    marginBottom: 50
+                },
+                colors: ['#7266ba','#23b7e5','#27c24c','#fad733','#f05050','#6E6658','#611680','#167F80','#801634','#D3E6C7'],
+                title: {
+                    text: name,
+                    x: -20,//center
+                    style : {
+                        textTransform : 'normal'
+                    }
+                },
+                xAxis: {
+                    categories: categories,
+                    tickmarkPlacement: 'on',
+                    minTickInterval : min_tick_interval
+                },
+                yAxis: {
+                    title: {
+                        text: yaxis_name
+                    },
+                    plotLines: [
+                        {
+                            value: 0,
+                            width: 1,
+                            color: '#808080'
+                        }
+                    ],
+                    min: 0
+                },
+                legend: {
+                    layout: 'vertical',
+                    align: 'right',
+                    verticalAlign: 'top',
+                    x: -10,
+                    y: 100,
+                    borderWidth: 0
+                },
+                 plotOptions: {
+                    area: {
+                stacking: 'normal',
+                lineColor: '#666666',
+                lineWidth: 1,
+                marker: {
+                    lineWidth: 1,
+                    lineColor: '#666666',
+                    fillColor: null
+                  }
+                 }
+                  },
+                //Tooltip to show details,
+                tooltip: {
+                    formatter: function(){
+                        if(type=="deals")
+                                {
+                        return '<div>' + 
+                                '<div class="p-n">'+this.x+'</div>' + 
+                                '<div class="p-n"><font color='+this.series.color+'>'+this.series.name+'</font> : '+getNumberWithCommasForCharts(this.y)+'</div>' +
+                                '</div>'+
+                                '<div class="p-n">Total : '+getNumberWithCommasForCharts(AllData[this.point.x][1])+'</div>';
+                            }
+                        else
+                        {
+                        return '<div>' + 
+                                '<div class="p-n">'+this.x+'</div>' + 
+                                '<div class="p-n"><font color='+this.series.color+'>'+this.series.name+'</font> : '+getCurrencySymbolForCharts()+''+getNumberWithCommasForCharts(this.y)+'</div>' +
+                                '</div>'+
+                                 '<div class="p-n">Total : '+getCurrencySymbolForCharts()+''+getNumberWithCommasForCharts(AllData[this.point.x][1])+'</div>';;
+                            }
+                    },
+                    useHTML: true
+                },
+               
+                //Sets the series of data to be shown in the graph,shows total 
+                //and pipeline
+                series: series,
+                exporting: {
+                    enabled: false
+                }
+            });
+}

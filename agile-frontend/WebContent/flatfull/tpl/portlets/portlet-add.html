@@ -1,4 +1,5 @@
 <script id="portlets-add-model-template" type="text/html">
+<form id="{{remove_spaces name}}_portlet">
 			<div class="show_screeshot"  
 						id="{{remove_spaces name}}">
 			<div class="panel wrapper b-a text-center">
@@ -13,15 +14,16 @@
 			  {{#if is_added}}
 		<div>	<a class="btn btn-sm btn-default add-widget disabled" >Add</a></div>
 			{{else}}
-			 <div>	<a class="btn btn-sm btn-default add-widget" onclick="javascript:addNewPortlet('{{portlet_type}}','{{remove_spaces name}}');">Add</a></div>
+			 <div>	<a class="btn btn-sm btn-default add-widget add-portlet" portlet_type="{{portlet_type}}" portlet_name="{{name}}">Add</a></div>
 			{{/if}}
 			{{else}}
-			<div>	<a class="btn btn-sm btn-default add-widget" onclick="javascript:addNewPortlet('{{portlet_type}}','{{remove_spaces name}}');">Add</a></div>
+			<div>	<a class="btn btn-sm btn-default add-widget add-portlet" portlet_type="{{portlet_type}}" portlet_name="{{name}}">Add</a></div>
 		
 		{{/if_equals}}
 			
 		</div> 
 		</div>
+</form>
 </script>
 <script id="portlets-add-collection-template" type="text/html">
 <div class="bg-light lter b-b wrapper-md">

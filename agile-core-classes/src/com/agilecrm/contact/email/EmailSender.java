@@ -39,7 +39,7 @@ public class EmailSender
     {
 	EmailSender emailSender = new EmailSender();
 
-	emailSender.billingRestriction = BillingRestrictionUtil.getBillingRestriction(true);
+	emailSender.billingRestriction = BillingRestrictionUtil.getBillingRestrictionFromDB();
 
 	emailSender.emailBillingRestriction = (EmailBillingRestriction) DaoBillingRestriction.getInstace(
 	        DaoBillingRestriction.ClassEntities.Email.toString(), emailSender.billingRestriction);
@@ -59,6 +59,16 @@ public class EmailSender
 	        + "pending emails : " + billingRestriction.one_time_emails_count);
 
 	return isWhiteLabled;
+    }
+    
+    /**
+     * Verifies whether Master plan paid or not
+     * 
+     * @return boolean
+     */
+    public boolean isPaid()
+    {
+    	return !billingRestriction.planDetails.isFreePlan();
     }
 
     public boolean canSend()
@@ -161,7 +171,7 @@ public class EmailSender
 	if (emailGateway == null)
 	{
 		// For Paid plan return old Mandrill Account
-		if(billingRestriction.isEmailPlanPaid())
+		if(isPaid())
 			return Globals.MANDRIL_API_KEY_VALUE;
 	
 		return mandrillAPIKey;

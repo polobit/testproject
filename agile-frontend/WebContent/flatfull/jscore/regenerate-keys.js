@@ -48,6 +48,7 @@ function prettify_api_add_events() {
     prettyPrint();
 
     initializeRegenerateKeysListeners();
+    $("#update_allowed_domains").off('click');
     $("#update_allowed_domains").on('click', function(e) {
         e.preventDefault();
         $(this).attr("disabled", "disabled");
@@ -60,12 +61,16 @@ function prettify_api_add_events() {
         allowed_domains = allowed_domains ? allowed_domains + ", " + new_allowed_domain : new_allowed_domain;
         put_allowed_domains(allowed_domains);
     });
+
+    $(".allowed-domain-delete").off('click');
     $(".allowed-domain-delete").on('click', function(e) {
         e.preventDefault();
         $(this).closest("tr").remove();
         var allowed_domains = get_allowed_domains();
         put_allowed_domains(allowed_domains);
     });
+
+    $("#update_blocked_ips").off('click');
     $("#update_blocked_ips").on('click', function(e) {
         e.preventDefault();
         $(this).attr("disabled", "disabled");
@@ -79,6 +84,7 @@ function prettify_api_add_events() {
         put_blocked_ips(blocked_ips);
     });
 
+    $(".blocked-ip-delete").off('click');
     $(".blocked-ip-delete").on('click', function(e) {
         e.preventDefault();
         $(this).closest("tr").remove();
