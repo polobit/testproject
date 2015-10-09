@@ -185,7 +185,7 @@
     </div>
     <div class="col contacts-div">
 
-		<div class="filter-criteria"></div>
+		
     <div class="panel-heading grid-checkboxes" style="background:#f6f8f8;">Contacts List
 
       <a id="contacts-left-filters-toggle" class="m-l-xs" data-toggle="tooltip" data-placement="right" title="" data-original-title="Filters">
@@ -198,6 +198,7 @@
           </label>Select All</span>
   {{/if}}
       </div>
+      <div class="filter-criteria"></div>
       {{#unless this.length}}
         <div id="slate">
         </div>
@@ -215,7 +216,6 @@
 
 </script>
 	<script id="contacts-grid-table-collection-template" type="text/html">
-	<div class="filter-criteria"></div>
   <div class="panel-heading grid-checkboxes" style="background:#f6f8f8;">Contacts List
 
       <a id="contacts-left-filters-toggle" class="m-l-xs" data-toggle="tooltip" data-placement="right" title="" data-original-title="Filters">
@@ -229,6 +229,7 @@
           {{/if}}
       
   </div>
+  <div class="filter-criteria"></div>
         <div id="slate">
         </div>
         {{#if this.length}}
