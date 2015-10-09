@@ -20,7 +20,7 @@ import com.thirdparty.google.contacts.ContactsSynctoGoogle;
  * @author jitendra
  * 
  */
-public abstract class TwoWaySyncService extends ContactSyncService
+public abstract class TwoWaySyncService extends ContactSyncService implements ITwoWaySyncService
 {
     private Long last_synced_to_client = 0l;
 
@@ -70,7 +70,7 @@ public abstract class TwoWaySyncService extends ContactSyncService
 	ContactsSynctoGoogle.updateContacts(prefs);
     }
 
-    private void uploadContactsToClient()
+    public void uploadContactsToClient()
     {
 	uploadNewContactsToClient();
 	uploadUpdatedContactsToClient();

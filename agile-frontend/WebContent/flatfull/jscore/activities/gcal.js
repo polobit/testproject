@@ -7,26 +7,15 @@
 // or better
 
 
-function loadUserEventsfromGoogle(users){
+function loadUserEventsfromGoogle(users, start, end){
 
-	$.each(users, function(i, user)
-				{
-					if (CURRENT_DOMAIN_USER.id == user.domain_user_id)
-					{
-						// Fetches access token. Fetched here to
-						// avoid
-						// unnecessary loading of client.js and
-						// gapi helper
-						// without access token
-						load_events_from_google(function(data)
+		load_events_from_google(function(data)
 						{
 							if (!data)
 								return;
 
 							return agile_transform_options(data, start, end);
 						});
-					}
-				});
 }
 
 function isDefined(x)
@@ -47,7 +36,7 @@ function _init_gcal_options(users)
 
 			if(users){
 
-				loadUserEventsfromGoogle(users);
+				loadUserEventsfromGoogle(users, start, end);
 				return;
 
 			}
@@ -55,7 +44,7 @@ function _init_gcal_options(users)
 
 			$.getJSON('/core/api/users/agileusers', function(users)
 				{
-					loadUserEventsfromGoogle(users);
+					loadUserEventsfromGoogle(users, start, end);
 				});
 
 		}

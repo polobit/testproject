@@ -216,6 +216,7 @@ $(function()
 				last_name = ' ';
 
 			showXeroClient();
+            $("body").off('click','#xero_add_contact');
 			$("body").on('click','#xero_add_contact', function(e)
 			{
 				e.preventDefault();
@@ -224,6 +225,7 @@ $(function()
 			});
 
 			// attach event to invoices + icon to get lineitems
+            $("body").off('click','.invoices');
 			$("body").on('click','.invoices', function(e)
 			{
 				e.preventDefault();
@@ -240,7 +242,7 @@ $(function()
 						{
 							console.log((JSON.parse(data)).Invoices.Invoice);
 							
-							getTemplate('xero-invoice-lineitems', JSON.parse(data)).Invoices.Invoice, undefined, function(template_ui){
+							getTemplate('xero-invoice-lineitems', (JSON.parse(data)).Invoices.Invoice, undefined, function(template_ui){
 						 		if(!template_ui)
 						    		return;
 								$('#collapse-' + invoiceId).html($(template_ui)); 
@@ -248,8 +250,8 @@ $(function()
 						}
 						else
 						{
-							console.log("error")
-							xeroError(Xero_PLUGIN_NAME, data)
+							console.log("error");
+							xeroError(Xero_PLUGIN_NAME, data);
 						}
 						$('#XERO_PROFILE_LOAD_IMAGE').remove();
 					});

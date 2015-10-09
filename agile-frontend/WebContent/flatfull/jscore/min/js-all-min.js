@@ -636,7 +636,12 @@ var AdminSettingsRouter = Backbone.Router.extend({
 
 	"email-gateways/:id" : "emailGateways",
 
-	"sms-gateways/:id" : "smsGateways"
+	"sms-gateways/:id" : "smsGateways",
+
+	"lost-reasons" : "lostReasons",
+
+	"deal-sources" : "dealSources"
+
 
 	},
 
@@ -968,7 +973,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 				var view = new Base_Model_View({ url : '/core/api/api-key', template : "admin-settings-api-key-model", postRenderCallback : function(el)
 				{
 
-					initializeRegenerateKeysListeners();
+					
 					$('#content').find('#admin-prefs-tabs-content').html(view.el);
 
 					$('#content').find('#AdminPrefsTab .select').removeClass('select');
@@ -995,6 +1000,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 					{
 						$("#tracking-webrules-whitelist, .tracking-webrules-whitelist-tab").hide();
 					}
+					initializeRegenerateKeysListeners();
 
 				} });
 			});
@@ -1058,13 +1064,14 @@ var AdminSettingsRouter = Backbone.Router.extend({
 
 			return;
 		}
-
+		
 		var that = this;
 		$('#content').html("<div id='milestone-listner'>&nbsp;</div>");
 		getTemplate("admin-settings", {}, undefined, function(template_ui){
 			if(!template_ui)
 				  return;
 			$('#milestone-listner').html($(template_ui));
+			$('#milestone-listner').find('#admin-prefs-tabs-content').html(getTemplate("settings-milestones-tab"), {});
 
 			that.pipelineGridView = new Base_Collection_View({ url : '/core/api/milestone/pipelines', templateKey : "admin-settings-milestones",
 			individual_tag_name : 'div', sortKey : "name", postRenderCallback : function(el)
@@ -1075,16 +1082,20 @@ var AdminSettingsRouter = Backbone.Router.extend({
 					$('#milestone-listner').find('#deal-tracks-accordion').find('.collapse').addClass('in');
 				initializeMilestoneListners(el);
 				milestone_util.init(el);
+				//that.lostReasons();
+				//that.dealSources();
 			} });
 			that.pipelineGridView.collection.fetch();
 
-			$('#milestone-listner').find('#admin-prefs-tabs-content').html(that.pipelineGridView.render().el);
+			$('#milestone-listner').find('#admin-prefs-tabs-content').find('#settings-milestones-tab-content').html(that.pipelineGridView.render().el);
 			$('#milestone-listner').find('#AdminPrefsTab .select').removeClass('select');
 			$('#milestone-listner').find('.milestones-tab').addClass('select');
 			$(".active").removeClass("active");
 
 		}, "#milestone-listner");
 	
+		$('.settings-milestones').addClass('active');
+		$('#milestone-listner').find('#admin-prefs-tabs-content').parent().removeClass('bg-white');
 	},
 	
 	/**
@@ -1098,6 +1109,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			$('#content').html(getTemplate('others-not-allowed',{}));
 			return;
 		}
+
 		$("#content").html(getTemplate("admin-settings"), {});
 		this.categoryGridView = new Base_Collection_View({ url : '/core/api/categories?entity_type=TASK', templateKey : "admin-settings-categories",
 			individual_tag_name : 'tr', sortKey : "order", postRenderCallback : function(el)
@@ -1282,7 +1294,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 				if(emailGateway["email_api"].toUpperCase() != value)//checks if the current email gateway is the same as the clicked one
 				{
 				modalAlert("sms-integration-alert-modal","You have a Email Gateway already configured. Please disable that to configure a new one.","Email Gateway Configured");
-				this.navigate("integrations", { trigger : true });
+				that.navigate("integrations", { trigger : true });
 				return;	
 				}
 			}	
@@ -1358,7 +1370,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			}
 
 			var smsGateway;
-			$.each(this.integrations.collection.models, function(key, value)
+			$.each(that.integrations.collection.models, function(key, value)
 			{
 				var prefJSON = JSON.parse(value.attributes.prefs);
 				if (prefJSON["sms_api"])
@@ -1374,7 +1386,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 				{
 					modalAlert("sms-integration-alert-modal", "You have a SMS Gateway already configured. Please disable that to configure a new one.",
 							"SMS Gateway Configured");
-					this.navigate("integrations", { trigger : true });
+					that.navigate("integrations", { trigger : true });
 					return;
 				}
 			}
@@ -1429,6 +1441,60 @@ var AdminSettingsRouter = Backbone.Router.extend({
 
 
 		}, "#content");
+	},
+	
+	/**
+	 * Fetch all lost reasons
+	 */
+	lostReasons : function()
+	{
+		if (!CURRENT_DOMAIN_USER.is_admin)
+		{
+			$('#content').html(getTemplate('others-not-allowed',{}));
+			return;
+		}
+		$('#content').html("<div id='milestone-listner'>&nbsp;</div>");
+		$("#milestone-listner").html(getTemplate("admin-settings"), {});
+		$('#milestone-listner').find('#admin-prefs-tabs-content').html(getTemplate("settings-milestones-tab"), {});
+		this.dealLostReasons = new Base_Collection_View({ url : '/core/api/categories?entity_type=DEAL_LOST_REASON', templateKey : "admin-settings-lost-reasons",
+			individual_tag_name : 'tr', sortKey : "name", postRenderCallback : function(el)
+			{
+				initializeMilestoneListners(el);
+			} });
+		this.dealLostReasons.collection.fetch();
+		$('#content').find('#admin-prefs-tabs-content').find('#settings-milestones-tab-content').html(this.dealLostReasons.render().el);
+		$('#content').find('#AdminPrefsTab .select').removeClass('select');
+		$('#content').find('.milestones-tab').addClass('select');
+		$(".active").removeClass("active");
+		$('.settings-lost-reasons').addClass('active');
+		$('#milestone-listner').find('#admin-prefs-tabs-content').parent().removeClass('bg-white');
+	},
+
+	/**
+	 * Fetch all deal sources
+	 */
+	dealSources : function()
+	{
+		if (!CURRENT_DOMAIN_USER.is_admin)
+		{
+			$('#content').html(getTemplate('others-not-allowed',{}));
+			return;
+		}
+		$('#content').html("<div id='milestone-listner'>&nbsp;</div>");
+		$("#milestone-listner").html(getTemplate("admin-settings"), {});
+		$('#milestone-listner').find('#admin-prefs-tabs-content').html(getTemplate("settings-milestones-tab"), {});
+		this.dealSourcesView = new Base_Collection_View({ url : '/core/api/categories?entity_type=DEAL_SOURCE', templateKey : "admin-settings-deal-sources",
+			individual_tag_name : 'tr', sortKey : "name", postRenderCallback : function(el)
+			{
+				initializeMilestoneListners(el);
+			} });
+		this.dealSourcesView.collection.fetch();
+		$('#content').find('#admin-prefs-tabs-content').find('#settings-milestones-tab-content').html(this.dealSourcesView.render().el);
+		$('#content').find('#AdminPrefsTab .select').removeClass('select');
+		$('#content').find('.milestones-tab').addClass('select');
+		$(".active").removeClass("active");
+		$('.settings-deal-sources').addClass('active');
+		$('#milestone-listner').find('#admin-prefs-tabs-content').parent().removeClass('bg-white');
 	}
 
 });
@@ -1614,7 +1680,7 @@ function load_clickdesk_code()
 	var s = document.getElementsByTagName('script')[0];
 	s.parentNode.insertBefore(glcspt, s);
 }
-
+_
 function executeWebRulesOnRoute(){
  	  if(typeof _agile_execute_action == "function")
 	  {
@@ -1645,57 +1711,64 @@ calendar : function()
 	eraseCookie("agile_calendar_view");
 	// read cookie for view if list_view is there then rendar list view else
 	// rendar default view
-	getCalendarUsersDetails(function(users){
+	
 
 		$('#content').html("<div id='calendar-listers'>&nbsp;</div>");
+		$('#calendar-listers').html(LOADING_ON_CURSOR);
 		getTemplate("calendar", {}, undefined, function(template_ui){
+
 		if(!template_ui)
 			  return;
 
+		getCalendarUsersDetails(function(users){
+
 		$('#calendar-listers').html($(template_ui));
-		getTemplate("event-left-filter", users, undefined, function(template_ui1){
-				$('#calendar-listers').find("#calendar-filters").html($(template_ui1));
 
-				buildCalendarLhsFilters();
-				createRequestUrlBasedOnFilter();
-				var view = readCookie("agile_calendar_view");
+				getTemplate("event-left-filter", users, undefined, function(template_ui1){
+					
+						$('#calendar-listers').find("#calendar-filters").html($(template_ui1));
 
-				if (view)
-				{
-					$("#list_event_time").removeClass('hide');
-					$("#user_calendars").hide();
-					loadGoogleEvents();
-					loadAgileEvents();
-					return;
-				}
-				
-				$("#list_event_time").addClass('hide');
-				$("#user_calendars").show();
-				$('#calendar-view-button').show();
+						buildCalendarLhsFilters();
+						createRequestUrlBasedOnFilter();
+						var view = readCookie("agile_calendar_view");
 
-				$(".active").removeClass("active");
-				$("#calendarmenu").addClass("active");
-				$('#agile_event_list').addClass('hide');
+						if (view)
+						{
+							$("#list_event_time").removeClass('hide');
+							$("#user_calendars").hide();
+							loadGoogleEvents();
+							loadAgileEvents();
+							return;
+						}
+						
+						$("#list_event_time").addClass('hide');
+						$("#user_calendars").show();
+						$('#calendar-view-button').show();
 
-				// Typahead also uses jqueryui - if you are changing the version
-				// here,
-				// change it there too
-				head.js(LIB_PATH + 'lib/jquery-ui.min.js', 'lib/fullcalendar.min.js', function()
-				{
-					showCalendar();
-					hideTransitionBar();
-					initializeEventListners();
-				});
+						$(".active").removeClass("active");
+						$("#calendarmenu").addClass("active");
+						$('#agile_event_list').addClass('hide');
 
-				$('#grp_filter').css('display', 'none');
-				$('#event_tab').css('display', 'none');
-			
+						// Typahead also uses jqueryui - if you are changing the version
+						// here,
+						// change it there too
+						head.js(LIB_PATH + 'lib/jquery-ui.min.js', LIB_PATH + 'lib/fullcalendar.min.js', function()
+						{
+							showCalendar(users);
+							hideTransitionBar();
+							initializeEventListners();
+						});
 
-			}, $('#calendar-listers').find("#calendar-filters"));
-		}, "#calendar-listers");
+						$('#grp_filter').css('display', 'none');
+						$('#event_tab').css('display', 'none');
+					
+
+					}, $('#calendar-listers').find("#calendar-filters"));
+		});	
+	}, "#calendar-listers");
 
 
-	});	
+	
 },
 
 /* Show tasks list when All Tasks clicked under calendar page. */
@@ -2858,6 +2931,10 @@ var ContactBulkActionRouter = Backbone.Router.extend({
 					  return;
 				$('#content').html($(template_ui));	
 				$('body').trigger('fill_owners');
+
+
+
+
 			}, "#content");
 			
 		}
@@ -2991,7 +3068,7 @@ var ContactBulkActionRouter = Backbone.Router.extend({
 					  return;
 					
 				$('#send-email-listener-container').html($(template_ui));	
-				("#emailForm").find('.add-attachment-select').hide();
+				$("#emailForm").find('.add-attachment-select').hide();
 				$('body').trigger('fill_emails');
 				initializeSendEmailListeners();
 				sendEmailAttachmentListeners("send-email-listener-container");
@@ -3261,7 +3338,7 @@ var ContactsRouter = Backbone.Router.extend({
 			/* CALL-with mobile number */
 			"contacts/call-lead/:first/:last/:mob" : "addLeadDirectly"
 	},
-
+	
 	initialize : function()
 	{
 		/*
@@ -4822,13 +4899,21 @@ function accessUrlUsingAjax(url, callback, error_callback){
 		$("#content").html(this.formsListView.el);
 	} });
 /**
- * Creates backbone router to access preferences of the user portlets
+ * Creates backbone router to access preferences of the user 
  */
 var PortletsRouter = Backbone.Router
 		.extend({
 			routes : {
 				// "portlets" : "portlets",
 				"add-dashlet" : "adddashlet"
+			},
+			before : {
+				"*any" : function(fragment, args, next)
+					{
+						head.js( CLOUDFRONT_PATH + "/jscore/min/flatfull/portlets-min.js", function(){ 
+							next(); 
+						});
+					}
 			},
 			adddashlet : function() {
 				if (gridster == undefined) {
@@ -4838,8 +4923,6 @@ var PortletsRouter = Backbone.Router
 				} else {
 					head
 							.js(
-									LIB_PATH
-											+ 'jscore/handlebars/handlebars-helpers.js',
 									LIB_PATH + 'lib/jquery.gridster.js',
 									function() {
 										this.Catalog_Portlets_View = new Base_Collection_View(
@@ -4902,8 +4985,7 @@ var PortletsRouter = Backbone.Router
 			// $("#portletstreamDetails",$('#portletStreamModal')).html(this.Catalog_Portlets_View.el);},
 
 			portlets : function() {
-				head.js(LIB_PATH + 'jscore/handlebars/handlebars-helpers.js?='
-						+ _AGILE_VERSION, LIB_PATH + 'lib/jquery.gridster.js',
+				head.js(LIB_PATH + 'lib/jquery.gridster.js',
 						function() {
 
 							getTemplate('portlets', {}, undefined, function(template_ui){
@@ -5420,6 +5502,7 @@ function initializePortletsListeners_1(){
 	$('.gridster-portlets').on(
 		"click",'.portlets-tasks-select',
 		function(e) {
+			
 					e.stopPropagation();
 					if ($(this).is(':checked')) {
 						// Complete
@@ -6013,7 +6096,22 @@ function getStartAndEndDatesEpochForPortlets(duration)
 
 	return (getUTCMidNightEpochFromDate(d) / 1000);
 }
-var ReferelRouter = Backbone.Router.extend({
+
+
+/**
+ * Convert time in human readable format.
+ */
+function displayTimeAgo(elmnt)
+{
+	head.js('lib/jquery.timeago.js', function()
+	{
+		$(".time-ago", elmnt).timeago();
+	});
+	
+	console.log($("article.stream-item").parent());
+	
+	$("article.stream-item").parent().addClass("social-striped");
+}var ReferelRouter = Backbone.Router.extend({
 
 	routes : {
 
@@ -6065,23 +6163,21 @@ var ReportsRouter = Backbone.Router
 				if (!tight_acl.checkPermission('REPORT'))
 					return;
 
-				head.js(LIB_PATH + 'jscore/handlebars/handlebars-helpers.js', function()
-				{
-					$("#content").html("<div id='reports-listerners-container'></div>");
-					getTemplate('report-categories', {}, undefined, function(template_ui){
-						if(!template_ui)
-							  return;
-						$('#reports-listerners-container').html($(template_ui));
+				$("#content").html("<div id='reports-listerners-container'></div>");
+				getTemplate('report-categories', {}, undefined, function(template_ui){
+					if(!template_ui)
+						  return;
+					$('#reports-listerners-container').html($(template_ui));
 
-						initializeReportsListeners();
-						hideTransitionBar();
-						$(".active").removeClass("active");
-						$("#reportsmenu").addClass("active");
+					initializeReportsListeners();
+					hideTransitionBar();
+					$(".active").removeClass("active");
+					$("#reportsmenu").addClass("active");
 
-						$('[data-toggle="tooltip"]').tooltip();	
+					$('[data-toggle="tooltip"]').tooltip();	
 
-					}, "#reports-listerners-container");
-				});
+				}, "#reports-listerners-container");
+				
 			},
 
 	/**
@@ -6669,7 +6765,6 @@ var EMAIL_PREFS_WIDGET_SIZE = 0;
 
 var SettingsRouter = Backbone.Router
 		.extend({
-
 			routes : {
 
 			/* Settings */
@@ -6750,30 +6845,35 @@ var SettingsRouter = Backbone.Router
 
 				}
 
-
 				getTemplate("settings", {}, undefined, function(template_ui){
+
 					if(!template_ui)
 						  return;
 					$('#content').html($(template_ui));	
 
-					var view = new Base_Model_View({ url : '/core/api/user-prefs', template : "settings-user-prefs", el : $('#prefs-tabs-content'), change : false,
-					reload : true, postRenderCallback : function(el)
-					{
-						initializeSettingsListeners();
-						// setup TinyMCE
-						setupTinyMCEEditor('textarea#WYSItextarea', true, [
-							"textcolor link image preview code"
-						], function()
-						{   // Register focus
-							register_focus_on_tinymce('WYSItextarea');
-						});
-					} });
+					getTemplate("settings-user-prefs-tab", {}, undefined, function(template_ui1){
+						$("#prefs-tabs-content").html($(template_ui1));
 
-				$('#PrefsTab .select').removeClass('select');
-				$('.user-prefs-tab').addClass('select');
-				$(".active").removeClass("active");
-				$("#prefs-tabs-content .prefs-"+tab_class).addClass("active");
-				// $('#content').html(view.render().el);
+						var view = new Base_Model_View({ url : '/core/api/user-prefs', template : template_name, el : $('#settings-user-prefs-tab-content'), change : false,
+						reload : true, postRenderCallback : function(el)
+						{
+							initializeSettingsListeners();
+							// setup TinyMCE
+							setupTinyMCEEditor('textarea#WYSItextarea', true, [
+								"textcolor link image preview code"
+							], function()
+							{   // Register focus
+								register_focus_on_tinymce('WYSItextarea');
+							});
+						} });
+
+						$('#PrefsTab .select').removeClass('select');
+						$('.user-prefs-tab').addClass('select');
+						$(".active").removeClass("active");
+						$("#prefs-tabs-content .prefs-"+tab_class).addClass("active");
+
+					});
+
 				}, "#content");
 			},
 
@@ -7301,8 +7401,7 @@ var SettingsRouter = Backbone.Router
 						console.log("updated notification prefs are...");
 						console.log(notification_prefs);
 
-						head.load(CSS_PATH + 'css/bootstrap_switch.css', LIB_PATH + 'lib/bootstrapSwitch.js', LIB_PATH + 'lib/desktop-notify-min.js',
-								function()
+						head.load(CSS_PATH + 'css/bootstrap_switch.css', LIB_PATH + 'lib/bootstrapSwitch.js', function()
 								{
 									showSwitchChanges(el);
 									check_browser_notification_settings(el);
@@ -7571,6 +7670,15 @@ var SocialSuiteRouter = Backbone.Router.extend({
 	// Scheduled updates on new page
 	"scheduledmessages" : "scheduledmessages" },
 
+	before : 
+	{	
+		'*any': function(fragment, args, next) {
+			head.js(CLOUDFRONT_PATH + "/jscore/min/flatfull/social-suite-all-min.js?_=" +_AGILE_VERSION , function(){
+				next();
+			})
+			
+		}
+	},
 	/**
 	 * On click on social tab this function is called, to initialize social
 	 * suite, it will include js files.
@@ -7900,15 +8008,11 @@ var SubscribeRouter = Backbone.Router.extend({
 					obj = {"invoice" : invoicedata,	"company" : companydata}
 					console.log("xxxxxxxxxxxxxxx");
 					console.log(obj);
-					head.js(LIB_PATH + 'jscore/handlebars/handlebars-helpers.js', function()
-					{
-						getTemplate('invoice-detail', obj, undefined, function(template_ui){
+					getTemplate('invoice-detail', obj, undefined, function(template_ui){
 							if(!template_ui)
 								  return;
 							$('#content').html($(template_ui));	
 						}, "#content");
-					});
-
 				}, 
 				function(response){
 					showNotyPopUp("information", "error occured please try again", "top");
@@ -9261,6 +9365,9 @@ function saveTaskNote(form, noteModal, element, note)
 
 					notesView.collection.add(new BaseModel(note), { sort : false });
 					notesView.collection.sort();
+					taskDetailView = data;
+					
+
 				} });
 
 			}
@@ -9651,8 +9758,8 @@ var WidgetsRouter = Backbone.Router
 												"callscript" : "CallScript", "callscript/:id" : "CallScript",												
 
 												"sync" : "contactSync", "sync/contacts" : "google_apps_contacts", "sync/calendar" : "google_apps_calendar", "sync/stripe-import" : "stripe_sync",
-												"sync/shopify" : "shopify", "sync/salesforce" : "salesforce", "sync/zoho-import" : "zoho_sync", "sync/quickbook" : "quickbook_import",
-												"sync/xero" : "xero_import","sync/freshbooks":"freshbooks_sync","sync/freshbooks/setting":"freshbooks_sync_setting"},
+																"sync/shopify" : "shopify", "sync/salesforce" : "salesforce", "sync/zoho-import" : "zoho_sync", "sync/quickbook" : "quickbook_import",
+																"sync/xero" : "xero_import","sync/freshbooks":"freshbooks_sync","sync/freshbooks/setting":"freshbooks_sync_setting"},
 
 												/**
 												 * Adds social widgets (twitter, linkedIn and RapLeaf) to a contact
@@ -9669,6 +9776,7 @@ var WidgetsRouter = Backbone.Router
 																				sort_collection : false, individual_tag_name : 'div', postRenderCallback : function(el)
 																				{
 																								initializeWidgetSettingsListeners();
+																								
 																								build_custom_widget_form(el);
 																								setTimeout(function(){
 																									var socialHeight=0;
@@ -9696,7 +9804,8 @@ var WidgetsRouter = Backbone.Router
 																	_plan_restrictions.process_widgets(data);
 																}
 															});
-
+																console.log(organize_widgets);
+																
 															// Shows available widgets in the content
 															$('#prefs-tabs-content').html(that.Catalog_Widgets_View.el);
 
@@ -9720,63 +9829,64 @@ var WidgetsRouter = Backbone.Router
 																{
 																				if (!isNaN(parseInt(id)))
 																				{
-																					$.getJSON("core/api/widgets/social/profile/" + id,																																				function(data)
-																					{
-																									set_up_access(
-																																	"Linkedin",
-																																	'linkedin-login',
-																																	data,
-																																	'/scribe?service=linkedin&return_url=' + encodeURIComponent(window.location.protocol + "//" + window.location.host + "/#Linkedin/linkedin"));
+																								$.getJSON("core/api/widgets/social/profile/" + id,
+																																								function(data)
+																																								{
+																																												set_up_access(
+																																																				"Linkedin",
+																																																				'linkedin-login',
+																																																				data,
+																																																				'/scribe?service=linkedin&return_url=' + encodeURIComponent(window.location.protocol + "//" + window.location.host + "/#Linkedin/linkedin"));
 
-																					}).error(
-																					function(data)
-																					{
-																									console.log(data);
-																									setUpError("Linkedin", "widget-settings-error", data.responseText,
-																																	window.location.protocol + "//" + window.location.host + "/#Linkedin/linkedin1");
+																																								}).error(
+																																								function(data)
+																																								{
+																																												console.log(data);
+																																												setUpError("Linkedin", "widget-settings-error", data.responseText,
+																																																				window.location.protocol + "//" + window.location.host + "/#Linkedin/linkedin1");
 
-																					});
-																					return;
+																																								});
+																								return;
 
 																				}
 
 																				$.getJSON("core/api/widgets/Linkedin",
 																																				function(data1)
-																	{
-																					console.log(data1);
+																																				{
+																																								console.log(data1);
 
-																					if (data1)
-																					{
-																		$
-																										.getJSON(
-																												"core/api/widgets/social/profile/" + data1.id,
-																												function(data)
-																												{
-																																set_up_access(
-																																								"Linkedin",
-																																								'linkedin-login',
-																																								data,
-																																								'/scribe?service=linkedin&return_url=' + encodeURIComponent(window.location.protocol + "//" + window.location.host + "/#Linkedin/linkedin"),
-																																								data1);
+																																								if (data1)
+																																								{
+																																												$
+																																																				.getJSON(
+																																																												"core/api/widgets/social/profile/" + data1.id,
+																																																												function(data)
+																																																												{
+																																																																set_up_access(
+																																																																								"Linkedin",
+																																																																								'linkedin-login',
+																																																																								data,
+																																																																								'/scribe?service=linkedin&return_url=' + encodeURIComponent(window.location.protocol + "//" + window.location.host + "/#Linkedin/linkedin"),
+																																																																								data1);
 
-																												})
-																										.error(
-																											function(data)
-																											{
+																																																												})
+																																																				.error(
+																																																												function(data)
+																																																												{
 
-																															console.log(data);
-																															setUpError("Linkedin", "widget-settings-error", data.responseText,
-																																							window.location.protocol + "//" + window.location.host + "/#Linkedin/linkedin1", data1);
+																																																																console.log(data);
+																																																																setUpError("Linkedin", "widget-settings-error", data.responseText,
+																																																																								window.location.protocol + "//" + window.location.host + "/#Linkedin/linkedin1", data1);
 
-																											});
-																									return;
-																					}
-																					else
-																					{
-																									show_set_up_widget("Linkedin", 'linkedin-login',
-																																	'/scribe?service=linkedin&return_url=' + encodeURIComponent(window.location.href));
-																					}
-																	});
+																																																												});
+																																												return;
+																																								}
+																																								else
+																																								{
+																																												show_set_up_widget("Linkedin", 'linkedin-login',
+																																																				'/scribe?service=linkedin&return_url=' + encodeURIComponent(window.location.href));
+																																								}
+																																				});
 
 																}
 
@@ -9791,7 +9901,7 @@ var WidgetsRouter = Backbone.Router
 																if (!id)
 																{
 																				show_set_up_widget("Twitter", 'twitter-login',
-																												'/scribe?service=twitter&return_url=' + encodeURIComponent(window.location.href) + "/twitter");
+																												'/scribe?service=twitter&isForAll='+isForAll+'&return_url=' + encodeURIComponent(window.location.href) + "/twitter");
 																}
 																else
 																{
@@ -9926,7 +10036,6 @@ var WidgetsRouter = Backbone.Router
 												 */
 												TwilioIO : function(id)
 												{
-													initializeTwilioGlobalListeners();
 													if (!id)
 														show_set_up_widget("TwilioIO", 'twilioio-login');
 													else
@@ -9945,7 +10054,6 @@ var WidgetsRouter = Backbone.Router
 																if (!id)
 																{
 																				show_set_up_widget("Twilio", 'twilio-login', encodeURIComponent(window.location.href) + "/twilio");
-																				initializeTwilioGlobalListeners();
 																}
 
 																else
@@ -9953,7 +10061,6 @@ var WidgetsRouter = Backbone.Router
 
 																				if (!isNaN(parseInt(id)))
 																				{
-																					initializeTwilioGlobalListeners();
 																								$.getJSON(
 																																"/core/api/widgets/twilio/numbers/" + id,
 																																function(data)
@@ -9981,7 +10088,6 @@ var WidgetsRouter = Backbone.Router
 																								return;
 
 																				}
-																				initializeTwilioGlobalListeners();
 
 																				$.getJSON("core/api/widgets/Twilio", function(data)
 																				{
@@ -10049,11 +10155,11 @@ var WidgetsRouter = Backbone.Router
 												{
 
 																if (!id)
-																{
-																				show_set_up_widget("Stripe", 'stripe-login', '/scribe?service=stripe&return_url=' + encodeURIComponent(window.location.href) + "/stripe");
+																{																			    
+																				show_set_up_widget("Stripe", 'stripe-login', '/scribe?service=stripe&isForAll='+isForAll+'&return_url=' + encodeURIComponent(window.location.href) + "/stripe");
 																}
 																else
-																{
+																{																				
 																				{	$.getJSON("core/api/custom-fields/type/scope?scope=CONTACT&type=TEXT",
 																																								function(data)
 																																								{
@@ -10097,18 +10203,14 @@ var WidgetsRouter = Backbone.Router
 												 * Manage Shopify Widget
 												 */
 												Shopify : function(id)
-												{
-
-																 if(!id){
-															       show_set_up_widget("Shopify", "shopify-login");
-																 }
-																 else{ 
-																 			
-																 				
-																 				show_set_up_widget("Shopify","shopify-revoke-access")
-																 		
-																 }
-																 initializeShopifyListeners();
+												{											
+													 if(!id){													   
+												       show_set_up_widget("Shopify", "shopify-login");
+													 }else{ 																 																 			
+													 	show_set_up_widget("Shopify","shopify-revoke-access");													 		
+													 }
+													 
+													 initializeShopifyListeners();
 												},
 
 
@@ -10118,13 +10220,14 @@ var WidgetsRouter = Backbone.Router
 
 												Xero : function(id)
 												{
-																if (!id)
+													
+																if (!id){																		
 																				show_set_up_widget(
 																												"Xero",
 																												'xero-login',
-																												'http://integrations.clickdesk.com:8080/ClickdeskPlugins/agile-xero-oauth?callbackUrl=' + encodeURIComponent(window.location.protocol + "//" + window.location.host + "/XeroServlet?data="));
-																else
-																{
+																												"http://integrations.clickdesk.com:8080/ClickdeskPlugins/agile-xero-oauth?callbackUrl=" + encodeURIComponent(window.location.protocol + "//" + window.location.host + "/XeroServlet?isForAll="+isForAll+"&data="));
+																}else
+																{																	
 																				{
 																								$
 																																.getJSON(
@@ -10138,7 +10241,7 @@ var WidgetsRouter = Backbone.Router
 																																																				"Xero",
 																																																				'xero-login',
 																																																				data,
-																																																				'http://integrations.clickdesk.com:8080/ClickdeskPlugins/agile-xero-oauth?callbackUrl=' + encodeURIComponent(window.location.protocol + "//" + window.location.host + "/XeroServlet?data="));
+																																																				'http://integrations.clickdesk.com:8080/ClickdeskPlugins/agile-xero-oauth?callbackUrl=' + encodeURIComponent(window.location.protocol + "//" + window.location.host + "/XeroServlet?isForAll="+isForAll+"&data="));
 																																								});
 																								return;
 
@@ -10161,7 +10264,7 @@ var WidgetsRouter = Backbone.Router
 																																																																								"Xero",
 																																																																								'xero-login',
 																																																																								data,
-																																																																								'http://integrations.clickdesk.com:8080/ClickdeskPlugins/agile-xero-oauth?callbackUrl=' + encodeURIComponent(window.location.protocol + "//" + window.location.host + "/XeroServlet?data="),
+																																																																								'http://integrations.clickdesk.com:8080/ClickdeskPlugins/agile-xero-oauth?callbackUrl=' + encodeURIComponent(window.location.protocol + "//" + window.location.host + "/XeroServlet?isForAll="+isForAll+"&data="),
 																																																																								data1);
 																																																												});
 																																												return;
@@ -10172,7 +10275,7 @@ var WidgetsRouter = Backbone.Router
 																																												show_set_up_widget(
 																																																				"Xero",
 																																																				'xero-login',
-																																																				'http://integrations.clickdesk.com:8080/ClickdeskPlugins/agile-xero-oauth?callbackUrl=' + encodeURIComponent(window.location.protocol + "//" + window.location.host + "/XeroServlet?data="));
+																																																				'http://integrations.clickdesk.com:8080/ClickdeskPlugins/agile-xero-oauth?callbackUrl=' + encodeURIComponent(window.location.protocol + "//" + window.location.host + "/XeroServlet?isForAll="+isForAll+"&data="));
 																																								}
 																																				});
 																}
@@ -10184,11 +10287,11 @@ var WidgetsRouter = Backbone.Router
 												 */
 												QuickBooks : function(id)
 												{
-																if (!id)
+																if (!id){																	
 																				show_set_up_widget("QuickBooks", 'quickbooks-login',
-																												'/OAuthServlet?service=quickbooks&return_url=' + encodeURIComponent(window.location.href) + "/quickbooks");
-																else
-																{
+																												'/OAuthServlet?service=quickbooks&isForAll='+isForAll+'&return_url=' + encodeURIComponent(window.location.href) + "/quickbooks");
+																}else
+																{			
 																				$.getJSON("core/api/widgets/QuickBooks", function(data1)
 																				{
 																								console.log(data1);
@@ -10218,11 +10321,11 @@ var WidgetsRouter = Backbone.Router
 												 */
 												Facebook : function(id)
 												{
-																if (!id)
-																				show_set_up_widget("Facebook", 'facebook-login',
-																												'/scribe?service=facebook&return_url=' + encodeURIComponent(window.location.href) + "/facebook");
-																else
-																{
+																if (!id){																	
+																	show_set_up_widget("Facebook", 'facebook-login',
+																												'/scribe?service=facebook&isForAll='+isForAll+'&return_url=' + encodeURIComponent(window.location.href) + '/facebook');															
+																}else
+																{ 
 																				if (!isNaN(parseInt(id)))
 																				{
 																								$
@@ -10311,6 +10414,7 @@ var WidgetsRouter = Backbone.Router
 												{
 																if (id)
 																{
+																	alert('clicked');
 																				console.log($(this))
 																				divClone = $(this).clone();
 																				var widget_custom_view = new Base_Model_View({ url : "/core/api/widgets/custom", template : "add-custom-widget", isNew : true,
@@ -10319,6 +10423,8 @@ var WidgetsRouter = Backbone.Router
 																												initializeWidgetSettingsListeners();
 																												console.log('In post render callback');
 																												console.log(el);
+                                                                                                                 $('body').off('change', '#script_type');
+
 																												$('body').on('change', '#script_type', function(e)
 																												{
 																																var script_type = $('#script_type').val();
@@ -10351,7 +10457,7 @@ var WidgetsRouter = Backbone.Router
 
 																				$('#custom-widget', el).html(widget_custom_view.render(true).el);
 
-																				$('body').on('click', '#cancel_custom_widget', function(e) 
+																				$('#cancel_custom_widget').die().live('click', function(e)
 																				{
 																								// Restore element back to original
 																								$("#custom-widget").replaceWith(divClone);
@@ -10378,23 +10484,23 @@ var WidgetsRouter = Backbone.Router
 
 
 														that.contact_sync_google = new Base_Model_View({ url : 'core/api/contactprefs/google', template : 'admin-settings-import-google-contacts',postRenderCallback: function(el){initializeImportListeners();} });
-
+															
 														// Adds header
-														$('#prefs-tabs-content')
-																						.html(
-																														'<div class="row prefs-datasync"><div class="col-md-12"><h4 class="m-b">Google <small>import Contacts from Google</small></h4><div class="row"><div id="contact-prefs" class="col-md-4 col-sm-6 col-xs-12"></div>' + '<div id="calendar-prefs" class="col-md-4 col-sm-6 col-xs-12"></div><div id="email-prefs" class="col-md-4 col-sm-6 col-xs-12"></div></div></div></div>' + '<div class="row prefs-datasync"><div class="col-md-12 no-mg-l"><h4 class="m-b">E-commerce <small>import Contacts from E-commerce</small></h4><div class="row"><div id ="shopify" class="col-md-4 col-sm-6 col-xs-12"></div></div></div></div>' +
-																										
-																														'<div class="row prefs-datasync"><div class="col-md-12"><h4 class="m-b">Payment <small>import Contacts from payment gateway</small></h4><div class="row"><div id ="stripe" class="col-md-4 col-sm-6 col-xs-12"></div></div></div></div>'+
-																														'<div class="row prefs-datasync"><div class="col-md-12"><h4 class="m-b">Accounting <small>import Contacts from Accounting</small></h4><div class="row"><div id ="freshbook" class="col-md-4 col-sm-6 col-xs-12"></div><div class="col-md-4 col-sm-6 col-xs-12" id ="quickbook"></div></div></div></div>'
-
-
-																						);
+														$('#prefs-tabs-content').html(
+																'<div class="row prefs-datasync"><div class="col-md-12"><h4 class="m-b">Google <small>import Contacts from Google</small></h4><div class="row"><div id="contact-prefs" class="col-md-4 col-sm-6 col-xs-12"></div>'
+																+ '<div id="calendar-prefs" class="col-md-4 col-sm-6 col-xs-12"></div><div id="email-prefs" class="col-md-4 col-sm-6 col-xs-12"></div></div></div></div>'
+																+ '<div class="row prefs-datasync"><div class="col-md-12 no-mg-l"><h4 class="m-b">E-commerce <small>import Contacts from E-commerce</small></h4><div class="row"><div id ="shopify" class="col-md-4 col-sm-6 col-xs-12"></div></div></div></div>'																	
+																+ '<div class="row prefs-datasync"><div class="col-md-12"><h4 class="m-b">Payment <small>import Contacts from payment gateway</small></h4><div class="row"><div id ="stripe" class="col-md-4 col-sm-6 col-xs-12"></div></div></div></div>'
+																+ '<div class="row prefs-datasync"><div class="col-md-12"><h4 class="m-b">Accounting <small>import Contacts from Accounting</small></h4><div class="row"><div id ="freshbook" class="col-md-4 col-sm-6 col-xs-12"></div><div class="col-md-4 col-sm-6 col-xs-12" id ="quickbook"></div></div></div></div>'
+														);
 
 														// Adds Gmail Prefs
 														$('#contact-prefs').append(that.contact_sync_google.render().el);
+																
 
 														that.calendar_sync_google = new Base_Model_View({ url : 'core/api/calendar-prefs/get', template : 'import-google-calendar',postRenderCallback: function(el){initializeImportListeners();} });
-
+																
+																
 														// console.log(getTemplate("import-google-contacts", {}));
 														$('#calendar-prefs').append(that.calendar_sync_google.render().el);
 
@@ -10455,24 +10561,25 @@ var WidgetsRouter = Backbone.Router
 																			} };
 
 															var fetch_prefs = true;
-															if (that.contact_sync_google && that.contact_sync_google.model)
-															{
-																			options["model"] = that.contact_sync_google.model;
-																			fetch_prefs = false;
-															}
-															else
-															{
-																			that.contact_sync_google = new Base_Model_View({ url : 'core/api/contactprefs/google', template : 'import-google-contacts', });
-															}
+																if (that.contact_sync_google && that.contact_sync_google.model)
+																{
+																				options["model"] = that.contact_sync_google.model;
+																				fetch_prefs = false;
+																}
+																else
+																{
+																				that.contact_sync_google = new Base_Model_View({ url : 'core/api/contactprefs/google', template : 'import-google-contacts', });
+																}
 
-															that.setup_google_contacts = new Base_Model_View(options);
+																that.setup_google_contacts = new Base_Model_View(options);
 
-															if (fetch_prefs)
-															{
-																			$("#prefs-tabs-content").html(that.setup_google_contacts.render().el);
-																			return;
-															}
-															$("#prefs-tabs-content").html(that.setup_google_contacts.render(true).el);
+																if (fetch_prefs)
+																{
+																				$("#prefs-tabs-content").html(that.setup_google_contacts.render().el);
+																				return;
+																}
+																$("#prefs-tabs-content").html(that.setup_google_contacts.render(true).el);
+												
 
 														}, "#content");
 																
@@ -10509,7 +10616,7 @@ var WidgetsRouter = Backbone.Router
 														$("#prefs-tabs-content").html(that.setup_google_calendar.render(true).el);
 
 													}, "#content");
-												},
+												},																				
 												
 
 												stripe_sync : function()
@@ -10667,16 +10774,14 @@ var WidgetsRouter = Backbone.Router
 												 * Manages GooglePlus widget
 												 */
 												GooglePlus: function(id) {
-
-												    if (!id) {
+												    if (!id) {														    	
 												        show_set_up_widget("GooglePlus", 'googleplus-login',
-												            '/scribe?service=googleplus&return_url=' + encodeURIComponent(window.location.href) + "/googleplus");
-												    } else {
-												    	
+												            '/scribe?service=googleplus&isForAll='+isForAll+'&return_url=' + encodeURIComponent(window.location.href) + "/googleplus");
+												    } else {												    
 												    	var widgetDetails = "";
 
 												    	accessUrlUsingAjax("core/api/widgets/GooglePlus", function(resp){
-												    		    widgetDetails = $.parseJSON(resp);
+												    		    widgetDetails = resp;
 
 												    		    console.clear();
 												    			console.log("In google Plus widget Router");
@@ -10719,7 +10824,6 @@ var WidgetsRouter = Backbone.Router
 																else
 																				fill_form(id, "CallScript", 'callscript-login');
 																                adjust_form();
-																initializeCallScriptListeners();
 
 												},
 												
@@ -10729,8 +10833,6 @@ var WidgetsRouter = Backbone.Router
 												CallScriptShow : function()
 												{	
 													showCallScriptRule();
-													initializeCallScriptListeners();
-													
 												},
 												
 												/**
@@ -10739,8 +10841,6 @@ var WidgetsRouter = Backbone.Router
 												CallScriptAdd : function()
 												{
 													addCallScriptRule();
-													initializeCallScriptListeners();
-													
 												},
 												
 												/**
@@ -10749,11 +10849,8 @@ var WidgetsRouter = Backbone.Router
 												CallScriptEdit : function(id)
 												{
 													editCallScriptRule(id);
-													initializeCallScriptListeners();
-
 												}
 								});
-
 /**
  * workflows.js is a script file having routes for CRU operations of workflows
  * and triggers.
@@ -12484,17 +12581,22 @@ function add_tag_our_domain(tag, callback) {
  * @param tag
  */
 function addTagAgile(tag) {
-	// Checks if tag is already available.
-	if (checkTagAgile(tag))
-		return;
 
-	// Adds tag
-	_agile.add_tag(tag, function(data) {
-		Agile_Contact = data;
-		if (!checkTagAgile(tag))
-			Agile_Contact.tags.push(tag)
-			// set_profile_noty();
-	});
+	try{
+		// Checks if tag is already available.
+		if (checkTagAgile(tag))
+			return;
+
+		// Adds tag
+		_agile.add_tag(tag, function(data) {
+			Agile_Contact = data;
+			if (!checkTagAgile(tag))
+				Agile_Contact.tags.push(tag)
+				// set_profile_noty();
+		});
+		
+	}catch(err){}
+	
 }
 
 function add_property(name, value, type, callback) {
@@ -12624,6 +12726,12 @@ function add_plan_change_info_as_note_to_owner(cus_email, plan_type, plan_id,
 }
 
 $(function(){
+	
+	
+});
+
+function initialize_agile_domain_sync(){
+
 	try
 	{
 		if(_agile)
@@ -12641,7 +12749,8 @@ $(function(){
 		console.log();
 	}
 	
-});
+}
+
 // add note to owner when subscription is cancelled
 function add_cancel_subscription_info_as_note_to_owner(cus_email, callback)
 {
@@ -13060,6 +13169,8 @@ function loadMiscScripts() {
 
     // Load agile web stats
     load_urls_on_ajax_stop('stats/min/agile-min.js?_=' + _AGILE_VERSION, function(){
+
+    		initialize_agile_domain_sync();
     		_agile_execute_web_rules();
     });
 
@@ -15493,6 +15604,8 @@ function set_url(apiKey, domain)
 function send_ical_info_email(emailModal)
 {
 	// When Send Clicked, validate the form and send email.
+	emailModal.on("shown.bs.modal", function(e){
+
 	$("#share-ical-by-email")
 			.on(
 					'click',
@@ -15522,6 +15635,7 @@ function send_ical_info_email(emailModal)
 						});
 
 					});
+		});
 }
 
 $(function()
@@ -17847,7 +17961,7 @@ var LOADING_ON_CURSOR = '<img class="loading" style="padding-right:5px" src= "im
  * Default image shown for contacts if image is not available
  */
 
-var DEFAULT_GRAVATAR_url = window.location.origin + "/" + LIB_PATH_FLATFULL + "images/flatfull/user-default.jpg";
+var DEFAULT_GRAVATAR_url = window.location.origin + "/" + FLAT_FULL_PATH + "images/flatfull/user-default.jpg";
 
 var ONBOARDING_SCHEDULE_URL = "https://our.agilecrm.com/calendar/Haaris_Farooqi,Sandeep";
 
@@ -18681,7 +18795,7 @@ function canRunBulkOperations()
 	tight_acl.REPORTS_PER = false;
 	tight_acl.ACTIVITY_PER = false;
 	var obj = {};
-	
+
 	/*
 	 * Initialize the permissions when user changes the route using the menu scopes in the current domain user object.
 	 */
@@ -18742,15 +18856,14 @@ function canRunBulkOperations()
 			tight_acl.REPORTS_PER = true;
 			App_ACL.notAllowed(obj);
 		}
-	};
+	}
 	
 	/*
 	 * Check the permission based up on the given scope.
 	 */
 	tight_acl.checkPermission = function(scope){
 		return CURRENT_DOMAIN_USER.menu_scopes.indexOf(scope) > -1;
-	};
-	
+	}
 }(window.tight_acl = window.tight_acl || {}, $));
 
 (function(acl_util, $, undefined) {
@@ -19449,11 +19562,22 @@ function load_events_from_google(callback)
 				}
 			});
 		}
-
-		if ((type_of_cal && type_of_cal.length != 2 && type_of_cal[0] == 'agile') || type_of_cal.length == 0)
-		{
-			return;
+		if(type_of_cal){
+			var typelength = type_of_cal.length;										
+			if(typelength > 0){
+				//Google
+				var inArray = type_of_cal.indexOf("google");
+				if(inArray >= 0){
+					//continue
+				}else{
+					return
+				}
+			}
 		}
+//		if ((type_of_cal && type_of_cal.length != 2 && type_of_cal[0] == 'agile') || type_of_cal.length == 0)
+//		{
+//			return;
+//		}
 	}
 
 	// Name of the cookie to store/ calendar prefs. Current user id is set
@@ -19519,11 +19643,13 @@ function get_google_calendar_event_source(data, callback)
  * Shows the calendar
  */
 var fullCal;
-function showCalendar()
+function showCalendar(users)
 {
 
-	_init_gcal_options();
+	_init_gcal_options(users);
 	putGoogleCalendarLink();
+	putOfficeCalendarLink();
+	
 	var calendarView = (!readCookie('calendarDefaultView')) ? 'month' : readCookie('calendarDefaultView');
 	$('#' + calendarView).addClass('bg-light');
 	var contentHeight = 400;
@@ -19579,12 +19705,37 @@ function showCalendar()
 												agile_event_owners += value;
 											});
 										}
-
-										if ((type_of_cal.length == 1 && type_of_cal[0] == 'google' && owners.length == 1 && owners[0] == CURRENT_AGILE_USER.id) || type_of_cal.length == 0 && owners.length == 0)
-										{
+											
+										var typelength = type_of_cal.length;										
+										if(typelength > 0){
+											//Google
+											var inArray = type_of_cal.indexOf("google");
+											if(inArray >= 0){
+												//contiune
+											}
+											
+											//Office
+											var inArray = type_of_cal.indexOf("office");
+											if(inArray >= 0){
+												loadOfficeEvents(start.getTime(), end.getTime());
+											}
+											
 											$("#loading_calendar_events").hide();
-											return;
+											
+											//Agile
+											var inArray = type_of_cal.indexOf("agile");
+											if(inArray >= 0){
+												//continue
+											}else{
+												return;
+											}
 										}
+										
+//										if ((type_of_cal.length == 1 && type_of_cal[0] == 'google' && owners.length == 1 && owners[0] == CURRENT_AGILE_USER.id) || type_of_cal.length == 0 && owners.length == 0)
+//										{
+//											$("#loading_calendar_events").hide();
+//											return;
+//										}
 									}
 
 									/*
@@ -19596,18 +19747,21 @@ function showCalendar()
 									var start_end_array = {};
 									start_end_array.startTime = start.getTime() / 1000;
 									start_end_array.endTime = end.getTime() / 1000;
+									console.log(start_end_array.startTime+" : "+start_end_array.endTime);
 									createCookie('fullcalendar_start_end_time', JSON.stringify(start_end_array));
 
 									var eventsURL = '/core/api/events?start=' + start.getTime() / 1000 + "&end=" + end.getTime() / 1000;
-
+									
 									eventsURL += '&owner_id=' + agile_event_owners;
 									console.log('-----------------', eventsURL);
+									
 									$.getJSON(eventsURL, function(doc)
 									{
 										$.each(doc, function(index, data)
 										{
 											// decides the color of event based
 											// on owner id
+											console.log(data);
 											data = renderEventBasedOnOwner(data);
 										});
 
@@ -19664,150 +19818,192 @@ function showCalendar()
 							calendarView = (!readCookie('calendarDefaultView')) ? 'month' : readCookie('calendarDefaultView');
 							var reletedContacts = '';
 							var meeting_type = '';
-							if (event.contacts.length > 0)
-								reletedContacts += '<i class="icon-user text-muted m-r-xs"></i>'
-							for (var i = 0; i < event.contacts.length; i++)
-							{
-								if (event.contacts[i].entity_type == "contact_entity")
-								{
-									var last_name = getPropertyValue(event.contacts[i].properties, "last_name");
-									if (last_name == undefined)
-										last_name = "";
-									if(event.contacts[i].type == 'COMPANY')
-										reletedContacts += '<a class="text-info" href="#company/' + event.contacts[i].id + '">' + getPropertyValue(
-											event.contacts[i].properties, "name") + '</a>';
-									else
-										reletedContacts += '<a class="text-info" href="#contact/' + event.contacts[i].id + '">' + getPropertyValue(
-												event.contacts[i].properties, "first_name") + ' ' + last_name + '</a>';
-								}
-								else
-									reletedContacts += '<a class="text-info" href="#contact/' + event.contacts[i].id + '">' + getPropertyValue(
-											event.contacts[i].properties, "name") + '</a>';
-								if (i != event.contacts.length - 1)
-									reletedContacts += ', ';
-							}
-							var leftorright = 'left';
-							var pullupornot = '';
-							if (event.meeting_type && event.description)
-							{
-								meeting_type = '<i class="icon-comment-alt text-muted m-r-xs"></i><span>Meeting Type - ' + event.meeting_type + '</span><br/><span title=' + event.description + '>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' + addDotsAtEnd(event.description) + '</span>';
-							}
-
-							else if (event.description)
-							{
-								meeting_type = '<i class="icon-comment-alt text-muted m-r-xs"></i><span title=' + event.description + '>' + addDotsAtEnd(event.description) + '</span>';
-							}
-
-							var popoverElement = '';
-							var popover_min_width = 300;
-							if (calendarView == "month")
-							{
-								popover_min_width = $('.fc-view-month').find('.fc-widget-content').eq(0).width() * 2;
-								var left = jsEvent.currentTarget.offsetLeft + jsEvent.currentTarget.offsetWidth + 10;
-								var top = jsEvent.currentTarget.offsetTop;
-								if ($('.fc-border-separate:visible').width() - left < popover_min_width)
-								{
-									left = jsEvent.currentTarget.offsetLeft - popover_min_width - 10;
-									leftorright = 'right';
-								}
-								if ($('.fc-border-separate:visible').width() - popover_min_width - 20 < jsEvent.currentTarget.offsetWidth)
-								{
-									left = ((jsEvent.currentTarget.offsetLeft + jsEvent.currentTarget.offsetWidth + 10) / 2) - (popover_min_width / 2);
-									top = jsEvent.currentTarget.offsetTop + jsEvent.currentTarget.offsetHeight + 10;
-									leftorright = 'top';
-								}
-								var popoverElement = '<div class="fc-overlayw ' + leftorright + '" style="width:100%;min-width:' + popover_min_width + 'px;max-width:' + popover_min_width + 'px;left:' + left + 'px;top:' + top + 'px;position:absolute;z-index:10;display:none;">' + '<div class="panel bg-white b-a pos-rlt p-sm">' + '<span class="arrow ' + leftorright + ' ' + pullupornot + '" style="top:11px;"></span>' + '<div class="h4 font-thin m-b-sm"><div class="pull-left text-ellipsis p-b-xs" style="width:100%;">' + event.title + '</div></div>' + '<div class="line b-b b-light"></div>' + '<div><i class="icon-clock text-muted m-r-xs"></i>' + event.start
-										.format('dd-mmm-yyyy HH:MM') + '<div class="pull-right" style="width:10%;"><img class="r-2x" src="' + event.ownerPic + '" height="20px" width="20px" title="' + event.owner.name + '"/></div></div>' + '<div class="text-ellipsis">' + reletedContacts + '</div>' + '<div class="text-ellipsis">' + meeting_type + '</div>' + '</div>' + '</div>';
-								$(this).after(popoverElement);
-								if ($('.fc-border-separate:visible').height() - jsEvent.currentTarget.offsetTop < $(this).parent().find('.fc-overlayw')
-										.height())
-								{
-									$(this).parent().find('.fc-overlayw').css("top",
-											top - $(this).parent().find('.fc-overlayw').height() + jsEvent.currentTarget.offsetHeight + 20 + "px");
-									$(this).parent().find('.fc-overlayw').find('.arrow').css("top", $(this).parent().find('.fc-overlayw').height() - 31 + "px");
-								}
-								if ($('.fc-border-separate:visible').width() - popover_min_width - 20 < jsEvent.currentTarget.offsetWidth)
-								{
-									$(this).parent().find('.fc-overlayw').find('.arrow').css("top", "-9px");
-								}
-								if (($('.fc-border-separate:visible').height() - jsEvent.currentTarget.offsetTop - jsEvent.currentTarget.offsetHeight - 10 < $(
-										this).parent().find('.fc-overlayw').height() + 10) && ($('.fc-border-separate:visible').width() - popover_min_width - 20 < jsEvent.currentTarget.offsetWidth))
-								{
-									$(this).parent().find('.fc-overlayw').find('.arrow').removeClass('top').addClass('bottom');
-									left = ((jsEvent.currentTarget.offsetLeft + jsEvent.currentTarget.offsetWidth + 10) / 2) - (popover_min_width / 2);
-									top = jsEvent.currentTarget.offsetTop - $(this).parent().find('.fc-overlayw').height() + 10;
-									$(this).parent().find('.fc-overlayw').css({ "top" : top + "px", "lef" : left + "px" });
-									$(this).parent().find('.fc-overlayw').find('.arrow').css("top", $(this).parent().find('.fc-overlayw').height() - 22 + "px");
-								}
-							}
-							else if (calendarView == "agendaWeek")
-							{
-								popover_min_width = $('.fc-view-agendaWeek').find('.fc-widget-content').eq(0).width() * 2;
-								var left = jsEvent.currentTarget.offsetLeft + jsEvent.currentTarget.offsetWidth + 10;
-								var top = jsEvent.currentTarget.offsetTop;
-								if ($('.fc-agenda-slots:visible').width() - left < popover_min_width)
-								{
-									left = jsEvent.currentTarget.offsetLeft - popover_min_width - 10;
-									leftorright = 'right';
-								}
-								// var event_width =
-								// jsEvent.currentTarget.offsetWidth;
-								var popoverElement = '<div class="fc-overlayw ' + leftorright + '" style="width:100%;min-width:' + popover_min_width + 'px;max-width:' + popover_min_width + 'px;left:' + left + 'px;top:' + top + 'px;position:absolute;z-index:10;display:none;">' + '<div class="panel bg-white b-a pos-rlt p-sm">' + '<span class="arrow ' + leftorright + ' ' + pullupornot + '" style="top:11px;"></span>' + '<div class="h4 font-thin m-b-sm"><div class="pull-left text-ellipsis p-b-xs" style="width:100%;">' + event.title + '</div></div>' + '<div class="line b-b b-light"></div>' + '<div><i class="icon-clock text-muted m-r-xs"></i>' + event.start
-										.format('dd-mmm-yyyy HH:MM') + '<div class="pull-right" style="width:10%;"><img class="r-2x" src="' + event.ownerPic + '" height="20px" width="20px" title="' + event.owner.name + '"/></div></div>' + '<div class="text-ellipsis">' + reletedContacts + '</div>' + '<div class="text-ellipsis">' + meeting_type + '</div>' + '</div>' + '</div>';
-								$(this).after(popoverElement);
-								if ($('.fc-agenda-slots:visible').height() - jsEvent.currentTarget.offsetTop < $(this).parent().find('.fc-overlayw').height())
-								{
-									$(this).parent().find('.fc-overlayw').css("top",
-											top - $(this).parent().find('.fc-overlayw').height() + jsEvent.currentTarget.offsetHeight + 20 + "px");
-									$(this).parent().find('.fc-overlayw').find('.arrow').css("top", $(this).parent().find('.fc-overlayw').height() - 31 + "px");
-								}
-							}
-							else if (calendarView == "agendaDay")
-							{
-								var left = jsEvent.currentTarget.offsetLeft;
-								var top = jsEvent.currentTarget.offsetTop + jsEvent.currentTarget.offsetHeight + 10;
-								leftorright = 'top';
-								if ($('.fc-agenda-slots:visible').width() - jsEvent.currentTarget.offsetLeft < popover_min_width)
-								{
-									left = jsEvent.currentTarget.offsetLeft - jsEvent.currentTarget.offsetWidth - ($('.fc-agenda-slots:visible').width() - jsEvent.currentTarget.offsetLeft - jsEvent.currentTarget.offsetWidth);
-								}
-								var popoverElement = '<div class="fc-overlayw ' + leftorright + '" style="width:100%;min-width:' + popover_min_width + 'px;max-width:' + popover_min_width + 'px;left:' + left + 'px;top:' + top + 'px;position:absolute;z-index:10;display:none;">' + '<div class="panel bg-white b-a pos-rlt p-sm">' + '<span class="arrow ' + leftorright + ' ' + pullupornot + '" style="top:11px;"></span>' + '<div class="h4 font-thin m-b-sm"><div class="pull-left text-ellipsis p-b-xs" style="width:100%;">' + event.title + '</div></div>' + '<div class="line b-b b-light"></div>' + '<div><i class="icon-clock text-muted m-r-xs"></i>' + event.start
-										.format('dd-mmm-yyyy HH:MM') + '<div class="pull-right" style="width:10%;"><img class="r-2x" src="' + event.ownerPic + '" height="20px" width="20px" title="' + event.owner.name + '"/></div></div>' + '<div class="text-ellipsis">' + reletedContacts + '</div>' + '<div class="text-ellipsis">' + meeting_type + '</div>' + '</div>' + '</div>';
-								$(this).after(popoverElement);
-								$(this).parent().find('.fc-overlayw').find('.arrow').css({ "top" : "-9px", "left" : "11px" });
-								if ($('.fc-agenda-slots:visible').width() - jsEvent.currentTarget.offsetLeft < popover_min_width)
-								{
-									$(this).parent().find('.fc-overlayw').find('.arrow').css({ "top" : "-9px", "left" : popover_min_width - 15 + "px" });
-								}
-								if ((jsEvent.currentTarget.offsetTop < $(this).parent().find('.fc-overlayw').height() + 10) && ($('.fc-agenda-slots:visible')
-										.height() - jsEvent.currentTarget.offsetHeight < $(this).parent().find('.fc-overlayw').height() + 10))
-								{
-									$(this).parent().find('.fc-overlayw').css("top", jsEvent.currentTarget.offsetTop + 40 + "px");
-								}
-								if ((jsEvent.currentTarget.offsetTop > $(this).parent().find('.fc-overlayw').height() + 10) && ($('.fc-agenda-slots:visible')
-										.height() - (jsEvent.currentTarget.offsetHeight + jsEvent.currentTarget.offsetTop) < $(this).parent().find(
-										'.fc-overlayw').height() + 10))
-								{
-									$(this).parent().find('.fc-overlayw').find('.arrow').removeClass('top').addClass('bottom');
-									$(this).parent().find('.fc-overlayw').find('.arrow').css("top", $(this).parent().find('.fc-overlayw').height() - 22 + "px");
-									$(this).parent().find('.fc-overlayw').css(
-											"top",
-											$('.fc-agenda-slots:visible').height() - jsEvent.currentTarget.offsetHeight - $(this).parent().find('.fc-overlayw')
-													.height() + 7 + "px");
-									if ($('.fc-agenda-slots:visible').width() - jsEvent.currentTarget.offsetLeft < popover_min_width)
+							 	
+								if(event.contacts != null){
+									if (event.contacts.length > 0){
+										reletedContacts += '<i class="icon-user text-muted m-r-xs"></i>';
+									}
+									for (var i = 0; i < event.contacts.length; i++)
 									{
-										$(this).parent().find('.fc-overlayw')
-												.css(
-														"left",
-														jsEvent.currentTarget.offsetLeft - jsEvent.currentTarget.offsetWidth - ($('.fc-agenda-slots:visible')
-																.width() - jsEvent.currentTarget.offsetLeft - jsEvent.currentTarget.offsetWidth) + "px");
+										if (event.contacts[i].entity_type == "contact_entity")
+										{
+											var last_name = getPropertyValue(event.contacts[i].properties, "last_name");
+											if (last_name == undefined)
+												last_name = "";
+											if(event.contacts[i].type == 'COMPANY')
+												reletedContacts += '<a class="text-info" href="#company/' + event.contacts[i].id + '">' + getPropertyValue(
+													event.contacts[i].properties, "name") + '</a>';
+											else
+												reletedContacts += '<a class="text-info" href="#contact/' + event.contacts[i].id + '">' + getPropertyValue(
+														event.contacts[i].properties, "first_name") + ' ' + last_name + '</a>';
+										}else{
+											reletedContacts += '<a class="text-info" href="#contact/' + event.contacts[i].id + '">' + getPropertyValue(
+													event.contacts[i].properties, "name") + '</a>';
+										}
+										if (i != event.contacts.length - 1){
+											reletedContacts += ', ';
+										}
 									}
 								}
-							}
-
+								
+								var leftorright = 'left';	
+								var pullupornot = '';
+								var popoverElement = '';
+								var popover_min_width = 300;
+									
+									if (event.meeting_type && event.description){
+										meeting_type = '<i class="icon-comment-alt text-muted m-r-xs"></i><span>Meeting Type - ' + event.meeting_type + '</span><br/><span title=' + event.description + '>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' + addDotsAtEnd(event.description) + '</span>';
+									}else if (event.description){
+										meeting_type = '<i class="icon-comment-alt text-muted m-r-xs"></i><span title=' + event.description + '>' + addDotsAtEnd(event.description) + '</span>';
+									}
+											
+									if (calendarView == "month")
+									{
+										popover_min_width = $('.fc-view-month').find('.fc-widget-content').eq(0).width() * 2;
+										var left = jsEvent.currentTarget.offsetLeft + jsEvent.currentTarget.offsetWidth + 10;
+										var top = jsEvent.currentTarget.offsetTop;
+										if ($('.fc-border-separate:visible').width() - left < popover_min_width)
+										{
+											left = jsEvent.currentTarget.offsetLeft - popover_min_width - 10;
+											leftorright = 'right';
+										}
+										if ($('.fc-border-separate:visible').width() - popover_min_width - 20 < jsEvent.currentTarget.offsetWidth)
+										{
+											left = ((jsEvent.currentTarget.offsetLeft + jsEvent.currentTarget.offsetWidth + 10) / 2) - (popover_min_width / 2);
+											top = jsEvent.currentTarget.offsetTop + jsEvent.currentTarget.offsetHeight + 10;
+											leftorright = 'top';
+										}
+										if(event.type == "officeCalendar"){
+											var popoverElement = '<div class="fc-overlayw ' + leftorright + '" style="min-width:' + popover_min_width + 'px;max-width:' + popover_min_width + 'px;left:' + left + 'px;top:' + top + 'px;position:absolute;z-index:10;display:none;">' + 
+																 '<div class="panel bg-white b-a pos-rlt p-sm">' + 
+																 '<span class="arrow ' + leftorright + ' ' + pullupornot + '" style="top:11px;"></span>' + 
+																 '<div class="m-b-sm"><div class="pull-left text-flow-ellipsis p-b-xs" style="width:100%;">' + event.title + '</div></div>' +
+																 '<div><i class="icon-clock text-muted m-r-xs"></i>' + event.start.format('dd-mmm-yyyy HH:MM') + '</div>' + 
+																 '<div class="text-ellipsis">' + reletedContacts + '</div>' + 
+																 '<div class="text-ellipsis">' + meeting_type + '</div>' + 
+																 '</div>' + '</div>';
+											$(this).after(popoverElement);
+										}else{
+											var popoverElement = '<div class="fc-overlayw ' + leftorright + '" style="width:100%;min-width:' + popover_min_width + 'px;max-width:' + popover_min_width + 'px;left:' + left + 'px;top:' + top + 'px;position:absolute;z-index:10;display:none;">' + '<div class="panel bg-white b-a pos-rlt p-sm">' + '<span class="arrow ' + leftorright + ' ' + pullupornot + '" style="top:11px;"></span>' + '<div class="h4 font-thin m-b-sm"><div class="pull-left text-ellipsis p-b-xs" style="width:100%;">' + event.title + '</div></div>' + '<div class="line b-b b-light"></div>' + '<div><i class="icon-clock text-muted m-r-xs"></i>' + event.start
+													.format('dd-mmm-yyyy HH:MM') + '<div class="pull-right" style="width:10%;"><img class="r-2x" src="' + event.ownerPic + '" height="20px" width="20px" title="' + event.owner.name + '"/></div></div>' + '<div class="text-ellipsis">' + reletedContacts + '</div>' + '<div class="text-ellipsis">' + meeting_type + '</div>' + '</div>' + '</div>';
+											$(this).after(popoverElement);
+										}
+										
+										if ($('.fc-border-separate:visible').height() - jsEvent.currentTarget.offsetTop < $(this).parent().find('.fc-overlayw')
+												.height())
+										{
+											$(this).parent().find('.fc-overlayw').css("top",
+													top - $(this).parent().find('.fc-overlayw').height() + jsEvent.currentTarget.offsetHeight + 20 + "px");
+											$(this).parent().find('.fc-overlayw').find('.arrow').css("top", $(this).parent().find('.fc-overlayw').height() - 31 + "px");
+										}
+										if ($('.fc-border-separate:visible').width() - popover_min_width - 20 < jsEvent.currentTarget.offsetWidth)
+										{
+											$(this).parent().find('.fc-overlayw').find('.arrow').css("top", "-9px");
+										}
+										if (($('.fc-border-separate:visible').height() - jsEvent.currentTarget.offsetTop - jsEvent.currentTarget.offsetHeight - 10 < $(
+												this).parent().find('.fc-overlayw').height() + 10) && ($('.fc-border-separate:visible').width() - popover_min_width - 20 < jsEvent.currentTarget.offsetWidth))
+										{
+											$(this).parent().find('.fc-overlayw').find('.arrow').removeClass('top').addClass('bottom');
+											left = ((jsEvent.currentTarget.offsetLeft + jsEvent.currentTarget.offsetWidth + 10) / 2) - (popover_min_width / 2);
+											top = jsEvent.currentTarget.offsetTop - $(this).parent().find('.fc-overlayw').height() + 10;
+											$(this).parent().find('.fc-overlayw').css({ "top" : top + "px", "lef" : left + "px" });
+											$(this).parent().find('.fc-overlayw').find('.arrow').css("top", $(this).parent().find('.fc-overlayw').height() - 22 + "px");
+										}
+									}
+									else if (calendarView == "agendaWeek")
+									{
+										popover_min_width = $('.fc-view-agendaWeek').find('.fc-widget-content').eq(0).width() * 2;
+										var left = jsEvent.currentTarget.offsetLeft + jsEvent.currentTarget.offsetWidth + 10;
+										var top = jsEvent.currentTarget.offsetTop;
+										if ($('.fc-agenda-slots:visible').width() - left < popover_min_width)
+										{
+											left = jsEvent.currentTarget.offsetLeft - popover_min_width - 10;
+											leftorright = 'right';
+										}
+										
+										if(event.type == "officeCalendar"){
+											var popoverElement = '<div class="fc-overlayw ' + leftorright + '" style="min-width:' + popover_min_width + 'px;max-width:' + popover_min_width + 'px;left:' + left + 'px;top:' + top + 'px;position:absolute;z-index:10;display:none;">' + 
+																 '<div class="panel bg-white b-a pos-rlt p-sm">' + 
+																 '<span class="arrow ' + leftorright + ' ' + pullupornot + '" style="top:11px;"></span>' + 
+																 '<div class="m-b-sm"><div class="pull-left text-flow-ellipsis p-b-xs" style="width:100%;">' + event.title + '</div></div>' +
+																 '<div><i class="icon-clock text-muted m-r-xs"></i>' + event.start.format('dd-mmm-yyyy HH:MM') + '</div>' + 
+																 '<div class="text-ellipsis">' + reletedContacts + '</div>' + 
+																 '<div class="text-ellipsis">' + meeting_type + '</div>' + 
+																 '</div>' + '</div>';
+											$(this).after(popoverElement);
+										}else{
+											// var event_width =
+											// jsEvent.currentTarget.offsetWidth;
+											var popoverElement = '<div class="fc-overlayw ' + leftorright + '" style="width:100%;min-width:' + popover_min_width + 'px;max-width:' + popover_min_width + 'px;left:' + left + 'px;top:' + top + 'px;position:absolute;z-index:10;display:none;">' + '<div class="panel bg-white b-a pos-rlt p-sm">' + '<span class="arrow ' + leftorright + ' ' + pullupornot + '" style="top:11px;"></span>' + '<div class="h4 font-thin m-b-sm"><div class="pull-left text-ellipsis p-b-xs" style="width:100%;">' + event.title + '</div></div>' + '<div class="line b-b b-light"></div>' + '<div><i class="icon-clock text-muted m-r-xs"></i>' + event.start
+													.format('dd-mmm-yyyy HH:MM') + '<div class="pull-right" style="width:10%;"><img class="r-2x" src="' + event.ownerPic + '" height="20px" width="20px" title="' + event.owner.name + '"/></div></div>' + '<div class="text-ellipsis">' + reletedContacts + '</div>' + '<div class="text-ellipsis">' + meeting_type + '</div>' + '</div>' + '</div>';
+											$(this).after(popoverElement);									
+										}
+										
+										if ($('.fc-agenda-slots:visible').height() - jsEvent.currentTarget.offsetTop < $(this).parent().find('.fc-overlayw').height())
+										{
+											$(this).parent().find('.fc-overlayw').css("top",
+													top - $(this).parent().find('.fc-overlayw').height() + jsEvent.currentTarget.offsetHeight + 20 + "px");
+											$(this).parent().find('.fc-overlayw').find('.arrow').css("top", $(this).parent().find('.fc-overlayw').height() - 31 + "px");
+										}
+									}
+									else if (calendarView == "agendaDay")
+									{
+										var left = jsEvent.currentTarget.offsetLeft;
+										var top = jsEvent.currentTarget.offsetTop + jsEvent.currentTarget.offsetHeight + 10;
+										leftorright = 'top';
+										if ($('.fc-agenda-slots:visible').width() - jsEvent.currentTarget.offsetLeft < popover_min_width)
+										{
+											left = jsEvent.currentTarget.offsetLeft - jsEvent.currentTarget.offsetWidth - ($('.fc-agenda-slots:visible').width() - jsEvent.currentTarget.offsetLeft - jsEvent.currentTarget.offsetWidth);
+										}
+										
+										if(event.type == "officeCalendar"){
+											var popoverElement = '<div class="fc-overlayw ' + leftorright + '" style="min-width:' + popover_min_width + 'px;max-width:' + popover_min_width + 'px;left:' + left + 'px;top:' + top + 'px;position:absolute;z-index:10;display:none;">' + 
+																 '<div class="panel bg-white b-a pos-rlt p-sm">' + 
+																 '<span class="arrow ' + leftorright + ' ' + pullupornot + '" style="top:11px;"></span>' + 
+																 '<div class="m-b-sm"><div class="pull-left text-flow-ellipsis p-b-xs" style="width:100%;">' + event.title + '</div></div>' +
+																 '<div><i class="icon-clock text-muted m-r-xs"></i>' + event.start.format('dd-mmm-yyyy HH:MM') + '</div>' + 
+																 '<div class="text-ellipsis">' + reletedContacts + '</div>' + 
+																 '<div class="text-ellipsis">' + meeting_type + '</div>' + 
+																 '</div>' + '</div>';
+											$(this).after(popoverElement);
+										}else{
+											var popoverElement = '<div class="fc-overlayw ' + leftorright + '" style="width:100%;min-width:' + popover_min_width + 'px;max-width:' + popover_min_width + 'px;left:' + left + 'px;top:' + top + 'px;position:absolute;z-index:10;display:none;">' + '<div class="panel bg-white b-a pos-rlt p-sm">' + '<span class="arrow ' + leftorright + ' ' + pullupornot + '" style="top:11px;"></span>' + '<div class="h4 font-thin m-b-sm"><div class="pull-left text-ellipsis p-b-xs" style="width:100%;">' + event.title + '</div></div>' + '<div class="line b-b b-light"></div>' + '<div><i class="icon-clock text-muted m-r-xs"></i>' + event.start
+													.format('dd-mmm-yyyy HH:MM') + '<div class="pull-right" style="width:10%;"><img class="r-2x" src="' + event.ownerPic + '" height="20px" width="20px" title="' + event.owner.name + '"/></div></div>' + '<div class="text-ellipsis">' + reletedContacts + '</div>' + '<div class="text-ellipsis">' + meeting_type + '</div>' + '</div>' + '</div>';
+											$(this).after(popoverElement);
+										}
+										
+										$(this).parent().find('.fc-overlayw').find('.arrow').css({ "top" : "-9px", "left" : "11px" });
+										if ($('.fc-agenda-slots:visible').width() - jsEvent.currentTarget.offsetLeft < popover_min_width)
+										{
+											$(this).parent().find('.fc-overlayw').find('.arrow').css({ "top" : "-9px", "left" : popover_min_width - 15 + "px" });
+										}
+										if ((jsEvent.currentTarget.offsetTop < $(this).parent().find('.fc-overlayw').height() + 10) && ($('.fc-agenda-slots:visible')
+												.height() - jsEvent.currentTarget.offsetHeight < $(this).parent().find('.fc-overlayw').height() + 10))
+										{
+											$(this).parent().find('.fc-overlayw').css("top", jsEvent.currentTarget.offsetTop + 40 + "px");
+										}
+										if ((jsEvent.currentTarget.offsetTop > $(this).parent().find('.fc-overlayw').height() + 10) && ($('.fc-agenda-slots:visible')
+												.height() - (jsEvent.currentTarget.offsetHeight + jsEvent.currentTarget.offsetTop) < $(this).parent().find(
+												'.fc-overlayw').height() + 10))
+										{
+											$(this).parent().find('.fc-overlayw').find('.arrow').removeClass('top').addClass('bottom');
+											$(this).parent().find('.fc-overlayw').find('.arrow').css("top", $(this).parent().find('.fc-overlayw').height() - 22 + "px");
+											$(this).parent().find('.fc-overlayw').css(
+													"top",
+													$('.fc-agenda-slots:visible').height() - jsEvent.currentTarget.offsetHeight - $(this).parent().find('.fc-overlayw')
+															.height() + 7 + "px");
+											if ($('.fc-agenda-slots:visible').width() - jsEvent.currentTarget.offsetLeft < popover_min_width)
+											{
+												$(this).parent().find('.fc-overlayw')
+														.css(
+																"left",
+																jsEvent.currentTarget.offsetLeft - jsEvent.currentTarget.offsetWidth - ($('.fc-agenda-slots:visible')
+																		.width() - jsEvent.currentTarget.offsetLeft - jsEvent.currentTarget.offsetWidth) + "px");
+											}
+										}
+									}
 							$(jsEvent.currentTarget).css('z-index', 9);
-							if (event.allDay)
-							{
+							if (event.allDay){
 								$(jsEvent.currentTarget.parentElement).css('z-index', 9);
 							}
 							$(this).parent().find('.fc-overlayw').show();
@@ -19832,6 +20028,10 @@ function showCalendar()
 							var end_event = new Date(event.end).getTime() / 1000;
 							if (end_event - start_event == 3600)
 							{
+								$(element).height('');
+							}
+							
+							if(event.type == "officeCalendar"){
 								$(element).height('');
 							}
 						},
@@ -20087,9 +20287,7 @@ function loadDefaultFilters(callback)
 	}
 }
 
-$(function()
-{
-	
+$(function(){
 	/**
 	 * Hide the filters window when click on out side of the filters pop up.
 	 */
@@ -20130,33 +20328,28 @@ function getCalendarUsersDetails(callback)
 
 	accessUrlUsingAjax('/core/api/users/agileusers', function(data){
 
+		if(!data)
+			 return callback(data);
+
 		var json_users = [];
-		if (data)
+		$.each(data, function(i, user)
 		{
-			$.each(JSON.parse(data), function(i, user)
+
+			if (CURRENT_DOMAIN_USER.id == user.domain_user_id)
 			{
-
-				if (CURRENT_DOMAIN_USER.id == user.domain_user_id)
-				{
-					CURRENT_AGILE_USER = user;
-
-				}
-				else
-				{
-					if (user.domainUser)
-					{
-						var json_user = {};
-						json_user.id = user.id;
-						json_user.name = user.domainUser.name;
-						json_user.domain_user_id = user.domainUser.id;
-						json_users.push(json_user);
-					}
-
-				}
-
-			});
-		}
-
+				CURRENT_AGILE_USER = user;
+				return;
+			}
+			
+			if (user.domainUser)
+			{
+				var json_user = {};
+				json_user.id = user.id;
+				json_user.name = user.domainUser.name;
+				json_user.domain_user_id = user.domainUser.id;
+				json_users.push(json_user);
+			}
+		});
 		return callback(json_users);
 
 	});
@@ -20388,9 +20581,27 @@ function checkBothCalWhenNoCalSelected()
  */
 function putGoogleCalendarLink()
 {
+	$.ajax({ url : 'core/api/calendar-prefs/get', success : function(response)
+	{
+		if (response)
+		{
+			$("#google_cal").removeClass('hide');
+			$("#google_cal_link").addClass('hide');
+		}
+		else
+		{
+			$("#google_cal").addClass('hide');
+			$("#google_cal_link").removeClass('hide');
+		}
+
+	} });
+}
+
+function putOfficeCalendarLink()
+{
 	var calEnable = false;
 
-	$.ajax({ url : 'core/api/calendar-prefs/get', async : false, success : function(response)
+	$.ajax({ url : 'core/api/officecalendar', async : false, success : function(response)
 	{
 		if (response)
 			calEnable = true;
@@ -20399,17 +20610,16 @@ function putGoogleCalendarLink()
 
 	if (calEnable)
 	{
-		$("#google_cal").removeClass('hide');
-		$("#google_cal_link").addClass('hide');
+		$("#office_cal").removeClass('hide');
+		$("#office_cal_link").addClass('hide');
 	}
 
 	else
 	{
-		$("#google_cal").addClass('hide');
-		$("#google_cal_link").removeClass('hide');
+		$("#office_cal").addClass('hide');
+		$("#office_cal_link").removeClass('hide');
 	}
 }
-
 
 /**
  * fetches and renders events in full calendar
@@ -20899,22 +21109,24 @@ function initializeEventListners(el)
 {
 
 
-$("#ical_appointment_links").on('click', '#subscribe-ical', function(event)
+/*$("#ical_appointment_links").on('click', '#subscribe-ical', function(event)
 {
 	event.preventDefault();
 	set_api_key();
-});
+});*/
 
 
 /**
  * When Send Mail is clicked from Ical Modal, it hides the ical modal and shows
  * the ical-send email modal.
  */
+$("#icalModal").off('click');
 $("#icalModal").on('click', '#send-ical-email', function(event)
 {
 	event.preventDefault();
 
 	$("#icalModal").modal('hide');
+
 
 	// Removes previous modals if exist.
 	if ($('#share-ical-by-email').size() != 0)
@@ -21779,27 +21991,11 @@ function changeEndTime(startTime, endTime)
  */
 
 // or better
-function isDefined(x)
-{
-	var undefined;
-	return typeof x !== undefined;
-}
 
-function _init_gcal_options()
-{
-	var fc = $.fullCalendar;
-	fc.sourceFetchers = [];
-	// Transforms the event sources to Google Calendar Events
-	fc.sourceFetchers.push(function(sourceOptions, start, end)
-	{
-		if (sourceOptions.dataType == 'agile-gcal')
-		{
 
-			// Check whether to show the google calendar events or not.
+function loadUserEventsfromGoogle(users, start, end){
 
-			$.getJSON('/core/api/users/agileusers', function(users)
-			{
-				$.each(users, function(i, user)
+	$.each(users, function(i, user)
 				{
 					if (CURRENT_DOMAIN_USER.id == user.domain_user_id)
 					{
@@ -21817,7 +22013,36 @@ function _init_gcal_options()
 						});
 					}
 				});
-			});
+}
+
+function isDefined(x)
+{
+	var undefined;
+	return typeof x !== undefined;
+}
+
+function _init_gcal_options(users)
+{
+	var fc = $.fullCalendar;
+	fc.sourceFetchers = [];
+	// Transforms the event sources to Google Calendar Events
+	fc.sourceFetchers.push(function(sourceOptions, start, end)
+	{
+		if (sourceOptions.dataType == 'agile-gcal')
+		{
+
+			if(users){
+
+				loadUserEventsfromGoogle(users, start, end);
+				return;
+
+			}
+			// Check whether to show the google calendar events or not.
+
+			$.getJSON('/core/api/users/agileusers', function(users)
+				{
+					loadUserEventsfromGoogle(users, start, end);
+				});
 
 		}
 	});
@@ -22410,6 +22635,21 @@ function save_task(formId, modalId, isUpdate, saveBtn)
 
 	if (!isUpdate)
 		json.due = new Date(json.due).getTime();
+	
+	if(isUpdate){
+		
+		if($('#'+formId).find('ul#notes').length>0){
+			var notes = [];
+			$('#'+formId+' li.task-note').each(function()
+			{
+				notes.push($(this).attr('data'));
+			});
+
+			console.log(notes);
+
+			json.notes = notes;
+		}
+	}
 	var startarray = (json.task_ending_time).split(":");
 	json.due = new Date((json.due) * 1000).setHours(startarray[0], startarray[1]) / 1000.0;
 
@@ -22767,6 +23007,9 @@ function complete_task(taskId, collection, ui, callback)
 	new_task.url = '/core/api/tasks';
 	new_task.save(taskJSON, { success : function(model, response)
 	{
+		if(!Current_Route)
+			  Current_Route = "/";
+
 		if (Current_Route.indexOf("contact/") > -1)
 		{
 			collection.get(taskId).set(model);
@@ -22776,15 +23019,20 @@ function complete_task(taskId, collection, ui, callback)
 			collection.remove(model);
 		}
 
-		var due_task_count = getDueTasksCount();
-		if (due_task_count == 0)
+		getDueTasksCount(function(due_task_count){
+
+			if (due_task_count == 0)
 			$(".navbar_due_tasks").css("display", "none");
-		else
-			$(".navbar_due_tasks").css("display", "inline-block");
-		if(due_task_count !=0)
-			$('#due_tasks_count').html(due_task_count);
-		else
-			$('#due_tasks_count').html("");
+			else
+				$(".navbar_due_tasks").css("display", "inline-block");
+			if(due_task_count !=0)
+				$('#due_tasks_count').html(due_task_count);
+			else
+				$('#due_tasks_count').html("");
+		
+		});
+
+		
 		if (ui)
 			ui.fadeOut(500);
 
@@ -25233,25 +25481,28 @@ $(function()
 					{
 						e.preventDefault();
 
-						if (!canRunBulkOperations())
-						{
-							showModalConfirmation(
-									"Bulk Change Owner",
-									"You may not have permission to update some of the contacts selected. " + "Proceeding with this operation will change the owner for only the contacts " + "you are allowed to update.<br/><br/> Do you want to proceed?",
-									show_bulk_owner_change_page, function()
-									{
-										// No callback
-										return;
-									}, function()
-									{
+						load_bulk_operations_template(function(){
 
-									});
-						}
-						else
-						{
-							show_bulk_owner_change_page();
-						}
+								if (!canRunBulkOperations())
+								{
+									showModalConfirmation(
+											"Bulk Change Owner",
+											"You may not have permission to update some of the contacts selected. " + "Proceeding with this operation will change the owner for only the contacts " + "you are allowed to update.<br/><br/> Do you want to proceed?",
+											show_bulk_owner_change_page, function()
+											{
+												// No callback
+												return;
+											}, function()
+											{
 
+											});
+								}
+								else
+								{
+									show_bulk_owner_change_page();
+								}
+
+						});
 					});
 
 	function show_bulk_owner_change_page()
@@ -25408,56 +25659,61 @@ $(function()
 
 	function show_bulk_campaign_assign_page()
 	{
-		var id_array = [];
-		var filter;
-		if (SELECT_ALL == true)
-			filter = getSelectionCriteria();
-		else
-			id_array = get_contacts_bulk_ids();
 
-		console.log(filter);
+		load_bulk_operations_template(function(){
 
-        $("body").off('fill_campaigns').on("fill_campaigns", function(event)
-		{
-			var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
-			fillSelect('campaignBulkSelect', '/core/api/workflows', 'workflow', 'no-callback ', optionsTemplate);
-		});
+			var id_array = [];
+			var filter;
+			if (SELECT_ALL == true)
+				filter = getSelectionCriteria();
+			else
+				id_array = get_contacts_bulk_ids();
 
-		// Navigate to show form
-		Backbone.history.navigate("bulk-campaigns", { trigger : true });
+			console.log(filter);
 
-		/**
-		 * Subscribes the selected contacts to a campaign by sending the
-		 * workflow id and selected contacts' ids.
-		 */
-		$("#addBulkTocampaign").click(function(e)
-		{
-			e.preventDefault();
-
-			var $form = $('#campaignsBulkForm');
-
-			// Button Disabled or Validate Form Failed
-			if ($(this).attr('disabled') == 'disabled' || !isValidForm($form))
+	        $("body").off('fill_campaigns').on("fill_campaigns", function(event)
 			{
-				return;
-			}
+				var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
+				fillSelect('campaignBulkSelect', '/core/api/workflows', 'workflow', 'no-callback ', optionsTemplate);
+			});
 
-			var saveButton = $(this);
+			// Navigate to show form
+			Backbone.history.navigate("bulk-campaigns", { trigger : true });
 
-			disable_save_button(saveButton);
-			// Show loading symbol until model get saved
-			// $('#campaignsBulkForm').find('span.save-status').html(getRandomLoadingImg());
-
-			var workflow_id = $('#campaignBulkSelect option:selected').prop('value');
-			var url = '/core/api/bulk/update?workflow_id=' + workflow_id + "&action_type=ASIGN_WORKFLOW";
-
-			var json = {};
-			json.contact_ids = id_array;
-			postBulkOperationData(url, json, $form, undefined, function(data)
+			/**
+			 * Subscribes the selected contacts to a campaign by sending the
+			 * workflow id and selected contacts' ids.
+			 */
+			$("#addBulkTocampaign").click(function(e)
 			{
-				enable_save_button(saveButton);
-			}, 'Campaign assigning scheduled');
+				e.preventDefault();
+
+				var $form = $('#campaignsBulkForm');
+
+				// Button Disabled or Validate Form Failed
+				if ($(this).attr('disabled') == 'disabled' || !isValidForm($form))
+				{
+					return;
+				}
+
+				var saveButton = $(this);
+
+				disable_save_button(saveButton);
+				// Show loading symbol until model get saved
+				// $('#campaignsBulkForm').find('span.save-status').html(getRandomLoadingImg());
+
+				var workflow_id = $('#campaignBulkSelect option:selected').prop('value');
+				var url = '/core/api/bulk/update?workflow_id=' + workflow_id + "&action_type=ASIGN_WORKFLOW";
+
+				var json = {};
+				json.contact_ids = id_array;
+				postBulkOperationData(url, json, $form, undefined, function(data)
+				{
+					enable_save_button(saveButton);
+				}, 'Campaign assigning scheduled');
+			});
 		});
+		
 	}
 
 	/**
@@ -25466,7 +25722,9 @@ $(function()
 	 */
 	$("body").on("click", "#bulk-tags", function(e)
 			{
-						e.preventDefault();
+					e.preventDefault();
+
+					load_bulk_operations_template(function(){
 
 						if (!canRunBulkOperations())
 						{
@@ -25506,6 +25764,8 @@ $(function()
 							show_add_tag_bulkaction_form()
 						}
 					});
+
+			});
 
 	function show_add_tag_bulkaction_form()
 	{
@@ -25618,44 +25878,46 @@ $(function()
 					{
 						e.preventDefault();
 
-						if (!canRunBulkOperations())
-						{
-							showModalConfirmation(
-									"Bulk Remove Tag",
-									"You may not have permission to update some of the contacts selected. Proceeding with this operation will delete tag to only the contacts you are allowed to update.<br/><br/> Do you want to proceed?",
+						load_bulk_operations_template(function(){
 
-									show_remove_tag_bulkaction_form, function()
-									{
-										// No callback
-										return;
-									}, function()
-									{
-										return;
-									});
-						}
-						if (is_free_plan() && has_more_than_limit())
-						{
-							continueAction = false;
-							showModalConfirmation(
-									"Remove tags",
-									"You can apply this bulk action only on 25 contacts in the FREE Plan. Please choose lesser number of contacts or upgrade your account.",
-									function()
-									{
-										Backbone.history.navigate("subscribe", { trigger : true });
-									}, function()
-									{
-										// No callback
-										return;
-									}, function()
-									{
-										return;
-									}, "Upgrade", "Close");
-						}
-						else
-						{
-							show_remove_tag_bulkaction_form()
-						}
+							if (!canRunBulkOperations())
+							{
+								showModalConfirmation(
+										"Bulk Remove Tag",
+										"You may not have permission to update some of the contacts selected. Proceeding with this operation will delete tag to only the contacts you are allowed to update.<br/><br/> Do you want to proceed?",
 
+										show_remove_tag_bulkaction_form, function()
+										{
+											// No callback
+											return;
+										}, function()
+										{
+											return;
+										});
+							}
+							if (is_free_plan() && has_more_than_limit())
+							{
+								continueAction = false;
+								showModalConfirmation(
+										"Remove tags",
+										"You can apply this bulk action only on 25 contacts in the FREE Plan. Please choose lesser number of contacts or upgrade your account.",
+										function()
+										{
+											Backbone.history.navigate("subscribe", { trigger : true });
+										}, function()
+										{
+											// No callback
+											return;
+										}, function()
+										{
+											return;
+										}, "Upgrade", "Close");
+							}
+							else
+							{
+								show_remove_tag_bulkaction_form()
+							}
+						});
 					});
 
 	function show_remove_tag_bulkaction_form()
@@ -25756,13 +26018,15 @@ $(function()
 	 * Bulk operations - Sends email to the bulk of contacts by filling up the
 	 * send email details like from, subject and body.
 	 */
-	//$("body #bulk-email").off("click");
+	$("body #bulk-email").off("click");
 	$("body").on("click", "#bulk-email", function(e)
 					{
 						e.preventDefault();
 
-							// Selected Contact ids
-							var id_array = get_contacts_bulk_ids();
+					load_bulk_operations_template(function(){
+
+						// Selected Contact ids
+						var id_array = get_contacts_bulk_ids();
 
 						if (!canRunBulkOperations())
 						{
@@ -25846,8 +26110,9 @@ $(function()
 
 							show_bulk_email_form(id_array)
 						}
-
 					});
+
+				});
 
 	function show_bulk_email_form(id_array)
 	{
@@ -26410,7 +26675,7 @@ function getDynamicFilters()
 	
 	if (company_util.isCompany())
 	{
-		if(!App_Companies.companiesListView && !App_Companies.companiesListView.post_data)
+		if(!App_Companies.companiesListView || !App_Companies.companiesListView.post_data)
 		{
 			return null;
 		}
@@ -26419,7 +26684,7 @@ function getDynamicFilters()
 	}
 	else
 	{
-		if(!App_Contacts.contactsListView && !App_Contacts.contactsListView.post_data)
+		if(!App_Contacts.contactsListView || !App_Contacts.contactsListView.post_data)
 		{
 			return null;
 		}
@@ -26467,6 +26732,17 @@ function has_more_than_limit()
 		return true;
 
 	return false;
+}
+
+
+function load_bulk_operations_template(callback){
+
+	getTemplate("bulk-actions-company-owner", {}, undefined, function(template_ui){
+				if(callback)
+				   callback();
+
+	}, null);
+
 }/**
  * table-checkboxes.js Prepends check-boxes to each row of desired tables (which are 
  * having showCheckboxes class), in order to perform bulk operations (Delete, Change owner etc..)
@@ -28212,6 +28488,10 @@ $(function()
 			});
 		});
 
+		populateLostReasons(el, undefined);
+
+		populateDealSources(el, undefined);
+
 		// Enable the datepicker
 
 		$('#close_date', el).datepicker({ format : CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY});
@@ -28983,7 +29263,7 @@ var contact_details_tab = {
 			var json = contact.toJSON();
 			 
 			// Get email of the contact in contact detail
-			var email = getPropertyValue(json.properties, "email");
+			var email = getAllPropertyValuesByName(json.properties, "email", ",");
 			
 			// Shows an error alert, when there is no email to the contact 
 			if(!email){
@@ -41472,6 +41752,62 @@ function gmap_create_table_view(Search_Url){
 	 gmapContactsListView.collection.fetch();
 	$('#gmap-table-view').html(gmapContactsListView.el);
 }
+var TEMPLATE_LIB_PATH = "";
+
+/**
+ * Downloads the template synchronously (stops other browsing actions) from the
+ * given url and returns it
+ * 
+ * @param {String}
+ *            url location to download the template
+ * @returns down-loaded template content
+ */
+function downloadTemplate(url, callback)
+{
+
+	var dataType = 'html', template_url = CLOUDFRONT_PATH;
+
+
+	// If Precompiled is enabled, we change the directory to precompiled. If
+	// pre-compiled flat is set true then template path is sent accordingly
+	if (HANDLEBARS_PRECOMPILATION)
+	{
+		url = "tpl/min/precompiled/" + FLAT_FULL_UI +  url;
+	}
+	else
+		url = "tpl/min/" + FLAT_FULL_UI +  url;
+
+	// If JS
+	if (url.endsWith("js") && HANDLEBARS_PRECOMPILATION)
+	{
+		dataType = 'script';
+		template_url = template_url.replace("flatfull/", "");
+		url = template_url + url;
+	}
+
+	url += "?_=" + _AGILE_VERSION;
+	
+	// If callback is sent to this method then template is fetched synchronously
+	var is_async = false;
+	if (callback && typeof (callback) === "function")
+		is_async = true;
+
+	console.log(url + " " + dataType + " " + is_async);
+
+	var is_cached = !LOCAL_SERVER;
+
+	jQuery.ajax({ url : url, dataType : dataType, cache:is_cached, success : function(result)
+	{
+		// If HTMl, add to body
+		if (dataType == 'html')
+			$('body').append((result));
+
+		if (is_async)
+			callback(result);
+	}, async : is_async });
+
+	return "";
+}
 // We store one template compiled - if repetitive templates are called, we save time on compilations
 var Handlebars_Compiled_Templates = {};
 
@@ -41746,11 +42082,17 @@ function getTemplateUrls(templateName)
 	}
 	if (templateName.indexOf("socialsuite") == 0)
 	{
-		template_relative_urls.push("socialsuite.js");
+		if(HANDLEBARS_PRECOMPILATION)
+			template_relative_urls.push("socialsuite-all.js");
+		else
+		{
+			template_relative_urls.push("socialsuite.js");
+		}
 
 		if (HANDLEBARS_PRECOMPILATION)
 			template_relative_urls.push("socialsuite.html");
 	}
+
 
 	if (templateName.indexOf("portlet") == 0)
 	{
@@ -41819,61 +42161,6 @@ String.prototype.endsWith = function(suffix)
 {
 	return this.indexOf(suffix, this.length - suffix.length) !== -1;
 };
-
-var TEMPLATE_LIB_PATH = "";
-
-/**
- * Downloads the template synchronously (stops other browsing actions) from the
- * given url and returns it
- * 
- * @param {String}
- *            url location to download the template
- * @returns down-loaded template content
- */
-function downloadTemplate(url, callback)
-{
-
-	var dataType = 'html', template_url = LIB_PATH;
-
-
-	// If Precompiled is enabled, we change the directory to precompiled. If
-	// pre-compiled flat is set true then template path is sent accordingly
-	if (HANDLEBARS_PRECOMPILATION)
-	{
-		url = "tpl/min/precompiled/" + FLAT_FULL_UI +  url;
-	}
-	else
-		url = "tpl/min/" + FLAT_FULL_UI +  url;
-
-	// If JS
-	if (url.endsWith("js") && HANDLEBARS_PRECOMPILATION)
-	{
-		dataType = 'script';
-		template_url = template_url.replace("flatfull/", "");
-		url = template_url + url;
-	}
-
-	url += "?_=" + _AGILE_VERSION;
-	
-	// If callback is sent to this method then template is fetched synchronously
-	var is_async = false;
-	if (callback && typeof (callback) === "function")
-		is_async = true;
-
-	console.log(url + " " + dataType + " " + is_async);
-
-	jQuery.ajax({ url : url, dataType : dataType, success : function(result)
-	{
-		// If HTMl, add to body
-		if (dataType == 'html')
-			$('body').append((result));
-
-		if (is_async)
-			callback(result);
-	}, async : is_async });
-
-	return "";
-}
 
 /**
  * Iterates the given "items", to find a match with the given "name", if found
@@ -48789,7 +49076,7 @@ function getDealCustomProperties(items)
 	 * 
 	 */
 	Handlebars.registerHelper('getDefaultImage',function(){
-		return new Handlebars.SafeString(LIB_PATH_FLATFULL + 'images/flatfull/user-default.jpg');
+		return new Handlebars.SafeString(FLAT_FULL_PATH + 'images/flatfull/user-default.jpg');
 		
 	});
 	
@@ -49503,37 +49790,35 @@ function show_desktop_notification(imageURL, title, message, link, tag,timeout) 
 	if(!timeout){
 		timeout=30000;
 	}
-	head.js(LIB_PATH +'lib/desktop-notify-min.js',function(){
 		
-		var notification = notify.createNotification(title, {
-			   body : message,
-			   icon : imageURL,
-			   tag : tag,
-			   onClickCallback : function() {
-					
-				   window.focus();
-					
-				   // Open respective block
-					Backbone.history.navigate(link, {
-						trigger : true
-					});
+	var notification = notify.createNotification(title, {
+		   body : message,
+		   icon : imageURL,
+		   tag : tag,
+		   onClickCallback : function() {
+				
+			   window.focus();
+				
+			   // Open respective block
+				Backbone.history.navigate(link, {
+					trigger : true
+				});
 
-					notification.close();
-				 }
-			  });
+				notification.close();
+			 }
+		  });
+	
+	setTimeout(function() {
+		notification.close();
+	}, timeout);
+	
+	// Show when tab is inactive
+	if (!window.closed)
+	{	
+		if (notification_prefs.notification_sound != 'no_sound')
+			play_sound(notification_prefs.notification_sound);
 		
-		setTimeout(function() {
-			notification.close();
-		}, timeout);
-		
-		// Show when tab is inactive
-		if (!window.closed)
-		{	
-			if (notification_prefs.notification_sound != 'no_sound')
-				play_sound(notification_prefs.notification_sound);
-			
-		}
-	});
+	}
 }
 
 /**
@@ -49544,32 +49829,27 @@ function show_desktop_notification(imageURL, title, message, link, tag,timeout) 
  */
 function request_notification_permission() {
 	
-	head.js(LIB_PATH +'lib/desktop-notify-min.js',function(){
 		
-		if (notify.permissionLevel() == notify.PERMISSION_DEFAULT) {
-
-            $('body').on('click', '#set-desktop-notification', function(){
-				notify.requestPermission(function() {
-					if(notify.permissionLevel() == notify.PERMISSION_GRANTED)
-					{	
-						$('#set-desktop-notification').css('display', 'none');
-					    $('#desktop-notification-content')
-							.html(
-									"<i>Desktop Notifications are now enabled. <a href=\"#\" id=\"disable-notification\" class=\"text-info\" style=\"text-decoration:underline;\">Disable</a></i>");
-					}
-					else
-					{
-						$('#set-desktop-notification').css('display', 'none');
-			            $('#desktop-notification-content').html(
-							"<i>Desktop Notifications are now disabled. <a href=\"#\" id=\"enable-notification\" class=\"text-info\" style=\"text-decoration:underline;\">Enable</a></i>")
-	                 }	
-				});
-			});
-
-		}
-		
-	});
-
+	if (notify.permissionLevel() != notify.PERMISSION_DEFAULT)
+		  return;
+	 
+    $('body').on('click', '#set-desktop-notification', function(){
+		notify.requestPermission(function() {
+			if(notify.permissionLevel() == notify.PERMISSION_GRANTED)
+			{	
+				$('#set-desktop-notification').css('display', 'none');
+			    $('#desktop-notification-content')
+					.html(
+							"<i>Desktop Notifications are now enabled. <a href=\"#\" id=\"disable-notification\" class=\"text-info\" style=\"text-decoration:underline;\">Disable</a></i>");
+			}
+			else
+			{
+				$('#set-desktop-notification').css('display', 'none');
+	            $('#desktop-notification-content').html(
+					"<i>Desktop Notifications are now disabled. <a href=\"#\" id=\"enable-notification\" class=\"text-info\" style=\"text-decoration:underline;\">Enable</a></i>")
+             }	
+		});
+	});	
 }
 /**
  * notification.js is a script file to show notifications.pubnub is used to emit
@@ -50459,7 +50739,7 @@ function setup_deals_in_milestones(id){
 		      },
 		      // When deal is dropped its milestone is changed 
 		      update : function(event, ui) {
-		    	  console.log(">>>>>>>>>>>>>>>>>> deals id");
+		      	  console.log(">>>>>>>>>>>>>>>>>> deals id");
 		    	  console.log(ui);
 		    	  console.log(ui.item[0]);
 		    	  console.log(ui.item[0].id);
@@ -50473,7 +50753,34 @@ function setup_deals_in_milestones(id){
 						var dealModel = dealPipelineModel[0].get('dealCollection').get(id);
 						var newMilestone = ($('#'+id).closest('ul').attr("milestone")).trim();
 						console.log('new...',newMilestone);
-						update_milestone(dealModel, id, newMilestone, old_milestone);
+						if(dealModel && dealModel.collection){
+							App_Deals.dealModel = dealModel;
+							App_Deals.newMilestone = newMilestone;
+							App_Deals.old_milestone = old_milestone;
+							App_Deals.lost_reason_milesone_id = id;
+							var milestone_model_view = new Base_Model_View({ url : '/core/api/milestone/'+dealModel.collection.get(id).get('pipeline_id'), template : "" });
+							milestone_model_view.model.fetch({
+								success: function(data){
+									var jsonModel = data.toJSON();
+									console.log("jsonModel.lost_milestone----"+jsonModel.lost_milestone);
+									console.log("newMilestone----"+newMilestone);
+									console.log("old_milestone----"+old_milestone);
+									if(jsonModel.lost_milestone == newMilestone && newMilestone != old_milestone){
+										console.log("Success if block");
+										App_Deals.deal_lost_reason_for_update = "";
+										populateLostReasons($('#dealLostReasonModal'), undefined);
+										$('#deal_lost_reason',$('#dealLostReasonModal')).removeClass("hidden");
+										$('#dealLostReasonModal > .modal-dialog > .modal-content > .modal-footer > a#deal_lost_reason_save').text('Save');
+										$('#dealLostReasonModal > .modal-dialog > .modal-content > .modal-footer > a#deal_lost_reason_save').attr('disabled',false);
+										$('#'+id).attr('data',newMilestone);
+									}
+									hideTransitionBar();
+								}
+							});
+						}
+						if(dealModel){
+							update_milestone(dealModel, id, newMilestone, old_milestone,true, "");
+						}
 						$('#'+id).attr('data',newMilestone);
 					
 		        }
@@ -50486,12 +50793,13 @@ function setup_deals_in_milestones(id){
  * To change the milestone of the deal when it is 
  * dropped in other milestone columns and saves or updates deal object.
  */
-function update_milestone(data, id, newMilestone, oldMilestone){
+function update_milestone(data, id, newMilestone, oldMilestone, updateCollectionFlag, lost_reason_id){
 	
 	var DealJSON = data.toJSON();
 	
 	console.log(DealJSON);
 	DealJSON.milestone = newMilestone;
+	DealJSON.lost_reason_id = lost_reason_id;
 	// Replace notes object with note ids
 	var notes = [];
 	$.each(DealJSON.notes, function(index, note)
@@ -50515,7 +50823,9 @@ function update_milestone(data, id, newMilestone, oldMilestone){
 		// If the milestone is changed, to show that change in edit popup if opened without reloading the app.
 		success : function(model, response) {
 			console.log('moved deal----',model);
-			update_deal_collection(model.toJSON(), id, newMilestone, oldMilestone);
+			if (updateCollectionFlag) {
+				update_deal_collection(model.toJSON(), id, newMilestone, oldMilestone);
+			}
 		}
 	});
 
@@ -51818,10 +52128,18 @@ function initializeMilestoneListners(el){
     	var form = $(this).closest('form');
     	var new_milestone = form.find(".add_new_milestone").val().trim();
 
-    	if(!new_milestone || new_milestone.length <= 0 || !(/^[a-zA-Z0-9-_ ]*$/).test(new_milestone))
+    	/*if(!new_milestone || new_milestone.length <= 0 || !(/^[a-zA-Z0-9-_ ]*$/).test(new_milestone))
 		{
     		$('#milestone-error-modal').modal('show');
 			return;
+		}*/
+		if(form.find(".add_new_milestone").val().trim()==""){
+			$('#new_milestone_name_error_'+form.attr('id').split('milestonesForm_')[1]).show();
+			return false;
+		}
+		if(!(/^[a-zA-Z0-9-_ ]*$/).test(form.find(".add_new_milestone").val().trim())){
+			$('#new_milestone_chars_error_'+form.attr('id').split('milestonesForm_')[1]).show();
+			return false;
 		}
     	form.find('.show_field').css("display","none");
     	form.find(".show_milestone_field").closest("div").css("display","inline-block");
@@ -51868,6 +52186,10 @@ function initializeMilestoneListners(el){
     });
 
 	$('#milestone-listner').on('keypress', '.add_new_milestone', function(e) {
+		var form = $(this).closest('form');
+    	$('#new_milestone_name_error_'+form.attr('id').split('milestonesForm_')[1]).hide();
+		$('#new_milestone_existed_error_'+form.attr('id').split('milestonesForm_')[1]).hide();
+		$('#new_milestone_chars_error_'+form.attr('id').split('milestonesForm_')[1]).hide();
     	if(e.keyCode == 13)
     	{
     		var form = $(this).closest("form");
@@ -51915,6 +52237,254 @@ function initializeMilestoneListners(el){
     	});
     	
     });
+
+	$("#milestone-listner").on('click', '.add_lost_reason', function(e){
+		e.preventDefault();
+		if($('#lost_reason_name').val().trim()==""){
+			$('#lost_reason_name_error').show();
+			return false;
+		}
+		if(!(/^[a-zA-Z0-9-_ ]*$/).test($('#lost_reason_name').val().trim())){
+			$('#lost_reason_chars_error').show();
+			return false;
+		}
+		var obj = serializeForm('lostReasonsForm');
+		var model = new BaseModel();
+		model.url = 'core/api/categories';
+		model.save(obj, {
+        success: function (data) {
+        	var model = data.toJSON();
+	        App_Admin_Settings.dealLostReasons.collection.add(new BaseModel(model));
+	        $('.show_field').find('#lost_reason_name').val("");
+	        $('.show_field').hide();
+	        $('.show_lost_reason_add').show();
+        },
+        error: function (model, response) {
+        	if(response.status==400 && response.responseText=="Reason with this name already exists."){
+        		$('#lost_reason_existed_error').show();
+        	}
+        }});
+	});
+
+	$("#milestone-listner").on('keypress', '#lost_reason_name', function(e){
+		$('#lost_reason_name_error').hide();
+		$('#lost_reason_existed_error').hide();
+		$('#lost_reason_chars_error').hide();
+		if(e.keyCode == 13)
+    	{
+    		e.preventDefault();
+    		var form = $(this).closest("form");
+    		form.find(".add_lost_reason").click();
+    	}
+	});
+
+	$('#milestone-listner').on("click", '.lost-reason-edit', function(e){
+		$(this).closest('tr').find('.lost_reason_name_div').hide();
+		$(this).closest('tr').find('.lost_reason_name_input').show();
+	});
+
+	$('#milestone-listner').on("keypress", '.update_lost_reason', function(e){
+		if(e.which == 13){
+			e.preventDefault();
+			if($(this).val().trim()==""){
+				$('#lost_reason_name_error_'+$(this).attr("id")).show();
+				return false;
+			}
+			if(!(/^[a-zA-Z0-9-_ ]*$/).test($(this).val().trim())){
+				$('#lost_reason_chars_error_'+$(this).attr("id")).show();
+				return false;
+			}
+			var obj = serializeForm('lostReasonsForm_'+$(this).attr("id"));
+			var model = new BaseModel();
+			model.url = 'core/api/categories';
+			model.save(obj, {
+        	success: function (data) {
+        		var model = data.toJSON();
+	       		App_Admin_Settings.dealLostReasons.collection.get(model).set(new BaseModel(model));
+	        	$('.lost_reason_name_input').hide();
+	        	$('.lost_reason_name_div').show();
+        	},
+        	error: function (model, response) {
+        		if(response.status==400 && response.responseText=="Reason with this name already exists."){
+        			$('#lost_reason_existed_error').show();
+        		}
+        	}});
+		}else{
+			$('#lost_reason_name_error_'+$(this).attr("id")).hide();
+			$('#lost_reason_existed_error_'+$(this).attr("id")).hide();
+			$('#lost_reason_chars_error_'+$(this).attr("id")).hide();
+		}
+	});
+
+	$('#milestone-listner').on("click", '.updates_lost_reason', function(e){
+		if($(this).parent().find('input:text').val().trim()==""){
+			$('#lost_reason_name_error_'+$(this).parent().find('input:text').attr("id")).show();
+			return false;
+		}
+		if(!(/^[a-zA-Z0-9-_ ]*$/).test($(this).parent().find('input:text').val().trim())){
+			$('#lost_reason_chars_error_'+$(this).parent().find('input:text').attr("id")).show();
+			return false;
+		}
+		var obj = serializeForm('lostReasonsForm_'+$(this).parent().find('input:text').attr("id"));
+		var model = new BaseModel();
+		model.url = 'core/api/categories';
+		model.save(obj, {
+        success: function (data) {
+        	var model = data.toJSON();
+	       	App_Admin_Settings.dealLostReasons.collection.get(model).set(new BaseModel(model));
+	       	$('.lost_reason_name_input').hide();
+	       	$('.lost_reason_name_div').show();
+        },
+        error: function (model, response) {
+        	if(response.status==400 && response.responseText=="Reason with this name already exists."){
+        		$('#lost_reason_existed_error').show();
+        	}
+        }});
+	});
+
+	$("#milestone-listner").on('click', '.lost-reason-delete', function(e){
+		if(confirm("Are you sure you want to delete ?")){
+			e.preventDefault();
+			var that = $(this);
+			var obj = serializeForm($(this).closest('form').attr("id"));
+			var model = new BaseModel();
+			model.url = 'core/api/categories/'+obj.id;
+			model.set({ "id" : obj.id });
+			model.destroy({
+        	success: function (data) {
+        		var model = data.toJSON();
+	      	  App_Admin_Settings.dealLostReasons.collection.remove(new BaseModel(model));
+	      	  that.closest('tr').remove();
+        	},
+        	error: function (model, response) {
+        	
+        	}});
+		}
+	});
+
+	$("#milestone-listner").on('click', '.add_deal_source', function(e){
+		e.preventDefault();
+		if($('#deal_source_name').val().trim()==""){
+			$('#deal_source_name_error').show();
+			return false;
+		}
+		if(!(/^[a-zA-Z0-9-_ ]*$/).test($('#deal_source_name').val().trim())){
+			$('#deal_source_chars_error').show();
+			return false;
+		}
+		var obj = serializeForm('dealSourcesForm');
+		var model = new BaseModel();
+		model.url = 'core/api/categories';
+		model.save(obj, {
+        success: function (data) {
+        	var model = data.toJSON();
+	        App_Admin_Settings.dealSourcesView.collection.add(new BaseModel(model));
+	        $('.show_field').find('#deal_source_name').val("");
+	        $('.show_field').hide();
+	        $('.show_deal_source_add').show();
+        },
+        error: function (model, response) {
+        	if(response.status==400 && response.responseText=="Source with this name already exists."){
+        		$('#deal_source_existed_error').show();
+        	}
+        }});
+	});
+
+	$("#milestone-listner").on('keypress', '#deal_source_name', function(e){
+		$('#deal_source_name_error').hide();
+		$('#deal_source_existed_error').hide();
+		$('#deal_source_chars_error').hide();
+		if(e.keyCode == 13)
+    	{
+    		e.preventDefault();
+    		var form = $(this).closest("form");
+    		form.find(".add_deal_source").click();
+    	}
+	});
+
+	$('#milestone-listner').on("click", '.deal-source-edit', function(e){
+		$(this).closest('tr').find('.deal_source_name_div').hide();
+		$(this).closest('tr').find('.deal_source_name_input').show();
+	});
+
+	$('#milestone-listner').on("keypress", '.update_deal_source', function(e){
+		if(e.which == 13){
+			e.preventDefault();
+			if($(this).val().trim()==""){
+				$('#deal_source_name_error_'+$(this).attr("id")).show();
+				return false;
+			}
+			if(!(/^[a-zA-Z0-9-_ ]*$/).test($(this).val().trim())){
+				$('#deal_source_chars_error_'+$(this).attr("id")).show();
+				return false;
+			}
+			var obj = serializeForm('dealSourcesForm_'+$(this).attr("id"));
+			var model = new BaseModel();
+			model.url = 'core/api/categories';
+			model.save(obj, {
+        	success: function (data) {
+        		var model = data.toJSON();
+	       		App_Admin_Settings.dealSourcesView.collection.get(model).set(new BaseModel(model));
+	        	$('.deal_source_name_input').hide();
+	        	$('.deal_source_name_div').show();
+        	},
+        	error: function (model, response) {
+        		if(response.status==400 && response.responseText=="Source with this name already exists."){
+        			$('#deal_source_existed_error').show();
+        		}
+        	}});
+		}else{
+			$('#deal_source_name_error_'+$(this).attr("id")).hide();
+			$('#deal_source_existed_error_'+$(this).attr("id")).hide();
+			$('#deal_source_chars_error_'+$(this).attr("id")).hide();
+		}
+	});
+
+	$('#milestone-listner').on("click", '.updates_deal_source', function(e){
+		if($(this).parent().find('input:text').val().trim()==""){
+			$('#deal_source_name_error_'+$(this).parent().find('input:text').attr("id")).show();
+			return false;
+		}
+		if(!(/^[a-zA-Z0-9-_ ]*$/).test($(this).parent().find('input:text').val().trim())){
+			$('#deal_source_chars_error_'+$(this).parent().find('input:text').attr("id")).show();
+			return false;
+		}
+		var obj = serializeForm('dealSourcesForm_'+$(this).parent().find('input:text').attr("id"));
+		var model = new BaseModel();
+		model.url = 'core/api/categories';
+		model.save(obj, {
+        success: function (data) {
+        	var model = data.toJSON();
+	       	App_Admin_Settings.dealSourcesView.collection.get(model).set(new BaseModel(model));
+	        $('.deal_source_name_input').hide();
+	        $('.deal_source_name_div').show();
+        },
+        error: function (model, response) {
+        	if(response.status==400 && response.responseText=="Source with this name already exists."){
+        		$('#deal_source_existed_error').show();
+        	}
+        }});
+	});
+
+	$("#milestone-listner").on('click', '.deal-source-delete', function(e){
+		if(confirm("Are you sure you want to delete ?")){
+			e.preventDefault();
+			var that = $(this);
+			var obj = serializeForm($(this).closest('form').attr("id"));
+			var model = new BaseModel();
+			model.url = 'core/api/categories/'+obj.id;
+			model.set({ "id" : obj.id });
+			model.destroy({
+        	success: function (data) {
+        		var model = data.toJSON();
+	      	  App_Admin_Settings.dealSourcesView.collection.remove(new BaseModel(model));
+	      	  that.closest('tr').remove();
+        	},
+        	error: function (model, response) {
+        	
+        	}});
+		}
+	});
 }// Before selecting proper type array from map, need to fill map with user's detail.
 function startGettingDeals(criteria, pending)
 {
@@ -52474,6 +53044,30 @@ function deal_infi_scroll(element_id, targetCollection)
 		$(this).closest('form').find('#pipeline').val(track);
 		$(this).closest('form').find('#milestone').val(milestone);
 		console.log(track, '-----------', milestone);
+		var lost_milestone_flag = false;
+		$(this).find('option').each(function(){
+			if($(this).css("display") == "none" && $(this).val() == temp){
+				lost_milestone_flag = true;
+			}
+		});
+		if(lost_milestone_flag && $('#lost_reason',$(this).closest('.modal')).find('option').length>1){
+			$('#lost_reason',$(this).closest('.modal')).val("");
+			$('#deal_lost_reason',$(this).closest('.modal')).removeClass("hidden");
+		}else{
+			$('#lost_reason',$(this).closest('.modal')).val("");
+			$('#deal_lost_reason',$(this).closest('.modal')).addClass("hidden");
+		}
+	});
+
+	$('body').on('click', '#deal_lost_reason_save', function(e){
+		e.preventDefault();
+		$(this).attr('disabled',true);
+		$(this).text('Saving...');
+		var dealPipelineModel = DEALS_LIST_COLLECTION.collection.where({ heading : App_Deals.newMilestone });
+		var dealModel = dealPipelineModel[0].get('dealCollection').get(App_Deals.lost_reason_milesone_id);
+		dealModel.collection.get(App_Deals.lost_reason_milesone_id).set({ "lost_reason_id" : $(this).closest('.modal').find('form').find('#lost_reason').val() });
+		update_milestone(App_Deals.dealModel, App_Deals.lost_reason_milesone_id, App_Deals.newMilestone, App_Deals.old_milestone, false, $(this).closest('.modal').find('form').find('#lost_reason').val());
+		$('#dealLostReasonModal').modal('hide');
 	});
 
 });
@@ -52547,6 +53141,10 @@ function updateDeal(ele, editFromMilestoneView)
 		$("#custom-field-deals", dealForm).html(fill_custom_fields_values_generic($(el), value["custom_data"]));
 
 	}, "DEAL")
+
+	populateLostReasons(dealForm, value);
+
+	populateDealSources(dealForm, value);
 }
 
 /**
@@ -52599,6 +53197,10 @@ function show_deal()
 			}
 		});
 	});
+
+	populateLostReasons(el, undefined);
+
+	populateDealSources(el, undefined);
 
 	// Enable the datepicker
 	$('#close_date', el).datepicker({
@@ -52907,8 +53509,7 @@ function saveDeal(formId, modalId, saveBtn, json, isUpdate)
 		}, 2000);
 		console.log('-----------------', err.responseText);
 	} });
-}
-/**
+}/**
  * opportunity.js is a script file that handles opportunity pop-over,
  * milestones and owner select list.
  * 
@@ -53095,6 +53696,9 @@ var tracks = new Base_Collection_View({url : '/core/api/milestone/pipelines'});
 					else
 						html+='<option value="'+mile.id+'_'+milestone+'">'+milestone+'</option>';
 				});
+				if(mile.lost_milestone){
+					html+='<option value="'+mile.id+'_'+mile.lost_milestone+'" style="display:none;">'+mile.lost_milestone+'</option>';
+				}
 				$('#' + id, el).closest('.control-group').find('label b').text('Milestone');
 			}
 			else {
@@ -53109,6 +53713,9 @@ var tracks = new Base_Collection_View({url : '/core/api/milestone/pipelines'});
 						else
 							html+='<option value="'+mile.id+'_'+milestone+'">'+mile.name+' - '+milestone+'</option>';
 					});
+					if(mile.lost_milestone){
+						html+='<option value="'+mile.id+'_'+mile.lost_milestone+'" style="display:none;">'+mile.name+' - '+mile.lost_milestone+'</option>';
+					}
 					html+='</optgroup>';
 				});
 				$('#' + id, el).closest('.control-group').find('label b').text('Track & Milestone');
@@ -53379,21 +53986,108 @@ function dealCustomFieldValueForDate(name, data){
 		}
 	});
 	return value;
+}
+
+function populateLostReasons(el, value){
+	if(!$('#deal_lost_reason',el).hasClass("hidden")){
+		$('#deal_lost_reason',el).addClass("hidden");
+	}
+	var tracks = new Base_Collection_View({url : '/core/api/categories?entity_type=DEAL_LOST_REASON', sortKey : "label"});
+	tracks.collection.fetch({
+		success: function(data){
+			var jsonModel = data.toJSON();
+			var html = '<option value="">Select...</option>';
+			console.log(jsonModel);
+			
+			$.each(jsonModel,function(index,lostReason){
+				if (value && value.lost_reason_id == lostReason.id){
+					html+='<option value="'+lostReason.id+'" selected="selected">'+lostReason.label+'</option>';
+					$('#deal_lost_reason',el).removeClass("hidden");
+				}else{
+					html+='<option value="'+lostReason.id+'">'+lostReason.label+'</option>';
+				}
+			});
+			$('#lost_reason', el).html(html);
+			console.log('adding');
+			$('#lost_reason', el).closest('div').find('.loading-img').hide();
+
+			// Hide loading bar
+			hideTransitionBar();
+
+			if($('#pipeline_milestone',el).length>0){
+				var temp = $('#pipeline_milestone',el).val();
+				var track = temp.substring(0, temp.indexOf('_'));
+				var milestone = temp.substring(temp.indexOf('_') + 1, temp.length + 1);
+				$('#pipeline_milestone',el).closest('form').find('#pipeline').val(track);
+				$('#pipeline_milestone',el).closest('form').find('#milestone').val(milestone);
+				console.log(track, '-----------', milestone);
+				var lost_milestone_flag = false;
+				$('#pipeline_milestone',el).find('option').each(function(){
+					if($(this).css("display") == "none" && $(this).val() == temp){
+						lost_milestone_flag = true;
+					}
+				});
+				if(lost_milestone_flag && $('#lost_reason',$('#pipeline_milestone',el).closest('.modal')).find('option').length>1){
+					$('#deal_lost_reason',$('#pipeline_milestone',el).closest('.modal')).removeClass("hidden");
+				}else{
+					$('#lost_reason',$('#pipeline_milestone',el).closest('.modal')).val("");
+					$('#deal_lost_reason',$('#pipeline_milestone',el).closest('.modal')).addClass("hidden");
+				}
+			}else{
+				if($('#lost_reason',el).find('option').length>1){
+					$('#dealLostReasonModal').modal('show');
+				}
+			}
+		}
+	}); 
+}
+
+function populateDealSources(el, value){
+	if(!$('#deal_deal_source',el).hasClass("hidden")){
+		$('#deal_deal_source',el).addClass("hidden");
+	}
+	var tracks = new Base_Collection_View({url : '/core/api/categories?entity_type=DEAL_SOURCE', sortKey : "label"});
+	tracks.collection.fetch({
+		success: function(data){
+			var jsonModel = data.toJSON();
+			var html = '<option value="">Select...</option>';
+			console.log(jsonModel);
+			
+			$.each(jsonModel,function(index,dealSource){
+				if (value && value.deal_source_id == dealSource.id){
+					html+='<option value="'+dealSource.id+'" selected="selected">'+dealSource.label+'</option>';
+					$('#deal_deal_source',el).removeClass("hidden");
+				}else{
+					html+='<option value="'+dealSource.id+'">'+dealSource.label+'</option>';
+				}
+			});
+			$('#deal_source', el).html(html);
+			console.log('adding');
+			$('#deal_source', el).closest('div').find('.loading-img').hide();
+
+			// Hide loading bar
+			hideTransitionBar();
+
+			if($('#deal_source',el).find('option').length>1){
+				$('#deal_deal_source',el).removeClass("hidden");
+			}
+		}
+	}); 
 }var Portlets_View;
 var portlet_template_loaded_map = {};
 
 $(function()
 {
-				$.getJSON('/core/api/users/agileusers', function(users)
+	$.getJSON('/core/api/users/agileusers', function(users)
+	{
+		$.each(users, function(i, user)
+		{
+			if (CURRENT_DOMAIN_USER.id == user.domain_user_id)
 			{
-				$.each(users, function(i, user)
-				{
-					if (CURRENT_DOMAIN_USER.id == user.domain_user_id)
-					{
-					CURRENT_AGILE_USER = user;
-					}
-				});
-			});
+				CURRENT_AGILE_USER = user;
+			}
+		});
+	});
 });
 /**
  * Loads all the portlets for the current agile user
@@ -53978,7 +54672,11 @@ function showPortletSettings(el){
 					$.each(base_model.get("settings")["calls-user-list"], function(){
 						$("#calls-user-list", elData).find('option[value='+ this +']').attr("selected", "selected");
 					});
+
 					$('.loading-img').hide();
+
+					portlet_utiity.enable_users_multi_select_option('ms-calls-user-list', elData);
+
 				} });
 		}else{
 			var options ='';
@@ -53990,16 +54688,12 @@ function showPortletSettings(el){
 					});
 					$('#calls-user-list', elData).html(options);
 					$('.loading-img').hide();
+
+					portlet_utiity.enable_users_multi_select_option('ms-calls-user-list', elData);
 				} });
 		}
-		$('#ms-calls-user-list', elData).remove();
-		head.js(LIB_PATH + 'lib/jquery.multi-select.js', function(){
-			$('#calls-user-list',elData).multiSelect();
-			$('#ms-calls-user-list .ms-selection', elData).children('ul').addClass('multiSelect').attr("name", "calls-user-list").attr("id", "calls-user");
-			$('#ms-calls-user-list .ms-selectable .ms-list', elData).css("height","130px");
-			$('#ms-calls-user-list .ms-selection .ms-list', elData).css("height","130px");
-			$('#ms-calls-user-list', elData).addClass('portlet-user-ms-container');					
-		});
+
+		
 		
 	}else if(base_model.get('portlet_type')=="TASKSANDEVENTS" && base_model.get('name')=="Task Report"){
 		$('#portletsTaskReportSettingsModal').modal('show');
@@ -54032,6 +54726,8 @@ function showPortletSettings(el){
 						$("#task-report-user-list", elData).find('option[value='+ this +']').attr("selected", "selected");
 					});
 					$('.loading-img').hide();
+
+					portlet_utiity.enable_users_multi_select_option('ms-task-report-user-list', elData);
 				} });
 		}else{
 			var options ='';
@@ -54043,16 +54739,11 @@ function showPortletSettings(el){
 					});
 					$('#task-report-user-list', elData).html(options);
 					$('.loading-img').hide();
+
+					portlet_utiity.enable_users_multi_select_option('ms-task-report-user-list', elData);
 				} });
 		}
-		$('#ms-task-report-user-list', elData).remove();
-		head.js(LIB_PATH + 'lib/jquery.multi-select.js', function(){
-			$('#task-report-user-list',elData).multiSelect();
-			$('#ms-task-report-user-list .ms-selection', elData).children('ul').addClass('multiSelect').attr("name", "task-report-user-list").attr("id", "task-report-user");
-			$('#ms-task-report-user-list .ms-selectable .ms-list', elData).css("height","130px");
-			$('#ms-task-report-user-list .ms-selection .ms-list', elData).css("height","130px");
-			$('#ms-task-report-user-list', elData).addClass('portlet-user-ms-container');					
-		});
+		
 
 	}else if(base_model.get('portlet_type')=="USERACTIVITY" && base_model.get('name')=="Stats Report"){
 		$('#portletsStatsReportSettingsModal').modal('show');
@@ -54108,6 +54799,9 @@ function showPortletSettings(el){
 						$("#user-list", elData).find('option[value='+ this +']').attr("selected", "selected");
 					});
 					$('.loading-img').hide();
+
+					portlet_utiity.enable_users_multi_select_option('ms-category-list', elData);
+
 				} });
 		}else{
 			var options ='';
@@ -54119,21 +54813,11 @@ function showPortletSettings(el){
 					});
 					$('#user-list', elData).html(options);
 					$('.loading-img').hide();
+
+					portlet_utiity.enable_users_multi_select_option('ms-category-list', elData);
 				} });
 		}
-		$('#ms-category-list', elData).remove();
-		$('#ms-user-list', elData).remove();
-		head.js(LIB_PATH + 'lib/jquery.multi-select.js', function(){
-			$('#category-list, #user-list',elData).multiSelect();
-			$('#ms-category-list .ms-selection', elData).children('ul').addClass('multiSelect').attr("name", "category-list").attr("id", "category");
-			$('#ms-user-list .ms-selection', elData).children('ul').addClass('multiSelect').attr("name", "user-list").attr("id", "user");
-			$('#ms-user-list .ms-selectable .ms-list', elData).css("height","130px");
-			$('#ms-user-list .ms-selection .ms-list', elData).css("height","130px");
-			$('#ms-category-list .ms-selectable .ms-list', elData).css("height","105px");
-			$('#ms-category-list .ms-selection .ms-list', elData).css("height","105px");
-			$('#ms-user-list', elData).addClass('portlet-user-ms-container');
-			$('#ms-category-list', elData).addClass('portlet-category-ms-container');					
-		});
+		
 	}else if(base_model.get('portlet_type')=="DEALS" && base_model.get('name')=="Revenue Graph"){
 		$('#portletsDealsRevenueGraphSettingsModal').modal('show');
 		$('#portletsDealsRevenueGraphSettingsModal > .modal-dialog > .modal-content > .modal-footer > .save-modal').attr('id',base_model.get("id")+'-save-modal');
@@ -54155,9 +54839,11 @@ function showPortletSettings(el){
 						else
 							options+="<option value="+trackObj.id+">"+trackObj.name+"</option>";
 					});
+
+					$('#track', elData).html(options);
+					$('.loading-img').hide();
 				} });
-		$('#track', elData).html(options);
-		$('.loading-img').hide();
+		
 		$("#duration", elData).find('option[value='+ base_model.get("settings").duration +']').attr("selected", "selected");
 	}
 	else if(base_model.get('portlet_type')=="USERACTIVITY" && base_model.get('name')=="Campaign stats"){
@@ -56395,6 +57081,8 @@ var portlet_utiity = {
 	 */
   get_filtered_contact_header : function(base_model, callback){
 
+  		var filter_name = base_model.get("settings").filter;
+
   		if (filter_name == 'contacts')
 			return callback("All Contacts");
 		else if (filter_name == 'companies')
@@ -56408,7 +57096,7 @@ var portlet_utiity = {
 		else
 		{
 
-			var contactFilter = $.ajax({ type : 'GET', url : '/core/api/filters/' + base_model.get("settings").filter, dataType : 'json', success : function(data)
+			var contactFilter = $.ajax({ type : 'GET', url : '/core/api/filters/' + filter_name, dataType : 'json', success : function(data)
 			{
 				var header_name = '';
 				if (data != null && data != undefined)
@@ -56454,6 +57142,53 @@ var portlet_utiity = {
 
 	} });
 	
+ },
+
+ enable_users_multi_select_option: function(selector, elData){
+
+ 	if(selector == "ms-calls-user-list"){
+ 		$('#ms-calls-user-list', elData).remove();
+		head.js(LIB_PATH + 'lib/jquery.multi-select.js', function(){
+			$('#calls-user-list',elData).multiSelect();
+			$('#ms-calls-user-list .ms-selection', elData).children('ul').addClass('multiSelect').attr("name", "calls-user-list").attr("id", "calls-user");
+			$('#ms-calls-user-list .ms-selectable .ms-list', elData).css("height","130px");
+			$('#ms-calls-user-list .ms-selection .ms-list', elData).css("height","130px");
+			$('#ms-calls-user-list', elData).addClass('portlet-user-ms-container');					
+		});
+ 	}
+ 	
+
+ 	if(selector == "ms-calls-user-list"){
+
+ 		$('#ms-task-report-user-list', elData).remove();
+		head.js(LIB_PATH + 'lib/jquery.multi-select.js', function(){
+			$('#task-report-user-list',elData).multiSelect();
+			$('#ms-task-report-user-list .ms-selection', elData).children('ul').addClass('multiSelect').attr("name", "task-report-user-list").attr("id", "task-report-user");
+			$('#ms-task-report-user-list .ms-selectable .ms-list', elData).css("height","130px");
+			$('#ms-task-report-user-list .ms-selection .ms-list', elData).css("height","130px");
+			$('#ms-task-report-user-list', elData).addClass('portlet-user-ms-container');					
+		});
+
+ 	}
+
+	if(selector == "ms-category-list"){
+
+		$('#ms-category-list', elData).remove();
+		$('#ms-user-list', elData).remove();
+		head.js(LIB_PATH + 'lib/jquery.multi-select.js', function(){
+			$('#category-list, #user-list',elData).multiSelect();
+			$('#ms-category-list .ms-selection', elData).children('ul').addClass('multiSelect').attr("name", "category-list").attr("id", "category");
+			$('#ms-user-list .ms-selection', elData).children('ul').addClass('multiSelect').attr("name", "user-list").attr("id", "user");
+			$('#ms-user-list .ms-selectable .ms-list', elData).css("height","130px");
+			$('#ms-user-list .ms-selection .ms-list', elData).css("height","130px");
+			$('#ms-category-list .ms-selectable .ms-list', elData).css("height","105px");
+			$('#ms-category-list .ms-selection .ms-list', elData).css("height","105px");
+			$('#ms-user-list', elData).addClass('portlet-user-ms-container');
+			$('#ms-category-list', elData).addClass('portlet-category-ms-container');					
+		});
+	}
+	
+
  },
 
 
@@ -57849,7 +58584,7 @@ function set_p_portlets(base_model){
 		}
 	});
 	//enablePortletTimeAndDates(base_model);
-	head.js(LIB_PATH + 'lib/jquery-ui.min.js', 'lib/fullcalendar.min.js', function()
+	head.js(LIB_PATH + 'lib/jquery-ui.min.js', LIB_PATH + 'lib/fullcalendar.min.js', function()
 			{
 				$('.portlet_body_calendar', this.el).each(function(){
 		if($(this).parent().attr('id')=='ui-id-'+column_position+'-'+row_position && base_model.get('name')=="Mini Calendar"){
@@ -59626,16 +60361,10 @@ function reportsContactTableView(base_model, customDatefields, view)
 			if (!property)
 				property = {};
 
-			var template_name = "contacts-custom-view-custom";
 			if (isDateCustomField(customDatefields, property))
-				 template_name = 'contacts-custom-view-custom-date';
-
-			getTemplate(template_name, property, undefined, function(template_ui){
-				if(!template_ui)
-					  return;
-
-				final_html_content += $(template_ui);
-			}, null);
+				final_html_content += getTemplate('contacts-custom-view-custom-date', property);
+			else
+				final_html_content += getTemplate('contacts-custom-view-custom', property);
 
 			return;
 		}
@@ -59643,13 +60372,7 @@ function reportsContactTableView(base_model, customDatefields, view)
 		if (field_name.indexOf("properties_") != -1)
 			field_name = field_name.split("properties_")[1];
 
-		getTemplate('contacts-custom-view-' + field_name, contact, undefined, function(template_ui){
-	 		if(!template_ui)
-	    		return;
-	    	final_html_content += $(template_ui);
-			
-		}, null);
-
+		final_html_content += getTemplate('contacts-custom-view-' + field_name, contact);
 	});
 
 	// Appends model to model-list template in collection template
@@ -61978,21 +62701,6 @@ function registerStreamAgain(streamId)
 
 	// Show waiting symbol.
 	$("#stream-spinner-modal-" + streamId).show();
-}
-
-/**
- * Convert time in human readable format.
- */
-function displayTimeAgo(elmnt)
-{
-	head.js('lib/jquery.timeago.js', function()
-	{
-		$(".time-ago", elmnt).timeago();
-	});
-	
-	console.log($("article.stream-item").parent());
-	
-	$("article.stream-item").parent().addClass("social-striped");
 }
 /**
  * Calls updateNotification method to update or add new tweet notification with
@@ -65353,20 +66061,17 @@ var TAG_MODEL_VIEW = Backbone.View
 				this.input.val(this.model.get('tag'));
 
 			},
-			render : function(callback) {
-				var that = this;
-				getTemplate(that.options.template, that.model.toJSON(), undefined, function(template_ui){
-					if(!template_ui)
-						  return;
-					$(that.el).html($(template_ui));
-					$(that.el).data(that.model);
-					that.input = $('.edit-input', that.el);
-					// Add model as data to it's corresponding row
-					return that;
+		render : function(callback) {
+				$(this.el)
+						.html(
+								getTemplate(this.options.template, this.model
+										.toJSON()));
+				$(this.el).data(this.model);
+				this.input = $('.edit-input', this.el);
+				// Add model as data to it's corresponding row
 
-				}, that.el);
-
-				
+				return this;
+		
 			}
 		});
 
@@ -72397,7 +73102,7 @@ function tinyMCECallBack(name, htmlVal)
  * @param type - to add specific fields for specific nodes
  *               like unsubscribe link to SendEmail node
  **/
-function getMergeFields(type)
+function getMergeFields(type, callback)
 {
 	var options=
 	{
@@ -72430,6 +73135,9 @@ function getMergeFields(type)
 		
 		// Merges options json and custom fields json
 		var merged_json = merge_webrules_jsons({}, options, custom_fields);
+		if(callback)
+			 return callback(merged_json);
+
 		return merged_json;
 
 		});
@@ -73565,6 +74273,7 @@ function setup_sortable_callscriptrules()
 		 * This event is called after sorting stops to save new positions of
 		 * rules
 		 */
+		$('.csr-sortable').off("sortstop");
 		$('.csr-sortable').on("sortstop", function(event, ui) {
 					
 			// Get new array of rule
@@ -73636,7 +74345,7 @@ function makeWidgetTabActive()
 	$('.add-widget-prefs-tab').addClass('select');	
 }
 function initializeShopifyListeners(){
-
+$('#prefs-tabs-content').off('click', '#revoke-shopify');
 $('#prefs-tabs-content').on('click', '#revoke-shopify', function(e)
 {
 				if (confirm("Are you sure to delete Shopify?"))
@@ -73646,7 +74355,7 @@ $('#prefs-tabs-content').on('click', '#revoke-shopify', function(e)
 				}
 				return false;
 });
-
+$('#prefs-tabs-content').off('click', '#widget_shopify');
 $('#prefs-tabs-content').on('click', '#widget_shopify', function(e)
 {
 				var shopName = $('#shop').val();
@@ -73698,7 +74407,8 @@ $(function(){
 			globalTwilioIOSetup();
 		}
 	}, 10000); // 15 sec
-
+    
+    $('body').off('click', '.noty_twilio_mute');
 	$('body').on('click', '.noty_twilio_mute', function(e)
 			{
 				e.preventDefault();
@@ -73710,6 +74420,7 @@ $(function(){
 				$('.noty_buttons').find('.noty_twilio_mute').toggle();
 			});
 	
+    $('body').off('click', '.noty_twilio_unmute');
 	$('body').on('click', '.noty_twilio_unmute', function(e)
 			{
 				e.preventDefault();
@@ -73721,7 +74432,7 @@ $(function(){
 				$('.noty_buttons').find('.noty_twilio_mute').toggle();
 			});
 	
-	
+	$('body').off('click', '.noty_twilio_hangup');
 	$('body').on('click', '.noty_twilio_hangup', function(e)
 	{
 		e.preventDefault();
@@ -73730,6 +74441,7 @@ $(function(){
 		Twilio.Device.disconnectAll();
 	});
 
+    $('body').off('click', '.noty_twilio_dialpad');
 	$('body').on('click', '.noty_twilio_dialpad', function(e)
 	{
 		e.preventDefault();
@@ -73739,6 +74451,7 @@ $(function(){
 	});
 	
 	//START voice mails
+    $('body').off('click', '#noty_twilio_voicemail');
 	$('body').on('click', '#noty_twilio_voicemail', function(e){
 		e.preventDefault();
 		var voiceMailCount = parseInt($(this).attr('data-length'));
@@ -73749,12 +74462,14 @@ $(function(){
 		}
 	});
 	
+    $('#prefs-tabs-content').off('click', '.voiceMailItem');
 	$('#prefs-tabs-content').on('click', '.voiceMailItem', function(e){
 		e.preventDefault();
 		sendVoiceAndEndCall($(this).attr('data-src'));
 	});
 		
 	//END voice mails related
+    $('body').off('click', '.noty_twilio_answer');
 	$('body').on('click', '.noty_twilio_answer', function(e)
 	{
 		e.preventDefault();
@@ -73763,6 +74478,7 @@ $(function(){
 		globalconnection.accept();
 	});
 
+    $('body').off('click', '.noty_twilio_ignore');
 	$('body').on('click', '.noty_twilio_ignore', function(e)
 	{
 		e.preventDefault();
@@ -73771,6 +74487,7 @@ $(function(){
 		globalconnection.ignore();
 	});
 
+    $('body').off('click', '.noty_twilio_cancel');
 	$('body').on('click', '.noty_twilio_cancel', function(e)
 	{
 		e.preventDefault();
@@ -73781,6 +74498,7 @@ $(function(){
 		Twilio.Device.disconnectAll();
 	});
 
+    $('body').off('click', '#validate_account');
 	$('body').on('click', '#validate_account', function(e)
 	{
 		e.preventDefault();
@@ -73815,6 +74533,7 @@ $(function(){
 		 */
 	});
 
+    $('body').off('change', '#twilio_number');
 	$('body').on('change', '#twilio_number', function(e)
 	{
 		e.preventDefault();
@@ -73827,12 +74546,14 @@ $(function(){
 		$("#twilio_number_sid").val(numberSID);
 	});
 	
+    $('body').off('change', '#twilio_from_number');
 	$('body').on('change', '#twilio_from_number', function(e)
 	{
 		e.preventDefault();
 		$("#error-number-not-selected").hide();
 	});
 
+    $('body').off('click', '.contact-make-twilio-call');
 	$('body').on('click', '.contact-make-twilio-call', function(e)
 	{
 		e.preventDefault();
@@ -73857,12 +74578,14 @@ $(function(){
 		twiliocall($(this).attr("phone"), getContactName(contactDetailsObj));
 	});
 
-	$('body').on('click', '#twilio_acc_sid, #twilio_auth_token', function(e)
+	$('body').off('click', '#twilio_acc_sid, #twilio_auth_token');
+    $('body').on('click', '#twilio_acc_sid, #twilio_auth_token', function(e)
 	{
 		e.preventDefault();
 		$("#note-number-not-available").hide();
 	});
 	
+    $('body').off('click', '.twilioio-advance-settings');
 	$('body').on('click', '.twilioio-advance-settings', function(e)
 	 {
 		e.preventDefault();
@@ -73878,6 +74601,7 @@ $(function(){
 	    $("#twilio_twimlet_url_controls").toggle();
 	 });
 
+    $('body').off('click', '#twilio_verify_settings');
 	$('body').on('click', '#twilio_verify_settings', function(e)
 			{
 				e.preventDefault();
@@ -73895,6 +74619,7 @@ $(function(){
 		 * Twilio.On click of verify button in Twilio initial template,
 		 * verifyNumberFromTwilio is called to verify a number in Twilio
 		 */
+        $('body').off('click', '#twilio_verify');
 		$('body').on('click', '#twilio_verify', function(e)
 		{
 			e.preventDefault();
@@ -75125,7 +75850,7 @@ function loadWidgets(el, contact)
 		 * loaded. This avoid unnecessary loading.
 		 */
 		var flag = false;
-
+        $(el).off('view_loaded');
 		$(el).on('view_loaded', function(e)
 		{
 
@@ -75150,6 +75875,7 @@ function loadWidgets(el, contact)
 	 * and sets "is_minimized" field of widget as true, we check this while
 	 * loading widgets and skip loading widget if it is minimized
 	 */
+    $('#prefs-tabs-content').off('click', '.widget-minimize');
 	$('#prefs-tabs-content').on('click', '.widget-minimize', function(e)
 	{
 		e.preventDefault();
@@ -75185,6 +75911,7 @@ function loadWidgets(el, contact)
 	 * widget as false, we check this while loading widgets and skip loading
 	 * widget if it is minimized
 	 */
+    $('#prefs-tabs-content').off('click', '.widget-maximize');
 	$('#prefs-tabs-content').on('click', '.widget-maximize', function(e)
 	{
 		e.preventDefault();
@@ -75368,6 +76095,7 @@ function enableWidgetSoring(el)
 		 * This event is called after sorting stops to save new positions of
 		 * widgets
 		 */
+        $('.widget-sortable', el).off("sortstop");
 		$('.widget-sortable', el).on(
 				"sortstop",
 				function(event, ui)
@@ -75669,6 +76397,7 @@ function initializeWidgetSettingsListeners(){
 	 * anchor tag and gets the model from the collection with widget name and
 	 * add widget then navigates back to the contact-details page
 	 */
+	$('#prefs-tabs-content').off();
 	$('#prefs-tabs-content .install-custom-widget').off();
 	$('#prefs-tabs-content, #custom-widget').on('click', '.install-custom-widget', function(e)
 	{
@@ -75749,17 +76478,33 @@ function initializeWidgetSettingsListeners(){
 			$('#Twilio-container').hide();
 
 		});	
+	
+	// Helps to know that widget is for all users.
+	$('#prefs-tabs-content .add_to_all').off();
+	$('#prefs-tabs-content').on('click', '.add_to_all', function(e){
+		isForAll = true;
+	});
 
+	$('#prefs-tabs-content .add-widget').off();
+	$('#prefs-tabs-content').on('click', '.add-widget', function(e){
+		isForAll = false;
+	});
+	
 	$('#prefs-tabs-content #remove-widget').off();
 	$('#prefs-tabs-content').on('click', '#remove-widget', function(e)
 	{
+
 		// Fetch widget name from the widget on which delete is clicked
 		var widget_name = $(this).attr('widget-name');
-
+		
+		
 		// If not confirmed to delete, return
 		if (!confirm("Are you sure to remove " + widget_name))
 			return;
 
+		//Deletes the cutom widget form the widget entity.
+		delete_widget(widget_name);
+		
 		/*
 		 * Sends Delete request with widget name as path parameter, and on
 		 * success fetches the widgets to reflect the changes is_added, to show
@@ -75823,8 +76568,10 @@ function build_custom_widget_form(el)
 {
 	var divClone;
 	
+    $('#prefs-tabs-content').off('click', '#add-custom-widget');
 	$('#prefs-tabs-content').on('click', '#add-custom-widget', function(e)
 			{
+				$('#custom-widget-btn').removeClass('open');
 				divClone = $("#custom-widget").clone();
 				var widget_custom_view = new Base_Model_View({ url : "/core/api/widgets/custom", template : "add-custom-widget", isNew : true,
 					postRenderCallback : function(el)
@@ -75832,7 +76579,7 @@ function build_custom_widget_form(el)
 						console.log('In post render callback');
 						console.log(el);
                         
-						$('#custom_widget_form').off('change').on('change', '#script_type', function(e)
+						$('#custom-widget').off('change').on('change', '#script_type', function(e)
 						{
 							var script_type = $('#script_type').val();
 							if (script_type == "script")
@@ -75864,6 +76611,13 @@ function build_custom_widget_form(el)
 
 				$('#custom-widget', el).html(widget_custom_view.render(true).el);
 				
+				//Is Custom widget for all.
+				if(!($(this).hasClass('add_to_all'))){
+					isForAll = false;
+				}
+				$('#custom_isForAll').val(isForAll);
+				
+                $('#prefs-tabs-content').off('click', '#cancel_custom_widget');
 				$('#prefs-tabs-content').on('click', '#cancel_custom_widget', function(e)
 				{
 					// Restore element back to original
@@ -75871,12 +76625,16 @@ function build_custom_widget_form(el)
 				});
 			});
 }
+//Helps to know that widget is for all users.
+var isForAll = false;
+
 function initializeWidgetUtilListeners(){
 	
 }
 
 $(function(){
 	
+    $('#content').off('click', '#widget-prefs-save');
 	$('#content').on('click', '#widget-prefs-save', function(e)
 	{
 		e.preventDefault();
@@ -75975,6 +76733,7 @@ function clickdesk_save_widget_prefs()
 	$('#save_clickdesk_prefs').unbind("click");
 
 	// On click of save button, check input and save details
+    $('body').off('click', '#save_clickdesk_prefs');
 	$('body').on('click', '#save_clickdesk_prefs', function(e)
 	{
 		e.preventDefault();
@@ -76011,9 +76770,10 @@ function saveClickDeskWidgetPrefs()
 
 function helpscout_save_widget_prefs()
 {
-	$('#save_api_key').unbind("click");
+	$('#save_api_key').off("click");
 
 	// Saves the API key
+    $('body').off('click', '#save_api_key');
 	$('body').on('click', '#save_api_key', function(e)
 	{
 		e.preventDefault();
@@ -76054,6 +76814,7 @@ function freshbook_save_widget_prefs()
 	$('#freshbooks_save_token').unbind("click");
 
 	// On click of save button, check input and save details
+    $('body').off('click', '#freshbooks_save_token');
 	$('body').on('click', '#freshbooks_save_token', function(e)
 	{
 		e.preventDefault();
@@ -76092,9 +76853,10 @@ function savefreshBooksWidgetPrefs()
 function rapleaf_save_widget_prefs()
 {
 
-	$('#save_api_key').unbind("click");
+	$('#save_api_key').off("click");
 
 	// Saves the API key
+    $('body').off('click', '#save_api_key');
 	$('body').on('click', '#save_api_key', function(e)
 	{
 		e.preventDefault();
@@ -76140,6 +76902,7 @@ function zendesk_save_widget_prefs()
 	$('#save_prefs').unbind("click");
 
 	// On click of save button, check input and save details
+    $('body').off('click', '#save_prefs');
 	$('body').on('click', '#save_prefs', function(e)
 	{
 		e.preventDefault();
@@ -76201,6 +76964,7 @@ function sip_save_widget_prefs()
 	$('#save_prefs').unbind("click");
 
 	// On click of save button, check input and save details
+    $('body').off('click', '#save_prefs');
 	$('body').on('click', '#save_prefs', function(e)
 	{
 		e.preventDefault();
@@ -76265,6 +77029,7 @@ function twilioio_save_widget_prefs()
 	$('#save_prefs').unbind("click");
 
 	// On click of save button, check input and save details
+    $('body').off('click', '#save_prefs');
 	$('body').on('click', '#save_prefs', function(e)
 	{
 		e.preventDefault();
@@ -76353,6 +77118,7 @@ function callscript_save_widget_prefs()
 	$('#save_prefs').unbind("click");
 
 	// On click of save button, check input and save details
+    $('body').off('click', '#save_prefs');
 	$('body').on('click', '#save_prefs', function(e)
 	{
 		e.preventDefault();		
@@ -76424,6 +77190,7 @@ function save_widget_prefs(pluginName, prefs, callback)
 	// URL to connect with widgets
 	widgetModel.url = '/core/api/widgets';
 	models[0].set('prefs', prefs);
+	models[0].set('isForAll', isForAll);
 
 	widgetModel.save(models[0].toJSON(), { success : function(data)
 	{
@@ -76596,7 +77363,7 @@ function show_set_up_widget(widget_name, template_id, url, model)
 
 function set_up_access(widget_name, template_id, data, url, model)
 {
-	getTemplate('settings', obj, undefined, function(template_ui){
+	getTemplate('settings', {}, undefined, function(template_ui){
  		if(!template_ui)
     		return;
 		$('#content').html($(template_ui)); 
@@ -76615,9 +77382,10 @@ function set_up_access(widget_name, template_id, data, url, model)
 		    		return;
 				el = $(template_ui1);
 				json = model; 
+				setup_widget_revoke_access(el, json, data, widget_name, template_id, url, model);
 			}, null);
 
-			
+			return;
 		}
 		else
 		{
@@ -76652,48 +77420,10 @@ function set_up_access(widget_name, template_id, data, url, model)
 
 		}
 
-		if (json.name == "Twilio")
-			json['outgoing_numbers'] = data;
-
-		else if (json.name == "Linkedin" || json.name == "Twitter")
-			json['profile'] = data;
-
-		else
-			json['custom_data'] = data;
-
-		console.log(json);
-
-		// merged_json = $.extend(merged_json, model, data);
-
-		getTemplate(widget_name.toLowerCase() + "-revoke-access", json, undefined, function(template_ui1){
-	 		if(!template_ui1)
-	    		return;
-			$('#widget-settings', el).html($(template_ui1)); 
-			$('#prefs-tabs-content').html(el);
-
-			$('#prefs-tabs-content').find('form').data('widget', json);
-			console.log(json);
-			console.log($('#prefs-tabs-content').find('form').data('widget'));
-
-			$('#PrefsTab .select').removeClass('select');
-			$('.add-widget-prefs-tab').addClass('select');
-
-			$('body').on('click', '.revoke-widget', function(e)
-			{
-
-				console.log($(this).attr("widget-name"));
-				delete_widget(widget_name);
-				show_set_up_widget(widget_name, template_id, url, model);
-			});
-		}, "#widget-settings");
-
-
+		setup_widget_revoke_access(el, json, data, widget_name, template_id, url, model);
 			
 	}, "#content");
-
-
-		
-
+	
 }
 
 function fill_form(id, widget_name, template_id)
@@ -76815,23 +77545,18 @@ function setUpError(widget_name, template_id, error_data, error_url, model)
 			$('#PrefsTab .select').removeClass('select');
 			$('.add-widget-prefs-tab').addClass('select');
 		}, "#widget-settings");
+
+
 	}, "#content");
-
-
-		
-
-		
-
-
-		
 
 }
 
 function xero_save_widget_prefs()
 {
 	$('#xero_save_token').unbind("click");
-	alert("hello in xero save")
+	
 	// On click of save button, check input and save details
+    $('body').off('click', '#xero_save_token');
 	$('body').on('click', '#xero_save_token', function(e)
 	{
 		e.preventDefault();
@@ -76855,17 +77580,18 @@ function quickBooks_save_widget_prefs(template_id, url)
 {
 	head.js('https://appcenter.intuit.com/Content/IA/intuit.ipp.anywhere.js', function()
 	{
-		$('#widget-settings', el).html(getTemplate(template_id, { "url" : url }));
-		console.log(el);
+		$('#widget-settings').html(getTemplate(template_id, { "url" : url }));
+		//console.log(el);
 		intuit.ipp.anywhere.setup({ menuProxy : 'http://example.com/myapp/BlueDotMenu', grantUrl : url });
 	});
 
 }
 function chargify_save_widget_prefs()
 {
-	$('#chargify_save_api_key').unbind("click");
+	$('#chargify_save_api_key').off("click");
 
 	// Saves the API key
+    $('body').off('click', '#chargify_save_api_key');
 	$('body').on('click', '#chargify_save_api_key', function(e)
 	{
 		e.preventDefault();
@@ -76900,6 +77626,49 @@ function saveChargifyWidgetPrefs()
 		console.log('In chargify save success');
 		console.log(data);
 	});
+}
+
+
+function setup_widget_revoke_access(el, json, data, widget_name, template_id, url, model){
+
+	if (json.name == "Twilio")
+		json['outgoing_numbers'] = data;
+
+	else if (json.name == "Linkedin" || json.name == "Twitter")
+		json['profile'] = data;
+
+	else
+		json['custom_data'] = data;
+
+	console.log(json);
+
+	// merged_json = $.extend(merged_json, model, data);
+
+	getTemplate(widget_name.toLowerCase() + "-revoke-access", json, undefined, function(template_ui1){
+
+ 		if(!template_ui1)
+    		return;
+		$('#widget-settings', el).html($(template_ui1)); 
+		$('#prefs-tabs-content').html(el);
+
+		$('#prefs-tabs-content').find('form').data('widget', json);
+		console.log(json);
+		console.log($('#prefs-tabs-content').find('form').data('widget'));
+
+		$('#PrefsTab .select').removeClass('select');
+		$('.add-widget-prefs-tab').addClass('select');
+
+		$('body').off('click', '.revoke-widget');
+		$('body').on('click', '.revoke-widget', function(e)
+		{
+			console.log($(this).attr("widget-name"));
+			delete_widget(widget_name);
+			show_set_up_widget(widget_name, template_id, url, model);
+		});
+
+	}, "#widget-settings");
+
+
 }
 /**
  * triggers.js is a script file that sets tags typeahead when Tag options are
@@ -77531,7 +78300,7 @@ function toggle_active_contacts_bulk_actions_dropdown(clicked_ele, isBulk)
 	$('#content').find('#subscribers-bulk-select').css('display', 'none');
 
 	// When checked show Delete button
-	if ($(clicked_ele).attr('checked') == 'checked')
+	if ($(clicked_ele).is(':checked'))
 	{
 		$('#content').find('#subscribers-block').css('display', 'block');
 		

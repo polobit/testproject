@@ -528,6 +528,7 @@ var Base_Model_View = Backbone.View
 			}, 
 			buildModelViewUI : function(content)
 			{
+				hideTransitionBar();
 				$(this.el).on('DOMNodeInserted', function(e) {
 					//alert("triggered");
 					//$('form', this).focus_first();
@@ -562,7 +563,7 @@ var Base_Model_View = Backbone.View
 					callback($(this.el),this.model.toJSON());
 				}
 
-				hideTransitionBar();
+				
 				// If isNew is not true, then serialize the form data
 				if (this.options.isNew != true) {
 					// If el have more than 1 form de serialize all forms
@@ -601,10 +602,15 @@ var Base_Model_View = Backbone.View
  */
 function disable_save_button(elem)
 {
+
+	var loadingText = elem.attr("data-loading-text");
+if(!loadingText)
+	   loadingText = "Saving...";
+	
 	elem.css('min-width',elem.width()+'px')
 		.attr('disabled', 'disabled')
 		.attr('data-save-text',elem.html())
-		.text('Saving...');
+		.text(loadingText);
 }
 
 /**
@@ -613,8 +619,5 @@ function disable_save_button(elem)
  */
 function enable_save_button(elem)
 {
-	if(!elem.attr('data-save-text'))
-		 elem.attr('data-save-text', 'save');
-		
 	elem.html(elem.attr('data-save-text')).removeAttr('disabled data-save-text');
 }

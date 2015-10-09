@@ -2213,7 +2213,7 @@ $(function()
 			// Iterates inorder to insert each field into json
 			for (var i = 0; i < email_fields.length; i++)
 			{
-				// Splits based on colon. E.g "To: naresh@agilecrm.com "
+				// Splits based on colon. E.g "To: naresh@agilecrm.com   "
 				var arrcolon = email_fields[i].split(":");
 
 				// Inserts LHS of colon as key. E.g., To
@@ -2223,7 +2223,7 @@ $(function()
 				// accessible
 
 				// Inserts RHS of colon as value. E.g.,
-				// naresh@agilecrm.com
+				// naresh@agilecrm.com  
 				var value = arrcolon.slice(1).join(":"); // join the
 				// remaining string
 				// based on colon,
@@ -4277,7 +4277,7 @@ $(function()
 			// Iterates inorder to insert each field into json
 			for (var i = 0; i < email_fields.length; i++)
 			{
-				// Splits based on colon. E.g "To: naresh@agilecrm.com "
+				// Splits based on colon. E.g "To: naresh@agilecrm.com   "
 				var arrcolon = email_fields[i].split(":");
 
 				// Inserts LHS of colon as key. E.g., To
@@ -4285,7 +4285,7 @@ $(function()
 				key = key.trim(); // if key starts with space, it can't
 				// accessible
 
-				// Inserts RHS of colon as value. E.g., naresh@agilecrm.com
+				// Inserts RHS of colon as value. E.g., naresh@agilecrm.com  
 				var value = arrcolon.slice(1).join(":"); // join the
 				// remaining string
 				// based on colon,
@@ -5884,10 +5884,9 @@ $(function()
 	 */
 	Handlebars.registerHelper("isTracksEligible", function(options)
 	{
-		var planName = _billing_restriction.currentLimits.planName;
-		if (planName == 'PRO' || planName == 'REGULAR')
-			return options.fn(this);
-
+		if(_billing_restriction.currentLimits.addTracks)
+			   return options.fn(this);
+			
 		return options.inverse(this);
 	});
 
@@ -6586,4 +6585,38 @@ Handlebars.registerHelper('SALES_CALENDAR_URL', function()
 		if (data && data != "localhost, *")
 			return options.inverse(this);
 		return options.fn(this);
+	});
+	
+	Handlebars.registerHelper('proToEnterprise', function(plan_type, options)
+			{
+		var temp = "Free";
+
+		  if(plan_type.indexOf("PRO") >= 0)
+			plan_type= plan_type.replace("PRO","ENTERPRISE");
+
+		  var fragments = plan_type.split("_");
+
+		  var interval = "Monthly";
+		  if(fragments.length > 1)
+		  {
+		  	 interval = ucfirst(fragments[1]);
+		  	 temp = ucfirst(fragments[0]);
+
+		  	 return temp + " (" + interval+")";
+		  }
+
+		    });
+	Handlebars.registerHelper('invoice_description', function(description) {
+
+		if (!description)
+			return description;
+
+		if (description.indexOf("Unused time on") != -1) {
+			description = "Balance from previous transaction";
+		} else if (description.indexOf("Remaining") != -1) {
+			description = "Changed on " + description.substring(description.indexOf("after") + 5);
+		}
+
+		return description + " ";
+
 	});

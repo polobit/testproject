@@ -1,155 +1,127 @@
+/*
+ * Appends the model (portlet) to its specific div, based on the portlet_type
+ * as div id (div defined in portlet-add.html)
+ */
+function organize_portlets(base_model) {
 
-var itemCollection;
-var itemCollection1;
-var tasksCollection;
-function organize_portlets(base_model){
 
-	var itemView = new Base_List_View({ model : base_model, template : this.options.templateKey + "-model", tagName : 'div', });
+	var itemView = new Base_List_View({
+		model : base_model,
+		template : this.options.templateKey + "-model",
+		tagName : 'div',
+		className : 'col-md-3 col-sm-6 col-xs'
+	});
 
 	// Get portlet type from model (portlet object)
 	var portlet_type = base_model.get('portlet_type');
-	
+
 	/*
-	 * Appends the model (portlet) to its specific div, based on the portlet_type
-	 * as div id (div defined in portlet-add.html)
+	 * Appends the model (portlet) to its specific div, based on the
+	 * portlet_type as div id (div defined in portlet-add.html)
 	 */
-	var container_id = "";
 
-	if (portlet_type == "CONTACTS")
-		   container_id = "contacts";
-	if (portlet_type == "DEALS")
-		   container_id = "deals";
-	if (portlet_type == "TASKSANDEVENTS")
-		   container_id = "taksAndEvents";
-	if (portlet_type == "USERACTIVITY")
-		   container_id = "userActivity";
-	if (portlet_type == "RSS")
-		   container_id = "rssFeed";
-	if (portlet_type == "ACCOUNT")
-		   container_id = "accountInfo";
+	var containerJSON = {
+		"CONTACTS" : "contacts",
+		"DEALS" : "deals",
+		"TASKSANDEVENTS" : "taksAndEvents",
+		"USERACTIVITY" : "userActivity",
+		"RSS" : "rssFeed",
+		"ACCOUNT" : "accountInfo"
+	};
 
-	// Append Item View 
-	$('#' + container_id, this.el).append($(itemView.render().el).addClass('col-md-3 col-sm-6 col-xs-12'));
+	// Append Item View
+	$('#' + containerJSON[portlet_type], this.el).append(
+			$(itemView.render().el));
 }
 
-function set_p_portlets(base_model){
+/*
+ * Appends the outer view and inner view of each portlet.
+ */
+function set_p_portlets(base_model) {
 
-	portlet_utility.getOuterViewOfPortlet(base_model, this.el);
+	var that = this;
+	portlet_utility.getOuterViewOfPortlet(base_model, this.el, function() {
+		portlet_utility.getInnerViewOfPortlet(base_model, that.el);
+	});
 
-	portlet_utility.getInnerViewOfPortlet(base_model, this.el);
-	
 }
 
-function setPortletContentHeight(base_model){
-	if(base_model.get("name")=="Stats Report"){
+/*
+ * Sets the portlet content height based on it's size-y attribute.
+ */
+function setPortletContentHeight(base_model) {
+	if (base_model.get("name") == "Stats Report") {
 
-		var $resize_ele = $('#' + base_model.get("id")).parent().find('.stats_report_portlet');
-		var size_y = base_model.get("size_y"), resized_val =0;
+		var $resize_ele = $('#' + base_model.get("id")).parent().find(
+				'.stats_report_portlet');
+		var size_y = base_model.get("size_y"), resized_val = 0;
 
-		switch(size_y){
-			case "1" : {
-				resized_val = (size_y * 200);	
-				break;
-			}		
-			case "2" : {
-				resized_val = (size_y*200) + 10;	
-				break;
-			}
-			case "3" : {
-				resized_val = (size_y*200) + 20;	
-				break;
-			}
+		if (size_y == 1) {
+			resized_val = (size_y * 200);
+		} else if (size_y == 2) {
+			resized_val = (size_y * 200) + 10;
+		} else if (size_y == 3) {
+			resized_val = (size_y * 200) + 20;
 		}
 
 		var css = {
-			 "overflow-x": "hidden", "overflow-y": "hidden", 
-			 "height": resized_val + "px", "max-height": resized_val + "px"
+			"overflow-x" : "hidden",
+			"overflow-y" : "hidden",
+			"height" : resized_val + "px",
+			"max-height" : resized_val + "px"
 		}
 
 		$resize_ele.css(css);
 
-	}
-	if(base_model.get("name")=="Mini Calendar"){
-		if(base_model.get("size_y")==1){
-			$('#'+base_model.get("id")).parent().find('.portlet_body_calendar').css("height",(base_model.get("size_y")*200)+"px");
-			$('#'+base_model.get("id")).parent().find('.portlet_body_calendar').css("max-height",(base_model.get("size_y")*200)+"px");
-		}else if(base_model.get("size_y")==2){
-			$('#'+base_model.get("id")).parent().find('.portlet_body_calendar').css("height",(base_model.get("size_y")*200)+25+"px");
-			$('#'+base_model.get("id")).parent().find('.portlet_body_calendar').css("max-height",(base_model.get("size_y")*200)+25+"px");
-		}else if(base_model.get("size_y")==3){
-			$('#'+base_model.get("id")).parent().find('.portlet_body_calendar').css("height",(base_model.get("size_y")*200)+50+"px");
-			$('#'+base_model.get("id")).parent().find('.portlet_body_calendar').css("max-height",(base_model.get("size_y")*200)+50+"px");
+	} else if (base_model.get("name") == "Mini Calendar") {
+
+		var $resize_ele = $('#' + base_model.get("id")).parent().find(
+				'.portlet_body_calendar');
+		var size_y = base_model.get("size_y"), resized_val = 0;
+
+		if (size_y == 1) {
+			resized_val = (size_y * 200);
+		} else if (size_y == 2) {
+			resized_val = (size_y * 200) + 25;
+		} else if (size_y == 3) {
+			resized_val = (size_y * 200) + 50;
 		}
-	}
-	else{
-		if(base_model.get("size_y")==1){
-			$('#'+base_model.get("id")).parent().find('.portlet_body').css("height",(base_model.get("size_y")*200)-45+"px");
-			$('#'+base_model.get("id")).parent().find('.portlet_body').css("max-height",(base_model.get("size_y")*200)-45+"px");
-		}else if(base_model.get("size_y")==2){
-			$('#'+base_model.get("id")).parent().find('.portlet_body').css("height",(base_model.get("size_y")*200)+25-45+"px");
-			$('#'+base_model.get("id")).parent().find('.portlet_body').css("max-height",(base_model.get("size_y")*200)+25-45+"px");
-		}else if(base_model.get("size_y")==3){
-			$('#'+base_model.get("id")).parent().find('.portlet_body').css("height",(base_model.get("size_y")*200)+50-45+"px");
-			$('#'+base_model.get("id")).parent().find('.portlet_body').css("max-height",(base_model.get("size_y")*200)+50-45+"px");
+
+		var css = {
+			"height" : resized_val + "px",
+			"max-height" : resized_val + "px"
 		}
-		
-		$('#'+base_model.get("id")).parent().find('.portlet_body').css("overflow-x","hidden");
-		$('#'+base_model.get("id")).parent().find('.portlet_body').css("overflow-y","auto");
+
+		$resize_ele.css(css);
+	} else {
+
+		var $resize_ele = $('#' + base_model.get("id")).parent().find(
+				'.portlet_body');
+		var size_y = base_model.get("size_y"), resized_val = 0;
+
+		if (size_y == 1) {
+			resized_val = (size_y * 200) - 45;
+		} else if (size_y == 2) {
+			resized_val = (size_y * 200) + 25 - 45;
+		} else if (size_y == 3) {
+			resized_val = (size_y * 200) + 50 - 45;
+		}
+
+		var css = {
+			"overflow-x" : "hidden",
+			"overflow-y" : "auto",
+			"height" : resized_val + "px",
+			"max-height" : resized_val + "px"
+		}
+
+		$resize_ele.css(css);
 	}
+
 }
 
-function getPortletsCurrencySymbol(){
-	var value = ((CURRENT_USER_PREFS.currency != null) ? CURRENT_USER_PREFS.currency : "USD-$");
-	var symbol = ((value.length < 4) ? "$" : value.substring(4, value.length));
-	return symbol;
-}
-
-function getNumberWithCommasForPortlets(value){
-	value = parseFloat(value);
-	value = Math.round(value);
-	if(value==0)
-		return value;
-
-	if (value)
-		return value.toFixed(2).toString().replace(/\B(?=(?:\d{3})+(?!\d))/g, ",").replace('.00', '');
-}
-
-function getPortletsTimeConversion(diffInSeconds){
-	if(!diffInSeconds)
-		return;
-
-	var duration='';
-	 
-	var days = Math.floor(diffInSeconds/(24*60*60));
-	var hrs = Math.floor((diffInSeconds % (24*60*60))/(60*60));
-	var mins = Math.floor(((diffInSeconds % (24*60*60)) % (60*60))/60);
-	var secs = Math.floor(((diffInSeconds % (24*60*60)) % (60*60))%60);
-	
-	if(hrs!=0)
-		duration += ''+((days*24)+hrs)+'h';
-	if(mins!=0)
-		duration += ' '+mins+'m';
-	if(secs!=0)
-		duration += ' '+secs+'s';
-
-	return duration;
-}
-
-function getPortletNormalName(name){
-
-	if (!name)
-		return;
-	
-	var name_json = { "HIGH" : "High", "LOW" : "Low", "NORMAL" : "Normal", "EMAIL" : "Email", "CALL" : "Call", "SEND" : "Send", "TWEET" : "Tweet",
-			"FOLLOW_UP" : "Follow Up", "MEETING" : "Meeting", "MILESTONE" : "Milestone", "OTHER" : "Other", "YET_TO_START" : "Yet To Start",
-			"IN_PROGRESS" : "In Progress", "COMPLETED" : "Completed", "TODAY" : "Today", "TOMORROW" : "Tomorrow", "OVERDUE" : "Overdue", "LATER" : "Later" };
-
-	name = name.trim();
-	
-	return (name_json[name] ? name_json[name] : name);
-	
-}
-
+/*
+ * Appends the activity to activity portlet.
+ */
 function append_activity(base_model) {
 
 	var itemView = new Base_List_View({
@@ -196,4 +168,7 @@ function append_activity(base_model) {
 		$('#next-week-heading', this.el).show();
 
 	}
+
+	if($('#tomorrow-heading', this.el).css('display')=="none" && $('#today-heading', this.el).css('display')=="none")
+		$('#next-week-heading', this.el).hide();
 }

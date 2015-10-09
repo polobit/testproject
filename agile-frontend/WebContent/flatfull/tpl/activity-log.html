@@ -14,8 +14,7 @@
 				</div>
             </div>
         </div>
-{{/unless}}
-
+        {{/unless}}
 {{#if this.length}}
 <div class="list-group list-group-sp">
 <section class="scroll">
@@ -33,9 +32,10 @@
     </form>
 </section>
 </div>
-<!--<ul style="margin:0px" id="activity-list-log-model-list" ></ul>-->
-{{/if}}
 
+	<!--<ul style="margin:0px" id="activity-list-log-model-list" ></ul>-->
+
+{{/if}}
 </script>
 
 
@@ -43,7 +43,7 @@
 <script id="activity-list-log-model-template" type="text/html">
     <div class="pos-rlt list-group-item">
 	<div class="pull-left avatar thumb-xs m-r m-t-xs">
-			{{#if this.user.ownerPic}}
+			{{#if this.user}}
 				<img class="user-img ref-roundedimg"  alt="" src="{{this.user.ownerPic}}" title="{{this.user.name}}">
 			{{else}}
 				<img class="user-img ref-roundedimg"  alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
@@ -848,7 +848,6 @@ Deleted  {{custom1}} Campaigns<br/>
 <div class="clearfix"></div>
 
 </script>
-
 <script id="activity-list-header-template" type="text/html">
 <div class="custom-animated custom-fadeInUp">
 <div class="wrapper-md lter bg-light b-b ">
@@ -888,7 +887,7 @@ Deleted  {{custom1}} Campaigns<br/>
             <div id="activities_date_range" class="btn-group pull-right activity-date-filter c-p m-r m-t-none">
             <span class="inline-block" style="padding: 3px 10px;">
                <i class="icon-calendar icon-large m-r-xs"></i>
-                <span id="range" class="text-xs">Filter by date</span>
+                <span id="range" class="text-xs">{{date-range "today" "-6"}}</span>
              </span>
              <span class="inline-block" style="padding: 4px 6px;border-left: 1px solid #eee;">
                 <span class="caret  inline-block p-t-xs"></span>
@@ -898,8 +897,15 @@ Deleted  {{custom1}} Campaigns<br/>
                 <a href="#activities" class="btn btn-default btn-sm bg-light">User Activities</a> 
                 <a href="#contact-activities" class="btn btn-default btn-sm" onclick="$(this).prev().removeClass('bg-light')">Contact Activities</a>
             </div>
+            
+          
+
+            
         </div>
         <div class="clearfix"></div>
+   
+
+    
 </div>
 </div>
 </div>

@@ -12,6 +12,7 @@ import com.agilecrm.activities.util.EventUtil;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.cursor.Cursor;
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.agilecrm.deals.Opportunity;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.UserPrefs;
@@ -157,6 +158,17 @@ public class Event extends Cursor
 	 */
 	@Indexed
 	private List<Key<Contact>> related_contacts = new ArrayList<Key<Contact>>();
+	
+	/**
+     * Deal ids of related deals for a document.
+     */
+    @NotSaved
+    private List<String> deal_ids = new ArrayList<String>();
+    
+    /**
+     * Related deal objects fetched using deal ids.
+     */
+    private List<Key<Opportunity>> related_deals = new ArrayList<Key<Opportunity>>();
 
 	/**
 	 * While saving an event it contains list of contact keys, but while
@@ -345,6 +357,14 @@ public class Event extends Cursor
 		search_range = new ArrayList<Long>();
 		search_range.add(start);
 		search_range.add(end);
+		
+		if (deal_ids != null)
+		{
+		    for (String deal_id : this.deal_ids)
+		    {
+		    	this.related_deals.add(new Key<Opportunity>(Opportunity.class, Long.parseLong(deal_id)));
+		    }
+		}
 	}
 
 	public String toString()
@@ -450,5 +470,33 @@ public class Event extends Cursor
 		}
 		return "";
 	}
+	
+	/**
+     * While saving a event it contains list of deal keys, but while
+     * retrieving includes complete deal object.
+     * 
+     * @return List of deal objects
+     */
+    @XmlElement
+    public List<Opportunity> getDeals()
+    {
+	return Opportunity.dao.fetchAllByKeys(this.related_deals);
+    }
+    
+    /**
+     * Gets deals related with document.
+     * 
+     * @return list of deal objects as xml element related with a document.
+     */
+    @XmlElement(name = "deal_ids")
+    public List<String> getDeal_ids()
+    {
+	deal_ids = new ArrayList<String>();
+
+	for (Key<Opportunity> dealKey : related_deals)
+	    deal_ids.add(String.valueOf(dealKey.getId()));
+
+	return deal_ids;
+    }
 
 }

@@ -1,13 +1,16 @@
 
 <script id="settings-user-prefs-tab-template" type="text/html">
 	<div class="tab-container m-b-none">
-           <ul class="nav nav-tabs">
-             <li class="prefs-profile"><a href="#user-prefs/profile" class="b-l-none">Profile</a></li>
-             <li class="prefs-reminders"><a href="#user-prefs/reminders">Reminders</a></li>
-			 <li class="prefs-advanced"><a href="#user-prefs/advanced">Advanced</a></li>
-           </ul>
+       <ul class="nav nav-tabs">
+         <li class="prefs-profile"><a href="#settings-user-prefs" data-toggle="tab"  class="b-l-none">Profile</a></li>
+         <li class="prefs-reminders"><a href="#settings-reminders" data-toggle="tab" >Reminders</a></li>
+		 <li class="prefs-advanced"><a href="#settings-advanced" data-toggle="tab" >Advanced</a></li>
+       </ul>
 	</div>
-	<div class="tab-pane active" id="settings-user-prefs-tab-content">
+	<div class="tab-content" id="settings-user-prefs-tab-content">
+		
+	</div>
+	
 </script>
 
 
@@ -16,8 +19,7 @@
 
 <script id="settings-user-prefs-template" type="text/html">
 <!--  Contact View Detail in Detailed mode - when only one contact is shown -->
-
-<div class="panel wrapper">
+	<div class="panel wrapper">
     <form id="userPrefs" class="form-horizontal" role="form">
         <fieldset>
             <input name="id" type="hidden" value="{{id}}" /> 		

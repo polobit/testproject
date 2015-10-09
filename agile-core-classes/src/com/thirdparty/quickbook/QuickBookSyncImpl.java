@@ -22,7 +22,7 @@ import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Note;
 import com.agilecrm.contact.sync.TimeZoneUtil;
 import com.agilecrm.contact.sync.service.OneWaySyncService;
-import com.agilecrm.contact.sync.wrapper.WrapperService;
+import com.agilecrm.contact.sync.wrapper.IContactWrapper;
 import com.agilecrm.contact.util.NoteUtil;
 import com.agilecrm.scribe.util.SignpostUtil;
 
@@ -40,7 +40,7 @@ public class QuickBookSyncImpl extends OneWaySyncService
     private int current_page = 1;
 
     @Override
-    public Class<? extends WrapperService> getWrapperService()
+    public Class<? extends IContactWrapper> getWrapperService()
     {
 	return QuickBookContactWrapperImpl.class;
     }

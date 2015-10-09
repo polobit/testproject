@@ -1,9 +1,8 @@
 
-//binds events to activites route
-
 function initializeActivitiesListner(el){
 
 
+	$("#activities-listners").off();
 	// Click events to agents dropdown and department
 	$("#activities-listners").on("click", "ul#user-select li a, ul#entity_type li a", function(e)
 	{
@@ -14,9 +13,9 @@ function initializeActivitiesListner(el){
 
 		$(this).closest("ul").data("selected_item", id);
 		$(this).closest(".btn-group").find(".selected_name").text(name);
-		var url = getParameters();
+		var url = getActivityFilterParameters();
 
-		updateActivty(url);
+		renderActivityView(url);
 
 	});
 	$("#activities-listners").on("click", "ul#entity_type li a", function(e)
@@ -24,8 +23,8 @@ function initializeActivitiesListner(el){
 		var entitytype = $(this).html();
 
 		var entity_attribute = $(this).attr("href");
-		createCookie("selectedentity", entity_attribute, 90);
-		createCookie("selectedentity_value", entitytype, 90);
+
+		buildActivityFilters(entitytype,entity_attribute,"entityDropDown");
 		$('.activity-sub-heading').html(entitytype);
 
 	});
@@ -34,77 +33,78 @@ function initializeActivitiesListner(el){
 
 		var user = $(this).html();
 		var user_attribute = $(this).attr("href");
-		createCookie("selecteduser", user_attribute, 90);
-		createCookie("selecteduser_value", user, 90);
+
+		buildActivityFilters(user,user_attribute,"userDropDown");
 
 	});
 
 
 
 	$("#activities-listners").on('click', '.activity-event-edit', function(e)
-{
+	{
 	e.preventDefault();
 	var data = $(this).closest('a').attr("data");
 
-	getEventObject(data, function(resp){
-		update_event_activity(resp);
-	});
+	var currentevent = getEventObject(data);
+
+	update_event_activity(currentevent);
+
 });
 
 
 
-$("#activities-listners").on('click', '.email-details', function(e) 
+	$("#activities-listners").on('click', '.email-details', function(e) 
 {
 	e.preventDefault();
 	var data = $(this).closest('a').attr("data");
 
-	getActivityObject(data, function(resp){
+	var obj = getActivityObject(data);
+	console.log(obj);
 
-		console.log(resp);
-		getTemplate("infoModal", resp, undefined, function(template_ui){
-			if(!template_ui)
-				  return;
-
-			var emailinfo = $(template_ui);
-			emailinfo.modal('show');
-		}, null);
-	});
+	getTemplate("infoModal", JSON.parse(obj), undefined, function(template_ui){
+		if(!template_ui)
+			  return;
+		var emailinfo = $(template_ui);
+		emailinfo.modal('show');
+	}, null);
 
 });
 
-
 }
-
-/**
-* fetches the event object based on id
-**/
-function getEventObject(id, callback)
+function getDealObject(id)
 {
 
-	accessUrlUsingAjax('core/api/events/getEventObject/' + id, function(data){
-			if(callback)
-				 callback(data);
-	});
+	return $.ajax({ type : "GET", url : 'core/api/opportunity/' + id, async : true }).responseText;
 
 }
 
-
-/**
-* when user clicks on email from activities route we show email content in model
-**/
-function getActivityObject(id, callback)
+function getEventObject(id)
 {
 
-	accessUrlUsingAjax('core/api/activitylog/' + id, function(data){
-			if(callback)
-				 callback(data);
-	});
+	return $.ajax({ type : "GET", url : 'core/api/events/getEventObject/' + id, async : true }).responseText;
+
 }
 
+function getTaskObject(id)
+{
 
-/**
-* when user clicks on event save it will be called
-**/
+	return $.ajax({ type : "GET", url : 'core/api/tasks/getTaskObject/' + id, async : true }).responseText;
+
+}
+
+function getNoteObject(id)
+{
+
+	return $.ajax({ type : "GET", url : 'core/api/notes/' + id, async : true }).responseText;
+
+}
+
+function getActivityObject(id)
+{
+
+	return $.ajax({ type : "GET", url : 'core/api/activitylog/' + id, async : true }).responseText;
+
+}
 
 function update_event_activity(ele)
 {
@@ -150,12 +150,13 @@ function update_event_activity(ele)
 	populateUsersInUpdateActivityModal(value);
 }
 
+function getModal()
+{
+	var activity_object = App_Activity_log.activitiesview.collection.models[this];
+	alert(activity_object);
+	console.log(activity_object);
+}
 
-
-/**
-* will be called when user enters update task
-*
-**/
 function updateactivity__task(ele)
 {
 	var value = JSON.parse(ele);
@@ -175,12 +176,6 @@ function updateactivity__task(ele)
 	// Add notes in task modal
 	showNoteOnForm("updateTaskForm", value.notes);
 }
-
-
-/**
-*
-* deal will be updated if user clicks on update deal from deal details.js
-**/
 
 function updatedeals(ele)
 {
@@ -240,10 +235,6 @@ function updatedeals(ele)
 	}, "DEAL")
 }
 
-
-/**
-*activites will be differentiated based on created time like today , yesterday and later 
-**/
 function get_activity_created_time(due)
 {
 	// Get Todays Date

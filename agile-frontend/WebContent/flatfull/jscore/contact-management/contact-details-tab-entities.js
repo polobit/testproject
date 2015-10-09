@@ -206,7 +206,7 @@ var contact_details_tab = {
 			var json = contact.toJSON();
 			 
 			// Get email of the contact in contact detail
-			var email = getPropertyValue(json.properties, "email");
+			var email = getAllPropertyValuesByName(json.properties, "email", ",");
 			
 			// Shows an error alert, when there is no email to the contact 
 			if(!email){

@@ -43,7 +43,12 @@ var AdminSettingsRouter = Backbone.Router.extend({
 
 	"email-gateways/:id" : "emailGateways",
 
-	"sms-gateways/:id" : "smsGateways"
+	"sms-gateways/:id" : "smsGateways",
+
+	"lost-reasons" : "lostReasons",
+
+	"deal-sources" : "dealSources"
+
 
 	},
 
@@ -375,12 +380,12 @@ var AdminSettingsRouter = Backbone.Router.extend({
 				var view = new Base_Model_View({ url : '/core/api/api-key', template : "admin-settings-api-key-model", postRenderCallback : function(el)
 				{
 
-					initializeRegenerateKeysListeners();
+					
 					$('#content').find('#admin-prefs-tabs-content').html(view.el);
 
 					$('#content').find('#AdminPrefsTab .select').removeClass('select');
 					$('#content').find('.analytics-code-tab').addClass('select');
-					prettyPrint();
+					// prettyPrint();
 					if (id)
 					{
 						$(el).find('#APITab a[href="#' + id + '"]').trigger('click');
@@ -402,6 +407,9 @@ var AdminSettingsRouter = Backbone.Router.extend({
 					{
 						$("#tracking-webrules-whitelist, .tracking-webrules-whitelist-tab").hide();
 					}
+
+					prettify_api_add_events();
+					// initializeRegenerateKeysListeners();
 
 				} });
 			});
@@ -465,13 +473,14 @@ var AdminSettingsRouter = Backbone.Router.extend({
 
 			return;
 		}
-
+		
 		var that = this;
 		$('#content').html("<div id='milestone-listner'>&nbsp;</div>");
 		getTemplate("admin-settings", {}, undefined, function(template_ui){
 			if(!template_ui)
 				  return;
 			$('#milestone-listner').html($(template_ui));
+			$('#milestone-listner').find('#admin-prefs-tabs-content').html(getTemplate("settings-milestones-tab"), {});
 
 			that.pipelineGridView = new Base_Collection_View({ url : '/core/api/milestone/pipelines', templateKey : "admin-settings-milestones",
 			individual_tag_name : 'div', sortKey : "name", postRenderCallback : function(el)
@@ -482,16 +491,20 @@ var AdminSettingsRouter = Backbone.Router.extend({
 					$('#milestone-listner').find('#deal-tracks-accordion').find('.collapse').addClass('in');
 				initializeMilestoneListners(el);
 				milestone_util.init(el);
+				//that.lostReasons();
+				//that.dealSources();
 			} });
 			that.pipelineGridView.collection.fetch();
 
-			$('#milestone-listner').find('#admin-prefs-tabs-content').html(that.pipelineGridView.render().el);
+			$('#milestone-listner').find('#admin-prefs-tabs-content').find('#settings-milestones-tab-content').html(that.pipelineGridView.render().el);
 			$('#milestone-listner').find('#AdminPrefsTab .select').removeClass('select');
 			$('#milestone-listner').find('.milestones-tab').addClass('select');
 			$(".active").removeClass("active");
 
 		}, "#milestone-listner");
 	
+		$('.settings-milestones').addClass('active');
+		$('#milestone-listner').find('#admin-prefs-tabs-content').parent().removeClass('bg-white');
 	},
 	
 	/**
@@ -505,6 +518,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			$('#content').html(getTemplate('others-not-allowed',{}));
 			return;
 		}
+
 		$("#content").html(getTemplate("admin-settings"), {});
 		this.categoryGridView = new Base_Collection_View({ url : '/core/api/categories?entity_type=TASK', templateKey : "admin-settings-categories",
 			individual_tag_name : 'tr', sortKey : "order", postRenderCallback : function(el)
@@ -675,6 +689,8 @@ var AdminSettingsRouter = Backbone.Router.extend({
 
 			if (id == 'mandrill')
 				value = 'MANDRILL';
+			else if (id == 'ses')
+                value = 'SES';
 
 			var emailGateway;
 			$.each(that.integrations.collection.where({name:"EmailGateway"}),function(key,value){
@@ -689,7 +705,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 				if(emailGateway["email_api"].toUpperCase() != value)//checks if the current email gateway is the same as the clicked one
 				{
 				modalAlert("sms-integration-alert-modal","You have a Email Gateway already configured. Please disable that to configure a new one.","Email Gateway Configured");
-				this.navigate("integrations", { trigger : true });
+				that.navigate("integrations", { trigger : true });
 				return;	
 				}
 			}	
@@ -710,11 +726,20 @@ var AdminSettingsRouter = Backbone.Router.extend({
 					if(id=="sendgrid"){
 						$("#integrations-image",el).attr("src","img/crm-plugins/sendgrid_logo.png");
 					}
+
+					if(id=="ses"){
+						$("#integrations-image",el).attr("src","img/crm-plugins/ses_logo.png");
+				    }
 					
 				}, saveCallback : function()
 				{
+					$('.ses-success-msg').show();
+					
 					// On saved, navigate to integrations
 					Backbone.history.navigate("integrations", { trigger : true });
+
+					if(value == 'SES')
+ 						return;
 
 					data = App_Admin_Settings.email_gateway.model.toJSON();
 
@@ -723,6 +748,38 @@ var AdminSettingsRouter = Backbone.Router.extend({
 					{
 						console.log(data);
 					});
+				},
+				errorCallback : function(response)
+				{
+					var $save = $('.save', '#email-gateway-integration-form');
+
+					disable_save_button($save);
+
+					var msg = response.responseText;
+
+					if(msg.indexOf('SignatureDoesNotMatch') != -1)
+                        msg = msg.replace('SignatureDoesNotMatch', 'Signature Mismatch');
+
+                    if(msg.indexOf('InvalidClientTokenId') != -1)
+                    	msg = msg.replace('InvalidClientTokenId', 'Invalid Access Key');
+
+					// Show cause of error in saving
+					var $save_info = $('<div style="display:inline-block"><small><p style="color:#B94A48; font-size:14px"><i>'
+												+ msg
+												+ '</i></p></small></div>');
+
+					// Appends error info to form actions
+					// block.
+					$save.closest(".form-actions", this.el).append(
+							$save_info);
+
+					// Hides the error message after 3
+					// seconds
+					if(response.status != 406)
+						$save_info.show().delay(3000).hide(1, function(){
+
+							enable_save_button($save);
+						});
 				}
 
 			});
@@ -765,7 +822,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			}
 
 			var smsGateway;
-			$.each(this.integrations.collection.models, function(key, value)
+			$.each(that.integrations.collection.models, function(key, value)
 			{
 				var prefJSON = JSON.parse(value.attributes.prefs);
 				if (prefJSON["sms_api"])
@@ -781,7 +838,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 				{
 					modalAlert("sms-integration-alert-modal", "You have a SMS Gateway already configured. Please disable that to configure a new one.",
 							"SMS Gateway Configured");
-					this.navigate("integrations", { trigger : true });
+					that.navigate("integrations", { trigger : true });
 					return;
 				}
 			}
@@ -836,6 +893,60 @@ var AdminSettingsRouter = Backbone.Router.extend({
 
 
 		}, "#content");
+	},
+	
+	/**
+	 * Fetch all lost reasons
+	 */
+	lostReasons : function()
+	{
+		if (!CURRENT_DOMAIN_USER.is_admin)
+		{
+			$('#content').html(getTemplate('others-not-allowed',{}));
+			return;
+		}
+		$('#content').html("<div id='milestone-listner'>&nbsp;</div>");
+		$("#milestone-listner").html(getTemplate("admin-settings"), {});
+		$('#milestone-listner').find('#admin-prefs-tabs-content').html(getTemplate("settings-milestones-tab"), {});
+		this.dealLostReasons = new Base_Collection_View({ url : '/core/api/categories?entity_type=DEAL_LOST_REASON', templateKey : "admin-settings-lost-reasons",
+			individual_tag_name : 'tr', sortKey : "name", postRenderCallback : function(el)
+			{
+				initializeMilestoneListners(el);
+			} });
+		this.dealLostReasons.collection.fetch();
+		$('#content').find('#admin-prefs-tabs-content').find('#settings-milestones-tab-content').html(this.dealLostReasons.render().el);
+		$('#content').find('#AdminPrefsTab .select').removeClass('select');
+		$('#content').find('.milestones-tab').addClass('select');
+		$(".active").removeClass("active");
+		$('.settings-lost-reasons').addClass('active');
+		$('#milestone-listner').find('#admin-prefs-tabs-content').parent().removeClass('bg-white');
+	},
+
+	/**
+	 * Fetch all deal sources
+	 */
+	dealSources : function()
+	{
+		if (!CURRENT_DOMAIN_USER.is_admin)
+		{
+			$('#content').html(getTemplate('others-not-allowed',{}));
+			return;
+		}
+		$('#content').html("<div id='milestone-listner'>&nbsp;</div>");
+		$("#milestone-listner").html(getTemplate("admin-settings"), {});
+		$('#milestone-listner').find('#admin-prefs-tabs-content').html(getTemplate("settings-milestones-tab"), {});
+		this.dealSourcesView = new Base_Collection_View({ url : '/core/api/categories?entity_type=DEAL_SOURCE', templateKey : "admin-settings-deal-sources",
+			individual_tag_name : 'tr', sortKey : "name", postRenderCallback : function(el)
+			{
+				initializeMilestoneListners(el);
+			} });
+		this.dealSourcesView.collection.fetch();
+		$('#content').find('#admin-prefs-tabs-content').find('#settings-milestones-tab-content').html(this.dealSourcesView.render().el);
+		$('#content').find('#AdminPrefsTab .select').removeClass('select');
+		$('#content').find('.milestones-tab').addClass('select');
+		$(".active").removeClass("active");
+		$('.settings-deal-sources').addClass('active');
+		$('#milestone-listner').find('#admin-prefs-tabs-content').parent().removeClass('bg-white');
 	}
 
 });

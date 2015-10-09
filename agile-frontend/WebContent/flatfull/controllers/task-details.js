@@ -131,6 +131,14 @@ function initializeTaskDetailListeners(){
 		save_task_tab_position_in_cookie("activity");
 		task_details_tab.loadActivitiesView();
 	});
+
+	$('#task-tab-container-header #taskDetailsTab a[href="#deals"]').off();
+	$('#task-tab-container-header').on('click', '#taskDetailsTab a[href="#deals"]', function(e)
+	{
+		e.preventDefault();
+		save_task_tab_position_in_cookie("deals");
+		task_details_tab.loadTaskRelatedDealsView();
+	});
 	
 	$('#change-owner-element .task-owner-list').off();
 	$('#change-owner-element').on('click', '.task-owner-list', function(e) 
@@ -341,6 +349,16 @@ $(function(){
 		update_task(taskDetailView.toJSON());
 	});
 
+	$('#content .task-add-deal').off('click');
+	$('#content').on('click', '.task-add-deal', function(e) 
+	{
+		e.preventDefault();
+		update_task(taskDetailView.toJSON());
+		setTimeout(function(){
+			$('#update_task_relates_to_deals').focus();
+		},1000);
+	});
+
 });
 
 
@@ -514,6 +532,9 @@ function saveTaskNote(form, noteModal, element, note)
 
 					notesView.collection.add(new BaseModel(note), { sort : false });
 					notesView.collection.sort();
+					taskDetailView = data;
+					
+
 				} });
 
 			}

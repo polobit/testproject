@@ -6,12 +6,20 @@ var WidgetsRouter = Backbone.Router
 
 												routes : {
 
-												"add-widget" : "addWidget", "Linkedin" : "Linkedin", "Linkedin/:id" : "Linkedin",
-												"Twitter" : "Twitter", "Twitter/:id" : "Twitter",												
+												"add-widget" : "addWidget",
+
+												"Linkedin" : "Linkedin", "Linkedin/:id" : "Linkedin",
+
+												"Twitter" : "Twitter", "Twitter/:id" : "Twitter",
+												
 												"GooglePlus" : "GooglePlus", "GooglePlus/:id" : "GooglePlus",
+
 												"Rapleaf" : "Rapleaf", "Rapleaf/:id" : "Rapleaf",
+
 												"ClickDesk" : "ClickDesk", "ClickDesk/:id" : "ClickDesk",
+
 												"HelpScout" : "HelpScout", "HelpScout/:id" : "HelpScout",
+
 												"Zendesk" : "Zendesk", "Zendesk/:id" : "Zendesk",
 
 												"Sip" : "Sip", "Sip/:id" : "Sip",
@@ -38,8 +46,8 @@ var WidgetsRouter = Backbone.Router
 												"callscript" : "CallScript", "callscript/:id" : "CallScript",												
 
 												"sync" : "contactSync", "sync/contacts" : "google_apps_contacts", "sync/calendar" : "google_apps_calendar", "sync/stripe-import" : "stripe_sync",
-												"sync/shopify" : "shopify", "sync/salesforce" : "salesforce", "sync/zoho-import" : "zoho_sync", "sync/quickbook" : "quickbook_import",
-												"sync/xero" : "xero_import","sync/freshbooks":"freshbooks_sync","sync/freshbooks/setting":"freshbooks_sync_setting"},
+																"sync/shopify" : "shopify", "sync/salesforce" : "salesforce", "sync/zoho-import" : "zoho_sync", "sync/quickbook" : "quickbook_import",
+																"sync/xero" : "xero_import","sync/freshbooks":"freshbooks_sync","sync/freshbooks/setting":"freshbooks_sync_setting"},
 
 												/**
 												 * Adds social widgets (twitter, linkedIn and RapLeaf) to a contact
@@ -55,18 +63,19 @@ var WidgetsRouter = Backbone.Router
 														that.Catalog_Widgets_View = new Base_Collection_View({ url : '/core/api/widgets/default', restKey : "widget", templateKey : "widgets-add",
 																				sort_collection : false, individual_tag_name : 'div', postRenderCallback : function(el)
 																				{
-																					initializeWidgetSettingsListeners();
-																					build_custom_widget_form(el);
-																					setTimeout(function(){
-																						var socialHeight=0;
-																						$('#social > div',el).each(function(){
-																							if($(this).height() > socialHeight)
-																								socialHeight = $(this).height();
-																						});
-																						$('#social > div',el).each(function(){
-																							$(this).height(socialHeight);
-																						});
-																					},1000);
+																								initializeWidgetSettingsListeners();
+																								
+																								build_custom_widget_form(el);
+																								setTimeout(function(){
+																									var socialHeight=0;
+																									$('#social > div',el).each(function(){
+																										if($(this).height() > socialHeight)
+																											socialHeight = $(this).height();
+																									});
+																									$('#social > div',el).each(function(){
+																										$(this).height(socialHeight);
+																									});
+																								},1000);
 
 																				} });
 
@@ -83,7 +92,8 @@ var WidgetsRouter = Backbone.Router
 																	_plan_restrictions.process_widgets(data);
 																}
 															});
-
+																console.log(organize_widgets);
+																
 															// Shows available widgets in the content
 															$('#prefs-tabs-content').html(that.Catalog_Widgets_View.el);
 
@@ -107,63 +117,64 @@ var WidgetsRouter = Backbone.Router
 																{
 																				if (!isNaN(parseInt(id)))
 																				{
-																					$.getJSON("core/api/widgets/social/profile/" + id,																																				function(data)
-																					{
-																									set_up_access(
-																																	"Linkedin",
-																																	'linkedin-login',
-																																	data,
-																																	'/scribe?service=linkedin&return_url=' + encodeURIComponent(window.location.protocol + "//" + window.location.host + "/#Linkedin/linkedin"));
+																								$.getJSON("core/api/widgets/social/profile/" + id,
+																																								function(data)
+																																								{
+																																												set_up_access(
+																																																				"Linkedin",
+																																																				'linkedin-login',
+																																																				data,
+																																																				'/scribe?service=linkedin&return_url=' + encodeURIComponent(window.location.protocol + "//" + window.location.host + "/#Linkedin/linkedin"));
 
-																					}).error(
-																					function(data)
-																					{
-																									console.log(data);
-																									setUpError("Linkedin", "widget-settings-error", data.responseText,
-																																	window.location.protocol + "//" + window.location.host + "/#Linkedin/linkedin1");
+																																								}).error(
+																																								function(data)
+																																								{
+																																												console.log(data);
+																																												setUpError("Linkedin", "widget-settings-error", data.responseText,
+																																																				window.location.protocol + "//" + window.location.host + "/#Linkedin/linkedin1");
 
-																					});
-																					return;
+																																								});
+																								return;
 
 																				}
 
 																				$.getJSON("core/api/widgets/Linkedin",
 																																				function(data1)
-																	{
-																					console.log(data1);
+																																				{
+																																								console.log(data1);
 
-																					if (data1)
-																					{
-																		$
-																										.getJSON(
-																												"core/api/widgets/social/profile/" + data1.id,
-																												function(data)
-																												{
-																																set_up_access(
-																																								"Linkedin",
-																																								'linkedin-login',
-																																								data,
-																																								'/scribe?service=linkedin&return_url=' + encodeURIComponent(window.location.protocol + "//" + window.location.host + "/#Linkedin/linkedin"),
-																																								data1);
+																																								if (data1)
+																																								{
+																																												$
+																																																				.getJSON(
+																																																												"core/api/widgets/social/profile/" + data1.id,
+																																																												function(data)
+																																																												{
+																																																																set_up_access(
+																																																																								"Linkedin",
+																																																																								'linkedin-login',
+																																																																								data,
+																																																																								'/scribe?service=linkedin&return_url=' + encodeURIComponent(window.location.protocol + "//" + window.location.host + "/#Linkedin/linkedin"),
+																																																																								data1);
 
-																												})
-																										.error(
-																											function(data)
-																											{
+																																																												})
+																																																				.error(
+																																																												function(data)
+																																																												{
 
-																															console.log(data);
-																															setUpError("Linkedin", "widget-settings-error", data.responseText,
-																																							window.location.protocol + "//" + window.location.host + "/#Linkedin/linkedin1", data1);
+																																																																console.log(data);
+																																																																setUpError("Linkedin", "widget-settings-error", data.responseText,
+																																																																								window.location.protocol + "//" + window.location.host + "/#Linkedin/linkedin1", data1);
 
-																											});
-																									return;
-																					}
-																					else
-																					{
-																									show_set_up_widget("Linkedin", 'linkedin-login',
-																																	'/scribe?service=linkedin&return_url=' + encodeURIComponent(window.location.href));
-																					}
-																	});
+																																																												});
+																																												return;
+																																								}
+																																								else
+																																								{
+																																												show_set_up_widget("Linkedin", 'linkedin-login',
+																																																				'/scribe?service=linkedin&return_url=' + encodeURIComponent(window.location.href));
+																																								}
+																																				});
 
 																}
 
@@ -178,7 +189,7 @@ var WidgetsRouter = Backbone.Router
 																if (!id)
 																{
 																				show_set_up_widget("Twitter", 'twitter-login',
-																												'/scribe?service=twitter&return_url=' + encodeURIComponent(window.location.href) + "/twitter");
+																												'/scribe?service=twitter&isForAll='+isForAll+'&return_url=' + encodeURIComponent(window.location.href) + "/twitter");
 																}
 																else
 																{
@@ -313,7 +324,6 @@ var WidgetsRouter = Backbone.Router
 												 */
 												TwilioIO : function(id)
 												{
-													initializeTwilioGlobalListeners();
 													if (!id)
 														show_set_up_widget("TwilioIO", 'twilioio-login');
 													else
@@ -332,7 +342,6 @@ var WidgetsRouter = Backbone.Router
 																if (!id)
 																{
 																				show_set_up_widget("Twilio", 'twilio-login', encodeURIComponent(window.location.href) + "/twilio");
-																				initializeTwilioGlobalListeners();
 																}
 
 																else
@@ -340,7 +349,6 @@ var WidgetsRouter = Backbone.Router
 
 																				if (!isNaN(parseInt(id)))
 																				{
-																					initializeTwilioGlobalListeners();
 																								$.getJSON(
 																																"/core/api/widgets/twilio/numbers/" + id,
 																																function(data)
@@ -368,7 +376,6 @@ var WidgetsRouter = Backbone.Router
 																								return;
 
 																				}
-																				initializeTwilioGlobalListeners();
 
 																				$.getJSON("core/api/widgets/Twilio", function(data)
 																				{
@@ -436,11 +443,11 @@ var WidgetsRouter = Backbone.Router
 												{
 
 																if (!id)
-																{
-																				show_set_up_widget("Stripe", 'stripe-login', '/scribe?service=stripe&return_url=' + encodeURIComponent(window.location.href) + "/stripe");
+																{																			    
+																				show_set_up_widget("Stripe", 'stripe-login', '/scribe?service=stripe&isForAll='+isForAll+'&return_url=' + encodeURIComponent(window.location.href) + "/stripe");
 																}
 																else
-																{
+																{																				
 																				{	$.getJSON("core/api/custom-fields/type/scope?scope=CONTACT&type=TEXT",
 																																								function(data)
 																																								{
@@ -484,18 +491,14 @@ var WidgetsRouter = Backbone.Router
 												 * Manage Shopify Widget
 												 */
 												Shopify : function(id)
-												{
-
-																 if(!id){
-															       show_set_up_widget("Shopify", "shopify-login");
-																 }
-																 else{ 
-																 			
-																 				
-																 				show_set_up_widget("Shopify","shopify-revoke-access")
-																 		
-																 }
-																 initializeShopifyListeners();
+												{											
+													 if(!id){													   
+												       show_set_up_widget("Shopify", "shopify-login");
+													 }else{ 																 																 			
+													 	show_set_up_widget("Shopify","shopify-revoke-access");													 		
+													 }
+													 
+													 initializeShopifyListeners();
 												},
 
 
@@ -505,13 +508,14 @@ var WidgetsRouter = Backbone.Router
 
 												Xero : function(id)
 												{
-																if (!id)
+													
+																if (!id){																		
 																				show_set_up_widget(
 																												"Xero",
 																												'xero-login',
-																												'http://integrations.clickdesk.com:8080/ClickdeskPlugins/agile-xero-oauth?callbackUrl=' + encodeURIComponent(window.location.protocol + "//" + window.location.host + "/XeroServlet?data="));
-																else
-																{
+																												"http://integrations.clickdesk.com:8080/ClickdeskPlugins/agile-xero-oauth?callbackUrl=" + encodeURIComponent(window.location.protocol + "//" + window.location.host + "/XeroServlet?isForAll="+isForAll+"&data="));
+																}else
+																{																	
 																				{
 																								$
 																																.getJSON(
@@ -525,7 +529,7 @@ var WidgetsRouter = Backbone.Router
 																																																				"Xero",
 																																																				'xero-login',
 																																																				data,
-																																																				'http://integrations.clickdesk.com:8080/ClickdeskPlugins/agile-xero-oauth?callbackUrl=' + encodeURIComponent(window.location.protocol + "//" + window.location.host + "/XeroServlet?data="));
+																																																				'http://integrations.clickdesk.com:8080/ClickdeskPlugins/agile-xero-oauth?callbackUrl=' + encodeURIComponent(window.location.protocol + "//" + window.location.host + "/XeroServlet?isForAll="+isForAll+"&data="));
 																																								});
 																								return;
 
@@ -548,7 +552,7 @@ var WidgetsRouter = Backbone.Router
 																																																																								"Xero",
 																																																																								'xero-login',
 																																																																								data,
-																																																																								'http://integrations.clickdesk.com:8080/ClickdeskPlugins/agile-xero-oauth?callbackUrl=' + encodeURIComponent(window.location.protocol + "//" + window.location.host + "/XeroServlet?data="),
+																																																																								'http://integrations.clickdesk.com:8080/ClickdeskPlugins/agile-xero-oauth?callbackUrl=' + encodeURIComponent(window.location.protocol + "//" + window.location.host + "/XeroServlet?isForAll="+isForAll+"&data="),
 																																																																								data1);
 																																																												});
 																																												return;
@@ -559,7 +563,7 @@ var WidgetsRouter = Backbone.Router
 																																												show_set_up_widget(
 																																																				"Xero",
 																																																				'xero-login',
-																																																				'http://integrations.clickdesk.com:8080/ClickdeskPlugins/agile-xero-oauth?callbackUrl=' + encodeURIComponent(window.location.protocol + "//" + window.location.host + "/XeroServlet?data="));
+																																																				'http://integrations.clickdesk.com:8080/ClickdeskPlugins/agile-xero-oauth?callbackUrl=' + encodeURIComponent(window.location.protocol + "//" + window.location.host + "/XeroServlet?isForAll="+isForAll+"&data="));
 																																								}
 																																				});
 																}
@@ -571,11 +575,11 @@ var WidgetsRouter = Backbone.Router
 												 */
 												QuickBooks : function(id)
 												{
-																if (!id)
+																if (!id){																	
 																				show_set_up_widget("QuickBooks", 'quickbooks-login',
-																												'/OAuthServlet?service=quickbooks&return_url=' + encodeURIComponent(window.location.href) + "/quickbooks");
-																else
-																{
+																												'/OAuthServlet?service=quickbooks&isForAll='+isForAll+'&return_url=' + encodeURIComponent(window.location.href) + "/quickbooks");
+																}else
+																{			
 																				$.getJSON("core/api/widgets/QuickBooks", function(data1)
 																				{
 																								console.log(data1);
@@ -605,11 +609,11 @@ var WidgetsRouter = Backbone.Router
 												 */
 												Facebook : function(id)
 												{
-																if (!id)
-																				show_set_up_widget("Facebook", 'facebook-login',
-																												'/scribe?service=facebook&return_url=' + encodeURIComponent(window.location.href) + "/facebook");
-																else
-																{
+																if (!id){																	
+																	show_set_up_widget("Facebook", 'facebook-login',
+																												'/scribe?service=facebook&isForAll='+isForAll+'&return_url=' + encodeURIComponent(window.location.href) + '/facebook');															
+																}else
+																{ 
 																				if (!isNaN(parseInt(id)))
 																				{
 																								$
@@ -698,6 +702,7 @@ var WidgetsRouter = Backbone.Router
 												{
 																if (id)
 																{
+																	alert('clicked');
 																				console.log($(this))
 																				divClone = $(this).clone();
 																				var widget_custom_view = new Base_Model_View({ url : "/core/api/widgets/custom", template : "add-custom-widget", isNew : true,
@@ -706,6 +711,8 @@ var WidgetsRouter = Backbone.Router
 																												initializeWidgetSettingsListeners();
 																												console.log('In post render callback');
 																												console.log(el);
+                                                                                                                 $('body').off('change', '#script_type');
+
 																												$('body').on('change', '#script_type', function(e)
 																												{
 																																var script_type = $('#script_type').val();
@@ -738,7 +745,7 @@ var WidgetsRouter = Backbone.Router
 
 																				$('#custom-widget', el).html(widget_custom_view.render(true).el);
 
-																				$('body').on('click', '#cancel_custom_widget', function(e) 
+																				$('#cancel_custom_widget').die().live('click', function(e)
 																				{
 																								// Restore element back to original
 																								$("#custom-widget").replaceWith(divClone);
@@ -765,23 +772,23 @@ var WidgetsRouter = Backbone.Router
 
 
 														that.contact_sync_google = new Base_Model_View({ url : 'core/api/contactprefs/google', template : 'admin-settings-import-google-contacts',postRenderCallback: function(el){initializeImportListeners();} });
-
+															
 														// Adds header
-														$('#prefs-tabs-content')
-																						.html(
-																														'<div class="row prefs-datasync"><div class="col-md-12"><h4 class="m-b">Google <small>import Contacts from Google</small></h4><div class="row"><div id="contact-prefs" class="col-md-4 col-sm-6 col-xs-12"></div>' + '<div id="calendar-prefs" class="col-md-4 col-sm-6 col-xs-12"></div><div id="email-prefs" class="col-md-4 col-sm-6 col-xs-12"></div></div></div></div>' + '<div class="row prefs-datasync"><div class="col-md-12 no-mg-l"><h4 class="m-b">E-commerce <small>import Contacts from E-commerce</small></h4><div class="row"><div id ="shopify" class="col-md-4 col-sm-6 col-xs-12"></div></div></div></div>' +
-																										
-																														'<div class="row prefs-datasync"><div class="col-md-12"><h4 class="m-b">Payment <small>import Contacts from payment gateway</small></h4><div class="row"><div id ="stripe" class="col-md-4 col-sm-6 col-xs-12"></div></div></div></div>'+
-																														'<div class="row prefs-datasync"><div class="col-md-12"><h4 class="m-b">Accounting <small>import Contacts from Accounting</small></h4><div class="row"><div id ="freshbook" class="col-md-4 col-sm-6 col-xs-12"></div><div class="col-md-4 col-sm-6 col-xs-12" id ="quickbook"></div></div></div></div>'
-
-
-																						);
+														$('#prefs-tabs-content').html(
+																'<div class="row prefs-datasync"><div class="col-md-12"><h4 class="m-b">Google <small>import Contacts from Google</small></h4><div class="row"><div id="contact-prefs" class="col-md-4 col-sm-6 col-xs-12"></div>'
+																+ '<div id="calendar-prefs" class="col-md-4 col-sm-6 col-xs-12"></div><div id="email-prefs" class="col-md-4 col-sm-6 col-xs-12"></div></div></div></div>'
+																+ '<div class="row prefs-datasync"><div class="col-md-12 no-mg-l"><h4 class="m-b">E-commerce <small>import Contacts from E-commerce</small></h4><div class="row"><div id ="shopify" class="col-md-4 col-sm-6 col-xs-12"></div></div></div></div>'																	
+																+ '<div class="row prefs-datasync"><div class="col-md-12"><h4 class="m-b">Payment <small>import Contacts from payment gateway</small></h4><div class="row"><div id ="stripe" class="col-md-4 col-sm-6 col-xs-12"></div></div></div></div>'
+																+ '<div class="row prefs-datasync"><div class="col-md-12"><h4 class="m-b">Accounting <small>import Contacts from Accounting</small></h4><div class="row"><div id ="freshbook" class="col-md-4 col-sm-6 col-xs-12"></div><div class="col-md-4 col-sm-6 col-xs-12" id ="quickbook"></div></div></div></div>'
+														);
 
 														// Adds Gmail Prefs
 														$('#contact-prefs').append(that.contact_sync_google.render().el);
+																
 
 														that.calendar_sync_google = new Base_Model_View({ url : 'core/api/calendar-prefs/get', template : 'import-google-calendar',postRenderCallback: function(el){initializeImportListeners();} });
-
+																
+																
 														// console.log(getTemplate("import-google-contacts", {}));
 														$('#calendar-prefs').append(that.calendar_sync_google.render().el);
 
@@ -842,24 +849,25 @@ var WidgetsRouter = Backbone.Router
 																			} };
 
 															var fetch_prefs = true;
-															if (that.contact_sync_google && that.contact_sync_google.model)
-															{
-																			options["model"] = that.contact_sync_google.model;
-																			fetch_prefs = false;
-															}
-															else
-															{
-																			that.contact_sync_google = new Base_Model_View({ url : 'core/api/contactprefs/google', template : 'import-google-contacts', });
-															}
+																if (that.contact_sync_google && that.contact_sync_google.model)
+																{
+																				options["model"] = that.contact_sync_google.model;
+																				fetch_prefs = false;
+																}
+																else
+																{
+																				that.contact_sync_google = new Base_Model_View({ url : 'core/api/contactprefs/google', template : 'import-google-contacts', });
+																}
 
-															that.setup_google_contacts = new Base_Model_View(options);
+																that.setup_google_contacts = new Base_Model_View(options);
 
-															if (fetch_prefs)
-															{
-																			$("#prefs-tabs-content").html(that.setup_google_contacts.render().el);
-																			return;
-															}
-															$("#prefs-tabs-content").html(that.setup_google_contacts.render(true).el);
+																if (fetch_prefs)
+																{
+																				$("#prefs-tabs-content").html(that.setup_google_contacts.render().el);
+																				return;
+																}
+																$("#prefs-tabs-content").html(that.setup_google_contacts.render(true).el);
+												
 
 														}, "#content");
 																
@@ -896,7 +904,7 @@ var WidgetsRouter = Backbone.Router
 														$("#prefs-tabs-content").html(that.setup_google_calendar.render(true).el);
 
 													}, "#content");
-												},
+												},																				
 												
 
 												stripe_sync : function()
@@ -1054,16 +1062,14 @@ var WidgetsRouter = Backbone.Router
 												 * Manages GooglePlus widget
 												 */
 												GooglePlus: function(id) {
-
-												    if (!id) {
+												    if (!id) {														    	
 												        show_set_up_widget("GooglePlus", 'googleplus-login',
-												            '/scribe?service=googleplus&return_url=' + encodeURIComponent(window.location.href) + "/googleplus");
-												    } else {
-												    	
+												            '/scribe?service=googleplus&isForAll='+isForAll+'&return_url=' + encodeURIComponent(window.location.href) + "/googleplus");
+												    } else {												    
 												    	var widgetDetails = "";
 
 												    	accessUrlUsingAjax("core/api/widgets/GooglePlus", function(resp){
-												    		    widgetDetails = $.parseJSON(resp);
+												    		    widgetDetails = resp;
 
 												    		    console.clear();
 												    			console.log("In google Plus widget Router");
@@ -1105,8 +1111,7 @@ var WidgetsRouter = Backbone.Router
 																				show_set_up_widget("CallScript", 'callscript-login');
 																else
 																				fill_form(id, "CallScript", 'callscript-login');
-																                adjust_form();
-																initializeCallScriptListeners();
+																                
 
 												},
 												
@@ -1114,10 +1119,9 @@ var WidgetsRouter = Backbone.Router
 												 * Show CallScript rules
 												 */
 												CallScriptShow : function()
-												{	
+												{														
 													showCallScriptRule();
 													initializeCallScriptListeners();
-													
 												},
 												
 												/**
@@ -1126,8 +1130,6 @@ var WidgetsRouter = Backbone.Router
 												CallScriptAdd : function()
 												{
 													addCallScriptRule();
-													initializeCallScriptListeners();
-													
 												},
 												
 												/**
@@ -1136,8 +1138,5 @@ var WidgetsRouter = Backbone.Router
 												CallScriptEdit : function(id)
 												{
 													editCallScriptRule(id);
-													initializeCallScriptListeners();
-
 												}
 								});
-

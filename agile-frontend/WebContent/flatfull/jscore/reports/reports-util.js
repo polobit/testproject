@@ -117,7 +117,151 @@ edit_contacts : function(el, report)
 			$("#report_timezone").val(ACCOUNT_PREFS.timezone);
 		}
 	}, 1000);
-} };
+}, 
+/**Function block to be executed for every call back for Call Reports*/
+call_reports : function(url,reportType,graphOn){
+	var selector="email-reports";
+
+	var answeredCallsCountList=[];
+	var busyCallsCountList=[];
+	var failedCallsCountList=[];
+	var voiceMailCallsCountList=[];
+	var callsDurationList=[];
+	var totalCallsCountList=[];
+	var domainUsersList=[];
+	var domainUserImgList=[];
+	var averageCallList=[];
+	var sizey = parseInt($('#'+selector).parent().attr("data-sizey"));
+	var topPos = 50*sizey;
+	if(sizey==2 || sizey==3)
+		topPos += 50;
+	$('#'+selector).html("<div class='text-center v-middle opa-half' style='margin-top:"+topPos+"px'><img src='../flatfull/img/ajax-loader-cursor.gif' style='width:12px;height:10px;opacity:0.5;' /></div>");
+
+	portlet_graph_data_utility.fetchPortletsGraphData(url,function(data){
+		if(data.status==403){
+			$('#'+selector).html("<div class='portlet-error-message'><i class='icon-warning-sign icon-1x'></i>&nbsp;&nbsp;Sorry, you do not have the privileges to access this.</div>");
+			return;
+		}
+		answeredCallsCountList=data["answeredCallsCountList"];
+		busyCallsCountList=data["busyCallsCountList"];
+		failedCallsCountList=data["failedCallsCountList"];
+		voiceMailCallsCountList=data["voiceMailCallsCountList"];
+		callsDurationList=data["callsDurationList"];
+		totalCallsCountList=data["totalCallsCountList"];
+		domainUsersList=data["domainUsersList"];
+		domainUserImgList=data["domainUserImgList"];
+		pieGraphRegions=['Answered Calls','Busy Calls','Failed Calls','Voice Mail Calls'];
+		
+		var series=[];
+		var text='';
+		var colors;
+		
+		/**This executes for plotting pie chart*/
+		
+		if(reportType == 'pie-graph'){ /**When it is a pie graph and dropdown is Number of calls */
+			
+			var answeredCallCount=0;
+			var CompleteCallsCount=[];
+			$.each(answeredCallsCountList,function(index,answeredCall){
+				answeredCallCount +=answeredCall;
+			});
+			CompleteCallsCount.push(answeredCallCount);
+			var busyCallCount=0;
+			$.each(busyCallsCountList,function(index,busyCall){
+				busyCallCount +=busyCall;
+			});
+			CompleteCallsCount.push(busyCallCount);
+			var failedCallCount=0;
+			$.each(failedCallsCountList,function(index,failedCall){
+				failedCallCount +=failedCall;
+			});
+			CompleteCallsCount.push(failedCallCount);
+			var voicemailCallCount=0;
+			$.each(voiceMailCallsCountList,function(index,voicemailCall){
+				voicemailCallCount +=voicemailCall;
+			});
+			CompleteCallsCount.push(voicemailCallCount);
+			
+			
+			portlet_graph_utility.callsByPersonPieGraph(selector,pieGraphRegions,CompleteCallsCount);
+			return;
+			
+		}
+		
+		/**This executes for plotting the Bar graph*/ 
+		if(graphOn == "number-of-calls"){
+			var tempData={};
+			tempData.name="Answered";
+			tempData.data=answeredCallsCountList;
+			series[0]=tempData;
+			
+			tempData={};
+			tempData.name="Busy";
+			tempData.data=busyCallsCountList;
+			series[1]=tempData;
+			
+			tempData={};
+			tempData.name="Failed";
+			tempData.data=failedCallsCountList;
+			series[2]=tempData;
+			
+			tempData={};
+			tempData.name="Voicemail";
+			tempData.data=voiceMailCallsCountList;
+			series[3]=tempData;
+			text="Total Calls";
+			colors=['green','blue','red','violet'];
+		}
+		else if(graphOn == "average-calls"){
+			
+				var tempData={};
+				tempData.name="Average Call Duration";
+			    $.each(callsDurationList,function(index,duration){
+			    if(duration > 0){
+			    	
+					var callsDurationAvg=duration/answeredCallsCountList[index];
+					averageCallList.push(callsDurationAvg);
+			    	
+			    }else{
+			    	averageCallList.push(0);
+			    }
+				
+			    });
+			    tempData.data=averageCallList;
+			    tempData.showInLegend=false;
+			    series[0]=tempData;
+			    text="Average Call Duration (Mins)";
+			    colors=['green'];
+		}
+		else
+		{
+			var tempData={};
+			tempData.name="Total Call Duration";
+			var callsDurationInMinsList = [];
+			$.each(callsDurationList,function(index,duration){
+				if(duration > 0){
+					callsDurationInMinsList[index] = duration;
+				}else{
+					callsDurationInMinsList[index] = 0;
+				}
+				
+			});
+			tempData.data=callsDurationInMinsList;
+			tempData.showInLegend=false;
+			series[0]=tempData;
+			text="Calls Duration (Mins)";
+			colors=['green'];
+		}
+		
+		portlet_graph_utility.callsPerPersonBarGraph(selector,domainUsersList,series,totalCallsCountList,callsDurationList,text,colors,domainUserImgList);
+	});
+
+	return;
+
+},
+
+
+};
 
 /* Loads libraries needed for reporting * */
 function initReportLibs(callback)
@@ -130,6 +274,7 @@ function initReportLibs(callback)
 	});
 }
 
+/* Loads libraries needed for activity reporting * */
 function loadActivityReportLibs(callback)
 {
 

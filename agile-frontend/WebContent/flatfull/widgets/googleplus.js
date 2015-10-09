@@ -281,6 +281,7 @@ $(function()
 			// handling all events related to this widget
 
 			// Deletes GooglePlus profile on click of delete button in template
+            $("body").off("click", "#GooglePlus_plugin_delete");
 			$("body").on("click", "#GooglePlus_plugin_delete", function(e)
 			{
 				e.preventDefault();
@@ -292,11 +293,12 @@ $(function()
 				});
 
 			});
-
+            
+            $("body").off("click", ".peoplesearch");
 			$("body").on("click", ".peoplesearch", function(e)
 			{
 				e.preventDefault();
-				getTemplate('googleplus-modified-search', obj, undefined, function(template_ui){
+				getTemplate('googleplus-modified-search', {}, undefined, function(template_ui){
 			 		if(!template_ui)
 			    		return;
 					$('#' + WIDGET_NAME).html($(template_ui)); 
@@ -304,6 +306,7 @@ $(function()
 
 			});
 			
+            $("body").off("click", "#gpsearchbtn");
 			$("body").on("click", "#gpsearchbtn", function(e)
 			{
 				e.preventDefault();
@@ -320,6 +323,7 @@ $(function()
 				showMatchedPeople(searchDetails['keywords']);
 			});
 
+            $("body").off("keypress", "#searchkeywords");
 			$("body").on("keypress", "#searchkeywords", function(event)
 			{
 				if (event.keyCode == 13)
@@ -329,12 +333,14 @@ $(function()
 				}
 			});
 
+            $("body").off("click", "#gpsearchclose");
 			$("body").on("click", "#gpsearchclose", function(e)
 			{
 				showMatchedPeople(searchDetails['keywords']);
 				e.preventDefault();
 			});
 
+            $("body").off("mouseover", ".GoogleplusDisplayPic");
 			$("body").on("mouseover", ".GoogleplusDisplayPic", function(e)
 			{
 
@@ -362,7 +368,8 @@ $(function()
 				 * hover for first time)
 				 */
 				$(this).popover('show');  
-
+                
+                $('#' + profileID).off('click');
 				$('#' + profileID).on('click', function(e)
 				{
 
@@ -402,6 +409,7 @@ $(function()
 
 			});
 
+            $("body").off("click", "#gplusstreammore");
 			$("body").on("click", "#gplusstreammore", function(e)
 			{
 				e.preventDefault();

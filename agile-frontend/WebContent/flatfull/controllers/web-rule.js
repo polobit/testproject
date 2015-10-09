@@ -7,13 +7,6 @@ var WebreportsRouter = Backbone.Router.extend({
 	routes : {
 	/* Settings */
 	"web-rules" : "webrules", "webrules-add" : "web_reports_add", "webrule-edit/:id" : "web_reports_edit" },
-
-		before : {
-		"*any" : function(fragment, args, next)
-		{
-			head.js(CLOUDFRONT_PATH + "jscore/min/flatfull/web-rules-min.js", next);
-		}
-	},
 	webrules : function()
 	{
 		var that = this;

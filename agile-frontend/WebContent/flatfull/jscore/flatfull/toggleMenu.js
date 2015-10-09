@@ -32,6 +32,12 @@ $('#app-aside-folded').on('click', function(e) {
 	
 $(document).ready(function(){
 
+	$(".person").on("click", function(e){
+		e.preventDefault();
+		addContactBasedOnCustomfields();
+		
+	});
+
 
     $("#contact-results li").click(function(){
    $("#mobile-menu-settings").trigger('click');
@@ -80,6 +86,24 @@ $(document).ready(function(){
 
 
    });
+
+//checks if there are any custom fields and if if present navigates to contact-add page otherwise opens person-modal
+function addContactBasedOnCustomfields(){
+ 	$.ajax({
+				url : 'core/api/custom-fields/required/scope?scope=CONTACT',
+				type : 'GET',
+				dataType : 'json',
+				success : function(data){
+					if(data.length > 0)
+					{
+						Backbone.history.navigate("contact-add" , {trigger: true});
+						
+					}
+					else
+						$("#personModal").modal("show");
+				}
+			});
+ }
 
 
 

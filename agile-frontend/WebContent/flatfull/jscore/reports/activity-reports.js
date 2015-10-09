@@ -42,52 +42,6 @@ function initializeActivityReportsListeners()
 
 }
 
-function initializeReportSendConfirm(){
-
-
-	var date = Math.floor(Date.now()/1000);
-		$("#report-send-confirm").click(
-				function(event)
-				{
-					event.preventDefault();
-
-					if ($(this).attr("disabled")) return;
-
-					$(this).attr("disabled", "disabled");
-					$.get('/core/api/activity-reports/email/' + id +'?end_time='+date, function(data){
-
-						console.log("sending email");
-						$save_info = $('<div style="display:inline-block"><small><p class="text-success"><i>Report will be sent shortly</i></p></small></div>');
-
-						$('.report-message').html($save_info);
-
-						$save_info.show();
-
-						setTimeout(function ()
-								{
-							$('#report-send-confirmation').modal('hide');
-							$('.report-message').empty();
-							$("#report-send-confirm").removeAttr("disabled");
-								}, 2000);
-
-					}).fail(function(response){
-						$save_info = $('<div style="display:inline-block"><small><p style="color:#B94A48; font-size:14px"><i>'+response.responseText+'</i></p></small></div>');
-
-						$('.report-message').html($save_info);
-
-						$save_info.show();
-
-						setTimeout(function ()
-								{
-							$('#report-send-confirmation').modal('hide');
-							$('.report-message').empty();
-							$("#report-send-confirm").removeAttr("disabled");
-								}, 2000);
-
-					});
-				});
-
-}
 
 /**
  * Confirmation box event to send email reports

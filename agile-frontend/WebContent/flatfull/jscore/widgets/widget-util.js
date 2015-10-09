@@ -1,9 +1,13 @@
+//Helps to know that widget is for all users.
+var isForAll = false;
+
 function initializeWidgetUtilListeners(){
 	
 }
 
 $(function(){
 	
+    $('#content').off('click', '#widget-prefs-save');
 	$('#content').on('click', '#widget-prefs-save', function(e)
 	{
 		e.preventDefault();
@@ -102,6 +106,7 @@ function clickdesk_save_widget_prefs()
 	$('#save_clickdesk_prefs').unbind("click");
 
 	// On click of save button, check input and save details
+    $('body').off('click', '#save_clickdesk_prefs');
 	$('body').on('click', '#save_clickdesk_prefs', function(e)
 	{
 		e.preventDefault();
@@ -138,9 +143,10 @@ function saveClickDeskWidgetPrefs()
 
 function helpscout_save_widget_prefs()
 {
-	$('#save_api_key').unbind("click");
+	$('#save_api_key').off("click");
 
 	// Saves the API key
+    $('body').off('click', '#save_api_key');
 	$('body').on('click', '#save_api_key', function(e)
 	{
 		e.preventDefault();
@@ -181,6 +187,7 @@ function freshbook_save_widget_prefs()
 	$('#freshbooks_save_token').unbind("click");
 
 	// On click of save button, check input and save details
+    $('body').off('click', '#freshbooks_save_token');
 	$('body').on('click', '#freshbooks_save_token', function(e)
 	{
 		e.preventDefault();
@@ -219,9 +226,10 @@ function savefreshBooksWidgetPrefs()
 function rapleaf_save_widget_prefs()
 {
 
-	$('#save_api_key').unbind("click");
+	$('#save_api_key').off("click");
 
 	// Saves the API key
+    $('body').off('click', '#save_api_key');
 	$('body').on('click', '#save_api_key', function(e)
 	{
 		e.preventDefault();
@@ -267,6 +275,7 @@ function zendesk_save_widget_prefs()
 	$('#save_prefs').unbind("click");
 
 	// On click of save button, check input and save details
+    $('body').off('click', '#save_prefs');
 	$('body').on('click', '#save_prefs', function(e)
 	{
 		e.preventDefault();
@@ -328,6 +337,7 @@ function sip_save_widget_prefs()
 	$('#save_prefs').unbind("click");
 
 	// On click of save button, check input and save details
+    $('body').off('click', '#save_prefs');
 	$('body').on('click', '#save_prefs', function(e)
 	{
 		e.preventDefault();
@@ -392,6 +402,7 @@ function twilioio_save_widget_prefs()
 	$('#save_prefs').unbind("click");
 
 	// On click of save button, check input and save details
+    $('body').off('click', '#save_prefs');
 	$('body').on('click', '#save_prefs', function(e)
 	{
 		e.preventDefault();
@@ -480,6 +491,7 @@ function callscript_save_widget_prefs()
 	$('#save_prefs').unbind("click");
 
 	// On click of save button, check input and save details
+    $('body').off('click', '#save_prefs');
 	$('body').on('click', '#save_prefs', function(e)
 	{
 		e.preventDefault();		
@@ -551,6 +563,7 @@ function save_widget_prefs(pluginName, prefs, callback)
 	// URL to connect with widgets
 	widgetModel.url = '/core/api/widgets';
 	models[0].set('prefs', prefs);
+	models[0].set('isForAll', isForAll);
 
 	widgetModel.save(models[0].toJSON(), { success : function(data)
 	{
@@ -597,7 +610,7 @@ function save_widget_prefs(pluginName, prefs, callback)
 	} });
 }
 
-function show_set_up_widget(widget_name, template_id, url, model)
+function show_set_up_widget(widget_name, template_id, url, model, callback)
 {
 	getTemplate('settings', {}, undefined, function(template_ui){
 		if(!template_ui)
@@ -617,17 +630,23 @@ function show_set_up_widget(widget_name, template_id, url, model)
 		{
 			if (!App_Widgets.Catalog_Widgets_View || App_Widgets.Catalog_Widgets_View.collection.length == 0)
 			{
-				App_Widgets.Catalog_Widgets_View = new Base_Collection_View({ url : '/core/api/widgets/default' });
+				
+					App_Widgets.Catalog_Widgets_View = new Base_Collection_View({ url : '/core/api/widgets/default' });
 
-				// Fetch the list of widgets
-				App_Widgets.Catalog_Widgets_View.collection.fetch({ success : function()
-				{
-
-					$.getJSON('core/api/widgets/' + widget_name, function(data)
+					// Fetch the list of widgets
+					App_Widgets.Catalog_Widgets_View.collection.fetch({ success : function()
 					{
-						show_set_up_widget(widget_name, template_id, url, data);
-					});
-				} });
+
+						$.getJSON('core/api/widgets/' + widget_name, function(data)
+						{
+							getTemplate("widget-settings", {}, undefined, function(ui){
+								hideTransitionBar();
+								show_set_up_widget(widget_name, template_id, url, data, callback);
+							});
+						});
+					} });
+				
+				
 				return;
 			}
 			models = App_Widgets.Catalog_Widgets_View.collection.where({ name : widget_name });
@@ -675,6 +694,10 @@ function show_set_up_widget(widget_name, template_id, url, model)
 		    		return;
 				$('#widget-settings', el).html($(template_ui)); 
 				console.log(el);
+
+				if(callback)
+			 		callback(el);
+
 			}, "#widget-settings");
 
 			
@@ -689,6 +712,10 @@ function show_set_up_widget(widget_name, template_id, url, model)
 				 		if(!template_ui)
 				    		return;
 						$('#widget-settings', el).html($(template_ui)); 
+
+						if(callback)
+			 				callback(el);
+
 					}, '#widget-settings');
 
 				}
@@ -698,6 +725,14 @@ function show_set_up_widget(widget_name, template_id, url, model)
 				 		if(!template_ui)
 				    		return;
 						$('#widget-settings', el).html($(template_ui)); 
+
+						if(widget_name == "CallScript"){
+							adjust_form();
+						}
+
+						if(callback)
+			 				callback(el);
+
 					}, '#widget-settings');
 				}
 			}
@@ -708,11 +743,20 @@ function show_set_up_widget(widget_name, template_id, url, model)
 				    		return;
 						$('#widget-settings', el).html($(template_ui)); 
 						console.log(el);
+
+						if(callback)
+			 				callback(el);
+
 					}, '#widget-settings');
 				
 			}
 		}
+
 		$('#prefs-tabs-content').html(el);
+
+		if(callback)
+			 callback(el);
+
 		$('#PrefsTab .select').removeClass('select');
 		$('.add-widget-prefs-tab').addClass('select');
 
@@ -723,7 +767,7 @@ function show_set_up_widget(widget_name, template_id, url, model)
 
 function set_up_access(widget_name, template_id, data, url, model)
 {
-	getTemplate('settings', obj, undefined, function(template_ui){
+	getTemplate('settings', {}, undefined, function(template_ui){
  		if(!template_ui)
     		return;
 		$('#content').html($(template_ui)); 
@@ -742,8 +786,10 @@ function set_up_access(widget_name, template_id, data, url, model)
 		    		return;
 				el = $(template_ui1);
 				json = model; 
+				setup_widget_revoke_access(el, json, data, widget_name, template_id, url, model);
 			}, null);
 
+			return;
 		}
 		else
 		{
@@ -778,48 +824,10 @@ function set_up_access(widget_name, template_id, data, url, model)
 
 		}
 
-		if (json.name == "Twilio")
-			json['outgoing_numbers'] = data;
-
-		else if (json.name == "Linkedin" || json.name == "Twitter")
-			json['profile'] = data;
-
-		else
-			json['custom_data'] = data;
-
-		console.log(json);
-
-		// merged_json = $.extend(merged_json, model, data);
-
-		getTemplate(widget_name.toLowerCase() + "-revoke-access", json, undefined, function(template_ui1){
-	 		if(!template_ui1)
-	    		return;
-			$('#widget-settings', el).html($(template_ui1)); 
-			$('#prefs-tabs-content').html(el);
-
-			$('#prefs-tabs-content').find('form').data('widget', json);
-			console.log(json);
-			console.log($('#prefs-tabs-content').find('form').data('widget'));
-
-			$('#PrefsTab .select').removeClass('select');
-			$('.add-widget-prefs-tab').addClass('select');
-
-			$('body').on('click', '.revoke-widget', function(e)
-			{
-
-				console.log($(this).attr("widget-name"));
-				delete_widget(widget_name);
-				show_set_up_widget(widget_name, template_id, url, model);
-			});
-		}, "#widget-settings");
-
-
+		setup_widget_revoke_access(el, json, data, widget_name, template_id, url, model);
 			
 	}, "#content");
-
-
-		
-
+	
 }
 
 function fill_form(id, widget_name, template_id)
@@ -831,15 +839,23 @@ function fill_form(id, widget_name, template_id)
 	console.log(model.get("prefs"));
 	console.log(model.length);
 
-	show_set_up_widget(widget_name, template_id);
+	show_set_up_widget(widget_name, template_id, undefined, undefined, function(){
 
-	if (model && model.get("prefs"))
-	{
-		var prefsJSON = JSON.parse(model.get("prefs"));
-		console.log("prefsJSON:");
-		console.log(prefsJSON);
-		fill_fields(prefsJSON);
-	}
+		if (model && model.get("prefs"))
+		{
+			var prefsJSON = JSON.parse(model.get("prefs"));
+			console.log("prefsJSON:");
+			console.log(prefsJSON);
+			fill_fields(prefsJSON);
+		}
+
+		if(widget_name == "CallScript"){
+			adjust_form();
+		}
+
+	});
+
+	
 }
 
 function show_shopify_prefs(id, widget_name, template_id)
@@ -941,17 +957,18 @@ function setUpError(widget_name, template_id, error_data, error_url, model)
 			$('#PrefsTab .select').removeClass('select');
 			$('.add-widget-prefs-tab').addClass('select');
 		}, "#widget-settings");
+
+
 	}, "#content");
 
-
 }
-
 
 function xero_save_widget_prefs()
 {
 	$('#xero_save_token').unbind("click");
-	alert("hello in xero save")
+	
 	// On click of save button, check input and save details
+    $('body').off('click', '#xero_save_token');
 	$('body').on('click', '#xero_save_token', function(e)
 	{
 		e.preventDefault();
@@ -975,17 +992,18 @@ function quickBooks_save_widget_prefs(template_id, url)
 {
 	head.js('https://appcenter.intuit.com/Content/IA/intuit.ipp.anywhere.js', function()
 	{
-		$('#widget-settings', el).html(getTemplate(template_id, { "url" : url }));
-		console.log(el);
+		$('#widget-settings').html(getTemplate(template_id, { "url" : url }));
+		//console.log(el);
 		intuit.ipp.anywhere.setup({ menuProxy : 'http://example.com/myapp/BlueDotMenu', grantUrl : url });
 	});
 
 }
 function chargify_save_widget_prefs()
 {
-	$('#chargify_save_api_key').unbind("click");
+	$('#chargify_save_api_key').off("click");
 
 	// Saves the API key
+    $('body').off('click', '#chargify_save_api_key');
 	$('body').on('click', '#chargify_save_api_key', function(e)
 	{
 		e.preventDefault();
@@ -1020,4 +1038,47 @@ function saveChargifyWidgetPrefs()
 		console.log('In chargify save success');
 		console.log(data);
 	});
+}
+
+
+function setup_widget_revoke_access(el, json, data, widget_name, template_id, url, model){
+
+	if (json.name == "Twilio")
+		json['outgoing_numbers'] = data;
+
+	else if (json.name == "Linkedin" || json.name == "Twitter")
+		json['profile'] = data;
+
+	else
+		json['custom_data'] = data;
+
+	console.log(json);
+
+	// merged_json = $.extend(merged_json, model, data);
+
+	getTemplate(widget_name.toLowerCase() + "-revoke-access", json, undefined, function(template_ui1){
+
+ 		if(!template_ui1)
+    		return;
+		$('#widget-settings', el).html($(template_ui1)); 
+		$('#prefs-tabs-content').html(el);
+
+		$('#prefs-tabs-content').find('form').data('widget', json);
+		console.log(json);
+		console.log($('#prefs-tabs-content').find('form').data('widget'));
+
+		$('#PrefsTab .select').removeClass('select');
+		$('.add-widget-prefs-tab').addClass('select');
+
+		$('body').off('click', '.revoke-widget');
+		$('body').on('click', '.revoke-widget', function(e)
+		{
+			console.log($(this).attr("widget-name"));
+			delete_widget(widget_name);
+			show_set_up_widget(widget_name, template_id, url, model);
+		});
+
+	}, "#widget-settings");
+
+
 }

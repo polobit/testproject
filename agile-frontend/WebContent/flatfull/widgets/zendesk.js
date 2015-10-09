@@ -26,6 +26,7 @@ function setupZendeskAuth()
 	}, "#Zendesk");
 
 	// On click of save button, check input and save details
+    $("body").off('click','#save_prefs');
 	$("body").on('click','#save_prefs', function(e)
 	{
 		e.preventDefault();
@@ -77,7 +78,7 @@ function showZendeskProfile()
 		zendeskError(ZENDESK_PLUGIN_NAME, "Please provide email for this contact");
 		return;
 	}
-
+	
 	// Retrieves tickets and calls method to show them in Zendesk tickets panel
 	getTicketsFromZendesk(function(data)
 	{
@@ -105,6 +106,7 @@ function showZendeskProfile()
  */
 function getTicketsFromZendesk(callback)
 {
+
 	/*
 	 * Calls queueGetRequest method in widget_loader.js, with queue name as
 	 * "widget_queue" to retrieve tickets
@@ -117,6 +119,7 @@ function getTicketsFromZendesk(callback)
 
 	}, function error(data)
 	{
+		
 		// Loading is removed if error occurs
 		$('#tickets_load').remove();
 
@@ -135,10 +138,13 @@ function showTicketsInZendesk(data)
 {
 	// Fill template with tickets and append it to Zendesk panel
 	
+	
 	getTemplate('zendesk-profile', data, undefined, function(template_ui){
- 		if(!template_ui)
+ 		if(!template_ui){
     		return;
-		$('#Zendesk').html($(template_ui)); 
+    	}
+    	
+		$('#Zendesk').html(template_ui); 
 
 		// All tickets and first five tickets stored in variables to be used further
 		var all_tickets;
@@ -165,11 +171,13 @@ function showTicketsInZendesk(data)
 		}
 
 		// Get and fill the template with tickets
-		getTemplate('endesk-ticket-stream', first_five, undefined, function(template_ui1){
+		getTemplate('zendesk-ticket-stream', first_five, undefined, function(template_ui1){
 	 		if(!template_ui1)
 	    		return;
-	    	var all_tickets_template = $(template_ui1);
+	    	var all_tickets_template = template_ui1;
 	    	// show the tickets in Zendeks panel
+	    	console.log(all_tickets_template);
+	    	
 			$('#all_tickets_panel').html(all_tickets_template);
 
 			// Load jquery time ago function to show time ago in tickets
@@ -182,8 +190,8 @@ function showTicketsInZendesk(data)
 			 * On click of show more in tickets panel, we splice 5 tickets from
 			 * all_tickets and show every time
 			 */
-			 $("body").on('click','#more_tickets', function(e)
-			{
+			 $('body').off('click', '.revoke-widget');
+			 $("body").on('click','#more_tickets', function(e){
 				e.preventDefault();
 
 				// If all tickets is not defined, return
@@ -285,6 +293,7 @@ function registerClickEventsInZendesk()
 	/*
 	 * On click of update ticket link for ticket, update ticket method is called
 	 */
+    $("body").off('click','#ticket_update');
 	$("body").on('click','#ticket_update', function(e)
 	{
 		e.preventDefault();
@@ -295,6 +304,7 @@ function registerClickEventsInZendesk()
 	});
 
 	// On click of show ticket, show ticket by ticket id method is called
+    $("body").off('click','#ticket_show');
 	$("body").on('click','#ticket_show', function(e)
 	{
 		e.preventDefault();
@@ -574,6 +584,7 @@ $(function()
 			showZendeskProfile();
 
 			// On click of add ticket, add ticket method is called
+            $("body").off('click','#add_ticket');
 			$("body").on('click','#add_ticket', function(e)
 			{
 				e.preventDefault();
@@ -584,12 +595,14 @@ $(function()
 			 * On mouse enter of ticket, show tab link which has a link to show detailed
 			 * description of ticket and comment on it
 			 */
+             $("body").off('mouseenter','.zendesk_ticket_hover');
 			 $("body").on('mouseenter','.zendesk_ticket_hover', function(e)
 			{
 				$(this).find('.zendesk_tab_link').show();
 			});
 
 			// On mouse leave of chat, hides tab link
+            $("body").off('mouseleave','.zendesk_ticket_hover');
 			$("body").on('mouseleave','.zendesk_ticket_hover', function(e)
 			{
 				$('.zendesk_tab_link').hide();

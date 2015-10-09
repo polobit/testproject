@@ -12,7 +12,8 @@ var ReportsRouter = Backbone.Router
 			"reports" : "reports", "email-reports" : "emailReportTypes", "activity-reports" : "activityReports", "activity-report-add" : "activityReportAdd",
 				"activity-report-edit/:id" : "activityReportEdit", "contact-reports" : "emailReports", "report-add" : "reportAdd",
 				"report-edit/:id" : "reportEdit", "report-results/:id" : "reportInstantResults", "report-charts/:type" : "reportCharts",
-				"report-funnel/:tags" : "showFunnelReport", "report-growth/:tags" : "showGrowthReport", "report-ratio/:tag1/:tag2" : "showRatioReport" },
+				"report-funnel/:tags" : "showFunnelReport", "report-growth/:tags" : "showGrowthReport", "report-ratio/:tag1/:tag2" : "showRatioReport","report-deals":"showIncomingDeals","report-calls/:type" : "showCallsReport" },
+
 
 			/**
 			 * Shows reports categories
@@ -362,7 +363,7 @@ var ReportsRouter = Backbone.Router
 			 */
 			showFunnelReport : function(tags)
 			{
-
+				hideTransitionBar();
 				initReportLibs(function()
 				{
 					getTemplate("report-funnel", {}, undefined, function(template_ui)
@@ -384,6 +385,9 @@ var ReportsRouter = Backbone.Router
 						$(".active").removeClass("active");
 						$("#reportsmenu").addClass("active");
 
+						
+						highlightDatepickerOption();
+
 					}, "#content");
 
 				});
@@ -397,8 +401,9 @@ var ReportsRouter = Backbone.Router
 			 */
 			showGrowthReport : function(tags)
 			{
-
+				hideTransitionBar();
 				initReportLibs(function()
+
 				{
 
 					// Load Reports Template
@@ -418,11 +423,101 @@ var ReportsRouter = Backbone.Router
 
 					}, "#content");
 
+					
 				});
 
 				$(".active").removeClass("active");
 				$("#reportsmenu").addClass("active");
+				highlightDatepickerOption();
 			},
+			
+			
+				
+		/**
+			 * Returns calls report
+			 * 
+			 * @param tags -
+			 *            comma separated tags
+			 */
+			showCallsReport : function(reportType)
+			{
+				hideTransitionBar();
+				initReportLibs(function()
+
+				{
+					
+					/** Default dropdown value to be considered*/ 
+					var graphOn='number-of-calls';
+					
+					/**Default template id to be loaded*/
+					var templateId="report-calls";
+					
+					/**when it is a call outcome selection*/
+					if(reportType == 'pie-graph'){
+						//templateId="report-calls-piechart";
+						templateId=templateId+"-piechart";
+						
+					}
+					
+					getTemplate(templateId, {}, undefined, function(template_ui){
+						if(!template_ui)
+							  return;
+
+						// Load Reports Template
+						$('#content').html($(template_ui));
+					
+					/**Reinitialize the variable which holds the user preference abt report type*/
+	               if(reportType == 'average-calls'){
+						graphOn='average-calls';
+						$('select[id="typeCall"]').find('option[value="average-calls"]').attr("selected",true);
+						
+					}else{
+						$('select[id="typeCall"]').find('option[value="number-of-calls"]').attr("selected",true);
+					}
+	               
+	               initReportsForCalls(function()
+							{
+	            	   
+	            	   /** Get date range selected for every call back call */
+	            	   
+	            		var options = "?";
+
+						var range = $('#range').html().split("-");
+						var start_time=new Date(range[0]).getTime() / 1000;
+
+						var end_value = $.trim(range[1]);
+
+						
+						if (end_value)
+							end_value = end_value + " 23:59:59";
+
+						var end_time=new Date(end_value).getTime() / 1000;
+						options += ("start-date=" + start_time + "&end-date=" + end_time);
+						
+						var url='core/api/portlets/portletCallsPerPerson/' + options;
+						
+						graphOn=$("#typeCall option:selected").val();
+					    
+					    var userDropDown=$('#users option:selected').val();
+					    
+					    if(userDropDown != undefined){
+					    	if(userDropDown != 'All' && userDropDown != ""){
+								var usersUrl=url;
+								url=url+'&user=["'+userDropDown+'"]';
+							}
+					    	
+					    }
+					     report_utility.call_reports(url,reportType,graphOn);
+					    
+							
+							});
+
+					}, "#content");
+				});
+				
+			},
+
+
 
 			/**
 			 * Returns Ratio Graphs with two tag1
@@ -434,6 +529,7 @@ var ReportsRouter = Backbone.Router
 			{
 
 				initReportLibs(function()
+
 				{
 
 					// Load Reports Template
@@ -454,9 +550,12 @@ var ReportsRouter = Backbone.Router
 						$(".active").removeClass("active");
 						$("#reportsmenu").addClass("active");
 
+						highlightDatepickerOption();
+
 					}, "#content");
 
 				});
+
 
 			},
 
@@ -476,22 +575,42 @@ var ReportsRouter = Backbone.Router
 					if (!template_ui)
 						return;
 
-					var el = $(template_ui);
-					$("#reports-listerners-container").html(el);
-					initializeChartReportsListeners();
+							var el = $(template_ui);
+				$("#reports-listerners-container").html(el);
+				initializeChartReportsListeners();
 
-					if (type && (type == 'growth' || type == 'funnel'))
-					{
-						setup_tags_typeahead();
-						return;
-					}
-					$.each($("[id=tags-reports]", el), function(i, element)
-					{
-						console.log(element);
-						addTagsDefaultTypeahead(element);
-					});
+				if (type && (type == 'growth' || type == 'funnel'))
+				{
+					setup_tags_typeahead();
+					return;
+				}
+				$.each($("[id=tags-reports]", el), function(i, element)
+				{
+					console.log(element);
+					addTagsDefaultTypeahead(element);
+				});
 
 				}, "#reports-listerners-container");
+			},
+
+			showIncomingDeals : function(){
+				hideTransitionBar();
+				initReportLibs(function()
+
+				{
+
+							// Load Reports Template
+						getTemplate("report-deals", {}, undefined, function(template_ui){
+						if(!template_ui)
+							  return;
+						$('#content').html($(template_ui));	
+
+							initFunnelCharts(function()
+							{
+								showDealsGrowthReport();
+							});
+						}, "#content");
+					});
 			}
 });
 

@@ -1,4 +1,38 @@
 /**
+ * widget-model.js manages the widgets, adding/deleting widgets. When user
+ * chooses to add/manage widgets from any contact detailed view, list of
+ * available widgets are shown to add or delete if already added.
+ */
+//var Catalog_Widgets_View1 = null;
+
+// Show when Add widget is selected by user in contact view
+/**
+ * pickWidget method is called when add/manage widgets link in contact details
+ * is clicked, it creates a view of widget collection showing add/delete based
+ * on is_added variable in widget model, which is checked in template using
+ * handle bars
+ */
+/*function pickWidget()
+{
+	Catalog_Widgets_View = new Base_Collection_View({ url : '/core/api/widgets/default', restKey : "widget", templateKey : "widgets-add",
+		sort_collection : false, individual_tag_name : 'div', postRenderCallback : function(el)
+		{
+			build_custom_widget_form(el);
+		} });
+
+	// Append widgets into view by organizing them
+	Catalog_Widgets_View.appendItem = organize_widgets;
+
+	// Fetch the list of widgets
+	Catalog_Widgets_View.collection.fetch();
+	
+	// Shows available widgets in the content
+	$('#prefs-tabs-content').html(Catalog_Widgets_View.el);
+	$('#PrefsTab .select').removeClass('select');
+    $('.add-widget-prefs-tab').addClass('select');
+}*/
+
+/**
  * Organizes widgets into different categories like (SOCIAL, SUPPORT, EMAIL,
  * CALL, BILLING.. etc) to show in the add widget page, based on the widget_type
  * fetched from Widget object
@@ -12,49 +46,34 @@ function organize_widgets(base_model)
 	// Get widget type from model (widget object)
 	var widget_type = base_model.get('widget_type');
 
-	var appendable_container_id = "";
-
 	/*
 	 * Appends the model (widget) to its specific div, based on the widget_type
 	 * as div id (div defined in widget_add.html)
 	 */
-	 switch(widget_type){
-	 	case "SOCIAL" : {
-	 		appendable_container_id = "social";
-	 		break;
-	 	}
-	 	case "SUPPORT" : {
-	 		appendable_container_id = "support";
-	 		break;
-	 	}
+	if (widget_type == "SOCIAL")
+		$('#social', this.el).append($(itemView.render().el).addClass('col-md-4 col-sm-6 col-xs-12'));
 
-	 	case "EMAIL" : {
-	 		appendable_container_id = "email";
-	 		break;
-	 	}
+	if (widget_type == "SUPPORT")
+		$('#support', this.el).append($(itemView.render().el).addClass('col-md-4 col-sm-6 col-xs-12'));
 
-	 	case "CALL" : {
-	 		if(!(base_model.get('name') == "Twilio" && !base_model.get('is_added'))
-	 				appendable_container_id = "call";
-	 		break;
-	 	}
+	if (widget_type == "EMAIL")
+		$('#email', this.el).append($(itemView.render().el).addClass('col-md-4 col-sm-6 col-xs-12'));
 
-	 	case "BILLING" : {
-	 		appendable_container_id = "billing";
-	 		break;
-	 	}
-	 	case "ECOMMERCE" : {
-	 		appendable_container_id = "ecommerce";
-	 		break;
-	 	}
-	 	case "CUSTOM" : {
-	 		appendable_container_id = "custom";
-	 		break;
-	 	}
-	 }
+	if (widget_type == "CALL")
+	{
+	  if( base_model.get('name') == "Twilio" && !base_model.get('is_added'))
+		  console.log("It is old twilio");
+	  else
+	      $('#call', this.el).append($(itemView.render().el).addClass('col-md-4 col-sm-6 col-xs-12'));
+	}	
 
-	$('#' + appendable_container_id, this.el).append($(itemView.render().el).addClass('col-md-4 col-sm-6 col-xs-12'));
+	if (widget_type == "BILLING")
+		$('#billing', this.el).append($(itemView.render().el).addClass('col-md-4 col-sm-6 col-xs-12'));
+	if (widget_type == "ECOMMERCE")
+				$('#ecommerce', this.el).append($(itemView.render().el).addClass('col-md-4 col-sm-6 col-xs-12'));
 
+	if (widget_type == "CUSTOM")
+		$('#custom', this.el).append($(itemView.render().el).addClass('col-md-4 col-sm-6 col-xs-12'));
 }
 
 /**
@@ -63,7 +82,6 @@ function organize_widgets(base_model)
  * this init function
  */
 function initializeWidgetSettingsListeners(){
-
 	// adding widget
 	/**
 	 * When user clicks on add-widget, gets the widget-name which is set to add
@@ -151,17 +169,33 @@ function initializeWidgetSettingsListeners(){
 			$('#Twilio-container').hide();
 
 		});	
+	
+	// Helps to know that widget is for all users.
+	$('#prefs-tabs-content .add_to_all').off();
+	$('#prefs-tabs-content').on('click', '.add_to_all', function(e){
+		isForAll = true;
+	});
 
+	$('#prefs-tabs-content .add-widget').off();
+	$('#prefs-tabs-content').on('click', '.add-widget', function(e){
+		isForAll = false;
+	});
+	
 	$('#prefs-tabs-content #remove-widget').off();
 	$('#prefs-tabs-content').on('click', '#remove-widget', function(e)
 	{
+
 		// Fetch widget name from the widget on which delete is clicked
 		var widget_name = $(this).attr('widget-name');
-
+		
+		
 		// If not confirmed to delete, return
 		if (!confirm("Are you sure to remove " + widget_name))
 			return;
 
+		//Deletes the cutom widget form the widget entity.
+		delete_widget(widget_name);
+		
 		/*
 		 * Sends Delete request with widget name as path parameter, and on
 		 * success fetches the widgets to reflect the changes is_added, to show
@@ -225,8 +259,10 @@ function build_custom_widget_form(el)
 {
 	var divClone;
 	
+    $('#prefs-tabs-content').off('click', '#add-custom-widget');
 	$('#prefs-tabs-content').on('click', '#add-custom-widget', function(e)
 			{
+				$('#custom-widget-btn').removeClass('open');
 				divClone = $("#custom-widget").clone();
 				var widget_custom_view = new Base_Model_View({ url : "/core/api/widgets/custom", template : "add-custom-widget", isNew : true,
 					postRenderCallback : function(el)
@@ -234,7 +270,7 @@ function build_custom_widget_form(el)
 						console.log('In post render callback');
 						console.log(el);
                         
-						$('#custom_widget_form').off('change').on('change', '#script_type', function(e)
+						$('#custom-widget').off('change').on('change', '#script_type', function(e)
 						{
 							var script_type = $('#script_type').val();
 							if (script_type == "script")
@@ -266,6 +302,13 @@ function build_custom_widget_form(el)
 
 				$('#custom-widget', el).html(widget_custom_view.render(true).el);
 				
+				//Is Custom widget for all.
+				if(!($(this).hasClass('add_to_all'))){
+					isForAll = false;
+				}
+				$('#custom_isForAll').val(isForAll);
+				
+                $('#prefs-tabs-content').off('click', '#cancel_custom_widget');
 				$('#prefs-tabs-content').on('click', '#cancel_custom_widget', function(e)
 				{
 					// Restore element back to original

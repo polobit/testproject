@@ -136,7 +136,7 @@ public class MandrillSubAccounts
      * @param notes
      *            - notes
      */
-    public static void updateMandrillSubAccount(String subaccountId, String apiKey, String notes)
+    public static String updateMandrillSubAccount(String subaccountId, String apiKey, String notes)
     {
 	System.out.println("Updating subaccount id " + subaccountId);
 
@@ -151,18 +151,23 @@ public class MandrillSubAccounts
 	    subaccount.put(Mandrill.MANDRILL_API_KEY, apiKey);
 	    subaccount.put(MANDRILL_SUBACCOUNT_ID, subaccountId);
 	    subaccount.put(MANDRILL_SUBACCOUNT_NAME, subaccountId);
+	    
+	    if(StringUtils.isNotBlank(notes))
 	    subaccount.put(MANDRILL_SUBACCOUNT_NOTES, notes);
 
 	    String response = HTTPUtil.accessURLUsingPost(Mandrill.MANDRILL_API_POST_URL
 		    + MANDRILL_API_SUBACCOUNT_UPDATE_CALL, subaccount.toString());
 
 	    System.out.println("Response for updating subaccount: " + response);
+	    
+	    return response;
 
 	}
 	catch (Exception e)
 	{
 	    e.printStackTrace();
 	    System.err.println("Exception occured while updating subaccount..." + e.getMessage());
+	    return e.getMessage();
 	}
 
     }

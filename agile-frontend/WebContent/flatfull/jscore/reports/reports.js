@@ -116,62 +116,55 @@ function reportsContactTableView(base_model, customDatefields, view)
 	 * itemView.render().el); // ----------- this line fails on Firefox
 	 */
 
-	var modelData = view.options.modelData; // Reads the modelData (customView
-	// object)
-	var fields = modelData['fields_set']; // Reads fields_set from modelData
-	var contact = base_model.toJSON(); // Converts base_model (contact) in to
-	// JSON
-	var final_html_content = "";
-	var element_tag = view.options.individual_tag_name;
-	var templateKey = view.options.templateKey;
+	getTemplate('contacts-custom-view-custom', {}, undefined, function(ui){
 
-	// Iterates through, each field name and appends the field according to
-	// order of the fields
-	$.each(fields, function(index, field_name)
-	{
+			var modelData = view.options.modelData; // Reads the modelData (customView
+			// object)
+			var fields = modelData['fields_set']; // Reads fields_set from modelData
+			var contact = base_model.toJSON(); // Converts base_model (contact) in to
+			// JSON
+			var final_html_content = "";
+			var element_tag = view.options.individual_tag_name;
+			var templateKey = view.options.templateKey;
 
-		if (field_name.indexOf("custom_") != -1)
-		{
-			field_name = field_name.split("custom_")[1];
-			var property = getProperty(contact.properties, field_name);
-			if (!property)
-				property = {};
-
-			var template_name = "contacts-custom-view-custom";
-			if (isDateCustomField(customDatefields, property))
-				template_name = 'contacts-custom-view-custom-date';
-
-			getTemplate(template_name, property, undefined, function(template_ui)
+			// Iterates through, each field name and appends the field according to
+			// order of the fields
+			$.each(fields, function(index, field_name)
 			{
-				if (!template_ui)
+
+				if (field_name.indexOf("custom_") != -1)
+				{
+					field_name = field_name.split("custom_")[1];
+					var property = getProperty(contact.properties, field_name);
+					if (!property)
+						property = {};
+
+					if (isDateCustomField(customDatefields, property))
+						final_html_content += getTemplate('contacts-custom-view-custom-date', property);
+					else
+						final_html_content += getTemplate('contacts-custom-view-custom', property);
+
 					return;
+				}
 
-				final_html_content += $(template_ui);
-			}, null);
+				if (field_name.indexOf("properties_") != -1)
+					field_name = field_name.split("properties_")[1];
 
-			return;
-		}
+				final_html_content += getTemplate('contacts-custom-view-' + field_name, contact);
+			});
 
-		if (field_name.indexOf("properties_") != -1)
-			field_name = field_name.split("properties_")[1];
+			// Appends model to model-list template in collection template
+			$(("#" + templateKey + '-model-list'), view.el).append('<' + element_tag + '>' + final_html_content + '</' + element_tag + '>');
 
-		getTemplate('contacts-custom-view-' + field_name, contact, undefined, function(template_ui)
-		{
-			if (!template_ui)
-				return;
-			final_html_content += $(template_ui);
+			// Sets data to tr
+			$(('#' + templateKey + '-model-list'), view.el).find('tr:last').data(base_model);
 
-		}, null);
 
-	});
 
-	// Appends model to model-list template in collection template
-	$(("#" + templateKey + '-model-list'), view.el).append('<' + element_tag + '>' + final_html_content + '</' + element_tag + '>');
-
-	// Sets data to tr
-	$(('#' + templateKey + '-model-list'), view.el).find('tr:last').data(base_model);
+	 }, null);
 
 }
+
 
 function deserialize_multiselect(data, el)
 {
@@ -312,3 +305,17 @@ function updateWeekDayReportVisibility(report_value, container_id){
 		$("#" + container_id + "_report_time").css("display", time_visibility);
 
 }
+/**This is being invoked from call category -call logs under reports:where it should redirect to activities with calls as a entity type*/
+$(function()
+		{
+	
+	$("body").on("click","a#call-activity-link", function(e){
+	var entitytype = "Calls";
+	var entity_attribute = "CALL";
+	buildActivityFilters(entitytype,entity_attribute,"entityDropDown");
+	//ActivitylogRouter.activities("id");
+	App_Activity_log.navigate("activities", { trigger : true });
+	
+});
+	
+		});
