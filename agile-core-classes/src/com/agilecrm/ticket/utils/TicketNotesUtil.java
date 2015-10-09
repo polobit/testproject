@@ -27,6 +27,7 @@ import com.agilecrm.util.HTTPUtil;
 import com.agilecrm.util.MD5Util;
 import com.agilecrm.util.email.MustacheUtil;
 import com.agilecrm.util.email.SendMail;
+import com.campaignio.urlshortener.util.Base62;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.googlecode.objectify.Key;
