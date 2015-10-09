@@ -226,8 +226,7 @@ public class TicketNotesUtil
 
 		System.out.println("domainUserKeys: " + domainUserKeys);
 		
-		List<DomainUser> domainUsers = DomainUserUtil.dao
-				.fetchAllByKeys(new ArrayList<Key<DomainUser>>(domainUserKeys));
+		List<DomainUser> domainUsers = DomainUserUtil.getDomainUsersFromKeys(new ArrayList<Key<DomainUser>>(domainUserKeys));
 
 		System.out.println("domainUsers: " + domainUsers);
 
