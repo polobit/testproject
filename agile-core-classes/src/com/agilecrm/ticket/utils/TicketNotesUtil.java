@@ -212,8 +212,6 @@ public class TicketNotesUtil
 	{
 		Set<Key<DomainUser>> domainUserKeys = new HashSet<Key<DomainUser>>();
 
-		System.out.println("domainUserKeys: " + domainUserKeys);
-
 		Map<Long, DomainUser> map = new HashMap<Long, DomainUser>();
 
 		for (TicketNotes note : notes)
@@ -221,9 +219,13 @@ public class TicketNotesUtil
 			if (note.created_by == CREATED_BY.REQUESTER)
 				continue;
 
+			System.out.println(note.assignee_id);
+			
 			domainUserKeys.add(new Key<DomainUser>(DomainUser.class, note.assignee_id));
 		}
 
+		System.out.println("domainUserKeys: " + domainUserKeys);
+		
 		List<DomainUser> domainUsers = DomainUserUtil.dao
 				.fetchAllByKeys(new ArrayList<Key<DomainUser>>(domainUserKeys));
 
