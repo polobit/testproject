@@ -683,17 +683,16 @@ var ReportsRouter = Backbone.Router
 											tempData.name="Voicemail";
 											tempData.data=voiceMailCallsCountList;
 											series[3]=tempData;
-											text="No. of Calls";
+											text="Total Calls";
 											colors=['green','blue','red','violet'];
 										}else if(graphOn == "average-calls"){
 											
 												var tempData={};
-												tempData.name="Average Call Duration ";
+												tempData.name="Average Call Duration";
 											    $.each(callsDurationList,function(index,duration){
 											    if(duration > 0){
 											    	
-											    	var durationInMins=duration/60;
-													var callsDurationAvg=durationInMins/answeredCallsCountList[index];
+													var callsDurationAvg=duration/answeredCallsCountList[index];
 													averageCallList.push(callsDurationAvg);
 											    	
 											    }else{
@@ -704,16 +703,16 @@ var ReportsRouter = Backbone.Router
 											    tempData.data=averageCallList;
 											    tempData.showInLegend=false;
 											    series[0]=tempData;
-											    text="Average Call Duration in Minutes";
+											    text="Average Call Duration (Mins)";
 											    colors=['green'];
 										}
 										else{
 											var tempData={};
-											tempData.name="Total Call Duration  ";
+											tempData.name="Total Call Duration";
 											var callsDurationInMinsList = [];
 											$.each(callsDurationList,function(index,duration){
 												if(duration > 0){
-													callsDurationInMinsList[index] = duration/60;
+													callsDurationInMinsList[index] = duration;
 												}else{
 													callsDurationInMinsList[index] = 0;
 												}

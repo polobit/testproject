@@ -221,10 +221,11 @@ var SubscribeRouter = Backbone.Router
 
 				if (IS_NEW_USER && _plan_on_signup && _plan_on_signup.plan_type && _plan_on_signup.plan_type == "FREE")
 				{
-					_plan_on_signup = null;
+					 _plan_on_signup = null;
 					Backbone.history.navigate("dashboard", { trigger : true });
 					return;
 				}
+				
 				if (!$.isEmptyObject(USER_CREDIRCARD_DETAILS))
 				{
 

@@ -66,7 +66,7 @@ class EventReminderCreateDeferredTask implements DeferredTask
 			{
 				EventReminder.getEventReminder(domain, null);
 			}
-			catch (IOException e)
+			catch (Exception e)
 			{
 				// TODO Auto-generated catch block
 				e.printStackTrace();
