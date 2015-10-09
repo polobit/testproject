@@ -13,9 +13,9 @@ function initializeActivitiesListner(el){
 
 		$(this).closest("ul").data("selected_item", id);
 		$(this).closest(".btn-group").find(".selected_name").text(name);
-		var url = getParameters();
+		var url = getActivityFilterParameters();
 
-		updateActivty(url);
+		renderActivityView(url);
 
 	});
 	$("#activities-listners").on("click", "ul#entity_type li a", function(e)

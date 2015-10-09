@@ -6,6 +6,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang.exception.ExceptionUtils;
+
 import com.agilecrm.activities.EventReminder;
 
 /**
@@ -39,8 +41,9 @@ public class FailedDomainEventReminderServlet extends HttpServlet
 	    res.setContentType("text/html");
 
 	}
-	catch (IOException e)
+	catch (Exception e)
 	{
+		System.out.println(ExceptionUtils.getFullStackTrace(e));
 	    e.printStackTrace();
 	}
     }

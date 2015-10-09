@@ -1634,7 +1634,7 @@ var portlet_utility = {
 	 */
 	getPortletsTimeConversion : function(diffInSeconds) {
 		if (!diffInSeconds)
-			return;
+			return 0;
 
 		var duration = '';
 

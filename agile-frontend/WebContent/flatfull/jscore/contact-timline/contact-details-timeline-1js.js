@@ -11,21 +11,14 @@ function load_timeline_details(el, contactId, callback1, noAnimation)
 function add_entity_to_timeline(model)
 {
 	var list = [];
-	list.push(model.toJSON());
+	list.push(model.toJSON())
 
-	var contactId = 0;
-
-	if(Current_Route.indexOf("contact/") == 0)
-	{
-		contactId = Current_Route.split("contact/")[1];
-	}
-
-	if(!timeline_collection_view[contactId])
+	if(!timeline_collection_view)
 		return;
 
-	if (!timeline_collection_view[contactId].collection.get(model.get('id')))
+	if (!timeline_collection_view.collection.get(model.get('id')))
 	{
-		timeline_collection_view[contactId].addItems(list);
+		timeline_collection_view.addItems(list);
 		return;
 	}
 
@@ -65,20 +58,13 @@ function removeItemFromTimeline(element)
 
 function addTagToTimelineDynamically(tag, collection)
 {
-	var contactId = 0;
-
-	if(Current_Route.indexOf("contact/") == 0)
-	{
-		contactId = Current_Route.split("contact/")[1];
-	}
-
-	if(!timeline_collection_view[contactId] || !timeline_collection_view[contactId].collection)
+	if(!timeline_collection_view || !timeline_collection_view.collection)
 		return;
 	
 	$.each(collection, function(index, tagObject){
 		if(tagObject.tag == tag)
 			{
-				timeline_collection_view[contactId].collection.add(new BaseModel(tagObject));
+				timeline_collection_view.collection.add(new BaseModel(tagObject));
 			}
 	})
 	console.log(collection);
