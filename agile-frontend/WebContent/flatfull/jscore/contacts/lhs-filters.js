@@ -118,6 +118,7 @@ function loadCustomFiledsFilters(fields, cel, is_company)
 
 function submitLhsFilter()
 {
+	$("#contacts-view-options").css( 'pointer-events', 'none' );
 	var formData = serializeLhsFilters($('#lhs-contact-filter-form'))
 	// erase filter cookies
 	var contact_type = formData.contact_type;

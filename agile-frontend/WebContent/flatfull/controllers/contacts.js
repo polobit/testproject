@@ -107,6 +107,7 @@ var ContactsRouter = Backbone.Router.extend({
 	 */
 	contacts : function(tag_id, filter_id, grid_view, is_lhs_filter)
 	{
+		$("#contacts-view-options").css( 'pointer-events', 'auto');
 		if(SCROLL_POSITION)
 		{
 			$('html, body').animate({ scrollTop : SCROLL_POSITION  },1000);
