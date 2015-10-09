@@ -4,8 +4,7 @@
  * application based on the function provided on agile_widgets.js(Third party API)
  */
 
-$(function()
-{
+function startSipWidget(contact_id){
 	console.log("In sip.js");
 
 	// sip widget name declared as global variable
@@ -43,7 +42,7 @@ $(function()
 	 */
 	// showSipProfile();
 
-});
+}
 
 /**
  * Shows setup if user adds Sip widget for the first time or clicks on reset

@@ -611,3 +611,13 @@ function enable_save_button(elem)
 {
 	elem.html(elem.attr('data-save-text')).removeAttr('disabled data-save-text');
 }
+
+
+/**
+*  Extended View of Base_Model. It combines parent events to extended view events.
+*/
+Base_Model_View.extend = function(child) {
+ var view = Backbone.View.extend.apply(this, arguments);
+ view.prototype.events = _.extend({}, this.prototype.events, child.events);
+ return view;
+};
