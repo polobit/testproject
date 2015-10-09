@@ -54,10 +54,17 @@ function initValidator(selector, callback) {
 	  });
 
 	  // Merge Fields validation
-	  $.tools.validator.fn(":input, textarea", function(input, value){
+	  $.tools.validator.fn(function(){
+	  		return ($(this).is('input') || $(this).is('textarea'))
+	  }, 
+	  function(input, value){
 
-	     if(value == undefined)
-			value='';
+	     if(!value)
+			value = "";
+
+		 // match works only on strings
+		 if(typeof value !== "string")
+		 	value = String(value);
 		        
         // Regex to identify merge fields
         var reg = /{{[a-zA-Z0-9\s_.,&/\\*-]*[a-zA-Z0-9\s]}(?!})|{{{[a-zA-Z0-9\s_.,&/\\*-]*[a-zA-Z0-9\s]}}(?!})/g;
