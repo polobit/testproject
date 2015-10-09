@@ -107,7 +107,6 @@ var ContactsRouter = Backbone.Router.extend({
 	 */
 	contacts : function(tag_id, filter_id, grid_view, is_lhs_filter)
 	{
-		$("#contacts-view-options").css( 'pointer-events', 'auto');
 		if(SCROLL_POSITION)
 		{
 			$('html, body').animate({ scrollTop : SCROLL_POSITION  },1000);
@@ -255,11 +254,12 @@ var ContactsRouter = Backbone.Router.extend({
 		
 		if(is_lhs_filter) {
 			template_key = "contacts-table";
+			
 			if (grid_view || readCookie("agile_contact_view"))
 			{
 				template_key = "contacts-grid-table";
 				individual_tag_name = "div";
-				custom_scrollable_element="#contacts-grid-model-list";
+				custom_scrollable_element="#contacts-grid-table-model-list";
 			}
 		}
 
