@@ -501,7 +501,7 @@ public class Opportunity extends Cursor implements Serializable
 	    
 	    //If old deal, new deal are same and lost reason is there, 
 	    //can update milestone changed time with old milestone changed time
-	    if (this.pipeline_id.equals(oldOpportunity.getPipeline_id())
+	    if (this.pipeline_id != null && this.milestone != null && this.pipeline_id.equals(oldOpportunity.getPipeline_id())
 		    && this.milestone.equals(oldOpportunity.milestone) 
 		    && (this.lost_reason_id != null || this.lost_reason_id != 0) 
 		    && (oldOpportunity.lost_reason_id == null || oldOpportunity.lost_reason_id == 0))
