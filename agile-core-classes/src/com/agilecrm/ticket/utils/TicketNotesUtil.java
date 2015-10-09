@@ -210,35 +210,51 @@ public class TicketNotesUtil
 	 */
 	public static List<TicketNotes> inclDomainUsers(List<TicketNotes> notes)
 	{
-		Set<Key<DomainUser>> domainUserKeys = new HashSet<Key<DomainUser>>();
+		String oldnamespace = NamespaceManager.get();
 
-		Map<Long, DomainUser> map = new HashMap<Long, DomainUser>();
-
-		for (TicketNotes note : notes)
+		try
 		{
-			if (note.created_by == CREATED_BY.REQUESTER)
-				continue;
+			Set<Key<DomainUser>> domainUserKeys = new HashSet<Key<DomainUser>>();
 
-			System.out.println(note.assignee_id);
-			
-			domainUserKeys.add(new Key<DomainUser>(DomainUser.class, note.assignee_id));
+			Map<Long, DomainUser> map = new HashMap<Long, DomainUser>();
+
+			NamespaceManager.set("");
+
+			for (TicketNotes note : notes)
+			{
+				if (note.created_by == CREATED_BY.REQUESTER)
+					continue;
+
+				System.out.println(note.assignee_id);
+
+				domainUserKeys.add(new Key<DomainUser>(DomainUser.class, note.assignee_id));
+			}
+
+			System.out.println("domainUserKeys: " + domainUserKeys);
+
+			List<DomainUser> domainUsers = DomainUserUtil.dao.fetchAllByKeys(new ArrayList<Key<DomainUser>>(
+					domainUserKeys));
+
+			System.out.println("domainUsers: " + domainUsers);
+
+			for (DomainUser domainUser : domainUsers)
+				map.put(domainUser.id, domainUser);
+
+			for (TicketNotes note : notes)
+			{
+				if (note.created_by == CREATED_BY.REQUESTER)
+					continue;
+
+				note.domain_user = map.get(note.assignee_id);
+			}
 		}
-
-		System.out.println("domainUserKeys: " + domainUserKeys);
-		
-		List<DomainUser> domainUsers = DomainUserUtil.getDomainUsersFromKeys(new ArrayList<Key<DomainUser>>(domainUserKeys));
-
-		System.out.println("domainUsers: " + domainUsers);
-
-		for (DomainUser domainUser : domainUsers)
-			map.put(domainUser.id, domainUser);
-
-		for (TicketNotes note : notes)
+		catch (Exception e)
 		{
-			if (note.created_by == CREATED_BY.REQUESTER)
-				continue;
-
-			note.domain_user = map.get(note.assignee_id);
+			e.printStackTrace();
+		}
+		finally
+		{
+			NamespaceManager.set(oldnamespace);
 		}
 
 		return notes;
