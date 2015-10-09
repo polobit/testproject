@@ -869,8 +869,8 @@ var ReportsRouter = Backbone.Router
 			showDealsLossReason : function()
 			{
 				hideTransitionBar();
-				head.js(LIB_PATH + 'lib/date-charts.js', LIB_PATH + 'lib/date-range-picker.js', CSS_PATH + "css/misc/date-picker.css", function()
-						{
+				initReportLibs(function()
+				{
 
 					// Load Reports Template
 				getTemplate("report-DealsLoss", {}, undefined, function(template_ui){
@@ -892,8 +892,8 @@ var ReportsRouter = Backbone.Router
 			showDealsWonChart : function()
 			{
 				hideTransitionBar();
-				head.js(LIB_PATH + 'lib/date-charts.js', LIB_PATH + 'lib/date-range-picker.js', CSS_PATH + "css/misc/date-picker.css", function()
-						{
+			initReportLibs(function()
+				{
 
 					// Load Reports Template
 				getTemplate("report-DealsWon", {}, undefined, function(template_ui){
