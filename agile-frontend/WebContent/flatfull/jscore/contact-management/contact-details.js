@@ -427,9 +427,9 @@ function clearContactWidetQueues(contactId){
 
 	if(!contactId || !document.ajaxq)
 		  return;
-
 	document.ajaxq.q["_widgets_" + contactId] = [];
-	document.ajaxq.q["widget_queue_" + contactId] = [];
+	document.ajaxq.q["widgets_" + contactId] = [];
+	document.ajaxq.q["widget_queue_"+contactId] = [];
 
 }
 
