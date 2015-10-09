@@ -12,35 +12,42 @@ $(function(){
 
 				Group_ID = group_id;
 
-				//Fectching new, open, closed tickets count
-				Tickets_Count.fetch_tickets_count();
-
 				//Rendering root template
-				$("#content").html(getTemplate('tickets-container', {group_id: group_id}));
+				getTemplate("tickets-container",  {group_id: group_id}, undefined, function(template_ui){
 
-				//Rendering Groups dropdown
-				Tickets_Group_View = new Base_Model_View({
-					isNew : false,
-					template : "tickets-groups-container",
-					url : "/core/api/tickets/groups",
-					postRenderCallback : function(el, data) {
+					if(!template_ui)
+				  		return;
 
-						//Render Group name on drop down
-						$.map(data, function(obj,index){
+					$('#content').html($(template_ui));	
 
-							if(obj.id == Group_ID)
-							{
-								$('a#group_name').html(obj.group_name);
-								return true;
-							}	
-						});
+					//Fectching new, open, closed tickets count
+					Tickets_Count.fetch_tickets_count();
 
-						if(callback)
-							callback();
-					}
-				});
+					//Rendering Groups dropdown
+					Tickets_Group_View = new Base_Model_View({
+						isNew : false,
+						template : "tickets-groups-container",
+						url : "/core/api/tickets/groups",
+						postRenderCallback : function(el, data) {
 
-				$('#right-pane').html(Tickets_Group_View.render().el);
+							//Render Group name on drop down
+							$.map(data, function(obj,index){
+
+								if(obj.id == Group_ID)
+								{
+									$('a#group_name').html(obj.group_name);
+									return true;
+								}	
+							});
+
+							if(callback)
+								callback();
+						}
+					});
+
+					$('#right-pane').html(Tickets_Group_View.render().el);
+
+				}, "#content");
 			}	
 			else{
 
