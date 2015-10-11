@@ -1,16 +1,14 @@
 package com.agilecrm.ticket.utils;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.regex.Pattern;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.agilecrm.Globals;
@@ -26,9 +24,7 @@ import com.agilecrm.util.HTTPUtil;
 import com.agilecrm.util.MD5Util;
 import com.agilecrm.util.email.MustacheUtil;
 import com.agilecrm.util.email.SendMail;
-import com.campaignio.urlshortener.util.Base62;
 import com.google.appengine.api.NamespaceManager;
-import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.googlecode.objectify.Key;
 import com.thirdparty.mandrill.Mandrill;
 
@@ -72,8 +68,9 @@ public class TicketNotesUtil
 			NOTE_TYPE note_type, List<String> attachments_list)
 	{
 		TicketNotes ticketNotes = new TicketNotes(ticket_id, group_id, assignee_id, created_by, requester_name,
-				requester_email, parsePlainText(original_plain_text), parseHtmlText(original_html_text),
-				original_plain_text, original_html_text, note_type, attachments_list);
+				requester_email, removedQuotedReplies(original_plain_text, requester_email), removedQuotedReplies(
+						original_html_text, requester_email), original_plain_text, original_html_text, note_type,
+				attachments_list);
 
 		Key<TicketNotes> key = TicketNotes.ticketNotesDao.put(ticketNotes);
 
@@ -280,6 +277,28 @@ public class TicketNotesUtil
 	{
 		// parse plain text
 		return original_html_text;
+	}
+
+	/**
+	 * Removes quoted replies in received ticket.
+	 * 
+	 * @param text
+	 * @param fromAddress
+	 * @return sent only last typed reply
+	 */
+	private static String removedQuotedReplies(String text, String fromAddress)
+	{
+		try
+		{
+			Pattern pattern = Pattern.compile("On.*?wrote:.*?", Pattern.DOTALL);
+			text = pattern.split(text)[0];
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+
+		return text;
 	}
 
 	public static void main(String[] args) throws Exception
