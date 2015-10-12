@@ -228,10 +228,14 @@ function initDateRange(callback)
 							'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'
 					], firstDay : parseInt(CALENDAR_WEEK_START_DAY) } }, function(start, end)
 					{
+						if(start && end){
 						var months_diff = Math.abs(start.getMonth() - end.getMonth() + (12 * (start.getFullYear() - end.getFullYear())));
 						$('#reportrange span').html(start.toString('MMMM d, yyyy') + ' - ' + end.toString('MMMM d, yyyy'));
 						$("#week-range").html(end.add({ days : -6 }).toString('MMMM d, yyyy') + ' - ' + end.add({ days : 6 }).toString('MMMM d, yyyy'));
-						
+						}
+						else
+ 			$('#reportrange span').html(Date.today().add({ days : -6 }).toString('MMMM d, yyyy')+'-'+Date.today().toString('MMMM d, yyyy'));	
+
 						callback();
 					});
 					$('.daterangepicker > .ranges > ul').on("click", "li", function(e)
