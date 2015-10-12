@@ -120,5 +120,5 @@ function assignTicket(event){
 
   	setTimeout(function(){
   		$("#ticket-assign-modal").modal('show');
-  	},0);
+  	}, 1);
 }
