@@ -1724,7 +1724,7 @@ function pieforReports(url, selector, name,show_loading)
 	chart = new Highcharts.Chart(
 			{
 				chart : { renderTo : selector, type : 'pie', plotBackgroundColor : null, plotBorderWidth : null, plotShadow : false,
-					marginTop : 50 },
+					marginBottom : 50 },
 				colors: ['#7266ba','#23b7e5','#27c24c','#fad733','#f05050','#FF9900','#7AF168','#167F80','#0560A2','#D3E6C7'],
 				title : { text : name },
 				 tooltip: {
@@ -1759,7 +1759,7 @@ function pieforReports(url, selector, name,show_loading)
 							{
 								return 	'<div class="text-center"><span style="color:'+this.point.color+'"><b>'+this.point.name+'</b></span><br/>' +
     			'<span style="color:'+this.point.color+'"><b>'+Math.round(this.point.percentage)+'%</b></span></div>';
-							}, distance : 20 }, showInLegend : false, innerSize : '60%', size : '50%', shadow : false, borderWidth : 0 },
+							}, distance : 20 }, showInLegend : false, innerSize : '50%',  shadow : false, borderWidth : 0 },
 					series : { events : { mouseOver : function()
 					{
 						$('.tooltip-default-message').hide();
