@@ -751,3 +751,21 @@ function removeStyleForAPlan(id)
 		$(".plan-collection-in").removeClass('selected-plan');
 
 }
+
+function emailClickEvent() {
+	$('ul.nav.nav-tabs').removeClass("hide");
+	$("#email").addClass("hide");
+	$("#currentPlan").addClass("p-t-md");
+	$("#usertab").removeClass("active");
+	$("#emailtab").addClass("active");
+	$("#users-content").removeClass("active");
+	$("#email-content").addClass("active");
+}
+
+function printPage() {
+	$("#print-div").addClass("hide");
+	//document.getElementById('header').style.display = 'none';
+    //document.getElementById('footer').style.display = 'none';
+	window.print();
+	$("#print-div").removeClass("hide");
+}

@@ -137,7 +137,7 @@ ${{numeric_operation ../../amountDue 100 "/"}}
 	  	<div class="col-md-10 text-center" id="print-div">
 			<div class="m-b-sm" style="height: 35px;">
 					<a class="btn btn-default" href="#invoice-details">Back</a>
-					<input class="print_btn btn btn btn-primary" type="button" value="Print" onclick="xyz()">
+					<input class="print_btn btn btn btn-primary" type="button" value="Print" onclick="printPage()">
 						
 			</div>
 		</div>
@@ -150,13 +150,4 @@ ${{numeric_operation ../../amountDue 100 "/"}}
 
 <div id="invoice-details-holder"></div>
 
-</script>
-<script>
-function xyz() {
-	$("#print-div").addClass("hide");
-	//document.getElementById('header').style.display = 'none';
-    //document.getElementById('footer').style.display = 'none';
-	window.print();
-	$("#print-div").removeClass("hide");
-}
 </script>

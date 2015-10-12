@@ -671,14 +671,3 @@ users.
 <script id="latest-invoice-template" type="text/html">
  Thank you for your last payment of ${{numeric_operation this.total 100 "/"}} on {{epochToHumanDate "mmm dd, yyyy" periodStart}}.
 </script>
-<script>
-function emailClickEvent() {
-	$('ul.nav.nav-tabs').removeClass("hide");
-	$("#email").addClass("hide");
-	$("#currentPlan").addClass("p-t-md");
-	$("#usertab").removeClass("active");
-	$("#emailtab").addClass("active");
-	$("#users-content").removeClass("active");
-	$("#email-content").addClass("active");
-}
-</script>
