@@ -1759,7 +1759,7 @@ function pieforReports(url, selector, name,show_loading)
 							{
 								return 	'<div class="text-center"><span style="color:'+this.point.color+'"><b>'+this.point.name+'</b></span><br/>' +
     			'<span style="color:'+this.point.color+'"><b>'+Math.round(this.point.percentage)+'%</b></span></div>';
-							}, distance : 20 }, showInLegend : false, innerSize : '60%', size : '90%', shadow : false, borderWidth : 0 },
+							}, distance : 20 }, showInLegend : false, innerSize : '60%', size : '50%', shadow : false, borderWidth : 0 },
 					series : { events : { mouseOver : function()
 					{
 						$('.tooltip-default-message').hide();
