@@ -207,6 +207,7 @@ public class ScribeServlet extends HttpServlet {
 
 		// Get service name from request
 		String serviceName = req.getParameter("service");
+		String linkType = req.getParameter("linkType");
 
 		// OAuth needn't send any service type
 		if (serviceName == null && req.getRequestURI().contains("oauth"))
@@ -214,6 +215,9 @@ public class ScribeServlet extends HttpServlet {
 
 		if (serviceName != null)
 			req.getSession().setAttribute("service_type", serviceName);
+
+		if (linkType != null)
+			req.getSession().setAttribute("linkType", linkType);
 
 		System.out.println("in set up of scribe " + serviceName);
 
@@ -244,7 +248,7 @@ public class ScribeServlet extends HttpServlet {
 				|| serviceName.equalsIgnoreCase(SERVICE_TYPE_GOOGLE_PLUS)) {
 			// After building service, redirects to authorization page
 			url = service.getAuthorizationUrl(null);
-			
+
 			String query = req.getParameter("query");
 
 			if (query != null) {
@@ -256,32 +260,46 @@ public class ScribeServlet extends HttpServlet {
 			System.out.println("wait");
 		} else {
 			// OAuth 1.0
-			token = service.getRequestToken();
+			try {
+				token = service.getRequestToken();
 
-			// After building service, redirects to authorization page
-			url = service.getAuthorizationUrl(token);
-			System.out.println("Redirect URL OAuth1: " + url);
+				// After building service, redirects to authorization page
+				url = service.getAuthorizationUrl(token);
+				System.out.println("Redirect URL OAuth1: " + url);
+
+				/*
+				 * Save Token,Return URL and Plugin-Id in session as we need
+				 * them after it returns back
+				 */
+				req.getSession().setAttribute("oauth.request_token", token);
+
+				String returnURL = req.getParameter("return_url");
+				if (returnURL != null)
+					req.getSession().setAttribute("return_url", returnURL);
+
+				String pluginId = req.getParameter("plugin_id");
+				if (pluginId != null)
+					req.getSession().setAttribute("plugin_id", pluginId);
+
+				req.getSession().setAttribute("isForAll", isForAll);
+
+				System.out.println("In setup of scribe response: " + resp);
+
+				System.out.println(url);
+
+			} catch (Exception e) {
+				// TODO: handle exception
+				if (linkType.equalsIgnoreCase("widget")) {
+					req.getSession().setAttribute("widgetMsgType", "error");
+					req.getSession().setAttribute(
+							"widgetMsg",
+							"Error occured while doing authentication : "
+									+ e.getMessage());
+					url = "/#add-widget";
+				}
+			}
 		}
 
-		/*
-		 * Save Token,Return URL and Plugin-Id in session as we need them after
-		 * it returns back
-		 */
-		req.getSession().setAttribute("oauth.request_token", token);
-
-		String returnURL = req.getParameter("return_url");
-		if (returnURL != null)
-			req.getSession().setAttribute("return_url", returnURL);
-
-		String pluginId = req.getParameter("plugin_id");
-		if (pluginId != null)
-			req.getSession().setAttribute("plugin_id", pluginId);
-
-		req.getSession().setAttribute("isForAll", isForAll);
-
-		System.out.println("In setup of scribe response: " + resp);
-
-		System.out.println(url);
 		// Redirect URL
 		resp.sendRedirect(url);
 	}
@@ -300,6 +318,7 @@ public class ScribeServlet extends HttpServlet {
 	public static void saveToken(HttpServletRequest req,
 			HttpServletResponse resp) throws IOException {
 		Long widgetID = null;
+		String linkType = (String) req.getSession().getAttribute("linkType");
 		// Retrieve Token and Service Name from session
 		String serviceName = (String) req.getSession().getAttribute(
 				"oauth.service");
@@ -363,31 +382,40 @@ public class ScribeServlet extends HttpServlet {
 
 		String widgetName = (Character.toUpperCase(serviceName.charAt(0)) + serviceName
 				.substring(1));
-		String resultType = "error";
-		String statusMSG = "Error occurred while saving " + widgetName
-				+ " widget";
-		String returnURL = "/#add-widget";
+		String returnURL = "";
+		if (linkType != null) {
+			String resultType = "error";
+			String statusMSG = "Error occurred while saving " + widgetName
+					+ " widget";
+			returnURL = "/#add-widget";
 
-		try {
-			widgetID = ScribeUtil.saveTokens(req, resp, service, serviceName,
-					accessToken, code);
+			if (linkType.equalsIgnoreCase("widget")) {
+				try {
+					widgetID = ScribeUtil.saveTokens(req, resp, service,
+							serviceName, accessToken, code);
 
-			if (widgetID != null) {
-				// return URL is retrieved from session
-				returnURL = (String) req.getSession()
-						.getAttribute("return_url") + "/" + widgetID;
-				resultType = "success";
-				statusMSG = widgetName + " widget saved successfully.";
-				System.out.println("return url " + returnURL);
+					if (widgetID != null) {
+						// return URL is retrieved from session
+						returnURL = (String) req.getSession().getAttribute(
+								"return_url")
+								+ "/" + widgetID;
+						resultType = "success";
+						statusMSG = widgetName + " widget saved successfully.";
+						System.out.println("return url " + returnURL);
+					}
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+
+					statusMSG += " : " + e.getMessage();
+				}
+
+				req.getSession().setAttribute("widgetMsgType", resultType);
+				req.getSession().setAttribute("widgetMsg", statusMSG);
 			}
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-
-			statusMSG += " : " + e.getMessage();
+		} else {
+			returnURL = (String) req.getSession().getAttribute("return_url");
 		}
 
-		req.getSession().setAttribute("widgetMsgType", resultType);
-		req.getSession().setAttribute("widgetMsg", statusMSG);
 		resp.sendRedirect(returnURL);
 
 		// Delete return url Attribute

@@ -38,6 +38,11 @@ public class OAuthServlet extends HttpServlet {
 				req.getSession().setAttribute("isForAll", isForAll);
 			}
 
+			String linkType = req.getParameter("linkType");
+			if (linkType != null) {
+				req.getSession().setAttribute("linkType", linkType);
+			}
+
 			String verifier = req.getParameter("oauth_verifier");
 			String org = req.getParameter("org");
 			System.out.println("verifier: " + verifier);
@@ -94,6 +99,7 @@ public class OAuthServlet extends HttpServlet {
 
 		String userId = (userInfo == null) ? null : userInfo.getEmail();
 		String isForAll = (String) req.getSession().getAttribute("isForAll");
+		String linkType = (String) req.getSession().getAttribute("linkType");
 
 		Map<String, String> properties = new HashMap<String, String>();
 		properties.put("token", consumer.getToken());
@@ -106,6 +112,7 @@ public class OAuthServlet extends HttpServlet {
 		String statusMSG = "QuickBooks Widget saved successfully";
 
 		if (SERVICE_TYPE_QUICKBOOKS.equalsIgnoreCase(serviceType)) {
+
 			try {
 				widgetID = ScribeUtil.saveWidgetPrefsByName("quickbooks",
 						properties);

@@ -61,8 +61,7 @@ var WidgetsRouter = Backbone.Router
 				"sync/xero" : "xero_import",
 				"sync/freshbooks" : "freshbooks_sync",
 				"sync/freshbooks/setting" : "freshbooks_sync_setting",
-				"sync/officecalendar" : "office365Calendar",
-				"Bria" : "Bria", "Bria/:id" : "Bria"
+				"sync/officecalendar" : "office365Calendar"
 			},
 
 			/**
@@ -135,13 +134,6 @@ var WidgetsRouter = Backbone.Router
 			},
 
 			/**
-			 * Manages Bria widget
-			 */
-			Bria : function(id) {
-				addConfigurableWidget(id, "Bria", 'bria-login');
-			},
-			
-			/**
 			 * Manages Rapleaf widget
 			 */
 			Rapleaf : function(id) {
@@ -184,7 +176,7 @@ var WidgetsRouter = Backbone.Router
 					addOAuthWidget(
 							"Twitter",
 							"twitter-login",
-							('/scribe?service=twitter&isForAll=' + isForAll
+							('/scribe?service=twitter&linkType=widget&isForAll=' + isForAll
 									+ '&return_url='
 									+ encodeURIComponent(window.location.href)));
 				} else {
@@ -202,7 +194,7 @@ var WidgetsRouter = Backbone.Router
 					addOAuthWidget(
 							"Facebook",
 							"facebook-login",
-							('/scribe?service=facebook&isForAll=' + isForAll
+							('/scribe?service=facebook&linkType=widget&isForAll=' + isForAll
 									+ '&return_url='
 									+ encodeURIComponent(window.location.href)));
 				} else {
@@ -225,7 +217,7 @@ var WidgetsRouter = Backbone.Router
 									+ window.location.host
 									+ "/XeroServlet?isForAll="
 									+ isForAll
-									+ "&data=")));
+									+ "&linkType=widget&data=")));
 				} else {
 					addWidgetProfile(id, "Xero", "xero-revoke-access",
 							"core/api/widgets/Xero");
@@ -241,7 +233,7 @@ var WidgetsRouter = Backbone.Router
 					addOAuthWidget(
 							"QuickBooks",
 							"quickbooks-login",
-							('/OAuthServlet?service=quickbooks&isForAll='
+							('/OAuthServlet?service=quickbooks&linkType=widget&isForAll='
 									+ isForAll + '&return_url='
 									+ encodeURIComponent(window.location.href)));
 				} else {
@@ -273,7 +265,7 @@ var WidgetsRouter = Backbone.Router
 					addOAuthWidget(
 							"GooglePlus",
 							"googleplus-login",
-							('/scribe?service=googleplus&isForAll=' + isForAll
+							('/scribe?service=googleplus&linkType=widget&isForAll=' + isForAll
 									+ '&return_url='
 									+ encodeURIComponent(window.location.href)));
 				} else {
@@ -292,7 +284,7 @@ var WidgetsRouter = Backbone.Router
 					addOAuthWidget(
 							"Stripe",
 							"stripe-login",
-							('/scribe?service=stripe&isForAll=' + isForAll
+							('/scribe?service=stripe&linkType=widget&isForAll=' + isForAll
 									+ '&return_url='
 									+ encodeURIComponent(window.location.href)));
 				} else {
