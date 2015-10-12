@@ -2,13 +2,16 @@ package com.agilecrm.deals.util;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.TimeZone;
+import java.util.TreeSet;
 
 import net.sf.json.JSONObject;
 
@@ -1946,15 +1949,30 @@ public class OpportunityUtil
 			{
 		UserAccessControlUtil.checkReadAccessAndModifyQuery("Opportunity", null);
 		Map<String, Object> conditionsMap = new HashMap<String, Object>();
+		Map<String, Object> conditionsMap1 = new HashMap<String, Object>();
 		List<Opportunity> ownDealsList = new ArrayList<Opportunity>();
+		//List<Opportunity> ownDealsList_2 = new ArrayList<Opportunity>();
+		Set<Opportunity> ownDealsSet = new TreeSet<Opportunity>(new Comparator<Opportunity>()
+		{
+			@Override  
+            public int compare(Opportunity o1, Opportunity o2){
+				return o1.id.equals(o2.id) ? 0 : -1;
+            }
+		});
 		List<Milestone> milestoneList;
 		Milestone milestone1;
 		if (ownerId != null)
+			{
 			conditionsMap.put("ownerKey", new Key<DomainUser>(DomainUser.class, ownerId));
+			conditionsMap1.put("ownerKey", new Key<DomainUser>(DomainUser.class, ownerId));
+			}
 			
 		conditionsMap.put("archived", false);
-		conditionsMap.put("milestone_changed_time >= ", minTime);
-		conditionsMap.put("milestone_changed_time <= ", maxTime);
+		conditionsMap1.put("archived", false);
+		conditionsMap.put("created_time >= ", minTime);
+		conditionsMap.put("created_time <= ", maxTime);
+		conditionsMap1.put("milestone_changed_time >= ", minTime);
+		conditionsMap1.put("milestone_changed_time <= ", maxTime);
 		if (pipelineId != null)
 		{
 			milestone1 = MilestoneUtil.getMilestone(pipelineId);
@@ -1962,20 +1980,34 @@ public class OpportunityUtil
 			{
 				conditionsMap.put("milestone", milestone1.lost_milestone);
 				conditionsMap.put("pipeline", new Key<Milestone>(Milestone.class, milestone1.id));
+				conditionsMap1.put("milestone", milestone1.lost_milestone);
+				conditionsMap1.put("pipeline", new Key<Milestone>(Milestone.class, milestone1.id));
 				List<Opportunity> list = dao.listByProperty(conditionsMap);
+				List<Opportunity> list2 = dao.listByProperty(conditionsMap1);
 				if (list != null)
 				{
-					ownDealsList.addAll(list);
+					ownDealsSet.addAll(list);
+				}
+				if (list2 != null)
+				{
+					ownDealsSet.addAll(list2);
 				}
 			}
 			else
 			{
 				conditionsMap.put("milestone", "Lost");
 				conditionsMap.put("pipeline", new Key<Milestone>(Milestone.class, milestone1.id));
+				conditionsMap1.put("milestone", "Lost");
+				conditionsMap1.put("pipeline", new Key<Milestone>(Milestone.class, milestone1.id));
 				List<Opportunity> list = dao.listByProperty(conditionsMap);
+				List<Opportunity> list2 = dao.listByProperty(conditionsMap1);
 				if (list != null)
 				{
-					ownDealsList.addAll(list);
+					ownDealsSet.addAll(list);
+				}
+				if (list2 != null)
+				{
+					ownDealsSet.addAll(list2);
 				}
 			}
 		}
@@ -1988,24 +2020,41 @@ public class OpportunityUtil
 				{
 					conditionsMap.put("milestone", milestone.lost_milestone);
 					conditionsMap.put("pipeline", new Key<Milestone>(Milestone.class, milestone.id));
+					conditionsMap1.put("milestone", milestone.lost_milestone);
+					conditionsMap1.put("pipeline", new Key<Milestone>(Milestone.class, milestone.id));
 					List<Opportunity> list = dao.listByProperty(conditionsMap);
+					List<Opportunity> list2 = dao.listByProperty(conditionsMap1);
 					if (list != null)
 					{
-						ownDealsList.addAll(list);
+						ownDealsSet.addAll(list);
+					}
+					if (list2 != null)
+					{
+						System.out.println("Adding another 2");
+						ownDealsSet.addAll(list2);
 					}
 				}
 				else
 				{
 					conditionsMap.put("milestone", "Lost");
 					conditionsMap.put("pipeline", new Key<Milestone>(Milestone.class, milestone.id));
+					conditionsMap1.put("milestone", "Lost");
+					conditionsMap1.put("pipeline", new Key<Milestone>(Milestone.class, milestone.id));
+					
 					List<Opportunity> list = dao.listByProperty(conditionsMap);
+					List<Opportunity> list2 = dao.listByProperty(conditionsMap1);
 					if (list != null)
 					{
-						ownDealsList.addAll(list);
+						ownDealsSet.addAll(list);
+					}
+					if (list2 != null)
+					{
+						ownDealsSet.addAll(list2);
 					}
 				}
 			}
 		}
+		ownDealsList=new ArrayList<>(ownDealsSet);
 		return ownDealsList;
 			}
 	/**
