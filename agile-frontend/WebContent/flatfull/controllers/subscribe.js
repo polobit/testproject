@@ -44,7 +44,7 @@ var SubscribeRouter = Backbone.Router
 
 			"invoice" : "invoice",
 
-			"invoice/:id" : "invoiceDetails",
+			"invoice/:id" : "getInvoiceDetails",
 
 			"getInvoiceDetails/:id" : "getInvoiceDetails",
 
@@ -440,7 +440,9 @@ var SubscribeRouter = Backbone.Router
 			 */
 			invoiceDetails : function(id)
 			{
-
+				var invoicedata;
+				var companydata;
+				var obj;
 				// Checks whether invoice list is defined, if list is not
 				// defined get the list of invoices
 
@@ -458,9 +460,21 @@ var SubscribeRouter = Backbone.Router
 					var invoice_detail_model = new Base_Model_View({ url : "core/api/subscription/getinvoice", model : model, template : "invoice-detail",
 						postRenderCallback : function(el)
 						{
+							var company_detail = new Base_Model_View({ url : "core/api/account-prefs", model : model, template : "invoice-detail",
+								postRenderCallback : function(el)
+								{
+									companydata = data;
+									obj = { "invoice" : invoicedata, "company" : companydata }
+									getTemplate('invoice-detail', obj, undefined, function(template_ui)
+											{
+												if (!template_ui)
+													return;
+												$('#billing-settings-tab-content').html($(template_ui));
+											}, "#billing-settings-tab-content");
+								} });
 						} });
-					$("#billing-settings-tab-content").html("");
-					$("#billing-settings-tab-content").html(invoice_detail_model.render().el);
+//					$("#billing-settings-tab-content").html("");
+//					$("#billing-settings-tab-content").html(invoice_detail_model.render().el);
 				}
 				else
 					return;
