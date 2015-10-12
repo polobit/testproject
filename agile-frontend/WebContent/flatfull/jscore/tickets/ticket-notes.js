@@ -98,6 +98,8 @@ function assignTicket(event){
 		url : "/core/api/tickets/assign-ticket",
 		postRenderCallback : function(el) {
 
+			$("#ticket-assign-modal").modal('show');
+			
 			head.js(LIB_PATH + 'lib/agile.jquery.chained.min.js', function()
 			{
 				var LHS, RHS;
@@ -117,8 +119,4 @@ function assignTicket(event){
 	});
 
   	$('#assign-ticket').html(assignModalView.render().el);
-
-  	setTimeout(function(){
-  		$("#ticket-assign-modal").modal('show');
-  	}, 1);
 }
