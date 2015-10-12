@@ -76,3 +76,49 @@ function initializeTicketNotesEvent(el){
 		$('#send-reply-container').show();
 	});
 }
+
+/**
+ *
+ **/
+function assignTicket(event){
+
+	$("#ticket-assign-modal").modal('hide'); 
+
+	// Removes previous modals if exist. 
+	if($('#ticket-assign-modal').size() != 0)
+		 $('#ticket-assign-modal').remove();
+	
+
+	var assignModalView = new Base_Model_View({
+		isNew : false, 
+		template : "ticket-assign",
+		saveCallback : function(){
+			$("#ticket-assign-modal").modal('hide');
+		},
+		url : "/core/api/tickets/assign-ticket",
+		postRenderCallback : function(el) {
+
+			head.js(LIB_PATH + 'lib/agile.jquery.chained.min.js', function()
+			{
+				var LHS, RHS;
+
+				// Assigning elements with ids LHS
+				// and RHS
+				// in trigger-add.html
+				LHS = $("#group_id", el);
+				RHS = $("#assignee_id", el);
+
+				// Chaining dependencies of input
+				// fields
+				// with jquery.chained.js
+				RHS.chained(LHS);
+			});
+		}
+	});
+
+  	$('#assign-ticket').html(assignModalView.render().el);
+
+  	setTimeout(function(){
+  		$("#ticket-assign-modal").modal('show');
+  	},0);
+}

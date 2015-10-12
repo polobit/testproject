@@ -1,5 +1,6 @@
 package com.agilecrm.ticket.rest;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.ws.rs.GET;
@@ -13,15 +14,23 @@ import javax.ws.rs.core.Response;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.agilecrm.ticket.entitys.TicketGroups;
 import com.agilecrm.ticket.entitys.Tickets;
+import com.agilecrm.ticket.entitys.TicketNotes.CREATED_BY;
+import com.agilecrm.ticket.entitys.TicketNotes.NOTE_TYPE;
 import com.agilecrm.ticket.entitys.Tickets.Priority;
+import com.agilecrm.ticket.entitys.Tickets.Source;
 import com.agilecrm.ticket.entitys.Tickets.Status;
 import com.agilecrm.ticket.utils.TicketGroupUtil;
+import com.agilecrm.ticket.utils.TicketNotesUtil;
 import com.agilecrm.ticket.utils.TicketsUtil;
 import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.util.DomainUserUtil;
+import com.google.appengine.api.NamespaceManager;
 import com.googlecode.objectify.Key;
 
 /**
@@ -104,6 +113,44 @@ public class TicketsRest
 	}
 
 	/**
+	 * 
+	 * @return JSONArray of Groups and Assignee to show in modal for selection.
+	 */
+	@GET
+	@Path("/assign-ticket")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<TicketGroups> assignTicket()
+	{
+		try
+		{
+			List<TicketGroups> groups = TicketGroupUtil.getAllGroups();
+
+			List<DomainUser> domainUsers = DomainUserUtil.getAllAdminUsers(NamespaceManager.get());
+
+			for (TicketGroups group : groups)
+			{
+				List<DomainUser> groupUsers = new ArrayList<DomainUser>();
+				
+				for (DomainUser domainUser : domainUsers)
+				{
+					if(group.agents_keys.contains(domainUser.id))
+						groupUsers.add(domainUser);
+				}
+				
+				group.group_users = groupUsers;
+			}
+
+			return groups;
+		}
+		catch (Exception e)
+		{
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
+			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+					.build());
+		}
+	}
+
+	/**
 	 * Assigns Ticket to given domain user and ticket group
 	 * 
 	 * @param ticket_id
@@ -171,7 +218,6 @@ public class TicketsRest
 					.build());
 		}
 	}
-	
 
 	/**
 	 * 
@@ -182,7 +228,7 @@ public class TicketsRest
 	@POST
 	@Path("/make-favorite")
 	@Produces(MediaType.APPLICATION_JSON)
-	public String  makeFavorite(@QueryParam("ticket_id") Long ticket_id, @QueryParam("is_starred") Boolean is_starred)
+	public String makeFavorite(@QueryParam("ticket_id") Long ticket_id, @QueryParam("is_starred") Boolean is_starred)
 	{
 		try
 		{
@@ -212,7 +258,7 @@ public class TicketsRest
 	@POST
 	@Path("/close-ticket")
 	@Produces(MediaType.APPLICATION_JSON)
-	public String  closeTicket(@QueryParam("ticket_id") Long ticket_id)
+	public String closeTicket(@QueryParam("ticket_id") Long ticket_id)
 	{
 		try
 		{
@@ -232,5 +278,39 @@ public class TicketsRest
 			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
 					.build());
 		}
+	}
+
+	/**
+	 * 
+	 * @return
+	 * @throws JSONException
+	 */
+	@GET
+	@Path("/create-test-ticket")
+	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	public String createTicket() throws JSONException
+	{
+		try
+		{
+			TicketGroups group = TicketGroupUtil.getDefaultTicketGroup();
+
+			String message = "Hi!..\r\nThis is test message. Please ignore.\r\n\r\nThank you\r\nSasi Krishna";
+
+			// Creating new Ticket in Ticket table
+			Tickets ticket = TicketsUtil.createTicket(group.id, true, "Sasi", "sasi@clickdesk.com",
+					"Test ticket created from rest method", "", message, Source.EMAIL, true, "[142.152.23.23]");
+
+			// Creating new Notes in TicketNotes table
+			TicketNotesUtil.createTicketNotes(ticket.id, group.id, ticket.assigneeID, CREATED_BY.REQUESTER, "Sasi",
+					"sasi@clickdesk.com", message, message, NOTE_TYPE.PUBLIC, new ArrayList<String>());
+		}
+		catch (Exception e)
+		{
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
+			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+					.build());
+		}
+
+		return new JSONObject().put("status", "success").toString();
 	}
 }

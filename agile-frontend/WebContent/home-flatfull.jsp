@@ -153,6 +153,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
 
 <!-- Including header(Navigation Bar) page -->
   <%@ include file="flatfull/header.html"%>
+  <%@ include file="flatfull/ticket-modals.html"%>
 
  <aside id="aside" class="app-aside hidden-xs 
  <%

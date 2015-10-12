@@ -85,7 +85,7 @@ var TicketsUtilRouter = Backbone.Router.extend({
 
 		Current_Ticket_ID = id;
 
-		var ticketView = new Base_Model_View({
+		var ticketView = new Ticket_Base_Model({
 			model : ticketModal, 
 			isNew : true, 
 			template : "ticket-details",
