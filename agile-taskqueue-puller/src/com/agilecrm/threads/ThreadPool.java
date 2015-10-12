@@ -1,7 +1,9 @@
 package com.agilecrm.threads;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -10,6 +12,7 @@ import java.util.concurrent.TimeUnit;
 import com.Globals;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.util.ContactUtil;
+import com.agilecrm.workflows.util.WorkflowUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.tools.remoteapi.RemoteApiInstaller;
 import com.google.appengine.tools.remoteapi.RemoteApiOptions;
@@ -20,24 +23,34 @@ import com.googlecode.objectify.cache.TriggerFutureHook;
 
 public class ThreadPool
 {
-    private static ThreadPoolExecutor poolExecutor = null;
+    // private static ThreadPoolExecutor poolExecutor = null;
+    private String poolName = null;
 
-    public static ThreadPoolExecutor getThreadPoolExecutor()
+    private static Map<String, ThreadPoolExecutor> threadPoolMap = new HashMap<String, ThreadPoolExecutor>();
+
+    public static ThreadPoolExecutor getThreadPoolExecutor(String poolName)
     {
-	if (poolExecutor != null)
-	    return poolExecutor;
-	ThreadPool pool = new ThreadPool();
+	if (threadPoolMap.containsKey(poolName))
+	    return threadPoolMap.get(poolName);
 
-	pool.setUpRemoteAPIOnAllThreads();
+	ThreadPool pool = new ThreadPool(poolName);
 
-	return poolExecutor;
+	// pool.setUpRemoteAPIOnAllThreads();
+
+	return threadPoolMap.get(poolName);
     }
 
-    private ThreadPool()
+    private ThreadPool(String poolName)
     {
-	poolExecutor = new ThreadPoolExecutor(6, 10, 5, TimeUnit.SECONDS, new ArrayBlockingQueue<Runnable>(100));
+	ThreadFactoryImpl timpl = new ThreadFactoryImpl();
 
-	poolExecutor.allowCoreThreadTimeOut(true);
+	ThreadPoolExecutor poolExecutor = new ThreadPoolExecutor(2, 15, 5, TimeUnit.SECONDS,
+		new ArrayBlockingQueue<Runnable>(100), timpl);
+
+	this.poolName = poolName;
+
+	threadPoolMap.put(poolName, poolExecutor);
+	// poolExecutor.allowCoreThreadTimeOut(true);
     }
 
     private void setUpRemoteAPIOnAllThreads()
@@ -60,9 +73,14 @@ public class ThreadPool
 
     public synchronized static void main(String[] args)
     {
+	ThreadPoolExecutor executor = ThreadPool.getThreadPoolExecutor("export");
+	for (int i = 0; i < 25; i++)
+	{
+	    ThreadExample te = new ThreadExample();
+	    executor.execute(te);
+	}
 
-	ThreadFactoryImpl timpl = new ThreadFactoryImpl();
-
+	new ThreadTester(executor).start();
     }
 }
 
@@ -71,10 +89,10 @@ class ThreadTester extends Thread
     ThreadPoolExecutor pool = null;
     RemoteApiInstaller installer = null;
 
-    public ThreadTester(ThreadPoolExecutor pool, RemoteApiInstaller installer)
+    public ThreadTester(ThreadPoolExecutor pool)
     {
 	this.pool = pool;
-	this.installer = installer;
+	// this.installer = installer;
 	// TODO Auto-generated constructor stub
     }
 
@@ -82,9 +100,10 @@ class ThreadTester extends Thread
 
     public void run()
     {
-	for (int i = 10; i < 15; i++)
+	for (int i = 10; i < 20; i++)
 	    try
 	    {
+		System.out.println("iterating : " + i);
 		remainingThreads();
 	    }
 	    catch (InterruptedException e)
@@ -98,13 +117,15 @@ class ThreadTester extends Thread
     private synchronized void remainingThreads() throws InterruptedException
     {
 
+	System.out.println("intial actual count : " + pool.getActiveCount());
+	wait(20000);
 	System.out.println("----------------- active threads : " + pool.getActiveCount());
-	wait(10000);
 	System.out.println("is terminating : " + pool.isTerminating());
 	System.out.println(pool.isShutdown());
 	System.out.println(pool.getTaskCount());
 	System.out.println(pool.getCompletedTaskCount());
 	System.out.println(pool.getPoolSize());
+	// System.out.println(pool.get);
 
 	if (!uninstalled && pool.getPoolSize() == 0)
 	{
@@ -146,8 +167,9 @@ class RemoteAPISetupThread extends Thread
 	// System.out.println(threadLocalDelegate.getClass());
 
 	System.out.println(environment);
+
 	// ApiProxy.setEnvironmentForCurrentThread(environment);
-	// ApiProxy.setDelegate(threadLocalDelegate);
+	ApiProxy.setDelegate(threadLocalDelegate);
 	System.out.println("****** Environment ******");
 	System.out.println(environment.getClass());
 	System.out.println(environment.getAppId());
@@ -181,12 +203,13 @@ class RemoteAPISetupThread extends Thread
 		.credentials(Globals.USER_ID, Globals.PASSWORD);
 
 	installer = new RemoteApiInstaller();
+	installer.logMethodCalls();
 
 	try
 	{
 	    installer.install(options);
 
-	    TriggerFutureHook.install();
+	    // TriggerFutureHook.install();
 	    environment = ApiProxy.getCurrentEnvironment();
 	    threadLocalDelegate = (ApiProxy.Delegate<ApiProxy.Environment>) ApiProxy.getDelegate();
 	}
@@ -200,14 +223,15 @@ class RemoteAPISetupThread extends Thread
 
     public void run()
     {
-	System.out.println("Remote api setting up in thread : " + Thread.currentThread().getName());
-	// setupremoteapi();
+	System.out.println("Remote api setting up in thread thread pool: " + Thread.currentThread().getName());
+	setupremoteapi();
 
 	r.run();
+	System.out.println("uninstalling remote api in thread : " + Thread.currentThread().getName());
 	// System.out.println("Total operations : " + installer.getRpcCount());
 	// System.out.println("after uninstalling 1: " +
 	// ApiProxy.getDelegate());
-	// uninstall();
+	uninstall();
 	// System.out.println(ApiProxy.getCurrentEnvironment());
 	// threadLocalDelegate = ApiProxy.getDelegate();
 
@@ -230,16 +254,17 @@ class ThreadExample implements Runnable
     {
 	// System.out.println("test " + Thread.currentThread().getName() +
 	// " time " + System.currentTimeMillis());
-	// System.out.println(Thread.currentThread());
+	System.out.println(Thread.currentThread());
+	System.out.println("namespace from thread : " + NamespaceManager.get());
 	// System.out.println(s);
 	NamespaceManager.set("local");
-	// System.out.println(ContactUtil.getAllCompanies(2, null));
+	System.out.println(ContactUtil.getAllCompanies(2, null));
 	List<Contact> contacts = ContactUtil.getAllContacts(1, null);
-	// contacts.get(0).save(true);
+	contacts.get(0).save(true);
 
-	// System.out.println(ContactUtil.getAllCompanies(2, null));
-	// System.out.println(ContactUtil.getAllCompanies(2, null));
-	// System.out.println(WorkflowUtil.getAllWorkflows(1, null));
+	System.out.println(ContactUtil.getAllCompanies(2, null));
+	System.out.println(ContactUtil.getAllCompanies(2, null));
+	System.out.println(WorkflowUtil.getAllWorkflows(1, null));
 	NamespaceManager.set(null);
     }
 

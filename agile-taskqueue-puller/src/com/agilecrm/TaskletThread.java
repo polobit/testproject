@@ -44,6 +44,9 @@ public class TaskletThread implements Work
     public void run()
     {
 
+	// Check task it self contains finishing future tasks
+	boolean isIndependentTask = false;
+
 	try
 	{
 	    // Set namespace
@@ -66,7 +69,9 @@ public class TaskletThread implements Work
 
 		    if (deferredTask instanceof ContactExportPullTask)
 		    {
-			ThreadPool.getThreadPoolExecutor().execute(deferredTask);
+			isIndependentTask = true;
+			ThreadPool.getThreadPoolExecutor("export-executor").execute(deferredTask);
+			continue;
 		    }
 
 		    if (deferredTask != null)
@@ -85,7 +90,8 @@ public class TaskletThread implements Work
 	    try
 	    {
 		System.out.println("completing remaining reqests");
-		TriggerFutureHook.completeAllPendingFutures();
+		if (!isIndependentTask)
+		    TriggerFutureHook.completeAllPendingFutures();
 		System.out.println("completed remaining requests");
 	    }
 	    catch (Exception e)
