@@ -32,11 +32,7 @@ $('#app-aside-folded').on('click', function(e) {
 	
 $(document).ready(function(){
 
-	$(".person").on("click", function(e){
-		e.preventDefault();
-		addContactBasedOnCustomfields();
-		
-	});
+	
 
 
     $("#contact-results li").click(function(){
@@ -80,10 +76,16 @@ $(document).ready(function(){
    	$("#navbar").removeClass("show");
    }
    });
+
+   $("#documentsmenu span").text("Documents");
    
    }
 
-
+   $(".person").on("click", function(e){
+		e.preventDefault();
+		addContactBasedOnCustomfields();
+		
+	});
 
    });
 

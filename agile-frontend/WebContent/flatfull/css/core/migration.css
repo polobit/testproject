@@ -624,6 +624,13 @@ left:0;
 display: block!important;
 }
 
+#fat-menu .avatar img {
+  width: 32px!important;
+  height: 32px!important;
+}
+.checkbox-mobile-view {
+  padding-top: 0px!important;
+}
 }
 
 
