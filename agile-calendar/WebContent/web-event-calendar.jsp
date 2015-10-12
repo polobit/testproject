@@ -252,7 +252,7 @@ if(scheduleid.contains(",")){
 		<span id="user_name" style="display:block;white-space: nowrap;text-overflow: ellipsis;overflow: hidden;width: 100%;font-size:16px;" title="<%=pr_name %>"><%=pr_name %>&nbsp;&nbsp;&nbsp;</span>
 		<span id="workhours-<%= domain_user_id%>" style="display:inline-block;color:#8E8F8F;font-size:16px;" title="Working Hours"><%="<script>document.write(getTimeInVisitorTimezoneWhileLoading('"+workHours+"','"+timezone+"'));</script>"%></span>
 		<span class="user_in_visitor_timezone" style="color:#8E8F8F;font-size:16px;" title="Timezone"><%="<script>document.write(getVisitorWhileLoading());</script>"%></span>
-		<span id="timezone-<%= domain_user_id%>" style="display:none;color:#8E8F8F;font-size:16px;" title="Timezone"><%="<script>document.write(getVisitorWhileLoading());</script>"%></span>
+		<span id="timezone-<%= domain_user_id%>" style="display:none;color:#8E8F8F;font-size:16px;" title="Timezone"><%=timezone %></span>
 		</div>
 		</div>
 		
