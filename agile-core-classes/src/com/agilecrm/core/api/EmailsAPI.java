@@ -413,7 +413,7 @@ public class EmailsAPI
     @Path("agile-emails")
     @GET
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public List<ContactEmailWrapper> getAgileEmails(@QueryParam("e") String searchEmail)
+    public List<ContactEmailWrapper> getAgileEmails(@QueryParam("e") String searchEmail,@QueryParam("count") String countString)
     {
 	List<ContactEmailWrapper> emailsList = null;
 	try
@@ -424,29 +424,48 @@ public class EmailsAPI
 	    searchEmail = StringUtils.split(normalisedEmail, ",")[0];
 
 	    Contact contact = ContactUtil.searchContactByEmail(searchEmail);
-
-	    // Fetches contact emails
-	    List<ContactEmail> contactEmails = ContactEmailUtil.getContactEmails(contact.id);
-
-	    JSONArray agileEmails = new JSONArray();
-
-	    // Merge Contact Emails with obtained imap emails
-	    for (ContactEmail contactEmail : contactEmails)
+	    
+	    List<ContactEmail> contactEmails = null;
+	    
+	    if(StringUtils.isNotBlank(countString))
 	    {
-		// parse email body
-		contactEmail.message = EmailUtil.parseEmailData(contactEmail.message);
-
-		ObjectMapper mapper = new ObjectMapper();
-		String emailString = mapper.writeValueAsString(contactEmail);
-		agileEmails.put(new JSONObject(emailString));
+	    	try
+	    	{
+	    		Integer count = Integer.parseInt(countString);
+	    		// Fetches latest contact emails
+	    		contactEmails = ContactEmailUtil.getContactEmails(contact.id,count);
+	    	}
+	    	catch(NumberFormatException e)
+	    	{
+	    		e.printStackTrace();
+	    		contactEmails = ContactEmailUtil.getContactEmails(contact.id,20);
+	    	}
 	    }
-
-	    emailsList = new ObjectMapper().readValue(agileEmails.toString(),
-		    new TypeReference<List<ContactEmailWrapper>>()
+	    else
+	    {
+	    	contactEmails = ContactEmailUtil.getContactEmails(contact.id);
+	    }
+	    
+        if(contactEmails!= null)
+        {
+		    JSONArray agileEmails = new JSONArray();
+		    // Merge Contact Emails with obtained imap emails
+		    for (ContactEmail contactEmail : contactEmails)
 		    {
-		    });
+			// parse email body
+			contactEmail.message = EmailUtil.parseEmailData(contactEmail.message);
+	
+			ObjectMapper mapper = new ObjectMapper();
+			String emailString = mapper.writeValueAsString(contactEmail);
+			agileEmails.put(new JSONObject(emailString));
+		    }
+	
+		    emailsList = new ObjectMapper().readValue(agileEmails.toString(),
+			    new TypeReference<List<ContactEmailWrapper>>()
+			    {
+			    });
+        }
 	    return emailsList;
-
 	}
 	catch (Exception e)
 	{
