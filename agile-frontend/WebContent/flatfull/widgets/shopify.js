@@ -15,7 +15,7 @@ function showShopifyClient(shop, contact_id)
 		console.log(emailArray);
 		console.log("In show Shopify Client" + Shopify_Plugin_Id);
 
-		queueGetRequest("widget_queue_"+contact_id, "/core/api/widgets/shopify/" + Shopify_Plugin_Id + "/" + emailArray, "json", function success(data)
+		queueGetRequest("widget_queue_"+contact_id, "/core/api/widgets/shopify/" + Shopify_Plugin_Id + "/" + emailArray, "json", function success(data, queueName)
 		{
 				console.log('In Shopify clients fetching data..');
 				console.log(data)
@@ -49,7 +49,7 @@ function showShopifyClient(shop, contact_id)
 								shopifyError(Shopify_PLUGIN_NAME, data.responseText);
 				}
 
-		}, function error(data)
+		}, function error(data, queueName)
 		{
 			console.log("In Shopify error ");
 			console.log(data);
@@ -61,7 +61,7 @@ function showShopifyClient(shop, contact_id)
 			if (resText.indexOf('No Customer found') != -1)
 			{
 							console.log("No customer found")
-							createContact(resText);
+							createStripeContact(resText);
 			}
 
 			else
@@ -72,7 +72,7 @@ function showShopifyClient(shop, contact_id)
 		});
 }
 
-function createContact(message)
+function createStripeContact(message)
 {
 		getTemplate('shopify-profile-addcontact', {}, undefined, function(template_ui){
 	 		if(!template_ui)
