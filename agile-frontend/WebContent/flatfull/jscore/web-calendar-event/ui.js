@@ -7,7 +7,7 @@ $(function()
 	var MIDNIGHT_END_TIME = null;
 
 	// Select slot duration 60/30/15min
-	$('body').on('click', '.selected_meeting_time', function(e)
+	$(".selected_meeting_time").die().live('click', function(e)
 	{
 		// e.preventDefault();
 
@@ -60,7 +60,7 @@ $(function()
 	});
 
 	// Only single slot selection is allowed
-	$('body').on('click', '.selected-slot', function(e)
+	$(".selected-slot").die().live('click', function(e)
 	{
 		var currentId = $(this).attr('id');
 
@@ -80,7 +80,7 @@ $(function()
 
 	});
 
-	$('body').on('click', '#multi-user-avatar', function(e)
+	$("#multi-user-avatar").die().live('click', function(e)
 	{
 		$(".thumbnail").css("background", "none");
 		$(this).css("background", "#4A90E2");
@@ -115,7 +115,6 @@ $(function()
 
 				slot_details = SELECTED_DOMAIN_USER['slot_details'];
 				$('.show_slots').hide();
-
 				getSlotDurations();
 				$(".segment1").fadeIn("slow");
 				$(".panel-body").height(parseInt(getPanelBodyMaxHeight()) + 26);
@@ -126,13 +125,15 @@ $(function()
 
 	});
 
-	$('#user_timezone').change(function()
+	$('#user_timezone').die().change(function()
 	{
 
 		SELECTED_TIMEZONE = $('#user_timezone').val();
 		$(".timezone1").text(SELECTED_TIMEZONE);
 		$('.timezone1').show();
 		$("#hidetimezone").addClass("hide");
+		$('.user_in_visitor_timezone').html(SELECTED_TIMEZONE);
+		updateUserBusinessHoursInVisitorTimezone();
 
 		if (!selecteddate || !Selected_Time)
 			return;
@@ -141,13 +142,13 @@ $(function()
 		get_slots(selecteddate, Selected_Time);
 	});
 
-	$('.timezone1').click(function()
+	$('.timezone1').die().click(function()
 	{
 		$("#hidetimezone").removeClass("hide");
 		$('.timezone1').hide();
 	});
 
-	$('#user_timezone').blur(function()
+	$('#user_timezone').die().blur(function()
 	{
 		if (SELECTED_TIMEZONE == $('#user_timezone').val())
 		{
