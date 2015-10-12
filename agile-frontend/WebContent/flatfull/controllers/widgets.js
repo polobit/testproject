@@ -61,7 +61,8 @@ var WidgetsRouter = Backbone.Router
 				"sync/xero" : "xero_import",
 				"sync/freshbooks" : "freshbooks_sync",
 				"sync/freshbooks/setting" : "freshbooks_sync_setting",
-				"sync/officecalendar" : "office365Calendar"
+				"sync/officecalendar" : "office365Calendar",
+				"Bria" : "Bria", "Bria/:id" : "Bria"
 			},
 
 			/**
@@ -133,6 +134,13 @@ var WidgetsRouter = Backbone.Router
 				addConfigurableWidget(id, "TwilioIO", 'twilioio-login');
 			},
 
+			/**
+			 * Manages Bria widget
+			 */
+			Bria : function(id) {
+				addConfigurableWidget(id, "Bria", 'bria-login');
+			},
+			
 			/**
 			 * Manages Rapleaf widget
 			 */

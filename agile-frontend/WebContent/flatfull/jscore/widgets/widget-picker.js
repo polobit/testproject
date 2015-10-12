@@ -134,6 +134,9 @@ function initializeWidgetSettingsListeners(){
 		if(widget_name == "Twilio")
 			$('#Twilio-container').hide();
 
+		if(widget_name == "Bria")
+			callFromBria = false;
+			default_call_type = null;
 		});	
 	
 	// Helps to know that widget is for all users.

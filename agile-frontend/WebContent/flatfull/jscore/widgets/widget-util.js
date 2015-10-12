@@ -96,6 +96,12 @@ function save_widget_prefs(pluginName, prefs, callback) {
 					// Get widget, Create token and set twilio device
 					globalTwilioIOSetup();
 				}
+				if (pluginName == "Bria"){
+					callFromBria = true;
+
+					// Get widget,set bria device
+					globalBriaSetup();
+				}
 				showNotyPopUp("success", (pluginName+" widget saved successfully"), "bottomRight");
 			}else{
 				showNotyPopUp("error", ("Error occurred while saving "+pluginName), "bottomRight");
