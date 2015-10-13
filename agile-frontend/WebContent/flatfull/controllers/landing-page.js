@@ -41,15 +41,27 @@ var LandingPageRouter = Backbone.Router.extend({
 	},
 
 	getListOfTemplates : function() {
-        $('#content').html("<div id='landingpages-listeners'></div>");
+        $('#content').html("<link rel='stylesheet' type='text/css' href='flatfull/css/jquery.fancybox.css'><div id='landingpages-listeners'></div>");
+        
+        head.js('flatfull/lib/jquery.fancybox.js',function() {
+            $.getJSON("misc/landingpage/templates/templates.json", function(data) {
 
-        $.getJSON("misc/landingpage/templates/templates.json", function(data) {
+                getTemplate("landingpages-categories", data.templates[0], undefined, function(ui){
+                    $("#landingpages-listeners").html($(ui));
+                }, "#landingpages-listeners");
+                
+                $(".lpt_fancybox").fancybox({
+                    'autoDimensions': false,
+                    'padding'       : 0,
+                    'autoScale'     : true,
+                    'scrolling'     : 'yes',
+                    'transitionIn'  : 'none',
+                    'transitionOut' : 'none',
+                    'type'          : 'iframe'
+                 });
 
-            getTemplate("landingpages-categories", data.templates[0], undefined, function(ui){
-                $("#landingpages-listeners").html($(ui));
-            }, "#landingpages-listeners");
-
-            hideTransitionBar();
+                hideTransitionBar();
+            });
         });
 
 	},
