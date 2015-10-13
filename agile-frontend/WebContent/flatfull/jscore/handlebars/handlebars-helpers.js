@@ -35,6 +35,16 @@ $(function()
 	{
 		return checkPropertyValueExistance(items, name,name1);
 	});
+	
+	
+	
+	/**
+	 * checks for the contact property value existance to display div none or block
+	 */
+	Handlebars.registerHelper('getMarginLength', function(items, name)
+	{
+		return getMarginLength(items, name);
+	});
 
 	/**
 	 * Helper function to return the checkbox html element with value of a

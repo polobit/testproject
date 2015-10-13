@@ -107,7 +107,7 @@ var ContactsRouter = Backbone.Router.extend({
 	 */
 	contacts : function(tag_id, filter_id, grid_view, is_lhs_filter)
 	{
-		$("#contacts-view-options").css( 'pointer-events', 'auto');
+		
 		if(SCROLL_POSITION)
 		{
 			$('html, body').animate({ scrollTop : SCROLL_POSITION  },1000);
@@ -299,6 +299,7 @@ var ContactsRouter = Backbone.Router.extend({
 					setUpContactView(cel);
 				}
 				$('[data-toggle="tooltip"]').tooltip();
+				$("#contacts-view-options").css( 'pointer-events', 'auto');
 				start_tour("contacts", el);
 			} });
 
@@ -317,6 +318,7 @@ var ContactsRouter = Backbone.Router.extend({
 		$(".active").removeClass("active");
 		$("#contactsmenu").addClass("active");
 		$('[data-toggle="tooltip"]').tooltip();
+		$("#contacts-view-options").css( 'pointer-events', 'auto');
 	
 
 	},
@@ -1052,6 +1054,16 @@ var ContactsRouter = Backbone.Router.extend({
 			createCookie('sort_by_name', sort_key);
 		}
 		var template_key = "contacts-custom-view";
+		var individual_tag_name='tr';
+		var custom_scrollable_element=null;
+
+		// Checks if user is using custom view. It check for grid view
+		if (readCookie("agile_contact_view"))
+		{
+			template_key = "contacts-grid";
+			individual_tag_name = "div";
+			custom_scrollable_element="#contacts-grid-model-list";
+		}
 		//if directly called the method, i.e on click of custom view link, 
 		//the url will be updated if any filter conditions are selected.
 		if(readData('dynamic_contact_filter')) {
@@ -1060,10 +1072,17 @@ var ContactsRouter = Backbone.Router.extend({
 		}
 		if(is_lhs_filter) {
 			template_key = "contacts-custom-view-table";
+
+			if (readCookie("agile_contact_view"))
+		    {
+			template_key = "contacts-grid-table";
+			individual_tag_name = "div";
+			custom_scrollable_element="#contacts-grid-table-model-list";
+		    }
 		}	
 		
 		this.contact_custom_view = new Base_Collection_View({ url : url, restKey : "contact", modelData : view_data, global_sort_key : sort_key,
-			templateKey : template_key, individual_tag_name : 'tr', slateKey : slateKey, cursor : true, request_method : 'POST', post_data: {'filterJson': postData}, page_size : 25, sort_collection : false,
+			templateKey : template_key,custom_scrollable_element:custom_scrollable_element, individual_tag_name : individual_tag_name, slateKey : slateKey, cursor : true, request_method : 'POST', post_data: {'filterJson': postData}, page_size : 25, sort_collection : false,
 			postRenderCallback : function(el, collection)
 			{
 				App_Contacts.contactsListView = App_Contacts.contact_custom_view;
@@ -1101,9 +1120,11 @@ var ContactsRouter = Backbone.Router.extend({
 		$.getJSON("core/api/custom-fields/type/scope?type=DATE&scope=CONTACT", function(customDatefields)
 				{
 					// Defines appendItem for custom view
+					if(!readCookie("agile_contact_view")){
 					_that.contact_custom_view.appendItem = function(base_model){
 						contactTableView(base_model,customDatefields,this);
 					};
+				}
 			
 					// Fetch collection
 					_that.contact_custom_view.collection.fetch();

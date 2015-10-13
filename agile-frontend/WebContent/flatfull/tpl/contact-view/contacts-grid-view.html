@@ -18,14 +18,14 @@
 			<div class="pull-left text-ellipsis"
 				style="width: calc(100% - 45px);line-height: 18px;color:#7C7C7C;">
 				<a href="#contact/{{id}}" style="width: calc(100% - 30px);"
-					class="text-first-capital agile-contact-grid-view text-ellipsis block">
+					class="text-cap agile-contact-grid-view text-ellipsis block">
 					{{getPropertyValue properties "first_name"}} {{getPropertyValue
 					properties "last_name"}} </a>
 
 				<div style="color:#7C7C7C; display:{{checkPropertyValueExistance properties "company" "title"}}">
-					<span class="grid-view-elipsis" style="vertical-align: bottom;" title="{{getPropertyValue properties "company"}}">{{getPropertyValue
-						properties "company"}}</span>{{getPropertyValueExists properties
-					"company" "title"}}&nbsp;<span class="grid-view-elipsis" style="vertical-align: bottom;"
+					<span class="text-cap grid-view-elipsis" style="vertical-align: bottom;" title="{{getPropertyValue properties "company"}}">{{getPropertyValue
+						properties "company"}}</span><span style="margin-right: {{getMarginLength properties "company"}};">{{getPropertyValueExists properties
+					"company" "title"}}</span><span class="text-cap grid-view-elipsis" style="vertical-align: bottom;"
 						title="{{getPropertyValue properties "title"}}">
 						{{getPropertyValue properties "title"}}</span>
 				</div>
@@ -47,7 +47,7 @@
 
 		</div>
 		<div class="clearfix"></div>
-		<div class="w-full text-ellipsis m-t-xs"
+		<div class="w-full line-clamp line-clamp-2 m-t-xs"
 			style="padding-left: 24px;">
 			{{#each tags}} <span
 				class="label bg-light dk text-tiny overflow-visible font-normal grid-tag-color">{{this}}</span>
@@ -83,14 +83,14 @@
 			<div class="pull-left text-ellipsis"
 				style="width: calc(100% - 45px);line-height: 18px;">
 				<a href="#contact/{{id}}" style="width: calc(100% - 30px);"
-					class="text-first-capital agile-contact-grid-view text-ellipsis block">
+					class="text-cap agile-contact-grid-view text-ellipsis block">
 					{{getPropertyValue properties "first_name"}} {{getPropertyValue
 					properties "last_name"}} </a>
 
 				<div style="color:#7C7C7C;display:{{checkPropertyValueExistance properties "company" "title"}}">
-					<span class="grid-view-elipsis" style="vertical-align: bottom;"  title="{{getPropertyValue properties "company"}}">{{getPropertyValue
-						properties "company"}}</span>{{getPropertyValueExists properties
-					"company" "title"}}&nbsp;<span class="grid-view-elipsis" style="vertical-align: bottom;" title="{{getPropertyValue properties "title"}}">
+					<span class="grid-view-elipsis text-cap" style="vertical-align: bottom;"  title="{{getPropertyValue properties "company"}}">{{getPropertyValue
+						properties "company"}}</span><span style="margin-right: {{getMarginLength properties "company"}};">{{getPropertyValueExists properties
+					"company" "title"}}</span><span class="text-cap grid-view-elipsis" style="vertical-align: bottom;" title="{{getPropertyValue properties "title"}}">
 						{{getPropertyValue properties "title"}}</span>
 				</div>
 				<div>{{getPropertyValue properties "email"}}</div>
@@ -107,7 +107,7 @@
 			</div>
 			<div class="clearfix"></div>
 		</div>
-	<div class="w-full text-ellipsis m-t-xs" style="padding-left: 27px;">
+	<div class="w-full line-clamp line-clamp-2 m-t-xs" style="padding-left: 27px;">
 				{{#each tags}} <span
 					class="label bg-light dk text-tiny overflow-visible font-normal grid-tag-color">{{this}}</span>
 				{{/each}}

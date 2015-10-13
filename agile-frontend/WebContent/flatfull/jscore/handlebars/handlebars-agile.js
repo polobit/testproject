@@ -413,6 +413,21 @@ function getPropertyValueByCheckingExistance(items, companyname,jobtitle)
 }
 
 
+
+function getMarginLength(items, companyname)
+{
+	if (items == undefined)
+		return;
+
+	for (var i = 0, l = items.length; i < l; i++)
+	{
+		if (items[i].name == companyname)
+			return '3px';
+	}
+	return '0px';
+}
+
+
 /**
  * checks the contact properties existance
  * @param items
