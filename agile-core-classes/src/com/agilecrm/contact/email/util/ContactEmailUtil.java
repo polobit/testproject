@@ -77,7 +77,7 @@ public class ContactEmailUtil
 	{
 		Map<String, Object> conditionsMap = new HashMap<String, Object>();
 		conditionsMap.put("contact_id", contactId);
-		return dao.fetchAllByOrderWithoutCount(count,null,conditionsMap, false, false, "date_secs");
+		return dao.fetchAllByOrderWithoutCount(count,null,conditionsMap, false, false, "-date_secs");
 	}
 
 	/**
