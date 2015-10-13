@@ -73,7 +73,10 @@
 							{{else}}
 								{{#if_equals name "TwilioIO"}}
 									<a class="btn btn-sm btn-default add-widget" href="#{{name}}" widget-name="{{name}}">Add</a>
-								{{else}}											
+								{{else}}	
+									{{#if_equals name "Bria"}}
+										<a class="btn btn-sm btn-default add-widget" href="#{{name}}" widget-name="{{name}}">Add</a>
+									{{else}}										
 								<div class="btn-group pos-abs m-l-n-lg">
   									<a type="button" class="btn btn-sm btn-default add-widget" href="#{{name}}" widget-name="{{name}}">Add</a>
   									<a type="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
@@ -84,6 +87,7 @@
     									<li><a class="btn btn-sm add_to_all" href="#{{name}}" widget-name="{{name}}">Add for all users</a></li>    									
   									</ul>
 								</div>
+									{{/if_equals}}
 							 {{/if_equals}}
 						  {{/if_equals}}
 						{{else}}
