@@ -98,6 +98,7 @@ public class ContactPrefsAPI
      * If count is null fetches all the contacts at once
      * 
      * 
+     * deletes datasync prefs
      * @return {@link ContactPrefs}
      */
     @Path("{type}")
