@@ -423,7 +423,7 @@
     
     <datastore-index kind="ContactEmail" ancestor="false" source="manual">
         <property name="contact_id" direction="asc"/>
-        <property name="date_secs" direction="asc"/>
+        <property name="date_secs" direction="desc"/>
     </datastore-index>
 
 </datastore-indexes>
