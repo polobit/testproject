@@ -2,13 +2,16 @@ package com.agilecrm.deals.util;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.TimeZone;
+import java.util.TreeSet;
 
 import net.sf.json.JSONObject;
 
@@ -1646,6 +1649,7 @@ public class OpportunityUtil
     public static JSONObject getIncomingDealsList(Long ownerId,Long minTime, Long maxTime,String frequency, String type)
     {
         JSONObject newDealsObject = new JSONObject();
+       
         String timeZone = "UTC";
         List<Opportunity> opportunitiesList;
         UserPrefs userPrefs = UserPrefsUtil.getCurrentUserPrefs();
@@ -1664,7 +1668,7 @@ public class OpportunityUtil
             sourcecount.put("0", type.equalsIgnoreCase("deals")?0:0.0);
         for (Category source : sources)
         {
-        sourcecount.put(source.getId(), type.equalsIgnoreCase("deals")?0:0.0);
+        sourcecount.put(source.getId().toString(), type.equalsIgnoreCase("deals")?0:0.0);
         }
         System.out.println(sources.get(0).getId());
         Calendar startCalendar = Calendar.getInstance(TimeZone.getTimeZone(timeZone));
@@ -1710,10 +1714,11 @@ public class OpportunityUtil
             startTimeMilli = startCalendar.getTimeInMillis();
         }
 
-        
+        System.out.println("Total opportunitite....."+opportunitiesList.size());
         for (Opportunity opportunity : opportunitiesList)
         {
         	String last="";
+        	 boolean flag_reason=true;
             try
             {
             /*
@@ -1723,6 +1728,14 @@ public class OpportunityUtil
              */
             Long source_id= opportunity.getDeal_source_id();
             System.out.println(categoriesUtil.getCategory(source_id));
+            List<Category> sources_id = categoriesUtil.getCategoriesByType("DEAL_SOURCE");
+			for (Category source_temp : sources_id){
+				if(source_temp.getId().toString().equals(source_id.toString()))
+					flag_reason=false;
+			}
+			if(flag_reason)
+				source_id=0L;
+			System.out.println("source"+source_id);
             Double revenue=opportunity.expected_value;
             Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone(timeZone));
             calendar.setTimeInMillis(opportunity.created_time * 1000);
@@ -1793,4 +1806,385 @@ public class OpportunityUtil
 	return newDealsList;
 
     }
+    
+    /**
+	 * Gets JSONObject of deals of loss reason. These are used for pie chart building.
+	 * 
+	 * @param minTime
+	 *            - Given time less than closed date.
+	 * @param maxTime
+	 *            - Given time greater than closed date.
+	 * @return JsonObject .
+	 */
+	public static JSONObject getDealswithLossReason(Long ownerId, Long pipelineId, Long sourceId, long minTime,
+			long maxTime)
+	{
+
+		JSONObject sourcecount = new JSONObject();
+		CategoriesUtil categoriesUtil = new CategoriesUtil();
+		
+		
+		if (minTime == 0 || pipelineId == 0)
+		{
+			pipelineId = null;
+		}
+		if (ownerId == 0)
+		{
+			ownerId = null;
+		}
+		if (sourceId == 0)
+			sourceId = null;
+		String timeZone = "UTC";
+		UserPrefs userPrefs = UserPrefsUtil.getCurrentUserPrefs();
+		if (userPrefs != null && userPrefs.timezone != null)
+		{
+			timeZone = userPrefs.timezone;
+		}
+		List<Opportunity> opportunitiesList = getLostDealsWithOwnerandPipeline(ownerId, pipelineId, minTime,maxTime);
+		List<Opportunity> opportunitiesList_temp=new ArrayList<Opportunity>();
+		if (opportunitiesList != null && opportunitiesList.size() > 0)
+		{
+			for (Opportunity opportunity : opportunitiesList)
+			{
+				boolean flag=true;
+				try
+				{
+					Long source=opportunity.getDeal_source_id();
+					if(sourceId!=null)
+					{
+						if(sourceId==1)
+						{
+							if (source==0L)
+								opportunitiesList_temp.add(opportunity);
+							else
+								{
+								List<Category> sources = categoriesUtil.getCategoriesByType("DEAL_SOURCE");
+								for(Category source_id : sources)
+								{
+									if(source.toString().equals(source_id.getId().toString())){
+										flag=false;
+										break;
+									}
+										
+								}
+								if(flag)
+									opportunitiesList_temp.add(opportunity);
+								}
+								
+						}
+						else if (source.toString().equals(sourceId.toString()))
+							opportunitiesList_temp.add(opportunity);
+						else 
+							continue;
+					}
+					else
+						opportunitiesList_temp.add(opportunity);
+				}
+				catch (Exception e)
+				{
+					System.out.println("Exception :" + e);
+				}
+			}
+			if(opportunitiesList_temp!=null && opportunitiesList_temp.size() > 0){
+			List<Category> reasons = categoriesUtil.getCategoriesByType("DEAL_LOST_REASON");
+			JSONObject countandToal = new JSONObject();
+			countandToal.put("count", 0);
+			countandToal.put("total", 0);
+			sourcecount.put("0", countandToal);
+			for (Category reason : reasons)
+			{
+				sourcecount.put(reason.getId(), countandToal);
+			}
+			}
+		}
+		for (Opportunity opportunity : opportunitiesList_temp)
+		{
+			boolean flag_reason=true;
+			try
+			{	
+				Long lost_id = opportunity.getLost_reason_id();
+				Double value = opportunity.expected_value;
+				List<Category> reasons = categoriesUtil.getCategoriesByType("DEAL_LOST_REASON");
+				for (Category reason : reasons){
+					if(reason.getId().toString().equals(lost_id.toString()))
+						flag_reason=false;
+				}
+				if(flag_reason)
+					lost_id=0L;
+				// Read from previous object if present
+				if (sourcecount.containsKey(lost_id.toString()))
+				{
+					JSONObject sourceObject = sourcecount.getJSONObject(lost_id.toString());
+					int count = sourceObject.getInt("count");
+					count++;
+					Double total = sourceObject.getDouble("total");
+					total = total + value;
+					sourceObject.put("count", count);
+					sourceObject.put("total", total);
+					sourcecount.put(lost_id.toString(), sourceObject);
+				}
+
+			}
+			catch (Exception e)
+			{
+				System.out.println("Exception :" + e);
+			}
+		}
+		return sourcecount;
+
+	}
+	/**
+	 * Returns deals based on ownerId or PipelineId or sourceId  or close-date or all at once
+	 * 
+	 * 
+	 * @param ownerId
+	 *            - Owner Id
+	 * @param pipelineId
+	 *            - pipeline Id -
+	 *  @param   sourceId      
+	 * @return List
+	 */
+	public static List<Opportunity> getLostDealsWithOwnerandPipeline(Long ownerId, Long pipelineId,
+			long minTime, long maxTime)
+			{
+		UserAccessControlUtil.checkReadAccessAndModifyQuery("Opportunity", null);
+		Map<String, Object> conditionsMap = new HashMap<String, Object>();
+		Map<String, Object> conditionsMap1 = new HashMap<String, Object>();
+		List<Opportunity> ownDealsList = new ArrayList<Opportunity>();
+		//List<Opportunity> ownDealsList_2 = new ArrayList<Opportunity>();
+		Set<Opportunity> ownDealsSet = new TreeSet<Opportunity>(new Comparator<Opportunity>()
+		{
+			@Override  
+            public int compare(Opportunity o1, Opportunity o2){
+				return o1.id.equals(o2.id) ? 0 : -1;
+            }
+		});
+		List<Milestone> milestoneList;
+		Milestone milestone1;
+		if (ownerId != null)
+			{
+			conditionsMap.put("ownerKey", new Key<DomainUser>(DomainUser.class, ownerId));
+			conditionsMap1.put("ownerKey", new Key<DomainUser>(DomainUser.class, ownerId));
+			}
+			
+		conditionsMap.put("archived", false);
+		conditionsMap1.put("archived", false);
+		conditionsMap.put("created_time >= ", minTime);
+		conditionsMap.put("created_time <= ", maxTime);
+		conditionsMap1.put("milestone_changed_time >= ", minTime);
+		conditionsMap1.put("milestone_changed_time <= ", maxTime);
+		if (pipelineId != null)
+		{
+			milestone1 = MilestoneUtil.getMilestone(pipelineId);
+			if (milestone1.lost_milestone != null)
+			{
+				conditionsMap.put("milestone", milestone1.lost_milestone);
+				conditionsMap.put("pipeline", new Key<Milestone>(Milestone.class, milestone1.id));
+				conditionsMap1.put("milestone", milestone1.lost_milestone);
+				conditionsMap1.put("pipeline", new Key<Milestone>(Milestone.class, milestone1.id));
+				List<Opportunity> list = dao.listByProperty(conditionsMap);
+				List<Opportunity> list2 = dao.listByProperty(conditionsMap1);
+				if (list != null)
+				{
+					ownDealsSet.addAll(list);
+				}
+				if (list2 != null)
+				{
+					ownDealsSet.addAll(list2);
+				}
+			}
+			else
+			{
+				conditionsMap.put("milestone", "Lost");
+				conditionsMap.put("pipeline", new Key<Milestone>(Milestone.class, milestone1.id));
+				conditionsMap1.put("milestone", "Lost");
+				conditionsMap1.put("pipeline", new Key<Milestone>(Milestone.class, milestone1.id));
+				List<Opportunity> list = dao.listByProperty(conditionsMap);
+				List<Opportunity> list2 = dao.listByProperty(conditionsMap1);
+				if (list != null)
+				{
+					ownDealsSet.addAll(list);
+				}
+				if (list2 != null)
+				{
+					ownDealsSet.addAll(list2);
+				}
+			}
+		}
+		else
+		{
+			milestoneList = MilestoneUtil.getMilestonesList();
+			for (Milestone milestone : milestoneList)
+			{
+				if (milestone.lost_milestone != null)
+				{
+					conditionsMap.put("milestone", milestone.lost_milestone);
+					conditionsMap.put("pipeline", new Key<Milestone>(Milestone.class, milestone.id));
+					conditionsMap1.put("milestone", milestone.lost_milestone);
+					conditionsMap1.put("pipeline", new Key<Milestone>(Milestone.class, milestone.id));
+					List<Opportunity> list = dao.listByProperty(conditionsMap);
+					List<Opportunity> list2 = dao.listByProperty(conditionsMap1);
+					if (list != null)
+					{
+						ownDealsSet.addAll(list);
+					}
+					if (list2 != null)
+					{
+						System.out.println("Adding another 2");
+						ownDealsSet.addAll(list2);
+					}
+				}
+				else
+				{
+					conditionsMap.put("milestone", "Lost");
+					conditionsMap.put("pipeline", new Key<Milestone>(Milestone.class, milestone.id));
+					conditionsMap1.put("milestone", "Lost");
+					conditionsMap1.put("pipeline", new Key<Milestone>(Milestone.class, milestone.id));
+					
+					List<Opportunity> list = dao.listByProperty(conditionsMap);
+					List<Opportunity> list2 = dao.listByProperty(conditionsMap1);
+					if (list != null)
+					{
+						ownDealsSet.addAll(list);
+					}
+					if (list2 != null)
+					{
+						ownDealsSet.addAll(list2);
+					}
+				}
+			}
+		}
+		ownDealsList=new ArrayList<>(ownDealsSet);
+		return ownDealsList;
+			}
+	/**
+	 * Returns JSONObject of won Deals divided by source. These are used for pie chart building.
+	 * 
+	 * @param minTime
+	 *            - Given time less than closed date.
+	 * @param maxTime
+	 *            - Given time greater than closed date.
+	 * @return JsonObject .
+	 */
+	public static JSONObject getWonDealsforpiechart(Long ownerId, long minTime,
+			long maxTime){
+		JSONObject dealswoncount = new JSONObject();
+		CategoriesUtil categoriesUtil = new CategoriesUtil();
+
+		if (ownerId == 0)
+		{
+			ownerId = null;
+		}
+		String timeZone = "UTC";
+		UserPrefs userPrefs = UserPrefsUtil.getCurrentUserPrefs();
+		if (userPrefs != null && userPrefs.timezone != null)
+		{
+			timeZone = userPrefs.timezone;
+		}
+		List<Opportunity> opportunitiesList = getWonDealsListWithOwner(minTime,
+				maxTime,ownerId);
+		if (opportunitiesList != null && opportunitiesList.size() > 0)
+		{
+			
+			List<Category> sources = categoriesUtil.getCategoriesByType("DEAL_SOURCE");
+			JSONObject countandvalue = new JSONObject();
+			countandvalue.put("count", 0);
+			countandvalue.put("total", 0);
+			dealswoncount.put("0", countandvalue);
+			for (Category source : sources)
+			{
+				dealswoncount.put(source.getId(), countandvalue);
+			}
+		}
+		for (Opportunity opportunity : opportunitiesList)
+		{
+			boolean flag_reason=true;
+			try
+			{
+
+				Long source_id = opportunity.getDeal_source_id();
+				Double value = opportunity.expected_value;
+				
+				List<Category> sources = categoriesUtil.getCategoriesByType("DEAL_SOURCE");
+				for (Category reason : sources){
+					if(reason.getId().toString().equals(source_id.toString()))
+						flag_reason=false;
+				}
+				if(flag_reason)
+					source_id=0L;
+
+				// Read from previous object if present
+				if (dealswoncount.containsKey(source_id.toString()))
+				{
+					JSONObject sourceObject = dealswoncount.getJSONObject(source_id.toString());
+					int count = sourceObject.getInt("count");
+					count++;
+					Double total = sourceObject.getDouble("total");
+					total = total + value;
+					sourceObject.put("count", count);
+					sourceObject.put("total", total);
+					dealswoncount.put(source_id.toString(), sourceObject);
+				}
+
+			}
+			catch (Exception e)
+			{
+				System.out.println("Exception :" + e);
+			}
+		}
+		return dealswoncount;
+	}
+	/**
+	 * Returns list of deals based on ownerId  or won-date or all at once
+	 * 
+	 * 
+	 * @param ownerId
+	 *            - Owner Id    
+	 * @return List
+	 */
+	public static List<Opportunity> getWonDealsListWithOwner(long minTime, long maxTime, Long ownerId)
+	{
+		UserAccessControlUtil.checkReadAccessAndModifyQuery("Opportunity", null);
+		Map<String, Object> conditionsMap = new HashMap<String, Object>();
+		List<Opportunity> ownDealsList = new ArrayList<Opportunity>();
+		if (ownerId != null)
+			conditionsMap.put("ownerKey", new Key<DomainUser>(DomainUser.class, ownerId));
+		conditionsMap.put("won_date >= ", minTime);
+		conditionsMap.put("won_date <= ", maxTime);
+		conditionsMap.put("archived", false);
+		try
+		{
+			List<Milestone> milestoneList = MilestoneUtil.getMilestonesList();
+			for (Milestone milestone : milestoneList)
+			{
+				if (milestone.won_milestone != null)
+				{
+					conditionsMap.put("milestone", milestone.won_milestone);
+					conditionsMap.put("pipeline", new Key<Milestone>(Milestone.class, milestone.id));
+					List<Opportunity> list = dao.listByProperty(conditionsMap);
+					if (list != null)
+					{
+						ownDealsList.addAll(list);
+					}
+				}
+				else
+				{
+					conditionsMap.put("milestone", "Won");
+					conditionsMap.put("pipeline", new Key<Milestone>(Milestone.class, milestone.id));
+					List<Opportunity> list = dao.listByProperty(conditionsMap);
+					if (list != null)
+					{
+						ownDealsList.addAll(list);
+					}
+				}
+			}
+			return ownDealsList;
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			return null;
+		}
+
+	}
 }

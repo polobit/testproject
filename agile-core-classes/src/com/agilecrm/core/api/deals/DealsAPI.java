@@ -935,6 +935,8 @@ public class DealsAPI
 	    je.printStackTrace();
 	}
     }
+
+   
     
     /**
      * fetches tasks of a deal in deal details page
@@ -998,4 +1000,52 @@ public class DealsAPI
     	 ReportsUtil.check(min*1000,max*1000);
      return OpportunityUtil.getIncomingDealsList(ownerId,min,max,frequency,type).toString();
     }
+     /**
+ 	 * fetches deals for specified time for loss reason pie chart
+ 	 * 
+ 	 * @param min
+ 	 * 
+ 	 * @param max
+ 	 * 
+ 	 * @param ownerId
+ 	 * 
+ 	 * @param pipelineId
+ 	 * 
+ 	 * @param sourceId
+ 	 * 
+ 	 * @return deals
+ 	 * 
+ 	 * @throws JSONException
+ 	 */
+ 	@Path("/details/{owner-id}/{pipeline-id}/{source-id}")
+ 	@GET
+ 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+ 	public String getDealsbyLossReason(@PathParam("owner-id") Long ownerId, @PathParam("pipeline-id") Long pipelineId,
+ 			@PathParam("source-id") Long sourceId, @QueryParam("min") Long min, @QueryParam("max") Long max)
+ 	{
+ 		ReportsUtil.check(min*1000, max*1000);
+ 		return OpportunityUtil.getDealswithLossReason(ownerId, pipelineId, sourceId, min, max).toString();
+ 	}
+ 	
+ 	/**
+ 	 * fetches won deals for specified time for WonDeals pie chart
+ 	 * 
+ 	 * @param min
+ 	 * 
+ 	 * @param max
+ 	 * 
+ 	 * @param ownerId
+ 	 * 
+ 	 * @return deals
+ 	 */
+ 	@Path("/wonDetails/{owner-id}")
+ 	@GET
+ 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+ 	public String getDealsWonforReports(@PathParam("owner-id") Long ownerId, 
+ 			@QueryParam("min") Long min, @QueryParam("max") Long max)
+ 	{
+ 		ReportsUtil.check(min*1000, max*1000);
+ 		return OpportunityUtil.getWonDealsforpiechart(ownerId, min, max).toString();
+ 	}
+
 }
