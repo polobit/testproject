@@ -44,6 +44,8 @@ import com.agilecrm.contact.filter.ContactFilter;
 import com.agilecrm.contact.filter.ContactFilterIdsResultFetcher;
 import com.agilecrm.contact.filter.ContactFilterResultFetcher;
 import com.agilecrm.contact.filter.util.ContactFilterUtil;
+import com.agilecrm.contact.imports.CSVImporter;
+import com.agilecrm.contact.imports.impl.ContactsCSVImporter;
 import com.agilecrm.contact.sync.SyncFrequency;
 import com.agilecrm.contact.util.BulkActionUtil;
 import com.agilecrm.contact.util.ContactUtil;
@@ -51,6 +53,7 @@ import com.agilecrm.contact.util.bulk.BulkActionNotifications;
 import com.agilecrm.contact.util.bulk.BulkActionNotifications.BulkAction;
 import com.agilecrm.export.ExportBuilder;
 import com.agilecrm.export.Exporter;
+import com.agilecrm.queues.util.PullQueueUtil;
 import com.agilecrm.session.UserInfo;
 import com.agilecrm.subscription.restrictions.db.BillingRestriction;
 import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
@@ -569,6 +572,11 @@ public class BulkOperationsAPI
 
 	    if (type.equalsIgnoreCase("contacts"))
 	    {
+		CSVImporter<Contact> importer = new ContactsCSVImporter(NamespaceManager.get(), blobKey,
+			Long.parseLong(ownerId), new ObjectMapper().writeValueAsString(contact), Contact.class);
+
+		PullQueueUtil.addToPullQueue("dummy-pull-queue", importer, null);
+
 		new CSVUtil(restrictions, accessControl).createContactsFromCSV(blobStream, contact, ownerId);
 	    }
 	    else if (type.equalsIgnoreCase("companies"))
