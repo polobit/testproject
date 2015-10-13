@@ -2591,6 +2591,7 @@ select.input-xs{
 .tooltip-inner {
 	max-width: 260px;
 }
+
 .note-editor {
  border: 1px solid #E0E0E0 !important;
 }
@@ -2884,3 +2885,23 @@ width: 915px;
 .m-r-8{
 	    margin-right: 8px;
 }
+#deals-reports .highcharts-tooltip span
+{
+	 background-color: #313030;
+     opacity: 1;
+     z-index: 9999!important;
+     padding: 8px;
+     border-radius: 5px
+ }
+ #deals-reports svg .highcharts-tooltip {
+ 	visibility: hidden!important;
+ }
+
+ #deals-reports .highcharts-data-labels
+ {
+ 	text-transform: capitalize;
+ }
+
+ #deals-chart .highcharts-legend{
+ 	text-transform: capitalize;
+ }

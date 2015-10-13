@@ -656,6 +656,10 @@ public class Opportunity extends Cursor implements Serializable
 
 	    this.notes = null;
 	}
+	
+	/*if (milestone_changed_time == 0L)
+		milestone_changed_time = System.currentTimeMillis() / 1000;*/
+
 
     }
 
@@ -684,4 +688,5 @@ public class Opportunity extends Cursor implements Serializable
 	;
 	return builder.toString();
     }
+    
 }

@@ -13,8 +13,8 @@ var ReportsRouter = Backbone.Router
 				"activity-report-edit/:id" : "activityReportEdit", "acivity-report-results/:id" : "activityReportInstantResults",
 				"contact-reports" : "emailReports", "report-add" : "reportAdd", "report-edit/:id" : "reportEdit",
 				"report-results/:id" : "reportInstantResults", "report-charts/:type" : "reportCharts", "report-funnel/:tags" : "showFunnelReport",
-				"report-growth/:tags" : "showGrowthReport", "report-cohorts/:tag1/:tag2" : "showCohortsReport", "report-ratio/:tag1/:tag2" : "showRatioReport","report-deals":"showIncomingDeals","report-calls/:type" : "showCallsReport" },
-
+				"report-growth/:tags" : "showGrowthReport", "report-cohorts/:tag1/:tag2" : "showCohortsReport", "report-ratio/:tag1/:tag2" : "showRatioReport","report-deals":"showIncomingDeals","report-calls/:type" : "showCallsReport",
+				"report-lossReason":"showDealsLossReason","reports-wonDeals":"showDealsWonChart"},
 			/**
 			 * Shows reports categories
 			 */
@@ -845,6 +845,7 @@ var ReportsRouter = Backbone.Router
 
 				}, "#reports-listerners-container");
 			},
+
 			showIncomingDeals : function(){
 				hideTransitionBar();
 				head.js(LIB_PATH + 'lib/date-charts.js', LIB_PATH + 'lib/date-range-picker.js',function()
@@ -856,12 +857,59 @@ var ReportsRouter = Backbone.Router
 							  return;
 						$('#content').html($(template_ui));	
 
+
 							initFunnelCharts(function()
 							{
 								showDealsGrowthReport();
 							});
 						}, "#content");
 					});
+			},
+			showDealsLossReason : function()
+			{
+				hideTransitionBar();
+				initReportLibs(function()
+				{
+
+					// Load Reports Template
+				getTemplate("report-DealsLoss", {}, undefined, function(template_ui){
+						if(!template_ui)
+							  return;
+						$('#content').html($(template_ui));	
+
+					initSalesCharts(function()
+							{
+						showLossReasonGraphs();
+							});
+
+					$(".active").removeClass("active");
+					$("#reportsmenu").addClass("active");
+				}, "#content");
+			});
+			},
+
+			showDealsWonChart : function()
+			{
+				hideTransitionBar();
+			initReportLibs(function()
+				{
+
+					// Load Reports Template
+				getTemplate("report-DealsWon", {}, undefined, function(template_ui){
+
+					if(!template_ui)
+							  return;
+						$('#content').html($(template_ui));	
+
+					initSalesCharts(function()
+							{
+						showWonPieChart();
+							});
+
+				$(".active").removeClass("active");
+				$("#reportsmenu").addClass("active");
+				}, "#content");
+			  });	
 			}
 			
 	});
