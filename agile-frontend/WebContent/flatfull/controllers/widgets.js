@@ -61,7 +61,9 @@ var WidgetsRouter = Backbone.Router
                 "sync/xero" : "xero_import",
                 "sync/freshbooks" : "freshbooks_sync",
                 "sync/freshbooks/setting" : "freshbooks_sync_setting",
-                "sync/officecalendar" : "office365Calendar"
+                "sync/officecalendar" : "office365Calendar",
+                "Bria" : "Bria", "Bria/:id" : "Bria"
+                	
             },
 
             /**
@@ -93,7 +95,7 @@ var WidgetsRouter = Backbone.Router
                                     $(that).height(socialHeight);
                                 });
                             }, 1000);
-
+                            $('[data-toggle="tooltip"]').tooltip();
                         }
                     });
 
@@ -132,6 +134,13 @@ var WidgetsRouter = Backbone.Router
             TwilioIO : function(id) {
                 addConfigurableWidget(id, "TwilioIO", 'twilioio-login');
             },
+            
+			/**
+			 * Manages Bria widget
+			 */
+			Bria : function(id) {
+				addConfigurableWidget(id, "Bria", 'bria-login');
+			},
 
             /**
              * Manages Rapleaf widget
