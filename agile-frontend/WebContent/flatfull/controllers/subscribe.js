@@ -219,7 +219,7 @@ var SubscribeRouter = Backbone.Router
 				IS_HAVING_MANDRILL = false;
 				$("#content").html("<div id='subscribe_plan_change'></div>");
 
-				// Set it in local machine
+				/*// Set it in local machine
 				if(_plan_on_signup && _plan_on_signup.plan_type){
 					localStorage.setItem("registered_plan" + CURRENT_DOMAIN_USER.id,localStorage.setItem("registered_plan" + CURRENT_DOMAIN_USER.id, JSON.stringify(_plan_on_signup)));
 				}
@@ -227,7 +227,7 @@ var SubscribeRouter = Backbone.Router
 					_plan_on_signup = localStorage.getItem("registered_plan" + CURRENT_DOMAIN_USER.id);
 					if(_plan_on_signup)
 						   _plan_on_signup = JSON.parse(_plan_on_signup);
-				}	
+				}*/	
 
 				if (IS_NEW_USER && _plan_on_signup && _plan_on_signup.plan_type && _plan_on_signup.plan_type == "FREE")
 				{
