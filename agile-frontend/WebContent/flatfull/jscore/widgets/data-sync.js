@@ -157,7 +157,7 @@ function getSyncModelFromName(name, callback){
        }
        else{
        	DATA_SYNC_FORCE_FETCH=true;
-       	callback(getSyncModelFromName(name));
+       	callback(getSyncModelFromName(name,callback));
        }
   }
 
