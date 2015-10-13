@@ -50,9 +50,14 @@ public class OAuthServlet extends HttpServlet {
 			if (verifier != null) {
 				getAccessToken(req, resp, verifier, org);
 			} else {
+				String window_opened_service=req.getParameter("window_opened");
+				if(StringUtils.isNotBlank(window_opened_service)){
+					req.getSession().setAttribute("window_opened_service", true);
+				}
 				req.getSession().setAttribute("referer",
 						req.getHeader("referer"));
 			}
+			
 			if (serviceType != null) {
 				setupOAuth(req, resp, serviceType);
 			}
@@ -98,7 +103,7 @@ public class OAuthServlet extends HttpServlet {
 		}
 
 		String userId = (userInfo == null) ? null : userInfo.getEmail();
-		String isForAll = (String) req.getSession().getAttribute("isForAll");
+		String isForAll = req.getSession().getAttribute("isForAll")!=null?(String)req.getSession().getAttribute("isForAll"):null;
 		String linkType = (String) req.getSession().getAttribute("linkType");
 
 		Map<String, String> properties = new HashMap<String, String>();
@@ -131,8 +136,11 @@ public class OAuthServlet extends HttpServlet {
 
 		} else if (serviceType.equalsIgnoreCase("quickbook-import")) {
 			ScribeUtil.saveQuickBookPrefs(properties);
-			String redirectURL = (String) req.getSession().getAttribute(
-					"referer");
+			String redirectURL = (String) req.getSession().getAttribute("referer");
+			
+			if(ScribeUtil.isWindowPopUpOpened(serviceType, redirectURL+"#sync/quickbook", req, resp))
+				return;
+			
 			returnURL = redirectURL + "#sync/quickbook";
 		}
 
@@ -176,9 +184,10 @@ public class OAuthServlet extends HttpServlet {
 
 		if (returnURL != null)
 			req.getSession().setAttribute("return_url", returnURL);
+		resp.getWriter().print("please wail ...");
 
-		resp.sendRedirect(authUrl + "&oauth_callback=" + getRedirectURI(req)
-				+ "/OAuthServlet");
+		resp.sendRedirect(authUrl + "&oauth_callback=" + getRedirectURI(req) + "/OAuthServlet");
+		resp.getWriter().print("please wail ...");
 	}
 
 	public OAuthProvider getOAuthProvider(String serviceType) {

@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.agilecrm.contact.sync.Type;
+import com.agilecrm.scribe.util.ScribeUtil;
 import com.agilecrm.widgets.Widget;
 import com.agilecrm.widgets.util.DefaultWidgets;
 import com.thirdparty.google.ContactPrefs;
@@ -35,9 +36,11 @@ public class ShopifyServlet extends HttpServlet {
 				}
 			} else {
 				saveToken(req, token);
+				if(ScribeUtil.isWindowPopUpOpened("shopify", "/#sync/shopify", req, res))
 				returnURL = "/#sync/shopify";
 			}
 		}
+	   
 		res.sendRedirect(returnURL);
 	}
 

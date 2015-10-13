@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang.StringUtils;
 import org.scribe.model.Token;
 import org.scribe.model.Verifier;
 import org.scribe.oauth.OAuthService;
@@ -139,7 +140,15 @@ public class ScribeServlet extends HttpServlet {
 			saveToken(req, resp);
 			return;
 		}
+		else{
+			String window_opened_service=req.getParameter("window_opened");
+			if(StringUtils.isNotBlank(window_opened_service)){
+				req.getSession().setAttribute("window_opened_service", true);
+			}
 
+		}
+
+		resp.getWriter().print("Please wait...");
 		/*
 		 * If the request is from imports we get this parameter, This happens
 		 * when we have the user google tokens with us, there is no need of
@@ -281,6 +290,8 @@ public class ScribeServlet extends HttpServlet {
 				if (pluginId != null)
 					req.getSession().setAttribute("plugin_id", pluginId);
 
+		req.getSession().setAttribute("isForAll", isForAll);
+		System.out.println("In setup of scribe response: " + resp);
 				req.getSession().setAttribute("isForAll", isForAll);
 
 				System.out.println("In setup of scribe response: " + resp);
@@ -393,9 +404,30 @@ public class ScribeServlet extends HttpServlet {
 
 		System.out.println("service name in save token " + serviceName);
 
+		try
+		{
+			ScribeUtil.saveTokens(req, resp, service, serviceName, accessToken, code);
+		}
+		catch (Exception e1)
+		{
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+
+		// return URL is retrieved from session
+		String returnURL = (String) req.getSession().getAttribute("return_url");
+		System.out.println("return url " + returnURL);
+		if(ScribeUtil.isWindowPopUpOpened(serviceName,returnURL,req,resp)){
+			return;
+		}
+		// If return URL is null, redirect to dashboard
+		System.out.println(returnURL);
+		if (returnURL == null)
+			resp.sendRedirect("/");
+		else
+			resp.sendRedirect(returnURL);
 		String widgetName = (Character.toUpperCase(serviceName.charAt(0)) + serviceName
 				.substring(1));
-		String returnURL = "";
 		if (linkType != null) {
 			String resultType = "error";
 			String statusMSG = "Error occurred while saving " + widgetName
@@ -434,4 +466,6 @@ public class ScribeServlet extends HttpServlet {
 		// Delete return url Attribute
 		req.getSession().removeAttribute("return_url");
 	}
+	
+	
 }
