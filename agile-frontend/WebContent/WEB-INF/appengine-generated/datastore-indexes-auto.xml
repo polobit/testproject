@@ -420,5 +420,10 @@
         <property name="pipeline" direction="asc"/>
         <property name="created_time" direction="asc"/>
     </datastore-index>
+    
+    <datastore-index kind="ContactEmail" ancestor="false" source="manual">
+        <property name="contact_id" direction="asc"/>
+        <property name="date_secs" direction="asc"/>
+    </datastore-index>
 
 </datastore-indexes>
