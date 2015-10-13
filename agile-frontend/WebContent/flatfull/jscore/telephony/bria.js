@@ -106,18 +106,6 @@ $(function()
 		sendMessageToBriaClient(command,number,callId);
 	});
 
-// function for sending DTMF
-	function briaSendDTMF(digit)
-	{
-		if(digit){
-				play_sound("dtmf");
-				var command = "sendDTMF";
-				var number =  digit;
-				var callId =  "";
-				sendMessageToBriaClient(command,number,callId);
-				return;
-		}
-	}
 
 	
 //show dialpad	 ---note implemented
@@ -129,7 +117,7 @@ $(function()
 	});
 
 
-
+//this is to close the dialpad when clicked anywhere in screen
 	$(document).on('click', function(e){
 		if($('#briaDialpad_btns').length !=0){
 			$('#briaDialpad_btns').hide();
@@ -138,12 +126,34 @@ $(function()
 		
 	});	
 	
+// this is used to prevent dialpad from closing 	
 	$('body').on('click', '#briaDialpad_btns', function(e)	{
 		e.stopPropagation();
 	});
 	
 
+//	This function is to hide the information shown to the client when the user is not running bria client
+	$('body').on('click', '#bria_info_ok', function(e)	{
+		e.stopPropagation();
+		$('#briaInfoModal').modal('hide');
+	});
+	
+	
 });
+
+//function for sending DTMF
+function briaSendDTMF(digit)
+{
+	if(digit){
+			play_sound("dtmf");
+			var command = "sendDTMF";
+			var number =  digit;
+			var callId =  "";
+			sendMessageToBriaClient(command,number,callId);
+			return;
+	}
+}
+
 
 function sendMessageToBriaClient(command, number, callid){
 	var domain = CURRENT_DOMAIN_USER['domain'];
@@ -151,8 +161,6 @@ function sendMessageToBriaClient(command, number, callid){
 	var image = new Image();
 	image.onload = function(png) {
 		console.log("bria sucess");
-		if (Bria_Call_Noty != undefined)
-			Bria_Call_Noty.close();
 		window.focus();
 
 	};
@@ -161,7 +169,7 @@ function sendMessageToBriaClient(command, number, callid){
 		if (Bria_Call_Noty != undefined)
 			Bria_Call_Noty.close();
 		window.focus();
-		alert("Please make sure the Agile Bria app is running in your machine.");
+		$('#briaInfoModal').modal('show');
 	};
 	
 	image.src = "http://localhost:33333/"+ new Date().getTime() +"?command="+command+";number="+number+";callid="+callid+";domain="+domain+";userid="+id+";namedpipe="+NamedPipe+"?";
