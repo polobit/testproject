@@ -74,35 +74,35 @@ function initializeActivitiesListner(el){
 function getDealObject(id)
 {
 
-	return $.ajax({ type : "GET", url : 'core/api/opportunity/' + id, async : true }).responseText;
+	return $.ajax({ type : "GET", url : 'core/api/opportunity/' + id, async : false }).responseText;
 
 }
 
 function getEventObject(id)
 {
 
-	return $.ajax({ type : "GET", url : 'core/api/events/getEventObject/' + id, async : true }).responseText;
+	return $.ajax({ type : "GET", url : 'core/api/events/getEventObject/' + id, async : false }).responseText;
 
 }
 
 function getTaskObject(id)
 {
 
-	return $.ajax({ type : "GET", url : 'core/api/tasks/getTaskObject/' + id, async : true }).responseText;
+	return $.ajax({ type : "GET", url : 'core/api/tasks/getTaskObject/' + id, async : false }).responseText;
 
 }
 
 function getNoteObject(id)
 {
 
-	return $.ajax({ type : "GET", url : 'core/api/notes/' + id, async : true }).responseText;
+	return $.ajax({ type : "GET", url : 'core/api/notes/' + id, async : false }).responseText;
 
 }
 
 function getActivityObject(id)
 {
 
-	return $.ajax({ type : "GET", url : 'core/api/activitylog/' + id, async : true }).responseText;
+	return $.ajax({ type : "GET", url : 'core/api/activitylog/' + id, async : false }).responseText;
 
 }
 
