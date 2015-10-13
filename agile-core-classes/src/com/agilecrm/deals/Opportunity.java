@@ -2,7 +2,9 @@ package com.agilecrm.deals;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Embedded;
 import javax.persistence.Id;
@@ -168,6 +170,12 @@ public class Opportunity extends Cursor implements Serializable
      */
     @NotSaved
     private List<String> notes = new ArrayList<String>();
+
+    /**
+     * Note id's of related task for a deal.
+     */
+    @NotSaved
+    private List<String> note_ids = new ArrayList<String>();
 
     /**
      * Related notes objects fetched using notes id's.
@@ -498,14 +506,15 @@ public class Opportunity extends Cursor implements Serializable
 
 	    if (!this.milestone.equals(oldOpportunity.milestone) && this.milestone.equalsIgnoreCase(wonMilestone))
 		this.won_date = System.currentTimeMillis() / 1000;
-	    
-	    System.out.println("New Opportunity-----"+this);
-	    //If old deal, new deal are same and lost reason is there, 
-	    //can update milestone changed time with old milestone changed time
+
+	    System.out.println("New Opportunity-----" + this);
+	    // If old deal, new deal are same and lost reason is there,
+	    // can update milestone changed time with old milestone changed time
 	    if (this.pipeline_id.equals(oldOpportunity.getPipeline_id())
-		    && this.milestone.equals(oldOpportunity.milestone) 
-		    && this.lost_reason_id != null && ((oldOpportunity.lost_reason_id != null && oldOpportunity.lost_reason_id == 0L) || oldOpportunity.lost_reason_id == null))
-	    	this.milestone_changed_time = oldOpportunity.milestone_changed_time;
+		    && this.milestone.equals(oldOpportunity.milestone)
+		    && this.lost_reason_id != null
+		    && ((oldOpportunity.lost_reason_id != null && oldOpportunity.lost_reason_id == 0L) || oldOpportunity.lost_reason_id == null))
+		this.milestone_changed_time = oldOpportunity.milestone_changed_time;
 	}
 	else if (oldOpportunity == null && this.milestone.equalsIgnoreCase(wonMilestone))
 	    this.won_date = System.currentTimeMillis() / 1000;
@@ -656,10 +665,63 @@ public class Opportunity extends Cursor implements Serializable
 
 	    this.notes = null;
 	}
-	
-	/*if (milestone_changed_time == 0L)
-		milestone_changed_time = System.currentTimeMillis() / 1000;*/
 
+	/*
+	 * if (milestone_changed_time == 0L) milestone_changed_time =
+	 * System.currentTimeMillis() / 1000;
+	 */
+
+	// Setting note_ids from api calls
+	setRelatedNotes();
+
+    }
+
+    @XmlElement(name = "note_ids")
+    public List<String> getNote_ids()
+    {
+	note_ids = new ArrayList<String>();
+
+	for (Key<Note> noteKey : related_notes)
+	    note_ids.add(String.valueOf(noteKey.getId()));
+
+	return note_ids;
+    }
+
+    /**
+     * Set related notes to the Case. Annotated with @JsonIgnore to prevent auto
+     * execution of this method (conflict with "PUT" request)
+     * 
+     * @param owner_key
+     */
+    @JsonIgnore
+    public void setRelatedNotes()
+    {
+	Set<String> notesSet = null;
+	if (this.notes != null && !this.notes.isEmpty())
+	{
+	    notesSet = new HashSet<String>(notes);
+
+	}
+	else if (this.note_ids != null && !this.note_ids.isEmpty())
+	{
+	    notesSet = new HashSet<String>(note_ids);
+	}
+	if (notesSet != null)
+	{
+
+	    // Create list of Note keys
+	    for (String note_id : notesSet)
+	    {
+		this.related_notes.add(new Key<Note>(Note.class, Long.parseLong(note_id)));
+	    }
+
+	    this.notes = null;
+	}
+
+	/*
+	 * if (milestone_changed_time == 0L) milestone_changed_time =
+	 * System.currentTimeMillis() / 1000;
+	 */
 
     }
 
@@ -688,5 +750,5 @@ public class Opportunity extends Cursor implements Serializable
 	;
 	return builder.toString();
     }
-    
+
 }
