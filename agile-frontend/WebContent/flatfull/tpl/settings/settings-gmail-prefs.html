@@ -13,6 +13,7 @@
             <input name="id" type="hidden" value="{{id}}" /> 
             {{/if}} -->
             <div>
+                <div class="pull-left">
 				{{#if picture}} 
 					<i class="media-grid thumb thumb-wrapper"> 
 						{{#if_equals picture "https://lh3.googleusercontent.com/-XdUIqdMkCWA/AAAAAAAAAAI/AAAAAAAAAAA/4252rscbv5M/photo.jpg"}}
@@ -24,7 +25,12 @@
 				{{else}} 
 					<i class="media-grid"> <img class="thumbnail m-b-none thumb" src="{{emailGravatarurl 50 email}}" /> </i>
 			   	{{/if}}
-			   	<label>{{name}}</label>
+                </div>
+			   		<div class="pull-left m-l-xs">
+			   			<span class="block m-t-sm">{{name}}</span>
+                		<span class="block">{{email}}</span>
+                	</div>
+                    <div class="clearfix"></div> 
 			</div>
             <div class="control-group form-group m-t">
 	            <div class="controls">
