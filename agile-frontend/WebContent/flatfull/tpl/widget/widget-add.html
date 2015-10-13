@@ -54,7 +54,16 @@
                         {{/if_equals}}
                 {{/if_equals}}
     			<a class="btn btn-sm btn-danger m-r-xs" id="delete-widget" widget-name="{{name}}">Delete</a>
-				<div class="clearfix"></div>
+				
+				{{#if_equals name "Bria"}}
+					<div class="text-center m-t-sm ">
+							Download
+							<a href="https://s3.amazonaws.com/agilecrm/website/bria.jar" class="text-info" target="_blank" id="downloadBria" widget-name="Bria"> jar file </a>
+							<i class="icon-question-sign m-l-xs" style="color:#A09898;" data-toggle="tooltip" data-placement="top" title="" data-original-title="Download jar file and run it. Your Bria client must be running before running this jar file."></i>
+					</div>
+				{{/if_equals}}
+
+			<div class="clearfix"></div>
     		{{else}}
 				{{#if allowedToAdd}}
 					{{#if_equals widget_type "SOCIAL"}}

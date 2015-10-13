@@ -151,19 +151,17 @@ function sendMessageToBriaClient(command, number, callid){
 	var image = new Image();
 	image.onload = function(png) {
 		console.log("bria sucess");
-		if (Twilio_Call_Noty != undefined)
-			Twilio_Call_Noty.close();
+		if (Bria_Call_Noty != undefined)
+			Bria_Call_Noty.close();
 		window.focus();
-		if(png.target.height == 2){
-			alert("Please make sure the Bria client is running in your machine.");
-		}
+
 	};
 	image.onerror= function(png) {
 		console.log("bria failure");
-		if (Twilio_Call_Noty != undefined)
-			Twilio_Call_Noty.close();
+		if (Bria_Call_Noty != undefined)
+			Bria_Call_Noty.close();
 		window.focus();
-		alert("Please make sure the Agile Bria client app is running in your machine.");
+		alert("Please make sure the Agile Bria app is running in your machine.");
 	};
 	
 	image.src = "http://localhost:33333/"+ new Date().getTime() +"?command="+command+";number="+number+";callid="+callid+";domain="+domain+";userid="+id+";namedpipe="+NamedPipe+"?";
@@ -246,26 +244,26 @@ function _getMessage(message){
 		});*/
 		
 		contact_Image = getContactImage(number,"Incoming");
-		message =contact_Image+'<span class="noty_contact_details m-l-sm inline pos-rlt pos-t-sm"><i class="icon icon-phone m-r-xs pos-rlt m-t-xxs"></i><b>Incoming call &nbsp;&nbsp;&nbsp;  </b>'+'<span id="callId" value ='+callId+ '>' + number +'</span>'+'<br><br></span><div class="clearfix"></div>';
+		message =contact_Image+'<span class="noty_contact_details m-l-sm inline pos-rlt" style="top: 10px;"><i class="icon icon-phone m-r-xs pos-rlt m-t-xxs"></i><b>Incoming Call &nbsp;&nbsp;&nbsp;  </b>'+'<span id="callId" class="text-xs" value ='+callId+ '>' + number +'</span>'+'<br><br></span><div class="clearfix"></div>';
 				
 	}else if(state == "connected"){
 		contact_Image = getContactImage(number,"Outgoing");
-		message =contact_Image+'<span class="noty_contact_details m-l-sm inline pos-rlt pos-t-sm"><i class="icon icon-phone m-r-xs pos-rlt m-t-xxs"></i><b>On Call &nbsp;&nbsp;&nbsp; </b>'+'<span id="callId" value ='+callId+ '>' + number + '</span>'+'<br><br></span><div class="clearfix"></div>';
+		message =contact_Image+'<span class="noty_contact_details m-l-sm inline pos-rlt" style="top: 10px;"><i class="icon icon-phone m-r-xs pos-rlt m-t-xxs"></i><b>On Call &nbsp;&nbsp;&nbsp; </b>'+'<span id="callId" class="text-xs" value ='+callId+ '>' + number + '</span>'+'<br><br></span><div class="clearfix"></div>';
 	
 	}else if(state == "missed-call"){
 		To_Number = number;
 		contact_Image = getContactImage(number,"Incoming");
-		message =contact_Image+'<span class="noty_contact_details m-l-sm inline pos-rlt pos-t-sm"><i class="icon icon-phone m-r-xs pos-rlt m-t-xxs"></i><b>Missed call &nbsp;&nbsp;&nbsp;  </b>'+ '<span id="callId" value ='+callId+ '>' + number + '</span>' +'<br><br></span><div class="clearfix"></div>';
+		message =contact_Image+'<span class="noty_contact_details m-l-sm inline pos-rlt" style="top: 10px;"><i class="icon icon-phone m-r-xs pos-rlt m-t-xxs"></i><b>Missed Call &nbsp;&nbsp;&nbsp;  </b>'+ '<span id="callId" class="text-xs" value ='+callId+ '>' + number + '</span>' +'<br><br></span><div class="clearfix"></div>';
 
 	}else if(state == "connecting"){
 		//var contactDetailsObj = agile_crm_get_contact();
 		//displayName = getContactName(contactDetailsObj);
 		contact_Image = getContactImage(number,"Outgoing");
-		message =contact_Image+'<span class="noty_contact_details m-l-sm inline pos-rlt pos-t-sm"><i class="icon icon-phone m-r-xs pos-rlt m-t-xxs"></i><b>Calling... &nbsp;&nbsp;&nbsp; </b>'+'<span id="callId" value ='+callId+ '>' + number + '</span>' +'<br><br></span><div class="clearfix"></div>';
+		message =contact_Image+'<span class="noty_contact_details m-l-sm inline pos-rlt" style="top: 10px;"><i class="icon icon-phone m-r-xs pos-rlt m-t-xxs"></i><b>Calling... &nbsp;&nbsp;&nbsp; </b>'+'<span id="callId" class="text-xs" value ='+callId+ '>' + number + '</span>' +'<br><br></span><div class="clearfix"></div>';
 		
 	}else if(state == "failed"){
 		contact_Image = getContactImage(number,"Outgoing");
-		message =contact_Image+'<span class="noty_contact_details m-l-sm inline pos-rlt pos-t-sm"><i class="icon icon-phone m-r-xs pos-rlt m-t-xxs"></i><b>Call Failed &nbsp;&nbsp;&nbsp; </b>'+'<span id="callId" value ='+callId+ '>' + number + '</span>'+'<br><br></span><div class="clearfix"></div>';
+		message =contact_Image+'<span class="noty_contact_details m-l-sm inline pos-rlt" style="top: 10px;"><i class="icon icon-phone m-r-xs pos-rlt m-t-xxs"></i><b>Call Failed &nbsp;&nbsp;&nbsp; </b>'+'<span id="callId" class="text-xs" value ='+callId+ '>' + number + '</span>'+'<br><br></span><div class="clearfix"></div>';
 	
 	}else if(state == "ended"){
 		

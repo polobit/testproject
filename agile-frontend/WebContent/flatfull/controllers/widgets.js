@@ -94,7 +94,7 @@ var WidgetsRouter = Backbone.Router
 									$(that).height(socialHeight);
 								});
 							}, 1000);
-
+							$('[data-toggle="tooltip"]').tooltip();	
 						}
 					});
 
@@ -115,7 +115,6 @@ var WidgetsRouter = Backbone.Router
 
 					// Shows available widgets in the content
 					$('#prefs-tabs-content').html(that.Catalog_Widgets_View.el);
-
 				});
 
 			},
