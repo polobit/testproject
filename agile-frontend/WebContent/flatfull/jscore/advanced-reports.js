@@ -235,7 +235,7 @@ function initSalesCharts(callback){
 				callback();
 			});
 
-		}, '<option class="default-select" value="{{id}}">{{label}}</option>', false, undefined, "All Sources");
+		}, '<option class="default-select text-cap" value="{{id}}">{{label}}</option>', false, undefined, "All Sources");
 		callback();		
 		
 	}
