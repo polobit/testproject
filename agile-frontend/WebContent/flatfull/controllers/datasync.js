@@ -156,18 +156,15 @@ google_calendar:function(el){
 
                 $('#PrefsTab .select').removeClass('select');
                 $('.contact-sync-tab').addClass('select');
+                getSyncModelFromName("FRESHBOOKS", function(model){
 
-              
-                that.freshbooks_sync_setting = new Base_Model_View({
-                    url: 'core/api/freshbooks/import-settings',
-                    template: 'admin-settings-import-freshbooks-contacts-form',
-                    saveCallback: function(model) {
-
-                        showNotyPopUp("information", "Contacts sync initiated", "top", 1000);
-                    }
-                });
-
-                $("#prefs-tabs-content").html(that.freshbooks_sync_setting.render().el);
+                    var url= 'core/api/contactprefs/FRESHBOOKS',
+                              template= 'admin-settings-import-freshbooks-contacts-form';
+                                    renderInnerSyncView(url,template,model,function(model){
+                                    showNotyPopUp("information", "Contacts sync initiated", "top", 1000);
+                                    });
+                           
+                     });
             
             }, "#content");
         },
@@ -180,23 +177,15 @@ google_calendar:function(el){
                 $('#content').html($(template_ui));
                 $('#PrefsTab .select').removeClass('select');
                 $('.contact-sync-tab').addClass('select');
-
-
-                
-                that.freshbooks_import_settings = new Base_Model_View({
-                    url: 'core/api/freshbooks/import-settings',
-                    template: 'admin-settings-import-freshbooks-settings',
-                    postRenderCallback: function(el) {
-                        initializeImportListeners();
-                    },
-                    saveCallback: function(model) {
-
-                        showNotyPopUp("information", "Contacts sync initiated", "top", 1000);
-                    }
-                });
-
-                $("#prefs-tabs-content").html(that.freshbooks_import_settings.render().el);
           
+                  getSyncModelFromName("FRESHBOOKS", function(model){
+                    var url= 'core/api/contactprefs/FRESHBOOKS',
+                              template= 'admin-settings-import-freshbooks-settings';
+                                    renderInnerSyncView(url,template,model,function(model){
+                                    showNotyPopUp("information", "Contacts sync initiated", "top", 1000);
+                                    });
+                     });
+
 
             }, "#content");
         },
