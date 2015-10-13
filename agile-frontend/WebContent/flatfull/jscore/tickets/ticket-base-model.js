@@ -11,9 +11,9 @@ var Ticket_Base_Model = Base_Model_View.extend({
 		"click .refresh-tickets" : "refreshTickets",
 
 		"click .change-group" : "changeGroup",
-		"click .change-assignee" : "changeAssignee",
-		"click .change-status" : "changeStatus",
-		"click .change-priority" : "changePriority"
+		"click .change-assignee" : "changeGroup",
+		"click .change-status" : "changeGroup",
+		"click .change-priority" : "changeGroup"
 	},
 
 	assignTicket: function(e){
