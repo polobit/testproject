@@ -376,4 +376,5 @@ function saveAttachmentBlobKey(blobKey,fileName)
 	$('#emailForm').find('#attachment-select').find('option:first').attr('selected', 'selected');
 	var el = $('#emailForm').find(".attachment-document-select");
 	$('#emailForm').find(".attachment-document-select").css('display','none');
+	$('#emailForm').find('#agile_attachment_name').val(fileName);
 }

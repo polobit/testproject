@@ -574,7 +574,7 @@ var ReportsRouter = Backbone.Router
 						var end_time=new Date(end_value).getTime() / 1000;
 						options += ("start-date=" + start_time + "&end-date=" + end_time);
 						
-						var url='core/api/portlets/portletCallsPerPerson/' + options;
+						var url='core/api/portlets/calls-per-person/' + options;
 						
 						graphOn=$("#typeCall option:selected").val();
 					    
