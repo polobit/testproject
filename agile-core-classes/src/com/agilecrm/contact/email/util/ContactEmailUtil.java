@@ -1,8 +1,10 @@
 package com.agilecrm.contact.email.util;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
@@ -61,6 +63,21 @@ public class ContactEmailUtil
 	public static List<ContactEmail> getContactEmails(Long contactId)
 	{
 		return dao.listByProperty("contact_id", contactId);
+	}
+	
+	 /**
+	 * Retrieves the ContactEmails based on contactId.
+	 * 
+	 * @param contactId
+	 * @param count - the number of entries to retrieve
+	 *  
+	 * @return List
+	 */
+	public static List<ContactEmail> getContactEmails(Long contactId,int count)
+	{
+		Map<String, Object> conditionsMap = new HashMap<String, Object>();
+		conditionsMap.put("contact_id", contactId);
+		return dao.fetchAllByOrderWithoutCount(count,null,conditionsMap, false, false, "-date_secs");
 	}
 
 	/**
@@ -763,6 +780,8 @@ public class ContactEmailUtil
 		List<OfficeEmailPrefs> sharedOfficePrefsList = getSharedToOfficePrefs(agileUserKey);
 
 		List<String> emailFetchUrls = new ArrayList<String>();
+		//First Adding URL for fetching emails sent through agile.
+		String agileEmailsUrl = "core/api/emails/agile-emails?count=20";
 		if (socialPrefsList != null & socialPrefsList.size() > 0)
 		{
 		    for (SocialPrefs gmailPrefs : socialPrefsList)
@@ -817,6 +836,7 @@ public class ContactEmailUtil
 			emailFetchUrls.add(officeUrl);
 		    }
 		}
+		emailFetchUrls.add(agileEmailsUrl);
 		return emailFetchUrls;
 	    }
 
