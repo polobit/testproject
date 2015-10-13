@@ -18,29 +18,26 @@
          </tbody>
       </table>
       <hr>
-      <div class="col-md-6">
-         <div class="panel">
-            <div class="panel-body" style="
-               height: 120px;
-               ">
-               <table="" width="90%">
-               <address>
-                  <strong>Agile CRM,</strong><br>
-                  440 N Wolfe Road,<br>
-                  Sunnyvale, CA, 94085<br>
-               </address>
-               </table="">
-            </div><!-- end of panel-body -->
-         </div><!-- end of panel-->
-      </div><!-- end of col-md-6 -->
-      <div class="col-md-6">
-         <div class="panel">
-            <div class="panel-body" style="
-               height: 120px;
-               ">
-               <table class="invoice-head p-t-sm m-t-sm" style="background-color:transparent;">
-                  <tbody>
-                     <tr>
+      <div class="col-md-12 p-b-md">
+<div class="col-md-6">
+<table width="100%%">
+<tbody>
+	<tr>
+		<td class="p-l-sm">
+                <address>
+					<strong>Agile CRM,</strong><br>
+                    440 N Wolfe Road,<br>
+                    Sunnyvale, CA, 94085<br>
+                </address>
+		</td>
+	</tr>
+</tbody>
+</table>
+</div>
+				<div class="col-md-6">
+                <table class="invoice-head" style="background-color:white;" width="100%">
+                    <tbody>
+			 <tr>
                         <td class="pull-right"><strong>Invoice#</strong></td>
                         <td>{{invoice.id}}</td>
                      </tr>
@@ -56,12 +53,12 @@
                             <tr>
                             <td class="pull-right"><strong>Company</strong></td>
                             <td>{{company.company_name}}</td></tr>
-                     {{/if_not_equals}}
-                  </tbody>
-               </table>
-            </div><!-- end of panel-body -->
-         </div><!-- end of panel -->
-      </div><!-- end of col-md-6 -->
+                     {{/if_not_equals}}</tbody>
+                </table>
+</div>
+		
+	
+</div>
       <div class="col-md-12">
          <div class="panel">
             <div class="panel-body">
