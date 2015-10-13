@@ -1494,7 +1494,11 @@ function showDealAreaSpline(url, selector, name, yaxis_name, show_loading)
            								style: {
              								 fontWeight: 'bold',
                									fontSize: '25px',
-      	     									 }
+      	     									 },
+      	     							 position :{
+               									 x : 60,
+               									 y: 5
+           									 },
        								 }
 			});
 		});
