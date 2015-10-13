@@ -8,11 +8,11 @@
 				</div>
 				<div class="modal-body">
 					<form id='ticketAssignForm' name="ticketAssignForm" class="form-horizontal">
-						<input type="hidden" name="ticket_id">
+						<input type="hidden" name="id" id="ticket_id">
 						<div class="form-group">
 			              <label class="col-lg-3 control-label">Group</label>
 			              <div class="col-lg-7">
-			              	<select id="group_id" name="group_id" class="form-control m-b">
+			              	<select id="groupID" name="groupID" class="form-control m-b">
 			              		{{#each this}}
 			              			<option value="{{id}}">{{group_name}}</option>	
 								{{/each}}
@@ -22,7 +22,7 @@
 			            <div class="form-group">
 			              <label class="col-lg-3 control-label">Assignee</label>
 			              <div class="col-lg-7">
-			                <select id="assignee_id" name="assignee_id" class="form-control m-b">
+			                <select id="assigneeID" name="assigneeID" class="form-control m-b">
 			                	{{#each this}}
 			                		{{#each group_users}}
 			                			<option class="{{../id}}" value="{{id}}">{{name}}</option>	

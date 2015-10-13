@@ -42,6 +42,10 @@ var TicketsUtilRouter = Backbone.Router.extend({
 				page_size : 20,
 				slateKey : "no-tickets",
 				postRenderCallback: function(el){
+
+					//Initialize tooltips
+					$('.refresh-tickets').tooltip();
+
 					head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
 					{
 						$("time", el).timeago();

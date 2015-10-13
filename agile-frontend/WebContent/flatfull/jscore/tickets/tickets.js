@@ -24,7 +24,7 @@ $(function(){
 					Tickets_Count.fetch_tickets_count();
 
 					//Rendering Groups dropdown
-					Tickets_Group_View = new Base_Model_View({
+					Tickets_Group_View = new Ticket_Base_Model({
 						isNew : false,
 						template : "tickets-groups-container",
 						url : "/core/api/tickets/groups",
@@ -53,11 +53,21 @@ $(function(){
 
 				$('#right-pane').html(Tickets_Group_View.render().el);
 				
+				Tickets_Group_View.delegateEvents();
+
 				if(callback)
 					callback();
 			}
 
 			Current_Ticket_ID = null;
 		},
-	}
+	};
 });
+
+/**
+ *
+ **/
+function changeGroup(event){
+
+	
+}

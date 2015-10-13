@@ -15,6 +15,7 @@ import com.agilecrm.ticket.entitys.Tickets.Priority;
 import com.agilecrm.ticket.entitys.Tickets.Source;
 import com.agilecrm.ticket.entitys.Tickets.Status;
 import com.agilecrm.ticket.entitys.Tickets.Type;
+import com.agilecrm.user.DomainUser;
 import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.googlecode.objectify.Key;
 
@@ -47,7 +48,7 @@ public class TicketsUtil
 
 		return Tickets.ticketsDao.fetchAllByOrder(20, cursor, searchMap, false, true, sortKey);
 	}
-	
+
 	/**
 	 * 
 	 * @param groupID
@@ -62,7 +63,7 @@ public class TicketsUtil
 
 		return Tickets.ticketsDao.getCountByProperty(searchMap);
 	}
-	
+
 	/**
 	 * 
 	 * @param groupID
@@ -77,7 +78,7 @@ public class TicketsUtil
 
 		return Tickets.ticketsDao.listByProperty(searchMap);
 	}
-	
+
 	/**
 	 * 
 	 * @param groupID
@@ -204,6 +205,88 @@ public class TicketsUtil
 		new TicketDocument().edit(ticket);
 
 		return ticket;
+	}
+
+	/**
+	 * 
+	 * @param ticket_id
+	 * @param group_id
+	 * @param assignee_id
+	 * @return
+	 * @throws EntityNotFoundException
+	 */
+	public static Tickets assignTicket(Long ticket_id, Long group_id, Long assignee_id) throws EntityNotFoundException
+	{
+		Tickets ticket = TicketsUtil.getTicketByID(ticket_id);
+		ticket.group_id = new Key<TicketGroups>(TicketGroups.class, group_id);
+
+		if (assignee_id != null)
+			ticket.assignee_id = new Key<DomainUser>(DomainUser.class, assignee_id);
+
+		Tickets.ticketsDao.put(ticket);
+
+		return ticket;
+	}
+
+
+	/**
+	 * 
+	 * @param ticket_id
+	 * @param priority
+	 * @return updated ticket
+	 * @throws EntityNotFoundException
+	 */
+	public static Tickets changePriority(Long ticket_id, Priority priority) throws EntityNotFoundException
+	{
+		Tickets ticket = TicketsUtil.getTicketByID(ticket_id);
+		ticket.priority = priority;
+		
+		Tickets.ticketsDao.put(ticket);
+
+		return ticket;
+	}
+	
+	/**
+	 * 
+	 * @param ticket_id
+	 * @param is_favorite
+	 * @return
+	 * @throws EntityNotFoundException
+	 */
+	public static Tickets markFavorite(Long ticket_id, Boolean is_favorite) throws EntityNotFoundException
+	{
+		Tickets ticket = TicketsUtil.getTicketByID(ticket_id);
+		ticket.is_favorite = is_favorite;
+		
+		Tickets.ticketsDao.put(ticket);
+
+		return ticket;
+	}
+	
+	/**
+	 * 
+	 * @param ticket_id
+	 * @return
+	 * @throws EntityNotFoundException
+	 */
+	public static Tickets closeTicket(Long ticket_id) throws EntityNotFoundException
+	{
+		Tickets ticket = TicketsUtil.getTicketByID(ticket_id);
+		ticket.status = Status.CLOSED;
+		
+		Tickets.ticketsDao.put(ticket);
+
+		return ticket;
+	}
+	
+	/**
+	 * 
+	 * @param ticket_id
+	 * @throws EntityNotFoundException
+	 */
+	public static void deleteTicket(Long ticket_id) throws EntityNotFoundException
+	{
+		Tickets.ticketsDao.deleteKey(new Key<Tickets>(Tickets.class, ticket_id));
 	}
 
 	/**

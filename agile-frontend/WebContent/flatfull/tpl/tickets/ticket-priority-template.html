@@ -1,0 +1,32 @@
+<script id="ticket-priority-template" type="text/html">
+	<div id="ticket-priority-modal" class="modal fade">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+		            <button class="close" data-dismiss="modal">x</button>
+					<h3 class="modal-title"><i class="fa fa-bolt"></i> Change Priority</h3>
+				</div>
+				<div class="modal-body">
+					<form id='ticketPriorityForm' name="ticketPriorityForm" class="form-horizontal">
+						<input type="hidden" name="id" id="ticket_id">
+						<div class="form-group">
+			              <label class="col-lg-3 control-label">Priority</label>
+			              <div class="col-lg-7">
+			              	<select id="priority" name="priority" class="form-control m-b">
+			              		<option value="LOW">Low</option>
+			              		<option value="MEDIUM">Medium</option>
+			              		<option value="HIGH">High</option>
+				            </select><br/>
+			              </div>
+			            </div>
+					</form>	
+				</div>
+				<div class="modal-footer">
+					<a href="javascript:void(0);" data-dismiss="modal" class="btn btn-sm btn-default">Close</a>
+		            <a href="javascript:void(0);" class="save btn btn-sm btn-primary">Change</a>
+					&nbsp;&nbsp;<span id="msg"></span>
+				</div>
+			</div>
+		</div>
+	</div>
+</script>	

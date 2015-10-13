@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.ws.rs.GET;
-import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
@@ -14,7 +14,6 @@ import javax.ws.rs.core.Response;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -22,7 +21,6 @@ import com.agilecrm.ticket.entitys.TicketGroups;
 import com.agilecrm.ticket.entitys.Tickets;
 import com.agilecrm.ticket.entitys.TicketNotes.CREATED_BY;
 import com.agilecrm.ticket.entitys.TicketNotes.NOTE_TYPE;
-import com.agilecrm.ticket.entitys.Tickets.Priority;
 import com.agilecrm.ticket.entitys.Tickets.Source;
 import com.agilecrm.ticket.entitys.Tickets.Status;
 import com.agilecrm.ticket.utils.TicketGroupUtil;
@@ -31,7 +29,6 @@ import com.agilecrm.ticket.utils.TicketsUtil;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.google.appengine.api.NamespaceManager;
-import com.googlecode.objectify.Key;
 
 /**
  * 
@@ -130,13 +127,13 @@ public class TicketsRest
 			for (TicketGroups group : groups)
 			{
 				List<DomainUser> groupUsers = new ArrayList<DomainUser>();
-				
+
 				for (DomainUser domainUser : domainUsers)
 				{
-					if(group.agents_keys.contains(domainUser.id))
+					if (group.agents_keys.contains(domainUser.id))
 						groupUsers.add(domainUser);
 				}
-				
+
 				group.group_users = groupUsers;
 			}
 
@@ -158,25 +155,17 @@ public class TicketsRest
 	 * @param assignee_id
 	 * @return returns success json
 	 */
-	@POST
+	@PUT
 	@Path("/assign-ticket")
 	@Produces(MediaType.APPLICATION_JSON)
-	public String assignTicket(@QueryParam("ticket_id") Long ticket_id, @QueryParam("group_id") Long group_id,
-			@QueryParam("assignee_id") Long assignee_id)
+	public String assignTicket(Tickets ticket)
 	{
 		try
 		{
-			if (ticket_id == null || group_id == null || assignee_id == null)
+			if (ticket == null || ticket.id == null || ticket.groupID == null)
 				throw new Exception("Required parameters missing.");
 
-			Tickets ticket = TicketsUtil.getTicketByID(ticket_id);
-			ticket.group_id = new Key<TicketGroups>(TicketGroups.class, group_id);
-			ticket.assignee_id = new Key<DomainUser>(DomainUser.class, assignee_id);
-
-			if (ticket.status == Status.NEW)
-				ticket.status = Status.OPEN;
-
-			Tickets.ticketsDao.put(ticket);
+			TicketsUtil.assignTicket(ticket.id, ticket.groupID, ticket.assigneeID);
 
 			return new JSONObject().put("status", "success").toString();
 		}
@@ -194,20 +183,17 @@ public class TicketsRest
 	 * @param priority
 	 * @return
 	 */
-	@POST
+	@PUT
 	@Path("/change-priority")
 	@Produces(MediaType.APPLICATION_JSON)
-	public String changePriority(@QueryParam("ticket_id") Long ticket_id, @QueryParam("priority") String priority)
+	public String changePriority(Tickets ticket)
 	{
 		try
 		{
-			if (ticket_id == null || StringUtils.isBlank(priority))
+			if (ticket == null || ticket.priority == null)
 				throw new Exception("Required parameters missing.");
 
-			Tickets ticket = TicketsUtil.getTicketByID(ticket_id);
-			ticket.priority = Priority.valueOf(priority.toUpperCase());
-
-			Tickets.ticketsDao.put(ticket);
+			TicketsUtil.changePriority(ticket.id, ticket.priority);
 
 			return new JSONObject().put("status", "success").toString();
 		}
@@ -225,20 +211,17 @@ public class TicketsRest
 	 * @param is_starred
 	 * @return
 	 */
-	@POST
+	@PUT
 	@Path("/make-favorite")
 	@Produces(MediaType.APPLICATION_JSON)
-	public String makeFavorite(@QueryParam("ticket_id") Long ticket_id, @QueryParam("is_starred") Boolean is_starred)
+	public String makeFavorite(Tickets ticket)
 	{
 		try
 		{
-			if (ticket_id == null || is_starred == null)
+			if (ticket == null || ticket.is_favorite == null)
 				throw new Exception("Required parameters missing.");
 
-			Tickets ticket = TicketsUtil.getTicketByID(ticket_id);
-			ticket.is_favorite = is_starred;
-
-			Tickets.ticketsDao.put(ticket);
+			TicketsUtil.markFavorite(ticket.id, ticket.is_favorite);
 
 			return new JSONObject().put("status", "success").toString();
 		}
@@ -255,20 +238,44 @@ public class TicketsRest
 	 * @param ticket_id
 	 * @return
 	 */
-	@POST
-	@Path("/close-ticket")
+	@PUT
+	@Path("/mark-solved")
 	@Produces(MediaType.APPLICATION_JSON)
-	public String closeTicket(@QueryParam("ticket_id") Long ticket_id)
+	public String closeTicket(Tickets ticket)
 	{
 		try
 		{
-			if (ticket_id == null)
+			if (ticket == null || ticket.id == null)
 				throw new Exception("Required parameter missing.");
 
-			Tickets ticket = TicketsUtil.getTicketByID(ticket_id);
-			ticket.status = Status.CLOSED;
+			TicketsUtil.closeTicket(ticket.id);
 
-			Tickets.ticketsDao.put(ticket);
+			return new JSONObject().put("status", "success").toString();
+		}
+		catch (Exception e)
+		{
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
+			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+					.build());
+		}
+	}
+	
+	/**
+	 * 
+	 * @param ticket_id
+	 * @return
+	 */
+	@PUT
+	@Path("/delete-ticket")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String deleteTicket(Tickets ticket)
+	{
+		try
+		{
+			if (ticket == null || ticket.id == null)
+				throw new Exception("Required parameter missing.");
+
+			TicketsUtil.deleteTicket(ticket.id);
 
 			return new JSONObject().put("status", "success").toString();
 		}
