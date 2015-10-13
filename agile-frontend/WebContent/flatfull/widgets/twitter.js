@@ -72,13 +72,13 @@ function showTwitterMatchingProfiles(data)
 	else
 		el = "<div class='panel-body'><p class='text-base'>Search results. " + "<a href='#' class='twitter_modify_search'>Modify search</a></p>";
 
-	el = el.concat(getTemplate("twitter-search-result", data));
+	//el = el.concat(getTemplate("twitter-search-result", data));
 
 	getTemplate('twitter-search-result', data, undefined, function(template_ui){
  		if(!template_ui)
     		return;
-		el = el.concat($(template_ui)); 
-		el = el + "</div><div class='clearfix'></div>";
+		el += template_ui; 
+		el += "</div><div class='clearfix'></div>";
 
 		// Show matching profiles in Twitter panel
 		$('#Twitter', agile_crm_get_current_view()).html(el);

@@ -61,7 +61,8 @@ function showGooglePlusProfile(id)
 
 		if (typeof resData.errors == "undefined")
 		{
-			var el = getTemplate("googleplus-profile", resData);
+			var el = getTemplate("googleplus-profile", resData);		
+			console.log(el);
 			$('#' + WIDGET_NAME).html(el);
 			showGooglePlusPosts(id);
 		}
@@ -207,6 +208,11 @@ function googlePlusApiCall(apiURL, reqData, callback) {
 		dataType : "json",
 		success: function(data){
 			callback(data);
+		},error:function(data){
+			var errorObj = JSON.parse(data.responseText);
+			if(errorObj){
+				displayError(WIDGET_NAME, errorObj.error.message);
+			}
 		}
 	});
 }
@@ -221,14 +227,12 @@ function displayError(id, error, disable_check)
 	/*
 	 * Get error template and fill it with error message and show it in the div
 	 * with given id
-	 */
+	 */	 
 	$('#' + id).html(getTemplate('googleplus-error-panel', error_json));
 
 }
 
 function startGooglePlusWidget(contact_id) {
-
-	console.log('');
 
 	WIDGET_NAME = "GooglePlus";
 	LODING_IMAGE = '<div id="tweet_load"><center><img  src=\"img/ajax-loader-cursor.gif\" ' + 'style="margin-top: 10px;margin-bottom: 14px;"></img></center></div>';
@@ -254,8 +258,7 @@ function startGooglePlusWidget(contact_id) {
 		name = name + agile_crm_get_contact_property("first_name");
 	if (agile_crm_get_contact_property("last_name"))
 		name = name + " " + agile_crm_get_contact_property("last_name");
-	searchDetails['keywords'] = name.trim();
-
+	searchDetails['keywords'] = name.trim();	
 	contactGooglePlusId = agile_crm_get_contact_property_by_subtype('website', 'GOOGLE-PLUS');
 
 	// console.log("From Java API after refresh");
