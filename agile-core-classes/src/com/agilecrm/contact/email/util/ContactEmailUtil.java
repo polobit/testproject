@@ -770,7 +770,7 @@ public class ContactEmailUtil
 
 		List<String> emailFetchUrls = new ArrayList<String>();
 		//First Adding URL for fetching emails sent through agile.
-		String agileEmailsUrl = "core/api/emails/agile-emails?e="+agileUser.getDomainUser().email+"&count=20";
+		String agileEmailsUrl = "core/api/emails/agile-emails?count=20&";
 		if (socialPrefsList != null & socialPrefsList.size() > 0)
 		{
 		    for (SocialPrefs gmailPrefs : socialPrefsList)

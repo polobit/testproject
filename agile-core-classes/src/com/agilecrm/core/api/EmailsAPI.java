@@ -413,7 +413,7 @@ public class EmailsAPI
     @Path("agile-emails")
     @GET
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public List<ContactEmailWrapper> getAgileEmails(@QueryParam("e") String searchEmail,@QueryParam("count") String countString)
+    public List<ContactEmailWrapper> getAgileEmails(@QueryParam("search_email") String searchEmail,@QueryParam("count") String countString)
     {
 	List<ContactEmailWrapper> emailsList = null;
 	try
