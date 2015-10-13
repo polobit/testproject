@@ -46,7 +46,7 @@ public class LandingPageServlet extends HttpServlet {
 				if(landingPage != null) {
 					String fullXHtml = landingPage.html;
 					fullXHtml = fullXHtml.replace("</head>", "<style>"+landingPage.css+"</style></head>");
-					fullXHtml = fullXHtml.replace("</body>", "<script>"+landingPage.css+"</script></body>");
+					fullXHtml = fullXHtml.replace("</body>", "<script>"+landingPage.js+"</script></body>");
 					out.print(fullXHtml);
 				} else {
 					throw new NumberFormatException();
