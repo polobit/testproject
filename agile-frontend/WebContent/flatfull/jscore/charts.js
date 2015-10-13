@@ -1724,18 +1724,18 @@ function pieforReports(url, selector, name,show_loading)
 	chart = new Highcharts.Chart(
 			{
 				chart : { renderTo : selector, type : 'pie', plotBackgroundColor : null, plotBorderWidth : null, plotShadow : false,
-					marginTop : 25 },
+					marginTop : 20 },
 				colors: ['#7266ba','#23b7e5','#27c24c','#fad733','#f05050','#FF9900','#7AF168','#167F80','#0560A2','#D3E6C7'],
 				title : { text : name },
 				 tooltip: {
-				formatter: function(){
-						return '<table>' + 
-        '<tr><td class="p-n">'+this.series.name+'s: </td>' + 
-        '<td class="p-n"><b>'+AllData[this.point.x][1]+'</b></td></tr>' + 
-        '<tr><td class="p-n">Total Value: </td>' + 
-        '<td class="p-n"><b>'+getCurrencySymbolForCharts()+''+AllData[this.point.x][2].toLocaleString()+'</b></td></tr>' +
-        '</table>';
-		},
+				formatter:  function(){
+						return  '<div>' + 
+                              
+                                '<div class="p-n">'+this.series.name+'s : <b>'+getNumberWithCommasForCharts(AllData[this.point.x][1])+'</b></div>' +
+                                '</div>'+
+                                '<div class="p-n">Total Value : <b>'+getCurrencySymbolForCharts()+''+getNumberWithCommasForCharts(AllData[this.point.x][2].toLocaleString())+'</b></div>';
+                        
+						},
 							  shared: true,
 								  useHTML: true,
 							 borderWidth : 1,
@@ -1759,7 +1759,7 @@ function pieforReports(url, selector, name,show_loading)
 							{
 								return 	'<div class="text-center"><span style="color:'+this.point.color+'"><b>'+this.point.name+'</b></span><br/>' +
     			'<span style="color:'+this.point.color+'"><b>'+Math.round(this.point.percentage)+'%</b></span></div>';
-							}, distance : 20 }, showInLegend : false, innerSize : '65%',  shadow : false, borderWidth : 0 },
+							}, distance : 25 }, showInLegend : false, innerSize : '65%',  shadow : false, borderWidth : 0 },
 					series : { events : { mouseOver : function()
 					{
 						$('.tooltip-default-message').hide();
