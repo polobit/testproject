@@ -1733,7 +1733,7 @@ function pieforReports(url, selector, name,show_loading)
                               
                                 '<div class="p-n">'+this.series.name+'s: <b>'+getNumberWithCommasForCharts(AllData[this.point.x][1])+'</b></div>' +
                                 '</div>'+
-                                '<div class="p-n">Total Value: <b>'+getCurrencySymbolForCharts()+''+getNumberWithCommasForCharts(AllData[this.point.x][2].toLocaleString())+'</b></div>';
+                                '<div class="p-n">Total Value: <b>'+getCurrencySymbolForCharts()+''+AllData[this.point.x][2].toLocaleString()+'</b></div>';
                         
 						},
 							  shared: true,
