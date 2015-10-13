@@ -237,7 +237,7 @@ function initializePortletsListeners() {
 				// Saves new width and height in server
 				$.ajax({
 					type : 'POST',
-					url : '/core/api/portlets/saveOnboardingPrefs',
+					url : '/core/api/portlets/save-onboarding-prefs',
 					data : JSON.stringify(model.toJSON()),
 					contentType : "application/json; charset=utf-8",
 					dataType : 'json',
@@ -918,7 +918,7 @@ function initializeAddPortletsListeners() {
 				}
 
 				var portlet = new BaseModel();
-				portlet.url = 'core/api/portlets/addPortlet';
+				portlet.url = 'core/api/portlets/add';
 				portlet.set({
 					"prefs" : JSON.stringify(json)
 				}, {
