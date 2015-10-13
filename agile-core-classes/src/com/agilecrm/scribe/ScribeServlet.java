@@ -297,9 +297,22 @@ public class ScribeServlet extends HttpServlet {
 									+ e.getMessage());
 					url = "/#add-widget";
 				}
+				else{
+					req.getSession().setAttribute("widgetMsgType", "error");
+					req.getSession().setAttribute(
+							"widgetMsg",
+							"Error occured while doing authentication : "
+									+ e.getMessage());
+					url = "/#sync";
+				}
 			}
 		}
+		
+		req.getSession().setAttribute("oauth.request_token", token);
 
+		String returnURL = req.getParameter("return_url");
+		if (returnURL != null)
+			req.getSession().setAttribute("return_url", returnURL);
 		// Redirect URL
 		resp.sendRedirect(url);
 	}
