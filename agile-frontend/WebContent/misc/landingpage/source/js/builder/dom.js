@@ -256,7 +256,7 @@ angular.module('builder')
 				head += uniques.join("\n");
 			}
 			
-			head += '<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">';
+			head += '<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" rel="stylesheet">';
 
 			if (page) {
 				var path = $rootScope.baseUrl+'/public/css/bootstrap.min.css';
