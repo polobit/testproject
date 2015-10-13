@@ -1,6 +1,5 @@
-$(function()
-{
-	// Twilio io widget name as a global variable
+function startTwilioIOWidget(contact_id){	// Twilio io widget name as a global variable
+
 	TwilioIO_PLUGIN_NAME = "TwilioIO";
 
 	// Twilio loading image declared as global
@@ -57,7 +56,7 @@ $(function()
 		// Get next 10 logs
 		getNextLogs(to, page, pageToken);
 	});
-});
+}
 
 function showListOfContactNumbers()
 {
@@ -320,4 +319,3 @@ function twilioIOSaveContactedTime()
 				console.log('Error - Results :' + data);
 			});
 }
-

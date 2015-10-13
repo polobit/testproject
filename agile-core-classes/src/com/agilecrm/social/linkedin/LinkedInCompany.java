@@ -29,8 +29,9 @@ public class LinkedInCompany
 				CompanyField.LOGO_URL, CompanyField.NAME, CompanyField.NUM_FOLLOWERS, CompanyField.BLOG_RSS_URL,
 				CompanyField.DESCRIPTION, CompanyField.ID, CompanyField.INDUSTRY, CompanyField.TICKER));
 	
-		if (company.getLogoUrl() != null)
+		if (company.getLogoUrl() != null){
 			company.setLogoUrl(LinkedInUtil.changeImageUrl(company.getLogoUrl()));
+		}
 	
 		return company;
 	
@@ -74,9 +75,6 @@ public class LinkedInCompany
 						throw new Exception(e.getMessage());
 				}
 			}
-	
 		}
-	
 	}
-
 }

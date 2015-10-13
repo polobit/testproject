@@ -41,8 +41,7 @@ import com.thirdparty.google.ContactsImportUtil;
 public class WidgetsAPI {
 
 	/**
-	 * Gets list of available configurable widgets which are shown on user
-	 * preference widgets panel.
+	 * Gets list of available widgets
 	 * 
 	 * @return {@link List} of {@link Widget}
 	 */
@@ -54,7 +53,7 @@ public class WidgetsAPI {
 	}
 
 	/**
-	 * Gets List of configured widgets of the current user
+	 * Gets List of widgets added for current user
 	 * 
 	 * @return {@link List} of {@link Widget}
 	 */
@@ -66,8 +65,10 @@ public class WidgetsAPI {
 	}
 
 	/**
-	 * Gets widget of the current user based on the name widget.
+	 * Gets List of widgets added for current user
 	 * 
+	 * @param name
+	 *            name of the widget
 	 * @return {@link List} of {@link Widget}
 	 */
 	@Path("{widget_name}")
@@ -78,7 +79,8 @@ public class WidgetsAPI {
 	}
 
 	/**
-	 * Saves the widget.
+	 * Saves a widget, can also save custom widget by specifying script url to
+	 * load and preferences to connect.
 	 * 
 	 * @param widget
 	 *            {@link Widget}
@@ -89,17 +91,16 @@ public class WidgetsAPI {
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public Widget createWidget(Widget widget) {
 		System.out.println("In widgets api create");
-
-		if (widget == null) {
-			return null;
+		if (widget != null) {
+			widget.save();
+			return widget;
 		}
-
-		widget.save();
-		return widget;
+		return null;
 	}
 
 	/**
-	 * Saves the custom widget.
+	 * Saves a widget, can also save custom widget by specifying script url to
+	 * load and preferences to connect.
 	 * 
 	 * @param customWidget
 	 *            {@link CustomWidget}
@@ -111,25 +112,20 @@ public class WidgetsAPI {
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public Widget createCustomWidget(CustomWidget customWidget) {
 		System.out.println("In custom widgets api create");
-		if (customWidget == null) {
-			return null;
+		if (customWidget != null) {
+			customWidget.name = customWidget.name.replaceAll("[^a-zA-Z]+", "");
+			if (WidgetUtil.checkIfWidgetNameExists(customWidget.name)) {
+				return null;
+			}
+			System.out.println(customWidget);
+			customWidget.save();
+			return customWidget;
 		}
-
-		// Removes the special character in name of custom widget.
-		customWidget.name = customWidget.name.replaceAll("[^a-zA-Z]+", "");
-
-		if (WidgetUtil.checkIfWidgetNameExists(customWidget.name)) {
-			return null;
-		}
-
-		System.out.println(customWidget);
-
-		customWidget.save();
-		return customWidget;
+		return null;
 	}
 
 	/**
-	 * Updates the widget.
+	 * Updates a widget
 	 * 
 	 * @param widget
 	 *            {@link Widget}
@@ -139,16 +135,15 @@ public class WidgetsAPI {
 	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public Widget updateWidget(Widget widget) {
-		if (widget == null) {
-			return null;
+		if (widget != null) {
+			widget.save();
+			return widget;
 		}
-
-		widget.save();
-		return widget;
+		return null;
 	}
 
 	/**
-	 * Deletes the widget based on widget name
+	 * Deletes an widget based on widget name
 	 * 
 	 * @param widget_name
 	 *            {@link String}
@@ -158,16 +153,15 @@ public class WidgetsAPI {
 	public void deleteWidget(@QueryParam("widget_name") String widget_name) {
 		// Deletes widget based on name
 		Widget widget = WidgetUtil.getWidget(widget_name);
-
-		if (widget == null) {
-			return;
+		if (widget != null) {
+			// default widgets are removed from database on deletion
+			widget.delete();
 		}
-		// default widgets are removed from database on deletion
-		widget.delete();
 	}
 
 	/**
-	 * Deletes the custom widget based on the widget name.
+	 * Removes a custom widget based on widget name from database from
+	 * {@link CustomWidget} database and deletes it for all agile users
 	 * 
 	 * @param widget_name
 	 *            {@link String}
@@ -176,13 +170,23 @@ public class WidgetsAPI {
 	@DELETE
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	public void removeCustomWidget(@QueryParam("widget_name") String widget_name) {
-			// removes the widget for all agile users
-			WidgetUtil.removeCurrentUserCustomWidget(widget_name);
-			System.out.println("TEst code.....");
+		// Deletes widget based on name
+		CustomWidget customWidget = CustomWidgets.getCustomWidget(widget_name);
+		if (customWidget != null) {
+			// check if widget is custom widget and delete it
+			if (WidgetType.CUSTOM == customWidget.widget_type) {
+				// removes the widget for all agile users
+				WidgetUtil.removeWidgetForAllUsers(widget_name);
+
+				// removes it from custom widgets database
+				customWidget.delete();
+			}
+		}
 	}
 
 	/**
-	 * Saves the position of the widget to display in the contact details page.
+	 * Saves position of widget, used to show widgets in order according to
+	 * position ascending order
 	 * 
 	 * @param widgets
 	 *            {@link List} of {@link Widget}
@@ -192,16 +196,14 @@ public class WidgetsAPI {
 	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public void savePositions(List<Widget> widgets) {
-		if (widgets == null) {
-			return;
-		}
-
-		// UI sends only ID and Position
-		for (Widget widget : widgets) {
-			Widget fullWidget = WidgetUtil.getWidget(widget.id);
-			System.out.println(fullWidget);
-			fullWidget.position = widget.position;
-			fullWidget.save();
+		if (widgets != null) {
+			// UI sends only ID and Position
+			for (Widget widget : widgets) {
+				Widget fullWidget = WidgetUtil.getWidget(widget.id);
+				System.out.println(fullWidget);
+				fullWidget.position = widget.position;
+				fullWidget.save();
+			}
 		}
 	}
 
@@ -237,7 +239,7 @@ public class WidgetsAPI {
 	}
 
 	/**
-	 * Gets contacts from the sales force.
+	 * Gets the contacts from the salesforce.
 	 * 
 	 * @param userId
 	 * @param password
@@ -272,7 +274,7 @@ public class WidgetsAPI {
 	}
 
 	/**
-	 * Gets all the widgets of type integration.
+	 * Gets a list of widgets based on widget_type which is INTEGRATIONS
 	 * 
 	 * @return
 	 */

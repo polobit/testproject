@@ -135,18 +135,19 @@ public class HelpScoutUtil
 
 	    if (mailsPage.getCount() > 0)
 	    {
-		// Group the conversations/Mails based on their Mailbox.
-		JSONArray conversations = new JSONArray(gson.toJson(mailsPage.getItems()));
-		JSONObject mailbox = new JSONObject();
-		mailbox.put("name", mailboxes.getJSONObject(i).getString("name"));
-		mailbox.put("conversations", conversations);
-		customerConv.append("mailbox", mailbox);
+			// Group the conversations/Mails based on their Mailbox.
+			JSONArray conversations = new JSONArray(gson.toJson(mailsPage.getItems()));
+			JSONObject mailbox = new JSONObject();
+			mailbox.put("name", mailboxes.getJSONObject(i).getString("name"));
+			mailbox.put("conversations", conversations);
+			customerConv.append("mailbox", mailbox);
 	    }
 
 	}
 	// If there are no conversations, add a message.
-	if (!customerConv.has("mailbox"))
+	if (!customerConv.has("mailbox")){
 	    customerConv.put("message", "No Mails from this Customer.");
+	}
 	System.out.println("----------------" + customerConv.toString());
 	return customerConv;
     }
@@ -238,8 +239,9 @@ public class HelpScoutUtil
 
 	// Add tags to the conversation.
 	List<String> tagsList = new ArrayList<String>();
-	for (String tag : tags.split(","))
+	for (String tag : tags.split(",")){
 	    tagsList.add(tag);
+	}
 	conversation.setTags(tagsList);
 
 	// Reference to the mailbox to which the conversation is created in to.
@@ -315,14 +317,17 @@ public class HelpScoutUtil
 	ApiClient client = getHelpScoutApiClient(widget);
 	Gson gson = new Gson();
 	Page page = null;
-	if (type.equalsIgnoreCase(PERSON_USER))
+	
+	if (type.equalsIgnoreCase(PERSON_USER)){
 	    page = client.getUsers();
-	else if (type.equalsIgnoreCase(PERSON_CUSTOMER))
+	}else if (type.equalsIgnoreCase(PERSON_CUSTOMER)){
 	    page = client.getCustomers();
-
-	if (page != null && page.getCount() > 0)
+	}
+	
+	if (page != null && page.getCount() > 0){
 	    return gson.toJson(page.getItems());
-	else
+	}else{
 	    return "[]";
+	}
     }
 }

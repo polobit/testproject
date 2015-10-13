@@ -37,7 +37,6 @@ public class XeroWidgetsAPI
 {
 	
 	@Context UriInfo uriInfo;
-
 	/**
 	 * Retrieves clients from agent's Xero account based on contact email
 	 * 
@@ -55,26 +54,25 @@ public class XeroWidgetsAPI
 		System.out.println("xero widgets api");
 		// Retrieves widget based on its id
 		Widget widget = WidgetUtil.getWidget(widgetId);
-		if (widget == null)
-			return null;
+		if (widget != null){
+			widget = checkAccesToken(widget);
+			XeroUtil utilObj = new XeroUtil();
+			utilObj.callbackUrl = String.format(utilObj.callbackUrl,getReqDomainURL());
 
-		widget = checkAccesToken(widget);
-		
-		XeroUtil utilObj = new XeroUtil();
-		utilObj.callbackUrl = String.format(utilObj.callbackUrl,getReqDomainURL());
-
-		try
-		{
-			// Calls XeroUtil metod to retrieve invoices
-			String res = utilObj.getInvoicesOfClient(widget, email);
-			// System.out.println(res);
-			return res;
+			try
+			{
+				// Calls XeroUtil metod to retrieve invoices
+				String res = utilObj.getInvoicesOfClient(widget, email);
+				// System.out.println(res);
+				return res;
+			}
+			catch (Exception e)
+			{
+				throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+						.build());
+			}
 		}
-		catch (Exception e)
-		{
-			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
-					.build());
-		}
+		return null;
 	}
 
 	/**
@@ -98,23 +96,22 @@ public class XeroWidgetsAPI
 	{
 		// Retrieves widget based on its id
 		Widget widget = WidgetUtil.getWidget(widgetId);
-		if (widget == null)
-			return null;
-		
-		widget = checkAccesToken(widget);
-
-		XeroUtil utilObj = new XeroUtil();
-		utilObj.callbackUrl = String.format(utilObj.callbackUrl,getReqDomainURL());
-		try
-		{
-			// calls XeroUtil method to add Contact to Xero account
-			return utilObj.addContact(widget, firstName, lastName, email);
+		if (widget != null){
+			widget = checkAccesToken(widget);
+			XeroUtil utilObj = new XeroUtil();
+			utilObj.callbackUrl = String.format(utilObj.callbackUrl,getReqDomainURL());
+			try
+			{
+				// calls XeroUtil method to add Contact to Xero account
+				return utilObj.addContact(widget, firstName, lastName, email);
+			}
+			catch (Exception e)
+			{
+				throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+						.build());
+			}
 		}
-		catch (Exception e)
-		{
-			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
-					.build());
-		}
+		return null;
 	}
 
 	/**
@@ -131,25 +128,30 @@ public class XeroWidgetsAPI
 	{
 		// Retrieves widget based on its id
 		Widget widget = WidgetUtil.getWidget(widgetId);
-		if (widget == null)
-			return null;
-		
-		widget = checkAccesToken(widget);
-
-		XeroUtil utilObj = new XeroUtil();
-		utilObj.callbackUrl = String.format(utilObj.callbackUrl,getReqDomainURL());
-		try
-		{
-			// Calls XeroUtil metod to retrieve invoices
-			return utilObj.getLineItemsOfInvoice(invoiceId, widget);
+		if (widget != null){
+			widget = checkAccesToken(widget);
+			XeroUtil utilObj = new XeroUtil();
+			utilObj.callbackUrl = String.format(utilObj.callbackUrl,getReqDomainURL());
+			try
+			{
+				// Calls XeroUtil metod to retrieve invoices
+				return utilObj.getLineItemsOfInvoice(invoiceId, widget);
+			}
+			catch (Exception e)
+			{
+				throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+						.build());
+			}
 		}
-		catch (Exception e)
-		{
-			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
-					.build());
-		}
+		return null;
 	}
 
+	/**
+	 * Gets the organisation info based on the widget id.
+	 * 
+	 * @param widgetId
+	 * @return
+	 */
 	@Path("org/{widget-id}")
 	@GET
 	@Produces(MediaType.TEXT_PLAIN)
@@ -157,28 +159,30 @@ public class XeroWidgetsAPI
 	{
 		// Retrieves widget based on its id
 		Widget widget = WidgetUtil.getWidget(widgetId);
-		if (widget == null)
-			return null;
-		
-		widget = checkAccesToken(widget);
-
-		XeroUtil utilObj = new XeroUtil();
-		utilObj.callbackUrl = String.format(utilObj.callbackUrl,getReqDomainURL());
-		try
-		{
-			// Calls XeroUtil method to retrieve organisation info
-			return utilObj.getOrganisationInfo(widget);
+		if (widget != null){
+			widget = checkAccesToken(widget);
+			XeroUtil utilObj = new XeroUtil();
+			utilObj.callbackUrl = String.format(utilObj.callbackUrl,getReqDomainURL());
+			try
+			{
+				// Calls XeroUtil method to retrieve organisation info
+				return utilObj.getOrganisationInfo(widget);
+			}
+			catch (Exception e)
+			{
+				throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+						.build());
+			}
 		}
-		catch (Exception e)
-		{
-			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
-					.build());
-		}
+		return null;
 	}
 	
-	
+	/**
+	 * Gets the domain url.
+	 * 
+	 * @return
+	 */
 	public String getReqDomainURL() {
-		
 		URL url = null;
 		String requestURL = "";
 		try
@@ -194,6 +198,12 @@ public class XeroWidgetsAPI
 		return requestURL;
 	}
 	
+	/**
+	 * Checks the access token and renew it.
+	 * 
+	 * @param widget
+	 * @return
+	 */
 	public Widget checkAccesToken(Widget widget)
 	{
 		long current_epoch_time = Calendar.getInstance().getTimeInMillis();
@@ -214,7 +224,7 @@ public class XeroWidgetsAPI
 					XeroUtil utilObj = new XeroUtil();
 					utilObj.callbackUrl = String.format(utilObj.callbackUrl,getReqDomainURL());
 					return utilObj.refreshToken(widget);
-			}
+				}
 			}
 			catch (NumberFormatException e)
 			{
@@ -222,8 +232,6 @@ public class XeroWidgetsAPI
 			}
 			
 		}
-
-
 		catch (Exception e)
 		{
 			System.out.println(e.getMessage());
@@ -232,5 +240,4 @@ public class XeroWidgetsAPI
 		return widget;
 	}
 	
-
 }

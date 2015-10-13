@@ -553,7 +553,6 @@ var Base_Collection_View = Backbone.View
 
 				return this;
 			}, });
-
 /**
 *  Extended View of Base_Collection. It combines parent events to extended view events.
 */

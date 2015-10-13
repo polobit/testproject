@@ -52,8 +52,9 @@ public class LinkedInMessage
 			 * check if message length exceeds 7000, if so agile message is
 			 * skipped
 			 */
-			if (message.length() < (7000 - agile.length()))
+			if (message.length() < (7000 - agile.length())){
 				message = message + agile;
+			}
 	
 			// sends message to a person in LinkedIn based on LinkedInId in list
 			client.sendMessage(list, subject, message);
