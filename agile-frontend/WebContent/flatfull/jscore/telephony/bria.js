@@ -134,7 +134,7 @@ $(function()
 
 //	This function is to hide the information shown to the client when the user is not running bria client
 	$('body').on('click', '#bria_info_ok', function(e)	{
-		e.stopPropagation();
+		e.preventDefault();
 		$('#briaInfoModal').modal('hide');
 	});
 	
@@ -182,6 +182,7 @@ function sendMessageToBriaClient(command, number, callid){
 function globalBriaSetup()
 {
 	console.log('Fetching Bria initial status');
+	
 	$.getJSON("/core/api/widgets/Bria", function(bria_widget)
 	{
 		if (bria_widget == null)
@@ -207,6 +208,12 @@ function globalBriaSetup()
 				initToPubNub();
 				console.log("Bria is set properly");
 				showBriaCallOption();
+			}else{
+				if(default_call_type == "Bria"){
+					default_call_type = null;
+					callFromBria = false;
+				}
+				
 			}
 		}else{
 			console.log("No preferences found for bria setting");
@@ -236,62 +243,91 @@ function changeTooltipTo(selector, text){
 
 }
 
-function _getMessage(message){
+function _getMessage(message, callback){
 	var state = message.state;
 	var number = message.number;
 	var callId = message.callId;
 	var displayName = message.displayName;
 	var message="";
-	var contact_Image;
 	console.log("state--" + state + " number --" + number + "   callId" + callId + "  displayName" + displayName);
 	
 	if (state == "incoming"){
 		To_Number = number;
-/*		searchForContact(To_Number, function(name){
+		/*		searchForContact(To_Number, function(name){
 			displayName = name;
 		});*/
 		
-		contact_Image = getContactImage(number,"Incoming");
-		message =contact_Image+'<span class="noty_contact_details m-l-sm inline pos-rlt" style="top: 10px;"><i class="icon icon-phone m-r-xs pos-rlt m-t-xxs"></i><b>Incoming Call &nbsp;&nbsp;&nbsp;  </b>'+'<span id="callId" class="text-xs" value ='+callId+ '>' + number +'</span>'+'<br><br></span><div class="clearfix"></div>';
+		getContactImage(number,"Incoming",function(contact_Image){
+			message =contact_Image+'<span class="noty_contact_details m-l-sm inline pos-rlt" style="top: 10px;"><i class="icon icon-phone m-r-xs pos-rlt m-t-xxs"></i><b>Incoming Call &nbsp;&nbsp;&nbsp;  </b>'+'<span id="callId" class="text-xs" value ='+callId+ '>' + number +'</span>'+'<br><br></span><div class="clearfix"></div>';
+			if(callback)
+				callback(message);
+		});
 				
 	}else if(state == "connected"){
-		contact_Image = getContactImage(number,"Outgoing");
-		message =contact_Image+'<span class="noty_contact_details m-l-sm inline pos-rlt" style="top: 10px;"><i class="icon icon-phone m-r-xs pos-rlt m-t-xxs"></i><b>On Call &nbsp;&nbsp;&nbsp; </b>'+'<span id="callId" class="text-xs" value ='+callId+ '>' + number + '</span>'+'<br><br></span><div class="clearfix"></div>';
+		getContactImage(number,"Outgoing",function(contact_Image){
+			message =contact_Image+'<span class="noty_contact_details m-l-sm inline pos-rlt" style="top: 10px;"><i class="icon icon-phone m-r-xs pos-rlt m-t-xxs"></i><b>On Call &nbsp;&nbsp;&nbsp; </b>'+'<span id="callId" class="text-xs" value ='+callId+ '>' + number + '</span>'+'<br><br></span><div class="clearfix"></div>';
+			if(callback)
+				callback(message);
+		});
+		
 	
 	}else if(state == "missed-call"){
 		To_Number = number;
-		contact_Image = getContactImage(number,"Incoming");
-		message =contact_Image+'<span class="noty_contact_details m-l-sm inline pos-rlt" style="top: 10px;"><i class="icon icon-phone m-r-xs pos-rlt m-t-xxs"></i><b>Missed Call &nbsp;&nbsp;&nbsp;  </b>'+ '<span id="callId" class="text-xs" value ='+callId+ '>' + number + '</span>' +'<br><br></span><div class="clearfix"></div>';
-
+		getContactImage(number,"Incoming",function(contact_Image){		
+			message =contact_Image+'<span class="noty_contact_details m-l-sm inline pos-rlt" style="top: 10px;"><i class="icon icon-phone m-r-xs pos-rlt m-t-xxs"></i><b>Missed Call &nbsp;&nbsp;&nbsp;  </b>'+ '<span id="callId" class="text-xs" value ='+callId+ '>' + number + '</span>' +'<br><br></span><div class="clearfix"></div>';
+		if(callback)
+			callback(message);
+		});
+		
 	}else if(state == "connecting"){
 		//var contactDetailsObj = agile_crm_get_contact();
 		//displayName = getContactName(contactDetailsObj);
-		contact_Image = getContactImage(number,"Outgoing");
-		message =contact_Image+'<span class="noty_contact_details m-l-sm inline pos-rlt" style="top: 10px;"><i class="icon icon-phone m-r-xs pos-rlt m-t-xxs"></i><b>Calling... &nbsp;&nbsp;&nbsp; </b>'+'<span id="callId" class="text-xs" value ='+callId+ '>' + number + '</span>' +'<br><br></span><div class="clearfix"></div>';
+		
+		getContactImage(number,"Outgoing",function(contact_Image){		
+			message =contact_Image+'<span class="noty_contact_details m-l-sm inline pos-rlt" style="top: 10px;"><i class="icon icon-phone m-r-xs pos-rlt m-t-xxs"></i><b>Calling... &nbsp;&nbsp;&nbsp; </b>'+'<span id="callId" class="text-xs" value ='+callId+ '>' + number + '</span>' +'<br><br></span><div class="clearfix"></div>';
+		if(callback)
+			callback(message);
+		});
+		
+		
 		
 	}else if(state == "failed"){
-		contact_Image = getContactImage(number,"Outgoing");
-		message =contact_Image+'<span class="noty_contact_details m-l-sm inline pos-rlt" style="top: 10px;"><i class="icon icon-phone m-r-xs pos-rlt m-t-xxs"></i><b>Call Failed &nbsp;&nbsp;&nbsp; </b>'+'<span id="callId" class="text-xs" value ='+callId+ '>' + number + '</span>'+'<br><br></span><div class="clearfix"></div>';
+		getContactImage(number,"Outgoing",function(contact_Image){		
+			message =contact_Image+'<span class="noty_contact_details m-l-sm inline pos-rlt" style="top: 10px;"><i class="icon icon-phone m-r-xs pos-rlt m-t-xxs"></i><b>Call Failed &nbsp;&nbsp;&nbsp; </b>'+'<span id="callId" class="text-xs" value ='+callId+ '>' + number + '</span>'+'<br><br></span><div class="clearfix"></div>';
+		if(callback)
+			callback(message);
+		});
+		
 	
 	}else if(state == "ended"){
-		
+		callback("");
 	}
-	
-	return message;
+
 }
 
-function getContactImage(number,type){
-	var contact_Image = "";
+function getContactImage(number, type, callback){
 	if(type){
 		if(type == "Outgoing"){
 			var currentContact = agile_crm_get_contact();
-			contact_Image = $(getTemplate("contact-image", currentContact)).html();
+			getTemplate('contact-image', currentContact, undefined, function(image){
+		 		if(!image)
+		    		callback("");
+		 			callback(image);
+			});
+			
 		}else{
-			var currentContact = searchForContactImg(number);
-			contact_Image =  $(getTemplate("contact-image", currentContact)).html();
+			
+			searchForContactImg(number,function(currentContact){
+				getTemplate('contact-image', currentContact, undefined, function(image){
+			 		if(!image)
+			    		callback("");
+			 			callback(image);
+				});
+			});
+			
 		}
 	}
-	return contact_Image;
+	
 }
 
 

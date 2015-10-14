@@ -36,8 +36,10 @@ public class ShopifyServlet extends HttpServlet {
 				}
 			} else {
 				saveToken(req, token);
-				if(ScribeUtil.isWindowPopUpOpened("shopify", "/#sync/shopify", req, res))
 				returnURL = "/#sync/shopify";
+				if(ScribeUtil.isWindowPopUpOpened("shopify", returnURL, req, res));
+				return;
+				
 			}
 		}
 	   
