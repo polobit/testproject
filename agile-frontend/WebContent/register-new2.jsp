@@ -8,6 +8,24 @@ if (request.getAttribute("javax.servlet.forward.request_uri") == null) {
     response.sendRedirect("/register");
 }
 String _AGILE_VERSION = SystemProperty.applicationVersion.get();
+
+
+String CSS_PATH = "/";
+String FLAT_FULL_PATH = "flatfull/";
+
+String CLOUDFRONT_TEMPLATE_LIB_PATH = VersioningUtil.getCloudFrontBaseURL();
+
+System.out.println(CLOUDFRONT_TEMPLATE_LIB_PATH);
+  
+String CLOUDFRONT_STATIC_FILES_PATH = VersioningUtil.getStaticFilesBaseURL();
+
+CSS_PATH = CLOUDFRONT_STATIC_FILES_PATH;
+if(SystemProperty.environment.value() == SystemProperty.Environment.Value.Development)
+{
+	  CLOUDFRONT_STATIC_FILES_PATH = FLAT_FULL_PATH;
+	  CLOUDFRONT_TEMPLATE_LIB_PATH = "";	
+	  CSS_PATH = FLAT_FULL_PATH;
+}
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -56,9 +74,9 @@ body {
 }
 
 </style>
-<link rel="stylesheet" type="text/css" href="/flatfull/css/bootstrap.v3.min.css" />
-<link rel="stylesheet" type="text/css" href="/flatfull/css/app.css" />
-<link type="text/css" rel="stylesheet" href="/css/phonenumber-lib/intlTelInput.css" />
+<link rel="stylesheet" type="text/css" href="<%=CSS_PATH %>css/bootstrap.v3.min.css" />
+<link rel="stylesheet" type="text/css" href="<%=CSS_PATH %>css/app.css" />
+<link type="text/css" rel="stylesheet" href="<%=CSS_PATH %>css/phonenumber-lib/intlTelInput.css" />
 
 <script type="text/javascript">
 var isSafari = (Object.prototype.toString.call(window.HTMLElement).indexOf('Constructor') > 0);
@@ -227,7 +245,7 @@ $(document).ready(function(){
 	
 });
 function preload_dashlet_libs(){ 
-	setTimeout(function(){head.load('/flatfull/final-lib/min/lib-all-min.js')}, 5000);
+	setTimeout(function(){head.load('<%=CSS_PATH %>final-lib/min/lib-all-min.js')}, 5000);
 }
 </script>
 

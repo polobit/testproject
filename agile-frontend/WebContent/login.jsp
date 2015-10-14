@@ -75,6 +75,25 @@ if(cookieJSON.has("userAgent"))
 AccountPrefs accountPrefs = AccountPrefsUtil.getAccountPrefs();
 String logo_url = accountPrefs.logo;
 
+
+  String CSS_PATH = "/";
+  String FLAT_FULL_PATH = "flatfull/";
+
+  String CLOUDFRONT_TEMPLATE_LIB_PATH = VersioningUtil.getCloudFrontBaseURL();
+  
+  System.out.println(CLOUDFRONT_TEMPLATE_LIB_PATH);
+    
+  String CLOUDFRONT_STATIC_FILES_PATH = VersioningUtil.getStaticFilesBaseURL();
+
+  CSS_PATH = CLOUDFRONT_STATIC_FILES_PATH;
+  if(SystemProperty.environment.value() == SystemProperty.Environment.Value.Development)
+  {
+	  CLOUDFRONT_STATIC_FILES_PATH = FLAT_FULL_PATH;
+	  CLOUDFRONT_TEMPLATE_LIB_PATH = "";	
+	  CSS_PATH = FLAT_FULL_PATH;
+  }
+
+
 %>
 <!DOCTYPE html>
 
@@ -88,8 +107,8 @@ String logo_url = accountPrefs.logo;
 <meta name="description" content="">
 <meta name="author" content="">
 
-<link rel="stylesheet" type="text/css" href="<%=flatfull_path%>/css/bootstrap.v3.min.css" />
-<link rel="stylesheet" type="text/css" href="<%=flatfull_path%>/css/app.css" />
+<link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>/css/bootstrap.v3.min.css" />
+<link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>/css/app.css" />
 
 <style>
 body {
@@ -278,7 +297,7 @@ if(isSafari && isWin)
 		}
 
 		function preload_dashlet_libs(){ 
-			setTimeout(function(){head.load('<%=flatfull_path%>/final-lib/min/lib-all-min.js')}, 5000);
+			setTimeout(function(){head.load('<%=CSS_PATH%>/final-lib/min/lib-all-min.js')}, 5000);
 		}
 	</script>
 	<!-- Clicky code -->
