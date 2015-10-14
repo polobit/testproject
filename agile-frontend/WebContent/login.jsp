@@ -1,3 +1,4 @@
+<%@page import="com.agilecrm.util.VersioningUtil"%>
 <%@page import="com.google.appengine.api.utils.SystemProperty"%>
 <%@page import="java.util.TimeZone"%>
 <%@page import="com.agilecrm.account.util.AccountPrefsUtil"%>
