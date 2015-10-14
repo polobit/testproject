@@ -139,10 +139,9 @@ public class ScribeServlet extends HttpServlet {
 				|| (oAuthToken != null && oAuthVerifier != null)) {
 			saveToken(req, resp);
 			return;
-		}
-		else{
-			String window_opened_service=req.getParameter("window_opened");
-			if(StringUtils.isNotBlank(window_opened_service)){
+		} else {
+			String window_opened_service = req.getParameter("window_opened");
+			if (StringUtils.isNotBlank(window_opened_service)) {
 				req.getSession().setAttribute("window_opened_service", true);
 			}
 
@@ -290,8 +289,8 @@ public class ScribeServlet extends HttpServlet {
 				if (pluginId != null)
 					req.getSession().setAttribute("plugin_id", pluginId);
 
-		req.getSession().setAttribute("isForAll", isForAll);
-		System.out.println("In setup of scribe response: " + resp);
+				req.getSession().setAttribute("isForAll", isForAll);
+				System.out.println("In setup of scribe response: " + resp);
 				req.getSession().setAttribute("isForAll", isForAll);
 
 				System.out.println("In setup of scribe response: " + resp);
@@ -307,8 +306,7 @@ public class ScribeServlet extends HttpServlet {
 							"Error occured while doing authentication : "
 									+ e.getMessage());
 					url = "/#add-widget";
-				}
-				else{
+				} else {
 					req.getSession().setAttribute("widgetMsgType", "error");
 					req.getSession().setAttribute(
 							"widgetMsg",
@@ -318,7 +316,7 @@ public class ScribeServlet extends HttpServlet {
 				}
 			}
 		}
-		
+
 		req.getSession().setAttribute("oauth.request_token", token);
 
 		String returnURL = req.getParameter("return_url");
@@ -343,6 +341,7 @@ public class ScribeServlet extends HttpServlet {
 			HttpServletResponse resp) throws IOException {
 		Long widgetID = null;
 		String linkType = (String) req.getSession().getAttribute("linkType");
+
 		// Retrieve Token and Service Name from session
 		String serviceName = (String) req.getSession().getAttribute(
 				"oauth.service");
@@ -404,68 +403,60 @@ public class ScribeServlet extends HttpServlet {
 
 		System.out.println("service name in save token " + serviceName);
 
-		try
-		{
-			ScribeUtil.saveTokens(req, resp, service, serviceName, accessToken, code);
-		}
-		catch (Exception e1)
-		{
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-
 		// return URL is retrieved from session
-		String returnURL = (String) req.getSession().getAttribute("return_url");
-		System.out.println("return url " + returnURL);
-		if(ScribeUtil.isWindowPopUpOpened(serviceName,returnURL,req,resp)){
-			return;
-		}
+		String returnURL = null;
+		
 		// If return URL is null, redirect to dashboard
 		System.out.println(returnURL);
-		if (returnURL == null)
-			resp.sendRedirect("/");
-		else
-			resp.sendRedirect(returnURL);
+		returnURL = (String) req.getSession().getAttribute("return_url");
+		
 		String widgetName = (Character.toUpperCase(serviceName.charAt(0)) + serviceName
 				.substring(1));
-		if (linkType != null) {
-			String resultType = "error";
-			String statusMSG = "Error occurred while saving " + widgetName
-					+ " widget";
-			returnURL = "/#add-widget";
-
-			if (linkType.equalsIgnoreCase("widget")) {
-				try {
-					widgetID = ScribeUtil.saveTokens(req, resp, service,
-							serviceName, accessToken, code);
-
-					if (widgetID != null) {
-						// return URL is retrieved from session
-						returnURL = (String) req.getSession().getAttribute(
-								"return_url")
-								+ "/" + widgetID;
-						resultType = "success";
-						statusMSG = widgetName + " widget saved successfully.";
-						System.out.println("return url " + returnURL);
-					}
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-
-					statusMSG += " : " + e.getMessage();
-				}
-
-				req.getSession().setAttribute("widgetMsgType", resultType);
-				req.getSession().setAttribute("widgetMsg", statusMSG);
+		String statusMSG = "Error occurred while saving " + widgetName
+				+ " widget";
+		String resultType = "error";
+		
+		try {
+			
+			widgetID = ScribeUtil.saveTokens(req, resp, service,
+					serviceName, accessToken, code);
+			
+			if (ScribeUtil.isWindowPopUpOpened(serviceName, returnURL, req,
+					resp)) {
+				return;
 			}
-		} else {
-			returnURL = (String) req.getSession().getAttribute("return_url");
+			
+			returnURL = "/#add-widget";
+				
+			if (widgetID != null) {
+				
+				// return URL is retrieved from session
+				returnURL = (String) req.getSession().getAttribute(
+						"return_url")
+						+ "/" + widgetID;
+				resultType = "success";
+				statusMSG = widgetName + " widget saved successfully.";
+				System.out.println("return url " + returnURL);
+			}
+		} catch (Exception e) {
+				statusMSG += " : " + e.getMessage();
+		}
+		
+		if (linkType != null && linkType.equalsIgnoreCase("widget")) {
+			req.getSession().setAttribute("widgetMsgType", resultType);
+			req.getSession().setAttribute("widgetMsg", statusMSG);
 		}
 
-		resp.sendRedirect(returnURL);
+		if (returnURL != null) {
+			resp.sendRedirect(returnURL);
+		}
 
 		// Delete return url Attribute
 		req.getSession().removeAttribute("return_url");
+		
+		 // Delete linkType Attribute
+	  	  req.getSession().removeAttribute("linkType");
+		
 	}
-	
-	
+
 }

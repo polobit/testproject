@@ -331,6 +331,10 @@ function enableWidgetSoring(el)
 					{
 						var model_name = $(element).find('.collapse').attr('id');
 
+						if(!model_name)
+						model_name = $(element).find('.widgets').attr('id');
+						
+						
 						// Get Model, model is set as data to widget element
 						var model = $('#' + model_name).data('model');
 
@@ -484,11 +488,14 @@ function queueClear(queueName)
 	if (document.ajaxq)
 	{
 		document.ajaxq.q[queueName] = [];
+		try{
+
+			document.ajaxq.qr[queueName].abort();
+	  		document.ajaxq.qr[queueName] = null;
+  		}catch(e){
+  			console.log(e);
+  		}
 	}
-	/*
-	 * head.js('/js/lib/ajaxm/ajaxq.js', function(){ $.ajaxq.clear(queueName);
-	 * });
-	 */
 }
 
 /**
