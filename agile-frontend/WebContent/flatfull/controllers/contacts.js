@@ -179,6 +179,7 @@ var ContactsRouter = Backbone.Router.extend({
 		}
 		else
 		{
+			$("#contacts-view-options").css( 'pointer-events', 'auto');
 			if (this.contactsListView && this.contactsListView.collection)
 			{
 
@@ -1085,6 +1086,7 @@ var ContactsRouter = Backbone.Router.extend({
 			templateKey : template_key,custom_scrollable_element:custom_scrollable_element, individual_tag_name : individual_tag_name, slateKey : slateKey, cursor : true, request_method : 'POST', post_data: {'filterJson': postData}, page_size : 25, sort_collection : false,
 			postRenderCallback : function(el, collection)
 			{
+				$("#contacts-view-options").css( 'pointer-events', 'auto');
 				App_Contacts.contactsListView = App_Contacts.contact_custom_view;
 
 				// To set chats and view when contacts are fetch by
@@ -1124,6 +1126,7 @@ var ContactsRouter = Backbone.Router.extend({
 					_that.contact_custom_view.appendItem = function(base_model){
 						contactTableView(base_model,customDatefields,this);
 					};
+					$("#contacts-view-options").css( 'pointer-events', 'auto');
 				}
 			
 					// Fetch collection
