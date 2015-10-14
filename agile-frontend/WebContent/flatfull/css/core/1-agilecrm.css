@@ -2929,3 +2929,15 @@ width: 915px;
 .m-r-8{
 	    margin-right: 8px;
 }
+
+@-moz-document url-prefix() {
+  .contact-grid-ellipsis {
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+.contact-grid-ellipsis span {
+ display:inline-block;
+}
+
+}
