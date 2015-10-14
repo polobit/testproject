@@ -179,7 +179,6 @@ var ContactsRouter = Backbone.Router.extend({
 		}
 		else
 		{
-			$("#contacts-view-options").css( 'pointer-events', 'auto');
 			if (this.contactsListView && this.contactsListView.collection)
 			{
 
@@ -272,6 +271,8 @@ var ContactsRouter = Backbone.Router.extend({
 		this.contactsListView = new Base_Collection_View({ url : url,custom_scrollable_element:custom_scrollable_element, sort_collection : false, templateKey : template_key, individual_tag_name : individual_tag_name,
 			cursor : true, page_size : 25, global_sort_key : sort_key, slateKey : slateKey, request_method : 'POST', post_data: {filterJson: postData}, postRenderCallback : function(el, collection)
 			{
+		
+			$("#contacts-view-options").css( 'pointer-events', 'auto' );
 
 				// Contacts are fetched when the app loads in
 				// the initialize
@@ -300,7 +301,6 @@ var ContactsRouter = Backbone.Router.extend({
 					setUpContactView(cel);
 				}
 				$('[data-toggle="tooltip"]').tooltip();
-				$("#contacts-view-options").css( 'pointer-events', 'auto');
 				start_tour("contacts", el);
 			} });
 
@@ -319,7 +319,6 @@ var ContactsRouter = Backbone.Router.extend({
 		$(".active").removeClass("active");
 		$("#contactsmenu").addClass("active");
 		$('[data-toggle="tooltip"]').tooltip();
-		$("#contacts-view-options").css( 'pointer-events', 'auto');
 	
 
 	},
@@ -1029,6 +1028,7 @@ var ContactsRouter = Backbone.Router.extend({
 			var el = App_Contacts.contact_custom_view.render(true).el;
 			$('#content').html('<div id="conatcts-listeners-conatainer"></div>');
 			$('#conatcts-listeners-conatainer').html(el);
+			$("#contacts-view-options").css( 'pointer-events', 'auto' );
 
 			contactFiltersListeners();
 
@@ -1086,7 +1086,7 @@ var ContactsRouter = Backbone.Router.extend({
 			templateKey : template_key,custom_scrollable_element:custom_scrollable_element, individual_tag_name : individual_tag_name, slateKey : slateKey, cursor : true, request_method : 'POST', post_data: {'filterJson': postData}, page_size : 25, sort_collection : false,
 			postRenderCallback : function(el, collection)
 			{
-				$("#contacts-view-options").css( 'pointer-events', 'auto');
+				
 				App_Contacts.contactsListView = App_Contacts.contact_custom_view;
 
 				// To set chats and view when contacts are fetch by
@@ -1095,6 +1095,8 @@ var ContactsRouter = Backbone.Router.extend({
 
 				//pieTags(el);
 				setupViews(el, view_data.name);
+				$("#contacts-view-options").css( 'pointer-events', 'auto' );
+
 
 				// show list of filters dropdown in contacts list
 				setupContactFilterList(el, App_Contacts.tag_id);
@@ -1126,7 +1128,6 @@ var ContactsRouter = Backbone.Router.extend({
 					_that.contact_custom_view.appendItem = function(base_model){
 						contactTableView(base_model,customDatefields,this);
 					};
-					$("#contacts-view-options").css( 'pointer-events', 'auto');
 				}
 			
 					// Fetch collection

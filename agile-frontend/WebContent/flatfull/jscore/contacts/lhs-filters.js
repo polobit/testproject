@@ -167,7 +167,6 @@ $('#' + container_id).on('click', 'a.filter-multiple-add-lhs', function(e)
 // Filter Contacts- Remove Multiple
 $('#' + container_id).on('click', 'i.filter-tags-multiple-remove-lhs', function(e)
 {
-	$("#contacts-view-options").css( 'pointer-events', 'none' );
 	var container = $(this).parents('.lhs-contact-filter-row');
 	$(container).find('#RHS').children().val("").trigger('blur').trigger('custom_blur').trigger('change');
 	$(this).closest('div.lhs-contact-filter-row').remove();
@@ -235,14 +234,12 @@ $('#' + container_id).on('change', '#lhs-contact-filter-form select[name="CONDIT
 $('#' + container_id).on('custom_blur keyup', '#lhs-contact-filter-form #RHS input.filters-tags-typeahead:not(.date)', function(e)
 {
 	console.log("I am in blur " + $(this).val());
-	$("#contacts-view-options").css( 'pointer-events', 'none' );
 	if (e.type == 'custom_blur' || e.type == 'focusout' || e.keyCode == '13')
 	{
 		var prevVal = $(this).attr('prev-val');
 		var currVal = $(this).val().trim();
 		if (prevVal == currVal)
 		{
-			$("#contacts-view-options").css( 'pointer-events', 'auto' );
 			return;
 		}
 		else
