@@ -167,6 +167,7 @@ $('#' + container_id).on('click', 'a.filter-multiple-add-lhs', function(e)
 // Filter Contacts- Remove Multiple
 $('#' + container_id).on('click', 'i.filter-tags-multiple-remove-lhs', function(e)
 {
+	$("#contacts-view-options").css( 'pointer-events', 'none' );
 	var container = $(this).parents('.lhs-contact-filter-row');
 	$(container).find('#RHS').children().val("").trigger('blur').trigger('custom_blur').trigger('change');
 	$(this).closest('div.lhs-contact-filter-row').remove();
@@ -175,7 +176,7 @@ $('#' + container_id).on('click', 'i.filter-tags-multiple-remove-lhs', function(
 // Filter Contacts- Remove Multiple
 $('#' + container_id).on('click', 'a.clear-filter-condition-lhs', function(e)
 {
-	$("#contacts-view-options").css( 'pointer-events', 'none' );
+	
 	$(this).addClass('hide');
 	var container = $(this).parents('.lhs-row-filter');
 	$(container).find('#RHS').children().val("").attr('prev-val', "");
