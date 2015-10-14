@@ -177,7 +177,9 @@ google_calendar:function(el){
                     var url= 'core/api/contactprefs/FRESHBOOKS',
                               template= 'admin-settings-import-freshbooks-settings';
                                     renderInnerSyncView(url,template,model,function(model){
-                                    initializeFreshbooksListners();
+                                    //initializes freshbooks listners which is present in 
+                                    //import.js
+                                    initializeImportListeners();
                                     showNotyPopUp("information", "Contacts sync initiated", "top", 1000);
                                     });
                      });
