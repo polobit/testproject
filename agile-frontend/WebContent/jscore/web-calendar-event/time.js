@@ -292,5 +292,27 @@ function toTimeZone(time, zone) {
  */
 function toTimeZoneFirstTimeLoading(time, zone) {
 	
-	return moment.tz(time, jstz.determine().name()).format('hh:mm a')
+	return moment.tz(time, jstz.determine().name()).format('hh:mm a');
+}
+
+function getVisitorWhileLoading(){
+	return jstz.determine().name(); 
+}
+
+
+function updateUserBusinessHoursInVisitorTimezone(dates){
+	
+	if(!dates)
+		dates=selecteddate;
+	
+	for(var k=0;k<=multi_user_ids.length - 1;k++){
+		var array=business_hours_array[k];
+		var s=array[convertWeekDayToArray(new Date(dates).getDay())];
+		if(s.isActive){
+			$("#workhours-"+multi_user_ids[k]).html(getTimeInVisitorTimezone(s.timeFrom)+" - "+getTimeInVisitorTimezone(s.timeTill));
+		}
+		else{
+			$("#workhours-"+multi_user_ids[k]).html("No working hours");
+		}
+	}
 }
