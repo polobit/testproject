@@ -10,10 +10,12 @@ var Ticket_Base_Model = Base_Model_View.extend({
 
 		"click .refresh-tickets" : "refreshTickets",
 
-		"click .change-group" : "changeGroup",
-		"click .change-assignee" : "changeGroup",
-		"click .change-status" : "changeGroup",
-		"click .change-priority" : "changeGroup"
+		"click .ticket_group_name" : "changeGroup",
+		"click .ticket_assignee_name" : "changeAssignee",
+		"click .ticket_type" : "changeTicketType",
+		"click .ticket_priority" : "changeTicketPriority",
+
+		"click .to-emails" : "toEmails"
 	},
 
 	assignTicket: function(e){
@@ -54,5 +56,31 @@ var Ticket_Base_Model = Base_Model_View.extend({
 
 	changeGroup: function(e){
 		e.preventDefault();
+
+		Tickets.changeGroup(e);
+	},
+
+	changeAssignee: function(e){
+		e.preventDefault();
+
+		Tickets.changeAssignee(e);
+	},
+
+	changeTicketType: function(e){
+		e.preventDefault();
+
+		Tickets.changeTicketType(e);
+	},
+
+	changeTicketPriority: function(e){
+		e.preventDefault();
+
+		Tickets.changeTicketPriority(e);
+	},
+
+	toEmails: function(e){
+		e.preventDefault();
+
+		Tickets.toEmails();
 	}
 });

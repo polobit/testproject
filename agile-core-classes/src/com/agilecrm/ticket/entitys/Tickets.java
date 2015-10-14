@@ -49,6 +49,12 @@ public class Tickets extends Cursor
 	 */
 	@NotSaved
 	public Long groupID = null;
+	
+	/**
+	 * Util attribute to send group id to client
+	 */
+	@NotSaved
+	public TicketGroups group = null;
 
 	/**
 	 * Stores true if ticket is assigned to a group
@@ -66,6 +72,12 @@ public class Tickets extends Cursor
 	 */
 	@NotSaved
 	public Long assigneeID = null;
+	
+	/**
+	 * Util attribute to domain user obj
+	 */
+	@NotSaved
+	public DomainUser assignee = null;
 
 	/**
 	 * Stores name of customer who created ticket

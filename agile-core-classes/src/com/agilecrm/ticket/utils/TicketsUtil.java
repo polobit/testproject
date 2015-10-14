@@ -1,21 +1,28 @@
 package com.agilecrm.ticket.utils;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.lang.exception.ExceptionUtils;
 
 import com.agilecrm.search.document.TicketDocument;
 import com.agilecrm.ticket.entitys.TicketGroups;
+import com.agilecrm.ticket.entitys.TicketNotes;
 import com.agilecrm.ticket.entitys.Tickets;
+import com.agilecrm.ticket.entitys.TicketNotes.CREATED_BY;
 import com.agilecrm.ticket.entitys.Tickets.LAST_UPDATED_BY;
 import com.agilecrm.ticket.entitys.Tickets.Priority;
 import com.agilecrm.ticket.entitys.Tickets.Source;
 import com.agilecrm.ticket.entitys.Tickets.Status;
 import com.agilecrm.ticket.entitys.Tickets.Type;
 import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.util.DomainUserUtil;
+import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.googlecode.objectify.Key;
 
@@ -46,7 +53,7 @@ public class TicketsUtil
 		searchMap.put("status", status);
 		searchMap.put("group_id", new Key<TicketGroups>(TicketGroups.class, groupID));
 
-		return Tickets.ticketsDao.fetchAllByOrder(20, cursor, searchMap, false, true, sortKey);
+		return Tickets.ticketsDao.fetchAllByOrder(Integer.parseInt(pageSize), cursor, searchMap, false, true, sortKey);
 	}
 
 	/**
@@ -70,13 +77,13 @@ public class TicketsUtil
 	 * @param status
 	 * @return
 	 */
-	public static List<Tickets> getFavoriteTickets(Long groupID)
+	public static List<Tickets> getFavoriteTickets(Long groupID, String cursor, String pageSize)
 	{
 		Map<String, Object> searchMap = new HashMap<String, Object>();
 		searchMap.put("is_favorite", true);
 		searchMap.put("group_id", new Key<TicketGroups>(TicketGroups.class, groupID));
 
-		return Tickets.ticketsDao.listByProperty(searchMap);
+		return Tickets.ticketsDao.fetchAllByOrder(Integer.parseInt(pageSize), cursor, searchMap, false, true, "");
 	}
 
 	/**
@@ -218,16 +225,25 @@ public class TicketsUtil
 	public static Tickets assignTicket(Long ticket_id, Long group_id, Long assignee_id) throws EntityNotFoundException
 	{
 		Tickets ticket = TicketsUtil.getTicketByID(ticket_id);
-		ticket.group_id = new Key<TicketGroups>(TicketGroups.class, group_id);
+
+		if (ticket.status == Status.NEW)
+			ticket.status = Status.OPEN;
+
+		if (group_id != null)
+			ticket.group_id = new Key<TicketGroups>(TicketGroups.class, group_id);
 
 		if (assignee_id != null)
+		{
 			ticket.assignee_id = new Key<DomainUser>(DomainUser.class, assignee_id);
+			ticket.assigned_to_group = false;
+		}
+		else
+			ticket.assigned_to_group = true;
 
 		Tickets.ticketsDao.put(ticket);
 
 		return ticket;
 	}
-
 
 	/**
 	 * 
@@ -240,12 +256,30 @@ public class TicketsUtil
 	{
 		Tickets ticket = TicketsUtil.getTicketByID(ticket_id);
 		ticket.priority = priority;
-		
+
 		Tickets.ticketsDao.put(ticket);
 
 		return ticket;
 	}
-	
+
+	/**
+	 * 
+	 * @param ticket_id
+	 * @param priority
+	 * @return updated ticket
+	 * 
+	 * @throws EntityNotFoundException
+	 */
+	public static Tickets changeTicketType(Long ticket_id, Type type) throws EntityNotFoundException
+	{
+		Tickets ticket = TicketsUtil.getTicketByID(ticket_id);
+		ticket.type = type;
+
+		Tickets.ticketsDao.put(ticket);
+
+		return ticket;
+	}
+
 	/**
 	 * 
 	 * @param ticket_id
@@ -257,12 +291,12 @@ public class TicketsUtil
 	{
 		Tickets ticket = TicketsUtil.getTicketByID(ticket_id);
 		ticket.is_favorite = is_favorite;
-		
+
 		Tickets.ticketsDao.put(ticket);
 
 		return ticket;
 	}
-	
+
 	/**
 	 * 
 	 * @param ticket_id
@@ -273,12 +307,83 @@ public class TicketsUtil
 	{
 		Tickets ticket = TicketsUtil.getTicketByID(ticket_id);
 		ticket.status = Status.CLOSED;
-		
+
 		Tickets.ticketsDao.put(ticket);
 
 		return ticket;
 	}
-	
+
+	/**
+	 * 
+	 * @param tickets
+	 * @return
+	 */
+	public static List<Tickets> inclGroupDetails(List<Tickets> tickets, Long groupID)
+	{
+		try
+		{
+			TicketGroups group = TicketGroups.ticketGroupsDao.get(groupID);
+
+			for (Tickets ticket : tickets)
+				ticket.group = group;
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+
+		return tickets;
+	}
+
+	/**
+	 * 
+	 * @param notes
+	 * @return
+	 */
+	public static List<Tickets> inclDomainUsers(List<Tickets> tickets)
+	{
+		String oldnamespace = NamespaceManager.get();
+
+		try
+		{
+			Set<Key<DomainUser>> domainUserKeys = new HashSet<Key<DomainUser>>();
+
+			Map<Long, DomainUser> map = new HashMap<Long, DomainUser>();
+
+			NamespaceManager.set("");
+
+			for (Tickets ticket : tickets)
+				if (ticket.assigneeID != null)
+					domainUserKeys.add(new Key<DomainUser>(DomainUser.class, ticket.assigneeID));
+
+			System.out.println("domainUserKeys: " + domainUserKeys);
+
+			if (domainUserKeys.size() == 0)
+				return tickets;
+
+			List<DomainUser> domainUsers = DomainUserUtil.dao.fetchAllByKeys(new ArrayList<Key<DomainUser>>(
+					domainUserKeys));
+
+			System.out.println("domainUsers: " + domainUsers);
+
+			for (DomainUser domainUser : domainUsers)
+				map.put(domainUser.id, domainUser);
+
+			for (Tickets ticket : tickets)
+				ticket.assignee = map.get(ticket.assigneeID);
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+		finally
+		{
+			NamespaceManager.set(oldnamespace);
+		}
+
+		return tickets;
+	}
+
 	/**
 	 * 
 	 * @param ticket_id

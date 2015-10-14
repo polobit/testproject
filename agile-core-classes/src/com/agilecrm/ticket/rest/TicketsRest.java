@@ -21,8 +21,10 @@ import com.agilecrm.ticket.entitys.TicketGroups;
 import com.agilecrm.ticket.entitys.Tickets;
 import com.agilecrm.ticket.entitys.TicketNotes.CREATED_BY;
 import com.agilecrm.ticket.entitys.TicketNotes.NOTE_TYPE;
+import com.agilecrm.ticket.entitys.Tickets.Priority;
 import com.agilecrm.ticket.entitys.Tickets.Source;
 import com.agilecrm.ticket.entitys.Tickets.Status;
+import com.agilecrm.ticket.entitys.Tickets.Type;
 import com.agilecrm.ticket.utils.TicketGroupUtil;
 import com.agilecrm.ticket.utils.TicketNotesUtil;
 import com.agilecrm.ticket.utils.TicketsUtil;
@@ -60,11 +62,23 @@ public class TicketsRest
 			if (StringUtils.isBlank(groupID))
 				groupID = TicketGroupUtil.getDefaultTicketGroup().id + "";
 
-			if (StringUtils.equalsIgnoreCase(status, "starred"))
-				return TicketsUtil.getFavoriteTickets(Long.parseLong(groupID));
+			List<Tickets> tickets = new ArrayList<Tickets>();
 
-			return TicketsUtil.getTicketsByGroupID(Long.parseLong(groupID), Status.valueOf(status.toUpperCase()),
-					cursor, pageSize, "-last_updated_time");
+			if (StringUtils.equalsIgnoreCase(status, "starred"))
+			{
+				tickets = TicketsUtil.getFavoriteTickets(Long.parseLong(groupID), cursor, pageSize);
+			}
+			else
+			{
+				tickets = TicketsUtil.getTicketsByGroupID(Long.parseLong(groupID),
+						Status.valueOf(status.toUpperCase()), cursor, pageSize, "-last_updated_time");
+			}
+
+			// Include Ticket Group Object
+			tickets = TicketsUtil.inclGroupDetails(tickets, Long.parseLong(groupID));
+			tickets = TicketsUtil.inclDomainUsers(tickets);
+
+			return tickets;
 		}
 		catch (Exception e)
 		{
@@ -158,16 +172,15 @@ public class TicketsRest
 	@PUT
 	@Path("/assign-ticket")
 	@Produces(MediaType.APPLICATION_JSON)
-	public String assignTicket(Tickets ticket)
+	public Tickets assignTicket(@QueryParam("id") Long ticketID, @QueryParam("group_id") Long groupID,
+			@QueryParam("assignee_id") Long assigneeID)
 	{
 		try
 		{
-			if (ticket == null || ticket.id == null || ticket.groupID == null)
+			if (ticketID == null && (groupID == null || assigneeID == null))
 				throw new Exception("Required parameters missing.");
 
-			TicketsUtil.assignTicket(ticket.id, ticket.groupID, ticket.assigneeID);
-
-			return new JSONObject().put("status", "success").toString();
+			return TicketsUtil.assignTicket(ticketID, groupID, assigneeID);
 		}
 		catch (Exception e)
 		{
@@ -184,16 +197,42 @@ public class TicketsRest
 	 * @return
 	 */
 	@PUT
-	@Path("/change-priority")
+	@Path("/change-ticket-type")
 	@Produces(MediaType.APPLICATION_JSON)
-	public String changePriority(Tickets ticket)
+	public Tickets changeTicketType(@QueryParam("id") Long id, @QueryParam("type") Type ticketType)
 	{
 		try
 		{
-			if (ticket == null || ticket.priority == null)
+			if (ticketType == null)
 				throw new Exception("Required parameters missing.");
 
-			TicketsUtil.changePriority(ticket.id, ticket.priority);
+			return TicketsUtil.changeTicketType(id, ticketType);
+		}
+		catch (Exception e)
+		{
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
+			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+					.build());
+		}
+	}
+	
+	/**
+	 * 
+	 * @param ticket_id
+	 * @param priority
+	 * @return
+	 */
+	@PUT
+	@Path("/change-priority")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String changePriority(@QueryParam("id") Long id, @QueryParam("priority") Priority priority)
+	{
+		try
+		{
+			if (id == null || priority == null)
+				throw new Exception("Required parameters missing.");
+
+			TicketsUtil.changePriority(id, priority);
 
 			return new JSONObject().put("status", "success").toString();
 		}
@@ -259,7 +298,7 @@ public class TicketsRest
 					.build());
 		}
 	}
-	
+
 	/**
 	 * 
 	 * @param ticket_id

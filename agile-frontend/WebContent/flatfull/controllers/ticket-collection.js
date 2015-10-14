@@ -30,7 +30,7 @@ var TicketsUtilRouter = Backbone.Router.extend({
 		Ticket_Status = status;
 
 		//Renders root template, fetches tickets count & loads Groups drop down
-		Tickets_Util.initialize(group_id, function(){
+		Tickets.initialize(group_id, function(){
 
 			App_Ticket_Module.ticketsCollection = new Base_Collection_View({
 				url : '/core/api/tickets?status=' + Ticket_Status + '&group_id=' + Group_ID,

@@ -24,6 +24,7 @@ import com.agilecrm.ticket.entitys.TicketGroups;
 import com.agilecrm.ticket.utils.TicketGroupUtil;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
+import com.google.appengine.api.NamespaceManager;
 import com.googlecode.objectify.Key;
 
 /**
@@ -52,6 +53,45 @@ public class TicketGroupRest
 			System.out.println(ExceptionUtils.getFullStackTrace(e));
 			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
 					.build());
+		}
+	}
+	
+	/**
+	 * @return List of Domain Users
+	 */
+	@GET
+	@Path("/domain-users")
+	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	public List<DomainUser> getDomainUsersInGroup(@QueryParam("group_id") Long groupID)
+	{
+		String oldnamespace = NamespaceManager.get();
+		
+		try
+		{
+			TicketGroups ticketGroup = TicketGroups.ticketGroupsDao.get(groupID);
+			List<Long> domainUserIdsList = ticketGroup.agents_keys;
+			
+			List<Key<DomainUser>> domainUserKeyList = new ArrayList<Key<DomainUser>>();
+			
+			NamespaceManager.set("");
+			
+			for(Long id : domainUserIdsList)
+				domainUserKeyList.add(new Key<DomainUser>(DomainUser.class, id));
+			
+			List<DomainUser> domainUsers = DomainUserUtil.dao.fetchAllByKeys(domainUserKeyList);
+			
+			NamespaceManager.set(oldnamespace);
+			
+			return domainUsers;
+		}
+		catch (Exception e)
+		{
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
+			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+					.build());
+		}
+		finally{
+			NamespaceManager.set(oldnamespace);
 		}
 	}
 

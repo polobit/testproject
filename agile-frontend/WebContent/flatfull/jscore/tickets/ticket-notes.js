@@ -53,6 +53,9 @@ function initializeTicketNotesEvent(el){
 		Backbone.history.navigate('#tickets/group/'+ Group_ID +'/' + Ticket_Status, {
 				trigger : false
 		});
+
+		//Enable click events
+		Tickets_Group_View.delegateEvents();
 	});
 
 	/**
