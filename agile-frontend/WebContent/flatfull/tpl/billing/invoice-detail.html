@@ -18,51 +18,52 @@
          </tbody>
       </table>
       <hr>
-      <div class="col-md-6">
-         <div class="panel">
-            <div class="panel-body" style="
-               height: 120px;
-               ">
-               <table="" width="90%">
-               <address>
-                  <strong>Agile CRM,</strong><br>
-                  440 N Wolfe Road,<br>
-                  Sunnyvale, CA, 94085<br>
-               </address>
-               </table="">
-            </div><!-- end of panel-body -->
-         </div><!-- end of panel-->
-      </div><!-- end of col-md-6 -->
-      <div class="col-md-6">
-         <div class="panel">
-            <div class="panel-body" style="
-               height: 120px;
-               ">
-               <table class="invoice-head p-t-sm m-t-sm" style="background-color:transparent;">
-                  <tbody>
-                     <tr>
+      <div class="col-md-12">
+<div class="row">
+<div class="col-md-6">
+<table width="100%%">
+<tbody>
+	<tr>
+		<td class="p-l-sm">
+                <address>
+					<strong>Agile CRM,</strong><br>
+                    440 N Wolfe Road,<br>
+                    Sunnyvale, CA, 94085<br>
+                </address>
+		</td>
+	</tr>
+</tbody>
+</table>
+</div>
+				<div class="col-md-6">
+<div class="wrapper-sm bg-white" style="min-height: 94px;">
+                <table class="invoice-head" style="background-color:white;" width="100%">
+                    <tbody>
+			 <tr>
                         <td class="pull-right"><strong>Invoice#</strong></td>
-                        <td>{{this.id}}</td>
+                        <td>{{invoice.id}}</td>
                      </tr>
                      <tr>
                         <td class="pull-right"><strong>Date</strong></td>
-                        <td>{{epochToHumanDate "mm/dd/yyyy" this.date}}</td>
+                        <td>{{epochToHumanDate "mm/dd/yyyy" invoice.date}}</td>
                      </tr>
                      <tr>
                         <td class="pull-right"><strong>Customer#</strong></td>
-                        <td>{{this.customer}}</td>
+                        <td>{{invoice.customer}}</td>
                      </tr>
                      {{#if_not_equals company.company_name "My company"}}
                             <tr>
                             <td class="pull-right"><strong>Company</strong></td>
                             <td>{{company.company_name}}</td></tr>
-                     {{/if_not_equals}}
-                  </tbody>
-               </table>
-            </div><!-- end of panel-body -->
-         </div><!-- end of panel -->
-      </div><!-- end of col-md-6 -->
-      <div class="col-md-12">
+                     {{/if_not_equals}}</tbody>
+                </table>
+</div>
+</div>
+		
+	
+</div>
+</div>
+      <div class="col-md-12 m-t-md">
          <div class="panel">
             <div class="panel-body">
                <table class="table">
@@ -74,7 +75,7 @@
                      </tr>
                   </thead>
                   <tbody>
-			{{#each lines.data}}
+			{{#each invoice.lines.data}}
             <tr>
             {{#if this.plan}} 
 			<td>
@@ -125,7 +126,7 @@ ${{numeric_operation ../../amountDue 100 "/"}}
                   <i class="fa fa-phone-square"></i> +1.800.980.0729
                </div>
                <div class="col-md-4">
-                  <i class="fa fa-envelope"></i> billing@agilecrm.com
+                  <i class="fa fa-envelope"></i> billing@agilecrm.com  
                </div>
                <div class="col-md-4">
                   <i class="fa fa-globe"></i> https://www.agilecrm.com
@@ -134,10 +135,10 @@ ${{numeric_operation ../../amountDue 100 "/"}}
          </div><!-- end of panel -->
       </div> <!-- end of col-md-12 -->
 
-	  	<div class="col-md-10 text-center">
+	  	<div class="col-md-10 text-center" id="print-div">
 			<div class="m-b-sm" style="height: 35px;">
 					<a class="btn btn-default" href="#invoice-details">Back</a>
-					<input class="print_btn btn btn btn-primary" type="button" value="Print" onclick="window.print()">
+					<input class="print_btn btn btn btn-primary" type="button" value="Print" onclick="printPage()">
 						
 			</div>
 		</div>

@@ -10,7 +10,8 @@
 function setupCharts(callback)
 {
 
-	head.js(LIB_PATH + 'lib/flot/highcharts-3.js', LIB_PATH + 'lib/flot/highcharts-exporting.js', LIB_PATH + 'lib/flot/funnel.js',LIB_PATH + 'lib/flot/highcharts-grid.js', function()
+	head.js(LIB_PATH + 'lib/flot/highcharts-3.js', LIB_PATH + 'lib/flot/highcharts-exporting.js', LIB_PATH + 'lib/flot/funnel.js',LIB_PATH + 'lib/flot/highcharts-grid.js',
+	LIB_PATH + 'lib/flot/no-data-to-display.js', function()
 	{
 
 		// Checks if callback is available, if available calls the callback
@@ -1446,7 +1447,7 @@ function chartRenderforIncoming(selector,categories,name,yaxis_name,min_tick_int
                     marginRight: 130,
                     marginBottom: 50
                 },
-                colors: ['#7266ba','#23b7e5','#27c24c','#fad733','#f05050','#6E6658','#611680','#167F80','#801634','#D3E6C7'],
+                colors: ['#7266ba','#23b7e5','#27c24c','#fad733','#f05050','#FF9900','#7AF168','#167F80','#0560A2','#D3E6C7'],
                 title: {
                     text: name,
                     x: -20,//center
@@ -1460,6 +1461,7 @@ function chartRenderforIncoming(selector,categories,name,yaxis_name,min_tick_int
                     minTickInterval : min_tick_interval
                 },
                 yAxis: {
+                	allowDecimals: false,
                     title: {
                         text: yaxis_name
                     },
@@ -1523,3 +1525,165 @@ function chartRenderforIncoming(selector,categories,name,yaxis_name,min_tick_int
                 }
             });
 }
+function pieforReports(url, selector, name,show_loading)
+{
+
+	    if(typeof show_loading === 'undefined')
+    {
+        // Old calls were not showing loading image..
+    }
+    else
+        $('#' + selector).html(getRandomLoadingImg());
+
+	var chart;
+	var AllData=[];
+	var frequency = $( "#frequency:visible").val();
+	setupCharts(function()
+	{
+
+		fetchReportData(
+						url,
+						function(data)
+						{
+							// Convert into labels and data as required by
+							// Highcharts
+							var pieData = [];
+							var total = 0;
+							var count = 0;
+
+							// Iterates through data and calculate total number
+							$.each(data, function(k, v)
+							{
+								var totalData=[];
+								totalData.push(k);
+								totalData.push(v.count);
+								totalData.push(v.total);
+								AllData.push(totalData);
+								if(frequency=="Revenue")
+								total+=v.total;	
+								else
+								total += v.count;
+								count ++;
+							});
+
+							console.log(data,total);
+							// Iterates through data, gets each tag, count and
+							// calculate
+							// percentage of each tag
+							$.each(data, function(k, v)
+							{
+								var item = [];
+
+								
+								// Push tag name in to array
+								item.push(k);
+
+								// Push percentage of current tag in to array
+								if(frequency=="Revenue")
+									item.push(v.total/ total * 100);
+								else
+								item.push(v.count/ total * 100);
+								pieData.push(item);
+							})
+							console.log(pieData);
+							var animation = count > 20 ? false : true;
+							var url_path;
+							if(selector=="lossreasonpie-chart")
+								url_path='/core/api/categories?entity_type=DEAL_LOST_REASON';
+							else
+								url_path='/core/api/categories?entity_type=DEAL_SOURCE';
+							if(pieData!=undefined && pieData.length==0){
+								createAPieChart(selector, name, animation, AllData, pieData);
+							}
+							else{
+
+							  $.ajax({ type : 'GET', url : url_path, dataType : 'json',
+          				  success: function(data){
+                			$.each(data,function(index,deals){
+                   				 for(var i=0;i<pieData.length;i++){
+                     			   if(pieData[i][0]=="0")
+                        	      		 pieData[i][0]="Unknown";
+                        		else if(deals.id==pieData[i][0]){
+                            		pieData[i][0]=deals.label;
+                        		}
+                        		 createAPieChart(selector, name, animation, AllData, pieData);
+                            
+                  		  }
+                			});
+
+            	    }		
+            	     });
+					}
+						});
+	});
+	}
+
+
+	function createAPieChart(selector, name, animation, AllData, pieData){
+
+		// Initializes Highcharts,
+	chart = new Highcharts.Chart(
+			{
+				chart : { renderTo : selector, type : 'pie', plotBackgroundColor : null, plotBorderWidth : null, plotShadow : false,
+					marginTop : 20 },
+				colors: ['#7266ba','#23b7e5','#27c24c','#fad733','#f05050','#FF9900','#7AF168','#167F80','#0560A2','#D3E6C7'],
+				title : { text : name },
+				 tooltip: {
+				formatter:  function(){
+						return  '<div>' + 
+                              
+                                '<div class="p-n">'+this.series.name+'s: <b>'+getNumberWithCommasForCharts(AllData[this.point.x][1])+'</b></div>' +
+                                '</div>'+
+                                '<div class="p-n">Total Value: <b>'+getCurrencySymbolForCharts()+''+AllData[this.point.x][2].toLocaleString()+'</b></div>';
+                        
+						},
+							  shared: true,
+								  useHTML: true,
+							 borderWidth : 1,
+						backgroundColor : '#313030',
+							shadow : false,
+						borderColor: '#000',
+					borderRadius : 3,
+					style : {
+					color : '#EFEFEF'
+				}
+					 },
+				legend : { itemWidth : 75, },
+				plotOptions : {
+					pie : {
+						 animation: animation,
+						allowPointSelect : true,
+						cursor : 'pointer',
+						borderWidth : 0,
+						dataLabels : { enabled : true,useHTML: true,
+							formatter : function()
+							{
+								return 	'<div class="text-center"><span style="color:'+this.point.color+'"><b>'+this.point.name+'</b></span><br/>' +
+    			'<span style="color:'+this.point.color+'"><b>'+Math.round(this.point.percentage)+'%</b></span></div>';
+							}, distance : 25 }, showInLegend : false, innerSize : '65%',  shadow : false, borderWidth : 0 },
+					series : { events : { mouseOver : function()
+					{
+						$('.tooltip-default-message').hide();
+					}, mouseOut : function(e)
+					{
+						$('.tooltip-default-message').show();
+					} },
+					borderWidth : 0 } },
+
+				series : [
+					{ type : 'pie', name : 'Deal', data : pieData, startAngle : 90 }
+				], exporting : { enabled : false },
+
+				 lang: {
+					noData: "No Deals Found"
+					},
+					 noData: {
+									 style: {
+									   fontWeight: 'bold',
+										fontSize: '25px',
+											 }
+								 }
+				 } );
+
+
+	}

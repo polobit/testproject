@@ -64,6 +64,7 @@ function initReportsForCalls(callback){
 	
 
 	initDateRange(callback);
+
 	callback();
 	
 	$('#typeCall').change(function()
@@ -184,6 +185,146 @@ function highlightDatepickerOption()
 		$('.daterangepicker > .ranges > ul > li').eq(2).addClass("active");
 	}
 }
+
+function initSalesCharts(callback){
+	
+		initDateRange(callback);
+		// Init the callback when the frequency selector changes too
+		if ($('#frequency').length > 0)
+			{
+		// Get Frequency
+			callback();
+			$('#frequency').change(function()
+			{
+			callback();
+			});
+		}
+			// Init the callback when the track selector changes too
+		fillSelect("track", "/core/api/milestone/pipelines", undefined, function()
+		{
+			$('#track').change(function()
+			{
+				$('#reports-sales-track').text($("#track option:selected").text());
+				callback();
+			});
+		}, '<option class="default-select" value="{{id}}">{{name}}</option>', false, undefined, "All Tracks");
+
+		fillSelect("owner", "core/api/users", undefined, function()
+		{
+			$('#owner').change(function()
+			{
+				$('#reports-sales-owner').text($("#owner option:selected").text());
+				callback();
+			});
+
+		}, '<option class="default-select" value="{{id}}">{{name}}</option>', false, undefined, "All Owners");
+
+			fillSelect("source", "/core/api/categories?entity_type=DEAL_SOURCE", undefined, function()
+		{
+			$('#source option').eq(0).after($('<option class="default-select" value="1">Unknown</option>'));
+			$('#source').change(function()
+			{
+				callback();
+			});
+
+		}, '<option class="default-select text-cap" value="{{id}}">{{label}}</option>', false, undefined, "All Sources");
+		callback();		
+		
+	}
+
+	function showLossReasonGraphs()
+{
+	var options='';
+
+	// Get Date Range January 22, 2015 - January 28, 2015
+	var range = $('#range').html().split("-");
+	var start_time = getUTCMidNightEpochFromDate(new Date(range[0]));
+
+	var end_value = $.trim(range[1]);
+
+	// To make end value as end time of day
+	if (end_value)
+		end_value = end_value + " 23:59:59";
+
+	var end_time = getUTCMidNightEpochFromDate(new Date(end_value));
+
+	// Adds start_time, end_time and timezone offset to params.
+	var d = new Date();
+	start_time=start_time+(d.getTimezoneOffset()*60*1000);
+	 end_time += (((23*60*60)+(59*60)+59)*1000);
+	end_time=end_time+(d.getTimezoneOffset()*60*1000);
+
+
+	if ($('#owner').length > 0)
+	{
+		// Get owner
+		var owner_id=0;
+		if ($("#owner").val() != "" && $("#owner").val() != "All Owners")
+			owner_id=$("#owner").val();
+			options += owner_id;
+		}
+	if ($('#track').length > 0)
+	{
+		// Get track
+		var track = 0;
+		if($("#track").val() != "" &&  $("#track").val() != "All Tracks")
+			track=$("#track").val();
+			options +=('/'+ track);
+
+	}
+	if ($('#source').length > 0)
+	{
+		// Get source
+		var source = 0;
+		if($("#source").val() != "" &&  $("#source").val() != "All Sources")
+		source=$("#source").val();
+		options += ("/" + source);
+	}
+	options += ("?min=" + start_time/1000 + "&max=" + end_time/1000);
+	
+	
+	pieforReports('core/api/opportunity/details/'+options,'lossreasonpie-chart','',true);
+}
+
+function showWonPieChart()
+{
+var options='';
+
+	// Get Date Range January 22, 2015 - January 28, 2015
+	var range = $('#range').html().split("-");
+	var start_time = getUTCMidNightEpochFromDate(new Date(range[0]));
+
+	var end_value = $.trim(range[1]);
+
+	// To make end value as end time of day
+	if (end_value)
+		end_value = end_value + " 23:59:59";
+
+
+	var end_time = getUTCMidNightEpochFromDate(new Date(end_value));
+
+	// Adds start_time, end_time and timezone offset to params.
+	var d = new Date();
+	start_time=start_time+(d.getTimezoneOffset()*60*1000);
+	 end_time += (((23*60*60)+(59*60)+59)*1000);
+	end_time=end_time+(d.getTimezoneOffset()*60*1000);
+
+
+	if ($('#owner').length > 0)
+	{
+		// Get owner
+		var owner_id=0;
+		if ($("#owner").val() != "" && $("#owner").val() != "All Owners")
+			owner_id=$("#owner").val();
+			options += owner_id;
+	}
+	
+	options += ("?min=" + start_time/1000 + "&max=" + end_time/1000);
+	
+	
+	pieforReports('core/api/opportunity/wonDetails/'+options,'wonpie-chart','',true);
+}
+
 /** Initialising date range for various report* */
 function initDateRange(callback)
 {
@@ -250,5 +391,3 @@ function initDateRange(callback)
 
 }
 
-
- 

@@ -12,7 +12,8 @@ var ReportsRouter = Backbone.Router
 			"reports" : "reports", "email-reports" : "emailReportTypes", "activity-reports" : "activityReports", "activity-report-add" : "activityReportAdd",
 				"activity-report-edit/:id" : "activityReportEdit", "contact-reports" : "emailReports", "report-add" : "reportAdd",
 				"report-edit/:id" : "reportEdit", "report-results/:id" : "reportInstantResults", "report-charts/:type" : "reportCharts",
-				"report-funnel/:tags" : "showFunnelReport", "report-growth/:tags" : "showGrowthReport", "report-ratio/:tag1/:tag2" : "showRatioReport","report-deals":"showIncomingDeals","report-calls/:type" : "showCallsReport" },
+				"report-funnel/:tags" : "showFunnelReport", "report-growth/:tags" : "showGrowthReport", "report-ratio/:tag1/:tag2" : "showRatioReport","report-deals":"showIncomingDeals","report-calls/:type" : "showCallsReport",
+				"report-lossReason":"showDealsLossReason","reports-wonDeals":"showDealsWonChart" },
 
 
 			/**
@@ -494,7 +495,7 @@ var ReportsRouter = Backbone.Router
 						var end_time=new Date(end_value).getTime() / 1000;
 						options += ("start-date=" + start_time + "&end-date=" + end_time);
 						
-						var url='core/api/portlets/portletCallsPerPerson/' + options;
+						var url='core/api/portlets/calls-per-person/' + options;
 						
 						graphOn=$("#typeCall option:selected").val();
 					    
@@ -605,12 +606,59 @@ var ReportsRouter = Backbone.Router
 							  return;
 						$('#content').html($(template_ui));	
 
+
 							initFunnelCharts(function()
 							{
 								showDealsGrowthReport();
 							});
 						}, "#content");
 					});
+			},
+			showDealsLossReason : function()
+			{
+				hideTransitionBar();
+				initReportLibs(function()
+				{
+
+					// Load Reports Template
+				getTemplate("report-DealsLoss", {}, undefined, function(template_ui){
+						if(!template_ui)
+							  return;
+						$('#content').html($(template_ui));	
+
+					initSalesCharts(function()
+							{
+						showLossReasonGraphs();
+							});
+
+					$(".active").removeClass("active");
+					$("#reportsmenu").addClass("active");
+				}, "#content");
+			});
+			},
+
+			showDealsWonChart : function()
+			{
+				hideTransitionBar();
+			initReportLibs(function()
+				{
+
+					// Load Reports Template
+				getTemplate("report-DealsWon", {}, undefined, function(template_ui){
+
+					if(!template_ui)
+							  return;
+						$('#content').html($(template_ui));	
+
+					initSalesCharts(function()
+							{
+						showWonPieChart();
+							});
+
+				$(".active").removeClass("active");
+				$("#reportsmenu").addClass("active");
+				}, "#content");
+			  });	
 			}
 });
 

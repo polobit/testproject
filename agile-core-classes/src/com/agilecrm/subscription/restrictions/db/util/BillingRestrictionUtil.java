@@ -32,7 +32,7 @@ public class BillingRestrictionUtil
     public static enum ErrorMessages
     {
 	Contact("Contacts limit reached"), WebRule("Web Rules limit reached"), Workflow("Campaigns limit reached"), REPORT(
-		"For reports in excess of 7 days, please <a href=\"#subscribe\">upgrade</a> to Regular or Enterprise plan."), NOT_DOWNGRADABLE(
+		"For reports in excess of 7 days, please <a href=\"#subscribe\">upgrade</a> to a plan."), NOT_DOWNGRADABLE(
 		"Plan cannot be dowgraded"), Trigger("Triggers limit reached"), Reports("Email Reports limit reached");
 	private String message;
 
