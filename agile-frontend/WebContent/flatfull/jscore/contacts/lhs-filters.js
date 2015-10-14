@@ -175,6 +175,7 @@ $('#' + container_id).on('click', 'i.filter-tags-multiple-remove-lhs', function(
 // Filter Contacts- Remove Multiple
 $('#' + container_id).on('click', 'a.clear-filter-condition-lhs', function(e)
 {
+	$("#contacts-view-options").css( 'pointer-events', 'none' );
 	$(this).addClass('hide');
 	var container = $(this).parents('.lhs-row-filter');
 	$(container).find('#RHS').children().val("").attr('prev-val', "");
