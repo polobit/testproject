@@ -1811,7 +1811,19 @@ function chartRenderforIncoming(selector,categories,name,yaxis_name,min_tick_int
                     },
                     useHTML: true
                 },
-               
+                  lang: {
+            				noData: "No Deals Found"
+        				},
+        					noData: {
+           								style: {
+             								 fontWeight: 'bold',
+               									fontSize: '25px',
+      	     									 },
+      	     							 position :{
+               									 x : 60,
+               									 y: 5
+           									 },
+       								 },
                 //Sets the series of data to be shown in the graph,shows total 
                 //and pipeline
                 series: series,
