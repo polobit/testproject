@@ -247,7 +247,7 @@ $(document).ready(function(){
 });
 
 function preload_dashlet_libs(){ 
-	setTimeout(function(){head.load('<%=CLOUDFRONT_TEMPLATE_LIB_PATH %>final-lib/min/lib-all-min.js', '<%=CLOUDFRONT_TEMPLATE_LIB_PATH %>jscore/min/js-all-min.js', '<%=CLOUDFRONT_TEMPLATE_LIB_PATH%> + "tpl/min/precompiled/" + FLAT_FULL_PATH + "tpl.js" + "?_=" + _AGILE_VERSION', '<%=CLOUDFRONT_TEMPLATE_LIB_PATH%> + "tpl/min/precompiled/" + FLAT_FULL_PATH + "portlets.js" + "?_=" + _AGILE_VERSION')}, 5000);
+	setTimeout(function(){head.load('<%=CLOUDFRONT_TEMPLATE_LIB_PATH %>final-lib/min/lib-all-min.js', '<%=CLOUDFRONT_TEMPLATE_LIB_PATH %>jscore/min/js-all-min.js', '<%=CLOUDFRONT_TEMPLATE_LIB_PATH%>tpl/min/precompiled/<%=FLAT_FULL_PATH%>tpl.js?_=<%=_AGILE_VERSION%>', '<%=CLOUDFRONT_TEMPLATE_LIB_PATH%>tpl/min/precompiled/<%=FLAT_FULL_PATH%>portlets.js?_=<%=_AGILE_VERSION%>')}, 5000);
 }
 </script>
 
