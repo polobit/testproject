@@ -1494,6 +1494,7 @@ function showDealAreaSpline(url, selector, name, yaxis_name, show_loading)
            								style: {
              								
                									fontSize: '14px',
+               									fontWeight : 'normal',
       	     									 },
       	     							 position :{
                									 x : 60,
@@ -1818,6 +1819,7 @@ function chartRenderforIncoming(selector,categories,name,yaxis_name,min_tick_int
            								style: {
              								 
                									fontSize: '14px',
+               									fontWeight : 'normal',
       	     									 },
       	     							 position :{
                									 x : 60,
@@ -1988,6 +1990,7 @@ function pieforReports(url, selector, name,show_loading)
 									 style: {
 									   
 										fontSize: '14px',
+										fontWeight : 'normal',
 											 }
 								 }
 				 } );
