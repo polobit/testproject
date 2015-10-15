@@ -238,18 +238,23 @@ function addWidgetProfile(widgetId, widgetName, template, url) {
 						});
 						model["profile"] = jQuery.parseJSON(model.prefs);
 					} else {
+
 						if (data) {
-							try{
-								data.prefs = jQuery.parseJSON(data.prefs); 
-							}catch(e){
-								console.log("Error occured while parsing widget prefs");
+							if($.isArray(data)){
+								model["profile"] = jQuery.parseJSON(model.prefs);
+							}else{
+								try{
+									data.prefs = jQuery.parseJSON(data.prefs);
+								}catch(e){
+									console.log("Error occured while parsing widget prefs");
+								}
+								model["profile"] = data;
 							}
-							model["profile"] = data;
 						}
 					}
 					
 					// Create a view modal for widgets
-					renderWidgetView(template, url,model, '#widget-settings');
+					renderWidgetView(template, url, model, '#widget-settings');
 					
 				});
 		});
