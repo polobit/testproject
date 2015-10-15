@@ -209,43 +209,45 @@ function addWidgetProfile(widgetId, widgetName, template, url) {
 
 		// Get route model
 		getWidgetModelFromName(widgetId, "", function(model) {
-				$.getJSON((url + widgetId), function(data) {
+				$.getJSON((url), function(data) {
 					var widget_el = getTemplate(
 							"widget-settings", model);
 					$('#prefs-tabs-content')
 							.html(widget_el);
 
-					if (data) {
-						model["profile"] = data;
-					} else {
+					// Loading GooglePlus profile
+					if (widgetName == "GooglePlus") {
+						var widgetPrefGP = JSON.parse(model.prefs);
+						$.getJSON("https://www.googleapis.com/plus/v1/people/me?access_token="+ widgetPrefGP['access_token'], function(userData) {
+							model["profile"] = userData;
 
-						// Loading GooglePlus profile
-						if (widgetName == "GooglePlus") {
-							var widgetPrefGP = JSON.parse(model.prefs);
-							$.getJSON("https://www.googleapis.com/plus/v1/people/me?access_token="+ widgetPrefGP['access_token'], function(userData) {
-								model["profile"] = userData;
-
-								// Create a view modal for widgets
-								renderWidgetView(template, url,model, '#widget-settings');
-								return;
-							});
+							// Create a view modal for widgets
+							renderWidgetView(template, url, model, '#widget-settings');
 							return;
-							// Loading Stripe profile
-						} else if (widgetName == "Stripe") {
-							$.getJSON("core/api/custom-fields/type/scope?scope=CONTACT&type=TEXT", function(data) {
-								model["custom_data"] = data;
+						});
+						return;
+						// Loading Stripe profile
+					} else if (widgetName == "Stripe") {
+						$.getJSON("core/api/custom-fields/type/scope?scope=CONTACT&type=TEXT", function(data) {
+							model["custom_data"] = data;
 
-								// Create a view modal for widgets
-								renderWidgetView(template, url,model, '#widget-settings');
-								return;
+							// Create a view modal for widgets
+							renderWidgetView(template, url, model, '#widget-settings');
+							return;
 
-							});
-							model["profile"] = jQuery.parseJSON(model.prefs);
-						} else {
-							model["profile"] = jQuery.parseJSON(model.prefs);
+						});
+						model["profile"] = jQuery.parseJSON(model.prefs);
+					} else {
+						if (data) {
+							try{
+								data.prefs = jQuery.parseJSON(data.prefs); 
+							}catch(e){
+								console.log("Error occured while parsing widget prefs");
+							}
+							model["profile"] = data;
 						}
 					}
-
+					
 					// Create a view modal for widgets
 					renderWidgetView(template, url,model, '#widget-settings');
 					

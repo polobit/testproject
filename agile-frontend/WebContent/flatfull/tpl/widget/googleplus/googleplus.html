@@ -8,25 +8,23 @@
 </script>
 
 <script id="googleplus-revoke-access-template" type="text/html">
-<div>
-{{#if profile.image.url}}	
-<div class="m-t">
-		<div class="pull-left thumb-md thumb-wrapper">
-			<img src="{{profile.image.url}}&sz=70" alt="" class="w-full"/>
-		</div>
-		<div class="pull-left m-l-sm">
-			<p><a href="{{profile.url}}" target="_blank" >{{profile.displayName}}</a></p>
-		</div>
-<div class="clearfix"></div>
-	</div>
-{{/if}}
-	
+	<div>
+		{{#if profile.image.url}}	
+			<div class="m-t">
+				<div class="pull-left thumb-md thumb-wrapper">
+					<img src="{{profile.image.url}}&sz=70" alt="" class="w-full"/>
+				</div>
+				<div class="pull-left m-l-sm">
+					<p><a href="{{profile.url}}" target="_blank" >{{profile.displayName}}</a></p>
+				</div>
+				<div class="clearfix"></div>
+			</div>
+		{{/if}}
 		<div class="m-t-md">
 			<a class='btn btn-sm btn-danger revoke-widget' widget-name="GooglePlus">Revoke Access</a>
 			<a href="#add-widget" class='btn btn-default btn-sm m-l-xs'  widget-name="GooglePlus">Cancel</a>
 		</div>
-	
-</div>
+	</div>
 </script>
 
 <script id="googleplus-search-result-template" type="text/html">
