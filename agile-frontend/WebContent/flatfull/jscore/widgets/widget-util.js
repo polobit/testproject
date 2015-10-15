@@ -1,7 +1,18 @@
 //Helps to know that widget is for all users.
 var isForAll = false;
 
+function initializeTabListeners(localStorageItem, navigateURL){
+	$("#prefs-tabs-content .widgets_inner ul li").off("click");
+	$("#prefs-tabs-content").on("click",".tab-container ul li",function(){
+		var temp = $(this).find("a").attr("href").split("#");
+		if(islocalStorageHasSpace())
+			localStorage.setItem(localStorageItem, temp[1]);
+		Backbone.history.navigate(navigateURL, { trigger : true });
+	});
+}
+
 function update_collection_with_prefs(data) {
+
 	console.log("In update_collection_with_prefs");
 	console.log(data);
 	if (App_Widgets.Catalog_Widgets_View
@@ -194,6 +205,9 @@ function set_up_access(widget_name, template_id, data, url, model){
 		 		if(!template_ui1)
 		    		return;
 				el = $(template_ui1);
+				var widgetTab = localStorage.getItem("widget_tab");
+				el.find('a[href="#'+widgetTab+'"]').closest("li").addClass("active");
+				initializeTabListeners("widget_tab", "add-widget");
 				json = model; 
 				setup_widget_revoke_access(el, json, data, widget_name, template_id, url, model);
 			}, null);
@@ -210,6 +224,7 @@ function set_up_access(widget_name, template_id, data, url, model){
 			$.getJSON('core/api/widgets/' + widget_name, function(data1){
 				set_up_access(widget_name, template_id, data, url, data1)
 			});
+			
 		} 
 	});
 }

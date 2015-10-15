@@ -66,14 +66,26 @@ var WidgetsRouter = Backbone.Router
                     that.Catalog_Widgets_View = new Base_Collection_View({
                         url : '/core/api/widgets/default',
                         restKey : "widget",
-                        templateKey : "widgets-add",
+                        templateKey : "widgets-add-new",
                         sort_collection : false,
                         individual_tag_name : 'div',
                         postRenderCallback : function(el) {
+                            var widgetTab = localStorage.getItem("widget_tab");
+                            if(!widgetTab || widgetTab == null) {
+                                if(islocalStorageHasSpace())
+                                   localStorage.setItem('widget_tab', "call-tab");
+                                widgetTab = "call-tab";
+                            }
+                            $('#prefs-tabs-content a[href="#'+widgetTab+'"]').tab('show');
                             initializeWidgetSettingsListeners();
-
+                            $("#prefs-tabs-content .tab-container ul li").off("click");
+                            $("#prefs-tabs-content").on("click",".tab-container ul li",function(){
+                                var temp = $(this).find("a").attr("href").split("#");
+                                if(islocalStorageHasSpace())
+                                    localStorage.setItem('widget_tab', temp[1]);
+                            });
                             build_custom_widget_form(el);
-                            setTimeout(function() {
+                            /*setTimeout(function() {
                                 var socialHeight = 0;
                                 $('#social > div', el).each(function() {
                                     if ($(that).height() > socialHeight)
@@ -82,7 +94,7 @@ var WidgetsRouter = Backbone.Router
                                 $('#social > div', el).each(function() {
                                     $(that).height(socialHeight);
                                 });
-                            }, 1000);
+                            }, 1000);*/
                             $('[data-toggle="tooltip"]').tooltip();
                         }
                     });
@@ -359,6 +371,9 @@ function renderWidgetView(templateName, url, model, renderEle){
         data : model,
         postRenderCallback : function(el) {
             deserializeWidget(model, el);
+            var widgetTab = localStorage.getItem("widget_tab");
+            $("#prefs-tabs-content").find('a[href="#'+widgetTab+'"]').closest("li").addClass("active");
+            initializeTabListeners("widget_tab", "add-widget");
         }
     });
 

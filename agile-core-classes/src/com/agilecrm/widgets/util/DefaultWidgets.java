@@ -60,11 +60,6 @@ public class DefaultWidgets {
 				"/widgets/stripe.js", "/img/plugins/Stripe.png",
 				"/widgets/stripe-small-logo.png", null, WidgetType.BILLING));
 		widgets.add(new Widget(
-				"Sip",
-				"Make and receive calls from your contacts using any SIP account.",
-				"/widgets/sip.js", "/widgets/sip-logo-small.png",
-				"/widgets/sip-logo-small.png", null, WidgetType.CALL));
-		widgets.add(new Widget(
 				"HelpScout",
 				"Help Scout is a help desk for teams that insist on a delightful customer experience without exposing to ticket numbers, portals or robotic emails.",
 				"/widgets/helpscout.js", "/img/plugins/helpscout-logo.png",
@@ -94,6 +89,11 @@ public class DefaultWidgets {
 				"Make and receive calls from your contacts using your Twilio account.",
 				"/widgets/twilioio.js", "/img/plugins/twilio.png",
 				"/widgets/twilio-small-logo.png", null, WidgetType.CALL));
+		widgets.add(new Widget(
+				"Sip",
+				"Make and receive calls from your contacts using any SIP account.",
+				"/widgets/sip.js", "/widgets/sip-logo-small.png",
+				"/widgets/sip-logo-small.png", null, WidgetType.CALL));
 		widgets.add(new Widget(
 				"GooglePlus",
 				"Keep tabs on your customers' activity on Google+ and engage with them better.",
