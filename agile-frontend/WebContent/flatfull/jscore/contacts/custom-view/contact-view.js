@@ -42,7 +42,7 @@ function contactTableView(base_model,customDatefields,view) {
 	var contact = base_model.toJSON();
 	var el = itemView.el;
 
-	if (!gridViewEl) {
+	if (!gridViewEl || window.location.hash=="#companies") {
 	
 		// Clears the template, because all the fields are appended, has to be reset
 		// for each contact
@@ -97,7 +97,7 @@ function contactTableView(base_model,customDatefields,view) {
 			}, null);
 		});
 
-	} else if(window.location.hash!="#companies") {
+	} else  {
 		getTemplate('contacts-grid-model', contact, undefined, function(template_ui){
 				if(!template_ui)
 					  return;
