@@ -210,8 +210,10 @@ function addWidgetProfile(widgetId, widgetName, template, url) {
 		// Get route model
 		getWidgetModelFromName(widgetId, "", function(model) {
 				$.getJSON((url), function(data) {
-					var widget_el = getTemplate(
-							"widget-settings", model);
+
+					getTemplate(
+							"widget-settings", model, undefined, function(widget_el){
+
 					$('#prefs-tabs-content')
 							.html(widget_el);
 
@@ -256,7 +258,8 @@ function addWidgetProfile(widgetId, widgetName, template, url) {
 					// Create a view modal for widgets
 					renderWidgetView(template, url, model, '#widget-settings');
 					
-				});
+				});								
+			});
 		});
 	});
 }
