@@ -11,7 +11,6 @@ routes : {
 
             "sync": "dataSync",
             "sync/contacts": "google_contacts_sync",
-            "sync/calendar": "google_apps_calendar",
             "sync/stripe-import": "stripe_sync",
             "sync/shopify": "shopify",
             "sync/salesforce": "salesforce",
@@ -94,10 +93,6 @@ google_calendar:function(el){
 	            }, "#content");
 
 	        },
-
-        google_apps_calendar: function() {
-           
-        },
 
 
         stripe_sync: function() {
@@ -182,6 +177,9 @@ google_calendar:function(el){
                     var url= 'core/api/contactprefs/FRESHBOOKS',
                               template= 'admin-settings-import-freshbooks-settings';
                                     renderInnerSyncView(url,template,model,function(model){
+                                    //initializes freshbooks listners which is present in 
+                                    //import.js
+                                    initializeImportListeners();
                                     showNotyPopUp("information", "Contacts sync initiated", "top", 1000);
                                     });
                      });

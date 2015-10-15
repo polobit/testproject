@@ -381,13 +381,11 @@
                                            phone="{{value}}">
                                            {{value}}
                                         </a>    
--->
-										<a href="tel:{{remove_spaces value}}" class="contact-make-call">{{value}}</a> 
+-->		
+										<span class="contact-call-button-div"  data-toggle="tooltip" data-placement="top" title="">
+										<a href="tel:{{remove_spaces value}}" class="contact-make-call contact-call-button" phone="{{value}}">{{value}}</a> 
                                         {{#if subtype}}<span class="label bg-light dk text-tiny">{{subtype}}</span> {{/if}}
-
-										<div class="pull-right contact-call-button-div" data-toggle="tooltip" data-placement="top" title="">
-        								  <button class="btn btn-default btn-xs contact-call-button" style="font-size:9px;padding: 0px 3px;"  aria-expanded="false" disabled phone="{{value}}">Call</button>
-    									</div>
+										</span>
 
 									</div>
 									<div class="clearfix"></div>
