@@ -23,6 +23,7 @@ function setupLhsFilters(cel, is_company)
 				  return;
 
 			$('#lhs_filters_conatiner', cel).html($(template_ui));
+			bindChangeEvent();
 
 			fillSelect('owner_select', '/core/api/users', undefined, function()
 			{
@@ -54,6 +55,8 @@ function setupLhsFilters(cel, is_company)
 			if(!template_ui)
 				  return;
 			$('#lhs_filters_conatiner', cel).html($(template_ui));
+			bindChangeEvent();
+
 			fillSelect('owner_select', '/core/api/users', undefined, function()
 			{
 				fillSelect('campaign_select_master', '/core/api/workflows', undefined, function()
@@ -162,14 +165,16 @@ $('#' + container_id).on('click', 'a.filter-multiple-add-lhs', function(e)
 	scramble_filter_input_names(htmlContent);
 	$(htmlContent).appendTo('#' + fieldName + '-lhs-filter-table');
 	$('#' + fieldName + '-lhs-filter-table').find("div.lhs-contact-filter-row:last").find('#RHS:visible').find(':not(input.date)').focus();
+	bindChangeEvent();
 });
 
 // Filter Contacts- Remove Multiple
 $('#' + container_id).on('click', 'i.filter-tags-multiple-remove-lhs', function(e)
 {
 	var container = $(this).parents('.lhs-contact-filter-row');
-	$(container).find('#RHS').children().val("").trigger('blur').trigger('custom_blur').trigger('change');
+	$(container).find('#RHS').children().val("").trigger('blur').trigger('custom_blur').trigger('change').trigger('custom_change');
 	$(this).closest('div.lhs-contact-filter-row').remove();
+
 });
 
 // Filter Contacts- Remove Multiple
@@ -230,6 +235,7 @@ $('#' + container_id).on('change', '#lhs-contact-filter-form select[name="CONDIT
 		submitLhsFilter();
 	}
 });
+
 
 $('#' + container_id).on('custom_blur keyup', '#lhs-contact-filter-form #RHS input.filters-tags-typeahead:not(.date)', function(e)
 {
@@ -547,4 +553,56 @@ function addTagsTypeaheadLhsFilters(tagsJSON, element)
 		this.hide();
 		return item;
 	} }).attr('placeholder', "Enter Tag");
+}
+
+function bindChangeEvent(){
+
+$("#lhs-contact-filter-form #RHS input.filters-tags-typeahead:not(.date)").each(function(index, element){
+	$(element).unbind('custom_change').bind('custom_change', function(e)
+	{
+		console.log("I am in custom_change " + $(this).val());
+		if (e.type == 'custom_change')
+		{
+			var prevVal = $(this).attr('prev-val');
+			var currVal = $(this).val().trim();
+			if (prevVal == currVal)
+			{
+				return;
+			}
+			else
+			{
+				$(this).attr('prev-val', currVal);
+			}
+			if ($(this).parent().next().attr("id") == "RHS_NEW")
+			{
+				if ($(this).parent().next().find('input').val() != "" && currVal != "")
+				{
+					submitLhsFilter();
+					$(this).blur();
+				}
+			}
+			else
+			{
+				if (currVal == "")
+				{
+					var container = $(this).parents('.lhs-contact-filter-row');
+					$(container).find('a.clear-filter-condition-lhs').addClass('hide');
+				}
+				submitLhsFilter();
+				$(this).blur();
+			}
+		}
+	});
+
+});
+
+
+$("body").unbind("click").bind("click", function(e){
+	  if($(e.target).parent("#conatcts-listeners-conatainer").size() == 0){
+            $("#lhs-contact-filter-form #RHS input.filters-tags-typeahead:not(.date)").each(function(index, ele){
+            			$(ele).trigger('custom_change');
+            });
+		}  
+});
+
 }
