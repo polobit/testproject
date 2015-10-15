@@ -848,7 +848,7 @@ var ReportsRouter = Backbone.Router
 
 			showIncomingDeals : function(){
 				hideTransitionBar();
-				head.js(LIB_PATH + 'lib/date-charts.js', LIB_PATH + 'lib/date-range-picker.js',function()
+				initReportLibs(function()
 						{
 
 							// Load Reports Template

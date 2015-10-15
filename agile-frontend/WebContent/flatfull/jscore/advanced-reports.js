@@ -531,7 +531,7 @@ function initDateRange(callback)
 function initReportLibs(callback)
 {
 
-	head.load(LIB_PATH + 'lib/date-charts.js', LIB_PATH + 'lib/date-range-picker.js', function()
+	head.load(LIB_PATH + 'lib/date-charts.js', LIB_PATH + 'lib/date-range-picker.js'+'?_=' + _AGILE_VERSION, function()
 	{
 		callback();
 
