@@ -416,7 +416,7 @@ public class DealsAPI
     public String getDealsDetailsByPipeline(@PathParam("pipeline-id") Long pipelineId, @QueryParam("min") Long min,
 	    @QueryParam("max") Long max)
     {
-	return OpportunityUtil.getDealsDetailsByPipeline(pipelineId, min, max).toString();
+	return OpportunityUtil.getDealsDetailsByPipeline(null,pipelineId,null, min, max,null).toString();
     }
 
     /**
@@ -936,7 +936,6 @@ public class DealsAPI
 	}
     }
 
-   
     
     /**
      * fetches tasks of a deal in deal details page
@@ -1000,6 +999,27 @@ public class DealsAPI
     	 ReportsUtil.check(min*1000,max*1000);
      return OpportunityUtil.getIncomingDealsList(ownerId,min,max,frequency,type).toString();
     }
+     
+     /**
+      * Gets sum of expected values and pipeline values of the deals having
+      * closed date within the month of given time period. Deals Stats - Details.
+      * 
+      * @param min
+      *            - Given time less than closed date.
+      * @param max
+      *            - Given time more than closed date.
+      * @return string having sum of expected values and pipeline values of the
+      *         deals of same month.
+      */
+     @Path("stats/details/{owner-id}/{pipeline-id}/{source}")
+     @GET
+     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+     public String getDealsDetailsByPipelineandOwner(@PathParam("owner-id") Long ownerId,@PathParam("pipeline-id") Long pipelineId,
+     		@PathParam("source") Long source,@QueryParam("min") Long min, @QueryParam("max") Long max,@QueryParam("frequency") String frequency)
+     {
+     	ReportsUtil.check(min*1000,max*1000);
+ 	return OpportunityUtil.getDealsDetailsByPipeline(ownerId,pipelineId,source, min, max,frequency).toString();
+     }
      /**
  	 * fetches deals for specified time for loss reason pie chart
  	 * 

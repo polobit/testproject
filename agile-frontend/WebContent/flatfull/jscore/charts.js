@@ -1499,6 +1499,7 @@ function showDealAreaSpline(url, selector, name, yaxis_name, show_loading,freque
                									fontSize: '14px',
                									fontWeight : 'normal',
                									color : '#98A6AD'
+
       	     									 },
       	     							 position :{
                									 x : 60,
