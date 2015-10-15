@@ -212,7 +212,7 @@ This is where you and your users will log in to your account
 
 <script type='text/javascript' src='//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js'></script>
 <script type="text/javascript" src="<%=CSS_PATH %>lib/phonenumber-lib/intlTelInput.js"></script>
-<script src="/flatfull/registration/register.js?_v=<%=_AGILE_VERSION%>"   type="text/javascript"></script>
+<script src="<%=CSS_PATH %>registration/register.js?_v=<%=_AGILE_VERSION%>"   type="text/javascript"></script>
 <script type="text/javascript">
 var version = <%="\"" + VersioningUtil.getAppVersion(request) + "\""%>;
   var applicationId = <%="\"" + SystemProperty.applicationId.get() + "\""%>;
