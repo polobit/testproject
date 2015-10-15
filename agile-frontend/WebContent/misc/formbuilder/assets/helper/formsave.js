@@ -11,6 +11,7 @@ define([
 		var form = {};
 		form.formName = saveform[0].fields.name.value;
 		form.formJson = saveform;
+		form.formHtml = $("#render").val();
 		if(formNumber){
 			form.id = formNumber;
 		}

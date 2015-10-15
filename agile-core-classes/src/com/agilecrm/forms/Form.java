@@ -24,6 +24,9 @@ public class Form
     @NotSaved(IfDefault.class)
     public String formJson = null;
 
+    @NotSaved(IfDefault.class)
+    public String formHtml= null;
+
     public static ObjectifyGenericDao<Form> dao = new ObjectifyGenericDao<Form>(Form.class);
 
     public Form()
@@ -35,6 +38,13 @@ public class Form
     {
 	this.formName = name;
 	this.formJson = json;
+    }
+
+    public Form(String name, String json, String html)
+    {
+    this.formName = name;
+    this.formJson = json;
+    this.formHtml = html;
     }
 
     public void save()
