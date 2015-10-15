@@ -1124,12 +1124,10 @@ var ContactsRouter = Backbone.Router.extend({
 		$.getJSON("core/api/custom-fields/type/scope?type=DATE&scope=CONTACT", function(customDatefields)
 				{
 					// Defines appendItem for custom view
-					if(!readCookie("agile_contact_view")){
+					
 					_that.contact_custom_view.appendItem = function(base_model){
 						contactTableView(base_model,customDatefields,this);
 					};
-				}
-			
 					// Fetch collection
 					_that.contact_custom_view.collection.fetch();
 					
