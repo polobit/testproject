@@ -69,6 +69,7 @@ public class SendEventReminderDeferredTask implements DeferredTask
      **/
     public void run()
     {
+    	
     	if("nimbleschedule".equalsIgnoreCase(domain))
         	return;
 
