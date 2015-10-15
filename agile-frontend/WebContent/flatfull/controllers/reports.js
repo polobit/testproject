@@ -13,7 +13,7 @@ var ReportsRouter = Backbone.Router
 				"activity-report-edit/:id" : "activityReportEdit", "acivity-report-results/:id" : "activityReportInstantResults",
 				"contact-reports" : "emailReports", "report-add" : "reportAdd", "report-edit/:id" : "reportEdit",
 				"report-results/:id" : "reportInstantResults", "report-charts/:type" : "reportCharts", "report-funnel/:tags" : "showFunnelReport",
-				"report-growth/:tags" : "showGrowthReport", "report-cohorts/:tag1/:tag2" : "showCohortsReport", "report-ratio/:tag1/:tag2" : "showRatioReport","report-deals":"showIncomingDeals","report-calls/:type" : "showCallsReport",
+				"report-growth/:tags" : "showGrowthReport", "report-cohorts/:tag1/:tag2" : "showCohortsReport", "report-ratio/:tag1/:tag2" : "showRatioReport","report-deals":"showIncomingDeals","report-calls/:type" : "showCallsReport","user-reports": "showUserReports",
 				"report-lossReason":"showDealsLossReason","reports-wonDeals":"showDealsWonChart"},
 			/**
 			 * Shows reports categories
@@ -736,6 +736,45 @@ var ReportsRouter = Backbone.Router
 					}, "#content");
 				});
 				
+			},
+			
+			/**
+			 * Shows User Reports
+			 */
+			showUserReports : function()
+
+			{
+				hideTransitionBar();
+				initReportLibs(function()
+						{
+					getTemplate("report-revenue-user", {}, undefined, function(template_ui){
+						if(!template_ui)
+							  return;
+						$('#content').html($(template_ui));	
+
+						initUserReports(function()
+								{
+							salesReportGraphForUserReports();
+							showLossReasonGraphForUserReports();
+								
+							var callReportUrl='core/api/portlets/calls-per-person/' + getSelectedDates();
+							
+							if ($('#owner').length > 0)
+							{
+								if ($("#owner").val() != "" && $("#owner").val() != "All Owners"){
+								var user=$("#owner").val();
+								callReportUrl=callReportUrl+'&user=["'+user+'"]';
+							}
+							}
+							
+							report_utility.user_reports(callReportUrl);
+							
+								});
+						
+						
+				}, "#content");
+
+						});
 			},
 
 

@@ -194,6 +194,26 @@ function highlightDatepickerOption()
 		$('.daterangepicker > .ranges > ul > li').eq(2).addClass("active");
 	}
 }
+
+
+function initUserReports(callback){
+	
+	initDateRange(callback);
+
+	callback();	
+
+		fillSelect("owner", "core/api/users", undefined, function()
+		{
+			$('#owner').change(function()
+			{
+				callback();
+			});
+
+		}, '<option class="default-select" value="{{id}}">{{name}}</option>', false, undefined, "All Owners");
+		
+	}
+
+
 function initSalesCharts(callback){
 	
 		initDateRange(callback);
@@ -201,7 +221,6 @@ function initSalesCharts(callback){
 		if ($('#frequency').length > 0)
 			{
 		// Get Frequency
-			callback();
 			$('#frequency').change(function()
 			{
 			callback();
@@ -212,7 +231,7 @@ function initSalesCharts(callback){
 		{
 			$('#track').change(function()
 			{
-				$('#reports-sales-track').text($("#track option:selected").text());
+
 				callback();
 			});
 		}, '<option class="default-select" value="{{id}}">{{name}}</option>', false, undefined, "All Tracks");
@@ -221,7 +240,7 @@ function initSalesCharts(callback){
 		{
 			$('#owner').change(function()
 			{
-				$('#reports-sales-owner').text($("#owner option:selected").text());
+
 				callback();
 			});
 
@@ -229,6 +248,7 @@ function initSalesCharts(callback){
 
 			fillSelect("source", "/core/api/categories?entity_type=DEAL_SOURCE", undefined, function()
 		{
+
 			$('#source option').eq(0).after($('<option class="default-select" value="1">Unknown</option>'));
 			$('#source').change(function()
 			{
@@ -240,7 +260,85 @@ function initSalesCharts(callback){
 		
 	}
 
-	function showLossReasonGraphs()
+function showsalesReportGraphs()
+{
+	var options='';
+	// Get Date Range January 22, 2015 - January 28, 2015
+	var range = $('#range').html().split("-");
+	/*
+	 * var temp = "January 22, 2015 - January 28, 2015"; var range =
+	 * temp.split("-");
+	 */
+	// Returns milliseconds from start date. For e.g., August 6, 2013 converts
+	// to 1375727400000
+	//var start_time = Date.parse($.trim(range[0])).valueOf();
+	//Get the GMT start time
+
+	var start_time = getUTCMidNightEpochFromDate(new Date(range[0]));
+
+	var end_value = $.trim(range[1]);
+
+	// To make end value as end time of day
+	if (end_value)
+		end_value = end_value + " 23:59:59";
+
+	// Returns milliseconds from end date.
+	//var end_time = Date.parse(end_value).valueOf();
+	//Get the GMT end time
+	var end_time = getUTCMidNightEpochFromDate(new Date(end_value));
+
+	//end_time += (((23*60*60)+(59*60)+59)*1000);
+
+	// Adds start_time, end_time and timezone offset to params.
+	var d = new Date();
+	start_time=start_time+(d.getTimezoneOffset()*60*1000);
+	 end_time += (((23*60*60)+(59*60)+59)*1000);
+	end_time=end_time+(d.getTimezoneOffset()*60*1000);
+
+
+	if ($('#owner').length > 0)
+	{
+		// Get Frequency
+		var owner_id=0;
+		if ($("#owner").val() != "" && $("#owner").val() != "All Owners")
+			owner_id=$("#owner").val();
+			options += owner_id;
+		}
+	if ($('#track').length > 0)
+	{
+		// Get Frequency
+		var track = 0;
+		if($("#track").val() != "" &&  $("#track").val() != "All Tracks")
+			track=$("#track").val();
+			options +=('/'+ track);
+
+	}
+
+	if ($('#source').length > 0)
+	{
+		// Get source
+		var source = 0;
+		if($("#source").val() != "" &&  $("#source").val() != "All Sources")
+			source=$("#source").val();
+			options +=('/'+ source);
+
+	}
+	options += ("?min=" + start_time/1000 + "&max=" + end_time/1000);
+	if ($('#frequency').length > 0)
+	{
+		// Get Frequency
+		var frequency = $("#frequency").val();
+		options += ("&frequency=" + frequency);
+	}
+	// If Frequency is present - send frequency too
+	
+	var frequency = $( "#frequency:visible").val();
+	showDealAreaSpline('core/api/opportunity/stats/details/'+options,'revenue-chart','','',true,frequency);
+}
+   
+function showLossReasonGraphs()
+
+
 {
 	var options='';
 
@@ -270,7 +368,8 @@ function initSalesCharts(callback){
 		if ($("#owner").val() != "" && $("#owner").val() != "All Owners")
 			owner_id=$("#owner").val();
 			options += owner_id;
-		}
+	}
+	
 	if ($('#track').length > 0)
 	{
 		// Get track
@@ -292,6 +391,109 @@ function initSalesCharts(callback){
 	
 	
 	pieforReports('core/api/opportunity/details/'+options,'lossreasonpie-chart','',true);
+}
+
+function showLossReasonGraphForUserReports(){
+	
+
+	var options='';
+
+	// Get Date Range January 22, 2015 - January 28, 2015
+	var range = $('#range').html().split("-");
+	var start_time = getUTCMidNightEpochFromDate(new Date(range[0]));
+
+	var end_value = $.trim(range[1]);
+
+	// To make end value as end time of day
+	if (end_value)
+		end_value = end_value + " 23:59:59";
+
+	var end_time = getUTCMidNightEpochFromDate(new Date(end_value));
+
+	// Adds start_time, end_time and timezone offset to params.
+	var d = new Date();
+	start_time=start_time+(d.getTimezoneOffset()*60*1000);
+	 end_time += (((23*60*60)+(59*60)+59)*1000);
+	end_time=end_time+(d.getTimezoneOffset()*60*1000);
+
+
+	if ($('#owner').length > 0)
+	{
+		// Get owner
+		var owner_id=0;
+		if ($("#owner").val() != "" && $("#owner").val() != "All Owners")
+			owner_id=$("#owner").val();
+			options += owner_id;
+	}
+	
+		// Get track
+		var track = 0;
+		options +=('/'+ track);
+	
+		// Get source
+		var source = 0;
+		options += ("/" + source);
+	
+	options += ("?min=" + start_time/1000 + "&max=" + end_time/1000);
+	
+	
+	pieforReports('core/api/opportunity/details/'+options,'lossreasonpie-chart-users','',true);
+
+	
+}
+
+function salesReportGraphForUserReports(){
+	
+	
+
+	var options='';
+	// Get Date Range January 22, 2015 - January 28, 2015
+	var range = $('#range').html().split("-");
+
+	var start_time = getUTCMidNightEpochFromDate(new Date(range[0]));
+
+	var end_value = $.trim(range[1]);
+
+	// To make end value as end time of day
+	if (end_value)
+		end_value = end_value + " 23:59:59";
+
+	var end_time = getUTCMidNightEpochFromDate(new Date(end_value));
+
+	var d = new Date();
+	start_time=start_time+(d.getTimezoneOffset()*60*1000);
+	 end_time += (((23*60*60)+(59*60)+59)*1000);
+	end_time=end_time+(d.getTimezoneOffset()*60*1000);
+
+
+	if ($('#owner').length > 0)
+	{
+		// Get Frequency
+		var owner_id=0;
+		if ($("#owner").val() != "" && $("#owner").val() != "All Owners")
+			owner_id=$("#owner").val();
+			options += owner_id;
+	}
+	
+	
+		// Get Frequency
+		var track = 0;
+		options +=('/'+ track);
+		
+			// Get source
+		var source = 0;
+		options +=('/'+ source);
+
+
+	   options += ("?min=" + start_time/1000 + "&max=" + end_time/1000);
+	
+		// Default frequency for the user report is set to weekly
+		var frequency = "monthly";
+		//options += ("&frequency=" + frequency);
+
+	showDealAreaSpline('core/api/opportunity/stats/details/'+options,'revenue-chart-users','','',true,undefined);
+
+	
 }
 
 function showWonPieChart()
@@ -333,6 +535,7 @@ var options='';
 	pieforReports('core/api/opportunity/wonDetails/'+options,'wonpie-chart','',true);
 }
 
+/** Initialising date range for various report* */
 function initDateRange(callback)
 {
 	initReportLibs(function()
@@ -382,8 +585,12 @@ function initDateRange(callback)
 						$("#week-range").html(end.add({ days : -6 }).toString('MMMM d, yyyy') + ' - ' + end.add({ days : 6 }).toString('MMMM d, yyyy'));
 						}
 						else
- 			$('#reportrange span').html(Date.today().add({ days : -6 }).toString('MMMM d, yyyy')+'-'+Date.today().toString('MMMM d, yyyy'));	
-
+ 						{
+ 							$('#reportrange span').html(Date.today().add({ days : -6 }).toString('MMMM d, yyyy')+'-'+Date.today().toString('MMMM d, yyyy'));	
+ 							$('.daterangepicker > .ranges > ul > li').each(function(){
+							$(this).removeClass("active");
+						});
+ 						}
 						callback();
 					});
 					$('.daterangepicker > .ranges > ul').on("click", "li", function(e)
@@ -398,13 +605,3 @@ function initDateRange(callback)
 
 }
 
-/* Loads libraries needed for reporting * */
-function initReportLibs(callback)
-{
-
-	head.load(LIB_PATH + 'lib/date-charts.js', LIB_PATH + 'lib/date-range-picker.js', function()
-	{
-		callback();
-
-	});
-}
