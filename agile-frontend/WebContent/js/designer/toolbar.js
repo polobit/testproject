@@ -212,7 +212,7 @@ function addDraggingCapability() {
 
             // Get jsonDefinition and add it      	
             var jsonDefinition = $(ui.draggable).data("json");
-            
+            //save dropped location
             jsonDefinition.x = ui.position.left;
             jsonDefinition.y = ui.position.top;
             //jsonDefinition.parentY = window.parent.scrollY;

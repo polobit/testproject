@@ -79,9 +79,9 @@ $(function(){
         var designerJSON = window.frames.designer.serializePhoneSystem();
         
         /**
-         * Checks if start node is connected to any other node
+         * Checks if start node is connected to any other node.
          */
-        
+              
         if(!is_start_active(designerJSON)){
         	var $save_info = '<span style="color: red;">Please connect the \'Start\' node to another node in the campaign</span>';
         	$("#workflow-msg").html($save_info).show().fadeOut(3000);

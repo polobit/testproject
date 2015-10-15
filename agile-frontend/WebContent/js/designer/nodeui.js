@@ -180,7 +180,7 @@ function saveNode(e) {
 	
 		// Check if node id is undefined or not 
 		if( nodeId == undefined || nodeId == null ) {
-			// Add designer 
+			// Add designer at given location
 			if(jsonDefinition.x && jsonDefinition.y){
 				jsonDefinition.x += $('#designercontainer').scrollLeft();
 				jsonDefinition.y += $('#designercontainer').scrollTop();
