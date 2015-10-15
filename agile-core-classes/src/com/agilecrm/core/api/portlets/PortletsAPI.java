@@ -24,7 +24,10 @@ import com.agilecrm.contact.Contact;
 import com.agilecrm.deals.Opportunity;
 import com.agilecrm.portlets.Portlet;
 import com.agilecrm.portlets.util.PortletUtil;
+import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.util.DomainUserUtil;
+import com.googlecode.objectify.Key;
 
 /**
  * <code>PortletsAPI</code> includes REST calls to interact with
@@ -78,6 +81,36 @@ public class PortletsAPI {
 			if(portlet!=null){	
 				portlet.save();
 				
+				if(portlet.prefs!=null){
+					JSONObject json=(JSONObject)JSONSerializer.toJSON(portlet.prefs);
+					portlet.settings=json;
+				}
+				//PortletUtil.setPortletContent(portlet);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return portlet;
+	}
+	/**
+	 * Adding of new portlet for all users
+	 * 
+	 * @param portlets
+	 * 
+	 * @return {@link List} of {@link Portlet}
+	 */
+	@POST
+	@Path("addforAll")
+	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	public Portlet createPortletforAll(Portlet portlet) {
+		try {
+			if(portlet!=null){
+				DomainUserUtil du=new DomainUserUtil();
+				List<DomainUser> domainusers=du.getUsers();
+				for(DomainUser domainuser:domainusers)	{
+					portlet.saveAll(domainuser);
+				}
 				if(portlet.prefs!=null){
 					JSONObject json=(JSONObject)JSONSerializer.toJSON(portlet.prefs);
 					portlet.settings=json;
