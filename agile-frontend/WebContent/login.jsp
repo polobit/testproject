@@ -76,25 +76,24 @@ if(cookieJSON.has("userAgent"))
 // Users can show their logo on login page. 
 AccountPrefs accountPrefs = AccountPrefsUtil.getAccountPrefs();
 String logo_url = accountPrefs.logo;
+String _AGILE_VERSION = SystemProperty.applicationVersion.get();
 
+String CSS_PATH = "/";
+String FLAT_FULL_PATH = "flatfull/";
 
-  String CSS_PATH = "/";
-  String FLAT_FULL_PATH = "flatfull/";
+String CLOUDFRONT_TEMPLATE_LIB_PATH = VersioningUtil.getCloudFrontBaseURL();
 
-  String CLOUDFRONT_TEMPLATE_LIB_PATH = VersioningUtil.getCloudFrontBaseURL();
+System.out.println(CLOUDFRONT_TEMPLATE_LIB_PATH);
   
-  System.out.println(CLOUDFRONT_TEMPLATE_LIB_PATH);
-    
-  String CLOUDFRONT_STATIC_FILES_PATH = VersioningUtil.getStaticFilesBaseURL();
+String CLOUDFRONT_STATIC_FILES_PATH = VersioningUtil.getStaticFilesBaseURL();
 
-  CSS_PATH = CLOUDFRONT_STATIC_FILES_PATH;
-  if(SystemProperty.environment.value() == SystemProperty.Environment.Value.Development)
-  {
-	  CLOUDFRONT_STATIC_FILES_PATH = FLAT_FULL_PATH;
-	  CLOUDFRONT_TEMPLATE_LIB_PATH = "";	
-	  CSS_PATH = FLAT_FULL_PATH;
-  }
-
+CSS_PATH = CLOUDFRONT_STATIC_FILES_PATH;
+if(SystemProperty.environment.value() == SystemProperty.Environment.Value.Development)
+{
+ CLOUDFRONT_STATIC_FILES_PATH = FLAT_FULL_PATH;
+ CLOUDFRONT_TEMPLATE_LIB_PATH = "";	
+ CSS_PATH = FLAT_FULL_PATH;
+}
 
 %>
 <!DOCTYPE html>
@@ -299,7 +298,7 @@ if(isSafari && isWin)
 		}
 
 		function preload_dashlet_libs(){ 
-			setTimeout(function(){head.load('<%=CSS_PATH%>/final-lib/min/lib-all-min.js')}, 5000);
+			setTimeout(function(){head.load('<%=CLOUDFRONT_PATH %>final-lib/min/lib-all-min.js', '<%=CLOUDFRONT_PATH %>jscore/min/js-all-min.js', '<%=CLOUDFRONT_PATH%> + "tpl/min/precompiled/" + FLAT_FULL_PATH + "tpl.js" + "?_=" + _AGILE_VERSION', '<%=CLOUDFRONT_PATH%> + "tpl/min/precompiled/" + FLAT_FULL_PATH + "portlets.js" + "?_=" + _AGILE_VERSION')}, 5000);
 		}
 	</script>
 	<!-- Clicky code -->
