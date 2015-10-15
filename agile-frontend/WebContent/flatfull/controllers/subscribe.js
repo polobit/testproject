@@ -544,15 +544,8 @@ var SubscribeRouter = Backbone.Router
 							},
 							errorCallback : function(data)
 							{
-								if ("Your card number is incorrect." == data.responseText)
+								if (data.responseText)
 									showNotyPopUp("warning", data.responseText, "top");
-								else if ("Your card's security code is invalid." == data.responseText)
-									showNotyPopUp("warning", data.responseText, "top");
-								else
-									showNotyPopUp(
-											"warning",
-											"Sorry, you cannot downgrade your plan. Please contact our <a class='text-info' href='https://our.agilecrm.com/calendar/Raja_Shekar,Natesh,Abhishek_Pandey' target='_blank'>Support</a> team.",
-											"top");
 							}
 
 						});
