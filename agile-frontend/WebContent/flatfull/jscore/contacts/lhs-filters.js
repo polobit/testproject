@@ -597,12 +597,12 @@ $("#lhs-contact-filter-form #RHS input.filters-tags-typeahead:not(.date)").each(
 });
 
 
-$("body").unbind("click").bind("click", function(e){
+/*$("body").unbind("click").bind("click", function(e){
 	  if($(e.target).parent("#conatcts-listeners-conatainer").size() == 0){
             $("#lhs-contact-filter-form #RHS input.filters-tags-typeahead:not(.date)").each(function(index, ele){
             			$(ele).trigger('custom_change');
             });
 		}  
-});
+});*/
 
 }
