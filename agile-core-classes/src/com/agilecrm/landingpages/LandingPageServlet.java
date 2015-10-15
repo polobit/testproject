@@ -8,6 +8,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.agilecrm.account.APIKey;
+import com.agilecrm.db.ObjectifyGenericDao;
+import com.google.appengine.api.NamespaceManager;
+import com.google.appengine.api.utils.SystemProperty;
+
 /**
  * Servlet implementation class LandingPageServlet
  */
@@ -45,8 +50,24 @@ public class LandingPageServlet extends HttpServlet {
 				LandingPage landingPage = LandingPageUtil.getLandingPage(landingPageId);
 				if(landingPage != null) {
 					String fullXHtml = landingPage.html;
+					
+					String domainHost = "http://localhost:8888";
+					if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Production) {
+						domainHost = "https://" + NamespaceManager.get() +  ".agilecrm.com";		
+						//domainHost = "https://" + NamespaceManager.get() + "-dot-sandbox-dot-agilecrmbeta.appspot.com";
+					}
+					String analyticsCode = "<script src=\""+domainHost+"/stats/min/agile-min.js\"></script>"
+							+ "<script> _agile.set_account('%s', '"+NamespaceManager.get()+"'); _agile.track_page_view();</script>";
+					
+					ObjectifyGenericDao<APIKey> dao = new ObjectifyGenericDao<APIKey>(APIKey.class);
+					APIKey apiKey = dao.ofy().query(APIKey.class).get();
+					if(apiKey != null && apiKey.js_api_key != null) {
+						analyticsCode = String.format(analyticsCode, apiKey.js_api_key);
+					}					
+					
 					fullXHtml = fullXHtml.replace("</head>", "<style>"+landingPage.css+"</style></head>");
-					fullXHtml = fullXHtml.replace("</body>", "<script>"+landingPage.js+"</script></body>");
+					fullXHtml = fullXHtml.replace("</body>", "<script>"+landingPage.js+"</script>"+analyticsCode+"</body>");
+					
 					out.print(fullXHtml);
 				} else {
 					throw new NumberFormatException();

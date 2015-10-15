@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -16,6 +17,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+
+import com.agilecrm.forms.Form;
+import com.agilecrm.forms.util.FormUtil;
 
 
 /**
@@ -77,6 +81,27 @@ public class CustomElementServlet extends HttpServlet
     		    	  
     		      }
     	    }
+    	    
+    	    //load agile forms
+    	    
+    	    List<Form> forms = FormUtil.getAllForms();
+    	    
+    	    String formConfig = "({name: '%s',nodes: ['form'],frameworks: ['bootstrap'],types: ['flow'],validChildren: ['flow'],previewScale: '0.25',category: 'forms',"
+    	    		+ "links: ['https://s3.amazonaws.com/agilecrm/landing/public/agileform.css'],"
+    	    		+ "icon: 'newspaper',description: 'Agile form'});";
+    	    
+    	    for(Form form : forms) {    	    	
+    	    	if(form.formHtml != null) {
+    	    		form.formHtml = form.formHtml.replace("<div class=\"agile-custom-clear\"></div>", "");
+        	    	JSONObject formElement = new JSONObject();
+        	    	formElement.put("css", "");      	    	
+    	    		formElement.put("config", String.format(formConfig, form.formName));
+    	    		formElement.put("html", form.formHtml);
+    	    		elementsJsonArray.put(formElement);
+    	    	}
+    	    }
+    	    
+    	    
     	    
     	} catch(Exception e) {
     		e.printStackTrace();
