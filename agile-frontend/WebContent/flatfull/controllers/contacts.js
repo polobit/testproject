@@ -976,10 +976,7 @@ var ContactsRouter = Backbone.Router.extend({
 		{
 			url = "core/api/contacts/list";
 		}
-		if (readCookie("agile_contact_view") && tag_id)
-		{
-			this.contact_custom_view=undefined;
-		}
+		
 
 		if (CONTACTS_HARD_RELOAD == true)
 		{
