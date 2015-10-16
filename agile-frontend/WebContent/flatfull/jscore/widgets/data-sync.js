@@ -190,7 +190,9 @@ renders inner sync view and binds all model events to DataSync_Event_Modal_View
 			                    template: templateName,
 			                    data:data,
 			                    saveCallback: function(model) {
+
 			                       callback(model);
+
 			                    }
 			                });
 
@@ -198,34 +200,3 @@ renders inner sync view and binds all model events to DataSync_Event_Modal_View
   }
 
 
-  function initializeFreshbooksListners(){
-
-  	$('#prefs-tabs-content #freshbooks_sync_prefs').off();
-	$('#prefs-tabs-content').on('click', '#freshbooks_sync_prefs', function(e){
-					e.preventDefault();
-					var disable = $(this).attr('disabled');
-					if(disable)
-						return false;
-					$(this).attr("disabled", "disabled");
-					$(this).text("Syncing");
-					
-					var freshbooks_prefs = serializeForm("freshbooks-form");
-					freshbooks_prefs['inProgress'] = true;
-					
-					App_Datasync.freshbooks_import_settings.model.set(freshbooks_prefs, {silent:true});
-					var url = App_Datasync.freshbooks_import_settings.model.url;
-
-					$(this).after(getRandomLoadingImg());
-					App_Datasync.freshbooks_import_settings.model.url = url + "?sync=true"
-					App_Datasync.freshbooks_import_settings.model.save({}, {success : function(data){
-					
-						App_Datasync.freshbooks_import_settings.render(true);
-						App_Datasync.freshbooks_import_settings.model.url = url;	
-							show_success_message_after_save_button("Sync Initiated", App_Datasync.freshbooks_import_settings.el);
-							showNotyPopUp("information", "Contacts sync initiated", "top", 1000);
-						}});
-					
-				});
-
-
-  }

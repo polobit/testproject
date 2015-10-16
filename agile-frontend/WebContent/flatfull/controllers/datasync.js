@@ -179,7 +179,7 @@ google_calendar:function(el){
                                     renderInnerSyncView(url,template,model,function(model){
                                     //initializes freshbooks listners which is present in 
                                     //import.js
-                                    initializeImportListeners();
+                                    
                                     showNotyPopUp("information", "Contacts sync initiated", "top", 1000);
                                     });
                      });
