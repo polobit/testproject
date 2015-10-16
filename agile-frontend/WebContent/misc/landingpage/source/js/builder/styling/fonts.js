@@ -177,7 +177,7 @@ angular.module('builder.styling', [])
             } else {
                 //load the given fonts
                 head.append(
-                    '<link rel="stylesheet" class="include" id="dynamic-fonts" href="http://fonts.googleapis.com/css?family='+names+'">'
+                    '<link rel="stylesheet" class="include" id="dynamic-fonts" href="//fonts.googleapis.com/css?family='+names+'">'
                 );
             }
 
