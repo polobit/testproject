@@ -12,6 +12,8 @@ var DataSync_Event_Modal_View = Base_Model_View.extend({
         'click #stripe-import-prefs-delete': 'importStripePrefsDelete',
         'click #stripe_sync_prefs': 'syncStripePrefs',
         'click #shopify-setting': 'syncShopify',
+        'click #quickbook_sync_prefs': 'syncQuickbooks',
+        'click #freshbooks_sync_prefs': 'syncFreshbooks',
     },
 
     /**
@@ -199,6 +201,75 @@ var DataSync_Event_Modal_View = Base_Model_View.extend({
 
 
     },
+
+    syncQuickbooks: function(e) {
+        e.preventDefault();
+        var ele = $(e.currentTarget);
+
+       var disable = $(ele).attr('disabled');
+        if(disable)
+            return false;
+        $(ele).attr("disabled", "disabled");
+        $(ele).text("Syncing");
+        
+        var quickbookPrefs = serializeForm("quickbook-form");
+        quickbookPrefs['inProgress'] = true;
+
+          getSyncModelFromName('QUICKBOOK', function(mod) {
+
+            var model = new Backbone.Model(mod);
+            model.set(quickbookPrefs, {
+                silent: true
+            });
+
+            var url = DATA_SYNC_URL + "/QUICKBOOK";
+
+            $(ele).after(getRandomLoadingImg());
+            model.url = url + "?sync=true"
+            model.save({}, {
+                success: function(data) {
+                    show_success_message_after_save_button("Sync Initiated", App_Datasync.dataSync.el);
+                    showNotyPopUp("information", "Contacts sync initiated", "top", 1000);
+                }
+            });
+        });
+
+    },
+
+
+     syncFreshbooks: function(e) {
+        e.preventDefault();
+        var ele = $(e.currentTarget);
+
+                var disable = $(ele).attr('disabled');
+                    if(disable)
+                    return false;
+                    $(ele).attr("disabled", "disabled");
+                    $(ele).text("Syncing");
+                    
+                    var freshbooks_prefs = serializeForm("freshbooks-form");
+                    freshbooks_prefs['inProgress'] = true;
+                     getSyncModelFromName('FRESHBOOKS', function(mod) {
+
+                        var model = new Backbone.Model(mod);
+                        model.set(freshbooks_prefs, {
+                            silent: true
+                        });
+
+                        var url = DATA_SYNC_URL + "/FRESHBOOKS";
+
+                        $(ele).after(getRandomLoadingImg());
+                        model.url = url + "?sync=true"
+                        model.save({}, {
+                            success: function(data) {
+                                show_success_message_after_save_button("Sync Initiated", App_Datasync.dataSync.el);
+                                showNotyPopUp("information", "Contacts sync initiated", "top", 1000);
+                            }
+                        });
+                    });
+                    
+    }
+
 });
 
 
