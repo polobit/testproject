@@ -108,6 +108,11 @@ var CONTENT_JSON = {
 		"description" : "Tickets can be problem, incident, question or task escalated by your customer.",
 		"image" : "/img/clipboard.png"
 	},
+	"no-ticket-filters" : {
+		"title" : "You do not have any Tickets Filters currently.",
+		"description" : "Tickets Filters are set of conditions to view Tickets which satisfies conditions.",
+		"image" : "/img/clipboard.png"
+	},
 	"dashboard" : {
 		"contacts" : {
 			"title" : "There is no recent activity",

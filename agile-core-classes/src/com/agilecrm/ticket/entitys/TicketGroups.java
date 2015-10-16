@@ -1,6 +1,7 @@
 package com.agilecrm.ticket.entitys;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import javax.persistence.Id;
@@ -98,6 +99,12 @@ public class TicketGroups
 	public static ObjectifyGenericDao<TicketGroups> ticketGroupsDao = new ObjectifyGenericDao<TicketGroups>(
 			TicketGroups.class);
 
+	@javax.persistence.PrePersist
+	private void prePersist()
+	{
+		this.updated_time = Calendar.getInstance().getTimeInMillis();
+	}
+	
 	@javax.persistence.PostLoad
 	private void PostLoad()
 	{

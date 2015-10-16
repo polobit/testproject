@@ -1,12 +1,6 @@
 var Ticket_Base_Model = Base_Model_View.extend({
 
 	events:{
-		
-		"click .assign-ticket" : "assignTicket",
-		"click .change-priority" : "changePriority",
-		"click .mark-solved" : "markSolved",
-		"click .delete-ticket" : "deleteTicket",
-		"click .toggle-favorite" : "toggleFavorite",
 
 		"click .refresh-tickets" : "refreshTickets",
 
@@ -15,37 +9,10 @@ var Ticket_Base_Model = Base_Model_View.extend({
 		"click .ticket_type" : "changeTicketType",
 		"click .ticket_priority" : "changeTicketPriority",
 
-		"click .to-emails" : "toEmails"
-	},
+		"click .to-emails" : "toEmails",
 
-	assignTicket: function(e){
-		e.preventDefault();
-
-		assignTicket(e);
-	},
-
-	changePriority: function(e){
-		e.preventDefault();
-
-		changePriority(e);
-	},
-
-	markSolved: function(e){
-		e.preventDefault();
-
-		markSolved(e);
-	},
-
-	toggleFavorite: function(e){
-		e.preventDefault();
-
-		toggleFavorite(e);
-	},
-
-	deleteTicket: function(e){
-		e.preventDefault();
-
-		deleteTicket(e);
+		"click .clone-filter-ticket-conditions" : "cloneTicketFiltersRow",
+		"click .remove-filter-ticket-conditions" : "removeTicketFiltersRow"
 	},
 
 	refreshTickets: function(e){
@@ -82,5 +49,17 @@ var Ticket_Base_Model = Base_Model_View.extend({
 		e.preventDefault();
 
 		Tickets.toEmails();
+	},
+
+	cloneTicketFiltersRow: function(e){
+		e.preventDefault();
+
+		Ticket_Filters.cloneTicketFiltersRow(e);
+	},
+
+	removeTicketFiltersRow: function(e){
+		e.preventDefault();
+
+		Ticket_Filters.removeTicketFiltersRow(e);
 	}
 });

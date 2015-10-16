@@ -1,29 +1,21 @@
 <script id="add-edit-ticket-group-template" type="text/html">
-<div class="custom-animated custom-fadeInUp">
-    <div class="wrapper-md lter bg-light b-b">
-        <div class="row">
-            <div class="col-sm-12 col-md-12">
-                <h3 class="pull-left font-thin h3">{{#if id}}Edit{{else}}Add{{/if}} Ticket Group</h3>
-                <div class="clearfix"></div>
-            </div>
-        </div>
-    </div>
-    <div class="wrapper-md">
+	<div class="wrapper">
         <div class="row">
         	<div class="col-md-9 col-sm-9">
-                <div class="panel wrapper">
-					<form id="add-ticket-group" class="form-horizontal m-l-n-md">
+                <div class="panel panel-default">
+                	<div class="panel-heading">{{#if id}}Edit{{else}}Add{{/if}} Ticket Group</div>
+					<form id="add-ticket-group" class="form-horizontal">
 						{{#if id}}<input type="hidden" name="id" value="{{id}}">{{/if}}
-						<fieldset>
+						<fieldset class="wrapper"><br>
 							<div class="control-group form-group">
-								<label class="control-label col-sm-2">Group Name<span class="field_req">*</span></label>
+								<label class="control-label col-sm-2">Name<span class="field_req">*</span></label>
 								<div class="controls col-sm-9">
 									<input type="text" name="group_name" id="group_name" value="{{group_name}}" class="required form-control">
 								</div>
 							</div>
 							{{#if group_email}}
 								<div class="control-group form-group">
-									<label class="control-label col-sm-2">Group Email</label>
+									<label class="control-label col-sm-2">Email</label>
 									<div class="controls col-sm-9">
 										<input type="text" class="form-control" value="{{group_email}}" READONLY>
 									</div>
@@ -35,35 +27,23 @@
 									
 								</div>
 							</div>
-						</fieldset>
-						<div class="row">
-							<div class="col-sm-offset-2 col-sm-10">
-								<div class="form-actions">
-									<a href="#ticket-groups" class="btn btn-sm btn-default">Close</a>
-									<a href="javascript:void(0);" type="submit" class="save btn btn-sm btn-primary">Save</a> 
+							<div class="row">
+								<div class="col-md-12">
+									<hr>
 								</div>
 							</div>
-						</div>
+							<div class="form-group">
+			    				<div class="form-actions col-sm-offset-3 col-md-9">
+									<div class="form-actions">
+										<a type="reset" href="#ticket-groups" class="btn btn-default btn-sm">Cancel</a>
+			               				<a href="javascript:void(0);" type="submit" class="save btn btn-sm btn-primary">Save</a>
+			             			</div>
+								</div>
+							</div>
+						</fieldset>
 					</form>
 				 </div>	
             </div>
-            <div class="col-md-3">
-		        <div class="panel wrapper">
-		            <h4 class="m-t-none font-thin">
-		                How to define a Web Rule?
-		            </h4>
-		            
-		            
-						<p>1. Give it a name</p>
-
-						<p>2. Define one or more conditions to be satisfied</p>
-
-						<p>3. Define one or more actions to be performed - show a popup, run campaign etc</p>
-
-						<p>Need more help? Please check the <a class="text-info" href="https://github.com/agilecrm/agile-popups#usage" target="_blank"> detailed documentation.</a></p> 
-		        </div>
-		    </div>
         </div>
-    </div>    
-</div>    
+    </div>
 </script>

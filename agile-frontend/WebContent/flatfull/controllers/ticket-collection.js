@@ -15,7 +15,12 @@ var TicketsUtilRouter = Backbone.Router.extend({
 		/*Ticket Groups*/
 		"ticket-groups" : "ticketGroups",
 		"add-ticket-group" : "addTicketGroup",
-		"ticket-group/:id" : "editTicketGroup"
+		"ticket-group/:id" : "editTicketGroup",
+
+		/*Ticket Filters*/
+		"ticket-filters" : "ticketFilters",
+		"add-ticket-filter" : "addTicketFilter",
+		"ticket-filter/:id" : "editTicketFilter"
 	},
 
 	/**
@@ -118,21 +123,29 @@ var TicketsUtilRouter = Backbone.Router.extend({
 	 */
 	ticketGroups : function() {
 
-		App_Ticket_Module.groupsCollection = new Base_Collection_View({
-			url : '/core/api/tickets/groups',
-			// restKey : "workflow",
-			//sort_collection : false,
-			templateKey : "ticket-groups",
-			individual_tag_name : 'tr',
-			slateKey : "no-groups",
-			postRenderCallback : function(el) {
+		getTemplate("admin-settings", {}, undefined, function(template_ui){
 
-			}
+			if(!template_ui)
+				  return;
+
+			$('#content').html($(template_ui));	
+
+			App_Ticket_Module.groupsCollection = new Base_Collection_View({
+				url : '/core/api/tickets/groups',
+				templateKey : "ticket-groups",
+				individual_tag_name : 'tr',
+				slateKey : "no-groups",
+				postRenderCallback : function(el) {
+
+				}
+			});
+
+			App_Ticket_Module.groupsCollection.collection.fetch();
+
+			$('#content').find('#admin-prefs-tabs-content').html(App_Ticket_Module.groupsCollection.el);
+			$('#content').find('#AdminPrefsTab .select').removeClass('select');
+			$('#content').find('.ticket-groups-tab').addClass('select');
 		});
-
-		App_Ticket_Module.groupsCollection.collection.fetch();
-
-		$("#content").html(App_Ticket_Module.groupsCollection.el);
 	},
 
 	/**
@@ -153,7 +166,7 @@ var TicketsUtilRouter = Backbone.Router.extend({
 			}
 		});
 
-		$('#content').html(addTicketGroupView.render().el);
+		$('#content').find('#admin-prefs-tabs-content').html(addTicketGroupView.render().el);
 	},
 
 	/**
@@ -191,7 +204,85 @@ var TicketsUtilRouter = Backbone.Router.extend({
 			}
 		});
 
-		$('#content').html(editTicketGroupView.render().el);
+		$('#content').find('#admin-prefs-tabs-content').html(editTicketGroupView.render().el);
+	},
+
+	/**
+	 * Shows list of Groups
+	 */
+	ticketFilters : function() {
+
+		App_Ticket_Module.ticketFiltersCollection = new Base_Collection_View({
+			url : '/core/api/tickets/filters',
+			templateKey : "ticket-filters",
+			individual_tag_name : 'tr',
+			slateKey : "no-ticket-filters",
+			postRenderCallback : function(el) {
+
+			}
+		});
+
+		App_Ticket_Module.ticketFiltersCollection.collection.fetch();
+
+		$("#content").html(App_Ticket_Module.ticketFiltersCollection.el);
+	},
+
+	/**
+	 * Add ticket filter
+	 */
+	addTicketFilter: function(){
+
+		var addTicketFilterView = new Ticket_Base_Model({
+			isNew : true,
+			template : "ticket-filter-add-edit",
+			url : "/core/api/tickets/filters",
+			saveCallback : function(){
+				Backbone.history.navigate( "ticket-filters", { trigger : true });
+			},
+			postRenderCallback : function(el) {
+
+				head.js('lib/agile.jquery.chained.min.js', function()
+				{
+					Ticket_Filters.initChaining(el);
+				});
+			}
+		});
+
+		$('#content').html(addTicketFilterView.render().el);
+	},
+
+	/**
+	 * Edit ticket group
+	 */
+	editTicketFilter: function(id){
+
+		if(!App_Ticket_Module.ticketFiltersCollection || !App_Ticket_Module.ticketFiltersCollection.collection){
+
+			Backbone.history.navigate( "ticket-filters", { trigger : true });
+			return;
+		}
+
+		var filter = App_Ticket_Module.ticketFiltersCollection.collection.get(id);
+
+		var editTicketFilterView = new Ticket_Base_Model({
+			model : filter, 
+			isNew : true,
+			url : "/core/api/tickets/filters",
+			template : "ticket-filter-add-edit",
+			saveCallback : function(){
+				Backbone.history.navigate( "ticket-filters", { trigger : true });
+			},
+			postRenderCallback : function(el, data) {
+
+				head.js(LIB_PATH + 'lib/agile.jquery.chained.min.js', function()
+				{
+					Ticket_Filters.initChaining(el, data);
+				});
+
+			}
+		});
+
+		$('#content').html(editTicketFilterView.render().el);
 	},
 
 	/**
