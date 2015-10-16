@@ -492,6 +492,7 @@
 			this.changed = true;
 			this.cleared = true;
 			this.hide();
+			this.container.find('.calendar').hide();
 		},
 
 		updateCalendars : function()

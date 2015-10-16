@@ -4,7 +4,7 @@ function change_availability_date(selected_date)
 
 	var date = new Date(selected_date);
 
-	$('.availability').html("Availability on " + date.getDayName() + ", " + date.getMonthName() + ", " + date.getDate());
+	$('.availability').html("Availability on " + date.getDayName() + ", " + date.getMonthName() + " " + date.getDate());
 }
 
 // Get slot details time n description
@@ -194,7 +194,7 @@ function displayNoSlotsMsg()
 
 	var date = new Date(selecteddate);
 
-	$('.availability').html("No slots available for " + date.getDayName() + ", " + date.getMonthName() + ", " + date.getDate());
+	$('.availability').html("No slots available for " + date.getDayName() + ", " + date.getMonthName() + " " + date.getDate());
 
 	// Add msg
 	// $('.checkbox-main-grid').append('<label for="no-slots"

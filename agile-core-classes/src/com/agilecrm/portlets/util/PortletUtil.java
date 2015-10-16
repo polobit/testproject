@@ -175,7 +175,7 @@ public class PortletUtil {
 					portlet.settings=json;
 				}
 			}
-			if(!portlet.name.equalsIgnoreCase("Dummy Blog"))
+			if(portlet.name!=null && !portlet.name.equalsIgnoreCase("Dummy Blog"))
 				added_portlets.add(portlet);
 		}
 		

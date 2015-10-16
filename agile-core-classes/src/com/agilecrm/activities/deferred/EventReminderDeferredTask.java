@@ -51,6 +51,9 @@ public class EventReminderDeferredTask implements DeferredTask
      */
     public void run()
     {
+    if("nimbleschedule".equalsIgnoreCase(domain))
+ 	    	return;
+    	
 	String oldNamespace = NamespaceManager.get();
 	NamespaceManager.set(domain);
 	Event event = null;
