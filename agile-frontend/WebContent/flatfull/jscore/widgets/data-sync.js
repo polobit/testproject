@@ -82,7 +82,7 @@ function initializeDataSyncListners(){
 
 		if(!sync_widget_type)
 			return;
-		var deleteSyncUrl="core/api/contactprefs/delete/"+sync_widget_type;
+		var deleteSyncUrl="core/api/contactprefs/"+sync_widget_type;
 		$.ajax({
  				url : deleteSyncUrl,
 				type : 'DELETE',

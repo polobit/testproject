@@ -107,6 +107,8 @@ public class ContactPrefsAPI
     public void deleteContactPrefs(@PathParam("type") Type type)
     {
 
+    	System.out.println("executing delete request Type"+type);
+    	
     		if(type==Type.GOOGLE)
         	ContactPrefsUtil.delete(Type.GOOGLE);
         	if(type==Type.STRIPE)
@@ -120,23 +122,5 @@ public class ContactPrefsAPI
 
     }
     
-    
-    @Path("/delete/{type}")
-    @DELETE
-    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public void deleteContactSyncPrefs(@PathParam("type") Type type)
-    {
-
-    	if(type==Type.GOOGLE)
-    	ContactPrefsUtil.delete(Type.GOOGLE);
-    	if(type==Type.STRIPE)
-    	ContactPrefsUtil.delete(Type.STRIPE);
-    	if(type==Type.SHOPIFY)
-        	ContactPrefsUtil.delete(Type.SHOPIFY);
-    	if(type==Type.QUICKBOOK)
-        	ContactPrefsUtil.delete(Type.QUICKBOOK);
-    	if(type==Type.FRESHBOOKS)
-        ContactPrefsUtil.delete(Type.FRESHBOOKS);
-
-    }
+   
 }
