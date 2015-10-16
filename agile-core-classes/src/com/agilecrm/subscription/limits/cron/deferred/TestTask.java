@@ -47,21 +47,15 @@ public class TestTask implements DeferredTask
     }
     
     public static void main(String[] args) {
-    	String email = "haaris.note3@gmail.com";
-    	String[] emails = email.split(",");
-    	for (int i = 0; i < emails.length; i++) {
-    		System.out.println(isValidEmail(emails[i]));
-		}
     	
+    	System.out.println(parse("$11111.0sadfsad0"));
 	}
 
-    private static boolean isValidEmail(final String hex)
+    private static String parse(String hex)
     {
-	String EMAIL_PATTERN = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
-		+ "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
-	Pattern pattern = Pattern.compile(EMAIL_PATTERN);
-	Matcher matcher = pattern.matcher(hex);
-	return matcher.matches();
-
-    }
+        Pattern pattern = Pattern.compile("(\\d+\\.\\d+)|(\\d+)");
+        Matcher matcher = pattern.matcher(hex);
+        matcher.find();
+        return matcher.group();
+        }
 }

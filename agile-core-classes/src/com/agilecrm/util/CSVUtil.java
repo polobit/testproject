@@ -1348,17 +1348,11 @@ public class CSVUtil
      */
     private String parse(String data)
     {
-    	String lastdecimalIndexVal = "";
-    	if(data.indexOf(".") > 0){
-    		lastdecimalIndexVal = data.substring(data.lastIndexOf("."));
-    		data = data.substring(0, data.lastIndexOf("."));
-    	}
-    	
-    	String parseVal = data.replaceAll("[\\W A-Za-z]", "");
-    	
-    	System.out.println(parseVal);
-    	return (parseVal + lastdecimalIndexVal).trim();
-     }
+    Pattern pattern = Pattern.compile("(\\d+\\.\\d+)|(\\d+)");
+    Matcher matcher = pattern.matcher(data);
+    matcher.find();
+    return matcher.group();
+    }
 
     /**
      * build failed contact csv file
