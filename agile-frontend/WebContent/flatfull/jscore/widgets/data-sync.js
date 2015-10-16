@@ -118,9 +118,13 @@ function executeDataSyncReturnCallback(returnUrl,serviceName){
 			App_Datasync.shopify();
 			return;
 		}
-
-		
 		returnUrl=returnUrl.substr(returnUrl.indexOf('#'));
+
+		if(serviceName=='quickbook-import'){
+
+			returnUrl='#sync';
+		}
+
 		Backbone.history.navigate(returnUrl , {
                 trigger: true
             });		
@@ -190,9 +194,7 @@ renders inner sync view and binds all model events to DataSync_Event_Modal_View
 			                    template: templateName,
 			                    data:data,
 			                    saveCallback: function(model) {
-
 			                       callback(model);
-
 			                    }
 			                });
 

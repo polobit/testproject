@@ -14,6 +14,7 @@ var DataSync_Event_Modal_View = Base_Model_View.extend({
         'click #shopify-setting': 'syncShopify',
         'click #quickbook_sync_prefs': 'syncQuickbooks',
         'click #freshbooks_sync_prefs': 'syncFreshbooks',
+        'click #data-sync-type':'enableDataSyncWidget',
     },
 
     /**
@@ -37,6 +38,14 @@ var DataSync_Event_Modal_View = Base_Model_View.extend({
 
         // For every request of import, it will ask to grant access
         window.open(url + "&return_url=" + encodeURIComponent(callbackURL), 'dataSync', 'height=1000,width=500');
+    },
+
+     enableDataSyncWidget: function(e) {
+        e.preventDefault();
+        var ele = $(e.currentTarget);
+
+      window.open('/OAuthServlet?service=quickbook-import&window_opened=true&return_url=' + encodeURIComponent(window.location.href) + 'quickbooks','dataSync','height=1000,width=500');
+      return;
     },
 
     syncShopify: function(e) {

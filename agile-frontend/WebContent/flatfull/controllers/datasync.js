@@ -203,6 +203,7 @@ google_calendar:function(el){
  							var	url= 'core/api/contactprefs/QUICKBOOK',
 			                  template= 'admin-settings-import-quickbook-settings';
                   					renderInnerSyncView(url,template,model,function(model){
+                                        
 									showNotyPopUp("information", "Contacts sync initiated", "top", 1000);
                   					});
 			         });

@@ -104,19 +104,19 @@ public class ContactPrefsAPI
     @Path("{type}")
     @DELETE
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public void deleteContactPrefs(@PathParam("type") Type type)
+    public void deleteContactPrefs(@PathParam("type") String type)
     {
-
-    	if(type==Type.GOOGLE)
-        	ContactPrefsUtil.delete(Type.GOOGLE);
-        	if(type==Type.STRIPE)
-        	ContactPrefsUtil.delete(Type.STRIPE);
-        	if(type==Type.SHOPIFY)
-            	ContactPrefsUtil.delete(Type.SHOPIFY);
-        	if(type==Type.QUICKBOOK)
-            	ContactPrefsUtil.delete(Type.QUICKBOOK);
-        	if(type==Type.FRESHBOOKS)
-            ContactPrefsUtil.delete(Type.FRESHBOOKS);
+    	if(Type.GOOGLE.toString().equals(type))
+    		ContactPrefsUtil.delete(Type.GOOGLE);
+    	else if(Type.STRIPE.toString().equals(type))
+    		ContactPrefsUtil.delete(Type.STRIPE);
+    	else if(Type.SHOPIFY.toString().equals(type))
+    		ContactPrefsUtil.delete(Type.SHOPIFY);
+    	else if(Type.QUICKBOOK.toString().equals(type))
+    		ContactPrefsUtil.delete(Type.QUICKBOOK);
+    	else if(Type.FRESHBOOKS.toString().equals(type))
+    		ContactPrefsUtil.delete(Type.FRESHBOOKS);
+         return;
 
     }
     
@@ -127,16 +127,17 @@ public class ContactPrefsAPI
     public void deleteContactSyncPrefs(@PathParam("type") Type type)
     {
 
-    	if(type==Type.GOOGLE)
-    	ContactPrefsUtil.delete(Type.GOOGLE);
-    	if(type==Type.STRIPE)
-    	ContactPrefsUtil.delete(Type.STRIPE);
-    	if(type==Type.SHOPIFY)
-        	ContactPrefsUtil.delete(Type.SHOPIFY);
-    	if(type==Type.QUICKBOOK)
-        	ContactPrefsUtil.delete(Type.QUICKBOOK);
-    	if(type==Type.FRESHBOOKS)
-        ContactPrefsUtil.delete(Type.FRESHBOOKS);
+    	if(Type.GOOGLE.toString().equals(type))
+    		ContactPrefsUtil.delete(Type.GOOGLE);
+    	else if(Type.STRIPE.toString().equals(type))
+    		ContactPrefsUtil.delete(Type.STRIPE);
+    	else if(Type.SHOPIFY.toString().equals(type))
+    		ContactPrefsUtil.delete(Type.SHOPIFY);
+    	else if(Type.QUICKBOOK.toString().equals(type))
+    		ContactPrefsUtil.delete(Type.QUICKBOOK);
+    	else if(Type.FRESHBOOKS.toString().equals(type))
+    		ContactPrefsUtil.delete(Type.FRESHBOOKS);
+         return;
 
     }
 }
