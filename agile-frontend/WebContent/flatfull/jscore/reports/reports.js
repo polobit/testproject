@@ -18,8 +18,9 @@ function initializeReportsListeners(){
 
 						var id = $(this).attr('data');
 						var url='core/api/reports/send/' + id;
+						$("#report-send-confirmation").find('input').attr("data",url);
 						$('#report-send-confirmation').modal('show');
-						initializeReportSendConfirm(url);
+						initializeReportSendConfirm();
 						
 					});
 
