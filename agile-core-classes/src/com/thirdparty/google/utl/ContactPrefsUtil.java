@@ -20,6 +20,7 @@ public class ContactPrefsUtil
 {
     public static void delete(Type type)
     {
+    System.out.println("type is printing     "+type);
 	ContactPrefs prefs = ContactPrefsUtil.getPrefsByType(type);
 	prefs.delete();
     }
