@@ -233,8 +233,14 @@ public class ScribeServlet extends HttpServlet {
 		if (serviceName == null) {
 			String return_url = (String) req.getSession().getAttribute(
 					"return_url");
+			
 
 			System.out.println("return url in oauth cancel " + return_url);
+			
+			if (ScribeUtil.closeOpendWindow(return_url, req,
+					resp)) {
+				return;
+			}
 			// Redirect URL
 			resp.sendRedirect(return_url);
 			return;
@@ -440,6 +446,10 @@ public class ScribeServlet extends HttpServlet {
 			}
 		} catch (Exception e) {
 				statusMSG += " : " + e.getMessage();
+				if (ScribeUtil.closeOpendWindow(returnURL, req, resp)) {
+					return;
+				}
+				
 		}
 		
 		if (linkType != null && linkType.equalsIgnoreCase("widget")) {

@@ -397,6 +397,15 @@ public class ScribeUtil {
 				});
 
 		ContactPrefs prefs = new ContactPrefs();
+		if (properties.containsKey("refresh_token"))
+		{
+
+			prefs.refreshToken = properties.get("refresh_token");
+			prefs.apiKey = properties.get("access_token");
+			prefs.type = Type.STRIPE;
+			prefs.othersParams = "first";
+			prefs.save();
+		}
 		// retrieve User Account information from stripe
 		Account account = Account.retrieve(prefs.apiKey);
 		prefs.userName = account.getEmail();
@@ -908,4 +917,30 @@ public class ScribeUtil {
 		      return false;
 		 }
 	
-}
+	public static boolean closeOpendWindow(String returnUrl, HttpServletRequest req, HttpServletResponse resp){
+		
+		boolean openedService = false;
+		Object obj = req.getSession().getAttribute("window_opened_service");
+		if (obj != null)
+			openedService = (boolean) obj;
+		if (!openedService)
+			return false;
+
+		// Delete return url Attribute
+		req.getSession().removeAttribute("window_opened_service");
+		try
+		{
+			resp.setContentType("text/html");
+			resp.getWriter().print(
+					"<script type='text/javascript'> window.close();</script>");
+			return true;
+		}
+		catch (Exception e)
+		{
+			
+		}
+		return false;
+		
+	}
+
+   }

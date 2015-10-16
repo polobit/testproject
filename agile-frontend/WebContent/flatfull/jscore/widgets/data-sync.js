@@ -130,6 +130,12 @@ function executeDataSyncReturnCallback(returnUrl,serviceName){
             });		
 }
 
+function executeCloseWindowCallback(returnUrl){
+	Backbone.history.navigate(returnUrl , {
+                trigger: true
+            });		
+}
+
 var DATA_SYNC_FORCE_FETCH=false;
 
 /**
