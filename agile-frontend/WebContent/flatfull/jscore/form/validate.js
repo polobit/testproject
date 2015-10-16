@@ -150,7 +150,7 @@ function isValidForm(form) {
 			return false;
 		return true;
 	}, function(params, element) {
-		  return 'Maximum length is ' + $(element).attr("max_len") + ' characters only.'
+		  return 'Maximum length is ' + $(element).attr("max_len") + ' chars only.'
 		}
 	);
 	$(form).validate({

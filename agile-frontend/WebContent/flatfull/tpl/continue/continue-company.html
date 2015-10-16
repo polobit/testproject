@@ -107,7 +107,10 @@
                     <label class="control-label col-sm-3">Website <span><a href="#" class="multiple-add"><i class="icon-plus"></i></a></span></label>
                     <div class="controls col-sm-9 hide pull-right">
                         <div class="website multiple-template style=" display:none" data="website">
-                            <input class="form-control inline-block field_length" max_len="500" type="text" id="website" name="website" style="width:105px" placeholder="Website" /> 
+                            <div style="display:inline-table;">
+                                <input class="form-control inline-block field_length" max_len="500" type="text" id="website" name="website"  placeholder="Website" />
+                            </div>
+                             
                             <select class="website-select form-control inline-block m-b-sm" name="website-select" style="width:100px">
                                 <option></option>
                                 <option value="URL">Website</option>
@@ -152,7 +155,7 @@
                     <div class="controls col-sm-9">
                         <div class="address multiple-template" data="address">
 							<div style="display:inline-table;">
-                            	<input class="form-control inline-block field_length" max_len="500" type="text" name="address" id="address" placeholder="address" />
+                            	<input class="form-control inline-block field_length" max_len="350" type="text" name="address" id="address" placeholder="address" />
 							</div> 
                             <select class="address-type form-control inline-block m-b-sm" name="address-type" style="width:100px">
                                 <option></option>
@@ -161,9 +164,9 @@
                                 <option value="office">Office</option>
                             </select>
                             <br />
-                            <input class="form-control field_length" max_len="500" type="text" name="city" id="city" placeholder="city" /> <br />
-                            <input class="form-control field_length" max_len="500" type="text" name="state" id="state" placeholder="state" /> <br />
-                            <input class="form-control field_length" max_len="500" type="text" name="zip" id="zip" placeholder="zip" /><br /> 
+                            <input class="form-control field_length" max_len="30" type="text" name="city" id="city" placeholder="city" /> <br />
+                            <input class="form-control field_length" max_len="30" type="text" name="state" id="state" placeholder="state" /> <br />
+                            <input class="form-control field_length" max_len="12" type="text" name="zip" id="zip" placeholder="zip" /><br /> 
                             <select class="styled form-control inline-block m-b-sm" id="country" name="country">
                                 <option value=""></option>
                                 <option value="AF">Afghanistan</option>

@@ -269,7 +269,7 @@ function show_custom_fields_helper(custom_fields, properties){
 			div_col3_style = "col-sm-3";
 		}else if(field.scope == "COMPANY" || field.scope == "DEAL" || field.scope == "CASE"){
 			label_style = "control-label col-sm-3 word-break";
-			checkbox_style = "col-sm-3 p-none";
+			checkbox_style = "col-sm-3";
 		}
 		
 		// If field type is list create a select dropdown

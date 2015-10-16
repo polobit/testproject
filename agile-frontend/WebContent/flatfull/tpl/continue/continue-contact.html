@@ -103,7 +103,7 @@
                     <div class="hide controls col-sm-9 pull-right">
                         <div class="phone multiple-template" data="phone">
                             <div class="pull-left m-r-xs">
-								<input type="text" id="phone" class="form-control" name="phone" placeholder="Phone number" />
+								<input type="text" id="phone" class="form-control field_length" max_len="500" name="phone" placeholder="Phone number" />
                             </div>
 							<select class="phone-select form-control inline-block" style="width:100px">
                                 <option></option>
@@ -142,8 +142,10 @@
                 <div class="control-group form-group">
                     <label class="control-label col-sm-3">Website <span><a href="#" class="multiple-add"><i class="icon-plus"></i></a></span></label>
                     <div class="hide controls col-sm-9 pull-right">
-                        <div class="website multiple-template style=" display:none" data="website">
-                            <input type="text" class="form-control pull-left m-r-xs field_length" max_len="500" id="website" name="website" style="width:105px" placeholder="Website" /> 
+                        <div class="website multiple-template" data="website">
+                            <div class="pull-left m-r-xs">
+                                <input type="text" class="form-control field_length" max_len="500" id="website" name="website" placeholder="Website" />
+                            </div> 
                             <select class="website-select form-control inline-block" style="width:100px">
                                 <option></option>
                                 <option value="URL">Website</option>
@@ -188,7 +190,7 @@
                     <div class="controls col-sm-9">
                         <div class="address multiple-template" data="address">
                         	<div style="display:inline-table;">
-                            	<input type="text" class="form-control inline-block field_length" max_len="500" id="address" name="address" placeholder="address" /> 
+                            	<input type="text" class="form-control inline-block field_length" max_len="350" id="address" name="address" placeholder="address" /> 
                          	</div>
                          	
                             <select class="address-type form-control inline-block m-b-sm" name="address-type" style="width:100px">
@@ -198,9 +200,9 @@
                                 <option value="office">Office</option>
                             </select>
                             
-                            <input type="text" name="city" id="city" class="form-control m-b-sm field_length" max_len="500" placeholder="city" /> <br />
-                            <input type="text" name="state" id="state" class="form-control m-b-sm field_length" max_len="500" placeholder="state" /> <br />
-                            <input type="text" name="zip" id="zip" class="form-control m-b-sm field_length" max_len="500" placeholder="zip" /><br /> 
+                            <input type="text" name="city" id="city" class="form-control field_length" max_len="30" placeholder="city" /> <br />
+                            <input type="text" name="state" id="state" class="form-control field_length" max_len="30" placeholder="state" /> <br />
+                            <input type="text" name="zip" id="zip" class="form-control field_length" max_len="12" placeholder="zip" /><br /> 
                             <select class="styled form-control m-b-sm" id="country" name="country">
                                 <option value=""></option>
                                 <option value="AF">Afghanistan</option>
