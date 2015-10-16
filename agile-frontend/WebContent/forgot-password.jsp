@@ -83,11 +83,11 @@ else if(!StringUtils.isEmpty(email) && StringUtils.isEmpty(password))
 
 
 body {
-  background-image:url('..<%=flatfull_path%>/images/flatfull/agile-registration-page.png');
-  background-repeat: no-repeat;
-  background-position: center center;
-  background-size: 100% 100%;
-  background-attachment: fixed;
+background-image:url('..<%=flatfull_path%>/images/flatfull/buildings-low.jpg');
+background-repeat:no-repeat;
+background-position:center center;
+background-size:100% 100%;
+background-attachment:fixed;
 }
 
 .text-white
@@ -268,6 +268,13 @@ jQuery.validator.setDefaults({
 		<script type="text/javascript">
 		$(document).ready(function() {			
 		  
+		  var newImg = new Image;
+      	newImg.onload = function() {
+    	$("body").css("background-image","url('"+this.src+"')");
+  		 }
+		newImg.src = 'flatfull/images/flatfull/buildings.jpg';
+
+
 		  //form is self submitted
           $("#forgot_password").validate({
 				 submitHandler: function(form) {

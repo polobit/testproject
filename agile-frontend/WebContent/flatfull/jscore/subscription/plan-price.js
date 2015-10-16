@@ -160,7 +160,7 @@ function setPlan(user_plan)
 		if (IS_NEW_USER && _plan_on_signup)
 		{
 			plan_type = _plan_on_signup.plan_type.toLowerCase();
-			interval = "monthly";
+			interval = "yearly";
 		}
 		else if (user_plan != "free" && user_plan != "super")
 		{
@@ -175,7 +175,7 @@ function setPlan(user_plan)
 			}
 			else
 			{
-				interval = "monthly";
+				interval = "yearly";
 				plan_type = "free";
 			}
 		}

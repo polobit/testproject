@@ -92,7 +92,7 @@ $(document).ready(function(){
 //checks if there are any custom fields and if if present navigates to contact-add page otherwise opens person-modal
 function addContactBasedOnCustomfields(){
  	$.ajax({
-				url : 'core/api/custom-fields/scope?scope=CONTACT',
+				url : 'core/api/custom-fields/required/scope?scope=CONTACT',
 				type : 'GET',
 				dataType : 'json',
 				success : function(data){

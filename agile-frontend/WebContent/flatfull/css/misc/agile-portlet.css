@@ -1055,3 +1055,10 @@ font-size:30px;
 	height: 100%!important;
 	width : 100%!important;
 }
+
+.portlet_header:hover .portlet_header_icons{
+	visibility: visible!important;
+}
+.portlet_header:hover h4 small{
+	visibility: hidden;
+}

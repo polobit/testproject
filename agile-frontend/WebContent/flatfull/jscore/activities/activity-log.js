@@ -1,3 +1,8 @@
+
+var ACTIVITY_FILTER="activity-filters-cookie";
+
+var ACTIVITY_FILTER_JSON={};
+
 function includeTimeAgo(element)
 {
 	head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
@@ -6,6 +11,22 @@ function includeTimeAgo(element)
 	});
 }
 
+
+function buildActivityFilters(name,valueid,clickedFrom){
+   
+		if(clickedFrom=='entityDropDown'){
+		ACTIVITY_FILTER_JSON.entity=name;
+		ACTIVITY_FILTER_JSON.entityId=valueid;
+		}
+		else if(clickedFrom=='userDropDown'){
+		ACTIVITY_FILTER_JSON.user=name;
+		ACTIVITY_FILTER_JSON.userId=valueid;
+		}
+
+		createCookie(ACTIVITY_FILTER,JSON.stringify(ACTIVITY_FILTER_JSON));
+
+
+}
 /**
  * To show the dates or time in words of time-ago plugin.
  * 
@@ -19,9 +40,8 @@ function includeTimeAgo(element)
  * @param params
  *            query string contains date, agentId & widgetId
  */
-function updateActivty(params)
+function renderActivityView(params)
 {
-	console.log("entered into update activity function  " + new Date().getTime() + "  time with milliseconds " + new Date())
 	// Creates backbone collection view
 	this.activitiesview = new Base_Collection_View({ url : '/core/api/activitylog/getActivitiesOnSelectedCondition' + params, sortKey : 'time',
 		descending : true, templateKey : "activity-list-log", sort_collection : false, cursor : true, scroll_symbol : 'scroll', page_size : 20,
@@ -43,8 +63,6 @@ function updateActivty(params)
 	// Renders data to activity list page.
 	$('#activity-list-based-condition').html(this.activitiesview.render().el);
 
-	console.log("completed update activity function  " + new Date().getTime() + "  time with milliseconds " + new Date())
-
 }
 
 /**
@@ -53,25 +71,16 @@ function updateActivty(params)
  * 
  * @returns {String} query string
  */
-function getParameters()
+function getActivityFilterParameters(loadingFirstTime)
 {
 	var params = "?";
 
+	var user =null;
+	var entitytype=null;
 	// Get Date Range
 	var range = $('#activities_date_range #range').html().split("-");
 
-	// Returns milliseconds from start date. For e.g., August 6, 2013 converts
-	// to 1375727400000
-
-	// Get task type and append it to params
-	var user = $('#user-select').data("selected_item");
-
-	var entitytype = $('#entity_type').data("selected_item");
-	if (user)
-		params += ("user_id=" + user);
-	// Get owner name and append it to params
-
-	if (range && range != "Filter by date")
+	if (range)
 	{
 		//var start_time = Date.parse($.trim(range[0])).valueOf();
 		//Get the GMT start time
@@ -90,8 +99,40 @@ function getParameters()
 		end_time += (((23*60*60)+(59*60)+59)*1000);
 
 		// Adds start_time, end_time and timezone offset to params.
-		params += ("&start_time=" + start_time + "&end_time=" + end_time);
+		params += ("start_time=" + start_time + "&end_time=" + end_time);
 	}
+	
+
+	if(loadingFirstTime){
+		var activityFilters=JSON.parse(readCookie(ACTIVITY_FILTER));
+		if(activityFilters){
+			user=activityFilters.userId;
+			if(activityFilters.entityId)
+				entitytype=activityFilters.entityId;
+			else
+				entitytype='ALL';
+		}
+		else{
+			entitytype="ALL";
+		}
+		if(user)
+		params += ("&user_id=" + user);
+		params += ("&entity_type=" + entitytype);
+		return params;
+	}
+
+	// Returns milliseconds from start date. For e.g., August 6, 2013 converts
+	// to 1375727400000
+
+	// Get task type and append it to params
+	 user = $('#user-select').data("selected_item");
+
+	 entitytype = $('#entity_type').data("selected_item");
+	if (user)
+		params += ("&user_id=" + user);
+	// Get owner name and append it to params
+
+	
 	if (entitytype == 'TASK')
 	{
 		params += ("&entity_type=" + entitytype);
@@ -147,6 +188,24 @@ function initActivitiesDateRange()
 			Date.today().moveToFirstDayOfMonth(), Date.today().moveToLastDayOfMonth()
 	], 'Last Month' : [
 			Date.today().moveToFirstDayOfMonth().add({ months : -1 }), Date.today().moveToFirstDayOfMonth().add({ days : -1 })
+	], 'This Quarter' : [
+			Date.today().getMonth() < 3 ? new Date(Date.today().setMonth(0)).moveToFirstDayOfMonth() : 
+			(Date.today().getMonth() >= 3 && Date.today().getMonth() < 6) ? new Date(Date.today().setMonth(3)).moveToFirstDayOfMonth() :
+			(Date.today().getMonth() >= 6 && Date.today().getMonth() < 9) ? new Date(Date.today().setMonth(6)).moveToFirstDayOfMonth() : new Date(Date.today().setMonth(9)).moveToFirstDayOfMonth(), 
+			Date.today().getMonth() < 3 ? new Date(Date.today().setMonth(2).moveToLastDayOfMonth()) : 
+			(Date.today().getMonth() >= 3 && Date.today().getMonth() < 6) ? new Date(Date.today().setMonth(5)).moveToLastDayOfMonth() :
+			(Date.today().getMonth() >= 6 && Date.today().getMonth() < 9) ? new Date(Date.today().setMonth(8)).moveToLastDayOfMonth() : new Date(Date.today().setMonth(11)).moveToLastDayOfMonth()
+	], 'Last Quarter' : [
+			Date.today().getMonth() < 3 ? new Date(Date.today().add({ years : -1 }).setMonth(9)).moveToFirstDayOfMonth() : 
+			(Date.today().getMonth() >= 3 && Date.today().getMonth() < 6) ? new Date(Date.today().setMonth(0)).moveToFirstDayOfMonth() :
+			(Date.today().getMonth() >= 6 && Date.today().getMonth() < 9) ? new Date(Date.today().setMonth(3)).moveToFirstDayOfMonth() : new Date(Date.today().setMonth(6)).moveToFirstDayOfMonth(), 
+			Date.today().getMonth() < 3 ? new Date(Date.today().add({ years : -1 }).setMonth(11)).moveToLastDayOfMonth() : 
+			(Date.today().getMonth() >= 3 && Date.today().getMonth() < 6) ? new Date(Date.today().setMonth(2)).moveToLastDayOfMonth() :
+			(Date.today().getMonth() >= 6 && Date.today().getMonth() < 9) ? new Date(Date.today().setMonth(5)).moveToLastDayOfMonth() : new Date(Date.today().setMonth(8)).moveToLastDayOfMonth()
+	], 'This Year' : [
+			new Date(Date.today().setMonth(0)).moveToFirstDayOfMonth(), new Date(Date.today().setMonth(11)).moveToLastDayOfMonth()
+	], 'Last Year' : [
+			new Date(Date.today().setMonth(0)).add({ years : -1 }).moveToFirstDayOfMonth(), new Date(Date.today().setMonth(11)).add({ years : -1 }).moveToLastDayOfMonth()
 	] }, locale : { applyLabel : 'Apply', cancelLabel : 'Cancel', fromLabel : 'From', toLabel : 'To', customRangeLabel : 'Custom', daysOfWeek : [
 			'Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'
 	], monthNames : [
@@ -155,18 +214,23 @@ function initActivitiesDateRange()
 	{
 		if (start && end)
 		{
-			createCookie("selectedStartTime", start.toString('MMMM d, yyyy'), 90);
-			createCookie("selectedEndTime", end.toString('MMMM d, yyyy'), 90);
 			$('#activities_date_range #range').html(start.toString('MMMM d, yyyy') + ' - ' + end.toString('MMMM d, yyyy'));
 
-			updateActivty(getParameters());
+			renderActivityView(getActivityFilterParameters());
 		}
 		else
 		{
-			eraseCookie("selectedStartTime");
-			eraseCookie("selectedEndTime");
-			$('#activities_date_range #range').html('Filter by date');
-			updateActivty(getParameters());
+			var from_date = Date.parse('today');
+			var to_date = Date.today().add({ days : parseInt(-6) });
+			$('#activities_date_range #range').html(to_date.toString('MMMM d, yyyy') + " - " + from_date.toString('MMMM d, yyyy'));
+			renderActivityView(getActivityFilterParameters());
 		}
+	});
+	$('.daterangepicker > .ranges > ul').on("click", "li", function(e)
+	{
+		$('.daterangepicker > .ranges > ul > li').each(function(){
+			$(this).removeClass("active");
+		});
+		$(this).addClass("active");
 	});
 }

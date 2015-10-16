@@ -160,10 +160,10 @@ public class MilestoneUtil
 
     public static void isTracksEligible(Milestone milestone)
     {
-	String planName = BillingRestrictionUtil.getInstance().getCurrentLimits().getPlanName();
-	if (milestone.id == null && !(planName.equalsIgnoreCase("PRO") || planName.equalsIgnoreCase("REGULAR")))
-	    throw new WebApplicationException(Response.status(Response.Status.FORBIDDEN)
-		    .entity("Sorry, Your current plan does not have this option.").build());
+	
+	if (milestone.id == null && !BillingRestrictionUtil.getInstance().getCurrentLimits().getAddTracks())
+		 throw new WebApplicationException(Response.status(Response.Status.FORBIDDEN)
+				    .entity("Sorry, Your current plan does not have this option.").build());
 
     }
 

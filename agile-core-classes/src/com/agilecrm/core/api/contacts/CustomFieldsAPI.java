@@ -144,6 +144,30 @@ public class CustomFieldsAPI
     }
     
     /**
+     * Gets all custom fields which are required
+     * 
+     * @return List of custom fields
+     */
+    @Path("/required/scope")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public List<CustomFieldDef> getRequiredCustomFieldsByScope(@QueryParam("scope") String scope)
+    {
+		try
+		{
+		    if (scope == null)
+		    	CustomFieldDefUtil.getRequiredCustomFields();
+	
+		    return CustomFieldDefUtil.getRequiredCustomFieldsByScope(SCOPE.valueOf(scope));
+		}
+		catch (Exception e)
+		{
+		    e.printStackTrace();
+		    return null;
+		}
+    }
+    
+    /**
      * Retrieves Custom fields according to scope SCOPE can be like PERSION,COMPANY,CONTACT etc
      */
     @Path("/byscope")

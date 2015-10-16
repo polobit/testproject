@@ -69,6 +69,9 @@ public class SendEventReminderDeferredTask implements DeferredTask
      **/
     public void run()
     {
+    	
+    	if("nimbleschedule".equalsIgnoreCase(domain))
+        	return;
 
 	List<Event> eventList = EventUtil.getLatestWithSameStartTime(starttime);
 	try

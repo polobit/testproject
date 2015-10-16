@@ -41,15 +41,6 @@ if(redirectTo  != null)
 <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
 
 <style>
-
-/*body {
-background-image:url('..<%=flatfull_path%>/images/flatfull/buildings.jpg');
-background-repeat:no-repeat;
-background-position:center center;
-background-size:100% 100%;
-background-attachment:fixed;
-}*/
-
 body {
   background-image:url('..<%=flatfull_path%>/images/flatfull/agile-registration-page.png');
   background-repeat: no-repeat;
@@ -164,6 +155,15 @@ padding-left:10px!important;
 	<script type='text/javascript' src='<%=flatfull_path%>/lib/jquery-new/jquery-2.1.1.min.js'></script>
 	<script type="text/javascript" src="<%=flatfull_path%>/lib/bootstrap.v3.min.js"></script>
 	<script>
+
+	$(document).ready(function(){
+   var newImg = new Image;
+      	newImg.onload = function() {
+    	$("body").css("background-image","url('"+this.src+"')");
+  		 }
+		newImg.src = 'flatfull/images/flatfull/buildings.jpg';
+
+	});
 		//Init
 		var error = "";
 		$(function() {
