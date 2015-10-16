@@ -1226,8 +1226,8 @@ public class ContactsAPI
 	ContactFilterResultFetcher fetcher = new ContactFilterResultFetcher(filter, dynamicFilter, 200, contact_ids,
 		currentUserId);
 
-	int totalCount = 0;
-	if (fetcher.getAvailableContacts() == 0)
+	int totalCount = fetcher.getAvailableContacts();
+	if (totalCount == 0)
 	    totalCount = fetcher.getAvailableCompanies();
 
 	DeferredTask task = null;
