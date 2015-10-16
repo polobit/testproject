@@ -120,7 +120,7 @@ function executeDataSyncReturnCallback(returnUrl,serviceName){
 		}
 		returnUrl=returnUrl.substr(returnUrl.indexOf('#'));
 
-		if(serviceName=='quickbook-import'){
+		if(window.location.hash==returnUrl && serviceName=='quickbook-import'){
 
 			returnUrl='#sync';
 		}
