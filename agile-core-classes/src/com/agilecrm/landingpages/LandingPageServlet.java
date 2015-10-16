@@ -56,6 +56,8 @@ public class LandingPageServlet extends HttpServlet {
 						domainHost = "https://" + NamespaceManager.get() +  ".agilecrm.com";		
 						//domainHost = "https://" + NamespaceManager.get() + "-dot-sandbox-dot-agilecrmbeta.appspot.com";
 					}
+					
+					String formSubmitCode = "<script>(function(a){var b=a.onload,p=false;if(p){a.onload=\"function\"!=typeof b?function(){try{_agile_load_form_fields()}catch(a){}}:function(){b();try{_agile_load_form_fields()}catch(a){}}};a.document.forms[\"agile-form\"].onsubmit=function(a){a.preventDefault();try{_agile_synch_form_v3()}catch(b){this.submit()}}})(window);</script>";
 					String analyticsCode = "<script src=\""+domainHost+"/stats/min/agile-min.js\"></script>"
 							+ "<script> _agile.set_account('%s', '"+NamespaceManager.get()+"'); _agile.track_page_view();</script>";
 					
@@ -66,7 +68,7 @@ public class LandingPageServlet extends HttpServlet {
 					}					
 					
 					fullXHtml = fullXHtml.replace("</head>", "<style>"+landingPage.css+"</style></head>");
-					fullXHtml = fullXHtml.replace("</body>", "<script>"+landingPage.js+"</script>"+analyticsCode+"</body>");
+					fullXHtml = fullXHtml.replace("</body>", formSubmitCode+"<script>"+landingPage.js+"</script>"+analyticsCode+"</body>");
 					
 					out.print(fullXHtml);
 				} else {

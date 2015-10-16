@@ -54,7 +54,7 @@ var LandingPageRouter = Backbone.Router.extend({
                     'autoDimensions': false,
                     'padding'       : 0,
                     'autoScale'     : true,
-                    'scrolling'     : 'yes',
+                    'width'         : "600px",
                     'transitionIn'  : 'none',
                     'transitionOut' : 'none',
                     'type'          : 'iframe'
