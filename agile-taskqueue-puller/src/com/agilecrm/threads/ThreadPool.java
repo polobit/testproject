@@ -28,23 +28,23 @@ public class ThreadPool
 
     private static Map<String, ThreadPoolExecutor> threadPoolMap = new HashMap<String, ThreadPoolExecutor>();
 
-    public static ThreadPoolExecutor getThreadPoolExecutor(String poolName)
+    public static ThreadPoolExecutor getThreadPoolExecutor(String poolName, int minPoolSize, int maxPoolSize)
     {
 	if (threadPoolMap.containsKey(poolName))
 	    return threadPoolMap.get(poolName);
 
-	ThreadPool pool = new ThreadPool(poolName);
+	ThreadPool pool = new ThreadPool(poolName, minPoolSize, maxPoolSize);
 
 	// pool.setUpRemoteAPIOnAllThreads();
 
 	return threadPoolMap.get(poolName);
     }
 
-    private ThreadPool(String poolName)
+    private ThreadPool(String poolName, int minPoolSize, int maxPoolSize)
     {
 	ThreadFactoryImpl timpl = new ThreadFactoryImpl();
 
-	ThreadPoolExecutor poolExecutor = new ThreadPoolExecutor(2, 15, 5, TimeUnit.SECONDS,
+	ThreadPoolExecutor poolExecutor = new ThreadPoolExecutor(minPoolSize, maxPoolSize, 5, TimeUnit.SECONDS,
 		new ArrayBlockingQueue<Runnable>(100), timpl);
 
 	this.poolName = poolName;
@@ -73,7 +73,7 @@ public class ThreadPool
 
     public synchronized static void main(String[] args)
     {
-	ThreadPoolExecutor executor = ThreadPool.getThreadPoolExecutor("export");
+	ThreadPoolExecutor executor = ThreadPool.getThreadPoolExecutor("executor", 2, 15);
 	for (int i = 0; i < 25; i++)
 	{
 	    ThreadExample te = new ThreadExample();

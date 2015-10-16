@@ -12,6 +12,7 @@ import org.apache.log4j.Logger;
 import com.Globals;
 import com.agilecrm.account.util.EmailGatewayUtil;
 import com.agilecrm.bulkaction.deferred.ContactExportPullTask;
+import com.agilecrm.bulkaction.deferred.bulk.BigTask;
 import com.agilecrm.contact.imports.CSVImporter;
 import com.agilecrm.mandrill.util.deferred.MailDeferredTask;
 import com.agilecrm.threads.ThreadPool;
@@ -71,13 +72,19 @@ public class TaskletThread implements Work
 		    if (deferredTask instanceof ContactExportPullTask)
 		    {
 			isIndependentTask = true;
-			ThreadPool.getThreadPoolExecutor("export-executor").execute(deferredTask);
+			ThreadPool.getThreadPoolExecutor("export-executor", 2, 15).execute(deferredTask);
+			continue;
+		    }
+		    else if (deferredTask instanceof BigTask)
+		    {
+			isIndependentTask = true;
+			ThreadPool.getThreadPoolExecutor("bulk-export-executor", 1, 5).execute(deferredTask);
 			continue;
 		    }
 		    else if (deferredTask instanceof CSVImporter)
 		    {
 			isIndependentTask = true;
-			ThreadPool.getThreadPoolExecutor("import-executor").execute(deferredTask);
+			ThreadPool.getThreadPoolExecutor("import-executor", 1, 15).execute(deferredTask);
 			continue;
 		    }
 
