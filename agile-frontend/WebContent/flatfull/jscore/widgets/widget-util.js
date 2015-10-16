@@ -103,12 +103,13 @@ function save_widget_prefs(pluginName, prefs, callback) {
 					globalBriaSetup();
 				}
 				
-				if(pluginName  == "rapleaf"){
+				if(pluginName  == "Rapleaf"){
 					pluginName = "TowerData"
 				}
+
 				showNotyPopUp("success", (pluginName+" widget saved successfully"), "bottomRight");
 			}else{
-				if(pluginName  == "rapleaf"){
+				if(pluginName  == "Rapleaf"){
 					pluginName = "TowerData"
 				}
 				showNotyPopUp("error", ("Error occurred while saving "+pluginName), "bottomRight");
@@ -275,11 +276,12 @@ function addOAuthWidget(widgetName, template, url) {
 				model["url"] = url;
 			}
 
-			var widget_el = getTemplate("widget-settings", model);
-			$('#prefs-tabs-content').html(widget_el);
+			getTemplate("widget-settings", model, undefined, function(widget_el){
+				$('#prefs-tabs-content').html(widget_el);
 
-			// Create a view modal for widgets
-			renderWidgetView(template, 'core/api/widgets',model, '#widget-settings');
+				// Create a view modal for widgets
+				renderWidgetView(template, 'core/api/widgets',model, '#widget-settings');
+			});
 
 		});
 
