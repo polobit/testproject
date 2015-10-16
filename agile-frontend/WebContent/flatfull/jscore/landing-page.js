@@ -10,16 +10,10 @@ function initializeLandingPageListeners() {
     	}
 	});
 
-	$('#landingpages-listeners').on('click', '#builder-page-option', function (e) {
+	$('#landingpages-listeners').on('click', '#builderPageOptionsLink', function (e) {
 		e.preventDefault();
-		if(!$(this).hasClass('collapsed'))
-		{
-			$('#builder-page-option').html('<span><i class="icon-plus"></i></span> Page Options');
-		}
-		else
-		{
-			$('#builder-page-option').html('<span><i class="icon-minus"></i></span> Page Options');
-		}
+		$(this).find('i').toggleClass('icon-plus').toggleClass('icon-minus');
+		$("#builderPageOptions").slideToggle('fast');
 	});
 
 }
