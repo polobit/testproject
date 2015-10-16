@@ -103,12 +103,13 @@ function save_widget_prefs(pluginName, prefs, callback) {
 					globalBriaSetup();
 				}
 				
-				if(pluginName  == "rapleaf"){
+				if(pluginName  == "Rapleaf"){
 					pluginName = "TowerData"
 				}
+				
 				showNotyPopUp("success", (pluginName+" widget saved successfully"), "bottomRight");
 			}else{
-				if(pluginName  == "rapleaf"){
+				if(pluginName  == "Rapleaf"){
 					pluginName = "TowerData"
 				}
 				showNotyPopUp("error", ("Error occurred while saving "+pluginName), "bottomRight");
