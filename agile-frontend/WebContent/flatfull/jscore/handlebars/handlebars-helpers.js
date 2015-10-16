@@ -2341,23 +2341,48 @@ $(function()
 
 		var active_campaigns = [];
 		var completed_campaigns = [];
+		var unsubscribed_campaigns = [];
 
 		// campaignStatus object of contact
 		var campaignStatusArray = object[data];
+		var statuses = object["campaignStatus"];
+		var campaign_json = {};
+
+		for (var i = 0, len = statuses.length; i < len; i++)
+		{
+			var status = statuses[i];
+			
+			if(status)
+				campaign_json[status.campaign_id] = status.campaign_name;
+		}
+
 
 		for (var i = 0, len = campaignStatusArray.length; i < len; i++)
 		{
-			// push all active campaigns
-			if (campaignStatusArray[i].status.indexOf('ACTIVE') !== -1)
-				active_campaigns.push(campaignStatusArray[i])
+			if(campaignStatusArray[i].status)
+			{
+				// push all active campaigns
+				if (campaignStatusArray[i].status.indexOf('ACTIVE') !== -1)
+					active_campaigns.push(campaignStatusArray[i])
 
 				// push all done campaigns
-			if (campaignStatusArray[i].status.indexOf('DONE') !== -1)
-				completed_campaigns.push(campaignStatusArray[i]);
+				if (campaignStatusArray[i].status.indexOf('DONE') !== -1)
+					completed_campaigns.push(campaignStatusArray[i]);
+			}
+
+			// 
+			if(campaignStatusArray[i].unsubscribeType)
+			{
+
+				campaignStatusArray[i].campaign_name = campaign_json[campaignStatusArray[i].campaign_id];
+
+				unsubscribed_campaigns.push(campaignStatusArray[i]);
+			}
 		}
 
 		campaigns["active"] = active_campaigns;
 		campaigns["done"] = completed_campaigns;
+		campaigns["unsubscribed"] = unsubscribed_campaigns;
 
 		// apply obtained campaigns context within
 		// contact_campaigns block
@@ -6636,3 +6661,26 @@ Handlebars.registerHelper('get_campaign_type_filter', function(filter_name)
 		return description + " ";
 
 	});
+
+	Handlebars.registerHelper("is_unsubscribed_all", function(options){
+               
+               var contact_model = App_Contacts.contactDetailView.model.toJSON();
+
+               // First name
+               var first_name = getPropertyValue(contact_model["properties"], "first_name");
+
+               if(contact_model && contact_model["unsubscribeStatus"] && contact_model["unsubscribeStatus"].length > 0)
+               {
+                       var statuses = contact_model["unsubscribeStatus"];
+
+                       for(var i=0, len = statuses.length; i < len; i++)
+                       {
+                               var status = statuses[i];
+
+                              if(status.unsubscribeType && status.unsubscribeType == "ALL")                                       return options.fn({"first_name": first_name, "campaign_id": status.campaign_id});
+                       }
+               }
+
+               return options.inverse(this);
+        });
+

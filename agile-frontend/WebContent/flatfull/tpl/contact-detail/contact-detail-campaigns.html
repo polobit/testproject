@@ -31,11 +31,7 @@
 					{{/each}}
                     </div>
 	       {{#canEditCurrentContact "1"}}
-              {{^is_unsubscribed_all}}
                 <a class="add-to-campaign"  href="#"><i class="icon-plus"></i> Add {{getCurrentContactProperty "first_name"}} to Campaign</a>
-              {{else}}
-                {{first_name}} has unsubscribed from all Campaigns. <a href="#" class="resubscribe" data="{{campaign_id}}">Resubscribe</a>
-              {{/is_unsubscribed_all}}
 	        {{/canEditCurrentContact}}
             <form id="add-to-campaign-form" class="show_campaigns_list" style="display:none;">
             	<div class="control-group form-group">
@@ -53,11 +49,7 @@
          
          {{else}}
             {{#canEditCurrentContact "1"}}
-              {{^is_unsubscribed_all}}
         	     <a class="add-to-campaign" style="margin-top:1%;" href="#"><i class="icon-plus"></i> Add {{getCurrentContactProperty "first_name"}} to Campaign</a>
-              {{else}}
-                {{first_name}} has unsubscribed from all Campaigns. <a href="#" class="resubscribe" data="{{campaign_id}}">Resubscribe</a>
-              {{/is_unsubscribed_all}}
 		        {{/canEditCurrentContact}}
          	<form id="add-to-campaign-form" class="show_campaigns_list" style="display: none;">
 				<div class="control-group form-group">
@@ -100,8 +92,9 @@
         {{/unless}}
         {{#if this.length}}
           <div class="wrapper p-t-none">
-		     
-              <div class="text-md">Campaign Log</div>
+              <div class="text-md">Campaign Log
+              <span class="pull-right"><a href="#" id="unsubscribe-modal" class="btn btn-xs btn-default pos-rlt pull-left">Manage Subscription</a></span>
+              </div>
           </div>                                
 		  <ul id="campaigns-model-list" class="ativity-block-ul list-group list-group-lg no-radius m-b-none m-t-n-xxs  "></ul>
 		  <!--<table class="m-t-md"></table>-->

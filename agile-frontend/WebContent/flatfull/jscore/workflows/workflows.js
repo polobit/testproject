@@ -405,3 +405,12 @@ function show_campaign_save()
 
 	$("#workflow-msg").html($save_info).show().fadeOut(3000);
 }
+
+function populate_workflows_list(id, el, callback)
+{
+     if(callback == undefined)
+        callback = 'no-callback';
+
+     var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
+     fillSelect(id, '/core/api/workflows', 'workflow', callback , optionsTemplate, undefined, el);
+}

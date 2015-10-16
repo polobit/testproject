@@ -1,6 +1,6 @@
 package com.agilecrm.core.api.campaigns;
 
-import java.util.ArrayList;
+ import java.util.ArrayList;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
@@ -251,16 +251,16 @@ public class CampaignsAPI
 	@Path("resubscribe")
 	@POST
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-	public void resubscribeCampaign(@FormParam("id") Long contactId, @FormParam("workflow-id") Long workflowId)
+	public void resubscribeCampaign(@FormParam("id") Long contactId, @FormParam("workflow-id") String workflowId)
 	{
 			Contact contact = ContactUtil.getContact(contactId);
 			
 			if(contact == null)
 				return;
 
-			UnsubscribeStatusUtil.resubscribeContact(contact, workflowId);
+			UnsubscribeStatusUtil.resubscribeContactFromAll(contact, workflowId);
 	}
-
+	
 	/**
 	 * Gets logs with respect to campaign.
 	 * 
@@ -279,5 +279,5 @@ public class CampaignsAPI
 			cursor = "0";
 		return LogUtil.getConatctActivitiesSQLLogs(log_type, cursor, count);
 	}
-
+	
 }

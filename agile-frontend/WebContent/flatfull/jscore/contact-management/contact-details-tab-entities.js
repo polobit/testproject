@@ -271,27 +271,12 @@ var contact_details_tab = {
 	            sort_collection:false,
 	            postRenderCallback: function(el) {            	
 
-	            	$('.resubscribe', el).one('click', function(e){
-	            		e.preventDefault();
+	            	$('#unsubscribe-modal', el).off('click');
 
-	            		var workflow_id = $(this).attr("data");
+	            	$('#unsubscribe-modal', el).on('click', function(e){
+	            		e.preventDefault();	            	    
 
-	            		$.ajax({
-	            			url : "core/api/campaigns/resubscribe", 
-	            			data: {"id": App_Contacts.contactDetailView.model.id, "workflow-id" : workflow_id},
-	            			method : "POST",
-	            			success: function(){
-
-	            				// To update model
-	            				checkContactUpdated();
-	            				
-	            				showNotyPopUp("information", "Contact resubscribed successfully.", "top");
-	            			},
-	            			error: function (response) {
-	            				showNotyPopUp("warning", "Contact resubscribed failed. Please try again.", "top");
-	            				}
-
-	            			});
+						show_resubscribe_modal();
 
 	            	});
 
@@ -765,4 +750,74 @@ function show_no_email_alert()
 {
 	$('#mail', App_Contacts.contactDetailView.el).html('<div class="alert alert-danger m-t-sm"><a class="close" data-dismiss="alert" href="#">&times;</a>Sorry! this contact has no email to get the mails.</div>');
 }
+
+function show_resubscribe_modal(){
 	
+	getTemplate('contact-detail-resubscribe-modal', {}, undefined, 
+		function(template_ui){
+							
+					if(!template_ui)
+							return;
+					
+					// Removes if previous modals exist.
+					if ($('div#contact-detail-resubscribe-modal').size() != 0)
+						$('div#contact-detail-resubscribe-modal').remove();
+
+					$(template_ui).on('shown.bs.modal', function (e) {
+		              
+		                var el = $(template_ui);
+
+		  				fillSelect("campaigns-list", "core/api/workflows", undefined, function()
+						{
+								head.js(LIB_PATH + 'lib/bootstrap-multiselect/bootstrap-multiselect.js', CSS_PATH + 'css/bootstrap-multiselect/bootstrap-multiselect.css', function(){
+
+									$('#campaigns-list', el).multiselect({
+										  onInitialized: function(select, container) {
+                    									
+                						},
+										  nonSelectedText: 'Select Campaign',
+										  selectAllValue: "ALL",
+										  includeSelectAllOption: true,
+										  maxHeight: 200,
+										  onSelectAll: function(checked){
+										  		unsubscribe_contact(checked);
+										  },
+										  onChange: function(option, checked) {
+
+										  			if(!option)
+										  				return;
+
+        											if(option.val() == 'ALL' && checked)
+													{
+														unsubscribe_contact(selected, true);
+														return;
+													}
+
+													unsubscribe_contact(false);
+    											},
+    									   onDropdownShow: function(event) {
+
+											      var $menu = $(event.currentTarget).find(".dropdown-menu li label");
+											      
+											      $menu.css({ "width": "250px","white-space": "nowrap", "overflow": "hidden","text-overflow": "ellipsis"});
+											  }
+									});
+
+									$('div#contact-detail-resubscribe-modal .modal-body').html(el.find('form'));
+
+									// Unsubscribe
+									unsubscribe_contact(false);
+
+									// Resubscribe
+									resubscribe(el);
+								});
+
+
+							}, '<option value="{{id}}" class="text-cap">{{name}}</option>', true, el);
+
+
+					}).modal('show');
+	
+			}, null);
+
+}

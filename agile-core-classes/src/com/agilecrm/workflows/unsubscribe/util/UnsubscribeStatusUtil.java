@@ -4,11 +4,13 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 
 import com.agilecrm.contact.Contact;
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.agilecrm.util.EmailUtil;
 import com.agilecrm.workflows.Workflow;
 import com.agilecrm.workflows.status.CampaignStatus.Status;
 import com.agilecrm.workflows.status.util.CampaignStatusUtil;
@@ -115,5 +117,16 @@ public class UnsubscribeStatusUtil
 			CampaignStatusUtil.removeCampaignStatus(contact, cid);
 		else
 			CampaignStatusUtil.setStatusOfCampaign(contactId, cid, workflow.name, Status.DONE);
+	}
+	
+	public static void resubscribeContactFromAll(Contact contact, String workflowId)
+	{
+		if(StringUtils.isBlank(workflowId))
+			return;
+		
+		Set<String> workflowIds = EmailUtil.getStringTokenSet(workflowId, ",");
+		
+		for(String id : workflowIds)
+			resubscribeContact(contact, Long.valueOf(id));
 	}
 }
