@@ -101,8 +101,8 @@ var ReportsRouter = Backbone.Router
 
 						initializeActivityReportsListeners();
 						initializeReportsListeners();
-						// if (count != 0)
-						// return;
+						if (count != 0)
+						 return;
 
 						report_utility.load_activities(el);
 
