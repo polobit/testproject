@@ -50,6 +50,7 @@ import com.stripe.model.Account;
 import com.thirdparty.google.ContactPrefs;
 import com.thirdparty.google.GoogleServiceUtil;
 import com.thirdparty.google.calendar.GoogleCalenderPrefs;
+import com.thirdparty.google.utl.ContactPrefsUtil;
 import com.thirdparty.shopify.ShopifyAccessURLBuilder;
 
 //import org.codehaus.jackson.map.ObjectMapper;
@@ -583,6 +584,7 @@ public class ScribeUtil {
 		contactPrefs.setExpiryTime(Long.valueOf(properties.get("expires_in")
 				.toString()));
 		contactPrefs.refreshToken = properties.get("refresh_token").toString();
+		if(ContactPrefsUtil.findPrefsByType(Type.GOOGLE))
 		contactPrefs.save();
 
 		// initialize backend to save contacts

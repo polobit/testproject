@@ -77,11 +77,13 @@ public class ContactPrefsAPI
 
 	System.out.println("Sync" + sync);
 
-	updatedPrefs.save();
+	if(prefs.id==updatedPrefs.id)
+	   updatedPrefs.save();
 
 	if (!StringUtils.isEmpty(sync) && !updatedPrefs.inProgress)
 	{
 	    updatedPrefs.inProgress = true;
+	    if(prefs.id==updatedPrefs.id)
 	    updatedPrefs.save();
 
 	    ContactsImportUtil.initilaizeImportBackend(updatedPrefs, true);

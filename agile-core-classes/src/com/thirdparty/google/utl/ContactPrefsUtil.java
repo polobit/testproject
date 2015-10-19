@@ -175,4 +175,20 @@ public class ContactPrefsUtil
 
 	return null;
     }
+    
+    /**
+     * check for existence of sync widget 
+     * @param type
+     * @return
+     */
+    public static boolean findPrefsByType(Type type)
+    {
+	Map<String, Object> searchMap = new HashMap<String, Object>();
+	searchMap.put("type", type);
+	searchMap.put("domainUser", new Key<DomainUser>(DomainUser.class, SessionManager.get().getDomainId()));
+	if(ContactPrefs.dao.getByProperty(searchMap)==null){
+		return true;
+	}
+	return false;
+    }
 }
