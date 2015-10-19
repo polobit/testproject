@@ -27,22 +27,38 @@ public class ShopifyServlet extends HttpServlet {
 
 		String callback = (String) req.getSession().getAttribute("url");
 		String returnURL = null;
+		String widgetMsgType = "success";
+		String widgetMsg = "Shopify widgets saved successfully.";
+
 		if (token != null) {
 			if (callback.equalsIgnoreCase("shopify")) {
 				// Saving the shopify widget.
-				String widgetID = saveWidgetPref(req, token);
-				if (widgetID != null) {
-					returnURL = ("/#Shopify/" + widgetID);
+				try {
+					String widgetID = saveWidgetPref(req, token);
+					if (widgetID != null) {
+						returnURL = ("/#Shopify/" + widgetID);
+					} else {
+						widgetMsgType = "error";
+						widgetMsg = "Error occured while saving shopify";
+					}
+				} catch (Exception e) {
+					widgetMsgType = "error";
+					widgetMsg = "Error occured while saving shopify : "
+							+ e.getMessage();
 				}
 			} else {
 				saveToken(req, token);
 				returnURL = "/#sync/shopify";
-				if(ScribeUtil.isWindowPopUpOpened("shopify", returnURL, req, res));
+				if (ScribeUtil.isWindowPopUpOpened("shopify", returnURL, req,
+						res))
+					;
 				return;
-				
+
 			}
 		}
-	   
+
+		req.getSession().setAttribute("widgetMsgType", widgetMsgType);
+		req.getSession().setAttribute("widgetMsg", widgetMsg);
 		res.sendRedirect(returnURL);
 	}
 
@@ -68,7 +84,8 @@ public class ShopifyServlet extends HttpServlet {
 	 * @param req
 	 * @param token
 	 */
-	private String saveWidgetPref(HttpServletRequest req, String token) {
+	private String saveWidgetPref(HttpServletRequest req, String token)
+			throws Exception {
 		Widget shopifyWidget = DefaultWidgets.getDefaultWidgetByName("Shopify");
 
 		String temp = (String) req.getSession().getAttribute("isForAll");

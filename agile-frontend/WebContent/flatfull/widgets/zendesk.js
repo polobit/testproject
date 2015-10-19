@@ -277,10 +277,11 @@ function showTicketById(json, ticket_id)
 	$('#zendesk_showModal').remove();
 
 	// Append the form into the content
-	
-	getTemplate('zendesk-ticket-show', json, undefined, function(template_ui){
+	getTemplate('zendesk-ticket-show', json, undefined, function(template_ui){	
  		if(!template_ui)
     		return;
+
+    	$('body').append(template_ui);
     	$('#zendesk_showModal').modal("show"); 
 	}, null);
 
@@ -306,7 +307,7 @@ function registerClickEventsInZendesk()
 	// On click of show ticket, show ticket by ticket id method is called
     $("#widgets").off('click','#ticket_show');
 	$("#widgets").on('click','#ticket_show', function(e)
-	{
+	{		
 		e.preventDefault();
 
 		var json = JSON.parse($(this).attr('data-attr'));
@@ -339,7 +340,14 @@ function addTicketToZendesk()
 	json["info"] = "Add ticket in Zendesk";
 
 	// Name of the contact to be added to ticket
-	json["name"] = agile_crm_get_contact_property('first_name') + " " + agile_crm_get_contact_property('last_name');
+	var name = "";
+	if(agile_crm_get_contact_property('first_name')){
+		name += agile_crm_get_contact_property('first_name');
+	}
+	if(agile_crm_get_contact_property('last_name')){
+		name += agile_crm_get_contact_property('last_name');
+	}
+	json["name"] = name;
 
 	// Email of the contact based on which ticket is added
 	json["email"] = Email;

@@ -69,6 +69,20 @@ function save_widget_prefs(pluginName, prefs, callback) {
 			data.set('is_added', true);
 			models[0].set(data);
 			var widgetID = data.id;
+			var displayName;
+			if(pluginName  == "Rapleaf"){
+				displayName = "Towerdata"
+			}else if(pluginName == "HelpScout"){
+				displayName = "Help Scout"
+			}else if(pluginName == "TwilioIO"){
+				displayName = "Twilio";
+			}else{
+				displayName = pluginName;
+			}
+
+			var msgType = "success";
+			var msg = displayName+" widget saved successfully";
+
 			if(widgetID){
 
 				// If plugin name is CallScript do not redirect
@@ -102,18 +116,13 @@ function save_widget_prefs(pluginName, prefs, callback) {
 					// Get widget,set bria device
 					globalBriaSetup();
 				}
-				
-				if(pluginName  == "Rapleaf"){
-					pluginName = "TowerData"
-				}
 
-				showNotyPopUp("success", (pluginName+" widget saved successfully"), "bottomRight");
 			}else{
-				if(pluginName  == "Rapleaf"){
-					pluginName = "TowerData"
-				}
-				showNotyPopUp("error", ("Error occurred while saving "+pluginName), "bottomRight");
+				msgType = "error";
+				msg = ("Error occurred while saving "+displayName);
 			}
+
+			showNotyPopUp(msgType , msg, "bottomRight");
 
 			if (callback && typeof (callback) === "function") {
 				callback(data);

@@ -150,14 +150,35 @@ function addTicketToHelpScout(contact_id)
 			$('#helpscout_messageModal').modal("show");
 
 			// To show the radio button (for type) as buttons with toggle state.
-            $("#widgets").off("click", "#helpscout_messageModal input[type='radio']");
-			$("#widgets").on("click", "#helpscout_messageModal input[type='radio']", function(e)
+            $("#helpscout_messageModal").off("click", "#helpscout_messageModal input[type='radio']");
+			$("#helpscout_messageModal").on("click", "#helpscout_messageModal input[type='radio']", function(e)
 					{	
 						$('#helpscout_messageModal label.btn').toggleClass("active");
 					});
 			
 			$('#add_conv').toggle();
 			$('#helpscout_loading').toggle();
+
+			/*
+			 * On click of send button in the modal, calls send request method to add a
+			 * Conversation in HelpScout.
+			 */
+		    $("#helpscout_messageModal").off("click", "#helpscout_send_request");
+			$("#helpscout_messageModal").on("click", "#helpscout_send_request", function(e)
+			{
+				e.preventDefault();
+				console.log("subbmitting the HelpScout form");
+				// Checks whether all the input fields are filled
+				if (!isValidForm($("#helpscout_messageForm")))
+				{
+					return;
+				}
+
+				var currentUserID = CURRENT_DOMAIN_USER.id;
+				// Sends request to HelpScout to create conversation
+				sendRequestToHelpScout("/core/api/widgets/helpscout/add/" + HelpScout_Plugin_Id, "helpscout_messageForm", "helpscout_messageModal",
+						"add-conv-error-panel", currentUserID);
+			});
 		}
 
 	}, function error(data)
@@ -170,26 +191,6 @@ function addTicketToHelpScout(contact_id)
 			$('#helpscout_error').hide();
 		}, 2000);
 	});
-
-	/*
-	 * On click of send button in the modal, calls send request method to add a
-	 * Conversation in HelpScout.
-	 */
-    $("#widgets").off("click", "#helpscout_send_request");
-	$("#widgets").on("click", "#helpscout_send_request", function(e)
-			{
-				e.preventDefault();
-				console.log("subbmitting the HelpScout form");
-				// Checks whether all the input fields are filled
-				if (!isValidForm($("#helpscout_messageForm")))
-				{
-					return;
-				}
-
-				// Sends request to HelpScout to create conversation
-				sendRequestToHelpScout("/core/api/widgets/helpscout/add/" + HelpScout_Plugin_Id, "helpscout_messageForm", "helpscout_messageModal",
-						"add-conv-error-panel", contact_id);
-			});
 }
 
 /**
