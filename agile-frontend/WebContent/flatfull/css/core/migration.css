@@ -1531,15 +1531,15 @@ a#email-reply{
 
 /*starting mobile compatibility V2 */
 
-#continueform .single-error {
+/*#continueform .single-error {
   position: relative;
-}
+}*/
 
-#continueform span.help-inline[generated|=true] {
+/*#continueform span.help-inline[generated|=true] {
   right: 25px;
   top: 5px;
   position: absolute;
-}
+}*/
 
 .details-mobile-view {
   width: 299px;
