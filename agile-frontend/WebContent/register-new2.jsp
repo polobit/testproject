@@ -74,9 +74,9 @@ body {
 }
 
 </style>
-<link rel="stylesheet" type="text/css" href="<%=CSS_PATH %>css/bootstrap.v3.min.css" />
-<link rel="stylesheet" type="text/css" href="<%=CSS_PATH %>css/app.css" />
-<link type="text/css" rel="stylesheet" href="<%=CSS_PATH %>css/phonenumber-lib/intlTelInput.css" />
+<link rel="stylesheet" type="text/css" href="/flatfull/css/bootstrap.v3.min.css" />
+<link rel="stylesheet" type="text/css" href="/flatfull/css/app.css" />
+<link type="text/css" rel="stylesheet" href="/css/phonenumber-lib/intlTelInput.css" />
 
 <script type="text/javascript">
 var isSafari = (Object.prototype.toString.call(window.HTMLElement).indexOf('Constructor') > 0);
@@ -211,9 +211,9 @@ This is where you and your users will log in to your account
 </div>
 
 <script type='text/javascript' src='//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js'></script>
-<script type="text/javascript" src="<%=CLOUDFRONT_TEMPLATE_LIB_PATH %>lib/phonenumber-lib/intlTelInput.js"></script>
+<script type="text/javascript" src="/lib/phonenumber-lib/intlTelInput.js"></script>
+<script src="/flatfull/registration/register.js?_v=<%=_AGILE_VERSION%>"   type="text/javascript"></script>
 <script src='//cdnjs.cloudflare.com/ajax/libs/headjs/1.0.3/head.min.js'></script>
-<script src="<%=CLOUDFRONT_TEMPLATE_LIB_PATH %>registration/register.js?_v=<%=_AGILE_VERSION%>"   type="text/javascript"></script>
 <script type="text/javascript">
 var version = <%="\"" + VersioningUtil.getAppVersion(request) + "\""%>;
   var applicationId = <%="\"" + SystemProperty.applicationId.get() + "\""%>;
