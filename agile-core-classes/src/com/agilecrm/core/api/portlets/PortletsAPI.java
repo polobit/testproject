@@ -142,6 +142,7 @@ public class PortletsAPI {
 			Portlet portlt = PortletUtil.getPortlet(portlet.id);
 			portlt.column_position = portlet.column_position;
 			portlt.row_position = portlet.row_position;
+			portlt.isForAll=portlet.isForAll;
 			portlt.save();
 		}
 	}

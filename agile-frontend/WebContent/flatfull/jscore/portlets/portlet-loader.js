@@ -36,6 +36,8 @@ function loadPortlets(el){
 	App_Portlets.activitiesView= new Array();
 	App_Portlets.campaignstats = new Array();
 
+	App_Portlets.adminPortlets = new Array();
+
 	/*
 	 * If Portlets_View is not defined , creates collection view, collection is
 	 * sorted based on position i.e., set when sorted using jquery ui sortable
@@ -46,7 +48,26 @@ function loadPortlets(el){
 	Portlets_View = new Base_Collection_View({ url : '/core/api/portlets', sortKey : "row_position",sort_collection : false, restKey : "portlet", templateKey : "portlets", individual_tag_name : 'div',
 		postRenderCallback : function(portlets_el){
 			set_up_portlets(el, portlets_el);
+				if(App_Portlets.adminPortlets.length!=0)
+				{
+					var models = [];
+					$.each( App_Portlets.adminPortlets, function(index,model) {
 
+					var obj={};
+					var next_position = gridster.next_position(1, 1);
+				obj.column_position = next_position.col;
+				obj.row_position = next_position.row;
+				
+				model.set({ 'column_position' : obj.column_position}, { silent : true });
+					model.set({ 'row_position' : obj.row_position  }, { silent : true });
+					model.set({'isForAll' : false});
+					set_p_portlets(model);
+					models.push({ id : model.get("id"), column_position : obj.column_position, row_position : obj.row_position,isForAll : false });
+			
+				});
+				$.ajax({ type : 'POST', url : '/core/api/portlets/positions', data : JSON.stringify(models),
+					contentType : "application/json; charset=utf-8", dataType : 'json' });
+				}
 				if(Portlets_View.collection.length==0)
 					$('.gridster > div:visible > div',el).removeClass('gs-w');
 			
