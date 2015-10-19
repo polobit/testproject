@@ -1540,3 +1540,16 @@ a#email-reply{
   top: 5px;
   position: absolute;
 }
+
+.details-mobile-view {
+  width: 299px;
+}
+
+@media all (max-width: 990px) {
+
+.details-mobile-view {
+  width: 100%;
+}
+
+}
+

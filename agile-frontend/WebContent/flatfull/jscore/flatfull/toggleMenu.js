@@ -42,7 +42,7 @@ $(document).ready(function(){
 
 	if(( $(window).width() ) < 768 ) {
 	
-	$(".nav li a").click(function(){
+	$(".navi-wrap li a").click(function(){
 	  $("#mobile-menu").delay(2000).trigger("click");
 	});
 	
@@ -68,7 +68,7 @@ $(document).ready(function(){
    }
    });
 
-   $("#navbar li a").on("click" , function(){
+   $("#navbar li a:not(.dropdown-menu)").on("click" , function(){
    if($(this).hasClass("dropdown-toggle")) {
 	
     }
