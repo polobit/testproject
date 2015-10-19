@@ -43,7 +43,7 @@ if(redirectTo  != null)
 <style>
 
 body {
-background-image:url('..<%=flatfull_path%>/images/flatfull/buildings.jpg');
+background-image:url('..<%=flatfull_path%>/images/flatfull/buildings-low.jpg');
 background-repeat:no-repeat;
 background-position:center center;
 background-size:100% 100%;
@@ -146,6 +146,15 @@ padding-left:10px!important;
 	<script type='text/javascript' src='<%=flatfull_path%>/lib/jquery-new/jquery-2.1.1.min.js'></script>
 	<script type="text/javascript" src="<%=flatfull_path%>/lib/bootstrap.v3.min.js"></script>
 	<script>
+
+	$(document).ready(function(){
+   var newImg = new Image;
+      	newImg.onload = function() {
+    	$("body").css("background-image","url('"+this.src+"')");
+  		 }
+		newImg.src = 'flatfull/images/flatfull/buildings.jpg';
+
+	});
 		//Init
 		var error = "";
 		$(function() {

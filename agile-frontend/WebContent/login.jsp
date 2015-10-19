@@ -113,7 +113,7 @@ if(SystemProperty.environment.value() == SystemProperty.Environment.Value.Develo
 
 <style>
 body {
-   background-image: url('../flatfull/images/flatfull/agile-login-page.png');
+   background-image: url('../flatfull/images/flatfull/agile-login-page-low.jpg');
   background-repeat: no-repeat;
   background-position: center center;
   background-size: 100% 100%;
@@ -268,6 +268,11 @@ if(isSafari && isWin)
 		$(document).ready(function()
 		{
 
+        var newImg = new Image;
+        newImg.onload = function() {
+        $("body").css("background-image","url('"+this.src+"')");
+        }
+        newImg.src = 'flatfull/images/flatfull/agile-login-page-high.png';
 			// Pre load dashlet files when don is active
 			preload_dashlet_libs();
 

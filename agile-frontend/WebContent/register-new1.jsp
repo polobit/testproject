@@ -203,7 +203,14 @@ if(isSafari && isWin)
   var version = <%="\"" + VersioningUtil.getAppVersion(request) + "\""%>;
   var applicationId = <%="\"" + SystemProperty.applicationId.get() + "\""%>;
 $(document).ready(function() {
-  $('#account_timezone').val(jstz.determine().name());
+  	var newImg = new Image;
+    newImg.onload = function() {
+    $("body").css("background-image","url('"+this.src+"')");
+     }
+    newImg.src = 'flatfull/images/flatfull/agile-registration-page-high.png';
+
+
+    $('#account_timezone').val(jstz.determine().name());
 });
   </script>
 

@@ -4,8 +4,9 @@
 <div class="row">
     <div class="col-sm-12 col-md-12">
                      
-             <div id="reportrange" class="pull-right" style="padding: 6.2px 8px;box-shadow: 0 0px 0px rgba(0, 0, 0, 0), inset 0 -0 0 rgba(0, 0, 0, .1);border: 1px solid rgb(207, 218, 221);">
-                <i class="icon-calendar icon-large"></i>
+               <div id="reportrange" class="pull-right" style="box-shadow: 0 0px 0px rgba(0, 0, 0, 0), inset 0 -0 0 rgba(0, 0, 0, .1);
+			border:1px solid #cfdadd;height:34px">
+				<i class="icon-calendar icon-large"></i>
                 <span id="range">{{date-range "today" "-6"}}</span>
               </div>
 			<div class="pull-right" style="padding:0px 8px 10px">
@@ -21,9 +22,9 @@
                 </select>
 			</div>
 			<div class="col-md-4 col-sm-6">
-            <h3 class="font-thin h3">Growth Reports</h3>
+            <h3 class="font-thin h3">Growth Reports  <small id="reports-growth-tags" class="no-wrap m-l-xs"></small></h3>
 
-			<div class="ellipsis-multiline pull-left w-full"> <span id="reports-growth-tags" class="no-wrap"></span></div>
+			
 			<div id="plan-limit-error" class="pull-right" style="width:46%;display:none"></div>
 			</div>
    

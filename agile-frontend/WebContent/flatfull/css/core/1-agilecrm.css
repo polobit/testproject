@@ -2962,3 +2962,8 @@ width: 915px;
  #deals-chart .highcharts-legend{
  	text-transform: capitalize;
  }
+ #lossreasonpie-chart-users .highcharts-data-labels div span div.text-center span:first-child {
+ display:block;
+ word-wrap:break- all;
+ white-space:normal!important;
+ } 
