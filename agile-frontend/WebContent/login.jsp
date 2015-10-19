@@ -108,8 +108,8 @@ if(SystemProperty.environment.value() == SystemProperty.Environment.Value.Develo
 <meta name="description" content="">
 <meta name="author" content="">
 
-<link rel="stylesheet" type="text/css" href="<%=flatfull_path%>/css/bootstrap.v3.min.css" />
-<link rel="stylesheet" type="text/css" href="<%=flatfull_path%>/css/app.css" />
+<link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>/css/bootstrap.v3.min.css" />
+<link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>/css/app.css" />
 
 <style>
 body {

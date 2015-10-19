@@ -9,6 +9,7 @@ if (request.getAttribute("javax.servlet.forward.request_uri") == null) {
 }
 String _AGILE_VERSION = SystemProperty.applicationVersion.get();
 
+
 String CSS_PATH = "/";
 String FLAT_FULL_PATH = "flatfull/";
 
@@ -21,12 +22,11 @@ String CLOUDFRONT_STATIC_FILES_PATH = VersioningUtil.getStaticFilesBaseURL();
 CSS_PATH = CLOUDFRONT_STATIC_FILES_PATH;
 if(SystemProperty.environment.value() == SystemProperty.Environment.Value.Development)
 {
- CLOUDFRONT_STATIC_FILES_PATH = FLAT_FULL_PATH;
- CLOUDFRONT_TEMPLATE_LIB_PATH = "";	
- CSS_PATH = FLAT_FULL_PATH;
+	  CLOUDFRONT_STATIC_FILES_PATH = FLAT_FULL_PATH;
+	  CLOUDFRONT_TEMPLATE_LIB_PATH = "";	
+	  CSS_PATH = FLAT_FULL_PATH;
 }
 %>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -74,9 +74,9 @@ body {
 }
 
 </style>
-<link rel="stylesheet" type="text/css" href="/flatfull/css/bootstrap.v3.min.css" />
-<link rel="stylesheet" type="text/css" href="/flatfull/css/app.css" />
-<link type="text/css" rel="stylesheet" href="/css/phonenumber-lib/intlTelInput.css" />
+<link rel="stylesheet" type="text/css" href="<%=CSS_PATH %>css/bootstrap.v3.min.css" />
+<link rel="stylesheet" type="text/css" href="<%=CSS_PATH %>css/app.css" />
+<link type="text/css" rel="stylesheet" href="<%=CSS_PATH %>css/phonenumber-lib/intlTelInput.css" />
 
 <script type="text/javascript">
 var isSafari = (Object.prototype.toString.call(window.HTMLElement).indexOf('Constructor') > 0);
@@ -213,7 +213,6 @@ This is where you and your users will log in to your account
 <script type='text/javascript' src='//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js'></script>
 <script type="text/javascript" src="/lib/phonenumber-lib/intlTelInput.js"></script>
 <script src="/flatfull/registration/register.js?_v=<%=_AGILE_VERSION%>"   type="text/javascript"></script>
-<script src='//cdnjs.cloudflare.com/ajax/libs/headjs/1.0.3/head.min.js'></script>
 <script type="text/javascript">
 var version = <%="\"" + VersioningUtil.getAppVersion(request) + "\""%>;
   var applicationId = <%="\"" + SystemProperty.applicationId.get() + "\""%>;
@@ -245,9 +244,8 @@ $(document).ready(function(){
 			});
 	
 });
-
 function preload_dashlet_libs(){ 
-	setTimeout(function(){head.load('<%=CLOUDFRONT_STATIC_FILES_PATH %>final-lib/min/lib-all-min.js', '<%=CLOUDFRONT_TEMPLATE_LIB_PATH %>jscore/min/flatfull/js-all-min.js', '<%=CLOUDFRONT_TEMPLATE_LIB_PATH%>tpl/min/precompiled/<%=FLAT_FULL_PATH%>tpl.js?_=<%=_AGILE_VERSION%>', '<%=CLOUDFRONT_TEMPLATE_LIB_PATH%>tpl/min/precompiled/<%=FLAT_FULL_PATH%>portlets.js?_=<%=_AGILE_VERSION%>')}, 5000);
+	setTimeout(function(){head.load('<%=CSS_PATH %>final-lib/min/lib-all-min.js')}, 5000);
 }
 </script>
 
