@@ -1033,7 +1033,7 @@ public class ActivityReportsUtil
 	// Send reports email only if it has records.
 	if (recordsCount != null && recordsCount > 0)
 	    SendMail.sendMail(report.sendTo, report.name + " - " + SendMail.REPORTS_SUBJECT, "activity_reports",
-		    ActivityReportsUtil.generateActivityReports(reportId, endTime));
+	    		reports);
     }
 
     /**
