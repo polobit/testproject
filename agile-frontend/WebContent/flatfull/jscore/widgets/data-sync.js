@@ -124,7 +124,11 @@ function executeDataSyncReturnCallback(returnUrl,serviceName){
 		}
 		returnUrl=returnUrl.substr(returnUrl.indexOf('#'));
 
+<<<<<<< HEAD
 		if(window.location.hash==returnUrl && (serviceName=='quickbook-import' || serviceName=='stripe_import')){
+=======
+		if(window.location.hash==returnUrl){
+>>>>>>> 2973594... stripe delete bug fix
 
 			window.location.reload();
 			return;
