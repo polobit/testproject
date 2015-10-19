@@ -96,6 +96,9 @@ function initValidator(selector, callback) {
               
                //get the name of the field
                var name = error.input.attr("name");
+
+               if(name == "html_email" || name == "text_email")
+                   name = name.replace('_email', '');
                
                name = ucwords(name);
                
