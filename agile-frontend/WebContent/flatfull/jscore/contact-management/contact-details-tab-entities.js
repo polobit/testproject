@@ -767,9 +767,6 @@ function show_resubscribe_modal(){
 		              
 		                var el = $(template_ui);
 
-		                fillSelect("campaigns-list", "core/api/workflows", undefined, function()
-						{
-
 							head.js(LIB_PATH + 'lib/bootstrap-multiselect/bootstrap-multiselect.js', CSS_PATH + 'css/bootstrap-multiselect/bootstrap-multiselect.css', function(){
 
 								$('#campaigns-list', el).multiselect({
@@ -820,8 +817,7 @@ function show_resubscribe_modal(){
 								// Resubscribe
 								resubscribe(el);
 						});
-					}, '<option value="{{id}}" class="text-cap">{{name}}</option>', true, el);
-
+					
 					}).modal('show');
 	
 			}, null);
