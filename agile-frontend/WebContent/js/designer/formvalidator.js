@@ -72,7 +72,7 @@ function initValidator(selector, callback) {
          var merge_fields = value.match(reg);
 
         for (var i in merge_fields) {
-           return "Missing closed '}' at ..." + merge_fields[i];
+           return "Parse error. Please correct " + merge_fields[i] + "}.";
         }
 
         return true;
