@@ -84,6 +84,7 @@ public class ContactPrefsUtil
     List<String> prefsTyes=new ArrayList<String>();
  	List<ContactPrefs> contactPrefs= ContactPrefs.dao.fetchAll();
 	for(ContactPrefs prefs:contactPrefs){
+		if(prefs.type!=null)
 		prefsTyes.add(prefs.type.toString());
 	}
 	

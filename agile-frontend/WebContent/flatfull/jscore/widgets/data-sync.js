@@ -90,7 +90,7 @@ function initializeDataSyncListners(){
 					console.log("success");
 					if(sync_widget_type=='GOOGLE'){
 						window.location.reload();
-						return;
+						return false;
 					}
 					App_Datasync.dataSync();
 				}

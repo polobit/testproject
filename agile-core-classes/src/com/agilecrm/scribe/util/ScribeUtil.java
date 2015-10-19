@@ -584,7 +584,7 @@ public class ScribeUtil {
 		contactPrefs.setExpiryTime(Long.valueOf(properties.get("expires_in")
 				.toString()));
 		contactPrefs.refreshToken = properties.get("refresh_token").toString();
-		if(ContactPrefsUtil.findPrefsByType(Type.GOOGLE))
+		//if(ContactPrefsUtil.findPrefsByType(Type.GOOGLE))
 		contactPrefs.save();
 
 		// initialize backend to save contacts
