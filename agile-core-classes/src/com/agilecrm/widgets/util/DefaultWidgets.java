@@ -109,12 +109,12 @@ public class DefaultWidgets {
 		 * , "/widgets/linkedin.js", "/img/plugins/linkedin.png",
 		 * "/widgets/linkedin-logo-small.png", null, WidgetType.SOCIAL));
 		 */
-		widgets.add(new Widget("Bria", "Make and receive calls from your contacts using your Bria Account.",
-
-		"/widgets/bria.js", "/img/plugins/bria-call.png", "/img/plugins/bria-call.png", null,
-
-
-		WidgetType.CALL));
+//		widgets.add(new Widget("Bria", "Make and receive calls from your contacts using your Bria Account.",
+//
+//		"/widgets/bria.js", "/img/plugins/bria-call.png", "/img/plugins/bria-call.png", null,
+//
+//
+//		WidgetType.CALL));
 
 		System.out.println("Default widgets ");
 		System.out.println(widgets);

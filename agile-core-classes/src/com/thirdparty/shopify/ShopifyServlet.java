@@ -28,7 +28,7 @@ public class ShopifyServlet extends HttpServlet {
 		String callback = (String) req.getSession().getAttribute("url");
 		String returnURL = null;
 		String widgetMsgType = "success";
-		String widgetMsg = "Shopify widgets saved successfully.";
+		String widgetMsg = "Shopify widget saved successfully.";
 
 		if (token != null) {
 			if (callback.equalsIgnoreCase("shopify")) {

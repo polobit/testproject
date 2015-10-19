@@ -30,7 +30,6 @@ function loadWidgets(el, contact)
 		Widgets_View = new Base_Collection_View({ url : '/core/api/widgets', restKey : "widget", templateKey : "widgets", individual_tag_name : 'li',
 			sortKey : 'position', modelData : data, postRenderCallback : function(widgets_el)
 			{
-
 				head.load(FLAT_FULL_UI + "css/misc/agile-widgets.css", function()
 				{
 					// If scripts aren't loaded earlier, setup is initialized
@@ -51,7 +50,7 @@ function loadWidgets(el, contact)
 		// show widgets
 		var newEl = Widgets_View.render().el;
 		$('#widgets', el).html(newEl);
-
+		widgetBindingsLoader();
 	}
 	else
 	{
@@ -76,11 +75,9 @@ function loadWidgets(el, contact)
 				set_up_widgets(el, Widgets_View.el);
 
 			}
-
+			widgetBindingsLoader();
 		});
 	}
-		
-	widgetBindingsLoader();
 }
 
 function widgetBindingsLoader(){
@@ -250,9 +247,7 @@ function set_up_widgets(el, widgets_el)
 				});
 		}
 	}, this);
-
 	enableWidgetSoring(widgets_el);
-
 }
 
 function setup_custom_widget(model, widgets_el)

@@ -233,12 +233,10 @@ public class ScribeServlet extends HttpServlet {
 		if (serviceName == null) {
 			String return_url = (String) req.getSession().getAttribute(
 					"return_url");
-			
 
 			System.out.println("return url in oauth cancel " + return_url);
-			
-			if (ScribeUtil.closeOpendWindow(return_url, req,
-					resp)) {
+
+			if (ScribeUtil.closeOpendWindow(return_url, req, resp)) {
 				return;
 			}
 			// Redirect URL
@@ -411,47 +409,50 @@ public class ScribeServlet extends HttpServlet {
 
 		// return URL is retrieved from session
 		String returnURL = null;
-		
+
 		// If return URL is null, redirect to dashboard
 		System.out.println(returnURL);
 		returnURL = (String) req.getSession().getAttribute("return_url");
-		
+
 		String widgetName = (Character.toUpperCase(serviceName.charAt(0)) + serviceName
 				.substring(1));
 		String statusMSG = "Error occurred while saving " + widgetName
 				+ " widget";
 		String resultType = "error";
-		
+
 		try {
-			
-			widgetID = ScribeUtil.saveTokens(req, resp, service,
-					serviceName, accessToken, code);
-			
+
+			widgetID = ScribeUtil.saveTokens(req, resp, service, serviceName,
+					accessToken, code);
+
 			if (ScribeUtil.isWindowPopUpOpened(serviceName, returnURL, req,
 					resp)) {
 				return;
 			}
-			
-			returnURL = "/#add-widget";
-				
+
 			if (widgetID != null) {
-				
+
 				// return URL is retrieved from session
-				returnURL = (String) req.getSession().getAttribute(
-						"return_url")
-						+ "/" + widgetID;
+				returnURL = (String) req.getSession()
+						.getAttribute("return_url") + "/" + widgetID;
 				resultType = "success";
 				statusMSG = widgetName + " widget saved successfully.";
 				System.out.println("return url " + returnURL);
 			}
+
+			if (serviceName.equalsIgnoreCase(SERVICE_TYPE_GOOGLE_DRIVE)) {
+				returnURL = (String) req.getSession().getAttribute("return_url");
+			}
+
 		} catch (Exception e) {
-				statusMSG += " : " + e.getMessage();
-				if (ScribeUtil.closeOpendWindow(returnURL, req, resp)) {
-					return;
-				}
-				
+			statusMSG += " : " + e.getMessage();
+			returnURL = "/#add-widget";
+			if (ScribeUtil.closeOpendWindow(returnURL, req, resp)) {
+				return;
+			}
+
 		}
-		
+
 		if (linkType != null && linkType.equalsIgnoreCase("widget")) {
 			req.getSession().setAttribute("widgetMsgType", resultType);
 			req.getSession().setAttribute("widgetMsg", statusMSG);
@@ -463,10 +464,10 @@ public class ScribeServlet extends HttpServlet {
 
 		// Delete return url Attribute
 		req.getSession().removeAttribute("return_url");
-		
-		 // Delete linkType Attribute
-	  	  req.getSession().removeAttribute("linkType");
-		
+
+		// Delete linkType Attribute
+		req.getSession().removeAttribute("linkType");
+
 	}
 
 }

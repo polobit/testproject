@@ -428,7 +428,6 @@ var ContactsRouter = Backbone.Router.extend({
 	 */
 	contactDetails : function(id, contact)
 	{
-		widgetBindingsLoader();
 		$('[data-toggle="tooltip"]').tooltip();
 
 

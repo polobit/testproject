@@ -124,7 +124,16 @@ function initializeWidgetSettingsListeners(){
 		var widget_name = $(this).attr('widget-name');
 
 		// If not confirmed to delete, return
-		if (!confirm("Are you sure to delete " + widget_name))
+		var displayName;
+		if(widget_name == "Rapleaf"){
+			displayName = "Towerdata";
+		}if(widget_name == "TwilioIO"){
+			displayName = "Twilio";
+		}else{
+			displayName = widget_name;
+		}
+
+		if (!confirm("Are you sure to delete " + displayName))
 			return;
 		
 		delete_widget(widget_name);
