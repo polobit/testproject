@@ -55,6 +55,7 @@ function initializeReportSendConfirm()
 					function(event)
 					{
 						event.preventDefault();
+						$('.report-message').html(getRandomLoadingImg());
 						var url= $('#report-send-confirmation').find('input').attr('data');
 						if ($(this).attr("disabled"))
 							return;
