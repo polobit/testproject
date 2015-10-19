@@ -26,9 +26,9 @@ var WorkflowsRouter = Backbone.Router
 
 			// Appends campaign-id to show selected campaign-name in add trigger
 			// form.
-			"trigger-add/:id" : "triggerAdd",
+			"trigger-add/:id" : "triggerNewUI",
 
-			"trigger-add" : "triggerAdd", "trigger/:id" : "triggerEdit",
+			"trigger-add" : "triggerNewUI", "trigger/:id" : "triggerEdit",
 
 			/* Subscribers */
 			"workflow/all-subscribers/:id" : "allSubscribers", "workflow/active-subscribers/:id" : "activeSubscribers",
@@ -373,7 +373,7 @@ var WorkflowsRouter = Backbone.Router
 					// Hide bulk subscribers block
 					$('#subscribers-block').hide();
 
-					head.js(LIB_PATH + 'lib/date-charts.js', LIB_PATH + 'lib/date-range-picker.js', CSS_PATH + "css/misc/date-picker.css", function()
+					head.js(LIB_PATH + 'lib/date-charts.js', LIB_PATH + 'lib/date-range-picker.js' + '?_=' + _AGILE_VERSION, CSS_PATH + "css/misc/date-picker.css", function()
 					{
 						// Load Reports Template
 						getTemplate('campaign-email-reports', {}, undefined, function(template_ui1){
@@ -417,13 +417,51 @@ var WorkflowsRouter = Backbone.Router
 			},
 
 			/**
+			 * Shows new trigger UI
+			 */
+			 triggerNewUI : function(campaign_id)
+			 {
+			 	$('#content').html("<div id='trigger-listener'>&nbsp;</div>");
+
+				this.triggerModelview = new Base_Model_View({ url : 'core/api/triggers', template : "trigger-categories", isNew : true, window : 'triggers',
+					/**
+					 * Callback after page rendered.
+					 * 
+					 * @param el
+					 *            el property of Backbone.js
+					 */
+					postRenderCallback : function(el)
+					{
+					//	var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
+
+						// fill the selected campaign-id
+						
+						$('#campaign-id').val(campaign_id);
+
+						initializeTriggerEventListners(campaign_id);
+					}
+				
+				});
+				
+				var view = this.triggerModelview.render();
+
+				$('#trigger-listener').html(view.el);
+
+				$('#campaign-id').val(campaign_id);
+
+
+			 },
+			/**
 			 * Saves new trigger. Loads jquery.chained.js to link Conditions and
 			 * Value of input field.Fills campaign list using fillSelect
 			 * function. When + Add is clicked in workflows, fill with selected
 			 * campaign-name
 			 */
-			triggerAdd : function(campaign_id)
+			triggerAdd : function(id,trigger_type)
 			{
+
+				$('#content').html("<div id='trigger-selector'>&nbsp;</div>");
+
 				this.triggerModelview = new Base_Model_View({ url : 'core/api/triggers', template : "trigger-add", isNew : true, window : 'triggers',
 				/**
 				 * Callback after page rendered.
@@ -434,6 +472,8 @@ var WorkflowsRouter = Backbone.Router
 				postRenderCallback : function(el)
 				{
 					initializeAccountSettingsListeners();
+
+					initializeTriggerListEventListners(id,trigger_type);
 
 					// Loads jquery.chained.min.js
 					head.js(LIB_PATH + 'lib/agile.jquery.chained.min.js', function()
@@ -460,33 +500,49 @@ var WorkflowsRouter = Backbone.Router
 
 					var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
 
-					// fill the selected campaign-id
-					if (campaign_id)
-					{
-						fillSelect('campaign-select', '/core/api/workflows', 'workflow', function(id)
-						{
-							$('#campaign-select', el).find('option[value=' + campaign_id + ']').attr('selected', 'selected');
-						}, optionsTemplate, false, el);
+					
+					/**
+					* Shows given values when trigger selected
+					*/
 
-					}
-					else
-					{
-						/**
-						 * Fills campaign select with existing Campaigns.
-						 * 
-						 * @param campaign-select -
-						 *            Id of select element of Campaign
-						 * @param /core/api/workflows -
-						 *            Url to get workflows
-						 * @param 'workflow' -
-						 *            parse key
-						 * @param no-callback -
-						 *            No callback
-						 * @param optionsTemplate-
-						 *            to fill options with workflows
-						 */
-						fillSelect('campaign-select', '/core/api/workflows', 'workflow', 'no-callback', optionsTemplate, false, el);
-					}
+					// To get the input values
+					var type = trigger_type;
+					var campaign_id = id;
+					
+					setTimeout(function(){
+							// Shows the Value field with given value
+						$('#trigger-type', el).val(type).attr("selected", "selected").trigger('change');
+					}, 100);
+
+					
+						 
+						if (campaign_id)
+						{
+							fillSelect('campaign-select', '/core/api/workflows', 'workflow', function(id)
+							{
+								$('#campaign-select', el).find('option[value=' + campaign_id + ']').attr('selected', 'selected');
+							}, optionsTemplate, false, el);
+
+						}
+						else
+						{
+							/**
+							 * Fills campaign select with existing Campaigns.
+							 * 
+							 * @param campaign-select -
+							 *            Id of select element of Campaign
+							 * @param /core/api/workflows -
+							 *            Url to get workflows
+							 * @param 'workflow' -
+							 *            parse key
+							 * @param no-callback -
+							 *            No callback
+							 * @param optionsTemplate-
+							 *            to fill options with workflows
+							 */
+							fillSelect('campaign-select', '/core/api/workflows', 'workflow', 'no-callback', optionsTemplate, false, el);
+						}
+
 				},
 
 				saveCallback : function()
@@ -500,7 +556,7 @@ var WorkflowsRouter = Backbone.Router
 
 				var view = this.triggerModelview.render();
 
-				$('#content').html(view.el);
+				$('#trigger-selector').html(view.el);
 			},
 
 			/**
@@ -522,10 +578,13 @@ var WorkflowsRouter = Backbone.Router
 				// Gets trigger with respect to id
 				var currentTrigger = this.triggersCollectionView.collection.get(id);
 
+				$('#content').html("<div id='trigger-edit-selector'>&nbsp;</div>");
+
 				var view = new Base_Model_View({ url : 'core/api/triggers', model : currentTrigger, template : "trigger-add", window : 'triggers',
 					postRenderCallback : function(el)
 					{
 						initializeTriggersListeners();
+
 						// Loads jquery.chained.min.js
 						head.js(LIB_PATH + 'lib/agile.jquery.chained.min.js', function()
 						{
@@ -552,6 +611,8 @@ var WorkflowsRouter = Backbone.Router
 
 						// To get the input values
 						var type = currentTrigger.toJSON()['type'];
+
+						initializeTriggerListEventListners(id,type);
 
 						// Shows the Value field with given value
 						$('#trigger-type', el).val(type).attr("selected", "selected").trigger('change');
@@ -724,7 +785,7 @@ var WorkflowsRouter = Backbone.Router
 
 				});
 
-				$("#content").html(view.render().el);
+				$("#trigger-edit-selector").html(view.render().el);
 			},
 
 			/**

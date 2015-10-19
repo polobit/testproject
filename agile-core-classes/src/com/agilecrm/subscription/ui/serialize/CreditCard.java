@@ -10,11 +10,10 @@ import javax.xml.bind.annotation.XmlRootElement;
  * 
  */
 @XmlRootElement
-public class CreditCard
-{
-    public String name = "";
-    public String cvc = null;
-    public String number = "";
-    public String exp_month = "";
-    public String exp_year = "";
+public class CreditCard {
+	// public String name = "";
+	public String cvc = null;
+	public String number = null;
+	public String exp_month = "";
+	public String exp_year = "";
 }

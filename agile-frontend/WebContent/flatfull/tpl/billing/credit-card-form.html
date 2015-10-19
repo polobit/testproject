@@ -1,17 +1,5 @@
 <script id="credit-card-form-template" type="text/html">
-<div class="modal fade" id="credit-card-form-modal">
- <div class="modal-dialog">
-    <div class="modal-content">
-    <div class="modal-header">
-        <button class="close" data-dismiss="modal">x</button>
-		{{#if billingData}}
-        	<h3 class="modal-title"><i class="icon-plus-sign"></i>  Change Card</h3>
-			{{else}}
-			<h3 class="modal-title"><i class="icon-plus-sign"></i>  Attach Card</h3>			
-		{{/if}}
-    </div>
-    <div class="modal-body">
-		<form id="CCform" class="form-horizontal card_details"
+<form id="CCform" class="form-horizontal card_details"
 			name="card_details">
 			<fieldset>
 
@@ -49,7 +37,7 @@
 					<label class="control-label col-sm-4">CVC<span class="field_req">*</span></label>
 					<div class="controls col-sm-6">
 						<input type="text" name="cvc" class="input required  digits form-control"
-							placeholder="Card security code" />
+							placeholder="Card Security Code" />
 
 					</div>
 
@@ -70,15 +58,4 @@
 		<form id="gateway" class="form-horizontal hide">
 			<input type="text" name="gateway" class="hidden form-control" value="Stripe" />
 		</form>
-	</div>
-  <div class="modal-footer form-actions">
-							<span class="pull-left"><i class="icon-lock text-md pull-left"></i><span class="m-l-xs">Secure</span></span>
-<a href="#" type="submit" id="updateCreditCard" class="save btn btn-primary btn-sm pull-right">Save</a>
-<!--<a href="#"
-				class="btn btn-sm btn-danger" data-dismiss="modal">Close</a>-->
-			
-    </div>
-</div>
-</div>
-</div>
 </script>

@@ -53,13 +53,11 @@ import com.stripe.net.RequestOptions.RequestOptionsBuilder;
  * @see StripeImpl
  * @since November 2012
  */
-public class StripeUtil
-{
-    static
-    {
-	Stripe.apiKey = Globals.STRIPE_API_KEY;
-	Stripe.apiVersion = "2012-09-24";
-    }
+public class StripeUtil {
+	static {
+		Stripe.apiKey = Globals.STRIPE_API_KEY;
+		Stripe.apiVersion = "2012-09-24";
+	}
 
 	/**
 	 * Creates a map of customer card details, plan and other details required
@@ -74,9 +72,9 @@ public class StripeUtil
 	 * @throws JsonMappingException
 	 * @throws IOException
 	 */
-	public static Map<String, Object> getCustomerParams(CreditCard customerCard, Plan plan) throws JsonParseException,
-			JsonMappingException, IOException
-	{
+	public static Map<String, Object> getCustomerParams(
+			CreditCard customerCard, Plan plan) throws JsonParseException,
+			JsonMappingException, IOException {
 		Map<String, Object> customerParams = new HashMap<String, Object>();
 
 		// Gets credit card details map
@@ -91,7 +89,8 @@ public class StripeUtil
 
 		// Sets Description and Email for subscription
 		customerParams.put("description", NamespaceManager.get());
-		customerParams.put("email", DomainUserUtil.getCurrentDomainUser().email);
+		customerParams
+				.put("email", DomainUserUtil.getCurrentDomainUser().email);
 
 		return customerParams;
 	}
@@ -100,9 +99,8 @@ public class StripeUtil
 	 * Creates map to create customer without any subscription just by adding
 	 * credit card
 	 */
-	public static Map<String, Object> getCustomerParams(CreditCard customerCard) throws JsonParseException,
-			JsonMappingException, IOException
-	{
+	public static Map<String, Object> getCustomerParams(CreditCard customerCard)
+			throws JsonParseException, JsonMappingException, IOException {
 		Map<String, Object> customerParams = new HashMap<String, Object>();
 
 		// Gets credit card details map
@@ -110,7 +108,8 @@ public class StripeUtil
 
 		// Sets Description and Email for subscription
 		customerParams.put("description", NamespaceManager.get());
-		customerParams.put("email", DomainUserUtil.getCurrentDomainUser().email);
+		customerParams
+				.put("email", DomainUserUtil.getCurrentDomainUser().email);
 
 		return customerParams;
 	}
@@ -126,17 +125,15 @@ public class StripeUtil
 	 * @throws JsonMappingException
 	 * @throws IOException
 	 */
-	public static Map<String, Object> getCardParams(CreditCard cardDetails) throws JsonParseException,
-			JsonMappingException, IOException
-	{
+	public static Map<String, Object> getCardParams(CreditCard cardDetails)
+			throws JsonParseException, JsonMappingException, IOException {
 
 		// Converts CreditCard object in to JSON string
 		String creditCardJSON = new Gson().toJson(cardDetails);
 
 		// Creates HashMap from CreditCard JSON string
-		HashMap<String, Object> cardParams = new ObjectMapper().readValue(creditCardJSON,
-				new TypeReference<HashMap<String, Object>>()
-				{
+		HashMap<String, Object> cardParams = new ObjectMapper().readValue(
+				creditCardJSON, new TypeReference<HashMap<String, Object>>() {
 				});
 
 		return cardParams;
@@ -153,11 +150,23 @@ public class StripeUtil
 	 * @return {@link Customer}
 	 * @throws StripeException
 	 */
-	public static Customer getCustomerFromJson(JSONObject customerJSON) throws StripeException
-	{
+	public static Customer getCustomerFromJson(JSONObject customerJSON)
+			throws StripeException {
 		Stripe.apiKey = Globals.STRIPE_API_KEY;
 		// Converts Customer JSON to customer object
-		Customer customer = new Gson().fromJson(customerJSON.toString(), Customer.class);
+		Customer customer = new Gson().fromJson(customerJSON.toString(),
+				Customer.class);
+
+		if (customer != null && !customer.getLivemode()) {
+			RequestOptionsBuilder builder = new RequestOptionsBuilder()
+					.setApiKey(Globals.STRIPE_TEST_API_KEY);
+			// builder.setApiKey(Globals.STRIPE_API_KEY);
+			// builder.setStripeVersion("2014-12-08");
+			RequestOptions options = builder.build();
+
+			return Customer.retrieve(customer.getId(), options);
+		}
+
 		// Retrieves the customer from stripe based on id
 		return Customer.retrieve(customer.getId());
 	}
@@ -174,22 +183,19 @@ public class StripeUtil
 	 * @throws AuthenticationException
 	 * @throws StripeException
 	 */
-	public static Event getEventFromJSON(String event_json_string) throws AuthenticationException,
-			InvalidRequestException, APIConnectionException, CardException, APIException
-	{
+	public static Event getEventFromJSON(String event_json_string)
+			throws AuthenticationException, InvalidRequestException,
+			APIConnectionException, CardException, APIException {
 		System.out.println();
 
-		try
-		{
+		try {
 			org.json.JSONObject ob = new org.json.JSONObject(event_json_string);
 			System.out.println("event id" + ob.getString("id"));
 			// Converts Customer JSON to1 customer object
 			Event event = Event.retrieve(ob.getString("id"));
 			// Retrieves the customer from stripe based on id
 			return event;
-		}
-		catch (JSONException e)
-		{
+		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -197,13 +203,13 @@ public class StripeUtil
 
 	}
 
-	public static List<Charge> getCharges(String customerid) throws StripeException
-	{
+	public static List<Charge> getCharges(String customerid)
+			throws StripeException {
 		return getCharges(customerid, null);
 	}
 
-	public static List<Charge> getCharges(String customerid, Integer limit) throws StripeException
-	{
+	public static List<Charge> getCharges(String customerid, Integer limit)
+			throws StripeException {
 
 		Stripe.apiKey = Globals.STRIPE_API_KEY;
 
@@ -225,8 +231,7 @@ public class StripeUtil
 	}
 
 	// based on charge id, that charge will be refunded
-	public static Charge createRefund(String chargeid) throws StripeException
-	{
+	public static Charge createRefund(String chargeid) throws StripeException {
 
 		Stripe.apiKey = Globals.STRIPE_API_KEY;
 
@@ -234,19 +239,20 @@ public class StripeUtil
 
 		return ch.refund();
 	}
+
 	// based on charge id, that charge will be refunded
-	public static Refund createPartialRefund(String chargeId, Integer amount) throws StripeException
-	{
-	    RequestOptionsBuilder builder = new RequestOptionsBuilder();
-	    builder.setApiKey(Globals.STRIPE_API_KEY);
-	    builder.setStripeVersion("2014-12-08");
-	    RequestOptions options = builder.build();
-	    Map<String, Object> params = new HashMap<String, Object>();
-	    params.put("amount", amount);
-	    Charge ch = Charge.retrieve(chargeId, options);
-	    System.out.println(ch);
-	    Refund refund = ch.getRefunds().create(params);
-	    return refund;
+	public static Refund createPartialRefund(String chargeId, Integer amount)
+			throws StripeException {
+		RequestOptionsBuilder builder = new RequestOptionsBuilder();
+		builder.setApiKey(Globals.STRIPE_API_KEY);
+		builder.setStripeVersion("2014-12-08");
+		RequestOptions options = builder.build();
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("amount", amount);
+		Charge ch = Charge.retrieve(chargeId, options);
+		System.out.println(ch);
+		Refund refund = ch.getRefunds().create(params);
+		return refund;
 	}
 
 	/**
@@ -257,8 +263,8 @@ public class StripeUtil
 	 * @return {@link JSONObject}
 	 * @throws Exception
 	 */
-	public static JSONObject getJSONFromCustomer(Customer customer) throws Exception
-	{
+	public static JSONObject getJSONFromCustomer(Customer customer)
+			throws Exception {
 		// Gets customer JSON string from customer object
 		String customerJSONString = new Gson().toJson(customer);
 
@@ -267,8 +273,7 @@ public class StripeUtil
 		return customerJSON;
 	}
 
-	public static Card getDefaultCard(Customer customer)
-	{
+	public static Card getDefaultCard(Customer customer) {
 		String cardId = customer.getDefaultCard();
 
 		if (StringUtils.isEmpty(cardId))
@@ -276,20 +281,18 @@ public class StripeUtil
 
 		CustomerCardCollection cardCollection = customer.getCards();
 
-		for (Card card : cardCollection.getData())
-		{
+		for (Card card : cardCollection.getData()) {
 			if (cardId.equals(card.getId()))
 				return card;
 		}
 		return (Card) null;
 	}
 
-	public static com.stripe.model.Subscription getEmailSubscription(Customer customer, String domain)
-	{
+	public static com.stripe.model.Subscription getEmailSubscription(
+			Customer customer, String domain) {
 		String oldNamespace = null;
 		NamespaceManager.set(domain);
-		try
-		{
+		try {
 
 			Subscription subscription = SubscriptionUtil.getSubscription();
 			if (subscription.emailPlan == null)
@@ -300,78 +303,60 @@ public class StripeUtil
 			if (customer.getSubscriptions() == null)
 				return null;
 
-			for (com.stripe.model.Subscription stripeSubscription : customer.getSubscriptions().getData())
-			{
+			for (com.stripe.model.Subscription stripeSubscription : customer
+					.getSubscriptions().getData()) {
 				if (stripeSubscription.getId().equals(subscription_id))
 					return stripeSubscription;
 			}
-		}
-		finally
-		{
+		} finally {
 			NamespaceManager.set(oldNamespace);
 		}
 
 		return null;
 	}
 
-	public static void deleteSubscription(String sub_id, String cus_id)
-	{
+	public static void deleteSubscription(String sub_id, String cus_id) {
 		Stripe.apiKey = Globals.STRIPE_API_KEY;
 		Customer cu;
 
-		try
-		{
+		try {
 			cu = Customer.retrieve(cus_id);
 
 			cu.getSubscriptions().retrieve(sub_id).cancel(null);
 			System.out.println("subscription successfully deleted");
-		}
-		catch (AuthenticationException e)
-		{
+		} catch (AuthenticationException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
-		catch (InvalidRequestException e)
-		{
+		} catch (InvalidRequestException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
-		catch (APIConnectionException e)
-		{
+		} catch (APIConnectionException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
-		catch (CardException e)
-		{
+		} catch (CardException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
-		catch (APIException e)
-		{
+		} catch (APIException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
 	}
 
-	public static Invoice getInvoice(String invoice_id)
-	{
+	public static Invoice getInvoice(String invoice_id) {
 		Stripe.apiKey = Globals.STRIPE_API_KEY;
-		try
-		{
-		    RequestOptionsBuilder builder = new RequestOptionsBuilder();
-		    builder.setApiKey(Globals.STRIPE_API_KEY);
-		    builder.setStripeVersion("2014-12-08");
-		    RequestOptions options = builder.build();
-		    
-		    Invoice invoice = Invoice.retrieve(invoice_id, options);
-		    System.out.println("aaaaaaaaaaaaa");
-		    System.out.println(invoice);
-		    return invoice;
-		}
-		catch (AuthenticationException | InvalidRequestException | APIConnectionException | CardException
-				| APIException e)
-		{
+		try {
+			RequestOptionsBuilder builder = new RequestOptionsBuilder();
+			builder.setApiKey(Globals.STRIPE_API_KEY);
+			builder.setStripeVersion("2014-12-08");
+			RequestOptions options = builder.build();
+
+			Invoice invoice = Invoice.retrieve(invoice_id, options);
+			System.out.println("aaaaaaaaaaaaa");
+			System.out.println(invoice);
+			return invoice;
+		} catch (AuthenticationException | InvalidRequestException
+				| APIConnectionException | CardException | APIException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

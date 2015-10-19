@@ -272,6 +272,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
   </div>
   </aside>
 <div class="app-content" id="agilecrm-container">
+<div id="call-campaign-content" class="box-shadow width-min-100p height-min-100p z-lg" style = "background-color: #edf1f2;"></div> 
 <div class="butterbar animation-active" style="z-index:99;"><span class="bar"></span></div>
 <div id="content" class="app-content-body">
 <!-- <img class="init-loading" style="padding-right: 5px"

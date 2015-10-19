@@ -39,7 +39,7 @@ public class CustomWidget extends Widget
     						AgileUser agileUsr =  AgileUser.getCurrentAgileUserFromDomainUser(domainUser.id);
     						if(agileUsr != null){
     							System.out.println("agile usr "+agileUsr.id);
-    							Widget widget = WidgetUtil.getWidget(this.name,agileUsr.id);
+    							Widget widget = WidgetUtil.getCustomWidget(this.name,agileUsr.id);
     							if(widget == null){
     								this.id = null;
     								System.out.println("widget is null *****");

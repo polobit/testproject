@@ -28,9 +28,14 @@ import com.google.appengine.api.taskqueue.TaskOptions;
  */
 public class EventReminder
 {
-    public static void getEventReminder(String domain, Long starttime) throws IOException
+    public static void getEventReminder(String domain, Long starttime) throws Exception
     {
 
+    //for temporary solution to stop event reminders in this domain.
+    //because event reminder initiated 9 times in this domain
+    if("nimbleschedule".equalsIgnoreCase(domain))
+    	return;
+    System.out.println("executing event reminder class "+domain+" Starttime "+starttime);
 	EventReminderDeferredTask eventReminderDeferredTask = new EventReminderDeferredTask(domain, starttime);
 	Queue queue = QueueFactory.getQueue("event-notifier");
 	TaskOptions options = TaskOptions.Builder.withPayload(eventReminderDeferredTask);

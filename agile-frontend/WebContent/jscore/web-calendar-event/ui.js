@@ -115,7 +115,6 @@ $(function()
 
 				slot_details = SELECTED_DOMAIN_USER['slot_details'];
 				$('.show_slots').hide();
-
 				getSlotDurations();
 				$(".segment1").fadeIn("slow");
 				$(".panel-body").height(parseInt(getPanelBodyMaxHeight()) + 26);
@@ -133,6 +132,8 @@ $(function()
 		$(".timezone1").text(SELECTED_TIMEZONE);
 		$('.timezone1').show();
 		$("#hidetimezone").addClass("hide");
+		$('.user_in_visitor_timezone').html(SELECTED_TIMEZONE);
+		updateUserBusinessHoursInVisitorTimezone();
 
 		if (!selecteddate || !Selected_Time)
 			return;

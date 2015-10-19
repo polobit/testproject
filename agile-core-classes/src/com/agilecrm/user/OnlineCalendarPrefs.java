@@ -60,6 +60,13 @@ public class OnlineCalendarPrefs
 	@NotSaved(IfDefault.class)
 	public String bufferTimeUnit = null;
 
+	
+	/**
+	 * user enters his own text. which shows in online calendar page heading
+	 */
+	@NotSaved(IfDefault.class)
+	public String user_calendar_title = "Welcome to my scheduling page. Please follow the instructions to book an appointment.";
+ 
 	/**
 	 * default meeting names and slot is meeting durations
 	 */
