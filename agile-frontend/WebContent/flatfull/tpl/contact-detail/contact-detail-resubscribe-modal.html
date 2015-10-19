@@ -13,8 +13,16 @@
                    <div class="control-group form-group">
                     <label class="control-label col-sm-4"><b>Campaigns</b> <!--<span class="field_req">*</span>--></label>
                     <div class="controls col-sm-8">
-                        <select id="campaigns-list" class="form-control checkedMultiSelect" multiple="multiple">
-                            <option value="">Select...</option>
+                        <select id="campaigns-list" name="campaigns_list" class="form-control checkedMultiSelect" multiple="multiple" style="display: none;">
+                             {{#contact_model}}
+                                {{#contact_campaigns this "campaignStatus"}}
+                                    {{#if this}}
+                                        {{#each this.active}}
+                                            <option value="{{campaign_id}}">{{campaign_name}}</option>
+                                        {{/each}}
+                                    {{/if}}
+                                {{/contact_campaigns}}
+                            {{/contact_model}}
                         </select>
                     </div>
                     </div>
@@ -30,7 +38,7 @@
                                     {{#if this}}
                                     {{#if this.unsubscribed}}    
                                         <div class="tagsinput" style="margin-top: 7px;">
-                                                <ul id="added-tags-ul" class="tagsinput inline v-top m-b-sm p-n">
+                                                <ul name="unsubscribed_names" id="added-tags-ul" class="tagsinput inline v-top m-b-sm p-n">
                                                      <li class="inline-block tag btn btn-xs btn-default m-r-xs m-b-xs" style="background-color: #f6f6f6;">
                                                          <span>
                                                              <a class="anchor m-r-xs custom-color" style="color:#363f44">All</a>
