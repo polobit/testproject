@@ -44,8 +44,20 @@ var DataSync_Event_Modal_View = Base_Model_View.extend({
         e.preventDefault();
         var ele = $(e.currentTarget);
 
-      window.open('/OAuthServlet?service=quickbook-import&window_opened=true&return_url=' + encodeURIComponent(window.location.href) + 'quickbooks','dataSync','height=1000,width=500');
-      return;
+        var sync_type=$(ele).attr('sync_type');
+        if(sync_type=='STRIPE'){
+
+        var callbackURL = window.location.origin + "/#sync/stripe-import";
+        // For every request of import, it will ask to grant access
+        window.open( "/scribe?service=stripe_import&window_opened=true&return_url=" + encodeURIComponent(callbackURL),'dataSync','height=1000,width=500');
+        return false;
+
+        }
+        else if(sync_type=='QUICKBOOK'){
+
+          window.open('/OAuthServlet?service=quickbook-import&window_opened=true&return_url=' + encodeURIComponent(window.location.href) + 'quickbooks','dataSync','height=1000,width=500');
+          return;
+        }
     },
 
     syncShopify: function(e) {
@@ -73,7 +85,7 @@ var DataSync_Event_Modal_View = Base_Model_View.extend({
 
             var url = DATA_SYNC_URL + "/SHOPIFY";
 
-            $(ele).after(getRandomLoadingImg());
+          //  $(ele).after(getRandomLoadingImg());
             model.url = url + "?sync=true"
             model.save({}, {
                 success: function(data) {
@@ -140,7 +152,7 @@ var DataSync_Event_Modal_View = Base_Model_View.extend({
             var url = DATA_SYNC_URL + "/GOOGLE";
             url = url.replace("/allPrefs", "");
 
-            $(ele).after(getRandomLoadingImg());
+          //  $(ele).after(getRandomLoadingImg());
             model.url = url + "?sync=true"
             model.save({}, {
                 success: function(data) {
@@ -163,7 +175,7 @@ var DataSync_Event_Modal_View = Base_Model_View.extend({
         if (disable)
             return;
         $(ele).attr("disabled", "disabled");
-        $(ele).after(getRandomLoadingImg());
+       // $(ele).after(getRandomLoadingImg());
 
         getTemplate('admin-settings-import-stripe-contact-sync', {}, undefined, function(template_) {
             if (!template_)
@@ -198,7 +210,7 @@ var DataSync_Event_Modal_View = Base_Model_View.extend({
             var url = DATA_SYNC_URL + "/STRIPE";
             url = url.replace("/allPrefs", "");
 
-            $(ele).after(getRandomLoadingImg());
+           // $(ele).after(getRandomLoadingImg());
             model.url = url + "?sync=true"
             model.save({}, {
                 success: function(data) {
@@ -233,7 +245,7 @@ var DataSync_Event_Modal_View = Base_Model_View.extend({
 
             var url = DATA_SYNC_URL + "/QUICKBOOK";
 
-            $(ele).after(getRandomLoadingImg());
+         //   $(ele).after(getRandomLoadingImg());
             model.url = url + "?sync=true"
             model.save({}, {
                 success: function(data) {
@@ -267,7 +279,7 @@ var DataSync_Event_Modal_View = Base_Model_View.extend({
 
                         var url = DATA_SYNC_URL + "/FRESHBOOKS";
 
-                        $(ele).after(getRandomLoadingImg());
+                       // $(ele).after(getRandomLoadingImg());
                         model.url = url + "?sync=true"
                         model.save({}, {
                             success: function(data) {

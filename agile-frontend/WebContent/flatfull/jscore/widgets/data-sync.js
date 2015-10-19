@@ -120,9 +120,10 @@ function executeDataSyncReturnCallback(returnUrl,serviceName){
 		}
 		returnUrl=returnUrl.substr(returnUrl.indexOf('#'));
 
-		if(window.location.hash==returnUrl && serviceName=='quickbook-import'){
+		if(window.location.hash==returnUrl){
 
-			returnUrl='#sync';
+			window.location.reload();
+			return;
 		}
 
 		Backbone.history.navigate(returnUrl , {

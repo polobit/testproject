@@ -23,7 +23,7 @@ public class DataSyncUrlConstants
 	public static String QUICKBOOKS_CONTENT="Sync customers in Quickbooks as Contacts in Agile CRM along with invoice and payment data.";
 	
 	public static String STRIPE_IMAGE_URL="/img/plugins/Stripe.png";
-	public static String STRIPE_CONTENT="Sync customers in Stripe as Contacts in Agile CRM with their subscription &amp; payment data.";
+	public static String STRIPE_CONTENT="Sync customers in Stripe as Contacts in Agile CRM with their subscription & payment data.";
 			
 	
 	
