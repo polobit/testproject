@@ -89,7 +89,6 @@ public class ContactPrefsAPI
 	    return;
 	}
 
-	updatedPrefs.save();
     }
 
     /**
