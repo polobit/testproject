@@ -120,7 +120,7 @@ function executeDataSyncReturnCallback(returnUrl,serviceName){
 		}
 		returnUrl=returnUrl.substr(returnUrl.indexOf('#'));
 
-		if(window.location.hash==returnUrl){
+		if(window.location.hash==returnUrl && (serviceName=='quickbook-import' || serviceName=='stripe_import')){
 
 			window.location.reload();
 			return;
