@@ -79,7 +79,11 @@ function loadWidgets(el, contact)
 
 		});
 	}
+		
+	widgetBindingsLoader();
+}
 
+function widgetBindingsLoader(){
 	/*
 	 * Called on click of icon-minus on widgets, collapsed class is added to it
 	 * and sets "is_minimized" field of widget as true, we check this while
