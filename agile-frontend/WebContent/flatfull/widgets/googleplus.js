@@ -295,7 +295,7 @@ function startGooglePlusWidget(contact_id) {
 	$("#widgets").on("click", ".peoplesearch", function(e)
 	{
 		e.preventDefault();
-		getTemplate('googleplus-modified-search', obj, undefined, function(template_ui){
+		getTemplate('googleplus-modified-search', {}, undefined, function(template_ui){
 	 		if(!template_ui)
 	    		return;
 			$('#' + WIDGET_NAME).html($(template_ui)); 

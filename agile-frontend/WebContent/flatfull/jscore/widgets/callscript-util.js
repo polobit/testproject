@@ -93,6 +93,30 @@ function initializeCallScriptListeners(){
 	{
 		$(this).find(".callscriptrule-actions").css("visibility", "hidden");
 	});
+
+	
+	// On click of save button, check input and save details
+	$('#prefs-tabs-content #save_prefs').off('click');
+	$('#prefs-tabs-content').on('click', '#save_prefs', function(e)
+	{	e.preventDefault();
+
+		if ($(this).text() == "Saving..." || $(this).text() == "Loading...") {
+			console.log("Do not hit me again " + $(this).text());
+			return;
+		}
+
+		// Checks whether all input fields are given
+		try {
+			if (!isValidForm($("#callscriptruleForm"))) {
+				return;
+			}
+		} catch (err) {
+			return;
+		}
+
+		// Saves call script preferences in callscript widget object
+		saveCallScriptWidgetPrefs();
+	});
 }
 
 // Get widget and make adjustment of buttons in widget form
@@ -326,6 +350,8 @@ function addCallScriptRule()
 
 	// Shows loading image until data gets ready for displaying
 	$("#prefs-tabs-content").html(LOADING_HTML);
+	initializeCallScriptListeners();
+
 	add_csr.render();
 }
 
@@ -347,6 +373,7 @@ function editCallScriptRule(ruleCount)
 		var csrule = getRule(callscriptPrefsJson,ruleCount);
 
 		$("#prefs-tabs-content").html(LOADING_HTML);
+		initializeCallScriptListeners();
 		
 		head.js(LIB_PATH + 'lib/agile.jquery.chained.min.js', function()
 		{
@@ -560,30 +587,7 @@ function saveCallScriptWidgetPrefs() {
  * 
  */
 function callscript_save_widget_prefs() {
-	$('#save_prefs').unbind("click");
-
-	// On click of save button, check input and save details
-	$('body').off('click', '#save_prefs');
-	$('body').on('click', '#save_prefs', function(e) {
-		e.preventDefault();
-
-		if ($(this).text() == "Saving..." || $(this).text() == "Loading...") {
-			console.log("Do not hit me again " + $(this).text());
-			return;
-		}
-
-		// Checks whether all input fields are given
-		try {
-			if (!isValidForm($("#callscriptruleForm"))) {
-				return;
-			}
-		} catch (err) {
-			return;
-		}
-
-		// Saves call script preferences in callscript widget object
-		saveCallScriptWidgetPrefs();
-	});
+	
 }
 
 

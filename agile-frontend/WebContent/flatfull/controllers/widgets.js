@@ -288,6 +288,41 @@ var WidgetsRouter = Backbone.Router
                             "core/api/widgets/Stripe");
                 }
 
+            },
+
+            /**
+             * Manages CallScript widget
+             */
+            CallScript : function(id)
+            {
+                addConfigurableWidget(id, "CallScript", "callscript-login");
+                if(id){
+                    adjust_form();
+                }
+            },
+            
+            /**
+             * Show CallScript rules
+             */
+            CallScriptShow : function()
+            {   
+                showCallScriptRule();
+            },
+            
+            /**
+             * Add CallScript rules
+             */
+            CallScriptAdd : function()
+            {
+                addCallScriptRule();
+            },
+            
+            /**
+             * Edit CallScript rules
+             */
+            CallScriptEdit : function(id)
+            {
+                editCallScriptRule(id);
             }
 });
 
