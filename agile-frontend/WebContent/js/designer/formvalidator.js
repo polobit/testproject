@@ -98,7 +98,7 @@ function initValidator(selector, callback) {
                var name = error.input.attr("name");
 
                if(name == "html_email" || name == "text_email")
-                   name = name.replace('_email', '');
+                   name = name.replace('_email', '').toUpperCase();
                
                name = ucwords(name);
                
