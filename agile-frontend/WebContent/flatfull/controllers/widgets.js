@@ -125,9 +125,9 @@ var WidgetsRouter = Backbone.Router
 			/**
 			 * Manages Bria widget
 			 */
-			Bria : function(id) {
-				addConfigurableWidget(id, "Bria", 'bria-login');
-			},
+			// Bria : function(id) {
+			// 	addConfigurableWidget(id, "Bria", 'bria-login');
+			// },
 
             /**
              * Manages Rapleaf widget
