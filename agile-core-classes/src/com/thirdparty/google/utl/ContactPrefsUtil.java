@@ -24,6 +24,18 @@ public class ContactPrefsUtil
 	ContactPrefs prefs = ContactPrefsUtil.getPrefsByType(type);
 	prefs.delete();
     }
+    
+    
+    public static void deleteSyncwidgetById(Type type,Long id)
+    {
+    System.out.println("type is printing     "+type);
+	ContactPrefs prefs = ContactPrefsUtil.get(id);
+	if(prefs==null){
+		prefs=ContactPrefsUtil.getPrefsByType(type);
+	}
+	if(prefs!=null)
+	prefs.delete();
+    }
 
     /**
      * Retrieves {@link ContactPrefs} based on enum {@link ContactPrefs.Type}

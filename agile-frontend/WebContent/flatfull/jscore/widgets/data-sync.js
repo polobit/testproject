@@ -80,9 +80,11 @@ function initializeDataSyncListners(){
 		    		return false;
 		var sync_widget_type=$(this).attr("data_sync_type");
 
+		var sync_widget_id=$(this).attr("data_sync_id");
+
 		if(!sync_widget_type)
 			return;
-		var deleteSyncUrl="core/api/contactprefs/"+sync_widget_type;
+		var deleteSyncUrl="core/api/contactprefs/delete/"+sync_widget_type+"/"+sync_widget_id;
 		$.ajax({
  				url : deleteSyncUrl,
 				type : 'DELETE',

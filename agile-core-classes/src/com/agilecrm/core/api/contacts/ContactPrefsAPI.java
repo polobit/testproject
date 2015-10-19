@@ -118,5 +118,26 @@ public class ContactPrefsAPI
 
     }
     
+    @Path("delete/{type}/{sync_widget_id}")
+    @DELETE
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public void deleteContactPrefs(@PathParam("type") Type type,@PathParam("sync_widget_id") Long id)
+    {
+
+    	System.out.println("executing delete request Type"+type);
+    	
+    		if(type==Type.GOOGLE)
+        	ContactPrefsUtil.deleteSyncwidgetById(Type.GOOGLE,id);
+        	if(type==Type.STRIPE)
+        	ContactPrefsUtil.deleteSyncwidgetById(Type.STRIPE,id);
+        	if(type==Type.SHOPIFY)
+            	ContactPrefsUtil.deleteSyncwidgetById(Type.SHOPIFY,id);
+        	if(type==Type.QUICKBOOK)
+            	ContactPrefsUtil.deleteSyncwidgetById(Type.QUICKBOOK,id);
+        	if(type==Type.FRESHBOOKS)
+            ContactPrefsUtil.deleteSyncwidgetById(Type.FRESHBOOKS,id);
+
+    }
+    
    
 }
