@@ -76,11 +76,13 @@ public class ContactPrefsAPI
 	ContactPrefs updatedPrefs = ContactPrefsUtil.mergePrefs(currentPrefs, prefs);
 
 	System.out.println("Sync" + sync);
+	if(updatedPrefs.id==currentPrefs.id)
 	   updatedPrefs.save();
 
 	if (!StringUtils.isEmpty(sync) && !updatedPrefs.inProgress)
 	{
 	    updatedPrefs.inProgress = true;
+	    if(updatedPrefs.id==currentPrefs.id)
 	    updatedPrefs.save();
 	    ContactsImportUtil.initilaizeImportBackend(updatedPrefs, true);
 	    return;
