@@ -886,69 +886,29 @@ function initializeAddPortletsListeners() {
 						$(this).popover('show');
 					});
 
-	$('#portlets-add-listener').on(
+		$('#portlets-add-listener').on(
 			"click",
 			'.add-portlet',
 			function() {
-
-				var portlet_type = $(this).attr("portlet_type");
-				var p_name = $(this).attr("portlet_name");
-
-				var json = portlet_utility.getDefaultPortletSettings(
-						portlet_type, p_name);
-
-				var obj = {};
-				obj.name = p_name;
-				var curDate = new Date();
-				obj.portlet_type = portlet_type;
-				var max_row_position = 0;
-				var next_position = gridster.next_position(1, 1);
-				obj.column_position = next_position.col;
-				obj.row_position = next_position.row;
-				obj.size_x = next_position.size_x;
-				obj.size_y = next_position.size_y;
-
-				if (portlet_type == "RSS" && p_name == "Agile CRM Blog")
-					obj.size_y = 2;
-
-				else if (portlet_type == "USERACTIVITY"
-						&& p_name == "Leaderboard") {
-					obj.size_y = 2;
-					obj.size_x = 2;
-				}
-
-				var portlet = new BaseModel();
-				portlet.url = 'core/api/portlets/add';
-				portlet.set({
-					"prefs" : JSON.stringify(json)
-				}, {
-					silent : true
-				});
-				var model;
-				var scrollPosition;
-				portlet.save(obj, {
-					success : function(data) {
-						model = new BaseModel(data.toJSON());
-						if ($('#zero-portlets').is(':visible'))
-							$('#zero-portlets').hide();
-						if ($('#no-portlets').is(':visible'))
-							$('#no-portlets').hide();
-						App_Portlets.navigate("dashboard", {
-							trigger : true
-						});
-					},
-					error : function(model, response) {
-						alert("Failed to add.");
-					}
-				});
+				var url='core/api/portlets/add';
+				var forAll=false;
+				clickfunction($(this),url,forAll);
 			});
-$('#portlets-add-listener').on(
+	$('#portlets-add-listener').on(
 			"click",
 			'.add_to_all',
 			function() {
+				var forAll=true;
+				var url='core/api/portlets/addforAll';
+				clickfunction($(this),url,forAll);
+				
+			});
 
-				var portlet_type = $(this).attr("portlet_type");
-				var p_name = $(this).attr("portlet_name");
+}
+function clickfunction(that,url,forAll){
+
+	var portlet_type = that.attr("portlet_type");
+				var p_name = that.attr("portlet_name");
 
 				var json = portlet_utility.getDefaultPortletSettings(
 						portlet_type, p_name);
@@ -974,10 +934,10 @@ $('#portlets-add-listener').on(
 				}
 
 				var portlet = new BaseModel();
-				portlet.url = 'core/api/portlets/addforAll';
+				portlet.url = url;
 				portlet.set({
 					"prefs" : JSON.stringify(json),
-					"isForAll" : true
+					"isForAll" : forAll
 				}, {
 					silent : true
 				});
@@ -998,7 +958,4 @@ $('#portlets-add-listener').on(
 						alert("Failed to add.");
 					}
 				});
-			});
-
-
-}
+				}
