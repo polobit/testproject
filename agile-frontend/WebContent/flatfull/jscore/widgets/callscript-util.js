@@ -283,7 +283,7 @@ function deleteCallScriptRule(dltRuleIndex)
 			console.log(data);
 		});
 	}
-	
+	initializeCallScriptListeners();
 	makeWidgetTabActive();
 }
 
@@ -314,6 +314,7 @@ function showCallScriptRule()
 
 		}, null);
 	}
+	initializeCallScriptListeners();
 }
 
 // show add rule page with chaining

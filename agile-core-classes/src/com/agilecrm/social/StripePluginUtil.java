@@ -51,8 +51,8 @@ public class StripePluginUtil {
 		}
 
 		// Un comment the apiKey and customerId, to test in local or beta.
-		apiKey = "sk_test_qxs4FCoEJ3o5aED4d1rIWiCE";
-		customerId = "cus_5M6BkObcMEbP5C";
+		//apiKey = "sk_test_qxs4FCoEJ3o5aED4d1rIWiCE";
+		//customerId = "cus_5M6BkObcMEbP5C";
 
 		/*
 		 * Retrieves Stripe customer based on Stripe customer ID and Stripe
