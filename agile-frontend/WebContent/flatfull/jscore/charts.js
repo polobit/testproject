@@ -660,6 +660,9 @@ function showFunnel(url, selector, name, show_loading)
 		                borderWidth: 0
 		            }
 		        },
+		        tooltip : {
+		        	 headerFormat: '<span style="font-size: 12px">{point.key}</span><br/>'
+		        	},
 		        legend: {
 		            enabled: false
 		        },
