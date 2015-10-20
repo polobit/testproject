@@ -4,78 +4,23 @@
  * 
  * @author Chandan
  */
-
-// handle popover
-
-
 $(function(){
-
-
-/**
-	 * To avoid showing previous errors of the modal.
-	 */
-	$('#casesModal, #casesUpdateModal').on('show.bs.modal', function(data)
-	{
-
-		// Removes alert message of error related date and time.
-		$('#' + this.id).find('.alert').css('display', 'none');
-
-		// Removes error class of input fields
-		$('#' + this.id).find('.error').removeClass('error');
-		var taget = $(data.target);
-		add_custom_fields_to_form({}, function(data)
-		{
-			var el_custom_fields = show_custom_fields_helper(data["custom_fields"], [
-				"modal"
-			]);
-			$("#custom-field-case", taget).html($(el_custom_fields));
-
-		}, "CASE");
-
-	});
 
 	$('#casesModal, #casesUpdateModal').on("shown.bs.modal", function()
 	{
 		// Add placeholder and date picker to date custom fields
-
 		$('.date_input').attr("placeholder","Select Date");
-    
-		$('.date_input').datepicker({
+    	$('.date_input').datepicker({
 			format: CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY
 		});
 
+		// Enable the datepicker
+		$('#close_date', el).datepicker({
+			format : CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY
+		});
+	
 	});
-
-	/**
-	 * "Hide" event of note modal to remove contacts appended to related to
-	 * field and validation errors
-	 */
-	$('#casesModal').on('hidden.bs.modal', function()
-	{
-
-		// Removes appended contacts from related-to field
-		$("#casesForm").find("li").remove();
-
-		// Removes validation error messages
-		remove_validation_errors('casesModal');
-
-	});
-
-	/**
-	 * "Hide" event of note modal to remove contacts appended to related to
-	 * field and validation errors
-	 */
-	$('#casesUpdateModal').on('hidden.bs.modal', function()
-	{
-
-		// Removes appended contacts from related-to field
-		$("#casesUpdateForm").find("li").remove();
-
-		// Removes validation error messages
-		remove_validation_errors('casesUpdateModal');
-	});
-
-
+	
 	$('#casesModal,#casesUpdateModal').on('click', '#cases_validate', function(e) 
 	{
 		e.preventDefault();
@@ -87,8 +32,6 @@ $(function(){
 		savecases(form_id, modal_id, this, json);
 	});
 
-
-
 });
 
 
@@ -97,27 +40,22 @@ function initializeCasesListeners(el){
 	
 	$('#cases-listners').off();
 	// $("#cases-listners #cases-model-list > tr").off('mouseenter');
-	$("#cases-listners").on('mouseenter',
-			'#cases-model-list > tr',
-			function()
-			{
+	$("#cases-listners").on('mouseenter','#cases-model-list > tr', function(){
 
-				var data = $(this).find('.data').attr('data');
-				var currentCase = App_Cases.casesCollectionView.collection.get(data);
-				var that = this;
-				getTemplate('cases-detail-popover', currentCase.toJSON(), undefined, function(template_ui){
-			 		if(!template_ui)
-			    		return;
-			    	var ele = $(template_ui);
-					$(that).popover(
-							{ "rel" : "popover", "trigger" : "hover", "placement" : 'right', "original-title" : currentCase.toJSON().name, "content" : ele,
-								"html" : true, });
-					$(that).popover('show');
-				}, null);
+		var data = $(this).find('.data').attr('data');
+		var currentCase = App_Cases.casesCollectionView.collection.get(data);
+		var that = this;
+		getTemplate('cases-detail-popover', currentCase.toJSON(), undefined, function(template_ui){
+	 		if(!template_ui)
+	    		return;
+	    	var ele = $(template_ui);
+			$(that).popover(
+					{ "rel" : "popover", "trigger" : "hover", "placement" : 'right', "original-title" : currentCase.toJSON().name, "content" : ele,
+						"html" : true, });
+			$(that).popover('show');
+		}, null);
 
-
-					
-			});
+	});
 
 	/**
 	 * On mouse out on the row hides the popover.
@@ -150,27 +88,23 @@ function initializeCasesListeners(el){
  * @param ele
  */
 function updatecases(ele)
-{
+{	
+	$("#casesUpdateModal").html(getTemplate("cases-update-modal", {})).modal("show");
 	var value = ele.toJSON();
 
 	add_recent_view(new BaseModel(value));
 
 	var casesForm = $("#casesUpdateForm");
-
-	deserializeForm(value, $("#casesUpdateForm"));
+	deserializeForm(value, casesForm);
 
 	// Call setupTypeAhead to get contacts
 	agile_type_ahead("contacts-typeahead-input", casesForm, contacts_typeahead);
-	$("#casesUpdateModal").modal("show");
 
 	add_custom_fields_to_form(value, function(data)
 	{
 		var el_custom_fields = show_custom_fields_helper(data["custom_fields"], [
 			"modal"
 		]);
-		console.log(value);
-		console.log(el_custom_fields);
-		console.log(value["custom_data"]);
 		fill_custom_fields_values_generic($(el_custom_fields), value["custom_data"])
 		$("#custom-field-case", casesForm).html(fill_custom_fields_values_generic($(el_custom_fields), value["custom_data"]));
 
@@ -191,6 +125,8 @@ function updatecases(ele)
 // Show new cases popup
 function showCases()
 {
+
+	$("#casesModal").html(getTemplate("cases-new-modal", {})).modal("show");
 	var el = $("#casesForm");
 
 	add_custom_fields_to_form({}, function(data)
@@ -200,24 +136,19 @@ function showCases()
 
 	}, "CASE");
 
+	// Contacts type-ahead
+	agile_type_ahead("contacts-typeahead-input", el, contacts_typeahead);
+
 	// Fills owner select element
 	populateUsers("owners-list", el, undefined, undefined, function(data)
 	{
 
 		$("#casesForm").find("#owners-list").html(data);
 		$("#owners-list", $("#casesForm")).find('option[value=' + CURRENT_DOMAIN_USER.id + ']').attr("selected", "selected");
-		// Contacts type-ahead
-		agile_type_ahead("contacts-typeahead-input", el, contacts_typeahead);
-	});
-
-	// Enable the datepicker
-
-	$('#close_date', el).datepicker({
-		format : CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY
-	});
 		
+	});
 
-	$("#casesModal").modal('show');
+	
 }
 
 // Updates or Saves a cases

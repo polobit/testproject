@@ -125,147 +125,173 @@ function load_imap_properties(model, el) {
 }
 
 
-function initializeSettingsListeners(){
+/**
+*  Settings modal event listeners
+*/
+var Settings_Modal_Events = Base_Model_View.extend({
 
-	$('#prefs-tabs-content').on('click', '.gmail-share-settings-select', function(e)
-	{
-						e.preventDefault();
-						var id = $(this).attr("oid");
-						var el = $(this).closest("div");
-						$(this).css("display", "none");
-						el.find(".gmail-share-select").css("display", "inline");
-						el.find(".gmail-share-settings-txt").css("display",
-								"none");
-						var optionsTemplate = "<option value='{{id}}' {{selected}}>{{name}}</option>";
-						fillSelect(
-								'gmail-share-user-select',
-								'core/api/social-prefs/shared-to-users?id='
-										+ id,
-								'users',
-								function fillNew() {
-									$(
-											"#gmail-share-user-select .default-select",
-											el).remove();
-								}, optionsTemplate, false, el);
-					});
 	/**
+	 * For adding new document
+	 */
+	onGmailShareOptionsSelect: function(e){
+		e.preventDefault();
+		var target_el = $(e.currentTarget);
+
+		var id = $(target_el).attr("oid");
+		var el = $(target_el).closest("div");
+
+		$(target_el).css("display", "none");
+		el.find(".gmail-share-select").css("display", "inline");
+		el.find(".gmail-share-settings-txt").css("display",
+				"none");
+		var optionsTemplate = "<option value='{{id}}' {{selected}}>{{name}}</option>";
+		fillSelect(
+				'gmail-share-user-select',
+				'core/api/social-prefs/shared-to-users?id='
+						+ id,
+				'users',
+				function fillNew() {
+					$(
+							"#gmail-share-user-select .default-select",
+							el).remove();
+				}, optionsTemplate, false, el);
+	},
+
+	 /**
 	 * To cancel the imap share settings event
 	 */
-	$('#prefs-tabs-content').on('click', '.gmail-share-settings-cancel', function(e){
-		e.preventDefault();
-		var el = $(this).closest("div");
-		var name = $(this).attr('name');
-		el.find(".gmail-share-select").css("display", "none");
-		el.find(".gmail-share-settings-select").css("display", "inline");
-		el.find(".gmail-share-settings-txt").css("display", "inline");
-	});
+	onGmailShareOptionsCancel : function(e){
+
+		if(e.target.parentElement.attributes[0].name!="href" && e.target.parentElement.attributes[1].name!="href"){
+     		e.preventDefault();
+     		var target_el = $(e.currentTarget);
+
+     	 	var el = $(target_el).closest("div");
+			var name = $(target_el).attr('name');
+			el.find(".gmail-share-select").css("display", "none");
+			el.find(".gmail-share-settings-select").css("display", "inline");
+			el.find(".gmail-share-settings-txt").css("display", "inline");
+	     }
+	},
 
 	/**
 	 * Share imap settings with othe users
 	 */
-	$('#prefs-tabs-content').on('click', '.imap-share-settings-select', function(e){
-						e.preventDefault();
-						var id = $(this).attr("oid");
-						var el = $(this).closest("div");
-						$(this).css("display", "none");
-						el.find(".imap-share-settings-txt").css("display",
-								"none");
-						el.find(".imap-share-select").css("display", "inline");
-						var optionsTemplate = "<option value='{{id}}' {{selected}}>{{name}}</option>";
-						fillSelect(
-								'imap-share-user-select',
-								'core/api/imap/shared-to-users?id=' + id,
-								'users',
-								function fillNew() {
-									$(
-											"#imap-share-user-select .default-select",
-											el).remove();
-								}, optionsTemplate, false, el);
-					});
+	onImapShareOptionsSelect : function(e){
+		e.preventDefault();
+		var target_el = $(e.currentTarget);
+
+		var id = $(target_el).attr("oid");
+		var el = $(target_el).closest("div");
+		$(target_el).css("display", "none");
+		el.find(".imap-share-settings-txt").css("display",
+				"none");
+		el.find(".imap-share-select").css("display", "inline");
+		var optionsTemplate = "<option value='{{id}}' {{selected}}>{{name}}</option>";
+		fillSelect(
+				'imap-share-user-select',
+				'core/api/imap/shared-to-users?id=' + id,
+				'users',
+				function fillNew() {
+					$(
+							"#imap-share-user-select .default-select",
+							el).remove();
+				}, optionsTemplate, false, el);
+	},
 
 	/**
 	 * To cancel the imap share settings event
 	 */
-	$('#prefs-tabs-content').on('click', '.imap-share-settings-cancel', function(e){
+	onImapShareOptionsCancel : function(e){
 		e.preventDefault();
-		var el = $(this).closest("div");
-		var name = $(this).attr('name');
+		var target_el = $(e.currentTarget);
+
+		var el = $(target_el).closest("div");
+		var name = $(target_el).attr('name');
 		el.find("#imap-share-user-select").empty();
 		el.find(".imap-share-select").css("display", "none");
 		el.find(".imap-share-settings-select").css("display", "inline");
 		el.find(".imap-share-settings-txt").css("display", "inline");
-	});
+	},
 
 	/**
 	 * Select imap server folder, will fetch mails from these folders
 	 */
-	$('#prefs-tabs-content').on('click', '.imap-folders-settings-click', function(e){
-				e.preventDefault();
-				var el = $(this).closest("div");
-				var id = $(this).attr("oid");
-				$(this).css("display", "none");
-				el.find(".imap-folders-select").css("display", "inline");
-				var optionsTemplate = "<option {{selected}}>{{name}}</option>";
-				fillSelect('imap-folders-multi-select', 'core/api/imap/' + id
-						+ '/imap-folders', 'folders', function fillNew() {
-					$("#imap-folders-multi-select .default-select", el)
-							.remove();
-				}, optionsTemplate, false, el);
-			});
+	onImapFoldersOptionsSelect :  function(e){
+		e.preventDefault();
+		var target_el = $(e.currentTarget);
+
+		var el = $(target_el).closest("div");
+		var id = $(target_el).attr("oid");
+		$(target_el).css("display", "none");
+		el.find(".imap-folders-select").css("display", "inline");
+		var optionsTemplate = "<option {{selected}}>{{name}}</option>";
+		fillSelect('imap-folders-multi-select', 'core/api/imap/' + id
+				+ '/imap-folders', 'folders', function fillNew() {
+			$("#imap-folders-multi-select .default-select", el)
+					.remove();
+		}, optionsTemplate, false, el);
+	},
 
 	/**
 	 * To cancel the imap folder settings
 	 */
-	$('#prefs-tabs-content').on('click', '.imap-folders-settings-cancel', function(e){
+	onImapFoldersOptionsCancel :  function(e){
 		e.preventDefault();
-		var el = $(this).closest("div");
+		var target_el = $(e.currentTarget);
+
+		var el = $(target_el).closest("div");
 		el.find('#imap-folders-multi-select').empty();
 		el.find(".imap-folders-select").css("display", "none");
 		el.find(".imap-folders-settings-click").css("display", "inline");
-	});
+	},
+
 
 	/**
 	 * Share office settings with other users
 	 */
-	$('#prefs-tabs-content').on('click', '.office-share-settings-select', function(e){
-						e.preventDefault();
-						var el = $(this).closest("div");
-						$(this).css("display", "none");
-						var id = $(this).attr("oid");
-						el.find(".office-share-settings-txt").css("display",
-								"none");
-						el.find(".office-share-select")
-								.css("display", "inline");
-						var optionsTemplate = "<option value='{{id}}' {{selected}}>{{name}}</option>";
-						fillSelect(
-								'office-share-user-select',
-								'core/api/office/shared-to-users?id=' + id,
-								'users',
-								function fillNew() {
-									$(
-											"#office-share-user-select .default-select",
-											el).remove();
-								}, optionsTemplate, false, el);
-					});
+	onOfficeShareOptionsSelect : function(e){
+		e.preventDefault();
+		var target_el = $(e.currentTarget);
+
+		var el = $(target_el).closest("div");
+		$(target_el).css("display", "none");
+		var id = $(target_el).attr("oid");
+		el.find(".office-share-settings-txt").css("display",
+				"none");
+		el.find(".office-share-select")
+				.css("display", "inline");
+		var optionsTemplate = "<option value='{{id}}' {{selected}}>{{name}}</option>";
+		fillSelect(
+				'office-share-user-select',
+				'core/api/office/shared-to-users?id=' + id,
+				'users',
+				function fillNew() {
+					$(
+							"#office-share-user-select .default-select",
+							el).remove();
+				}, optionsTemplate, false, el);
+	},
 
 	/**
 	 * To cancel the imap share settings event
 	 */
-	$('#prefs-tabs-content').on('click', '.office-share-settings-cancel', function(e){
+	onOfficeShareOptionsCancel : function(e){
 		e.preventDefault();
-		var el = $(this).closest("div");
-		var name = $(this).attr('name');
+		var target_el = $(e.currentTarget);
+
+		var el = $(target_el).closest("div");
+		var name = $(target_el).attr('name');
 		el.find(".office-share-select").css("display", "none");
 		el.find(".office-share-settings-select").css("display", "inline");
 		el.find(".office-share-settings-txt").css("display", "inline");
-	});
+	},
 
-	$('#prefs-tabs-content').on('click', '#gmail-prefs-delete', function(e){
-
+	onGmailPrefsDelete : function(e){
 		e.preventDefault();
+		var target_el = $(e.currentTarget);
 
-		var saveBtn = $(this);
-
+		var saveBtn = $(target_el);
 		var id = $(saveBtn).attr("oid");
 
 		// Returns, if the save button has disabled attribute
@@ -287,14 +313,13 @@ function initializeSettingsListeners(){
 				return;
 			}
 		});
-	});
-	
-	$('#prefs-tabs-content').on('click', '#office-prefs-delete, #imap-prefs-delete', function(e){
+	},
 
+	onImapOfficePrefsDelete : function(e){
 		e.preventDefault();
-		
-		var saveBtn = $(this);
-		
+		var target_el = $(e.currentTarget);
+
+		var saveBtn = $(target_el);		
 		var id = $(saveBtn).attr("oid");
 
 		// Returns, if the save button has disabled attribute
@@ -319,182 +344,27 @@ function initializeSettingsListeners(){
 				return;
 			}
 		});
-	});
 
-}
+	},
 
-function initializeAdminSettingsListeners(){
+	events: {
+		'click .gmail-share-settings-select': 'onGmailShareOptionsSelect',
+		'click .gmail-share-settings-cancel': 'onGmailShareOptionsCancel',		
+		'click .imap-share-settings-select': 'onImapShareOptionsSelect',		
+		'click .imap-share-settings-cancel': 'onImapShareOptionsCancel',	
+		'click .imap-folders-settings-click': 'onImapFoldersOptionsSelect',	
+		'click .imap-folders-settings-cancel': 'onImapFoldersOptionsCancel',	
+		'click .office-share-settings-select': 'onOfficeShareOptionsSelect',	
+		'click .office-share-settings-cancel': 'onOfficeShareOptionsCancel',	
+		'click #gmail-prefs-delete': 'onGmailPrefsDelete',	
+		'click #office-prefs-delete,#imap-prefs-delete': 'onImapOfficePrefsDelete',	
+	},
 
-	 $('#upload-container .upload_s3').off('click');
-	 $('#upload-container').on('click', '.upload_s3', function (e) {
-		e.preventDefault();
-		uploadImage("upload-container");
-	});
+});
 
-	ACCOUNT_DELETE_REASON_JSON = undefined;
-	/**
-	 * If user clicks on confirm delete the modal is hidden and
-	 * delete request is sent to "core/api/delete/account"
-	 */
-		
-	// Cancellation for free users
-	$('#accountPrefs #cancel-account').off('click');
-	$('#accountPrefs').on('click', '#cancel-account', function(e) {
-	
-			e.preventDefault();
-			
-			$("#warning-deletion-feedback").remove();
-			// Shows account stats warning template with stats(data used)
-			
-			getTemplate("warning-feedback", {}, undefined, function(template_ui){
-				if(!template_ui)
-					  return;
-				var el = $(template_ui);
-
-				// Appends to content, warning is modal can call show if
-				// appended in content
-				$('#content').append(el);
-
-				// Shows warning modal
-				$("#warning-deletion-feedback").modal('show');
-
-				// Undefines delete reason, if use chose not to delete account in delete process
-				$("#warning-deletion-feedback").on('hidden.bs.modal', function(){
-					ACCOUNT_DELETE_REASON_JSON = undefined;
-				});
-
-				$('body').on('click', '#warning-feedback-save', function(e) {
-					e.preventDefault();
-					
-					var form = $("#cancelation-feedback-form");
-					
-					if(!isValidForm(form))
-					{
-						return;
-					}
-					
-					var input =  $("input[name=cancellation_reason]:checked");
-				
-					ACCOUNT_DELETE_REASON_JSON = {};
-					ACCOUNT_DELETE_REASON_JSON["reason"] = $(input).val();
-					ACCOUNT_DELETE_REASON_JSON["reason_info"] = $("#account_delete_reason").val();
-					$(".modal-body").html(getRandomLoadingImg());
-					var delete_step1_el = "";
-					if(ACCOUNT_STATS){
-						getTemplate('warning', ACCOUNT_STATS, undefined, function(template_ui1){
-					 		if(!template_ui1)
-					    		return;
-					    	delete_step1_el = $(template_ui1);
-							
-						}, null);
-
-					}
-					else
-						{
-							set_up_account_stats(el, function(data){
-								getTemplate('warning', data, undefined, function(template_ui){
-							 		if(!template_ui)
-							    		return;
-							    	delete_step1_el = $(template_ui);
-									$('#content').html($(template_ui)); 
-									$(".modal-body").css("padding", 0 ).html($(".modal-body", $(delete_step1_el)));
-									$(".modal-footer").html($(".modal-footer", $(delete_step1_el)).html());
-								}, null);
-
-							})
-							return;
-						}
-						 
-					$(".modal-body").css("padding", 0 ).html($(".modal-body", $(delete_step1_el)));
-					$(".modal-footer").html($(".modal-footer", $(delete_step1_el)).html());
-					
-				});
-			}, null);
-	});
-	
-	// Cancellation for paid users
-	$('#accountPrefs #cancel-account-request').off('click');
-	$('#accountPrefs').on('click', '#cancel-account-request', function(e) {
-	
-			e.preventDefault();
-			
-			$("#send-cancellation").remove();
-			
-			// Shows cancellation modal
-			getTemplate('send-cancellation-request', {}, undefined, function(template_ui){
-				if(!template_ui)
-					  return;
-				var el = $(template_ui);	
-				$('#content').append(el);
-				$("#send-cancellation").modal('show');
-			
-				// Undefines delete reason, if use chose not to delete account in delete process
-				$("#send-cancellation").on('hidden.bs.modal', function(){
-					$("#account_cancel_reason").val()
-				});
-
-				$('body').on('click', '#send-delete-request', function(e) {
-
-						e.preventDefault();
-
-						if($(this).attr('disabled'))
-					   	     return;
-						
-						// If not a valid form return else serialize form data to parse
-						if(!isValidForm($("#cancelation-request-form")))
-							return;
-						
-						// Disables send button and change text to Sending...
-						disable_send_button($(this));
-						
-						var json = serializeForm("cancelation-request-form");
-						
-						var info = json.account_cancel_reason;
-						
-						// Replace \r\n with <br> tags as email is sent as text/html
-						var reason = info.replace(/\r\n/g,"<br/>");
-						
-						// Build url
-						var url =  'core/api/emails/send-email?from=' + encodeURIComponent(CURRENT_DOMAIN_USER.email) + '&to=' + 
-						encodeURIComponent("care@agilecrm.com") + '&subject=' + encodeURIComponent("Cancellation Request") + '&body=' + 
-						encodeURIComponent(reason);
-
-						$.post(url,function(){
-
-							// Reset form fields after sending email
-							$("#cancelation-request-form").each(function () {
-								this.reset();
-							});
-							
-							// Adds "Cancellation Request" tag in "Our" domain
-							add_tag_our_domain("Cancellation Request");
-							
-							// Adds note in "Our" domain
-							var note = {};
-							note.subject = "Cancellation Request";
-							note.description = info;
-							
-							agile_addNote(note,'', CURRENT_DOMAIN_USER.email);
-							
-							$("#send-cancellation .modal-title").html($("#send-delete-request-step2 .modal-title").html());		    
-						    $("#send-cancellation .modal-body").html($("#send-delete-request-step2 .modal-body").html());
-							$("#send-cancellation .modal-footer").html($("#send-delete-request-step2 .modal-footer").html());
-							
-							// Enables Send Email button.
-							enable_send_button($('#send-delete-request'));
-						});
-						
-					});
-
-			}, null);
-
-			
-	});
-
-}
 
 $(function(){
-
+	
 	$("#content").on("click", '#email-gateway-delete', function(e) {
 		e.preventDefault();
 		

@@ -503,7 +503,7 @@ var Base_Model_View = Backbone.View
 	    				var topPos = 50*sizey;
 	    				if(sizey==2 || sizey==3)
 	    					topPos += 50;
-	        			$(this.el).html("<div class='text-center v-middle opa-half' style='margin-top:"+topPos+"px'><img src='../flatfull/img/ajax-loader-cursor.gif' style='width:12px;height:10px;opacity:0.5;' /></div>");
+	        			$(this.el).html("<div class='text-center v-middle opa-half' style='margin-top:"+topPos+"px'><img src='../img/ajax-loader-cursor.gif' style='width:12px;height:10px;opacity:0.5;' /></div>");
 					}
 					else
 					{
@@ -611,3 +611,12 @@ function enable_save_button(elem)
 {
 	elem.html(elem.attr('data-save-text')).removeAttr('disabled data-save-text');
 }
+
+/**
+*  Extended View of Base_Model. It combines parent events to extended view events.
+*/
+Base_Model_View.extend = function(child) {
+ var view = Backbone.View.extend.apply(this, arguments);
+ view.prototype.events = _.extend({}, this.prototype.events, child.events);
+ return view;
+};

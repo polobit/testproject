@@ -477,6 +477,7 @@ var Base_Collection_View = Backbone.View
 					this.infiniScroll.destroy();
 				}
 
+				this.delegateEvents();
 				return this;
 			}, buildCollectionUI : function(result)
 			{
@@ -547,3 +548,14 @@ var Base_Collection_View = Backbone.View
 
 				return this;
 			}, });
+
+/**
+*  Extended View of Base_Collection. It combines parent events to extended view events.
+*/
+Base_Collection_View.extend = function(child) {
+ var view = Backbone.View.extend.apply(this, arguments);
+ view.prototype.events = _.extend({}, this.prototype.events, child.events);
+ return view;
+};
+
+

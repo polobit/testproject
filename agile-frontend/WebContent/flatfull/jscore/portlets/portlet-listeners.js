@@ -237,7 +237,7 @@ function initializePortletsListeners() {
 				// Saves new width and height in server
 				$.ajax({
 					type : 'POST',
-					url : '/core/api/portlets/save-onboarding-prefs',
+					url : '/core/api/portlets/saveOnboardingPrefs',
 					data : JSON.stringify(model.toJSON()),
 					contentType : "application/json; charset=utf-8",
 					dataType : 'json',
@@ -838,24 +838,24 @@ function initializeAddPortletsListeners() {
 						var image;
 						var placement = "right";
 						var image_url_json = {
-							"FilterBased" : "flatfull/img/dashboard_images/My-contacts.png",
-							"EmailsOpened" : "flatfull/img/dashboard_images/Email-opened.png",
-							"GrowthGraph" : "flatfull/img/dashboard_images/Tag-Graph.png",
-							"PendingDeals" : "flatfull/img/dashboard_images/Pending-Deals.png",
-							"DealsByMilestone" : "flatfull/img/dashboard_images/Milestone.png",
-							"DealsFunnel" : "flatfull/img/dashboard_images/Deals-Funnel.png",
-							"Agenda" : "flatfull/img/dashboard_images/Events.png",
-							"TodayTasks" : "flatfull/img/dashboard_images/Task.png",
-							"CallsPerPerson" : "flatfull/img/dashboard_images/Calls.png",
-							"AgileCRMBlog" : "flatfull/img/dashboard_images/Agile-Blog.png",
-							"TaskReport" : "flatfull/img/dashboard_images/Task-report.png",
-							"StatsReport" : "flatfull/img/dashboard_images/stats.png",
-							"Leaderboard" : "flatfull/img/dashboard_images/Leaderboard.png",
-							"RevenueGraph" : "flatfull/img/dashboard_images/Revenue-graph.png",
-							"AccountDetails" : "flatfull/img/dashboard_images/account-information.png",
-							"MiniCalendar" : "flatfull/img/dashboard_images/Mini-Calendar.jpg",
-							"UserActivities" : "flatfull/img/dashboard_images/User-Activities.png",
-							"Campaignstats" : "flatfull/img/dashboard_images/Campaign-stats.jpg"
+							"FilterBased" : "img/dashboard_images/My-contacts.png",
+							"EmailsOpened" : "img/dashboard_images/Email-opened.png",
+							"GrowthGraph" : "img/dashboard_images/Tag-Graph.png",
+							"PendingDeals" : "img/dashboard_images/Pending-Deals.png",
+							"DealsByMilestone" : "img/dashboard_images/Milestone.png",
+							"DealsFunnel" : "img/dashboard_images/Deals-Funnel.png",
+							"Agenda" : "img/dashboard_images/Events.png",
+							"TodayTasks" : "img/dashboard_images/Task.png",
+							"CallsPerPerson" : "img/dashboard_images/Calls.png",
+							"AgileCRMBlog" : "img/dashboard_images/Agile-Blog.png",
+							"TaskReport" : "img/dashboard_images/Task-report.png",
+							"StatsReport" : "img/dashboard_images/stats.png",
+							"Leaderboard" : "img/dashboard_images/Leaderboard.png",
+							"RevenueGraph" : "img/dashboard_images/Revenue-graph.png",
+							"AccountDetails" : "img/dashboard_images/account-information.png",
+							"MiniCalendar" : "img/dashboard_images/Mini-Calendar.jpg",
+							"UserActivities" : "img/dashboard_images/User-Activities.png",
+							"Campaignstats" : "img/dashboard_images/Campaign-stats.jpg"
 						};
 						var placements_json = {
 							"GrowthGraph" : "left",
@@ -918,7 +918,7 @@ function initializeAddPortletsListeners() {
 				}
 
 				var portlet = new BaseModel();
-				portlet.url = 'core/api/portlets/add';
+				portlet.url = 'core/api/portlets/addPortlet';
 				portlet.set({
 					"prefs" : JSON.stringify(json)
 				}, {

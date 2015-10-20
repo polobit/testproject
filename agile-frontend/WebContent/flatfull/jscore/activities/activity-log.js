@@ -223,7 +223,8 @@ function initActivitiesDateRange()
 			var from_date = Date.parse('today');
 			var to_date = Date.today().add({ days : parseInt(-6) });
 			$('#activities_date_range #range').html(to_date.toString('MMMM d, yyyy') + " - " + from_date.toString('MMMM d, yyyy'));
-			renderActivityView(getActivityFilterParameters());
+			renderActivityView(getActivityFilterParameters);
+			updateActivty(getActivityFilterParameters());
 		}
 	});
 	$('.daterangepicker > .ranges > ul').on("click", "li", function(e)

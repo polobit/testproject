@@ -363,9 +363,10 @@ $('#content').on('click', '.add-deal-document-confirm', function(e){
     }	    	
     else if(document_id == "new")
     {
-    	var el = $("#uploadDocumentForm");
-		$("#uploadDocumentModal").modal('show');
+    	
+    	$('#uploadDocumentModal').html(getTemplate("upload-document-modal", {})).modal('show');
 		
+		var el = $("#uploadDocumentForm");
 		// Contacts type-ahead
 		agile_type_ahead("document_relates_to_contacts", el, contacts_typeahead);
 		

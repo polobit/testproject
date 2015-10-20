@@ -90,7 +90,8 @@ function getTemplate(templateName, context, download, callback, loading_place_ho
 	if(loading_place_holder)
 	{
 		try{
-			$(loading_place_holder).html(getRandomLoadingImg());
+			var loaderEl = $(getRandomLoadingImg());
+			$(loading_place_holder).html(loaderEl.css("margin", "10px"));
 		}catch(err){}
 	}
 		   

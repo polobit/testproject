@@ -33,69 +33,49 @@ function fill_company_related_contacts(companyId, htmlId)
 
 	$('#' + htmlId).html(companyContactsView.render().el);
 }
-$(function()
-{
 
-	var id;
+var Contact_Details_Tab_Actions = {
 
-	/**
+	 /**
 	 * Activates the Timeline tab-content to show the time-line with all
 	 * details, which are already added to time-line, when the contact is
 	 * getting to its detail view.
 	 */
-	$('body').on('click', '#contactDetailsTab a[href="#timeline"]', function(e)
-	{
-		e.preventDefault();
+	  openTimeLine : function(e){
+	  		
+			save_contact_tab_position_in_cookie("timeline");
 
-		save_contact_tab_position_in_cookie("timeline");
+			contact_details_tab.load_timeline();
+	  },
 
-		contact_details_tab.load_timeline();
-	});
+	  onEmailSubjectClick : function(e){
+	  		
+	  		var targetEl = $(e.currentTarget);
 
-	$('body').on('click', '.email-subject', function(e)
-	{
-		e.preventDefault();
-		var href = $(this).attr("href");
-		var id = $(this).attr('id');
-		$(".collapse-" + id).hide();
-		$(href).collapse('toggle');
+			var href = $(targetEl).attr("href");
+			var id = $(targetEl).attr('id');
+			$(".collapse-" + id).hide();
+			$(href).collapse('toggle');
 
-		$(href).on("hidden.bs.collapse", function()
-		{
-			$(".collapse-" + id).show();
-		})
+			$(href).on("hidden.bs.collapse", function()
+			{
+				$(".collapse-" + id).show();
+			})
+	  },
 
-	});
+	  // Hide More link and truncated webstats and show complete web stats.
+	  showPageViews : function(e){
+		   $(e.currentTarget).closest('.activity-text-block').find('#complete-webstats').toggle();	  	
+	  },
 
-	// Hide More link and truncated webstats and show complete web stats.
-	/*
-	 * $('#more-page-urls').die().live('click', function(e) {
-	 * e.preventDefault();
-	 * 
-	 * $(this).css('display', 'none');
-	 * $(this).parent().parent().find('#truncated-webstats').css('display',
-	 * 'none');
-	 * 
-	 * $(this).parent().parent().find('#complete-webstats').removeAttr('style');
-	 * });
-	 */
+	  // to remove contact from active campaign.
+	  removeActiveCampaigns : function(e){
+	  	var targetEl = $(e.currentTarget);
 
-	$('body').on('click', '#show-page-views', function(e)
-	{
-		e.preventDefault();
+  		if (!confirm("Are you sure to remove " + $(targetEl).attr("contact_name") + " from " + $(targetEl).attr("campaign_name") + " campaign?"))
+		return;
 
-		$(this).closest('.activity-text-block').find('#complete-webstats').toggle();
-	});
-
-	// to remove contact from active campaign.
-	$('body').on('click', '.remove-active-campaign', function(e)
-	{
-		e.preventDefault();
-
-		if (!confirm("Are you sure to remove " + $(this).attr("contact_name") + " from " + $(this).attr("campaign_name") + " campaign?"))
-			return;
-
-		var $active_campaign = $(this).closest('span#active-campaign');
+		var $active_campaign = $(targetEl).closest('span#active-campaign');
 		var campaign_id = $active_campaign.attr('data');
 		var contact_id;
 
@@ -131,154 +111,34 @@ $(function()
 			$active_campaign.remove();
 
 		} });
+	  },
 
-	});
-	/*
-	 * $('.ativity-block-ul > li') .live('mouseenter',function(){
-	 * console.log("hover"); }) .live('mouseleave',function(){
-	 * console.log("hout"); });
-	 */
-
-	/**
+	  /**
 	 * Fetches all the notes related to the contact and shows the notes
 	 * collection as a table in its tab-content, when "Notes" tab is clicked.
 	 */
-	$('body').on('click', '#contactDetailsTab a[href="#notes"]', function(e)
-	{
-		e.preventDefault();
-		save_contact_tab_position_in_cookie("notes");
-		contact_details_tab.load_notes();
-	});
+	  showNotes : function(e){
+		   save_contact_tab_position_in_cookie("notes");
+		   contact_details_tab.load_notes();
+	  
+	  },
 
-	/**
+	  /**
 	 * Fetches all the events related to the contact and shows the events
 	 * collection as a table in its tab-content, when "Events" tab is clicked.
 	 */
-	$('body').on('click', '#contactDetailsTab a[href="#events"]', function(e)
-	{
-		e.preventDefault();
-		save_contact_tab_position_in_cookie("events");
+	  showEvents : function(e){
+		   save_contact_tab_position_in_cookie("events");
 		contact_details_tab.load_events();
-	});
+	  },
 
-	/**
-	 * Fetches all the documents related to the contact and shows the documents
-	 * collection as a table in its tab-content, when "Documents" tab is
-	 * clicked.
-	 */
-	$('body').on('click', '#contactDetailsTab a[href="#documents"]', function(e)
-	{
-		e.preventDefault();
-		save_contact_tab_position_in_cookie("documents");
-		contact_details_tab.load_documents();
-	});
+	   replyToEmail : function(e){
+		   
+		   var targetEl = $(e.currentTarget);
 
-	/**
-	 * Fetches all the notes related to the contact and shows the tasks
-	 * collection as a table in its tab-content, when "Tasks" tab is clicked.
-	 */
-	$('body').on('click', '#contactDetailsTab a[href="#tasks"]', function(e)
-	{
-		e.preventDefault();
-		save_contact_tab_position_in_cookie("tasks");
-		contact_details_tab.load_tasks();
-	});
+				var from = $(targetEl).data('from');
 
-	/**
-	 * Fetches all the deals related to the contact and shows the deals
-	 * collection as a table in its tab-content, when "Deals" tab is clicked.
-	 */
-	$('body').on('click', '#contactDetailsTab a[href="#deals"]', function(e)
-	{
-		e.preventDefault();
-		save_contact_tab_position_in_cookie("deals");
-		contact_details_tab.load_deals();
-	});
-
-	/**
-	 * Fetches all the cases related to the contact and shows the collection.
-	 */
-	$('body').on('click', '#contactDetailsTab a[href="#cases"]', function(e)
-	{
-		e.preventDefault();
-		save_contact_tab_position_in_cookie("cases");
-
-		contact_details_tab.load_cases();
-	});
-
-	/**
-	 * Gets every conversation of the contact (if it has email) with the
-	 * associated email (gmail or imap) in Email-preferences of this CRM, when
-	 * "Mail" tab is clicked.
-	 */
-	$('body').on('click', '#contactDetailsTab a[href="#mail"]', function(e)
-	{
-		e.preventDefault();
-		email_server_type = "agilecrm"
-		save_contact_tab_position_in_cookie("mail");
-		contact_details_tab.load_mail();
-	});
-
-	/**
-	 * Gets the activities of a contact from browsing history, using its email.
-	 * To do so the email should be run in analytics script provided by
-	 * agileCRM.
-	 */
-	 $('body').on('click', '#contactDetailsTab a[href="#stats"]', function(e)
-	{
-		e.preventDefault();
-		save_contact_tab_position_in_cookie("stats");
-		contact_details_tab.load_stats();
-
-	});
-
-	/**
-	 * Fetches all the logs of the campaigns that the contact is subscribed to
-	 * and shows them in a table. Also shows a campaigns drop down list to
-	 * subscribe the contact to the selected campaign.
-	 */
-	$('body').on('click', '#contactDetailsTab a[href="#campaigns"]', function(e)
-	{
-		e.preventDefault();
-		save_contact_tab_position_in_cookie("campaigns");
-		contact_details_tab.load_campaigns();
-	});
-
-    /*$('body').on('click', '#contactDetailsTab a[href="#company-contacts"]', function(e)
-	{
-		e.preventDefault();
-		fill_company_related_contacts(App_Contacts.contactDetailView.model.id, 'company-contacts');
-	});*/
-
-	/**
-	 * Sets cookie when user changes email dropdown under mail tab. Cookie
-	 * contains email server, email name from next time application loads from
-	 * emails from this email server and email
-	 */
-	$('body').on('click', '.agile-emails', function(e)
-	{
-		e.preventDefault();
-		var email_server = $(this).attr('email-server');
-		var url = $(this).attr('data-url');
-		$('#email-type-select', App_Contacts.contactDetailView.el).html($(this).html());
-		// Here email_server_type means email/username of mail account
-		email_server_type = $(this).attr('email-server-type');
-		if (email_server && url && (email_server != 'agile'))
-			url = url.concat(email_server_type);
-		var cookie_value = email_server_type + '|' + email_server;
-		save_email_server_type_in_cookie(cookie_value);
-		contact_details_tab.load_mail(url, email_server);
-	});
-
-	
-
-    $('body').on('click', '#email-reply', function(e)
-			{
-				e.preventDefault();
-
-				var from = $(this).data('from');
-
-				var $parent_element = $(this).closest('#email-reply-div');
+				var $parent_element = $(targetEl).closest('#email-reply-div');
 
 				var to_emails = $parent_element.find('.to-emails').data('to');
 				var cc_emails = $parent_element.find('.cc-emails').data('cc');
@@ -331,90 +191,91 @@ $(function()
 						'<p></p><blockquote style="margin:0 0 0 .8ex;border-left:1px #ccc solid;padding-left:1ex;">' + $parent_element.find('.email-body')
 								.html() + '</blockquote>', cc_emails, bcc_emails);
 
-			});
+	  },
 
-	/**
+	  /**
 	 * Delete functionality for activity blocks in contact details
 	 */
-	$('body').on('click', '.activity-delete', function(e)
-	{
-		e.preventDefault();
+	   deleteActivity : function(e){
+		  	
+		  	var targetEl = $(e.currentTarget);
 
-		var model = $(this).parents('li').data();
+		  	var model = $(targetEl).parents('li').data();
 
-		if (model && model.toJSON().type != "WEB_APPOINTMENT")
-		{
-			if (!confirm("Are you sure you want to delete?"))
-				return;
-		}
-		else if (model && model.toJSON().type == "WEB_APPOINTMENT" && parseInt(model.toJSON().start) < parseInt(new Date().getTime() / 1000))
-		{
-			if (!confirm("Are you sure you want to delete?"))
-				return;
-		}
-
-		if (model && model.collection)
-		{
-			model.collection.remove(model);
-		}
-
-		// Gets the id of the entity
-		var entity_id = $(this).attr('id');
-
-		if (model && model.toJSON().type == "WEB_APPOINTMENT" && parseInt(model.toJSON().start) > parseInt(new Date().getTime() / 1000))
-		{
-			web_event_title = model.toJSON().title;
-			if (model.toJSON().contacts.length > 0)
+			if (model && model.toJSON().type != "WEB_APPOINTMENT")
 			{
-				var firstname = getPropertyValue(model.toJSON().contacts[0].properties, "first_name");
-				if (firstname == undefined)
-					firstname = "";
-				var lastname = getPropertyValue(model.toJSON().contacts[0].properties, "last_name");
-				if (lastname == undefined)
-					lastname = "";
-				web_event_contact_name = firstname + " " + lastname;
+				if (!confirm("Are you sure you want to delete?"))
+					return;
 			}
-			$("#webEventCancelModel").modal('show');
-			$("#cancel_event_title").html("Delete event &#39" + web_event_title + "&#39");
-			$("#event_id_hidden").html("<input type='hidden' name='event_id' id='event_id' value='" + entity_id + "'/>");
-			return;
-		}
-
-		// Gets the url to which delete request is to be sent
-		var entity_url = $(this).attr('url');
-
-		if (!entity_url)
-			return;
-
-		var id_array = [];
-		var id_json = {};
-
-		// Create array with entity id.
-		id_array.push(entity_id);
-
-		// Set entity id array in to json object with key ids,
-		// where ids are read using form param
-		id_json.ids = JSON.stringify(id_array);
-		var that = this;
-
-		// Add loading. Adds loading only if there is no loaded image added
-		// already i.e.,
-		// to avoid multiple loading images on hitting delete multiple times
-		if ($(this).find('.loading').length == 0)
-			$(this).prepend($(LOADING_HTML).addClass('pull-left').css('width', "20px"));
-
-		$.ajax({ url : entity_url, type : 'POST', data : id_json, success : function()
-		{
-			// Removes activity from list
-			$(that).parents(".activity").fadeOut(400, function()
+			else if (model && model.toJSON().type == "WEB_APPOINTMENT" && parseInt(model.toJSON().start) < parseInt(new Date().getTime() / 1000))
 			{
-				$(this).remove();
-			});
-			removeItemFromTimeline($("#" + entity_id, $("#timeline")));
-		} });
-	});
+				if (!confirm("Are you sure you want to delete?"))
+					return;
+			}
 
-});
+			if (model && model.collection)
+			{
+				model.collection.remove(model);
+			}
+
+			// Gets the id of the entity
+			var entity_id = $(targetEl).attr('id');
+
+			if (model && model.toJSON().type == "WEB_APPOINTMENT" && parseInt(model.toJSON().start) > parseInt(new Date().getTime() / 1000))
+			{
+				web_event_title = model.toJSON().title;
+				if (model.toJSON().contacts.length > 0)
+				{
+					var firstname = getPropertyValue(model.toJSON().contacts[0].properties, "first_name");
+					if (firstname == undefined)
+						firstname = "";
+					var lastname = getPropertyValue(model.toJSON().contacts[0].properties, "last_name");
+					if (lastname == undefined)
+						lastname = "";
+					web_event_contact_name = firstname + " " + lastname;
+				}
+				$("#webEventCancelModel").modal('show');
+				$("#cancel_event_title").html("Delete event &#39" + web_event_title + "&#39");
+				$("#event_id_hidden").html("<input type='hidden' name='event_id' id='event_id' value='" + entity_id + "'/>");
+				return;
+			}
+
+			// Gets the url to which delete request is to be sent
+			var entity_url = $(targetEl).attr('url');
+
+			if (!entity_url)
+				return;
+
+			var id_array = [];
+			var id_json = {};
+
+			// Create array with entity id.
+			id_array.push(entity_id);
+
+			// Set entity id array in to json object with key ids,
+			// where ids are read using form param
+			id_json.ids = JSON.stringify(id_array);
+			var that = targetEl;
+
+			// Add loading. Adds loading only if there is no loaded image added
+			// already i.e.,
+			// to avoid multiple loading images on hitting delete multiple times
+			if ($(targetEl).find('.loading').length == 0)
+				$(targetEl).prepend($(LOADING_HTML).addClass('pull-left').css('width', "20px"));
+
+			$.ajax({ url : entity_url, type : 'POST', data : id_json, success : function()
+			{
+				// Removes activity from list
+				$(that).parents(".activity").fadeOut(400, function()
+				{
+					$(targetEl).remove();
+				});
+				removeItemFromTimeline($("#" + entity_id, $("#timeline")));
+			} });
+	  },
+
+	 
+};
 
 /**
  * Returns contact properties in a json

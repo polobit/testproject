@@ -46,7 +46,7 @@ var portlet_graph_data_utility = {
 				.html(
 						"<div class='text-center v-middle opa-half' style='margin-top:"
 								+ topPos
-								+ "px'><img src='../flatfull/img/ajax-loader-cursor.gif' style='width:12px;height:10px;opacity:0.5;' /></div>");
+								+ "px'><img src='../img/ajax-loader-cursor.gif' style='width:12px;height:10px;opacity:0.5;' /></div>");
 		this
 				.fetchPortletsGraphData(
 						url,
@@ -140,7 +140,7 @@ var portlet_graph_data_utility = {
 				.html(
 						"<div class='text-center v-middle opa-half' style='margin-top:"
 								+ topPos
-								+ "px'><img src='../flatfull/img/ajax-loader-cursor.gif' style='width:12px;height:10px;opacity:0.5;' /></div>");
+								+ "px'><img src='../img/ajax-loader-cursor.gif' style='width:12px;height:10px;opacity:0.5;' /></div>");
 		this
 				.fetchPortletsGraphData(
 						url,
@@ -253,7 +253,7 @@ var portlet_graph_data_utility = {
 				.html(
 						"<div class='text-center v-middle opa-half' style='margin-top:"
 								+ topPos
-								+ "px'><img src='../flatfull/img/ajax-loader-cursor.gif' style='width:12px;height:10px;opacity:0.5;' /></div>");
+								+ "px'><img src='../img/ajax-loader-cursor.gif' style='width:12px;height:10px;opacity:0.5;' /></div>");
 		this
 				.fetchPortletsGraphData(
 						url,
@@ -620,7 +620,7 @@ var portlet_graph_data_utility = {
 				.html(
 						"<div class='text-center v-middle opa-half' style='margin-top:"
 								+ topPos
-								+ "px'><img src='../flatfull/img/ajax-loader-cursor.gif' style='width:12px;height:10px;opacity:0.5;' /></div>");
+								+ "px'><img src='../img/ajax-loader-cursor.gif' style='width:12px;height:10px;opacity:0.5;' /></div>");
 		this
 				.fetchPortletsGraphData(
 						url,
@@ -707,7 +707,7 @@ var portlet_graph_data_utility = {
 				.html(
 						"<div class='text-center v-middle opa-half' style='margin-top:"
 								+ topPos
-								+ "px'><img src='../flatfull/img/ajax-loader-cursor.gif' style='width:12px;height:10px;opacity:0.5;' /></div>");
+								+ "px'><img src='../img/ajax-loader-cursor.gif' style='width:12px;height:10px;opacity:0.5;' /></div>");
 		this
 				.fetchPortletsGraphData(
 						url,
@@ -849,7 +849,7 @@ var portlet_graph_data_utility = {
 				.html(
 						"<div class='text-center v-middle opa-half' style='margin-top:"
 								+ topPos
-								+ "px'><img src='../flatfull/img/ajax-loader-cursor.gif' style='width:12px;height:10px;opacity:0.5;' /></div>");
+								+ "px'><img src='../img/ajax-loader-cursor.gif' style='width:12px;height:10px;opacity:0.5;' /></div>");
 		this
 				.fetchPortletsGraphData(
 						url,

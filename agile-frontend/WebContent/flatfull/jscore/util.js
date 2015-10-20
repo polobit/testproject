@@ -1,7 +1,7 @@
 /**
  * Loading spinner shown while loading
  */
-var LOADING_HTML = '<img class="loading" style="padding-right:5px;opacity:0.5;" src= "/flatfull/img/ajax-loader-cursor.gif"></img>';
+var LOADING_HTML = '<img class="loading" style="padding-right:5px;opacity:0.5;" src= "/img/ajax-loader-cursor.gif"></img>';
 
 /**
  * Set of loading images
@@ -19,7 +19,7 @@ var LOADING_ON_CURSOR = '<img class="loading" style="padding-right:5px" src= "im
  * Default image shown for contacts if image is not available
  */
 
-var DEFAULT_GRAVATAR_url = window.location.origin + "/" + FLAT_FULL_PATH + "images/flatfull/user-default.jpg";
+var DEFAULT_GRAVATAR_url = window.location.origin + "/" + FLAT_FULL_PATH + "images/user-default.jpg";
 
 var ONBOARDING_SCHEDULE_URL = "https://our.agilecrm.com/calendar/Haaris_Farooqi,Sandeep";
 
@@ -85,7 +85,7 @@ function fillSelect(selectId, url, parseKey, callback, template, isUlDropdown, e
 	});
 
 	// Prepend Loading
-	$loading = '<img class="loading" style="padding-right:5px;opacity:0.5;" src= "../flatfull/img/ajax-loader-cursor.gif"></img>';
+	$loading = '<img class="loading" style="padding-right:5px;opacity:0.5;" src= "../img/ajax-loader-cursor.gif"></img>';
 	if ($("#" + selectId, el).next().hasClass("select-loading"))
 		$("#" + selectId, el).next().html($loading);
 	else

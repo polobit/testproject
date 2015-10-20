@@ -507,7 +507,7 @@ function show_chained_fields(el, data, forceShow)
  * 
  * @param element
  */
-function addTagsDefaultTypeahead(element, applyCustomCSS)
+function addTagsDefaultTypeahead(element)
 {
 	var tags_array = [];
 
@@ -522,7 +522,7 @@ function addTagsDefaultTypeahead(element, applyCustomCSS)
 		tagsCollection.fetch({ success : function(data)
 		{
 			TAGS = tagsCollection.models;
-			addTagsArrayasTypeaheadSource(tagsCollection.toJSON(), element, applyCustomCSS);
+			addTagsArrayasTypeaheadSource(tagsCollection.toJSON(), element);
 
 		} });
 		return;
@@ -530,11 +530,11 @@ function addTagsDefaultTypeahead(element, applyCustomCSS)
 	
 
 	// Adds typeahead to given element
-	addTagsArrayasTypeaheadSource(tagsCollection.toJSON(), element, applyCustomCSS);
+	addTagsArrayasTypeaheadSource(tagsCollection.toJSON(), element);
 }
 
 // With tags JSON sent type ahead is built on input fields
-function addTagsArrayasTypeaheadSource(tagsJSON, element, applyCustomCSS)
+function addTagsArrayasTypeaheadSource(tagsJSON, element)
 {
 	var tags_array = [];
 
@@ -544,10 +544,7 @@ function addTagsArrayasTypeaheadSource(tagsJSON, element, applyCustomCSS)
 	});
 
 	// $("input", element).attr("data-provide","typeahead");
-	if(applyCustomCSS)
-		$("input", element).typeahead({ "source" : tags_array }).attr('placeholder', "Enter Tag");
-	else
-		$("input", element).typeahead({ "source" : tags_array }).attr('placeholder', "Enter Tag").width("92%");
+	$("input", element).typeahead({ "source" : tags_array }).attr('placeholder', "Enter Tag").width("92%");
 }
 
 

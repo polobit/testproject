@@ -365,7 +365,7 @@ function fetchMails(contact_details_tab_scope,has_email_configured,mail_server_u
 	// By default showing Agile emails
 	if(email_server === 'agile')
 	{
-		mail_server_url = 'core/api/emails/agile-emails?search_email='+encodeURIComponent(email);
+		mail_server_url = 'core/api/emails/agile-emails?e='+encodeURIComponent(email);
 		email_server_type = "agilecrm";
 		cursor = false;
 	}
