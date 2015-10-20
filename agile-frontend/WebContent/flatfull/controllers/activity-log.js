@@ -34,7 +34,7 @@ var ActivitylogRouter = Backbone.Router.extend({
 
                     renderActivityView(getActivityFilterParameters(true));
                     
-                    $(".activity-log-button").hide();
+                    $(".activity-log-button").css('display','none');
 
                     var activityFilters = JSON.parse(readCookie(ACTIVITY_FILTER));
 
@@ -52,7 +52,7 @@ var ActivitylogRouter = Backbone.Router.extend({
 
                         }
 
-                        $(".activity-log-button").show();
+                        $(".activity-log-button").css('display','inline');
 
 
                     }, optionsTemplate, true);
