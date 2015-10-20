@@ -1040,7 +1040,7 @@ public class ActivityReportsUtil
 	    return;
 	}
 	throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-		.entity("Report not sent as there are no records matching the report criteria.").build());
+		.entity("Report not sent as there are no activities matching the report criteria.").build());
     }
 
     /**

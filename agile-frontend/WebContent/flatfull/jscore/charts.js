@@ -1703,7 +1703,7 @@ function chartRenderforIncoming(selector,categories,name,yaxis_name,min_tick_int
                                 {
                         return '<div>' + 
                                 '<div class="p-n">'+this.x+'</div>' + 
-                                '<div class="p-n"><font color='+this.series.color+'>'+this.series.name+'</font> : '+getNumberWithCommasForCharts(this.y)+'</div>' +
+                                '<div class="p-n text-cap"><font color='+this.series.color+'>'+this.series.name+'</font> : '+getNumberWithCommasForCharts(this.y)+'</div>' +
                                 '</div>'+
                                 '<div class="p-n">Total : '+getNumberWithCommasForCharts(AllData[this.point.x][1])+'</div>';
                             }
@@ -1877,7 +1877,7 @@ if(selector == 'lossreasonpie-chart-users'){
 						dataLabels : { enabled : true,useHTML: true,
 							formatter : function()
 							{
-								return 	'<div class="text-center"><span style="color:'+this.point.color+';display:block"><b>'+this.point.name+'</b></span>' +
+								return 	'<div class="text-center text-cap"><span style="color:'+this.point.color+';display:block"><b>'+this.point.name+'</b></span>' +
     			'<span style="color:'+this.point.color+'"><b>'+Math.round(this.point.percentage)+'%</b></span></div>';
 							}, distance : 25 }, showInLegend : false,size:pieSize,innerSize :'65%',shadow : false, borderWidth : 0 },
 					series : { events : { mouseOver : function()
