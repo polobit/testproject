@@ -90,10 +90,7 @@ function initializeDataSyncListners(){
 				type : 'DELETE',
 				success : function(){
 					console.log("success");
-					if(sync_widget_type=='GOOGLE'){
-						window.location.reload();
-						return false;
-					}
+					
 					App_Datasync.dataSync();
 				}
 			});
