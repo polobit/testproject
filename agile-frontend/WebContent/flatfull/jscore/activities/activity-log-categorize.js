@@ -108,6 +108,8 @@ function getActivityObject(id)
 
 function update_event_activity(ele)
 {
+	$("#updateActivityModal").html(getTemplate("update-activity-modal"));
+	
 	var value = JSON.parse(ele);
 	deserializeForm(value, $("#updateActivityForm"));
 	$("#updateActivityModal").modal('show');

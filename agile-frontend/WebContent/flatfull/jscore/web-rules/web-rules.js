@@ -56,10 +56,17 @@ function chainWebRules(el, data, isNew, actions)
 	scramble_input_names($(".reports-condition-table", element_clone))
 }
 
-$(function()
-		{
+/**
+*  WebRules event view
+*/
+var Web_Rules_Event_View = Base_Model_View.extend({
+    events: {
+ 		'click .web-rule-multiple-add' : 'ruleMultipleAdd',
+ 		'click i.webrule-multiple-remove' : 'ruleMultipleAdd',
+    },
+
 			// Filter Contacts- Clone Multiple
-			$('body').on('click', '.web-rule-multiple-add', function(e)
+			ruleMultipleAdd: function(e)
 			{
 				e.preventDefault();
 
@@ -81,7 +88,7 @@ $(function()
 			// Filter Contacts- Remove Multiple
 			$('body').on('click', 'i.webrule-multiple-remove', function(e)
 			{
-				$(this).closest(".chained-table > div").remove();
+				$(this).closest("tr").remove();
 			});
 			
 			// Filter Contacts- Clone Multiple

@@ -25,16 +25,35 @@ function scramble_input_names(el)
 }
 SEARCHABLE_CONTACT_CUSTOM_FIELDS = undefined;
 COMPANY_CUSTOM_FIELDS = undefined;
-function initializeContactFiltersListeners()
-{
-}
-$(function(){
+
+/**
+*  Contact Reports filters event view
+*/
+var Report_Filters_Event_View = Base_Model_View.extend({
+    events: {
+    	'click .filter-contacts-multiple-add' : 'contactsFilterMultipleAdd',
+    	'click .filter-contacts-multiple-add-or-rules' : 'contactsFilterAddOrRules',
+    	'click .filter-companies-multiple-add' : 'companiesFilterMultipleAdd',
+    	'click .filter-companies-multiple-add-or-rules' : 'companiesFilterAddOrRules',
+    	'click i.filter-contacts-multiple-remove' : 'contactsFilterRemove',
+    	'click .filter' : 'filterResults',
+    	'click .default_filter' : 'defaultFilterResults',
+    	'click .default_contact_remove_tag' : 'defaultContactRemoveTag',
+
+    	'click #companies-filter' : 'companyFilterResults',
+    	'change .lhs_chanined_parent' : 'onParentLHSChanged',
+    	'change #condition > select' : 'onConditionChanged',
+    	'change #contact_type' : 'onChangeContactType',
+    	
+    },
 
 	// Filter Contacts- Clone Multiple
-	$('body').on('click', '.filter-contacts-multiple-add', function(e)
+	contactsFilterMultipleAdd: function(e)
 	{
 		e.preventDefault();
-		var that = this;
+		var targetEl = $(e.currentTarget);
+
+		var that = targetEl;
 		// To solve chaining issue when cloned
 
 		getTemplate("filter-contacts", {}, undefined, function(template_ui){
@@ -57,13 +76,15 @@ $(function(){
 			$(that).prev('table').find("tbody").append(htmlContent);
 
 		}, null);
-	});
+	},
 	
 	// Filter Contacts- Clone Multiple
-	$('body').on('click', '.filter-contacts-multiple-add-or-rules', function(e)
+	contactsFilterAddOrRules: function(e)
 	{
 		e.preventDefault();
-		var that = this;
+		var targetEl = $(e.currentTarget);
+
+		var that = targetEl;
 		// To solve chaining issue when cloned
 		getTemplate("filter-contacts", {}, undefined, function(template_ui){
 			if(!template_ui)
@@ -86,14 +107,16 @@ $(function(){
 
 		}, null);
 		
-	});
+	},
 	
 	// Filter Contacts- Clone Multiple
-	$('body').on('click', '.filter-companies-multiple-add', function(e)
+	companiesFilterMultipleAdd: function(e)
 	{
 		e.preventDefault();
+		var targetEl = $(e.currentTarget);
+
 		// To solve chaining issue when cloned
-		var that = this;
+		var that = targetEl;
 		getTemplate("filter-contacts", {}, undefined, function(template_ui){
 			if(!template_ui)
 				  return;
@@ -113,13 +136,15 @@ $(function(){
 
 		}, null);
 		
-	});
+	},
 	
 	// Filter Contacts- Clone Multiple
-	$('body').on('click', '.filter-companies-multiple-add-or-rules', function(e)
+	companiesFilterAddOrRules: function(e)
 	{
 		e.preventDefault();
-		var that = this;
+		var targetEl = $(e.currentTarget);
+		
+		var that = targetEl;
 		// To solve chaining issue when cloned
 		getTemplate("filter-contacts", {}, undefined, function(template_ui){
 			if(!template_ui)
@@ -141,23 +166,26 @@ $(function(){
 		}, null);
 
 		
-	});
+	},
 
 	// Filter Contacts- Remove Multiple
-	$('body').on('click', 'i.filter-contacts-multiple-remove', function(e)
+	contactsFilterRemove: function(e)
 	{
-		$(this).closest("tr").remove();
-	});
+		var targetEl = $(e.currentTarget);
+		$(targetEl).closest("tr").remove();
+	},
 
 	// Fetch filter result without changing route on click
-	$('body').on('click', '.filter', function(e)
+	filterResults:  function(e)
 	{
 
 		e.preventDefault();
+		var targetEl = $(e.currentTarget);
+
 		eraseData('dynamic_contact_filter');
 
-		var filter_id = $(this).attr('id');
-		var filter_type = $(this).attr('filter_type');
+		var filter_id = $(targetEl).attr('id');
+		var filter_type = $(targetEl).attr('filter_type');
 
 		// Saves Filter in cookie
 		createCookie('contact_filter', filter_id)
@@ -165,32 +193,33 @@ $(function(){
 
 		// Gets name of the filter, which is set as data
 		// attribute in filter
-		filter_name = $(this).attr('data');
+		filter_name = $(targetEl).attr('data');
 
 		CONTACTS_HARD_RELOAD=true;
 		App_Contacts.contacts();
 		return;
 		// /removed old code from below,
 		// now filters will work only on contact, not company
-	});
+	},
+
 	/*
 	 * If default filter is selected, removes filter cookies an load contacts
 	 * with out any query condition
 	 */
-	$('body').on('click', '.default_filter', function(e)
+	defaultFilterResults:  function(e)
 	{
 		e.preventDefault();
 		revertToDefaultContacts();
-	});
+	},
 
-	$('body').on('click', '.default_contact_remove_tag', function(e)
+	defaultContactRemoveTag: function(e)
 	{
 		e.preventDefault();
 		// Navigate to show form
 		Backbone.history.navigate("contacts", { trigger : true });
-	});
+	},
 
-	$('body').on('click', '#companies-filter', function(e)
+	companyFilterResults: function(e)
 	{
 
 		e.preventDefault();
@@ -203,40 +232,44 @@ $(function(){
 		// reload
 		return;
 		
-	});
+	},
 
-	$('body').on('change', '.lhs_chanined_parent', function(e)
+	onParentLHSChanged:  function(e)
 	{
 		e.preventDefault();
+		var targetEl = $(e.currentTarget);
 
-		if (($(this).val()).indexOf('tags') != -1)
+		if (($(targetEl).val()).indexOf('tags') != -1)
 		{
-			var element = $(this).closest('tr').find('div#RHS');
+			var element = $(targetEl).closest('tr').find('div#RHS');
 			addTagsDefaultTypeahead(element);
 		}
-	});
+	},
 	
-	$('body').on('change', '#condition > select', function(e){
+	onConditionChanged: function(e){
 		e.preventDefault();
+		var targetEl = $(e.currentTarget);
 
-		if ($(this).find("option:selected").hasClass('tags'))
+		if ($(targetEl).find("option:selected").hasClass('tags'))
 		{
-			var element = $(this).parents().closest('tr').find('div#RHS');
+			var element = $(targetEl).parents().closest('tr').find('div#RHS');
 			addTagsDefaultTypeahead(element);
 		}
 		
-	})
+	},
 	
-	$('body').on('change', '#contact_type', function(e)
+	onChangeContactType: function(e)
 	{
-		if($(this).val() == 'COMPANY') {
+		var targetEl = $(e.currentTarget);
+
+		if($(targetEl).val() == 'COMPANY') {
 			$('#companies-filter-wrapper').show();
 			$('#contacts-filter-wrapper').hide();
 		} else {
 			$('#companies-filter-wrapper').hide();
 			$('#contacts-filter-wrapper').show();
 		}
-	});
+	},
 	
 });
 

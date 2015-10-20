@@ -38,6 +38,8 @@ var contact_details_documentandtasks_actions = {
         edit_event : function(e){
         	var targetEl = $(e.currentTarget);
 
+        	$("#updateActivityModal").html(getTemplate("update-activity-modal"));
+        	
         	var id = $(targetEl).attr('data');
 			var value = eventsView.collection.get(id).toJSON();
 			deserializeForm(value, $("#updateActivityForm"));

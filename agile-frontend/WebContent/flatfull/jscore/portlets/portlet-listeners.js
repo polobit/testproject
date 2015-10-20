@@ -322,6 +322,7 @@ function initializePortletsListeners() {
 										.find('.row_position').text().trim();
 						App_Portlets.currentPortletName = 'Mini Calendar';
 
+						$("#updateActivityModal").html(getTemplate("update-activity-modal"));
 						var id = $(this).attr('id');
 						if (id && !isNaN(id)) {
 							var events_array = $(
@@ -648,6 +649,7 @@ function initializePortletsListeners() {
 								hrefFlag = true;
 						});
 
+						$("#updateActivityModal").html(getTemplate("update-activity-modal"));
 						if (!hrefFlag) {
 
 							App_Portlets.currentPosition = ''
