@@ -1545,11 +1545,19 @@ a#email-reply{
   width: 299px;
 }
 
-@media all (max-width: 990px) {
-
+@media all and (max-width: 990px) {
 .details-mobile-view {
   width: 100%;
 }
+}
 
+@media all and (max-width: 767px) {
+.bg-light.lter.b-b.wrapper-md .pull-left,.bg-light.lter.b-b.wrapper-md .pull-right {
+   float: none!important;
+   text-align: center;
+  }
+  #workflow-designer-help {
+    margin-top: 0px;
+  }
 }
 
