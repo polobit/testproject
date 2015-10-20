@@ -15,15 +15,10 @@ import javax.ws.rs.core.Response;
 
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.json.JSONArray;
-import org.json.JSONException;
 
 import com.agilecrm.ticket.entitys.TicketFilters;
-import com.agilecrm.ticket.entitys.TicketGroups;
 import com.agilecrm.ticket.utils.TicketFiltersUtil;
-import com.agilecrm.ticket.utils.TicketGroupUtil;
 import com.agilecrm.user.util.DomainUserUtil;
-import com.agilecrm.webrules.WebRule;
-import com.agilecrm.webrules.util.WebRuleUtil;
 import com.google.appengine.labs.repackaged.org.json.JSONObject;
 
 /**
@@ -36,6 +31,10 @@ import com.google.appengine.labs.repackaged.org.json.JSONObject;
 @Path("/api/tickets/filters")
 public class TicketFiltersRest
 {
+	/**
+	 * 
+	 * @return List of filters
+	 */
 	@GET
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	public List<TicketFilters> getFilters()
@@ -52,6 +51,12 @@ public class TicketFiltersRest
 		}
 	}
 
+	/**
+	 * Create new filter
+	 * 
+	 * @param newFilter
+	 * @return success message if filter is created successfully
+	 */
 	@POST
 	@Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
@@ -60,7 +65,7 @@ public class TicketFiltersRest
 		try
 		{
 			newFilter.setOwner_key(DomainUserUtil.getCurentUserKey());
-			
+
 			TicketFilters.dao.put(newFilter);
 
 			return new JSONObject().put("status", "success").toString();
@@ -73,6 +78,12 @@ public class TicketFiltersRest
 		}
 	}
 
+	/**
+	 * Updates filter conditions
+	 * 
+	 * @param filter
+	 * @return success message if filter is updated successfully
+	 */
 	@PUT
 	@Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
@@ -80,6 +91,8 @@ public class TicketFiltersRest
 	{
 		try
 		{
+			filter.setOwner_key(DomainUserUtil.getCurentUserKey());
+
 			TicketFilters.dao.put(filter);
 
 			return new JSONObject().put("status", "success").toString();
@@ -92,6 +105,12 @@ public class TicketFiltersRest
 		}
 	}
 
+	/**
+	 *  Deletes filters based on provided ticket ids
+	 *  
+	 * @param model_ids
+	 * @return
+	 */
 	@POST
 	@Path("/bulk")
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)

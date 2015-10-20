@@ -1,9 +1,14 @@
 package com.agilecrm.search.document;
 
+import java.net.URLDecoder;
+import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
+import org.json.JSONObject;
 
+import com.agilecrm.contact.Tag;
 import com.agilecrm.search.BuilderInterface;
 import com.agilecrm.ticket.entitys.Tickets;
 import com.agilecrm.ticket.utils.TicketsUtil;
@@ -12,7 +17,12 @@ import com.google.appengine.api.search.Document;
 import com.google.appengine.api.search.Field;
 import com.google.appengine.api.search.Index;
 import com.google.appengine.api.search.IndexSpec;
+import com.google.appengine.api.search.Query;
+import com.google.appengine.api.search.QueryOptions;
+import com.google.appengine.api.search.Results;
+import com.google.appengine.api.search.ScoredDocument;
 import com.google.appengine.api.search.SearchServiceFactory;
+import com.googlecode.objectify.Key;
 
 /**
  * <code>TicketDocument</code> class is a text search entity for {@link Tickets}
@@ -49,7 +59,13 @@ public class TicketDocument implements BuilderInterface
 
 			// Set ticket assignee id if exists
 			if (ticket.getAssignee_id() != null)
-				document.addField(Field.newBuilder().setName("assignee_id").setText(ticket.getAssignee_id().getId() + ""));
+			{
+				document.addField(Field.newBuilder().setName("assignee_id")
+						.setText(ticket.getAssignee_id().getId() + ""));
+
+				document.addField(Field.newBuilder().setName("assigned_time")
+						.setNumber(Math.floor(ticket.assigned_time / 1000)));
+			}
 
 			/**
 			 * Set ticket created time. Epoch number is greater than limits
@@ -104,6 +120,17 @@ public class TicketDocument implements BuilderInterface
 			// Set mail content
 			document.addField(Field.newBuilder().setName("mail_content").setText(plainText));
 
+			// Set mail subject
+			document.addField(Field.newBuilder().setName("subject").setText(ticket.subject));
+
+			StringBuffer tagsString = new StringBuffer();
+
+			for (Tag tag : ticket.tags)
+				tagsString.append(tag.tag + " ");
+
+			// Set tags
+			document.addField(Field.newBuilder().setName("tags").setText(tagsString.toString().trim()));
+
 			// Setting search tokens
 			document.addField(Field
 					.newBuilder()
@@ -157,7 +184,7 @@ public class TicketDocument implements BuilderInterface
 	@Override
 	public void delete(String id)
 	{
-		// TODO Auto-generated method stub
+		getIndex().delete(id);
 	}
 
 	@Override
@@ -165,6 +192,64 @@ public class TicketDocument implements BuilderInterface
 	{
 		IndexSpec indexSpec = IndexSpec.newBuilder().setName(indexName).build();
 		return SearchServiceFactory.getSearchService().getIndex(indexSpec);
+	}
+
+	public JSONObject searchDocuments(String queryString, String cursorString) throws Exception
+	{
+		List<Key<Tickets>> resultArticleIds = new ArrayList<Key<Tickets>>();
+
+		System.out.println("searching Documents");
+
+		// Create the initial cursor
+		com.google.appengine.api.search.Cursor cursor = com.google.appengine.api.search.Cursor.newBuilder().build();
+
+		// Set cursor if you already have
+		if (StringUtils.isNotBlank(cursorString))
+			cursor = com.google.appengine.api.search.Cursor.newBuilder().build(URLDecoder.decode(cursorString));
+
+		QueryOptions options = null;
+		com.google.appengine.api.search.Query query = null;
+
+		try
+		{
+			// Setting records fetching limit to 20
+			options = QueryOptions.newBuilder().setCursor(cursor).setLimit(20).build();
+			query = com.google.appengine.api.search.Query.newBuilder().setOptions(options).build(queryString);
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+
+		Results<ScoredDocument> results = getIndex().search(query);
+
+		String newCursor = "";
+		Long totalResults = 0l;
+
+		try
+		{
+			totalResults = results.getNumberFound();
+			newCursor = results.getCursor().toWebSafeString();
+
+			System.out.println("Cursor: " + newCursor);
+		}
+		catch (Exception e)
+		{
+		}
+
+		for (ScoredDocument document : results)
+			resultArticleIds.add(new Key<Tickets>(Tickets.class, Long.parseLong(document.getId())));
+
+		return new JSONObject().put("cursor", newCursor).put("keys", resultArticleIds).put("count", totalResults);
+	}
+
+	public int getTicketsCount(String queryString)
+	{
+		QueryOptions options = QueryOptions.newBuilder().setNumberFoundAccuracy(10000).setLimit(1).build();
+
+		Query query = Query.newBuilder().setOptions(options).build(queryString);
+
+		return (int) getIndex().search(query).getNumberFound();
 	}
 
 	/**

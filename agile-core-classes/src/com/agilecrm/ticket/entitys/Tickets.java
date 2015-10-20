@@ -1,17 +1,24 @@
 package com.agilecrm.ticket.entitys;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.persistence.Embedded;
 import javax.persistence.Id;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
 
 import com.agilecrm.contact.Contact;
+import com.agilecrm.contact.Tag;
 import com.agilecrm.cursor.Cursor;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.ticket.utils.TicketsUtil;
 import com.agilecrm.user.DomainUser;
 import com.googlecode.objectify.Key;
+import com.googlecode.objectify.annotation.Indexed;
 import com.googlecode.objectify.annotation.NotSaved;
+import com.googlecode.objectify.condition.IfDefault;
 
 /**
  * <code>Tickets</code> root class for Ticketing. Every webhook returned from
@@ -72,6 +79,16 @@ public class Tickets extends Cursor
 	 */
 	@NotSaved
 	public Long assigneeID = null;
+	
+	/**
+	 * Stores epoch time when ticket is assigned
+	 */
+	public Long assigned_time = 0L;
+	
+	/**
+	 * Stores epoch time when ticket is closed
+	 */
+	public Long closed_time = 0L;
 	
 	/**
 	 * Util attribute to domain user obj
@@ -229,6 +246,13 @@ public class Tickets extends Cursor
 	 * Stores true if ticket is deleted from client
 	 */
 	public String requester_ip_address = "";
+	
+	/**
+	 * Stores ticket tags
+	 */
+	@NotSaved(IfDefault.class)
+	@Embedded
+	public ArrayList<Tag> tags = new ArrayList<Tag>();
 
 	/**
 	 * Default constructor
@@ -236,6 +260,14 @@ public class Tickets extends Cursor
 	public Tickets()
 	{
 
+	}
+
+	/**
+	 * Default constructor
+	 */
+	public Tickets(Long id)
+	{
+		this.id = id;
 	}
 
 	public Tickets(Long group_id, Boolean assigned_to_group, String requester_name, String requester_email,

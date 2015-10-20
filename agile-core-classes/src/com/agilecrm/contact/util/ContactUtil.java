@@ -1721,4 +1721,37 @@ public class ContactUtil
 	Queue queue = QueueFactory.getQueue(AgileQueues.LAST_CONTACTED_UPDATE_QUEUE);
 	queue.add(TaskOptions.Builder.withPayload(lastContactDeferredtask));
     }
+    
+    /**
+     * Creates contact in DB for the given name and email
+     * 
+     * @param firstName
+     * @param email
+     * @return new created contact
+     */
+	public static Contact createContact(String firstName, String email)
+	{
+		Contact newContact = new Contact();
+		newContact.first_name = firstName;
+
+		List<ContactField> properties = new ArrayList<ContactField>();
+
+		properties.add(new ContactField("first_name", firstName, null));
+		properties.add(new ContactField("email", email, null));
+
+		newContact.properties = properties;
+		
+		Contact.dao.put(newContact);
+
+		try
+		{
+			ActivitySave.createTagAddActivity(newContact);
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+
+		return newContact;
+	}
 }

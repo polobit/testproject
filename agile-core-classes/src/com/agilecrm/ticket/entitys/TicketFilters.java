@@ -62,7 +62,7 @@ public class TicketFilters
 	@NotSaved
 	public Long owner_id = null;
 	
-	public Long updated_time = 0l;;
+	public Long updated_time = 0l;
 
 	@JsonIgnore
 	public void setOwner_key(Key<DomainUser> owner_key)

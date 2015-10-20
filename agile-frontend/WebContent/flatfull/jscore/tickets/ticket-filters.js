@@ -85,5 +85,24 @@ var Ticket_Filters = {
 
 		var $currentTarget = $(event.currentTarget);
 		$currentTarget.closest("tr").remove();
+	},
+
+	fetch_filters_collection: function(){
+		
+		App_Ticket_Module.ticketFiltersCollection = new Base_Collection_View({
+			url : '/core/api/tickets/filters',
+			sortKey:"updated_time",
+			descending:true,
+			templateKey : "ticket-filters-list",
+			individual_tag_name : 'li',
+			postRenderCallback : function(el){
+
+				//Fetch ticket collection count
+				Tickets_Count.fetch_filter_tickets_count();
+			}
+		});
+
+		App_Ticket_Module.ticketFiltersCollection.collection.fetch();
+		$("#filters-list-container").html(App_Ticket_Module.ticketFiltersCollection.el);
 	}
 };

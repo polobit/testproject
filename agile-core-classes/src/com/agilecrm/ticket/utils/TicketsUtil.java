@@ -10,6 +10,8 @@ import java.util.Set;
 
 import org.apache.commons.lang.exception.ExceptionUtils;
 
+import com.agilecrm.contact.Contact;
+import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.search.document.TicketDocument;
 import com.agilecrm.ticket.entitys.TicketGroups;
 import com.agilecrm.ticket.entitys.TicketNotes;
@@ -153,12 +155,24 @@ public class TicketsUtil
 			ticket.type = Type.PROBLEM;
 			ticket.priority = Priority.LOW;
 			ticket.requester_ip_address = ipAddress;
+
 			// Get country and city from ipaddress
 			Key<Tickets> key = Tickets.ticketsDao.put(ticket);
 
 			System.out.println("key: " + key.getId());
 
 			ticket.short_id = getTicketShortID(key.getId()) + "";
+
+			/**
+			 * Checking if new ticket requester is there in Contacts
+			 */
+			Contact contact = ContactUtil.searchContactByEmail(requester_email);
+
+			if (contact == null)
+				contact = ContactUtil.createContact(requester_name, requester_email);
+
+			ticket.contact_key = new Key<Contact>(Contact.class, contact.id);
+
 			Tickets.ticketsDao.put(ticket);
 
 			// Create search document
@@ -240,7 +254,12 @@ public class TicketsUtil
 		else
 			ticket.assigned_to_group = true;
 
+		ticket.assigned_time = Calendar.getInstance().getTimeInMillis();
+
 		Tickets.ticketsDao.put(ticket);
+
+		// Update search document
+		new TicketDocument().edit(ticket);
 
 		return ticket;
 	}
@@ -258,6 +277,9 @@ public class TicketsUtil
 		ticket.priority = priority;
 
 		Tickets.ticketsDao.put(ticket);
+
+		// Update search document
+		new TicketDocument().edit(ticket);
 
 		return ticket;
 	}
@@ -277,6 +299,9 @@ public class TicketsUtil
 
 		Tickets.ticketsDao.put(ticket);
 
+		// Update search document
+		new TicketDocument().edit(ticket);
+
 		return ticket;
 	}
 
@@ -294,6 +319,9 @@ public class TicketsUtil
 
 		Tickets.ticketsDao.put(ticket);
 
+		// Update search document
+		new TicketDocument().edit(ticket);
+
 		return ticket;
 	}
 
@@ -307,8 +335,12 @@ public class TicketsUtil
 	{
 		Tickets ticket = TicketsUtil.getTicketByID(ticket_id);
 		ticket.status = Status.CLOSED;
+		ticket.closed_time = Calendar.getInstance().getTimeInMillis();
 
 		Tickets.ticketsDao.put(ticket);
+
+		// Update search document
+		new TicketDocument().edit(ticket);
 
 		return ticket;
 	}
@@ -318,14 +350,21 @@ public class TicketsUtil
 	 * @param tickets
 	 * @return
 	 */
-	public static List<Tickets> inclGroupDetails(List<Tickets> tickets, Long groupID)
+	public static List<Tickets> inclGroupDetails(List<Tickets> tickets)
 	{
 		try
 		{
-			TicketGroups group = TicketGroups.ticketGroupsDao.get(groupID);
+			Map<Long, TicketGroups> groupsList = new HashMap<Long, TicketGroups>();
 
 			for (Tickets ticket : tickets)
-				ticket.group = group;
+			{
+				Long groupID = ticket.groupID;
+				
+				if(!groupsList.containsKey(groupID))
+					groupsList.put(groupID, TicketGroups.ticketGroupsDao.get(groupID));
+				
+				ticket.group = groupsList.get(groupID);
+			}
 		}
 		catch (Exception e)
 		{
@@ -392,6 +431,8 @@ public class TicketsUtil
 	public static void deleteTicket(Long ticket_id) throws EntityNotFoundException
 	{
 		Tickets.ticketsDao.deleteKey(new Key<Tickets>(Tickets.class, ticket_id));
+
+		new TicketDocument().delete(ticket_id + "");
 	}
 
 	/**

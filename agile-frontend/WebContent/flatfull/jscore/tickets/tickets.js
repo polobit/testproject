@@ -1,7 +1,57 @@
-var Group_ID = '', Ticket_Status = 'new', Current_Ticket_ID = null, New_Tickets = 0, Opened_Tickets = 0, 
+var Group_ID = '', Ticket_Status = 'new', Current_Ticket_ID = null, Ticket_Filter_ID = null,
+New_Tickets = 0, Opened_Tickets = 0, 
 		Starred_Tickets = 0, Closed_Tickets =0, Tickets_Util = {} ;
 
+$("body").bind('click', function(ev) {
+	Tickets.hideDropDowns(ev);
+});
+
 var Tickets = {
+
+	fetch_tickets_collection: function(url, group_id){
+
+		//Renders root template, fetches tickets count & loads Groups drop down
+		Tickets.initialize(group_id, function(){
+
+			App_Ticket_Module.ticketsCollection = new Base_Collection_View({
+				url : url,
+				sortKey:"created_time",
+				descending:true,
+				templateKey : "ticket",
+				individual_tag_name : 'div',
+				cursor : true,
+				page_size : 20,
+				slateKey : "no-tickets",
+				postRenderCallback: function(el){
+
+					//Initialize tooltips
+					$('.refresh-tickets').tooltip();
+
+					head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
+					{
+						$("time", el).timeago();
+								
+					});
+				}
+			});
+
+			//Activating main menu
+			$('nav').find(".active").removeClass("active");
+			$("#tickets").addClass("active");
+
+			//Activating ticket type pill
+			$('ul.ticket-types').find('.active').removeClass('active');
+
+			if(!Ticket_Filter_ID)
+				$('ul.ticket-types').find('li a.' + Ticket_Status).parent().addClass('active');
+			else
+				$('ul.ticket-types').find('li > a[filter-id="' + Ticket_Filter_ID + '"]').parent().addClass('active');
+
+			App_Ticket_Module.ticketsCollection.collection.fetch();
+
+			$(".tickets-collection-pane").html(App_Ticket_Module.ticketsCollection.el);
+		});	
+	},
 
 	initialize: function(group_id, callback){
 
@@ -20,6 +70,9 @@ var Tickets = {
 
 				//Fectching new, open, closed tickets count
 				Tickets_Count.fetch_tickets_count();
+
+				//Fectching ticket filters
+				Ticket_Filters.fetch_filters_collection();
 
 				//Rendering Groups dropdown
 				Tickets_Group_View = new Ticket_Base_Model({
@@ -240,5 +293,19 @@ var Tickets = {
 		$('.ticket-email').show(function(){
 			$('#cc_emails').focus();
 		});
+	},
+
+	hideDropDowns: function(ev){
+
+		if(Current_Route.indexOf('ticket/') == -1)
+			return;
+
+		console.log(ev);
+
+		if($(ev.target).closest('div.ticket-details-dropdown').length > 0 || $(ev.target).hasClass('ticket-details-value'))
+			return;
+
+		$('.ticket-details-dropdown').hide();
+		$('.ticket-details-value').show();
 	}
 };

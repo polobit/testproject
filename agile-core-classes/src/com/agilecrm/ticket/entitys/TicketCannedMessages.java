@@ -1,5 +1,6 @@
 package com.agilecrm.ticket.entitys;
 
+import java.util.Calendar;
 
 import javax.persistence.Id;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -12,14 +13,13 @@ import com.agilecrm.user.DomainUser;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.annotation.NotSaved;
 
-
 /**
- * <code>TicketCannedMessages</code> class is a entity class for creating canned messages in
- * Ticketing.
+ * <code>TicketCannedMessages</code> class is a entity class for creating canned
+ * messages in Ticketing.
  * 
  * <p>
- * {@link TicketCannedMessagesUtil} is a utility class which provides CRUD opertions on
- * TicketCannedMessagesUtil.
+ * {@link TicketCannedMessagesUtil} is a utility class which provides CRUD
+ * opertions on TicketCannedMessagesUtil.
  * </p>
  * 
  * 
@@ -36,7 +36,7 @@ public class TicketCannedMessages
 	 * Stores canned message title
 	 */
 	public String title = "";
-	
+
 	/**
 	 * Stores canned message
 	 */
@@ -70,6 +70,13 @@ public class TicketCannedMessages
 	public static ObjectifyGenericDao<TicketCannedMessages> dao = new ObjectifyGenericDao<TicketCannedMessages>(
 			TicketCannedMessages.class);
 
+	@javax.persistence.PrePersist
+	private void prePersist()
+	{
+		updated_time = Calendar.getInstance().getTimeInMillis();
+		title = title.toLowerCase();
+	}
+
 	@javax.persistence.PostLoad
 	private void PostLoad()
 	{
@@ -81,5 +88,37 @@ public class TicketCannedMessages
 	public void setOwner_key(Key<DomainUser> owner_key)
 	{
 		this.owner_key = owner_key;
+	}
+
+	@Override
+	public int hashCode()
+	{
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj)
+	{
+		TicketCannedMessages other = (TicketCannedMessages) obj;
+		
+		if (id == null)
+		{
+			if (other.id != null)
+				return false;
+		}
+		else if (!id.equals(other.id))
+			return false;
+		
+		return true;
+	}
+
+	@Override
+	public String toString()
+	{
+		return "TicketCannedMessages [id=" + id + ", title=" + title + ", message=" + message + ", owner_key="
+				+ owner_key + ", owner_id=" + owner_id + "]";
 	}
 }

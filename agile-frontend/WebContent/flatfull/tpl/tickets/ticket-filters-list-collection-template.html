@@ -1,0 +1,21 @@
+<script id="ticket-filters-list-collection-template" type="text/html">
+	<h4>Filters</h4><hr class="m-t-sm m-b-sm" style="border-color: #D8D8D8;">
+	{{#unless this.length}}
+		<div class="text-center">
+		    You dont have any filters yet.
+		    <a href="#ticket-filters" class="btn btn-sm btn-default btn-addon m-t-sm">
+	            <span><i class="icon-plus-sign"></i></span> Add Filter
+	        </a>
+	    </div>    
+	{{/unless}}
+	{{#if this.length}}
+		<ul id="ticket-filters-list-model-list" class="nav nav-pills nav-stacked nav-sm ticket-types">
+		
+		</ul>
+	{{/if}}
+</script>
+<script id="ticket-filters-list-model-template" type="text/html">
+	<a filter-id="{{id}}" href="#tickets/filter/{{id}}">
+		{{name}} <badge class="badge bg-danger pull-right"></badge>
+	</a>
+</script>	

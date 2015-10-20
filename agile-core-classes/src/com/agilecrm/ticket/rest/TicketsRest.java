@@ -14,9 +14,14 @@ import javax.ws.rs.core.Response;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.map.type.TypeFactory;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.agilecrm.search.document.TicketDocument;
+import com.agilecrm.ticket.entitys.TicketFilters;
 import com.agilecrm.ticket.entitys.TicketGroups;
 import com.agilecrm.ticket.entitys.Tickets;
 import com.agilecrm.ticket.entitys.TicketNotes.CREATED_BY;
@@ -25,12 +30,16 @@ import com.agilecrm.ticket.entitys.Tickets.Priority;
 import com.agilecrm.ticket.entitys.Tickets.Source;
 import com.agilecrm.ticket.entitys.Tickets.Status;
 import com.agilecrm.ticket.entitys.Tickets.Type;
+import com.agilecrm.ticket.utils.TicketFiltersUtil;
 import com.agilecrm.ticket.utils.TicketGroupUtil;
 import com.agilecrm.ticket.utils.TicketNotesUtil;
 import com.agilecrm.ticket.utils.TicketsUtil;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.google.appengine.api.NamespaceManager;
+import com.google.appengine.api.search.Query;
+import com.google.appengine.api.search.QueryOptions;
+import com.googlecode.objectify.Key;
 
 /**
  * 
@@ -75,8 +84,60 @@ public class TicketsRest
 			}
 
 			// Include Ticket Group Object
-			tickets = TicketsUtil.inclGroupDetails(tickets, Long.parseLong(groupID));
+			tickets = TicketsUtil.inclGroupDetails(tickets);
 			tickets = TicketsUtil.inclDomainUsers(tickets);
+
+			return tickets;
+		}
+		catch (Exception e)
+		{
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
+			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+					.build());
+		}
+	}
+
+	/**
+	 * Fetches tickets based on provided filter
+	 * 
+	 * @param cursor
+	 * @param pageSize
+	 * @return list of tickets
+	 */
+	@GET
+	@Path("/filter")
+	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	public List<Tickets> getTicketsByFilter(@QueryParam("filter_id") Long filterID,
+			@QueryParam("cursor") String cursor, @QueryParam("page_size") String pageSize)
+	{
+		try
+		{
+			if (filterID == null)
+				throw new Exception("Required paramaters missing.");
+
+			TicketFilters filter = TicketFiltersUtil.getFilterById(filterID);
+
+			String queryString = TicketFiltersUtil.getQueryFromConditions(filter.conditions);
+			queryString = queryString.substring(0, queryString.lastIndexOf("AND"));
+
+			JSONObject resultJSON = new TicketDocument().searchDocuments(queryString.trim(), cursor);
+
+			System.out.println("query: " + queryString);
+
+			JSONArray keysArray = resultJSON.getJSONArray("keys");
+
+			List<Key<Tickets>> keys = new ArrayList<Key<Tickets>>();
+			
+			for (int i = 0; i < keysArray.length(); i++)
+				keys.add((Key<Tickets>) keysArray.get(i));
+
+			List<Tickets> tickets = Tickets.ticketsDao.fetchAllByKeys(keys);
+
+			if (tickets.size() > 0)
+			{
+				tickets = TicketsUtil.inclGroupDetails(tickets);
+				tickets = TicketsUtil.inclDomainUsers(tickets);
+			}
 
 			return tickets;
 		}
@@ -114,6 +175,38 @@ public class TicketsRest
 					Status.valueOf(status));
 
 			return new JSONObject().put("count", count).toString();
+		}
+		catch (Exception e)
+		{
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
+			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+					.build());
+		}
+	}
+
+	/**
+	 * 
+	 * @param groupID
+	 * @param cursor
+	 * @param pageSize
+	 * @param status
+	 * @return list of tickets
+	 */
+	@GET
+	@Path("/fitered-tickets-count")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String getFilteredTicketsCount(@QueryParam("filter_id") Long filterID)
+	{
+		try
+		{
+			TicketFilters filter = TicketFiltersUtil.getFilterById(filterID);
+
+			String queryString = TicketFiltersUtil.getQueryFromConditions(filter.conditions);
+			queryString = queryString.substring(0, queryString.lastIndexOf("AND"));
+
+			System.out.println("queryString: " + queryString);
+
+			return new JSONObject().put("count", new TicketDocument().getTicketsCount(queryString)).toString();
 		}
 		catch (Exception e)
 		{
@@ -215,7 +308,7 @@ public class TicketsRest
 					.build());
 		}
 	}
-	
+
 	/**
 	 * 
 	 * @param ticket_id
@@ -340,7 +433,7 @@ public class TicketsRest
 		{
 			TicketGroups group = TicketGroupUtil.getDefaultTicketGroup();
 
-			String message = "Hi!..\r\nThis is test message. Please ignore.\r\n\r\nThank you\r\nSasi Krishna";
+			String message = "Hi!..\r\n\r\nThis is test message. Please ignore.\r\n\r\nThank you\r\nSasi Krishna";
 
 			// Creating new Ticket in Ticket table
 			Tickets ticket = TicketsUtil.createTicket(group.id, true, "Sasi", "sasi@clickdesk.com",

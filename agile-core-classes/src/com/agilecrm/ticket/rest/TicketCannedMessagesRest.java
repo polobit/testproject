@@ -46,7 +46,13 @@ public class TicketCannedMessagesRest
 	{
 		try
 		{
-			return TicketCannedMessagesUtil.getCannedMessages(DomainUserUtil.getCurentUserKey());
+			List<TicketCannedMessages> list = TicketCannedMessagesUtil.getCannedMessages(DomainUserUtil
+					.getCurentUserKey());
+
+			if (list == null || list.size() == 0)
+				list = TicketCannedMessagesUtil.createDefault();
+
+			return list;
 		}
 		catch (Exception e)
 		{
@@ -78,7 +84,6 @@ public class TicketCannedMessagesRest
 				throw new Exception("Canned Message with same name already exists. Please choose different name.");
 
 			cannedMessage.title = title;
-			cannedMessage.updated_time = Calendar.getInstance().getTimeInMillis();
 			cannedMessage.setOwner_key(domainUser);
 
 			TicketCannedMessages.dao.put(cannedMessage);
@@ -110,17 +115,21 @@ public class TicketCannedMessagesRest
 
 			String title = cannedMessage.title.toLowerCase();
 
+			/**
+			 * Get canned message with same name if exists
+			 */
 			TicketCannedMessages oldCannedMessage = TicketCannedMessagesUtil.getCannedMessageByName(title,
 					DomainUserUtil.getCurentUserKey());
 
-			if (oldCannedMessage.id != cannedMessage.id)
-				throw new Exception("Canned Message with same name already exists. Please choose different name.");
+			/**
+			 * Verifying if there exists a canned response with name
+			 */
+			if (oldCannedMessage != null)
+				if (!cannedMessage.equals(oldCannedMessage))
+					throw new Exception("Canned Message with same name already exists. Please choose different name.");
 
-			oldCannedMessage.title = title;
-			oldCannedMessage.message = cannedMessage.message;
-			oldCannedMessage.updated_time = Calendar.getInstance().getTimeInMillis();
-
-			TicketCannedMessages.dao.put(oldCannedMessage);
+			cannedMessage.setOwner_key(DomainUserUtil.getCurentUserKey());
+			TicketCannedMessages.dao.put(cannedMessage);
 
 			return new JSONObject().put("status", "success").toString();
 		}

@@ -23,7 +23,7 @@
     </div>
 </div>
 <div class="row">
-  <div class="col-md-8 p-r-none b-r b-l">
+  <div class="col-md-8 p-r-none b-r">
     <div class="wrapper b-b">
       <h2 class="font-thin m-n ng-binding">{{subject}}</h2>
     </div>
@@ -100,8 +100,8 @@
               <tr>
                   <td class="p-t-xs p-b-xs">Group</td>
                   <td id="group-id" class="p-t-xs p-b-xs" data-id="{{groupID}}">
-                    <div class="group_name ticket_group_name first-letter-cap">{{group.group_name}}</div>
-                    <div class="dropdown" id="change-ticket-group-ul" style="display: none;">
+                    <div class="group_name ticket_group_name ticket-details-value first-letter-cap">{{group.group_name}}</div>
+                    <div class="dropdown ticket-details-dropdown" id="change-ticket-group-ul" style="display: none;">
                       <div class="btn-group">
                         <div class="btn btn-default btn-xs custom_view first-letter-cap">Change Group</div>
                         <a class="btn btn-xs dropdown-toggle btn-default" data-toggle="dropdown" aria-expanded="false"> 
@@ -116,10 +116,10 @@
               <tr>
                   <td class="p-t-xs p-b-xs">Assignee</td>
                   <td id="assignee-id" class="p-t-xs p-b-xs" data-id="{{#if assigneeID}}{{assigneeID}}{{/if}}">
-                    <div class="assignee_name ticket_assignee_name first-letter-cap">
+                    <div class="assignee_name ticket_assignee_name ticket-details-value first-letter-cap">
                       {{#if assigneeID}}{{assignee.name}}{{else}}-{{/if}}
                     </div>
-                    <div class="dropdown" id="change-ticket-assignee-ul" style="display: none;">
+                    <div class="dropdown ticket-details-dropdown" id="change-ticket-assignee-ul" style="display: none;">
                       <div class="btn-group">
                         <div class="btn btn-default btn-xs custom_view first-letter-cap">
                           Change Assignee
@@ -136,8 +136,8 @@
               <tr>
                   <td class="p-t-xs p-b-xs">Type</td>
                   <td class="p-t-xs p-b-xs">
-                    <div class="ticket_type first-letter-cap">{{type}}</div>
-                    <div class="dropdown" id="change-ticket-type-ul" style="display: none;">
+                    <div class="ticket_type ticket-details-value first-letter-cap">{{type}}</div>
+                    <div class="dropdown ticket-details-dropdown" id="change-ticket-type-ul" style="display: none;">
                       <div class="btn-group">
                         <div class="btn btn-default btn-xs custom_view first-letter-cap">Change Type</div>
                         <a class="btn btn-xs dropdown-toggle btn-default" data-toggle="dropdown" aria-expanded="false"> 
@@ -156,8 +156,8 @@
               <tr>
                   <td class="p-t-xs p-b-xs">Priority</td>
                   <td class="p-t-xs p-b-xs">
-                    <div class="ticket_priority first-letter-cap">{{priority}}</div>
-                    <div class="dropdown" id="change-ticket-priority-ul" style="display: none;">
+                    <div class="ticket_priority ticket-details-value first-letter-cap">{{priority}}</div>
+                    <div class="dropdown ticket-details-dropdown" id="change-ticket-priority-ul" style="display: none;">
                       <div class="btn-group">
                         <div class="btn btn-default btn-xs custom_view first-letter-cap">Change Priority</div>
                         <a class="btn btn-xs dropdown-toggle btn-default" data-toggle="dropdown" aria-expanded="false"> 
@@ -181,8 +181,14 @@
                   <td class="p-t-xs p-b-xs">{{epochToHumanDate "dd mmm yyyy HH:MM" last_updated_time}}</td>
               </tr>
               <tr>
-                  <td class="p-t-xs p-b-sm">Last Updated By</td>
+                  <td class="p-t-xs p-b-xs">Last Updated By</td>
                   <td class="p-t-xs p-b-xs first-letter-cap">{{last_updated_by}}</td>
+              </tr>
+              <tr>
+                  <td class="p-t-xs p-b-xs">Contact URL</td>
+                  <td class="p-t-xs p-b-xs">
+                    <a href="https://{{get_current_domain}}.agilecrm.com/#contact/{{contactID}}">Click Here</a>
+                  </td>
               </tr>
           </table>
         </div>
