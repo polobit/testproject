@@ -53,11 +53,26 @@ var Widget_Model_Events = Base_Model_View.extend({
 
 		$(ele).attr("disabled", "disabled").val("Saving...");
 
-		// Saves the preferences into widget with name
-		save_widget_prefs(widgetName, JSON.stringify(prefs), function(data){
-			console.log(data);
-			$(ele).removeAttr("disabled").val("Save");
-		});
+      if(widgetName != "TwilioIO"){
+         // Saves the preferences into widget with name
+         save_widget_prefs(widgetName, JSON.stringify(prefs), function(data){
+            console.log(data);
+            $(ele).removeAttr("disabled").val("Save");
+         });
+      }else{
+         createAppSid(prefs, function(data){
+               // Update prefs
+               console.log(data);
+               prefs["twilio_app_sid"] = data;
+               // Saves the preferences into widget with name
+               save_widget_prefs(widgetName, JSON.stringify(prefs), function(data){
+                  console.log(data);
+                  $(ele).removeAttr("disabled").val("Save");
+               });
+         });
+      }
+
+		
    },
 
    connectShopify : function(e){
