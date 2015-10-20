@@ -96,7 +96,7 @@ public class ContactPrefsUtil
     List<String> prefsTyes=new ArrayList<String>();
     Map<String, Object> searchMap = new HashMap<String, Object>();
 	searchMap.put("domainUser", new Key<DomainUser>(DomainUser.class, SessionManager.get().getDomainId()));
- 	List<ContactPrefs> contactPrefs=(List<ContactPrefs>) ContactPrefs.dao.getByProperty(searchMap);
+ 	List<ContactPrefs> contactPrefs=ContactPrefs.dao.listByProperty(searchMap);
 	for(ContactPrefs prefs:contactPrefs){
 		if(prefs.type!=null)
 		prefsTyes.add(prefs.type.toString());
