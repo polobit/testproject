@@ -490,7 +490,8 @@ function initializePortletsListeners() {
 								.trim();
 				App_Portlets.currentPortletName = 'Mini Calendar';
 				var start = new Date(parseInt($(this).attr('id')));
-				$('#activityModal').modal('show');
+				
+				$('#activityModal').getTemplate("new-event-modal").modal('show');
 				highlight_event();
 
 				// Set Date for Event

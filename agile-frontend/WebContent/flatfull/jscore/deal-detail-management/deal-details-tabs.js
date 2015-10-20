@@ -409,9 +409,9 @@ $('#content').on('click', '.add-deal-document-cancel', function(e){
 
 	$('#content').on('click', '.deal-add-task', function(e){ 
     	e.preventDefault();
+    	$('#activityTaskModal').html(getTemplate("new-task-modal")).modal('show');
 
-    	var	el = $("#taskForm");
-		$('#activityTaskModal').modal('show');
+		var	el = $("#taskForm");
 		highlight_task();
 		// Displays contact name, to indicate the task is related to the contact
 		fill_relation_deal_task(el);
@@ -568,8 +568,10 @@ $('#content').on('click', '.add-deal-document-cancel', function(e){
     $('#content').on('click', '.deal-add-event', function(e){ 
     	e.preventDefault();
 
+    	$('#activityModal').html(getTemplate("new-event-modal")).modal('show');
+
     	var	el = $("#activityForm");
-		$('#activityModal').modal('show');
+
 		highlight_event();
 		// Displays contact name, to indicate the task is related to the contact
 		fill_relation_deal_task(el);

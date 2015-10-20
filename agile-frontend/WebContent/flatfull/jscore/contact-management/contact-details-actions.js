@@ -14,8 +14,10 @@
      */ 
       add_task : function(e){
 
+            
+            $('#activityTaskModal').html(getTemplate("new-task-modal")).modal('show');
+
             var el = $("#taskForm");
-            $('#activityTaskModal').modal('show');
             highlight_task();
             // Displays contact name, to indicate the task is related to the contact
             fill_relation(el);
@@ -44,9 +46,12 @@
      */ 
       add_event : function(e){
 
+            
+            $('#activityModal').html(getTemplate("new-event-modal")).modal('show');
+
             var el = $("#activityForm");
-            $('#activityModal').modal('show');
             highlight_event();
+
             // Displays contact name, to indicate the task is related to the contact
             fill_relation(el);
             agile_type_ahead("event_related_to", el, contacts_typeahead);

@@ -234,8 +234,8 @@ var ContactsRouter = Backbone.Router.extend({
 		{
 			this.contactsListView.collection.url = url;
 
-			$('#content').html('<div id="conatcts-listeners-conatainer"></div>');
-			$('#conatcts-listeners-conatainer').html(this.contactsListView.render(true).el);
+			$('#content').html('<div id="contacts-listener-container"></div>');
+			$('#contacts-listener-container').html(this.contactsListView.render(true).el);
 
 			$(".active").removeClass("active");
 			$("#contactsmenu").addClass("active");
@@ -297,11 +297,11 @@ var ContactsRouter = Backbone.Router.extend({
 		// Contacts are fetched when the app loads in the initialize
 		this.contactsListView.collection.fetch();
 		if(!is_lhs_filter) {
-			$('#content').html('<div id="conatcts-listeners-conatainer"></div>');
-			$('#conatcts-listeners-conatainer').html(this.contactsListView.render().el);
+			$('#content').html('<div id="contacts-listener-container"></div>');
+			$('#contacts-listener-container').html(this.contactsListView.render().el);
 			contactFiltersListeners();
 		} else {
-			$('#conatcts-listeners-conatainer').find('.contacts-div').html(this.contactsListView.render().el);
+			$('#contacts-listener-container').find('.contacts-div').html(this.contactsListView.render().el);
 			$('#bulk-actions').css('display', 'none');
 			$('#bulk-select').css('display', 'none');
 			CONTACTS_HARD_RELOAD = true;
@@ -339,7 +339,7 @@ var ContactsRouter = Backbone.Router.extend({
 		 * cursor and page_size options are taken to activate
 		 * infiniScroll
 		 */
-		this.duplicateContactsListView = new Base_Collection_View({ url : url, templateKey : template_key, individual_tag_name : 'tr', cursor : true,
+		this.duplicateContactsListView = new Contacts_Events_Collection_View({ url : url, templateKey : template_key, individual_tag_name : 'tr', cursor : true,
 			page_size : 25, sort_collection : collection_is_reverse, slateKey : null, postRenderCallback : function(el)
 			{
 				// this.duplicateContactsListView.collection.forEach(function(model,
@@ -430,6 +430,7 @@ var ContactsRouter = Backbone.Router.extend({
 	{
 		$('[data-toggle="tooltip"]').tooltip();
 
+
 		//If call campaign is running then show the campaign
 		if(CALL_CAMPAIGN.last_clicked == "start-bulk-campaign"){
 			startCallCampaign(CALL_CAMPAIGN.contact_id_list);
@@ -443,7 +444,7 @@ var ContactsRouter = Backbone.Router.extend({
 		
 		//For getting custom fields
 		if(App_Contacts.customFieldsList == null || App_Contacts.customFieldsList == undefined){
-			App_Contacts.customFieldsList = new Base_Collection_View({ url : '/core/api/custom-fields/position', sort_collection : false, restKey : "customFieldDefs",
+			App_Contacts.customFieldsList = new Contacts_Events_Collection_View({ url : '/core/api/custom-fields/position', sort_collection : false, restKey : "customFieldDefs",
 				templateKey : "admin-settings-customfields", individual_tag_name : 'tr' });
 			App_Contacts.customFieldsList.collection.fetch();
 		}
@@ -522,7 +523,7 @@ var ContactsRouter = Backbone.Router.extend({
 			return;
 		}
 
-		this.contactDetailView = new Contact_Details_Model_Events({ model : contact, isNew : true, template : "contact-detail", postRenderCallback : function(el)
+		this.contactDetailView = new Base_Model_View({ model : contact, isNew : true, template : "contact-detail", postRenderCallback : function(el)
 		{
 			
 			$("#mobile-menu-settings").trigger('click');
@@ -543,6 +544,24 @@ var ContactsRouter = Backbone.Router.extend({
 
 			loadWidgets(el, contact.toJSON());
 			
+			
+			
+			/*
+			 * // To get QR code and download Vcard
+			 * $.get('/core/api/VCard/' + contact.toJSON().id,
+			 * function(data){ console.log("Vcard string");
+			 * console.log(data); var url =
+			 * 'https://chart.googleapis.com/chart?cht=qr&chs=180x180&chld=0&choe=UTF-8&chl=' +
+			 * encodeURIComponent(data); $("#qrcode", el).html('<img
+			 * src="' + url + '" id="qr_code" alt="QR Code"/>');
+			 * //$("#qrcode", el).html('<img
+			 * style="display:inline-block!important;" src="' + url + '"
+			 * id="qr_code" alt="QR Code" data="' + data + '"
+			 * onload="qr_load();"/>'); $("#qrcode", el).prepend('<span
+			 * style="padding: 8% 0%;margin-right: 2px;float:right;"
+			 * id="downloadify"></span>'); });
+			 */
+
 			starify(el);
 
 			show_map(el);
@@ -924,7 +943,8 @@ var ContactsRouter = Backbone.Router.extend({
 			}
 			
 			initializeSendEmailListeners();
-			sendEmailAttachmentListeners("send-email-listener-container");			
+			sendEmailAttachmentListeners("send-email-listener-container");
+			
 			
 		}, "#send-email-listener-container"); 
 	
@@ -995,8 +1015,8 @@ var ContactsRouter = Backbone.Router.extend({
 		{
 			
 			var el = App_Contacts.contact_custom_view.render(true).el;
-			$('#content').html('<div id="conatcts-listeners-conatainer"></div>');
-			$('#conatcts-listeners-conatainer').html(el);
+			$('#content').html('<div id="contacts-listener-container"></div>');
+			$('#contacts-listener-container').html(el);
 
 			contactFiltersListeners();
 
@@ -1077,11 +1097,11 @@ var ContactsRouter = Backbone.Router.extend({
 				});
 		
 		if(!is_lhs_filter) {
-			$('#content').html('<div id="conatcts-listeners-conatainer"></div>');
-			$('#conatcts-listeners-conatainer').html(this.contact_custom_view.el);
+			$('#content').html('<div id="contacts-listener-container"></div>');
+			$('#contacts-listener-container').html(this.contact_custom_view.el);
 			contactFiltersListeners();
 		} else {
-			$('#conatcts-listeners-conatainer').find('.contacts-div').html(this.contact_custom_view.el);
+			$('#contacts-listener-container').find('.contacts-div').html(this.contact_custom_view.el);
 			$('#bulk-actions').css('display', 'none');
 			$('#bulk-select').css('display', 'none');
 			CONTACTS_HARD_RELOAD = true;
@@ -1166,14 +1186,6 @@ var ContactsRouter = Backbone.Router.extend({
 			$(".butterbar").hide();
 			$("#content").html($(template_ui));	
 			$('[data-toggle="tooltip"]').tooltip();
-
-
-
-
-
-
-
-
 
 		}, "#content"); 
 

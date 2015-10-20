@@ -231,14 +231,6 @@ $("#updateActivityModal").on(
 function initializeEventListners(el)
 {
 
-
-/*$("#ical_appointment_links").on('click', '#subscribe-ical', function(event)
-{
-	event.preventDefault();
-	set_api_key();
-});*/
-
-
 /**
  * When Send Mail is clicked from Ical Modal, it hides the ical modal and shows
  * the ical-send email modal.
@@ -330,16 +322,10 @@ $("#calendar-listers").on('click', '.agendaDayWeekMonth', function()
 	{
 		e.preventDefault();
 
-		$('#activityModal').modal('show');
+		$('#activityModal').html(getTemplate("new-event-modal")).modal('show');
+
 		agile_type_ahead("event_relates_to_deals", $('#activityModal'), deals_typeahead, false,null,null,"core/api/search/deals",false, true);
 		highlight_event();
-
-		/*
-		 * $('#task-date-1').val(new Date().format('mm/dd/yyyy'));
-		 * $("#event-date-1").val(new Date().format('mm/dd/yyyy'));
-		 * $("#event-date-2").val(new Date().format('mm/dd/yyyy'));
-		 */
-
 		return;
 	});
 
@@ -434,10 +420,12 @@ $(function()
 	 * 
 	 */
 	
-	  $("body").on('click', '#show-activity', function(e) { e.preventDefault();
-	  highlight_event();
-	  
-	  $("#activityModal").modal('show'); });
+	  $("body").on('click', '#show-activity', function(e) { 
+	  		e.preventDefault();
+
+	 		highlight_event();
+	  		$('#activityModal').html(getTemplate("new-event-modal")).modal('show');
+	  });
 	 
 
 	/**
@@ -601,56 +589,6 @@ $(function()
 		// Update will highlight the date of in date picker
 		$("input.date").datepicker('update');
 
-		/*if($('#activityTaskModal').find('.new-task-related-contacts-input').find('ul').find('li').length>0)
-		{
-			$('#activityTaskModal').find('#new-task-related-contacts-label').parent().addClass('hide');
-			$('#activityTaskModal').find('.new-task-related-contacts-input').removeClass('hide');
-			$('#activityTaskModal').find('.new-task-related-contacts-label').removeClass('hide');
-		}
-		else
-		{
-			$('#activityTaskModal').find('#new-task-related-contacts-label').parent().removeClass('hide');
-			$('#activityTaskModal').find('.new-task-related-contacts-input').addClass('hide');
-			$('#activityTaskModal').find('.new-task-related-contacts-label').addClass('hide');
-		}
-		if($('#activityTaskModal').find('.new-task-related-deals-input').find('ul').find('li').length>0)
-		{
-			$('#activityTaskModal').find('#new-task-related-deals-label').parent().addClass('hide');
-			$('#activityTaskModal').find('.new-task-related-deals-input').removeClass('hide');
-			$('#activityTaskModal').find('.new-task-related-deals-label').removeClass('hide');
-		}
-		else
-		{
-			$('#activityTaskModal').find('#new-task-related-deals-label').parent().removeClass('hide');
-			$('#activityTaskModal').find('.new-task-related-deals-input').addClass('hide');
-			$('#activityTaskModal').find('.new-task-related-deals-label').addClass('hide');
-		}
-
-		if($('#activityModal').find('.new-event-related-contacts-input').find('ul').find('li').length>0)
-		{
-			$('#activityModal').find('#new-event-related-contacts-label').parent().addClass('hide');
-			$('#activityModal').find('.new-event-related-contacts-input').removeClass('hide');
-			$('#activityModal').find('.new-event-related-contacts-label').removeClass('hide');
-		}
-		else
-		{
-			$('#activityModal').find('#new-event-related-contacts-label').parent().removeClass('hide');
-			$('#activityModal').find('.new-event-related-contacts-input').addClass('hide');
-			$('#activityModal').find('.new-event-related-contacts-label').addClass('hide');
-		}
-		if($('#activityModal').find('.new-event-related-deals-input').find('ul').find('li').length>0)
-		{
-			$('#activityModal').find('#new-event-related-deals-label').parent().addClass('hide');
-			$('#activityModal').find('.new-event-related-deals-input').removeClass('hide');
-			$('#activityModal').find('.new-event-related-deals-label').removeClass('hide');
-		}
-		else
-		{
-			$('#activityModal').find('#new-event-related-deals-label').parent().removeClass('hide');
-			$('#activityModal').find('.new-event-related-deals-input').addClass('hide');
-			$('#activityModal').find('.new-event-related-deals-label').addClass('hide');
-		}*/
-
 	});
 
 	/**
@@ -677,31 +615,6 @@ $(function()
 		$('#' + this.id).find('.error').removeClass('error');
 
 		$("input.date").datepicker('update');
-
-		/*if($('#updateActivityModal').find('.update-event-related-contacts-input').find('ul').find('li').length>0)
-		{
-			$('#updateActivityModal').find('#update-event-related-contacts-label').parent().addClass('hide');
-			$('#updateActivityModal').find('.update-event-related-contacts-input').removeClass('hide');
-			$('#updateActivityModal').find('.update-event-related-contacts-label').removeClass('hide');
-		}
-		else
-		{
-			$('#updateActivityModal').find('#update-event-related-contacts-label').parent().removeClass('hide');
-			$('#updateActivityModal').find('.update-event-related-contacts-input').addClass('hide');
-			$('#updateActivityModal').find('.update-event-related-contacts-label').addClass('hide');
-		}
-		if($('#updateActivityModal').find('.update-event-related-deals-input').find('ul').find('li').length>0)
-		{
-			$('#updateActivityModal').find('#update-event-related-deals-label').parent().addClass('hide');
-			$('#updateActivityModal').find('.update-event-related-deals-input').removeClass('hide');
-			$('#updateActivityModal').find('.update-event-related-deals-label').removeClass('hide');
-		}
-		else
-		{
-			$('#updateActivityModal').find('#update-event-related-deals-label').parent().removeClass('hide');
-			$('#updateActivityModal').find('.update-event-related-deals-input').addClass('hide');
-			$('#updateActivityModal').find('.update-event-related-deals-label').addClass('hide');
-		}*/
 
 	});
 
@@ -755,32 +668,7 @@ $(function()
 		$('#update-event-time-1').closest('.control-group').show();
 		$('#update-event-date-2').closest('.row').show();
 	});
-	$('#activityModal').on('hidden.bs.modal', function()
-	{
-		$("#add_event_desctiption").show();
-
-		$(".event_discription").addClass("hide");
-
-		if ($(this).hasClass('in'))
-		{
-			return;
-		}
-
-		// Remove validation error messages
-		remove_validation_errors('activityModal');
-
-		$("#activityForm").find("li").remove();
-		$('#event-time-1').closest('.control-group').show();
-		$('#event-date-2').closest('.row').show();
-
-		/*$('#activityModal').find('#new-event-related-contacts-label').parent().removeClass('hide');
-		$('#activityModal').find('.new-event-related-contacts-input').addClass('hide');
-		$('#activityModal').find('.new-event-related-contacts-label').addClass('hide');
-		$('#activityModal').find('#new-event-related-deals-label').parent().removeClass('hide');
-		$('#activityModal').find('.new-event-related-deals-input').addClass('hide');
-		$('#activityModal').find('.new-event-related-deals-label').addClass('hide');*/
-	});
-
+	
 	$('#webEventCancelModel').on('hidden.bs.modal', function()
 	{
 		$("#webEventCancelForm").each(function()
@@ -788,34 +676,6 @@ $(function()
 			this.reset();
 		});
 	});
-
-	/*$('#activityModal').on('click', '#new-event-related-contacts-label', function(e){
-		e.preventDefault();
-		$(this).parent().parent().find('.new-event-related-contacts-input').removeClass('hide');
-		$(this).parent().parent().find('.new-event-related-contacts-label').removeClass('hide');
-		$(this).parent().addClass('hide');
-	});
-
-	$('#activityModal').on('click', '#new-event-related-deals-label', function(e){
-		e.preventDefault();
-		$(this).parent().parent().find('.new-event-related-deals-input').removeClass('hide');
-		$(this).parent().parent().find('.new-event-related-deals-label').removeClass('hide');
-		$(this).parent().addClass('hide');
-	});
-
-	$('#updateActivityModal').on('click', '#update-event-related-contacts-label', function(e){
-		e.preventDefault();
-		$(this).parent().parent().find('.update-event-related-contacts-input').removeClass('hide');
-		$(this).parent().parent().find('.update-event-related-contacts-label').removeClass('hide');
-		$(this).parent().addClass('hide');
-	});
-
-	$('#updateActivityModal').on('click', '#update-event-related-deals-label', function(e){
-		e.preventDefault();
-		$(this).parent().parent().find('.update-event-related-deals-input').removeClass('hide');
-		$(this).parent().parent().find('.update-event-related-deals-label').removeClass('hide');
-		$(this).parent().addClass('hide');
-	});*/
 
 });
 

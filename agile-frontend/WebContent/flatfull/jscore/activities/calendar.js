@@ -538,7 +538,7 @@ function showCalendar(users)
 						select : function(start, end, allDay)
 						{
 							// Show a new event
-							$('#activityModal').modal('show');
+							$('#activityModal').html(getTemplate("new-event-modal")).modal('show');
 							highlight_event();
 
 							// Set Date for Event
