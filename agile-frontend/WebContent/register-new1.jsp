@@ -6,22 +6,36 @@
 <%@page contentType="text/html; charset=UTF-8" %>
 <%
 
-	if (request.getAttribute("javax.servlet.forward.request_uri") == null) {
+	 if (request.getAttribute("javax.servlet.forward.request_uri") == null) {
 		response.sendRedirect("/register");
 		return;
-	}
+	} 
 
-  if(RegisterUtil.isWrongURL(request))
+   if(RegisterUtil.isWrongURL(request))
 	{
 	    RegisterUtil.redirectToRegistrationpage(request, response);
 	    return;
-	}
+	} 
 
   String _source = request.getParameter("_source");
   
   String registered_email = request.getParameter("email");
 
 String _AGILE_VERSION = SystemProperty.applicationVersion.get();
+
+String CSS_PATH = "/";
+String FLAT_FULL_PATH = "flatfull/";
+String CLOUDFRONT_TEMPLATE_LIB_PATH = VersioningUtil.getCloudFrontBaseURL();
+System.out.println(CLOUDFRONT_TEMPLATE_LIB_PATH);
+  
+String CLOUDFRONT_STATIC_FILES_PATH = VersioningUtil.getStaticFilesBaseURL();
+CSS_PATH = CLOUDFRONT_STATIC_FILES_PATH;
+if(SystemProperty.environment.value() == SystemProperty.Environment.Value.Development)
+{
+	  CLOUDFRONT_STATIC_FILES_PATH = FLAT_FULL_PATH;
+	  CLOUDFRONT_TEMPLATE_LIB_PATH = "";	
+	  CSS_PATH = FLAT_FULL_PATH;
+}
 
   if(registered_email != null)
   {
@@ -46,7 +60,7 @@ String _AGILE_VERSION = SystemProperty.applicationVersion.get();
 
 <!-- Page CSS -->
 <link rel="stylesheet" type="text/css" href="/flatfull/css/register-new.css" />
-<link rel="stylesheet" type="text/css" href="/flatfull/css/bootstrap.v3.min.css" />
+<link rel="stylesheet" type="text/css" href="<%=CSS_PATH %>css/bootstrap.v3.min.css" />
 <link rel="stylesheet" type="text/css" href="/flatfull/css/app.css" />
 
 <script type="text/javascript">
