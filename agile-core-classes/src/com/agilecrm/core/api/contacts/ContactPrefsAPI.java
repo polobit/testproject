@@ -75,15 +75,21 @@ public class ContactPrefsAPI
 
 	ContactPrefs updatedPrefs = ContactPrefsUtil.mergePrefs(currentPrefs, prefs);
 
-	System.out.println("Sync" + sync);
-	if(updatedPrefs.id==currentPrefs.id)
-	   updatedPrefs.save();
+	System.out.println("Sync" + sync+" prefs id is not null ");
+
+	if(updatedPrefs.id==prefs.id){
+	 System.out.println("in update prefs and prefs id are same before saving ");
+		updatedPrefs.save();
+	}
 
 	if (!StringUtils.isEmpty(sync) && !updatedPrefs.inProgress)
 	{
 	    updatedPrefs.inProgress = true;
-	    if(updatedPrefs.id==currentPrefs.id)
-	    updatedPrefs.save();
+	    System.out.println("syncing before updated prefs and ");
+	    if(updatedPrefs.id==prefs.id){
+	    System.out.println("updated prefs and prefs are same while syncing");
+	    	updatedPrefs.save();
+	    }
 	    ContactsImportUtil.initilaizeImportBackend(updatedPrefs, true);
 	    return;
 	}
