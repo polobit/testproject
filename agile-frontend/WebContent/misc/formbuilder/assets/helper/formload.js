@@ -10,6 +10,7 @@ define([
 			type: 'GET',
 			dataType: 'json',
 			success: function(data){
+				
 				saveform = JSON.parse(data.formJson);
 				$('#form-label').text('Edit Form');
 				new MyFormView({ title : "Original", collection : new MyFormSnippetsCollection(saveform) });
@@ -20,7 +21,13 @@ define([
 			    	  if(formHtml != '') {
 			    		  $('#agileFormHolder').html(formHtml);
 			    		  $('#agileFormHolder style').remove();
+
+			    		  if(typeof data.formHtml == "undefined" || data.formHtml == "") {
+			    		  	data.formHtml = formHtml;
+			    		  	try{window.parent.updateAgileFormDB(data);}catch(err){}
+			    		  }
 			    	  }
+
 				}
 				
 			}
