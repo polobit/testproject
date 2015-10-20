@@ -77,7 +77,7 @@ function createStripeContact(message)
 		getTemplate('shopify-profile-addcontact', {}, undefined, function(template_ui){
 	 		if(!template_ui)
 	    		return;
-			$('#' + Shopify_PLUGIN_NAME).html($(template_ui)); 
+			$('#' + Shopify_PLUGIN_NAME).html(template_ui); 
 		}, '#' + Shopify_PLUGIN_NAME);
 }
 
@@ -102,7 +102,7 @@ function shopifyError(id, message)
 		getTemplate('shopify-error', error_json, undefined, function(template_ui){
 	 		if(!template_ui)
 	    		return;
-			$('#' + id).html($(template_ui)); 
+			$('#' + id).html(template_ui); 
 		}, '#' + id);
 
 }

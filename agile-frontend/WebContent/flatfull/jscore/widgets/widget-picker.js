@@ -125,9 +125,10 @@ function initializeWidgetSettingsListeners(){
 
 		// If not confirmed to delete, return
 		var displayName;
+		
 		if(widget_name == "Rapleaf"){
 			displayName = "Towerdata";
-		}if(widget_name == "TwilioIO"){
+		}else if(widget_name == "TwilioIO"){
 			displayName = "Twilio";
 		}else{
 			displayName = widget_name;
@@ -146,7 +147,7 @@ function initializeWidgetSettingsListeners(){
 		if(widget_name == "Bria")
 			callFromBria = false;
 			default_call_type = null;
-		});	
+	});	
 	
 	// Helps to know that widget is for all users.
 	$('#prefs-tabs-content .add_to_all').off();
