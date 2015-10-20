@@ -262,7 +262,7 @@ var ContactsRouter = Backbone.Router.extend({
 		 * cursor and page_size options are taken to activate
 		 * infiniScroll
 		 */
-		this.contactsListView = new Base_Collection_View({ url : url, sort_collection : false, templateKey : template_key, individual_tag_name : individual_tag_name,
+		this.contactsListView = new Contacts_Events_Collection_View({ url : url, sort_collection : false, templateKey : template_key, individual_tag_name : individual_tag_name,
 			cursor : true, page_size : 25, global_sort_key : sort_key, slateKey : slateKey, request_method : 'POST', post_data: {filterJson: postData}, postRenderCallback : function(el, collection)
 			{
 
@@ -430,7 +430,6 @@ var ContactsRouter = Backbone.Router.extend({
 	{
 		$('[data-toggle="tooltip"]').tooltip();
 
-
 		//If call campaign is running then show the campaign
 		if(CALL_CAMPAIGN.last_clicked == "start-bulk-campaign"){
 			startCallCampaign(CALL_CAMPAIGN.contact_id_list);
@@ -523,7 +522,7 @@ var ContactsRouter = Backbone.Router.extend({
 			return;
 		}
 
-		this.contactDetailView = new Base_Model_View({ model : contact, isNew : true, template : "contact-detail", postRenderCallback : function(el)
+		this.contactDetailView = new Contact_Details_Model_Events({ model : contact, isNew : true, template : "contact-detail", postRenderCallback : function(el)
 		{
 			
 			$("#mobile-menu-settings").trigger('click');
@@ -544,24 +543,6 @@ var ContactsRouter = Backbone.Router.extend({
 
 			loadWidgets(el, contact.toJSON());
 			
-			
-			
-			/*
-			 * // To get QR code and download Vcard
-			 * $.get('/core/api/VCard/' + contact.toJSON().id,
-			 * function(data){ console.log("Vcard string");
-			 * console.log(data); var url =
-			 * 'https://chart.googleapis.com/chart?cht=qr&chs=180x180&chld=0&choe=UTF-8&chl=' +
-			 * encodeURIComponent(data); $("#qrcode", el).html('<img
-			 * src="' + url + '" id="qr_code" alt="QR Code"/>');
-			 * //$("#qrcode", el).html('<img
-			 * style="display:inline-block!important;" src="' + url + '"
-			 * id="qr_code" alt="QR Code" data="' + data + '"
-			 * onload="qr_load();"/>'); $("#qrcode", el).prepend('<span
-			 * style="padding: 8% 0%;margin-right: 2px;float:right;"
-			 * id="downloadify"></span>'); });
-			 */
-
 			starify(el);
 
 			show_map(el);
@@ -943,8 +924,7 @@ var ContactsRouter = Backbone.Router.extend({
 			}
 			
 			initializeSendEmailListeners();
-			sendEmailAttachmentListeners("send-email-listener-container");
-			
+			sendEmailAttachmentListeners("send-email-listener-container");			
 			
 		}, "#send-email-listener-container"); 
 	
@@ -1052,7 +1032,7 @@ var ContactsRouter = Backbone.Router.extend({
 			template_key = "contacts-custom-view-table";
 		}	
 		
-		this.contact_custom_view = new Base_Collection_View({ url : url, restKey : "contact", modelData : view_data, global_sort_key : sort_key,
+		this.contact_custom_view = new Contacts_Events_Collection_View({ url : url, restKey : "contact", modelData : view_data, global_sort_key : sort_key,
 			templateKey : template_key, individual_tag_name : 'tr', slateKey : slateKey, cursor : true, request_method : 'POST', post_data: {'filterJson': postData}, page_size : 25, sort_collection : false,
 			postRenderCallback : function(el, collection)
 			{

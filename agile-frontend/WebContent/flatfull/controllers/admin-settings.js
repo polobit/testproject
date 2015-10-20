@@ -110,8 +110,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			$('#content').html($(template_ui));	
 			var view = new Base_Model_View({ url : '/core/api/account-prefs', template : "admin-settings-account-prefs", postRenderCallback : function()
 			{
-				initializeAdminSettingsListeners();
-				initializeAccountSettingsListeners();
+				ACCOUNT_DELETE_REASON_JSON = undefined;
 			} });
 
 			$('#content').find('#admin-prefs-tabs-content').html(view.render().el);

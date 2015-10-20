@@ -202,7 +202,7 @@ var CompaniesRouter = Backbone.Router
 		 * cursor and page_size options are taken to activate
 		 * infiniScroll
 		 */
-		this.companiesListView = new Base_Collection_View({ url : url, restKey : "contact", modelData : view_data, global_sort_key : sort_key,
+		this.companiesListView = new Contacts_Events_Collection_View({ url : url, restKey : "contact", modelData : view_data, global_sort_key : sort_key,
 			templateKey : template_key, individual_tag_name : 'tr', slateKey : slateKey, cursor : true, request_method : 'POST', post_data: {'filterJson': postData}, page_size : 25, sort_collection : false,
 			postRenderCallback : function(el, collection)
 			{
@@ -339,7 +339,7 @@ var CompaniesRouter = Backbone.Router
 		add_recent_view(company);
 
 		// If contact is of type company , go to company details page
-		this.companyDetailView = new Base_Model_View({ model : company, isNew : true, template : "company-detail",
+		this.companyDetailView = new Contact_Details_Model_Events({ model : company, isNew : true, template : "company-detail",
 			postRenderCallback : function(el)
 			{
 				fill_company_related_contacts(id, 'company-contacts');

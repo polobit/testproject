@@ -13,8 +13,8 @@ var ReportsRouter = Backbone.Router
 				"activity-report-edit/:id" : "activityReportEdit", "acivity-report-results/:id" : "activityReportInstantResults",
 				"contact-reports" : "emailReports", "report-add" : "reportAdd", "report-edit/:id" : "reportEdit",
 				"report-results/:id" : "reportInstantResults", "report-charts/:type" : "reportCharts", "report-funnel/:tags" : "showFunnelReport",
-				"report-growth/:tags" : "showGrowthReport", "report-cohorts/:tag1/:tag2" : "showCohortsReport", "report-ratio/:tag1/:tag2" : "showRatioReport","report-sales":"showrevenuegraph","report-deals":"showIncomingDeals","report-calls/:type" : "showCallsReport","user-reports": "showUserReports",
-				"report-lossReason":"showDealsLossReason","reports-wonDeals":"showDealsWonChart"},
+				"report-growth/:tags" : "showGrowthReport", "report-cohorts/:tag1/:tag2" : "showCohortsReport", "report-ratio/:tag1/:tag2" : "showRatioReport","report-deals":"showIncomingDeals","report-calls/:type" : "showCallsReport" },
+
 			/**
 			 * Shows reports categories
 			 */
@@ -451,7 +451,7 @@ var ReportsRouter = Backbone.Router
 			showFunnelReport : function(tags)
 			{
 
-				head.load(LIB_PATH + 'lib/date-charts.js', LIB_PATH + 'lib/date-range-picker.js' + '?_=' + _AGILE_VERSION, CSS_PATH + "css/misc/date-picker.css", function()
+				head.load(LIB_PATH + 'lib/date-charts.js', LIB_PATH + 'lib/date-range-picker.js' + '?_=' + _AGILE_VERSION, function()
 				{
 					getTemplate("report-funnel", {}, undefined, function(template_ui){
 						if(!template_ui)
@@ -486,7 +486,7 @@ var ReportsRouter = Backbone.Router
 			showGrowthReport : function(tags)
 			{
 
-				head.js(LIB_PATH + 'lib/date-charts.js', LIB_PATH + 'lib/date-range-picker.js' + '?_=' + _AGILE_VERSION, CSS_PATH + "css/misc/date-picker.css", function()
+				head.js(LIB_PATH + 'lib/date-charts.js', LIB_PATH + 'lib/date-range-picker.js' + '?_=' + _AGILE_VERSION, function()
 				{
 
 					// Load Reports Template
@@ -523,7 +523,7 @@ var ReportsRouter = Backbone.Router
 			showCallsReport : function(reportType)
 			{
 
-				head.js(LIB_PATH + 'lib/date-charts.js', LIB_PATH + 'lib/date-range-picker.js', CSS_PATH + "css/misc/date-picker.css", function()
+				head.js(LIB_PATH + 'lib/date-charts.js', LIB_PATH + 'lib/date-range-picker.js', function()
 				{
 					
 					/** Default dropdown value to be considered*/ 
@@ -574,7 +574,7 @@ var ReportsRouter = Backbone.Router
 						var end_time=new Date(end_value).getTime() / 1000;
 						options += ("start-date=" + start_time + "&end-date=" + end_time);
 						
-						var url='core/api/portlets/calls-per-person/' + options;
+						var url='core/api/portlets/portletCallsPerPerson/' + options;
 						
 						graphOn=$("#typeCall option:selected").val();
 					    
@@ -609,7 +609,7 @@ var ReportsRouter = Backbone.Router
 									var topPos = 50*sizey;
 									if(sizey==2 || sizey==3)
 										topPos += 50;
-									$('#'+selector).html("<div class='text-center v-middle opa-half' style='margin-top:"+topPos+"px'><img src='../flatfull/img/ajax-loader-cursor.gif' style='width:12px;height:10px;opacity:0.5;' /></div>");
+									$('#'+selector).html("<div class='text-center v-middle opa-half' style='margin-top:"+topPos+"px'><img src='../img/ajax-loader-cursor.gif' style='width:12px;height:10px;opacity:0.5;' /></div>");
 									
 									portlet_graph_data_utility.fetchPortletsGraphData(url,function(data){
 										if(data.status==403){
@@ -737,45 +737,6 @@ var ReportsRouter = Backbone.Router
 				});
 				
 			},
-			
-			/**
-			 * Shows User Reports
-			 */
-			showUserReports : function()
-
-			{
-				hideTransitionBar();
-				initReportLibs(function()
-						{
-					getTemplate("report-revenue-user", {}, undefined, function(template_ui){
-						if(!template_ui)
-							  return;
-						$('#content').html($(template_ui));	
-
-						initUserReports(function()
-								{
-							salesReportGraphForUserReports();
-							showLossReasonGraphForUserReports();
-								
-							var callReportUrl='core/api/portlets/calls-per-person/' + getSelectedDates();
-							
-							if ($('#owner').length > 0)
-							{
-								if ($("#owner").val() != "" && $("#owner").val() != "All Owners"){
-								var user=$("#owner").val();
-								callReportUrl=callReportUrl+'&user=["'+user+'"]';
-							}
-							}
-							
-							report_utility.user_reports(callReportUrl);
-							
-								});
-						
-						
-				}, "#content");
-
-						});
-			},
 
 
 			/**
@@ -787,7 +748,7 @@ var ReportsRouter = Backbone.Router
 			showCohortsReport : function(tag1, tag2)
 			{
 
-				head.js(LIB_PATH + 'lib/date-charts.js', LIB_PATH + 'lib/date-range-picker.js' + '?_=' + _AGILE_VERSION, CSS_PATH + "css/misc/date-picker.css", function()
+				head.js(LIB_PATH + 'lib/date-charts.js', LIB_PATH + 'lib/date-range-picker.js' + '?_=' + _AGILE_VERSION, function()
 				{
 
 					// Load Reports Template
@@ -822,7 +783,7 @@ var ReportsRouter = Backbone.Router
 			showRatioReport : function(tag1, tag2)
 			{
 
-				head.js(LIB_PATH + 'lib/date-charts.js', LIB_PATH + 'lib/date-range-picker.js' + '?_=' + _AGILE_VERSION, CSS_PATH + "css/misc/date-picker.css", function()
+				head.js(LIB_PATH + 'lib/date-charts.js', LIB_PATH + 'lib/date-range-picker.js' + '?_=' + _AGILE_VERSION, function()
 				{
 
 					// Load Reports Template
@@ -884,10 +845,9 @@ var ReportsRouter = Backbone.Router
 
 				}, "#reports-listerners-container");
 			},
-
 			showIncomingDeals : function(){
 				hideTransitionBar();
-				initReportLibs(function()
+				head.js(LIB_PATH + 'lib/date-charts.js', LIB_PATH + 'lib/date-range-picker.js',function()
 						{
 
 							// Load Reports Template
@@ -896,80 +856,12 @@ var ReportsRouter = Backbone.Router
 							  return;
 						$('#content').html($(template_ui));	
 
-
 							initFunnelCharts(function()
 							{
 								showDealsGrowthReport();
 							});
 						}, "#content");
 					});
-			},
-
-			showDealsLossReason : function()
-			{
-				hideTransitionBar();
-				initReportLibs(function()
-				{
-
-					// Load Reports Template
-				getTemplate("report-DealsLoss", {}, undefined, function(template_ui){
-						if(!template_ui)
-							  return;
-						$('#content').html($(template_ui));	
-
-					initSalesCharts(function()
-							{
-						showLossReasonGraphs();
-							});
-
-					$(".active").removeClass("active");
-					$("#reportsmenu").addClass("active");
-				}, "#content");
-			});
-			},
-
-			showDealsWonChart : function()
-			{
-				hideTransitionBar();
-			initReportLibs(function()
-				{
-
-					// Load Reports Template
-				getTemplate("report-DealsWon", {}, undefined, function(template_ui){
-
-					if(!template_ui)
-							  return;
-						$('#content').html($(template_ui));	
-
-					initSalesCharts(function()
-							{
-						showWonPieChart();
-							});
-
-				$(".active").removeClass("active");
-				$("#reportsmenu").addClass("active");
-				}, "#content");
-			  });	
-			},
-
-			showrevenuegraph : function()
-			{
-						hideTransitionBar();
-				initReportLibs(function()
-				{
-							// Load Reports Template
-						getTemplate("report-sales", {}, undefined, function(template_ui){
-						if(!template_ui)
-							  return;
-						$('#content').html($(template_ui));	
-							// Set the name
-
-							initSalesCharts(function()
-							{
-								showsalesReportGraphs();
-					});
-						}, "#content");
-					});
-			},
+			}
 			
 	});
