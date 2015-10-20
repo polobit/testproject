@@ -554,7 +554,7 @@ function addTagsTypeaheadLhsFilters(tagsJSON, element)
 
 function bindChangeEvent(ele){
 
-	console.log("I am in custom_change " + $(ele).val());
+	console.log("I am in change " + $(ele).val());
 	var prevVal = $(ele).attr('prev-val');
 	var currVal = $(ele).val().trim();
 	if (prevVal == currVal)
@@ -570,7 +570,7 @@ function bindChangeEvent(ele){
 		if ($(ele).parent().next().find('input').val() != "" && currVal != "")
 		{
 			submitLhsFilter();
-			$(ele).blur();
+			// $(ele).blur();
 		}
 	}
 	else
@@ -581,7 +581,7 @@ function bindChangeEvent(ele){
 			$(container).find('a.clear-filter-condition-lhs').addClass('hide');
 		}
 		submitLhsFilter();
-		$(ele).blur();
+		// $(ele).blur();
 	}
 
 
