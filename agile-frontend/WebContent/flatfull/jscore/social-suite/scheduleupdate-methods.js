@@ -45,8 +45,9 @@ function isTimeInPast()
 		// To check text limit after button text change.
 		$('#twit-tweet').keypress();
 	}
-	else
+	
 	// Past Time
+	else
 	{
 		alert("Please select Date/Time in future.");
 		$("#send_tweet").attr("disabled", "disable");
