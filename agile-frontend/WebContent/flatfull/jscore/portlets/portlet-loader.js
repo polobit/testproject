@@ -62,6 +62,7 @@ function loadPortlets(el){
 					model.set({ 'row_position' : obj.row_position  }, { silent : true });
 					model.set({'isForAll' : false});
 					set_p_portlets(model);
+					//set_up_portlets(el, portlets_el);
 					models.push({ id : model.get("id"), column_position : obj.column_position, row_position : obj.row_position,isForAll : false });
 			
 				});
