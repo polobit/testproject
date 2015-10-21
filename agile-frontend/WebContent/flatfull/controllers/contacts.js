@@ -405,7 +405,7 @@ var ContactsRouter = Backbone.Router.extend({
 		// Contact Edit - take him to continue-contact form
 		add_custom_fields_to_form(bigObject, function(contact)
 		{
-			this.mergeContactsView = new Base_Model_View({ template : template_key, data : bigObject, postRenderCallback : function(el)
+			this.mergeContactsView = new Contact_Details_Model_Events({ template : template_key, data : bigObject, postRenderCallback : function(el)
 			{
 				// g_id_array.length = 0;
 			} });
@@ -523,7 +523,7 @@ var ContactsRouter = Backbone.Router.extend({
 			return;
 		}
 
-		this.contactDetailView = new Base_Model_View({ model : contact, isNew : true, template : "contact-detail", postRenderCallback : function(el)
+		this.contactDetailView = new Contact_Details_Model_Events({ model : contact, isNew : true, template : "contact-detail", postRenderCallback : function(el)
 		{
 			
 			$("#mobile-menu-settings").trigger('click');

@@ -17,4 +17,4 @@ rm WebContent/jscore/min/flatfull/js-all-min.js
 
 git stash
 
-git checkout agile-beta-development
+git checkout sandbox_sync_conversion
