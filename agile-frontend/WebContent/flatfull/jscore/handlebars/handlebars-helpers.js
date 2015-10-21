@@ -2247,14 +2247,20 @@ $(function()
 
 	Handlebars.registerHelper('remove_spaces', function(value)
 	{
-		return value.replace(/ +/g, '');
+		if(value)
+			  value = value.replace(/ +/g, '');
+
+		return value;
 
 	});
 
 	Handlebars.registerHelper('replace_spaces', function(value)
 	{
-		return value.replace(/ +/g, '_');
+		if(value)
+			  value = value.replace(/ +/g, '_');
 
+		return value;
+		
 	});
 
 	/***************************************************************************
@@ -4309,13 +4315,19 @@ $(function()
 
 	Handlebars.registerHelper('remove_spaces', function(value)
 	{
-		return value.replace(/ +/g, '');
+		if(value)
+			  value = value.replace(/ +/g, '');
+
+		return value;
 
 	});
 
 	Handlebars.registerHelper('replace_spaces', function(value)
 	{
-		return value.replace(/ +/g, '_');
+		if(value)
+			  value = value.replace(/ +/g, '_');
+
+		return value;
 
 	});
 
