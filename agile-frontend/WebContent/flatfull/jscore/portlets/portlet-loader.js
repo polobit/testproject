@@ -68,6 +68,7 @@ function loadPortlets(el){
 				$.ajax({ type : 'POST', url : '/core/api/portlets/positions', data : JSON.stringify(models),
 					contentType : "application/json; charset=utf-8", dataType : 'json' });
 				}
+				App_Portlets.adminPortlets=new Array();
 				if(Portlets_View.collection.length==0)
 					$('.gridster > div:visible > div',el).removeClass('gs-w');
 			

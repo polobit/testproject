@@ -10,9 +10,23 @@
 					<!--<img class="show_screeshot v-top question-tag" id="{{remove_spaces name}}"
 							border="0" src="/img/help.png"/>-->
 				</div>
+
 			{{#if_equals "Mini Calendar" name}}
 			  {{#if is_added}}
-		<div>	<a class="btn btn-sm btn-default add-widget disabled" >Add</a></div>
+			  {{#isAdmin}}
+				<div class="btn-group  m-l-n-lg">
+  									<a type="button" class="btn btn-sm btn-default add-widget add-portlet disabled"  portlet_type="{{portlet_type}}" portlet_name="{{name}}">Add</a>
+  									<a type="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+    									<span class="caret"></span>
+    									<span class="sr-only">Toggle Dropdown</span>
+  									</a>
+  									<ul class="dropdown-menu" role="menu">
+    									<li><a class="btn btn-sm add_to_all"  portlet_type="{{portlet_type}}" portlet_name="{{name}}">Add for all users</a></li>    									
+  									</ul>
+								</div>
+					{{else}}
+					  <div>	<a class="btn btn-sm btn-default add-widget add-portlet disabled" portlet_type="{{portlet_type}}" portlet_name="{{name}}">Add</a></div>
+					  {{/isAdmin}}
 			{{else}}
 				{{#isAdmin}}
 					<div class="btn-group  m-l-n-lg">
