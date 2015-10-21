@@ -3,8 +3,10 @@ angular.module('builder').factory('panels', function() {
         active: 'elements',
         open: function(name) {
             if (this.active === name) return;
-            var top = $('.main-nav [data-name="'+name+'"]').offset().top;
-            $('.selected-tab').css('transform', 'translateY('+(top-121)+'px)');
+            // var top = $('.main-nav [data-name="'+name+'"]').offset().top;
+            // $('.selected-tab').css('transform', 'translateY('+(top-121)+'px)');
+            $(".nav-item").removeClass("active2");
+            $('.main-nav [data-name="'+name+'"]').addClass("active2");
             this.active = name;
         }
     };

@@ -158,18 +158,17 @@
     .clearfix();
 
     .panel-inner {
-        width: ~"calc(100% - 70px)";
-        height: 100%;
+        width: auto;
+        height: ~"calc(100% - 60px)";
         overflow: visible;
-        float: left;
+        float: none;
         position: relative;
     }
 
     .main-nav {
-        width: 70px;
+        width: auto;
         background: #f0f3f4;
-        float: left;
-        height: 100%;
+        float: none;
         position: relative;
         padding-top: 0px;
 
@@ -261,15 +260,20 @@
             border: none;
             font-size: 25px;
             text-align: center;
-            margin-bottom: 10px;
-            padding: 15px 0;
+            margin-bottom: 0px;
+            padding: 5px 19px;
             cursor: pointer;
             position: relative;
             z-index: 1;
             line-height: 1.4;
+            float: left;
 
             &.active {
-                color: #000;
+                color: #98a6ad;
+            }
+
+            &.active2 {
+                background-color: #f6f8f8;
             }
 
             &:hover {
@@ -282,6 +286,7 @@
                 font-weight: bold;
                 letter-spacing: 0.5px;
             }
+
         }
     }
 
