@@ -17,7 +17,7 @@
                         <input type="text" id="label" placeholder="Label" class="required form-control noSpecialChars" value="{{../field_label}}" disabled / >
 						<input name="field_label" type="text" id="label" placeholder="Label" class="required form-control noSpecialChars hide" value="{{../field_label}}" / >
 						{{else}}
-							<input name="field_label" type="text" id="label" placeholder="Label" class="required form-control noSpecialChars" value="{{field_label}}"/>
+							<input name="field_label" type="text" id="label" placeholder="Label" class="required form-control noSpecialChars field_length" max_len="500" value="{{field_label}}"/>
 					{{/if}}
                     </div>
                 </div>
@@ -127,7 +127,7 @@
                 <div class="control-group form-group">
                     <label class="control-label col-sm-3">Label <span class="field_req">*</span></label> 
                     <div class="controls">
-                        <input name="field_label" type="text" id="label" placeholder="Label" class="required noSpecialChars form-control" />
+                        <input name="field_label" type="text" id="label" placeholder="Label" class="required noSpecialChars form-control field_length" max_len="500" />
                     </div>
                 </div>
                 <input class="hide form-control" name="field_type" type="text" placeholder="Label" value="TEXT" />
@@ -200,7 +200,7 @@
                 <div class="control-group form-group">
                     <label class="control-label col-sm-3">Label <span class="field_req">*</span></label> 
                     <div class="controls">
-                        <input name="field_label" type="text" id="label" placeholder="Label" class="required noSpecialChars form-control" />
+                        <input name="field_label" type="text" id="label" placeholder="Label" class="required noSpecialChars form-control field_length" max_len="500" />
                     </div>
                 </div>
                 <input class="hide form-control" name="field_type" type="text" placeholder="Label" value="DATE" />
@@ -267,7 +267,7 @@
                 <div class="control-group form-group">
                     <label class="control-label col-sm-3">Label <span class="field_req">*</span></label> 
                     <div class="controls">
-                        <input name="field_label" type="text" id="label" placeholder="Label" class="required form-control noSpecialChars" />
+                        <input name="field_label" type="text" id="label" placeholder="Label" class="required form-control noSpecialChars field_length" max_len="500" />
                     </div>
                 </div>
                 <input class="hide" name="field_type" type="text" placeholder="Label" value="LIST" />
@@ -339,7 +339,7 @@
                 <div class="control-group form-group">
                     <label class="control-label col-sm-3">Label <span class="field_req">*</span></label> 
                     <div class="controls">
-                        <input name="field_label" type="text" id="label" placeholder="Label" class="required noSpecialChars form-control" />
+                        <input name="field_label" type="text" id="label" placeholder="Label" class="required noSpecialChars form-control field_length" max_len="500" />
                     </div>
                 </div>
                 <input class="hide" name="field_type" type="text" placeholder="Label" value="CHECKBOX"  />
@@ -405,7 +405,7 @@
                 <div class="control-group form-group">
                     <label class="control-label col-sm-3">Label <span class="field_req">*</span></label> 
                     <div class="controls">
-                        <input name="field_label" type="text" id="label" placeholder="Label" class="required form-control" />
+                        <input name="field_label" type="text" id="label" placeholder="Label" class="required form-control field_length" max_len="500" />
                     </div>
                 </div>
                 <input class="hide" name="field_type" type="text" placeholder="Label" value="TEXTAREA" />
@@ -478,7 +478,7 @@
                 <div class="control-group form-group">
                     <label class="control-label col-sm-3">Label <span class="field_req">*</span></label> 
                     <div class="controls">
-                        <input name="field_label" type="text" id="label" placeholder="Label" class="required form-control" />
+                        <input name="field_label" type="text" id="label" placeholder="Label" class="required form-control field_length" max_len="500" />
                     </div>
                 </div>
                 <input class="hide" name="field_type" type="text" placeholder="Label" value="LINK" />

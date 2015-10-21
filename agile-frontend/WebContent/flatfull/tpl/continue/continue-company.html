@@ -11,7 +11,7 @@
                 <div class="control-group form-group">
                     <label class="control-label col-sm-3">Organization</label>
                     <div class="controls col-sm-9">                     
-                        <input name="name" type="text" class="required form-control" id="company_name" value="{{getPropertyValue properties "name"}}"/>
+                        <input name="name" type="text" class="required form-control field_length" max_len="100" id="company_name" value="{{getPropertyValue properties "name"}}"/>
                     </div>
                 </div>
 				<div class="control-group form-group" id="tags_source_continue_company">
@@ -24,13 +24,13 @@
                                 {{/each}}
                             </ul>
                         </div>
-                        <input name="tags" type="text" id="tags-new-person" class="tags-typeahead form-control" />
+                        <input name="tags" type="text" id="tags-new-person" class="tags-typeahead form-control" maxlength="500"/>
                     </div>
                 </div>
                 <div class="control-group form-group">
                     <label class="control-label col-sm-3">Url</label>
                     <div class="controls col-sm-9">
-                        <input class="form-control" name="url" placeholder="http://www." type="text" id="company_url" value="{{getPropertyValue properties "url"}}"/>
+                        <input class="form-control field_length" max_len="500" name="url" placeholder="http://www." type="text" id="company_url" value="{{getPropertyValue properties "url"}}"/>
                     </div>
                 </div>
 				 {{show_custom_fields custom_fields properties}}
@@ -38,8 +38,10 @@
                     <label class="control-label col-sm-3">Add Email <span><a href="#" class="multiple-add"><i class="fa fa-plus m-l-xs"></i></a></span></label>
                     <div class="controls col-sm-9 col-sm-offset-3 hide m-t-sm">
                         <div class="email multiple-template" data="email">
+
 							<div class="pull-left w-half">
-							<input type="text" id="email" class="email form-control" name="email" placeholder="Email" />
+							<input type="text" id="email" class="email form-control field_length" max_len="500" name="email" placeholder="Email" />
+
 							</div>
 							<div class="pull-left w-half">
                 <select class="email-select form-control inline-block m-l-sm" name="email-select" style="width:calc(100% - 32px);">
@@ -54,8 +56,10 @@
                     </div>
                     <div class="controls col-sm-9 second">
                         <div class="email multiple-template" data="email">
+
                             <div class="pull-left w-half">
-								<input type="text" id="email" class="email form-control" name="email" placeholder="Email" />
+			<input type="text" id="email" class="email form-control field_length" name="email" max_len="500" placeholder="Email" />
+
 							</div>
 							<div class="pull-left w-half">
             <select class="email-select form-control inline-block m-l-sm" name="email-select" style="width:calc(100% - 32px);">
@@ -73,8 +77,10 @@
                     <label class="control-label col-sm-3">Add Phone <span><a href="#" class="multiple-add"><i class="fa fa-plus m-l-xs"></i></a></span></label>
                     <div class="controls col-sm-9 col-sm-offset-3 hide m-t-sm">
                         <div class="phone multiple-template" data="phone">
+
 						    <div class="pull-left w-half">
-                            	<input class="form-control inline-block" type="text" id="phone" name="phone" placeholder="Phone number" />
+                            	<input class="form-control inline-block field_length" max_len="500" type="text" id="phone" name="phone" placeholder="Phone number" />
+
 						    </div>
                             <div class="pull-left w-half">
                  <select class="phone-select form-control inline-block m-l-sm" name="phone-select" style="width:calc(100% - 32px);">
@@ -90,8 +96,10 @@
                     </div>
                     <div class="controls col-sm-9 second">
                         <div class="phone multiple-template" data="phone">
+
 							<div class="pull-left w-half">
-                            	<input class="form-control inline-block" type="text" id="phone" name="phone" placeholder="Phone number" />
+            <input class="form-control inline-block field_length" max_len="500" type="text" id="phone" name="phone" placeholder="Phone number" />
+
 							</div>
                             <div class="pull-left w-half">
                 <select class="phone-select form-control inline-block m-l-sm" name="phone-select" style="width:calc(100% - 32px);">
@@ -108,14 +116,16 @@
                 </div>
                 <!-- End of phone template -->
                 <div class="control-group form-group">
+
                     <label class="control-label col-sm-3">Website <span><a href="#" class="multiple-add"><i class="fa fa-plus m-l-xs"></i></a></span></label>
                     <div class="controls col-sm-9 col-sm-offset-3 hide m-t-sm">
-                        <div class="website multiple-template" data="website">
+                        <div class="website multiple-template style=" display:none" data="website">
                         <div class="pull-left w-half">
-                            <input class="form-control inline-block" type="text" id="website" name="website"  placeholder="Website" /> 
+                            <input class="form-control inline-block field_length"  max_len="500" type="text" id="website" name="website"  placeholder="Website" /> 
                             </div>
                         <div class="pull-left w-half">    
             <select class="website-select form-control inline-block m-l-sm" name="website-select" style="width:calc(100% - 32px);">
+
                                 <option></option>
                                 <option value="URL">Website</option>
                                 <option value="SKYPE">Skype</option>
@@ -133,13 +143,15 @@
                             </div>
                         </div>
                     </div>
+
                     <div class="controls col-sm-9 second">
                         <div class="website multiple-template"  data="website">
                         <div class="pull-left w-half">
-                            <input class="form-control" type="text" id="website"  name="website" placeholder="Website" />
+                            <input class="form-control field_length" max_len="500" type="text" id="website"  name="website" placeholder="Website" />
                             </div>
                             <div class="pull-left w-half"> 
          <select class="website-select form-control m-l-sm inline-block" name="website-select" style="width:calc(100% - 32px);">
+
                                 <option></option>
                                 <option value="URL">Website</option>
                                 <option value="SKYPE">Skype</option>
@@ -163,8 +175,10 @@
                     <label class="control-label col-sm-3">Add Address</label>
                     <div class="controls col-sm-9">
                         <div class="address multiple-template" data="address">
+
 							<div class="pull-left w-half">
-                        <input class="form-control" type="text" name="address" id="address" placeholder="address" />
+                        <input class="form-control field_length" max_len="350" type="text" name="address" id="address" placeholder="address" />
+
 							</div> 
                             <div class="pull-left  w-half">
                             <select class="address-type form-control inline-block m-l-sm" name="address-type" style="width:calc(100% - 32px);">
@@ -176,9 +190,10 @@
                             </div>
                             <div class="clearfix m-b-sm"></div>
                             
-                            <input class="form-control m-b-sm" type="text" name="city" id="city" placeholder="city" />
-                            <input class="form-control m-b-sm" type="text" name="state" id="state" placeholder="state" /> 
-                            <input class="form-control m-b-sm" type="text" name="zip" id="zip" placeholder="zip" />
+                            <input class="form-control m-b-sm field_length" max_len="30" type="text" name="city" id="city" placeholder="city" />
+                            <input class="form-control m-b-sm field_length"  max_len="30" type="text" name="state" id="state" placeholder="state" /> 
+                            <input class="form-control m-b-sm field_length" max_len="12"  type="text" name="zip" id="zip" placeholder="zip" />
+
                             <select class="styled form-control inline-block m-b-sm" id="country" name="country">
                                 <option value=""></option>
                                 <option value="AF">Afghanistan</option>

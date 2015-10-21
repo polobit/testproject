@@ -308,7 +308,7 @@ public class CronUtil
 
 			// If bulk crons wake up from Wait, add to pull queue
 			if (wakeupOrInterrupt.equalsIgnoreCase(Cron.CRON_TYPE_TIME_OUT))
-				PullQueueUtil.addToPullQueue(AgileQueues.NORMAL_CAMPAIGN_PULL_QUEUE, cronDeferredTask, cron.namespace);
+				PullQueueUtil.addToPullQueue(totalCronJobsCount >= 200 ? AgileQueues.BULK_CAMPAIGN_PULL_QUEUE : AgileQueues.NORMAL_CAMPAIGN_PULL_QUEUE, cronDeferredTask, cron.namespace);
 			else
 			{
 				// Interruptted crons like Click, Open
