@@ -175,7 +175,16 @@ public class FreshBooksWidgetsAPI {
 		Widget widget = WidgetUtil.getWidget(widgetId);
 
 		if (widget != null) {
-
+			
+			if(firstName.equalsIgnoreCase("undefined")){
+				firstName = "";
+			}
+			
+			if(lastName.equalsIgnoreCase("undefined")){
+				lastName = "";
+			}
+			
+			
 			try {
 				if (organisation.equals("undefined")) {
 					organisation = "";
