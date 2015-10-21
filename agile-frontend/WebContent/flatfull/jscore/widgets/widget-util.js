@@ -230,9 +230,13 @@ function addWidgetProfile(widgetId, widgetName, template, url) {
 					// Loading GooglePlus profile
 					if (widgetName == "GooglePlus") {
 						var widgetPrefGP = JSON.parse(model.prefs);
-						$.getJSON("https://www.googleapis.com/plus/v1/people/me?access_token="+ widgetPrefGP['access_token'], function(userData) {
+						$.getJSON("https://www.googleapis.com/plus/v1/people/me?access_token="+ widgetPrefGP['access_token']).success(function(userData) { 
 							model["profile"] = userData;
-
+							// Create a view modal for widgets
+							renderWidgetView(template, url, model, '#widget-settings');
+							return;
+						}).error(function() { 
+							model["profile"] = {};
 							// Create a view modal for widgets
 							renderWidgetView(template, url, model, '#widget-settings');
 							return;
