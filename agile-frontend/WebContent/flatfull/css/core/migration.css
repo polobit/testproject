@@ -1563,5 +1563,9 @@ a#email-reply{
     display: block;
     width: 100%;
   }
-}
+  .mobile-view-btn-billing, .mobile-view-btn-billing > div {
+    padding-left: none!important;
+    text-align: center;
+  }
+ }
 
