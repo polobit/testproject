@@ -150,8 +150,6 @@ var DataSync_Event_Modal_View = Base_Model_View.extend({
             });
 
             var url = DATA_SYNC_URL + "/GOOGLE";
-            url = url.replace("/allPrefs", "");
-
           //  $(ele).after(getRandomLoadingImg());
             model.url = url + "?sync=true"
             model.save({}, {
@@ -208,7 +206,6 @@ var DataSync_Event_Modal_View = Base_Model_View.extend({
             });
 
             var url = DATA_SYNC_URL + "/STRIPE";
-            url = url.replace("/allPrefs", "");
 
            // $(ele).after(getRandomLoadingImg());
             model.url = url + "?sync=true"
