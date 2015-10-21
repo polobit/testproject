@@ -93,6 +93,10 @@ public class ContactPrefsAPI
 	    ContactsImportUtil.initilaizeImportBackend(updatedPrefs, true);
 	    return;
 	}
+	if(updatedPrefs.id==prefs.id){
+		 System.out.println("in update prefs and prefs id are same before saving ");
+			updatedPrefs.save();
+		}
 
     }
 
