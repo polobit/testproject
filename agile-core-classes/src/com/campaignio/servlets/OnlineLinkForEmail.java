@@ -91,7 +91,7 @@ public class OnlineLinkForEmail extends HttpServlet
 			catch (Exception e)
 			{
 			    System.out
-				    .println("Exception occured while getting objects(Campaign,Subscriber,Node) JSON from ids");
+				    .println("Exception occured while getting objects(Campaign,Subscriber,Node) JSON from ids" + e.getMessage());
 			    System.out.println("CampaignId: " + campaignId + " " + "SubscriberId: " + subscriberId
 				    + " " + "NodeId: " + nodeId);
 			}
@@ -101,7 +101,7 @@ public class OnlineLinkForEmail extends HttpServlet
 			{
 			    String html = TaskletAdapter.getStringValue(nodeJSON, subscriberJSON, data,
 				    SendEmail.HTML_EMAIL);
-			    res.setHeader("Content-Type", "text/html");
+			    res.setContentType("text/html; charset=UTF-8");
 			    res.getWriter().write(html);
 			}
 			else
@@ -114,8 +114,7 @@ public class OnlineLinkForEmail extends HttpServlet
 	}
 	catch (Exception e)
 	{
-	    System.out.println("Exception occured while reading content of email node");
-	    e.printStackTrace();
+	    System.out.println("Exception occured while reading content of email node" + e.getMessage());
 	}
     }
 
@@ -127,7 +126,7 @@ public class OnlineLinkForEmail extends HttpServlet
     {
 	try
 	{
-	    res.setHeader("Content-Type", "text/html");
+		res.setContentType("text/html; charset=UTF-8");
 	    res.getWriter().write("Requested content is no longer available");
 	}
 	catch (Exception e)

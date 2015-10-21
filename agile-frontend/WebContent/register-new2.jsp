@@ -9,16 +9,12 @@ if (request.getAttribute("javax.servlet.forward.request_uri") == null) {
 }
 String _AGILE_VERSION = SystemProperty.applicationVersion.get();
 
-
 String CSS_PATH = "/";
 String FLAT_FULL_PATH = "flatfull/";
-
 String CLOUDFRONT_TEMPLATE_LIB_PATH = VersioningUtil.getCloudFrontBaseURL();
-
 System.out.println(CLOUDFRONT_TEMPLATE_LIB_PATH);
   
 String CLOUDFRONT_STATIC_FILES_PATH = VersioningUtil.getStaticFilesBaseURL();
-
 CSS_PATH = CLOUDFRONT_STATIC_FILES_PATH;
 if(SystemProperty.environment.value() == SystemProperty.Environment.Value.Development)
 {
@@ -75,8 +71,8 @@ body {
 
 </style>
 <link rel="stylesheet" type="text/css" href="<%=CSS_PATH %>css/bootstrap.v3.min.css" />
-<link rel="stylesheet" type="text/css" href="<%=CSS_PATH %>css/app.css" />
-<link type="text/css" rel="stylesheet" href="<%=CSS_PATH %>css/phonenumber-lib/intlTelInput.css" />
+<link rel="stylesheet" type="text/css" href="/flatfull/css/app.css" />
+<link type="text/css" rel="stylesheet" href="/css/phonenumber-lib/intlTelInput.css" />
 
 <script type="text/javascript">
 var isSafari = (Object.prototype.toString.call(window.HTMLElement).indexOf('Constructor') > 0);
@@ -245,6 +241,7 @@ $(document).ready(function(){
 	
 });
 function preload_dashlet_libs(){ 
+	
 	setTimeout(function(){head.load('<%=CLOUDFRONT_STATIC_FILES_PATH %>final-lib/min/lib-all-min.js', '<%=CLOUDFRONT_TEMPLATE_LIB_PATH %>jscore/min/flatfull/js-all-min.js', '<%=CLOUDFRONT_TEMPLATE_LIB_PATH%>tpl/min/precompiled/<%=FLAT_FULL_PATH%>tpl.js?_=<%=_AGILE_VERSION%>', '<%=CLOUDFRONT_TEMPLATE_LIB_PATH%>tpl/min/precompiled/<%=FLAT_FULL_PATH%>portlets.js?_=<%=_AGILE_VERSION%>')}, 5000);
 }
 </script>

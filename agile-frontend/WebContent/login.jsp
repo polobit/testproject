@@ -1,5 +1,5 @@
-<%@page import="com.agilecrm.util.VersioningUtil"%>
 <%@page import="com.google.appengine.api.utils.SystemProperty"%>
+<%@page import="com.agilecrm.util.VersioningUtil"%>
 <%@page import="java.util.TimeZone"%>
 <%@page import="com.agilecrm.account.util.AccountPrefsUtil"%>
 <%@page import="org.apache.commons.lang.StringUtils"%>
@@ -12,6 +12,8 @@ we use setAttribute() to store the username and to autofill if he want to resubm
 */
 //flatfull path
 String flatfull_path="/flatfull";
+
+
 
 // Gets User Name
 String email = request.getParameter("email");
@@ -73,27 +75,25 @@ if(cookieJSON.has("userAgent"))
 }
 }
 
-// Users can show their logo on login page. 
-AccountPrefs accountPrefs = AccountPrefsUtil.getAccountPrefs();
-String logo_url = accountPrefs.logo;
 String _AGILE_VERSION = SystemProperty.applicationVersion.get();
 
 String CSS_PATH = "/";
 String FLAT_FULL_PATH = "flatfull/";
-
 String CLOUDFRONT_TEMPLATE_LIB_PATH = VersioningUtil.getCloudFrontBaseURL();
-
 System.out.println(CLOUDFRONT_TEMPLATE_LIB_PATH);
   
 String CLOUDFRONT_STATIC_FILES_PATH = VersioningUtil.getStaticFilesBaseURL();
-
 CSS_PATH = CLOUDFRONT_STATIC_FILES_PATH;
 if(SystemProperty.environment.value() == SystemProperty.Environment.Value.Development)
 {
- CLOUDFRONT_STATIC_FILES_PATH = FLAT_FULL_PATH;
- CLOUDFRONT_TEMPLATE_LIB_PATH = "";	
- CSS_PATH = FLAT_FULL_PATH;
+	  CLOUDFRONT_STATIC_FILES_PATH = FLAT_FULL_PATH;
+	  CLOUDFRONT_TEMPLATE_LIB_PATH = "";	
+	  CSS_PATH = FLAT_FULL_PATH;
 }
+
+// Users can show their logo on login page. 
+AccountPrefs accountPrefs = AccountPrefsUtil.getAccountPrefs();
+String logo_url = accountPrefs.logo;
 
 %>
 <!DOCTYPE html>
@@ -108,8 +108,8 @@ if(SystemProperty.environment.value() == SystemProperty.Environment.Value.Develo
 <meta name="description" content="">
 <meta name="author" content="">
 
-<link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>/css/bootstrap.v3.min.css" />
-<link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>/css/app.css" />
+<link rel="stylesheet" type="text/css" href="<%=flatfull_path%>/css/bootstrap.v3.min.css" />
+<link rel="stylesheet" type="text/css" href="<%=flatfull_path%>/css/app.css" />
 
 <style>
 body {
