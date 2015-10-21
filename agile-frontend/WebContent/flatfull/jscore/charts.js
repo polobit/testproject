@@ -1002,6 +1002,7 @@ function showAreaSpline(url, selector, name, yaxis_name, show_loading)
 			        tickWidth: 1
 			    },
 			    yAxis: {
+			    	allowDecimals: false,
 			        title: {
 			            text: yaxis_name
 			        },
