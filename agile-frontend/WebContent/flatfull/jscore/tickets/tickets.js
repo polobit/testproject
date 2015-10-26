@@ -14,6 +14,14 @@ var Tickets = {
 		//Renders root template, fetches tickets count & loads Groups drop down
 		Tickets.initialize(group_id, function(){
 
+			if(Group_ID != group_id){
+
+				Group_ID = group_id;
+
+				//Fectching new, open, closed tickets count
+				Tickets_Count.fetch_tickets_count(group_id);
+			}
+
 			App_Ticket_Module.ticketsCollection = new Base_Collection_View({
 				url : url,
 				sortKey:"created_time",
@@ -55,9 +63,7 @@ var Tickets = {
 	initialize: function(group_id, callback){
 
 		//Checking root template
-		if($('#tickets-container').length == 0 || Group_ID != group_id){
-
-			Group_ID = group_id;
+		if($('#tickets-container').length == 0){
 
 			//Rendering root template
 			getTemplate("tickets-container",  {group_id: group_id, ticket_status: Ticket_Status}, undefined, function(template_ui){
@@ -66,9 +72,6 @@ var Tickets = {
 			  		return;
 
 				$('#content').html($(template_ui));	
-
-				//Fectching new, open, closed tickets count
-				Tickets_Count.fetch_tickets_count();
 
 				//Fectching ticket filters
 				Ticket_Filters.fetch_filters_collection();
@@ -83,7 +86,7 @@ var Tickets = {
 						//Render Group name on drop down
 						$.map(data, function(obj,index){
 
-							if(obj.id == Group_ID)
+							if(obj.id == group_id)
 							{
 								$('a#group_name').html(obj.group_name);
 								return true;

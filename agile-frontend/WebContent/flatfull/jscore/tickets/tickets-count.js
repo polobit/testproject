@@ -1,11 +1,11 @@
 var Tickets_Count = {
 
-	fetch_tickets_count: function(){
+	fetch_tickets_count: function(group_id){
 
 		var ticket_type = ['NEW','OPEN','STARRED','CLOSED'];
 
 		for(var i=0; i < ticket_type.length; i++)
-			this.show_count(ticket_type[i]);
+			this.show_count(ticket_type[i], group_id);
 	},
 
 	fetch_filter_tickets_count: function(filters_colletion){
@@ -18,9 +18,9 @@ var Tickets_Count = {
 		}
 	},
 
-	show_count: function(type){
+	show_count: function(type, group_id){
 
-		var url = '/core/api/tickets/count?status='+ type + '&group_id='+ Group_ID;
+		var url = '/core/api/tickets/count?status='+ type + '&group_id='+ group_id;
 
 		this.ajax_call(url, function(data){
 

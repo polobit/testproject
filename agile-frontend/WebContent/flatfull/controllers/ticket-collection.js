@@ -108,7 +108,8 @@ var TicketsUtilRouter = Backbone.Router.extend({
 					},undefined, undefined, 'core/api/search/');
 			}
 		});
-
+		
+		$(".tickets-collection-pane").html('');
 		$("#right-pane").html(ticketView.render().el);
 	},
 
@@ -119,7 +120,7 @@ var TicketsUtilRouter = Backbone.Router.extend({
 
 		Ticket_Status = status;
 		Ticket_Filter_ID = null;
-		var url = '/core/api/tickets?status=' + Ticket_Status + '&group_id=' + Group_ID;
+		var url = '/core/api/tickets?status=' + Ticket_Status + '&group_id=' + group_id;
 
 		Tickets.fetch_tickets_collection(url, group_id);
 	},
