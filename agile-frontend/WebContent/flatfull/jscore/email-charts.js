@@ -15,6 +15,7 @@ function initChartsUI(callback)
 {
 	//Loads the date range 
 	initDateRange(callback);
+	callback();
 
 }
 
