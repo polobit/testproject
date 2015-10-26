@@ -1741,6 +1741,9 @@ public class ContactUtil
 
 		newContact.properties = properties;
 		
+		DomainUser domainUser = DomainUserUtil.getDomainOwner(NamespaceManager.get());
+		
+		newContact.setContactOwner(new Key<DomainUser>(DomainUser.class, domainUser.id));
 		Contact.dao.put(newContact);
 
 		try
