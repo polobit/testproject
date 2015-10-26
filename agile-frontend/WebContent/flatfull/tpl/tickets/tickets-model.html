@@ -1,18 +1,27 @@
 <script id="ticket-model-template" type="text/html">
-	<li class="list-group-item clearfix b-l-3x ng-scope b-l-info data"  data="{{id}}" style="margin-bottom: -1px;">
-      <a class="avatar thumb pull-left m-r" href="javascript: void(0);">
-        <img src="{{emailGravatarurl 50 requester_email}}">
-      </a>
-      <div class="pull-right text-sm text-muted">
-        <time class="time-ago" datetime="{{epochToHumanDate "" last_updated_time}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" last_updated_time}}</time>
-        <!-- <span class="hidden-xs ng-binding">{{epochToHumanDate "mmm dd yyyy HH:MM" last_updated_time}}</span> -->
-        {{#if attachments_exists}}<i class="fa fa-paperclip m-l-sm" aria-hidden="false"></i>{{/if}}
+	<li class="list-group-item clearfix b-l-3x b-l-info data"  data="{{id}}">
+    <a class="avatar thumb pull-left m-r" href="javascript:void(0);">
+      <img src="{{emailGravatarurl 50 requester_email}}">
+    </a>
+    <div class="pull-right text-sm text-muted">
+      <time class="time-ago" datetime="{{epochToHumanDate "" last_updated_time}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" last_updated_time}}
+      </time>
+      {{#if attachments_exists}}
+        <i class="fa fa-paperclip m-l-sm" aria-hidden="false"></i>
+      {{/if}}
+    </div>
+    <div class="clear">
+      <div class="subject-row tags-row">
+        <a class="text-md" href="{{#is_filtered_ticket}}#tickets/filter/{{#get_ticket_filter_id}}{{/get_ticket_filter_id}}/ticket/{{id}}
+          {{else}}#tickets/group/{{groupID}}/{{toLowerCase status}}/{{id}}{{/is_filtered_ticket}}" 
+            style="color: #58666e !important;">
+          {{subject}}
+        </a>
+        {{#each tags}}
+            <span class="label bg-light m-l-xs font-bold">{{this.tag}}</span>
+        {{/each}}
       </div>
-      <div class="clear">
-        <div>
-          <a class="text-md ng-binding" href="#ticket/{{id}}" style="color: #58666e !important;">{{subject}}</a>
-        </div>
-        <div class="text-ellipsis m-t-xs">{{first_notes_text}}</div>
-      </div>      
-    </li>
+      <div class="text-ellipsis m-t-xs">{{first_notes_text}}</div>
+    </div>      
+  </li>
 </script>

@@ -99,6 +99,12 @@ var Ticket_Filters = {
 
 				//Fetch ticket collection count
 				Tickets_Count.fetch_filter_tickets_count();
+
+				if(Ticket_Filter_ID){
+					//Activating ticket type pill
+					$('ul.ticket-types').find('.active').removeClass('active');
+					$('ul.ticket-types').find('li > a[filter-id="' + Ticket_Filter_ID + '"]').parent().addClass('active');
+				}	
 			}
 		});
 

@@ -16,7 +16,6 @@ import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.ticket.utils.TicketsUtil;
 import com.agilecrm.user.DomainUser;
 import com.googlecode.objectify.Key;
-import com.googlecode.objectify.annotation.Indexed;
 import com.googlecode.objectify.annotation.NotSaved;
 import com.googlecode.objectify.condition.IfDefault;
 
@@ -56,7 +55,7 @@ public class Tickets extends Cursor
 	 */
 	@NotSaved
 	public Long groupID = null;
-	
+
 	/**
 	 * Util attribute to send group id to client
 	 */
@@ -79,17 +78,17 @@ public class Tickets extends Cursor
 	 */
 	@NotSaved
 	public Long assigneeID = null;
-	
+
 	/**
 	 * Stores epoch time when ticket is assigned
 	 */
 	public Long assigned_time = 0L;
-	
+
 	/**
 	 * Stores epoch time when ticket is closed
 	 */
 	public Long closed_time = 0L;
-	
+
 	/**
 	 * Util attribute to domain user obj
 	 */
@@ -126,9 +125,9 @@ public class Tickets extends Cursor
 	public String subject = "";
 
 	/**
-	 * Stores CC email addresses if ticke have any
+	 * Stores CC email addresses if ticket have any
 	 */
-	public String cc_emails = "";
+	public List<String> cc_emails = new ArrayList<String>();
 
 	/**
 	 * Stores epoch time when ticket is created
@@ -192,7 +191,7 @@ public class Tickets extends Cursor
 
 	public static enum Source
 	{
-		EMAIL, WEB_FORM
+		EMAIL, WEB_FORM, NEW_TICKET_DASHBOARD
 	};
 
 	/**
@@ -233,11 +232,6 @@ public class Tickets extends Cursor
 	public Boolean attachments_exists = false;
 
 	/**
-	 * Stores true if ticket is deleted from client
-	 */
-	public Boolean is_archived = false;
-	
-	/**
 	 * Stores true if ticket is favorite
 	 */
 	public Boolean is_favorite = false;
@@ -246,13 +240,25 @@ public class Tickets extends Cursor
 	 * Stores true if ticket is deleted from client
 	 */
 	public String requester_ip_address = "";
-	
+
 	/**
 	 * Stores ticket tags
 	 */
 	@NotSaved(IfDefault.class)
 	@Embedded
-	public ArrayList<Tag> tags = new ArrayList<Tag>();
+	public List<Tag> tags = new ArrayList<Tag>();
+
+	/**
+	 * Util attribute to get html content in new ticket
+	 */
+	@NotSaved
+	public String html_text = "";
+
+	/**
+	 * Stores list of attachments URL's saved in Google cloud
+	 */
+	@NotSaved
+	public List<TicketDocuments> attachments_list = new ArrayList<TicketDocuments>();
 
 	/**
 	 * Default constructor
@@ -268,21 +274,6 @@ public class Tickets extends Cursor
 	public Tickets(Long id)
 	{
 		this.id = id;
-	}
-
-	public Tickets(Long group_id, Boolean assigned_to_group, String requester_name, String requester_email,
-			String subject, String cc_emails, String first_notes_text, Source source, Boolean attachments_exists)
-	{
-		super();
-		this.group_id = new Key<TicketGroups>(TicketGroups.class, group_id);
-		this.assigned_to_group = assigned_to_group;
-		this.requester_name = requester_name;
-		this.requester_email = requester_email;
-		this.subject = subject;
-		this.cc_emails = cc_emails;
-		this.first_notes_text = first_notes_text;
-		this.source = source;
-		this.attachments_exists = attachments_exists;
 	}
 
 	@javax.persistence.PostLoad

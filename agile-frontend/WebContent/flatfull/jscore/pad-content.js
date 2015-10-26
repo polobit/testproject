@@ -105,7 +105,9 @@ var CONTENT_JSON = {
 	},
 	"no-tickets" : {
 		"title" : "You do not have any Tickets currently.",
-		"description" : "Tickets can be problem, incident, question or task escalated by your customer.",
+		"description" : "Tickets can be problem, incident, question or task escalated by your customers. Set up email forwarding to receive tickets.",
+		"button_text" : "Set up forwarding",
+		"route" : "#ticket-groups",
 		"image" : "/img/clipboard.png"
 	},
 	"no-ticket-filters" : {

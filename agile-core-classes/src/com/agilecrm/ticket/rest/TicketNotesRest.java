@@ -1,10 +1,10 @@
 package com.agilecrm.ticket.rest;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
-import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -14,13 +14,12 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
-import org.json.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.examples.HtmlToPlainText;
 import org.jsoup.nodes.Document;
 
+import com.agilecrm.ticket.entitys.TicketDocuments;
 import com.agilecrm.ticket.entitys.TicketNotes;
 import com.agilecrm.ticket.entitys.TicketNotes.CREATED_BY;
 import com.agilecrm.ticket.entitys.TicketNotes.NOTE_TYPE;
@@ -61,49 +60,64 @@ public class TicketNotesRest
 	}
 
 	@POST
-	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public String createNotes(@FormParam("ticket_id") Long ticketID, @FormParam("html_text") String html_text,
-			@FormParam("cc_emails") String cc_emails, @FormParam("note_type") NOTE_TYPE note_type,
-			@FormParam("attachment_urls") String attachment_urls)
+	public TicketNotes createNotes(TicketNotes notes)
 	{
 		try
 		{
-			if (ticketID == null)
+			Long ticketID = notes.ticket_id;
+			String html_text = notes.html_text;
+
+			if (notes == null || notes.ticket_id == null)
 				throw new Exception("Ticket ID is missing.");
 
 			Tickets ticket = TicketsUtil.getTicketByID(ticketID);
 
-			Long ticketUpdatedTime = Calendar.getInstance().getTimeInMillis();
-
 			// Converting html text to plain with jsoup
-			Document doc = Jsoup.parse(html_text, "UTF-8");
+			Document doc = Jsoup.parse(notes.html_text, "UTF-8");
 			String plain_text = new HtmlToPlainText().getPlainText(doc);
 
-			// Updating existing ticket
-			ticket = TicketsUtil.updateTicket(ticketID, cc_emails.trim(), plain_text, LAST_UPDATED_BY.AGENT,
-					ticketUpdatedTime, null, ticketUpdatedTime, StringUtils.isNotBlank(attachment_urls));
+			TicketNotes ticketNotes = new TicketNotes();
 
-			if (ticket.status == Status.NEW)
+			if (notes.note_type == NOTE_TYPE.PRIVATE)
 			{
-				ticket.status = Status.OPEN;
+				ticketNotes = TicketNotesUtil.createTicketNotes(ticket.id, null, DomainUserUtil.getCurentUserKey()
+						.getId(), CREATED_BY.AGENT, "", "", plain_text, html_text, NOTE_TYPE.PRIVATE,
+						new ArrayList<TicketDocuments>());
+			}
+			else
+			{
+				Long ticketUpdatedTime = Calendar.getInstance().getTimeInMillis();
 
-				Key<DomainUser> domainUserKey = DomainUserUtil.getCurentUserKey();
+				// Updating existing ticket
+				ticket = TicketsUtil.updateTicket(ticketID, notes.cc_emails, plain_text, LAST_UPDATED_BY.AGENT,
+						ticketUpdatedTime, null, ticketUpdatedTime,
+						(notes.attachments_list != null && notes.attachments_list.size() > 0) ? true : false);
 
-				ticket.assignee_id = domainUserKey;
-				ticket.assigneeID = domainUserKey.getId();
+				if (ticket.status == Status.NEW)
+				{
+					ticket.status = Status.OPEN;
 
-				Tickets.ticketsDao.put(ticket);
+					Key<DomainUser> domainUserKey = DomainUserUtil.getCurentUserKey();
+
+					ticket.assignee_id = domainUserKey;
+					ticket.assigneeID = domainUserKey.getId();
+
+					Tickets.ticketsDao.put(ticket);
+				}
+
+				// Creating new Notes in TicketNotes table
+				ticketNotes = TicketNotesUtil.createTicketNotes(ticket.id, ticket.groupID, ticket.assigneeID,
+						CREATED_BY.AGENT, ticket.requester_name, ticket.requester_email, plain_text, html_text,
+						notes.note_type, new ArrayList<TicketDocuments>());
+
+				TicketNotesUtil.sendReplyToRequester(ticket);
 			}
 
-			// Creating new Notes in TicketNotes table
-			TicketNotes ticketNotes = TicketNotesUtil.createTicketNotes(ticket.id, ticket.groupID, ticket.assigneeID,
-					CREATED_BY.AGENT, ticket.requester_name, ticket.requester_email, plain_text, html_text, note_type,
-					java.util.Arrays.asList(attachment_urls.split(",")));
+			ticketNotes.domain_user = DomainUserUtil.getDomainUser(ticket.assigneeID);
 
-			TicketNotesUtil.sendReplyToRequester(ticket);
-
-			return new JSONObject().put("status", "success").toString();
+			return ticketNotes;
 		}
 		catch (Exception e)
 		{

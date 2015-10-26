@@ -12,6 +12,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.agilecrm.Globals;
+import com.agilecrm.ticket.entitys.TicketDocuments;
 import com.agilecrm.ticket.entitys.TicketGroups;
 import com.agilecrm.ticket.entitys.TicketNotes;
 import com.agilecrm.ticket.entitys.Tickets;
@@ -65,7 +66,7 @@ public class TicketNotesUtil
 	 */
 	public static TicketNotes createTicketNotes(Long ticket_id, Long group_id, Long assignee_id, CREATED_BY created_by,
 			String requester_name, String requester_email, String original_plain_text, String original_html_text,
-			NOTE_TYPE note_type, List<String> attachments_list)
+			NOTE_TYPE note_type, List<TicketDocuments> attachments_list)
 	{
 		TicketNotes ticketNotes = new TicketNotes(ticket_id, group_id, assignee_id, created_by, requester_name,
 				requester_email, removedQuotedReplies(original_plain_text, requester_email), removedQuotedReplies(
@@ -156,7 +157,7 @@ public class TicketNotesUtil
 		return json;
 	}
 
-	public static void sendEmail(String toAddress, String subject, String fromName, String fromEmail, String ccEmails,
+	public static void sendEmail(String toAddress, String subject, String fromName, String fromEmail, List<String> ccEmails,
 			String template, JSONObject dataJSON) throws Exception
 	{
 		// Read template - HTML
@@ -177,8 +178,12 @@ public class TicketNotesUtil
 
 		JSONObject mailJSON = Mandrill.setMandrillAPIKey(null, NamespaceManager.get(), null);
 
+		String ccEmailString = "";
+		for(String ccEmail : ccEmails)
+			ccEmailString += ccEmail + ",";
+		
 		// All email params are inserted into Message json
-		JSONObject messageJSON = Mandrill.getMessageJSON("", fromEmail, fromName, toAddress, ccEmails, "", "", subject,
+		JSONObject messageJSON = Mandrill.getMessageJSON("", fromEmail, fromName, toAddress, ccEmailString, "", "", subject,
 				emailHTML, emailBody, "", "");
 
 		String response = null;

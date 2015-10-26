@@ -6737,3 +6737,37 @@ Handlebars.registerHelper('SALES_CALENDAR_URL', function()
                return options.inverse(this);
         });
 
+Handlebars.registerHelper('is_filtered_ticket', function(options) {
+
+	if(Ticket_Filter_ID)
+		return options.fn(this);
+
+	return options.inverse(this);
+});
+
+Handlebars.registerHelper('get_ticket_filter_id', function(options) {
+
+	return Ticket_Filter_ID;
+});
+
+Handlebars.registerHelper('ticket_collection_exists', function(options) {
+
+	if(App_Ticket_Module.ticketsCollection 
+		&& App_Ticket_Module.ticketsCollection.collection 
+		&& App_Ticket_Module.ticketsCollection.collection.length > 0)
+		return options.fn(this);
+
+	return options.inverse(this);
+});
+
+Handlebars.registerHelper('next_prev_ticket_exists', function(action_type, options) {
+
+	if(Tickets.next_prev_ticket_exists(action_type))
+		return options.fn(this);
+
+	return options.inverse(this);
+});
+
+Handlebars.registerHelper('get_ticket_id', function(action_type, options) {
+	return Tickets.get_next_prev_ticket_id(action_type);
+});

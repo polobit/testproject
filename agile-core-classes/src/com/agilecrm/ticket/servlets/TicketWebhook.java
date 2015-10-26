@@ -17,18 +17,22 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.agilecrm.Globals;
+import com.agilecrm.contact.Tag;
+import com.agilecrm.ticket.entitys.TicketDocuments;
 import com.agilecrm.ticket.entitys.TicketGroups;
 import com.agilecrm.ticket.entitys.TicketNotes;
 import com.agilecrm.ticket.entitys.Tickets;
 import com.agilecrm.ticket.entitys.TicketNotes.CREATED_BY;
 import com.agilecrm.ticket.entitys.TicketNotes.NOTE_TYPE;
 import com.agilecrm.ticket.entitys.Tickets.LAST_UPDATED_BY;
+import com.agilecrm.ticket.entitys.Tickets.Priority;
 import com.agilecrm.ticket.entitys.Tickets.Source;
+import com.agilecrm.ticket.entitys.Tickets.Status;
+import com.agilecrm.ticket.entitys.Tickets.Type;
 import com.agilecrm.ticket.utils.TicketGroupUtil;
 import com.agilecrm.ticket.utils.TicketNotesUtil;
 import com.agilecrm.ticket.utils.TicketsUtil;
 import com.agilecrm.user.util.DomainUserUtil;
-import com.campaignio.urlshortener.util.Base62;
 import com.google.appengine.api.NamespaceManager;
 
 /**
@@ -168,7 +172,7 @@ public class TicketWebhook extends HttpServlet
 			if (toAddressArray.length == 3)
 				isNewTicket = false;
 
-			String ccEmails = "";
+			List<String> ccEmails = new ArrayList<String>();
 			JSONArray ccEmailsArray = new JSONArray();
 
 			// CC emails will be sent as JSON array
@@ -176,24 +180,25 @@ public class TicketWebhook extends HttpServlet
 				ccEmailsArray = msgJSON.getJSONArray("cc");
 
 			for (int i = 0; i < ccEmailsArray.length(); i++)
-				ccEmails += ccEmailsArray.getJSONArray(i).getString(0) + " ";
+				ccEmails.add(ccEmailsArray.getJSONArray(i).getString(0));
 
 			// Check if any attachments exists
 			Boolean attachmentExists = msgJSON.has("attachments") || msgJSON.has("images");
 
 			// Save attachments and get URLs
 			// Need to implement attachments saving code here
-			List<String> attachmentURLs = new ArrayList<String>();
+			List<TicketDocuments> attachmentURLs = new ArrayList<TicketDocuments>();
 
 			Tickets ticket = null;
 
 			if (isNewTicket)
 			{
 				// Creating new Ticket in Ticket table
-				ticket = TicketsUtil.createTicket(groupID, true, msgJSON.getString("from_name"), msgJSON
-						.getString("from_email"), msgJSON.getString("subject"), ccEmails.trim(), msgJSON
-						.getString("text"), Source.EMAIL, attachmentExists,
-						msgJSON.getJSONObject("headers").getString("X-Originating-Ip"));
+				ticket = TicketsUtil.createTicket(groupID, null, msgJSON.getString("from_name"),
+						msgJSON.getString("from_email"), msgJSON.getString("subject"), ccEmails,
+						msgJSON.getString("text"), Status.NEW, Type.PROBLEM, Priority.LOW, Source.EMAIL,
+						attachmentExists, msgJSON.getJSONObject("headers").getString("X-Originating-Ip"),
+						new ArrayList<Tag>());
 			}
 			else
 			{
@@ -212,7 +217,7 @@ public class TicketWebhook extends HttpServlet
 				Long ticketUpdatedTime = Calendar.getInstance().getTimeInMillis();
 
 				// Updating existing ticket
-				TicketsUtil.updateTicket(ticketID, ccEmails.trim(), msgJSON.getString("text"),
+				TicketsUtil.updateTicket(ticketID, ccEmails, msgJSON.getString("text"),
 						LAST_UPDATED_BY.REQUESTER, ticketUpdatedTime, ticketUpdatedTime, null, attachmentExists);
 			}
 

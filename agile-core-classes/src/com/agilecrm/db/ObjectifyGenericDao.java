@@ -49,6 +49,7 @@ import com.agilecrm.subscription.restrictions.db.BillingRestriction;
 import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
 import com.agilecrm.subscription.restrictions.entity.DaoBillingRestriction;
 import com.agilecrm.ticket.entitys.TicketCannedMessages;
+import com.agilecrm.ticket.entitys.TicketDocuments;
 import com.agilecrm.ticket.entitys.TicketFilters;
 import com.agilecrm.ticket.entitys.TicketGroups;
 import com.agilecrm.ticket.entitys.TicketNotes;
@@ -224,7 +225,8 @@ public class ObjectifyGenericDao<T> extends DAOBase
 	ObjectifyService.register(TicketCannedMessages.class);
 	ObjectifyService.register(TicketFilters.class);
 	ObjectifyService.register(TicketMacros.class);
-
+	ObjectifyService.register(TicketDocuments.class);
+	
     }
 
     /**

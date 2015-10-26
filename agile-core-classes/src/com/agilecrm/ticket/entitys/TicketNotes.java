@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import javax.persistence.Embedded;
 import javax.persistence.Id;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -124,7 +125,8 @@ public class TicketNotes
 	/**
 	 * Stores list of attachments URL's saved in Google cloud
 	 */
-	public List<String> attachments_list = new ArrayList<String>();
+	@Embedded
+	public List<TicketDocuments> attachments_list = new ArrayList<TicketDocuments>();
 
 	/**
 	 * Stores requested viewed time in epoch format
@@ -138,6 +140,12 @@ public class TicketNotes
 	public DomainUser domain_user = null;
 
 	/**
+	 * Stores CC email addresses if ticket have any
+	 */
+	@NotSaved
+	public List<String> cc_emails = new ArrayList<String>();
+
+	/**
 	 * Default constructor
 	 */
 	public TicketNotes()
@@ -147,11 +155,13 @@ public class TicketNotes
 
 	public TicketNotes(Long ticket_id, Long group_id, Long assignee_id, CREATED_BY created_by, String requester_name,
 			String requester_email, String plain_text, String html_text, String original_plain_text,
-			String original_html_text, NOTE_TYPE note_type, List<String> attachments_list)
+			String original_html_text, NOTE_TYPE note_type, List<TicketDocuments> attachments_list)
 	{
 		super();
 		this.ticket_key = new Key<Tickets>(Tickets.class, ticket_id);
-		this.group_key = new Key<TicketGroups>(TicketGroups.class, group_id);
+
+		if (group_id != null)
+			this.group_key = new Key<TicketGroups>(TicketGroups.class, group_id);
 
 		if (assignee_id != null)
 			this.assignee_key = new Key<DomainUser>(DomainUser.class, assignee_id);

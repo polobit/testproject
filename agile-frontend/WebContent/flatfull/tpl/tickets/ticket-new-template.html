@@ -1,0 +1,128 @@
+<script id="ticket-new-template" type="text/html">
+<div class="wrapper bg-light lter b-b">
+    <h3 class="m-b-none" style="margin-top: 4px;">New Ticket</h3>
+</div>
+<div class="wrapper">
+    <form id="new-ticket" name="new-ticket" class="form-horizontal m-t-lg">
+      <div class="form-group">
+        <label class="col-lg-2 control-label">To</label>
+        <div class="col-lg-7">
+          <input type="hidden" id="requester_name" name="requester_name">
+          <input type="hidden" id="contact_id" name="contact_id">
+          <input type="text" id="requester_email" name="requester_email" class="form-control nt-reqester_email required" style="display: none;">
+        	<input type="text" id="requester_email_typeahead" placeholder="Contact Email" class="typeahead typeahead_contacts form-control email" data-provide="typeahead" data-mode="multiple" autocomplete="off">
+        </div>
+        <div class="col-lg-1 p-n m-t">
+          <a class="show_cc_emails_field" href="javascript: void(0);">Cc</a>
+         </div>
+      </div>
+      <div class="form-group cc_emails_container" style="display: none;">
+        <label class="col-lg-2 control-label">Cc</label>
+        <div class="col-lg-7">
+          <div style="background-color: white; border: 1px solid #cfdadd; border-radius: 2px; padding: 5px 12px;">
+            <ul name="cc_emails" class="p-n">
+                <li class="tag m-r-xs m-b-xs inline-block">
+                  <input type="text" placeholder="Cc Emails" id="cc_email_field" style="border: none; width: 9em !important;">
+                </li>
+            </ul>
+          </div>  
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-lg-2 control-label">Subject</label>
+        <div class="col-lg-7">
+          <input type="text" name="subject" class="form-control required"  placeholder="Subject">
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-lg-2 control-label">Status</label>
+        <div class="col-lg-7">
+            <select id="status" name="status" class="form-control status">
+                <option value="NEW">New</option>
+                <option value="OPEN">Open</option>
+            </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-lg-2 control-label">Group</label>
+        <div class="col-lg-7">
+            <select id="groupID" name="groupID" class="form-control">
+              {{#each this}}
+                <option value="{{id}}">{{group_name}}</option>  
+              {{/each}}
+            </select>
+        </div>
+      </div>
+      <div class="form-group grp-assigee" style="display: none">
+        <label class="col-lg-2 control-label">Assignee</label>
+        <div class="col-lg-7">
+            <select id="assigneeID" name="assigneeID" class="form-control">
+              {{#each this}}
+                  {{#each group_users}}
+                      <option class="{{../id}}" value="{{id}}">{{name}}</option>  
+                  {{/each}}
+              {{/each}}
+            </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-lg-2 control-label">Priority</label>
+        <div class="col-lg-7">
+            <select id="priority" name="priority" class="form-control">
+                <option value="LOW">Low</option>
+                <option value="MEDIUM">Medium</option>
+                <option value="HIGH">High</option>
+            </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-lg-2 control-label">Tags</label>
+        <div class="col-lg-7">
+          <ul id="ticket-tags-ul" name="tags" class="inline v-top m-b-sm p-n tags">
+          </ul>
+          <div class="inline-block m-t-xs">
+            <div class="add-tags-form" class="m-b-none" style="display: none;">
+              <div class="control-group m-b-none">
+                <input type="text" class="ticket-tags-typeahead ignore-comma-keydown form-control inline-block" style="width: 60%" placeholder="Enter tag">
+              </div>
+            </div>
+            <a href="javascript:void(0);" id="show-tags-field" rel="tooltip" data-original-title="addtag" data-placement="top" class="text-xs text-muted show-tags-field">
+              <i class="icon-plus"></i>
+              <span>Add</span>
+            </a>
+          </div>  
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-sm-2 control-label">Body</label>
+        <div class="col-sm-8">
+          <div ui-jq="wysiwyg" class="form-control h-auto required html_text required" placeholder="Type your message here" data-name="html_text" style="min-height:200px;" contenteditable="true">
+           	
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="col-lg-8 col-lg-offset-2">
+          <a href="javascript:void(0);" class="btn btn-primary save">Create Ticket</a>
+          <a href="javascript:void(0);" class="btn btn-default btn-icon "><i class="fa fa-paperclip"></i></a>
+        </div>
+      </div>
+    </form>
+</div>
+</script>
+<script id="ticket-tag-template" type="text/html">
+  <li class="tag btn btn-xs btn-default m-r-xs m-b-xs inline-block" data="{{tag}}">
+    <span>
+      <a class="anchor m-r-xs" href="javascript:void(0);">{{tag}}</a>
+      <a class="close remove-ticket-tags text-lg" tag="{{tag}}">&times</a>
+    </span>
+  </li>
+</script>
+<script id="cc-email-li-template" type="text/html">
+  <li class="tag btn btn-xs btn-default m-r-xs m-b-xs inline-block" data="{{email}}">
+    <span>
+      <a class="anchor m-r-xs" href="javascript:void(0);" >{{email}}</a>
+      <a class="close remove-ticket-tags text-lg">&times</a>
+    </span>
+  </li>
+</script>

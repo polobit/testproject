@@ -1,53 +1,50 @@
-function initializeTicketNotesEvent(el){
+var Tickets_Notes = {
 
-	$(el).on('click', '.send-reply', function(e){
+	sendReply: function(e){
+
 		e.preventDefault();
 	
-		var $save_btn = $(this);
+		var $save_btn = $('.send-reply');
 		disable_save_button($save_btn);
 
 		var json = serializeForm("send-reply");
 
-		console.log(json);
-
-		var note_type = $(this).hasClass('private') ? 'PRIVATE' : 'PUBLIC';
+		var note_type = $(e.target).hasClass('private') ? 'PRIVATE' : 'PUBLIC';
 		json.note_type = note_type;
 
-		$.ajax({
-			url : '/core/api/tickets/notes',
-			type : 'post',
-			contentType:'application/x-www-form-urlencoded',
-			accept: 'application/json',
-			async:false,
-			data : json,
-			success : function()
-			{
-				setTimeout(function() {
-					 enable_save_button($save_btn);
-			     	}, 2000);
+		var newTicketNotesModel = new BaseModel();
+		newTicketNotesModel.url = '/core/api/tickets/notes';
+		newTicketNotesModel.save(json, {
+			
+			success: function(model){
 
-				App_Ticket_Module.renderNotesCollection(json.ticket_id, $('#notes-collection-container'), function(){
-
-					 $("html, body").animate({ scrollTop: $(document).height() }, 1000);	
-				});
-			},
-			error : function(error)
-			{
-				$('#error_message').html("There was an error in saving your settings. Please try again in a minute.");
-				enable_save_button($save_btn);
-			} 
+				Tickets_Notes.discardReply();
+				App_Ticket_Module.notesCollection.collection.add(model);
+				App_Ticket_Module.notesCollection.render(true);
+			}
 		});
-	});
+	},
 
-	/**
-	 * Click event for back button
-	 */
-	$(el).on('click', '#back-to-tickets', function(e){
-		e.preventDefault();
+	backToTickets: function(e){
 
 		//Rendering existing Tickets collection
 		$('#right-pane').html(Tickets_Group_View.render().el);
-		$(".tickets-collection-pane").html(App_Ticket_Module.ticketsCollection.el);
+
+		setTimeout(function(){
+
+			if(!App_Ticket_Module.ticketsCollection){
+
+				var url = '/core/api/tickets?status=' + Ticket_Status + '&group_id=' + Group_ID;
+
+				if(Ticket_Filter_ID)
+					url = '/core/api/tickets/filter?filter_id=' + Ticket_Filter_ID;
+
+				Tickets.fetch_tickets_collection(url, Group_ID);
+			}
+			else{
+				$(".tickets-collection-pane").html(App_Ticket_Module.ticketsCollection.el);
+			}	
+		}, 0);
 
 		var url = (Ticket_Filter_ID) ? '#tickets/filter/' + Ticket_Filter_ID : '#tickets/group/'+ Group_ID +'/' + Ticket_Status;
 
@@ -58,25 +55,19 @@ function initializeTicketNotesEvent(el){
 
 		//Enable click events
 		Tickets_Group_View.delegateEvents();
-	});
+	},
+	repltBtn: function(e){
 
-	/**
-	 * Click event for reply button to show text area
-	 */
-	$(el).on('click', '#reply-btn', function(e){
-		e.preventDefault();
+		var ticketModel = App_Ticket_Module.ticketsCollection.collection.get(Current_Ticket_ID);
 
-		$('#reply-editor').show();
+		$('#reply-editor').html(getTemplate('create-ticket-notes', ticketModel.toJSON()));
 		$('#send-reply-container').hide();
-	});
 
-	/**
-	 * Click event for reply button to show text area
-	 */
-	$(el).on('click', '#discard-reply', function(e){
-		e.preventDefault();
-
-		$('#reply-editor').hide();
+		//Scroll to bottom of page
+		$("html, body").animate({ scrollTop: $(document).height() }, 1000);
+	},
+	discardReply: function(e){
+		$('#reply-editor').html('');
 		$('#send-reply-container').show();
-	});
-}
+	}
+};

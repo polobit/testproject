@@ -4,8 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
@@ -14,15 +16,18 @@ import javax.ws.rs.core.Response;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.map.type.TypeFactory;
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
+import org.jsoup.Jsoup;
+import org.jsoup.examples.HtmlToPlainText;
+import org.jsoup.nodes.Document;
 
+import com.agilecrm.contact.Tag;
 import com.agilecrm.search.document.TicketDocument;
+import com.agilecrm.ticket.entitys.TicketDocuments;
 import com.agilecrm.ticket.entitys.TicketFilters;
 import com.agilecrm.ticket.entitys.TicketGroups;
+import com.agilecrm.ticket.entitys.TicketNotes;
 import com.agilecrm.ticket.entitys.Tickets;
 import com.agilecrm.ticket.entitys.TicketNotes.CREATED_BY;
 import com.agilecrm.ticket.entitys.TicketNotes.NOTE_TYPE;
@@ -98,6 +103,39 @@ public class TicketsRest
 	}
 
 	/**
+	 * 
+	 * @param groupID
+	 * @param cursor
+	 * @param pageSize
+	 * @param status
+	 * @return list of tickets
+	 */
+	@GET
+	@Path("/{id}")
+	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	public Tickets getTicketByID(@PathParam("id") Long ticketID)
+	{
+		try
+		{
+			Tickets ticket = TicketsUtil.getTicketByID(ticketID);
+
+			// Include Ticket Group Object
+			ticket.group = TicketGroups.ticketGroupsDao.get(ticket.groupID);
+
+			if (ticket.assignee_id != null)
+				ticket.assignee = DomainUserUtil.dao.get(ticket.assigneeID);
+
+			return ticket;
+		}
+		catch (Exception e)
+		{
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
+			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+					.build());
+		}
+	}
+
+	/**
 	 * Fetches tickets based on provided filter
 	 * 
 	 * @param cursor
@@ -127,7 +165,7 @@ public class TicketsRest
 			JSONArray keysArray = resultJSON.getJSONArray("keys");
 
 			List<Key<Tickets>> keys = new ArrayList<Key<Tickets>>();
-			
+
 			for (int i = 0; i < keysArray.length(); i++)
 				keys.add((Key<Tickets>) keysArray.get(i));
 
@@ -221,7 +259,7 @@ public class TicketsRest
 	 * @return JSONArray of Groups and Assignee to show in modal for selection.
 	 */
 	@GET
-	@Path("/assign-ticket")
+	@Path("/new-ticket")
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<TicketGroups> assignTicket()
 	{
@@ -245,6 +283,46 @@ public class TicketsRest
 			}
 
 			return groups;
+		}
+		catch (Exception e)
+		{
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
+			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+					.build());
+		}
+	}
+
+	/**
+	 * Creates new ticket from dashboard
+	 * 
+	 * @param ticket
+	 * @return newly created ticket
+	 */
+	@POST
+	@Path("/new-ticket")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Tickets createTicket(Tickets ticket)
+	{
+		try
+		{
+			String html_text = ticket.html_text;
+			Long groupID = ticket.groupID, assigneeID = ticket.assigneeID;
+
+			// Converting html text to plain with jsoup
+			Document doc = Jsoup.parse(html_text, "UTF-8");
+			String plain_text = new HtmlToPlainText().getPlainText(doc);
+
+			// Creating new Ticket in Ticket table
+			ticket = TicketsUtil.createTicket(groupID, assigneeID, ticket.requester_name, ticket.requester_email,
+					ticket.subject, ticket.cc_emails, plain_text, ticket.status, ticket.type, ticket.priority,
+					ticket.source, ticket.attachments_exists, "", ticket.tags);
+
+			// Creating new Notes in TicketNotes table
+			TicketNotesUtil.createTicketNotes(ticket.id, groupID, assigneeID, CREATED_BY.REQUESTER,
+					ticket.requester_name, ticket.requester_email, plain_text, html_text, NOTE_TYPE.PUBLIC,
+					new ArrayList<TicketDocuments>());
+
+			return ticket;
 		}
 		catch (Exception e)
 		{
@@ -318,16 +396,14 @@ public class TicketsRest
 	@PUT
 	@Path("/change-priority")
 	@Produces(MediaType.APPLICATION_JSON)
-	public String changePriority(@QueryParam("id") Long id, @QueryParam("priority") Priority priority)
+	public Tickets changePriority(@QueryParam("id") Long id, @QueryParam("priority") Priority priority)
 	{
 		try
 		{
 			if (id == null || priority == null)
 				throw new Exception("Required parameters missing.");
 
-			TicketsUtil.changePriority(id, priority);
-
-			return new JSONObject().put("status", "success").toString();
+			return TicketsUtil.changePriority(id, priority);
 		}
 		catch (Exception e)
 		{
@@ -346,16 +422,14 @@ public class TicketsRest
 	@PUT
 	@Path("/make-favorite")
 	@Produces(MediaType.APPLICATION_JSON)
-	public String makeFavorite(Tickets ticket)
+	public Tickets makeFavorite(Tickets ticket)
 	{
 		try
 		{
 			if (ticket == null || ticket.is_favorite == null)
 				throw new Exception("Required parameters missing.");
 
-			TicketsUtil.markFavorite(ticket.id, ticket.is_favorite);
-
-			return new JSONObject().put("status", "success").toString();
+			return TicketsUtil.markFavorite(ticket.id, ticket.is_favorite);
 		}
 		catch (Exception e)
 		{
@@ -373,16 +447,40 @@ public class TicketsRest
 	@PUT
 	@Path("/mark-solved")
 	@Produces(MediaType.APPLICATION_JSON)
-	public String closeTicket(Tickets ticket)
+	public Tickets closeTicket(Tickets ticket)
 	{
 		try
 		{
 			if (ticket == null || ticket.id == null)
 				throw new Exception("Required parameter missing.");
 
-			TicketsUtil.closeTicket(ticket.id);
+			return TicketsUtil.closeTicket(ticket.id);
+		}
+		catch (Exception e)
+		{
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
+			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+					.build());
+		}
+	}
 
-			return new JSONObject().put("status", "success").toString();
+	/**
+	 * 
+	 * @param ticket_id
+	 * @return
+	 */
+	@PUT
+	@Path("/update-tags")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Tickets updateTags(@QueryParam("command") String command, @QueryParam("tag") Tag tag,
+			@QueryParam("id") Long ticketID)
+	{
+		try
+		{
+			if (ticketID == null)
+				throw new Exception("Required parameter missing.");
+
+			return TicketsUtil.updateTags(ticketID, tag, command);
 		}
 		catch (Exception e)
 		{
@@ -424,32 +522,38 @@ public class TicketsRest
 	 * @return
 	 * @throws JSONException
 	 */
-	@GET
-	@Path("/create-test-ticket")
-	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public String createTicket() throws JSONException
-	{
-		try
-		{
-			TicketGroups group = TicketGroupUtil.getDefaultTicketGroup();
-
-			String message = "Hi!..\r\n\r\nThis is test message. Please ignore.\r\n\r\nThank you\r\nSasi Krishna";
-
-			// Creating new Ticket in Ticket table
-			Tickets ticket = TicketsUtil.createTicket(group.id, true, "Sasi", "sasi@clickdesk.com",
-					"Test ticket created from rest method", "", message, Source.EMAIL, true, "[142.152.23.23]");
-
-			// Creating new Notes in TicketNotes table
-			TicketNotesUtil.createTicketNotes(ticket.id, group.id, ticket.assigneeID, CREATED_BY.REQUESTER, "Sasi",
-					"sasi@clickdesk.com", message, message, NOTE_TYPE.PUBLIC, new ArrayList<String>());
-		}
-		catch (Exception e)
-		{
-			System.out.println(ExceptionUtils.getFullStackTrace(e));
-			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
-					.build());
-		}
-
-		return new JSONObject().put("status", "success").toString();
-	}
+	// @GET
+	// @Path("/create-test-ticket")
+	// @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	// public String createTicket() throws JSONException
+	// {
+	// try
+	// {
+	// TicketGroups group = TicketGroupUtil.getDefaultTicketGroup();
+	//
+	// String message =
+	// "Hi!..\r\n\r\nThis is test message. Please ignore.\r\n\r\nThank you\r\nSasi Krishna";
+	//
+	// // Creating new Ticket in Ticket table
+	// Tickets ticket = TicketsUtil.createTicket(group.id, true, "Sasi",
+	// "sasi@clickdesk.com",
+	// "Test ticket created from rest method", "", message, Source.EMAIL, true,
+	// "[142.152.23.23]");
+	//
+	// // Creating new Notes in TicketNotes table
+	// TicketNotesUtil.createTicketNotes(ticket.id, group.id, ticket.assigneeID,
+	// CREATED_BY.REQUESTER, "Sasi",
+	// "sasi@clickdesk.com", message, message, NOTE_TYPE.PUBLIC, new
+	// ArrayList<String>());
+	// }
+	// catch (Exception e)
+	// {
+	// System.out.println(ExceptionUtils.getFullStackTrace(e));
+	// throw new
+	// WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+	// .build());
+	// }
+	//
+	// return new JSONObject().put("status", "success").toString();
+	// }
 }

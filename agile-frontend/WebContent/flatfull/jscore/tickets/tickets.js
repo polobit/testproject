@@ -4,6 +4,7 @@ New_Tickets = 0, Opened_Tickets = 0,
 
 $("body").bind('click', function(ev) {
 	Tickets.hideDropDowns(ev);
+	Ticket_Tags.hideTicketTagField(ev);
 });
 
 var Tickets = {
@@ -29,23 +30,21 @@ var Tickets = {
 
 					head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
 					{
-						$("time", el).timeago();
-								
+						$("time", el).timeago();		
 					});
+
+					//Activating ticket type pill
+					$('ul.ticket-types').find('.active').removeClass('active');
+					if(!Ticket_Filter_ID)
+						$('ul.ticket-types').find('li a.' + Ticket_Status).parent().addClass('active');
+					else
+						$('ul.ticket-types').find('li > a[filter-id="' + Ticket_Filter_ID + '"]').parent().addClass('active');
 				}
 			});
 
 			//Activating main menu
 			$('nav').find(".active").removeClass("active");
 			$("#tickets").addClass("active");
-
-			//Activating ticket type pill
-			$('ul.ticket-types').find('.active').removeClass('active');
-
-			if(!Ticket_Filter_ID)
-				$('ul.ticket-types').find('li a.' + Ticket_Status).parent().addClass('active');
-			else
-				$('ul.ticket-types').find('li > a[filter-id="' + Ticket_Filter_ID + '"]').parent().addClass('active');
 
 			App_Ticket_Module.ticketsCollection.collection.fetch();
 
@@ -61,7 +60,7 @@ var Tickets = {
 			Group_ID = group_id;
 
 			//Rendering root template
-			getTemplate("tickets-container",  {group_id: group_id}, undefined, function(template_ui){
+			getTemplate("tickets-container",  {group_id: group_id, ticket_status: Ticket_Status}, undefined, function(template_ui){
 
 				if(!template_ui)
 			  		return;
@@ -90,13 +89,13 @@ var Tickets = {
 								return true;
 							}	
 						});
-
-						if(callback)
-							callback();
 					}
 				});
 
 				$('#right-pane').html(Tickets_Group_View.render().el);
+
+				if(callback)
+					callback();
 
 			}, "#content");
 		}	
@@ -148,16 +147,17 @@ var Tickets = {
 
 			var newTicketModel = new BaseModel();
 			newTicketModel.url = "/core/api/tickets/assign-ticket?id=" + Current_Ticket_ID + "&group_id=" + new_group_id;
-			newTicketModel.save(ticketModel.toJSON(), 
-				{success: function(model){
+			newTicketModel.save(ticketModel.toJSON(), {
+				
+					success: function(model){
 
 					$('.ticket_group_name').html(new_group_name);
 					$('td#group-id').attr('data-id', new_group_id);
 					$('.ticket_group_name').show();
 
 					ticketModel.set(model, {silent: true});
-				}}
-			);
+				}
+			});
    		});
 	},
 	changeAssignee: function(event){
@@ -297,15 +297,112 @@ var Tickets = {
 
 	hideDropDowns: function(ev){
 
-		if(Current_Route.indexOf('ticket/') == -1)
+		if(!Current_Route || Current_Route == null || Current_Route.indexOf('ticket/') == -1)
 			return;
 
 		console.log(ev);
 
-		if($(ev.target).closest('div.ticket-details-dropdown').length > 0 || $(ev.target).hasClass('ticket-details-value'))
+		if($(ev.target).closest('div.ticket-details-dropdown').length > 0 
+				|| $(ev.target).hasClass('ticket-details-value'))
 			return;
 
 		$('.ticket-details-dropdown').hide();
 		$('.ticket-details-value').show();
+	},
+
+	ccEmailsList: function(e){
+
+		e.stopImmediatePropagation();
+		if(e.which == 13) {
+
+        	var email = $('#cc_email_field').val();
+
+        	if(!Tickets.validateEmail(email))
+        		return;
+
+        	$('ul[name="cc_emails"]').prepend(getTemplate('cc-email-li', {email: email}));
+        	$('#cc_email_field').val('');
+    	}
+	},
+
+	validateEmail : function(email) {
+
+		// Email Regex pattern
+		var emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,9}$/;
+
+		if (!emailPattern.test(email))
+				return false;
+
+		return true;
+	},
+
+	getCCEmailsList: function(form_id){
+
+		return $('#' + form_id + ' [name="cc_emails"]').map(function() {
+
+        	var f = [];
+        	$.each($(this).children(), function(g, h) {
+
+        			if($(h).attr("data"))
+            			f.push(($(h).attr("data")).toString())
+	        	}
+	        );
+
+	        return {
+	            name: 'cc_emails',
+	            value: f
+	        }
+
+	    }).get();
+	},
+
+	next_prev_ticket_exists: function(action_type){
+		var ticket_collection = App_Ticket_Module.ticketsCollection.collection;
+		var current_ticket_index = ticket_collection.indexOf(ticket_collection.get(Current_Ticket_ID));
+
+		current_ticket_index = (action_type == "previous") ? --current_ticket_index
+				: ++current_ticket_index;
+
+		if(!ticket_collection.at(current_ticket_index))
+			return false;
+
+		return true;
+	},
+
+	get_next_prev_ticket_id: function(action_type){
+		var ticket_collection = App_Ticket_Module.ticketsCollection.collection;
+		var current_ticket_index = ticket_collection.indexOf(ticket_collection.get(Current_Ticket_ID));
+
+		current_ticket_index = (action_type == "previous") ? --current_ticket_index
+				: ++current_ticket_index;
+				
+		return ticket_collection.at(current_ticket_index).id;
 	}
 };
+
+function tickets_typeahead(data){
+
+	if (data == null)
+		return;
+
+	// To store contact names list
+	var contact_names_list = [];
+
+	/*
+	 * Iterates through all the contacts and get name property
+	 */
+	$.each(data, function(index, contact)
+	{
+		var contact_name;
+
+		// Appends first and last name to push in to a list
+		contact_name = getContactName(contact) + "-" + contact.id;
+
+		// Spaces are removed from the name, name should be used as a key in map
+		// "TYPEHEAD_TAGS"
+		contact_names_list.push(contact_name.split(" ").join(""));
+	});
+
+	// Returns list of contact/company names
+	return contact_names_list;
+}

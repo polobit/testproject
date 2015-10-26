@@ -6,38 +6,115 @@ var TicketsUtilRouter = Backbone.Router.extend({
 
 		/* Tickets */
 		"tickets" : "tickets",
+		"new-ticket" : "newTicket",
 		"ticket/:id" : "ticketDetails",
 
 		/*Tickets by group*/
 		"tickets/group/:id" : "ticketsByGroup",
 		"tickets/group/:id/:status" : "ticketsByGroup",
+		"tickets/group/:id/:status/:id" : "ticketNotes",
 
 		/* Tickets  by filter*/
 		"tickets/filter/:id" : "ticketsByFilter",
+		"tickets/filter/:id/ticket/:id" : "filteredTicketNotes",
 
-		/*Ticket Groups*/
+		/*Ticket Groups CRUD*/
 		"ticket-groups" : "ticketGroups",
 		"add-ticket-group" : "addTicketGroup",
 		"ticket-group/:id" : "editTicketGroup",
 
-		/*Ticket Filters*/
+		/*Ticket Filters CRUD*/
 		"ticket-filters" : "ticketFilters",
 		"add-ticket-filter" : "addTicketFilter",
 		"ticket-filter/:id" : "editTicketFilter",
 
-		/*Ticket Canned Responses*/
+		/*Ticket Canned Responses CRUD*/
 		"ticket-canned-responses" : "cannedResponses",
 		"add-canned-response" : "addCannedResponse",
 		"edit-canned-response/:id" : "editCannedResponse"
 	},
 
-	/**
-	 * Shows list of Tickets
-	 */
-	tickets : function() {
-		Backbone.history.navigate('#tickets/group/'+ DEFAULT_GROUP_ID +'/new', {trigger: true});
+	tickets: function(){
+		App_Ticket_Module.ticketsByGroup(DEFAULT_GROUP_ID, 'new');
 	},
 
+	/**
+	 * Shows new ticket form
+	 */
+	newTicket : function(){
+
+		if($('#tickets-container').length == 0)
+		{
+			Tickets.initialize(DEFAULT_GROUP_ID, function(){
+				App_Ticket_Module.renderNewTicketView();
+			});
+		}else{
+			App_Ticket_Module.renderNewTicketView();
+		}
+	},
+
+	/**
+	 * Renders new ticket form and initializes required events
+	 */ 
+	renderNewTicketView: function(){
+
+		var ticketView = new Ticket_Base_Model({
+			isNew : false, 
+			template : "ticket-new",
+			url : "/core/api/tickets/new-ticket",
+			saveCallback : function(ticket){
+
+				var url = 'tickets/group/'+ ticket.groupID +'/'+ ticket.status.toLowerCase() +'/' + ticket.id;
+
+				Backbone.history.navigate( url, { trigger : true });
+			},
+			postRenderCallback : function(el, data) {
+
+				//Activating ticket type pill
+				$('ul.ticket-types').find('.active').removeClass('active');
+
+				//Initializing chaining on Group and Assignee select fields
+				head.js(LIB_PATH + 'lib/agile.jquery.chained.min.js', function()
+				{
+					var LHS = $("#group_id", el);
+					var RHS = $("#assignee_id", el);
+
+					RHS.chained(LHS);
+				});
+
+				//Initializing type ahead for tags
+				Ticket_Tags.initTagsTypeahead('.ticket-tags-typeahead');
+				
+				//Initializing click on CC email field
+				$(el).on('keypress', '#cc_email_field', function(e){
+					Tickets.ccEmailsList(e);
+				});
+
+				//Initializing type ahead for selecting contact in To address field
+				agile_type_ahead("requester_email_typeahead", el, tickets_typeahead, function(arg1, arg2){
+
+						arg2 = arg2.split(" ").join("");
+
+						var email = TYPEHEAD_EMAILS[arg2 + '-' + arg1];
+
+						if(!email || email == 'No email')
+							return;
+
+						$('#requester_name').val(arg2);
+						$('#contact_id').val(arg1);
+						$('#requester_email').val(email).show();
+						$('#requester_email_typeahead').hide();
+
+					},undefined, undefined, 'core/api/search/');
+			}
+		});
+
+		$("#right-pane").html(ticketView.render().el);
+	},
+
+	/**
+	 * Shows list of tickets for the selected Group
+	 */
 	ticketsByGroup: function(group_id, status){
 
 		Ticket_Status = status;
@@ -47,6 +124,36 @@ var TicketsUtilRouter = Backbone.Router.extend({
 		Tickets.fetch_tickets_collection(url, group_id);
 	},
 
+	/**
+	 * Shows ticket details and notes for select ticket
+	 */
+	ticketNotes: function(group_id, status, id){
+
+		Ticket_Status = status;
+		Ticket_Filter_ID = null;
+
+		var ticketModal = null;
+
+		if(App_Ticket_Module.ticketsCollection && App_Ticket_Module.ticketsCollection.collection)
+			ticketModal = App_Ticket_Module.ticketsCollection.collection.get(id);
+
+		//Verifying ticket exists in collection or not
+		if(!ticketModal)
+		{
+			//If collection doesn't exists the re-render the whole layout and then fetch ticket notes
+			Tickets.initialize(group_id, function(){
+				App_Ticket_Module.ticketDetails(id);
+			});
+		}else{
+			
+			//If model exists renders the view directly
+			App_Ticket_Module.ticketDetails(id);
+		}
+	},
+
+	/**
+	 * Shows list of tickets for the given filter id
+	**/
 	ticketsByFilter : function(filter_id){
 
 		Ticket_Status = null;
@@ -58,47 +165,67 @@ var TicketsUtilRouter = Backbone.Router.extend({
 	},
 
 	/**
+	 * Shows individual filtered ticket details and notes collection
+	**/
+	filteredTicketNotes: function(filter_id, id){
+		Ticket_Filter_ID = filter_id;
+
+		var ticketModal = null;
+
+		if(App_Ticket_Module.ticketsCollection && App_Ticket_Module.ticketsCollection.collection)
+			ticketModal = App_Ticket_Module.ticketsCollection.collection.get(id);
+
+		//Verifying ticket exists in collection or not
+		if(!ticketModal)
+		{
+			//If collection doesn't exists the re-render the whole layout and then fetch ticket notes
+			Tickets.initialize(DEFAULT_GROUP_ID, function(){
+				App_Ticket_Module.ticketDetails(id);
+			});
+		}else{
+			
+			//If model exists renders the view directly
+			App_Ticket_Module.ticketDetails(id);
+		}
+	},
+
+	/**
 	 * Shows individual ticket details and notes collection
 	**/
 	ticketDetails: function(id){
 
-		if(!App_Ticket_Module.ticketsCollection || !App_Ticket_Module.ticketsCollection.collection){
+		var ticketModal = null;
 
-			Backbone.history.navigate( "tickets", { trigger : true });
-			return;
-		}
+		if(App_Ticket_Module.ticketsCollection && App_Ticket_Module.ticketsCollection.collection){
 
-		var ticketModal = App_Ticket_Module.ticketsCollection.collection.get(id);
-
-		if(!ticketModal || ticketModal == null || ticketModal == undefined)
-		{
-			Backbone.history.navigate( "tickets", { trigger : true });
-			return;
+			ticketModal = App_Ticket_Module.ticketsCollection.collection.get(id);
 		}	
 
 		Current_Ticket_ID = id;
 
 		var ticketView = new Ticket_Base_Model({
 			model : ticketModal, 
-			isNew : true, 
+			isNew : (ticketModal) ? true : false, 
 			template : "ticket-details",
-			url : "/core/api/ticket/" + id,
+			url : "/core/api/tickets/" + id,
 			postRenderCallback : function(el, data) {
-
-				//Initializing click events on ticket details view
-				initializeTicketNotesEvent(el);
 
 				//Initialize tooltips
 				$('[data-toggle="tooltip"]', el).tooltip();
 
+				//Initializing type ahead for tags
+				Ticket_Tags.initTagsTypeahead('.ticket-tags-typeahead');
+
+				//Initializing CC email click events
+				$(el).on('keypress', '#cc_email_field', function(e){
+					Tickets.ccEmailsList(e);
+				});
+
 				App_Ticket_Module.renderNotesCollection(id, $('#notes-collection-container', el), function(){});
-
-				// App_Ticket_Module.loadHtmlEditor($('#summernote', el), function(){
-
-				// });
 			}
 		});
 
+		$(".tickets-collection-pane").html('');
 		$("#right-pane").html(ticketView.render().el);
 	},
 

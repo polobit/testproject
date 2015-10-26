@@ -1,14 +1,40 @@
 <script id="ticket-notes-model-template" type="text/html">
-	<div class="wrapper b-b">
-	    {{#if_equals created_by 'REQUESTER'}}
-	    	<img class="img-circle thumb-xs m-r-sm" src="{{emailGravatarurl 50 requester_email}}">
-	   		From <a href="javascript:void(0);" class="ng-binding">{{requester_name}} ({{requester_email}})</a> on {{epochToHumanDate "mmm dd yyyy HH:MM" created_time}}
-	   	{{else}}
-	   		<img class="img-circle thumb-xs m-r-sm" src="{{domain_user.ownerPic}}">
-	   		User <a href="javascript:void(0);" class="ng-binding">{{domain_user.name}} ({{domain_user.email}}) wrote </a> on {{epochToHumanDate "mmm dd yyyy HH:MM" created_time}}
-	   	{{/if_equals}}	
-	</div>
-	<div class="wrapper">
-    	{{{plain_text}}}
-  	</div>
+	{{#if_equals note_type 'PUBLIC'}}
+		<img class="pos-abs" src="/flatfull/img/tickets/{{#if_equals created_by 'REQUESTER'}}received-reply.png{{else}}send-response.png{{/if_equals}}" width="25px" height="25px">
+		<div class="wrapper b-b b-t" style="{{#if_equals created_by 'REQUESTER'}}background-color: #F6F8F8{{/if_equals}}">
+		    {{#if_equals created_by 'REQUESTER'}}
+		    	<img class="img-circle thumb-xs m-r-sm" src="{{emailGravatarurl 50 requester_email}}">
+		   		From <a href="javascript:void(0);" class="ng-binding">{{requester_name}} ({{requester_email}})</a> on {{epochToHumanDate "mmm dd yyyy HH:MM" created_time}}
+		   	{{else}}
+		   		<img class="img-circle thumb-xs m-r-sm" src="{{domain_user.ownerPic}}">
+		   		User <a href="javascript:void(0);" class="ng-binding">
+		   				{{domain_user.name}} ({{domain_user.email}}) wrote 
+		   			</a> on {{epochToHumanDate "mmm dd yyyy HH:MM" created_time}}
+		   	{{/if_equals}}
+		   	<div class="dropdown pull-right">
+			  <button class="btn btn-default btn-xs dropdown-toggle" type="button" data-toggle="dropdown"> 
+			  	<i class="fa fa-cog"></i>
+			  	<span class="caret"></span>
+			  </button>
+			  <ul class="dropdown-menu dropdown-menu-right">
+			    <li><a href="javascript:void(0);" class="show-plain-text-notes">Show plain text</a></li>
+			    <li><a href="javascript:void(0);" class="show-original-text">Show original text</a></li>
+			  </ul>
+			</div>
+		</div>
+		<div class="wrapper" style="{{#if_equals created_by 'REQUESTER'}}background-color:#F6F8F8{{/if_equals}}">
+	    	{{{html_text}}}
+	  	</div>
+	{{else}}
+		<div class="wrapper b-b b-t m-t-xs">
+		    <img class="img-circle thumb-xs m-r-sm" src="{{domain_user.ownerPic}}">
+		   		User <a href="javascript:void(0);" class="ng-binding">
+		   				{{domain_user.name}} ({{domain_user.email}}) wrote 
+		   			</a> on {{epochToHumanDate "mmm dd yyyy HH:MM" created_time}}
+		   	<span class="label label-warning pull-right">Private Notes</span>		
+		</div>
+		<div class="wrapper">
+	    	{{{html_text}}}
+	  	</div>
+	{{/if_equals}}  	
 </script>

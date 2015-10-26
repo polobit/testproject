@@ -63,6 +63,20 @@ function serializeForm(form_id) {
 		};
 	}).get());
 
+	// Serialize cc_emails
+	arr = arr.concat($('#' + form_id + ' [name="cc_emails"]').map(function() {
+
+        var array = [];
+        $.each($(this).children(), function(g, h) {
+
+    		if($(h).attr("data"))
+        		array.push(($(h).attr("data")).toString());
+	    });
+
+	    return { name: 'cc_emails', value: array };
+
+	}).get());
+
 	// Serialize tags
 	arr = arr.concat(get_tags(form_id));
 

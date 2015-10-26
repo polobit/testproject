@@ -1,30 +1,40 @@
 <script id="ticket-details-template" type="text/html">
 <div class="wrapper bg-light lter b-b">
-    <a id="back-to-tickets" class="btn btn-sm btn-default w-xxs m-r-sm" data-toggle="tooltip" data-placement="bottom" data-original-title="Back to Tickets" href="javascript:void(0);"><i class="fa fa-long-arrow-left"></i></a>
-    <div class="btn-group pos-stc m-r-sm ticket-operations" ticket-id="{{id}}" style="display: none;">
-      <button class="btn btn-sm btn-default w-xxs w-auto-xs assign-ticket" data-toggle="tooltip" data-placement="bottom" data-original-title="Assign Ticket"><i class="fa fa-exchange"></i></button>
-      <button class="btn btn-sm btn-default w-xxs w-auto-xs change-priority" data-toggle="tooltip" 
-      data-placement="bottom" data-original-title="Change Priority"><i class="fa fa-bolt"></i></button>
-      <button class="btn btn-sm btn-default w-xxs w-auto-xs mark-solved" data-toggle="tooltip" data-placement="bottom" data-original-title="Mark as Solved"><i class="fa fa-bullseye"></i></button>  
-      <button class="btn btn-sm btn-default w-xxs w-auto-xs toggle-favorite" data-toggle="tooltip" data-placement="bottom" data-original-title="Favorite" is_favorite="{{#is_favorite}}true{{else}}false{{/is_favorite}}"><i class="fa fa-star{{#is_favorite}}{{else}}-o{{/is_favorite}}"></i></button>
-    </div>
+    <a class="btn btn-sm btn-default w-xxs m-r-sm back-to-tickets" data-toggle="tooltip" data-placement="bottom" data-original-title="Back to Tickets" href="javascript:void(0);"><i class="fa fa-long-arrow-left"></i></a>
+
+    <!-- Tickets navigation -->
     <div class="btn-group pull-right m-l-xs">
-      <button type="button" class="btn btn-sm btn-bg btn-default" data-toggle="tooltip" data-placement="bottom" data-original-title="Previous"><i class="fa fa-chevron-left"></i></button>
-      <button type="button" class="btn btn-sm btn-bg btn-default" data-toggle="tooltip" data-placement="bottom" data-original-title="Next"><i class="fa fa-chevron-right"></i></button>
+      {{#ticket_collection_exists}}
+        <a href="{{#is_filtered_ticket}}
+                    #tickets/filter/{{#get_ticket_filter_id}}{{/get_ticket_filter_id}}/ticket/{{#next_prev_ticket_exists 'previous'}}{{get_ticket_id 'previous'}}{{/next_prev_ticket_exists}}
+                {{else}}
+                  #tickets/group/{{groupID}}/{{toLowerCase status}}/{{#next_prev_ticket_exists 'previous'}}{{get_ticket_id 'previous'}}{{/next_prev_ticket_exists}}
+                {{/is_filtered_ticket}}"
+            class="btn btn-sm btn-bg btn-default 
+            {{#next_prev_ticket_exists 'previous'}}{{else}}disabled{{/next_prev_ticket_exists}}" data-toggle="tooltip" data-placement="bottom" data-original-title="Previous"><i class="fa fa-chevron-left"></i>
+        </a>
+        <a href="{{#is_filtered_ticket}}
+                    #tickets/filter/{{#get_ticket_filter_id}}{{/get_ticket_filter_id}}/ticket/{{#next_prev_ticket_exists 'next'}}{{get_ticket_id 'next'}}{{/next_prev_ticket_exists}}
+                  {{else}}
+                    #tickets/group/{{groupID}}/{{toLowerCase status}}/{{#next_prev_ticket_exists 'next'}}{{get_ticket_id 'next'}}{{/next_prev_ticket_exists}}
+                  {{/is_filtered_ticket}}" 
+            class="btn btn-sm btn-bg btn-default {{#next_prev_ticket_exists 'next'}}{{else}}disabled{{/next_prev_ticket_exists}}" data-toggle="tooltip" data-placement="bottom" data-original-title="Next"><i class="fa fa-chevron-right"></i>
+        </a>
+      {{/ticket_collection_exists}} 
     </div>
+
+    <!-- Toolbar menu -->
     <div class="btn-group pos-stc">
       <button class="btn btn-sm btn-default w-xxs w-auto-xs delete-ticket" data-toggle="tooltip" data-placement="bottom" data-original-title="Delete Ticket"><i class="fa fa-trash-o"></i></button>
       <div class="btn-group dropdown">
         <button class="btn btn-sm btn-default w-xxs w-auto-xs dropdown-toggle" data-toggle="tooltip" data-placement="bottom" data-original-title="Macros"><i class="fa fa-sitemap"></i></button>
       </div>
-      <div class="btn-group dropdown">
-        <button class="btn btn-sm btn-default w-xxs w-auto-xs dropdown-toggle" data-toggle="tooltip" data-placement="bottom" data-original-title="Tags"><i class="fa fa-fw fa-tags"></i> <span class="caret"></span></button>
-      </div>
     </div>
+
 </div>
 <div class="row">
   <div class="col-md-8 p-r-none b-r">
-    <div class="wrapper b-b">
+    <div class="wrapper">
       <h2 class="font-thin m-n ng-binding">{{subject}}</h2>
     </div>
     <div id="notes-collection-container">
@@ -32,35 +42,15 @@
     </div>
     <div class="wrapper">
         <div class="panel b-a">
-          <div id="send-reply-container" class="panel-heading ng-show" ng-hide="reply" aria-hidden="false">
+          <div id="send-reply-container" class="panel-heading" aria-hidden="false">
             <div class="m-b-lg">
-            Click here to <a id="reply-btn" href="javascript:void(0);" class="text-u-l" tabindex="0">Reply</a> or <a href="javascript:void(0);" class="text-u-l" tabindex="0">Forward</a>
+              Click here to 
+              <a href="javascript:void(0);" class="text-u-l reply-btn" tabindex="0">Reply</a> or 
+              <a href="javascript:void(0);" class="text-u-l" tabindex="0">Forward</a>
             </div>
           </div>
-          <div id="reply-editor" style="display: none;">
-              <form name="send-reply" id="send-reply">
-                <input type="hidden" name="ticket_id" value="{{id}}">
-                <input type="hidden" name="attachment_urls" value=",">
-
-                <div class="panel-heading b-b b-light to-emails">
-                  {{requester_email}}{{#if cc_emails}},{{cc_emails}}{{/if}}
-                </div>
-                <div class="panel-heading ticket-email p-b-none" style="display: none;">
-                  <span class="text-muted">To</span>&nbsp;&nbsp; {{requester_email}}
-                </div>
-                <div class="panel-heading ticket-email b-b b-light p-t-none" style="padding-top: 0;  display: none;">
-                  <span class="text-muted">Cc</span>&nbsp;&nbsp; 
-                  <input type="text" placeholder="Cc Emails" id="cc_emails" name="cc_emails" value="cc_emails" style="padding: 0; border: 0;width: 90%;" value='{{cc_emails}}'>
-                </div>
-                <div class="wrapper" contenteditable="true" data-name="html_text" style="min-height:130px"></div>
-                <div class="panel-footer bg-light lt">
-                  <button id="discard-reply" class="btn btn-link pull-right"><i  data-toggle="tooltip" data-placement="top" data-original-title="Discard" class="fa fa-trash-o"></i></button>
-                  <button class="btn btn-info btn-sm send-reply" data-loading-text='Send Reply'>Send Reply</button>
-                  <button class="btn btn-primary btn-sm m-l-xs send-reply private" data-loading-text='Add Note'>Add Note</button>
-                  <button class="btn btn-default btn-sm m-l-xs" data-toggle="tooltip" data-placement="top" data-original-title="Attachments"><i class="fa fa-paperclip"></i></button>
-                  <button class="btn btn-default btn-sm m-l-xs" data-toggle="tooltip" data-placement="top" data-original-title="Canned Responses"><i class="fa fa-reorder"></i></button>
-                </div>
-              </form>
+          <div id="reply-editor">
+              
           </div>
         </div>  
     </div>
@@ -73,12 +63,12 @@
             Details
           </a>
         </li>
-        <li class="">
+        <li>
           <a data-target="#tab-2" role="tab" data-toggle="tab" aria-expanded="false">
             Timeline
           </a>
         </li>
-        <li class="">
+        <li>
           <a data-target="#tab-3" role="tab" data-toggle="tab" aria-expanded="false">
             Widgets
           </a>
@@ -87,7 +77,7 @@
     </div>
     <div class="tab-content">
       <div role="tabpanel" class="tab-pane active" id="tab-1">
-        <div class="wrapper-md">
+        <div class="wrapper-md p-b-none">
           <table style="width: 100%;">
               <tr>
                   <td class="p-t-xs p-b-xs">Ticket #</td>
@@ -191,6 +181,31 @@
                   </td>
               </tr>
           </table>
+        </div><hr class="m-l m-r m-t-sm m-b-sm"/>
+        <div class="wrapper-md p-t-none">
+          <ul id="ticket-tags-ul" name="tags" class="inline v-top m-b-sm p-n tags">
+              {{#each tags}}
+                <li class="tag btn btn-xs btn-default m-r-xs m-b-xs inline-block" data="{{this.tag}}">
+                  <span>
+                    <a class="anchor m-r-xs" href="javascript:void(0);">{{this.tag}}</a>
+                    <a class="close remove-ticket-tags text-lg" tag="{{this.tag}}">&times</a>
+                  </span>
+                </li>
+              {{/each}}  
+          </ul>
+          <div class="inline-block m-t-xs">
+            <div class="add-tags-form" class="m-b-none" style="display: none;">
+              <div class="control-group m-b-none">
+                <input type="text" class="input-sm ticket-tags-typeahead ignore-comma-keydown form-control inline-block" style="width: 60%" placeholder="Enter tag">
+                <span>
+              </div>
+            </div>
+            <a href="javascript:void(0);" id="show-tags-field" rel="tooltip" data-original-title="addtag" 
+              data-placement="top" class="p-t-sm p-b-sm text-xs text-muted show-tags-field">
+              <i class="icon-plus"></i>
+              <span>Add Tag</span>
+            </a>
+          </div>
         </div>
       </div>
       <div role="tabpanel" class="tab-pane" id="tab-2">
@@ -266,7 +281,52 @@
         </div>
       </div>
     </div>
-
   </div>
 </div> 
+</script>
+<script  id="create-ticket-notes-template" type="text/html">
+  <form name="send-reply" id="send-reply" onsubmit="return false;">
+    <input type="hidden" name="ticket_id" value="{{id}}">
+    <input type="hidden" name="attachment_urls" value=",">
+
+    <div class="panel-heading b-b b-light to-emails">
+      {{requester_email}}{{#if cc_emails}},{{cc_emails}}{{/if}}
+    </div>
+    <div class="panel-heading ticket-email p-b-none" style="display: none;">
+      <span class="text-muted">To</span>&nbsp;&nbsp; {{requester_email}}
+    </div>
+    <div class="panel-heading ticket-email b-b b-light p-t-xs p-b-xs" style="display: none;">
+      <div class="text-muted inline-block v-top">Cc</div>&nbsp;&nbsp;
+      <div class="inline-block v-top" style="width: 95%;">
+        <ul name="cc_emails" class="m-n p-n">
+            {{#each cc_emails}}
+              <li class="tag btn btn-xs btn-default m-r-xs m-b-xs inline-block" data="{{this}}">
+                <span>
+                  <a class="m-r-xs" href="javascript:void(0);" >{{this}}</a>
+                  <a class="close remove-ticket-tags text-lg">&times</a>
+                </span>
+              </li>
+            {{/each}}
+            <li class="tag m-r-xs m-b-xs inline-block">
+              <input type="text" placeholder="Cc Emails" id="cc_email_field" style="border: none; width: 9em !important;">
+            </li>
+        </ul>
+      </div>  
+    </div>
+    <div class="wrapper" contenteditable="true" data-name="html_text" style="min-height:130px">
+    </div>
+    <div class="panel-footer bg-light lt">
+      <a href="javascript:void(0);" class="btn btn-link pull-right discard-reply">
+        <i  data-toggle="tooltip" data-placement="top" data-original-title="Discard" class="fa fa-trash-o"></i>
+      </a>
+      <a href="javascript:void(0);" class="btn btn-info btn-sm send-reply" data-loading-text='Send Reply'>Send Reply</a>
+      <a href="javascript:void(0);" class="btn btn-primary btn-sm m-l-xs send-reply private" data-loading-text='Add Note'>Add Note</a>
+      <a href="javascript:void(0);" class="btn btn-default btn-sm m-l-xs">
+        <i class="fa fa-paperclip" data-toggle="tooltip" data-placement="top" data-original-title="Attachments"></i>
+      </a>
+      <a href="javascript:void(0);" class="btn btn-default btn-sm m-l-xs">
+        <i  data-toggle="tooltip" data-placement="top" data-original-title="Canned Responses" class="fa fa-reorder"></i>
+      </a>
+    </div>
+  </form>
 </script>

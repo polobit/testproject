@@ -11,12 +11,11 @@ import java.util.Set;
 import org.apache.commons.lang.exception.ExceptionUtils;
 
 import com.agilecrm.contact.Contact;
+import com.agilecrm.contact.Tag;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.search.document.TicketDocument;
 import com.agilecrm.ticket.entitys.TicketGroups;
-import com.agilecrm.ticket.entitys.TicketNotes;
 import com.agilecrm.ticket.entitys.Tickets;
-import com.agilecrm.ticket.entitys.TicketNotes.CREATED_BY;
 import com.agilecrm.ticket.entitys.Tickets.LAST_UPDATED_BY;
 import com.agilecrm.ticket.entitys.Tickets.Priority;
 import com.agilecrm.ticket.entitys.Tickets.Source;
@@ -116,55 +115,72 @@ public class TicketsUtil
 	}
 
 	/**
-	 * Creates new ticket in {@link Tickets} table and adds to text search
-	 * {@link TicketDocument}.
 	 * 
 	 * @param group_id
-	 * @param assigned_to_group
+	 * @param assignee_id
 	 * @param requester_name
 	 * @param requester_email
 	 * @param subject
 	 * @param cc_emails
 	 * @param plain_text
-	 * @param html_text
+	 * @param status
+	 * @param type
+	 * @param priority
 	 * @param source
 	 * @param attachments
 	 * @param ipAddress
-	 * 
-	 * @return {@link Tickets} object
+	 * @param tags
+	 * @return
 	 */
-	public static Tickets createTicket(Long group_id, Boolean assigned_to_group, String requester_name,
-			String requester_email, String subject, String cc_emails, String plain_text, Source source,
-			Boolean attachments, String ipAddress)
+	public static Tickets createTicket(Long group_id, Long assignee_id, String requester_name, String requester_email,
+			String subject, List<String> cc_emails, String plain_text, Status status, Type type, Priority priority,
+			Source source, Boolean attachments, String ipAddress, List<Tag> tags)
 	{
-		Tickets ticket = null;
+		Tickets ticket = new Tickets();
 
 		try
 		{
-			ticket = new Tickets(group_id, assigned_to_group, requester_name, requester_email, subject, cc_emails,
-					plain_text, source, attachments);
+			ticket.group_id = new Key<TicketGroups>(TicketGroups.class, group_id);
+			ticket.tags = tags;
+			ticket.status = status;
+			ticket.type = type;
+			ticket.priority = priority;
+			ticket.source = source;
 
-			Long createdTime = Calendar.getInstance().getTimeInMillis();
+			Long epochTime = Calendar.getInstance().getTimeInMillis();
 
-			ticket.created_time = createdTime;
-			ticket.last_updated_time = createdTime;
-			ticket.last_customer_replied_time = createdTime;
+			/**
+			 * Verifying for ticket status. If Open then ticket should be
+			 * assigned to someone.
+			 */
+			if (status == Status.OPEN)
+			{
+				ticket.assignee_id = new Key<DomainUser>(DomainUser.class, assignee_id);
+				ticket.assigned_time = epochTime;
+			}
+			else
+				ticket.assigned_to_group = true;
+
+			ticket.requester_name = requester_name;
+			ticket.requester_email = requester_email;
+			ticket.subject = subject;
+			ticket.cc_emails = cc_emails;
+			ticket.first_notes_text = plain_text;
+			ticket.attachments_exists = attachments;
+
+			ticket.created_time = epochTime;
+			ticket.last_updated_time = epochTime;
+			ticket.last_customer_replied_time = epochTime;
 			ticket.last_updated_by = LAST_UPDATED_BY.REQUESTER;
-			ticket.last_reply_text = plain_text;
-			ticket.status = Status.NEW;
-			ticket.type = Type.PROBLEM;
-			ticket.priority = Priority.LOW;
 			ticket.requester_ip_address = ipAddress;
+			ticket.user_replies_count = 1;
 
-			// Get country and city from ipaddress
 			Key<Tickets> key = Tickets.ticketsDao.put(ticket);
-
-			System.out.println("key: " + key.getId());
 
 			ticket.short_id = getTicketShortID(key.getId()) + "";
 
 			/**
-			 * Checking if new ticket requester is there in Contacts
+			 * Checking if new ticket requester is exists in Contacts
 			 */
 			Contact contact = ContactUtil.searchContactByEmail(requester_email);
 
@@ -198,7 +214,7 @@ public class TicketsUtil
 	 * @return {@link Tickets} object
 	 * @throws EntityNotFoundException
 	 */
-	public static Tickets updateTicket(Long ticketID, String cc_emails, String last_reply_plain_text,
+	public static Tickets updateTicket(Long ticketID, List<String> cc_emails, String last_reply_plain_text,
 			LAST_UPDATED_BY last_updated_by, Long updated_time, Long customer_replied_time,
 			Long last_agent_replied_time, Boolean attachments_exists) throws EntityNotFoundException
 	{
@@ -347,6 +363,31 @@ public class TicketsUtil
 
 	/**
 	 * 
+	 * @param ticket_id
+	 * @return
+	 * @throws EntityNotFoundException
+	 */
+	public static Tickets updateTags(Long ticket_id, Tag tag, String command) throws EntityNotFoundException
+	{
+		Tickets ticket = TicketsUtil.getTicketByID(ticket_id);
+
+		List<Tag> tags = ticket.tags;
+
+		if ("add".equalsIgnoreCase(command))
+			tags.add(tag);
+		else
+			tags.remove(tag);
+
+		ticket.tags = tags;
+		Tickets.ticketsDao.put(ticket);
+
+		new TicketDocument().edit(ticket);
+
+		return ticket;
+	}
+
+	/**
+	 * 
 	 * @param tickets
 	 * @return
 	 */
@@ -359,10 +400,10 @@ public class TicketsUtil
 			for (Tickets ticket : tickets)
 			{
 				Long groupID = ticket.groupID;
-				
-				if(!groupsList.containsKey(groupID))
+
+				if (!groupsList.containsKey(groupID))
 					groupsList.put(groupID, TicketGroups.ticketGroupsDao.get(groupID));
-				
+
 				ticket.group = groupsList.get(groupID);
 			}
 		}
