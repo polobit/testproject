@@ -496,6 +496,10 @@ $('#' + container_id).on('change keyup', '#lhs-contact-filter-form #RHS_NEW inpu
     					createCookie("agile_contact_view","grid-view");
     					CONTACTS_HARD_RELOAD=true;
     				}
+    				if(window.location.hash.indexOf("tags")==1){
+    					App_Contacts.contacts(window.location.hash.substr(window.location.hash.lastIndexOf("/")+1));
+    					return;
+    				}
     				App_Contacts.contacts();
     	   });
 
