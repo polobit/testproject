@@ -157,6 +157,7 @@ angular.module('builder.projects', [])
             	$("#metatitle",parent.document).val(returnDataFormat.pages[0].title);
             	$("#metadesc",parent.document).val(returnDataFormat.pages[0].tags);
             	$("#metakeywords",parent.document).val(returnDataFormat.pages[0].description);
+            	$("#cname",parent.document).val(returnDataFormat.pages[0].cname);
             	returnDataFormat.pages[0].name = "index";
 				project.active = returnDataFormat;
 
@@ -218,6 +219,7 @@ angular.module('builder.projects', [])
             projectPageData['title'] = $("#metatitle",parent.document).val();
             projectPageData['tags'] = $("#metadesc",parent.document).val();
             projectPageData['description'] = $("#metakeywords",parent.document).val();
+            projectPageData['cname'] = $("#cname",parent.document).val();
 
             if(landingPageName == "") {
             	alertify.log("Page name is required.", "error");
@@ -234,12 +236,16 @@ angular.module('builder.projects', [])
 			  "js": projectPageData.js,
 			  "title": projectPageData.title,
 			  "tags": projectPageData.tags,
-			  "description": projectPageData.description
+			  "description": projectPageData.description,
+			  "cname" : projectPageData.cname
 			};
 
             if(typeof projectPageData.id != "undefined") {
             	webPageObject["id"] = projectPageData.id;
             	reqMethod = "PUT";
+            }
+            if(typeof projectPageData.cname_id != "undefined") {
+            	webPageObject["cname_id"] = projectPageData.cname_id;
             }
 
 			var req = {
@@ -252,15 +258,17 @@ angular.module('builder.projects', [])
 			};
 
             return $http(req).success(function(data) {
-
             	var returnDataFormat = {"pages": []};
             	returnDataFormat.pages[0] = data;
             	returnDataFormat.pages[0].name = "index";
 				project.active = returnDataFormat;
 
-				$("#landingpagename-msg",parent.document).html('<span style="color: green; margin-left: 85px;">Page saved.</span>').show().fadeOut(3000);
-
-				alertify.log("Saved successfully.", "success");
+				if(data.isDuplicateCName) {
+					$("#cnameMessage",parent.document).html('CNAME field should be unique.').show();
+				} else {
+					$("#landingpagename-msg",parent.document).html('<span style="color: green; margin-left: 85px;">Page saved.</span>').show().fadeOut(3000);
+					alertify.log("Saved successfully.", "success");
+				}
 
 			}).error(function(data) {
 				alertify.log(data.substring(0, 500), 'error', 2500);
