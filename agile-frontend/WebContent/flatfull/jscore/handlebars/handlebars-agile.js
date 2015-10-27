@@ -300,6 +300,10 @@ function getTemplateUrls(templateName)
 	{
 		template_relative_urls.push("settings.js");
 	}
+	if (templateName.indexOf("bria") == 0)
+	{
+		template_relative_urls.push("bria.js");
+	}
 	return template_relative_urls;
 }
 

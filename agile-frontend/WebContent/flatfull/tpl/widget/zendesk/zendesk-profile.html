@@ -70,11 +70,11 @@
 				<p>View and respond to support tickets from contact using your Zendesk account.</p>
 				
 				<label>Enter your Zendesk details </label>
-				<div class="control-group form-group"><div class="controls"><input type="url" id="zendesk_url" class="input-medium required widget_input_box form-control" placeholder="https://yourdomain.zendesk.com" value="" name="url"></input></div></div>
-				<div class="control-group form-group"><div class="controls"><input type="text" id="zendesk_username" class="input-medium required widget_input_box form-control"  placeholder="User Name" value="" name="username"></input></div></div>
-				<div class="control-group form-group"><div class="controls"><input type="password" id="zendesk_password" class="input-medium required widget_input_box form-control"  placeholder="Password" value="" name="password"></input></div></div>			
+				<div class="control-group form-group"><div class="controls"><input type="url" id="zendesk_url" class="input-medium required widget_input_box form-control" placeholder="https://yourdomain.zendesk.com" value="" name="zendesk_url"></input></div></div>
+				<div class="control-group form-group"><div class="controls"><input type="text" id="zendesk_username" class="input-medium required widget_input_box form-control"  placeholder="User Name" value="" name="zendesk_username"></input></div></div>
+				<div class="control-group form-group"><div class="controls"><input type="password" id="zendesk_password" class="input-medium required widget_input_box form-control"  placeholder="Password" value="" name="zendesk_password"></input></div></div>			
 				<a href="#add-widget" class="btn btn-default btn-sm">Cancel</a>
-				<a href="#" id="save_prefs" class="btn btn-sm btn-primary ml_5">Save</a>
+				<a href="#" id="save_prefs" class="save-agile-widget btn btn-sm btn-primary ml_5">Save</a>
 			 </fieldset>
 	    </form>
 	</div>
@@ -129,7 +129,7 @@
 
 
 <script id="zendesk-ticket-show-template" type="text/html">
-<div class="modal fade message-modal" aria-hidden="false" id="zendesk_showModal" style="display: block; padding-left: 17px;">
+<div class="modal fade message-modal" aria-hidden="false" data-target="zendesk_showModal" id="zendesk_showModal" style="display: block; padding-left: 17px;">
 <div class="modal-backdrop fade" style="height: auto;"></div> 
  <div class="modal-dialog"> 
   <div class="modal-content"> 

@@ -462,7 +462,6 @@ var Base_Model_View = Backbone.View
 			render : function(isFetched) {
 
 				
-				
 				/**
 				 * Renders and returns the html element of view with model data,
 				 * few conditions are checked render the view according to
@@ -486,7 +485,7 @@ var Base_Model_View = Backbone.View
 				if (!this.model.isNew() || this.options.isNew
 						|| !$.isEmptyObject(this.model.toJSON()) || isFetched) {
 
-					//$(this.el).html(getRandomLoadingImg());
+					$(this.el).html(getRandomLoadingImg());
 					/*
 					 * Uses handlebars js to fill the model data in the template
 					 */
@@ -611,3 +610,12 @@ function enable_save_button(elem)
 {
 	elem.html(elem.attr('data-save-text')).removeAttr('disabled data-save-text');
 }
+
+/**
+*  Extended View of Base_Model. It combines parent events to extended view events.
+*/
+Base_Model_View.extend = function(child) {
+	var view = Backbone.View.extend.apply(this, arguments);
+	view.prototype.events = _.extend({}, this.prototype.events, child.events);
+	return view;
+};

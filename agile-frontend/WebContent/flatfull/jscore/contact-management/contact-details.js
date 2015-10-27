@@ -71,7 +71,7 @@ function checkContactUpdated(){
 	var contact_id = contact_model.id;
 	var updated_time = contact_model.attributes.updated_time;
 
-		queueGetRequest("contact_queue", "/core/api/contacts/" + contact_id + "/isUpdated?updated_time=" + updated_time, "", function success(data)
+		queueGetRequest("contact_queue_"+contact_id, "/core/api/contacts/" + contact_id + "/isUpdated?updated_time=" + updated_time, "", function success(data)
 		{
 			// If true show refresh contact button.
 			if (data == 'true')
@@ -434,7 +434,7 @@ function qr_load(){
  * To navigate from one contact detail view to other
  */
 function contact_detail_view_navigation(id, contact_list_view, el){
-	console.log("collection >>>>>>>>>>>>>>>>");
+	console.log("collection >>>>>>>>>>>>>>>>" + id);
 	console.log(contact_collection);
 	var contact_collection = contact_list_view.collection;
 	var collection_length = contact_collection.length;
@@ -456,15 +456,29 @@ function contact_detail_view_navigation(id, contact_list_view, el){
     }
 
     if(previous_contact_id != null)
-    	$('.navigation', el).append('<a style="float:left;" href="#contact/' + previous_contact_id + '" class=""><i class="icon icon-chevron-left"></i></a>');
+    	$('.navigation', el).append('<a style="float:left;" href="#contact/' + previous_contact_id + '" class="" onclick="clearContactWidetQueues(' + id + ')"><i class="icon icon-chevron-left"></i></a>');
     if(next_contact_id != null)
-    	$('.navigation', el).append('<a style="float:right;" href="#contact/'+ next_contact_id + '" class=""><i class="icon icon-chevron-right"></i></a>');
+    	$('.navigation', el).append('<a style="float:right;" href="#contact/'+ next_contact_id + '" class="" onclick="clearContactWidetQueues(' + id + ')"><i class="icon icon-chevron-right"></i></a>');
 	
 }
 
 
+/**
+* Clear all contact related widget queue requests
+*/
+function clearContactWidetQueues(contactId){
+
+	if(!contactId || !document.ajaxq)
+		  return;
+		
+	queueClear("_widgets_" + contactId);
+	queueClear("widgets_" + contactId);
+	queueClear("widget_queue_"+contactId);
+
+}
+
 $(function(){
-	
+
 	$('body').on('mouseenter', '.tooltip_info', function(e){
 		 $(this).tooltip({
 			 html : true

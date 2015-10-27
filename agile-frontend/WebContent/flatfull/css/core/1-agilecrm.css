@@ -2832,7 +2832,7 @@ top: 165px!important;
 	;z-index: 100;
 }
 
-.campaign_dialpad_btns{
+.campaign_dialpad_btns,.dialpad_btns{
 	border: 1px solid #eee;
 	display: none;
 }
@@ -2855,7 +2855,7 @@ top: 165px!important;
 	vertical-align: inherit;
 }
 
-#campaign_dialpad_btns input[type="button"]{
+#campaign_dialpad_btns input[type="button"],.dialpad_btns input[type="button"]{
     background-color: #fff;
     border: none;
     border-bottom: 1px solid #eee!important;
@@ -2864,7 +2864,7 @@ top: 165px!important;
 	width: 31px!important;
 }
 
-#campaign_dialpad_btns input[type="button"]:hover{
+#campaign_dialpad_btns input[type="button"]:hover,.dialpad_btns input[type="button"]:hover{
         background-color: #EFEFEF;
         color: #888;
 }

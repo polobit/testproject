@@ -30,7 +30,6 @@ function loadWidgets(el, contact)
 		Widgets_View = new Base_Collection_View({ url : '/core/api/widgets', restKey : "widget", templateKey : "widgets", individual_tag_name : 'li',
 			sortKey : 'position', modelData : data, postRenderCallback : function(widgets_el)
 			{
-
 				head.load(FLAT_FULL_UI + "css/misc/agile-widgets.css", function()
 				{
 					// If scripts aren't loaded earlier, setup is initialized
@@ -51,7 +50,7 @@ function loadWidgets(el, contact)
 		// show widgets
 		var newEl = Widgets_View.render().el;
 		$('#widgets', el).html(newEl);
-
+		widgetBindingsLoader();
 	}
 	else
 	{
@@ -76,17 +75,19 @@ function loadWidgets(el, contact)
 				set_up_widgets(el, Widgets_View.el);
 
 			}
-
+			widgetBindingsLoader();
 		});
 	}
+}
 
+function widgetBindingsLoader(){
 	/*
 	 * Called on click of icon-minus on widgets, collapsed class is added to it
 	 * and sets "is_minimized" field of widget as true, we check this while
 	 * loading widgets and skip loading widget if it is minimized
 	 */
-    $('#prefs-tabs-content').off('click', '.widget-minimize');
-	$('#prefs-tabs-content').on('click', '.widget-minimize', function(e)
+    $('#widgets').off('click', '.widget-minimize');
+	$('#widgets').on('click', '.widget-minimize', function(e)
 	{
 		e.preventDefault();
 		var widget_name = $(this).attr('widget');
@@ -121,8 +122,8 @@ function loadWidgets(el, contact)
 	 * widget as false, we check this while loading widgets and skip loading
 	 * widget if it is minimized
 	 */
-    $('#prefs-tabs-content').off('click', '.widget-maximize');
-	$('#prefs-tabs-content').on('click', '.widget-maximize', function(e)
+    $('#widgets').off('click', '.widget-maximize');
+	$('#widgets').on('click', '.widget-maximize', function(e)
 	{
 		e.preventDefault();
 		var widget_name = $(this).attr('widget');
@@ -157,11 +158,15 @@ function loadWidgets(el, contact)
 		if (is_collapsed)
 		{
 			$("#" + widget_name).collapse('show');
-			return;
+		}else{
+			queueGetRequest("_widgets_", "flatfull/"+widget.get('url'), "script", function(data, queueName){
+					try{
+					console.log("start" + model.get('name') + "Widget");
+					  eval("start" + model.get('name') + "Widget")(queueName.replace("_widgets_", ""));	
+					  $("#" + widget_name).collapse('show');
+					}catch(err){console.log(err);}		
+			}, undefined, 'true');
 		}
-
-		// else load the script
-		$.get(widget.get('url'), 'script');
 
 	});
 }
@@ -206,13 +211,24 @@ function set_up_widgets(el, widgets_el)
 		{
 			if (widget_template_loaded_map[model.get('name').toLowerCase()])
 			{
-				queueGetRequest("_widgets_" + contact_id, url, "script");
+				queueGetRequest("_widgets_" + contact_id, url, "script", function(data, queueName){
+					try{
+					console.log("start" + model.get('name') + "Widget");
+					  eval("start" + model.get('name') + "Widget")(queueName.replace("_widgets_", ""));	
+					}catch(err){console.log(err);}
+					
+				}, undefined, 'true');
 			}
 			else
 				downloadTemplate(model.get('name').toLowerCase() + ".js", function()
 				{
 					widget_template_loaded_map[model.get('name').toLowerCase()] = true;
-					queueGetRequest("_widgets_" + contact_id, url, "script");
+					queueGetRequest("_widgets_" + contact_id, url, "script", function(data, queueName){
+						try{
+							console.log("start" + model.get('name') + "Widget");
+					  		eval("start" + model.get('name') + "Widget")(queueName.replace("_widgets_", ""));	
+						}catch(err){console.log(err);}						
+					}, undefined, 'true');
 				});
 		}
 
@@ -235,9 +251,7 @@ function set_up_widgets(el, widgets_el)
 				});
 		}
 	}, this);
-
 	enableWidgetSoring(widgets_el);
-
 }
 
 function setup_custom_widget(model, widgets_el)
@@ -318,8 +332,12 @@ function enableWidgetSoring(el)
 					 */
 					$('.widget-sortable > li', el).each(function(index, element)
 					{
-						var model_name = $(element).find('.widgets').attr('id');
+						var model_name = $(element).find('.collapse').attr('id');
 
+						if(!model_name)
+						model_name = $(element).find('.widgets').attr('id');
+						
+						
 						// Get Model, model is set as data to widget element
 						var model = $('#' + model_name).data('model');
 
@@ -355,7 +373,7 @@ function enableWidgetSoring(el)
  * @param errorCallback
  *            Function to be executed on error
  */
-function queueGetRequest(queueName, url, dataType, successCallback, errorCallback)
+function queueGetRequest(queueName, url, dataType, successCallback, errorCallback, isCacheEnable)
 {
 	console.log(queueName + ", " + url);
 	// Loads ajaxq to initialize queue
@@ -363,10 +381,11 @@ function queueGetRequest(queueName, url, dataType, successCallback, errorCallbac
 	{
 		try
 		{
+			isCacheEnable = (isCacheEnable) ? true : false;
 			/*
 			 * Initialize a queue, with GET request
 			 */
-			$.ajaxq(queueName, { url : url, cache : false, dataType : dataType,
+			$.ajaxq(queueName, { url : url, cache : isCacheEnable, dataType : dataType,
 
 			// function to be executed on success, if successCallback is
 			// defined
@@ -374,7 +393,7 @@ function queueGetRequest(queueName, url, dataType, successCallback, errorCallbac
 			{
 				console.log("Sucesses", url);
 				if (successCallback && typeof (successCallback) === "function")
-					successCallback(data);
+					successCallback(data, queueName);
 			},
 
 			// function to be executed on success, if errorCallback is
@@ -383,7 +402,7 @@ function queueGetRequest(queueName, url, dataType, successCallback, errorCallbac
 			{
 				console.log("error", url);
 				if (errorCallback && typeof (errorCallback) === "function")
-					errorCallback(data);
+					errorCallback(data, queueName);
 			},
 
 			// function to be executed on completion of queue
@@ -472,11 +491,14 @@ function queueClear(queueName)
 	if (document.ajaxq)
 	{
 		document.ajaxq.q[queueName] = [];
+		try{
+
+			document.ajaxq.qr[queueName].abort();
+	  		document.ajaxq.qr[queueName] = null;
+  		}catch(e){
+  			console.log(e);
+  		}
 	}
-	/*
-	 * head.js('/js/lib/ajaxm/ajaxq.js', function(){ $.ajaxq.clear(queueName);
-	 * });
-	 */
 }
 
 /**

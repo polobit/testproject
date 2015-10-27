@@ -74,7 +74,7 @@ function initializeActivitiesListner(el){
 function getDealObject(id)
 {
 
-	return $.ajax({ type : "GET", url : 'core/api/opportunity/' + id, async : false }).responseText;
+	return $.ajax({ type : "GET", url : 'core/api/opportunity/' + id, async : true }).responseText;
 
 }
 
