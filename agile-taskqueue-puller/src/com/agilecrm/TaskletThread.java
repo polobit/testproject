@@ -69,16 +69,17 @@ public class TaskletThread implements Work
 		{
 		    DeferredTask deferredTask = convertResponseToDeferredTask(task);
 
-		    if (deferredTask instanceof ContactExportPullTask)
-		    {
-			isIndependentTask = true;
-			ThreadPool.getThreadPoolExecutor("export-executor", 2, 15).execute(deferredTask);
-			continue;
-		    }
-		    else if (deferredTask instanceof BigTask)
+		    System.out.println("instance of CSVImporter : " + (deferredTask instanceof CSVImporter));
+		    if (deferredTask instanceof BigTask)
 		    {
 			isIndependentTask = true;
 			ThreadPool.getThreadPoolExecutor("bulk-export-executor", 1, 5).execute(deferredTask);
+			continue;
+		    }
+		    else if (deferredTask instanceof ContactExportPullTask)
+		    {
+			isIndependentTask = true;
+			ThreadPool.getThreadPoolExecutor("export-executor", 2, 15).execute(deferredTask);
 			continue;
 		    }
 		    else if (deferredTask instanceof CSVImporter)
