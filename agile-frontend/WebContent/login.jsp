@@ -228,6 +228,8 @@ if(isSafari && isWin)
 						<div class="list-group-item">
 					    	<input class="input-xlarge required field form-control no-border" required maxlength="20" minlength="4" name='password' type="password" placeholder="Password" autocapitalize="off">
 						</div>
+
+						 
 						<div class="block">
 							<input class="hide" id="location_hash" name="location_hash"></input>
 						</div>
