@@ -175,6 +175,7 @@ public class LoginServlet extends HttpServlet
 
 	String timezone = request.getParameter("account_timezone");
 
+	// Hash to redirect after login
 	String hash = request.getParameter("location_hash");
 
 	if (email == null || password == null)

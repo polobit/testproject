@@ -271,6 +271,7 @@ if(isSafari && isWin)
 		$(document).ready(function()
 		{
 
+			// Sets location hash in hidden field
 			$("#location_hash").val(window.location.hash);
         var newImg = new Image;
         newImg.onload = function() {
