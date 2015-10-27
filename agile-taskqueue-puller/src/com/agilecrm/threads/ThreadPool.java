@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -21,12 +20,26 @@ import com.google.apphosting.api.ApiProxy.Delegate;
 import com.google.apphosting.api.ApiProxy.Environment;
 import com.googlecode.objectify.cache.TriggerFutureHook;
 
+/**
+ * 
+ * @author yaswanth
+ *
+ */
 public class ThreadPool
 {
     // private static ThreadPoolExecutor poolExecutor = null;
     private String poolName = null;
 
     private static Map<String, ThreadPoolExecutor> threadPoolMap = new HashMap<String, ThreadPoolExecutor>();
+
+    private ThreadFactoryImpl timpl = new ThreadFactoryImpl();
+
+    static
+    {
+	ThreadPool.getThreadPoolExecutor("bulk-export-executor", 1, 5);
+	ThreadPool.getThreadPoolExecutor("export-executor", 1, 5);
+	ThreadPool.getThreadPoolExecutor("import-executor", 1, 15);
+    }
 
     public static ThreadPoolExecutor getThreadPoolExecutor(String poolName, int minPoolSize, int maxPoolSize)
     {
@@ -35,21 +48,29 @@ public class ThreadPool
 
 	ThreadPool pool = new ThreadPool(poolName, minPoolSize, maxPoolSize);
 
-	// pool.setUpRemoteAPIOnAllThreads();
-
 	return threadPoolMap.get(poolName);
     }
 
     private ThreadPool(String poolName, int minPoolSize, int maxPoolSize)
     {
-	ThreadFactoryImpl timpl = new ThreadFactoryImpl();
 
-	ThreadPoolExecutor poolExecutor = new ThreadPoolExecutor(minPoolSize, maxPoolSize, 5, TimeUnit.SECONDS,
-		new ArrayBlockingQueue<Runnable>(100), timpl);
+	ScalingAgileQueue<Runnable> blockingQueue = new ScalingAgileQueue<Runnable>(100);
+
+	ThreadPoolExecutor poolExecutor = new ThreadPoolExecutor(minPoolSize, maxPoolSize, 5, TimeUnit.MILLISECONDS,
+		blockingQueue, timpl);
+
+	blockingQueue.setThreadPool(poolExecutor);
+
+	poolExecutor.setRejectedExecutionHandler(new RejectionHandler());
 
 	this.poolName = poolName;
 
 	threadPoolMap.put(poolName, poolExecutor);
+
+	System.out.println(threadPoolMap);
+
+	setUpThreadPool(poolName, poolExecutor);
+
 	// poolExecutor.allowCoreThreadTimeOut(true);
     }
 
@@ -71,39 +92,82 @@ public class ThreadPool
 	}
     }
 
+    private void setUpThreadPool(String threadPool, ThreadPoolExecutor executor)
+    {
+	ThreadPoolExecutor poolExecutorTemp = new ThreadPoolExecutor(1, 1, 5, TimeUnit.MINUTES,
+		new ScalingAgileQueue<Runnable>(10));
+	ThreadTester t = new ThreadTester(executor, threadPool);
+	t.setName(threadPool);
+	poolExecutorTemp.execute(t);
+    }
+
     public synchronized static void main(String[] args)
     {
-	ThreadPoolExecutor executor = ThreadPool.getThreadPoolExecutor("executor", 2, 15);
-	for (int i = 0; i < 25; i++)
+	for (int i = 1; i < 200; i++)
 	{
-	    ThreadExample te = new ThreadExample();
-	    executor.execute(te);
+
+	    ThreadPool.getThreadPoolExecutor("bulk-exporter-queue", 1, 15).execute(new Runnable()
+	    {
+
+		@Override
+		public synchronized void run()
+		{
+		    try
+		    {
+			System.out.println("waiting in thread :" + Thread.currentThread().getName());
+			wait(10000);
+
+		    }
+		    catch (InterruptedException e)
+		    {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		    }
+		    // TODO Auto-generated method stub
+
+		}
+	    });
+	    /*
+	     * ThreadExample t = new ThreadExample(); if (i % 2 == 0)
+	     * ThreadPool.getThreadPoolExecutor("bulk-exporter-queue", 1,
+	     * 15).execute(t); else
+	     * ThreadPool.getThreadPoolExecutor("exporter-queue", 1,
+	     * 30).execute(t);
+	     */
 	}
 
-	new ThreadTester(executor).start();
     }
 }
 
 class ThreadTester extends Thread
 {
     ThreadPoolExecutor pool = null;
+    String testerThreadName = null;
+    Map<String, ThreadPoolExecutor> threadPoolMap = null;
+
     RemoteApiInstaller installer = null;
 
-    public ThreadTester(ThreadPoolExecutor pool)
+    public ThreadTester(Map<String, ThreadPoolExecutor> threadPoolMap)
+    {
+	this.threadPoolMap = threadPoolMap;
+    }
+
+    public ThreadTester(ThreadPoolExecutor pool, String testerThreadName)
     {
 	this.pool = pool;
+	this.testerThreadName = testerThreadName;
+
 	// this.installer = installer;
 	// TODO Auto-generated constructor stub
     }
 
     boolean uninstalled = false;
 
-    public void run()
+    public void checkThreads()
     {
-	for (int i = 10; i < 20; i++)
+	while (true)
 	    try
 	    {
-		System.out.println("iterating : " + i);
 		remainingThreads();
 	    }
 	    catch (InterruptedException e)
@@ -111,29 +175,31 @@ class ThreadTester extends Thread
 		// TODO Auto-generated catch block
 		e.printStackTrace();
 	    }
-	System.out.println(pool.shutdownNow());
+    }
+
+    public void run()
+    {
+	checkThreads();
     }
 
     private synchronized void remainingThreads() throws InterruptedException
     {
+	System.out.println("*********************************************************************" + " Thread name : "
+		+ testerThreadName);
 
-	System.out.println("intial actual count : " + pool.getActiveCount());
+	System.out.println("----------------- active threads : " + pool.getActiveCount());
+
 	wait(20000);
+	System.out.println("*********************************************************************" + " Thread name : "
+		+ testerThreadName);
 	System.out.println("----------------- active threads : " + pool.getActiveCount());
 	System.out.println("is terminating : " + pool.isTerminating());
 	System.out.println(pool.isShutdown());
 	System.out.println(pool.getTaskCount());
 	System.out.println(pool.getCompletedTaskCount());
 	System.out.println(pool.getPoolSize());
+	System.out.println("########################################################################");
 	// System.out.println(pool.get);
-
-	if (!uninstalled && pool.getPoolSize() == 0)
-	{
-	    installer.uninstall();
-	    uninstalled = true;
-	}
-
-	System.out.println("----------------- active threads final : " + pool.getPoolSize());
     }
 }
 
@@ -146,7 +212,6 @@ class ThreadFactoryImpl implements ThreadFactory
 	// TODO Auto-generated method stub
 	return new RemoteAPISetupThread(r);
     }
-
 }
 
 class RemoteAPISetupThread extends Thread
@@ -202,14 +267,24 @@ class RemoteAPISetupThread extends Thread
 	RemoteApiOptions options = new RemoteApiOptions().server(Globals.APPLICATION_ID + ".appspot.com", 443)
 		.credentials(Globals.USER_ID, Globals.PASSWORD);
 
+	try
+	{
+	    ClassLoader.getSystemClassLoader().loadClass(TriggerFutureHook.class.getName());
+	}
+	catch (ClassNotFoundException e)
+	{
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	}
+
 	installer = new RemoteApiInstaller();
 	installer.logMethodCalls();
 
 	try
 	{
+
 	    installer.install(options);
 
-	    // TriggerFutureHook.install();
 	    environment = ApiProxy.getCurrentEnvironment();
 	    threadLocalDelegate = (ApiProxy.Delegate<ApiProxy.Environment>) ApiProxy.getDelegate();
 	}
