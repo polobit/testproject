@@ -1188,23 +1188,34 @@ public class CSVUtil
 			else if (value.equalsIgnoreCase("relatedTo"))
 			{
 			    String data = dealPropValues[i].toLowerCase();
-			    boolean email = isValidEmail(data);
+			    if(StringUtils.isNotBlank(data)){
+			    	
+			    	String[] emails = data.split(",");
+			    	for (int k = 0; k < emails.length; k++) {
+			    		
+			    		 boolean email = isValidEmail(emails[k]);
 
-			    if (email)
-			    {
-				try
-				{
-				    Contact contact = ContactUtil.searchContactByEmail(data);
-				    if (contact != null && contact.id != null)
-				    {
-					opportunity.addContactIds(contact.id.toString());
-				    }
-				}
-				catch (NullPointerException e)
-				{
-				    e.printStackTrace();
-				}
+						    if (email)
+						    {
+							try
+							{
+							    Contact contact = ContactUtil.searchContactByEmail(emails[k]);
+							    if (contact != null && contact.id != null)
+							    {
+								opportunity.addContactIds(contact.id.toString());
+							    }
+							}
+							catch (NullPointerException e)
+							{
+							    e.printStackTrace();
+							}
+						    }
+						    
+					}
+			    	
+			    	
 			    }
+			   
 			}
 			else if (value.equalsIgnoreCase("note"))
 			{
@@ -1337,9 +1348,18 @@ public class CSVUtil
      */
     private String parse(String data)
     {
+    	
+	String lastdecimalIndexVal = "";
+	if(data.indexOf(".") > 0){
+		lastdecimalIndexVal = data.substring(data.lastIndexOf("."));
+		data = data.substring(0, data.lastIndexOf("."));
+	}
+	
 	String parseVal = data.replaceAll("[\\W A-Za-z]", "");
 	System.out.println(parseVal);
-	return parseVal.trim();
+	
+   	return (parseVal + lastdecimalIndexVal).trim();
+   
     }
 
     /**
@@ -1577,4 +1597,5 @@ public class CSVUtil
 
 	return failedContactsWriter = new CSVWriter(service.getOutputWriter());
     }
+    
 }

@@ -19,8 +19,7 @@ var Pubnub = null;
 var SocialSuiteRouter = Backbone.Router.extend({
 
 	routes : {
-	// route : function name
-
+	
 	// First function on click of tab
 	"social" : "socialsuite",
 
@@ -128,6 +127,7 @@ var SocialSuiteRouter = Backbone.Router.extend({
 
 			return;
 		}// if end
+
 		if (Streams_List_View) // Streams already collected in collection
 		{
 			console.log("Collection already defined.");
@@ -150,6 +150,7 @@ var SocialSuiteRouter = Backbone.Router.extend({
 
 		// Remove waiting icon.
 		removeWaiting();
+		
 	}, // streams end
 
 	/**
