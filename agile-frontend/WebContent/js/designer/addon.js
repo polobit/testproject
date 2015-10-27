@@ -81,7 +81,6 @@ function showAddonNodes(id) {
 //add nodes to tab 
 function addAddonTabTemplate(data, url, callback, container)
 {
-
 	if(!checkMaxNodesCount())
  		return;
 	

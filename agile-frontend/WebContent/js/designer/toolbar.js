@@ -49,6 +49,7 @@ function downloadNodes(callback) {
                 
                 menuNode.click(function()                
                 {
+
                 	if(!checkMaxNodesCount())
                  		return;
                 	if(!checkWorkflowSize())

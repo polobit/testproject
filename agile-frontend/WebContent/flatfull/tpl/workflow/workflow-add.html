@@ -18,6 +18,7 @@
 								</div>
 								<div class="col-md-4 col-sm-5 col-xs-4">
 									<a data-toggle="modal" id="workflow-designer-help" class="right m-t-n-md c-p text-xs text-info" style="clear:both;">Need help? Watch our tutorial.</a>
+									<input type="hidden" id="was-disabled" data = {{was_disabled}}>
 									{{#if is_new}}
 										<button class="btn btn-primary btn-sm  right pos-rlt m-r-xs" id="save-workflow-top">Save Campaign</button>
 									{{else}}
@@ -29,7 +30,16 @@
 											<ul class="dropdown-menu">
 												<li>
 													<a href="#" id="duplicate-workflow-top">
-														<i class="icon-copy"></i> Create a Copy
+														<i class="fa fa-clipboard"></i> Create a Copy
+													</a>
+												</li>
+												<li>
+													<a href="#" data = "{{is_disabled}}" class="is-disabled-top" >
+														{{#if_equals "true" is_disabled}}
+															<i class="fa fa-unlock"></i><div class="inline">Enable Workflow</div>
+														{{else}}
+															<i class="fa fa-lock"></i><div class="inline">Disable Workflow</div>
+														{{/if_equals}}
 													</a>
 												</li>
 											</ul>
@@ -102,13 +112,34 @@
                     {{#if is_new}}
 						<button class="btn btn-sm btn-primary" id="save-workflow-bottom">Save Campaign</button>
 					{{else}}
-						<div class="btn-group inline-block">
-                           	<button class="btn btn-primary btn-sm btn-addon" id="save-workflow-bottom"><i class="icon-plus-sign"></i> Save Campaign</button>
-            				<button class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
-							<ul class="dropdown-menu">
-								<li><a href="#" id="duplicate-workflow-bottom"><i class="icon-copy"></i> Create a Copy</a></li>
-							</ul>
-                         </div>
+
+
+<div class="btn-group left m-r-xs">
+											<button class="btn btn-primary btn-sm btn-addon" id="save-workflow-top"><i class="icon-plus-sign"></i> Save Campaign</button>
+                            				<button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false"> 
+            									<span class="caret"></span>
+											</button>
+											<ul class="dropdown-menu">
+												<li>
+													<a href="#" id="duplicate-workflow-top">
+														<i class="fa fa-clipboard"></i> Create a Copy
+													</a>
+												</li>
+												<li>
+													<a href="#" class="is-disabled-top" data = "{{is_disabled}}" >
+														{{#if_equals "true" is_disabled}}
+															<i class="fa fa-unlock"></i><div class="inline">Enable Workflow</div>
+														{{else}}
+															<i class="fa fa-lock"></i><div class="inline">Disable Workflow</div>
+														{{/if_equals}}
+													</a>
+												</li>
+											</ul>
+                           				</div>
+
+
+
+
                     {{/if}}
                     <div class="save-workflow-img inline-block"></div>
                     <br />

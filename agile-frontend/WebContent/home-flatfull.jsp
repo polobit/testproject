@@ -46,6 +46,11 @@ ObjectMapper mapper = new ObjectMapper();
 UserPrefs currentUserPrefs = UserPrefsUtil.getCurrentUserPrefs();
 AccountPrefs accountPrefs = AccountPrefsUtil.getAccountPrefs();
 
+//Update workflow entities if they are not initialized
+//with new is_disabled property
+if(!accountPrefs.workflows_updated)
+	AccountPrefsUtil.postDataToUpdateWorkflows(accountPrefs,domainUser);
+
 // Download the template the user likes
 String template = currentUserPrefs.template;
 if (request.getParameter("t") != null)
