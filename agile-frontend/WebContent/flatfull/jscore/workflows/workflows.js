@@ -56,7 +56,7 @@ $(function(){
 	 * so ids are separated by comma in click event.
 	 * 
 	 **/
-	$('body').on('click', '#save-workflow-top, #save-workflow-bottom, #duplicate-workflow-top, #duplicate-workflow-bottom', function (e, trigger_data) {
+	$('body').on('click', '#save-workflow-top, #save-workflow-bottom, #duplicate-workflow-top, #duplicate-workflow-bottom, .is-disabled-top', function (e, trigger_data) {
            e.preventDefault();
            
            // Temporary variable to hold clicked button, either top or bottom. $ is preceded, just to show 
@@ -83,7 +83,11 @@ $(function(){
         var unsubscribe_tag = $('#unsubscribe-tag').val().trim();
         var unsubscribe_action = $('#unsubscribe-action').val();
         var unsubscribe_email = $('#unsubscribe-email').val().trim();
+        var is_disabled = $('.is-disabled-top').attr("data");
         
+        if($clicked_button.attr("class") == "is-disabled-top" && is_disabled)
+            is_disabled = !JSON.parse(is_disabled);
+
         var unsubscribe_json ={
         		               		"tag":unsubscribe_tag,
         		               		"action":unsubscribe_action,
@@ -110,7 +114,7 @@ $(function(){
         // New Workflow or Copy Workflow
         if (App_Workflows.workflow_model === undefined || $(this).attr('id') === 'duplicate-workflow-top' || $(this).attr('id') === 'duplicate-workflow-bottom') 
         {
-        	create_new_workflow(name, designerJSON, unsubscribe_json, $clicked_button, trigger_data);
+        	create_new_workflow(name, designerJSON, unsubscribe_json, $clicked_button, trigger_data, is_disabled);
         }
         // Update workflow
         else
@@ -119,17 +123,39 @@ $(function(){
             App_Workflows.workflow_model.set("name", name);
             App_Workflows.workflow_model.set("rules", designerJSON);
             App_Workflows.workflow_model.set("unsubscribe", unsubscribe_json);
+            App_Workflows.workflow_model.set("is_disabled", is_disabled);
             App_Workflows.workflow_model.save({}, {success: function(){
             	
             	enable_save_button($clicked_button);
             	
             	show_campaign_save();
             	
-            	// Adds tag in our domain
-            	add_tag_our_domain(CAMPAIGN_TAG);
-            	
             	// Hide message
             	$('#workflow-edit-msg').hide();
+
+                //toggle disable dropdown
+                 if($clicked_button.attr("class") == "is-disabled-top"){
+                	 var disabled = $(".is-disabled-top");
+                 
+                    if (is_disabled) {
+                    	disabled.attr("data", true);
+                    	disabled.find('i').toggleClass('fa-lock').toggleClass('fa-unlock');
+                    	disabled.find('div').text("Enable Workflow");
+                        $('#designer-tour').addClass("blur").removeClass("anti-blur");;
+                        window.frames[0].$('#paintarea').addClass("disable-iframe").removeClass("enable-iframe");
+                        window.frames[0].$('#paintarea .nodeItem table>tbody').addClass("disable-iframe").removeClass("enable-iframe");
+                    } else {
+                    	disabled.attr("data", false);
+                    	disabled.find('i').toggleClass('fa-unlock').toggleClass('fa-lock');
+                    	disabled.find('div').text("Disable Workflow"); 
+                        $('#designer-tour').addClass("anti-blur").removeClass("blur");;
+                        window.frames[0].$('#paintarea').addClass("enable-iframe").removeClass("disable-iframe");
+                        window.frames[0].$('#toolbartabs').removeClass("disable-iframe");
+                       // $('#designer-tour').css("pointer-events","none");
+                        window.frames[0].$('#paintarea .nodeItem table>tbody').addClass("enable-iframe").removeClass("disable-iframe");
+                        
+                    }
+                }
             	
             	// Boolean data used on clicking on Done
     	    	if(trigger_data && trigger_data["navigate"])
@@ -139,6 +165,8 @@ $(function(){
                   });
     	    	}
     	    	
+                // Adds tag in our domain
+                add_tag_our_domain(CAMPAIGN_TAG);
             	//$('#workflowform').find('#save-workflow').removeAttr('disabled');
                
                //$(".save-workflow-img").remove();
@@ -268,14 +296,15 @@ $(function(){
  * @param unsubscribe_json - unsubscribe data of workflow
  * @param $clicked_button - jquery object to know clicked button
  **/
-function create_new_workflow(name, designerJSON, unsubscribe_json, $clicked_button, trigger_data)
+function create_new_workflow(name, designerJSON, unsubscribe_json, $clicked_button, trigger_data, is_disabled, was_disabled)
 {
 	var workflowJSON = {};
 	
 	workflowJSON.name = name;
     workflowJSON.rules = designerJSON;
     workflowJSON.unsubscribe = unsubscribe_json;
-    
+    workflowJSON.is_disabled = is_disabled;
+    workflowJSON.was_disabled = was_disabled;
     var workflow = new Backbone.Model(workflowJSON);
     App_Workflows.workflow_list_view.collection.create(workflow,{
     	    success:function(){  

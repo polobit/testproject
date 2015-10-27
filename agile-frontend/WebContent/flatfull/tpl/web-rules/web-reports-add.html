@@ -1,3 +1,7 @@
+<Script id="campaign-options-template" type="text/html">
+	<option value="{{this.name}}" id="{{id}}" {{#if is_disabled}}disabled="disabled" >{{this.name}} (disabled) {{else}}>{{this.name}}{{/if}}</option>
+ </Script> 
+
 <Script id="webrules-add-template" type="text/html">
 <div class="wrapper-md lter bg-light b-b">
 <div class="row">
@@ -480,10 +484,10 @@
 											<optgroup label="Campaign">
 												<option value="ASSIGN_CAMPAIGN" class="campaign" 
 													related="WEB_RULE_RHS" url="core/api/workflows"
-													parse_key="id" parse_value="name">Add To Campaign</option>
+													parse_key="id" parse_value="name" template="campaign-options">Add To Campaign</option>
 												<option value="UNSUBSCRIBE_CAMPAIGN" class="campaign" 
 													related="WEB_RULE_RHS" url="core/api/workflows"
-													parse_key="id" parse_value="name">Remove From Campaign</option>
+													parse_key="id" parse_value="name" template="campaign-options">Remove From Campaign</option>
 											</optgroup>
 											<optgroup label="Tags">
 												<option value="ADD_TAG" class="campaign" 

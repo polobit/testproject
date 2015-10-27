@@ -261,6 +261,15 @@
 	</retry-parameters>
   </queue>
   
+  <queue>
+    <name>update-workflows-queue</name>
+    <rate>20/s</rate>
+    <max-concurrent-requests>20</max-concurrent-requests>
+    <retry-parameters>
+		<task-retry-limit>2</task-retry-limit>
+	</retry-parameters>
+  </queue>
+  
   
   <!-- pull queues -->
   <queue>
