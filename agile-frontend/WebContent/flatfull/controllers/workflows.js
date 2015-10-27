@@ -356,6 +356,14 @@ var WorkflowsRouter = Backbone.Router
 						if (!template_ui)
 							return;
 						$('#content').html($(template_ui));
+						var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
+
+						// fill workflows
+						fillSelect('campaign-reports-select', '/core/api/workflows', 'workflow', function fillCampaign()
+						{
+							$('#campaign-reports-select').find('option[value=' + id + ']').attr('selected', 'selected');
+
+						}, optionsTemplate);
 
 						getTemplate("campaign-analysis-tabs", { "id" : id }, undefined, function(template_ui)
 				{
@@ -400,19 +408,58 @@ var WorkflowsRouter = Backbone.Router
 					hideTransitionBar();
 
 				}, "#campaign-analysis-tabs");
-
-						var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
-
-						// fill workflows
-						fillSelect('campaign-reports-select', '/core/api/workflows', 'workflow', function fillCampaign()
-						{
-							$('#campaign-reports-select').find('option[value=' + id + ']').attr('selected', 'selected');
-
-						}, optionsTemplate);
 					}, "#content");
+
+					
 
 				}
 
+				else
+				{
+					getTemplate("campaign-analysis-tabs", { "id" : id }, undefined, function(template_ui)
+				{
+					if (!template_ui)
+						return;
+
+					// Render tabs with id
+					$('#campaign-analysis-tabs').html($(template_ui));
+					// Hide bulk subscribers block
+					$('#subscribers-block').hide();
+
+					initReportLibs(function()
+					{
+						// Load Reports Template
+						getTemplate('campaign-email-reports', {}, undefined, function(template_ui1)
+						{
+							if (!template_ui1)
+								return;
+							
+							$('#campaign-analysis-tabs-content').html($(template_ui1));
+							
+							// Set the name
+							// $('#reports-campaign-name').text(workflowName);
+							initChartsUI(function()
+							{
+								// Updates table data
+								get_email_table_reports(id);
+
+								// shows graphs by default week date range.
+								showEmailGraphs(id);
+							});
+						}, "#campaign-analysis-tabs-content");
+
+					});
+
+					$(".active").removeClass("active");
+					$("#workflowsmenu").addClass("active");
+
+					$('#campaign-tabs .select').removeClass('select');
+					$('.campaign-stats-tab').addClass('select');
+
+					hideTransitionBar();
+
+				}, "#campaign-analysis-tabs");
+				}
 				
 			},
 
