@@ -196,13 +196,15 @@ try{
 		// Load HTML into Tiny MCE.
 		if(textarea_id !== undefined && url === undefined)
 		{
-			var initHTML
+			var initHTML;
 			if(templateJSON){
 				initHTML = (templateJSON);
 				//initHTML = templateJSON.text;
 			}
 			else
 			initHTML = window.opener.$('#' + textarea_id).val();
+		if(window.opener.location.hash != "#webrules-add")
+		initHTML = remove_script_tags(initHTML);
 		$('#content').val(initHTML);
 		var isWarning = should_warn(initHTML);
 		showWarning(isWarning);
@@ -219,7 +221,8 @@ try{
 	    	
 	    		// Fetch html and fill into tinymce
 	    		$.get(location.origin+url, function(value){
-	    			
+	    			if(window.opener.location.hash != "#webrules-add")
+	    			value = remove_script_tags(value);
 	    			$('#content').val(value);
 	    			
 	    			var isWarning = should_warn(value);
@@ -265,7 +268,8 @@ try{
 			showError("Please enter a valid html message");
 			return;
 		}
-		
+		if(window.opener.location.hash != "#webrules-add")
+		html = remove_script_tags(html);
 		window.opener.tinyMCECallBack(getUrlVars()["id"], html);
 		window.close();
 		
@@ -337,7 +341,7 @@ function initialize_tinymce_editor(){
             editor.addButton('templates', {
                 text: 'Templates',
                 icon: false,
-                onclick: function() {
+                onclick: function() { 
                 	
                 	// Confirm before going to Templates
                 	if(!confirm("Your changes will be lost. Are you sure you want to go back to templates?"))
@@ -361,7 +365,13 @@ function initialize_tinymce_editor(){
             }); 
             
             editor.on('change', function(e) {
-                var isWarning = should_warn(tinyMCE.activeEditor.getContent());
+            	
+            	var editor_contents = tinyMCE.activeEditor.getContent();
+            	if(window.opener.location.hash != "#webrules-add"){
+            	editor_contents = remove_script_tags(editor_contents);
+            	tinyMCE.activeEditor.setContent(editor_contents)
+            	}
+                var isWarning = should_warn(editor_contents);
                 showWarning(isWarning);
             });
             
@@ -450,6 +460,18 @@ function showWarning(isWarning)
 		
 	
 }
+
+function remove_script_tags(content)
+{
+	try{
+		return content.replace(/<script\b[^>]*>([\s\S]*?)<\/script>/gm,'');
+	}
+	catch(err){
+		console.log(err);
+		return content;
+	}
+}
+
 
 </script>
 
