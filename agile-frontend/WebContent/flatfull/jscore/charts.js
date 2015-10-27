@@ -268,7 +268,7 @@ function showBar(url, selector, name, yaxis_name, stacked)
 			    },
 			    legend: {
 			        align: 'right',
-			        x: -100,
+			        x: -50,
 			        verticalAlign: 'top',
 			        y: 20,
 			        floating: true,
@@ -289,7 +289,10 @@ function showBar(url, selector, name, yaxis_name, stacked)
 			                enabled: true,
 			                color: (Highcharts.theme&&Highcharts.theme.dataLabelsColor)||'white'
 			            }
-			        }
+			        },
+			        series : {
+			        	borderWidth : 0
+			        },
 			    },
 			    series: series
 			});

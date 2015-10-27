@@ -322,7 +322,7 @@ var WorkflowsRouter = Backbone.Router
 			/** Gets list of campaign-stats * */
 			campaignStats : function()
 			{
-
+				hideTransitionBar();
 				// Load Reports Template
 				getTemplate("campaign-stats-chart", {}, undefined, function(template_ui)
 				{
