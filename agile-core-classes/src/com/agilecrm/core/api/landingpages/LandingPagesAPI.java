@@ -18,6 +18,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import com.agilecrm.landingpages.LandingPage;
+import com.agilecrm.landingpages.LandingPageCNames;
 import com.agilecrm.landingpages.LandingPageUtil;
 
 @Path("/api/landingpages")
@@ -45,6 +46,12 @@ public class LandingPagesAPI
 	public LandingPage getLandingPage(@PathParam("landingPageId") Long id)
 	{
 		LandingPage landingPage = LandingPageUtil.getLandingPage(id);
+		LandingPageCNames landingPageCNames = LandingPageUtil.getLandingPageCNamesForPage(id);
+		if(landingPageCNames != null) {
+			System.out.println("in not null");
+			landingPage.cname = landingPageCNames.cname;
+			landingPage.cname_id = landingPageCNames.id;
+		}
 		return landingPage;
 	}
 

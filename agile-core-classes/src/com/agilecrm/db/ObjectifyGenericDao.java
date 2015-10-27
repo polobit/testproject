@@ -41,6 +41,7 @@ import com.agilecrm.document.Document;
 import com.agilecrm.facebookpage.FacebookPage;
 import com.agilecrm.forms.Form;
 import com.agilecrm.landingpages.LandingPage;
+import com.agilecrm.landingpages.LandingPageCNames;
 import com.agilecrm.portlets.Portlet;
 import com.agilecrm.reports.ActivityReports;
 import com.agilecrm.reports.Reports;
@@ -207,6 +208,7 @@ public class ObjectifyGenericDao<T> extends DAOBase
 	ObjectifyService.register(VerifiedEmails.class);
 	
 	ObjectifyService.register(LandingPage.class);
+	ObjectifyService.register(LandingPageCNames.class);
 
     }
 

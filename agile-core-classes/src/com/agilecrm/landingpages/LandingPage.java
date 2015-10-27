@@ -2,8 +2,10 @@ package com.agilecrm.landingpages;
 
 import javax.persistence.Id;
 import javax.persistence.PrePersist;
+import javax.persistence.Transient;
 
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.google.appengine.api.NamespaceManager;
 import com.googlecode.objectify.annotation.NotSaved;
 import com.googlecode.objectify.condition.IfDefault;
 
@@ -37,6 +39,15 @@ public class LandingPage
     public Long created_time = 0L;
     
     public Long updated_time = 0L;
+    
+    @Transient
+    public String cname = "";
+    
+    @Transient
+    public Long cname_id = 0L;
+    
+    @Transient
+    public boolean isDuplicateCName = false;
 
     public static ObjectifyGenericDao<LandingPage> dao = new ObjectifyGenericDao<LandingPage>(LandingPage.class);
 
@@ -57,7 +68,55 @@ public class LandingPage
 
 	public void save()
     {
-    	 dao.put(this);
+		LandingPageUtil lputil = new LandingPageUtil();
+		if(this.id == null){
+		    //when creating
+			if(!cname.isEmpty() && lputil.isCNameExists(cname)) {
+				isDuplicateCName = true;
+				return;
+			} else {
+				dao.put(this);
+				
+				//store
+				if(!cname.isEmpty()) {
+					LandingPageCNames lpCNames = new LandingPageCNames(NamespaceManager.get(),id,cname);
+					lpCNames.save();
+					if(lpCNames.id != null) {
+						cname_id = lpCNames.id;
+					}
+				}
+				
+			}
+		} else {
+		    //when updating
+			dao.put(this);
+			
+			//update
+			if(!cname.isEmpty()) {
+				if(cname_id != 0L) {
+					isDuplicateCName = lputil.isCNameExists(cname,cname_id);
+				} else {
+					isDuplicateCName = lputil.isCNameExists(cname);
+				}
+				if(isDuplicateCName) {
+					return;
+				}
+				
+				if(cname_id != 0L) {
+					LandingPageCNames lpCNames = LandingPageUtil.getLandingPageCNames(cname_id);
+					lpCNames.cname = cname;
+					lpCNames.save();
+				} else {
+					LandingPageCNames lpCNames = new LandingPageCNames(NamespaceManager.get(),id,cname);
+					lpCNames.save();
+					if(lpCNames.id != null) {
+						cname_id = lpCNames.id;
+					}
+				}
+			}
+			
+		}
+		
     }
 
     public void delete()
