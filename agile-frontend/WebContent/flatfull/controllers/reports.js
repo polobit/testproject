@@ -14,7 +14,7 @@ var ReportsRouter = Backbone.Router
 				"contact-reports" : "emailReports", "report-add" : "reportAdd", "report-edit/:id" : "reportEdit",
 				"report-results/:id" : "reportInstantResults", "report-charts/:type" : "reportCharts", "report-funnel/:tags" : "showFunnelReport",
 				"report-growth/:tags" : "showGrowthReport", "report-cohorts/:tag1/:tag2" : "showCohortsReport", "report-ratio/:tag1/:tag2" : "showRatioReport","report-sales":"showrevenuegraph","report-deals":"showIncomingDeals","report-calls/:type" : "showCallsReport","user-reports": "showUserReports",
-				"report-lossReason":"showDealsLossReason","reports-wonDeals":"showDealsWonChart"},
+				"report-lossReason":"showDealsLossReason","reports-wonDeals":"showDealsWonChart","rep-reports":"showRepPerformance"},
 			/**
 			 * Shows reports categories
 			 */
@@ -965,6 +965,26 @@ var ReportsRouter = Backbone.Router
 							// Set the name
 
 							initSalesCharts(function()
+							{
+								showsalesReportGraphs();
+					});
+						}, "#content");
+					});
+			},
+			
+			showRepPerformance : function()
+			{
+				hideTransitionBar();
+				initReportLibs(function()
+				{
+							// Load Reports Template
+						getTemplate("report-user-performance", {}, undefined, function(template_ui){
+						if(!template_ui)
+							  return;
+						$('#content').html($(template_ui));	
+							// Set the name
+
+						initUserReports(function()
 							{
 								showsalesReportGraphs();
 					});
