@@ -160,6 +160,9 @@ function showTicketsInZendesk(data)
 			 */
 			all_tickets = JSON.parse(data.all_tickets);
 			first_five = all_tickets.splice(0, 5);
+			if(first_five){
+    			$('.zendesk-tickets-footer').removeClass('hide');
+    		}
 		}
 		catch (err)
 		{
@@ -172,8 +175,10 @@ function showTicketsInZendesk(data)
 
 		// Get and fill the template with tickets
 		getTemplate('zendesk-ticket-stream', first_five, undefined, function(template_ui1){
-	 		if(!template_ui1)
+	 		if(!template_ui1){
 	    		return;
+	    	}
+
 	    	var all_tickets_template = template_ui1;
 	    	// show the tickets in Zendeks panel
 	    	console.log(all_tickets_template);
@@ -191,15 +196,17 @@ function showTicketsInZendesk(data)
 			 * all_tickets and show every time
 			 */
 			 $('body').off('click', '.revoke-widget');
-			 $("#widgets").on('click','#more_tickets', function(e){
+			 $("#widgets").off('click','#zen_more_tickets');
+			 $("#widgets").on('click','#zen_more_tickets', function(e){
 				e.preventDefault();
 
 				// If all tickets is not defined, return
 				if (!all_tickets)
 					return;
-
+				
 				// More tickets are shown in the tickets panel
-				showMoreTickets(all_tickets.splice(0, 5));
+
+				showZenMoreTickets(all_tickets.splice(0, 5));
 			});
 			
 		}, null);
@@ -217,7 +224,7 @@ function showTicketsInZendesk(data)
  * @param more_tickets
  *            List of tickets
  */
-function showMoreTickets(more_tickets)
+function showZenMoreTickets(more_tickets)
 {
 	// Show spinner until tickets are shown
 	$('#spinner-tickets').show();
@@ -241,17 +248,15 @@ function showMoreTickets(more_tickets)
 	getTemplate('zendesk-ticket-stream', more_tickets, undefined, function(template_ui){
  		if(!template_ui)
     		return;
-		$('#all_tickets_panel').append(more_tickets_template);
+		$('#all_tickets_panel').append(template_ui);
 		$('#spinner-tickets').hide();
 
 		// Load jquery time ago function to show time ago in tickets
 		head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
 		{
-			$(".time-ago", more_tickets_template).timeago();
+			$(".time-ago", template_ui).timeago();
 		});
 	}, null);
-
-		
 }
 
 /**
