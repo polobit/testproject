@@ -2,6 +2,10 @@ package com.agilecrm.landingpages;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.commons.lang.StringUtils;
+
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.google.appengine.api.NamespaceManager;
 import com.googlecode.objectify.Query;
@@ -25,6 +29,44 @@ public class LandingPageUtil
 			return null;
 		}
 	}
+	
+	public static LandingPage getLandingPage(HttpServletRequest req)
+	{
+		
+		String cname = req.getParameter("cname");
+			if(cname != null) {
+				String oldNameSpace = NamespaceManager.get();
+				NamespaceManager.set("");
+				
+				try
+				{
+					Query<LandingPageCNames> q = null;
+					ObjectifyGenericDao<LandingPageCNames> dao = new ObjectifyGenericDao<LandingPageCNames>(LandingPageCNames.class);
+					q = dao.ofy().query(LandingPageCNames.class);
+					q.filter("cname", cname);
+					LandingPageCNames lpCNames =  q.get();
+					if(lpCNames == null)
+						return null;
+					
+					NamespaceManager.set(lpCNames.domain);
+					return getLandingPage(lpCNames.landing_page_id);
+				}
+				finally
+				{
+					NamespaceManager.set(oldNameSpace);
+				}
+				
+				
+			} else {
+				String idPath = req.getPathInfo();
+				
+				if(StringUtils.isEmpty(idPath))
+					return null;
+							
+				return LandingPageUtil.getLandingPage(Long.parseLong(idPath.substring(1)));
+			}
+	}
+	
 
 	public static List<LandingPage> getLandingPages()
 	{

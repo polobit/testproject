@@ -18,73 +18,64 @@ import com.google.appengine.api.utils.SystemProperty;
  */
 public class LandingPageServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public LandingPageServlet() {
-        super();
-        // TODO Auto-generated constructor stub
-    }
 
 	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 * @see HttpServlet#HttpServlet()
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	public LandingPageServlet() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+	/**
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
+	 *      response)
+	 */
+	protected void doGet(HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException {
 		doPost(request, response);
 	}
 
 	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
+	 *      response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-    	response.setContentType("text/html");
+
+		response.setContentType("text/html");
     	PrintWriter out = response.getWriter();
     	
 		try {
-			String idPath = request.getPathInfo();
-			Long landingPageId = 0L;
-			if(idPath != null && !idPath.isEmpty()) {
+				LandingPage landingPage = LandingPageUtil.getLandingPage(request);
+				if(landingPage == null)
+				throw new Exception("No landing page found.");
 				
-				landingPageId = Long.parseLong(idPath.substring(1));				
-				LandingPage landingPage = LandingPageUtil.getLandingPage(landingPageId);
-				if(landingPage != null) {
-					String fullXHtml = landingPage.html;
-					
-					String domainHost = "http://localhost:8888";
-					if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Production) {
-						domainHost = "https://" + NamespaceManager.get() +  ".agilecrm.com";		
-						//domainHost = "https://" + NamespaceManager.get() + "-dot-sandbox-dot-agilecrmbeta.appspot.com";
-					}
-					
-					String formSubmitCode = "<script>(function(a){var b=a.onload,p=false;if(p){a.onload=\"function\"!=typeof b?function(){try{_agile_load_form_fields()}catch(a){}}:function(){b();try{_agile_load_form_fields()}catch(a){}}};a.document.forms[\"agile-form\"].onsubmit=function(a){a.preventDefault();try{_agile_synch_form_v3()}catch(b){this.submit()}}})(window);</script>";
-					String analyticsCode = "<script src=\""+domainHost+"/stats/min/agile-min.js\"></script>"
-							+ "<script> _agile.set_account('%s', '"+NamespaceManager.get()+"'); _agile.track_page_view();</script>";
-					
-					ObjectifyGenericDao<APIKey> dao = new ObjectifyGenericDao<APIKey>(APIKey.class);
-					APIKey apiKey = dao.ofy().query(APIKey.class).get();
-					if(apiKey != null && apiKey.js_api_key != null) {
-						analyticsCode = String.format(analyticsCode, apiKey.js_api_key);
-					}					
-					
-					fullXHtml = fullXHtml.replace("</head>", "<style>"+landingPage.css+"</style></head>");
-					fullXHtml = fullXHtml.replace("</body>", formSubmitCode+"<script>"+landingPage.js+"</script>"+analyticsCode+"</body>");
-					
-					out.print(fullXHtml);
-				} else {
-					throw new NumberFormatException();
+				String fullXHtml = landingPage.html;
+				
+				String domainHost = "http://localhost:8888";
+				if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Production) {
+					domainHost = "https://" + NamespaceManager.get() +  ".agilecrm.com";		
+					//domainHost = "https://" + NamespaceManager.get() + "-dot-sandbox-dot-agilecrmbeta.appspot.com";
 				}
 				
-			} else {
-				throw new Exception();
-			}
-		} catch (NumberFormatException e) {
-			out.print("<h1>No landing page found.</h1>");
+				String formSubmitCode = "<script>(function(a){var b=a.onload,p=false;if(p){a.onload=\"function\"!=typeof b?function(){try{_agile_load_form_fields()}catch(a){}}:function(){b();try{_agile_load_form_fields()}catch(a){}}};a.document.forms[\"agile-form\"].onsubmit=function(a){a.preventDefault();try{_agile_synch_form_v3()}catch(b){this.submit()}}})(window);</script>";
+				String analyticsCode = "<script src=\""+domainHost+"/stats/min/agile-min.js\"></script>"
+						+ "<script> _agile.set_account('%s', '"+NamespaceManager.get()+"'); _agile.track_page_view();</script>";
+				
+				ObjectifyGenericDao<APIKey> dao = new ObjectifyGenericDao<APIKey>(APIKey.class);
+				APIKey apiKey = dao.ofy().query(APIKey.class).get();
+				if(apiKey != null && apiKey.js_api_key != null) {
+					analyticsCode = String.format(analyticsCode, apiKey.js_api_key);
+				}					
+				
+				fullXHtml = fullXHtml.replace("</head>", "<style>"+landingPage.css+"</style></head>");
+				fullXHtml = fullXHtml.replace("</body>", formSubmitCode+"<script>"+landingPage.js+"</script>"+analyticsCode+"</body>");
+				
+				out.print(fullXHtml);
+				
 		} catch (Exception e) {
-			//redirect to agilecrm.com
-			response.sendRedirect("https://www.agilecrm.com/");
+			out.print("<h1>"+e.getMessage()+"</h1>");
 		}
 		
 	}
-
 }

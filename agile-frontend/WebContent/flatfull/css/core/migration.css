@@ -1521,3 +1521,8 @@ a#email-reply{
 }
 
 /* end milestone deal sources */
+
+
+a.lpt_fancybox:hover{
+  opacity: 0.6;
+}

@@ -40,14 +40,15 @@ public class LandingPage
     
     public Long updated_time = 0L;
     
-    @Transient
     public String cname = "";
     
-    @Transient
     public Long cname_id = 0L;
     
     @Transient
     public boolean isDuplicateCName = false;
+    
+    @Transient
+    public boolean requestViaCnameSetup = false;
 
     public static ObjectifyGenericDao<LandingPage> dao = new ObjectifyGenericDao<LandingPage>(LandingPage.class);
 
@@ -83,13 +84,15 @@ public class LandingPage
 					lpCNames.save();
 					if(lpCNames.id != null) {
 						cname_id = lpCNames.id;
+						dao.put(this);
 					}
 				}
 				
 			}
 		} else {
 		    //when updating
-			dao.put(this);
+			if(!requestViaCnameSetup)
+				dao.put(this);
 			
 			//update
 			if(!cname.isEmpty()) {
@@ -106,6 +109,9 @@ public class LandingPage
 					LandingPageCNames lpCNames = LandingPageUtil.getLandingPageCNames(cname_id);
 					lpCNames.cname = cname;
 					lpCNames.save();
+					if(lpCNames.id != null) {
+						cname_id = lpCNames.id;
+					}
 				} else {
 					LandingPageCNames lpCNames = new LandingPageCNames(NamespaceManager.get(),id,cname);
 					lpCNames.save();
@@ -113,6 +119,7 @@ public class LandingPage
 						cname_id = lpCNames.id;
 					}
 				}
+				dao.put(this);
 			}
 			
 		}
