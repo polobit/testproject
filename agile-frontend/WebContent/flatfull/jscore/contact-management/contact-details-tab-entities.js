@@ -763,7 +763,9 @@ function show_resubscribe_modal(){
 					if ($('div#contact-detail-resubscribe-modal').size() != 0)
 						$('div#contact-detail-resubscribe-modal').remove();
 
-					$(template_ui).on('shown.bs.modal', function (e) {
+					var modal = $(template_ui).modal('show');
+
+					modal.on('shown.bs.modal', function (e) {
 		              
 		                var el = $(template_ui);
 
@@ -771,10 +773,18 @@ function show_resubscribe_modal(){
 		              fillSelect('campaigns-list', '/core/api/workflows', 'workflow', function(collection)
 						{
 							
+								$('#campaigns-list', el).empty();
+
+								if($loading){
+									if ($('#campaigns-list', el).next().hasClass("select-loading"))
+										$('#campaigns-list', el).next().html($loading);
+									else
+										$('#campaigns-list', el).after($loading);
+								}
+
+								
 
 								var email_workflows = get_email_workflows(collection.toJSON());
-
-								$('#campaigns-list', el).empty();
 								var modelTemplate = Handlebars.compile(optionsTemplate);
 								$.each(email_workflows, function(index, model)
 								{
@@ -782,11 +792,17 @@ function show_resubscribe_modal(){
 									$('#campaigns-list', el).append(optionsHTML);
 								});
 
+								// Remove image
+								$('#campaigns-list', el).next().remove();
+
 								head.js(LIB_PATH + 'lib/bootstrap-multiselect/bootstrap-multiselect.js', CSS_PATH + 'css/bootstrap-multiselect/bootstrap-multiselect.css', function(){
 
 									$('#campaigns-list', el).multiselect({
 										  onInitialized: function(select, container) {
 			        								
+		    								$(container).find('button').addClass('w-md');
+		    								$(container).find('span').addClass('pull-left');
+		    								$(container).find('b.caret').addClass('pull-right m-t-sm');
 			    						},
 										  nonSelectedText: 'Select Campaign',
 										  selectAllValue: "ALL",
@@ -835,7 +851,12 @@ function show_resubscribe_modal(){
 				
 						}, optionsTemplate, true, el);
 
-					}).modal('show');
+					});
+	
+					// Modal hidden
+					modal.on('hidden.bs.modal', function(e){
+						contact_details_tab.load_campaigns()
+					});
 	
 			}, null);
 
