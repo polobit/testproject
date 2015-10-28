@@ -261,12 +261,24 @@ function removeFullCalendarEvents(ownerid)
 
 	eventsURL += '&owner_id=' + ownerid;
 	console.log('-----------------', eventsURL);
-	$.getJSON(eventsURL, function(doc)
+
+
+	// Removes all events at once
+	$('#calendar_event').fullCalendar('removeEvents', function(value, index) {
+		if(value && value.owner && value.owner.id)
+		return value.owner.id != ownerid;
+	});
+
+	showLoadingOnCalendar(false);
+
+
+/*	$.getJSON(eventsURL, function(doc)
 	{
 		var ids = [];
 		$.each(doc, function(index, data)
 		{
-			ids.push(data);	
+			if(data.id)
+				ids.push(data.id);	
 		});
 
 		// Removes all events at once
@@ -274,8 +286,8 @@ function removeFullCalendarEvents(ownerid)
 			return $.inArray(value, ids) < 0;
 		});
 
-		showLoadingOnCalendar(false);
-	});
+		
+	});*/
 }
 
 
