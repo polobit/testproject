@@ -767,57 +767,63 @@ function show_resubscribe_modal(){
 		              
 		                var el = $(template_ui);
 
-							head.js(LIB_PATH + 'lib/bootstrap-multiselect/bootstrap-multiselect.js', CSS_PATH + 'css/bootstrap-multiselect/bootstrap-multiselect.css', function(){
+		               var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
+		              fillSelect('campaigns-list', '/core/api/workflows', 'workflow', function()
+						{
+							
+								head.js(LIB_PATH + 'lib/bootstrap-multiselect/bootstrap-multiselect.js', CSS_PATH + 'css/bootstrap-multiselect/bootstrap-multiselect.css', function(){
 
-								$('#campaigns-list', el).multiselect({
-									  onInitialized: function(select, container) {
-		        								
-		    						},
-									  nonSelectedText: 'Select Campaign',
-									  selectAllValue: "ALL",
-									  includeSelectAllOption: true,
-									  maxHeight: 200,
-									  disableIfEmpty: true,
-									  buttonText: function(options){
+									$('#campaigns-list', el).multiselect({
+										  onInitialized: function(select, container) {
+			        								
+			    						},
+										  nonSelectedText: 'Select Campaign',
+										  selectAllValue: "ALL",
+										  includeSelectAllOption: true,
+										  maxHeight: 200,
+										  disableIfEmpty: true,
+										  buttonText: function(options){
 
-									  		if(options.length == 0)
-									  			return 'Select Campaign';
+										  		if(options.length == 0)
+										  			return 'Select Campaign';
 
-									  		return options.length + ' selected';
-									  },
-									  onSelectAll: function(checked){
-									  		unsubscribe_contact(checked);
-									  },
-									  onChange: function(option, checked) {
+										  		return options.length + ' selected';
+										  },
+										  onSelectAll: function(checked){
+										  		unsubscribe_contact(checked);
+										  },
+										  onChange: function(option, checked) {
 
-									  			if(!option)
-									  				return;
+										  			if(!option)
+										  				return;
 
-												if(option.val() == 'ALL' && checked)
-												{
-													unsubscribe_contact(selected, true);
-													return;
-												}
+													if(option.val() == 'ALL' && checked)
+													{
+														unsubscribe_contact(selected, true);
+														return;
+													}
 
-												unsubscribe_contact(false);
-											},
-									   onDropdownShow: function(event) {
+													unsubscribe_contact(false);
+												},
+										   onDropdownShow: function(event) {
 
-										      var $menu = $(event.currentTarget).find(".dropdown-menu li label");
-										      
-										      $menu.css({ "width": "250px","white-space": "nowrap", "overflow": "hidden","text-overflow": "ellipsis"});
-										  }
-								});
+											      var $menu = $(event.currentTarget).find(".dropdown-menu li label");
+											      
+											      $menu.css({ "width": "250px","white-space": "nowrap", "overflow": "hidden","text-overflow": "ellipsis"});
+											  }
+									});
 
-								$('div#contact-detail-resubscribe-modal .modal-body').html(el.find('form'));
+									$('div#contact-detail-resubscribe-modal .modal-body').html(el.find('form'));
 
-								// Unsubscribe
-								unsubscribe_contact(false);
+									// Unsubscribe
+									unsubscribe_contact(false);
 
-								// Resubscribe
-								resubscribe(el);
-						});
-					
+									// Resubscribe
+									resubscribe(el);
+							});
+				
+						}, optionsTemplate, false);
+
 					}).modal('show');
 	
 			}, null);
