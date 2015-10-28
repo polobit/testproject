@@ -268,9 +268,9 @@ function showBar(url, selector, name, yaxis_name, stacked)
 			    },
 			    legend: {
 			        align: 'right',
-			        x: -50,
+			        x: -52,
 			        verticalAlign: 'top',
-			        y: -20,
+			        y: 0,
 			        floating: true,
 			        layout: 'horizontal',
 			        backgroundColor: (Highcharts.theme&&Highcharts.theme.legendBackgroundColorSolid)||'white',
