@@ -140,7 +140,7 @@ function fillSelect(selectId, url, parseKey, callback, template, isUlDropdown, e
 		{
 			// execute the callback, passing parameters as
 			// necessary
-			callback();
+			callback(collection);
 		}
 	}
 

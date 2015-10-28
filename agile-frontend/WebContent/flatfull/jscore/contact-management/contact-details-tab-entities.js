@@ -768,9 +768,19 @@ function show_resubscribe_modal(){
 		                var el = $(template_ui);
 
 		               var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
-		              fillSelect('campaigns-list', '/core/api/workflows', 'workflow', function()
+		              fillSelect('campaigns-list', '/core/api/workflows', 'workflow', function(collection)
 						{
 							
+
+								var email_workflows = get_email_workflows(collection.toJSON());
+
+								$('#campaigns-list', el).empty();
+								var modelTemplate = Handlebars.compile(optionsTemplate);
+								$.each(email_workflows, function(index, model)
+								{
+									var optionsHTML = modelTemplate(model);
+									$('#campaigns-list', el).append(optionsHTML);
+								});
 
 								head.js(LIB_PATH + 'lib/bootstrap-multiselect/bootstrap-multiselect.js', CSS_PATH + 'css/bootstrap-multiselect/bootstrap-multiselect.css', function(){
 
@@ -828,5 +838,35 @@ function show_resubscribe_modal(){
 					}).modal('show');
 	
 			}, null);
+
+}
+
+function get_email_workflows(workflows){
+
+	if(!workflows)
+		return;
+
+	var email_workflows = [];
+
+	for (var i = 0, len = workflows.length; i < len; i++){
+        
+        var workflow = workflows[i];
+        var rules = JSON.parse(workflow["rules"]);
+        var nodes = rules["nodes"];
+
+		// Iterate nodes to check SendEmail
+		for(var j=0, length = nodes.length; j < length; j++){
+
+			var node = nodes[j];
+
+			if(node["NodeDefinition"]["name"] == "Send Email" && node["NodeDefinition"]["workflow_tasklet_class_name"] == "com.campaignio.tasklets.agile.SendEmail")
+			{
+				email_workflows.push(workflow);
+				break;
+			}
+		}
+    }
+
+    return email_workflows;
 
 }
