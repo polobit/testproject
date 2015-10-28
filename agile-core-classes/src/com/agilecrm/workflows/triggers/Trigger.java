@@ -149,7 +149,7 @@ public class Trigger
 	public Boolean new_email_trigger_run_on_new_contacts = true;
 
 	@NotSaved
-	public Boolean is_disabled = true;
+	public Boolean is_disabled = false;
 
 	/**
 	 * Returns campaign name as an xml element which is retrieved using
@@ -209,10 +209,10 @@ public class Trigger
 		if (campaign_id == null)
 			return " ";
 
-		Workflow workflow = WorkflowUtil.getWorkflow(campaign_id);
+		this.workflow = WorkflowUtil.getWorkflow(campaign_id);
 
-		if (workflow != null)
-			return workflow.name;
+		if (this.workflow != null)
+			return this.workflow.name;
 
 		return "?";
 	}
@@ -272,12 +272,12 @@ public class Trigger
 	{
 		try
 		{
-			if (workflow == null)
+			if (this.workflow == null)
 			{
 				getCampaign();
 			}
 
-			if (workflow != null)
+			if (this.workflow != null)
 				this.is_disabled = workflow.is_disabled;
 
 		}

@@ -313,7 +313,7 @@
 				$.each(campaigns, function(index,camp){
 					//console.log(customfield);
 					if(camp.is_disabled){
- 						html += '<option value="'+camp.id+'" disabled = disabled>'+camp.name+' (disabled)</option>';
+ 						html += '<option value="'+camp.id+'" disabled = disabled>'+camp.name+' (Disabled)</option>';
  						return true;
  					} 
 
