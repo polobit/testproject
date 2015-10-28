@@ -117,6 +117,11 @@ public class TaskletUtil
 		// Assign to Start
 		if (currentNodeJSON == null)
 		{
+			if (campaignJSON.has("is_disabled"))
+			{
+				if (campaignJSON.getBoolean("is_disabled"))
+					return;
+			}
 			nextNode = START_NODE_ID;
 
 			data = new JSONObject();
