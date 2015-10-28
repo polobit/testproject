@@ -263,13 +263,16 @@ function removeFullCalendarEvents(ownerid)
 	console.log('-----------------', eventsURL);
 	$.getJSON(eventsURL, function(doc)
 	{
+		var ids = [];
 		$.each(doc, function(index, data)
 		{
-			$('#calendar_event').fullCalendar('removeEvents', data.id);
+			ids.push(data);	
 		});
+
+		// Removes all events at once
+		$('#calendar_event').fullCalendar('removeEvents', ids);
 		showLoadingOnCalendar(false);
 	});
-
 }
 
 
