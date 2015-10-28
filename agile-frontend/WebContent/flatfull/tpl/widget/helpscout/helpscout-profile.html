@@ -47,12 +47,8 @@
 </script>
 
 <script id="helpscout-conversation-template" type="text/html">
-
-{{#if mailbox}}
-	{{#each mailbox}}
-
-{{#isArray conversations}}
-	{{#each conversations}}
+{{#isArray this}}
+	{{#each this}}
 		<li class="list-group-item r-none b-l-none b-r-none helpscout_ticket_hover"  id="{{id}}">
 			<div class="overflow-elipsis" title="{{subject}}">
 				<div class="text-flow-ellipsis pull-left" style="width:12rem">
@@ -67,15 +63,14 @@
 			<div class="clearfix"></div>
 		</li>
 	{{/each}}
-{{/isArray}}
-
-{{/each}}
+	<div class="widget_tab_footer helpscout_show_more hide" align="center">
+		<a class="c-p text-info" id="help_show_more" rel="tooltip" title="Click to see more tickets">Show More</a>
+	</div>
 {{else}}
-<div class="widget_content word-break">
-{{message}}
-</div>
-{{/if}}
-
+	<div class="widget_content word-break">
+	{{message}}
+	</div>
+{{/isArray}}
 </script>
 
 <script id="helpscout-message-template" type="text/html">

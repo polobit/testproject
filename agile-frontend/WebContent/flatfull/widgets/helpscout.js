@@ -4,6 +4,8 @@
  * based on the function provided on agile_widgets.js (Third party API).
  */
 
+var helpscoutmails = [];
+var showMoreCount = 1;
 
 /**
  * Show data retrieved from HelpScout in the HelpScout widget
@@ -37,7 +39,7 @@ function showHelpScoutMails(contact_id)
 		{
 			$('#HelpScout').html(getTemplate('helpscout-profile', data));
 			customerId = data.id;
-			showMailsInHelpScout(data.id, contact_id);
+			showMailsInHelpScout(data.id, contact_id, 0);
 		}
 		
 	}, contact_id);
@@ -79,8 +81,45 @@ function getMailsFromHelpScout(callback, contact_id)
  * @param data
  *            List of tickets
  */
-function showMailsInHelpScout(customerId, contact_id)
+function showMailsInHelpScout(customerId, contact_id, offSet)
 {
+	if(offSet == 0){		
+		loadTickets(customerId, contact_id, function(data){			
+			if(data.mailbox){
+				var obj = data.mailbox;
+				$.each(obj, function( key, value ) {
+					var arrayList = obj[key].conversations;
+					$.each(arrayList, function( index, val ) {
+						helpscoutmails.push(arrayList[index]);
+				    });
+				});
+			}
+
+			var result = helpscoutmails.slice(0, 5);
+			// Get and fill the template with tickets
+			$('#all_conv_panel').html(getTemplate('helpscout-conversation', result));
+
+			if(helpscoutmails.length > 5){
+				$('.helpscout_show_more').removeClass('hide');
+			}
+
+			// Load jquery time ago function to show time ago in tickets
+			head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
+			{
+				$(".time-ago").timeago();
+			});
+		});
+	}else if(offSet > 0  && (offSet+5) < helpscoutmails.length){
+		var result = helpscoutmails.slice(offSet, (offSet+5));
+		$('#all_conv_panel').apped(getTemplate('helpscout-conversation', result));
+	}else {
+		var result = helpscoutmails.slice(offSet, helpscoutmails.length);
+		$('#all_conv_panel').append(getTemplate('helpscout-conversation', result));
+	}
+}
+
+function loadTickets(customerId, contact_id, callback){
+
 	// show loading until tickets are retrieved
 	$('#all_conv_panel').html(HELPSCOUT_UPDATE_LOAD_IMAGE);
 	/*
@@ -89,14 +128,9 @@ function showMailsInHelpScout(customerId, contact_id)
 	 */
 	queueGetRequest("widget_queue_"+contact_id, "/core/api/widgets/helpscout/get/" + HelpScout_Plugin_Id + "/customer/" + customerId, "json", function success(data)
 	{
-		// Get and fill the template with tickets
-		$('#all_conv_panel').html(getTemplate('helpscout-conversation', data));
-
-		// Load jquery time ago function to show time ago in tickets
-		head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
-		{
-			$(".time-ago").timeago();
-		});
+		// If defined, execute the callback function
+		if (callback && typeof (callback) === "function")
+			callback(data);
 
 	}, function error(data)
 	{
@@ -221,7 +255,7 @@ function sendRequestToHelpScout(url, formId, modalId, errorPanelId, contact_id)
 		setTimeout(function()
 		{
 			$('#' + modalId).modal("hide");
-			showMailsInHelpScout(customerId, contact_id);
+			showMailsInHelpScout(customerId, contact_id, 0);
 		}, 2000);
 
 	}).error(function(data)
@@ -282,6 +316,8 @@ function startHelpScoutWidget(contact_id){
 
 	HELPSCOUT_PLUGIN_NAME = "HelpScout";
 
+	helpscoutmails = [];
+
 	// HelpScout update loading image declared as global
 	HELPSCOUT_UPDATE_LOAD_IMAGE = '<center><img id="conv_load" src=' + '\"img/ajax-loader-cursor.gif\" style="margin-top: 10px;margin-bottom: 14px;"></img></center>';
 
@@ -302,9 +338,16 @@ function startHelpScoutWidget(contact_id){
 
 	// On click of add ticket, add ticket method is called
     $("#widgets").off("click", "#add_conv");
-	$("#widgets").on("click", "#add_conv", function(e)
-	{
+	$("#widgets").on("click", "#add_conv", function(e){
 		e.preventDefault();
 		addTicketToHelpScout(contact_id);
+	});
+
+    $("#widgets").off("click", "#help_show_more");
+	$("#widgets").on("click", "#help_show_more", function(e){
+		e.preventDefault();
+		var offSet = showMoreCount * 5;
+		showMailsInHelpScout(showMailsInHelpScout, contact_id, offSet);
+		++showMoreCount;
 	});
 }
