@@ -240,6 +240,7 @@ public class LoginServlet extends HttpServlet
 	    return;
 	}
 
+	System.out.println("page to login into : " + hash);
 	if (StringUtils.isEmpty(hash))
 	{
 	    response.sendRedirect("/");
