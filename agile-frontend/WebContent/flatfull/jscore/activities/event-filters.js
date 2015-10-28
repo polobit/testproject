@@ -270,7 +270,10 @@ function removeFullCalendarEvents(ownerid)
 		});
 
 		// Removes all events at once
-		$('#calendar_event').fullCalendar('removeEventSource', ids);
+		$('#calendar_event').fullCalendar('removeEvents', function(value, index) {
+			return $.inArray(value, ids) < 0;
+		});
+
 		showLoadingOnCalendar(false);
 	});
 }
