@@ -14,15 +14,6 @@
                     <label class="control-label col-sm-4"><b>Campaigns</b> <!--<span class="field_req">*</span>--></label>
                     <div class="controls col-sm-8">
                         <select id="campaigns-list" name="campaigns_list" class="form-control checkedMultiSelect" multiple="multiple" style="display: none;">
-                             {{#contact_model}}
-                                {{#contact_campaigns this "campaignStatus"}}
-                                    {{#if this}}
-                                        {{#each this.active}}
-                                            <option value="{{campaign_id}}">{{campaign_name}}</option>
-                                        {{/each}}
-                                    {{/if}}
-                                {{/contact_campaigns}}
-                            {{/contact_model}}
                         </select>
                     </div>
                     </div>

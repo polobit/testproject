@@ -771,6 +771,7 @@ function show_resubscribe_modal(){
 		              fillSelect('campaigns-list', '/core/api/workflows', 'workflow', function()
 						{
 							
+
 								head.js(LIB_PATH + 'lib/bootstrap-multiselect/bootstrap-multiselect.js', CSS_PATH + 'css/bootstrap-multiselect/bootstrap-multiselect.css', function(){
 
 									$('#campaigns-list', el).multiselect({
@@ -822,7 +823,7 @@ function show_resubscribe_modal(){
 									resubscribe(el);
 							});
 				
-						}, optionsTemplate, false);
+						}, optionsTemplate, true, el);
 
 					}).modal('show');
 	
