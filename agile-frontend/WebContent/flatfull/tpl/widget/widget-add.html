@@ -10,9 +10,15 @@
         <span  class="thumbnail text-2x text-center  bg-transparent m-b-none thumb-xl m-t-sm" style="font-size:21px;width:150px;"><span class="block"><i class="icon icon-comment m-r-xs"></i>Call Script</span></span>
      </center>  
     {{else}}
+			{{#if_equals name "Bria"}}
+				<center>  
+  				<span style="font-size: 24px;width: 113px;height: 50px; text-align:center;vertical-align: middle;color: #4A4A4A;" class="thumbnail m-b-xs"><span><img src="{{logo_url}}" style="width: 40px; height: 40px;margin-right: 4px;margin-top: 1px;">Bria</span></span>
+				</center>  
+        	{{else}}
       <center> 
         <img class="thumbnail m-b-none img-responsive thumb-xl bg-transparent" src="{{logo_url}}" />
       </center>   
+			 {{/if_equals}}
    {{/if_equals}}
    {{/if_equals}}
 	<br />
@@ -48,7 +54,16 @@
                         {{/if_equals}}
                 {{/if_equals}}
     			<a class="btn btn-sm btn-danger m-r-xs" id="delete-widget" widget-name="{{name}}">Delete</a>
-				<div class="clearfix"></div>
+				
+				{{#if_equals name "Bria"}}
+					<div class="text-center m-t-sm ">
+							Download
+							<a href="https://s3.amazonaws.com/agilecrm/website/bria.jar" class="text-info" target="_blank" id="downloadBria" widget-name="Bria"> jar file </a>
+							<i class="icon-question-sign m-l-xs" style="color:#A09898;" data-toggle="tooltip" data-placement="top" title="" data-original-title="Download jar file and run it in your system to establish a connection between your Bria client and Agile CRM. Please note that you should already be logged in with selected Bria client before running this jar file."></i>
+					</div>
+				{{/if_equals}}
+
+			<div class="clearfix"></div>
     		{{else}}
 				{{#if allowedToAdd}}
 					{{#if_equals widget_type "SOCIAL"}}
@@ -58,7 +73,10 @@
 							{{else}}
 								{{#if_equals name "TwilioIO"}}
 									<a class="btn btn-sm btn-default add-widget" href="#{{name}}" widget-name="{{name}}">Add</a>
-								{{else}}											
+								{{else}}	
+									{{#if_equals name "Bria"}}
+										<a class="btn btn-sm btn-default add-widget" href="#{{name}}" widget-name="{{name}}">Add</a>
+									{{else}}										
 								<div class="btn-group pos-abs m-l-n-lg">
   									<a type="button" class="btn btn-sm btn-default add-widget" href="#{{name}}" widget-name="{{name}}">Add</a>
   									<a type="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
@@ -69,6 +87,7 @@
     									<li><a class="btn btn-sm add_to_all" href="#{{name}}" widget-name="{{name}}">Add for all users</a></li>    									
   									</ul>
 								</div>
+									{{/if_equals}}
 							 {{/if_equals}}
 						  {{/if_equals}}
 						{{else}}
@@ -354,7 +373,13 @@
     {{#if_equals name "CallScript"}}
         <center><span class="thumbnail text-2x text-center  bg-transparent m-b-none thumb-xl" style="font-size:21px;width:150px;"><span class="block"><i class="icon icon-comment m-r-xs"></i>Call Script</span></span></center>
     {{else}}
+		{{#if_equals name "Bria"}}
+			<center>
+				<span style="font-size: 24px;width: 113px;height: 50px; text-align:center;vertical-align: middle;color: #4A4A4A;" class="thumbnail m-b-xs"><span><img src="{{logo_url}}" style="width: 40px; height: 40px;margin-right: 4px;margin-top: 1px;">Bria</span></span>
+			</center>
+        {{else}}
         <center><img class="thumbnail bg-transparent thumb-xl img-responsive" src="{{logo_url}}" /></center>
+		{{/if_equals}}
     {{/if_equals}}
 {{/if_equals}}  
 	<div  id="widget-settings" widget-name="{{name}}">

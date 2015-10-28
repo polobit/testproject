@@ -91,12 +91,14 @@ public class TwitterUtil
 			Exception
 	{
 		// Check if it is twitter URl
-		if (!webUrl.startsWith("https://twitter.com/") && !webUrl.startsWith("http://twitter.com/"))
+		if (!webUrl.startsWith("https://twitter.com/") && !webUrl.startsWith("http://twitter.com/")){
 			return null;
+		}
 
 		// check if URL start with HTTP, if so replace with HTTPS
-		if (webUrl.startsWith("http://twitter.com/"))
+		if (webUrl.startsWith("http://twitter.com/")){
 			webUrl = webUrl.replace("http://twitter.com/", "https://twitter.com/");
+		}
 
 		String screenName = webUrl.substring(webUrl.lastIndexOf("/") + 1);
 		System.out.println("Twitter screen name from URL: " + screenName);
@@ -139,9 +141,10 @@ public class TwitterUtil
 		 * Iterates through Twitter users and wraps the profile details in
 		 * SocialSearchResult and adds to list
 		 */
-		for (User user : users)
+		for (User user : users){
 			// Wraps into SocialSearchResult and adds each result in to list
 			searchResults.add(wrapUserDetailsInSearchResult(user));
+		}
 
 		return searchResults;
 	}
@@ -196,7 +199,7 @@ public class TwitterUtil
 			 * Id, wrap each user details into SocialSearchResult object and add
 			 * it to list
 			 */
-			for (int i = 0; i < arrayOfIds.length(); i++)
+			for (int i = 0; i < arrayOfIds.length(); i++){
 				try
 				{
 					User user = twitter.showUser(Long.parseLong(arrayOfIds.getString(i)));
@@ -212,7 +215,7 @@ public class TwitterUtil
 					 */
 					continue;
 				}
-
+			}
 			return profilesList;
 		}
 		catch (TwitterRuntimeException e)

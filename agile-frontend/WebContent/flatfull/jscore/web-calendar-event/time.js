@@ -176,3 +176,106 @@ function getUnixTimeStampInSpecificTimezone(timezone)
 	m.set('millisecond', 00);
 	return m.valueOf();
 }
+
+
+/**
+ * gets the time
+ * @param time
+ * @param timezone
+ * @param firstTimeLoading if {true} then loading from jsp page
+ * @returns
+ */
+function getTimeInVisitorTimezone(time,timezone,firstTimeLoading)
+{
+	if(!timezone)
+		timezone=$("#timezone-"+User_Id).html();
+	var m = moment().tz(timezone);
+	var hour=null;
+	var min=null;
+	var result=null;
+	if(time){
+		result=time.split(":")
+		
+	}
+	if(result){
+		hour=result[0];
+		min=result[1];
+	}
+	m.set('hour', parseInt(hour));
+	m.set('minute', parseInt(min));
+	m.set('second', 00);
+	m.set('millisecond', 00);
+	if(firstTimeLoading==true){
+		return toTimeZoneFirstTimeLoading(m.valueOf());
+	}
+	return toTimeZone(m.valueOf());
+}
+
+
+
+/**
+ * 
+ * @param time  while loading jsp time will be 09:00-18:00 format.
+ * @param timezone  we are change @agile user 09:00 to Visitor time @Us/eastrn 
+ * @returns {String}
+ */
+function getTimeInVisitorTimezoneWhileLoading(time,timezone){
+	var workhours=null;
+	var times=null;
+	if(time!="Today is holiday")
+		times=time.split("-");
+	if(times){
+		workhours=getTimeInVisitorTimezone(times[0],timezone,true)+" - "+getTimeInVisitorTimezone(times[1],timezone,true);
+	}
+	else{
+		workhours="Today is holiday";
+	}
+	return workhours;
+}
+
+
+
+/**
+ * 
+ * @param time  after click on date picker we are changing time to visitor time
+ * @param zone
+ * @returns
+ */
+function toTimeZone(time, zone) {
+	
+	return moment.tz(time, SELECTED_TIMEZONE).format('hh:mm a')
+}
+
+
+/**
+ * converts the @agile user time to vistor time
+ * @param time
+ * @param zone
+ * @returns
+ */
+function toTimeZoneFirstTimeLoading(time, zone) {
+	
+	return moment.tz(time, jstz.determine().name()).format('hh:mm a');
+}
+
+function getVisitorWhileLoading(){
+	return jstz.determine().name(); 
+}
+
+
+function updateUserBusinessHoursInVisitorTimezone(dates){
+	
+	if(!dates)
+		dates=selecteddate;
+	
+	for(var k=0;k<=multi_user_ids.length - 1;k++){
+		var array=business_hours_array[k];
+		var s=array[convertWeekDayToArray(new Date(dates).getDay())];
+		if(s.isActive){
+			$("#workhours-"+multi_user_ids[k]).html(getTimeInVisitorTimezone(s.timeFrom)+" - "+getTimeInVisitorTimezone(s.timeTill));
+		}
+		else{
+			$("#workhours-"+multi_user_ids[k]).html("No working hours");
+		}
+	}
+}

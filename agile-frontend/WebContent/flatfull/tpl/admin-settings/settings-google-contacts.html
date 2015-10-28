@@ -219,7 +219,7 @@
        
     </form>
 {{else}}
-<div class="btn btn-primary btn-sm inline-block" id="stripe_import">Enable</div>
+<div class="btn btn-primary btn-sm inline-block" sync_type="STRIPE" id="data-sync-type">Enable</div>
 {{/if}}
 
 </div>
@@ -439,7 +439,7 @@
        
     </form>
 {{else}}
- <a href="/OAuthServlet?service=quickbook-import&return_url=' + encodeURIComponent(window.location.href) + "/quickbooks""  class="btn btn-sm btn-primary inline-block">Enable</a>
+ <a  sync_type="QUICKBOOK" id="data-sync-type"  class="btn btn-sm btn-primary inline-block">Enable</a>
 {{/if}}
 
 </div>

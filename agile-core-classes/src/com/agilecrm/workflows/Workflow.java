@@ -50,7 +50,8 @@ import com.googlecode.objectify.condition.IfDefault;
  */
 @XmlRootElement
 @Unindexed
-public class Workflow extends Cursor {
+public class Workflow extends Cursor
+{
 	/**
 	 * Id of a workflow. Each workflow has its own and unique id.Id is system
 	 * generated
@@ -109,15 +110,22 @@ public class Workflow extends Cursor {
 	public Long round_robin_owner_id = null;
 
 	/**
+	 * Status of workflow
+	 */
+
+	@Indexed
+	public boolean is_disabled = false;
+
+	/**
 	 * Initialize DataAccessObject.
 	 */
-	public static ObjectifyGenericDao<Workflow> dao = new ObjectifyGenericDao<Workflow>(
-			Workflow.class);
+	public static ObjectifyGenericDao<Workflow> dao = new ObjectifyGenericDao<Workflow>(Workflow.class);
 
 	/**
 	 * Default Workflow.
 	 */
-	Workflow() {
+	Workflow()
+	{
 
 	}
 
@@ -129,7 +137,8 @@ public class Workflow extends Cursor {
 	 * @param rules
 	 *            Workflow rules.
 	 */
-	public Workflow(String name, String rules) {
+	public Workflow(String name, String rules)
+	{
 		this.name = name;
 		this.rules = rules;
 	}
@@ -139,19 +148,22 @@ public class Workflow extends Cursor {
 	 * 
 	 * @return domain user id
 	 */
-	public Long getDomainUserId() {
+	public Long getDomainUserId()
+	{
 		if (this.creator_key == null)
 			return null;
 
 		return this.creator_key.getId();
 	}
 
-	public void setRoundRobinKey(Key<DomainUser> roundRobinKey) {
+	public void setRoundRobinKey(Key<DomainUser> roundRobinKey)
+	{
 		this.round_robin_owner_key = roundRobinKey;
 	}
 
 	@JsonIgnore
-	public Key<DomainUser> getRoundRobinKey() {
+	public Key<DomainUser> getRoundRobinKey()
+	{
 		return round_robin_owner_key;
 	}
 
@@ -163,16 +175,21 @@ public class Workflow extends Cursor {
 	 *             when domain user doesn't exist with that id.
 	 */
 	@XmlElement(name = "creator")
-	public String getCreatorName() throws Exception {
-		if (creator_key == null) {
+	public String getCreatorName() throws Exception
+	{
+		if (creator_key == null)
+		{
 			return "";
 		}
 
 		DomainUser domainUser = null;
 
-		try {
+		try
+		{
 			domainUser = DomainUserUtil.getDomainUser(creator_key.getId());
-		} catch (Exception e) {
+		}
+		catch (Exception e)
+		{
 			e.printStackTrace();
 		}
 
@@ -187,15 +204,20 @@ public class Workflow extends Cursor {
 	 * names. If given name already exists, it throws exception. Same name
 	 * causes confusion while assigning campaign.
 	 */
-	public void save() throws WebApplicationException {
+	public void save() throws WebApplicationException
+	{
 
 		// Verifies for duplicate workflow name before save
 		checkForDuplicateName();
 
-		try {
+		try
+		{
 			dao.put(this);
-		} catch (ApiProxy.RequestTooLargeException e) {
-			try {
+		}
+		catch (ApiProxy.RequestTooLargeException e)
+		{
+			try
+			{
 				JSONObject obj = new JSONObject();
 				obj.put("title", "Campaign Alert");
 				obj.put("message", "TBD - too large exception");
@@ -204,9 +226,10 @@ public class Workflow extends Cursor {
 						Response.status(Status.BAD_REQUEST)
 								.entity("Unable to save the campaign as it exceeds the limit of 1MB. Please consider splitting into multiple campaigns using the 'Transfer' property.")
 								.build());
-			} catch (JSONException e1) {
-				System.out.println("Exception while saving a Workflow"
-						+ e.getMessage());
+			}
+			catch (JSONException e1)
+			{
+				System.out.println("Exception while saving a Workflow" + e.getMessage());
 			}
 		}
 	}
@@ -214,7 +237,8 @@ public class Workflow extends Cursor {
 	/**
 	 * Removes the workflow object.
 	 */
-	public void delete() {
+	public void delete()
+	{
 		dao.delete(this);
 	}
 
@@ -228,29 +252,29 @@ public class Workflow extends Cursor {
 	 * 
 	 * @throws Exception
 	 */
-	private void checkForDuplicateName() throws WebApplicationException {
+	private void checkForDuplicateName() throws WebApplicationException
+	{
 		// New workflow
-		if (id == null) {
+		if (id == null)
+		{
 			if (WorkflowUtil.getCampaignNameCount(name) > 0)
-				throw new WebApplicationException(
-						Response.status(Status.BAD_REQUEST)
-								.entity("Please change the given name. Same kind of name already exists.")
-								.build());
+				throw new WebApplicationException(Response.status(Status.BAD_REQUEST)
+						.entity("Please change the given name. Same kind of name already exists.").build());
 		}
 
 		// Old workflow
-		if (id != null) {
+		if (id != null)
+		{
 			// to compare given name with existing ones.
 			Workflow oldWorkflow = WorkflowUtil.getWorkflow(id);
 
 			// Verifies only when workflow name updated
-			if (!oldWorkflow.name.equals(name)) {
+			if (!oldWorkflow.name.equals(name))
+			{
 				// throws exception for duplicate name
 				if (WorkflowUtil.getCampaignNameCount(name) == 1)
-					throw new WebApplicationException(
-							Response.status(Status.BAD_REQUEST)
-									.entity("Please change the given name. Same kind of name already exists.")
-									.build());
+					throw new WebApplicationException(Response.status(Status.BAD_REQUEST)
+							.entity("Please change the given name. Same kind of name already exists.").build());
 			}
 		}
 	}
@@ -260,24 +284,27 @@ public class Workflow extends Cursor {
 	 * object gets saved. Sets creator key when it is null.
 	 */
 	@PrePersist
-	private void PrePersist() {
+	private void PrePersist()
+	{
 		// Set creator_key only when it is null
-		if (creator_key == null) {
+		if (creator_key == null)
+		{
 			// Set creator(current domain user)
-			creator_key = new Key<DomainUser>(DomainUser.class, SessionManager
-					.get().getDomainId());
+			creator_key = new Key<DomainUser>(DomainUser.class, SessionManager.get().getDomainId());
 		}
 
 		// Store Created and Last Updated Time
-		if (created_time == 0L) {
+		if (created_time == 0L)
+		{
 			created_time = System.currentTimeMillis() / 1000;
 		}
 
-		else {
-			if (round_robin_owner_key == null) {
+		else
+		{
+			if (round_robin_owner_key == null)
+			{
 				if (round_robin_owner_id != null)
-					round_robin_owner_key = new Key<DomainUser>(
-							DomainUser.class, round_robin_owner_id);
+					round_robin_owner_key = new Key<DomainUser>(DomainUser.class, round_robin_owner_id);
 
 				updated_time = System.currentTimeMillis() / 1000;
 			}
@@ -285,21 +312,22 @@ public class Workflow extends Cursor {
 	}
 
 	@javax.persistence.PostLoad
-	private void PostLoad() {
+	private void PostLoad()
+	{
 		if (round_robin_owner_key != null)
 			round_robin_owner_id = round_robin_owner_key.getId();
 	}
 
-	public String toString() {
-		return "Name: " + name + " Rules: " + rules + " created_time: "
-				+ created_time + " updated_time" + updated_time;
+	public String toString()
+	{
+		return "Name: " + name + " Rules: " + rules + " created_time: " + created_time + " updated_time" + updated_time;
 	}
 
-	public static void main(String[] arg) {
+	public static void main(String[] arg)
+	{
 		BigDecimal b = new BigDecimal(22);
 		BigDecimal b1 = new BigDecimal(7);
-		System.out.println(BigDecimal.valueOf(22.0).divide(
-				BigDecimal.valueOf(7)));
+		System.out.println(BigDecimal.valueOf(22.0).divide(BigDecimal.valueOf(7)));
 
 		System.out.println(22 / 7f);
 	}

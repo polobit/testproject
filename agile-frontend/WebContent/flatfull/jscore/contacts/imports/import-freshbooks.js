@@ -58,10 +58,12 @@ $(function()
 								}
 								else if (location == "#sync/freshbooks")
 								{
+										DATA_SYNC_FORCE_FETCH=true;
 												window.location = window.location.origin + "#sync/freshbooks/setting";
 								}
 								else
 								{
+									DATA_SYNC_FORCE_FETCH=true;
 												window.location = window.location.origin + "#sync";
 								}
 				});

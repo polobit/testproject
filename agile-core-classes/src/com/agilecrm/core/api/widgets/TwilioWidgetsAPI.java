@@ -1,10 +1,5 @@
 package com.agilecrm.core.api.widgets;
 
-import java.io.IOException;
-import java.net.SocketTimeoutException;
-import java.util.Calendar;
-import java.util.TimeZone;
-
 import javax.ws.rs.Consumes;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
@@ -13,9 +8,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
-import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
@@ -29,6 +22,7 @@ import com.agilecrm.search.query.util.QueryDocumentUtil;
 import com.agilecrm.social.TwilioUtil;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.widgets.Widget;
+import com.agilecrm.widgets.util.ExceptionUtil;
 import com.agilecrm.widgets.util.WidgetUtil;
 import com.agilecrm.workflows.triggers.util.CallTriggerUtil;
 import com.thirdparty.twilio.sdk.TwilioRestClient;
@@ -66,30 +60,17 @@ public class TwilioWidgetsAPI
 	{
 		// Retrieve widget based on its id
 		Widget widget = WidgetUtil.getWidget(widgetId);
-
-		if (widget == null)
-			return null;
-
-		try
-		{
-			// Calls TwilioUtil method to retrieve numbers
-			return TwilioUtil.getOutgoingNumber(widget).toString();
+		if (widget != null){
+			try
+			{
+				// Calls TwilioUtil method to retrieve numbers
+				return TwilioUtil.getOutgoingNumber(widget).toString();
+			}catch (Exception e)
+			{
+			    throw ExceptionUtil.catchWebException(e);
+			}
 		}
-		catch (SocketTimeoutException e)
-		{
-			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-					.entity("Request timed out. Refresh and Please try again.").build());
-		}
-		catch (IOException e)
-		{
-			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-					.entity("An error occurred. Refresh and Please try again.").build());
-		}
-		catch (Exception e)
-		{
-			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
-					.build());
-		}
+		return null;
 	}
 
 	/**
@@ -106,33 +87,17 @@ public class TwilioWidgetsAPI
 	{
 		// Retrieve widget based on its id
 		Widget widget = WidgetUtil.getWidget(widgetId);
-
-		if (widget == null)
-			return null;
-
-		try
-		{
-			/*
-			 * Calls TwilioUtil method to verify a number in agile Twilio user
-			 * account
-			 */
-			return TwilioUtil.verifyOutgoingNumbers(widget, from).toString();
+		if (widget != null){
+			try
+			{
+				// Calls TwilioUtil method to verify a number in agile Twilio user
+				return TwilioUtil.verifyOutgoingNumbers(widget, from).toString();
+			}catch (Exception e)
+			{
+			    throw ExceptionUtil.catchWebException(e);
+			}
 		}
-		catch (SocketTimeoutException e)
-		{
-			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-					.entity("Request timed out. Refresh and Please try again.").build());
-		}
-		catch (IOException e)
-		{
-			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-					.entity("An error occurred. Refresh and Please try again.").build());
-		}
-		catch (Exception e)
-		{
-			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
-					.build());
-		}
+		return null;
 	}
 
 	/**
@@ -149,33 +114,17 @@ public class TwilioWidgetsAPI
 	{
 		// Retrieve widget based on its id
 		Widget widget = WidgetUtil.getWidget(widgetId);
-
-		if (widget == null)
-			return null;
-
-		try
-		{
-			/*
-			 * Create a Twilio Application for Agile in Agile User Twilio
-			 * account
-			 */
-			return TwilioUtil.getTwilioAppSID(widget);
+		if (widget != null){
+			try
+			{
+				// Create a Twilio Application for Agile in Agile User Twilio account
+				return TwilioUtil.getTwilioAppSID(widget);
+			}catch (Exception e)
+			{
+			    throw ExceptionUtil.catchWebException(e);
+			}
 		}
-		catch (SocketTimeoutException e)
-		{
-			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-					.entity("Request timed out. Refresh and Please try again.").build());
-		}
-		catch (IOException e)
-		{
-			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-					.entity("An error occurred. Refresh and Please try again.").build());
-		}
-		catch (Exception e)
-		{
-			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
-					.build());
-		}
+		return null;
 	}
 
 	/**
@@ -195,33 +144,17 @@ public class TwilioWidgetsAPI
 	{
 		// Retrieve widget based on its id
 		Widget widget = WidgetUtil.getWidget(widgetId);
-
-		if (widget == null)
-			return null;
-
-		try
-		{
-			/*
-			 * Calls TwilioUtil method to generate a token to make calls
-			 */
-			return TwilioUtil.generateTwilioToken(widget);
+		if (widget != null){
+			try
+			{
+				// Calls TwilioUtil method to generate a token to make calls
+				return TwilioUtil.generateTwilioToken(widget);
+			}catch (Exception e)
+			{
+			    throw ExceptionUtil.catchWebException(e);
+			}
 		}
-		catch (SocketTimeoutException e)
-		{
-			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-					.entity("Request timed out. Refresh and Please try again.").build());
-		}
-		catch (IOException e)
-		{
-			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-					.entity("An error occurred. Refresh and Please try again.").build());
-		}
-		catch (Exception e)
-		{
-			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
-					.build());
-		}
-
+		return null;
 	}
 
 	/**
@@ -239,32 +172,17 @@ public class TwilioWidgetsAPI
 	{
 		// Retrieve widget based on its id
 		Widget widget = WidgetUtil.getWidget(widgetId);
-
-		if (widget == null)
-			return null;
-
-		try
-		{
-
-			// Calls TwilioUtil method to retrieve call logs for the "to" number
-			return TwilioUtil.getCallLogsWithRecordingsFromTwilioIO(widget, to).toString();
+		if (widget != null){
+			try
+			{
+				// Calls TwilioUtil method to retrieve call logs for the "to" number
+				return TwilioUtil.getCallLogsWithRecordingsFromTwilioIO(widget, to).toString();
+			}catch (Exception e)
+			{
+			    throw ExceptionUtil.catchWebException(e);
+			}
 		}
-		catch (SocketTimeoutException e)
-		{
-			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-					.entity("Request timed out. Refresh and Please try again.").build());
-		}
-		catch (IOException e)
-		{
-			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-					.entity("An error occurred. Refresh and Please try again.").build());
-		}
-		catch (Exception e)
-		{
-			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
-					.build());
-		}
-
+		return null;
 	}
 
 	/**
@@ -281,29 +199,17 @@ public class TwilioWidgetsAPI
 	{
 		// Retrieve widget based on its id
 		Widget widget = WidgetUtil.getWidget(widgetId);
-
-		if (widget == null)
-			return null;
-		try
-		{
-			// Calls TwilioUtil method to retrive incoming numbers
-			return TwilioUtil.getIncomingNumber(widget).toString();
+		if (widget != null){
+			try
+			{
+				// Calls TwilioUtil method to retrive incoming numbers
+				return TwilioUtil.getIncomingNumber(widget).toString();
+			}catch (Exception e)
+			{
+			    throw ExceptionUtil.catchWebException(e);
+			}
 		}
-		catch (SocketTimeoutException e)
-		{
-			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-					.entity("Request timed out. Refresh and Please try again.").build());
-		}
-		catch (IOException e)
-		{
-			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-					.entity("An error occurred. Refresh and Please try again.").build());
-		}
-		catch (Exception e)
-		{
-			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
-					.build());
-		}
+		return null;
 	}
 
 	/**
@@ -358,32 +264,13 @@ public class TwilioWidgetsAPI
 			@PathParam("auth-token") String authToken)
 	{
 		System.out.println("In validateaccount" + accountSID + " " + authToken);
-		/*
-		 * TwilioRestClient client = new TwilioRestClient(accountSID, authToken,
-		 * null); System.out.println(client.getAccountSid());
-		 */
 		try
 		{
-			/*
-			 * // Calls TwilioUtil method to retrieve numbers return
-			 * TwilioUtil.getOutgoingNumberTwilioIO(client).toString();
-			 */
+			 // Calls TwilioUtil method to retrieve numbers return
 			return TwilioUtil.checkCredentials(accountSID, authToken);
-		}
-		catch (SocketTimeoutException e)
+		}catch (Exception e)
 		{
-			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-					.entity("Request timed out. Refresh and Please try again.").build());
-		}
-		catch (IOException e)
-		{
-			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-					.entity("An error occurred. Refresh and Please try again.").build());
-		}
-		catch (Exception e)
-		{
-			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
-					.build());
+		    throw ExceptionUtil.catchWebException(e);
 		}
 
 	}
@@ -407,23 +294,10 @@ public class TwilioWidgetsAPI
 		{
 			// Calls TwilioUtil method to retrieve numbers
 			return TwilioUtil.getOutgoingNumberTwilioIO(client).toString();
-		}
-		catch (SocketTimeoutException e)
+		}catch (Exception e)
 		{
-			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-					.entity("Request timed out. Refresh and Please try again.").build());
+		    throw ExceptionUtil.catchWebException(e);
 		}
-		catch (IOException e)
-		{
-			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-					.entity("An error occurred. Refresh and Please try again.").build());
-		}
-		catch (Exception e)
-		{
-			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
-					.build());
-		}
-
 	}
 
 	/**
@@ -445,25 +319,23 @@ public class TwilioWidgetsAPI
 		{
 			// Calls TwilioUtil method to retrieve numbers
 			return TwilioUtil.getIncomingNumberTwilioIO(client).toString();
-		}
-		catch (SocketTimeoutException e)
+		}catch (Exception e)
 		{
-			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-					.entity("Request timed out. Refresh and Please try again.").build());
-		}
-		catch (IOException e)
-		{
-			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-					.entity("An error occurred. Refresh and Please try again.").build());
-		}
-		catch (Exception e)
-		{
-			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
-					.build());
+		    throw ExceptionUtil.catchWebException(e);
 		}
 
 	}
 
+	/**
+	 * Saves the twilio app secret id and its related details.
+	 * 
+	 * @param accountSID
+	 * @param authToken
+	 * @param numberSid
+	 * @param record
+	 * @param twimletUrl
+	 * @return String
+	 */
 	@Path("createappsid/{acc-sid}/{auth-token}/{number-sid}/{record}/{twimlet-url}")
 	@GET
 	@Produces(MediaType.TEXT_PLAIN)
@@ -472,33 +344,18 @@ public class TwilioWidgetsAPI
 			@PathParam("twimlet-url") String twimletUrl)
 	{
 		System.out.println("In createAppSid" + accountSID + " " + authToken + " " + numberSid + " " + record);
-
 		try
 		{
-			/*
-			 * Create a Twilio Application for Agile in Agile User Twilio
-			 * account
-			 */
+		    // Create a Twilio Application for Agile in Agile User Twilio account
 			return TwilioUtil.createAppSidTwilioIO(accountSID, authToken, numberSid, record, twimletUrl);
-		}
-		catch (SocketTimeoutException e)
+		}catch (Exception e)
 		{
-			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-					.entity("Request timed out. Refresh and Please try again.").build());
-		}
-		catch (IOException e)
-		{
-			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-					.entity("An error occurred. Refresh and Please try again.").build());
-		}
-		catch (Exception e)
-		{
-			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
-					.build());
+		    throw ExceptionUtil.catchWebException(e);
 		}
 	}
 
 	/**
+	 * Gets the twilio call history.
 	 * 
 	 * @author Purushotham
 	 * @created 28-Nov-2014
@@ -511,37 +368,25 @@ public class TwilioWidgetsAPI
 			@PathParam("auth-token") String authToken, @PathParam("call-sid") String callSID,
 			@PathParam("parent") String isParent)
 	{
-
 		try
 		{
-			if (isParent.equals("true"))
+			if (isParent.equals("true")){
 				return TwilioUtil.getLastCallLogStatus(accountSID, authToken, callSID).toString();
-			else
+			}else{
 				return TwilioUtil.getLastChildCallLogStatus(accountSID, authToken, callSID).toString();
-		}
-		catch (SocketTimeoutException e)
+			}
+		}catch (Exception e)
 		{
-			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-					.entity("Request timed out. Refresh and Please try again.").build());
+		    throw ExceptionUtil.catchWebException(e);
 		}
-		catch (IOException e)
-		{
-			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-					.entity("An error occurred. Refresh and Please try again.").build());
-		}
-		catch (Exception e)
-		{
-			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
-					.build());
-		}
-
 	}
 
 	/**
+	 * Saving call info and history.
 	 * 
 	 * @author Purushotham
 	 * @created 28-Nov-2014
-	 * 
+	 * @return String
 	 */
 	@Path("savecallactivity")
 	@POST
@@ -549,35 +394,34 @@ public class TwilioWidgetsAPI
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	public String saveCallActivity(@FormParam("direction") String direction,@FormParam("phone") String phone,@FormParam("status") String status,@FormParam("duration") String duration) {		
 	    
-	    	if (StringUtils.isBlank(phone))
-		    return "";
+	    	if (!(StringUtils.isBlank(phone))){
+	    		Contact contact = QueryDocumentUtil.getContactsByPhoneNumber(phone);
 
-		Contact contact = QueryDocumentUtil.getContactsByPhoneNumber(phone);
+	    		if (direction.equalsIgnoreCase("outbound-dial"))
+	    		{
+	    		    ActivityUtil.createLogForCalls(Call.SERVICE_TWILIO, phone, Call.OUTBOUND, status, duration, contact);
 
-		if (direction.equalsIgnoreCase("outbound-dial"))
-		{
-		    ActivityUtil.createLogForCalls(Call.SERVICE_TWILIO, phone, Call.OUTBOUND, status, duration, contact);
+	    		    // Trigger for outbound
+	    		    CallTriggerUtil.executeTriggerForCall(contact, Call.SERVICE_TWILIO, Call.OUTBOUND, status, duration);
+	    		}
 
-		    // Trigger for outbound
-		    CallTriggerUtil.executeTriggerForCall(contact, Call.SERVICE_TWILIO, Call.OUTBOUND, status, duration);
-		}
+	    		if (direction.equalsIgnoreCase("inbound"))
+	    		{
+	    		    ActivityUtil.createLogForCalls(Call.SERVICE_TWILIO, phone, Call.INBOUND, status, duration, contact);
 
-		if (direction.equalsIgnoreCase("inbound"))
-		{
-		    ActivityUtil.createLogForCalls(Call.SERVICE_TWILIO, phone, Call.INBOUND, status, duration, contact);
-
-		    // Trigger for inbound
-		    CallTriggerUtil.executeTriggerForCall(contact,  Call.SERVICE_TWILIO, Call.INBOUND, status, duration);
-		}
-	
+	    		    // Trigger for inbound
+	    		    CallTriggerUtil.executeTriggerForCall(contact,  Call.SERVICE_TWILIO, Call.INBOUND, status, duration);
+	    		}
+	    	}
 		return "";
 	}
 
 	/**
-	 * 
+	 * Twillio auto notes saving after call ends.
 	 * @author Purushotham
 	 * @created 28-Nov-2014
 	 * 
+	 * @return String
 	 */
 	@Path("autosavenote")
 	@POST
@@ -594,40 +438,26 @@ public class TwilioWidgetsAPI
 	}
 	
 	/**
+	 * Redirect the voice mail.
 	 * 
 	 * @author Purushotham
 	 * @created 10-Dec-2014
 	 *
 	 */
-	
 	@Path("setvoicemail/{acc-sid}/{auth-token}/{call-sid}/{file-selected}")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public String setVoiceMailRedirect(@PathParam("acc-sid") String accountSID,
 			@PathParam("auth-token") String authToken, @PathParam("call-sid") String callSID, @PathParam("file-selected") String fileSelected)
 	{
-
 		try
 		{
 			TwilioUtil.sendVoiceMailRedirect(accountSID, authToken, callSID, fileSelected);
 			return "{}";//empty JSON Object
-		}
-		catch (SocketTimeoutException e)
+		}catch (Exception e)
 		{
-			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-					.entity("Request timed out. Refresh and Please try again.").build());
+		    throw ExceptionUtil.catchWebException(e);
 		}
-		catch (IOException e)
-		{
-			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-					.entity("An error occurred. Refresh and Please try again.").build());
-		}
-		catch (Exception e)
-		{
-			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
-					.build());
-		}
-
 	}
 
 	/**
@@ -646,32 +476,17 @@ public class TwilioWidgetsAPI
 	{
 		// Retrieve widget based on its id
 		Widget widget = WidgetUtil.getWidget(widgetId);
-
-		if (widget == null)
-			return null;
-
-		try
-		{
-
-			// Calls TwilioUtil method to retrieve call logs for the "to" number
-			return TwilioUtil.getCallLogsByPage(widget, to, page, pageToken).toString();
+		if (widget != null){
+			try
+			{
+				// Calls TwilioUtil method to retrieve call logs for the "to" number
+				return TwilioUtil.getCallLogsByPage(widget, to, page, pageToken).toString();
+			}catch (Exception e)
+			{
+			    throw ExceptionUtil.catchWebException(e);
+			}
 		}
-		catch (SocketTimeoutException e)
-		{
-			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-					.entity("Request timed out. Refresh and Please try again.").build());
-		}
-		catch (IOException e)
-		{
-			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-					.entity("An error occurred. Refresh and Please try again.").build());
-		}
-		catch (Exception e)
-		{
-			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
-					.build());
-		}
-
+		return null;
 	}
 	
 	/**
@@ -680,12 +495,10 @@ public class TwilioWidgetsAPI
 	 * @param contactId - id of the current user
 	 * @return sucess message
 	 */
-	
 	@Path("save/time")
 	@GET
 	@Produces(MediaType.TEXT_PLAIN)
 	public String saveLastContactedTime(@QueryParam("id") Long contactId){
-		
 		try{
 			System.out.println("contact id ==== " + contactId);
 			Contact contact = ContactUtil.getContact(contactId);
@@ -694,13 +507,9 @@ public class TwilioWidgetsAPI
 			System.out.println("contact has been updated");
 			
 			return "sucess";
-		}
-		catch (Exception e)
+		}catch (Exception e)
 		{
-			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
-					.build());
-		}
-
-		
+		    throw ExceptionUtil.catchWebException(e);
+		}	
 	}
 }

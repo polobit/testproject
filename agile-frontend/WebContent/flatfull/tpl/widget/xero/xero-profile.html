@@ -91,7 +91,7 @@
 		</ul>	
 	{{/isArray}}
 	{{else}}
-		<li class="list-group-item r-none b-l-none b-r-none">
+		<li class="r-none b-l-none b-r-none">
 	    	No invoices	found		
 		</li>
 	{{/if}}
@@ -139,8 +139,8 @@
 
 	<div>
 	
-{{#if custom_data.prefsObj.xero_company_name}}
-			<p class="title_txt p-l-sm"><a href="https://go.xero.com/organisationlogin/default.aspx?shortcode={{custom_data.prefsObj.xero_org_shortcode}}&redirecturl=/Dashboard/" target="_blank" >{{custom_data.prefsObj.xero_company_name}}</a></p>
+{{#if profile.prefs.xero_company_name}}
+			<p class="title_txt p-l-sm"><a href="https://go.xero.com/organisationlogin/default.aspx?shortcode={{profile.prefsObj.xero_org_shortcode}}&redirecturl=/Dashboard/" target="_blank" >{{profile.prefs.xero_company_name}}</a></p>
 {{/if}}
 		
 	</div>

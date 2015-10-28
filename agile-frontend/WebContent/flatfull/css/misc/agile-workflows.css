@@ -1,0 +1,13 @@
+.disable-iframe{
+	cursor: no-drop
+}
+.enable-iframe{
+	cursor: default
+	
+}
+.blur{
+	opacity: 0.3
+}
+.anti-blur{
+	opacity: 1
+}

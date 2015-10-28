@@ -98,7 +98,7 @@ var WorkflowsRouter = Backbone.Router
 					url : 'core/api/workflow', 
 					template : 'workflow-add',
 					isNew : 'true',
-					data : { "is_new" : true },
+					data : {  "is_new" : true, "is_disabled" : "false", "was_disabled" : "false" },
 					postRenderCallback : function(el){
 						initiate_tour("workflows-add", $('#content'));						
 						// Init SendVerify Email
@@ -164,13 +164,14 @@ var WorkflowsRouter = Backbone.Router
 					return;
 
 				this.workflow_json = this.workflow_model.get("rules");
+				this.is_disabled = this.workflow_model.get("is_disabled");
 				var that = this;
 
 				var workflowModal = new Workflow_Model_Events({
 					url : 'core/api/workflow', 
 					template : 'workflow-add',
 					isNew : 'true',
-					modal : this.workflow_model,
+					data :  {"is_disabled" : ""+that.is_disabled},
 					postRenderCallback : function(el){
 						// Set the name
 						$('#workflow-name', el).val(that.workflow_model.get("name"));
@@ -181,6 +182,9 @@ var WorkflowsRouter = Backbone.Router
 						$('#unsubscribe-tag', el).val(unsubscribe.tag);
 						$('#unsubscribe-action', el).val(unsubscribe.action);
 						$('#unsubscribe-action', el).trigger('change');
+
+						if(that.is_disabled)
+								$('#designer-tour').addClass("blur").removeClass("anti-blur");
 
 						// Init SendVerify Email
 						send_verify_email(el);
@@ -249,7 +253,7 @@ var WorkflowsRouter = Backbone.Router
 					url : 'core/api/workflow', 
 					template : 'workflow-add',
 					isNew : 'true',
-					data : { "is_new" : true },
+					data : { "is_new" : true, "is_disabled" : false, "was_disabled" : false  },
 					postRenderCallback : function(el){
 						// Init SendVerify Email
 						send_verify_email(el);
@@ -1128,4 +1132,3 @@ var WorkflowsRouter = Backbone.Router
 				$('#campaign-tabs .select').removeClass('select');
 				$('.campaign-subscribers-tab').addClass('select');
 			} });
-

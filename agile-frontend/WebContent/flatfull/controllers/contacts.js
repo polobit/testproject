@@ -107,6 +107,7 @@ var ContactsRouter = Backbone.Router.extend({
 	 */
 	contacts : function(tag_id, filter_id, grid_view, is_lhs_filter)
 	{
+		
 		if(SCROLL_POSITION)
 		{
 			$('html, body').animate({ scrollTop : SCROLL_POSITION  },1000);
@@ -122,7 +123,8 @@ var ContactsRouter = Backbone.Router.extend({
 		/*if(readData('dynamic_contact_filter') &&readData('dynamic_contact_filter').indexOf('campaign_status') >= 0 ) {
 			eraseData('dynamic_contact_filter');
 		}*/
-
+		//custom scroll element for grid view
+		var custom_scrollable_element=null;
 		var max_contacts_count = 20;
 		var is_company = false;
 		var template_key = "contacts";
@@ -139,6 +141,7 @@ var ContactsRouter = Backbone.Router.extend({
 		{
 			template_key = "contacts-grid";
 			individual_tag_name = "div";
+			custom_scrollable_element="#contacts-grid-model-list";
 		}
 		
 		// Default url for contacts route
@@ -249,12 +252,15 @@ var ContactsRouter = Backbone.Router.extend({
 		} 
 
 		var slateKey = getContactPadcontentKey(url);
+		
 		if(is_lhs_filter) {
 			template_key = "contacts-table";
+			
 			if (grid_view || readCookie("agile_contact_view"))
 			{
 				template_key = "contacts-grid-table";
 				individual_tag_name = "div";
+				custom_scrollable_element="#contacts-grid-table-model-list";
 			}
 		}
 
@@ -262,9 +268,11 @@ var ContactsRouter = Backbone.Router.extend({
 		 * cursor and page_size options are taken to activate
 		 * infiniScroll
 		 */
-		this.contactsListView = new Contacts_Events_Collection_View({ url : url, sort_collection : false, templateKey : template_key, individual_tag_name : individual_tag_name,
+		this.contactsListView = new  Contacts_Events_Collection_View({ url : url,custom_scrollable_element:custom_scrollable_element, sort_collection : false, templateKey : template_key, individual_tag_name : individual_tag_name,
 			cursor : true, page_size : 25, global_sort_key : sort_key, slateKey : slateKey, request_method : 'POST', post_data: {filterJson: postData}, postRenderCallback : function(el, collection)
 			{
+		
+			$("#contacts-view-options").css( 'pointer-events', 'auto' );
 
 				// Contacts are fetched when the app loads in
 				// the initialize
@@ -285,12 +293,14 @@ var ContactsRouter = Backbone.Router.extend({
 					$('#contacts-count').html(count_message);
 					setupViews();
 					setupContactFilterList();
+					//setUpContactView();
 				} else {					
 					setupLhsFilters(cel, is_company);
 					setupViews(cel);
 					setupContactFilterList(cel, tag_id);
+					setUpContactView(cel);
 				}
-				
+				$('[data-toggle="tooltip"]').tooltip();
 				start_tour("contacts", el);
 			} });
 
@@ -308,6 +318,7 @@ var ContactsRouter = Backbone.Router.extend({
 		}
 		$(".active").removeClass("active");
 		$("#contactsmenu").addClass("active");
+		$('[data-toggle="tooltip"]').tooltip();
 	
 
 	},
@@ -573,20 +584,38 @@ var ContactsRouter = Backbone.Router.extend({
 			//fill_owners(el, contact.toJSON());
 			start_tour("contact-details", el);
 			
-			// For sip
-			if (Sip_Stack != undefined && Sip_Register_Session != undefined && Sip_Start == true)
-			{
-				$(".contact-make-sip-call",el).show();
-				$(".contact-make-twilio-call",el).hide();
-				$(".contact-make-call",el).hide();
-			}
-			else if(Twilio_Start == true)
-			//else if (Twilio.Device.status() == "ready" || Twilio.Device.status() == "busy")			
-			{
-				$(".contact-make-sip-call",el).hide();
-				$(".contact-make-twilio-call",el).show();
-				$(".contact-make-call",el).hide();
-			}
+
+			// Sequence of calling option 1) BRIA 2) Twilio 3) SIP in contact phone option
+			if(default_call_type == "Bria"){
+				if(callFromBria == true){
+					$(".contact-call-button",el).removeAttr('disabled');
+					$(".contact-make-call",el).removeAttr("href");
+					$(".contact-call-button",el).addClass('contact-make-bria-call');
+					$(".contact-call-button-div",el).tooltip('hide')
+					  .attr('data-original-title', "Call from Bria")
+				    .tooltip('fixTitle');
+					}
+				}else{
+					if(Twilio_Start == true)
+						//else if (Twilio.Device.status() == "ready" || Twilio.Device.status() == "busy")			
+						{
+							$(".contact-call-button",el).removeAttr('disabled');
+							$(".contact-make-call",el).removeAttr("href");
+							$(".contact-call-button",el).addClass('contact-make-twilio-call');
+							$(".contact-call-button-div",el).tooltip('hide')
+							  .attr('data-original-title', "Call from Twilio")
+						    .tooltip('fixTitle');
+
+						}else if (Sip_Stack != undefined && Sip_Register_Session != undefined && Sip_Start == true)
+							{
+								$(".contact-call-button",el).removeAttr('disabled');
+								$(".contact-make-call",el).removeAttr("href");
+								$(".contact-call-button",el).addClass('contact-make-sip-call');
+								$(".contact-call-button-div",el).tooltip('hide')
+								  .attr('data-original-title', "Call from SIP")
+							    .tooltip('fixTitle');
+							}
+				}
 
 			} });
 
@@ -965,6 +994,7 @@ var ContactsRouter = Backbone.Router.extend({
 		{
 			url = "core/api/contacts/list";
 		}
+		
 
 		if (CONTACTS_HARD_RELOAD == true)
 		{
@@ -1013,10 +1043,10 @@ var ContactsRouter = Backbone.Router.extend({
 		// If defined
 		if (this.contact_custom_view && this.contact_custom_view.collection.url == url)
 		{
-			
 			var el = App_Contacts.contact_custom_view.render(true).el;
 			$('#content').html('<div id="contacts-listener-container"></div>');
 			$('#contacts-listener-container').html(el);
+			$("#contacts-view-options").css( 'pointer-events', 'auto' );
 
 			contactFiltersListeners();
 
@@ -1027,6 +1057,7 @@ var ContactsRouter = Backbone.Router.extend({
 			//pieTags(el);
 			setupViews(el, view_data.name);
 			setupContactFilterList(el, tag_id);
+			setUpContactView(el);
 
 			$(".active").removeClass("active"); // Activate Contacts
 												// Navbar tab
@@ -1042,6 +1073,16 @@ var ContactsRouter = Backbone.Router.extend({
 			createCookie('sort_by_name', sort_key);
 		}
 		var template_key = "contacts-custom-view";
+		var individual_tag_name='tr';
+		var custom_scrollable_element=null;
+
+		// Checks if user is using custom view. It check for grid view
+		if (readCookie("agile_contact_view"))
+		{
+			template_key = "contacts-grid";
+			individual_tag_name = "div";
+			custom_scrollable_element="#contacts-grid-model-list";
+		}
 		//if directly called the method, i.e on click of custom view link, 
 		//the url will be updated if any filter conditions are selected.
 		if(readData('dynamic_contact_filter')) {
@@ -1050,12 +1091,20 @@ var ContactsRouter = Backbone.Router.extend({
 		}
 		if(is_lhs_filter) {
 			template_key = "contacts-custom-view-table";
+
+			if (readCookie("agile_contact_view"))
+		    {
+			template_key = "contacts-grid-table";
+			individual_tag_name = "div";
+			custom_scrollable_element="#contacts-grid-table-model-list";
+		    }
 		}	
 		
 		this.contact_custom_view = new Contacts_Events_Collection_View({ url : url, restKey : "contact", modelData : view_data, global_sort_key : sort_key,
-			templateKey : template_key, individual_tag_name : 'tr', slateKey : slateKey, cursor : true, request_method : 'POST', post_data: {'filterJson': postData}, page_size : 25, sort_collection : false,
+			templateKey : template_key,custom_scrollable_element:custom_scrollable_element, individual_tag_name : individual_tag_name, slateKey : slateKey, cursor : true, request_method : 'POST', post_data: {'filterJson': postData}, page_size : 25, sort_collection : false,
 			postRenderCallback : function(el, collection)
 			{
+				
 				App_Contacts.contactsListView = App_Contacts.contact_custom_view;
 
 				// To set chats and view when contacts are fetch by
@@ -1064,9 +1113,15 @@ var ContactsRouter = Backbone.Router.extend({
 
 				//pieTags(el);
 				setupViews(el, view_data.name);
+				$("#contacts-view-options").css( 'pointer-events', 'auto' );
+
 
 				// show list of filters dropdown in contacts list
 				setupContactFilterList(el, App_Contacts.tag_id);
+				if(tag_id)
+				setUpContactView(el,true);
+			    else
+				setUpContactView(el);
 				if(is_lhs_filter) {
 					var count = 0;
 					if(collection.models.length > 0) {
@@ -1087,10 +1142,10 @@ var ContactsRouter = Backbone.Router.extend({
 		$.getJSON("core/api/custom-fields/type/scope?type=DATE&scope=CONTACT", function(customDatefields)
 				{
 					// Defines appendItem for custom view
+					
 					_that.contact_custom_view.appendItem = function(base_model){
 						contactTableView(base_model,customDatefields,this);
 					};
-			
 					// Fetch collection
 					_that.contact_custom_view.collection.fetch();
 					

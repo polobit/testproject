@@ -1,0 +1,145 @@
+
+ <script id="data-sync-collection-template" type="html/text">
+        
+    <div class="row prefs-datasync">
+	<div class="col-md-12">
+		<h4 class="m-b">
+			Google <small>import Contacts from Google</small>
+		</h4>
+		<div class="row">
+			<div id="contact-prefs" class="col-md-4 col-sm-6 col-xs-12"></div>
+			<div id="calendar-prefs" class="col-md-4 col-sm-6 col-xs-12"></div>
+			<div id="email-prefs" class="col-md-4 col-sm-6 col-xs-12"></div>
+		</div>
+	</div>
+</div>
+<div class="row prefs-datasync">
+	<div class="col-md-12 no-mg-l">
+		<h4 class="m-b">
+			E-commerce <small>import Contacts from E-commerce</small>
+		</h4>
+		<div class="row">
+			<div id="shopify" class="col-md-4 col-sm-6 col-xs-12"></div>
+		</div>
+	</div>
+</div>
+<div class="row prefs-datasync">
+	<div class="col-md-12">
+		<h4 class="m-b">
+			Payment <small>import Contacts from payment gateway</small>
+		</h4>
+		<div class="row">
+			<div id="stripe" class="col-md-4 col-sm-6 col-xs-12"></div>
+		</div>
+	</div>
+</div>
+<div class="row prefs-datasync">
+	<div class="col-md-12">
+		<h4 class="m-b">
+			Accounting <small>import Contacts from Accounting</small>
+		</h4>
+		<div class="row">
+			<div id="freshbook" class="col-md-4 col-sm-6 col-xs-12"></div>
+			<div id="quickbook" class="col-md-4 col-sm-6 col-xs-12" ></div>
+		</div>
+	</div>
+</div>
+
+</script>
+<script id="data-sync-model-template" type="text/html">	
+
+
+
+
+</script>
+
+
+
+
+
+
+<script id="admin-settings-import-skeleton-template"
+	type="text/html">
+	<div class="panel wrapper widget-add" >
+    <center>
+    <img class="thumbnail m-b-none thumb-xl bg-transparent" src="{{imageUrl}}" />
+    </center>
+    <div class="m-b-md m-t"  rel="tooltip" >
+		{{content}}
+	</div>
+    <div>
+
+    		{{#if_equals type "GOOGLE"}}
+			{{#if id}}
+    			<a class="btn btn-sm btn-danger " data_sync_type="{{type}}" data_sync_id="{{id}}" id="sync-import-prefs-delete" >Disable</a>
+				<a href="#sync/contacts" class="btn btn-sm btn-default" id="setting-widget">Settings</a>
+    		{{else}}
+				{{#canSyncContacts}}
+    					<div class="btn btn-sm btn-default inline-block" sync_type="{{type}}" id="data-sync-type">Enable</div>
+					{{else}}
+						<span class="btn btn-sm btn-primary inline-block" disabled>Enable</span>
+						<span class="m-l-xs"><i>Needs import privilege.</i></span>
+				{{/canSyncContacts}}
+    		{{/if}}
+    		{{/if_equals}}
+
+
+    		{{#if_equals type "STRIPE"}}
+			{{#if id}}
+    			<a class="btn btn-sm btn-danger " data_sync_type="{{type}}" data_sync_id="{{id}}" id="sync-import-prefs-delete" >Disable</a>
+				<a href="#sync/stripe-import" class="btn btn-sm btn-default" id="setting-widget">Settings</a>
+    		{{else}}
+				{{#canSyncContacts}}
+    					<div class="btn btn-sm btn-default inline-block" sync_type="{{type}}" id="data-sync-type">Enable</div>
+					{{else}}
+						<span class="btn btn-sm btn-primary inline-block" disabled>Enable</span>
+						<span class="m-l-xs"><i>Needs import privilege.</i></span>
+				{{/canSyncContacts}}
+    		{{/if}}
+    		{{/if_equals}}
+
+
+    		{{#if_equals type "SHOPIFY"}}
+			{{#if id}}
+    			<a class="btn btn-sm btn-danger " data_sync_type="{{type}}" data_sync_id="{{id}}" id="sync-import-prefs-delete" >Disable</a>
+				<a href="#sync/shopify" class="btn btn-sm btn-default" id="setting-widget">Settings</a>
+    		{{else}}
+				{{#canSyncContacts}}
+    					<div class="btn btn-sm btn-default inline-block" sync_type="{{type}}" id="data-sync-type">Enable</div>
+					{{else}}
+						<span class="btn btn-sm btn-primary inline-block" disabled>Enable</span>
+						<span class="m-l-xs"><i>Needs import privilege.</i></span>
+				{{/canSyncContacts}}
+    		{{/if}}
+    		{{/if_equals}}
+
+    		{{#if_equals type "FRESHBOOKS"}}
+			{{#if id}}
+    			<a class="btn btn-sm btn-danger " data_sync_type="{{type}}" data_sync_id="{{id}}" id="sync-import-prefs-delete" >Disable</a>
+				<a href="#sync/freshbooks/setting" class="btn btn-sm btn-default" id="setting-widget">Settings</a>
+    		{{else}}
+				{{#canSyncContacts}}
+    					<div class="btn btn-sm btn-default inline-block" sync_type="{{type}}" id="data-sync-type">Enable</div>
+					{{else}}
+						<span class="btn btn-sm btn-primary inline-block" disabled>Enable</span>
+						<span class="m-l-xs"><i>Needs import privilege.</i></span>
+				{{/canSyncContacts}}
+    		{{/if}}
+    		{{/if_equals}}
+
+    		{{#if_equals type "QUICKBOOK"}}
+			{{#if id}}
+    			<a class="btn btn-sm btn-danger " data_sync_type="{{type}}" data_sync_id="{{id}}" id="sync-import-prefs-delete" >Disable</a>
+				<a href="#sync/quickbook" class="btn btn-sm btn-default" id="setting-widget">Settings</a>
+    		{{else}}
+				{{#canSyncContacts}}
+    					<div class="btn btn-sm btn-default inline-block" sync_type="{{type}}" id="data-sync-type">Enable</div>
+					{{else}}
+						<span class="btn btn-sm btn-primary inline-block" disabled>Enable</span>
+						<span class="m-l-xs"><i>Needs import privilege.</i></span>
+				{{/canSyncContacts}}
+    		{{/if}}
+    		{{/if_equals}}
+	</div>
+</div>
+</script>

@@ -5,154 +5,15 @@
  * same label for different fields then error message is shown and will not send
  * request to save.
  */
+
+
+
+
+
+
+
 function initializeImportListeners(){
 
-	$('#prefs-tabs-content #google-import').off();
-    $('#prefs-tabs-content').on('click', '#google-import', function(e){
-		
-		// URL to return, after fetching token and secret key from LinkedIn
-		var callbackURL = window.location.href + "/contacts";
-		console.log(callbackURL);
-
-		// For every request of import, it will ask to grant access
-		window.location = "/scribe?service=google&return_url=" + encodeURIComponent(callbackURL);
-
-		// this code is used, if once permission is granted, we refresh the
-		// tokens and import without asking for permission again and again
-		
-		// $.getJSON("/core/api/contactprefs/google", function(data)
-		// {
-		//		
-		// console.log(data);
-		// if (!data)
-		// {
-		// $("#google-delete-import").hide();
-		// window.location = "/scribe?service=google&return_url=" +
-		// encodeURIComponent(callbackURL);
-		// return;
-		// }
-		//					
-		// var url = '/scribe?service_type=google';
-		// $("#google-delete-import").show();
-		//		
-		// $.post(url, function(data)
-		// {
-		// console.log("in success");
-		// }).error(function(data)
-		// {
-		// console.log(data.responseText);
-		// });
-		//		
-		// }).error(function(data)
-		// {
-		//					
-		// });
-
-	});
-	
-	$('#prefs-tabs-content #google-import-prefs-delete').off();
-	 $('#prefs-tabs-content').on('click', '#google-import-prefs-delete', function(e){
-		e.preventDefault();
-		var disabled = $(this).attr("disabled");
-		if(disabled)
-			return;
-		
-		$(this).attr("disabled", "disabled");
-		
-		$(this).after(getRandomLoadingImg());
-		
-		console.log(App_Widgets.contact_sync_google.model.destroy({success : function(){
-			App_Widgets.contact_sync_google.model.clear();
-			App_Widgets.contact_sync_google.render(true);
-		}}));
-	});
-
-	$('#prefs-tabs-content #sync-type').off();
-	$('#prefs-tabs-content').on('change', '#sync-type', function(e){
-		e.preventDefault();
-		var value = $(this).val();
-		if(value == "AGILE_TO_CLIENT" || value == "TWO_WAY")
-			{
-				$("#sync_to_group_controlgroup").show();
-				$("#my_contacts_sync_group").show();
-				if(value == "AGILE_TO_CLIENT")
-				{
-					$("#sync_from_group_controlgroup").hide();
-					return;
-				}
-				
-				$("#sync_from_group_controlgroup").show();
-			}
-		else
-			{
-				$("#sync_from_group_controlgroup").show();
-				$("#sync_to_group_controlgroup").hide();
-				$("#my_contacts_sync_group").hide();
-			}
-		
-	})
-	
-	$('#prefs-tabs-content .save-contact-prefs').off();
-	$('#prefs-tabs-content').on('click', '.save-contact-prefs', function(e){
-		e.preventDefault();
-		var disabled = $(this).attr("disabled");
-		if(disabled)
-			return;
-		
-		if(!isValidForm("#google-contacts-import-form"))
-			{
-				return;
-			};
-				
-		$(this).attr("disabled", "disabled");
-		$(this).text("Syncing");
-		
-//	return;
-		
-		var syncPrefs = serializeForm("google-contacts-import-form");
-		syncPrefs["inProgress"] = true;
-		App_Widgets.setup_google_contacts.model.set(syncPrefs, {silent:true});
-		var url = App_Widgets.setup_google_contacts.model.url;
-
-		$(this).after(getRandomLoadingImg());
-		App_Widgets.setup_google_contacts.model.url = url + "?sync=true"
-		App_Widgets.setup_google_contacts.model.save({}, {success : function(data){
-		
-			App_Widgets.setup_google_contacts.render(true);
-			App_Widgets.setup_google_contacts.model.url = url;	
-				show_success_message_after_save_button("Sync Initiated", App_Widgets.setup_google_contacts.el);
-				showNotyPopUp("information", "Contacts sync initiated", "top", 1000);
-			}});
-		
-	})
-	
-	$('#prefs-tabs-content #quickbook_sync_prefs').off();
-	$('#prefs-tabs-content').on('click', '#quickbook_sync_prefs', function(e){
-		e.preventDefault();
-		var disable = $(this).attr('disabled');
-		if(disable)
-			return false;
-		$(this).attr("disabled", "disabled");
-		$(this).text("Syncing");
-		
-		var quickbookPrefs = serializeForm("quickbook-form");
-		quickbookPrefs['inProgress'] = true;
-		
-		App_Widgets.quickbook_import_settings.model.set(quickbookPrefs, {silent:true});
-		var url = App_Widgets.quickbook_import_settings.model.url;
-
-		$(this).after(getRandomLoadingImg());
-		App_Widgets.quickbook_import_settings.model.url = url + "?sync=true"
-		App_Widgets.quickbook_import_settings.model.save({}, {success : function(data){
-		
-			App_Widgets.quickbook_import_settings.render(true);
-			App_Widgets.quickbook_import_settings.model.url = url;	
-				show_success_message_after_save_button("Sync Initiated", App_Widgets.quickbook_import_settings.el);
-				showNotyPopUp("information", "Contacts sync initiated", "top", 1000);
-			}});
-		
-	});
-	
 	$('#prefs-tabs-content #xero_sync_prefs').off();
 	$('#prefs-tabs-content').on('click', '#xero_sync_prefs', function(e){
 		e.preventDefault();
@@ -180,32 +41,6 @@ function initializeImportListeners(){
 		
 	});
 	
-	$('#prefs-tabs-content #freshbooks_sync_prefs').off();
-	$('#prefs-tabs-content').on('click', '#freshbooks_sync_prefs', function(e){
-					e.preventDefault();
-					var disable = $(this).attr('disabled');
-					if(disable)
-						return false;
-					$(this).attr("disabled", "disabled");
-					$(this).text("Syncing");
-					
-					var freshbooks_prefs = serializeForm("freshbooks-form");
-					freshbooks_prefs['inProgress'] = true;
-					
-					App_Widgets.freshbooks_import_settings.model.set(freshbooks_prefs, {silent:true});
-					var url = App_Widgets.freshbooks_import_settings.model.url;
-
-					$(this).after(getRandomLoadingImg());
-					App_Widgets.freshbooks_import_settings.model.url = url + "?sync=true"
-					App_Widgets.freshbooks_import_settings.model.save({}, {success : function(data){
-					
-						App_Widgets.freshbooks_import_settings.render(true);
-						App_Widgets.freshbooks_import_settings.model.url = url;	
-							show_success_message_after_save_button("Sync Initiated", App_Widgets.freshbooks_import_settings.el);
-							showNotyPopUp("information", "Contacts sync initiated", "top", 1000);
-						}});
-					
-				});
 
 	//oauth request for xero
 $('#prefs-tabs-content #xeroconnect').off();
@@ -217,43 +52,6 @@ $('#prefs-tabs-content').on('click', '#xeroconnect', function(e){
 	window.location = "/scribe?service=xero&return_url=" + encodeURIComponent(callbackURL);
 	return false;
 });
-
-$('#prefs-tabs-content #sync-google-calendar').off();
-$("#prefs-tabs-content").on('click', '#sync-google-calendar', function(e)
-	{
-		e.preventDefault();
-
-		// URL to return, after fetching token and secret key from LinkedIn
-		var callbackURL = window.location.href;
-
-		// For every request of import, it will ask to grant access
-		window.location = "/scribe?service=google_calendar&return_url=" + encodeURIComponent(callbackURL);
-	});
-
-	$('#prefs-tabs-content #sync-google-calendar-delete').off();
-	$("#prefs-tabs-content").on('click', '#sync-google-calendar-delete', function(e)
-	{
-		e.preventDefault();
-
-		var disabled = $(this).attr("disabled");
-		if (disabled)
-			return;
-
-		$(this).attr("disabled", "disabled");
-
-		$(this).after(getRandomLoadingImg());
-		App_Widgets.calendar_sync_google.model.url = "/core/api/calendar-prefs"
-		console.log(App_Widgets.calendar_sync_google.model.destroy({ success : function()
-		{
-
-			App_Widgets.calendar_sync_google.model.clear();
-			App_Widgets.calendar_sync_google.model.url = "/core/api/calendar-prefs/get"
-			App_Widgets.calendar_sync_google.render(true);
-			erase_google_calendar_prefs_cookie();
-
-		} }));
-	});
-	
 }
 
 function show_success_message_after_save_button(message, el)

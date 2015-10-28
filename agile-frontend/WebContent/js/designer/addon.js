@@ -18,6 +18,8 @@ function showAddonsTab(){
     
     // Make it default as first tab
     $('#addontabs').tabs('select', 0);
+    //save location of Agile Window outside the iframe
+    $('#addontabs').attr("data",window.parent.scrollY);
     	
    	$('#addontabs').dialog({
 				            title:'Nodes',
@@ -81,7 +83,6 @@ function showAddonNodes(id) {
 //add nodes to tab 
 function addAddonTabTemplate(data, url, callback, container)
 {
-
 	if(!checkMaxNodesCount())
  		return;
 	

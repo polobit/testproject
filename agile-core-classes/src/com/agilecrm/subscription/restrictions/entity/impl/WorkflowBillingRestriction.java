@@ -6,81 +6,107 @@ import com.agilecrm.workflows.Workflow;
 
 public class WorkflowBillingRestriction extends DaoBillingRestriction
 {
-    boolean hardUpdateTags = true;
+	boolean hardUpdateTags = true;
 
-    /**
-     * Checks if new workflow does not exceed limits in current plan
-     */
-    @Override
-    public boolean can_create()
-    {
-	restriction.campaigns_count = Workflow.dao.count();
+	/**
+	 * Checks if new workflow does not exceed limits in current plan
+	 */
+	@Override
+	public boolean can_create()
+	{
+		restriction.campaigns_count = get_campaign_count();
 
-	if (restriction.sendReminder)
-	    send_warning_message();
+		System.out.println("Active campaign count: " + restriction.campaigns_count);
 
-	if (restriction.campaigns_count < max_allowed)
-	    return true;
+		if (restriction.sendReminder)
+			send_warning_message();
 
-	return false;
-    }
+		Workflow workflow = (Workflow) entity;
 
-    /**
-     * Always returns as there are no limits on updation
-     */
-    @Override
-    public boolean can_update()
-    {
-	// TODO Auto-generated method stub
-	return true;
-    }
+		if (workflow.is_disabled)
+			return true;
 
-    @Override
-    public void send_warning_message()
-    {
-	getTag();
-	if (restriction.tagsToAddInOurDomain.isEmpty())
-	    return;
+		if (restriction.campaigns_count < max_allowed)
+			return true;
 
-	restriction.sendReminder();
-    }
+		return false;
+	}
 
-    /**
-     * Creates restriction object and gets Max allowed workflows count
-     */
-    @Override
-    public void setMax()
-    {
-	if (restriction == null)
-	    restriction = BillingRestrictionUtil.getInstance(sendReminder);
+	/**
+	 * Always returns as there are no limits on updation
+	 */
+	@Override
+	public boolean can_update()
+	{
+		restriction.campaigns_count = get_campaign_count();
 
-	max_allowed = restriction.planDetails.getWorkflowLimit();
-    }
+		System.out.println("Active campaign count: " + restriction.campaigns_count);
 
-    @Override
-    public String getTag()
-    {
+		Workflow workflow = (Workflow) entity;
 
-	if (restriction == null || restriction.campaigns_count == null)
-	    return null;
+		if (!workflow.is_disabled)
+			restriction.campaigns_count += 1;
 
-	int count = restriction.campaigns_count;
+		if (restriction.campaigns_count <= max_allowed)
+			return true;
 
-	String tag = setTagsToUpdate(max_allowed, daemonCheck ? restriction.campaigns_count
-		: (restriction.campaigns_count + 1));
+		return false;
+	}
 
-	restriction.campaigns_count = count;
+	@Override
+	public void send_warning_message()
+	{
+		getTag();
+		if (restriction.tagsToAddInOurDomain.isEmpty())
+			return;
 
-	return tag;
-    }
+		restriction.sendReminder();
+	}
 
-    @Override
-    public boolean check()
-    {
-	Workflow workflow = (Workflow) entity;
-	if (workflow.id == null)
-	    return can_create();
+	/**
+	 * Creates restriction object and gets Max allowed workflows count
+	 */
+	@Override
+	public void setMax()
+	{
+		if (restriction == null)
+			restriction = BillingRestrictionUtil.getInstance(sendReminder);
 
-	return can_update();
-    }
+		max_allowed = restriction.planDetails.getWorkflowLimit();
+	}
+
+	@Override
+	public String getTag()
+	{
+
+		if (restriction == null || restriction.campaigns_count == null)
+			return null;
+
+		int count = restriction.campaigns_count;
+
+		String tag = setTagsToUpdate(max_allowed, daemonCheck ? restriction.campaigns_count
+				: (restriction.campaigns_count + 1));
+
+		restriction.campaigns_count = count;
+
+		return tag;
+	}
+
+	@Override
+	public boolean check()
+	{
+		Workflow workflow = (Workflow) entity;
+		if (workflow.id == null)
+			return can_create();
+
+		return can_update();
+	}
+
+	/**
+	 * @return - Returns active workflow count
+	 */
+	private int get_campaign_count()
+	{
+		return Workflow.dao.getCountByProperty("is_disabled", false);
+	}
 }
