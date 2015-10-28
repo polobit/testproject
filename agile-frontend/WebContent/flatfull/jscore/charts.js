@@ -295,7 +295,15 @@ function showBar(url, selector, name, yaxis_name, stacked)
 			        	borderWidth : 0
 			        },
 			    },
-			    series: series
+			    series: series,
+			    noData: {
+									 style: {
+									   
+										fontSize: '14px',
+										fontWeight : 'normal',
+										color : '#98A6AD'
+											 },
+						},
 			});
 			});
 	});
@@ -673,7 +681,15 @@ function showFunnel(url, selector, name, show_loading)
 		        series: [{
 		            name: 'Contacts',
 		            data: funnel_data
-		        }]
+		        }],
+		        noData: {
+									 style: {
+									   
+										fontSize: '14px',
+										fontWeight : 'normal',
+										color : '#98A6AD'
+											 },
+						},
 		    });
 			
 		});
