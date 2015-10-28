@@ -538,6 +538,8 @@ var contacts_bulk_actions = {
 											$('body').find('#bulk-select').css('display', 'none');
 											$('table#contacts-table').find('.thead_check').removeAttr('checked');
 											$('table#contacts-table').find('.tbody_check').removeAttr('checked');
+											$(".grid-checkboxes").find(".thead_check").removeAttr("checked");
+                                            $(".contacts-grid-view-temp").find(".tbody_check").removeAttr("checked");
 
 										}, "no_noty");
 									});
@@ -728,8 +730,8 @@ function show_bulk_owner_change_page()
 
 	        $("body").off('fill_campaigns').on("fill_campaigns", function(event)
 			{
-				var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
-				fillSelect('campaignBulkSelect', '/core/api/workflows', 'workflow', 'no-callback ', optionsTemplate);
+				var optionsTemplate = "<option value='{{id}}'{{#if is_disabled}}disabled=disabled>{{name}} (disabled){{else}}>{{name}}{{/if}}</option>";
+ 				fillSelect('campaignBulkSelect', '/core/api/workflows', 'workflow', 'no-callback ', optionsTemplate);
 			});
 
 			// Navigate to show form

@@ -103,13 +103,24 @@ var Workflow_Model_Events = Base_Model_View.extend({
         
         // Gets Designer JSON
         var designerJSON = window.frames.designer.serializePhoneSystem();
+        /**
+         * Checks if start node is connected to any other node.
+         */      
+        if(!is_start_active(designerJSON)){
+            var $save_info = '<span style="color: red;">Please connect the \'Start\' node to another node in the campaign</span>';
+            $("#workflow-msg").html($save_info).show().fadeOut(3000);
+            return false;
+        }
 
         var name = $('#workflow-name').val();
         
         var unsubscribe_tag = $('#unsubscribe-tag').val().trim();
         var unsubscribe_action = $('#unsubscribe-action').val();
         var unsubscribe_email = $('#unsubscribe-email').val().trim();
-        
+        var is_disabled = $('.is-disabled-top').attr("data");
+        if($clicked_button.attr("class") == "is-disabled-top" && is_disabled)
+            is_disabled = !JSON.parse(is_disabled);
+
         var unsubscribe_json ={
                                     "tag":unsubscribe_tag,
                                     "action":unsubscribe_action,
@@ -130,7 +141,7 @@ var Workflow_Model_Events = Base_Model_View.extend({
         // New Workflow or Copy Workflow
         if (App_Workflows.workflow_model === undefined || $(targetEl).attr('id') === 'duplicate-workflow-top' || $(targetEl).attr('id') === 'duplicate-workflow-bottom') 
         {
-            create_new_workflow(name, designerJSON, unsubscribe_json, $clicked_button, trigger_data);
+            create_new_workflow(name, designerJSON, unsubscribe_json, $clicked_button, trigger_data, is_disabled);
         }
         // Update workflow
         else
@@ -139,6 +150,7 @@ var Workflow_Model_Events = Base_Model_View.extend({
             App_Workflows.workflow_model.set("name", name);
             App_Workflows.workflow_model.set("rules", designerJSON);
             App_Workflows.workflow_model.set("unsubscribe", unsubscribe_json);
+            App_Workflows.workflow_model.set("is_disabled", is_disabled);
             App_Workflows.workflow_model.save({}, {success: function(){
                 
                 enable_save_button($clicked_button);
@@ -150,6 +162,31 @@ var Workflow_Model_Events = Base_Model_View.extend({
                 
                 // Hide message
                 $('#workflow-edit-msg').hide();
+
+                //toggle disable dropdown
+                 if($clicked_button.attr("class") == "is-disabled-top"){
+                     var disabled = $(".is-disabled-top");
+                 
+                    if (is_disabled) {
+                        disabled.attr("data", true);
+                        disabled.find('i').toggleClass('fa-lock').toggleClass('fa-unlock');
+                        disabled.find('div').text("Enable Workflow");
+                        $('#designer-tour').addClass("blur").removeClass("anti-blur");;
+                        window.frames[0].$('#paintarea').addClass("disable-iframe").removeClass("enable-iframe");
+                        window.frames[0].$('#paintarea .nodeItem table>tbody').addClass("disable-iframe").removeClass("enable-iframe");
+                    } else {
+                        disabled.attr("data", false);
+                        disabled.find('i').toggleClass('fa-unlock').toggleClass('fa-lock');
+                        disabled.find('div').text("Disable Workflow"); 
+                        $('#designer-tour').addClass("anti-blur").removeClass("blur");;
+                        window.frames[0].$('#paintarea').addClass("enable-iframe").removeClass("disable-iframe");
+                        window.frames[0].$('#toolbartabs').removeClass("disable-iframe");
+                       // $('#designer-tour').css("pointer-events","none");
+                        window.frames[0].$('#paintarea .nodeItem table>tbody').addClass("enable-iframe").removeClass("disable-iframe");
+                        
+                    }
+                }
+
                 
                 // Boolean data used on clicking on Done
                 if(trigger_data && trigger_data["navigate"])
@@ -158,6 +195,9 @@ var Workflow_Model_Events = Base_Model_View.extend({
                       trigger: true
                   });
                 }
+
+                 // Adds tag in our domain
+                add_tag_our_domain(CAMPAIGN_TAG);
                 
             },
             
@@ -270,13 +310,15 @@ $(function(){
  * @param unsubscribe_json - unsubscribe data of workflow
  * @param $clicked_button - jquery object to know clicked button
  **/
-function create_new_workflow(name, designerJSON, unsubscribe_json, $clicked_button, trigger_data)
+function create_new_workflow(name, designerJSON, unsubscribe_json, $clicked_button, trigger_data, is_disabled, was_disabled)
 {
 	var workflowJSON = {};
 	
 	workflowJSON.name = name;
     workflowJSON.rules = designerJSON;
     workflowJSON.unsubscribe = unsubscribe_json;
+    workflowJSON.is_disabled = is_disabled;
+    workflowJSON.was_disabled = was_disabled;
     
     var workflow = new Backbone.Model(workflowJSON);
     App_Workflows.workflow_list_view.collection.create(workflow,{
@@ -406,4 +448,27 @@ function show_campaign_save()
 	var $save_info = '<span style="color: green;">Campaign saved.</span>';
 
 	$("#workflow-msg").html($save_info).show().fadeOut(3000);
+}
+
+function is_start_active(designerJSON){
+    
+    var nodes  = JSON.parse(designerJSON).nodes;
+    var is_active = true;
+    try{
+    $.each(nodes,function(node_name,node_value){
+        if(node_value.displayname == "Start"){
+        var start_states= node_value.States;
+        $.each(start_states,function(start_name,start_node){
+        if(start_node.start == "hangup"){
+            is_active = false;
+            return true
+        }
+        });
+        }
+        });
+    }
+    catch(err){
+        return is_active;
+    }
+    return is_active;
 }

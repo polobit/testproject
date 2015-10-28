@@ -65,7 +65,7 @@ function checkContactUpdated(){
 	var contact_id = contact_model.id;
 	var updated_time = contact_model.attributes.updated_time;
 
-		queueGetRequest("contact_queue", "/core/api/contacts/" + contact_id + "/isUpdated?updated_time=" + updated_time, "", function success(data)
+		queueGetRequest("contact_queue" + contact_id, "/core/api/contacts/" + contact_id + "/isUpdated?updated_time=" + updated_time, "", function success(data)
 		{
 			// If true show refresh contact button.
 			if (data == 'true')
@@ -185,10 +185,25 @@ function contact_detail_view_navigation(id, contact_list_view, el){
     }
 
     if(previous_contact_id != null)
-    	$('.navigation', el).append('<a style="float:left;" href="#contact/' + previous_contact_id + '" class=""><i class="icon icon-chevron-left"></i></a>');
+    	$('.navigation', el).append('<a style="float:left;" href="#contact/' + previous_contact_id + '" class="" onclick="clearContactWidetQueues(' + id + ')"><i class="icon icon-chevron-left"></i></a>');
     if(next_contact_id != null)
-    	$('.navigation', el).append('<a style="float:right;" href="#contact/'+ next_contact_id + '" class=""><i class="icon icon-chevron-right"></i></a>');
+    	$('.navigation', el).append('<a style="float:right;" href="#contact/'+ next_contact_id + '" class="" onclick="clearContactWidetQueues(' + id + ')"><i class="icon icon-chevron-right"></i></a>');
 	
+}
+
+
+/**
+* Clear all contact related widget queue requests
+*/
+function clearContactWidetQueues(contactId){
+
+	if(!contactId || !document.ajaxq)
+		  return;
+		
+	queueClear("_widgets_" + contactId);
+	queueClear("widgets_" + contactId);
+	queueClear("widget_queue_"+contactId);
+
 }
 
 $(function(){
@@ -277,7 +292,51 @@ var Contact_Details_Model_Events = Base_Model_View.extend({
     	'click #company-actions-delete' : 'companyDelete',
     	'click .company-owner-list' : 'companyOwnerList',
     	'click .remove-company-tags' : 'removeCmpanyTags',
+
+    	'click #contact-actions-grid-delete' : 'contactActionsGridDelete',
     },
+
+
+	contactActionsGridDelete: function(e){
+		
+		e.preventDefault();
+		var contact_id=$(e.currentTarget).attr('con_id');
+    	var model=App_Contacts.contactsListView.collection.get(contact_id);
+		$('#deleteGridContactModal').modal('show');
+
+		$('#deleteGridContactModal').on("shown.bs.modal", function(){
+
+				// If Yes clicked
+		   $('#deleteGridContactModal').on('click', '#delete_grid_contact_yes', function(e) {
+				e.preventDefault();
+				// Delete Contact.
+				$.ajax({
+    					url: 'core/api/contacts/' + contact_id,
+       					type: 'DELETE',
+       					success: function()
+       					{
+       						$('#deleteGridContactModal').modal('hide');
+       						App_Contacts.contactsListView.collection.remove(model);
+       						if(App_Contacts.contact_custom_view)
+       						App_Contacts.contact_custom_view.collection.remove(model);
+       						CONTACTS_HARD_RELOAD=true;
+       						App_Contacts.contacts();
+       					}
+       				});
+			});
+
+
+		   $('#deleteGridContactModal').on('click', '#delete_grid_contact_no', function(e) {
+				e.preventDefault();
+				if($(this).attr('disabled'))
+			   	     return;
+				$('#deleteGridContactModal').modal('hide');
+			});
+
+		});
+
+    		
+	},
 
 	/**
 	 * Get the updated details of the contact and update the model.
