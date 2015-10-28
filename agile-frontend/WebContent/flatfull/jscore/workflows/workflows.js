@@ -77,6 +77,17 @@ $(function(){
     	
         // Gets Designer JSON
         var designerJSON = window.frames.designer.serializePhoneSystem();
+        
+        /**
+         * Checks if start node is connected to any other node.
+         */
+              
+        if(!is_start_active(designerJSON)){
+        	var $save_info = '<span style="color: red;">Please connect the \'Start\' node to another node in the campaign</span>';
+        	$("#workflow-msg").html($save_info).show().fadeOut(3000);
+        	return false;
+        }
+        	
 
         var name = $('#workflow-name').val();
         
@@ -433,4 +444,27 @@ function show_campaign_save()
 	var $save_info = '<span style="color: green;">Campaign saved.</span>';
 
 	$("#workflow-msg").html($save_info).show().fadeOut(3000);
+}
+
+function is_start_active(designerJSON){
+	
+	var nodes  = JSON.parse(designerJSON).nodes;
+	var is_active = true;
+	try{
+	$.each(nodes,function(node_name,node_value){
+		if(node_value.displayname == "Start"){
+		var start_states= node_value.States;
+		$.each(start_states,function(start_name,start_node){
+		if(start_node.start == "hangup"){
+			is_active = false;
+			return true
+		}
+		});
+		}
+		});
+	}
+	catch(err){
+		return is_active;
+	}
+	return is_active;
 }
