@@ -120,7 +120,7 @@ edit_contacts : function(el, report)
 }, 
 /**Function block to be executed for every call back for Call Reports*/
 call_reports : function(url,reportType,graphOn){
-	var selector="email-reports";
+	var selector="calls-chart";
 
 	var answeredCallsCountList=[];
 	var busyCallsCountList=[];
