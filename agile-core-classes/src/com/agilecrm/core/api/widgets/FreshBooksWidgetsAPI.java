@@ -1,8 +1,5 @@
 package com.agilecrm.core.api.widgets;
 
-import java.io.IOException;
-import java.net.SocketTimeoutException;
-
 import javax.ws.rs.Consumes;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
@@ -10,14 +7,13 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 
 import org.json.JSONObject;
 
 import com.agilecrm.social.FreshBooksUtil;
 import com.agilecrm.widgets.Widget;
+import com.agilecrm.widgets.util.ExceptionUtil;
 import com.agilecrm.widgets.util.WidgetUtil;
 
 /**
@@ -51,33 +47,20 @@ public class FreshBooksWidgetsAPI {
 	public String getClientsFromFreshBooks(
 			@PathParam("widget-id") Long widgetId,
 			@PathParam("email") String email) {
+		String result = null;
 		// Retrieves widget based on its id
 		Widget widget = WidgetUtil.getWidget(widgetId);
 
-		if (widget == null) {
-			return null;
-		}
+		if (widget != null) {
 
-		try {
-			// Calls FreshBooksUtil method to retrieve clients
-			return FreshBooksUtil.getClients(widget, email);
-		} catch (SocketTimeoutException e) {
-			throw new WebApplicationException(Response
-					.status(Response.Status.BAD_REQUEST)
-					.entity("Request timed out. Refresh and Please try again.")
-					.build());
-		} catch (IOException e) {
-			throw new WebApplicationException(Response
-					.status(Response.Status.BAD_REQUEST)
-					.entity("An error occurred. Refresh and Please try again.")
-					.build());
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new WebApplicationException(Response
-					.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
-					.build());
+			try {
+				// Calls FreshBooksUtil method to retrieve clients
+				result = FreshBooksUtil.getClients(widget, email);
+			} catch (Exception e) {
+				throw ExceptionUtil.catchWebException(e);
+			}
 		}
-
+		return result;
 	}
 
 	/**
@@ -95,32 +78,20 @@ public class FreshBooksWidgetsAPI {
 	public String getInvoicesFromFreshBooks(
 			@PathParam("widget-id") Long widgetId,
 			@PathParam("client_id") String clientId) {
+		String result = null;
 		// Retrieves widget based on its id
 		Widget widget = WidgetUtil.getWidget(widgetId);
 
-		if (widget == null) {
-			return null;
-		}
+		if (widget != null) {
 
-		try {
-			// Calls FreshBooksUtil method to retrieve invoices of client
-			return FreshBooksUtil.getInvoicesOfClient(widget, clientId);
-		} catch (SocketTimeoutException e) {
-			throw new WebApplicationException(Response
-					.status(Response.Status.BAD_REQUEST)
-					.entity("Request timed out. Refresh and Please try again.")
-					.build());
-		} catch (IOException e) {
-			throw new WebApplicationException(Response
-					.status(Response.Status.BAD_REQUEST)
-					.entity("An error occurred. Refresh and Please try again.")
-					.build());
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new WebApplicationException(Response
-					.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
-					.build());
+			try {
+				// Calls FreshBooksUtil method to retrieve invoices of client
+				result = FreshBooksUtil.getInvoicesOfClient(widget, clientId);
+			} catch (Exception e) {
+				throw ExceptionUtil.catchWebException(e);
+			}
 		}
+		return result;
 
 	}
 
@@ -136,31 +107,19 @@ public class FreshBooksWidgetsAPI {
 	@GET
 	@Produces(MediaType.TEXT_PLAIN)
 	public String getItemsFromFreshBooks(@PathParam("widget-id") Long widgetId) {
+		String result = null;
 		// Retrieves widget based on its id
 		Widget widget = WidgetUtil.getWidget(widgetId);
 
-		if (widget == null) {
-			return null;
+		if (widget != null) {
+			try {
+				// Calls FreshBooksUtil method to retrieve items in FreshBooks
+				result = FreshBooksUtil.getItems(widget);
+			} catch (Exception e) {
+				throw ExceptionUtil.catchWebException(e);
+			}
 		}
-
-		try {
-			// Getting an items from FreshBooks account.
-			return FreshBooksUtil.getItems(widget);
-		} catch (SocketTimeoutException e) {
-			throw new WebApplicationException(Response
-					.status(Response.Status.BAD_REQUEST)
-					.entity("Request timed out. Refresh and try again.")
-					.build());
-		} catch (IOException e) {
-			throw new WebApplicationException(Response
-					.status(Response.Status.BAD_REQUEST)
-					.entity("An error occurred. Refresh and Please try again.")
-					.build());
-		} catch (Exception e) {
-			throw new WebApplicationException(Response
-					.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
-					.build());
-		}
+		return result;
 	}
 
 	/**
@@ -175,33 +134,18 @@ public class FreshBooksWidgetsAPI {
 	@GET
 	@Produces(MediaType.TEXT_PLAIN)
 	public String getTaxesFromFreshBooks(@PathParam("widget-id") Long widgetId) {
+		String result = null;
 		// Retrieves widget based on its id
 		Widget widget = WidgetUtil.getWidget(widgetId);
-
-		if (widget == null)
-			return null;
-
-		try {
-			/*
-			 * Calls FreshBooksUtil method to retrieve taxes in FreshBooks
-			 * account
-			 */
-			return FreshBooksUtil.getTaxes(widget);
-		} catch (SocketTimeoutException e) {
-			throw new WebApplicationException(Response
-					.status(Response.Status.BAD_REQUEST)
-					.entity("Request timed out. Refresh and Please try again.")
-					.build());
-		} catch (IOException e) {
-			throw new WebApplicationException(Response
-					.status(Response.Status.BAD_REQUEST)
-					.entity("An error occurred. Refresh and Please try again.")
-					.build());
-		} catch (Exception e) {
-			throw new WebApplicationException(Response
-					.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
-					.build());
+		if (widget != null) {
+			try {
+				// Calls FreshBooksUtil method to retrieve taxes in FreshBooks
+				result = FreshBooksUtil.getTaxes(widget);
+			} catch (Exception e) {
+				throw ExceptionUtil.catchWebException(e);
+			}
 		}
+		return result;
 
 	}
 
@@ -226,36 +170,33 @@ public class FreshBooksWidgetsAPI {
 			@PathParam("last_name") String lastName,
 			@PathParam("email") String email,
 			@PathParam("organisation") String organisation) {
+		String result = null;
 		// Retrieves widget based on its id
 		Widget widget = WidgetUtil.getWidget(widgetId);
 
-		if (widget == null)
-			return null;
-
-		try {
-			if (organisation.equals("undefined"))
-				organisation = "";
-			/*
-			 * Calls FreshBooksUtil method to add client items in FreshBooks
-			 * account
-			 */
-			return FreshBooksUtil.addClient(widget, firstName, lastName, email,
-					organisation);
-		} catch (SocketTimeoutException e) {
-			throw new WebApplicationException(Response
-					.status(Response.Status.BAD_REQUEST)
-					.entity("Request timed out. Refresh and Please try again.")
-					.build());
-		} catch (IOException e) {
-			throw new WebApplicationException(Response
-					.status(Response.Status.BAD_REQUEST)
-					.entity("An error occurred. Refresh and Please try again.")
-					.build());
-		} catch (Exception e) {
-			throw new WebApplicationException(Response
-					.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
-					.build());
+		if (widget != null) {
+			
+			if(firstName.equalsIgnoreCase("undefined")){
+				firstName = "";
+			}
+			
+			if(lastName.equalsIgnoreCase("undefined")){
+				lastName = "";
+			}
+			
+			
+			try {
+				if (organisation.equals("undefined")) {
+					organisation = "";
+				}
+				// Calls FreshBooksUtil method to add client items in FreshBooks
+				result = FreshBooksUtil.addClient(widget, firstName, lastName,
+						email, organisation);
+			} catch (Exception e) {
+				throw ExceptionUtil.catchWebException(e);
+			}
 		}
+		return result;
 	}
 
 	/**
@@ -285,32 +226,21 @@ public class FreshBooksWidgetsAPI {
 			@FormParam("last_name") String lastName,
 			@FormParam("email") String email,
 			@FormParam("lines_info") String linesInfo) {
+		String result = null;
 		// Retrieves widget based on its id
 		Widget widget = WidgetUtil.getWidget(widgetId);
 
-		if (widget == null)
-			return null;
+		if (widget != null) {
 
-		try {
-			/*
-			 * Calls FreshBooksUtil method to add invoice in FreshBooks account
-			 */
-			return FreshBooksUtil.addInvoice(widget, firstName, lastName,
-					email, linesInfo);
-		} catch (SocketTimeoutException e) {
-			throw new WebApplicationException(Response
-					.status(Response.Status.BAD_REQUEST)
-					.entity("Request timed out. Refresh and Please try again.")
-					.build());
-		} catch (IOException e) {
-			throw new WebApplicationException(Response
-					.status(Response.Status.BAD_REQUEST)
-					.entity("An error occurred. Refresh and Please try again.")
-					.build());
-		} catch (Exception e) {
-			throw new WebApplicationException(Response
-					.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
-					.build());
+			try {
+				// Calls FreshBooksUtil method to add invoice in FreshBooks
+				// account
+				result = FreshBooksUtil.addInvoice(widget, firstName, lastName,
+						email, linesInfo);
+			} catch (Exception e) {
+				throw ExceptionUtil.catchWebException(e);
+			}
 		}
+		return result;
 	}
 }

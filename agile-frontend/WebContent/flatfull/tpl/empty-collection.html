@@ -43,3 +43,23 @@
 <div class="clearfix"></div>
 </div>
 </script>
+
+
+<script id="empty-collection-contacts-model-template" type="text/html">
+    <div class="slate-content">
+                <div class="box-right text-center m-t-md">
+                    <div class="text-md">{{title}}</div>
+                    <div class="text text-muted">
+                        {{{description}}}
+                    </div>
+             {{#if modal_id}}
+            	<a href="{{route}}" modal_id="{{modal_id}}" class="modal-form btn btn-sm btn-default blue btn-slate-action m-t-xs"><i class="icon-plus-sign"></i>  {{button_text}}</a>
+            {{else}}
+				{{#if button_text}}
+            		<a href="{{route}}" class="btn btn-sm btn-default blue btn-slate-action m-t-xs"><i class="icon-plus-sign"></i>  {{button_text}}</a>
+				{{/if}}
+            {{/if}}
+                </div>
+			<div class="clearfix"></div>
+
+</script>

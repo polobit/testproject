@@ -99,8 +99,8 @@ $(function(){
 	    		 */
     		
 	    		$('body').off('fill_campaigns_contact').on('fill_campaigns_contact', function(event){
-	    			var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
-	    	        fillSelect('campaign-select','/core/api/workflows', 'workflow', 'no-callback ', optionsTemplate); 
+	    			var optionsTemplate = "<option value='{{id}}'{{#if is_disabled}}disabled=disabled>{{name}} (Disabled){{else}}>{{name}}{{/if}}</option>";
+                    fillSelect('campaign-select','/core/api/workflows', 'workflow', 'no-callback ', optionsTemplate); 
 	    		});
 	    		
 	    		// Navigate to controller to show the form and then to trigger the custom event
@@ -117,8 +117,8 @@ $(function(){
     			
     			$('.show_campaigns_list').css('display','inline-block');
     			
-    			var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
-    			
+    			var optionsTemplate = "<option value='{{id}}'{{#if is_disabled}}disabled=disabled>{{name}} (Disabled){{else}}>{{name}}{{/if}}</option>";
+                
     		    fillSelect('campaign-select','/core/api/workflows', 'workflow', 'no-callback ', optionsTemplate); 
     		}
     		

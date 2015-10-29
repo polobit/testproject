@@ -380,14 +380,17 @@ var portlet_utility = {
 					header_name) {
 				$(el).find(".campaign_stats_header").html(header_name);
 			});
+			break;
 		}
 		case "Stats Report": {
 			$(el).find('.stats_report_portlet_body').parent().css('background',
 					'#f0f3f4');
+			break;
 		}
 		case "User Activities" : {
 			var pos = base_model.get("column_position")+''+base_model.get("row_position");
 			App_Portlets.activitiesView[parseInt(pos)] = el;
+			break;
 		}
 		}
 	},
@@ -1067,6 +1070,10 @@ var portlet_utility = {
 													minicalendar($(this));
 												});
 							});
+			break;
+		}
+		case "Onboarding" : {
+			setPortletContentHeight(base_model);
 			break;
 		}
 

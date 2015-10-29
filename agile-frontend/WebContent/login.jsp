@@ -1,3 +1,5 @@
+<%@page import="com.google.appengine.api.utils.SystemProperty"%>
+<%@page import="com.agilecrm.util.VersioningUtil"%>
 <%@page import="java.util.TimeZone"%>
 <%@page import="com.agilecrm.account.util.AccountPrefsUtil"%>
 <%@page import="org.apache.commons.lang.StringUtils"%>
@@ -10,6 +12,8 @@ we use setAttribute() to store the username and to autofill if he want to resubm
 */
 //flatfull path
 String flatfull_path="/flatfull";
+
+
 
 // Gets User Name
 String email = request.getParameter("email");
@@ -69,6 +73,22 @@ if(cookieJSON.has("userAgent"))
     agent = user_details.get("OSName") + " - " +user_details.get("browser_name") ;
     error="We had to log you out as you seem to have logged in from some other browser <span style='font-size:12px'>("+ agent+ ")</span>";
 }
+}
+
+String _AGILE_VERSION = SystemProperty.applicationVersion.get();
+
+String CSS_PATH = "/";
+String FLAT_FULL_PATH = "flatfull/";
+String CLOUDFRONT_TEMPLATE_LIB_PATH = VersioningUtil.getCloudFrontBaseURL();
+System.out.println(CLOUDFRONT_TEMPLATE_LIB_PATH);
+  
+String CLOUDFRONT_STATIC_FILES_PATH = VersioningUtil.getStaticFilesBaseURL();
+CSS_PATH = CLOUDFRONT_STATIC_FILES_PATH;
+if(SystemProperty.environment.value() == SystemProperty.Environment.Value.Development)
+{
+	  CLOUDFRONT_STATIC_FILES_PATH = FLAT_FULL_PATH;
+	  CLOUDFRONT_TEMPLATE_LIB_PATH = "";	
+	  CSS_PATH = FLAT_FULL_PATH;
 }
 
 // Users can show their logo on login page. 
@@ -283,7 +303,7 @@ if(isSafari && isWin)
 		}
 
 		function preload_dashlet_libs(){ 
-			setTimeout(function(){head.load('<%=flatfull_path%>/final-lib/min/lib-all-min.js')}, 5000);
+			setTimeout(function(){head.load('<%=CLOUDFRONT_STATIC_FILES_PATH %>final-lib/min/lib-all-min.js', '<%=CLOUDFRONT_TEMPLATE_LIB_PATH %>jscore/min/flatfull/js-all-min.js', '<%=CLOUDFRONT_TEMPLATE_LIB_PATH%>tpl/min/precompiled/<%=FLAT_FULL_PATH%>tpl.js?_=<%=_AGILE_VERSION%>', '<%=CLOUDFRONT_TEMPLATE_LIB_PATH%>tpl/min/precompiled/<%=FLAT_FULL_PATH%>portlets.js?_=<%=_AGILE_VERSION%>')}, 5000);
 		}
 	</script>
 	<!-- Clicky code -->

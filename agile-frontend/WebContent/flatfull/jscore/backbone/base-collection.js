@@ -135,16 +135,8 @@ edit : function(e)
 		return this;
 	}
 
-	var that = this
-	// console.log(this.model.toJSON());
-	getTemplate(that.options.template, that.model.toJSON(), undefined, function(el)
-	{
-		$(that.el).html(el);
-		$(that.el).data(that.model);
-	}, this.el);
-
-	// $(this.el).html(getTemplate(this.options.template, this.model.toJSON()));
-	// $(this.el).data(this.model);
+	$(this.el).html(getTemplate(this.options.template, this.model.toJSON()));
+	$(this.el).data(this.model);
 	// Add model as data to it's corresponding row
 
 	return this;
@@ -180,6 +172,15 @@ edit : function(e)
  */
 var Base_Collection_View = Backbone.View
 		.extend({
+
+			/*
+			 * Events defined on the view and related function(defines action to
+			 * be performed on event). ".save" and ".delete" represents html
+			 * elements in current view
+			 */
+			events : {
+				"click .temp_collection_event" : "tempEvent"
+			},
 
 			/**
 			 * Initializes the view, creates an empty BaseCollection and options
@@ -312,6 +313,8 @@ var Base_Collection_View = Backbone.View
 						var element="table"; 
 						if (that.options.scroll_symbol)
 							element="section";
+						if(that.options.custom_scrollable_element)
+							element=that.options.custom_scrollable_element;
 						$(element, that.el).after('<div class="scroll-loading" style="margin-left:50%">' + LOADING_ON_CURSOR + '</div>');
 					} });
 
@@ -357,6 +360,11 @@ var Base_Collection_View = Backbone.View
 				}
 
 			},
+
+			tempEvent: function(){
+				console.log("tempEvent");
+			},
+
 			/**
 			 * Takes each model and creates a view for each model using model
 			 * template and appends it to model-list, This method is called
@@ -469,7 +477,7 @@ var Base_Collection_View = Backbone.View
 				var ui_function = this.buildCollectionUI;
 				// Populate template with collection and view element is created
 				// with content, is used to fill heading of the table
-				getTemplate((this.options.templateKey + '-collection'), this.collection.toJSON(), "yes", ui_function, this.el);
+				getTemplate((this.options.templateKey + '-collection'), this.collection.toJSON(), "yes", ui_function);
 
 				if (this.page_size && (this.collection.length < this.page_size))
 				{
@@ -547,7 +555,6 @@ var Base_Collection_View = Backbone.View
 
 				return this;
 			}, });
-
 /**
 *  Extended View of Base_Collection. It combines parent events to extended view events.
 */

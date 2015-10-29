@@ -944,5 +944,15 @@
 		<servlet-name>RemoteApiServlet</servlet-name>
 		<url-pattern>/remote_api</url-pattern>
 	</servlet-mapping>
+	<servlet>
+        <servlet-name>BriaInformUserServlet</servlet-name>
+        <servlet-class>com.thirdparty.bria.BriaInformUserServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>  
+ 
+    <servlet-mapping>
+        <servlet-name>BriaInformUserServlet</servlet-name>
+        <url-pattern>/InformUser</url-pattern>
+    </servlet-mapping>
 	
 </web-app>

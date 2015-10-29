@@ -19,8 +19,7 @@ var Pubnub = null;
 var SocialSuiteRouter = Backbone.Router.extend({
 
 	routes : {
-	// route : function name
-
+	
 	// First function on click of tab
 	"social" : "socialsuite",
 
@@ -63,7 +62,13 @@ var SocialSuiteRouter = Backbone.Router.extend({
 			$('#content').html($(template_ui));	
 
 			/* Creates pubnub object and channel dedicated for new user or relogin */
-			initToPubNub();
+            initToPubNub(function() {
+                if (!Pubnub.is_connected_call) {
+                    return
+                }
+                Pubnub.is_connected_call = false;
+                socialsuitecall.streams()
+            });
 
 			// Display added streams
 			socialsuitecall.streams();
@@ -122,6 +127,7 @@ var SocialSuiteRouter = Backbone.Router.extend({
 
 			return;
 		}// if end
+
 		if (Streams_List_View) // Streams already collected in collection
 		{
 			console.log("Collection already defined.");
@@ -144,6 +150,7 @@ var SocialSuiteRouter = Backbone.Router.extend({
 
 		// Remove waiting icon.
 		removeWaiting();
+		
 	}, // streams end
 
 	/**

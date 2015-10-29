@@ -142,7 +142,6 @@ var Base_Model_View = Backbone.View
 							 * page, since on change in model i.e., data fetched
 							 * render is called again)
 							 */
-							that.model.save_called = false;
 							that.render(true);
 						}
 					});
@@ -332,17 +331,14 @@ var Base_Model_View = Backbone.View
 
 				var prePersist = this.options.prePersist;
 				
-				if (prePersist && typeof (prePersist) === "function") {				    
+				if (prePersist && typeof (prePersist) === "function") {
+				    
 				     prePersist(this.model);
 				    }
 				// Loading while saving
 				//$save_info = $('<div style="display:inline-block"><img src="img/1-0.gif" height="15px" width="15px"></img></div>');
 				//$(".form-actions", this.el).append($save_info);
 				//$save_info.show();
-
-
-				// Add a dummy variable to not call postrenderCallback after save if window or navigate options present in model view
-				this.model.save_called = true;
 
 				// Calls save on the model
 				this.model
@@ -363,8 +359,8 @@ var Base_Model_View = Backbone.View
 									success : function(model, response) 
 									{	
 										// Removes disabled attribute of save button
-										enable_save_button($(e.currentTarget));										
-
+										enable_save_button($(e.currentTarget));
+										
 										if (saveCallback && typeof (saveCallback) === "function") {
 											console.log(response)
 											// execute the callback, passing parameters as necessary
@@ -466,7 +462,6 @@ var Base_Model_View = Backbone.View
 			render : function(isFetched) {
 
 				
-				
 				/**
 				 * Renders and returns the html element of view with model data,
 				 * few conditions are checked render the view according to
@@ -490,7 +485,7 @@ var Base_Model_View = Backbone.View
 				if (!this.model.isNew() || this.options.isNew
 						|| !$.isEmptyObject(this.model.toJSON()) || isFetched) {
 
-					//$(this.el).html(getRandomLoadingImg());
+					$(this.el).html(getRandomLoadingImg());
 					/*
 					 * Uses handlebars js to fill the model data in the template
 					 */
@@ -552,13 +547,7 @@ var Base_Model_View = Backbone.View
 				 */
 				
 				if (callback && typeof (callback) === "function") {
-
-					// No render callback if navigation/reload present in view
-					if(this.model.save_called && (this.options.window || this.options.navigate || this.options.reload)){
-						    this.model.save_called = false;
-                            return;
-					}
-
+					
 					// execute the callback, passing parameters as necessary
 					callback($(this.el),this.model.toJSON());
 				}
@@ -621,3 +610,12 @@ function enable_save_button(elem)
 {
 	elem.html(elem.attr('data-save-text')).removeAttr('disabled data-save-text');
 }
+
+/**
+*  Extended View of Base_Model. It combines parent events to extended view events.
+*/
+Base_Model_View.extend = function(child) {
+	var view = Backbone.View.extend.apply(this, arguments);
+	view.prototype.events = _.extend({}, this.prototype.events, child.events);
+	return view;
+};

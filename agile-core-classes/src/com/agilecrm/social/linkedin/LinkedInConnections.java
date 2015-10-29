@@ -52,8 +52,9 @@ public class LinkedInConnections
 					ProfileField.RELATION_TO_VIEWER_CONNECTIONS));
 	
 			// If no connections found return empty list
-			if (profile.getRelationToViewer().getRelatedConnections() == null)
+			if (profile.getRelationToViewer().getRelatedConnections() == null){
 				return new ArrayList<SocialSearchResult>();
+			}
 	
 			// fill each shared connection details in list
 			return LinkedInUtil.fillPersonsDetailsInList(profile.getRelationToViewer().getRelatedConnections().getPersonList());

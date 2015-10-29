@@ -61,7 +61,8 @@ function showGooglePlusProfile(id)
 
 		if (typeof resData.errors == "undefined")
 		{
-			var el = getTemplate("googleplus-profile", resData);
+			var el = getTemplate("googleplus-profile", resData);		
+			console.log(el);
 			$('#' + WIDGET_NAME).html(el);
 			showGooglePlusPosts(id);
 		}
@@ -147,8 +148,7 @@ function getGooglePlusPosts(id, nextPageToken, callback)
 	});	
 }
 
-function getMatchingPeople(search, callback)
-{
+function getMatchingPeople(search, callback) {
 	var apiURL = "https://www.googleapis.com/plus/v1/people";
 	var reqData = "query=" + search + "&maxResults=20";
 	googlePlusApiCall(apiURL, reqData, function(apiCallReturnData){
@@ -174,8 +174,7 @@ function getMatchingPeople(search, callback)
 
 // utility functions
 
-function refreshAccessToken()
-{
+function refreshAccessToken() {
 
 	var reqData = "reqType=googleplusrefresh&widgetId=" + pluginId + "&refreshToken=" + widgetPref['refresh_token'] + "&code_token=" + widgetPref['code_token'];
 
@@ -193,17 +192,14 @@ function refreshAccessToken()
 	} });
 }
 
-function getWidgetDetails(callback)
-{
+function getWidgetDetails(callback) {
 	accessUrlUsingAjax("core/api/widgets/GooglePlus", function(response){
 		if(callback)
 			   callback(response);
 	});
-	
 }
 
-function googlePlusApiCall(apiURL, reqData, callback)
-{
+function googlePlusApiCall(apiURL, reqData, callback) {
 
 	$.ajax({ 
 		type : "GET", 
@@ -211,7 +207,12 @@ function googlePlusApiCall(apiURL, reqData, callback)
 		data : reqData + "&access_token=" + widgetPref['access_token'],
 		dataType : "json",
 		success: function(data){
-			callback($.parseJSON(data));
+			callback(data);
+		},error:function(data){
+			var errorObj = JSON.parse(data.responseText);
+			if(errorObj){
+				displayError(WIDGET_NAME, errorObj.error.message);
+			}
 		}
 	});
 }
@@ -226,127 +227,119 @@ function displayError(id, error, disable_check)
 	/*
 	 * Get error template and fill it with error message and show it in the div
 	 * with given id
-	 */
+	 */	 
 	$('#' + id).html(getTemplate('googleplus-error-panel', error_json));
 
 }
 
-$(function()
+function startGooglePlusWidget(contact_id) {
+
+	WIDGET_NAME = "GooglePlus";
+	LODING_IMAGE = '<div id="tweet_load"><center><img  src=\"img/ajax-loader-cursor.gif\" ' + 'style="margin-top: 10px;margin-bottom: 14px;"></img></center></div>';
+
+	PROFILE_DATA = {};
+
+	// Retrieves widget which is fetched using script API
+	widgetDetails = agile_crm_get_widget(WIDGET_NAME);
+
+	// console.clear();
+	// console.log("From Javascript API before refresh");
+	// console.log(widgetDetails);
+	// return;
+
+	pluginId = widgetDetails.id;
+	widgetPref = JSON.parse(widgetDetails.prefs);
+	searchDetails = {};
+
+	// console.log(widgetPref);
+
+	var name = "";
+	if (agile_crm_get_contact_property("first_name"))
+		name = name + agile_crm_get_contact_property("first_name");
+	if (agile_crm_get_contact_property("last_name"))
+		name = name + " " + agile_crm_get_contact_property("last_name");
+	searchDetails['keywords'] = name.trim();	
+	contactGooglePlusId = agile_crm_get_contact_property_by_subtype('website', 'GOOGLE-PLUS');
+
+	// console.log("From Java API after refresh");
+	// refreshAccessToken();
+	// console.log(widgetDetails);
+	// console.log(widgetPref);
+	// return;
+
+	if (typeof contactGooglePlusId == "undefined")
+	{
+		// search and display people matching customer name
+		showMatchedPeople(searchDetails['keywords']);
+	}
+	else
+	{
+		showGooglePlusProfile(contactGooglePlusId);
+	}
+
+	// handling all events related to this widget
+
+	// Deletes GooglePlus profile on click of delete button in template
+	$("#widgets").on("click", "#GooglePlus_plugin_delete", function(e)
+	{
+		e.preventDefault();
+		contactGooglePlusId = agile_crm_get_contact_property_by_subtype('website', 'GOOGLE-PLUS');
+
+		agile_crm_delete_contact_property_by_subtype('website', 'GOOGLE-PLUS', contactGooglePlusId, function(data)
 		{
+			showMatchedPeople(searchDetails['keywords']);
+		});
 
-			WIDGET_NAME = "GooglePlus";
-			LODING_IMAGE = '<div id="tweet_load"><center><img  src=\"img/ajax-loader-cursor.gif\" ' + 'style="margin-top: 10px;margin-bottom: 14px;"></img></center></div>';
+	});
 
-			PROFILE_DATA = {};
+	$("#widgets").on("click", ".peoplesearch", function(e)
+	{
+		e.preventDefault();
+		getTemplate('googleplus-modified-search', {}, undefined, function(template_ui){
+	 		if(!template_ui)
+	    		return;
+			$('#' + WIDGET_NAME).html($(template_ui)); 
+		},'#' + WIDGET_NAME);
 
-			// Retrieves widget which is fetched using script API
-			widgetDetails = agile_crm_get_widget(WIDGET_NAME);
+	});
+	
+	$("#widgets").on("click", "#gpsearchbtn", function(e)
+	{
+		e.preventDefault();
 
-			// console.clear();
-			// console.log("From Javascript API before refresh");
-			// console.log(widgetDetails);
-			// return;
+		// Checks whether all input fields are given
+		if (!isValidForm($("#gpsearchform")))
+		{
+			return;
+		}
 
-			pluginId = widgetDetails.id;
-			widgetPref = JSON.parse(widgetDetails.prefs);
-			searchDetails = {};
+		var searchKey = $('#searchkeywords').val();
+		$('#spinner-search').show();
+		searchDetails['keywords'] = searchKey;
+		showMatchedPeople(searchDetails['keywords']);
+	});
 
-			// console.log(widgetPref);
+	$("#widgets").on("keypress", "#searchkeywords", function(event)
+	{
+		if (event.keyCode == 13)
+		{
+			event.preventDefault();
+			$("#gpsearchbtn").trigger("click");
+		}
+	});
 
-			var name = "";
-			if (agile_crm_get_contact_property("first_name"))
-				name = name + agile_crm_get_contact_property("first_name");
-			if (agile_crm_get_contact_property("last_name"))
-				name = name + " " + agile_crm_get_contact_property("last_name");
-			searchDetails['keywords'] = name.trim();
+	$("#widgets").on("click", "#gpsearchclose", function(e)
+	{
+		showMatchedPeople(searchDetails['keywords']);
+		e.preventDefault();
+	});
 
-			contactGooglePlusId = agile_crm_get_contact_property_by_subtype('website', 'GOOGLE-PLUS');
+	$("#widgets").on("mouseover", ".GoogleplusDisplayPic", function(e)
+	{
 
-			// console.log("From Java API after refresh");
-			// refreshAccessToken();
-			// console.log(widgetDetails);
-			// console.log(widgetPref);
-			// return;
-
-			if (typeof contactGooglePlusId == "undefined")
-			{
-				// search and display people matching customer name
-				showMatchedPeople(searchDetails['keywords']);
-			}
-			else
-			{
-				showGooglePlusProfile(contactGooglePlusId);
-			}
-
-			// handling all events related to this widget
-
-			// Deletes GooglePlus profile on click of delete button in template
-            $("body").off("click", "#GooglePlus_plugin_delete");
-			$("body").on("click", "#GooglePlus_plugin_delete", function(e)
-			{
-				e.preventDefault();
-				contactGooglePlusId = agile_crm_get_contact_property_by_subtype('website', 'GOOGLE-PLUS');
-
-				agile_crm_delete_contact_property_by_subtype('website', 'GOOGLE-PLUS', contactGooglePlusId, function(data)
-				{
-					showMatchedPeople(searchDetails['keywords']);
-				});
-
-			});
-            
-            $("body").off("click", ".peoplesearch");
-			$("body").on("click", ".peoplesearch", function(e)
-			{
-				e.preventDefault();
-				getTemplate('googleplus-modified-search', {}, undefined, function(template_ui){
-			 		if(!template_ui)
-			    		return;
-					$('#' + WIDGET_NAME).html($(template_ui)); 
-				},'#' + WIDGET_NAME);
-
-			});
-			
-            $("body").off("click", "#gpsearchbtn");
-			$("body").on("click", "#gpsearchbtn", function(e)
-			{
-				e.preventDefault();
-
-				// Checks whether all input fields are given
-				if (!isValidForm($("#gpsearchform")))
-				{
-					return;
-				}
-
-				var searchKey = $('#searchkeywords').val();
-				$('#spinner-search').show();
-				searchDetails['keywords'] = searchKey;
-				showMatchedPeople(searchDetails['keywords']);
-			});
-
-            $("body").off("keypress", "#searchkeywords");
-			$("body").on("keypress", "#searchkeywords", function(event)
-			{
-				if (event.keyCode == 13)
-				{
-					event.preventDefault();
-					$("#gpsearchbtn").trigger("click");
-				}
-			});
-
-            $("body").off("click", "#gpsearchclose");
-			$("body").on("click", "#gpsearchclose", function(e)
-			{
-				showMatchedPeople(searchDetails['keywords']);
-				e.preventDefault();
-			});
-
-            $("body").off("mouseover", ".GoogleplusDisplayPic");
-			$("body").on("mouseover", ".GoogleplusDisplayPic", function(e)
-			{
-
-				// Unique Google Plus User Id from widget
-				profileID = $(this).attr('id');
-				// on hover ajax request
+		// Unique Google Plus User Id from widget
+		profileID = $(this).attr('id');
+		// on hover ajax request
 //				var profileDat = getGooglePlusUserDetails(profileID);
 //				if (typeof profileDat.errors == "undefined")
 //				{
@@ -356,74 +349,72 @@ $(function()
 //						var povOverData = $("#" + profileID).attr('data-content');
 //						$("#" + profileID).attr('data-content', povOverData + getTemplate("googleplus-pop-profile", profileDat));
 //					}
-		//
+//
 //				}
 
-				// Aligns details to left in the pop over
-				$(this).popover({ placement : 'left',
-					html:true
-				});
-				/*
-				 * Called show to overcome pop over bug (not showing pop over on mouse
-				 * hover for first time)
-				 */
-				$(this).popover('show');  
-                
-                $('#' + profileID).off('click');
-				$('#' + profileID).on('click', function(e)
-				{
+		// Aligns details to left in the pop over
+		$(this).popover({ placement : 'left',
+			html:true
+		});
+		/*
+		 * Called show to overcome pop over bug (not showing pop over on mouse
+		 * hover for first time)
+		 */
+		$(this).popover('show');  
 
-					e.preventDefault();
-					// Hide pop over after clicking on any picture
-					$(this).popover('hide');
+		$('#' + profileID).on('click', function(e)
+		{
 
-					// saving in db
-					var propertiesArray = [
-						{ "name" : "website", "value" : profileID, "subtype" : "GOOGLE-PLUS" }
-					];
+			e.preventDefault();
+			// Hide pop over after clicking on any picture
+			$(this).popover('hide');
 
-					if (!agile_crm_get_contact_property("image"))// If no contact
-					// image
-					{
-						// Get image link which can be used to save image for contact
-						var displayImage = $(this).attr('src');
-						propertiesArray.push({ "name" : "image", "value" : displayImage });
-					}
+			// saving in db
+			var propertiesArray = [
+				{ "name" : "website", "value" : profileID, "subtype" : "GOOGLE-PLUS" }
+			];
 
-					/*
-					 * If contact title is undefined, saves headline of the Twitter
-					 * profile to the contact title
-					 */
-					// if (!agile_crm_get_contact_property("title"))
-					// {
-					// var summary = $(this).attr("summary");
-					// propertiesArray.push({ "name" : "title", "value" : summary });
-					// }
-					agile_crm_update_contact_properties(propertiesArray);
-
-					contactGooglePlusId = profileID;
-
-					showGooglePlusProfile(profileID);
-
-				});
-
-			});
-
-            $("body").off("click", "#gplusstreammore");
-			$("body").on("click", "#gplusstreammore", function(e)
+			if (!agile_crm_get_contact_property("image"))// If no contact
+			// image
 			{
-				e.preventDefault();
-				var nextPageToken = $(this).attr("ntoken");
+				// Get image link which can be used to save image for contact
+				var displayImage = $(this).attr('src');
+				propertiesArray.push({ "name" : "image", "value" : displayImage });
+			}
 
-				if (nextPageToken == "")
-				{
-					$('#gplusstreammore').html("No more posts.");
-					return;
-				}
+			/*
+			 * If contact title is undefined, saves headline of the Twitter
+			 * profile to the contact title
+			 */
+			// if (!agile_crm_get_contact_property("title"))
+			// {
+			// var summary = $(this).attr("summary");
+			// propertiesArray.push({ "name" : "title", "value" : summary });
+			// }
+			agile_crm_update_contact_properties(propertiesArray);
 
-				$('#spinnerspan').show();
-				showGooglePlusPosts(contactGooglePlusId, nextPageToken);
-				$('#spinnerspan').hide();
-			});
+			contactGooglePlusId = profileID;
 
-		});// End of function
+			showGooglePlusProfile(profileID);
+
+		});
+
+	});
+
+	$("#widgets").on("click", "#gplusstreammore", function(e)
+	{
+		e.preventDefault();
+		var nextPageToken = $(this).attr("ntoken");
+
+		if (nextPageToken == "")
+		{
+			$('#gplusstreammore').html("No more posts.");
+			return;
+		}
+
+		$('#spinnerspan').show();
+		showGooglePlusPosts(contactGooglePlusId, nextPageToken);
+		$('#spinnerspan').hide();
+	});
+
+}// End of function

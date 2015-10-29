@@ -17,6 +17,35 @@ $(function()
 		return getPropertyValue(items, name);
 	});
 
+
+	
+	/**
+	 * displays , in between 2 conatct fields.
+	 */
+	Handlebars.registerHelper('getPropertyValueExists', function(items, companyname,jobtitle)
+	{
+		return getPropertyValueByCheckingExistance(items, companyname,jobtitle);
+	});
+
+	
+	/**
+	 * checks for the contact property value existance to display div none or block
+	 */
+	Handlebars.registerHelper('checkPropertyValueExistance', function(items, name,name1)
+	{
+		return checkPropertyValueExistance(items, name,name1);
+	});
+	
+	
+	
+	/**
+	 * checks for the contact property value existance to display div none or block
+	 */
+	Handlebars.registerHelper('getMarginLength', function(items, name)
+	{
+		return getMarginLength(items, name);
+	});
+
 	/**
 	 * Helper function to return the checkbox html element with value of a
 	 * property matched with the given name from the array of properties
@@ -2247,14 +2276,20 @@ $(function()
 
 	Handlebars.registerHelper('remove_spaces', function(value)
 	{
-		return value.replace(/ +/g, '');
+		if(value)
+			  value = value.replace(/ +/g, '');
+
+		return value;
 
 	});
 
 	Handlebars.registerHelper('replace_spaces', function(value)
 	{
-		return value.replace(/ +/g, '_');
+		if(value)
+			  value = value.replace(/ +/g, '_');
 
+		return value;
+		
 	});
 
 	/***************************************************************************
@@ -4309,13 +4344,19 @@ $(function()
 
 	Handlebars.registerHelper('remove_spaces', function(value)
 	{
-		return value.replace(/ +/g, '');
+		if(value)
+			  value = value.replace(/ +/g, '');
+
+		return value;
 
 	});
 
 	Handlebars.registerHelper('replace_spaces', function(value)
 	{
-		return value.replace(/ +/g, '_');
+		if(value)
+			  value = value.replace(/ +/g, '_');
+
+		return value;
 
 	});
 

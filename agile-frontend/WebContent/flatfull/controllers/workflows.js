@@ -97,13 +97,13 @@ var WorkflowsRouter = Backbone.Router
 				this.workflow_model = undefined;
 
 				$("#content").html('<div id="workflows-listener-container"></div>');
-				getTemplate('workflow-add', { "is_new" : true }, undefined, function(template_ui)
-				{
-					if (!template_ui)
-						return;
-					$('#workflows-listener-container').html($(template_ui));
+				getTemplate('workflow-add', { "is_new" : true, "is_disabled" : "false", "was_disabled" : "false" }, undefined, function(template_ui){
+					if(!template_ui)
+						  return;
+					$('#workflows-listener-container').html($(template_ui));	
 					initializeWorkflowsListeners();
 					initiate_tour("workflows-add", $('#content'));
+					
 					// Init SendVerify Email
 					send_verify_email();
 				}, "#workflows-listener-container");
@@ -164,11 +164,12 @@ var WorkflowsRouter = Backbone.Router
 					return;
 
 				this.workflow_json = this.workflow_model.get("rules");
+				this.is_disabled = this.workflow_model.get("is_disabled");
 				var that = this;
-				getTemplate('workflow-add', {}, undefined, function(template_ui)
-				{
-					if (!template_ui)
-						return;
+
+				getTemplate('workflow-add', {"is_disabled" : ""+that.is_disabled}, undefined, function(template_ui){
+					if(!template_ui)
+						  return;
 
 					var el = $(template_ui);
 
@@ -176,6 +177,9 @@ var WorkflowsRouter = Backbone.Router
 					$('#workflows-listener-container').html(el);
 					initializeWorkflowsListeners();
 
+					if(that.is_disabled)
+						$('#designer-tour').addClass("blur").removeClass("anti-blur");
+                    
 					// Set the name
 					$('#workflow-name').val(that.workflow_model.get("name"));
 
@@ -248,10 +252,10 @@ var WorkflowsRouter = Backbone.Router
 				} });
 
 				$("#content").html('<div id="workflows-listener-container"></div>');
-				getTemplate('workflow-add', { "is_new" : true }, undefined, function(template_ui)
-				{
-					if (!template_ui)
-						return;
+
+				getTemplate('workflow-add', { "is_new" : true, "is_disabled" : false, "was_disabled" : false }, undefined, function(template_ui){
+					if(!template_ui)
+						  return;
 					$('#workflows-listener-container').html($(template_ui));
 					initializeWorkflowsListeners();
 					// Init SendVerify Email
@@ -562,7 +566,7 @@ var WorkflowsRouter = Backbone.Router
 
 					});
 
-					var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
+					var optionsTemplate = "<option value='{{id}}'{{#if is_disabled}}disabled=disabled>{{name}} (Disabled){{else}}>{{name}}{{/if}}</option>";
 
 					
 					/**
@@ -821,7 +825,7 @@ var WorkflowsRouter = Backbone.Router
 							populate_call_trigger_options($('form#addTriggerForm', el), currentTrigger.toJSON());
 						}
 
-						var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
+						var optionsTemplate = "<option value='{{id}}'{{#if is_disabled}}disabled=disabled>{{name}} (Disabled){{else}}>{{name}}{{/if}}</option>";
 
 						/**
 						 * Fills campaign select drop down with existing

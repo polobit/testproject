@@ -273,15 +273,11 @@
 <div class="activity block pos-rlt">
 
 	<div class="activity-block-owner thumb-xs pull-left m-r-sm b-light b avatar">
-         {{#if user}}
-			{{#if this.user.ownerPic}}
-				<img class="user-img r r-2x"  alt="" src="{{this.user.ownerPic}}" >
+         {{#if this.user}}
+				<img class="user-img ref-roundedimg"  alt="" src="{{this.user.ownerPic}}" title="{{this.user.name}}">
 			{{else}}
-				<img class="user-img r r-2x" alt="" src="{{defaultGravatarurl 40}}" >
+				<img class="user-img ref-roundedimg"  alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
 			{{/if}}
-		{{else}}
-			<img class="user-img r r-2x"  alt="" src="{{#getCurrentUserPrefs}}{{#if pic}}{{pic}}{{else}}{{defaultGravatarurl 40}}{{/if}}{{/getCurrentUserPrefs}}" >
-		{{/if}}
 
      <span class="owner-name hide">{{user.name}}</span>
 
