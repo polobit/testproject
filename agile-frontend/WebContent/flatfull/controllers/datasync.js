@@ -39,6 +39,19 @@ dataSync : function()
                     individual_tag_name: 'div',
                     templateKey: 'data-sync',
                     postRenderCallback: function(el) {
+                        var dataSyncTab = localStorage.getItem("datasync_tab");
+                        if(!dataSyncTab || dataSyncTab == null) {
+                            if(islocalStorageHasSpace())
+                               localStorage.setItem('datasync_tab', "google-tab");
+                        dataSyncTab = "google-tab";
+                    }
+                        $('#prefs-tabs-content a[href="#'+dataSyncTab+'"]').tab('show');
+                        $("#prefs-tabs-content .tab-container ul li").off("click");
+                        $("#prefs-tabs-content").on("click",".tab-container ul li",function(){
+                            var temp = $(this).find("a").attr("href").split("#");
+                            if(islocalStorageHasSpace())
+                                localStorage.setItem('datasync_tab', temp[1]);
+                        });
                     	that.google_calendar(el);
                         initializeDataSyncListners();
 
@@ -79,16 +92,23 @@ google_calendar:function(el){
 	                $('#PrefsTab .select').removeClass('select');
 	                $('.contact-sync-tab').addClass('select');
 
+                    getTemplate('data-sync-settings', {}, undefined, function(template_ui1){
+                        if(!template_ui1)
+                            return;
+                        $("#prefs-tabs-content").html(template_ui1);
+                        var dataSynctTab = localStorage.getItem("datasync_tab");
+                        $("#prefs-tabs-content").find('a[href="#'+dataSynctTab+'"]').closest("li").addClass("active");
+                        initializeTabListeners("datasync_tab", "sync");
+    	                getSyncModelFromName("GOOGLE", function(model){
 
-	                getSyncModelFromName("GOOGLE", function(model){
-
-                   	var	url= 'core/api/contactprefs/GOOGLE',
-			                  template= 'admin-settings-import-google-contacts-setup';
-                  					renderInnerSyncView(url,template,model,function(model){
-									showNotyPopUp("information", "Contacts sync initiated", "top", 1000);
-                  					});
-			               
-			         });
+                       	var	url= 'core/api/contactprefs/GOOGLE',
+    			                  template= 'admin-settings-import-google-contacts-setup';
+                      					renderInnerSyncView(url,template,model,function(model){
+    									showNotyPopUp("information", "Contacts sync initiated", "top", 1000);
+                      					});
+    			               
+    			         });
+                    }, null);
 
 	            }, "#content");
 
@@ -105,17 +125,24 @@ google_calendar:function(el){
                 $('#PrefsTab .select').removeClass('select');
                 $('.contact-sync-tab').addClass('select');
 
-               
-			       getSyncModelFromName("STRIPE", function(model){
+               getTemplate('data-sync-settings', {}, undefined, function(template_ui1){
+                        if(!template_ui1)
+                            return;
+                        $("#prefs-tabs-content").html(template_ui1);
+                        var dataSynctTab = localStorage.getItem("datasync_tab");
+                        $("#prefs-tabs-content").find('a[href="#'+dataSynctTab+'"]').closest("li").addClass("active");
+                        initializeTabListeners("datasync_tab", "sync");
+    			       getSyncModelFromName("STRIPE", function(model){
 
-                   	var	url= 'core/api/contactprefs/STRIPE',
-			                  template= 'admin-settings-import-stripe-contact-sync-prefs';
-                  					renderInnerSyncView(url,template,model,function(model){
-									showNotyPopUp("information", "Contacts sync initiated", "top", 1000);
-                  					});
-			               
-			    	     });
-			          }, "#content");
+                       	var	url= 'core/api/contactprefs/STRIPE',
+    			                  template= 'admin-settings-import-stripe-contact-sync-prefs';
+                      					renderInnerSyncView(url,template,model,function(model){
+    									showNotyPopUp("information", "Contacts sync initiated", "top", 1000);
+                      					});
+    			               
+    			    	     });
+                }, null);
+			 }, "#content");
 
         },
 
@@ -128,7 +155,13 @@ google_calendar:function(el){
                 $('#content').html($(template_ui));
                 $('#PrefsTab .select').removeClass('select');
                 $('.contact-sync-tab').addClass('select');
-
+                getTemplate('data-sync-settings', {}, undefined, function(template_ui1){
+                        if(!template_ui1)
+                            return;
+                        $("#prefs-tabs-content").html(template_ui1);
+                        var dataSynctTab = localStorage.getItem("datasync_tab");
+                        $("#prefs-tabs-content").find('a[href="#'+dataSynctTab+'"]').closest("li").addClass("active");
+                        initializeTabListeners("datasync_tab", "sync");
                    getSyncModelFromName("SHOPIFY", function(model){
 
                    	var	url= 'core/api/contactprefs/SHOPIFY',
@@ -138,7 +171,7 @@ google_calendar:function(el){
                   					});
 			               
 			         });
-               
+                }, null);    
             }, "#content");
         },
 
@@ -151,6 +184,13 @@ google_calendar:function(el){
 
                 $('#PrefsTab .select').removeClass('select');
                 $('.contact-sync-tab').addClass('select');
+                getTemplate('data-sync-settings', {}, undefined, function(template_ui1){
+                        if(!template_ui1)
+                            return;
+                        $("#prefs-tabs-content").html(template_ui1);
+                        var dataSynctTab = localStorage.getItem("datasync_tab");
+                        $("#prefs-tabs-content").find('a[href="#'+dataSynctTab+'"]').closest("li").addClass("active");
+                        initializeTabListeners("datasync_tab", "sync");
                 getSyncModelFromName("FRESHBOOKS", function(model){
 
                     var url= 'core/api/contactprefs/FRESHBOOKS',
@@ -160,7 +200,7 @@ google_calendar:function(el){
                                     });
                            
                      });
-            
+                }, null);      
             }, "#content");
         },
 
@@ -172,7 +212,13 @@ google_calendar:function(el){
                 $('#content').html($(template_ui));
                 $('#PrefsTab .select').removeClass('select');
                 $('.contact-sync-tab').addClass('select');
-          
+                getTemplate('data-sync-settings', {}, undefined, function(template_ui1){
+                        if(!template_ui1)
+                            return;
+                        $("#prefs-tabs-content").html(template_ui1);
+                        var dataSynctTab = localStorage.getItem("datasync_tab");
+                        $("#prefs-tabs-content").find('a[href="#'+dataSynctTab+'"]').closest("li").addClass("active");
+                        initializeTabListeners("datasync_tab", "sync");
                   getSyncModelFromName("FRESHBOOKS", function(model){
                     var url= 'core/api/contactprefs/FRESHBOOKS',
                               template= 'admin-settings-import-freshbooks-settings';
@@ -184,7 +230,7 @@ google_calendar:function(el){
                                     });
                      });
 
-
+                  }, null);
             }, "#content");
         },
 
@@ -197,6 +243,13 @@ google_calendar:function(el){
                 $('#content').html($(template_ui));
                 $('#PrefsTab .select').removeClass('select');
                 $('.contact-sync-tab').addClass('select');
+                getTemplate('data-sync-settings', {}, undefined, function(template_ui1){
+                        if(!template_ui1)
+                            return;
+                        $("#prefs-tabs-content").html(template_ui1);
+                        var dataSynctTab = localStorage.getItem("datasync_tab");
+                        $("#prefs-tabs-content").find('a[href="#'+dataSynctTab+'"]').closest("li").addClass("active");
+                        initializeTabListeners("datasync_tab", "sync");
 
                   getSyncModelFromName("QUICKBOOK", function(model){
 
@@ -207,7 +260,7 @@ google_calendar:function(el){
 									showNotyPopUp("information", "Contacts sync initiated", "top", 1000);
                   					});
 			         });
-
+                  }, null);
             }, "#content");
         },
 
@@ -220,6 +273,13 @@ google_calendar:function(el){
 
                 $('#PrefsTab .select').removeClass('select');
                 $('.contact-sync-tab').addClass('select');
+                getTemplate('data-sync-settings', {}, undefined, function(template_ui1){
+                        if(!template_ui1)
+                            return;
+                        $("#prefs-tabs-content").html(template_ui1);
+                        var dataSynctTab = localStorage.getItem("datasync_tab");
+                        $("#prefs-tabs-content").find('a[href="#'+dataSynctTab+'"]').closest("li").addClass("active");
+                        initializeTabListeners("datasync_tab", "sync");
 
                  getSyncModelFromName("XERO", function(model){
 
@@ -230,7 +290,7 @@ google_calendar:function(el){
                   					});
 			               
 			         });
-
+                 }, null);
             }, "#content");
         },
          zoho_sync: function() {
@@ -242,7 +302,13 @@ google_calendar:function(el){
                 $('#PrefsTab .select').removeClass('select');
                 $('.contact-sync-tab').addClass('select');
 
-
+                getTemplate('data-sync-settings', {}, undefined, function(template_ui1){
+                        if(!template_ui1)
+                            return;
+                        $("#prefs-tabs-content").html(template_ui1);
+                        var dataSynctTab = localStorage.getItem("datasync_tab");
+                        $("#prefs-tabs-content").find('a[href="#'+dataSynctTab+'"]').closest("li").addClass("active");
+                        initializeTabListeners("datasync_tab", "sync");
                  getSyncModelFromName("ZOHO", function(model){
 
                    	var	url= 'core/api/contactprefs/ZOHO',
@@ -252,7 +318,7 @@ google_calendar:function(el){
                   					});
 			               
 			         });
-
+                }, null);
             }, "#content");
         }
 

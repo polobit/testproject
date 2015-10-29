@@ -630,6 +630,11 @@
 	
 	-webkit-line-clamp:3;
 }
+.line-clamp-4
+{
+  
+  -webkit-line-clamp:4;
+}
 .overflow-scroll
 {
 	overflow:scroll;
