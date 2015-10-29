@@ -229,7 +229,7 @@ function set_up_portlets(el, portlets_el){
 						column_position : parseInt($(this).attr("data-col")), row_position : parseInt($(this).attr("data-row")) });
 				});
 				// Saves new width and height in server
-				$.ajax({ type : 'POST', url : '/core/api/portlets/widthAndHeight', data : JSON.stringify(models),
+				$.ajax({ type : 'POST', url : '/core/api/portlets/save-width-height', data : JSON.stringify(models),
 					contentType : "application/json; charset=utf-8", dataType : 'json' });
 
 			}
