@@ -96,8 +96,11 @@
 	</div>
 	<ul class="list-group m-b-none text-base" id="freshbooks_invoice_panel">
 		<li class="list-group-item r-none b-l-none b-r-none">
-			<center><img id="freshbooks_invoice_load" src="img/ajax-loader-cursor.gif" class="m-t m-b-sm"></img></center>
+			<div class="pull-left text-base">Status</div>
+			<div class="pull-right text-base text-right">Amount</div>
+			<div class="clearfix"></div>
 		</li>
+		<div><center><img id="freshbooks_invoice_load" src="img/ajax-loader-cursor.gif" class="m-t m-b-sm"></img></center></div>
 	</ul>
 {{/if_equals}}
 </script>
@@ -108,11 +111,6 @@
 	    	No invoices			
 		</li>		
 	{{else}}
-		<li class="list-group-item r-none b-l-none b-r-none">
-			<div class="pull-left text-base">Status</div>
-			<div class="pull-right text-base text-right">Amount</div>
-			<div class="clearfix"></div>
-		</li>
 		{{#isArray invoice}}
 			{{#each invoice}}
 				<li class="row-fluid list-group-item r-none b-l-none b-r-none text-base">

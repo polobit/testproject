@@ -218,7 +218,7 @@ function addMoreButton(pageInfo)
 		return;
 
 	
-	$(".widget_tab_footer").remove();
+	//$(".widget_tab_footer").remove();
 	$("#twilioio_more_call_logs").remove();
 
 	// If page and pageToken is present then only add more button else hide it

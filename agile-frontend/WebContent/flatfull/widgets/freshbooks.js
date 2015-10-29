@@ -4,7 +4,10 @@
  * application based on the function provided on agile_widgets.js (Third party
  * API)
  */
-
+var FBSmails = {};
+var FBSCount = 1;
+var showMoreHtmlFBS = '<div class="widget_tab_footer freshbooks_show_more" align="center"><a class="c-p text-info" id="FBS_show_more" rel="tooltip" title="Click to see more tickets">Show More</a></div>';
+var FBSclientID = "";
 
 /**
  * Shows setup if user adds FreshBooks widget for the first time or clicks on
@@ -105,10 +108,13 @@ function showFreshBooksClient(contact_id)
 		 * take first client and retrieve invoices for its client id, else we
 		 * get JSONObject of client
 		 */
+		 
 		if (isArray(data.client))
-			getInvoicesOfClient(data.client[0].client_id);
+			FBSclientID = data.client[0].client_id;
 		else
-			getInvoicesOfClient(data.client.client_id);
+			FBSclientID = data.client.client_id;
+
+		getInvoicesOfClient(FBSclientID , 0)
 
 	}, function error(data)
 	{
@@ -123,37 +129,82 @@ function showFreshBooksClient(contact_id)
 	});
 }
 
-/**
- * Retrieves invoices of client base on widget id and client id
- * 
- * @param client_id
- *            id of client in FreshBooks
- */
-function getInvoicesOfClient(client_id)
-{
+
+function loadFBSInvoices(client_id, callback){
+
 	/*
 	 * send GET request to the URL to retrieve invoices based on widget id and
 	 * client id as path parameters
 	 */
 	$.get("/core/api/widgets/freshbooks/invoices/" + FreshBooks_Plugin_id + "/" + client_id, function(data)
 	{
-		// Fill FreshBooks invoice template with invoice of client
-		var freshbooks_invoice_template = $(getTemplate('freshbooks-invoice', data));
+		console.log(" freshbooks widget **** ");
+		console.log(data);
 
-		// Load jquery time ago function to show time ago in invoices
-		head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
-		{
-			$(".time-ago", freshbooks_invoice_template).timeago();
-		});
-
-		// Show invoices in FreshBooks widget panel
-		$('#freshbooks_invoice_panel').html(freshbooks_invoice_template);
+		// If defined, execute the callback function
+		if (callback && typeof (callback) === "function")
+			callback(data);
 
 	}, 'json').error(function(data)
 	{
 		// Show FreshBooks error in FreshBooks invoice panel
 		freshBooksError("freshbooks_invoice_panel", data.responseText);
 	});
+
+} 
+/**
+ * Retrieves invoices of client base on widget id and client id
+ * 
+ * @param client_id
+ *            id of client in FreshBooks
+ */
+function getInvoicesOfClient(client_id, offSet)
+{
+	if(offSet == 0){
+		loadFBSInvoices(client_id, function(data){
+			console.log("widgets **** freshbooks");
+			console.log(data);
+
+			var result = {};
+
+			if(data.total > 0){
+				FBSmails.invoice = data.invoice;
+				FBSmails.total = data.total;
+				result.invoice = FBSmails.invoice.slice(0, 5);
+			}
+			result.total = data.total;
+
+			// Fill FreshBooks invoice template with invoice of client
+			var freshbooks_invoice_template = $(getTemplate('freshbooks-invoice', result));
+
+			// Show invoices in FreshBooks widget panel
+			$('#freshbooks_invoice_panel').append(freshbooks_invoice_template);
+			// Load jquery time ago function to show time ago in invoices
+			head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
+			{
+				$(".time-ago", freshbooks_invoice_template).timeago();
+			});
+
+			$('#freshbooks_invoice_load').remove();
+
+			if(result.total > 5){
+				$('#freshbooks_invoice_panel').append(showMoreHtmlFBS);
+			}
+		});
+	}else if(offSet > 0  && (offSet+5) < FBSmails.total){
+		var result = {};
+		result.invoice = FBSmails.invoice.slice(offSet, (offSet+5));
+		result.total = FBSmails.total;
+		$('.freshbooks_show_more').remove();
+		$('#freshbooks_invoice_panel').apped(getTemplate('freshbooks-invoice', result));
+		$('#freshbooks_invoice_panel').append(showMoreHtmlFBS);
+	}else{
+		var result = {};
+		result.invoice = FBSmails.invoice.slice(offSet, FBSmails.total);
+		result.total = FBSmails.total;
+		$('.freshbooks_show_more').remove();
+		$('#freshbooks_invoice_panel').append(getTemplate('freshbooks-invoice', result));
+	}
 }
 
 /**
@@ -220,6 +271,9 @@ function freshBooksError(id, message)
 
 function startFreshBooksWidget(contact_id){
 
+	FBSmails = {};
+	FBSCount = 1;
+
 	console.log('freshbooks loaded ********** ');
 	// FreshBooks widget name as a global variable
 	FRESHBOOKS_PLUGIN_NAME = "FreshBooks";
@@ -273,6 +327,21 @@ function startFreshBooksWidget(contact_id){
 	{
 		e.preventDefault();
 		addClientToFreshBooks(contact_id, first_name, last_name, Email);
+	});
+
+	
+	/*
+	 * On click of add client button in FreshBooks, calls method to add a client
+	 * in FreshBooks with contact's first name, last name and email
+	 */
+	$("#widgets").off("click", "#FBS_show_more");
+	$("#widgets").on("click", "#FBS_show_more", function(e)
+	{
+		e.preventDefault();
+		var offSet = FBSCount * 5;
+		getInvoicesOfClient(FBSclientID, offSet);
+		++FBSCount;
+		
 	});
 
 }

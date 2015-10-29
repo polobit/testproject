@@ -321,6 +321,7 @@ function startHelpScoutWidget(contact_id){
 	HELPSCOUT_PLUGIN_NAME = "HelpScout";
 
 	helpscoutmails = [];
+	showMoreCount = 1;
 
 	// HelpScout update loading image declared as global
 	HELPSCOUT_UPDATE_LOAD_IMAGE = '<center><img id="conv_load" src=' + '\"img/ajax-loader-cursor.gif\" style="margin-top: 10px;margin-bottom: 14px;"></img></center>';
