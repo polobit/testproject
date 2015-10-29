@@ -10,6 +10,7 @@ import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.util.EmailUtil;
 import com.agilecrm.workflows.Workflow;
 import com.agilecrm.workflows.status.CampaignStatus.Status;
+import com.agilecrm.workflows.status.util.EmailSubscriptionDeferredTask.SubscriptionType;
 import com.agilecrm.workflows.triggers.Trigger.Type;
 import com.agilecrm.workflows.triggers.util.EmailTrackingTriggerUtil;
 import com.agilecrm.workflows.unsubscribe.UnsubscribeStatus;
@@ -112,11 +113,12 @@ public class UnsubscribeEmailUtil
 		contact.save();
 	}
 
-	public static void unsubscribeCampaignEmailByQueue(Long contactId, String campaignIds, UnsubscribeType type)
+	public static void emailSubscriptionByQueue(Long contactId, String campaignIds, UnsubscribeType type, SubscriptionType subType)
 	{
-		UnsubscribeEmailDeferredTask task = new UnsubscribeEmailDeferredTask(contactId, campaignIds, type);
+		EmailSubscriptionDeferredTask task = new EmailSubscriptionDeferredTask(contactId, campaignIds, type, subType);
 
 		Queue queue = QueueFactory.getQueue(AgileQueues.CAMPAIGN_QUEUE);
 		queue.add(TaskOptions.Builder.withPayload(task));
 	}
+	
 }

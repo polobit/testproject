@@ -24,6 +24,8 @@ import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.workflows.Workflow;
 import com.agilecrm.workflows.status.CampaignStatus.Status;
 import com.agilecrm.workflows.status.util.CampaignStatusUtil;
+import com.agilecrm.workflows.status.util.EmailSubscriptionDeferredTask.SubscriptionType;
+import com.agilecrm.workflows.status.util.UnsubscribeEmailUtil;
 import com.agilecrm.workflows.unsubscribe.util.UnsubscribeStatusUtil;
 import com.agilecrm.workflows.util.WorkflowSubscribeUtil;
 import com.agilecrm.workflows.util.WorkflowUtil;
@@ -258,7 +260,7 @@ public class CampaignsAPI
 			if(contact == null)
 				return;
 
-			UnsubscribeStatusUtil.resubscribeContactFromAll(contact, workflowId);
+			UnsubscribeEmailUtil.emailSubscriptionByQueue(contactId, workflowId, null, SubscriptionType.RESUBSCRIBE);
 	}
 	
 	/**
