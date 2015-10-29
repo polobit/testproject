@@ -3,7 +3,7 @@ cd ../
 
 git stash
 
-./../deploy-beta.sh agile-frontend newui
+../../deploy-beta.sh agile-frontend newui
 
 # git checkout sandbox_sync_conversion
 
