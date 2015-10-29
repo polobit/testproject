@@ -632,6 +632,11 @@ function showCalendar(users)
 
 							if (isNaN(event.id))
 								return;
+
+							// Show edit modal for the event
+							$("#updateActivityModal").html(getTemplate("update-activity-modal")).modal("show");
+
+
 							// Deserialize
 							deserializeForm(event, $("#updateActivityForm"));
 
@@ -691,8 +696,7 @@ function showCalendar(users)
 								var desc = '<div class="row-fluid">' + '<div class="control-group form-group m-b-none " id="addEventDescription">' + '<a href="#" id="add_event_desctiption"><i class="icon-plus"></i> Add Description </a>' + '<div class="controls event_discription hide">' + '<textarea id="description" name="description" rows="3" class="input form-control w-full col-md-8" placeholder="Add Description"></textarea>' + '</div></div></div>'
 								$("#event_desc").html(desc);
 							}
-							// Show edit modal for the event
-							$("#updateActivityModal").modal('show');
+							
 							
 							agile_type_ahead("event_relates_to_deals", $('#updateActivityModal'), deals_typeahead, false,null,null,"core/api/search/deals",false, true);
 
