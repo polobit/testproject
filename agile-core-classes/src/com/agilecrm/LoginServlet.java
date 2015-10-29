@@ -43,6 +43,7 @@ import com.google.appengine.api.utils.SystemProperty;
 public class LoginServlet extends HttpServlet
 {
     public static String RETURN_PATH_SESSION_PARAM_NAME = "redirect_after_openid";
+    public static String RETURN_PATH_SESSION_HASH = "return_hash";
 
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException
@@ -178,6 +179,11 @@ public class LoginServlet extends HttpServlet
 	// Hash to redirect after login
 	String hash = request.getParameter("location_hash");
 
+	System.out.println("hash in login servlet : " + hash);
+
+	if (!StringUtils.isEmpty(hash))
+	    request.getSession().setAttribute(RETURN_PATH_SESSION_HASH, hash);
+
 	if (email == null || password == null)
 	    throw new Exception("Invalid Input. Email or password has been left blank.");
 
@@ -229,6 +235,14 @@ public class LoginServlet extends HttpServlet
 
 	request.getSession().setAttribute("account_timezone", timezone);
 
+	hash = (String) request.getSession().getAttribute(RETURN_PATH_SESSION_HASH);
+	if (!StringUtils.isEmpty(hash))
+	{
+	    request.getSession().removeAttribute(RETURN_PATH_SESSION_HASH);
+	    response.sendRedirect("/" + hash);
+	    return;
+	}
+
 	// Redirect to page in session is present - eg: user can access #reports
 	// but we store reports in session and then forward to auth. After auth,
 	// we forward back to the old page
@@ -240,13 +254,7 @@ public class LoginServlet extends HttpServlet
 	    return;
 	}
 
-	System.out.println("page to login into : " + hash);
-	if (StringUtils.isEmpty(hash))
-	{
-	    response.sendRedirect("/");
-	    return;
-	}
-	response.sendRedirect("/" + hash);
+	response.sendRedirect("/");
 
     }
 
