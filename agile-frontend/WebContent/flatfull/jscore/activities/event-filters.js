@@ -266,7 +266,9 @@ function removeFullCalendarEvents(ownerid)
 	// Removes all events at once
 	$('#calendar_event').fullCalendar('removeEvents', function(value, index) {
 		if(value && value.owner && value.owner.id)
-		return value.owner.id != ownerid;
+			return value.owner.id != ownerid;
+		else
+			return true;
 	});
 
 	showLoadingOnCalendar(false);
