@@ -230,7 +230,26 @@ public class ContactPrefs extends SyncPrefs implements Serializable
 		sync_to_group = URLDecoder.decode(sync_to_group);
 		
 	    }
+	    this.imageUrl=DataSyncUrlConstants.GOOGLE_IMAGE_URL;
+		this.content=DataSyncUrlConstants.GOOGLE_CONTENT;
 	}
+	   if(type.SHOPIFY==type){
+		   this.imageUrl=DataSyncUrlConstants.SHOPIFY_IMAGE_URL;
+		   this.content=DataSyncUrlConstants.SHOPIFY_CONTENT;
+		   
+	   }
+	   if(type.STRIPE==type){
+		   this.imageUrl=DataSyncUrlConstants.STRIPE_IMAGE_URL;
+		   this.content=DataSyncUrlConstants.STRIPE_CONTENT;
+	   }
+	   if(type.FRESHBOOKS==type){
+		   this.imageUrl=DataSyncUrlConstants.FRESHBOOKS_IMAGE_URL;
+		   this.content=DataSyncUrlConstants.FRESHBOOKS_CONTENT;
+	   }
+	   if(type.QUICKBOOK==type){
+		   this.imageUrl=DataSyncUrlConstants.QUICKBOOKS_IMAGE_URL;
+		   this.content=DataSyncUrlConstants.QUICKBOOKS_CONTENT;
+	   }
 	
     }
 
@@ -360,39 +379,5 @@ public class ContactPrefs extends SyncPrefs implements Serializable
 
     }
     
-    
-    @PostLoad
-    void PostLoad()
-    {
-	try
-	{
-	   if(type.GOOGLE==type){
-		   this.imageUrl=DataSyncUrlConstants.GOOGLE_IMAGE_URL;
-		   this.content=DataSyncUrlConstants.GOOGLE_CONTENT;
-	   }
-	   if(type.SHOPIFY==type){
-		   this.imageUrl=DataSyncUrlConstants.SHOPIFY_IMAGE_URL;
-		   this.content=DataSyncUrlConstants.SHOPIFY_CONTENT;
-		   
-	   }
-	   if(type.STRIPE==type){
-		   this.imageUrl=DataSyncUrlConstants.STRIPE_IMAGE_URL;
-		   this.content=DataSyncUrlConstants.STRIPE_CONTENT;
-	   }
-	   if(type.FRESHBOOKS==type){
-		   this.imageUrl=DataSyncUrlConstants.FRESHBOOKS_IMAGE_URL;
-		   this.content=DataSyncUrlConstants.FRESHBOOKS_CONTENT;
-	   }
-	   if(type.QUICKBOOK==type){
-		   this.imageUrl=DataSyncUrlConstants.QUICKBOOKS_IMAGE_URL;
-		   this.content=DataSyncUrlConstants.QUICKBOOKS_CONTENT;
-	   }
-
-	}
-	catch (Exception e)
-	{
-	    e.printStackTrace();
-	}
-    }
-
+  
 }
