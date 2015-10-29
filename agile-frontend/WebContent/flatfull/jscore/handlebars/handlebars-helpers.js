@@ -2379,7 +2379,7 @@ $(function()
 
 				// Global variable set on resubscribe modal shown
 				if(typeof email_workflows_list != 'undefined')
-					campaignStatusArray[i].campaign_name = campaign_json[email_workflows_list.campaign_id];
+					campaignStatusArray[i].campaign_name = email_workflows_list[campaignStatusArray[i].campaign_id];
 
 				if(campaignStatusArray[i].unsubscribeType == 'ALL'){
 
