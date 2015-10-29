@@ -186,10 +186,21 @@ $(function(){
             
             error: function(jqXHR, status, errorThrown){ 
               enable_save_button($clicked_button);
+
+              console.log(status);
+                    // Show cause of error in saving
+                    $save_info = $('<div style="display:inline-block"><small><p style="color:#B94A48; font-size:14px"><i>'
+                            + status.responseText
+                            + '</i></p></small></div>');
+
+                    // Appends error info to form actions
+                    // block.
+                    $("#workflow-msg").html(
+                            $save_info).show();
               //var json = JSON.parse(status.responseText);
               //workflow_alerts(json["title"], json["message"],"workflow-alert-modal");
               // shows Exception message
-              alert(status.responseText);
+              //alert(status.responseText);
                 }
             });        
             
