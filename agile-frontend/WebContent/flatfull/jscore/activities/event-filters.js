@@ -253,20 +253,15 @@ function renderFullCalenarEvents(ownerid)
  * removed full calendar events based on ids
  * @param ownerid
  */
-function removeFullCalendarEvents(ownerid)
+function removeFullCalendarEvents(domain_user_id)
 {
-	var start_end_time = JSON.parse(readCookie('fullcalendar_start_end_time'));
-
-	var eventsURL = '/core/api/events?start=' + start_end_time.startTime + "&end=" + start_end_time.endTime;
-
-	eventsURL += '&owner_id=' + ownerid;
-	console.log('-----------------', eventsURL);
-
+	if(!domain_user_id)
+		return;
 
 	// Removes all events at once
 	$('#calendar_event').fullCalendar('removeEvents', function(value, index) {
 		if(value && value.owner && value.owner.id)
-			return value.owner.id == ownerid;
+			return value.owner.id == domain_user_id;
 		else
 			return false;
 	});
@@ -322,6 +317,19 @@ function getOwnerIdsFromCookie(uncheckedagile)
 		}
 	}
 	return agile_event_owners;
+}
+
+function getOwnerIdsFromCookie(uncheckedagile)
+{
+	var eventFilters = JSON.parse(readCookie('event-lhs-filters'));
+	var agile_event_owners = '';
+	var domain_user_ids = [];
+	if (eventFilters)
+	{
+		domain_user_ids = eventFilters.domain_user_ids;
+	}
+
+	return domain_user_ids;
 }
 
 
