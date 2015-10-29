@@ -71,9 +71,6 @@ function createDealsNestedCollection(pipeline_id,milestones,currentTrack)
 	// Render it
 	$('#new-opportunity-list-paging').html(DEALS_LIST_COLLECTION.render(true).el);
 
-	pipeline_count = 0;
-	// Fetch tasks from DB for first task list
-	fetchForNextDealsList(milestones);
 }
 
 // Initialize nested collection
@@ -115,6 +112,15 @@ function initDealListCollection(milestones)
 // Append sub collection and model
 function dealAppend(base_model)
 {
+	milestonesCollectionView(base_model, this.el, function(){
+		dealsFetch(base_model);
+	});
+	
+}
+
+// Renders outer view of milestone view
+function milestonesCollectionView(base_model, ele, callback)
+{
 	var dealsListModel = new Base_List_View({ model : base_model, "view" : "inline", template : "opportunities-by-paging-model", tagName : 'div',
 		className : "milestone-column panel m-b-none  b-n r-n panel-default", id : base_model.get("heading").replace(/ +/g, '') });
 
@@ -122,42 +128,17 @@ function dealAppend(base_model)
 	var el = dealsListModel.render().el;
 
 	// Append model from main collection in UI
-	$('#opportunities-by-paging-model-list > div', this.el).append(el);
+	$('#opportunities-by-paging-model-list > div', ele).append(el);
+	return callback();
 }
 
-/*
- * Compare counter with length of criteria array and call function to Fetch
- * tasks from DB for next task list if available.
- */
-function fetchForNextDealsList(milestones)
-{
-	// is All task list are done?
-	if (deal_fetching)
-		return;
-
-	// Some task list are pending
-	if (pipeline_count < milestones.length)
-	{
-		// call fetch for next task list.
-		dealsFetch(pipeline_count, milestones);
-	}
-
-	// All task list are done.
-	if (pipeline_count >= milestones.length)
-		deal_fetching = true;
-}
 
 /**
  * Create sub collection, ad to model in main collection, fetch tasks from DB
  * for sub collection and update UI.
  */
-function dealsFetch(index, milestones)
+function dealsFetch(base_model)
 {
-	console.log("index: " + index);
-
-	// Get model from main collection
-	var base_model = DEALS_LIST_COLLECTION.collection.at(index);
-
 	if (!base_model)
 		return;
 
@@ -202,8 +183,7 @@ function dealsFetch(index, milestones)
 		// Counter to fetch next sub collection
 		pipeline_count++;
 		setup_deals_in_milestones('opportunities-by-paging-model-list');
-		// Fetch tasks from DB for next task list
-		fetchForNextDealsList(milestones);
+		
 	} });
 }
 
