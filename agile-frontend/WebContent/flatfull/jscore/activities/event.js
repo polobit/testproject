@@ -365,7 +365,7 @@ $("#calendar-listers").on('click', '.agendaDayWeekMonth', function()
 			else
 			{
 				ownerids = getOwnerIdsFromCookie(true);
-				removeFullCalendarEvents(ownerids);
+				removeFullCalendarEvents(CURRENT_DOMAIN_USER.id);
 			}
 
 		}
@@ -382,13 +382,14 @@ $("#calendar-listers").on('click', '.agendaDayWeekMonth', function()
 		createRequestUrlBasedOnFilter();
 		// loadFullCalednarOrListView();
 		var user_id = $(this).val();
+		var domain_user_id = $(this).attr('data');
 		if (this.checked == true)
 		{
 			renderFullCalenarEvents(user_id);
 		}
 		else
 		{
-			removeFullCalendarEvents(user_id);
+			removeFullCalendarEvents(domain_user_id);
 		}
 
 		// $('.select_all_users').removeAttr("checked");
