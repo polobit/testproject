@@ -2,6 +2,7 @@ package com.agilecrm.search.document;
 
 import java.net.URLDecoder;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
@@ -9,7 +10,9 @@ import org.apache.commons.lang.exception.ExceptionUtils;
 import org.json.JSONObject;
 
 import com.agilecrm.contact.Tag;
+import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.search.BuilderInterface;
+import com.agilecrm.search.QueryInterface.Type;
 import com.agilecrm.ticket.entitys.Tickets;
 import com.agilecrm.ticket.utils.TicketsUtil;
 import com.agilecrm.util.StringUtils2;
@@ -32,7 +35,7 @@ import com.googlecode.objectify.Key;
  * @author Sasi on 29-sep-2015
  * 
  */
-public class TicketDocument implements BuilderInterface
+public class TicketsDocument implements BuilderInterface
 {
 	String indexName = "tickets";
 
@@ -98,7 +101,7 @@ public class TicketDocument implements BuilderInterface
 			document.addField(Field.newBuilder().setName("status").setText(ticket.status.toString()));
 
 			// Set ticket type
-			document.addField(Field.newBuilder().setName("type").setText(ticket.type.toString()));
+			document.addField(Field.newBuilder().setName("ticket_type").setText(ticket.type.toString()));
 
 			// Set ticket priority
 			document.addField(Field.newBuilder().setName("priority").setText(ticket.priority.toString()));
@@ -139,9 +142,21 @@ public class TicketDocument implements BuilderInterface
 							StringUtils2.breakdownFragments(plainText).toString() + " " + requesterName + " "
 									+ requesterEmail + " " + shortTicketID));
 
-			// Set email tags
-			// document.addField(Field.newBuilder().setName("tags").setText(ticket.source.toString()));
 			System.out.println(getIndex().put(document));
+
+			// Updating to contacts text search table for global search
+
+			// Setting search tokens
+			document.addField(Field
+					.newBuilder()
+					.setName("search_tokens")
+					.setText(
+							StringUtils2.breakdownFragments(requesterName + " " + requesterEmail).toString() + " "
+									+ shortTicketID));
+
+			document.addField(Field.newBuilder().setName("type").setText("TICKETS"));
+
+			System.out.println(getContactIndex().put(document));
 		}
 		catch (Exception e)
 		{
@@ -191,6 +206,12 @@ public class TicketDocument implements BuilderInterface
 	public Index getIndex()
 	{
 		IndexSpec indexSpec = IndexSpec.newBuilder().setName(indexName).build();
+		return SearchServiceFactory.getSearchService().getIndex(indexSpec);
+	}
+
+	public Index getContactIndex()
+	{
+		IndexSpec indexSpec = IndexSpec.newBuilder().setName("contacts").build();
 		return SearchServiceFactory.getSearchService().getIndex(indexSpec);
 	}
 
@@ -253,11 +274,18 @@ public class TicketDocument implements BuilderInterface
 	}
 
 	/**
+	 * Gets contact collection related to given document ids
 	 * 
+	 * Since querying on ContactDocumet returns document ids, this method
+	 * returns related contacts to document ids
+	 * 
+	 * @param doc_ids
+	 *            {@link List}
+	 * @return {@link Collection}
 	 */
-	@Override
-	public List getResults(List<Long> ids)
+	@SuppressWarnings("rawtypes")
+	public List getResults(List<Long> doc_ids)
 	{
-		return null;
+		return TicketsUtil.getTicketsBulk(doc_ids);
 	}
 }

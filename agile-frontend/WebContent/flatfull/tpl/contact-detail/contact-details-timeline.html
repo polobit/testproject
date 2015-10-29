@@ -513,6 +513,68 @@
                 <div class="text-xs ">{{body}}</div>
             </div>
         {{/if_entity}}
+        {{#if_entity "ticketActivity"}}
+            <div class="timestamp">{{created_time}}</div>
+            <div class="text-md text-cap">  
+                <div class="contact-job-title text-sm custom-color  wrapper-xs bg-light-color" >
+                    <i class="icon-folder-open-alt text-muted p-r-xs"></i>
+                    {{#if_equals ticket_activity_type 'TICKET_CREATED'}}
+                        Ticket (#{{ticket_id}}) Created
+                    {{else}}
+                        {{#if_equals ticket_activity_type 'TICKET_ASSIGNED'}}
+                            Ticket (#{{ticket_id}}) Assigned to {{new_assignee.name}}
+                        {{else}}
+                            {{#if_equals ticket_activity_type 'TICKET_ASSIGNED_CHANGED'}}
+                                Ticket (#{{ticket_id}}) Assignee changed to {{new_assignee.name}}
+                            {{else}}
+                                {{#if_equals ticket_activity_type 'TICKET_GROUP_CHANGED'}}
+                                    Ticket (#{{ticket_id}}) Group changed to {{new_group.name}}
+                                {{else}}
+                                    {{#if_equals ticket_activity_type 'TICKET_STATUS_CHANGE'}}
+                                        Ticket (#{{ticket_id}}) Status changed to {{new_data}}
+                                    {{else}}
+                                        {{#if_equals ticket_activity_type 'TICKET_PRIORITY_CHANGE'}}
+                                            Ticket (#{{ticket_id}}) Priority changed to {{new_data}}
+                                        {{else}}
+                                            {{#if_equals ticket_activity_type 'TICKET_TYPE_CHANGE'}}
+                                                Ticket (#{{ticket_id}}) Type changed to {{new_data}}
+                                            {{else}}
+                                                {{#if_equals ticket_activity_type 'TICKET_TAG_ADD'}}
+                                                    Tag {{new_data}} added to Ticket (#{{ticket_id}})
+                                                {{else}}
+                                                    {{#if_equals ticket_activity_type 'TICKET_TAG_REMOVE'}}
+                                                        Tag {{new_data}} removed from to Ticket (#{{ticket_id}})
+                                                    {{else}}
+                                                        {{#if_equals ticket_activity_type 'TICKET_ASSIGNEE_REPLIED'}}
+                                                            Assignee {{old_assignee.name}} replied to Ticket (#{{ticket_id}})
+                                                        {{else}}
+                                                            {{#if_equals ticket_activity_type 'TICKET_REQUESTER_REPLIED'}}
+                                                                Requester replied to Ticket (#{{ticket_id}})
+                                                            {{else}}
+                                                                {{#if_equals ticket_activity_type 'TICKET_PRIVATE_NOTES_ADD'}}
+                                                                    {{user_name}} added private notes to Ticket (#{{ticket_id}})
+                                                                {{/if_equals}}
+                                                            {{/if_equals}}
+                                                        {{/if_equals}}
+                                                    {{/if_equals}}
+                                                {{/if_equals}}
+                                            {{/if_equals}}
+                                        {{/if_equals}}
+                                    {{/if_equals}}
+                                {{/if_equals}}
+                            {{/if_equals}}
+                        {{/if_equals}}
+                    {{/if_equals}}
+                </div>
+            </div>
+            <div class="date tooltip_info" data-container="body"  title="{{epochToHumanDate "mmmm dd, yyyy 'at' hh:MM tt" created_time}}">
+                {{{epochToTaskDate1 created_time}}} 
+                <span class="timeline-subscript"></span>
+            </div>
+            <div class="body wrapper-sm">
+                <div class="text-xs "><!-- {{old_data}} {{new_data}} {{changed_field}} --></div>
+            </div>
+        {{/if_entity}}
 	<!-- <a href="#" class="open-close"></a> -->
   </div>
 </div>

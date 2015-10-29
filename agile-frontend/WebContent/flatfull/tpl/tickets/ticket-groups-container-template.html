@@ -12,7 +12,11 @@
 		        </a>
 				<ul id="groups-dropdown" class="dropdown-menu pull-right">
 					{{#each this}}
-						<li><a href="#tickets/group/{{id}}/new">{{group_name}}</a></li>
+						<li>
+							<a href="#tickets/group/{{id}}/new" data-group-id="{{id}}" data-group-name="{{group_name}}">
+								{{group_name}}
+							</a>
+						</li>
 					{{/each}}				
 				</ul>
 			</div>

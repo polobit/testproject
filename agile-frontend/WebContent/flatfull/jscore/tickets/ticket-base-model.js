@@ -5,10 +5,12 @@ var Ticket_Base_Model = Base_Model_View.extend({
 		"click .refresh-tickets" : "refreshTickets",
 
 		//Ticket operations change group, assignee, priority etc
+		"click .ticket_status" : "changeStatus",
 		"click .ticket_group_name" : "changeGroup",
 		"click .ticket_assignee_name" : "changeAssignee",
 		"click .ticket_type" : "changeTicketType",
 		"click .ticket_priority" : "changeTicketPriority",
+		"click .delete-ticket" : "deleteTicket",
 
 		"click .to-emails" : "toEmails",
 
@@ -29,7 +31,8 @@ var Ticket_Base_Model = Base_Model_View.extend({
 		"click .send-reply" : "sendReply",
 		"click .back-to-tickets" : "backToTickets",
 		"click .reply-btn" : "repltBtn",
-		"click .discard-reply" : "discardReply"
+		"click .discard-reply" : "discardReply",
+		"click .timeline" : "renderTicketTimeline"
 	},
 
 	refreshTickets: function(e){
@@ -38,10 +41,16 @@ var Ticket_Base_Model = Base_Model_View.extend({
 		App_Ticket_Module.ticketsByGroup(Group_ID, Ticket_Status);
 
 		//Fectching new, open, closed tickets count
-		Tickets_Count.fetch_tickets_count();
+		Tickets_Count.fetch_tickets_count(Group_ID);
 
 		//Fectching ticket filters
 		Ticket_Filters.fetch_filters_collection();
+	},
+
+	changeStatus: function(e){
+		e.preventDefault();
+
+		Tickets.changeStatus(e);
 	},
 
 	changeGroup: function(e){
@@ -139,5 +148,17 @@ var Ticket_Base_Model = Base_Model_View.extend({
 		e.preventDefault();
 		
 		Tickets_Notes.discardReply(e);		
+	},
+
+	renderTicketTimeline: function(e){
+		e.preventDefault();
+
+		Ticket_Timeline.render_ticket_timeline(Current_Ticket_ID);
+	},
+
+	deleteTicket: function(e){
+		e.preventDefault();
+		
+		Tickets.deleteTicket();
 	}
 });

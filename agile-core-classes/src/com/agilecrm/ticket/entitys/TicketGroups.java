@@ -15,6 +15,7 @@ import com.agilecrm.ticket.utils.TicketGroupUtil;
 import com.agilecrm.user.DomainUser;
 import com.google.appengine.api.NamespaceManager;
 import com.googlecode.objectify.Key;
+import com.googlecode.objectify.annotation.Cached;
 import com.googlecode.objectify.annotation.NotSaved;
 
 /**
@@ -31,6 +32,7 @@ import com.googlecode.objectify.annotation.NotSaved;
  * 
  */
 @XmlRootElement
+@Cached
 public class TicketGroups
 {
 	// Key

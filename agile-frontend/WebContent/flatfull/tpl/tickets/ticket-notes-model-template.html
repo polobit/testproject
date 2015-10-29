@@ -11,7 +11,7 @@
 		   				{{domain_user.name}} ({{domain_user.email}}) wrote 
 		   			</a> on {{epochToHumanDate "mmm dd yyyy HH:MM" created_time}}
 		   	{{/if_equals}}
-		   	<div class="dropdown pull-right">
+		   	<!-- <div class="dropdown pull-right">
 			  <button class="btn btn-default btn-xs dropdown-toggle" type="button" data-toggle="dropdown"> 
 			  	<i class="fa fa-cog"></i>
 			  	<span class="caret"></span>
@@ -20,7 +20,7 @@
 			    <li><a href="javascript:void(0);" class="show-plain-text-notes">Show plain text</a></li>
 			    <li><a href="javascript:void(0);" class="show-original-text">Show original text</a></li>
 			  </ul>
-			</div>
+			</div> -->
 		</div>
 		<div class="wrapper" style="{{#if_equals created_by 'REQUESTER'}}background-color:#F6F8F8{{/if_equals}}">
 	    	{{{html_text}}}

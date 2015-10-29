@@ -1,6 +1,5 @@
-var Group_ID = '', Ticket_Status = 'new', Current_Ticket_ID = null, Ticket_Filter_ID = null,
-New_Tickets = 0, Opened_Tickets = 0, 
-		Starred_Tickets = 0, Closed_Tickets =0, Tickets_Util = {} ;
+var Group_ID = null, Ticket_Status = 'new', Current_Ticket_ID = null, Ticket_Filter_ID = null,
+New_Tickets = 0, Opened_Tickets = 0, Starred_Tickets = 0, Closed_Tickets =0, Tickets_Util = {};
 
 $("body").bind('click', function(ev) {
 	Tickets.hideDropDowns(ev);
@@ -76,6 +75,9 @@ var Tickets = {
 				//Fectching ticket filters
 				Ticket_Filters.fetch_filters_collection();
 
+				//Fectching new, open, closed tickets count
+				Tickets_Count.fetch_tickets_count(group_id);
+
 				//Rendering Groups dropdown
 				Tickets_Group_View = new Ticket_Base_Model({
 					isNew : false,
@@ -115,6 +117,49 @@ var Tickets = {
 		Current_Ticket_ID = null;
 	},
 
+	changeStatus: function(event){
+
+		var ticketModel = App_Ticket_Module.ticketView.model.toJSON();
+		
+
+		getTemplate("ticket-status",  {status: ticketModel.status}, undefined, function(template_ui){
+
+			if(!template_ui)
+			  		return;
+
+			$('#ticket-status-list').html($(template_ui));	
+
+			$('.ticket_status').hide();
+	        $('#change-ticket-status-ul').show();
+
+	        Tickets.initChangeStatusEvent();
+
+		}, '#ticket-status-list');
+	},
+
+	initChangeStatusEvent: function(){
+
+		$('ul#ticket-status-list').on('click', '.change-ticket-status-li', function(e){
+		
+			$('#change-ticket-status-ul').hide();
+			
+			var ticketModel = App_Ticket_Module.ticketView.model.toJSON();
+
+			var new_ticket_status = $(this).attr('data-value');
+
+			var newTicketModel = new BaseModel();
+			newTicketModel.url = "/core/api/tickets/change-status?id=" + Current_Ticket_ID + "&status=" + new_ticket_status;
+			newTicketModel.save(ticketModel, {
+				
+					success: function(model){
+
+					$('.ticket_status').html(new_ticket_status).show();
+
+					 App_Ticket_Module.ticketView.model.set(model, {silent: true});
+				}
+			});
+   		});
+	},
 	changeGroup: function(event){
 
 		var optionsTemplate = "<li><a class='change-ticket-group-li' data-id='{{id}}'>{{group_name}}</a></li>";
@@ -146,11 +191,11 @@ var Tickets = {
 				return;
 			}
 			
-			var ticketModel = App_Ticket_Module.ticketsCollection.collection.get(Current_Ticket_ID);
+			var ticketModel = App_Ticket_Module.ticketView.model.toJSON();
 
 			var newTicketModel = new BaseModel();
 			newTicketModel.url = "/core/api/tickets/assign-ticket?id=" + Current_Ticket_ID + "&group_id=" + new_group_id;
-			newTicketModel.save(ticketModel.toJSON(), {
+			newTicketModel.save(ticketModel, {
 				
 					success: function(model){
 
@@ -158,7 +203,7 @@ var Tickets = {
 					$('td#group-id').attr('data-id', new_group_id);
 					$('.ticket_group_name').show();
 
-					ticketModel.set(model, {silent: true});
+					 App_Ticket_Module.ticketView.model.set(model, {silent: true});
 				}
 			});
    		});
@@ -186,7 +231,7 @@ var Tickets = {
 		
 			$('#change-ticket-assignee-ul').hide();
 			
-			var ticketModel = App_Ticket_Module.ticketsCollection.collection.get(Current_Ticket_ID);
+			var ticketModel = App_Ticket_Module.ticketView.model.toJSON();
 
 			// Reads the owner id from the selected option
 			var new_assignee_id = $(this).attr('data-id');
@@ -201,14 +246,14 @@ var Tickets = {
 			
 			var newTicketModel = new BaseModel();
 			newTicketModel.url = "/core/api/tickets/assign-ticket?id=" + Current_Ticket_ID + "&assignee_id=" + new_assignee_id;
-			newTicketModel.save(ticketModel.toJSON(), 
+			newTicketModel.save(ticketModel, 
 				{success: function(model){
 
 					$('.ticket_assignee_name').html(new_assignee_name);
 					$('.ticket_assignee_name').show();
 					$('td#assignee-id').attr('data-id', new_assignee_id);
 
-					ticketModel.set(model, {silent: true});
+					 App_Ticket_Module.ticketView.model.set(model, {silent: true});
 				}}
 			);
    		});
@@ -227,7 +272,7 @@ var Tickets = {
 		
 			$('#change-ticket-type-ul').hide();
 			
-			var ticketModel = App_Ticket_Module.ticketsCollection.collection.get(Current_Ticket_ID);
+			var ticketModel = App_Ticket_Module.ticketView.model.toJSON();
 
 			var new_ticket_type = $(this).attr('data-value');
 			
@@ -239,13 +284,13 @@ var Tickets = {
 			
 			var newTicketModel = new BaseModel();
 			newTicketModel.url = "/core/api/tickets/change-ticket-type?id=" + Current_Ticket_ID + "&type=" + new_ticket_type;
-			newTicketModel.save(ticketModel.toJSON(), 
+			newTicketModel.save(ticketModel, 
 				{success: function(model){
 
 					$('.ticket_type').html(new_ticket_type);
 					$('.ticket_type').show();
 
-					ticketModel.set(model, {silent: true});
+					 App_Ticket_Module.ticketView.model.set(model, {silent: true});
 				}}
 			);
    		});
@@ -265,7 +310,7 @@ var Tickets = {
 		
 			$('#change-ticket-priority-ul').hide();
 			
-			var ticketModel = App_Ticket_Module.ticketsCollection.collection.get(Current_Ticket_ID);
+			var ticketModel = App_Ticket_Module.ticketView.model.toJSON();
 
 			var new_priority = $(this).attr('data-value');
 			
@@ -277,13 +322,13 @@ var Tickets = {
 			
 			var newTicketModel = new BaseModel();
 			newTicketModel.url = "/core/api/tickets/change-priority?id=" + Current_Ticket_ID + "&priority=" + new_priority;
-			newTicketModel.save(ticketModel.toJSON(), 
+			newTicketModel.save(ticketModel, 
 				{success: function(model){
 
 					$('.ticket_priority').html(new_priority);
 					$('.ticket_priority').show();
 
-					ticketModel.set(model, {silent: true});
+					App_Ticket_Module.ticketView.model.set(model, {silent: true});
 				}}
 			);
    		});
@@ -300,15 +345,14 @@ var Tickets = {
 
 	hideDropDowns: function(ev){
 
-		if(!Current_Route || Current_Route == null || Current_Route.indexOf('ticket/') == -1)
+		if(!Current_Ticket_ID)
 			return;
-
-		console.log(ev);
 
 		if($(ev.target).closest('div.ticket-details-dropdown').length > 0 
 				|| $(ev.target).hasClass('ticket-details-value'))
 			return;
 
+		//Hiding dropdowns
 		$('.ticket-details-dropdown').hide();
 		$('.ticket-details-value').show();
 	},
@@ -378,8 +422,31 @@ var Tickets = {
 
 		current_ticket_index = (action_type == "previous") ? --current_ticket_index
 				: ++current_ticket_index;
-				
+		
+		if(current_ticket_index == null)
+			return null;
+
 		return ticket_collection.at(current_ticket_index).id;
+	},
+
+	deleteTicket: function(e){
+
+		var deleteTicketView = new Base_Model_View({
+			isNew : true,
+			url : "/core/api/tickets/delete-ticket?id=" + Current_Ticket_ID,
+			template : "ticket-delete",
+			saveCallback : function(){
+
+				$('#ticket-delete-modal').modal('hide');
+				var url = '#tickets/group/'+ (!Group_ID ? DEFAULT_GROUP_ID : Group_ID) + 
+					'/' + (Ticket_Status ? Ticket_Status : 'new');
+
+				Backbone.history.navigate(url, {trigger : true});
+			}
+		});
+
+		$('#ticket-modals').html(deleteTicketView.render().el);
+		$('#ticket-delete-modal').modal('show');
 	}
 };
 

@@ -18,6 +18,7 @@ import com.agilecrm.cases.util.CaseUtil;
 import com.agilecrm.contact.util.NoteUtil;
 import com.agilecrm.deals.Opportunity;
 import com.agilecrm.deals.util.OpportunityUtil;
+import com.agilecrm.ticket.entitys.TicketActivity;
 
 /**
  * <ContactFullDetails> loads deals, tasks, notes and cases of a particular
@@ -147,6 +148,25 @@ public class ContactFullDetails
 		{ // TODO Auto-generated catch block
 			e.printStackTrace();
 			return new ArrayList<Event>();
+		}
+	}
+
+	/**
+	 * Fetches events
+	 * 
+	 * @return
+	 */
+	@XmlElement
+	public List<TicketActivity> getTicketActivity()
+	{
+		try
+		{
+			return new TicketActivity().getActivityByContactId(contact_id);
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			return new ArrayList<TicketActivity>();
 		}
 	}
 

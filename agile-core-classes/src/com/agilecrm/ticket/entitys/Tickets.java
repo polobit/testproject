@@ -253,6 +253,12 @@ public class Tickets extends Cursor
 	 */
 	@NotSaved
 	public String html_text = "";
+	
+	/**
+	 * Util attribute to save entity type
+	 */
+	@NotSaved
+	public String entity_type = "tickets";
 
 	/**
 	 * Stores list of attachments URL's saved in Google cloud

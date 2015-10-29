@@ -21,6 +21,16 @@ var Tickets_Notes = {
 				Tickets_Notes.discardReply();
 				App_Ticket_Module.notesCollection.collection.add(model);
 				App_Ticket_Module.notesCollection.render(true);
+			},
+			error: function(data, response){
+
+				$('.error-msg').html(response.responseText);
+
+				enable_save_button($save_btn);
+
+				setTimeout(function(){
+					$('.error-msg').html('');
+				}, 3000);
 			}
 		});
 	},
@@ -30,21 +40,20 @@ var Tickets_Notes = {
 		//Rendering existing Tickets collection
 		$('#right-pane').html(Tickets_Group_View.render().el);
 
-		setTimeout(function(){
+		if(!App_Ticket_Module.ticketsCollection){
 
-			if(!App_Ticket_Module.ticketsCollection){
+			Group_ID = (!Group_ID ? DEFAULT_GROUP_ID : Group_ID);
 
-				var url = '/core/api/tickets?status=' + Ticket_Status + '&group_id=' + Group_ID;
+			var url = '/core/api/tickets?status=' + Ticket_Status + '&group_id=' + Group_ID;
 
-				if(Ticket_Filter_ID)
-					url = '/core/api/tickets/filter?filter_id=' + Ticket_Filter_ID;
+			if(Ticket_Filter_ID)
+				url = '/core/api/tickets/filter?filter_id=' + Ticket_Filter_ID;
 
-				Tickets.fetch_tickets_collection(url, Group_ID);
-			}
-			else{
-				$(".tickets-collection-pane").html(App_Ticket_Module.ticketsCollection.el);
-			}	
-		}, 0);
+			Tickets.fetch_tickets_collection(url, Group_ID);
+		}
+		else{
+			$(".tickets-collection-pane").html(App_Ticket_Module.ticketsCollection.el);
+		}
 
 		var url = (Ticket_Filter_ID) ? '#tickets/filter/' + Ticket_Filter_ID : '#tickets/group/'+ Group_ID +'/' + Ticket_Status;
 
@@ -58,13 +67,16 @@ var Tickets_Notes = {
 	},
 	repltBtn: function(e){
 
-		var ticketModel = App_Ticket_Module.ticketsCollection.collection.get(Current_Ticket_ID);
+		var ticketModel = App_Ticket_Module.ticketView.model;
 
 		$('#reply-editor').html(getTemplate('create-ticket-notes', ticketModel.toJSON()));
 		$('#send-reply-container').hide();
 
 		//Scroll to bottom of page
 		$("html, body").animate({ scrollTop: $(document).height() }, 1000);
+
+		//Initialize tooltips
+		$('[data-toggle="tooltip"]', $('#reply-editor')).tooltip();
 	},
 	discardReply: function(e){
 		$('#reply-editor').html('');

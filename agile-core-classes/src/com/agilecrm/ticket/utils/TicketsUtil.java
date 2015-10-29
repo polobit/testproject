@@ -13,9 +13,11 @@ import org.apache.commons.lang.exception.ExceptionUtils;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Tag;
 import com.agilecrm.contact.util.ContactUtil;
-import com.agilecrm.search.document.TicketDocument;
+import com.agilecrm.search.document.TicketsDocument;
+import com.agilecrm.ticket.entitys.TicketActivity;
 import com.agilecrm.ticket.entitys.TicketGroups;
 import com.agilecrm.ticket.entitys.Tickets;
+import com.agilecrm.ticket.entitys.TicketActivity.TicketActivityType;
 import com.agilecrm.ticket.entitys.Tickets.LAST_UPDATED_BY;
 import com.agilecrm.ticket.entitys.Tickets.Priority;
 import com.agilecrm.ticket.entitys.Tickets.Source;
@@ -32,7 +34,7 @@ import com.googlecode.objectify.Key;
  * Tickets.
  * 
  * @author Sasi on 28-Sep-2015
- * @See {@link TicketDocument}
+ * @See {@link TicketsDocument}
  * 
  */
 public class TicketsUtil
@@ -55,6 +57,21 @@ public class TicketsUtil
 		searchMap.put("group_id", new Key<TicketGroups>(TicketGroups.class, groupID));
 
 		return Tickets.ticketsDao.fetchAllByOrder(Integer.parseInt(pageSize), cursor, searchMap, false, true, sortKey);
+	}
+
+	public static List<Tickets> getTicketsBulk(List<Long> idsArray)
+	{
+		List<Key<Tickets>> ticketKeys = new ArrayList<Key<Tickets>>();
+
+		for (Long id : idsArray)
+		{
+			ticketKeys.add(new Key<Tickets>(Tickets.class, id));
+		}
+		List<Tickets> list = Tickets.ticketsDao.fetchAllByKeys(ticketKeys);
+
+		System.out.println("getTicketsBulk size: " + list.size());
+
+		return list;
 	}
 
 	/**
@@ -188,11 +205,15 @@ public class TicketsUtil
 				contact = ContactUtil.createContact(requester_name, requester_email);
 
 			ticket.contact_key = new Key<Contact>(Contact.class, contact.id);
+			ticket.contactID = contact.id;
 
 			Tickets.ticketsDao.put(ticket);
 
 			// Create search document
-			new TicketDocument().add(ticket);
+			new TicketsDocument().add(ticket);
+
+			// Logging ticket created activity
+			new TicketActivity(TicketActivityType.TICKET_CREATED, ticket.contactID, ticket.id, "", "", "").save();
 		}
 		catch (Exception e)
 		{
@@ -205,7 +226,7 @@ public class TicketsUtil
 
 	/**
 	 * Updates existing {@link Tickets} as well as text search document
-	 * {@link TicketDocument}
+	 * {@link TicketsDocument}
 	 * 
 	 * @param ticketID
 	 * @param cc_emails
@@ -239,7 +260,33 @@ public class TicketsUtil
 		Tickets.ticketsDao.put(ticket);
 
 		// Update search document
-		new TicketDocument().edit(ticket);
+		new TicketsDocument().edit(ticket);
+
+		return ticket;
+	}
+
+	/**
+	 * 
+	 * @param ticket_id
+	 * @param priority
+	 * @return updated ticket
+	 * @throws EntityNotFoundException
+	 */
+	public static Tickets changeStatus(Long ticket_id, Status status) throws EntityNotFoundException
+	{
+		Tickets ticket = TicketsUtil.getTicketByID(ticket_id);
+
+		Status oldStatus = ticket.status;
+		ticket.status = status;
+
+		Tickets.ticketsDao.put(ticket);
+
+		// Updating search document
+		new TicketsDocument().edit(ticket);
+
+		// Logging activity
+		new TicketActivity(TicketActivityType.TICKET_STATUS_CHANGE, ticket.contactID, ticket.id, oldStatus.toString(),
+				status.toString(), "status").save();
 
 		return ticket;
 	}
@@ -256,16 +303,38 @@ public class TicketsUtil
 	{
 		Tickets ticket = TicketsUtil.getTicketByID(ticket_id);
 
+		boolean isTicketTransfer = true;
+
 		if (ticket.status == Status.NEW)
+		{
 			ticket.status = Status.OPEN;
 
+			// Logging ticket assigned activity
+			new TicketActivity(TicketActivityType.TICKET_ASSIGNED, ticket.contactID, ticket.id, "", assignee_id + "",
+					"assigneeID").save();
+
+			isTicketTransfer = false;
+		}
+
 		if (group_id != null)
+		{
+			if (ticket.groupID != group_id)
+				// Logging group changed activity
+				new TicketActivity(TicketActivityType.TICKET_GROUP_CHANGED, ticket.contactID, ticket.id, ticket.groupID
+						+ "", group_id + "" + "", "groupID").save();
+
 			ticket.group_id = new Key<TicketGroups>(TicketGroups.class, group_id);
+		}
 
 		if (assignee_id != null)
 		{
 			ticket.assignee_id = new Key<DomainUser>(DomainUser.class, assignee_id);
 			ticket.assigned_to_group = false;
+
+			if (isTicketTransfer && ticket.assigneeID != assignee_id)
+				// Logging ticket transfer activity
+				new TicketActivity(TicketActivityType.TICKET_ASSIGNED_CHANGED, ticket.contactID, ticket.id,
+						ticket.assignee_id + "", assignee_id + "" + "", "assigneeID").save();
 		}
 		else
 			ticket.assigned_to_group = true;
@@ -275,7 +344,7 @@ public class TicketsUtil
 		Tickets.ticketsDao.put(ticket);
 
 		// Update search document
-		new TicketDocument().edit(ticket);
+		new TicketsDocument().edit(ticket);
 
 		return ticket;
 	}
@@ -287,15 +356,20 @@ public class TicketsUtil
 	 * @return updated ticket
 	 * @throws EntityNotFoundException
 	 */
-	public static Tickets changePriority(Long ticket_id, Priority priority) throws EntityNotFoundException
+	public static Tickets changePriority(Long ticket_id, Priority newPriority) throws EntityNotFoundException
 	{
 		Tickets ticket = TicketsUtil.getTicketByID(ticket_id);
-		ticket.priority = priority;
+		Priority oldPriority = ticket.priority;
+		ticket.priority = newPriority;
 
 		Tickets.ticketsDao.put(ticket);
 
-		// Update search document
-		new TicketDocument().edit(ticket);
+		// Updating search document
+		new TicketsDocument().edit(ticket);
+
+		// Logging activity
+		new TicketActivity(TicketActivityType.TICKET_PRIORITY_CHANGE, ticket.contactID, ticket.id,
+				oldPriority.toString(), newPriority.toString(), "priority").save();
 
 		return ticket;
 	}
@@ -308,15 +382,22 @@ public class TicketsUtil
 	 * 
 	 * @throws EntityNotFoundException
 	 */
-	public static Tickets changeTicketType(Long ticket_id, Type type) throws EntityNotFoundException
+	public static Tickets changeTicketType(Long ticket_id, Type newTicketType) throws EntityNotFoundException
 	{
 		Tickets ticket = TicketsUtil.getTicketByID(ticket_id);
-		ticket.type = type;
 
+		Type oldTicketType = ticket.type;
+
+		// Updating with new ticket type
+		ticket.type = newTicketType;
 		Tickets.ticketsDao.put(ticket);
 
 		// Update search document
-		new TicketDocument().edit(ticket);
+		new TicketsDocument().edit(ticket);
+
+		// Logging activity
+		new TicketActivity(TicketActivityType.TICKET_TYPE_CHANGE, ticket.contactID, ticket.id,
+				oldTicketType.toString(), newTicketType.toString(), "type").save();
 
 		return ticket;
 	}
@@ -336,7 +417,12 @@ public class TicketsUtil
 		Tickets.ticketsDao.put(ticket);
 
 		// Update search document
-		new TicketDocument().edit(ticket);
+		new TicketsDocument().edit(ticket);
+
+		// Logging activity
+		new TicketActivity((is_favorite ? TicketActivityType.TICKET_MARKED_FAVORITE
+				: TicketActivityType.TICKET_MARKED_UNFAVORITE), ticket.contactID, ticket.id, "", "", "is_favorite")
+				.save();
 
 		return ticket;
 	}
@@ -350,13 +436,20 @@ public class TicketsUtil
 	public static Tickets closeTicket(Long ticket_id) throws EntityNotFoundException
 	{
 		Tickets ticket = TicketsUtil.getTicketByID(ticket_id);
+
+		Status oldStatus = ticket.status;
+
 		ticket.status = Status.CLOSED;
 		ticket.closed_time = Calendar.getInstance().getTimeInMillis();
 
 		Tickets.ticketsDao.put(ticket);
 
 		// Update search document
-		new TicketDocument().edit(ticket);
+		new TicketsDocument().edit(ticket);
+
+		// Logging activity
+		new TicketActivity(TicketActivityType.TICKET_STATUS_CHANGE, ticket.contactID, ticket.id, oldStatus.toString(),
+				Status.CLOSED.toString(), "status").save();
 
 		return ticket;
 	}
@@ -373,15 +466,26 @@ public class TicketsUtil
 
 		List<Tag> tags = ticket.tags;
 
+		TicketActivityType ticketActivityType = null;
+
 		if ("add".equalsIgnoreCase(command))
+		{
 			tags.add(tag);
+			ticketActivityType = TicketActivityType.TICKET_TAG_ADD;
+		}
 		else
+		{
 			tags.remove(tag);
+			ticketActivityType = TicketActivityType.TICKET_TAG_REMOVE;
+		}
 
 		ticket.tags = tags;
 		Tickets.ticketsDao.put(ticket);
 
-		new TicketDocument().edit(ticket);
+		new TicketsDocument().edit(ticket);
+
+		// Logging activity
+		new TicketActivity(ticketActivityType, ticket.contactID, ticket.id, "", tag.tag, "tags").save();
 
 		return ticket;
 	}
@@ -471,9 +575,14 @@ public class TicketsUtil
 	 */
 	public static void deleteTicket(Long ticket_id) throws EntityNotFoundException
 	{
+		Tickets ticket = getTicketByID(ticket_id);
+
 		Tickets.ticketsDao.deleteKey(new Key<Tickets>(Tickets.class, ticket_id));
 
-		new TicketDocument().delete(ticket_id + "");
+		new TicketsDocument().delete(ticket_id + "");
+
+		// Logging deleting ticket activity
+		new TicketActivity(TicketActivityType.TICKET_DELETED, ticket.contactID, ticket.id, "", "", "").save();
 	}
 
 	/**

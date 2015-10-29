@@ -204,13 +204,13 @@ var TicketsUtilRouter = Backbone.Router.extend({
 
 		Current_Ticket_ID = id;
 
-		var ticketView = new Ticket_Base_Model({
+		App_Ticket_Module.ticketView = new Ticket_Base_Model({
 			model : ticketModal, 
 			isNew : (ticketModal) ? true : false, 
 			template : "ticket-details",
 			url : "/core/api/tickets/" + id,
 			postRenderCallback : function(el, data) {
-
+				
 				//Initialize tooltips
 				$('[data-toggle="tooltip"]', el).tooltip();
 
@@ -227,7 +227,7 @@ var TicketsUtilRouter = Backbone.Router.extend({
 		});
 
 		$(".tickets-collection-pane").html('');
-		$("#right-pane").html(ticketView.render().el);
+		$("#right-pane").html(App_Ticket_Module.ticketView.render().el);
 	},
 
 	/**

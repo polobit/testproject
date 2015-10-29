@@ -92,7 +92,7 @@ var Ticket_Tags = {
 
 	updateTag: function(tag, command, callback){
 
-		var ticketModel = App_Ticket_Module.ticketsCollection.collection.get(Current_Ticket_ID);
+		var ticketModel = App_Ticket_Module.ticketView.model.toJSON();
 
 		if(ticketModel.tags)
 			ticketModel.tags.push(tag);
@@ -101,11 +101,11 @@ var Ticket_Tags = {
 
 		var newTicketModel = new BaseModel();
 		newTicketModel.url = "/core/api/tickets/update-tags?command="+ command +"&tag=" + tag + '&id=' + Current_Ticket_ID;
-		newTicketModel.save(ticketModel.toJSON(), 
+		newTicketModel.save(ticketModel, 
 			{
 				success: function(model){
 
-				ticketModel.set(model, {silent: true});
+				 App_Ticket_Module.ticketView.model.set(model, {silent: true});
 
 				if(callback)
 					callback();

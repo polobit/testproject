@@ -42,8 +42,6 @@
 	</div>
 	{{/if_equals}}
 
-</div>
-
 <!-- Document Result -->
 {{#if_equals entity_type "document"}}
 <div class="thumb-sm agile-img m-r-xs">
@@ -56,8 +54,6 @@
 	</div>
 	{{/if_equals}}
 
-</div>
-
 <!-- Case Result -->
 {{#if_equals entity_type "case"}}
 <div class="thumb-sm agile-img m-r-xs">
@@ -69,6 +65,17 @@
          
 	</div>
 	{{/if_equals}}
+
+<!-- Ticket Result -->
+{{#if_equals entity_type "tickets"}}
+	<div class="thumb-sm agile-img m-r-xs">
+		<img class="img-inital r r-2x" src="{{emailGravatarurl 40 requester_email}}"/>
+	</div>
+	<div class="agile-thumb text-ellipsis">
+		{{subject}}
+        <br /> {{first_notes_text}} </br> {{epochToHumanDate "dd mmm yyyy" created_time}}
+	</div>
+{{/if_equals}}	
 
 </div>
 
@@ -87,6 +94,9 @@
 <div id="case-typeahead-heading" style="display:none;" class="text-md custom-color m-l-sm">Cases</div>	
 	<div id="case-results">
 	</div>
+<div id="tickets-typeahead-heading" style="display:none;" class="text-md custom-color m-l-sm">Tickets</div>	
+	<div id="ticket-results">
+	</div>	
 	<div id="typeahead-contacts-model-list"></div>
 </script>
 

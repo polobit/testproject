@@ -1,5 +1,7 @@
 package com.agilecrm.ticket.entitys;
 
+import java.util.Calendar;
+
 import javax.persistence.Id;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -36,12 +38,22 @@ public class TicketDocuments
 	/**
 	 * URL of Document.
 	 */
-	public String url = null;
+	public String bucketName = null;
 
 	/**
 	 * Default Constructor.
 	 */
 	public TicketDocuments()
 	{
+	}
+
+	public TicketDocuments(String name, String extension, Long size, String bucketName)
+	{
+		super();
+		this.name = name;
+		this.extension = extension;
+		this.size = size;
+		this.bucketName = bucketName;
+		this.uploaded_time = Calendar.getInstance().getTimeInMillis();
 	}
 }

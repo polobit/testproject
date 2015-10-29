@@ -23,16 +23,16 @@ import org.jsoup.examples.HtmlToPlainText;
 import org.jsoup.nodes.Document;
 
 import com.agilecrm.contact.Tag;
-import com.agilecrm.search.document.TicketDocument;
+import com.agilecrm.search.document.TicketsDocument;
+import com.agilecrm.ticket.entitys.TicketActivity;
 import com.agilecrm.ticket.entitys.TicketDocuments;
 import com.agilecrm.ticket.entitys.TicketFilters;
 import com.agilecrm.ticket.entitys.TicketGroups;
-import com.agilecrm.ticket.entitys.TicketNotes;
 import com.agilecrm.ticket.entitys.Tickets;
+import com.agilecrm.ticket.entitys.TicketActivity.TicketActivityType;
 import com.agilecrm.ticket.entitys.TicketNotes.CREATED_BY;
 import com.agilecrm.ticket.entitys.TicketNotes.NOTE_TYPE;
 import com.agilecrm.ticket.entitys.Tickets.Priority;
-import com.agilecrm.ticket.entitys.Tickets.Source;
 import com.agilecrm.ticket.entitys.Tickets.Status;
 import com.agilecrm.ticket.entitys.Tickets.Type;
 import com.agilecrm.ticket.utils.TicketFiltersUtil;
@@ -42,8 +42,6 @@ import com.agilecrm.ticket.utils.TicketsUtil;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.google.appengine.api.NamespaceManager;
-import com.google.appengine.api.search.Query;
-import com.google.appengine.api.search.QueryOptions;
 import com.googlecode.objectify.Key;
 
 /**
@@ -158,7 +156,7 @@ public class TicketsRest
 			String queryString = TicketFiltersUtil.getQueryFromConditions(filter.conditions);
 			queryString = queryString.substring(0, queryString.lastIndexOf("AND"));
 
-			JSONObject resultJSON = new TicketDocument().searchDocuments(queryString.trim(), cursor);
+			JSONObject resultJSON = new TicketsDocument().searchDocuments(queryString.trim(), cursor);
 
 			System.out.println("query: " + queryString);
 
@@ -244,7 +242,7 @@ public class TicketsRest
 
 			System.out.println("queryString: " + queryString);
 
-			return new JSONObject().put("count", new TicketDocument().getTicketsCount(queryString)).toString();
+			return new JSONObject().put("count", new TicketsDocument().getTicketsCount(queryString)).toString();
 		}
 		catch (Exception e)
 		{
@@ -293,6 +291,26 @@ public class TicketsRest
 	}
 
 	/**
+	 * @return list of ticket activitys
+	 */
+	@GET
+	@Path("/activity")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<TicketActivity> listTicketActivitys(@QueryParam("id") Long ticketID)
+	{
+		try
+		{
+			return new TicketActivity().getActivityByTicketId(ticketID);
+		}
+		catch (Exception e)
+		{
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
+			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+					.build());
+		}
+	}
+
+	/**
 	 * Creates new ticket from dashboard
 	 * 
 	 * @param ticket
@@ -306,6 +324,10 @@ public class TicketsRest
 		try
 		{
 			String html_text = ticket.html_text;
+
+			if (StringUtils.isBlank(html_text))
+				throw new Exception("Please provide message body.");
+
 			Long groupID = ticket.groupID, assigneeID = ticket.assigneeID;
 
 			// Converting html text to plain with jsoup
@@ -322,7 +344,37 @@ public class TicketsRest
 					ticket.requester_name, ticket.requester_email, plain_text, html_text, NOTE_TYPE.PUBLIC,
 					new ArrayList<TicketDocuments>());
 
+			ticket.groupID = ticket.group_id.getId();
+
 			return ticket;
+		}
+		catch (Exception e)
+		{
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
+			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+					.build());
+		}
+	}
+
+	/**
+	 * changes ticket status
+	 * 
+	 * @param ticket_id
+	 * @param group_id
+	 * @param assignee_id
+	 * @return returns success json
+	 */
+	@PUT
+	@Path("/change-status")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Tickets changeStatus(@QueryParam("id") Long ticketID, @QueryParam("status") Status status)
+	{
+		try
+		{
+			if (ticketID == null && status == null)
+				throw new Exception("Required parameters missing.");
+
+			return TicketsUtil.changeStatus(ticketID, status);
 		}
 		catch (Exception e)
 		{
@@ -498,14 +550,14 @@ public class TicketsRest
 	@PUT
 	@Path("/delete-ticket")
 	@Produces(MediaType.APPLICATION_JSON)
-	public String deleteTicket(Tickets ticket)
+	public String deleteTicket(@QueryParam("id") Long ticketID)
 	{
 		try
 		{
-			if (ticket == null || ticket.id == null)
+			if (ticketID == null)
 				throw new Exception("Required parameter missing.");
 
-			TicketsUtil.deleteTicket(ticket.id);
+			TicketsUtil.deleteTicket(ticketID);
 
 			return new JSONObject().put("status", "success").toString();
 		}

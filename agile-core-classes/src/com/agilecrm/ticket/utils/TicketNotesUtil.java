@@ -12,10 +12,12 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.agilecrm.Globals;
+import com.agilecrm.ticket.entitys.TicketActivity;
 import com.agilecrm.ticket.entitys.TicketDocuments;
 import com.agilecrm.ticket.entitys.TicketGroups;
 import com.agilecrm.ticket.entitys.TicketNotes;
 import com.agilecrm.ticket.entitys.Tickets;
+import com.agilecrm.ticket.entitys.TicketActivity.TicketActivityType;
 import com.agilecrm.ticket.entitys.TicketNotes.CREATED_BY;
 import com.agilecrm.ticket.entitys.TicketNotes.NOTE_TYPE;
 import com.agilecrm.user.DomainUser;
@@ -26,6 +28,7 @@ import com.agilecrm.util.MD5Util;
 import com.agilecrm.util.email.MustacheUtil;
 import com.agilecrm.util.email.SendMail;
 import com.google.appengine.api.NamespaceManager;
+import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.googlecode.objectify.Key;
 import com.thirdparty.mandrill.Mandrill;
 
@@ -63,15 +66,15 @@ public class TicketNotesUtil
 	 * @param note_type
 	 * @param attachments_list
 	 * @return
+	 * @throws EntityNotFoundException
 	 */
 	public static TicketNotes createTicketNotes(Long ticket_id, Long group_id, Long assignee_id, CREATED_BY created_by,
 			String requester_name, String requester_email, String original_plain_text, String original_html_text,
-			NOTE_TYPE note_type, List<TicketDocuments> attachments_list)
+			NOTE_TYPE note_type, List<TicketDocuments> attachments_list) throws EntityNotFoundException
 	{
 		TicketNotes ticketNotes = new TicketNotes(ticket_id, group_id, assignee_id, created_by, requester_name,
-				requester_email, removedQuotedReplies(original_plain_text, requester_email), removedQuotedReplies(
-						original_html_text, requester_email), original_plain_text, original_html_text, note_type,
-				attachments_list);
+				requester_email, removedQuotedReplies(original_plain_text), removedQuotedReplies(original_html_text),
+				original_plain_text, original_html_text, note_type, attachments_list);
 
 		Key<TicketNotes> key = TicketNotes.ticketNotesDao.put(ticketNotes);
 
@@ -157,8 +160,8 @@ public class TicketNotesUtil
 		return json;
 	}
 
-	public static void sendEmail(String toAddress, String subject, String fromName, String fromEmail, List<String> ccEmails,
-			String template, JSONObject dataJSON) throws Exception
+	public static void sendEmail(String toAddress, String subject, String fromName, String fromEmail,
+			List<String> ccEmails, String template, JSONObject dataJSON) throws Exception
 	{
 		// Read template - HTML
 		String emailHTML = MustacheUtil.templatize(template + SendMail.TEMPLATE_HTML_EXT, dataJSON);
@@ -179,12 +182,12 @@ public class TicketNotesUtil
 		JSONObject mailJSON = Mandrill.setMandrillAPIKey(null, NamespaceManager.get(), null);
 
 		String ccEmailString = "";
-		for(String ccEmail : ccEmails)
+		for (String ccEmail : ccEmails)
 			ccEmailString += ccEmail + ",";
-		
+
 		// All email params are inserted into Message json
-		JSONObject messageJSON = Mandrill.getMessageJSON("", fromEmail, fromName, toAddress, ccEmailString, "", "", subject,
-				emailHTML, emailBody, "", "");
+		JSONObject messageJSON = Mandrill.getMessageJSON("", fromEmail, fromName, toAddress, ccEmailString, "", "",
+				subject, emailHTML, emailBody, "", "");
 
 		String response = null;
 
@@ -291,7 +294,7 @@ public class TicketNotesUtil
 	 * @param fromAddress
 	 * @return sent only last typed reply
 	 */
-	private static String removedQuotedReplies(String text, String fromAddress)
+	private static String removedQuotedReplies(String text)
 	{
 		try
 		{

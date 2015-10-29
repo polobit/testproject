@@ -45,8 +45,8 @@
           <div id="send-reply-container" class="panel-heading" aria-hidden="false">
             <div class="m-b-lg">
               Click here to 
-              <a href="javascript:void(0);" class="text-u-l reply-btn" tabindex="0">Reply</a> or 
-              <a href="javascript:void(0);" class="text-u-l" tabindex="0">Forward</a>
+              <a href="javascript:void(0);" class="text-u-l reply-btn" tabindex="0">Reply</a>
+              <!-- or <a href="javascript:void(0);" class="text-u-l" tabindex="0">Forward</a> -->
             </div>
           </div>
           <div id="reply-editor">
@@ -64,15 +64,15 @@
           </a>
         </li>
         <li>
-          <a data-target="#tab-2" role="tab" data-toggle="tab" aria-expanded="false">
+          <a class="timeline" data-target="#tab-2" role="tab" data-toggle="tab" aria-expanded="false">
             Timeline
           </a>
         </li>
-        <li>
+        <!-- <li>
           <a data-target="#tab-3" role="tab" data-toggle="tab" aria-expanded="false">
             Widgets
           </a>
-        </li>
+        </li> -->
       </ul>
     </div>
     <div class="tab-content">
@@ -85,7 +85,25 @@
               </tr>
               <tr>
                   <td class="p-t-xs p-b-xs">Status</td>
-                  <td class="p-t-xs p-b-xs first-letter-cap">{{status}}</td>
+                  {{#if_equals status 'NEW'}}
+                    <td class="p-t-xs p-b-xs first-letter-cap">{{status}}</td>
+                  {{else}}
+                    <td class="p-t-xs p-b-xs">
+                      <div class="ticket_status ticket-details-value first-letter-cap">{{status}}</div>
+                      <div class="dropdown ticket-details-dropdown" id="change-ticket-status-ul" style="display: none;">
+                        <div class="btn-group">
+                          <div class="btn btn-default btn-xs custom_view first-letter-cap">Change Status</div>
+                          <a class="btn btn-xs dropdown-toggle btn-default" data-toggle="dropdown" aria-expanded="false"> 
+                            <span class="caret"></span>
+                          </a>
+                          <ul id="ticket-status-list" class="dropdown-menu pull-right">
+                             
+                          </ul>
+                        </div>
+                      </div>
+                    </td>
+                  {{/if_equals}}
+                  
               </tr>
               <tr>
                   <td class="p-t-xs p-b-xs">Group</td>
@@ -209,60 +227,8 @@
         </div>
       </div>
       <div role="tabpanel" class="tab-pane" id="tab-2">
-        <div class="wrapper-md">
-            <div class="streamline b-l m-b">
-              <div class="sl-item">
-                <div class="m-l">
-                  <div class="text-muted">5 minutes ago</div>
-                  <p><a href="" class="text-info">Jessi</a> commented your post.</p>
-                </div>
-              </div>
-              <div class="sl-item">
-                <div class="m-l">
-                  <div class="text-muted">11:30</div>
-                  <p>Join comference</p>
-                </div>
-              </div>
-              <div class="sl-item b-success b-l">
-                <div class="m-l">
-                  <div class="text-muted">10:30</div>
-                  <p>Call to customer <a href="" class="text-info">Jacob</a> and discuss the detail.</p>
-                </div>
-              </div>
-              <div class="bg-info wrapper-sm m-l-n m-r-n m-b r r-2x">
-                Create tasks for the team
-              </div>
-              <div class="sl-item b-primary b-l">
-                <div class="m-l">
-                  <div class="text-muted">Wed, 25 Mar</div>
-                  <p>Finished task <a href="" class="text-info">Testing</a>.</p>
-                </div>
-              </div>
-              <div class="sl-item b-warning b-l">
-                <div class="m-l">
-                  <div class="text-muted">Thu, 10 Mar</div>
-                  <p>Trip to the moon</p>
-                </div>
-              </div>
-              <div class="sl-item b-info b-l">
-                <div class="m-l">
-                  <div class="text-muted">Sat, 5 Mar</div>
-                  <p>Prepare for presentation</p>
-                </div>
-              </div>
-              <div class="sl-item b-l">
-                <div class="m-l">
-                  <div class="text-muted">Sun, 11 Feb</div>
-                  <p><a href="" class="text-info">Jessi</a> assign you a task <a href="" class="text-info">Mockup Design</a>.</p>
-                </div>
-              </div>
-              <div class="sl-item b-l">
-                <div class="m-l">
-                  <div class="text-muted">Thu, 17 Jan</div>
-                  <p>Follow up to close deal</p>
-                </div>
-              </div>
-            </div>
+        <div id="timeline" class="wrapper-md">
+            
         </div>
       </div>
       <div role="tabpanel" class="tab-pane" id="tab-3">
@@ -317,7 +283,8 @@
     </div>
     <div class="panel-footer bg-light lt">
       <a href="javascript:void(0);" class="btn btn-link pull-right discard-reply">
-        <i  data-toggle="tooltip" data-placement="top" data-original-title="Discard" class="fa fa-trash-o"></i>
+        <i  data-toggle="tooltip" data-placement="top" data-original-title="Discard" 
+          class="fa fa-trash-o"></i>
       </a>
       <a href="javascript:void(0);" class="btn btn-info btn-sm send-reply" data-loading-text='Send Reply'>Send Reply</a>
       <a href="javascript:void(0);" class="btn btn-primary btn-sm m-l-xs send-reply private" data-loading-text='Add Note'>Add Note</a>
@@ -327,6 +294,19 @@
       <a href="javascript:void(0);" class="btn btn-default btn-sm m-l-xs">
         <i  data-toggle="tooltip" data-placement="top" data-original-title="Canned Responses" class="fa fa-reorder"></i>
       </a>
+      <div class="error-msg" style="color:#B94A48; font-size:14px"></div>
     </div>
   </form>
+</script>
+<script  id="ticket-status-template" type="text/html">
+  {{#if_equals status 'OPEN'}}
+    <li>
+      <a class="change-ticket-status-li" data-value="CLOSED">Closed</a>
+    </li>
+  {{/if_equals}}
+  {{#if_equals status 'CLOSED'}}
+    <li>
+      <a class="change-ticket-status-li" data-value="OPEN">Open</a>
+    </li>
+  {{/if_equals}}
 </script>

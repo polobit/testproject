@@ -14,13 +14,17 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.examples.HtmlToPlainText;
 import org.jsoup.nodes.Document;
 
+import com.agilecrm.search.document.TicketsDocument;
+import com.agilecrm.ticket.entitys.TicketActivity;
 import com.agilecrm.ticket.entitys.TicketDocuments;
 import com.agilecrm.ticket.entitys.TicketNotes;
+import com.agilecrm.ticket.entitys.TicketActivity.TicketActivityType;
 import com.agilecrm.ticket.entitys.TicketNotes.CREATED_BY;
 import com.agilecrm.ticket.entitys.TicketNotes.NOTE_TYPE;
 import com.agilecrm.ticket.entitys.Tickets.LAST_UPDATED_BY;
@@ -59,6 +63,11 @@ public class TicketNotesRest
 		}
 	}
 
+	/**
+	 * 
+	 * @param notes
+	 * @return
+	 */
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
@@ -71,6 +80,9 @@ public class TicketNotesRest
 
 			if (notes == null || notes.ticket_id == null)
 				throw new Exception("Ticket ID is missing.");
+
+			if (StringUtils.isBlank(html_text))
+				throw new Exception("Please provide message body.");
 
 			Tickets ticket = TicketsUtil.getTicketByID(ticketID);
 
@@ -85,6 +97,10 @@ public class TicketNotesRest
 				ticketNotes = TicketNotesUtil.createTicketNotes(ticket.id, null, DomainUserUtil.getCurentUserKey()
 						.getId(), CREATED_BY.AGENT, "", "", plain_text, html_text, NOTE_TYPE.PRIVATE,
 						new ArrayList<TicketDocuments>());
+
+				// Logging private notes activity
+				new TicketActivity(TicketActivityType.TICKET_PRIVATE_NOTES_ADD, ticket.contactID, ticket.id,
+						plain_text, html_text, "html_text").save();
 			}
 			else
 			{
@@ -104,7 +120,15 @@ public class TicketNotesRest
 					ticket.assignee_id = domainUserKey;
 					ticket.assigneeID = domainUserKey.getId();
 
+					// Updating ticket entity
 					Tickets.ticketsDao.put(ticket);
+
+					// updating text search data
+					new TicketsDocument().edit(ticket);
+
+					// Logging status changed activity
+					new TicketActivity(TicketActivityType.TICKET_STATUS_CHANGE, ticket.contactID, ticket.id, "NEW",
+							"OPEN", "status").save();
 				}
 
 				// Creating new Notes in TicketNotes table
@@ -113,6 +137,10 @@ public class TicketNotesRest
 						notes.note_type, new ArrayList<TicketDocuments>());
 
 				TicketNotesUtil.sendReplyToRequester(ticket);
+
+				// Logging private notes activity
+				new TicketActivity(TicketActivityType.TICKET_ASSIGNEE_REPLIED, ticket.contactID, ticket.id, html_text,
+						plain_text, "html_text").save();
 			}
 
 			ticketNotes.domain_user = DomainUserUtil.getDomainUser(ticket.assigneeID);
