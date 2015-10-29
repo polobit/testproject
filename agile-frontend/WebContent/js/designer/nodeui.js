@@ -247,6 +247,9 @@ function saveNode(e) {
 		 // Shows 'Save Campaign' message. Naresh (21/02/2014)
 		 window.parent.$("#workflow-msg").html($save_info).fadeIn(1000);
 		 
+		 delete jsonDefinition["x"];
+		 delete jsonDefinition["y"];
+		 
 		 if(!checkWorkflowSize())
 				return;
 		   	

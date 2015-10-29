@@ -2,7 +2,10 @@ package com.campaignio.tasklets.util.deferred;
 
 import org.json.JSONObject;
 
+import com.agilecrm.workflows.status.CampaignStatus.Status;
+import com.agilecrm.workflows.status.util.CampaignStatusUtil;
 import com.agilecrm.workflows.util.WorkflowUtil;
+import com.campaignio.tasklets.agile.util.AgileTaskletUtil;
 import com.campaignio.tasklets.util.TaskCore;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.taskqueue.DeferredTask;
@@ -60,7 +63,13 @@ public class TaskletWorkflowDeferredTask implements DeferredTask
 
 			// In case workflow is deleted or disabled.
 			if (campaignJSON == null || campaignJSON.getBoolean("is_disabled"))
+			{
+				System.out.println("Disabled campaign assigned");
+				CampaignStatusUtil.setStatusOfCampaignWithName(AgileTaskletUtil.getId(subscriberJSON),
+						AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getCampaignNameFromJSON(campaignJSON),
+						Status.REMOVED);
 				return;
+			}
 
 			TaskCore.executeWorkflow(campaignJSON, subscriberJSON);
 		}

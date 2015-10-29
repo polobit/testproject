@@ -3,6 +3,7 @@ package com.agilecrm.subscription.restrictions.entity.impl;
 import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
 import com.agilecrm.subscription.restrictions.entity.DaoBillingRestriction;
 import com.agilecrm.workflows.Workflow;
+import com.agilecrm.workflows.util.WorkflowUtil;
 
 public class WorkflowBillingRestriction extends DaoBillingRestriction
 {
@@ -44,7 +45,9 @@ public class WorkflowBillingRestriction extends DaoBillingRestriction
 
 		Workflow workflow = (Workflow) entity;
 
-		if (!workflow.is_disabled)
+		Workflow old_workflow = WorkflowUtil.getWorkflow(workflow.id);
+
+		if (old_workflow.is_disabled != workflow.is_disabled && !workflow.is_disabled)
 			restriction.campaigns_count += 1;
 
 		if (restriction.campaigns_count <= max_allowed)
