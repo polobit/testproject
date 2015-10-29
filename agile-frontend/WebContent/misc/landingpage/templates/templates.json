@@ -4,27 +4,42 @@
             "category": "General",
             "description": "Category description here",
             "list": [
-				{
+                {
                     "id": "flatapp",
                     "displayname": "Flat App",
                     "description": "this is sample text"
                 },
-				{
-                    "id": "meetup",
-                    "displayname": "Meet Up",
+                {
+                    "id": "freelancer",
+                    "displayname": "Freelancer",
                     "description": "this is sample text"
                 },
-				{
+                {
+                    "id": "landing-page",
+                    "displayname": "Landing Page",
+                    "description": "this is sample text"
+                },
+                {
                     "id": "sleek",
                     "displayname": "Sleek",
                     "description": "this is sample text"
                 },
-				{
+                {
+                    "id": "squad",
+                    "displayname": "Squad",
+                    "description": "this is sample text"
+                },
+                {
+                    "id": "stylish-portfolio",
+                    "displayname": "Stylish Portfolio",
+                    "description": "this is sample text"
+                },
+                {
                     "id": "superawesome",
                     "displayname": "Super Awesome",
                     "description": "this is sample text"
                 }
-			]
+            ]
         }
     ]
 }
