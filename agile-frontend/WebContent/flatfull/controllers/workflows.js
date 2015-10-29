@@ -463,7 +463,7 @@ var WorkflowsRouter = Backbone.Router
 
 					});
 
-					var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
+					var optionsTemplate = "<option value='{{id}}'{{#if is_disabled}}disabled=disabled>{{name}} (Disabled){{else}}>{{name}}{{/if}}</option>";
 
 					// fill the selected campaign-id
 					if (campaign_id)
@@ -693,7 +693,7 @@ var WorkflowsRouter = Backbone.Router
 							populate_call_trigger_options($('form#addTriggerForm', el), currentTrigger.toJSON());	
 						}
 
-						var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
+						var optionsTemplate = "<option value='{{id}}'{{#if is_disabled}}disabled=disabled>{{name}} (Disabled){{else}}>{{name}}{{/if}}</option>";
 
 						/**
 						 * Fills campaign select drop down with existing
