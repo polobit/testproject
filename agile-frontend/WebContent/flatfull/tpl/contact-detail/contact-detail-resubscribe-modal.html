@@ -30,20 +30,23 @@
                                     {{#if this.unsubscribed}}    
                                         <div class="tagsinput" style="margin-top: 7px;">
                                                 <ul name="unsubscribed_names" id="added-tags-ul" class="tagsinput inline v-top m-b-sm p-n">
-                                                     <li class="inline-block tag btn btn-xs btn-default m-r-xs m-b-xs" style="background-color: #f6f6f6;">
-                                                         <span>
-                                                             <a class="anchor m-r-xs custom-color" style="color:#363f44">All</a>
-                                                             <a class="close resubscribe" data="ALL" contact_name = "{{contactShortName}}" campaign_name="all" title="Resubscribe" style="font-size: 16px; opacity: 0.5;">&times</a>
-                                                         </span>
-                                                     </li> 
-                                                    {{#each this.unsubscribed}}
-                                                        <li class="inline-block tag btn btn-xs btn-default m-r-xs m-b-xs" style="background-color: #f6f6f6;">
-                                                             <span>
-                                                                 <a class="anchor m-r-xs custom-color" style="color:#363f44">{{#if campaign_name}}{{trim_space campaign_name}}{{else}}Unsubscribed Campaign{{/if}}</a>
-                                                                 <a class="close resubscribe" data="{{campaign_id}}" contact_name = "{{contactShortName}}" campaign_name="{{campaign_name}}" title="Resubscribe" style="font-size: 16px; opacity: 0.5;">&times</a>
-                                                             </span>
-                                                        </li> 
-                                                    {{/each}}
+                                                        {{#if this.unsubscribed.isAll}}
+                                                            <li class="inline-block tag btn btn-xs btn-default m-r-xs m-b-xs" style="background-color: #f6f6f6;">
+                                                                 <span>
+                                                                     <a class="anchor m-r-xs custom-color" style="color:#363f44">All</a>
+                                                                     <a class="close resubscribe" data="ALL" contact_name = "{{contactShortName}}" campaign_name="all" title="Resubscribe" style="font-size: 16px; opacity: 0.5;">&times</a>
+                                                                 </span>
+                                                             </li> 
+                                                        {{else}}
+                                                        {{#each this.unsubscribed.unsubscribed_campaigns}}
+                                                            <li class="inline-block tag btn btn-xs btn-default m-r-xs m-b-xs" style="background-color: #f6f6f6;">
+                                                                 <span>
+                                                                     <a class="anchor m-r-xs custom-color" style="color:#363f44">{{#if campaign_name}}{{trim_space campaign_name}}{{else}}Unsubscribed Campaign{{/if}}</a>
+                                                                     <a class="close resubscribe" data="{{campaign_id}}" contact_name = "{{contactShortName}}" campaign_name="{{campaign_name}}" title="Resubscribe" style="font-size: 16px; opacity: 0.5;">&times</a>
+                                                                 </span>
+                                                            </li>
+                                                        {{/each}}
+                                                        {{/if}}
                                                </ul>
                                         </div>
                                     {{else}}

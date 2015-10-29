@@ -2341,13 +2341,14 @@ $(function()
 
 		var active_campaigns = [];
 		var completed_campaigns = [];
-		var unsubscribed_campaigns = [];
+		var unsubscribed_campaigns_json = {};
 
 		// campaignStatus object of contact
 		var campaignStatusArray = object[data];
 		var statuses = object["campaignStatus"];
 		var campaign_json = {};
 
+		// To get campaign name for unsubscribed campaigns
 		for (var i = 0, len = statuses.length; i < len; i++)
 		{
 			var status = statuses[i];
@@ -2370,19 +2371,32 @@ $(function()
 					completed_campaigns.push(campaignStatusArray[i]);
 			}
 
-			// 
+			var isAll = false;
+			var unsubscribed_campaigns = []
+			// Unsubscribed campaigns list
 			if(campaignStatusArray[i].unsubscribeType)
 			{
 
 				campaignStatusArray[i].campaign_name = campaign_json[campaignStatusArray[i].campaign_id];
 
+				if(campaignStatusArray[i].unsubscribeType == 'ALL'){
+
+					if(!isAll)
+					{
+						unsubscribed_campaigns_json["isAll"] = true;
+						isAll = true;
+					}
+				}
+
 				unsubscribed_campaigns.push(campaignStatusArray[i]);
 			}
 		}
 
+		unsubscribed_campaigns_json["unsubscribed_campaigns"] = unsubscribed_campaigns;
+
 		campaigns["active"] = active_campaigns;
 		campaigns["done"] = completed_campaigns;
-		campaigns["unsubscribed"] = unsubscribed_campaigns;
+		campaigns["unsubscribed"] = unsubscribed_campaigns_json;
 
 		// apply obtained campaigns context within
 		// contact_campaigns block
