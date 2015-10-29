@@ -191,6 +191,9 @@ function unsubscribe_contact()
 				
 				$('#unsubscribe').removeAttr('disabled').text('Unsubscribe');
 
+				// To update Campaigns tab
+				unsubscribe_status_updated = true;
+
 				$('div#contact-detail-resubscribe-modal').modal('hide');
 
 				showNotyPopUp("information", "Unsubscribed successfully.", "top");
@@ -240,6 +243,9 @@ function resubscribe()
 			data: json,
 			success: function(data){
 				
+				// To update campaigns tab
+				unsubscribe_status_updated = true;
+
 				$element.closest('li').remove();
 			},
 			error: function(response)

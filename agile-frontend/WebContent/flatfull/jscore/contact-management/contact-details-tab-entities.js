@@ -759,6 +759,8 @@ function show_resubscribe_modal(){
 					if(!template_ui)
 							return;
 					
+					unsubscribe_status_updated = false;
+
 					// Removes if previous modals exist.
 					if ($('div#contact-detail-resubscribe-modal').size() != 0)
 						$('div#contact-detail-resubscribe-modal').remove();
@@ -853,7 +855,9 @@ function show_resubscribe_modal(){
 	
 					// Modal hidden
 					modal.on('hidden.bs.modal', function(e){
-						contact_details_tab.load_campaigns()
+
+						if(typeof unsubscribe_status_updated != 'undefined' && unsubscribe_status_updated)
+							contact_details_tab.load_campaigns()
 					});
 	
 			}, null);
