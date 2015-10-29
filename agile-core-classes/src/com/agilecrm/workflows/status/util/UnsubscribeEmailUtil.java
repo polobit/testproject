@@ -4,6 +4,7 @@ import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 
+import com.agilecrm.AgileQueues;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.util.EmailUtil;
@@ -17,66 +18,70 @@ import com.agilecrm.workflows.unsubscribe.util.UnsubscribeStatusUtil;
 import com.agilecrm.workflows.util.WorkflowUtil;
 import com.campaignio.cron.util.CronUtil;
 import com.campaignio.tasklets.agile.util.AgileTaskletUtil;
+import com.google.appengine.api.taskqueue.Queue;
+import com.google.appengine.api.taskqueue.QueueFactory;
+import com.google.appengine.api.taskqueue.TaskOptions;
 
 public class UnsubscribeEmailUtil
 {
 
 	public static void unsubscribeCampaignEmail(Long contactId, String campaignIds, UnsubscribeType type)
 	{
+
 		Contact contact = ContactUtil.getContact(contactId);
-		
+
 		Set<String> campaignIdSet = EmailUtil.getStringTokenSet(campaignIds, ",");
 		Workflow workflow = null;
-		
-		for(String campaignId: campaignIdSet)
+
+		for (String campaignId : campaignIdSet)
 		{
 			try
 			{
 				workflow = WorkflowUtil.getWorkflow(Long.valueOf(campaignId));
-				
-				if(workflow == null)
+
+				if (workflow == null)
 					continue;
-			
-				unsubscribeCampaignEmail(contact, workflow, type);
+
+				UnsubscribeEmailUtil.unsubscribeCampaignEmail(contact, workflow, type);
 			}
-			catch(Exception e)
+			catch (Exception e)
 			{
 				System.err.println("Exception occured while unsubscribing campaign email..." + e.getMessage());
 				continue;
 			}
 		}
 	}
-	
+
 	public static void unsubscribeCampaignEmail(Contact contact, Workflow workflow, UnsubscribeType type)
 	{
 
-	    boolean isNew = true;
-	    
-	    String campaignId = String.valueOf(workflow.id);
-	    String contactId = String.valueOf(contact.id);
-	    String tag =  workflow.unsubscribe.tag;
-	    String campaignName = workflow.name;
-	    
-	    setUnsubscribeStatus(contact, type, isNew, campaignId);
+		boolean isNew = true;
 
-	    // Add unsubscribe tag
-	    if (!StringUtils.isBlank(tag))
-	    	contact.addTags(AgileTaskletUtil.normalizeStringSeparatedByDelimiter(',', tag).split(","));
+		String campaignId = String.valueOf(workflow.id);
+		String contactId = String.valueOf(contact.id);
+		String tag = workflow.unsubscribe.tag;
+		String campaignName = workflow.name;
 
-	    // Add Removed status to contact
-	    CampaignStatusUtil.setStatusOfCampaign(contact.id.toString(), campaignId, campaignName, Status.REMOVED);
-	    
-	    // Delete Related Crons.
-	    CronUtil.removeTask(campaignId, contact.id.toString());
-	    
-	    String msg = "Unsubscribed from all campaigns";
-	    
-	    if(type.equals(UnsubscribeType.CURRENT))
-	    	msg = "Unsubscribed from campaign " + campaignName;
-	    
-	    // Add unsubscribe log
-	    UnsubscribeStatusUtil.addUnsubscribeLog(campaignId, contactId, msg);
-	    
+		setUnsubscribeStatus(contact, type, isNew, campaignId);
+
+		// Add unsubscribe tag
+		if (!StringUtils.isBlank(tag))
+			contact.addTags(AgileTaskletUtil.normalizeStringSeparatedByDelimiter(',', tag).split(","));
+
+		// Add Removed status to contact
+		CampaignStatusUtil.setStatusOfCampaign(contact.id.toString(), campaignId, campaignName, Status.REMOVED);
+
+		// Delete Related Crons.
+		CronUtil.removeTask(campaignId, contact.id.toString());
+
+		String msg = "Unsubscribed from all campaigns";
+
+		if (type.equals(UnsubscribeType.CURRENT))
+			msg = "Unsubscribed from campaign " + campaignName;
+
+		// Add unsubscribe log
+		UnsubscribeStatusUtil.addUnsubscribeLog(campaignId, contactId, msg);
+
 		// Trigger Unsubscribe
 		EmailTrackingTriggerUtil.executeTrigger(contactId, campaignId, null, Type.UNSUBSCRIBED);
 	}
@@ -86,24 +91,32 @@ public class UnsubscribeEmailUtil
 		// Update older one having same campaign id
 		for (UnsubscribeStatus uns : contact.unsubscribeStatus)
 		{
-		    if (uns == null)
-			continue;
+			if (uns == null)
+				continue;
 
-		    if (campaignId.equals(uns.campaign_id))
-		    {
-			uns.unsubscribeType = type;
-			isNew = false;
-			break;
-		    }
+			if (campaignId.equals(uns.campaign_id))
+			{
+				uns.unsubscribeType = type;
+				isNew = false;
+				break;
+			}
 		}
-	 
-	    // First time unsubscribe
-	    if (isNew)
-	    {
-		UnsubscribeStatus unsubscribeStatus = new UnsubscribeStatus(campaignId, type);
-		contact.unsubscribeStatus.add(unsubscribeStatus);
-	    }
 
-	    contact.save();
+		// First time unsubscribe
+		if (isNew)
+		{
+			UnsubscribeStatus unsubscribeStatus = new UnsubscribeStatus(campaignId, type);
+			contact.unsubscribeStatus.add(unsubscribeStatus);
+		}
+
+		contact.save();
+	}
+
+	public static void unsubscribeCampaignEmailByQueue(Long contactId, String campaignIds, UnsubscribeType type)
+	{
+		UnsubscribeEmailDeferredTask task = new UnsubscribeEmailDeferredTask(contactId, campaignIds, type);
+
+		Queue queue = QueueFactory.getQueue(AgileQueues.CAMPAIGN_QUEUE);
+		queue.add(TaskOptions.Builder.withPayload(task));
 	}
 }

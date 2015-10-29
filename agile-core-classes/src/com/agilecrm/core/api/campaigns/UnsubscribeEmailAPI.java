@@ -18,7 +18,7 @@ public class UnsubscribeEmailAPI
 	@POST
 	public void unsubscribeCampaignEmail(@FormParam("campaign_id") String campaignIds, @FormParam("contact_id") Long contactId,@FormParam("type") UnsubscribeType type)
 	{
-		UnsubscribeEmailUtil.unsubscribeCampaignEmail(contactId, campaignIds, type);
+		UnsubscribeEmailUtil.unsubscribeCampaignEmailByQueue(contactId, campaignIds, type);
 	}
 	
 	@Path("/resubscribe")

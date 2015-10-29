@@ -775,15 +775,6 @@ function show_resubscribe_modal(){
 							
 								$('#campaigns-list', el).empty();
 
-								if($loading){
-									if ($('#campaigns-list', el).next().hasClass("select-loading"))
-										$('#campaigns-list', el).next().html($loading);
-									else
-										$('#campaigns-list', el).after($loading);
-								}
-
-								
-
 								email_workflows_list = get_email_workflows(collection.toJSON());
 
 
@@ -794,7 +785,7 @@ function show_resubscribe_modal(){
 								
 
 								// Remove image
-								$('#campaigns-list', el).next().remove();
+								$('#campaigns-list', el).parent().find('.loading').remove();
 
 								head.js(LIB_PATH + 'lib/bootstrap-multiselect/bootstrap-multiselect.js', CSS_PATH + 'css/bootstrap-multiselect/bootstrap-multiselect.css', function(){
 
@@ -802,7 +793,7 @@ function show_resubscribe_modal(){
 									$('#campaigns-list', el).multiselect({
 										  onInitialized: function(select, container) {
 			        								
-		    								$(container).find('button').addClass('w-md');
+		    								$(container).find('button').css({width: '252px'});
 		    								$(container).find('span').addClass('pull-left');
 		    								$(container).find('b.caret').addClass('pull-right m-t-sm');
 			    						},
