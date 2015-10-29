@@ -17,6 +17,9 @@ var Tickets = {
 
 				Group_ID = group_id;
 
+				//Replace group name
+				$('a#group_name').html($('a[data-group-id="'+ group_id +'"]').attr('data-group-name'));
+
 				//Fectching new, open, closed tickets count
 				Tickets_Count.fetch_tickets_count(group_id);
 			}
