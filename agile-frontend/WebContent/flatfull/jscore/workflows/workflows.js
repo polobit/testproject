@@ -128,8 +128,6 @@ $(function(){
             	
             	enable_save_button($clicked_button);
             	
-            	show_campaign_save();
-            	
             	// Hide message
             	$('#workflow-edit-msg').hide();
 
@@ -144,6 +142,7 @@ $(function(){
                         $('#designer-tour').addClass("blur").removeClass("anti-blur");;
                         window.frames[0].$('#paintarea').addClass("disable-iframe").removeClass("enable-iframe");
                         window.frames[0].$('#paintarea .nodeItem table>tbody').addClass("disable-iframe").removeClass("enable-iframe");
+                        show_campaign_save("Campaign has been disabled successfully.","red");
                     } else {
                     	disabled.attr("data", false);
                     	disabled.find('i').toggleClass('fa-unlock').toggleClass('fa-lock');
@@ -153,7 +152,8 @@ $(function(){
                         window.frames[0].$('#toolbartabs').removeClass("disable-iframe");
                        // $('#designer-tour').css("pointer-events","none");
                         window.frames[0].$('#paintarea .nodeItem table>tbody').addClass("enable-iframe").removeClass("disable-iframe");
-                        
+                        show_campaign_save("Campaign has been enabled successfully.");
+
                     }
                 }
             	
@@ -438,10 +438,17 @@ function fill_logs_slate(id, type)
 
 }
 
-function show_campaign_save()
+function show_campaign_save(message,color)
 {
 	// Campaign save message
-	var $save_info = '<span style="color: green;">Campaign saved.</span>';
+    var save_info;
+    if(message)
+        save_info = '<span style="color: green;">'+message+'</span>';
+    else
+	   save_info = '<span style="color: green;">Campaign saved.</span>';
 
-	$("#workflow-msg").html($save_info).show().fadeOut(3000);
+    if(color)
+        save_info = $(save_info).css("color", color);
+
+	$("#workflow-msg").html(save_info).show().fadeOut(3000);
 }
