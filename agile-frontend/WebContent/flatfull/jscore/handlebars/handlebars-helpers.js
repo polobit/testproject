@@ -2341,6 +2341,7 @@ $(function()
 
 		var active_campaigns = [];
 		var completed_campaigns = [];
+		var unsubscribed_campaigns = [];
 		var unsubscribed_campaigns_json = {};
 
 		// campaignStatus object of contact
@@ -2372,12 +2373,13 @@ $(function()
 			}
 
 			var isAll = false;
-			var unsubscribed_campaigns = []
 			// Unsubscribed campaigns list
 			if(campaignStatusArray[i].unsubscribeType)
 			{
 
-				campaignStatusArray[i].campaign_name = campaign_json[campaignStatusArray[i].campaign_id];
+				// Global variable set on resubscribe modal shown
+				if(typeof email_workflows_list != 'undefined')
+					campaignStatusArray[i].campaign_name = campaign_json[email_workflows_list.campaign_id];
 
 				if(campaignStatusArray[i].unsubscribeType == 'ALL'){
 
