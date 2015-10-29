@@ -364,7 +364,6 @@ $("#calendar-listers").on('click', '.agendaDayWeekMonth', function()
 
 			else
 			{
-				ownerids = getOwnerIdsFromCookie(true);
 				removeFullCalendarEvents(CURRENT_DOMAIN_USER.id);
 			}
 

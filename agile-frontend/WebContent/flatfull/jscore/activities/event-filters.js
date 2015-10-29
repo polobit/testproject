@@ -319,20 +319,6 @@ function getOwnerIdsFromCookie(uncheckedagile)
 	return agile_event_owners;
 }
 
-function getOwnerIdsFromCookie(uncheckedagile)
-{
-	var eventFilters = JSON.parse(readCookie('event-lhs-filters'));
-	var agile_event_owners = '';
-	var domain_user_ids = [];
-	if (eventFilters)
-	{
-		domain_user_ids = eventFilters.domain_user_ids;
-	}
-
-	return domain_user_ids;
-}
-
-
 /**
  * fetches google events
  */
