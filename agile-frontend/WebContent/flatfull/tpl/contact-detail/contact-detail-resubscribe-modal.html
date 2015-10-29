@@ -27,7 +27,7 @@
                                 {{#contact_campaigns this "unsubscribeStatus"}}
                                 {{!-- Shows Unsubscribed campaigns like tags --}}
                                     {{#if this}}
-                                    {{#if this.unsubscribed}}    
+                                    {{#if this.unsubscribed.unsubscribed_campaigns}}    
                                         <div class="tagsinput" style="margin-top: 7px;">
                                                 <ul name="unsubscribed_names" id="added-tags-ul" class="tagsinput inline v-top m-b-sm p-n">
                                                         {{#if this.unsubscribed.isAll}}
@@ -51,7 +51,7 @@
                                         </div>
                                     {{else}}
                                         <p style="margin-top: 7px;">There are no unsubscribed campaigns for this contact.</p>
-                                        {{/if}}
+                                    {{/if}}
                                     {{/if}}
                             {{/contact_campaigns}}
                         {{/contact_model}}

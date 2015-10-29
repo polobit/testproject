@@ -797,6 +797,7 @@ function show_resubscribe_modal(){
 
 								head.js(LIB_PATH + 'lib/bootstrap-multiselect/bootstrap-multiselect.js', CSS_PATH + 'css/bootstrap-multiselect/bootstrap-multiselect.css', function(){
 
+									is_selected_all = false;
 									$('#campaigns-list', el).multiselect({
 										  onInitialized: function(select, container) {
 			        								
@@ -817,20 +818,25 @@ function show_resubscribe_modal(){
 										  		return options.length + ' selected';
 										  },
 										  onSelectAll: function(checked){
-										  		unsubscribe_contact(checked);
+										  		is_selected_all = checked;
+										  		unsubscribe_contact();
+										  		return;
 										  },
 										  onChange: function(option, checked) {
+
+										  			is_selected_all = checked;
 
 										  			if(!option)
 										  				return;
 
 													if(option.val() == 'ALL' && checked)
 													{
-														unsubscribe_contact(selected, true);
+														is_selected_all = true;
+														unsubscribe_contact();
 														return;
 													}
 
-													unsubscribe_contact(false);
+													unsubscribe_contact();
 												},
 										   onDropdownShow: function(event) {
 
@@ -843,7 +849,7 @@ function show_resubscribe_modal(){
 									$('div#contact-detail-resubscribe-modal .modal-body').html(el.find('form'));
 
 									// Unsubscribe
-									unsubscribe_contact(false);
+									unsubscribe_contact();
 
 									// Resubscribe
 									resubscribe(el);

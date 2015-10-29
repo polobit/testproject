@@ -129,7 +129,7 @@ function send_verify_email()
 	});
 }
 
-function unsubscribe_contact(is_selected_all)
+function unsubscribe_contact()
 {
 	
     $('#unsubscribe').off('click');

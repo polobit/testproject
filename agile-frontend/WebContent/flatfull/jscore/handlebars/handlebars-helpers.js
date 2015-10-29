@@ -2392,7 +2392,8 @@ $(function()
 			}
 		}
 
-		unsubscribed_campaigns_json["unsubscribed_campaigns"] = unsubscribed_campaigns;
+		if(unsubscribed_campaigns && unsubscribed_campaigns.length > 0)
+			unsubscribed_campaigns_json["unsubscribed_campaigns"] = unsubscribed_campaigns;
 
 		campaigns["active"] = active_campaigns;
 		campaigns["done"] = completed_campaigns;
