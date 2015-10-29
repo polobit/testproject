@@ -137,7 +137,6 @@ public class HomeServlet extends HttpServlet
      */
     private void redirectBack(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException
     {
-	System.out.println("Dispatching in home jsp");
 	req.getRequestDispatcher("/home?w=1").forward(req, resp);
     }
 

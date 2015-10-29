@@ -179,8 +179,6 @@ public class LoginServlet extends HttpServlet
 	// Hash to redirect after login
 	String hash = request.getParameter("location_hash");
 
-	System.out.println("hash in login servlet : " + hash);
-
 	if (!StringUtils.isEmpty(hash))
 	    request.getSession().setAttribute(RETURN_PATH_SESSION_HASH, hash);
 
