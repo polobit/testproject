@@ -1,4 +1,3 @@
-@@ -1,118 +0,0 @@
 <script id="settings-email-prefs-template" type="text/html">
 {{#check_plan "PRO"}}
 <div class="row" style="display: none;">
@@ -54,9 +53,9 @@ You can integrate a maximum of 3 email accounts irrespective of the type of acco
 			<div>
 			    {{#has_email_account_limit_reached}}
 			    {{#if_non_pro_plan}}
-				<div class="text-xs m-t-sm p-xs" style="border: 1px solid #E2E29C;background-color: #F7F7D0;"> Upgrade to <string><a href="#subscribe">Enterprise</strong> plan to add more accounts</div>
+				<div class="text-xs m-t-sm p-xs" style="width: 75%;border: 1px solid #E2E29C;background-color: #F7F7D0;"> Please <string><a class="text-info" href="#subscribe">upgrade</a></strong> to Enterprise plan</div>
 				{{/if_non_pro_plan}}
-				<a class="btn btn-sm btn-default m-t-sm" disabled="disabled">Enable</a>
+				<!--<a class="btn btn-sm btn-default m-t-sm" disabled="disabled">Enable</a>-->
 				
 				{{else}}
 				<a class="btn btn-sm btn-default" href="#imap">Enable</a>
@@ -101,9 +100,9 @@ You can integrate a maximum of 3 email accounts irrespective of the type of acco
 				<div>
 			    {{#has_email_account_limit_reached}}
 			    {{#if_non_pro_plan}}
-				<div class="text-xs m-t-sm p-xs" style="border: 1px solid #E2E29C;background-color: #F7F7D0;"> Upgrade to <string><a href="#subscribe">Enterprise</strong> plan to add more accounts</div>				
+				<div class="text-xs m-t-sm p-xs" style="width: 75%;border: 1px solid #E2E29C;background-color: #F7F7D0;"> Please <string><a class="text-info" href="#subscribe">upgrade</a></strong> to Enterprise plan</div>				
 				{{/if_non_pro_plan}}
-				<a class="btn m-t-sm btn-sm btn-default" disabled="disabled">Enable</a>
+				<!--<a class="btn m-t-sm btn-sm btn-default" disabled="disabled">Enable</a>-->
 				{{else}}
 				<a class="btn btn-sm btn-default" href="#office">Enable</a>
 				{{/has_email_account_limit_reached}}

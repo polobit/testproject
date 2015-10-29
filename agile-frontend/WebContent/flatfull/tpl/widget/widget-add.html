@@ -233,7 +233,7 @@
        	 <li><a href="#billing-tab" data-toggle="tab">Billing</a></li>
        	 <li><a href="#social-tab" data-toggle="tab">Social</a></li>
        	 <li><a href="#ecommerce-tab" data-toggle="tab">Ecommerce</a></li>
-         <li><a href="#custom-widget-tab" data-toggle="tab">Widgets</a></li>
+         <li><a href="#custom-widget-tab" data-toggle="tab">Custom</a></li>
        </ul>
 	</div>
 
@@ -444,7 +444,7 @@
        	 <li><a href="#billing-tab" data-toggle="tab">Billing</a></li>
        	 <li><a href="#social-tab" data-toggle="tab">Social</a></li>
        	 <li><a href="#ecommerce-tab" data-toggle="tab">Ecommerce</a></li>
-         <li><a href="#custom-widget-tab" data-toggle="tab">Widgets</a></li>
+         <li><a href="#custom-widget-tab" data-toggle="tab">Custom</a></li>
        </ul>
 	</div>
 
@@ -455,17 +455,17 @@
 			<div class="panel panel-default" style="min-height: 220px;">
 			<div class="panel-heading">
 			{{#if_equals name "Sip"}}
-			    <center><span class="thumbnail m-b-none text-2x thumb-xl text-center  bg-transparent"><span class="block"><i class="icon icon-phone m-r"></i>SIP</span></span></center>
+			    <center><img class="m-b-none img-responsive thumb-xl bg-transparent" style="height:47px;" src="/img/plugins/sip.png" /></center>
 			{{else}}
 			    {{#if_equals name "CallScript"}}
-			        <center><span class="thumbnail text-2x text-center  bg-transparent m-b-none thumb-xl" style="font-size:21px;width:150px;"><span class="block"><i class="icon icon-comment m-r-xs"></i>Call Script</span></span></center>
+			        <center><img class="m-b-none img-responsive thumb-xl bg-transparent" style="height:47px;" src="/img/plugins/call_script.png" /></center>
 			    {{else}}
 					{{#if_equals name "Bria"}}
 						<center>
 							<span style="font-size: 24px;width: 113px;height: 50px; text-align:center;vertical-align: middle;color: #4A4A4A;" class="thumbnail m-b-xs"><span><img src="{{logo_url}}" style="width: 40px; height: 40px;margin-right: 4px;margin-top: 1px;">Bria</span></span>
 						</center>
 			        {{else}}
-			        <center><img class="thumbnail bg-transparent thumb-xl img-responsive" src="{{logo_url}}" /></center>
+			        <center><img class="m-b-none img-responsive thumb-xl bg-transparent" style="height:47px;" src="{{logo_url}}" /></center>
 					{{/if_equals}}
 			    {{/if_equals}}
 			{{/if_equals}}
