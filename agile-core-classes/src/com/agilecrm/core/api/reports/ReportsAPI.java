@@ -25,6 +25,7 @@ import org.json.JSONObject;
 
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.filter.ContactFilter;
+import com.agilecrm.deals.util.OpportunityUtil;
 import com.agilecrm.reports.Reports;
 import com.agilecrm.reports.ReportsUtil;
 import com.agilecrm.search.ui.serialize.SearchRule;
@@ -374,4 +375,15 @@ public class ReportsAPI
 	// Get Cohorts Monthly
 	return TagSearchUtil.getRatioTagCount(filter, tag1, tag2, String.valueOf(Long.parseLong(startTime)-(Long.parseLong(timeZone)*60*1000)), String.valueOf(Long.parseLong(endTime)-(Long.parseLong(timeZone)*60*1000)), type).toString();
     }
+    
+	@Path("/repPerformance/{owner-id}")
+ 	@GET
+ 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+ 	public String userPerformanceForReports(@PathParam("owner-id") Long ownerId, 
+ 			@QueryParam("min") Long min, @QueryParam("max") Long max)
+ 	{
+ 		ReportsUtil.check(min*1000, max*1000);
+ 		return ReportsUtil.userPerformanceForReports(ownerId, min, max).toString();
+ 	}
 }
+

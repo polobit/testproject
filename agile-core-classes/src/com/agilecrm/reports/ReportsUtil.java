@@ -22,6 +22,8 @@ import com.agilecrm.contact.ContactField;
 import com.agilecrm.contact.CustomFieldDef;
 import com.agilecrm.contact.CustomFieldDef.SCOPE;
 import com.agilecrm.contact.util.CustomFieldDefUtil;
+import com.agilecrm.deals.Opportunity;
+import com.agilecrm.deals.util.OpportunityUtil;
 import com.agilecrm.reports.deferred.ReportsInstantEmailDeferredTask;
 import com.agilecrm.search.ui.serialize.SearchRule;
 import com.agilecrm.search.util.SearchUtil;
@@ -437,4 +439,32 @@ public class ReportsUtil
 	return Reports.dao.count();
     }
 
+    public static JSONObject userPerformanceForReports(Long ownerId, long minTime,
+			long maxTime){
+    	try
+		{
+			List<Opportunity> wonDealsList = OpportunityUtil.getWonDealsListOfUser(minTime, maxTime, ownerId);
+			JSONObject dataJson = new JSONObject();
+			Double milestoneValue = 0d;
+			Integer soldCount=0;
+			Double avgValue=0d;
+			if(wonDealsList!=null){
+				for(Opportunity opportunity : wonDealsList){
+					milestoneValue += opportunity.expected_value;
+					soldCount++;
+				}
+				avgValue=milestoneValue/soldCount;
+			}
+			dataJson.put("sales", milestoneValue);
+			dataJson.put("soldDeals",soldCount);
+			dataJson.put("avg",avgValue);
+			
+		}
+		catch (JSONException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	return null;
+	}
 }
