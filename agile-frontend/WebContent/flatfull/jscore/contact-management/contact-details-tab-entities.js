@@ -845,6 +845,8 @@ function show_resubscribe_modal(){
 										$('#unsubscribe-campaigns-list', el).html(campaigns_list_template);
 
 										$('div#contact-detail-resubscribe-modal .modal-body').html(el.find('form'));
+
+										$('[data-toggle="tooltip"]').tooltip();
 									
 									});
 									
