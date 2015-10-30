@@ -39,6 +39,7 @@ var Tickets_Count = {
 					break;			
 			}
 
+			$('ul.ticket-types').find('li > a.'+ type.toLowerCase()).attr('href', '#tickets/group/' + group_id + '/' + type.toLowerCase());
 			$('ul.ticket-types').find('li > a.'+ type.toLowerCase() +' > badge').html(data.count);
 		});
 	},

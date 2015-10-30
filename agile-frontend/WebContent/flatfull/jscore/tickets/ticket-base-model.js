@@ -32,7 +32,8 @@ var Ticket_Base_Model = Base_Model_View.extend({
 		"click .back-to-tickets" : "backToTickets",
 		"click .reply-btn" : "repltBtn",
 		"click .discard-reply" : "discardReply",
-		"click .timeline" : "renderTicketTimeline"
+		"click .timeline" : "renderTicketTimeline",
+		"click .canned-messages" : "showCannedMessages"
 	},
 
 	refreshTickets: function(e){
@@ -137,23 +138,29 @@ var Ticket_Base_Model = Base_Model_View.extend({
 	backToTickets: function(e){
 		e.preventDefault();
 		
-		Tickets_Notes.backToTickets(e);	
+		Tickets_Notes.backToTickets(e);
 	},
 	repltBtn: function(e){
 		e.preventDefault();
 		
-		Tickets_Notes.repltBtn(e);	
+		Tickets_Notes.repltBtn(e);
 	},
 	discardReply: function(e){
 		e.preventDefault();
 		
-		Tickets_Notes.discardReply(e);		
+		Tickets_Notes.discardReply(e);	
 	},
 
 	renderTicketTimeline: function(e){
 		e.preventDefault();
 
 		Ticket_Timeline.render_ticket_timeline(Current_Ticket_ID);
+	},
+
+	showCannedMessages: function(e){
+		e.preventDefault();
+
+		Tickets_Notes.showCannedMessages(e);
 	},
 
 	deleteTicket: function(e){

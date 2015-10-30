@@ -89,6 +89,9 @@ var Ticket_Filters = {
 
 	fetch_filters_collection: function(){
 		
+		if(!Reload_Filters)
+			return;
+
 		App_Ticket_Module.ticketFiltersCollection = new Base_Collection_View({
 			url : '/core/api/tickets/filters',
 			sortKey:"updated_time",
@@ -97,6 +100,8 @@ var Ticket_Filters = {
 			individual_tag_name : 'li',
 			postRenderCallback : function(el){
 
+				Reload_Filters = false;
+				
 				//Fetch ticket collection count
 				Tickets_Count.fetch_filter_tickets_count();
 

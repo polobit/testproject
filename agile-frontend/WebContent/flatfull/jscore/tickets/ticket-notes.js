@@ -40,6 +40,8 @@ var Tickets_Notes = {
 		//Rendering existing Tickets collection
 		$('#right-pane').html(Tickets_Group_View.render().el);
 
+		$("#filters-list-container").html(App_Ticket_Module.ticketFiltersCollection.el);
+		
 		if(!App_Ticket_Module.ticketsCollection){
 
 			Group_ID = (!Group_ID ? DEFAULT_GROUP_ID : Group_ID);
@@ -81,5 +83,25 @@ var Tickets_Notes = {
 	discardReply: function(e){
 		$('#reply-editor').html('');
 		$('#send-reply-container').show();
+	},
+
+	showCannedMessages: function(e){
+
+		var deleteTicketView = new Base_Model_View({
+			isNew : true,
+			url : "/core/api/tickets/delete-ticket?id=" + Current_Ticket_ID,
+			template : "ticket-delete",
+			saveCallback : function(){
+
+				$('#ticket-delete-modal').modal('hide');
+				var url = '#tickets/group/'+ (!Group_ID ? DEFAULT_GROUP_ID : Group_ID) + 
+					'/' + (Ticket_Status ? Ticket_Status : 'new');
+
+				Backbone.history.navigate(url, {trigger : true});
+			}
+		});
+
+		$('#ticket-modals').html(deleteTicketView.render().el);
+		$('#ticket-delete-modal').modal('show');
 	}
 };

@@ -1,5 +1,5 @@
 var Group_ID = null, Ticket_Status = 'new', Current_Ticket_ID = null, Ticket_Filter_ID = null,
-New_Tickets = 0, Opened_Tickets = 0, Starred_Tickets = 0, Closed_Tickets =0, Tickets_Util = {};
+New_Tickets = 0, Opened_Tickets = 0, Starred_Tickets = 0, Closed_Tickets =0, Tickets_Util = {}, Reload_Filters = true;
 
 $("body").bind('click', function(ev) {
 	Tickets.hideDropDowns(ev);
@@ -95,8 +95,7 @@ var Tickets = {
 							}	
 						});
 
-						//Fectching ticket filters
-						Ticket_Filters.fetch_filters_collection();
+						Ticket_Filters.fetch_filters_collection();	
 					}
 				});
 
@@ -112,6 +111,8 @@ var Tickets = {
 			$('#right-pane').html(Tickets_Group_View.render().el);
 			
 			Tickets_Group_View.delegateEvents();
+
+			$("#filters-list-container").html(App_Ticket_Module.ticketFiltersCollection.el);
 
 			if(callback)
 				callback();
