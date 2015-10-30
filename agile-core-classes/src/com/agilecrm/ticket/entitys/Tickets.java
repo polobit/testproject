@@ -11,6 +11,7 @@ import org.codehaus.jackson.annotate.JsonIgnore;
 
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Tag;
+import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.cursor.Cursor;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.ticket.utils.TicketsUtil;
@@ -253,7 +254,7 @@ public class Tickets extends Cursor
 	 */
 	@NotSaved
 	public String html_text = "";
-	
+
 	/**
 	 * Util attribute to save entity type
 	 */
@@ -308,5 +309,13 @@ public class Tickets extends Cursor
 	public Key<DomainUser> getAssignee_id()
 	{
 		return assignee_id;
+	}
+
+	public Contact getContact()
+	{
+		if (this.contactID != null)
+			return ContactUtil.getContact(this.contactID);
+		
+		return null;
 	}
 }
