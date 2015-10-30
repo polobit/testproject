@@ -83,79 +83,83 @@
 </div>
 <div class="tab-content" id="myTabContent">
 	<div id="invoices" class="tab-pane fade active in">
-		<ul class="list-group m-b-none text-base">
-		{{#if invoice.length}}
-			{{#each invoice}}
-				<li class="list-group-item r-none b-l-none b-r-none">
-					<div class="clear">					
-						<a class="pull-left" data-toggle="collapse" href="#collapse-{{id}}" >
-							{{#if_equals paid true}}Paid{{else}}Pending{{/if_equals}}
-						</a>
-						<div class="pull-right font-bold">$ {{numeric_operation total 100 "/"}}</div>	
-						<div class="clearfix"></div>	
-					</div>		
-					<div class="clearfix"></div>					
-					<div id="collapse-{{id}}" class="collapse" style="color: rgba(0, 0, 0, 0.5);">
-						{{#each lines.data}}	
-							{{#if_equals type "invoiceitem"}}
-								<div class="pull-left">{{description}}</div>					
-								<div class="pull-right">$ {{numeric_operation amount 100 "/"}}</div><br>
-							{{/if_equals}}
-							{{#if_equals type "subscription"}}
-								<div class="pull-left">{{plan.name}}</div>					
-								<div class="pull-right">$ {{numeric_operation plan.amount 100 "/"}}</div><br>
-								<div class="pull-left">Quantity</div>					
-								<div class="pull-right">{{quantity}}</div><br>
-								<div class="text-ellipsis w-full">
-									<small>
-										{{epochToHumanDate "dd-mmm-yy" period.start}}&nbspto 
-										{{epochToHumanDate "dd-mmm-yy" period.end}} 
-									</small>
-								</div>
-							{{/if_equals}}	         
-						{{/each}}
-					</div>
-					<small class="text-muted"><i class="fa fa-clock-o m-r-xs"></i><time class="time-ago" datetime="{{epochToHumanDate "" date}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" date}}</time></small>
-				</li>
-			{{/each}}
-		{{else}}
-			<li class="list-group-item r-none b-l-none b-r-none"> No invoices </li>
-		{{/if}}
-		</ul>
+		<ul id="invoice_block" class="list-group m-b-none text-base"></ul>
 	</div>
 	<div id="payments" class="tab-pane fade">
-		<ul class="list-group m-b-none text-base">
-		{{#if payments.length}}
-			{{#each payments}}
-				<li class="list-group-item r-none b-l-none b-r-none">
-					<div class="clear">					
-						<a class="pull-left" data-toggle="collapse" href="#collapse-{{id}}" >
-							{{#if_equals paid true}}Paid{{else}}Pending{{/if_equals}}
-						</a>
-						<div class="pull-right font-bold">$ {{numeric_operation amount 100 "/"}}</div>				
-						<div class="clearfix"></div>
-					</div>					
-					<div id="collapse-{{id}}" class="collapse" style="color: rgba(0, 0, 0, 0.5);">
-						{{#each lines.data}}	
-							Amount : {{amount}}{{currency}}<br>
-							Receipt: {{receipt_number}}<br>
-							Balance: {{balance_transaction}}<br>
-							Reason : {{reason}}
-							Time   : {{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" created}}
-							{{else}}
-							No refund Transactions.
-						{{/each}}
-					</div>
-					<small class="text-muted"><i class="fa fa-clock-o m-r-xs"></i><time class="time-ago" datetime="{{epochToHumanDate "" created}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" created}}</time></small>
-				</li>
-			{{/each}}
-		{{else}}
-			<li class="list-group-item r-none b-l-none b-r-none"> No payments </li>
-		{{/if}}
-		</ul>
+		<ul id="payments_block" class="list-group m-b-none text-base"></ul>
 	</div>
 </div>
 <div class="clearfix"></div>
+</script>
+
+<script id="stripe-invoices-template" type="text/html">
+{{#if invoice.length}}
+	{{#each invoice}}
+		<li class="list-group-item r-none b-l-none b-r-none">
+			<div class="clear">					
+				<a class="pull-left" data-toggle="collapse" href="#collapse-{{id}}" >
+					{{#if_equals paid true}}Paid{{else}}Pending{{/if_equals}}
+				</a>
+				<div class="pull-right font-bold">$ {{numeric_operation total 100 "/"}}</div>	
+				<div class="clearfix"></div>	
+			</div>		
+			<div class="clearfix"></div>					
+			<div id="collapse-{{id}}" class="collapse" style="color: rgba(0, 0, 0, 0.5);">
+				{{#each lines.data}}	
+					{{#if_equals type "invoiceitem"}}
+						<div class="pull-left">{{description}}</div>					
+						<div class="pull-right">$ {{numeric_operation amount 100 "/"}}</div><br>
+					{{/if_equals}}
+					{{#if_equals type "subscription"}}
+						<div class="pull-left">{{plan.name}}</div>					
+						<div class="pull-right">$ {{numeric_operation plan.amount 100 "/"}}</div><br>
+						<div class="pull-left">Quantity</div>					
+						<div class="pull-right">{{quantity}}</div><br>
+						<div class="text-ellipsis w-full">
+							<small>
+								{{epochToHumanDate "dd-mmm-yy" period.start}}&nbspto 
+								{{epochToHumanDate "dd-mmm-yy" period.end}} 
+							</small>
+						</div>
+					{{/if_equals}}	         
+				{{/each}}
+			</div>
+			<small class="text-muted"><i class="fa fa-clock-o m-r-xs"></i><time class="time-ago" datetime="{{epochToHumanDate "" date}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" date}}</time></small>
+		</li>
+	{{/each}}
+{{else}}
+	<li class="list-group-item r-none b-l-none b-r-none"> No invoices </li>
+{{/if}}
+</script>
+
+<script id="stripe-payments-template" type="text/html">
+{{#if payments.length}}
+	{{#each payments}}
+		<li class="list-group-item r-none b-l-none b-r-none">
+			<div class="clear">					
+				<a class="pull-left" data-toggle="collapse" href="#collapse-{{id}}" >
+					{{#if_equals paid true}}Paid{{else}}Pending{{/if_equals}}
+				</a>
+				<div class="pull-right font-bold">$ {{numeric_operation amount 100 "/"}}</div>				
+				<div class="clearfix"></div>
+			</div>					
+			<div id="collapse-{{id}}" class="collapse" style="color: rgba(0, 0, 0, 0.5);">
+				{{#each lines.data}}	
+					Amount : {{amount}}{{currency}}<br>
+					Receipt: {{receipt_number}}<br>
+					Balance: {{balance_transaction}}<br>
+					Reason : {{reason}}
+					Time   : {{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" created}}
+					{{else}}
+					No refund Transactions.
+				{{/each}}
+			</div>
+			<small class="text-muted"><i class="fa fa-clock-o m-r-xs"></i><time class="time-ago" datetime="{{epochToHumanDate "" created}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" created}}</time></small>
+		</li>
+	{{/each}}
+{{else}}
+	<li class="list-group-item r-none b-l-none b-r-none"> No payments </li>
+{{/if}}
 </script>
 
 <script id="stripe-custom-field-template" type="text/html">
