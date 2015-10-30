@@ -818,8 +818,6 @@ function show_resubscribe_modal(){
 										  },
 										  onChange: function(option, checked) {
 
-										  			is_selected_all = checked;
-
 										  			if(!option)
 										  				return;
 
@@ -829,6 +827,8 @@ function show_resubscribe_modal(){
 														unsubscribe_contact();
 														return;
 													}
+
+													is_selected_all = false;
 
 													unsubscribe_contact();
 												},
