@@ -3,6 +3,7 @@ package com.agilecrm.workflows.triggers.util;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.agilecrm.contact.Contact;
@@ -52,19 +53,29 @@ public class TicketTriggerUtil
 
 	}
 
+	public static void executeTriggerForNewNoteAddedByUser(Tickets ticket)
+	{
+		// if null
+		if (ticket == null)
+			return;
+
+		executeTriggerForTicketBasedOnCondition(ticket.getContact(), ticket, Trigger.Type.TICKET_NOTE_ADDED_BY_USER);
+
+	}
+
 	/**
 	 * Executes when note added by user or customer
 	 * 
 	 * @param ticket
 	 * @param noteAddedBy
 	 */
-	public static void executeTriggerForNewNote(Tickets ticket, Type condition)
+	public static void executeTriggerForNewNoteAddedByCustomer(Tickets ticket)
 	{
 		// if null
 		if (ticket == null)
 			return;
 
-		executeTriggerForTicketBasedOnCondition(ticket.getContact(), ticket, condition);
+		executeTriggerForTicketBasedOnCondition(ticket.getContact(), ticket, Trigger.Type.TICKET_NOTE_ADDED_BY_CUSTOMER);
 
 	}
 
@@ -113,11 +124,31 @@ public class TicketTriggerUtil
 			// Run campaign
 			for (Trigger trigger : triggersList)
 			{
-				WorkflowSubscribeUtil.subscribeDeferred(contact, trigger.campaign_id,
-						new JSONObject().put("ticket", ticket));
+				executeCampaign(contact, trigger.campaign_id, ticket);
 			}
 		}
 		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * Execute campaign for ticket
+	 * 
+	 * @param contact
+	 * @param campaignId
+	 * @param ticket
+	 */
+	public static void executeCampaign(Contact contact, Long campaignId, Tickets ticket)
+	{
+
+		try
+		{
+			// Run campaign
+			WorkflowSubscribeUtil.subscribeDeferred(contact, campaignId, new JSONObject().put("ticket", ticket));
+		}
+		catch (JSONException e)
 		{
 			e.printStackTrace();
 		}
