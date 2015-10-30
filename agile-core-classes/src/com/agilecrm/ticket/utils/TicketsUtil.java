@@ -214,6 +214,9 @@ public class TicketsUtil
 
 			// Logging ticket created activity
 			new TicketActivity(TicketActivityType.TICKET_CREATED, ticket.contactID, ticket.id, "", "", "").save();
+
+			// Execute triggers
+			TicketTriggerUtil.executeTriggerForNewTicket(ticket);
 		}
 		catch (Exception e)
 		{
