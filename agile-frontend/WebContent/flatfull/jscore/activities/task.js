@@ -58,6 +58,8 @@ $( document ).ready(function() {
 
 function activateSliderAndTimerToTaskModal(){
 
+	console.log("activateSliderAndTimerToTaskModal");
+	
 	$('.update-task-timepicker').timepicker({ defaultTime : get_hh_mm(true), showMeridian : false });
 	$('.update-task-timepicker').timepicker().on('show.timepicker', function(e)
 	{
@@ -84,6 +86,8 @@ function activateSliderAndTimerToTaskModal(){
 		$('.bootstrap-timepicker-hour').val(e.time.hours);
 		$('.bootstrap-timepicker-minute').val(e.time.minutes);
 	});
+
+	console.log("loadProgressSlider");
 
 	// Loads progress slider in add task / update modal.
 	loadProgressSlider($("#taskForm"));

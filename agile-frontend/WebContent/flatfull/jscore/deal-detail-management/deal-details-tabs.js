@@ -26,6 +26,8 @@ var Deal_Modal_Event_View = Base_Model_View.extend({
 
     	'click #opportunity-actions-delete' : 'opportunityDelete',
     	'click .deal-edit-note' : 'dealNoteEdit',
+    	'click .activity-delete': 'deleteActivity',
+
     	'click #dealshow-note' : 'dealShowNoteModal',
     	'click .deal-owner-list' : 'openDealOwnersList',
     	'click .deal-add-contact' : 'addDealContact',
@@ -115,7 +117,11 @@ var Deal_Modal_Event_View = Base_Model_View.extend({
 		deal_details_tab.load_deal_events();
 	},
 
-
+	deleteActivity: function(b) {
+        b.preventDefault();
+        Contact_Details_Tab_Actions.deleteActivity(b)
+    },
+    
 	showOwnerList: function(e)
 	{
 		e.preventDefault();

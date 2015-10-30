@@ -439,20 +439,21 @@ $(function()
 
 		agile_type_ahead("event_relates_to_deals", el, deals_typeahead, false,null,null,"core/api/search/deals",false, true);
 
+
 		/**
 		 * Fills current time only when there is no time in the fields
 		 */
-		if ($('.start-timepicker').val() == '')
-			$('.start-timepicker').val(get_hh_mm());
+		if ($('.start-timepicker', el).val() == '')
+			$('.start-timepicker', el).val(get_hh_mm());
 
-		if ($('.end-timepicker').val() == '')
-			$('.end-timepicker').val(get_hh_mm(true));
+		if ($('.end-timepicker', el).val() == '')
+			$('.end-timepicker', el).val(get_hh_mm(true));
 		// sets the time in time picker if it is empty
-		if ($('.new-task-timepicker').val() == '')
-			$('.new-task-timepicker').val("12:00");
+		if ($('.new-task-timepicker', el).val() == '')
+			$('.new-task-timepicker', el).val("12:00");
 
 		// Update will highlight the date of in date picker
-		$("input.date").datepicker('update');
+		$("input.date", el).datepicker('update');
 
 	});
 
@@ -467,10 +468,10 @@ $(function()
 		
 		agile_type_ahead("event_relates_to_deals", el, deals_typeahead, false,null,null,"core/api/search/deals",false, true);
 
-		if ($('#updateActivityModal #allDay').is(':checked'))
+		if ($('#updateActivityModal #allDay', el).is(':checked'))
 		{
-			$('#update-event-time-1').closest('.control-group').hide();
-			$('#update-event-date-2').closest('.row').hide();
+			$('#update-event-time-1', el).closest('.control-group').hide();
+			$('#update-event-date-2', el).closest('.row').hide();
 		}
 
 		// Removes alert message of error related date and time.
@@ -479,14 +480,14 @@ $(function()
 		// Removes error class of input fields
 		$('#' + this.id).find('.error').removeClass('error');
 
-		$("input.date").datepicker('update');
+		$("input.date", el).datepicker('update');
 
 	});
 
 	/**
 	 * To avoid showing previous errors of the modal.
 	 */
-	$('#activityModal, #activityTaskModal').on('show.bs.modal', function(e)
+	$('#activityModal, #activityTaskModal, #updateActivityModal').on('show.bs.modal', function(e)
 	{
 		$(".event_discription").addClass("hide");
 		$("textarea#description").val('');
@@ -642,6 +643,9 @@ $(function()
 			$('.bootstrap-timepicker-hour').val(e.time.hours);
 			$('.bootstrap-timepicker-minute').val(e.time.minutes);
 		});
+
+		// activateSliderAndTimerToTaskModal();
+
 
 	});
 
