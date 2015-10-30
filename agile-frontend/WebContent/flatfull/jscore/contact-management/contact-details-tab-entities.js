@@ -784,7 +784,6 @@ function show_resubscribe_modal(){
 								var optionsHTML = modelTemplate(email_workflows_list);
 								
 								$('#campaigns-list', el).append(optionsHTML);
-								
 
 								// Remove image
 								$('#campaigns-list', el).parent().find('.loading').remove();
@@ -840,8 +839,15 @@ function show_resubscribe_modal(){
 											  }
 									});
 
-									$('div#contact-detail-resubscribe-modal .modal-body').html(el.find('form'));
+									
+									getTemplate('contact-detail-unsubscribe-campaigns-list', {}, undefined, function(campaigns_list_template){
 
+										$('#unsubscribe-campaigns-list', el).html(campaigns_list_template);
+
+										$('div#contact-detail-resubscribe-modal .modal-body').html(el.find('form'));
+									
+									});
+									
 									// Unsubscribe
 									unsubscribe_contact();
 

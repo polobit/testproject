@@ -23,39 +23,8 @@
                     <div class="row">
                     <div class="control-group form-group">
                         <label class="control-label col-sm-4"><b>Unsubscribed Campaigns </b></label>
-                        <div class="controls col-sm-8">
-                             {{#contact_model}}
-                                {{#contact_campaigns this "unsubscribeStatus"}}
-                                {{!-- Shows Unsubscribed campaigns like tags --}}
-                                    {{#if this}}
-                                    {{#if this.unsubscribed.unsubscribed_campaigns}}    
-                                        <div class="tagsinput" style="margin-top: 7px;">
-                                                <ul name="unsubscribed_names" id="added-tags-ul" class="tagsinput inline v-top m-b-sm p-n">
-                                                        {{#if this.unsubscribed.isAll}}
-                                                            <li class="inline-block tag btn btn-xs btn-default m-r-xs m-b-xs" style="background-color: #f6f6f6;">
-                                                                 <span>
-                                                                     <a class="anchor m-r-xs custom-color" style="color:#363f44">All</a>
-                                                                     <a class="close resubscribe" data="ALL" contact_name = "{{contactShortName}}" campaign_name="all" title="Resubscribe" style="font-size: 16px; opacity: 0.5;">&times</a>
-                                                                 </span>
-                                                             </li> 
-                                                        {{else}}
-                                                        {{#each this.unsubscribed.unsubscribed_campaigns}}
-                                                            <li class="inline-block tag btn btn-xs btn-default m-r-xs m-b-xs" style="background-color: #f6f6f6;">
-                                                                 <span>
-                                                                     <a class="anchor m-r-xs custom-color" style="color:#363f44">{{#if campaign_name}}{{trim_space campaign_name}}{{else}}Unsubscribed Campaign{{/if}}</a>
-                                                                     <a class="close resubscribe" data="{{campaign_id}}" contact_name = "{{contactShortName}}" campaign_name="{{campaign_name}}" title="Resubscribe" style="font-size: 16px; opacity: 0.5;">&times</a>
-                                                                 </span>
-                                                            </li>
-                                                        {{/each}}
-                                                        {{/if}}
-                                               </ul>
-                                        </div>
-                                    {{else}}
-                                        <p style="margin-top: 7px;">There are no unsubscribed campaigns for this contact.</p>
-                                    {{/if}}
-                                    {{/if}}
-                            {{/contact_campaigns}}
-                        {{/contact_model}}
+                        <div class="controls col-sm-8" id="unsubscribe-campaigns-list">
+                            <img class="loading" style="padding-right:5px;opacity:0.5;margin-top: 10px;" src= "../flatfull/img/ajax-loader-cursor.gif"></img>
                         </div>
                     </div>
                     </div>
@@ -79,4 +48,38 @@
 </div>
 </div>
 </div>
+</script>
+
+<script id="contact-detail-unsubscribe-campaigns-list-template" type="text/html">
+{{#contact_model}}
+    {{#contact_campaigns this "unsubscribeStatus"}}
+    {{!-- Shows Unsubscribed campaigns like tags --}}
+        {{#if this}}
+        {{#if this.unsubscribed.unsubscribed_campaigns}}    
+            <div class="tagsinput" style="margin-top: 7px;">
+                    <ul name="unsubscribed_names" id="added-tags-ul" class="tagsinput inline v-top m-b-sm p-n">
+                            {{#if this.unsubscribed.isAll}}
+                                <li class="inline-block tag btn btn-xs btn-default m-r-xs m-b-xs" style="background-color: #f6f6f6;">
+                                     <span>
+                                         <a class="anchor m-r-xs custom-color" style="color:#363f44">All</a>
+                                         <a class="close resubscribe" data="ALL" contact_name = "{{contactShortName}}" campaign_name="all" title="Resubscribe" style="font-size: 16px; opacity: 0.5;">&times</a>
+                                     </span>
+                                 </li> 
+                            {{/if}}
+                            {{#each this.unsubscribed.unsubscribed_campaigns}}
+                                <li class="inline-block tag btn btn-xs btn-default m-r-xs m-b-xs" style="background-color: #f6f6f6;">
+                                     <span>
+                                         <a class="anchor m-r-xs custom-color" style="color:#363f44">{{#if campaign_name}}{{trim_space campaign_name}}{{else}}Unsubscribed Campaign{{/if}}</a>
+                                         <a class="close resubscribe" data="{{campaign_id}}" contact_name = "{{contactShortName}}" campaign_name="{{campaign_name}}" title="Resubscribe" style="font-size: 16px; opacity: 0.5;">&times</a>
+                                     </span>
+                                </li>
+                            {{/each}}
+                   </ul>
+            </div>
+        {{else}}
+            <p style="margin-top: 7px;">There are no unsubscribed campaigns for this contact.</p>
+        {{/if}}
+        {{/if}}
+{{/contact_campaigns}}
+{{/contact_model}}
 </script>
