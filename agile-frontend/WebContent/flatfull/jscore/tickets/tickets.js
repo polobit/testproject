@@ -75,9 +75,6 @@ var Tickets = {
 
 				$('#content').html($(template_ui));	
 
-				//Fectching ticket filters
-				Ticket_Filters.fetch_filters_collection();
-
 				//Fectching new, open, closed tickets count
 				Tickets_Count.fetch_tickets_count(group_id);
 
@@ -97,6 +94,9 @@ var Tickets = {
 								return true;
 							}	
 						});
+
+						//Fectching ticket filters
+						Ticket_Filters.fetch_filters_collection();
 					}
 				});
 
@@ -197,7 +197,7 @@ var Tickets = {
 			var ticketModel = App_Ticket_Module.ticketView.model.toJSON();
 
 			var newTicketModel = new BaseModel();
-			newTicketModel.url = "/core/api/tickets/assign-ticket?id=" + Current_Ticket_ID + "&group_id=" + new_group_id;
+			newTicketModel.url = "/core/api/tickets/change-group?id=" + Current_Ticket_ID + "&group_id=" + new_group_id;
 			newTicketModel.save(ticketModel, {
 				
 					success: function(model){

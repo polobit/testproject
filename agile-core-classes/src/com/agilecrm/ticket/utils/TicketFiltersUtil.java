@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
+
 import com.agilecrm.search.ui.serialize.SearchRule;
 import com.agilecrm.ticket.entitys.TicketFilters;
 import com.agilecrm.user.DomainUser;
@@ -55,114 +57,82 @@ public class TicketFiltersUtil
 	public static String getQueryFromConditions(List<SearchRule> conditions)
 	{
 		StringBuffer query = new StringBuffer();
+		Map<String, String> fieldsMap = new HashMap<String, String>()
+		{
+			{
+				put("hrs_since_created", "created_time");
+				put("hrs_since_opened", "first_replied_time");
+				put("hrs_since_closed", "last_updated_time");
+				put("hrs_since_assigned", "assigned_time");
+				put("hrs_since_requester_update", "last_customer_replied_time");
+				put("hrs_since_assignee_update", "last_agent_replied_time");
+				put("hrs_since_due_date", "due_date");
+				put("hrs_untill_due_date", "due_date");
+			}
+		};
 
 		for (SearchRule condition : conditions)
 		{
-			String conditionString = String.valueOf(condition.CONDITION).toLowerCase(), operator = "";
+			String LHS = condition.LHS.toString(), operator = String.valueOf(condition.CONDITION).toLowerCase(), 
+					RHS = (condition.RHS == null ? "" : condition.RHS)
+					.toString();
 
-			/**
-			 * Preparing not equals condition like - NOT manufacturer=steinway
-			 */
-			if (conditionString.equals("notequals") || conditionString.equals("ticket_status_is_not")
-					|| conditionString.equals("ticket_type_is_not") || conditionString.equals("ticket_priority_is_not")
-					|| conditionString.equals("ticket_source_is_not") || conditionString.equals("is_not"))
+			switch (LHS)
 			{
-				if (condition.LHS.equals("subject") || condition.LHS.equals("notes"))
+				case "status":
+				case "type":
+				case "priority":
+				case "source":
+				case "tags":
+				case "assignee_id":
+				case "group_id":
 				{
-					query.append("NOT " + condition.LHS + " = (" + condition.RHS + ") AND ");
+					if (operator != null && operator.contains("not"))
+						query.append("NOT " + LHS + " = " + RHS);
+					else
+						query.append(LHS + " = " + RHS);
+	
+					break;
 				}
-				else
+				case "ticket_last_updated_by":
 				{
-					query.append("NOT " + condition.LHS + " = " + condition.RHS + " AND ");
+					query.append("last_updated_by = " + (operator.equalsIgnoreCase("LAST_UPDATED_BY_AGENT") ? "AGENT" : "REQUESTER"));
+					break;
 				}
-
-				continue;
-			}
-
-			switch (conditionString)
-			{
-			case "is":
-			case "equals":
-			case "ticket_status_is":
-			case "ticket_type_is":
-			case "ticket_priority_is":
-			case "ticket_source_is":
-				operator = " = ";
-				break;
-			case "is_greater_than":
-				operator = " > ";
-				break;
-			case "is_less_than":
-				operator = " < ";
-				break;
-			}
-
-			String lhs = condition.LHS, rhs = condition.RHS;
-
-			/**
-			 * Checking if condition related to time
-			 */
-			if (lhs.startsWith("hrs"))
-			{
-				/**
-				 * Converting hours in RHS value to milli seconds
-				 */
-				Long millis = Long.parseLong(rhs) * 60 * 60 * 1000;
-				rhs = (Calendar.getInstance().getTimeInMillis() - millis)/1000 + "";
-
-				switch (lhs)
+				case "subject":
+				case "notes":
 				{
+					if (operator != null && operator.contains("not"))
+						query.append("NOT " + condition.LHS + " = (" + condition.RHS + ")");
+					else
+						query.append(LHS + " = " + RHS);
+	
+					break;
+				}
 				case "hrs_since_created":
-				{
-					lhs = "created_time";
-					break;
-				}
 				case "hrs_since_opened":
-				{
-					lhs = "first_replied_time";
-					break;
-				}
 				case "hrs_since_closed":
-				{
-					lhs = "closed_time";
-					break;
-				}
 				case "hrs_since_assigned":
-				{
-					lhs = "assigned_time";
-					break;
-				}
 				case "hrs_since_requester_update":
-				{
-					lhs = "last_customer_replied_time";
-					break;
-				}
 				case "hrs_since_assignee_update":
-				{
-					lhs = "last_agent_replied_time";
-					break;
-				}
-
 				case "hrs_since_due_date":
-				{
-					break;
-				}
 				case "hrs_untill_due_date":
 				{
+					Long currentEpoch = Calendar.getInstance().getTimeInMillis();
+	
+					Long millis = Long.parseLong(RHS) * 60 * 60 * 1000;
+					Long rhsEpoch = (currentEpoch - millis) / 1000;
+	
+					if (operator != null && operator.equalsIgnoreCase("IS_GREATER_THAN"))
+						query.append(fieldsMap.get(LHS) + " <= " + rhsEpoch);
+					else
+						query.append(fieldsMap.get(LHS) + " >= " + rhsEpoch + " AND " + fieldsMap.get(LHS) + " <= " + currentEpoch);
+	
 					break;
 				}
-				}
-			}
-
-			if (condition.LHS.equals("subject") || condition.LHS.equals("notes"))
-			{
-				query.append(condition.LHS + " = (" + condition.RHS + ") AND ");
-			}
-			else
-			{
-				query.append(lhs + operator + rhs + " AND ");
 			}
 			
+			query.append(" AND ");
 		}
 
 		return query.toString();

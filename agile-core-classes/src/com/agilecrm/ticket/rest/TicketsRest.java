@@ -246,6 +246,7 @@ public class TicketsRest
 		}
 		catch (Exception e)
 		{
+			e.printStackTrace();
 			System.out.println(ExceptionUtils.getFullStackTrace(e));
 			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
 					.build());
@@ -385,25 +386,49 @@ public class TicketsRest
 	}
 
 	/**
+	 * @param group_id
+	 * @param assignee_id
+	 * @return returns updated ticket object
+	 */
+	@PUT
+	@Path("/change-group")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Tickets changeGroup(@QueryParam("id") Long ticketID, @QueryParam("group_id") Long groupID)
+	{
+		try
+		{
+			if (ticketID == null && groupID == null)
+				throw new Exception("Required parameters missing.");
+
+			return TicketsUtil.changeGroup(ticketID, groupID);
+		}
+		catch (Exception e)
+		{
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
+			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+					.build());
+		}
+	}
+
+	/**
 	 * Assigns Ticket to given domain user and ticket group
 	 * 
 	 * @param ticket_id
 	 * @param group_id
 	 * @param assignee_id
-	 * @return returns success json
+	 * @return returns updated ticket object
 	 */
 	@PUT
 	@Path("/assign-ticket")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Tickets assignTicket(@QueryParam("id") Long ticketID, @QueryParam("group_id") Long groupID,
-			@QueryParam("assignee_id") Long assigneeID)
+	public Tickets assignTicket(@QueryParam("id") Long ticketID, @QueryParam("assignee_id") Long assigneeID)
 	{
 		try
 		{
-			if (ticketID == null && (groupID == null || assigneeID == null))
+			if (ticketID == null && assigneeID == null)
 				throw new Exception("Required parameters missing.");
 
-			return TicketsUtil.assignTicket(ticketID, groupID, assigneeID);
+			return TicketsUtil.assignTicket(ticketID, assigneeID);
 		}
 		catch (Exception e)
 		{

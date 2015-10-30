@@ -524,7 +524,7 @@
                         {{#if_equals ticket_activity_type 'TICKET_ASSIGNED'}}
                             Ticket (#{{ticket_id}}) Assigned to {{new_assignee.name}}
                         {{else}}
-                            {{#if_equals ticket_activity_type 'TICKET_ASSIGNED_CHANGED'}}
+                            {{#if_equals ticket_activity_type 'TICKET_ASSIGNEE_CHANGED'}}
                                 Ticket (#{{ticket_id}}) Assignee changed to {{new_assignee.name}}
                             {{else}}
                                 {{#if_equals ticket_activity_type 'TICKET_GROUP_CHANGED'}}

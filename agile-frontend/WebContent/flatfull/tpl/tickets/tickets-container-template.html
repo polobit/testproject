@@ -2,35 +2,33 @@
 <div id="tickets-container" class="hbox hbox-auto-xs hbox-auto-sm">
 	<div class="col w-md bg-light dk b-r bg-auto">
 		<div class="wrapper b-b bg">
-			<a class="btn btn-sm btn-danger w-xs font-bold" href="#new-ticket">Compose</a>
+			<a class="btn btn-sm btn-danger w-xs" href="#new-ticket">Compose</a>
 		</div>
 		<div class="wrapper hidden-sm hidden-xs" id="email-menu">
 			<ul class="nav nav-pills nav-stacked nav-sm ticket-types">
 				<li {{#if ticket_status}}{{#if_equals ticket_status 'new'}}class="active"{{/if_equals}}{{/if}}>
-					<a class="new" href="#tickets/group/{{group_id}}/new">
+					<a class="new text-sm" href="#tickets/group/{{group_id}}/new">
 						New <badge class="badge bg-danger pull-right"></badge>
 					</a>
 				</li>
 		        <li {{#if ticket_status}}{{#if_equals ticket_status 'open'}}class="active"{{/if_equals}}{{/if}}>
-		        	<a class="open" href="#tickets/group/{{group_id}}/open">
+		        	<a class="open text-sm" href="#tickets/group/{{group_id}}/open">
 		        		Open <badge class="badge bg-info pull-right"></badge>
 		        	</a>
 		        </li>
 		        <li {{#if ticket_status}}{{#if_equals ticket_status 'starred'}}class="active"{{/if_equals}}{{/if}}>
-		        	<a class="starred" href="#tickets/group/{{group_id}}/starred">
+		        	<a class="starred text-sm" href="#tickets/group/{{group_id}}/starred">
 		        		Favorite <badge class="badge bg-primary pull-right"></badge>
 		        	</a>
 		        </li>
 		        <li {{#if ticket_status}}{{#if_equals ticket_status 'closed'}}class="active"{{/if_equals}}{{/if}}>
-		        	<a class="closed" href="#tickets/group/{{group_id}}/closed">
+		        	<a class="closed text-sm" href="#tickets/group/{{group_id}}/closed">
 		        		Closed <badge class="badge bg-success pull-right"></badge>
 		        	</a>
 		        </li>
 			</ul>
 		</div>
-		<div class="wrapper hidden-sm hidden-xs" id="filters-list-container">
-			
-		</div>
+		<!--<div class="wrapper hidden-sm hidden-xs" id="filters-list-container"></div>-->
 	</div>
 	<div class="col">
 		<div id="right-pane">

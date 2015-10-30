@@ -246,7 +246,6 @@ var TicketsUtilRouter = Backbone.Router.extend({
 				url : '/core/api/tickets/groups',
 				templateKey : "ticket-groups",
 				individual_tag_name : 'tr',
-				slateKey : "no-groups",
 				postRenderCallback : function(el) {
 
 				}

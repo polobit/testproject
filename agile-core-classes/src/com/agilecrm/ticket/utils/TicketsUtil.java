@@ -299,45 +299,46 @@ public class TicketsUtil
 	 * @return
 	 * @throws EntityNotFoundException
 	 */
-	public static Tickets assignTicket(Long ticket_id, Long group_id, Long assignee_id) throws EntityNotFoundException
+	public static Tickets changeGroup(Long ticket_id, Long group_id) throws EntityNotFoundException
 	{
 		Tickets ticket = TicketsUtil.getTicketByID(ticket_id);
 
-		boolean isTicketTransfer = true;
+		ticket.group_id = new Key<TicketGroups>(TicketGroups.class, group_id);
+		ticket.groupID = group_id;
+
+		Tickets.ticketsDao.put(ticket);
+
+		// Update search document
+		new TicketsDocument().edit(ticket);
+
+		// Logging ticket assigned activity
+		new TicketActivity(TicketActivityType.TICKET_GROUP_CHANGED, ticket.contactID, ticket.id, "", group_id + "",
+				"groupID").save();
+
+		return ticket;
+	}
+
+	/**
+	 * 
+	 * @param ticket_id
+	 * @param assignee_id
+	 * @return
+	 * @throws EntityNotFoundException
+	 */
+	public static Tickets assignTicket(Long ticket_id, Long assignee_id) throws EntityNotFoundException
+	{
+		Tickets ticket = TicketsUtil.getTicketByID(ticket_id);
+
+		boolean isNewTicket = false;
 
 		if (ticket.status == Status.NEW)
 		{
 			ticket.status = Status.OPEN;
-
-			// Logging ticket assigned activity
-			new TicketActivity(TicketActivityType.TICKET_ASSIGNED, ticket.contactID, ticket.id, "", assignee_id + "",
-					"assigneeID").save();
-
-			isTicketTransfer = false;
+			isNewTicket = true;
 		}
 
-		if (group_id != null)
-		{
-			if (ticket.groupID != group_id)
-				// Logging group changed activity
-				new TicketActivity(TicketActivityType.TICKET_GROUP_CHANGED, ticket.contactID, ticket.id, ticket.groupID
-						+ "", group_id + "" + "", "groupID").save();
-
-			ticket.group_id = new Key<TicketGroups>(TicketGroups.class, group_id);
-		}
-
-		if (assignee_id != null)
-		{
-			ticket.assignee_id = new Key<DomainUser>(DomainUser.class, assignee_id);
-			ticket.assigned_to_group = false;
-
-			if (isTicketTransfer && ticket.assigneeID != assignee_id)
-				// Logging ticket transfer activity
-				new TicketActivity(TicketActivityType.TICKET_ASSIGNED_CHANGED, ticket.contactID, ticket.id,
-						ticket.assignee_id + "", assignee_id + "" + "", "assigneeID").save();
-		}
-		else
-			ticket.assigned_to_group = true;
+		ticket.assignee_id = new Key<DomainUser>(DomainUser.class, assignee_id);
+		ticket.assigned_to_group = false;
 
 		ticket.assigned_time = Calendar.getInstance().getTimeInMillis();
 
@@ -345,6 +346,15 @@ public class TicketsUtil
 
 		// Update search document
 		new TicketsDocument().edit(ticket);
+
+		if (isNewTicket)
+			// Logging ticket assigned activity
+			new TicketActivity(TicketActivityType.TICKET_ASSIGNED, ticket.contactID, ticket.id, "", assignee_id + "",
+					"assigneeID").save();
+		else
+			// Logging ticket transfer activity
+			new TicketActivity(TicketActivityType.TICKET_ASSIGNEE_CHANGED, ticket.contactID, ticket.id,
+					ticket.assignee_id + "", assignee_id + "", "assigneeID").save();
 
 		return ticket;
 	}

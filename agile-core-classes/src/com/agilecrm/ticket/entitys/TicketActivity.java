@@ -108,7 +108,7 @@ public class TicketActivity
 	 */
 	public enum TicketActivityType
 	{
-		TICKET_CREATED, TICKET_DELETED, TICKET_ASSIGNED, TICKET_ASSIGNED_CHANGED, TICKET_GROUP_CHANGED, TICKET_STATUS_CHANGE, TICKET_PRIORITY_CHANGE, TICKET_TYPE_CHANGE, TICKET_TAG_ADD, TICKET_TAG_REMOVE, TICKET_ASSIGNEE_REPLIED, TICKET_REQUESTER_REPLIED, TICKET_PRIVATE_NOTES_ADD, TICKET_MARKED_FAVORITE, TICKET_MARKED_UNFAVORITE
+		TICKET_CREATED, TICKET_DELETED, TICKET_ASSIGNED, TICKET_ASSIGNEE_CHANGED, TICKET_GROUP_CHANGED, TICKET_STATUS_CHANGE, TICKET_PRIORITY_CHANGE, TICKET_TYPE_CHANGE, TICKET_TAG_ADD, TICKET_TAG_REMOVE, TICKET_ASSIGNEE_REPLIED, TICKET_REQUESTER_REPLIED, TICKET_PRIVATE_NOTES_ADD, TICKET_MARKED_FAVORITE, TICKET_MARKED_UNFAVORITE
 	};
 
 	public TicketActivityType ticket_activity_type;
@@ -133,45 +133,45 @@ public class TicketActivity
 		this.created_time = Calendar.getInstance().getTimeInMillis();
 		this.ticket_activity_type = ticket_activity_type;
 
-		switch (ticket_activity_type)
-		{
-		case TICKET_CREATED:
-			this.label = "Ticket Created";
-			break;
-		case TICKET_ASSIGNED:
-			this.label = label;
-			break;
-		case TICKET_ASSIGNED_CHANGED:
-			this.label = label;
-			break;
-		case TICKET_GROUP_CHANGED:
-			this.label = label;
-			break;
-		case TICKET_STATUS_CHANGE:
-			this.label = label;
-			break;
-		case TICKET_PRIORITY_CHANGE:
-			this.label = label;
-			break;
-		case TICKET_TYPE_CHANGE:
-			this.label = label;
-			break;
-		case TICKET_TAG_ADD:
-			this.label = label;
-			break;
-		case TICKET_TAG_REMOVE:
-			this.label = label;
-			break;
-		case TICKET_ASSIGNEE_REPLIED:
-			this.label = label;
-			break;
-		case TICKET_REQUESTER_REPLIED:
-			this.label = label;
-			break;
-		case TICKET_PRIVATE_NOTES_ADD:
-			this.label = "";
-			break;
-		}
+//		switch (ticket_activity_type)
+//		{
+//		case TICKET_CREATED:
+//			this.label = "Ticket Created";
+//			break;
+//		case TICKET_ASSIGNED:
+//			this.label = label;
+//			break;
+//		case TICKET_ASSIGNED_CHANGED:
+//			this.label = label;
+//			break;
+//		case TICKET_GROUP_CHANGED:
+//			this.label = label;
+//			break;
+//		case TICKET_STATUS_CHANGE:
+//			this.label = label;
+//			break;
+//		case TICKET_PRIORITY_CHANGE:
+//			this.label = label;
+//			break;
+//		case TICKET_TYPE_CHANGE:
+//			this.label = label;
+//			break;
+//		case TICKET_TAG_ADD:
+//			this.label = label;
+//			break;
+//		case TICKET_TAG_REMOVE:
+//			this.label = label;
+//			break;
+//		case TICKET_ASSIGNEE_REPLIED:
+//			this.label = label;
+//			break;
+//		case TICKET_REQUESTER_REPLIED:
+//			this.label = label;
+//			break;
+//		case TICKET_PRIVATE_NOTES_ADD:
+//			this.label = "";
+//			break;
+//		}
 	}
 
 	/**
