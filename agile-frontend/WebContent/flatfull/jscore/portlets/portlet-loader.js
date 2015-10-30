@@ -71,6 +71,7 @@ function loadPortlets(el){
 					model.set({ 'row_position' : obj.row_position  }, { silent : true });
 					model.set({'isForAll' : false});
 					set_p_portlets(model);
+					set_up_portlets(el,$('#portlets > div'));
 					portlet_utility.addWidgetToGridster(model);
 					
 					models.push({ id : model.get("id"), column_position : obj.column_position, row_position : obj.row_position,isForAll : false });
@@ -80,6 +81,32 @@ function loadPortlets(el){
 					contentType : "application/json; charset=utf-8", dataType : 'json' });
 				}
 				App_Portlets.adminPortlets=new Array();
+				var models_position = [];
+				$('#portlet-res > div > .gs-w').each(function(){
+					
+					$(this).attr('id','ui-id-'+$(this).attr("data-col")+'-'+$(this).attr("data-row"));
+					$(this).find('div.portlet_body').attr('id','p-body-'+$(this).attr("data-col")+'-'+$(this).attr("data-row"));
+					
+					var model_id = $(this).find('.portlets').attr('id');
+					
+					var model = Portlets_View.collection.get(model_id);
+
+					if(!($(this).attr('data-col')==model.get('column_position')) || !($(this).attr('data-row')==model.get('row_position')))
+					{
+						model.set({ 'column_position' : parseInt($(this).attr("data-col")) }, { silent : true });
+						model.set({ 'row_position' : parseInt($(this).attr("data-row")) }, { silent : true });
+						$(this).remove();
+						set_p_portlets(model);
+					}
+					
+
+					models_position.push({ id : model.get("id"), column_position : parseInt($(this).attr("data-col")), row_position : parseInt($(this).attr("data-row")) });
+					
+				});
+				// Saves new positions in server
+				$.ajax({ type : 'POST', url : '/core/api/portlets/positions', data : JSON.stringify(models_position),
+					contentType : "application/json; charset=utf-8", dataType : 'json' });
+
 				if(Portlets_View.collection.length==0)
 					$('.gridster > div:visible > div',el).removeClass('gs-w');
 			
@@ -316,6 +343,8 @@ function set_up_portlets(el, portlets_el){
 	}
 
     $(window).trigger('resize');
+
+    //return callback();
 }
 
 /**To hide the modal popup after the portlet setting is saved**/
