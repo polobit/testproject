@@ -802,7 +802,7 @@ function show_resubscribe_modal(){
 										  onInitialized: function(select, container) {
 			        								
 		    								$(container).find('button').css({width: '252px'});
-		    								$(container).find('.multiselect-container').css({'position':'relative'});
+		    								// $(container).find('.multiselect-container').css({'position':'relative'});
 		    								$(container).find('span').addClass('pull-left');
 		    								$(container).find('b.caret').addClass('pull-right m-t-sm');
 			    						},
