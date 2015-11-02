@@ -683,3 +683,28 @@ function initDateRange(callback)
 
 }
 
+
+function showRepPerformanceReport()
+{
+
+	var options='';
+
+	// Get Date Range January 22, 2015 - January 28, 2015
+	var range = $('#range').html().split("-");
+	var start_time = getUTCMidNightEpochFromDate(new Date(range[0]));
+
+	var end_value = $.trim(range[1]);
+
+	// To make end value as end time of day
+	if (end_value)
+		end_value = end_value + " 23:59:59";
+
+
+	var end_time = getUTCMidNightEpochFromDate(new Date(end_value));
+
+	// Adds start_time, end_time and timezone offset to params.
+	var d = new Date();
+	start_time=start_time+(d.getTimezoneOffset()*60*1000);
+	 end_time += (((23*60*60)+(59*60)+59)*1000);
+	end_time=end_time+(d.getTimezoneOffset()*60*1000);
+}

@@ -224,4 +224,18 @@ public class NoteUtil
     {
 	Note.dao.deleteAll(list);
     }
+    
+    public static int getNotesCountforUser(Long startTime, Long endTime)
+    {
+    	try{
+	return dao.ofy().query(Note.class)
+		.filter("owner", new Key<AgileUser>(AgileUser.class, AgileUser.getCurrentAgileUser().id))
+		.filter("-created_time >=", startTime).filter("-created_time <", endTime).count();
+    	}
+    	catch (Exception e)
+		{
+		    e.printStackTrace();
+		    return 0;
+		}
+    	}
 }

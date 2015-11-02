@@ -16,12 +16,17 @@ import org.codehaus.jackson.type.TypeReference;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.agilecrm.activities.Activity;
+import com.agilecrm.activities.Call;
+import com.agilecrm.activities.util.ActivityUtil;
+import com.agilecrm.activities.util.TaskUtil;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Contact.Type;
 import com.agilecrm.contact.ContactField;
 import com.agilecrm.contact.CustomFieldDef;
 import com.agilecrm.contact.CustomFieldDef.SCOPE;
 import com.agilecrm.contact.util.CustomFieldDefUtil;
+import com.agilecrm.contact.util.NoteUtil;
 import com.agilecrm.deals.Opportunity;
 import com.agilecrm.deals.util.OpportunityUtil;
 import com.agilecrm.reports.deferred.ReportsInstantEmailDeferredTask;
@@ -448,6 +453,9 @@ public class ReportsUtil
 			Double milestoneValue = 0d;
 			Integer soldCount=0;
 			Double avgValue=0d;
+			Double avgDealsClosure=0d;
+			long callsDuration=0;
+
 			if(wonDealsList!=null){
 				for(Opportunity opportunity : wonDealsList){
 					milestoneValue += opportunity.expected_value;
@@ -458,6 +466,31 @@ public class ReportsUtil
 			dataJson.put("sales", milestoneValue);
 			dataJson.put("soldDeals",soldCount);
 			dataJson.put("avg",avgValue);
+			
+			List<Opportunity> closedDeals=OpportunityUtil.getOpportunities(minTime, maxTime);
+			if(closedDeals!=null)
+			{
+				
+				for(Opportunity opportunity : closedDeals){
+					Integer r=Math.round((opportunity.close_date-opportunity.created_time)/1000*60*60*24);
+					avgDealsClosure=avgDealsClosure+r;
+				}
+				avgDealsClosure=avgDealsClosure/closedDeals.size();
+			}
+			
+			dataJson.put("avgDealClosetime", avgDealsClosure);
+			List<Activity> callActivitiesList = ActivityUtil.getActivitiesByActivityType("CALL",ownerId,minTime,maxTime);
+			for(Activity activity : callActivitiesList){
+				if(activity.custom4!=null && !activity.custom3.equalsIgnoreCase(Call.VOICEMAIL) && !activity.custom4.equalsIgnoreCase(null) 
+						&& !activity.custom4.equalsIgnoreCase("null") && !activity.custom4.equalsIgnoreCase(""))
+					callsDuration+=Long.valueOf(activity.custom4);
+			}
+			callsDuration=callsDuration/callActivitiesList.size();
+			dataJson.put("avgCallDuration", callsDuration);
+			
+			dataJson.put("taskcreated",TaskUtil.getUserCreatedTasks(minTime, maxTime, ownerId));
+			dataJson.put("taskCompleted",TaskUtil.getCompletedTasksOfUser(minTime, maxTime, ownerId));
+			dataJson.put("notes",NoteUtil.getNotesCountforUser(minTime, maxTime));
 			
 		}
 		catch (JSONException e)

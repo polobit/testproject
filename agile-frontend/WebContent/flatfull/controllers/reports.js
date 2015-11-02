@@ -986,7 +986,7 @@ var ReportsRouter = Backbone.Router
 
 						initUserReports(function()
 							{
-								showsalesReportGraphs();
+								showRepPerformanceReport();
 					});
 						}, "#content");
 					});
