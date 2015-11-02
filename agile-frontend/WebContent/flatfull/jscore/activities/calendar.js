@@ -258,7 +258,15 @@ function showCalendar(users)
 												$("#loading_calendar_events").hide();
 										}
 									});
-								} }, { dataType : 'agile-gcal' }
+								//		return true;
+
+								}
+								},
+								{
+									events : loadUserEventsfromGoogle,
+									dataType : 'agile-gcal'
+								},
+							
 						],
 						header : { left : 'prev', center : 'title', right : 'next' },
 						defaultView : calendarView,

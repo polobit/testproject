@@ -7,7 +7,7 @@
 // or better
 
 
-function loadUserEventsfromGoogle(users, start, end, callback){
+function loadUserEventsfromGoogle(start, end, callback){
 
 		load_events_from_google(function(data)
 						{
@@ -29,27 +29,15 @@ function _init_gcal_options(users)
 	var fc = $.fullCalendar;
 	fc.sourceFetchers = [];
 	// Transforms the event sources to Google Calendar Events
-	fc.sourceFetchers.push(function(sourceOptions, start, end, callback)
-	{
-		if (sourceOptions.dataType == 'agile-gcal')
+	fc.sourceFetchers.push(_googleEventFetcher);
+}
+
+function _googleEventFetcher(sourceOptions, start, end, callback)
+{
+	if (sourceOptions.dataType == 'agile-gcal')
 		{
-
-			if(users){
-
-				loadUserEventsfromGoogle(users, start, end, callback);
-				return;
-
-			}
-			// Check whether to show the google calendar events or not.
-
-			$.getJSON('/core/api/users/agileusers', function(users)
-				{
-					loadUserEventsfromGoogle(users, start, end, callback);
-				});
-
+				//loadUserEventsfromGoogle(undefined, start, end, callback);
 		}
-	});
-
 }
 
 // Tranform agile
@@ -104,11 +92,16 @@ function _fetchGCAndAddEvents(sourceOptions, start, end, callback)
 
 			if (fc_event)
 				google_events.push(fc_event);
-				
+			renderEventBasedOnOwner(fc_event);
+			//$('#calendar_event').fullCalendar('renderEvent', fc_event);		
 		}
+
+
+		//$('#calendar_event').fullCalendar('renderEvents', google_events);
 		callback(google_events);
+		//$('#calendar_event').fullCalendar('removeEvents', function(value, i) {return false;});
 		// Add event
-		//$('#calendar_event').fullCalendar('addEventSource', google_events);
+		//$('#calendar_event').fullCalendar('renderEvents', google_events);
 	});
 }
 

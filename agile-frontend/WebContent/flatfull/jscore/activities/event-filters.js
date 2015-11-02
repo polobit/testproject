@@ -252,14 +252,15 @@ function renderFullCalenarEvents(ownerid)
 function removeGoogleCalendarEvents()
 {
 // Removes all events at once
-	$('#calendar_event').fullCalendar('removeEvents', function(value, index) {
-		if(value && value.google)
-			return true;
-		else
-			return false;
-	});
+	$('#calendar_event').fullCalendar('removeEventSource', loadUserEventsfromGoogle);
 
 	showLoadingOnCalendar(false);
+}
+
+function addGoogleCalendarEvents()
+{
+	$('#calendar_event').fullCalendar('removeEventSource', loadUserEventsfromGoogle)
+	$('#calendar_event').fullCalendar('addEventSource', loadUserEventsfromGoogle);
 }
 
 /**
