@@ -134,6 +134,8 @@ function showSettingPage()
  */
 function routeToPage(url)
 {
+	if(window.location.hash == ("#" + url))
+        return;
 
 	if (window.location.hash.indexOf("#" + url) != -1)
 	{
