@@ -9,7 +9,7 @@
     "language": "en",
     "branches": "yes",
     "workflow_tasklet_class_name": "com.campaignio.tasklets.agile.TicketStatus",
-    "category": "Status",
+    "category": "Tickets",
     "ui": [
         {
             "label": "Status",
@@ -19,9 +19,8 @@
             "id": "status",
             "title": "Select status",
             "options": {
-                "Open": "open",
-                "Closed": "closed",
-                "Pending": "pending"
+                "Open": "OPEN",
+                "Closed": "CLOSED"
             },
             "fieldType": "select",
             "type": "select"

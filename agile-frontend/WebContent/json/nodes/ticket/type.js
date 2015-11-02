@@ -9,7 +9,7 @@
     "language": "en",
     "branches": "yes",
     "workflow_tasklet_class_name": "com.campaignio.tasklets.agile.TicketType",
-    "category": "type",
+    "category": "Tickets",
     "ui": [
         {
             "label": "Type",
@@ -19,10 +19,10 @@
             "id": "ticket-type",
             "title": "Select Ticket Type",
             "options": {
-                "Question": "question",
-                "Incident": "incident",
-                "Problem": "problem",
-                "Task": "task"
+                "Question": "QUESTION",
+                "Incident": "INCIDENT",
+                "Problem": "PROBLEM",
+                "Task": "TASK"
             },
             "fieldType": "select",
             "type": "select"

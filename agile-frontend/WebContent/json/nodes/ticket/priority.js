@@ -9,7 +9,7 @@
     "language": "en",
     "branches": "yes",
     "workflow_tasklet_class_name": "com.campaignio.tasklets.agile.TicketPriority",
-    "category": "Priority",
+    "category": "Tickets",
     "ui": [
            {
                "label": "Priority",
@@ -19,9 +19,9 @@
                "id": "priority",
                "title": "Select priority",
                "options": {
-                   "Low": "low",
-                   "Medium": "medium",
-                   "High": "high"
+                   "Low": "LOW",
+                   "Medium": "MEDIUM",
+                   "High": "HIGH"
                },
                "fieldType": "select",
                "type": "select"

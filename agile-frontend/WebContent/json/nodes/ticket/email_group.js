@@ -9,20 +9,22 @@
     "language": "en",
     "branches": "yes",
     "workflow_tasklet_class_name": "com.campaignio.tasklets.agile.TicketEmailGroup",
-    "category": "Email Group",
+    "category": "Tickets",
     "ui": [
            {
-               "label": "Group",
-               "required": "required",
+               "label": "Email Group",
+               "required": "Yes",
                "category": "Info",
                "name": "email-group",
                "id": "email-group",
                "title": "Select group",
+               "url": "/core/api/tickets/groups",
+               "dynamicName": "email",
+               "dynamicValue": "id",
+               "appendToDynamicName": "name",
                "options": {
-			        "Sales": "sales",
-			        "Support": "support"
 			    },
-               "fieldType": "select",
+               "fieldType": "dynamicselect",
                "type": "select"
            },
            {

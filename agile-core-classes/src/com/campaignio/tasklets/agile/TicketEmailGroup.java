@@ -23,7 +23,7 @@ public class TicketEmailGroup extends TaskletAdapter
 	/**
 	 * Ticket Group id
 	 */
-	public static String TICKET_GROUP_ID = "group_id";
+	public static String TICKET_GROUP_ID = "email-group";
 
 	/**
 	 * Email Subject
@@ -33,7 +33,7 @@ public class TicketEmailGroup extends TaskletAdapter
 	/**
 	 * Email Body
 	 */
-	public static String BODY = "body";
+	public static String BODY = "email-body";
 
 	/*
 	 * (non-Javadoc)

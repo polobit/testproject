@@ -9,34 +9,37 @@
     "language": "en",
     "branches": "yes",
     "workflow_tasklet_class_name": "com.campaignio.tasklets.agile.TicketAssignee",
-    "category": "Assignee",
+    "category": "Tickets",
     "ui": [
            
            {
-               "label": "Assigned to user",
+               "label": "Assigned to group",
                "required": "required",
                "category": "Info",
-               "name": "assignee-user",
-               "id": "assignee-user",
-               "title": "Select Assignee",
+               "name": "group-id",
+               "id": "group-id",
+               "title": "Select Group",
+               "url": "/core/api/tickets/groups",
+               "dynamicName": "group_name",
+               "dynamicValue": "id",
+               "appendToDynamicName": "name",
                "options": {
-            	   "User 1": "user 1",
-			       "User 2": "user 2",
-			       "User 3": "user 3"
+            	   "--Select--": ""
                },
-               "fieldType": "select",
+               "fieldType": "dynamicselect",
                "type": "select",
                "event": "onchange",
-               "eventHandler": "getUserTicketGroups(this)",
-               "select_event_callback": "getUserTicketGroups"
+               "eventHandler": "getUsersFromGroup(this)",
+               "eventHandlerOnLoad": "getUsersFromGroup",
+               "triggerEventOnLoad": "true"
            },
            {
-               "label": "group",
+               "label": "Assignee",
                "required": "required",
                "category": "Info",
-               "name": "assignee-group",
-               "id": "assignee-group",
-               "title": "Select Group",
+               "name": "assignee-id",
+               "id": "assignee-id",
+               "title": "Select Assignee",
                "options": {},
                "fieldType": "select",
                "type": "select"

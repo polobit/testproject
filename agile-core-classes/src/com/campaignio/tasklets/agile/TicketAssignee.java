@@ -23,12 +23,12 @@ public class TicketAssignee extends TaskletAdapter
 	/**
 	 * Ticket Group
 	 */
-	public static String TICKET_GROUP_ID = "group_id";
+	public static String TICKET_GROUP_ID = "group-id";
 
 	/**
 	 * Ticket assignee
 	 */
-	public static String TICKET_ASSIGNEE_ID = "assignee_id";
+	public static String TICKET_ASSIGNEE_ID = "assignee-id";
 
 	/*
 	 * (non-Javadoc)

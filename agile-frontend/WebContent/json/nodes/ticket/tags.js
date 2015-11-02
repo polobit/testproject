@@ -10,7 +10,7 @@
     "branches": "yes",
     "type":"voice",
     "workflow_tasklet_class_name": "com.campaignio.tasklets.agile.TicketTags",
-    "category": "Utilities",
+    "category": "Tickets",
     "ui": [{
             "label": "Type",
             "required": "required",

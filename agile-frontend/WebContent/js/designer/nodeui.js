@@ -45,6 +45,8 @@ function constructNodeFromDefinition(nodeJSONDefinition, jsonData, nodeId) {
     
     if(jsonData != undefined)
 	    newJSONDefinition = changeDefaultValues(newJSONDefinition, jsonData);
+
+	
         
     // Change Grid default values       
     constructUI($("#nodeui"), newJSONDefinition);
@@ -138,6 +140,17 @@ function constructNodeFromDefinition(nodeJSONDefinition, jsonData, nodeId) {
 	
 	//.removeClass('ui-button-text-only').addClass('ui-button-text-icon').append("<span class='ui-icon ui-icon-disk'></span>");        
 	
+	// Treat as opened second time, So trigger the events attached to ui
+	// elements
+	$.each(nodeJSONDefinition.ui, function(index, data) {
+		try {
+			if (data.triggerEventOnLoad)
+				window[data.eventHandlerOnLoad]($("*[name='" + data.name + "']"),
+						jsonData);
+		} catch (e) {
+			console.log(e);
+		}
+	});
 }
 
 function serializeNodeForm()

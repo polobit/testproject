@@ -24,7 +24,7 @@ public class TicketType extends TaskletAdapter
 	/**
 	 * Ticket type
 	 */
-	public static String TYPE = "type";
+	public static String TYPE = "ticket-type";
 
 	/*
 	 * (non-Javadoc)

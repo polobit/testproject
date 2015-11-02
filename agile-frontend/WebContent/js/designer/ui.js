@@ -202,7 +202,7 @@ function fetchAndFillSelect(url, keyField, valField, appendNameField, options, s
 				
 				if(key != undefined && value != undefined)
 				{
-					
+					console.log(key);
 					if(key.indexOf("*") == 0)
 					{
 						key  = key.substr(1);

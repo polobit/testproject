@@ -9,28 +9,23 @@
     "language": "en",
     "branches": "yes",
     "workflow_tasklet_class_name": "com.campaignio.tasklets.agile.TicketEmailUser",
-    "category": "Email User",
+    "category": "Tickets",
     "ui": [
            {
                "label": "Email User",
-               "required": "required",
+               "required": "Yes",
                "category": "Info",
                "name": "email-user",
                "id": "email-user",
                "title": "Select email user",
-               "optgroup" : [
-					{
-					    "label": "--Users--",
-					    "options": {
-					        "User 1": "user 1",
-					        "User 2": "user 2"
-					    }
-					}
-               ],
+               "url": "/core/api/users",
+               "dynamicName": "email",
+               "dynamicValue": "id",
+               "appendToDynamicName": "name",
                "options": {
-                   "(requester)": "(requester)"
+                   "(requester)": "{{requester}}"
                },
-               "fieldType": "select",
+               "fieldType": "dynamicselect",
                "type": "select"
            },
            {
