@@ -769,7 +769,14 @@ function show_resubscribe_modal(){
 
 					modal.on('shown.bs.modal', function (e) {
 		              
-		                var el = $(template_ui);
+
+		              var el = $(template_ui);
+
+		               $(this).find('.modal-body').css({
+			              width:'auto', //probably not needed
+			              height:'auto', //probably not needed 
+			              'max-height':'100%'
+       					});
 
 		              
 		              fillSelect('campaigns-list', '/core/api/workflows', 'workflow', function(collection)
