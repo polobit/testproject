@@ -50,6 +50,7 @@ function loadPortlets(el){
 				if(Portlets_View.collection.length==0)
 					$('.gridster > div:visible > div',el).removeClass('gs-w');
 			
+
 			initializePortletsListeners();
 
 		} });

@@ -2931,6 +2931,7 @@ width: 915px;
 	    margin-right: 8px;
 }
 
+
 @-moz-document url-prefix() {
   .contact-grid-ellipsis {
   overflow:hidden;
@@ -2942,7 +2943,8 @@ width: 915px;
 }
 
 }
-#deals-reports .highcharts-tooltip span
+
+#deals-reports .highcharts-tooltip span , #lossreasonpie-chart-users .highcharts-tooltip span , #calls-chart-user .highcharts-tooltip span , #call-report .highcharts-tooltip span
 {
 	 background-color: #313030;
      opacity: 1;
@@ -2950,14 +2952,14 @@ width: 915px;
      padding: 8px;
      border-radius: 5px
  }
- #deals-reports svg .highcharts-tooltip {
+ #deals-reports svg .highcharts-tooltip, #lossreasonpie-chart-users svg .highcharts-tooltip,#calls-chart-user svg .highcharts-tooltip , #call-report svg .highcharts-tooltip {
  	visibility: hidden!important;
  }
 
- #deals-reports .highcharts-data-labels
+/* #deals-reports .highcharts-data-labels
  {
  	text-transform: capitalize;
- }
+ }*/
 
  #deals-chart .highcharts-legend{
  	text-transform: capitalize;

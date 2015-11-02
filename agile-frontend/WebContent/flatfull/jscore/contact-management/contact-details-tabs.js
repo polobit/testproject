@@ -373,10 +373,14 @@ function enable_send_button(elem)
 /**
  * Returns webstats count w.r.t domain
  */
-function get_web_stats_count_for_domain()
+function get_web_stats_count_for_domain(callback)
 {
 	// Returns web-stats count
-	return $.ajax({ type : "GET", url : 'core/api/web-stats/JSAPI-status', async : false }).responseText;
+	accessUrlUsingAjax('core/api/web-stats/JSAPI-status', function(resp){
+			if(callback)
+				 callback(resp);
+	});
+	
 }
 
 function save_contact_tab_position_in_cookie(tab_href)

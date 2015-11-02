@@ -233,6 +233,7 @@ public class ReportsAPI
 	    @QueryParam("end_time") String endTime, @QueryParam("time_zone") String timeZone,
 	    @QueryParam("filter") String filterId)
     {
+    	boolean flag=false;
 	ReportsUtil.check(Long.parseLong(startTime)-(Long.parseLong(timeZone)*60*1000), Long.parseLong(endTime)-(Long.parseLong(timeZone)*60*1000));
 
 	JSONArray tagsJSONArray = new JSONArray();
@@ -263,9 +264,13 @@ public class ReportsAPI
 	    {
 	    count = TagSearchUtil.getNextTagCount(filter, tags[0], String.valueOf(Long.parseLong(startTime)-(Long.parseLong(timeZone)*60*1000)), String.valueOf(Long.parseLong(endTime)-(Long.parseLong(timeZone)*60*1000)), tag);
 	    }
+	    if(count!=0)
+	    	flag=true;
 		tagsJSONArray.put(new JSONObject().put(tag, count));
 		i++;
 	    }
+	    if(!flag)
+	    	tagsJSONArray=new JSONArray();
 	}
 	catch (Exception e)
 	{

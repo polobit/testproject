@@ -3123,7 +3123,7 @@ var ContactFiltersRouter = Backbone.Router.extend({
 	contactFilterAdd : function()
 	{
 
-		var contacts_filter = new Base_Model_View({ url : 'core/api/filters', template : "filter-contacts", isNew : "true", window : "contact-filters",
+		var contacts_filter = new Report_Filters_Event_View({ url : 'core/api/filters', template : "filter-contacts", isNew : "true", window : "contact-filters",
 			postRenderCallback : function(el)
 			{
 				head.js(LIB_PATH + 'lib/agile.jquery.chained.min.js', function()
@@ -3153,7 +3153,7 @@ var ContactFiltersRouter = Backbone.Router.extend({
 
 		$("#content").html(LOADING_HTML);
 		var contact_filter = this.contactFiltersList.collection.get(id);
-		var ContactFilter = new Base_Model_View({ url : 'core/api/filters', model : contact_filter, template : "filter-contacts",
+		var ContactFilter = new Report_Filters_Event_View({ url : 'core/api/filters', model : contact_filter, template : "filter-contacts",
 			window : 'contact-filters', postRenderCallback : function(el)
 			{
 				$(el).on('agile_model_loaded', function(e) {
@@ -9946,7 +9946,7 @@ var WorkflowsRouter = Backbone.Router
 
 					});
 
-					var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
+					var optionsTemplate = "<option value='{{id}}'{{#if is_disabled}}disabled=disabled>{{name}} (Disabled){{else}}>{{name}}{{/if}}</option>";
 
 					// fill the selected campaign-id
 					if (campaign_id)
@@ -10176,7 +10176,7 @@ var WorkflowsRouter = Backbone.Router
 							populate_call_trigger_options($('form#addTriggerForm', el), currentTrigger.toJSON());	
 						}
 
-						var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
+						var optionsTemplate = "<option value='{{id}}'{{#if is_disabled}}disabled=disabled>{{name}} (Disabled){{else}}>{{name}}{{/if}}</option>";
 
 						/**
 						 * Fills campaign select drop down with existing
@@ -19558,6 +19558,11 @@ function showCalendar(users)
 
 							if (isNaN(event.id))
 								return;
+
+							// Show edit modal for the event
+							$("#updateActivityModal").html(getTemplate("update-activity-modal")).modal("show");
+
+
 							// Deserialize
 							deserializeForm(event, $("#updateActivityForm"));
 
@@ -19617,8 +19622,7 @@ function showCalendar(users)
 								var desc = '<div class="row-fluid">' + '<div class="control-group form-group m-b-none " id="addEventDescription">' + '<a href="#" id="add_event_desctiption"><i class="icon-plus"></i> Add Description </a>' + '<div class="controls event_discription hide">' + '<textarea id="description" name="description" rows="3" class="input form-control w-full col-md-8" placeholder="Add Description"></textarea>' + '</div></div></div>'
 								$("#event_desc").html(desc);
 							}
-							// Show edit modal for the event
-							$("#updateActivityModal").modal('show');
+							
 							
 							agile_type_ahead("event_relates_to_deals", $('#updateActivityModal'), deals_typeahead, false,null,null,"core/api/search/deals",false, true);
 
@@ -20748,20 +20752,21 @@ $(function()
 
 		agile_type_ahead("event_relates_to_deals", el, deals_typeahead, false,null,null,"core/api/search/deals",false, true);
 
+
 		/**
 		 * Fills current time only when there is no time in the fields
 		 */
-		if ($('.start-timepicker').val() == '')
-			$('.start-timepicker').val(get_hh_mm());
+		if ($('.start-timepicker', el).val() == '')
+			$('.start-timepicker', el).val(get_hh_mm());
 
-		if ($('.end-timepicker').val() == '')
-			$('.end-timepicker').val(get_hh_mm(true));
+		if ($('.end-timepicker', el).val() == '')
+			$('.end-timepicker', el).val(get_hh_mm(true));
 		// sets the time in time picker if it is empty
-		if ($('.new-task-timepicker').val() == '')
-			$('.new-task-timepicker').val("12:00");
+		if ($('.new-task-timepicker', el).val() == '')
+			$('.new-task-timepicker', el).val("12:00");
 
 		// Update will highlight the date of in date picker
-		$("input.date").datepicker('update');
+		$("input.date", el).datepicker('update');
 
 	});
 
@@ -20776,10 +20781,10 @@ $(function()
 		
 		agile_type_ahead("event_relates_to_deals", el, deals_typeahead, false,null,null,"core/api/search/deals",false, true);
 
-		if ($('#updateActivityModal #allDay').is(':checked'))
+		if ($('#updateActivityModal #allDay', el).is(':checked'))
 		{
-			$('#update-event-time-1').closest('.control-group').hide();
-			$('#update-event-date-2').closest('.row').hide();
+			$('#update-event-time-1', el).closest('.control-group').hide();
+			$('#update-event-date-2', el).closest('.row').hide();
 		}
 
 		// Removes alert message of error related date and time.
@@ -20788,14 +20793,14 @@ $(function()
 		// Removes error class of input fields
 		$('#' + this.id).find('.error').removeClass('error');
 
-		$("input.date").datepicker('update');
+		$("input.date", el).datepicker('update');
 
 	});
 
 	/**
 	 * To avoid showing previous errors of the modal.
 	 */
-	$('#activityModal, #activityTaskModal').on('show.bs.modal', function(e)
+	$('#activityModal, #activityTaskModal, #updateActivityModal').on('show.bs.modal', function(e)
 	{
 		$(".event_discription").addClass("hide");
 		$("textarea#description").val('');
@@ -20951,6 +20956,9 @@ $(function()
 			$('.bootstrap-timepicker-hour').val(e.time.hours);
 			$('.bootstrap-timepicker-minute').val(e.time.minutes);
 		});
+
+		// activateSliderAndTimerToTaskModal();
+
 
 	});
 
@@ -21850,6 +21858,8 @@ $( document ).ready(function() {
 
 function activateSliderAndTimerToTaskModal(){
 
+	console.log("activateSliderAndTimerToTaskModal");
+	
 	$('.update-task-timepicker').timepicker({ defaultTime : get_hh_mm(true), showMeridian : false });
 	$('.update-task-timepicker').timepicker().on('show.timepicker', function(e)
 	{
@@ -21876,6 +21886,8 @@ function activateSliderAndTimerToTaskModal(){
 		$('.bootstrap-timepicker-hour').val(e.time.hours);
 		$('.bootstrap-timepicker-minute').val(e.time.minutes);
 	});
+
+	console.log("loadProgressSlider");
 
 	// Loads progress slider in add task / update modal.
 	loadProgressSlider($("#taskForm"));
@@ -25714,7 +25726,7 @@ function show_bulk_owner_change_page()
 
 	        $("body").off('fill_campaigns').on("fill_campaigns", function(event)
 			{
-				var optionsTemplate = "<option value='{{id}}'{{#if is_disabled}}disabled=disabled>{{name}} (disabled){{else}}>{{name}}{{/if}}</option>";
+				var optionsTemplate = "<option value='{{id}}'{{#if is_disabled}}disabled=disabled>{{name}} (Disabled){{else}}>{{name}}{{/if}}</option>";
  				fillSelect('campaignBulkSelect', '/core/api/workflows', 'workflow', 'no-callback ', optionsTemplate);
 			});
 
@@ -39181,6 +39193,8 @@ var Deal_Modal_Event_View = Base_Model_View.extend({
 
     	'click #opportunity-actions-delete' : 'opportunityDelete',
     	'click .deal-edit-note' : 'dealNoteEdit',
+    	'click .activity-delete': 'deleteActivity',
+
     	'click #dealshow-note' : 'dealShowNoteModal',
     	'click .deal-owner-list' : 'openDealOwnersList',
     	'click .deal-add-contact' : 'addDealContact',
@@ -39270,7 +39284,11 @@ var Deal_Modal_Event_View = Base_Model_View.extend({
 		deal_details_tab.load_deal_events();
 	},
 
-
+	deleteActivity: function(b) {
+        b.preventDefault();
+        Contact_Details_Tab_Actions.deleteActivity(b)
+    },
+    
 	showOwnerList: function(e)
 	{
 		e.preventDefault();
@@ -51867,7 +51885,7 @@ function fill_ordered_milestone(formId){
 				$.each(campaigns, function(index,camp){
 					//console.log(customfield);
 					if(camp.is_disabled){
- 						html += '<option value="'+camp.id+'" disabled = disabled>'+camp.name+' (disabled)</option>';
+ 						html += '<option value="'+camp.id+'" disabled = disabled>'+camp.name+' (Disabled)</option>';
  						return true;
  					} 
 
@@ -53196,9 +53214,6 @@ function createDealsNestedCollection(pipeline_id,milestones,currentTrack)
 	// Render it
 	$('#new-opportunity-list-paging').html(DEALS_LIST_COLLECTION.render(true).el);
 
-	pipeline_count = 0;
-	// Fetch tasks from DB for first task list
-	fetchForNextDealsList(milestones);
 }
 
 // Initialize nested collection
@@ -53240,6 +53255,15 @@ function initDealListCollection(milestones)
 // Append sub collection and model
 function dealAppend(base_model)
 {
+	milestonesCollectionView(base_model, this.el, function(){
+		dealsFetch(base_model);
+	});
+	
+}
+
+// Renders outer view of milestone view
+function milestonesCollectionView(base_model, ele, callback)
+{
 	var dealsListModel = new Base_List_View({ model : base_model, "view" : "inline", template : "opportunities-by-paging-model", tagName : 'div',
 		className : "milestone-column panel m-b-none  b-n r-n panel-default", id : base_model.get("heading").replace(/ +/g, '') });
 
@@ -53247,42 +53271,17 @@ function dealAppend(base_model)
 	var el = dealsListModel.render().el;
 
 	// Append model from main collection in UI
-	$('#opportunities-by-paging-model-list > div', this.el).append(el);
+	$('#opportunities-by-paging-model-list > div', ele).append(el);
+	return callback();
 }
 
-/*
- * Compare counter with length of criteria array and call function to Fetch
- * tasks from DB for next task list if available.
- */
-function fetchForNextDealsList(milestones)
-{
-	// is All task list are done?
-	if (deal_fetching)
-		return;
-
-	// Some task list are pending
-	if (pipeline_count < milestones.length)
-	{
-		// call fetch for next task list.
-		dealsFetch(pipeline_count, milestones);
-	}
-
-	// All task list are done.
-	if (pipeline_count >= milestones.length)
-		deal_fetching = true;
-}
 
 /**
  * Create sub collection, ad to model in main collection, fetch tasks from DB
  * for sub collection and update UI.
  */
-function dealsFetch(index, milestones)
+function dealsFetch(base_model)
 {
-	console.log("index: " + index);
-
-	// Get model from main collection
-	var base_model = DEALS_LIST_COLLECTION.collection.at(index);
-
 	if (!base_model)
 		return;
 
@@ -53327,8 +53326,7 @@ function dealsFetch(index, milestones)
 		// Counter to fetch next sub collection
 		pipeline_count++;
 		setup_deals_in_milestones('opportunities-by-paging-model-list');
-		// Fetch tasks from DB for next task list
-		fetchForNextDealsList(milestones);
+		
 	} });
 }
 
@@ -54759,7 +54757,7 @@ function populateDealSources(el, value){
 				.html(
 						"<div class='text-center v-middle opa-half' style='margin-top:"
 								+ topPos
-								+ "px'><img src='../img/ajax-loader-cursor.gif' style='width:12px;height:10px;opacity:0.5;' /></div>");
+								+ "px'><img src='../flatfull/img/ajax-loader-cursor.gif' style='width:12px;height:10px;opacity:0.5;' /></div>");
 		this
 				.fetchPortletsGraphData(
 						url,
@@ -54853,7 +54851,7 @@ function populateDealSources(el, value){
 				.html(
 						"<div class='text-center v-middle opa-half' style='margin-top:"
 								+ topPos
-								+ "px'><img src='../img/ajax-loader-cursor.gif' style='width:12px;height:10px;opacity:0.5;' /></div>");
+								+ "px'><img src='../flatfull/img/ajax-loader-cursor.gif' style='width:12px;height:10px;opacity:0.5;' /></div>");
 		this
 				.fetchPortletsGraphData(
 						url,
@@ -54966,7 +54964,7 @@ function populateDealSources(el, value){
 				.html(
 						"<div class='text-center v-middle opa-half' style='margin-top:"
 								+ topPos
-								+ "px'><img src='../img/ajax-loader-cursor.gif' style='width:12px;height:10px;opacity:0.5;' /></div>");
+								+ "px'><img src='../flatfull/img/ajax-loader-cursor.gif' style='width:12px;height:10px;opacity:0.5;' /></div>");
 		this
 				.fetchPortletsGraphData(
 						url,
@@ -55333,7 +55331,7 @@ function populateDealSources(el, value){
 				.html(
 						"<div class='text-center v-middle opa-half' style='margin-top:"
 								+ topPos
-								+ "px'><img src='../img/ajax-loader-cursor.gif' style='width:12px;height:10px;opacity:0.5;' /></div>");
+								+ "px'><img src='../flatfull/img/ajax-loader-cursor.gif' style='width:12px;height:10px;opacity:0.5;' /></div>");
 		this
 				.fetchPortletsGraphData(
 						url,
@@ -55420,7 +55418,7 @@ function populateDealSources(el, value){
 				.html(
 						"<div class='text-center v-middle opa-half' style='margin-top:"
 								+ topPos
-								+ "px'><img src='../img/ajax-loader-cursor.gif' style='width:12px;height:10px;opacity:0.5;' /></div>");
+								+ "px'><img src='../flatfull/img/ajax-loader-cursor.gif' style='width:12px;height:10px;opacity:0.5;' /></div>");
 		this
 				.fetchPortletsGraphData(
 						url,
@@ -55562,7 +55560,7 @@ function populateDealSources(el, value){
 				.html(
 						"<div class='text-center v-middle opa-half' style='margin-top:"
 								+ topPos
-								+ "px'><img src='../img/ajax-loader-cursor.gif' style='width:12px;height:10px;opacity:0.5;' /></div>");
+								+ "px'><img src='../flatfull/img/ajax-loader-cursor.gif' style='width:12px;height:10px;opacity:0.5;' /></div>");
 		this
 				.fetchPortletsGraphData(
 						url,
@@ -56268,8 +56266,12 @@ function populateDealSources(el, value){
 				emptyFlag = false;
 		});
 		if(categoryList.length==0 || emptyFlag){
+			if(selector == 'calls-chart-user'){
+				$('#'+selector).html('<div class="portlet-error-message" style="font-size: 14px;font-style: normal;padding-top: 50%">No Calls Found</div>');	
+			}else{
+				$('#'+selector).html('<div class="portlet-error-message">No Calls Found</div>');
+			}
 			
-			$('#'+selector).html('<div class="portlet-error-message">No Calls Found</div>');
 		}else{
 			var data = [];
 			$.each(categoryList,function(index,value){
@@ -56304,11 +56306,13 @@ function populateDealSources(el, value){
 		        },
 		        plotOptions: {
 		        	series: {
+
 		                borderWidth : 0
 		            },
 		            pie: {
+		            	size:'50%',
 		            	borderWidth: 0,
-		            	innerSize : '50%',
+		            	innerSize :'65%',
 		            	dataLabels: {
 		            		enabled: true,
 		            		useHTML: true,
@@ -56320,8 +56324,6 @@ function populateDealSources(el, value){
 		    	            },
 		            		/*format: '<b>{point.name}</b>: {point.percentage:.1f}',*/
 		                    distance: 30,
-		                    x: 2,
-		                    y: -10
 		                },
 		                showInLegend: false
 		            }
@@ -57205,7 +57207,7 @@ function initializePortletsListeners() {
 				// Saves new width and height in server
 				$.ajax({
 					type : 'POST',
-					url : '/core/api/portlets/saveOnboardingPrefs',
+					url : '/core/api/portlets/save-onboarding-prefs',
 					data : JSON.stringify(model.toJSON()),
 					contentType : "application/json; charset=utf-8",
 					dataType : 'json',
@@ -57290,7 +57292,6 @@ function initializePortletsListeners() {
 										.find('.row_position').text().trim();
 						App_Portlets.currentPortletName = 'Mini Calendar';
 
-						$("#updateActivityModal").html(getTemplate("update-activity-modal"));
 						var id = $(this).attr('id');
 						if (id && !isNaN(id)) {
 							var events_array = $(
@@ -57459,8 +57460,7 @@ function initializePortletsListeners() {
 								.trim();
 				App_Portlets.currentPortletName = 'Mini Calendar';
 				var start = new Date(parseInt($(this).attr('id')));
-				
-				$('#activityModal').getTemplate("new-event-modal").modal('show');
+				$('#activityModal').modal('show');
 				highlight_event();
 
 				// Set Date for Event
@@ -57617,7 +57617,6 @@ function initializePortletsListeners() {
 								hrefFlag = true;
 						});
 
-						$("#updateActivityModal").html(getTemplate("update-activity-modal"));
 						if (!hrefFlag) {
 
 							App_Portlets.currentPosition = ''
@@ -57631,6 +57630,8 @@ function initializePortletsListeners() {
 							if (isNaN(id))
 								return;
 
+							$("#updateActivityModal").html(getTemplate("update-activity-modal"));
+       
 							// Deserialize
 							deserializeForm(model.toJSON(),
 									$("#updateActivityForm"));
@@ -57809,24 +57810,24 @@ function initializeAddPortletsListeners() {
 						var image;
 						var placement = "right";
 						var image_url_json = {
-							"FilterBased" : "img/dashboard_images/My-contacts.png",
-							"EmailsOpened" : "img/dashboard_images/Email-opened.png",
-							"GrowthGraph" : "img/dashboard_images/Tag-Graph.png",
-							"PendingDeals" : "img/dashboard_images/Pending-Deals.png",
-							"DealsByMilestone" : "img/dashboard_images/Milestone.png",
-							"DealsFunnel" : "img/dashboard_images/Deals-Funnel.png",
-							"Agenda" : "img/dashboard_images/Events.png",
-							"TodayTasks" : "img/dashboard_images/Task.png",
-							"CallsPerPerson" : "img/dashboard_images/Calls.png",
-							"AgileCRMBlog" : "img/dashboard_images/Agile-Blog.png",
-							"TaskReport" : "img/dashboard_images/Task-report.png",
-							"StatsReport" : "img/dashboard_images/stats.png",
-							"Leaderboard" : "img/dashboard_images/Leaderboard.png",
-							"RevenueGraph" : "img/dashboard_images/Revenue-graph.png",
-							"AccountDetails" : "img/dashboard_images/account-information.png",
-							"MiniCalendar" : "img/dashboard_images/Mini-Calendar.jpg",
-							"UserActivities" : "img/dashboard_images/User-Activities.png",
-							"Campaignstats" : "img/dashboard_images/Campaign-stats.jpg"
+							"FilterBased" : "flatfull/img/dashboard_images/My-contacts.png",
+							"EmailsOpened" : "flatfull/img/dashboard_images/Email-opened.png",
+							"GrowthGraph" : "flatfull/img/dashboard_images/Tag-Graph.png",
+							"PendingDeals" : "flatfull/img/dashboard_images/Pending-Deals.png",
+							"DealsByMilestone" : "flatfull/img/dashboard_images/Milestone.png",
+							"DealsFunnel" : "flatfull/img/dashboard_images/Deals-Funnel.png",
+							"Agenda" : "flatfull/img/dashboard_images/Events.png",
+							"TodayTasks" : "flatfull/img/dashboard_images/Task.png",
+							"CallsPerPerson" : "flatfull/img/dashboard_images/Calls.png",
+							"AgileCRMBlog" : "flatfull/img/dashboard_images/Agile-Blog.png",
+							"TaskReport" : "flatfull/img/dashboard_images/Task-report.png",
+							"StatsReport" : "flatfull/img/dashboard_images/stats.png",
+							"Leaderboard" : "flatfull/img/dashboard_images/Leaderboard.png",
+							"RevenueGraph" : "flatfull/img/dashboard_images/Revenue-graph.png",
+							"AccountDetails" : "flatfull/img/dashboard_images/account-information.png",
+							"MiniCalendar" : "flatfull/img/dashboard_images/Mini-Calendar.jpg",
+							"UserActivities" : "flatfull/img/dashboard_images/User-Activities.png",
+							"Campaignstats" : "flatfull/img/dashboard_images/Campaign-stats.jpg"
 						};
 						var placements_json = {
 							"GrowthGraph" : "left",
@@ -57889,7 +57890,7 @@ function initializeAddPortletsListeners() {
 				}
 
 				var portlet = new BaseModel();
-				portlet.url = 'core/api/portlets/addPortlet';
+				portlet.url = 'core/api/portlets/add';
 				portlet.set({
 					"prefs" : JSON.stringify(json)
 				}, {
@@ -58145,7 +58146,7 @@ function set_up_portlets(el, portlets_el){
 						column_position : parseInt($(this).attr("data-col")), row_position : parseInt($(this).attr("data-row")) });
 				});
 				// Saves new width and height in server
-				$.ajax({ type : 'POST', url : '/core/api/portlets/widthAndHeight', data : JSON.stringify(models),
+				$.ajax({ type : 'POST', url : '/core/api/portlets/save-width-height', data : JSON.stringify(models),
 					contentType : "application/json; charset=utf-8", dataType : 'json' });
 
 			}
@@ -59584,7 +59585,7 @@ function append_activity(base_model) {
 		case "Filter Based": {
 			App_Portlets.filteredContacts[parseInt(pos)] = new Base_Collection_View(
 					{
-						url : '/core/api/portlets/portletContacts?filter='
+						url : '/core/api/portlets/contacts?filter='
 								+ base_model.get('settings').filter
 								+ '&sortKey=-created_time',
 						templateKey : "portlets-contacts",
@@ -59603,7 +59604,7 @@ function append_activity(base_model) {
 		case "Emails Opened": {
 			App_Portlets.emailsOpened[parseInt(pos)] = new Base_Collection_View(
 					{
-						url : '/core/api/portlets/portletEmailsOpened?duration='
+						url : '/core/api/portlets/emails-opened?duration='
 								+ base_model.get('settings').duration
 								+ '&start-date='
 								+ portlet_utility
@@ -59639,7 +59640,7 @@ function append_activity(base_model) {
 							+ row_position);
 			selector = 'emails-opened-pie-chart-' + column_position + '-'
 					+ row_position;
-			var url = '/core/api/portlets/portletEmailsOpenedPie?duration='
+			var url = '/core/api/portlets/emails-opened-pie-chart?duration='
 					+ base_model.get('settings').duration + '&start-date='
 					+ portlet_utility.getStartAndEndDatesOnDue(start_date_str)
 					+ '&end-date='
@@ -59652,7 +59653,7 @@ function append_activity(base_model) {
 		case "Pending Deals": {
 			App_Portlets.pendingDeals[parseInt(pos)] = new Base_Collection_View(
 					{
-						url : '/core/api/portlets/portletPendingDeals?deals='
+						url : '/core/api/portlets/pending-deals?deals='
 								+ base_model.get('settings').deals,
 						templateKey : 'portlets-opportunities',
 						sort_collection : false,
@@ -59671,7 +59672,7 @@ function append_activity(base_model) {
 		}
 		case "Deals Won": {
 			App_Portlets.dealsWon[parseInt(pos)] = new Base_Collection_View({
-				url : '/core/api/portlets/portletDealsWon?duration='
+				url : '/core/api/portlets/deals-won?duration='
 						+ base_model.get('settings').duration,
 				templateKey : 'portlets-opportunities',
 				individual_tag_name : 'tr',
@@ -59690,7 +59691,7 @@ function append_activity(base_model) {
 		case "Agenda": {
 			App_Portlets.todayEventsCollection[parseInt(pos)] = new Base_Collection_View(
 					{
-						url : '/core/api/portlets/portletAgenda?duration='
+						url : '/core/api/portlets/agenda?duration='
 								+ base_model.get('settings').duration
 								+ '&start_time='
 								+ portlet_utility
@@ -59719,7 +59720,7 @@ function append_activity(base_model) {
 		case "Today Tasks": {
 			App_Portlets.tasksCollection[parseInt(pos)] = new Base_Collection_View(
 					{
-						url : '/core/api/portlets/portletTodayTasks?duration='
+						url : '/core/api/portlets/today-tasks?duration='
 								+ base_model.get('settings').duration
 								+ '&start_time='
 								+ portlet_utility
@@ -59744,7 +59745,7 @@ function append_activity(base_model) {
 
 			App_Portlets.leaderboard[parseInt(pos)] = new Base_Model_View(
 					{
-						url : '/core/api/portlets/portletLeaderboard?duration='
+						url : '/core/api/portlets/leaderboard?duration='
 								+ base_model.get('settings').duration
 								+ '&start-date='
 								+ portlet_utility
@@ -59797,7 +59798,7 @@ function append_activity(base_model) {
 		}
 		case "Account Details": {
 			App_Portlets.accountInfo[parseInt(pos)] = new Base_Model_View({
-				url : '/core/api/portlets/portletAccount',
+				url : '/core/api/portlets/account-details',
 				template : "portlets-account-body-model",
 				postRenderCallback : function(p_el) {
 					portlet_utility.addWidgetToGridster(base_model);
@@ -59811,7 +59812,7 @@ function append_activity(base_model) {
 		}
 		case "User Activities": {
 			App_Portlets.activity[parseInt(pos)] = new Base_Collection_View({
-				url : '/core/api/portlets/portletCustomerActivity',
+				url : '/core/api/portlets/customer-activity',
 				sortKey : 'time',
 				descending : true,
 				templateKey : "portlets-activities-list-log",
@@ -59841,7 +59842,7 @@ function append_activity(base_model) {
 		}
 		case "Campaign stats": {
 			var emailsSentCount, emailsOpenedCount, emailsClickedCount, emailsUnsubscribed, that = portlet_ele;
-			var url = '/core/api/portlets/portletCampaignstats?duration='
+			var url = '/core/api/portlets/campaign-stats?duration='
 					+ base_model.get('settings').duration + '&start-date='
 					+ portlet_utility.getStartAndEndDatesOnDue(start_date_str)
 					+ '&end-date='
@@ -59856,7 +59857,7 @@ function append_activity(base_model) {
 							that
 									.find('#emails-sent-count')
 									.html(
-											"<img src='../img/ajax-loader-cursor.gif' style='width:12px;height:10px;opacity:0.5;' />");
+											"<img src='../flatfull/img/ajax-loader-cursor.gif' style='width:12px;height:10px;opacity:0.5;' />");
 					}, 1000);
 
 			portlet_graph_data_utility
@@ -59929,7 +59930,7 @@ function append_activity(base_model) {
 			break;
 		}
 		case "Deals By Milestone": {
-			var url = '/core/api/portlets/portletDealsByMilestone?deals='
+			var url = '/core/api/portlets/deals-by-milestone?deals='
 					+ base_model.get('settings').deals + '&track='
 					+ base_model.get('settings').track;
 			portlet_graph_data_utility.dealsByMilestoneGraphData(base_model,
@@ -59938,7 +59939,7 @@ function append_activity(base_model) {
 			break;
 		}
 		case "Closures Per Person": {
-			var url = '/core/api/portlets/portletClosuresPerPerson?due-date='
+			var url = '/core/api/portlets/deals-closed-per-person?due-date='
 					+ base_model.get('settings')["due-date"];
 			portlet_graph_data_utility.closuresPerPersonGraphData(base_model,
 					selector, url);
@@ -59946,7 +59947,7 @@ function append_activity(base_model) {
 			break;
 		}
 		case "Deals Funnel": {
-			var url = '/core/api/portlets/portletDealsFunnel?deals='
+			var url = '/core/api/portlets/deals-funnel?deals='
 					+ base_model.get('settings').deals + '&track='
 					+ base_model.get('settings').track;
 			portlet_graph_data_utility.dealsFunnelGraphData(base_model,
@@ -59955,7 +59956,7 @@ function append_activity(base_model) {
 			break;
 		}
 		case "Emails Sent": {
-			var url = '/core/api/portlets/portletEmailsSent?duration='
+			var url = '/core/api/portlets/emails-sent?duration='
 					+ base_model.get('settings').duration;
 			portlet_graph_data_utility.emailsSentGrapgData(base_model,
 					selector, url);
@@ -59963,7 +59964,7 @@ function append_activity(base_model) {
 			break;
 		}
 		case "Growth Graph": {
-			var url = '/core/api/portlets/portletGrowthGraph?tags='
+			var url = '/core/api/portlets/growth-graph?tags='
 					+ base_model.get('settings').tags
 					+ '&frequency='
 					+ base_model.get('settings').frequency
@@ -60002,7 +60003,7 @@ function append_activity(base_model) {
 			break;
 		}
 		case "Deals Assigned": {
-			var url = '/core/api/portlets/portletDealsAssigned?duration='
+			var url = '/core/api/portlets/deals-assigned?duration='
 					+ base_model.get('settings').duration;
 			portlet_graph_data_utility.dealsAssignedGraphData(base_model,
 					selector, url);
@@ -60014,7 +60015,7 @@ function append_activity(base_model) {
 				users = JSON
 						.stringify(base_model.get('settings')["calls-user-list"]);
 			}
-			var url = '/core/api/portlets/portletCallsPerPerson?duration='
+			var url = '/core/api/portlets/calls-per-person?duration='
 					+ base_model.get('settings').duration + '&start-date='
 					+ portlet_utility.getStartAndEndDatesOnDue(start_date_str)
 					+ '&end-date='
@@ -60036,7 +60037,7 @@ function append_activity(base_model) {
 				users = JSON
 						.stringify(base_model.get('settings')["task-report-user-list"]);
 			}
-			var url = '/core/api/portlets/portletTaskReport?group-by='
+			var url = '/core/api/portlets/task-report?group-by='
 					+ base_model.get('settings')["group-by"] + '&split-by='
 					+ base_model.get('settings')["split-by"] + '&start-date='
 					+ portlet_utility.getStartAndEndDatesOnDue(start_date_str)
@@ -60071,7 +60072,7 @@ function append_activity(base_model) {
 			portlet_ele = $('#ui-id-' + column_position + '-' + row_position,
 					el).find('.stats_report_portlet_body');
 			var that = portlet_ele;
-			var newContactsurl = '/core/api/portlets/portletStatsReport?reportType=newContacts&duration='
+			var newContactsurl = '/core/api/portlets/activity-overview-report?reportType=newContacts&duration='
 					+ base_model.get('settings').duration
 					+ '&start-date='
 					+ portlet_utility.getStartAndEndDatesOnDue(start_date_str)
@@ -60084,7 +60085,7 @@ function append_activity(base_model) {
 							that
 									.find('#new-contacts-count')
 									.html(
-											"<img src='../img/ajax-loader-cursor.gif' style='width:12px;height:10px;opacity:0.5;' />");
+											"<img src='../flatfull/img/ajax-loader-cursor.gif' style='width:12px;height:10px;opacity:0.5;' />");
 					}, 1000);
 			portlet_graph_data_utility
 					.fetchPortletsGraphData(
@@ -60099,7 +60100,7 @@ function append_activity(base_model) {
 										"New contacts");
 							});
 
-			var wonDealsurl = '/core/api/portlets/portletStatsReport?reportType=wonDeals&duration='
+			var wonDealsurl = '/core/api/portlets/activity-overview-report?reportType=wonDeals&duration='
 					+ base_model.get('settings').duration
 					+ '&start-date='
 					+ portlet_utility.getStartAndEndDatesOnDue(start_date_str)
@@ -60112,7 +60113,7 @@ function append_activity(base_model) {
 							that
 									.find('#won-deal-value')
 									.html(
-											"<img src='../img/ajax-loader-cursor.gif' style='width:12px;height:10px;opacity:0.5;' />");
+											"<img src='../flatfull/img/ajax-loader-cursor.gif' style='width:12px;height:10px;opacity:0.5;' />");
 					}, 1000);
 			portlet_graph_data_utility
 					.fetchPortletsGraphData(
@@ -60135,7 +60136,7 @@ function append_activity(base_model) {
 														+ " deals");
 							});
 
-			var newDealsurl = '/core/api/portlets/portletStatsReport?reportType=newDeals&duration='
+			var newDealsurl = '/core/api/portlets/activity-overview-report?reportType=newDeals&duration='
 					+ base_model.get('settings').duration
 					+ '&start-date='
 					+ portlet_utility.getStartAndEndDatesOnDue(start_date_str)
@@ -60148,7 +60149,7 @@ function append_activity(base_model) {
 							that
 									.find('#new-deal-value')
 									.html(
-											"<img src='../img/ajax-loader-cursor.gif' style='width:12px;height:10px;opacity:0.5;' />");
+											"<img src='../flatfull/img/ajax-loader-cursor.gif' style='width:12px;height:10px;opacity:0.5;' />");
 					}, 1000);
 			portlet_graph_data_utility
 					.fetchPortletsGraphData(
@@ -60171,7 +60172,7 @@ function append_activity(base_model) {
 														+ "");
 							});
 
-			var campaignEmailsSentsurl = '/core/api/portlets/portletStatsReport?reportType=campaignEmailsSent&duration='
+			var campaignEmailsSentsurl = '/core/api/portlets/activity-overview-report?reportType=campaignEmailsSent&duration='
 					+ base_model.get('settings').duration
 					+ '&start-date='
 					+ portlet_utility.getStartAndEndDatesOnDue(start_date_str)
@@ -60184,7 +60185,7 @@ function append_activity(base_model) {
 							that
 									.find('#emails-sent-count')
 									.html(
-											"<img src='../img/ajax-loader-cursor.gif' style='width:12px;height:10px;opacity:0.5;' />");
+											"<img src='../flatfull/img/ajax-loader-cursor.gif' style='width:12px;height:10px;opacity:0.5;' />");
 					}, 1000);
 			portlet_graph_data_utility
 					.fetchPortletsGraphData(
@@ -60376,7 +60377,7 @@ function append_activity(base_model) {
 					"portletsDealsByMilestoneSettingsModal");
 			elData = $('#portletsDealsByMilestoneSettingsModal');
 			var that = this;
-			var url = '/core/api/portlets/portletDealsByMilestone?deals='
+			var url = '/core/api/portlets/deals-by-milestone?deals='
 					+ base_model.get('settings').deals + '&track='
 					+ base_model.get('settings').track;
 			if (App_Portlets.track_length != undefined
@@ -60434,7 +60435,7 @@ function append_activity(base_model) {
 					"portletsDealsFunnelSettingsModal");
 			elData = $('#portletsDealsFunnelSettingsModal');
 			var that = this;
-			var url = '/core/api/portlets/portletDealsFunnel?deals='
+			var url = '/core/api/portlets/deals-funnel?deals='
 					+ base_model.get('settings').deals + '&track='
 					+ base_model.get('settings').track;
 			if (App_Portlets.track_length != undefined
@@ -67981,18 +67982,16 @@ function taskAppend(base_model)
 
 	// Append model from main collection in UI
 	$('#new-tasks-lists-model-list', this.el).append(el);
+	taskFetch(base_model);
 }
 
 /**
  * Create sub collection, ad to model in main collection, fetch tasks from DB
  * for sub collection and update UI.
  */
-function taskFetch(index)
+function taskFetch(base_model)
 {
-	console.log("index: " + index);
 
-	// Get model from main collection
-	var base_model = TASKS_LIST_COLLECTION.collection.at(index);
 
 	if (!base_model)
 		return;
@@ -68054,10 +68053,10 @@ function taskFetch(index)
 		setup_sortable_tasks();
 
 		// Counter to fetch next sub collection
-		FETCH_COUNTER++;
+		//FETCH_COUNTER++;
 
 		// Fetch tasks from DB for next task list
-		fetchForNextTaskList();
+		//fetchForNextTaskList();
 	} });
 }
 /*Get user's name and id to add in GROUPING_MAP for owner of task, 

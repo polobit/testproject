@@ -8,6 +8,7 @@ var PortletsRouter = Backbone.Router
 				"add-dashlet" : "adddashlet"
 			},
 
+
 			adddashlet : function() {
 
 				// Back to dashboard if gridster not initalized
@@ -16,8 +17,9 @@ var PortletsRouter = Backbone.Router
 						trigger : true
 					});
 					return;
-				}
+				} 
 
+					
 				$('#content').html("<div id='portlets-add-listener'></div>");
 
 				// Load portlets
@@ -27,6 +29,7 @@ var PortletsRouter = Backbone.Router
 							templateKey : "portlets-add",
 							sort_collection : false,
 							individual_tag_name : 'div',
+
 							postRenderCallback : function(el) {
 
 								// Hide activity/Deals/tasks tab if no deals
@@ -134,6 +137,7 @@ function deletePortlet(el) {
 						model.get("settings").duration, function(duration) {
 							return duration;
 						}) + "?";
+
 
 	$modal.find(".modal-body").html(deleteWarnHTML);
 }

@@ -174,6 +174,7 @@ var Workflow_Model_Events = Base_Model_View.extend({
                         $('#designer-tour').addClass("blur").removeClass("anti-blur");;
                         window.frames[0].$('#paintarea').addClass("disable-iframe").removeClass("enable-iframe");
                         window.frames[0].$('#paintarea .nodeItem table>tbody').addClass("disable-iframe").removeClass("enable-iframe");
+                        show_campaign_save("Campaign has been disabled successfully.","red");
                     } else {
                         disabled.attr("data", false);
                         disabled.find('i').toggleClass('fa-unlock').toggleClass('fa-lock');
@@ -183,7 +184,8 @@ var Workflow_Model_Events = Base_Model_View.extend({
                         window.frames[0].$('#toolbartabs').removeClass("disable-iframe");
                        // $('#designer-tour').css("pointer-events","none");
                         window.frames[0].$('#paintarea .nodeItem table>tbody').addClass("enable-iframe").removeClass("disable-iframe");
-                        
+                        show_campaign_save("Campaign has been enabled successfully.");
+
                     }
                 }
 
@@ -203,10 +205,21 @@ var Workflow_Model_Events = Base_Model_View.extend({
             
             error: function(jqXHR, status, errorThrown){ 
               enable_save_button($clicked_button);
+
+              console.log(status);
+                    // Show cause of error in saving
+                    $save_info = $('<div style="display:inline-block"><small><p style="color:#B94A48; font-size:14px"><i>'
+                            + status.responseText
+                            + '</i></p></small></div>');
+
+                    // Appends error info to form actions
+                    // block.
+                    $("#workflow-msg").html(
+                            $save_info).show();
               //var json = JSON.parse(status.responseText);
               //workflow_alerts(json["title"], json["message"],"workflow-alert-modal");
               // shows Exception message
-              alert(status.responseText);
+              //alert(status.responseText);
                 }
             });        
             
@@ -442,12 +455,19 @@ function fill_logs_slate(id, type)
 
 }
 
-function show_campaign_save()
+function show_campaign_save(message,color)
 {
 	// Campaign save message
-	var $save_info = '<span style="color: green;">Campaign saved.</span>';
+    var save_info;
+    if(message)
+        save_info = '<span style="color: green;">'+message+'</span>';
+    else
+	   save_info = '<span style="color: green;">Campaign saved.</span>';
 
-	$("#workflow-msg").html($save_info).show().fadeOut(3000);
+    if(color)
+        save_info = $(save_info).css("color", color);
+
+	$("#workflow-msg").html(save_info).show().fadeOut(3000);
 }
 
 function is_start_active(designerJSON){

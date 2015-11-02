@@ -11,7 +11,7 @@ function get_allowed_domains()
 
 function put_allowed_domains(allowed_domains)
 {
-	$.ajax({ url : "/core/api/api-key/allowed-domains?allowed_domains=" + encodeURIComponent(allowed_domains), method : "PUT", async : true,
+	$.ajax({ url : "/core/api/api-key/allowed-domains?allowed_domains=" + encodeURIComponent(allowed_domains), method : "PUT",
 		success : function(data)
 		{
 			$("#allowed_domains_list").empty();

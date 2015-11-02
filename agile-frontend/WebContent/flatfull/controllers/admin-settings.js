@@ -610,9 +610,23 @@ var AdminSettingsRouter = Backbone.Router.extend({
 
 			$('#content').html($(template_ui));	
 
-			that.integrations = new Base_Collection_View({ url : 'core/api/widgets/integrations', templateKey : 'admin-settings-web-to-lead',
-			postRenderCallback : function()
+			that.integrations = new Base_Collection_View({ url : 'core/api/widgets/integrations', templateKey : 'admin-settings-web-to-lead-new',
+			postRenderCallback : function(el)
 			{
+				var integrationsTab = localStorage.getItem("integrations_tab");
+				if(!integrationsTab || integrationsTab == null) {
+					if(islocalStorageHasSpace())
+						localStorage.setItem('integrations_tab', "web-to-lead-tab");
+					integrationsTab = "web-to-lead-tab";
+				}
+				$('#admin-prefs-tabs-content a[href="#'+integrationsTab+'"]').tab('show');
+				$("#admin-prefs-tabs-content .tab-container ul li").off("click");
+				$("#admin-prefs-tabs-content").on("click",".tab-container ul li",function(){
+					var temp = $(this).find("a").attr("href").split("#");
+					if(islocalStorageHasSpace())
+						localStorage.setItem('integrations_tab', temp[1]);
+				});
+
 			} });
 
 			that.integrations.collection.fetch();
@@ -676,118 +690,124 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			if(!template_ui)
 				  return;
 			$('#content').html($(template_ui));	
-
-			// On Reload, navigate to integrations
-			if (!that.integrations || that.integrations.collection == undefined)
-			{
-				that.navigate("integrations", { trigger : true });
-				return;
-			}
-
-			var value = 'SEND_GRID';
-
-			if (id == 'mandrill')
-				value = 'MANDRILL';
-			else if (id == 'ses')
-                value = 'SES';
-
-			var emailGateway;
-			$.each(that.integrations.collection.where({name:"EmailGateway"}),function(key,value){
-			
-				emailGateway = JSON.parse(value.attributes.prefs);
-			
-			});
-			
-			// Allow only one Email gateway configured
-			if(emailGateway && emailGateway["email_api"])//check if email gateway exist
-			{
-				if(emailGateway["email_api"].toUpperCase() != value)//checks if the current email gateway is the same as the clicked one
+			getTemplate("web-to-lead-settings", {}, undefined, function(template_ui1){
+				if(!template_ui1)
+					return;
+				$('#admin-prefs-tabs-content').html($(template_ui1));
+				var integrationsTab = localStorage.getItem("integrations_tab");
+				$("#admin-prefs-tabs-content").find('a[href="#'+integrationsTab+'"]').closest("li").addClass("active");	
+				// On Reload, navigate to integrations
+				if (!that.integrations || that.integrations.collection == undefined)
 				{
-				modalAlert("sms-integration-alert-modal","You have a Email Gateway already configured. Please disable that to configure a new one.","Email Gateway Configured");
-				that.navigate("integrations", { trigger : true });
-				return;	
+					that.navigate("integrations", { trigger : true });
+					return;
 				}
-			}	
 
-			// To show template according to api. Note: Widget and EmailGateway model is different
-			if(!emailGateway)
-				emailGateway = {"email_api":value, "api_user": "", "api_key":""}; 
-					
-			that.email_gateway = new Base_Model_View({ 
-				data : emailGateway,
-				url : 'core/api/email-gateway',
-				template : 'settings-email-gateway', postRenderCallback : function(el)
+				var value = 'SEND_GRID';
+
+				if (id == 'mandrill')
+					value = 'MANDRILL';
+				else if (id == 'ses')
+	                value = 'SES';
+
+				var emailGateway;
+				$.each(that.integrations.collection.where({name:"EmailGateway"}),function(key,value){
+				
+					emailGateway = JSON.parse(value.attributes.prefs);
+				
+				});
+				
+				// Allow only one Email gateway configured
+				if(emailGateway && emailGateway["email_api"])//check if email gateway exist
 				{
-					if(id=="mandrill"){
-						$("#integrations-image",el).attr("src","img/crm-plugins/mandrill_logo.png");
-					}
-					
-					if(id=="sendgrid"){
-						$("#integrations-image",el).attr("src","img/crm-plugins/sendgrid_logo.png");
-					}
-
-					if(id=="ses"){
-						$("#integrations-image",el).attr("src","img/crm-plugins/ses_logo.png");
-				    }
-					
-				}, saveCallback : function()
-				{
-					$('.ses-success-msg').show();
-					
-					// On saved, navigate to integrations
-					Backbone.history.navigate("integrations", { trigger : true });
-
-					if(value == 'SES')
- 						return;
-
-					data = App_Admin_Settings.email_gateway.model.toJSON();
-
-					// Add webhook
-					$.getJSON("core/api/email-gateway/add-webhook?api_user="+data.api_user+"&api_key=" + data.api_key + "&type=" + data.email_api, function(data)
+					if(emailGateway["email_api"].toUpperCase() != value)//checks if the current email gateway is the same as the clicked one
 					{
-						console.log(data);
-					});
-				},
-				errorCallback : function(response)
-				{
-					var $save = $('.save', '#email-gateway-integration-form');
+					modalAlert("sms-integration-alert-modal","You have a Email Gateway already configured. Please disable that to configure a new one.","Email Gateway Configured");
+					that.navigate("integrations", { trigger : true });
+					return;	
+					}
+				}	
 
-					disable_save_button($save);
+				// To show template according to api. Note: Widget and EmailGateway model is different
+				if(!emailGateway)
+					emailGateway = {"email_api":value, "api_user": "", "api_key":""}; 
+						
+				that.email_gateway = new Base_Model_View({ 
+					data : emailGateway,
+					url : 'core/api/email-gateway',
+					template : 'settings-email-gateway', postRenderCallback : function(el)
+					{
+						initializeIntegrationsTabListeners("integrations_tab", "integrations");
+						if(id=="mandrill"){
+							$("#integrations-image",el).attr("src","img/crm-plugins/mandrill_logo.png");
+						}
+						
+						if(id=="sendgrid"){
+							$("#integrations-image",el).attr("src","img/crm-plugins/sendgrid_logo.png");
+						}
 
-					var msg = response.responseText;
+						if(id=="ses"){
+							$("#integrations-image",el).attr("src","img/crm-plugins/ses_logo.png");
+					    }
+						
+					}, saveCallback : function()
+					{
+						$('.ses-success-msg').show();
+						
+						// On saved, navigate to integrations
+						Backbone.history.navigate("integrations", { trigger : true });
 
-					if(msg.indexOf('SignatureDoesNotMatch') != -1)
-                        msg = msg.replace('SignatureDoesNotMatch', 'Signature Mismatch');
+						if(value == 'SES')
+	 						return;
 
-                    if(msg.indexOf('InvalidClientTokenId') != -1)
-                    	msg = msg.replace('InvalidClientTokenId', 'Invalid Access Key');
+						data = App_Admin_Settings.email_gateway.model.toJSON();
 
-					// Show cause of error in saving
-					var $save_info = $('<div style="display:inline-block"><small><p style="color:#B94A48; font-size:14px"><i>'
-												+ msg
-												+ '</i></p></small></div>');
-
-					// Appends error info to form actions
-					// block.
-					$save.closest(".form-actions", this.el).append(
-							$save_info);
-
-					// Hides the error message after 3
-					// seconds
-					if(response.status != 406)
-						$save_info.show().delay(3000).hide(1, function(){
-
-							enable_save_button($save);
+						// Add webhook
+						$.getJSON("core/api/email-gateway/add-webhook?api_user="+data.api_user+"&api_key=" + data.api_key + "&type=" + data.email_api, function(data)
+						{
+							console.log(data);
 						});
-				}
+					},
+					errorCallback : function(response)
+					{
+						var $save = $('.save', '#email-gateway-integration-form');
 
-			});
+						disable_save_button($save);
 
-			$('#content').find('#admin-prefs-tabs-content').html(that.email_gateway.render().el);
-			$('#content').find('.integrations-tab').addClass('select');
-			$(".active").removeClass("active");
+						var msg = response.responseText;
 
-		}, "#content");
+						if(msg.indexOf('SignatureDoesNotMatch') != -1)
+	                        msg = msg.replace('SignatureDoesNotMatch', 'Signature Mismatch');
+
+	                    if(msg.indexOf('InvalidClientTokenId') != -1)
+	                    	msg = msg.replace('InvalidClientTokenId', 'Invalid Access Key');
+
+						// Show cause of error in saving
+						var $save_info = $('<div style="display:inline-block"><small><p style="color:#B94A48; font-size:14px"><i>'
+													+ msg
+													+ '</i></p></small></div>');
+
+						// Appends error info to form actions
+						// block.
+						$save.closest(".form-actions", this.el).append(
+								$save_info);
+
+						// Hides the error message after 3
+						// seconds
+						if(response.status != 406)
+							$save_info.show().delay(3000).hide(1, function(){
+
+								enable_save_button($save);
+							});
+					}
+
+				});
+
+				$('#content').find('#admin-settings-integrations-tab-content').html(that.email_gateway.render().el);
+				$('#content').find('.integrations-tab').addClass('select');
+				//$(".active").removeClass("active");
+			}, "#admin-settings-integrations-tab-content");
+		}, null);
 
 		
 	},
@@ -800,98 +820,104 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			if(!template_ui)
 				  return;
 			$('#content').html($(template_ui));	
+			getTemplate("web-to-lead-settings", {}, undefined, function(template_ui1){
+				if(!template_ui1)
+					return;
+				$('#admin-prefs-tabs-content').html($(template_ui1));
+				var integrationsTab = localStorage.getItem("integrations_tab");
+				$("#admin-prefs-tabs-content").find('a[href="#'+integrationsTab+'"]').closest("li").addClass("active");
 
-			// On Reload, navigate to integrations
-			if (!that.integrations || that.integrations.collection == undefined)
-			{
-				that.navigate("integrations", { trigger : true });
-				return;
-			}
-
-			var value, accountID;
-			if (id == "plivo")
-			{
-				value = 'PLIVO';
-				accountID = "account_id";
-			}
-			if (id == "twilio")
-			{
-				value = 'TWILIO';
-				accountID = "account_sid";
-			}
-
-			var smsGateway;
-			$.each(that.integrations.collection.models, function(key, value)
-			{
-				var prefJSON = JSON.parse(value.attributes.prefs);
-				if (prefJSON["sms_api"])
-					smsGateway = prefJSON["sms_api"];
-			});
-
-			// allow one sms gateway configured at a time
-			if (smsGateway != undefined)// check if sms gateway exist
-			{
-				if (smsGateway.toUpperCase() != value)// checks if the current sms
-				// gateway is the same as
-				// the clicked one
+				// On Reload, navigate to integrations
+				if (!that.integrations || that.integrations.collection == undefined)
 				{
-					modalAlert("sms-integration-alert-modal", "You have a SMS Gateway already configured. Please disable that to configure a new one.",
-							"SMS Gateway Configured");
 					that.navigate("integrations", { trigger : true });
 					return;
 				}
-			}
 
-			view = new Base_Model_View({
-				model : App_Admin_Settings.integrations.collection.where({ name : "SMS-Gateway" })[0],
-				url : 'core/api/sms-gateway',
-				template : 'settings-sms-gateway',
-				prePersist : function(model)
+				var value, accountID;
+				if (id == "plivo")
 				{
-					if (id == "plivo")
-						var prefJSON = { account_id : model.attributes.account_id, auth_token : model.attributes.auth_token, endpoint : model.attributes.endpoint,
-							sms_api : value };
-					if (id == "twilio")
-						var prefJSON = { account_sid : model.attributes.account_sid, auth_token : model.attributes.auth_token,
-							endpoint : model.attributes.endpoint, sms_api : value };
-					model.set({ prefs : JSON.stringify(prefJSON) }, { silent : true });
-				}, postRenderCallback : function(el)
+					value = 'PLIVO';
+					accountID = "account_id";
+				}
+				if (id == "twilio")
 				{
+					value = 'TWILIO';
+					accountID = "account_sid";
+				}
 
-					if (id == "plivo")
+				var smsGateway;
+				$.each(that.integrations.collection.models, function(key, value)
+				{
+					var prefJSON = JSON.parse(value.attributes.prefs);
+					if (prefJSON["sms_api"])
+						smsGateway = prefJSON["sms_api"];
+				});
+
+				// allow one sms gateway configured at a time
+				if (smsGateway != undefined)// check if sms gateway exist
+				{
+					if (smsGateway.toUpperCase() != value)// checks if the current sms
+					// gateway is the same as
+					// the clicked one
 					{
-						$("#integrations-image", el).attr("src", "/img/plugins/plivo.png");
-						$("#accoundID", el).attr("name", "account_id");
-						$("#accoundID", el).attr("placeholder", "Auth ID");
-						$("#integrations-label", el).text("You need a Paid Plivo account to be able to send SMS");
+						modalAlert("sms-integration-alert-modal", "You have a SMS Gateway already configured. Please disable that to configure a new one.",
+								"SMS Gateway Configured");
+						that.navigate("integrations", { trigger : true });
+						return;
 					}
-					if (id == "twilio")
+				}
+
+				view = new Base_Model_View({
+					model : App_Admin_Settings.integrations.collection.where({ name : "SMS-Gateway" })[0],
+					url : 'core/api/sms-gateway',
+					template : 'settings-sms-gateway',
+					prePersist : function(model)
 					{
-						$("#integrations-image", el).attr("src", "/img/plugins/twilio.png");
-						$("#accoundID", el).attr("name", "account_sid");
-						$("#accoundID", el).attr("placeholder", "Account SID");
-						$("#integrations-label", el).text("Please provide your account details");
-					}
-				}, saveCallback : function(data)
-				{
-					// On saved, navigate to integrations
-					Backbone.history.navigate("integrations", { trigger : true });
-				}, errorCallback : function(data)
-				{
-					if ($("#sms-gateway-error").is(":visible"))
-						$("#sms-gateway-error").remove();
+						if (id == "plivo")
+							var prefJSON = { account_id : model.attributes.account_id, auth_token : model.attributes.auth_token, endpoint : model.attributes.endpoint,
+								sms_api : value };
+						if (id == "twilio")
+							var prefJSON = { account_sid : model.attributes.account_sid, auth_token : model.attributes.auth_token,
+								endpoint : model.attributes.endpoint, sms_api : value };
+						model.set({ prefs : JSON.stringify(prefJSON) }, { silent : true });
+					}, postRenderCallback : function(el)
+					{
+						initializeIntegrationsTabListeners("integrations_tab", "integrations");
+						if (id == "plivo")
+						{
+							$("#integrations-image", el).attr("src", "/img/plugins/plivo.png");
+							$("#accoundID", el).attr("name", "account_id");
+							$("#accoundID", el).attr("placeholder", "Auth ID");
+							$("#integrations-label", el).text("You need a Paid Plivo account to be able to send SMS");
+						}
+						if (id == "twilio")
+						{
+							$("#integrations-image", el).attr("src", "/img/plugins/twilio.png");
+							$("#accoundID", el).attr("name", "account_sid");
+							$("#accoundID", el).attr("placeholder", "Account SID");
+							$("#integrations-label", el).text("Please provide your account details");
+						}
+					}, saveCallback : function(data)
+					{
+						// On saved, navigate to integrations
+						Backbone.history.navigate("integrations", { trigger : true });
+					}, errorCallback : function(data)
+					{
+						if ($("#sms-gateway-error").is(":visible"))
+							$("#sms-gateway-error").remove();
 
-					$responceText = "<div style='color:#B94A48; font-size:14px' id='sms-gateway-error'><i>" + data.responseText + "</i></div>";
-					$("#sms-integration-error", that.el).append($responceText);
-				} });
+						$responceText = "<div style='color:#B94A48; font-size:14px' id='sms-gateway-error'><i>" + data.responseText + "</i></div>";
+						$("#sms-integration-error", that.el).append($responceText);
+					} });
 
-			$('#content').find('#admin-prefs-tabs-content').html(view.render().el);
-			$('#content').find('#AdminPrefsTab .select').removeClass('select');
-			$('#content').find('.integrations-tab').addClass('select');
-			$(".active").removeClass("active");
+				$('#content').find('#admin-settings-integrations-tab-content').html(view.render().el);
+				$('#content').find('#AdminPrefsTab .select').removeClass('select');
+				$('#content').find('.integrations-tab').addClass('select');
+				//$(".active").removeClass("active");
 
-
-		}, "#content");
+			}, "#admin-settings-integrations-tab-content");
+		}, null);
 	},
 	
 	/**
