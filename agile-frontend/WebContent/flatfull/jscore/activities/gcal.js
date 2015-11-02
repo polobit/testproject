@@ -9,13 +9,18 @@
 
 function loadUserEventsfromGoogle(start, end, callback){
 
-		load_events_from_google(function(data)
+		var isConfigured = load_events_from_google(function(data)
 						{
 							if (!data)
+							{
 								return;
+							}
 
 							return agile_transform_options(data, start, end, callback);
 						});
+
+		if(!isConfigured)
+			callback([]);
 }
 
 function isDefined(x)

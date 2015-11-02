@@ -45,7 +45,7 @@ function load_events_from_google(callback)
 				if(inArray >= 0){
 					//continue
 				}else{
-					return
+					return;
 				}
 			}
 			else{
@@ -80,8 +80,8 @@ function load_events_from_google(callback)
 		if (prefs.expires_at - (2 * 60 * 1000) >= new Date().getTime())
 		{
 			// Returns token to the callback accoring to specification of gcal
-			get_google_calendar_event_source(prefs, callback);
-			return;
+			return get_google_calendar_event_source(prefs, callback);
+			
 		}
 
 		// Erases cookie if token is expired and sends request to backend to
@@ -99,7 +99,7 @@ function load_events_from_google(callback)
 
 		// Creates cookie
 		createCookie(google_calendar_cookie_name, JSON.stringify(prefs));
-		get_google_calendar_event_source(prefs, callback);
+		return get_google_calendar_event_source(prefs, callback);
 	});
 }
 
@@ -118,6 +118,7 @@ function get_google_calendar_event_source(data, callback)
 
 	if (callback && typeof (callback) === "function")
 		callback({ token : data.access_token, dataType : 'agile-gcal', className : "agile-gcal" });
+	return true;
 }
 
 /**
@@ -266,6 +267,7 @@ function showCalendar(users)
 									events : loadUserEventsfromGoogle,
 									dataType : 'agile-gcal'
 								},
+								
 							
 						],
 						header : { left : 'prev', center : 'title', right : 'next' },
