@@ -256,8 +256,11 @@ var TicketsUtilRouter = Backbone.Router.extend({
 				postRenderCallback : function(el) {
 
 						setTimeout(function(){
+
+							var $ele  = $('td[default_group]').closest('tr').find('.tbody_check');
+							
 							//Disabling default group checkbox to avoid deleting
-							$('td[default_group]').closest('tr').find('.tbody_check').attr('disabled', true);
+							$ele.attr('disabled', true);
 						}, 1000);
 					}
 				});

@@ -1,7 +1,15 @@
 <script id="ticket-canned-response-collection-template" type="text/html">
 {{#unless this.length}}
-    <div class="col-md-12 col-sm-12">
-        <div id="slate"></div>
+    <div class="text-center padder-v">
+        <h4 class="m-t-none m-b-xs">You don&#39;t have any canned responses</h4>
+        <div class="m-b-xs">
+            Create frequently type messages as canned responses. Choose the required canned response when sending reply to without typing the same message again.
+        </div>
+        <div>
+            <a href="#add-canned-response" class="btn btn-sm btn-default blue btn-slate-action m-t-xs">
+                Create Canned Response
+            </a>
+        </div>
     </div>
 {{/unless}}
 {{#if this.length}}

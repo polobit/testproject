@@ -1,16 +1,14 @@
 <script id="ticket-filters-collection-template" type="text/html">
 {{#unless this.length}}
-    <div class="col-md-12 col-sm-12">
-        <div class="text-center padder-v">
-            <h4 class="m-t-none m-b-xs">You don&#39;t have any filters</h4>
-            <div class="m-b-xs">
-                Configure your help desk system to answer customer queries from your Agile Dashboard.
-            </div>
-            <div>
-                <a href="#add-ticket-filter" class="btn btn-sm btn-default blue btn-slate-action m-t-xs">
-                    Create Filter
-                </a>
-            </div>
+    <div class="text-center padder-v">
+        <h4 class="m-t-none m-b-xs">You don&#39;t have any filters</h4>
+        <div class="m-b-xs">
+            Configure your help desk system to answer customer queries from your Agile Dashboard.
+        </div>
+        <div>
+            <a href="#add-ticket-filter" class="btn btn-sm btn-default blue btn-slate-action m-t-xs">
+                Create Filter
+            </a>
         </div>
     </div>
 {{/unless}}
