@@ -33,9 +33,51 @@ var Contacts_Events_Collection_View = Base_Collection_View.extend({
     	'click .company_static_filter' : 'bulkActionCompaniesStaticFilter',
     	'click #comp-sort-by-created_time-desc' : 'bulkActionCompaniesSortonTimeDesc',
     	'click #comp-sort-by-created_time-asc' : 'bulkActionCompaniesSortonTimeAsec',
+    	'click #contact-actions-grid-delete' : 'contactActionsGridDelete',
     	
     },
 
+    
+	contactActionsGridDelete: function(e){
+		
+		e.preventDefault();
+		var contact_id=$(e.currentTarget).attr('con_id');
+    	var model=App_Contacts.contactsListView.collection.get(contact_id);
+		$('#deleteGridContactModal').modal('show');
+
+		$('#deleteGridContactModal').on("shown.bs.modal", function(){
+
+				// If Yes clicked
+		   $('#deleteGridContactModal').on('click', '#delete_grid_contact_yes', function(e) {
+				e.preventDefault();
+				// Delete Contact.
+				$.ajax({
+    					url: 'core/api/contacts/' + contact_id,
+       					type: 'DELETE',
+       					success: function()
+       					{
+       						$('#deleteGridContactModal').modal('hide');
+       						App_Contacts.contactsListView.collection.remove(model);
+       						if(App_Contacts.contact_custom_view)
+       						App_Contacts.contact_custom_view.collection.remove(model);
+       						CONTACTS_HARD_RELOAD=true;
+       						App_Contacts.contacts();
+       					}
+       				});
+			});
+
+
+		   $('#deleteGridContactModal').on('click', '#delete_grid_contact_no', function(e) {
+				e.preventDefault();
+				if($(this).attr('disabled'))
+			   	     return;
+				$('#deleteGridContactModal').modal('hide');
+			});
+
+		});
+
+    		
+	},
 	/*
 	 * If default filter is selected, removes filter cookies an load contacts
 	 * with out any query condition
@@ -1089,7 +1131,7 @@ function get_contacts_bulk_ids()
 			// If element is checked add store it's id in an array
 			if ($(element).is(':checked'))
 			{
-				id_array.push($(element).parent('div').attr('id'));
+				id_array.push($(element).parent().parent().parent('div').attr('id'));
 			}
 		});
 
