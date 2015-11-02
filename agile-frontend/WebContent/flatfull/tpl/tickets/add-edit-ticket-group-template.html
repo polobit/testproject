@@ -14,8 +14,14 @@
 					{{#if group_email}}
 						<div class="control-group form-group">
 							<label class="control-label col-sm-3">Forwarding Email</label>
-							<div class="controls col-sm-4">
-								<input type="text" class="form-control" value="{{group_email}}" READONLY>
+							<div class="controls col-sm-5">
+								<div class="well bg-transparent m-b-none p-sm">
+						    		<span id="source-{{id}}">{{group_email}}</span>
+									<button id="grp-{{id}}" class="btn btn-xs btn-primary grp-btn-cpy-email" data-original-title="Copy to Cliboard" data-toggle="tooltip" 
+										data-placement="top">
+										Copy
+									</button>
+								</div>
 							</div>
 						</div>
 					{{/if}}	

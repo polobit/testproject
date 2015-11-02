@@ -1,0 +1,17 @@
+@CHARSET "ISO-8859-1";
+
+.bg-c-58666e{
+	color: #58666e !important;
+}
+
+.grp-btn-cpy-email{
+	position: absolute;
+    right: 16px;
+    top: 1px;
+    border-bottom-right-radius: 0 !important;
+    border-top-left-radius: 0 !important;
+}
+
+.cursor-default{
+	cursor: default !important;
+}

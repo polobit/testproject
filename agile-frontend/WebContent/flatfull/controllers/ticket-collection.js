@@ -253,14 +253,30 @@ var TicketsUtilRouter = Backbone.Router.extend({
 				url : '/core/api/tickets/groups',
 				templateKey : "ticket-groups",
 				individual_tag_name : 'tr',
-				postRenderCallback : function(el) {
+				postRenderCallback : function(el, collection) {
+
+						head.js(LIB_PATH + '../lib/zeroclipboard/ZeroClipboard.js', function()
+						{
+							$('[data-toggle="tooltip"]').tooltip();
+
+							$('[data-toggle="popover"]').popover();
+
+							var array = collection.toJSON();
+							for(var i=0; i< array.length; i++){
+
+								var model = array[i];
+								initZeroClipboard(('grp-' + model.id), ('source-' + model.id));
+							}
+						});	
 
 						setTimeout(function(){
 
 							var $ele  = $('td[default_group]').closest('tr').find('.tbody_check');
 							
 							//Disabling default group checkbox to avoid deleting
-							$ele.attr('disabled', true);
+							$ele.attr('disabled', true).removeClass('tbody_check');
+							$ele.closest('label').addClass('cursor-default');
+							
 						}, 1000);
 					}
 				});
@@ -347,7 +363,7 @@ var TicketsUtilRouter = Backbone.Router.extend({
 					},
 					url : "/core/api/tickets/groups",
 					postRenderCallback : function(el, data) {
-
+						
 						App_Ticket_Module.renderUsersCollection($('#users-collection', el), function(){
 
 							var agents_keys = data.agents_keys;
@@ -355,6 +371,12 @@ var TicketsUtilRouter = Backbone.Router.extend({
 							for(var i=0; i < agents_keys.length; i++){
 								$("input[data='"+ agents_keys[i] +"']").attr('checked', 'checked');
 							}
+
+							head.js(LIB_PATH + '../lib/zeroclipboard/ZeroClipboard.js', function()
+							{	
+								$('[data-toggle="tooltip"]').tooltip();
+								initZeroClipboard(('grp-' + data.id), ('source-' + data.id));
+							});
 						});
 					}
 				});

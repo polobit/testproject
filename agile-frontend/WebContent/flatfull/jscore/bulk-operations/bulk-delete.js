@@ -320,6 +320,25 @@ function bulk_delete_operation(url, id_array, index_array, table, is_grid_view, 
 			
 			$('.thead_check').attr("checked", false);
 			
+			switch(url){
+				case 'core/api/tickets/groups/bulk':{
+
+					if(id_array.length == App_Ticket_Module.groupsCollection.collection.length)
+						App_Ticket_Module.ticketGroups();
+					break;
+				}
+				case 'core/api/tickets/canned-messages/bulk':{
+					if(id_array.length == App_Ticket_Module.cannedResponseCollection.collection.length)
+						App_Ticket_Module.cannedResponses();
+					break;
+				}
+				case 'core/api/tickets/filters/bulk':{
+					if(id_array.length == App_Ticket_Module.ticketFiltersCollection.collection.length)
+						App_Ticket_Module.ticketFilters();
+					break;
+				}
+			}	
+			
 			// Show bulk operations only when thead check box is checked
 			toggle_contacts_bulk_actions_dropdown(undefined, true,$('.thead_check').parents('table').attr('id'));
 			

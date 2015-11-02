@@ -607,4 +607,114 @@ public class TicketsUtil
 	{
 		return ticketID;
 	}
+
+	/**
+	 * Change ticket group and assignee
+	 * 
+	 * @param ticket_id
+	 * @param group_id
+	 * @param assignee_id
+	 * @return Tickets
+	 * @throws EntityNotFoundException
+	 */
+	public static Tickets changeGroupAndAssignee(Long ticket_id, Long group_id, Long assignee_id)
+			throws EntityNotFoundException
+	{	
+		//Fetching ticket object by its id
+		Tickets ticket = TicketsUtil.getTicketByID(ticket_id);
+
+		// Verifying if ticket assigned to same Group and Assignee
+		if ((ticket.groupID != null && ticket.groupID == group_id)
+				&& (ticket.assigneeID != null && ticket.assigneeID == assignee_id))
+			return ticket;
+
+		// Copying old data to create ticket activity
+		Long oldGroupID = ticket.groupID, oldAssigneeID = ticket.assigneeID;
+
+		// Verifying if ticket is assigned to Group. This happens only if ticket
+		// is NEW.
+		if (assignee_id == null)
+		{
+			// Assigning new group to ticket
+			ticket.group_id = new Key<TicketGroups>(TicketGroups.class, group_id);
+			ticket.groupID = group_id;
+
+			// Updating ticket entity
+			Tickets.ticketsDao.put(ticket);
+
+			// Update search document
+			new TicketsDocument().edit(ticket);
+
+			// Logging group change activity
+			if (oldGroupID != ticket.groupID)
+				new TicketActivity(TicketActivityType.TICKET_GROUP_CHANGED, ticket.contactID, ticket.id, oldGroupID
+						+ "", group_id + "", "groupID").save();
+		}
+		else
+		{
+			boolean isNewTicket = false;
+			if (ticket.status == Status.NEW)
+			{
+				ticket.status = Status.OPEN;
+				isNewTicket = true;
+			}
+
+			// Assigning new agent to ticket
+			ticket.assigned_time = Calendar.getInstance().getTimeInMillis();
+			ticket.assignee_id = new Key<DomainUser>(DomainUser.class, assignee_id);
+			ticket.assigneeID = assignee_id;
+			ticket.assigned_to_group = false;
+
+			// Assigning new group to ticket
+			ticket.group_id = new Key<TicketGroups>(TicketGroups.class, group_id);
+			ticket.groupID = group_id;
+
+			// Updating ticket entity
+			Tickets.ticketsDao.put(ticket);
+
+			// Updating search document
+			new TicketsDocument().edit(ticket);
+
+			// Logging group change activity
+			if (oldGroupID != ticket.groupID)
+				new TicketActivity(TicketActivityType.TICKET_GROUP_CHANGED, ticket.contactID, ticket.id, oldGroupID
+						+ "", group_id + "", "groupID").save();
+
+			// Logging new ticket assigned activity
+			if (isNewTicket)
+				new TicketActivity(TicketActivityType.TICKET_ASSIGNED, ticket.contactID, ticket.id, "", assignee_id
+						+ "", "assigneeID").save();
+			else
+				// Logging ticket transfer activity
+				new TicketActivity(TicketActivityType.TICKET_ASSIGNEE_CHANGED, ticket.contactID, ticket.id,
+						oldAssigneeID + "", assignee_id + "", "assigneeID").save();
+		}
+
+		return ticket;
+	}
+
+	/**
+	 * Send email to group
+	 * 
+	 * @param groupId
+	 * @param subject
+	 * @param body
+	 */
+	public static void sendEmailToGroup(long groupId, String subject, String body)
+	{
+
+	}
+
+	/**
+	 * Send email to user
+	 * 
+	 * @param groupId
+	 * @param subject
+	 * @param body
+	 */
+	public static void sendEmailToUser(String email, String subject, String body)
+	{
+
+	}
+
 }

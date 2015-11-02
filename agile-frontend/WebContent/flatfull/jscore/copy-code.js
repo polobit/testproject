@@ -46,7 +46,7 @@ function initZeroClipboard(id, source) {
 		
 		  // Show tooltip on complete
 		  $("#" + id).attr({
-		   "data-placement" : 'right',
+		   "data-placement" : 'top',
 		   "data-original-title" : title
 		  });
 		

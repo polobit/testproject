@@ -2,9 +2,14 @@ package com.agilecrm.ticket.utils;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import com.agilecrm.ticket.entitys.TicketGroups;
+import com.agilecrm.ticket.entitys.Tickets;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.campaignio.urlshortener.util.Base62;
@@ -64,7 +69,7 @@ public class TicketGroupUtil
 			ticketGroups.add(supportGroup);
 		}
 
-		return ticketGroups;
+		return inclDomainUsers(ticketGroups);
 	}
 
 	public TicketGroups createGroup(String groupName, List<Long> domainUserIDs) throws Exception
@@ -148,6 +153,39 @@ public class TicketGroupUtil
 			ticketGroup = createDefaultGroup();
 
 		return ticketGroup;
+	}
+
+	public static List<TicketGroups> inclDomainUsers(List<TicketGroups> ticketGroups)
+	{
+		String oldnamespace = NamespaceManager.get();
+
+		try
+		{
+			NamespaceManager.set("");
+
+			for (TicketGroups group : ticketGroups)
+			{
+				List<Long> users_keys = group.agents_keys;
+				List<Key<DomainUser>> domainUserKeys = new ArrayList<Key<DomainUser>>();
+
+				for (Long userKey : users_keys)
+					domainUserKeys.add(new Key<DomainUser>(DomainUser.class, userKey));
+
+				group.group_users = DomainUserUtil.dao.fetchAllByKeys(domainUserKeys);
+			}
+
+			NamespaceManager.set(oldnamespace);
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+		finally
+		{
+			NamespaceManager.set(oldnamespace);
+		}
+
+		return ticketGroups;
 	}
 
 	/**

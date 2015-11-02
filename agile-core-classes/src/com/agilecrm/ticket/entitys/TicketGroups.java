@@ -79,13 +79,13 @@ public class TicketGroups
 	public Boolean is_default = false;
 
 	/**
-	 * Stores current domain user key as owner.
+	 * Stores group forwarding email
 	 */
 	@NotSaved
 	public String group_email = "";
 	
 	/**
-	 * Stores current domain user key as owner.
+	 * Stores group users list
 	 */
 	@NotSaved
 	public List<DomainUser> group_users = null;
