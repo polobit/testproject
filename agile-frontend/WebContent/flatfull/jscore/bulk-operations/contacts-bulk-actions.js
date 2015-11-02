@@ -35,8 +35,34 @@ var Contacts_Events_Collection_View = Base_Collection_View.extend({
     	'click #comp-sort-by-created_time-asc' : 'bulkActionCompaniesSortonTimeAsec',
     	'click #contact-actions-grid-delete' : 'contactActionsGridDelete',
     	
+    	'click .filter' : 'filterResults',
+    	'click .default_filter' : 'defaultFilterResults',
+    	'click #companies-filter' : 'companyFilterResults',
+    	
     },
 
+    // Fetch filter result without changing route on click
+	filterResults:  function(e)
+	{
+
+		contact_filters_util.filterResults(e);
+	},
+
+	/*
+	 * If default filter is selected, removes filter cookies an load contacts
+	 * with out any query condition
+	 */
+	defaultFilterResults:  function(e)
+	{
+		e.preventDefault();
+		revertToDefaultContacts();
+	},
+
+	companyFilterResults: function(e)
+	{
+		contact_filters_util.companyFilterResults(e);
+		
+	},
     
 	contactActionsGridDelete: function(e){
 		

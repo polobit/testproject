@@ -179,27 +179,7 @@ var Report_Filters_Event_View = Base_Model_View.extend({
 	filterResults:  function(e)
 	{
 
-		e.preventDefault();
-		var targetEl = $(e.currentTarget);
-
-		eraseData('dynamic_contact_filter');
-
-		var filter_id = $(targetEl).attr('id');
-		var filter_type = $(targetEl).attr('filter_type');
-
-		// Saves Filter in cookie
-		createCookie('contact_filter', filter_id)
-		createCookie('contact_filter_type', filter_type)
-
-		// Gets name of the filter, which is set as data
-		// attribute in filter
-		filter_name = $(targetEl).attr('data');
-
-		CONTACTS_HARD_RELOAD=true;
-		App_Contacts.contacts();
-		return;
-		// /removed old code from below,
-		// now filters will work only on contact, not company
+		contact_filters_util.filterResults(e);
 	},
 
 	/*
@@ -221,18 +201,10 @@ var Report_Filters_Event_View = Base_Model_View.extend({
 
 	companyFilterResults: function(e)
 	{
-
-		e.preventDefault();
-		eraseCookie('contact_filter');
-		eraseCookie('contact_filter_type');
-
-		createCookie('company_filter', "Companies");
-		CONTACTS_HARD_RELOAD = true;
-		App_Contacts.contacts(); // /Show Companies list, explicitly hard
-		// reload
-		return;
+		contact_filters_util.companyFilterResults(e);
 		
 	},
+	
 
 	onParentLHSChanged:  function(e)
 	{
@@ -735,3 +707,50 @@ function setUpContactView(cel,tagExists){
 	}
 	
 }
+
+
+var contact_filters_util = {
+
+	// Fetch filter result without changing route on click
+	filterResults:  function(e)
+	{
+
+		e.preventDefault();
+		var targetEl = $(e.currentTarget);
+
+		eraseData('dynamic_contact_filter');
+
+		var filter_id = $(targetEl).attr('id');
+		var filter_type = $(targetEl).attr('filter_type');
+
+		// Saves Filter in cookie
+		createCookie('contact_filter', filter_id)
+		createCookie('contact_filter_type', filter_type)
+
+		// Gets name of the filter, which is set as data
+		// attribute in filter
+		filter_name = $(targetEl).attr('data');
+
+		CONTACTS_HARD_RELOAD=true;
+		App_Contacts.contacts();
+		return;
+		// /removed old code from below,
+		// now filters will work only on contact, not company
+	},
+
+	companyFilterResults: function(e)
+	{
+
+		e.preventDefault();
+		eraseCookie('contact_filter');
+		eraseCookie('contact_filter_type');
+
+		createCookie('company_filter', "Companies");
+		CONTACTS_HARD_RELOAD = true;
+		App_Contacts.contacts(); // /Show Companies list, explicitly hard
+		// reload
+		return;
+		
+	},
+
+};
