@@ -43,13 +43,6 @@ function _googleEventFetcher(sourceOptions, start, end, callback)
 		{
 				//loadUserEventsfromGoogle(undefined, start, end, callback);
 		}
-	else
-	{
-		console.log(sourceOptions);
-		// Assuming there are no events from that particular source
-		if(sourceOptions.events && $.isFunction(sourceOptions.events))
-			return callback([]);
-	}
 }
 
 // Tranform agile

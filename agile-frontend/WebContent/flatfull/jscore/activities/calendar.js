@@ -209,6 +209,7 @@ function showCalendar(users)
 											if(inArray >= 0){
 												//continue
 											}else{
+												callback([]);
 												return;
 											}
 										}
