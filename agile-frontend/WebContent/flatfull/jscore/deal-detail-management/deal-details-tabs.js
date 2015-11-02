@@ -46,7 +46,8 @@ var Deal_Modal_Event_View = Base_Model_View.extend({
     	'click .complete-deal-task' : 'dealCompleteTask',
     	'click .deal-add-event' : 'dealAddEvent',
     	'click .event-edit-deal-tab' : 'dealEditEvent',
-		'click .deal-event-delete' : 'dealEditDelete',   	
+		'click .deal-event-delete' : 'dealEditDelete', 
+		'click .activity-delete' : 'deleteActivity',  	
     	
     },
 
@@ -60,6 +61,12 @@ var Deal_Modal_Event_View = Base_Model_View.extend({
 
 		save_deal_tab_position_in_cookie("dealnotes");
 		deal_details_tab.load_deal_notes();
+	},
+	deleteActivity : function(e)
+	{
+		e.preventDefault();
+
+		Contact_Details_Tab_Actions.deleteActivity(e);
 	},
 
 	/**
