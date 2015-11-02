@@ -2,8 +2,8 @@ package com.campaignio.tasklets.agile;
 
 import org.json.JSONObject;
 
+import com.agilecrm.ticket.utils.TicketsUtil;
 import com.campaignio.tasklets.TaskletAdapter;
-import com.campaignio.tasklets.agile.util.AgileTaskletUtil;
 import com.campaignio.tasklets.util.TaskletUtil;
 
 /**
@@ -14,6 +14,21 @@ import com.campaignio.tasklets.util.TaskletUtil;
  */
 public class TicketAssignee extends TaskletAdapter
 {
+
+	/**
+	 * Ticket
+	 */
+	public static String TICKET = "ticket";
+
+	/**
+	 * Ticket Group
+	 */
+	public static String TICKET_GROUP_ID = "group_id";
+
+	/**
+	 * Ticket assignee
+	 */
+	public static String TICKET_ASSIGNEE_ID = "assignee_id";
 
 	/*
 	 * (non-Javadoc)
@@ -27,18 +42,32 @@ public class TicketAssignee extends TaskletAdapter
 
 		try
 		{
-			// Get Contact Id
-			String contactId = AgileTaskletUtil.getId(subscriberJSON);
+
+			JSONObject ticketJSON = data.getJSONObject(TICKET);
+
+			if (ticketJSON != null)
+			{
+				// Get group
+				String ticketGroupId = getStringValue(nodeJSON, subscriberJSON, data, TICKET_GROUP_ID);
+
+				// Get assignee
+				String ticketAssigneeId = getStringValue(nodeJSON, subscriberJSON, data, TICKET_ASSIGNEE_ID);
+
+				String ticketId = ticketJSON.getString("id");
+
+				// Change Group and Assignee
+				TicketsUtil.ChangeGroupAndAssignee(Long.parseLong(ticketId), Long.parseLong(ticketGroupId),
+						Long.parseLong(ticketAssigneeId));
+			}
 
 		}
 		catch (Exception e)
 		{
 			e.printStackTrace();
-			System.out.println("Got Exception while Changing assignee..." + e.getMessage());
+			System.out.println("Got Exception while Changing Assignee ..." + e.getMessage());
 		}
 
 		// Execute Next One in Loop
 		TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, null);
 	}
-
 }

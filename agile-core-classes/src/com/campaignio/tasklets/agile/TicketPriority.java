@@ -2,8 +2,9 @@ package com.campaignio.tasklets.agile;
 
 import org.json.JSONObject;
 
+import com.agilecrm.ticket.entitys.Tickets;
+import com.agilecrm.ticket.utils.TicketsUtil;
 import com.campaignio.tasklets.TaskletAdapter;
-import com.campaignio.tasklets.agile.util.AgileTaskletUtil;
 import com.campaignio.tasklets.util.TaskletUtil;
 
 /**
@@ -14,6 +15,17 @@ import com.campaignio.tasklets.util.TaskletUtil;
  */
 public class TicketPriority extends TaskletAdapter
 {
+
+	/**
+	 * Ticket
+	 */
+	public static String TICKET = "ticket";
+
+	/**
+	 * Ticket priority
+	 */
+	public static String PRIORITY = "priority";
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -26,14 +38,23 @@ public class TicketPriority extends TaskletAdapter
 
 		try
 		{
-			// Get Contact Id
-			String contactId = AgileTaskletUtil.getId(subscriberJSON);
+
+			// Get priority
+			String priority = getStringValue(nodeJSON, subscriberJSON, data, PRIORITY);
+
+			JSONObject ticketJSON = data.getJSONObject(TICKET);
+
+			if (ticketJSON != null)
+			{
+				String ticketId = ticketJSON.getString("id");
+				TicketsUtil.changePriority(Long.parseLong(ticketId), Tickets.Priority.valueOf(priority));
+			}
 
 		}
 		catch (Exception e)
 		{
 			e.printStackTrace();
-			System.out.println("Got Exception while Changing assignee..." + e.getMessage());
+			System.out.println("Got Exception while Changing ticket Priority..." + e.getMessage());
 		}
 
 		// Execute Next One in Loop

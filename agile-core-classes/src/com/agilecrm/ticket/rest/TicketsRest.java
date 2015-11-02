@@ -35,8 +35,6 @@ import com.agilecrm.ticket.entitys.TicketActivity;
 import com.agilecrm.ticket.entitys.TicketDocuments;
 import com.agilecrm.ticket.entitys.TicketFilters;
 import com.agilecrm.ticket.entitys.TicketGroups;
-import com.agilecrm.ticket.entitys.Tickets;
-import com.agilecrm.ticket.entitys.TicketActivity.TicketActivityType;
 import com.agilecrm.ticket.entitys.TicketNotes.CREATED_BY;
 import com.agilecrm.ticket.entitys.TicketNotes.NOTE_TYPE;
 import com.agilecrm.ticket.entitys.TicketWorkflow;
@@ -484,6 +482,9 @@ public class TicketsRest
 
 			ticket.groupID = ticket.group_id.getId();
 
+			// Execute triggers
+			TicketTriggerUtil.executeTriggerForNewTicket(ticket);
+
 			return ticket;
 		}
 		catch (Exception e)
@@ -557,7 +558,13 @@ public class TicketsRest
 			if (ticketID == null && status == null)
 				throw new Exception("Required parameters missing.");
 
-			return TicketsUtil.changeStatus(ticketID, status);
+			Tickets ticket = TicketsUtil.changeStatus(ticketID, status);
+
+			// Execute closed ticket trigger
+			if (Status.CLOSED == status)
+				TicketTriggerUtil.executeTriggerForClosedTicket(ticket);
+
+			return ticket;
 		}
 		catch (Exception e)
 		{

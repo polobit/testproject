@@ -2,8 +2,8 @@ package com.campaignio.tasklets.agile;
 
 import org.json.JSONObject;
 
+import com.agilecrm.ticket.utils.TicketsUtil;
 import com.campaignio.tasklets.TaskletAdapter;
-import com.campaignio.tasklets.agile.util.AgileTaskletUtil;
 import com.campaignio.tasklets.util.TaskletUtil;
 
 /**
@@ -14,6 +14,27 @@ import com.campaignio.tasklets.util.TaskletUtil;
  */
 public class TicketEmailGroup extends TaskletAdapter
 {
+
+	/**
+	 * Ticket
+	 */
+	public static String TICKET = "ticket";
+
+	/**
+	 * Ticket Group id
+	 */
+	public static String TICKET_GROUP_ID = "group_id";
+
+	/**
+	 * Email Subject
+	 */
+	public static String SUBJECT = "subject";
+
+	/**
+	 * Email Body
+	 */
+	public static String BODY = "body";
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -26,18 +47,35 @@ public class TicketEmailGroup extends TaskletAdapter
 
 		try
 		{
-			// Get Contact Id
-			String contactId = AgileTaskletUtil.getId(subscriberJSON);
+
+			JSONObject ticketJSON = data.getJSONObject(TICKET);
+
+			if (ticketJSON != null)
+			{
+				// Get group id
+				String groupId = getStringValue(nodeJSON, subscriberJSON, data, TICKET_GROUP_ID);
+
+				// Ticket subject
+				String subject = getStringValue(nodeJSON, subscriberJSON, data, SUBJECT);
+
+				// Ticket body
+				String emailBody = getStringValue(nodeJSON, subscriberJSON, data, BODY);
+
+				String ticketId = ticketJSON.getString("id");
+
+				// Change Group and Assignee
+				TicketsUtil.sendEmailToGroup(Long.parseLong(groupId), subject, emailBody);
+
+			}
 
 		}
 		catch (Exception e)
 		{
 			e.printStackTrace();
-			System.out.println("Got Exception while Changing assignee..." + e.getMessage());
+			System.out.println("Got Exception while Sending email to group ..." + e.getMessage());
 		}
 
 		// Execute Next One in Loop
 		TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, null);
 	}
-
 }

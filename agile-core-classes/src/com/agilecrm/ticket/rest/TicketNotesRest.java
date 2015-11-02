@@ -22,18 +22,19 @@ import org.jsoup.nodes.Document;
 
 import com.agilecrm.search.document.TicketsDocument;
 import com.agilecrm.ticket.entitys.TicketActivity;
+import com.agilecrm.ticket.entitys.TicketActivity.TicketActivityType;
 import com.agilecrm.ticket.entitys.TicketDocuments;
 import com.agilecrm.ticket.entitys.TicketNotes;
-import com.agilecrm.ticket.entitys.TicketActivity.TicketActivityType;
 import com.agilecrm.ticket.entitys.TicketNotes.CREATED_BY;
 import com.agilecrm.ticket.entitys.TicketNotes.NOTE_TYPE;
-import com.agilecrm.ticket.entitys.Tickets.LAST_UPDATED_BY;
 import com.agilecrm.ticket.entitys.Tickets;
+import com.agilecrm.ticket.entitys.Tickets.LAST_UPDATED_BY;
 import com.agilecrm.ticket.entitys.Tickets.Status;
 import com.agilecrm.ticket.utils.TicketNotesUtil;
 import com.agilecrm.ticket.utils.TicketsUtil;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
+import com.agilecrm.workflows.triggers.util.TicketTriggerUtil;
 import com.googlecode.objectify.Key;
 
 /**
@@ -141,6 +142,9 @@ public class TicketNotesRest
 				// Logging private notes activity
 				new TicketActivity(TicketActivityType.TICKET_ASSIGNEE_REPLIED, ticket.contactID, ticket.id, html_text,
 						plain_text, "html_text").save();
+
+				// Execute note created by user trigger
+				TicketTriggerUtil.executeTriggerForNewNoteAddedByUser(ticket);
 			}
 
 			ticketNotes.domain_user = DomainUserUtil.getDomainUser(ticket.assigneeID);
