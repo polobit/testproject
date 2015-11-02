@@ -71,9 +71,17 @@ function loadPortlets(el){
 					model.set({ 'row_position' : obj.row_position  }, { silent : true });
 					model.set({'isForAll' : false});
 					set_p_portlets(model);
-					set_up_portlets(el,$('#portlets > div'));
-					portlet_utility.addWidgetToGridster(model);
+					//set_up_portlets(el,$('#portlets > div'));
 					
+					portlet_utility.addWidgetToGridster(model);
+					var that=$('#'+model.id).parent();
+					if(!(that.attr('data-col')==model.get('column_position')) || !(that.attr('data-row')==model.get('row_position')))
+					{
+						model.set({ 'column_position' : parseInt(that.attr("data-col")) }, { silent : true });
+						model.set({ 'row_position' : parseInt(that.attr("data-row")) }, { silent : true });
+						that.attr('id','ui-id-'+that.attr("data-col")+'-'+that.attr("data-row"));
+					that.find('div.portlet_body').attr('id','p-body-'+that.attr("data-col")+'-'+that.attr("data-row"));
+					}
 					models.push({ id : model.get("id"), column_position : obj.column_position, row_position : obj.row_position,isForAll : false });
 			
 				});
