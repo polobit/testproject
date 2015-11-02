@@ -801,7 +801,7 @@ function show_resubscribe_modal(){
 										  nonSelectedText: 'Select Campaign',
 										  selectAllValue: "ALL",
 										  includeSelectAllOption: true,
-										  maxHeight: 200,
+										  maxHeight: 180,
 										  disableIfEmpty: true,
 										  buttonText: function(options){
 
