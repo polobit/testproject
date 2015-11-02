@@ -74,7 +74,7 @@ var WorkflowsRouter = Backbone.Router
 				this.workflow_list_view.collection.fetch();
 
 				$("#content").html('<div id="workflows-listener-container"></div>').find('#workflows-listener-container').html(this.workflow_list_view.el);
-				initializeWorkflowsListeners();
+				// initializeWorkflowsListeners();
 
 				$(".active").removeClass("active");
 				$("#workflowsmenu").addClass("active");
@@ -218,7 +218,7 @@ var WorkflowsRouter = Backbone.Router
 					if (!template_ui)
 						return;
 					$('#workflows-listener-container').html($(template_ui));
-					initializeWorkflowsListeners();
+					// initializeWorkflowsListeners();
 				}, "#workflows-listener-container");
 			},
 

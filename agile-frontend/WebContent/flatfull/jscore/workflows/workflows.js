@@ -12,7 +12,7 @@
 var Workflow_Model_Events = Base_Model_View.extend({
    
     events: {
-        'click #save-workflow-top,#save-workflow-bottom,#duplicate-workflow-top,#duplicate-workflow-bottom': 'saveCampaignClick',
+        'click #save-workflow-top,#save-workflow-bottom,#duplicate-workflow-top,#duplicate-workflow-bottom,.is-disabled-top': 'saveCampaignClick',
         'click #workflow-unsubscribe-option': 'unsubscribeCampaign',
         'click #workflow-designer-help': 'helpCampaign',
         'change #unsubscribe-action': 'unsubscribeCampaignOptionSelect',
@@ -81,7 +81,7 @@ var Workflow_Model_Events = Base_Model_View.extend({
      * so ids are separated by comma in click event.
      * 
      **/
-    saveCampaignClick: function(e){
+    saveCampaignClick: function(e, trigger_data){
         e.preventDefault();
         var targetEl = $(e.currentTarget);
 
@@ -492,3 +492,6 @@ function is_start_active(designerJSON){
     }
     return is_active;
 }
+
+
+function initializeWorkflowsListeners() {}
