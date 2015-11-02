@@ -802,6 +802,7 @@ function show_resubscribe_modal(){
 										  onInitialized: function(select, container) {
 			        								
 		    								$(container).find('button').css({width: '252px'});
+		    								$(container).find('.multiselect-container').css({'position':'relative'});
 		    								$(container).find('span').addClass('pull-left');
 		    								$(container).find('b.caret').addClass('pull-right m-t-sm');
 			    						},
@@ -853,7 +854,15 @@ function show_resubscribe_modal(){
 
 										$('div#contact-detail-resubscribe-modal .modal-body').html(el.find('form'));
 
-										$('[data-toggle="tooltip"]').tooltip();
+										var $tooltip = $('[data-toggle="tooltip"]').tooltip();
+
+										$tooltip.on('shown.bs.tooltip', function(){
+											
+											 $(this).next('.tooltip').css({'padding-right': '2px'});
+
+										});
+
+
 									
 									});
 									
