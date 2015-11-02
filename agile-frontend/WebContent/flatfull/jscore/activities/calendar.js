@@ -257,11 +257,14 @@ function showCalendar(users)
 										}
 										catch(err){
 												$("#loading_calendar_events").hide();
+												callback([]);
 										}
 									});
 								//		return true;
 
-								}
+								},
+								dataType: 'agile-events'
+
 								},
 								{
 									events : loadUserEventsfromGoogle,
