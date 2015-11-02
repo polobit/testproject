@@ -56,7 +56,7 @@ $( document ).ready(function() {
 });
 
 
-function activateSliderAndTimerToTaskModal(){
+function activateSliderAndTimerToTaskModal(el){
 
 	console.log("activateSliderAndTimerToTaskModal");
 	
@@ -97,7 +97,7 @@ function activateSliderAndTimerToTaskModal(){
 	 * Date Picker Activates datepicker for task due element
 	 */
 
-	$('#task-date-1').datepicker({ format : CURRENT_USER_PREFS.dateFormat , weekStart : CALENDAR_WEEK_START_DAY});
+	// $('#task-date-1').datepicker({ format : CURRENT_USER_PREFS.dateFormat , weekStart : CALENDAR_WEEK_START_DAY});
 	$('#update-task-date-1').datepicker({ format : CURRENT_USER_PREFS.dateFormat , weekStart : CALENDAR_WEEK_START_DAY});
 
 
@@ -110,30 +110,7 @@ function activateSliderAndTimerToTaskModal(){
 	{
 		e.preventDefault();
 		save_task('updateTaskForm', 'updateTaskModal', true, this);
-	});
-
-	/**
-	 * initialises task time picker
-	 */
-	$('#updateTaskModal').off('hidden.bs.modal');
-	$('#updateTaskModal').on('hidden.bs.modal', function()
-	{
-
-		if ($(this).hasClass('in'))
-		{
-			return;
-		}
-
-		$("#updateTaskForm").find("li").remove();
-
-		resetForm($("#updateTaskForm"));
-
-		// Removes note from from task form
-		$('#updateTaskForm #forNoteForm').html("");
-
-		// Hide + Add note link
-		$(".task-add-note", $("#updateTaskForm")).show();
-	});
+	});	
 
 }
 
@@ -244,7 +221,8 @@ function highlight_task()
 				$("#activityForm").find("#event_related_to").closest(".controls").find("ul").children());
 
 	// Date().format('mm/dd/yyyy'));
-	$('input.date').val(getDateInFormat(new Date())).datepicker('update');
+	$('input.date').val(getDateInFormat(new Date()));
+	// datepicker('update');
 }
 
 /**

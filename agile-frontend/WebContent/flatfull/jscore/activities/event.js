@@ -435,6 +435,8 @@ $(function()
 	{
 		// Show related to contacts list
 		var el = $("#activityForm");
+		$('#task-date-1').datepicker({ format : CURRENT_USER_PREFS.dateFormat , weekStart : CALENDAR_WEEK_START_DAY});
+
 		agile_type_ahead("event_related_to", el, contacts_typeahead);
 
 		agile_type_ahead("event_relates_to_deals", el, deals_typeahead, false,null,null,"core/api/search/deals",false, true);
@@ -465,8 +467,11 @@ $(function()
 		if ($('.new-task-timepicker', el).val() == '')
 			$('.new-task-timepicker', el).val("12:00");
 
+		// activateSliderAndTimerToTaskModal(el);
+
+
 		// Update will highlight the date of in date picker
-		$("input.date", el).datepicker('update');
+		// $("input.date").datepicker('update');
 
 	});
 

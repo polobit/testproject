@@ -236,9 +236,7 @@ var Contact_Details_Model_Events = Base_Model_View.extend({
     	'click #enable_map_view' : 'onEnableMapView',
     	'click #add' : 'onAddScore',
     	'click #minus' : 'onRemoveScore',
-    	'mouseenter #element': 'onElementPopover',
-    	'mouseenter #element-title' : 'onElementTitlePopover',
-
+    	
     	
     	'click .email-subject' : 'onEmailSubjectClick',
     	'click #show-page-views' : 'openPageViews',
@@ -818,20 +816,7 @@ var Contact_Details_Model_Events = Base_Model_View.extend({
 			}
 		});
 	},
-	
-	
-	// Popover for help in contacts,tasks etc
-	onElementPopover :  function(e){
-    	e.preventDefault();
-        $(e.currentTarget).popover({
-        	template:'<div class="popover" style="width:400px"><div class="arrow"></div><div class="popover-inner"><div class="popover-content"><p></p></div></div></div>'
-        });
-        $(e.currentTarget).popover('show');
-    },
-	onElementTitlePopover : function(e){
-    	e.preventDefault();
-        $(e.currentTarget).popover('show');
-    },
+
 
     addTask : function(e){
     	e.preventDefault();
@@ -1106,4 +1091,20 @@ var Contact_Details_Model_Events = Base_Model_View.extend({
        			}
         });
 	},
+});
+
+$(function(){
+	$("body").on("mouseenter", "#element", function(b) {
+        b.preventDefault();
+        $(this).popover({
+            template: '<div class="popover" style="width:400px"><div class="arrow"></div><div class="popover-inner"><div class="popover-content"><p></p></div></div></div>'
+        });
+        $(this).popover("show")
+    }
+    );
+    $("body").on("mouseenter", "#element-title", function(b) {
+        b.preventDefault();
+        $(this).popover("show")
+    }
+    );
 });
