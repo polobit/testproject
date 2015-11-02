@@ -946,11 +946,11 @@ function clickfunction(that,url,forAll){
 						&& p_name == "Leaderboard") {
 					obj.size_y = 2;
 					obj.size_x = 2;
-					if(obj.column_position==3)
+					/*if(obj.column_position==3)
 					{
 						obj.column_position=1;
 						obj.row_position=obj.row_position+1;
-					}
+					}*/
 				}
 
 				var portlet = new BaseModel();

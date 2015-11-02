@@ -58,14 +58,14 @@ function loadPortlets(el){
 				obj.column_position = next_position.col;
 				obj.row_position = next_position.row;
 
-				if (model.toJSON().portlet_type == "USERACTIVITY"
+				/*if (model.toJSON().portlet_type == "USERACTIVITY"
 										&& model.toJSON().name == "Leaderboard") {
 									if(obj.column_position==3)
 									{
 										obj.column_position=1;
 										obj.row_position=obj.row_position+1;
 					}
-				}
+				}*/
 				
 				model.set({ 'column_position' : obj.column_position}, { silent : true });
 					model.set({ 'row_position' : obj.row_position  }, { silent : true });
@@ -95,8 +95,8 @@ function loadPortlets(el){
 					{
 						model.set({ 'column_position' : parseInt($(this).attr("data-col")) }, { silent : true });
 						model.set({ 'row_position' : parseInt($(this).attr("data-row")) }, { silent : true });
-						$(this).remove();
-						set_p_portlets(model);
+						//$(this).remove();
+						//set_p_portlets(model);
 					}
 					
 
