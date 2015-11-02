@@ -373,7 +373,7 @@ $("#calendar-listers").on('click', '.agendaDayWeekMonth', function()
 			if (this.checked == true)
 			{
 				_//init_gcal_options();
-				loadFullCalednarOrListView();
+				addGoogleCalendarEvents();
 			}
 			else
 			{
