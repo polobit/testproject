@@ -23,8 +23,8 @@ $(function(){
 
 		$(table).find('tr .tbody_check').each(function(index, element){
 			
-			// If element is checked store it's id in an array 
-			if($(element).is(':checked')){
+			// If element is checked store it's id in an array. !$(element).attr('disabled') included by Sasi to avoid disabled checkboxes
+			if($(element).is(':checked') && !$(element).attr('disabled')){
 				// Disables mouseenter once checked for delete(To avoid popover in deals when model is checked)
 				$(element).closest('tr').on("mouseenter", false);
 				index_array.push(index);
@@ -80,6 +80,31 @@ $(function(){
 			}
 			else
 			{
+				if($(table).hasClass('show-delete-modal')){
+
+					var json = {};
+					json.title = $(table).attr('data-bulk-delete-title');
+					json.msg = $(table).attr('data-bulk-delete-msg');
+
+					getTemplate("bulk-actions-delete-modal", json, undefined, function(template_ui){
+
+						if(!template_ui)
+							  return;
+
+						$('#ticket-modals').html($(template_ui));
+						$('#bulk-delete-modal').modal('show');
+
+						$('#bulk-delete-modal').on('click', 'a.bulk-delete', function(e){
+
+							$('#bulk-delete-modal').modal('hide');
+							$(this).after('<img class="bulk-delete-loading" style="padding-right:5px;margin-bottom:15px" src= "img/21-0.gif"></img>');
+							bulk_delete_operation($(table).attr('url'), id_array, index_array, table, undefined, data_array);
+						});						
+					});
+
+					return;
+				}
+
 				// customize delete confirmation message
 				if(!customize_delete_message(table))
 					return;

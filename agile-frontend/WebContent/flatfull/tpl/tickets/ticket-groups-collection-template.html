@@ -1,33 +1,36 @@
 <script id="ticket-groups-collection-template" type="text/html">
 {{#unless this.length}}
     <div class="col-md-12 col-sm-12">
-        <div id="slate"></div>
+        <div class="text-center padder-v">
+            <h4 class="m-t-none m-b-xs">You don&#39;t have any groups</h4>
+            <div class="m-b-xs">
+                Configure your help desk system to answer customer queries from your Agile Dashboard.
+            </div>
+            <div>
+                <a href="#ticket-groups" class="btn btn-sm btn-default blue btn-slate-action m-t-xs">
+                    Create Group
+                </a>
+            </div>
+        </div>
     </div>
 {{/unless}}
 {{#if this.length}}
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            Groups List
-            <div class="pull-right">
-                <a href="#add-ticket-group" class="btn btn-sm btn-default btn-addon">
-                    <span><i class="icon-plus-sign"></i></span> Add Group
-                </a>
-            </div>
-            <div class="clearfix"></div>
-        </div>
-
-        <table class="table table-striped showCheckboxes m-b-none agile-table panel table-layout-mob-view" url="core/api/tickets/groups/bulk">
-                <thead>
-                    <tr>
-                        <th class="hide">Id</th>
-                        <th style="width:20%">Name</th>
-                        <th style="width:35%">Group Email</th>
-                        <th style="width:25%">&nbsp;</th>
-                        <th style="width:17%">&nbsp;</th>
-                    </tr>
-                </thead>
-                <tbody id="ticket-groups-model-list" route="ticket-group/" class="c-p"> </tbody>
-        </table>
+    <div class="pull-right">
+        <a href="#add-ticket-group" class="btn btn-sm btn-default btn-addon">
+            <span><i class="icon-plus-sign"></i></span> Add
+        </a>
     </div>
+    <table class="table table-striped showCheckboxes m-b-none agile-table panel table-layout-mob-view show-delete-modal" url="core/api/tickets/groups/bulk" data-bulk-delete-title="Delete Tickets"
+        data-bulk-delete-msg="Are you sure you want to delete tickets?">
+            <thead>
+                <tr>
+                    <th class="hide">Id</th>
+                    <th style="width:20%">Group Name</th>
+                    <th style="width:35%">Forwarding Email</th>
+                    <th style="width:45%">&nbsp;</th>
+                </tr>
+            </thead>
+            <tbody id="ticket-groups-model-list" route="ticket-group/" class="c-p"> </tbody>
+    </table>
 {{/if}}
 </script>

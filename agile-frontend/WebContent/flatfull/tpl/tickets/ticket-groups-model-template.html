@@ -1,5 +1,7 @@
 <script id="ticket-groups-model-template" type="text/html">
-	<td class="hide data" data="{{id}}">{{id}}</td>
+	<td class="hide data" {{#if is_default}}default_group{{/if}} data="{{id}}">
+		{{id}}
+	</td>
 	<td>
 		<div class="table-resp">
 			<div class="pull-left text-ellipsis">
@@ -8,7 +10,7 @@
 		</div>
 	</td>
   	<div class="clearfix"></div>
-    <td class="workflow-triggers" workflow-id={{id}}> 
+    <td class="workflow-triggers"> 
 		<div class="table-resp">
 			{{group_email}}
 		</div>	
@@ -17,15 +19,10 @@
         <div class="table-resp">
             <small class="edit-hover text-muted"> 
 				<i class="fa fa-clock-o m-r-xs"></i>
-		        <span><em>Modified</em>&nbsp;</span>
+		        <span>Modified&nbsp;</span>
                 <time class="campaign-created-time b-b-dotted" datetime="{{epochToHumanDate "" updated_time}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" updated_time}}</time>
             </small>
         </div>
-    </td>
-    <td>
-        <div class="table-resp">
-            {{#if is_default}}Default Group{{/if}}
-        </div>
-    </td>  
+    </td> 
 <br />
 </script>
