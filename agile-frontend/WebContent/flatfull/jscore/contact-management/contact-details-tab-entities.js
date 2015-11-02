@@ -906,7 +906,7 @@ function get_email_workflows(workflows){
 
 			var node = nodes[j];
 
-			if(node["NodeDefinition"]["name"] == "Send Email" && node["NodeDefinition"]["workflow_tasklet_class_name"] == "com.campaignio.tasklets.agile.SendEmail")
+			if((node["NodeDefinition"]["name"] == "Send Email" || node["NodeDefinition"]["name"] == "Send E-mail") && node["NodeDefinition"]["workflow_tasklet_class_name"] == "com.campaignio.tasklets.agile.SendEmail")
 			{
 				email_workflows[workflow.id] = workflow.name;
 				break;
