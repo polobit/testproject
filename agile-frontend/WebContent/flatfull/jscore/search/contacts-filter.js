@@ -38,7 +38,6 @@ var Report_Filters_Event_View = Base_Model_View.extend({
     	'click i.filter-contacts-multiple-remove' : 'contactsFilterRemove',
     	'click .filter' : 'filterResults',
     	'click .default_filter' : 'defaultFilterResults',
-    	'click .default_contact_remove_tag' : 'defaultContactRemoveTag',
 
     	'click #companies-filter' : 'companyFilterResults',
     	'change .lhs_chanined_parent' : 'onParentLHSChanged',
@@ -190,13 +189,6 @@ var Report_Filters_Event_View = Base_Model_View.extend({
 	{
 		e.preventDefault();
 		revertToDefaultContacts();
-	},
-
-	defaultContactRemoveTag: function(e)
-	{
-		e.preventDefault();
-		// Navigate to show form
-		Backbone.history.navigate("contacts", { trigger : true });
 	},
 
 	companyFilterResults: function(e)

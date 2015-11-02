@@ -38,8 +38,16 @@ var Contacts_Events_Collection_View = Base_Collection_View.extend({
     	'click .filter' : 'filterResults',
     	'click .default_filter' : 'defaultFilterResults',
     	'click #companies-filter' : 'companyFilterResults',
+    	'click .default_contact_remove_tag' : 'defaultContactRemoveTag',
     	
     },
+
+	defaultContactRemoveTag: function(e)
+	{
+		e.preventDefault();
+		// Navigate to show form
+		Backbone.history.navigate("contacts", { trigger : true });
+	},
 
     // Fetch filter result without changing route on click
 	filterResults:  function(e)
