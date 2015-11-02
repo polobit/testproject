@@ -1,7 +1,7 @@
 /**
  * Loading spinner shown while loading
  */
-var LOADING_HTML = '<img class="loading" style="padding-right:5px;opacity:0.5;" src= "/img/ajax-loader-cursor.gif"></img>';
+var LOADING_HTML = '<img class="loading" style="padding-left:5px;padding-right:5px;opacity:0.5;" src= "/img/ajax-loader-cursor.gif"></img>';
 
 /**
  * Set of loading images
