@@ -249,6 +249,19 @@ function renderFullCalenarEvents(ownerid)
 
 }
 
+function removeGoogleCalendarEvents()
+{
+// Removes all events at once
+	$('#calendar_event').fullCalendar('removeEvents', function(value, index) {
+		if(value && value.google)
+			return true;
+		else
+			return false;
+	});
+
+	showLoadingOnCalendar(false);
+}
+
 /**
  * removed full calendar events based on ids
  * @param ownerid

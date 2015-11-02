@@ -7,14 +7,14 @@
 // or better
 
 
-function loadUserEventsfromGoogle(users, start, end){
+function loadUserEventsfromGoogle(users, start, end, callback){
 
 		load_events_from_google(function(data)
 						{
 							if (!data)
 								return;
 
-							return agile_transform_options(data, start, end);
+							return agile_transform_options(data, start, end, callback);
 						});
 }
 
@@ -29,14 +29,14 @@ function _init_gcal_options(users)
 	var fc = $.fullCalendar;
 	fc.sourceFetchers = [];
 	// Transforms the event sources to Google Calendar Events
-	fc.sourceFetchers.push(function(sourceOptions, start, end)
+	fc.sourceFetchers.push(function(sourceOptions, start, end, callback)
 	{
 		if (sourceOptions.dataType == 'agile-gcal')
 		{
 
 			if(users){
 
-				loadUserEventsfromGoogle(users, start, end);
+				loadUserEventsfromGoogle(users, start, end, callback);
 				return;
 
 			}
@@ -44,7 +44,7 @@ function _init_gcal_options(users)
 
 			$.getJSON('/core/api/users/agileusers', function(users)
 				{
-					loadUserEventsfromGoogle(users, start, end);
+					loadUserEventsfromGoogle(users, start, end, callback);
 				});
 
 		}
@@ -53,14 +53,14 @@ function _init_gcal_options(users)
 }
 
 // Tranform agile
-function agile_transform_options(sourceOptions, start, end)
+function agile_transform_options(sourceOptions, start, end, callback)
 {
 	// Setup GC for First time
 	// console.log(gapi.client.calendar);
 
 	if (typeof gapi != "undefined" && isDefined(gapi) && isDefined(gapi.client) && isDefined(gapi.client.calendar))
 	{
-		_fetchGCAndAddEvents(sourceOptions, start, end);
+		_fetchGCAndAddEvents(sourceOptions, start, end, callback);
 		return;
 	}
 
@@ -68,7 +68,7 @@ function agile_transform_options(sourceOptions, start, end)
 	{
 		setupGC(function()
 		{
-			_fetchGCAndAddEvents(sourceOptions, start, end);
+			_fetchGCAndAddEvents(sourceOptions, start, end, callback);
 		});
 		return;
 	});
@@ -85,7 +85,7 @@ function setupGC(callback)
 	gapi_helper.when('calendarLoaded', callback);
 }
 
-function _fetchGCAndAddEvents(sourceOptions, start, end)
+function _fetchGCAndAddEvents(sourceOptions, start, end, callback)
 {
 	// Set the access token
 	gapi.auth.setToken({ access_token : sourceOptions.token, state : "https://www.googleapis.com/auth/calendar" });
@@ -106,9 +106,9 @@ function _fetchGCAndAddEvents(sourceOptions, start, end)
 				google_events.push(fc_event);
 				
 		}
-
+		callback(google_events);
 		// Add event
-		$('#calendar_event').fullCalendar('addEventSource', google_events);
+		//$('#calendar_event').fullCalendar('addEventSource', google_events);
 	});
 }
 
