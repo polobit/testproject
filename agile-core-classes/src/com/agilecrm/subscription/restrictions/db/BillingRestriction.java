@@ -255,7 +255,7 @@ public class BillingRestriction
     	limits.put("count", WorkflowUtil.getCount());
     	resrtictions.put("workflows", limits);
     	limits = new HashMap<String, Integer>();
-    	limits.put("limit", planDetails.getAllowedUsers());
+    	limits.put("limit", planDetails.getTriggersLimit());
     	limits.put("count", TriggerUtil.getCount());
     	resrtictions.put("triggers", limits);
     	limits = new HashMap<String, Integer>();
