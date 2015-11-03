@@ -2,15 +2,14 @@
 <script id="xero-profile-template" type="text/html"> 
 <div class="wrapper-sm">
 	<div style="display:inline-block;">
-		<div  class="title_txt" style="display:inline-block;">
-			<a href="https://go.xero.com{{#unless xeroOrganisationShortCode}}/organisationlogin/default.aspx?shortcode={{xeroOrganisationShortCode}}&redirecturl={{/unless}}/Contacts/View.aspx?contactID={{Contact.ContactID}}" target="_blank"><h4 class="h4 m-t-none text-cap text-base">
-			{{Contact.Name}}	
-			</h4></a>
+		<div class="title_txt" style="display:inline-block;">
+			<a href="https://go.xero.com{{#unless xeroOrganisationShortCode}}/organisationlogin/default.aspx?shortcode={{xeroOrganisationShortCode}}&redirecturl={{/unless}}/Contacts/View.aspx?contactID={{Contact.ContactID}}" target="_blank">
+			<h4 class="h4 m-t-none text-cap text-base">{{Contact.Name}}</h4></a>
 		</div>
 	</div>
 	<div>
 		{{#if Contact.Addresses}}
-		<p class="m-b-none text-muted text-sm">	
+			<p class="m-b-none text-muted text-sm">	
 				{{#if Contact.Addresses.Address.1.AddressLine1}}
 					{{Contact.Addresses.Address.1.AddressLine1}}
 				{{/if}}	
@@ -32,29 +31,41 @@
 				{{#if Contact.Addresses.Address.1.Country}}
 					{{Contact.Addresses.Address.1.Country}}
 				{{/if}}
-				
-		</p>				
+			</p>				
 		{{/if}}
 	</div>
 	<div class="text-muted text-muted text-sm">
 		{{#if Contact.Phones}}
-		{{#each Contact.Phones.Phone}}
-			{{#if PhoneNumber}}<i class="icon icon-phone text-md m-r-xs v-middle"></i> {{#if PhoneCountryCode}}{{PhoneCountryCode}}-{{/if}}{{#if PhoneAreaCode}}{{PhoneAreaCode}}-{{/if}}{{PhoneNumber}}    {{capFirstLetter PhoneType}}<br> {{/if}}
-		{{/each}}
+			{{#each Contact.Phones.Phone}}
+				{{#if PhoneNumber}}
+					<i class="icon icon-phone text-md m-r-xs v-middle"></i> 
+					{{#if PhoneCountryCode}}{{PhoneCountryCode}}-{{/if}}
+					{{#if PhoneAreaCode}}{{PhoneAreaCode}}-{{/if}}
+					{{PhoneNumber}}    {{capFirstLetter PhoneType}}<br>
+				{{/if}}
+			{{/each}}
 		{{/if}}
 	</div>
 	<div>
 		<a id="xero_add_invoice" class="btn btn-default btn-xs" href="https://go.xero.com{{#unless xeroOrganisationShortCode}}/organisationlogin/default.aspx?shortcode={{xeroOrganisationShortCode}}&redirecturl={{/unless}}/AccountsReceivable/Edit.aspx?fromContactID={{Contact.ContactID}}" target="_blank">Add Invoice</a>
 	</div>
 </div>
-<div class="wrapper-sm b-t b-light">
 	{{#if invoice.Invoice}}	
-	<a href="https://go.xero.com{{#unless xeroOrganisationShortCode}}/organisationlogin/default.aspx?shortcode={{xeroOrganisationShortCode}}&redirecturl={{/unless}}/AccountsReceivable/Search.aspx?graphSearch=False" target="_blank"><h4 class="h4 text-md text-sm">Invoices</h4></a>
-</div>	
-	{{#isArray invoice.Invoice}}
-	
-	<ul class="list-group m-b-none text-base">
-		{{#each invoice.Invoice}}
+		<div class="wrapper-sm b-t b-light">
+			<a href="https://go.xero.com{{#unless xeroOrganisationShortCode}}/organisationlogin/default.aspx?shortcode={{xeroOrganisationShortCode}}&redirecturl={{/unless}}/AccountsReceivable/Search.aspx?graphSearch=False" target="_blank">
+			<h4 class="h4 text-md text-sm">Invoices</h4></a>
+		</div>	
+		<ul class="list-group m-b-none text-base" id="xero-invoice-list"></ul>
+	{{else}}
+		<li class="r-none b-l-none b-r-none">
+	    	No invoices	found		
+		</li>
+	{{/if}}
+</script>
+
+<script id="xero-invoice-template" type="text/html">
+{{#isArray invoice}}
+		{{#each invoice}}
 			<li class="list-group-item r-none b-l-none b-r-none">
 				<div class="pull-left">
 				<a class="invoices c-p" data-toggle="collapse"  id="getInvoice-lineitems-{{InvoiceID}}"  value="{{InvoiceID}}"><i class="icon icon-plus text-muted text-sm"></i></a>
@@ -70,31 +81,23 @@
 				</div>			
 			</li>
 		{{/each}}
-	</ul>
 {{else}}
-		<ul class="list-group m-b-none text-base">
-			<li class="list-group-item r-none b-l-none b-r-none">
-				<div class="pull-left">
-					<a class="invoices c-p" data-toggle="collapse"  id="getInvoice-lineitems-{{invoice.Invoice.InvoiceID}}"  value="{{invoice.Invoice.InvoiceID}}"  ><i class="icon-plus"></i></a>
-					<a class="c-p" id="xeroinvoicelink" data-toggle="tooltip" data-placement="top" title= "{{xeroTypeToolTip invoice.Invoice.Type}}" href="https://go.xero.com{{#unless xeroOrganisationShortCode}}/organisationlogin/default.aspx?shortcode={{xeroOrganisationShortCode}}&redirecturl={{/unless}}/AccountsReceivable/View.aspx?InvoiceID={{invoice.Invoice.InvoiceID}}" target="_blank">{{invoice.Invoice.InvoiceNumber}} {{xeroType invoice.Invoice.Type}}</a>
-				</div>
-				<div class="pull-right">{{invoice.Invoice.CurrencyCode}} {{invoice.Invoice.Total}}</div><br>
-				
-				<div id="collapse-{{invoice.Invoice.InvoiceID}}" class="collapse text-sm" style="color: rgba(0, 0, 0, 0.5);">
-				</div>		
-				<div>
-					<div class="pull-left"><small>Due <i class="fa fa-clock-o m-r-xs text-muted"></i><time class="time-ago text-muted" datetime="{{invoice.Invoice.DueDate}}">{{invoice.Invoice.DueDate}}</time></small></div>					
-					<div class="pull-right"><span class="label bg-light dk text-tiny">{{capFirstLetter invoice.Invoice.Status}}</span></div><br>
-					<div class="clearfix"></div>
-				</div>			
-			</li>
-		</ul>	
-	{{/isArray}}
-	{{else}}
-		<li class="r-none b-l-none b-r-none">
-	    	No invoices	found		
-		</li>
-	{{/if}}
+		<li class="list-group-item r-none b-l-none b-r-none">
+			<div class="pull-left">
+				<a class="invoices c-p" data-toggle="collapse"  id="getInvoice-lineitems-{{invoice.Invoice.InvoiceID}}"  value="{{invoice.Invoice.InvoiceID}}"  ><i class="icon-plus"></i></a>
+				<a class="c-p" id="xeroinvoicelink" data-toggle="tooltip" data-placement="top" title= "{{xeroTypeToolTip invoice.Invoice.Type}}" href="https://go.xero.com{{#unless xeroOrganisationShortCode}}/organisationlogin/default.aspx?shortcode={{xeroOrganisationShortCode}}&redirecturl={{/unless}}/AccountsReceivable/View.aspx?InvoiceID={{invoice.Invoice.InvoiceID}}" target="_blank">{{invoice.Invoice.InvoiceNumber}} {{xeroType invoice.Invoice.Type}}</a>
+			</div>
+			<div class="pull-right">{{invoice.Invoice.CurrencyCode}} {{invoice.Invoice.Total}}</div><br>
+			
+			<div id="collapse-{{invoice.Invoice.InvoiceID}}" class="collapse text-sm" style="color: rgba(0, 0, 0, 0.5);">
+			</div>		
+			<div>
+				<div class="pull-left"><small>Due <i class="fa fa-clock-o m-r-xs text-muted"></i><time class="time-ago text-muted" datetime="{{invoice.Invoice.DueDate}}">{{invoice.Invoice.DueDate}}</time></small></div>					
+				<div class="pull-right"><span class="label bg-light dk text-tiny">{{capFirstLetter invoice.Invoice.Status}}</span></div><br>
+				<div class="clearfix"></div>
+			</div>			
+		</li>	
+{{/isArray}}
 </script>
 
 

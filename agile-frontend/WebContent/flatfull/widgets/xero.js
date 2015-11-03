@@ -4,6 +4,12 @@
  * based on the function provided on agile_widgets.js (Third party API).
  */
 
+// xero-invoice
+
+var XEROObj = {};
+var XEROCount = 1;
+var showMoreHtmlXERO = '<div class="widget_tab_footer xero_show_more" align="center"><a class="c-p text-info" id="XERO_show_more" rel="tooltip" title="Click to see more tickets">Show More</a></div>';
+ 
 
 function showXeroClient(contact_id)
 {
@@ -30,6 +36,7 @@ function showXeroClient(contact_id)
 			if(data.invoice != undefined && data.invoice.Invoice != undefined){	
 				if($.isArray(data.invoice.Invoice)){
 					data.invoice.Invoice = data.invoice.Invoice.reverse();
+					XEROObj.invoice = data.invoice.Invoice;
 				}
 			}	
 			
@@ -45,8 +52,8 @@ function showXeroClient(contact_id)
 					$(".time-ago", template).timeago();
 				});
 			}, "#Xero");
-				
 
+			loadInvoices(0);
 		}
 		else
 		{
@@ -87,6 +94,36 @@ function showXeroClient(contact_id)
 			xeroError("Xero", resText);
 		}
 	});
+}
+
+function loadInvoices(offSet){
+
+	var data = XEROObj.invoice;
+	alert(data.length);
+	alert(offSet);
+
+	if(offSet == 0){
+		var result = {};
+		result.invoice = data.slice(0, 5); ;
+
+		getTemplate('xero-invoice', result, undefined, function(template_ui){
+			$('#xero-invoice-list').append(template_ui);
+			$('#xero-invoice-list').append(showMoreHtmlXERO);
+		});
+		
+	}else if(offSet > 0  && (offSet + 5) < data.length){
+		var result = {};
+		result.invoice = data.slice(offSet, (offSet+5));
+		console.log("xero 2nd result **** ");
+		console.log(result);
+		$('.xero_show_more').remove();
+		$('#xero-invoice-list').append(getTemplate('xero-invoice', result)).append(showMoreHtmlXERO);
+	}else{
+		var result = {};
+		result.invoice = data.slice(offSet, data.length);
+		$('.xero_show_more').remove();
+		$('#xero-invoice-list').append(getTemplate('xero-invoice', result));
+	}
 }
 
 /**
@@ -167,6 +204,9 @@ function addContactToXero(first_name, last_name, contact_id)
 }
 
 function startXeroWidget(contact_id){
+
+	XEROObj = {};
+	XEROCount = 1;
 
 	console.log("in xero widget.js")
 	// Xero widget name as a global variable
@@ -268,5 +308,19 @@ function startXeroWidget(contact_id){
 			$('#collapse-' + invoiceId).addClass("collapse");
 		}
 
+	});
+
+	/*
+	 * On click of add client button in FreshBooks, calls method to add a client
+	 * in FreshBooks with contact's first name, last name and email
+	 */
+	$("#widgets").off("click", "#XERO_show_more");
+	$("#widgets").on("click", "#XERO_show_more", function(e)
+	{
+		e.preventDefault();
+		var offSet = XEROCount * 5;
+		loadInvoices(offSet);
+		++XEROCount;
+		
 	});
 }
