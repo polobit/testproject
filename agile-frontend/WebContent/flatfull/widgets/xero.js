@@ -111,7 +111,9 @@ function loadInvoices(offSet){
 
 		getTemplate('xero-invoice', result, undefined, function(template_ui){
 			$('#xero-invoice-list').append(template_ui);
-			$('#xero-invoice-list').append(showMoreHtmlXERO);
+			if(data.length > 5){
+				$('#xero-invoice-list').append(showMoreHtmlXERO);
+			}
 		});
 		
 	}else if(offSet > 0  && (offSet + 5) < data.length){
