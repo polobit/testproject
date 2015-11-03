@@ -797,7 +797,7 @@ function show_resubscribe_modal(){
 								// Remove image
 								$('#campaigns-list', el).parent().find('.loading').remove();
 
-								head.js(LIB_PATH + 'lib/bootstrap-multiselect/bootstrap-multiselect.js', CSS_PATH + 'css/bootstrap-multiselect/bootstrap-multiselect.css', function(){
+								head.js(LIB_PATH + 'lib/bootstrap-multiselect/bootstrap-multiselect.min.js', CSS_PATH + 'css/bootstrap-multiselect/bootstrap-multiselect.css', function(){
 
 									is_selected_all = false;
 									$('#campaigns-list', el).multiselect({
