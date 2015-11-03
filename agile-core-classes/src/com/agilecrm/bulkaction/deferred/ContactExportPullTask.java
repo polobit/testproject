@@ -5,6 +5,8 @@ import java.util.List;
 
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.filter.ContactFilterResultFetcher;
+import com.agilecrm.contact.util.bulk.BulkActionNotifications;
+import com.agilecrm.contact.util.bulk.BulkActionNotifications.BulkAction;
 import com.agilecrm.export.ExportBuilder;
 import com.agilecrm.export.Exporter;
 import com.agilecrm.user.DomainUser;
@@ -56,6 +58,8 @@ public class ContactExportPullTask implements DeferredTask
 	getExporter().finalize();
 
 	getExporter().sendEmail(user.email);
+
+	BulkActionNotifications.publishconfirmation(BulkAction.EXPORT_CONTACTS_CSV);
 
 	NamespaceManager.set(null);
 

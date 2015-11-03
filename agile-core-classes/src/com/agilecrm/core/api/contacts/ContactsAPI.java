@@ -52,8 +52,6 @@ import com.agilecrm.contact.Tag;
 import com.agilecrm.contact.filter.ContactFilterResultFetcher;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.contact.util.NoteUtil;
-import com.agilecrm.contact.util.bulk.BulkActionNotifications;
-import com.agilecrm.contact.util.bulk.BulkActionNotifications.BulkAction;
 import com.agilecrm.deals.Opportunity;
 import com.agilecrm.deals.util.OpportunityUtil;
 import com.agilecrm.document.Document;
@@ -1251,8 +1249,6 @@ public class ContactsAPI
 	// ContactExportType.CONTACT);
 	// ActivityUtil.createLogForImport(ActivityType.CONTACT_EXPORT,
 	// EntityType.CONTACT, count, 0);
-
-	BulkActionNotifications.publishconfirmation(BulkAction.EXPORT_CONTACTS_CSV);
     }
 
     @Path("/email/chrome/{email}")
