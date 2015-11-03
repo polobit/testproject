@@ -252,7 +252,7 @@ public class BillingRestriction
     	resrtictions.put("webrules", limits);
     	limits = new HashMap<String, Integer>();
     	limits.put("limit", planDetails.getWorkflowLimit());
-    	limits.put("count", WorkflowUtil.getCount());
+    	limits.put("count", WorkflowUtil.get_enable_campaign_count());
     	resrtictions.put("workflows", limits);
     	limits = new HashMap<String, Integer>();
     	limits.put("limit", planDetails.getTriggersLimit());
