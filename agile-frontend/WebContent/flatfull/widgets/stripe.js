@@ -165,6 +165,10 @@ function showStripeProfile(stripe_custom_field_name, contact_id)
 			// Show the template in Stripe widget panel
 			$('#Stripe').html(stripe_template);
 
+			stripeOBJ = {};
+			stripeINVCount = 1;
+			stripePAYCount = 1;
+
 			stripeOBJ.invoice = data.invoice;
 			stripeOBJ.payments = data.payments;
 			loadStripeInvoices(0);

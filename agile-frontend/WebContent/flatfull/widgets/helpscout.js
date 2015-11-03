@@ -84,12 +84,14 @@ function getMailsFromHelpScout(callback, contact_id)
  */
 function showMailsInHelpScout(customerId, contact_id, offSet)
 {
-	if(offSet == 0){		
+	if(offSet == 0){	
+		helpscoutmails = [];
+		showMoreCount = 1;	
 		loadTickets(customerId, contact_id, function(data){			
 			if(data.mailbox){
 				var obj = data.mailbox;
 				$.each(obj, function( key, value ) {
-					var arrayList = obj[key].conversations;
+					var arrayList = obj[key].conversations;					
 					$.each(arrayList, function( index, val ) {
 						helpscoutmails.push(arrayList[index]);
 				    });
@@ -113,7 +115,7 @@ function showMailsInHelpScout(customerId, contact_id, offSet)
 	}else if(offSet > 0  && (offSet+5) < helpscoutmails.length){
 		var result = helpscoutmails.slice(offSet, (offSet+5));
 		$('.helpscout_show_more').remove();
-		$('#all_conv_panel').apped(getTemplate('helpscout-conversation', result));
+		$('#all_conv_panel').append(getTemplate('helpscout-conversation', result));
 		$('#all_conv_panel').append(showMoreHtml);
 	}else {
 		var result = helpscoutmails.slice(offSet, helpscoutmails.length);

@@ -161,6 +161,8 @@ function loadFBSInvoices(client_id, callback){
 function getInvoicesOfClient(client_id, offSet)
 {
 	if(offSet == 0){
+		FBSmails = {};
+		FBSCount = 1;
 		loadFBSInvoices(client_id, function(data){
 			console.log("widgets **** freshbooks");
 			console.log(data);

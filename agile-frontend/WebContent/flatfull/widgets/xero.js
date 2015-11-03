@@ -33,7 +33,11 @@ function showXeroClient(contact_id)
 		// If data is not defined return
 		if (data)
 		{
+
 			if(data.invoice != undefined && data.invoice.Invoice != undefined){	
+				XEROObj = {};
+				XEROCount = 1;
+				
 				if($.isArray(data.invoice.Invoice)){
 					data.invoice.Invoice = data.invoice.Invoice.reverse();
 					XEROObj.invoice = data.invoice.Invoice;
@@ -99,10 +103,9 @@ function showXeroClient(contact_id)
 function loadInvoices(offSet){
 
 	var data = XEROObj.invoice;
-	alert(data.length);
-	alert(offSet);
 
 	if(offSet == 0){
+
 		var result = {};
 		result.invoice = data.slice(0, 5); ;
 
