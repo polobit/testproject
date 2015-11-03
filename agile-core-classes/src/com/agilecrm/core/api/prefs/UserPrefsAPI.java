@@ -114,7 +114,7 @@ public class UserPrefsAPI
 			}
 		}
 		else
-			throw new Exception("Current Password not matched");
+			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("Current Password not matched").build());
 	}
 
 	@Path("saveTheme")

@@ -45,8 +45,9 @@ public class TwitterSearch
 			String lastName = contact.getContactFieldValue(Contact.LAST_NAME);
 
 			// returns empty if first name and last name both are null
-			if (StringUtils.isBlank(firstName) && StringUtils.isBlank(lastName))
+			if (StringUtils.isBlank(firstName) && StringUtils.isBlank(lastName)){
 				return new ArrayList<SocialSearchResult>();
+			}
 
 			/*
 			 * check first name and last name, if null put it as empty for
@@ -92,9 +93,10 @@ public class TwitterSearch
 		{
 
 			// returns empty list if String to be searched is null
-			if (StringUtils.isBlank(searchString))
+			if (StringUtils.isBlank(searchString)){
 				return new ArrayList<SocialSearchResult>();
-
+			}
+			
 			/*
 			 * Creates a twitter object to connect with twitter Searches twitter
 			 * profiles based on the search string

@@ -11,7 +11,7 @@
                 <div class="control-group form-group">
                     <label class="control-label col-sm-3">Organization</label>
                     <div class="controls col-sm-9">                     
-                        <input name="name" type="text" class="required form-control" id="company_name" value="{{getPropertyValue properties "name"}}"/>
+                        <input name="name" type="text" class="required form-control field_length" max_len="100" id="company_name" value="{{getPropertyValue properties "name"}}"/>
                     </div>
                 </div>
 				<div class="control-group form-group" id="tags_source_continue_company">
@@ -24,13 +24,13 @@
                                 {{/each}}
                             </ul>
                         </div>
-                        <input name="tags" type="text" id="tags-new-person" class="tags-typeahead form-control" />
+                        <input name="tags" type="text" id="tags-new-person" class="tags-typeahead form-control" maxlength="500"/>
                     </div>
                 </div>
                 <div class="control-group form-group">
                     <label class="control-label col-sm-3">Url</label>
                     <div class="controls col-sm-9">
-                        <input class="form-control" name="url" placeholder="http://www." type="text" id="company_url" value="{{getPropertyValue properties "url"}}"/>
+                        <input class="form-control field_length" max_len="500" name="url" placeholder="http://www." type="text" id="company_url" value="{{getPropertyValue properties "url"}}"/>
                     </div>
                 </div>
 				 {{show_custom_fields custom_fields properties}}
@@ -39,7 +39,7 @@
                     <div class="controls col-sm-9 pull-right hide">
                         <div class="email multiple-template" data="email">
 							<div style="display:inline-table; width:210px; ">
-								<input type="text" id="email" class="email form-control inline-block" name="email" placeholder="Email" />
+								<input type="text" id="email" class="email form-control inline-block field_length" max_len="500" name="email" placeholder="Email" />
 							</div>
 							<div style="display:inline-table; ">
                             	<select class="email-select form-control inline-block m-b-sm" name="email-select" style="width:100px">
@@ -55,7 +55,7 @@
                     <div class="controls col-sm-9 second pull-right">
                         <div class="email multiple-template" data="email">
                             <div style="display:inline-table; width:210px; ">
-								<input type="text" id="email" class="email form-control inline-block" name="email" placeholder="Email" />
+								<input type="text" id="email" class="email form-control inline-block field_length" max_len="500" name="email" placeholder="Email" />
 							</div>
 							<div style="display:inline-table; ">
                             	<select class="email-select form-control inline-block m-b-sm" name="email-select" style="width:100px">
@@ -74,7 +74,7 @@
                     <div class="controls col-sm-9 hide pull-right">
                         <div class="phone multiple-template" data="phone">
 						    <div style="display:inline-table;">
-                            	<input class="form-control inline-block" type="text" id="phone" name="phone" placeholder="Phone number" />
+                            	<input class="form-control inline-block field_length" max_len="500" type="text" id="phone" name="phone" placeholder="Phone number" />
 						    </div>
                             <select class="phone-select form-control inline-block m-b-sm" name="phone-select" style="width:100px">
                                 <option></option>
@@ -89,7 +89,7 @@
                     <div class="controls col-sm-9 second pull-right">
                         <div class="phone multiple-template" data="phone">
 							<div style="display:inline-table;">
-                            	<input class="form-control inline-block" type="text" id="phone" name="phone" placeholder="Phone number" />
+                            	<input class="form-control inline-block field_length" max_len="500" type="text" id="phone" name="phone" placeholder="Phone number" />
 							</div>
                             <select class="phone-select form-control inline-block m-b-sm" name="phone-select" style="width:100px">
                                <option></option>
@@ -107,7 +107,10 @@
                     <label class="control-label col-sm-3">Website <span><a href="#" class="multiple-add"><i class="icon-plus"></i></a></span></label>
                     <div class="controls col-sm-9 hide pull-right">
                         <div class="website multiple-template style=" display:none" data="website">
-                            <input class="form-control inline-block" type="text" id="website" name="website" style="width:105px" placeholder="Website" /> 
+                            <div style="display:inline-table;">
+                                <input class="form-control inline-block field_length" max_len="500" type="text" id="website" name="website"  placeholder="Website" />
+                            </div>
+                             
                             <select class="website-select form-control inline-block m-b-sm" name="website-select" style="width:100px">
                                 <option></option>
                                 <option value="URL">Website</option>
@@ -127,7 +130,9 @@
                     </div>
                     <div class="controls col-sm-9 second pull-right">
                         <div class="website multiple-template style=" display:none" data="website">
-                            <input class="form-control inline-block" type="text" id="website" style="width:105px" name="website" placeholder="Website" /> 
+                            <div style="display:inline-table;">
+                            	<input class="form-control inline-block field_length" max_len="500" type="text" id="website" name="website" placeholder="Website" /> 
+                            </div>
                             <select class="website-select form-control inline-block m-b-sm" name="website-select" style="width:100px">
                                 <option></option>
                                 <option value="URL">Website</option>
@@ -152,7 +157,7 @@
                     <div class="controls col-sm-9">
                         <div class="address multiple-template" data="address">
 							<div style="display:inline-table;">
-                            	<input class="form-control inline-block" type="text" name="address" id="address" placeholder="address" />
+                            	<input class="form-control inline-block field_length" max_len="350" type="text" name="address" id="address" placeholder="address" />
 							</div> 
                             <select class="address-type form-control inline-block m-b-sm" name="address-type" style="width:100px">
                                 <option></option>
@@ -161,9 +166,9 @@
                                 <option value="office">Office</option>
                             </select>
                             <br />
-                            <input class="form-control" type="text" name="city" id="city" placeholder="city" /> <br />
-                            <input class="form-control" type="text" name="state" id="state" placeholder="state" /> <br />
-                            <input class="form-control" type="text" name="zip" id="zip" placeholder="zip" /><br /> 
+                            <input class="form-control field_length" max_len="30" type="text" name="city" id="city" placeholder="city" /> <br />
+                            <input class="form-control field_length" max_len="30" type="text" name="state" id="state" placeholder="state" /> <br />
+                            <input class="form-control field_length" max_len="12" type="text" name="zip" id="zip" placeholder="zip" /><br /> 
                             <select class="styled form-control inline-block m-b-sm" id="country" name="country">
                                 <option value=""></option>
                                 <option value="AF">Afghanistan</option>

@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.agilecrm.DataSyncUrlConstants;
 import com.agilecrm.contact.sync.Type;
 import com.agilecrm.contact.sync.SyncFrequency;
 import com.agilecrm.session.SessionManager;
@@ -19,7 +20,20 @@ public class ContactPrefsUtil
 {
     public static void delete(Type type)
     {
+    System.out.println("type is printing     "+type);
 	ContactPrefs prefs = ContactPrefsUtil.getPrefsByType(type);
+	prefs.delete();
+    }
+    
+    
+    public static void deleteSyncwidgetById(Type type,Long id)
+    {
+    System.out.println("type is printing     "+type);
+	ContactPrefs prefs = ContactPrefsUtil.get(id);
+	if(prefs==null){
+		prefs=ContactPrefsUtil.getPrefsByType(type);
+	}
+	if(prefs!=null)
 	prefs.delete();
     }
 
@@ -75,6 +89,34 @@ public class ContactPrefsUtil
     {
 	return ContactPrefs.dao.fetchAll();
     }
+    
+    
+    public static List<ContactPrefs> getAllprefs()
+    {
+    List<String> prefsTyes=new ArrayList<String>();
+    Map<String, Object> searchMap = new HashMap<String, Object>();
+	searchMap.put("domainUser", new Key<DomainUser>(DomainUser.class, SessionManager.get().getDomainId()));
+ 	List<ContactPrefs> contactPrefs=ContactPrefs.dao.listByProperty(searchMap);
+	for(ContactPrefs prefs:contactPrefs){
+		if(prefs.type!=null)
+		prefsTyes.add(prefs.type.toString());
+	}
+	
+	return addSyncTemplates(prefsTyes,contactPrefs);
+    }
+    
+    public static List<ContactPrefs> addSyncTemplates(List<String> configuredSync,List<ContactPrefs> finalSyncPrefs){
+    	DataSyncUrlConstants dataSyncUrls=null;
+    	dataSyncUrls=DataSyncUrlConstants.getDataSyncUrlInstance();
+    	List<String> defaultSyncTemplates=dataSyncUrls.dataSyncTypes;
+    	for(String defaults:defaultSyncTemplates){
+    		if(!configuredSync.contains(defaults)){
+    			finalSyncPrefs.add(dataSyncUrls.getDataSyncWidget(defaults));
+    		}
+    	}
+    	return finalSyncPrefs;
+    }
+
 
     public static List<ContactPrefs> getprefs(SyncFrequency duration)
     {
@@ -147,5 +189,21 @@ public class ContactPrefsUtil
 	}
 
 	return null;
+    }
+    
+    /**
+     * check for existence of sync widget 
+     * @param type
+     * @return
+     */
+    public static boolean findPrefsByType(Type type)
+    {
+	Map<String, Object> searchMap = new HashMap<String, Object>();
+	searchMap.put("type", type);
+	searchMap.put("domainUser", new Key<DomainUser>(DomainUser.class, SessionManager.get().getDomainId()));
+	if(ContactPrefs.dao.getByProperty(searchMap)==null){
+		return true;
+	}
+	return false;
     }
 }

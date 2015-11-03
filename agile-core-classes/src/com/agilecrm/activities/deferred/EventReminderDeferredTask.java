@@ -51,6 +51,7 @@ public class EventReminderDeferredTask implements DeferredTask
      */
     public void run()
     {
+    	
 	String oldNamespace = NamespaceManager.get();
 	NamespaceManager.set(domain);
 	Event event = null;
@@ -119,6 +120,7 @@ public class EventReminderDeferredTask implements DeferredTask
 	finally
 	{
 	    NamespaceManager.set(oldNamespace);
+	   
 	}
     }
 }

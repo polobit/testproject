@@ -1,7 +1,7 @@
 <script id="googleplus-login-template" type="text/html">
 <div>
 	Keep tabs on your customers' activity on Google+ and engage with them better.
-	<div class="m-t-md  m-b-xs">
+	<div class="m-t-md  m-b-xs text-center">
 		<a class='btn btn-primary btn-sm text-l-none' href="{{url}}">Link Your Google+</a>
 	</div>
 </div>
@@ -19,14 +19,17 @@
 		</div>
 <div class="clearfix"></div>
 	</div>
+	{{else}}
+			<div class="wrapper-xs">
+				Invalid credentials. Please revoke the widget.
+			</div>
 {{/if}}
 	
-		<div class="m-t-md">
+		<div class="m-t-md text-center">
 			<a class='btn btn-sm btn-danger revoke-widget' widget-name="GooglePlus">Revoke Access</a>
 			<a href="#add-widget" class='btn btn-default btn-sm m-l-xs'  widget-name="GooglePlus">Cancel</a>
 		</div>
-	
-</div>
+	</div>
 </script>
 
 <script id="googleplus-search-result-template" type="text/html">

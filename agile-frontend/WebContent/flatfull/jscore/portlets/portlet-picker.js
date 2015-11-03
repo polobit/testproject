@@ -4,6 +4,7 @@
  */
 function organize_portlets(base_model) {
 
+
 	var itemView = new Base_List_View({
 		model : base_model,
 		template : this.options.templateKey + "-model",
@@ -18,6 +19,7 @@ function organize_portlets(base_model) {
 	 * Appends the model (portlet) to its specific div, based on the
 	 * portlet_type as div id (div defined in portlet-add.html)
 	 */
+
 	var containerJSON = {
 		"CONTACTS" : "contacts",
 		"DEALS" : "deals",

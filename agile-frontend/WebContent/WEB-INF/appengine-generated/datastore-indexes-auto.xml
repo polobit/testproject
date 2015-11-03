@@ -231,11 +231,17 @@
         <property name="type" direction="asc"/>
         <property name="last_name" direction="desc"/>
     </datastore-index>
-
+    
     <!-- Used 2 times in query history -->
     <datastore-index kind="Contact" ancestor="false" source="auto">
         <property name="type" direction="asc"/>
         <property name="last_name" direction="asc"/>
+    </datastore-index>
+    
+    <!-- Used 2 times in query history -->
+    <datastore-index kind="Contact" ancestor="false" source="auto">
+        <property name="tagsWithTime.tag" direction="asc"/>
+        <property name="tagsWithTime.createdTime" direction="desc"/>
     </datastore-index>
     
     <datastore-index kind="Task" ancestor="false" source="auto">
@@ -397,6 +403,7 @@
         <property name="entity_type" direction="asc"/>
     </datastore-index>
     
+
     <datastore-index kind="Task" ancestor="false" source="auto">
         <property name="related_deals" direction="asc"/>
         <property name="due" direction="asc"/>
@@ -406,6 +413,34 @@
 		<property name="ownerKey" direction="asc"/>
     </datastore-index>
     
+    <datastore-index kind="Opportunity" ancestor="false" source="manual">
+        <property name="archived" direction="asc"/>
+        <property name="dealSource" direction="asc"/>
+        <property name="close_date" direction="asc"/>
+    </datastore-index>
+    
+    <datastore-index kind="Opportunity" ancestor="false" source="manual">
+        <property name="archived" direction="asc"/>
+        <property name="dealSource" direction="asc"/>
+        <property name="close_date" direction="asc"/>
+        <property name="ownerKey" direction="asc"/>
+    </datastore-index>
+    
+    <datastore-index kind="Opportunity" ancestor="false" source="manual">
+        <property name="archived" direction="asc"/>
+        <property name="dealSource" direction="asc"/>
+        <property name="close_date" direction="asc"/>
+         <property name="pipeline" direction="asc"/>
+    </datastore-index>
+    
+    <datastore-index kind="Opportunity" ancestor="false" source="manual">
+        <property name="archived" direction="asc"/>
+        <property name="dealSource" direction="asc"/>
+        <property name="close_date" direction="asc"/>
+         <property name="pipeline" direction="asc"/>
+		 <property name="ownerKey" direction="asc"/>
+   </datastore-index>
+
     <datastore-index kind="Opportunity" ancestor="false" source="manual">
         <property name="archived" direction="asc"/>
         <property name="milestone" direction="asc"/>

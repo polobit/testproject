@@ -268,10 +268,11 @@ function showBar(url, selector, name, yaxis_name, stacked)
 			    },
 			    legend: {
 			        align: 'right',
-			        x: -100,
+			        x: -52,
 			        verticalAlign: 'top',
-			        y: 20,
+			        y: 0,
 			        floating: true,
+			        layout: 'horizontal',
 			        backgroundColor: (Highcharts.theme&&Highcharts.theme.legendBackgroundColorSolid)||'white',
 			        borderColor: '#CCC',
 			        borderWidth: 1,
@@ -289,9 +290,20 @@ function showBar(url, selector, name, yaxis_name, stacked)
 			                enabled: true,
 			                color: (Highcharts.theme&&Highcharts.theme.dataLabelsColor)||'white'
 			            }
-			        }
+			        },
+			        series : {
+			        	borderWidth : 0
+			        },
 			    },
-			    series: series
+			    series: series,
+			    noData: {
+									 style: {
+									   
+										fontSize: '14px',
+										fontWeight : 'normal',
+										color : '#98A6AD'
+											 },
+						},
 			});
 			});
 	});
@@ -660,123 +672,31 @@ function showFunnel(url, selector, name, show_loading)
 		                borderWidth: 0
 		            }
 		        },
+		        tooltip : {
+		        	 headerFormat: '<span style="font-size: 12px">{point.key}</span><br/>'
+		        	},
 		        legend: {
 		            enabled: false
 		        },
 		        series: [{
 		            name: 'Contacts',
 		            data: funnel_data
-		        }]
+		        }],
+		        noData: {
+									 style: {
+									   
+										fontSize: '14px',
+										fontWeight : 'normal',
+										color : '#98A6AD'
+											 },
+						},
 		    });
 			
 		});
 	});
 }
 
-
-/**
- * Function to build Cohorts
- * <p>
- * The data is not manipulated and the server sends it the required format. We do not use showBar code to decode as some of the data in the cohorts are not sent back 
- * </p>
- * 
- * @param url - 
- *            to fetch json data inorder to render graph.
- * @param selector - 
- *            id or class of an element where charts should render.
- * @param name - 
- *            title of the chart.
- * @param yaxis_name - 
- *            name for y-axis
- * @param show_loading
- * 				shows loading image
- */
-function showCohorts(url, selector, name, yaxis_name, show_loading)
-{
-	
-	// Show loading image if required
-	if(typeof show_loading === 'undefined')
-	{
-		// Old calls were not showing loading image..
-	}
-	else
-		$('#' + selector).html(getRandomLoadingImg());
-	
-	
-	var chart;
-
-	// Loads Highcharts plugin using setupCharts and sets up line chart in the
-	// callback
-	setupCharts(function()
-	{
-
-		// Loads statistics details from backend i.e.,[{closed
-		// date:{total:value, pipeline: value},...]
-		fetchReportData(url, function(data)
-		{
-
-			// Categories are closed dates
-			var categories = data.categories;
-			
-			// Data with total and pipeline values
-			var series = data.series;
-
-			// After loading and processing all data, highcharts are initialized
-			// setting preferences and data to show
-			chart = new Highcharts.Chart({
-			    chart: {
-			        renderTo: selector,
-			        type: 'line',
-			        marginRight: 130,
-			        marginBottom: 25,
-			        zoomType: 'x'
-			    },
-			    title: {
-			        text: name,
-			        x: -20//center
-			    },
-			    xAxis: {
-			       categories: categories,
-			       tickmarkPlacement: 'on'
-			    },
-			    yAxis: {
-			        title: {
-			            text: yaxis_name
-			        },
-			        plotLines: [
-			            {
-			                value: 0,
-			                width: 1,
-			                color: '#808080'
-			            }
-			        ],
-			        min: 0
-			    },
-			    //Tooltip to show details,
-			    ongraphtooltip: {
-			        formatter: function(){
-			            return'<b>'+this.series.name+'</b><br/>'+Highcharts.dateFormat('%e.%b',
-			            this.x)+': '+this.y.toFixed(2);
-			        }
-			    },
-			    legend: {
-			        layout: 'vertical',
-			        align: 'right',
-			        verticalAlign: 'top',
-			        x: -10,
-			        y: 100,
-			        borderWidth: 0
-			    },
-			    //Sets the series of data to be shown in the graph,shows total 
-			    //and pipeline
-			    series: series,
-			    exporting: {
-			        enabled: false
-			    }
-			});
-		});
-	});
-}
+ 
 
 
 /**
@@ -826,7 +746,8 @@ function pieTasks(params)
  */
 function dealsLineChart()
 {
-	showDealAreaSpline('core/api/opportunity/stats/details?min=0&max=1543842319', 'total-pipeline-chart', 'Monthly Deals', 'Total Value');
+	var frequency=$( "#frequency:visible").val();
+	showDealAreaSpline('core/api/opportunity/stats/details?min=0&max=1543842319', 'total-pipeline-chart', 'Monthly Deals', 'Total Value',frequency);
 }
 
 /**
@@ -835,7 +756,8 @@ function dealsLineChart()
  */
 function dealsLineChartByPipeline(pipeline_id)
 {
-	showDealAreaSpline('core/api/opportunity/stats/details/'+pipeline_id+'?min=0&max=1543842319', 'total-pipeline-chart', 'Monthly Revenue - All Deals', 'Total Value');
+	var frequency=$( "#frequency:visible").val();
+	showDealAreaSpline('core/api/opportunity/stats/details/'+pipeline_id+'?min=0&max=1543842319', 'total-pipeline-chart', 'Monthly Revenue - All Deals', 'Total Value',frequency);
 }
 
 /**
@@ -1100,6 +1022,7 @@ function showAreaSpline(url, selector, name, yaxis_name, show_loading)
 			        tickWidth: 1
 			    },
 			    yAxis: {
+			    	allowDecimals: false,
 			        title: {
 			            text: yaxis_name
 			        },
@@ -1155,7 +1078,7 @@ function showAreaSpline(url, selector, name, yaxis_name, show_loading)
  * @param show_loading
  * 				shows loading image
  */
-function showDealAreaSpline(url, selector, name, yaxis_name, show_loading)
+function showDealAreaSpline(url, selector, name, yaxis_name, show_loading,frequency)
 {
 	
 	// Show loading image if required
@@ -1178,10 +1101,12 @@ function showDealAreaSpline(url, selector, name, yaxis_name, show_loading)
 		// date:{total:value, pipeline: value},...]
 		fetchReportData(url, function(data)
 		{
-
 			// Categories are closed dates
 			var categories = [];
 			
+			//The below code is commented as frequency is now sent as a parameter 
+			//var frequency = $( "#frequency:visible").val();
+			var tempcategories=[];
 			// Data with total and pipeline values
 			var series;
 			
@@ -1226,9 +1151,191 @@ function showDealAreaSpline(url, selector, name, yaxis_name, show_loading)
 					var series_data = find_series_with_name(series, k1);
 					series_data.data.push(v1);
 				});
-				var dt = new Date(k * 1000);
-				categories.push(Highcharts.dateFormat('%b.%Y',Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()))+'');
+				tempcategories.push(k*1000);
 				dataLength++;
+			});
+				//
+				var cnt=0;
+				$.each(sortedData, function(k, v)
+			{
+				var dt = new Date(k * 1000);
+				var dte = new Date(tempcategories[cnt]);
+				if(selector=="revenue-chart"){
+
+						if(frequency!=undefined)
+				{
+					if(frequency=="daily")
+					{
+						categories.push(Highcharts.dateFormat('%e.%b',Date.UTC(dte.getFullYear(), dte.getMonth(), dte.getDate()))+'');
+					}
+					else if(frequency=="weekly")
+					{
+						if(cnt!=dataLength-1)
+						{
+							var next_dte = new Date(tempcategories[cnt+1]);
+							categories.push(Highcharts.dateFormat('%e.%b', Date.UTC(dte.getFullYear(), dte.getMonth(), dte.getDate()))+' - '+Highcharts.dateFormat('%e.%b', Date.UTC(next_dte.getFullYear(), next_dte.getMonth(), next_dte.getDate()-1)));
+						}
+						else
+						{
+							var end_date = new Date(Date.parse($.trim($('#range').html().split("-")[1])).valueOf());
+							categories.push(Highcharts.dateFormat('%e.%b', Date.UTC(dte.getFullYear(), dte.getMonth(), dte.getDate()))+' - '+Highcharts.dateFormat('%e.%b', Date.UTC(end_date.getFullYear(), end_date.getMonth(), end_date.getDate())));
+						}
+					}
+					else if(frequency=="monthly" || frequency=="yearly")
+					{
+						if(cnt!=dataLength-1)
+						{
+							var next_dte = new Date(tempcategories[cnt+1]);
+							var current_date = new Date();
+							var from_date = '';
+							var to_date = '';
+							if(cnt!=0)
+							{
+								if(frequency=="yearly")
+									from_date = Highcharts.dateFormat('%Y', Date.UTC(dte.getFullYear(), dte.getMonth(), dte.getDate()));
+								else{
+								if(current_date.getFullYear()!=dte.getFullYear())
+								{
+									from_date = Highcharts.dateFormat('%b.%Y', Date.UTC(dte.getFullYear(), dte.getMonth(), dte.getDate()));
+								}
+								else
+								{
+									from_date = Highcharts.dateFormat('%b', Date.UTC(dte.getFullYear(), dte.getMonth(), dte.getDate()));
+								
+								}
+							}
+								categories.push(from_date);
+							}
+							else
+							{
+								var start_date=new Date(Date.parse($.trim($('#range').html().split("-")[0])).valueOf());
+								if(current_date.getFullYear()!=dte.getFullYear())
+								{
+									from_date = Highcharts.dateFormat('%e.%b.%Y', Date.UTC(start_date.getFullYear(), start_date.getMonth(), start_date.getDate()));
+								}
+								else
+								{
+									from_date = Highcharts.dateFormat('%e.%b', Date.UTC(start_date.getFullYear(), start_date.getMonth(), start_date.getDate()));
+								
+								}
+								//if(current_date.getFullYear()!=next_dte.getFullYear())
+								
+									to_date = Highcharts.dateFormat('%e.%b.%Y', Date.UTC(next_dte.getFullYear(), next_dte.getMonth(), next_dte.getDate()-1));
+								
+								categories.push(from_date+' - '+to_date);
+							}
+						}
+						else
+						{
+							var current_date = new Date();
+							var from_date ='';
+							var start_date=new Date(Date.parse($.trim($('#range').html().split("-")[0])).valueOf());
+							var to_date = '';
+							var end_date = new Date(Date.parse($.trim($('#range').html().split("-")[1])).valueOf());
+							if(current_date.getFullYear()!=dte.getFullYear())
+							{
+								if(cnt==0)
+									from_date = Highcharts.dateFormat('%e.%b.%Y', Date.UTC(start_date.getFullYear(), start_date.getMonth(), start_date.getDate()));
+								else
+									from_date = Highcharts.dateFormat('%e.%b.%Y', Date.UTC(dte.getFullYear(), dte.getMonth(), dte.getDate()));
+							
+								to_date = Highcharts.dateFormat('%e.%b.%Y', Date.UTC(end_date.getFullYear(), end_date.getMonth(), end_date.getDate()));
+							}
+							else
+							{
+								if(cnt==0)
+								  from_date = Highcharts.dateFormat('%e.%b', Date.UTC(start_date.getFullYear(), start_date.getMonth(), start_date.getDate()));
+								else
+									from_date = Highcharts.dateFormat('%e.%b', Date.UTC(dte.getFullYear(), dte.getMonth(), dte.getDate()));
+								
+								to_date = Highcharts.dateFormat('%e.%b', Date.UTC(end_date.getFullYear(), end_date.getMonth(), end_date.getDate()));
+								
+							}
+							categories.push(from_date+' - '+to_date);
+						}
+					}
+					else if(frequency=="Quarterly")
+					{
+						if(cnt!=dataLength-1)
+						{
+							var next_dte = new Date(tempcategories[cnt+1]);
+							var current_date = new Date();
+							var from_date = '';
+							var to_date = '';
+							if(cnt!=0)
+							{
+								if(current_date.getFullYear()!=dte.getFullYear())
+								{
+									categories.push(Highcharts.dateFormat('%b.%y', Date.UTC(dte.getFullYear(), dte.getMonth(), dte.getDate()))+' - '+Highcharts.dateFormat('%b.%y', Date.UTC(next_dte.getFullYear(), next_dte.getMonth()-1, next_dte.getDate())));
+								}
+								else
+								{
+									categories.push(Highcharts.dateFormat('%b', Date.UTC(dte.getFullYear(), dte.getMonth(), dte.getDate()))+' - '+Highcharts.dateFormat('%b', Date.UTC(next_dte.getFullYear(), next_dte.getMonth()-1, next_dte.getDate())));
+	
+								}
+								
+							}
+							else
+							{
+								var start_date=new Date(Date.parse($.trim($('#range').html().split("-")[0])).valueOf());
+								if(current_date.getFullYear()!=dte.getFullYear())
+								{
+									from_date = Highcharts.dateFormat('%e.%b.%Y', Date.UTC(start_date.getFullYear(), start_date.getMonth(), start_date.getDate()));
+								}
+								else
+								{
+									from_date = Highcharts.dateFormat('%e.%b', Date.UTC(start_date.getFullYear(), start_date.getMonth(), start_date.getDate()));
+								
+								}
+								if(current_date.getFullYear()!=next_dte.getFullYear())
+								{
+									to_date = Highcharts.dateFormat('%e.%b.%Y', Date.UTC(next_dte.getFullYear(), next_dte.getMonth(), next_dte.getDate()-1));
+								}
+								else
+								{
+									to_date = Highcharts.dateFormat('%e.%b', Date.UTC(next_dte.getFullYear(), next_dte.getMonth(), next_dte.getDate()-1));
+								}
+								categories.push(from_date+' - '+to_date);
+							}
+							
+									}
+						else
+						{
+							var current_date = new Date();
+							var from_date ='';
+							var start_date=new Date(Date.parse($.trim($('#range').html().split("-")[0])).valueOf());
+							var to_date = '';
+							var end_date = new Date(Date.parse($.trim($('#range').html().split("-")[1])).valueOf());
+							if(current_date.getFullYear()!=dte.getFullYear())
+							{
+								if(cnt==0)
+									from_date = Highcharts.dateFormat('%e.%b.%Y', Date.UTC(start_date.getFullYear(), start_date.getMonth(), start_date.getDate()));
+								else
+									from_date = Highcharts.dateFormat('%e.%b.%Y', Date.UTC(dte.getFullYear(), dte.getMonth(), dte.getDate()));
+							
+								to_date = Highcharts.dateFormat('%e.%b.%Y', Date.UTC(end_date.getFullYear(), end_date.getMonth(), end_date.getDate()));
+							}
+							else
+							{
+								if(cnt==0)
+								  from_date = Highcharts.dateFormat('%e.%b', Date.UTC(start_date.getFullYear(), start_date.getMonth(), start_date.getDate()));
+								else
+									from_date = Highcharts.dateFormat('%e.%b', Date.UTC(dte.getFullYear(), dte.getMonth(), dte.getDate()));
+								
+								to_date = Highcharts.dateFormat('%e.%b', Date.UTC(end_date.getFullYear(), end_date.getMonth(), end_date.getDate()));
+								
+							}
+							categories.push(from_date+' - '+to_date);
+						}
+					}
+
+					cnt++;
+				}
+				}
+					//categories.push(Highcharts.dateFormat('%e.%b',Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()))+'');
+				else
+					categories.push(Highcharts.dateFormat('%b.%Y',Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()))+'');
+				//dataLength++;
 			});
 
 			if(Math.ceil((dataLength-1)/10)>0)
@@ -1247,7 +1354,7 @@ function showDealAreaSpline(url, selector, name, yaxis_name, show_loading)
 			        renderTo: selector,
 			        type: 'areaspline',
 			        marginRight: 130,
-			        marginBottom: 25
+			        marginBottom: 50
 			    },
 			    title: {
 			        text: name,
@@ -1303,16 +1410,36 @@ function showDealAreaSpline(url, selector, name, yaxis_name, show_loading)
 			    series: series,
 			    exporting: {
 			        enabled: false
-			    }
+			    },
+			    lang: {
+            				noData: "No Deals Found"
+        				},
+        					noData: {
+           								style: {
+             								
+               									fontSize: '14px',
+               									fontWeight : 'normal',
+               									color : '#98A6AD'
+
+      	     									 },
+      	     							 position :{
+               									 x : 60,
+               									 y: 5
+           									 },
+       								 }
 			});
 		});
 	});
 }
+
+/** get the symbol for currency to be used in various charts **/
 function getCurrencySymbolForCharts(){
 	var value = ((CURRENT_USER_PREFS.currency != null) ? CURRENT_USER_PREFS.currency : "USD-$");
 	var symbol = ((value.length < 4) ? "$" : value.substring(4, value.length));
 	return symbol;
 }
+
+/** get the comma separated number for charts **/
 function getNumberWithCommasForCharts(value){
 	value = parseFloat(value);
 	value = Math.round(value);
@@ -1600,7 +1727,7 @@ function chartRenderforIncoming(selector,categories,name,yaxis_name,min_tick_int
                                 {
                         return '<div>' + 
                                 '<div class="p-n">'+this.x+'</div>' + 
-                                '<div class="p-n"><font color='+this.series.color+'>'+this.series.name+'</font> : '+getNumberWithCommasForCharts(this.y)+'</div>' +
+                                '<div class="p-n text-cap"><font color='+this.series.color+'>'+this.series.name+'</font> : '+getNumberWithCommasForCharts(this.y)+'</div>' +
                                 '</div>'+
                                 '<div class="p-n">Total : '+getNumberWithCommasForCharts(AllData[this.point.x][1])+'</div>';
                             }
@@ -1615,7 +1742,21 @@ function chartRenderforIncoming(selector,categories,name,yaxis_name,min_tick_int
                     },
                     useHTML: true
                 },
-               
+                  lang: {
+            				noData: "No Deals Found"
+        				},
+        					noData: {
+           								style: {
+             								 
+               									fontSize: '14px',
+               									fontWeight : 'normal',
+        										color : '#98A6AD'
+      	     									 },
+      	     							 position :{
+               									 x : 60,
+               									 y: 5
+           									 },
+       								 },
                 //Sets the series of data to be shown in the graph,shows total 
                 //and pipeline
                 series: series,
@@ -1687,7 +1828,7 @@ function pieforReports(url, selector, name,show_loading)
 							console.log(pieData);
 							var animation = count > 20 ? false : true;
 							var url_path;
-							if(selector=="lossreasonpie-chart")
+							if(selector=="lossreasonpie-chart" || selector == "lossreasonpie-chart-users")
 								url_path='/core/api/categories?entity_type=DEAL_LOST_REASON';
 							else
 								url_path='/core/api/categories?entity_type=DEAL_SOURCE';
@@ -1719,12 +1860,15 @@ function pieforReports(url, selector, name,show_loading)
 
 
 	function createAPieChart(selector, name, animation, AllData, pieData){
-
+		var pieSize='90%';
+if(selector == 'lossreasonpie-chart-users'){
+	pieSize='50%';
+}
 		// Initializes Highcharts,
 	chart = new Highcharts.Chart(
 			{
 				chart : { renderTo : selector, type : 'pie', plotBackgroundColor : null, plotBorderWidth : null, plotShadow : false,
-					marginTop : 20 },
+					marginBottom:50},
 				colors: ['#7266ba','#23b7e5','#27c24c','#fad733','#f05050','#FF9900','#7AF168','#167F80','#0560A2','#D3E6C7'],
 				title : { text : name },
 				 tooltip: {
@@ -1757,9 +1901,9 @@ function pieforReports(url, selector, name,show_loading)
 						dataLabels : { enabled : true,useHTML: true,
 							formatter : function()
 							{
-								return 	'<div class="text-center"><span style="color:'+this.point.color+'"><b>'+this.point.name+'</b></span><br/>' +
+								return 	'<div class="text-center text-cap"><span style="color:'+this.point.color+';display:block"><b>'+this.point.name+'</b></span>' +
     			'<span style="color:'+this.point.color+'"><b>'+Math.round(this.point.percentage)+'%</b></span></div>';
-							}, distance : 25 }, showInLegend : false, innerSize : '65%',  shadow : false, borderWidth : 0 },
+							}, distance : 25 }, showInLegend : false,size:pieSize,innerSize :'65%',shadow : false, borderWidth : 0 },
 					series : { events : { mouseOver : function()
 					{
 						$('.tooltip-default-message').hide();
@@ -1778,9 +1922,14 @@ function pieforReports(url, selector, name,show_loading)
 					},
 					 noData: {
 									 style: {
-									   fontWeight: 'bold',
-										fontSize: '25px',
-											 }
+									   
+										fontSize: '14px',
+										fontWeight : 'normal',
+										color : '#98A6AD'
+											 },
+											 position :{
+               									 y: 5
+           									 },
 								 }
 				 } );
 

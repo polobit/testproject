@@ -620,33 +620,6 @@ public class OpportunityUtil
     }
 
     /**
-     * Gets list of opportunities with respect to closed date and given time
-     * period.
-     * 
-     * @param minTime
-     *            - Given time less than closed date.
-     * @param maxTime
-     *            - Given time greater than closed date.
-     * @return list of opportunities with closed date in between min and max
-     *         times.
-     */
-    public static List<Opportunity> getOpportunitiesByPipeline(Long pipelineId, long minTime, long maxTime)
-    {
-	UserAccessControlUtil.checkReadAccessAndModifyQuery("Opportunity", null);
-
-	if (pipelineId == null)
-	{
-		return dao.ofy().query(Opportunity.class)
-				.filter("close_date >= ", minTime).filter("close_date <= ", maxTime).list();
-	}
-	else
-	{
-		return dao.ofy().query(Opportunity.class).filter("pipeline", new Key<Milestone>(Milestone.class, pipelineId))
-				.filter("close_date >= ", minTime).filter("close_date <= ", maxTime).list();
-	}
-    }
-
-    /**
      * Gets JSONObject of expected-values and pipeline values of deals with
      * respect to month. Gets list of opportunities with respect to given time
      * period. Adds expected-values and pipeline values by iterating through
@@ -660,14 +633,16 @@ public class OpportunityUtil
      * @return JsonObject having total and pipeline values with respect to
      *         month.
      */
-    public static JSONObject getDealsDetailsByPipeline(Long pipelineId, long minTime, long maxTime)
+    public static JSONObject getDealsDetailsByPipeline(Long ownerId,
+			Long pipelineId,Long sourceId, long minTime, long maxTime,String frequency)
     {
 	// Final JSON Constants
-	String TOTAL = "total";
-	String PIPELINE = "pipeline";
-
+	String TOTAL = "Total";
+	String PIPELINE = "Pipeline";
+	int type=Calendar.DAY_OF_MONTH;
 	// Deals Object
 	JSONObject dealsObject = new JSONObject();
+	CategoriesUtil categoriesUtil = new CategoriesUtil();
 
 	/*if (pipelineId == null || pipelineId == 0L)
 	    pipelineId = MilestoneUtil.getMilestones().id;*/
@@ -679,26 +654,85 @@ public class OpportunityUtil
 	{
 		pipelineId = null;
 	}
+	if(ownerId!=null && ownerId==0)
+		ownerId=null;
+	if(sourceId!=null && sourceId==0)
+		sourceId=null;
 	String timeZone = "UTC";
 	UserPrefs userPrefs = UserPrefsUtil.getCurrentUserPrefs();
 	if (userPrefs != null && userPrefs.timezone != null)
 	{
 		timeZone = userPrefs.timezone;
 	}
-	List<Opportunity> opportunitiesList = getOpportunitiesByPipeline(pipelineId, minTime, maxTime);
+	List<Opportunity> opportunitiesList = getDealsWithOwnerandPipeline(ownerId,pipelineId, minTime, maxTime);
+	List<Opportunity> opportunitiesList_temp=new ArrayList<Opportunity>();
 	if (opportunitiesList != null && opportunitiesList.size() > 0)
 	{
+		if(sourceId!=null){
+			for (Opportunity opportunity : opportunitiesList)
+			{
+				boolean flag=true;
+				try
+				{
+					Long source=opportunity.getDeal_source_id();
+						if(sourceId==1)
+						{
+							if (source==0L)
+								opportunitiesList_temp.add(opportunity);
+							else
+								{
+								List<Category> sources = categoriesUtil.getCategoriesByType("DEAL_SOURCE");
+								for(Category source_id : sources)
+								{
+									if(source.toString().equals(source_id.getId().toString())){
+										flag=false;
+										break;
+									}
+										
+								}
+								if(flag)
+									opportunitiesList_temp.add(opportunity);
+								}
+						}
+						else if (source.toString().equals(sourceId.toString()))
+							opportunitiesList_temp.add(opportunity);
+						else 
+							continue;
+				}
+				catch (Exception e)
+				{
+					System.out.println("Exception :" + e);
+				}
+			}
+		}
+		else
+			opportunitiesList_temp=opportunitiesList;
+		if (opportunitiesList_temp != null && opportunitiesList_temp.size() > 0){
 		Calendar startCalendar = Calendar.getInstance(TimeZone.getTimeZone(timeZone));
 		System.out.println("Start Calendar timezone id-----"+startCalendar.getTimeZone().getID());
 		if (minTime == 0)
 		{
-			startCalendar.setTimeInMillis(opportunitiesList.get(0).close_date * 1000);
+			startCalendar.setTimeInMillis(opportunitiesList_temp.get(0).close_date * 1000);
 		}
 		else
 		{
-			startCalendar.setTimeInMillis((minTime * 1000) + (24 * 60 * 60 * 1000));
+			startCalendar.setTimeInMillis(minTime * 1000);
 		}
-		startCalendar.set(Calendar.DAY_OF_MONTH, 1);
+		if(frequency!=null){
+			if (StringUtils.equalsIgnoreCase(frequency, "monthly"))
+				startCalendar.set(Calendar.DAY_OF_MONTH, 1);
+				
+				if (StringUtils.equalsIgnoreCase(frequency, "Quarterly"))
+				{
+					int a= startCalendar.get(Calendar.MONTH)/3;
+					a=a*3;
+					startCalendar.set(Calendar.MONTH,a);
+					startCalendar.set(Calendar.DAY_OF_MONTH, 1);
+					
+				}
+		}
+		else 
+			startCalendar.set(Calendar.DAY_OF_MONTH, 1);
 		startCalendar.set(Calendar.HOUR_OF_DAY, 0);
 		startCalendar.set(Calendar.MINUTE, 0);
 		startCalendar.set(Calendar.SECOND, 0);
@@ -708,13 +742,26 @@ public class OpportunityUtil
 		System.out.println("End Calendar timezone id-----"+endCalendar.getTimeZone().getID());
 		if (maxTime == 1543842319)
 		{
-			endCalendar.setTimeInMillis(opportunitiesList.get(opportunitiesList.size()-1).close_date * 1000);
+			endCalendar.setTimeInMillis(opportunitiesList_temp.get(opportunitiesList_temp.size()-1).close_date * 1000);
 		}
 		else
 		{
 			endCalendar.setTimeInMillis(maxTime * 1000);
 		}
-		endCalendar.set(Calendar.DAY_OF_MONTH, 1);
+		if(frequency!=null){
+		if (StringUtils.equalsIgnoreCase(frequency, "monthly"))
+			 endCalendar.set(Calendar.DAY_OF_MONTH, 1);
+			if (StringUtils.equalsIgnoreCase(frequency, "Quarterly"))
+			{
+				int a= endCalendar.get(Calendar.MONTH)/3;
+				a=a*3;
+				endCalendar.set(Calendar.MONTH,a);
+				endCalendar.set(Calendar.DAY_OF_MONTH, 1);
+				
+			}
+		}
+		else
+			endCalendar.set(Calendar.DAY_OF_MONTH, 1);
 		endCalendar.set(Calendar.HOUR_OF_DAY, 0);
 		endCalendar.set(Calendar.MINUTE, 0);
 		endCalendar.set(Calendar.SECOND, 0);
@@ -728,19 +775,60 @@ public class OpportunityUtil
 			totalAndPipeline.put(PIPELINE, 0);
 			String mmYY = (startCalendar.getTimeInMillis() / 1000) + "";
 			dealsObject.put(mmYY, totalAndPipeline);
-			startCalendar.add(Calendar.MONTH, 1);
-			startCalendar.set(Calendar.DAY_OF_MONTH, 1);
+			if(frequency!=null){
+				if (StringUtils.equalsIgnoreCase(frequency, "daily"))
+					{type=Calendar.DAY_OF_MONTH;
+					startCalendar.add(type, 1);
+					}
+				if (StringUtils.equalsIgnoreCase(frequency, "monthly"))
+				{
+					type = Calendar.MONTH;
+					startCalendar.add(type, 1);
+					startCalendar.set(Calendar.DAY_OF_MONTH, 1);
+				}
+				if (StringUtils.equalsIgnoreCase(frequency, "Quarterly"))
+				{
+					type = Calendar.MONTH;
+					startCalendar.add(type, 3);
+					startCalendar.set(Calendar.DAY_OF_MONTH, 1);
+				}
+				if (StringUtils.equalsIgnoreCase(frequency, "weekly"))
+				{ type = Calendar.WEEK_OF_YEAR;
+				startCalendar.add(type, 1);}
+			}
+			else{
+				startCalendar.add(Calendar.MONTH, 1);
+				startCalendar.set(Calendar.DAY_OF_MONTH, 1);
+			}
 			startCalendar.set(Calendar.HOUR_OF_DAY, 0);
 			startCalendar.set(Calendar.MINUTE, 0);
 			startCalendar.set(Calendar.SECOND, 0);
 			startCalendar.set(Calendar.MILLISECOND, 0);
 			startTimeInMilliSecs = startCalendar.getTimeInMillis();
+			
 		}
 	}
-	for (Opportunity opportunity : opportunitiesList)
+	}
+	for (Opportunity opportunity : opportunitiesList_temp)
 	{
+		String last="";
 	    try
 	    {
+	    	String wonMilestone = "Won";
+	    	String lostMilestone = "Lost";
+	    	    Milestone mile = MilestoneUtil.getMilestone(opportunity.getPipeline_id());
+	    	    if (mile.won_milestone != null)
+	    		wonMilestone = mile.won_milestone;
+	    	    if (mile.lost_milestone != null)
+	    		lostMilestone = mile.lost_milestone;
+
+	    	    // If the deal is won, change the probability to 100.
+	    	    if (opportunity.milestone.equalsIgnoreCase(wonMilestone))
+	    	    	opportunity.probability = 100;
+
+	    	    // If the deal is lost, change the probability to 0.
+	    	    if (opportunity.milestone.equalsIgnoreCase(lostMilestone))
+	    	    	opportunity.probability = 0;
 		// Total and Pipeline (total * probability)
 		double total = opportunity.expected_value;
 		double pipeline = opportunity.expected_value * opportunity.probability / 100;
@@ -754,14 +842,44 @@ public class OpportunityUtil
 
 		Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone(timeZone));
 		calendar.setTimeInMillis(opportunity.close_date * 1000);
-		calendar.set(Calendar.DAY_OF_MONTH, 1);
+		if(frequency!=null){
+		if(StringUtils.equalsIgnoreCase(frequency, "monthly")) 
+			calendar.set(Calendar.DAY_OF_MONTH, 1);
+		if(StringUtils.equalsIgnoreCase(frequency, "Quarterly"))
+		{
+			int a= calendar.get(Calendar.MONTH)/3;
+			a=a*3;
+			calendar.set(Calendar.MONTH,a);
+			calendar.set(Calendar.DAY_OF_MONTH, 1);
+		}
+		if(StringUtils.equalsIgnoreCase(frequency,"weekly"))
+			{
+			
+			Iterator iter = dealsObject.keys();
+			while (iter.hasNext()) {
+			    String key = (String) iter.next();
+			    if((calendar.getTimeInMillis()/1000+"").compareToIgnoreCase(key.toString())>-1)
+			     {
+			    	last=key;
+			    	continue;	
+			     }
+			    break;
+			}
+			
+			}
+		}
+		else
+			calendar.set(Calendar.DAY_OF_MONTH, 1);
 		calendar.set(Calendar.HOUR_OF_DAY, 0);
 		calendar.set(Calendar.MINUTE, 0);
 		calendar.set(Calendar.SECOND, 0);
 		calendar.set(Calendar.MILLISECOND, 0);
-
+		String mmYY;
 		Date firstDayOfMonth = calendar.getTime();
-		String mmYY = (calendar.getTimeInMillis() / 1000) + "";
+		if(frequency!=null && StringUtils.equalsIgnoreCase(frequency,"weekly"))
+			 mmYY=last;
+		else
+			mmYY = (calendar.getTimeInMillis() / 1000) + "";
 
 		Double oldTotal = 0D, oldPipeline = 0D;
 
@@ -1637,6 +1755,7 @@ public class OpportunityUtil
 	return dao.listByProperty(conditionsMap);
     }
     /**
+
      * Gets JSONObject of deals and Total pipeline values of deals with
      * respect to da. These are used for graph building.
      * 
@@ -1806,6 +1925,36 @@ public class OpportunityUtil
 	return newDealsList;
 
     }
+
+	/* Returns deals based on ownerId or PipelineId or close-date
+	* or all at once
+	* 
+	* 
+	* @param ownerId
+	*            - Owner Id
+	* @param pipelineId
+	*            - pipeline Id
+	*            -
+	* @return List
+	*/
+	
+	public static List<Opportunity> getDealsWithOwnerandPipeline(Long ownerId,
+			Long pipelineId, long minTime, long maxTime) {
+		UserAccessControlUtil
+				.checkReadAccessAndModifyQuery("Opportunity", null);
+		Map<String, Object> conditionsMap = new HashMap<String, Object>();
+		if (ownerId != null)
+			conditionsMap.put("ownerKey", new Key<DomainUser>(DomainUser.class,
+					ownerId));
+		if (pipelineId != null)
+			conditionsMap.put("pipeline", new Key<Milestone>(Milestone.class,
+					pipelineId));
+		conditionsMap.put("close_date >= ", minTime);
+		conditionsMap.put("close_date <= ", maxTime);
+		conditionsMap.put("archived",false);
+		return dao.listByProperty(conditionsMap);
+	}
+
     
     /**
 	 * Gets JSONObject of deals of loss reason. These are used for pie chart building.

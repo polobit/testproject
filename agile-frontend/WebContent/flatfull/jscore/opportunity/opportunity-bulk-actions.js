@@ -312,6 +312,11 @@
 				var html = '';
 				$.each(campaigns, function(index,camp){
 					//console.log(customfield);
+					if(camp.is_disabled){
+ 						html += '<option value="'+camp.id+'" disabled = disabled>'+camp.name+' (Disabled)</option>';
+ 						return true;
+ 					} 
+
 					html += '<option value="'+camp.id+'">'+camp.name+'</th>';
 				});
 				el.html(html);

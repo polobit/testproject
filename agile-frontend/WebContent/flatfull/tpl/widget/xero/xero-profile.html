@@ -91,7 +91,7 @@
 		</ul>	
 	{{/isArray}}
 	{{else}}
-		<li class="list-group-item r-none b-l-none b-r-none">
+		<li class="r-none b-l-none b-r-none">
 	    	No invoices	found		
 		</li>
 	{{/if}}
@@ -115,7 +115,7 @@
 <script id="xero-login-template" type="text/html">
 <div class="m-t">
 	Xero is an online accounting software for small business - Explore invoicing, reconciliation anytime, anywhere.
-<div class="m-t">	
+<div class="m-t text-center">	
 <a class="btn btn-sm btn-primary m-t-sm" href="{{url}}">Link Your Xero</a>
 </div>
 </div>
@@ -139,13 +139,13 @@
 
 	<div>
 	
-{{#if custom_data.prefsObj.xero_company_name}}
-			<p class="title_txt p-l-sm"><a href="https://go.xero.com/organisationlogin/default.aspx?shortcode={{custom_data.prefsObj.xero_org_shortcode}}&redirecturl=/Dashboard/" target="_blank" >{{custom_data.prefsObj.xero_company_name}}</a></p>
+{{#if profile.prefs.xero_company_name}}
+			<p class="title_txt p-l-sm"><a href="https://go.xero.com/organisationlogin/default.aspx?shortcode={{profile.prefsObj.xero_org_shortcode}}&redirecturl=/Dashboard/" target="_blank" >{{profile.prefs.xero_company_name}}</a></p>
 {{/if}}
 		
 	</div>
 	
-		<div class="m-t-md  m-b-xs">
+		<div class="m-t-md  m-b-xs text-center">
 			<a class='btn btn-sm btn-danger revoke-widget ml_5' widget-name="Xero">Revoke Access</a>
 			<a href="#add-widget" class='btn btn-default btn-sm ml_5' widget-name="Xero">Cancel</a>
 		</div>

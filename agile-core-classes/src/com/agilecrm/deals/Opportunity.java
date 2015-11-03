@@ -477,19 +477,35 @@ public class Opportunity extends Cursor implements Serializable
 	Opportunity oldOpportunity = null;
 
 	String wonMilestone = "Won";
+	String lostMilestone = "Lost";
 	try
 	{
-	    wonMilestone = MilestoneUtil.getMilestone(pipeline_id).won_milestone;
+	    Milestone mile = MilestoneUtil.getMilestone(pipeline_id);
+	    if (mile.won_milestone != null)
+		wonMilestone = mile.won_milestone;
+	    if (mile.lost_milestone != null)
+		lostMilestone = mile.lost_milestone;
+
 	}
 	catch (Exception e)
 	{
 	    e.printStackTrace();
 	}
-	System.out.println("-------------won date---------" + wonMilestone);
+	System.out.println("-------------won milestone---------" + wonMilestone);
+	System.out.println("-------------lost milestone---------" + lostMilestone);
 
 	// cache old data to compare new and old in triggers
 	if (id != null)
 	    oldOpportunity = OpportunityUtil.getOpportunity(id);
+	if(oldOpportunity==null){
+		 // If the deal is won, change the probability to 100.
+	    if (this.milestone.equalsIgnoreCase(wonMilestone))
+		this.probability = 100;
+
+	    // If the deal is lost, change the probability to 0.
+	    if (this.milestone.equalsIgnoreCase(lostMilestone))
+		this.probability = 0;
+	}
 	if (oldOpportunity != null)
 	{
 	    if (this.created_time == 0)
@@ -500,12 +516,20 @@ public class Opportunity extends Cursor implements Serializable
 	if (oldOpportunity != null && StringUtils.isNotEmpty(this.milestone)
 		&& StringUtils.isNotEmpty(oldOpportunity.milestone))
 	{
+	    // For API fix. If the user didn't send the milestone_changed_time
+	    // in the call, use the value in the old one.
+	    if (this.milestone_changed_time == 0 && oldOpportunity.milestone_changed_time > 0)
+		this.milestone_changed_time = oldOpportunity.milestone_changed_time;
+
 	    if (!this.pipeline_id.equals(oldOpportunity.getPipeline_id())
 		    || !this.milestone.equals(oldOpportunity.milestone))
 		this.milestone_changed_time = System.currentTimeMillis() / 1000;
 
 	    if (!this.milestone.equals(oldOpportunity.milestone) && this.milestone.equalsIgnoreCase(wonMilestone))
+	    {
 		this.won_date = System.currentTimeMillis() / 1000;
+		this.probability = 100;
+	    }
 
 	    System.out.println("New Opportunity-----" + this);
 	    // If old deal, new deal are same and lost reason is there,
