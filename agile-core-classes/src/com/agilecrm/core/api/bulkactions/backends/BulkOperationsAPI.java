@@ -579,7 +579,10 @@ public class BulkOperationsAPI
 			Long.parseLong(ownerId), new ObjectMapper().writeValueAsString(contact), Contact.class,
 			currentEntityCount);
 
-		PullQueueUtil.addToPullQueue("dummy-pull-queue", importer, null);
+		PullQueueUtil.addToPullQueue("contact-import-queue", importer, key);
+
+
+		//PullQueueUtil.addToPullQueue("dummy-pull-queue", importer, null);
 
 		new CSVUtil(restrictions, accessControl).createContactsFromCSV(blobStream, contact, ownerId);
 	    }
