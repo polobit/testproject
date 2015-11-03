@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.imports.CSVImporter;
+import com.agilecrm.subscription.restrictions.db.BillingRestriction;
 import com.agilecrm.subscription.restrictions.exception.PlanRestrictedException;
 import com.agilecrm.util.CSVUtil;
 import com.google.appengine.api.NamespaceManager;
@@ -17,21 +18,26 @@ public class ContactsCSVImporter extends CSVImporter<Contact>
     private static final long serialVersionUID = 1L;
 
     public ContactsCSVImporter(String domain, BlobKey blobKey, Long domainUseId, String entityMapper,
-	    Class<Contact> contactClass)
+	    Class<Contact> contactClass, int currentEntityCount)
     {
-	super(domain, blobKey, domainUseId, entityMapper, contactClass);
+	super(domain, blobKey, domainUseId, entityMapper, contactClass, currentEntityCount);
 	// TODO Auto-generated constructor stub
     }
 
-    @Override
-    public void run()
+    protected void process()
     {
 	NamespaceManager.set(domain);
 	// TODO Auto-generated method stub
 	try
 	{
-	    new CSVUtil(getBillingRestriction(), getUserAccessControl()).createContactsFromCSV(getInputStream(),
-		    getMapperEntity(), String.valueOf(domainUserId));
+	    BillingRestriction restriction = getBillingRestriction();
+
+	    // There is limiation on count in remote API (max count
+	    // it gives is 1000)
+	    restriction.contacts_count = currentEntityCount;
+
+	    new CSVUtil(restriction, getUserAccessControl()).createContactsFromCSV(getInputStream(), getMapperEntity(),
+		    String.valueOf(domainUserId));
 	}
 	catch (PlanRestrictedException e)
 	{
@@ -43,6 +49,7 @@ public class ContactsCSVImporter extends CSVImporter<Contact>
 	    // TODO Auto-generated catch block
 	    e.printStackTrace();
 	}
+
 	finally
 	{
 	    NamespaceManager.set(null);

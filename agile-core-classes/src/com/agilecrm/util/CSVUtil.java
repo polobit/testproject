@@ -247,8 +247,10 @@ public class CSVUtil
 
 	BulkActionUtil.setSessionManager(domainUser);
 
-	// Refreshes count of contacts
-	billingRestriction.refreshContacts();
+	// Refreshes count of contacts. This is removed as it already calculated
+	// in deferred task; there is limation on count in remote api (max count
+	// it gives is 1000)
+	// billingRestriction.refreshContacts();
 
 	System.out.println(billingRestriction.getCurrentLimits().getPlanId() + " : "
 		+ billingRestriction.getCurrentLimits().getPlanName());

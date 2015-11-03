@@ -14,8 +14,10 @@ import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.access.UserAccessControl;
 import com.agilecrm.user.access.UserAccessControl.AccessControlClasses;
 import com.agilecrm.user.util.DomainUserUtil;
+import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.blobstore.BlobKey;
 import com.google.appengine.api.blobstore.BlobstoreInputStream;
+import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
 import com.google.appengine.api.taskqueue.DeferredTask;
 
 public abstract class CSVImporter<T> implements CSVImportable
@@ -35,15 +37,18 @@ public abstract class CSVImporter<T> implements CSVImportable
     private UserAccessControl userAccessControl;
     private DomainUser user;
     private InputStream blobStream;
+    protected int currentEntityCount;
     protected final Class<T> clazz;
 
-    public CSVImporter(String domain, BlobKey blobKey, Long domainUserId, String entityMapper, Class<T> clazz)
+    public CSVImporter(String domain, BlobKey blobKey, Long domainUserId, String entityMapper, Class<T> clazz,
+	    int currentEntityCount)
     {
 	this.domain = domain;
 	this.blobKey = blobKey;
 	this.domainUserId = domainUserId;
 	this.clazz = clazz;
 	this.entityMapper = entityMapper;
+	this.currentEntityCount = currentEntityCount;
     }
 
     protected T getMapperEntity() throws JsonParseException, JsonMappingException, IOException
@@ -93,6 +98,25 @@ public abstract class CSVImporter<T> implements CSVImportable
 	// TODO Auto-generated method stub
 	return userAccessControl;
     }
+
+    public final void run()
+    {
+	String oldNamespace = NamespaceManager.get();
+
+	try
+	{
+	    NamespaceManager.set(domain);
+	    process();
+	    BlobstoreServiceFactory.getBlobstoreService().delete(blobKey);
+	}
+	finally
+	{
+	    NamespaceManager.set(oldNamespace);
+	}
+    }
+
+    protected abstract void process();
+
 }
 
 interface CSVImportable extends DeferredTask
