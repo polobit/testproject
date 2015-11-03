@@ -17,10 +17,9 @@
 							<div class="controls col-sm-5">
 								<div class="well bg-transparent m-b-none p-sm">
 						    		<span id="source-{{id}}">{{group_email}}</span>
-									<button id="grp-{{id}}" class="btn btn-xs btn-primary grp-btn-cpy-email" data-original-title="Copy to Cliboard" data-toggle="tooltip" 
-										data-placement="top">
+									<a onclick="function(e){e.stopPropagation();}" id="grp-{{id}}" class="btn btn-xs btn-primary grp-btn-cpy-email" data-original-title="Copy to Cliboard" data-toggle="tooltip" data-placement="top">
 										Copy
-									</button>
+									</a>
 								</div>
 							</div>
 						</div>

@@ -12,7 +12,7 @@
   	<div class="clearfix"></div>
     <td>
     	<span id="source-{{id}}">{{group_email}}</span>
-    	<a id="grp-{{id}}" class="m-xs" href="javascript: void(0);" title="Copy to Clipboard" data-clipboard-text="{{group_email}}" data-toggle="tooltip" data-placement="top">
+    	<a id="grp-{{id}}" class="m-xs" href="#" onclick="function(e){e.stopPropagation();}" title="Copy to Clipboard" data-clipboard-text="{{group_email}}" data-toggle="tooltip" data-placement="top">
     			<i class="icon-copy copy_email_clipboard_icon" ></i>
     	</a>
 	</td>
