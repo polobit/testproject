@@ -1,6 +1,8 @@
 package com.agilecrm.core.api.subscription;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
@@ -16,16 +18,25 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.jsoup.Jsoup;
+
+import net.sf.json.JSONObject;
+
+import sun.security.jgss.GSSCaller;
+
 import com.agilecrm.subscription.Subscription;
 import com.agilecrm.subscription.SubscriptionUtil;
 import com.agilecrm.subscription.limits.cron.deferred.AccountLimitsRemainderDeferredTask;
 import com.agilecrm.subscription.restrictions.db.BillingRestriction;
 import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
+import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil.ErrorMessages;
 import com.agilecrm.subscription.restrictions.exception.PlanRestrictedException;
 import com.agilecrm.subscription.stripe.StripeImpl;
 import com.agilecrm.subscription.stripe.StripeUtil;
 import com.agilecrm.subscription.ui.serialize.CreditCard;
 import com.agilecrm.subscription.ui.serialize.Plan;
+import com.agilecrm.subscription.ui.serialize.Plan.PlanType;
+import com.agilecrm.user.util.DomainUserUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
@@ -333,6 +344,42 @@ public class SubscriptionApi {
 	public void cancelSubscription() {
 		try {
 			SubscriptionUtil.getSubscription().cancelSubscription();
+		} catch (Exception e) {
+			throw new WebApplicationException(Response
+					.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+					.build());
+		}
+	}
+	
+	/**
+	 * get the plan restrictions
+	 */
+	@Path("/planRestrictions")
+	@POST
+	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	public String planRestrictions(Plan plan) {
+		try {
+			Subscription subscription = SubscriptionUtil.getSubscription();
+			if (subscription.plan != null && subscription.plan.plan_type == PlanType.FREE) {
+				int count = DomainUserUtil.count();
+				System.out.println("existing users cout in free plan " + count);
+				if (plan.quantity < count) {
+					JSONObject json =  new JSONObject();
+					json.put("is_more_users", true);
+					json.put("count", count);
+					return json.toString();
+				}
+			}else if (BillingRestrictionUtil.isLowerPlan(subscription.plan, plan)) {
+				System.out.println("plan upgrade not possible");
+				Map<String, Map<String, Integer>> restrictions = BillingRestrictionUtil.getInstanceTemporary(plan).getRestrictions();
+				String restrictionsJSONString = new Gson().toJson(restrictions);
+				return restrictionsJSONString;
+			}
+			Map<String, Boolean> restrictions = new HashMap<String, Boolean>();
+			restrictions.put("is_allowed_plan", true);
+			String restrictionsJSONString = new Gson().toJson(restrictions);
+			return restrictionsJSONString;
 		} catch (Exception e) {
 			throw new WebApplicationException(Response
 					.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
