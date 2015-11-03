@@ -122,6 +122,12 @@ var TicketsUtilRouter = Backbone.Router.extend({
 		Ticket_Filter_ID = null;
 		var url = '/core/api/tickets?status=' + Ticket_Status + '&group_id=' + group_id;
 
+		if(!Group_ID || Group_ID != group_id){
+
+			Group_ID = group_id;
+			Reload_Tickets_Count = true;
+		}	
+
 		Tickets.fetch_tickets_collection(url, group_id);
 	},
 
@@ -141,6 +147,9 @@ var TicketsUtilRouter = Backbone.Router.extend({
 		//Verifying ticket exists in collection or not
 		if(!ticketModal)
 		{
+			Group_ID = group_id;
+			Reload_Tickets_Count = true;
+			
 			//If collection doesn't exists the re-render the whole layout and then fetch ticket notes
 			Tickets.initialize(group_id, function(){
 				App_Ticket_Module.ticketDetails(id);

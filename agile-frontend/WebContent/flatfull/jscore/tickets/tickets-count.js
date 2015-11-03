@@ -1,11 +1,16 @@
 var Tickets_Count = {
 
-	fetch_tickets_count: function(group_id){
+	fetch_tickets_count: function(){
+
+		if(!Reload_Tickets_Count)
+			return;
 
 		var ticket_type = ['NEW','OPEN','STARRED','CLOSED'];
 
 		for(var i=0; i < ticket_type.length; i++)
-			this.show_count(ticket_type[i], group_id);
+			this.show_count(ticket_type[i], Group_ID);
+
+		Reload_Tickets_Count = false;
 	},
 
 	fetch_filter_tickets_count: function(filters_colletion){

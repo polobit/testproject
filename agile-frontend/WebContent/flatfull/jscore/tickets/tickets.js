@@ -1,5 +1,6 @@
 var Group_ID = null, Ticket_Status = 'new', Current_Ticket_ID = null, Ticket_Filter_ID = null,
-New_Tickets = 0, Opened_Tickets = 0, Starred_Tickets = 0, Closed_Tickets =0, Tickets_Util = {}, Reload_Filters = true;
+New_Tickets = 0, Opened_Tickets = 0, Starred_Tickets = 0, Closed_Tickets =0, Tickets_Util = {}, Reload_Filters = true,
+Reload_Tickets_Count = false;
 
 $("body").bind('click', function(ev) {
 	Tickets.hideDropDowns(ev);
@@ -12,17 +13,6 @@ var Tickets = {
 
 		//Renders root template, fetches tickets count & loads Groups drop down
 		Tickets.initialize(group_id, function(){
-
-			if(Group_ID != group_id){
-
-				Group_ID = group_id;
-
-				//Replace group name
-				$('a#group_name').html($('a[data-group-id="'+ group_id +'"]').attr('data-group-name'));
-
-				//Fectching new, open, closed tickets count
-				Tickets_Count.fetch_tickets_count(group_id);
-			}
 
 			App_Ticket_Module.ticketsCollection = new Base_Collection_View({
 				url : url,
@@ -79,7 +69,7 @@ var Tickets = {
 				$('#content').html($(template_ui));	
 
 				//Fectching new, open, closed tickets count
-				Tickets_Count.fetch_tickets_count(group_id);
+				Tickets_Count.fetch_tickets_count();
 
 				//Rendering Groups dropdown
 				Tickets_Group_View = new Ticket_Base_Model({
@@ -88,15 +78,8 @@ var Tickets = {
 					url : "/core/api/tickets/groups",
 					postRenderCallback : function(el, data) {
 
-						//Render Group name on drop down
-						$.map(data, function(obj,index){
-
-							if(obj.id == group_id)
-							{
-								$('a#group_name').html(obj.group_name);
-								return true;
-							}	
-						});
+						//Replacing group name
+						$('a#group_name', el).html($('a[data-group-id="'+ Group_ID +'"]').attr('data-group-name'));
 
 						Ticket_Filters.fetch_filters_collection();	
 					}
@@ -114,6 +97,9 @@ var Tickets = {
 			$('#right-pane').html(Tickets_Group_View.render().el);
 			
 			Tickets_Group_View.delegateEvents();
+
+			//Fectching new, open, closed tickets count
+			Tickets_Count.fetch_tickets_count();
 
 			$("#filters-list-container").html(App_Ticket_Module.ticketFiltersList.el);
 
@@ -143,7 +129,7 @@ var Tickets = {
 		$('ul#ticket-model-list', el)
 			.on('mouseover mouseout', 'li.ticket',
 				function(event) {
-					if (event.type == 'mouseover') {
+					if (event.type == 'mouseover'){
 
 						var top_offset = $('#' + $(this).attr('data-id'))
 								.offset().top;
@@ -163,7 +149,8 @@ var Tickets = {
 						$(this).find('#ticket-last-notes').css('display',
 								'none').css('top', '60px');
 					}
-			});
+				}
+			);
 	},
 
 	changeStatus: function(event){

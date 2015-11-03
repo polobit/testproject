@@ -37,8 +37,13 @@ var Tickets_Notes = {
 
 	backToTickets: function(e){
 
+		var group_el = Tickets_Group_View.render().el;
+		
 		//Rendering existing Tickets collection
-		$('#right-pane').html(Tickets_Group_View.render().el);
+		$('#right-pane').html(group_el);
+
+		//Replacing group name
+		$('a#group_name', group_el).html($('a[data-group-id="'+ Group_ID +'"]').attr('data-group-name'));
 
 		$("#filters-list-container").html(App_Ticket_Module.ticketFiltersList.el);
 		
