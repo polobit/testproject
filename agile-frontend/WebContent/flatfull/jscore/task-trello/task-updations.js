@@ -22,12 +22,13 @@ function editTask(taskId, taskListId, taskListOwnerId)
 	taskJson["taskListId"] = taskListId;
 	taskJson["taskListOwnerId"] = taskListOwnerId;
 
+	// Show modal
+	$("#updateTaskModal").html(getTemplate("task-update-modal")).modal('show');
+	
 	// Fill form
 	deserializeForm(taskJson, $("#updateTaskForm"));
 	$('.update-task-timepicker').val(fillTimePicker(taskJson.due));
 
-	// Show modal
-	$("#updateTaskModal").modal('show');
 	categories.getCategoriesHtml(taskJson,function(catsHtml){
 		$('#type',$("#updateTaskForm")).html(catsHtml);
 		// Fills owner select element

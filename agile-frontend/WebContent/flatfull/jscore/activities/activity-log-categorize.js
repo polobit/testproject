@@ -162,8 +162,10 @@ function getModal()
 function updateactivity__task(ele)
 {
 	var value = JSON.parse(ele);
+
+	$("#updateTaskModal").html(getTemplate("task-update-modal")).modal('show');
+
 	deserializeForm(value, $("#updateTaskForm"));
-	$("#updateTaskModal").modal('show');
 	// Fills owner select element
 	populateUsers("owners-list", $("#updateTaskForm"), value, 'taskOwner', function(data)
 	{

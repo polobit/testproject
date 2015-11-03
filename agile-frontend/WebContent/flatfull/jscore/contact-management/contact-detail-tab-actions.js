@@ -10,10 +10,10 @@ var contact_details_documentandtasks_actions = {
         	var id = $(targetEl).attr('data');
 			var value = tasksView.collection.get(id).toJSON();
 
+			$("#updateTaskModal").html(getTemplate("task-update-modal")).modal('show');
 			deserializeForm(value, $("#updateTaskForm"));
 
-			$("#updateTaskModal").modal('show');
-
+			
 			$('.update-task-timepicker').val(fillTimePicker(value.due));
 			categories.getCategoriesHtml(value,function(catsHtml){
 				$('#type',$("#updateTaskForm")).html(catsHtml);

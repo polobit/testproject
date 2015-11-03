@@ -21,10 +21,8 @@ function starify(el) {
     		 return;
     	}
     	
-    	
     	// Set URL - is this required?
-    	// contact_model.url = 'core/api/contacts';
-    	
+    	// contact_model.url = 'core/api/contacts';    	
     	$('#star', el).raty({
     		
     		/**

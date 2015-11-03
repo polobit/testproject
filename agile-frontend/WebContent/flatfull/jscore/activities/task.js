@@ -44,6 +44,20 @@ $( document ).ready(function() {
 
 		agile_type_ahead("update_task_relates_to_deals", el, deals_typeahead, false,null,null,"core/api/search/deals",false, true);
 
+		$('.update-task-timepicker').timepicker({ defaultTime : get_hh_mm(true), showMeridian : false });
+		$('.update-task-timepicker').timepicker().on('show.timepicker', function(e)
+		{
+			if ($('.update-task-timepicker').prop('value') != "" && $('.update-task-timepicker').prop('value') != undefined)
+			{
+				if ($('.update-task-timepicker').prop('value').split(":")[0] != undefined)
+					e.time.hours = $('.update-task-timepicker').prop('value').split(":")[0];
+				if ($('.update-task-timepicker').prop('value').split(":")[0] != undefined)
+					e.time.minutes = $('.update-task-timepicker').prop('value').split(":")[1];
+			}
+			$('.bootstrap-timepicker-hour').val(e.time.hours);
+			$('.bootstrap-timepicker-minute').val(e.time.minutes);
+		});
+
 		// Fill details in form
 		setForm(el);
 
@@ -60,19 +74,6 @@ function activateSliderAndTimerToTaskModal(el){
 
 	console.log("activateSliderAndTimerToTaskModal");
 	
-	$('.update-task-timepicker').timepicker({ defaultTime : get_hh_mm(true), showMeridian : false });
-	$('.update-task-timepicker').timepicker().on('show.timepicker', function(e)
-	{
-		if ($('.update-task-timepicker').prop('value') != "" && $('.update-task-timepicker').prop('value') != undefined)
-		{
-			if ($('.update-task-timepicker').prop('value').split(":")[0] != undefined)
-				e.time.hours = $('.update-task-timepicker').prop('value').split(":")[0];
-			if ($('.update-task-timepicker').prop('value').split(":")[0] != undefined)
-				e.time.minutes = $('.update-task-timepicker').prop('value').split(":")[1];
-		}
-		$('.bootstrap-timepicker-hour').val(e.time.hours);
-		$('.bootstrap-timepicker-minute').val(e.time.minutes);
-	});
 	$('.new-task-timepicker').timepicker({ defaultTime : '12:00', showMeridian : false });
 	$('.new-task-timepicker').timepicker().on('show.timepicker', function(e)
 	{

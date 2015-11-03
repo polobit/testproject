@@ -409,7 +409,8 @@ function update_task(value)
 {
 
 	deserializeForm(value, $("#updateTaskForm"));
-	$("#updateTaskModal").modal('show');
+	$("#updateTaskModal").html(getTemplate("task-update-modal")).modal('show');
+	
 	categories.getCategoriesHtml(value,function(catsHtml){
 		$('#type',$("#updateTaskForm")).html(catsHtml);
 		// Fills owner select element

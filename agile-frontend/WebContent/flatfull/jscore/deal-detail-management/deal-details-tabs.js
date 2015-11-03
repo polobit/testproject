@@ -439,10 +439,10 @@ var Deal_Modal_Event_View = Base_Model_View.extend({
 		var id = $(targetEl).attr('data');
 		var value = dealTasksView.collection.get(id).toJSON();
 
+		$("#updateTaskModal").html(getTemplate("task-update-modal")).modal('show');
+
 		deserializeForm(value, $("#updateTaskForm"));
-
-		$("#updateTaskModal").modal('show');
-
+		
 		$('.update-task-timepicker').val(fillTimePicker(value.due));
 		// Fills owner select element
 		populateUsers("owners-list", $("#updateTaskForm"), value, 'taskOwner', function(data)
