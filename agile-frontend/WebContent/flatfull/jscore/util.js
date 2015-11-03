@@ -130,8 +130,15 @@ function fillSelect(selectId, url, parseKey, callback, template, isUlDropdown, e
 		// populates the template using handlebars
 		$.each(data, function(index, model)
 		{
-			var optionsHTML = modelTemplate(model);
-			$("#" + selectId, el).append(optionsHTML);
+			if (model && model.field_type && model.field_type == "FORMULA")
+			{
+				//If the model is Customfield and if it is formula type we won't add that.
+			}
+			else
+			{
+				var optionsHTML = modelTemplate(model);
+				$("#" + selectId, el).append(optionsHTML);
+			}
 		});
 
 		// If callback is present, it is called to deserialize
