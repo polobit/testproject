@@ -175,7 +175,7 @@ public class PortletUtil {
 					portlet.settings=json;
 				}
 			}
-			if(!portlet.name.equalsIgnoreCase("Dummy Blog"))
+			if(portlet.name!=null && !portlet.name.equalsIgnoreCase("Dummy Blog"))
 				added_portlets.add(portlet);
 		}
 		
@@ -598,8 +598,8 @@ public class PortletUtil {
 			String time_zone = DateUtil.getCurrentUserTimezoneOffset();
 		    if (time_zone != null)
 		    {
-		    	start_date += (Long.parseLong(time_zone)*60*1000);
-		    	end_date += (Long.parseLong(time_zone)*60*1000);
+		    	start_date -= (Long.parseLong(time_zone)*60*1000);
+		    	end_date -= (Long.parseLong(time_zone)*60*1000);
 		    }
 			ReportsUtil.check(start_date, end_date);
 			

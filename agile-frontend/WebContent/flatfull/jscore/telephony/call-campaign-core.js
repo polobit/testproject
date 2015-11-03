@@ -95,7 +95,12 @@ function stopCallCampaign()
 	// step3:
 	campaignVariableToInitialState();
 	// step4:
-	routeToPage("contacts");
+	if (window.location.hash.indexOf("#contacts") != -1)
+	{
+		return;
+	}else{
+		routeToPage("contacts");
+	}
 
 }
 
@@ -506,8 +511,14 @@ function getContact(contactId)
 {
 	console.log("In getContact");
 
-	return App_Contacts.contactsListView.collection.where({ id : contactId })[0].toJSON();
+	try
+	{
+		return App_Contacts.contactsListView.collection.where({ id : contactId })[0].toJSON();
 
+	}catch(err){
+		return App_Contacts.contactsListView.collection.get(contactId).toJSON();
+	}
+	
 	// var json = $.parseJSON($.ajax({ url : '/core/api/contacts/' + contactId,
 	// async : false, dataType : 'json' }).responseText);
 
@@ -687,6 +698,19 @@ function editCallContainer()
 	var dialpad = $(getTemplate("campaign-dialpad"), {});
 	$('.campaign_noty_buttons').append(dialpad);
 
+	accessUrlUsingAjax("core/api/voicemails", function(resp){
+
+		var responseJson = resp;
+		getTemplate("campaign-voicemail",responseJson, undefined, function(template_ui){
+			if(!template_ui)
+				  return;
+				
+			$('.campaign_voicemail_buttons').html($(template_ui));
+			
+
+
+		}, null);
+	});
 	lookForSelectedNumber();
 }
 

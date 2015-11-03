@@ -1,8 +1,10 @@
 package com.agilecrm.contact.email.util;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
@@ -62,6 +64,21 @@ public class ContactEmailUtil
 	{
 		return dao.listByProperty("contact_id", contactId);
 	}
+	
+	 /**
+	 * Retrieves the ContactEmails based on contactId.
+	 * 
+	 * @param contactId
+	 * @param count - the number of entries to retrieve
+	 *  
+	 * @return List
+	 */
+	public static List<ContactEmail> getContactEmails(Long contactId,int count)
+	{
+		Map<String, Object> conditionsMap = new HashMap<String, Object>();
+		conditionsMap.put("contact_id", contactId);
+		return dao.fetchAllByOrderWithoutCount(count,null,conditionsMap, false, false, "-date_secs");
+	}
 
 	/**
 	 * Returns list of contact emails based on tracker id.
@@ -92,7 +109,7 @@ public class ContactEmailUtil
 	 */
 	public static void saveContactEmailAndSend(String fromEmail, String fromName, String to, String cc, String bcc,
 			String subject, String body, String signature, Contact contact, boolean trackClicks,
-			List<Long> documentIds, List<BlobKey> blobKeys) throws Exception
+			List<Long> documentIds, List<BlobKey> blobKeys, String attachment_name, String attachment_url) throws Exception
 	{
 
 		// Personal Email open tracking id
@@ -133,7 +150,7 @@ public class ContactEmailUtil
 		{
 			contactId = contact.id.toString();
 			saveContactEmail(fromEmail, fromName, to, cc, bcc, subject, emailBody, signature, contact.id,
-					openTrackerId, documentIds);
+					openTrackerId, documentIds, attachment_name, attachment_url);
 		}
 		else
 		{
@@ -151,7 +168,7 @@ public class ContactEmailUtil
 				{
 					contactId = contact.id.toString();
 					saveContactEmail(fromEmail, fromName, to, cc, bcc, subject, emailBody, signature, contact.id,
-							openTrackerId, documentIds);
+							openTrackerId, documentIds, attachment_name, attachment_url);
 
 					contact.setLastEmailed(System.currentTimeMillis() / 1000);
 					contact.update();
@@ -212,11 +229,22 @@ public class ContactEmailUtil
 	 *            <Long> documentIds - documentsIds as attachments to email
 	 */
 	public static void saveContactEmail(String fromEmail, String fromName, String to, String cc, String bcc,
-			String subject, String body, String signature, Long contactId, long trackerId, List<Long> documentIds)
+			String subject, String body, String signature, Long contactId, long trackerId, List<Long> documentIds, 
+			String attachment_name, String attachment_url)
 	{
 
 		// combine body and signature.
 		body = body + "<div><br/>" + signature + "</div>";
+		
+		// Adding attachment name to the content of email
+		if (attachment_name !=null && !attachment_name.equals("") && attachment_url != null && !attachment_url.equals(""))
+		{
+			body = body + "<div><a href='"+attachment_url+"' style='color:#23b7e5;'><i class='fa fa-paperclip m-r-xs'></i>" + attachment_name + "</a></div>";
+		}
+		else if (attachment_name !=null && !attachment_name.equals(""))
+		{
+			body = body + "<div><i class='fa fa-paperclip m-r-xs'></i>" + attachment_name + "</div>";
+		}
 
 		// Remove trailing commas for to emails
 		ContactEmail contactEmail = new ContactEmail(contactId, fromEmail, to, subject, body);
@@ -752,6 +780,8 @@ public class ContactEmailUtil
 		List<OfficeEmailPrefs> sharedOfficePrefsList = getSharedToOfficePrefs(agileUserKey);
 
 		List<String> emailFetchUrls = new ArrayList<String>();
+		//First Adding URL for fetching emails sent through agile.
+		String agileEmailsUrl = "core/api/emails/agile-emails?count=20";
 		if (socialPrefsList != null & socialPrefsList.size() > 0)
 		{
 		    for (SocialPrefs gmailPrefs : socialPrefsList)
@@ -806,6 +836,7 @@ public class ContactEmailUtil
 			emailFetchUrls.add(officeUrl);
 		    }
 		}
+		emailFetchUrls.add(agileEmailsUrl);
 		return emailFetchUrls;
 	    }
 

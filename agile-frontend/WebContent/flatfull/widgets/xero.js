@@ -5,7 +5,7 @@
  */
 
 
-function showXeroClient()
+function showXeroClient(contact_id)
 {
 	if (EmailList.length == 0)
 	{
@@ -19,7 +19,7 @@ function showXeroClient()
 	}
 	console.log(emailArray);
 	console.log("In show Xero Client" + Xero_PLUGIN_ID);
-	queueGetRequest("widget_queue", "/core/api/widgets/xero/clients/" + Xero_PLUGIN_ID + "/" + emailArray, "json", function success(data)
+	queueGetRequest("widget_queue_"+contact_id, "/core/api/widgets/xero/clients/" + Xero_PLUGIN_ID + "/" + emailArray, "json", function success(data)
 	{
 		console.log('In Xero clients');		
 		console.log(data);
@@ -134,7 +134,7 @@ function createContact(message)
 	}, '#' + Xero_PLUGIN_NAME);
 }
 
-function addContactToXero(first_name, last_name)
+function addContactToXero(first_name, last_name, contact_id)
 {
 	/*
 	 * send GET request to the URL to add client in FreshBooks based on widget
@@ -155,7 +155,7 @@ function addContactToXero(first_name, last_name)
 		 */
 		if (data.Status = 'OK')
 		{
-			showXeroClient();
+			showXeroClient(contact_id);
 		}
 		else
 		{
@@ -166,106 +166,107 @@ function addContactToXero(first_name, last_name)
 
 }
 
-$(function()
+function startXeroWidget(contact_id){
+
+	console.log("in xero widget.js")
+	// Xero widget name as a global variable
+	Xero_PLUGIN_NAME = "Xero";
+
+	// Xero profile loading image declared as global
+	XERO_PROFILE_LOAD_IMAGE = '<center><img id="xero_profile_load" src="img/ajax-loader-cursor.gif" style="margin-top: 10px;margin-bottom: 14px;"></img></center>';
+
+	// Retrieves widget which is fetched using script API
+	var xero_widget = agile_crm_get_widget(Xero_PLUGIN_NAME);
+
+	// ID of the Xero widget as global variable
+	Xero_PLUGIN_ID = xero_widget.id;
+	console.log("plugin Id" + Xero_PLUGIN_ID);
+	/*
+	 * Gets Xero widget preferences, required to check whether to show setup
+	 * button or to fetch details. If undefined - considering first time usage
+	 * of widget, setupXeroOAuth is shown and returned
+	 */
+
+	if (xero_widget.prefs == undefined)
+	{
+		xeroError(Xero_PLUGIN_NAME, 'Authentication Error.Please reconfigure your Xero widget.');
+		return;
+	}
+
+	var xeroWidgetPref = JSON.parse(xero_widget.prefs);
+	
+	SHORT_CODE = xeroWidgetPref.xero_org_shortcode;	
+
+	if (typeof SHORT_CODE == "undefined")
+	{
+		xeroError(Xero_PLUGIN_NAME, "Authentication Error.Please reconfigure your Xero widget.");
+		return;
+	}
+
+	// Email as global variable
+	Email = agile_crm_get_contact_property('email');
+
+	// Email list as global variable
+	EmailList = agile_crm_get_contact_properties_list("email");
+
+	var first_name = agile_crm_get_contact_property("first_name");
+	var last_name = agile_crm_get_contact_property("last_name");
+
+	if (last_name == undefined || last_name == null)
+		last_name = ' ';
+
+	showXeroClient(contact_id);
+
+    $("#widgets").off('click','#xero_add_contact');
+	$("#widgets").on('click','#xero_add_contact', function(e)
+	{
+		e.preventDefault();
+
+		addContactToXero(first_name, last_name, contact_id, Email);
+	});
+
+	// attach event to invoices + icon to get lineitems
+    $("#widgets").off('click','.invoices');
+	$("#widgets").on('click','.invoices', function(e)
+	{
+		e.preventDefault();
+		var invoiceId = $(this).prop('value');
+
+		// checking for data existence in div
+		if ($('#collapse-' + invoiceId).text().trim() === "")
 		{
-			console.log("in xero widget.js")
-			// Xero widget name as a global variable
-			Xero_PLUGIN_NAME = "Xero";
-
-			// Xero profile loading image declared as global
-			XERO_PROFILE_LOAD_IMAGE = '<center><img id="xero_profile_load" src="img/ajax-loader-cursor.gif" style="margin-top: 10px;margin-bottom: 14px;"></img></center>';
-
-			// Retrieves widget which is fetched using script API
-			var xero_widget = agile_crm_get_widget(Xero_PLUGIN_NAME);
-
-			// ID of the Xero widget as global variable
-			Xero_PLUGIN_ID = xero_widget.id;
-			console.log("plugin Id" + Xero_PLUGIN_ID);
-			/*
-			 * Gets Xero widget preferences, required to check whether to show setup
-			 * button or to fetch details. If undefined - considering first time usage
-			 * of widget, setupXeroOAuth is shown and returned
-			 */
-
-			if (xero_widget.prefs == undefined)
+			console.log("no data present");
+			$('#collapse-' + invoiceId).html(XERO_PROFILE_LOAD_IMAGE);
+			$.get("/core/api/widgets/xero/lineItems/" + Xero_PLUGIN_ID + "/" + invoiceId, function(data)
 			{
-				xeroError(Xero_PLUGIN_NAME, 'Authentication Error.Please reconfigure your Xero widget.');
-				return;
-			}
-
-			var xeroWidgetPref = JSON.parse(xero_widget.prefs);
-			
-			SHORT_CODE = xeroWidgetPref.xero_org_shortcode;	
-
-			if (typeof SHORT_CODE == "undefined")
-			{
-				xeroError(Xero_PLUGIN_NAME, "Authentication Error.Please reconfigure your Xero widget.");
-				return;
-			}
-
-			// Email as global variable
-			Email = agile_crm_get_contact_property('email');
-
-			// Email list as global variable
-			EmailList = agile_crm_get_contact_properties_list("email");
-
-			var first_name = agile_crm_get_contact_property("first_name");
-			var last_name = agile_crm_get_contact_property("last_name");
-
-			if (last_name == undefined || last_name == null)
-				last_name = ' ';
-
-			showXeroClient();
-            $("body").off('click','#xero_add_contact');
-			$("body").on('click','#xero_add_contact', function(e)
-			{
-				e.preventDefault();
-
-				addContactToXero(first_name, last_name, Email);
-			});
-
-			// attach event to invoices + icon to get lineitems
-            $("body").off('click','.invoices');
-			$("body").on('click','.invoices', function(e)
-			{
-				e.preventDefault();
-				var invoiceId = $(this).prop('value');
-
-				// checking for data existence in div
-				if ($('#collapse-' + invoiceId).text().trim() === "")
+				if (data.Status = 'OK')
 				{
-					console.log("no data present");
-					$('#collapse-' + invoiceId).html(XERO_PROFILE_LOAD_IMAGE);
-					$.get("/core/api/widgets/xero/lineItems/" + Xero_PLUGIN_ID + "/" + invoiceId, function(data)
-					{
-						if (data.Status = 'OK')
-						{
-							console.log((JSON.parse(data)).Invoices.Invoice);
-							
-							getTemplate('xero-invoice-lineitems', (JSON.parse(data)).Invoices.Invoice, undefined, function(template_ui){
-						 		if(!template_ui)
-						    		return;
-								$('#collapse-' + invoiceId).html($(template_ui)); 
-							}, '#collapse-' + invoiceId);
-						}
-						else
-						{
-							console.log("error");
-							xeroError(Xero_PLUGIN_NAME, data);
-						}
-						$('#XERO_PROFILE_LOAD_IMAGE').remove();
-					});
-
-				}
-
-				if ($('#collapse-' + invoiceId).hasClass("collapse"))
-				{
-					$('#collapse-' + invoiceId).removeClass("collapse");
+					console.log((JSON.parse(data)).Invoices.Invoice);
+					
+					getTemplate('xero-invoice-lineitems', (JSON.parse(data)).Invoices.Invoice, undefined, function(template_ui){
+				 		if(!template_ui)
+				    		return;
+						$('#collapse-' + invoiceId).html($(template_ui)); 
+					}, '#collapse-' + invoiceId);
 				}
 				else
 				{
-					$('#collapse-' + invoiceId).addClass("collapse");
+					console.log("error");
+					xeroError(Xero_PLUGIN_NAME, data);
 				}
-
+				$('#XERO_PROFILE_LOAD_IMAGE').remove();
 			});
-		});
+
+		}
+
+		if ($('#collapse-' + invoiceId).hasClass("collapse"))
+		{
+			$('#collapse-' + invoiceId).removeClass("collapse");
+		}
+		else
+		{
+			$('#collapse-' + invoiceId).addClass("collapse");
+		}
+
+	});
+}

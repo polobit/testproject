@@ -117,6 +117,18 @@ public class TaskletUtil
 		// Assign to Start
 		if (currentNodeJSON == null)
 		{
+			if (campaignJSON.has("is_disabled"))
+			{
+				if (campaignJSON.getBoolean("is_disabled"))
+				{
+					// Set status to REMOVED for disabled workflows
+					System.out.println("Disabled campaign assigned");
+					CampaignStatusUtil.setStatusOfCampaignWithName(AgileTaskletUtil.getId(subscriberJSON),
+							AgileTaskletUtil.getId(campaignJSON),
+							AgileTaskletUtil.getCampaignNameFromJSON(campaignJSON), Status.REMOVED);
+					return;
+				}
+			}
 			nextNode = START_NODE_ID;
 
 			data = new JSONObject();

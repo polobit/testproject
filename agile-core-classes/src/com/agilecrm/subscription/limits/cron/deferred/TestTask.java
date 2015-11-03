@@ -1,6 +1,8 @@
 package com.agilecrm.subscription.limits.cron.deferred;
 
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -43,5 +45,17 @@ public class TestTask implements DeferredTask
 	    queue.add(TaskOptions.Builder.withPayload(task));
 	}
     }
+    
+    public static void main(String[] args) {
+    	
+    	System.out.println(parse("$11111.0sadfsad0"));
+	}
 
+    private static String parse(String hex)
+    {
+        Pattern pattern = Pattern.compile("(\\d+\\.\\d+)|(\\d+)");
+        Matcher matcher = pattern.matcher(hex);
+        matcher.find();
+        return matcher.group();
+        }
 }

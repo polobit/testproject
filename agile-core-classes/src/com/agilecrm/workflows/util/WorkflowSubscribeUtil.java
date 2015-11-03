@@ -11,6 +11,7 @@ import com.agilecrm.Globals;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.queues.backend.ModuleUtil;
 import com.agilecrm.queues.util.PullQueueUtil;
+import com.agilecrm.util.VersioningUtil;
 import com.agilecrm.workflows.status.util.CampaignStatusUtil;
 import com.campaignio.tasklets.agile.util.AgileTaskletUtil;
 import com.campaignio.tasklets.util.TaskCore;
@@ -129,7 +130,7 @@ public class WorkflowSubscribeUtil
 
 	    PullQueueUtil
 		    .addToPullQueue(
-		            Globals.BULK_BACKENDS.equals(ModuleUtil.getCurrentModuleName()) ? AgileQueues.BULK_CAMPAIGN_PULL_QUEUE
+		            VersioningUtil.isBackgroundThread() ? AgileQueues.BULK_CAMPAIGN_PULL_QUEUE
 		                    : AgileQueues.NORMAL_CAMPAIGN_PULL_QUEUE, taskletWorkflowDeferredTask, namespace);
 	}
 	catch (Exception e)

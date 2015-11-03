@@ -115,9 +115,7 @@ public class LinkedInUpdates
 				Date endDat = new Date(Long.parseLong(endDate) * 1000);
 	
 				return client.getUserUpdates(linkedInId, enumSet, startIndex, endIndex, startDat, endDat);
-			}
-			else
-			{
+			}else{
 				System.out.println("In network updates indexed");
 				// filters updates only on start and end index
 				return client.getUserUpdates(linkedInId, enumSet, startIndex, endIndex);
@@ -238,14 +236,12 @@ public class LinkedInUpdates
 			// Create network updates client, to re-share the post
 			final NetworkUpdatesApiClient client = LinkedInUtil.factory.createNetworkUpdatesApiClient(widget.getProperty("token"),
 					widget.getProperty("secret"));
-	
 			/*
 			 * comment while re-sharing, we are not taking this parameter from
 			 * user
 			 */
 			text = "";
 			client.reShare(shareId, text, VisibilityType.ANYONE);
-	
 			return "Shared Successfully";
 		}
 		catch (Exception e)

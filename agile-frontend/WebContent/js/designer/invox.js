@@ -66,6 +66,12 @@ function deserialize()
 			console.log("Deser");
 			console.log(JSON.parse(designerJSON));
 			deserializePhoneSystem(JSON.parse(designerJSON));
+			
+			if(parent.App_Workflows.is_disabled){
+			$('#paintarea .nodeItem table>tbody').addClass("disable-iframe").removeClass("enable-iframe");
+			$('#paintarea').addClass("disable-iframe").removeClass("enable-iframe");
+			$('#toolbartabs').addClass("disable-iframe").removeClass("enable-iframe");
+			}
 		}
 	
 }

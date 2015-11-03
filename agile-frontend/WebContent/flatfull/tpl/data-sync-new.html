@@ -1,0 +1,165 @@
+
+ <script id="data-sync-collection-template" type="html/text">
+        
+    <div class="tab-container m-b-none">
+       <ul class="nav nav-tabs">
+         <li><a href="#google-tab" data-toggle="tab"  class="b-l-none">Google</a></li>
+         <li><a href="#ecommerce-tab" data-toggle="tab">Ecommerce</a></li>
+         <li><a href="#payment-tab" data-toggle="tab">Payment</a></li>
+         <li><a href="#accounting-tab" data-toggle="tab">Accounting</a></li>
+       </ul>
+	</div>
+
+	<div class="tab-content wrapper-md panel" id="settings-data-sync-tab-content">
+		<div class="tab-pane" id="google-tab">
+			<div class="row">
+				<div id="contact-prefs" class="col-md-4 col-sm-6 col-xs-12"></div>
+				<div id="calendar-prefs" class="col-md-4 col-sm-6 col-xs-12"></div>
+				<div id="email-prefs" class="col-md-4 col-sm-6 col-xs-12"></div>
+			</div>
+		</div>
+		<div class="tab-pane" id="ecommerce-tab">
+			<div class="row">
+				<div id ="shopify" class="col-md-4 col-sm-6 col-xs-12"></div>
+			</div>
+		</div>
+		<div class="tab-pane" id="payment-tab">
+			<div class="row">
+				<div id ="stripe" class="col-md-4 col-sm-6 col-xs-12"></div>
+			</div>
+		</div>
+		<div class="tab-pane" id="accounting-tab">
+			<div class="row">
+				<div id ="freshbook" class="col-md-4 col-sm-6 col-xs-12"></div>
+				<div class="col-md-4 col-sm-6 col-xs-12" id ="quickbook"></div>
+			</div>
+		</div>
+	</div>
+
+</script>
+<script id="data-sync-model-template" type="text/html">	
+
+
+
+
+</script>
+
+<script id="data-sync-settings-template" type="text/html">
+	<div class="tab-container m-b-none widgets_inner">
+       <ul class="nav nav-tabs">
+         <li><a href="#google-tab" data-toggle="tab"  class="b-l-none">Google</a></li>
+         <li><a href="#ecommerce-tab" data-toggle="tab">Ecommerce</a></li>
+         <li><a href="#payment-tab" data-toggle="tab">Payment</a></li>
+         <li><a href="#accounting-tab" data-toggle="tab">Accounting</a></li>
+       </ul>
+	</div>
+
+	<div class="tab-content wrapper-md panel">
+		<div class="tab-pane active" id="data-sync-settings-tab-content"></div>
+	</div>
+</script>
+
+
+
+
+<script id="admin-settings-import-skeleton-template"
+	type="text/html">
+	{{#if_equals type "GOOGLE"}}
+	<div class="panel panel-default widget-add" style="height: 230px;">
+	{{else}}
+	<div class="panel panel-default widget-add" style="height: 220px;">
+	{{/if_equals}}
+	<div class="panel-heading">
+	    <center>
+	    	<img class="m-b-none img-responsive thumb-xl bg-transparent" style="height:47px;" src="{{imageUrl}}" />
+	    </center>
+    </div>
+    <div class="panel-body">
+    {{#if_equals type "GOOGLE"}}
+	    <div class="text-flow-ellipsis line-clamp line-clamp-4" style="height:80px" rel="tooltip" title="{{content}}">
+			{{content}}
+		</div>
+	{{else}}
+		<div class="text-flow-ellipsis line-clamp line-clamp-4" style="height:85px" rel="tooltip" title="{{content}}">
+			{{content}}
+		</div>
+	{{/if_equals}}
+    <div class="text-center">
+
+    		{{#if_equals type "GOOGLE"}}
+			{{#if id}}
+				<div class="m-t-md">
+    				<a class="btn btn-sm btn-danger " data_sync_type="{{type}}" data_sync_id="{{id}}" id="sync-import-prefs-delete" >Disable</a>
+					<a href="#sync/contacts" class="btn btn-sm btn-default" id="setting-widget">Settings</a>
+				</div>
+    		{{else}}
+				{{#canSyncContacts}}
+    					<div class="btn btn-sm btn-default inline-block" sync_type="{{type}}" id="data-sync-type">Enable</div>
+					{{else}}
+						<span class="btn btn-sm btn-primary inline-block" disabled>Enable</span>
+						<span class="m-l-xs"><i>Needs import privilege.</i></span>
+				{{/canSyncContacts}}
+    		{{/if}}
+    		{{/if_equals}}
+
+
+    		{{#if_equals type "STRIPE"}}
+			{{#if id}}
+    			<a class="btn btn-sm btn-danger " data_sync_type="{{type}}" data_sync_id="{{id}}" id="sync-import-prefs-delete" >Disable</a>
+				<a href="#sync/stripe-import" class="btn btn-sm btn-default" id="setting-widget">Settings</a>
+    		{{else}}
+				{{#canSyncContacts}}
+    					<div class="btn btn-sm btn-default inline-block" sync_type="{{type}}" id="data-sync-type">Enable</div>
+					{{else}}
+						<span class="btn btn-sm btn-primary inline-block" disabled>Enable</span>
+						<span class="m-l-xs"><i>Needs import privilege.</i></span>
+				{{/canSyncContacts}}
+    		{{/if}}
+    		{{/if_equals}}
+
+
+    		{{#if_equals type "SHOPIFY"}}
+			{{#if id}}
+    			<a class="btn btn-sm btn-danger " data_sync_type="{{type}}" data_sync_id="{{id}}" id="sync-import-prefs-delete" >Disable</a>
+				<a href="#sync/shopify" class="btn btn-sm btn-default" id="setting-widget">Settings</a>
+    		{{else}}
+				{{#canSyncContacts}}
+    					<div class="btn btn-sm btn-default inline-block" sync_type="{{type}}" id="data-sync-type">Enable</div>
+					{{else}}
+						<span class="btn btn-sm btn-primary inline-block" disabled>Enable</span>
+						<span class="m-l-xs"><i>Needs import privilege.</i></span>
+				{{/canSyncContacts}}
+    		{{/if}}
+    		{{/if_equals}}
+
+    		{{#if_equals type "FRESHBOOKS"}}
+			{{#if id}}
+    			<a class="btn btn-sm btn-danger " data_sync_type="{{type}}" data_sync_id="{{id}}" id="sync-import-prefs-delete" >Disable</a>
+				<a href="#sync/freshbooks/setting" class="btn btn-sm btn-default" id="setting-widget">Settings</a>
+    		{{else}}
+				{{#canSyncContacts}}
+    					<div class="btn btn-sm btn-default inline-block" sync_type="{{type}}" id="data-sync-type">Enable</div>
+					{{else}}
+						<span class="btn btn-sm btn-primary inline-block" disabled>Enable</span>
+						<span class="m-l-xs"><i>Needs import privilege.</i></span>
+				{{/canSyncContacts}}
+    		{{/if}}
+    		{{/if_equals}}
+
+    		{{#if_equals type "QUICKBOOK"}}
+			{{#if id}}
+    			<a class="btn btn-sm btn-danger " data_sync_type="{{type}}" data_sync_id="{{id}}" id="sync-import-prefs-delete" >Disable</a>
+				<a href="#sync/quickbook" class="btn btn-sm btn-default" id="setting-widget">Settings</a>
+    		{{else}}
+				{{#canSyncContacts}}
+    					<div class="btn btn-sm btn-default inline-block" sync_type="{{type}}" id="data-sync-type">Enable</div>
+					{{else}}
+						<span class="btn btn-sm btn-primary inline-block" disabled>Enable</span>
+						<span class="m-l-xs"><i>Needs import privilege.</i></span>
+				{{/canSyncContacts}}
+    		{{/if}}
+    		{{/if_equals}}
+	</div>
+	</div>
+</div>
+</script>

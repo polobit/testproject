@@ -24,7 +24,7 @@ function init_acl_restriction()
 				return _plan_restrictions.plan.emailGateway;
 			}, function() {
 				return {
-					"message" : "Please <a href='#subscribe-plan' class='c-p text-info'>upgrade</a> to Pro plan"
+					"message" : "Please <a href='#subscribe-plan' class='c-p text-info'>upgrade</a> to Enterprise plan"
 				}
 			} ],
 			
@@ -126,7 +126,7 @@ function init_acl_restriction()
 				return _plan_restrictions.plan.activityReports;
 			}, function() {
 				return {
-					"message" : "Please <a href='#subscribe-plan' class='c-p text-info'>upgrade</a> to Pro plan"
+					"message" : "Please <a href='#subscribe-plan' class='c-p text-info'>upgrade</a> to Enterprise plan"
 				}
 			} ],
 			is_cohort_reports_enabled : [ function() {

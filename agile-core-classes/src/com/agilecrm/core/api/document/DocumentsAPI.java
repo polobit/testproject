@@ -150,8 +150,6 @@ public class DocumentsAPI
     /**
      * Deletes documents bulk
      * 
-     * 
-     * 
      * @param model_ids
      *            document ids, read as form parameter from request url
      * @throws JSONException

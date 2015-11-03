@@ -57,7 +57,7 @@ if(!StringUtils.isEmpty(email))
 <style>
 
 body {
-background-image:url('..<%=flatfull_path%>/images/flatfull/buildings.jpg');
+background-image:url('..<%=flatfull_path%>/images/flatfull/buildings-low.jpg');
 background-repeat:no-repeat;
 background-position:center center;
 background-size:100% 100%;
@@ -208,6 +208,12 @@ jQuery.validator.setDefaults({
 		<script type="text/javascript">
 		$(document).ready(function() {			
 			
+			var newImg = new Image;
+      	newImg.onload = function() {
+    	$("body").css("background-image","url('"+this.src+"')");
+  		 }
+		newImg.src = 'flatfull/images/flatfull/buildings.jpg';
+		
 		  //form is self submitted
           $("#forgot_domain").validate({
 				 submitHandler: function(form) {

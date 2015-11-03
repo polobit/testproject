@@ -151,6 +151,7 @@ function bindCustomFiledChangeEvent(el){
 			$("input",  $("#custom-field-list-values")).attr("name", "field_data");
 			$("#custom-field-formula-data").hide();
 			$("textarea",  $("#custom-field-formula-data")).removeAttr("name");
+			$('.required-and-searchable').show();
 		}
 		else if(value == "TEXTAREA")
 		{
@@ -160,6 +161,7 @@ function bindCustomFiledChangeEvent(el){
 			$("input",  $("#custom-field-list-values")).removeAttr("name");
 			$("#custom-field-formula-data").hide();
 			$("textarea",  $("#custom-field-formula-data")).removeAttr("name");
+			$('.required-and-searchable').show();
 		}
 		else if(value == "FORMULA")
 		{
@@ -169,12 +171,14 @@ function bindCustomFiledChangeEvent(el){
 			$("input",  $("#custom-field-list-values")).removeAttr("name");
 			$("#custom-field-formula-data").show();
 			$("textarea",  $("#custom-field-formula-data")).attr("name", "field_data");
+			$('.required-and-searchable').hide();
 		}
 		else
 		{
 			$("#custom-field-data").hide();
 			$("#custom-field-list-values").hide();
 			$("#custom-field-formula-data").hide();
+			$('.required-and-searchable').show();
 		}
 		
 	});
@@ -261,15 +265,15 @@ function show_custom_fields_helper(custom_fields, properties){
 		var div_col9_style = "";
 		var div_col3_style = "";
 		var checkbox_style ="";
-
+		var max_len = 500;
 		if(field.scope == "CONTACT"){
-			label_style = "col-sm-3 word-break";
+			label_style = "col-sm-3 word-break-all";
 			field_style = "col-sm-10";
 			div_col9_style = "col-sm-9";
 			div_col3_style = "col-sm-3";
 		}else if(field.scope == "COMPANY" || field.scope == "DEAL" || field.scope == "CASE"){
-			label_style = "control-label col-sm-3 word-break";
-			checkbox_style = "col-sm-3 p-none";
+			label_style = "control-label col-sm-3 word-break-all";
+			checkbox_style = "col-sm-3";
 		}
 		
 		// If field type is list create a select dropdown
@@ -291,7 +295,7 @@ function show_custom_fields_helper(custom_fields, properties){
 				if(field.is_required){
 					
 					if(isModal){
-						el = el.concat('<div class="control-group form-group"><label class="control-label"><b>'
+						el = el.concat('<div class="control-group form-group "><label class="control-label word-break-all"><b>'
 								+field.field_label
 								+'</b><span class="field_req">*</span></label><div class="controls"><span><select class="'
 								+field.field_type.toLowerCase()
@@ -303,7 +307,7 @@ function show_custom_fields_helper(custom_fields, properties){
 								+list_options
 								+'</select></span></div></div>');											
 					}else{
-						el = el.concat('<div class="control-group form-group"><label class="control-label '+label_style+'">'
+						el = el.concat('<div class="control-group form-group "><label class="control-label '+label_style+'">'
 								+field.field_label
 								+' <span class="field_req">*</span></label><div class="controls col-sm-9 '+div_col9_style+'"><select class="'
 								+field.field_type.toLowerCase()
@@ -318,7 +322,7 @@ function show_custom_fields_helper(custom_fields, properties){
 					
 				}else{
 					if(isModal){
-						el = el.concat('<div class="control-group form-group"><label class="control-label"><b>'
+						el = el.concat('<div class="control-group form-group "><label class="control-label word-break-all"><b>'
 								+field.field_label
 								+'</b></label><div class="controls"><select class="'
 								+field.field_type.toLowerCase()
@@ -328,7 +332,7 @@ function show_custom_fields_helper(custom_fields, properties){
 								+field.field_label+'">'
 								+list_options+'</select></div></div>');
 					}else{
-						el = el.concat('<div class="control-group form-group">	<label class="control-label '+label_style+'">'
+						el = el.concat('<div class="control-group form-group ">	<label class="control-label '+label_style+'">'
 									+field.field_label
 									+'</label><div class="controls col-sm-9 '+div_col9_style+'"><select class="'
 									+field.field_type.toLowerCase()
@@ -349,7 +353,7 @@ function show_custom_fields_helper(custom_fields, properties){
 				if(field.scope=="DEAL"){
 					if(field.is_required){
 						if(isModal){
-							el = el.concat('<div class="control-group form-group"><label class="i-checks i-checks-sm">'
+							el = el.concat('<div class="control-group form-group "><label class="i-checks i-checks-sm">'
 									+'<input type="'
 									+field_type
 									+'" class="'
@@ -359,7 +363,7 @@ function show_custom_fields_helper(custom_fields, properties){
 									+field.field_label
 									+'" style="margin: 0px 5px;"><i></i><div class="field_req inline-block">*</div><b>'+field.field_label+'</b></label></div>');
 						}else{
-							el = el.concat('<div class="control-group form-group">	<label class="i-checks i-checks-sm '+label_style+'">'
+							el = el.concat('<div class="control-group form-group ">	<label class="i-checks i-checks-sm '+label_style+'">'
 									+'<span class="field_req">*</span><input type="'
 									+field_type
 									+'" class="'
@@ -371,7 +375,7 @@ function show_custom_fields_helper(custom_fields, properties){
 						}
 					}else{
 						if(isModal){
-							el = el.concat('<div class="control-group form-group"><label class="i-checks i-checks-sm">'
+							el = el.concat('<div class="control-group form-group "><label class="i-checks i-checks-sm">'
 									+'<input type="'
 									+field_type
 									+'" class="'
@@ -381,7 +385,7 @@ function show_custom_fields_helper(custom_fields, properties){
 									+field.field_label
 									+'" style="margin: 0px 5px;"><i></i><b>'+field.field_label+'</b></label></div>');
 						}else{
-							el = el.concat('<div class="control-group form-group"><label class="i-checks i-checks-sm '+label_style+'">'
+							el = el.concat('<div class="control-group form-group "><label class="i-checks i-checks-sm '+label_style+'">'
 									+'<input type="'
 									+field_type
 									+'" class="'
@@ -397,7 +401,7 @@ function show_custom_fields_helper(custom_fields, properties){
 				
 				if(field.is_required){
 					if(isModal){
-						el = el.concat('<div class="control-group form-group">'
+						el = el.concat('<div class="control-group form-group ">'
 								+'<label class="i-checks i-checks-sm"><input type="'
 								+field_type
 								+'" class="'
@@ -407,7 +411,7 @@ function show_custom_fields_helper(custom_fields, properties){
 								+field.field_label
 								+'"><i></i><div class="field_req inline-block">*</div><b>'+field.field_label+'</b></label></div>');
 					}else{
-						el = el.concat('<div class="control-group form-group">	<label class="control-label '+checkbox_style+" "+label_style+'">'
+						el = el.concat('<div class="control-group form-group ">	<label class="control-label '+checkbox_style+" "+label_style+'">'
 								+field.field_label
 								+' <span class="field_req">*</span></label><div class="controls col-sm-9 '+div_col3_style+' m-t-xs"><label class="i-checks i-checks-sm"><input type="'
 								+field_type
@@ -421,7 +425,7 @@ function show_custom_fields_helper(custom_fields, properties){
 				}
 				else{
 					if(isModal){
-						el = el.concat('<div class="control-group form-group"><label class="i-checks i-checks-sm">'
+						el = el.concat('<div class="control-group form-group "><label class="i-checks i-checks-sm">'
 								+'<input type="'
 								+field_type
 								+'" class="'
@@ -431,7 +435,7 @@ function show_custom_fields_helper(custom_fields, properties){
 								+field.field_label
 								+'"><i></i><b>'+field.field_label+'</b></label></label></div>');
 					}else{
-						el = el.concat('<div class="control-group form-group"><label class="control-label '+checkbox_style+" "+label_style+'">'
+						el = el.concat('<div class="control-group form-group "><label class="control-label '+checkbox_style+" "+label_style+'">'
 								+field.field_label
 								+'</label><div class="controls col-sm-9 '+div_col3_style+' m-t-xs"><label class="i-checks i-checks-sm"><input type="'
 								+field_type
@@ -455,47 +459,47 @@ function show_custom_fields_helper(custom_fields, properties){
 				
 			if(field.is_required){
 				if(isModal){
-					el = el.concat('<div class="control-group form-group"><label class="control-label"><b>'
+					el = el.concat('<div class="control-group form-group "><label class="control-label word-break-all"><b>'
 							+field.field_label
 							+'</b><span class="field_req">*</span></label><div class="controls"><textarea rows="'
 							+rows+'" class="'
 							+field.field_type.toLowerCase()
-							+'_input custom_field required form-control resize-vertical" id='
+							+'_input custom_field required form-control resize-vertical field_length" id='
 							+field.id+' name="'
 							+field.field_label
-							+'"></textarea></div></div>');
+							+'" max_len="'+max_len+'"></textarea></div></div>');
 				}else{
-					el = el.concat('<div class="control-group form-group"><label class="control-label '+label_style+'">'
+					el = el.concat('<div class="control-group form-group "><label class="control-label '+label_style+'">'
 							+field.field_label
 							+'<span class="field_req">*</span></label><div class="controls col-sm-9 '+div_col9_style+'"><textarea rows="'
 							+rows+'" class="'
 							+field.field_type.toLowerCase()
-							+'_input custom_field required form-control resize-vertical" id='
+							+'_input custom_field required form-control resize-vertical field_length" id='
 							+field.id+' name="'
 							+field.field_label
-							+'" ></textarea></div></div>');
+							+'"  max_len="'+max_len+'"></textarea></div></div>');
 				}
 			}else{
 				if(isModal){
-					el = el.concat('<div class="control-group form-group"><label class="control-label"><b>'
+					el = el.concat('<div class="control-group form-group "><label class="control-label word-break-all"><b>'
 							+field.field_label
 							+'</b></label><div class="controls"><textarea rows="'
 							+rows+'" class="'
 							+field.field_type.toLowerCase()
-							+'_input custom_field form-control resize-vertical" id='
+							+'_input custom_field form-control resize-vertical field_length" id='
 							+field.id+' name="'
 							+field.field_label
-							+'" ></textarea></div></div>');
+							+'"  max_len="'+max_len+'"></textarea></div></div>');
 				}else{
-					el = el.concat('<div class="control-group form-group"><label class="control-label '+label_style+'">'
+					el = el.concat('<div class="control-group form-group "><label class="control-label '+label_style+'">'
 							+field.field_label
 							+'</label><div class="controls col-sm-9 '+div_col9_style+'"><textarea rows="'
 							+rows+'" class="'
 							+field.field_type.toLowerCase()
-							+'_input custom_field form-control resize-vertical" id='
+							+'_input custom_field form-control resize-vertical field_length" id='
 							+field.id+' name="'
 							+field.field_label
-							+'" ></textarea></div></div>');
+							+'"  max_len="'+max_len+'"></textarea></div></div>');
 				}
 			}
 			return;
@@ -505,46 +509,46 @@ function show_custom_fields_helper(custom_fields, properties){
 			field_type = "number";
 			if(field.is_required){
 				if(isModal){
-					el = el.concat('<div class="control-group form-group"><label class="control-label"><b>'
+					el = el.concat('<div class="control-group form-group "><label class="control-label word-break-all"><b>'
 						+field.field_label
 						+'</b><span class="field_req">*</span></label><div class="controls custom-number-controls"><input type="number" class="'
 						+field.field_type.toLowerCase()
-						+'_input custom_field required form-control" id="'
+						+'_input custom_field required form-control field_length" id="'
 						+field.id+'" name="'
 						+field.field_label
-						+'" value="0"></input>'
+						+'" value="0" max_len="'+max_len+'"></input>'
 						+'</div></div>');
 				}else{
-					el = el.concat('<div class="control-group form-group">	<label class="control-label '+label_style+'">'
+					el = el.concat('<div class="control-group form-group ">	<label class="control-label '+label_style+'">'
 							+field.field_label
 							+' <span class="field_req">*</span></label><div class="controls col-sm-9 '+div_col3_style+' custom-number-controls"><input type="number" class="'
 							+field.field_type.toLowerCase()
-							+'_input custom_field required form-control" id="'
+							+'_input custom_field required form-control field_length" id="'
 							+field.id+'" name="'
 							+field.field_label
-							+'" value="0"></input>'
+							+'" value="0" max_len="'+max_len+'"></input>'
 							+'</div></div>');
 				}
 			}else{
 				if(isModal){
-					el = el.concat('<div class="control-group form-group"><label class="control-label"><b>'
+					el = el.concat('<div class="control-group form-group "><label class="control-label word-break-all"><b>'
 						+field.field_label
 						+'</label><div class="controls custom-number-controls"><input type="number" class="'
 						+field.field_type.toLowerCase()
-						+'_input custom_field form-control" id="'
+						+'_input custom_field form-control field_length" id="'
 						+field.id+'" name="'
 						+field.field_label
-						+'" value="0"></input>'
+						+'" value="0" max_len="'+max_len+'"></input>'
 						+'</div></div>');
 				}else{
-					el = el.concat('<div class="control-group form-group">	<label class="control-label '+label_style+'">'
+					el = el.concat('<div class="control-group form-group ">	<label class="control-label '+label_style+'">'
 							+field.field_label
 							+'</label><div class="controls col-sm-9 '+div_col3_style+' custom-number-controls"><input type="number" class="'
 							+field.field_type.toLowerCase()
-							+'_input custom_field form-control" id="'
+							+'_input custom_field form-control field_length" id="'
 							+field.id+'" name="'
 							+field.field_label
-							+'" value="0"></input>'
+							+'" value="0" max_len="'+max_len+'"></input>'
 							+'</div></div>');
 				}
 			}
@@ -560,41 +564,41 @@ function show_custom_fields_helper(custom_fields, properties){
 		// If the field is not of type list or checkbox, create text field (plain text field or date field)
 		if(field.is_required){
 			if(isModal){
-				el = el.concat('<div class="control-group form-group"><label class="control-label"><b>'
+				el = el.concat('<div class="control-group form-group "><label class="control-label word-break-all"><b>'
 							+field.field_label
 							+'</b><span class="field_req">*</span></label><div class="controls"><input type="text" class="'
 							+field.field_type.toLowerCase()
-							+'_input custom_field required form-control" id='
+							+'_input custom_field required form-control field_length" id='
 							+field.id+' name="'+field.field_label
-							+'"></div></div>');
+							+'" max_len="'+max_len+'"></div></div>');
 			}else{
-				el = el.concat('<div class="control-group form-group">	<label class="control-label '+label_style+'">'
+				el = el.concat('<div class="control-group form-group ">	<label class="control-label '+label_style+'">'
 						+field.field_label
 						+' <span class="field_req">*</span></label><div class="controls col-sm-9 '+div_col9_style+'"><input type="text" class="'
 						+field.field_type.toLowerCase()
-						+'_input custom_field required form-control" id='
+						+'_input custom_field required form-control field_length" id='
 						+field.id+' name="'+field.field_label
-						+'"></div></div>');
+						+'" max_len="'+max_len+'"></div></div>');
 			}
 		}else{
 			if(isModal){
-				el = el.concat('<div class="control-group form-group"><label class="control-label"><b>'
+				el = el.concat('<div class="control-group form-group "><label class="control-label word-break-all"><b>'
 							+field.field_label
 							+'</b></label><div class="controls"><input type="text" class="'
 							+field.field_type.toLowerCase()
-							+'_input custom_field form-control" id='
+							+'_input custom_field form-control field_length" id='
 							+field.id+' name="'
 							+field.field_label
-							+'"></div></div>');
+							+'" max_len="'+max_len+'"></div></div>');
 			}else{
-				el = el.concat('<div class="control-group form-group"><label class="control-label '+label_style+'">'
+				el = el.concat('<div class="control-group form-group "><label class="control-label '+label_style+'">'
 						+field.field_label
 						+'</label><div class="controls col-sm-9 '+div_col9_style+'"><input type="text" class="'
 						+field.field_type.toLowerCase()
-						+'_input custom_field form-control" id='
+						+'_input custom_field form-control field_length" id='
 						+field.id+' name="'
 						+field.field_label
-						+'"></div></div>');
+						+'" max_len="'+max_len+'"></div></div>');
 			}
 		}
 	});

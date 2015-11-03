@@ -382,7 +382,7 @@ function getLinkedinMatchingProfiles()
 		 * Sends request to url "core/api/widgets/match/" and Calls WidgetsAPI
 		 * with contact id and plugin id as path parameters
 		 */
-		queueGetRequest("widget_queue", "/core/api/widgets/social/match/" + LinkedIn_Plugin_Id + "/" + contact_id, 'json', function(data)
+		queueGetRequest("widget_queue_", "/core/api/widgets/social/match/" + LinkedIn_Plugin_Id + "/" + contact_id, 'json', function(data)
 		{
 			if(islocalStorageHasSpace()){
 				// Store social results in cookie of particular contact

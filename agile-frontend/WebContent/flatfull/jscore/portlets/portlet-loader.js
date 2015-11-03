@@ -36,6 +36,8 @@ function loadPortlets(el){
 	App_Portlets.activitiesView= new Array();
 	App_Portlets.campaignstats = new Array();
 
+	App_Portlets.adminPortlets = new Array();
+
 	/*
 	 * If Portlets_View is not defined , creates collection view, collection is
 	 * sorted based on position i.e., set when sorted using jquery ui sortable
@@ -46,10 +48,77 @@ function loadPortlets(el){
 	Portlets_View = new Base_Collection_View({ url : '/core/api/portlets', sortKey : "row_position",sort_collection : false, restKey : "portlet", templateKey : "portlets", individual_tag_name : 'div',
 		postRenderCallback : function(portlets_el){
 			set_up_portlets(el, portlets_el);
+				if(App_Portlets.adminPortlets.length!=0)
+				{
+					var models = [];
+					$.each( App_Portlets.adminPortlets, function(index,model) {
+
+					var obj={};
+					var next_position = gridster.next_position(1, 1);
+				obj.column_position = next_position.col;
+				obj.row_position = next_position.row;
+
+				/*if (model.toJSON().portlet_type == "USERACTIVITY"
+										&& model.toJSON().name == "Leaderboard") {
+									if(obj.column_position==3)
+									{
+										obj.column_position=1;
+										obj.row_position=obj.row_position+1;
+					}
+				}*/
+				
+				model.set({ 'column_position' : obj.column_position}, { silent : true });
+					model.set({ 'row_position' : obj.row_position  }, { silent : true });
+					model.set({'isForAll' : false});
+					set_p_portlets(model);
+					//set_up_portlets(el,$('#portlets > div'));
+					
+					portlet_utility.addWidgetToGridster(model);
+					var that=$('#'+model.id).parent();
+					if(!(that.attr('data-col')==model.get('column_position')) || !(that.attr('data-row')==model.get('row_position')))
+					{
+						model.set({ 'column_position' : parseInt(that.attr("data-col")) }, { silent : true });
+						model.set({ 'row_position' : parseInt(that.attr("data-row")) }, { silent : true });
+						that.attr('id','ui-id-'+that.attr("data-col")+'-'+that.attr("data-row"));
+					that.find('div.portlet_body').attr('id','p-body-'+that.attr("data-col")+'-'+that.attr("data-row"));
+					}
+					models.push({ id : model.get("id"), column_position : obj.column_position, row_position : obj.row_position,isForAll : false });
+			
+				});
+				$.ajax({ type : 'POST', url : '/core/api/portlets/positions', data : JSON.stringify(models),
+					contentType : "application/json; charset=utf-8", dataType : 'json' });
+				}
+				App_Portlets.adminPortlets=new Array();
+				var models_position = [];
+				$('#portlet-res > div > .gs-w').each(function(){
+					
+					$(this).attr('id','ui-id-'+$(this).attr("data-col")+'-'+$(this).attr("data-row"));
+					$(this).find('div.portlet_body').attr('id','p-body-'+$(this).attr("data-col")+'-'+$(this).attr("data-row"));
+					
+					var model_id = $(this).find('.portlets').attr('id');
+					
+					var model = Portlets_View.collection.get(model_id);
+
+					if(!($(this).attr('data-col')==model.get('column_position')) || !($(this).attr('data-row')==model.get('row_position')))
+					{
+						model.set({ 'column_position' : parseInt($(this).attr("data-col")) }, { silent : true });
+						model.set({ 'row_position' : parseInt($(this).attr("data-row")) }, { silent : true });
+						//$(this).remove();
+						//set_p_portlets(model);
+					}
+					
+
+					models_position.push({ id : model.get("id"), column_position : parseInt($(this).attr("data-col")), row_position : parseInt($(this).attr("data-row")) });
+					
+				});
+				// Saves new positions in server
+				$.ajax({ type : 'POST', url : '/core/api/portlets/positions', data : JSON.stringify(models_position),
+					contentType : "application/json; charset=utf-8", dataType : 'json' });
 
 				if(Portlets_View.collection.length==0)
 					$('.gridster > div:visible > div',el).removeClass('gs-w');
 			
+
 			initializePortletsListeners();
 
 		} });
@@ -229,7 +298,7 @@ function set_up_portlets(el, portlets_el){
 						column_position : parseInt($(this).attr("data-col")), row_position : parseInt($(this).attr("data-row")) });
 				});
 				// Saves new width and height in server
-				$.ajax({ type : 'POST', url : '/core/api/portlets/widthAndHeight', data : JSON.stringify(models),
+				$.ajax({ type : 'POST', url : '/core/api/portlets/save-width-height', data : JSON.stringify(models),
 					contentType : "application/json; charset=utf-8", dataType : 'json' });
 
 			}
@@ -283,6 +352,8 @@ function set_up_portlets(el, portlets_el){
 	}
 
     $(window).trigger('resize');
+
+    //return callback();
 }
 
 /**To hide the modal popup after the portlet setting is saved**/

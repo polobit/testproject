@@ -67,6 +67,21 @@
             "type": "select"
         },
         {
+            "label": "Deal Source",
+            "required": "Yes",
+            "category": "More details",
+            "name": "deal_source_id",
+            "title": "Select deal source.",
+            "url": "/core/api/categories?entity_type=DEAL_SOURCE",
+            "dynamicName": "label",
+            "dynamicValue": "id",
+            "options": {
+                "Select..": ""
+            },
+            "fieldType": "dynamicselect",
+            "type": "select"
+        },
+        {
             "label": "Owner",
             "required": "Yes",
             "category": "More details",

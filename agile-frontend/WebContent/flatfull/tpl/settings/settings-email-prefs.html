@@ -23,38 +23,47 @@ You can integrate a maximum of 3 email accounts irrespective of the type of acco
 
 <script id="settings-imap-access-model-template" type="text/html">
 <div class="col-md-4 col-sm-6 col-xs-12">
-	<div class="panel wrapper" >
+	<div class="panel panel-default">
+	<div class="panel-heading">
 		<center>
-			<img class="thumbnail m-b-none thumb-transparent img-responsive thumb-xl" src="/img/email-prefs/imap.jpg"/>
+			<img class="m-b-none thumb-transparent img-responsive thumb-xl" style="height:47px;" src="/img/email-prefs/imap.jpg"/>
 		</center>
-		<br />
+	</div>
+	<div class="panel-body">
+		<div  style="min-height: 110px;">
 		{{#if id}}
-		   <div class="m-b-md p-b-xs">
+		   <div>
 		   	  <div class="l-h word-break">Server: {{server_name}}</div>
 			  <div class="l-h word-break">Email: {{user_name}}</div>
 		   </div>
 		{{else}}
-    	<div class="ellipsis-multiline m-b-md" rel="tooltip" title="Just link your IMAP account and Agile will show emails below a contact from your Inbox.">
+    	<div class="m-b-sm" rel="tooltip" title="Just link your IMAP account and Agile will show emails below a contact from your Inbox.">
 			Just link your IMAP account and Agile will show emails below a contact from your Inbox and Sent folders.
 		</div>
+		
         {{/if}}
-		<div>
+        </div>
+		<center>
 			{{#if id}}
-                <div class="m-t-md">
+                <div class="">
 				<a class="btn btn-sm btn-danger" href="#" id="imap-prefs-delete" name="imap" oid={{id}}>Disable</a>
 				<a class="btn btn-sm btn-default" href="#imap/{{id}}">Settings</a>
                 </div>
 			{{else}}
+			<div>
 			    {{#has_email_account_limit_reached}}
-				<a class="btn pull-left btn-sm btn-default" disabled="disabled">Enable</a>
-				{{#if_non_pro_plan}}
-				<div class="pull-left m-l-sm text-xs" style="line-height:13px;width:149px"> Upgrade to Pro plan to add more accounts</div>
+			    {{#if_non_pro_plan}}
+				<div class="m-t-sm p-xs" style="width: 75%;border: 1px solid #E2E29C;background-color: #F7F7D0;"> Please <strong><a class="text-info" href="#subscribe">upgrade</a></strong> to Enterprise plan</div>
 				{{/if_non_pro_plan}}
+				<!--<a class="btn btn-sm btn-default m-t-sm" disabled="disabled">Enable</a>-->
+				
 				{{else}}
 				<a class="btn btn-sm btn-default" href="#imap">Enable</a>
 				{{/has_email_account_limit_reached}}
+			</div>
 			{{/if}}
-		</div>
+		</center>
+	</div>
 	</div>
 </div>
 </script>
@@ -64,40 +73,43 @@ You can integrate a maximum of 3 email accounts irrespective of the type of acco
 
 <script id="settings-office-access-model-template" type="text/html">
 <div class="col-md-4 col-sm-6 col-xs-12">
-	<div class="panel wrapper" >
+	<div class="panel panel-default" >
+	<div class="panel-heading">
 		<center>
-			<img class="thumbnail m-b-none thumb-transparent img-responsive thumb-xl" src="/img/email-prefs/office365.jpg"/>
+			<img class="m-b-none thumb-transparent img-responsive thumb-xl" style="height:47px;" src="/img/email-prefs/office365.jpg"/>
 		</center>
-		<br />
-		<div> 
+		</div>
+		<div class="panel-body">
+		<div  style="min-height: 110px;"> 
 			{{#if id}}
 			  <div class="m-b-md p-b-xs">
 		   	  <div class="l-h word-break">Server: {{server_url}}</div>
 		   	  <div class="l-h word-break">Email: {{user_name}}</div>
 		   </div>
 			{{else}}
-			<div class="ellipsis-multiline m-b-md"  rel="tooltip" title="See all emails related to a contact from your Office365 account.">
+			<div class="m-b-sm" rel="tooltip" title="See all emails related to a contact from your Office365 account.">
 				See all emails related to a contact from your Office365 account.
 			</div>
 			{{/if}}
 		</div>
-        <div>
+        <center>
 			{{#if id}}
 				<a class="btn btn-sm btn-danger" href="#" id="office-prefs-delete" name="office" oid={{id}}>Disable</a>
 				<a class="btn btn-sm btn-default" href="#office/{{id}}">Settings</a>
 			{{else}}
-				<div class="m-t-sm">
+				<div>
 			    {{#has_email_account_limit_reached}}
-				<a class="btn pull-left btn-sm btn-default" disabled="disabled">Enable</a>
-				{{#if_non_pro_plan}}
-				<div class="pull-left m-l-sm text-xs" style="line-height:13px;width:149px"> Upgrade to Pro plan to add more accounts</div>
+			    {{#if_non_pro_plan}}
+				<div class="m-t-sm p-xs" style="width: 75%;border: 1px solid #E2E29C;background-color: #F7F7D0;"> Please <strong><a class="text-info" href="#subscribe">upgrade</a></strong> to Enterprise plan</div>				
 				{{/if_non_pro_plan}}
+				<!--<a class="btn m-t-sm btn-sm btn-default" disabled="disabled">Enable</a>-->
 				{{else}}
-				<a class="btn btn-sm btn-default m-t-sm" href="#office">Enable</a>
+				<a class="btn btn-sm btn-default" href="#office">Enable</a>
 				{{/has_email_account_limit_reached}}
 				</div>
 			{{/if}}
-		</div>
+		</center>
+	</div>
 	</div>
 </div>
 </script>

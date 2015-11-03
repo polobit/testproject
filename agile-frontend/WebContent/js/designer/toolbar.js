@@ -49,6 +49,7 @@ function downloadNodes(callback) {
                 
                 menuNode.click(function()                
                 {
+
                 	if(!checkMaxNodesCount())
                  		return;
                 	if(!checkWorkflowSize())
@@ -212,6 +213,10 @@ function addDraggingCapability() {
 
             // Get jsonDefinition and add it      	
             var jsonDefinition = $(ui.draggable).data("json");
+            //save dropped location
+            jsonDefinition.x = ui.position.left;
+            jsonDefinition.y = ui.position.top;
+            //jsonDefinition.parentY = window.parent.scrollY;
             
             if(!checkMaxNodesCount())
         		return;

@@ -14,12 +14,12 @@
 	                <div class="row">
 		                 <div class="control-group col-md-5">
 		                     <span class="controls">
-		                     <input name="first_name" type="text" class="required form-control" id="fname" placeholder="First Name" />
+		                     <input name="first_name" type="text" class="required form-control field_length" max_len="500" id="fname" placeholder="First Name" />
 		                     </span>
 		                 </div>
 		                 <div class="control-group col-md-6">
 		                     <span class="controls">
-		                     <input name="last_name" class="form-control" type="text" id="lname" placeholder="Last Name" />
+		                     <input name="last_name" class="form-control field_length" max_len="500" type="text" id="lname" placeholder="Last Name" />
 		                     </span>
 		                 </div>
 	                </div>
@@ -29,7 +29,7 @@
 	                <div class="control-group col-md-5">
 	                    <label class="control-label"><b>Title</b></label>
 	                    <div class="controls">
-	                        <input name="title" type="text" id="job_title" placeholder="Job Title" class="form-control" />
+	                        <input name="title" type="text" id="job_title" placeholder="Job Title" class="form-control field_length" max_len="500" />
 	                    </div>
 	                </div>
 	                <div class="control-group col-md-6" id='company_source_person_modal'>
@@ -38,7 +38,7 @@
 							<div class="pull-left" style="display:inline-block;">
 								<ul name="contact_company_id" class="contacts tagsinput tags p-n"></ul>
 							</div>
-	                        <input type="text" id="contact_company" placeholder="Company Name" class="form-control" />
+	                        <input type="text" id="contact_company" placeholder="Company Name" class="form-control field_length" max_len="100" />
 	                    </div>
 	                </div>
                 </div>   
@@ -48,7 +48,7 @@
 	                	<div class="col-md-5">
 		                    <label class="control-label"><b>Email</b> </label>
 		                    <div class="controls">
-		                        <span><input name="email" class="email form-control" type="text" id="email" placeholder="Email" /></span>
+		                        <span><input name="email" class="email form-control field_length" max_len="500" type="text" id="email" placeholder="Email" /></span>
 		                    </div>
 	                    </div>
 	                    <div class="col-md-6">	                                       
@@ -57,14 +57,14 @@
 	                    	<div id="network_handle" class="network-handle pull-left">
 		                    	<label class="control-label"><b>Twitter</b> </label>
 		                    	<div class="controls">
-		                        	<span><input name="handle" class="form-contol" type="text" id="handle" disabled value=""/></span>
+		                        	<span><input name="handle" class="form-contol field_length" max_len="500" type="text" id="handle" disabled value=""/></span>
 		                    	</div>
 	                    	</div>	                    	 
 	                    	
 	                    	<div class="control-group" >                    
                     		  <div class="controls">
                         		<div class="website multiple-template" style="display:none" data="website">
-                                  <input type="text" id="website" name="website" class="form-control"/> 
+                                  <input type="text" id="website" name="website" class="form-control field_length" max_len="500"/> 
                                   <select class="website-select form-control" name="website-select">
                                     <option></option>                                
                                     <option value="TWITTER">Twitter</option>
@@ -85,7 +85,7 @@
 	                <div class="control-group form-group col-md-5">
 	                    <label class="control-label"><b>Phone</b></label>
 	                    <div class="controls">
-	                        <input name="phone" class="phone form-control" type="text" id="phone" placeholder="Phone Number" />
+	                        <input name="phone" class="phone form-control field_length" max_len="500" type="text" id="phone" placeholder="Phone Number" />
 	                    </div>
 	                </div>
 	            </div>
@@ -100,7 +100,7 @@
 	                        </ul>
 	                    </div>
 	                    <div class="col-md-5 p-l-none">
-	                        <input name="tags" type="text" id="tags-new-person" class="tags-typeahead form-control" />
+	                        <input name="tags" type="text" id="tags-new-person" class="tags-typeahead form-control" maxlength="500" />
 	                    </div>
 	                    </div>
 	                </div>

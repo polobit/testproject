@@ -81,12 +81,14 @@ public class TwitterUpdates
 	    User user = twitter.showUser(twitterId);
 	    Paging page = new Paging();
 	    // set max id if statusId is not zero
-	    if (statusId != 0)
-		page.setMaxId(statusId);
+	    if (statusId != 0){
+	    	page.setMaxId(statusId);
+	    }
 
 	    // set max id if count is not zero
-	    if (count != 0)
-		page.setCount(count);
+	    if (count != 0){
+	    	page.setCount(count);
+	    }
 
 	    return TwitterUpdates.getListOfSocialUpdateStream(user, twitter,
 		    twitter.getUserTimeline(user.getScreenName(), page));
@@ -154,10 +156,11 @@ public class TwitterUpdates
 		 * as link in the tweet string which can be redirected to
 		 * his/her twitter profile
 		 */
-		for (UserMentionEntity entity : tweet.getUserMentionEntities())
+		for (UserMentionEntity entity : tweet.getUserMentionEntities()){
 		    stream.message = stream.message.replace("@" + entity.getScreenName(),
 			    "<a href='https://twitter.com/" + entity.getScreenName()
 				    + "' target='_blank' class='cd_hyperlink'>@" + entity.getScreenName() + "</a>");
+		}
 
 		/*
 		 * For every hash tag, make its name as link in the tweet string
@@ -175,9 +178,10 @@ public class TwitterUpdates
 		 * content returned from Twitter, which redirects with the
 		 * actual URL
 		 */
-		for (URLEntity entity : tweet.getURLEntities())
+		for (URLEntity entity : tweet.getURLEntities()){
 		    stream.message = stream.message.replace(entity.getURL(), "<a href='" + entity.getURL()
 			    + "' target='_blank' class='cd_hyperlink'>" + entity.getDisplayURL() + "</a>");
+		}
 
 		/*
 		 * If still tweet contains URL, showing it as hyper link and
@@ -186,10 +190,11 @@ public class TwitterUpdates
 		String[] words = stream.message.split(" ");
 		String exp = "^(https?|ftp|file)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]";
 
-		for (String word : words)
+		for (String word : words){
 		    if (word.matches(exp))
 			stream.message = stream.message.replace(word, "<a href='" + word
 				+ "' target='_blank' class='cd_hyperlink'>" + word + "</a>");
+		}
 
 		System.out.println("Tweet after showing links: " + stream.message);
 

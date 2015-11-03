@@ -1,7 +1,9 @@
 package com.agilecrm.subscription.restrictions.db;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import javax.persistence.Embedded;
@@ -232,6 +234,35 @@ public class BillingRestriction
 	    return false;
 
 	return true;
+    }
+    
+    @JsonIgnore
+    public Map<String, Map<String, Integer>> getRestrictions()
+    {
+    	Map<String, Map<String, Integer>> resrtictions = new HashMap<String, Map<String, Integer>>();
+        
+    	refreshContacts();
+    	Map<String, Integer> limits = new HashMap<String, Integer>();
+    	limits.put("limit", planDetails.getContactLimit());
+    	limits.put("count", contacts_count);
+    	resrtictions.put("contacts", limits);
+    	limits = new HashMap<String, Integer>();
+    	limits.put("limit", planDetails.getWebRuleLimit());
+    	limits.put("count", WebRuleUtil.getCount());
+    	resrtictions.put("webrules", limits);
+    	limits = new HashMap<String, Integer>();
+    	limits.put("limit", planDetails.getWorkflowLimit());
+    	limits.put("count", WorkflowUtil.get_enable_campaign_count());
+    	resrtictions.put("workflows", limits);
+    	limits = new HashMap<String, Integer>();
+    	limits.put("limit", planDetails.getTriggersLimit());
+    	limits.put("count", TriggerUtil.getCount());
+    	resrtictions.put("triggers", limits);
+    	limits = new HashMap<String, Integer>();
+    	limits.put("limit", planDetails.getAllowedUsers());
+    	limits.put("count", DomainUserUtil.count());
+    	resrtictions.put("users", limits);
+	return resrtictions;
     }
 
     /**

@@ -11,14 +11,14 @@
 	<div class="col-md-9">
 		<div class="tab-container">
 {{#check_plan "FREE"}}
-<div class="" style="font-size: 13px; /* line-height: 16px; *//* padding: 8px 8px 8px; *//* width: auto; */ position: relative;
-/* top: -49px; */margin: 0 auto;z-index: 9;width: 202px;bottom: -8px;"><span style="padding: 5px 15px 5px 15px;border: 1px solid #E2E29C;background-color: #F7F7D0;">You are currently on FREE plan</span></div>
+<div style="font-size: 13px; /* line-height: 16px; *//* padding: 8px 8px 8px; *//* width: auto; */ position: relative;
+/* top: -49px; */margin: 0 auto;z-index: 9;width: 202px;bottom: 9px;"><span style="padding: 5px 15px 5px 15px;border: 1px solid #E2E29C;background-color: #F7F7D0;">You are currently on FREE plan</span></div>
 
-			<ul class="nav nav-tabs" id="subTab" style="margin-top: -18px;">
+			<ul class="nav nav-tabs hide" id="subTab" style="margin-top: -18px;">
 {{else}}
 <ul class="nav nav-tabs" id="subTab">
 {{/check_plan}}
-										    <li role="presentation" class="active" data-tab="1">
+										    <li role="presentation" id="usertab" class="active" data-tab="1">
 												<a href="#users-content" role="tab" name="users-content" data-toggle="tab" aria-control="users-content" id="users">Plans</a>
 											</li>
 											<li role="presentation" id="emailtab" data-tab="2">
@@ -526,9 +526,22 @@
         </div> <!-- End of tab container -->
 		
     </div> <!-- End of col-md-9 -->
-       
+{{#check_plan "FREE"}}
+<div class="col-md-3 p-t-sm m-t-xs" id="email">
+	
+		<div class="panel panel-default wrapper-md m-b-none">
+		<p class="b-b b-light p-b-xs">Emails<a onclick='emailClickEvent()' style="font-size: 12px;" class="text-info pull-right">Purchase</a></p>
+		<div>
+Your current plan provides 5000 emails (branded). 
+</div>
+		</div>
+	
+	</div>
+{{else}}
+{{/check_plan}}   
      
-  <div class="col-md-3">
+  <div class="col-md-3" id="currentPlan">
+
 {{#getSubscriptionBasedOnPlan billingData plan}}
    <div class="panel panel-default wrapper-md m-t-xl">
       <p class="b-b b-light p-b-xs">
@@ -549,7 +562,7 @@ users.
 <div class="row">
 	<div class="col-md-12">
 {{#check_plan "FREE"}}
-        <div class="panel panel-default wrapper-md m-t-xl">
+        <div class="panel panel-default wrapper-md m-t-md">
 {{else}}
 		<div class="panel panel-default wrapper-md">
 {{/check_plan}}
@@ -656,4 +669,46 @@ users.
 
 <script id="latest-invoice-template" type="text/html">
  Thank you for your last payment of ${{numeric_operation this.total 100 "/"}} on {{epochToHumanDate "mmm dd, yyyy" periodStart}}.
+</script>
+
+<script id="subscribe-error-modal-template" type="text/html">
+	<div class="modal" data-backdrop="static">
+<div class="modal-dialog">
+    <div class="modal-content">
+		<div class="modal-header">
+            <button class="close" data-dismiss="modal">x</button>
+			<h3 class="modal-title">Plan Restrictions</h3>
+		</div>
+		<div class="modal-body help-text">
+			<strong>Sorry, we are unable to subscribe you to {{plan}} plan because of the following reason{{#if_greater errorsCount 2}}s{{/if_greater}}:</strong><br/><br/>
+			
+			{{#if is_more_users}}
+				<div class="p-t-xs"><i class="fa fa-angle-double-right pull-left" style="margin-top:3px;"></i><div class="p-l">We see that you already have {{../count}} users with your current plan and are trying to subscribe with {{../newCount}} user{{#if_greater ../newCount 1}}s{{/if_greater}} for the new plan.</div></div>
+			{{else}}
+				{{#if_greater users.count users.limit}}
+					<div class="p-t-xs"><i class="fa fa-angle-double-right pull-left" style="margin-top:3px;"></i><div class="p-l">We see that you already have {{users.count}} users with your current plan and are trying to subscribe with {{users.limit}} user for the new plan.</div></div>
+				{{/if_greater}}
+				{{#if_greater contacts.count contacts.limit}}
+					<div class="p-t-xs"><i class="fa fa-angle-double-right pull-left" style="margin-top:3px;"></i><div class="p-l">We see that you already have {{contacts.count}} contacts with your current plan and are trying to subscribe with the plan ({{../plan}}) which does not support {{contacts.count}} contacts.</div></div>
+				{{/if_greater}}
+				{{#if_greater workflows.count workflows.limit}}
+					<div class="p-t-xs"><i class="fa fa-angle-double-right pull-left" style="margin-top:3px;"></i><div class="p-l">We see that you already have {{workflows.count}} campaigns with your current plan and are trying to subscribe with the plan ({{../plan}}) which does not support {{workflows.count}} campaigns.</div></div>
+				{{/if_greater}}
+				{{#if_greater webrules.count webrules.limit}}
+					<div class="p-t-xs"><i class="fa fa-angle-double-right pull-left" style="margin-top:3px;"></i><div class="p-l">We see that you already have {{webrules.count}} web rules with your current plan and are trying to subscribe with the plan ({{../plan}}) which does not support {{webrules.count}} web rules.</div></div>
+				{{/if_greater}}
+				{{#if_greater triggers.count triggers.limit}}
+					<div class="p-t-xs"><i class="fa fa-angle-double-right pull-left" style="margin-top:3px;"></i><div class="p-l">We see that you already have {{triggers.count}} triggers with your current plan and are trying to subscribe with the plan ({{../plan}}) which does not support {{triggers.count}} triggers.</div></div>
+				{{/if_greater}}
+			{{/if}}
+			<br/>
+			<div class="text-danger">Please adjust your current plan accordingly and proceed to process your new subscription.</div>
+			
+		</div>
+		<div class="modal-footer">
+			<a href="#" data-dismiss="modal" class="btn btn-sm btn-danger">Close</a>
+		</div>
+	</div>
+</div>
+</div>
 </script>

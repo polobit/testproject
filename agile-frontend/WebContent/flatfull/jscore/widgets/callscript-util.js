@@ -93,6 +93,30 @@ function initializeCallScriptListeners(){
 	{
 		$(this).find(".callscriptrule-actions").css("visibility", "hidden");
 	});
+
+	
+	// On click of save button, check input and save details
+	$('#prefs-tabs-content #save_prefs').off('click');
+	$('#prefs-tabs-content').on('click', '#save_prefs', function(e)
+	{	e.preventDefault();
+
+		if ($(this).text() == "Saving..." || $(this).text() == "Loading...") {
+			console.log("Do not hit me again " + $(this).text());
+			return;
+		}
+
+		// Checks whether all input fields are given
+		try {
+			if (!isValidForm($("#callscriptruleForm"))) {
+				return;
+			}
+		} catch (err) {
+			return;
+		}
+
+		// Saves call script preferences in callscript widget object
+		saveCallScriptWidgetPrefs();
+	});
 }
 
 // Get widget and make adjustment of buttons in widget form
@@ -259,7 +283,7 @@ function deleteCallScriptRule(dltRuleIndex)
 			console.log(data);
 		});
 	}
-	
+	initializeCallScriptListeners();
 	makeWidgetTabActive();
 }
 
@@ -290,6 +314,7 @@ function showCallScriptRule()
 
 		}, null);
 	}
+	initializeCallScriptListeners();
 }
 
 // show add rule page with chaining
@@ -326,6 +351,8 @@ function addCallScriptRule()
 
 	// Shows loading image until data gets ready for displaying
 	$("#prefs-tabs-content").html(LOADING_HTML);
+	initializeCallScriptListeners();
+
 	add_csr.render();
 }
 
@@ -347,6 +374,7 @@ function editCallScriptRule(ruleCount)
 		var csrule = getRule(callscriptPrefsJson,ruleCount);
 
 		$("#prefs-tabs-content").html(LOADING_HTML);
+		initializeCallScriptListeners();
 		
 		head.js(LIB_PATH + 'lib/agile.jquery.chained.min.js', function()
 		{
@@ -520,4 +548,110 @@ function makeWidgetTabActive()
 {
 	$('#PrefsTab .select').removeClass('select');
 	$('.add-widget-prefs-tab').addClass('select');	
+}
+
+
+// from widget-util.js
+
+
+
+/**
+ * Calls method in script API (agile_widget.js) to save CallScript preferences
+ * in CallScript widget object
+ */
+function saveCallScriptWidgetPrefs() {
+	$("#save_prefs").text("Saving...");
+	$("#save_prefs").attr("disabled", true);
+
+	// Retrieve and store the Sip preferences entered by the user as
+	// JSON
+	var callscript_prefs = makeRule();
+
+	console.log(callscript_prefs);
+
+	// Saves the preferences into widget with sip widget name
+	save_widget_prefs("CallScript", JSON.stringify(callscript_prefs), function(
+			data) {
+		console.log('In call script save success');
+		console.log(data);
+
+		// Redirect to show call script rules page
+		window.location.href = "#callscript/rules";
+	});
+}
+
+
+
+/**
+ * Shows setup if user adds call script widget for the first time or clicks on
+ * reset icon on call script panel in the UI
+ * 
+ */
+function callscript_save_widget_prefs() {
+	
+}
+
+
+
+function build_custom_widget_form(el)
+{
+	var divClone;
+	
+    $('#prefs-tabs-content').off('click', '#add-custom-widget');
+	$('#prefs-tabs-content').on('click', '#add-custom-widget', function(e)
+	{
+		$('#custom-widget-btn').removeClass('open');
+		divClone = $("#custom-widget").clone();
+		var widget_custom_view = new Base_Model_View({ url : "/core/api/widgets/custom", template : "add-custom-widget", isNew : true,
+			postRenderCallback : function(el)
+			{
+				console.log('In post render callback');
+				console.log(el);
+                
+				$('#custom-widget').off('change').on('change', '#script_type', function(e)
+				{
+					var script_type = $('#script_type').val();
+					if (script_type == "script")
+					{
+						$('#script_div').show();
+						$('#url_div').hide();
+						return;
+					}
+
+					if (script_type == "url")
+					{
+						$('#script_div').hide();
+						$('#url_div').show();
+					}
+				});
+
+			}, saveCallback : function(model)
+			{
+				console.log('In save callback');
+
+				console.log(model);
+
+				if (model == null)
+					alert("A widget with this name exists already. Please choose a different name");
+
+				App_Widgets.Catalog_Widgets_View.collection.add(model);
+				$("#custom-widget").replaceWith(divClone);
+			} });
+
+		$('#custom-widget', el).html(widget_custom_view.render(true).el);
+		
+		// Is Custom widget for all.
+		if(!($(this).hasClass('add_to_all'))){
+			isForAll = false;
+		}
+
+		$('#custom_isForAll').val(isForAll);
+		
+        $('#prefs-tabs-content').off('click', '#cancel_custom_widget');
+		$('#prefs-tabs-content').on('click', '#cancel_custom_widget', function(e)
+		{
+			// Restore element back to original
+			$("#custom-widget").replaceWith(divClone); 
+		});
+	});
 }

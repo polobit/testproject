@@ -19,10 +19,16 @@ var CURRENT_VIEW_OBJECT;
 
 function contactTableView(base_model,customDatefields,view) {
 	
+	var templateKey = 'contacts-custom-view-model';
+	var gridViewEl = readCookie("agile_contact_view");
+	if (gridViewEl) {
+		templateKey = 'contacts-grid';
+	}
+
 	// Creates list view for
 	var itemView = new Base_List_View({
 		model : base_model,
-		template : 'contacts-custom-view-model',
+		template : templateKey,
 		tagName : view.options.individual_tag_name
 	});
 
@@ -35,59 +41,69 @@ function contactTableView(base_model,customDatefields,view) {
 	// Converts base_model (contact) in to JSON
 	var contact = base_model.toJSON();
 	var el = itemView.el;
+
+	if (!gridViewEl || window.location.hash=="#companies") {
 	
-				// Clears the template, because all the fields are appended, has to be reset
-				// for each contact
-				// $('#contacts-custom-view-model-template').empty();
-				
-				// Iterates through, each field name and appends the field according to
-				// order of the fields
-				$.each(fields, function(index, field_name) {
-					if(field_name.indexOf("CUSTOM_") != -1)
-					{
-						field_name = field_name.split("CUSTOM_")[1]; 			
-						var property = getProperty(contact.properties, field_name);
-						var json = {};
-						if(!property)
-						{
-							json.id = contact.id;
-							getTemplate('contacts-custom-view-custom', json, undefined, function(template_ui){
-								if(!template_ui)
-									  return;
-								$(el).append($(template_ui));
-							}, null);
-							return;
-						}
-						if(isDateCustomField(customDatefields,property)){
-							console.log('got true');
-							json = property;
-							json.id = contact.id;
-							getTemplate('contacts-custom-view-custom-date', json, undefined, function(template_ui){
-								if(!template_ui)
-									  return;
-								$(el).append($(template_ui));
-							}, null);
-						}
-						else
-						{
-							json = property;
-							json.id = contact.id;
-							getTemplate('contacts-custom-view-custom', json, undefined, function(template_ui){
-								if(!template_ui)
-									  return;
-								$(el).append($(template_ui));
-							}, null);
-							
-						}
-						return;
-					}
-					
-					getTemplate('contacts-custom-view-' + field_name, contact, undefined, function(template_ui){
+		// Clears the template, because all the fields are appended, has to be reset
+		// for each contact
+		// $('#contacts-custom-view-model-template').empty();
+		
+		// Iterates through, each field name and appends the field according to
+		// order of the fields
+		$.each(fields, function(index, field_name) {
+			if(field_name.indexOf("CUSTOM_") != -1)
+			{
+				field_name = field_name.split("CUSTOM_")[1]; 			
+				var property = getProperty(contact.properties, field_name);
+				var json = {};
+				if(!property)
+				{
+					json.id = contact.id;
+					getTemplate('contacts-custom-view-custom', json, undefined, function(template_ui){
 						if(!template_ui)
 							  return;
 						$(el).append($(template_ui));
 					}, null);
-				});
+					return;
+				}
+				if(isDateCustomField(customDatefields,property)){
+					console.log('got true');
+					json = property;
+					json.id = contact.id;
+					getTemplate('contacts-custom-view-custom-date', json, undefined, function(template_ui){
+						if(!template_ui)
+							  return;
+						$(el).append($(template_ui));
+					}, null);
+				}
+				else
+				{
+					json = property;
+					json.id = contact.id;
+					getTemplate('contacts-custom-view-custom', json, undefined, function(template_ui){
+						if(!template_ui)
+							  return;
+						$(el).append($(template_ui));
+					}, null);
+					
+				}
+				return;
+			}
+			
+			getTemplate('contacts-custom-view-' + field_name, contact, undefined, function(template_ui){
+				if(!template_ui)
+					  return;
+				$(el).append($(template_ui));
+			}, null);
+		});
+
+	} else  {
+		getTemplate('contacts-grid-model', contact, undefined, function(template_ui){
+				if(!template_ui)
+					  return;
+				$(el).append($(template_ui));
+			}, null);
+	}
 				
 	// Appends model to model-list template in collection template
 	$(('#'+view.options.templateKey+'-model-list'), view.el).append(el);
@@ -95,7 +111,6 @@ function contactTableView(base_model,customDatefields,view) {
 	// Sets data to tr
 	$(('#'+view.options.templateKey+'-model-list'), view.el).find('tr:last').data(
 			base_model);
-
 }
 
 // Check whether the given fields list has the property name.

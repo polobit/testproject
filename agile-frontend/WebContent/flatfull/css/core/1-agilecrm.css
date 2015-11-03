@@ -2591,6 +2591,7 @@ select.input-xs{
 .tooltip-inner {
 	max-width: 260px;
 }
+
 .note-editor {
  border: 1px solid #E0E0E0 !important;
 }
@@ -2661,6 +2662,47 @@ margin-bottom: 17px;
 }
 
 
+.contacts-grid-view-temp:hover div.grid-view-actions {
+  display: block;
+}
+
+div.grid-view-actions {
+  display: none;
+}
+
+.grid-edit-color{
+color:rgb(118, 114, 114) !important
+}
+.grid-delete-color{
+
+color:rgb(240, 92, 92)
+}
+
+.grid-tag-color{
+background-color: #e4eaec !important;color:rgb(113, 85, 87);
+}
+
+.grid-view-elipsis{
+	max-width: 50%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: inline-block;
+}
+
+.grid-view-elipsis-job{
+	max-width: 50%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  
+  display: inline-block;
+}
+
+.grid-view-action-button{
+	position: absolute;
+  right: 22px;
+}
 .show_shortcuts li ul li:hover .shortcuts.enable{
 	display: block!important;
 }
@@ -2675,6 +2717,10 @@ margin-bottom: 17px;
 	display:none;
 }
 
+#contacts-view-options .tooltip-inner {
+  white-space:nowrap;
+  max-width:none;
+}
 .c-cm
 {
 	cursor:context-menu;
@@ -2786,7 +2832,7 @@ top: 165px!important;
 	;z-index: 100;
 }
 
-.campaign_dialpad_btns{
+.campaign_dialpad_btns,.dialpad_btns{
 	border: 1px solid #eee;
 	display: none;
 }
@@ -2809,7 +2855,7 @@ top: 165px!important;
 	vertical-align: inherit;
 }
 
-#campaign_dialpad_btns input[type="button"]{
+#campaign_dialpad_btns input[type="button"],.dialpad_btns input[type="button"]{
     background-color: #fff;
     border: none;
     border-bottom: 1px solid #eee!important;
@@ -2818,7 +2864,7 @@ top: 165px!important;
 	width: 31px!important;
 }
 
-#campaign_dialpad_btns input[type="button"]:hover{
+#campaign_dialpad_btns input[type="button"]:hover,.dialpad_btns input[type="button"]:hover{
         background-color: #EFEFEF;
         color: #888;
 }
@@ -2884,3 +2930,42 @@ width: 915px;
 .m-r-8{
 	    margin-right: 8px;
 }
+
+
+@-moz-document url-prefix() {
+  .contact-grid-ellipsis {
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+.contact-grid-ellipsis span {
+ display:inline-block;
+}
+
+}
+
+#deals-reports .highcharts-tooltip span , #lossreasonpie-chart-users .highcharts-tooltip span , #calls-chart-user .highcharts-tooltip span , #call-report .highcharts-tooltip span
+{
+	 background-color: #313030;
+     opacity: 1;
+     z-index: 9999!important;
+     padding: 8px;
+     border-radius: 5px
+ }
+ #deals-reports svg .highcharts-tooltip, #lossreasonpie-chart-users svg .highcharts-tooltip,#calls-chart-user svg .highcharts-tooltip , #call-report svg .highcharts-tooltip {
+ 	visibility: hidden!important;
+ }
+
+/* #deals-reports .highcharts-data-labels
+ {
+ 	text-transform: capitalize;
+ }*/
+
+ #deals-chart .highcharts-legend{
+ 	text-transform: capitalize;
+ }
+ #lossreasonpie-chart-users .highcharts-data-labels div span div.text-center span:first-child {
+ display:block;
+ word-wrap:break- all;
+ white-space:normal!important;
+ } 

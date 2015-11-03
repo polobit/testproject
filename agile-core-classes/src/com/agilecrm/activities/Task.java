@@ -1,7 +1,9 @@
 package com.agilecrm.activities;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Id;
 import javax.persistence.PrePersist;
@@ -161,6 +163,12 @@ public class Task extends Cursor
     public List<String> notes = null;
 
     /**
+     * Note id's of related task for a deal Ghanshyam.
+     */
+    @NotSaved
+    private List<String> note_ids = new ArrayList<String>();
+
+    /**
      * note's description related to a task
      */
     @NotSaved(IfDefault.class)
@@ -174,13 +182,13 @@ public class Task extends Cursor
     };
 
     public Status status = Status.YET_TO_START;
-    
+
     /**
      * Deal ids of related deals for a document.
      */
     @NotSaved
     private List<String> deal_ids = new ArrayList<String>();
-    
+
     /**
      * Related deal objects fetched using deal ids.
      */
@@ -428,12 +436,15 @@ public class Task extends Cursor
 
 	    this.notes = null;
 	}
-	
+
 	if (deal_ids != null)
 	{
 	    for (String deal_id : this.deal_ids)
 		this.related_deals.add(new Key<Opportunity>(Opportunity.class, Long.parseLong(deal_id)));
 	}
+
+	// Setting note_ids from api calls
+	setRelatedNotes();
     }
 
     /************************ New task view methods ******************************/
@@ -469,10 +480,10 @@ public class Task extends Cursor
 	Task task = TaskUtil.getTask(id);
 	return task.getNotes();
     }
-    
+
     /**
-     * While saving a task it contains list of deal keys, but while
-     * retrieving includes complete deal object.
+     * While saving a task it contains list of deal keys, but while retrieving
+     * includes complete deal object.
      * 
      * @return List of deal objects
      */
@@ -481,7 +492,7 @@ public class Task extends Cursor
     {
 	return Opportunity.dao.fetchAllByKeys(this.related_deals);
     }
-    
+
     /**
      * Gets deals related with document.
      * 
@@ -496,6 +507,49 @@ public class Task extends Cursor
 	    deal_ids.add(String.valueOf(dealKey.getId()));
 
 	return deal_ids;
+    }
+
+    @XmlElement(name = "note_ids")
+    public List<String> getNote_ids()
+    {
+	note_ids = new ArrayList<String>();
+
+	for (Key<Note> noteKey : related_notes)
+	    note_ids.add(String.valueOf(noteKey.getId()));
+
+	return note_ids;
+    }
+
+    /**
+     * Set related notes to the Case. Annotated with @JsonIgnore to prevent auto
+     * execution of this method (conflict with "PUT" request)
+     * 
+     * @param owner_key
+     */
+    @JsonIgnore
+    public void setRelatedNotes()
+    {
+	Set<String> notesSet = null;
+	if (this.notes != null && !this.notes.isEmpty())
+	{
+	    notesSet = new HashSet<String>(notes);
+
+	}
+	else if (this.note_ids != null && !this.note_ids.isEmpty())
+	{
+	    notesSet = new HashSet<String>(note_ids);
+	}
+	if (notesSet != null)
+	{
+
+	    // Create list of Note keys
+	    for (String note_id : notesSet)
+	    {
+		this.related_notes.add(new Key<Note>(Note.class, Long.parseLong(note_id)));
+	    }
+
+	    this.notes = null;
+	}
     }
 
     /***************************************************************************/

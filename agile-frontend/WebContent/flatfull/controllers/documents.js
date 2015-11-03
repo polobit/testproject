@@ -14,22 +14,26 @@ var DocumentsRouter = Backbone.Router.extend({
 	 */
 	documents : function()
 	{
-		 $('#content').html("<div id='documents-listners'>&nbsp;</div>");
+		 $('#content').html("<div id='documents-listners'></div>");
+
 		// Fetches documents as list
 		this.DocumentCollectionView = new Base_Collection_View({ url : 'core/api/documents', templateKey : "documents", cursor : true, page_size : 20,
 			individual_tag_name : 'tr', postRenderCallback : function(el)
 			{
+				// Show timeago for models appended by infini scroll
 				includeTimeAgo(el);
+
+				// Initialize events
 				initializeDocumentsListner(el);
-				/*
-				 * head.js(LIB_PATH + 'lib/jquery.timeago.js', function() {
-				 * $(".document-created-time", el).timeago(); });
-				 */
+				
 			}, appendItemCallback : function(el)
 			{
-				// To show timeago for models appended by infini scroll
+				// Show timeago for models appended by infini scroll
 				includeTimeAgo(el);
+
 			} });
+
+		// 
 		this.DocumentCollectionView.collection.fetch();
 
 		// Shows deals as list view
@@ -37,4 +41,5 @@ var DocumentsRouter = Backbone.Router.extend({
 
 		$(".active").removeClass("active");
 		$("#documentsmenu").addClass("active");
+
 	} });

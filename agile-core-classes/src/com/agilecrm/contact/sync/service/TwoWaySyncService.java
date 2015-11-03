@@ -92,7 +92,7 @@ public abstract class TwoWaySyncService extends ContactSyncService implements IT
 	System.out.println("total available new contacts: " + fetcher.getAvailableContacts());
 	while (fetcher.hasNextSet())
 	{
-	    saveContactsToClient(fetcher.nextSet());
+	    saveNewContactsToClient(fetcher.nextSet());
 	}
 
     }
@@ -109,16 +109,18 @@ public abstract class TwoWaySyncService extends ContactSyncService implements IT
 
 	ContactFilterResultFetcher fetcher = new ContactFilterResultFetcher(queryMap, "updated_time", 200,
 	        MAX_UPLOAD_LIMIT);
-
+	
 	System.out.println("total available : " + fetcher.getAvailableContacts());
 	while (fetcher.hasNextSet())
 	{
-	    saveContactsToClient(fetcher.nextSet());
+	    saveUpdatedContactsToClient(fetcher.nextSet());
 	}
 
     }
+    
+    public abstract void saveNewContactsToClient(List<Contact> contacts);
 
-    public abstract void saveContactsToClient(List<Contact> contacts);
+    public abstract void saveUpdatedContactsToClient(List<Contact> contacts);
     
     public abstract void syncContactFromClient();
 

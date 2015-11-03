@@ -2,7 +2,9 @@ package com.agilecrm.deals;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Embedded;
 import javax.persistence.Id;
@@ -168,6 +170,12 @@ public class Opportunity extends Cursor implements Serializable
      */
     @NotSaved
     private List<String> notes = new ArrayList<String>();
+
+    /**
+     * Note id's of related task for a deal.
+     */
+    @NotSaved
+    private List<String> note_ids = new ArrayList<String>();
 
     /**
      * Related notes objects fetched using notes id's.
@@ -469,19 +477,35 @@ public class Opportunity extends Cursor implements Serializable
 	Opportunity oldOpportunity = null;
 
 	String wonMilestone = "Won";
+	String lostMilestone = "Lost";
 	try
 	{
-	    wonMilestone = MilestoneUtil.getMilestone(pipeline_id).won_milestone;
+	    Milestone mile = MilestoneUtil.getMilestone(pipeline_id);
+	    if (mile.won_milestone != null)
+		wonMilestone = mile.won_milestone;
+	    if (mile.lost_milestone != null)
+		lostMilestone = mile.lost_milestone;
+
 	}
 	catch (Exception e)
 	{
 	    e.printStackTrace();
 	}
-	System.out.println("-------------won date---------" + wonMilestone);
+	System.out.println("-------------won milestone---------" + wonMilestone);
+	System.out.println("-------------lost milestone---------" + lostMilestone);
 
 	// cache old data to compare new and old in triggers
 	if (id != null)
 	    oldOpportunity = OpportunityUtil.getOpportunity(id);
+	if(oldOpportunity==null){
+		 // If the deal is won, change the probability to 100.
+	    if (this.milestone.equalsIgnoreCase(wonMilestone))
+		this.probability = 100;
+
+	    // If the deal is lost, change the probability to 0.
+	    if (this.milestone.equalsIgnoreCase(lostMilestone))
+		this.probability = 0;
+	}
 	if (oldOpportunity != null)
 	{
 	    if (this.created_time == 0)
@@ -492,12 +516,33 @@ public class Opportunity extends Cursor implements Serializable
 	if (oldOpportunity != null && StringUtils.isNotEmpty(this.milestone)
 		&& StringUtils.isNotEmpty(oldOpportunity.milestone))
 	{
+	    // For API fix. If the user didn't send the milestone_changed_time
+	    // in the call, use the value in the old one.
+	    if (this.milestone_changed_time == 0 && oldOpportunity.milestone_changed_time > 0)
+		this.milestone_changed_time = oldOpportunity.milestone_changed_time;
+
 	    if (!this.pipeline_id.equals(oldOpportunity.getPipeline_id())
 		    || !this.milestone.equals(oldOpportunity.milestone))
 		this.milestone_changed_time = System.currentTimeMillis() / 1000;
 
 	    if (!this.milestone.equals(oldOpportunity.milestone) && this.milestone.equalsIgnoreCase(wonMilestone))
+	    {
 		this.won_date = System.currentTimeMillis() / 1000;
+		this.probability = 100;
+	    }
+
+	    if (!this.milestone.equals(oldOpportunity.milestone) && this.milestone.equalsIgnoreCase(lostMilestone))
+	    {
+		this.probability = 0;
+	    }
+	    System.out.println("New Opportunity-----" + this);
+	    // If old deal, new deal are same and lost reason is there,
+	    // can update milestone changed time with old milestone changed time
+	    if (this.pipeline_id.equals(oldOpportunity.getPipeline_id())
+		    && this.milestone.equals(oldOpportunity.milestone)
+		    && this.lost_reason_id != null
+		    && ((oldOpportunity.lost_reason_id != null && oldOpportunity.lost_reason_id == 0L) || oldOpportunity.lost_reason_id == null))
+		this.milestone_changed_time = oldOpportunity.milestone_changed_time;
 	}
 	else if (oldOpportunity == null && this.milestone.equalsIgnoreCase(wonMilestone))
 	    this.won_date = System.currentTimeMillis() / 1000;
@@ -649,6 +694,63 @@ public class Opportunity extends Cursor implements Serializable
 	    this.notes = null;
 	}
 
+	/*
+	 * if (milestone_changed_time == 0L) milestone_changed_time =
+	 * System.currentTimeMillis() / 1000;
+	 */
+
+	// Setting note_ids from api calls
+	setRelatedNotes();
+
+    }
+
+    @XmlElement(name = "note_ids")
+    public List<String> getNote_ids()
+    {
+	note_ids = new ArrayList<String>();
+
+	for (Key<Note> noteKey : related_notes)
+	    note_ids.add(String.valueOf(noteKey.getId()));
+
+	return note_ids;
+    }
+
+    /**
+     * Set related notes to the Case. Annotated with @JsonIgnore to prevent auto
+     * execution of this method (conflict with "PUT" request)
+     * 
+     * @param owner_key
+     */
+    @JsonIgnore
+    public void setRelatedNotes()
+    {
+	Set<String> notesSet = null;
+	if (this.notes != null && !this.notes.isEmpty())
+	{
+	    notesSet = new HashSet<String>(notes);
+
+	}
+	else if (this.note_ids != null && !this.note_ids.isEmpty())
+	{
+	    notesSet = new HashSet<String>(note_ids);
+	}
+	if (notesSet != null)
+	{
+
+	    // Create list of Note keys
+	    for (String note_id : notesSet)
+	    {
+		this.related_notes.add(new Key<Note>(Note.class, Long.parseLong(note_id)));
+	    }
+
+	    this.notes = null;
+	}
+
+	/*
+	 * if (milestone_changed_time == 0L) milestone_changed_time =
+	 * System.currentTimeMillis() / 1000;
+	 */
+
     }
 
     /*
@@ -676,4 +778,5 @@ public class Opportunity extends Cursor implements Serializable
 	;
 	return builder.toString();
     }
+
 }
