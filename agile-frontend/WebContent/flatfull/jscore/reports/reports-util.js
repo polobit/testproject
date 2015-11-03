@@ -331,9 +331,27 @@ user_reports :function(callReportUrl){
 		});
 	
 	
+},
+
+getRepPerformanceLog : function(url) {
+		
+		$.ajax({ 
+			type : "GET", 
+			url : url,
+			dataType :'json',
+			success : function(data) {
+				console.log("Inside RepPerform");
+				getTemplate("report-user-data", data, undefined, function(template_ui){
+					if(!template_ui)
+						  return;
+					$('#rep-performance-reports').html($(template_ui));	
+				//return callback(data);
+			}, "#rep-performance-reports");
+		}
+	
+	});
+
 }
-
-
  };
 
 

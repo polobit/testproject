@@ -25,9 +25,15 @@
 
 </div>
 </div>
+
+<div id="rep-performance-reports" class="wrapper-md">
+</div>
+</div>
+</script>
+<script id="report-user-data-template" type="text/html">
 <div>	
 	<!-- Growth Reports -->
-	<div id="rep-performance-reports" class="wrapper-md">	
+		
 		<div class="row">
             {{#if userPic}}
 							<img class="img-inital r r-2x" src="{{userPic}}" />
@@ -39,18 +45,19 @@
   			<table>
     <thead>
       <tr>
-        <th></th>
         <th>Total Sales</th>
         <th>Avg. Deal Size</th>
         <th>Deals Sold</th>
+		<th> Average Deal Closure Time </th>
       </tr>
     </thead>
     <tbody>
       <tr class="user-values">
-        <th></th>
-        <td><span class="symbol">$</span>0</td>
-        <td><span class="symbol">$</span>0</td>
-        <td>0</td>
+        <td><span class="symbol">$</span>{{sales}}</td>
+        <td><span class="symbol">$</span>{{avgSalesValue}}</td>
+        <td>{{soldDeals}}</td>
+		<td>{{avgDealClosetime}}</td>
+
       </tr>
     </tbody>
   </table>
@@ -58,14 +65,32 @@
 </div></div>
 </div>
 <div class="row">
+
+<table>
+    <thead>
+      <tr>
+        <th>Task Created</th>
+        <th>Tasks Completed</th>
+		<th>Total Notes </th>
+		<th>Average Time Spent on Call</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="user-values">
+        <td>{{taskcreated}}</td>
+        <td>{{taskCompleted}}</td>
+		<td>{{notes}}</td>
+		<td>{{avgCallDuration}}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<div class="row">
         
-        <div class="loss-reasons-widget"><div><h2>Loss Reasons</h2>
-<div class="chart"><div><div class="loss-reasons" style="display: none;"></div><div class="empty-state" style=""><div class="alert"> <h4>Congratulations!</h4>No deals were lost in the period you’ve selected.</div></div><div class="logo-loader-small loading" style="display: none;"></div></div></div>
-</div></div>
+        <div class="loss-reasons-widget"><h2>Loss Reasons</h2>
+				<div id="lossreasonpie-chart-users"></div></div>
       </div>
             
 	<!-- End of Growth Reports -->  
-</div>
-</div>
 </div>
 </script>

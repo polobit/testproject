@@ -454,28 +454,31 @@ public class ReportsUtil
 			Integer soldCount=0;
 			Double avgValue=0d;
 			Double avgDealsClosure=0d;
-			long callsDuration=0;
+			Double callsDuration=0d;
 
 			if(wonDealsList!=null){
 				for(Opportunity opportunity : wonDealsList){
 					milestoneValue += opportunity.expected_value;
 					soldCount++;
 				}
-				avgValue=milestoneValue/soldCount;
+				avgValue=(double) Math.round(milestoneValue/soldCount);
 			}
 			dataJson.put("sales", milestoneValue);
 			dataJson.put("soldDeals",soldCount);
-			dataJson.put("avg",avgValue);
+			dataJson.put("avgSalesValue",avgValue);
 			
 			List<Opportunity> closedDeals=OpportunityUtil.getOpportunities(minTime, maxTime);
-			if(closedDeals!=null)
+			if(closedDeals!=null )
 			{
 				
 				for(Opportunity opportunity : closedDeals){
-					Integer r=Math.round((opportunity.close_date-opportunity.created_time)/1000*60*60*24);
+					Integer r=0;
+					if(opportunity.close_date >= opportunity.created_time)
+					 r=Math.round((opportunity.close_date-opportunity.created_time)/(60*60*24));
 					avgDealsClosure=avgDealsClosure+r;
 				}
-				avgDealsClosure=avgDealsClosure/closedDeals.size();
+				if(closedDeals.size()!=0)
+				avgDealsClosure=(double) Math.round(avgDealsClosure/closedDeals.size());
 			}
 			
 			dataJson.put("avgDealClosetime", avgDealsClosure);
@@ -485,19 +488,21 @@ public class ReportsUtil
 						&& !activity.custom4.equalsIgnoreCase("null") && !activity.custom4.equalsIgnoreCase(""))
 					callsDuration+=Long.valueOf(activity.custom4);
 			}
-			callsDuration=callsDuration/callActivitiesList.size();
+			if(callActivitiesList.size()!=0)
+			 callsDuration=callsDuration/callActivitiesList.size();
 			dataJson.put("avgCallDuration", callsDuration);
 			
 			dataJson.put("taskcreated",TaskUtil.getUserCreatedTasks(minTime, maxTime, ownerId));
 			dataJson.put("taskCompleted",TaskUtil.getCompletedTasksOfUser(minTime, maxTime, ownerId));
-			dataJson.put("notes",NoteUtil.getNotesCountforUser(minTime, maxTime));
-			
+			dataJson.put("notes",NoteUtil.getNotesCountforUser(minTime, maxTime,ownerId));
+			return dataJson;
 		}
 		catch (JSONException e)
 		{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			return null;
 		}
-    	return null;
+
 	}
 }

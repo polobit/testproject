@@ -9,6 +9,7 @@ import com.agilecrm.contact.Note;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.deals.Opportunity;
 import com.agilecrm.user.AgileUser;
+import com.agilecrm.user.DomainUser;
 import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.google.appengine.labs.repackaged.org.json.JSONException;
 import com.googlecode.objectify.Key;
@@ -225,12 +226,12 @@ public class NoteUtil
 	Note.dao.deleteAll(list);
     }
     
-    public static int getNotesCountforUser(Long startTime, Long endTime)
+    public static int getNotesCountforUser(long startTime,long endTime,Long ownerId)
     {
     	try{
 	return dao.ofy().query(Note.class)
-		.filter("owner", new Key<AgileUser>(AgileUser.class, AgileUser.getCurrentAgileUser().id))
-		.filter("-created_time >=", startTime).filter("-created_time <", endTime).count();
+		.filter("domain_owner", new Key<DomainUser>(DomainUser.class, ownerId))
+		.filter("created_time >=", startTime).filter("created_time <", endTime).count();
     	}
     	catch (Exception e)
 		{

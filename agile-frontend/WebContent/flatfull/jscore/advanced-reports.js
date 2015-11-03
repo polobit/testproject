@@ -707,4 +707,21 @@ function showRepPerformanceReport()
 	start_time=start_time+(d.getTimezoneOffset()*60*1000);
 	 end_time += (((23*60*60)+(59*60)+59)*1000);
 	end_time=end_time+(d.getTimezoneOffset()*60*1000);
+
+	/*if ($('#owner').length > 0)
+	{
+		// Get owner
+		var owner_id=0;
+		if ($("#owner").val() != "" && $("#owner").val() != "All Owners")
+			owner_id=$("#owner").val();
+			options += owner_id;
+	}*/
+
+	options += CURRENT_DOMAIN_USER.id;
+	options += ("?min=" + start_time/1000 + "&max=" + end_time/1000);
+		report_utility.getRepPerformanceLog('core/api/reports/repPerformance/' + options);
+
+			//console.log(resp);
+		
+
 }
