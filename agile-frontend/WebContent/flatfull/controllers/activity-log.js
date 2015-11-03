@@ -52,7 +52,7 @@ var ActivitylogRouter = Backbone.Router.extend({
 
                         }
 
-                        $(".activity-log-button").css('display','inline');
+                        $(".activity-log-button").css('display','inline-block');
 
 
                     }, optionsTemplate, true);
