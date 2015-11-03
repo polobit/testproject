@@ -249,7 +249,7 @@ function resubscribe()
 				$element.closest('li').remove();
 
 				// Remove All option too
-				$element.closest('ul').find("a[data='ALL']").closest('li').remove();
+				$('ul#added-tags-ul').find("a[data='ALL']").closest('li').remove();
 
 			},
 			error: function(response)
