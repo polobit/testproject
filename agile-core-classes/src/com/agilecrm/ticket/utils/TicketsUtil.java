@@ -184,6 +184,7 @@ public class TicketsUtil
 			ticket.subject = subject;
 			ticket.cc_emails = cc_emails;
 			ticket.first_notes_text = plain_text;
+			ticket.last_reply_text = plain_text;
 			ticket.attachments_exists = attachments;
 
 			ticket.created_time = epochTime;

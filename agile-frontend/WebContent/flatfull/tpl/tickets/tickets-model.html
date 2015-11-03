@@ -1,5 +1,5 @@
 <script id="ticket-model-template" type="text/html">
-	<li class="list-group-item clearfix b-l-3x b-l-info data"  data="{{id}}">
+	<li id="{{id}}" class="list-group-item clearfix b-l-3x b-l-info data cursor-pointer ticket"  data-id="{{id}}">
     <a class="avatar thumb pull-left m-r" href="javascript:void(0);">
       <img src="{{emailGravatarurl 50 requester_email}}">
     </a>
@@ -12,16 +12,40 @@
     </div>
     <div class="clear">
       <div class="subject-row tags-row">
-        <a class="text-md" href="{{#is_filtered_ticket}}#tickets/filter/{{#get_ticket_filter_id}}{{/get_ticket_filter_id}}/ticket/{{id}}
-          {{else}}#tickets/group/{{groupID}}/{{toLowerCase status}}/{{id}}{{/is_filtered_ticket}}" 
-            style="color: #58666e !important;">
-          {{subject}}
+        <a class="text-md" href="javascript:;">
+          {{requester_name}} ({{requester_email}})
         </a>
         {{#each tags}}
             <span class="label bg-light m-l-xs font-bold">{{this.tag}}</span>
         {{/each}}
       </div>
-      <div class="text-ellipsis m-t-xs">{{first_notes_text}}</div>
-    </div>      
+      <div class="text-ellipsis m-t-xs">{{subject}}</div>
+    </div>
+    <div id="ticket-last-notes">
+      <div class="row mar-no">
+        <div class="col-md-9 p-sm">
+          <div class="text-light">Ticket# {{short_id}}</div>
+        </div>
+        <div class="col-md-3 p-sm">
+          <div><span class="label label-success first-letter-cap pull-right">{{priority}}</span></div>
+        </div>
+      </div>
+      <hr class="m-t-none m-b-sm">
+      <div class="row m-n mar-btm-md last-notes-drp-dwn">
+        <div class="col-md-12 pad-all-sm">
+          <span>Last comment</span>
+          <span class="text-light txt-small pull-right">
+            {{epochToHumanDate "ddd mmm dd yyyy HH:MM" last_updated_time}}
+          </span>
+        </div>
+        <div id="recent-reply-notes" class="col-md-12 p recent-reply-notes">
+          {{#if last_reply_text}}
+            {{last_reply_text}}
+          {{else}}
+            {{first_reply_notes}}
+          {{/if}}  
+        </div>
+      </div>
+    </div>
   </li>
 </script>

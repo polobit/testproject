@@ -40,7 +40,7 @@ var Tickets_Notes = {
 		//Rendering existing Tickets collection
 		$('#right-pane').html(Tickets_Group_View.render().el);
 
-		$("#filters-list-container").html(App_Ticket_Module.ticketFiltersCollection.el);
+		$("#filters-list-container").html(App_Ticket_Module.ticketFiltersList.el);
 		
 		if(!App_Ticket_Module.ticketsCollection){
 
@@ -55,6 +55,7 @@ var Tickets_Notes = {
 		}
 		else{
 			$(".tickets-collection-pane").html(App_Ticket_Module.ticketsCollection.el);
+			Tickets.initEvents(App_Ticket_Module.ticketsCollection.el);
 		}
 
 		var url = (Ticket_Filter_ID) ? '#tickets/filter/' + Ticket_Filter_ID : '#tickets/group/'+ Group_ID +'/' + Ticket_Status;

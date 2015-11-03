@@ -15,3 +15,49 @@
 .cursor-default{
 	cursor: default !important;
 }
+
+.cursor-pointer{
+	cursor: pointer !important;
+}
+
+#ticket-last-notes {
+	display: none;
+	position: absolute;
+	width: 450px;
+	max-height: 200px;
+	min-height: 100px;
+	top: 60px;
+	left: 25%;
+	background-color: white;
+	z-index: 10;
+	border: 1px solid rgba(0, 0, 0, 0.2);
+	box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+	background-clip: padding-box;
+	overflow-y: hidden;
+	text-overflow: ellipsis;
+	cursor: default !important;
+	pointer-events: none;
+}
+
+#recent-reply-notes {
+	display: -webkit-box;
+	height: 96.2px;
+	margin: 0 auto;
+	line-height: 1.4;
+	-webkit-line-clamp: 5;
+	-webkit-box-orient: vertical;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.last-notes-drp-dwn {
+	overflow: hidden;
+	max-height: 135px;
+}
+
+.div-max-width {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    word-break: break-word;
+}    

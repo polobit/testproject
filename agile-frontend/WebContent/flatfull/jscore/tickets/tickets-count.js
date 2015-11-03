@@ -10,7 +10,10 @@ var Tickets_Count = {
 
 	fetch_filter_tickets_count: function(filters_colletion){
 
-		var filters = App_Ticket_Module.ticketFiltersCollection.collection.toJSON();
+		if(!App_Ticket_Module.ticketFiltersList)
+			return;
+		
+		var filters = App_Ticket_Module.ticketFiltersList.collection.toJSON();
 
 		for(var i=0; i<filters.length; i++){
 

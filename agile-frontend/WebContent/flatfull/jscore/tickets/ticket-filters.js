@@ -92,7 +92,7 @@ var Ticket_Filters = {
 		if(!Reload_Filters)
 			return;
 
-		App_Ticket_Module.ticketFiltersCollection = new Base_Collection_View({
+		App_Ticket_Module.ticketFiltersList = new Base_Collection_View({
 			url : '/core/api/tickets/filters',
 			sortKey:"updated_time",
 			descending:true,
@@ -113,7 +113,7 @@ var Ticket_Filters = {
 			}
 		});
 
-		App_Ticket_Module.ticketFiltersCollection.collection.fetch();
-		$("#filters-list-container").html(App_Ticket_Module.ticketFiltersCollection.el);
+		App_Ticket_Module.ticketFiltersList.collection.fetch();
+		$("#filters-list-container").html(App_Ticket_Module.ticketFiltersList.el);
 	}
 };

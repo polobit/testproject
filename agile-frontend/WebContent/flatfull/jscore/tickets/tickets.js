@@ -49,6 +49,9 @@ var Tickets = {
 						$('ul.ticket-types').find('li a.' + Ticket_Status).parent().addClass('active');
 					else
 						$('ul.ticket-types').find('li > a[filter-id="' + Ticket_Filter_ID + '"]').parent().addClass('active');
+				
+					//Init click event on each ticket li
+					Tickets.initEvents(el);
 				}
 			});
 
@@ -112,13 +115,55 @@ var Tickets = {
 			
 			Tickets_Group_View.delegateEvents();
 
-			$("#filters-list-container").html(App_Ticket_Module.ticketFiltersCollection.el);
+			$("#filters-list-container").html(App_Ticket_Module.ticketFiltersList.el);
 
 			if(callback)
 				callback();
 		}
 
 		Current_Ticket_ID = null;
+	},
+
+	initEvents: function(el){
+		
+		$('ul#ticket-model-list', el).on('click', 'li.ticket', function(e){
+
+			var url = '#tickets/group/' + (!Group_ID ? DEFAULT_GROUP_ID : Group_ID) + 
+					'/' + (Ticket_Status ? Ticket_Status : 'new') + '/';
+
+			if(Ticket_Filter_ID)
+				url = '#tickets/filter/' + Ticket_Filter_ID + '/ticket/';
+
+			Backbone.history.navigate(url + $(this).attr('data-id'), {trigger : true});
+		});
+
+		/*
+		 * Hover event on ticket subject
+		 */
+		$('ul#ticket-model-list', el)
+			.on('mouseover mouseout', 'li.ticket',
+				function(event) {
+					if (event.type == 'mouseover') {
+
+						var top_offset = $('#' + $(this).attr('data-id'))
+								.offset().top;
+
+						if (window.innerHeight - top_offset >= 210)
+							$(this).find('#ticket-last-notes').css(
+									'display', 'block');
+						else
+							$(this).find('#ticket-last-notes').css(
+									'display', 'block').css(
+									'top',
+									'-'
+											+ $(this).find(
+													'#ticket-last-notes')
+													.height() + 'px');
+					} else {
+						$(this).find('#ticket-last-notes').css('display',
+								'none').css('top', '60px');
+					}
+			});
 	},
 
 	changeStatus: function(event){
