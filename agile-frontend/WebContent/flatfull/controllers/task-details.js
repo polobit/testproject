@@ -408,8 +408,8 @@ function save_task_tab_position_in_cookie(tab_href)
 function update_task(value)
 {
 
-	deserializeForm(value, $("#updateTaskForm"));
 	$("#updateTaskModal").html(getTemplate("task-update-modal")).modal('show');
+	deserializeForm(value, $("#updateTaskForm"));
 	
 	categories.getCategoriesHtml(value,function(catsHtml){
 		$('#type',$("#updateTaskForm")).html(catsHtml);

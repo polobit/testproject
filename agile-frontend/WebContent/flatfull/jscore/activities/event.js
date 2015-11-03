@@ -467,7 +467,7 @@ $(function()
 		if ($('.new-task-timepicker', el).val() == '')
 			$('.new-task-timepicker', el).val("12:00");
 
-		// activateSliderAndTimerToTaskModal(el);
+		activateSliderAndTimerToTaskModal(el);
 
 
 		// Update will highlight the date of in date picker
