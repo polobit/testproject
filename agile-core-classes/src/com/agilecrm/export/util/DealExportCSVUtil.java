@@ -91,7 +91,12 @@ public class DealExportCSVUtil
 
 	    // Appends custom field labels to list
 	    for (CustomFieldDef customField : customFields)
-		headersList.add(customField.field_label);
+	    {
+	    	if (!customField.field_type.equals(CustomFieldDef.Type.FORMULA))
+	    	{
+	    		headersList.add(customField.field_label);
+	    	}
+	    }
 
 	    // Converts ArrayList to String array before return
 	    return headersList.toArray(new String[headersList.size()]);

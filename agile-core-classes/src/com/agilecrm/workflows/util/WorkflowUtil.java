@@ -196,4 +196,8 @@ public class WorkflowUtil
 	{
 		dao.putAll(workflows);
 	}
+	public static int get_enable_campaign_count()
+	{
+		return Workflow.dao.getCountByProperty("is_disabled", false);
+	}
 }
