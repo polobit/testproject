@@ -408,9 +408,9 @@
 				// Shows in contacts list
 				$('#filter-list', cel).html(companyFiltersListView.render().el);
 				
-	}
+	};
 	
-	var revertToDefaultCompanies = function(){
+	company_list_view.revertToDefaultCompanies = function(){
 		// Erase filter cookie. Erases both contact and company filter
 		//eraseCookie('contact_filter');
 		//eraseCookie('contact_filter_type');
