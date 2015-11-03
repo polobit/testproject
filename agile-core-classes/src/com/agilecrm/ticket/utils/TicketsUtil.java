@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -619,8 +620,8 @@ public class TicketsUtil
 	 */
 	public static Tickets changeGroupAndAssignee(Long ticket_id, Long group_id, Long assignee_id)
 			throws EntityNotFoundException
-	{	
-		//Fetching ticket object by its id
+	{
+		// Fetching ticket object by its id
 		Tickets ticket = TicketsUtil.getTicketByID(ticket_id);
 
 		// Verifying if ticket assigned to same Group and Assignee
@@ -652,6 +653,13 @@ public class TicketsUtil
 		}
 		else
 		{
+			// Fetching ticket group
+			TicketGroups group = TicketGroupUtil.getTicketGroupById(group_id);
+
+			// Checking if assignee belongs to given group or not
+			if (!group.agents_keys.contains(assignee_id))
+				return ticket;
+
 			boolean isNewTicket = false;
 			if (ticket.status == Status.NEW)
 			{
@@ -699,10 +707,23 @@ public class TicketsUtil
 	 * @param groupId
 	 * @param subject
 	 * @param body
+	 * @throws EntityNotFoundException
 	 */
-	public static void sendEmailToGroup(long groupId, String subject, String body)
+	public static void sendEmailToGroup(long group_id, String subject, String body) throws EntityNotFoundException
 	{
+		// Fetching ticket group
+		TicketGroups group = TicketGroupUtil.getTicketGroupById(group_id);
 
+		List<Long> users_keys = group.agents_keys;
+		List<Key<DomainUser>> domainUserKeys = new ArrayList<Key<DomainUser>>();
+
+		for (Long userKey : users_keys)
+			domainUserKeys.add(new Key<DomainUser>(DomainUser.class, userKey));
+
+		List<DomainUser> users = DomainUserUtil.dao.fetchAllByKeys(domainUserKeys);
+
+		for (DomainUser user : users)
+			sendEmailToUser(user.email, subject, body);
 	}
 
 	/**
@@ -716,5 +737,4 @@ public class TicketsUtil
 	{
 
 	}
-
 }

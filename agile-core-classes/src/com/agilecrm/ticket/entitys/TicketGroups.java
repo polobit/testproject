@@ -83,7 +83,7 @@ public class TicketGroups
 	 */
 	@NotSaved
 	public String group_email = "";
-	
+
 	/**
 	 * Stores group users list
 	 */
@@ -106,7 +106,7 @@ public class TicketGroups
 	{
 		this.updated_time = Calendar.getInstance().getTimeInMillis();
 	}
-	
+
 	@javax.persistence.PostLoad
 	private void PostLoad()
 	{
@@ -132,4 +132,22 @@ public class TicketGroups
 	{
 		this.owner_key = owner_key;
 	}
+
+	@Override
+	public String toString()
+	{
+		return "TicketGroups [id=" + id + ", group_name=" + group_name + "]";
+	}
+
+	@Override
+	public boolean equals(Object obj)
+	{
+		if (this == null || obj == null)
+			return false;
+
+		TicketGroups group = (TicketGroups) obj;
+
+		return (this.id.longValue() == group.id.longValue());
+	}
+
 }
