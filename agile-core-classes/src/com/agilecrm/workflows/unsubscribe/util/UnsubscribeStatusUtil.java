@@ -7,6 +7,9 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import com.agilecrm.contact.Contact;
 import com.agilecrm.db.ObjectifyGenericDao;
@@ -15,6 +18,7 @@ import com.agilecrm.workflows.Workflow;
 import com.agilecrm.workflows.status.CampaignStatus.Status;
 import com.agilecrm.workflows.status.util.CampaignStatusUtil;
 import com.agilecrm.workflows.unsubscribe.UnsubscribeStatus;
+import com.agilecrm.workflows.unsubscribe.UnsubscribeStatus.UnsubscribeType;
 import com.agilecrm.workflows.util.WorkflowUtil;
 import com.campaignio.logger.Log.LogType;
 import com.campaignio.logger.util.LogUtil;
@@ -23,9 +27,15 @@ import com.campaignio.tasklets.agile.util.AgileTaskletUtil;
 public class UnsubscribeStatusUtil
 {
 
+	public static final String UNSUBSCRIBE_STATUS = "unsubscribeStatus";
 	// Contact Dao
 	private static ObjectifyGenericDao<Contact> dao = new ObjectifyGenericDao<Contact>(Contact.class);
 
+	/**
+	 * Removes Unsubscribe Status and update All status to CURRENT
+	 * @param contact
+	 * @param campaignId
+	 */
 	public static void removeUnsubscribeStatus(Contact contact, String campaignId)
 	{
 		List<UnsubscribeStatus> statusList = contact.unsubscribeStatus;
@@ -34,10 +44,16 @@ public class UnsubscribeStatusUtil
 
 		while (itr.hasNext())
 		{
-			if (!StringUtils.isBlank(campaignId) && campaignId.equals(itr.next().campaign_id))
+			UnsubscribeStatus status = itr.next();
+			
+			if (!StringUtils.isBlank(campaignId) && campaignId.equals(status.campaign_id))
 			{
 				itr.remove();
-				break;
+			}
+			else
+			{
+				if(status.unsubscribeType.equals(UnsubscribeType.ALL))
+					status.unsubscribeType = UnsubscribeType.CURRENT;
 			}
 		}
 
@@ -128,5 +144,53 @@ public class UnsubscribeStatusUtil
 		
 		for(String id : workflowIds)
 			resubscribeContact(contact, Long.valueOf(id));
+	}
+	
+	public static JSONArray getUnsubscribeStatus(Contact contact){
+		
+		try
+		{
+			ObjectMapper map = new ObjectMapper();
+			
+			String unsubscribeStatus = map.writeValueAsString(contact.unsubscribeStatus);
+			
+			return new JSONArray(unsubscribeStatus);
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+			return new JSONArray();
+		}
+	}
+	
+	public static Boolean isUnsubscribed(JSONObject subscriberJSON, String campaignId)
+	{
+		try
+		{
+			
+			if(!subscriberJSON.has(UNSUBSCRIBE_STATUS))
+				return false;
+			
+			JSONArray arr = subscriberJSON.getJSONArray(UNSUBSCRIBE_STATUS);
+			
+			JSONObject json = new JSONObject();
+			
+			for(int i=0, len= arr.length(); i<len; i++)
+			{
+				json = arr.getJSONObject(i);
+				
+				if(json.has("campaign_id") && json.getString("campaign_id").equals(campaignId))
+					return true;
+				
+			}
+			
+			return false;
+		
+		}
+		catch(Exception e){
+			System.err.println("Exception occurred in isUnsubscribed method..." + e.getMessage());
+			return false;
+		}
+		
 	}
 }

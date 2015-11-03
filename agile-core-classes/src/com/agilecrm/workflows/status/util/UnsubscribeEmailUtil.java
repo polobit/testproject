@@ -110,7 +110,7 @@ public class UnsubscribeEmailUtil
 			contact.unsubscribeStatus.add(unsubscribeStatus);
 		}
 
-		contact.save();
+		contact.update();
 	}
 
 	public static void emailSubscriptionByQueue(Long contactId, String campaignIds, UnsubscribeType type, SubscriptionType subType)
