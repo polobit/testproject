@@ -250,6 +250,8 @@ public class CSVUtil
 	// Refreshes count of contacts
 	billingRestriction.refreshContacts();
 
+	System.out.println(billingRestriction.getCurrentLimits().getPlanId() + " : "
+		+ billingRestriction.getCurrentLimits().getPlanName());
 	int allowedContacts = billingRestriction.getCurrentLimits().getContactLimit();
 	boolean limitCrossed = false;
 	// stores list of failed contacts in beans with causes
@@ -475,6 +477,9 @@ public class CSVUtil
 		    // and checked with plan limits
 
 		    ++billingRestriction.contacts_count;
+		    System.out.println("Contacts limit - Allowed : "
+			    + billingRestriction.getCurrentLimits().getContactLimit() + " current contacts count : "
+			    + billingRestriction.contacts_count);
 		    if (limitCrossed)
 		    {
 			++limitExceeded;

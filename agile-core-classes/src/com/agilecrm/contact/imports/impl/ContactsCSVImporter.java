@@ -6,6 +6,7 @@ import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.imports.CSVImporter;
 import com.agilecrm.subscription.restrictions.exception.PlanRestrictedException;
 import com.agilecrm.util.CSVUtil;
+import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.blobstore.BlobKey;
 
 public class ContactsCSVImporter extends CSVImporter<Contact>
@@ -25,6 +26,7 @@ public class ContactsCSVImporter extends CSVImporter<Contact>
     @Override
     public void run()
     {
+	NamespaceManager.set(domain);
 	// TODO Auto-generated method stub
 	try
 	{
@@ -40,6 +42,10 @@ public class ContactsCSVImporter extends CSVImporter<Contact>
 	{
 	    // TODO Auto-generated catch block
 	    e.printStackTrace();
+	}
+	finally
+	{
+	    NamespaceManager.set(null);
 	}
 
     }
