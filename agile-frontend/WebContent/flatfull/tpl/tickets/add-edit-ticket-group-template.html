@@ -16,8 +16,8 @@
 							<label class="control-label col-sm-3">Forwarding Email</label>
 							<div class="controls col-sm-5">
 								<div class="well bg-transparent m-b-none p-sm">
-						    		<span id="source-{{id}}">{{group_email}}</span>
-									<a onclick="function(e){e.stopPropagation();}" id="grp-{{id}}" class="btn btn-xs btn-primary grp-btn-cpy-email" data-original-title="Copy to Cliboard" data-toggle="tooltip" data-placement="top">
+						    		<span id="source-{{id}}" data-clipboard-text="{{group_email}}">{{group_email}}</span>
+									<a onclick="function(e){e.stopPropagation();}" id="grp-{{id}}" class="btn btn-xs btn-primary grp-btn-cpy-email" data-original-title="Copy to Cliboard" data-toggle="tooltip" data-placement="top" data-copied-text="Email copied to clipboard">
 										Copy
 									</a>
 								</div>

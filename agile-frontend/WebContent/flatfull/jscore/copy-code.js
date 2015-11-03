@@ -46,7 +46,7 @@ function initZeroClipboard(id, source) {
 		
 		  // Show tooltip on complete
 		  $("#" + id).attr({
-		   "data-placement" : 'top',
+		   "data-placement" : 'bottom',
 		   "data-original-title" : title
 		  });
 		
@@ -58,12 +58,37 @@ function initZeroClipboard(id, source) {
 
 }
 
+
+function initZeroClipboard2($id, $source){
+
+	var clip = new ZeroClipboard($id);
+ 
+    clip.on("ready", function(e) {
+        $id.data("placement", "top").attr("title", "Copy to clipboard").tooltip();
+    });
+ 
+    clip.on("copy", function(e) {
+        clip.setText($source.attr("data-clipboard-text"));
+    });
+ 
+    clip.on("aftercopy", function(e) {
+
+    	var txt = $id.attr("data-copied-text") ? $id.attr("data-copied-text") : 'Copied!';
+    	
+        $id.attr("title", txt).tooltip("fixTitle").tooltip("show").attr("title", "Copy to clipboard").tooltip("fixTitle");
+    });
+ 
+    clip.on("error", function(e) {
+        $id.attr("title", e.message).tooltip("fixTitle").tooltip("show");
+    });
+}
+
 function getTitleForClip(id) {
 
  var title = "Code copied to clipboard";
  switch (id) {
  case "copy_email_to_clip_button":
-  title = "Email id copied to clipboard";
+  title = "Email copied to clipboard";
   break;
  case "api_key_code_icon":
   title = "Key copied to clipboard";

@@ -39,6 +39,8 @@ var Ticket_Base_Model = Base_Model_View.extend({
 	refreshTickets: function(e){
 		e.preventDefault();
 
+		Reload_Tickets_Count = true;
+
 		App_Ticket_Module.ticketsByGroup(Group_ID, Ticket_Status);
 
 		//Fectching new, open, closed tickets count

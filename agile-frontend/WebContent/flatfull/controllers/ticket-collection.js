@@ -264,17 +264,23 @@ var TicketsUtilRouter = Backbone.Router.extend({
 				individual_tag_name : 'tr',
 				postRenderCallback : function(el, collection) {
 
-						head.js('/lib/zeroclipboard/ZeroClipboard.js', function()
-						{
-							$('[data-toggle="tooltip"]').tooltip();
+						//Disabling click events on copy btn
+						$('#ticket-groups-model-list', el).on('click', 'a.a-frwd-email', function(e){
 
+							console.log('e');
+							e.stopPropagation();
+							e.stopImmediatePropagation();
+						});
+
+						head.js('/lib/zeroclipboard2/ZeroClipboard.min.js', function()
+						{
 							$('[data-toggle="popover"]').popover();
 
 							var array = collection.toJSON();
 							for(var i=0; i< array.length; i++){
 
 								var model = array[i];
-								initZeroClipboard(('grp-' + model.id), ('source-' + model.id));
+								initZeroClipboard2($('#grp-' + model.id), $('#source-' + model.id));
 							}
 						});	
 
@@ -381,10 +387,9 @@ var TicketsUtilRouter = Backbone.Router.extend({
 								$("input[data='"+ agents_keys[i] +"']").attr('checked', 'checked');
 							}
 
-							head.js('/lib/zeroclipboard/ZeroClipboard.js', function()
+							head.js('/lib/zeroclipboard2/ZeroClipboard.min.js', function()
 							{	
-								$('[data-toggle="tooltip"]').tooltip();
-								initZeroClipboard(('grp-' + data.id), ('source-' + data.id));
+								initZeroClipboard2($('#grp-' + data.id), $('#source-' + data.id));
 							});
 						});
 					}
