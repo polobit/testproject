@@ -255,7 +255,7 @@ var TicketsUtilRouter = Backbone.Router.extend({
 				individual_tag_name : 'tr',
 				postRenderCallback : function(el, collection) {
 
-						head.js(LIB_PATH + '../lib/zeroclipboard/ZeroClipboard.js', function()
+						head.js('/lib/zeroclipboard/ZeroClipboard.js', function()
 						{
 							$('[data-toggle="tooltip"]').tooltip();
 
@@ -372,7 +372,7 @@ var TicketsUtilRouter = Backbone.Router.extend({
 								$("input[data='"+ agents_keys[i] +"']").attr('checked', 'checked');
 							}
 
-							head.js(LIB_PATH + '../lib/zeroclipboard/ZeroClipboard.js', function()
+							head.js('/lib/zeroclipboard/ZeroClipboard.js', function()
 							{	
 								$('[data-toggle="tooltip"]').tooltip();
 								initZeroClipboard(('grp-' + data.id), ('source-' + data.id));
