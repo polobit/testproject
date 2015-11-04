@@ -2,7 +2,7 @@
 <!--  Contact View Detail in Detailed mode - when only one contact is shown -->
 <script id="admin-settings-account-prefs-template" type="text/html">
 <div class="panel panel-default">
-	<div class="panel-heading">Account Preferences</div>
+	<div class="panel-heading">Preferences</div>
 	<div class="panel-body">
     <form id="accountPrefs" class="form-horizontal">
         <fieldset>
@@ -12,17 +12,17 @@
 				<div class="col-md-7 col-xs-12">
                     <div class="control-group form-group">
                         <label class="control-label col-sm-4 col-xs-4">Plan</label> 
-                        <div class="controls col-sm-8 m-t-xs col-xs-8">
-                            {{#if plan.plan_id}}
-                            {{plan.plan_id}} ( <a href="#subscribe" class="text-info">Upgrade</a> | <a href="#" id="cancel-account-request" class="text-info">Cancel Account</a> )
+                        <div class="controls col-sm-8 col-xs-8" style="margin-top:7px;">
+                            {{#if plan.plan_type}}
+                            {{getFullAccountPlanName plan.plan_type}} <!--<a href="#subscribe" style="font-size:11px;" class="text-info">Upgrade</a> -->
                             {{else}}
-                            Free ( <a href="#subscribe" class="text-info">Upgrade</a> | <a href="#" id="cancel-account" class="text-info">Cancel Account</a> )
+                            Free <!--<a href="#subscribe" class="text-info">Upgrade</a>-->
                             {{/if}}
                         </div>
                     </div>
                     <div class="control-group form-group">
                         <label class="control-label col-sm-4 col-xs-4">Users</label>
-                        <div class="controls col-sm-8 m-t-xs col-xs-8">
+                        <div class="controls col-sm-8 col-xs-8" style="margin-top:7px;">
                             {{#if plan.quantity}}
                             {{plan.quantity}}
                             {{else}}
