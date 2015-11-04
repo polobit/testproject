@@ -32,7 +32,9 @@ $('#app-aside-folded').on('click', function(e) {
 	
 $(document).ready(function(){
 
-	
+	function contactSortTouch(event) {
+		$("#contact-sort-views").css("display","block");
+	}
 
 
     $("#contact-results li").click(function(){
