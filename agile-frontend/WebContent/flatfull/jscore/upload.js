@@ -51,7 +51,7 @@ function setImageURL(url)
 	var id = "upload-container";
 	// Set the media stream
 	$('#' + id).find('.imgholder').html('');
-	$('#' + id).find('.imgholder').html('<img class="w-full" src="' + url + '"/>');
+	$('#' + id).find('.imgholder').html('<img class="w-full" style="width:60px;height: 60px;" src="' + url + '"/>');
 	
 	// Set the value of selector for input
 	$('#' + id).find('#upload_url').val(url);
