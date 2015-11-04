@@ -36,11 +36,13 @@
 		
 		<div class="row">
             {{#if userPic}}
-							<img class="img-inital r r-2x" src="{{userPic}}" />
+						<span class="pull-left thumb-lg avatar  m-t-n-sm m-b-n-sm m-l-sm">
+						<img class="img-inital r r-2x" src="{{userPic}}" /></span>
 						{{else}}
-							<img class="img-inital r r-2x" src="{{defaultGravatarurl 50}}" />
+						<span class="pull-left thumb-lg avatar  m-t-n-sm m-b-n-sm m-l-sm">	
+						<img class="img-inital r r-2x" src="{{defaultGravatarurl 50}}" /></span>
 						{{/if}}
-		<div>{{userName}}</div>
+		<div class="pull-left">{{userName}}</div>
 		<div class="pull-right"><div>
   			<table>
     <thead>
@@ -53,8 +55,8 @@
     </thead>
     <tbody>
       <tr class="user-values">
-        <td><span class="symbol">$</span>{{sales}}</td>
-        <td><span class="symbol">$</span>{{avgSalesValue}}</td>
+        <td>{{currencySymbol}}{{numberWithCommas sales}}</td>
+        <td>{{currencySymbol}}{{numberWithCommas avgSalesValue}}</td>
         <td>{{soldDeals}}</td>
 		<td>{{avgDealClosetime}}</td>
 
@@ -64,7 +66,7 @@
 
 </div></div>
 </div>
-<div class="row">
+<div class="row p-t-lg">
 
 <table>
     <thead>
@@ -73,6 +75,7 @@
         <th>Tasks Completed</th>
 		<th>Total Notes </th>
 		<th>Average Time Spent on Call</th>
+		<th>Events</th>
       </tr>
     </thead>
     <tbody>
@@ -81,16 +84,20 @@
         <td>{{taskCompleted}}</td>
 		<td>{{notes}}</td>
 		<td>{{avgCallDuration}}</td>
+		<td>{{events}}</td>
       </tr>
     </tbody>
   </table>
 </div>
 <div class="row">
         
-        <div class="loss-reasons-widget"><h2>Loss Reasons</h2>
+        <div class="col-md-4"><h4>Loss Reasons</h4>
 				<div id="lossreasonpie-chart-users"></div></div>
+
+		 <div class="col-md-4"><h4>Call Outcomes</h4>
+				<div id="calls-chart-user"></div></div>
       </div>
-            
+           </div>       
 	<!-- End of Growth Reports -->  
 </div>
 </script>

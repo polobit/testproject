@@ -628,4 +628,21 @@ public class EventUtil
 	Key<Opportunity> dealKey = new Key<Opportunity>(Opportunity.class, dealId);
 	return dao.listByProperty("related_deals = ", dealKey);
     }
+    
+    public static int getEventsCountforOwner(long startTime, long endTime)
+    {
+	try
+	{
+	    AgileUser agileUser = AgileUser.getCurrentAgileUser();
+
+	    // Gets list of tasks filtered on given conditions
+	    return dao.ofy().query(Event.class).filter("owner", new Key<AgileUser>(AgileUser.class, agileUser.id))
+		    .filter("start >=", startTime).filter("start <", endTime).count();
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    return 0;
+	}
+    }
 }

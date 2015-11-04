@@ -19,6 +19,7 @@ import org.json.JSONObject;
 import com.agilecrm.activities.Activity;
 import com.agilecrm.activities.Call;
 import com.agilecrm.activities.util.ActivityUtil;
+import com.agilecrm.activities.util.EventUtil;
 import com.agilecrm.activities.util.TaskUtil;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Contact.Type;
@@ -37,8 +38,12 @@ import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil.Err
 import com.agilecrm.subscription.restrictions.entity.DaoBillingRestriction;
 import com.agilecrm.subscription.restrictions.entity.DaoBillingRestriction.ClassEntities;
 import com.agilecrm.subscription.restrictions.exception.PlanRestrictedException;
+import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.UserPrefs;
 import com.agilecrm.user.access.util.UserAccessControlUtil;
+import com.agilecrm.user.util.DomainUserUtil;
+import com.agilecrm.user.util.UserPrefsUtil;
 import com.agilecrm.util.email.SendMail;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.datastore.EntityNotFoundException;
@@ -495,6 +500,20 @@ public class ReportsUtil
 			dataJson.put("taskcreated",TaskUtil.getUserCreatedTasks(minTime, maxTime, ownerId));
 			dataJson.put("taskCompleted",TaskUtil.getCompletedTasksOfUser(minTime, maxTime, ownerId));
 			dataJson.put("notes",NoteUtil.getNotesCountforUser(minTime, maxTime,ownerId));
+
+			dataJson.put("userName", DomainUserUtil.getDomainUser(ownerId).name);
+			AgileUser agileUser = AgileUser.getCurrentAgileUserFromDomainUser(ownerId);
+			
+			UserPrefs userPrefs = null;
+			
+			if(agileUser!=null)
+				userPrefs = UserPrefsUtil.getUserPrefs(agileUser);
+			if(userPrefs!=null)
+				dataJson.put("userPic",userPrefs.pic);
+			else
+				dataJson.put("userPic","");
+			
+			dataJson.put("events",EventUtil.getEventsCountforOwner(minTime,maxTime));
 			return dataJson;
 		}
 		catch (JSONException e)
