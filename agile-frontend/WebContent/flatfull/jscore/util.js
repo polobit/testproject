@@ -561,7 +561,9 @@ function convertDateFromUKtoUS(ukDate)
 		return "";
 }
 
-
+/**
+* Retuns date with supportable format
+*/
 function getFormattedDateObjectWithString(value){
 
 		if(!value)
