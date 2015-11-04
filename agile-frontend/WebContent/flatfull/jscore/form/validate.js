@@ -132,21 +132,19 @@ function isValidForm(form) {
 	jQuery.validator.addMethod("date", function(value, element){
 		if(value=="")
 			return true;
-		if(CURRENT_USER_PREFS.dateFormat.indexOf("dd/mm/yy") != -1 || CURRENT_USER_PREFS.dateFormat.indexOf("dd.mm.yy") != -1)
-		{
-			return !/Invalid|NaN/.test(new Date(convertDateFromUKtoUS(value))); 
-		}else
-			return !/Invalid|NaN/.test(new Date(value));
+
+		return !/Invalid|NaN/.test(getFormattedDateObjectWithString(value));
+
+			
 	}," Please enter a valid date.");
 
 	jQuery.validator.addMethod("date_input", function(value, element){
 		if(value=="")
 			return true;
-		if(CURRENT_USER_PREFS.dateFormat.indexOf("dd/mm/yy") != -1 || CURRENT_USER_PREFS.dateFormat.indexOf("dd.mm.yy") != -1)
-		{
-			return !/Invalid|NaN/.test(new Date(convertDateFromUKtoUS(value))); 
-		}else
-			return !/Invalid|NaN/.test(new Date(value));
+
+		return !/Invalid|NaN/.test(getFormattedDateObjectWithString(value));
+
+		
 	}," Please enter a valid date.");
 
 	jQuery.validator.addMethod("field_length", function(value, element){

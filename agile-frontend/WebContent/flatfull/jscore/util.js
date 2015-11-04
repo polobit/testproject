@@ -548,6 +548,9 @@ function convertDateFromUKtoUS(ukDate)
 		date = ukDate.split(".");
 	if(date.length == 3)
 	{	
+		if(date[2].length == 2)
+			  date[2] = "20" + date[2];
+
 		var returnDate = new Date(date[1]+"/"+date[0]+"/"+date[2]);
 		if(!/Invalid|NaN/.test(returnDate))
 			return returnDate.format("mm/dd/yyyy");
@@ -558,4 +561,21 @@ function convertDateFromUKtoUS(ukDate)
 		return "";
 }
 
+
+function getFormattedDateObjectWithString(value){
+
+		if(!value)
+			   return;
+
+        value = value.replace(/\./g,'/');
+		if(CURRENT_USER_PREFS.dateFormat.indexOf("yyyy") == -1){
+			value = value.substring(0, value.length - 2) + "20" + value.substring(value.length - 2);
+		}
+
+		if(CURRENT_USER_PREFS.dateFormat.indexOf("dd/mm/yy") != -1 || CURRENT_USER_PREFS.dateFormat.indexOf("dd.mm.yy") != -1)
+			value = convertDateFromUKtoUS(value);
+
+		return new Date(value);
+	
+}
 
