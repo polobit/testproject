@@ -1,5 +1,7 @@
 package com.agilecrm.account;
 
+import java.io.Serializable;
+
 import javax.persistence.Id;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -22,70 +24,76 @@ import com.googlecode.objectify.condition.IfDefault;
  */
 @XmlRootElement
 @Cached
-public class AccountPrefs
+public class AccountPrefs implements Serializable
 {
-    /**
-     * AccountPrefs Id.
-     */
-    @Id
-    public Long id;
+	/**
+	 * AccountPrefs Id.
+	 */
+	@Id
+	public Long id;
 
-    /**
-     * Company logo.
-     */
-    @NotSaved(IfDefault.class)
-    public String logo = null;
+	/**
+	 * Company logo.
+	 */
+	@NotSaved(IfDefault.class)
+	public String logo = null;
 
-    /**
-     * Company name.
-     */
-    @NotSaved(IfDefault.class)
-    public String company_name = "";
+	/**
+	 * Company name.
+	 */
+	@NotSaved(IfDefault.class)
+	public String company_name = "";
 
-    public String timezone = "UTC";
+	public String timezone = "UTC";
 
-    public Boolean tagsPermission = true;
+	public Boolean tagsPermission = true;
 
-    /**
-     * AccountPrefs Dao.
-     */
-    private static ObjectifyGenericDao<AccountPrefs> dao = new ObjectifyGenericDao<AccountPrefs>(AccountPrefs.class);
+	/**
+	 * AccountPrefs Dao.
+	 */
+	private static ObjectifyGenericDao<AccountPrefs> dao = new ObjectifyGenericDao<AccountPrefs>(AccountPrefs.class);
 
-    /**
-     * Default AccountPrefs.
-     */
-    AccountPrefs()
-    {
+	/**
+	 * States if the workflows have been updated with the new "is_disabled"
+	 * property
+	 */
+	public boolean workflows_updated = false;
 
-    }
+	/**
+	 * Default AccountPrefs.
+	 */
+	AccountPrefs()
+	{
 
-    /**
-     * Constructs a new {@link AccountPrefs}.
-     * 
-     * @param companyName
-     *            - Company Name.
-     */
-    public AccountPrefs(String companyName)
-    {
-	this.company_name = companyName;
-    }
+	}
 
-    /**
-     * Returns subscription plan if exists, otherwise null.
-     * 
-     * @return Subscription plan.
-     */
-    @XmlElement(name = "subscription_plan")
-    public Plan getPlan()
-    {
-	return SubscriptionUtil.getSubscription().plan;
-    }
+	/**
+	 * Constructs a new {@link AccountPrefs}.
+	 * 
+	 * @param companyName
+	 *            - Company Name.
+	 */
+	public AccountPrefs(String companyName)
+	{
+		this.company_name = companyName;
+	}
 
-    /**
-     * Saves AccountPrefs.
-     */
-    public void save()
-    {
-	dao.put(this);
-    }
+	/**
+	 * Returns subscription plan if exists, otherwise null.
+	 * 
+	 * @return Subscription plan.
+	 */
+	@XmlElement(name = "subscription_plan")
+	public Plan getPlan()
+	{
+		return SubscriptionUtil.getSubscription().plan;
+	}
+
+	/**
+	 * Saves AccountPrefs.
+	 */
+	public void save()
+	{
+		dao.put(this);
+	}
 }

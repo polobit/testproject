@@ -198,19 +198,22 @@ function get_custom_fields(type)
 	// Iterate over data and get field labels of each custom field
 	$.each(data, function(index, obj)
 	{
-		// Iterate over single custom field to get field-label
-		$.each(obj, function(key, value)
+		if (obj['field_type'] != "FORMULA")
 		{
-
-			// Needed only field labels for merge fields
-			if (key == 'field_label')
+			// Iterate over single custom field to get field-label
+			$.each(obj, function(key, value)
 			{
-				if (type == "update_field")
-					customfields[value] = value
-				else
-					customfields[value] = "{{" + value + "}}"
-			}
-		});
+
+				// Needed only field labels for merge fields
+				if (key == 'field_label')
+				{
+					if (type == "update_field")
+						customfields[value] = value
+					else
+						customfields[value] = "{{" + value + "}}"
+				}
+			});
+		}
 	});
 
 	return customfields;

@@ -110,6 +110,7 @@ public class WorkflowUtil
 			campaignJSON.put(TaskletUtil.CAMPAIGN_WORKFLOW_JSON, workflowJSON);
 			campaignJSON.put("id", workflow.id);
 			campaignJSON.put("name", workflow.name);
+			campaignJSON.put("is_disabled", workflow.is_disabled);
 			return campaignJSON;
 		}
 		catch (Exception e)
@@ -193,4 +194,17 @@ public class WorkflowUtil
 				.filter("created_time >=", startTime).filter("created_time <", endTime).count();
 	}
 
+	/**
+	 * Updates the list of workflows
+	 * 
+	 * @param workflows
+	 */
+	public static void updateWorkflows(List<Workflow> workflows)
+	{
+		dao.putAll(workflows);
+	}
+	public static int get_enable_campaign_count()
+	{
+		return Workflow.dao.getCountByProperty("is_disabled", false);
+	}
 }

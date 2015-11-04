@@ -559,4 +559,60 @@ public class RestAPI
 	return contact;
     }
 
+    /**
+     * Gets all the contacts which are associated with the given tag and returns
+     * as list
+     * 
+     * @param tag
+     *            name of the tag
+     * @return list of tags
+     */
+    @Path("/newTagsByTime/{tag}")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public List<Contact> getContactsBasedOnTag(@PathParam("tag") String tag, @QueryParam("cursor") String cursor,
+	    @QueryParam("page_size") String count, @QueryParam("global_sort_key") String sortKey)
+    {
+	List<Contact> licontacts1 = new ArrayList<Contact>();
+	try
+	{
+	    if (count != null)
+	    {
+		List<Contact> licontacts = ContactUtil.getContactsForTag(tag, Integer.parseInt(count), cursor, sortKey);
+
+		for (Contact c : licontacts)
+		{
+		    if (c.tags.size() >= 2)
+		    {
+			List<String> nameList = new ArrayList<String>(c.tags);
+			if (c.tags.toArray()[c.tags.size() - 1].equals(tag))
+			{
+			    licontacts1.add(c);
+			}
+			else if (c.tagsWithTime.get(c.tags.size() - 1).createdTime
+				- c.tagsWithTime.get(nameList.indexOf(tag)).createdTime <= 900000)
+			{
+			    licontacts1.add(c);
+			}
+		    }
+		    else
+		    {
+			licontacts1.add(c);
+		    }
+
+		}
+
+		return licontacts1;
+	    }
+
+	    return ContactUtil.getContactsForTag(tag, null, null, sortKey);
+
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    return null;
+	}
+    }
+
 }

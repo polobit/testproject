@@ -1,4 +1,4 @@
-var plan_json = [];
+var plan_json = {};
 var email_json = {};
 var PLAN_DETAILS = { getPlanPrice : function(plan_name)
 {
@@ -332,6 +332,10 @@ function initializeSubscriptionListeners()
 			'#purchase-plan',
 			function(e)
 			{
+				e.preventDefault();
+				var buttonText = $(this).html();
+				$(this).text("Loading...");
+				$(this).attr("disabled","disabled");
 				/*
 				 * var quantity = $("#users_quantity").text(); var cost =
 				 * $("#users_total_cost").text(); var plan =
@@ -348,6 +352,7 @@ function initializeSubscriptionListeners()
 				if (!plan || plan == "free")
 				{
 					alert("Please select a plan to proceed");
+					$(this).text(buttonText).removeAttr("disabled");
 					return false;
 				}
 
@@ -399,6 +404,7 @@ function initializeSubscriptionListeners()
 				if (selected_plan_name.toLowerCase() + "-" + quantity == user_existing_plan_name + "-" + USER_DETAILS.getQuantity(USER_BILLING_PREFS))
 				{
 					alert("Please change your plan to proceed");
+					$(this).text(buttonText).removeAttr("disabled");
 					return false;
 				}
 
@@ -437,6 +443,7 @@ function initializeSubscriptionListeners()
 				{
 
 					alert("Please change the plan to proceed");
+					$(this).text(buttonText).removeAttr("disabled");
 					return false;
 				}
 
@@ -452,6 +459,61 @@ function initializeSubscriptionListeners()
 
 					plan_json.customer = JSON.parse(USER_CREDIRCARD_DETAILS);
 				}
+				var that = this;
+				// Get plan restrictions and check downgrade conditions.
+				$.ajax({
+					url :"/core/api/subscription/planRestrictions" ,
+					type : "POST",
+					dataType: "json",
+					contentType : "application/json; charset=utf-8",
+					data : JSON.stringify(plan_json),
+					success : function(data){
+						var errorsCount = 0;
+						$(that).text(buttonText).removeAttr("disabled");
+						data.plan = plan.substr(0, 1).toUpperCase() + plan.substr(1);
+						if(data.is_more_users)
+						{
+							errorsCount++;
+							data.newCount = quantity;
+							data.errorsCount = errorsCount;
+							getTemplate("subscribe-error-modal",data , undefined, function(template_ui){
+								if(!template_ui)
+									  return;
+								$(template_ui).modal('show');
+							}, null);
+						}else if(data.is_allowed_plan){
+							Backbone.history.navigate("purchase-plan", { trigger : true });
+						}else{
+							if(data.contacts.count > data.contacts.limit)
+								errorsCount++;
+							if(data.webrules.count > data.webrules.limit)
+								errorsCount++;
+							if(data.users.count > data.users.limit)
+								errorsCount++;
+							if(data.workflows.count > data.workflows.limit)
+								errorsCount++;
+							if(data.triggers.count > data.triggers.limit)
+								errorsCount++;
+							if(errorsCount >= 1)
+							{
+								data.errorsCount = errorsCount;
+								getTemplate("subscribe-error-modal",data , undefined, function(template_ui){
+									if(!template_ui)
+										  return;
+									$(template_ui).modal('show');
+								}, null);
+								
+							}
+							else
+								Backbone.history.navigate("purchase-plan", { trigger : true });
+						}
+							
+					},
+					error : function(msg){
+						$(this).text(buttonText).removeAttr("disabled");
+					}
+				});
+
 
 			});
 

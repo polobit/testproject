@@ -207,7 +207,7 @@ public class Activity extends Cursor
     }
 
     
-    /**
+  /*  *//**
      * 
      * @return user pic of the user who performed activity
      * @throws Exception

@@ -1,6 +1,6 @@
 package com.agilecrm.core.api.campaigns;
 
-import java.util.ArrayList;
+ import java.util.ArrayList;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
@@ -24,6 +24,9 @@ import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.workflows.Workflow;
 import com.agilecrm.workflows.status.CampaignStatus.Status;
 import com.agilecrm.workflows.status.util.CampaignStatusUtil;
+import com.agilecrm.workflows.status.util.EmailSubscriptionDeferredTask.SubscriptionType;
+import com.agilecrm.workflows.status.util.UnsubscribeEmailUtil;
+import com.agilecrm.workflows.unsubscribe.util.UnsubscribeStatusUtil;
 import com.agilecrm.workflows.util.WorkflowSubscribeUtil;
 import com.agilecrm.workflows.util.WorkflowUtil;
 import com.campaignio.cron.util.CronUtil;
@@ -246,7 +249,20 @@ public class CampaignsAPI
 			return null;
 		}
 	}
+	
+	@Path("resubscribe")
+	@POST
+	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+	public void resubscribeCampaign(@FormParam("id") Long contactId, @FormParam("workflow-id") String workflowId)
+	{
+			Contact contact = ContactUtil.getContact(contactId);
+			
+			if(contact == null)
+				return;
 
+			UnsubscribeEmailUtil.emailSubscriptionByQueue(contactId, workflowId, null, SubscriptionType.RESUBSCRIBE);
+	}
+	
 	/**
 	 * Gets logs with respect to campaign.
 	 * 
@@ -265,5 +281,5 @@ public class CampaignsAPI
 			cursor = "0";
 		return LogUtil.getConatctActivitiesSQLLogs(log_type, cursor, count);
 	}
-
+	
 }

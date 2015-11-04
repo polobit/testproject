@@ -1,6 +1,6 @@
 /**
- * Initializes the date-range-picker. Calls the callback when the date range is
- * selected.
+ * Initializes the date-range-picker and other filters. Calls the callback when
+ * the date range is selected.
  * 
  * @param campaign_id -
  *            to show charts w.r.t campaign-id.
@@ -10,13 +10,13 @@
 function initFunnelCharts(callback)
 {
 
+	// Init the callback for daterange
 	initDateRange(callback);
-
+	
 	// Init the callback when the frequency selector changes too
 	if ($('#frequency').length > 0)
 	{
 		// Get Frequency
-		
 		$('#frequency').change(function()
 		{
 			callback();
@@ -63,8 +63,8 @@ function initFunnelCharts(callback)
 function initReportsForCalls(callback){
 	
 
-		initDateRange(callback);
-	
+	initDateRange(callback);
+
 	callback();
 	
 	$('#typeCall').change(function()
@@ -94,19 +94,11 @@ function showFunnelGraphs(tags)
 }
 
 /**
- * Shows Grwoth Graphs based on the tags
+ * Shows Growth Graphs based on the tags
  */
 function showGrowthGraphs(tags)
 {
 	showAreaSpline('core/api/reports/growth/' + tags + getOptions(), 'growth-chart', '', '', true);
-}
-
-/**
- * Shows Grwoth Graphs based on the tags
- */
-function showCohortsGraphs(tag1, tag2)
-{
-	showCohorts('core/api/reports/cohorts/' + tag1 + "/" + tag2 + "/" + getOptions(), 'cohorts-chart', 'Cohort Analysis', tag1 + ' vs ' + tag2, true);
 }
 
 /**
@@ -169,10 +161,7 @@ function showDealsGrowthReport()
 
     // Get Date Range January 22, 2015 - January 28, 2015
     var range = $('#range').html().split("-");
-    /*
-     * var temp = "January 22, 2015 - January 28, 2015"; var range =
-     * temp.split("-");
-     */
+    
     // Returns milliseconds from start date. For e.g., August 6, 2013 converts
     // to 1375727400000
     //var start_time = Date.parse($.trim(range[0])).valueOf();

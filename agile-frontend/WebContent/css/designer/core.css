@@ -614,3 +614,21 @@ margin-bottom:10px;
     min-height: 0;
     padding: 0;
 }
+
+.disable-iframe {
+	cursor: no-drop !important
+}
+
+.disable-iframe:hover  * {
+    pointer-events:none;
+}
+.enable-iframe *{ 
+	 
+	
+}
+.blur *{ 
+	opacity: 0.3 !important
+}
+.anti-blur *{
+	opacity: 1 !important
+}
