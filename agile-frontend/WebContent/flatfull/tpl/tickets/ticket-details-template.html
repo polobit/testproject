@@ -38,7 +38,7 @@
       <h2 class="font-thin m-n ng-binding">{{subject}}</h2>
     </div>
     <div id="notes-collection-container">
-      Loading...
+      
     </div>
     <div class="wrapper">
         <div class="panel b-a">
@@ -58,13 +58,13 @@
   <div class="col-md-4 p-l-none bg-white b-b" style="min-height: calc(100vh - 110px);">
     <div class="nav-tabs-alt">
       <ul class="nav nav-tabs" role="tablist">
-        <li class="active">
-          <a data-target="#tab-1" role="tab" data-toggle="tab" aria-expanded="true">
+        <li class="active width50 text-center">
+          <a class="border-bottom-width" data-target="#tab-1" role="tab" data-toggle="tab" aria-expanded="true">
             Details
           </a>
         </li>
-        <li>
-          <a class="timeline" data-target="#tab-2" role="tab" data-toggle="tab" aria-expanded="false">
+        <li class="width50 text-center">
+          <a class="timeline border-bottom-width" data-target="#tab-2" role="tab" data-toggle="tab" aria-expanded="false">
             Timeline
           </a>
         </li>
@@ -220,15 +220,51 @@
             </div>
             <a href="javascript:void(0);" id="show-tags-field" rel="tooltip" data-original-title="addtag" 
               data-placement="top" class="p-t-sm p-b-sm text-xs text-muted show-tags-field">
-              <i class="icon-plus"></i>
+              <i class="fa fa-plus-square"></i>
               <span>Add Tag</span>
             </a>
           </div>
         </div>
       </div>
       <div role="tabpanel" class="tab-pane" id="tab-2">
-        <div id="timeline" class="wrapper-md">
-            
+        <div class="padder p-l-none">      
+          <div class="streamline b-l b-info m-l-lg m-b padder-v">
+              <div>
+                <a class="pull-left thumb-sm avatar m-l-n-md">
+                  <img src="http://flatfull.com/themes/angulr/angular/img/a2.jpg" alt="...">
+                </a>          
+                <div class="m-l-lg panel b-a">
+                  <div class="panel-heading pos-rlt b-b b-light">
+                    <span class="arrow left"></span>
+                    <a href="">Peter</a>
+                    <label class="label bg-light m-l-xs">VIP</label> 
+                    <span class="text-muted m-l-sm pull-right">
+                      9h ago
+                    </span>
+                  </div>
+                  <div class="panel-body">
+                    <div>Lorem ipsum dolor sit amet, consecteter adipiscing elit...</div>
+                  </div>
+                </div>
+              </div>
+              <div>
+                <a class="pull-left thumb-sm avatar m-l-n-md">
+                  <img src="http://flatfull.com/themes/angulr/angular/img/a3.jpg" alt="...">
+                </a>          
+                <div class="m-l-lg m-b-lg panel b-a bg-light lt">
+                  <div class="panel-heading pos-rlt b-light">
+                    <span class="arrow arrow-light left"></span>                    
+                    <a href="">By me</a>
+                    <span class="text-muted m-l-sm pull-right">
+                      1h ago
+                    </span>
+                  </div>
+                  <div class="panel-body">
+                    <div>This comment was posted by you.</div>
+                  </div>
+                </div>
+              </div>
+          </div>
         </div>
       </div>
       <div role="tabpanel" class="tab-pane" id="tab-3">
@@ -274,12 +310,13 @@
               </li>
             {{/each}}
             <li class="tag m-r-xs m-b-xs inline-block">
-              <input type="text" placeholder="Cc Emails" id="cc_email_field" style="border: none; width: 9em !important;">
+              <input type="text" placeholder="Cc Emails" id="cc_email_field" class="cc_emails_st" autocomplete="off">
             </li>
         </ul>
       </div>  
     </div>
     <div class="wrapper" contenteditable="true" data-name="html_text" style="min-height:130px">
+        <br/><br/>{{#getCurrentUserPrefs}}{{{signature}}}{{/getCurrentUserPrefs}}
     </div>
     <div class="panel-footer bg-light lt">
       <a href="javascript:void(0);" class="btn btn-link pull-right discard-reply">
@@ -309,4 +346,9 @@
       <a class="change-ticket-status-li" data-value="OPEN">Open</a>
     </li>
   {{/if_equals}}
+</script>
+<script  id="ticket-notes-loader-template" type="text/html">
+<div class="b-b b-t p-md">
+  <img class="loading" src="/flatfull/img/ajax-loader-cursor.gif">
+</div>
 </script>

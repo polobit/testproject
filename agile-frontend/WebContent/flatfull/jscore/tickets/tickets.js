@@ -81,7 +81,7 @@ var Tickets = {
 						//Replacing group name
 						$('a#group_name', el).html($('a[data-group-id="'+ Group_ID +'"]').attr('data-group-name'));
 
-						Ticket_Filters.fetch_filters_collection();	
+						Ticket_Filters.fetch_filters_collection();
 					}
 				});
 
@@ -139,9 +139,7 @@ var Tickets = {
 									'display', 'block');
 						else
 							$(this).find('#ticket-last-notes').css(
-									'display', 'block').css(
-									'top',
-									'-'
+									'display', 'block').css('top','-'
 											+ $(this).find(
 													'#ticket-last-notes')
 													.height() + 'px');
@@ -393,22 +391,39 @@ var Tickets = {
 		$('.ticket-details-value').show();
 	},
 
-	ccEmailsList: function(e){
+	//Activate enter click event listener and focus out events on CC email field
+	initCCEmailsListeners: function(el){
+
+		$(el).on('keypress', '#cc_email_field', function(e){
+			Tickets.ccEmailsList(e);
+		});
+
+		$(el).on('focusout', '#cc_email_field', function(e){
+			e.stopImmediatePropagation();
+			Tickets.ccEmailsList(e, true);
+		});
+	},
+
+	//Appends email as list item in cc emails list
+	ccEmailsList: function(e, force_allow){
 
 		e.stopImmediatePropagation();
-		if(e.which == 13) {
+		if(e.which == 13 || force_allow) {
 
         	var email = $('#cc_email_field').val();
 
-        	if(!Tickets.validateEmail(email))
+        	if(!email)
         		return;
+        	
+        	var err_email = !Tickets.isValidEmail(email);
 
-        	$('ul[name="cc_emails"]').prepend(getTemplate('cc-email-li', {email: email}));
+        	$('ul[name="cc_emails"]').prepend(getTemplate('cc-email-li', {email: email, err_email: err_email}));
         	$('#cc_email_field').val('');
     	}
 	},
 
-	validateEmail : function(email) {
+	//Return true if provided email is valid
+	isValidEmail : function(email) {
 
 		// Email Regex pattern
 		var emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,9}$/;

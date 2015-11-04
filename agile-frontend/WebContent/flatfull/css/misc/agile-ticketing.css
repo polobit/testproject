@@ -43,11 +43,12 @@
 	display: -webkit-box;
 	height: 110px;
 	margin: 0 auto;
-	line-height: 1.4;
+	line-height: 1.5;
 	-webkit-line-clamp: 5;
 	-webkit-box-orient: vertical;
 	overflow: hidden;
 	text-overflow: ellipsis;
+	font-size: 13px;
 }
 
 .last-notes-drp-dwn {
@@ -60,4 +61,31 @@
     white-space: nowrap;
     overflow: hidden;
     word-break: break-word;
-}    
+}
+
+.cc_emails_st{
+	border: none;
+	width: 9em !important;
+}
+
+.boder-btm-dot{
+	border-bottom: 2px dotted red;
+}
+
+.v-inherit{
+  vertical-align: inherit !important;
+}
+
+.border-bottom-width{
+	border-bottom-width: 1px !important;
+}
+
+.width50{
+	width: 50%;
+}
+
+#ticket-tags-ul li a.close{
+	font-size: 15px;
+    padding-top: 1px;
+    opacity: 1;
+}

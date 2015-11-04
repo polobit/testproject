@@ -1,6 +1,7 @@
 package com.agilecrm.ticket.rest;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import javax.ws.rs.GET;
@@ -113,6 +114,8 @@ public class TicketsRest
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	public Tickets getTicketByID(@PathParam("id") Long ticketID)
 	{
+		String oldnamespace = NamespaceManager.get();
+		
 		try
 		{
 			Tickets ticket = TicketsUtil.getTicketByID(ticketID);
@@ -121,7 +124,12 @@ public class TicketsRest
 			ticket.group = TicketGroups.ticketGroupsDao.get(ticket.groupID);
 
 			if (ticket.assignee_id != null)
-				ticket.assignee = DomainUserUtil.dao.get(ticket.assigneeID);
+			{
+				NamespaceManager.set("");
+				
+				Key<DomainUser> userKey = new Key<DomainUser>(DomainUser.class, ticket.assigneeID);
+				ticket.assignee = DomainUserUtil.dao.get(userKey);
+			}
 
 			return ticket;
 		}
@@ -130,6 +138,10 @@ public class TicketsRest
 			System.out.println(ExceptionUtils.getFullStackTrace(e));
 			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
 					.build());
+		}
+		finally
+		{
+			NamespaceManager.set(oldnamespace);
 		}
 	}
 

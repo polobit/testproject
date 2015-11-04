@@ -123,6 +123,7 @@ public class SendMail
 
     //Ticket template names
     public static final String TICKET_REPLY = "ticket_reply_email";
+    public static final String TICKET_SEND_EMAIL_TO_USER = "ticket_send_email_to_user";
     
     /**
      * From Name of email.

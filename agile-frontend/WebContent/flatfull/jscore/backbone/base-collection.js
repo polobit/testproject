@@ -456,8 +456,11 @@ var Base_Collection_View = Backbone.View
 				// once collection is fetched, loading is removed by render and
 				// view gets populated with fetched collection.
 				if (force_render == undefined)
-				{
-					$(this.el).html("");
+				{	
+					//Included by Sasi for tickets
+					var html = (this.options.customLoader) ? getTemplate(this.options.customLoaderTemplate) : '';
+
+					$(this.el).html(html);
 					return this;
 				}
 

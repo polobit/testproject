@@ -10,6 +10,8 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.lang.exception.ExceptionUtils;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Tag;
@@ -26,6 +28,7 @@ import com.agilecrm.ticket.entitys.Tickets.Status;
 import com.agilecrm.ticket.entitys.Tickets.Type;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
+import com.agilecrm.util.email.SendMail;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.googlecode.objectify.Key;
@@ -709,8 +712,10 @@ public class TicketsUtil
 	 * @param subject
 	 * @param body
 	 * @throws EntityNotFoundException
+	 * @throws JSONException
 	 */
-	public static void sendEmailToGroup(long group_id, String subject, String body) throws EntityNotFoundException
+	public static void sendEmailToGroup(long group_id, String subject, String body) throws EntityNotFoundException,
+			JSONException
 	{
 		// Fetching ticket group
 		TicketGroups group = TicketGroupUtil.getTicketGroupById(group_id);
@@ -733,9 +738,13 @@ public class TicketsUtil
 	 * @param groupId
 	 * @param subject
 	 * @param body
+	 * @throws JSONException
 	 */
-	public static void sendEmailToUser(String email, String subject, String body)
+	public static void sendEmailToUser(String email, String subject, String body) throws JSONException
 	{
+		JSONObject dataJSON = new JSONObject();
+		dataJSON.put("body", body);
 
+		SendMail.sendMail(email, subject, SendMail.TICKET_SEND_EMAIL_TO_USER, dataJSON);
 	}
 }

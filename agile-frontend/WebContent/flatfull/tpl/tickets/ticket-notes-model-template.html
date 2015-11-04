@@ -3,13 +3,23 @@
 		<img class="pos-abs" src="/flatfull/img/tickets/{{#if_equals created_by 'REQUESTER'}}received-reply.png{{else}}send-response.png{{/if_equals}}" width="25px" height="25px">
 		<div class="wrapper b-b b-t" style="{{#if_equals created_by 'REQUESTER'}}background-color: #F6F8F8{{/if_equals}}">
 		    {{#if_equals created_by 'REQUESTER'}}
-		    	<img class="img-circle thumb-xs m-r-sm" src="{{emailGravatarurl 50 requester_email}}">
-		   		From <a href="javascript:void(0);" class="ng-binding">{{requester_name}} ({{requester_email}})</a> on {{epochToHumanDate "mmm dd yyyy HH:MM" created_time}}
+		    	<img class="m-r-sm v-inherit" src="{{emailGravatarurl 50 requester_email}}" width="34px" height="34px">
+		    	<div class="inline-block">
+		    		From <a href="javascript:void(0);">{{requester_name}} ({{requester_email}})</a>
+		    		<div>
+		   				on {{epochToHumanDate "mmm dd yyyy HH:MM" created_time}}
+		   			</div>
+		    	</div>
 		   	{{else}}
-		   		<img class="img-circle thumb-xs m-r-sm" src="{{domain_user.ownerPic}}">
-		   		User <a href="javascript:void(0);" class="ng-binding">
-		   				{{domain_user.name}} ({{domain_user.email}}) wrote 
-		   			</a> on {{epochToHumanDate "mmm dd yyyy HH:MM" created_time}}
+		   		<img class="m-r-sm v-inherit" src="{{domain_user.ownerPic}}" width="34px" height="34px">
+		   		<div class="inline-block">
+		   			<a href="javascript:void(0);">
+		   				{{domain_user.name}} ({{domain_user.email}})
+		   			</a>
+		   			<div>
+		   				Replied on {{epochToHumanDate "mmm dd yyyy HH:MM" created_time}}
+		   			</div>
+		   		</div>
 		   	{{/if_equals}}
 		   	<!-- <div class="dropdown pull-right">
 			  <button class="btn btn-default btn-xs dropdown-toggle" type="button" data-toggle="dropdown"> 

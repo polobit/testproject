@@ -1,7 +1,7 @@
 <script id="ticket-model-template" type="text/html">
 	<li id="{{id}}" class="list-group-item clearfix b-l-3x b-l-info data cursor-pointer ticket"  data-id="{{id}}">
-    <a class="thumb pull-left m-r" href="javascript:void(0);">
-      <img src="{{emailGravatarurl 50 requester_email}}" width="42" height="42">
+    <a class="pull-left m-r" href="javascript:void(0);">
+      <img src="{{emailGravatarurl 42 requester_email}}">
     </a>
     <div class="pull-right text-sm text-muted">
       <time class="time-ago" datetime="{{epochToHumanDate "" last_updated_time}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" last_updated_time}}

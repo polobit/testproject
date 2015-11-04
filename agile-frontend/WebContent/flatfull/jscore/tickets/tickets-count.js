@@ -2,8 +2,11 @@ var Tickets_Count = {
 
 	fetch_tickets_count: function(){
 
-		if(!Reload_Tickets_Count)
+		if(!Reload_Tickets_Count){
+
+			Tickets_Count.render_tickets_count();
 			return;
+		}
 
 		var ticket_type = ['NEW','OPEN','STARRED','CLOSED'];
 

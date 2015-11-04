@@ -86,9 +86,7 @@ var TicketsUtilRouter = Backbone.Router.extend({
 				Ticket_Tags.initTagsTypeahead('.ticket-tags-typeahead');
 				
 				//Initializing click on CC email field
-				$(el).on('keypress', '#cc_email_field', function(e){
-					Tickets.ccEmailsList(e);
-				});
+				Tickets.initCCEmailsListeners(el);
 
 				//Initializing type ahead for selecting contact in To address field
 				agile_type_ahead("requester_email_typeahead", el, tickets_typeahead, function(arg1, arg2){
@@ -226,10 +224,8 @@ var TicketsUtilRouter = Backbone.Router.extend({
 				//Initializing type ahead for tags
 				Ticket_Tags.initTagsTypeahead('.ticket-tags-typeahead');
 
-				//Initializing CC email click events
-				$(el).on('keypress', '#cc_email_field', function(e){
-					Tickets.ccEmailsList(e);
-				});
+				//Initializing events on CC email field
+				Tickets.initCCEmailsListeners(el);
 
 				App_Ticket_Module.renderNotesCollection(id, $('#notes-collection-container', el), function(){});
 			}
@@ -660,6 +656,8 @@ var TicketsUtilRouter = Backbone.Router.extend({
 			url : '/core/api/tickets/notes?ticket_id=' + ticket_id,
 			templateKey : "ticket-notes",
 			sortKey:"created_time",
+			customLoader: true,
+			customLoaderTemplate: "ticket-notes-loader",
 			descending:false,
 			individual_tag_name : 'div',
 			postRenderCallback : function(el) {

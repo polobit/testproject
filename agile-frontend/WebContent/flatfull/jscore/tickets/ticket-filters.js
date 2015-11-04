@@ -100,8 +100,6 @@ var Ticket_Filters = {
 			individual_tag_name : 'li',
 			postRenderCallback : function(el){
 
-				Reload_Filters = false;
-				
 				//Fetch ticket collection count
 				Tickets_Count.fetch_filter_tickets_count();
 
@@ -115,5 +113,6 @@ var Ticket_Filters = {
 
 		App_Ticket_Module.ticketFiltersList.collection.fetch();
 		$("#filters-list-container").html(App_Ticket_Module.ticketFiltersList.el);
+		Reload_Filters = false;
 	}
 };
