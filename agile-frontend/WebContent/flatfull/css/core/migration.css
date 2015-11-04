@@ -1552,10 +1552,13 @@ a#email-reply{
 }
 
 @media all and (max-width: 767px) {
-.bg-light.lter.b-b.wrapper-md .pull-left,.bg-light.lter.b-b.wrapper-md .pull-right,.bg-light.lter.b-b.wrapper-md .right {
+.custom-animated.custom-fadeInUp > .bg-light .pull-left,.custom-animated.custom-fadeInUp > .bg-light .pull-right,.bg-light.lter.b-b.wrapper-md .pull-left,.bg-light.lter.b-b.wrapper-md .pull-right,.bg-light.lter.b-b.wrapper-md .right {
    float: none!important;
    text-align: center;
   }
+.custom-animated.custom-fadeInUp > .bg-light .row {
+  text-align: center;
+}
   #workflow-designer-help {
     margin-top: 0px;
   }
