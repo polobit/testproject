@@ -7,7 +7,7 @@
 // or better
 
 
-function loadUserEventsfromGoogle(start, end, callback){
+function loadUserEventsfromGoogle(start, end){
 
 		var isConfigured = load_events_from_google(function(data)
 						{
@@ -16,11 +16,8 @@ function loadUserEventsfromGoogle(start, end, callback){
 								return;
 							}
 
-							return agile_transform_options(data, start, end, callback);
+							return agile_transform_options(data, start, end);
 						});
-
-		if(!isConfigured)
-			callback([]);
 }
 
 function isDefined(x)
@@ -41,19 +38,28 @@ function _googleEventFetcher(sourceOptions, start, end, callback)
 {
 	if (sourceOptions.dataType == 'agile-gcal')
 		{
-				//loadUserEventsfromGoogle(undefined, start, end, callback);
+				loadUserEventsfromGoogle(start, end);
+				//callback([]);
 		}
+	else if (sourceOptions.dataType == "agile-events")
+		{
+			console.log(sourceOptions);
+			addEventsToCalendar(sourceOptions.events(start, end, function(test){}));
+
+		}
+
+		
 }
 
 // Tranform agile
-function agile_transform_options(sourceOptions, start, end, callback)
+function agile_transform_options(sourceOptions, start, end)
 {
 	// Setup GC for First time
 	// console.log(gapi.client.calendar);
 
 	if (typeof gapi != "undefined" && isDefined(gapi) && isDefined(gapi.client) && isDefined(gapi.client.calendar))
 	{
-		_fetchGCAndAddEvents(sourceOptions, start, end, callback);
+		_fetchGCAndAddEvents(sourceOptions, start, end);
 		return;
 	}
 
@@ -61,7 +67,7 @@ function agile_transform_options(sourceOptions, start, end, callback)
 	{
 		setupGC(function()
 		{
-			_fetchGCAndAddEvents(sourceOptions, start, end, callback);
+			_fetchGCAndAddEvents(sourceOptions, start, end);
 		});
 		return;
 	});
@@ -78,7 +84,7 @@ function setupGC(callback)
 	gapi_helper.when('calendarLoaded', callback);
 }
 
-function _fetchGCAndAddEvents(sourceOptions, start, end, callback)
+function _fetchGCAndAddEvents(sourceOptions, start, end)
 {
 	// Set the access token
 	gapi.auth.setToken({ access_token : sourceOptions.token, state : "https://www.googleapis.com/auth/calendar" });
@@ -103,7 +109,8 @@ function _fetchGCAndAddEvents(sourceOptions, start, end, callback)
 
 
 		//$('#calendar_event').fullCalendar('renderEvents', google_events);
-		callback(google_events);
+		addEventSourceToCalendar("google", google_events)
+		
 		//$('#calendar_event').fullCalendar('removeEvents', function(value, i) {return false;});
 		// Add event
 		//$('#calendar_event').fullCalendar('renderEvents', google_events);

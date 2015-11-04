@@ -161,7 +161,8 @@ function showCalendar(users)
 						 */
 
 						eventSources : [
-								{ events : function(start, end, callback)
+								{ 	
+									events : function(start, end, callback)
 								{
 
 									var eventFilters = JSON.parse(readCookie('event-lhs-filters'));
@@ -214,6 +215,8 @@ function showCalendar(users)
 											}
 										}
 										
+										
+
 //										if ((type_of_cal.length == 1 && type_of_cal[0] == 'google' && owners.length == 1 && owners[0] == CURRENT_AGILE_USER.id) || type_of_cal.length == 0 && owners.length == 0)
 //										{
 //											$("#loading_calendar_events").hide();
@@ -235,32 +238,12 @@ function showCalendar(users)
 
 									var eventsURL = '/core/api/events?start=' + start.getTime() / 1000 + "&end=" + end.getTime() / 1000;
 									
+
 									eventsURL += '&owner_id=' + agile_event_owners;
 									console.log('-----------------', eventsURL);
-									
-									$.getJSON(eventsURL, function(doc)
-									{
-										try{
-										$.each(doc, function(index, data)
-										{
-											// decides the color of event based
-											// on owner id
-											console.log(data);
-											data = renderEventBasedOnOwner(data);
-										});
+									callback([]);
+									return eventsURL
 
-										if (doc)
-										{
-
-											callback(doc);
-
-										}
-										}
-										catch(err){
-												$("#loading_calendar_events").hide();
-												callback([]);
-										}
-									});
 								//		return true;
 
 								},
@@ -268,7 +251,6 @@ function showCalendar(users)
 
 								},
 								{
-									events : loadUserEventsfromGoogle,
 									dataType : 'agile-gcal'
 								},
 								

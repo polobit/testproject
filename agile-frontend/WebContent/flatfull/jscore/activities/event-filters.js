@@ -249,6 +249,53 @@ function renderFullCalenarEvents(ownerid)
 
 }
 
+var functions = {};
+function addEventsToCalendar(eventsURL)
+{
+		var resultMap = {};
+		$.getJSON(eventsURL, function(doc)
+									{
+										$.each(doc, function(index, data)
+										{
+											// decides the color of event based
+											// on owner id
+											console.log(data);
+											if(!resultMap[data.owner.id])
+											{
+												var array = [];
+												resultMap[data.owner.id] = array;
+											}
+
+												data = renderEventBasedOnOwner(data);
+												resultMap[data.owner.id].push(data);
+
+										});
+
+										console.log(resultMap);
+										$.each(resultMap, function(index, eventArray){
+												console.log(index);
+												addEventSourceToCalendar(index, eventArray);
+										})
+							});
+}
+
+function addEventSourceToCalendar(key, eventArray)
+{
+			$('#calendar_event').fullCalendar('removeEventSource', functions["event_" + key]);
+
+			functions["event_" + key] = function(start, end, callback)
+			{
+				console.log("function : " +  "event_" + functions["event_" + key])
+				callback(eventArray);
+			}
+
+			
+			//if(addScource)
+			$('#calendar_event').fullCalendar('addEventSource', functions["event_" + key]);
+
+			eventArray = [];
+}
+
 function removeGoogleCalendarEvents()
 {
 // Removes all events at once
