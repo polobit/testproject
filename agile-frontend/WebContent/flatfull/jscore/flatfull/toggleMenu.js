@@ -32,7 +32,7 @@ $('#app-aside-folded').on('click', function(e) {
 	
 $(document).ready(function(){
 
-	$('body').on('click','#mobile-dropdown-click-sort',function() {
+	$('body').bind('touchstart','#mobile-dropdown-click-sort',function() {
 		$("#contact-sort-views").css("display","block");
 		
 	});
