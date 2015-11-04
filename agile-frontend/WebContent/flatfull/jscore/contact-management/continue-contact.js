@@ -541,13 +541,14 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
 
 				// App_Contacts.contactDetails(data.id,data);
 				// App_Contacts.navigate("contact/"+data.id);
-				if(!CALL_CAMPAIGN.start)
+				if(!CALL_CAMPAIGN.start && Current_Route != "contact/" + data.id)
 				App_Contacts.navigate("contact/" + data.id, { trigger : true });
 			} else {
 				// update contacts-details view
 				if (App_Companies.companyDetailView)
 					App_Companies.companyDetailView.model = data;
 
+				if(Current_Route != "company/" + data.id)
 				App_Companies.navigate("company/" + data.id, { trigger : true });
 			}
 		}
@@ -582,6 +583,7 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
 					
 				}
 				
+				if(Current_Route != "contact/" + id)
 				Backbone.history.navigate("contact/" + id, { trigger : true });	
 				$( window ).scrollTop( 0 );
 				
