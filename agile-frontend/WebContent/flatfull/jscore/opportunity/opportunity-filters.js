@@ -250,9 +250,7 @@ function getDealFilters()
 
 
 
-//listenrs
-
-
+// Deal Listeners
 function initializeDealListners(el){
 	
 $('#opportunity-listners').off('click', ".deals-list-view");

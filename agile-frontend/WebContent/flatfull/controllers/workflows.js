@@ -74,7 +74,7 @@ var WorkflowsRouter = Backbone.Router
 				this.workflow_list_view.collection.fetch();
 
 				$("#content").html('<div id="workflows-listener-container"></div>').find('#workflows-listener-container').html(this.workflow_list_view.el);
-				initializeWorkflowsListeners();
+				// initializeWorkflowsListeners();
 
 				$(".active").removeClass("active");
 				$("#workflowsmenu").addClass("active");
@@ -96,18 +96,20 @@ var WorkflowsRouter = Backbone.Router
 				this.workflow_json = undefined;
 				this.workflow_model = undefined;
 
-				$("#content").html('<div id="workflows-listener-container"></div>');
-				getTemplate('workflow-add', { "is_new" : true, "is_disabled" : "false", "was_disabled" : "false" }, undefined, function(template_ui){
-					if(!template_ui)
-						  return;
-					$('#workflows-listener-container').html($(template_ui));	
-					initializeWorkflowsListeners();
-					initiate_tour("workflows-add", $('#content'));
-					
-					// Init SendVerify Email
-					send_verify_email();
-				}, "#workflows-listener-container");
+				var workflowModal = new Workflow_Model_Events({
+					url : 'core/api/workflow', 
+					template : 'workflow-add',
+					isNew : 'true',
+					data : {  "is_new" : true, "is_disabled" : "false", "was_disabled" : "false" },
+					postRenderCallback : function(el){
+						initiate_tour("workflows-add", $('#content'));						
+						// Init SendVerify Email
+						send_verify_email(el);
+					}
 
+				});
+
+				$("#content").html(workflowModal.render().el);
 			},
 
 			/**
@@ -167,32 +169,33 @@ var WorkflowsRouter = Backbone.Router
 				this.is_disabled = this.workflow_model.get("is_disabled");
 				var that = this;
 
-				getTemplate('workflow-add', {"is_disabled" : ""+that.is_disabled}, undefined, function(template_ui){
-					if(!template_ui)
-						  return;
+				var workflowModal = new Workflow_Model_Events({
+					url : 'core/api/workflow', 
+					template : 'workflow-add',
+					isNew : 'true',
+					data :  {"is_disabled" : ""+that.is_disabled},
+					postRenderCallback : function(el){
+						// Set the name
+						$('#workflow-name', el).val(that.workflow_model.get("name"));
 
-					var el = $(template_ui);
+						var unsubscribe = that.workflow_model.get("unsubscribe");
 
-					$("#content").html('<div id="workflows-listener-container"></div>');
-					$('#workflows-listener-container').html(el);
-					initializeWorkflowsListeners();
+						$('#unsubscribe-email', el).val(unsubscribe.unsubscribe_email);
+						$('#unsubscribe-tag', el).val(unsubscribe.tag);
+						$('#unsubscribe-action', el).val(unsubscribe.action);
+						$('#unsubscribe-action', el).trigger('change');
 
-					if(that.is_disabled)
-						$('#designer-tour').addClass("blur").removeClass("anti-blur");
-                    
-					// Set the name
-					$('#workflow-name').val(that.workflow_model.get("name"));
+						if(that.is_disabled)
+								$('#designer-tour').addClass("blur").removeClass("anti-blur");
 
-					var unsubscribe = that.workflow_model.get("unsubscribe");
+						// Init SendVerify Email
+						send_verify_email(el);
+					}
 
-					$('#unsubscribe-email').val(unsubscribe.unsubscribe_email);
-					$('#unsubscribe-tag').val(unsubscribe.tag);
-					$('#unsubscribe-action').val(unsubscribe.action);
-					$('#unsubscribe-action').trigger('change');
+				});
 
-					// Init SendVerify Email
-					send_verify_email();
-				}, "#content");
+				$("#content").html(workflowModal.render().el);
+
 			},
 
 			/**
@@ -215,7 +218,7 @@ var WorkflowsRouter = Backbone.Router
 					if (!template_ui)
 						return;
 					$('#workflows-listener-container').html($(template_ui));
-					initializeWorkflowsListeners();
+					// initializeWorkflowsListeners();
 				}, "#workflows-listener-container");
 			},
 
@@ -251,17 +254,20 @@ var WorkflowsRouter = Backbone.Router
 					that.workflow_json = JSON.stringify(data);
 				} });
 
-				$("#content").html('<div id="workflows-listener-container"></div>');
+				var workflowModal = new Workflow_Model_Events({
+					url : 'core/api/workflow', 
+					template : 'workflow-add',
+					isNew : 'true',
+					data : { "is_new" : true, "is_disabled" : false, "was_disabled" : false  },
+					postRenderCallback : function(el){
+						// Init SendVerify Email
+						send_verify_email(el);
+					}
 
-				getTemplate('workflow-add', { "is_new" : true, "is_disabled" : false, "was_disabled" : false }, undefined, function(template_ui){
-					if(!template_ui)
-						  return;
-					$('#workflows-listener-container').html($(template_ui));
-					initializeWorkflowsListeners();
-					// Init SendVerify Email
-					send_verify_email();
+				});
 
-				}, "#workflows-listener-container");
+				$("#content").html(workflowModal.render().el);
+
 			},
 
 			/**
@@ -292,8 +298,8 @@ var WorkflowsRouter = Backbone.Router
 					else
 						log_type = '?log-type=' + log_type;
 
-					var logsListView = new Base_Collection_View({ url : '/core/api/campaigns/logs/' + id + log_type, templateKey : "campaign-logs",
-						cursor : true, page_size : 20, individual_tag_name : 'tr', sort_collection : false, postRenderCallback : function(el)
+					var logsListView = new Workflow_Reports_Events({ url : '/core/api/campaigns/logs/' + id + log_type, templateKey : "campaign-logs",
+						cursor : true,page_size :20, individual_tag_name : 'tr', sort_collection :false, postRenderCallback : function(el)
 						{
 							initializeTriggersListeners();
 							head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
@@ -301,13 +307,13 @@ var WorkflowsRouter = Backbone.Router
 								$("time.log-created-time", el).timeago();
 							});
 
-							// $('#logs-campaign-name').text(workflowName);
-
 							$('#log-filter-title').html(log_filter_title);
-						}, appendItemCallback : function(el)
+							
+						},appendItemCallback : function(el)
 						{
 							includeTimeAgo(el);
-						} });
+						}  
+						});
 
 					logsListView.collection.fetch({ success : function(collection)
 					{
@@ -328,11 +334,10 @@ var WorkflowsRouter = Backbone.Router
 			{
 				hideTransitionBar();
 				// Load Reports Template
-				getTemplate("campaign-stats-chart", {}, undefined, function(template_ui)
-				{
-					if (!template_ui)
-						return;
-					$('#content').html($(template_ui));
+				getTemplate("campaign-stats-chart", {}, undefined, function(template_ui){
+					if(!template_ui)
+						  return;
+					$('#content').html($(template_ui));	
 
 					// Show bar graph for campaign stats
 					showBar('/core/api/campaign-stats/stats/', 'campaign-stats-chart', 'Campaigns Comparison', 'Email Stats', null);
@@ -355,11 +360,11 @@ var WorkflowsRouter = Backbone.Router
 				// Fetches workflows if not filled
 				if ($('#campaign-reports-select').html() === null || $('#campaign-reports-select').html() === undefined)
 				{
-					getTemplate('campaign-analysis', {}, undefined, function(template_ui)
-					{
-						if (!template_ui)
-							return;
-						$('#content').html($(template_ui));
+					getTemplate('campaign-analysis', {}, undefined, function(template_ui){
+				 		if(!template_ui)
+				    		return;
+
+						$('#content').html($(template_ui)); 
 						var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
 
 						// fill workflows
@@ -1265,8 +1270,3 @@ var WorkflowsRouter = Backbone.Router
 				$('#campaign-tabs .select').removeClass('select');
 				$('.campaign-subscribers-tab').addClass('select');
 			} });
-
-function initializeWorkflowsListeners()
-{
-
-}

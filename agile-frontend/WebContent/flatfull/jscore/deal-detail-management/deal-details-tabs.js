@@ -11,86 +11,131 @@
 var deal_tab_position_cookie_name = "deal_tab_position";
 var id;
 
-function initializeDealDetailsListners(el)
-{	
-}
+/**
+* Deal modal actions
+*/
+var Deal_Modal_Event_View = Base_Model_View.extend({
+    events: {
+    	'click #deal-details-tab a[href="#dealnotes"]' : 'openDealNotes',
+    	'click #deal-details-tab a[href="#dealrelated"]' : 'openDealContacts',
+    	'click #deal-details-tab a[href="#dealactivities"]' : 'openDealActivities',
+    	'click #deal-details-tab a[href="#dealdocs"]' : 'openDealDocs',
+    	'click #deal-details-tab a[href="#dealtasks"]' : 'openDealTasks',
+    	'click #deal-details-tab a[href="#dealevents"]' : 'openDealEvents',
+    	'click #deal-owner' : 'showOwnerList',
 
-$(function(){
+    	'click #opportunity-actions-delete' : 'opportunityDelete',
+    	'click .deal-edit-note' : 'dealNoteEdit',
+    	'click .activity-delete': 'deleteActivity',
+
+    	'click #dealshow-note' : 'dealShowNoteModal',
+    	'click .deal-owner-list' : 'openDealOwnersList',
+    	'click .deal-add-contact' : 'addDealContact',
+    	'click .deal-detail-edit-deal' : 'editDeal',
+    	'click .deal-note' : 'showDealNote',
+    	'click #dealdetail-archive' : 'dealArchive',
+    	'click .deal-restore-detail-view' : 'dealRestoreView',
+    	'click .document-edit-deal-tab' : 'dealDocumentEdit',
+    	'click .document-unlink-deal-tab' : 'dealUnlinkDocument',
+    	'click .add-deal-document-select' : 'dealDocumentsList',
+    	'click .add-deal-document-confirm' : 'dealAddDocumentConfirm',
+    	'click .add-deal-document-cancel' : 'dealAddDocumentCancel',
+    	'click .deal-add-task' : 'dealAddtask',
+    	'click .task-edit-deal-tab' : 'dealEditTask',
+    	'click .deal-task-delete' : 'dealDeleteTask',
+    	'click .complete-deal-task' : 'dealCompleteTask',
+    	'click .deal-add-event' : 'dealAddEvent',
+    	'click .event-edit-deal-tab' : 'dealEditEvent',
+		'click .deal-event-delete' : 'dealEditDelete', 
+		'click .activity-delete' : 'deleteActivity',  	
+    	
+    },
+
 	/**
 	 * Fetches all the notes related to the deal and shows the notes collection
 	 * as a table in its tab-content, when "Notes" tab is clicked.
 	 */
-	$('#content').on('click', '#deal-details-tab a[href="#dealnotes"]', function(e)
+	openDealNotes :  function(e)
 	{
 		e.preventDefault();
+
 		save_deal_tab_position_in_cookie("dealnotes");
 		deal_details_tab.load_deal_notes();
-	});
+	},
+	deleteActivity : function(e)
+	{
+		e.preventDefault();
+
+		Contact_Details_Tab_Actions.deleteActivity(e);
+	},
 
 	/**
 	 * Fetches all the contacts related to the deal and shows the contacts
 	 * collection as a table in its tab-content, when "contacts" tab is clicked.
 	 */
-	$('#content').on('click', '#deal-details-tab a[href="#dealrelated"]', function(e)
+	openDealContacts : function(e)
 	{
 		e.preventDefault();
 		save_deal_tab_position_in_cookie("dealrelated");
 		deal_details_tab.loadDealRelatedContactsView();
-	});
+	},
 
 	/**
 	 * Fetches all the notes related to the contact and shows the tasks
 	 * collection as a table in its tab-content, when "Tasks" tab is clicked.
 	 */
-	$('#content').on('click', '#deal-details-tab a[href="#dealactivities"]', function(e)
+	openDealActivities : function(e)
 	{
 		e.preventDefault();
+
 		save_deal_tab_position_in_cookie("dealactivities");
 		deal_details_tab.load_deal_activities();
-	});
+	},
 
 	/**
 	 * Fetches all the docs related to the deal and shows the docs collection as
 	 * a table in its tab-content, when "Documents" tab is clicked.
 	 */
-	$('#content').on('click', '#deal-details-tab a[href="#dealdocs"]', function(e)
+	openDealDocs : function(e)
 	{		e.preventDefault();
 		save_deal_tab_position_in_cookie("dealdocs");
 		deal_details_tab.load_deal_docs();
-	});
+	},
 	
 	/**
 	 * Fetches all the tasks related to the deal and shows the docs collection as
 	 * a table in its tab-content, when "Tasks" tab is clicked.
 	 */
-	$('#content').on('click', '#deal-details-tab a[href="#dealtasks"]', function(e)
+	openDealTasks: function(e)
 	{
 		e.preventDefault();
 		save_deal_tab_position_in_cookie("dealtasks");
 		deal_details_tab.load_deal_tasks();
-	});
+	},
 
 	/**
 	 * Fetches all the events related to the deal and shows the docs collection as
 	 * a table in its tab-content, when "Events" tab is clicked.
 	 */
-	$('#content').on('click', '#deal-details-tab a[href="#dealevents"]', function(e)
+	openDealEvents : function(e)
 	{
 		e.preventDefault();
 		save_deal_tab_position_in_cookie("dealevents");
 		deal_details_tab.load_deal_events();
-	});
+	},
 
-
-	$("#content").on('click', "#deal-owner", function(e)
-
+	deleteActivity: function(b) {
+        b.preventDefault();
+        Contact_Details_Tab_Actions.deleteActivity(b)
+    },
+    
+	showOwnerList: function(e)
 	{
 		e.preventDefault();
 		fill_deal_owners(undefined, undefined, function()
 		{
 
 			$('#deal-owner').css('display', 'none');
-
 			$('#change-deal-owner-ul').css('display', 'inline-block');
 
 			if ($('#change-deal-owner-ul').css('display') == 'inline-block')
@@ -98,18 +143,18 @@ $(function(){
 
 		});
 
-	});
+	},
 
 
-	$("#content").on('click', "#opportunity-actions-delete", function(e)
-
+	opportunityDelete : function(e)
 	{
 		e.preventDefault();
 
 		if (!confirm("Are you sure you want to delete?"))
 			return;
 
-		var id = $(this).closest('.deal_detail_delete').attr('data');
+		var targetEl = $(e.currentTarget);
+		var id = $(targetEl).closest('.deal_detail_delete').attr('data');
 
 		$.ajax({ url : 'core/api/opportunity/' + id, type : 'DELETE', success : function(data)
 		{
@@ -118,102 +163,49 @@ $(function(){
 		{
 			alert("some exception occured please try again");
 		} });
-	});
+	},
 
-	$('#content').on('click', '.deal-edit-note', function(e)
+	dealNoteEdit:  function(e)
 	{
 
 		e.preventDefault();
+		var targetEl = $(e.currentTarget);
 
-		var note = dealNotesView.collection.get($(this).attr('data'));
+		var note = dealNotesView.collection.get($(targetEl).attr('data'));
 		console.log(note);
 		deserializeForm(note.toJSON(), $("#dealnoteUpdateForm", $('#dealnoteupdatemodal')));
 		fill_relation_deal($('#dealnoteUpdateForm'));
 		$('#dealnoteupdatemodal').modal('show');
-	});
 
-	$('body').on('click', '#dealnote_update', function(e)
-	{
-		e.preventDefault();
-
-		// Returns, if the save button has disabled attribute
-		if ($(this).attr('disabled'))
-			return;
-
-		// Disables save button to prevent multiple click event issues
-		disable_save_button($(this));// $(this).attr('disabled', 'disabled');
-
-		if (!isValidForm('#dealnoteUpdateForm'))
-		{
-
-			// Removes disabled attribute of save button
-			enable_save_button($(this));
-			return;
-		}
-
-		// Shows loading symbol until model get saved
-		// $('#noteUpdateModal').find('span.save-status').html(getRandomLoadingImg());
-
-		var json = serializeForm("dealnoteUpdateForm");
-
-		saveDealUpdateNote($("#dealnoteUpdateForm"), $("#dealnoteupdatemodal"), this, json);
-	});
-	/**
-	 * Saves note model using "Bcakbone.Model" object, and adds saved data to
-	 * time-line if necessary.
-	 */
-	$('#deal-note-modal').on('click', '#dealnote_validate', function(e)
-	{
-
-		e.preventDefault();
-
-		// Returns, if the save button has disabled attribute
-		if ($(this).attr('disabled'))
-			return;
-
-		if (!isValidForm('#dealnoteForm'))
-		{
-			return;
-		}
-
-		disable_save_button($(this));
-
-		// Shows loading symbol until model get saved
-		// $('#noteModal').find('span.save-status').html(getRandomLoadingImg());
-
-		var json = serializeForm("dealnoteForm");
-
-		console.log(json);
-
-		saveDealNote($("#dealnoteForm"), $("#deal-note-modal"), this, json);
-	});
+	},
+	
 
 	/**
 	 * Shows note modal and activates contacts typeahead to its related to field
 	 */
-	$('#content').on('click', '#dealshow-note', function(e)
+	dealShowNoteModal: function(e)
 	{
 		if (App_Deal_Details.dealDetailView.model.get('archived') == true)
 			return;
+
 		e.preventDefault();
 		$("#deal-note-modal").modal('show');
 
-		var el = $("#dealnoteForm");
-
-	});
+	},
 
 	/**
 	 * Changes, owner of the contact, when an option of change owner drop down
 	 * is selected.
 	 */
-	$("#content").on('click', ".deal-owner-list", function(e)
+	openDealOwnersList: function(e)
 	{
 
 		$('#change-deal-owner-ul').css('display', 'none');
+		var targetEl = $(e.currentTarget);
 
 		// Reads the owner id from the selected option
-		var new_owner_id = $(this).attr('data');
-		var new_owner_name = $(this).text();
+		var new_owner_id = $(targetEl).attr('data');
+		var new_owner_name = $(targetEl).text();
 		var current_owner_id = $('#deal-owner').attr('data');
 		// Returns, if same owner is selected again
 		if (new_owner_id == current_owner_id)
@@ -239,9 +231,9 @@ $(function(){
 
 		} });
 
-	});
+	},
 
-	$("#content").on('click', ".deal-add-contact", function(e)
+	addDealContact: function(e)
 	{
 		e.preventDefault();
 		console.log(App_Deal_Details.dealDetailView.model.toJSON());
@@ -253,18 +245,18 @@ $(function(){
 			$('#opportunityUpdateForm').find("input[name='relates_to']").focus();
 		}, 800);
 
-	});
+	},
 
-	$("#content").on('click', ".deal-detail-edit-deal", function(e)
+	editDeal:  function(e)
 	{
 		e.preventDefault();
 		console.log(App_Deal_Details.dealDetailView.model.toJSON());
 		var currentdeal = App_Deal_Details.dealDetailView.model;
 		updateDeal(currentdeal);
 
-	});
+	},
 
-	$("#content").on('click', ".deal-note", function(e)
+	showDealNote: function(e)
 	{
 		e.preventDefault();
 
@@ -273,9 +265,9 @@ $(function(){
 		// Displays contact name, to indicate the note is related to the contact
 		fill_relation_deal(el1);
 		$('#deal-note-modal').modal('show');
-	});
+	},
 
-	$("#content").on('click', "#dealdetail-archive", function(e)
+	dealArchive: function(e)
 	{
 		e.preventDefault();
 
@@ -284,9 +276,9 @@ $(function(){
 		$("#archived-deal-milestone", $("#deal_archive_confirm_modal")).val(currentDeal.milestone);
 		$("#deal_archive_confirm_modal").modal('show');
 
-	});
+	},
 
-	$("#content").on('click', ".deal-restore-detail-view", function(e)
+	dealRestoreView: function(e)
 	{
 		e.preventDefault();
 
@@ -296,121 +288,130 @@ $(function(){
 		$("#restored-deal-milestone", $("#deal_restore_confirm_modal")).val(currentDeal.milestone);
 		$("#deal_restore_confirm_modal").modal('show');
 
-	});
+	},
 
 	//For updating document from contact-details
-$('#content').on('click', '.document-edit-deal-tab', function(e){
-	e.preventDefault();
-	var id = $(this).attr('data');
-	updateDocument(dealDocsView.collection.get(id));
-});
+	dealDocumentEdit: function(e){
+		e.preventDefault();
+		var targetEl = $(e.currentTarget);
 
-// For unlinking document from contact-details
-$('#content').on('click', '.document-unlink-deal-tab', function(e){
-	e.preventDefault();
-	var id = $(this).attr('data');
-	var json = dealDocsView.collection.get(id).toJSON();
-	
-	// To get the contact id and converting into string
-	var deal_id = App_Deal_Details.dealDetailView.model.id + "";
-	
-    // Removes the contact id from related to contacts
-	json.deal_ids.splice(json.deal_ids.indexOf(deal_id),1);
-	
-	// Updates the document object and hides 
-	var newDocument = new Backbone.Model();
-	newDocument.url = 'core/api/documents';
-	newDocument.save(json, {
-		success : function(data) {
-			dealDocsView.collection.remove(json);
-			dealDocsView.render(true);
-		}
-	});
-});
+		var id = $(targetEl).attr('data');
+		updateDocument(dealDocsView.collection.get(id));
+	},
 
-/**
- * For showing new/existing documents
- */
-$('#content').on('click', '.add-deal-document-select', function(e){
-	e.preventDefault();
-	var el = $(this).closest("div");
-	$(this).css("display", "none");
-	el.find(".deal-document-select").css("display", "inline");
-	var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
-    fillSelect('document-select','core/api/documents', 'documents',  function fillNew()
-	{
-		el.find("#document-select").append("<option value='new'>Add New Doc</option>");
+	// For unlinking document from contact-details
+	dealUnlinkDocument: function(e){
+		e.preventDefault();
+		var targetEl = $(e.currentTarget);
 
-	}, optionsTemplate, false, el); 
-});
-
-/**
- * For adding existing document to current contact
- */
-$('#content').on('click', '.add-deal-document-confirm', function(e){
-	e.preventDefault();
-	
-    var document_id = $(this).closest(".deal-document-select").find("#document-select").val();
-
-    var saveBtn = $(this);
-	
-		// To check whether the document is selected or not
-    if(document_id == "")
-    {
-    	saveBtn.closest("span").find(".save-status").html("<span style='color:red;margin-left:10px;'>This field is required.</span>");
-    	saveBtn.closest("span").find('span.save-status').find("span").fadeOut(5000);
-    	return;
-    }	    	
-    else if(document_id == "new")
-    {
-    	var el = $("#uploadDocumentForm");
-		$("#uploadDocumentModal").modal('show');
+		var id = $(targetEl).attr('data');
+		var json = dealDocsView.collection.get(id).toJSON();
 		
-		// Contacts type-ahead
-		agile_type_ahead("document_relates_to_contacts", el, contacts_typeahead);
+		// To get the contact id and converting into string
+		var deal_id = App_Deal_Details.dealDetailView.model.id + "";
 		
-		// Deals type-ahead
-		agile_type_ahead("document_relates_to_deals", el, deals_typeahead, false,null,null,"core/api/search/deals",false, true);
+	    // Removes the contact id from related to contacts
+		json.deal_ids.splice(json.deal_ids.indexOf(deal_id),1);
+		
+		// Updates the document object and hides 
+		var newDocument = new Backbone.Model();
+		newDocument.url = 'core/api/documents';
+		newDocument.save(json, {
+			success : function(data) {
+				dealDocsView.collection.remove(json);
+				dealDocsView.render(true);
+			}
+		});
+	},
 
-    	var deal_json = App_Deal_Details.dealDetailView.model.toJSON();
-    	var deal_name = deal_json.name;
-    	$('.deal_tags',el).append('<li class="tag"  style="display: inline-block; vertical-align: middle; margin-right:3px;" data="'+ deal_json.id +'">'+deal_name+'</li>');
-    }
-    else if(document_id != undefined && document_id != null)
-    {
-		if(!existingDealDocumentsView)
+	/**
+	 * For showing new/existing documents
+	 */
+	dealDocumentsList: function(e){
+		e.preventDefault();
+		var targetEl = $(e.currentTarget);
+
+		var el = $(targetEl).closest("div");
+		$(targetEl).css("display", "none");
+		el.find(".deal-document-select").css("display", "inline");
+		var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
+	    fillSelect('document-select','core/api/documents', 'documents',  function fillNew()
 		{
-			existingDealDocumentsView = new Base_Collection_View({ 
-				url : 'core/api/documents',
-				restKey : "documents",
-			});
-			existingDealDocumentsView.collection.fetch({
-			    success: function(data){
-			    		existing_deal_document_attach(document_id, saveBtn);
-			    	}
-		        });
-		}
-		else
-			existing_deal_document_attach(document_id, saveBtn);
-    }
+			el.find("#document-select").append("<option value='new'>Add New Doc</option>");
 
-});
+		}, optionsTemplate, false, el); 
+	},
 
-/**
- * To cancel the add documents request
- */
-$('#content').on('click', '.add-deal-document-cancel', function(e){
-	e.preventDefault();
-	var el = $(this).closest("div");
-	el.find(".deal-document-select").css("display", "none");
-	el.find(".add-deal-document-select").css("display", "inline");
-});
+	/**
+	 * For adding existing document to current contact
+	 */
+	dealAddDocumentConfirm: function(e){
+		e.preventDefault();
+		var targetEl = $(e.currentTarget);
 
-	$('#content').on('click', '.deal-add-task', function(e){ 
+	    var document_id = $(targetEl).closest(".deal-document-select").find("#document-select").val();
+		var saveBtn = $(targetEl);
+		
+			// To check whether the document is selected or not
+	    if(document_id == "")
+	    {
+	    	saveBtn.closest("span").find(".save-status").html("<span style='color:red;margin-left:10px;'>This field is required.</span>");
+	    	saveBtn.closest("span").find('span.save-status').find("span").fadeOut(5000);
+	    	return;
+	    }	    	
+	    else if(document_id == "new")
+	    {
+	    	
+	    	$('#uploadDocumentModal').html(getTemplate("upload-document-modal", {})).modal('show');
+			
+			var el = $("#uploadDocumentForm");
+			// Contacts type-ahead
+			agile_type_ahead("document_relates_to_contacts", el, contacts_typeahead);
+			
+			// Deals type-ahead
+			agile_type_ahead("document_relates_to_deals", el, deals_typeahead, false,null,null,"core/api/search/deals",false, true);
+
+	    	var deal_json = App_Deal_Details.dealDetailView.model.toJSON();
+	    	var deal_name = deal_json.name;
+	    	$('.deal_tags',el).append('<li class="tag"  style="display: inline-block; vertical-align: middle; margin-right:3px;" data="'+ deal_json.id +'">'+deal_name+'</li>');
+	    }
+	    else if(document_id != undefined && document_id != null)
+	    {
+			if(!existingDealDocumentsView)
+			{
+				existingDealDocumentsView = new Base_Collection_View({ 
+					url : 'core/api/documents',
+					restKey : "documents",
+				});
+				existingDealDocumentsView.collection.fetch({
+				    success: function(data){
+				    		existing_deal_document_attach(document_id, saveBtn);
+				    	}
+			        });
+			}
+			else
+				existing_deal_document_attach(document_id, saveBtn);
+	    }
+
+	},
+
+	/**
+	 * To cancel the add documents request
+	 */
+	dealAddDocumentCancel: function(e){
+		e.preventDefault();
+		var targetEl = $(e.currentTarget);
+
+		var el = $(targetEl).closest("div");
+		el.find(".deal-document-select").css("display", "none");
+		el.find(".add-deal-document-select").css("display", "inline");
+	},
+
+	dealAddtask:  function(e){ 
     	e.preventDefault();
+    	$('#activityTaskModal').html(getTemplate("new-task-modal")).modal('show');
 
-    	var	el = $("#taskForm");
-		$('#activityTaskModal').modal('show');
+		var	el = $("#taskForm");
 		highlight_task();
 		// Displays contact name, to indicate the task is related to the contact
 		fill_relation_deal_task(el);
@@ -428,18 +429,20 @@ $('#content').on('click', '.add-deal-document-cancel', function(e){
 		});
 
        activateSliderAndTimerToTaskModal();
-    });
+    },
 
-    $('#content').on('click', '.task-edit-deal-tab', function(e)
+    dealEditTask: function(e)
 	{
 		e.preventDefault();
-		var id = $(this).attr('data');
+		var targetEl = $(e.currentTarget);
+
+		var id = $(targetEl).attr('data');
 		var value = dealTasksView.collection.get(id).toJSON();
 
+		$("#updateTaskModal").html(getTemplate("task-update-modal")).modal('show');
+
 		deserializeForm(value, $("#updateTaskForm"));
-
-		$("#updateTaskModal").modal('show');
-
+		
 		$('.update-task-timepicker').val(fillTimePicker(value.due));
 		// Fills owner select element
 		populateUsers("owners-list", $("#updateTaskForm"), value, 'taskOwner', function(data)
@@ -456,16 +459,17 @@ $('#content').on('click', '.add-deal-document-cancel', function(e){
 
 		activateSliderAndTimerToTaskModal();
 
-	});
+	},
 
 	/**
 	 * Delete functionality for tasks blocks in deal details
 	 */
-	$('#content').on('click', '.deal-task-delete', function(e)
+	dealDeleteTask: function(e)
 	{
 		e.preventDefault();
+		var targetEl = $(e.currentTarget);
 
-		var model = $(this).parents('li').data();
+		var model = $(targetEl).parents('li').data();
 
 		if (model && model.toJSON().type != "WEB_APPOINTMENT")
 		{
@@ -484,7 +488,7 @@ $('#content').on('click', '.add-deal-document-cancel', function(e){
 		}
 
 		// Gets the id of the entity
-		var entity_id = $(this).attr('id');
+		var entity_id = $(targetEl).attr('id');
 
 		if (model && model.toJSON().type == "WEB_APPOINTMENT" && parseInt(model.toJSON().start) > parseInt(new Date().getTime() / 1000))
 		{
@@ -506,7 +510,7 @@ $('#content').on('click', '.add-deal-document-cancel', function(e){
 		}
 
 		// Gets the url to which delete request is to be sent
-		var entity_url = $(this).attr('url');
+		var entity_url = $(targetEl).attr('url');
 
 		if (!entity_url)
 			return;
@@ -520,35 +524,37 @@ $('#content').on('click', '.add-deal-document-cancel', function(e){
 		// Set entity id array in to json object with key ids,
 		// where ids are read using form param
 		id_json.ids = JSON.stringify(id_array);
-		var that = this;
+		var that = targetEl;
 
 		// Add loading. Adds loading only if there is no loaded image added
 		// already i.e.,
 		// to avoid multiple loading images on hitting delete multiple times
-		if ($(this).find('.loading').length == 0)
-			$(this).prepend($(LOADING_HTML).addClass('pull-left').css('width', "20px"));
+		if ($(targetEl).find('.loading').length == 0)
+			$(targetEl).prepend($(LOADING_HTML).addClass('pull-left').css('width', "20px"));
 
 		$.ajax({ url : entity_url, type : 'POST', data : id_json, success : function()
 		{
 			// Removes activity from list
 			$(that).parents(".activity").parent().fadeOut(400, function()
 			{
-				$(this).remove();
+				$(targetEl).remove();
 			});
 			if(dealTasksView && dealTasksView.collection.length==0)
 			{
 				$('#dealtasks').html(dealTasksView.render(true).el);
 			}
 		} });
-	});
+	},
 
-	$('#content').on('click', '.complete-deal-task', function(e)
+	dealCompleteTask: function(e)
 	{
 		e.preventDefault();
-		if ($(this).is(':checked'))
+		var targetEl = $(e.currentTarget);
+
+		if ($(targetEl).is(':checked'))
 		{
-			var id = $(this).attr('data');
-			var that = this;
+			var id = $(targetEl).attr('data');
+			var that = targetEl;
 			complete_task(id, dealTasksView.collection, undefined, function(data)
 			{
 				$(that).parent().siblings(".task-subject").css("text-decoration", "line-through");
@@ -557,31 +563,37 @@ $('#content').on('click', '.add-deal-document-cancel', function(e){
 				dealTasksView.collection.add(data, { silent : true });
 			});
 		}
-	});
+	},
 
 	/**
 	 * Displays activity modal with all event features,  to add a event 
 	 * related to the deal in deal detail view. Also prepends the 
 	 * deal name to related to field of activity modal.
 	 */ 
-    $('#content').on('click', '.deal-add-event', function(e){ 
+    dealAddEvent: function(e){ 
     	e.preventDefault();
 
+    	$('#activityModal').html(getTemplate("new-event-modal")).modal('show');
+
     	var	el = $("#activityForm");
-		$('#activityModal').modal('show');
+
 		highlight_event();
 		// Displays contact name, to indicate the task is related to the contact
 		fill_relation_deal_task(el);
 		agile_type_ahead("event_related_to", el, contacts_typeahead);
         agile_type_ahead("task_relates_to_deals", el, deals_typeahead, false,null,null,"core/api/search/deals",false, true);
 
-    });
+    },
 
     // Event edit in contact details tab
-	$('#content').on('click', '.event-edit-deal-tab', function(e)
+	dealEditEvent: function(e)
 					{
 						e.preventDefault();
-						var id = $(this).attr('data');
+						var targetEl = $(e.currentTarget);
+
+						$("#updateActivityModal").html(getTemplate("update-activity-modal"));
+						
+						var id = $(targetEl).attr('data');
 						var value = dealEventsView.collection.get(id).toJSON();
 						deserializeForm(value, $("#updateActivityForm"));
 						$("#updateActivityModal").modal('show');
@@ -621,16 +633,17 @@ $('#content').on('click', '.add-deal-document-cancel', function(e){
 		}
 		// Fills owner select element
 		populateUsersInUpdateActivityModal(value);
-	});
+	},
 
 	/**
 	 * Delete functionality for events blocks in deal details
 	 */
-	$('#content').on('click', '.deal-event-delete', function(e)
+	dealEditDelete: function(e)
 	{
 		e.preventDefault();
+		var targetEl = $(e.currentTarget)
 
-		var model = $(this).parents('li').data();
+		var model = $(targetEl).parents('li').data();
 
 		if (model && model.toJSON().type != "WEB_APPOINTMENT")
 		{
@@ -649,7 +662,7 @@ $('#content').on('click', '.add-deal-document-cancel', function(e){
 		}
 
 		// Gets the id of the entity
-		var entity_id = $(this).attr('id');
+		var entity_id = $(targetEl).attr('id');
 
 		if (model && model.toJSON().type == "WEB_APPOINTMENT" && parseInt(model.toJSON().start) > parseInt(new Date().getTime() / 1000))
 		{
@@ -671,7 +684,7 @@ $('#content').on('click', '.add-deal-document-cancel', function(e){
 		}
 
 		// Gets the url to which delete request is to be sent
-		var entity_url = $(this).attr('url');
+		var entity_url = $(targetEl).attr('url');
 
 		if (!entity_url)
 			return;
@@ -685,31 +698,29 @@ $('#content').on('click', '.add-deal-document-cancel', function(e){
 		// Set entity id array in to json object with key ids,
 		// where ids are read using form param
 		id_json.ids = JSON.stringify(id_array);
-		var that = this;
+		var that = targetEl;
 
 		// Add loading. Adds loading only if there is no loaded image added
 		// already i.e.,
 		// to avoid multiple loading images on hitting delete multiple times
-		if ($(this).find('.loading').length == 0)
-			$(this).prepend($(LOADING_HTML).addClass('pull-left').css('width', "20px"));
+		if ($(targetEl).find('.loading').length == 0)
+			$(targetEl).prepend($(LOADING_HTML).addClass('pull-left').css('width', "20px"));
 
 		$.ajax({ url : entity_url, type : 'POST', data : id_json, success : function()
 		{
 			// Removes activity from list
 			$(that).parents(".activity").parent().fadeOut(400, function()
 			{
-				$(this).remove();
+				$(targetEl).remove();
 			});
 			if(dealEventsView && dealEventsView.collection.length==0)
 			{
 				$('#dealevents').html(dealEventsView.render(true).el);
 			}
 		} });
-	});
+	},
 
 });
-
-// }
 
 function save_deal_tab_position_in_cookie(tab_href)
 {
@@ -774,3 +785,66 @@ function load_deal_tab(el, dealJSON)
 	}
 
 }
+
+
+$(function(){
+ 	/**
+	 * Saves note model using "Bcakbone.Model" object, and adds saved data to
+	 * time-line if necessary.
+	 */
+	$('#deal-note-modal').on('click', '#dealnote_validate', function(e)
+	{
+
+		e.preventDefault();
+
+		// Returns, if the save button has disabled attribute
+		if ($(this).attr('disabled'))
+			return;
+
+		if (!isValidForm('#dealnoteForm'))
+		{
+			return;
+		}
+
+		disable_save_button($(this));
+
+		// Shows loading symbol until model get saved
+		// $('#noteModal').find('span.save-status').html(getRandomLoadingImg());
+
+		var json = serializeForm("dealnoteForm");
+
+		console.log(json);
+
+		saveDealNote($("#dealnoteForm"), $("#deal-note-modal"), this, json);
+	});
+
+	$('#dealnoteupdatemodal').on('click', '#dealnote_update', function(e)
+	{
+
+		e.preventDefault();
+
+		// Returns, if the save button has disabled attribute
+		if ($(this).attr('disabled'))
+			return;
+
+		// Disables save button to prevent multiple click event issues
+		disable_save_button($(this));// $(this).attr('disabled', 'disabled');
+
+		if (!isValidForm('#dealnoteUpdateForm'))
+		{
+
+			// Removes disabled attribute of save button
+			enable_save_button($(this));
+			return;
+		}
+
+		// Shows loading symbol until model get saved
+		// $('#noteUpdateModal').find('span.save-status').html(getRandomLoadingImg());
+
+		var json = serializeForm("dealnoteUpdateForm");
+
+		saveDealUpdateNote($("#dealnoteUpdateForm"), $("#dealnoteupdatemodal"), this, json);
+
+	});
+
+});

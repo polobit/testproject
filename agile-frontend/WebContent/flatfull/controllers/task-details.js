@@ -408,8 +408,9 @@ function save_task_tab_position_in_cookie(tab_href)
 function update_task(value)
 {
 
+	$("#updateTaskModal").html(getTemplate("task-update-modal")).modal('show');
 	deserializeForm(value, $("#updateTaskForm"));
-	$("#updateTaskModal").modal('show');
+	
 	categories.getCategoriesHtml(value,function(catsHtml){
 		$('#type',$("#updateTaskForm")).html(catsHtml);
 		// Fills owner select element
