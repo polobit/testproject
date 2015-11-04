@@ -567,6 +567,8 @@ public class BulkOperationsAPI
 	    // according to contact prototype sent
 	    BillingRestriction restrictions = BillingRestrictionUtil.getBillingRestrictionFromDB();
 
+	    restrictions.refreshContacts();
+
 	    UserAccessControl accessControl = UserAccessControl.getAccessControl(AccessControlClasses.Contact, null,
 		    domainUser);
 
@@ -581,8 +583,8 @@ public class BulkOperationsAPI
 
 		PullQueueUtil.addToPullQueue("contact-import-queue", importer, key);
 
-
-		//PullQueueUtil.addToPullQueue("dummy-pull-queue", importer, null);
+		// PullQueueUtil.addToPullQueue("dummy-pull-queue", importer,
+		// null);
 
 		new CSVUtil(restrictions, accessControl).createContactsFromCSV(blobStream, contact, ownerId);
 	    }
