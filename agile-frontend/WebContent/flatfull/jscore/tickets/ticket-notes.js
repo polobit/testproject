@@ -38,7 +38,7 @@ var Tickets_Notes = {
 	backToTickets: function(e){
 
 		//Fetching ticket toolbar template
-		getTemplate("tickets-toolbar-container",  {}, undefined, function(toolbar_ui){
+		getTemplate("tickets-toolbar-container", {}, undefined, function(toolbar_ui){
 
 			if(!toolbar_ui)
 	  			return;
@@ -51,7 +51,7 @@ var Tickets_Notes = {
 
 			//Rendering existing filter tickets drop down view
 			Ticket_Filters.renderFiltersCollection();
-		}, "#right-pane");
+		}, "");
 
 		//Checking if ticket collection exists
 		if(!App_Ticket_Module.ticketsCollection){

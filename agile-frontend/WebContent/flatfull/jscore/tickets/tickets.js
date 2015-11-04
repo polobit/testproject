@@ -87,7 +87,7 @@ var Tickets = {
 					if(callback)
 						callback();
 
-				}, "#right-pane");
+				}, "");
 				
 			}, "#content");
 		}	
@@ -114,7 +114,7 @@ var Tickets = {
 				if(callback)
 					callback();
 
-			}, "#right-pane");
+			}, "");
 		}
 
 		Current_Ticket_ID = null;
@@ -159,6 +159,18 @@ var Tickets = {
 					}
 				}
 			);
+
+		//Refresh button click event initialization
+		$('.tickets-toolbar').on('click', '.refresh-tickets', function(e){
+			e.preventDefault();
+
+			Reload_Tickets_Count = true;
+
+			App_Ticket_Module.ticketsByGroup(Group_ID, Ticket_Status);
+
+			//Fectching new, open, closed tickets count
+			Tickets_Count.fetch_tickets_count();
+		});	
 	},
 
 	changeStatus: function(event){
