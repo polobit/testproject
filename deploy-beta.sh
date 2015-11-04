@@ -21,9 +21,9 @@ git checkout .
 
 git stash
 
-git checkout events_conversion
+git checkout sandbox_latest_converse
 
-git pull origin events_conversion
+git pull origin sandbox_latest_converse
 
 ant create-target  -DRELEASE_VERSION="$2" -DPRODUCTION=false;
 
