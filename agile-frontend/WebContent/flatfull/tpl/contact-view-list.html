@@ -8,7 +8,7 @@
 				 a href="#contacts" class="GridView">Grid View</a 
         	</li>
 			<li class="divider"></li>-->
-			<li class="dropdown-submenu"><a data-toggle="dropdown" >Sort By</a>
+			<li class="dropdown-submenu"><a data-toggle="dropdown" id="mobile-dropdown-click-sort">Sort By</a>
 				<ul class="dropdown-menu" id="contact-sort-views">
 					<li><a class="sort" id="sort-by-created_time-desc" data="-created_time" href="#">Newest</a></li>
 					<li><a class="sort" id="sort-by-created_time-asc" data="created_time" href="#">Oldest</a></li>
@@ -55,7 +55,7 @@
 				<!-- a href="#contacts" class="GridView">Grid View</a -->
         	</li>
 			<li class="divider"></li>
-			<li class="dropdown-submenu"><a data-toggle="dropdown" >Sort By</a>
+			<li class="dropdown-submenu"><a data-toggle="dropdown" ontouchstart="contactSortTouch(event)">Sort By</a>
 				<ul class="dropdown-menu" id="contact-sort-views">
 					<li><a class="sort" id="comp-sort-by-created_time-desc" data="-created_time" href="#">Newest</a></li>
 					<li><a class="sort" id="comp-sort-by-created_time-asc" data="created_time" href="#">Oldest</a></li>

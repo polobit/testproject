@@ -1605,5 +1605,11 @@ a#email-reply{
     top: 29px;
     left: 0%;
   }
+  #navbar 
+  { 
+    max-height: 80vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
  }
 
