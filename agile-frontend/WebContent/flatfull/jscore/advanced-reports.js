@@ -326,14 +326,14 @@ function initUserReports(callback){
 
 	callback();	
 
-		fillSelect("owner", "core/api/users", undefined, function()
+/*		fillSelect("owner", "core/api/users", undefined, function()
 		{
 			$('#owner').change(function()
 			{
 				callback();
 			});
 
-		}, '<option class="default-select" value="{{id}}">{{name}}</option>', false, undefined, "All Owners");
+		}, '<option class="default-select" value="{{id}}">{{name}}</option>', false, undefined, "All Owners");*/
 		
 	}
 
@@ -495,14 +495,15 @@ function showLossReasonGraphForUserReports(){
 	end_time=end_time+(d.getTimezoneOffset()*60*1000);
 
 
-	if ($('#owner').length > 0)
+	/*if ($('#owner').length > 0)
 	{
 		// Get owner
 		var owner_id=0;
 		if ($("#owner").val() != "" && $("#owner").val() != "All Owners")
 			owner_id=$("#owner").val();
 			options += owner_id;
-	}
+	}*/
+	options += CURRENT_DOMAIN_USER.id;
 	
 		// Get track
 		var track = 0;

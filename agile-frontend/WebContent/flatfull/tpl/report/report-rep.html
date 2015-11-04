@@ -10,16 +10,17 @@
                 <span id="range">{{date-range "today" "-6"}}</span>
               </div>
 
-			<div class="pull-right" style="padding:0px 8px 10px">
+			<!--<div class="pull-right" style="padding:0px 8px 10px">
 				<select name="owner" id="owner" class="required form-control">
 					<option value="All Owners">All Owners</option>
                 </select>
-			</div>
+			</div>-->
 			<div class="col-md-4 col-sm-6">
             <h3 class="font-thin h3">User Performance
             </h3>
 			
 			</div>
+			<div id="plan-limit-error" class="pull-left" style="padding: 5px 15px 0px;display:none"></div>  
    
         </div>
 
@@ -55,8 +56,8 @@
     </thead>
     <tbody>
       <tr class="user-values">
-        <td>{{currencySymbol}}{{numberWithCommas sales}}</td>
-        <td>{{currencySymbol}}{{numberWithCommas avgSalesValue}}</td>
+        <td>{{currencySymbol}}{{numberWithCommasForActivities sales}}</td>
+        <td>{{currencySymbol}}{{numberWithCommasForActivities avgSalesValue}}</td>
         <td>{{soldDeals}}</td>
 		<td>{{avgDealClosetime}}</td>
 
@@ -76,6 +77,7 @@
 		<th>Total Notes </th>
 		<th>Average Time Spent on Call</th>
 		<th>Events</th>
+		<th>Campaigns Created </th>
       </tr>
     </thead>
     <tbody>
@@ -85,6 +87,7 @@
 		<td>{{notes}}</td>
 		<td>{{avgCallDuration}}</td>
 		<td>{{events}}</td>
+		<td>{{workflows}}</td>
       </tr>
     </tbody>
   </table>

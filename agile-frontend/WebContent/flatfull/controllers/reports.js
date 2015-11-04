@@ -907,7 +907,7 @@ var ReportsRouter = Backbone.Router
 
 			showDealsLossReason : function()
 			{
-				headideTransitionBar();
+				hideTransitionBar();
 				initReportLibs(function()
 				{
 
@@ -987,19 +987,7 @@ var ReportsRouter = Backbone.Router
 						initUserReports(function()
 							{
 								showRepPerformanceReport();
-								showLossReasonGraphForUserReports();
-
-								var callReportUrl='core/api/portlets/calls-per-person/' + getSelectedDates();
-							
-							if ($('#owner').length > 0)
-							{
-								if ($("#owner").val() != "" && $("#owner").val() != "All Owners"){
-								var user=$("#owner").val();
-								callReportUrl=callReportUrl+'&user=["'+user+'"]';
-							}
-							}
-							
-							report_utility.user_reports(callReportUrl);
+								
 					});
 						}, "#content");
 					});

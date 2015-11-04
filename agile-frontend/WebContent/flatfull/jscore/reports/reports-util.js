@@ -334,22 +334,36 @@ user_reports :function(callReportUrl){
 },
 
 getRepPerformanceLog : function(url) {
-		
-		$.ajax({ 
-			type : "GET", 
-			url : url,
-			dataType :'json',
-			success : function(data) {
+		fetchReportData(url, function(data)
+		{
+			if(data.length!=0){
 				console.log("Inside RepPerform");
 				getTemplate("report-user-data", data, undefined, function(template_ui){
 					if(!template_ui)
 						  return;
 					$('#rep-performance-reports').html($(template_ui));	
-				//return callback(data);
+				
+				showLossReasonGraphForUserReports();
+
+								var callReportUrl='core/api/portlets/calls-per-person/' + getSelectedDates();
+							
+							/*if ($('#owner').length > 0)
+							{
+								if ($("#owner").val() != "" && $("#owner").val() != "All Owners"){*/
+								var user=CURRENT_DOMAIN_USER.id;
+								callReportUrl=callReportUrl+'&user=["'+user+'"]';
+							//}
+							//}
+							
+							report_utility.user_reports(callReportUrl);
 			}, "#rep-performance-reports");
-		}
+			}
+			else
+			{
+				$('#rep-performance-reports').html('<div style="padding-left:50%;color:#98A6AD">No Data to display</div>');
+			}
+		});
 	
-	});
 
 }
  };

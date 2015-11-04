@@ -45,6 +45,7 @@ import com.agilecrm.user.access.util.UserAccessControlUtil;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.user.util.UserPrefsUtil;
 import com.agilecrm.util.email.SendMail;
+import com.agilecrm.workflows.util.WorkflowUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.google.appengine.api.taskqueue.Queue;
@@ -514,7 +515,9 @@ public class ReportsUtil
 				dataJson.put("userPic","");
 			
 			dataJson.put("events",EventUtil.getEventsCountforOwner(minTime,maxTime));
+			dataJson.put("workflows",WorkflowUtil.getWorkflowCountOfCurrentUser(minTime, maxTime, ownerId));
 			return dataJson;
+			
 		}
 		catch (JSONException e)
 		{
