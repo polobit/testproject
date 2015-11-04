@@ -532,9 +532,24 @@ function initializePortletsListeners() {
 								.parent(), false);
 
 						setTimeout(function() {
-							gridster.$changed.attr('id', 'ui-id-'
+							var change=gridster.$changed.attr('id', 'ui-id-'
 									+ gridster.$changed.attr('data-col') + '-'
 									+ gridster.$changed.attr('data-row'));
+							var models=[];
+							change.each(function(){
+
+								var model_id = $(this).find('.portlets').attr('id');
+					
+					var model = Portlets_View.collection.get(model_id);
+					model.set({ 'column_position' : parseInt($(this).attr("data-col")) }, { silent : true });
+					model.set({ 'row_position' : parseInt($(this).attr("data-row")) }, { silent : true });
+
+					models.push({ id : model.get("id"), column_position : parseInt($(this).attr("data-col")), row_position : parseInt($(this).attr("data-row")) });
+				
+							});
+							// Saves new positions in server
+				$.ajax({ type : 'POST', url : '/core/api/portlets/positions', data : JSON.stringify(models),
+					contentType : "application/json; charset=utf-8", dataType : 'json' });
 						}, 500);
 
 						$('#' + portlet.get("id")).parent().remove();
@@ -886,13 +901,29 @@ function initializeAddPortletsListeners() {
 						$(this).popover('show');
 					});
 
-	$('#portlets-add-listener').on(
+		$('#portlets-add-listener').on(
 			"click",
 			'.add-portlet',
 			function() {
+				var url='core/api/portlets/add';
+				var forAll=false;
+				clickfunction($(this),url,forAll);
+			});
+	$('#portlets-add-listener').on(
+			"click",
+			'.add_to_all',
+			function() {
+				var forAll=true;
+				var url='core/api/portlets/addforAll';
+				clickfunction($(this),url,forAll);
+				
+			});
 
-				var portlet_type = $(this).attr("portlet_type");
-				var p_name = $(this).attr("portlet_name");
+}
+function clickfunction(that,url,forAll){
+
+	var portlet_type = that.attr("portlet_type");
+				var p_name = that.attr("portlet_name");
 
 				var json = portlet_utility.getDefaultPortletSettings(
 						portlet_type, p_name);
@@ -915,12 +946,18 @@ function initializeAddPortletsListeners() {
 						&& p_name == "Leaderboard") {
 					obj.size_y = 2;
 					obj.size_x = 2;
+					/*if(obj.column_position==3)
+					{
+						obj.column_position=1;
+						obj.row_position=obj.row_position+1;
+					}*/
 				}
 
 				var portlet = new BaseModel();
-				portlet.url = 'core/api/portlets/add';
+				portlet.url = url;
 				portlet.set({
-					"prefs" : JSON.stringify(json)
+					"prefs" : JSON.stringify(json),
+					"isForAll" : forAll
 				}, {
 					silent : true
 				});
@@ -941,6 +978,4 @@ function initializeAddPortletsListeners() {
 						alert("Failed to add.");
 					}
 				});
-			});
-
-}
+				}

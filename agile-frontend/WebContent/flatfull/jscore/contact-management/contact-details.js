@@ -166,6 +166,49 @@ $(function(){
 		Backbone.history.navigate("contacts", {trigger: true});
 		*/
 	});
+
+
+	$('body').on('click', '#contact-actions-grid-delete', function(e){
+		
+		e.preventDefault();
+		var contact_id=$(this).attr('con_id');
+    	var model=App_Contacts.contactsListView.collection.get(contact_id);
+		$('#deleteGridContactModal').modal('show');
+
+
+		$('#deleteGridContactModal').on("shown.bs.modal", function(){
+
+				// If Yes clicked
+		   $('#deleteGridContactModal').on('click', '#delete_grid_contact_yes', function(e) {
+				e.preventDefault();
+				// Delete Contact.
+				$.ajax({
+    					url: 'core/api/contacts/' + contact_id,
+       					type: 'DELETE',
+       					success: function()
+       					{
+       						$('#deleteGridContactModal').modal('hide');
+       						App_Contacts.contactsListView.collection.remove(model);
+       						if(App_Contacts.contact_custom_view)
+       						App_Contacts.contact_custom_view.collection.remove(model);
+       						CONTACTS_HARD_RELOAD=true;
+       						App_Contacts.contacts();
+       					}
+       				});
+			});
+
+
+		   $('#deleteGridContactModal').on('click', '#delete_grid_contact_no', function(e) {
+				e.preventDefault();
+				if($(this).attr('disabled'))
+			   	     return;
+				$('#deleteGridContactModal').modal('hide');
+			});
+
+		});
+
+    		
+	});
 	
 	/**
 	 * Deletes a tag of a contact (removes the tag from the contact and saves the contact)

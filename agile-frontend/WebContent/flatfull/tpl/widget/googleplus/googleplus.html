@@ -1,30 +1,31 @@
 <script id="googleplus-login-template" type="text/html">
 <div>
 	Keep tabs on your customers' activity on Google+ and engage with them better.
-	<div class="m-t-md  m-b-xs">
+	<div class="m-t-md  m-b-xs text-center">
 		<a class='btn btn-primary btn-sm text-l-none' href="{{url}}">Link Your Google+</a>
 	</div>
 </div>
 </script>
 
 <script id="googleplus-revoke-access-template" type="text/html">
-	<div>
-		{{#if profile.image.url}}	
-			<div class="m-t">
-				<div class="pull-left thumb-md thumb-wrapper">
-					<img src="{{profile.image.url}}&sz=70" alt="" class="w-full"/>
-				</div>
-				<div class="pull-left m-l-sm">
-					<p><a href="{{profile.url}}" target="_blank" >{{profile.displayName}}</a></p>
-				</div>
-				<div class="clearfix"></div>
-			</div>
-		{{else}}
+<div>
+{{#if custom_data.image.url}}	
+<div class="m-t">
+		<div class="pull-left thumb-md thumb-wrapper">
+			<img src="{{custom_data.image.url}}&sz=70" alt="" class="w-full"/>
+		</div>
+		<div class="pull-left m-l-sm">
+			<p><a href="{{custom_data.url}}" target="_blank" >{{custom_data.displayName}}</a></p>
+		</div>
+<div class="clearfix"></div>
+	</div>
+	{{else}}
 			<div class="wrapper-xs">
 				It seems that your Google+ access token has been expired. Please revoke the access.
 			</div>
-		{{/if}}
-		<div class="m-t-md">
+{{/if}}
+	
+		<div class="m-t-md text-center">
 			<a class='btn btn-sm btn-danger revoke-widget' widget-name="GooglePlus">Revoke Access</a>
 			<a href="#add-widget" class='btn btn-default btn-sm m-l-xs'  widget-name="GooglePlus">Cancel</a>
 		</div>

@@ -116,6 +116,8 @@ $(function(){
 		
 		if (Current_Route == 'deals')
 			deal_bulk_actions.toggle_deals_bulk_actions_dropdown(this,false,$(this).parents('table').attr("id"));
+		/*else if(Current_Route=='contacts' && readCookie("agile_contact_view"))
+			toggle_contacts_bulk_actions_dropdown(this,true,$(this).parents('table').attr("id"));*/
 		else
 			toggle_contacts_bulk_actions_dropdown(this,false,$(this).parents('table').attr("id"));
 	});
@@ -134,7 +136,13 @@ function append_checkboxes(el)
 
 	// If select all is chosen then all the upcomming models with in table should have checked checkboxes
 	if(SELECT_ALL == true || (Current_Route == 'deals' && deal_bulk_actions.SELECT_ALL_DEALS==true) || SUBSCRIBERS_SELECT_ALL == true)
+	{
 		$('tr:last', el).prepend('<td><label class="i-checks i-checks-sm"><input class="tbody_check" type="checkbox" checked="checked"/><i></i></label></td>');
+		var grid_view_element = $(".grid-view-checkbox", el);
+		  if(grid_view_element.length != 0)
+		      grid_view_element.prop("checked", "checked");
+	}	
+
 	else
 		$('tr:last', el).prepend('<td><label class="i-checks i-checks-sm"><input class="tbody_check" type="checkbox"/><i></i></label></td>');	
 }

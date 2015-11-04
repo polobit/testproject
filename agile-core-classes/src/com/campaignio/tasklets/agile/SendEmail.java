@@ -20,6 +20,7 @@ import com.agilecrm.util.DateUtil;
 import com.agilecrm.util.EmailLinksConversion;
 import com.agilecrm.util.EmailUtil;
 import com.agilecrm.util.VersioningUtil;
+import com.agilecrm.workflows.unsubscribe.util.UnsubscribeStatusUtil;
 import com.campaignio.logger.Log.LogType;
 import com.campaignio.logger.util.LogUtil;
 import com.campaignio.tasklets.TaskletAdapter;
@@ -263,7 +264,7 @@ public class SendEmail extends TaskletAdapter
 	// Verify Unsubscribed status
 	if (subscriberJSON.has("isUnsubscribedAll"))
 	{
-	    if (subscriberJSON.getBoolean("isUnsubscribedAll"))
+	    if (subscriberJSON.getBoolean("isUnsubscribedAll") || UnsubscribeStatusUtil.isUnsubscribed(subscriberJSON, AgileTaskletUtil.getId(campaignJSON)))
 	    {
 		System.err.println("Skipping SendEmail node for "
 		        + subscriberJSON.getJSONObject("data").getString(Contact.EMAIL)

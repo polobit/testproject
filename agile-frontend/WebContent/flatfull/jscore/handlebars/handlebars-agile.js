@@ -382,6 +382,84 @@ function getPropertyValue(items, name)
 	}
 }
 
+
+/**
+ * appends , between contact fields
+ * @param items
+ * @param name
+ * @returns {String}
+ */
+
+function getPropertyValueByCheckingExistance(items, companyname,jobtitle)
+{
+	if (items == undefined)
+		return;
+
+	var companyExists=false;
+	var jobTitleExists=false;
+	for (var i = 0, l = items.length; i < l; i++)
+	{
+		if (items[i].name == companyname){
+			if(items[i].value){
+				companyExists=true;
+			}
+			
+		}
+		else if (items[i].name == jobtitle){
+			if(items[i].value){
+				jobTitleExists=true;
+			}
+			
+		}
+	}
+	if(companyExists&&jobTitleExists)
+		return ',';
+}
+
+
+
+function getMarginLength(items, companyname)
+{
+	if (items == undefined)
+		return;
+
+	for (var i = 0, l = items.length; i < l; i++)
+	{
+		if (items[i].name == companyname)
+			return '3px';
+	}
+	return '0px';
+}
+
+
+/**
+ * checks the contact properties existance
+ * @param items
+ * @param name
+ * @param name1
+ * @returns {String}
+ */
+function checkPropertyValueExistance(items,name,name1){
+
+	if (items == undefined)
+		return "none";
+
+	var valueExists=false;
+	for (var i = 0, l = items.length; i < l; i++)
+	{
+		if (items[i].name == name || items[i].name == name1){
+			if(items[i].value){
+				valueExists=true;
+			}
+			
+		}
+	}
+	if(valueExists==true)
+		return 'block';
+	else
+		return 'none';
+}
+
 /**
  * Iterates the given "items", to find all matches with the given "name" and
  * concats each matched value by given separator

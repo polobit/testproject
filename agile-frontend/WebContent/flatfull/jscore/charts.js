@@ -268,10 +268,11 @@ function showBar(url, selector, name, yaxis_name, stacked)
 			    },
 			    legend: {
 			        align: 'right',
-			        x: -100,
+			        x: -52,
 			        verticalAlign: 'top',
-			        y: 20,
+			        y: 0,
 			        floating: true,
+			        layout: 'horizontal',
 			        backgroundColor: (Highcharts.theme&&Highcharts.theme.legendBackgroundColorSolid)||'white',
 			        borderColor: '#CCC',
 			        borderWidth: 1,
@@ -289,9 +290,20 @@ function showBar(url, selector, name, yaxis_name, stacked)
 			                enabled: true,
 			                color: (Highcharts.theme&&Highcharts.theme.dataLabelsColor)||'white'
 			            }
-			        }
+			        },
+			        series : {
+			        	borderWidth : 0
+			        },
 			    },
-			    series: series
+			    series: series,
+			    noData: {
+									 style: {
+									   
+										fontSize: '14px',
+										fontWeight : 'normal',
+										color : '#98A6AD'
+											 },
+						},
 			});
 			});
 	});
@@ -660,123 +672,31 @@ function showFunnel(url, selector, name, show_loading)
 		                borderWidth: 0
 		            }
 		        },
+		        tooltip : {
+		        	 headerFormat: '<span style="font-size: 12px">{point.key}</span><br/>'
+		        	},
 		        legend: {
 		            enabled: false
 		        },
 		        series: [{
 		            name: 'Contacts',
 		            data: funnel_data
-		        }]
+		        }],
+		        noData: {
+									 style: {
+									   
+										fontSize: '14px',
+										fontWeight : 'normal',
+										color : '#98A6AD'
+											 },
+						},
 		    });
 			
 		});
 	});
 }
 
-
-/**
- * Function to build Cohorts
- * <p>
- * The data is not manipulated and the server sends it the required format. We do not use showBar code to decode as some of the data in the cohorts are not sent back 
- * </p>
- * 
- * @param url - 
- *            to fetch json data inorder to render graph.
- * @param selector - 
- *            id or class of an element where charts should render.
- * @param name - 
- *            title of the chart.
- * @param yaxis_name - 
- *            name for y-axis
- * @param show_loading
- * 				shows loading image
- */
-function showCohorts(url, selector, name, yaxis_name, show_loading)
-{
-	
-	// Show loading image if required
-	if(typeof show_loading === 'undefined')
-	{
-		// Old calls were not showing loading image..
-	}
-	else
-		$('#' + selector).html(getRandomLoadingImg());
-	
-	
-	var chart;
-
-	// Loads Highcharts plugin using setupCharts and sets up line chart in the
-	// callback
-	setupCharts(function()
-	{
-
-		// Loads statistics details from backend i.e.,[{closed
-		// date:{total:value, pipeline: value},...]
-		fetchReportData(url, function(data)
-		{
-
-			// Categories are closed dates
-			var categories = data.categories;
-			
-			// Data with total and pipeline values
-			var series = data.series;
-
-			// After loading and processing all data, highcharts are initialized
-			// setting preferences and data to show
-			chart = new Highcharts.Chart({
-			    chart: {
-			        renderTo: selector,
-			        type: 'line',
-			        marginRight: 130,
-			        marginBottom: 25,
-			        zoomType: 'x'
-			    },
-			    title: {
-			        text: name,
-			        x: -20//center
-			    },
-			    xAxis: {
-			       categories: categories,
-			       tickmarkPlacement: 'on'
-			    },
-			    yAxis: {
-			        title: {
-			            text: yaxis_name
-			        },
-			        plotLines: [
-			            {
-			                value: 0,
-			                width: 1,
-			                color: '#808080'
-			            }
-			        ],
-			        min: 0
-			    },
-			    //Tooltip to show details,
-			    ongraphtooltip: {
-			        formatter: function(){
-			            return'<b>'+this.series.name+'</b><br/>'+Highcharts.dateFormat('%e.%b',
-			            this.x)+': '+this.y.toFixed(2);
-			        }
-			    },
-			    legend: {
-			        layout: 'vertical',
-			        align: 'right',
-			        verticalAlign: 'top',
-			        x: -10,
-			        y: 100,
-			        borderWidth: 0
-			    },
-			    //Sets the series of data to be shown in the graph,shows total 
-			    //and pipeline
-			    series: series,
-			    exporting: {
-			        enabled: false
-			    }
-			});
-		});
-	});
-}
+ 
 
 
 /**
@@ -1102,6 +1022,7 @@ function showAreaSpline(url, selector, name, yaxis_name, show_loading)
 			        tickWidth: 1
 			    },
 			    yAxis: {
+			    	allowDecimals: false,
 			        title: {
 			            text: yaxis_name
 			        },
@@ -1510,11 +1431,15 @@ function showDealAreaSpline(url, selector, name, yaxis_name, show_loading,freque
 		});
 	});
 }
+
+/** get the symbol for currency to be used in various charts **/
 function getCurrencySymbolForCharts(){
 	var value = ((CURRENT_USER_PREFS.currency != null) ? CURRENT_USER_PREFS.currency : "USD-$");
 	var symbol = ((value.length < 4) ? "$" : value.substring(4, value.length));
 	return symbol;
 }
+
+/** get the comma separated number for charts **/
 function getNumberWithCommasForCharts(value){
 	value = parseFloat(value);
 	value = Math.round(value);
@@ -1802,7 +1727,7 @@ function chartRenderforIncoming(selector,categories,name,yaxis_name,min_tick_int
                                 {
                         return '<div>' + 
                                 '<div class="p-n">'+this.x+'</div>' + 
-                                '<div class="p-n"><font color='+this.series.color+'>'+this.series.name+'</font> : '+getNumberWithCommasForCharts(this.y)+'</div>' +
+                                '<div class="p-n text-cap"><font color='+this.series.color+'>'+this.series.name+'</font> : '+getNumberWithCommasForCharts(this.y)+'</div>' +
                                 '</div>'+
                                 '<div class="p-n">Total : '+getNumberWithCommasForCharts(AllData[this.point.x][1])+'</div>';
                             }
@@ -1976,7 +1901,7 @@ if(selector == 'lossreasonpie-chart-users'){
 						dataLabels : { enabled : true,useHTML: true,
 							formatter : function()
 							{
-								return 	'<div class="text-center"><span style="color:'+this.point.color+';display:block"><b>'+this.point.name+'</b></span>' +
+								return 	'<div class="text-center text-cap"><span style="color:'+this.point.color+';display:block"><b>'+this.point.name+'</b></span>' +
     			'<span style="color:'+this.point.color+'"><b>'+Math.round(this.point.percentage)+'%</b></span></div>';
 							}, distance : 25 }, showInLegend : false,size:pieSize,innerSize :'65%',shadow : false, borderWidth : 0 },
 					series : { events : { mouseOver : function()

@@ -1,24 +1,28 @@
 <script id="import-google-calendar-template" type="text/html">
-	<div class="panel wrapper widget-add" >
-    <center>
-    <img class="thumbnail m-b-none thumb-xl bg-transparent" src="/img/icons/google-calendar-sync.png" />
-    </center>
-   <div class="line-clamp-6 m-t">
-{{#if id}}
-	You have successfully associated your Google Calendar with Agile. Your events will be popped up automatically in the <a href="#calendar">calendar</a>.
-{{else}}
-		By enabling access to your Google Calendar, we'll automatically sync your events in your Google Calendar with Agile <a href="#calendar">calendar</a>.
-{{/if}}
-<br/>
-<div>You can also <a href="#icalModal" data-toggle="modal" id="subscribe-ical" >setup Agile calendar inside Google</a></div> 
+	<div class="panel panel-default widget-add">
+	<div class="panel-heading">
+	    <center>
+	    	<img class="m-b-none thumb-xl bg-transparent" style="height:47px;" src="/img/icons/google-calendar-sync.png" />
+	    </center>
+	 </div>
+	 <div class="panel-body">
+	   <div class="line-clamp-6 ">
+	{{#if id}}
+		You have successfully associated your Google Calendar with Agile. Your events will be popped up automatically in the <a href="#calendar">calendar</a>.
+	{{else}}
+			By enabling access to your Google Calendar, we'll automatically sync your events in your Google Calendar with Agile <a href="#calendar">calendar</a>.
+	{{/if}}
+	<br/>
+	<div>You can also <a href="#icalModal" data-toggle="modal" id="subscribe-ical" >setup Agile calendar inside Google.</a></div> 
 
-	</div>
-    <div class="m-t-md">
-			{{#if id}}
-    			<a class="btn btn-sm btn-danger" id="sync-google-calendar-delete">Disable</a>
-    		{{else}}
-    				<a class="btn btn-sm btn-default" id="sync-google-calendar">Enable</a>
-    		{{/if}}
+		</div>
+	    <div class="m-t-md text-center">
+				{{#if id}}
+	    			<a class="btn btn-sm btn-danger" id="sync-google-calendar-delete">Disable</a>
+	    		{{else}}
+	    				<a class="btn btn-sm btn-default" id="sync-google-calendar">Enable</a>
+	    		{{/if}}
+		</div>
 	</div>
 </div>
 </script>

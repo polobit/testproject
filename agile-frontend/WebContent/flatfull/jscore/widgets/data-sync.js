@@ -207,7 +207,7 @@ renders inner sync view and binds all model events to DataSync_Event_Modal_View
 			                    }
 			                });
 
-			   $("#prefs-tabs-content").html(data_sync.render().el);
+			   $("#data-sync-settings-tab-content").html(data_sync.render().el);
   }
 
 

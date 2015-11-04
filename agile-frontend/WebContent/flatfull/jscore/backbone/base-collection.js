@@ -313,6 +313,8 @@ var Base_Collection_View = Backbone.View
 						var element="table"; 
 						if (that.options.scroll_symbol)
 							element="section";
+						if(that.options.custom_scrollable_element)
+							element=that.options.custom_scrollable_element;
 						$(element, that.el).after('<div class="scroll-loading" style="margin-left:50%">' + LOADING_ON_CURSOR + '</div>');
 					} });
 

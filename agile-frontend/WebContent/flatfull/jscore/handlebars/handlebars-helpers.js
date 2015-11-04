@@ -17,6 +17,35 @@ $(function()
 		return getPropertyValue(items, name);
 	});
 
+
+	
+	/**
+	 * displays , in between 2 conatct fields.
+	 */
+	Handlebars.registerHelper('getPropertyValueExists', function(items, companyname,jobtitle)
+	{
+		return getPropertyValueByCheckingExistance(items, companyname,jobtitle);
+	});
+
+	
+	/**
+	 * checks for the contact property value existance to display div none or block
+	 */
+	Handlebars.registerHelper('checkPropertyValueExistance', function(items, name,name1)
+	{
+		return checkPropertyValueExistance(items, name,name1);
+	});
+	
+	
+	
+	/**
+	 * checks for the contact property value existance to display div none or block
+	 */
+	Handlebars.registerHelper('getMarginLength', function(items, name)
+	{
+		return getMarginLength(items, name);
+	});
+
 	/**
 	 * Helper function to return the checkbox html element with value of a
 	 * property matched with the given name from the array of properties
@@ -2347,23 +2376,65 @@ $(function()
 
 		var active_campaigns = [];
 		var completed_campaigns = [];
+		var unsubscribed_campaigns = [];
+		var unsubscribed_campaigns_json = {};
 
 		// campaignStatus object of contact
 		var campaignStatusArray = object[data];
+		var statuses = object["campaignStatus"];
+		var campaign_json = {};
+
+		// To get campaign name for unsubscribed campaigns
+		for (var i = 0, len = statuses.length; i < len; i++)
+		{
+			var status = statuses[i];
+			
+			if(status)
+				campaign_json[status.campaign_id] = status.campaign_name;
+		}
+
 
 		for (var i = 0, len = campaignStatusArray.length; i < len; i++)
 		{
-			// push all active campaigns
-			if (campaignStatusArray[i].status.indexOf('ACTIVE') !== -1)
-				active_campaigns.push(campaignStatusArray[i])
+			if(campaignStatusArray[i].status)
+			{
+				// push all active campaigns
+				if (campaignStatusArray[i].status.indexOf('ACTIVE') !== -1)
+					active_campaigns.push(campaignStatusArray[i])
 
 				// push all done campaigns
-			if (campaignStatusArray[i].status.indexOf('DONE') !== -1)
-				completed_campaigns.push(campaignStatusArray[i]);
+				if (campaignStatusArray[i].status.indexOf('DONE') !== -1)
+					completed_campaigns.push(campaignStatusArray[i]);
+			}
+
+			var isAll = false;
+			// Unsubscribed campaigns list
+			if(campaignStatusArray[i].unsubscribeType)
+			{
+
+				// Global variable set on resubscribe modal shown
+				if(typeof email_workflows_list != 'undefined')
+					campaignStatusArray[i].campaign_name = email_workflows_list[campaignStatusArray[i].campaign_id];
+
+				if(campaignStatusArray[i].unsubscribeType == 'ALL'){
+
+					if(!isAll)
+					{
+						unsubscribed_campaigns_json["isAll"] = true;
+						isAll = true;
+					}
+				}
+
+				unsubscribed_campaigns.push(campaignStatusArray[i]);
+			}
 		}
+
+		if(unsubscribed_campaigns && unsubscribed_campaigns.length > 0)
+			unsubscribed_campaigns_json["unsubscribed_campaigns"] = unsubscribed_campaigns;
 
 		campaigns["active"] = active_campaigns;
 		campaigns["done"] = completed_campaigns;
+		campaigns["unsubscribed"] = unsubscribed_campaigns_json;
 
 		// apply obtained campaigns context within
 		// contact_campaigns block
@@ -6542,22 +6613,6 @@ Handlebars.registerHelper('SALES_CALENDAR_URL', function()
 	       	}
 	    	
 			});
-Handlebars.registerHelper('get_campaign_type_filter', function(filter_name)
-{
-	var campaign_type ='';
-	if(filter_name=='All')
-		campaign_type= 'All Campaigns';
-	else{
-		var filter=$.ajax({ type : 'GET', url : '/core/api/workflows/'+filter_name, async : false, dataType : 'json',
-		success : function(data)
-			{
-				if (data != null && data != undefined)
-					campaign_type = "" + data.name;
-			} });
-	}
-	return campaign_type;
-		
-});
 	
 	Handlebars.registerHelper('toggle_contacts_filter', function(options)
 			{	        
@@ -6648,3 +6703,26 @@ Handlebars.registerHelper('get_campaign_type_filter', function(filter_name)
 		return description + " ";
 
 	});
+
+	Handlebars.registerHelper("is_unsubscribed_all", function(options){
+               
+               var contact_model = App_Contacts.contactDetailView.model.toJSON();
+
+               // First name
+               var first_name = getPropertyValue(contact_model["properties"], "first_name");
+
+               if(contact_model && contact_model["unsubscribeStatus"] && contact_model["unsubscribeStatus"].length > 0)
+               {
+                       var statuses = contact_model["unsubscribeStatus"];
+
+                       for(var i=0, len = statuses.length; i < len; i++)
+                       {
+                               var status = statuses[i];
+
+                              if(status.unsubscribeType && status.unsubscribeType == "ALL")                                       return options.fn({"first_name": first_name, "campaign_id": status.campaign_id});
+                       }
+               }
+
+               return options.inverse(this);
+        });
+

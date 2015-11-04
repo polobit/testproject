@@ -34,7 +34,7 @@ function setupStripeOAuth()
 
 	$('#Stripe')
 			.html(
-					'<div class="widget_content" style="border-bottom:none;line-height: 160%;">See the contact\'s subscriptions history and payments from your Stripe account.<p style="margin: 10px 0px 5px 0px;"></p><a class="btn" href=' + url + '>Link Your Stripe</a></div>');
+					'<div class="widget_content" style="border-bottom:none;line-height: 160%;">See the contact\'s subscriptions history and payments from your Stripe account.<p style="margin: 10px 0px 5px 0px;"></p><div class="text-center"><a class="btn" href=' + url + '>Link Your Stripe</a></div></div>');
 
 }
 

@@ -212,7 +212,7 @@ $(function()
 
 	        $("body").off('fill_campaigns').on("fill_campaigns", function(event)
 			{
-				var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
+				var optionsTemplate = "<option value='{{id}}'{{#if is_disabled}}disabled=disabled>{{name}} (Disabled){{else}}>{{name}}{{/if}}</option>";
 				fillSelect('campaignBulkSelect', '/core/api/workflows', 'workflow', 'no-callback ', optionsTemplate);
 			});
 
@@ -820,6 +820,8 @@ $(function()
 											$('body').find('#bulk-select').css('display', 'none');
 											$('table#contacts-table').find('.thead_check').removeAttr('checked');
 											$('table#contacts-table').find('.tbody_check').removeAttr('checked');
+											$(".grid-checkboxes").find(".thead_check").removeAttr("checked");
+                                            $(".contacts-grid-view-temp").find(".tbody_check").removeAttr("checked");
 
 										}, "no_noty");
 									});
@@ -975,7 +977,7 @@ function get_contacts_bulk_ids()
 			// If element is checked add store it's id in an array
 			if ($(element).is(':checked'))
 			{
-				id_array.push($(element).parent('div').attr('id'));
+				id_array.push($(element).parent().parent().parent('div').attr('id'));
 			}
 		});
 

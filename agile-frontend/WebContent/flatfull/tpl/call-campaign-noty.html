@@ -84,7 +84,7 @@
 			   </span>
 
 		    </div>
-        	<div class="pull-left text-sm" style="position:relative;top:-3px;width:225px;">
+        	<div class="text-sm" style="position:relative;top:-3px;">
 		        <div class="text-cap text-xs font-weight-600" style="margin-top: 4px;">
 					{{current_contact_name}}
 				</div>
@@ -147,7 +147,9 @@
 						<div id="hangup" class="pull-left c-p w-h-20 text-center v-middle p-t-4 text-white  text-11 m-t-n-xxs m-r-xs" style="background:rgb(240, 120, 120);" data-toggle="tooltip" data-placement="top" title="Hangup">
 							<i class="fa fa-headphones cam-call-icon"></i>
 						</div>
-						 	&nbsp;&nbsp;&nbsp;&nbsp;<span id="dialpad" class="c-p pull-left pos-rlt" style="top:-2px;" data-toggle="tooltip" data-placement="top" title="Dialpad"><i class="icon-th cam-dialpad-icon btn btn-default btn-xs"></i></span><span class="campaign_noty_buttons pos-abs pos-t-23"></span>
+							<div class="campaign_voicemail_buttons  pull-left pos-rlt m-r-xs" style="top:-2px;"  data-toggle="tooltip" data-placement="top" title="Voicemail"></div>
+							&nbsp;&nbsp;&nbsp;&nbsp;<div id="dialpad" class="c-p pull-left pos-rlt" style="top:-2px;" data-toggle="tooltip" data-placement="top" title="Dialpad"><i class="icon-th cam-dialpad-icon btn btn-default btn-xs"></i></div><span class="campaign_noty_buttons pos-abs pos-t-23"></span>
+							<div id="campaign_wait_image pull-left pos-rlt" style="top:-2px;"></div> 
 					{{else}}
 						{{#if_equals current_contact_phonenumber.length "0"}}
 							<div id="non-start" class="pull-left c-cm w-h-20 text-center v-middle p-t-4 text-white  m-t-n-xxs pos-rlt m-r-xs" style="background:rgb(185, 185, 185);">
@@ -191,7 +193,7 @@
  			<div class="text-right text-sm pull-right">
  				{{#if autodial}}
 
-					<div class="pos-rlt pull-right" style="top:10px;"> 
+					<div class="pos-rlt pull-right" style="top:-10px;">
 					<span id="callStartText" class="text-sm text-l-none m-r-xs"></span>
 					<span id="callStartTime" class="text-info"></span>
 					<span id="callPauseText" class="text-info" style="display:none;">(Paused)</span>						
@@ -241,4 +243,20 @@ $(document).ready(function(){
 	 </div>
   </div>
 </div>
+</script>
+
+<script id="campaign-voicemail-template" type="text/html">
+{{#if this}}
+<div class="btn-group dropdown pull-left">
+<button class="btn btn-xs btn-default" id="noty_twilio_voicemail" data-length="{{length}}" data-src="{{this.0.extension}}" style="padding-left: 2px;padding-right: 2px;padding-bottom: 1px;padding-top: 0px;height: 22px;"><img src="/img/voicemail.png" width="17px" height="17px"></img></button>
+{{#ifCond length "greaterthan" 1}}
+<button class="btn btn-xs btn-default dropdown-toggle" data-toggle="dropdown" onclick="voiceMailDropAction()" id="splitButtonVoicemail" style="padding-right:3px;padding-left:3px;padding-bottom:1px;height: 22px;"><span class="caret"></span></button>
+<ul class="dropdown-menu text-left text-base" style="top:20px;">
+{{#each this}}
+<li><a href="#" data-src="{{extension}}" class="voiceMailItem">{{name}}</a></li>
+{{/each}}
+</ul>
+{{/ifCond}}
+</div>
+{{/if}}
 </script>

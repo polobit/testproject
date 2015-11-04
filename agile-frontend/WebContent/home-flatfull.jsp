@@ -46,6 +46,11 @@ ObjectMapper mapper = new ObjectMapper();
 UserPrefs currentUserPrefs = UserPrefsUtil.getCurrentUserPrefs();
 AccountPrefs accountPrefs = AccountPrefsUtil.getAccountPrefs();
 
+//Update workflow entities if they are not initialized
+//with new is_disabled property
+if(!accountPrefs.workflows_updated)
+	AccountPrefsUtil.postDataToUpdateWorkflows(accountPrefs,domainUser);
+
 // Download the template the user likes
 String template = currentUserPrefs.template;
 if (request.getParameter("t") != null)
@@ -108,7 +113,6 @@ content="<%=domainUser.getInfo(DomainUser.LAST_LOGGED_IN_TIME)%>" />
 <!-- <link rel="stylesheet" type="text/css" href="<%=FLAT_FULL_PATH%>css/agile-app-framework.css">  -->
 <link rel="stylesheet" type="text/css" href="flatfull/css/min/misc-all-new.css?_=<%=_AGILE_VERSION%>"></link>
 <link rel="stylesheet" type="text/css" href="flatfull/css/min/core-all-new.css?_=<%=_AGILE_VERSION%>"></link>
-
 <style>
 .clickdesk_bubble {
   display: none !important;
