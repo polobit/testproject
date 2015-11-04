@@ -1,6 +1,6 @@
 <script id="settings-social-prefs-model-template" type="text/html">
 <div class="col-md-4 col-sm-6 col-xs-12">
-	<div class="panel panel-default" >
+	<div class="panel panel-default" style="height:225px;">
 		{{#if id}} 
 		  <div class="panel-heading">
 			{{add_tag "Email"}} 
@@ -27,7 +27,7 @@
                 </div> 
 				<div class="clearfix"></div>
 			</div>
-				<div class="text-center m-t-sm">
+				<div class="text-center">
 			   	<a href="#" class="btn btn-sm btn-danger" id="gmail-prefs-delete" oid={{id}}>Disable</a>
 			   	<a class="btn btn-sm btn-default" href="#gmail/{{id}}">Settings</a>
          		<a href="#sync"><img class="google-apps-icon m-t-none" src="../flatfull/img/add_to_apps_shadow.png" style="
@@ -59,10 +59,9 @@
 			{{else}}
 			<a href="/scribe?service={{service}}&amp;return_url={{return_url}}" class="btn btn-sm btn-default">Enable</a>
 			<a href="#sync"><img class="google-apps-icon m-t-none" src="../flatfull/img/add_to_apps_shadow.png"/></a>
-
-</div>
             {{/has_email_account_limit_reached}}
             </center>
+            </div>
 		{{/if}}
 	</div>
 </div>
