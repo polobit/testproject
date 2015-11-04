@@ -1,6 +1,5 @@
 var Group_ID = null, Ticket_Status = 'new', Current_Ticket_ID = null, Ticket_Filter_ID = null,
-New_Tickets = 0, Opened_Tickets = 0, Starred_Tickets = 0, Closed_Tickets =0, Tickets_Util = {}, Reload_Filters = true,
-Reload_Tickets_Count = false;
+New_Tickets = 0, Opened_Tickets = 0, Starred_Tickets = 0, Closed_Tickets =0, Tickets_Util = {}, Reload_Tickets_Count = false;
 
 $("body").bind('click', function(ev) {
 	Tickets.hideDropDowns(ev);
@@ -35,10 +34,9 @@ var Tickets = {
 
 					//Activating ticket type pill
 					$('ul.ticket-types').find('.active').removeClass('active');
+
 					if(!Ticket_Filter_ID)
 						$('ul.ticket-types').find('li a.' + Ticket_Status).parent().addClass('active');
-					else
-						$('ul.ticket-types').find('li > a[filter-id="' + Ticket_Filter_ID + '"]').parent().addClass('active');
 				
 					//Init click event on each ticket li
 					Tickets.initEvents(el);
@@ -71,40 +69,52 @@ var Tickets = {
 				//Fectching new, open, closed tickets count
 				Tickets_Count.fetch_tickets_count();
 
-				//Rendering Groups dropdown
-				Tickets_Group_View = new Ticket_Base_Model({
-					isNew : false,
-					template : "tickets-groups-container",
-					url : "/core/api/tickets/groups",
-					postRenderCallback : function(el, data) {
+				//Fetching ticket toolbar template
+				getTemplate("tickets-toolbar-container",  {}, undefined, function(toolbar_ui){
 
-						//Replacing group name
-						$('a#group_name', el).html($('a[data-group-id="'+ Group_ID +'"]').attr('data-group-name'));
+					if(!toolbar_ui)
+			  			return;
 
-						Ticket_Filters.fetch_filters_collection();
-					}
-				});
+			  		//Rendering toolbar container
+					$('#right-pane').html($(toolbar_ui));
 
-				$('#right-pane').html(Tickets_Group_View.render().el);
+					//Load filters collection drop down
+					Ticket_Filters.fetchFiltersCollection();
 
-				if(callback)
-					callback();
+					//Load filters collection drop down
+					Ticket_Groups.fetchGroups();
 
+					if(callback)
+						callback();
+
+				}, "#right-pane");
+				
 			}, "#content");
 		}	
 		else{
 
-			$('#right-pane').html(Tickets_Group_View.render().el);
-			
-			Tickets_Group_View.delegateEvents();
+			//Fetching ticket toolbar template
+			getTemplate("tickets-toolbar-container",  {}, undefined, function(toolbar_ui){
 
-			//Fectching new, open, closed tickets count
-			Tickets_Count.fetch_tickets_count();
+				if(!toolbar_ui)
+		  			return;
 
-			$("#filters-list-container").html(App_Ticket_Module.ticketFiltersList.el);
+		  		//Rendering toolbar container
+				$('#right-pane').html($(toolbar_ui));
 
-			if(callback)
-				callback();
+				//Rendering existing groups view
+				Ticket_Groups.renderGroupsView();
+
+				//Fectching new, open, closed tickets count
+				Tickets_Count.fetch_tickets_count();
+
+				//Rendering existing filter tickets drop down view
+				Ticket_Filters.renderFiltersCollection();
+				
+				if(callback)
+					callback();
+
+			}, "#right-pane");
 		}
 
 		Current_Ticket_ID = null;

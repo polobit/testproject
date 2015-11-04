@@ -37,16 +37,23 @@ var Tickets_Notes = {
 
 	backToTickets: function(e){
 
-		var group_el = Tickets_Group_View.render().el;
-		
-		//Rendering existing Tickets collection
-		$('#right-pane').html(group_el);
+		//Fetching ticket toolbar template
+		getTemplate("tickets-toolbar-container",  {}, undefined, function(toolbar_ui){
 
-		//Replacing group name
-		$('a#group_name', group_el).html($('a[data-group-id="'+ Group_ID +'"]').attr('data-group-name'));
+			if(!toolbar_ui)
+	  			return;
 
-		$("#filters-list-container").html(App_Ticket_Module.ticketFiltersList.el);
-		
+	  		//Rendering toolbar container
+			$('#right-pane').html($(toolbar_ui));
+
+			//Rendering existing groups view
+			Ticket_Groups.renderGroupsView();
+
+			//Rendering existing filter tickets drop down view
+			Ticket_Filters.renderFiltersCollection();
+		}, "#right-pane");
+
+		//Checking if ticket collection exists
 		if(!App_Ticket_Module.ticketsCollection){
 
 			Group_ID = (!Group_ID ? DEFAULT_GROUP_ID : Group_ID);
@@ -59,19 +66,15 @@ var Tickets_Notes = {
 			Tickets.fetch_tickets_collection(url, Group_ID);
 		}
 		else{
+
+			//Rendering existing collection
 			$(".tickets-collection-pane").html(App_Ticket_Module.ticketsCollection.el);
 			Tickets.initEvents(App_Ticket_Module.ticketsCollection.el);
 		}
 
+		//Just URL will be changed without reloading the page
 		var url = (Ticket_Filter_ID) ? '#tickets/filter/' + Ticket_Filter_ID : '#tickets/group/'+ Group_ID +'/' + Ticket_Status;
-
-		//$("#right-pane").html(App_Ticket_Module.ticketsCollection.el);
-		Backbone.history.navigate(url, {
-				trigger : false
-		});
-
-		//Enable click events
-		Tickets_Group_View.delegateEvents();
+		Backbone.history.navigate(url, {trigger : false});
 	},
 	repltBtn: function(e){
 

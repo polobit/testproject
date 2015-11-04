@@ -47,7 +47,7 @@ var Ticket_Base_Model = Base_Model_View.extend({
 		Tickets_Count.fetch_tickets_count(Group_ID);
 
 		//Fectching ticket filters
-		Ticket_Filters.fetch_filters_collection();
+		Ticket_Filters.fetchFiltersCollection();
 	},
 
 	changeStatus: function(e){

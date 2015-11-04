@@ -166,6 +166,7 @@ var TicketsUtilRouter = Backbone.Router.extend({
 
 		Ticket_Status = null;
 		Ticket_Filter_ID = filter_id;
+		Group_ID = !Group_ID ? DEFAULT_GROUP_ID : Group_ID;
 
 		var url = '/core/api/tickets/filter?filter_id=' + filter_id;
 		

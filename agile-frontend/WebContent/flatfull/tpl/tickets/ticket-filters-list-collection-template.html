@@ -21,7 +21,9 @@
 </script>
 <script id="ticket-filters-list-model-template" type="text/html">
 	<a filter-id="{{id}}" href="#tickets/filter/{{id}}">
-		<span class="text-ellipsis" style="max-width: 86%; display: inline-block;">{{name}}</span>
+		<span filter-id="{{id}}" class="text-ellipsis" style="max-width: 86%; display: inline-block;">
+			{{name}}
+		</span>
 		<badge class="badge bg-danger pull-right"></badge>
 	</a>
 </script>	

@@ -81,17 +81,12 @@ var Ticket_Filters = {
 
 	removeTicketFiltersRow : function(event){
 
-		console.log(event.currentTarget);
-
 		var $currentTarget = $(event.currentTarget);
 		$currentTarget.closest("tr").remove();
 	},
 
-	fetch_filters_collection: function(){
+	fetchFiltersCollection: function(){
 		
-		if(!Reload_Filters)
-			return;
-
 		App_Ticket_Module.ticketFiltersList = new Base_Collection_View({
 			url : '/core/api/tickets/filters',
 			sortKey:"updated_time",
@@ -103,16 +98,23 @@ var Ticket_Filters = {
 				//Fetch ticket collection count
 				Tickets_Count.fetch_filter_tickets_count();
 
-				if(Ticket_Filter_ID){
-					//Activating ticket type pill
-					$('ul.ticket-types').find('.active').removeClass('active');
+				//Render filter name on drop down
+				if(Ticket_Filter_ID)
 					$('a#filter_name').text($('a[filter-id="' + Ticket_Filter_ID + '"]').text());
-				}	
 			}
 		});
 
 		App_Ticket_Module.ticketFiltersList.collection.fetch();
 		$("#filters-list-container").html(App_Ticket_Module.ticketFiltersList.el);
-		Reload_Filters = false;
+	},
+
+	renderFiltersCollection: function(){
+
+		//Rendering existing filter tickets drop down view
+		$("#filters-list-container").html(App_Ticket_Module.ticketFiltersList.el);
+
+		//Render filter name on drop down
+		if(Ticket_Filter_ID)
+			$('a#filter_name').text($('span[filter-id="' + Ticket_Filter_ID + '"]').text());
 	}
 };
