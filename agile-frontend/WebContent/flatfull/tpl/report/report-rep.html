@@ -46,7 +46,7 @@
 		<div class="pull-left">{{userName}}</div>
 
 
-<div class="col-md-6 b-light">
+<div class="col-md-6 b-light pull-right">
 <div class="panel panel-default">
 <table class="table table-bordered">
    
@@ -82,61 +82,52 @@
 </div>
 </div>
 
-		<div class="pull-right"><div>
-  			<table>
-    <thead>
-      <tr>
-        <th>Total Sales</th>
-        <th>Avg. Deal Size</th>
-        <th>Deals Sold</th>
-		<th> Average Deal Closure Time </th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr class="user-values">
-        <td>{{currencySymbol}}{{numberWithCommasForActivities sales}}</td>
-        <td>{{currencySymbol}}{{numberWithCommasForActivities avgSalesValue}}</td>
-        <td>{{soldDeals}}</td>
-		<td>{{avgDealClosetime}}</td>
-
-      </tr>
-    </tbody>
-  </table>
-
-</div></div>
-</div>
-<div class="row p-t-lg">
-
-<table>
-    <thead>
-      <tr>
-        <th>Task Created</th>
-        <th>Tasks Completed</th>
-		<th>Total Notes </th>
-		<th>Average Time Spent on Call</th>
-		<th>Events</th>
-		<th>Campaigns Created </th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr class="user-values">
-        <td>{{taskcreated}}</td>
-        <td>{{taskCompleted}}</td>
-		<td>{{notes}}</td>
-		<td>{{avgCallDuration}}</td>
-		<td>{{events}}</td>
-		<td>{{workflows}}</td>
-      </tr>
-    </tbody>
-  </table>
+		
 </div>
 <div class="row">
-        
-        <div class="col-md-4"><h4>Loss Reasons</h4>
-				<div id="lossreasonpie-chart-users"></div></div>
+        <div class="pull-left" style="width:45%">
+			<h2 style="border-bottom: 1px solid #ddd;line-height: 35px">Rep Performance </h2>
 
-		 <div class="col-md-4"><h4>Call Outcomes</h4>
+	<div class="col-md-6 b-light pull-right">
+<div class="panel panel-default">
+<table class="table table-bordered">
+   
+    <thead class="panel-heading">
+        <tr>
+            <th style="width:46%" class="font-normal">Name</th>
+            <th style="width:54%" class="font-normal">Count</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr> 
+            <td>Total Sales</td>
+           <td>{{currencySymbol}}{{numberWithCommasForActivities sales}}</td>
+        </tr>
+        <tr>
+            <td>Avg. Deal Size</td>
+            <td>{{currencySymbol}}{{numberWithCommasForActivities avgSalesValue}}</td>
+        </tr>
+		<tr>
+            <td>Deals Sold</td>
+           <td>{{soldDeals}}</td>
+        </tr>
+        <tr>
+            <td>Average Deal Closure Time</td>
+         	 <td>{{avgDealClosetime}}</td>
+        </tr>
+    </tbody>
+</table>
+</div>
+</div>
+        <div class="col-md-6"><h4>Loss Reasons</h4>
+				<div id="lossreasonpie-chart-users"></div></div>
+		</div>
+		<div class="pull-right" style="width:45%">
+		<h2 style="border-bottom: 1px solid #ddd;line-height: 35px">Call Outcomes </h2>
+		 <div class="col-md-6">
 				<div id="calls-chart-user"></div></div>
+		<div class="pull-right" style="padding: 80px 36px 0px 0px;">Average Time Spent on Call : {{avgCallDuration}} </div>
+		</div>
       </div>
            </div>       
 	<!-- End of Growth Reports -->  
