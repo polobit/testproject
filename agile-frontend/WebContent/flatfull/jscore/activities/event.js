@@ -436,6 +436,7 @@ $(function()
 		// Show related to contacts list
 		var el = $("#activityForm");
 		$('#task-date-1').datepicker({ format : CURRENT_USER_PREFS.dateFormat , weekStart : CALENDAR_WEEK_START_DAY});
+		$('#task-date-1').datepicker('update');
 
 		agile_type_ahead("event_related_to", el, contacts_typeahead);
 
