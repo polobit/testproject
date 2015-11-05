@@ -69,6 +69,7 @@
 	    target = UTILITIES_CATALOG;
     else if (type.equalsIgnoreCase("developers"))
 	    target = DEVELOPERS_CATALOG;
+	
     else if (type.equalsIgnoreCase("tickets"))
 	    target = TICKETS_CATALOG;
 	
