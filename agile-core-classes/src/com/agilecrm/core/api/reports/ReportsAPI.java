@@ -18,13 +18,10 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import net.sf.json.JSONException;
-import net.sf.json.JSONObject;
-import net.sf.json.JSONSerializer;
 
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
-//import org.json.JSONObject;
-
+import org.json.JSONObject;
 
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.filter.ContactFilter;
@@ -269,7 +266,7 @@ public class ReportsAPI
 	    }
 	    if(count!=0)
 	    	flag=true;
-		tagsJSONArray.put(new org.json.JSONObject().put(tag, count));
+		tagsJSONArray.put(new JSONObject().put(tag, count));
 		i++;
 	    }
 	    if(!flag)
@@ -302,13 +299,11 @@ public class ReportsAPI
     @Path("/growth/{tags}")
     @GET
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public JSONObject getGrowthStats(@PathParam("tags") String tagsString, @QueryParam("start_time") String startTime,
+    public String getGrowthStats(@PathParam("tags") String tagsString, @QueryParam("start_time") String startTime,
 	    @QueryParam("end_time") String endTime, @QueryParam("time_zone") String timeZone,
 	    @QueryParam("frequency") String frequency, @QueryParam("filter") String filterId) throws Exception
     {
     String current_timezone = DateUtil.getCurrentUserTimezoneOffset();
-    String growthGraphString=null;
-	JSONObject growthGraphJSON=null;
     if (current_timezone != null)
     {
     	timeZone = current_timezone;
@@ -324,10 +319,7 @@ public class ReportsAPI
 	    filter = ContactFilter.getContactFilter(Long.parseLong(filterId));
 
 	// Get Tags Daily
-	growthGraphString = TagSearchUtil.getTagCount(filter, tags, String.valueOf(Long.parseLong(startTime) - (Long.parseLong(timeZone)*60*1000)), String.valueOf(Long.parseLong(endTime) - (Long.parseLong(timeZone)*60*1000)), type).toString();
-	if(growthGraphString!=null)
-		growthGraphJSON = (JSONObject)JSONSerializer.toJSON(growthGraphString);
-	return growthGraphJSON;
+	return TagSearchUtil.getTagCount(filter, tags, String.valueOf(Long.parseLong(startTime) - (Long.parseLong(timeZone)*60*1000)), String.valueOf(Long.parseLong(endTime) - (Long.parseLong(timeZone)*60*1000)), type).toString();
     }
 
     /*
