@@ -32,6 +32,12 @@ String.prototype.toCamelCase = function() {
   });
 }
 
+String.prototype.toCamelCaseWithSpace = function() {
+  return this.replace(/[-](\w)/g, function(match) {
+    return match[1].toUpperCase();
+  });
+}
+
 String.prototype.toTitleCase = function() {
 	//camel case to spaces
 	var space = this.replace(/([A-Z])/g, function($1){return ' '+$1.toLowerCase();});

@@ -213,7 +213,7 @@ angular.module('builder.elements')
             var el = angular.extend({}, defaults, config);
 
             //we'll need both snake case and camel case names for the element
-            el.camelName = config.name.toCamelCase();
+            el.camelName = config.name.toCamelCaseWithSpace();
             el.snakeName = config.name.replace(/([A-Z])/g, function($1){return "-"+$1.toLowerCase();});
 
             //push newly created element to all elements object
