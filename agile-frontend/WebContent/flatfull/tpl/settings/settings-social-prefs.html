@@ -9,7 +9,7 @@
 		  </div>
           <div class="panel-body">
           <div style="min-height:85px">
-
+          	<div class="m-b-sm">
 				{{#if picture}} 
 					<i class="media-grid thumb thumb-wrapper pull-left"> 
 						{{#if_equals picture "https://lh3.googleusercontent.com/-XdUIqdMkCWA/AAAAAAAAAAI/AAAAAAAAAAA/4252rscbv5M/photo.jpg"}}
@@ -27,6 +27,7 @@
                 	<span class="block">{{email}}</span>
                 </div> 
 				<div class="clearfix"></div>
+			</div>
 			</div>
 				<div class="text-center">
 			   	<a href="#" class="btn btn-sm btn-danger" id="gmail-prefs-delete" oid={{id}}>Disable</a>
@@ -52,7 +53,7 @@
 			<center>
 			{{#has_email_account_limit_reached}}
 			{{#if_non_pro_plan}}
-			<div class="m-t-sm p-xs" style="width: 75%;border: 1px solid #E2E29C;background-color: #F7F7D0;"> Please <strong><a class="text-info" href="#subscribe">upgrade</a></strong> to Enterprise plan</div>
+			<div class="p-xs" style="width: 75%;border: 1px solid #E2E29C;background-color: #F7F7D0;"> Please <strong><a class="text-info" href="#subscribe">upgrade</a></strong> to Enterprise plan</div>
 			{{/if_non_pro_plan}}
 			<div> <!--<a class="btn btn-sm btn-default m-t-sm" disabled="disabled">Enable</a> -->
 <a href="#sync"><img class="google-apps-icon" src="../flatfull/img/add_to_apps_shadow.png"/></a>
