@@ -80,6 +80,10 @@ public class NamespaceFilter implements Filter
 	if (((HttpServletRequest) request).getRequestURI().contains("fbformload"))
 	    return true;
 
+	// To serve landing pages
+	if (((HttpServletRequest) request).getRequestURI().contains("landing"))
+	    return true;
+
 	if (((HttpServletRequest) request).getRequestURI().contains("/_ah/mail"))
 	    return true;
 

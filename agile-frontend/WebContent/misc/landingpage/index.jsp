@@ -101,7 +101,7 @@ AGILE_LP_OPTIONS['templateId'] = "";
                                 </div>
                             </section>
                             <div id="elements-list">
-                                <div class="elements-box accordion-item open" id="components">
+                                <div class="elements-box accordion-item" id="components">
                                     <h3 class="accordion-heading">{{ 'components' | translate }} <i class="icon icon-down-open-1"></i></h3>
                                     <div class="accordion-body"><ul class="list-unstyled"></ul></div>
                                 </div>
@@ -121,8 +121,12 @@ AGILE_LP_OPTIONS['templateId'] = "";
                                     <h3 class="accordion-heading">{{ 'buttons' | translate }} <i class="icon icon-down-open-1"></i></h3>
                                     <div class="accordion-body"><ul class="list-unstyled"></ul></div>
                                 </div>
-                                <div class="elements-box accordion-item" id="forms">
+                                <!-- <div class="elements-box accordion-item" id="forms">
                                     <h3 class="accordion-heading">{{ 'forms' | translate }} <i class="icon icon-down-open-1"></i></h3>
+                                    <div class="accordion-body"><ul class="list-unstyled"></ul></div>
+                                </div> -->
+                                <div class="elements-box accordion-item" id="agileforms">
+                                    <h3 class="accordion-heading">Agile Forms <small>create form & select here</small> <i class="icon icon-down-open-1"></i></h3>
                                     <div class="accordion-body"><ul class="list-unstyled"></ul></div>
                                 </div>
                             </div>

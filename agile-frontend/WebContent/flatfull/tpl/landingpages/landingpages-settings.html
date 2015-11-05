@@ -21,10 +21,9 @@
 <div class="panel panel-default">
   <div class="panel-heading">CNAME Setup</div>
   <div class="panel-body">
-    <p>Please create a CNAME record to add an alias for the CNAME you selected for landing.agilelanding.com</p>
-    <br>
+    <p>Please create a CNAME record to add an alias for the CNAME you selected for {{getCurrentDomain}}-{{id}}.agilelanding.com</p>
     <div>
-      <input type="url" class="form-control" id="cname" value="{{cname}}" required>
+      <input type="url" class="form-control" id="cname" value="{{cname}}" required placeholder="Eg: http://your.domain.com/landing-page-title">
       <span for="cname" generated="true" id="cnameMessage" class="help-inline"></span>
       <br>
       <button class="btn btn-sm btn-primary" id="landingPageSettingBtn" data-pageid="{{id}}">Save</button>
@@ -32,8 +31,23 @@
   </div>
 </div>
 </form>
-
 </div>
+
+
+<div class="col-md-6">
+<div class="panel panel-default">
+  <div class="panel-heading">CNAME Setup Instructions</div>
+  <div class="panel-body">
+    <p>To publish your landing pages to your own domain, you need to:</p>
+<ul>
+<li>Tell your domain to show the pages hosted by Agile CRM.</li>
+<li>Publish your landing by using the CNAME setup.</li>
+</ul>
+
+  </div>
+</div>
+</div>
+
 
 </div>
 
@@ -56,10 +70,40 @@
            </div>
         </div>
         <div>
-            <a class="btn btn-sm btn-default" href="#">Read</a>
+            <a class="btn btn-sm btn-default" target="_blank" href="https://in.godaddy.com/help/add-a-cname-record-19236">Read</a>
         </div>
     </div>
 </div>
+
+
+<div class="col-md-3 col-sm-6 col-xs-12">
+    <div class="panel wrapper text-center">
+        <div>
+           <div class="p-b-sm p-l-none p-r-none">
+            <img style="width:85%;border:1px solid #d4d4d4" src="img/misc/bluehost_logo.png"/>
+           </div>
+        </div>
+        <div>
+            <a class="btn btn-sm btn-default" target="_blank" href="https://my.bluehost.com/cgi/help/cname">Read</a>
+        </div>
+    </div>
+</div>
+
+
+<div class="col-md-3 col-sm-6 col-xs-12">
+    <div class="panel wrapper text-center">
+        <div>
+           <div class="p-b-sm p-l-none p-r-none">
+            <img style="width:85%;border:1px solid #d4d4d4" src="img/misc/namecheap_logo.png"/>
+           </div>
+        </div>
+        <div>
+            <a class="btn btn-sm btn-default" target="_blank" href="https://www.youtube.com/watch?v=5TwLD2t9b7U">Read</a>
+        </div>
+    </div>
+</div>
+
+
 
 
 </div>

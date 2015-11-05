@@ -8,6 +8,10 @@ function initializeLandingPageListeners() {
     	if (isValidForm('#landingPageBuilderForm')) {
     		document.getElementById('landingPageBuilder').contentWindow.$('.icon-floppy-1:last').trigger("click");
     		App_LandingPageRouter.LandingPageCollectionView.collection.fetch();
+    	} else {
+    		if(!$("#landingpagename").val().trim()) {
+    			$('html, body').animate({scrollTop: $('body').offset().top}, 500);
+    		}
     	}
 	});
 

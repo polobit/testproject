@@ -86,7 +86,7 @@ public class CustomElementServlet extends HttpServlet
     	    
     	    List<Form> forms = FormUtil.getAllForms();
     	    
-    	    String formConfig = "({name: '%s',nodes: ['form'],frameworks: ['bootstrap'],types: ['flow'],validChildren: ['flow'],previewScale: '0.25',category: 'forms',"
+    	    String formConfig = "({name: '%s',nodes: ['form'],frameworks: ['bootstrap'],types: ['flow'],validChildren: ['flow'],previewScale: '0.25',category: 'agileforms',"
     	    		+ "links: ['https://s3.amazonaws.com/agilecrm/landing/public/agileform.css'],"
     	    		+ "icon: 'newspaper',description: 'Agile form'});";
     	    
