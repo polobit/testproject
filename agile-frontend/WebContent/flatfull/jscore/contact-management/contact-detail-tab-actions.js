@@ -11,27 +11,29 @@ var contact_details_documentandtasks_actions = {
 			var value = tasksView.collection.get(id).toJSON();
 
 			$("#updateTaskModal").html(getTemplate("task-update-modal")).modal('show');
-			deserializeForm(value, $("#updateTaskForm"));
 
+				loadProgressSlider($("#updateTaskForm"), function(el){
+
+				deserializeForm(value, $("#updateTaskForm"));
+				
+				$('.update-task-timepicker').val(fillTimePicker(value.due));
+				categories.getCategoriesHtml(value,function(catsHtml){
+					$('#type',$("#updateTaskForm")).html(catsHtml);
+					// Fills owner select element
+					populateUsers("owners-list", $("#updateTaskForm"), value, 'taskOwner', function(data)
+					{
+						$("#updateTaskForm").find("#owners-list").html(data);
+						if (value.taskOwner)
+							$("#owners-list", $("#updateTaskForm")).find('option[value=' + value['taskOwner'].id + ']').attr("selected", "selected");
 			
-			$('.update-task-timepicker').val(fillTimePicker(value.due));
-			categories.getCategoriesHtml(value,function(catsHtml){
-				$('#type',$("#updateTaskForm")).html(catsHtml);
-				// Fills owner select element
-				populateUsers("owners-list", $("#updateTaskForm"), value, 'taskOwner', function(data)
-				{
-					$("#updateTaskForm").find("#owners-list").html(data);
-					if (value.taskOwner)
-						$("#owners-list", $("#updateTaskForm")).find('option[value=' + value['taskOwner'].id + ']').attr("selected", "selected");
-		
-					$("#owners-list", $("#updateTaskForm")).closest('div').find('.loading-img').hide();
+						$("#owners-list", $("#updateTaskForm")).closest('div').find('.loading-img').hide();
+					});
 				});
+
+				// Add notes in task modal
+				showNoteOnForm("updateTaskForm", value.notes);
 			});
-
-			// Add notes in task modal
-			showNoteOnForm("updateTaskForm", value.notes);
-
-			activateSliderAndTimerToTaskModal();
+			// activateSliderAndTimerToTaskModal();
         },
 
         // Event edit in contact details tab

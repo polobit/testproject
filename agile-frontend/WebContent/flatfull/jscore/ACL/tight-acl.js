@@ -23,6 +23,19 @@
 				tight_acl.DEAL_PER = true;
 				App_ACL.notAllowed(obj);
 			}
+		if(Current_Route.indexOf('tasks') > -1 && !(CURRENT_DOMAIN_USER.menu_scopes.indexOf('CALENDAR') > -1))
+		  {
+		   obj.entity = 'Tasks';
+		   tight_acl.ACTIVITY_PER = true;
+		   App_ACL.notAllowed(obj);
+		  }
+
+		  if(Current_Route.indexOf('calendar') > -1 && !(CURRENT_DOMAIN_USER.menu_scopes.indexOf('CALENDAR') > -1))
+		  {
+		   obj.entity = 'Calendar';
+		   tight_acl.ACTIVITY_PER = true;
+		   App_ACL.notAllowed(obj);
+		  }
 		if(Current_Route.indexOf('activit') > -1 && !(CURRENT_DOMAIN_USER.menu_scopes.indexOf('ACTIVITY') > -1))
 		{
 			obj.entity = 'Acivities';

@@ -33,9 +33,8 @@ $( document ).ready(function() {
 		// Show task modal with owners list.
 		showTaskModal(this);
 	});
-	/**
-	 * Show event of update task modal Activates typeahead for task-update-modal
-	 */
+	
+
 	$('#updateTaskModal').on('shown.bs.modal', function()
 	{
 
@@ -60,9 +59,6 @@ $( document ).ready(function() {
 
 		// Fill details in form
 		setForm(el);
-
-		
-
 	});
 
 	
