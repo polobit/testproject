@@ -25,7 +25,7 @@ function initializeChartReportsListeners()
 				if (i == 0)
 					tags += tag;
 				else
-					tags += ", " + tag;
+					tags += "," + tag;
 			});
 
 		console.log(tags);
