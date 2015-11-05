@@ -72,7 +72,8 @@ public class SubscriptionUtil
 	    subscription.refreshCustomer();
 	    subscription.cachedData = BillingRestrictionUtil.getBillingRestriction(
 		    subscription.plan.plan_type.toString(), subscription.plan.quantity);
-	    subscription.cachedData.refresh(true);
+
+	    // subscription.cachedData.refresh(true);
 	}
 	catch (StripeException e)
 	{
