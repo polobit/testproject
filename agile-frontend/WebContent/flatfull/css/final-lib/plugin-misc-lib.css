@@ -516,7 +516,7 @@ table.fc-border-separate {
     background: transparent url('../img/switch.png') no-repeat 164px 80px;
 }
 
-@media all and (max-width:768px) {
+@media all and (max-width:400px) {
   .ms-container{
   background: transparent url('../img/switch_mobile.png') no-repeat 164px 80px;
 }
