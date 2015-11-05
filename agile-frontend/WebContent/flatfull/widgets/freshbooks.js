@@ -170,10 +170,13 @@ function getInvoicesOfClient(client_id, offSet)
 			var result = {};
 
 			if(data.total > 0){
-				FBSmails.invoice = data.invoice;
+				if(data.invoice){
+					FBSmails.invoice = data.invoice;
+					result.invoice = FBSmails.invoice.slice(0, 5);	
+				}
 				FBSmails.total = data.total;
-				result.invoice = FBSmails.invoice.slice(0, 5);
 			}
+
 			result.total = data.total;
 
 			// Fill FreshBooks invoice template with invoice of client
