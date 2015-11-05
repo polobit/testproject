@@ -18,7 +18,7 @@ function displayTimeZone(results)
 		return;
 	
 	$.ajax({ 
-		url : "/core/api/contacts/gettz/" + latitude + "/" + longitude, 
+		url : "/core/api/contacts/gettz/" + latitude() + "/" + longitude(), 
 		type : 'GET', 
 		dataType : 'text', 
 		success : function(data)
