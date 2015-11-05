@@ -374,6 +374,8 @@ var WorkflowsRouter = Backbone.Router
 
 						}, optionsTemplate);
 
+						initializeLogReportHandlers();
+
 						getTemplate("campaign-analysis-tabs", { "id" : id }, undefined, function(template_ui)
 				{
 					if (!template_ui)
