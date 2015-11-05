@@ -107,7 +107,7 @@ public class CSVUtil
 		.acl("public-read").addUserMetadata("domain", NamespaceManager.get()).build();
 
 	service = new GCSServiceAgile(
-		NamespaceManager.get() + "_failed_contacts_" + GoogleSQL.getFutureDate() + ".csv", "agile-export",
+		NamespaceManager.get() + "_failed_contacts_" + GoogleSQL.getFutureDate() + ".csv", "agile-exports",
 		options);
 
 	this.accessControl = accessControl;
@@ -250,7 +250,7 @@ public class CSVUtil
 	// Refreshes count of contacts. This is removed as it already calculated
 	// in deferred task; there is limation on count in remote api (max count
 	// it gives is 1000)
-	// billingRestriction.refreshContacts();
+	billingRestriction.refreshContacts();
 
 	System.out.println(billingRestriction.getCurrentLimits().getPlanId() + " : "
 		+ billingRestriction.getCurrentLimits().getPlanName());
@@ -1195,34 +1195,35 @@ public class CSVUtil
 			else if (value.equalsIgnoreCase("relatedTo"))
 			{
 			    String data = dealPropValues[i].toLowerCase();
-			    if(StringUtils.isNotBlank(data)){
-			    	
-			    	String[] emails = data.split(",");
-			    	for (int k = 0; k < emails.length; k++) {
-			    		
-			    		 boolean email = isValidEmail(emails[k]);
+			    if (StringUtils.isNotBlank(data))
+			    {
 
-						    if (email)
-						    {
-							try
-							{
-							    Contact contact = ContactUtil.searchContactByEmail(emails[k]);
-							    if (contact != null && contact.id != null)
-							    {
-								opportunity.addContactIds(contact.id.toString());
-							    }
-							}
-							catch (NullPointerException e)
-							{
-							    e.printStackTrace();
-							}
-						    }
-						    
+				String[] emails = data.split(",");
+				for (int k = 0; k < emails.length; k++)
+				{
+
+				    boolean email = isValidEmail(emails[k]);
+
+				    if (email)
+				    {
+					try
+					{
+					    Contact contact = ContactUtil.searchContactByEmail(emails[k]);
+					    if (contact != null && contact.id != null)
+					    {
+						opportunity.addContactIds(contact.id.toString());
+					    }
 					}
-			    	
-			    	
+					catch (NullPointerException e)
+					{
+					    e.printStackTrace();
+					}
+				    }
+
+				}
+
 			    }
-			   
+
 			}
 			else if (value.equalsIgnoreCase("note"))
 			{
@@ -1355,18 +1356,19 @@ public class CSVUtil
      */
     private String parse(String data)
     {
-    	
+
 	String lastdecimalIndexVal = "";
-	if(data.indexOf(".") > 0){
-		lastdecimalIndexVal = data.substring(data.lastIndexOf("."));
-		data = data.substring(0, data.lastIndexOf("."));
+	if (data.indexOf(".") > 0)
+	{
+	    lastdecimalIndexVal = data.substring(data.lastIndexOf("."));
+	    data = data.substring(0, data.lastIndexOf("."));
 	}
-	
+
 	String parseVal = data.replaceAll("[\\W A-Za-z]", "");
 	System.out.println(parseVal);
-	
-   	return (parseVal + lastdecimalIndexVal).trim();
-   
+
+	return (parseVal + lastdecimalIndexVal).trim();
+
     }
 
     /**
@@ -1619,5 +1621,5 @@ public class CSVUtil
 	System.out.println("building failed contacts service");
 	return failedContactsWriter = new CSVWriter(service.getOutputWriter());
     }
-    
+
 }
