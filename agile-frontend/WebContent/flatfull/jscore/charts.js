@@ -175,7 +175,7 @@ function showBar(url, selector, name, yaxis_name, stacked)
 	var chart;
 
 	// Shows loading image
-	$('#' + selector).html("<div class='text-center v-middle opa-half' style='margin-top:"+topPos+"px'><img src='../flatfull/img/ajax-loader-cursor.gif' style='width:12px;height:10px;opacity:0.5;' /></div>");
+	$('#' + selector).html("<div class='text-center v-middle opa-half'><img src='../flatfull/img/ajax-loader-cursor.gif' style='width:12px;height:10px;opacity:0.5;' /></div>");
 
 	// Builds graph with the obtained json data.
 	setupCharts(function()
@@ -355,7 +355,7 @@ function showLine(url, selector, name, yaxis_name, show_loading)
 		// Old calls were not showing loading image..
 	}
 	else
-		$('#' + selector).html("<div class='text-center v-middle opa-half' style='margin-top:"+topPos+"px'><img src='../flatfull/img/ajax-loader-cursor.gif' style='width:12px;height:10px;opacity:0.5;' /></div>");
+		$('#' + selector).html("<div class='text-center v-middle opa-half'><img src='../flatfull/img/ajax-loader-cursor.gif' style='width:12px;height:10px;opacity:0.5;' /></div>");
 	
 	
 	var chart;
@@ -616,8 +616,7 @@ function showFunnel(url, selector, name, show_loading)
 		// Old calls were not showing loading image..
 	}
 	else
-		$('#' + selector).html("<div class='text-center v-middle opa-half' style='margin-top:"+topPos+"px'><img src='../flatfull/img/ajax-loader-cursor.gif' style='width:12px;height:10px;opacity:0.5;' /></div>");
-
+		$('#' + selector).html("<div class='text-center v-middle opa-half'><img src='../flatfull/img/ajax-loader-cursor.gif' style='width:12px;height:10px;opacity:0.5;' /></div>");
 	var chart;
 
 	// Loads Highcharts plugin using setupCharts and sets up line chart in the
@@ -822,7 +821,7 @@ function showAreaSpline(url, selector, name, yaxis_name, show_loading)
 		// Old calls were not showing loading image..
 	}
 	else
-		$('#' + selector).html("<div class='text-center v-middle opa-half' style='margin-top:"+topPos+"px'><img src='../flatfull/img/ajax-loader-cursor.gif' style='width:12px;height:10px;opacity:0.5;' /></div>");
+		$('#' + selector).html("<div class='text-center v-middle opa-half'><img src='../flatfull/img/ajax-loader-cursor.gif' style='width:12px;height:10px;opacity:0.5;' /></div>");
 	
 	
 	var chart;
@@ -1087,7 +1086,7 @@ function showDealAreaSpline(url, selector, name, yaxis_name, show_loading,freque
 		// Old calls were not showing loading image..
 	}
 	else
-		$('#' + selector).html("<div class='text-center v-middle opa-half' style='margin-top:"+topPos+"px'><img src='../flatfull/img/ajax-loader-cursor.gif' style='width:12px;height:10px;opacity:0.5;' /></div>");
+		$('#' + selector).html("<div class='text-center v-middle opa-half'><img src='../flatfull/img/ajax-loader-cursor.gif' style='width:12px;height:10px;opacity:0.5;' /></div>");
 	
 	
 	var chart;
@@ -1458,7 +1457,7 @@ function showDealsGrowthgraph(url, selector, name, yaxis_name, show_loading)
         // Old calls were not showing loading image..
     }
     else
-        $('#' + selector).html("<div class='text-center v-middle opa-half' style='margin-top:"+topPos+"px'><img src='../flatfull/img/ajax-loader-cursor.gif' style='width:12px;height:10px;opacity:0.5;' /></div>");
+        $('#' + selector).html("<div class='text-center v-middle opa-half'><img src='../flatfull/img/ajax-loader-cursor.gif' style='width:12px;height:10px;opacity:0.5;' /></div>");
     
     
     var chart;
@@ -1773,7 +1772,7 @@ function pieforReports(url, selector, name,show_loading)
         // Old calls were not showing loading image..
     }
     else
-        $('#' + selector).html("<div class='text-center v-middle opa-half' style='margin-top:"+topPos+"px'><img src='../flatfull/img/ajax-loader-cursor.gif' style='width:12px;height:10px;opacity:0.5;' /></div>");
+        $('#' + selector).html("<div class='text-center v-middle opa-half'><img src='../flatfull/img/ajax-loader-cursor.gif' style='width:12px;height:10px;opacity:0.5;' /></div>");
 
 	var chart;
 	var AllData=[];
