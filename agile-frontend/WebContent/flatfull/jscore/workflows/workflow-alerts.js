@@ -216,7 +216,7 @@ function resubscribe()
 
 		var $element = $(event.target);
 
-		if (!confirm("Are you sure to resubscribe " + $(this).attr("contact_name") + " from " + $(this).attr("campaign_name") + " campaign?"))
+		if (!confirm("Are you sure to resubscribe " + $(this).attr("contact_name") + " to " + $(this).attr("campaign_name") + " campaign?"))
 			return;
 		
 		var campaign_id = $(this).attr('data');
