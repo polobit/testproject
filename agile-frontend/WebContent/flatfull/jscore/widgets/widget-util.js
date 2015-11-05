@@ -342,7 +342,7 @@ function addConfigurableWidget(widgetId, widgetName, templateName) {
 			// Create a view modal for widgets
 			renderWidgetView(templateName, 'core/api/widgets',model, '#widget-settings');
 			
-			if (model.name == "TwilioIO") {
+			if (model.name == "TwilioIO" && model.is_added) {
 				fill_twilioio_numbers();
 			}
 
