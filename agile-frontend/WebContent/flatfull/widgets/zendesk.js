@@ -136,11 +136,19 @@ function getTicketsFromZendesk(callback, contact_id)
 
 function loadZENTickets(offSet){
 	if(offSet == 0){
+
 		var result = {};
-		result = ZENTickets.slice(0, 5); ;
+		var isArray = ZENTickets.isArray;
+		
+		if(ZENTickets instanceof Array){
+			result = ZENTickets.slice(0, 5); 
+		}else{
+			result = ZENTickets;
+		}
+
 		getTemplate('zendesk-ticket-stream', result, undefined, function(template_ui){
 			$('#all_tickets_panel').append(template_ui);
-			if(ZENTickets.length > 5){
+			if(ZENTickets.length > 5 && ZENTickets instanceof Array){
 				$('#all_tickets_panel').append(showMoreHtmlZEN);
 			}
 		});

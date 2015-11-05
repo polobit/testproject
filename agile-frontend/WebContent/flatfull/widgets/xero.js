@@ -55,9 +55,8 @@ function showXeroClient(contact_id)
 				{
 					$(".time-ago", template).timeago();
 				});
+				loadInvoices(0);
 			}, "#Xero");
-
-			loadInvoices(0);
 		}
 		else
 		{
@@ -104,14 +103,19 @@ function loadInvoices(offSet){
 
 	var data = XEROObj.invoice;
 
+	console.log('xero obj  **** ');
+	console.log(data);
+
 	if(offSet == 0){
 
 		var result = {};
-		result.invoice = data.slice(0, 5); ;
+		if(data){
+			result.invoice = data.slice(0, 5);
+		}
 
 		getTemplate('xero-invoice', result, undefined, function(template_ui){
 			$('#xero-invoice-list').append(template_ui);
-			if(data.length > 5){
+			if(data && data.length > 5){
 				$('#xero-invoice-list').append(showMoreHtmlXERO);
 			}
 		});
