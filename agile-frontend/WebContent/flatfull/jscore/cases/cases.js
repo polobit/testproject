@@ -6,6 +6,15 @@
  */
 $(function(){
 
+	$("#casesModal").on("show.bs.modal", function(c) {
+        add_custom_fields_to_form({}, function(data)
+		{
+			var el_custom_fields = show_custom_fields_helper(data["custom_fields"], ["modal"]);
+			$("#custom-field-case", $("#casesModal")).html($(el_custom_fields));
+
+		}, "CASE");
+    });	
+
 	$('#casesModal, #casesUpdateModal').on("shown.bs.modal", function()
 	{
 		// Add placeholder and date picker to date custom fields
@@ -15,7 +24,7 @@ $(function(){
 		});
 
 		// Enable the datepicker
-		$('#close_date', el).datepicker({
+		$('#close_date').datepicker({
 			format : CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY
 		});
 	
@@ -126,15 +135,8 @@ function updatecases(ele)
 function showCases()
 {
 
-	$("#casesModal").html(getTemplate("cases-new-modal", {})).modal("show");
+	$("#casesModal").html(getTemplate("cases-new-modal", {}));
 	var el = $("#casesForm");
-
-	add_custom_fields_to_form({}, function(data)
-	{
-		var el_custom_fields = show_custom_fields_helper(data["custom_fields"], []);
-		$("#custom-field-case", $("#casesModal")).html($(el_custom_fields));
-
-	}, "CASE");
 
 	// Contacts type-ahead
 	agile_type_ahead("contacts-typeahead-input", el, contacts_typeahead);
@@ -148,7 +150,7 @@ function showCases()
 		
 	});
 
-	
+	$("#casesModal").modal("show");
 }
 
 // Updates or Saves a cases
