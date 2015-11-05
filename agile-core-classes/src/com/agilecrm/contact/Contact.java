@@ -469,7 +469,7 @@ public class Contact extends Cursor
 
 	// Verifies EmailBounceStatus
 	checkBounceStatus(oldContact, this);
-	
+
 	// Verifies CampaignStatus
 	checkCampaignStatus(oldContact, this);
 
@@ -1343,7 +1343,7 @@ public class Contact extends Cursor
 	    e.printStackTrace();
 	}
     }
-    
+
     /**
      * Verifies CampaignStatus in both old and new contact objects. To update
      * campaign statuses if not exists in updated contact

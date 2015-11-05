@@ -1,13 +1,16 @@
 package com.agilecrm.bulkaction.deferred;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.List;
 
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.filter.ContactFilterResultFetcher;
+import com.agilecrm.contact.util.bulk.BulkActionNotifications;
+import com.agilecrm.contact.util.bulk.BulkActionNotifications.BulkAction;
 import com.agilecrm.export.ExportBuilder;
 import com.agilecrm.export.Exporter;
+import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.util.DomainUserUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.taskqueue.DeferredTask;
 
@@ -44,14 +47,19 @@ public class ContactExportPullTask implements DeferredTask
 	NamespaceManager.set(namespace);
 	System.out.println("-----------------------------------------------------------------------------------------");
 	System.out.println(contact_ids + " " + dynamicFilter + " " + filter + " " + currentUserId + " " + namespace);
-	if (file == null)
-	{
-	    file = new File(System.getProperty("user.dir") + "/exports/contacts/" + namespace + filter + ".csv");
-	}
+
+	DomainUser user = DomainUserUtil.getDomainUser(currentUserId);
+
+	if (user == null)
+	    return;
 
 	writeContacts();
 
 	getExporter().finalize();
+
+	getExporter().sendEmail(user.email);
+
+	BulkActionNotifications.publishconfirmation(BulkAction.EXPORT_CONTACTS_CSV);
 
 	NamespaceManager.set(null);
 
@@ -63,17 +71,8 @@ public class ContactExportPullTask implements DeferredTask
     {
 	if (exporter != null)
 	    return exporter;
-	try
-	{
-	    return exporter = ExportBuilder.buildContactExporter(file);
-	}
-	catch (IOException e)
-	{
-	    // TODO Auto-generated catch block
-	    e.printStackTrace();
-	}
 
-	return (Exporter<Contact>) null;
+	return exporter = ExportBuilder.buildContactExporter();
     }
 
     private void writeContacts()

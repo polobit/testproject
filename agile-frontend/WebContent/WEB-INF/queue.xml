@@ -43,7 +43,7 @@
     <name>reports-queue</name>
     <rate>10/s</rate>
      <acl> 
-      <user-email>yaswanth@agilecrm.com</user-email>
+      <user-email>naresh@faxdesk.com</user-email>
     </acl>
     <max-concurrent-requests>20</max-concurrent-requests>
     <retry-parameters>
@@ -196,7 +196,7 @@
    <queue>
   	<name>bulk-emails-queue</name>
     <acl> 
-      <user-email>yaswanth@agilecrm.com</user-email>
+      <user-email>naresh@faxdesk.com</user-email>
     </acl>
     <rate>5/s</rate>
     
@@ -297,7 +297,7 @@
   <queue>
   <name>normal-email-pull-queue</name>
     <acl> 
-      <user-email>yaswanth@agilecrm.com</user-email>
+      <user-email>naresh@faxdesk.com</user-email>
     </acl>
   <mode>pull</mode>
   <retry-parameters>
@@ -309,7 +309,7 @@
   <name>bulk-email-pull-queue</name>
   <mode>pull</mode>
   <acl> 
-    <user-email>yaswanth@agilecrm.com</user-email>
+    <user-email>naresh@faxdesk.com</user-email>
   </acl>
   <retry-parameters>
   		<task-retry-limit>2</task-retry-limit>
@@ -321,14 +321,14 @@
   <name>dummy-pull-queue</name>
   <mode>pull</mode>
    <acl>
-      <user-email>yaswanth@agilecrm.com</user-email>  
+      <user-email>naresh@faxdesk.com</user-email>  
     </acl>
   </queue>
   
   <queue>
   <name>normal-personal-email-pull-queue</name>
     <acl>
-      <user-email>yaswanth@agilecrm.com</user-email>
+      <user-email>naresh@faxdesk.com</user-email>
     </acl>
   <mode>pull</mode>
   <retry-parameters>
@@ -339,7 +339,7 @@
   <queue>
   <name>bulk-personal-email-pull-queue</name>
     <acl> 
-      <user-email>yaswanth@agilecrm.com</user-email>
+      <user-email>naresh@faxdesk.com</user-email>
     </acl>
   <mode>pull</mode>
   <retry-parameters>
@@ -380,11 +380,22 @@
   	<name>export-pull-queue</name>
   	<mode>pull</mode>
        <acl> 
-      <user-email>yaswanth@agilecrm.com</user-email>
+      <user-email>naresh@faxdesk.com</user-email>
     </acl>
   	<retry-parameters>
   		<task-retry-limit>2</task-retry-limit>
   	</retry-parameters>
+  </queue>
+
+    <queue>
+    <name>contact-import-queue</name>
+    <mode>pull</mode>
+       <acl> 
+      <user-email>naresh@faxdesk.com</user-email>
+    </acl>
+    <retry-parameters>
+      <task-retry-limit>2</task-retry-limit>
+    </retry-parameters>
   </queue>
   
   <!-- Notification Pull Queue -->
@@ -392,7 +403,7 @@
   	<name>notification-pull-queue</name>
   	<mode>pull</mode>
        <acl> 
-      <user-email>yaswanth@agilecrm.com</user-email>
+      <user-email>naresh@faxdesk.com</user-email>
     </acl>
   	<retry-parameters>
   		<task-retry-limit>2</task-retry-limit>
@@ -403,7 +414,7 @@
     <name>pull-queue</name>
     <mode>pull</mode>
     <acl>
-      <user-email>yaswanth@agilecrm.com</user-email>      <!-- can list, get, lease, delete, and update tasks -->
+      <user-email>naresh@faxdesk.com</user-email>      <!-- can list, get, lease, delete, and update tasks -->
   <!--  can insert tasks, in addition to rights granted by being a user_email above -->
     </acl>
   </queue>

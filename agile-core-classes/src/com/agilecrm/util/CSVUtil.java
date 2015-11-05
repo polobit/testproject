@@ -247,9 +247,13 @@ public class CSVUtil
 
 	BulkActionUtil.setSessionManager(domainUser);
 
-	// Refreshes count of contacts
-	billingRestriction.refreshContacts();
+	// Refreshes count of contacts. This is removed as it already calculated
+	// in deferred task; there is limation on count in remote api (max count
+	// it gives is 1000)
+	// billingRestriction.refreshContacts();
 
+	System.out.println(billingRestriction.getCurrentLimits().getPlanId() + " : "
+		+ billingRestriction.getCurrentLimits().getPlanName());
 	int allowedContacts = billingRestriction.getCurrentLimits().getContactLimit();
 	boolean limitCrossed = false;
 	// stores list of failed contacts in beans with causes
@@ -475,6 +479,9 @@ public class CSVUtil
 		    // and checked with plan limits
 
 		    ++billingRestriction.contacts_count;
+		    System.out.println("Contacts limit - Allowed : "
+			    + billingRestriction.getCurrentLimits().getContactLimit() + " current contacts count : "
+			    + billingRestriction.contacts_count);
 		    if (limitCrossed)
 		    {
 			++limitExceeded;
@@ -492,7 +499,7 @@ public class CSVUtil
 		}
 
 		tempContact.bulkActionTracker = bulk_action_tracker;
-		tempContact.save();
+		tempContact.save(false);
 	    }// end of try
 	    catch (InvalidTagException e)
 	    {
@@ -1373,18 +1380,32 @@ public class CSVUtil
 	String path = null;
 	try
 	{
+	    System.out.println("Export functionality email" + failedContacts);
 	    if (failedContacts == null || failedContacts.size() == 0)
 	    {
+		System.out.println("no failed conditions");
 		// Send every partition as separate email
 		sendFailedContactImportFile(domainUser, null, 0, status);
 		return;
 	    }
+
+	    System.out.println("writing file service");
+
 	    // Builds Contact CSV
 	    writeFailedContactsInCSV(getCSVWriterForFailedContacts(), failedContacts, headings);
 
+	    System.out.println("wrote files to CSV");
+
 	    service.getOutputchannel().close();
 
+	    System.out.println("closing stream");
+
 	    byte[] data = service.getDataFromFile();
+
+	    System.out.println("byte data");
+
+	    System.out.println(data.length);
+	    System.out.println(domainUser.email);
 
 	    // Send every partition as separate email
 	    sendFailedContactImportFile(domainUser, new String(data, "UTF-8"), failedContacts.size(), status);
@@ -1595,6 +1616,7 @@ public class CSVUtil
 	if (failedContactsWriter != null)
 	    return failedContactsWriter;
 
+	System.out.println("building failed contacts service");
 	return failedContactsWriter = new CSVWriter(service.getOutputWriter());
     }
     
