@@ -1602,7 +1602,7 @@ a#email-reply{
     right: auto;
   }
   #contact-sort-views {
-    top: 29px;
+    top: 2px;
     left: 0%;
   }
   #navbar 
@@ -1610,6 +1610,9 @@ a#email-reply{
     max-height: 80vh;
     overflow-y: auto;
     overflow-x: hidden;
+  }
+  .dropdown-submenu:hover #contact-sort-views {
+    display: none;
   }
  }
 

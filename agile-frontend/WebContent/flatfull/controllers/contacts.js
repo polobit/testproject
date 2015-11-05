@@ -526,7 +526,7 @@ var ContactsRouter = Backbone.Router.extend({
 		this.contactDetailView = new Base_Model_View({ model : contact, isNew : true, template : "contact-detail", postRenderCallback : function(el)
 		{
 			
-			$("#mobile-menu-settings").trigger('click');
+			//$("#mobile-menu-settings").trigger('click');
 			// Clone contact model, to avoid render and post-render fell
 			// in to
 			// loop while changing attributes of contact

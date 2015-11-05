@@ -814,7 +814,7 @@ $(function()
 		e.preventDefault();
 
 		// Clone the template
-		$(this).parents("div.control-group").append($(this).parents().siblings("div.controls:first").clone().removeClass('hide'));
+		$(this).parents("div.control-group").append($(this).parents().siblings("div.controls:first").clone().removeClass('hide').addClass('col-sm-offset-3'));
 	});
 
 	// Removes multiple fields
