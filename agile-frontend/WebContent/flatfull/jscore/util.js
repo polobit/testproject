@@ -1,7 +1,7 @@
 /**
  * Loading spinner shown while loading
  */
-var LOADING_HTML = '<img class="loading" style="padding-right:5px;opacity:0.5;" src= "/flatfull/img/ajax-loader-cursor.gif"></img>';
+var LOADING_HTML = '<img class="loading" style="padding-left:10px;padding-right:5px;opacity:0.5;" src= "/flatfull/img/ajax-loader-cursor.gif"></img>';
 
 /**
  * Set of loading images
@@ -13,7 +13,7 @@ LOADING_HTML_IMAGES = [
 /**
  * Loading images shown which contacts are being fetched on page scroll
  */
-var LOADING_ON_CURSOR = '<img class="loading" style="padding-right:5px" src= "img/ajax-loader-cursor.gif"></img>';
+var LOADING_ON_CURSOR = '<img class="loading" style="padding-left:10px;padding-right:5px" src= "img/ajax-loader-cursor.gif"></img>';
 
 /**
  * Default image shown for contacts if image is not available

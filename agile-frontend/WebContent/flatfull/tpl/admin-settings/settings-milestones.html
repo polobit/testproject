@@ -2,8 +2,8 @@
 	<div class="tab-container m-b-none">
            <ul class="nav nav-tabs">
              <li class="settings-milestones"><a href="#milestones" class="b-l-none">Tracks and Milestones</a></li>
-             <li class="settings-lost-reasons"><a href="#lost-reasons">Loss Reasons</a></li>
-			 <li class="settings-deal-sources"><a href="#deal-sources">Deal Sources</a></li>
+             <li class="settings-lost-reasons"><a href="#lost-reasons">Lost Reasons</a></li>
+			 <li class="settings-deal-sources"><a href="#deal-sources">Sources</a></li>
            </ul>
 	</div>
 	<div class="tab-pane active" id="settings-milestones-tab-content">
@@ -12,7 +12,7 @@
 	type="text/html">
 	<div class='col panel wrapper'>
 		<div class="hbox h-auto m-b-sm">
-			<h4><div class="m-t-xs pull-left">Tracks and Milestones</div>
+			<h4>
 			{{#isTracksEligible}}
 				<a href="#pipelineModal" role="button" data-toggle="modal" type="submit" class="add-pipeline btn btn-default btn-addon btn-sm" style="float:right;"><i class="icon icon-plus-sign"></i> Add Track</a>
 			{{else}}
@@ -130,7 +130,7 @@
 <script id="admin-settings-lost-reasons-collection-template" type="text/html">
 <div class="panel wrapper">
 	<div class="">
-		<table id="lost-reasons-table" class="table agile-table onlySorting m-b-n-xs table-hover">
+		<table id="lost-reasons-table" class="table table-bordered agile-table onlySorting m-b-n-xs table-hover">
 			<tbody id="admin-settings-lost-reasons-model-list" class="admin-settings-lost-reasons-model-list" style="word-break:normal!important;" ></tbody>
 		</table>
 	</div>
@@ -177,14 +177,14 @@
 <script id="admin-settings-deal-sources-collection-template" type="text/html">
 <div class="panel wrapper">
 	<div class="">
-		<table id="deal-sources-table" class="table agile-table onlySorting m-b-n-xs table-hover">
+		<table id="deal-sources-table" class="table  table-bordered agile-table onlySorting m-b-n-xs table-hover">
 			<tbody id="admin-settings-deal-sources-model-list" class="admin-settings-deal-sources-model-list" style="word-break:normal!important;" ></tbody>
 		</table>
 	</div>
 	<form id="dealSourcesForm" class="form-horizontal m-b-none pipeline" method=post>
 		<div class="p-l p-t p-b show_deal_source_add"><a href="#" class="show_milestone_field text-info"><i class="icon-plus-sign"></i> Add Source</a></div>
 		<div class="show_field p-l p-t p-b" style="display:none;">
-			<input id="deal_source_name" name="label" class="form-control input-sm required" style="width:145px;display:inline-block" type="text" placeholder="New Deal Source">
+			<input id="deal_source_name" name="label" class="form-control input-sm required" style="width:145px;display:inline-block" type="text" placeholder="New Source">
 			<input type="hidden" name="entity_type" value="DEAL_SOURCE" />
 			<a class="btn btn-default btn-addon btn-sm add_deal_source m-t-n-xxs" data-toggle="modal" id="add_deal_source" href="#">Add</a>
 			<span id="deal_source_name_error" for="deal_source_name" generated="true" class="help-inline" style="display:none;">This field is required.</span>

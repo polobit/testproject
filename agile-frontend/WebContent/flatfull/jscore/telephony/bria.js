@@ -10,7 +10,7 @@
  
 $(function()
 {
-	globalBriaSetup();
+	//globalBriaSetup();
 	
 	$('body').on('click', '.contact-make-bria-call', function(e)
 	{
