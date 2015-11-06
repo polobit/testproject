@@ -1557,6 +1557,11 @@ a#email-reply{
    text-align: center;
    margin-bottom: 7px!important;
   }
+
+  .wrapper-md .h3 {
+  text-align: center;
+  }
+
 .custom-animated.custom-fadeInUp > .bg-light .row {
   text-align: center;
 }
@@ -1613,6 +1618,10 @@ a#email-reply{
   }
   .dropdown-submenu:hover #contact-sort-views {
     display: none;
+  }
+  #contacts-filter-wrapper .chained-table tr td {
+    display: block;
+    margin-top: 5px;
   }
  }
 

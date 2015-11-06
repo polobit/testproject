@@ -62,10 +62,10 @@
 					{{else}}	
 <div class="inline-block">
 					{{#if_contact_type "PERSON"}}
-						<a class="text-info" href="#contact/{{id}}">{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}</a>,
+						<a class="text-info" href="#contact/{{id}}">{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}</a>{{#if @last}}{{else}},{{/if}}
 					{{/if_contact_type}}
 					{{#if_contact_type "COMPANY"}}
-        				<a class="text-info" href="#company/{{id}}">{{getPropertyValue properties "name"}}</a>,
+        		<a class="text-info" href="#company/{{id}}">{{getPropertyValue properties "name"}}</a>{{#if @last}}{{else}},{{/if}}
         			{{/if_contact_type}}
 </div>
 				{{/isDuplicateContactProperty}}

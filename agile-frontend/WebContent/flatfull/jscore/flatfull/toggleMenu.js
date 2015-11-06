@@ -47,6 +47,11 @@ $(document).ready(function(){
  
 
 	if(( $(window).width() ) < 768 ) {
+
+	$('body').on('click','.navbar-brand',function(){
+     $("#navbar").removeClass('show');
+     $("#aside").removeClass('off-screen');
+	});	
 	
 	$(".navi-wrap li a").click(function(){
 	  $("#mobile-menu").delay(2000).trigger("click");

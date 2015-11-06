@@ -516,9 +516,12 @@ table.fc-border-separate {
     background: transparent url('../img/switch.png') no-repeat 164px 80px;
 }
 
-@media all and (max-width:400px) {
+@media all and (max-width:535px) {
   .ms-container{
-  background: transparent url('../img/switch_mobile.png') no-repeat 164px 80px;
+  background: transparent url('../img/switch_mobile.png') no-repeat 70px 208px;
+}
+#ms-multipleSelect .ms-selection {
+  margin-top: 40px;
 }
 }
 

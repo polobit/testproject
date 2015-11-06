@@ -134,7 +134,7 @@ function isValid(){
 <br/>
 
 <div class="row">
-<div class="col-md-3 col-sm-6 col-xs-12">
+<div class="col-md-12 col-sm-12 col-xs-12">
 <div class="panel panel-default">
 <div class="panel-heading">Upload CSV file</div>
 <div class="panel-body">
