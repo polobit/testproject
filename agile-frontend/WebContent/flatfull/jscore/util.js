@@ -567,7 +567,7 @@ function convertDateFromUKtoUS(ukDate)
 function getFormattedDateObjectWithString(value){
 
 		if(!value)
-			   return;
+			   return new Date("");
 
         value = value.replace(/\./g,'/');
 		if(CURRENT_USER_PREFS.dateFormat.indexOf("yyyy") == -1){

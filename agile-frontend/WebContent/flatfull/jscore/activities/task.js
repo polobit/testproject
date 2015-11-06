@@ -24,6 +24,17 @@ $( document ).ready(function() {
 	});
 
 	/**
+	 * When clicked on update button of task-update-modal, the task will get
+	 * updated by calling save_task function
+	 */
+	$('#updateTaskModal #update_task_validate').off('click');
+	$("#updateTaskModal").on("click", '#update_task_validate', function(e)
+	{
+		e.preventDefault();
+		save_task('updateTaskForm', 'updateTaskModal', true, this);
+	});	
+
+	/**
 	 * Shows activity modal with all the task create fields.
 	 */
 	$("body").on("click", '.add-task', function(e)
@@ -97,17 +108,6 @@ function activateSliderAndTimerToTaskModal(el){
 	// $('#task-date-1').datepicker({ format : CURRENT_USER_PREFS.dateFormat , weekStart : CALENDAR_WEEK_START_DAY});
 	$('#update-task-date-1').datepicker({ format : CURRENT_USER_PREFS.dateFormat , weekStart : CALENDAR_WEEK_START_DAY});
 
-
-	/**
-	 * When clicked on update button of task-update-modal, the task will get
-	 * updated by calling save_task function
-	 */
-	$('#updateTaskModal #update_task_validate').off('click');
-	$("#updateTaskModal").on("click", '#update_task_validate', function(e)
-	{
-		e.preventDefault();
-		save_task('updateTaskForm', 'updateTaskModal', true, this);
-	});	
 
 }
 
