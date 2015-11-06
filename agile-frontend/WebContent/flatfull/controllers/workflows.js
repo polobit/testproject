@@ -485,7 +485,6 @@ var WorkflowsRouter = Backbone.Router
 				 */
 				postRenderCallback : function(el)
 				{
-					initializeAccountSettingsListeners();
 
 					initializeTriggerListEventListners(id,trigger_type);
 
