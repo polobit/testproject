@@ -556,21 +556,28 @@ var Tickets = {
 
 	showWorkflows: function(e){
 
-		var workflowsView = new Ticket_Base_Model({
+		//Rendering root template
+		getTemplate("ticket-show-workflows-modal", {}, undefined, function(template_ui){
+
+			if(!template_ui)
+		  		return;
+
+			$('#ticket-modals').html($(template_ui));
+			$('#show-workflows-modal').modal('show');
+
+			var workflowsView = new Ticket_Base_Model({
 			isNew : false,
 			url : "core/api/workflows",
-			template : "ticket-show-workflows-modal",
+			template : "ticket-show-workflows-form",
 			saveCallback : function(){
+					$('#show-workflows-modal').modal('hide');
+				}
+			});
 
-				$('#show-workflows-modal').modal('hide');
-			}
-		});
-
-		$('#ticket-modals').html(workflowsView.render().el);
-
-		setTimeout(function(){
-			$('#show-workflows-modal').modal('show');
-		}, 0);
+			$('#modal-body').html(workflowsView.render().el);
+		});	
+		
+		//$('#ticket-modals').html(workflowsView.render().el);
 	}
 };
 
