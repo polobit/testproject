@@ -10,11 +10,10 @@
                 <span id="range">{{date-range "today" "-6"}}</span>
               </div>
 
-			<!--<div class="pull-right" style="padding:0px 8px 10px">
+			<div class="pull-right" style="padding:0px 8px 10px">
 				<select name="owner" id="owner" class="required form-control">
-					<option value="All Owners">All Owners</option>
                 </select>
-			</div>-->
+			</div>
 			<div class="col-md-4 col-sm-6">
             <h3 class="font-thin h3">User Performance
             </h3>
@@ -36,26 +35,21 @@
 	<!-- Growth Reports -->
 		
 		<div class="row">
+		<div class="pull-left p-t-xl m-l-xl">
             {{#if userPic}}
-						<span class="pull-left thumb-lg avatar  m-t-n-sm m-b-n-sm m-l-sm">
+						<span class="pull-left thumb-m avatar  m-t-n-sm m-b-n-sm m-l-sm">
 						<img class="img-inital r r-2x" src="{{userPic}}" /></span>
 						{{else}}
-						<span class="pull-left thumb-lg avatar  m-t-n-sm m-b-n-sm m-l-sm">	
+						<span class="pull-left thumb-m avatar  m-t-n-sm m-b-n-sm m-l-sm">	
 						<img class="img-inital r r-2x" src="{{defaultGravatarurl 50}}" /></span>
 						{{/if}}
-		<div class="pull-left">{{userName}}</div>
+		<div class="pull-left p-t-lg p-l-sm text-lg">{{userName}}'s Performance</div>
+			</div>
 
-
-<div class="col-md-6 b-light pull-right">
-<div class="panel panel-default">
-<table class="table table-bordered">
+<div class="col-md-4 b-light pull-right">
+<div class="panel-default">
+<table class="table repTable" style="background-color:transparent;">
    
-    <thead class="panel-heading">
-        <tr>
-            <th style="width:46%" class="font-normal">Name</th>
-            <th style="width:54%" class="font-normal">Count</th>
-        </tr>
-    </thead>
     <tbody>
         <tr>
             <td>Task Created</td>
@@ -77,6 +71,11 @@
             <td>Campaigns Created</td>
            	<td>{{workflows}}</td>
         </tr>
+		<tr>
+            <td>Total Cases</td>
+           	<td>{{cases}}</td>
+        </tr>
+			
     </tbody>
 </table>
 </div>
@@ -85,19 +84,13 @@
 		
 </div>
 <div class="row">
-        <div class="pull-left" style="width:45%">
-			<h2 style="border-bottom: 1px solid #ddd;line-height: 35px">Rep Performance </h2>
+        <div class="pull-left p-l-sm" style="width:45%">
+			<h2 class="b-b"style="line-height: 35px">Rep Performance </h2>
 
-	<div class="col-md-6 b-light pull-right">
-<div class="panel panel-default">
-<table class="table table-bordered">
+	<div class="col-md-6 b-light pull-right p-t-xxl">
+<div class="panel-default">
+<table class="table repTable" style="background-color:transparent;">
    
-    <thead class="panel-heading">
-        <tr>
-            <th style="width:46%" class="font-normal">Name</th>
-            <th style="width:54%" class="font-normal">Count</th>
-        </tr>
-    </thead>
     <tbody>
         <tr> 
             <td>Total Sales</td>
@@ -123,9 +116,9 @@
 				<div id="lossreasonpie-chart-users"></div></div>
 		</div>
 		<div class="pull-right" style="width:45%">
-		<h2 style="border-bottom: 1px solid #ddd;line-height: 35px">Call Outcomes </h2>
+		<h2 class="b-b"style="line-height: 35px">Call Outcomes </h2>
 		 <div class="col-md-6">
-				<div id="calls-chart-user"></div></div>
+				<h4>Calls chart</h4><div id="calls-chart-user"></div></div>
 		<div class="pull-right" style="padding: 80px 36px 0px 0px;">Average Time Spent on Call : {{avgCallDuration}} </div>
 		</div>
       </div>

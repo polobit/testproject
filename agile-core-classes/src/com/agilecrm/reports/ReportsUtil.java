@@ -21,6 +21,7 @@ import com.agilecrm.activities.Call;
 import com.agilecrm.activities.util.ActivityUtil;
 import com.agilecrm.activities.util.EventUtil;
 import com.agilecrm.activities.util.TaskUtil;
+import com.agilecrm.cases.util.CaseUtil;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Contact.Type;
 import com.agilecrm.contact.ContactField;
@@ -473,7 +474,7 @@ public class ReportsUtil
 			dataJson.put("soldDeals",soldCount);
 			dataJson.put("avgSalesValue",avgValue);
 			
-			List<Opportunity> closedDeals=OpportunityUtil.getOpportunities(minTime, maxTime);
+			List<Opportunity> closedDeals=OpportunityUtil.getDealsWithOwnerandPipeline(ownerId,null,minTime, maxTime);
 			if(closedDeals!=null )
 			{
 				
@@ -516,6 +517,7 @@ public class ReportsUtil
 			
 			dataJson.put("events",EventUtil.getEventsCountforOwner(minTime,maxTime));
 			dataJson.put("workflows",WorkflowUtil.getWorkflowCountOfCurrentUser(minTime, maxTime, ownerId));
+			dataJson.put("cases",CaseUtil.getCasesOfUser(minTime, maxTime, ownerId));
 			return dataJson;
 			
 		}

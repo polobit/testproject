@@ -315,14 +315,14 @@ function initUserReports(callback){
 
 	callback();	
 
-/*		fillSelect("owner", "core/api/users", undefined, function()
+	fillSelect("owner", "core/api/users", undefined, function()
 		{
 			$('#owner').change(function()
 			{
 				callback();
 			});
 
-		}, '<option class="default-select" value="{{id}}">{{name}}</option>', false, undefined, "All Owners");*/
+		}, '<option class="default-select" value="{{id}}">{{name}}</option>', false, undefined, CURRENT_DOMAIN_USER.id);
 		
 	}
 
@@ -698,16 +698,16 @@ function showRepPerformanceReport()
 	 end_time += (((23*60*60)+(59*60)+59)*1000);
 	end_time=end_time+(d.getTimezoneOffset()*60*1000);
 
-	/*if ($('#owner').length > 0)
+	if ($('#owner').length > 0)
 	{
 		// Get owner
 		var owner_id=0;
-		if ($("#owner").val() != "" && $("#owner").val() != "All Owners")
+		if ($("#owner").val() != "")
 			owner_id=$("#owner").val();
 			options += owner_id;
-	}*/
+	}
 
-	options += CURRENT_DOMAIN_USER.id;
+	//options += CURRENT_DOMAIN_USER.id;
 	options += ("?min=" + start_time/1000 + "&max=" + end_time/1000);
 		report_utility.getRepPerformanceLog('core/api/reports/repPerformance/' + options);
 

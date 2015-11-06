@@ -2969,3 +2969,13 @@ width: 915px;
  word-wrap:break- all;
  white-space:normal!important;
  } 
+
+ .repTable tr td
+ {
+ 	border : none!Important;
+ }
+ 
+ .thumb-m {
+	 display: inline-block;
+  width: 80px;
+}
