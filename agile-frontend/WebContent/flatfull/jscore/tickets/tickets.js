@@ -169,7 +169,10 @@ var Tickets = {
 
 			Reload_Tickets_Count = true;
 
-			App_Ticket_Module.ticketsByGroup(Group_ID, Ticket_Status);
+			if(!Ticket_Filter_ID)
+				App_Ticket_Module.ticketsByGroup(Group_ID, Ticket_Status);
+			else
+				App_Ticket_Module.ticketsByFilter(Ticket_Filter_ID);
 
 			//Fectching new, open, closed tickets count
 			Tickets_Count.fetch_tickets_count();
