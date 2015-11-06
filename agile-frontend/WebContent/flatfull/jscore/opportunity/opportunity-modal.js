@@ -52,7 +52,7 @@ $(function()
 	 * "Hide" event of note modal to remove contacts appended to related to
 	 * field and validation errors
 	 */
-	$('#opportunityUpdateModal').on('hidden.bs.modal', function()
+	$('#opportunityUpdateModal').on('hide.bs.modal', function()
 	{
 
 		// Removes appended contacts from related-to field
