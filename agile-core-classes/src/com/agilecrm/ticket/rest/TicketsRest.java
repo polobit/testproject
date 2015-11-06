@@ -1,8 +1,10 @@
 package com.agilecrm.ticket.rest;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -23,7 +25,9 @@ import org.jsoup.Jsoup;
 import org.jsoup.examples.HtmlToPlainText;
 import org.jsoup.nodes.Document;
 
+import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Tag;
+import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.search.document.TicketsDocument;
 import com.agilecrm.ticket.entitys.TicketActivity;
 import com.agilecrm.ticket.entitys.TicketDocuments;
@@ -115,7 +119,7 @@ public class TicketsRest
 	public Tickets getTicketByID(@PathParam("id") Long ticketID)
 	{
 		String oldnamespace = NamespaceManager.get();
-		
+
 		try
 		{
 			Tickets ticket = TicketsUtil.getTicketByID(ticketID);
@@ -126,7 +130,7 @@ public class TicketsRest
 			if (ticket.assignee_id != null)
 			{
 				NamespaceManager.set("");
-				
+
 				Key<DomainUser> userKey = new Key<DomainUser>(DomainUser.class, ticket.assigneeID);
 				ticket.assignee = DomainUserUtil.dao.get(userKey);
 			}
@@ -313,7 +317,96 @@ public class TicketsRest
 	{
 		try
 		{
-			return new TicketActivity().getActivityByTicketId(ticketID);
+			List<TicketActivity> activitys = new TicketActivity().getActivityByTicketId(ticketID);
+
+			if (activitys == null || activitys.size() == 0)
+				return new ArrayList<TicketActivity>();
+
+			Tickets ticket = TicketsUtil.getTicketByID(ticketID);
+
+			Map<Long, TicketGroups> groupsList = new HashMap<Long, TicketGroups>();
+			Map<Long, DomainUser> assigneeList = new HashMap<Long, DomainUser>();
+			
+			for (TicketActivity activity : activitys)
+			{
+				switch (activity.ticket_activity_type)
+				{	
+					case TICKET_ASSIGNED:{
+						Long assigneeID = Long.parseLong(activity.new_data);
+						
+						if(!assigneeList.containsKey(assigneeID)){
+							
+							DomainUser temp = DomainUserUtil.getDomainUser(assigneeID);
+							
+							if(temp !=null)
+								assigneeList.put(assigneeID, temp);
+						}
+						
+						activity.new_assignee = assigneeList.get(assigneeID);
+						break;
+					}
+					case TICKET_ASSIGNEE_CHANGED:{
+						Long newAssigneeID = Long.parseLong(activity.new_data);
+						Long oldAssigneeID = Long.parseLong(activity.old_data);
+						
+						if(!assigneeList.containsKey(newAssigneeID)){
+							
+							DomainUser temp = DomainUserUtil.getDomainUser(newAssigneeID);
+							
+							if(temp !=null)
+								assigneeList.put(newAssigneeID, temp);
+						}
+						
+						if(!assigneeList.containsKey(oldAssigneeID)){
+							
+							DomainUser temp = DomainUserUtil.getDomainUser(oldAssigneeID);
+							
+							if(temp !=null)
+								assigneeList.put(oldAssigneeID, temp);
+						}
+						
+						activity.new_assignee = assigneeList.get(newAssigneeID);
+						activity.old_assignee = assigneeList.get(oldAssigneeID);
+						break;
+					}
+					case TICKET_GROUP_CHANGED:
+						
+						Long newGroupID = Long.parseLong(activity.new_data);
+						Long oldGroupID = Long.parseLong(activity.old_data);
+						
+						if(!groupsList.containsKey(newGroupID)){
+							
+							TicketGroups group = TicketGroupUtil.getTicketGroupById(newGroupID);
+							
+							if(group !=null)
+								groupsList.put(newGroupID, group);
+						}
+						
+						if(!groupsList.containsKey(oldGroupID)){
+							
+							TicketGroups group = TicketGroupUtil.getTicketGroupById(oldGroupID);
+							
+							if(group !=null)
+								groupsList.put(oldGroupID, group);
+						}
+						
+						activity.new_group = groupsList.get(newGroupID);
+						activity.old_group = groupsList.get(oldGroupID);
+						break;
+				}
+			}
+				
+				
+			// Including contact in each activity
+			if (ticket.contactID != null)
+			{
+				Contact contact = ContactUtil.getContact(ticket.contactID);
+
+				for (TicketActivity activity : activitys)
+					activity.contact = contact;
+			}
+
+			return activitys;
 		}
 		catch (Exception e)
 		{

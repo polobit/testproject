@@ -10,6 +10,7 @@ import javax.persistence.PrePersist;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.annotate.JsonIgnore;
 
 import com.agilecrm.contact.Contact;
@@ -102,6 +103,9 @@ public class TicketActivity
 	@NotSaved
 	public DomainUser old_assignee = null, new_assignee = null;
 
+	@NotSaved
+	public Contact contact = null;
+
 	/**
 	 * Type of the activity.
 	 * 
@@ -112,6 +116,12 @@ public class TicketActivity
 	};
 
 	public TicketActivityType ticket_activity_type;
+
+	/**
+	 * Util attribute to send clean activity title to client
+	 */
+	@NotSaved
+	public String activity_title = "";
 
 	private static ObjectifyGenericDao<TicketActivity> dao = new ObjectifyGenericDao<TicketActivity>(
 			TicketActivity.class);
@@ -133,45 +143,45 @@ public class TicketActivity
 		this.created_time = Calendar.getInstance().getTimeInMillis();
 		this.ticket_activity_type = ticket_activity_type;
 
-//		switch (ticket_activity_type)
-//		{
-//		case TICKET_CREATED:
-//			this.label = "Ticket Created";
-//			break;
-//		case TICKET_ASSIGNED:
-//			this.label = label;
-//			break;
-//		case TICKET_ASSIGNED_CHANGED:
-//			this.label = label;
-//			break;
-//		case TICKET_GROUP_CHANGED:
-//			this.label = label;
-//			break;
-//		case TICKET_STATUS_CHANGE:
-//			this.label = label;
-//			break;
-//		case TICKET_PRIORITY_CHANGE:
-//			this.label = label;
-//			break;
-//		case TICKET_TYPE_CHANGE:
-//			this.label = label;
-//			break;
-//		case TICKET_TAG_ADD:
-//			this.label = label;
-//			break;
-//		case TICKET_TAG_REMOVE:
-//			this.label = label;
-//			break;
-//		case TICKET_ASSIGNEE_REPLIED:
-//			this.label = label;
-//			break;
-//		case TICKET_REQUESTER_REPLIED:
-//			this.label = label;
-//			break;
-//		case TICKET_PRIVATE_NOTES_ADD:
-//			this.label = "";
-//			break;
-//		}
+		// switch (ticket_activity_type)
+		// {
+		// case TICKET_CREATED:
+		// this.label = "Ticket Created";
+		// break;
+		// case TICKET_ASSIGNED:
+		// this.label = label;
+		// break;
+		// case TICKET_ASSIGNED_CHANGED:
+		// this.label = label;
+		// break;
+		// case TICKET_GROUP_CHANGED:
+		// this.label = label;
+		// break;
+		// case TICKET_STATUS_CHANGE:
+		// this.label = label;
+		// break;
+		// case TICKET_PRIORITY_CHANGE:
+		// this.label = label;
+		// break;
+		// case TICKET_TYPE_CHANGE:
+		// this.label = label;
+		// break;
+		// case TICKET_TAG_ADD:
+		// this.label = label;
+		// break;
+		// case TICKET_TAG_REMOVE:
+		// this.label = label;
+		// break;
+		// case TICKET_ASSIGNEE_REPLIED:
+		// this.label = label;
+		// break;
+		// case TICKET_REQUESTER_REPLIED:
+		// this.label = label;
+		// break;
+		// case TICKET_PRIVATE_NOTES_ADD:
+		// this.label = "";
+		// break;
+		// }
 	}
 
 	/**
@@ -244,6 +254,58 @@ public class TicketActivity
 
 		if (ticket_id == null)
 			ticket_id = ticket_key.getId();
+
+		if (StringUtils.isBlank(activity_title))
+		{
+			switch (ticket_activity_type)
+			{
+				case TICKET_CREATED:
+					this.activity_title = "Ticket created";
+					break;
+				case TICKET_ASSIGNED:
+					this.activity_title = "Ticket assigned";
+					break;
+				case TICKET_ASSIGNEE_CHANGED:
+					this.activity_title = "Assignee changed";
+					break;
+				case TICKET_GROUP_CHANGED:
+					this.activity_title = "Group changed";
+					break;
+				case TICKET_STATUS_CHANGE:
+					this.activity_title = "Status changed";
+					break;
+				case TICKET_PRIORITY_CHANGE:
+					this.activity_title = "Priority changed";
+					break;
+				case TICKET_TYPE_CHANGE:
+					this.activity_title = "Type changed";
+					break;
+				case TICKET_TAG_ADD:
+					this.activity_title = "Tag added";
+					break;
+				case TICKET_TAG_REMOVE:
+					this.activity_title = "Tag removed";
+					break;
+				case TICKET_ASSIGNEE_REPLIED:
+					this.activity_title = "Assignee replied";
+					break;
+				case TICKET_REQUESTER_REPLIED:
+					this.activity_title = "Requester replied";
+					break;
+				case TICKET_PRIVATE_NOTES_ADD:
+					this.activity_title = "Private notes added";
+					break;
+				case TICKET_DELETED:
+					this.activity_title = "Ticket deleted";
+					break;
+				case TICKET_MARKED_FAVORITE:
+					this.activity_title = "Marked favorite";
+					break;
+				case TICKET_MARKED_UNFAVORITE:
+					this.activity_title = "Marked unfavorite";
+					break;
+			}
+		}
 	}
 
 	public List<TicketActivity> getActivityByContactId(Long contact_id)
@@ -259,6 +321,6 @@ public class TicketActivity
 		Map<String, Object> searchMap = new HashMap<String, Object>();
 		searchMap.put("ticket_key", new Key<Tickets>(Tickets.class, ticket_id));
 
-		return dao.listByProperty(searchMap);
+		return dao.listByPropertyAndOrder(searchMap, "-created_time");
 	}
 }

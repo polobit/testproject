@@ -5,12 +5,15 @@ var Ticket_Base_Model = Base_Model_View.extend({
 		"click .refresh-tickets" : "refreshTickets",
 
 		//Ticket operations change group, assignee, priority etc
+		/*"click .ticket_group_name" : "changeGroup",*/
 		"click .ticket_status" : "changeStatus",
-		"click .ticket_group_name" : "changeGroup",
 		"click .ticket_assignee_name" : "changeAssignee",
 		"click .ticket_type" : "changeTicketType",
 		"click .ticket_priority" : "changeTicketPriority",
 		"click .delete-ticket" : "deleteTicket",
+		"click .show-workflows" : "workflows",
+		"mouseover .hover-edit" : "showEditIcon",
+		"mouseout  .hover-edit" : "hideEditIcon",
 
 		"click .to-emails" : "toEmails",
 
@@ -156,7 +159,7 @@ var Ticket_Base_Model = Base_Model_View.extend({
 	renderTicketTimeline: function(e){
 		e.preventDefault();
 
-		Ticket_Timeline.render_ticket_timeline(Current_Ticket_ID);
+		Ticket_Timeline.render_individual_ticket_timeline();
 	},
 
 	showCannedMessages: function(e){
@@ -169,5 +172,20 @@ var Ticket_Base_Model = Base_Model_View.extend({
 		e.preventDefault();
 		
 		Tickets.deleteTicket();
+	},
+
+	workflows: function(e){
+		e.preventDefault();
+		
+		Tickets.showWorkflows();
+	},
+
+	showEditIcon: function(e){
+		e.preventDefault();
+		$(e.target).find('.icon-edit').removeClass('hide');
+	},
+	hideEditIcon: function(e){
+		e.preventDefault();
+		$(e.target).find('.icon-edit').addClass('hide');
 	}
 });

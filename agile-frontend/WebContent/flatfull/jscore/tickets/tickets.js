@@ -520,6 +520,25 @@ var Tickets = {
 
 		$('#ticket-modals').html(deleteTicketView.render().el);
 		$('#ticket-delete-modal').modal('show');
+	},
+
+	showWorkflows: function(e){
+
+		var workflowsView = new Ticket_Base_Model({
+			isNew : false,
+			url : "core/api/workflows",
+			template : "ticket-show-workflows-modal",
+			saveCallback : function(){
+
+				$('#show-workflows-modal').modal('hide');
+			}
+		});
+
+		$('#ticket-modals').html(workflowsView.render().el);
+
+		setTimeout(function(){
+			$('#show-workflows-modal').modal('show');
+		}, 0);
 	}
 };
 

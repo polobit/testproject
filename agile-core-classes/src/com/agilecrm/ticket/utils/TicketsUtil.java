@@ -697,7 +697,7 @@ public class TicketsUtil
 				new TicketActivity(TicketActivityType.TICKET_ASSIGNED, ticket.contactID, ticket.id, "", assignee_id
 						+ "", "assigneeID").save();
 			else
-				// Logging ticket transfer activity
+				// Logging ticket assignee changed activity
 				new TicketActivity(TicketActivityType.TICKET_ASSIGNEE_CHANGED, ticket.contactID, ticket.id,
 						oldAssigneeID + "", assignee_id + "", "assigneeID").save();
 		}

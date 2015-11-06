@@ -5,9 +5,12 @@
 		    {{#if_equals created_by 'REQUESTER'}}
 		    	<img class="m-r-sm v-inherit" src="{{emailGravatarurl 50 requester_email}}" width="34px" height="34px">
 		    	<div class="inline-block">
-		    		From <a href="javascript:void(0);">{{requester_name}} ({{requester_email}})</a>
+		    		<a href="javascript:void(0);">{{requester_name}} ({{requester_email}})</a>
 		    		<div>
-		   				on {{epochToHumanDate "mmm dd yyyy HH:MM" created_time}}
+		   				Received on 
+		   					<span class="text-xs text-muted">
+		   						{{epochToHumanDate "mmm dd yyyy HH:MM" created_time}}
+		   					</span>
 		   			</div>
 		    	</div>
 		   	{{else}}
@@ -17,7 +20,10 @@
 		   				{{domain_user.name}} ({{domain_user.email}})
 		   			</a>
 		   			<div>
-		   				Replied on {{epochToHumanDate "mmm dd yyyy HH:MM" created_time}}
+		   				Replied on 
+		   				<span class="text-xs text-muted">
+	   						{{epochToHumanDate "mmm dd yyyy HH:MM" created_time}}
+	   					</span>
 		   			</div>
 		   		</div>
 		   	{{/if_equals}}
@@ -36,14 +42,22 @@
 	    	{{{html_text}}}
 	  	</div>
 	{{else}}
-		<div class="wrapper b-b b-t m-t-xs">
-		    <img class="img-circle thumb-xs m-r-sm" src="{{domain_user.ownerPic}}">
-		   		User <a href="javascript:void(0);" class="ng-binding">
-		   				{{domain_user.name}} ({{domain_user.email}}) wrote 
-		   			</a> on {{epochToHumanDate "mmm dd yyyy HH:MM" created_time}}
-		   	<span class="label label-warning pull-right">Private Notes</span>		
+		<div class="wrapper b-b b-t m-t-xs" style="background-color:#FBFBFB">
+		    <img class="m-r-sm v-inherit" src="{{domain_user.ownerPic}}"  width="34px" height="34px">
+		    <div class="inline-block">
+		   		<a href="javascript:void(0);">
+	   				{{domain_user.name}} ({{domain_user.email}})
+	   			</a>
+	   			<div>
+	   				Notes added on 
+	   				<span class="text-xs text-muted">
+						{{epochToHumanDate "mmm dd yyyy HH:MM" created_time}}
+					</span>
+	   				<span class="label label-warning m-l-xs">Private Notes</span>
+	   			</div>
+		   	</div>
 		</div>
-		<div class="wrapper">
+		<div class="wrapper" style="background-color:#FBFBFB">
 	    	{{{html_text}}}
 	  	</div>
 	{{/if_equals}}  	

@@ -1,0 +1,56 @@
+<script id="ticket-show-workflows-modal-template" type="text/html">
+	<div id="show-workflows-modal" class="modal fade">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+		            <button class="close" data-dismiss="modal">x</button>
+					<h3 class="modal-title"><i class="icon icon-sitemap"></i> Select Workflow</h3>
+				</div>
+				<div class="modal-body">
+					<form id='executeWorkFlowForm' name="executeWorkFlowForm" class="form-horizontal">
+						<input type="hidden" name="ticket_id" id="ticket_id">
+						<table class="table table-striped">
+							<thead><tr><th>Name</th><th></th></tr></thead>
+							<tbody>
+								{{#each this}}
+									<tr class="ticket-workflows-row" data-id="{{id}}">
+										<td class="cursor-pointer">
+											<label class="i-checks">
+								                <input type="radio" name="workflow_id" value="{{id}}"><i></i>
+								            </label>&nbsp;
+											{{name}}
+										</td>
+										<td class="cursor-pointer">
+											{{#if updated_time}}
+										        <div class="table-resp">
+										            <small class="edit-hover text-muted"> 
+														<i class="fa fa-clock-o m-r-xs"></i>
+												        <span>Modified&nbsp;</span>
+										                <time class="campaign-created-time b-b-dotted" datetime="{{epochToHumanDate "" updated_time}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" updated_time}}</time>
+										            </small>
+										        </div>
+									        {{else}}
+										        <div>
+										            <small class="edit-hover text-muted"> 
+														<i class="fa fa-clock-o m-r-xs"></i>
+												       	<span>Created&nbsp;</span>
+										               	<time class="campaign-created-time b-b-dotted" datetime="{{epochToHumanDate "" created_time}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" created_time}}</time>
+										         	</small>
+										        </div>
+										    {{/if}}
+										</td>
+									</tr>
+								{{/each}}	
+							</tbody>
+						</table>
+					</form>	
+				</div>
+				<div class="modal-footer">
+					<a href="javascript:void(0);" data-dismiss="modal" class="btn btn-sm btn-default">Close</a>
+					<a href="javascript:void(0);" data-loading-text='Executing...' class="save btn btn-sm btn-primary">Execute</a>
+					&nbsp;&nbsp;<span id="msg"></span>
+				</div>
+			</div>
+		</div>
+	</div>
+</script>	

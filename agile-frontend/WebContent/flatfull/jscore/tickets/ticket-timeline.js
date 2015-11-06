@@ -29,6 +29,27 @@ var Ticket_Timeline = {
 
 			ticket_timeline_collection_view.render();
 		});
+	},
+
+	render_individual_ticket_timeline: function(){
+
+		var timeLineView = new Ticket_Base_Model({
+			isNew : false,
+			url : 'core/api/tickets/activity?id=' + Current_Ticket_ID,
+			template : 'ticket-timeline',
+			postRenderCallback: function(el){
+
+				head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
+				{
+					$("time", el).timeago();		
+				});
+
+				//Initialize tooltips
+				$('[data-toggle="tooltip"]', el).tooltip();
+			}
+		});
+
+		$('#ticket_timeline').html(timeLineView.render().el);
 	}
 };	
 

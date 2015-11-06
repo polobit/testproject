@@ -112,5 +112,16 @@ var Tickets_Notes = {
 
 		$('#ticket-modals').html(deleteTicketView.render().el);
 		$('#ticket-delete-modal').modal('show');
+	},
+
+	executeWorkflow: function(e){
+
+		var $that = $(e.target);
+
+		console.log($that.data('id'));
+
+		$('#ticket_id').val(Current_Ticket_ID);
+		$('#workflow_id').val($that.data('id'));
+		$that.closest('form').submit();
 	}
 };

@@ -27,7 +27,7 @@
     <div class="btn-group pos-stc">
       <button class="btn btn-sm btn-default w-xxs w-auto-xs delete-ticket" data-toggle="tooltip" data-placement="bottom" data-original-title="Delete Ticket"><i class="fa fa-trash-o"></i></button>
       <div class="btn-group dropdown">
-        <button class="btn btn-sm btn-default w-xxs w-auto-xs dropdown-toggle" data-toggle="tooltip" data-placement="bottom" data-original-title="Macros"><i class="fa fa-sitemap"></i></button>
+        <button class="btn btn-sm btn-default w-xxs w-auto-xs dropdown-toggle show-workflows" data-toggle="tooltip" data-placement="bottom" data-original-title="Workflows"><i class="fa fa-sitemap"></i></button>
       </div>
     </div>
 
@@ -35,7 +35,7 @@
 <div class="row">
   <div class="col-md-8 p-r-none b-r">
     <div class="wrapper">
-      <h2 class="font-thin m-n ng-binding">{{subject}}</h2>
+      <h3 class="font-thin m-n ctx">{{subject}}</h3>
     </div>
     <div id="notes-collection-container">
       
@@ -78,19 +78,48 @@
     <div class="tab-content">
       <div role="tabpanel" class="tab-pane active" id="tab-1">
         <div class="wrapper-md p-b-none">
-          <table style="width: 100%;">
-              <tr>
-                  <td class="p-t-xs p-b-xs">Ticket #</td>
-                  <td class="p-t-xs p-b-xs">{{short_id}}</td>
-              </tr>
-              <tr>
+            <table class="ticket-details-table" style="width: 100%;">
+                <tr>
+                  <td class="p-t-xs p-b-xs">Last Updated By</td>
+                  <td class="p-t-xs p-b-xs first-letter-cap">
+                    {{#if_equals last_updated_by 'AGENT'}}
+                      {{assignee.name}}
+                      <small class="text-muted first-letter-cap inline-block">({{last_updated_by}})</small>
+                    {{else}}
+                       {{requester_name}}
+                    {{/if_equals}}
+                  </td>
+                </tr>
+            </table>  
+        </div>
+        <hr class="m-l m-r m-t-sm m-b-sm"/>
+         <div class="wrapper-md p-b-none p-t-none">
+            <table class="ticket-details-table" style="width: 100%;">
+                <tr>
                   <td class="p-t-xs p-b-xs">Status</td>
                   {{#if_equals status 'NEW'}}
-                    <td class="p-t-xs p-b-xs first-letter-cap">{{status}}</td>
+                    <td class="p-t-xs p-b-xs first-letter-cap">
+                      {{status}}
+                      <i class="icon-edit pull-right m-t-xs hide"></i>
+                    </td>
                   {{else}}
                     <td class="p-t-xs p-b-xs">
-                      <div class="ticket_status ticket-details-value first-letter-cap">{{status}}</div>
-                      <div class="dropdown ticket-details-dropdown" id="change-ticket-status-ul" style="display: none;">
+                      <div class="pos-rlt">
+                        <div data-toggle="dropdown" aria-expanded="false" class="dropdown-toggle ticket-details-value first-letter-cap hover-edit">
+                          {{status}} <i class="icon-edit pull-right m-t-xs hide"></i>
+                        </div>
+                        <ul class="dropdown-menu pull-right m-t-n-md m-r-md text-sm pos-abs">
+                          <li>
+                            <a href="javascript:;">
+                              <i class="icon-edit"></i> Change status
+                              <div class="clearfix"></div>
+                            </a> 
+                          </li>
+                          <li class="divider"></li>
+                          <li><a href="javascript:;">Close</a></li>
+                        </ul>
+                       </div>  
+                      <!--<div class="dropdown ticket-details-dropdown" id="change-ticket-status-ul" style="display: none;">
                         <div class="btn-group">
                           <div class="btn btn-default btn-xs custom_view first-letter-cap">Change Status</div>
                           <a class="btn btn-xs dropdown-toggle btn-default" data-toggle="dropdown" aria-expanded="false"> 
@@ -100,32 +129,17 @@
                              
                           </ul>
                         </div>
-                      </div>
+                      </div> -->
                     </td>
                   {{/if_equals}}
-                  
-              </tr>
-              <tr>
-                  <td class="p-t-xs p-b-xs">Group</td>
-                  <td id="group-id" class="p-t-xs p-b-xs" data-id="{{groupID}}">
-                    <div class="group_name ticket_group_name ticket-details-value first-letter-cap">{{group.group_name}}</div>
-                    <div class="dropdown ticket-details-dropdown" id="change-ticket-group-ul" style="display: none;">
-                      <div class="btn-group">
-                        <div class="btn btn-default btn-xs custom_view first-letter-cap">Change Group</div>
-                        <a class="btn btn-xs dropdown-toggle btn-default" data-toggle="dropdown" aria-expanded="false"> 
-                          <span class="caret"></span>
-                        </a>
-                        <ul id="ticket-groups-list" class="dropdown-menu pull-right">
-                        </ul>
-                      </div>
-                    </div>
-                  </td>
               </tr>
               <tr>
                   <td class="p-t-xs p-b-xs">Assignee</td>
                   <td id="assignee-id" class="p-t-xs p-b-xs" data-id="{{#if assigneeID}}{{assigneeID}}{{/if}}">
-                    <div class="assignee_name ticket_assignee_name ticket-details-value first-letter-cap">
-                      {{#if assigneeID}}{{assignee.name}}{{else}}-{{/if}}
+                    <div class="assignee_name ticket_assignee_name ticket-details-value first-letter-cap hover-edit">
+                      {{#if assigneeID}}
+                        {{assignee.name}} <i class="icon-edit pull-right m-t-xs hide"></i>
+                      {{else}}-{{/if}}
                     </div>
                     <div class="dropdown ticket-details-dropdown" id="change-ticket-assignee-ul" style="display: none;">
                       <div class="btn-group">
@@ -144,7 +158,9 @@
               <tr>
                   <td class="p-t-xs p-b-xs">Type</td>
                   <td class="p-t-xs p-b-xs">
-                    <div class="ticket_type ticket-details-value first-letter-cap">{{type}}</div>
+                    <div class="ticket_type ticket-details-value first-letter-cap hover-edit">
+                      {{type}} <i class="icon-edit pull-right m-t-xs hide"></i>
+                    </div>
                     <div class="dropdown ticket-details-dropdown" id="change-ticket-type-ul" style="display: none;">
                       <div class="btn-group">
                         <div class="btn btn-default btn-xs custom_view first-letter-cap">Change Type</div>
@@ -164,7 +180,10 @@
               <tr>
                   <td class="p-t-xs p-b-xs">Priority</td>
                   <td class="p-t-xs p-b-xs">
-                    <div class="ticket_priority ticket-details-value first-letter-cap">{{priority}}</div>
+                    <div class="ticket_priority ticket-details-value first-letter-cap hover-edit">
+                      {{priority}}
+                      <i class="icon-edit pull-right m-t-xs hide"></i>
+                    </div>
                     <div class="dropdown ticket-details-dropdown" id="change-ticket-priority-ul" style="display: none;">
                       <div class="btn-group">
                         <div class="btn btn-default btn-xs custom_view first-letter-cap">Change Priority</div>
@@ -180,22 +199,37 @@
                     </div>
                   </td>
               </tr>
+            </table>  
+        </div>
+        <hr class="m-l m-r m-t-sm m-b-sm"/>
+        <div class="wrapper-md p-b-none  p-t-none">
+          <table class="ticket-details-table" style="width: 100%;">
               <tr>
-                  <td class="p-t-xs p-b-xs">Created</td>
-                  <td class="p-t-xs p-b-xs">{{epochToHumanDate "dd mmm yyyy HH:MM" created_time}}</td>
+                  <td class="p-t-xs p-b-xs">Ticket #</td>
+                  <td class="p-t-xs p-b-xs">{{short_id}}</td>
               </tr>
               <tr>
-                  <td class="p-t-xs p-b-xs">Last Updated</td>
-                  <td class="p-t-xs p-b-xs">{{epochToHumanDate "dd mmm yyyy HH:MM" last_updated_time}}</td>
+                  <td class="p-t-xs p-b-xs">Group</td>
+                  <td id="group-id" class="p-t-xs p-b-xs" data-id="{{groupID}}">
+                    <div class="group_name ticket_group_name ticket-details-value first-letter-cap">
+                      {{group.group_name}}
+                    </div>
+                  </td>
               </tr>
               <tr>
-                  <td class="p-t-xs p-b-xs">Last Updated By</td>
-                  <td class="p-t-xs p-b-xs first-letter-cap">{{last_updated_by}}</td>
+                  <td class="p-t-xs p-b-xs">Created On</td>
+                  <td class="p-t-xs p-b-xs">{{epochToHumanDate "mmm dd yyyy HH:MM" created_time}}</td>
               </tr>
               <tr>
-                  <td class="p-t-xs p-b-xs">Contact URL</td>
+                  <td class="p-t-xs p-b-xs">Updated On</td>
+                  <td class="p-t-xs p-b-xs">{{epochToHumanDate "mmm dd yyyy HH:MM" last_updated_time}}</td>
+              </tr>
+              <tr>
+                  <td class="p-t-xs p-b-xs">Contact Details</td>
                   <td class="p-t-xs p-b-xs">
-                    <a href="https://{{get_current_domain}}.agilecrm.com/#contact/{{contactID}}">Click Here</a>
+                    <a class="link-color" href="https://{{get_current_domain}}.agilecrm.com/#contact/{{contactID}}">
+                      Click Here
+                    </a>
                   </td>
               </tr>
           </table>
@@ -227,27 +261,7 @@
         </div>
       </div>
       <div role="tabpanel" class="tab-pane" id="tab-2">
-        <div class="padder p-l-none">      
-          <div class="streamline b-l b-info m-l-lg m-b padder-v">
-              <div>
-                <a class="pull-left thumb-sm avatar m-l-n-md">
-                  <img src="http://flatfull.com/themes/angulr/angular/img/a2.jpg" alt="...">
-                </a>          
-                <div class="m-l-lg panel b-a">
-                  <div class="panel-heading pos-rlt b-b b-light">
-                    <span class="arrow left"></span>
-                    <a href="">Peter</a>
-                    <label class="label bg-light m-l-xs">VIP</label> 
-                    <span class="text-muted m-l-sm pull-right">
-                      9h ago
-                    </span>
-                  </div>
-                  <div class="panel-body">
-                    <div>Lorem ipsum dolor sit amet, consecteter adipiscing elit...</div>
-                  </div>
-                </div>
-              </div>
-          </div>
+        <div id="ticket_timeline">
         </div>
       </div>
       <div role="tabpanel" class="tab-pane" id="tab-3">

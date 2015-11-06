@@ -1,0 +1,93 @@
+<script id="ticket-timeline-template" type="text/html">
+<div class="padder p-l-none">      
+    <div class="streamline b-l b-info m-l-lg m-b padder-v">
+    	{{#each this}}  
+	      <div class="timeline_entity">
+	        <a class="pull-left thumb-sm avatar m-l-n">
+	        	{{#if_equals ticket_activity_type 'TICKET_CREATED'}}
+	        		<img class="img-inital inline" src="{{gravatarurl contact.properties 30}}" data-toggle="tooltip" data-placement="top" data-original-title="{{getPropertyValue contact.properties "first_name"}} {{getPropertyValue contact.properties "last_name"}}"/>
+	        	{{else}}
+	        		{{#if_equals ticket_activity_type 'TICKET_REQUESTER_REPLIED'}}
+	        			<img class="img-inital inline" src="{{gravatarurl contact.properties 30}}" data-toggle="tooltip" data-placement="top" data-original-title="{{getPropertyValue contact.properties "first_name"}} {{getPropertyValue contact.properties "last_name"}}"/>
+	        		{{else}}
+	        			<img src="{{user.ownerPic}}" data-toggle="tooltip" data-placement="top" 
+	        				data-original-title="{{user.name}}"/>
+	        		{{/if_equals}}
+	        	{{/if_equals}}
+	        </a>          
+	        <div class="m-l-lg panel b-a">
+	          <div class="panel-heading pos-rlt b-b b-light p-t-xs p-b-xs p-r-sm p-l-sm">
+	            <span class="arrow left"></span>
+	            <a href="javascript:;">{{activity_title}}</a>
+	          </div>
+	          <div class="panel-body text-sm p-t-xs p-b-xs p-r-sm p-l-sm">
+				{{#if_equals ticket_activity_type 'TICKET_CREATED'}}
+				    Ticket (#{{ticket_id}}) Created
+				{{else}}
+				    {{#if_equals ticket_activity_type 'TICKET_ASSIGNED'}}
+				        Ticket assigned to <span class="first-letter-cap inline-block">{{new_assignee.name}}</span>
+				    {{else}}
+				        {{#if_equals ticket_activity_type 'TICKET_ASSIGNEE_CHANGED'}}
+				            Ticket assignee changed to <span class="first-letter-cap inline-block">
+				            	{{new_assignee.name}}
+				            </span>
+				        {{else}}
+				            {{#if_equals ticket_activity_type 'TICKET_GROUP_CHANGED'}}
+				                Ticket group changed to <span class="first-letter-cap inline-block">{{new_group.name}}</span>
+				            {{else}}
+				                {{#if_equals ticket_activity_type 'TICKET_STATUS_CHANGE'}}
+				                    Status changed to <span class="first-letter-cap inline-block">{{new_data}}</span>
+				                {{else}}
+				                    {{#if_equals ticket_activity_type 'TICKET_PRIORITY_CHANGE'}}
+				                       Priority changed to <span class="first-letter-cap inline-block">{{new_data}}</span>
+				                    {{else}}
+				                        {{#if_equals ticket_activity_type 'TICKET_TYPE_CHANGE'}}
+				                            Type changed to <span class="first-letter-cap inline-block">{{new_data}}</span>
+				                        {{else}}
+				                            {{#if_equals ticket_activity_type 'TICKET_TAG_ADD'}}
+				                                Tag {{new_data}} added
+				                            {{else}}
+				                                {{#if_equals ticket_activity_type 'TICKET_TAG_REMOVE'}}
+				                                    Tag {{new_data}} removed
+				                                {{else}}
+				                                    {{#if_equals ticket_activity_type 'TICKET_ASSIGNEE_REPLIED'}}
+				                                    	{{user.name}} replied to Ticket
+				                                    {{else}}
+				                                        {{#if_equals ticket_activity_type 'TICKET_REQUESTER_REPLIED'}}
+				                                            {{#if contact}}
+				                                            	{{getPropertyValue contact.properties "first_name"}} 
+				                                            	{{getPropertyValue contact.properties "last_name"}}
+				                                            {{else}}
+				                                            	Requester
+				                                            {{/if}}		
+				                                            replied to Ticket
+				                                        {{else}}
+				                                            {{#if_equals ticket_activity_type 'TICKET_PRIVATE_NOTES_ADD'}}
+				                                                {{user.name}} added private notes
+				                                            {{/if_equals}}
+				                                        {{/if_equals}}
+				                                    {{/if_equals}}
+				                                {{/if_equals}}
+				                            {{/if_equals}}
+				                        {{/if_equals}}
+				                    {{/if_equals}}
+				                {{/if_equals}}
+				            {{/if_equals}}
+				        {{/if_equals}}
+				    {{/if_equals}}
+				{{/if_equals}}
+				<div class="m-t-xs">
+					<span class="text-muted txt-11 pull-right">
+						<i class="fa fa-clock-o"></i>
+		            	<time class="b-b-dotted" datetime="{{epochToHumanDate "" created_time}}">
+		              		{{epochToHumanDate "ddd mmm dd yyyy HH:MM" created_time}}
+		              	</time>
+		            </span>
+		        </div>    
+	          </div>
+	        </div>
+	      </div>
+	    {{/each}}  
+   </div>
+</div>
+</script>                    
