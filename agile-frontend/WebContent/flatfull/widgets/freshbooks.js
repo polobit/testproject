@@ -174,6 +174,9 @@ function getInvoicesOfClient(client_id, offSet)
 					FBSmails.invoice = data.invoice;
 					if(FBSmails.invoice instanceof Array){
 						result.invoice = FBSmails.invoice.slice(0, 5);
+					}else{
+						FBSmails.invoice = data.invoice;
+						result.invoice = data.invoice;
 					}						
 				}
 				FBSmails.total = data.total;
