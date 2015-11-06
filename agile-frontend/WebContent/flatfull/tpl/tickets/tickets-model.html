@@ -15,9 +15,9 @@
         <a class="text-md" href="javascript:;">
           {{requester_name}} ({{requester_email}})
         </a>
-        {{#each tags}}
+        <!--{{#each tags}}
             <span class="label bg-light m-l-xs font-bold">{{this.tag}}</span>
-        {{/each}}
+        {{/each}}-->
       </div>
       <div class="text-ellipsis m-t-xs">{{subject}}</div>
     </div>
@@ -40,9 +40,9 @@
         </div>
         <div id="recent-reply-notes" class="col-md-12 p recent-reply-notes">
           {{#if last_reply_text}}
-            {{last_reply_text}}
+            {{{last_reply_text}}}
           {{else}}
-            {{first_reply_notes}}
+            {{{first_reply_notes}}}
           {{/if}}  
         </div>
       </div>

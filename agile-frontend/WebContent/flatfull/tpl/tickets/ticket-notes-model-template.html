@@ -7,10 +7,9 @@
 		    	<div class="inline-block">
 		    		<a href="javascript:void(0);">{{requester_name}} ({{requester_email}})</a>
 		    		<div>
-		   				Received on 
-		   					<span class="text-xs text-muted">
-		   						{{epochToHumanDate "mmm dd yyyy HH:MM" created_time}}
-		   					</span>
+		    			<span class="txt-small text-xs text-muted">
+		   					Received on {{epochToHumanDate "mmm dd yyyy HH:MM" created_time}}
+		   				</span>
 		   			</div>
 		    	</div>
 		   	{{else}}
@@ -20,9 +19,8 @@
 		   				{{domain_user.name}} ({{domain_user.email}})
 		   			</a>
 		   			<div>
-		   				Replied on 
-		   				<span class="text-xs text-muted">
-	   						{{epochToHumanDate "mmm dd yyyy HH:MM" created_time}}
+		   				<span class="txt-small text-xs text-muted">
+		   					Replied on {{epochToHumanDate "mmm dd yyyy HH:MM" created_time}}
 	   					</span>
 		   			</div>
 		   		</div>

@@ -18,52 +18,55 @@
 	        <div class="m-l-lg panel b-a">
 	          <div class="panel-heading pos-rlt b-b b-light p-t-xs p-b-xs p-r-sm p-l-sm">
 	            <span class="arrow left"></span>
-	            <a href="javascript:;">{{activity_title}}</a>
+	            <a href="javascript:;" class="txt-small">{{activity_title}}</a>
 	          </div>
-	          <div class="panel-body text-sm p-t-xs p-b-xs p-r-sm p-l-sm">
+	          <div class="panel-body p-t-xs p-b-xs p-r-sm p-l-sm txt-small">
 				{{#if_equals ticket_activity_type 'TICKET_CREATED'}}
 				    Ticket (#{{ticket_id}}) Created
 				{{else}}
 				    {{#if_equals ticket_activity_type 'TICKET_ASSIGNED'}}
-				        Ticket assigned to <span class="first-letter-cap inline-block">{{new_assignee.name}}</span>
+				        Ticket assigned to <span class="first-letter-cap">{{new_assignee.name}}</span>
 				    {{else}}
 				        {{#if_equals ticket_activity_type 'TICKET_ASSIGNEE_CHANGED'}}
-				            Ticket assignee changed to <span class="first-letter-cap inline-block">
+				            Ticket assignee changed to <span class="first-letter-cap">
 				            	{{new_assignee.name}}
 				            </span>
 				        {{else}}
 				            {{#if_equals ticket_activity_type 'TICKET_GROUP_CHANGED'}}
-				                Ticket group changed to <span class="first-letter-cap inline-block">{{new_group.name}}</span>
+				                Ticket group changed to <span class="first-letter-cap">{{new_group.group_name}}</span>
 				            {{else}}
 				                {{#if_equals ticket_activity_type 'TICKET_STATUS_CHANGE'}}
-				                    Status changed to <span class="first-letter-cap inline-block">{{new_data}}</span>
+				                    Status changed to <span class="first-letter-cap">{{new_data}}</span>
 				                {{else}}
 				                    {{#if_equals ticket_activity_type 'TICKET_PRIORITY_CHANGE'}}
-				                       Priority changed to <span class="first-letter-cap inline-block">{{new_data}}</span>
+				                       Priority changed to <span class="first-letter-cap">{{new_data}}</span>
 				                    {{else}}
 				                        {{#if_equals ticket_activity_type 'TICKET_TYPE_CHANGE'}}
-				                            Type changed to <span class="first-letter-cap inline-block">{{new_data}}</span>
+				                            Type changed to <span class="first-letter-cap">{{new_data}}</span>
 				                        {{else}}
 				                            {{#if_equals ticket_activity_type 'TICKET_TAG_ADD'}}
-				                                Tag {{new_data}} added
+				                                Tag added - {{new_data}}
 				                            {{else}}
 				                                {{#if_equals ticket_activity_type 'TICKET_TAG_REMOVE'}}
-				                                    Tag {{new_data}} removed
+				                                    Tag removed - {{new_data}}
 				                                {{else}}
 				                                    {{#if_equals ticket_activity_type 'TICKET_ASSIGNEE_REPLIED'}}
-				                                    	{{user.name}} replied to Ticket
+				                                    	<span class="first-letter-cap inline-block">{{user.name}}</span> replied to ticket
 				                                    {{else}}
 				                                        {{#if_equals ticket_activity_type 'TICKET_REQUESTER_REPLIED'}}
-				                                            {{#if contact}}
-				                                            	{{getPropertyValue contact.properties "first_name"}} 
-				                                            	{{getPropertyValue contact.properties "last_name"}}
-				                                            {{else}}
-				                                            	Requester
-				                                            {{/if}}		
-				                                            replied to Ticket
+				                                        	<span class="first-letter-cap inline-block">
+					                                            {{#if contact}}
+					                                            	{{getPropertyValue contact.properties "first_name"}} 
+					                                            	{{getPropertyValue contact.properties "last_name"}}
+					                                            {{else}}
+					                                            	Requester
+					                                            {{/if}}
+					                                        </span> replied to ticket
 				                                        {{else}}
 				                                            {{#if_equals ticket_activity_type 'TICKET_PRIVATE_NOTES_ADD'}}
-				                                                {{user.name}} added private notes
+				                                                <span class="first-letter-cap inline-block">
+				                                                	{{user.name}}
+				                                                </span>  added a note
 				                                            {{/if_equals}}
 				                                        {{/if_equals}}
 				                                    {{/if_equals}}

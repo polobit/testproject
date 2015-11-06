@@ -311,6 +311,8 @@ public class TicketsUtil
 	{
 		Tickets ticket = TicketsUtil.getTicketByID(ticket_id);
 
+		Long oldGroupID = ticket.groupID;
+
 		ticket.group_id = new Key<TicketGroups>(TicketGroups.class, group_id);
 		ticket.groupID = group_id;
 
@@ -320,8 +322,8 @@ public class TicketsUtil
 		new TicketsDocument().edit(ticket);
 
 		// Logging ticket assigned activity
-		new TicketActivity(TicketActivityType.TICKET_GROUP_CHANGED, ticket.contactID, ticket.id, "", group_id + "",
-				"groupID").save();
+		new TicketActivity(TicketActivityType.TICKET_GROUP_CHANGED, ticket.contactID, ticket.id, oldGroupID + "",
+				group_id + "", "groupID").save();
 
 		return ticket;
 	}

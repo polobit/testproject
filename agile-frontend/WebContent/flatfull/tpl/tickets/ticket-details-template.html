@@ -77,16 +77,15 @@
     </div>
     <div class="tab-content">
       <div role="tabpanel" class="tab-pane active" id="tab-1">
-        <div class="wrapper-md p-b-none">
-            <table class="ticket-details-table" style="width: 100%;">
-                <tr>
-                  <td class="p-t-xs p-b-xs">Last Updated By</td>
+        <div class="wrapper-md p-b-none p-l p-r">
+            <table class="ticket-details-table w-full txt-small">
+                <tr class="b-a">
+                  <td class="p-t-xs p-b-xs p-l-sm">Last Updated By</td>
                   <td class="p-t-xs p-b-xs first-letter-cap">
                     {{#if_equals last_updated_by 'AGENT'}}
-                      {{assignee.name}}
-                      <small class="text-muted first-letter-cap inline-block">({{last_updated_by}})</small>
+                      <span title="Assignee">{{assignee.name}}</span>
                     {{else}}
-                       {{requester_name}}
+                      <span title="Requester">{{requester_name}}</span>
                     {{/if_equals}}
                   </td>
                 </tr>
@@ -94,7 +93,7 @@
         </div>
         <hr class="m-l m-r m-t-sm m-b-sm"/>
          <div class="wrapper-md p-b-none p-t-none">
-            <table class="ticket-details-table" style="width: 100%;">
+            <table class="ticket-details-table w-full txt-small">
                 <tr>
                   <td class="p-t-xs p-b-xs">Status</td>
                   {{#if_equals status 'NEW'}}
@@ -103,42 +102,32 @@
                       <i class="icon-edit pull-right m-t-xs hide"></i>
                     </td>
                   {{else}}
-                    <td class="p-t-xs p-b-xs">
+                    <td>
                       <div class="pos-rlt">
-                        <div data-toggle="dropdown" aria-expanded="false" class="dropdown-toggle ticket-details-value first-letter-cap hover-edit">
-                          {{status}} <i class="icon-edit pull-right m-t-xs hide"></i>
+                        <div data-toggle="dropdown" aria-expanded="false" class="dropdown-toggle ticket_status ticket-details-value first-letter-cap hover-edit">
+                          {{status}} <i class="icon-edit m-t-xs m-l-xs hide"></i>
                         </div>
-                        <ul class="dropdown-menu pull-right m-t-n-md m-r-md text-sm pos-abs">
-                          <li>
-                            <a href="javascript:;">
-                              <i class="icon-edit"></i> Change status
-                              <div class="clearfix"></div>
-                            </a> 
-                          </li>
-                          <li class="divider"></li>
-                          <li><a href="javascript:;">Close</a></li>
-                        </ul>
                        </div>  
-                      <!--<div class="dropdown ticket-details-dropdown" id="change-ticket-status-ul" style="display: none;">
+                      <div class="dropdown ticket-details-dropdown" id="change-ticket-status-ul" style="display: none;">
                         <div class="btn-group">
                           <div class="btn btn-default btn-xs custom_view first-letter-cap">Change Status</div>
                           <a class="btn btn-xs dropdown-toggle btn-default" data-toggle="dropdown" aria-expanded="false"> 
                             <span class="caret"></span>
                           </a>
-                          <ul id="ticket-status-list" class="dropdown-menu pull-right">
+                          <ul id="ticket-status-list" class="dropdown-menu pull-right txt-small">
                              
                           </ul>
                         </div>
-                      </div> -->
+                      </div>
                     </td>
                   {{/if_equals}}
               </tr>
               <tr>
                   <td class="p-t-xs p-b-xs">Assignee</td>
-                  <td id="assignee-id" class="p-t-xs p-b-xs" data-id="{{#if assigneeID}}{{assigneeID}}{{/if}}">
+                  <td id="assignee-id" data-id="{{#if assigneeID}}{{assigneeID}}{{/if}}">
                     <div class="assignee_name ticket_assignee_name ticket-details-value first-letter-cap hover-edit">
                       {{#if assigneeID}}
-                        {{assignee.name}} <i class="icon-edit pull-right m-t-xs hide"></i>
+                        {{assignee.name}} <i class="icon-edit m-t-xs m-l-xs hide"></i>
                       {{else}}-{{/if}}
                     </div>
                     <div class="dropdown ticket-details-dropdown" id="change-ticket-assignee-ul" style="display: none;">
@@ -149,7 +138,7 @@
                         <a class="btn btn-xs dropdown-toggle btn-default" data-toggle="dropdown" aria-expanded="false"> 
                           <span class="caret"></span>
                         </a>
-                        <ul id="ticket-assignee-list" class="dropdown-menu pull-right">
+                        <ul id="ticket-assignee-list" class="dropdown-menu pull-right txt-small">
                         </ul>
                       </div>
                     </div>
@@ -157,9 +146,9 @@
               </tr>
               <tr>
                   <td class="p-t-xs p-b-xs">Type</td>
-                  <td class="p-t-xs p-b-xs">
+                  <td>
                     <div class="ticket_type ticket-details-value first-letter-cap hover-edit">
-                      {{type}} <i class="icon-edit pull-right m-t-xs hide"></i>
+                      {{type}} <i class="icon-edit m-t-xs m-l-xs hide"></i>
                     </div>
                     <div class="dropdown ticket-details-dropdown" id="change-ticket-type-ul" style="display: none;">
                       <div class="btn-group">
@@ -167,7 +156,7 @@
                         <a class="btn btn-xs dropdown-toggle btn-default" data-toggle="dropdown" aria-expanded="false"> 
                           <span class="caret"></span>
                         </a>
-                        <ul id="ticket-type-list" class="dropdown-menu pull-right">
+                        <ul id="ticket-type-list" class="dropdown-menu pull-right txt-small">
                             <li><a class="change-ticket-type-li" data-value="PROBLEM">Problem</a></li>
                             <li><a class="change-ticket-type-li" data-value="QUESTION">Question</a></li>
                             <li><a class="change-ticket-type-li" data-value="INCIDENT">Incident</a></li>
@@ -179,10 +168,10 @@
               </tr>
               <tr>
                   <td class="p-t-xs p-b-xs">Priority</td>
-                  <td class="p-t-xs p-b-xs">
+                  <td>
                     <div class="ticket_priority ticket-details-value first-letter-cap hover-edit">
                       {{priority}}
-                      <i class="icon-edit pull-right m-t-xs hide"></i>
+                      <i class="icon-edit m-t-xs m-l-xs hide"></i>
                     </div>
                     <div class="dropdown ticket-details-dropdown" id="change-ticket-priority-ul" style="display: none;">
                       <div class="btn-group">
@@ -190,7 +179,7 @@
                         <a class="btn btn-xs dropdown-toggle btn-default" data-toggle="dropdown" aria-expanded="false"> 
                           <span class="caret"></span>
                         </a>
-                        <ul id="ticket-priority-list" class="dropdown-menu pull-right">
+                        <ul id="ticket-priority-list" class="dropdown-menu pull-right txt-small">
                             <li><a class="change-ticket-priority-li" data-value="LOW">Low</a></li>
                             <li><a class="change-ticket-priority-li" data-value="MEDIUM">Medium</a></li>
                             <li><a class="change-ticket-priority-li" data-value="HIGH">High</a></li>
@@ -203,7 +192,7 @@
         </div>
         <hr class="m-l m-r m-t-sm m-b-sm"/>
         <div class="wrapper-md p-b-none  p-t-none">
-          <table class="ticket-details-table" style="width: 100%;">
+          <table class="ticket-details-table w-full txt-small">
               <tr>
                   <td class="p-t-xs p-b-xs">Ticket #</td>
                   <td class="p-t-xs p-b-xs">{{short_id}}</td>
@@ -335,7 +324,7 @@
 <script  id="ticket-status-template" type="text/html">
   {{#if_equals status 'OPEN'}}
     <li>
-      <a class="change-ticket-status-li" data-value="CLOSED">Closed</a>
+      <a class="change-ticket-status-li" data-value="CLOSED">Close</a>
     </li>
   {{/if_equals}}
   {{#if_equals status 'CLOSED'}}
@@ -348,4 +337,16 @@
 <div class="b-b b-t p-md">
   <img class="loading" src="/flatfull/img/ajax-loader-cursor.gif">
 </div>
+</script>
+<script  id="ticket-change-assignee-template" type="text/html">
+  {{#each this}}
+    <li class="dropdown-header text-sm b-b">{{group_name}}</li>
+      {{#group_users}}
+        <li>
+          <a class="change-ticket-assignee-li" data-group-id="{{../id}}" data-group-name="{{../group_name}}" data-assignee-id="{{id}}">
+             <span class="first-letter-cap inline-block">{{name}}</span>
+          </a>
+        </li>
+      {{/group_users}}
+  {{/each}}  
 </script>

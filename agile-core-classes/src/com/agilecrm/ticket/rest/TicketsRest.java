@@ -326,77 +326,84 @@ public class TicketsRest
 
 			Map<Long, TicketGroups> groupsList = new HashMap<Long, TicketGroups>();
 			Map<Long, DomainUser> assigneeList = new HashMap<Long, DomainUser>();
-			
+
 			for (TicketActivity activity : activitys)
 			{
 				switch (activity.ticket_activity_type)
-				{	
-					case TICKET_ASSIGNED:{
-						Long assigneeID = Long.parseLong(activity.new_data);
-						
-						if(!assigneeList.containsKey(assigneeID)){
-							
-							DomainUser temp = DomainUserUtil.getDomainUser(assigneeID);
-							
-							if(temp !=null)
-								assigneeList.put(assigneeID, temp);
-						}
-						
-						activity.new_assignee = assigneeList.get(assigneeID);
-						break;
+				{
+				case TICKET_ASSIGNED:
+				{
+					Long assigneeID = Long.parseLong(activity.new_data);
+
+					if (!assigneeList.containsKey(assigneeID))
+					{
+
+						DomainUser temp = DomainUserUtil.getDomainUser(assigneeID);
+
+						if (temp != null)
+							assigneeList.put(assigneeID, temp);
 					}
-					case TICKET_ASSIGNEE_CHANGED:{
-						Long newAssigneeID = Long.parseLong(activity.new_data);
-						Long oldAssigneeID = Long.parseLong(activity.old_data);
-						
-						if(!assigneeList.containsKey(newAssigneeID)){
-							
-							DomainUser temp = DomainUserUtil.getDomainUser(newAssigneeID);
-							
-							if(temp !=null)
-								assigneeList.put(newAssigneeID, temp);
-						}
-						
-						if(!assigneeList.containsKey(oldAssigneeID)){
-							
-							DomainUser temp = DomainUserUtil.getDomainUser(oldAssigneeID);
-							
-							if(temp !=null)
-								assigneeList.put(oldAssigneeID, temp);
-						}
-						
-						activity.new_assignee = assigneeList.get(newAssigneeID);
-						activity.old_assignee = assigneeList.get(oldAssigneeID);
-						break;
+
+					activity.new_assignee = assigneeList.get(assigneeID);
+					break;
+				}
+				case TICKET_ASSIGNEE_CHANGED:
+				{
+					Long newAssigneeID = Long.parseLong(activity.new_data);
+					Long oldAssigneeID = Long.parseLong(activity.old_data);
+
+					if (!assigneeList.containsKey(newAssigneeID))
+					{
+
+						DomainUser temp = DomainUserUtil.getDomainUser(newAssigneeID);
+
+						if (temp != null)
+							assigneeList.put(newAssigneeID, temp);
 					}
-					case TICKET_GROUP_CHANGED:
-						
-						Long newGroupID = Long.parseLong(activity.new_data);
-						Long oldGroupID = Long.parseLong(activity.old_data);
-						
-						if(!groupsList.containsKey(newGroupID)){
-							
-							TicketGroups group = TicketGroupUtil.getTicketGroupById(newGroupID);
-							
-							if(group !=null)
-								groupsList.put(newGroupID, group);
-						}
-						
-						if(!groupsList.containsKey(oldGroupID)){
-							
-							TicketGroups group = TicketGroupUtil.getTicketGroupById(oldGroupID);
-							
-							if(group !=null)
-								groupsList.put(oldGroupID, group);
-						}
-						
-						activity.new_group = groupsList.get(newGroupID);
-						activity.old_group = groupsList.get(oldGroupID);
-						break;
+
+					if (!assigneeList.containsKey(oldAssigneeID))
+					{
+
+						DomainUser temp = DomainUserUtil.getDomainUser(oldAssigneeID);
+
+						if (temp != null)
+							assigneeList.put(oldAssigneeID, temp);
+					}
+
+					activity.new_assignee = assigneeList.get(newAssigneeID);
+					activity.old_assignee = assigneeList.get(oldAssigneeID);
+					break;
+				}
+				case TICKET_GROUP_CHANGED:
+
+					Long newGroupID = Long.parseLong(activity.new_data);
+					Long oldGroupID = Long.parseLong(activity.old_data);
+					
+					if(activity.old_data != null)
+					if (!groupsList.containsKey(newGroupID))
+					{
+
+						TicketGroups group = TicketGroupUtil.getTicketGroupById(newGroupID);
+
+						if (group != null)
+							groupsList.put(newGroupID, group);
+					}
+
+					if (!groupsList.containsKey(oldGroupID))
+					{
+
+						TicketGroups group = TicketGroupUtil.getTicketGroupById(oldGroupID);
+
+						if (group != null)
+							groupsList.put(oldGroupID, group);
+					}
+
+					activity.new_group = groupsList.get(newGroupID);
+					activity.old_group = groupsList.get(oldGroupID);
+					break;
 				}
 			}
-				
-				
+
 			// Including contact in each activity
 			if (ticket.contactID != null)
 			{
@@ -526,14 +533,15 @@ public class TicketsRest
 	@PUT
 	@Path("/assign-ticket")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Tickets assignTicket(@QueryParam("id") Long ticketID, @QueryParam("assignee_id") Long assigneeID)
+	public Tickets assignTicket(@QueryParam("ticket_id") Long ticketID, @QueryParam("assignee_id") Long assigneeID,
+			@QueryParam("group_id") Long groupID)
 	{
 		try
 		{
-			if (ticketID == null && assigneeID == null)
+			if (ticketID == null || assigneeID == null || groupID == null)
 				throw new Exception("Required parameters missing.");
 
-			return TicketsUtil.assignTicket(ticketID, assigneeID);
+			return TicketsUtil.changeGroupAndAssignee(ticketID, groupID, assigneeID);
 		}
 		catch (Exception e)
 		{

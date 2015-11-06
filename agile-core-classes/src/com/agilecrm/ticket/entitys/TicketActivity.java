@@ -293,7 +293,7 @@ public class TicketActivity
 					this.activity_title = "Requester replied";
 					break;
 				case TICKET_PRIVATE_NOTES_ADD:
-					this.activity_title = "Private notes added";
+					this.activity_title = "Note added";
 					break;
 				case TICKET_DELETED:
 					this.activity_title = "Ticket deleted";

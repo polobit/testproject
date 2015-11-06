@@ -84,7 +84,7 @@ var Tickets_Notes = {
 		$('#send-reply-container').hide();
 
 		//Scroll to bottom of page
-		$("html, body").animate({ scrollTop: $(document).height() }, 1000);
+		//$("html, body").animate({ scrollTop: $(document).height() }, 1000);
 
 		//Initialize tooltips
 		$('[data-toggle="tooltip"]', $('#reply-editor')).tooltip();
