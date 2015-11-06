@@ -468,7 +468,7 @@ function initializeTriggerEventListners()
 function initializeTriggerListEventListners(id,trigger_type)
 {
 
-	$('#trigger-selector').on('click', '#trigger-cancel', function(e)
+	$('#trigger-selector, #trigger-edit-selector').on('click', '#trigger-cancel', function(e)
  	{
 		e.preventDefault();
 
