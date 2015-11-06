@@ -186,7 +186,7 @@ var WorkflowsRouter = Backbone.Router
 						$('#unsubscribe-action', el).trigger('change');
 
 						if(that.is_disabled)
-								$('#designer-tour').addClass("blur").removeClass("anti-blur");
+								$('#designer-tour', el).addClass("blur").removeClass("anti-blur");
 
 						// Init SendVerify Email
 						send_verify_email(el);
