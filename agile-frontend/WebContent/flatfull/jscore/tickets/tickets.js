@@ -18,6 +18,8 @@ var Tickets = {
 				sortKey:"created_time",
 				descending:true,
 				templateKey : "ticket",
+				customLoader: true,
+				customLoaderTemplate: "ticket-notes-loader",
 				individual_tag_name : 'div',
 				cursor : true,
 				page_size : 20,
