@@ -79,43 +79,18 @@ AGILE_LP_OPTIONS['templateId'] = "";
 
                         <div class="nav-item active2" data-name="elements"><i class="icon icon-puzzle-outline"></i> <span>{{ 'elements' | translate }}</span></div>
                         <div class="nav-item" data-name="inspector"><i class="icon icon-brush-1"></i> <span>{{ 'inspector' | translate }}</span></div>
-                        <div class="nav-item" ng-click="toggleCodeEditor()" ng-class="{ active: codeEditors.currentlyOpen }" not-selectable><i class="icon icon-code"></i> <span>{{ 'codeEditor' | translate }}</span></div>
-
-                    <div id="elements-sub-nav" class="agile-sub-nav" style="display: none;">
-                        <div class="agile-top-nav-elements" ng-click="agileShowElements('components')"><i class="icon icon-brush-1"></i> <span>Components</span></div>
-                        <div class="agile-top-nav-elements" ng-click="agileShowElements('layout')"><i class="icon icon-brush-1"></i> <span>Layout</span></div>
-                        <div class="agile-top-nav-elements" ng-click="agileShowElements('media')"><i class="icon icon-brush-1"></i> <span>Media</span></div>
-                        <div class="agile-top-nav-elements" ng-click="agileShowElements('typography')"><i class="icon icon-brush-1"></i> <span>Typography</span></div>
-                        <div class="agile-top-nav-elements" ng-click="agileShowElements('buttons')"><i class="icon icon-brush-1"></i> <span>Buttons</span></div>
-                        <div class="agile-top-nav-elements" ng-click="agileShowElements('agileforms')"><i class="icon icon-brush-1"></i> <span>Agile forms</span></div>
-                    </div>
-                    <div id="inspector-sub-nav" class="agile-sub-nav" style="display: none;">
-
-                        <div class="agile-top-nav-elements" ng-show="canEdit('attributes')" ng-click="agileShowInspector('attributes-panel')"><i class="icon icon-brush-1"></i> <span>Attributes</span></div>
-                        <div class="agile-top-nav-elements" ng-show="canEdit('background')" ng-click="agileShowInspector('background-panel')"><i class="icon icon-brush-1"></i> <span>{{ 'background' | translate }}</span></div>
-                        <div class="agile-top-nav-elements" ng-show="canEdit('shadows')" ng-click="agileShowInspector('shadows-panel')"><i class="icon icon-brush-1"></i> <span>{{ 'shadows' | translate }}</span></div>
-                        <div class="agile-top-nav-elements" ng-show="canEdit('padding')" ng-click="agileShowInspector('padding-panel')"><i class="icon icon-brush-1"></i> <span>{{ 'padding' | translate }}</span></div>
-                        <div class="agile-top-nav-elements" ng-show="canEdit('margin')" ng-click="agileShowInspector('margin-panel')"><i class="icon icon-brush-1"></i> <span>{{ 'margin' | translate }} </span></div>
-                        <div class="agile-top-nav-elements" ng-show="canEdit('text')" ng-click="agileShowInspector('text-panel')"><i class="icon icon-brush-1"></i> <span>{{ 'textStyle' | translate }}</span></div>
-                        <div class="agile-top-nav-elements" ng-show="canEdit('box')" ng-click="agileShowInspector('border-box')"><i class="icon icon-brush-1"></i> <span>{{ 'border' | translate }}</span></div>
-
-                    </div>
-
-
-                    <div class="nav-item hidden" data-name="pages"><i class="icon icon-docs"></i> <span>{{ 'Page Info' | translate }}</span></div>
+                        <div class="nav-item hidden" data-name="pages"><i class="icon icon-docs"></i> <span>{{ 'Page Info' | translate }}</span></div>
                         <div class="nav-item hidden" data-name="settings"><i class="icon icon-cog-outline"></i> <span>{{ 'settings' | translate }}</span></div>
-                        
+                        <div class="nav-item" ng-click="toggleCodeEditor()" ng-class="{ active: codeEditors.currentlyOpen }" not-selectable><i class="icon icon-code"></i> <span>{{ 'codeEditor' | translate }}</span></div>
                         <div class="clearfix"></div>
 
                         <div class="push-bottom hidden">
                             <button class="nav-item" ng-click="undo()" ng-disabled="!undoManager.canUndo" not-selectable><i class="icon icon-reply"></i> <span>{{ 'undo' | translate }}</span></button>
                             <button class="nav-item" ng-click="redo()" ng-disabled="!undoManager.canRedo" not-selectable><i class="icon icon-forward"></i> <span>{{ 'redo' | translate }}</span></button>
                         </div>
-
-
                     </div>
                     <div class="panel-inner">
-                        <div class="agile-top-menu panel" ng-class="{ open: panels.active === 'elements' }" data-name="elements" bl-pretty-scrollbar bl-panels-accordion id="elements">
+                        <div class="panel" ng-class="{ open: panels.active === 'elements' }" data-name="elements" bl-pretty-scrollbar bl-panels-accordion>
                             <section id="el-panel-top">
                                 <div id="panel-search" class="panel-heading-input hidden">
                                     <input type="text" class="form-control" id="el-search" placeholder="{{ 'searchElements' | translate }}" ng-model="query" ng-model-options="{ debounce: 300 }">
@@ -127,36 +102,36 @@ AGILE_LP_OPTIONS['templateId'] = "";
                             </section>
                             <div id="elements-list">
                                 <div class="elements-box accordion-item" id="components">
-                                    <h3 class="accordion-heading hidden">{{ 'components' | translate }} <i class="icon icon-down-open-1"></i></h3>
+                                    <h3 class="accordion-heading">{{ 'components' | translate }} <i class="icon icon-down-open-1"></i></h3>
                                     <div class="accordion-body"><ul class="list-unstyled"></ul></div>
                                 </div>
                                 <div class="elements-box accordion-item" id="layout">
-                                    <h3 class="accordion-heading hidden">{{ 'layout' | translate }} <i class="icon icon-down-open-1"></i></h3>
+                                    <h3 class="accordion-heading">{{ 'layout' | translate }} <i class="icon icon-down-open-1"></i></h3>
                                     <div class="accordion-body"><ul class="list-unstyled"></ul></div>
                                 </div>
                                 <div class="elements-box accordion-item" id="media">
-                                    <h3 class="accordion-heading hidden">{{ 'media' | translate }} <i class="icon icon-down-open-1"></i></h3>
+                                    <h3 class="accordion-heading">{{ 'media' | translate }} <i class="icon icon-down-open-1"></i></h3>
                                     <div class="accordion-body"><ul class="list-unstyled"></ul></div>
                                 </div>
                                 <div class="elements-box accordion-item" id="typography">
-                                    <h3 class="accordion-heading hidden">{{ 'typography' | translate }} <i class="icon icon-down-open-1"></i></h3>
+                                    <h3 class="accordion-heading">{{ 'typography' | translate }} <i class="icon icon-down-open-1"></i></h3>
                                     <div class="accordion-body"><ul class="list-unstyled"></ul></div>
                                 </div>
                                 <div class="elements-box accordion-item" id="buttons">
-                                    <h3 class="accordion-heading hidden">{{ 'buttons' | translate }} <i class="icon icon-down-open-1"></i></h3>
+                                    <h3 class="accordion-heading">{{ 'buttons' | translate }} <i class="icon icon-down-open-1"></i></h3>
                                     <div class="accordion-body"><ul class="list-unstyled"></ul></div>
                                 </div>
                                 <!-- <div class="elements-box accordion-item" id="forms">
-                                    <h3 class="accordion-heading hidden">{{ 'forms' | translate }} <i class="icon icon-down-open-1"></i></h3>
+                                    <h3 class="accordion-heading">{{ 'forms' | translate }} <i class="icon icon-down-open-1"></i></h3>
                                     <div class="accordion-body"><ul class="list-unstyled"></ul></div>
                                 </div> -->
                                 <div class="elements-box accordion-item" id="agileforms">
-                                    <h3 class="accordion-heading hidden">Agile Forms <small>create form & select here</small> <i class="icon icon-down-open-1"></i></h3>
+                                    <h3 class="accordion-heading">Agile Forms <small>create form & select here</small> <i class="icon icon-down-open-1"></i></h3>
                                     <div class="accordion-body"><ul class="list-unstyled"></ul></div>
                                 </div>
                             </div>
                         </div>
-                        <aside id="inspector" ng-class="{ open: panels.active === 'inspector' }" class="agile-top-menu panel" data-name="inspector" ng-controller="InspectorController" bl-color-picker bl-panels-accordion style="display: none;">
+                        <aside id="inspector" ng-class="{ open: panels.active === 'inspector' }" class="panel" data-name="inspector" ng-controller="InspectorController" bl-color-picker bl-panels-accordion>
                             <div id="inspector-overlay" ng-show="!selected.node"><div class="overlay-content"><i class="icon icon-brush-1"></i> {{ 'toEditStylesPlease' | translate }}</div></div>
                             <section id="inspector-inner" bl-pretty-scrollbar bl-panels-collapsable>
                                 <ol class="element-path">
@@ -164,7 +139,7 @@ AGILE_LP_OPTIONS['templateId'] = "";
                                 </ol>
 
                                 <div ng-show="canEdit('attributes')" ng-controller="AttributesController" class="inspector-panel accordion-item open" id="attributes-panel">
-                                    <h4 class="accordion-heading hidden">{{ 'attributes' | translate }} <i class="icon icon-down-open-1"></i></h4>
+                                    <h4 class="accordion-heading">{{ 'attributes' | translate }} <i class="icon icon-down-open-1"></i></h4>
                                     <div class="accordion-body">
                                         <div class="panel-box">
                                             <div id="custom-attributes">
@@ -223,7 +198,7 @@ AGILE_LP_OPTIONS['templateId'] = "";
                                 </div>
 
                                 <section id="background-panel" class="inspector-panel accordion-item" ng-controller="BackgroundController" ng-show="canEdit('background')">
-                                    <h4 class="accordion-heading hidden">{{ 'background' | translate }} <i class="icon icon-down-open-1"></i></h4>
+                                    <h4 class="accordion-heading">{{ 'background' | translate }} <i class="icon icon-down-open-1"></i></h4>
 
                                     <div class="accordion-body">
                                         <div class="panel-box">
@@ -278,7 +253,7 @@ AGILE_LP_OPTIONS['templateId'] = "";
 
                                 <section id="shadows-panel" class="inspector-panel accordion-item" ng-controller="ShadowsController">
                                     <div ng-show="canEdit('shadows')">
-                                        <h4 class="accordion-heading hidden">{{ 'shadows' | translate }} <i class="icon icon-down-open-1"></i></h4>
+                                        <h4 class="accordion-heading">{{ 'shadows' | translate }} <i class="icon icon-down-open-1"></i></h4>
                                         <div class="accordion-body">
                                             <div class="panel-box clearfix">
                                                 <div id="shadow-knob-container">
@@ -321,7 +296,7 @@ AGILE_LP_OPTIONS['templateId'] = "";
 
                                 <section ng-controller="MarginPaddingController">
                                     <div id="padding-panel" class="inspector-panel accordion-item" ng-show="canEdit('padding')">
-                                        <h4 class="accordion-heading hidden">{{ 'padding' | translate }} <i class="icon icon-down-open-1"></i></h4>
+                                        <h4 class="accordion-heading">{{ 'padding' | translate }} <i class="icon icon-down-open-1"></i></h4>
                                         <div class="accordion-body">
                                             <div class="clearfix panel-box">
                                                 <div class="checkboxes clearfix" bl-checkboxes="padding"></div>
@@ -332,7 +307,7 @@ AGILE_LP_OPTIONS['templateId'] = "";
                                     </div>
 
                                     <div id="margin-panel" class="inspector-panel accordion-item" ng-show="canEdit('margin')">
-                                        <h4 class="accordion-heading hidden">{{ 'margin' | translate }} <i class="icon icon-down-open-1"></i></h4>
+                                        <h4 class="accordion-heading">{{ 'margin' | translate }} <i class="icon icon-down-open-1"></i></h4>
                                         <div class="accordion-body clearfix">
                                             <div class="panel-body">
                                                 <section class="checkboxes clearfix" bl-checkboxes="margin"></section>
@@ -345,7 +320,7 @@ AGILE_LP_OPTIONS['templateId'] = "";
 
                                 <!-- text style box starts -->
                                 <section ng-show="canEdit('text')" class="inspector-panel accordion-item" id="text-panel" ng-controller="TextController">
-                                    <h4 class="accordion-heading hidden">{{ 'textStyle' | translate }} <i class="icon icon-down-open-1"></i></h4>
+                                    <h4 class="accordion-heading">{{ 'textStyle' | translate }} <i class="icon icon-down-open-1"></i></h4>
                                     <div class="accordion-body">
                                         <div id="text-box" class="clearfix panel-box">
                                             <div class="clearfix">
@@ -390,7 +365,7 @@ AGILE_LP_OPTIONS['templateId'] = "";
                                 <section id="border-box" ng-show="canEdit('box')" ng-controller="BorderController">
 
                                     <div id="border-panel" class="inspector-panel accordion-item">
-                                        <h4 class="accordion-heading hidden">{{ 'border' | translate }} <i class="icon icon-down-open-1"></i></h4>
+                                        <h4 class="accordion-heading">{{ 'border' | translate }} <i class="icon icon-down-open-1"></i></h4>
                                         <div class="accordion-body">
                                             <div class="panel-box">
                                                 <section class="checkboxes clearfix" bl-checkboxes="borderWidth"></section>
@@ -415,7 +390,7 @@ AGILE_LP_OPTIONS['templateId'] = "";
                                     </div>
 
                                     <div id="border-radius-panel" class="inspector-panel accordion-item">
-                                        <h4 class="accordion-heading hidden">{{ 'borderRoundness' | translate }} <i class="icon icon-down-open-1"></i></h4>
+                                        <h4 class="accordion-heading">{{ 'borderRoundness' | translate }} <i class="icon icon-down-open-1"></i></h4>
                                         <div class="accordion-body">
                                             <div id="borderRadius-box" class="panel-box clearfix">
 
@@ -466,7 +441,7 @@ AGILE_LP_OPTIONS['templateId'] = "";
                                 <div class="arrow-right" id="background-arrow"></div>
                             </section>
                         </aside>
-                        <div id="pages" ng-class="{ open: panels.active === 'pages' }" class="panel" data-name="pages" ng-controller="PagesController" bl-pretty-scrollbar style="display: none;">
+                        <div id="pages" ng-class="{ open: panels.active === 'pages' }" class="panel" data-name="pages" ng-controller="PagesController" bl-pretty-scrollbar>
                         
                         <div class="hidden">
                             <ul class="list-unstyled">
@@ -511,7 +486,7 @@ AGILE_LP_OPTIONS['templateId'] = "";
                                 <button class="btn btn-danger" ng-click="emptyProject()">{{ 'emptyProject' | translate }}</button>
                             </div>
                         </div>
-                        <div id="settings" ng-class="{ open: panels.active === 'settings' }" class="panel" data-name="settings" ng-controller="SettingsController" style="display: none;">
+                        <div id="settings" ng-class="{ open: panels.active === 'settings' }" class="panel" data-name="settings" ng-controller="SettingsController">
                             <div class="categories" bl-panels-accordion>
                                 <div class="accordion-item" ng-repeat="(category, categorySettings) in settings.all" ng-class="{ open: category === 'autoSave' }">
                                     <div class="accordion-heading">{{ category | translate }} <i class="icon icon-down-open-1"></i></div>
@@ -548,7 +523,7 @@ AGILE_LP_OPTIONS['templateId'] = "";
                                     <div class="size">{{ activeCanvasSize+'Size' | translate }}</div>
                                 </div>
                             </div>
-                            <div class="bottom-navigation hidden">
+                            <div class="bottom-navigation">
                                 <button ng-click="preview()" bl-tooltip="preview" placement="top"><i class="icon icon-eye"></i></button>
                                 <button class="hidden" ng-click="openPanel('export')" bl-tooltip="export" placement="top"><i class="icon icon-export"></i></button>
                                 <button ng-click="toggleDevicesPanel()" ng-class="{ active: devicesPanelOpen }" bl-tooltip="changeDevice" placement="top"><i class="icon icon-mobile"></i></button>
