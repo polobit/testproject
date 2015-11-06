@@ -464,5 +464,8 @@
         <property name="contact_id" direction="asc"/>
         <property name="date_secs" direction="desc"/>
     </datastore-index>
-
+    <datastore-index kind="TicketActivity" ancestor="false" source="manual">
+        <property name="ticket_key" direction="asc"/>
+        <property name="created_time" direction="desc"/>
+    </datastore-index>
 </datastore-indexes>
