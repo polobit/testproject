@@ -237,8 +237,8 @@ var ContactsRouter = Backbone.Router.extend({
 		{
 			this.contactsListView.collection.url = url;
 
-			$('#content').html('<div id="conatcts-listeners-conatainer"></div>');
-			$('#conatcts-listeners-conatainer').html(this.contactsListView.render(true).el);
+			$('#content').html('<div id="contacts-listener-container"></div>');
+			$('#contacts-listener-container').html(this.contactsListView.render(true).el);
 
 			$(".active").removeClass("active");
 			$("#contactsmenu").addClass("active");
@@ -268,7 +268,7 @@ var ContactsRouter = Backbone.Router.extend({
 		 * cursor and page_size options are taken to activate
 		 * infiniScroll
 		 */
-		this.contactsListView = new Base_Collection_View({ url : url,custom_scrollable_element:custom_scrollable_element, sort_collection : false, templateKey : template_key, individual_tag_name : individual_tag_name,
+		this.contactsListView = new  Contacts_Events_Collection_View({ url : url,custom_scrollable_element:custom_scrollable_element, sort_collection : false, templateKey : template_key, individual_tag_name : individual_tag_name,
 			cursor : true, page_size : 25, global_sort_key : sort_key, slateKey : slateKey, request_method : 'POST', post_data: {filterJson: postData}, postRenderCallback : function(el, collection)
 			{
 		
@@ -307,11 +307,11 @@ var ContactsRouter = Backbone.Router.extend({
 		// Contacts are fetched when the app loads in the initialize
 		this.contactsListView.collection.fetch();
 		if(!is_lhs_filter) {
-			$('#content').html('<div id="conatcts-listeners-conatainer"></div>');
-			$('#conatcts-listeners-conatainer').html(this.contactsListView.render().el);
+			$('#content').html('<div id="contacts-listener-container"></div>');
+			$('#contacts-listener-container').html(this.contactsListView.render().el);
 			contactFiltersListeners();
 		} else {
-			$('#conatcts-listeners-conatainer').find('.contacts-div').html(this.contactsListView.render().el);
+			$('#contacts-listener-container').find('.contacts-div').html(this.contactsListView.render().el);
 			$('#bulk-actions').css('display', 'none');
 			$('#bulk-select').css('display', 'none');
 			CONTACTS_HARD_RELOAD = true;
@@ -350,7 +350,7 @@ var ContactsRouter = Backbone.Router.extend({
 		 * cursor and page_size options are taken to activate
 		 * infiniScroll
 		 */
-		this.duplicateContactsListView = new Base_Collection_View({ url : url, templateKey : template_key, individual_tag_name : 'tr', cursor : true,
+		this.duplicateContactsListView = new Contacts_Events_Collection_View({ url : url, templateKey : template_key, individual_tag_name : 'tr', cursor : true,
 			page_size : 25, sort_collection : collection_is_reverse, slateKey : null, postRenderCallback : function(el)
 			{
 				// this.duplicateContactsListView.collection.forEach(function(model,
@@ -416,7 +416,7 @@ var ContactsRouter = Backbone.Router.extend({
 		// Contact Edit - take him to continue-contact form
 		add_custom_fields_to_form(bigObject, function(contact)
 		{
-			this.mergeContactsView = new Base_Model_View({ template : template_key, data : bigObject, postRenderCallback : function(el)
+			this.mergeContactsView = new Contact_Details_Model_Events({ template : template_key, data : bigObject, postRenderCallback : function(el)
 			{
 				// g_id_array.length = 0;
 			} });
@@ -455,7 +455,7 @@ var ContactsRouter = Backbone.Router.extend({
 		
 		//For getting custom fields
 		if(App_Contacts.customFieldsList == null || App_Contacts.customFieldsList == undefined){
-			App_Contacts.customFieldsList = new Base_Collection_View({ url : '/core/api/custom-fields/position', sort_collection : false, restKey : "customFieldDefs",
+			App_Contacts.customFieldsList = new Contacts_Events_Collection_View({ url : '/core/api/custom-fields/position', sort_collection : false, restKey : "customFieldDefs",
 				templateKey : "admin-settings-customfields", individual_tag_name : 'tr' });
 			App_Contacts.customFieldsList.collection.fetch();
 		}
@@ -534,7 +534,7 @@ var ContactsRouter = Backbone.Router.extend({
 			return;
 		}
 
-		this.contactDetailView = new Base_Model_View({ model : contact, isNew : true, template : "contact-detail", postRenderCallback : function(el)
+		this.contactDetailView = new Contact_Details_Model_Events({ model : contact, isNew : true, template : "contact-detail", postRenderCallback : function(el)
 		{
 			
 			$("#mobile-menu-settings").trigger('click');
@@ -1044,8 +1044,8 @@ var ContactsRouter = Backbone.Router.extend({
 		if (this.contact_custom_view && this.contact_custom_view.collection.url == url)
 		{
 			var el = App_Contacts.contact_custom_view.render(true).el;
-			$('#content').html('<div id="conatcts-listeners-conatainer"></div>');
-			$('#conatcts-listeners-conatainer').html(el);
+			$('#content').html('<div id="contacts-listener-container"></div>');
+			$('#contacts-listener-container').html(el);
 			$("#contacts-view-options").css( 'pointer-events', 'auto' );
 
 			contactFiltersListeners();
@@ -1100,7 +1100,7 @@ var ContactsRouter = Backbone.Router.extend({
 		    }
 		}	
 		
-		this.contact_custom_view = new Base_Collection_View({ url : url, restKey : "contact", modelData : view_data, global_sort_key : sort_key,
+		this.contact_custom_view = new Contacts_Events_Collection_View({ url : url, restKey : "contact", modelData : view_data, global_sort_key : sort_key,
 			templateKey : template_key,custom_scrollable_element:custom_scrollable_element, individual_tag_name : individual_tag_name, slateKey : slateKey, cursor : true, request_method : 'POST', post_data: {'filterJson': postData}, page_size : 25, sort_collection : false,
 			postRenderCallback : function(el, collection)
 			{
@@ -1152,11 +1152,11 @@ var ContactsRouter = Backbone.Router.extend({
 				});
 		
 		if(!is_lhs_filter) {
-			$('#content').html('<div id="conatcts-listeners-conatainer"></div>');
-			$('#conatcts-listeners-conatainer').html(this.contact_custom_view.el);
+			$('#content').html('<div id="contacts-listener-container"></div>');
+			$('#contacts-listener-container').html(this.contact_custom_view.el);
 			contactFiltersListeners();
 		} else {
-			$('#conatcts-listeners-conatainer').find('.contacts-div').html(this.contact_custom_view.el);
+			$('#contacts-listener-container').find('.contacts-div').html(this.contact_custom_view.el);
 			$('#bulk-actions').css('display', 'none');
 			$('#bulk-select').css('display', 'none');
 			CONTACTS_HARD_RELOAD = true;
@@ -1241,14 +1241,6 @@ var ContactsRouter = Backbone.Router.extend({
 			$(".butterbar").hide();
 			$("#content").html($(template_ui));	
 			$('[data-toggle="tooltip"]').tooltip();
-
-
-
-
-
-
-
-
 
 		}, "#content"); 
 

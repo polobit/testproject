@@ -133,7 +133,8 @@ function save_widget_prefs(pluginName, prefs, callback) {
 				msg = ("Error occurred while saving "+displayName);
 			}
 
-			showNotyPopUp(msgType , msg, "bottomRight");
+			if (pluginName != "CallScript")
+				showNotyPopUp(msgType , msg, "bottomRight");
 
 			if (callback && typeof (callback) === "function") {
 				callback(data);
@@ -342,7 +343,7 @@ function addConfigurableWidget(widgetId, widgetName, templateName) {
 			// Create a view modal for widgets
 			renderWidgetView(templateName, 'core/api/widgets',model, '#widget-settings');
 			
-			if (model.name == "TwilioIO") {
+			if (model.name == "TwilioIO" && model.is_added) {
 				fill_twilioio_numbers();
 			}
 

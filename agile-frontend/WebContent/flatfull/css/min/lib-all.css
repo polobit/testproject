@@ -214,6 +214,14 @@
 	padding: 8px;
 	line-height: 18px;
 	cursor: pointer;
+}
+
+/* Hiding from and to labels */
+.daterangepicker .ranges .range_inputs > .daterangepicker_start_input {
+	display: none;
+}
+.daterangepicker .ranges .range_inputs > .daterangepicker_end_input {
+	display: none;
 }/*@font-face {
   font-family: 'FontAwesome';
   src: url('../font/fontawesome-webfont.eot?v=3.2.1');

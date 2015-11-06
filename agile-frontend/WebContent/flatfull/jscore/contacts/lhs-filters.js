@@ -148,7 +148,7 @@ function submitLhsFilter()
 function contactFiltersListeners(container_id){
 
 if(!container_id)
-	  container_id = 'conatcts-listeners-conatainer';
+	  container_id = 'contacts-listener-container';
 
 $('#' + container_id).on('click', 'a.filter-multiple-add-lhs', function(e)
 {

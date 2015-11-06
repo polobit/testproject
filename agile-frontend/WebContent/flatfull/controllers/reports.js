@@ -214,10 +214,9 @@ var ReportsRouter = Backbone.Router
 				$("#reports-listerners-container").html(getRandomLoadingImg());
 
 				SEARCHABLE_CONTACT_CUSTOM_FIELDS = undefined;
-				var report_add = new Base_Model_View({ url : 'core/api/reports', template : "reports-add", window : "contact-reports", isNew : true,
+				var report_add = new Report_Filters_Event_View({ url : 'core/api/reports', template : "reports-add", window : "contact-reports", isNew : true,
 					postRenderCallback : function(el)
 					{
-						initializeContactFiltersListeners();
 						initializeReportsListeners();
 						// Counter to set when script is loaded. Used to avoid
 						// flash in
@@ -250,7 +249,7 @@ var ReportsRouter = Backbone.Router
 
 				// Gets a report to edit, from reports collection, based on id
 				var report = this.reports.collection.get(id);
-				var report_model = new Base_Model_View({
+				var report_model = new Report_Filters_Event_View({
 					url : 'core/api/reports',
 					change : false,
 					model : report,
@@ -259,7 +258,6 @@ var ReportsRouter = Backbone.Router
 					id : "reports-listerners-container",
 					postRenderCallback : function(el)
 					{
-						initializeContactFiltersListeners();
 						initializeReportsListeners();
 
 						if (count != 0)
