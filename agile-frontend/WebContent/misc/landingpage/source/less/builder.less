@@ -448,7 +448,7 @@ html, body, #viewport {
 }
 
 #viewport {
-    display: flex;
+    display: block;
     position: relative;
     transition: right 0.3s ease;
     right: 0;
@@ -656,10 +656,9 @@ html, body, #viewport {
 }
 
 #middle {
-	flex: 1 1 auto;
-	height: 100%;
+	height: 500px;
 	.transition(all 0.2s linear);
-	overflow: hidden;
+	overflow: auto;
 
 	#hover-box, #select-box {
 		border: 1px solid @brand-primary;

@@ -36,6 +36,19 @@ angular.module('builder').controller('NavbarController', ['$scope', '$rootScope'
         }
     };
 
+    $scope.agileShowElements = function(eleId) {
+
+        $(".elements-box").removeClass("open");
+        $("#"+eleId).toggleClass("open");
+    };
+
+    $scope.agileShowInspector = function(eleId) {
+
+        $(".inspector-panel").removeClass("open");
+        $("#"+eleId).toggleClass("open");
+    };
+
+
 	$scope.openPanel = function(name) {
 		$rootScope.activePanel = name;
 		$rootScope.flyoutOpen = true;
