@@ -2,7 +2,6 @@ package com.agilecrm.ticket.rest;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -276,7 +275,7 @@ public class TicketsRest
 	@GET
 	@Path("/new-ticket")
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<TicketGroups> assignTicket()
+	public List<TicketGroups> listGroupsForNewTicket()
 	{
 		try
 		{

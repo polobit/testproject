@@ -228,7 +228,17 @@ var TicketsUtilRouter = Backbone.Router.extend({
 				//Initializing events on CC email field
 				Tickets.initCCEmailsListeners(el);
 
+				//Rendering ticket notes
 				App_Ticket_Module.renderNotesCollection(id, $('#notes-collection-container', el), function(){});
+
+				//Loading widgets
+				if(data && data.contactID){
+					var contactDetails = Backbone.Model.extend({urlRoot : '/core/api/contacts/' + data.contactID});
+					new contactDetails().fetch({success: function(contact, response, options){
+							loadWidgets(el, contact.toJSON());
+						}, error: function(){}
+					});
+				}
 			}
 		});
 
