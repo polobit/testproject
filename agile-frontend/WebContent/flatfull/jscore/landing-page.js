@@ -43,4 +43,28 @@ function initializeLandingPageListeners() {
 			}
       	}});
 	});
+
+	$('#landingpages-listeners').on('click', '.lpBuilderMenuItem', function(e){
+		e.preventDefault();
+		var builderIFrame = document.getElementById('landingPageBuilder').contentWindow;
+		var selector = '#'+$(this).data("id")+'AgileId';
+
+		if($(this).hasClass("active")) {
+			builderIFrame.$('#elements-container').hide();
+			$(this).removeClass("active");
+		} else {
+			builderIFrame.$('#elements-container').show();
+			$('.lpBuilderMenuItem').removeClass("active");
+			$(this).addClass("active");
+		}
+		
+		builderIFrame.$(selector).trigger("click");
+
+	});
+
+	$('#landingpages-listeners').on('click', '.lpCodeEditorMenuItem', function(e){
+		e.preventDefault();
+		document.getElementById('landingPageBuilder').contentWindow.$('#codeEditorAgileId').trigger("click");
+	});
+	
 }

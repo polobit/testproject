@@ -72,16 +72,17 @@ AGILE_LP_OPTIONS['templateId'] = "";
                 </div>
             </div>
             <div id="description-container"></div>
-            <aside id="elements-container" ng-controller="ElementsPanelController">
+            <aside id="elements-container" ng-controller="ElementsPanelController" style="display:none;">
                 <section id="elements-panel" bl-el-panel-filterable bl-el-panel-searchable ng-controller="NavbarController">
-                    <div class="main-nav" left-panel-navigation>
+                    
+                    <div class="main-nav hidden" left-panel-navigation>
                         <selected-tab></selected-tab>
 
-                        <div class="nav-item active2" data-name="elements"><i class="icon icon-puzzle-outline"></i> <span>{{ 'elements' | translate }}</span></div>
-                        <div class="nav-item" data-name="inspector"><i class="icon icon-brush-1"></i> <span>{{ 'inspector' | translate }}</span></div>
+                        <div class="nav-item active2" data-name="elements" id="elementsAgileId"><i class="icon icon-puzzle-outline"></i> <span>{{ 'elements' | translate }}</span></div>
+                        <div class="nav-item" data-name="inspector" id="inspectorAgileId"><i class="icon icon-brush-1"></i> <span>{{ 'inspector' | translate }}</span></div>
                         <div class="nav-item hidden" data-name="pages"><i class="icon icon-docs"></i> <span>{{ 'Page Info' | translate }}</span></div>
                         <div class="nav-item hidden" data-name="settings"><i class="icon icon-cog-outline"></i> <span>{{ 'settings' | translate }}</span></div>
-                        <div class="nav-item" ng-click="toggleCodeEditor()" ng-class="{ active: codeEditors.currentlyOpen }" not-selectable><i class="icon icon-code"></i> <span>{{ 'codeEditor' | translate }}</span></div>
+                        <div class="nav-item" id="codeEditorAgileId" ng-click="toggleCodeEditor()" ng-class="{ active: codeEditors.currentlyOpen }" not-selectable><i class="icon icon-code"></i> <span>{{ 'codeEditor' | translate }}</span></div>
                         <div class="clearfix"></div>
 
                         <div class="push-bottom hidden">

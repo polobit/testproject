@@ -1526,3 +1526,13 @@ a#email-reply{
 a.lpt_fancybox:hover{
   opacity: 0.6;
 }
+
+.lp-menu-nav>li>a:hover, .lp-menu-nav>li>a:focus {
+    background-color: transparent;
+}
+
+.lp-menu-nav > li.active > a,
+.lp-menu-nav > li.active > a:hover,
+.lp-menu-nav > li.active > a:focus {
+  background-color: #fff;
+}
