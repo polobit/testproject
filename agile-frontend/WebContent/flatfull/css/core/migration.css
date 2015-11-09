@@ -1587,6 +1587,7 @@ a#email-reply{
   }
   .text-center-mobile-view {
     text-align: center;
+    word-break:break-all;
   }
   .mobile-pad-content .box-left {
     display: none;
@@ -1622,6 +1623,15 @@ a#email-reply{
   #contacts-filter-wrapper .chained-table tr td {
     display: block;
     margin-top: 5px;
+  }
+  .mobile-popup {
+    min-height: 50vh;
+  }
+  .mobile-popup * {
+    font-size: 1.2em;
+  }
+  #contact-view-model-list {
+    float: none!important;
   }
  }
 
