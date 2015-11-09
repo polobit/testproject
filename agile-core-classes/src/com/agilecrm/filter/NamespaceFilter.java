@@ -81,7 +81,7 @@ public class NamespaceFilter implements Filter
 	    return true;
 
 	// To serve landing pages
-	if (((HttpServletRequest) request).getRequestURI().contains("landing"))
+	if (((HttpServletRequest) request).getRequestURI().contains("/landing/"))
 	    return true;
 
 	if (((HttpServletRequest) request).getRequestURI().contains("/_ah/mail"))
