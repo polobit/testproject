@@ -164,7 +164,6 @@ function showCalendar(users)
 								{ 	
 									events : function(start, end, callback)
 								{
-
 									var eventFilters = JSON.parse(readCookie('event-lhs-filters'));
 									var agile_event_owners = '';
 									if (eventFilters)
@@ -202,8 +201,6 @@ function showCalendar(users)
 											if(inArray >= 0){
 												loadOfficeEvents(start.getTime(), end.getTime());
 											}
-											
-											$("#loading_calendar_events").hide();
 											
 											//Agile
 											var inArray = type_of_cal.indexOf("agile");
@@ -269,7 +266,7 @@ function showCalendar(users)
 						{
 							if (bool)
 							{
-
+								pushLoading();
 								$("#loading_calendar_events").remove();
 								$('.fc-header-left')
 										.append(
@@ -280,9 +277,13 @@ function showCalendar(users)
 							}
 							else
 							{
-								// $('#loading').hide();
-								$("#loading_calendar_events").hide();
-								start_tour('calendar');
+								if(popLoading() <= 0)
+								{
+									// $('#loading').hide();
+									$("#loading_calendar_events").hide();
+									start_tour('calendar');	
+								}
+								
 							}
 							$(".fc-agenda-axis").addClass('bg-light lter');
 							$(".ui-resizable-handle").hide();

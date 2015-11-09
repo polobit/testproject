@@ -255,8 +255,10 @@ var functions = {};
 function addEventsToCalendar(eventsURL)
 {
 		var resultMap = {};
+		showLoadingOnCalendar(true);
 		$.getJSON(eventsURL, function(doc)
 									{
+
 										$.each(doc, function(index, data)
 										{
 											// decides the color of event based
@@ -277,7 +279,9 @@ function addEventsToCalendar(eventsURL)
 										$.each(resultMap, function(index, eventArray){
 												console.log(index);
 												addEventSourceToCalendar(index, eventArray);
-										})
+										});
+
+										showLoadingOnCalendar(false)
 							});
 }
 
@@ -331,6 +335,7 @@ function removeFullCalendarEvents(domain_user_id)
 	if(!domain_user_id)
 		return;
 
+	showLoadingOnCalendar(true);
 	removeEventSource(domain_user_id);
 
 	// Removes all events at once
@@ -559,6 +564,21 @@ function revertEventColorBasedOnPriority(event)
 
 }
 
+
+var loadingCounter = 0;
+function pushLoading()
+{
+	if(loadingCounter < 0)
+		loadingCounter = 0;
+	loadingCounter ++ ;
+	return loadingCounter;
+}
+
+function popLoading()
+{
+	loadingCounter--;
+	return loadingCounter;
+}
 /**
  * shows loading symbol while fetching events
  * @param loading
@@ -567,13 +587,15 @@ function showLoadingOnCalendar(loading)
 {
 	if (loading)
 	{
+		pushLoading();
+
 		$("#loading_calendar_events").remove();
 		$('.fc-header-left').append(
 				'<span id="loading_calendar_events" style="margin-left:5px;vertical-align:middle;padding-top: 5px;position: absolute;">loading...</span>')
 				.show();
 		$('.fc-header-left').show();
 	}
-	else
+	else if(popLoading() <= 0)
 	{
 		$("#loading_calendar_events").hide();
 	}

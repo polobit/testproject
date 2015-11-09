@@ -9,6 +9,7 @@
 
 function loadUserEventsfromGoogle(start, end, callback){
 
+	showLoadingOnCalendar(true);
 		var isConfigured = load_events_from_google(function(data)
 						{
 							if (!data)
@@ -40,6 +41,7 @@ function _googleEventFetcher(sourceOptions, start, end, callback)
 {	
 	if (sourceOptions.dataType == 'agile-gcal')
 		{
+			
 				loadUserEventsfromGoogle(start, end);
 
 			return	{};
@@ -125,7 +127,9 @@ function _fetchGCAndAddEvents(sourceOptions, start, end)
 
 
 		//$('#calendar_event').fullCalendar('renderEvents', google_events);
-		addEventSourceToCalendar("google", google_events)
+		addEventSourceToCalendar("google", google_events);
+		showLoadingOnCalendar(false);
+
 		
 		//$('#calendar_event').fullCalendar('removeEvents', function(value, i) {return false;});
 		// Add event

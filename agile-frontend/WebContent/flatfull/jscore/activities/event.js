@@ -350,7 +350,6 @@ $("#calendar-listers").on('click', '.agendaDayWeekMonth', function()
 
 	$("#calendar-listers").on('click', '.calendar_check', function(e)
 	{
-		showLoadingOnCalendar(true);
 		createRequestUrlBasedOnFilter();
 		var calendar = $(this).val();
 		var ownerids = '';
@@ -385,7 +384,6 @@ $("#calendar-listers").on('click', '.agendaDayWeekMonth', function()
 
 	$("#calendar-listers").on('click', '.calendar_user_check', function(e)
 	{
-		showLoadingOnCalendar(true);
 		// checkBothCalWhenNoCalSelected();
 		createRequestUrlBasedOnFilter();
 		// loadFullCalednarOrListView();
