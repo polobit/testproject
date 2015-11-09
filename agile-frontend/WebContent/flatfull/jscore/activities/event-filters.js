@@ -233,7 +233,9 @@ function renderFullCalenarEvents(ownerid)
 
 	eventsURL += '&owner_id=' + ownerid;
 	console.log('-----------------', eventsURL);
-	$.getJSON(eventsURL, function(doc)
+	addEventsToCalendar(eventsURL)
+
+/*	$.getJSON(eventsURL, function(doc)
 	{
 		$.each(doc, function(index, data)
 		{
@@ -245,7 +247,7 @@ function renderFullCalenarEvents(ownerid)
 
 		showLoadingOnCalendar(false);
 
-	});
+	});*/
 
 }
 
@@ -285,6 +287,7 @@ function addEventSourceToCalendar(key, eventArray)
 
 			functions["event_" + key] = function(start, end, callback)
 			{
+				console.log(this);
 				console.log("function : " +  "event_" + functions["event_" + key])
 				callback(eventArray);
 			}
@@ -296,18 +299,27 @@ function addEventSourceToCalendar(key, eventArray)
 			eventArray = [];
 }
 
-function removeGoogleCalendarEvents()
+function removeEventSource(key)
 {
-// Removes all events at once
-	$('#calendar_event').fullCalendar('removeEventSource', loadUserEventsfromGoogle);
-
-	showLoadingOnCalendar(false);
+	//if(addScource)
+	$('#calendar_event').fullCalendar('removeEventSource', functions["event_" + key]);
 }
 
 function addGoogleCalendarEvents()
 {
-	$('#calendar_event').fullCalendar('removeEventSource', loadUserEventsfromGoogle)
-	$('#calendar_event').fullCalendar('addEventSource', loadUserEventsfromGoogle);
+
+	var tempFunction = function(start, end, callback)
+	{
+
+		loadUserEventsfromGoogle(start, end);		
+		callback({});
+		$('#calendar_event').fullCalendar('removeEventSource', tempFunction);
+		return;
+	}
+
+	$('#calendar_event').fullCalendar('addEventSource', tempFunction);
+//	$('#calendar_event').fullCalendar('removeEventSource', tempFunction);
+
 }
 
 /**
@@ -318,6 +330,8 @@ function removeFullCalendarEvents(domain_user_id)
 {
 	if(!domain_user_id)
 		return;
+
+	removeEventSource(domain_user_id);
 
 	// Removes all events at once
 	$('#calendar_event').fullCalendar('removeEvents', function(value, index) {

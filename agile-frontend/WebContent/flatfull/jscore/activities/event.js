@@ -372,13 +372,13 @@ $("#calendar-listers").on('click', '.agendaDayWeekMonth', function()
 		{
 			if (this.checked == true)
 			{
-				_//init_gcal_options();
+				//_init_gcal_options();
 				addGoogleCalendarEvents();
 			}
 			else
 			{
 				
-				removeGoogleCalendarEvents();
+				removeEventSource('google');
 			}
 		}	
 	});

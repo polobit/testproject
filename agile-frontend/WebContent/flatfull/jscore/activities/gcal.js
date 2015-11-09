@@ -7,7 +7,7 @@
 // or better
 
 
-function loadUserEventsfromGoogle(start, end){
+function loadUserEventsfromGoogle(start, end, callback){
 
 		var isConfigured = load_events_from_google(function(data)
 						{
@@ -18,6 +18,8 @@ function loadUserEventsfromGoogle(start, end){
 
 							return agile_transform_options(data, start, end);
 						});
+
+	//	return;
 }
 
 function isDefined(x)
@@ -35,20 +37,34 @@ function _init_gcal_options(users)
 }
 
 function _googleEventFetcher(sourceOptions, start, end, callback)
-{
+{	
 	if (sourceOptions.dataType == 'agile-gcal')
 		{
 				loadUserEventsfromGoogle(start, end);
-				//callback([]);
+
+			return	{};
+
+			//	callback([]);
 		}
 	else if (sourceOptions.dataType == "agile-events")
 		{
-			console.log(sourceOptions);
 			addEventsToCalendar(sourceOptions.events(start, end, function(test){}));
+
+			return {};
+			//return true;
+		//	callback([]);
 
 		}
 
-		
+		console.log("--------------- Events -----------------------");
+		console.log(sourceOptions.className)
+		if($.isFunction(sourceOptions.events))
+		{
+			//	return sourceOptions.events(start, end, callback);
+		//	sourceOptions.events(start, end, callback);
+				return;
+		}		
+		return;
 }
 
 // Tranform agile

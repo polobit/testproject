@@ -241,7 +241,7 @@ function showCalendar(users)
 
 									eventsURL += '&owner_id=' + agile_event_owners;
 									console.log('-----------------', eventsURL);
-									callback([]);
+									//callback([]);
 									return eventsURL
 
 								//		return true;
@@ -251,7 +251,8 @@ function showCalendar(users)
 
 								},
 								{
-									dataType : 'agile-gcal'
+									dataType : 'agile-gcal',
+									
 								},
 								
 							
