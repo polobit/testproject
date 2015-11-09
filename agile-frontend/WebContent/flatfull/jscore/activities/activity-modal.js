@@ -9,7 +9,7 @@
  */
 $(function() {
 
-	$("#activityTaskModal,#activityModal").on("click", "#activityForm #allDay, #updateActivityForm #allDay", function(e){
+	$("#activityTaskModal,#activityModal,#updateActivityModal").on("click", "#activityForm #allDay, #updateActivityForm #allDay", function(e){
 
 			if($(this).is(':checked'))
 			{	

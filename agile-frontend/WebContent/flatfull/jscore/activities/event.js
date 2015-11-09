@@ -503,6 +503,7 @@ $(function()
 
 	});
 
+		
 	/**
 	 * To avoid showing previous errors of the modal.
 	 */
@@ -516,18 +517,20 @@ $(function()
 		// Removes error class of input fields
 		$('#' + this.id).find('.error').removeClass('error');
 
-		var isOwnerListUploded = $("#event-owners-list", $("#activityForm")).val();
-		if (isOwnerListUploded == null)
-		{
-			// Fills owner select element
-			populateUsers("event-owners-list", $("#activityForm"), undefined, undefined, function(data)
+		if($("#activityForm").length  > 0){
+			var isOwnerListUploded = $("#event-owners-list", $("#activityForm")).val();
+			if (isOwnerListUploded == null)
 			{
-				$("#activityForm").find("#event-owners-list").html(data);
-				$("#event-owners-list", $("#activityForm")).find('option[value=' + CURRENT_DOMAIN_USER.id + ']').attr("selected", "selected");
-				$("#event-owners-list", $("#activityForm")).closest('div').find('.loading-img').hide();
-			});
+				// Fills owner select element
+				populateUsers("event-owners-list", $("#activityForm"), undefined, undefined, function(data)
+				{
+					$("#activityForm").find("#event-owners-list").html(data);
+					$("#event-owners-list", $("#activityForm")).find('option[value=' + CURRENT_DOMAIN_USER.id + ']').attr("selected", "selected");
+					$("#event-owners-list", $("#activityForm")).closest('div').find('.loading-img').hide();
+				});
+			}
 		}
-
+		
 		/**
 		 * Activates the date picker to the corresponding fields in activity modal
 		 * and activity-update modal
