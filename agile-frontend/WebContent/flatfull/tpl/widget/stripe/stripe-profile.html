@@ -69,53 +69,93 @@
 			</div>
 		</div>
 	{{else}}
-		<div class="row">
+		<div>
 	    	No active subscription
 		</div>
 	{{/if}}
 </div>
 
-<div class="wrapper-xs">
-		<span>Invoices</span>
+<div class="nav-tabs-alt">
+<ul class="nav nav-tabs text-base" id="myTab">
+	<li class="active text-center" style="width:48%; margin-left: 2%;" align="center"><a data-toggle="tab" href="#invoices"><h4 class="h4 text-base">Invoices</h4><small></small></a></li>
+	<li class="text-center" style="width:48%;" align="center"><a data-toggle="tab" href="#payments"><h4 class="h4 text-base">payments</h4><small></small></a></li>
+</ul>
 </div>
-<ul class="list-group m-b-none text-base">
-{{#if invoice.length}}
-	{{#each invoice}}
-		<li class="list-group-item r-none b-l-none b-r-none">
-				<div class="clear">					
-					<a class="pull-left" data-toggle="collapse" href="#collapse-{{id}}" >
-						{{#if_equals paid true}}Paid{{else}}Pending{{/if_equals}}
-					</a>
-					<div class="pull-right">$ {{numeric_operation total 100 "/"}}</div>				
+<div class="tab-content" id="myTabContent">
+	<div id="invoices" class="tab-pane fade active in">
+		<ul class="list-group m-b-none text-base">
+		{{#if invoice.length}}
+			{{#each invoice}}
+				<li class="list-group-item r-none b-l-none b-r-none">
+					<div class="clear">					
+						<a class="pull-left" data-toggle="collapse" href="#collapse-{{id}}" >
+							{{#if_equals paid true}}Paid{{else}}Pending{{/if_equals}}
+						</a>
+						<div class="pull-right font-bold">$ {{numeric_operation total 100 "/"}}</div>	
+						<div class="clearfix"></div>	
+					</div>		
 					<div class="clearfix"></div>					
 					<div id="collapse-{{id}}" class="collapse" style="color: rgba(0, 0, 0, 0.5);">
-							{{#each lines.data}}	
-								{{#if_equals type "invoiceitem"}}
-									<div class="pull-left">{{description}}</div>					
-									<div class="pull-right">$ {{numeric_operation amount 100 "/"}}</div><br>
-								{{/if_equals}}
-								{{#if_equals type "subscription"}}
-									<div class="pull-left">{{plan.name}}</div>					
-									<div class="pull-right">$ {{numeric_operation plan.amount 100 "/"}}</div><br>
-									<div class="pull-left">Quantity</div>					
-									<div class="pull-right">{{quantity}}</div><br>
-									<div class="text-ellipsis w-full"><small>
-											{{epochToHumanDate "dd-mmm-yy" period.start}}&nbspto 
-											{{epochToHumanDate "dd-mmm-yy" period.end}} 
-									</small></div>
-								{{/if_equals}}	         
-							{{/each}}
+						{{#each lines.data}}	
+							{{#if_equals type "invoiceitem"}}
+								<div class="pull-left">{{description}}</div>					
+								<div class="pull-right">$ {{numeric_operation amount 100 "/"}}</div><br>
+							{{/if_equals}}
+							{{#if_equals type "subscription"}}
+								<div class="pull-left">{{plan.name}}</div>					
+								<div class="pull-right">$ {{numeric_operation plan.amount 100 "/"}}</div><br>
+								<div class="pull-left">Quantity</div>					
+								<div class="pull-right">{{quantity}}</div><br>
+								<div class="text-ellipsis w-full">
+									<small>
+										{{epochToHumanDate "dd-mmm-yy" period.start}}&nbspto 
+										{{epochToHumanDate "dd-mmm-yy" period.end}} 
+									</small>
+								</div>
+							{{/if_equals}}	         
+						{{/each}}
 					</div>
-				</div>
 					<small class="text-muted"><i class="fa fa-clock-o m-r-xs"></i><time class="time-ago" datetime="{{epochToHumanDate "" date}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" date}}</time></small>
-		</li>
-	{{/each}}
-{{else}}
-	<li class="list-group-item r-none b-l-none b-r-none">
-	    No payments
-	</li>
-{{/if}}
-</ul>
+				</li>
+			{{/each}}
+		{{else}}
+			<li class="list-group-item r-none b-l-none b-r-none"> No invoices </li>
+		{{/if}}
+		</ul>
+	</div>
+	<div id="payments" class="tab-pane fade">
+		<ul class="list-group m-b-none text-base">
+		{{#if payments.length}}
+			{{#each payments}}
+				<li class="list-group-item r-none b-l-none b-r-none">
+					<div class="clear">					
+						<a class="pull-left" data-toggle="collapse" href="#collapse-{{id}}" >
+							{{#if_equals paid true}}Paid{{else}}Pending{{/if_equals}}
+						</a>
+						<div class="pull-right font-bold">$ {{numeric_operation amount 100 "/"}}</div>				
+						<div class="clearfix"></div>
+					</div>					
+					<div id="collapse-{{id}}" class="collapse" style="color: rgba(0, 0, 0, 0.5);">
+						{{#each lines.data}}	
+							Amount : {{amount}}{{currency}}<br>
+							Receipt: {{receipt_number}}<br>
+							Balance: {{balance_transaction}}<br>
+							Reason : {{reason}}
+							Time   : {{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" created}}
+							{{else}}
+							No refund Transactions.
+						{{/each}}
+					</div>
+					<small class="text-muted"><i class="fa fa-clock-o m-r-xs"></i><time class="time-ago" datetime="{{epochToHumanDate "" created}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" created}}</time></small>
+				</li>
+			{{/each}}
+		{{else}}
+			<li class="list-group-item r-none b-l-none b-r-none"> No payments </li>
+		{{/if}}
+		</ul>
+	</div>
+</div>
+<div class="clearfix"></div>
 </script>
 
 <script id="stripe-custom-field-template" type="text/html">
@@ -155,7 +195,7 @@
 <div class="m-t">
 	See the contact's subscriptions history and payments from your Stripe account.
 <br>
-	<a class="btn btn-sm btn-primary m-t-sm" href="{{url}}">Link Your Stripe</a>
+	<div class="text-center"><a class="btn btn-sm btn-primary m-t-sm" href="{{url}}">Link Your Stripe</a></div>
 </div>
 </script>
 
@@ -166,8 +206,8 @@
 
 {{#if_equals custom_data.length "0"}}
 				<p>Stripe id for each contact is stored in a text custom field. You have no custom fields defined. Please <a href="#custom-fields">create one</a>.</p>
-	{{else}}
-				{{#stringToJSON this "prefs"}}{{/stringToJSON}}
+{{else}}
+
 <p>Stripe id for each contact is stored in a text custom field. Select the custom field to be used.</p><form id="reportsForm">
 <fieldset class="m-l-md">
 		<div class="control-group m-l-n-md">
@@ -187,8 +227,8 @@
 			</div>
 			</div>
 		</fieldset>
-				<div class="m-t-sm m-r-none m-b-xs m-l-none">
-					<a class='btn btn-default btn-sm  p-t-xs p-b-xs p-l-xs p-r-xs m-l-xs' widget-name="Stripe" id="widget-prefs-save">Save</a>
+				<div class="m-t-sm m-r-none m-b-xs m-l-none text-center">
+					<a class='btn btn-default btn-sm  p-t-xs p-b-xs p-l-xs p-r-xs m-l-xs save-agile-widget' widget-name="Stripe" id="widget-prefs-save">Save</a>
 					<a class='btn btn-danger btn-sm revoke-widget m-l-xs' widget-name="Stripe">Revoke Access</a>
 
 					

@@ -2,13 +2,15 @@
 	<div>
 		<form  id="helpscout_login_form" name="helpscout_login_form">
 	    	<fieldset>
-				<p >Help Scout is a help desk for teams that insist on a delightful customer experience without exposing to ticket To access, </p>
+				<p >Help Scout is a help desk for teams that insist on a delightful customer experience. </p>
 				
 				<label>Enter your API key</label>
-				<div class="control-group form-group"><div class="controls"><input type="text" id="helpscout_api_key" class="input-medium required form-control" placeholder="API Key" value="" onkeydown="if (event.keyCode == 13) { event.preventDefault(); }"></input></div></div>
+				<div class="control-group form-group"><div class="controls"><input type="text" id="helpscout_api_key" class="input-medium required form-control" placeholder="API Key" value="" name="helpscout_api_key" onkeydown="if (event.keyCode == 13) { event.preventDefault(); }"></input></div></div>
+				<div class="text-center">
 				<a href="#add-widget" class="btn btn-default btn-sm">Cancel</a>
-				<a href="#" id="save_api_key" class="btn btn-sm btn-primary ml_5">Save</a>
+				<a href="#" id="save_api_key" class="save-agile-widget btn btn-sm btn-primary ml_5">Save</a>
 				<p class="p-xs">Don't have an API key? <a href="https://www.helpscout.net" target="_blank" class="text-info"> SignUp </a></p>
+				</div>
      </div>
 			</fieldset>
 	    </form>

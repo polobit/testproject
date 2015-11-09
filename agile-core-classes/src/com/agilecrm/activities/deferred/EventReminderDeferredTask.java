@@ -120,6 +120,7 @@ public class EventReminderDeferredTask implements DeferredTask
 	finally
 	{
 	    NamespaceManager.set(oldNamespace);
+	   
 	}
     }
 }

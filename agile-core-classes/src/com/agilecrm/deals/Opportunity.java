@@ -531,6 +531,10 @@ public class Opportunity extends Cursor implements Serializable
 		this.probability = 100;
 	    }
 
+	    if (!this.milestone.equals(oldOpportunity.milestone) && this.milestone.equalsIgnoreCase(lostMilestone))
+	    {
+		this.probability = 0;
+	    }
 	    System.out.println("New Opportunity-----" + this);
 	    // If old deal, new deal are same and lost reason is there,
 	    // can update milestone changed time with old milestone changed time

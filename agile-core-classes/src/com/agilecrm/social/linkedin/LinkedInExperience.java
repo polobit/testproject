@@ -82,8 +82,9 @@ public class LinkedInExperience
 		experience.id = linkedInId;
 	
 		// If no work positions, return empty result
-		if (person.getPositions() == null && person.getPositions().getPositionList() == null)
+		if (person.getPositions() == null && person.getPositions().getPositionList() == null){
 			return experience;
+		}
 	
 		// For each position, fill company details
 		LinkedInCompany.fillPositionsWithCompanyDetails(person, client);
@@ -93,5 +94,4 @@ public class LinkedInExperience
 	
 		return experience;
 	}
-
 }

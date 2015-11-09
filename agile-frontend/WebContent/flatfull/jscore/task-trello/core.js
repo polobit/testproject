@@ -121,18 +121,16 @@ function taskAppend(base_model)
 
 	// Append model from main collection in UI
 	$('#new-tasks-lists-model-list', this.el).append(el);
+	taskFetch(base_model);
 }
 
 /**
  * Create sub collection, ad to model in main collection, fetch tasks from DB
  * for sub collection and update UI.
  */
-function taskFetch(index)
+function taskFetch(base_model)
 {
-	console.log("index: " + index);
 
-	// Get model from main collection
-	var base_model = TASKS_LIST_COLLECTION.collection.at(index);
 
 	if (!base_model)
 		return;
@@ -194,9 +192,9 @@ function taskFetch(index)
 		setup_sortable_tasks();
 
 		// Counter to fetch next sub collection
-		FETCH_COUNTER++;
+		//FETCH_COUNTER++;
 
 		// Fetch tasks from DB for next task list
-		fetchForNextTaskList();
+		//fetchForNextTaskList();
 	} });
 }

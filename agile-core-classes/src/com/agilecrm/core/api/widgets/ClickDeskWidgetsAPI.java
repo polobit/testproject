@@ -1,20 +1,16 @@
 package com.agilecrm.core.api.widgets;
 
-import java.io.IOException;
-import java.net.SocketTimeoutException;
-
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 
 import org.json.JSONArray;
 
 import com.agilecrm.social.ClickDeskUtil;
 import com.agilecrm.widgets.Widget;
+import com.agilecrm.widgets.util.ExceptionUtil;
 import com.agilecrm.widgets.util.WidgetUtil;
 
 /**
@@ -52,28 +48,15 @@ public class ClickDeskWidgetsAPI {
 		// Retrieves widget based on its id
 		Widget widget = WidgetUtil.getWidget(widgetId);
 
-		if (widget == null) {
-			return null;
+		if (widget != null) {
+			try {
+				// Calls ClickDeskUtil method to retrieve chats
+				return ClickDeskUtil.getChats(widget, email, offset);
+			} catch (Exception e) {
+				throw ExceptionUtil.catchWebException(e);
+			}
 		}
-
-		try {
-			// Calls ClickDeskUtil method to retrieve chats
-			return ClickDeskUtil.getChats(widget, email, offset);
-		} catch (SocketTimeoutException e) {
-			throw new WebApplicationException(Response
-					.status(Response.Status.BAD_REQUEST)
-					.entity("Request timed out. Refresh and Please try again.")
-					.build());
-		} catch (IOException e) {
-			throw new WebApplicationException(Response
-					.status(Response.Status.BAD_REQUEST)
-					.entity("An error occurred. Refresh and Please try again.")
-					.build());
-		} catch (Exception e) {
-			throw new WebApplicationException(Response
-					.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
-					.build());
-		}
+		return null;
 	}
 
 	/**
@@ -95,27 +78,14 @@ public class ClickDeskWidgetsAPI {
 		// Retrieves widget based on its id
 		Widget widget = WidgetUtil.getWidget(widgetId);
 
-		if (widget == null) {
-			return null;
+		if (widget != null) {
+			try {
+				// Calls ClickDeskUtil method to retrieve tickets
+				return ClickDeskUtil.getTickets(widget, email, offset);
+			} catch (Exception e) {
+				throw ExceptionUtil.catchWebException(e);
+			}
 		}
-
-		try {
-			// Calls ClickDeskUtil method to retrieve tickets
-			return ClickDeskUtil.getTickets(widget, email, offset);
-		} catch (SocketTimeoutException e) {
-			throw new WebApplicationException(Response
-					.status(Response.Status.BAD_REQUEST)
-					.entity("Request timed out. Refresh and Please try again.")
-					.build());
-		} catch (IOException e) {
-			throw new WebApplicationException(Response
-					.status(Response.Status.BAD_REQUEST)
-					.entity("An error occurred. Refresh and Please try again.")
-					.build());
-		} catch (Exception e) {
-			throw new WebApplicationException(Response
-					.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
-					.build());
-		}
+		return null;
 	}
 }

@@ -698,6 +698,19 @@ function editCallContainer()
 	var dialpad = $(getTemplate("campaign-dialpad"), {});
 	$('.campaign_noty_buttons').append(dialpad);
 
+	accessUrlUsingAjax("core/api/voicemails", function(resp){
+
+		var responseJson = resp;
+		getTemplate("campaign-voicemail",responseJson, undefined, function(template_ui){
+			if(!template_ui)
+				  return;
+				
+			$('.campaign_voicemail_buttons').html($(template_ui));
+			
+
+
+		}, null);
+	});
 	lookForSelectedNumber();
 }
 

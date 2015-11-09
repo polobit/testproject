@@ -213,17 +213,18 @@ var contact_details_tab = {
 				$('#stats', App_Contacts.contactDetailView.el).html('<div class="alert alert-danger m-t-sm"><a class="close" data-dismiss="alert" href="#">&times;</a>Sorry! this contact has no email to get the stats.</div>');
 				return;	
 			}
-			
-			// To avoid unnecessary JSAPI count, first verify in cookie
-			if(!(readCookie('_agile_jsapi') != null && readCookie('_agile_jsapi') == "true") && (NO_WEB_STATS_SETUP && get_web_stats_count_for_domain() == '0'))
-			{
-				$('#stats', App_Contacts.contactDetailView.el).html('<h4><p>You have not yet setup the Javascript API on your website.</p><p>Please <a href="#analytics-code">set it up</a> to see the contact\'s site visits here.</p></h4>');
-				return;
-			}
-				
-			
-			// Add tag if data is not 0
-	        addTagAgile(CODE_SETUP_TAG);
+
+			get_web_stats_count_for_domain(function(count){
+
+				// To avoid unnecessary JSAPI count, first verify in cookie
+				if(!(readCookie('_agile_jsapi') != null && readCookie('_agile_jsapi') == "true") && (NO_WEB_STATS_SETUP && count == '0'))
+				{
+					$('#stats', App_Contacts.contactDetailView.el).html('<h4><p>You have not yet setup the Javascript API on your website.</p><p>Please <a href="#analytics-code">set it up</a> to see the contact\'s site visits here.</p></h4>');
+					return;
+				}
+
+				// Add tag if data is not 0
+		        addTagAgile(CODE_SETUP_TAG);
 
 				var statsView = new Base_Collection_View({
 				url: 'core/api/web-stats?e=' + encodeURIComponent(email),
@@ -245,19 +246,21 @@ var contact_details_tab = {
 	            		$(first_model_element).find('#show-page-views').trigger('click');
 	            	
 	            }
-	        });
-			
-	        statsView.collection.fetch();
-	        
-	        // Organises collection based on created_time in decreasing order
-	        statsView.collection.comparator = function(model)
-	        {
-	        	if (model.get('created_time'))
-		            return -model.get('created_time');
-		                                      
-	        }
-	        console.log($('#stats', App_Contacts.contactDetailView.el));
-	        $('#stats', App_Contacts.contactDetailView.el).html(statsView.render().el);
+		        });
+				
+		        statsView.collection.fetch();
+		        
+		        // Organises collection based on created_time in decreasing order
+		        statsView.collection.comparator = function(model)
+		        {
+		        	if (model.get('created_time'))
+			            return -model.get('created_time');
+			                                      
+		        }
+		        console.log($('#stats', App_Contacts.contactDetailView.el));
+		        $('#stats', App_Contacts.contactDetailView.el).html(statsView.render().el);
+
+			});
 		},
 		load_campaigns : function()
 		{
@@ -270,6 +273,16 @@ var contact_details_tab = {
 	            page_size : 20,
 	            sort_collection:false,
 	            postRenderCallback: function(el) {            	
+
+	            	$('#unsubscribe-modal', el).off('click');
+
+	            	$('#unsubscribe-modal', el).on('click', function(e){
+	            		e.preventDefault();	            	    
+
+						show_resubscribe_modal();
+
+	            	});
+
 	            	head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
 	              		 $("time.log-created-time", el).timeago();
 	              	});
@@ -432,7 +445,6 @@ function fetchMailsFromAllAccounts(contact_details_tab_scope,has_email_configure
 		for(var i=0;i<fetch_urls.length;i++)
 		{
 			var xhr = $.ajax({ url : fetch_urls[i]+'&search_email='+encodeURIComponent(email),
-				async : true, 
 				success : function(emails)
 				{	
 					response_count++;
@@ -740,4 +752,170 @@ function show_no_email_alert()
 {
 	$('#mail', App_Contacts.contactDetailView.el).html('<div class="alert alert-danger m-t-sm"><a class="close" data-dismiss="alert" href="#">&times;</a>Sorry! this contact has no email to get the mails.</div>');
 }
+
+function show_resubscribe_modal(){
 	
+	getTemplate('contact-detail-resubscribe-modal', {}, undefined, 
+		function(template_ui){
+							
+					if(!template_ui)
+							return;
+					
+					unsubscribe_status_updated = false;
+
+					// Removes if previous modals exist.
+					if ($('div#contact-detail-resubscribe-modal').size() != 0)
+						$('div#contact-detail-resubscribe-modal').remove();
+
+					var modal = $(template_ui).modal('show');
+
+					modal.on('shown.bs.modal', function (e) {
+		              
+
+		              var el = $(template_ui);
+
+		               $(this).find('.modal-body').css({
+			              width:'auto', //probably not needed
+			              height:'auto', //probably not needed 
+			              'max-height':'100%'
+       					});
+
+		              
+		              fillSelect('campaigns-list', '/core/api/workflows', 'workflow', function(collection)
+						{
+							
+								$('#campaigns-list', el).empty();
+
+								email_workflows_list = get_email_workflows(collection.toJSON());
+
+
+								var modelTemplate = Handlebars.compile("{{#each this}}<option value='{{@key}}'>{{this}}</option>{{/each}}");
+								var optionsHTML = modelTemplate(email_workflows_list);
+								
+								$('#campaigns-list', el).append(optionsHTML);
+
+								// Remove image
+								$('#campaigns-list', el).parent().find('.loading').remove();
+
+								head.js(LIB_PATH + 'lib/bootstrap-multiselect/bootstrap-multiselect.min.js', CSS_PATH + 'css/bootstrap-multiselect/bootstrap-multiselect.css', function(){
+
+									is_selected_all = false;
+									$('#campaigns-list', el).multiselect({
+										  onInitialized: function(select, container) {
+			        								
+		    								$(container).find('button').css({width: '252px'});
+		    								// $(container).find('.multiselect-container').css({'position':'relative'});
+		    								$(container).find('span').addClass('pull-left');
+		    								$(container).find('b.caret').addClass('pull-right m-t-sm');
+			    						},
+										  nonSelectedText: 'Select Campaign',
+										  selectAllValue: "ALL",
+										  includeSelectAllOption: true,
+										  maxHeight: 125,
+										  disableIfEmpty: true,
+										  buttonText: function(options){
+
+										  		if(options.length == 0)
+										  			return 'Select Campaign';
+
+										  		return options.length + ' selected';
+										  },
+										  onSelectAll: function(checked){
+										  		is_selected_all = checked;
+										  		unsubscribe_contact();
+										  		return;
+										  },
+										  onChange: function(option, checked) {
+
+										  			if(!option)
+										  				return;
+
+													if(option.val() == 'ALL' && checked)
+													{
+														is_selected_all = true;
+														unsubscribe_contact();
+														return;
+													}
+
+													is_selected_all = false;
+
+													unsubscribe_contact();
+												},
+										   onDropdownShow: function(event) {
+
+											      var $menu = $(event.currentTarget).find(".dropdown-menu li label");
+											      
+											      $menu.css({ "width": "250px","white-space": "nowrap", "overflow": "hidden","text-overflow": "ellipsis"});
+											  }
+									});
+
+									
+									getTemplate('contact-detail-unsubscribe-campaigns-list', {}, undefined, function(campaigns_list_template){
+
+										$('#unsubscribe-campaigns-list', el).html(campaigns_list_template);
+
+										$('div#contact-detail-resubscribe-modal .modal-body').html(el.find('form'));
+
+										var $tooltip = $('[data-toggle="tooltip"]').tooltip();
+
+										$tooltip.on('shown.bs.tooltip', function(){
+											
+											 $(this).next('.tooltip').css({'padding-right': '2px'});
+
+										});
+
+
+									
+									});
+									
+									// Unsubscribe
+									unsubscribe_contact();
+
+									// Resubscribe
+									resubscribe(el);
+							});
+				
+						}, "<option value='{{id}}'>{{name}}</option>", true, el);
+
+					});
+	
+					// Modal hidden
+					modal.on('hidden.bs.modal', function(e){
+
+						if(typeof unsubscribe_status_updated != 'undefined' && unsubscribe_status_updated)
+							contact_details_tab.load_campaigns()
+					});
+	
+			}, null);
+
+}
+
+function get_email_workflows(workflows){
+
+	if(!workflows)
+		return;
+
+	var email_workflows = {};
+
+	for (var i = 0, len = workflows.length; i < len; i++){
+        
+        var workflow = workflows[i];
+        var rules = JSON.parse(workflow["rules"]);
+        var nodes = rules["nodes"];
+
+		// Iterate nodes to check SendEmail
+		for(var j=0, length = nodes.length; j < length; j++){
+
+			var node = nodes[j];
+
+			if((node["NodeDefinition"]["name"] == "Send Email" || node["NodeDefinition"]["name"] == "Send E-mail") && node["NodeDefinition"]["workflow_tasklet_class_name"] == "com.campaignio.tasklets.agile.SendEmail")
+			{
+				email_workflows[workflow.id] = workflow.name;
+				break;
+			}
+		}
+    }
+
+    return email_workflows;
+
+}

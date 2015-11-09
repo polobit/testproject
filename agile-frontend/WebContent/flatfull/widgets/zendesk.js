@@ -11,7 +11,7 @@
  * @param plugin_id
  *            To get the widget and save tokens in it.
  */
-function setupZendeskAuth()
+function setupZendeskAuth(contact_id)
 {
 	// Shows loading image until set up is shown
 	$('#Zendesk').html(ZENDESK_UPDATE_LOAD_IMAGE);
@@ -26,8 +26,8 @@ function setupZendeskAuth()
 	}, "#Zendesk");
 
 	// On click of save button, check input and save details
-    $("body").off('click','#save_prefs');
-	$("body").on('click','#save_prefs', function(e)
+    $("#widgets").off('click','#save_prefs');
+	$("#widgets").on('click','#save_prefs', function(e)
 	{
 		e.preventDefault();
 
@@ -37,7 +37,7 @@ function setupZendeskAuth()
 			return;
 		}
 		// Saves Zendesk preferences in ClickDesk widget object
-		saveZendeskPrefs();
+		saveZendeskPrefs(contact_id);
 
 	});
 }
@@ -46,7 +46,7 @@ function setupZendeskAuth()
  * Calls method in script API (agile_widget.js) to save Zendesk preferences in
  * Zendesk widget object
  */
-function saveZendeskPrefs()
+function saveZendeskPrefs(contact_id)
 {
 	// Retrieve and store the Zendesk preferences entered by the user as JSON
 	var zendesk_prefs = {};
@@ -58,14 +58,14 @@ function saveZendeskPrefs()
 	agile_crm_save_widget_prefs(ZENDESK_PLUGIN_NAME, JSON.stringify(zendesk_prefs), function(data)
 	{
 		// Retrieves and shows Zendesk tickets in the Zendesk widget UI
-		showZendeskProfile();
+		showZendeskProfile(contact_id);
 	});
 }
 
 /**
  * Show data retrieved from Zendesk in the Zendesk widget
  */
-function showZendeskProfile()
+function showZendeskProfile(contact_id)
 {
 	// show loading until tickets are retrieved
 	$('#Zendesk').html(ZENDESK_UPDATE_LOAD_IMAGE);
@@ -89,7 +89,7 @@ function showZendeskProfile()
 
 		// Registers click events in Zendesk
 		registerClickEventsInZendesk();
-	});
+	}, contact_id);
 }
 
 /**
@@ -104,14 +104,14 @@ function showZendeskProfile()
  * @param callback
  *            Function to be executed on success
  */
-function getTicketsFromZendesk(callback)
+function getTicketsFromZendesk(callback, contact_id)
 {
 
 	/*
 	 * Calls queueGetRequest method in widget_loader.js, with queue name as
 	 * "widget_queue" to retrieve tickets
 	 */
-	queueGetRequest("widget_queue", "/core/api/widgets/zendesk/profile/" + Zendesk_Plugin_Id + "/" + Email, "json", function success(data)
+	queueGetRequest("widget_queue_"+contact_id, "/core/api/widgets/zendesk/profile/" + Zendesk_Plugin_Id + "/" + Email, "json", function success(data)
 	{
 		// If defined, execute the callback function
 		if (callback && typeof (callback) === "function")
@@ -191,7 +191,7 @@ function showTicketsInZendesk(data)
 			 * all_tickets and show every time
 			 */
 			 $('body').off('click', '.revoke-widget');
-			 $("body").on('click','#more_tickets', function(e){
+			 $("#widgets").on('click','#more_tickets', function(e){
 				e.preventDefault();
 
 				// If all tickets is not defined, return
@@ -277,10 +277,11 @@ function showTicketById(json, ticket_id)
 	$('#zendesk_showModal').remove();
 
 	// Append the form into the content
-	
-	getTemplate('zendesk-ticket-show', json, undefined, function(template_ui){
+	getTemplate('zendesk-ticket-show', json, undefined, function(template_ui){	
  		if(!template_ui)
     		return;
+
+    	$('body').append(template_ui);
     	$('#zendesk_showModal').modal("show"); 
 	}, null);
 
@@ -293,8 +294,8 @@ function registerClickEventsInZendesk()
 	/*
 	 * On click of update ticket link for ticket, update ticket method is called
 	 */
-    $("body").off('click','#ticket_update');
-	$("body").on('click','#ticket_update', function(e)
+    $("#widgets").off('click','#ticket_update');
+	$("#widgets").on('click','#ticket_update', function(e)
 	{
 		e.preventDefault();
 
@@ -304,9 +305,9 @@ function registerClickEventsInZendesk()
 	});
 
 	// On click of show ticket, show ticket by ticket id method is called
-    $("body").off('click','#ticket_show');
-	$("body").on('click','#ticket_show', function(e)
-	{
+    $("#widgets").off('click','#ticket_show');
+	$("#widgets").on('click','#ticket_show', function(e)
+	{		
 		e.preventDefault();
 
 		var json = JSON.parse($(this).attr('data-attr'));
@@ -339,7 +340,14 @@ function addTicketToZendesk()
 	json["info"] = "Add ticket in Zendesk";
 
 	// Name of the contact to be added to ticket
-	json["name"] = agile_crm_get_contact_property('first_name') + " " + agile_crm_get_contact_property('last_name');
+	var name = "";
+	if(agile_crm_get_contact_property('first_name')){
+		name += agile_crm_get_contact_property('first_name');
+	}
+	if(agile_crm_get_contact_property('last_name')){
+		name += agile_crm_get_contact_property('last_name');
+	}
+	json["name"] = name;
 
 	// Email of the contact based on which ticket is added
 	json["email"] = Email;
@@ -544,69 +552,67 @@ function zendeskStreamError(id, message)
 	$('#' + id).fadeOut(10000);
 }
 
-$(function()
-		{
-			// Zendesk widget name declared as global variable
-			ZENDESK_PLUGIN_NAME = "Zendesk";
+function startZendeskWidget(contact_id){
+	// Zendesk widget name declared as global variable
+	ZENDESK_PLUGIN_NAME = "Zendesk";
 
-			// Zendesk update loading image declared as global
-			ZENDESK_UPDATE_LOAD_IMAGE = '<center><img id="tickets_load" src=' + '\"img/ajax-loader-cursor.gif\" style="margin-top: 10px;margin-bottom: 14px;"></img></center>';
+	// Zendesk update loading image declared as global
+	ZENDESK_UPDATE_LOAD_IMAGE = '<center><img id="tickets_load" src=' + '\"img/ajax-loader-cursor.gif\" style="margin-top: 10px;margin-bottom: 14px;"></img></center>';
 
-			// Retrieves widget which is fetched using script API
-			var zendesk_widget = agile_crm_get_widget(ZENDESK_PLUGIN_NAME);
+	// Retrieves widget which is fetched using script API
+	var zendesk_widget = agile_crm_get_widget(ZENDESK_PLUGIN_NAME);
 
-			console.log('In Zendesk');
-			console.log(zendesk_widget);
+	console.log('In Zendesk');
+	console.log(zendesk_widget);
 
-			// ID of the Zendesk widget as global variable
-			Zendesk_Plugin_Id = zendesk_widget.id;
+	// ID of the Zendesk widget as global variable
+	Zendesk_Plugin_Id = zendesk_widget.id;
 
-			// Stores email of the contact as global variable
-			Email = agile_crm_get_contact_property('email');
-			console.log('Email: ' + Email);
+	// Stores email of the contact as global variable
+	Email = agile_crm_get_contact_property('email');
+	console.log('Email: ' + Email);
 
 
-			/*
-			 * Gets Zendesk widget preferences, required to check whether to show setup
-			 * button or to fetch details. If undefined - considering first time usage
-			 * of widget, setupZendeskAuth is shown and returned
-			 */
-			if (zendesk_widget.prefs == undefined)
-			{
-				setupZendeskAuth();
-				return;
-			}
+	/*
+	 * Gets Zendesk widget preferences, required to check whether to show setup
+	 * button or to fetch details. If undefined - considering first time usage
+	 * of widget, setupZendeskAuth is shown and returned
+	 */
+	if (zendesk_widget.prefs == undefined)
+	{
+		setupZendeskAuth(contact_id);
+		return;
+	}
 
-			/*
-			 * If Zendesk widget preferences are defined, shows tickets from Zendesk
-			 * associated with current contact's email
-			 */
-			showZendeskProfile();
+	/*
+	 * If Zendesk widget preferences are defined, shows tickets from Zendesk
+	 * associated with current contact's email
+	 */
+	showZendeskProfile(contact_id);
 
-			// On click of add ticket, add ticket method is called
-            $("body").off('click','#add_ticket');
-			$("body").on('click','#add_ticket', function(e)
-			{
-				e.preventDefault();
-				addTicketToZendesk();
-			});
+	// On click of add ticket, add ticket method is called
+    $("#widgets").off('click','#add_ticket');
+	$("#widgets").on('click','#add_ticket', function(e)
+	{
+		e.preventDefault();
+		addTicketToZendesk();
+	});
 
-			/*
-			 * On mouse enter of ticket, show tab link which has a link to show detailed
-			 * description of ticket and comment on it
-			 */
-             $("body").off('mouseenter','.zendesk_ticket_hover');
-			 $("body").on('mouseenter','.zendesk_ticket_hover', function(e)
-			{
-				$(this).find('.zendesk_tab_link').show();
-			});
+	/*
+	 * On mouse enter of ticket, show tab link which has a link to show detailed
+	 * description of ticket and comment on it
+	 */
+     $("#widgets").off('mouseenter','.zendesk_ticket_hover');
+	 $("#widgets").on('mouseenter','.zendesk_ticket_hover', function(e)
+	{
+		$(this).find('.zendesk_tab_link').show();
+	});
 
-			// On mouse leave of chat, hides tab link
-            $("body").off('mouseleave','.zendesk_ticket_hover');
-			$("body").on('mouseleave','.zendesk_ticket_hover', function(e)
-			{
-				$('.zendesk_tab_link').hide();
-			});
+	// On mouse leave of chat, hides tab link
+    $("#widgets").off('mouseleave','.zendesk_ticket_hover');
+	$("#widgets").on('mouseleave','.zendesk_ticket_hover', function(e)
+	{
+		$('.zendesk_tab_link').hide();
+	});
 
-		});
-
+}

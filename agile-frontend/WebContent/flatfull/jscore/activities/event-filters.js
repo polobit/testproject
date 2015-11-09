@@ -240,6 +240,10 @@ function renderFullCalenarEvents(ownerid)
 			data = renderEventBasedOnOwner(data);
 			$('#calendar_event').fullCalendar('renderEvent', data);
 		});
+
+		// Add event
+		//$('#calendar_event').fullCalendar('addEventSource', doc);
+
 		showLoadingOnCalendar(false);
 
 	});

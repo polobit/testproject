@@ -8,7 +8,7 @@
 /**
  * Show data retrieved from HelpScout in the HelpScout widget
  */
-function showHelpScoutMails()
+function showHelpScoutMails(contact_id)
 {
 	// show loading until tickets are retrieved
 	$('#HelpScout').html(HELPSCOUT_UPDATE_LOAD_IMAGE);
@@ -37,10 +37,10 @@ function showHelpScoutMails()
 		{
 			$('#HelpScout').html(getTemplate('helpscout-profile', data));
 			customerId = data.id;
-			showMailsInHelpScout(data.id);
+			showMailsInHelpScout(data.id, contact_id);
 		}
 		
-	});
+	}, contact_id);
 }
 
 /**
@@ -55,13 +55,13 @@ function showHelpScoutMails()
  * @param callback
  *            Function to be executed on success
  */
-function getMailsFromHelpScout(callback)
+function getMailsFromHelpScout(callback, contact_id)
 {
 	/*
 	 * Calls queueGetRequest method in widget_loader.js, with queue name as
 	 * "widget_queue" to retrieve tickets
 	 */
-	queueGetRequest("widget_queue", "/core/api/widgets/helpscout/get/" + HelpScout_Plugin_Id + "/" + Email, "json", function success(data)
+	queueGetRequest("widget_queue_"+contact_id, "/core/api/widgets/helpscout/get/" + HelpScout_Plugin_Id + "/" + Email, "json", function success(data)
 	{
 		// If defined, execute the callback function
 		if (callback && typeof (callback) === "function")
@@ -79,7 +79,7 @@ function getMailsFromHelpScout(callback)
  * @param data
  *            List of tickets
  */
-function showMailsInHelpScout(customerId)
+function showMailsInHelpScout(customerId, contact_id)
 {
 	// show loading until tickets are retrieved
 	$('#all_conv_panel').html(HELPSCOUT_UPDATE_LOAD_IMAGE);
@@ -87,7 +87,7 @@ function showMailsInHelpScout(customerId)
 	 * Calls queueGetRequest method in widget_loader.js, with queue name as
 	 * "widget_queue" to retrieve tickets
 	 */
-	queueGetRequest("widget_queue", "/core/api/widgets/helpscout/get/" + HelpScout_Plugin_Id + "/customer/" + customerId, "json", function success(data)
+	queueGetRequest("widget_queue_"+contact_id, "/core/api/widgets/helpscout/get/" + HelpScout_Plugin_Id + "/customer/" + customerId, "json", function success(data)
 	{
 		// Get and fill the template with tickets
 		$('#all_conv_panel').html(getTemplate('helpscout-conversation', data));
@@ -106,7 +106,7 @@ function showMailsInHelpScout(customerId)
 
 }
 
-function addTicketToHelpScout()
+function addTicketToHelpScout(contact_id)
 {
 	$('#add_conv').toggle();
 	$('#helpscout_loading').toggle();
@@ -131,7 +131,7 @@ function addTicketToHelpScout()
 	// Remove the modal if already exists
 	$('#helpscout_messageModal').remove();
 
-	queueGetRequest("widget_queue", "/core/api/widgets/helpscout/get/createform/" + HelpScout_Plugin_Id, "json", function success(data)
+	queueGetRequest("widget_queue_"+contact_id, "/core/api/widgets/helpscout/get/createform/" + HelpScout_Plugin_Id, "json", function success(data)
 	{
 		if(data.hasOwnProperty("mailboxes"))
 		{
@@ -150,14 +150,35 @@ function addTicketToHelpScout()
 			$('#helpscout_messageModal').modal("show");
 
 			// To show the radio button (for type) as buttons with toggle state.
-            $("body").off("click", "#helpscout_messageModal input[type='radio']");
-			$("body").on("click", "#helpscout_messageModal input[type='radio']", function(e)
+            $("#helpscout_messageModal").off("click", "#helpscout_messageModal input[type='radio']");
+			$("#helpscout_messageModal").on("click", "#helpscout_messageModal input[type='radio']", function(e)
 					{	
 						$('#helpscout_messageModal label.btn').toggleClass("active");
 					});
 			
 			$('#add_conv').toggle();
 			$('#helpscout_loading').toggle();
+
+			/*
+			 * On click of send button in the modal, calls send request method to add a
+			 * Conversation in HelpScout.
+			 */
+		    $("#helpscout_messageModal").off("click", "#helpscout_send_request");
+			$("#helpscout_messageModal").on("click", "#helpscout_send_request", function(e)
+			{
+				e.preventDefault();
+				console.log("subbmitting the HelpScout form");
+				// Checks whether all the input fields are filled
+				if (!isValidForm($("#helpscout_messageForm")))
+				{
+					return;
+				}
+
+				var currentUserID = CURRENT_DOMAIN_USER.id;
+				// Sends request to HelpScout to create conversation
+				sendRequestToHelpScout("/core/api/widgets/helpscout/add/" + HelpScout_Plugin_Id, "helpscout_messageForm", "helpscout_messageModal",
+						"add-conv-error-panel", currentUserID);
+			});
 		}
 
 	}, function error(data)
@@ -170,26 +191,6 @@ function addTicketToHelpScout()
 			$('#helpscout_error').hide();
 		}, 2000);
 	});
-
-	/*
-	 * On click of send button in the modal, calls send request method to add a
-	 * Conversation in HelpScout.
-	 */
-    $("body").off("click", "#helpscout_send_request");
-	$("body").on("click", "#helpscout_send_request", function(e)
-			{
-				e.preventDefault();
-				console.log("subbmitting the HelpScout form");
-				// Checks whether all the input fields are filled
-				if (!isValidForm($("#helpscout_messageForm")))
-				{
-					return;
-				}
-
-				// Sends request to HelpScout to create conversation
-				sendRequestToHelpScout("/core/api/widgets/helpscout/add/" + HelpScout_Plugin_Id, "helpscout_messageForm", "helpscout_messageModal",
-						"add-conv-error-panel");
-			});
 }
 
 /**
@@ -204,7 +205,7 @@ function addTicketToHelpScout()
  * @param errorPanelId
  *            Error div id where error is shown
  */
-function sendRequestToHelpScout(url, formId, modalId, errorPanelId)
+function sendRequestToHelpScout(url, formId, modalId, errorPanelId, contact_id)
 {
 	/*
 	 * Sends post request to given url and Calls HelpScoutWidgetsAPI with
@@ -220,7 +221,7 @@ function sendRequestToHelpScout(url, formId, modalId, errorPanelId)
 		setTimeout(function()
 		{
 			$('#' + modalId).modal("hide");
-			showMailsInHelpScout(customerId);
+			showMailsInHelpScout(customerId, contact_id);
 		}, 2000);
 
 	}).error(function(data)
@@ -277,33 +278,33 @@ function helpscoutStreamError(id, message)
 	$('#' + id).fadeOut(10000);
 }
 
-$(function()
-		{
-			HELPSCOUT_PLUGIN_NAME = "HelpScout";
+function startHelpScoutWidget(contact_id){
 
-			// HelpScout update loading image declared as global
-			HELPSCOUT_UPDATE_LOAD_IMAGE = '<center><img id="conv_load" src=' + '\"img/ajax-loader-cursor.gif\" style="margin-top: 10px;margin-bottom: 14px;"></img></center>';
+	HELPSCOUT_PLUGIN_NAME = "HelpScout";
 
-			// Retrieves widget which is fetched using script API
-			var helpscout_widget = agile_crm_get_widget(HELPSCOUT_PLUGIN_NAME);
+	// HelpScout update loading image declared as global
+	HELPSCOUT_UPDATE_LOAD_IMAGE = '<center><img id="conv_load" src=' + '\"img/ajax-loader-cursor.gif\" style="margin-top: 10px;margin-bottom: 14px;"></img></center>';
 
-			console.log('In HelpScout');
-			console.log(helpscout_widget);
+	// Retrieves widget which is fetched using script API
+	var helpscout_widget = agile_crm_get_widget(HELPSCOUT_PLUGIN_NAME);
 
-			// ID of the HelpScout widget as global variable
-			HelpScout_Plugin_Id = helpscout_widget.id;
+	console.log('In HelpScout');
+	console.log(helpscout_widget);
 
-			// Stores email of the contact as global variable
-			Email = agile_crm_get_contact_property('email');
-			console.log('Email: ' + Email);
-			customerId = 0;
-			showHelpScoutMails();
+	// ID of the HelpScout widget as global variable
+	HelpScout_Plugin_Id = helpscout_widget.id;
 
-			// On click of add ticket, add ticket method is called
-            $("body").off("click", "#add_conv");
-			$("body").on("click", "#add_conv", function(e)
-			{
-				e.preventDefault();
-				addTicketToHelpScout();
-			});
-		});
+	// Stores email of the contact as global variable
+	Email = agile_crm_get_contact_property('email');
+	console.log('Email: ' + Email);
+	customerId = 0;
+	showHelpScoutMails(contact_id);
+
+	// On click of add ticket, add ticket method is called
+    $("#widgets").off("click", "#add_conv");
+	$("#widgets").on("click", "#add_conv", function(e)
+	{
+		e.preventDefault();
+		addTicketToHelpScout(contact_id);
+	});
+}

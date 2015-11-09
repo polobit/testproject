@@ -39,6 +39,23 @@
 							<a href="#change-password" class="text-info">Change Password</a>      
                 		</div>
             		</div>
+
+            		<div class="control-group form-group">
+						<label class="control-label col-sm-4">Avatar</label>
+                		<div id="upload-container" class="control-label text-left col-sm-8">
+							<a href="#choose-avatar-modal" data-toggle="modal" class="pull-left">
+								<div class="imgholder thumb-lg thumb-wrapper" style="width:50px;height:50px;">
+                                  {{#if pic}}
+                                    <img class="w-full" src="{{pic}}"  />
+                                  {{else}}
+                                    <img class="w-full"  src="https://contactuswidget.appspot.com/images/pic.png"  />
+                                  {{/if}}
+								</div>
+							</a> 
+							<input type="hidden" id="upload_url" name="pic"/>     
+                		</div>
+            		</div>
+
                     <div class="control-group form-group hidden">
                         <label class="control-label col-sm-4">Color Theme <span class="field_req">*</span></label> 
                         <div class="controls col-sm-8">
@@ -977,6 +994,7 @@
                  </div>
              </div>
                 </div>
+
                 <div class="col-md-3 col-sm-3 col-xs-12">
                     
                         <div id="upload-container" messg="User image has been uploaded">
@@ -997,6 +1015,7 @@
                         
                     </div>
                 </div>
+
             </div>
             <div class="row m-t-sm">
 <div class="col-md-12">

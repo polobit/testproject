@@ -70,8 +70,9 @@ public class FreshBooksUtil
 			 * FreshBooks returns 401 and system does not exist messages for
 			 * improper details
 			 */
-			if (response.contains("401") || response.contains("System does not exist"))
+			if (response.contains("401") || response.contains("System does not exist")){
 				throw new Exception("Authentication failed. Please try again");
+			}
 		}
 		return response;
 	}

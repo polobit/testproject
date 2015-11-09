@@ -3,13 +3,16 @@
  * agile_CRM_Channel.
  * 
  */
-function initToPubNub()
+function initToPubNub(callback)
 {
 	//console.log(Pubnub);
 	// Pubnub already defined.
 	if(Pubnub != undefined)
-	 if (Pubnub != null)
+	 if (Pubnub != null){
+		 if(callback)
+			 callback();
 	 	 return;
+}
 
 	// Pubnub not defined.
 	var protocol = 'https';
@@ -23,20 +26,24 @@ function initToPubNub()
 		// Pubnub.ready();
 
 		// Subscribe to client channel. Receive tweet from social server.
-		subscribeClientChannel();
+		subscribeClientChannel(callback);
 	});
 }
 
 /**
  * Subscribe client channel.
  */
-function subscribeClientChannel()
+function subscribeClientChannel(callback)
 {
 	Pubnub.subscribe({ channel : CURRENT_DOMAIN_USER.id + "_Channel", restore : true, message : function(message, env, channel)
 	{
 		//console.log(message);
 
 		// Display message in stream.
+			if((message || {}).type  == "BRIA_CALL"){
+				showBriaCallNoty(message);
+				return;
+		}
 		handleMessage(message);
 
 	}, // RECEIVED A MESSAGE.
@@ -47,9 +54,11 @@ function subscribeClientChannel()
 	connect : function()
 	{
 		console.log("Agile crm Connected");
-
-		// Display added streams
-		socialsuitecall.streams();
+		Pubnub.is_connected_call = true;
+		
+		if(callback)
+			callback();
+	
 	}, // CONNECTION ESTABLISHED.
 	disconnect : function(channel)
 	{

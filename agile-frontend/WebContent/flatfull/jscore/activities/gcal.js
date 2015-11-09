@@ -97,15 +97,18 @@ function _fetchGCAndAddEvents(sourceOptions, start, end)
 
 	request.execute(function(resp)
 	{
-		console.log(resp);
+		var google_events = [];
 		for (var i = 0; i < resp.items.length; i++)
 		{
 			var fc_event = google2fcEvent(resp.items[i]);
 
 			if (fc_event)
-				// Add event
-				$('#calendar_event').fullCalendar('renderEvent', fc_event)
+			// Add event
+			$('#calendar_event').fullCalendar( 'renderEvent', fc_event  )
+				
 		}
+
+		
 	});
 }
 

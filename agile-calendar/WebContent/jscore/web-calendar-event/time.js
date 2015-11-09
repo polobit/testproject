@@ -292,7 +292,7 @@ function toTimeZone(time, zone) {
  */
 function toTimeZoneFirstTimeLoading(time, zone) {
 	
-	return moment.tz(time, jstz.determine().name()).format('hh:mm a')
+	return moment.tz(time, jstz.determine().name()).format('hh:mm a');
 }
 
 function getVisitorWhileLoading(){
