@@ -92,6 +92,10 @@ var Ticket_Tags = {
 
 	updateTag: function(tag, command, callback){
 
+		if(!tag)
+			if(callback)
+					callback();
+				
 		var ticketModel = App_Ticket_Module.ticketView.model.toJSON();
 
 		if(ticketModel.tags)

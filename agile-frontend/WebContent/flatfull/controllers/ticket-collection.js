@@ -70,6 +70,8 @@ var TicketsUtilRouter = Backbone.Router.extend({
 			},
 			postRenderCallback : function(el, data) {
 
+				$('[data-toggle="tooltip"]').tooltip();
+
 				//Activating ticket type pill
 				$('ul.ticket-types').find('.active').removeClass('active');
 
@@ -230,15 +232,6 @@ var TicketsUtilRouter = Backbone.Router.extend({
 
 				//Rendering ticket notes
 				App_Ticket_Module.renderNotesCollection(id, $('#notes-collection-container', el), function(){});
-
-				//Loading widgets
-				if(data && data.contactID){
-					var contactDetails = Backbone.Model.extend({urlRoot : '/core/api/contacts/' + data.contactID});
-					new contactDetails().fetch({success: function(contact, response, options){
-							loadWidgets(el, contact.toJSON());
-						}, error: function(){}
-					});
-				}
 			}
 		});
 

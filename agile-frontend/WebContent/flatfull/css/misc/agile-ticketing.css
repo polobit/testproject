@@ -113,3 +113,11 @@ table.ticket-details-table > tbody > tr > td:first-child{
 .link-color{
 	color: #337ab7 !important;
 }
+
+.display-none{
+	display: none
+}
+
+.ticket-types > li.active > a {
+	background-color: #CFDADD !important;
+}
