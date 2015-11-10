@@ -327,7 +327,8 @@ user_reports :function(callReportUrl){
 				
 				if(callsDurationList[0]!=0)
 				   callsDurationAvg=callsDurationList[0]/answeredCallsCountList[0];
-				$('.avg-duration').html("Average Time Spent on Call:"+callsDurationAvg);
+
+				$('.avg-duration').html("Average Time Spent on Call:"+portlet_utility.getPortletsTimeConversion(Math.round(callsDurationAvg)));
 				
 				portlet_graph_utility.callsByPersonPieGraph(selector,pieGraphRegions,CompleteCallsCount);
 			
