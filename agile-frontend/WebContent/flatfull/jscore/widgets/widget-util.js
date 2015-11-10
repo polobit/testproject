@@ -367,6 +367,7 @@ function loadSettingsUI(callback) {
 	}, "#content");
 }
 
+
 function getWidgetModelFromName(widgetId, type, callback) {
 
 	getAgileConfiguredWidgetCollection(function(widgetCollection) {
