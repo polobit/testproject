@@ -34,7 +34,7 @@
 <div>	
 	<!-- Growth Reports -->
 		
-		<div class="row">
+		<div class="row m-b-lg">
 		<div class="pull-left p-t-xl m-l-xl">
             {{#if userPic}}
 						<span class="pull-left thumb-m avatar  m-t-n-sm m-b-n-sm m-l-sm">
@@ -43,15 +43,21 @@
 						<span class="pull-left thumb-m avatar  m-t-n-sm m-b-n-sm m-l-sm">	
 						<img class="img-inital r r-2x" src="{{defaultGravatarurl 50}}" /></span>
 						{{/if}}
-		<div class="pull-left p-t-lg p-l-sm text-lg">{{userName}}'s Performance</div>
+		<div class="pull-left p-t-sm p-l-sm text-lg">{{userName}}'s Performance</div>
 			</div>
 
-<div class="col-md-4 b-light pull-right">
+<!--<div class="col-md-6 b-light pull-right m-t-lg">
+
+<div class=" pull-left m-r-lg  bg-white text-center"><div class="font-bold">Tasks</div><i class="icon-list icon-white m-sm" style="font-size:54px; color:#E7EEF1"></i><div>1</div></div>
+<div class=" pull-left m-r-lg bg-white text-center"><div class="font-bold">Notes</div><i class="icon-doc icon-white m-sm" style="font-size:54px; color:#E7EEF1"></i><div>1</div></div>
+<div class=" pull-left m-r-lg bg-white text-center"><div class="font-bold">Events</div><i class="icon-calendar icon-white m-sm" style="font-size:54px; color:#E7EEF1"></i><div>1</div></div>
+<div class=" pull-left m-r-lg  bg-white text-center"><div class="font-bold">Campaigns</div><i class="icon-sitemap icon-white  m-sm" style="font-size:54px; color:#E7EEF1"></i><div>1</div></div>
+<div class=" pull-left m-r-lg  bg-white text-center"><div class="font-bold">Cases</div><i class="icon icon-folder icon-white  m-sm" style="font-size:54px; color:#E7EEF1"></i><div>1</div></div>-->
 <div class="panel-default">
-<table class="table repTable" style="background-color:transparent;">
+<table class="table repTable w-half pull-right" style="background-color:transparent;">
    
     <tbody>
-        <tr>
+      <!--  <tr>
             <td>Task Created</td>
            <td>{{taskcreated}}</td>
         </tr>
@@ -74,8 +80,34 @@
 		<tr>
             <td>Total Cases</td>
            	<td>{{cases}}</td>
-        </tr>
-			
+        </tr>-->
+			<tr>
+				<th>Task Created</th>
+
+            <th>Tasks Completed</th>
+
+            <th>Total Notes</th>
+
+            <th>Events</th>
+
+            <th>Campaigns Created</th>
+
+            <th>Total Cases</th> </tr>
+
+			<tr>
+
+           <td>{{taskcreated}}</td>
+
+            <td>{{taskCompleted}}</td>
+
+           <td>{{notes}}</td>
+
+         	 <td>{{events}}</td>
+
+           	<td>{{workflows}}</td>
+			<td>{{cases}}</td>
+				</tr>
+				
     </tbody>
 </table>
 </div>

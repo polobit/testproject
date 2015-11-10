@@ -2970,11 +2970,15 @@ width: 915px;
  white-space:normal!important;
  } 
 
- .repTable tr td
+ /* .repTable tr td
  {
  	border : none!Important;
- }
- 
+ } */
+ .repTable tr th, .repTable tr td
+ {
+     border-left: 1px solid #ddd;
+     border-top : none!Important;
+     }
  .thumb-m {
 	 display: inline-block;
   width: 80px;
