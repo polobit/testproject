@@ -34,8 +34,8 @@
 <div>	
 	<!-- Growth Reports -->
 		
-		<div class="row m-b-lg">
-		<div class="pull-left p-t-xl m-l-xl">
+		<div class="row m-b-lg" style="background-color:white">
+		<div class="pull-left rep-user-info btn-rounded ">
             {{#if userPic}}
 						<span class="pull-left thumb-m avatar  m-t-n-sm m-b-n-sm m-l-sm">
 						<img class="img-inital r r-2x" src="{{userPic}}" /></span>
@@ -43,7 +43,7 @@
 						<span class="pull-left thumb-m avatar  m-t-n-sm m-b-n-sm m-l-sm">	
 						<img class="img-inital r r-2x" src="{{defaultGravatarurl 50}}" /></span>
 						{{/if}}
-		<div class="pull-left p-t-sm p-l-sm text-lg">{{userName}}'s Performance</div>
+		<div class="pull-left p-t-md p-l-sm text-lg">{{userName}}'s Performance</div>
 			</div>
 
 <div class="col-md-6 b-light pull-right m-t-lg">
@@ -54,32 +54,32 @@
 <div class=" pull-left m-r-lg  bg-white text-center"><div class="font-bold">Campaigns</div><i class="icon-sitemap icon-white  m-sm" style="font-size:54px; color:#E7EEF1"></i><div>1</div></div>
 <div class=" pull-left m-r-lg  bg-white text-center"><div class="font-bold">Cases</div><i class="icon icon-folder icon-white  m-sm" style="font-size:54px; color:#E7EEF1"></i><div>1</div></div>
  --><div class="panel-default">
-<table class="table repTable w-half pull-right" style="background-color:transparent;">
+<table class="table repTable pull-right">
    
     <tbody>
         <tr>
-            <td>Task Created</td>
-           <td>{{taskcreated}}</td>
+            <td><i class="fa-tasks icon-white m-sm text-muted"></i>Task Created</td>
+           <td><div class="bg-primary badge">{{taskcreated}}</div></td>
         </tr>
         <tr>
-            <td>Tasks Completed</td>
-            <td>{{taskCompleted}}</td>
+            <td><i class="fa-tasks icon-white m-sm text-muted"></i>Tasks Completed</td>
+            <td><div class="bg-primary badge">{{taskCompleted}}</div></td>
         </tr>
 		<tr>
-            <td>Total Notes</td>
-           <td>{{notes}}</td>
+            <td><i class="fa-file icon-white m-sm text-muted"></i>Total Notes</td>
+           <td><div class="bg-primary badge">{{notes}}</div></td>
         </tr>
         <tr>
-            <td>Events</td>
-         	 <td>{{events}}</td>
+            <td><i class="fa-calendar icon-white m-sm text-muted"></i>Events</td>
+         	 <td><div class="bg-primary badge">{{events}}</div></td>
         </tr>
 		<tr>
-            <td>Campaigns Created</td>
-           	<td>{{workflows}}</td>
+            <td><i class="icon-sitemap icon-white m-sm text-muted"></i>Campaigns Created</td>
+           	<td><div class="bg-primary badge">{{workflows}}</div></td>
         </tr>
 		<tr>
-            <td>Total Cases</td>
-           	<td>{{cases}}</td>
+            <td><i class="fa-folder icon-white m-sm text-muted"></i>Total Cases</td>
+           	<td><div class="bg-primary badge">{{cases}}</div></td>
         </tr>
 			<!--<tr>
 				<td>Task Created</td>
@@ -117,7 +117,7 @@
 </div>
 <div class="row">
         <div class="pull-left p-l-sm" style="width:45%">
-			<h2 class="b-b"style="line-height: 35px">Rep Performance </h2>
+			<h4 class="b-b"style="line-height: 35px">Rep Performance </h4>
 
 	<div class="col-md-6 b-light pull-right p-t-xxl">
 <div class="panel-default">
@@ -144,13 +144,13 @@
 </table>
 </div>
 </div>
-        <div class="col-md-6"><h4>Loss Reasons</h4>
+        <div class="col-md-6"><h5>Loss Reasons</h5>
 				<div id="lossreasonpie-chart-users"></div></div>
 		</div>
 		<div class="pull-right" style="width:45%">
-		<h2 class="b-b"style="line-height: 35px">Call Outcomes </h2>
+		<h4 class="b-b"style="line-height: 35px">Call Outcomes </h4>
 		 <div class="col-md-6">
-				<h4>Calls chart</h4><div id="calls-chart-user"></div></div>
+				<h5>Calls chart</h5><div id="calls-chart-user"></div></div>
 		<div class="pull-right avg-duration" style="padding: 80px 36px 0px 0px;"></div>
 		</div>
       </div>

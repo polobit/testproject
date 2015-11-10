@@ -2970,10 +2970,10 @@ width: 915px;
  white-space:normal!important;
  } 
 
- /* .repTable tr td
+  .repTable tr td
  {
  	border : none!Important;
- } */
+ } 
  .repTable tr th, .repTable tr td
  {
      border-left: 1px solid #ddd;
@@ -2982,4 +2982,12 @@ width: 915px;
  .thumb-m {
 	 display: inline-block;
   width: 80px;
+}
+
+.rep-user-info
+{
+	background-color: rgb(240, 243, 244);
+    margin-top: 108px;
+    margin-left: 156px;
+}
 }
