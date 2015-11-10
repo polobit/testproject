@@ -1,25 +1,21 @@
 <script id="ticket-show-workflows-modal-template" type="text/html">
-	<div id="show-workflows-modal" class="modal fade">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-header">
-		            <button class="close" data-dismiss="modal">x</button>
-					<h3 class="modal-title"><i class="icon icon-sitemap"></i> Select Workflow</h3>
-				</div>
-				<div id="modal-body" class="modal-body">
-					Loading...
-				</div>
-				<div class="modal-footer">
-					<a href="javascript:void(0);" data-dismiss="modal" class="btn btn-sm btn-default">Close</a>
-					<a href="javascript:void(0);" data-loading-text='Executing...' class="save btn btn-sm btn-primary">Execute</a>
-					&nbsp;&nbsp;<span id="msg"></span>
-				</div>
+<div id="show-workflows-modal" class="modal fade">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+	            <button class="close" data-dismiss="modal">x</button>
+				<h3 class="modal-title"><i class="icon icon-sitemap"></i> Select Workflow</h3>
+			</div>
+			<div id="modal-body">
+				Loading...
 			</div>
 		</div>
 	</div>
+</div>
 </script>
 <script id="ticket-show-workflows-form-template" type="text/html">
-<form id='executeWorkFlowForm' name="executeWorkFlowForm" class="form-horizontal">
+<div class="modal-body">
+	<form id='executeWorkFlowForm' name="executeWorkFlowForm" class="form-horizontal">
 	<input type="hidden" name="ticket_id" id="ticket_id">
 	<table class="table table-striped">
 		<thead><tr><th>Name</th><th></th></tr></thead>
@@ -55,5 +51,13 @@
 			{{/each}}	
 		</tbody>
 	</table>
-</form>	
+	</form>
+</div>
+<div class="modal-footer">
+	<a href="javascript:void(0);" data-dismiss="modal" class="btn btn-sm btn-default">Close</a>
+	<a href="javascript:void(0);" data-loading-text="Executing..." class="save btn btn-sm btn-primary">
+		Execute
+	</a>
+	&nbsp;&nbsp;<span id="msg"></span>
+</div>	
 </script>						

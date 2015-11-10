@@ -68,6 +68,12 @@ var Tickets = {
 
 				$('#content').html($(template_ui));	
 
+				$('#content').on('click', '.new-ticket', function(e){
+					e.preventDefault();
+		
+					App_Ticket_Module.renderNewTicketModalView();
+				});
+
 				//Fectching new, open, closed tickets count
 				Tickets_Count.fetch_tickets_count();
 
@@ -568,18 +574,33 @@ var Tickets = {
 			$('#show-workflows-modal').modal('show');
 
 			var workflowsView = new Ticket_Base_Model({
-			isNew : false,
-			url : "core/api/workflows",
-			template : "ticket-show-workflows-form",
-			saveCallback : function(){
+				isNew : false,
+				url : "core/api/tickets/execute-workflow",
+				template : "ticket-show-workflows-form",
+				saveCallback : function(){
 					$('#show-workflows-modal').modal('hide');
+				},
+				postRenderCallback: function(el){
+					$('#ticket_id',el).val(Current_Ticket_ID);
 				}
 			});
 
 			$('#modal-body').html(workflowsView.render().el);
-		});	
-		
-		//$('#ticket-modals').html(workflowsView.render().el);
+		});
+	},
+
+	loadWidgets: function(){
+
+		var ticketModel = App_Ticket_Module.ticketView.model.toJSON();
+
+		//Loading widgets
+		if(ticketModel && ticketModel.contactID){
+			var contactDetails = Backbone.Model.extend({urlRoot : '/core/api/contacts/' + ticketModel.contactID});
+			new contactDetails().fetch({success: function(contact, response, options){
+					loadWidgets(App_Ticket_Module.ticketView.el, contact.toJSON());
+				}, error: function(){}
+			});
+		}
 	}
 };
 

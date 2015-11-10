@@ -77,6 +77,9 @@ function serializeForm(form_id) {
 
 	}).get());
 
+	//Serialize attachments list
+	arr = arr.concat(Ticket_Attachments.serializeList(form_id));
+
 	// Serialize tags
 	arr = arr.concat(get_tags(form_id));
 

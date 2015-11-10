@@ -12,9 +12,9 @@ var Ticket_Base_Model = Base_Model_View.extend({
 		"click .ticket_priority" : "changeTicketPriority",
 		"click .delete-ticket" : "deleteTicket",
 		"click .show-workflows" : "workflows",
+		"click .toggle-timeline" : "toggleTimeline",
 		"mouseover .hover-edit" : "showEditIcon",
 		"mouseout  .hover-edit" : "hideEditIcon",
-		"click .widgets" : "showWidgets",
 
 		"click .to-emails" : "toEmails",
 
@@ -31,6 +31,12 @@ var Ticket_Base_Model = Base_Model_View.extend({
 		"change .status" : "toggleGroupAssigneeFields",
 		"click .nt-reqester_email" : "showContactTypeAhead",
 		"click .toggle-options" : "toggleOptions",
+
+		//Attachment events
+		"click .toggle-docs-dropdown" : "toggleDocsDropdown",
+		"click .add-document" : "addDocument",
+		"click .cancel-docs-dropdown" : "cancelDocsDropdown",
+		"click .remove-attachment" : "removeAttachment",
 
 		//Ticket notes events
 		"click .send-reply" : "sendReply",
@@ -125,7 +131,9 @@ var Ticket_Base_Model = Base_Model_View.extend({
 	toggleGroupAssigneeFields: function(e){
 		e.preventDefault();
 
-		($(e.target).val() == 'OPEN') ? $('.grp-assigee').show() : $('.grp-assigee').hide();
+		var disable_selection = ($(e.target).val() == 'OPEN') ? false : true;
+		
+		$('.grp-assigee').attr('disabled', disable_selection);
 	},
 
 	showContactTypeAhead: function(e){
@@ -184,6 +192,22 @@ var Ticket_Base_Model = Base_Model_View.extend({
 		Tickets_Notes.discardReply(e);	
 	},
 
+	toggleTimeline: function(e){
+
+		var tooltip_text = 'Timeline';
+		if($('.ticket-timeline-container').is(':visible'))
+		{
+			//Rendering ticket notes
+			App_Ticket_Module.renderNotesCollection(Current_Ticket_ID, $('#notes-collection-container', App_Ticket_Module.ticketView.el), function(){});
+		}
+		else{
+			Ticket_Timeline.render_individual_ticket_timeline();
+			tooltip_text = 'Notes';
+		}
+
+		$('.toggle-timeline').attr('data-original-title', tooltip_text);
+	},
+
 	renderTicketTimeline: function(e){
 		e.preventDefault();
 
@@ -218,18 +242,27 @@ var Ticket_Base_Model = Base_Model_View.extend({
 		$(e.target).find('.icon-edit').addClass('hide');
 	},
 
-	showWidgets: function(e){
+	toggleDocsDropdown: function(e){
 		e.preventDefault();
-		
-		var ticketModel = App_Ticket_Module.ticketView.model.toJSON();
 
-		//Loading widgets
-		if(ticketModel && ticketModel.contactID){
-			var contactDetails = Backbone.Model.extend({urlRoot : '/core/api/contacts/' + ticketModel.contactID});
-			new contactDetails().fetch({success: function(contact, response, options){
-					loadWidgets(App_Ticket_Module.ticketView.el, contact.toJSON());
-				}, error: function(){}
-			});
-		}
+		Ticket_Attachments.toggleDocsDropdown();
+	},
+
+	addDocument: function(e){
+		e.preventDefault();
+
+		Ticket_Attachments.addDocument();
+	},
+
+	cancelDocsDropdown: function(e){
+		e.preventDefault();
+
+		Ticket_Attachments.cancelDocsDropdown();
+	},
+
+	removeAttachment: function(e){
+		e.preventDefault();
+
+		Ticket_Attachments.removeAttachment(e);
 	}
 });

@@ -46,11 +46,79 @@ var TicketsUtilRouter = Backbone.Router.extend({
 		if($('#tickets-container').length == 0)
 		{
 			Tickets.initialize(DEFAULT_GROUP_ID, function(){
-				App_Ticket_Module.renderNewTicketView();
+				App_Ticket_Module.renderNewTicketModalView();
 			});
 		}else{
-			App_Ticket_Module.renderNewTicketView();
+			App_Ticket_Module.renderNewTicketModalView();
 		}
+	},
+
+	renderNewTicketModalView: function(){
+
+		//Rendering root template
+		getTemplate("ticket-new-modal", {}, undefined, function(template_ui){
+
+			if(!template_ui)
+		  		return;
+
+			$('#ticket-modals').html($(template_ui));
+			$('#new-ticket-modal').modal('show');
+
+			var ticketView = new Ticket_Base_Model({
+				isNew : false, 
+				template : "ticket-new-modal-form",
+				url : "/core/api/tickets/new-ticket",
+				saveCallback : function(ticket){
+
+					$('#new-ticket-modal').modal('hide');
+					
+					var url = 'tickets/group/'+ ticket.groupID +'/'+ ticket.status.toLowerCase() +'/' + ticket.id;
+
+					Backbone.history.navigate( url, { trigger : true });
+				},
+				postRenderCallback : function(el, data) {
+
+					$('[data-toggle="tooltip"]').tooltip();
+
+					//Activating ticket type pill
+					$('ul.ticket-types').find('.active').removeClass('active');
+
+					//Initializing chaining on Group and Assignee select fields
+					head.js(LIB_PATH + 'lib/agile.jquery.chained.min.js', function()
+					{
+						var LHS = $("#group_id", el);
+						var RHS = $("#assignee_id", el);
+
+						RHS.chained(LHS);
+					});
+
+					//Initializing type ahead for tags
+					Ticket_Tags.initTagsTypeahead('.ticket-tags-typeahead');
+					
+					//Initializing click on CC email field
+					Tickets.initCCEmailsListeners(el);
+
+					//Initializing type ahead for selecting contact in To address field
+					agile_type_ahead("requester_email_typeahead", el, tickets_typeahead, function(arg1, arg2){
+
+							arg2 = arg2.split(" ").join("");
+
+							var email = TYPEHEAD_EMAILS[arg2 + '-' + arg1];
+
+							if(!email || email == 'No email')
+								return;
+
+							$('#requester_name').val(arg2);
+							$('#contact_id').val(arg1);
+							$('#requester_email').val(email).show();
+							$('#requester_email_typeahead').hide();
+
+						},undefined, undefined, 'core/api/search/');
+				}
+			});
+
+			$('#modal-body').html(ticketView.render().el);
+		});	
 	},
 
 	/**
@@ -232,6 +300,9 @@ var TicketsUtilRouter = Backbone.Router.extend({
 
 				//Rendering ticket notes
 				App_Ticket_Module.renderNotesCollection(id, $('#notes-collection-container', el), function(){});
+
+				//Load widgets
+				Tickets.loadWidgets(el);
 			}
 		});
 

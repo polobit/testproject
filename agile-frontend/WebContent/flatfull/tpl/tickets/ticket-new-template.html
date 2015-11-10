@@ -1,23 +1,23 @@
 <script id="ticket-new-template" type="text/html">
 <div class="wrapper bg-light lter b-b">
-    <h3 class="m-b-none" style="margin-top: 4px;">New Ticket</h3>
+    <h3 class="m-b-none" style="margin-top: 4px;">Create Ticket</h3>
 </div>
 <div class="wrapper">
-    <form id="new-ticket" name="new-ticket" class="form-horizontal m-t-lg">
+    <form id="new-ticket" name="new-ticket" class="form-horizontal m-t-sm">
       <div class="form-group">
         <label class="col-lg-2 control-label">To</label>
-        <div class="col-lg-7">
+        <div class="col-lg-8">
           <input type="hidden" id="requester_name" name="requester_name">
           <input type="hidden" id="contact_id" name="contact_id">
           <input type="text" id="requester_email" name="requester_email" class="form-control nt-reqester_email required" style="display: none;">
         	<div class="input-group">
-              <input type="text" id="requester_email_typeahead" placeholder="Contact Email" class="typeahead typeahead_contacts form-control email b-r-none" data-provide="typeahead" 
-                data-mode="multiple" autocomplete="off">
-              <span class="input-group-addon show_cc_emails_field cursor-pointer bg-white text-muted">Cc</span>
+              <input type="text" id="requester_email_typeahead" placeholder="Email" class="typeahead typeahead_contacts form-control email b-r-none" data-provide="typeahead" 
+                data-mode="multiple" autocomplete="off" style="border-right: 1px solid #F5F5F5 !important;">
+              <span class="input-group-addon show_cc_emails_field cursor-pointer bg-white color-c7c7c7">Cc</span>
             </div>
         </div>
         <div class="col-lg-1 p-n m-t-xs">
-            <a class="toggle-options" href="javascript:void(0);">
+            <a class="toggle-options color-c7c7c7" href="javascript:void(0);">
               <i class="fa fa-angle-double-down" data-toggle="tooltip" data-placement="top" 
                 data-original-title="Show fields"></i>
             </a>  
@@ -25,11 +25,11 @@
       </div>
       <div class="form-group cc_emails_container" style="display: none;">
         <label class="col-lg-2 control-label">Cc</label>
-        <div class="col-lg-7">
-          <div style="background-color: white; border: 1px solid #cfdadd; border-radius: 2px; padding: 5px 12px;">
-            <ul name="cc_emails" class="p-n">
+        <div class="col-lg-8">
+          <div class="cc-emails-st">
+            <ul name="cc_emails" class="p-n m-n">
                 <li class="tag m-r-xs m-b-xs inline-block">
-                  <input type="text" placeholder="Cc Emails" id="cc_email_field" style="border: none; width: 9em !important;">
+                  <input type="text" placeholder="Cc" class="b-n" id="cc_email_field" autocomplete="off" style="width: 9em !important;">
                 </li>
             </ul>
           </div>  
@@ -37,33 +37,40 @@
       </div>
       <div class="form-group">
         <label class="col-lg-2 control-label">Subject</label>
-        <div class="col-lg-7">
+        <div class="col-lg-8">
           <input type="text" name="subject" class="form-control required"  placeholder="Subject">
         </div>
       </div>
       <div class="form-group d-nt-show display-none">
         <label class="col-lg-2 control-label">Status</label>
-        <div class="col-lg-7">
+        <div class="col-lg-3">
             <select id="status" name="status" class="form-control status">
                 <option value="NEW">New</option>
                 <option value="OPEN">Open</option>
             </select>
         </div>
+        <label class="col-lg-1 control-label">Priority</label>
+        <div class="col-lg-4">
+            <select id="priority" name="priority" class="form-control">
+                <option value="LOW">Low</option>
+                <option value="MEDIUM">Medium</option>
+                <option value="HIGH">High</option>
+            </select>
+        </div>
       </div>
+      <!--<div class="form-group d-nt-show display-none"></div>-->
       <div class="form-group d-nt-show display-none">
         <label class="col-lg-2 control-label">Group</label>
-        <div class="col-lg-7">
+        <div class="col-lg-3">
             <select id="groupID" name="groupID" class="form-control">
               {{#each this}}
                 <option value="{{id}}">{{group_name}}</option>  
               {{/each}}
             </select>
         </div>
-      </div>
-      <div class="form-group grp-assigee" style="display: none">
-        <label class="col-lg-2 control-label">Assignee</label>
-        <div class="col-lg-7">
-            <select id="assigneeID" name="assigneeID" class="form-control">
+        <label class="col-lg-1 control-label">Assignee</label>
+        <div class="col-lg-4">
+            <select id="assigneeID" name="assigneeID" class="form-control grp-assigee" disabled>
               {{#each this}}
                   {{#each group_users}}
                       <option class="{{../id}}" value="{{id}}">{{name}}</option>  
@@ -72,28 +79,50 @@
             </select>
         </div>
       </div>
-      <div class="form-group d-nt-show display-none">
-        <label class="col-lg-2 control-label">Priority</label>
-        <div class="col-lg-7">
-            <select id="priority" name="priority" class="form-control">
-                <option value="LOW">Low</option>
-                <option value="MEDIUM">Medium</option>
-                <option value="HIGH">High</option>
-            </select>
+      <!--<div class="form-group d-nt-show display-none"></div>-->
+      <div class="form-group">
+        <label class="col-sm-2 control-label">Message</label>
+        <div class="col-sm-8">
+          <div ui-jq="wysiwyg" class="form-control h-auto required html_text required" placeholder="Type your message here" data-name="html_text" style="min-height:200px;" contenteditable="true">
+           	<br><br><br><br><br><br><br>{{#getCurrentUserPrefs}}{{{signature}}}{{/getCurrentUserPrefs}}
+          </div>
         </div>
       </div>
+      <div class="form-group">
+        <label class="col-sm-2 control-label">Attachments</label>
+        <div class="col-sm-8">
+            <ul class="inline v-top m-b-sm p-n attachments-list">
+            </ul>
+            <div class="inline-block">
+              <a href="javascript:void(0);" class="toggle-docs-dropdown text-info">
+                <i class="fa fa-paperclip"></i> Attach file
+              </a>
+            </div>  
+            <div class="docs-container display-none">
+              <select class="form-control width33 inline-block choose-document" id="choose-document">
+              </select>&nbsp;
+              <a href="javascript:void(0);" class="add-document text-info text-xs  
+                m-l-xs m-t-sm">Add</a> 
+              <a href="javascript:void(0);" class="cancel-docs-dropdown text-info 
+                text-xs m-l-xs m-t-sm">Cancel</a>
+              <span class="attachment-status"></span>
+              <span class="save-status"></span>
+            </div>
+        </div>
+      </div>  
       <div class="form-group d-nt-show display-none">
         <label class="col-lg-2 control-label">Tags</label>
-        <div class="col-lg-7">
+        <div class="col-lg-8">
           <ul id="ticket-tags-ul" name="tags" class="inline v-top m-b-sm p-n tags">
           </ul>
-          <div class="inline-block m-t-xs">
+          <div class="inline-block" style="height: 34px;">
             <div class="add-tags-form" class="m-b-none" style="display: none;">
               <div class="control-group m-b-none">
                 <input type="text" class="ticket-tags-typeahead ignore-comma-keydown form-control inline-block" style="width: 60%" placeholder="Enter tag">
               </div>
             </div>
-            <a href="javascript:void(0);" id="show-tags-field" rel="tooltip" data-original-title="addtag" data-placement="top" class="text-xs text-muted show-tags-field">
+            <a href="javascript:void(0);" id="show-tags-field" rel="tooltip" data-original-title="addtag" 
+            data-placement="top" class="text-xs text-muted show-tags-field" style="vertical-align: -webkit-baseline-middle;">
               <i class="icon-plus"></i>
               <span>Add</span>
             </a>
@@ -101,20 +130,187 @@
         </div>
       </div>
       <div class="form-group">
-        <label class="col-sm-2 control-label">Message</label>
-        <div class="col-sm-8">
-          <div ui-jq="wysiwyg" class="form-control h-auto required html_text required" placeholder="Type your message here" data-name="html_text" style="min-height:200px;" contenteditable="true">
-           	<br/><br/>{{#getCurrentUserPrefs}}{{{signature}}}{{/getCurrentUserPrefs}}
-          </div>
-        </div>
-      </div>
-      <div class="form-group">
         <div class="col-lg-8 col-lg-offset-2 form-actions">
           <a href="javascript:void(0);" class="btn btn-primary save">Create Ticket</a>
-          <a href="javascript:void(0);" class="btn btn-default btn-icon "><i class="fa fa-paperclip"></i></a>
         </div>
       </div>
     </form>
+</div>
+</script>
+<script id="ticket-new-modal-template" type="text/html">
+<div id="new-ticket-modal" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button class="close" data-dismiss="modal">x</button>
+        <h3 class="modal-title"><i class="icon icon-envelop"></i> Create Ticket</h3>
+      </div>
+      <div id="modal-body">
+        Loading...
+      </div>
+    </div>
+  </div>
+</div>
+</script>
+<script id="ticket-new-modal-form-template" type="text/html">
+<div class="modal-body">
+  <form id="new-ticket" name="new-ticket">
+    <fieldset>
+      <div class="control-group form-group">
+        <div class="row">
+            <div class="control-group col-md-5">
+              <label class="control-label"><b>To</b> <span class="field_req">*</span></label>
+              <span class="controls">
+                <input type="hidden" id="requester_name" name="requester_name">
+                <input type="hidden" id="contact_id" name="contact_id">
+                <input type="text" id="requester_email" name="requester_email" class="form-control nt-reqester_email required" style="display: none;">
+                <input type="text" id="requester_email_typeahead" placeholder="Email" class="required typeahead typeahead_contacts form-control email" data-provide="typeahead">
+              </span>
+            </div>
+            <div class="control-group col-md-6">
+                <label class="control-label"><b>Cc</b></label>
+                <span class="controls">
+                  <div class="cc-emails-st">
+                    <ul name="cc_emails" class="p-n m-n">
+                        <li class="tag m-r-xs m-b-xs inline-block">
+                          <input type="text" placeholder="Cc" class="b-n" id="cc_email_field" autocomplete="off" style="width: 9em !important;">
+                        </li>
+                    </ul>
+                  </div>  
+                </span>
+            </div>
+        </div>
+      </div>
+      <div class="control-group form-group">
+        <div class="row">
+            <div class="control-group col-md-5">
+              <label class="control-label"><b>Subject</b> <span class="field_req">*</span></label>
+              <span class="controls">
+                <input type="text" name="subject" class="form-control required"  placeholder="Subject">
+              </span>
+            </div>
+            <div class="control-group col-md-6">
+                <label class="control-label"><b>Status</b></label>
+                <span class="controls">
+                  <select id="status" name="status" class="form-control status">
+                      <option value="NEW">New</option>
+                      <option value="OPEN">Open</option>
+                  </select>
+                </span>
+            </div>
+        </div>
+      </div>
+      <div class="control-group form-group">
+        <div class="row">
+            <div class="control-group col-md-5">
+              <label class="control-label"><b>Priority</b></label>
+              <span class="controls">
+                <select id="priority" name="priority" class="form-control">
+                    <option value="LOW">Low</option>
+                    <option value="MEDIUM">Medium</option>
+                    <option value="HIGH">High</option>
+                </select>
+              </span>
+            </div>
+            <div class="control-group col-md-6">
+                <label class="control-label"><b>Group</b></label>
+                <span class="controls">
+                  <select id="groupID" name="groupID" class="form-control required">
+                    {{#each this}}
+                      <option value="{{id}}">{{group_name}}</option>  
+                    {{/each}}
+                  </select>
+                </span>
+            </div>
+        </div>
+      </div>
+      <div class="control-group form-group">
+        <div class="row">
+            <div class="control-group col-md-5">
+              <label class="control-label"><b>Assignee</b></label>
+              <span class="controls">
+                <select id="assigneeID" name="assigneeID" class="form-control grp-assigee" disabled>
+                  {{#each this}}
+                      {{#each group_users}}
+                          <option class="{{../id}}" value="{{id}}">{{name}}</option>  
+                      {{/each}}
+                  {{/each}}
+                </select>
+              </span>
+            </div>
+            <div class="control-group col-md-6">
+                <label class="control-label block"><b>Tags</b></label>
+                <span class="controls">
+                  <div class="inline-block">
+                    <ul id="ticket-tags-ul" name="tags" class="inline v-top m-b-sm p-n tags">
+                    </ul>
+                  </div>                    
+                  <div class="inline-block">
+                    <div class="add-tags-form" class="m-b-none" style="display: none;">
+                      <div class="control-group m-b-none">
+                        <input type="text" class="ticket-tags-typeahead ignore-comma-keydown form-control inline-block" style="width: 60%" placeholder="Enter tag">
+                      </div>
+                    </div>
+                    <a href="javascript:void(0);" id="show-tags-field" rel="tooltip" data-original-title="addtag" 
+                    data-placement="top" class="text-xs text-muted show-tags-field" style="vertical-align: -webkit-baseline-middle;">
+                      <i class="icon-plus"></i>
+                      <span>Add</span>
+                    </a>
+                  </div>  
+                </span>
+            </div>
+        </div>
+      </div>
+      <div class="control-group form-group">
+        <div class="row">
+            <div class="control-group col-md-11">
+              <label class="control-label"><b>Message</b></label>
+              <span class="controls">
+                <div ui-jq="wysiwyg" class="form-control h-auto required html_text required" placeholder="Type your message here" data-name="html_text" style="min-height: 150px;" contenteditable="true">
+                  <br><br><br><br>{{#getCurrentUserPrefs}}{{{signature}}}{{/getCurrentUserPrefs}}
+                </div>
+              </span>
+            </div>
+            <div class="control-group col-md-1">
+            </div>
+        </div>
+      </div>
+      <div class="control-group form-group">
+        <div class="row">
+            <div class="control-group col-md-11">
+              <label class="control-label block"><b>Attachments</b></label>
+              <span class="controls">
+                <ul class="inline v-top m-b-sm p-n attachments-list">
+                </ul>
+                <div class="inline-block">
+                  <a href="javascript:void(0);" class="toggle-docs-dropdown text-info">
+                    <i class="fa fa-paperclip"></i> Attach file
+                  </a>
+                </div>  
+                <div class="docs-container display-none">
+                  <select class="form-control width33 inline-block choose-document" id="choose-document">
+                  </select>&nbsp;
+                  <a href="javascript:void(0);" class="add-document text-info text-xs  
+                    m-l-xs m-t-sm">Add</a> 
+                  <a href="javascript:void(0);" class="cancel-docs-dropdown text-info 
+                    text-xs m-l-xs m-t-sm">Cancel</a>
+                  <span class="attachment-status"></span>
+                  <span class="save-status"></span>
+                </div>  
+              </span>
+            </div>
+            <div class="control-group col-md-1">
+            </div>
+        </div>
+      </div>
+    </fieldset>  
+  </form>
+</div>
+<div class="modal-footer">
+    <span class="form-action-error"></span>
+    <a href="javascript:void(0);" data-dismiss="modal" class="btn btn-sm btn-default">Close</a> 
+    <a href="javascript:void(0);" class="save btn btn-sm btn-primary">Save</a>
+    <span class="save-status"></span>
 </div>
 </script>
 <script id="ticket-tag-template" type="text/html">
@@ -130,6 +326,14 @@
     <span>
       <a class="anchor m-r-xs {{#if err_email}}boder-btm-dot{{/if}}" href="javascript:void(0);" >{{email}}</a>
       <a class="close remove-ticket-tags text-lg">&times</a>
+    </span>
+  </li>
+</script>
+<script id="ticket-attachment-li-template" type="text/html">
+  <li class="tag btn btn-xs btn-default m-r-xs m-b-xs inline-block" file-name="{{name}}" url="{{url}}" size="{{size}}">
+    <span>
+      <i class="fa fa-paperclip"></i> <a class="anchor m-r-xs" href="{{url}}" target="_blank">{{name}}</a>
+      <a class="close remove-attachment text-lg">×</a>
     </span>
   </li>
 </script>

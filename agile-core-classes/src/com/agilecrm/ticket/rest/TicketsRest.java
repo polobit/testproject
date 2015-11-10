@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.ws.rs.Consumes;
+import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -19,6 +21,7 @@ import javax.ws.rs.core.Response;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.examples.HtmlToPlainText;
@@ -36,6 +39,8 @@ import com.agilecrm.ticket.entitys.Tickets;
 import com.agilecrm.ticket.entitys.TicketActivity.TicketActivityType;
 import com.agilecrm.ticket.entitys.TicketNotes.CREATED_BY;
 import com.agilecrm.ticket.entitys.TicketNotes.NOTE_TYPE;
+import com.agilecrm.ticket.entitys.TicketWorkflow;
+import com.agilecrm.ticket.entitys.Tickets;
 import com.agilecrm.ticket.entitys.Tickets.Priority;
 import com.agilecrm.ticket.entitys.Tickets.Status;
 import com.agilecrm.ticket.entitys.Tickets.Type;
@@ -45,6 +50,9 @@ import com.agilecrm.ticket.utils.TicketNotesUtil;
 import com.agilecrm.ticket.utils.TicketsUtil;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
+import com.agilecrm.workflows.Workflow;
+import com.agilecrm.workflows.triggers.util.TicketTriggerUtil;
+import com.agilecrm.workflows.util.WorkflowUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.googlecode.objectify.Key;
 
@@ -377,16 +385,16 @@ public class TicketsRest
 
 					Long newGroupID = Long.parseLong(activity.new_data);
 					Long oldGroupID = Long.parseLong(activity.old_data);
-					
-					if(activity.old_data != null)
-					if (!groupsList.containsKey(newGroupID))
-					{
 
-						TicketGroups group = TicketGroupUtil.getTicketGroupById(newGroupID);
+					if (activity.old_data != null)
+						if (!groupsList.containsKey(newGroupID))
+						{
 
-						if (group != null)
-							groupsList.put(newGroupID, group);
-					}
+							TicketGroups group = TicketGroupUtil.getTicketGroupById(newGroupID);
+
+							if (group != null)
+								groupsList.put(newGroupID, group);
+						}
 
 					if (!groupsList.containsKey(oldGroupID))
 					{
@@ -423,6 +431,17 @@ public class TicketsRest
 	}
 
 	/**
+	 * @return list of worklows
+	 */
+	@GET
+	@Path("/execute-workflow")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<Workflow> listWorkflows()
+	{
+		return WorkflowUtil.getAllWorkflows();
+	}
+
+	/**
 	 * Creates new ticket from dashboard
 	 * 
 	 * @param ticket
@@ -446,15 +465,22 @@ public class TicketsRest
 			Document doc = Jsoup.parse(html_text, "UTF-8");
 			String plain_text = new HtmlToPlainText().getPlainText(doc);
 
+			boolean attachmentExists = false;
+
+			List<TicketDocuments> attachmentsList = ticket.attachments_list;
+
+			if (attachmentsList != null && attachmentsList.size() > 0)
+				attachmentExists = true;
+
 			// Creating new Ticket in Ticket table
 			ticket = TicketsUtil.createTicket(groupID, assigneeID, ticket.requester_name, ticket.requester_email,
 					ticket.subject, ticket.cc_emails, plain_text, ticket.status, ticket.type, ticket.priority,
-					ticket.source, ticket.attachments_exists, "", ticket.tags);
+					ticket.source, attachmentExists, "", ticket.tags);
 
 			// Creating new Notes in TicketNotes table
 			TicketNotesUtil.createTicketNotes(ticket.id, groupID, assigneeID, CREATED_BY.REQUESTER,
 					ticket.requester_name, ticket.requester_email, plain_text, html_text, NOTE_TYPE.PUBLIC,
-					new ArrayList<TicketDocuments>());
+					attachmentsList);
 
 			ticket.groupID = ticket.group_id.getId();
 
@@ -466,6 +492,51 @@ public class TicketsRest
 			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
 					.build());
 		}
+	}
+
+	/**
+	 * Executes selected workflow on currently viewing ticket
+	 * 
+	 * @param ticket
+	 * @return newly created ticket
+	 * @throws JSONException
+	 */
+	@POST
+	@Path("/execute-workflow")
+	@Consumes({ MediaType.APPLICATION_JSON })
+	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	public String executeWorkflow(TicketWorkflow ticketWorkflow)
+			throws JSONException
+	{
+		try
+		{
+			Long ticketID = ticketWorkflow.getTicket_id();
+			Long workflowID = ticketWorkflow.getWorkflow_id();
+			
+			if (ticketID == null || workflowID == null)
+				throw new Exception("ticketID or workflowID is missing.");
+
+			// Fetching ticket
+			Tickets ticket = TicketsUtil.getTicketByID(ticketID);
+
+			// Fetching contact
+			Contact contact = ticket.getContact();
+
+			// Throwing exception if contact is null
+			if (contact == null)
+				throw new Exception("No contact found for this customer.");
+			
+			//Executing workflow on given ticket id
+			TicketTriggerUtil.executeCampaign(contact, workflowID, ticket);
+		}
+		catch (Exception e)
+		{
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
+			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+					.build());
+		}
+
+		return new JSONObject().put("status", "success").toString();
 	}
 
 	/**

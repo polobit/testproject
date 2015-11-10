@@ -49,7 +49,7 @@ var Ticket_Timeline = {
 			}
 		});
 
-		$('#ticket_timeline').html(timeLineView.render().el);
+		$('#notes-collection-container').html(timeLineView.render().el);
 	}
 };	
 

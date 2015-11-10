@@ -39,6 +39,21 @@
 		<div class="wrapper" style="{{#if_equals created_by 'REQUESTER'}}background-color:#F6F8F8{{/if_equals}}">
 	    	{{{html_text}}}
 	  	</div>
+	  	{{#if attachments_list}}
+	  		<div class="wrapper" style="{{#if_equals created_by 'REQUESTER'}}background-color: #F6F8F8{{/if_equals}}">
+	  			<h5>Attachments</h5>
+	  			 <ul class="inline v-top m-b-sm p-n attachments-list">
+	  			 	{{#each attachments_list}}
+		  				<li class="tag btn btn-xs btn-default m-r-xs m-b-xs inline-block" file-name="{{name}}" url="{{url}}" size="{{size}}">
+						    <span>
+						      <i class="fa fa-paperclip"></i> <a class="anchor m-r-xs" href="{{url}}">{{name}}</a>
+						      <a class="close remove-attachment text-lg">×</a>
+						    </span>
+						  </li>
+		  			{{/each}}
+	        	</ul>
+	  		</div>
+	  	{{/if}}	
 	{{else}}
 		<div class="wrapper b-b b-t m-t-xs" style="background-color:#FBFBFB">
 		    <img class="m-r-sm v-inherit" src="{{domain_user.ownerPic}}"  width="34px" height="34px">

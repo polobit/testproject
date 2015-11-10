@@ -23,7 +23,7 @@ public class TicketDocuments
 	/**
 	 * Uploaded time of a Document.
 	 */
-	public Long uploaded_time = 0L;
+	public Long uploaded_time = Calendar.getInstance().getTimeInMillis();
 
 	/**
 	 * Extension of a Document.
@@ -38,7 +38,7 @@ public class TicketDocuments
 	/**
 	 * URL of Document.
 	 */
-	public String bucketName = null;
+	public String url = null;
 
 	/**
 	 * Default Constructor.
@@ -47,13 +47,13 @@ public class TicketDocuments
 	{
 	}
 
-	public TicketDocuments(String name, String extension, Long size, String bucketName)
+	public TicketDocuments(String name, String extension, Long size, String url)
 	{
 		super();
 		this.name = name;
 		this.extension = extension;
 		this.size = size;
-		this.bucketName = bucketName;
+		this.url = url;
 		this.uploaded_time = Calendar.getInstance().getTimeInMillis();
 	}
 }

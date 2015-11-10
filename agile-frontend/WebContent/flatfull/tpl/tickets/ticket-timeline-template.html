@@ -1,5 +1,5 @@
 <script id="ticket-timeline-template" type="text/html">
-<div class="padder p-l-none">      
+<div class="ticket-timeline-container padder p-l-none bd-t">      
     <div class="streamline b-l b-info m-l-lg m-b padder-v">
     	{{#each this}}  
 	      <div class="timeline_entity">
@@ -10,9 +10,9 @@
 	        		{{#if_equals ticket_activity_type 'TICKET_REQUESTER_REPLIED'}}
 	        			<img class="img-inital inline" src="{{gravatarurl contact.properties 30}}" data-toggle="tooltip" data-placement="top" data-original-title="{{getPropertyValue contact.properties "first_name"}} {{getPropertyValue contact.properties "last_name"}}"/>
 	        		{{else}}
-	        			<img src="{{user.ownerPic}}" data-toggle="tooltip" data-placement="top" 
-	        				data-original-title="{{user.name}}"/>
-	        		{{/if_equals}}
+	        			<img src="{{#if user.name}}{{user.ownerPic}}{{else}}flatfull/images/flatfull/user-default.jpg{{/if}}" data-toggle="tooltip" data-placement="top" 
+		        				data-original-title="{{user.name}}"/>
+		        	{{/if_equals}}
 	        	{{/if_equals}}
 	        </a>          
 	        <div class="m-l-lg panel b-a">
