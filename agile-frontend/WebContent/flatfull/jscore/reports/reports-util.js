@@ -275,6 +275,7 @@ user_reports :function(callReportUrl){
 		var domainUsersList=[];
 		var domainUserImgList=[];
 		var averageCallList=[];
+		var callsDurationAvg=0;
 		var sizey = parseInt($('#'+selector).parent().attr("data-sizey"));
 		var topPos = 50*sizey;
 		if(sizey==2 || sizey==3)
@@ -324,6 +325,9 @@ user_reports :function(callReportUrl){
 				});
 				CompleteCallsCount.push(voicemailCallCount);
 				
+				if(callsDurationList[0]!=0)
+				   callsDurationAvg=callsDurationList[0]/answeredCallsCountList[0];
+				$('.avg-duration').html("Average Time Spent on Call:"+callsDurationAvg);
 				
 				portlet_graph_utility.callsByPersonPieGraph(selector,pieGraphRegions,CompleteCallsCount);
 			

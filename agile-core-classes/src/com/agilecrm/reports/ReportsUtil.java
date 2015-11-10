@@ -490,14 +490,14 @@ public class ReportsUtil
 			
 			dataJson.put("avgDealClosetime", avgDealsClosure);
 			List<Activity> callActivitiesList = ActivityUtil.getActivitiesByActivityType("CALL",ownerId,minTime,maxTime);
-			for(Activity activity : callActivitiesList){
+		/*	for(Activity activity : callActivitiesList){
 				if(activity.custom4!=null && !activity.custom3.equalsIgnoreCase(Call.VOICEMAIL) && !activity.custom4.equalsIgnoreCase(null) 
 						&& !activity.custom4.equalsIgnoreCase("null") && !activity.custom4.equalsIgnoreCase(""))
 					callsDuration+=Long.valueOf(activity.custom4);
 			}
 			if(callActivitiesList.size()!=0)
-			 callsDuration=callsDuration/callActivitiesList.size();
-			dataJson.put("avgCallDuration", callsDuration);
+			 callsDuration=(double) Math.round(callsDuration/callActivitiesList.size());
+			dataJson.put("avgCallDuration", callsDuration);*/
 			
 			dataJson.put("taskcreated",TaskUtil.getUserCreatedTasks(minTime, maxTime, ownerId));
 			dataJson.put("taskCompleted",TaskUtil.getCompletedTasksOfUser(minTime, maxTime, ownerId));
