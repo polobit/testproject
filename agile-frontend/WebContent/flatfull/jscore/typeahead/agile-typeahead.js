@@ -362,7 +362,14 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
 							else
 							{
 								// If tag already exists returns
-								$.each(this.$menu.closest("div.controls").find('.tags').children('li'), function(index, tag)
+								var targetContainer = this.$menu.closest("div.controls").find('.tags');
+								if(targetContainer.length == 0){
+									targetContainer = this.$menu.closest("div.control-group").find('.tags'); 
+								} else if(targetContainer.length == 0){
+									targetContainer = this.$menu.closest("div.form-group").find('.tags'); 	
+								}
+									
+								$.each(targetContainer.children('li'), function(index, tag)
 								{
 
 									if ($(tag).attr('data') == TYPEHEAD_TAGS[items])
@@ -374,7 +381,7 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
 
 								// add tag
 								if (tag_not_exist)
-									this.$menu.closest("div.controls").find('.tags')
+									targetContainer
 											.append(
 													'<li class="tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block"  data="' + TYPEHEAD_TAGS[items] + '"><a href="'+TYPEHEAD_TYPE[items] + TYPEHEAD_TAGS[items] + '" class="text-white v-middle">' + items_temp + '</a><a class="close m-l-xs" id="remove_tag">&times</a></li>');
 							}
