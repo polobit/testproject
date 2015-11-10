@@ -732,9 +732,8 @@ var ReportsRouter = Backbone.Router
 						$('#content').html($(template_ui));	
 							// Set the name
 
-						initUserReports(function()
+						initRepReports(function()
 							{
-								//$('select[id="owner"]').find('option[value="'+CURRENT_DOMAIN_USER.id+'"]').attr("selected",true);
 								showRepPerformanceReport();
 								
 					});

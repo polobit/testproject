@@ -142,7 +142,6 @@ call_reports : function(url,reportType,graphOn){
 			$('#'+selector).html("<div class='portlet-error-message'><i class='icon-warning-sign icon-1x'></i>&nbsp;&nbsp;Sorry, you do not have the privileges to access this.</div>");
 			return;
 		}
-		data={"answeredCallsCountList":[1],"busyCallsCountList":[0],"failedCallsCountList":[1],"voiceMailCallsCountList":[0],"callsDurationList":[35],"totalCallsCountList":[3],"domainUsersList":["Nids"],"domainUserImgList":["https://d1gwclp1pmzk26.cloudfront.net/img/gravatar/11.png"]}
 		answeredCallsCountList=data["answeredCallsCountList"];
 		busyCallsCountList=data["busyCallsCountList"];
 		failedCallsCountList=data["failedCallsCountList"];
@@ -287,8 +286,6 @@ user_reports :function(callReportUrl){
 				$('#'+selector).html("<div class='portlet-error-message'><i class='icon-warning-sign icon-1x'></i>&nbsp;&nbsp;Sorry, you do not have the privileges to access this.</div>");
 				return;
 			}
-			data={"answeredCallsCountList":[1],"busyCallsCountList":[0],"failedCallsCountList":[1],"voiceMailCallsCountList":[0],"callsDurationList":[0],"totalCallsCountList":[0],"domainUsersList":["Nids"],"domainUserImgList":["https://d1gwclp1pmzk26.cloudfront.net/img/gravatar/11.png"]}
-		
 			answeredCallsCountList=data["answeredCallsCountList"];
 			busyCallsCountList=data["busyCallsCountList"];
 			failedCallsCountList=data["failedCallsCountList"];
@@ -349,13 +346,14 @@ getRepPerformanceLog : function(url) {
 
 								var callReportUrl='core/api/portlets/calls-per-person/' + getSelectedDates();
 							
-							/*if ($('#owner').length > 0)
+							if ($('#owner').length > 0)
 							{
-								if ($("#owner").val() != "" && $("#owner").val() != "All Owners"){*/
-								var user=CURRENT_DOMAIN_USER.id;
+								if ($("#owner").val() != ""){
+									var user=$("#owner").val();
+								//var user=CURRENT_DOMAIN_USER.id;
 								callReportUrl=callReportUrl+'&user=["'+user+'"]';
-							//}
-							//}
+							}
+							}
 							
 							report_utility.user_reports(callReportUrl);
 			}, "#rep-performance-reports");

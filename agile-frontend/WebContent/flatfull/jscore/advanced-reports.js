@@ -312,18 +312,17 @@ function showsalesReportGraphs()
 function initUserReports(callback){
 	
 	initDateRange(callback);
-	
 
-	fillSelect("owner", "core/api/users", undefined, function()
+	callback();	
+
+		fillSelect("owner", "core/api/users", undefined, function()
 		{
-			$('select[id="owner"]').find('option[value="'+CURRENT_DOMAIN_USER.id+'"]').attr("selected",true);
-			callback();					
 			$('#owner').change(function()
 			{
 				callback();
 			});
 
-		}, '<option class="default-select" value="{{id}}">{{name}}</option>', false, undefined);
+		}, '<option class="default-select" value="{{id}}">{{name}}</option>', false, undefined, "All Owners");
 		
 	}
 
@@ -716,3 +715,21 @@ function showRepPerformanceReport()
 		
 
 }
+
+function initRepReports(callback){
+	
+	initDateRange(callback);
+	
+
+	fillSelect("owner", "core/api/users", undefined, function()
+		{havo
+			$('select[id="owner"]').find('option[value="'+CURRENT_DOMAIN_USER.id+'"]').attr("selected",true);
+			callback();					
+			$('#owner').change(function()
+			{
+				callback();
+			});
+
+		}, '<option class="default-select" value="{{id}}">{{name}}</option>', false, undefined);
+		
+	}
