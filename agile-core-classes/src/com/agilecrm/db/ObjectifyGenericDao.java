@@ -225,7 +225,6 @@ public class ObjectifyGenericDao<T> extends DAOBase
 	ObjectifyService.register(TicketGroups.class);
 	ObjectifyService.register(TicketCannedMessages.class);
 	ObjectifyService.register(TicketFilters.class);
-	ObjectifyService.register(TicketMacros.class);
 	ObjectifyService.register(TicketDocuments.class);
 	ObjectifyService.register(TicketActivity.class);
 	
