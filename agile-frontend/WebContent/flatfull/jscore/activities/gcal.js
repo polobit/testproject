@@ -168,14 +168,14 @@ function google2fcEvent(google)
 		if (fc.end.length > 10)
 		{
 			end = $.fullCalendar.parseDate(fc.end);
-			fc.end = $.fullCalendar.formatDate(end, 'yyyy-MM-dd');
+			fc.end = $.fullCalendar.formatDate(end, 'yyyy-mm-dd');
 		}
 		else
 		{
 			end = new Date(fc.end);
 		}
 		end.setDate(end.getDate() - 1);
-		fc.end = end.format('yyyy-MM-dd');
+		fc.end = end.format('yyyy-mm-dd');
 
 	}
 	return fc;
