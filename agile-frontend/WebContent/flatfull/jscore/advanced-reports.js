@@ -722,7 +722,7 @@ function initRepReports(callback){
 	
 
 	fillSelect("owner", "core/api/users", undefined, function()
-		{havo
+		{
 			$('select[id="owner"]').find('option[value="'+CURRENT_DOMAIN_USER.id+'"]').attr("selected",true);
 			callback();					
 			$('#owner').change(function()

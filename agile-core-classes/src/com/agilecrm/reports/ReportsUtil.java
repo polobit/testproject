@@ -515,7 +515,7 @@ public class ReportsUtil
 			else
 				dataJson.put("userPic","");
 			
-			dataJson.put("events",EventUtil.getEventsCountforOwner(minTime,maxTime));
+			dataJson.put("events",EventUtil.getEventsCountforOwner(minTime,maxTime,ownerId));
 			dataJson.put("workflows",WorkflowUtil.getWorkflowCountOfCurrentUser(minTime, maxTime, ownerId));
 			dataJson.put("cases",CaseUtil.getCasesOfUser(minTime, maxTime, ownerId));
 			return dataJson;

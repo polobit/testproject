@@ -629,11 +629,11 @@ public class EventUtil
 	return dao.listByProperty("related_deals = ", dealKey);
     }
     
-    public static int getEventsCountforOwner(long startTime, long endTime)
+    public static int getEventsCountforOwner(long startTime, long endTime,Long domainUserId)
     {
 	try
 	{
-	    AgileUser agileUser = AgileUser.getCurrentAgileUser();
+	    AgileUser agileUser = AgileUser.getCurrentAgileUserFromDomainUser(domainUserId);
 
 	    // Gets list of tasks filtered on given conditions
 	    return dao.ofy().query(Event.class).filter("owner", new Key<AgileUser>(AgileUser.class, agileUser.id))
