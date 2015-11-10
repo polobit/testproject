@@ -1534,5 +1534,6 @@ a.lpt_fancybox:hover{
 .lp-menu-nav > li.active > a,
 .lp-menu-nav > li.active > a:hover,
 .lp-menu-nav > li.active > a:focus {
-  background-color: #fff;
+  background-color: #f6f8f8;
+  border-bottom-color: #f6f8f8 !important;
 }

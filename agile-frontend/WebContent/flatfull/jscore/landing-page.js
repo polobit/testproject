@@ -68,3 +68,7 @@ function initializeLandingPageListeners() {
 	});
 	
 }
+
+function onLandingPageBuilderLoad() {
+	$("#landingPageBuilderMenuNav").show();
+}

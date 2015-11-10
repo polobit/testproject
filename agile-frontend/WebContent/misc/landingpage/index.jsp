@@ -33,7 +33,7 @@ AGILE_LP_OPTIONS['templateId'] = "";
 
 </head>
 
-<body ng-app="builder">
+<body ng-app="builder" onload="parent.onLandingPageBuilderLoad()">
     <div id="splash" ng-cloak>
         <div id="splash-spinner"></div>
     </div>
