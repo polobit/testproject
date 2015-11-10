@@ -178,7 +178,12 @@ angular.module('dragAndDrop')
                         $scope.freeDragModeEnabled = true;
                     });
 
-                    $scope.frameBody.iframeNodesSortable('destroy');
+                    // $scope.frameBody.iframeNodesSortable('destroy');
+
+                    $scope.frameBody.iframeNodesSortable({
+                        //prevent nodes whose text is being edited from being dragged
+                        cancel: '[contenteditable="true"]'
+                    });
                 } else {
                     $scope.unbindFreeDrag && $scope.unbindFreeDrag();
 

@@ -68,7 +68,7 @@ angular.module('builder.settings', [])
             elements: [
                 {
                     name: 'enableFreeElementDragging',
-                    value: true,
+                    value: false,
                     category: 'Elements',
                     description: 'When this is enabled you will be able to drag elements anywhere on the screen without any restrictions. Elements will be positioned absolutely so you should not use columns or rows with this mode. To use, first select an element then drag.'
                 }
