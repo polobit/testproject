@@ -32,13 +32,18 @@ $('#app-aside-folded').on('click', function(e) {
 	
 $(document).ready(function(){
 
-	$('body').on('touchstart','#mobile-dropdown-click-sort',function() {
+	$('body').on('touchstart touchleave','#mobile-dropdown-click-sort',function() {
 		$("#contact-sort-views").css("display","block");
    });
 
-   $('body').on('touchstart','#contact-sort-views',function(){
+   $('body').on('touchstart touchmove touchenter','#contact-sort-views',function(){
+        $(this).css('display','block');
+   });	
+
+   $('body').on('click','#contact-sort-views',function(){
         $(this).css('display','none');
    });	
+   
 
 
     $("#contact-results li").click(function(){

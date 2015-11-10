@@ -1634,4 +1634,9 @@ a#email-reply{
     float: none!important;
   }
  }
+.tagsinput li {
+  word-break:break-all;
+  white-space: pre-wrap;
+  text-align: left;
+}
 
