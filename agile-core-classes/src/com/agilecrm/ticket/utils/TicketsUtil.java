@@ -511,6 +511,15 @@ public class TicketsUtil
 		return ticket;
 	}
 
+	public static void updateTags(String ticketId, String[] tagsArray, String type) throws Exception
+	{
+		for (String tag : tagsArray)
+		{
+			TicketsUtil.updateTags(Long.parseLong(ticketId), new Tag(tag), type.toLowerCase());
+		}
+
+	}
+
 	/**
 	 * 
 	 * @param tickets

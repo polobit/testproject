@@ -56,7 +56,7 @@ public class TicketAssignee extends TaskletAdapter
 				String ticketId = ticketJSON.getString("id");
 
 				// Change Group and Assignee
-				TicketsUtil.ChangeGroupAndAssignee(Long.parseLong(ticketId), Long.parseLong(ticketGroupId),
+				TicketsUtil.changeGroupAndAssignee(Long.parseLong(ticketId), Long.parseLong(ticketGroupId),
 						Long.parseLong(ticketAssigneeId));
 			}
 

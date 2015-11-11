@@ -118,10 +118,6 @@ table.ticket-details-table > tbody > tr > td:first-child{
 	display: none
 }
 
-.ticket-types > li.active > a {
-	background-color: #CFDADD !important;
-}
-
 .color-c7c7c7{
 	color: #C7C7C7 !important;
 }
