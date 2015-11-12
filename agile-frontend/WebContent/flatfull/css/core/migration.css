@@ -1095,10 +1095,12 @@ font-size:16px;
 .contact-title-dynamic
 {
 	width:calc(100% - 150px);
+  word-break:break-all;
 }
 .contact-desc-dynamic
 {
 	width:calc(100% - 40px);
+  word-break:break-all;
 }
 #contactDetailsTab li a
 {
@@ -1633,10 +1635,15 @@ a#email-reply{
   #contact-view-model-list {
     float: none!important;
   }
+  #campaign-select {
+ display: block!important; 
+}
+#add-to-campaign, #cancel-to-add-campaign {
+  margin-top: 10px;
+}
  }
 .tagsinput li {
   word-break:break-all;
   white-space: pre-wrap;
   text-align: left;
 }
-
