@@ -155,11 +155,14 @@ public class Globals
     public static final String PUBNUB_SUBSCRIBE_KEY = "sub-c-118f8482-92c3-11e2-9b69-12313f022c90";
 
     // MANDRILL MAIL API
-    public static final String MANDRIL_API_KEY_VALUE = "iQ_811cc9NxpLG11Ue4ftA";
+    // public static final String MANDRIL_API_KEY_VALUE =
+    // "iQ_811cc9NxpLG11Ue4ftA";
+
     public static final String MANDRILL_TEST_API_KEY_VALUE = "MRiwkducZGEbXrLW1LC5oQ";
 
     // Mandrill API Key for FREE
     public static final String MANDRILL_API_KEY_VALUE_2 = "RSn1Y3FmVLr59WKZqlKDGQ";
+    public static final String MANDRIL_API_KEY_VALUE = MANDRILL_API_KEY_VALUE_2;
 
     public static final String MANDRILL_PAID_POOL = "paid-pool";
 
