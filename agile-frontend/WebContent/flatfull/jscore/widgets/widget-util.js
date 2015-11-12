@@ -133,8 +133,8 @@ function save_widget_prefs(pluginName, prefs, callback) {
 				msg = ("Error occurred while saving "+displayName);
 			}
 
-			if (pluginName != "CallScript")
-				showNotyPopUp(msgType , msg, "bottomRight");
+			// if (pluginName != "CallScript")
+			showNotyPopUp(msgType , msg, "bottomRight");
 
 			if (callback && typeof (callback) === "function") {
 				callback(data);

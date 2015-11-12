@@ -23,7 +23,9 @@ $(function()
     
 		$('.date_input').datepicker({
 			format: CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY
-		});
+		}).datepicker('update');
+
+		$("input.date").each(function(index, ele){$(ele).datepicker('update');});
 	})
 
 	/**

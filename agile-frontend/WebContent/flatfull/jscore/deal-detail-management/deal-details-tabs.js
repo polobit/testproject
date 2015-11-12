@@ -597,10 +597,13 @@ var Deal_Modal_Event_View = Base_Model_View.extend({
 						var id = $(targetEl).attr('data');
 						var value = dealEventsView.collection.get(id).toJSON();
 						deserializeForm(value, $("#updateActivityForm"));
-						$("#updateActivityModal").modal('show');
 
 						$('.update-start-timepicker').val(fillTimePicker(value.start));
 						$('.update-end-timepicker').val(fillTimePicker(value.end));
+
+						$("#updateActivityModal").modal('show');
+
+						
 
 		if (value.type == "WEB_APPOINTMENT" && parseInt(value.start) > parseInt(new Date().getTime() / 1000))
 		{

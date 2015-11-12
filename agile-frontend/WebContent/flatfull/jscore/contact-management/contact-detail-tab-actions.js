@@ -45,11 +45,11 @@ var contact_details_documentandtasks_actions = {
         	var id = $(targetEl).attr('data');
 			var value = eventsView.collection.get(id).toJSON();
 			deserializeForm(value, $("#updateActivityForm"));
-			$("#updateActivityModal").modal('show');
-
 			$('.update-start-timepicker').val(fillTimePicker(value.start));
 			$('.update-end-timepicker').val(fillTimePicker(value.end));
 
+			$("#updateActivityModal").modal('show');
+			
 			if (value.type == "WEB_APPOINTMENT" && parseInt(value.start) > parseInt(new Date().getTime() / 1000))
 			{
 				$("[id='event_delete']").attr("id", "delete_web_event");
