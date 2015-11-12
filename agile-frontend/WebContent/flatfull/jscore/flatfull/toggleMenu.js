@@ -32,26 +32,22 @@ $('#app-aside-folded').on('click', function(e) {
 	
 $(document).ready(function(){
 
-	$('body').on('touchstart touchleave','#mobile-dropdown-click-sort',function() {
-		$("#contact-sort-views").css("display","block");
-   });
-
-   $('body').on('touchstart touchmove touchenter','#contact-sort-views',function(){
-        $(this).css('display','block');
-   });	
-
-   $('body').on('click','#contact-sort-views',function(){
-        $(this).css('display','none');
-   });	
-   
-
-
-    $("#contact-results li").click(function(){
+	 $("#contact-results li").click(function(){
    $("#mobile-menu-settings").trigger('click');
    });
  
 
 	if(( $(window).width() ) < 768 ) {
+
+	$('body').on('click','#mobile-dropdown-click-sort',function() {
+		$("#contact-sort-views").css("display","block");
+   });	
+
+   $('body').on('click','#contact-sort-views',function(){
+        $(this).css('display','none');
+   });	
+
+   
 
 	$('body').on('click','.navbar-brand',function(){
      $("#navbar").removeClass('show');

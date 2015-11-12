@@ -124,6 +124,18 @@ function isValid(){
 	label.error {
 		color:red;
 	}
+@media all and (max-width: 767px) {	
+	.mobile-popup {
+    min-height: 50vh;
+  }
+  .mobile-popup * {
+    text-align: center;
+    font-size: 20px;
+  }
+  .mobile-popup input {
+  	display: inline-block;
+  }
+}
 </style>
 
 </head>

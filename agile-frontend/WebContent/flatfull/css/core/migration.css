@@ -1626,22 +1626,28 @@ a#email-reply{
     display: block;
     margin-top: 5px;
   }
-  .mobile-popup {
-    min-height: 50vh;
-  }
-  .mobile-popup * {
-    font-size: 1.2em;
-  }
+  
   #contact-view-model-list {
-    float: none!important;
+   left: 0px;
   }
-  #campaign-select {
- display: block!important; 
+  #campaign-select,#document-select {
+ display: block!important;
+ margin: 0 auto; 
 }
-#add-to-campaign, #cancel-to-add-campaign {
+#add-to-campaign, #cancel-to-add-campaign , .add-document-confirm , .add-document-cancel {
   margin-top: 10px;
 }
- }
+.upload-doc-field {
+display: block;
+text-align: center;
+}
+}
+
+@media all and (min-width: 768px) {
+  .addField > .col-sm-9:nth-of-type(3) {
+  margin-left: 25%;
+  }
+} 
 .tagsinput li {
   word-break:break-all;
   white-space: pre-wrap;
