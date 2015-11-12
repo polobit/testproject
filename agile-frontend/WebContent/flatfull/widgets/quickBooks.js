@@ -80,6 +80,10 @@ function quickBooksError(message)
 
 function addContactToQuickbooks(first_name, last_name, contact_id)
 {
+
+	// Shows loading image until set up is shown
+	$('#QuickBooks').html(FRESHBOOKS_LOGS_LOAD_IMAGE);
+
     /*
      * send GET request to the URL to add client in Quickbooks based on widget
      * id, first name, last name and email as path parameters
@@ -92,7 +96,7 @@ function addContactToQuickbooks(first_name, last_name, contact_id)
     {
 	console.log('In Quickbooks add contact ');
 	console.log(data);
-
+	$('#quickbooks_profile_load').remove();
 	/*
 	 * Response from freshBooks will be sent as "ok" if client is added,
 	 * check the response and show added client in FreshBooks widget panel
@@ -112,6 +116,7 @@ function addContactToQuickbooks(first_name, last_name, contact_id)
 		// Shows error if error occurs in quickbooks widget panel
     	console.log("data is in add contact error");
     	console.log(data);
+    	$('#quickbooks_profile_load').remove();
 		quickBooksError("<div class='wrapper-sm'>"+data.responseText+"</div>");
 	});
 }
