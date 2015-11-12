@@ -50,12 +50,14 @@
 		<a id="xero_add_invoice" class="btn btn-default btn-xs" href="https://go.xero.com{{#unless xeroOrganisationShortCode}}/organisationlogin/default.aspx?shortcode={{xeroOrganisationShortCode}}&redirecturl={{/unless}}/AccountsReceivable/Edit.aspx?fromContactID={{Contact.ContactID}}" target="_blank">Add Invoice</a>
 	</div>
 </div>
-	{{#if invoice.Invoice}}	
-		<div class="wrapper-sm b-t b-light">
-			<a href="https://go.xero.com{{#unless xeroOrganisationShortCode}}/organisationlogin/default.aspx?shortcode={{xeroOrganisationShortCode}}&redirecturl={{/unless}}/AccountsReceivable/Search.aspx?graphSearch=False" target="_blank">
-			<h4 class="h4 text-md text-sm">Invoices</h4></a>
-		</div>	
-		<ul class="list-group m-b-none text-base" id="xero-invoice-list"></ul>
+	{{#if invoice}}
+		{{#if invoice.Invoice}}	
+			<div class="wrapper-sm b-t b-light">
+				<a href="https://go.xero.com{{#unless xeroOrganisationShortCode}}/organisationlogin/default.aspx?shortcode={{xeroOrganisationShortCode}}&redirecturl={{/unless}}/AccountsReceivable/Search.aspx?graphSearch=False" target="_blank">
+				<h4 class="h4 text-md text-sm">Invoices</h4></a>
+			</div>	
+			<ul class="list-group m-b-none text-base" id="xero-invoice-list"></ul>
+		{{/if}}
 	{{else}}
 		<div class="wrapper-sm b-t b-light">
 			<li class="r-none b-l-none b-r-none">
@@ -66,6 +68,7 @@
 </script>
 
 <script id="xero-invoice-template" type="text/html">
+{{#if invoice}}
 {{#isArray invoice}}
 		{{#each invoice}}
 			<li class="list-group-item r-none b-l-none b-r-none">
@@ -100,6 +103,7 @@
 			</div>			
 		</li>	
 {{/isArray}}
+{{/if}}
 </script>
 
 
