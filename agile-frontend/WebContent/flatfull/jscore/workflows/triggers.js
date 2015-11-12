@@ -472,8 +472,12 @@ function initializeTriggerListEventListners(id,trigger_type)
  	{
 		e.preventDefault();
 
-		if (history !== undefined)
+		if (!history)
+			   return;
+
+		if($(this).closest("#trigger-edit-selector").length == 0)
 			Backbone.history.loadUrl();
+		else history.back(-1);
 	});
 
 

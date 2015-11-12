@@ -14,7 +14,7 @@ function load_imap_folders(el, model) {
 
 function load_gmail_widgets(limit) {
 	// Gets Social Prefs (Same as Linkedin/Twitter) for Gmail
-	gmailListView1 = new Base_Collection_View({
+	gmailListView1 = new Settings_Collection_Events({
 		url : 'core/api/social-prefs/GMAIL/list',
 		templateKey : "settings-social-prefs",
 		individual_tag_name : 'div',
@@ -43,7 +43,7 @@ function load_gmail_widgets(limit) {
 }
 function load_imap_widgets(limit) {
 	// Gets imap prefs
-	imapListView1 = new Base_Collection_View({
+	imapListView1 = new Settings_Collection_Events({
 		url : 'core/api/imap/',
 		templateKey : "settings-imap-access",
 		individual_tag_name : 'div',
@@ -69,7 +69,7 @@ function load_imap_widgets(limit) {
 
 function load_office365_widgets(limit) {
 	// Gets office prefs list
-	officeListView1 = new Base_Collection_View({
+	officeListView1 = new Settings_Collection_Events({
 		url : 'core/api/office/',
 		templateKey : "settings-office-access",
 		individual_tag_name : 'div',
@@ -287,6 +287,30 @@ var Settings_Modal_Events = Base_Model_View.extend({
 		el.find(".office-share-settings-txt").css("display", "inline");
 	},
 
+
+	events: {
+		'click .gmail-share-settings-select': 'onGmailShareOptionsSelect',
+		'click .gmail-share-settings-cancel': 'onGmailShareOptionsCancel',		
+		'click .imap-share-settings-select': 'onImapShareOptionsSelect',		
+		'click .imap-share-settings-cancel': 'onImapShareOptionsCancel',	
+		'click .imap-folders-settings-click': 'onImapFoldersOptionsSelect',	
+		'click .imap-folders-settings-cancel': 'onImapFoldersOptionsCancel',	
+		'click .office-share-settings-select': 'onOfficeShareOptionsSelect',	
+		'click .office-share-settings-cancel': 'onOfficeShareOptionsCancel',	
+	},
+
+});
+
+/**
+*  Settings modal event listeners
+*/
+var Settings_Collection_Events = Base_Collection_View.extend({
+	events: {
+		'click #gmail-prefs-delete': 'onGmailPrefsDelete',	
+		'click #office-prefs-delete,#imap-prefs-delete': 'onImapOfficePrefsDelete',	
+	},
+
+	
 	onGmailPrefsDelete : function(e){
 		e.preventDefault();
 		var target_el = $(e.currentTarget);
@@ -346,20 +370,6 @@ var Settings_Modal_Events = Base_Model_View.extend({
 		});
 
 	},
-
-	events: {
-		'click .gmail-share-settings-select': 'onGmailShareOptionsSelect',
-		'click .gmail-share-settings-cancel': 'onGmailShareOptionsCancel',		
-		'click .imap-share-settings-select': 'onImapShareOptionsSelect',		
-		'click .imap-share-settings-cancel': 'onImapShareOptionsCancel',	
-		'click .imap-folders-settings-click': 'onImapFoldersOptionsSelect',	
-		'click .imap-folders-settings-cancel': 'onImapFoldersOptionsCancel',	
-		'click .office-share-settings-select': 'onOfficeShareOptionsSelect',	
-		'click .office-share-settings-cancel': 'onOfficeShareOptionsCancel',	
-		'click #gmail-prefs-delete': 'onGmailPrefsDelete',	
-		'click #office-prefs-delete,#imap-prefs-delete': 'onImapOfficePrefsDelete',	
-	},
-
 });
 
 

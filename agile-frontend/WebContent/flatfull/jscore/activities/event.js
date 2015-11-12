@@ -470,10 +470,6 @@ $(function()
 
 		activateSliderAndTimerToTaskModal(el);
 
-
-		// Update will highlight the date of in date picker
-		// $("input.date").datepicker('update');
-
 	});
 
 	/**
@@ -499,16 +495,28 @@ $(function()
 		// Removes error class of input fields
 		$('#' + this.id).find('.error').removeClass('error');
 
-		$("input.date", el).datepicker('update');
+		// $("input.date", el).datepicker('update');
 
 	});
 
+	$('#activityModal, #activityTaskModal, #updateActivityModal').on('shown.bs.modal', function(e)
+	{
+		if($(e.target).hasClass("date"))
+			   return;
+
+		// Update will highlight the date of in date picker
+		$("input.date").each(function(index, ele){$(ele).datepicker('update');});
+
+	});
 		
 	/**
 	 * To avoid showing previous errors of the modal.
 	 */
 	$('#activityModal, #activityTaskModal, #updateActivityModal').on('show.bs.modal', function(e)
 	{
+		if($(e.target).hasClass("date"))
+			   return;
+
 		$(".event_discription").addClass("hide");
 		$("textarea#description").val('');
 		// Removes alert message of error related date and time.
@@ -665,9 +673,6 @@ $(function()
 			$('.bootstrap-timepicker-hour').val(e.time.hours);
 			$('.bootstrap-timepicker-minute').val(e.time.minutes);
 		});
-
-		// activateSliderAndTimerToTaskModal();
-
 
 	});
 
