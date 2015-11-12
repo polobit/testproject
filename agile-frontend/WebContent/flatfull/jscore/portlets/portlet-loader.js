@@ -313,6 +313,13 @@ function set_up_portlets(el, portlets_el){
     	if($(window).width()<768 && gridster!=undefined){
     		gridster.disable();
     		gridster.disable_resize();
+    		if($('.portlet_body_calendar').is(':visible'))
+    		{
+    			$('.portlet_body_calendar').each(function(){
+					var that=$(this);
+					$('#calendar_container').fullCalendar('option','aspectRatio',getaspectratio(that));
+				});
+    		}
     	}
     	else if(gridster!=undefined)
     	{
@@ -324,6 +331,8 @@ function set_up_portlets(el, portlets_el){
 		if($(window).width()<975 && $(window).width()>768 && $('.portlet_body_calendar').is(':visible'))
 		{
 				$('.portlet_body_calendar').each(function(){
+					var that=$(this);
+					$('#calendar_container').fullCalendar('option','aspectRatio',getaspectratio(that));
 				$(this).find('#calendar_container').find('.fc-widget-header').each(function(){
 				$(this).text($(this).text().substring(0, 1));
 				});
@@ -333,6 +342,8 @@ function set_up_portlets(el, portlets_el){
 		{
 				$('.portlet_body_calendar').each(function()
 				{
+					var that=$(this);
+					$('#calendar_container').fullCalendar('option','aspectRatio',getaspectratio(that));
 					var weeksArray = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 					$(this).find('#calendar_container').find('.fc-widget-header').each(function(index)
 					{
