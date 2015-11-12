@@ -522,7 +522,10 @@
 </div> 
 <!-- End of email pane -->
             </div>  <!-- End of tab-content -->
-
+{{#check_plan "FREE"}}
+<div class="pull-right"><a href="#" id="cancel-account" class="text-info" style="font-size:12px;">Cancel Account</a></div>
+<div class="clearfix"></div>
+{{/check_plan}}
         </div> <!-- End of tab container -->
 		
     </div> <!-- End of col-md-9 -->
@@ -603,7 +606,7 @@ users.
 	{{#check_plan "FREE"}}
 	{{else}}
 	<div>
-	<a href="#"  id="cancel-account-request" class="pull-right text-lg text-info" style="font-size:12px;">Cancel Account</a>
+	<a href="#"  id="cancel-account-request" class="pull-right text-lg text-info" style="font-size:12px;">Cancel Subscription</a>
 	</div>
 	{{/check_plan}}
 	</div>  <!-- End of col-md-3 -->
@@ -669,4 +672,46 @@ users.
 
 <script id="latest-invoice-template" type="text/html">
  Thank you for your last payment of ${{numeric_operation this.total 100 "/"}} on {{epochToHumanDate "mmm dd, yyyy" periodStart}}.
+</script>
+
+<script id="subscribe-error-modal-template" type="text/html">
+	<div class="modal" data-backdrop="static">
+<div class="modal-dialog">
+    <div class="modal-content">
+		<div class="modal-header">
+            <button class="close" data-dismiss="modal">x</button>
+			<h3 class="modal-title">Plan Restrictions</h3>
+		</div>
+		<div class="modal-body help-text">
+			<strong>Sorry, we are unable to subscribe you to {{plan}} plan because of the following reason{{#if_greater errorsCount 2}}s{{/if_greater}}:</strong><br/><br/>
+			
+			{{#if is_more_users}}
+				<div class="p-t-xs"><i class="fa fa-angle-double-right pull-left" style="margin-top:3px;"></i><div class="p-l">We see that you already have {{../count}} users with your current plan and are trying to subscribe with {{../newCount}} user{{#if_greater ../newCount 1}}s{{/if_greater}} for the new plan.</div></div>
+			{{else}}
+				{{#if_greater users.count users.limit}}
+					<div class="p-t-xs"><i class="fa fa-angle-double-right pull-left" style="margin-top:3px;"></i><div class="p-l">We see that you already have {{users.count}} users with your current plan and are trying to subscribe with {{users.limit}} user for the new plan.</div></div>
+				{{/if_greater}}
+				{{#if_greater contacts.count contacts.limit}}
+					<div class="p-t-xs"><i class="fa fa-angle-double-right pull-left" style="margin-top:3px;"></i><div class="p-l">We see that you already have {{contacts.count}} contacts with your current plan and are trying to subscribe with the plan ({{../plan}}) which does not support {{contacts.count}} contacts.</div></div>
+				{{/if_greater}}
+				{{#if_greater workflows.count workflows.limit}}
+					<div class="p-t-xs"><i class="fa fa-angle-double-right pull-left" style="margin-top:3px;"></i><div class="p-l">We see that you already have {{workflows.count}} campaigns with your current plan and are trying to subscribe with the plan ({{../plan}}) which does not support {{workflows.count}} campaigns.</div></div>
+				{{/if_greater}}
+				{{#if_greater webrules.count webrules.limit}}
+					<div class="p-t-xs"><i class="fa fa-angle-double-right pull-left" style="margin-top:3px;"></i><div class="p-l">We see that you already have {{webrules.count}} web rules with your current plan and are trying to subscribe with the plan ({{../plan}}) which does not support {{webrules.count}} web rules.</div></div>
+				{{/if_greater}}
+				{{#if_greater triggers.count triggers.limit}}
+					<div class="p-t-xs"><i class="fa fa-angle-double-right pull-left" style="margin-top:3px;"></i><div class="p-l">We see that you already have {{triggers.count}} triggers with your current plan and are trying to subscribe with the plan ({{../plan}}) which does not support {{triggers.count}} triggers.</div></div>
+				{{/if_greater}}
+			{{/if}}
+			<br/>
+			<div class="text-danger">Please adjust your current plan accordingly and proceed to process your new subscription.</div>
+			
+		</div>
+		<div class="modal-footer">
+			<a href="#" data-dismiss="modal" class="btn btn-sm btn-danger">Close</a>
+		</div>
+	</div>
+</div>
+</div>
 </script>

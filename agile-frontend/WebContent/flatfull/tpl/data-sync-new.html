@@ -94,10 +94,10 @@
 				</div>
     		{{else}}
 				{{#canSyncContacts}}
-    					<div class="btn btn-sm btn-default inline-block" sync_type="{{type}}" id="data-sync-type">Enable</div>
+    					<div class="btn btn-sm btn-default inline-block m-t-md" sync_type="{{type}}" id="data-sync-type">Enable</div>
 					{{else}}
-						<span class="btn btn-sm btn-primary inline-block" disabled>Enable</span>
-						<span class="m-l-xs"><i>Needs import privilege.</i></span>
+						<span class="btn btn-sm btn-primary inline-block m-t-md" disabled>Enable</span>
+						<span class="m-l-xs m-t-md"><i>Needs import privilege.</i></span>
 				{{/canSyncContacts}}
     		{{/if}}
     		{{/if_equals}}

@@ -944,7 +944,10 @@ function setUpGlobalTwilio()
 								  {
 									if(CALL_CAMPAIGN.call_from_campaign ){
 											// if state is pause i.e callresp.status != completed then make another call
-												if(CALL_CAMPAIGN.state == "DISCONNECTED"){
+								
+													if(TWILIO_IS_VOICEMAIL){
+														TWILIO_IS_VOICEMAIL = false;
+													}
 													CALL_CAMPAIGN.state = "START";
 														
 													  if(CALL_CAMPAIGN.autodial){
@@ -956,7 +959,6 @@ function setUpGlobalTwilio()
 															  dialNextCallManually();
 														  }
 													  }
-												}
 									}else{
 											CALL_CAMPAIGN.state = "START";
 											dialNextCallManually();
@@ -1397,6 +1399,13 @@ function sendVoiceAndEndCall(fileSelected) {
 								if(!data)
 								  return;
 								closeTwilioNoty();
+								// added for call campaign...
+								if(CALL_CAMPAIGN.start){
+									if(TWILIO_CALLTYPE == "Outgoing" && CALL_CAMPAIGN.call_from_campaign){
+										getContactDetails();
+									}
+								}
+								//...............................
 								if(TWILIO_CONTACT_ID) {		
 									//add note automatically
 									$.post( "/core/api/widgets/twilio/autosavenote", {
@@ -1465,6 +1474,13 @@ function twilioVoiceMailRedirect(fileSelected, callback) {
 			ApiCallUrl = "/core/api/widgets/twilio/setvoicemail/" + acc_sid + "/" + auth_token + "/" +callRespJson.sid + "/" + fileSelected
 			console.log("In ajax send voice mail : " + ApiCallUrl);	
 			var resp  = twilioApiRequest(ApiCallUrl);
+			//added for call-campaign...
+			if(CALL_CAMPAIGN.start){
+				$('#noty_twilio_voicemail').attr('disabled','disabled');
+				$('#splitButtonVoicemail').attr('disabled','disabled');
+				
+			}
+			//...........................
 			return callback(true);
 
 		});

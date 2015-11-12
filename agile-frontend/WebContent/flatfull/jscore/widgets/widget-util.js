@@ -121,12 +121,12 @@ function save_widget_prefs(pluginName, prefs, callback) {
 					// Get widget, Create token and set twilio device
 					globalTwilioIOSetup();
 				}
-				if (pluginName == "Bria"){
+				/*if (pluginName == "Bria"){
 					callFromBria = true;
 
 					// Get widget,set bria device
 					globalBriaSetup();
-				}
+				}*/
 
 			}else{
 				msgType = "error";
@@ -366,6 +366,7 @@ function loadSettingsUI(callback) {
 			callback();
 	}, "#content");
 }
+
 
 function getWidgetModelFromName(widgetId, type, callback) {
 

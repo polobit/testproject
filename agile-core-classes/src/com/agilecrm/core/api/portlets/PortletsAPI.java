@@ -24,7 +24,10 @@ import com.agilecrm.contact.Contact;
 import com.agilecrm.deals.Opportunity;
 import com.agilecrm.portlets.Portlet;
 import com.agilecrm.portlets.util.PortletUtil;
+import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.util.DomainUserUtil;
+import com.googlecode.objectify.Key;
 
 /**
  * <code>PortletsAPI</code> includes REST calls to interact with
@@ -90,6 +93,43 @@ public class PortletsAPI {
 		return portlet;
 	}
 	/**
+	 * Adding of new portlet for all users
+	 * 
+	 * @param portlets
+	 * 
+	 * @return {@link List} of {@link Portlet}
+	 */
+	@POST
+	@Path("addforAll")
+	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	public Portlet createPortletforAll(Portlet portlet) {
+		try {
+			Portlet p=null;
+			if(portlet!=null){
+				DomainUserUtil du=new DomainUserUtil();
+				List<DomainUser> domainusers=du.getUsers();
+				for(DomainUser domainuser:domainusers)	{
+					if(portlet.name.equalsIgnoreCase("Mini Calendar"))	{
+					  p=PortletUtil.getPortlet(portlet.name,AgileUser.getCurrentAgileUserFromDomainUser(domainuser.id).id);
+					  if(p==null)
+						  portlet.saveAll(domainuser);
+					  continue;
+					}
+					portlet.saveAll(domainuser);
+				}
+				if(portlet.prefs!=null){
+					JSONObject json=(JSONObject)JSONSerializer.toJSON(portlet.prefs);
+					portlet.settings=json;
+				}
+				//PortletUtil.setPortletContent(portlet);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return portlet;
+	}
+	/**
 	 * Saves position of portlet, used to show portlets in ascending order 
 	 * according to position
 	 * 
@@ -109,6 +149,7 @@ public class PortletsAPI {
 			Portlet portlt = PortletUtil.getPortlet(portlet.id);
 			portlt.column_position = portlet.column_position;
 			portlt.row_position = portlet.row_position;
+			portlt.isForAll=portlet.isForAll;
 			portlt.save();
 		}
 	}

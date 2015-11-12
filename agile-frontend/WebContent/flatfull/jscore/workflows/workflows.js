@@ -486,3 +486,12 @@ function is_start_active(designerJSON){
 	}
 	return is_active;
 }
+
+function populate_workflows_list(id, el, callback)
+{
+     if(callback == undefined)
+        callback = 'no-callback';
+
+     var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
+     fillSelect(id, '/core/api/workflows', 'workflow', callback , optionsTemplate, undefined, el);
+}

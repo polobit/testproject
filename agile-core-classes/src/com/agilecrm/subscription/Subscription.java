@@ -294,7 +294,7 @@ public class Subscription {
 		// Gets subscription object of current domain
 		Subscription subscription = SubscriptionUtil.getSubscription();
 
-		if (subscription.plan != null
+		/*if (subscription.plan != null
 				&& subscription.plan.plan_type == PlanType.FREE) {
 			int count = DomainUserUtil.count();
 			System.out.println("existing users cout in free plan " + count);
@@ -311,7 +311,7 @@ public class Subscription {
 			BillingRestrictionUtil
 					.throwLimitExceededException(ErrorMessages.NOT_DOWNGRADABLE);
 			return null;
-		}
+		}*/
 
 		// If customer is already on same plan do not update(checks both
 		// on

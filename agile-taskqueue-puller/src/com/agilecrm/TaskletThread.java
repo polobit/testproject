@@ -11,7 +11,11 @@ import org.apache.log4j.Logger;
 
 import com.Globals;
 import com.agilecrm.account.util.EmailGatewayUtil;
+import com.agilecrm.bulkaction.deferred.ContactExportPullTask;
+import com.agilecrm.bulkaction.deferred.bulk.BigTask;
+import com.agilecrm.contact.imports.CSVImporter;
 import com.agilecrm.mandrill.util.deferred.MailDeferredTask;
+import com.agilecrm.threads.ThreadPool;
 import com.agilecrm.threads.Work;
 import com.google.api.client.googleapis.batch.BatchRequest;
 import com.google.api.client.googleapis.batch.json.JsonBatchCallback;
@@ -42,6 +46,9 @@ public class TaskletThread implements Work
     public void run()
     {
 
+	// Check task it self contains finishing future tasks
+	boolean isIndependentTask = false;
+
 	try
 	{
 	    // Set namespace
@@ -54,8 +61,6 @@ public class TaskletThread implements Work
 
 	    if (tasks.size() > 0 && isMailTask(tasks.get(0)))
 	    {
-		System.out
-			.println("********************************************************************************************************");
 		EmailGatewayUtil.sendMailsMailDeferredTask(convertTaskHandlestoMailDeferredTasks(tasks));
 	    }
 	    else
@@ -63,6 +68,26 @@ public class TaskletThread implements Work
 		for (Task task : tasks)
 		{
 		    DeferredTask deferredTask = convertResponseToDeferredTask(task);
+
+		    System.out.println("instance of CSVImporter : " + (deferredTask instanceof CSVImporter));
+		    if (deferredTask instanceof BigTask)
+		    {
+			isIndependentTask = true;
+			ThreadPool.getThreadPoolExecutor("bulk-export-executor", 1, 5).execute(deferredTask);
+			continue;
+		    }
+		    else if (deferredTask instanceof ContactExportPullTask)
+		    {
+			isIndependentTask = true;
+			ThreadPool.getThreadPoolExecutor("export-executor", 2, 15).execute(deferredTask);
+			continue;
+		    }
+		    else if (deferredTask instanceof CSVImporter)
+		    {
+			isIndependentTask = true;
+			ThreadPool.getThreadPoolExecutor("import-executor", 1, 15).execute(deferredTask);
+			continue;
+		    }
 
 		    if (deferredTask != null)
 			deferredTask.run();
@@ -80,7 +105,8 @@ public class TaskletThread implements Work
 	    try
 	    {
 		System.out.println("completing remaining reqests");
-		TriggerFutureHook.completeAllPendingFutures();
+		if (!isIndependentTask)
+		    TriggerFutureHook.completeAllPendingFutures();
 		System.out.println("completed remaining requests");
 	    }
 	    catch (Exception e)

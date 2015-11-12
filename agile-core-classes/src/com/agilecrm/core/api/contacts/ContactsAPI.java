@@ -40,6 +40,7 @@ import com.agilecrm.activities.util.ActivitySave;
 import com.agilecrm.activities.util.ActivityUtil;
 import com.agilecrm.activities.util.EventUtil;
 import com.agilecrm.activities.util.TaskUtil;
+import com.agilecrm.bulkaction.ContactExportBulkPullTask;
 import com.agilecrm.bulkaction.deferred.ContactExportPullTask;
 import com.agilecrm.cases.Case;
 import com.agilecrm.cases.util.CaseUtil;
@@ -48,10 +49,9 @@ import com.agilecrm.contact.ContactField;
 import com.agilecrm.contact.ContactFullDetails;
 import com.agilecrm.contact.Note;
 import com.agilecrm.contact.Tag;
+import com.agilecrm.contact.filter.ContactFilterResultFetcher;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.contact.util.NoteUtil;
-import com.agilecrm.contact.util.bulk.BulkActionNotifications;
-import com.agilecrm.contact.util.bulk.BulkActionNotifications.BulkAction;
 import com.agilecrm.deals.Opportunity;
 import com.agilecrm.deals.util.OpportunityUtil;
 import com.agilecrm.document.Document;
@@ -65,6 +65,7 @@ import com.agilecrm.user.access.util.UserAccessControlUtil;
 import com.agilecrm.user.access.util.UserAccessControlUtil.CRUDOperation;
 import com.agilecrm.util.HTTPUtil;
 import com.google.appengine.api.NamespaceManager;
+import com.google.appengine.api.taskqueue.DeferredTask;
 
 /**
  * <code>ContactsAPI</code> includes REST calls to interact with {@link Contact}
@@ -1219,8 +1220,25 @@ public class ContactsAPI
 	}
 
 	Long currentUserId = SessionManager.get().getDomainId();
-	ContactExportPullTask task = new ContactExportPullTask(contact_ids, filter, dynamicFilter, currentUserId,
-		NamespaceManager.get());
+
+	ContactFilterResultFetcher fetcher = new ContactFilterResultFetcher(filter, dynamicFilter, 200, contact_ids,
+		currentUserId);
+
+	int totalCount = fetcher.getAvailableContacts();
+	if (totalCount == 0)
+	    totalCount = fetcher.getAvailableCompanies();
+
+	DeferredTask task = null;
+	System.out.println("Total contacts to export : " + totalCount);
+	if (totalCount > 5000)
+	{
+	    task = new ContactExportBulkPullTask(contact_ids, filter, dynamicFilter, currentUserId,
+		    NamespaceManager.get());
+	}
+	else
+	{
+	    task = new ContactExportPullTask(contact_ids, filter, dynamicFilter, currentUserId, NamespaceManager.get());
+	}
 
 	PullQueueUtil.addToPullQueue("export-pull-queue", task, NamespaceManager.get());
 
@@ -1231,8 +1249,6 @@ public class ContactsAPI
 	// ContactExportType.CONTACT);
 	// ActivityUtil.createLogForImport(ActivityType.CONTACT_EXPORT,
 	// EntityType.CONTACT, count, 0);
-
-	BulkActionNotifications.publishconfirmation(BulkAction.EXPORT_CONTACTS_CSV);
     }
 
     @Path("/email/chrome/{email}")

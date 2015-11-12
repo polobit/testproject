@@ -238,10 +238,11 @@ function renderFullCalenarEvents(ownerid)
 		$.each(doc, function(index, data)
 		{
 			data = renderEventBasedOnOwner(data);
+			$('#calendar_event').fullCalendar('renderEvent', data);
 		});
 
 		// Add event
-		$('#calendar_event').fullCalendar('addEventSource', doc);
+		//$('#calendar_event').fullCalendar('addEventSource', doc);
 
 		showLoadingOnCalendar(false);
 

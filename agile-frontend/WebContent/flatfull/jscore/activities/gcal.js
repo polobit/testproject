@@ -108,8 +108,6 @@ function _fetchGCAndAddEvents(sourceOptions, start, end)
 				
 		}
 
-		// Add event
-		//$('#calendar_event').fullCalendar('addEventSource', google_events);
 	});
 }
 

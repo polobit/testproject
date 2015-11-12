@@ -39,6 +39,11 @@ function organize_portlets(base_model) {
  */
 function set_p_portlets(base_model) {
 
+	if(base_model.toJSON().isForAll)
+	{
+		App_Portlets.adminPortlets.push(base_model);
+		return;
+	}
 	var that = this;
 	portlet_utility.getOuterViewOfPortlet(base_model, this.el, function() {
 		portlet_utility.getInnerViewOfPortlet(base_model, that.el);
