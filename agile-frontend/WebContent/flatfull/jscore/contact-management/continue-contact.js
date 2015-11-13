@@ -279,7 +279,7 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
 			}
 		}
 
-		return serialize_contact_properties_and_save(e, form_id, obj, properties, modal_id, saveBtn, continueContact, is_person, tagsSourceId, id, created_time);
+		return serialize_contact_properties_and_save(e, form_id, obj, properties, modal_id, saveBtn, continueContact, is_person, tagsSourceId, id, created_time, custom_fields_in_template);
 	}
 	else
 	{
@@ -314,7 +314,7 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
 					else
 					{
 						properties.push(property_JSON('name', form_id + ' #company_name'));
-						return serialize_contact_properties_and_save(e, form_id, obj, properties, modal_id, continueContact, is_person, saveBtn, tagsSourceId, id, created_time);
+						return serialize_contact_properties_and_save(e, form_id, obj, properties, modal_id, continueContact, is_person, saveBtn, tagsSourceId, id, created_time, custom_fields_in_template);
 					}
 
 				});
@@ -325,7 +325,7 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
 			else
 			{
 				properties.push(property_JSON('name', form_id + ' #company_name'));
-				return serialize_contact_properties_and_save(e, form_id, obj, properties, modal_id, continueContact, is_person, saveBtn, tagsSourceId, id, created_time);
+				return serialize_contact_properties_and_save(e, form_id, obj, properties, modal_id, continueContact, is_person, saveBtn, tagsSourceId, id, created_time, custom_fields_in_template);
 			}
 		}		
 	}
@@ -333,7 +333,7 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
 
 }
 
-function serialize_contact_properties_and_save(e, form_id, obj, properties, modal_id, continueContact, is_person, saveBtn, tagsSourceId, id, created_time){
+function serialize_contact_properties_and_save(e, form_id, obj, properties, modal_id, continueContact, is_person, saveBtn, tagsSourceId, id, created_time, custom_fields_in_template){
 
 
 		if (isValidField(form_id + ' #company_url'))
