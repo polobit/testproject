@@ -104,6 +104,18 @@ function isValid(){
 	label.error {
 		color:red;
 	}
+	@media all and (max-width: 767px) {	
+	.mobile-popup {
+    min-height: 50vh;
+  }
+  .mobile-popup * {
+    text-align: center;
+    font-size: 20px;
+  }
+  .mobile-popup input {
+  	display: inline-block;
+  }
+}
 </style>
 
 </head>
@@ -113,8 +125,8 @@ function isValid(){
 
 <br/>
 <div class="row">
-<div class="col-md-3 col-sm-6 col-xs-12">
-<div class="panel panel-default">
+<div class="col-md-12 col-sm-12 col-xs-12">
+<div class="panel panel-default mobile-popup">
 <div class="panel-heading">Upload your image file</div>
 <div class="panel-body">
 <p>For best results, we recommend you upload png files. You can also upload jpg or gif files also.</i></p>

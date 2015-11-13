@@ -1641,6 +1641,26 @@ a#email-reply{
 display: block;
 text-align: center;
 }
+#clear-lhs-contact-filters {
+  display: none;
+}
+
+.leaderboard_portlet_header ul li {
+  display: none;
+}
+.leaderboard_portlet_header ul li:last-child {
+  display: block;
+}
+.leaderboard-bottom-border-edge:after {
+  width: 100%;
+}
+.leader-board-4 li {
+  width: 100%;
+  float: none!important;
+}
+.bigger-font-mobile {
+  font-size: 20px;
+}
 }
 
 @media all and (min-width: 768px) {

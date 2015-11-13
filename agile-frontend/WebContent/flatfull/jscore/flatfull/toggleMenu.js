@@ -39,6 +39,10 @@ $(document).ready(function(){
 
 	if(( $(window).width() ) < 768 ) {
 
+	$('body').on('touchstart','table tr  input[type="checkbox"]',function(){
+    $(this).trigger('click');
+	});
+
 	$('body').on('click','#mobile-dropdown-click-sort',function() {
 		$("#contact-sort-views").css("display","block");
    });	
