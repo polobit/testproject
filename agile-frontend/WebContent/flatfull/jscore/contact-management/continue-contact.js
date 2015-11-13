@@ -279,6 +279,7 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
 			}
 		}
 
+		return serialize_contact_properties_and_save(e, form_id, obj, properties, modal_id, saveBtn, continueContact, is_person, tagsSourceId, id, created_time);
 	}
 	else
 	{
@@ -313,16 +314,27 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
 					else
 					{
 						properties.push(property_JSON('name', form_id + ' #company_name'));
+						return serialize_contact_properties_and_save(e, form_id, obj, properties, modal_id, continueContact, is_person, saveBtn, tagsSourceId, id, created_time);
 					}
 
 				});
+
+				return;
 				
 			}
 			else
 			{
 				properties.push(property_JSON('name', form_id + ' #company_name'));
+				return serialize_contact_properties_and_save(e, form_id, obj, properties, modal_id, continueContact, is_person, saveBtn, tagsSourceId, id, created_time);
 			}
-		}
+		}		
+	}
+
+
+}
+
+function serialize_contact_properties_and_save(e, form_id, obj, properties, modal_id, continueContact, is_person, saveBtn, tagsSourceId, id, created_time){
+
 
 		if (isValidField(form_id + ' #company_url'))
 			properties.push(property_JSON('url', form_id + ' #company_url'));
@@ -384,7 +396,7 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
 				return false;
 			}
 		}
-	}
+	// }
 
 	/*
 	 * Reads the values of multiple-template fields from continue editing form
@@ -947,12 +959,13 @@ function add_model_cursor(app_collection, mdl)
  */
 function isCompanyExist(company, callback)
 {
-	accessUrlUsingAjax('core/api/contacts/company/validate/' + company, function(resp){
-	
-		if (resp === "true")
-			return callback(true);
+	$.get('core/api/contacts/company/validate/' + company, function(data){
+		   if(data == "true"){
+		   	    callback(true);
+		   		return;
+		   }
 
-		callback(false);
-
+		   callback(false);
 	});
+
 }
