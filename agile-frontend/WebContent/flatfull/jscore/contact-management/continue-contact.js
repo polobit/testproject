@@ -279,7 +279,8 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
 			}
 		}
 
-		return serialize_contact_properties_and_save(e, form_id, obj, properties, modal_id, saveBtn, continueContact, is_person, tagsSourceId, id, created_time, custom_fields_in_template, template);
+		return serialize_contact_properties_and_save(e, form_id, obj, properties, modal_id, continueContact, is_person, saveBtn, tagsSourceId, id, created_time, custom_fields_in_template, template);
+			   
 	}
 	else
 	{
