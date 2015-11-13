@@ -203,7 +203,7 @@ try{
 			}
 			else
 			initHTML = window.opener.$('#' + textarea_id).val();
-		if(window.opener.location.hash != "#webrules-add")
+		if(!is_webrule_type())
 		initHTML = remove_script_tags(initHTML);
 		$('#content').val(initHTML);
 		var isWarning = should_warn(initHTML);
@@ -221,7 +221,7 @@ try{
 	    	
 	    		// Fetch html and fill into tinymce
 	    		$.get(location.origin+url, function(value){
-	    			if(window.opener.location.hash != "#webrules-add")
+	    			if(!is_webrule_type())
 	    			value = remove_script_tags(value);
 	    			$('#content').val(value);
 	    			
@@ -268,7 +268,7 @@ try{
 			showError("Please enter a valid html message");
 			return;
 		}
-		if(window.opener.location.hash != "#webrules-add")
+		if(!is_webrule_type())
 		html = remove_script_tags(html);
 		window.opener.tinyMCECallBack(getUrlVars()["id"], html);
 		window.close();
@@ -367,7 +367,7 @@ function initialize_tinymce_editor(){
             editor.on('change', function(e) {
             	
             	var editor_contents = tinyMCE.activeEditor.getContent();
-            	if(window.opener.location.hash != "#webrules-add"){
+            	if(!is_webrule_type()){
             	editor_contents = remove_script_tags(editor_contents);
             	tinyMCE.activeEditor.setContent(editor_contents)
             	}
@@ -472,6 +472,14 @@ function remove_script_tags(content)
 	}
 }
 
+function is_webrule_type()
+{
+	var hasContent = window.opener.location.hash;
+	if(hasContent && hasContent.indexOf("webrule") != -1)
+		   return true;
+
+    return false;	
+}
 
 </script>
 
