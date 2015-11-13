@@ -148,7 +148,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			$('#content').html($(template_ui));	
 
 			that.usersListView = new Base_Collection_View({ url : '/core/api/users', restKey : "domainUser", templateKey : "admin-settings-users",
-			individual_tag_name : 'tr', postRenderCallback : function(el)
+			individual_tag_name : 'tr', sortKey : "name", postRenderCallback : function(el)
 			{
 
 				head.js(LIB_PATH + 'lib/jquery.timeago.js', function()

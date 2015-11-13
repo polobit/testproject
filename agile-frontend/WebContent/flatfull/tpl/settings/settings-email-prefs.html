@@ -23,14 +23,14 @@ You can integrate a maximum of 3 email accounts irrespective of the type of acco
 
 <script id="settings-imap-access-model-template" type="text/html">
 <div class="col-md-4 col-sm-6 col-xs-12">
-	<div class="panel panel-default">
+	<div class="panel panel-default" style="height:225px;">
 	<div class="panel-heading">
 		<center>
 			<img class="m-b-none thumb-transparent img-responsive thumb-xl" style="height:47px;" src="/img/email-prefs/imap.jpg"/>
 		</center>
 	</div>
 	<div class="panel-body">
-		<div  style="min-height: 110px;">
+		<div  style="min-height: 85px;">
 		{{#if id}}
 		   <div>
 		   	  <div class="l-h word-break">Server: {{server_name}}</div>
@@ -53,7 +53,7 @@ You can integrate a maximum of 3 email accounts irrespective of the type of acco
 			<div>
 			    {{#has_email_account_limit_reached}}
 			    {{#if_non_pro_plan}}
-				<div class="m-t-sm p-xs" style="width: 75%;border: 1px solid #E2E29C;background-color: #F7F7D0;"> Please <strong><a class="text-info" href="#subscribe">upgrade</a></strong> to Enterprise plan</div>
+				<div class="p-xs" style="width: 75%;border: 1px solid #E2E29C;background-color: #F7F7D0;"> Please <strong><a class="text-info" href="#subscribe">upgrade</a></strong> to Enterprise plan</div>
 				{{/if_non_pro_plan}}
 				<!--<a class="btn btn-sm btn-default m-t-sm" disabled="disabled">Enable</a>-->
 				
@@ -73,14 +73,14 @@ You can integrate a maximum of 3 email accounts irrespective of the type of acco
 
 <script id="settings-office-access-model-template" type="text/html">
 <div class="col-md-4 col-sm-6 col-xs-12">
-	<div class="panel panel-default" >
+	<div class="panel panel-default" style="height:225px;">
 	<div class="panel-heading">
 		<center>
 			<img class="m-b-none thumb-transparent img-responsive thumb-xl" style="height:47px;" src="/img/email-prefs/office365.jpg"/>
 		</center>
 		</div>
 		<div class="panel-body">
-		<div  style="min-height: 110px;"> 
+		<div  style="min-height: 85px;"> 
 			{{#if id}}
 			  <div class="m-b-md p-b-xs">
 		   	  <div class="l-h word-break">Server: {{server_url}}</div>
@@ -100,7 +100,7 @@ You can integrate a maximum of 3 email accounts irrespective of the type of acco
 				<div>
 			    {{#has_email_account_limit_reached}}
 			    {{#if_non_pro_plan}}
-				<div class="m-t-sm p-xs" style="width: 75%;border: 1px solid #E2E29C;background-color: #F7F7D0;"> Please <strong><a class="text-info" href="#subscribe">upgrade</a></strong> to Enterprise plan</div>				
+				<div class="p-xs" style="width: 75%;border: 1px solid #E2E29C;background-color: #F7F7D0;"> Please <strong><a class="text-info" href="#subscribe">upgrade</a></strong> to Enterprise plan</div>				
 				{{/if_non_pro_plan}}
 				<!--<a class="btn m-t-sm btn-sm btn-default" disabled="disabled">Enable</a>-->
 				{{else}}

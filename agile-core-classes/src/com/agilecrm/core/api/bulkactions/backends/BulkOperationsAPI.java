@@ -564,11 +564,31 @@ public class BulkOperationsAPI
 	    // according to contact prototype sent
 	    BillingRestriction restrictions = BillingRestrictionUtil.getBillingRestrictionFromDB();
 
+	    restrictions.refreshContacts();
+
 	    UserAccessControl accessControl = UserAccessControl.getAccessControl(AccessControlClasses.Contact, null,
 		    domainUser);
 
 	    if (type.equalsIgnoreCase("contacts"))
 	    {
+		// it gives is 1000)
+		// int currentEntityCount = ContactUtil.getCount();
+
+		new CSVUtil(restrictions, accessControl).createContactsFromCSV(blobStream, contact, ownerId);
+		/*
+		 * CSVImporter<Contact> importer = new
+		 * ContactsCSVImporter(NamespaceManager.get(), blobKey,
+		 * Long.parseLong(ownerId), new
+		 * ObjectMapper().writeValueAsString(contact), Contact.class,
+		 * currentEntityCount);
+		 * 
+		 * PullQueueUtil.addToPullQueue("contact-import-queue",
+		 * importer, key);
+		 */
+
+		// PullQueueUtil.addToPullQueue("dummy-pull-queue", importer,
+		// null);
+
 		new CSVUtil(restrictions, accessControl).createContactsFromCSV(blobStream, contact, ownerId);
 	    }
 	    else if (type.equalsIgnoreCase("companies"))

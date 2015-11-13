@@ -864,16 +864,19 @@ Deleted  {{custom1}} Campaigns<br/>
                 </a>
                 <ul class="dropdown-menu" id="entity_type">
 					 <li><a href="">All Activities</a></li>
-                     <li><a href="TASK">Tasks</a></li>
+                     <li><a href="CALL">Calls</a></li>
+                     <li><a href="CONTACT">Contacts</a></li>
+                     
 					{{#hasMenuScope 'DEALS'}}
                      	<li><a href="DEAL">Deals</a></li>
 					{{/hasMenuScope}}
+                    {{#hasMenuScope 'DOCUMENT'}}
+                        <li><a href="DOCUMENT">Documents</a></li>
+                    {{/hasMenuScope}}
 					 <li><a href="EVENT">Events</a></li>
-					 <li><a href="CONTACT">Contacts</a></li>
-					{{#hasMenuScope 'DOCUMENT'}}
- 						<li><a href="DOCUMENT">Documents</a></li>
-					{{/hasMenuScope}}
-					<li><a href="CALL">Calls</a></li>                    
+					 <li><a href="TASK">Tasks</a></li>
+					
+					                    
                 </ul>
             </div>            
 		<div class="btn-group pull-right activity-log-button c-p m-r">

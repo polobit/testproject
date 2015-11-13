@@ -2895,6 +2895,17 @@ $(function()
 
 	});
 
+	Handlebars.registerHelper('getFullAccountPlanName', function(plan_name)
+	{
+		if (!plan_name)
+			return "Free";
+
+		var plan_fragments = plan_name.split("_");
+
+		return ucfirst(plan_fragments[0])+" ("+ucfirst(plan_fragments[1])+")";
+
+	});
+
 	Handlebars.registerHelper('getAccountPlanInteval', function(plan_name)
 	{
 		if (!plan_name)
