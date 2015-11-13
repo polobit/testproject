@@ -211,3 +211,75 @@ function showMissedNotyPopUp(type, message,position,notyTimeout)
 	});
 			});		
 }
+
+// added by prakash for bria call notification
+function showBriaCallNoty(message){
+	if(message.type == "BRIA_CALL"){
+
+		_getMessage(message, function(data) {
+			
+			var messageHtml = data;
+			
+			head.js(LIB_PATH + 'lib/noty/jquery.noty.js', LIB_PATH + 'lib/noty/layouts/bottom.js', LIB_PATH + 'lib/noty/layouts/bottomRight.js',
+					LIB_PATH + 'lib/noty/themes/default.js', LIB_PATH + 'lib/noty/packaged/jquery.noty.packaged.min.js', function()
+					{
+
+				
+				if (Bria_Call_Noty != undefined)
+					Bria_Call_Noty.close();
+				
+				if(message.state == "incoming"){
+
+					Bria_Call_Noty = noty({ text : messageHtml, type : "confirm", layout : "bottomLeft", buttons : [
+			{ addClass : 'btn btn-primary noty_bria_answer', text : 'Answer'}, 
+			{ addClass : 'btn btn-danger noty_bria_ignore', text : 'Ignore'}] });
+					
+					if (notification_prefs.notification_sound != 'no_sound')
+						play_sound(notification_prefs.notification_sound);
+					
+				}else if(message.state == "connected"){
+					
+					Bria_Call_Noty = noty({ text : messageHtml, type : "success", layout : "bottomLeft", buttons : [
+		    { addClass : 'btn btn-sm btn-default noty_bria_mute', text : '<i class="fa fa-microphone"></i>' },
+		    { addClass : 'btn btn-sm btn-default noty_bria_unmute none', text : '<i class="fa fa-microphone-slash"></i>' },
+		    { addClass : 'btn btn-sm btn-default noty_bria_dialpad', text : '<i class="icon-th text-base" style="vertical-align: middle;"></i>' }, 
+					{ addClass : 'btn btn-sm btn-danger noty_bria_hangup', text : 'Hangup'}
+								] });
+					
+					var dialpad = $(getTemplate("briaDialpad"));
+					//$('.noty_buttons').prepend(dialpad);
+					$('#noty_bottomLeft_layout_container').prepend(dialpad);
+					
+					
+				}else if(message.state == "missed-call"){
+					
+					Bria_Call_Noty = noty({ text : messageHtml, type : "information", layout : "bottomLeft"});
+				
+					if (notification_prefs.notification_sound != 'no_sound')
+						play_sound(notification_prefs.notification_sound);
+				}else if(message.state == "connecting"){
+					
+					Bria_Call_Noty = noty({ text : messageHtml, type : "success", layout : "bottomLeft", buttons : [
+		           { addClass : 'btn btn-danger btn-sm noty_bria_cancel', text : 'Cancel'}
+					] });
+					
+					if (notification_prefs.notification_sound != 'no_sound')
+						play_sound(notification_prefs.notification_sound);
+				
+				}else if(message.state == "failed"){
+					
+					Bria_Call_Noty = noty({ text : messageHtml, type : "error", layout : "bottomLeft"});
+					
+				}else if(message.state == "ended"){
+
+					
+				}
+				
+					});
+		
+		
+		});
+
+
+	}
+}

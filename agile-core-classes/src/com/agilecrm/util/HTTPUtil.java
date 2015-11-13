@@ -2,6 +2,7 @@ package com.agilecrm.util;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
@@ -132,13 +133,13 @@ public class HTTPUtil
     {
 	// Send data
 	URL url = new URL(postURL);
-	URLConnection conn = url.openConnection();
+	HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 	conn.setDoOutput(true);
 
 	// Set Connection Timeout as Google AppEngine has 5 secs timeout
 	conn.setConnectTimeout(600000);
 	conn.setReadTimeout(600000);
-
+	
 	OutputStreamWriter wr = new OutputStreamWriter(conn.getOutputStream(), "UTF-8");
 	if (data != null)
 	{
@@ -146,8 +147,20 @@ public class HTTPUtil
 	    wr.flush();
 	}
 
+	InputStream is = null;
+	
+    try
+    {
+    	is = conn.getInputStream();
+    }
+    catch(IOException ie)
+    {
+    	System.err.println("IOException occured, getting error stream.");
+    	is = conn.getErrorStream();
+    }
+	
 	// Get the response
-	BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+	BufferedReader reader = new BufferedReader(new InputStreamReader(is, "UTF-8"));
 	String output = "";
 	String inputLine;
 	while ((inputLine = reader.readLine()) != null)

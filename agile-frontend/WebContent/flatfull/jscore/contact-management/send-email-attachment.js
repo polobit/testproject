@@ -75,6 +75,8 @@
 		    	$('#emailForm').find(".attachment-document-select").css('display','none');
 		    	$('#emailForm').find('#eattachment_key').attr('name',"document_key");
 		    	$('#emailForm').find('#eattachment_key').attr('value',document_id);
+		    	$('#emailForm').find('#agile_attachment_name').attr('value',docName);
+		    	$('#emailForm').find('#agile_attachment_url').attr('value',$( "#attachment-select option:selected").attr('url'));
 		    }
 	    }
 	});
@@ -102,6 +104,8 @@
 		$('#emailForm').find(".add-attachment-select").css("display", "inline");
 		$('#emailForm').find('#eattachment_key').attr("name","name");
     	$('#emailForm').find('#eattachment_key').attr("value","value");
+    	$('#emailForm').find('#agile_attachment_name').attr('value','');
+    	$('#emailForm').find('#agile_attachment_url').attr('value','');
 	});
 	
 	}
@@ -110,7 +114,6 @@
     {
     	$.ajax({url : '/core/api/emails/send-email/delete-blob/'+blob_key,
     		type : 'GET',
-    		async : false,
     		success : function()
     		{
     		},

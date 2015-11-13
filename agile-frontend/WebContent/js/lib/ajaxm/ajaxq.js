@@ -14,7 +14,7 @@
 jQuery.ajaxq = function (queue, options)
 {
 	// Initialize storage for request queues if it's not initialized yet
-	if (typeof document.ajaxq == "undefined") document.ajaxq = {q:{}, r:null};
+	if (typeof document.ajaxq == "undefined") document.ajaxq = {q:{}, r:null, qr : {}};
 
 	// Initialize current queue if it's not initialized yet
 	if (typeof document.ajaxq.q[queue] == "undefined") document.ajaxq.q[queue] = [];
@@ -41,14 +41,20 @@ jQuery.ajaxq = function (queue, options)
 			if (originalCompleteCallback) originalCompleteCallback (request, status);
 
 			// Run the next request from the queue
-			if (document.ajaxq.q[queue].length > 0) document.ajaxq.r = jQuery.ajax (document.ajaxq.q[queue][0]);
+			if (document.ajaxq.q[queue].length > 0) {
+				document.ajaxq.r = jQuery.ajax (document.ajaxq.q[queue][0]);
+				document.ajaxq.qr[queue] = document.ajaxq.r;
+			}
 		};
 
 		// Enqueue the request
 		document.ajaxq.q[queue].push (options);
 
 		// Also, if no request is currently running, start it
-		if (document.ajaxq.q[queue].length == 1) document.ajaxq.r = jQuery.ajax (options);
+		if (document.ajaxq.q[queue].length == 1) {
+			document.ajaxq.r = jQuery.ajax (options);
+			document.ajaxq.qr[queue] = document.ajaxq.r;	
+		}
 	}
 	else // No request settings are given, stop current request and clear the queue
 	{

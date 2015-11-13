@@ -86,6 +86,7 @@ public class Globals
     // "ca_33Ms3QZgGsn0nqkvilqNUFYU9BcDyNVC";
 
     public static final String STRIPE_LIVE_API_KEY = "sk_live_kV3JFirLAOXsEUcYYO3YsCJ5";
+    public static final String STRIPE_TEST_API_KEY = "sk_test_qxs4FCoEJ3o5aED4d1rIWiCE";
     public static final String STRIPE_LIVE_CLIENT_ID = "ca_33Ms3QZgGsn0nqkvilqNUFYU9BcDyNVC";
 
     // development keys
@@ -142,7 +143,7 @@ public class Globals
     public static final int TRIAL_USERS_COUNT = 2;
 
     // Cheat Code
-    public static final String MASTER_CODE_INTO_SYSTEM = "AgileRock*";
+    public static final String MASTER_CODE_INTO_SYSTEM = "AgileRocks#@!";
 
     public static final String BULK_ACTION_BACKENDS_URL = "agile-normal-bulk";
 
@@ -156,6 +157,9 @@ public class Globals
     // MANDRILL MAIL API
     public static final String MANDRIL_API_KEY_VALUE = "iQ_811cc9NxpLG11Ue4ftA";
     public static final String MANDRILL_TEST_API_KEY_VALUE = "MRiwkducZGEbXrLW1LC5oQ";
+
+    // Mandrill API Key for FREE
+    public static final String MANDRILL_API_KEY_VALUE_2 = "RSn1Y3FmVLr59WKZqlKDGQ";
 
     public static final String MANDRILL_PAID_POOL = "paid-pool";
 

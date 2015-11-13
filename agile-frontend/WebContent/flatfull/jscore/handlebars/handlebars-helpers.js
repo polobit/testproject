@@ -17,6 +17,35 @@ $(function()
 		return getPropertyValue(items, name);
 	});
 
+
+	
+	/**
+	 * displays , in between 2 conatct fields.
+	 */
+	Handlebars.registerHelper('getPropertyValueExists', function(items, companyname,jobtitle)
+	{
+		return getPropertyValueByCheckingExistance(items, companyname,jobtitle);
+	});
+
+	
+	/**
+	 * checks for the contact property value existance to display div none or block
+	 */
+	Handlebars.registerHelper('checkPropertyValueExistance', function(items, name,name1)
+	{
+		return checkPropertyValueExistance(items, name,name1);
+	});
+	
+	
+	
+	/**
+	 * checks for the contact property value existance to display div none or block
+	 */
+	Handlebars.registerHelper('getMarginLength', function(items, name)
+	{
+		return getMarginLength(items, name);
+	});
+
 	/**
 	 * Helper function to return the checkbox html element with value of a
 	 * property matched with the given name from the array of properties
@@ -2213,7 +2242,7 @@ $(function()
 			// Iterates inorder to insert each field into json
 			for (var i = 0; i < email_fields.length; i++)
 			{
-				// Splits based on colon. E.g "To: naresh@agilecrm.com "
+				// Splits based on colon. E.g "To: naresh@agilecrm.com   "
 				var arrcolon = email_fields[i].split(":");
 
 				// Inserts LHS of colon as key. E.g., To
@@ -2223,7 +2252,7 @@ $(function()
 				// accessible
 
 				// Inserts RHS of colon as value. E.g.,
-				// naresh@agilecrm.com
+				// naresh@agilecrm.com  
 				var value = arrcolon.slice(1).join(":"); // join the
 				// remaining string
 				// based on colon,
@@ -2247,14 +2276,20 @@ $(function()
 
 	Handlebars.registerHelper('remove_spaces', function(value)
 	{
-		return value.replace(/ +/g, '');
+		if(value)
+			  value = value.replace(/ +/g, '');
+
+		return value;
 
 	});
 
 	Handlebars.registerHelper('replace_spaces', function(value)
 	{
-		return value.replace(/ +/g, '_');
+		if(value)
+			  value = value.replace(/ +/g, '_');
 
+		return value;
+		
 	});
 
 	/***************************************************************************
@@ -2341,23 +2376,65 @@ $(function()
 
 		var active_campaigns = [];
 		var completed_campaigns = [];
+		var unsubscribed_campaigns = [];
+		var unsubscribed_campaigns_json = {};
 
 		// campaignStatus object of contact
 		var campaignStatusArray = object[data];
+		var statuses = object["campaignStatus"];
+		var campaign_json = {};
+
+		// To get campaign name for unsubscribed campaigns
+		for (var i = 0, len = statuses.length; i < len; i++)
+		{
+			var status = statuses[i];
+			
+			if(status)
+				campaign_json[status.campaign_id] = status.campaign_name;
+		}
+
 
 		for (var i = 0, len = campaignStatusArray.length; i < len; i++)
 		{
-			// push all active campaigns
-			if (campaignStatusArray[i].status.indexOf('ACTIVE') !== -1)
-				active_campaigns.push(campaignStatusArray[i])
+			if(campaignStatusArray[i].status)
+			{
+				// push all active campaigns
+				if (campaignStatusArray[i].status.indexOf('ACTIVE') !== -1)
+					active_campaigns.push(campaignStatusArray[i])
 
 				// push all done campaigns
-			if (campaignStatusArray[i].status.indexOf('DONE') !== -1)
-				completed_campaigns.push(campaignStatusArray[i]);
+				if (campaignStatusArray[i].status.indexOf('DONE') !== -1)
+					completed_campaigns.push(campaignStatusArray[i]);
+			}
+
+			var isAll = false;
+			// Unsubscribed campaigns list
+			if(campaignStatusArray[i].unsubscribeType)
+			{
+
+				// Global variable set on resubscribe modal shown
+				if(typeof email_workflows_list != 'undefined')
+					campaignStatusArray[i].campaign_name = email_workflows_list[campaignStatusArray[i].campaign_id];
+
+				if(campaignStatusArray[i].unsubscribeType == 'ALL'){
+
+					if(!isAll)
+					{
+						unsubscribed_campaigns_json["isAll"] = true;
+						isAll = true;
+					}
+				}
+
+				unsubscribed_campaigns.push(campaignStatusArray[i]);
+			}
 		}
+
+		if(unsubscribed_campaigns && unsubscribed_campaigns.length > 0)
+			unsubscribed_campaigns_json["unsubscribed_campaigns"] = unsubscribed_campaigns;
 
 		campaigns["active"] = active_campaigns;
 		campaigns["done"] = completed_campaigns;
+		campaigns["unsubscribed"] = unsubscribed_campaigns_json;
 
 		// apply obtained campaigns context within
 		// contact_campaigns block
@@ -2816,6 +2893,17 @@ $(function()
 		var plan_fragments = plan_name.split("_");
 
 		return ucfirst(plan_fragments[0]);
+
+	});
+
+	Handlebars.registerHelper('getFullAccountPlanName', function(plan_name)
+	{
+		if (!plan_name)
+			return "Free";
+
+		var plan_fragments = plan_name.split("_");
+
+		return ucfirst(plan_fragments[0])+" ("+ucfirst(plan_fragments[1])+")";
 
 	});
 
@@ -4277,7 +4365,7 @@ $(function()
 			// Iterates inorder to insert each field into json
 			for (var i = 0; i < email_fields.length; i++)
 			{
-				// Splits based on colon. E.g "To: naresh@agilecrm.com "
+				// Splits based on colon. E.g "To: naresh@agilecrm.com   "
 				var arrcolon = email_fields[i].split(":");
 
 				// Inserts LHS of colon as key. E.g., To
@@ -4285,7 +4373,7 @@ $(function()
 				key = key.trim(); // if key starts with space, it can't
 				// accessible
 
-				// Inserts RHS of colon as value. E.g., naresh@agilecrm.com
+				// Inserts RHS of colon as value. E.g., naresh@agilecrm.com  
 				var value = arrcolon.slice(1).join(":"); // join the
 				// remaining string
 				// based on colon,
@@ -4309,13 +4397,19 @@ $(function()
 
 	Handlebars.registerHelper('remove_spaces', function(value)
 	{
-		return value.replace(/ +/g, '');
+		if(value)
+			  value = value.replace(/ +/g, '');
+
+		return value;
 
 	});
 
 	Handlebars.registerHelper('replace_spaces', function(value)
 	{
-		return value.replace(/ +/g, '_');
+		if(value)
+			  value = value.replace(/ +/g, '_');
+
+		return value;
 
 	});
 
@@ -5884,10 +5978,9 @@ $(function()
 	 */
 	Handlebars.registerHelper("isTracksEligible", function(options)
 	{
-		var planName = _billing_restriction.currentLimits.planName;
-		if (planName == 'PRO' || planName == 'REGULAR')
-			return options.fn(this);
-
+		if(_billing_restriction.currentLimits.addTracks)
+			   return options.fn(this);
+			
 		return options.inverse(this);
 	});
 
@@ -6531,22 +6624,6 @@ Handlebars.registerHelper('SALES_CALENDAR_URL', function()
 	       	}
 	    	
 			});
-Handlebars.registerHelper('get_campaign_type_filter', function(filter_name)
-{
-	var campaign_type ='';
-	if(filter_name=='All')
-		campaign_type= 'All Campaigns';
-	else{
-		var filter=$.ajax({ type : 'GET', url : '/core/api/workflows/'+filter_name, async : false, dataType : 'json',
-		success : function(data)
-			{
-				if (data != null && data != undefined)
-					campaign_type = "" + data.name;
-			} });
-	}
-	return campaign_type;
-		
-});
 	
 	Handlebars.registerHelper('toggle_contacts_filter', function(options)
 			{	        
@@ -6603,3 +6680,60 @@ Handlebars.registerHelper('get_campaign_type_filter', function(filter_name)
 			return options.inverse(this);
 		return options.fn(this);
 	});
+	
+	Handlebars.registerHelper('proToEnterprise', function(plan_type, options)
+			{
+		var temp = "Free";
+
+		  if(plan_type.indexOf("PRO") >= 0)
+			plan_type= plan_type.replace("PRO","ENTERPRISE");
+
+		  var fragments = plan_type.split("_");
+
+		  var interval = "Monthly";
+		  if(fragments.length > 1)
+		  {
+		  	 interval = ucfirst(fragments[1]);
+		  	 temp = ucfirst(fragments[0]);
+
+		  	 return temp + " (" + interval+")";
+		  }
+
+		    });
+	Handlebars.registerHelper('invoice_description', function(description) {
+
+		if (!description)
+			return description;
+
+		if (description.indexOf("Unused time on") != -1) {
+			description = "Balance from previous transaction";
+		} else if (description.indexOf("Remaining") != -1) {
+			description = "Changed on " + description.substring(description.indexOf("after") + 5);
+		}
+
+		return description + " ";
+
+	});
+
+	Handlebars.registerHelper("is_unsubscribed_all", function(options){
+               
+               var contact_model = App_Contacts.contactDetailView.model.toJSON();
+
+               // First name
+               var first_name = getPropertyValue(contact_model["properties"], "first_name");
+
+               if(contact_model && contact_model["unsubscribeStatus"] && contact_model["unsubscribeStatus"].length > 0)
+               {
+                       var statuses = contact_model["unsubscribeStatus"];
+
+                       for(var i=0, len = statuses.length; i < len; i++)
+                       {
+                               var status = statuses[i];
+
+                              if(status.unsubscribeType && status.unsubscribeType == "ALL")                                       return options.fn({"first_name": first_name, "campaign_id": status.campaign_id});
+                       }
+               }
+
+               return options.inverse(this);
+        });
+

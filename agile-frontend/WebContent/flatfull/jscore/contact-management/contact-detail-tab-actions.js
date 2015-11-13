@@ -240,7 +240,23 @@ $(function()
 		// Company won't be forced.
 		// Also after showing modal, it is set to false internally, so
 		// Company is not forced otherwise.
-		$('#personModal').modal('show');
+		//$('#personModal').modal('show');
+		$.ajax({
+			url : 'core/api/custom-fields/scope?scope=CONTACT',
+			type : 'GET',
+			dataType : 'json',
+			success : function(data){
+				if(data.length > 0)
+				{
+					Backbone.history.navigate("contact-add" , {trigger: true});
+					setTimeout(function(){ 
+					$("#continueform").find("ul[name=contact_company_id]").html('<li class="inline-block tag btn btn-xs btn-primary m-r-xs m-b-xs" data="'+forceCompany.id+'"><span><a class="text-white m-r-xs" href="#contact/'+forceCompany.id+'">'+forceCompany.name+'</a><a class="close text-white" id="remove_tag">×</a></span></li>')
+					}, 800);
+				}
+				else
+					$("#personModal").modal("show");
+			}
+		});
 	});
 
 	// For adding new document from contact-details

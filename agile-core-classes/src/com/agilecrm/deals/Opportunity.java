@@ -2,7 +2,9 @@ package com.agilecrm.deals;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Embedded;
 import javax.persistence.Id;
@@ -170,6 +172,12 @@ public class Opportunity extends Cursor implements Serializable
     private List<String> notes = new ArrayList<String>();
 
     /**
+     * Note id's of related task for a deal.
+     */
+    @NotSaved
+    private List<String> note_ids = new ArrayList<String>();
+
+    /**
      * Related notes objects fetched using notes id's.
      */
     private List<Key<Note>> related_notes = new ArrayList<Key<Note>>();
@@ -204,25 +212,25 @@ public class Opportunity extends Cursor implements Serializable
      * Won date for a deal.
      */
     public Long won_date = null;
-    
+
     /**
      * Lost reason Id of the deal.
      */
     @NotSaved
     public Long lost_reason_id = 0L;
-    
+
     /**
      * Key object of lost reason
      */
     @NotSaved(IfDefault.class)
     private Key<Category> lostReason = null;
-    
+
     /**
      * Deal source Id of the deal.
      */
     @NotSaved
     public Long deal_source_id = 0L;
-    
+
     /**
      * Key object of deal source
      */
@@ -417,14 +425,14 @@ public class Opportunity extends Cursor implements Serializable
     {
 	return Note.dao.fetchAllByKeys(this.related_notes);
     }
-    
+
     public Long getLost_reason_id()
     {
 	if (lostReason != null)
 	    return lostReason.getId();
 	return 0L;
     }
-    
+
     public Long getDeal_source_id()
     {
 	if (dealSource != null)
@@ -469,28 +477,72 @@ public class Opportunity extends Cursor implements Serializable
 	Opportunity oldOpportunity = null;
 
 	String wonMilestone = "Won";
+	String lostMilestone = "Lost";
 	try
 	{
-	    wonMilestone = MilestoneUtil.getMilestone(pipeline_id).won_milestone;
+	    Milestone mile = MilestoneUtil.getMilestone(pipeline_id);
+	    if (mile.won_milestone != null)
+		wonMilestone = mile.won_milestone;
+	    if (mile.lost_milestone != null)
+		lostMilestone = mile.lost_milestone;
+
 	}
 	catch (Exception e)
 	{
 	    e.printStackTrace();
 	}
-	System.out.println("-------------won date---------" + wonMilestone);
+	System.out.println("-------------won milestone---------" + wonMilestone);
+	System.out.println("-------------lost milestone---------" + lostMilestone);
 
 	// cache old data to compare new and old in triggers
 	if (id != null)
 	    oldOpportunity = OpportunityUtil.getOpportunity(id);
+	if(oldOpportunity==null){
+		 // If the deal is won, change the probability to 100.
+	    if (this.milestone.equalsIgnoreCase(wonMilestone))
+		this.probability = 100;
+
+	    // If the deal is lost, change the probability to 0.
+	    if (this.milestone.equalsIgnoreCase(lostMilestone))
+		this.probability = 0;
+	}
+	if (oldOpportunity != null)
+	{
+	    if (this.created_time == 0)
+		this.created_time = oldOpportunity.created_time;
+	    if (this.won_date == null && oldOpportunity.won_date != null)
+		this.won_date = oldOpportunity.won_date;
+	}
 	if (oldOpportunity != null && StringUtils.isNotEmpty(this.milestone)
 		&& StringUtils.isNotEmpty(oldOpportunity.milestone))
 	{
+	    // For API fix. If the user didn't send the milestone_changed_time
+	    // in the call, use the value in the old one.
+	    if (this.milestone_changed_time == 0 && oldOpportunity.milestone_changed_time > 0)
+		this.milestone_changed_time = oldOpportunity.milestone_changed_time;
+
 	    if (!this.pipeline_id.equals(oldOpportunity.getPipeline_id())
 		    || !this.milestone.equals(oldOpportunity.milestone))
 		this.milestone_changed_time = System.currentTimeMillis() / 1000;
 
 	    if (!this.milestone.equals(oldOpportunity.milestone) && this.milestone.equalsIgnoreCase(wonMilestone))
+	    {
 		this.won_date = System.currentTimeMillis() / 1000;
+		this.probability = 100;
+	    }
+
+	    if (!this.milestone.equals(oldOpportunity.milestone) && this.milestone.equalsIgnoreCase(lostMilestone))
+	    {
+		this.probability = 0;
+	    }
+	    System.out.println("New Opportunity-----" + this);
+	    // If old deal, new deal are same and lost reason is there,
+	    // can update milestone changed time with old milestone changed time
+	    if (this.pipeline_id.equals(oldOpportunity.getPipeline_id())
+		    && this.milestone.equals(oldOpportunity.milestone)
+		    && this.lost_reason_id != null
+		    && ((oldOpportunity.lost_reason_id != null && oldOpportunity.lost_reason_id == 0L) || oldOpportunity.lost_reason_id == null))
+		this.milestone_changed_time = oldOpportunity.milestone_changed_time;
 	}
 	else if (oldOpportunity == null && this.milestone.equalsIgnoreCase(wonMilestone))
 	    this.won_date = System.currentTimeMillis() / 1000;
@@ -558,17 +610,17 @@ public class Opportunity extends Cursor implements Serializable
 	if (owner_id != null)
 	    ownerKey = new Key<DomainUser>(DomainUser.class, Long.parseLong(owner_id));
 	System.out.println("OwnerKey" + ownerKey);
-	
+
 	// Sets Deal lostReason.
 	if (lost_reason_id != null && lost_reason_id > 0)
 	{
-		this.lostReason = new Key<Category>(Category.class, lost_reason_id);
+	    this.lostReason = new Key<Category>(Category.class, lost_reason_id);
 	}
-		
+
 	// Sets deal source.
 	if (deal_source_id != null && deal_source_id > 0)
 	{
-		this.dealSource = new Key<Category>(Category.class, deal_source_id);
+	    this.dealSource = new Key<Category>(Category.class, deal_source_id);
 	}
 
 	// Session doesn't exist when adding deal from Campaigns.
@@ -642,6 +694,63 @@ public class Opportunity extends Cursor implements Serializable
 	    this.notes = null;
 	}
 
+	/*
+	 * if (milestone_changed_time == 0L) milestone_changed_time =
+	 * System.currentTimeMillis() / 1000;
+	 */
+
+	// Setting note_ids from api calls
+	setRelatedNotes();
+
+    }
+
+    @XmlElement(name = "note_ids")
+    public List<String> getNote_ids()
+    {
+	note_ids = new ArrayList<String>();
+
+	for (Key<Note> noteKey : related_notes)
+	    note_ids.add(String.valueOf(noteKey.getId()));
+
+	return note_ids;
+    }
+
+    /**
+     * Set related notes to the Case. Annotated with @JsonIgnore to prevent auto
+     * execution of this method (conflict with "PUT" request)
+     * 
+     * @param owner_key
+     */
+    @JsonIgnore
+    public void setRelatedNotes()
+    {
+	Set<String> notesSet = null;
+	if (this.notes != null && !this.notes.isEmpty())
+	{
+	    notesSet = new HashSet<String>(notes);
+
+	}
+	else if (this.note_ids != null && !this.note_ids.isEmpty())
+	{
+	    notesSet = new HashSet<String>(note_ids);
+	}
+	if (notesSet != null)
+	{
+
+	    // Create list of Note keys
+	    for (String note_id : notesSet)
+	    {
+		this.related_notes.add(new Key<Note>(Note.class, Long.parseLong(note_id)));
+	    }
+
+	    this.notes = null;
+	}
+
+	/*
+	 * if (milestone_changed_time == 0L) milestone_changed_time =
+	 * System.currentTimeMillis() / 1000;
+	 */
+
     }
 
     /*
@@ -664,8 +773,10 @@ public class Opportunity extends Cursor implements Serializable
 		.append(", entity_type=").append(entity_type).append(", notes=").append(notes)
 		.append(", related_notes=").append(related_notes).append(", note_description=")
 		.append(note_description).append(", pipeline=").append(pipeline).append(", pipeline_id=")
-		.append(pipeline_id).append(", archived=").append(archived).append(", lost_reason_id=").append(lost_reason_id)
-		.append(", deal_source_id=").append(deal_source_id).append("]");;
+		.append(pipeline_id).append(", archived=").append(archived).append(", lost_reason_id=")
+		.append(lost_reason_id).append(", deal_source_id=").append(deal_source_id).append("]");
+	;
 	return builder.toString();
     }
+
 }

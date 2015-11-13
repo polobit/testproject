@@ -1,0 +1,111 @@
+<script id="call-campaign-setting-template" type="text/html">
+<div class="bg-light lter b-b wrapper-md ng-scope">
+    <div>
+      <div>
+ <h1 class="m-n font-thin h3 pull-left"><span id="contact-heading">Start Call Campaign</span></h1>
+        <div class="clearfix"></div>
+    </div>
+</div>
+</div>
+<div class="wrapper-md">
+<div class="row">
+    <div class="col-md-12">
+<div id="callcampaign-setting" class="text-base">
+<div class="col-lg-8"> 
+<div class="panel panel-default">
+<div class="panel-heading" style="background:#f6f8f8;">Call Campaign</div>
+        <div class="panel-body">
+          <form class="bs-example form-horizontal">
+<div class="form-group col-lg-12"> 
+<label class="col-lg-3 control-label">Selected Contacts </label>
+<label class="col-lg-9 control-label text-left p-l-md">{{total_count}}</label>
+</div>
+<div class="form-group">
+              <label class="col-lg-3 control-label">Dial Type</label>
+              <div class="col-lg-9 p-t-8">
+            				  <label class="i-checks">
+               					  <input type="radio" name="call_campaign_autodial" id="call_campaign_autodial" checked="checked" value="autodial" title="Auto Dial">
+								<i></i>
+               					 Auto Dial
+ 								</label>
+
+&nbsp;&nbsp;&nbsp;
+
+							 <label class="i-checks">
+               					 <input type="radio" name="call_campaign_autodial" id="call_campaign_autodial" value="manual" title="Manual Dial">
+								<i></i>
+               					 Manual
+              				  </label>
+
+								<i class="icon-question-sign m-l-xs" style="color:#A09898;" data-toggle="tooltip" data-placement="top" title="" data-original-title="For Auto Dial, campaign will automatically dial contact and move on to the next call. For Manual, dial manually and then select 'Next' to move on to the next call."></i>
+              </div>
+            </div>
+
+		<div class="form-group" id="wrapUpDiv">
+
+              <label class="col-lg-3 control-label">Wrapup Time</label>
+              <div class="col-lg-9">
+ 						<a href="" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false"> 
+    				      <button id="rampTimeButton" type="button" class="btn btn-default">
+    						  				  
+								<span  id="call_campaign_timer" class="call_campaign_timer" name="call_campaign_timer" value = "20"> 20 Sec </span>
+         				   		<span class="caret"></span>
+							
+ 							</button>
+						</a>
+							<span class="help-block m-b-none">The time gap between each call</span>
+								<ul class="dropdown-menu" style="top: 32px;left: 15px;">
+									<li><a id = "timerValue" href="" value = "0">None</a></li>
+										{{#each time}} <li><a id = "timerValue" href="" value = {{this}} > {{this}} Sec </a></li>{{/each}}
+								</ul>
+              	</div>
+          </div>
+
+		<div class="form-group">
+              <label class="col-lg-3 control-label">Add Tag</label>
+              <div class="col-lg-6">
+				<input type="text" class="form-control setting-add-tag" id="addTag" placeholder="Tag Name (Optional)" style="width:55%">
+			<span class="help-block m-b-none">Tag will be added once the call is completed successfully.</span>
+              </div>
+  		</div>
+
+         
+          </form>
+        </div>
+<div class="panel-footer p-t-8 height-min-50">
+           
+              <div class="col-lg-offset-3 col-lg-9">
+<a href="#" class="btn btn-sm btn-default" id="bulk-close-call-campaign" >Close</a>
+<a href="#" class="save btn btn-sm btn-primary" id="bulk-start-call-campaign">Start Campaign</a>
+              </div>
+            
+</div>
+      </div>
+</div>
+<div class="col-md-4">
+<div class="panel panel-default">
+<div class="panel-heading" style="background:#fff;">Help</div>
+        <div class="panel-body">
+	        <p> 'Selected Contacts' displays the number of contacts added to the campaign.</p>
+
+			<p> By selecting 'Auto Dial', the campaign will automatically dial contact and once the call is completed, move on to the next call.</p>
+
+			<p> For 'Manual' dial type, the user needs to dial manually and once the call is completed, select 'Next' to move on to the succeeding call.</p> 
+				
+			<p> You can add a tag for each contact after the call is completed. It will help you to recheck whether the call campaign ran successfully.</p>
+			
+			<p> 'Wrapup Time' will be applicable for the 'Auto Dial' option which allows a time gap between each call so that the user may record call notes.</p>
+
+        </div>
+      </div>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+</script>
+
+
+

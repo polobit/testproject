@@ -10,10 +10,11 @@ var ReportsRouter = Backbone.Router
 
 			/* Reports */
 			"reports" : "reports", "email-reports" : "emailReportTypes", "activity-reports" : "activityReports", "activity-report-add" : "activityReportAdd",
-				"activity-report-edit/:id" : "activityReportEdit", "acivity-report-results/:id" : "activityReportInstantResults",
-				"contact-reports" : "emailReports", "report-add" : "reportAdd", "report-edit/:id" : "reportEdit",
-				"report-results/:id" : "reportInstantResults", "report-charts/:type" : "reportCharts", "report-funnel/:tags" : "showFunnelReport",
-				"report-growth/:tags" : "showGrowthReport", "report-cohorts/:tag1/:tag2" : "showCohortsReport", "report-ratio/:tag1/:tag2" : "showRatioReport" },
+				"activity-report-edit/:id" : "activityReportEdit", "contact-reports" : "emailReports", "report-add" : "reportAdd",
+				"report-edit/:id" : "reportEdit", "report-results/:id" : "reportInstantResults", "report-charts/:type" : "reportCharts",
+				"report-funnel/:tags" : "showFunnelReport", "report-growth/:tags" : "showGrowthReport", "report-ratio/:tag1/:tag2" : "showRatioReport","report-sales":"showrevenuegraph","report-deals":"showIncomingDeals","report-calls/:type" : "showCallsReport","user-reports": "showUserReports",
+				"report-lossReason":"showDealsLossReason","reports-wonDeals":"showDealsWonChart" },
+
 
 			/**
 			 * Shows reports categories
@@ -24,348 +25,256 @@ var ReportsRouter = Backbone.Router
 					return;
 
 				$("#content").html("<div id='reports-listerners-container'></div>");
-				getTemplate('report-categories', {}, undefined, function(template_ui){
-					if(!template_ui)
-						  return;
+				getTemplate('report-categories', {}, undefined, function(template_ui)
+				{
+					if (!template_ui)
+						return;
 					$('#reports-listerners-container').html($(template_ui));
 
-					initializeReportsListeners();
-					hideTransitionBar();
+				initializeReportsListeners();
+				hideTransitionBar();
+				$(".active").removeClass("active");
+				$("#reportsmenu").addClass("active");
+
+					$('[data-toggle="tooltip"]').tooltip();
+
+				}, "#reports-listerners-container");
+
+			},
+
+			/**
+			 * Shows email-reports categories
+			 */
+			emailReportTypes : function()
+			{
+				getTemplate('email-report-categories', {}, undefined, function(template_ui)
+				{
+					if (!template_ui)
+						return;
+					$('#content').html($(template_ui));
+
 					$(".active").removeClass("active");
 					$("#reportsmenu").addClass("active");
 
-					$('[data-toggle="tooltip"]').tooltip();	
+				}, "#content");
 
-				}, "#reports-listerners-container");
-				
 			},
 
-	/**
-	 * Shows email-reports categories
-	 */
-	emailReportTypes : function()
-	{
-		getTemplate('email-report-categories', {}, undefined, function(template_ui){
-			if(!template_ui)
-				  return;
-			$('#content').html($(template_ui));	
-
-			$(".active").removeClass("active");
-			$("#reportsmenu").addClass("active");
-
-		}, "#content");
-
-		
-	},
-	
-	activityReports : function()
-	{
-		$("#content").html("<div id='reports-listerners-container'></div>");
-		$("#reports-listerners-container").html(getRandomLoadingImg());
-		this.activityReports = new Base_Collection_View({ url : '/core/api/activity-reports', restKey : "activityReports", templateKey : "activity-report", individual_tag_name : 'tr', 
-			postRenderCallback: function(){
-				initializeActivityReportsListeners();
-			} });
-		this.activityReports.collection.fetch();
-		$("#reports-listerners-container").html(this.activityReports.render().el);
-
-		$(".active").removeClass("active");
-		$("#reportsmenu").addClass("active");
-	},
-	
-	activityReportAdd : function(){
-		
-		if(!tight_acl.checkPermission('REPORT'))
-			return;
-		
-		if(!tight_acl.checkPermission('ACTIVITY'))
-			return;
-
-		$("#content").html("<div id='reports-listerners-container'></div>");
-		$("#reports-listerners-container").html(getRandomLoadingImg());
-		
-		var count = 0;
-		var activity_report_add = new Base_Model_View({ url : 'core/api/activity-reports', template : "activity-reports-add", window : "activity-reports", isNew : true,
-			postRenderCallback : function(el)
+			/** shows list of activity reports added * */
+			activityReports : function()
 			{
-
-				initializeActivityReportsListeners();
-				initializeReportsListeners();
-				if (count != 0)
-					return;
-								
-				// Fills owner select element
-				fillSelect("users-list", '/core/api/users', 'domainUser', function()
-				{
-					head.js(LIB_PATH + 'lib/jquery.multi-select.js',CSS_PATH + 'css/businesshours/jquerytimepicker.css', LIB_PATH + 'lib/businesshours/jquerytimepicker.js', function()
+				$("#content").html("<div id='reports-listerners-container'></div>");
+				$("#reports-listerners-container").html(getRandomLoadingImg());
+				this.activityReports = new Base_Collection_View({ url : '/core/api/activity-reports', restKey : "activityReports",
+					templateKey : "activity-report", individual_tag_name : 'tr', postRenderCallback : function()
 					{
-						$('#activity-type-list, #users-list',el).multiSelect();
-						$('#ms-activity-type-list .ms-selection', el).children('ul').addClass('multiSelect').attr("name", "activity").attr("id", "activity_type");
-						$('#ms-users-list .ms-selection', el).children('ul').addClass('multiSelect').attr("name", "user_ids").attr("id", "user_ids");
-						++count;
-						if (count > 0)
-							$("#reports-listerners-container").html(el);
-							
-							$('.activity_time_timepicker', el).timepicker({ 'timeFormat': 'H:i ' ,'step': 30});
-							$(".activity_time_timepicker", el).val("09:00");
-							$("#report_timezone", el).val(ACCOUNT_PREFS.timezone);
-					});
-				}, '<option value="{{id}}">{{name}}</option>', true, el);
-				
-				} });
+						initializeActivityReportsListeners();
+					} });
 
-		$("#reports-listerners-container").html(getRandomLoadingImg());
-		activity_report_add.render();
+				this.activityReports.collection.fetch();
+				$("#reports-listerners-container").html(this.activityReports.render().el);
 
-	},
-	
-	/**
-	 * Edits a report by de-serializing the existing report into its saving
-	 * form, from there it can be edited and saved. Populates users and loads
-	 * agile.jquery.chained.min.js to match the conditions with the values of
-	 * input fields.
-	 */
-	activityReportEdit : function(id)
-	{
+				$(".active").removeClass("active");
+				$("#reportsmenu").addClass("active");
+			},
 
-		if(!tight_acl.checkPermission('REPORT'))
-			return;
-		
-		if(!tight_acl.checkPermission('ACTIVITY'))
-			return;
-		$("#content").html("<div id='reports-listerners-container'></div>");
-		$("#reports-listerners-container").html(getRandomLoadingImg());
-		// Counter to set when script is loaded. Used to avoid flash in page
-		var count = 0;
-
-		// If reports view is not defined, navigates to reports
-		if (!this.activityReports || !this.activityReports.collection || this.activityReports.collection.length == 0 || this.activityReports.collection.get(id) == null)
-		{
-			this.navigate("activity-reports", { trigger : true });
-			return;
-		}
-
-		// Gets a report to edit, from reports collection, based on id
-		var activityReport = this.activityReports.collection.get(id);
-		var report_model = new Base_Model_View({ url : 'core/api/activity-reports', change : false, model : activityReport, template : "activity-reports-add", window : "activity-reports",
-		postRenderCallback : function(el)
+			/**
+			 * adds new activity report with various condtion like user, type of
+			 * activity ,user email ,frequency and advanced conditions
+			 */
+			activityReportAdd : function()
 			{
-				initializeActivityReportsListeners();
-				initializeReportsListeners();
-				if (count != 0)
+
+				if (!tight_acl.checkPermission('REPORT'))
 					return;
-				fillSelect("users-list", '/core/api/users', 'domainUser', function()
-						{
-							var json = activityReport.toJSON();
-							var time=json.activity_start_time;
-							
-							var frequency=json.frequency;
-							
-							deserializeForm(json,$('#activityReportsForm',el));
-							
-							
-							head.js(LIB_PATH + 'lib/jquery.multi-select.js',CSS_PATH + 'css/businesshours/jquerytimepicker.css', LIB_PATH + 'lib/businesshours/jquerytimepicker.js', function()
-							{
 
-								$('#activity-type-list, #users-list',el).multiSelect();
-								$('#ms-activity-type-list .ms-selection', el).children('ul').addClass('multiSelect').attr("name", "activity").attr("id", "activity_type");
-								$('#ms-users-list .ms-selection', el).children('ul').addClass('multiSelect').attr("name", "user_ids").attr("id", "user_ids");
-								
-								$("#reports-listerners-container").html(el)
-								$.each(json.user_ids,function(i,user_id){
-									$('#users-list').multiSelect('select',user_id);
-									console.log('select user---',user_id);
-								});
-								$.each(json.activity,function(i,activity){
-									$('#activity-type-list').multiSelect('select',activity);
-									console.log('select activity-------',activity);
-								});
-								$('#ms-activity-type-list .ms-selection').children('ul').addClass('multiSelect').attr("name", "activity").attr("id", "activity_type");
-								$('#ms-users-list .ms-selection').children('ul').addClass('multiSelect').attr("name", "user_ids").attr("id", "user_ids");
-								
-								if(json.report_timezone==null){
-									$("#report_timezone").val(ACCOUNT_PREFS.timezone);
-								}
-								// based on frequency we are showing and hideing the time and date and month fields
-								if (frequency == "DAILY")
-								{
-									$("#activity_report_weekday").css("display", "none");
-									$("#activity_report_day").css("display", "none");
-									$("#activity_report_time").css("display", "block");
+				if (!tight_acl.checkPermission('ACTIVITY'))
+					return;
 
-								}
-								else if (frequency == "WEEKLY")
-								{
-									$("#activity_report_day").css("display", "none");
-									$("#activity_report_time").css("display", "block");
-									$("#activity_report_weekday").css("display", "block");
+				$("#content").html("<div id='reports-listerners-container'></div>");
+				$("#reports-listerners-container").html(getRandomLoadingImg());
+				count = 0;
 
-								}
-								else if (frequency == "MONTHLY")
-								{
-									$("#activity_report_weekday").css("display", "none");
-									$("#activity_report_time").css("display", "block");
-									$("#activity_report_day").css("display", "block");
+				var activity_report_add = new Base_Model_View({ url : 'core/api/activity-reports', template : "activity-reports-add",
+					window : "activity-reports", isNew : true, postRenderCallback : function(el)
+					{
 
-								}
-								$('.activity_time_timepicker').timepicker({ 'timeFormat': 'H:i ' ,'step': 30});
-								
-							});
-						}, '<option value="{{id}}">{{name}}</option>', true, el);
-				
-			} });
+						initializeActivityReportsListeners();
+						initializeReportsListeners();
+						if (count != 0)
+						 return;
 
-		$("#reports-listerners-container").html(getRandomLoadingImg());
-		report_model.render();
+						report_utility.load_activities(el);
 
+					} });
 
-	},
-	
-	/**
-	 * Shows list of reports, with an option to add new report
-	 */
-	emailReports : function()
-	{
-			$("#content").html("<div id='reports-listerners-container'></div>");
-			this.reports = new Base_Collection_View({ url : '/core/api/reports', restKey : "reports", templateKey : "report", individual_tag_name : 'tr', 
-				postRenderCallback: function(){
-					initializeReportsListeners();
-				}});
+				$("#reports-listerners-container").html(getRandomLoadingImg());
+				activity_report_add.render();
 
-			this.reports.collection.fetch();
-			$("#reports-listerners-container").html(this.reports.render().el);
+			},
 
-	},
-
-	/**
-	 * Loads a template to add new report. Populates users drop down list and
-	 * loads agile.jquery.chained.min.js to chain conditions and values of input
-	 * fields, from postRenderCallback of its Base_Model_View.
-	 */
-	reportAdd : function()
-	{
-		var count = 0;
-		$("#content").html("<div id='reports-listerners-container'></div>");
-		$("#reports-listerners-container").html(getRandomLoadingImg());
-		SEARCHABLE_CONTACT_CUSTOM_FIELDS = undefined;
-		var report_add = new Base_Model_View({ url : 'core/api/reports', template : "reports-add", window : "contact-reports", isNew : true,
-			postRenderCallback : function(el)
+			/**
+			 * Edits a report by de-serializing the existing report into its
+			 * saving form, from there it can be edited and saved. Populates
+			 * users and loads agile.jquery.chained.min.js to match the
+			 * conditions with the values of input fields.
+			 */
+			activityReportEdit : function(id)
 			{
-				initializeContactFiltersListeners();
-				initializeReportsListeners();
+
+				if (!tight_acl.checkPermission('REPORT'))
+					return;
+
+				if (!tight_acl.checkPermission('ACTIVITY'))
+					return;
+
+				$("#content").html("<div id='reports-listerners-container'></div>");
+				$("#reports-listerners-container").html(getRandomLoadingImg());
+
 				// Counter to set when script is loaded. Used to avoid flash in
 				// page
-				if (count != 0)
-					return;
-				fillSelect("custom-fields-optgroup", "core/api/custom-fields/scope?scope=CONTACT", undefined, function()
+				count = 0;
+
+				// If reports view is not defined, navigates to reports
+				if (!this.activityReports || !this.activityReports.collection || this.activityReports.collection.length == 0 || this.activityReports.collection
+						.get(id) == null)
 				{
-
-					head.js(LIB_PATH + 'lib/jquery.multi-select.js' ,CSS_PATH + 'css/businesshours/jquerytimepicker.css', LIB_PATH + 'lib/businesshours/jquerytimepicker.js', function()
-					{
-
-						$('#multipleSelect', el).multiSelect({ selectableOptgroup : true });
-
-						$('.ms-selection', el).children('ul').addClass('multiSelect').attr("name", "fields_set").attr("id", "fields_set").sortable();
-
-						++count;
-						if (count > 1)
-							$("#reports-listerners-container").html(el);
-
-						$('.report_time_timepicker', el).timepicker({ 'timeFormat': 'H:i ' ,'step': 30});
-						$(".report_time_timepicker", el).val("09:00");
-						$("#report_timezone", el).val(ACCOUNT_PREFS.timezone);
-					});
-				}, '<option value="custom_{{field_label}}">{{field_label}}</option>', true, el);
-
-				head.js(LIB_PATH + 'lib/jquery-ui.min.js', LIB_PATH + 'lib/agile.jquery.chained.min.js', function()
-				{
-					scramble_input_names($(el).find('div#report-settings'));
-					chainFiltersForContact(el, undefined, function()
-					{
-						++count;
-						if (count > 1)
-							$("#reports-listerners-container").html(el)
-					});
-				});
-
-			} });
-
-		$("#reports-listerners-container").html(getRandomLoadingImg());
-		report_add.render();
-	},
-				
-	/**
-	 * Edits a report by de-serializing the existing report into its saving
-	 * form, from there it can be edited and saved. Populates users and loads
-	 * agile.jquery.chained.min.js to match the conditions with the values of
-	 * input fields.
-	 */
-	reportEdit : function(id)
-	{
-		$("#content").html("<div id='reports-listerners-container'></div>");
-		$("#reports-listerners-container").html(getRandomLoadingImg());
-		// Counter to set when script is loaded. Used to avoid flash in page
-		var count = 0;
-
-		// Gets a report to edit, from reports collection, based on id
-		var report = this.reports.collection.get(id);
-		var report_model = new Base_Model_View({ url : 'core/api/reports', change : false, model : report, template : "reports-add", window : "contact-reports", id : "reports-listerners-container",
-			postRenderCallback : function(el)
-			{
-				initializeContactFiltersListeners();
-				initializeReportsListeners();
-				if (count != 0)
+					this.navigate("activity-reports", { trigger : true });
 					return;
-				
+				}
+
 				// Gets a report to edit, from reports collection, based on id
-				
-					fillSelect("custom-fields-optgroup", "core/api/custom-fields/scope?scope=CONTACT", undefined, function()
+				var activityReport = this.activityReports.collection.get(id);
+				var report_model = new Base_Model_View({
+					url : 'core/api/activity-reports',
+					change : false,
+					model : activityReport,
+					template : "activity-reports-add",
+					window : "activity-reports",
+					postRenderCallback : function(el)
+					{
+						initializeActivityReportsListeners();
+						initializeReportsListeners();
+						if (count != 0)
+							return;
+
+						fillSelect("users-list", '/core/api/users', 'domainUser', function()
 						{
+							var json = activityReport.toJSON();
+							var time = json.activity_start_time;
+
+							var frequency = json.frequency;
+
+							deserializeForm(json, $('#activityReportsForm', el));
 
 							head.js(LIB_PATH + 'lib/jquery.multi-select.js', CSS_PATH + 'css/businesshours/jquerytimepicker.css',
 									LIB_PATH + 'lib/businesshours/jquerytimepicker.js', function()
 									{
-										console.log(el);
-										console.log(report.toJSON());
-										$('#multipleSelect', el).multiSelect({ selectableOptgroup : true });
-										++count;
-										if (count > 1)
-											deserialize_multiselect(report.toJSON(), el);
 
-										setTimeout(function()
-										{
-											$('.report_time_timepicker').timepicker({ 'timeFormat' : 'H:i ', 'step' : 30 });
+										report_utility.edit_activities(el, json);
 
-											var frequency = report.toJSON().duration;
-
-											if (frequency == "DAILY")
-											{
-												$("#contact_report_weekday").css("display", "none");
-												$("#contact_report_day").css("display", "none");
-												$("#contact_report_time").css("display", "block");
-
-											}
-											else if (frequency == "WEEKLY")
-											{
-												$("#contact_report_day").css("display", "none");
-												$("#contact_report_time").css("display", "block");
-												$("#contact_report_weekday").css("display", "block");
-
-											}
-											else if (frequency == "MONTHLY")
-											{
-												$("#contact_report_weekday").css("display", "none");
-												$("#contact_report_time").css("display", "block");
-												$("#contact_report_day").css("display", "block");
-
-											}
-
-											if (report.toJSON().report_timezone == null)
-											{
-												$("#report_timezone").val(ACCOUNT_PREFS.timezone);
-											}
-										}, 1000);
 									});
+						}, '<option value="{{id}}">{{name}}</option>', true, el);
+
+					} });
+
+				$("#reports-listerners-container").html(getRandomLoadingImg());
+				report_model.render();
+
+			},
+
+			/**
+			 * Shows list of reports, with an option to add new report
+			 */
+			emailReports : function()
+			{
+				$("#content").html("<div id='reports-listerners-container'></div>");
+				this.reports = new Base_Collection_View({ url : '/core/api/reports', restKey : "reports", templateKey : "report", individual_tag_name : 'tr',
+					postRenderCallback : function()
+					{
+						initializeReportsListeners();
+					} });
+
+				this.reports.collection.fetch();
+				$("#reports-listerners-container").html(this.reports.render().el);
+
+			},
+
+			/**
+			 * Loads a template to add new report. Populates users drop down
+			 * list and loads agile.jquery.chained.min.js to chain conditions
+			 * and values of input fields, from postRenderCallback of its
+			 * Base_Model_View.
+			 */
+			reportAdd : function()
+			{
+				count = 0;
+
+				$("#content").html("<div id='reports-listerners-container'></div>");
+				$("#reports-listerners-container").html(getRandomLoadingImg());
+
+				SEARCHABLE_CONTACT_CUSTOM_FIELDS = undefined;
+				var report_add = new Base_Model_View({ url : 'core/api/reports', template : "reports-add", window : "contact-reports", isNew : true,
+					postRenderCallback : function(el)
+					{
+						initializeContactFiltersListeners();
+						initializeReportsListeners();
+						// Counter to set when script is loaded. Used to avoid
+						// flash in
+						// page
+						if (count != 0)
+							return;
+
+						report_utility.load_contacts(el, count);
+
+					} });
+
+				$("#reports-listerners-container").html(getRandomLoadingImg());
+				report_add.render();
+			},
+
+			/**
+			 * Edits a report by de-serializing the existing report into its
+			 * saving form, from there it can be edited and saved. Populates
+			 * users and loads agile.jquery.chained.min.js to match the
+			 * conditions with the values of input fields.
+			 */
+			reportEdit : function(id)
+			{
+				$("#content").html("<div id='reports-listerners-container'></div>");
+				$("#reports-listerners-container").html(getRandomLoadingImg());
+
+				// Counter to set when script is loaded. Used to avoid flash in
+				// page
+				count = 0;
+
+				// Gets a report to edit, from reports collection, based on id
+				var report = this.reports.collection.get(id);
+				var report_model = new Base_Model_View({
+					url : 'core/api/reports',
+					change : false,
+					model : report,
+					template : "reports-add",
+					window : "contact-reports",
+					id : "reports-listerners-container",
+					postRenderCallback : function(el)
+					{
+						initializeContactFiltersListeners();
+						initializeReportsListeners();
+
+						if (count != 0)
+							return;
+
+						// Gets a report to edit, from reports collection, based
+						// on id
+						fillSelect("custom-fields-optgroup", "core/api/custom-fields/scope?scope=CONTACT", undefined, function()
+						{
+
+							loadActivityReportLibs(function()
+							{
+								report_utility.edit_contacts(el, report);
+							});
+	
 
 						}, '<option value="custom_{{field_label}}">{{field_label}}</option>', true, el);
 
@@ -379,6 +288,7 @@ var ReportsRouter = Backbone.Router
 										if (count > 1)
 											deserialize_multiselect(report.toJSON(), el);
 									});
+
 									scramble_input_names($(el).find('div#report-settings'));
 								});
 
@@ -398,6 +308,7 @@ var ReportsRouter = Backbone.Router
 			{
 
 				if (!report)
+				{
 					// If reports view is not defined, navigates to reports
 					if (!this.reports || !this.reports.collection || this.reports.collection.length == 0 || this.reports.collection.get(id) == null)
 					{
@@ -419,6 +330,8 @@ var ReportsRouter = Backbone.Router
 						report = this.reports.collection.get(id).toJSON();
 					}
 
+				}
+
 				// Stores in global variable, as it is required to build custom
 				// table
 				// headings
@@ -427,6 +340,7 @@ var ReportsRouter = Backbone.Router
 				var report_results_view = new Base_Collection_View({ url : "core/api/reports/show-results/" + id, modelData : report,
 					templateKey : "report-search", individual_tag_name : 'tr', cursor : true, sort_collection : false, page_size : 15, });// Collection
 				var _that = this;
+				
 				$.getJSON("core/api/custom-fields/type/scope?type=DATE&scope=CONTACT", function(customDatefields)
 				{
 					// Report built with custom table, as reports should be
@@ -450,15 +364,17 @@ var ReportsRouter = Backbone.Router
 			 */
 			showFunnelReport : function(tags)
 			{
-
-				head.load(LIB_PATH + 'lib/date-charts.js', LIB_PATH + 'lib/date-range-picker.js', CSS_PATH + "css/misc/date-picker.css", function()
+				hideTransitionBar();
+				initReportLibs(function()
 				{
-					getTemplate("report-funnel", {}, undefined, function(template_ui){
-						if(!template_ui)
-							  return;
+					getTemplate("report-funnel", {}, undefined, function(template_ui)
+					{
+						if (!template_ui)
+							return;
 
 						// Load Reports Template
 						$('#content').html($(template_ui));
+						
 						// Set the name
 						$('#reports-funnel-tags').text(tags);
 
@@ -469,7 +385,9 @@ var ReportsRouter = Backbone.Router
 
 						$(".active").removeClass("active");
 						$("#reportsmenu").addClass("active");
+
 						
+						highlightDatepickerOption();
 
 					}, "#content");
 
@@ -484,15 +402,17 @@ var ReportsRouter = Backbone.Router
 			 */
 			showGrowthReport : function(tags)
 			{
+				hideTransitionBar();
+				initReportLibs(function()
 
-				head.js(LIB_PATH + 'lib/date-charts.js', LIB_PATH + 'lib/date-range-picker.js', CSS_PATH + "css/misc/date-picker.css", function()
 				{
 
 					// Load Reports Template
-					getTemplate("report-growth", {}, undefined, function(template_ui){
-						if(!template_ui)
-							  return;
-						$('#content').html($(template_ui));	
+					getTemplate("report-growth", {}, undefined, function(template_ui)
+					{
+						if (!template_ui)
+							return;
+						$('#content').html($(template_ui));
 
 						// Set the name
 						$('#reports-growth-tags').text(tags);
@@ -503,50 +423,144 @@ var ReportsRouter = Backbone.Router
 						});
 
 					}, "#content");
+
 					
 				});
 
 				$(".active").removeClass("active");
 				$("#reportsmenu").addClass("active");
+				highlightDatepickerOption();
 			},
-
-
-			/**
-			 * Returns Cohorts Graphs with two tag1
+			
+			
+				
+		/**
+			 * Returns calls report
 			 * 
-			 * @param id -
-			 *            workflow id
+			 * @param tags -
+			 *            comma separated tags
 			 */
-			showCohortsReport : function(tag1, tag2)
+			showCallsReport : function(reportType)
 			{
+				hideTransitionBar();
+				initReportLibs(function()
 
-				head.js(LIB_PATH + 'lib/date-charts.js', LIB_PATH + 'lib/date-range-picker.js', CSS_PATH + "css/misc/date-picker.css", function()
 				{
+					
+					/** Default dropdown value to be considered*/ 
+					var graphOn='number-of-calls';
+					
+					/**Default template id to be loaded*/
+					var templateId="report-calls";
+					
+					/**when it is a call outcome selection*/
+					if(reportType == 'pie-graph'){
+						//templateId="report-calls-piechart";
+						templateId=templateId+"-piechart";
+						
+					}
+					
+					getTemplate(templateId, {}, undefined, function(template_ui){
+						if(!template_ui)
+							  return;
 
-					// Load Reports Template
-					getTemplate("report-cohorts", {}, undefined, function(template_ui){
+						// Load Reports Template
+						$('#content').html($(template_ui));
+					
+					/**Reinitialize the variable which holds the user preference abt report type*/
+	               if(reportType == 'average-calls'){
+						graphOn='average-calls';
+						$('select[id="typeCall"]').find('option[value="average-calls"]').attr("selected",true);
+						
+					}else{
+						$('select[id="typeCall"]').find('option[value="number-of-calls"]').attr("selected",true);
+					}
+	               
+	               initReportsForCalls(function()
+							{
+	            	   
+	            	   /** Get date range selected for every call back call */
+	            	   
+	            		var options = "?";
+
+						var range = $('#range').html().split("-");
+						var start_time=new Date(range[0]).getTime() / 1000;
+
+						var end_value = $.trim(range[1]);
+
+						
+						if (end_value)
+							end_value = end_value + " 23:59:59";
+
+						var end_time=new Date(end_value).getTime() / 1000;
+						options += ("start-date=" + start_time + "&end-date=" + end_time);
+						
+						var url='core/api/portlets/calls-per-person/' + options;
+						
+						graphOn=$("#typeCall option:selected").val();
+					    
+					    var userDropDown=$('#users option:selected').val();
+					    
+					    if(userDropDown != undefined){
+					    	if(userDropDown != 'All' && userDropDown != ""){
+								var usersUrl=url;
+								url=url+'&user=["'+userDropDown+'"]';
+							}
+					    	
+					    }
+					     report_utility.call_reports(url,reportType,graphOn);
+					    
+							
+							});
+
+					}, "#content");
+				});
+				
+			},
+			
+			/**
+			 * Shows User Reports
+			 */
+			showUserReports : function()
+
+			{
+				hideTransitionBar();
+				initReportLibs(function()
+						{
+					getTemplate("report-revenue-user", {}, undefined, function(template_ui){
 						if(!template_ui)
 							  return;
 						$('#content').html($(template_ui));	
 
-						// Set the name
-						$('#reports-cohorts-tags').text(tag1 + " versus " + tag2);
+						initUserReports(function()
+								{
+							salesReportGraphForUserReports();
+							showLossReasonGraphForUserReports();
+								
+							var callReportUrl='core/api/portlets/calls-per-person/' + getSelectedDates();
+							
+							if ($('#owner').length > 0)
+							{
+								if ($("#owner").val() != "" && $("#owner").val() != "All Owners"){
+								var user=$("#owner").val();
+								callReportUrl=callReportUrl+'&user=["'+user+'"]';
+							}
+							}
+							
+							report_utility.user_reports(callReportUrl);
+							
+								});
+						
+						
+				}, "#content");
 
-						initFunnelCharts(function()
-						{
-							showCohortsGraphs(tag1, tag2);
 						});
-
-					}, "#content");
-					
-					
-				});
-
-				$(".active").removeClass("active");
-				$("#reportsmenu").addClass("active");
 			},
+
+
+
 			/**
-			 * Returns Cohorts Graphs with two tag1
+			 * Returns Ratio Graphs with two tag1
 			 * 
 			 * @param id -
 			 *            workflow id
@@ -554,14 +568,16 @@ var ReportsRouter = Backbone.Router
 			showRatioReport : function(tag1, tag2)
 			{
 
-				head.js(LIB_PATH + 'lib/date-charts.js', LIB_PATH + 'lib/date-range-picker.js', CSS_PATH + "css/misc/date-picker.css", function()
+				initReportLibs(function()
+
 				{
 
 					// Load Reports Template
-					getTemplate("report-ratio", {}, undefined, function(template_ui){
-						if(!template_ui)
-							  return;
-						$('#content').html($(template_ui));	
+					getTemplate("report-ratio", {}, undefined, function(template_ui)
+					{
+						if (!template_ui)
+							return;
+						$('#content').html($(template_ui));
 
 						// Set the name
 						$('#reports-ratio-tags').text(tag1 + " versus " + tag2);
@@ -574,9 +590,12 @@ var ReportsRouter = Backbone.Router
 						$(".active").removeClass("active");
 						$("#reportsmenu").addClass("active");
 
+						highlightDatepickerOption();
+
 					}, "#content");
-					
+
 				});
+
 
 			},
 
@@ -591,26 +610,116 @@ var ReportsRouter = Backbone.Router
 					template_name = "report-" + type + "-form";
 
 				$("#content").html("<div id='reports-listerners-container'></div>");
-				getTemplate(template_name, {}, undefined, function(template_ui){
-					if(!template_ui)
-						  return;
-
-					var el = $(template_ui);
-					$("#reports-listerners-container").html(el);
-					initializeChartReportsListeners();
-
-					if (type && (type == 'growth' || type == 'funnel'))
-					{
-						setup_tags_typeahead();
+				getTemplate(template_name, {}, undefined, function(template_ui)
+				{
+					if (!template_ui)
 						return;
-					}
-					$.each($("[id=tags-reports]", el), function(i, element)
-					{
-						console.log(element);
-						addTagsDefaultTypeahead(element);
-					});
 
+							var el = $(template_ui);
+				$("#reports-listerners-container").html(el);
+				initializeChartReportsListeners();
+
+				if (type && (type == 'growth' || type == 'funnel'))
+				{
+					setup_tags_typeahead();
+					return;
+				}
+				$.each($("[id=tags-reports]", el), function(i, element)
+				{
+					console.log(element);
+					addTagsDefaultTypeahead(element);
+				});
 
 				}, "#reports-listerners-container");
-			}
-	});
+			},
+
+			showIncomingDeals : function(){
+				hideTransitionBar();
+				initReportLibs(function()
+						{
+
+							// Load Reports Template
+						getTemplate("report-deals", {}, undefined, function(template_ui){
+						if(!template_ui)
+							  return;
+						$('#content').html($(template_ui));	
+
+
+							initFunnelCharts(function()
+							{
+								showDealsGrowthReport();
+							});
+						}, "#content");
+					});
+			},
+
+			showDealsLossReason : function()
+			{
+				hideTransitionBar();
+				initReportLibs(function()
+				{
+
+					// Load Reports Template
+				getTemplate("report-DealsLoss", {}, undefined, function(template_ui){
+						if(!template_ui)
+							  return;
+						$('#content').html($(template_ui));	
+
+					initSalesCharts(function()
+							{
+						showLossReasonGraphs();
+							});
+
+					$(".active").removeClass("active");
+					$("#reportsmenu").addClass("active");
+				}, "#content");
+			});
+			},
+
+			showDealsWonChart : function()
+			{
+				hideTransitionBar();
+			initReportLibs(function()
+				{
+
+					// Load Reports Template
+				getTemplate("report-DealsWon", {}, undefined, function(template_ui){
+
+					if(!template_ui)
+							  return;
+						$('#content').html($(template_ui));	
+
+					initSalesCharts(function()
+							{
+						showWonPieChart();
+							});
+
+				$(".active").removeClass("active");
+				$("#reportsmenu").addClass("active");
+				}, "#content");
+			  });	
+},
+
+			showrevenuegraph : function()
+			{
+						hideTransitionBar();
+				initReportLibs(function()
+				{
+							// Load Reports Template
+						getTemplate("report-sales", {}, undefined, function(template_ui){
+						if(!template_ui)
+							  return;
+						$('#content').html($(template_ui));	
+							// Set the name
+
+							initSalesCharts(function()
+							{
+								showsalesReportGraphs();
+					});
+						}, "#content");
+					});
+			},
+			
+});
+
+var count = 0;

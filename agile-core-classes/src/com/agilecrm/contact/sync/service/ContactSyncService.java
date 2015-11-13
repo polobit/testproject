@@ -38,7 +38,7 @@ import com.thirdparty.google.ContactPrefs;
  * @author jitendra
  * 
  */
-public abstract class ContactSyncService implements SyncService
+public abstract class ContactSyncService implements IContactSyncService
 {
 
     String bulk_action_tracker = String.valueOf(System.currentTimeMillis());
@@ -71,7 +71,7 @@ public abstract class ContactSyncService implements SyncService
      * Polymorphism
      */
     @Override
-    public SyncService createService(ContactPrefs pref)
+    public IContactSyncService createService(ContactPrefs pref)
     {
 	Preconditions.checkNotNull(pref, "Prefs can't be null");
 	this.prefs = pref;

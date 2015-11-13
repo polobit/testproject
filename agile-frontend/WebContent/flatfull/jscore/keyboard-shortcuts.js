@@ -21,9 +21,10 @@ function isModalVisible()
 $(function(){
 	
 	/* To enable or disable the keyboard shortcuts	 */
-	if(CURRENT_USER_PREFS.keyboard_shotcuts)
+	if(CURRENT_USER_PREFS.keyboard_shotcuts){
 		enableKeyboardShotcuts();
-	
+		$(".show_shortcuts .shortcuts").addClass("enable");
+	}
 	/* For toggling keyboard shortcuts modal popup */
     $("body").on('click', '#keyboard-shortcuts', function(e){
 		e.preventDefault();
@@ -43,16 +44,25 @@ function enableKeyboardShotcuts()
 {
 	head.js(LIB_PATH+'lib/mousetrap.min.js',function(){
 	
-		// Preferences
-		Mousetrap.bind('shift+p',function(){
-			if(isModalVisible())return;
-			App_Settings.navigate("user-prefs/profile",{trigger:true});
-		});
 		
 		// New contact
 		Mousetrap.bind('shift+n',function(){
 			if(!isModalVisible())
-				$('#personModal').modal('show'); 
+				addContactBasedOnCustomfields(); 
+		});
+
+		// New company
+		Mousetrap.bind('shift+c',function(){
+			if(!isModalVisible())
+				$('#companyModal').modal('show'); 
+		});
+
+		// New event
+		Mousetrap.bind('shift+v',function(){
+			if(!isModalVisible()){
+				$('#activityModal').modal('show'); 
+				highlight_event();
+			}
 		});
 		
 		// New Task
@@ -60,6 +70,75 @@ function enableKeyboardShotcuts()
 			if(!isModalVisible())
 				showTaskModal("");
 		});
+
+		// New deal
+		Mousetrap.bind('shift+d',function(){
+			if(!isModalVisible())
+				show_deal(); 
+		});
+
+		// New note
+		Mousetrap.bind('shift+o',function(){
+			if(!isModalVisible()){
+				$('#noteModal').modal('show'); 
+				var el = $("#noteForm");
+				agile_type_ahead("note_related_to", el, contacts_typeahead);
+			}
+		});
+
+		// New email
+		/*Mousetrap.bind('shift+l',function(){
+			if(!isRoute("send-email") && !isModalVisible())
+				App_Contacts.navigate("send-email",{trigger:true});
+		});*/
+
+
+
+
+		// Preferences
+		Mousetrap.bind('shift+p',function(){
+			if(!isRoute("user-prefs") && !isModalVisible())
+				App_Settings.navigate("user-prefs",{trigger:true});
+		});
+
+		// Admin settings
+		Mousetrap.bind('shift+a',function(){
+			if(!isRoute("account-prefs") && !isModalVisible() && CURRENT_DOMAIN_USER.is_admin)
+				App_Settings.navigate("account-prefs",{trigger:true});
+		});
+
+		// Theme and layout
+		Mousetrap.bind('shift+l',function(){
+			if(!isRoute("themeandlayout") && !isModalVisible())
+				App_Settings.navigate("themeandlayout",{trigger:true});
+		});
+
+		// upgrade
+		Mousetrap.bind('shift+u',function(){
+			if(!isRoute("subscribe") && !isModalVisible())
+				App_Settings.navigate("subscribe",{trigger:true});
+		});
+
+		// Product updates
+		Mousetrap.bind('shift+r',function(){
+			if(!isModalVisible())
+				window.open("https://www.agilecrm.com/product-updates", true);
+		});
+
+		// Help
+		Mousetrap.bind('shift+h',function(){
+			if(!isRoute("help") && !isModalVisible())
+				App_Settings.navigate("help",{trigger:true});
+		});
+
+		// Logout
+		Mousetrap.bind('shift+g',function(){
+			if(!isModalVisible())
+				window.location.href = "/login?sur=true";
+		});
+
+
+
 		
 		// Edit the current contact
 		Mousetrap.bind('shift+e',function(){
@@ -69,8 +148,12 @@ function enableKeyboardShotcuts()
 		
 		// Send mail to current contact
 		Mousetrap.bind('shift+m',function(){
-			if(isRoute("contact/") && !isModalVisible())
+			if(isModalVisible())
+				return;
+			if(isRoute("contact/"))
 				App_Contacts.navigate("send-email/"+ getCurrentContactProperty("email"),{trigger:true});
+			else
+				App_Contacts.navigate("send-email",{trigger:true});
 		});
 		
 		// Focus on search box in main menu
@@ -90,7 +173,7 @@ function enableKeyboardShotcuts()
 			if(isModalVisible())return;
 			
 			if(isRoute('contact'))
-				$('#personModal').modal('show');
+				addContactBasedOnCustomfields();
 			else if(isRoute('cases'))
 				showCases();
 			else if(isRoute('deals'))

@@ -55,5 +55,10 @@ public class RegularPlanLimits extends PlanLimits
 
 		widgets = Integer.MAX_VALUE;
 		customWidget = true;
+		
+		/**
+		 * Milestones
+		 */
+		addTracks = true;
 	}
 }

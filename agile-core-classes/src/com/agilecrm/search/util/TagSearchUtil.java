@@ -11,6 +11,7 @@ import org.json.JSONObject;
 
 import com.agilecrm.contact.filter.ContactFilter;
 import com.agilecrm.search.ui.serialize.SearchRule;
+import com.agilecrm.search.ui.serialize.SearchRule.RuleCondition;
 import com.agilecrm.user.UserPrefs;
 import com.agilecrm.user.util.UserPrefsUtil;
 import com.agilecrm.util.DateUtil;
@@ -78,7 +79,21 @@ public class TagSearchUtil
 	{
 	    contactFilter = new ContactFilter();
 	}
-
+	else
+	{
+		SearchRule contact_searchRule = new SearchRule();
+		contact_searchRule.LHS = "type";
+		contact_searchRule.CONDITION = RuleCondition.EQUALS;
+		contact_searchRule.RHS = contactFilter.contact_type.toString();
+		contactFilter.rules.add(contact_searchRule);
+	}
+	SearchRule searchRule = new SearchRule();
+	searchRule.LHS = "tags";
+	searchRule.CONDITION = SearchRule.RuleCondition.EQUALS;
+	searchRule.RHS = tag;
+	
+	contactFilter.rules.add(searchRule);
+	
 	// Add the tag find rule
 	contactFilter.rules.add(getSearchRule(tag, startTime, endTime));
 
@@ -482,7 +497,14 @@ public class TagSearchUtil
 	{
 	    contactFilter = new ContactFilter();
 	}
-
+	
+	SearchRule searchRule1 = new SearchRule();
+	searchRule1.LHS = "tags";
+	searchRule1.CONDITION = SearchRule.RuleCondition.EQUALS;
+	searchRule1.RHS = tag;
+	
+	contactFilter.rules.add(searchRule1);
+	
 	// Add the tag find rule
 	contactFilter.rules.add(getSearchRule(tag, startTime, endTime));
 	

@@ -316,7 +316,7 @@ function initialize_tinymce_editor(){
         plugins: [
             "advlist autolink lists link image charmap print preview hr anchor pagebreak",
             "searchreplace wordcount visualblocks visualchars code fullscreen fullpage",
-            "insertdatetime media nonbreaking save table contextmenu directionality",
+            "insertdatetime nonbreaking save table contextmenu directionality",
             "paste textcolor"
         ],
         toolbar1 : "bold italic underline | alignleft aligncenter alignright alignjustify | bullist numlist | outdent indent blockquote | forecolor backcolor | link image | preview",
@@ -342,7 +342,7 @@ function initialize_tinymce_editor(){
             editor.addButton('templates', {
                 text: 'Templates',
                 icon: false,
-                onclick: function() {
+                onclick: function() { 
                 	
                 	// Confirm before going to Templates
                 	if(!confirm("Your changes will be lost. Are you sure you want to go back to templates?"))

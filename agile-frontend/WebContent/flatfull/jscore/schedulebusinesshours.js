@@ -47,6 +47,7 @@ function initializeOnlineCalendarListners(el){
 				json['schedule_id'] = scheduling_id;
 				json['bufferTime'] = $("#bufferTime").val();
 				json['bufferTimeUnit'] = $("#bufferTimeUnit").val();
+				json['user_calendar_title']=$(".online_summer_note").code();
 				console.log(business_hours);
 
 			// $("#schedule-preferences").html(getRandomLoadingImg());
@@ -62,7 +63,7 @@ function initializeOnlineCalendarListners(el){
 					{
 						$('#error_message').html("There was an error in saving your settings. Please try again in a minute.");
 						enable_save_button($(saveBtn));
-						eraseCookie("BUFFER_TIME_UNIT");
+						
 					} });
 		});
 
@@ -196,6 +197,32 @@ $("#online-cal-listners").on("click","#save-scheduleurl", function(e){
 		}, null);	
 
 	});
+/*
+     $("#online-cal-listners a[href='#calendar-tab']").unbind("click");
+	 $('#online-cal-listners a[href="#calendar-tab"]').on('click', function(e) {
+			e.preventDefault();
+			$(el).find('#calendar-tab').html(LOADING_ON_CURSOR);
+			online_calendar_tabs.loadScheduleUrlTab(el);
+	  });
+	 $("#online-cal-listners a[href='#businesshours-tab']").unbind("click");
+	$('#online-cal-listners a[href="#businesshours-tab"]').on('click', function(e) {
+		e.preventDefault();
+		$(el).find('#businesshours-tab').html(LOADING_ON_CURSOR);
+		online_calendar_tabs.loadBusinessHoursTab(el);
+	  });
+	 $("#online-cal-listners a[href='#meeting-types-tab']").unbind("click");
+	$('#online-cal-listners a[href="#meeting-types-tab"]').on('click', function(e) {
+		e.preventDefault();
+		$(el).find('#meeting-types-tab').html(LOADING_ON_CURSOR);
+		online_calendar_tabs.loadMeetingtypesTab(el);
+	  });
+	$("#online-cal-listners a[href='#advanced-tab']").unbind("click");
+	$('#online-cal-listners a[href="#advanced-tab"]').on('click', function(e) {
+		e.preventDefault();
+		$(el).find('#advanced-tab').html(LOADING_ON_CURSOR);
+		online_calendar_tabs.loadAdvancedTab(el);
+	  });*/
+
 
 	// $("#onlineCalendarAddToSite .getStartedToAddToSite").off("click");	
 }

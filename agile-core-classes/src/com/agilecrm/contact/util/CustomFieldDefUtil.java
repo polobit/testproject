@@ -93,6 +93,35 @@ public class CustomFieldDefUtil
 	return dao.listByProperty(map);
     }
     
+    public static List<CustomFieldDef> getAllRequiredCustomFields(boolean isRequired)
+    {
+	return dao.listByProperty("is_required", isRequired);
+    }
+
+    public static List<CustomFieldDef> getRequiredCustomFields()
+    {
+	return getAllRequiredCustomFields(true);
+    }
+
+    public static List<CustomFieldDef> getRequiredCustomFieldsByScope(SCOPE scope)
+    {
+    List<CustomFieldDef> contactCustomFieldsList = new ArrayList<CustomFieldDef>();
+    if(scope!=null && (scope==SCOPE.CONTACT || scope==SCOPE.PERSON)){
+    	Map<String, Object> map = new HashMap<String, Object>();
+    	map.put("is_required", true);
+		List<CustomFieldDef> customFieldsList = dao.listByProperty(map);;
+		for(CustomFieldDef cfd : customFieldsList){
+			if(cfd.scope==SCOPE.CONTACT || cfd.scope==SCOPE.PERSON || cfd.scope==null)
+				contactCustomFieldsList.add(cfd);
+		}
+		return contactCustomFieldsList;
+    }
+	Map<String, Object> map = new HashMap<String, Object>();
+	map.put("is_required", true);
+	map.put("scope", scope);
+	return dao.listByProperty(map);
+    }
+    
     public static List<CustomFieldDef> getCustomFieldsByScope(SCOPE scope)
     {
 	Map<String, Object> map = new HashMap<String, Object>();

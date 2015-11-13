@@ -1,6 +1,6 @@
 <script id="continue-contact-template" type="text/html">
 <div class="bg-light lter b-b wrapper-md">
-	<h3 class="h3 font-thin m-n">Continue Editing
+	<h3 class="h3 font-thin m-n">{{#if id}}Continue Editing{{else}}<i class="icon-plus-sign"></i>&nbsp;Add Contact{{/if}}
 	</h3>
 </div>
 <div class="wrapper-md">
@@ -12,13 +12,13 @@
                 <div class="control-group form-group">
                     <label class="control-label col-sm-3">Name <span class="field_req">*</span></label>
                     <div class="controls col-sm-9">
-                        <input name="fname" type="text" class="required form-control" id="fname" placeholder="First name"
+                        <input name="fname" type="text" class="required form-control field_length" max_len="500" id="fname" placeholder="First name"
                         value="{{getPropertyValue properties "first_name"}}" />
 					</div>
 				</div>
 				<div class="control-group form-group">
 					<div class="controls col-sm-9 pull-right">	
-                        <input name="lname" type="text" class="form-control" id="lname" placeholder="Last name"
+                        <input name="lname" type="text" class="form-control field_length" max_len="500" id="lname" placeholder="Last name"
                         value="{{getPropertyValue properties "last_name"}}"/> 
                     </div>
                 </div>
@@ -35,14 +35,14 @@
 								{{/if}}
 								</ul>
 							</div>
-	                        <input name="company" type="text" id="contact_company" class="form-control" placeholder="Company Name"/>
+	                        <input name="company" type="text" id="contact_company" class="form-control field_length" max_len="100" placeholder="Company Name"/>
 	                    </div>
 	                </div>
 
                 <div class="control-group form-group">
                     <label class="control-label col-sm-3">Job Description</label>
                     <div class="controls col-sm-9"> 
-                        <input name="title" type="text" class="form-control" id="job_title" placeholder="Job title"
+                        <input name="title" type="text" class="form-control field_length" max_len="500" id="job_title" placeholder="Job title"
                         value="{{getPropertyValue properties "title"}}"/>
                     </div>
                 </div>
@@ -56,14 +56,11 @@
                                 {{/each}}
                             </ul>
                         </div>
-                        <input name="tags" type="text" id="tags-new-person" class="tags-typeahead form-control" />
+                        <input name="tags" type="text" id="tags-new-person" class="tags-typeahead form-control" maxlength="500" />
+                        <div class="invalid-tags-person" style="color:red;display:none;">Tag name should start with an alphabet and can not contain special characters other than underscore and space.</div>
                     </div>
                 </div>
-				<div class="control-group invalid-tags-person" style="display:none;">
-					<label class="control-label"></label>
-					<div style="color:red;">Tag name should start with an alphabet and can not contain special characters other than underscore and space.</div>
-				</div>
-                {{show_custom_fields custom_fields properties}}
+		        {{show_custom_fields custom_fields properties}}
                 
                 <p></p>
                 <div class="control-group form-group">
@@ -71,7 +68,7 @@
                     <div class="hide controls col-sm-9 pull-right">
                         <div class="email multiple-template" data="email">
                             <div class="pull-left m-r-xs">
-								<input type="text" class="email form-control" name="email" placeholder="Email" />
+								<input type="text" class="email form-control field_length" max_len="500" name="email" placeholder="Email" />
 							</div>
 							
                             	<select class="email-select form-control inline-block" style="width:100px">
@@ -87,7 +84,7 @@
                     <div class="controls second col-sm-9">
                         <div class="email multiple-template" data="email">
 							<div class="pull-left m-r-xs">
-                            	<input type="text" class="email form-control" name="email" placeholder="Email" />
+                            	<input type="text" class="email form-control field_length" max_len="500" name="email" placeholder="Email" />
 							</div>
 							
                             	<select class="email-select form-control inline-block" style="width:100px">
@@ -106,7 +103,7 @@
                     <div class="hide controls col-sm-9 pull-right">
                         <div class="phone multiple-template" data="phone">
                             <div class="pull-left m-r-xs">
-								<input type="text" id="phone" class="form-control" name="phone" placeholder="Phone number" />
+								<input type="text" id="phone" class="form-control field_length" max_len="500" name="phone" placeholder="Phone number" />
                             </div>
 							<select class="phone-select form-control inline-block" style="width:100px">
                                 <option></option>
@@ -125,7 +122,7 @@
                     <div class="controls second col-sm-9">
                         <div class="phone multiple-template" data="phone">
                             <div class="pull-left m-r-xs">
-								<input type="text" id="phone" class="form-control" name="phone" placeholder="Phone number" />
+								<input type="text" id="phone" class="form-control field_length" max_len="500" name="phone" placeholder="Phone number" />
                             </div>
 							<select class="phone-select form-control inline-block" style="width:100px">
                                 <option></option>
@@ -145,8 +142,10 @@
                 <div class="control-group form-group">
                     <label class="control-label col-sm-3">Website <span><a href="#" class="multiple-add"><i class="icon-plus"></i></a></span></label>
                     <div class="hide controls col-sm-9 pull-right">
-                        <div class="website multiple-template style=" display:none" data="website">
-                            <input type="text" class="form-control pull-left m-r-xs" id="website" name="website" style="width:105px" placeholder="Website" /> 
+                        <div class="website multiple-template" data="website">
+                            <div class="pull-left m-r-xs">
+                                <input type="text" class="form-control field_length" max_len="500" id="website" name="website" placeholder="Website" />
+                            </div> 
                             <select class="website-select form-control inline-block" style="width:100px">
                                 <option></option>
                                 <option value="URL">Website</option>
@@ -165,8 +164,10 @@
                         </div>
                     </div>
                     <div class="controls second col-sm-9">
-                        <div class="website multiple-template" style=" display:none" data="website">
-                            <input type="text" class="form-control pull-left m-r-xs inline-block" id="website" style="width:105px" name="website" placeholder="Website" /> 
+                        <div class="website multiple-template" data="website">
+                            <div class="pull-left m-r-xs">
+                            	<input type="text" class="form-control field_length" max_len="500" id="website" name="website" placeholder="Website" /> 
+                            </div>
                             <select class="website-select form-control pull-left m-r-xs" style="width:100px">
                                 <option></option>
                                 <option value="URL">Website</option>
@@ -192,7 +193,7 @@
                     <div class="controls col-sm-9">
                         <div class="address multiple-template" data="address">
                         	<div style="display:inline-table;">
-                            	<input type="text" class="form-control inline-block" id="address" name="address" placeholder="address" /> 
+                            	<input type="text" class="form-control inline-block field_length" max_len="350" id="address" name="address" placeholder="address" /> 
                          	</div>
                          	
                             <select class="address-type form-control inline-block m-b-sm" name="address-type" style="width:100px">
@@ -202,9 +203,9 @@
                                 <option value="office">Office</option>
                             </select>
                             
-                            <input type="text" name="city" id="city" class="form-control m-b-sm" placeholder="city" /> <br />
-                            <input type="text" name="state" id="state" class="form-control m-b-sm" placeholder="state" /> <br />
-                            <input type="text" name="zip" id="zip" class="form-control m-b-sm" placeholder="zip" /><br /> 
+                            <input type="text" name="city" id="city" class="form-control field_length" max_len="30" placeholder="city" /> <br />
+                            <input type="text" name="state" id="state" class="form-control field_length" max_len="30" placeholder="state" /> <br />
+                            <input type="text" name="zip" id="zip" class="form-control field_length" max_len="12" placeholder="zip" /><br /> 
                             <select class="styled form-control m-b-sm" id="country" name="country">
                                 <option value=""></option>
                                 <option value="AF">Afghanistan</option>
@@ -456,14 +457,22 @@
                         </div>
                     </div>
                 </div>
-                <input type="text" name="id" class="hide form-control" value="{{id}}" />
+                {{#if id}}
+                    <input type="text" name="id" class="hide form-control" value="{{id}}" />
+
                 <input type="text" name="created_time" class="hide form-control" value="{{created_time}}" />
 
-                <input type="text" name="image" id="image" class="hide form-control" value="{{getPropertyValue properties "image"}}" />             
+                <input type="text" name="image" id="image" class="hide form-control" value="{{getPropertyValue properties "image"}}" />  
+                {{/if}}           
                 <div class="row">
 	            <div class="controls col-sm-9 pull-right">
-					<a href="#home" class="btn btn-sm btn-default" id="close">Close</a>
-                    <a href="#" type="submit" class="save btn btn-sm btn-primary" id="update">Update</a>
+                    {{#if id}}
+    					<a href="#home" class="btn btn-sm btn-default" id="close">Close</a>
+                        <a href="#" type="submit" class="save btn btn-sm btn-primary" id="update">Update</a>
+                    {{else}}
+                        <a href="#contacts" class="btn btn-sm btn-default">Close</a>
+                        <a href="#" class="save btn btn-sm btn-primary" id="update">Save </a>
+                    {{/if}}
 					<span class="form-action-error"></span>
                     <span class="save-status"></span>
                 </div>

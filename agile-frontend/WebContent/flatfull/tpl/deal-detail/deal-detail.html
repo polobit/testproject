@@ -93,6 +93,25 @@
 {{/if}}
 
 <div>
+{{#if_equals pipeline.won_milestone milestone}}
+  {{#if won_date}}
+    <div class="m-t-sm">
+      <div>
+         <small class="text-xs text-muted">Won Date</small>
+      </div>
+      <div>{{epochToHumanDateInFormat won_date}}</div>
+    </div>
+  {{else}}
+    {{#if milestone_changed_time}}
+      <div class="m-t-sm">
+        <div>
+          <small class="text-xs text-muted">Won Date</small>
+        </div>
+        <div>{{epochToHumanDateInFormat milestone_changed_time}}</div>
+      </div>
+    {{/if}}
+  {{/if}}
+{{/if_equals}}
 
                            
 
@@ -175,13 +194,17 @@
              <li><a href="#dealnotes" data-toggle="tab" >Notes</a></li>
 			 <li><a href="#dealdocs" data-toggle="tab">Documents</a></li>
              <li><a href="#dealrelated" data-toggle="tab">Related</a></li>
+			 <li><a href="#dealtasks" data-toggle="tab">Tasks</a></li>
+			 <li><a href="#dealevents" data-toggle="tab">Events</a></li> 
            </ul>
 	</div>
  	<div class="tab-content panel" id="deal-tab-content">
  		<div class="tab-pane" id="dealactivities"></div>
  		<div class="tab-pane" id="dealnotes"></div>
  		<div class="tab-pane" id="dealdocs"></div>
- 		<div class="tab-pane" id="dealrelated"></div>     
+ 		<div class="tab-pane" id="dealrelated"></div>
+		<div class="tab-pane" id="dealtasks"></div>
+		<div class="tab-pane" id="dealevents"></div>     
  	</div>
 </div>
 </div>

@@ -1,6 +1,7 @@
 var notesView;
 var contactRelatedView;
 var taskActivitiesView;
+var dealRelatedView;
 var task_details_tab = {
 				load_timeline : function()
 				{
@@ -60,4 +61,16 @@ var task_details_tab = {
 								taskActivitiesView.collection.fetch();
 								$('#task_tab_detail').find('#activity').html(taskActivitiesView.el);
 
-				} };
+				},
+
+				loadTaskRelatedDealsView : function()
+				{
+								var id = taskDetailView.id;
+								dealRelatedView = new Base_Collection_View({ url : '/core/api/tasks/' + id + "/deals", templateKey : "task-related-deals", individual_tag_name : 'tr',
+												sortKey : "created_time", descending : true, postRenderCallback : function(el)
+												{
+
+												} });
+								dealRelatedView.collection.fetch();
+								$('#task_tab_detail').find('#deals').html(dealRelatedView.el);
+				}, };

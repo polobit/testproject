@@ -19,6 +19,7 @@ import com.agilecrm.activities.Event.EventType;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.agilecrm.deals.Opportunity;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
@@ -612,5 +613,19 @@ public class EventUtil
 	    // TODO Auto-generated catch block
 	    e.printStackTrace();
 	}
+    }
+    
+    /**
+     * Gets events related to a particular deal
+     * 
+     * @param dealId
+     *            contact id to get the events related to a deal
+     * @return List of events related to a deal
+     * @throws Exception
+     */
+    public static List<Event> getDealEvents(Long dealId) throws Exception
+    {
+	Key<Opportunity> dealKey = new Key<Opportunity>(Opportunity.class, dealId);
+	return dao.listByProperty("related_deals = ", dealKey);
     }
 }

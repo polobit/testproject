@@ -2591,3 +2591,381 @@ select.input-xs{
 .tooltip-inner {
 	max-width: 260px;
 }
+
+.note-editor {
+ border: 1px solid #E0E0E0 !important;
+}
+
+.note-statusbar {
+ border: none !important;
+ border-top: 1px solid #E0E0E0 !important;
+}
+
+.note-editor .note-statusbar .note-resizebar {
+ border-top: none !important;
+}
+
+
+.cd-highlight{
+	position: relative;padding: 30px;border: 1px solid #f6f6f6;
+}
+.cd-zero-clipboard {
+  position: relative;
+}
+
+.pad-all-22 {
+  padding: 22px !important;
+}
+
+
+.prettyprint.linenums {
+  word-wrap: break-word;
+  white-space: pre-wrap;
+  margin-bottom: 12px;
+  background: #fff !important;
+  margin-left: 0px !important;
+  padding-left: 0px !important;
+  -webkit-box-shadow: none !important;
+  -moz-box-shadow: none !important;
+  -o-box-shadow: none !important;
+  box-shadow: none !important;
+  border: 1px solid rgba(235, 235, 235, 0.47) !important;
+  font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial,
+ sans-serif !important;
+  font-size: 12px !important;
+}
+
+
+.mar-no {
+  margin: 0 !important;
+}
+
+.online-cal-tabs-border{
+	border: 1px solid #dee5e7;
+  border-top: 0px;
+}
+.ical-apple-logo{
+	vertical-align: middle;
+}
+.ical-copy-text{
+margin-bottom: 17px;
+}
+.ical-url-box{
+	position: relative; padding: 5px;
+}
+.ical-feed-url{
+	margin-left: 50px;
+}
+.ical-send-ical-link{
+	text-align: center;
+    margin-left: 134px;
+}
+
+
+.contacts-grid-view-temp:hover div.grid-view-actions {
+  display: block;
+}
+
+div.grid-view-actions {
+  display: none;
+}
+
+.grid-edit-color{
+color:rgb(118, 114, 114) !important
+}
+.grid-delete-color{
+
+color:rgb(240, 92, 92)
+}
+
+.grid-tag-color{
+background-color: #e4eaec !important;color:rgb(113, 85, 87);
+}
+
+.grid-view-elipsis{
+	max-width: 50%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: inline-block;
+}
+
+.grid-view-elipsis-job{
+	max-width: 50%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  
+  display: inline-block;
+}
+
+.grid-view-action-button{
+	position: absolute;
+  right: 22px;
+}
+.show_shortcuts li ul li:hover .shortcuts.enable{
+	display: block!important;
+}
+
+.contactView ul.dropdown-menu li:hover .shortcuts {
+	display: block!important;
+}
+
+.shortcuts{
+	color : #D2C9C9;
+	font-size: 12px;
+	display:none;
+}
+
+#contacts-view-options .tooltip-inner {
+  white-space:nowrap;
+  max-width:none;
+}
+.c-cm
+{
+	cursor:context-menu;
+}
+
+.p-8-16
+{
+ padding: 8px 16px;	
+}
+
+.p-t-4{
+	 padding-top: 4px;
+}
+
+.p-t-8{
+	 padding-top: 8px;
+}
+
+.font-weight-600 {
+  font-weight: 600;
+}
+
+.text-white
+{
+	color:#fff;
+}
+
+.text-11{
+	font-size:11px;
+}
+
+.cam-call-icon{
+	position: relative;
+	font-size:10px;
+
+    top: -1px;
+}
+
+.cam-dialpad-icon{
+	
+    height: 22px;
+    width : 22px;
+    padding-top: 3px;
+    font-size: 10px;
+}
+
+.w-40
+{
+	 width: 40px;
+}
+
+.r-50p{
+	border-radius: 50% ;
+}
+
+.call-campaign-body{
+	height:50px;
+	background-color:#ECECEC;
+	border-bottom: 1px solid #DDD;
+
+}
+
+
+.w-h-20
+{
+width: 20px;
+height: 20px;
+}
+
+.w-h-22
+{
+width: 22px;
+height: 22px;
+}
+
+.border-rgb-228
+{
+	border: 1px solid rgb(228, 228, 228)
+}
+
+.call-campaign-running .app-content-full{
+top: 101px;
+}
+
+.call-campaign-running.app-aside-dock .dock-view-fixing {
+top: 165px!important;
+}
+
+
+
+.height-min-50
+{
+	min-height: 50px;
+}
+
+.width-min-100p
+{
+	min-width: 100%;
+}
+
+
+.height-min-100p
+{
+	min-height: 100%;
+}
+
+
+.z-lg{
+	;z-index: 100;
+}
+
+.campaign_dialpad_btns,.dialpad_btns{
+	border: 1px solid #eee;
+	display: none;
+}
+
+.campaign_dialpad_row{
+	display: table-row;
+	vertical-align: inherit;
+	border-color: inherit; 
+	}
+
+.campaign_dialpad_bg{
+	border-collapse: collapse;
+	border-spacing: 0;
+	display: table;
+	background-color: #fff;
+}
+
+.campaign_dialpad_cell{
+	display: table-cell;
+	vertical-align: inherit;
+}
+
+#campaign_dialpad_btns input[type="button"],.dialpad_btns input[type="button"]{
+    background-color: #fff;
+    border: none;
+    border-bottom: 1px solid #eee!important;
+    border-right: 1px solid #eee!important;
+    padding: 7px 12px;
+	width: 31px!important;
+}
+
+#campaign_dialpad_btns input[type="button"]:hover,.dialpad_btns input[type="button"]:hover{
+        background-color: #EFEFEF;
+        color: #888;
+}
+
+a.noty_twilio_previous,a.noty_twilio_previous:visited,a.noty_twilio_previous:hover, a.noty_twilio_next,a.noty_twilio_next:visited,a.noty_twilio_next:hover{
+	color:#23b7e5;
+	text-decoration: none;
+}
+
+.m-t-22 {
+ margin-top:22px;
+}
+
+.m-0{
+margin:0 auto;
+}
+
+.w-915{
+width: 915px;	
+}
+
+.pos-t-23{
+	top: 23px;
+}
+
+.camp-pre-pos{
+ margin-left: 40px;
+ width: 10px;
+}
+
+.w-12{
+	    width: 12px;
+}
+
+.cam-small-btn{
+	font-size: 9px;
+    width:18px;
+    height :18px;
+}
+
+#campaign_pauseCall i{
+	padding-left: 4px;
+}
+    
+
+#campaign_resumeCall i{
+	color : green !important;
+}
+
+#stop i{
+	color : red !important;
+}
+
+
+.noty_twilio_skip i{
+	color: rgb(240, 120, 120) !important;
+	vertical-align:bottom;
+	width: 18px;
+    height: 18px;
+    font-size: 10px;
+}
+
+.m-r-8{
+	    margin-right: 8px;
+}
+
+
+@-moz-document url-prefix() {
+  .contact-grid-ellipsis {
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+.contact-grid-ellipsis span {
+ display:inline-block;
+}
+
+}
+
+#deals-reports .highcharts-tooltip span , #lossreasonpie-chart-users .highcharts-tooltip span , #calls-chart-user .highcharts-tooltip span , #call-report .highcharts-tooltip span
+{
+	 background-color: #313030;
+     opacity: 1;
+     z-index: 9999!important;
+     padding: 8px;
+     border-radius: 5px
+ }
+ #deals-reports svg .highcharts-tooltip, #lossreasonpie-chart-users svg .highcharts-tooltip,#calls-chart-user svg .highcharts-tooltip , #call-report svg .highcharts-tooltip {
+ 	visibility: hidden!important;
+ }
+
+/* #deals-reports .highcharts-data-labels
+ {
+ 	text-transform: capitalize;
+ }*/
+
+ #deals-chart .highcharts-legend{
+ 	text-transform: capitalize;
+ }
+ #lossreasonpie-chart-users .highcharts-data-labels div span div.text-center span:first-child {
+ display:block;
+ word-wrap:break- all;
+ white-space:normal!important;
+ } 

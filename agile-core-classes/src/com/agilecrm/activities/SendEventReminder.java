@@ -10,10 +10,12 @@ import com.google.appengine.api.taskqueue.TaskOptions;
 public class SendEventReminder
 {
 
-	public static void sendEventReminders(String domain, Long starttime, boolean nosamplevent) throws IOException
+	public static void sendEventReminders(String domain, Long starttime, boolean nosamplevent) throws Exception
 	{
 
 		// Get Namespaces / domains
+		
+		System.out.println("executed sendEventReminder "+domain+" starttime  "+starttime+" sample event  "+nosamplevent);
 
 		SendEventReminderDeferredTask sendEventReminder = new SendEventReminderDeferredTask(domain, starttime,
 				nosamplevent);

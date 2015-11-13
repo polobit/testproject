@@ -1,11 +1,7 @@
 package com.agilecrm.core.api;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
@@ -25,16 +21,12 @@ import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.agilecrm.account.EmailGateway;
-
 import com.agilecrm.account.EmailGateway.EMAIL_API;
-import com.agilecrm.account.VerifiedEmails.Verified;
-
 import com.agilecrm.account.VerifiedEmails;
-
+import com.agilecrm.account.VerifiedEmails.Verified;
 import com.agilecrm.account.util.EmailGatewayUtil;
 import com.agilecrm.account.util.VerifiedEmailsUtil;
 import com.agilecrm.activities.util.ActivitySave;
@@ -49,8 +41,6 @@ import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.EmailPrefs;
 import com.agilecrm.util.EmailUtil;
 import com.agilecrm.util.HTTPUtil;
-import com.agilecrm.util.VersioningUtil;
-import com.agilecrm.util.email.SendMail;
 import com.campaignio.tasklets.agile.util.AgileTaskletUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.blobstore.BlobKey;
@@ -107,7 +97,8 @@ public class EmailsAPI
 	    @FormParam("from_email") String fromEmail, @FormParam("to") String to, @FormParam("email_cc") String cc,
 	    @FormParam("email_bcc") String bcc, @FormParam("subject") String subject, @FormParam("body") String body,
 	    @FormParam("signature") String signature, @FormParam("track_clicks") boolean trackClicks,
-	    @FormParam("document_key") String document_id, @FormParam("blob_key") String blobKeyString)
+	    @FormParam("document_key") String document_id, @FormParam("blob_key") String blobKeyString, 
+	    @FormParam("attachment_name") String attachment_name, @FormParam("attachment_url") String attachment_url)
 	    throws Exception
     {
 	try
@@ -137,7 +128,7 @@ public class EmailsAPI
 	    {
 		// Saves Contact Email.
 		ContactEmailUtil.saveContactEmailAndSend(fromEmail, fromName, to, cc, bcc, subject, body, signature,
-			null, trackClicks, documentIds, blobKeys);
+			null, trackClicks, documentIds, blobKeys, attachment_name, attachment_url);
 
 		// Returns set of To Emails
 		Set<String> toEmailSet = ContactEmailUtil.getToEmailSet(to);
@@ -271,8 +262,8 @@ public class EmailsAPI
     {
 	EmailGateway emailGateway = EmailGatewayUtil.getEmailGateway();
 	
-	// If SendGrid, return 
-	if(emailGateway != null && emailGateway.email_api.equals(EMAIL_API.SEND_GRID))
+	// If not Mandrill, return 
+	if(emailGateway != null && !(emailGateway.email_api.equals(EMAIL_API.MANDRILL)))
 		return new JSONObject().put("_agile_email_gateway", emailGateway.email_api.toString()).toString();
 
 	String apiKey = null;
@@ -420,7 +411,7 @@ public class EmailsAPI
     @Path("agile-emails")
     @GET
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public List<ContactEmailWrapper> getAgileEmails(@QueryParam("e") String searchEmail)
+    public List<ContactEmailWrapper> getAgileEmails(@QueryParam("search_email") String searchEmail,@QueryParam("count") String countString)
     {
 	List<ContactEmailWrapper> emailsList = null;
 	try
@@ -431,29 +422,48 @@ public class EmailsAPI
 	    searchEmail = StringUtils.split(normalisedEmail, ",")[0];
 
 	    Contact contact = ContactUtil.searchContactByEmail(searchEmail);
-
-	    // Fetches contact emails
-	    List<ContactEmail> contactEmails = ContactEmailUtil.getContactEmails(contact.id);
-
-	    JSONArray agileEmails = new JSONArray();
-
-	    // Merge Contact Emails with obtained imap emails
-	    for (ContactEmail contactEmail : contactEmails)
+	    
+	    List<ContactEmail> contactEmails = null;
+	    
+	    if(StringUtils.isNotBlank(countString))
 	    {
-		// parse email body
-		contactEmail.message = EmailUtil.parseEmailData(contactEmail.message);
-
-		ObjectMapper mapper = new ObjectMapper();
-		String emailString = mapper.writeValueAsString(contactEmail);
-		agileEmails.put(new JSONObject(emailString));
+	    	try
+	    	{
+	    		Integer count = Integer.parseInt(countString);
+	    		// Fetches latest contact emails
+	    		contactEmails = ContactEmailUtil.getContactEmails(contact.id,count);
+	    	}
+	    	catch(NumberFormatException e)
+	    	{
+	    		e.printStackTrace();
+	    		contactEmails = ContactEmailUtil.getContactEmails(contact.id,20);
+	    	}
 	    }
-
-	    emailsList = new ObjectMapper().readValue(agileEmails.toString(),
-		    new TypeReference<List<ContactEmailWrapper>>()
+	    else
+	    {
+	    	contactEmails = ContactEmailUtil.getContactEmails(contact.id);
+	    }
+	    
+        if(contactEmails!= null)
+        {
+		    JSONArray agileEmails = new JSONArray();
+		    // Merge Contact Emails with obtained imap emails
+		    for (ContactEmail contactEmail : contactEmails)
 		    {
-		    });
+			// parse email body
+			contactEmail.message = EmailUtil.parseEmailData(contactEmail.message);
+	
+			ObjectMapper mapper = new ObjectMapper();
+			String emailString = mapper.writeValueAsString(contactEmail);
+			agileEmails.put(new JSONObject(emailString));
+		    }
+	
+		    emailsList = new ObjectMapper().readValue(agileEmails.toString(),
+			    new TypeReference<List<ContactEmailWrapper>>()
+			    {
+			    });
+        }
 	    return emailsList;
-
 	}
 	catch (Exception e)
 	{

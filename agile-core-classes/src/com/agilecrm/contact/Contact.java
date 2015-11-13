@@ -467,6 +467,9 @@ public class Contact extends Cursor
 	// if (type == Type.PERSON)
 	updateTagsEntity(oldContact, this);
 
+	// Verifies EmailBounceStatus
+	checkBounceStatus(oldContact, this);
+
 	// Verifies CampaignStatus
 	checkCampaignStatus(oldContact, this);
 
@@ -1302,6 +1305,42 @@ public class Contact extends Cursor
 	{
 	    e.printStackTrace();
 	    System.err.println("Exception occured in updateTagsEntity..." + e.getMessage());
+	}
+    }
+
+    /**
+     * Verifies BounceStatus in both old and new contact objects. To update
+     * bounce statuses if not exists in updated contact
+     * 
+     * @param oldContact
+     *            - oldContact from datastore
+     * @param updatedContact
+     *            - updated contact object ready to save
+     */
+    private void checkBounceStatus(Contact oldContact, Contact updatedContact)
+    {
+	try
+	{
+
+	    // For New contact
+	    if (oldContact == null || oldContact.emailBounceStatus == null)
+		return;
+
+	    // If no change return
+	    if (updatedContact.emailBounceStatus != null
+		    && oldContact.emailBounceStatus.size() == updatedContact.emailBounceStatus.size())
+		return;
+
+	    // Updated Bounce Status in new contact
+	    if (updatedContact.emailBounceStatus == null || updatedContact.emailBounceStatus.size() == 0
+		    || updatedContact.emailBounceStatus.size() < oldContact.emailBounceStatus.size())
+		updatedContact.emailBounceStatus = oldContact.emailBounceStatus;
+
+	}
+	catch (Exception e)
+	{
+	    System.err.println("Exception occured while checking Bounce Status in Contact..." + e.getMessage());
+	    e.printStackTrace();
 	}
     }
 

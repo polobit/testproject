@@ -70,62 +70,63 @@ function bulkActivitiesNoty(type, message, position) {
  *             position of noty like bottomRight, top etc.
  */
 function showNotyPopUp(type, message, position, timeout, clickCallback) {
-	
-	// for top position
-	if(position == "top")
-		head.js(LIB_PATH + 'lib/noty/jquery.noty.js', LIB_PATH
-		+ 'lib/noty/layouts/top.js', LIB_PATH
-		+ 'lib/noty/themes/default.js', function(){
-			notySetup(type, message, position, timeout, clickCallback)
-		});
-	
-	//for topCenter position
-	if(position == "topCenter")
-		head.js(LIB_PATH + 'lib/noty/jquery.noty.js', LIB_PATH
-				+ 'lib/noty/layouts/topCenter.js', LIB_PATH
-				+ 'lib/noty/themes/default.js', function(){
-			          notySetup(type,message,position,timeout,clickCallback)
-		});
-	
-	// for bottomRight position
-	if(position == "bottomRight")
-		head.js(LIB_PATH + 'lib/noty/jquery.noty.js',  LIB_PATH
-				+ 'lib/noty/layouts/bottom.js', LIB_PATH
-				+ 'lib/noty/layouts/bottomRight.js', LIB_PATH
-				+ 'lib/noty/themes/default.js', function(){
-					notySetup(type, message, position, timeout, clickCallback)
-				});
-	
-	// for bottomLeft position
-	if(position == "bottomLeft")
-		head.js(LIB_PATH + 'lib/noty/jquery.noty.js', LIB_PATH
-				+ 'lib/noty/layouts/bottomLeft.js', LIB_PATH
-				+ 'lib/noty/themes/default.js', function(){
+	if(type != 'null' && message !=  'null'){
+		// for top position
+		if(position == "top")
+			head.js(LIB_PATH + 'lib/noty/jquery.noty.js', LIB_PATH
+			+ 'lib/noty/layouts/top.js', LIB_PATH
+			+ 'lib/noty/themes/default.js', function(){
+				notySetup(type, message, position, timeout, clickCallback)
+			});
+		
+		//for topCenter position
+		if(position == "topCenter")
+			head.js(LIB_PATH + 'lib/noty/jquery.noty.js', LIB_PATH
+					+ 'lib/noty/layouts/topCenter.js', LIB_PATH
+					+ 'lib/noty/themes/default.js', function(){
+				          notySetup(type,message,position,timeout,clickCallback)
+			});
+		
+		// for bottomRight position
+		if(position == "bottomRight")
+			head.js(LIB_PATH + 'lib/noty/jquery.noty.js',  LIB_PATH
+					+ 'lib/noty/layouts/bottom.js', LIB_PATH
+					+ 'lib/noty/layouts/bottomRight.js', LIB_PATH
+					+ 'lib/noty/themes/default.js', function(){
 						notySetup(type, message, position, timeout, clickCallback)
-				});	
-	
-	//for bottomCenter position
-	if(position == "bottomCenter")
-		head.js(LIB_PATH + 'lib/noty/jquery.noty.js', LIB_PATH
-				+ 'lib/noty/layouts/bottomCenter.js', LIB_PATH
-				+ 'lib/noty/themes/default.js', function(){
-			          notySetup(type,message,position,timeout,clickCallback)
-		});
+					});
+		
+		// for bottomLeft position
+		if(position == "bottomLeft")
+			head.js(LIB_PATH + 'lib/noty/jquery.noty.js', LIB_PATH
+					+ 'lib/noty/layouts/bottomLeft.js', LIB_PATH
+					+ 'lib/noty/themes/default.js', function(){
+							notySetup(type, message, position, timeout, clickCallback)
+					});	
+		
+		//for bottomCenter position
+		if(position == "bottomCenter")
+			head.js(LIB_PATH + 'lib/noty/jquery.noty.js', LIB_PATH
+					+ 'lib/noty/layouts/bottomCenter.js', LIB_PATH
+					+ 'lib/noty/themes/default.js', function(){
+				          notySetup(type,message,position,timeout,clickCallback)
+			});
 
-	//for topCenter position
-	if(position == "topCenter")
-		head.js(LIB_PATH + 'lib/noty/jquery.noty.js', LIB_PATH
-				+ 'lib/noty/layouts/topCenter.js', LIB_PATH
-				+ 'lib/noty/themes/default.js', function(){
-			          notySetup(type,message,position,timeout,clickCallback)
-		});
-	
-	// for bottomLeft position
-	if(position == "bottom")
-		head.js(LIB_PATH + 'lib/noty/jquery.noty.js', LIB_PATH + 'lib/noty/layouts/bottom.js', LIB_PATH
-				+ 'lib/noty/themes/default.js', function(){
-						notySetup(type, message, position, timeout, clickCallback)
-				});	
+		//for topCenter position
+		if(position == "topCenter")
+			head.js(LIB_PATH + 'lib/noty/jquery.noty.js', LIB_PATH
+					+ 'lib/noty/layouts/topCenter.js', LIB_PATH
+					+ 'lib/noty/themes/default.js', function(){
+				          notySetup(type,message,position,timeout,clickCallback)
+			});
+		
+		// for bottomLeft position
+		if(position == "bottom")
+			head.js(LIB_PATH + 'lib/noty/jquery.noty.js', LIB_PATH + 'lib/noty/layouts/bottom.js', LIB_PATH
+					+ 'lib/noty/themes/default.js', function(){
+							notySetup(type, message, position, timeout, clickCallback)
+					});	
+	}
 }
 
 /**

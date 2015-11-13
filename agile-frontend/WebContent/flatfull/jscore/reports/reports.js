@@ -1,66 +1,33 @@
-// Stores report object, so it can be used while creating report table headings
+//Stores report object, so it can be used while creating report table headings
 var REPORT;
+/**
+ * Initializes listener to perform various event function related to contact
+ * reports
+ */
 function initializeReportsListeners(){
-	$('#reports-listerners-container').on('click', '#reports-email-now', function(e)
+
+
+	$('#reports-listerners-container')
+			.on(
+					'click',
+					'#reports-email-now',
+					function(e)
 					{
 						// e.preventDefault();
 						e.stopPropagation();
 
 						var id = $(this).attr('data');
-
-						var confirmationModal = $('<div id="report-send-confirmation" class="modal fade in">' + '<div class="modal-dialog">' + '<div class="modal-content">' + '<div class="modal-header" >' + '<a href="#" data-dismiss="modal" class="close">&times;</a>' + '<h3>Send Report</h3></div>' + '<div class="modal-body">' + '<p>You are about to send report.</p>' + '<p>Do you want to proceed?</p>' + '</div>' + '<div class="modal-footer">' + '<div><span class="report-message" style="margin-right:5px"></span></div>' + '<div>' + '<a href="#" id="report-send-confirm" class="btn btn-primary">Yes</a>' + '<a  href="#" class="btn btn-default" data-dismiss="modal" >No</a>' + '</div>' + '</div>' + '</div>' + '</div>' + '</div>' + '</div>');
-
-						confirmationModal.modal('show');
-
-						$("#report-send-confirm", confirmationModal)
-								.click(
-										function(event)
-										{
-											event.preventDefault();
-
-											if ($(this).attr("disabled"))
-												return;
-
-											$(this).attr("disabled", "disabled");
-
-											$
-													.get(
-															'core/api/reports/send/' + id,
-															function(data)
-															{
-
-																console.log("sending email");
-																$save_info = $('<div style="display:inline-block"><small><p class="text-success"><i>Report will be sent shortly</i></p></small></div>');
-
-																$('.report-message').html($save_info);
-
-																$save_info.show();
-
-																setTimeout(function()
-																{
-																	(confirmationModal).modal('hide');
-																}, 2000);
-
-															})
-													.fail(
-															function(response)
-															{
-																$save_info = $('<div style="display:inline-block"><small><p style="color:#B94A48; font-size:14px"><i>' + response.responseText + '</i></p></small></div>');
-
-																$('.report-message').html($save_info);
-
-																$save_info.show();
-
-																setTimeout(function()
-																{
-																	(confirmationModal).modal('hide');
-																}, 2000);
-
-															});
-										});
+						var url='core/api/reports/send/' + id;
+						$("#report-send-confirmation").find('input').attr("data",url);
+						$('#report-send-confirmation').modal('show');
+						initializeReportSendConfirm();
+						
 					});
 
-	$('#reports-listerners-container').on('click', '#campaign_id', function(e)
+	$('#reports-listerners-container').on(
+			'click',
+			'#campaign_id',
+			function(e)
 			{
 				e.preventDefault();
 				e.stopPropagation();
@@ -84,40 +51,18 @@ function initializeReportsListeners(){
 					} });
 
 			});
+
 	$('#reports-listerners-container').on('click', '#report-instant-results', function(e) 
-	{
+			{
 		e.stopPropagation();
-		var id = $(this).attr('data');
-		console.log(id);
-		/*
-		 * Backbone.history.navigate("report-results/" + id, { trigger: true });
-		 */
+		
 	});
 
-	$('#reports-listerners-container').on('change', '#frequency', function(e) 
-	{
-		var frequency = $("#frequency").val();
-		if (frequency == "DAILY")
-		{
-			$("#activity_report_weekday").css("display", "none");
-			$("#activity_report_day").css("display", "none");
-			$("#activity_report_time").css("display", "block");
+	$('#reports-listerners-container').on('change', '#frequency, #duration', function(e) 
+			{
 
-		}
-		else if (frequency == "WEEKLY")
-		{
-			$("#activity_report_day").css("display", "none");
-			$("#activity_report_time").css("display", "block");
-			$("#activity_report_weekday").css("display", "block");
-
-		}
-		else if (frequency == "MONTHLY")
-		{
-			$("#activity_report_weekday").css("display", "none");
-			$("#activity_report_time").css("display", "block");
-			$("#activity_report_day").css("display", "block");
-
-		}
+		var container = $(this).attr("id") == "duration" ? "contact" : "activity";
+		updateWeekDayReportVisibility($(this).val(), container);
 	});
 
 	/*
@@ -126,71 +71,26 @@ function initializeReportsListeners(){
 	$('#reports-listerners-container').on('click', '#report-dashlat-navigate', function(e)
 	{
 		e.preventDefault();
+
 		Backbone.history.navigate("add-dashlet", { trigger : true });
 
 	});
 
-	$('#reports-listerners-container').on('click', '#activity_advanced', function(e) 
+	$('#reports-listerners-container').on('click', '#activity_advanced', function(e)
 	{
 		e.preventDefault();
+		var el = $("#activity_advanced span i");
+		el.toggleClass("fa-minus").toggleClass("fa-plus");
 
-	});
+		});
 
-	$('#reports-listerners-container').on('shown', '#activity-advanced-block', function(e) 
-	{
-		$('#activity_advanced').html('<span><i class="icon-minus"></i></span> Advanced');
-
-	});
-
-    $('#reports-listerners-container').on('hidden', '#activity-advanced-block', function(e) 
-	{
-		$('#activity_advanced').html('<span><i class="icon-plus"></i></span> Advanced');
-	});
 
 	$('#reports-listerners-container').on('click', '#report_advanced', function(e) 
-	{
-		e.preventDefault();
-		$("#report_advanced span i").toggleClass("fa-minus");
-		$("#report_advanced span i").toggleClass("fa-plus");
-
-	});
-            
-	$('#reports-listerners-container').on('shown', '#report-advanced-block', function(e)
-	{
-		$('#report_advanced').html('<span><i class="icon-minus"></i></span> Advanced');
-
-	});
-			
-	$('#reports-listerners-container').on('hidden', '#report-advanced-block', function(e)
-	{
-		$('#report_advanced').html('<span><i class="icon-plus"></i></span> Advanced');
-	});
-	
-	$('#reports-listerners-container').on('change', '#duration', function(e)
 			{
-				var frequency = $("#duration").val();
-				if (frequency == "DAILY")
-				{
-					$("#contact_report_weekday").css("display", "none");
-					$("#contact_report_day").css("display", "none");
-					$("#contact_report_time").css("display", "block");
-
-				}
-				else if (frequency == "WEEKLY")
-				{
-					$("#contact_report_day").css("display", "none");
-					$("#contact_report_time").css("display", "block");
-					$("#contact_report_weekday").css("display", "block");
-
-				}
-				else if (frequency == "MONTHLY")
-				{
-					$("#contact_report_weekday").css("display", "none");
-					$("#contact_report_time").css("display", "block");
-					$("#contact_report_day").css("display", "block");
-
-				}
-	});
+		e.preventDefault();
+		var el = $("#report_advanced span i");
+		el.toggleClass("fa-minus").toggleClass("fa-plus");
+			});
 }
 
 function reportsContactTableView(base_model, customDatefields, view)
@@ -265,6 +165,7 @@ function reportsContactTableView(base_model, customDatefields, view)
 	 }, null);
 
 }
+
 
 function deserialize_multiselect(data, el)
 {
@@ -373,9 +274,49 @@ function getNextMonthEppoch(time, day, month)
 	{
 		month_in_year = month_in_year + 2;
 	}
+
 	date.setMonth(month_in_year);
 	date.setDate(day);
 	date.setHours(hour);
 	date.setMinutes(min);
 	return (date.getTime()) / 1000;
 }
+
+
+function updateWeekDayReportVisibility(report_value, container_id){
+
+		var day_visibility = "none", weekday_visibility = "none", time_visibility = "none";
+		if (report_value == "DAILY")
+		{
+			time_visibility = "block";
+		}
+		else if (report_value == "WEEKLY")
+		{
+			weekday_visibility = "block";
+			time_visibility = "block";
+		}
+		else if (report_value == "MONTHLY")
+		{
+			time_visibility = "block";
+			day_visibility = "block";
+		}
+
+		$("#" + container_id + "_report_weekday").css("display",weekday_visibility );
+		$("#" + container_id + "_report_day").css("display", day_visibility);
+		$("#" + container_id + "_report_time").css("display", time_visibility);
+
+}
+/**This is being invoked from call category -call logs under reports:where it should redirect to activities with calls as a entity type*/
+$(function()
+		{
+	
+	$("body").on("click","a#call-activity-link", function(e){
+	var entitytype = "Calls";
+	var entity_attribute = "CALL";
+	buildActivityFilters(entitytype,entity_attribute,"entityDropDown");
+	//ActivitylogRouter.activities("id");
+	App_Activity_log.navigate("activities", { trigger : true });
+	
+});
+	
+		});

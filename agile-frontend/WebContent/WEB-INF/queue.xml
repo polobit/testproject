@@ -261,6 +261,21 @@
 	</retry-parameters>
   </queue>
   
+  <queue>
+    <name>tickets-queue</name>
+    <rate>10/s</rate>
+    <bucket-size>10</bucket-size>
+    <max-concurrent-requests>40</max-concurrent-requests>
+  </queue>
+
+  <queue>
+    <name>update-workflows-queue</name>
+    <rate>20/s</rate>
+    <max-concurrent-requests>20</max-concurrent-requests>
+    <retry-parameters>
+		<task-retry-limit>2</task-retry-limit>
+	</retry-parameters>
+  </queue>
   
   <!-- pull queues -->
   <queue>
@@ -370,6 +385,17 @@
   	<retry-parameters>
   		<task-retry-limit>2</task-retry-limit>
   	</retry-parameters>
+  </queue>
+
+    <queue>
+    <name>contact-import-queue</name>
+    <mode>pull</mode>
+       <acl> 
+      <user-email>yaswanth@agilecrm.com</user-email>
+    </acl>
+    <retry-parameters>
+      <task-retry-limit>2</task-retry-limit>
+    </retry-parameters>
   </queue>
   
   <!-- Notification Pull Queue -->

@@ -1,5 +1,6 @@
 package com.thirdparty.mandrill;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -37,6 +38,14 @@ import com.thirdparty.mandrill.subaccounts.MandrillSubAccounts;
  */
 public class Mandrill
 {
+	
+	private static final List<String> agileMandrillKeys = new ArrayList<String>();
+	
+	static
+	{
+		agileMandrillKeys.add(Globals.MANDRIL_API_KEY_VALUE);
+		agileMandrillKeys.add(Globals.MANDRILL_API_KEY_VALUE_2);
+	}
 
     /**
      * Mandrill core REST API URL
@@ -212,24 +221,12 @@ public class Mandrill
 	    // Considering AgileCRM domain name as mandrill subaccount.
 	    String subaccount = NamespaceManager.get();
 
-	    /*
-	     * try { AccountEmailStatsUtil.checkLimits(); } catch
-	     * (PlanRestrictedException e) { return e.getMessage(); }
-	     */
-
 	    // Complete mail json to be sent
-	    JSONObject mailJSON = setMandrillAPIKey(apiKey, subaccount);
+	    JSONObject mailJSON = setMandrillAPIKey(apiKey, subaccount, null);
 
 	    // Set mandrill async
 	    if (async)
 		mailJSON.put(MANDRILL_ASYNC, true);
-
-	    // By Default Main pool
-	    mailJSON.put(MANDRILL_IP_POOL, MANDRILL_MAIN_POOL);
-
-	    // For paid plans, Paid Pool
-	    if (isPaid())
-		mailJSON.put(MANDRILL_IP_POOL, Globals.MANDRILL_PAID_POOL);
 
 	    // All email params are inserted into Message json
 	    JSONObject messageJSON = getMessageJSON(subaccount, fromEmail, fromName, to, cc, bcc, replyTo, subject,
@@ -276,7 +273,7 @@ public class Mandrill
 		catch (RetryException e)
 		{
 		    // Creates new subaccount
-		    MandrillSubAccounts.createMandrillSubAccount(subaccount, apiKey);
+		    MandrillSubAccounts.createMandrillSubAccount(subaccount, mailJSON.getString(MANDRILL_API_KEY));
 
 		    System.out.println("Resending email with subaccount " + subaccount + "...");
 
@@ -544,26 +541,37 @@ public class Mandrill
      *            - current namespace
      * @return mailJSON
      */
-    public static JSONObject setMandrillAPIKey(String apiKey, String subaccount)
+    public static JSONObject setMandrillAPIKey(String apiKey, String subaccount, Boolean isPaid)
     {
 	JSONObject mailJSON = new JSONObject();
 
-	// If apiKey is null, set Agile Mandrill
-	if (StringUtils.isBlank(apiKey))
-	    apiKey = Globals.MANDRIL_API_KEY_VALUE;
-
 	try
 	{
-	    // Use Mandrill test api key for naresh1 domain having username
+		
+		// Use Mandrill test api key for naresh1 domain having username
 	    // nrsh.mkl@gmail.com
 	    if (StringUtils.equals(subaccount, "naresh1"))
-	    {
-		mailJSON.put(MANDRILL_API_KEY, Globals.MANDRILL_TEST_API_KEY_VALUE);
-	    }
-	    else
-	    {
+	    	return mailJSON.put(MANDRILL_API_KEY, Globals.MANDRILL_TEST_API_KEY_VALUE);
+	    
+		// If API Key is given - Gateway exists
+		if(StringUtils.isNotBlank(apiKey))
+		{
+			// Just add api key. No need of adding pool for other Mandrill accounts
+			if(!agileMandrillKeys.contains(apiKey))
+				return mailJSON.put(MANDRILL_API_KEY, apiKey);
+		}
+		
+		// Add pool for paid users
+		if(isPaid == null)
+			isPaid = isPaid();
+		
+		// Old key and paid pool for Agile's Paid users
+		apiKey = isPaid ? Globals.MANDRIL_API_KEY_VALUE : Globals.MANDRILL_API_KEY_VALUE_2;
+		String ipPool = isPaid ? Globals.MANDRILL_PAID_POOL :  MANDRILL_MAIN_POOL;
+		
 		mailJSON.put(MANDRILL_API_KEY, apiKey);
-	    }
+	    mailJSON.put(MANDRILL_IP_POOL, ipPool);
+
 	}
 	catch (Exception e)
 	{
@@ -575,7 +583,7 @@ public class Mandrill
     }
 
     /**
-     * Returns false if Emails Plan is Free
+     * Returns false if Plan is Free
      * 
      * @return boolean
      */
@@ -585,8 +593,10 @@ public class Mandrill
 	{
 	    BillingRestriction billingRestriction = BillingRestrictionUtil.getBillingRestriction(true);
 
-	    if (billingRestriction != null)
-		return billingRestriction.isEmailWhiteLabelEnabled();
+	    return !billingRestriction.planDetails.isFreePlan();
+	    
+//	    if (billingRestriction != null)
+//	    	return billingRestriction.isEmailPlanPaid();
 	}
 	catch (Exception e)
 	{

@@ -6,7 +6,7 @@ package com.agilecrm.contact.sync;
 
 import java.io.Serializable;
 
-import com.agilecrm.contact.sync.service.SyncService;
+import com.agilecrm.contact.sync.service.IContactSyncService;
 import com.agilecrm.contact.sync.service.impl.FreshbooksSyncImpl;
 import com.agilecrm.contact.sync.service.impl.GoogleSyncImpl;
 import com.agilecrm.contact.sync.service.impl.SalesforceSync;
@@ -33,10 +33,10 @@ public enum Type implements Serializable
 	    "QuickBooks Import Status"), XERO(XeroSyncImpl.class, "Xero Import Status"), FRESHBOOKS(
 	    FreshbooksSyncImpl.class, "Freshbooks Import Status");
 
-    Class<? extends SyncService> clazz;
+    Class<? extends IContactSyncService> clazz;
     String notificationEmailSubject = "";
 
-    Type(Class<? extends SyncService> service, String notificationEmailSubject)
+    Type(Class<? extends IContactSyncService> service, String notificationEmailSubject)
     {
 	this.clazz = service;
 	this.notificationEmailSubject = notificationEmailSubject;
@@ -47,7 +47,7 @@ public enum Type implements Serializable
      * 
      * @return the clazz
      */
-    public Class<? extends SyncService> getClazz()
+    public Class<? extends IContactSyncService> getClazz()
     {
 	return clazz;
     }

@@ -1,12 +1,15 @@
 package com.agilecrm.subscription.restrictions.db;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import javax.persistence.Embedded;
 import javax.persistence.Id;
 import javax.persistence.PostLoad;
+import javax.persistence.PrePersist;
 import javax.xml.bind.annotation.XmlElement;
 
 import org.apache.commons.lang.StringUtils;
@@ -84,6 +87,17 @@ public class BillingRestriction
     public Integer widgets_count = 0;
 
     public Integer one_time_emails_count = 0;
+
+    /**
+     * This field is not saved in database, it is used to have a backup emails
+     * count we have got from DB. This field is used to compare before saving
+     * emails count
+     */
+    @NotSaved
+    private Integer one_time_emails_backup = 0;
+
+    @NotSaved
+    public boolean isNewEmailPlanUpgrade = false;
 
     public Integer max_emails_count;
 
@@ -204,6 +218,11 @@ public class BillingRestriction
 	return true;
     }
 
+    public boolean isEmailPlanPaid()
+    {
+	return (one_time_emails_count != null && one_time_emails_count > 0);
+    }
+
     /**
      * Checks if account can be downgraded
      * 
@@ -227,6 +246,35 @@ public class BillingRestriction
 	    return false;
 
 	return true;
+    }
+
+    @JsonIgnore
+    public Map<String, Map<String, Integer>> getRestrictions()
+    {
+	Map<String, Map<String, Integer>> resrtictions = new HashMap<String, Map<String, Integer>>();
+
+	refreshContacts();
+	Map<String, Integer> limits = new HashMap<String, Integer>();
+	limits.put("limit", planDetails.getContactLimit());
+	limits.put("count", contacts_count);
+	resrtictions.put("contacts", limits);
+	limits = new HashMap<String, Integer>();
+	limits.put("limit", planDetails.getWebRuleLimit());
+	limits.put("count", WebRuleUtil.getCount());
+	resrtictions.put("webrules", limits);
+	limits = new HashMap<String, Integer>();
+	limits.put("limit", planDetails.getWorkflowLimit());
+	limits.put("count", WorkflowUtil.get_enable_campaign_count());
+	resrtictions.put("workflows", limits);
+	limits = new HashMap<String, Integer>();
+	limits.put("limit", planDetails.getTriggersLimit());
+	limits.put("count", TriggerUtil.getCount());
+	resrtictions.put("triggers", limits);
+	limits = new HashMap<String, Integer>();
+	limits.put("limit", planDetails.getAllowedUsers());
+	limits.put("count", DomainUserUtil.count());
+	resrtictions.put("users", limits);
+	return resrtictions;
     }
 
     /**
@@ -311,6 +359,35 @@ public class BillingRestriction
 	    save();
     }
 
+    @PrePersist
+    private void prePersist()
+    {
+	if (this.id == null)
+	    return;
+
+	if (isNewEmailPlanUpgrade)
+	{
+	    this.one_time_emails_backup = one_time_emails_count;
+	    return;
+	}
+
+	BillingRestriction restriction = BillingRestriction.dao.ofy().query(BillingRestriction.class).get();
+
+	// Just to avoid null pointer exception
+	if (this.one_time_emails_backup == null)
+	    this.one_time_emails_backup = this.one_time_emails_count;
+
+	// Substracting from existing db count
+	restriction.one_time_emails_count -= (this.one_time_emails_backup - this.one_time_emails_count);
+
+	// Updating one time count from that of DB entity
+	this.one_time_emails_count = restriction.one_time_emails_count;
+
+	// Updating backup count from that of DB entity
+	this.one_time_emails_backup = one_time_emails_count;
+
+    }
+
     public void save()
     {
 	dao.put(this);
@@ -363,5 +440,9 @@ public class BillingRestriction
 	    max_emails_count = one_time_emails_count;
 	    this.save();
 	}
+
+	one_time_emails_backup = one_time_emails_count;
+
+	System.out.println("one time emails in domain : " + NamespaceManager.get() + " : " + one_time_emails_backup);
     }
 }

@@ -104,8 +104,7 @@ $("#updateActivityModal").on(
 
 											App_Portlets.todayEventsCollection[parseInt(App_Portlets.currentPosition)].render(true);
 
-										}
-										
+										}	
 										else if (App_Portlets.currentPortletName && App_Portlets.currentPortletName == 'Mini Calendar')
 									      {
 												var a=new Date(parseInt($('.minical-portlet-event').attr('data-date')));	
@@ -115,6 +114,18 @@ $("#updateActivityModal").on(
 										       App_Portlets.refetchEvents = true;
 										       //eraseCookie('current_date_calendar');
 									      }
+										else if (App_Deal_Details.dealDetailView && Current_Route == "deal/" + App_Deal_Details.dealDetailView.model.get('id'))
+										{
+
+											if (dealEventsView && dealEventsView.collection)
+											{
+												if (dealEventsView.collection.get(event_id))
+												{
+													dealEventsView.collection.remove(event_id);
+													dealEventsView.render(true);
+												}
+											}
+										}
 
 										// $('#updateActivityModal').find('span.save-status
 										// img').remove();
@@ -320,6 +331,7 @@ $("#calendar-listers").on('click', '.agendaDayWeekMonth', function()
 		e.preventDefault();
 
 		$('#activityModal').modal('show');
+		agile_type_ahead("event_relates_to_deals", $('#activityModal'), deals_typeahead, false,null,null,"core/api/search/deals",false, true);
 		highlight_event();
 
 		/*
@@ -573,6 +585,8 @@ $(function()
 		var el = $("#activityForm");
 		agile_type_ahead("event_related_to", el, contacts_typeahead);
 
+		agile_type_ahead("event_relates_to_deals", el, deals_typeahead, false,null,null,"core/api/search/deals",false, true);
+
 		/**
 		 * Fills current time only when there is no time in the fields
 		 */
@@ -587,6 +601,56 @@ $(function()
 		// Update will highlight the date of in date picker
 		$("input.date").datepicker('update');
 
+		/*if($('#activityTaskModal').find('.new-task-related-contacts-input').find('ul').find('li').length>0)
+		{
+			$('#activityTaskModal').find('#new-task-related-contacts-label').parent().addClass('hide');
+			$('#activityTaskModal').find('.new-task-related-contacts-input').removeClass('hide');
+			$('#activityTaskModal').find('.new-task-related-contacts-label').removeClass('hide');
+		}
+		else
+		{
+			$('#activityTaskModal').find('#new-task-related-contacts-label').parent().removeClass('hide');
+			$('#activityTaskModal').find('.new-task-related-contacts-input').addClass('hide');
+			$('#activityTaskModal').find('.new-task-related-contacts-label').addClass('hide');
+		}
+		if($('#activityTaskModal').find('.new-task-related-deals-input').find('ul').find('li').length>0)
+		{
+			$('#activityTaskModal').find('#new-task-related-deals-label').parent().addClass('hide');
+			$('#activityTaskModal').find('.new-task-related-deals-input').removeClass('hide');
+			$('#activityTaskModal').find('.new-task-related-deals-label').removeClass('hide');
+		}
+		else
+		{
+			$('#activityTaskModal').find('#new-task-related-deals-label').parent().removeClass('hide');
+			$('#activityTaskModal').find('.new-task-related-deals-input').addClass('hide');
+			$('#activityTaskModal').find('.new-task-related-deals-label').addClass('hide');
+		}
+
+		if($('#activityModal').find('.new-event-related-contacts-input').find('ul').find('li').length>0)
+		{
+			$('#activityModal').find('#new-event-related-contacts-label').parent().addClass('hide');
+			$('#activityModal').find('.new-event-related-contacts-input').removeClass('hide');
+			$('#activityModal').find('.new-event-related-contacts-label').removeClass('hide');
+		}
+		else
+		{
+			$('#activityModal').find('#new-event-related-contacts-label').parent().removeClass('hide');
+			$('#activityModal').find('.new-event-related-contacts-input').addClass('hide');
+			$('#activityModal').find('.new-event-related-contacts-label').addClass('hide');
+		}
+		if($('#activityModal').find('.new-event-related-deals-input').find('ul').find('li').length>0)
+		{
+			$('#activityModal').find('#new-event-related-deals-label').parent().addClass('hide');
+			$('#activityModal').find('.new-event-related-deals-input').removeClass('hide');
+			$('#activityModal').find('.new-event-related-deals-label').removeClass('hide');
+		}
+		else
+		{
+			$('#activityModal').find('#new-event-related-deals-label').parent().removeClass('hide');
+			$('#activityModal').find('.new-event-related-deals-input').addClass('hide');
+			$('#activityModal').find('.new-event-related-deals-label').addClass('hide');
+		}*/
+
 	});
 
 	/**
@@ -597,6 +661,8 @@ $(function()
 		// Show related to contacts list
 		var el = $("#updateActivityForm");
 		agile_type_ahead("event_related_to", el, contacts_typeahead);
+		
+		agile_type_ahead("event_relates_to_deals", el, deals_typeahead, false,null,null,"core/api/search/deals",false, true);
 
 		if ($('#updateActivityModal #allDay').is(':checked'))
 		{
@@ -611,6 +677,31 @@ $(function()
 		$('#' + this.id).find('.error').removeClass('error');
 
 		$("input.date").datepicker('update');
+
+		/*if($('#updateActivityModal').find('.update-event-related-contacts-input').find('ul').find('li').length>0)
+		{
+			$('#updateActivityModal').find('#update-event-related-contacts-label').parent().addClass('hide');
+			$('#updateActivityModal').find('.update-event-related-contacts-input').removeClass('hide');
+			$('#updateActivityModal').find('.update-event-related-contacts-label').removeClass('hide');
+		}
+		else
+		{
+			$('#updateActivityModal').find('#update-event-related-contacts-label').parent().removeClass('hide');
+			$('#updateActivityModal').find('.update-event-related-contacts-input').addClass('hide');
+			$('#updateActivityModal').find('.update-event-related-contacts-label').addClass('hide');
+		}
+		if($('#updateActivityModal').find('.update-event-related-deals-input').find('ul').find('li').length>0)
+		{
+			$('#updateActivityModal').find('#update-event-related-deals-label').parent().addClass('hide');
+			$('#updateActivityModal').find('.update-event-related-deals-input').removeClass('hide');
+			$('#updateActivityModal').find('.update-event-related-deals-label').removeClass('hide');
+		}
+		else
+		{
+			$('#updateActivityModal').find('#update-event-related-deals-label').parent().removeClass('hide');
+			$('#updateActivityModal').find('.update-event-related-deals-input').addClass('hide');
+			$('#updateActivityModal').find('.update-event-related-deals-label').addClass('hide');
+		}*/
 
 	});
 
@@ -682,6 +773,12 @@ $(function()
 		$('#event-time-1').closest('.control-group').show();
 		$('#event-date-2').closest('.row').show();
 
+		/*$('#activityModal').find('#new-event-related-contacts-label').parent().removeClass('hide');
+		$('#activityModal').find('.new-event-related-contacts-input').addClass('hide');
+		$('#activityModal').find('.new-event-related-contacts-label').addClass('hide');
+		$('#activityModal').find('#new-event-related-deals-label').parent().removeClass('hide');
+		$('#activityModal').find('.new-event-related-deals-input').addClass('hide');
+		$('#activityModal').find('.new-event-related-deals-label').addClass('hide');*/
 	});
 
 	$('#webEventCancelModel').on('hidden.bs.modal', function()
@@ -691,6 +788,34 @@ $(function()
 			this.reset();
 		});
 	});
+
+	/*$('#activityModal').on('click', '#new-event-related-contacts-label', function(e){
+		e.preventDefault();
+		$(this).parent().parent().find('.new-event-related-contacts-input').removeClass('hide');
+		$(this).parent().parent().find('.new-event-related-contacts-label').removeClass('hide');
+		$(this).parent().addClass('hide');
+	});
+
+	$('#activityModal').on('click', '#new-event-related-deals-label', function(e){
+		e.preventDefault();
+		$(this).parent().parent().find('.new-event-related-deals-input').removeClass('hide');
+		$(this).parent().parent().find('.new-event-related-deals-label').removeClass('hide');
+		$(this).parent().addClass('hide');
+	});
+
+	$('#updateActivityModal').on('click', '#update-event-related-contacts-label', function(e){
+		e.preventDefault();
+		$(this).parent().parent().find('.update-event-related-contacts-input').removeClass('hide');
+		$(this).parent().parent().find('.update-event-related-contacts-label').removeClass('hide');
+		$(this).parent().addClass('hide');
+	});
+
+	$('#updateActivityModal').on('click', '#update-event-related-deals-label', function(e){
+		e.preventDefault();
+		$(this).parent().parent().find('.update-event-related-deals-input').removeClass('hide');
+		$(this).parent().parent().find('.update-event-related-deals-label').removeClass('hide');
+		$(this).parent().addClass('hide');
+	});*/
 
 });
 
@@ -938,7 +1063,6 @@ function save_event(formId, modalName, isUpdate, saveBtn, callback)
 							App_Portlets.todayEventsCollection[parseInt(App_Portlets.currentPosition)].render(true);
 
 						}
-						
 						else if (App_Portlets.currentPortletName && App_Portlets.currentPortletName == 'Mini Calendar')
 					      {
 							if($('.minical-portlet-event').attr('data-date')!=undefined){
@@ -955,6 +1079,43 @@ function save_event(formId, modalName, isUpdate, saveBtn, callback)
 						       App_Portlets.refetchEvents = true;
 						       //eraseCookie('current_date_calendar');
 					      }
+						else if (App_Deal_Details.dealDetailView && Current_Route == "deal/" + App_Deal_Details.dealDetailView.model.get('id'))
+						{
+
+							/*
+							 * Verifies whether the added task is related to the
+							 * contact in contact detail view or not
+							 */
+							$.each(event.deal_ids, function(index, deal_id)
+							{
+								if (deal_id == App_Deal_Details.dealDetailView.model.get('id'))
+								{
+
+									// Add model to collection. Disabled sort
+									// while adding and
+									// called
+									// sort explicitly, as sort is not working
+									// when it is called
+									// by add
+									// function
+									if (dealEventsView && dealEventsView.collection)
+									{
+										if (dealEventsView.collection.get(data.id))
+										{
+											dealEventsView.collection.get(data.id).set(new BaseModel(data));
+										}
+										else
+										{
+											dealEventsView.collection.add(new BaseModel(data), { sort : false });
+											dealEventsView.collection.sort();
+										}
+									}
+									dealEventsView.render(true);
+									return false;
+								}
+
+							});
+						}
 						
 						else
 							App_Calendar.navigate("calendar", { trigger : true });

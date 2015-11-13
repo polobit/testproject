@@ -22,6 +22,8 @@ $(function(){
 		// Displays contact name, to indicate the task is related to the contact
 		fill_relation(el);
 		agile_type_ahead("task_related_to", el, contacts_typeahead);
+		
+		agile_type_ahead("task_relates_to_deals", el, deals_typeahead, false,null,null,"core/api/search/deals",false, true);
 
 		categories.getCategoriesHtml(undefined,function(catsHtml){
 			$('#type',el).html(catsHtml);
@@ -51,6 +53,7 @@ $(function(){
 		// Displays contact name, to indicate the task is related to the contact
 		fill_relation(el);
 		agile_type_ahead("event_related_to", el, contacts_typeahead);
+        agile_type_ahead("task_relates_to_deals", el, deals_typeahead, false,null,null,"core/api/search/deals",false, true);
 
     });
     
@@ -96,8 +99,8 @@ $(function(){
 	    		 */
     		
 	    		$('body').off('fill_campaigns_contact').on('fill_campaigns_contact', function(event){
-	    			var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
-	    	        fillSelect('campaign-select','/core/api/workflows', 'workflow', 'no-callback ', optionsTemplate); 
+	    			var optionsTemplate = "<option value='{{id}}'{{#if is_disabled}}disabled=disabled>{{name}} (Disabled){{else}}>{{name}}{{/if}}</option>";
+                    fillSelect('campaign-select','/core/api/workflows', 'workflow', 'no-callback ', optionsTemplate); 
 	    		});
 	    		
 	    		// Navigate to controller to show the form and then to trigger the custom event
@@ -114,8 +117,8 @@ $(function(){
     			
     			$('.show_campaigns_list').css('display','inline-block');
     			
-    			var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
-    			
+    			var optionsTemplate = "<option value='{{id}}'{{#if is_disabled}}disabled=disabled>{{name}} (Disabled){{else}}>{{name}}{{/if}}</option>";
+                
     		    fillSelect('campaign-select','/core/api/workflows', 'workflow', 'no-callback ', optionsTemplate); 
     		}
     		

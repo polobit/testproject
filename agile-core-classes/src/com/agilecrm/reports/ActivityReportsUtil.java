@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+import javax.ws.rs.WebApplicationException;
+
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
 
@@ -34,6 +36,7 @@ import com.agilecrm.util.email.SendMail;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.googlecode.objectify.Key;
+import javax.ws.rs.core.Response;
 
 import edu.emory.mathcs.backport.java.util.Arrays;
 
@@ -733,7 +736,7 @@ public class ActivityReportsUtil
 	    String result = null;
 
 	    if (!StringUtils.isEmpty(name))
-		result = "to <a href=\"https://" + user.domain + ".agilecrm.com/#contact" + contact.id
+		result = "to <a href=\"https://" + user.domain + ".agilecrm.com/#contact/" + contact.id
 		        + "\" target=\"_blank\">" + name + "</a>";
 
 	    activity.custom4 = result;
@@ -1031,9 +1034,13 @@ public class ActivityReportsUtil
 	Long recordsCount = (Long) reports.get("all_reports_count");
 	System.out.println("Total records count = " + recordsCount);
 	// Send reports email only if it has records.
-	if (recordsCount != null && recordsCount > 0)
+	if (recordsCount != null && recordsCount > 0){
 	    SendMail.sendMail(report.sendTo, report.name + " - " + SendMail.REPORTS_SUBJECT, "activity_reports",
-		    ActivityReportsUtil.generateActivityReports(reportId, endTime));
+	    		reports);
+	    return;
+	}
+	throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+		.entity("Report not sent as there are no activities matching the report criteria.").build());
     }
 
     /**
@@ -1058,7 +1065,7 @@ public class ActivityReportsUtil
 		JSONArray contacts = new JSONArray(activity.related_contact_ids);
 		for (int i = 0; i < contacts.length(); i++)
 		{
-		    result += "<a href=\"https://" + domain + ".agilecrm.com/#contact"
+		    result += "<a href=\"https://" + domain + ".agilecrm.com/#contact/"
 			    + contacts.getJSONObject(i).getString("contactid") + "\" target=\"_blank\">"
 			    + contacts.getJSONObject(i).getString("contactname") + "</a>";
 		    if (i + 1 != contacts.length())

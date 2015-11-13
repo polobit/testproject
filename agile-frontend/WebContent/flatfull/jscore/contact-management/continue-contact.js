@@ -303,10 +303,7 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
 			}
 			if (!id)
 			{
-				var status = isCompanyExist(companyName);
-				if (status)
-				{
-					show_error(modal_id, form_id, 'duplicate-email', 'Company name already exist.');
+				isCompanyExist(companyName, function(status){
 
 					if (status)
 					{
@@ -561,6 +558,7 @@ function serialize_contact_properties_and_save(e, form_id, obj, properties, moda
 
 				// App_Contacts.contactDetails(data.id,data);
 				// App_Contacts.navigate("contact/"+data.id);
+				if(!CALL_CAMPAIGN.start)
 				App_Contacts.navigate("contact/" + data.id, { trigger : true });
 			} else {
 				// update contacts-details view
@@ -582,6 +580,30 @@ function serialize_contact_properties_and_save(e, form_id, obj, properties, moda
 
 		// Removes tags list(remove them from new person modal)
 		$('.tagsinput', $("#" + modal_id)).empty();
+		//added for call campaign - functionality after updating fom call campaign
+			if(CALL_CAMPAIGN.start ){
+				var id = $('#continueform input[name=id]').val();
+				if(CALL_CAMPAIGN.contact_update){
+					CALL_CAMPAIGN.current_count = CALL_CAMPAIGN.current_count - 1;
+					CALL_CAMPAIGN.contact_update = false;
+					dialNextCallAutomatically();
+					Backbone.history.loadUrl("contact/" + id);
+					$( window ).scrollTop( 0 );
+					return;
+				}else{
+					var currentCampaignId = CALL_CAMPAIGN.contact_id_list[CALL_CAMPAIGN.current_count];
+					if(id == currentCampaignId ){
+						CALL_CAMPAIGN.current_count = CALL_CAMPAIGN.current_count-1;
+						dialNextCallAutomatically();
+					}
+					
+				}
+				
+				Backbone.history.navigate("contact/" + id, { trigger : true });	
+				$( window ).scrollTop( 0 );
+				
+				
+			}
 	}, error : function(model, response)
 	{
 
@@ -838,6 +860,13 @@ $(function()
 	{
 		e.preventDefault();
 		var id = $('#continueform input[name=id]').val();
+		//added for call campaign - functionality after updating fom call campaign
+		if(CALL_CAMPAIGN.start && CALL_CAMPAIGN.contact_update){
+			CALL_CAMPAIGN.contact_update = false;
+			Backbone.history.loadUrl("#contact/" + id);
+			$( window ).scrollTop( 0 );
+			return;
+		}
 		if (id)
 		{
 			Backbone.history.navigate("contact/" + id, { trigger : true });
@@ -929,7 +958,7 @@ function add_model_cursor(app_collection, mdl)
 /**
  * check for duplicated company
  */
-function isCompanyExist(company)
+function isCompanyExist(company, callback)
 {
 	$.get('core/api/contacts/company/validate/' + company, function(data){
 		   if(data == "true"){

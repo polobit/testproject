@@ -25,6 +25,7 @@ public class ProPlanLimits extends PlanLimits
 		whiteLabelEnabled = true;
 		campaignNodesLimit = 50;
 		emailAccountsLimit = 3;
+		
 
 		/**
 		 * New plan limits
@@ -59,6 +60,11 @@ public class ProPlanLimits extends PlanLimits
 
 		widgets = Integer.MAX_VALUE;
 		customWidget = true;
+		
+		/**
+		 * Milestones
+		 */
+		addTracks = true;
 	}
 
 }

@@ -291,46 +291,49 @@ public class GoogleContactWrapperImpl extends ContactWrapper
     public ContactField getAddress()
     {
 	ContactField field = null;
-	if (entry.hasStructuredPostalAddresses())
-	    for (StructuredPostalAddress address : entry.getStructuredPostalAddresses())
+	if (entry.hasStructuredPostalAddresses()){
+		StructuredPostalAddress address = null;
+		List<StructuredPostalAddress> addresses = entry.getStructuredPostalAddresses();
+	    if(addresses!=null && addresses.size()>0)
 	    {
-
-		JSONObject json = new JSONObject();
-		String addr = "";
-		if (address.hasStreet())
-		    addr = addr + address.getStreet().getValue();
-		try
-		{
-		    if (!StringUtils.isBlank(addr))
-			json.put("address", addr);
-
-		    if (address.hasCity() && address.getCity().hasValue())
-			json.put("city", address.getCity().getValue());
-
-		    if (address.hasRegion() && address.getRegion().hasValue())
-			json.put("state", address.getRegion().getValue());
-
-		    if (address.hasCountry() && address.getCountry().hasValue())
-			json.put("country", address.getCountry().getValue());
-
-		    if (address.hasPostcode() && address.getPostcode().hasValue())
-			json.put("zip", address.getPostcode().getValue());
-		}
-		catch (JSONException e)
-		{
-		    continue;
-		}
-		// default subtype is postal
-		String subType = "postal";
-		if (address.hasRel())
-		{
-		    String[] labels = address.getRel().split("#");
-		    subType = labels[1];
-		}
-
-		field = new ContactField("address", json.toString(), subType);
-
+		   	address = addresses.get(0);
+			JSONObject json = new JSONObject();
+			String addr = "";
+			if (address.hasStreet())
+			    addr = addr + address.getStreet().getValue();
+			try
+			{
+			    if (!StringUtils.isBlank(addr))
+				json.put("address", addr);
+	
+			    if (address.hasCity() && address.getCity().hasValue())
+				json.put("city", address.getCity().getValue());
+	
+			    if (address.hasRegion() && address.getRegion().hasValue())
+				json.put("state", address.getRegion().getValue());
+	
+			    if (address.hasCountry() && address.getCountry().hasValue())
+				json.put("country", address.getCountry().getValue());
+	
+			    if (address.hasPostcode() && address.getPostcode().hasValue())
+				json.put("zip", address.getPostcode().getValue());
+			}
+			catch (Exception e)
+			{
+				System.out.println("Error while fetching address from google contact" + e.getMessage());
+			    return field;
+			}
+			// default subtype is postal
+			String subType = "postal";
+			if (address.hasRel())
+			{
+			    String[] labels = address.getRel().split("#");
+			    subType = labels[1];
+			}
+	
+			field = new ContactField("address", json.toString(), subType);
 	    }
+	}
 	return field;
     }
 

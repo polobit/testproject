@@ -99,7 +99,7 @@ function setCost(price)
 function update_price()
 {	
 	// Get the selected plan cost
-	var plan_name = $("[name='pro_vs_lite']:checked").val();
+	var plan_name = $("[name='enterprise_vs_lite']:checked").val();
 	return $("#" + plan_name + "_plan_price").text();	
 }
 
@@ -174,7 +174,7 @@ $(function()
 		
 		$('.plan-collection-in').die().live('click', function(e){
 			 
-			$(this).find("[name='pro_vs_lite']").attr('checked','checked');
+			$(this).find("[name='enterprise_vs_lite']").attr('checked','checked');
 			var plan_type = "";
 	  		$('.plan-collection-in').each(function(index, element){
 	  			
@@ -188,7 +188,7 @@ $(function()
 	  		$(this).find("span.plan-collection-icon").addClass(plan_type + "_selected");
 	
 	  		// Set cost based on the selected plan type
-	  		var selected_plan = $(this).find("[name='pro_vs_lite']").val();
+	  		var selected_plan = $(this).find("[name='enterprise_vs_lite']").val();
 	  			 
 	      	// Cost
 	  		setCost(update_price());
@@ -224,7 +224,7 @@ $(function()
       	$('#purchase-plan').die().live('click', function(e){
 	          var quantity = $("#users_quantity").text();
 	          var cost = $("#users_total_cost").text();
-	          var plan_element = $("input[name='pro_vs_lite']:checked"); 
+	          var plan_element = $("input[name='enterprise_vs_lite']:checked"); 
 	          var plan = $(plan_element).val();
 	          var version = $(plan_element).attr("version");
 	          var discount = "", months = "";

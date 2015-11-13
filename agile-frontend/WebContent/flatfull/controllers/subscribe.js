@@ -5,967 +5,713 @@
  * @module Subscription
  * @author Yaswanth
  */
-var SubscribeRouter = Backbone.Router.extend({
+var _data = null;
+_IS_EMAIL_PLAN_ACTIVE = false;
+var SubscribeRouter = Backbone.Router
+		.extend({
 
-	routes : {
-	/* Subscription page */
-	"subscribe-plan" : "subscribe", "subscribe-plan/:id" : "subscribe",
-	
-	
-	/* Updating subscription details */
-	"updatecard" : "updateCreditCard",
-	
-	"updateplan" : "updatePlan", "purchase-plan" : "purchasePlan",
-	
-	"purchase-plan-new" : "purchasePlanNew",
+			routes : {
 
-	/* Invoices */
-	"invoice" : "invoice", "invoice/:id" : "invoiceDetails","getInvoiceDetails/:id" : "getInvoiceDetails",
-	"subscribe_new" : "subscribe_new" ,
-	"subscribe" : "subscribe_new",
-	"email_subscription" : "email_subscription",
-	"attach-card" :  "addCreditCardNew",
-	"update-card" : "updateCardNew",
-	},
+			/* Subscription page */
 
-	/**
-	 * Shows the subscription details(If subscribed ) of subscription form, this
-	 * function also sets account statistics in the subscription page, using
-	 * post render callback of the Base_Model_View
-	 */
-	subscribe : function(id)
-	{
-		$("#content").html("<div id='subscribe_plan_change'></div>");
-		if(IS_NEW_USER && _plan_on_signup && _plan_on_signup.plan_type && _plan_on_signup.plan_type == "FREE")
-		{
-			_plan_on_signup = null;
-			Backbone.history.navigate("dashboard", {trigger : true});
-			return;
-		}
-		
-		/*
-		 * Creates new view with a render callback to setup expiry dates
-		 * field(show dropdown of month and year), countries list and respective
-		 * states list using countries.js plugin account stats in subscription
-		 * page
-		 */
-		var subscribe_plan = new Base_Model_View({ url : "core/api/subscription?reload=true", template : "subscribe-new", window : 'subscribe',
-		/*
-		 * postRenderCallback : function(el) { // Setup account statistics
-		 * set_up_account_stats(el); // Load date and year for card expiry
-		 * card_expiry(el); // Load countries and respective states
-		 * head.js(LIB_PATH + 'lib/countries.js', function() {
-		 * print_country($("#country", el)); }); },
-		 */
-		postRenderCallback : function(el)
-		{
+			"subscribe" : "subscribe",
 
-			
-			initializeSubscriptionListeners();
-			
-			var data = subscribe_plan.model.toJSON();
-			var _window = window;
+			"subscribe/:id/:plan" : "subscribe",
 
-			// Setup account statistics
-			set_up_account_stats(el);
+			"subscribe-plan" : "subscribePlan",
 
-			USER_BILLING_PREFS = data;
+			"subscribe-plan/:id" : "subscribePlan",
 
-			
-			USER_CREDIRCARD_DETAILS = subscribe_plan.model.toJSON().billingData;
-			
-			if(!USER_CREDIRCARD_DETAILS && !(IS_NEW_USER && _plan_on_signup))
-			{
-				Backbone.history.navigate("subscribe", {trigger : true});
-				return;
-			}
-			var billing_data = JSON.parse(data.billingData);
-			var stripe_subscription = getSubscription(data.billingData, data.plan);
-			var planType = "";						
- 			var id = null;
- 			var quantity;
- 			if(stripe_subscription == null)
- 			{
- 				quantity = "2";
- 				planType = "FREE";
- 			}
- 			else
- 			{
- 				quantity = billing_data.subscription.quantity;
- 				planType = billing_data.subscription.plan.name.toUpperCase();
- 			}
- 			var planDetails = "<span class='text-head-black'>Current Plan</span></br><span class='text-head-black'>"+quantity+" Users</span>";
- 			if(planType.indexOf('STARTER') == 0){
- 				var id = $('#starter_plan');
- 			}else if(planType.indexOf('REGULAR') == 0){
- 				var id = $('#regular_plan');
-			}else if(planType.indexOf('PRO') == 0){			
- 				var id = $('#pro_plan');			
- 			}	
- 			
- 			if(id){
- 				addStyleForAPlan(id,planDetails);
- 				$("#plan_type").val(id.attr("id").split("_")[0]);
- 			}
-									
-			element = setPriceTemplete(data.plan.plan_type, el);
+			/* billing settings */
 
-			// Show Coupon code input field
-			id = (id && id == "coupon") ? id : "";
-			showCouponCodeContainer(id);
-			$("#user_quantity").val(quantity);
-			price = update_price();
-			$( "#users_quantity").text(quantity);
-     	    $("#users_total_cost").text((quantity * price).toFixed(2));
+			"billing-settings" : "billingSettings",
 
-			/*head.load(CSS_PATH + "css/misc/agile-plan-upgrade.css", LIB_PATH + 'lib/jquery.slider.min.js', function()
-			{ */
-				if ($.isEmptyObject(data))
-					setPlan("free");
-				else
-					setPlan(data);
-				
-			//	load_slider(el);
-			// });
+			"account-details" : "accountDetails",
 
-		} });
-		$('#subscribe_plan_change').html(subscribe_plan.render().el);
-		$(".active").removeClass("active");
-		$("#planView").addClass("active");
-	},
-	
-	getInvoiceDetails : function(invoice_id)
-	{
-		var invoicedata;
-		var companydata;
-		var obj;
-		
-		if (!invoice_id)
-			  return;
-		
-		accessUrlUsingAjax('core/api/subscription/getinvoice?d=' +invoice_id, function(data){
-			console.log("Invoice object");
-			console.log(data);
-			invoicedata = data;
+			"invoice-details" : "invoiceDetailsList",
 
-			accessUrlUsingAjax('/core/api/account-prefs', 
-				function(data){
-					console.log("Account prefs");
-					console.log(data);
-					companydata = data;
+			/* Updating subscription details */
 
-					obj = {"invoice" : invoicedata,	"company" : companydata}
-					console.log("xxxxxxxxxxxxxxx");
-					console.log(obj);
-					getTemplate('invoice-detail', obj, undefined, function(template_ui){
-							if(!template_ui)
-								  return;
-							$('#content').html($(template_ui));	
-						}, "#content");
-				}, 
-				function(response){
-					showNotyPopUp("information", "error occured please try again", "top");
-				});
+			"updateplan" : "updatePlan",
 
-		}, function(response){
-				showNotyPopUp("information", "error occured please try again", "top");
-		});
-		
-		 	
-	},	
+			"purchase-plan" : "purchasePlan",
 
-	
-	
-	/**
-	 * After selecting plan, page is navigated to purchase plan where user enter
-	 * his credit card details. It shows a form with countries and states and
-	 * fields to enter credit card details
-	 */
-	purchasePlanNew : function()
-	{
+			"purchase-email" : "purchaseEmail",
 
-		var that = this;
-		var window = this;
-		// Plan json is posted along with credit card details
-		var plan = plan_json
-		var upgrade_plan = new Base_Model_View({ url : "core/api/subscription", template : "purchase-plan-new", isNew : true,
-			postRenderCallback : function(el)
-			{
-				initializeSubscriptionListeners();
-				head.js(LIB_PATH + 'lib/countries.js', function()
-				{
-					print_country($("#country", el));
-				});
-				
-				
+			"updateCreditCard" : "cardUpdation",
+
+			/* Invoices */
+
+			"invoice" : "invoice",
+
+			"invoice/:id" : "getInvoiceDetails",
+
+			"getInvoiceDetails/:id" : "getInvoiceDetails",
+
 			},
-			saveCallback : function(data)
-			{
-				_IS_FREE_PLAN = false;
-				window.navigate("subscribe", { trigger : true });
-				showNotyPopUp("information", "Your plan has been updated successfully", "top");
-			}
-			
-		});
 
-		// Prepend Loading
-		$('#content').html(upgrade_plan.render().el);
-		$(".active").removeClass("active");
-		$("#planView").addClass("active");
-		// $("#fat-menu").addClass("active");
-	} ,
-	
-	
-	
-	/**
-	 * Shows forms to updates Credit card details, loads subscription details
-	 * from core/api/subscription to deserailize and show credit card details in
-	 * to form, so user can change any details if required render callback sets
-	 * the countries and states and card expiry, also deserialized the values.
-	 * Update credit card details are sent to core/api/subscription, where if
-	 * checks update is for credit card or plan
-	 */
-	updateCreditCard : function()
-	{
-		var card_details = new Base_Model_View({ url : "core/api/subscription", template : "subscription-card-detail", window : 'purchase-plan',
-			postRenderCallback : function(el)
+			subscribePlan : function()
+			{
+				Backbone.history.navigate("subscribe", { trigger : true });
+			},
+
+			cardUpdation : function()
 			{
 
-				// Load date and year for card expiry
-				card_expiry(el);
-
-				// To deserialize
-				var card_detail_form = el.find('form.card_details'), card_data = card_details.model.toJSON().billingData;
-
-				USER_CREDIRCARD_DETAILS = card_data;
-				plan_json.customer = JSON.parse(USER_CREDIRCARD_DETAILS);
-
-
-					// Deserialize card details
-					if (!$.isEmptyObject(card_data))
+				var card_details = new Base_Model_View({ url : "core/api/subscription", template : "creditcard-update", window : 'subscribe',
+					saveCallback : function()
 					{
-						// Deserialize method defined in
-						// agile_billing.js
-						deserialize_card_details(JSON.parse(card_data), $(card_detail_form));
-					}
+						showNotyPopUp("information", "Card has been updated successfully.", "top");
+					}, errorCallback : function(data)
+					{
+						showNotyPopUp("warning", data.responseText, "top");
+					}, postRenderCallback : function(el)
+					{
 
+						// Load date and year for card expiry
+						card_expiry(el);
+
+						// To deserialize
+						var card_detail_form = el.find('form.card_details'), card_data = card_details.model.toJSON().billingData;
+
+						USER_CREDIRCARD_DETAILS = card_data;
+						plan_json.customer = JSON.parse(USER_CREDIRCARD_DETAILS);
+
+						var activeCard = getActiveCard(plan_json.customer);
+
+						// Load countries and respective states
+						// Deserialize card details
+						if (!$.isEmptyObject(card_data))
+						{
+							// Deserialize method defined in
+							// agile_billing.js
+							deserialize_card_details(activeCard, $(card_detail_form));
+						}
+
+					} });
+				$("#content").html(card_details.render().el);
 			},
-			saveCallback : function(data)
+
+			billingSettings : function()
 			{
-				$("#change-card").show();
-			}
-		});
-
-		$('#content').html(card_details.render().el);
-		$(".active").removeClass("active");
-		$("#planView").addClass("active");
-	},
-
-	
-	/**
-	 * Shows form the update plan, uses the same url used to create new
-	 * subscription/update credit card of plan, deserializes the current plan
-	 */
-	updatePlan : function()
-	{
-		var update_plan = new Base_Model_View({ url : "core/api/subscription-addon/subscribe", template : "purchase-email-plan",  
-			
-			saveCallback : function(){
-				window.navigate("subscribe", { trigger : true });
-				showNotyPopUp("information", "Your plan has been updated successfully. Please logout and login again for the new changes to apply.", "top");
-			},
-			postRenderCallback : function(el) {
-				initializeSubscriptionListeners();
-				card_expiry(el);
-				head.js(LIB_PATH + 'lib/countries.js', function()
+				getTemplate('billing-settings', {}, undefined, function(template_ui)
 				{
-					print_country($("#country", el));
-				});
-			}
-			
-		});
+					if (!template_ui)
+						return;
+					$('#content').html($(template_ui));
 
-		$('#content').html(update_plan.render().el);
-		$(".active").removeClass("active");
-		$("#planView").addClass("active");
-	},
+					var view = new Base_Model_View({ url : '/core/api/subscription', template : "account-details", postRenderCallback : function()
+					{
+					} });
+					$('#content').find('#billing-settings-tab-content').html(view.render().el);
+					$('#content').find('#BillingSettingsTab .select').removeClass('select');
+					$('#content').find('.account-details-tab').addClass('select');
 
-	/**
-	 * Fetches the invoices and displays as list.
-	 */
-	invoice : function()
-	{
-		this.invoice = new Base_Collection_View({ url : "core/api/subscription/invoices", templateKey : "invoice", window : 'subscribe',
-			individual_tag_name : 'tr' })
+				}, "#content");
 
-		// Fetches the invoice payments
-		this.invoice.collection.fetch();
-		console.log(this.invoice.collection.fetch());
-
-		$('#content').html(this.invoice.el);
-	},
-
-	/**
-	 * Displays detailed invoice, when selected from the invoice list
-	 */
-	invoiceDetails : function(id)
-	{
-
-		// Checks whether invoice list is defined, if list is not
-		// defined get the list of invoices
-		if (!this.invoice || !this.invoice.collection || this.invoice.collection == 0 || this.invoice.collection.get(id) == null)
-		{
-			this.navigate("invoice", { trigger : true });
-			return;
-		}
-
-		// Gets invoice item from the collection
-		var model = this.invoice.collection.get(id);
-
-		// Displays detailed invoice
-		var invoice_details = new Base_Model_View({
-		// url: "core/api/subscription/invoice",
-		model : model, template : "invoice-detail", window : 'invoice', isNew : true });
-
-		$('#content').html(invoice_details.render().el);
-	},
-
-	/**
-	 * After selecting plan, page is navigated to purchase plan where user enter
-	 * his credit card details. It shows a form with countries and states and
-	 * fields to enter credit card details
-	 */
-	purchasePlan : function()
-	{
-		// If plan is not defined i.e., reloaded, or plan not chosen properly,
-		// then page is navigated back to subscription/ choose plan page
-		if (!plan_json.plan)
-		{
-			this.navigate("subscribe", { trigger : true });
-
-			return;
-		}
-		
-		_plan_on_signup = null;
-
-		var window = this;
-		// Plan json is posted along with credit card details
-		var plan = plan_json
-		var upgrade_plan = new Base_Model_View({ url : "core/api/subscription", template : "purchase-plan", isNew : true, data : plan,
-			postRenderCallback : function(el)
-			{
-				initializeSubscriptionListeners();
-				// Discount
-				showCouponDiscountAmount(plan_json, el);
-				card_expiry(el);
-			},
-			saveCallback : function(data)
-			{
-				window.navigate("subscribe", { trigger : true });
-				showNotyPopUp("information", "Your plan has been updated successfully", "top");
-
-				try
-				{
-					push_actual_plan(data.plan)
-				}
-				catch(err)
-				{
-					console.log(err);
-				}
+				$(".active").removeClass("active");
 
 			},
-			errorCallback : function(data)
+
+			accountDetails : function()
 			{
-				showNotyPopUp("information", "There was an error while processing your payment. Please try again later.", "top");
-			}
-			
-		});
-
-		// Prepend Loading
-		$('#content').html(upgrade_plan.render().el);
-		$(".active").removeClass("active");
-		$("#planView").addClass("active");
-		// $("#fat-menu").addClass("active");
-	} ,
-
-	
-
-	/**
-	 * Email plans
-	 */
-	email_subscription : function(subscription)
-	{
-		var that = this;
-		var counter = 0;
-		var viewParams = {
-				url : "core/api/subscription",
-				isNew : true,
-				template : "email-plan-form",
-				postRenderCallback : function(el) {
-					$("#close", el).click(function(e){
-						e.preventDefault();
-						that.setup_email_plan(subscription);
-					})
+				getTemplate('billing-settings', {}, undefined, function(template_ui)
+				{
+					if (!template_ui)
+						return;
+					$('#content').html($(template_ui));
 					
-							// Phone number validation
-					jQuery.validator.addMethod("email_plan_minimum", function(value, element) {
-	
-								if (this.optional(element))
-									return true;
-
-								return parseInt(value) >= 5;
-							}, " Should purchase a minimum of 5000 emails.");
 					
-					$("#email-quantity", el).on('keyup', function(e){ 
-						isValidForm($("#email-plan-form", el));
-						if(e.which == 13)
-							{
-								e.preventDefault();
-							}
-					})
-					
-				},
-				saveCallback : function(data)
+				}, "#content");
+				var view = new Base_Model_View({ url : '/core/api/subscription', template : "account-details", postRenderCallback : function()
 				{
-					that.setup_email_plan(subscription);
-					showNotyPopUp("information", "Your email package will be updated in a few minutes.", "top");
-				}
-			}
-		
-		if(subscription)
-		{
-			viewParams["model"] = subscription;
-		}
-		
-		var counter = 0;
-		var email_subscription = new Base_Model_View(viewParams);
-		
-		// Prepend Loading
-		$('#email-details-pane').html(email_subscription.render().el);
-		
-		// that.email_subscription();
+				} });
+				$('#content').find('#billing-settings-tab-content').html(view.render().el);
+				$('#content').find('#BillingSettingsTab .select').removeClass('select');
+				$('#content').find('.account-details-tab').addClass('select');
+				$(".active").removeClass("active");
 
-		$("#email-quantity").bind('keyup', function(e){
-			// console.log(e.which);
-				var quantity =  $(this).val();
-				if(isNaN(quantity))
-					return;
+			},
+
+			invoiceDetailsList : function()
+			{
+				var that = this;
+				getTemplate('billing-settings', {}, undefined, function(template_ui)
+				{
+					if (!template_ui)
+						return;
+					$('#content').html($(template_ui));
+					
+					getTemplate('invoice-details', {}, undefined, function(template_ui)
+					{
+						if (!template_ui)
+							return;
+						$('#billing-settings-tab-content').html($(template_ui));
+						$("#invoice-details-holder").html(getRandomLoadingImg());
+						
+					}, "#billing-settings-tab-content");
+					
+					var subscribe_plan = new Base_Model_View({ url : "core/api/subscription?reload=true", template : "subscribe-new", window : 'subscribe',
+
+					postRenderCallback : function(el)
+					{
+
+						var data = subscribe_plan.model.toJSON();
+						var subscription_model = new BaseModel(data);
+						that.recent_invoice(subscription_model);
+
+					} });
+					
+				}, "#content");
 				
-				var emails = quantity * 1000;
 				
-				if(IS_HAVING_MANDRILL)
+				
+
+			},
+
+			purchaseEmail : function()
+			{
+
+				if (!email_json.quantity)
 				{
-					$("#emails_total_cost").html(quantity * 2);
-					$("#email_rate").html("$2");
+					this.navigate("subscribe", { trigger : true });
+
 					return;
 				}
-				if(emails < 100000)
-					{
-						$("#emails_total_cost").html(quantity * 4);
-						$("#email_rate").html("$4");
-					}
-				
-				else if(emails <= 1000000)
+				var plan = email_json;
+				var update_email = new Base_Model_View({ url : "core/api/subscription", data : email_json, template : "purchase-emails", window : 'subscribe',
+
+				saveCallback : function()
 				{
-					$("#emails_total_cost").html(quantity * 3);
-					$("#email_rate").html("$3");
-				}
-				else if(emails >= 1000000)
+					showNotyPopUp("information", "Emails have been purchased successfully.", "top");
+				}, postRenderCallback : function(el)
 				{
-					$("#emails_total_cost").html(quantity * 2);
-					$("#email_rate").html("$2");
-				}
-				
-			});
-		
-		
-	},
-	email_sbuscrption_step1 : function(subscription)
-	{
-		
-		var is_model = true;
-		try
-		{
-			subscription.toJSON();
-		}
-		catch (e)
-		{
-			is_model = false;
-		}
-		var that = this;
-		var counter = 0;
-		
-		var params = {
-				url : "core/api/subscription?reload=true", template : "email-plan-details", window : 'subscribe', isNew : true,
-				/*
-				 * postRenderCallback : function(el) { // Setup account statistics
-				 * set_up_account_stats(el); // Load date and year for card expiry
-				 * card_expiry(el); // Load countries and respective states
-				 * head.js(LIB_PATH + 'lib/countries.js', function() {
-				 * print_country($("#country", el)); }); },
-				 */
-				postRenderCallback : function(el)
-				{
-					if(++counter <= 1)
-					{
-						
-						$("#account_email_plan_upgrade", el).on('click' , function(e){
-							e.preventDefault();
-							that.email_subscription(subscribe_email_plan.model);
-						})
-						
-					}
-					
-					
-				}
-		}
-		
-		if(is_model)
-			{
-				params["model"] = subscription;
-			}
-		else
-			{
-				params["data"] = subscription;
-			}
-		/*
-		 * Creates new view with a render callback to setup expiry dates
-		 * field(show dropdown of month and year), countries list and respective
-		 * states list using countries.js plugin account stats in subscription
-		 * page
-		 */
-		var subscribe_email_plan = new Base_Model_View(params);
-		
-		$('#email-details-pane').html(subscribe_email_plan.render(true).el);
-		
-	},
-	
-	
-	
-	/**
-	 * Shows forms to updates Credit card details, loads subscription details
-	 * from core/api/subscription to deserailize and show credit card details in
-	 * to form, so user can change any details if required render callback sets
-	 * the countries and states and card expiry, also deserialized the values.
-	 * Update credit card details are sent to core/api/subscription, where if
-	 * checks update is for credit card or plan
-	 */
-	updateCardNew : function()
-	{
-		var card_details = new Base_Model_View({ url : "core/api/subscription", template : "subscription-card-detail", window : 'purchase-plan',
-			postRenderCallback : function(el)
-			{
-
-				// Load date and year for card expiry
-				card_expiry(el);
-
-				// To deserialize
-				var card_detail_form = el.find('form.card_details'), card_data = card_details.model.toJSON().billingData;
-
-				USER_CREDIRCARD_DETAILS = card_data;
-				plan_json.customer = JSON.parse(USER_CREDIRCARD_DETAILS);
-
-				var activeCard = getActiveCard (plan_json.customer);
-				
-				// Load countries and respective states
-					// Deserialize card details
-					if (!$.isEmptyObject(card_data))
-					{
-						// Deserialize method defined in
-						// agile_billing.js
-						deserialize_card_details(activeCard, $(card_detail_form));
-					}
-
-			}
-		});
-
-		$('#content').html(card_details.render().el);
-	},
-	
-	
-	/**
-	 * Susbscribe new 
-	 */
-	subscribe_new : function()
-	{
-		var that = this;
-		var counter = 0;
-		$(".active").removeClass("active");
-		$("#planView").addClass("active");
-		$("#content").html("");
-		showTransitionBar();
-		
-		/*
-		 * Creates new view with a render callback to setup expiry dates
-		 * field(show dropdown of month and year), countries list and respective
-		 * states list using countries.js plugin account stats in subscription
-		 * page
-		 */
-		$.getJSON("core/api/subscription?reload=true", function(data){
-			_billing_restriction = data.cachedData;
-			init_acl_restriction();
-
-			getTemplate('subscribe', data, undefined, function(template_ui){
-				if(!template_ui)
-					  return;
-				$('#content').html($(template_ui));
-
-				initializeAccountSettingsListeners();
-				initializeInvoicesListeners();
-				var subscription_model = new BaseModel(data);
-				
-				$("#show_plan_page").on('click' , '#change-card', function(e){
-					e.preventDefault();
-					//alert("here");
-					that.showCreditCardForm(subscription_model, function(model){
-					});
-				});
-					
-				that.setup_account_plan(subscription_model);
-				
-				that.setup_email_plan(subscription_model);
-				
-				that.show_card_details(subscription_model);
-				
-				that.recent_invoice(subscription_model);
-
-			}, "#content");
-
-			
-		}).done(function(){
-			hideTransitionBar();
-		}).fail(function(){
-			hideTransitionBar();
-		});
-		
-		
-	},
-	setup_account_plan : function(subscription)
-	{
-		var counter = 0;
-		var that = this;
-		/*
-		 * Creates new view with a render callback to setup expiry dates
-		 * field(show dropdown of month and year), countries list and respective
-		 * states list using countries.js plugin account stats in subscription
-		 * page
-		 */
-		var subscribe_account_plan = new Base_Model_View({ url : "core/api/subscription", model : subscription, template : "account-plan-details", window : 'subscribe-plan',
-		/*
-		 * postRenderCallback : function(el) { // Setup account statistics
-		 * set_up_account_stats(el); // Load date and year for card expiry
-		 * card_expiry(el); // Load countries and respective states
-		 * head.js(LIB_PATH + 'lib/countries.js', function() {
-		 * print_country($("#country", el)); }); },
-		 */
-		postRenderCallback : function(el)
-		{
-			
-			if(++counter <= 1)
-			{
-				$("#attach_card_notification", el).on('click' , function(e){
-					e.preventDefault();
-					that.showCreditCardForm(subscribe_account_plan.model, function(model){
-						Backbone.history.navigate("subscribe-plan", { trigger : true });
-					})
-				})
-				
-				$("#user-plan-details-popover", el).on('click', function(e){
-					  var ele = getTemplate("account-plan-details-popover", subscribe_account_plan.model.get("planLimits"));
-					  var that = this;
-					  getTemplate('account-plan-details-popover', subscribe_account_plan.model.get("planLimits"), undefined, function(template_ui){
-				 		if(!template_ui)
-				    		return;
-				    	var ele = $(template_ui);
-				    	console.log(ele);
-					        $(that).attr({
-					        	"rel" : "popover",
-					        	"data-placement" : 'right',
-					        	"data-original-title" : "Plan Details",
-					        	"data-content" :  ele,
-					        });
-					        $(that).popover('show');
-						
-					}, null);
-
-						  
-				});
-				
-			}
-			
-			
-			// that.email_subscription();
-			
-		}});
-		
-		$('#plan-details-pane').html(subscribe_account_plan.render(true).el);
-	},
-	setup_email_plan : function(subscription)
-	{
-		var counter = 0;
-		var that = this;
-		IS_HAVING_MANDRILL = false;
-		$.ajax({
-			url:"core/api/email-gateway",
-			type:"GET",
-			success: function(data)
-			{
-				if(data && data.email_api == "MANDRILL")
-					IS_HAVING_MANDRILL = true;
-					
-			}
-		
-		});
-		
-		/*
-		 * Creates new view with a render callback to setup expiry dates
-		 * field(show dropdown of month and year), countries list and respective
-		 * states list using countries.js plugin account stats in subscription
-		 * page
-		 */
-		var subscribe_email_plan = new Base_Model_View({ url : "core/api/subscription", template : "email-plan-details", model : subscription, window : 'subscribe',
-		/*
-		 * postRenderCallback : function(el) { // Setup account statistics
-		 * set_up_account_stats(el); // Load date and year for card expiry
-		 * card_expiry(el); // Load countries and respective states
-		 * head.js(LIB_PATH + 'lib/countries.js', function() {
-		 * print_country($("#country", el)); }); },
-		 */
-		postRenderCallback : function(el)
-		{
-				$("#account_email_attach_card", el).on('click' , function(e){
-					e.preventDefault();
-					//alert("here");
-					that.showCreditCardForm(subscribe_email_plan.model, function(model){
-						that.email_subscription(subscribe_email_plan.model);
-					});
-				});
-				
-				$("#account_email_plan_upgrade", el).on('click' , function(e){
-					e.preventDefault();
-					that.email_subscription(subscribe_email_plan.model);
-					});
-				
-				
-				getTemplate("email-plan-subscription-details-popover", subscribe_email_plan.model.toJSON(), "Yes", function(content){
-					console.log(content)
-					  $("#email-plan-details-popover", el).attr({
-				        	"rel" : "popover",
-				        	"data-placement" : 'right',
-				        	"data-original-title" : "Plan Details",
-				        	"data-content" :  content,
-				        	//"trigger" : "hover"
-				        });
-					  
-				$("#email-plan-details-popover", el).on('click', function(e){
-						  $(this).popover('show');
-					  });
-				
-				
-				       
-				       
-				});
-				
-			// that.email_subscription();
-			
-		}});
-		
-		$('#email-details-pane').html(subscribe_email_plan.render(true).el);
-	},
-	showCreditCardForm : function(subscription, callback)
-	{
-		if(!subscription)
-			subscription = new BaseModel({});
-		var counter = 0;
-		$('#credit-card-form-modal-holder').empty();
-		var card_details = new Base_Model_View({ url : "core/api/subscription", 
-			// reload : true,
-			modal : "#credit-card-form-modal",
-			template : "credit-card-form", model:subscription,
-			postRenderCallback : function(el)
-			{
-				// Load date and year for card expiry
-				card_expiry(el);
-				if(++counter <= 1)
-				{
-					
-					$('.modal-backdrop').remove();	
-				
-					
-				}
-			},
-			saveCallback : function(model)
-			{
-				$('.modal-backdrop').remove();	
-				$("#credit-card-form-modal").modal('hide');
-				$('body').removeClass('modal-open');
-				
-				$("#change-card").show();
-				
-				if(callback && typeof callback == "function")
-					callback(model);
-				
-			}
-			
-		});
-
-		$('#credit-card-form-modal-holder').html(card_details.render(true).el);
-		$("#credit-card-form-modal").modal('show');
-		// console.log(card_details.render(true).el);1
-	},
-	
-	show_card_details : function(subscription)
-	{
-		var that = this;
-		var counter = 0;
-		/*
-		 * Creates new view with a render callback to setup expiry dates
-		 * field(show dropdown of month and year), countries list and respective
-		 * states list using countries.js plugin account stats in subscription
-		 * page
-		 */
-		var stripe_customer_details = new Base_Model_View({ url : "core/api/subscription", model : subscription, template : "customer-details-block",
-		/*
-		 * postRenderCallback : function(el) { // Setup account statistics
-		 * set_up_account_stats(el); // Load date and year for card expiry
-		 * card_expiry(el); // Load countries and respective states
-		 * head.js(LIB_PATH + 'lib/countries.js', function() {
-		 * print_country($("#country", el)); }); },
-		 */
-		postRenderCallback : function(el)
-		{
-			$("#change-card", el).on('click' , function(e){
-				e.preventDefault();
-				//alert("here");
-				that.showCreditCardForm(stripe_customer_details.model, function(model){
-				});
-			});
-			
-		}});
-		
-		$('#customer-details-holder').html(stripe_customer_details.render(true).el);
-	},
-	
-	/**
-	 * Shows forms to updates Credit card details, loads subscription details
-	 * from core/api/subscription to deserailize and show credit card details in
-	 * to form, so user can change any details if required render callback sets
-	 * the countries and states and card expiry, also deserialized the values.
-	 * Update credit card details are sent to core/api/subscription, where if
-	 * checks update is for credit card or plan
-	 */
-	addCreditCardNew : function(subscription)
-	{
-		var viewParams = { url : "core/api/subscription", template : "subscription-card-detail", window : 'purchase-plan', isNew:true,
-				postRenderCallback : function(el)
-				{
-
-					// Load date and year for card expiry
+					_IS_EMAIL_PLAN_ACTIVE = true;
 					card_expiry(el);
-
-					// Load countries and respective states
 					head.js(LIB_PATH + 'lib/countries.js', function()
 					{
 						print_country($("#country", el));
 					});
 
-				}}
-		
-		if(subscription)
+				}, errorCallback : function(data)
+				{
+					showNotyPopUp("warning", data.responseText, "top");
+				}
+				/*
+				 * prePersist : function(el) { console.log(el); }
+				 */
+				});
+
+				$('#content').html(update_email.render().el);
+				$(".active").removeClass("active");
+				$("#planView").addClass("active");
+
+			},
+			/**
+			 * Shows the subscription details(If subscribed ) of subscription
+			 * form, this function also sets account statistics in the
+			 * subscription page, using post render callback of the
+			 * Base_Model_View
+			 */
+			subscribe : function(id, plan)
 			{
-				viewParams["model"] = subscription;
-				viewParams["isNew"] = false ;
-			}
-		var card_details = new Base_Model_View();
 
-		$('#content').html(card_details.render().el);
-		$(".active").removeClass("active");
-		$("#planView").addClass("active");
-	},
-	
-	/*recent_invoice : function()
-	{
-		var invoice_collection = new Base_Collection_View({
-			url : "core/api/subscription/invoices?page_size=3",
-			templateKey : "invoice-partial"
+				IS_HAVING_MANDRILL = false;
+				$("#content").html("<div id='subscribe_plan_change'></div>");
+
+				/*// Set it in local machine
+				if(_plan_on_signup && _plan_on_signup.plan_type){
+					localStorage.setItem("registered_plan" + CURRENT_DOMAIN_USER.id,localStorage.setItem("registered_plan" + CURRENT_DOMAIN_USER.id, JSON.stringify(_plan_on_signup)));
+				}
+				else {
+					_plan_on_signup = localStorage.getItem("registered_plan" + CURRENT_DOMAIN_USER.id);
+					if(_plan_on_signup)
+						   _plan_on_signup = JSON.parse(_plan_on_signup);
+				}*/	
+
+				if (IS_NEW_USER && _plan_on_signup && _plan_on_signup.plan_type && _plan_on_signup.plan_type == "FREE")
+				{
+					 _plan_on_signup = null;
+					Backbone.history.navigate("dashboard", { trigger : true });
+					return;
+				}
+				
+				if (!$.isEmptyObject(USER_CREDIRCARD_DETAILS))
+				{
+
+					plan_json.customer = JSON.parse(USER_CREDIRCARD_DETAILS);
+				}
+				var that = this;
+				var counter = 0;
+				showTransitionBar();
+				var planDetails;
+
+				this.subscribe_plan = new Base_Model_View({ url : "core/api/subscription?reload=true", template : "subscribe-new", window : 'subscribe',
+
+				postRenderCallback : function(el)
+				{
+					var data = that.subscribe_plan.model.toJSON();
+					_data = that.subscribe_plan.model.toJSON();
+
+					initializeSubscriptionListeners()
+
+					var _window = window;
+					// Setup account statistics
+					set_up_account_stats(el);
+
+					USER_BILLING_PREFS = data;
+
+					USER_CREDIRCARD_DETAILS = that.subscribe_plan.model.toJSON().billingData;
+
+					if (data && data.billingData)
+					{
+						var billing_data = JSON.parse(data.billingData);
+						var stripe_subscription = getSubscription(data.billingData, data.plan);
+					}
+
+					var planType = "";
+
+					var quantity;
+					if (stripe_subscription == null)
+					{
+						quantity = "2";
+						planType = "FREE";
+					}
+					else
+					{
+						quantity = data.plan.quantity;
+						planType = data.plan.plan_type.toUpperCase();
+//						if("PRO_MONTHLY" == planType)
+//							planType = "ENTERPRISE_MONTHLY";
+//						else if("PRO_YEARLY" == planType)
+//							planType = "ENTERPRISE_YEARLY";
+					}
+					planDetails = "<span class='text-head-black'>Current Plan</span></br><span class='text-head-black'>" + quantity + " Users</span>";
+					if (planType.indexOf('STARTER') == 0)
+					{
+						id = $('#starter_plan');
+					}
+					else if (planType.indexOf('REGULAR') == 0)
+					{
+						id = $('#regular_plan');
+					}
+					else if (planType.indexOf('ENTERPRISE') == 0 || planType.indexOf('PRO') == 0)
+					{
+						id = $('#pro_plan');
+					}
+
+					if (id)
+					{
+						$("#plan_type").val(id.attr("id").split("_")[0]);
+					}
+					element = setPriceTemplete(data.plan.plan_type, el);
+					addStyleForAPlan(id, planDetails);
+					// Show Coupon code input field
+					id = (id && id == "coupon") ? id : "";
+					showCouponCodeContainer(id);
+					price = update_price();
+					$("#user_quantity").val(quantity);
+					$("#users_quantity").text(quantity);
+					(quantity && quantity > 1) ? $("#users_quantity_text").text("Users") : $("#users_quantity_text").text("User");
+					$("#users_total_cost").text((quantity * price).toFixed(2));
+					if ($.isEmptyObject(data))
+						setPlan("free");
+					else
+						setPlan(data);
+
+					data = _data;
+					_billing_restriction = _data.cachedData;
+					init_acl_restriction();
+
+					var subscription_model = new BaseModel(data);
+
+					that.setup_email_plan(subscription_model);
+
+					that.show_card_details(subscription_model);
+
+					that.invoice_latest(subscription_model);
+
+					hideTransitionBar();
+					document.getElementById('email-quantity').value = "";
+					$('.selected-plan', el).trigger('click');
+					if (_IS_EMAIL_PLAN_ACTIVE)
+					{
+						$(".nav-tabs li").removeClass("active");
+						$("#users-content").removeClass("active");
+						$("#emailtab").addClass("active");
+						$("#email-content").addClass("active");
+					}
+
+				} });
+
+				addStyleForAPlan(id, planDetails);
+				$('#subscribe_plan_change').html(that.subscribe_plan.render().el);
+				$(".active").removeClass("active");
+				$("#planView").addClass("active");
+
+			},
+
+			getInvoiceDetails : function(invoice_id)
+			{
+				var invoicedata;
+				var companydata;
+				var obj;
+
+				if (!invoice_id)
+					return;
+
+				accessUrlUsingAjax('core/api/subscription/getinvoice?d=' + invoice_id, function(data)
+				{
+					console.log("Invoice object");
+					console.log(data);
+					invoicedata = data;
+
+					accessUrlUsingAjax('/core/api/account-prefs', function(data)
+					{
+						console.log("Account prefs");
+						console.log(data);
+						companydata = data;
+
+						obj = { "invoice" : invoicedata, "company" : companydata }
+						console.log("xxxxxxxxxxxxxxx");
+						console.log(obj);
+						head.js(LIB_PATH + 'jscore/handlebars/handlebars-helpers.js', function()
+						{
+							getTemplate('invoice-detail', obj, undefined, function(template_ui)
+							{
+								if (!template_ui)
+									return;
+								$('#content').html($(template_ui));
+							}, "#content");
+						});
+
+					}, function(response)
+					{
+						showNotyPopUp("information", "error occured please try again", "top");
+					});
+
+				}, function(response)
+				{
+					showNotyPopUp("information", "error occured please try again", "top");
+				});
+
+			},
+
+			/**
+			 * Shows form the update plan, uses the same url used to create new
+			 * subscription/update credit card of plan, deserializes the current
+			 * plan
+			 */
+			updatePlan : function()
+			{
+				var update_plan = new Base_Model_View({
+					url : "core/api/subscription-addon/subscribe",
+					template : "purchase-email-plan",
+
+					saveCallback : function()
+					{
+						window.navigate("subscribe", { trigger : true });
+						showNotyPopUp("information", "Your plan has been updated successfully. Please logout and login again for the new changes to apply.",
+								"top");
+					}, postRenderCallback : function(el)
+					{
+						initializeSubscriptionListeners();
+						card_expiry(el);
+						head.js(LIB_PATH + 'lib/countries.js', function()
+						{
+							print_country($("#country", el));
+						});
+					}
+
+				});
+
+				$('#content').html(update_plan.render().el);
+				$(".active").removeClass("active");
+				$("#planView").addClass("active");
+			},
+
+			/**
+			 * Fetches the invoices and displays as list.
+			 */
+			invoice : function()
+			{
+				Backbone.history.navigate("invoice-details", { trigger : true });
+				this.invoice = new Base_Collection_View({ url : "core/api/subscription/invoices", templateKey : "invoice", window : 'subscribe',
+					individual_tag_name : 'tr' })
+
+				// Fetches the invoice payments
+				this.invoice.collection.fetch();
+
+				$('#content').html(this.invoice.el);
+			},
+
+			/**
+			 * Displays detailed invoice, when selected from the invoice list
+			 */
+			invoiceDetails : function(id)
+			{
+				var invoicedata;
+				var companydata;
+				var obj;
+				// Checks whether invoice list is defined, if list is not
+				// defined get the list of invoices
+
+				if (!this.invoice || !this.invoice.collection || this.invoice.collection == 0 || !this.invoice.collection.get(id))
+				{
+					this.navigate("invoice", { trigger : true });
+					return;
+				}
+				if (id)
+				{
+					// Gets invoice item from the collection
+					var model = this.invoice.collection.get(id);
+
+					// Displays detailed invoice
+					var invoice_detail_model = new Base_Model_View({ url : "core/api/subscription/getinvoice", model : model, template : "invoice-detail",
+						postRenderCallback : function(el)
+						{
+							var company_detail = new Base_Model_View({ url : "core/api/account-prefs", model : model, template : "invoice-detail",
+								postRenderCallback : function(el)
+								{
+									companydata = data;
+									obj = { "invoice" : invoicedata, "company" : companydata }
+									getTemplate('invoice-detail', obj, undefined, function(template_ui)
+											{
+												if (!template_ui)
+													return;
+												$('#billing-settings-tab-content').html($(template_ui));
+											}, "#billing-settings-tab-content");
+								} });
+						} });
+//					$("#billing-settings-tab-content").html("");
+//					$("#billing-settings-tab-content").html(invoice_detail_model.render().el);
+				}
+				else
+					return;
+			},
+
+			/**
+			 * After selecting plan, page is navigated to purchase plan where
+			 * user enter his credit card details. It shows a form with
+			 * countries and states and fields to enter credit card details
+			 */
+			purchasePlan : function()
+			{
+
+				// If plan is not defined i.e., reloaded, or plan not chosen
+				// properly,
+				// then page is navigated back to subscription/ choose plan page
+				if (!plan_json.plan)
+				{
+					this.navigate("subscribe", { trigger : true });
+
+					return;
+				}
+
+				_plan_on_signup = null;
+
+				var window = this;
+				// Plan json is posted along with credit card details
+				var plan = plan_json
+				var upgrade_plan = new Base_Model_View(
+						{
+							url : "core/api/subscription",
+							template : "purchase-plan",
+							isNew : true,
+							data : plan,
+							postRenderCallback : function(el)
+							{
+								initializeSubscriptionListeners();
+								_IS_EMAIL_PLAN_ACTIVE = false;
+								// Discount
+								showCouponDiscountAmount(plan_json, el);
+								card_expiry(el);
+							},
+							saveCallback : function(data)
+							{
+								window.navigate("subscribe", { trigger : true });
+								showNotyPopUp("information", "Your plan has been updated successfully", "top");
+
+								try
+								{
+									push_actual_plan(data.plan)
+								}
+								catch (err)
+								{
+									console.log(err);
+								}
+
+							},
+							errorCallback : function(data)
+							{
+								if (data.responseText)
+									showNotyPopUp("warning", data.responseText, "top");
+							}
+
+						});
+
+				// Prepend Loading
+				$('#content').html(upgrade_plan.render().el);
+				$(".active").removeClass("active");
+				$("#planView").addClass("active");
+			},
+
+			setup_email_plan : function(subscription)
+			{
+				var counter = 0;
+				var that = this;
+				IS_HAVING_MANDRILL = false;
+				$.ajax({ url : "core/api/email-gateway", type : "GET", success : function(data)
+				{
+					if (data && data.email_api == "MANDRILL")
+						IS_HAVING_MANDRILL = true;
+
+				}
+
+				});
+
+				/*
+				 * Creates new view with a render callback to setup expiry dates
+				 * field(show dropdown of month and year), countries list and
+				 * respective states list using countries.js plugin account
+				 * stats in subscription page
+				 */
+				var subscribe_email_plan = new Base_Model_View({ url : "core/api/subscription", template : "email-update", model : subscription,
+					window : 'subscribe',
+
+					postRenderCallback : function(el)
+					{
+
+					} });
+
+				$('#purchase-email').html(subscribe_email_plan.render(true).el);
+			},
+
+			show_card_details : function(subscription)
+			{
+				var that = this;
+				var counter = 0;
+				/*
+				 * Creates new view with a render callback to setup expiry dates
+				 * field(show dropdown of month and year), countries list and
+				 * respective states list using countries.js plugin account
+				 * stats in subscription page
+				 */
+				var stripe_customer_details = new Base_Model_View({ url : "core/api/subscription", model : subscription, template : "customer-details-block",
+
+				postRenderCallback : function(el)
+				{
+				} });
+
+				$('#customer-details-holder').html(stripe_customer_details.render(true).el);
+			},
+
+			invoice_latest : function(subscription)
+			{
+				$('#recent_invoice').html(getRandomLoadingImg());
+				if (!subscription.get("billingData"))
+				{
+					$("#invoice-details-holder").html("");
+					$('#invoice-details-holder').append("<div class='text-lg p-l-sm p-t-sm'>No invoices</div>");
+					return;
+				}
+
+				// Send an ajax request
+
+				$.get("core/api/subscription/invoices", {}, function(invoice)
+				{
+
+					if (!invoice || invoice.length <= 0)
+						return;
+
+					// Sort invoice
+					invoice = new BaseCollection(invoice, { sortKey : "created", descending : true }).toJSON();
+//					var object = JSON.parse(JSON.stringify(invoice[0]));
+					// Send data to a template
+					getTemplate('latest-invoice', invoice[0] , undefined, function(template_ui)
+					{
+						if (!template_ui)
+							return;
+						$('#recent_invoice').html(template_ui);
+						
+					}, "#recent_invoice");
+					
+				})
+				.fail(function() {
+					$('#recent_invoice').html("You do not have any invoices yet.");
+				});
+
+			},
+
+			// gets collection of charges of aa paricular customer based on
+			recent_invoice : function(subscription)
+			{
+				if (!subscription.get("billingData"))
+				{
+					$("#invoice-details-holder").html("");
+					$('#invoice-details-holder')
+							.append(
+									"<div class='text-lg p-l-sm p-t-sm'>Invoices</div><hr><div class='text-center p-b-lg'><p class='m-b-none' style='font-size: 18px;'>You do not have any invoices yet</p><p>Generated invoices will be shown here.</p></div>");
+					return;
+				}
+
+				this.invoice = new Base_Collection_View({ url : "core/api/subscription/invoices" + "?page_size=20", templateKey : "invoice",
+					window : 'subscribe', individual_tag_name : 'tr', sortKey : 'created', descending : true });
+
+				// Fetches the invoice payments
+				this.invoice.collection.fetch();
+
+				$("#invoice-details-holder").html(this.invoice.render().el);
+
+			},
+
 		});
-		
-		invoice_collection.collection.fetch();
-		$("#invoice-details-holder").html(invoice_collection.render().el)
-	},
-	*/
-	// gets collection of charges of aa paricular customer based on
-	recent_invoice : function(subscription)
-	{
-		if(!subscription.get("billingData"))
-			return;
-		
-		console.log(subscription.get("billingData"));
-		var customerId = null;
-		try
-		{
-			customerId = JSON.parse(subscription.get("billingData")).id;
-		}
-		catch(e)
-		{
-			customerId = subscription.get("billingData").id;
-		}
-		
-		var invoice_collection = new Base_Collection_View({ url : "core/api/subscription/charges/"+customerId+"?page_size=20" , templateKey : "charge",
-
-		individual_tag_name : 'tr',sortKey : 'created', descending : true });
-		invoice_collection.collection.fetch();
-
-		$("#invoice-details-holder").html(invoice_collection.render().el);
-	},
-
-});
 
 function getPendingEmails()
 {
 	var count = _billing_restriction.one_time_emails_count;
-	
+
 	var max = getMaxEmailsLimit();
-	
+
 	// if max is greater than zero, we consider user is subscrbed to email plan
-	if(max > 0)
+	if (max > 0)
 	{
 		// In case of count is less than zero we return 0;
-		if(count < 0)
+		if (count < 0)
 			return 0;
-		
+
 		return count;
 	}
-	
+
 	// If max is zero then it is free plan
-	if(max == 0)
+	if (max == 0)
 	{
 		// Count comes as a negavie value here
-		var remaining =  5000 + count;
-		if(remaining < 0)
+		var remaining = 5000 + count;
+		if (remaining < 0)
 			return 0;
-		
+
 		return remaining;
 	}
-	
+
 	return count;
 }
 
 function getMaxEmailsLimit()
 {
 	var max = _billing_restriction.max_emails_count;
-	
-	if(max == undefined)
+
+	if (max == undefined)
 		max = 0;
-	
+
 	return max;
 }
 function canSendEmails(emails_to_send)
 {
 	var pending = getPendingEmails();
-	if(pending >= emails_to_send)
+	if (pending >= emails_to_send)
 		return true;
-	
+
 	return false;
 }
 
@@ -976,25 +722,53 @@ function is_free_plan()
 
 /**
  * This function is used to add the style for price panels.
+ * 
  * @param id
  * @param description
  */
-function addStyleForAPlan(id,planDetails){
-	if(id){
-		id.css("opacity","1");
-		
-		if(planDetails){
-			id.find('.user-plan').html(planDetails);
-			// id.find('.djc_addtocart_link').text('Add users');
+function addStyleForAPlan(id, planDetails)
+{
+	if (id)
+	{
+
+		if (($('selected-plan')) != ($('#email-div')))
+		{
+			$(".plan-collection-in").removeClass('selected-plan');
+			id.find('.plan-collection-in').addClass('selected-plan');
 		}
-	}	
+		else
+		{
+			$('#email-div').addClass('selected-plan');
+		}
+
+	}
 }
 
-function removeStyleForAPlan(){
+function removeStyleForAPlan(id)
+{
 	var id = $('#plans-panel');
-	id.find(".plan-collection-bot").css("opacity","0.5");
-	
-	
-			
-	
+
+	id.find(".plan-collection-bot").css("opacity", "0.5");
+
+	if (($('selected-plan')) != ($('#email-div')))
+		$(".plan-collection-in").removeClass('selected-plan');
+
+}
+
+function emailClickEvent() {
+	$('ul.nav.nav-tabs').removeClass("hide");
+	$("#email").addClass("hide");
+	$("#currentPlan").addClass("p-t-md");
+	$("#usertab").removeClass("active");
+	$("#emailtab").addClass("active");
+	$("#users-content").removeClass("active");
+	$("#email-content").addClass("active");
+}
+
+function printPage() {
+	$("#print-div").addClass("hide");
+	//document.getElementById('header').style.display = 'none';
+    //document.getElementById('footer').style.display = 'none';
+	window.print();
+	$("#print-div").removeClass("hide");
 }
