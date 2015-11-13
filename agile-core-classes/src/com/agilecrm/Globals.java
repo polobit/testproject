@@ -93,11 +93,11 @@ public class Globals {
 	public static final String STRIPE_LIVE_CLIENT_ID = "ca_33Ms3QZgGsn0nqkvilqNUFYU9BcDyNVC";
 
 	// development keys
-	public static final String DEV_STRIPE_API_KEY = STRIPE_TEST_API_KEY;
+	public static final String DEV_STRIPE_API_KEY = STRIPE_LIVE_API_KEY;
 	public static final String DEV_STRIPE_CLIENT_ID = STRIPE_LIVE_CLIENT_ID;
 
 	// Stripe live keys
-	public static final String STRIPE_API_KEY = STRIPE_TEST_API_KEY;
+	public static final String STRIPE_API_KEY = STRIPE_LIVE_API_KEY;
 	public static final String STRIPE_CLIENT_ID = STRIPE_LIVE_CLIENT_ID;
 
 	// Xero live keys

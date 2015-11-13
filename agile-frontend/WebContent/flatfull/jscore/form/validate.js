@@ -1,3 +1,4 @@
+
 /**
  * validate.js is used to validate the forms in the application, isValidFom
  * method validates the form element
@@ -63,7 +64,7 @@ function isValidForm(form) {
 		
 		return /^([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/i.test(value);
 	}," Please enter a valid email.");
-	
+
 	// Phone number validation
 	jQuery.validator.addMethod("phone", function(value, element){
 		
