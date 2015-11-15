@@ -24,6 +24,7 @@ import com.agilecrm.activities.util.ActivitySave;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Contact.Type;
 import com.agilecrm.contact.ContactField;
+import com.agilecrm.contact.deferred.CompanyDeleteDeferredTask;
 import com.agilecrm.contact.email.ContactEmail;
 import com.agilecrm.contact.email.bounce.EmailBounceStatus.EmailBounceType;
 import com.agilecrm.contact.email.deferred.LastContactedDeferredTask;
@@ -818,6 +819,13 @@ public class ContactUtil
     {
 	return dao.ofy().query(Contact.class).filter("viewed.viewer_id", SessionManager.get().getDomainId())
 		.order("-viewed.viewed_time").limit(Integer.parseInt(page_size)).list();
+    }
+
+    public static void removeCompanyReferenceFromContacts(Contact company)
+    {
+	CompanyDeleteDeferredTask task = new CompanyDeleteDeferredTask(company.name, company.id, NamespaceManager.get());
+	Queue defaultQueue = QueueFactory.getDefaultQueue();
+	defaultQueue.addAsync(TaskOptions.Builder.withPayload(task));
     }
 
     public static void deleteContactsbyList(List<Contact> contacts)
