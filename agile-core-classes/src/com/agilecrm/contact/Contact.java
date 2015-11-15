@@ -274,6 +274,10 @@ public class Contact extends Cursor
     @NotSaved
     public String bulkActionTracker = "";
 
+    @JsonIgnore
+    @NotSaved
+    public boolean forceSearch = false;
+
     /**
      * Default constructor
      */
@@ -555,11 +559,12 @@ public class Contact extends Cursor
 
 	// If tags and properties length differ, contact is considered to be
 	// changed
-	if (contact.tags.size() != currentContactTags.size() || contact.properties.size() != properties.size()
-		|| contact.star_value != star_value
+	if (forceSearch || contact.tags.size() != currentContactTags.size()
+		|| contact.properties.size() != properties.size() || contact.star_value != star_value
 		|| (contact.lead_score != null ? !contact.lead_score.equals(lead_score) : false)
 		|| contact.campaignStatus.size() != campaignStatus.size()
-		|| contact.emailBounceStatus.size() != emailBounceStatus.size())
+		|| contact.emailBounceStatus.size() != emailBounceStatus.size()
+		|| contact.contact_company_key != contact_company_key)
 
 	    return true;
 
@@ -866,6 +871,11 @@ public class Contact extends Cursor
 	dao.delete(this);
 
 	new AppengineSearch<Contact>(Contact.class).delete(id.toString());
+
+	if (type == Type.COMPANY)
+	{
+	    ContactUtil.removeCompanyReferenceFromContacts(this);
+	}
 
 	// Delete Notes
 	NoteUtil.deleteAllNotes(id);
