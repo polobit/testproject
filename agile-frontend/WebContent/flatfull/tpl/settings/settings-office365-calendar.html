@@ -1,0 +1,72 @@
+<script id="admin-settings-office365-sync-details-template" type="text/html">
+<div class="panel wrapper widget-add">
+    <center>
+    	<img class="thumbnail m-b-none thumb-xl bg-transparent" src="/img/icons/office356-calendar.png" />
+    </center>
+    <div class="m-b-md m-t"  rel="tooltip">
+		By configuring access to your Office365 Calendar, we'll automatically sync your events in your Office365 Calendar with Agile calendar.
+	</div>
+    <div>
+		{{#if id}}
+    		<a class="btn btn-sm btn-danger delete"  id="office-calendar-sync-delete" >Disable</a>
+			<a href="#sync/officecalendar" class="btn btn-sm btn-default">Settings</a>
+    	{{else}}
+    		<a href="#sync/officecalendar" class="btn btn-sm btn-default">Enable</a>
+    	{{/if}}
+	</div>
+</div>
+</script>
+
+<script id="admin-settings-office365-calendar-prefs-template" type="text/html">
+<div class="row">
+    <div class="col-md-4 col-sm-6 col-xs-12">
+    <div class="panel wrapper">
+        <center>
+            <img class="thumbnail m-b-none img-responsive thumb-xl bg-transparent" src="img/icons/office356-calendar.png" />
+        </center>
+        <br/>
+        {{#unless id}}
+            <div class="m-b-md"   rel="tooltip" >
+                Configure Your Office 365 Account.
+            </div>
+            <form id="office365-calendar-form">
+            <div class="form-group">
+                <label for="office365-calendar-usrname">Username</label>
+                <input type="email" required="required" class="form-control" id="office365-calendar-usrname" name="username" placeholder="Email">
+            </div>
+            <div class="form-group">
+                <label for="office365-calendar-pwd">Password</label>
+                <input type="password" required="required" class="form-control" id="office365-calendar-pwd" name="password" placeholder="Password">
+            </div>
+            <div class="form-group">
+                <label for="office365-calendar-outlook-url">Outlook URL</label>
+                <input id="office365-calendar-outlook-url" required="required" name="serverUrl" class="form-control"  type="text" placeholder="Enter Outlook URL">
+            </div>
+            <a href ="#" id ="office365-calendar-save" class="btn btn-sm btn-primary m-t save">Save</a>
+            </form>
+        {{/unless}}
+         <form id="office365-calendar-form">
+            <input type ="hidden" value = "{{id}}" name ="id">  
+            {{#if id}}
+            <div class="form-group">
+                <label for="office365-calendar-usrname">Username</label>
+                <input type="email" required="required" class="form-control" id="office365-calendar-usrname" name="username" placeholder="Email" value="{{username}}">
+            </div>
+            <div class="form-group">
+                <label for="office365-calendar-pwd">Password</label>
+                <input type="password" required="required" class="form-control" id="office365-calendar-pwd" name="password" placeholder="Password" value="{{password}}">
+            </div>
+            <div class="form-group">
+                <label for="office365-calendar-outlook-url">Outlook URL</label>
+                <input id="office365-calendar-outlook-url" required="required" name="serverUrl" class="form-control"  type="text" placeholder="Enter Outlook URL" value="{{serverUrl}}">
+            </div>
+            <!-- <a href ="#" id ="office365-calendar-save" class="btn btn-sm btn-primary m-t save">Save</a> -->
+            <div class="form-actions">
+                <a type="reset" class="btn btn-default btn-sm" href="#sync">Cancel</a>
+                <a type="submit" class="save btn btn-sm btn-primary">Save</a>
+            </div>
+            {{/if}}       
+        </form>
+    </div>
+</div>
+</script>
