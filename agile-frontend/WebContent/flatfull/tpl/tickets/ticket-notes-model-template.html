@@ -1,9 +1,10 @@
 <script id="ticket-notes-model-template" type="text/html">
 	{{#if_equals note_type 'PUBLIC'}}
-		<img class="pos-abs" src="/flatfull/img/tickets/{{#if_equals created_by 'REQUESTER'}}received-reply.png{{else}}send-response.png{{/if_equals}}" width="25px" height="25px">
 		<div class="wrapper b-b b-t" style="{{#if_equals created_by 'REQUESTER'}}background-color: #F6F8F8{{/if_equals}}">
 		    {{#if_equals created_by 'REQUESTER'}}
-		    	<img class="m-r-sm v-inherit" src="{{emailGravatarurl 50 requester_email}}" width="34px" height="34px">
+		    	<div class="thumb-xs pull-left m-r-sm b-light b avatar">
+					<img class="user-img r r-2x" alt="" src="{{emailGravatarurl 34 requester_email}}">
+				</div>
 		    	<div class="inline-block">
 		    		<a href="javascript:void(0);">{{requester_name}} ({{requester_email}})</a>
 		    		<div>
@@ -13,7 +14,9 @@
 		   			</div>
 		    	</div>
 		   	{{else}}
-		   		<img class="m-r-sm v-inherit" src="{{domain_user.ownerPic}}" width="34px" height="34px">
+		   		<div class="thumb-xs pull-left m-r-sm b-light b avatar">
+					<img class="user-img r r-2x" alt="" src="{{domain_user.ownerPic}}">
+				</div>
 		   		<div class="inline-block">
 		   			<a href="javascript:void(0);">
 		   				{{domain_user.name}} ({{domain_user.email}})

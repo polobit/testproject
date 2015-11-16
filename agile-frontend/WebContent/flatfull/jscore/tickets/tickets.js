@@ -1,5 +1,4 @@
-var Group_ID = null, Ticket_Status = 'new', Current_Ticket_ID = null, Ticket_Filter_ID = null,
-New_Tickets = 0, Opened_Tickets = 0, Starred_Tickets = 0, Closed_Tickets =0, Tickets_Util = {}, Reload_Tickets_Count = false;
+var Group_ID = null, Current_Ticket_ID = null, Ticket_Filter_ID = null, Tickets_Util = {}, Sort_Field = '-last_updated_time';
 
 $("body").bind('click', function(ev) {
 	Tickets.hideDropDowns(ev);
@@ -8,89 +7,28 @@ $("body").bind('click', function(ev) {
 
 var Tickets = {
 
-	fetch_tickets_collection: function(url, group_id){
-
-		//Renders root template, fetches tickets count & loads Groups drop down
-		Tickets.initialize(group_id, function(){
-
-			App_Ticket_Module.ticketsCollection = new Base_Collection_View({
-				url : url,
-				sortKey:"created_time",
-				descending:true,
-				templateKey : "ticket",
-				customLoader: true,
-				customLoaderTemplate: "ticket-notes-loader",
-				individual_tag_name : 'div',
-				cursor : true,
-				page_size : 20,
-				slateKey : "no-tickets",
-				postRenderCallback: function(el){
-
-					//Initialize tooltips
-					$('.refresh-tickets').tooltip();
-
-					head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
-					{
-						$("time", el).timeago();		
-					});
-
-					//Activating ticket type (New, Open or Closed) pill
-					$('ul.ticket-types').find('.active').removeClass('active');
-
-					if(!Ticket_Filter_ID)
-						$('ul.ticket-types').find('li a.' + Ticket_Status).parent().addClass('active');
-				
-					//Initialize click event on each ticket li
-					Tickets.initEvents(el);
-				}
-			});
-
-			//Activating main menu
-			$('nav').find(".active").removeClass("active");
-			$("#tickets").addClass("active");
-
-			App_Ticket_Module.ticketsCollection.collection.fetch();
-
-			$(".tickets-collection-pane").html(App_Ticket_Module.ticketsCollection.el);
-		});	
-	},
-
-	initialize: function(group_id, callback){
+	//Renders the basic ticketing layout on which every view will be constructed
+	renderLayout: function(callback){
 
 		//Checking root template
 		if($('#tickets-container').length == 0){
 
 			//Rendering root template
-			getTemplate("tickets-container",  {group_id: group_id, ticket_status: Ticket_Status}, undefined, function(template_ui){
+			getTemplate("tickets-container", {}, undefined, function(template_ui){
 
 				if(!template_ui)
 			  		return;
 
 				$('#content').html($(template_ui));	
 
-				$('#content').on('click', '.new-ticket', function(e){
-					e.preventDefault();
-		
-					App_Ticket_Module.renderNewTicketModalView();
-				});
-
-				//Fectching new, open, closed tickets count
-				Tickets_Count.fetch_tickets_count();
-
 				//Fetching ticket toolbar template
-				getTemplate("tickets-toolbar-container",  {}, undefined, function(toolbar_ui){
+				getTemplate("tickets-toolbar-container", {}, undefined, function(toolbar_ui){
 
 					if(!toolbar_ui)
 			  			return;
 
-			  		//Rendering toolbar container
+			  		//Rendering top toolbar container
 					$('#right-pane').html($(toolbar_ui));
-
-					//Load filters collection drop down
-					Ticket_Filters.fetchFiltersCollection();
-
-					//Load filters collection drop down
-					Ticket_Groups.fetchGroups();
 
 					if(callback)
 						callback();
@@ -98,48 +36,108 @@ var Tickets = {
 				}, "");
 				
 			}, "#content");
-		}	
-		else{
+		}else{
 
-			//Fetching ticket toolbar template
-			getTemplate("tickets-toolbar-container",  {}, undefined, function(toolbar_ui){
-
-				if(!toolbar_ui)
-		  			return;
-
-		  		//Rendering toolbar container
-				$('#right-pane').html($(toolbar_ui));
-
-				//Rendering existing groups view
-				Ticket_Groups.renderGroupsView();
-
-				//Fectching new, open, closed tickets count
-				Tickets_Count.fetch_tickets_count();
-
-				//Rendering existing filter tickets drop down view
-				Ticket_Filters.renderFiltersCollection();
-				
+			if(!Ticket_Filter_ID)
+			{
 				if(callback)
 					callback();
-
-			}, "");
+			}else{
+				//Fetching selected filter ticket collection
+				Tickets.fetchTicketsCollection();
+			}	
 		}
 
 		Current_Ticket_ID = null;
 	},
 
+	//Fetches new ticket collection
+	fetchTicketsCollection: function(){
+
+		App_Ticket_Module.ticketsCollection = new Base_Collection_View({
+			url : '/core/api/tickets/filter?filter_id=' + Ticket_Filter_ID,
+			global_sort_key: Sort_Field,
+			sort_collection: false,
+			templateKey : 'ticket',
+			customLoader: true,
+			customLoaderTemplate: 'ticket-notes-loader',
+			individual_tag_name : 'div',
+			cursor : true,
+			page_size : 20,
+			slateKey : 'no-tickets',
+			postRenderCallback: function(el){
+
+				//Initialize tooltips
+				$('[data-toggle="tooltip"]').tooltip();
+
+				head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
+				{
+					$("time", el).timeago();		
+				});
+
+				$('ul.ticket-types').find('li').removeClass('active');
+				$('a[filter-id="' + Ticket_Filter_ID + '"]').closest('li').addClass('active');
+
+				//Initializing click event on each ticket li
+				Tickets.initEvents(el);
+
+				//Initializing checkbox events
+				Ticket_Bulk_Ops.initEvents();
+			}
+		});
+
+		//Activating main menu
+		$('nav').find(".active").removeClass("active");
+		$("#tickets").addClass("active");
+
+		App_Ticket_Module.ticketsCollection.collection.fetch();
+
+		$(".tickets-collection-pane").html(App_Ticket_Module.ticketsCollection.el);
+	},
+
+	renderExistingCollection: function(){
+
+		if(!App_Ticket_Module.ticketsCollection){
+			App_Ticket_Module.ticketsByFilter(Ticket_Filter_ID);
+		}else{
+			this.renderLayout(function(){
+
+				Ticket_Filters.renderFiltersCollection(function(){
+
+					$(".tickets-collection-pane").html(App_Ticket_Module.ticketsCollection.el);
+					
+					//Initialize click event on each ticket li
+					Tickets.initEvents(App_Ticket_Module.ticketsCollection.el);
+
+					Backbone.history.navigate('#tickets/filter/' + Ticket_Filter_ID,{render:false});
+				});
+			});
+		}
+	},
+
 	initEvents: function(el){
 		
 		/**
+		 * Initializing click event on ticket checkboxes
+		 */
+		$('ul#ticket-model-list', el).off('change'); 
+		$('ul#ticket-model-list', el).on('change', "input.ticket-checkbox", function(e){
+			e.stopPropagation();
+			e.preventDefault();
+
+			Ticket_Bulk_Ops.showText();
+		});
+
+		/**
 		 * Initializing click event on each ticket list item
 		 */
+		$('ul#ticket-model-list', el).off('click');
 		$('ul#ticket-model-list', el).on('click', 'li.ticket', function(e){
 
-			var url = '#tickets/group/' + (!Group_ID ? DEFAULT_GROUP_ID : Group_ID) + 
-					'/' + (Ticket_Status ? Ticket_Status : 'new') + '/';
+			if($(e.target).hasClass('ticket-checkbox'))
+				return;
 
-			if(Ticket_Filter_ID)
-				url = '#tickets/filter/' + Ticket_Filter_ID + '/ticket/';
+			var url = '#tickets/filter/' + Ticket_Filter_ID + '/ticket/';
 
 			Backbone.history.navigate(url + $(this).attr('data-id'), {trigger : true});
 		});
@@ -147,6 +145,7 @@ var Tickets = {
 		/*
 		 * Hover event on ticket subject
 		 */
+		$('ul#ticket-model-list', el).off('mouseover mouseout');
 		$('ul#ticket-model-list', el)
 			.on('mouseover mouseout', 'li.ticket',
 				function(event) {
@@ -172,19 +171,29 @@ var Tickets = {
 			);
 
 		//Initialization click event on refresh button
+		$('.tickets-toolbar').off('click');
 		$('.tickets-toolbar').on('click', '.refresh-tickets', function(e){
 			e.preventDefault();
 
-			Reload_Tickets_Count = true;
+			App_Ticket_Module.ticketsByFilter(Ticket_Filter_ID);
+			
+			//Fetch ticket collection count
+			Tickets_Count.fetchFilterTicketsCount();
+			
+			Ticket_Bulk_Ops.uncheckAllTickets();
+		});
 
-			if(!Ticket_Filter_ID)
-				App_Ticket_Module.ticketsByGroup(Group_ID, Ticket_Status);
-			else
-				App_Ticket_Module.ticketsByFilter(Ticket_Filter_ID);
+		//Initialization click event on sort filters
+		$('.tickets-toolbar').on('click', 'ul.sort-filters li a', function(e){
+			e.preventDefault();
 
-			//Fectching new, open, closed tickets count
-			Tickets_Count.fetch_tickets_count();
-		});	
+			Sort_Field = $(this).data('sort-key');
+
+			$('ul.sort-filters').find('li').removeClass('active');
+			$(this).closest('li').addClass('active');
+
+			App_Ticket_Module.ticketsByFilter(Ticket_Filter_ID);
+		});
 	},
 
 	changeStatus: function(event){
@@ -591,15 +600,34 @@ var Tickets = {
 
 	loadWidgets: function(){
 
+		var model_coun = 0;
+
 		var ticketModel = App_Ticket_Module.ticketView.model.toJSON();
 
 		//Loading widgets
 		if(ticketModel && ticketModel.contactID){
-			var contactDetails = Backbone.Model.extend({urlRoot : '/core/api/contacts/' + ticketModel.contactID});
+			/*var contactDetails = Backbone.Model.extend({urlRoot : '/core/api/contacts/' + ticketModel.contactID});
 			new contactDetails().fetch({success: function(contact, response, options){
-					loadWidgets(App_Ticket_Module.ticketView.el, contact.toJSON());
 				}, error: function(){}
+			});*/
+			App_Contacts.contactDetailView = new Base_Model_View({ 
+				isNew : false,
+				url: '/core/api/contacts/' + ticketModel.contactID,
+				template : "contact-detail",
+				postRenderCallback : function(el, contact)
+				{	
+					model_coun++;
+
+					if(model_coun > 1)
+						return;
+
+					clearContactWidetQueues(ticketModel.contactID);
+
+					loadWidgets(App_Ticket_Module.ticketView.el, contact);
+				}
 			});
+
+			//App_Contacts.contactDetailView.render(true).el;
 		}
 	}
 };

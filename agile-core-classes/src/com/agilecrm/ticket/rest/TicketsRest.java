@@ -165,7 +165,8 @@ public class TicketsRest
 	@Path("/filter")
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	public List<Tickets> getTicketsByFilter(@QueryParam("filter_id") Long filterID,
-			@QueryParam("cursor") String cursor, @QueryParam("page_size") String pageSize)
+			@QueryParam("cursor") String cursor, @QueryParam("page_size") String pageSize,
+			@QueryParam("global_sort_key") String sortField)
 	{
 		try
 		{
@@ -177,7 +178,10 @@ public class TicketsRest
 			String queryString = TicketFiltersUtil.getQueryFromConditions(filter.conditions);
 			queryString = queryString.substring(0, queryString.lastIndexOf("AND"));
 
-			JSONObject resultJSON = new TicketsDocument().searchDocuments(queryString.trim(), cursor);
+			if (StringUtils.isBlank(sortField))
+				sortField = "last_updated_time";
+
+			JSONObject resultJSON = new TicketsDocument().searchDocuments(queryString.trim(), cursor, sortField);
 
 			System.out.println("query: " + queryString);
 
@@ -194,6 +198,19 @@ public class TicketsRest
 			{
 				tickets = TicketsUtil.inclGroupDetails(tickets);
 				tickets = TicketsUtil.inclDomainUsers(tickets);
+			}
+
+			if (resultJSON.has("count"))
+			{
+				int count = resultJSON.getInt("count");
+
+				if (count > 20 && tickets.size() == 20)
+				{
+					Tickets ticket = tickets.get(19);
+
+					ticket.count = count;
+					ticket.cursor = resultJSON.getString("cursor");
+				}
 			}
 
 			return tickets;
@@ -506,14 +523,13 @@ public class TicketsRest
 	@Path("/execute-workflow")
 	@Consumes({ MediaType.APPLICATION_JSON })
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public String executeWorkflow(TicketWorkflow ticketWorkflow)
-			throws JSONException
+	public String executeWorkflow(TicketWorkflow ticketWorkflow) throws JSONException
 	{
 		try
 		{
 			Long ticketID = ticketWorkflow.getTicket_id();
 			Long workflowID = ticketWorkflow.getWorkflow_id();
-			
+
 			if (ticketID == null || workflowID == null)
 				throw new Exception("ticketID or workflowID is missing.");
 
@@ -526,8 +542,8 @@ public class TicketsRest
 			// Throwing exception if contact is null
 			if (contact == null)
 				throw new Exception("No contact found for this customer.");
-			
-			//Executing workflow on given ticket id
+
+			// Executing workflow on given ticket id
 			TicketTriggerUtil.executeCampaign(contact, workflowID, ticket);
 		}
 		catch (Exception e)

@@ -36,46 +36,10 @@ var Tickets_Notes = {
 	},
 
 	backToTickets: function(e){
-
-		//Fetching ticket toolbar template
-		getTemplate("tickets-toolbar-container", {}, undefined, function(toolbar_ui){
-
-			if(!toolbar_ui)
-	  			return;
-
-	  		//Rendering toolbar container
-			$('#right-pane').html($(toolbar_ui));
-
-			//Rendering existing groups view
-			Ticket_Groups.renderGroupsView();
-
-			//Rendering existing filter tickets drop down view
-			Ticket_Filters.renderFiltersCollection();
-		}, "");
-
-		//Checking if ticket collection exists
-		if(!App_Ticket_Module.ticketsCollection){
-
-			Group_ID = (!Group_ID ? DEFAULT_GROUP_ID : Group_ID);
-
-			var url = '/core/api/tickets?status=' + Ticket_Status + '&group_id=' + Group_ID;
-
-			if(Ticket_Filter_ID)
-				url = '/core/api/tickets/filter?filter_id=' + Ticket_Filter_ID;
-
-			Tickets.fetch_tickets_collection(url, Group_ID);
-		}
-		else{
-
-			//Rendering existing collection
-			$(".tickets-collection-pane").html(App_Ticket_Module.ticketsCollection.el);
-			Tickets.initEvents(App_Ticket_Module.ticketsCollection.el);
-		}
-
-		//Just URL will be changed without reloading the page
-		var url = (Ticket_Filter_ID) ? '#tickets/filter/' + Ticket_Filter_ID : '#tickets/group/'+ Group_ID +'/' + Ticket_Status;
-		Backbone.history.navigate(url, {trigger : false});
+		Tickets.renderExistingCollection();
+		Ticket_Bulk_Ops.uncheckAllTickets();
 	},
+	
 	repltBtn: function(e){
 
 		var ticketModel = App_Ticket_Module.ticketView.model;

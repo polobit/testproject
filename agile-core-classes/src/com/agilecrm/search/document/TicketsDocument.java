@@ -25,6 +25,9 @@ import com.google.appengine.api.search.QueryOptions;
 import com.google.appengine.api.search.Results;
 import com.google.appengine.api.search.ScoredDocument;
 import com.google.appengine.api.search.SearchServiceFactory;
+import com.google.appengine.api.search.SortExpression;
+import com.google.appengine.api.search.SortExpression.SortDirection;
+import com.google.appengine.api.search.SortOptions;
 import com.googlecode.objectify.Key;
 
 /**
@@ -105,7 +108,10 @@ public class TicketsDocument implements BuilderInterface
 
 			// Set ticket priority
 			document.addField(Field.newBuilder().setName("priority").setText(ticket.priority.toString()));
-
+			
+			//Set priority code to get records in ASC or DESC order
+			document.addField(Field.newBuilder().setName("priority_code").setNumber(ticket.priority.getCode()));
+			
 			// Set email source
 			document.addField(Field.newBuilder().setName("source").setText(ticket.source.toString()));
 
@@ -215,7 +221,7 @@ public class TicketsDocument implements BuilderInterface
 		return SearchServiceFactory.getSearchService().getIndex(indexSpec);
 	}
 
-	public JSONObject searchDocuments(String queryString, String cursorString) throws Exception
+	public JSONObject searchDocuments(String queryString, String cursorString, String sortField) throws Exception
 	{
 		List<Key<Tickets>> resultArticleIds = new ArrayList<Key<Tickets>>();
 
@@ -231,10 +237,22 @@ public class TicketsDocument implements BuilderInterface
 		QueryOptions options = null;
 		com.google.appengine.api.search.Query query = null;
 
+		SortDirection direction = sortField.startsWith("-") ? SortExpression.SortDirection.DESCENDING
+				: SortExpression.SortDirection.ASCENDING;
+
+		sortField = sortField.replace("-", "");
+		
+		// Build the SortOptions with 2 sort keys
+		SortOptions sortOptions = SortOptions
+				.newBuilder()
+				.addSortExpression(
+						SortExpression.newBuilder().setExpression(sortField)
+								.setDirection(direction).setDefaultValueNumeric(0))
+				.setLimit(1000).build();
 		try
 		{
 			// Setting records fetching limit to 20
-			options = QueryOptions.newBuilder().setCursor(cursor).setLimit(20).build();
+			options = QueryOptions.newBuilder().setCursor(cursor).setLimit(20).setSortOptions(sortOptions).build();
 			query = com.google.appengine.api.search.Query.newBuilder().setOptions(options).build(queryString);
 		}
 		catch (Exception e)

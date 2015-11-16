@@ -6,17 +6,68 @@
 	      <button type="button" class="btn btn-sm btn-bg btn-default"><i class="fa fa-chevron-right"></i></button>
 	    </div>
 	    <div class="btn-toolbar">
+	    	<input class="ticket-checkbox select-all pull-left" type="checkbox" 
+	    		style="margin-top: 10px; margin-left: 3px;">
+	    	<div id="rfr-btn" class="btn-group" style="margin-left: 10px !important;">
+		        <a href="javascript:void(0);" class="btn btn-sm btn-default refresh-tickets" 
+		        	data-toggle="tooltip" data-placement="bottom" data-original-title="Refresh">
+		        	<i class="fa fa-refresh"></i>
+		        </a>
+		    </div>
+		    <div>
+		        <div class="m-l-xs btn-group dropdown bulk-action-btn-grp display-none">
+		          <button class="btn btn-sm btn-default">Bulk Actions</button>
+		          <button class="btn btn-sm btn-default" data-toggle="dropdown"><span class="caret"></span></button>
+		          <ul class="dropdown-menu">
+		            <li><a href="#tickets/bulk-actions/add-tag">Add Tags</a></li>
+		            <li><a href="#tickets/bulk-actions/remove-tag">Remove Tags</a></li>
+		            <li class="divider"></li>
+		            <li><a href="#tickets/bulk-actions/change-assignee">Change Assignee</a></li>
+		            <li><a href="#tickets/bulk-actions/execute-workflows">Execute Workflow</a></li>
+		            <li><a href="#tickets/bulk-actions/delete">Delete</a></li>
+		          </ul>
+		        </div>
+		        <div class="btn-group inline-block m-l-xs m-t-xs" style="display: inline;" id="tickets-bulk-select">
+
+		        </div>
+		    </div>
+		    <div class="btn-group m-r-sm pull-right">
+		    	<button class="btn btn-default btn-sm" data-toggle="tooltip" data-placement="bottom" data-original-title="Sort by">
+		    		<i class="icon-list"></i>
+		    	</button>
+		    	<button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+		    		<span class="caret"></span>
+		    	</button>
+		    	<ul class="pull-right dropdown-menu sort-filters">
+		        	<li class="active">
+		            	<a href="javascript:void(0);" data-sort-key="-last_updated_time">Last Updated Time Desc</a>
+		        	</li>
+		        	<li>
+		            	<a href="javascript:void(0);" data-sort-key="last_updated_time">Last Updated Time Asc</a>
+		        	</li>
+		        	<li class="divider"></li>
+		        	<li>
+		            	<a href="javascript:void(0);" data-sort-key="-created_time">Created Time Desc</a>
+		        	</li>
+		        	<li>
+		            	<a href="javascript:void(0);" data-sort-key="created_time">Created Time Asc</a>
+		        	</li>
+		        	<li class="divider"></li>
+		        	<li>
+		            	<a href="javascript:void(0);" data-sort-key="-priority_code">Priority High Low</a>
+		        	</li>
+		        	<li>
+		            	<a href="javascript:void(0);" data-sort-key="priority_code">Priority Low High</a>
+		        	</li>
+		    	</ul>
+			</div>
+	    </div>
+	    <div class="btn-toolbar" style="display: none;">
 	    	<div id="groups-list-container">
 		        
 		    </div>
 		    <div id="filters-list-container">
 		        
-		    </div>
-		    <div id="rfr-btn" class="btn-group">
-		        <a href="javascript:void(0);" class="btn btn-sm btn-default refresh-tickets" 
-		        	data-toggle="tooltip" data-placement="bottom" data-original-title="Refresh">
-		        	<i class="fa fa-refresh"></i>
-		        </a>
 		    </div>
 	    </div>
 	</div>
@@ -38,4 +89,12 @@
 		{{/each}}				
 	</ul>
 </div>
+</script>
+<script id="ticket-bulk-ops-text-template" type="text/html">
+Selected {{selected_tickets_count}} tickets.
+{{#if total_tickets_count}}
+	<a id="select-all-available-contacts" class="c-p text-info" href="javascript:void(0);">
+		Select all {{total_tickets_count}} tickets
+	</a>
+{{/if}}
 </script>

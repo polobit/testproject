@@ -187,7 +187,17 @@ public class Tickets extends Cursor
 
 	public static enum Priority
 	{
-		LOW, MEDIUM, HIGH
+		LOW(0), MEDIUM(1), HIGH(2);
+		
+		private int code;
+		
+		private Priority(int code){
+			this.code = code;
+		}
+		
+		public int getCode(){
+			return code;
+		}
 	};
 
 	public static enum Source
@@ -315,7 +325,7 @@ public class Tickets extends Cursor
 	{
 		if (this.contactID != null)
 			return ContactUtil.getContact(this.contactID);
-		
+
 		return null;
 	}
 }

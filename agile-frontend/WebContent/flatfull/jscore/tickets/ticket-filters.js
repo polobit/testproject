@@ -85,8 +85,10 @@ var Ticket_Filters = {
 		$currentTarget.closest("tr").remove();
 	},
 
-	fetchFiltersCollection: function(){
+	fetchFiltersCollection: function(callback){
 		
+		var force_render = true;
+
 		App_Ticket_Module.ticketFiltersList = new Base_Collection_View({
 			url : '/core/api/tickets/filters',
 			sortKey:"updated_time",
@@ -96,11 +98,23 @@ var Ticket_Filters = {
 			postRenderCallback : function(el){
 
 				//Fetch ticket collection count
-				Tickets_Count.fetch_filter_tickets_count();
+				Tickets_Count.fetchFilterTicketsCount();
 
-				//Render filter name on drop down
-				if(Ticket_Filter_ID)
-					$('a#filter_name').text($('a[filter-id="' + Ticket_Filter_ID + '"]').text());
+				Ticket_Filter_ID =  !Ticket_Filter_ID ? App_Ticket_Module.ticketFiltersList.collection.at(0).id : Ticket_Filter_ID;
+
+				//Highlighting choosen li
+				$('a[filter-id="' + Ticket_Filter_ID + '"]').closest('li').addClass('active');
+
+				var url = '#tickets/filter/' + Ticket_Filter_ID;
+				Backbone.history.navigate(url, {trigger : false});
+
+				if(force_render)
+				{
+					force_render = false;
+
+					if(callback)
+						callback();
+				}	
 			}
 		});
 
@@ -108,13 +122,12 @@ var Ticket_Filters = {
 		$("#filters-list-container").html(App_Ticket_Module.ticketFiltersList.el);
 	},
 
-	renderFiltersCollection: function(){
+	renderFiltersCollection: function(callback){
 
 		//Rendering existing filter tickets drop down view
 		$("#filters-list-container").html(App_Ticket_Module.ticketFiltersList.el);
 
-		//Render filter name on drop down
-		if(Ticket_Filter_ID)
-			$('a#filter_name').text($('span[filter-id="' + Ticket_Filter_ID + '"]').text());
+		if(callback)
+			callback();
 	}
 };

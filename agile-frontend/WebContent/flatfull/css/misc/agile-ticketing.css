@@ -128,3 +128,43 @@ div.cc-emails-st{
 	border-radius: 2px; 
 	padding: 5px 9px 1px 9px;
 }
+
+.low-priority{
+	border-left-color: #DDDDDD !important;
+}
+
+.medium-priority{
+	border-left-color: #23b7e5 !important;
+}
+
+.high-priority{
+	border-left-color: #7266ba !important;
+}
+
+.low-priority-bg{
+	background-color: #DDDDDD;
+}
+
+.medium-priority-bg{
+	background-color: #23b7e5;
+}
+
+.high-priority-bg{
+	background-color: #7266ba;
+}
+
+.checkbox-st{
+	display: inline-block;
+    position: absolute;
+    padding: 9px;
+    top: 25%;
+    left: 0px;
+}
+
+.first-letter-cap{
+	text-transform: lowercase;
+}
+
+.first-letter-cap::first-letter{
+	text-transform: uppercase;
+}

@@ -2,8 +2,6 @@ var Ticket_Base_Model = Base_Model_View.extend({
 
 	events:{
 
-		"click .refresh-tickets" : "refreshTickets",
-
 		//Ticket operations change group, assignee, priority etc
 		/*"click .ticket_group_name" : "changeGroup",*/
 		"click .ticket_status" : "changeStatus",
@@ -45,20 +43,6 @@ var Ticket_Base_Model = Base_Model_View.extend({
 		"click .discard-reply" : "discardReply",
 		"click .timeline" : "renderTicketTimeline",
 		"click .canned-messages" : "showCannedMessages"
-	},
-
-	refreshTickets: function(e){
-		e.preventDefault();
-
-		Reload_Tickets_Count = true;
-
-		App_Ticket_Module.ticketsByGroup(Group_ID, Ticket_Status);
-
-		//Fectching new, open, closed tickets count
-		Tickets_Count.fetch_tickets_count(Group_ID);
-
-		//Fectching ticket filters
-		Ticket_Filters.fetchFiltersCollection();
 	},
 
 	changeStatus: function(e){

@@ -1,6 +1,9 @@
 <script id="ticket-model-template" type="text/html">
-	<li id="{{id}}" class="list-group-item clearfix b-l-3x b-l-info data cursor-pointer ticket"  data-id="{{id}}">
-    <a class="pull-left m-r" href="javascript:void(0);">
+	<li id="{{id}}" class="p-l-xxl list-group-item clearfix b-l-3x {{toLowerCase priority}}-priority data cursor-pointer ticket"  data-id="{{id}}" style="padding-left: 35px;">
+    <div class="checkbox-st">
+      <input class="ticket-checkbox" type="checkbox" data-ticket-id="{{id}}">
+    </div>
+    <a class="avatar thumb pull-left m-r" href="javascript:void(0);">
       <img src="{{emailGravatarurl 42 requester_email}}">
     </a>
     <div class="pull-right text-sm text-muted">
@@ -23,19 +26,20 @@
     </div>
     <div id="ticket-last-notes">
       <div class="row mar-no">
-        <div class="col-md-9 p-sm">
+        <!-- <div class="col-md-9 p-sm">
           <div class="text-light">Ticket# {{short_id}}</div>
         </div>
         <div class="col-md-3 p-sm">
           <div><span class="label label-primary first-letter-cap pull-right">{{priority}}</span></div>
         </div>
       </div>
-      <hr class="m-t-none m-b-sm">
-      <div class="row m-n mar-btm-md last-notes-drp-dwn">
+      <hr class="m-t-none m-b-sm"> -->
+      <div class="row m-n mar-btm-md last-notes-drp-dwn p-t">
         <div class="col-md-12 pad-all-sm">
           <span>Last Reply</span>
           <span class="text-light txt-small pull-right">
-            {{epochToHumanDate "ddd mmm dd yyyy HH:MM" last_updated_time}}
+            {{epochToHumanDate "ddd mmm dd yyyy HH:MM" last_updated_time}}&nbsp;
+            <span class="label label-primary first-letter-cap {{toLowerCase priority}}-priority-bg">{{priority}}</span>
           </span>
         </div>
         <div id="recent-reply-notes" class="col-md-12 p recent-reply-notes">
