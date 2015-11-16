@@ -33,7 +33,7 @@
 	<div class="panel-body">
 		<div class="form-horizontal">
           <div class="p-t-lg text-center m-b">
- <img src="/flatfull/img/free-plan.png" height="110" width="115">
+ <img src="{{getS3ImagePath '/flatfull/img/free-plan.png'}}" height="110" width="115">
                         </div>
 
 		{{#check_plan "FREE"}}
@@ -92,7 +92,7 @@
 {{#stringToJSON this "billingData"}}{{/stringToJSON}}
 {{#if billingData}}
  <div class="p-t-lg text-center m-b">
-                           <img src="/flatfull/img/credit-card.png" height="110" width="115">
+                           <img src="{{getS3ImagePath '/flatfull/img/credit-card.png'}}" height="110" width="115">
                         </div>
 	<div class="card-details">
 <div class="control-group p-b-md p-t-xs"></div>
@@ -111,7 +111,7 @@
 </div>
 {{else}}
  <div class="p-t-lg text-center m-b">
-                           <img src="/flatfull/img/no-credit-card.png" height="110" width="115">
+                           <img src="{{getS3ImagePath '/flatfull/img/no-credit-card.png'}}" height="110" width="115">
                         </div>
 <div class="p-b p-t-md">
 <div style="width: 100%; text-align: center;">

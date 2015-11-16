@@ -90,9 +90,9 @@
       	<div class="contact-owner text-base" id="change-owner-element">
         	
 			{{#if owner}}
-        	<span class="contact-owner-pic" style="visibility:visible;"><img class="user-img"  alt="" src="img/company.png" /></span>
+        	<span class="contact-owner-pic" style="visibility:visible;"><img class="user-img"  alt="" src="{{getS3ImagePath 'img/company.png'}}" /></span>
 			{{else}}
-			<span class="contact-owner-pic" style="visibility:hidden;"><img class="user-img"  alt="" src="img/company.png" /></span><span class="contact-owner-add" ><a class="c-p">Assign Owner</a></span>
+			<span class="contact-owner-pic" style="visibility:hidden;"><img class="user-img"  alt="" src="{{getS3ImagePath 'img/company.png'}}" /></span><span class="contact-owner-add" ><a class="c-p">Assign Owner</a></span>
  			{{/if}}
         	<a href="#" id="contact-owner" data={{owner.id}}  class="contact-owner-name">{{owner.name}}</a>
         
@@ -169,7 +169,7 @@
 									{{getPropertyValue properties "first_name"}}</strong>
 							</div>
 						</div>
-						<!-- <div id="qrcode"><img src="img/1-0.gif"></div> -->
+						<!-- <div id="qrcode"><img src="{{getS3ImagePath 'img/1-0.gif'}}"></div> -->
 						<div class="clearfix"></div>
 						
 
@@ -280,8 +280,8 @@
 				<div class="tab-pane active" id="company-contacts">...</div>
 				<div class="tab-pane" id="deals">...</div>
 				<div class="tab-pane" id="cases">...</div>
-                <div class="tab-pane" id="notes"><img src="img/21-0.gif"></img></div>
-               <div class="tab-pane" id="documents"><img src="img/21-0.gif"></img></div>
+                <div class="tab-pane" id="notes"><img src="{{getS3ImagePath 'img/21-0.gif'}}"></img></div>
+               <div class="tab-pane" id="documents"><img src="{{getS3ImagePath 'img/21-0.gif'}}"></img></div>
 			</div>
 		
 	</div>
@@ -354,7 +354,7 @@
 			<div>
             	<div class="slate-content mobile-pad-content">
                 	<div class="box-left pull-left m-r-md">
-                    	<img alt="Clipboard" src="/img/clipboard.png">
+                    	<img alt="Clipboard" src="{{getS3ImagePath '/img/clipboard.png'}}">
                 	</div>
                 	<div class="box-right pull-left">
                     	<h4 class="m-t-none">{{contactShortName}} is not associated with any person/contact. </h4>

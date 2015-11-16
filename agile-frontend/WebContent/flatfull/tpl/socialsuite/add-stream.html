@@ -17,7 +17,7 @@
 <script id="socialsuite-hover-helptext-template" type="text/html">
     {{#if_equals item "Search"}}<i class="icon-search"></i> Relevant Tweets matching a specified Search Keyword.{{/if_equals}}
     {{#if_equals item "Home"}}<i class="icon-home"></i> Tweets and retweets of user and followers.{{/if_equals}}
-    {{#if_equals item "Mentions"}}<img src="../img/socialsuite/mentions.png" style="width: 15px;height: 15px;"> Mentions (all tweets containing a users's @screen_name). {{/if_equals}}
+    {{#if_equals item "Mentions"}}<img src="{{getS3ImagePath '../img/socialsuite/mentions.png'}}" style="width: 15px;height: 15px;"> Mentions (all tweets containing a users's @screen_name). {{/if_equals}}
     {{#if_equals item "Retweets"}}<i class="icon-retweet"></i> User's tweets retweeted by others. {{/if_equals}}
     {{#if_equals item "DM_Inbox"}}<i class="icon-download-alt"></i> Direct messages sent to the user. {{/if_equals}}
     {{#if_equals item "DM_Outbox"}}<i class="icon-upload-alt"></i> Direct messages sent by the user. {{/if_equals}}

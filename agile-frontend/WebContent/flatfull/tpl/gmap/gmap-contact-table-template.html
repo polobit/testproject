@@ -39,13 +39,13 @@
 			{{#stringToJSON this "parsedUserAgent"}}
         	<div>
 				{{#if device_type}}
-              		<img class="inline m-r-xs r r-2x" style="width:12px;" src="/img/web-stats/devices/{{device_type}}.png"  title="{{device_type}}">
+              		<img class="inline m-r-xs r r-2x" style="width:12px;" src="{{getS3ImagePath '/img/web-stats/devices/{{device_type}}.png'}}"  title="{{device_type}}">
 				{{/if}}
 				{{#if os}}
-                	<img class="inline m-r-xs r r-2x" style="width:12px;" src="/img/web-stats/os/{{normalize_os os}}.png" title="{{os}}">
+                	<img class="inline m-r-xs r r-2x" style="width:12px;" src="{{getS3ImagePath '/img/web-stats/os/{{normalize_os os}}.png'}}" title="{{os}}">
 				{{/if}}
 				{{#if browser_name}}
-		      		<img class="inline m-r-xs r r-2x" style="width:12px;" src="/img/web-stats/browsers/{{browser_name}}.png"  title="{{browser_name}}">
+		      		<img class="inline m-r-xs r r-2x" style="width:12px;" src="{{getS3ImagePath '/img/web-stats/browsers/{{browser_name}}.png'}}"  title="{{browser_name}}">
 				{{/if}}
         	</div>
        		{{/stringToJSON}}
