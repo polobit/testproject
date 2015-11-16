@@ -39,14 +39,12 @@ $(document).ready(function(){
 
 	if(( $(window).width() ) < 768 ) {
 
-	$('body').on('touchstart','table tr  input[type="checkbox"]',function(){
-    $(this).parent().removeClass('i-checks-sm').addClass('i-checks-lg');
-	});
+	
 
 	 $('body').on('click','#view-list .dropdown-toggle' , function(){
          $("#contact-sort-views").css("display","none");
     });
-
+   
 
 	$('body').on('touchend','#mobile-dropdown-click-sort',function() {
 		$("#contact-sort-views").css("display","block");
@@ -56,7 +54,10 @@ $(document).ready(function(){
         $(this).css('display','none');
     });	
 
-  
+   $('body').on('touchstart','.i-checks',function(e){
+   	e.preventDefault();
+   $(this).find('input[type="checkbox"]').trigger('click');
+   });
    
 
 	$('body').on('click','.navbar-brand',function(){
