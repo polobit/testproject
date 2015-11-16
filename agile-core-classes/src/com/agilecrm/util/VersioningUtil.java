@@ -44,7 +44,7 @@ public class VersioningUtil
 	}
 	else
 	{
-	    APP_ID = "agilecrmbeta";
+	    APP_ID = "agile-crm-cloud";
 	    IS_LOCAL_DEVELOPMENT_SERVER = true;
 	    IS_PRODUCTION_APP = "agile-crm-cloud".equals(APP_ID);
 	    RELEASE_VERSION = "default";
