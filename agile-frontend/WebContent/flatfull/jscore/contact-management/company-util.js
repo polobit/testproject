@@ -491,6 +491,13 @@
 			COMPANIES_HARD_RELOAD=true;
 			App_Companies.companies();
 		});
+
+		$("body").on('click', '.comp-sort-by-name', function(e){
+			e.preventDefault();
+			createCookie('company_sort_field',$(this).attr('data'));
+			COMPANIES_HARD_RELOAD=true;
+			App_Companies.companies();
+		});
 	};
 	
 	company_list_view.init = function(cel){
