@@ -16,6 +16,8 @@ function organize_sync_widgets(base_model)
 		$('#stripe', this.el).append($(itemView.render().el));
 	if (sync_type == "FRESHBOOKS")
 		$('#freshbook', this.el).append($(itemView.render().el));
+	if (sync_type == "OFFICE365")
+		$('#office365', this.el).append($(itemView.render().el));
 	if (sync_type == "SHOPIFY")
 		$('#shopify', this.el).append($(itemView.render().el));
 	if (sync_type == "QUICKBOOK")
@@ -64,6 +66,11 @@ function initializeDataSyncListners(){
 		}
 		if(sync_type=="FRESHBOOKS"){
 			Backbone.history.navigate("#sync/freshbooks" , {
+                trigger: true
+            });
+		}
+		if(sync_type=="OFFICE365"){
+			Backbone.history.navigate("#sync/officeCalendar" , {
                 trigger: true
             });
 		}
