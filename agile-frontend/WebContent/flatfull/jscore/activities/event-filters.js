@@ -274,6 +274,7 @@ function removeFullCalendarEvents(ownerid)
 }
 
 
+
 /**
  * if agile calenar is unchecked then from cookie it removes all userids and puts only current userid
  * @param uncheckedagile
