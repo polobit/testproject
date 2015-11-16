@@ -274,6 +274,9 @@ public class Contact extends Cursor
     @NotSaved
     public String bulkActionTracker = "";
 
+    /**
+     * To update text document forcably
+     */
     @JsonIgnore
     @NotSaved
     public boolean forceSearch = false;
