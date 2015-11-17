@@ -266,6 +266,9 @@ public class ScribeServlet extends HttpServlet {
 			if (query != null) {
 				req.getSession().setAttribute("query", query);
 			}
+			
+			System.out.println("In setup of scribe response: " + resp);
+			req.getSession().setAttribute("isForAll", isForAll);
 
 			System.out.println("Redirect URL OAuth2: " + url);
 		} else if (serviceName.equalsIgnoreCase(SERVICE_TYPE_ZOHO)) {
@@ -293,7 +296,6 @@ public class ScribeServlet extends HttpServlet {
 				if (pluginId != null)
 					req.getSession().setAttribute("plugin_id", pluginId);
 
-				req.getSession().setAttribute("isForAll", isForAll);
 				System.out.println("In setup of scribe response: " + resp);
 				req.getSession().setAttribute("isForAll", isForAll);
 
