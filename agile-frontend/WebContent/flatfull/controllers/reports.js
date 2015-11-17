@@ -35,6 +35,8 @@ var ReportsRouter = Backbone.Router
 				hideTransitionBar();
 				$(".active").removeClass("active");
 				$("#reportsmenu").addClass("active");
+				$("#dealstab").addClass("active");
+				$("#deals-tab").addClass("active");
 
 					$('[data-toggle="tooltip"]').tooltip();
 
