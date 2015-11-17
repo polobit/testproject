@@ -94,24 +94,28 @@
 
                <div class="tab-container">
        <ul class="nav nav-tabs" id="subTab">
+                                            {{#hasMenuScope 'DEALS'}}
                                             <li role="presentation" class="active" data-tab="6" id="dealstab">
-                                                <a href="#deals-tab" name="email-content" aria-control="email-content" role="tab" data-toggle="tab" id="emails">Deals</a>
+                                                <a href="#deals-tab" role="tab" data-toggle="tab">Deals</a>
                                             </li>
-                                             <li role="presentation" data-tab="5">
-                                                <a href="#calls-tab" name="email-content" aria-control="email-content" role="tab" data-toggle="tab" id="emails">Calls</a>
+                                            {{/hasMenuScope}}
+                                             <li role="presentation" data-tab="5" id="callstab">
+                                                <a href="#calls-tab"   role="tab" data-toggle="tab" >Calls</a>
                                             </li>
+                                            {{#hasMenuScope 'ACTIVITY'}}
                                              <li role="presentation" data-tab="4">
-                                                <a href="#activities-tab" name="email-content" aria-control="email-content" role="tab" data-toggle="tab" id="emails">Activities</a>
+                                                <a href="#activities-tab"  role="tab" data-toggle="tab" >Activities</a>
                                             </li>
+                                            {{/hasMenuScope}}
                                               <li role="presentation" data-tab="2">
-                                                <a href="#graph-tab" name="email-content" aria-control="email-content" role="tab" data-toggle="tab" id="emails">Growth Graphs</a>
+                                                <a href="#graph-tab"  role="tab" data-toggle="tab">Growth Graphs</a>
                                             </li>
                                             <li role="presentation"  data-tab="1">
-                                                <a href="#email-tab" role="tab" name="users-content" data-toggle="tab" aria-control="users-content" id="users">Reports via Email</a>
+                                                <a href="#email-tab" role="tab"  data-toggle="tab">Reports via Email</a>
                                             </li>
                                           
                                              <li role="presentation" data-tab="3">
-                                                <a href="#campaign-tab" name="email-content" aria-control="email-content" role="tab" data-toggle="tab" id="emails">Campaigns</a>
+                                                <a href="#campaign-tab" role="tab" data-toggle="tab">Campaigns</a>
                                             </li>
 
 </ul>

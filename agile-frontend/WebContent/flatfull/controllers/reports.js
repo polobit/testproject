@@ -35,9 +35,15 @@ var ReportsRouter = Backbone.Router
 				hideTransitionBar();
 				$(".active").removeClass("active");
 				$("#reportsmenu").addClass("active");
-				$("#dealstab").addClass("active");
-				$("#deals-tab").addClass("active");
-
+				if($("#dealstab").length>0){
+					$("#dealstab").addClass("active");
+					$("#deals-tab").addClass("active");
+				}
+				else
+				{
+					$("#callstab").addClass("active");
+					$("#calls-tab").addClass("active");
+				}
 					$('[data-toggle="tooltip"]').tooltip();
 
 				}, "#reports-listerners-container");
