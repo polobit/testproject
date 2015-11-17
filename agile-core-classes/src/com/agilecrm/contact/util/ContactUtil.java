@@ -821,8 +821,23 @@ public class ContactUtil
 		.order("-viewed.viewed_time").limit(Integer.parseInt(page_size)).list();
     }
 
+    /**
+     * If contacts are associated with a company, on deletion of company,
+     * referece of company is removed from all its related contacts
+     * 
+     * @param company
+     */
     public static void removeCompanyReferenceFromContacts(Contact company)
     {
+	Map<String, Object> searchMap = new HashMap<String, Object>();
+	Key<Contact> companyKey = new Key<Contact>(Contact.class, company.id);
+	searchMap.put("contact_company_key", companyKey);
+	int count = Contact.dao.getCountByProperty(searchMap);
+
+	// If count is 0, then there are no contacts related to it.
+	if (count == 0)
+	    return;
+
 	CompanyDeleteDeferredTask task = new CompanyDeleteDeferredTask(company.name, company.id, NamespaceManager.get());
 	Queue defaultQueue = QueueFactory.getDefaultQueue();
 	defaultQueue.addAsync(TaskOptions.Builder.withPayload(task));
