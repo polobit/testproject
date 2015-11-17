@@ -1667,15 +1667,15 @@ text-align: center;
 .portlet_header_icons i:first-child {
   margin-right: 15px;
 }
-#navbar * {
+/*#navbar * {
   text-align: center;
 }
 #navbar .dropdown-menu a {
   display: inline-block;
 }
-.nav-bar-search {
+#searchForm {
   margin: 0 auto;
-  width: 90%;
+  padding: 10px 35px;
 }
 .navbar-nav li a i+span {
   display: inline-block!important;
@@ -1687,6 +1687,37 @@ text-align: center;
 #navbar {
 box-shadow: 0 0 10px 0px #bbb;
 }
+#fat-menu .avatar {
+  float: none!Important;
+}
+#fat-menu div {
+  float: none!important;
+  display: inline-block;
+  position: relative;
+  top: 5px;
+  padding-left: 3px;
+}*/
+
+#searchForm {
+  
+  padding: 10px 20px;
+}
+
+.navbar-nav li a i+span {
+  display: inline-block!important;
+  padding-left: 2px;
+}
+#recent-menu .dropdown-menu {
+  width: 100%!important;
+}
+#recent-menu .dropdown-menu .list-group-item {
+  padding:10px 7px;
+  border: none;
+}
+ .nav > li > a {
+   padding: 10px 20px; 
+  }
+
 }
 
 @media all and (min-width: 768px) {
