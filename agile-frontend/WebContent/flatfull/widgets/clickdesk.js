@@ -179,6 +179,8 @@ function showChats(data)
 		{
 			$('#clickdesk_chats_panel').html('<li class="list-group-item r-none b-l-none b-r-none">No chats</li>');
 			return;
+		}else if(data.length == 5){
+			$('.click-chat-footer').removeClass('hide');
 		}
 
 		// Fills chat template with chats and shows chat in chat panel
@@ -407,6 +409,8 @@ function showClickDeskTickets(data)
 	{
 		$('#clickdesk_tickets_panel').html('<li class="list-group-item r-none b-l-none b-r-none">No tickets</li>');
 		return;
+	}else if(data.length == 5){
+		$('.click-tickets-footer').removeClass('hide');
 	}
 
 	getTemplate('clickdesk-ticket-stream', data, undefined, function(template_ui){

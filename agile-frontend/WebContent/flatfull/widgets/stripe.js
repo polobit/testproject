@@ -4,6 +4,13 @@
  * based on the function provided on agile_widgets.js (Third party API).
  */
 
+var stripeOBJ = {};
+var stripeINVCount = 1;
+var stripePAYCount = 1;
+
+var showMoreStripeINV = '<div class="widget_tab_footer stripe_inv_show_more" align="center"><a class="c-p text-info" id="stripe_inv_show_more" rel="tooltip" title="Click to see more tickets">Show More</a></div>';
+var showMoreStripePAY = '<div class="widget_tab_footer stripe_pay_show_more" align="center"><a class="c-p text-info" id="stripe_pay_show_more" rel="tooltip" title="Click to see more tickets">Show More</a></div>';
+
 /**
  * Shows setup if user adds Stripe widget for the first time. Uses ScribeServlet
  * to create a client and get preferences and save it to the widget.
@@ -147,6 +154,7 @@ function showStripeProfile(stripe_custom_field_name, contact_id)
 		getTemplate('stripe-profile', data, undefined, function(template_ui){
 	 		if(!template_ui)
 	    		return;
+	    	
 	    	var stripe_template = $(template_ui);
 	    	// Load jquery time ago function to show time ago in invoices
 			head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
@@ -156,12 +164,75 @@ function showStripeProfile(stripe_custom_field_name, contact_id)
 
 			// Show the template in Stripe widget panel
 			$('#Stripe').html(stripe_template);
+
+			stripeOBJ = {};
+			stripeINVCount = 1;
+			stripePAYCount = 1;
+
+			stripeOBJ.invoice = data.invoice;
+			stripeOBJ.payments = data.payments;
+			loadStripeInvoices(0);
+			loadStripePayments(0);
 			 
 		}, null);
 
 			
 	}, contact_id);
 
+}
+
+function loadStripeInvoices(offSet){
+
+	if(offSet == 0){
+		var result = {};
+		result.invoice = stripeOBJ.invoice.slice(0, 5);
+
+		getTemplate('stripe-invoices', result, undefined, function(template_inv){			
+			$('#invoice_block').append(template_inv);
+		},null);
+
+		if(stripeOBJ.invoice.length > 5){
+			$('#invoice_block').append(showMoreStripeINV);
+		}
+	}else if(offSet > 0  && (offSet+5) < stripeOBJ.invoice.length){
+		var result = {};
+		result.invoice = stripeOBJ.invoice.slice(offSet, (offSet+5));
+		$('.stripe_inv_show_more').remove();
+		$('#invoice_block').apped(getTemplate('stripe-invoices', result));
+		$('#invoice_block').append(showMoreStripeINV);
+	}else{
+		var result = {};
+		result.invoice = stripeOBJ.invoice.slice(offSet, stripeOBJ.invoice.length);
+		$('.stripe_inv_show_more').remove();
+		$('#invoice_block').append(getTemplate('stripe-invoices', result));
+	}
+
+}
+
+function loadStripePayments(offSet){
+	if(offSet == 0){
+		var result = {};
+		result.payments = stripeOBJ.payments.slice(0, 5);
+
+		getTemplate('stripe-payments', result, undefined, function(template_pay){			
+			$('#payments_block').append(template_pay);
+		},null);
+
+		if(stripeOBJ.payments.length > 5){
+			$('#payments_block').append(showMoreStripePAY);
+		}
+	}else if(offSet > 0  && (offSet+5) < stripeOBJ.payments.length){
+		var result = {};
+		result.payments = stripeOBJ.payments.slice(offSet, (offSet+5));
+		$('.stripe_pay_show_more').remove();
+		$('#payments_block').apped(getTemplate('stripe-payments', result));
+		$('#payments_block').append(showMoreStripePAY);
+	}else{
+		var result = {};
+		result.payments = stripeOBJ.payments.slice(offSet, stripeOBJ.payments.length);
+		$('.stripe_pay_show_more').remove();
+		$('#payments_block').append(getTemplate('stripe-payments', result));
+	}
 }
 
 /**
@@ -227,6 +298,11 @@ function stripeError(id, message)
 }
 
 function startStripeWidget(contact_id){
+
+	stripeOBJ = {};
+	stripeINVCount = 1;
+	stripePAYCount = 1;
+
 	// Stripe widget name as a global variable
 	Stripe_PLUGIN_NAME = "Stripe";
 
@@ -280,4 +356,22 @@ function startStripeWidget(contact_id){
 	 * invoices from Stripe
 	 */
 	showStripeProfile(stripe_custom_field_name, contact_id);
+
+	$("#widgets").off("click", "#stripe_pay_show_more");
+	$("#widgets").on("click", "#stripe_pay_show_more", function(e)
+	{
+		e.preventDefault();
+		var offSet = stripePAYCount * 5;
+		loadStripePayments(offSet);
+		++stripePAYCount;
+	});
+
+	$("#widgets").off("click", "#stripe_inv_show_more");
+	$("#widgets").on("click", "#stripe_inv_show_more", function(e)
+	{
+		e.preventDefault();
+		var offSet = stripeINVCount * 5;
+		loadStripeInvoices(offSet);
+		++stripeINVCount;
+	});
 }

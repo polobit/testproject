@@ -125,7 +125,7 @@ function initializeSubmitHandler(form, emailField, subdomainField, submit_button
 						var email = $("#" + emailField).val();
 						var domain = $("#" + subdomainField).val();
 
-						var url =  "/backend/register-check?email=" + email +"&domain="+ domain;
+						var url =  "/backend/register-check?email=" + encodeURIComponent(email) +"&domain="+ domain;
 						 
 						 $(submit_button).attr("disabled", "disabled");
 

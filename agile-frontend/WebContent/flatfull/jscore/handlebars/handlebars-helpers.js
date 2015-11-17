@@ -2640,15 +2640,14 @@ $(function()
 	 */
 	Handlebars.registerHelper('capFirstLetter', function(data)
 	{
-		if (data === "DEFAULT")
-		{
-			// console.log("return empty");
-			return "";
-		}
-		else
-		{
-			var temp = data.toLowerCase();
-			return temp.charAt(0).toUpperCase() + temp.slice(1);
+		if(data){
+			if (data === "DEFAULT"){
+				// console.log("return empty");
+				return "";
+			}else{
+				var temp = data.toLowerCase();
+				return temp.charAt(0).toUpperCase() + temp.slice(1);
+			}
 		}
 	});
 
@@ -4776,15 +4775,17 @@ $(function()
 	 */
 	Handlebars.registerHelper('capFirstLetter', function(data)
 	{
-		if (data === "DEFAULT")
-		{
-			// console.log("return empty");
-			return "";
-		}
-		else
-		{
-			var temp = data.toLowerCase();
-			return temp.charAt(0).toUpperCase() + temp.slice(1);
+		if(data){
+			if (data === "DEFAULT")
+			{
+				// console.log("return empty");
+				return "";
+			}
+			else
+			{
+				var temp = data.toLowerCase();
+				return temp.charAt(0).toUpperCase() + temp.slice(1);
+			}
 		}
 	});
 

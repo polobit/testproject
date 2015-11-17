@@ -1242,8 +1242,10 @@ public class ContactUtil
     public static boolean isValidEmail(final String hex)
     {
 
-	String EMAIL_PATTERN = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
-		+ "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
+	/*String EMAIL_PATTERN = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
+		+ "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";*/
+	
+    String EMAIL_PATTERN = "^[a-zA-Z0-9.!#$%&'*+\\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$";
 
 	Pattern pattern = Pattern.compile(EMAIL_PATTERN);
 
@@ -1721,4 +1723,5 @@ public class ContactUtil
 	Queue queue = QueueFactory.getQueue(AgileQueues.LAST_CONTACTED_UPDATE_QUEUE);
 	queue.add(TaskOptions.Builder.withPayload(lastContactDeferredtask));
     }
+    
 }

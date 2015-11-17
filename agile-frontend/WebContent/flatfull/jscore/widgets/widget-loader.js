@@ -158,13 +158,15 @@ function widgetBindingsLoader(){
 		if (is_collapsed)
 		{
 			$("#" + widget_name).collapse('show');
-		}else{
+		}else{			
 			queueGetRequest("_widgets_", "flatfull/"+widget.get('url'), "script", function(data, queueName){
 					try{
 					console.log("start" + model.get('name') + "Widget");
 					  eval("start" + model.get('name') + "Widget")(queueName.replace("_widgets_", ""));	
 					  $("#" + widget_name).collapse('show');
-					}catch(err){console.log(err);}		
+					}catch(err){ 						
+						console.log(err);
+					}		
 			}, undefined, 'true');
 		}
 
