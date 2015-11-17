@@ -59,6 +59,7 @@ $(document).ready(function(){
    $(this).find('input[type="checkbox"]').trigger('click');
    });
    
+   
 
 	$('body').on('click','.navbar-brand',function(){
      $("#navbar").removeClass('show');

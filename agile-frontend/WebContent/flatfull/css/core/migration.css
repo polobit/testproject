@@ -1667,6 +1667,26 @@ text-align: center;
 .portlet_header_icons i:first-child {
   margin-right: 15px;
 }
+#navbar * {
+  text-align: center;
+}
+#navbar .dropdown-menu a {
+  display: inline-block;
+}
+.nav-bar-search {
+  margin: 0 auto;
+  width: 90%;
+}
+.navbar-nav li a i+span {
+  display: inline-block!important;
+}
+#due_tasks_count {
+  margin-left: 0px!important;
+  float: none!important;
+}
+#navbar {
+box-shadow: 0 0 10px 0px #bbb;
+}
 }
 
 @media all and (min-width: 768px) {
