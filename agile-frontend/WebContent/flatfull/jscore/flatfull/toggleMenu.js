@@ -58,8 +58,20 @@ $(document).ready(function(){
    	e.preventDefault();
    $(this).find('input[type="checkbox"]').trigger('click');
    });
+
+   $('body').on('click','#mobile-menu-settings',function(){
+    if($('#navbar').hasClass('show')){
+    	$('body').css('overflow-y','hidden');
+    }
+    else {
+    	$('body').css('overflow-y','auto');
+    }
+	});
+
+    $('.agile-menu .fa-history').removeClass('text-md  text-muted');
    
    
+
 
 	$('body').on('click','.navbar-brand',function(){
      $("#navbar").removeClass('show');
