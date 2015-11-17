@@ -114,6 +114,18 @@ var LandingPageRouter = Backbone.Router.extend({
 
         getTemplate("landingpages-settings", model.toJSON(), undefined, function(ui){
             $("#landingpages-listeners").html($(ui));
+            var cnameEL = document.getElementById("cname");
+            if($("#cname").attr("href") != "") {
+                var parts = cnameEL.hostname.split('.');
+                $("#sub_domain").val(parts.shift());
+                $("#domain").val(parts.join('.'));
+
+                var dirPath = cnameEL.pathname;
+                if(dirPath.charAt(0) === '/'){
+                    dirPath = dirPath.substr(1);
+                }
+                $("#directory_path").val(dirPath);
+            }
         }, "#landingpages-listeners");
         
         hideTransitionBar();

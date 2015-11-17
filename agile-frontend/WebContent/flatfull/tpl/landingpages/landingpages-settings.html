@@ -19,11 +19,32 @@
 <div class="col-md-6">
 <form id="landingPageSettingForm">
 <div class="panel panel-default">
-  <div class="panel-heading">CNAME Setup</div>
+  <div class="panel-heading">Custom Domain Setup</div>
   <div class="panel-body">
-    <p>Please create a CNAME record to add an alias for the CNAME you selected for {{getCurrentDomain}}-{{id}}.agilelanding.com</p>
     <div>
-      <input type="url" class="form-control" id="cname" value="{{cname}}" required placeholder="Eg: http://your.domain.com/landing-page-title">
+
+        <div class="form-group">
+            <label for="inpuFname">Enter the domain you want to point to the landing page.</label>
+            <div class="input-group">
+              <span class="input-group-addon">http://</span>
+
+              <input type="text" value="" class="form-control" id="sub_domain" name="sub_domain" placeholder="Sub Domain" required>
+              <span class="input-group-addon" style="border-left: none;border-right: none;">.</span>
+
+              <input type="text" value="" class="form-control" id="domain" name="domain" placeholder="Domain" required>
+              <span class="input-group-addon" style="border-left: none;border-right: none;">/</span>
+
+              <input type="text" value="" class="form-control" id="directory_path" name="directory_path" placeholder="Optional Directory">
+            </div>
+            <div class="row">
+              <span for="sub_domain" generated="true" class="col-md-5 help-inline"></span>
+              <span for="domain" generated="true" class="col-md-7 help-inline"></span>
+            </div>
+        </div>
+
+            <p id="cnameInstructionMessage" style="display:none;">Create a CNAME record in your DNS Setting, with Host &quot;<strong id="cnameHostVal"></strong>&quot; and Destination &quot;<strong>{{getCurrentDomain}}-{{id}}.agilelanding.com.</strong>&quot;</p>
+      <a class="hidden" id="cname" href="{{cname}}">hidden</a>
+
       <span for="cname" generated="true" id="cnameMessage" class="help-inline"></span>
       <br>
       <button class="btn btn-sm btn-primary" id="landingPageSettingBtn" data-pageid="{{id}}">Save</button>
@@ -36,12 +57,12 @@
 
 <div class="col-md-6">
 <div class="panel panel-default">
-  <div class="panel-heading">CNAME Setup Instructions</div>
+  <div class="panel-heading">Setup Instructions</div>
   <div class="panel-body">
     <p>To publish your landing pages to your own domain, you need to:</p>
 <ul>
 <li>Tell your domain to show the pages hosted by Agile CRM.</li>
-<li>Publish your landing by using the CNAME setup.</li>
+<li>Publish your landing by using the custom domain setup.</li>
 </ul>
 
   </div>

@@ -26,22 +26,31 @@ function initializeLandingPageListeners() {
 		if (!isValidForm('#landingPageSettingForm')) {
 			return;
 		}
+ 
+		var CNAME = "http://"+$("#sub_domain").val()+"."+$("#domain").val()+"/"+$("#directory_path").val();
 
 		var modelId = $(this).data("pageid");
 		var model = App_LandingPageRouter.LandingPageCollectionView.collection.get(modelId);
-		model.set("cname",$("#cname").val());
+		model.set("cname",CNAME);
 		model.set("requestViaCnameSetup",true);
 		
 		var landingPageModel = new Backbone.Model();
       	landingPageModel.url = 'core/api/landingpages';
       	landingPageModel.save(model.toJSON(), { success : function(obj){
       		if(obj.get("isDuplicateCName")) {
-				$("#cnameMessage").html('CNAME field should be unique.').show();
+				$("#cnameMessage").html('Custom domain URL should be unique.').show();
 			} else {
 				showNotyPopUp("information", "Saved successfully", "top");
 				App_LandingPageRouter.LandingPageCollectionView.collection.get(modelId).set(obj);
 			}
       	}});
+	});
+
+	$('#landingpages-listeners').on('keyup', '#sub_domain', function (e) {
+		if($("#cnameInstructionMessage").is(':hidden')) {
+			$("#cnameInstructionMessage").show();
+		}
+		$("#cnameHostVal").html($(this).val());
 	});
 
 	$('#landingpages-listeners').on('click', '.lpBuilderMenuItem', function(e){
