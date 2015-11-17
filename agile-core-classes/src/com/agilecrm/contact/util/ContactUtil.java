@@ -843,6 +843,16 @@ public class ContactUtil
 	defaultQueue.addAsync(TaskOptions.Builder.withPayload(task));
     }
 
+    public static void removeCompanyReferenceFromBulk(List<Contact> companies)
+    {
+	for (Contact company : companies)
+	{
+	    CompanyDeleteDeferredTask task = new CompanyDeleteDeferredTask(company.name, company.id,
+		    NamespaceManager.get());
+	    task.run();
+	}
+    }
+
     public static void deleteContactsbyList(List<Contact> contacts)
     {
 	for (Contact contact : contacts)
