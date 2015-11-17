@@ -166,7 +166,7 @@ google_calendar:function(el){
                         initializeTabListeners("datasync_tab", "sync");
                        getSyncModelFromName("officeCalendar", function(model){
                             var url= 'core/api/contactprefs/STRIPE',
-                            template= 'admin-settings-office365-calendar-prefs';
+                            template= 'admin-settings-import-office365-calendar-prefs';
                             renderInnerSyncView(url,template,model,function(model){
                                 showNotyPopUp("information", "Contacts sync initiated", "top", 1000);
                             });                       
