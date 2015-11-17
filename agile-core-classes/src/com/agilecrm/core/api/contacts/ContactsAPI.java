@@ -1234,13 +1234,13 @@ public class ContactsAPI
 	{
 	    task = new ContactExportBulkPullTask(contact_ids, filter, dynamicFilter, currentUserId,
 		    NamespaceManager.get());
+	    PullQueueUtil.addToPullQueue("bulk-export-pull-queue", task, NamespaceManager.get());
 	}
 	else
 	{
 	    task = new ContactExportPullTask(contact_ids, filter, dynamicFilter, currentUserId, NamespaceManager.get());
+	    PullQueueUtil.addToPullQueue("export-pull-queue", task, NamespaceManager.get());
 	}
-
-	PullQueueUtil.addToPullQueue("export-pull-queue", task, NamespaceManager.get());
 
 	// filter, dynamicFilter, data);
 

@@ -103,12 +103,11 @@ function _fetchGCAndAddEvents(sourceOptions, start, end)
 			var fc_event = google2fcEvent(resp.items[i]);
 
 			if (fc_event)
-			// Add event
-			$('#calendar_event').fullCalendar( 'renderEvent', fc_event  )
+				// Add event
+				$('#calendar_event').fullCalendar('renderEvent', fc_event)
 				
 		}
 
-		
 	});
 }
 
