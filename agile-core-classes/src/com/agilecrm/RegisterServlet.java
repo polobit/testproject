@@ -226,7 +226,7 @@ public class RegisterServlet extends HttpServlet
 	}
 
 	String redirectionURL = VersioningUtil.getURL(domainUser.domain, request);
-
+	redirectionURL+= "/#subscribe";
 	// Redirect to home page
 	response.sendRedirect(redirectionURL);
     }
