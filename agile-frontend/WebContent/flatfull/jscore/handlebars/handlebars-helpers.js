@@ -685,7 +685,7 @@ $(function()
 										{
 											if (count == 1 && key == "")
 											{
-												html += '<div class="alert-info alert"><div class="slate-content"><div class="box-left pull-left m-r-md"><img alt="Clipboard" src="/img/clipboard.png"></div><div class="box-right pull-left"><h4 class="m-t-none">You have no milestones defined</h4><br><a href="#milestones" class="btn btn-default btn-sm m-t-xs"><i class="icon icon-plus-sign"></i> Add Milestones</a></div><div class="clearfix"></div></div></div>';
+												html += '<div class="alert-info alert"><div class="slate-content"><div class="box-left pull-left m-r-md"><img alt="Clipboard" src="'+updateImageS3Path("/img/clipboard.png")+'"></div><div class="box-right pull-left"><h4 class="m-t-none">You have no milestones defined</h4><br><a href="#milestones" class="btn btn-default btn-sm m-t-xs"><i class="icon icon-plus-sign"></i> Add Milestones</a></div><div class="clearfix"></div></div></div>';
 											}
 											else
 											{
@@ -1947,10 +1947,10 @@ $(function()
 		{
 			if (i < parseInt(value))
 			{
-				element = element.concat('<li style="display: inline;"><img src="img/star-on.png" alt="' + i + '"></li>');
+				element = element.concat('<li style="display: inline;"><img src="'+updateImageS3Path("img/star-on.png")+'" alt="' + i + '"></li>');
 				continue;
 			}
-			element = element.concat('<li style="display: inline;"><img src="img/star-off.png" alt="' + i + '"></li>');
+			element = element.concat('<li style="display: inline;"><img src="'+updateImageS3Path("img/star-off.png")+'" alt="' + i + '"></li>');
 		}
 		return new Handlebars.SafeString(element);
 	});
@@ -3353,7 +3353,7 @@ $(function()
 
 						// default when we can't find image uploaded or url to
 						// fetch from
-						var default_return = "src='img/company.png' style='width:" + full_size + "px; height=" + full_size + "px;" + additional_style + "'";
+						var default_return = "src='"+updateImageS3Path('img/company.png')+"' style='width:" + full_size + "px; height=" + full_size + "px;" + additional_style + "'";
 
 						// when the image from uploaded one or favicon can't be
 						// fetched, then show company.png, adjust CSS ( if style
@@ -3368,7 +3368,7 @@ $(function()
 								// found uploaded image, break, no need to
 								// lookup url
 
-								error_fxn = "this.src='img/company.png'; this.onerror=null;";
+								error_fxn = "this.src='"+updateImageS3Path('img/company.png')+"'; this.onerror=null;";
 								// no need to resize, company.png is of good
 								// quality & can be scaled to this size
 
@@ -3380,7 +3380,7 @@ $(function()
 								// favicon fetch -- Google S2 Service, 32x32,
 								// rest padding added
 
-								error_fxn = "this.src='img/company.png'; " + "$(this).css('width','" + frame_size + "px'); $(this).css('height','" + frame_size + "px');" + "$(this).css('padding','4px'); this.onerror=null;";
+								error_fxn = "this.src='"+updateImageS3Path("img/company.png")+"'; " + "$(this).css('width','" + frame_size + "px'); $(this).css('height','" + frame_size + "px');" + "$(this).css('padding','4px'); this.onerror=null;";
 								// resize needed as favicon is 16x16 & scaled to
 								// just 32x32, company.png is adjusted on error
 							}
@@ -3428,7 +3428,7 @@ $(function()
 						{
 
 							if (this[0].count > 9999 && (readCookie('contact_filter') || readData('dynamic_contact_filter')))
-								count_message = "<small> (" + 10000 + "+ Total) </small>" + '<span style="vertical-align: text-top; margin-left: -5px">' + '<img border="0" src="/img/help.png"' + 'style="height: 10px; vertical-align: middle" rel="popover"' + 'data-placement="bottom" data-title="Lead Score"' + 'data-content="Looks like there are over 10,000 results. Sorry we can\'t give you a precise number in such cases."' + 'id="element" data-trigger="hover">' + '</span>';
+								count_message = "<small> (" + 10000 + "+ Total) </small>" + '<span style="vertical-align: text-top; margin-left: -5px">' + '<img border="0" src="'+updateImageS3Path("/img/help.png")+'"' + 'style="height: 10px; vertical-align: middle" rel="popover"' + 'data-placement="bottom" data-title="Lead Score"' + 'data-content="Looks like there are over 10,000 results. Sorry we can\'t give you a precise number in such cases."' + 'id="element" data-trigger="hover">' + '</span>';
 
 							else
 								count_message = "<small> (" + this[0].count + " Total) </small>";
@@ -4053,10 +4053,10 @@ $(function()
 		{
 			if (i < parseInt(value))
 			{
-				element = element.concat('<li style="display: inline;"><img src="img/star-on.png" alt="' + i + '"></li>');
+				element = element.concat('<li style="display: inline;"><img src="'+updateImageS3Path("img/star-on.png")+'" alt="' + i + '"></li>');
 				continue;
 			}
-			element = element.concat('<li style="display: inline;"><img src="img/star-off.png" alt="' + i + '"></li>');
+			element = element.concat('<li style="display: inline;"><img src="'+updateImageS3Path("img/star-off.png")+'" alt="' + i + '"></li>');
 		}
 		return new Handlebars.SafeString(element);
 	});
@@ -6377,7 +6377,7 @@ $(function()
 				{
 
 					if (this[0].count > 9999 && (readCookie('company_filter') || readData('dynamic_company_filter')))
-						count_message = "<small> (" + 10000 + "+ Total) </small>" + '<span style="vertical-align: text-top; margin-left: -5px">' + '<img border="0" src="/img/help.png"' + 'style="height: 10px; vertical-align: middle" rel="popover"' + 'data-placement="bottom" data-title="Lead Score"' + 'data-content="Looks like there are over 10,000 results. Sorry we can\'t give you a precise number in such cases."' + 'id="element" data-trigger="hover">' + '</span>';
+						count_message = "<small> (" + 10000 + "+ Total) </small>" + '<span style="vertical-align: text-top; margin-left: -5px">' + '<img border="0" src="'+updateImageS3Path("/img/help.png")+'"' + 'style="height: 10px; vertical-align: middle" rel="popover"' + 'data-placement="bottom" data-title="Lead Score"' + 'data-content="Looks like there are over 10,000 results. Sorry we can\'t give you a precise number in such cases."' + 'id="element" data-trigger="hover">' + '</span>';
 
 					else
 						count_message = "<small> (" + this[0].count + " Total) </small>";
@@ -6753,3 +6753,11 @@ Handlebars.registerHelper('is_mobile', function(options)
 		else
 		return options.inverse(this);
 	});
+
+/**
+ * Returns a S3 image url .
+ * 
+ */
+Handlebars.registerHelper('getS3ImagePath',function(imageUrl){
+	return new Handlebars.SafeString(updateImageS3Path(imageUrl));	
+});

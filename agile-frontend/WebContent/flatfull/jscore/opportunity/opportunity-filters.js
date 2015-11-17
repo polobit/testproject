@@ -351,7 +351,7 @@ $('#opportunity-listners').on('click', '.deals-list-view', function(e) {
 								filterJSON.pipeline_id = readCookie('agile_deal_track');
 							input.filter = filterJSON;
 							 // Shows message
-						    $save_info = $('<img src="img/1-0.gif" height="18px" width="18px" style="opacity:0.5;"></img>&nbsp;&nbsp;<span><small class="text-success" style="font-size:15px; display:inline-block"><i>Email will be sent shortly.</i></small></span>');
+						    $save_info = $('<img src="'+updateImageS3Path("img/1-0.gif")+'" height="18px" width="18px" style="opacity:0.5;"></img>&nbsp;&nbsp;<span><small class="text-success" style="font-size:15px; display:inline-block"><i>Email will be sent shortly.</i></small></span>');
 						    $(this).parent('.modal-footer').find('.deals-export-csv-message').append($save_info);
 							$save_info.show();
 							// Export Deals.
@@ -732,7 +732,7 @@ function initializeMilestoneListners(el){
 			$(this).attr('disabled', 'disabled');
 			var that = $(this);
 			 // Shows message
-		    $save_info = $('<img src="img/1-0.gif" height="18px" width="18px" style="opacity:0.5;"></img>&nbsp;&nbsp;<span><small class="text-success" style="font-size:15px; display:inline-block"><i>Deleting track.</i></small></span>');
+		    $save_info = $('<img src="'+updateImageS3Path("img/1-0.gif")+'" height="18px" width="18px" style="opacity:0.5;"></img>&nbsp;&nbsp;<span><small class="text-success" style="font-size:15px; display:inline-block"><i>Deleting track.</i></small></span>');
 		    $(this).parent('.modal-footer').find('.pipeline-delete-message').append($save_info);
 			$save_info.show();
 			// Export Deals.
