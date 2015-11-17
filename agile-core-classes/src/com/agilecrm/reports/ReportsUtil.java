@@ -2,12 +2,14 @@ package com.agilecrm.reports;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.TimeZone;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.WordUtils;
@@ -16,6 +18,9 @@ import org.codehaus.jackson.type.TypeReference;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.agilecrm.activities.Activity;
+import com.agilecrm.activities.Call;
+import com.agilecrm.activities.util.ActivityUtil;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Contact.Type;
 import com.agilecrm.contact.ContactField;
@@ -31,7 +36,10 @@ import com.agilecrm.subscription.restrictions.entity.DaoBillingRestriction;
 import com.agilecrm.subscription.restrictions.entity.DaoBillingRestriction.ClassEntities;
 import com.agilecrm.subscription.restrictions.exception.PlanRestrictedException;
 import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.UserPrefs;
 import com.agilecrm.user.access.util.UserAccessControlUtil;
+import com.agilecrm.user.util.DomainUserUtil;
+import com.agilecrm.user.util.UserPrefsUtil;
 import com.agilecrm.util.email.SendMail;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.datastore.EntityNotFoundException;
@@ -435,6 +443,104 @@ public class ReportsUtil
     public static Integer count()
     {
 	return Reports.dao.count();
+    }
+    public static net.sf.json.JSONObject getCallByTime(net.sf.json.JSONObject json)throws Exception{
+    	
+    	long minTime=0L;
+		long maxTime=0L;
+		Long user=null;
+		 String timeZone = "UTC";
+		 UserPrefs userPrefs = UserPrefsUtil.getCurrentUserPrefs();
+	        if (userPrefs != null && userPrefs.timezone != null)
+	        {
+	            timeZone = userPrefs.timezone;
+	        }
+		net.sf.json.JSONObject callsPerPersonJSON=new net.sf.json.JSONObject();
+		JSONObject callsObject=new JSONObject();
+		List<Activity> activitieslist =null;
+		List<DomainUser> domainUsersList=null;
+		DomainUser dUser=DomainUserUtil.getCurrentDomainUser();
+		if(dUser!=null)
+			domainUsersList=DomainUserUtil.getUsers(dUser.domain);
+		if(json!=null){
+			if(json.getString("startDate")!=null)
+				minTime = Long.valueOf(json.getString("startDate"));
+			if(json.getString("endDate")!=null)
+				maxTime = Long.valueOf(json.getString("endDate"))-1;
+			if(json.getString("user")!=null)
+			{
+				user=Long.valueOf(json.getString("user"));
+				domainUsersList=(List<DomainUser>) DomainUserUtil.getDomainUser(user);
+			}
+		}
+				for(DomainUser domainUser : domainUsersList){
+					List<Activity> callActivitiesList = ActivityUtil.getActivitiesByActivityType("CALL",domainUser.id,minTime,maxTime);
+					activitieslist.addAll(callActivitiesList);
+			}
+				callsObject.put("answeredCalls", 0);
+				callsObject.put("busyCalls",0);
+				callsObject.put("failedCalls",0);
+				callsObject.put("voicemails",0);
+			     Calendar startCalendar = Calendar.getInstance(TimeZone.getTimeZone(timeZone));
+			        startCalendar.setTimeInMillis(minTime * 1000);
+			        
+
+			        // Sets calendar with end time.
+			        Calendar endCalendar = Calendar.getInstance(TimeZone.getTimeZone(timeZone));
+			        endCalendar.setTimeInMillis(maxTime * 1000);
+			        long startTimeMilli = startCalendar.getTimeInMillis();
+			        long endTimeMilli = endCalendar.getTimeInMillis();
+			        while (startTimeMilli <= endTimeMilli)
+			        {
+			        	 String createdTime = (startCalendar.getTimeInMillis() / 1000) + "";
+			        	 callsPerPersonJSON.put(createdTime, callsObject);
+			        	 startCalendar.add(Calendar.DAY_OF_MONTH, 1);
+			        	 startCalendar.set(Calendar.HOUR_OF_DAY, 0);
+			             startCalendar.set(Calendar.MINUTE, 0);
+			             startCalendar.set(Calendar.SECOND, 0);
+			             startCalendar.set(Calendar.MILLISECOND, 0);
+			             startTimeMilli = startCalendar.getTimeInMillis();
+			        }
+				for(Activity activity : activitieslist){;
+					
+					   Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone(timeZone));
+			            calendar.setTimeInMillis(activity.time * 1000);
+			            calendar.set(Calendar.HOUR_OF_DAY, 0);
+			            calendar.set(Calendar.MINUTE, 0);
+			            calendar.set(Calendar.SECOND, 0);
+			            calendar.set(Calendar.MILLISECOND, 0);
+			           String createdTime= (calendar.getTimeInMillis() / 1000) + "";
+			            if (callsPerPersonJSON.containsKey(createdTime))
+			            {
+			            	net.sf.json.JSONObject count = callsPerPersonJSON.getJSONObject(createdTime);
+		                    if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.ANSWERED))
+		                    	{
+		                    	
+		                    		int count1=count.getInt("answeredCalls");
+		                    		count.put("answeredCalls",count1++);
+		                    	}
+							else if(activity.custom3!=null && (activity.custom3.equalsIgnoreCase(Call.BUSY) || activity.custom3.equalsIgnoreCase(Call.NO_ANSWER)))
+							{
+		                    	
+	                    		int count1=count.getInt("busyCalls");
+	                    		count.put("busyCalls",count1++);
+	                    	}
+							else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.FAILED))
+							{
+		                    	
+	                    		int count1=count.getInt("failedCalls");
+	                    		count.put("failedCalls",count1++);
+	                    	}
+							else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.VOICEMAIL))
+							{
+		                    	
+	                    		int count1=count.getInt("voicemails");
+	                    		count.put("voicemails",count1++);
+	                    	}
+		                    callsPerPersonJSON.put(createdTime, count);
+			            }
+				}
+    	return callsPerPersonJSON;
     }
 
 }

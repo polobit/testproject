@@ -459,6 +459,8 @@ var ReportsRouter = Backbone.Router
 						templateId=templateId+"-piechart";
 						
 					}
+					if(reportType == 'timebased')
+						templateId=templateId+"-timeGraph";
 					
 					getTemplate(templateId, {}, undefined, function(template_ui){
 						if(!template_ui)
@@ -496,7 +498,8 @@ var ReportsRouter = Backbone.Router
 						options += ("start-date=" + start_time + "&end-date=" + end_time);
 						
 						var url='core/api/portlets/calls-per-person/' + options;
-						
+						if(reportType == 'timebased')
+							url='core/api/reports/calls-time-based/' + options;
 						graphOn=$("#typeCall option:selected").val();
 					    
 					    var userDropDown=$('#users option:selected').val();
