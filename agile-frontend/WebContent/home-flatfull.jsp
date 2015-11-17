@@ -92,6 +92,9 @@ content="<%=domainUser.getInfo(DomainUser.LAST_LOGGED_IN_TIME)%>" />
   String CSS_PATH = "/";
   String FLAT_FULL_PATH = "flatfull/";
 
+  // Static images s3 path
+  String S3_STATIC_IMAGE_PATH = "";
+
   String CLOUDFRONT_TEMPLATE_LIB_PATH = VersioningUtil.getCloudFrontBaseURL();
   
   System.out.println(CLOUDFRONT_TEMPLATE_LIB_PATH);
@@ -321,6 +324,7 @@ if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Produ
 <script src='//cdnjs.cloudflare.com/ajax/libs/headjs/1.0.3/head.min.js'></script>
 <script>
 
+var S3_STATIC_IMAGE_PATH = '<%=S3_STATIC_IMAGE_PATH%>';
 //var LIB_PATH = "//-dpm72z3r2fvl4.cloudfront.net/js/";
 //var LIB_PATH = "//cdnapp.agilecrm.com/";
 var LIB_PATH = '<%=CLOUDFRONT_STATIC_FILES_PATH%>';
