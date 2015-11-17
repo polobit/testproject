@@ -92,9 +92,6 @@ content="<%=domainUser.getInfo(DomainUser.LAST_LOGGED_IN_TIME)%>" />
   String CSS_PATH = "/";
   String FLAT_FULL_PATH = "flatfull/";
 
-  // Static images s3 path
-  String S3_STATIC_IMAGE_PATH = "";
-
   String CLOUDFRONT_TEMPLATE_LIB_PATH = VersioningUtil.getCloudFrontBaseURL();
   
   System.out.println(CLOUDFRONT_TEMPLATE_LIB_PATH);
@@ -102,6 +99,10 @@ content="<%=domainUser.getInfo(DomainUser.LAST_LOGGED_IN_TIME)%>" />
   String CLOUDFRONT_STATIC_FILES_PATH = VersioningUtil.getStaticFilesBaseURL();
 
   CSS_PATH = CLOUDFRONT_STATIC_FILES_PATH;
+  
+  // Static images s3 path
+  String S3_STATIC_IMAGE_PATH = CLOUDFRONT_STATIC_FILES_PATH.replace("flatfull/", "");
+  
   if(SystemProperty.environment.value() == SystemProperty.Environment.Value.Development)
   {
 	  CLOUDFRONT_STATIC_FILES_PATH = FLAT_FULL_PATH;

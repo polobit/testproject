@@ -6341,7 +6341,7 @@ $(function()
 	 * 
 	 */
 	Handlebars.registerHelper('getDefaultImage',function(){
-		return new Handlebars.SafeString(FLAT_FULL_PATH + 'images/flatfull/user-default.jpg');
+		return new Handlebars.SafeString(updateImageS3Path(FLAT_FULL_PATH + 'images/flatfull/user-default.jpg'));
 		
 	});
 	

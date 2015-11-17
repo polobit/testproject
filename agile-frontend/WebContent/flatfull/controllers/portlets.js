@@ -169,7 +169,10 @@ function displayTimeAgo(elmnt)
 function updateImageS3Path(imageUrl){
 
 	if(imageUrl) 
-		  imageUrl = imageUrl.replace("/\images/", "/\images1/").replace("/\img/", "/\img1/");
+		  imageUrl = imageUrl.replace("flatfull/", "").replace(/\.{2}/g, '');
+
+	if(!S3_STATIC_IMAGE_PATH)
+		S3_STATIC_IMAGE_PATH = "//doxhze3l6s7v9.cloudfront.net/beta/static/";
 
 	return (S3_STATIC_IMAGE_PATH + imageUrl);
 }
