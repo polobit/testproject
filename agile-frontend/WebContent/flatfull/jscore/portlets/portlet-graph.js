@@ -583,7 +583,7 @@ var portlet_graph_utility = {
 						        		var tt = '';
 						        		if(text=="Calls Duration (Mins)")
 						        			tt = '<table>' + 
-						        					'<tr><td class="b-b-none">'+domainUsersList[this.points[0].point.x]+'</td></tr>'+	
+						        					'<tr><td>'+domainUsersList[this.points[0].point.x]+'</td></tr>'+	
 					        		              '<tr><td style="color:'+this.points[0].series.color+';padding:0">'+this.points[0].series.name+':&nbsp; </td>' +
 					        		              '<td style="padding:0"><b>'+portlet_utility.getPortletsTimeConversion(callsDurationList[this.points[0].point.x])+'</b></td></tr>' +
 					        		              '<tr><td style="color:'+this.points[0].series.color+';padding:0">Calls:&nbsp; </td>' + 
@@ -593,14 +593,14 @@ var portlet_graph_utility = {
 						        			
 						        			tt += '<table>';
 						        			if(this.points[0]!=undefined && this.points[0].series!=undefined){
-						        				tt += 	'<tr><td class="b-b-none">'+domainUsersList[this.points[0].point.x]+'</td></tr>'+	
+						        				tt += 	'<tr><td>'+domainUsersList[this.points[0].point.x]+'</td></tr>'+	
 						        							'<tr><td style="color:'+this.points[0].series.color+';padding:0">'+this.points[0].series.name+':&nbsp; </td>' +
 							                      		'<td style="padding:0"><b>'+portlet_utility.getPortletsTimeConversion(Math.round(this.points[0].point.y))+'</b></td></tr>';
 						        			}
 						        			tt += '</table>';
 						        			
 						        		}else{
-						        			tt += '<table><tr><td class="b-b-none">'+domainUsersList[this.points[0].point.x]+'</td></tr>';
+						        			tt += '<table><tr><td>'+domainUsersList[this.points[0].point.x]+'</td></tr>';
 						        			if(this.points[0]!=undefined && this.points[0].series!=undefined){
 						        				tt += 	'<tr><td style="color:'+this.points[0].series.color+';padding:0">'+this.points[0].series.name+':&nbsp; </td>' +
 							                      		'<td style="padding:0"><b>'+this.points[0].point.y+'</b></td></tr>';

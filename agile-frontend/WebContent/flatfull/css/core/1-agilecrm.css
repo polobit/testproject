@@ -2969,3 +2969,9 @@ width: 915px;
  word-wrap:break- all;
  white-space:normal!important;
  } 
+
+.show_screenshot + .popover
+{
+	max-width: none;
+	
+}
