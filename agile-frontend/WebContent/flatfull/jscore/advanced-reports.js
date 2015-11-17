@@ -484,15 +484,15 @@ function showLossReasonGraphForUserReports(){
 	end_time=end_time+(d.getTimezoneOffset()*60*1000);
 
 
-	/*if ($('#owner').length > 0)
+	if ($('#owner').length > 0)
 	{
 		// Get owner
 		var owner_id=0;
 		if ($("#owner").val() != "" && $("#owner").val() != "All Owners")
 			owner_id=$("#owner").val();
 			options += owner_id;
-	}*/
-	options += CURRENT_DOMAIN_USER.id;
+	}
+	//options += CURRENT_DOMAIN_USER.id;
 	
 		// Get track
 		var track = 0;
