@@ -1,3 +1,4 @@
+<%@page import="com.agilecrm.util.VersioningUtil"%>
 <%@page import="com.agilecrm.util.email.SendMail"%>
 <%@page import="com.agilecrm.util.email.AppengineMail"%>
 <%@page import="com.agilecrm.util.EncryptDecryptUtil"%>

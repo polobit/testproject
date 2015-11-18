@@ -1,3 +1,4 @@
+<%@page import="com.agilecrm.util.VersioningUtil"%>
 <%@page import="org.apache.commons.lang.StringUtils"%>
 <%@page import="com.agilecrm.user.DomainUser"%>
 <%@page import="com.agilecrm.user.util.DomainUserUtil"%>
