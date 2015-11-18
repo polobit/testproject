@@ -107,7 +107,7 @@ public class JerseyApplication extends Application
 	s.add(com.agilecrm.core.api.calendar.CategoriesAPI.class);
 	// s.add(com.agilecrm.core.api.webpage.WebPageAPI.class);
 	
-	 // Ticket Rest classes
+	// Ticket Rest classes
 	s.add(com.agilecrm.ticket.rest.TicketsRest.class);
 	s.add(com.agilecrm.ticket.rest.TicketGroupRest.class);
 	s.add(com.agilecrm.ticket.rest.TicketsRest.class);
