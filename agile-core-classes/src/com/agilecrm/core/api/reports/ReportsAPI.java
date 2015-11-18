@@ -398,7 +398,7 @@ public class ReportsAPI
 		json.put("startDate", startDate);
 		json.put("endDate", endDate);
 		if(user!=null && !user.equals(""))
-			json.put("user", (JSONArray)JSONSerializer.toJSON(user));
+			json.put("user", (net.sf.json.JSONArray)JSONSerializer.toJSON(user));
 		else
 			json.put("user", null);
 		PortletUtil.checkPrivilegesForPortlets("ACTIVITY");

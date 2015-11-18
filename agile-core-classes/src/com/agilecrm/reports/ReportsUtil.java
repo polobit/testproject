@@ -456,8 +456,8 @@ public class ReportsUtil
 	            timeZone = userPrefs.timezone;
 	        }
 		net.sf.json.JSONObject callsPerPersonJSON=new net.sf.json.JSONObject();
-		JSONObject callsObject=new JSONObject();
-		List<Activity> activitieslist =null;
+		net.sf.json.JSONObject callsObject=new net.sf.json.JSONObject();
+		List<Activity> activitieslist=null;
 		List<DomainUser> domainUsersList=null;
 		DomainUser dUser=DomainUserUtil.getCurrentDomainUser();
 		if(dUser!=null)
@@ -467,16 +467,30 @@ public class ReportsUtil
 				minTime = Long.valueOf(json.getString("startDate"));
 			if(json.getString("endDate")!=null)
 				maxTime = Long.valueOf(json.getString("endDate"))-1;
-			if(json.getString("user")!=null)
-			{
-				user=Long.valueOf(json.getString("user"));
+			if(json.containsKey("user")){
+				if(json.getJSONArray("user")!=null){
+			
+				user=json.getJSONArray("user").getLong(0);
 				domainUsersList=(List<DomainUser>) DomainUserUtil.getDomainUser(user);
 			}
+			}
 		}
+		try{
 				for(DomainUser domainUser : domainUsersList){
 					List<Activity> callActivitiesList = ActivityUtil.getActivitiesByActivityType("CALL",domainUser.id,minTime,maxTime);
-					activitieslist.addAll(callActivitiesList);
+					if(callActivitiesList!=null && callActivitiesList.size() > 0)
+					{
+						if(activitieslist==null)
+							activitieslist=callActivitiesList;
+						else
+						activitieslist.addAll(callActivitiesList);
+					}
+					
 			}
+		}
+		catch(Exception e){
+			e.printStackTrace();
+		}
 				callsObject.put("answeredCalls", 0);
 				callsObject.put("busyCalls",0);
 				callsObject.put("failedCalls",0);
@@ -501,7 +515,8 @@ public class ReportsUtil
 			             startCalendar.set(Calendar.MILLISECOND, 0);
 			             startTimeMilli = startCalendar.getTimeInMillis();
 			        }
-				for(Activity activity : activitieslist){;
+			        try{
+				for(Activity activity : activitieslist){
 					
 					   Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone(timeZone));
 			            calendar.setTimeInMillis(activity.time * 1000);
@@ -517,30 +532,38 @@ public class ReportsUtil
 		                    	{
 		                    	
 		                    		int count1=count.getInt("answeredCalls");
-		                    		count.put("answeredCalls",count1++);
+		                    		count1++;
+		                    		count.put("answeredCalls",count1);
 		                    	}
 							else if(activity.custom3!=null && (activity.custom3.equalsIgnoreCase(Call.BUSY) || activity.custom3.equalsIgnoreCase(Call.NO_ANSWER)))
 							{
 		                    	
 	                    		int count1=count.getInt("busyCalls");
-	                    		count.put("busyCalls",count1++);
+	                    		count1++;
+	                    		count.put("busyCalls",count1);
 	                    	}
 							else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.FAILED))
 							{
 		                    	
 	                    		int count1=count.getInt("failedCalls");
-	                    		count.put("failedCalls",count1++);
+	                    		count1++;
+	                    		count.put("failedCalls",count1);
 	                    	}
 							else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.VOICEMAIL))
 							{
 		                    	
 	                    		int count1=count.getInt("voicemails");
-	                    		count.put("voicemails",count1++);
+	                    		count1++;
+	                    		count.put("voicemails",count1);
 	                    	}
 		                    callsPerPersonJSON.put(createdTime, count);
 			            }
 				}
+			        }
+			        catch(Exception e){
+			    		e.printStackTrace();
+			    	}
     	return callsPerPersonJSON;
+ 
     }
-
 }

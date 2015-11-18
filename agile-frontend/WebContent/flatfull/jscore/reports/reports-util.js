@@ -122,6 +122,12 @@ edit_contacts : function(el, report)
 call_reports : function(url,reportType,graphOn){
 	var selector="calls-chart";
 
+
+		if(reportType == 'timebased'){
+			showBar(url,selector,null,"","");
+			//report_utility.call_timeBased(selector,data);
+			return;
+		}
 	var answeredCallsCountList=[];
 	var busyCallsCountList=[];
 	var failedCallsCountList=[];
@@ -143,9 +149,6 @@ call_reports : function(url,reportType,graphOn){
 			return;
 		}
 
-		if(reportType == 'timebased'){
-			report_utility.call_timeBased();
-		}
 		answeredCallsCountList=data["answeredCallsCountList"];
 		busyCallsCountList=data["busyCallsCountList"];
 		failedCallsCountList=data["failedCallsCountList"];
@@ -334,6 +337,9 @@ user_reports :function(callReportUrl){
 		});
 	
 	
+},
+call_timeBased:function(selector,data){
+
 }
 
 
