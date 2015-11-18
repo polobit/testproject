@@ -47,7 +47,7 @@ public class LandingPageUtil
 					Query<LandingPageCNames> q = null;
 					ObjectifyGenericDao<LandingPageCNames> dao = new ObjectifyGenericDao<LandingPageCNames>(LandingPageCNames.class);
 					q = dao.ofy().query(LandingPageCNames.class);
-					q.filter("cname", cname);
+					q.filter("cname", "http://"+cname);
 					LandingPageCNames lpCNames =  q.get();
 					if(lpCNames == null)
 						return null;
