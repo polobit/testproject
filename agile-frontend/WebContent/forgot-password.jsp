@@ -55,6 +55,8 @@ else if(!StringUtils.isEmpty(email) && StringUtils.isEmpty(password))
 	System.out.println(error + " " + success);
 }
 
+//Static images s3 path
+String S3_STATIC_IMAGE_PATH = VersioningUtil.getStaticFilesBaseURL().replace("flatfull/", "");
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -83,7 +85,7 @@ else if(!StringUtils.isEmpty(email) && StringUtils.isEmpty(password))
 
 
 body {
-background-image:url('..<%=flatfull_path%>/images/flatfull/buildings-low.jpg');
+background-image:url('<%=S3_STATIC_IMAGE_PATH%>/images/buildings-low.jpg');
 background-repeat:no-repeat;
 background-position:center center;
 background-size:100% 100%;
@@ -272,7 +274,7 @@ jQuery.validator.setDefaults({
       	newImg.onload = function() {
     	$("body").css("background-image","url('"+this.src+"')");
   		 }
-		newImg.src = 'flatfull/images/flatfull/buildings.jpg';
+		newImg.src = '<%=S3_STATIC_IMAGE_PATH%>/images/buildings.jpg';
 
 
 		  //form is self submitted
