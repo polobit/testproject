@@ -84,6 +84,9 @@ System.out.println(CLOUDFRONT_TEMPLATE_LIB_PATH);
   
 String CLOUDFRONT_STATIC_FILES_PATH = VersioningUtil.getStaticFilesBaseURL();
 CSS_PATH = CLOUDFRONT_STATIC_FILES_PATH;
+
+//Static images s3 path
+String S3_STATIC_IMAGE_PATH = CLOUDFRONT_STATIC_FILES_PATH.replace("flatfull/", "");
 if(SystemProperty.environment.value() == SystemProperty.Environment.Value.Development)
 {
 	  CLOUDFRONT_STATIC_FILES_PATH = FLAT_FULL_PATH;
@@ -113,7 +116,7 @@ String logo_url = accountPrefs.logo;
 
 <style>
 body {
-   background-image: url('../flatfull/images/flatfull/agile-login-page-low.jpg');
+   background-image: url('<%=S3_STATIC_IMAGE_PATH%>/images/agile-login-page-low.jpg');
   background-repeat: no-repeat;
   background-position: center center;
   background-size: 100% 100%;
@@ -289,7 +292,7 @@ if(isSafari && isWin)
         newImg.onload = function() {
         $("body").css("background-image","url('"+this.src+"')");
         }
-        newImg.src = 'flatfull/images/flatfull/agile-login-page-high.png';
+        newImg.src = '<%=S3_STATIC_IMAGE_PATH%>/images/agile-login-page-high.png';
 			// Pre load dashlet files when don is active
 			preload_dashlet_libs();
 
