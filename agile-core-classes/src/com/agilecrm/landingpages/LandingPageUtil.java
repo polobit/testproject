@@ -1,6 +1,9 @@
 package com.agilecrm.landingpages;
 
+import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -32,8 +35,9 @@ public class LandingPageUtil
 	
 	public static LandingPage getLandingPage(HttpServletRequest req)
 	{
-		
-		String cname = req.getParameter("cname");
+		Map<String, String> reqHeaders = getHeadersInfo(req);
+		String cname = reqHeaders.get("cname");
+		System.out.println(cname);
 			if(cname != null) {
 				String oldNameSpace = NamespaceManager.get();
 				NamespaceManager.set("");
@@ -67,6 +71,20 @@ public class LandingPageUtil
 			}
 	}
 	
+	//get request headers
+	public static Map<String, String> getHeadersInfo(HttpServletRequest req) {
+
+		Map<String, String> map = new HashMap<String, String>();
+
+		Enumeration headerNames = req.getHeaderNames();
+		while (headerNames.hasMoreElements()) {
+			String key = (String) headerNames.nextElement();
+			String value = req.getHeader(key);
+			map.put(key, value);
+		}
+
+		return map;
+	}
 
 	public static List<LandingPage> getLandingPages()
 	{
