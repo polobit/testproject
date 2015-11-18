@@ -92,6 +92,7 @@ if(SystemProperty.environment.value() == SystemProperty.Environment.Value.Develo
 	  CLOUDFRONT_STATIC_FILES_PATH = FLAT_FULL_PATH;
 	  CLOUDFRONT_TEMPLATE_LIB_PATH = "";	
 	  CSS_PATH = FLAT_FULL_PATH;
+	  S3_STATIC_IMAGE_PATH = VersioningUtil.getBaseServerURL() + "/beta/static/";
 }
 
 // Users can show their logo on login page. 
