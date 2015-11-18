@@ -221,7 +221,7 @@ public class TicketsDocument implements BuilderInterface
 		return SearchServiceFactory.getSearchService().getIndex(indexSpec);
 	}
 
-	public JSONObject searchDocuments(String queryString, String cursorString, String sortField) throws Exception
+	public JSONObject searchDocuments(String queryString, String cursorString, String sortField, int limit) throws Exception
 	{
 		List<Key<Tickets>> resultArticleIds = new ArrayList<Key<Tickets>>();
 
@@ -252,7 +252,7 @@ public class TicketsDocument implements BuilderInterface
 		try
 		{
 			// Setting records fetching limit to 20
-			options = QueryOptions.newBuilder().setCursor(cursor).setLimit(20).setSortOptions(sortOptions).build();
+			options = QueryOptions.newBuilder().setCursor(cursor).setLimit(limit).setSortOptions(sortOptions).build();
 			query = com.google.appengine.api.search.Query.newBuilder().setOptions(options).build(queryString);
 		}
 		catch (Exception e)

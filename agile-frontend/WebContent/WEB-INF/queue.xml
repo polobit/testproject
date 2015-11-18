@@ -262,10 +262,10 @@
   </queue>
   
   <queue>
-    <name>tickets-queue</name>
+   	<name>ticket-bulk-actions</name>
     <rate>10/s</rate>
-    <bucket-size>10</bucket-size>
-    <max-concurrent-requests>40</max-concurrent-requests>
+    <max-concurrent-requests>30</max-concurrent-requests>
+	<target>agile-normal-bulk</target>
   </queue>
 
   <queue>

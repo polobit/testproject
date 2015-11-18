@@ -521,6 +521,42 @@ public class TicketsUtil
 	}
 
 	/**
+	 * Tags add Bulk operation
+	 * 
+	 * @param ticketId
+	 * @param newTags
+	 */
+	public static void addTagsList(Long ticketId, List<Tag> newTags)
+	{
+		try
+		{
+			Tickets ticket = TicketsUtil.getTicketByID(ticketId);
+
+			List<Tag> tags = ticket.tags;
+
+			for (Tag newTag : newTags)
+			{
+				if (tags.contains(newTag))
+					continue;
+
+				tags.add(newTag);
+
+				// Logging activity
+				new TicketActivity(TicketActivityType.TICKET_TAG_ADD, ticket.contactID, ticket.id, "", newTag.tag,
+						"tags").save();
+			}
+
+			Tickets.ticketsDao.put(ticket);
+
+			new TicketsDocument().edit(ticket);
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+	}
+
+	/**
 	 * 
 	 * @param tickets
 	 * @return

@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 
 import javax.ws.rs.Consumes;
-import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -164,8 +163,8 @@ public class TicketsRest
 	@GET
 	@Path("/filter")
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public List<Tickets> getTicketsByFilter(@QueryParam("filter_id") Long filterID,
-			@QueryParam("cursor") String cursor, @QueryParam("page_size") String pageSize,
+	public List<Tickets> getFilteredTickets(@QueryParam("filter_id") Long filterID,
+			@QueryParam("cursor") String cursor, @QueryParam("page_size") Integer pageSize,
 			@QueryParam("global_sort_key") String sortField)
 	{
 		try
@@ -181,7 +180,11 @@ public class TicketsRest
 			if (StringUtils.isBlank(sortField))
 				sortField = "last_updated_time";
 
-			JSONObject resultJSON = new TicketsDocument().searchDocuments(queryString.trim(), cursor, sortField);
+			if (pageSize == null)
+				pageSize = 25;
+
+			JSONObject resultJSON = new TicketsDocument().searchDocuments(queryString.trim(), cursor, sortField,
+					pageSize);
 
 			System.out.println("query: " + queryString);
 

@@ -77,8 +77,6 @@ var Ticket_Tags = {
 	},
 
 	removeTag: function(e){
-		console.log(e);
-
 		Ticket_Tags.updateTag($(e.target).attr('tag'), 'remove', function(){
 			$(e.target).closest('li').remove();
 		});
@@ -92,9 +90,12 @@ var Ticket_Tags = {
 
 	updateTag: function(tag, command, callback){
 
-		if(!tag)
+		if(!tag || !Current_Ticket_ID){
 			if(callback)
 					callback();
+
+			return;	
+		}
 				
 		var ticketModel = App_Ticket_Module.ticketView.model.toJSON();
 

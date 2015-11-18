@@ -126,6 +126,7 @@ var Tickets = {
 			e.preventDefault();
 
 			Ticket_Bulk_Ops.showText();
+			Ticket_Bulk_Ops.addOrRemoveTicketID(this);
 		});
 
 		/**

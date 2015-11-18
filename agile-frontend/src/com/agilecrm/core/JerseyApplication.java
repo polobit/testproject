@@ -5,6 +5,8 @@ import java.util.Set;
 
 import javax.ws.rs.core.Application;
 
+import com.agilecrm.ticket.rest.TicketBulkActionsRest;
+
 public class JerseyApplication extends Application
 {
     @Override
@@ -108,13 +110,13 @@ public class JerseyApplication extends Application
 	 // Ticket Rest classes
 	s.add(com.agilecrm.ticket.rest.TicketsRest.class);
 	s.add(com.agilecrm.ticket.rest.TicketGroupRest.class);
-
-		// Ticket Rest classes
-		s.add(com.agilecrm.ticket.rest.TicketsRest.class);
-		s.add(com.agilecrm.ticket.rest.TicketNotesRest.class);
-		s.add(com.agilecrm.ticket.rest.TicketGroupRest.class);
-		s.add(com.agilecrm.ticket.rest.TicketCannedMessagesRest.class);
-		s.add(com.agilecrm.ticket.rest.TicketFiltersRest.class);
+	s.add(com.agilecrm.ticket.rest.TicketsRest.class);
+	s.add(com.agilecrm.ticket.rest.TicketNotesRest.class);
+	s.add(com.agilecrm.ticket.rest.TicketGroupRest.class);
+	s.add(com.agilecrm.ticket.rest.TicketCannedMessagesRest.class);
+	s.add(com.agilecrm.ticket.rest.TicketFiltersRest.class);
+	s.add(com.agilecrm.ticket.rest.TicketBulkActionsRest.class);
+	s.add(com.agilecrm.ticket.rest.TicketBulkActionsBackendsRest.class);
 
 		return s;
 	}

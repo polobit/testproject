@@ -42,7 +42,10 @@ var Ticket_Base_Model = Base_Model_View.extend({
 		"click .reply-btn" : "repltBtn",
 		"click .discard-reply" : "discardReply",
 		"click .timeline" : "renderTicketTimeline",
-		"click .canned-messages" : "showCannedMessages"
+		"click .canned-messages" : "showCannedMessages",
+
+		//Bulk actions
+		"click .bulk-add-labels" : "bulkAddLabels"
 	},
 
 	changeStatus: function(e){
@@ -248,5 +251,11 @@ var Ticket_Base_Model = Base_Model_View.extend({
 		e.preventDefault();
 
 		Ticket_Attachments.removeAttachment(e);
+	},
+
+	bulkAddLabels: function(e){
+		console.log(e);
+
+		Ticket_Bulk_Ops.bulkAddLabels();
 	}
 });
