@@ -31,6 +31,24 @@ var ReportsRouter = Backbone.Router
 						return;
 					$('#reports-listerners-container').html($(template_ui));
 
+						preloadImages([
+							'flatfull/img/reports_images/Growth_rep.jpg',
+							'flatfull/img/reports_images/ratio_rep.jpg',
+							'flatfull/img/reports_images/funnel_rep.jpg',
+							'flatfull/img/reports_images/campaign_comp.jpg',
+							'flatfull/img/reports_images/call_rep.jpg',
+							'flatfull/img/reports_images/averagecall_rep.jpg',
+							'flatfull/img/reports_images/callreport_rep.jpg',
+							'flatfull/img/reports_images/Incoming_rep.jpg',
+							'flatfull/img/reports_images/lostdeal_rep.jpg',
+							'flatfull/img/reports_images/revenue_rep.jpg',
+							'flatfull/img/reports_images/sales_rep.jpg',
+							'flatfull/img/reports_images/User_rep.jpg',
+							'flatfull/img/reports_images/CallActivity_rep.jpg',
+							'flatfull/img/reports_images/ContactActivities_rep.jpg',
+							'flatfull/img/reports_images/UserActivities_rep.jpg',
+							'flatfull/img/reports_images/campaign_analysis_rep.jpg',
+							]);
 				initializeReportsListeners();
 				hideTransitionBar();
 				$(".active").removeClass("active");
