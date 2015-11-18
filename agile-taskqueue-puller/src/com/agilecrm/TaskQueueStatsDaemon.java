@@ -141,6 +141,22 @@ public class TaskQueueStatsDaemon extends Thread
 	    leaseTasks();
 	}
 
+	try
+	{
+	    closeResources();
+	}
+	catch (Exception e)
+	{
+	    logger.error("Error while uninstalling");
+	}
+	finally
+	{
+	    logger.info("Interupting thread : " + Thread.currentThread().getName());
+	    // Interrupts the current tread
+	    Thread.currentThread().interrupt();
+	    logger.info("Exiting thread : " + Thread.currentThread().getName());
+	}
+
 	/*
 	 * int total = getTotalTasks(); if (total > 0) { //
 	 * threadPool.wakeUpAllThreads(); // }
@@ -349,7 +365,7 @@ public class TaskQueueStatsDaemon extends Thread
 
 		t.run();
 
-	    } while (true);
+	    } while (true && APIStats.shouldContinue());
 	}
 	catch (Exception e)
 	{
@@ -418,5 +434,10 @@ public class TaskQueueStatsDaemon extends Thread
 	    logger.info(e.getMessage());
 	    return leaseTasksOld();
 	}
+    }
+
+    private void closeResources() throws Exception
+    {
+	uninstall();
     }
 }

@@ -5,6 +5,7 @@ public class APIStats
     public static final Integer TASK_QUEUE_API_LIMIT = 50000;
 
     private static int counter = 0;
+    private static final int MAX_LIMIT = 20;
 
     public static synchronized void incrementCounter()
     {
@@ -24,4 +25,15 @@ public class APIStats
 	}
 
     }
+
+    public static boolean shouldContinue()
+    {
+	if (counter >= MAX_LIMIT)
+	{
+	    return false;
+	}
+
+	return true;
+    }
+
 }
