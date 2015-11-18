@@ -94,8 +94,8 @@ var Ticket_Filters = {
 			sortKey:"updated_time",
 			descending:true,
 			customLoader: true,
-			customLoaderTemplate: 'ticket-notes-loader',
-			templateKey : "ticket-filters-loader",
+			customLoaderTemplate: 'ticket-filters-loader',
+			templateKey : "ticket-filters-list",
 			individual_tag_name : 'li',
 			postRenderCallback : function(el){
 
