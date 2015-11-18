@@ -2173,12 +2173,26 @@ border-radius: 2px;
   	color: white;
   	font-weight: bold;
 }
+@media all and (min-width: 768px){
 .portlet-category-ms-container{
-	background: transparent url('../../img/switch.png') no-repeat 164px 40px!important;
+	background-position:164px 40px!important;
 }
 .portlet-user-ms-container{
-	background: transparent url('../../img/switch.png') no-repeat 164px 50px!important;
+	background-position:164px 50px!important;
 }
+}
+@media all and (max-width:460px) {
+  .portlet-category-ms-container {
+     background: transparent url('../img/switch_mobile.png') no-repeat 70px 115px!important;
+  }
+  .portlet-user-ms-container {
+    background: transparent url('../img/switch_mobile.png') no-repeat 70px 135px!important;
+  }
+#ms-category-list .ms-selection,#ms-user-list .ms-selection {
+  margin-top: 40px;
+}
+}
+
 .leaderboard_portlet_header{
 	border-bottom: 1px solid #edf1f2!important;
 }

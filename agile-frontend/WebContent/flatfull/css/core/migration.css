@@ -1235,6 +1235,8 @@ color:#1f2427!important;
   position: relative;
   top: -2px;
   vertical-align: middle;
+  opacity: 1;
+  color:#363f44!important;
 }
 
 /*hack for same grid */
@@ -1735,6 +1737,36 @@ box-shadow: 0 5px 10px 0px #bbb;
 .agile-menu .fa-history {
   width: 15px;
   font-size: 12px;
+  position: relative;
+  left: 2px;
+}
+.portlet_body_calendar {
+  position: relative;
+}
+#calendar_container .fc-header {
+  width: 65%;
+}
+#calendar_container .fc-header .fc-header-left,#calendar_container .fc-header .fc-header-right {
+  width: 25%;
+}
+#navbar li a:active {
+  background: #edf1f2;
+}
+.contact-right-widgetsview {
+  padding-top: 20px;
+}
+.contact-right-widgetsview > vbox {
+  border-top: 1px solid #ddd;
+}
+.leader-board-4 .thumb {
+  width: 40px;
+}
+.leader-board-4 .thumb img {
+  width: 40px;
+  height: 40px;
+}
+.leader-board-4 .agile-thumb .text-xlg {
+  font-size: 16px;
 }
 }
 
