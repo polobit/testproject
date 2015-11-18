@@ -153,7 +153,7 @@ public class TaskQueueStatsDaemon extends Thread
 	{
 	    logger.info("Interupting thread : " + Thread.currentThread().getName());
 	    // Interrupts the current tread
-	    Thread.currentThread().interrupt();
+	    APIStats.interruptThread(Thread.currentThread());
 	    logger.info("Exiting thread : " + Thread.currentThread().getName());
 	}
 
