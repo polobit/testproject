@@ -1,3 +1,5 @@
+var callschart=new Array();
+var taskReport=new Array();
 var portlet_graph_utility = {
 
 	/**
@@ -521,17 +523,25 @@ var portlet_graph_utility = {
 	callsPerPersonBarGraph : function(selector, domainUsersList, series,
 			totalCallsCountList, callsDurationList, text, colors,
 			domainUserImgList) {
+			var column_position = $('#'+selector).parent().attr('data-col'), row_position = $('#'+selector).parent().attr('data-row');
+		var pos = '' + column_position + '' + row_position;
+		var	height=domainUsersList.length*30+($('#'+selector).height()-30);
+		if(selector=='calls-chart')
+			height=domainUsersList.length*30+120;
+		
 		head
 				.js(
 						LIB_PATH + 'lib/flot/highcharts-3.js',
 						function() {
 							
-							$('#'+selector).highcharts({
+							callschart[parseInt(pos)]=new Highcharts.Chart({
 								chart: {
+									renderTo : selector,
 						            type: 'bar',
 						            marginRight: 100,
 						            plotBorderWidth: 1,
-						            plotBorderColor: '#F4F4F5'
+						            plotBorderColor: '#F4F4F5',
+						            height:height,
 						        },
 						        title: {
 						            text: ''
@@ -556,7 +566,7 @@ var portlet_graph_utility = {
 						    				color : '#98a6ad',
 						    				fontSize : '11px'
 						    			},
-						                useHTML: true
+						                useHTML: true,
 						            },
 						            gridLineWidth : 0,
 						    		gridLineColor : '#F4F4F5',
@@ -639,7 +649,7 @@ var portlet_graph_utility = {
 						                borderWidth : 0
 						            },
 						            column: {
-						                pointPadding: 0.2,
+						                pointPadding: 0.5,
 						                borderWidth: 0
 						            },
 						            bar : {
@@ -764,13 +774,14 @@ var portlet_graph_utility = {
 	 */
 	taskReportBarGraph : function(selector, groupByList, series, text,
 			base_model, domainUserNamesList) {
+			var column_position = $('#'+selector).parent().attr('data-col'), row_position = $('#'+selector).parent().attr('data-row');
+		var pos = '' + column_position + '' + row_position;
+
 		head
 				.js(
 						LIB_PATH + 'lib/flot/highcharts-3.js',
 						function() {
-							$('#' + selector)
-									.highcharts(
-											{
+							taskReport[parseInt(pos)]=new Highcharts.Chart({
 												colors : [ "#23b7e5",
 														"#27c24c", "#7266ba",
 														"#fad733", "#f05050",
@@ -778,8 +789,10 @@ var portlet_graph_utility = {
 														"#eeaaee", "#55BF3B",
 														"#DF5353" ],
 												chart : {
+													renderTo:selector,
 													type : 'bar',
-													marginRight : 20
+													marginRight : 20,
+													height:groupByList.length*30+($('#'+selector).height()-30),
 												},
 												title : {
 													text : ''

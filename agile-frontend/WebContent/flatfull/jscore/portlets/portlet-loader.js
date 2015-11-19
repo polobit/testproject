@@ -268,7 +268,22 @@ function set_up_portlets(el, portlets_el){
 						$(el).find('.fc-day-number').css('top',top);
 
         			}
-        		
+        			else if(tempModel.get("name")=="Calls Per Person")
+        			{
+
+        				var pos = '' + this.$resized_widget.attr('data-col')+''+this.$resized_widget.attr('data-row');
+        				var height = this.$resized_widget.find('.portlet_body').height();
+        				var width=this.$resized_widget.find('.portlet_body').width()
+        				callschart[parseInt(pos)].setSize(width,callschart[parseInt(pos)].xAxis[0].categories.length*30+(height-30),false);
+        			}
+        			else if(tempModel.get("name")=="Task Report")
+        			{
+
+        				var pos = '' + this.$resized_widget.attr('data-col')+''+this.$resized_widget.attr('data-row');
+        				var height = this.$resized_widget.find('.portlet_body').height();
+        				var width=this.$resized_widget.find('.portlet_body').width()
+        				taskReport[parseInt(pos)].setSize(width,taskReport[parseInt(pos)].xAxis[0].categories.length*30+(height-30),false);
+        			}
 
 				var models = [];
 
