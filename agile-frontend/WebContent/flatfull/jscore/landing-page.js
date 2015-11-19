@@ -75,6 +75,23 @@ function initializeLandingPageListeners() {
 		e.preventDefault();
 		document.getElementById('landingPageBuilder').contentWindow.$('#codeEditorAgileId').trigger("click");
 	});
+
+	$('#landingpages-listeners').on('click', '#landingPageVerifyBtn', function (e) {
+		 e.preventDefault();
+		 var cnameEL = document.getElementById("cname");
+		 var $btn = $(this).button('loading');
+
+		 if($("#cname").attr("href") != "") {
+		 	$.get("core/api/landingpages/verifycname?domain="+cnameEL.hostname, function(data) {
+		 		if(data.result) {
+		 			showNotyPopUp("information", "CNAME setup is fine.", "top");
+		 		} else {
+		 			showNotyPopUp("error", "CNAME setup for selected domain is incorrect. Please follow the instructions.", "top");
+		 		}
+		 		$btn.button('reset');
+		 	});
+		 }
+	});
 	
 }
 

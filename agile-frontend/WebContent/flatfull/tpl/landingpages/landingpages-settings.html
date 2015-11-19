@@ -42,12 +42,19 @@
             </div>
         </div>
 
-            <p id="cnameInstructionMessage" style="display:none;">Create a CNAME record in your DNS Setting, with Host &quot;<strong id="cnameHostVal"></strong>&quot; and Destination &quot;<strong>{{getCurrentDomain}}-{{id}}.agilelanding.com.</strong>&quot;</p>
+            <p id="cnameInstructionMessage" style="display:none;">Create a CNAME record in your DNS Setting, with Host &quot;<strong id="cnameHostVal"></strong>&quot; and Destination &quot;<strong>landing.agilecrm.com.</strong>&quot;</p>
       <a class="hidden" id="cname" href="{{cname}}">hidden</a>
 
       <span for="cname" generated="true" id="cnameMessage" class="help-inline"></span>
       <br>
-      <button class="btn btn-sm btn-primary" id="landingPageSettingBtn" data-pageid="{{id}}">Save</button>
+<div class="row">
+<div class="col-md-12">
+<button class="btn btn-sm btn-primary" id="landingPageSettingBtn" data-pageid="{{id}}">Save</button>
+{{#if cname}}
+<button class="btn btn-sm btn-success pull-right" id="landingPageVerifyBtn" data-loading-text="Verifing...">Verify Settings</button>
+{{/if}}
+</div>
+</div>
     </div>
   </div>
 </div>
@@ -62,7 +69,7 @@
     <p>To publish your landing pages to your own domain, you need to:</p>
 <ul>
 <li>Tell your domain to show the pages hosted by Agile CRM.</li>
-<li>Publish your landing by using the custom domain setup.</li>
+<li>Publish your landing page by using the custom domain setup.</li>
 </ul>
 
   </div>

@@ -16,13 +16,39 @@ import javax.ws.rs.core.MediaType;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import com.agilecrm.landingpages.LandingPage;
 import com.agilecrm.landingpages.LandingPageUtil;
+import com.agilecrm.util.HTTPUtil;
 
 @Path("/api/landingpages")
 public class LandingPagesAPI
 {
+	
+	@Path("verifycname")
+	@GET
+    @Produces(MediaType.APPLICATION_JSON)
+	public String verifyCnameSetup(@QueryParam("domain") String domain)
+	{
+		String responseText = "{\"result\":false}";
+		
+		try {
+			String response = HTTPUtil.accessURL("http://integrations.clickdesk.com:8080/ClickdeskPlugins/CNAMELookUp?domain="+domain);
+			JSONObject res = new JSONObject(response);
+			if(!res.isNull("ipaddress") && res.getString("ipaddress").equals("52.91.107.156")) {
+				res.put("result", true);
+			} else {
+				res.put("result", false);
+			}
+			responseText = res.toString();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		System.out.println(responseText);
+		return responseText;
+	}
 
 	/**
 	 * 
