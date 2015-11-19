@@ -646,7 +646,7 @@ var portlet_graph_utility = {
 						        },
 						        series: series,
 						        exporting: {
-							        enabled: false
+							        enabled: true
 							    },
 							    colors : [ "#27c24c", "#23b7e5", "#f05050", "#7266ba", "#fad733","#aaeeee", "#ff0066", "#eeaaee", "#55BF3B", "#DF5353" ],
 							    legend : {
@@ -876,7 +876,7 @@ var portlet_graph_utility = {
 												},
 												series : series,
 												exporting : {
-													enabled : false
+													enabled : true
 												},
 												tooltip : {
 													borderWidth : 1,

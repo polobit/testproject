@@ -187,6 +187,7 @@ function showBar(url, selector, name, yaxis_name, stacked)
 
 			// Names on X-axis
 			var categories = [];
+			var tempcategories = [];
 
 			// Data to map with X-axis and Y-axis.
 			var series;
@@ -194,7 +195,8 @@ function showBar(url, selector, name, yaxis_name, stacked)
 			// Iterates through data and add all keys as categories
 			$.each(data, function(k, v)
 			{
-				categories.push(k);
+				if(selector!='calls-chart')
+				 categories.push(k);
 
 				// Initializes series with names with the first
 				// data point
@@ -220,9 +222,20 @@ function showBar(url, selector, name, yaxis_name, stacked)
 					var series_data = find_series_with_name(series, k1);
 					series_data.data.push(v1);
 				});
-
+				tempcategories.push(k*1000);
+				//dataLength++;
+	
 			});
+					var cnt=0;
+					if(selector=='calls-chart'){
+					$.each(data, function(k, v)
+			{
+						var dte = new Date(tempcategories[cnt]);
 
+						categories.push(Highcharts.dateFormat('%e.%b', Date.UTC(dte.getFullYear(), dte.getMonth(), dte.getDate()))+'');
+							cnt++;
+						});
+						}
 			// Draw the graph
 			chart = new Highcharts.Chart({
 			    chart: {
@@ -245,7 +258,12 @@ function showBar(url, selector, name, yaxis_name, stacked)
 		                // to overcome x-axis labels overlapping
 			        	if(this.options.categories.length > 30)
 		                {
-		                    this.options.minTickInterval = 5;
+		                   // this.options.minTickInterval = 5;
+		                    this.options.minTickInterval = Math.ceil(this.options.categories.length/10);
+               					 if(this.options.minTickInterval==3)
+               					 {
+                   					 this.options.minTickInterval = 4;
+                				}
 		                }
 		            },
 			        labels:
