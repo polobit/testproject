@@ -24,8 +24,8 @@ public class Office365CalendarUtil {
 
 	private static String backgroundColor = "#C0E9FF";
 	private static String type = "officeCalendar";
-	//private static String server = "http://54.87.153.50:8080/";
-	private static String server = "http://localhost:8080/";
+	private static String server = "http://54.87.153.50:8080/";
+	//private static String server = "http://localhost:8080/";
 	private static String appName = "exchange-app-beta";
 	private static String serveltName = "appointment";
 

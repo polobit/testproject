@@ -373,6 +373,10 @@ $("#calendar-listers").on('click', '.agendaDayWeekMonth', function()
 		if (calendar == "google")
 			loadFullCalednarOrListView();
 
+		if(calendar == "office"){
+			loadFullCalednarOrListView();
+		}
+
 	});
 
 	$("#calendar-listers").on('click', '.calendar_user_check', function(e)

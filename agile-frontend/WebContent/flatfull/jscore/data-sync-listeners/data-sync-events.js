@@ -341,7 +341,4 @@ binds all click events  for google calendar model
 		} });
 
     }
-
-
-
-});
+}); 

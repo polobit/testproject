@@ -1,19 +1,23 @@
 <script id="admin-settings-import-office365-sync-details-template" type="text/html">
-<div class="panel wrapper widget-add">
-    <center>
-    	<img class="thumbnail m-b-none thumb-xl bg-transparent" src="/img/icons/office356-calendar.png" />
-    </center>
-    <div class="m-b-md m-t"  rel="tooltip">
-		By configuring access to your Office365 Calendar, we'll automatically sync your events in your Office365 Calendar with Agile calendar.
-	</div>
-    <div>
-		{{#if id}}
-    		<a class="btn btn-sm btn-danger delete"  id="office-calendar-sync-delete" >Disable</a>
-			<a href="#sync/officecalendar" class="btn btn-sm btn-default">Settings</a>
-    	{{else}}
-    		<a href="#sync/officecalendar" class="btn btn-sm btn-default">Enable</a>
-    	{{/if}}
-	</div>
+<div class="panel panel-default widget-add" style="height: 220px;">
+    <div class="panel-heading">
+        <center>
+            <img class="m-b-none img-responsive thumb-xl bg-transparent" style="height:47px;" src="/img/icons/office356-calendar.png">
+        </center>
+    </div>
+    <div class="panel-body">
+        <div class="text-flow-ellipsis line-clamp line-clamp-4" style="height:85px" rel="tooltip" title="By configuring access to your Office365 Calendar, we'll automatically sync your events in your Office365 Calendar with Agile calendar.">
+            By configuring access to your Office365 Calendar, we'll automatically sync your events in your Office365 Calendar with Agile calendar.
+        </div>
+    <div class="text-center"> 
+        {{#if id}}
+            <a class="btn btn-sm btn-danger delete" id="office-calendar-sync-delete">Disable</a>            
+            <a href="#sync/officeCalendar" class="btn btn-sm btn-default">Settings</a>
+        {{else}}
+            <a class="btn btn-sm btn-default inline-block" href="#sync/officeCalendar" id="data-sync-type">Enable</a> 
+        {{/if}}            
+    </div>
+    </div>
 </div>
 </script>
 

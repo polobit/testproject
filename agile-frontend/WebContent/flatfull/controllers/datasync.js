@@ -54,6 +54,7 @@ dataSync : function()
                         localStorage.setItem('datasync_tab', temp[1]);
                 });
             	that.google_calendar(el);
+                that.office_calendar();
                 initializeDataSyncListners();
 
             }
@@ -63,25 +64,33 @@ dataSync : function()
         that.agile_sync_collection_view.appendItem = organize_sync_widgets;
         $('#prefs-tabs-content').html(that.agile_sync_collection_view.render().el);
 
-
     }, "#content");
-	
 },
 
 
-google_calendar:function(el){
+    google_calendar:function(el){
+    	this.calendar_sync_google = new GoogleCalendar_Event_Modal_View({
+            url: 'core/api/calendar-prefs/get',
+            template: 'import-google-calendar',
+            postRenderCallback: function(el) {
+                initializeImportListeners();
+            }
+        });
 
+        // console.log(getTemplate("import-google-contacts", {}));
+        $('#calendar-prefs').html(this.calendar_sync_google.render().el);
+    },
 
-	 this.calendar_sync_google = new GoogleCalendar_Event_Modal_View({
-                            url: 'core/api/calendar-prefs/get',
-                            template: 'import-google-calendar',
-                            postRenderCallback: function(el) {
-                                initializeImportListeners();
-                            }
-                        });
-                        // console.log(getTemplate("import-google-contacts", {}));
-                        $('#calendar-prefs').html(this.calendar_sync_google.render().el);
-},
+    office_calendar: function(){
+        $.getJSON("core/api/officecalendar").success(function(data) { 
+            console.log(data);  
+            getTemplate("admin-settings-import-office365-sync-details", data, undefined, function(data_el){
+                $('#office365').html(data_el);
+            });      
+        }).error(function(data) { 
+            console.log(data);
+        });  
+    },
 
 	 google_contacts_sync: function() {
 	            var that = this;
@@ -165,10 +174,10 @@ google_calendar:function(el){
                         $("#prefs-tabs-content").find('a[href="#'+dataSynctTab+'"]').closest("li").addClass("active");
                         initializeTabListeners("datasync_tab", "sync");
                        getSyncModelFromName("officeCalendar", function(model){
-                            var url= 'core/api/contactprefs/STRIPE',
+                            var url= 'core/api/officecalendar',
                             template= 'admin-settings-import-office365-calendar-prefs';
                             renderInnerSyncView(url,template,model,function(model){
-                                showNotyPopUp("information", "Contacts sync initiated", "top", 1000);
+                                showNotyPopUp("information", "Office 365 calendar saved successfully", "top", 1000);
                             });                       
                         });
                 }, null);

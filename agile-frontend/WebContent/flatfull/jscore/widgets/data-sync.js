@@ -33,6 +33,28 @@ single click for all data sync collection events
 */
 function initializeDataSyncListners(){
 
+	// Office calendar delete button.
+	$("#prefs-tabs-content").off("click", "#office-calendar-sync-delete");
+	$("#prefs-tabs-content").on("click", "#office-calendar-sync-delete", function(){
+
+		$.ajax({ type : 'DELETE', 
+			url : 'core/api/officecalendar', 
+			contentType : "application/json; charset=utf-8",
+			success : function(data){
+				 $.getJSON("core/api/officecalendar").success(function(data) { 
+		            console.log(data);  
+		            getTemplate("admin-settings-import-office365-sync-details", data, undefined, function(data_el){
+		                $('#office365').html(data_el);
+		            });      
+		        }).error(function(data) { 
+		            console.log(data);
+		        });
+			} 
+		});   
+
+	});
+	   
+
 
 	$('#prefs-tabs-content #data-sync-type').off();
     $('#prefs-tabs-content').on('click', '#data-sync-type', function(e){

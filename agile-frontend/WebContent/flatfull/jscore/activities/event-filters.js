@@ -206,19 +206,15 @@ function putOfficeCalendarLink()
 		if (response)
 			calEnable = true;
 
+		if (calEnable){
+			$("#office_cal").removeClass('hide');
+			$("#office_cal_link").addClass('hide');
+		} else {
+			$("#office_cal").addClass('hide');
+			$("#office_cal_link").removeClass('hide');
+		}
+
 	} });
-
-	if (calEnable)
-	{
-		$("#office_cal").removeClass('hide');
-		$("#office_cal_link").addClass('hide');
-	}
-
-	else
-	{
-		$("#office_cal").addClass('hide');
-		$("#office_cal_link").removeClass('hide');
-	}
 }
 
 /**
