@@ -1,14 +1,19 @@
 package com.agilecrm.ticket.utils;
 
+import java.util.Set;
+
 import org.json.JSONObject;
 
 import com.agilecrm.AgileQueues;
 import com.agilecrm.contact.util.BulkActionUtil;
 import com.agilecrm.session.SessionManager;
+import com.agilecrm.ticket.deferred.TicketBulkActionAdaptor;
+import com.agilecrm.ticket.entitys.Tickets;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskOptions;
 import com.google.appengine.api.taskqueue.TaskOptions.Method;
+import com.googlecode.objectify.Key;
 
 /**
  * 
@@ -66,5 +71,20 @@ public class TicketBulkActionUtil
 					.header("Content-Type", contentType).method(type);
 
 		queue.addAsync(taskOptions);
+	}
+
+	public static void executeBulkAction(ITicketIdsFetcher idsFetcher, TicketBulkActionAdaptor task)
+	{
+		while (idsFetcher.hasNext())
+		{
+			Set<Key<Tickets>> ticketsSet = idsFetcher.next();
+
+			System.out.println("ticketsSet found: " + ticketsSet.size());
+
+			task.setTicketKeys(ticketsSet);
+			
+			Queue queue = QueueFactory.getQueue(AgileQueues.TICKET_BULK_ACTIONS_QUEUE);
+			queue.add(TaskOptions.Builder.withPayload(task));
+		}
 	}
 }

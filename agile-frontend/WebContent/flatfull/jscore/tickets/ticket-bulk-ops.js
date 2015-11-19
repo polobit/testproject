@@ -8,7 +8,7 @@ var Ticket_Bulk_Ops = {
 		var $el = $('#tickets-container');
 
 		/**
-		 * Initializing click event on ticket checkboxes
+		 * Initializing click event on top ticket checkbox
 		 */
 		$el.on('change', ".ticket-checkbox", function(e){
 			// e.stopPropagation();
@@ -23,6 +23,24 @@ var Ticket_Bulk_Ops = {
 				//Checking/unchecking checkboxes
 				selected_all ? Ticket_Bulk_Ops.checkAllTickets($el) : Ticket_Bulk_Ops.clearSelection();
 			}
+		});
+
+		/**
+		 * Initializing click event on bulk action close tickets
+		 */
+		$el.on('click', ".bulk-ticket-close", function(e){
+			e.preventDefault();
+			
+			Ticket_Bulk_Ops.renderTemplate('close-tickets');
+		});
+
+		/**
+		 * Initializing click event on bulk action delete tickets
+		 */
+		$el.on('click', ".bulk-ticket-delete", function(e){
+			e.preventDefault();
+
+			Ticket_Bulk_Ops.renderTemplate('delete-tickets');
 		});
 	},
 
@@ -86,11 +104,11 @@ var Ticket_Bulk_Ops = {
 		}else{
 
 			$('.ticket-checkbox.select-all').prop('checked', false);
+			$('#tickets-bulk-select').html('');
 
 			if(selected_tickets_count == 0){
 				
 				$('.bulk-action-btn-grp').hide();
-				$('#tickets-bulk-select').html('');
 			}else{
 				$('.bulk-action-btn-grp').show();
 			}	
@@ -142,6 +160,18 @@ var Ticket_Bulk_Ops = {
 				break;
 			}
 			case 'remove-labels':
+				var view = new Ticket_Base_Model({
+					isNew : false, 
+					template : "ticket-bulk-actions-remove-labels",
+					url : "/core/api/tickets/new-ticket",
+					postRenderCallback : function(){
+
+						//Initializing type ahead for tags
+						Ticket_Tags.showTagsField();
+					}
+				});
+
+				$('#content').html(view.render().el);
 				break;
 			case 'change-assignee':{
 
@@ -149,8 +179,20 @@ var Ticket_Bulk_Ops = {
 					isNew : false, 
 					template : "ticket-bulk-actions-change-assignee",
 					url : "/core/api/tickets/bulk-actions/change-assignee",
-					postRenderCallback : function(){
+					saveCallback: function(){
+						Backbone.history.navigate('#tickets/filter/' + Ticket_Filter_ID,{render:false});
+					},
+					prePersist : function(model)
+					{
+						var json = {};
+						json.ticketIDs = Ticket_Bulk_Ops.getSelectedTickesObj();
 
+						if(Ticket_Bulk_Ops.selected_all_filter_tickets)
+							json.filterID =  Ticket_Filter_ID;
+						
+						json.groupID = $('[name="assigneeID"]').find('option:selected').data('group-id');
+
+						model.set(json, { silent : true });
 					}
 				});
 
@@ -158,17 +200,84 @@ var Ticket_Bulk_Ops = {
 				break;
 			}	
 			case 'execute-workflows':
+
+				var view = new Ticket_Base_Model({
+					isNew : false, 
+					template : "ticket-bulk-actions-execute-workflow",
+					url : "/core/api/tickets/bulk-actions/execute-workflow",
+					saveCallback: function(){
+						Backbone.history.navigate('#tickets/filter/' + Ticket_Filter_ID,{render:false});
+					},
+					prePersist : function(model)
+					{
+						var json = {};
+						json.ticketIDs = Ticket_Bulk_Ops.getSelectedTickesObj();
+
+						if(Ticket_Bulk_Ops.selected_all_filter_tickets)
+							json.filterID =  Ticket_Filter_ID;
+
+						model.set(json, { silent : true });
+					}
+				});
+
+				$('#content').html(view.render().el);
 				break;
 			case 'close-tickets':
+
+				var view = new Ticket_Base_Model({
+					isNew : true, 
+					template : "ticket-bulk-actions-close-tickets",
+					url : "/core/api/tickets/bulk-actions/close-tickets",
+					saveCallback: function(){
+						Ticket_Bulk_Ops.clearSelection();
+						$('#close-tickets-modal').modal('hide');
+					},
+					prePersist : function(model)
+					{
+						var json = {};
+						json.ticketIDs = Ticket_Bulk_Ops.getSelectedTickesObj();
+
+						if(Ticket_Bulk_Ops.selected_all_filter_tickets)
+							json.filterID =  Ticket_Filter_ID;
+						
+						model.set(json, { silent : true });
+					}
+				});
+
+				$('#ticket-modals').html(view.render().el);
+				$('#close-tickets-modal').modal('show');
 				break;
 			case 'delete-tickets':
-				break;					
+
+				var view = new Ticket_Base_Model({
+					isNew : true, 
+					template : "ticket-bulk-actions-delete-tickets",
+					url : "/core/api/tickets/bulk-actions/delete-tickets",
+					saveCallback: function(){
+						Ticket_Bulk_Ops.clearSelection();
+						$('#delete-tickets-modal').modal('hide');
+					},
+					prePersist : function(model)
+					{
+						var json = {};
+						json.ticketIDs = Ticket_Bulk_Ops.getSelectedTickesObj();
+
+						if(Ticket_Bulk_Ops.selected_all_filter_tickets)
+							json.filterID =  Ticket_Filter_ID;
+						
+						model.set(json, { silent : true });
+					}
+				});
+
+				$('#ticket-modals').html(view.render().el);
+				$('#delete-tickets-modal').modal('show');
+				break;
 		}
 	},
 
-	bulkAddLabels: function(e){
+	bulkManageLabels: function(e){
 
-		var saveButton = $('.bulk-add-labels');
+		var saveButton = $('.bulk-manage-labels');
 		disable_save_button(saveButton);
 
 		var tagsObj = get_tags('bulk-labels').pop();
@@ -185,9 +294,9 @@ var Ticket_Bulk_Ops = {
 		var url = '/core/api/tickets/bulk-actions/add-tags';
 
 		var json = {};
-		json.action_type = 'ADD_TAGS';
 		json.tags = tagsObj['value'].toString();
 		json.ticket_ids = Ticket_Bulk_Ops.getSelectedTickesObj();
+		json.command = saveButton.hasClass('bulk-add-labels') ? 'add' : 'remove';
 
 		if(Ticket_Bulk_Ops.selected_all_filter_tickets)
 			json.filter_id =  Ticket_Filter_ID;

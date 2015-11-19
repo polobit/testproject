@@ -45,7 +45,7 @@ var Ticket_Base_Model = Base_Model_View.extend({
 		"click .canned-messages" : "showCannedMessages",
 
 		//Bulk actions
-		"click .bulk-add-labels" : "bulkAddLabels"
+		"click .bulk-manage-labels" : "bulkManageLabels"
 	},
 
 	changeStatus: function(e){
@@ -253,9 +253,9 @@ var Ticket_Base_Model = Base_Model_View.extend({
 		Ticket_Attachments.removeAttachment(e);
 	},
 
-	bulkAddLabels: function(e){
+	bulkManageLabels: function(e){
 		console.log(e);
 
-		Ticket_Bulk_Ops.bulkAddLabels();
+		Ticket_Bulk_Ops.bulkManageLabels();
 	}
 });

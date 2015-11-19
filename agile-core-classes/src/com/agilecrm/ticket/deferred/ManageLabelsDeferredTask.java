@@ -1,7 +1,6 @@
 package com.agilecrm.ticket.deferred;
 
 import java.util.List;
-import java.util.Set;
 
 import com.agilecrm.contact.Tag;
 import com.agilecrm.ticket.entitys.Tickets;
@@ -9,20 +8,20 @@ import com.agilecrm.ticket.utils.TicketsUtil;
 import com.agilecrm.user.DomainUser;
 import com.googlecode.objectify.Key;
 
-public class AddLabelsDeferredTask extends TicketBulkActionAdaptor
+public class ManageLabelsDeferredTask extends TicketBulkActionAdaptor
 {
 	private static final long serialVersionUID = 1L;
 	private List<Tag> tags = null;
-	private Set<Key<Tickets>> ticketsKeySet = null;
+	private String command = "";
 
-	public AddLabelsDeferredTask(List<Tag> tags, String nameSpace, Long domainUserID, Set<Key<Tickets>> ticketsKeySet)
+	public ManageLabelsDeferredTask(List<Tag> tags, String command, String nameSpace, Long domainUserID)
 	{
 		super();
 
 		this.namespace = nameSpace;
 		this.key = new Key<DomainUser>(DomainUser.class, domainUserID);
-		this.ticketsKeySet = ticketsKeySet;
 		this.tags = tags;
+		this.command = command;
 	}
 
 	@Override

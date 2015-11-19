@@ -1,7 +1,6 @@
 package com.agilecrm.ticket.rest;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -18,23 +17,27 @@ import com.agilecrm.AgileQueues;
 import com.agilecrm.contact.Tag;
 import com.agilecrm.contact.util.BulkActionUtil;
 import com.agilecrm.contact.util.bulk.BulkActionNotifications;
-import com.agilecrm.ticket.deferred.AddLabelsDeferredTask;
+import com.agilecrm.ticket.deferred.ChangeAssigneeDeferredTask;
+import com.agilecrm.ticket.deferred.CloseTicketsDeferredTask;
+import com.agilecrm.ticket.deferred.DeleteTicketsDeferredTask;
+import com.agilecrm.ticket.deferred.ExecuteWorkflowDeferredTask;
+import com.agilecrm.ticket.deferred.ManageLabelsDeferredTask;
 import com.agilecrm.ticket.entitys.TicketActivity;
 import com.agilecrm.ticket.entitys.Tickets;
 import com.agilecrm.ticket.entitys.TicketActivity.TicketActivityType;
-import com.agilecrm.ticket.utils.TicketBulkActionUtil.TicketBulkActionType;
-import com.agilecrm.ticket.utils.TicketIdsFetcher;
+import com.agilecrm.ticket.utils.CSVTicketIdsFetcher;
+import com.agilecrm.ticket.utils.ITicketIdsFetcher;
+import com.agilecrm.ticket.utils.FilterTicketIdsFetcher;
+import com.agilecrm.ticket.utils.TicketBulkActionUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskOptions;
 import com.googlecode.objectify.Key;
 
-import edu.emory.mathcs.backport.java.util.Arrays;
-
 /**
  * 
- * @author Sasi 30-Sep-2015
+ * @author Sasi on 30-Sep-2015
  * 
  */
 @Path("/api/bulk-actions/tickets")
@@ -43,17 +46,13 @@ public class TicketBulkActionsBackendsRest
 	@POST
 	@Path("/add-tags/{domain_user_id}")
 	@Produces(MediaType.APPLICATION_FORM_URLENCODED)
-	public void manageTags(@PathParam("domain_user_id") Long domainUserID,
-			@FormParam("action_type") TicketBulkActionType action_type, @FormParam("ticket_ids") String ticketIDs,
-			@FormParam("filter_id") Long filterID, @FormParam("data") String dataString,
+	public void manageTags(@PathParam("domain_user_id") Long domainUserID, @FormParam("filter_id") Long filterID,
+			@FormParam("ticket_ids") String ticketIds, @FormParam("data") String dataString,
 			@FormParam("tracker") String tracker)
 	{
 		try
 		{
 			System.out.println("*********Request reached to backend*********");
-			System.out.println("filterID.." + filterID);
-			System.out.println("action_type.." + action_type);
-			System.out.println("ticket_ids.." + ticketIDs);
 			System.out.println("domain_user_id.." + domainUserID);
 			System.out.println("NamespaceManager.." + NamespaceManager.get());
 
@@ -70,66 +69,181 @@ public class TicketBulkActionsBackendsRest
 			BulkActionUtil.setSessionManager(domainUserID);
 
 			// Logging bulk action activity
-			new TicketActivity(TicketActivityType.BULK_ACTION, null, null, "", tags.toString(), "tags").save();
+			new TicketActivity(TicketActivityType.BULK_ACTION_MANAGE_LABELS, null, null, "", tags.toString(), "tags")
+					.save();
+
+			ITicketIdsFetcher idsFetcher = null;
 
 			if (filterID != null)
-			{
-				TicketIdsFetcher idsFetcher = new TicketIdsFetcher(filterID);
+				idsFetcher = new FilterTicketIdsFetcher(filterID);
+			else if (ticketIds != null)
+				idsFetcher = new CSVTicketIdsFetcher(ticketIds);
 
-				while (idsFetcher.hasNext())
-				{
-					Set<Key<Tickets>> ticketsSet = idsFetcher.next();
+			ManageLabelsDeferredTask task = new ManageLabelsDeferredTask(tags, dataJSON.getString("command"),
+					NamespaceManager.get(), domainUserID);
 
-					System.out.println("ticketsSet found: " + ticketsSet.size());
+			TicketBulkActionUtil.executeBulkAction(idsFetcher, task);
 
-					AddLabelsDeferredTask task = new AddLabelsDeferredTask(tags, NamespaceManager.get(), domainUserID,
-							ticketsSet);
+			BulkActionNotifications.publishNotification("Bulk label adding started");
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+	}
 
-					Queue queue = QueueFactory.getQueue(AgileQueues.TICKET_BULK_ACTIONS_QUEUE);
-					queue.add(TaskOptions.Builder.withPayload(task));
-				}
-			}
-			else
-			{
-				List<String> ticketsList = Arrays.asList(ticketIDs.split(","));
-				int maxFetch = 200, fetchedCount = 0, fromIndex = 0, toIndex = maxFetch, totalTicketsSelected = ticketsList
-						.size();
+	@POST
+	@Path("/change-assignee/{domain_user_id}")
+	@Produces(MediaType.APPLICATION_FORM_URLENCODED)
+	public void changeAssignee(@PathParam("domain_user_id") Long domainUserID, @FormParam("filter_id") Long filterID,
+			@FormParam("ticket_ids") String ticketIds, @FormParam("data") String dataString,
+			@FormParam("tracker") String tracker)
+	{
+		try
+		{
+			System.out.println("*********Request reached to backend*********");
+			System.out.println("domain_user_id.." + domainUserID);
+			System.out.println("NamespaceManager.." + NamespaceManager.get());
 
-				do
-				{
-					List<String> subList = null;
+			JSONObject dataJSON = new JSONObject(dataString);
+			System.out.println("dataJSON: " + dataJSON);
 
-					try
-					{
-						subList = ticketsList.subList(fromIndex, toIndex);
-					}
-					catch (Exception e)
-					{
-						subList = ticketsList.subList(fromIndex, totalTicketsSelected);
-					}
+			Long assigneeID = dataJSON.getLong("assignee_id");
+			Long groupID = dataJSON.getLong("group_id");
 
-					if (subList == null || subList.size() == 0)
-						break;
+			BulkActionUtil.setSessionManager(domainUserID);
 
-					fromIndex += maxFetch;
-					toIndex += maxFetch;
-					fetchedCount += subList.size();
+			// Logging bulk action activity
+			new TicketActivity(TicketActivityType.BULK_ACTION_CHANGE_ASSIGNEE, null, null, "", assigneeID + " "
+					+ groupID, "assignee_id").save();
 
-					Set<Key<Tickets>> ticketIDList = new HashSet<Key<Tickets>>();
+			ITicketIdsFetcher idsFetcher = null;
 
-					for (String key : subList)
-					{
-						ticketIDList.add(new Key<Tickets>(Tickets.class, Long.parseLong(key)));
-					}
+			if (filterID != null)
+				idsFetcher = new FilterTicketIdsFetcher(filterID);
+			else if (ticketIds != null)
+				idsFetcher = new CSVTicketIdsFetcher(ticketIds);
 
-					AddLabelsDeferredTask task = new AddLabelsDeferredTask(tags, NamespaceManager.get(), domainUserID,
-							ticketIDList);
+			ChangeAssigneeDeferredTask task = new ChangeAssigneeDeferredTask(NamespaceManager.get(), domainUserID,
+					assigneeID, groupID);
 
-					Queue queue = QueueFactory.getQueue(AgileQueues.TICKET_BULK_ACTIONS_QUEUE);
-					queue.add(TaskOptions.Builder.withPayload(task));
+			TicketBulkActionUtil.executeBulkAction(idsFetcher, task);
 
-				} while (fetchedCount < totalTicketsSelected);
-			}
+			BulkActionNotifications.publishNotification("Bulk label adding started");
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+	}
+
+	@POST
+	@Path("/execute-workflow/{domain_user_id}")
+	@Produces(MediaType.APPLICATION_FORM_URLENCODED)
+	public void executeWorkflow(@PathParam("domain_user_id") Long domainUserID, @FormParam("filter_id") Long filterID,
+			@FormParam("ticket_ids") String ticketIds, @FormParam("data") String dataString,
+			@FormParam("tracker") String tracker)
+	{
+		try
+		{
+			System.out.println("*********Request reached to backend*********");
+			System.out.println("domain_user_id.." + domainUserID);
+			System.out.println("NamespaceManager.." + NamespaceManager.get());
+
+			JSONObject dataJSON = new JSONObject(dataString);
+			System.out.println("dataJSON: " + dataJSON);
+
+			Long workflowID = dataJSON.getLong("workflow_id");
+
+			BulkActionUtil.setSessionManager(domainUserID);
+
+			// Logging bulk action activity
+			new TicketActivity(TicketActivityType.BULK_ACTION_EXECUTE_WORKFLOW, null, null, "", workflowID + "", "")
+					.save();
+
+			ITicketIdsFetcher idsFetcher = null;
+
+			if (filterID != null)
+				idsFetcher = new FilterTicketIdsFetcher(filterID);
+			else if (ticketIds != null)
+				idsFetcher = new CSVTicketIdsFetcher(ticketIds);
+
+			ExecuteWorkflowDeferredTask task = new ExecuteWorkflowDeferredTask(NamespaceManager.get(), domainUserID,
+					workflowID);
+
+			TicketBulkActionUtil.executeBulkAction(idsFetcher, task);
+
+			BulkActionNotifications.publishNotification("Bulk label adding started");
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+	}
+
+	@POST
+	@Path("/close-tickets/{domain_user_id}")
+	@Produces(MediaType.APPLICATION_FORM_URLENCODED)
+	public void closeTickets(@PathParam("domain_user_id") Long domainUserID, @FormParam("filter_id") Long filterID,
+			@FormParam("ticket_ids") String ticketIds, @FormParam("tracker") String tracker)
+	{
+		try
+		{
+			System.out.println("*********Request reached to backend*********");
+			System.out.println("domain_user_id.." + domainUserID);
+			System.out.println("NamespaceManager.." + NamespaceManager.get());
+
+			BulkActionUtil.setSessionManager(domainUserID);
+
+			// Logging bulk action activity
+			new TicketActivity(TicketActivityType.BULK_ACTION_CLOSE_TICKETS, null, null, "", "", "").save();
+
+			ITicketIdsFetcher idsFetcher = null;
+
+			if (filterID != null)
+				idsFetcher = new FilterTicketIdsFetcher(filterID);
+			else if (ticketIds != null)
+				idsFetcher = new CSVTicketIdsFetcher(ticketIds);
+
+			CloseTicketsDeferredTask task = new CloseTicketsDeferredTask(NamespaceManager.get(), domainUserID);
+
+			TicketBulkActionUtil.executeBulkAction(idsFetcher, task);
+
+			BulkActionNotifications.publishNotification("Bulk label adding started");
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+	}
+
+	@POST
+	@Path("/delete-tickets/{domain_user_id}")
+	@Produces(MediaType.APPLICATION_FORM_URLENCODED)
+	public void deleteTickets(@PathParam("domain_user_id") Long domainUserID, @FormParam("filter_id") Long filterID,
+			@FormParam("ticket_ids") String ticketIds, @FormParam("tracker") String tracker)
+	{
+		try
+		{
+			System.out.println("*********Request reached to backend*********");
+			System.out.println("domain_user_id.." + domainUserID);
+			System.out.println("NamespaceManager.." + NamespaceManager.get());
+
+			BulkActionUtil.setSessionManager(domainUserID);
+
+			// Logging bulk action activity
+			new TicketActivity(TicketActivityType.BULK_ACTION_DELETE_TICKETS, null, null, "", "", "").save();
+
+			ITicketIdsFetcher idsFetcher = null;
+
+			if (filterID != null)
+				idsFetcher = new FilterTicketIdsFetcher(filterID);
+			else if (ticketIds != null)
+				idsFetcher = new CSVTicketIdsFetcher(ticketIds);
+
+			DeleteTicketsDeferredTask task = new DeleteTicketsDeferredTask(NamespaceManager.get(), domainUserID);
+
+			TicketBulkActionUtil.executeBulkAction(idsFetcher, task);
 
 			BulkActionNotifications.publishNotification("Bulk label adding started");
 		}

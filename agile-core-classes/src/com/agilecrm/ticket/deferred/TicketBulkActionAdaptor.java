@@ -1,8 +1,12 @@
 package com.agilecrm.ticket.deferred;
 
+
+import java.util.Set;
+
 import com.agilecrm.contact.util.BulkActionUtil;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
+import com.agilecrm.ticket.entitys.Tickets;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.google.appengine.api.NamespaceManager;
@@ -17,7 +21,9 @@ public abstract class TicketBulkActionAdaptor implements DeferredTask
 	protected String namespace;
 	protected UserInfo info;
 	private DomainUser user = null;
-
+	
+	public Set<Key<Tickets>> ticketsKeySet = null;
+	
 	public void run()
 	{
 		String oldNamespace = NamespaceManager.get();
@@ -58,4 +64,8 @@ public abstract class TicketBulkActionAdaptor implements DeferredTask
 	}
 
 	protected abstract void performAction();
+	
+	public void setTicketKeys(Set<Key<Tickets>> ticketsKeySet){
+		this.ticketsKeySet = ticketsKeySet;
+	}
 }

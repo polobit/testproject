@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -457,6 +456,9 @@ public class TicketsUtil
 	public static Tickets closeTicket(Long ticket_id) throws EntityNotFoundException
 	{
 		Tickets ticket = TicketsUtil.getTicketByID(ticket_id);
+
+		if (ticket.status == Status.CLOSED)
+			return ticket;
 
 		Status oldStatus = ticket.status;
 

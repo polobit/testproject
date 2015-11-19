@@ -7,7 +7,6 @@ import java.util.Set;
 import org.apache.commons.lang.StringUtils;
 
 import com.agilecrm.contact.filter.ContactFilterIdsResultFetcher;
-import com.agilecrm.contact.util.BulkActionUtil;
 import com.agilecrm.ticket.entitys.TicketFilters;
 import com.agilecrm.ticket.entitys.Tickets;
 import com.google.appengine.api.search.Cursor;
@@ -26,9 +25,10 @@ import com.googlecode.objectify.Key;
  * @author Sasi on 18-Nov-2015
  * 
  */
-public class TicketIdsFetcher
+public class FilterTicketIdsFetcher extends ITicketIdsFetcher
 {
-	Integer maxFetch = 200;
+	private static final long serialVersionUID = 1L;
+	
 	Integer fetchedCount = 0;
 	String cursor = null;
 	Long totalCount = null;
@@ -37,7 +37,7 @@ public class TicketIdsFetcher
 	TicketFilters filter = null;
 	String queryString = null;
 
-	public TicketIdsFetcher(Long ticketFilterID)
+	public FilterTicketIdsFetcher(Long ticketFilterID)
 	{
 		super();
 		this.ticketFilterID = ticketFilterID;
@@ -56,6 +56,7 @@ public class TicketIdsFetcher
 		}
 	}
 
+	@Override
 	public boolean hasNext()
 	{
 		if (StringUtils.isBlank(queryString))
@@ -70,7 +71,8 @@ public class TicketIdsFetcher
 
 		return true;
 	}
-
+	
+	@Override
 	public Set<Key<Tickets>> next()
 	{
 		Set<Key<Tickets>> resultArticleIds = new HashSet<Key<Tickets>>();
