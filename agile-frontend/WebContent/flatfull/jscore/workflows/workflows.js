@@ -407,35 +407,35 @@ function fill_logs_slate(id, type)
 	var LOGS_PAD_CONTENT = {
 		    "ALL": {
 		        "title": "No logs for this campaign yet",
-				"image": "/img/clipboard.png"
+				"image": updateImageS3Path("/img/clipboard.png")
 		    },
 		    "EMAIL_SENT": {
 		    	"title": "No emails sent yet",
-				"image": "/img/clipboard.png"
+				"image": updateImageS3Path("/img/clipboard.png")
 		    },
 		    "EMAIL_OPENED": {
 		    	"title": "No emails opened in this campaign",
-				"image": "/img/clipboard.png"
+				"image": updateImageS3Path("/img/clipboard.png")
 		    },
 		    "EMAIL_CLICKED": {
 		    	"title": "No emails clicked in this campaign",
-				"image": "/img/clipboard.png"
+				"image": updateImageS3Path("/img/clipboard.png")
 		    },
 		    "UNSUBSCRIBED": {
 		    	"title": "No one unsubscribed from this campaign",
-				"image": "/img/clipboard.png"
+				"image": updateImageS3Path("/img/clipboard.png")
 		    },
 		    "EMAIL_HARD_BOUNCED": {
 		    	"title": "No hard bounces seen for  this campaign",
-				"image": "/img/clipboard.png"
+				"image": updateImageS3Path("/img/clipboard.png")
 		    },
 		    "EMAIL_SOFT_BOUNCED": {
 		    	"title": "No soft bounces seen for this campaign",
-				"image": "/img/clipboard.png"
+				"image": updateImageS3Path("/img/clipboard.png")
 		    },
 		    "EMAIL_SPAM": {
 		    	"title": "No spam reports seen for this campaign",
-				"image": "/img/clipboard.png"
+				"image": updateImageS3Path("/img/clipboard.png")
 		    }
 		}
 
