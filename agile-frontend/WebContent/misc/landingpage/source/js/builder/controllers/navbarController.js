@@ -5,8 +5,11 @@ angular.module('builder').factory('panels', function() {
             if (this.active === name) return;
             // var top = $('.main-nav [data-name="'+name+'"]').offset().top;
             // $('.selected-tab').css('transform', 'translateY('+(top-121)+'px)');
-            $(".nav-item").removeClass("active2");
-            $('.main-nav [data-name="'+name+'"]').addClass("active2");
+            // $(".nav-item").removeClass("active2");
+            // $('.main-nav [data-name="'+name+'"]').addClass("active2");
+
+            $("#"+name+"BuilderMenuItem",parent.document).click();
+
             this.active = name;
         }
     };
