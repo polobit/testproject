@@ -220,7 +220,7 @@ public class ObjectifyGenericDao<T> extends DAOBase
 	
 	ObjectifyService.register(Office365CalendarPrefs.class);
 	
-	//Ticket related entity's
+	//Ticket related entitys
 	ObjectifyService.register(Tickets.class);
 	ObjectifyService.register(TicketNotes.class);
 	ObjectifyService.register(TicketGroups.class);
