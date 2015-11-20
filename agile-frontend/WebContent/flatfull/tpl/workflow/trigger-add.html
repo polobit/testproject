@@ -70,7 +70,10 @@
 										<option value="NOTE_ADDED_BY_USER">Note is added by user</option>
 										<option value="NOTE_ADDED_BY_CUSTOMER">Note is added by customer</option>
 										<option value="TICKET_IS_CLOSED">ticket is closed</option>
-										<option value="TICKET_SLA_REACHED">SLA Reached</option>
+										<option value="TICKET_SLA_REACHED">SLA reached</option>
+										<option value="TICKET_ASSIGNEE_CHANGED">Ticket assignee changed</option>
+										<option value="TICKET_LABEL_IS_ADDED">Ticket label is added</option>
+										<option value="TICKET_LABEL_IS_DELETED">Ticket label is deleted</option>
 										<!-- <option value="SLA_CROSSED">SLA crossed</option> -->
 
 									</select>
@@ -878,7 +881,7 @@
                     <!-- Icon and Title -->
                     <div>
                         <div>
-                            <i class="fa-folder icon-3x"></i>
+                            <i class="fa-cog icon-3x"></i>
                         </div>
                         <b>SLA Reached</b>
                     </div>
@@ -889,6 +892,68 @@
                     <!-- Add button -->
                     <div>
                         <a class="btn btn-sm btn-default add-trigger" data="TICKET_SLA_REACHED">Go</a>
+                    </div>
+                </div>
+            </div>
+
+
+		<div class="col-md-3 col-sm-6 col-xs-12">
+                <div class="panel wrapper text-center">
+                    <!-- Icon and Title -->
+                    <div>
+                        <div>
+                            <i class="fa-user icon-3x"></i>
+                        </div>
+                        <b>Assignee Changed</b>
+                    </div>
+                    <br/>
+                    <div class="ellipsis-multiline m-b-md" rel="tooltip">
+                        Runs a Campaign on a contact When ticket assignee is changed.
+                    </div>
+                    <!-- Add button -->
+                    <div>
+                        <a class="btn btn-sm btn-default add-trigger" data="TICKET_ASSIGNEE_CHANGED">Go</a>
+                    </div>
+                </div>
+            </div>
+
+
+			<div class="col-md-3 col-sm-6 col-xs-12">
+                <div class="panel wrapper text-center">
+                    <!-- Icon and Title -->
+                    <div>
+                        <div>
+                            <i class="fa-tag icon-3x"></i>
+                        </div>
+                        <b>Label Added</b>
+                    </div>
+                    <br/>
+                    <div class="ellipsis-multiline m-b-md" rel="tooltip">
+                        Runs a Campaign on a contact When ticket label is added.
+                    </div>
+                    <!-- Add button -->
+                    <div>
+                        <a class="btn btn-sm btn-default add-trigger" data="TICKET_LABEL_IS_ADDED">Go</a>
+                    </div>
+                </div>
+            </div>
+
+			<div class="col-md-3 col-sm-6 col-xs-12">
+                <div class="panel wrapper text-center">
+                    <!-- Icon and Title -->
+                    <div>
+                        <div>
+                            <i class="fa-tag icon-3x"></i>
+                        </div>
+                        <b>Label Deleted</b>
+                    </div>
+                    <br/>
+                    <div class="ellipsis-multiline m-b-md" rel="tooltip">
+                        Runs a Campaign on a contact When ticket label is deleted.
+                    </div>
+                    <!-- Add button -->
+                    <div>
+                        <a class="btn btn-sm btn-default add-trigger" data="TICKET_LABEL_IS_DELETED">Go</a>
                     </div>
                 </div>
             </div>

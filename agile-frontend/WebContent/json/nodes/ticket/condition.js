@@ -46,15 +46,9 @@
                 "Ticket Type": "{{ticket.type}}",
                 "Subject": "{{ticket.subject}}",
                 "Created Time": "{{ticket.created_time}}",
-                "Assigned Time": "{{ticket.assigned_time}}",
                 "Closed Time": "{{ticket.closed_time}}",
                 "Last Updated Time": "{{ticket.last_updated_time}}",
-                "Last Updated By": "{{ticket.last_updated_by}}",
-                "First Replied Time": "{{ticket.first_replied_time}}",
-                "Last Agent Replied Time": "{{ticket.last_agent_replied_time}}",
-                "Last Customer Replied Time": "{{ticket.last_customer_replied_time}}",
-                "First Notes Text": "{{ticket.first_notes_text}}",
-                "Last Notes Text": "{{ticket.last_reply_text}}"
+                "Last Updated By": "{{ticket.last_updated_by}}"
             },
             "fieldType": "select",
             "type": "select" 
