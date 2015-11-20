@@ -481,7 +481,9 @@ public class ReportsUtil
 				if(json.getJSONArray("user")!=null){
 			
 				user=json.getJSONArray("user").getLong(0);
-				domainUsersList=(List<DomainUser>) DomainUserUtil.getDomainUser(user);
+
+				domainUsersList=java.util.Arrays.asList(DomainUserUtil.getDomainUser(user)) ;
+			
 			}
 			}
 		}
