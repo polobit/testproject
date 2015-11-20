@@ -66,7 +66,9 @@
                         <li><a href="#" id="bulk-tags">Add tags</a></li>
                     </ul>
                 </div>
-                <table id="contacts_search" class="table table-striped showCheckboxes panel agile-table onlySorting " url="core/api/bulk/update?action_type=DELETE" style="table-layout:auto;">
+                <div class="table-responsive">
+                <table id="contacts_search" class="table table-striped showCheckboxes panel agile-table onlySorting  
+                table-layout-mob-view m-b-none" url="core/api/bulk/update?action_type=DELETE" style="table-layout:auto;">
                     <thead>
                         <tr>
 							<th></th>
@@ -79,6 +81,7 @@
                     <tbody id="search-model-list" class="model-list-cursor" route="contact/">
                     </tbody>
                 </table>
+                </div>
             </div>
         </div>
         {{/if}}

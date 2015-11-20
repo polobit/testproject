@@ -82,6 +82,7 @@ $(document).ready(function(){
 	$('body').on('click','.navbar-brand',function(){
      $("#navbar").removeClass('show');
      $("#aside").removeClass('off-screen');
+     $('body').css('overflow-y','auto');
 	});	
 	
 	$(".navi-wrap li a").click(function(){
