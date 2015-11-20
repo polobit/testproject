@@ -23,7 +23,8 @@
                "dynamicValue": "id",
                "appendToDynamicName": "name",
                "options": {
-                   "(requester)": "{{requester}}"
+                   "(requester)": "{{requester}}",
+                   "Ticket Assignee User": "{{ticket.assigneeID}}"
                },
                "fieldType": "dynamicselect",
                "type": "select"
