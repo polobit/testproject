@@ -83,6 +83,8 @@ var Tickets = {
 
 				//Initializing checkbox events
 				Ticket_Bulk_Ops.initEvents();
+
+				Ticket_Bulk_Ops.clearSelection();
 			}
 		});
 

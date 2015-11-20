@@ -53,6 +53,7 @@ import com.agilecrm.ticket.entitys.TicketCannedMessages;
 import com.agilecrm.ticket.entitys.TicketDocuments;
 import com.agilecrm.ticket.entitys.TicketFilters;
 import com.agilecrm.ticket.entitys.TicketGroups;
+import com.agilecrm.ticket.entitys.TicketLabels;
 import com.agilecrm.ticket.entitys.TicketNotes;
 import com.agilecrm.ticket.entitys.Tickets;
 import com.agilecrm.user.AgileUser;
@@ -227,6 +228,7 @@ public class ObjectifyGenericDao<T> extends DAOBase
 	ObjectifyService.register(TicketFilters.class);
 	ObjectifyService.register(TicketDocuments.class);
 	ObjectifyService.register(TicketActivity.class);
+	ObjectifyService.register(TicketLabels.class);
 	
     }
 

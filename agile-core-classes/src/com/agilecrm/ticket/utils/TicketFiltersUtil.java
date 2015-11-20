@@ -5,13 +5,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.lang.StringUtils;
-
 import com.agilecrm.search.ui.serialize.SearchRule;
 import com.agilecrm.ticket.entitys.TicketFilters;
 import com.agilecrm.user.DomainUser;
 import com.google.appengine.api.datastore.EntityNotFoundException;
-import com.google.gdata.data.contacts.Subject;
 import com.googlecode.objectify.Key;
 
 /**

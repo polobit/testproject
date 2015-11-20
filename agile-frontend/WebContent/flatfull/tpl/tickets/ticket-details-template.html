@@ -33,154 +33,108 @@
               </div>  
               <div class="clearfix"></div>
             </div>
-            <div class="text-center pos-rlt">
+            <!-- <div class="text-center pos-rlt">
               <div class="thumb-lg">
-                <img class="imgholder submit w-full img-circle" src="{{emailGravatarurl 96 requester_email}}">
+                <img class="imgholder submit w-full img-circle" src="{{emailGravatarurl 50 requester_email}}">
               </div>
               <div class="w-full m-t-xs h3 font-thin custom-color" style="padding-bottom:1px;width:95%;">
                   {{requester_name}} 
               </div>
+            </div> -->
+            <div class="panel panel-default m-t-md">
+              <div class="panel-body">
+                <div class="row m-n">
+                  <div class="col-md-12 p-n">Ticket Info</i>
+                    <hr class="m-t-sm m-b-sm">
+                  </div>
+                  <div class="col-md-12 p-n">
+                    <table class="ticket-details-table w-full txt-small">
+                      <tr>
+                          <td>Ticket #</td>
+                          <td>{{short_id}}</td>
+                      </tr>
+                      <tr>
+                          <td class="p-t-xs">Requester Name</td>
+                          <td class="p-t-xs">{{requester_name}}</td>
+                      </tr>
+                      <tr>
+                          <td class="p-t-xs">Requester Email</td>
+                          <td class="p-t-xs inline-block">
+                            <a href="/#contacts/search/{{requester_email}}" target="_blank" title="Search contacts" 
+                                style="border-bottom: 1px dashed #23b7e5;">
+                              {{requester_email}}
+                            </a>
+                          </td>
+                      </tr>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="panel panel-default m-t-md">
+              <div class="panel-body">
+                <span class="text-md first-letter-cap inline-block">{{status}}</span>
+                <div class="m-t-xs txt-small"><i class="fa fa-clock-o"></i> Due in next 5 days &nbsp; 
+                  <a href="javascript:void(0);" class="link-color">Change</a>
+                </div>
+              </div>
+            </div>
+            <div class="panel panel-default m-t-md">
+              <div class="panel-body">
+                <div class="row m-n">
+                  <div class="col-md-12 p-n">Assignee</div>
+                  <div class="col-md-12 assignee_name ticket_assignee_name ticket-details-value hover-edit text-xs m-t-xs p-xs b-a" style="border-radius: 2px;">
+                    <i class="fa fa-user"></i>&nbsp;
+                    {{#if assigneeID}}
+                      <span class="first-letter-cap inline-block">{{group.group_name}}</span>/
+                      <span class="first-letter-cap inline-block">{{assignee.name}} </span>
+                      <i class="icon-edit m-t-xs m-l-xs hide"></i>
+                    {{else}}-{{/if}}
+                  </div>
+                </div>
+                <div class="row m-l-n m-r-n m-t-sm text-sm">
+                  <div class="col-md-6 p-l-n">
+                    Type<br>
+                    <select class="form-control text-xs" style="height: 28px;padding: 3px 6px;">
+                      <option value="QUESTION">Question</option>
+                      <option value="TASK">Task</option>
+                      <option value="INCIDENT">Incident</option>
+                      <option value="PROBLEM">Problem</option>
+                    </select>
+                  </div>
+                  <div class="col-md-6 p-r-n">
+                    Priority<br>
+                    <select class="form-control text-xs" style="height: 28px;padding: 3px 6px;">
+                      <option value="LOW">Low</option>
+                      <option value="MEDIUM">Medium</option>
+                      <option value="HIGH">High</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="panel panel-default m-t-md">
+              <div class="panel-body">
+                <div class="row m-n">
+                  <div class="col-md-12 p-n">Labels<hr class="m-t-xs m-b-xs"></div>
+                  <div class="col-md-12 p-n">
+                    <a href="javascript:void(0);" id="show-tags-field" rel="tooltip" data-original-title="addtag" 
+                      data-placement="top" class="p-t-sm p-b-sm text-xs text-muted show-tags-field">
+                      <i class="fa fa-plus-square"></i>
+                      <span>Add Label</span>
+                    </a>
+                  </div>
+                </div>
+              </div>
             </div>
             <div class="m-t-sm">
-              <table class="ticket-details-table bg-light lter w-full txt-small">
-                  <tr>
-                    <td class="p-t-xs p-b-xs">Status</td>
-                    {{#if_equals status 'NEW'}}
-                      <td class="p-t-xs p-b-xs first-letter-cap">
-                        {{status}}
-                        <i class="icon-edit pull-right m-t-xs hide"></i>
-                      </td>
-                    {{else}}
-                      <td>
-                        <div class="pos-rlt">
-                          <div data-toggle="dropdown" aria-expanded="false" class="dropdown-toggle ticket_status ticket-details-value first-letter-cap hover-edit">
-                            {{status}} <i class="icon-edit m-t-xs m-l-xs hide"></i>
-                          </div>
-                         </div>  
-                        <div class="dropdown ticket-details-dropdown" id="change-ticket-status-ul" style="display: none;">
-                          <div class="btn-group">
-                            <div class="btn btn-default btn-xs custom_view first-letter-cap">Change Status</div>
-                            <a class="btn btn-xs dropdown-toggle btn-default" data-toggle="dropdown" aria-expanded="false"> 
-                              <span class="caret"></span>
-                            </a>
-                            <ul id="ticket-status-list" class="dropdown-menu pull-right txt-small">
-                               
-                            </ul>
-                          </div>
-                        </div>
-                      </td>
-                    {{/if_equals}}
-                </tr>
-                <tr>
-                    <td class="p-t-xs p-b-xs">Assignee</td>
-                    <td id="assignee-id" data-id="{{#if assigneeID}}{{assigneeID}}{{/if}}">
-                      <div class="assignee_name ticket_assignee_name ticket-details-value first-letter-cap hover-edit">
-                        {{#if assigneeID}}
-                          {{assignee.name}} <i class="icon-edit m-t-xs m-l-xs hide"></i>
-                        {{else}}-{{/if}}
-                      </div>
-                      <div class="dropdown ticket-details-dropdown" id="change-ticket-assignee-ul" style="display: none;">
-                        <div class="btn-group">
-                          <div class="btn btn-default btn-xs custom_view first-letter-cap">
-                            Change Assignee
-                          </div>
-                          <a class="btn btn-xs dropdown-toggle btn-default" data-toggle="dropdown" aria-expanded="false"> 
-                            <span class="caret"></span>
-                          </a>
-                          <ul id="ticket-assignee-list" class="dropdown-menu pull-right txt-small">
-                          </ul>
-                        </div>
-                      </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="p-t-xs p-b-xs">Type</td>
-                    <td>
-                      <div class="ticket_type ticket-details-value first-letter-cap hover-edit">
-                        {{type}} <i class="icon-edit m-t-xs m-l-xs hide"></i>
-                      </div>
-                      <div class="dropdown ticket-details-dropdown" id="change-ticket-type-ul" style="display: none;">
-                        <div class="btn-group">
-                          <div class="btn btn-default btn-xs custom_view first-letter-cap">Change Type</div>
-                          <a class="btn btn-xs dropdown-toggle btn-default" data-toggle="dropdown" aria-expanded="false"> 
-                            <span class="caret"></span>
-                          </a>
-                          <ul id="ticket-type-list" class="dropdown-menu pull-right txt-small">
-                              <li><a class="change-ticket-type-li" data-value="PROBLEM">Problem</a></li>
-                              <li><a class="change-ticket-type-li" data-value="QUESTION">Question</a></li>
-                              <li><a class="change-ticket-type-li" data-value="INCIDENT">Incident</a></li>
-                              <li><a class="change-ticket-type-li" data-value="TASK">Task</a></li>
-                          </ul>
-                        </div>
-                      </div>
-                    </td>  
-                </tr>
-                <tr>
-                    <td class="p-t-xs p-b-xs">Priority</td>
-                    <td>
-                      <div class="ticket_priority ticket-details-value first-letter-cap hover-edit">
-                        {{priority}}
-                        <i class="icon-edit m-t-xs m-l-xs hide"></i>
-                      </div>
-                      <div class="dropdown ticket-details-dropdown" id="change-ticket-priority-ul" style="display: none;">
-                        <div class="btn-group">
-                          <div class="btn btn-default btn-xs custom_view first-letter-cap">Change Priority</div>
-                          <a class="btn btn-xs dropdown-toggle btn-default" data-toggle="dropdown" aria-expanded="false"> 
-                            <span class="caret"></span>
-                          </a>
-                          <ul id="ticket-priority-list" class="dropdown-menu pull-right txt-small">
-                              <li><a class="change-ticket-priority-li" data-value="LOW">Low</a></li>
-                              <li><a class="change-ticket-priority-li" data-value="MEDIUM">Medium</a></li>
-                              <li><a class="change-ticket-priority-li" data-value="HIGH">High</a></li>
-                          </ul>
-                        </div>
-                      </div>
-                    </td>
-                </tr>
-              </table>
+              
             </div>
             <div class="m-b-xs m-t-xs">
-              <table class="ticket-details-table bg-light lter w-full txt-small">
-                <tr>
-                    <td class="p-t-xs p-b-xs">Ticket #</td>
-                    <td class="p-t-xs p-b-xs">{{short_id}}</td>
-                </tr>
-                <tr>
-                    <td class="p-t-xs p-b-xs">Group</td>
-                    <td id="group-id" class="p-t-xs p-b-xs" data-id="{{groupID}}">
-                      <div class="group_name ticket_group_name ticket-details-value first-letter-cap">
-                        {{group.group_name}}
-                      </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="p-t-xs p-b-xs">Created On</td>
-                    <td class="p-t-xs p-b-xs">{{epochToHumanDate "mmm dd yyyy HH:MM" created_time}}</td>
-                </tr>
-                <tr>
-                    <td class="p-t-xs p-b-xs">Updated On</td>
-                    <td class="p-t-xs p-b-xs">{{epochToHumanDate "mmm dd yyyy HH:MM" last_updated_time}}</td>
-                </tr>
-                <tr>
-                  <td class="p-t-xs p-b-xs">Last Updated By</td>
-                  <td class="p-t-xs p-b-xs first-letter-cap">
-                    {{#if_equals last_updated_by 'AGENT'}}
-                      <span title="Assignee">{{assignee.name}}</span>
-                    {{else}}
-                      <span title="Requester">{{requester_name}}</span>
-                    {{/if_equals}}
-                  </td>
-                </tr>
-                <tr>
-                    <td class="p-t-xs p-b-xs">Contact Details</td>
-                    <td class="p-t-xs p-b-xs">
-                      <a class="link-color" href="https://{{get_current_domain}}.agilecrm.com/#contact/{{contactID}}">
-                        Click Here
-                      </a>
-                    </td>
-                </tr>
-              </table>
-            </div><hr class="m-t-sm m-b-sm">
+             
+            </div>
+            <!--<hr class="m-t-sm m-b-sm">
             <div class="m-t-sm">
               <small class="text-muted text-sm">Tags</small>
             </div>
@@ -208,7 +162,7 @@
                   <span>Add Tag</span>
                 </a>
               </div>
-            </div>
+            </div>-->
           </div>  
         </div><!-- End of row-row-->
       </div><!-- End of vbox-->
@@ -228,19 +182,34 @@
               <button class="btn btn-sm btn-default w-xxs w-auto-xs delete-ticket" data-toggle="tooltip" data-placement="bottom" data-original-title="Delete Ticket"><i class="fa fa-trash-o"></i></button>
             </div>  
 
+            <button class="btn btn-sm btn-default w-xxs w-auto-xs dropdown-toggle show-workflows" data-toggle="tooltip" data-placement="bottom" data-original-title="Workflows"><i class="fa fa-sitemap"></i></button>
+
+            <div class="btn-group pos-stc">
+              <button class="btn btn-sm btn-default w-xxs w-auto-xs dropdown-toggle" data-toggle="tooltip" data-placement="bottom" data-original-title="Reply"><i class="fa fa-mail-reply"></i></button>
+               <button class="btn btn-sm btn-default w-xxs w-auto-xs dropdown-toggle" data-toggle="tooltip" data-placement="bottom" data-original-title="Forward"><i class="fa fa-mail-forward"></i></button>
+                <button class="btn btn-sm btn-default w-xxs w-auto-xs dropdown-toggle" data-toggle="tooltip" data-placement="bottom" data-original-title="Add Notes"><i class="fa fa-file-text"></i></button>
+            </div>
+
             <!-- Toolbar menu -->
             <div class="btn-group pos-stc">
-              <button class="btn btn-sm btn-default w-xxs w-auto-xs dropdown-toggle show-workflows" data-toggle="tooltip" data-placement="bottom" data-original-title="Workflows"><i class="fa fa-sitemap"></i></button>
               <button class="btn btn-sm btn-default w-xxs w-auto-xs dropdown-toggle" data-toggle="tooltip" data-placement="bottom" data-original-title="Close Ticket"><i class="fa fa-copyright"></i></button>
             </div>
           </div>
           <!-- End of ticket toolbar -->
 
           <!-- Start of ticket notes -->
-          <div class="wrapper bg-light">
-            <h2 class="font-thin m-t-none m-b-none">
+          <div class="wrapper bg-light p-t-sm p-b-sm">
+            <h2 class="font-thin m-t-none m-b-none inline-block">
               {{subject}}
             </h2>
+            <div class="inline-block m-l-sm" style="vertical-align: super;">
+              <span class="label bg-light dk text-tiny first-letter-cap inline-block">
+                {{status}}
+              </span>&nbsp;
+              <span class="label {{toLowerCase priority}}-priority-bg text-tiny first-letter-cap inline-block">
+                {{priority}}
+              </span>
+            </div>
           </div>
           <div id="notes-collection-container">
             

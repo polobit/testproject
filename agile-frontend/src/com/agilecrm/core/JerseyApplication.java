@@ -5,8 +5,6 @@ import java.util.Set;
 
 import javax.ws.rs.core.Application;
 
-import com.agilecrm.ticket.rest.TicketBulkActionsRest;
-
 public class JerseyApplication extends Application
 {
     @Override
@@ -117,6 +115,7 @@ public class JerseyApplication extends Application
 	s.add(com.agilecrm.ticket.rest.TicketFiltersRest.class);
 	s.add(com.agilecrm.ticket.rest.TicketBulkActionsRest.class);
 	s.add(com.agilecrm.ticket.rest.TicketBulkActionsBackendsRest.class);
+	s.add(com.agilecrm.ticket.rest.TicketLabelsRest.class);
 
 		return s;
 	}

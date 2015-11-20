@@ -39,7 +39,9 @@
           <span>Last Reply</span>
           <span class="text-light txt-small pull-right">
             {{epochToHumanDate "ddd mmm dd yyyy HH:MM" last_updated_time}}&nbsp;
-            <span class="label label-primary first-letter-cap {{toLowerCase priority}}-priority-bg">{{priority}}</span>
+            <span class="label label-primary first-letter-cap inline-block {{toLowerCase priority}}-priority-bg">
+              {{priority}}
+            </span>
           </span>
         </div>
         <div id="recent-reply-notes" class="col-md-12 p recent-reply-notes">

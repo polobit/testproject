@@ -26,6 +26,8 @@ var TicketsUtilRouter = Backbone.Router.extend({
 		"add-ticket-group" : "addTicketGroup",
 		"ticket-group/:id" : "editTicketGroup",
 
+		"ticket-labels" : "ticketLabels",
+
 		/*Ticket Filters CRUD*/
 		"ticket-filters" : "ticketFilters",
 		"add-ticket-filter" : "addTicketFilter",
@@ -337,7 +339,7 @@ var TicketsUtilRouter = Backbone.Router.extend({
 			getTemplate("ticket-settings-nav-tab", {groups: true}, undefined, function(tab_template_ui){
 
 				if(!tab_template_ui)
-				  return;
+					return;
 
 				$('#admin-prefs-tabs-content').html($(tab_template_ui));	
 
@@ -483,6 +485,47 @@ var TicketsUtilRouter = Backbone.Router.extend({
 				$('#content').find('.helpdesk-tab').addClass('select');
 			});
 		});
+	},
+
+	/**
+	 *Shows labels collection
+	 */
+	ticketLabels: function(){
+
+		getTemplate("admin-settings", {}, undefined, function(template_ui){
+
+			if(!template_ui)
+				  return;
+
+			$('#content').html($(template_ui));	
+
+			getTemplate("ticket-settings-nav-tab", {labels: true}, undefined, function(tab_template_ui){
+
+				if(!tab_template_ui)
+				  return;
+
+				$('#admin-prefs-tabs-content').html($(tab_template_ui));	
+
+				var labelsCollectionView = new Base_Collection_View({ 
+					url : 'core/api/tickets/labels', 
+					templateKey : "ticket-label", 
+					individual_tag_name : 'li',
+					sort_collection : true, 
+					sortKey : 'tag', 
+					postRenderCallback : function(el)
+					{
+						Ticket_Labels.initEvents(el);
+					} 
+				});
+				
+				labelsCollectionView.appendItem = Ticket_Labels.appendLabelManagement;
+				labelsCollectionView.collection.fetch();
+
+				$('.ticket-settings', $('#admin-prefs-tabs-content')).html(labelsCollectionView.el);
+				$('#content').find('#AdminPrefsTab .select').removeClass('select');
+				$('#content').find('.helpdesk-tab').addClass('select');
+			});
+		});	
 	},
 
 	/**

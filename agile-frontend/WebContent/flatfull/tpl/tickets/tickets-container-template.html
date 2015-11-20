@@ -4,37 +4,44 @@
 		<div class="wrapper b-b bg">
 			<a class="btn btn-sm btn-danger w-xs new-ticket" href="javascript:void(0);">New</a>
 		</div>
-		<div class="wrapper hidden-sm hidden-xs" id="filters-list-container">
-			
-			//Commented
-			<!--<ul class="nav nav-pills nav-stacked nav-sm ticket-types">
-				<li {{#if ticket_status}}{{#if_equals ticket_status 'new'}}class="active"{{/if_equals}}{{/if}}>
-					<a class="new" href="#tickets/group/{{group_id}}/new">
-						New <badge class="badge bg-gray pull-right"></badge>
-					</a>
-				</li>
-		        <li {{#if ticket_status}}{{#if_equals ticket_status 'open'}}class="active"{{/if_equals}}{{/if}}>
-		        	<a class="open" href="#tickets/group/{{group_id}}/open">
-		        		Open <badge class="badge bg-gray pull-right"></badge>
-		        	</a>
-		        </li>
-		        <li {{#if ticket_status}}{{#if_equals ticket_status 'starred'}}class="active"{{/if_equals}}{{/if}}>
-		        	<a class="starred" href="#tickets/group/{{group_id}}/starred">
-		        		Favorite <badge class="badge bg-gray pull-right"></badge>
-		        	</a>
-		        </li>
-		        <li {{#if ticket_status}}{{#if_equals ticket_status 'closed'}}class="active"{{/if_equals}}{{/if}}>
-		        	<a class="closed" href="#tickets/group/{{group_id}}/closed">
-		        		Closed <badge class="badge bg-gray pull-right"></badge>
-		        	</a>
-		        </li>
-			</ul>-->
-		</div>
-		<div class="text-center display-none">
-			<a href="" class="btn btn-sm btn-default btn-addon" ng-click="createItem()">
-				<i class="fa fa-plus fa-fw m-r-xs"></i> Add Filter
-			</a>
-		</div>	
+		<div class="wrapper hidden-sm hidden-xs">
+			<div id="filters-list-container">
+			</div>
+			<div class="wrapper">Labels</div>
+			<ul class="nav nav-pills nav-stacked nav-sm">
+		        <!-- ngRepeat: label in labels --><li ng-repeat="label in labels" ui-sref-active="active" class="ng-scope">
+		          <a ui-sref="app.mail.list({fold:label.filter})" class="ng-binding" href="#/app/mail/inbox/angular">
+		            <i class="fa fa-fw fa-circle text-muted" color="#23b7e5" label-color="" style="color: rgb(35, 183, 229);"></i>
+		            Angular
+		          </a>
+		        </li><!-- end ngRepeat: label in labels --><li ng-repeat="label in labels" ui-sref-active="active" class="ng-scope">
+		          <a ui-sref="app.mail.list({fold:label.filter})" class="ng-binding" href="#/app/mail/inbox/bootstrap">
+		            <i class="fa fa-fw fa-circle text-muted" color="#7266ba" label-color="" style="color: rgb(114, 102, 186);"></i>
+		            Bootstrap
+		          </a>
+		        </li><!-- end ngRepeat: label in labels --><li ng-repeat="label in labels" ui-sref-active="active" class="ng-scope">
+		          <a ui-sref="app.mail.list({fold:label.filter})" class="ng-binding" href="#/app/mail/inbox/client">
+		            <i class="fa fa-fw fa-circle text-muted" color="#fad733" label-color="" style="color: rgb(250, 215, 51);"></i>
+		            Client
+		          </a>
+		        </li><!-- end ngRepeat: label in labels --><li ng-repeat="label in labels" ui-sref-active="active" class="ng-scope">
+		          <a ui-sref="app.mail.list({fold:label.filter})" class="ng-binding" href="#/app/mail/inbox/work">
+		            <i class="fa fa-fw fa-circle text-muted" color="#27c24c" label-color="" style="color: rgb(39, 194, 76);"></i>
+		            Work
+		          </a>
+		        </li><!-- end ngRepeat: label in labels -->
+		    </ul>
+		    <div class="wrapper">
+		        <form name="label" class="ng-pristine ng-invalid ng-invalid-required">
+		          <div class="input-group">
+		            <input type="text" class="form-control input-sm ng-pristine ng-untouched ng-invalid ng-invalid-required" ng-model="newLabel.name" placeholder="New label" required="" aria-required="true" aria-invalid="true">
+		            <span class="input-group-btn">
+		              <button class="btn btn-sm btn-default" type="button" ng-click="addLabel()" ng-disabled="label.$invalid" aria-disabled="true" disabled="disabled">Add</button>
+		            </span>
+		          </div>
+		        </form>
+		    </div>
+		</div>   
 		<!--<div class="wrapper hidden-sm hidden-xs" id="filters-list-container"></div>-->
 	</div>
 	<div class="col">

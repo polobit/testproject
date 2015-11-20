@@ -1,0 +1,53 @@
+<script id="ticket-label-collection-template" type="text/html">
+<div align="right"> 
+    <div id="add-label-btn" class="inline">
+        <a href="javascript:void(0);" id="add-new-label" class="btn btn-default btn-addon btn-sm">
+            <i class="icon-plus-sign" ></i> Add Label
+        </a>
+    </div>
+    <div id="new-label-form" class="pull-right display-none">
+        <input type="text" class="form-control pull-left m-r-sm w add-new-label" placeholder="New Label"/>
+        <a class="btn btn-primary pull-left v-top btn-sm add-new-label" href="javacript:void(0);" title="Create Label">
+            <i class="fa fa-save"></i>
+        </a>
+        <a class="btn btn-default pull-left v-top btn-sm m-l-xs close-new-label" href="javacript:void(0);"  title="Close">
+            <i class="fa fa-times"></i>
+        </a>
+    </div>
+</div>
+<div class="clearfix"></div>
+<div class="control-group form-group">  
+    <div id="milestone-values" class="milestone-ul-list1">
+        {{#unless this.length}}
+            <div class="text-center padder-v">
+                <h4 class="m-t-none m-b-xs">You dont have any labels</h4>
+                <div class="m-b-xs">
+                    Labels can be add to tickets to filter Tickets.
+                </div>
+            </div>
+        {{else}}
+            <ul id="ticket-label-model-list" style="list-style: none;">
+
+            </ul>
+        {{/unless}}    
+    </div>
+    <div class="clearfix"></div>
+</div>
+</script>
+<script id="ticket-label-model-template" type="text/html">
+<span>
+    <div id="tag-solid-state">
+        <a class="anchor text-ellipsis v-middle text-sm p-l-xs text-sm pull-left inline-block"  style="width:140px" href="#tags/{{this.label}}" >{{this.label}}</a>  
+        <span id="actions" class="agile-custom-hide text-xs">
+        <div class="pull-right tag-management-actions">
+            <a class="details" href="#"><i class="icon-file-text"></i></a>
+            <a class="edit" href="#" ><i class="icon-pencil"></i></a>
+            <a class="delete" href="#" ><i class="icon-trash"></i></a>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+    <div class="agile-custom-hide pull-left m-b-sm m-l-sm" id="editing">
+        <input type="text" class="edit-input w-200 pull-left form-control m-r-sm" style="height:30px;" value='{{this.label}}'>
+    </div>
+</span>
+</script>

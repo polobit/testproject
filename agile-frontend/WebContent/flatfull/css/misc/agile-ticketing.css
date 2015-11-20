@@ -130,27 +130,30 @@ div.cc-emails-st{
 }
 
 .low-priority{
-	border-left-color: #DDDDDD !important;
-}
-
-.medium-priority{
 	border-left-color: #23b7e5 !important;
 }
 
-.high-priority{
+.medium-priority{
 	border-left-color: #7266ba !important;
 }
 
+.high-priority{
+	border-left-color: #f05050 !important;
+}
+
 .low-priority-bg{
-	background-color: #DDDDDD;
+	background-color: #23b7e5;
+	color: white;
 }
 
 .medium-priority-bg{
-	background-color: #23b7e5;
+	background-color: #7266ba;
+	color: white;
 }
 
 .high-priority-bg{
-	background-color: #7266ba;
+	background-color: #f05050;
+	color: white;
 }
 
 .checkbox-st{
