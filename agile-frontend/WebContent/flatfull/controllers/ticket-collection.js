@@ -18,6 +18,9 @@ var TicketsUtilRouter = Backbone.Router.extend({
 		"tickets/filter/:id" : "ticketsByFilter",
 		"tickets/filter/:id/ticket/:id" : "filteredTicketNotes",
 
+		/* Ticket bulk actions*/
+		"tickets/bulk-actions/:action_type" : "ticketsBulkActions",
+
 		/*Ticket Groups CRUD*/
 		"ticket-groups" : "ticketGroups",
 		"add-ticket-group" : "addTicketGroup",
@@ -313,6 +316,10 @@ var TicketsUtilRouter = Backbone.Router.extend({
 
 		//$(".tickets-collection-pane").html('');
 		$('#content').html(App_Ticket_Module.ticketView.render().el);
+	},
+
+	ticketsBulkActions: function(action_type){
+		Ticket_Bulk_Ops.renderTemplate(action_type);
 	},
 
 	/**

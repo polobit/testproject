@@ -36,8 +36,12 @@ var Tickets_Notes = {
 	},
 
 	backToTickets: function(e){
+		
 		Tickets.renderExistingCollection();
-		Ticket_Bulk_Ops.uncheckAllTickets();
+		Ticket_Bulk_Ops.clearSelection();
+
+		//Initializing checkbox events
+		Ticket_Bulk_Ops.initEvents();
 	},
 	
 	repltBtn: function(e){

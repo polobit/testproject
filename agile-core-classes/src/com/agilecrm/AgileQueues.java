@@ -56,4 +56,7 @@ public class AgileQueues
 
 	public static final String CONTACTS_SCHEMA_CHANGE_QUEUE = "contacts-schema-change-queue";
 
+	// Ticketing queue
+	public static final String TICKET_BULK_ACTIONS_QUEUE = "ticket-bulk-actions";
+
 }

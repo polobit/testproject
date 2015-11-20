@@ -14,6 +14,7 @@ import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.search.BuilderInterface;
 import com.agilecrm.search.QueryInterface.Type;
 import com.agilecrm.ticket.entitys.Tickets;
+import com.agilecrm.ticket.entitys.Tickets.Status;
 import com.agilecrm.ticket.utils.TicketsUtil;
 import com.agilecrm.util.StringUtils2;
 import com.google.appengine.api.search.Document;
@@ -103,15 +104,20 @@ public class TicketsDocument implements BuilderInterface
 			// Set ticket status
 			document.addField(Field.newBuilder().setName("status").setText(ticket.status.toString()));
 
+			if (ticket.status == Status.CLOSED)
+				// Set closed time
+				document.addField(Field.newBuilder().setName("closed_time")
+						.setNumber(Math.floor(ticket.closed_time / 1000)));
+
 			// Set ticket type
 			document.addField(Field.newBuilder().setName("ticket_type").setText(ticket.type.toString()));
 
 			// Set ticket priority
 			document.addField(Field.newBuilder().setName("priority").setText(ticket.priority.toString()));
-			
-			//Set priority code to get records in ASC or DESC order
+
+			// Set priority code to get records in ASC or DESC order
 			document.addField(Field.newBuilder().setName("priority_code").setNumber(ticket.priority.getCode()));
-			
+
 			// Set email source
 			document.addField(Field.newBuilder().setName("source").setText(ticket.source.toString()));
 
@@ -221,7 +227,8 @@ public class TicketsDocument implements BuilderInterface
 		return SearchServiceFactory.getSearchService().getIndex(indexSpec);
 	}
 
-	public JSONObject searchDocuments(String queryString, String cursorString, String sortField) throws Exception
+	public JSONObject searchDocuments(String queryString, String cursorString, String sortField, int limit)
+			throws Exception
 	{
 		List<Key<Tickets>> resultArticleIds = new ArrayList<Key<Tickets>>();
 
@@ -241,18 +248,17 @@ public class TicketsDocument implements BuilderInterface
 				: SortExpression.SortDirection.ASCENDING;
 
 		sortField = sortField.replace("-", "");
-		
+
 		// Build the SortOptions with 2 sort keys
 		SortOptions sortOptions = SortOptions
 				.newBuilder()
 				.addSortExpression(
-						SortExpression.newBuilder().setExpression(sortField)
-								.setDirection(direction).setDefaultValueNumeric(0))
-				.setLimit(1000).build();
+						SortExpression.newBuilder().setExpression(sortField).setDirection(direction)
+								.setDefaultValueNumeric(0)).setLimit(1000).build();
 		try
 		{
 			// Setting records fetching limit to 20
-			options = QueryOptions.newBuilder().setCursor(cursor).setLimit(20).setSortOptions(sortOptions).build();
+			options = QueryOptions.newBuilder().setCursor(cursor).setLimit(limit).setSortOptions(sortOptions).build();
 			query = com.google.appengine.api.search.Query.newBuilder().setOptions(options).build(queryString);
 		}
 		catch (Exception e)

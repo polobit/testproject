@@ -24,6 +24,4 @@ public class TicketWorkflow
 	{
 		this.workflow_id = workflow_id;
 	}
-	
-	
 }

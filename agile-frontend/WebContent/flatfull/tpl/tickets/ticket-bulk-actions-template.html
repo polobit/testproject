@@ -1,0 +1,239 @@
+<script id="ticket-bulk-actions-add-labels-template" type="text/html">
+<div class="row">
+    <div class="col-md-8">
+        <div class="tab-content wrapper-md">
+            <div class="panel panel-default">
+                <div class="panel-heading"><h4 class="h4">Add labels to selected tickets</h4></div>
+                    <div class="panel-body">
+                        <form id="bulk-labels" class="form-horizontal" onsubmit="return false;">
+                            <fieldset>
+                                <div class="control-group form-group">         
+                                    <label class="control-label col-sm-2 m-t-xs">
+                                        Add labels <span class="field_req">*</span>
+                                    </label>
+                                    <div class="controls col-sm-10">
+                                        <div class="contact-tags m-b-xs m-t-xs">
+                                          <ul id="ticket-tags-ul" name="tags" class="inline v-top m-b-sm p-n tags"></ul>
+                                          <div class="inline-block m-t-xs">
+                                            <div class="add-tags-form" class="m-b-none">
+                                              <div class="control-group m-b-none">
+                                                <input type="text" class="input-sm ticket-tags-typeahead ignore-comma-keydown form-control inline-block" placeholder="Enter label">
+                                                <span>
+                                              </div>
+                                            </div>
+                                          </div>
+                                        </div>
+                                        <span class="error-tags display-none" style="color: red;">
+                                            This field is required.
+                                        </span>  
+                                    </div>
+                                </div>
+                                <hr class="m-t-none">
+                                <div class="row">
+                                    <div class="col-sm-offset-2 col-sm-10">
+                                        <div class="form-actions">       
+                                            <a href="#tickets" class="btn btn-default btn-sm">Close</a>   
+                                            <a href="javascript:void(0);"
+                                                class="btn btn-primary btn-sm bulk-manage-labels bulk-add-labels">
+                                                    Add Labels
+                                            </a> 
+                                            <span class="save-status"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</script>
+<script id="ticket-bulk-actions-remove-labels-template" type="text/html">
+<div class="row">
+    <div class="col-md-8">
+        <div class="tab-content wrapper-md">
+            <div class="panel panel-default">
+                <div class="panel-heading"><h4 class="h4">Remove labels from selected tickets</h4></div>
+                    <div class="panel-body">
+                        <form id="bulk-labels" class="form-horizontal" onsubmit="return false;">
+                            <fieldset>
+                                <div class="control-group form-group">         
+                                    <label class="control-label col-sm-3 m-t-xs">
+                                        Remove labels <span class="field_req">*</span>
+                                    </label>
+                                    <div class="controls col-sm-9">
+                                        <div class="contact-tags m-b-xs m-t-xs">
+                                          <ul id="ticket-tags-ul" name="tags" class="inline v-top m-b-sm p-n tags"></ul>
+                                          <div class="inline-block m-t-xs">
+                                            <div class="add-tags-form" class="m-b-none">
+                                              <div class="control-group m-b-none">
+                                                <input type="text" class="input-sm ticket-tags-typeahead ignore-comma-keydown form-control inline-block" placeholder="Enter label">
+                                                <span>
+                                              </div>
+                                            </div>
+                                          </div>
+                                        </div>
+                                        <span class="error-tags display-none" style="color: red;">
+                                            This field is required.
+                                        </span>  
+                                    </div>
+                                </div>
+                                <hr class="m-t-none">
+                                <div class="row">
+                                    <div class="col-sm-offset-3 col-sm-9">
+                                        <div class="form-actions">       
+                                            <a href="#tickets" class="btn btn-default btn-sm">Close</a>   
+                                            <a href="javascript:void(0);"
+                                                class="btn btn-primary btn-sm bulk-manage-labels">Remove Labels</a> 
+                                            <span class="save-status"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>          
+</script>
+
+<script id="ticket-bulk-actions-change-assignee-template" type="text/html">
+<div class="row">
+    <div class="col-md-8">
+        <div class="tab-content wrapper-md">
+            <div class="panel panel-default">
+                <div class="panel-heading"><h4 class="h4">Add labels to selected tickets</h4></div>
+                    <div class="panel-body">
+                        <form id="bulk-labels" class="form-horizontal" onsubmit="return false;">
+                            <fieldset>
+                                <div class="control-group form-group">         
+                                    <label class="control-label col-sm-2">
+                                        Select Assignee
+                                    </label>
+                                    <div class="controls col-sm-6">
+                                        <select class="form-control" name="assigneeID">
+                                            {{#each this}}
+                                                <optgroup label="{{group_name}}">
+                                                    {{#group_users}}
+                                                        <option data-group-id="{{../id}}" value="{{id}}">
+                                                            {{name}}
+                                                        </option>
+                                                    {{/group_users}}
+                                                </optgroup>    
+                                              {{/each}}  
+                                        </select>
+                                    </div>
+                                </div>
+                                <hr class="m-t-none">
+                                <div class="row">
+                                    <div class="col-sm-offset-2 col-sm-10">
+                                        <div class="form-actions">       
+                                            <a href="#tickets" class="btn btn-default btn-sm">Close</a>   
+                                            <a href="javascript:void(0);"
+                                                class="btn btn-primary btn-sm save">Change Assignee</a> 
+                                            <span class="save-status"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>          
+</script>
+<script id="ticket-bulk-actions-execute-workflow-template" type="text/html">
+<div class="row">
+    <div class="col-md-8">
+        <div class="tab-content wrapper-md">
+            <div class="panel panel-default">
+                <div class="panel-heading"><h4 class="h4">Execute workflow on selected tickets</h4></div>
+                    <div class="panel-body">
+                        <form id="bulk-labels" class="form-horizontal" onsubmit="return false;">
+                            <fieldset>
+                                <div class="control-group form-group">         
+                                    <label class="control-label col-sm-3">
+                                        Select workflow
+                                    </label>
+                                    <div class="controls col-sm-6">
+                                        <select name="workflowID" class="form-control">
+                                            {{#each this}}
+                                               <option value="{{id}}">{{name}}</option>
+                                            {{/each}}                                               
+                                        </select>
+                                    </div>
+                                </div>
+                                <hr class="m-t-none">
+                                <div class="row">
+                                    <div class="col-sm-offset-3 col-sm-9">
+                                        <div class="form-actions">       
+                                            <a href="#tickets" class="btn btn-default btn-sm">Close</a>   
+                                            <a href="javascript:void(0);"
+                                                class="btn btn-primary btn-sm save">Execute workflow</a> 
+                                            <span class="save-status"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>          
+</script>
+<script id="ticket-bulk-actions-close-tickets-template" type="text/html">
+<div id="close-tickets-modal" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button class="close" data-dismiss="modal">x</button>
+                <h3 class="modal-title"><i class="icon icon-copyright"></i> Close Tickets</h3>
+            </div>
+            <div class="modal-body">
+                <form id='executeWorkFlowForm' name="executeWorkFlowForm" class="form-horizontal">
+                    Are you sure, you want to close selected tickets?<br/><br/>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <a href="javascript:void(0);" data-dismiss="modal" class="btn btn-sm btn-default">Close</a>
+                <a href="javascript:void(0);" data-loading-text="Close Tickets" class="save btn btn-sm btn-primary">
+                    Close Tickets
+                </a>
+                &nbsp;&nbsp;<span id="msg"></span>
+            </div>
+        </div>
+    </div>
+</div>
+</script>
+<script id="ticket-bulk-actions-delete-tickets-template" type="text/html">
+<div id="delete-tickets-modal" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button class="close" data-dismiss="modal">x</button>
+                <h3 class="modal-title"><i class="icon icon-trash"></i> Delete Tickets</h3>
+            </div>
+            <div class="modal-body">
+                <form id='executeWorkFlowForm' name="executeWorkFlowForm" class="form-horizontal">
+                    Are you sure, you want to delete selected tickets?<br/><br/>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <a href="javascript:void(0);" data-dismiss="modal" class="btn btn-sm btn-default">Close</a>
+                <a href="javascript:void(0);" data-loading-text="Delete Tickets" class="save btn btn-sm btn-primary">
+                    Delete Tickets
+                </a>
+                &nbsp;&nbsp;<span id="msg"></span>
+            </div>
+        </div>
+    </div>
+</div>
+</script>

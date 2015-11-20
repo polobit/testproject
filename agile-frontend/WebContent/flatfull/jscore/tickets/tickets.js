@@ -125,6 +125,7 @@ var Tickets = {
 			e.stopPropagation();
 			e.preventDefault();
 
+			Ticket_Bulk_Ops.addOrRemoveTicketID(this);
 			Ticket_Bulk_Ops.showText();
 		});
 
@@ -180,7 +181,7 @@ var Tickets = {
 			//Fetch ticket collection count
 			Tickets_Count.fetchFilterTicketsCount();
 			
-			Ticket_Bulk_Ops.uncheckAllTickets();
+			Ticket_Bulk_Ops.clearSelection();
 		});
 
 		//Initialization click event on sort filters

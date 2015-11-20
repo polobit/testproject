@@ -93,6 +93,8 @@ var Ticket_Filters = {
 			url : '/core/api/tickets/filters',
 			sortKey:"updated_time",
 			descending:true,
+			customLoader: true,
+			customLoaderTemplate: 'ticket-filters-loader',
 			templateKey : "ticket-filters-list",
 			individual_tag_name : 'li',
 			postRenderCallback : function(el){

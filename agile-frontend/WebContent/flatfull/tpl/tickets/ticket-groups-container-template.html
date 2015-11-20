@@ -8,23 +8,25 @@
 	    <div class="btn-toolbar">
 	    	<input class="ticket-checkbox select-all pull-left" type="checkbox" 
 	    		style="margin-top: 10px; margin-left: 3px;">
-	    	<div id="rfr-btn" class="btn-group" style="margin-left: 10px !important;">
+	    	<!--<div id="rfr-btn" class="btn-group" style="margin-left: 10px !important;">
 		        <a href="javascript:void(0);" class="btn btn-sm btn-default refresh-tickets" 
 		        	data-toggle="tooltip" data-placement="bottom" data-original-title="Refresh">
 		        	<i class="fa fa-refresh"></i>
 		        </a>
-		    </div>
+		    </div>-->
 		    <div>
-		        <div class="m-l-xs btn-group dropdown bulk-action-btn-grp display-none">
+		        <div class="m-l-xs btn-group dropdown bulk-action-btn-grp m-l-md display-none">
 		          <button class="btn btn-sm btn-default">Bulk Actions</button>
 		          <button class="btn btn-sm btn-default" data-toggle="dropdown"><span class="caret"></span></button>
 		          <ul class="dropdown-menu">
-		            <li><a href="#tickets/bulk-actions/add-tag">Add Tags</a></li>
-		            <li><a href="#tickets/bulk-actions/remove-tag">Remove Tags</a></li>
+		            <li><a href="#tickets/bulk-actions/add-labels">Add Labels</a></li>
+		            <li><a href="#tickets/bulk-actions/remove-labels">Remove Labels</a></li>
 		            <li class="divider"></li>
 		            <li><a href="#tickets/bulk-actions/change-assignee">Change Assignee</a></li>
 		            <li><a href="#tickets/bulk-actions/execute-workflows">Execute Workflow</a></li>
-		            <li><a href="#tickets/bulk-actions/delete">Delete</a></li>
+		            <li><a class="bulk-ticket-close" href="javascript:void(0);">Close Tickets</a></li>
+		            <li class="divider"></li>
+		            <li><a class="bulk-ticket-delete" href="javascript:void(0);">Delete</a></li>
 		          </ul>
 		        </div>
 		        <div class="btn-group inline-block m-l-xs m-t-xs" style="display: inline;" id="tickets-bulk-select">
@@ -61,6 +63,10 @@
 		        	</li>
 		    	</ul>
 			</div>
+			<a href="javascript:void(0);" class="btn btn-sm btn-default refresh-tickets pull-right" 
+	        	data-toggle="tooltip" data-placement="bottom" data-original-title="Refresh">
+	        	<i class="fa fa-refresh"></i>
+	        </a>
 	    </div>
 	    <div class="btn-toolbar" style="display: none;">
 	    	<div id="groups-list-container">

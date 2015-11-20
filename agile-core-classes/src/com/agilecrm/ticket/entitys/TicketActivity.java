@@ -31,7 +31,7 @@ import com.googlecode.objectify.condition.IfDefault;
  * 
  */
 @XmlRootElement
-public class TicketActivity  extends Cursor
+public class TicketActivity extends Cursor
 {
 	@Id
 	public Long id;
@@ -113,7 +113,7 @@ public class TicketActivity  extends Cursor
 	 */
 	public enum TicketActivityType
 	{
-		TICKET_CREATED, TICKET_DELETED, TICKET_ASSIGNED, TICKET_ASSIGNEE_CHANGED, TICKET_GROUP_CHANGED, TICKET_STATUS_CHANGE, TICKET_PRIORITY_CHANGE, TICKET_TYPE_CHANGE, TICKET_TAG_ADD, TICKET_TAG_REMOVE, TICKET_ASSIGNEE_REPLIED, TICKET_REQUESTER_REPLIED, TICKET_PRIVATE_NOTES_ADD, TICKET_MARKED_FAVORITE, TICKET_MARKED_UNFAVORITE
+		TICKET_CREATED, TICKET_DELETED, TICKET_ASSIGNED, TICKET_ASSIGNEE_CHANGED, TICKET_GROUP_CHANGED, TICKET_STATUS_CHANGE, TICKET_PRIORITY_CHANGE, TICKET_TYPE_CHANGE, TICKET_TAG_ADD, TICKET_TAG_REMOVE, TICKET_ASSIGNEE_REPLIED, TICKET_REQUESTER_REPLIED, TICKET_PRIVATE_NOTES_ADD, TICKET_MARKED_FAVORITE, TICKET_MARKED_UNFAVORITE, BULK_ACTION_MANAGE_LABELS, BULK_ACTION_CHANGE_ASSIGNEE, BULK_ACTION_EXECUTE_WORKFLOW, BULK_ACTION_CLOSE_TICKETS, BULK_ACTION_DELETE_TICKETS
 	};
 
 	public TicketActivityType ticket_activity_type;
@@ -136,8 +136,13 @@ public class TicketActivity  extends Cursor
 			String new_data, String changed_field)
 	{
 		super();
-		this.contact_key = new Key<Contact>(Contact.class, contact_id);
-		this.ticket_key = new Key<Tickets>(Tickets.class, ticket_id);
+
+		if (contact_id != null)
+			this.contact_key = new Key<Contact>(Contact.class, contact_id);
+
+		if (contact_id != null)
+			this.ticket_key = new Key<Tickets>(Tickets.class, ticket_id);
+
 		this.old_data = old_data;
 		this.new_data = new_data;
 		this.changed_field = changed_field;
@@ -260,51 +265,51 @@ public class TicketActivity  extends Cursor
 		{
 			switch (ticket_activity_type)
 			{
-				case TICKET_CREATED:
-					this.activity_title = "Ticket created";
-					break;
-				case TICKET_ASSIGNED:
-					this.activity_title = "Ticket assigned";
-					break;
-				case TICKET_ASSIGNEE_CHANGED:
-					this.activity_title = "Assignee changed";
-					break;
-				case TICKET_GROUP_CHANGED:
-					this.activity_title = "Group changed";
-					break;
-				case TICKET_STATUS_CHANGE:
-					this.activity_title = "Status changed";
-					break;
-				case TICKET_PRIORITY_CHANGE:
-					this.activity_title = "Priority changed";
-					break;
-				case TICKET_TYPE_CHANGE:
-					this.activity_title = "Type changed";
-					break;
-				case TICKET_TAG_ADD:
-					this.activity_title = "Tag added";
-					break;
-				case TICKET_TAG_REMOVE:
-					this.activity_title = "Tag removed";
-					break;
-				case TICKET_ASSIGNEE_REPLIED:
-					this.activity_title = "Assignee replied";
-					break;
-				case TICKET_REQUESTER_REPLIED:
-					this.activity_title = "Requester replied";
-					break;
-				case TICKET_PRIVATE_NOTES_ADD:
-					this.activity_title = "Note added";
-					break;
-				case TICKET_DELETED:
-					this.activity_title = "Ticket deleted";
-					break;
-				case TICKET_MARKED_FAVORITE:
-					this.activity_title = "Marked favorite";
-					break;
-				case TICKET_MARKED_UNFAVORITE:
-					this.activity_title = "Marked unfavorite";
-					break;
+			case TICKET_CREATED:
+				this.activity_title = "Ticket created";
+				break;
+			case TICKET_ASSIGNED:
+				this.activity_title = "Ticket assigned";
+				break;
+			case TICKET_ASSIGNEE_CHANGED:
+				this.activity_title = "Assignee changed";
+				break;
+			case TICKET_GROUP_CHANGED:
+				this.activity_title = "Group changed";
+				break;
+			case TICKET_STATUS_CHANGE:
+				this.activity_title = "Status changed";
+				break;
+			case TICKET_PRIORITY_CHANGE:
+				this.activity_title = "Priority changed";
+				break;
+			case TICKET_TYPE_CHANGE:
+				this.activity_title = "Type changed";
+				break;
+			case TICKET_TAG_ADD:
+				this.activity_title = "Tag added";
+				break;
+			case TICKET_TAG_REMOVE:
+				this.activity_title = "Tag removed";
+				break;
+			case TICKET_ASSIGNEE_REPLIED:
+				this.activity_title = "Assignee replied";
+				break;
+			case TICKET_REQUESTER_REPLIED:
+				this.activity_title = "Requester replied";
+				break;
+			case TICKET_PRIVATE_NOTES_ADD:
+				this.activity_title = "Note added";
+				break;
+			case TICKET_DELETED:
+				this.activity_title = "Ticket deleted";
+				break;
+			case TICKET_MARKED_FAVORITE:
+				this.activity_title = "Marked favorite";
+				break;
+			case TICKET_MARKED_UNFAVORITE:
+				this.activity_title = "Marked unfavorite";
+				break;
 			}
 		}
 	}

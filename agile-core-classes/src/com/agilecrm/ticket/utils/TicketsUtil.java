@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -458,6 +457,9 @@ public class TicketsUtil
 	{
 		Tickets ticket = TicketsUtil.getTicketByID(ticket_id);
 
+		if (ticket.status == Status.CLOSED)
+			return ticket;
+
 		Status oldStatus = ticket.status;
 
 		ticket.status = Status.CLOSED;
@@ -518,6 +520,42 @@ public class TicketsUtil
 			TicketsUtil.updateTags(Long.parseLong(ticketId), new Tag(tag), type.toLowerCase());
 		}
 
+	}
+
+	/**
+	 * Tags add Bulk operation
+	 * 
+	 * @param ticketId
+	 * @param newTags
+	 */
+	public static void addTagsList(Long ticketId, List<Tag> newTags)
+	{
+		try
+		{
+			Tickets ticket = TicketsUtil.getTicketByID(ticketId);
+
+			List<Tag> tags = ticket.tags;
+
+			for (Tag newTag : newTags)
+			{
+				if (tags.contains(newTag))
+					continue;
+
+				tags.add(newTag);
+
+				// Logging activity
+				new TicketActivity(TicketActivityType.TICKET_TAG_ADD, ticket.contactID, ticket.id, "", newTag.tag,
+						"tags").save();
+			}
+
+			Tickets.ticketsDao.put(ticket);
+
+			new TicketsDocument().edit(ticket);
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
 	}
 
 	/**

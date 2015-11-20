@@ -62,7 +62,7 @@ public class TicketFiltersUtil
 			{
 				put("hrs_since_created", "created_time");
 				put("hrs_since_opened", "first_replied_time");
-				put("hrs_since_closed", "last_updated_time");
+				put("hrs_since_closed", "closed_time");
 				put("hrs_since_assigned", "assigned_time");
 				put("hrs_since_requester_update", "last_customer_replied_time");
 				put("hrs_since_assignee_update", "last_agent_replied_time");
@@ -126,7 +126,7 @@ public class TicketFiltersUtil
 					if (operator != null && operator.equalsIgnoreCase("IS_GREATER_THAN"))
 						query.append(fieldsMap.get(LHS) + " <= " + rhsEpoch);
 					else
-						query.append(fieldsMap.get(LHS) + " >= " + rhsEpoch + " AND " + fieldsMap.get(LHS) + " <= " + currentEpoch);
+						query.append(fieldsMap.get(LHS) + " >= " + rhsEpoch + " AND " + fieldsMap.get(LHS) + " <= " + currentEpoch/1000);
 	
 					break;
 				}
