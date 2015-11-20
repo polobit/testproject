@@ -120,6 +120,16 @@ function update_price()
 {
 	// Get the selected plan cost
 	var plan_name = $("#plan_type").val();
+	if(_billing_restriction.currentLimits.planName == "FREE")
+	{
+		if(plan_name == "starter" || hasTagInContact("Cancellation Request") || hasTagInContact("Cancelled Trial"))
+			$("#purchase-plan").text("Proceed to Pay");
+		else if(IS_TRIAL)
+			$("#purchase-plan").text("Proceed to Free Trial");
+		else
+			$("#purchase-plan").text("Proceed to Pay");
+	}else
+		$("#purchase-plan").text("Proceed to Pay");
 	return $("#" + plan_name + "_plan_price").text();
 }
 
@@ -454,6 +464,8 @@ function initializeSubscriptionListeners()
 				plan_json.quantity = quantity;
 				plan_json.current_plan = USER_DETAILS.getCurrentPlanName(USER_BILLING_PREFS);
 				plan_json.domain_name = USER_DETAILS.getDomainName(USER_BILLING_PREFS);
+				if(IS_TRIAL)
+					plan_json.trialStatus = "apply";
 				if (!$.isEmptyObject(USER_CREDIRCARD_DETAILS))
 				{
 
@@ -595,6 +607,21 @@ function initializeSubscriptionListeners()
 
 			return parseInt(value) >= 5;
 		}, " Should purchase a minimum of 5000 emails.");
+	});
+
+	$("#subscribe_plan_change").on("click","#cancel_free_trial",function(e){
+		e.preventDefault();
+		if (!confirm("Are you sure you want cancel your free trial?"))
+			return;
+		$.ajax({url:'core/api/subscription/cancel/subscription',
+			type:'GET',
+			success:function(){
+				add_tag_our_domain("Cancelled Trial");
+				document.location.reload();
+			},error: function(){
+				alert("Error occured, Please try again");
+			}
+		});
 	});
 
 }

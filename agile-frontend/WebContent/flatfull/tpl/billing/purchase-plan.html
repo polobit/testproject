@@ -65,9 +65,7 @@
 						</div>
 
 					</div>
-
-
-						
+					<input type="hidden" name="trialStatus" value="{{trialStatus}}">
           <div class="row">
 			<div class="col-md-12">
 							<div class="control-group form-group m-b-xs">
@@ -121,7 +119,16 @@ Months
 
 								</div>
 							</div>
- 					  
+{{#if billingData}}
+{{#check_plan "FREE"}}
+{{#is_cancelled_user}}
+{{else}}
+{{#if_equals plan "starter"}}{{else}}<p class="pull-right m-b-none text-danger col-sm-offset-3 col-sm-9 p-l-none" style="font-size:13px;"> Please note that the account will be charged for the selected plan <span style="font-weight: 600;">after the 7-day free trial</span> period ends.</p>{{/if_equals}}
+{{/is_cancelled_user}}
+{{else}}
+{{/check_plan}}	
+{{/if}}		  
+
 </div>
 						
 						</div>
@@ -166,7 +173,13 @@ Months
 					</div>
  <img src="{{getS3ImagePath '/flatfull/img/cvc.png'}}" style="width: 60px;">
 				</div>
-					
+				{{#check_plan "FREE"}}
+				{{#is_cancelled_user}}
+				{{else}}
+				{{#if_equals plan "starter"}}{{else}}<p class="pull-right m-b-none text-danger col-sm-offset-3 col-sm-9 p-l-none" style="font-size:13px;"> Please note that the account will be charged for the selected plan <span style="font-weight: 600;">after the 7-day free trial</span> period ends.</p>{{/if_equals}}
+				{{/is_cancelled_user}}
+				{{else}}
+				{{/check_plan}}	
 				<!-- <div class="control-group form-group">	
                     <label class="control-label">Gateway<span class="field_req">*</span></label>
                     <div class="controls">
@@ -188,7 +201,17 @@ Months
 <div class="row">
             <div class="col-sm-offset-3 col-sm-9">
 
-<a href="#" type="submit" id="updatecard" data-loading-text="Proceeding..." class="save btn btn-sm btn-primary" >Pay Now</a>
+<a href="#" type="submit" id="updatecard" data-loading-text="Proceeding..." class="save btn btn-sm btn-primary" >
+{{#check_plan "FREE"}}
+{{#is_cancelled_user}}
+Pay Now
+{{else}}
+{{#if_equals plan "starter"}}Pay Now{{else}}Start FREE Trial{{/if_equals}}
+{{/is_cancelled_user}}
+{{else}}
+Pay Now
+{{/check_plan}}
+</a>
 <div class="pull-right">
 <img src="{{getS3ImagePath '/flatfull/img/credit-cards.png'}}" style="width: 188px;opacity: 0.5;">
 </div>

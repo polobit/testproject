@@ -6764,3 +6764,35 @@ Handlebars.registerHelper('is_mobile', function(options)
 Handlebars.registerHelper('getS3ImagePath',function(imageUrl){
 	return new Handlebars.SafeString(updateImageS3Path(imageUrl));	
 });
+	Handlebars.registerHelper('is_trial_exist', function(billingData, options)
+	{
+		if (!billingData && billingData.subscriptions)
+			return options.inverse(this);
+		var is_trial_exist = false;
+		$.each(billingData.subscriptions.data, function( index, value ) {
+		  if(!value.plan.id.indexOf("email") > -1)
+		  {
+		  	var trial_start = value.trialStart;
+		  	var trial_end = value.trialEnd;
+		  	if(trial_end - trial_start <= 864000){
+		  		is_trial_exist = true;
+		  		return false;
+		  	}
+		  }
+		});
+		if(is_trial_exist)
+			return options.fn(this);
+		else
+			return options.inverse(this);
+	});
+
+	Handlebars.registerHelper('is_cancelled_user', function(options)
+	{
+		if(hasTagInContact("Cancellation Request") || hasTagInContact("Cancelled Trial"))
+			return options.fn(this);
+		else if(IS_TRIAL)
+			return options.inverse(this);
+		else
+			return options.fn(this);
+	});
+

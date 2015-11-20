@@ -85,7 +85,17 @@
                         </div>
 
 
-<button class="btn btn-block btn-default btn-plan btn-lg  m-b-md" id="choose-regular">Choose</button>
+<button class="btn btn-block btn-default btn-plan btn-lg  m-b-md" id="choose-regular">
+{{#check_plan "FREE"}}
+{{#is_cancelled_user}}
+Choose
+{{else}}
+7 DAY FREE Trial
+{{/is_cancelled_user}}
+{{else}}
+Choose
+{{/check_plan}}
+</button>
 
                      </div>
                   </div>
@@ -112,7 +122,17 @@
                            Best choice for businesses trying to scale, with process-centric sales & marketing automation.
                         </div>
 
-<button class="btn btn-block btn-default btn-plan btn-lg  m-b-md" id="choose-pro">Choose</button>
+<button class="btn btn-block btn-default btn-plan btn-lg  m-b-md" id="choose-pro">
+{{#check_plan "FREE"}}
+{{#is_cancelled_user}}
+Choose
+{{else}}
+7 DAY FREE Trial
+{{/is_cancelled_user}}
+{{else}}
+Choose
+{{/check_plan}}
+</button>
                   </div>
                   </div>
                   <!-- End of pro-->
@@ -294,7 +314,17 @@
 	<div class="row p-l-xxl p-t-sm">
 		<div class="col-sm-offset-4 col-sm-8 p-l-xxl">
 
-<a href="#purchase-plan" id="purchase-plan"	class="btn btn-large btn-primary">Proceed to Pay</a>
+<a href="#purchase-plan" id="purchase-plan"	class="btn btn-large btn-primary">
+{{#check_plan "FREE"}}
+{{#is_cancelled_user}}
+Proceed to Pay
+{{else}}
+Proceed to Free Trial
+{{/is_cancelled_user}}
+{{else}}
+Proceed to Pay
+{{/check_plan}}
+</a>
 
 
 			
@@ -605,9 +635,11 @@ users.
 		</div>
 	{{#check_plan "FREE"}}
 	{{else}}
-	<div>
+	{{#is_trial_exist billingData}}
+	<a href="#"  id="cancel_free_trial" class="pull-right text-lg text-info" style="font-size:12px;">Cancel your Free Trial</a>
+	{{else}}
 	<a href="#"  id="cancel-account-request" class="pull-right text-lg text-info" style="font-size:12px;">Cancel Subscription</a>
-	</div>
+	{{/is_trial_exist}}
 	{{/check_plan}}
 	</div>  <!-- End of col-md-3 -->
 {{/if}}

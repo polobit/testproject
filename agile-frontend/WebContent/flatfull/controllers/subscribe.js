@@ -6,6 +6,7 @@
  * @author Yaswanth
  */
 var _data = null;
+var IS_TRIAL = false;
 _IS_EMAIL_PLAN_ACTIVE = false;
 var SubscribeRouter = Backbone.Router
 		.extend({
@@ -15,6 +16,8 @@ var SubscribeRouter = Backbone.Router
 			/* Subscription page */
 
 			"subscribe" : "subscribe",
+
+			"trial-subscribe" : "trialSubscribe",
 
 			"subscribe/:id/:plan" : "subscribe",
 
@@ -53,6 +56,12 @@ var SubscribeRouter = Backbone.Router
 			subscribePlan : function()
 			{
 				Backbone.history.navigate("subscribe", { trigger : true });
+			},
+
+			trialSubscribe: function()
+			{
+				IS_TRIAL = true;
+				this.subscribe();
 			},
 
 			cardUpdation : function()
@@ -526,6 +535,7 @@ var SubscribeRouter = Backbone.Router
 								// Discount
 								showCouponDiscountAmount(plan_json, el);
 								card_expiry(el);
+								
 							},
 							saveCallback : function(data)
 							{
