@@ -444,6 +444,16 @@ public class ReportsUtil
     {
 	return Reports.dao.count();
     }
+    
+    /**
+     * 
+     * @param json
+     * @return
+     * 
+     * 	JsonObject containing calls separated by timerange
+     * 
+     * @throws Exception
+     */
     public static net.sf.json.JSONObject getCallByTime(net.sf.json.JSONObject json)throws Exception{
     	
     	long minTime=0L;

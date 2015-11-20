@@ -196,7 +196,7 @@ function showBar(url, selector, name, yaxis_name, stacked)
 			$.each(data, function(k, v)
 			{
 				if(selector!='calls-chart')
-				 categories.push(k);
+				  categories.push(k);
 
 				// Initializes series with names with the first
 				// data point

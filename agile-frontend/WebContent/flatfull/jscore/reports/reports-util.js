@@ -338,9 +338,6 @@ user_reports :function(callReportUrl){
 	
 	
 },
-call_timeBased:function(selector,data){
-
-}
 
 
  };
