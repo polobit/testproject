@@ -13,7 +13,7 @@ import com.campaignio.tasklets.util.TaskletUtil;
  * @author Vaishnavi
  * 
  */
-public class TicketTags extends TaskletAdapter
+public class TicketLabels extends TaskletAdapter
 {
 
 	public static String TICKET = "ticket";
@@ -36,7 +36,7 @@ public class TicketTags extends TaskletAdapter
 	/**
 	 * Tags that are added
 	 */
-	public static String TAG_NAMES = "tag_names";
+	public static String LABEL_NAMES = "label_names";
 
 	/*
 	 * (non-Javadoc)
@@ -52,7 +52,7 @@ public class TicketTags extends TaskletAdapter
 
 			// Get Tags and Type
 			String type = getStringValue(nodeJSON, subscriberJSON, data, TYPE);
-			String tagNames = getStringValue(nodeJSON, subscriberJSON, data, TAG_NAMES);
+			String labelNames = getStringValue(nodeJSON, subscriberJSON, data, LABEL_NAMES);
 
 			JSONObject ticketJSON = data.getJSONObject(TICKET);
 
@@ -60,13 +60,13 @@ public class TicketTags extends TaskletAdapter
 			{
 				String ticketId = ticketJSON.getString("id");
 
-				String tags = AgileTaskletUtil.normalizeStringSeparatedByDelimiter(',', tagNames);
+				String tags = AgileTaskletUtil.normalizeStringSeparatedByDelimiter(',', labelNames);
 
-				System.out.println("Normalized tags are " + tags);
+				System.out.println("Normalized labels are " + tags);
 
-				String[] tagsArray = tags.split(",");
+				String[] labelsArray = tags.split(",");
 
-				TicketsUtil.updateTags(ticketId, tagsArray, type);
+				TicketsUtil.updateTags(ticketId, labelsArray, type);
 
 			}
 
@@ -74,7 +74,7 @@ public class TicketTags extends TaskletAdapter
 		catch (Exception e)
 		{
 			e.printStackTrace();
-			System.out.println("Got Exception while updating ticket tags... " + e.getMessage());
+			System.out.println("Got Exception while updating ticket labels... " + e.getMessage());
 		}
 
 		// Execute Next One in Loop

@@ -80,6 +80,22 @@ public class TicketTriggerUtil
 	}
 
 	/**
+	 * Executes when note added by user or customer
+	 * 
+	 * @param ticket
+	 * @param noteAddedBy
+	 */
+	public static void executeTriggerForSLAReachedTicket(Tickets ticket)
+	{
+		// if null
+		if (ticket == null)
+			return;
+
+		executeTriggerForTicketBasedOnCondition(ticket.getContact(), ticket, Trigger.Type.TICKET_SLA_REACHED);
+
+	}
+
+	/**
 	 * Executes trigger when tickets is created, updated or closed based on the
 	 * action trigger called.
 	 * 
