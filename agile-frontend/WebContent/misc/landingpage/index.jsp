@@ -575,11 +575,11 @@ AGILE_LP_OPTIONS['templateId'] = "";
                                     <div class="pull-right">
                                         <div class="title">{{ 'websiteUrl' | translate }}</div>
                                         <div class="body">
-                                            <input class="form-control" ng-model="linker.url" ng-change="applyUrl()" type="text" placeholder="http://www.google.com">
+                                            <input class="form-control" ng-model="linker.url" ng-change="applyUrl()" type="text" placeholder="">
                                         </div>
                                     </div>
                                 </li>
-                                <li ng-class="{ disabled: linker.radio !== 'page' }">
+                                <li ng-class="{ disabled: linker.radio !== 'page' }" class="hidden">
                                     <label class="pull-left">
                                         <div class="radio-input"><input value="page" ng-model="linker.radio" type="radio"></div>
                                     </label>
@@ -600,7 +600,7 @@ AGILE_LP_OPTIONS['templateId'] = "";
                                     <div class="pull-right">
                                         <div class="title">{{ 'download' | translate }}</div>
                                         <div class="body">
-                                            <input class="form-control" ng-model="linker.download" ng-change="applyDownload()" type="text" placeholder="https://www.google.com/images/srpr/logo11w.png">
+                                            <input class="form-control" ng-model="linker.download" ng-change="applyDownload()" type="text" placeholder="">
                                         </div>
                                     </div>
                                 </li>
@@ -611,7 +611,7 @@ AGILE_LP_OPTIONS['templateId'] = "";
                                     <div class="pull-right">
                                         <div class="title">{{ 'emailAddress' | translate }}</div>
                                         <div class="body">
-                                            <input class="form-control" ng-model="linker.email" ng-change="applyEmail()" type="text" placeholder="vebtolabs@gmail.com">
+                                            <input class="form-control" ng-model="linker.email" ng-change="applyEmail()" type="text" placeholder="">
                                         </div>
                                     </div>
                                 </li>

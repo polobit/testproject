@@ -126,8 +126,9 @@ public class LandingPagesAPI
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	public void deletelandingPages(@FormParam("ids") String model_ids) throws JSONException
 	{
-		JSONArray landingPageJSONArray = new JSONArray(model_ids);
-		LandingPage.dao.deleteBulkByIds(landingPageJSONArray);
+		JSONArray landingPageIds = new JSONArray(model_ids);
+		LandingPage.dao.deleteBulkByIds(landingPageIds);
+		LandingPageUtil.deleteLandingPageCNames(landingPageIds);
 	}
 
 }

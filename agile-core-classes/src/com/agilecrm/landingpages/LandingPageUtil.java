@@ -8,6 +8,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.StringUtils;
+import org.json.JSONArray;
 
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.google.appengine.api.NamespaceManager;
@@ -76,7 +77,7 @@ public class LandingPageUtil
 
 		Map<String, String> map = new HashMap<String, String>();
 
-		Enumeration headerNames = req.getHeaderNames();
+		Enumeration<?> headerNames = req.getHeaderNames();
 		while (headerNames.hasMoreElements()) {
 			String key = (String) headerNames.nextElement();
 			String value = req.getHeader(key);
@@ -205,6 +206,37 @@ public class LandingPageUtil
 			{
 				return false;
 			}
+		}
+		finally
+		{
+			NamespaceManager.set(oldNameSpace);
+		}
+		
+	}
+	
+	public static boolean deleteLandingPageCNames(JSONArray pageIds)
+	{
+		String oldNameSpace = NamespaceManager.get();
+		NamespaceManager.set("");		
+		try
+		{
+			Query<LandingPageCNames> q = null;
+			ObjectifyGenericDao<LandingPageCNames> dao = new ObjectifyGenericDao<LandingPageCNames>(LandingPageCNames.class);
+			int noOfPages = pageIds.length();
+			for(int i = 0; i < noOfPages; i++) {
+				q = dao.ofy().query(LandingPageCNames.class);
+				q.filter("landing_page_id", pageIds.getLong(i));
+				LandingPageCNames lpCname = q.get();
+				if(lpCname != null) {
+					dao.delete(lpCname);
+				}
+			}
+			return true;
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			return false;
 		}
 		finally
 		{
