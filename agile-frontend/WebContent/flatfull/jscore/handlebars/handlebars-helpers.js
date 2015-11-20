@@ -6737,3 +6737,10 @@ Handlebars.registerHelper('SALES_CALENDAR_URL', function()
                return options.inverse(this);
         });
 
+Handlebars.registerHelper('is_mobile', function(options)
+	{
+		if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) )
+		return options.fn(this);
+		else
+		return options.inverse(this);
+	});

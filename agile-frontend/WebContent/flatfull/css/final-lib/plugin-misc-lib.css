@@ -2188,9 +2188,15 @@ border-radius: 2px;
   .portlet-user-ms-container {
     background: transparent url('../img/switch_mobile.png') no-repeat 70px 135px!important;
   }
-#ms-category-list .ms-selection,#ms-user-list .ms-selection {
+#ms-category-list .ms-selection,#ms-user-list .ms-selection{
   margin-top: 40px;
 }
+}
+
+@media all and (max-width:428px) {
+  #ms-task-report-user-list .ms-selection,#ms-calls-user-list .ms-selection{
+    margin-top: 40px;
+  }
 }
 
 .leaderboard_portlet_header{
