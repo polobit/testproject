@@ -211,11 +211,13 @@ You can upgrade your account at any time.
 					</div>
 				
 				<div class="control-group form-group">
-					<label class="control-label col-sm-3">CVC<span class="field_req">*</span></label>
-					<div class="controls col-sm-6" style="width: 42%;">
-						<input type="text" name="cvc" class="input required  digits form-control" placeholder="Card Security Code">
-						<img src="{{getS3ImagePath '/flatfull/img/cvc.png'}}" style="width: 60px;">
-					</div> 
+					<label class="control-label col-sm-3 col-xs-12">CVC<span class="field_req">*</span></label>
+					<div class="controls col-sm-6 col-xs-12">
+<input type="text" name="cvc" class="input required  digits form-control pull-left" placeholder="Card Security Code" style="calc(100% - 75px)">
+ <img src="{{getS3ImagePath '/flatfull/img/cvc.png'}}" style="width: 60px;">
+<div class="clearfix"></div>
+					</div>
+
 				</div>
 
 				<div class="control-group form-group">
