@@ -431,7 +431,7 @@ public class MandrillSubAccounts
 		// Creates subaccount in both accounts
 		for(int i = 0; i < apiKeys.length; i++)
 		{
-			SubaccountCheckDeferredTask task = new SubaccountCheckDeferredTask(subaccount, apiKeys[i]);
+			SubaccountCheckDeferredTask task = new SubaccountCheckDeferredTask(apiKeys[i], subaccount);
 			queue.add(TaskOptions.Builder.withPayload(task));
 		}
 		
