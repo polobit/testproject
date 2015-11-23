@@ -204,7 +204,7 @@ function showCalendar(users)
 											
 											//Agile
 											var inArray = type_of_cal.indexOf("agile");
-											if(inArray >= 0){
+											if(inArray >= 0 ||( owners && owners.length > 0)){
 												//continue
 											}else{
 												callback([]);
