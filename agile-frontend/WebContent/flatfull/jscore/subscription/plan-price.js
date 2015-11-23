@@ -419,6 +419,19 @@ function initializeSubscriptionListeners()
 				}
 
 				var currentDate = new Date();
+
+				if(_billing_restriction.currentLimits.planName == "FREE")
+				{
+					if(plan_name == "starter" || hasTagInContact("Cancellation Request") || hasTagInContact("Cancelled Trial"))
+						plan_json.date = currentDate.setMonth(currentDate.getMonth() + months) / 1000;
+					else if(IS_TRIAL)
+						plan_json.date = currentDate.setHours(currentDate.getHours()+168);
+					else
+						plan_json.date = currentDate.setMonth(currentDate.getMonth() + months) / 1000;
+				}else
+					plan_json.date = currentDate.setMonth(currentDate.getMonth() + months) / 1000;
+
+				
 				plan_json.date = currentDate.setMonth(currentDate.getMonth() + months) / 1000;
 				plan_json.new_signup = is_new_signup_payment();
 				plan_json.price = update_price();
