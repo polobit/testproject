@@ -5,7 +5,7 @@
 <div class="col w-xl bg-light lter b-r">
 <div class="vbox">
 <div class="row-row">
-<div class="wrapper details-mobile-view">
+<div class="wrapper  text-center-mobile-view">
 				<div class="text-center pos-rlt">
 				
 						
@@ -43,7 +43,7 @@
 </div>
 						
 					
-							<div class="text-ellipsis  m-t-xs  h3 font-thin custom-color" style="width:289px">
+							<div class="text-ellipsis  m-t-xs  h3 font-thin custom-color w-full">
 
 								{{getPropertyValue properties "name"}}
 								{{#if_propertyName "url"}}</br>
@@ -182,7 +182,7 @@
 								
 								<div class="custom-color text-sm">
 									{{#each this}}
-									
+									<div class="l-h-xs">
                                         <a href='#' class="contact-make-sip-call" style="display:none;"
                                            phone="{{value}}">
                                            {{value}}
@@ -193,7 +193,7 @@
                                         </a>
 										<a href="tel:{{value}}" class="contact-make-call">{{value}}</a> 
                                         {{#if subtype}}<span class="label bg-light dk text-tiny">{{subtype}}</span> {{/if}}
-									
+									</div>
 									{{/each}}
 								</div>
 								{{/multiple_Company_Property_Element}}
@@ -246,8 +246,8 @@
 
 
  									{{#property_is_exists "address" properties}}
-<div class="m-t-sm text-left"><small class="text-xs text-muted">Location</small></div>
-										<div class="pull-left">
+<div class="m-t-sm "><small class="text-xs text-muted">Location</small></div>
+										<div>
 											{{#address_Element properties}}{{/address_Element}}</div></div>
 
 										<div class="pull-left m-t-sm m-b-sm w-full">
@@ -348,8 +348,8 @@
 
 		{{else}}
             <div class="p-sm">
-			<div class="alert-info alert">
-            	<div class="slate-content">
+			<div>
+            	<div class="slate-content mobile-pad-content">
                 	<div class="box-left pull-left m-r-md">
                     	<img alt="Clipboard" src="/img/clipboard.png">
                 	</div>
@@ -357,11 +357,10 @@
                     	<h4 class="m-t-none">{{contactShortName}} is not associated with any person/contact. </h4>
                     	<div class="text">
 							All Contacts that have this company in the 'Organization' or 'Company' field are shown here.
-							<br/>
-							<a href="#" class="contact-add-contact btn btn-default btn-sm left m-t-xs" style="margin-top:10px; margin-bottom:10px;">
+						</div>
+                    	<a href="#" class="contact-add-contact btn btn-default btn-sm left m-t-xs">
 								<i class="icon-plus-sign"></i> Add Contact
 							</a>
-                    	</div>
                 	</div>
 					<div class="clearfix">
 					</div>

@@ -926,7 +926,7 @@ $(function()
 						
 						$('body')
 								.find('#bulk-select')
-								.css('display', 'inline-block')
+								.css('display', 'block')
 								.html(html);
 
 						// On choosing select all option, all the visible
