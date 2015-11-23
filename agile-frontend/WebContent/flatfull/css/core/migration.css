@@ -1753,7 +1753,7 @@ box-shadow: 0 5px 10px 0px #bbb;
 #calendar_container .fc-header {
   width: 65%!important;
 }
-#calendar_container .portlet_header_icons {
+.portlet_body_calendar .portlet_header_icons {
   top: -4px;
 }
 #calendar_container .fc-header .fc-header-left,#calendar_container .fc-header .fc-header-right {
