@@ -69,7 +69,7 @@ public class SendEventReminderDeferredTask implements DeferredTask
      **/
     public void run()
     {
-    
+
 	List<Event> eventList = EventUtil.getLatestWithSameStartTime(starttime);
 	try
 	{

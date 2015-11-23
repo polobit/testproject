@@ -61,7 +61,7 @@ function isValidForm(form) {
 		if(this.optional(element))
 			return true;
 		
-		return /^([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/i.test(value);
+		return /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/.test(value);
 	}," Please enter a valid email.");
 	
 	// Phone number validation
@@ -119,6 +119,16 @@ function isValidForm(form) {
 		return true;
 	}," You can select maximum 3 folders only.");
 
+	jQuery.validator.addMethod("checkedMultiSelect", function(value, element){
+		
+		var counter = $(element).find('option:selected').length;
+		
+		if(counter == 0)
+			return false;
+
+		return true;
+	},"Please select atleast one option.");
+
 	jQuery.validator.addMethod("date", function(value, element){
 		if(value=="")
 			return true;
@@ -158,11 +168,13 @@ function isValidForm(form) {
 			atleastThreeMonths : true,
 			multipleEmails: true,
 			email: true,
+			checkedMultiSelect: true,
 			phone: true
 		},
 		debug : true,
 		errorElement : 'span',
 		errorClass : 'help-inline',
+		ignore: ':hidden:not(.checkedMultiSelect)',
 
 		// Higlights the field and addsClass error if validation failed
 		highlight : function(element, errorClass) {
@@ -175,7 +187,14 @@ function isValidForm(form) {
 		},
 		invalidHandler : function(form, validator) {
 			var errors = validator.numberOfInvalids();
-		}
+		},
+		errorPlacement: function(error, element) {
+    		if (element.hasClass('checkedMultiSelect')) {
+     			 error.appendTo($(element).parent());
+    			} else {
+      				error.insertAfter(element);
+    			}
+  }
 	});
 
 	// Return valid of invalid, to stop from saving the data

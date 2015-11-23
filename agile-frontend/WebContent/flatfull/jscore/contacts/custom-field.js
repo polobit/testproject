@@ -151,6 +151,7 @@ function bindCustomFiledChangeEvent(el){
 			$("input",  $("#custom-field-list-values")).attr("name", "field_data");
 			$("#custom-field-formula-data").hide();
 			$("textarea",  $("#custom-field-formula-data")).removeAttr("name");
+			$('.required-and-searchable').show();
 		}
 		else if(value == "TEXTAREA")
 		{
@@ -160,6 +161,7 @@ function bindCustomFiledChangeEvent(el){
 			$("input",  $("#custom-field-list-values")).removeAttr("name");
 			$("#custom-field-formula-data").hide();
 			$("textarea",  $("#custom-field-formula-data")).removeAttr("name");
+			$('.required-and-searchable').show();
 		}
 		else if(value == "FORMULA")
 		{
@@ -169,12 +171,14 @@ function bindCustomFiledChangeEvent(el){
 			$("input",  $("#custom-field-list-values")).removeAttr("name");
 			$("#custom-field-formula-data").show();
 			$("textarea",  $("#custom-field-formula-data")).attr("name", "field_data");
+			$('.required-and-searchable').hide();
 		}
 		else
 		{
 			$("#custom-field-data").hide();
 			$("#custom-field-list-values").hide();
 			$("#custom-field-formula-data").hide();
+			$('.required-and-searchable').show();
 		}
 		
 	});

@@ -33,6 +33,7 @@ import com.agilecrm.workflows.status.CampaignStatus.Status;
 import com.agilecrm.workflows.status.util.CampaignStatusUtil;
 import com.agilecrm.workflows.unsubscribe.UnsubscribeStatus;
 import com.agilecrm.workflows.unsubscribe.UnsubscribeStatus.UnsubscribeType;
+import com.agilecrm.workflows.unsubscribe.util.UnsubscribeStatusUtil;
 import com.campaignio.reports.DateUtil;
 import com.campaignio.tasklets.util.MergeFieldsUtil;
 import com.google.appengine.api.NamespaceManager;
@@ -388,7 +389,8 @@ public class AgileTaskletUtil {
 
 			subscriberJSONWithAddedParams.put("data", subscriberJSON)
 					.put("id", contact.id)
-					.put("isUnsubscribedAll", isUnsubscribedAll(contact));
+					.put("isUnsubscribedAll", isUnsubscribedAll(contact))
+					.put("unsubscribeStatus", UnsubscribeStatusUtil.getUnsubscribeStatus(contact));
 
 			// If isBounce not null
 			EmailBounceType bounceType = isBounce(contact, subscriberJSON);

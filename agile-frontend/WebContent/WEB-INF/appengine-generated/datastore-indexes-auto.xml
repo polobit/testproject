@@ -27,6 +27,17 @@
         <property name="first_name" direction="asc"/>
     </datastore-index>
 
+      <!-- Used 2 times in query history -->
+    <datastore-index kind="Contact" ancestor="false" source="auto">
+        <property name="type" direction="asc"/>
+        <property name="name" direction="asc"/>
+    </datastore-index>
+
+      <datastore-index kind="Contact" ancestor="false" source="auto">
+        <property name="type" direction="asc"/>
+        <property name="name" direction="desc"/>
+    </datastore-index>
+
     <!-- Used 2 times in query history -->
     <datastore-index kind="Contact" ancestor="false" source="auto">
         <property name="type" direction="asc"/>
@@ -231,11 +242,17 @@
         <property name="type" direction="asc"/>
         <property name="last_name" direction="desc"/>
     </datastore-index>
-
+    
     <!-- Used 2 times in query history -->
     <datastore-index kind="Contact" ancestor="false" source="auto">
         <property name="type" direction="asc"/>
         <property name="last_name" direction="asc"/>
+    </datastore-index>
+    
+    <!-- Used 2 times in query history -->
+    <datastore-index kind="Contact" ancestor="false" source="auto">
+        <property name="tagsWithTime.tag" direction="asc"/>
+        <property name="tagsWithTime.createdTime" direction="desc"/>
     </datastore-index>
     
     <datastore-index kind="Task" ancestor="false" source="auto">

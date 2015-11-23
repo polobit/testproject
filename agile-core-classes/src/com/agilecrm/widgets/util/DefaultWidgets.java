@@ -60,11 +60,6 @@ public class DefaultWidgets {
 				"/widgets/stripe.js", "/img/plugins/Stripe.png",
 				"/widgets/stripe-small-logo.png", null, WidgetType.BILLING));
 		widgets.add(new Widget(
-				"Sip",
-				"Make and receive calls from your contacts using any SIP account.",
-				"/widgets/sip.js", "/widgets/sip-logo-small.png",
-				"/widgets/sip-logo-small.png", null, WidgetType.CALL));
-		widgets.add(new Widget(
 				"HelpScout",
 				"Help Scout is a help desk for teams that insist on a delightful customer experience without exposing to ticket numbers, portals or robotic emails.",
 				"/widgets/helpscout.js", "/img/plugins/helpscout-logo.png",
@@ -81,12 +76,12 @@ public class DefaultWidgets {
 				"/widgets/quickbooks_small.jpg", null, WidgetType.BILLING));
 		widgets.add(new Widget(
 				"Facebook",
-				"Facebook is a social utility that connects people with friends and others who work, study and live around them",
+				"Facebook is a social utility that connects people with friends and others who work, study and live around them.",
 				"/widgets/facebook.js", "/widgets/facebook.png",
 				"/widgets/Fb24x24icon.png", null, WidgetType.SOCIAL));
 		widgets.add(new Widget(
 				"Shopify",
-				"Shopify is a powerful ecommerce solution that includes everything you need to create an online store",
+				"Shopify is a powerful ecommerce solution that includes everything you need to create an online store.",
 				"/widgets/shopify.js", "/widgets/shopify.png",
 				"/widgets/shopifysm.png", null, WidgetType.ECOMMERCE));
 		widgets.add(new Widget(
@@ -94,6 +89,11 @@ public class DefaultWidgets {
 				"Make and receive calls from your contacts using your Twilio account.",
 				"/widgets/twilioio.js", "/img/plugins/twilio.png",
 				"/widgets/twilio-small-logo.png", null, WidgetType.CALL));
+		widgets.add(new Widget(
+				"Sip",
+				"Make and receive calls from your contacts using any SIP account.",
+				"/widgets/sip.js", "/widgets/sip-logo-small.png",
+				"/widgets/sip-logo-small.png", null, WidgetType.CALL));
 		widgets.add(new Widget(
 				"GooglePlus",
 				"Keep tabs on your customers' activity on Google+ and engage with them better.",
@@ -109,6 +109,12 @@ public class DefaultWidgets {
 		 * , "/widgets/linkedin.js", "/img/plugins/linkedin.png",
 		 * "/widgets/linkedin-logo-small.png", null, WidgetType.SOCIAL));
 		 */
+//		widgets.add(new Widget("Bria", "Make and receive calls from your contacts using your Bria Account.",
+//
+//		"/widgets/bria.js", "/img/plugins/bria-call.png", "/img/plugins/bria-call.png", null,
+//
+//
+//		WidgetType.CALL));
 
 		System.out.println("Default widgets ");
 		System.out.println(widgets);

@@ -1,6 +1,5 @@
-$(function()
-{
-	// Twilio io widget name as a global variable
+function startTwilioIOWidget(contact_id){	// Twilio io widget name as a global variable
+
 	TwilioIO_PLUGIN_NAME = "TwilioIO";
 
 	// Twilio loading image declared as global
@@ -57,7 +56,7 @@ $(function()
 		// Get next 10 logs
 		getNextLogs(to, page, pageToken);
 	});
-});
+}
 
 function showListOfContactNumbers()
 {
@@ -219,14 +218,15 @@ function addMoreButton(pageInfo)
 		return;
 
 	
-	$(".widget_tab_footer").remove();
+	//$(".widget_tab_footer").remove();
 	$("#twilioio_more_call_logs").remove();
+	$("#twilioio_show_more").remove();
 
 	// If page and pageToken is present then only add more button else hide it
 	if (pageInfo.page)
 		$("#twilio-logs-panel")
 				.append(
-						'<div class="widget_tab_footer" align="center" style="float:none"><a href="#" class="text-info" id="twilioio_more_call_logs" page="' + pageInfo.page + '" pageToken="' + pageInfo.pageToken + '" style="margin-bottom: 10px;"  title="Click to see more call logs">Show More</a></div>');
+						'<div class="widget_tab_footer" id="twilioio_show_more" align="center" style="float:none"><a href="#" class="text-info" id="twilioio_more_call_logs" page="' + pageInfo.page + '" pageToken="' + pageInfo.pageToken + '" style="margin-bottom: 10px;"  title="Click to see more call logs">Show More</a></div>');
 }
 
 // Get next 10 calls, add in UI, do "More" btn settings
@@ -320,4 +320,3 @@ function twilioIOSaveContactedTime()
 				console.log('Error - Results :' + data);
 			});
 }
-

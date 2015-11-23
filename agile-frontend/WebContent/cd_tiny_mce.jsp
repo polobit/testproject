@@ -196,6 +196,7 @@ try{
 		// Load HTML into Tiny MCE.
 		if(textarea_id !== undefined && url === undefined)
 		{
+			var initHTML;
 			var initHTML
 			if(templateJSON){
 				initHTML = (templateJSON);
@@ -203,6 +204,8 @@ try{
 			}
 			else
 			initHTML = window.opener.$('#' + textarea_id).val();
+		if(!is_webrule_type())
+		initHTML = remove_script_tags(initHTML);
 		$('#content').val(initHTML);
 		var isWarning = should_warn(initHTML);
 		showWarning(isWarning);
@@ -219,7 +222,8 @@ try{
 	    	
 	    		// Fetch html and fill into tinymce
 	    		$.get(location.origin+url, function(value){
-	    			
+	    			if(!is_webrule_type())
+	    			value = remove_script_tags(value);
 	    			$('#content').val(value);
 	    			
 	    			var isWarning = should_warn(value);
@@ -265,7 +269,8 @@ try{
 			showError("Please enter a valid html message");
 			return;
 		}
-		
+		if(!is_webrule_type())
+		html = remove_script_tags(html);
 		window.opener.tinyMCECallBack(getUrlVars()["id"], html);
 		window.close();
 		
@@ -311,7 +316,7 @@ function initialize_tinymce_editor(){
         plugins: [
             "advlist autolink lists link image charmap print preview hr anchor pagebreak",
             "searchreplace wordcount visualblocks visualchars code fullscreen fullpage",
-            "insertdatetime media nonbreaking save table contextmenu directionality",
+            "insertdatetime nonbreaking save table contextmenu directionality",
             "paste textcolor"
         ],
         toolbar1 : "bold italic underline | alignleft aligncenter alignright alignjustify | bullist numlist | outdent indent blockquote | forecolor backcolor | link image | preview",
@@ -337,7 +342,7 @@ function initialize_tinymce_editor(){
             editor.addButton('templates', {
                 text: 'Templates',
                 icon: false,
-                onclick: function() {
+                onclick: function() { 
                 	
                 	// Confirm before going to Templates
                 	if(!confirm("Your changes will be lost. Are you sure you want to go back to templates?"))
@@ -361,7 +366,10 @@ function initialize_tinymce_editor(){
             }); 
             
             editor.on('change', function(e) {
-                var isWarning = should_warn(tinyMCE.activeEditor.getContent());
+            	
+            	var editor_contents = tinyMCE.activeEditor.getContent();
+            	
+                var isWarning = should_warn(editor_contents);
                 showWarning(isWarning);
             });
             
@@ -449,6 +457,26 @@ function showWarning(isWarning)
 	}
 		
 	
+}
+
+function remove_script_tags(content)
+{
+	try{
+		return content.replace(/<script\b[^>]*>([\s\S]*?)<\/script>/gm,'');
+	}
+	catch(err){
+		console.log(err);
+		return content;
+	}
+}
+
+function is_webrule_type()
+{
+	var hasContent = window.opener.location.hash;
+	if(hasContent && hasContent.indexOf("webrule") != -1)
+		   return true;
+
+    return false;	
 }
 
 </script>

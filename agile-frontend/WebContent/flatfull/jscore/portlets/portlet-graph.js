@@ -679,8 +679,12 @@ var portlet_graph_utility = {
 		});
 		if(categoryList.length==0 || emptyFlag){
 			if(selector == 'calls-chart-user'){
-				$('#'+selector).html('<div class="portlet-error-message" style="font-size: 14px;font-style: normal;padding-top: 50%">No Calls Found</div>');	
-			}else{
+				$('#'+selector).html('<div class="portlet-error-message" style="font-size: 14px;font-style: normal;padding-top: 174px">No Calls Found</div>');	
+			}
+			else if(selector === 'calls-chart'){
+				$('#'+selector).html('<div class="portlet-error-message" style="padding: 190px;font-style: normal">No Calls Found</div>');	
+			}
+			else{
 				$('#'+selector).html('<div class="portlet-error-message">No Calls Found</div>');
 			}
 			

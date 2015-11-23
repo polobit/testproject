@@ -18,12 +18,17 @@ import org.codehaus.jackson.annotate.JsonIgnore;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.agilecrm.DataSyncUrlConstants;
 import com.agilecrm.contact.sync.Type;
 import com.agilecrm.contact.sync.SyncFrequency;
 import com.agilecrm.contact.sync.config.SyncPrefs;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.session.SessionManager;
+import com.agilecrm.subscription.limits.PlanLimits;
+import com.agilecrm.subscription.ui.serialize.Plan;
+import com.agilecrm.subscription.ui.serialize.Plan.PlanType;
 import com.agilecrm.user.DomainUser;
+import com.google.appengine.api.NamespaceManager;
 import com.google.gdata.util.common.base.StringUtil;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.annotation.NotSaved;
@@ -96,6 +101,13 @@ public class ContactPrefs extends SyncPrefs implements Serializable
     /** sync_from_group. */
     @NotSaved(IfDefault.class)
     public String sync_from_group = null;
+    
+    
+    @NotSaved
+    public String imageUrl = null;
+    
+    @NotSaved
+    public String content = null;
 
     /** conflict. */
     @NotSaved(IfDefault.class)
@@ -218,7 +230,26 @@ public class ContactPrefs extends SyncPrefs implements Serializable
 		sync_to_group = URLDecoder.decode(sync_to_group);
 		
 	    }
+	    this.imageUrl=DataSyncUrlConstants.GOOGLE_IMAGE_URL;
+		this.content=DataSyncUrlConstants.GOOGLE_CONTENT;
 	}
+	   if(type.SHOPIFY==type){
+		   this.imageUrl=DataSyncUrlConstants.SHOPIFY_IMAGE_URL;
+		   this.content=DataSyncUrlConstants.SHOPIFY_CONTENT;
+		   
+	   }
+	   if(type.STRIPE==type){
+		   this.imageUrl=DataSyncUrlConstants.STRIPE_IMAGE_URL;
+		   this.content=DataSyncUrlConstants.STRIPE_CONTENT;
+	   }
+	   if(type.FRESHBOOKS==type){
+		   this.imageUrl=DataSyncUrlConstants.FRESHBOOKS_IMAGE_URL;
+		   this.content=DataSyncUrlConstants.FRESHBOOKS_CONTENT;
+	   }
+	   if(type.QUICKBOOK==type){
+		   this.imageUrl=DataSyncUrlConstants.QUICKBOOKS_IMAGE_URL;
+		   this.content=DataSyncUrlConstants.QUICKBOOKS_CONTENT;
+	   }
 	
     }
 
@@ -347,5 +378,6 @@ public class ContactPrefs extends SyncPrefs implements Serializable
 	    sync_type = SYNC_TYPE.valueOf(type);
 
     }
-
+    
+  
 }

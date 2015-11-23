@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+import javax.ws.rs.WebApplicationException;
+
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
 
@@ -34,6 +36,7 @@ import com.agilecrm.util.email.SendMail;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.googlecode.objectify.Key;
+import javax.ws.rs.core.Response;
 
 import edu.emory.mathcs.backport.java.util.Arrays;
 
@@ -1031,9 +1034,13 @@ public class ActivityReportsUtil
 	Long recordsCount = (Long) reports.get("all_reports_count");
 	System.out.println("Total records count = " + recordsCount);
 	// Send reports email only if it has records.
-	if (recordsCount != null && recordsCount > 0)
+	if (recordsCount != null && recordsCount > 0){
 	    SendMail.sendMail(report.sendTo, report.name + " - " + SendMail.REPORTS_SUBJECT, "activity_reports",
-		    ActivityReportsUtil.generateActivityReports(reportId, endTime));
+	    		reports);
+	    return;
+	}
+	throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+		.entity("Report not sent as there are no activities matching the report criteria.").build());
     }
 
     /**

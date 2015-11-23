@@ -10,6 +10,7 @@ import org.json.JSONObject;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.user.notification.NotificationPrefs.Type;
 import com.agilecrm.user.notification.util.NotificationPrefsUtil;
+import com.agilecrm.workflows.unsubscribe.util.UnsubscribeStatusUtil;
 import com.campaignio.logger.Log.LogType;
 import com.campaignio.logger.util.LogUtil;
 import com.campaignio.servlets.EmailOpenServlet;
@@ -197,6 +198,7 @@ public class TrackClickUtil
 	{
 	    // Remove unwanted keys
 	    contactJSON.remove("isUnsubscribedAll");
+	    contactJSON.remove(UnsubscribeStatusUtil.UNSUBSCRIBE_STATUS);
 	    contactJSON.remove("isBounce");
 	    contactJSON.remove("id");
 	    

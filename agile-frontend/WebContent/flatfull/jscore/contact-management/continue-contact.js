@@ -279,6 +279,8 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
 			}
 		}
 
+		return serialize_contact_properties_and_save(e, form_id, obj, properties, modal_id, continueContact, is_person, saveBtn, tagsSourceId, id, created_time, custom_fields_in_template, template);
+			   
 	}
 	else
 	{
@@ -301,24 +303,39 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
 			}
 			if (!id)
 			{
-				var status = isCompanyExist(companyName);
-				if (status)
-				{
-					show_error(modal_id, form_id, 'duplicate-email', 'Company name already exist.');
+				isCompanyExist(companyName, function(status){
 
-					enable_save_button($(saveBtn));// Remove loading image
-					return;
-				}
-				else
-				{
-					properties.push(property_JSON('name', form_id + ' #company_name'));
-				}
+					if (status)
+					{
+						show_error(modal_id, form_id, 'duplicate-email', 'Company name already exist.');
+
+						enable_save_button($(saveBtn));// Remove loading image
+						return;
+					}
+					else
+					{
+						properties.push(property_JSON('name', form_id + ' #company_name'));
+						return serialize_contact_properties_and_save(e, form_id, obj, properties, modal_id, continueContact, is_person, saveBtn, tagsSourceId, id, created_time, custom_fields_in_template, template);
+					}
+
+				});
+
+				return;
+				
 			}
 			else
 			{
 				properties.push(property_JSON('name', form_id + ' #company_name'));
+				return serialize_contact_properties_and_save(e, form_id, obj, properties, modal_id, continueContact, is_person, saveBtn, tagsSourceId, id, created_time, custom_fields_in_template, template);
 			}
-		}
+		}		
+	}
+
+
+}
+
+function serialize_contact_properties_and_save(e, form_id, obj, properties, modal_id, continueContact, is_person, saveBtn, tagsSourceId, id, created_time, custom_fields_in_template, template){
+
 
 		if (isValidField(form_id + ' #company_url'))
 			properties.push(property_JSON('url', form_id + ' #company_url'));
@@ -380,7 +397,7 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
 				return false;
 			}
 		}
-	}
+	// }
 
 	/*
 	 * Reads the values of multiple-template fields from continue editing form
@@ -541,13 +558,14 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
 
 				// App_Contacts.contactDetails(data.id,data);
 				// App_Contacts.navigate("contact/"+data.id);
-				if(!CALL_CAMPAIGN.start)
+				if(!CALL_CAMPAIGN.start && Current_Route != "contact/" + data.id)
 				App_Contacts.navigate("contact/" + data.id, { trigger : true });
 			} else {
 				// update contacts-details view
 				if (App_Companies.companyDetailView)
 					App_Companies.companyDetailView.model = data;
 
+				if(Current_Route != "company/" + data.id)
 				App_Companies.navigate("company/" + data.id, { trigger : true });
 			}
 		}
@@ -582,6 +600,7 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
 					
 				}
 				
+				if(Current_Route != "contact/" + id)
 				Backbone.history.navigate("contact/" + id, { trigger : true });	
 				$( window ).scrollTop( 0 );
 				
@@ -941,14 +960,15 @@ function add_model_cursor(app_collection, mdl)
 /**
  * check for duplicated company
  */
-function isCompanyExist(company)
+function isCompanyExist(company, callback)
 {
-	var status = false;
-	$.ajax({ url : 'core/api/contacts/company/validate/' + company, async : false, success : function(response)
-	{
-		if (response === "true")
-			status = true;
+	$.get('core/api/contacts/company/validate/' + company, function(data){
+		   if(data == "true"){
+		   	    callback(true);
+		   		return;
+		   }
 
-	} });
-	return status;
+		   callback(false);
+	});
+
 }

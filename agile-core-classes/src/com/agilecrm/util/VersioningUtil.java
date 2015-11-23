@@ -35,27 +35,35 @@ public class VersioningUtil
 
     static
     {
-	APP_ID = SystemProperty.applicationId.get();
-	IS_LOCAL_DEVELOPMENT_SERVER = (SystemProperty.environment.value() == SystemProperty.Environment.Value.Development);
-	IS_PRODUCTION_APP = "agile-crm-cloud".equals(APP_ID);
-	RELEASE_VERSION = SystemProperty.applicationVersion.get().split("\\.")[0];
+	if (SystemProperty.environment.value() != null)
+	{
+	    APP_ID = SystemProperty.applicationId.get();
+	    IS_LOCAL_DEVELOPMENT_SERVER = (SystemProperty.environment.value() == SystemProperty.Environment.Value.Development);
+	    IS_PRODUCTION_APP = "agile-crm-cloud".equals(APP_ID);
+	    RELEASE_VERSION = SystemProperty.applicationVersion.get().split("\\.")[0];
+	}
+	else
+	{
+	    APP_ID = "agile-crm-cloud";
+	    IS_LOCAL_DEVELOPMENT_SERVER = true;
+	    IS_PRODUCTION_APP = "agile-crm-cloud".equals(APP_ID);
+	    RELEASE_VERSION = "default";
+	}
 
 	System.out.println("is local server : " + IS_LOCAL_DEVELOPMENT_SERVER);
-	
+
 	/**
 	 * Returns cloudfornt URL with extension app/ or beta/ depending
 	 */
 	CLOUDFRONT_BASE_URL = IS_LOCAL_DEVELOPMENT_SERVER ? "" : (CLOUDFRONT_SERVER_URL
 		+ (IS_PRODUCTION_APP ? "app/" + RELEASE_VERSION : "beta/" + RELEASE_VERSION) + "/");
 	System.out.println("CLOUDFRONT_BASE_URL : " + CLOUDFRONT_BASE_URL);
-	
-	
 
 	// Static files are placed separately as they are not uploaded after
 	// every release.
 	CLOUDFRONT_STATIC_FILES_PATH = IS_LOCAL_DEVELOPMENT_SERVER ? "" : CLOUDFRONT_SERVER_URL
 		+ (IS_PRODUCTION_APP ? "app/static/" : "beta/static/") + "flatfull/";
-	
+
 	System.out.println("CLOUDFRONT_STATIC_FILES_PATH : " + CLOUDFRONT_STATIC_FILES_PATH);
 
     }

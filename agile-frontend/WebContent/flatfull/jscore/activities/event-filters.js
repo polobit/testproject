@@ -240,10 +240,11 @@ function renderFullCalenarEvents(ownerid)
 		$.each(doc, function(index, data)
 		{
 			data = renderEventBasedOnOwner(data);
+			$('#calendar_event').fullCalendar('renderEvent', data);
 		});
 
 		// Add event
-		$('#calendar_event').fullCalendar('addEventSource', doc);
+		//$('#calendar_event').fullCalendar('addEventSource', doc);
 
 		showLoadingOnCalendar(false);
 
@@ -351,7 +352,6 @@ function removeFullCalendarEvents(domain_user_id)
 
 /*	$.getJSON(eventsURL, function(doc)
 	{
-		var ids = [];
 		$.each(doc, function(index, data)
 		{
 			if(data.id)
@@ -366,6 +366,7 @@ function removeFullCalendarEvents(domain_user_id)
 		
 	});*/
 }
+
 
 
 /**

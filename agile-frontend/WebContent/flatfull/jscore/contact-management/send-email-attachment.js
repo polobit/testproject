@@ -114,7 +114,6 @@
     {
     	$.ajax({url : '/core/api/emails/send-email/delete-blob/'+blob_key,
     		type : 'GET',
-    		async : false,
     		success : function()
     		{
     		},

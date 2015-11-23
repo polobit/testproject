@@ -5,10 +5,12 @@
 				<p>Convert chat sessions with potential customers into contacts in Agile along with the conversation.</p>
 				
 				<label>Enter your ClickDesk details </label>
-				<div class="control-group form-group"><div class="controls"><input type="text" id="clickdesk_username" class="input-medium required widget_input_box form-control" placeholder="User Name" value="" name="username"></input></div></div>
-				<div class="control-group form-group"><div class="controls"><input type="text" id="clickdesk_api_key" class="input-medium required widget_input_box form-control"  placeholder="API Key" value="" name="api_key"></input></div></div>			
+				<div class="control-group form-group"><div class="controls"><input type="text" id="clickdesk_username" class="input-medium required widget_input_box form-control" placeholder="User Name" value="" name="clickdesk_username"></input></div></div>
+				<div class="control-group form-group"><div class="controls"><input type="text" id="clickdesk_api_key" class="input-medium required widget_input_box form-control"  placeholder="API Key" value="" name="clickdesk_api_key"></input></div></div>
+				<div class="text-center">			
 				<a href="#add-widget" class=" btn btn-default btn-sm">Cancel</a>
-				<a href="#" id="save_clickdesk_prefs" class="btn btn-sm btn-primary ml_5">Save</a>
+				<a href="#" id="save_clickdesk_prefs" class="save-agile-widget btn btn-sm btn-primary ml_5">Save</a>
+				</div>
 			 </fieldset>
 	    </form>
 	</div>
@@ -29,7 +31,7 @@
 		</ul>
 		<div class="clearfix" id="clickdesk-chats-error-panel" style="display:none;">
 		</div>
-		<div class="widget_tab_footer" align="center">
+		<div class="widget_tab_footer click-chat-footer hide" align="center">
 			<a class="more_chats_link text-info c-p" id="more_chats_link" rel="tooltip" title="Click to see more chats">Show More</a>
 			<a data-toggle="collapse" data-target="#clickdesk_chats_panel" id="less_chats_link" class="c-p" style="display:none;">Show Less..</a>
 			<img src="img/ajax-spinner.gif" id="spinner-clickdesk-chats" style="display:none;"></img>
@@ -41,7 +43,7 @@
 		</ul>
 		<div class="clearfix" id="clickdesk-tickets-error-panel" style="display:none;">
 		</div>
-		<div class="widget_tab_footer" align="center">
+		<div class="widget_tab_footer click-tickets-footer hide" align="center">
 			<a class="more_tickets_link c-p text-info" id="more_tickets_link" rel="tooltip" title="Click to see more tickets">Show More</a>
 			<a data-toggle="collapse" data-target="#clickdesk_tickets_panel" id="less_tickets_link" class="c-p" style="display:none;">Show Less..</a>
 			<img src="img/ajax-spinner.gif" id="spinner-clickdesk-tickets" style="display:none;"></img>

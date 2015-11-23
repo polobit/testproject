@@ -228,6 +228,11 @@ if(isSafari && isWin)
 						<div class="list-group-item">
 					    	<input class="input-xlarge required field form-control no-border" required maxlength="20" minlength="4" name='password' type="password" placeholder="Password" autocapitalize="off">
 						</div>
+
+						 
+						<div class="block">
+							<input class="hide" id="location_hash" name="location_hash"></input>
+						</div>
 						
 						</div>
 							<label class="checkbox" style="display:none;">
@@ -267,6 +272,12 @@ if(isSafari && isWin)
 	<script type="text/javascript">
 		$(document).ready(function()
 		{
+
+			var login_hash = window.location.hash;
+
+			// Sets location hash in hidden fields
+			if(login_hash)
+				$("#location_hash").val(login_hash);
 
         var newImg = new Image;
         newImg.onload = function() {

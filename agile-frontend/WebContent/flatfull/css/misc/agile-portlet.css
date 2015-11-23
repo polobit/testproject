@@ -666,7 +666,7 @@ border-radius: 2px;
  }
 	
 }
- .highcharts-container
+ .portlet_body .highcharts-container
  {
  	overflow:hidden!important;
  }
@@ -1049,11 +1049,6 @@ font-size:30px;
 	height:100%;
 }
 
-.graph >.highcharts-container
-{
-	height: 100%!important;
-	width : 100%!important;
-}
 
 .portlet_header:hover .portlet_header_icons{
 	visibility: visible!important;

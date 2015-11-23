@@ -1,19 +1,20 @@
 <script id="settings-email-gateway-template" type="text/html">
-<div class="wrapper-md">
 <div class="row">
 <div class="col-md-4 col-sm-6 col-xs-12">
-	<div class="panel p-md widget-add">
+	<div class="widget-add">
 		<form style="border-bottom:none;margin-top:-10px;margin-bottom: 0px;" id="email-gateway-integration-form" autocomplete="off">
 	    	<fieldset>
 				
 				<!--To disable AutoComplete of browsers-->
 				<input type="password" style="display: none">
 
-				<div style="position: relative; padding-top: 10px;">
+				<div class="panel panel-default">
+				<div class="panel-heading">
 					<center>
-						<img class="thumbnail img-responsive" alt="email-integration" id="integrations-image" style="top: -5px; position: relative; height: 85px;" />
+						<img class="img-responsive" alt="email-integration" id="integrations-image" style="height: 47px;" />
 					</center>
 				</div>
+				<div class="panel-body">
 				<input type="hidden" name="email_api" value="{{email_api}}">
 				<div class="control-group form-group">
 						<div class="controls">
@@ -71,12 +72,14 @@
         			</div>
         			<!-- End of SES Content -->
 				{{/if_equals}}	
-				<div class="form-actions">
+				<div class="form-actions text-center">
 					<a type="reset" class="btn btn-default btn-sm" href="#integrations">Cancel</a>
                		<a type="submit" href="#" class="save btn btn-sm btn-primary">Save</a>
+            	</div>
             	</div>
 			 </fieldset>
 	    </form>
 	</div>
+</div>
 </div>
 </script>

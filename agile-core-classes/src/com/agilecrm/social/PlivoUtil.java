@@ -25,9 +25,7 @@ public class PlivoUtil
 	 **/
 	public static boolean checkCredentials(String authId, String auth_token)
 	{
-
 		RestAPI api = new RestAPI(authId, auth_token, PLIVO_VERSION);
-
 		try
 		{
 			api.getAccount();
@@ -55,15 +53,11 @@ public class PlivoUtil
 	{
 
 		String account_id = null;
-
 		try
 		{
 			String prefs = widget.prefs;
-
 			JSONObject prefsJSON = new JSONObject(prefs);
-
 			account_id = prefsJSON.getString("account_id");
-
 		}
 		catch (Exception e)
 		{
@@ -88,11 +82,8 @@ public class PlivoUtil
 		try
 		{
 			String prefs = widget.prefs;
-
 			JSONObject prefsJSON = new JSONObject(prefs);
-
 			auth_token = prefsJSON.getString("auth_token");
-
 		}
 		catch (Exception e)
 		{

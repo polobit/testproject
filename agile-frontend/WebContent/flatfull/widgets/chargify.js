@@ -22,7 +22,7 @@ function showChargifyClient()
 	}
 	console.log(emailArray);
 
-	queueGetRequest("widget_queue", "core/api/widgets/chargify/clients/" + CHARGIFY_PLUGIN_ID + "/" + emailArray, "json", function success(data)
+	queueGetRequest("widget_queue_", "core/api/widgets/chargify/clients/" + CHARGIFY_PLUGIN_ID + "/" + emailArray, "json", function success(data)
 	{
 		console.log(data)
 		// If data is not defined return

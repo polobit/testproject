@@ -128,3 +128,137 @@ function send_verify_email()
 		
 	});
 }
+
+function unsubscribe_contact()
+{
+	
+    $('#unsubscribe').off('click');
+	$('body').on('click', '#unsubscribe', function(e){
+		
+		e.preventDefault();
+
+		// If already clicked, return
+		if($(this).attr("disabled"))
+			return;
+
+		if(!isValidForm('#unsubscribe-form'))
+			return;
+
+		$(this).attr('disabled', 'disabled').text("Unsubscribing...");
+
+		var json = {}, campaigns_list = [];
+
+		$('#campaigns-list option:selected').each(function(index, option){
+
+				campaigns_list.push($(this).val());
+    	});
+
+		var unsubscribe_campaign_ids = [];
+				
+		$.each(App_Contacts.contactDetailView.model.toJSON()["unsubscribeStatus"], function(index, value){
+       
+			unsubscribe_campaign_ids.push(value.campaign_id);
+		});
+
+		// Removes already unsubscribed campaigns
+		campaigns_list = campaigns_list.filter(function(el){
+
+			return unsubscribe_campaign_ids.indexOf(el) < 0 ; 
+		});
+
+		// If undefined
+		if(!campaigns_list || campaigns_list.length == 0)
+		{
+			$('div#contact-detail-resubscribe-modal').modal('hide');
+			return;
+		}
+
+		json["campaign_id"] = campaigns_list.join(',');
+		json["contact_id"] = App_Contacts.contactDetailView.model.get('id');
+		json["type"] = "CURRENT";
+		
+		if(is_selected_all)
+			json["type"]="ALL";
+
+		if(!json)
+			return;
+		
+		$.ajax({
+			url: 'core/api/unsubscribe',
+			type: 'POST',
+			data: json,
+			success: function(data){
+				
+				$('#unsubscribe').removeAttr('disabled').text('Unsubscribe');
+
+				// To update Campaigns tab
+				unsubscribe_status_updated = true;
+
+				$('div#contact-detail-resubscribe-modal').modal('hide');
+
+				showNotyPopUp("information", "Unsubscribed successfully.", "top");
+			},
+			error: function(response)
+			{
+				
+			}
+		});
+		
+	});
+}
+
+function resubscribe()
+{
+	$('.resubscribe').off('click');
+	$('.resubscribe').on('click', function(e){
+
+		e.preventDefault();
+
+		var $element = $(event.target);
+
+		if (!confirm("Are you sure to resubscribe " + $(this).attr("contact_name") + " to " + $(this).attr("campaign_name") + " campaign?"))
+			return;
+		
+		var campaign_id = $(this).attr('data');
+
+		var json = {};
+		json["id"] = App_Contacts.contactDetailView.model.get('id');
+		json["workflow-id"] = campaign_id;
+
+		if(campaign_id == "ALL")
+		{
+			var workflow_ids = [];
+
+			$.each(App_Contacts.contactDetailView.model.toJSON()["unsubscribeStatus"], function(index, value){
+               
+				workflow_ids.push(value.campaign_id);
+			});
+
+			json["workflow-id"] = workflow_ids.join(',');
+		}
+
+		$.ajax({
+			url: 'core/api/campaigns/resubscribe',
+			type: 'POST',
+			data: json,
+			success: function(data){
+				
+				// To update campaigns tab
+				unsubscribe_status_updated = true;
+
+				$element.closest('li').remove();
+
+				// Remove All option too
+				$('ul#added-tags-ul').find("a[data='ALL']").closest('li').remove();
+
+			},
+			error: function(response)
+			{
+				
+
+			}
+		});
+
+	});
+
+}

@@ -1,18 +1,14 @@
 package com.agilecrm.core.api.widgets;
 
-import java.io.IOException;
-import java.net.SocketTimeoutException;
-
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 
 import com.agilecrm.social.StripePluginUtil;
 import com.agilecrm.widgets.Widget;
+import com.agilecrm.widgets.util.ExceptionUtil;
 import com.agilecrm.widgets.util.WidgetUtil;
 
 /**
@@ -57,21 +53,8 @@ public class StripeWidgetsAPI {
 			 */
 			return StripePluginUtil.getCustomerDetails(widget, customerId)
 					.toString();
-		} catch (SocketTimeoutException e) {
-			throw new WebApplicationException(Response
-					.status(Response.Status.BAD_REQUEST)
-					.entity("Request timed out. Refresh and Please try again.")
-					.build());
-		} catch (IOException e) {
-			throw new WebApplicationException(Response
-					.status(Response.Status.BAD_REQUEST)
-					.entity("An error occurred. Refresh and Please try again.")
-					.build());
 		} catch (Exception e) {
-			throw new WebApplicationException(Response
-					.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
-					.build());
+			throw ExceptionUtil.catchWebException(e);
 		}
-
 	}
 }

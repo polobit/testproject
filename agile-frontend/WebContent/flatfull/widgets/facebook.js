@@ -1,4 +1,4 @@
-function showFacebookMatchingProfile(first_name)
+function showFacebookMatchingProfile(contact_id, first_name)
 {
 	var contact_image = agile_crm_get_contact_property("image");
 	/*
@@ -6,8 +6,9 @@ function showFacebookMatchingProfile(first_name)
 	 * for this contact"); return; }
 	 */
 	console.log("am in facebook show")
-	queueGetRequest("widget_queue", "/core/api/widgets/facebook/contacts/" + FACEBOOK_PLUGIN_ID + "?searchKey=" + first_name, 'json', function success(data)
+	queueGetRequest("widget_queue_"+contact_id, "/core/api/widgets/facebook/contacts/" + FACEBOOK_PLUGIN_ID + "?searchKey=" + first_name, 'json', function success(data)
 	{
+		$('#facebook_profile_load').remove();
 		console.log('Facebook');
 		// console.log(data)
 		// If data is not defined return
@@ -19,8 +20,8 @@ function showFacebookMatchingProfile(first_name)
 			console.log(data);
 			var template = $('#' + FACEBOOK_PLUGIN_NAME).html(getTemplate('facebook-matching-profiles', data));
             
-            $("body").off("mouseover", ".facebookImage");
-			$("body").on("mouseover", ".facebookImage", function(e)
+            $("#widgets").off("mouseover", ".facebookImage");
+			$("#widgets").on("mouseover", ".facebookImage", function(e)
 			{
 				// Unique Twitter Id from widget
 				Facebook_id = $(this).attr('id');
@@ -80,7 +81,7 @@ function showFacebookMatchingProfile(first_name)
 					agile_crm_update_contact_properties(propertiesArray);
 
 					// show twitter profile by id
-					showFacebookProfile(Facebook_id);
+					showFacebookProfile(Facebook_id, contact_id);
 
 				});
 			});
@@ -93,7 +94,7 @@ function showFacebookMatchingProfile(first_name)
 
 	}, function error(data)
 	{
-
+		$('#facebook_profile_load').remove();
 		facebookError(data.responseText);
 
 	});
@@ -128,7 +129,7 @@ function facebookError(message)
 
 }
 
-function getModifiedFacebookMatchingProfiles()
+function getModifiedFacebookMatchingProfiles(contact_id)
 {
 	console.log("am in getModifiedFacebookMatchingProfiles");
 	// Checks whether all input fields are given
@@ -142,15 +143,16 @@ function getModifiedFacebookMatchingProfiles()
 
 	SEARCH_STRING = $('#facebook_keywords').val();
 
-	showFacebookMatchingProfile(SEARCH_STRING);
+	showFacebookMatchingProfile(contact_id, SEARCH_STRING);
 
 }
 
-function showFacebookProfile(facebookid)
+function showFacebookProfile(facebookid, contact_id)
 {
 	console.log("am in facbook profile");
-	queueGetRequest("widget_queue", "/core/api/widgets/facebook/userProfile/" + FACEBOOK_PLUGIN_ID + "/" + facebookid, 'json', function success(data)
+	queueGetRequest("widget_queue_"+contact_id, "/core/api/widgets/facebook/userProfile/" + FACEBOOK_PLUGIN_ID + "/" + facebookid, 'json', function success(data)
 	{
+		$('#facebook_profile_load').remove();
 		console.log('Facebook');
 		console.log(data)
 		// If data is not defined return
@@ -162,21 +164,19 @@ function showFacebookProfile(facebookid)
 			$('#Twitter_plugin_delete').show();
 			var template = $('#' + FACEBOOK_PLUGIN_NAME).html(getTemplate('facebook-profile', data));
             
-            $("body").off("click", "#facebook_post_btn");
-			$("body").on("click", "#facebook_post_btn", function(e)
-					{
-						console.log("post on a wall")
-						queueGetRequest("widget_queue", "/core/api/widgets/facebook/postonwall/" + FACEBOOK_PLUGIN_ID + "/" + facebookid + "/" + "hai", 'json',
-								function success(data)
-								{
-									console.log("am at success");
-								}, function error(data)
-								{
-
-									facebookError(data.responseText);
-
-								});
-					});
+            $("#widgets").off("click", "#facebook_post_btn");
+			$("#widgets").on("click", "#facebook_post_btn", function(e)
+			{
+				console.log("post on a wall")
+				queueGetRequest("widget_queue_"+contact_id, "/core/api/widgets/facebook/postonwall/" + FACEBOOK_PLUGIN_ID + "/" + facebookid + "/" + "hai", 'json',
+						function success(data)
+						{
+							console.log("am at success");
+						}, function error(data)
+						{
+							facebookError(data.responseText);
+						});
+			});
 
 		}
 		else
@@ -187,6 +187,7 @@ function showFacebookProfile(facebookid)
 	}, function error(data)
 	{
 
+		$('#facebook_profile_load').remove();
 		facebookError(data.responseText);
 
 	});
@@ -197,131 +198,135 @@ function getUserNameOrUserID(url) {
     return url.substring(n+1);
 }
 
-	/**
-	 * ===facebook.js==== It is a pluginIn to be integrated with CRM, developed
-	 * based on the third party JavaScript API provided. It interacts with the
-	 * application based on the function provided on agile_widgets.js (Third
-	 * party API).
-	 */
-	$(function()
+/**
+ * ===facebook.js==== It is a pluginIn to be integrated with CRM, developed
+ * based on the third party JavaScript API provided. It interacts with the
+ * application based on the function provided on agile_widgets.js (Third
+ * party API).
+ */
+function startFacebookWidget(contact_id)
+{
+	
+	$('#spinner-facebook-search').show();
+	// Facebook widget name as a global variable
+	FACEBOOK_PLUGIN_NAME = "Facebook";
+
+	// Facebook profile loading image declared as global
+	FACEBOOK_PROFILE_LOAD_IMAGE = '<center><img id="facebook_profile_load" src="img/ajax-loader-cursor.gif" style="margin-top: 10px;margin-bottom: 14px;"></img></center>';
+
+	// Retrieves Facebook which is fetched using script API
+	var facebook_widget = agile_crm_get_widget(FACEBOOK_PLUGIN_NAME);
+
+	// ID of the Facebook widget as global variable
+	FACEBOOK_PLUGIN_ID = facebook_widget.id;
+	console.log("plugin Id" + FACEBOOK_PLUGIN_ID);
+
+	// Email as global variable
+	// Email = agile_crm_get_contact_property('email');
+	var first_name = agile_crm_get_contact_property("first_name");
+	var last_name = agile_crm_get_contact_property("last_name");
+
+	// setting lastname to empty string if it is undefined
+	if (last_name == undefined || last_name == null)
+		last_name = '';
+
+	console.log("firstName:" + first_name + "lastname:" + last_name);
+
+	// search string as global varibale
+	SEARCH_STRING = first_name + ' ' + last_name;
+	console.log("    SEARCH_STRING" + SEARCH_STRING)
+
+	web_url = agile_crm_get_contact_property_by_subtype('website', 'FACEBOOK');
+	console.log(web_url);
+
+	$('#Facebook').html(FACEBOOK_PROFILE_LOAD_IMAGE);
+
+	if (web_url)
 	{
-		console.log("in facebook.js")
-		// Facebook widget name as a global variable
-		FACEBOOK_PLUGIN_NAME = "Facebook";
 
-		// Facebook profile loading image declared as global
-		FACEBOOK_PROFILE_LOAD_IMAGE = '<center><img id="facebook_profile_load" src="img/ajax-loader-cursor.gif" style="margin-top: 10px;margin-bottom: 14px;"></img></center>';
+		// Get Twitter id from URL and show profile
+		console.log("profile attched" + web_url)
+		var fbProfileLink = buildFacebookProfileURL(web_url);
+		var userNameOrId = getUserNameOrUserID(fbProfileLink);
+		var fbUserId = userNameOrId;
+		console.log(fbUserId);
+		if(isNaN(fbUserId)) {//if not ID
+			console.log("In getID facebook");
+			var getURL = "https://graph.facebook.com/"+fbUserId;
+			console.log(getURL);
 
-		// Retrieves Facebook which is fetched using script API
-		var facebook_widget = agile_crm_get_widget(FACEBOOK_PLUGIN_NAME);
+			$.ajax({
+    		            url: getURL,
+    		            dataType: 'json',
+    		            success : function(fbProfileDetails){
+    		            	console.log(fbProfileDetails);
+			
+							if(typeof fbProfileDetails.id != 'undefined') {
+								fbUserId = fbProfileDetails.id;				
+								var propertiesArray = [{ "name" : "website", "value" : "@"+fbUserId, "subtype" : "FACEBOOK" }];
+								console.log(propertiesArray);
+								agile_crm_update_contact_properties(propertiesArray);
+							} else {
+								if(typeof fbProfileDetails.error != 'undefined') {
+									facebookError("Facebook profile do not exist.("+fbProfileLink+")");
+									return;
+								}
+							}
+    		            }
+    		        });
+			
+			
+		}
+		showFacebookProfile(fbUserId, contact_id);
+	}
+	else
+	{
+		// Shows all the matches in Twitter for the contact
+		console.log("no profile attached")
+		showFacebookMatchingProfile(contact_id, SEARCH_STRING);
+	}
 
-		// ID of the Facebook widget as global variable
-		FACEBOOK_PLUGIN_ID = facebook_widget.id;
-		console.log("plugin Id" + FACEBOOK_PLUGIN_ID);
+    $("#widgets").off("click", "#facebook_search_btn");
+	$("#widgets").on("click", "#facebook_search_btn", function(e)
+	{
+		e.preventDefault();
 
-		// Email as global variable
-		// Email = agile_crm_get_contact_property('email');
-		var first_name = agile_crm_get_contact_property("first_name");
-		var last_name = agile_crm_get_contact_property("last_name");
+		getModifiedFacebookMatchingProfiles(contact_id);
+	});
 
-		// setting lastname to empty string if it is undefined
-		if (last_name == undefined || last_name == null)
-			last_name = '';
+    $("#widgets").off("click", ".facebook_modify_search");
+	$("#widgets").on("click", ".facebook_modify_search", function(e)
+	{
+		e.preventDefault();
 
-		console.log("firstName:" + first_name + "lastname:" + last_name);
+		// Twitter_search_details['plugin_id'] = Twitter_Plugin_Id;
 
-		// search string as global varibale
-		SEARCH_STRING = first_name + ' ' + last_name;
-		console.log("    SEARCH_STRING" + SEARCH_STRING)
+		$('#' + FACEBOOK_PLUGIN_NAME).html(getTemplate('facebook-modified-search', { "searchString" : SEARCH_STRING }));
+	});
+    
+    $("#widgets").off("click", "#facebook_search_close");
+	$("#widgets").on("click", "#facebook_search_close", function(e)
+	{
+		e.preventDefault();
 
+		/*
+		 * if (search_data) showTwitterMatchingProfiles(search_data); else
+		 * getTwitterMatchingProfiles();
+		 */
+	});
+	
+	// Deletes Twitter profile on click of delete button in template
+    $("#widgets").off("click", "#Facebook_plugin_delete");
+	$("#widgets").on("click", "#Facebook_plugin_delete", function(e)
+	{
+		e.preventDefault();
 		web_url = agile_crm_get_contact_property_by_subtype('website', 'FACEBOOK');
-		console.log(web_url);
-
-		if (web_url)
+		console.log('deleting facebook acct.',web_url);
+		agile_crm_delete_contact_property_by_subtype('website', 'FACEBOOK', web_url, function(data)
 		{
-			// Get Twitter id from URL and show profile
-			console.log("profile attched" + web_url)
-			var fbProfileLink = buildFacebookProfileURL(web_url);
-			var userNameOrId = getUserNameOrUserID(fbProfileLink);
-			var fbUserId = userNameOrId;
-			console.log(fbUserId);
-			if(isNaN(fbUserId)) {//if not ID
-				console.log("In getID facebook");
-				var getURL = "https://graph.facebook.com/"+fbUserId;
-				console.log(getURL);
-				var fbProfileDetails = $.parseJSON(
-	    		        $.ajax({
-	    		            url: getURL, 
-	    		            async: false,
-	    		            dataType: 'json'
-	    		        }).responseText
-	    		    );
-				console.log(fbProfileDetails);
-				
-				if(typeof fbProfileDetails.id != 'undefined') {
-					fbUserId = fbProfileDetails.id;				
-					var propertiesArray = [{ "name" : "website", "value" : "@"+fbUserId, "subtype" : "FACEBOOK" }];
-					console.log(propertiesArray);
-					agile_crm_update_contact_properties(propertiesArray);
-				} else {
-					if(typeof fbProfileDetails.error != 'undefined') {
-//						facebookError(fbProfileDetails.error.message);
-						facebookError("Facebook profile do not exist.("+fbProfileLink+")");
-						return;
-					}
-				}
-			}
-			showFacebookProfile(fbUserId);
-		}
-		else
-		{
-			// Shows all the matches in Twitter for the contact
-			console.log("no profile attached")
-			showFacebookMatchingProfile(SEARCH_STRING);
-		}
-
-        $("body").off("click", "#facebook_search_btn");
-		$("body").on("click", "#facebook_search_btn", function(e)
-		{
-			e.preventDefault();
-
-			getModifiedFacebookMatchingProfiles();
-		});
-
-        $("body").off("click", ".facebook_modify_search");
-		$("body").on("click", ".facebook_modify_search", function(e)
-		{
-			e.preventDefault();
-
-			// Twitter_search_details['plugin_id'] = Twitter_Plugin_Id;
-
-			$('#' + FACEBOOK_PLUGIN_NAME).html(getTemplate('facebook-modified-search', { "searchString" : SEARCH_STRING }));
-		});
-        
-        $("body").off("click", "#facebook_search_close");
-		$("body").on("click", "#facebook_search_close", function(e)
-		{
-			e.preventDefault();
-
-			/*
-			 * if (search_data) showTwitterMatchingProfiles(search_data); else
-			 * getTwitterMatchingProfiles();
-			 */
-		});
-		
-		// Deletes Twitter profile on click of delete button in template
-        $("body").off("click", "#Facebook_plugin_delete");
-		$("body").on("click", "#Facebook_plugin_delete", function(e)
-		{
-			e.preventDefault();
-			web_url = agile_crm_get_contact_property_by_subtype('website', 'FACEBOOK');
-			console.log('deleting facebook acct.',web_url);
-			agile_crm_delete_contact_property_by_subtype('website', 'FACEBOOK', web_url, function(data)
-			{
-				console.log("In facebook delete callback");
-				showFacebookMatchingProfile();
-			});
-
+			console.log("In facebook delete callback");
+			showFacebookMatchingProfile(contact_id);
 		});
 
 	});
+}

@@ -1,5 +1,6 @@
 package com.agilecrm.core.api.contacts;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
@@ -48,9 +49,21 @@ public class CustomFieldsAPI
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public List<CustomFieldDef> getCustomFields()
     {
+    List<CustomFieldDef> customFieldsList = new ArrayList<CustomFieldDef>();
 	try
 	{
-	    return CustomFieldDefUtil.getAllCustomFields();
+	    List<CustomFieldDef> cusList = CustomFieldDefUtil.getAllCustomFields();
+	    if (cusList != null)
+	    {
+	    	for (CustomFieldDef customFieldDef : cusList)
+	    	{
+	    		if (!customFieldDef.field_type.equals(CustomFieldDef.Type.FORMULA))
+	    		{
+	    			customFieldsList.add(customFieldDef);
+	    		}
+	    	}
+	    }
+	    return customFieldsList;
 	}
 	catch (Exception e)
 	{
@@ -69,6 +82,7 @@ public class CustomFieldsAPI
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public List<CustomFieldDef> getCustomFieldsByScopeType(@QueryParam("scope") String scope)
     {
+    List<CustomFieldDef> customFieldsList = new ArrayList<CustomFieldDef>();
 	try
 	{
 	    if (scope == null)
@@ -77,7 +91,18 @@ public class CustomFieldsAPI
 	    //Sorting order is added for custom fields so getting them in 
 	    //order this line is commented and below added new line
 	    //return CustomFieldDefUtil.getAllCustomFields(SCOPE.valueOf(scope));
-	    return CustomFieldDefUtil.getCustomFieldsByScopeAndPosition(SCOPE.valueOf(scope));
+	    List<CustomFieldDef> cusList = CustomFieldDefUtil.getCustomFieldsByScopeAndPosition(SCOPE.valueOf(scope));
+	    if (cusList != null)
+	    {
+	    	for (CustomFieldDef customFieldDef : cusList)
+	    	{
+	    		if (!customFieldDef.field_type.equals(CustomFieldDef.Type.FORMULA))
+	    		{
+	    			customFieldsList.add(customFieldDef);
+	    		}
+	    	}
+	    }
+	    return customFieldsList;
 	}
 	catch (Exception e)
 	{
@@ -175,12 +200,24 @@ public class CustomFieldsAPI
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public List<CustomFieldDef> getCustomFieldsByScope(@QueryParam("scope") SCOPE scope)
     {
+    List<CustomFieldDef> customFieldsList = new ArrayList<CustomFieldDef>();
 	try
 	{
 	    if (scope == null)
 		CustomFieldDefUtil.getSearchableCustomFields();
 
-	    return CustomFieldDefUtil.getCustomFieldsByScope(scope);
+	    List<CustomFieldDef> cusList = CustomFieldDefUtil.getCustomFieldsByScope(scope);
+	    if (cusList != null)
+	    {
+	    	for (CustomFieldDef customFieldDef : cusList)
+	    	{
+	    		if (!customFieldDef.field_type.equals(CustomFieldDef.Type.FORMULA))
+	    		{
+	    			customFieldsList.add(customFieldDef);
+	    		}
+	    	}
+	    }
+	    return customFieldsList;
 	}
 	catch (Exception e)
 	{

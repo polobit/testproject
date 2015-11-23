@@ -11,7 +11,7 @@ function get_blocked_ips()
 
 function put_blocked_ips(blocked_ips)
 {
-	$.ajax({ url : "/core/api/api-key/blocked-ips?blocked_ips=" + encodeURIComponent(blocked_ips), method : "PUT", async : true,
+	$.ajax({ url : "/core/api/api-key/blocked-ips?blocked_ips=" + encodeURIComponent(blocked_ips), method : "PUT",
 		success : function(data)
 		{
 			$("#blocked_ips_list").empty();

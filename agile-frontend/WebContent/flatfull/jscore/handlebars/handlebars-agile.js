@@ -90,7 +90,8 @@ function getTemplate(templateName, context, download, callback, loading_place_ho
 	if(loading_place_holder)
 	{
 		try{
-			$(loading_place_holder).html(getRandomLoadingImg());
+			var loaderEl = $(getRandomLoadingImg());
+			$(loading_place_holder).html(loaderEl.css("margin", "10px"));
 		}catch(err){}
 	}
 		   
@@ -300,6 +301,10 @@ function getTemplateUrls(templateName)
 	{
 		template_relative_urls.push("settings.js");
 	}
+	if (templateName.indexOf("bria") == 0)
+	{
+		template_relative_urls.push("bria.js");
+	}
 	return template_relative_urls;
 }
 
@@ -376,6 +381,84 @@ function getPropertyValue(items, name)
 		if (items[i].name == name)
 			return items[i].value;
 	}
+}
+
+
+/**
+ * appends , between contact fields
+ * @param items
+ * @param name
+ * @returns {String}
+ */
+
+function getPropertyValueByCheckingExistance(items, companyname,jobtitle)
+{
+	if (items == undefined)
+		return;
+
+	var companyExists=false;
+	var jobTitleExists=false;
+	for (var i = 0, l = items.length; i < l; i++)
+	{
+		if (items[i].name == companyname){
+			if(items[i].value){
+				companyExists=true;
+			}
+			
+		}
+		else if (items[i].name == jobtitle){
+			if(items[i].value){
+				jobTitleExists=true;
+			}
+			
+		}
+	}
+	if(companyExists&&jobTitleExists)
+		return ',';
+}
+
+
+
+function getMarginLength(items, companyname)
+{
+	if (items == undefined)
+		return;
+
+	for (var i = 0, l = items.length; i < l; i++)
+	{
+		if (items[i].name == companyname)
+			return '3px';
+	}
+	return '0px';
+}
+
+
+/**
+ * checks the contact properties existance
+ * @param items
+ * @param name
+ * @param name1
+ * @returns {String}
+ */
+function checkPropertyValueExistance(items,name,name1){
+
+	if (items == undefined)
+		return "none";
+
+	var valueExists=false;
+	for (var i = 0, l = items.length; i < l; i++)
+	{
+		if (items[i].name == name || items[i].name == name1){
+			if(items[i].value){
+				valueExists=true;
+			}
+			
+		}
+	}
+	if(valueExists==true)
+		return 'block';
+	else
+		return 'none';
 }
 
 /**

@@ -732,17 +732,35 @@ function setUpGlobalTwilio()
 			Twilio_Setup_Called = false;
 
 			// Make call option visible on contact detail page
-			if (Sip_Stack != undefined && Sip_Register_Session != undefined && Sip_Start == true)
-			{
-				$(".contact-make-sip-call").show();
-				$(".contact-make-twilio-call").hide();
-				$(".contact-make-call").hide();
-			}
-			else if (Twilio.Device.status() == "ready" || Twilio.Device.status() == "busy")
-			{
-				$(".contact-make-sip-call").hide();
-				$(".contact-make-twilio-call").show();
-				$(".contact-make-call").hide();
+			// Sequence of calling option 1) BRIA 2) Twilio 3) SIP
+			if(default_call_type == "Bria"){
+				if(callFromBria == true){
+					$(".contact-call-button").removeAttr('disabled');
+					$(".contact-make-call").removeAttr("href");
+					$(".contact-call-button").addClass('contact-make-bria-call');
+					var selector = '.contact-call-button-div';
+					var text = "Call from Bria";
+					changeTooltipTo(selector,text);
+				}
+			}else{
+				if(Twilio.Device.status() == "ready" || Twilio.Device.status() == "busy")
+					//else if (Twilio.Device.status() == "ready" || Twilio.Device.status() == "busy")			
+					{
+						$(".contact-call-button").removeAttr('disabled');
+						$(".contact-make-call").removeAttr("href");
+						$(".contact-call-button").addClass('contact-make-twilio-call');
+						var selector = '.contact-call-button-div';
+						var text = "Call from Twilio";
+						changeTooltipTo(selector,text);
+					}else if (Sip_Stack != undefined && Sip_Register_Session != undefined && Sip_Start == true)
+						{
+							$(".contact-call-button").removeAttr('disabled');
+							$(".contact-make-call").removeAttr("href");
+							$(".contact-call-button").addClass('contact-make-sip-call');
+							var selector = '.contact-call-button-div';
+							var text = "Call from SIP";
+							changeTooltipTo(selector,text);
+						}
 			}
 		});
 
@@ -926,7 +944,10 @@ function setUpGlobalTwilio()
 								  {
 									if(CALL_CAMPAIGN.call_from_campaign ){
 											// if state is pause i.e callresp.status != completed then make another call
-												if(CALL_CAMPAIGN.state == "DISCONNECTED"){
+								
+													if(TWILIO_IS_VOICEMAIL){
+														TWILIO_IS_VOICEMAIL = false;
+													}
 													CALL_CAMPAIGN.state = "START";
 														
 													  if(CALL_CAMPAIGN.autodial){
@@ -938,7 +959,6 @@ function setUpGlobalTwilio()
 															  dialNextCallManually();
 														  }
 													  }
-												}
 									}else{
 											CALL_CAMPAIGN.state = "START";
 											dialNextCallManually();
@@ -1379,6 +1399,13 @@ function sendVoiceAndEndCall(fileSelected) {
 								if(!data)
 								  return;
 								closeTwilioNoty();
+								// added for call campaign...
+								if(CALL_CAMPAIGN.start){
+									if(TWILIO_CALLTYPE == "Outgoing" && CALL_CAMPAIGN.call_from_campaign){
+										getContactDetails();
+									}
+								}
+								//...............................
 								if(TWILIO_CONTACT_ID) {		
 									//add note automatically
 									$.post( "/core/api/widgets/twilio/autosavenote", {
@@ -1447,6 +1474,13 @@ function twilioVoiceMailRedirect(fileSelected, callback) {
 			ApiCallUrl = "/core/api/widgets/twilio/setvoicemail/" + acc_sid + "/" + auth_token + "/" +callRespJson.sid + "/" + fileSelected
 			console.log("In ajax send voice mail : " + ApiCallUrl);	
 			var resp  = twilioApiRequest(ApiCallUrl);
+			//added for call-campaign...
+			if(CALL_CAMPAIGN.start){
+				$('#noty_twilio_voicemail').attr('disabled','disabled');
+				$('#splitButtonVoicemail').attr('disabled','disabled');
+				
+			}
+			//...........................
 			return callback(true);
 
 		});

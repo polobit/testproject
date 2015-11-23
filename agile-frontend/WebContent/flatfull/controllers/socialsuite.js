@@ -62,7 +62,13 @@ var SocialSuiteRouter = Backbone.Router.extend({
 			$('#content').html($(template_ui));	
 
 			/* Creates pubnub object and channel dedicated for new user or relogin */
-			initToPubNub();
+            initToPubNub(function() {
+                if (!Pubnub.is_connected_call) {
+                    return
+                }
+                Pubnub.is_connected_call = false;
+                socialsuitecall.streams()
+            });
 
 			// Display added streams
 			socialsuitecall.streams();
