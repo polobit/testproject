@@ -36,6 +36,7 @@ import com.agilecrm.util.VersioningUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.utils.SystemProperty;
 import com.googlecode.objectify.Key;
+import com.thirdparty.mandrill.subaccounts.MandrillSubAccounts;
 
 /**
  * <code>RegisterServlet</code> class registers the user account in agile crm.
@@ -96,6 +97,9 @@ public class RegisterServlet extends HttpServlet
 		    registerAgile(request, response);
 		}
 
+		// Create subaccount after registration
+		MandrillSubAccounts.createSubAccountInAgileMandrill(NamespaceManager.get());
+		
 		return;
 	    }
 	}
