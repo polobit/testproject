@@ -247,7 +247,7 @@ public class Widget
 		if(this.isForAll){
 			String domain = NamespaceManager.get();
 			System.out.println("*** domain "+domain);
-			//if(domain != null){
+			if(domain != null){
 				List<DomainUser> users = DomainUserUtil.getUsers(domain);			
 				for (DomainUser domainUser : users) {
 					System.out.println("*** In For Loop "+domainUser.id);			
@@ -265,7 +265,7 @@ public class Widget
 						}
 					}
 				}	
-			//}
+			}
 		}else{
 			if (user == null){
 	    		user = new Key<AgileUser>(AgileUser.class, AgileUser.getCurrentAgileUser().id);    		
