@@ -97,9 +97,6 @@ public class RegisterServlet extends HttpServlet
 		    registerAgile(request, response);
 		}
 
-		// Create subaccount after registration
-		MandrillSubAccounts.createSubAccountInAgileMandrill(NamespaceManager.get());
-		
 		return;
 	    }
 	}
@@ -218,6 +215,10 @@ public class RegisterServlet extends HttpServlet
 	setAccountPrefsTimezone(request);
 
 	EventReminder.getEventReminder(domainUser.domain, null);
+	
+	// Create subaccount in Mandrill after registration
+	MandrillSubAccounts.createSubAccountInAgileMandrill(domainUser.domain);
+	
 	request.getSession().setAttribute("account_timezone", timezone);
 	try
 	{
