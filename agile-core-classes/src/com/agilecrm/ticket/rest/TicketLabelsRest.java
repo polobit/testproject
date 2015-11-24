@@ -41,7 +41,7 @@ public class TicketLabelsRest
 						"Sorry, Label name should start with an alphabet and can not contain special characters other than underscore and space - "
 								+ ticketLabel.label);
 
-			return TicketLabelsUtil.createLabel(ticketLabel.label);
+			return TicketLabelsUtil.createLabel(ticketLabel);
 		}
 		catch (Exception e)
 		{

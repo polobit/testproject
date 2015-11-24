@@ -1,53 +1,95 @@
 <script id="ticket-label-collection-template" type="text/html">
-<div align="right"> 
-    <div id="add-label-btn" class="inline">
-        <a href="javascript:void(0);" id="add-new-label" class="btn btn-default btn-addon btn-sm">
-            <i class="icon-plus-sign" ></i> Add Label
-        </a>
-    </div>
-    <div id="new-label-form" class="pull-right display-none">
-        <input type="text" class="form-control pull-left m-r-sm w add-new-label" placeholder="New Label"/>
-        <a class="btn btn-primary pull-left v-top btn-sm add-new-label" href="javacript:void(0);" title="Create Label">
-            <i class="fa fa-save"></i>
-        </a>
-        <a class="btn btn-default pull-left v-top btn-sm m-l-xs close-new-label" href="javacript:void(0);"  title="Close">
-            <i class="fa fa-times"></i>
-        </a>
-    </div>
-</div>
-<div class="clearfix"></div>
-<div class="control-group form-group">  
-    <div id="milestone-values" class="milestone-ul-list1">
-        {{#unless this.length}}
-            <div class="text-center padder-v">
-                <h4 class="m-t-none m-b-xs">You dont have any labels</h4>
-                <div class="m-b-xs">
-                    Labels can be add to tickets to filter Tickets.
-                </div>
+{{#unless this.length}}
+<div class="row">
+    <div class="col-md-12 col-sm-12">
+        <div class="text-center padder-v">
+            <h4 class="m-t-none m-b-xs">You don&#39;t have any labels</h4>
+            <div class="m-b-xs">
+                Create lables to streamline your tickets
             </div>
-        {{else}}
-            <ul id="ticket-label-model-list" style="list-style: none;">
-
-            </ul>
-        {{/unless}}    
+            <div>
+                <a href="#add-ticket-label" class="btn btn-sm btn-default blue btn-slate-action m-t-xs">
+                    Create Labels
+                </a>
+            </div>
+        </div>
     </div>
-    <div class="clearfix"></div>
-</div>
+ </div>
+{{/unless}}
+{{#if this.length}}
+    <div class="pull-right">
+        <a href="#add-ticket-label" class="btn btn-sm btn-default btn-addon">
+            <span><i class="icon-plus-sign"></i></span> Add
+        </a>
+    </div>
+    <table class="table table-striped showCheckboxes m-b-none agile-table panel table-layout-mob-view show-delete-modal" url="core/api/tickets/labels/bulk" data-bulk-delete-title="Delete"
+        data-bulk-delete-msg="Are you sure you want to delete?">
+            <thead>
+                <tr>
+                    <th class="hide">Id</th>
+                    <th style="width:20%">Label</th>
+                    <th style="width:40%">Color code</th>
+                    <th style="width:35%">&nbsp;</th>
+                </tr>
+            </thead>
+            <tbody id="ticket-label-model-list" route="ticket-label/" class="c-p"> </tbody>
+    </table>
+{{/if}}
 </script>
 <script id="ticket-label-model-template" type="text/html">
-<span>
-    <div id="tag-solid-state">
-        <a class="anchor text-ellipsis v-middle text-sm p-l-xs text-sm pull-left inline-block"  style="width:140px" href="#tags/{{this.label}}" >{{this.label}}</a>  
-        <span id="actions" class="agile-custom-hide text-xs">
-        <div class="pull-right tag-management-actions">
-            <a class="details" href="#"><i class="icon-file-text"></i></a>
-            <a class="edit" href="#" ><i class="icon-pencil"></i></a>
-            <a class="delete" href="#" ><i class="icon-trash"></i></a>
+<td class="hide data" data="{{id}}">
+    {{id}}
+</td>
+<td>
+    {{label}}
+</td>
+<td>
+    <i class="fa fa-square-o fa-1x" style="color: {{color_code}}; background-color: {{color_code}};"></i> {{color_code}}
+</td>
+<td>
+    <div class="table-resp">
+        <small class="edit-hover text-muted"> 
+            <i class="fa fa-clock-o m-r-xs"></i>
+            <span>Last updated on&nbsp;</span>
+            <time class="campaign-created-time b-b-dotted" datetime="{{epochToHumanDate "" updated_time}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM" updated_time}}</time>
+        </small>
+    </div>
+</td> 
+</script>
+<script id="add-edit-ticket-label-template" type="text/html">
+    <div class="wrapper">
+        <div class="row">
+            <h4>{{#if id}}Edit{{else}}Add{{/if}} Label</h4><hr>
+            <form id="add-ticket-group" class="form-horizontal">
+                {{#if id}}<input type="hidden" name="id" value="{{id}}">{{/if}}
+                <fieldset class="wrapper p-n"><br>
+                    <div class="control-group form-group">
+                        <label class="control-label col-sm-3">Label<span class="field_req">*</span></label>
+                        <div class="controls col-sm-4">
+                            <input type="text" name="label" id="label" value="{{label}}" class="required form-control">
+                        </div>
+                    </div>
+                    <div class="control-group form-group">
+                        <label class="control-label col-sm-3">Color code</label>
+                        <div class="controls col-sm-4 color_code">
+                             <input type="text" name="color_code" data-input="colorpicker" class="required form-control minicolors" data-control="saturation" value="{{#if color_code}}{{color_code}}{{else}}#5367ce{{/if}}">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <hr>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="form-actions col-sm-offset-3 col-md-9">
+                            <div class="form-actions">
+                                <a type="reset" href="#ticket-groups" class="btn btn-default btn-sm">Cancel</a>
+                                <a href="javascript:void(0);" type="submit" class="save btn btn-sm btn-primary">Save</a>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+            </form>
         </div>
-        <div class="clearfix"></div>
     </div>
-    <div class="agile-custom-hide pull-left m-b-sm m-l-sm" id="editing">
-        <input type="text" class="edit-input w-200 pull-left form-control m-r-sm" style="height:30px;" value='{{this.label}}'>
-    </div>
-</span>
 </script>

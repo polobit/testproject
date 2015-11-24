@@ -19,6 +19,7 @@ public class TicketLabels extends Cursor implements Serializable
 	public Long id;
 
 	public String label;
+	public String color_code;
 
 	public Long created_time = 0L;
 	public Long updated_time = 0L;
@@ -37,12 +38,36 @@ public class TicketLabels extends Cursor implements Serializable
 
 	}
 
+	public TicketLabels(String label)
+	{
+		super();
+		this.label = label;
+	}
+
+	public TicketLabels(String label, String color_code)
+	{
+		super();
+		this.label = label;
+		this.color_code = color_code;
+	}
+
 	@javax.persistence.PrePersist
 	private void prePersist()
 	{
-		if (this.id != null)
-			this.updated_time = Calendar.getInstance().getTimeInMillis();
-		else
+		if (this.id == null)
 			this.created_time = Calendar.getInstance().getTimeInMillis();
+
+		this.updated_time = Calendar.getInstance().getTimeInMillis();
+	}
+
+	@Override
+	public boolean equals(Object obj)
+	{
+		if (obj == null)
+			return false;
+
+		TicketLabels label = (TicketLabels) obj;
+
+		return this.label.equalsIgnoreCase(label.label);
 	}
 }

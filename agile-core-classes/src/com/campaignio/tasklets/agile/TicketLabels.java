@@ -66,7 +66,7 @@ public class TicketLabels extends TaskletAdapter
 
 				String[] labelsArray = tags.split(",");
 
-				TicketsUtil.updateTags(ticketId, labelsArray, type);
+				TicketsUtil.updateLabels(ticketId, labelsArray, type);
 
 			}
 

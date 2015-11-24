@@ -92,7 +92,7 @@ var Ticket_Filters = {
 		App_Ticket_Module.ticketFiltersList = new Base_Collection_View({
 			url : '/core/api/tickets/filters',
 			sortKey:"updated_time",
-			descending:true,
+			descending: true,
 			customLoader: true,
 			customLoaderTemplate: 'ticket-filters-loader',
 			templateKey : "ticket-filters-list",

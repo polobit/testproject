@@ -13,6 +13,7 @@ import com.agilecrm.contact.Tag;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.search.BuilderInterface;
 import com.agilecrm.search.QueryInterface.Type;
+import com.agilecrm.ticket.entitys.TicketLabels;
 import com.agilecrm.ticket.entitys.Tickets;
 import com.agilecrm.ticket.entitys.Tickets.Status;
 import com.agilecrm.ticket.utils.TicketsUtil;
@@ -82,6 +83,10 @@ public class TicketsDocument implements BuilderInterface
 			document.addField(Field.newBuilder().setName("created_time")
 					.setNumber(Math.floor(ticket.created_time / 1000)));
 
+			if (ticket.due_time != null)
+				// Set due date
+				document.addField(Field.newBuilder().setName("due_date").setNumber(Math.floor(ticket.due_time / 1000)));
+
 			// Set ticket last updated time
 			document.addField(Field.newBuilder().setName("last_updated_time")
 					.setNumber(Math.floor(ticket.last_updated_time / 1000)));
@@ -138,13 +143,13 @@ public class TicketsDocument implements BuilderInterface
 			// Set mail subject
 			document.addField(Field.newBuilder().setName("subject").setText(ticket.subject));
 
-			StringBuffer tagsString = new StringBuffer();
+			StringBuffer labelsString = new StringBuffer();
 
-			for (Tag tag : ticket.tags)
-				tagsString.append(tag.tag + " ");
+			for (TicketLabels label : ticket.labels)
+				labelsString.append(label.label + " ");
 
 			// Set tags
-			document.addField(Field.newBuilder().setName("tags").setText(tagsString.toString().trim()));
+			document.addField(Field.newBuilder().setName("labels").setText(labelsString.toString().trim()));
 
 			// Setting search tokens
 			document.addField(Field

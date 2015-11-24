@@ -113,7 +113,7 @@ public class TicketActivity extends Cursor
 	 */
 	public enum TicketActivityType
 	{
-		TICKET_CREATED, TICKET_DELETED, TICKET_ASSIGNED, TICKET_ASSIGNEE_CHANGED, TICKET_GROUP_CHANGED, TICKET_STATUS_CHANGE, TICKET_PRIORITY_CHANGE, TICKET_TYPE_CHANGE, TICKET_TAG_ADD, TICKET_TAG_REMOVE, TICKET_ASSIGNEE_REPLIED, TICKET_REQUESTER_REPLIED, TICKET_PRIVATE_NOTES_ADD, TICKET_MARKED_FAVORITE, TICKET_MARKED_UNFAVORITE, BULK_ACTION_MANAGE_LABELS, BULK_ACTION_CHANGE_ASSIGNEE, BULK_ACTION_EXECUTE_WORKFLOW, BULK_ACTION_CLOSE_TICKETS, BULK_ACTION_DELETE_TICKETS
+		TICKET_CREATED, TICKET_DELETED, TICKET_ASSIGNED, TICKET_ASSIGNEE_CHANGED, TICKET_GROUP_CHANGED, TICKET_STATUS_CHANGE, TICKET_PRIORITY_CHANGE, TICKET_TYPE_CHANGE, TICKET_LABEL_ADD, TICKET_LABEL_REMOVE, TICKET_ASSIGNEE_REPLIED, TICKET_REQUESTER_REPLIED, TICKET_PRIVATE_NOTES_ADD, TICKET_MARKED_FAVORITE, TICKET_MARKED_UNFAVORITE, BULK_ACTION_MANAGE_LABELS, BULK_ACTION_CHANGE_ASSIGNEE, BULK_ACTION_EXECUTE_WORKFLOW, BULK_ACTION_CLOSE_TICKETS, BULK_ACTION_DELETE_TICKETS, TICKET_TAG_ADD, TICKET_TAG_REMOVE, DUE_DATE_CHANGED
 	};
 
 	public TicketActivityType ticket_activity_type;
@@ -286,11 +286,11 @@ public class TicketActivity extends Cursor
 			case TICKET_TYPE_CHANGE:
 				this.activity_title = "Type changed";
 				break;
-			case TICKET_TAG_ADD:
-				this.activity_title = "Tag added";
+			case TICKET_LABEL_ADD:
+				this.activity_title = "Label added";
 				break;
-			case TICKET_TAG_REMOVE:
-				this.activity_title = "Tag removed";
+			case TICKET_LABEL_REMOVE:
+				this.activity_title = "Label removed";
 				break;
 			case TICKET_ASSIGNEE_REPLIED:
 				this.activity_title = "Assignee replied";
@@ -310,6 +310,11 @@ public class TicketActivity extends Cursor
 			case TICKET_MARKED_UNFAVORITE:
 				this.activity_title = "Marked unfavorite";
 				break;
+			case DUE_DATE_CHANGED:
+				this.activity_title = "Due date changed";
+				break;	
+			default:
+				this.activity_title = "";
 			}
 		}
 	}

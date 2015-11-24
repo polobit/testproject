@@ -6,11 +6,12 @@ var Ticket_Base_Model = Base_Model_View.extend({
 		/*"click .ticket_group_name" : "changeGroup",*/
 		"click .ticket_status" : "changeStatus",
 		"click .ticket_assignee_name" : "changeAssignee",
-		"click .ticket_type" : "changeTicketType",
-		"click .ticket_priority" : "changeTicketPriority",
+		"change .ticket_type" : "changeTicketType",
+		"change .ticket_priority" : "changeTicketPriority",
 		"click .delete-ticket" : "deleteTicket",
 		"click .show-workflows" : "workflows",
 		"click .toggle-timeline" : "toggleTimeline",
+		"click #change-sla" : "changeSla",
 		"mouseover .hover-edit" : "showEditIcon",
 		"mouseout  .hover-edit" : "hideEditIcon",
 
@@ -193,6 +194,17 @@ var Ticket_Base_Model = Base_Model_View.extend({
 		}
 
 		$('.toggle-timeline').attr('data-original-title', tooltip_text);
+	},
+
+	changeSla: function(e){
+		e.preventDefault();
+
+		$('#datetimepicker').show();
+
+		var ticketJSON = App_Ticket_Module.ticketView.model.toJSON();
+		var defaultDate = (ticketJSON.due_time) ? moment.unix(Math.floor(ticketJSON.due_time/1000)) : false;
+		
+		$('#datetimepicker').data("DateTimePicker").defaultDate(defaultDate);
 	},
 
 	renderTicketTimeline: function(e){

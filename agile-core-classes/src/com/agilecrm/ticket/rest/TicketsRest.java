@@ -34,6 +34,7 @@ import com.agilecrm.ticket.entitys.TicketActivity;
 import com.agilecrm.ticket.entitys.TicketDocuments;
 import com.agilecrm.ticket.entitys.TicketFilters;
 import com.agilecrm.ticket.entitys.TicketGroups;
+import com.agilecrm.ticket.entitys.TicketLabels;
 import com.agilecrm.ticket.entitys.TicketNotes.CREATED_BY;
 import com.agilecrm.ticket.entitys.TicketNotes.NOTE_TYPE;
 import com.agilecrm.ticket.entitys.TicketWorkflow;
@@ -702,6 +703,32 @@ public class TicketsRest
 	/**
 	 * 
 	 * @param ticket_id
+	 * @param priority
+	 * @return
+	 */
+	@PUT
+	@Path("/change-due-date")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Tickets changeDueDate(@QueryParam("id") Long ticketID, @QueryParam("due_time") Long dueDate)
+	{
+		try
+		{
+			if (ticketID == null || dueDate == null)
+				throw new Exception("Required parameters missing.");
+
+			return TicketsUtil.changeDueDate(ticketID, dueDate);
+		}
+		catch (Exception e)
+		{
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
+			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+					.build());
+		}
+	}
+
+	/**
+	 * 
+	 * @param ticket_id
 	 * @param is_starred
 	 * @return
 	 */
@@ -756,9 +783,9 @@ public class TicketsRest
 	 * @return
 	 */
 	@PUT
-	@Path("/update-tags")
+	@Path("/update-labels")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Tickets updateTags(@QueryParam("command") String command, @QueryParam("tag") Tag tag,
+	public Tickets updateLabels(@QueryParam("command") String command, @QueryParam("label") TicketLabels label,
 			@QueryParam("id") Long ticketID)
 	{
 		try
@@ -766,7 +793,7 @@ public class TicketsRest
 			if (ticketID == null)
 				throw new Exception("Required parameter missing.");
 
-			return TicketsUtil.updateTags(ticketID, tag, command);
+			return TicketsUtil.updateLabels(ticketID, label, command);
 		}
 		catch (Exception e)
 		{

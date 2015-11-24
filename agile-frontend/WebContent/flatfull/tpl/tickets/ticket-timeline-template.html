@@ -44,11 +44,11 @@
 				                        {{#if_equals ticket_activity_type 'TICKET_TYPE_CHANGE'}}
 				                            Type changed to <span class="first-letter-cap">{{new_data}}</span>
 				                        {{else}}
-				                            {{#if_equals ticket_activity_type 'TICKET_TAG_ADD'}}
-				                                Tag added - {{new_data}}
+				                            {{#if_equals ticket_activity_type 'TICKET_LABEL_ADD'}}
+				                                Label added - {{new_data}}
 				                            {{else}}
-				                                {{#if_equals ticket_activity_type 'TICKET_TAG_REMOVE'}}
-				                                    Tag removed - {{new_data}}
+				                                {{#if_equals ticket_activity_type 'TICKET_LABEL_REMOVE'}}
+				                                    Label removed - {{new_data}}
 				                                {{else}}
 				                                    {{#if_equals ticket_activity_type 'TICKET_ASSIGNEE_REPLIED'}}
 				                                    	<span class="first-letter-cap inline-block">{{user.name}}</span> replied to ticket

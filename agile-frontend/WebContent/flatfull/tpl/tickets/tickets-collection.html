@@ -20,3 +20,45 @@
 	    {{/if}}
 	</div>
 </script>
+<script id="ticket-single-row-collection-template" type="text/html">
+	<div class="tickets-div">
+		{{#unless this.length}}
+			<div class="text-center padder-v">
+				<h4 class="m-t-none m-b-xs">You don&#39;t have any tickets</h4>
+				<div class="m-b-xs">
+					Configure your help desk system to answer customer queries from your Agile Dashboard.
+				</div>
+				<div>
+					<a href="#ticket-groups" class="btn btn-sm btn-default blue btn-slate-action m-t-xs">
+						Configure Help Desk
+					</a>
+				</div>
+			</div>
+	    {{/unless}}
+	    {{#if this.length}}
+			<div class="data">
+				<div class="data-container"></div>
+            	<div class="table-responsive">
+					<div class="panel panel-default" style="border-top: none;">
+						<table class="table table-striped showCheckboxes no-sorting panel"
+							url="core/api/bulk/update?action_type=DELETE">
+							<thead>
+								<tr>
+									<th>Subject</th>
+									<th>Requester</th>
+									<th>Labels</th>
+									<th>Due Date</th>
+									<th>Status</th>
+									<th>Assignee</th>
+								</tr>
+							</thead>
+							<tbody id="ticket-single-row-model-list" class="ticket-single-row-model-list"
+								route="contact/">
+							</tbody>
+						</table>	
+					</div>
+            	</div>
+			</div>
+		{{/if}}
+	</div>
+</script>

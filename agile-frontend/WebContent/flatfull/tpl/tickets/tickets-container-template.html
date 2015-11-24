@@ -8,28 +8,8 @@
 			<div id="filters-list-container">
 			</div>
 			<div class="wrapper">Labels</div>
-			<ul class="nav nav-pills nav-stacked nav-sm">
-		        <!-- ngRepeat: label in labels --><li ng-repeat="label in labels" ui-sref-active="active" class="ng-scope">
-		          <a ui-sref="app.mail.list({fold:label.filter})" class="ng-binding" href="#/app/mail/inbox/angular">
-		            <i class="fa fa-fw fa-circle text-muted" color="#23b7e5" label-color="" style="color: rgb(35, 183, 229);"></i>
-		            Angular
-		          </a>
-		        </li><!-- end ngRepeat: label in labels --><li ng-repeat="label in labels" ui-sref-active="active" class="ng-scope">
-		          <a ui-sref="app.mail.list({fold:label.filter})" class="ng-binding" href="#/app/mail/inbox/bootstrap">
-		            <i class="fa fa-fw fa-circle text-muted" color="#7266ba" label-color="" style="color: rgb(114, 102, 186);"></i>
-		            Bootstrap
-		          </a>
-		        </li><!-- end ngRepeat: label in labels --><li ng-repeat="label in labels" ui-sref-active="active" class="ng-scope">
-		          <a ui-sref="app.mail.list({fold:label.filter})" class="ng-binding" href="#/app/mail/inbox/client">
-		            <i class="fa fa-fw fa-circle text-muted" color="#fad733" label-color="" style="color: rgb(250, 215, 51);"></i>
-		            Client
-		          </a>
-		        </li><!-- end ngRepeat: label in labels --><li ng-repeat="label in labels" ui-sref-active="active" class="ng-scope">
-		          <a ui-sref="app.mail.list({fold:label.filter})" class="ng-binding" href="#/app/mail/inbox/work">
-		            <i class="fa fa-fw fa-circle text-muted" color="#27c24c" label-color="" style="color: rgb(39, 194, 76);"></i>
-		            Work
-		          </a>
-		        </li><!-- end ngRepeat: label in labels -->
+			<ul class="nav nav-pills nav-stacked nav-sm labels-list">
+		        
 		    </ul>
 		    <div class="wrapper">
 		        <form name="label" class="ng-pristine ng-invalid ng-invalid-required">
@@ -51,4 +31,14 @@
 		</div>
 	</div>
 </div>
+</script>
+<script id="ticket-label-template" type="text/html">
+{{#each this}}
+<li>
+  <a href="#/tickets/label/inbox/{{label}}">
+    <i class="fa fa-fw fa-circle text-muted" color="#23b7e5" style="color: {{color_code}};"></i>
+    {{label}}
+  </a>
+</li>
+{{/each}}
 </script>

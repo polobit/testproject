@@ -1,57 +1,123 @@
 <script id="ticket-model-template" type="text/html">
-	<li id="{{id}}" class="p-l-xxl list-group-item clearfix b-l-3x {{toLowerCase priority}}-priority data cursor-pointer ticket"  data-id="{{id}}" style="padding-left: 35px;">
+	<li id="{{id}}" class="p-l-xxl list-group-item clearfix b-l-3x {{toLowerCase priority}}-priority data cursor-pointer ticket"  data-id="{{id}}" style="padding-left: 35px; padding-right: 25px;">
     <div class="checkbox-st">
-      <input class="each-ticket ticket-checkbox" type="checkbox" data-ticket-id="{{id}}">
+      <label class="i-checks i-checks-sm">
+        <input class="each-ticket ticket-checkbox" type="checkbox" data-ticket-id="{{id}}">
+        <i></i>
+      </label>
     </div>
-    <a class="avatar thumb pull-left m-r" href="javascript:void(0);">
-      <img src="{{emailGravatarurl 42 requester_email}}">
+    <a class="avatar thumb pull-left m-r m-l-sm b b-l" href="javascript:void(0);">
+      {{#if contact.properties}}
+        <img data-name="{{dataNameAvatar contact.properties 42}}" src="{{gravatarurl contact.properties}}">
+      {{else}}    
+        <img src="{{emailGravatarurl 42 requester_email}}">
+      {{/if}}  
     </a>
-    <div class="pull-right text-sm text-muted">
+    <div class="pull-right text-sm text-muted p-l-sm b-l" style="min-width: 20%;">
+      <table>
+        <tr>
+          <td><span class="text-muted">Assignee: </span></td>
+          <td class="p-l-sm">
+            <a href="javascript:void(0);" class="first-letter-cap inline-block">
+              {{#if assigneeID}}{{assignee.name}}{{else}}-{{/if}}
+            </a>
+          </td>
+        </tr>
+        <tr><td><span class="text-muted">Status: </span></td>
+            <td class="p-l-sm"><a href="javascript:void(0);" class="first-letter-cap inline-block">{{status}}</a></div></td>
+        </tr>
+        <tr><td><span class="text-muted">Priority: </span></td>
+            <td class="p-l-sm"><a href="javascript:void(0);" class="first-letter-cap inline-block">{{priority}}</a></div></td>
+        </tr>
+      </table>
+    </div>
+    <div class="pull-right text-sm text-muted text-right m-r-sm">
       <time class="time-ago" datetime="{{epochToHumanDate "" last_updated_time}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" last_updated_time}}
       </time>
       {{#if attachments_exists}}
         <i class="fa fa-paperclip m-l-sm" aria-hidden="false"></i>
       {{/if}}
+      <div class="due-text m-t-xs">
+        {{#if due_time}}
+          {{{calculate_due_date due_time}}}
+        {{else}}
+          <span class="label bg-danger pull-right description-hidden">Overdue</span>
+        {{/if}}
+      </div>
     </div>
     <div class="clear">
       <div class="subject-row tags-row">
         <a class="text-md" href="javascript:;">
-          {{requester_name}} ({{requester_email}})
+          {{requester_name}} 
+          {{#each labels}}
+            <span class="label bg-light m-l-xs font-bold" style="font-size: 10.5px;">{{this.label}}</span>
+          {{/each}}
         </a>
-        <!--{{#each tags}}
-            <span class="label bg-light m-l-xs font-bold">{{this.tag}}</span>
-        {{/each}}-->
       </div>
       <div class="text-ellipsis m-t-xs">{{subject}}</div>
     </div>
     <div id="ticket-last-notes">
-      <div class="row mar-no">
-        <!-- <div class="col-md-9 p-sm">
-          <div class="text-light">Ticket# {{short_id}}</div>
-        </div>
-        <div class="col-md-3 p-sm">
-          <div><span class="label label-primary first-letter-cap pull-right">{{priority}}</span></div>
-        </div>
-      </div>
-      <hr class="m-t-none m-b-sm"> -->
       <div class="row m-n mar-btm-md last-notes-drp-dwn p-t">
         <div class="col-md-12 pad-all-sm">
           <span>Last Reply</span>
           <span class="text-light txt-small pull-right">
-            {{epochToHumanDate "ddd mmm dd yyyy HH:MM" last_updated_time}}&nbsp;
-            <span class="label label-primary first-letter-cap inline-block {{toLowerCase priority}}-priority-bg">
+            {{epochToHumanDate "mmm dd, yyyy HH:MM" last_updated_time}}&nbsp;
+            <!--<span class="label label-primary first-letter-cap inline-block {{toLowerCase priority}}-priority-bg">
               {{priority}}
-            </span>
+            </span>-->
           </span>
         </div>
-        <div id="recent-reply-notes" class="col-md-12 p recent-reply-notes">
-          {{#if last_reply_text}}
-            {{{last_reply_text}}}
-          {{else}}
-            {{{first_reply_notes}}}
-          {{/if}}  
+        <div id="recent-reply-notes" class="col-md-12 p-t-sm p-b recent-reply-notes">
+          {{{last_reply_text}}}  
+        </div>
+      </div>
+      <div class="row m-n mar-btm-md last-notes-drp-dwn">  
+        <div class="col-md-12 pad-all-sm">
+          <hr class="m-t m-b">
+          <span>First Reply</span>
+          <span class="text-light txt-small pull-right">
+            {{epochToHumanDate "mmm dd, yyyy HH:MM" created_time}}&nbsp;
+          </span>
+        </div>
+        <div id="recent-reply-notes" class="col-md-12 p-t-sm p-b recent-reply-notes">
+          {{{first_notes_text}}}
         </div>
       </div>
     </div>
   </li>
+</script>
+<script id="ticket-single-row-model-template" type="text/html">
+  <td  class="select_checkbox c-p">
+    <label class="i-checks i-checks-sm">
+      <input type="checkbox" class="tbody_check"><i></i>                
+    </label>
+  </td>
+  <td class="data first-letter-cap" data="{{id}}">
+    {{subject}}
+  </td>
+  <td class="first-letter-cap">
+    {{requester_name}}
+  </td>
+  <td>
+    <div class="overflow-hidden line-clamp line-clamp-2" style="width:15em;">   
+        {{#each labels}}
+          <span class="label bg-light dk text-tiny">{{label}}</span> 
+        {{/each}}
+    </div>
+  </td>  
+  <td class="first-letter-cap">
+    {{#if due_time}}
+      {{{calculate_due_date due_time}}}
+    {{else}}
+      -
+    {{/if}}
+  </td>
+  <td>
+    <span class="label {{toLowerCase priority}}-priority-bg first-letter-cap text-tiny inline-block">
+      {{priority}}
+    </span>
+  </td>
+  <td class="first-letter-cap">
+    {{#if assigneeID}}{{assignee.name}}{{else}}-{{/if}}
+  </td>
 </script>

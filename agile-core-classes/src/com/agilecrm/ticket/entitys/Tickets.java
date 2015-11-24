@@ -86,6 +86,11 @@ public class Tickets extends Cursor
 	public Long assigned_time = 0L;
 
 	/**
+	 * Stores epoch time of due date
+	 */
+	public Long due_time = 0L;
+
+	/**
 	 * Stores epoch time when ticket is closed
 	 */
 	public Long closed_time = 0L;
@@ -177,7 +182,7 @@ public class Tickets extends Cursor
 
 	public static enum Status
 	{
-		NEW, OPEN, CLOSED
+		NEW, OPEN, PENDING, CLOSED
 	};
 
 	public static enum Type
@@ -188,14 +193,16 @@ public class Tickets extends Cursor
 	public static enum Priority
 	{
 		LOW(0), MEDIUM(1), HIGH(2);
-		
+
 		private int code;
-		
-		private Priority(int code){
+
+		private Priority(int code)
+		{
 			this.code = code;
 		}
-		
-		public int getCode(){
+
+		public int getCode()
+		{
 			return code;
 		}
 	};
@@ -258,6 +265,13 @@ public class Tickets extends Cursor
 	@NotSaved(IfDefault.class)
 	@Embedded
 	public List<Tag> tags = new ArrayList<Tag>();
+
+	/**
+	 * Stores ticket labels
+	 */
+	@NotSaved(IfDefault.class)
+	@Embedded
+	public List<TicketLabels> labels = new ArrayList<TicketLabels>();
 
 	/**
 	 * Util attribute to get html content in new ticket

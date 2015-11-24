@@ -4,10 +4,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.agilecrm.ticket.entitys.TicketGroups;
 import com.agilecrm.ticket.entitys.TicketLabels;
 import com.google.appengine.api.datastore.EntityNotFoundException;
-import com.googlecode.objectify.Key;
 
 /**
  * 
@@ -43,15 +41,12 @@ public class TicketLabelsUtil
 		return TicketLabels.dao.getByProperty(searchMap);
 	}
 
-	public static TicketLabels createLabel(String labelName) throws Exception
+	public static TicketLabels createLabel(TicketLabels ticketLabel) throws Exception
 	{
-		TicketLabels existingLabel = TicketLabelsUtil.getLabelByName(labelName);
+		TicketLabels existingLabel = TicketLabelsUtil.getLabelByName(ticketLabel.label);
 
 		if (existingLabel != null)
 			throw new Exception("Label already exists.");
-
-		TicketLabels ticketLabel = new TicketLabels();
-		ticketLabel.label = labelName;
 
 		TicketLabels.dao.put(ticketLabel);
 
@@ -62,10 +57,11 @@ public class TicketLabelsUtil
 	{
 		TicketLabels oldTicketLabel = TicketLabelsUtil.getLabelByName(ticketLabel.label);
 
-		if (oldTicketLabel.id != ticketLabel.id)
+		if (!oldTicketLabel.id.equals(ticketLabel.id))
 			throw new Exception("Label already exists.");
 
 		oldTicketLabel.label = ticketLabel.label;
+		oldTicketLabel.color_code = ticketLabel.color_code;
 		TicketLabels.dao.put(oldTicketLabel);
 
 		return oldTicketLabel;

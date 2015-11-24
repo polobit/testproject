@@ -1,8 +1,8 @@
 var Group_ID = null, Current_Ticket_ID = null, Ticket_Filter_ID = null, Tickets_Util = {}, Sort_Field = '-last_updated_time';
 
 $("body").bind('click', function(ev) {
-	Tickets.hideDropDowns(ev);
-	Ticket_Tags.hideTicketTagField(ev);
+	/*Tickets.hideDropDowns(ev);
+	Ticket_Tags.hideTicketTagField(ev);*/
 });
 
 var Tickets = {
@@ -21,8 +21,11 @@ var Tickets = {
 
 				$('#content').html($(template_ui));	
 
+				var isSingleRowView = (CURRENT_DOMAIN_USER.helpdesk_view && CURRENT_DOMAIN_USER.helpdesk_view == 'double_row')
+								 ? false : true;
+
 				//Fetching ticket toolbar template
-				getTemplate("tickets-toolbar-container", {}, undefined, function(toolbar_ui){
+				getTemplate("tickets-toolbar-container", {isSingleRowView: isSingleRowView}, undefined, function(toolbar_ui){
 
 					if(!toolbar_ui)
 			  			return;
@@ -54,14 +57,17 @@ var Tickets = {
 	//Fetches new ticket collection
 	fetchTicketsCollection: function(){
 
+		var isSingleRowView = (CURRENT_DOMAIN_USER.helpdesk_view && CURRENT_DOMAIN_USER.helpdesk_view == 'double_row')
+								 ? false : true;
+
 		App_Ticket_Module.ticketsCollection = new Base_Collection_View({
 			url : '/core/api/tickets/filter?filter_id=' + Ticket_Filter_ID,
 			global_sort_key: Sort_Field,
 			sort_collection: false,
-			templateKey : 'ticket',
+			templateKey : isSingleRowView ? 'ticket-single-row' : 'ticket',
 			customLoader: true,
 			customLoaderTemplate: 'ticket-notes-loader',
-			individual_tag_name : 'div',
+			individual_tag_name : isSingleRowView ? 'tr' : 'div',
 			cursor : true,
 			page_size : 20,
 			slateKey : 'no-tickets',
@@ -198,101 +204,7 @@ var Tickets = {
 			App_Ticket_Module.ticketsByFilter(Ticket_Filter_ID);
 		});
 	},
-
-	changeStatus: function(event){
-
-		var ticketModel = App_Ticket_Module.ticketView.model.toJSON();
-		
-
-		getTemplate("ticket-status",  {status: ticketModel.status}, undefined, function(template_ui){
-
-			if(!template_ui)
-			  	return;
-
-			$('#ticket-status-list').html($(template_ui));	
-
-			$('.ticket_status').hide();
-
-			var $dropdown = $('#change-ticket-status-ul');
-			$dropdown.find('a.dropdown-toggle').removeClass('disabled');
-			$dropdown.show();
-
-	        Tickets.initChangeStatusEvent();
-
-		}, '#ticket-status-list');
-	},
-
-	initChangeStatusEvent: function(){
-
-		$('ul#ticket-status-list').on('click', '.change-ticket-status-li', function(e){
-		
-			$('#change-ticket-status-ul').find('a.dropdown-toggle').addClass('disabled');
-			var ticketModel = App_Ticket_Module.ticketView.model.toJSON();
-
-			var new_ticket_status = $(this).attr('data-value');
-
-			var newTicketModel = new BaseModel();
-			newTicketModel.url = "/core/api/tickets/change-status?id=" + Current_Ticket_ID + "&status=" + new_ticket_status;
-			newTicketModel.save(ticketModel, {
-				
-					success: function(model){
-
-					$('#change-ticket-status-ul').hide();
-					$('.ticket_status').html(new_ticket_status).show();
-
-					 App_Ticket_Module.ticketView.model.set(model, {silent: true});
-				}
-			});
-   		});
-	},
-	changeGroup: function(event){
-
-		var optionsTemplate = "<li><a class='change-ticket-group-li' data-id='{{id}}'>{{group_name}}</a></li>";
-
-		fillSelect('ticket-groups-list','/core/api/tickets/groups', null,  function(){
-
-	        	$('.ticket_group_name').hide();
-	        	$('#change-ticket-group-ul').show();
-
-	        	Tickets.initChangeGroupEvent();
-	      
-	    	}, optionsTemplate, true); 
-	},
-
-	initChangeGroupEvent: function(){
-
-		$('ul#ticket-groups-list').on('click', '.change-ticket-group-li', function(e){
-		
-			$('#change-ticket-group-ul').hide();
-			
-			// Reads the owner id from the selected option
-			var new_group_id = $(this).attr('data-id');
-			var new_group_name = $(this).text();
-			
-			// Returns, if same owner is selected again 
-			if(new_group_id == Group_ID)
-			{
-				$('.ticket_group_name').show();
-				return;
-			}
-			
-			var ticketModel = App_Ticket_Module.ticketView.model.toJSON();
-
-			var newTicketModel = new BaseModel();
-			newTicketModel.url = "/core/api/tickets/change-group?id=" + Current_Ticket_ID + "&group_id=" + new_group_id;
-			newTicketModel.save(ticketModel, {
-				
-					success: function(model){
-
-					$('.ticket_group_name').html(new_group_name);
-					$('td#group-id').attr('data-id', new_group_id);
-					$('.ticket_group_name').show();
-
-					 App_Ticket_Module.ticketView.model.set(model, {silent: true});
-				}
-			});
-   		});
-	},
+	
 	changeAssignee: function(event){
 
 		var groupsAssignees = Backbone.Model.extend({urlRoot : '/core/api/tickets/groups'});
@@ -300,146 +212,164 @@ var Tickets = {
 		
 			$('.ticket_assignee_name').css('display', 'none');
 
-			var $dropdown = $('#change-ticket-assignee-ul');
-			$dropdown.find('a.dropdown-toggle').removeClass('disabled');
-        	$dropdown.css('display', 'inline-block');
-      		
       		var html = getTemplate('ticket-change-assignee', model.toJSON());
-      		$('#ticket-assignee-list').html(html);
 
-      		Tickets.initChangeAssigneeEvent();
+      		var $select = $('#ticket-assignee-list');
+      		$select.closest('div').show();
+      		$select.html(html);
+
+      		head.js('/lib/chosen.jquery.min.js', function()
+			{
+				//Initliazing multi select drop down
+				$select.chosen();
+
+				$select.off('change');
+				$select.on('change', function(evt, params) {
+				   
+				   console.log(evt);
+				   console.log(params);
+
+				   Tickets.initChangeAssigneeEvent(evt, params);
+				});
+			});
+
 		}, error: function(){
 
 		}});
 	},
 
-	initChangeAssigneeEvent: function(){
+	initChangeAssigneeEvent: function(evt, params){
 
-		$('ul#ticket-assignee-list').on('click', '.change-ticket-assignee-li', function(e){
-			
-			$('#change-ticket-assignee-ul').find('a.dropdown-toggle').addClass('disabled');
+		var assignee_id = params.selected;
+		var $selected_option = $('select#ticket-assignee-list').find('option:selected');
 
-			var ticketModel = App_Ticket_Module.ticketView.model.toJSON();
+		var assignee_name = $selected_option.text();
+		var group_id = $selected_option.data('group-id');
+		var group_name = $selected_option.data('group-name');
 
-			// Reads the owner id from the selected option
-			var assignee_id = $(this).data('assignee-id');
-			var assignee_name = $(this).text();
-			var group_id = $(this).data('group-id');
-			var group_name = $(this).data('group-name');
-			
-			// Returns, if same owner is selected again 
-			if(assignee_id == ticketModel.assigneeID && group_id == ticketModel.groupID)
-			{	
-				$('#change-ticket-assignee-ul').hide();
+		var ticketModel = App_Ticket_Module.ticketView.model.toJSON();
+
+		// Returns, if same owner is selected again 
+		if(assignee_id == ticketModel.assigneeID && group_id == ticketModel.groupID)
+		{	
+			$('#ticket-assignee-list').closest('div').hide();
+			$('.ticket_assignee_name').show();
+			return;
+		}
+
+		//Disable select box while updating
+		$('select#ticket-assignee-list').attr('disabled', true);
+
+		//Re-initalize to disable select box
+		$('#ticket-assignee-list').trigger('chosen:updated');
+
+		var newTicketModel = new BaseModel();
+		newTicketModel.url = "/core/api/tickets/assign-ticket?ticket_id=" + Current_Ticket_ID + "&assignee_id=" + assignee_id + 
+		                     '&group_id=' + group_id;
+		newTicketModel.save(ticketModel, 
+			{	success: function(model){
+
+				//Enable select box
+				$('select#ticket-assignee-list').attr('disabled', false);
+
+				//Re-initalize to disable select box
+				$('#ticket-assignee-list').trigger('chosen:updated');
+
+				//Set new assignee details on view
+				$('#assignee_name').html(assignee_name).attr('data-id', assignee_id);
+
+				//Set new assignee details on view
+				$('#group_name').html(group_name).attr('data-id', group_id);
+
+				//Hide select dropdown
+				$('#ticket-assignee-list').closest('div').hide();
+
+				//Show new group name and assignee name
 				$('.ticket_assignee_name').show();
-				return;
-			}
-			
-			var newTicketModel = new BaseModel();
-			newTicketModel.url = "/core/api/tickets/assign-ticket?ticket_id=" + Current_Ticket_ID + "&assignee_id=" + assignee_id + 
-			                     '&group_id=' + group_id;
-			newTicketModel.save(ticketModel, 
-				{success: function(model){
 
-					$('#change-ticket-assignee-ul').hide();
-
-					//Set new assignee details on view
-					$('.ticket_assignee_name').html(assignee_name);
-					$('td#assignee-id').attr('data-id', assignee_id);
-					$('.ticket_assignee_name').show();
-
-					//Set new assignee details on view
-					$('.ticket_group_name').html(group_name);
-					$('td#group-id').attr('data-id', group_id);
-
-					 App_Ticket_Module.ticketView.model.set(model, {silent: true});
-				}}
-			);
-   		});
+				App_Ticket_Module.ticketView.model.set(model, {silent: true});
+			}}
+		);
 	},
 
 	changeTicketType: function(event){
 
-		$('.ticket_type').css('display', 'none');
+		var $select = $('.ticket_type');
+		var new_ticket_type = $select.find('option:selected').val();
+		var url = "/core/api/tickets/change-ticket-type?id=" + Current_Ticket_ID + "&type=" + new_ticket_type;
+		$select.attr('disabled', true);
 
-		var $dropdown = $('#change-ticket-type-ul');
-		$dropdown.find('a.dropdown-toggle').removeClass('disabled');
-		$dropdown.css('display', 'inline-block');
-
-	    Tickets.initChangeTicketTypeEvent();
-	},
-
-	initChangeTicketTypeEvent: function(){
-
-		$('ul#ticket-type-list').on('click', '.change-ticket-type-li', function(e){
-			
-			$('#change-ticket-type-ul').find('a.dropdown-toggle').addClass('disabled');
-			
-			var ticketModel = App_Ticket_Module.ticketView.model.toJSON();
-
-			var new_ticket_type = $(this).attr('data-value');
-			
-			if(new_ticket_type == ticketModel.type)
-			{
-				$('.ticket_type').show();
-				return;
-			}
-			
-			var newTicketModel = new BaseModel();
-			newTicketModel.url = "/core/api/tickets/change-ticket-type?id=" + Current_Ticket_ID + "&type=" + new_ticket_type;
-			newTicketModel.save(ticketModel, 
-				{success: function(model){
-
-					$('#change-ticket-type-ul').hide();
-					$('.ticket_type').html(new_ticket_type);
-					$('.ticket_type').show();
-
-					 App_Ticket_Module.ticketView.model.set(model, {silent: true});
-				}}
-			);
-   		});
+		this.updateModel(url, function(){
+			$select.attr('disabled', false);
+		}, function(){
+			$select.attr('disabled', false);
+		});
 	},
 
 	changeTicketPriority: function(event){
 
-		$('.ticket_priority').css('display', 'none');
+		var $priority = $('.ticket_priority');
+		var new_priority = $priority.find('option:selected').val();
+		var url = "/core/api/tickets/change-priority?id=" + Current_Ticket_ID + "&priority=" + new_priority;
+		$priority.attr('disabled', true);
 
-		var $dropdown = $('#change-ticket-priority-ul');
-		$dropdown.find('a.dropdown-toggle').removeClass('disabled');
-		$dropdown.css('display', 'inline-block');
-
-	    Tickets.initChangeTicketPriorityEvent();
+		this.updateModel(url, function(){
+			$priority.attr('disabled', false);
+		}, function(){
+			$priority.attr('disabled', false);
+		});
 	},
 
-	initChangeTicketPriorityEvent: function(){
+	initDateTimePicker: function(el){
 
-		$('ul#ticket-priority-list').on('click', '.change-ticket-priority-li', function(e){
+		head.js('/lib/web-calendar-event/moment.min.js','/lib/bootstrap-datetimepicker.min.js', function()
+		{	
+			var $input = $('#datetimepicker', el);
 			
-			$('#change-ticket-priority-ul').find('a.dropdown-toggle').addClass('disabled');
-			
-			var ticketModel = App_Ticket_Module.ticketView.model.toJSON();
+			// Enable the datepicker
+			$input.datetimepicker({sideBySide: true});
+				
+			$input.off("dp.hide");
+			$input.on("dp.hide", function (e) {
+	            
+	            $input.attr('disabled', true);
 
-			var new_priority = $(this).attr('data-value');
-			
-			if(new_priority == ticketModel.priority)
+	            var slaEpoch = new Date($input.val()).getTime();
+
+	            var url = "/core/api/tickets/change-due-date?id=" + Current_Ticket_ID + "&due_time=" + slaEpoch;
+
+	            Tickets.updateModel(url, function(model){
+
+					$input.attr('disabled', false).hide();
+
+					var updatedDueDate = new Date(slaEpoch).format('mmm dd, yyyy HH:MM')
+
+					showNotyPopUp('information', 'Due date has been updated to ' + updatedDueDate, 'bottomRight', 3000);
+
+					//Change sla text
+				}, function(){
+					$input.attr('disabled', false);
+				});
+	        });
+		});
+	},
+
+	updateModel: function(url, success_cbk, err_cbk){
+		var newTicketModel = new BaseModel();
+		newTicketModel.url = url;
+		
+		newTicketModel.save(App_Ticket_Module.ticketView.model.toJSON(), 
 			{
-				$('.ticket_priority').show();
-				return;
-			}
-			
-			var newTicketModel = new BaseModel();
-			newTicketModel.url = "/core/api/tickets/change-priority?id=" + Current_Ticket_ID + "&priority=" + new_priority;
-			newTicketModel.save(ticketModel, 
-				{success: function(model){
+				success: function(model){
+				App_Ticket_Module.ticketView.model.set(model, {silent: true});
 
-					$('#change-ticket-priority-ul').hide();
-					$('.ticket_priority').html(new_priority);
-					$('.ticket_priority').show();
-
-					App_Ticket_Module.ticketView.model.set(model, {silent: true});
-				}}
-			);
-   		});
+				if(success_cbk)
+					success_cbk(model);
+			}, error: function(){
+				if(err_cbk)
+					err_cbk(model);
+			}}
+		);
 	},
 
 	toEmails: function(){
@@ -529,6 +459,10 @@ var Tickets = {
 	},
 
 	next_prev_ticket_exists: function(action_type){
+
+		if(!App_Ticket_Module.ticketsCollection || !App_Ticket_Module.ticketsCollection.collection)
+			return false;
+		
 		var ticket_collection = App_Ticket_Module.ticketsCollection.collection;
 		var current_ticket_index = ticket_collection.indexOf(ticket_collection.get(Current_Ticket_ID));
 

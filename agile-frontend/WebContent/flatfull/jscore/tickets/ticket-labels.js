@@ -1,59 +1,117 @@
 
 var Ticket_Labels = {
 
-	initEvents: function(el){
+	labelsCollection : new Object(),
 
-		/**
-		 * Initializing click event on add label btn
-		 */
-		$(el).on('click', "a#add-new-label, a.close-new-label", function(e){
-			e.preventDefault();
-			
-			$('#add-label-btn').toggle();
-			$('#new-label-form').toggle();
-			$('input', el).focus();
-		});
+	initChoosenSelect: function(){
 
-		/**
-		 * Initializing click event on save btn and enter event in input field
-		 */
-		$(el).on('click', "input.add-new-label, a.add-new-label", function(e){
-			e.preventDefault();
-			
+		head.js('/lib/chosen.jquery.min.js', function()
+		{	
+			var $select = $(".chosen-select");
 
+			//Initliazing multi select drop down
+			$select.chosen();
+
+			$select.off('change');
+			$select.on('change', function(evt, params) {
+			   
+				if(params && params.deselected){
+			   		Ticket_Labels.updateLabel(params.deselected, 'remove');
+			   		return;
+			   	}
+
+			   	Ticket_Labels.updateLabel(params.selected, 'add');
+			});
 		});
 	},
 
-	appendLabelManagement: function(base_model){
+	fetchCollection: function(callback){
 
-		var itemView = new Ticket_Base_Model({
-			model : base_model,
-			"view" : "inline",
-			template : this.options.templateKey + "-model",
-			tagName : 'li',
+		var Labels = Backbone.Collection.extend({
+		  url: '/core/api/tickets/labels'
 		});
 
-		console.log(itemView);
+		new Labels().fetch({success: function(collection){
 
-		var key = base_model.get('label').charAt(0).toUpperCase();
-		console.log($('div[tag-alphabet="' + encodeURI(key) + '"]', this.el))
+			console.log('Label collection length: ' + collection.length);
+			Ticket_Labels.labelsCollection = collection;
 
-		var el = itemView.render().el;
-		$(el).addClass('tag bg-white');
-		
-		var tag_name = base_model.get('label');
-		if(!isValidTag(tag_name, false)) {
-			$(el).addClass('error');
+			if(callback)
+				callback(collection);
+		}});
+	},
+
+	showSelectedLabels: function(labels){
+
+		if(!this.labelsCollection || $.isEmptyObject(this.labelsCollection)){
+			this.fetchCollection(function(){
+				Ticket_Labels.prepareOptionsList(labels);
+			});
+
+			return;
 		}
 
-		var element = $('div[tag-alphabet="' + encodeURI(key) + '"] ul', this.el);
-		console.log(element.length);
-		if (element.length > 0)
-			$('div[tag-alphabet="' + encodeURI(key) + '"] ul', this.el).append(
-					$(el));
-		else {
-			$(this.model_list_element).append("<div class='clearfix'></div>")
-					.append($(el));
+		this.prepareOptionsList(labels);	
+	},
+
+	prepareOptionsList: function(labels){
+
+		if(!this.labelsCollection)
+			return;
+
+		var optionList = '';
+
+		var labelsJSON = this.labelsCollection.toJSON();
+
+		for(var i =0; i< labelsJSON.length; i++){
+
+			var selected = '';
+
+			for(var j=0; j< labels.length; j++){
+
+				if(labels[j].label == labelsJSON[i].label){
+					selected =  'selected';
+					break;
+				}	
+			}
+
+			//var isLabelSelected = labels.
+			optionList += "<option value='"+ labelsJSON[i].label + "' " + selected + ">" + labelsJSON[i].label + "</option>";
 		}
+
+		$(".chosen-select").html(optionList);
+
+		//Initializing type ahead for tags
+		this.initChoosenSelect();
+	},
+
+	updateLabel: function(label, command, callback){
+
+		if(!label || !Current_Ticket_ID){
+			if(callback)
+				callback();
+
+			return;	
+		}
+				
+		var ticketModel = App_Ticket_Module.ticketView.model.toJSON();
+
+		if(ticketModel.labels)
+			ticketModel.labels.push(label);
+		else
+			ticketModel.labels = new Array(label);
+
+		var newTicketModel = new BaseModel();
+		newTicketModel.url = "/core/api/tickets/update-labels?command="+ command +"&label=" + label + '&id=' + Current_Ticket_ID;
+		newTicketModel.save(ticketModel, 
+			{
+				success: function(model){
+
+				 App_Ticket_Module.ticketView.model.set(model, {silent: true});
+
+				if(callback)
+					callback();
+			}
+		});
 	}
 };

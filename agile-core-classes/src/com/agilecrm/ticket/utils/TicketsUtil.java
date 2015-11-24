@@ -19,6 +19,7 @@ import com.agilecrm.search.document.TicketsDocument;
 import com.agilecrm.ticket.entitys.TicketActivity;
 import com.agilecrm.ticket.entitys.TicketActivity.TicketActivityType;
 import com.agilecrm.ticket.entitys.TicketGroups;
+import com.agilecrm.ticket.entitys.TicketLabels;
 import com.agilecrm.ticket.entitys.Tickets;
 import com.agilecrm.ticket.entitys.Tickets.LAST_UPDATED_BY;
 import com.agilecrm.ticket.entitys.Tickets.Priority;
@@ -483,41 +484,42 @@ public class TicketsUtil
 	 * @return
 	 * @throws EntityNotFoundException
 	 */
-	public static Tickets updateTags(Long ticket_id, Tag tag, String command) throws EntityNotFoundException
+	public static Tickets updateLabels(Long ticket_id, TicketLabels label, String command)
+			throws EntityNotFoundException
 	{
 		Tickets ticket = TicketsUtil.getTicketByID(ticket_id);
 
-		List<Tag> tags = ticket.tags;
+		List<TicketLabels> labels = ticket.labels;
 
 		TicketActivityType ticketActivityType = null;
 
 		if ("add".equalsIgnoreCase(command))
 		{
-			tags.add(tag);
-			ticketActivityType = TicketActivityType.TICKET_TAG_ADD;
+			labels.add(label);
+			ticketActivityType = TicketActivityType.TICKET_LABEL_ADD;
 		}
 		else
 		{
-			tags.remove(tag);
-			ticketActivityType = TicketActivityType.TICKET_TAG_REMOVE;
+			labels.remove(label);
+			ticketActivityType = TicketActivityType.TICKET_LABEL_REMOVE;
 		}
 
-		ticket.tags = tags;
+		ticket.labels = labels;
 		Tickets.ticketsDao.put(ticket);
 
 		new TicketsDocument().edit(ticket);
 
 		// Logging activity
-		new TicketActivity(ticketActivityType, ticket.contactID, ticket.id, "", tag.tag, "tags").save();
+		new TicketActivity(ticketActivityType, ticket.contactID, ticket.id, "", label.label, "labels").save();
 
 		return ticket;
 	}
 
-	public static void updateTags(String ticketId, String[] tagsArray, String type) throws Exception
+	public static void updateLabels(String ticketId, String[] labelsArray, String type) throws Exception
 	{
-		for (String tag : tagsArray)
+		for (String label : labelsArray)
 		{
-			TicketsUtil.updateTags(Long.parseLong(ticketId), new Tag(tag), type.toLowerCase());
+			TicketsUtil.updateLabels(Long.parseLong(ticketId), new TicketLabels(label), type.toLowerCase());
 		}
 
 	}
@@ -528,24 +530,24 @@ public class TicketsUtil
 	 * @param ticketId
 	 * @param newTags
 	 */
-	public static void addTagsList(Long ticketId, List<Tag> newTags)
+	public static void addTagsList(Long ticketId, List<TicketLabels> newLabels)
 	{
 		try
 		{
 			Tickets ticket = TicketsUtil.getTicketByID(ticketId);
 
-			List<Tag> tags = ticket.tags;
+			List<TicketLabels> labels = ticket.labels;
 
-			for (Tag newTag : newTags)
+			for (TicketLabels label : newLabels)
 			{
-				if (tags.contains(newTag))
+				if (labels.contains(label))
 					continue;
 
-				tags.add(newTag);
+				labels.add(label);
 
 				// Logging activity
-				new TicketActivity(TicketActivityType.TICKET_TAG_ADD, ticket.contactID, ticket.id, "", newTag.tag,
-						"tags").save();
+				new TicketActivity(TicketActivityType.TICKET_LABEL_ADD, ticket.contactID, ticket.id, "", label.label,
+						"labels").save();
 			}
 
 			Tickets.ticketsDao.put(ticket);
@@ -751,6 +753,28 @@ public class TicketsUtil
 				new TicketActivity(TicketActivityType.TICKET_ASSIGNEE_CHANGED, ticket.contactID, ticket.id,
 						oldAssigneeID + "", assignee_id + "", "assigneeID").save();
 		}
+
+		return ticket;
+	}
+
+	public static Tickets changeDueDate(long ticketID, long dueDate) throws EntityNotFoundException
+	{
+		// Fetching ticket object by its id
+		Tickets ticket = TicketsUtil.getTicketByID(ticketID);
+
+		long oldDueDate = (ticket.due_time != null) ? ticket.due_time : 0l;
+
+		ticket.due_time = dueDate;
+
+		// Updating ticket entity
+		Tickets.ticketsDao.put(ticket);
+
+		// Updating search document
+		new TicketsDocument().edit(ticket);
+
+		// Logging ticket assignee changed activity
+		new TicketActivity(TicketActivityType.DUE_DATE_CHANGED, ticket.contactID, ticket.id, oldDueDate + "", dueDate
+				+ "", "due_date").save();
 
 		return ticket;
 	}

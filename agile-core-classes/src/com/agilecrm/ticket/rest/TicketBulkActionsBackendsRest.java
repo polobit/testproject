@@ -2,7 +2,6 @@ package com.agilecrm.ticket.rest;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import javax.ws.rs.FormParam;
 import javax.ws.rs.POST;
@@ -13,8 +12,6 @@ import javax.ws.rs.core.MediaType;
 
 import org.json.JSONObject;
 
-import com.agilecrm.AgileQueues;
-import com.agilecrm.contact.Tag;
 import com.agilecrm.contact.util.BulkActionUtil;
 import com.agilecrm.contact.util.bulk.BulkActionNotifications;
 import com.agilecrm.ticket.deferred.ChangeAssigneeDeferredTask;
@@ -23,17 +20,15 @@ import com.agilecrm.ticket.deferred.DeleteTicketsDeferredTask;
 import com.agilecrm.ticket.deferred.ExecuteWorkflowDeferredTask;
 import com.agilecrm.ticket.deferred.ManageLabelsDeferredTask;
 import com.agilecrm.ticket.entitys.TicketActivity;
-import com.agilecrm.ticket.entitys.Tickets;
 import com.agilecrm.ticket.entitys.TicketActivity.TicketActivityType;
+import com.agilecrm.ticket.entitys.TicketLabels;
 import com.agilecrm.ticket.utils.CSVTicketIdsFetcher;
-import com.agilecrm.ticket.utils.ITicketIdsFetcher;
 import com.agilecrm.ticket.utils.FilterTicketIdsFetcher;
+import com.agilecrm.ticket.utils.ITicketIdsFetcher;
 import com.agilecrm.ticket.utils.TicketBulkActionUtil;
 import com.google.appengine.api.NamespaceManager;
-import com.google.appengine.api.taskqueue.Queue;
-import com.google.appengine.api.taskqueue.QueueFactory;
-import com.google.appengine.api.taskqueue.TaskOptions;
-import com.googlecode.objectify.Key;
+
+import edu.emory.mathcs.backport.java.util.Arrays;
 
 /**
  * 
@@ -59,18 +54,18 @@ public class TicketBulkActionsBackendsRest
 			JSONObject dataJSON = new JSONObject(dataString);
 			System.out.println("dataJSON: " + dataJSON);
 
-			String[] tagsArray = dataJSON.getString("tags").split(",");
+			String[] labelsArray = dataJSON.getString("tags").split(",");
 
-			List<Tag> tags = new ArrayList<Tag>();
+			List<TicketLabels> labels = new ArrayList<TicketLabels>();
 
-			for (String tagString : tagsArray)
-				tags.add(new Tag(tagString));
+			for (String labelString : labelsArray)
+				labels.add(new TicketLabels(labelString));
 
 			BulkActionUtil.setSessionManager(domainUserID);
 
 			// Logging bulk action activity
-			new TicketActivity(TicketActivityType.BULK_ACTION_MANAGE_LABELS, null, null, "", tags.toString(), "tags")
-					.save();
+			new TicketActivity(TicketActivityType.BULK_ACTION_MANAGE_LABELS, null, null, "",
+					Arrays.toString(labelsArray), "labels").save();
 
 			ITicketIdsFetcher idsFetcher = null;
 
@@ -79,7 +74,7 @@ public class TicketBulkActionsBackendsRest
 			else if (ticketIds != null)
 				idsFetcher = new CSVTicketIdsFetcher(ticketIds);
 
-			ManageLabelsDeferredTask task = new ManageLabelsDeferredTask(tags, dataJSON.getString("command"),
+			ManageLabelsDeferredTask task = new ManageLabelsDeferredTask(labels, dataJSON.getString("command"),
 					NamespaceManager.get(), domainUserID);
 
 			TicketBulkActionUtil.executeBulkAction(idsFetcher, task);

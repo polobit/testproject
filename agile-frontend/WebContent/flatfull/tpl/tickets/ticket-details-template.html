@@ -6,45 +6,10 @@
       <div class="vbox">
         <div class="row-row">
           <div class="wrapper contactView p-t-sm" style="width:299px;">
-            <div class="pos-rlt w-full">
-              <div class="contact-navigation-view">
-                {{#ticket_collection_exists}}
-                  <span class="navigation  contact-switching">
-                    {{#next_prev_ticket_exists 'previous'}}
-                      <a onclick="clearContactWidetQueues({{contactID}})" href="{{#is_filtered_ticket}}
-                        #tickets/filter/{{#get_ticket_filter_id}}{{/get_ticket_filter_id}}/ticket/{{#next_prev_ticket_exists 'previous'}}{{get_ticket_id 'previous'}}{{/next_prev_ticket_exists}}
-                        {{else}}
-                          #tickets/group/{{groupID}}/{{toLowerCase status}}/{{#next_prev_ticket_exists 'previous'}}{{get_ticket_id 'previous'}}{{/next_prev_ticket_exists}}
-                        {{/is_filtered_ticket}}">
-                        <i class="icon icon-chevron-left"></i>
-                      </a>
-                    {{/next_prev_ticket_exists}}
-                    {{#next_prev_ticket_exists 'next'}}
-                      <a class="pull-right" onclick="clearContactWidetQueues({{contactID}})" href="{{#is_filtered_ticket}}
-                        #tickets/filter/{{#get_ticket_filter_id}}{{/get_ticket_filter_id}}/ticket/{{#next_prev_ticket_exists 'next'}}{{get_ticket_id 'next'}}{{/next_prev_ticket_exists}}
-                        {{else}}
-                          #tickets/group/{{groupID}}/{{toLowerCase status}}/{{#next_prev_ticket_exists 'next'}}{{get_ticket_id 'next'}}{{/next_prev_ticket_exists}}
-                        {{/is_filtered_ticket}}">
-                        <i class="icon icon-chevron-right"></i>
-                      </a>
-                    {{/next_prev_ticket_exists}}  
-                  </span>
-                {{/ticket_collection_exists}}
-              </div>  
-              <div class="clearfix"></div>
-            </div>
-            <!-- <div class="text-center pos-rlt">
-              <div class="thumb-lg">
-                <img class="imgholder submit w-full img-circle" src="{{emailGravatarurl 50 requester_email}}">
-              </div>
-              <div class="w-full m-t-xs h3 font-thin custom-color" style="padding-bottom:1px;width:95%;">
-                  {{requester_name}} 
-              </div>
-            </div> -->
-            <div class="panel panel-default m-t-md">
+            <div class="panel panel-default m-t-sm">
               <div class="panel-body">
                 <div class="row m-n">
-                  <div class="col-md-12 p-n">Ticket Info</i>
+                  <div class="col-md-12 p-n">Contact Info</i>
                     <hr class="m-t-sm m-b-sm">
                   </div>
                   <div class="col-md-12 p-n">
@@ -71,11 +36,23 @@
                 </div>
               </div>
             </div>
+            <!-- <div class="text-center pos-rlt">
+              <div class="thumb-lg">
+                <img class="imgholder submit w-full img-circle" src="{{emailGravatarurl 50 requester_email}}">
+              </div>
+              <div class="w-full m-t-xs h3 font-thin custom-color" style="padding-bottom:1px;width:95%;">
+                  {{requester_name}} 
+              </div>
+            </div> -->
             <div class="panel panel-default m-t-md">
-              <div class="panel-body">
+              <div class="panel-body sla-due-date">
                 <span class="text-md first-letter-cap inline-block">{{status}}</span>
-                <div class="m-t-xs txt-small"><i class="fa fa-clock-o"></i> Due in next 5 days &nbsp; 
-                  <a href="javascript:void(0);" class="link-color">Change</a>
+                <div class="m-t-xs txt-small"><i class="fa fa-clock-o"></i> 
+                  <span class="sla-text">Due in next 5 days &nbsp;</span>
+                  <a id="change-sla" href="javascript:void(0);" class="link-color">Change</a>
+                  <div class="m-t-sm">
+                    <input type="text" class="form-control display-none" id="datetimepicker" placeholder="Select date" value="{{#if due_time}}{{epochToHumanDate "mmm dd yyyy HH:MM" due_time}}{{/if}}"/>
+                  </div>  
                 </div>
               </div>
             </div>
@@ -86,28 +63,41 @@
                   <div class="col-md-12 assignee_name ticket_assignee_name ticket-details-value hover-edit text-xs m-t-xs p-xs b-a" style="border-radius: 2px;">
                     <i class="fa fa-user"></i>&nbsp;
                     {{#if assigneeID}}
-                      <span class="first-letter-cap inline-block">{{group.group_name}}</span>/
-                      <span class="first-letter-cap inline-block">{{assignee.name}} </span>
+                      <span id="group_name" class="first-letter-cap inline-block">{{group.group_name}}</span>/
+                      <span id="assignee_name" class="first-letter-cap inline-block">{{assignee.name}}</span>
                       <i class="icon-edit m-t-xs m-l-xs hide"></i>
-                    {{else}}-{{/if}}
+                    {{else}}
+                      <span id="group_name" class="first-letter-cap inline-block">-</span>
+                      <span id="assignee_name" class="first-letter-cap inline-block"></span>
+                      <i class="icon-edit m-t-xs m-l-xs hide"></i>
+                    {{/if}}
+                  </div>
+                  <div class="col-md-12 select-assignee display-none p-n">
+                      <select id="ticket-assignee-list" class="w-full">
+                        
+                      </select>
                   </div>
                 </div>
                 <div class="row m-l-n m-r-n m-t-sm text-sm">
                   <div class="col-md-6 p-l-n">
                     Type<br>
-                    <select class="form-control text-xs" style="height: 28px;padding: 3px 6px;">
-                      <option value="QUESTION">Question</option>
-                      <option value="TASK">Task</option>
-                      <option value="INCIDENT">Incident</option>
-                      <option value="PROBLEM">Problem</option>
+                    <select id="type" name="type" class="form-control text-xs ticket_type" style="height: 28px;padding: 3px 6px;">
+                      <option value="QUESTION" {{#if_equals type "QUESTION"}}selected{{/if_equals}}>
+                        Question
+                      </option>
+                      <option value="TASK" {{#if_equals type "TASK"}}selected{{/if_equals}}>Task</option>
+                      <option value="INCIDENT" {{#if_equals type "INCIDENT"}}selected{{/if_equals}}>
+                        Incident
+                      </option>
+                      <option value="PROBLEM" {{#if_equals type "PROBLEM"}}selected{{/if_equals}}>Problem</option>
                     </select>
                   </div>
                   <div class="col-md-6 p-r-n">
                     Priority<br>
-                    <select class="form-control text-xs" style="height: 28px;padding: 3px 6px;">
-                      <option value="LOW">Low</option>
-                      <option value="MEDIUM">Medium</option>
-                      <option value="HIGH">High</option>
+                    <select name="priority" class="form-control text-xs ticket_priority" style="height: 28px;padding: 3px 6px;">
+                      <option value="LOW" {{#if_equals priority "LOW"}}selected{{/if_equals}}>Low</option>
+                      <option value="MEDIUM" {{#if_equals priority "MEDIUM"}}selected{{/if_equals}}>Medium</option>
+                      <option value="HIGH" {{#if_equals priority "HIGH"}}selected{{/if_equals}}>High</option>
                     </select>
                   </div>
                 </div>
@@ -118,12 +108,9 @@
               <div class="panel-body">
                 <div class="row m-n">
                   <div class="col-md-12 p-n">Labels<hr class="m-t-xs m-b-xs"></div>
-                  <div class="col-md-12 p-n">
-                    <a href="javascript:void(0);" id="show-tags-field" rel="tooltip" data-original-title="addtag" 
-                      data-placement="top" class="p-t-sm p-b-sm text-xs text-muted show-tags-field">
-                      <i class="fa fa-plus-square"></i>
-                      <span>Add Label</span>
-                    </a>
+                  <div class="col-md-12 p-n m-t-xs">
+                    <select data-placeholder="Labels" class="chosen-select form-control" multiple class="w-md">
+                    </select>
                   </div>
                 </div>
               </div>
@@ -198,7 +185,7 @@
           <!-- End of ticket toolbar -->
 
           <!-- Start of ticket notes -->
-          <div class="wrapper bg-light p-t-sm p-b-sm">
+          <div class="wrapper bg-light p-t-sm p-b-sm pos-rlt">
             <h2 class="font-thin m-t-none m-b-none inline-block">
               {{subject}}
             </h2>
@@ -209,6 +196,23 @@
               <span class="label {{toLowerCase priority}}-priority-bg text-tiny first-letter-cap inline-block">
                 {{priority}}
               </span>
+            </div>
+            <div class="ticket-number">
+              <small class="text-muted"># {{short_id}}</small>
+            </div>  
+            <div class="pos-abs" style="right: 15px; top: 10px;">
+              <div class="btn-group">
+                <a onclick="clearContactWidetQueues({{contactID}})" href="{{#is_filtered_ticket}}
+                  #tickets/filter/{{#get_ticket_filter_id}}{{/get_ticket_filter_id}}/ticket/{{#next_prev_ticket_exists 'previous'}}{{get_ticket_id 'previous'}}{{/next_prev_ticket_exists}}
+                  {{/is_filtered_ticket}}" class="btn btn-default btn-sm {{#next_prev_ticket_exists 'previous'}}{{else}}disabled{{/next_prev_ticket_exists}}" data-toggle="tooltip" data-placement="top" data-original-title="Previous">
+                  <i class="icon icon-chevron-left"></i>
+                </a>
+                <a onclick="clearContactWidetQueues({{contactID}})" href="{{#is_filtered_ticket}}
+                  #tickets/filter/{{#get_ticket_filter_id}}{{/get_ticket_filter_id}}/ticket/{{#next_prev_ticket_exists 'next'}}{{get_ticket_id 'next'}}{{/next_prev_ticket_exists}}
+                  {{/is_filtered_ticket}}" class="btn btn-default btn-sm {{#next_prev_ticket_exists 'next'}}{{else}}disabled{{/next_prev_ticket_exists}}" data-toggle="tooltip" data-placement="top" data-original-title="Next">
+                  <i class="icon icon-chevron-right"></i>
+                </a>
+              </div>
             </div>
           </div>
           <div id="notes-collection-container">
@@ -316,13 +320,10 @@
 </script>
 <script  id="ticket-change-assignee-template" type="text/html">
   {{#each this}}
-    <li class="dropdown-header text-sm b-b">{{group_name}}</li>
+    <optgroup label="{{group_name}}">
       {{#group_users}}
-        <li>
-          <a class="change-ticket-assignee-li" data-group-id="{{../id}}" data-group-name="{{../group_name}}" data-assignee-id="{{id}}">
-             <span class="first-letter-cap inline-block">{{name}}</span>
-          </a>
-        </li>
+        <option data-group-name="{{../group_name}}" data-group-id="{{../id}}" value="{{id}}">{{name}}</option>
       {{/group_users}}
+    </optgroup>
   {{/each}}  
 </script>
