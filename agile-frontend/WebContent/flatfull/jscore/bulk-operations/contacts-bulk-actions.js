@@ -926,7 +926,7 @@ $(function()
 						
 						$('body')
 								.find('#bulk-select')
-								.css('display', 'inline-block')
+								.css('display', 'block')
 								.html(html);
 
 						// On choosing select all option, all the visible
@@ -1032,7 +1032,7 @@ function toggle_contacts_bulk_actions_dropdown(clicked_ele, isBulk, isCampaign)
 					.css('display', 'block')
 					.html(
 							"Selected " + App_Companies.companiesListView.collection.length + " companies. <a id='select-all-available-contacts' class='c-p text-info' href='#'>Select all " + total_available_contacts + " companies</a>");
-			$('#bulk-select').css("display","inline");
+			$('#bulk-select').css("display","block");
 			}
 		} else {
 			if (isBulk && total_available_contacts != App_Contacts.contactsListView.collection.length)
@@ -1042,7 +1042,7 @@ function toggle_contacts_bulk_actions_dropdown(clicked_ele, isBulk, isCampaign)
 					.css('display', 'block')
 					.html(
 							"Selected " + App_Contacts.contactsListView.collection.length + " contacts. <a id='select-all-available-contacts' class='c-p text-info' href='#'>Select all " + total_available_contacts + " contacts</a>");
-			$('#bulk-select').css("display","inline");
+			$('#bulk-select').css("display","block");
 			}
 		}
 

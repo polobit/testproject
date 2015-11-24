@@ -98,7 +98,7 @@ String logo_url = accountPrefs.logo;
 %>
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" style="background:transparent;">
 <head>
 <meta charset="utf-8">
 <meta name="globalsign-domain-verification"
@@ -147,6 +147,12 @@ text-decoration:underline;
 position: fixed;width: 100%;top: 0px;
 }
 
+@media all and (max-width: 767px) {
+	#simple-modal {
+		display: none;
+	}
+}
+
 </style>
 
 <script>
@@ -172,7 +178,7 @@ if(isSafari && isWin)
 <body>
 <div id="openid_btns">
 					   	
-	<div class="app app-header-fixed app-aside-fixed" id="app">
+	<div class="" id="app">
 
 		<div ui-view="" class="fade-in-right-big smooth">
   			<div class="container w-xxl w-auto-xs">

@@ -1018,11 +1018,15 @@ $(function()
 		var el = "";
 		$.each(App_Contacts.contactViewModel[item], function(index, element)
 		{
-			if (element.indexOf("custom_") == 0)
-				element = element.split("custom_")[1];
+			
+			if (element.indexOf("CUSTOM_") == 0) {
+				element = element.split("_")[1];
+				el = el.concat('<th class="text-muted">' + ucfirst(element) + '</th>');
+			}
+			else {
 			element = element.replace("_", " ")
-
 			el = el.concat('<th>' + ucfirst(element) + '</th>');
+			}	
 
 		});
 
@@ -6350,12 +6354,14 @@ $(function()
 		var el = "";
 		$.each(App_Companies.companyViewModel[item], function(index, element)
 		{
-			if (element.indexOf("custom_") == 0)
-				element = element.split("custom_")[1];
+			if (element.indexOf("CUSTOM_") == 0) {
+				element = element.split("_")[1];
+				el = el.concat('<th class="text-muted">' + ucfirst(element) + '</th>');
+			}
+			else {
 			element = element.replace("_", " ")
-
 			el = el.concat('<th>' + ucfirst(element) + '</th>');
-
+			}	
 		});
 
 		return new Handlebars.SafeString(el);
@@ -6626,12 +6632,14 @@ Handlebars.registerHelper('SALES_CALENDAR_URL', function()
 	    	
 			});
 	
-	Handlebars.registerHelper('toggle_contacts_filter', function(options)
+	
+	Handlebars.registerHelper('toggle_companies_filter', function(options)
 			{	        
-		    if(readCookie(CONTACTS_DYNAMIC_FILTER_COOKIE_STATUS)=="hide"){
-		    	return "none";
-	       	}
+		   return  localStorage.getItem('companiesFilterStatus');
+		    
 			});
+
+	
 
 	Handlebars.registerHelper('totalTimeFormat', function(timeInSec)
 			{
@@ -6738,3 +6746,10 @@ Handlebars.registerHelper('SALES_CALENDAR_URL', function()
                return options.inverse(this);
         });
 
+Handlebars.registerHelper('is_mobile', function(options)
+	{
+		if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) )
+		return options.fn(this);
+		else
+		return options.inverse(this);
+	});

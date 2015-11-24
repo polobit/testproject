@@ -80,6 +80,8 @@ else if(!StringUtils.isEmpty(email) && StringUtils.isEmpty(password))
 
 <style>
 
+
+
 body {
 background-image:url('..<%=flatfull_path%>/images/flatfull/buildings-low.jpg');
 background-repeat:no-repeat;
@@ -115,7 +117,18 @@ text-decoration:underline;
 	  color: #3c763d !important;
 }
 
+ 
+@media all and (max-width: 767px) {
+
+body {
+  background-size: cover;
+
+}
+  
+}
+
 <!-- 
+
 @media (min-width: 900px) {
 body {
 	padding-top: 30px;
@@ -131,7 +144,7 @@ body {
 	margin: 8px 0px !important;
 	padding-left: 10px !important;
 }
-	-->
+ -->	
 
 
 </style> 
@@ -210,7 +223,7 @@ jQuery.validator.setDefaults({
 				<!--  <h3><small>Enter Your Email </small></h3>	 -->
 				<div class="list-group list-group-sm">
 					<div class="list-group-item">
-                   	 <input class="input-xlarge field required email form-control no-border" name='email' maxlength="50" minlength="6" type="email" required placeholder="Email" autocapitalize="off">
+                   	 <input class="input-xlarge  required email form-control no-border" name='email' maxlength="50" minlength="6" type="email" required placeholder="Email" autocapitalize="off">
 					</div>
 				</div>	
 					  <input type='submit' value="Submit" class='btn btn-lg btn-primary btn-block forgot_password_btn'>
