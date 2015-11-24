@@ -1737,7 +1737,7 @@ box-shadow: 0 5px 10px 0px #bbb;
  .nav > li > a {
    padding: 10px 20px; 
 }
-.recent-view {
+.recent-view,#recent-menu > ul {
 position: absolute!important;
 width: 100%!Important;
 }
