@@ -32,22 +32,22 @@ var ReportsRouter = Backbone.Router
 					$('#reports-listerners-container').html($(template_ui));
 
 						preloadImages([
-							'flatfull/img/reports_images/Growth_rep.jpg',
-							'flatfull/img/reports_images/ratio_rep.jpg',
-							'flatfull/img/reports_images/funnel_rep.jpg',
-							'flatfull/img/reports_images/campaign_comp.jpg',
-							'flatfull/img/reports_images/call_rep.jpg',
-							'flatfull/img/reports_images/averagecall_rep.jpg',
-							'flatfull/img/reports_images/callreport_rep.jpg',
-							'flatfull/img/reports_images/Incoming_rep.jpg',
-							'flatfull/img/reports_images/lostdeal_rep.jpg',
-							'flatfull/img/reports_images/revenue_rep.jpg',
-							'flatfull/img/reports_images/sales_rep.jpg',
-							'flatfull/img/reports_images/User_rep.jpg',
-							'flatfull/img/reports_images/CallActivity_rep.jpg',
-							'flatfull/img/reports_images/ContactActivities_rep.jpg',
-							'flatfull/img/reports_images/UserActivities_rep.jpg',
-							'flatfull/img/reports_images/campaign_analysis_rep.jpg',
+							'flatfull/img/reports_images/Growth-graph.png',
+							'flatfull/img/reports_images/ratio.png',
+							'flatfull/img/reports_images/funnel-graph.png',
+							'flatfull/img/reports_images/Campaign-stats.png',
+							'flatfull/img/reports_images/Call-By-User.png',
+							'flatfull/img/reports_images/averagecall.png',
+							'flatfull/img/reports_images/user-activities-call.png',
+							'flatfull/img/reports_images/Incoming-Deals.png',
+							'flatfull/img/reports_images/Lost-Deal-Analysis.png',
+							'flatfull/img/reports_images/Revenue.png',
+							'flatfull/img/reports_images/Sales-forecast.png',
+							'flatfull/img/reports_images/User-reports.png',
+							'flatfull/img/reports_images/Call-Outcomes.png',
+							'flatfull/img/reports_images/contact.png',
+							'flatfull/img/reports_images/user-activities.png',
+							'flatfull/img/reports_images/Daily-reports.png',
 							]);
 				initializeReportsListeners();
 				hideTransitionBar();
