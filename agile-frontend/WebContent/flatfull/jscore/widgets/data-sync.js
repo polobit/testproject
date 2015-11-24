@@ -16,6 +16,8 @@ function organize_sync_widgets(base_model)
 		$('#stripe', this.el).append($(itemView.render().el));
 	if (sync_type == "FRESHBOOKS")
 		$('#freshbook', this.el).append($(itemView.render().el));
+	if (sync_type == "OFFICE365")
+		$('#office365', this.el).append($(itemView.render().el));
 	if (sync_type == "SHOPIFY")
 		$('#shopify', this.el).append($(itemView.render().el));
 	if (sync_type == "QUICKBOOK")
@@ -30,6 +32,28 @@ function organize_sync_widgets(base_model)
 single click for all data sync collection events
 */
 function initializeDataSyncListners(){
+
+	// Office calendar delete button.
+	$("#prefs-tabs-content").off("click", "#office-calendar-sync-delete");
+	$("#prefs-tabs-content").on("click", "#office-calendar-sync-delete", function(){
+
+		$.ajax({ type : 'DELETE', 
+			url : 'core/api/officecalendar', 
+			contentType : "application/json; charset=utf-8",
+			success : function(data){
+				 $.getJSON("core/api/officecalendar").success(function(data) { 
+		            console.log(data);  
+		            getTemplate("admin-settings-import-office365-sync-details", data, undefined, function(data_el){
+		                $('#office365').html(data_el);
+		            });      
+		        }).error(function(data) { 
+		            console.log(data);
+		        });
+			} 
+		});   
+
+	});
+	   
 
 
 	$('#prefs-tabs-content #data-sync-type').off();
@@ -64,6 +88,11 @@ function initializeDataSyncListners(){
 		}
 		if(sync_type=="FRESHBOOKS"){
 			Backbone.history.navigate("#sync/freshbooks" , {
+                trigger: true
+            });
+		}
+		if(sync_type=="OFFICE365"){
+			Backbone.history.navigate("#sync/officeCalendar" , {
                 trigger: true
             });
 		}

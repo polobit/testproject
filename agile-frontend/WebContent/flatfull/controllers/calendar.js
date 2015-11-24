@@ -703,3 +703,22 @@ function loadMoreEventsFromGoogle()
 		}
 	}
 }
+
+function loadOfficeEvents(startingDate, endingDate){
+	showLoadingOnCalendar(true);
+	var url = "core/api/officecalendar/office365-appointments?startDate="+ startingDate +"&endDate="+ endingDate;
+	$.getJSON(url, function(response){
+		for (var i=0; i<response.length; i++){			
+			var obj = response[i];
+			//Start Date
+			var startDate = Math.round((new Date(obj.start).getTime()) / 1000);
+			obj.start = startDate;
+			//End Date
+			var endDate = Math.round((new Date(obj.end).getTime()) / 1000);
+			obj.end = endDate;		
+				
+			$('#calendar_event').fullCalendar('renderEvent', obj);
+		}	
+		showLoadingOnCalendar(false);	
+	});	
+}
