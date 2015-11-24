@@ -80,7 +80,7 @@ public class TicketTriggerUtil
 	}
 
 	/**
-	 * Executes when note added by user or customer
+	 * Executes SLA is reached
 	 * 
 	 * @param ticket
 	 * @param noteAddedBy
@@ -92,6 +92,54 @@ public class TicketTriggerUtil
 			return;
 
 		executeTriggerForTicketBasedOnCondition(ticket.getContact(), ticket, Trigger.Type.TICKET_SLA_REACHED);
+
+	}
+
+	/**
+	 * Executes when assignee changed
+	 * 
+	 * @param ticket
+	 * @param noteAddedBy
+	 */
+	public static void executeTriggerForAssigneeChanged(Tickets ticket)
+	{
+		// if null
+		if (ticket == null)
+			return;
+
+		executeTriggerForTicketBasedOnCondition(ticket.getContact(), ticket, Trigger.Type.TICKET_ASSIGNEE_CHANGED);
+
+	}
+
+	/**
+	 * Executes when label added
+	 * 
+	 * @param ticket
+	 * @param noteAddedBy
+	 */
+	public static void executeTriggerForLabelAddedToTicket(Tickets ticket)
+	{
+		// if null
+		if (ticket == null)
+			return;
+
+		executeTriggerForTicketBasedOnCondition(ticket.getContact(), ticket, Trigger.Type.TICKET_LABEL_IS_ADDED);
+
+	}
+
+	/**
+	 * Executes when label added
+	 * 
+	 * @param ticket
+	 * @param noteAddedBy
+	 */
+	public static void executeTriggerForLabelDeletedToTicket(Tickets ticket)
+	{
+		// if null
+		if (ticket == null)
+			return;
+
+		executeTriggerForTicketBasedOnCondition(ticket.getContact(), ticket, Trigger.Type.TICKET_LABEL_IS_DELETED);
 
 	}
 
