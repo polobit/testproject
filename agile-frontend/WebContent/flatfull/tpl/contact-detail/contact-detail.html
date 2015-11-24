@@ -220,8 +220,8 @@
 								<!--  starting score -->
 						<div class="unselectable m-t-n-xs" id="score" unselectable="on" onselectstart="return false">
 							<div  class="text-lg score-view">
-								<img src="../../img/flame.png" style="width:13px;"> <span class="m-l-n-xs pos-rlt" style="top:-3px">
-									<img border="0" src="/img/help.png"
+								<img src="{{getS3ImagePath '../../img/flame.png'}}" style="width:13px;"> <span class="m-l-n-xs pos-rlt" style="top:-3px">
+									<img border="0" src="{{getS3ImagePath '/img/help.png'}}"
 									style="height: 6px; vertical-align: middle" rel="popover"
 									data-placement="bottom" data-title="Lead Score"
 									data-content="Score your leads to get high quality leads to appear on top. Manually assign scores or automate the process based on user behavior using Workflow automation."
@@ -342,7 +342,7 @@
 									<span class="text-cap">{{getPropertyValue properties "first_name"}}</span>
 							
 						</h4>
-						<!-- <div id="qrcode"><img src="img/1-0.gif"></div>
+						<!-- <div id="qrcode"><img src="{{getS3ImagePath 'img/1-0.gif'}}"></div>
 						For refreshing the contact in the model list -->
 						<div id="refresh_contact" class="m-t-sm m-r-md m-l-md text-sm" style="display:none;">This contact has been updated
 							<a id="action_refresh_contact" class="c-p">
@@ -542,18 +542,18 @@
 			<div class="tab-content no-tab-cell" id="contact-tab-content">
 				<div class="tab-pane" id="time-line">
 					<div class="timeline-loading-img overflow-hidden" style="width:35px;max-height:30px;">
-						<!-- <img class="loading-img" src="img/21-0.gif"></img> -->
-						<!-- <img class="loading-img-log" src="img/21-0.gif"></img>
-						<img class="loading-img-email" src="img/21-0.gif"></img>
-						<img class="loading-img" src="img/21-0.gif"></img>
-						<img class="loading-img-stats" src="img/21-0.gif"></img> -->
+						<!-- <img class="loading-img" src="{{getS3ImagePath 'img/21-0.gif'}}"></img> -->
+						<!-- <img class="loading-img-log" src="{{getS3ImagePath 'img/21-0.gif'}}"></img>
+						<img class="loading-img-email" src="{{getS3ImagePath 'img/21-0.gif'}}"></img>
+						<img class="loading-img" src="{{getS3ImagePath 'img/21-0.gif'}}"></img>
+						<img class="loading-img-stats" src="{{getS3ImagePath 'img/21-0.gif'}}"></img> -->
 					</div>
 
 					<div class="alert-info alert" id="timeline-slate"
 						style="display: none">
 						<div class="slate-content">
 							<div class="box-left pull-left m-r-md">
-								<img alt="Clipboard" src="/img/clipboard.png" />
+								<img alt="Clipboard" src="{{getS3ImagePath '/img/clipboard.png'}}" />
 							</div>
 							<div class="box-right pull-left">
 								<h4 class="m-t-none">{{getPropertyValue properties "first_name"}} has no
@@ -577,18 +577,18 @@
 						</div>
 					</div>
 				</div>
-				<div class="tab-pane" id="notes"><img src="img/21-0.gif"></img></div>
-				<div class="tab-pane" id="events"><img src="img/21-0.gif"></img></div>
-				<div class="tab-pane" id="tasks"><img src="img/21-0.gif"></img></div>
-				<div class="tab-pane" id="deals"><img src="img/21-0.gif"></img></div>
-				<div class="tab-pane" id="cases"><img src="img/21-0.gif"></img></div>
-				<div class="tab-pane" id="campaigns"><img src="img/21-0.gif"></img></div>
-				<div class="tab-pane" id="stats"><img src="img/21-0.gif"></img></div>
+				<div class="tab-pane" id="notes"><img src="{{getS3ImagePath 'img/21-0.gif'}}"></img></div>
+				<div class="tab-pane" id="events"><img src="{{getS3ImagePath 'img/21-0.gif'}}"></img></div>
+				<div class="tab-pane" id="tasks"><img src="{{getS3ImagePath 'img/21-0.gif'}}"></img></div>
+				<div class="tab-pane" id="deals"><img src="{{getS3ImagePath 'img/21-0.gif'}}"></img></div>
+				<div class="tab-pane" id="cases"><img src="{{getS3ImagePath 'img/21-0.gif'}}"></img></div>
+				<div class="tab-pane" id="campaigns"><img src="{{getS3ImagePath 'img/21-0.gif'}}"></img></div>
+				<div class="tab-pane" id="stats"><img src="{{getS3ImagePath 'img/21-0.gif'}}"></img></div>
 				<div class="tab-pane" id="mail" style="min-height: 20em">
 					<div id="mail-account-types"  style="display:none"></div>
 					<div id="mails"></div>
 			    </div>
-				<div class="tab-pane" id="documents"><img src="img/21-0.gif"></img></div>
+				<div class="tab-pane" id="documents"><img src="{{getS3ImagePath 'img/21-0.gif'}}"></img></div>
 			</div>
 		</div>
 	<!--  ending timeline view -->

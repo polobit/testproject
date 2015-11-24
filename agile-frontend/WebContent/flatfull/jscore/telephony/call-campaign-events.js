@@ -449,7 +449,7 @@ $(function(){
 				console.log("Twilio call noty_add_phone from noty");
 				CALL_CAMPAIGN.last_clicked = "ADD-PHONE";
 				// Add loading img till contact update
-				$(".noty_new_phone").html('<img src="/img/ajax-loader.gif">');
+				$(".noty_new_phone").html('<img src="'+updateImageS3Path("/img/ajax-loader.gif")+'">');
 
 				CALL_CAMPAIGN.contact_update = true;
 

@@ -35,7 +35,7 @@
                      <div class="plan-collection-in panel  liteplan" style="background: rgb(246, 247, 249);">
                        
                         <div class="p-t-sm text-center m-b" style="">
-                           <img src="/flatfull/img/lite-plan.png" style="width: 132px;">
+                           <img src="{{getS3ImagePath '/flatfull/img/lite-plan.png'}}" style="width: 132px;">
                         </div>
                         <div style="" class="price-panel wrapper text-center b-b b-light m-t bg-white p-b-none">
                            <h4 class="m-b-none m-t-none" title="Lite Plan" id="plan_name">Starter</h4>
@@ -65,7 +65,7 @@
  <div class="plan-collection-in panel  proplan " style="background: rgb(246, 247, 249);">
   {{/check_plan}}
                         <div class="p-t-sm text-center m-b">
-                           <img src="/flatfull/img/pro-plan.png" height="110" width="132">
+                           <img src="{{getS3ImagePath '/flatfull/img/pro-plan.png'}}" height="110" width="132">
                         </div>
                         <div class="price-panel wrapper text-center b-b b-light m-t p-b-none">
                            <h4 class="m-b-none m-t-none" title="Pro Plan" id="plan_name">Regular</h4>
@@ -93,7 +93,7 @@
 <div id="pro_plan" class="col-md-4 col-sm-12 col-xs-12 p-n" style="opacity: 1;">
                      <div class="plan-collection-in panel  customplan" style="background: rgb(246, 247, 249);cursor: pointer;">
                         <div class="p-t-sm text-center m-b">
-                           <img src="/flatfull/img/enterprise-plan.png" style="width: 132px;">
+                           <img src="{{getS3ImagePath '/flatfull/img/enterprise-plan.png'}}" style="width: 132px;">
                         </div>
                         <div class="price-panel wrapper text-center b-b b-light p-b-none" style="/* border-radius: 4px; *//* background: white; *//* width: 80%; *//* margin: 0 auto; */
 /* margin-top: 15px; */">
@@ -437,7 +437,7 @@
       <div class="carousel-inner">
          <div class="item">
             <div class="pull-left tweet-img-pricing">
-               <img title="Nicolas Woirhaye" src="../../img/testimonial-nicolas.png">
+               <img title="Nicolas Woirhaye" src="{{getS3ImagePath '../../img/testimonial-nicolas.png'}}">
             </div>
             <div class="pull-left tweet-txt">
                <span class="tweet-arrow"></span>
@@ -452,7 +452,7 @@
             </div>
          </div>
          <div class="item">
-            <div class="pull-left tweet-img-pricing"><img title="Ron Kaplan" src="../../img/testimonial-ron.png"></div>
+            <div class="pull-left tweet-img-pricing"><img title="Ron Kaplan" src="{{getS3ImagePath '../../img/testimonial-ron.png'}}"></div>
             <div class="pull-left tweet-txt">
                <span class="tweet-arrow"></span>
                <div class="tweet-head">
@@ -465,7 +465,7 @@
             </div>
          </div>
          <div class="item active">
-            <div class="pull-left tweet-img-pricing"><img title="Gary Tramer" src="../../img/testimonial-gary.png"></div>
+            <div class="pull-left tweet-img-pricing"><img title="Gary Tramer" src="{{getS3ImagePath '../../img/testimonial-gary.png'}}"></div>
             <div class="pull-left tweet-txt">
                <span class="tweet-arrow"></span>
                <div class="tweet-head">
@@ -478,7 +478,7 @@
             </div>
          </div>
          <div class="item">
-            <div class="pull-left tweet-img-pricing"><img title="Mark Valles" src="../../img/testimonial-mark.png"></div>
+            <div class="pull-left tweet-img-pricing"><img title="Mark Valles" src="{{getS3ImagePath '../../img/testimonial-mark.png'}}"></div>
             <div class="pull-left tweet-txt">
                <span class="tweet-arrow"></span>
                <div class="tweet-head">
@@ -492,7 +492,7 @@
             </div>
          </div>
          <div class="item">
-            <div class="pull-left tweet-img-pricing"><img title="Paul Singh" src="../../img/testimonial-paulsingh.png"></div>
+            <div class="pull-left tweet-img-pricing"><img title="Paul Singh" src="{{getS3ImagePath '../../img/testimonial-paulsingh.png'}}"></div>
             <div class="pull-left tweet-txt">
                <span class="tweet-arrow"></span>
                <div class="tweet-head">
@@ -629,7 +629,7 @@ users.
 <div class="email-selected-plan panel" style="background: rgb(246, 247, 249);" id="email-div" onclick="focus()">
 
 <div class="p-t-md text-center m-b" style="">
-   <img src="/flatfull/img/mail.png" style="width: 132px;">
+   <img src="{{getS3ImagePath '/flatfull/img/mail.png'}}" style="width: 132px;">
 </div>
 <div  class="price-panel wrapper text-center b-b b-light m-t bg-white">
   <h4 class="m-b-none">Emails</h4>

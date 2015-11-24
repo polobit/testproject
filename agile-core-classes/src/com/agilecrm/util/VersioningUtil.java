@@ -166,6 +166,11 @@ public class VersioningUtil
 
 	return VersioningUtil.getDefaultLoginUrl(domain);
     }
+    
+    public static String getBaseServerURL()
+    {
+	return CLOUDFRONT_SERVER_URL;
+    }
 
     public static boolean isBackgroundThread()
     {

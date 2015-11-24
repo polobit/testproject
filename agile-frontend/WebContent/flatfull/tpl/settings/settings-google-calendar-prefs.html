@@ -2,7 +2,7 @@
 	<div class="panel panel-default widget-add" style="min-height: 230px;">
 	<div class="panel-heading">
 	    <center>
-	    	<img class="m-b-none thumb-xl bg-transparent" style="height:47px;" src="/img/icons/google-calendar-sync.png" />
+	    	<img class="m-b-none thumb-xl bg-transparent" style="height:47px;" src="{{getS3ImagePath '/img/icons/google-calendar-sync.png'}}" />
 	    </center>
 	 </div>
 	 <div class="panel-body">
@@ -31,7 +31,7 @@
 <script id="import-google-calendar-setup-template" type="text/html">
 	<div class="well">
  	<!-- <legend>Contacts <span class="label label-important">Beta</span>{{#if id}}<span class="text-base" style="float:right" title="Sync Contacts" title="Sync Contacts"><a class="icon-refresh save-contact-prefs c-p text-l-none" href="#" sync = "true" id="google-import-sync"></a></span>{{/if}}</legend> -->
-   <center> <img class="thumbnail m-b-none img-responsive thumb-xl bg-transparent" src="/img/icons/google-calendar-sync.png"  /></center>
+   <center> <img class="thumbnail m-b-none img-responsive thumb-xl bg-transparent" src="{{getS3ImagePath '/img/icons/google-calendar-sync.png'}}"  /></center>
 	<br />
     <div class="m-b-md">
 		{{#if id}}

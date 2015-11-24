@@ -4,7 +4,7 @@
  <div class="alert-info alert">
     <div class="slate-content">
        <div class="box-left pull-left m-r-md">
-            <img alt="Clipboard" src="/img/clipboard.png" />
+            <img alt="Clipboard" src="{{getS3ImagePath '/img/clipboard.png'}}" />
        </div>
        <div class="box-right pull-left">
             <h4 class="m-t-none">You have not associated any social accounts currently.</h4>
@@ -47,7 +47,7 @@
     {{/if_equals}}
    </span>
 <span id="stream-spinner-modal-{{id}}" class="waiting-symbol">
-         <img src="img/ajax-loader-cursor.gif"></img>
+         <img src="{{getS3ImagePath 'img/ajax-loader-cursor.gif'}}"></img>
     </span>        
   <h4 class="column-title txt-ellipsis m-t-none"> 
       {{#if_equals stream_type "All_Updates"}}    

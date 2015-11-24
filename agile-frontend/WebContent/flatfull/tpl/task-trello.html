@@ -43,7 +43,7 @@
 </div>
 <div class="wrapper-md">
 	<div id="new-task-list-based-condition"> 
-  		<img class="loading_task_img thumb-xs p-r-xs" src= "img/21-0.gif"></img>
+  		<img class="loading_task_img thumb-xs p-r-xs" src= "{{getS3ImagePath 'img/21-0.gif'}}"></img>
 	</div>
 	<div id="task-list-based-condition"></div>
 </div>
@@ -63,7 +63,7 @@
         <!-- <span id="task-count-{{heading}}-{{owner_id}}" class="badge bg-primary txt-mute"></span> -->
          
 </div>
-         <div class="pull-right"><img id="task-list-loading-img-{{heading}}-{{owner_id}}"  src="img/ajax-loader-cursor.gif">
+         <div class="pull-right"><img id="task-list-loading-img-{{heading}}-{{owner_id}}"  src="{{getS3ImagePath 'img/ajax-loader-cursor.gif'}}">
 <span id="task-count-{{heading}}-{{owner_id}}" class="badge badge-empty pull-right  m-l-sm"></span>
 </div>  
 <div class="clearfix"></div>               
