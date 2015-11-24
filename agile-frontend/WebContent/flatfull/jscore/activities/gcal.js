@@ -14,11 +14,15 @@ function loadUserEventsfromGoogle(start, end, callback){
 						{
 							if (!data)
 							{
+
 								return;
 							}
 
 							return agile_transform_options(data, start, end);
 						});
+
+		if(!isConfigured)
+			showLoadingOnCalendar(false);
 
 	//	return;
 }
