@@ -312,19 +312,26 @@ function removeEventSource(key)
 
 function addGoogleCalendarEvents()
 {
+	addAsyncCalendarEvents(loadUserEventsfromGoogle);
+//	$('#calendar_event').fullCalendar('removeEventSource', tempFunction);
 
+}
+
+function addAsyncCalendarEvents(asyncCallbackFunction)
+{
+	if(!asyncCallbackFunction || typeof asyncCallbackFunction != 'function')
+	{
+		return;
+	}
 	var tempFunction = function(start, end, callback)
 	{
-
-		loadUserEventsfromGoogle(start, end);		
+		asyncCallbackFunction(start, end);
 		callback({});
 		$('#calendar_event').fullCalendar('removeEventSource', tempFunction);
 		return;
 	}
 
 	$('#calendar_event').fullCalendar('addEventSource', tempFunction);
-//	$('#calendar_event').fullCalendar('removeEventSource', tempFunction);
-
 }
 
 /**
