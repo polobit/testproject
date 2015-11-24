@@ -53,7 +53,7 @@ var ReportsRouter = Backbone.Router
 				hideTransitionBar();
 				$(".active").removeClass("active");
 				$("#reportsmenu").addClass("active");
-				if($("#dealstab").length>0){
+				/*if($("#dealstab").length>0){
 					$("#dealstab").addClass("active");
 					$("#deals-tab").addClass("active");
 				}
@@ -61,7 +61,30 @@ var ReportsRouter = Backbone.Router
 				{
 					$("#callstab").addClass("active");
 					$("#calls-tab").addClass("active");
+				}*/
+
+					var reportsTab = localStorage.getItem("reports_tab");
+				if(!reportsTab || reportsTab == null) {
+					if(islocalStorageHasSpace())
+						localStorage.setItem('reports_tab', "deals-tab");
+					reportsTab = "deals-tab";
 				}
+				$('#reports-tab-container a[href="#'+reportsTab+'"]').tab('show');
+				$("#reports-tab-container ul li").off("click");
+				$("#reports-tab-container").on("click",".tab-container ul li",function(){
+					var temp = $(this).find("a").attr("href").split("#");
+					if(islocalStorageHasSpace())
+						localStorage.setItem('reports_tab', temp[1]);
+				});
+
+			} });
+
+			/*that.integrations.collection.fetch();
+
+			$('#content').find('#admin-prefs-tabs-content').html(that.integrations.render().el);
+			$('#content').find('#AdminPrefsTab .select').removeClass('select');
+			$('#content').find('.integrations-tab').addClass('select');
+			$(".active").removeClass("active");*/
 					$('[data-toggle="tooltip"]').tooltip();
 
 				}, "#reports-listerners-container");
