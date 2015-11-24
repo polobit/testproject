@@ -176,8 +176,8 @@
 
 
 							{{#property_is_exists "phone" properties}}
-<div class="m-t-sm text-left"><small class="text-xs text-muted">Contact Info</small></div>
-							<div class="text-left">
+<div class="m-t-sm"><small class="text-xs text-muted">Contact Info</small></div>
+							<div>
 								{{#multiple_Company_Property_Element "phone" properties}}
 								
 								<div class="custom-color text-sm">
@@ -200,13 +200,13 @@
 							</div>
 							{{/property_is_exists}}
  							{{#property_is_exists "email" properties}}
-							<div class="text-left custom-color">
+							<div class="custom-color">
 								{{#multiple_Company_Property_Element "email" properties}}
 								
 								{{#property_is_exists "phone" ../properties}}
 								
 									{{else}}
-<div class="m-t-sm text-left"><small class="text-xs text-muted">Contact Info</small></div>
+<div class="m-t-sm"><small class="text-xs text-muted">Contact Info</small></div>
 									
 										{{/property_is_exists}} 
 									{{#each this}}
@@ -221,9 +221,9 @@
 
  <div class="custom-data"> {{#getCompanyCustomPropertiesExclusively properties}}
 <div class="clearfix"></div>
-<div class="m-t-sm text-left"><small class="text-xs text-muted">Custom Info</small></div>
+<div class="m-t-sm"><small class="text-xs text-muted">Custom Info</small></div>
 
-								<div class="text-left word-break-all">
+								<div class="word-break-all">
 									{{#each_with_index this}}
 									<div class="pull-left">
 										<div class="pull-left">

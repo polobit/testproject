@@ -1608,7 +1608,7 @@ a#email-reply{
   .mobile-pad-content .box-right .text {
  color:#98a6ad !important
   }
-  #contact-filter-list-model-list.pull-right {
+  #contact-filter-list-model-list.pull-right,#company-filter-list-model-list.pull-right {
     right: auto;
   }
   /*

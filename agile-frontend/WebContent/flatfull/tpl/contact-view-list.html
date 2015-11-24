@@ -79,7 +79,27 @@
 	<div class="btn-group m-r-sm">
     	<button class="btn btn-default btn-sm custom_view"><i class="icon-list" style="margin-right:3px"></i></button>
     	<button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
+    	{{#is_mobile}}
     	<ul id="contact-view-model-list" class="pull-right dropdown-menu">
+        	<li>
+            	<a href="#companies" class="DefaultView">Default</a>
+				<!-- a href="#contacts" class="GridView">Grid View</a -->
+        	</li>
+			<li class="divider"></li>
+			<li class="dropdown-submenu"><a>Sort By</a> </li>
+				
+			<li><a class="sort" id="comp-sort-by-created_time-desc" data="-created_time" href="#">Newest</a></li>
+			<li><a class="sort" id="comp-sort-by-created_time-asc" data="created_time" href="#">Oldest</a></li>
+			
+			
+			<li class="divider"></li>
+        	<li>
+            	<a href="#company-view-prefs">Add/Remove Columns</a>
+        	</li>
+    	</ul>
+
+    	{{else}}
+    	<ul id="contact-view-model-list" class="pull-right dropdown-menu hidden-xs">
         	<li>
             	<a href="#companies" class="DefaultView">Default</a>
 				<!-- a href="#contacts" class="GridView">Grid View</a -->
@@ -95,7 +115,9 @@
         	<li>
             	<a href="#company-view-prefs">Add/Remove Columns</a>
         	</li>
-    	</ul>
+    	</ul>	
+    	{{/is_mobile}}
+    	
 	</div>
     <div class="btn-group">
         <a href="#companyModal" class="btn btn-default btn-sm" data-toggle="modal"><i class="icon-plus-sign"></i> Add Company</a>
