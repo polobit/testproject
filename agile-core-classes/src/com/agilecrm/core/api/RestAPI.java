@@ -1,8 +1,13 @@
 package com.agilecrm.core.api;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -19,6 +24,7 @@ import javax.ws.rs.core.Response;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.json.simple.JSONArray;
 
 import com.agilecrm.activities.Event;
 import com.agilecrm.activities.util.ActivitySave;
@@ -26,9 +32,13 @@ import com.agilecrm.activities.util.EventUtil;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
 import com.agilecrm.contact.Note;
+import com.agilecrm.contact.filter.ContactFilter;
+import com.agilecrm.contact.filter.util.ContactFilterUtil;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
+import com.agilecrm.user.access.UserAccessControl;
+import com.agilecrm.user.access.util.UserAccessControlUtil;
 import com.agilecrm.util.PHPAPIUtil;
 
 @Path("/rest/api")
@@ -559,6 +569,7 @@ public class RestAPI
 	return contact;
     }
 
+ // This newTagsByUpdate is temporary solution for Zapier.
     /**
      * Gets all the contacts which are associated with the given tag and returns
      * as list
@@ -566,53 +577,80 @@ public class RestAPI
      * @param tag
      *            name of the tag
      * @return list of tags
+     * @throws JSONException
      */
-    @Path("/newTagsByTime/{tag}")
+    @Path("/newTagsByUpdate/{tag}")
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public List<Contact> getContactsBasedOnTag(@PathParam("tag") String tag, @QueryParam("cursor") String cursor,
-	    @QueryParam("page_size") String count, @QueryParam("global_sort_key") String sortKey)
+    public List<Contact> getContactsBasedOnTagFilter(@PathParam("tag") String tag) throws JSONException
     {
-	List<Contact> licontacts1 = new ArrayList<Contact>();
-	try
+	List<Contact> contactList = new ArrayList<Contact>();
+	long currentTime = System.currentTimeMillis();
+	long initialTime = currentTime - 1200000; // Time befor 20 minutes of
+						  // current time
+
+	JSONObject json = new JSONObject();
+	json.put("LHS", "updated_time");
+	json.put("CONDITION", "BETWEEN");
+	json.put("RHS", initialTime);
+	json.put("RHS_NEW", currentTime);
+
+	JSONArray jsonArray = new JSONArray();
+	jsonArray.add(json);
+	JSONObject json1 = new JSONObject();
+	json1.put("rules", jsonArray);
+	json1.put("contact_type", "PERSON");
+
+	ContactFilter contact_filter = ContactFilterUtil.getFilterFromJSONString(json1.toString());
+	// Sets ACL condition
+	UserAccessControlUtil.checkReadAccessAndModifyTextSearchQuery(
+		UserAccessControl.AccessControlClasses.Contact.toString(), contact_filter.rules, null);
+
+	List<Contact> licontacts = new ArrayList<Contact>(contact_filter.queryContacts(Integer.parseInt("100"), null,
+		"-updated_time"));
+
+	Map<Long, Contact> unsortMap = new HashMap<Long, Contact>();
+
+	List<Contact> licontactsCreatedTime = ContactUtil.getContactsForTag(tag, Integer.parseInt("10"), null,
+		"-created_time");
+	for (Contact c : licontactsCreatedTime)
 	{
-	    if (count != null)
+	    if (c.updated_time == 0)
 	    {
-		List<Contact> licontacts = ContactUtil.getContactsForTag(tag, Integer.parseInt(count), cursor, sortKey);
-
-		for (Contact c : licontacts)
-		{
-		    if (c.tags.size() >= 2)
-		    {
-			List<String> nameList = new ArrayList<String>(c.tags);
-			if (c.tags.toArray()[c.tags.size() - 1].equals(tag))
-			{
-			    licontacts1.add(c);
-			}
-			else if (c.tagsWithTime.get(c.tags.size() - 1).createdTime
-				- c.tagsWithTime.get(nameList.indexOf(tag)).createdTime <= 900000)
-			{
-			    licontacts1.add(c);
-			}
-		    }
-		    else
-		    {
-			licontacts1.add(c);
-		    }
-
-		}
-
-		return licontacts1;
+		int index = Arrays.asList(c.tags.toArray()).indexOf(tag);
+		if ((System.currentTimeMillis() - c.tagsWithTime.get(index).createdTime) <= 1200000)
+		    unsortMap.put(c.tagsWithTime.get(index).createdTime, c);
 	    }
 
-	    return ContactUtil.getContactsForTag(tag, null, null, sortKey);
-
 	}
-	catch (Exception e)
+	for (Contact c : licontacts)
 	{
-	    e.printStackTrace();
-	    return null;
+	    int index = Arrays.asList(c.tags.toArray()).indexOf(tag);
+	    if (index >= 0)
+	    {
+		if ((System.currentTimeMillis() - c.tagsWithTime.get(index).createdTime) <= 1200000)
+		    unsortMap.put(c.tagsWithTime.get(index).createdTime, c);
+
+	    }
 	}
+
+	Map<Long, Contact> treeMap = new TreeMap<Long, Contact>(new Comparator<Long>()
+	{
+	    @Override
+	    public int compare(Long o1, Long o2)
+	    {
+		return o2.compareTo(o1);
+	    }
+	});
+	treeMap.putAll(unsortMap);
+
+	for (Map.Entry<Long, Contact> entry : treeMap.entrySet())
+	{
+	    contactList.add((Contact) entry.getValue());
+	}
+
+	return contactList;
+
     }
 
 }
