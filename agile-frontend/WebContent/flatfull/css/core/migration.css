@@ -1233,10 +1233,12 @@ color:#1f2427!important;
 {
 	 float: none;
   position: relative;
-  top: -2px;
+  top: 0px;
   vertical-align: middle;
   opacity: 1;
   color:#fff;
+  font-size: 16px;
+  text-shadow:none;
 }
 
   #added-tags-ul .close {
@@ -1768,7 +1770,7 @@ width: 100%!Important;
   width: 25%;
 }
 #navbar li a:active {
-  background: #edf1f2;
+  /*background: #edf1f2;*/
 }
 .contact-right-widgetsview {
   padding-top: 20px;
