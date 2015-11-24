@@ -16,12 +16,17 @@
 <div class="row">
 <br>
 
-<div class="col-md-6">
+<div class="col-md-9">
 <form id="landingPageSettingForm">
 <div class="panel panel-default">
   <div class="panel-heading">Custom Domain Setup</div>
   <div class="panel-body">
+
+  <a id="cname" href="{{cname}}" class="text-info" style="display:none;">{{cname}}</a>
+
     <div>
+
+    <div id="cnameSettingsFields">
 
         <div class="form-group">
             <label for="inpuFname">Enter the domain you want to point to the landing page.</label>
@@ -42,17 +47,14 @@
             </div>
         </div>
 
-            <p id="cnameInstructionMessage" style="display:none;">Create a CNAME record in your DNS Setting, with Host &quot;<strong id="cnameHostVal"></strong>&quot; and Destination &quot;<strong>landing.agilecrm.com.</strong>&quot;</p>
-      <a class="hidden" id="cname" href="{{cname}}">hidden</a>
+  <p id="cnameInstructionMessage" style="display:none;">Create a CNAME record in your DNS Setting, with Host &quot;<strong id="cnameHostVal"></strong>&quot; and Destination &quot;<strong>landing.agilecrm.com.</strong>&quot;</p>
+  </div>
 
-      <span for="cname" generated="true" id="cnameMessage" class="help-inline"></span>
-      <br>
 <div class="row">
 <div class="col-md-12">
-<button class="btn btn-sm btn-primary" id="landingPageSettingBtn" data-pageid="{{id}}">Save</button>
-{{#if cname}}
-<button class="btn btn-sm btn-success pull-right" id="landingPageVerifyBtn" data-loading-text="Verifing...">Verify Settings</button>
-{{/if}}
+<button class="btn btn-sm btn-primary" id="landingPageSettingBtn" data-pageid="{{id}}" data-loading-text="Saving...">Save</button>
+&nbsp;<a href="#" class="text-info" id="landingPageVerifyBtn" {{#unless cname}} style="display:none;" {{/unless}}>Verify</a>
+&nbsp;<span id="statusMessageHolder"></span>
 </div>
 </div>
     </div>
@@ -62,80 +64,32 @@
 </div>
 
 
-<div class="col-md-6">
-<div class="panel panel-default">
-  <div class="panel-heading">Setup Instructions</div>
-  <div class="panel-body">
-    <p>To publish your landing pages to your own domain, you need to:</p>
-<ul>
+<div class="col-md-3">
+<div class="data-block">
+         <div class="p-l p-r">
+            <h4 class="m-t-none">
+               Setup Instructions
+            </h4>
+<p>To publish your landing pages to your own domain, you need to:</p>
+<ul class="p-l-md">
 <li>Tell your domain to show the pages hosted by Agile CRM.</li>
 <li>Publish your landing page by using the custom domain setup.</li>
 </ul>
-
-  </div>
+      
+   
+   <h4 class="m-t-md">
+    DNS Instructions
+   </h4>
+   <p> CNAME setup instructions provided by some of popular domain register services.</p>
+   <ul class="p-l-md">
+   <li><a class="text-info" target="_blank" href="https://in.godaddy.com/help/add-a-cname-record-19236">Go Daddy</a></li>
+  <li><a class="text-info" target="_blank" href="https://my.bluehost.com/cgi/help/cname">BlueHost</a></li>
+   <li><a class="text-info" target="_blank" href="https://www.youtube.com/watch?v=5TwLD2t9b7U">NameCheap</a></li>
+   </ul>
+   
+     </div>
 </div>
 </div>
-
-
-</div>
-
-<hr>
-
-<div class="wrapper-md  p-t-none">
-<div class="row">    
-    <div class="col-md-12 p-none">
-        <h4>DNS Instructions</h4><br>
-    </div>
-</div>
-
-<div class="row">
-
-<div class="col-md-3 col-sm-6 col-xs-12">
-    <div class="panel wrapper text-center">
-        <div>
-           <div class="p-b-sm p-l-none p-r-none">
-            <img style="width:85%;border:1px solid #d4d4d4" src="img/misc/godaddy_logo.png"/>
-           </div>
-        </div>
-        <div>
-            <a class="btn btn-sm btn-default" target="_blank" href="https://in.godaddy.com/help/add-a-cname-record-19236">Read</a>
-        </div>
-    </div>
-</div>
-
-
-<div class="col-md-3 col-sm-6 col-xs-12">
-    <div class="panel wrapper text-center">
-        <div>
-           <div class="p-b-sm p-l-none p-r-none">
-            <img style="width:85%;border:1px solid #d4d4d4" src="img/misc/bluehost_logo.png"/>
-           </div>
-        </div>
-        <div>
-            <a class="btn btn-sm btn-default" target="_blank" href="https://my.bluehost.com/cgi/help/cname">Read</a>
-        </div>
-    </div>
-</div>
-
-
-<div class="col-md-3 col-sm-6 col-xs-12">
-    <div class="panel wrapper text-center">
-        <div>
-           <div class="p-b-sm p-l-none p-r-none">
-            <img style="width:85%;border:1px solid #d4d4d4" src="img/misc/namecheap_logo.png"/>
-           </div>
-        </div>
-        <div>
-            <a class="btn btn-sm btn-default" target="_blank" href="https://www.youtube.com/watch?v=5TwLD2t9b7U">Read</a>
-        </div>
-    </div>
-</div>
-
-
-
-
-</div>
-
 
 
 </div>

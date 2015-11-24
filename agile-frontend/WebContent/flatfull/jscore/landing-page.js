@@ -6,8 +6,12 @@ function initializeLandingPageListeners() {
 		e.preventDefault();
 		// Check if the form is valid
     	if (isValidForm('#landingPageBuilderForm')) {
+    		$(".saveLandingPageButton").prop("disabled",true);
+			$(".saveLandingPageButton").html("Saving...");
     		document.getElementById('landingPageBuilder').contentWindow.$('.icon-floppy-1:last').trigger("click");
-    		App_LandingPageRouter.LandingPageCollectionView.collection.fetch();
+    		if(App_LandingPageRouter.LandingPageCollectionView) {
+    			App_LandingPageRouter.LandingPageCollectionView.collection.fetch();
+    		}
     	} else {
     		if(!$("#landingpagename").val().trim()) {
     			$('html, body').animate({scrollTop: $('body').offset().top}, 500);
@@ -23,9 +27,11 @@ function initializeLandingPageListeners() {
 
 	$('#landingpages-listeners').on('click', '#landingPageSettingBtn', function (e) {
 		e.preventDefault();
+		$("#statusMessageHolder").removeClass("text-success text-danger");
 		if (!isValidForm('#landingPageSettingForm')) {
 			return;
 		}
+		var $btn = $(this).button('loading');
  
 		var CNAME = "http://"+$("#sub_domain").val()+"."+$("#domain").val()+"/"+$("#directory_path").val();
 
@@ -38,12 +44,17 @@ function initializeLandingPageListeners() {
       	landingPageModel.url = 'core/api/landingpages';
       	landingPageModel.save(model.toJSON(), { success : function(obj){
       		if(obj.get("isDuplicateCName")) {
-				$("#cnameMessage").html('Custom domain URL should be unique.').show();
+      			$("#statusMessageHolder").addClass("text-danger");
+				$("#statusMessageHolder").html("Custom domain should be unique").show().fadeOut(3000);
 			} else {
-				showNotyPopUp("information", "Saved successfully", "top");
+				$("#statusMessageHolder").addClass("text-success");
+				$("#statusMessageHolder").html("Custom domain saved successfully").show().fadeOut(3000);
+				$("#cname").attr("href",CNAME);
+				$("#landingPageVerifyBtn").show();
 				App_LandingPageRouter.LandingPageCollectionView.collection.get(modelId).set(obj);
 			}
       	}});
+      	$btn.button('reset');
 	});
 
 	$('#landingpages-listeners').on('keyup', '#sub_domain', function (e) {
@@ -78,17 +89,22 @@ function initializeLandingPageListeners() {
 
 	$('#landingpages-listeners').on('click', '#landingPageVerifyBtn', function (e) {
 		 e.preventDefault();
+		 $("#statusMessageHolder").removeClass("text-success text-danger");
 		 var cnameEL = document.getElementById("cname");
-		 var $btn = $(this).button('loading');
 
 		 if($("#cname").attr("href") != "") {
 		 	$.get("core/api/landingpages/verifycname?domain="+cnameEL.hostname, function(data) {
 		 		if(data.result) {
-		 			showNotyPopUp("information", "CNAME setup is fine.", "top");
+		 			$("#statusMessageHolder").addClass("text-success");
+		 			$("#statusMessageHolder").html("CNAME is correct. Found " + data.cnames[0]).show();
 		 		} else {
-		 			showNotyPopUp("error", "CNAME setup for selected domain is incorrect. Please follow the instructions.", "top");
+		 			$("#statusMessageHolder").addClass("text-danger");
+		 			if(typeof data.cnames[0] != "undefined") {
+		 				$("#statusMessageHolder").html("CNAME is incorrect. Found " + data.cnames[0]).show();
+		 			} else {
+		 				$("#statusMessageHolder").html("CNAME is not found.").show();
+		 			}
 		 		}
-		 		$btn.button('reset');
 		 	});
 		 }
 	});
