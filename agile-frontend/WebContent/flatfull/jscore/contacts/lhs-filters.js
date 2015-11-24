@@ -147,6 +147,8 @@ function submitLhsFilter()
 
 function contactFiltersListeners(container_id){
 
+	$('[data-toggle="tooltip"]').tooltip();
+
 if(!container_id)
 	  container_id = 'conatcts-listeners-conatainer';
 
@@ -485,6 +487,7 @@ $('#' + container_id).on('change keyup', '#lhs-contact-filter-form #RHS_NEW inpu
      $('body #companies-left-filters-toggle').off('click');
  	$('body').on('click', '#companies-left-filters-toggle', function(e)
 		{
+
 			e.preventDefault();
 
 			if ($('#companies-lhs-filters-toggle').is(':visible'))

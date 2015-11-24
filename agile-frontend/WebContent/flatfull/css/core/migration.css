@@ -1239,6 +1239,10 @@ color:#1f2427!important;
   color:#fff;
 }
 
+  #added-tags-ul .close {
+    color:#000;
+  }
+
 /*hack for same grid */
 /*.custom-grid-view
 {
@@ -1780,6 +1784,10 @@ box-shadow: 0 5px 10px 0px #bbb;
 }
 .leader-board-text-mobile {
   width: 60%!important;
+}
+.recent-view {
+position: absolute;
+width: 100%!Important;
 }
 }
 
