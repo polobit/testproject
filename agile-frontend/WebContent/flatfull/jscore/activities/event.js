@@ -373,13 +373,16 @@ $("#calendar-listers").on('click', '.agendaDayWeekMonth', function()
 				//_init_gcal_options();
 				addGoogleCalendarEvents();
 			}else{
-				
 				removeEventSource('google');
 			}
 		}	
 
-		if(calendar == "office"){
-			loadFullCalednarOrListView();
+		if(calendar == 'office'){
+			if(this.checked == true){
+				addOffice365CalendarEvents();
+			}else{
+				removeEventSource('office');
+			}
 		}
 
 	});

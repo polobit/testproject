@@ -313,6 +313,10 @@ function addGoogleCalendarEvents()
 
 }
 
+function addOffice365CalendarEvents(){
+	addAsyncCalendarEvents(loadOfficeEvents);
+}
+
 function addAsyncCalendarEvents(asyncCallbackFunction)
 {
 	if(!asyncCallbackFunction || typeof asyncCallbackFunction != 'function')

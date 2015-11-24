@@ -704,10 +704,13 @@ function loadMoreEventsFromGoogle()
 	}
 }
 
-function loadOfficeEvents(startingDate, endingDate){
+function loadOfficeEvents(calStartDateObj, calEndDateObj){
+
 	showLoadingOnCalendar(true);
-	var url = "core/api/officecalendar/office365-appointments?startDate="+ startingDate +"&endDate="+ endingDate;
+
+	var url = "core/api/officecalendar/office365-appointments?startDate="+ calStartDateObj.getTime() +"&endDate="+ calEndDateObj.getTime();
 	$.getJSON(url, function(response){
+		var jsonArray = [];
 		for (var i=0; i<response.length; i++){			
 			var obj = response[i];
 			//Start Date
@@ -715,10 +718,10 @@ function loadOfficeEvents(startingDate, endingDate){
 			obj.start = startDate;
 			//End Date
 			var endDate = Math.round((new Date(obj.end).getTime()) / 1000);
-			obj.end = endDate;		
-				
-			$('#calendar_event').fullCalendar('renderEvent', obj);
+			obj.end = endDate;
+			jsonArray.push(obj);		
 		}	
+		addEventSourceToCalendar('office', jsonArray);
 		showLoadingOnCalendar(false);	
 	});	
 }
