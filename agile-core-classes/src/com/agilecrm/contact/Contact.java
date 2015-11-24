@@ -275,6 +275,13 @@ public class Contact extends Cursor
     public String bulkActionTracker = "";
 
     /**
+     * To update text document forcably
+     */
+    @JsonIgnore
+    @NotSaved
+    public boolean forceSearch = false;
+
+    /**
      * Default constructor
      */
     public Contact()
@@ -401,7 +408,7 @@ public class Contact extends Cursor
 	// Checks User access control over current entity to be saved.
 	// UserAccessControlUtil.check(this.getClass().getSimpleName(), this,
 	// CRUDOperation.CREATE, true);
-
+	System.out.println("id is: " + id);
 	if (id != null)
 	{
 
@@ -434,7 +441,7 @@ public class Contact extends Cursor
 	    // value of this(current) Contact
 	    ContactUtil.isDuplicateContact(this, oldContact, true);
 	}
-
+	System.out.println("After duplicate check");
 	// To skip validation for Campaign Tags
 	if (args == null || args.length < 2)
 	{
@@ -462,7 +469,8 @@ public class Contact extends Cursor
 	    viewed.viewed_time = viewed_time;
 	    viewed.viewer_id = SessionManager.get().getDomainId();
 	}
-
+	System.out.println("viewed time" + viewed_time);
+	System.out.println("converted the email to lowercase");
 	// Updates Tag entity, if any new tag is added
 	// if (type == Type.PERSON)
 	updateTagsEntity(oldContact, this);
@@ -555,11 +563,12 @@ public class Contact extends Cursor
 
 	// If tags and properties length differ, contact is considered to be
 	// changed
-	if (contact.tags.size() != currentContactTags.size() || contact.properties.size() != properties.size()
-		|| contact.star_value != star_value
+	if (forceSearch || contact.tags.size() != currentContactTags.size()
+		|| contact.properties.size() != properties.size() || contact.star_value != star_value
 		|| (contact.lead_score != null ? !contact.lead_score.equals(lead_score) : false)
 		|| contact.campaignStatus.size() != campaignStatus.size()
-		|| contact.emailBounceStatus.size() != emailBounceStatus.size())
+		|| contact.emailBounceStatus.size() != emailBounceStatus.size()
+		|| !contact.contact_company_key.equals(contact_company_key))
 
 	    return true;
 
@@ -867,6 +876,11 @@ public class Contact extends Cursor
 
 	new AppengineSearch<Contact>(Contact.class).delete(id.toString());
 
+	if (type == Type.COMPANY)
+	{
+	    ContactUtil.removeCompanyReferenceFromContacts(this);
+	}
+
 	// Delete Notes
 	NoteUtil.deleteAllNotes(id);
 
@@ -1086,6 +1100,7 @@ public class Contact extends Cursor
 
 	if (this.type == Type.PERSON)
 	{
+	    System.out.println("type of contact is person");
 	    if (this.properties.size() > 0)
 	    {
 		ContactField firstNameField = this.getContactFieldByName(Contact.FIRST_NAME);
@@ -1095,6 +1110,7 @@ public class Contact extends Cursor
 	    }
 	    if (StringUtils.isNotEmpty(contact_company_id))
 	    {
+		System.out.println("Contact company id is not empty: " + contact_company_id);
 		// update id, for existing company
 		this.contact_company_key = new Key<Contact>(Contact.class, Long.parseLong(this.contact_company_id));
 	    }
@@ -1107,13 +1123,16 @@ public class Contact extends Cursor
 		    // Create new Company
 		    Key<Contact> companyKey = ContactUtil.getCompanyByName(contactField.value);
 
+		    System.out.println("Company key is " + companyKey);
 		    if (companyKey != null)
 		    {
 			// found company by its name, so set it
 			this.contact_company_key = companyKey;
+			System.out.println("Company key isnt null ");
 		    }
 		    else
 		    {
+			System.out.println("Company key is null ");
 			// company name not found, create a new one
 			Contact newCompany = new Contact();
 			newCompany.properties = new ArrayList<ContactField>();
