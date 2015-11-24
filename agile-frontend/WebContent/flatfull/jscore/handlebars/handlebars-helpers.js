@@ -6632,12 +6632,14 @@ Handlebars.registerHelper('SALES_CALENDAR_URL', function()
 	    	
 			});
 	
-	Handlebars.registerHelper('toggle_contacts_filter', function(options)
+	
+	Handlebars.registerHelper('toggle_companies_filter', function(options)
 			{	        
-		    if(readCookie(CONTACTS_DYNAMIC_FILTER_COOKIE_STATUS)=="hide"){
-		    	return "none";
-	       	}
+		   return  localStorage.getItem('companiesFilterStatus');
+		    
 			});
+
+	
 
 	Handlebars.registerHelper('totalTimeFormat', function(timeInSec)
 			{
@@ -6744,3 +6746,10 @@ Handlebars.registerHelper('SALES_CALENDAR_URL', function()
                return options.inverse(this);
         });
 
+Handlebars.registerHelper('is_mobile', function(options)
+	{
+		if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) )
+		return options.fn(this);
+		else
+		return options.inverse(this);
+	});

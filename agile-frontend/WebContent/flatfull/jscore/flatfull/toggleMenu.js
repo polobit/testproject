@@ -32,21 +32,60 @@ $('#app-aside-folded').on('click', function(e) {
 	
 $(document).ready(function(){
 
-	$(".person").on("click", function(e){
-		e.preventDefault();
-		addContactBasedOnCustomfields();
-		
-	});
-
-
-    $("#contact-results li").click(function(){
+	 $("#contact-results li").click(function(){
    $("#mobile-menu-settings").trigger('click');
    });
  
 
 	if(( $(window).width() ) < 768 ) {
+
+	/*$('body').on('click','#mobile-dropdown-click-sort',function(){
+			$("#contact-sort-views").css("display","block");
+   	return false;
+	});
+
+	 $('body').on('click','#view-list .dropdown-toggle' , function(){
+         $("#contact-sort-views").css("display","none");
+    });
+   	
+   	$('body').on('click','#contact-sort-views',function(){
+        $(this).css('display','none');
+    });	*/
+
+	$('body').on('touchstart','.magicMenu .i-checks',function(e){
+		e.preventDefault();
+		$(this).find('input[type="radio"]').trigger('click');
+	});
+
+   $('body').on('touchstart','.i-checks',function(e){
+   	e.preventDefault();
+   $(this).find('input[type="checkbox"]').trigger('click');
+   });
+
+   $('body').on('click','#mobile-menu-settings',function(){
+    if($('#navbar').hasClass('show')){
+    	$('body').css('overflow-y','hidden');
+    }
+    else {
+    	$('body').css('overflow-y','auto');
+    }
+	});
+
+    $('.agile-menu .fa-history').removeClass('text-md  text-muted');
+   
+   	$('body').on('click','#navbar li a:not(".dropdown-toggle")',function(){
+   		$('body').css('overflow-y','auto');
+   	});
+   
+
+
+	$('body').on('click','.navbar-brand',function(){
+     $("#navbar").removeClass('show');
+     $("#aside").removeClass('off-screen');
+     $('body').css('overflow-y','auto');
+	});	
 	
-	$(".nav li a").click(function(){
+	$(".navi-wrap li a").click(function(){
 	  $("#mobile-menu").delay(2000).trigger("click");
 	});
 	
@@ -69,10 +108,11 @@ $(document).ready(function(){
    $("#mobile-menu").on("click",function(){
    if( $("#navbar").hasClass("show")) {
    	$("#navbar").removeClass("show");
+   	$('body').css('overflow-y','auto');
    }
    });
 
-   $("#navbar li a").on("click" , function(){
+   $("#navbar li a:not(.dropdown-menu)").on("click" , function(){
    if($(this).hasClass("dropdown-toggle")) {
 	
     }
@@ -80,10 +120,16 @@ $(document).ready(function(){
    	$("#navbar").removeClass("show");
    }
    });
+
+   $("#documentsmenu span").text("Documents");
    
    }
 
-
+   $(".person").on("click", function(e){
+		e.preventDefault();
+		addContactBasedOnCustomfields();
+		
+	});
 
    });
 

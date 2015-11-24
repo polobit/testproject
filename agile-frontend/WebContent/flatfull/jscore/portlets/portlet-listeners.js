@@ -910,7 +910,7 @@ function initializeAddPortletsListeners() {
 				clickfunction($(this),url,forAll);
 			});
 	$('#portlets-add-listener').on(
-			"click",
+			"click touchstart",
 			'.add_to_all',
 			function() {
 				var forAll=true;
