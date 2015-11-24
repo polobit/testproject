@@ -1245,6 +1245,10 @@ color:#1f2427!important;
     color:#363f44;
   }
 
+  .tag.btn-primary .close {
+    color: #fff!important;
+  }
+
 /*hack for same grid */
 /*.custom-grid-view
 {
