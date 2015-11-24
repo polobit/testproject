@@ -126,7 +126,7 @@ function setupDealFilters(cel)
 						}
 					});
 					// deserializeForm(json, $('#dealsFilterForm'));
-					updateFilterColor();
+					//updateFilterColor();
 				}
 				// Enable the datepicker
 				$('#filter_options .date').datepicker({ format : 'mm/dd/yyyy', });
@@ -142,6 +142,35 @@ function setupDealFilters(cel)
 	}, '#deal-list-filters');
 }
 
+function setupNewDealFilters(callback)
+{
+	App_Deals.deal_filters = new Base_Collection_View({url : '/core/api/deal/filters'});
+	
+	App_Deals.deal_filters.collection.fetch({
+		success: function(data){
+			hideTransitionBar();
+			setNewDealFilters(data);
+			return callback();
+		}
+	}); 
+}
+function setNewDealFilters(data){
+	var filters_list = data.toJSON();
+	var filters_ui = "<li><a href='#deal-filters'>Add/Edit Filter</a></li>";
+	if(filters_list.length>0){
+		filters_ui += "<li class='divider'></li>";
+	}
+	$.each(filters_list,function(index, filter){
+		filters_ui += "<li><a class='deal-filter' id='"+filter.id+"'>"+filter.name+"</a></li>"
+	});
+	$('#deal-filter-list-model-list').html(filters_ui);
+	var cookie_filter_id = readCookie("deal-filter-name");
+	if(cookie_filter_id && data.get(cookie_filter_id) && data.get(cookie_filter_id).get('name')){
+		$('#opportunity-listners').find('h3').find('small').after('<div class="inline-block tag btn btn-xs btn-primary m-l-xs"><span class="inline-block m-r-xs v-middle">'+data.get(cookie_filter_id).get("name")+'</span><a class="close default_deal_filter">×</a></div>')
+	}else{
+		eraseCookie('deal-filters');
+	}
+}
 function updateFilterColor()
 {
 	var filters_count = 0;
@@ -231,21 +260,43 @@ function filterDeals(saveBtn)
  */
 function getDealFilters()
 {
-	var query = ''
-	if (readCookie('deal-filters'))
+	var filterJSON = {};
+	if (readCookie('deal-filter-name'))
 	{
-		query = readCookie('deal-filters');
+		var cookie_filter_id = readCookie('deal-filter-name');
+		var filterModel = App_Deals.deal_filters.collection.get(cookie_filter_id);
+		if(filterModel){
+			filterJSON = filterModel.toJSON();
+		}
+		
+		if(filterJSON){
+			filterJSON.filterOwner = {};
+		}
 		// Remove the milestone field in the filters if it is milestone view.
-		if (!readCookie("agile_deal_view"))
-		{
-			var json = $.parseJSON(query);
-			if (json.pipeline_id.length == 0)
+		if (filterJSON && !readCookie("agile_deal_view")){
+			var json = filterJSON;
+			if (!json.pipeline_id)
 				json.pipeline_id = readCookie('agile_deal_track');
 			json.milestone = '';
 			return JSON.stringify(json);
+		}else if (filterJSON && readCookie("agile_deal_view")){
+			return JSON.stringify(filterJSON);
+		}else if(!filterJSON && !readCookie("agile_deal_view")){
+			var json = {};
+			json.pipeline_id = readCookie('agile_deal_track');
+			return JSON.stringify(json);
+		}else{
+			return '';
+		}
+	}else{
+		if (!readCookie("agile_deal_view")){
+			var json = {};
+			json.pipeline_id = readCookie('agile_deal_track');
+			return JSON.stringify(json);
+		}else{
+			return '';
 		}
 	}
-	return query;
 }
 
 
@@ -297,6 +348,12 @@ $('#opportunity-listners').on('click', '.deals-list-view', function(e) {
 	$('#opportunity-listners').on('change', '#pipeline', function(e)
 	{
 		var el = $(this).closest('form');
+		if(!$(this).val())
+		{
+			$('#milestone',el).find('option[value!=""]').remove();
+			$('#milestone',el).find('option[value=""]').text("Any");
+			return;
+		}
 		$('#milestone', el).closest('div').find('.loading-img').show();
 		// Fills milestone select element
 		populateMilestones(el, undefined, $(this).val(), undefined, function(data)
@@ -688,6 +745,47 @@ $('#opportunity-listners').on('click', '.deals-list-view', function(e) {
     	e.preventDefault();
     	createCookie('deal-milestone-view','fit');
     	App_Deals.deals();
+    });
+
+    $('#opportunity-listners').off('click', '#value_filter');
+	$('#opportunity-listners').on('click', '#value_filter', function(e) {
+		var that = $(this);
+    	that.find('option').each(function(){
+    		if($(this).val()==that.val()){
+    			$('.'+$(this).val()).removeClass('hide');
+    		}else{
+    			$('.'+$(this).val()).addClass('hide');
+    		} 
+    	});
+    });
+
+    $('#opportunity-listners').off('click', '#view_type');
+	$('#opportunity-listners').on('click', '#view_type', function(e) {
+		if($(this).val()=="milestone"){
+			$('#filter-track').addClass('hide');
+			$('#filter-milestone').addClass('hide');
+		}else{
+			$('#filter-track').removeClass('hide');
+			$('#filter-milestone').removeClass('hide');
+		}
+    });
+
+    $('#opportunity-listners').off('click', '.deal-filter');
+	$('#opportunity-listners').on('click', '.deal-filter', function(e) {
+		var filter_id = $(this).attr("id");
+		var deal_filter = App_Deals.deal_filters.collection.get(filter_id);
+		var deal_filter_json = deal_filter.toJSON();
+		deal_filter_json.filterOwner = {};
+		createCookie('deal-filters', JSON.stringify(deal_filter_json));
+		createCookie('deal-filter-name',filter_id);
+		App_Deals.deals();
+    });
+
+    $('#opportunity-listners').off('click', '.default_deal_filter');
+	$('#opportunity-listners').on('click', '.default_deal_filter', function(e) {
+		eraseCookie('deal-filter-name');
+		eraseCookie('deal-filters');
+		App_Deals.deals();
     });
 
 }
