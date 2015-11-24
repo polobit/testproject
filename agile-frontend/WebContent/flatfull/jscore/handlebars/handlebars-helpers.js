@@ -1018,11 +1018,15 @@ $(function()
 		var el = "";
 		$.each(App_Contacts.contactViewModel[item], function(index, element)
 		{
-			if (element.indexOf("custom_") == 0)
-				element = element.split("custom_")[1];
+			
+			if (element.indexOf("CUSTOM_") == 0) {
+				element = element.split("_")[1];
+				el = el.concat('<th class="text-muted">' + ucfirst(element) + '</th>');
+			}
+			else {
 			element = element.replace("_", " ")
-
 			el = el.concat('<th>' + ucfirst(element) + '</th>');
+			}	
 
 		});
 
@@ -6350,12 +6354,14 @@ $(function()
 		var el = "";
 		$.each(App_Companies.companyViewModel[item], function(index, element)
 		{
-			if (element.indexOf("custom_") == 0)
-				element = element.split("custom_")[1];
+			if (element.indexOf("CUSTOM_") == 0) {
+				element = element.split("_")[1];
+				el = el.concat('<th class="text-muted">' + ucfirst(element) + '</th>');
+			}
+			else {
 			element = element.replace("_", " ")
-
 			el = el.concat('<th>' + ucfirst(element) + '</th>');
-
+			}	
 		});
 
 		return new Handlebars.SafeString(el);

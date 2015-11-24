@@ -37,9 +37,9 @@
 								
 								
 								<a class="dropdown-toggle" data-toggle="dropdown"><span class="fa fa-angle-down text-lg"></span></a>
-								<ul class="dropdown-menu pull-right ">
+								<ul class="dropdown-menu pull-right text-sm">
                                    <li><a href='#contact-edit'>
-                                     <div class="pull-left"><i class="icon-edit"></i>Edit</div> {{#if_keyboard_shortcuts_enabled}}
+                                     <div class="pull-left"><i class="fa fa-pencil-square"></i> Edit</div> {{#if_keyboard_shortcuts_enabled}}
                                      <div class='shortcuts pull-right'>Shift + E</div>
                                      {{/if_keyboard_shortcuts_enabled}}
                                      <div class="clearfix"></div>
@@ -49,7 +49,7 @@
                                      
 <li class="divider"></li>
 									<li><a href='#' class="contact-add-note"><i
-											class="icon-file"></i> Add Note</a></li>
+											class="fa fa-file-text"></i> Add Note</a></li>
 									<li><a href='#' class="contact-add-task"><i
 											class="icon-tasks"></i> Add Task</a></li>
 									{{#hasMenuScope 'DEALS'}}
@@ -62,10 +62,10 @@
 										id="contact-add-campaign"><i class="icon-sitemap"></i> Add
 											to Campaign</a></li>
 									<li><a href='#send-email{{#if_propertyName "email"}}/{{value}}{{/if_propertyName}}' id="contact-send-email"><i
-											class="icon-envelope-alt"></i> Send Email</a></li>
+											class="fa fa-envelope"></i> Send Email</a></li>
 
 									<li class='divider'></li>
-									<li><a href='#contact-duplicate'><i class="icon-copy"></i>
+									<li><a href='#contact-duplicate'><i class="fa fa-clipboard"></i>
 											Duplicate</a></li>
 											
 									<li><a href='#duplicate-contacts/{{id}}'><i class="icon-code-fork"></i>
@@ -74,7 +74,7 @@
 
 							
 									<li><a href='#' id='contact-actions-delete'><i
-											class="icon-trash"></i> Delete</a></li>
+											class="fa fa-trash"></i> Delete</a></li>
 								{{/canEditContact}}
 									
 

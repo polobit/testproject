@@ -227,14 +227,14 @@
 									{{#each_with_index this}}
 									<div class="pull-left">
 										<div class="pull-left">
-											<span class="text-muted" title="{{name}}">{{name}}<span>
+											<span class="text-muted" style="margin-right:3px;" title="{{name}}">{{name}}<span>
 										</div>
 										{{#if_equals index ../this.length}}
 											<div class="pull-left custom-color">
-											{{#if_equals subtype "DATE"}} <i class="fa fa-clock-o m-r-xs m-l-xs"></i> <time class="note-created-time" datetime="{{epochToHumanDate "" value}}">{{epochToHumanDateInFormat value}}</time>{{else}}{{value}} {{/if_equals}}</div>
+											{{#if_equals subtype "DATE"}} <i class="fa fa-clock-o"></i> <time class="note-created-time" datetime="{{epochToHumanDate "" value}}">{{epochToHumanDateInFormat value}}</time>{{else}}{{value}} {{/if_equals}}</div>
 										{{else}}
 											<div class="pull-left custom-color">
-											{{#if_equals subtype "DATE"}} <i class="fa fa-clock-o m-r-xs m-l-xs"></i> <time class="note-created-time" datetime="{{epochToHumanDate "" value}}">{{epochToHumanDateInFormat value}}</time>{{else}}{{value}} {{/if_equals}}</div>
+											{{#if_equals subtype "DATE"}} <i class="fa fa-clock-o"></i> <time class="note-created-time" datetime="{{epochToHumanDate "" value}}">{{epochToHumanDateInFormat value}}</time>{{else}}{{value}} {{/if_equals}}</div>
 										{{/if_equals}}
 										</div>
                                         <div class="clearfix"></div>
