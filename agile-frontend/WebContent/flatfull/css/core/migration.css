@@ -1240,7 +1240,7 @@ color:#1f2427!important;
 }
 
   #added-tags-ul .close {
-    color:#000;
+    color:#363f44;
   }
 
 /*hack for same grid */
@@ -1732,10 +1732,14 @@ box-shadow: 0 5px 10px 0px #bbb;
   border: none;
 }
 #recent-menu .dropdown-menu li > div {
-  padding: 10px 20px;
+  padding: 5px 15px 5px 40px;
 }
  .nav > li > a {
    padding: 10px 20px; 
+}
+.recent-view {
+position: absolute;
+width: 100%!Important;
 }
 
 #noty_bottomRight_layout_container {
@@ -1785,9 +1789,8 @@ box-shadow: 0 5px 10px 0px #bbb;
 .leader-board-text-mobile {
   width: 60%!important;
 }
-.recent-view {
-position: absolute;
-width: 100%!Important;
+.tooltip {
+  display: none!important;
 }
 }
 
