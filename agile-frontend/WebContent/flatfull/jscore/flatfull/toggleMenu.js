@@ -125,11 +125,29 @@ $(document).ready(function(){
    
    }
 
-   $(".person").on("click", function(e){
+	$(".person").on("click", function(e){
 		e.preventDefault();
 		addContactBasedOnCustomfields();
 		
 	});
+    $('body').on('click', function (e) {
+	    $('.popover').each(function () {
+	        //the 'is' for buttons that trigger popups
+	        //the 'has' for icons within a button that triggers a popup
+	        if (!$(this).is(e.target) && $(this).has(e.target).length === 0 && $('.popover').has(e.target).length === 0 && !e.target.closest(".need_help")) {
+	            $(this).popover('hide');
+	        }
+	    });
+	});
+	// initializing need help popover for header page
+   $(".need_help").popover({ placement : 'left',
+					html:true,
+					container: 'body'
+				}).on("click", function(){
+						var $this = $('.popover').find("#need_help_header");
+						$this.closest(".popover").addClass("custom_popover");
+
+    			   }); 
 
    });
 

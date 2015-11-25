@@ -46,25 +46,25 @@ var PortletsRouter = Backbone.Router
 								// Preload images (Images are not showing while
 								// popover if they are not preloaded)
 								preloadImages([
-										'flatfull/img/dashboard_images/Mini-Calendar.jpg',
-										'flatfull/img/dashboard_images/stats.png',
-										'flatfull/img/dashboard_images/Leaderboard.png',
-										'flatfull/img/dashboard_images/account-information.png',
-										'flatfull/img/dashboard_images/Activities.png',
-										'flatfull/img/dashboard_images/Agile-Blog.png',
-										'flatfull/img/dashboard_images/Calls.png',
-										'flatfull/img/dashboard_images/Deals-Funnel.png',
-										'flatfull/img/dashboard_images/Email-opened.png',
-										'flatfull/img/dashboard_images/Events.png',
-										'flatfull/img/dashboard_images/Milestone.png',
-										'flatfull/img/dashboard_images/My-contacts.png',
-										'flatfull/img/dashboard_images/Pending-Deals.png',
-										'flatfull/img/dashboard_images/Revenue-graph.png',
-										'flatfull/img/dashboard_images/Tag-Graph.png',
-										'flatfull/img/dashboard_images/Task-report.png',
-										'flatfull/img/dashboard_images/Task.png',
-										'flatfull/img/dashboard_images/User-Activities.png',
-										'flatfull/img/dashboard_images/Campaign-stats.jpg',
+										updateImageS3Path('flatfull/img/dashboard_images/Mini-Calendar.jpg'),
+										updateImageS3Path('flatfull/img/dashboard_images/stats.png'),
+										updateImageS3Path('flatfull/img/dashboard_images/Leaderboard.png'),
+										updateImageS3Path('flatfull/img/dashboard_images/account-information.png'),
+										updateImageS3Path('flatfull/img/dashboard_images/Activities.png'),
+										updateImageS3Path('flatfull/img/dashboard_images/Agile-Blog.png'),
+										updateImageS3Path('flatfull/img/dashboard_images/Calls.png'),
+										updateImageS3Path('flatfull/img/dashboard_images/Deals-Funnel.png'),
+										updateImageS3Path('flatfull/img/dashboard_images/Email-opened.png'),
+										updateImageS3Path('flatfull/img/dashboard_images/Events.png'),
+										updateImageS3Path('flatfull/img/dashboard_images/Milestone.png'),
+										updateImageS3Path('flatfull/img/dashboard_images/My-contacts.png'),
+										updateImageS3Path('flatfull/img/dashboard_images/Pending-Deals.png'),
+										updateImageS3Path('flatfull/img/dashboard_images/Revenue-graph.png'),
+										updateImageS3Path('flatfull/img/dashboard_images/Tag-Graph.png'),
+										updateImageS3Path('flatfull/img/dashboard_images/Task-report.png'),
+										updateImageS3Path('flatfull/img/dashboard_images/Task.png'),
+										updateImageS3Path('flatfull/img/dashboard_images/User-Activities.png'),
+										updateImageS3Path('flatfull/img/dashboard_images/Campaign-stats.jpg'),
 
 								]);
 								// Event initializers
@@ -163,4 +163,16 @@ function displayTimeAgo(elmnt)
 	console.log($("article.stream-item").parent());
 	
 	$("article.stream-item").parent().addClass("social-striped");
+}
+
+
+function updateImageS3Path(imageUrl){
+
+	if(imageUrl) 
+		  imageUrl = imageUrl.replace("flatfull/", "").replace(/\.{2}/g, '');
+
+	if(!S3_STATIC_IMAGE_PATH)
+		S3_STATIC_IMAGE_PATH = "//doxhze3l6s7v9.cloudfront.net/beta/static/";
+
+	return (S3_STATIC_IMAGE_PATH + imageUrl);
 }

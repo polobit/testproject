@@ -136,7 +136,7 @@ function pie(url, selector, name)
 										], exporting : { enabled : false } }, function(chart)
 									{ // on complete
 
-										chart.renderer.image('img/donut-tooltip-frame.png', 14, 5, 200, 80).add();
+										chart.renderer.image(updateImageS3Path('img/donut-tooltip-frame.png'), 14, 5, 200, 80).add();
 										chart.renderer.text(this.options.tooltip.message, 50, 40).attr("class", 'tooltip-default-message').add();
 
 									});
