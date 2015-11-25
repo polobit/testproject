@@ -47,7 +47,9 @@ var AdminSettingsRouter = Backbone.Router.extend({
 
 	"lost-reasons" : "lostReasons",
 
-	"deal-sources" : "dealSources"
+	"deal-sources" : "dealSources",
+	
+	"deal-goal": "dealGoal",
 
 
 	},
@@ -973,6 +975,43 @@ var AdminSettingsRouter = Backbone.Router.extend({
 		$(".active").removeClass("active");
 		$('.settings-deal-sources').addClass('active');
 		$('#milestone-listner').find('#admin-prefs-tabs-content').parent().removeClass('bg-white');
+	},
+
+	dealGoal : function()
+	{
+			if (!CURRENT_DOMAIN_USER.is_admin)
+		{
+			$('#content').html(getTemplate('others-not-allowed',{}));
+			return;
+		}
+		$('#content').html("<div id='milestone-listner'>&nbsp;</div>");
+			$("#milestone-listner").html(getTemplate("admin-settings"), {});
+		$('#milestone-listner').find('#admin-prefs-tabs-content').html(getTemplate("settings-milestones-tab"), {});
+		
+		this.dealGoalsView = new Base_Collection_View({ url : '/core/api/users', templateKey : "admin-settings-deal-goals",
+			individual_tag_name : 'tr', sortKey : "name", postRenderCallback : function(el)
+			{
+				//initializeMilestoneListners(el);
+				$("input.date").datepicker({ format :CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY, autoclose : true });
+			} });
+		this.dealGoalsView.collection.fetch();
+		$('#content').find('#admin-prefs-tabs-content').find('#settings-milestones-tab-content').html(this.dealGoalsView.render().el);
+		/*getTemplate('admin-settings-deal-goals-model', {}, undefined, function(template_ui)
+				{
+					if (!template_ui)
+						return;
+					$('#settings-milestones-tab-content').html($(template_ui));
+
+					$("input.date").datepicker({ format :CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY, autoclose : true });
+
+
+				}, "#settings-milestones-tab-content");*/
+		$('#content').find('#AdminPrefsTab .select').removeClass('select');
+		$('#content').find('.milestones-tab').addClass('select');
+		$(".active").removeClass("active");
+		$('.settings-deal-goal').addClass('active');
+		$('#milestone-listner').find('#admin-prefs-tabs-content').parent().removeClass('bg-white');
+
 	}
 
 });

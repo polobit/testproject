@@ -222,66 +222,55 @@
 </td>
 </script>
 
-<script id="admin-settings-deal-sources-model-template" type="text/html">
-<div class=" form-horizontal m-t-xs">
-	
+<script id="admin-settings-deal-goals-collection-template" type="text/html">
+<div class="panel wrapper">
+<form id="dealSourcesForm_{{id}}" class="form-horizontal m-b-none pipeline" method=post>
+	<div class="w-md pull-right">
+	<span id="RHS">
+				<input type="text" data-date-format="{{dateFormat}}" prev-val="" class="form-control date required" placeholder="{{dateFormat}}">
+			</span>
+			<span id="RHS_NEW"> 
+				<input type="text" data-date-format="{{dateFormat}}" prev-val="" placeholder="{{dateFormat}}" class="form-control date required">
+			</span>
+			</div>
 	<div class="control-group form-group">
 		<div class="col-md-2"></div>
-        <label class="control-label col-sm-3">Number of Users</label> 
-               <div class="controls col-sm-3">
-
-			<div class="input-group"></div>		
+               <div class="controls col-sm-6">
+		<table id="deal-sources-table" class="table  table-bordered agile-table onlySorting m-b-n-xs table-hover">
+			<tbody id="admin-settings-deal-goals-model-list" class="admin-settings-deal-goals-model-list" style="word-break:normal!important;" ></tbody>
+		</table>
+				
 			</div><!-- End of controls col-sm-6 -->
 	</div> <!-- End of control-group form-group -->
 
 
-	<div class="line line-dashed b-b line-lg m-t-lg"></div>
-	<form class="form-horizontal">
+	<div class="form-horizontal">
 		<div class="control-group form-group  m-b-none">
 		<div class="col-md-2"></div>
-		<label class="control-label col-sm-3">Monthly</label>
-			<div class="controls col-sm-6">
-				<span class="text-danger text-xlg">$<span id="users_total_cost">49.99</span></span>
-{{quantity}}
-				<p class="help-block m-t-none">For <span class="text-danger" id="users_quantity">{{quantity}}</span> <span id="users_quantity_text">Users</span></p>
-			</div>
+		
+	<div class="col-sm-2">
+            
+                <a href="#" type="submit" class="save btn btn-sm btn-primary">Save Changes</a>
+           </div>
+  <label class="control-label col-sm-2">Total</label>
+		</div>
+	</div>
+	
+
+	
+
+</form> <!-- End of form-horizontal -->
+</div>
+</script>
+
+<script id="admin-settings-deal-goals-model-template" type="text/html">
+<td>
+	<div class="pull-left inline-block v-top text-ellipsis deal_source_name_div text-cap">{{name}}
+		
+	</div>
+	<div class="pull-right">
+		<input type="text">
 		</div>
 	</form>
-	<div class="control-group form-group" style="display:none" id="coupon_code_container">
-		<form class="">
-			<label class="control-label col-sm-4 col-xs-12">Coupon Code <br><span class="text-xs">(Only for Credit Card)</span></label>
-			<div class="controls col-xs-5 col-sm-5 p-r-none">
-				<input type="text" class="form-control  input-sm" placeholder="Enter Promo Code" id="coupon_code" rel="tooltip" title="">
-				<span class="error text-danger"></span>
-			</div> <!-- End of controls col-xs-5 col-sm-5 p-r-none -->
-			<div class="controls col-xs-2 col-sm-2 m-l-none p-l-xs" >
-				<input type="button" class="btn btn-sm btn-default" value="Validate" id="check_valid_coupon">
-			</div> <!-- End of controls col-xs-2 col-sm-2 -->
-			<div class="controls col-xs-1 col-sm-1 p-l-none">
-				<i class=""></i>
-			</div> <!-- End of controls col-xs-1 col-sm-1 -->
-		</form>
-	</div> <!-- End of control-group form-group - coupon_code_container -->
-
-	{{#stringToJSON this "billingData"}}{{/stringToJSON}}
-	
-
-	<div class="line ling-lg b-b">
-	</div>
-	<div class="row p-l-xxl p-t-sm">
-		<div class="col-sm-offset-4 col-sm-8 p-l-xxl">
-
-<a href="#purchase-plan" id="purchase-plan"	class="btn btn-large btn-primary">Proceed to Pay</a>
-
-
-			
-<small class="help-block" id="subscribe_plan_tooltext">
-		<i class="fa fa-lock"></i> All transactions are secure and encrypted, and we never store your credit card information
-</small>
-		</div> <!-- End of col-sm-offset-4 col-sm-8 -->
-	</div> <!-- End of row -->
-
-	
-
-</div> <!-- End of form-horizontal -->
+</td>
 </script>
