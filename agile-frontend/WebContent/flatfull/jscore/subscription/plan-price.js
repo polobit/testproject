@@ -629,7 +629,7 @@ function initializeSubscriptionListeners()
 		$.ajax({url:'core/api/subscription/cancel/trial',
 			type:'GET',
 			success:function(data){
-				if(data && data.is_success)
+				if(data && JSON.parse(data).is_success)
 				{
 					add_tag_our_domain("Cancelled Trial");
 					document.location.reload();
