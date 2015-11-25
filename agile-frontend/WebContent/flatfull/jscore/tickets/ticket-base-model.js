@@ -12,6 +12,7 @@ var Ticket_Base_Model = Base_Model_View.extend({
 		"click .show-workflows" : "workflows",
 		"click .toggle-timeline" : "toggleTimeline",
 		"click #change-sla" : "changeSla",
+		"click .contact-deals" : "showContactDeals",
 		"mouseover .hover-edit" : "showEditIcon",
 		"mouseout  .hover-edit" : "hideEditIcon",
 
@@ -205,6 +206,27 @@ var Ticket_Base_Model = Base_Model_View.extend({
 		var defaultDate = (ticketJSON.due_time) ? moment.unix(Math.floor(ticketJSON.due_time/1000)) : false;
 		
 		$('#datetimepicker').data("DateTimePicker").defaultDate(defaultDate);
+	},
+
+	showContactDeals: function(e){
+		e.preventDefault();
+
+		var ticketJSON = App_Ticket_Module.ticketView.model.toJSON();
+		var contactID = ticketJSON.contact.id;
+
+		if(!contactID)
+		{
+			$('div#contact-deals').html('No deals');
+			return;
+		}
+
+		var Deals = Backbone.Collection.extend({
+		  url: '/core/api/contacts/' + contactID + '/deals'
+		});
+
+		new Deals().fetch({success: function(collection){
+			$('div#contact-deals').html(getTemplate('ticket-deals-list', collection.toJSON()));
+		}});
 	},
 
 	renderTicketTimeline: function(e){

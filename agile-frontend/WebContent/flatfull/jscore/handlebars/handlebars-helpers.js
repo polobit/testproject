@@ -6778,8 +6778,13 @@ Handlebars.registerHelper('calculate_due_date', function(due_date, options) {
 
 	if(due_date < currentEpoch){
 
-		return '<span class="label bg-danger pull-right" title="Overdue by ' +  Ticket_Utils.dateDiff(currentEpoch, due_date) + '">Overdue</span>';
+		return '<span class="label bg-danger first-letter-cap inline-block" title="Overdue by ' +  Ticket_Utils.dateDiff(currentEpoch, due_date) + '">Overdue</span>';
 	}	
 
-	return '<span class="label bg-warning pull-right">Due in ' + Ticket_Utils.dateDiff(currentEpoch, due_date) + '</span>';
+	return '<span class="label bg-warning first-letter-cap inline-block">Due in ' + Ticket_Utils.dateDiff(currentEpoch, due_date) + '</span>';
 });
+
+Handlebars.registerHelper('get_current_ticket_filter', function(options) {
+	return Ticket_Filter_ID;
+});
+

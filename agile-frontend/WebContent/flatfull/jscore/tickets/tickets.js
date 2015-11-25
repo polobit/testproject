@@ -22,7 +22,7 @@ var Tickets = {
 				$('#content').html($(template_ui));	
 
 				var isSingleRowView = (CURRENT_DOMAIN_USER.helpdesk_view && CURRENT_DOMAIN_USER.helpdesk_view == 'double_row')
-								 ? false : true;
+								 ? true : false;
 
 				//Fetching ticket toolbar template
 				getTemplate("tickets-toolbar-container", {isSingleRowView: isSingleRowView}, undefined, function(toolbar_ui){
@@ -58,7 +58,7 @@ var Tickets = {
 	fetchTicketsCollection: function(){
 
 		var isSingleRowView = (CURRENT_DOMAIN_USER.helpdesk_view && CURRENT_DOMAIN_USER.helpdesk_view == 'double_row')
-								 ? false : true;
+								 ? true : false;
 
 		App_Ticket_Module.ticketsCollection = new Base_Collection_View({
 			url : '/core/api/tickets/filter?filter_id=' + Ticket_Filter_ID,
