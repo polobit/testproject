@@ -188,7 +188,6 @@ angular.module('builder.projects', [])
 		 * @return promise
 		 */
 		save: function(what) {
-
 			
 			if ($rootScope.savingChanges || ! project.active) {
 				return false;
@@ -260,10 +259,19 @@ angular.module('builder.projects', [])
 
 				$("#landingpagename-msg",parent.document).html('<span style="color: green; margin-left: 85px;">Page saved.</span>').show().fadeOut(3000);
 
-				alertify.log("Saved successfully.", "success");
+				$timeout(function() {
+                	$(".saveLandingPageButton",parent.document).prop("disabled",false);
+					$(".saveLandingPageButton",parent.document).html("Save Page");
+            	}, 3000);
+
+				//alertify.log("Saved successfully.", "success");
 
 			}).error(function(data) {
-				alertify.log(data.substring(0, 500), 'error', 2500);
+				$timeout(function() {
+                	$(".saveLandingPageButton",parent.document).prop("disabled",false);
+					$(".saveLandingPageButton",parent.document).html("Save Page");
+            	}, 3000);
+				//alertify.log(data.substring(0, 500), 'error', 2500);
 			}).finally(function(data) {
 				$rootScope.savingChanges = false;
 			});
