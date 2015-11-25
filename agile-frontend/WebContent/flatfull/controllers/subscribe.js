@@ -8,6 +8,7 @@
 var _data = null;
 var IS_TRIAL = false;
 _IS_EMAIL_PLAN_ACTIVE = false;
+var IS_CANCELLED_USER = false;
 var SubscribeRouter = Backbone.Router
 		.extend({
 
@@ -56,12 +57,6 @@ var SubscribeRouter = Backbone.Router
 			subscribePlan : function()
 			{
 				Backbone.history.navigate("subscribe", { trigger : true });
-			},
-
-			trialSubscribe: function()
-			{
-				IS_TRIAL = true;
-				this.subscribe();
 			},
 
 			cardUpdation : function()
@@ -674,6 +669,36 @@ var SubscribeRouter = Backbone.Router
 				$("#invoice-details-holder").html(this.invoice.render().el);
 
 			},
+
+			trialSubscribe: function()
+			{
+				IS_TRIAL = true;
+				var that = this;
+				if(!IS_CANCELLED_USER)
+				{
+					$.ajax({ url : "core/api/subscription/agileTags?email="+CURRENT_DOMAIN_USER.email,
+					 type : "GET",
+					 dataType: "json",
+					 contentType : "application/json; charset=utf-8",
+					 success : function(data)
+						{
+							console.log(data);
+							if(data && data.tags)
+							{
+								if ( $.inArray('Cancellation Request', data.tags) > -1 || $.inArray('Cancelled Trial', data.tags) > -1) {
+								    IS_CANCELLED_USER = true;
+								}
+							}
+							that.subscribe();
+						},error : function(){
+							alert("Error occured. Please Reload the page.")
+						}
+					});	
+				}
+				else{
+					that.subscribe();
+				}
+			}
 
 		});
 

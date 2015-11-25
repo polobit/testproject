@@ -747,3 +747,42 @@ users.
 </div>
 </div>
 </script>
+
+<script id="trial-error-modal-template" type="text/html">
+	<div class="modal" data-backdrop="static">
+<div class="modal-dialog">
+    <div class="modal-content">
+		<div class="modal-header">
+            <button class="close" data-dismiss="modal">x</button>
+			<h3 class="modal-title">Plan Restrictions</h3>
+		</div>
+		<div class="modal-body help-text">
+			<strong>Sorry, we are unable to cancel your free trial subscription due to the following reasons:</strong><br/><br/>
+			
+				{{#if_greater userscount userslimit}}
+					<div class="p-t-xs"><i class="fa fa-angle-double-right pull-left" style="margin-top:3px;"></i><div class="p-l">Free plan does not allow more than {{userslimit}} users.</div></div>
+				{{/if_greater}}
+				{{#if_greater contactcount contactlimit}}
+					<div class="p-t-xs"><i class="fa fa-angle-double-right pull-left" style="margin-top:3px;"></i><div class="p-l">Free plan does not allow more than {{contactlimit}} contacts.</div></div>
+				{{/if_greater}}
+				{{#if_greater compaigncount compaignlimit}}
+					<div class="p-t-xs"><i class="fa fa-angle-double-right pull-left" style="margin-top:3px;"></i><div class="p-l">Free plan does not allow more than {{compaignlimit}} campaigns.</div></div>
+				{{/if_greater}}
+				{{#if_greater webrulecount webrulelimit}}
+					<div class="p-t-xs"><i class="fa fa-angle-double-right pull-left" style="margin-top:3px;"></i><div class="p-l">Free plan does not allow more than {{webrulelimit}} web rules.</div></div>
+				{{/if_greater}}
+				{{#if_greater triggerscount triggerslimit}}
+					<div class="p-t-xs"><i class="fa fa-angle-double-right pull-left" style="margin-top:3px;"></i><div class="p-l">Free plan does not allow more than {{triggerslimit}} triggers.</div></div>
+				{{/if_greater}}
+			
+			<br/>
+			<div class="text-danger">Please reset your account with the help of the above mentioned features and then proceed to cancel your trial subscription</div>
+			
+		</div>
+		<div class="modal-footer">
+			<a href="#" data-dismiss="modal" class="btn btn-sm btn-danger">Close</a>
+		</div>
+	</div>
+</div>
+</div>
+</script>

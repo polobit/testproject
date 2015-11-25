@@ -6766,29 +6766,31 @@ Handlebars.registerHelper('getS3ImagePath',function(imageUrl){
 });
 	Handlebars.registerHelper('is_trial_exist', function(billingData, options)
 	{
-		if (!billingData && billingData.subscriptions)
+		if (billingData && billingData.subscriptions){
+			var is_trial_exist = false;
+			$.each(billingData.subscriptions.data, function( index, value ) {
+			  if(!value.plan.id.indexOf("email") > -1 && value.trialStart && value.trialEnd && value.trialEnd >= (new Date().getTime()))
+			  {
+			  	var trial_start = value.trialStart;
+			  	var trial_end = value.trialEnd;
+			  	if(trial_end - trial_start <= 864000){
+			  		is_trial_exist = true;
+			  		return false;
+			  	}
+			  }
+			});
+			if(is_trial_exist)
+				return options.fn(this);
+			else
+				return options.inverse(this);
+		}else{
 			return options.inverse(this);
-		var is_trial_exist = false;
-		$.each(billingData.subscriptions.data, function( index, value ) {
-		  if(!value.plan.id.indexOf("email") > -1)
-		  {
-		  	var trial_start = value.trialStart;
-		  	var trial_end = value.trialEnd;
-		  	if(trial_end - trial_start <= 864000){
-		  		is_trial_exist = true;
-		  		return false;
-		  	}
-		  }
-		});
-		if(is_trial_exist)
-			return options.fn(this);
-		else
-			return options.inverse(this);
+		}
 	});
 
 	Handlebars.registerHelper('is_cancelled_user', function(options)
 	{
-		if(hasTagInContact("Cancellation Request") || hasTagInContact("Cancelled Trial"))
+		if(IS_CANCELLED_USER)
 			return options.fn(this);
 		else if(IS_TRIAL)
 			return options.inverse(this);

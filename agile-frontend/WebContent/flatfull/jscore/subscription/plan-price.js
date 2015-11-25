@@ -122,7 +122,7 @@ function update_price()
 	var plan_name = $("#plan_type").val();
 	if(_billing_restriction.currentLimits.planName == "FREE")
 	{
-		if(plan_name == "starter" || hasTagInContact("Cancellation Request") || hasTagInContact("Cancelled Trial"))
+		if(plan_name == "starter" || IS_CANCELLED_USER)
 			$("#purchase-plan").text("Proceed to Pay");
 		else if(IS_TRIAL)
 			$("#purchase-plan").text("Proceed to Free Trial");
@@ -422,7 +422,7 @@ function initializeSubscriptionListeners()
 
 				if(_billing_restriction.currentLimits.planName == "FREE")
 				{
-					if(plan_name == "starter" || hasTagInContact("Cancellation Request") || hasTagInContact("Cancelled Trial"))
+					if(plan_name == "starter" || IS_CANCELLED_USER)
 						plan_json.date = currentDate.setMonth(currentDate.getMonth() + months) / 1000;
 					else if(IS_TRIAL)
 						plan_json.date = currentDate.setHours(currentDate.getHours()+168);
@@ -626,11 +626,24 @@ function initializeSubscriptionListeners()
 		e.preventDefault();
 		if (!confirm("Are you sure you want cancel your free trial?"))
 			return;
-		$.ajax({url:'core/api/subscription/cancel/subscription',
+		$.ajax({url:'core/api/subscription/cancel/trial',
 			type:'GET',
-			success:function(){
-				add_tag_our_domain("Cancelled Trial");
-				document.location.reload();
+			success:function(data){
+				if(data && data.is_success)
+				{
+					add_tag_our_domain("Cancelled Trial");
+					document.location.reload();
+				}else if(data)
+				{
+					getTemplate("trial-error-modal",JSON.parse(data) , undefined, function(template_ui){
+						if(!template_ui)
+							  return;
+						$(template_ui).modal('show');
+					}, null);
+				}
+
+
+				
 			},error: function(){
 				alert("Error occured, Please try again");
 			}
