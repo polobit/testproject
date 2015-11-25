@@ -101,7 +101,7 @@ public class StripeImpl implements AgileBilling {
 			plan.trialStatus = "applied";
 			//updateParams.put("trial_end", new DateUtil().addDays(7).getTime().getTime() / 1000);
 			//For testing just 2 hours to cancel trial
-			updateParams.put("trial_end", new DateUtil().addMinutes(60).getTime().getTime()/1000);
+			updateParams.put("trial_end", new DateUtil().addMinutes(30).getTime().getTime()/1000);
 		}
 		customer.createSubscription(updateParams);
 		
@@ -259,7 +259,7 @@ public class StripeImpl implements AgileBilling {
 				plan.trialStatus = "applied";
 				//updateParams.put("trial_end", new DateUtil().addDays(7).getTime().getTime() / 1000);
 				//For testing just 2 hours to cancel trial
-				updateParams.put("trial_end", new DateUtil().addMinutes(60).getTime().getTime()/1000);
+				updateParams.put("trial_end", new DateUtil().addMinutes(30).getTime().getTime()/1000);
 			}
 			customer.createSubscription(updateParams);
 
