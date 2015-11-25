@@ -4,9 +4,24 @@
             "category": "General",
             "description": "Category description here",
             "list": [
+				{
+                    "id": "bolt",
+                    "displayname": "bolt free",
+                    "description": "this is sample text"
+                },
                 {
                     "id": "flatapp",
                     "displayname": "Flat App",
+                    "description": "this is sample text"
+                },
+				{
+                    "id": "flatty",
+                    "displayname": "Flatty free",
+                    "description": "this is sample text"
+                },
+				{
+                    "id": "pratt",
+                    "displayname": "Pratt free",
                     "description": "this is sample text"
                 },
                 {
