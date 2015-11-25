@@ -87,7 +87,13 @@ function constructNodeFromDefinition(nodeJSONDefinition, jsonData, nodeId) {
     // Init tags typeahead for Tags or Check Tags node. Naresh 30/10/2013
     if(nodeJSONDefinition.name === "Tags" || nodeJSONDefinition.name === "Check Tags")
     {
-    	init_tags_typeahead();
+    	init_tags_typeahead("#tag_names, #tag_value", "tags");
+    }
+    
+    // Init labels typeahead for labels or Check labels node. Vaishnavi 24/11/15
+    if(nodeJSONDefinition.name === "Labels" || nodeJSONDefinition.name === "Check Labels")
+    {
+    	init_tags_typeahead("#label_names, #label_value", "labels");
     }
     
     if(nodeJSONDefinition["name"] == "Send Message" && (jsonData == undefined || jsonData == "json/nodes/sms/sendmessage.js"))
