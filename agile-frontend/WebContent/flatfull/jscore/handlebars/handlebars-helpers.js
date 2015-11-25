@@ -6769,7 +6769,7 @@ Handlebars.registerHelper('getS3ImagePath',function(imageUrl){
 		if (billingData && billingData.subscriptions){
 			var is_trial_exist = false;
 			$.each(billingData.subscriptions.data, function( index, value ) {
-			  if(!value.plan.id.indexOf("email") > -1 && value.trialStart && value.trialEnd && value.trialEnd >= (new Date().getTime()))
+			  if(!value.plan.id.indexOf("email") > -1 && value.trialStart && value.trialEnd && value.trialEnd >= (new Date().getTime()/1000))
 			  {
 			  	var trial_start = value.trialStart;
 			  	var trial_end = value.trialEnd;
