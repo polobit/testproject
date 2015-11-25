@@ -168,6 +168,9 @@ function displayTimeAgo(elmnt)
 
 function updateImageS3Path(imageUrl){
 
+	if(!imageUrl)
+		  imageUrl = "";
+		
 	if(imageUrl) 
 		  imageUrl = imageUrl.replace("flatfull/", "").replace(/\.{2}/g, '');
 
