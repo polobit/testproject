@@ -503,10 +503,10 @@ public class ReportsUtil
 		catch(Exception e){
 			e.printStackTrace();
 		}
-				callsObject.put("answeredCalls", 0);
-				callsObject.put("busyCalls",0);
-				callsObject.put("failedCalls",0);
-				callsObject.put("voicemails",0);
+				callsObject.put("Answered", 0);
+				callsObject.put("Busy",0);
+				callsObject.put("Failed",0);
+				callsObject.put("Voicemails",0);
 			     Calendar startCalendar = Calendar.getInstance(TimeZone.getTimeZone(timeZone));
 			        startCalendar.setTimeInMillis(minTime * 1000);
 			        
@@ -543,30 +543,30 @@ public class ReportsUtil
 		                    if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.ANSWERED))
 		                    	{
 		                    	
-		                    		int count1=count.getInt("answeredCalls");
+		                    		int count1=count.getInt("Answered");
 		                    		count1++;
-		                    		count.put("answeredCalls",count1);
+		                    		count.put("Answered",count1);
 		                    	}
 							else if(activity.custom3!=null && (activity.custom3.equalsIgnoreCase(Call.BUSY) || activity.custom3.equalsIgnoreCase(Call.NO_ANSWER)))
 							{
 		                    	
-	                    		int count1=count.getInt("busyCalls");
+	                    		int count1=count.getInt("Busy");
 	                    		count1++;
-	                    		count.put("busyCalls",count1);
+	                    		count.put("Busy",count1);
 	                    	}
 							else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.FAILED))
 							{
 		                    	
-	                    		int count1=count.getInt("failedCalls");
+	                    		int count1=count.getInt("Failed");
 	                    		count1++;
-	                    		count.put("failedCalls",count1);
+	                    		count.put("Failed",count1);
 	                    	}
 							else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.VOICEMAIL))
 							{
 		                    	
-	                    		int count1=count.getInt("voicemails");
+	                    		int count1=count.getInt("Voicemails");
 	                    		count1++;
-	                    		count.put("voicemails",count1);
+	                    		count.put("Voicemails",count1);
 	                    	}
 		                    callsPerPersonJSON.put(createdTime, count);
 			            }
