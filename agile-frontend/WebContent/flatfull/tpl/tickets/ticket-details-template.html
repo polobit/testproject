@@ -7,33 +7,80 @@
         <div class="row-row">
           <div class="wrapper contactView p-t-sm" style="width:299px;">
             <div class="panel panel-default m-t-sm">
-              <div class="panel-body">
-                <div class="row m-n">
-                  <div class="col-md-12 p-n">Contact Info</i>
-                    <hr class="m-t-sm m-b-sm">
-                  </div>
-                  <div class="col-md-12 p-n">
-                    <table class="ticket-details-table w-full txt-small">
-                      <tr>
-                          <td>Ticket #</td>
-                          <td>{{short_id}}</td>
-                      </tr>
-                      <tr>
-                          <td class="p-t-xs">Requester Name</td>
-                          <td class="p-t-xs">{{requester_name}}</td>
-                      </tr>
-                      <tr>
-                          <td class="p-t-xs">Requester Email</td>
-                          <td class="p-t-xs inline-block">
-                            <a href="/#contacts/search/{{requester_email}}" target="_blank" title="Search contacts" 
-                                style="border-bottom: 1px dashed #23b7e5;">
-                              {{requester_email}}
-                            </a>
-                          </td>
-                      </tr>
-                    </table>
-                  </div>
+              <div class="panel-body p-n">
+                <div class="nav-tabs-alt">
+                  <ul class="nav nav-tabs" role="tablist">
+                    <li class="active width50">
+                      <a data-target="#tab-1" role="tab" data-toggle="tab" aria-expanded="true">
+                        <i class="fa fa-user"></i> Contact
+                      </a>
+                    </li>
+                    <li class="width50">
+                      <a class="contact-deals" data-target="#tab-2" role="tab" data-toggle="tab" aria-expanded="false">
+                        <i class="fa fa-money"></i> Deals
+                      </a>
+                    </li>
+                  </ul>
                 </div>
+                <div class="tab-content">
+                  <div role="tabpanel" class="tab-pane active" id="tab-1">
+                    <div class="wrapper-md p">
+                      <div class="row m-n">
+                        <div class="col-md-12 p-n">
+                          <div class="thumb-sm agile-img m-r-sm">
+                            <img class="img-inital r r-2x" src="{{gravatarurl contact.properties 24}}"/>
+                          </div>
+                          <div>
+                            <span class="first-letter-cap inline-block">
+                              {{getPropertyValue contact.properties "first_name"}}
+                              {{getPropertyValue contact.properties "last_name"}} 
+                            </span><br/>
+                            <span class="first-letter-cap inline-block">
+                              {{getPropertyValue contact.properties "company"}}
+                            </span>
+                          </div>
+                        </div>
+                        <div class="col-md-12 p-n m-t-xs">
+                          <div>
+                           <i class="fa fa-envelope fa-fw text-muted"></i>
+                              {{getPropertyValue contact.properties "email"}}
+                          </div>
+                          <div>
+                           <i class="fa fa-phone fa-fw text-muted"></i>
+                              <a href="tel:{{getPropertyValue contact.properties "phone"}}" class="contact-make-call contact-call-button" phone="{{getPropertyValue contact.properties "phone"}}">
+                                {{getPropertyValue contact.properties "phone"}}
+                              </a>
+                          </div>    
+                        </div>
+                        <div class="col-md-12 p-n m-t-xs">
+                          <a target="_blank" data-toggle="tooltip" data-placement="bottom" data-original-title="Website" href="/{{getPropertyValueBytype contact.properties 'website' '' 'URL'}}" 
+                            class="text-l-none tooltip_info">
+                            <i class="{{get_social_icon URL}} text-base text-muted tooltip_info"></i>
+                          </a>
+                          <a target="_blank" data-toggle="tooltip" data-placement="bottom" 
+                            data-original-title="Twitter" href="https://twitter.com/{{getPropertyValueBytype contact.properties 'website' '' 'TWITTER'}}" class="m-l-xs">
+                              <i class="{{get_social_icon "TWITTER"}} text-base text-muted tooltip_info"></i>
+                          </a>
+                          <a target="_blank" class="text-l-none tooltip_info m-l-xs" data-toggle="tooltip" data-placement="bottom" data-original-title="Facebook" href="https://www.facebook.com/{{getPropertyValueBytype contact.properties 'website' '' 'FACEBOOK'}}">
+                            <i class="{{get_social_icon "FACEBOOK"}} text-base text-muted tooltip_info"></i>
+                          </a>
+                          <a class="text-l-none tooltip_info m-l-xs" target="_blank" data-toggle="tooltip" data-placement="bottom" data-original-title="Skype" href="skype:{{getPropertyValueBytype contact.properties 'website' '' 'SKYPE'}}"> 
+                            <i class="{{get_social_icon "SKYPE"}}   text-base text-muted tooltip_info"></i>
+                          </a>
+                        </div>
+                      </div>    
+                    </div>
+                  </div>
+                  <div role="tabpanel" class="tab-pane tab-2" id="tab-2">
+                    <div class="wrapper-md p">
+                      <div class="row m-n">
+                        <div class="col-md-12 p-n" id="contact-deals">
+
+                        </div>
+                      </div>
+                    </div>
+                  </div>                    
+                </div>    
               </div>
             </div>
             <!-- <div class="text-center pos-rlt">
@@ -169,34 +216,34 @@
               <button class="btn btn-sm btn-default w-xxs w-auto-xs delete-ticket" data-toggle="tooltip" data-placement="bottom" data-original-title="Delete Ticket"><i class="fa fa-trash-o"></i></button>
             </div>  
 
-            <button class="btn btn-sm btn-default w-xxs w-auto-xs dropdown-toggle show-workflows" data-toggle="tooltip" data-placement="bottom" data-original-title="Workflows"><i class="fa fa-sitemap"></i></button>
-
             <div class="btn-group pos-stc">
               <button class="btn btn-sm btn-default w-xxs w-auto-xs dropdown-toggle" data-toggle="tooltip" data-placement="bottom" data-original-title="Reply"><i class="fa fa-mail-reply"></i></button>
                <button class="btn btn-sm btn-default w-xxs w-auto-xs dropdown-toggle" data-toggle="tooltip" data-placement="bottom" data-original-title="Forward"><i class="fa fa-mail-forward"></i></button>
                 <button class="btn btn-sm btn-default w-xxs w-auto-xs dropdown-toggle" data-toggle="tooltip" data-placement="bottom" data-original-title="Add Notes"><i class="fa fa-file-text"></i></button>
             </div>
 
+            <button class="btn btn-sm btn-default w-xxs w-auto-xs dropdown-toggle show-workflows" data-toggle="tooltip" data-placement="bottom" data-original-title="Workflows"><i class="fa fa-sitemap"></i></button>
+
             <!-- Toolbar menu -->
-            <div class="btn-group pos-stc">
+            <!--<div class="btn-group pos-stc">
               <button class="btn btn-sm btn-default w-xxs w-auto-xs dropdown-toggle" data-toggle="tooltip" data-placement="bottom" data-original-title="Close Ticket"><i class="fa fa-copyright"></i></button>
-            </div>
+            </div>-->
           </div>
           <!-- End of ticket toolbar -->
 
           <!-- Start of ticket notes -->
           <div class="wrapper bg-light p-t-sm p-b-sm pos-rlt">
-            <h2 class="font-thin m-t-none m-b-none inline-block">
+            <h2 class="font-thin m-t-none m-b-none inline-block" style="width: 88%;">
               {{subject}}
+              <div class="inline-block m-l-sm text-sm">
+                <span class="label bg-light dk text-tiny first-letter-cap inline-block">
+                  {{status}}
+                </span>&nbsp;
+                <span class="label {{toLowerCase priority}}-priority-bg text-tiny first-letter-cap inline-block">
+                  {{priority}}
+                </span>
+              </div>
             </h2>
-            <div class="inline-block m-l-sm" style="vertical-align: super;">
-              <span class="label bg-light dk text-tiny first-letter-cap inline-block">
-                {{status}}
-              </span>&nbsp;
-              <span class="label {{toLowerCase priority}}-priority-bg text-tiny first-letter-cap inline-block">
-                {{priority}}
-              </span>
-            </div>
             <div class="ticket-number">
               <small class="text-muted"># {{short_id}}</small>
             </div>  
@@ -326,4 +373,22 @@
       {{/group_users}}
     </optgroup>
   {{/each}}  
+</script>
+<script  id="ticket-deals-list-template" type="text/html">
+  {{#unless this.length}}
+    No Deals
+  {{/unless}}  
+  {{#each this}}
+    <div class="col-md-12 p-n m-t-xs">
+      <div>
+        {{name}}
+      </div>
+      <div>
+        $ {{expected_value}} <span class="text-muted">{{milestone}}({{probability}}%)</span>
+      </div>
+      <div class="text-ellipsis">
+        {{description}}
+      </div>
+    </div>
+  {{/each}}
 </script>

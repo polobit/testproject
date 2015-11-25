@@ -37,23 +37,24 @@
 	    {{/unless}}
 	    {{#if this.length}}
 			<div class="data">
-				<div class="data-container"></div>
-            	<div class="table-responsive">
-					<div class="panel panel-default" style="border-top: none;">
+				<div class="panel-heading">Tickets List</div>
+				<div class="dta-contatiner table-responsive">
+					<div class="panel panel-default" style="overflow-x:auto; border-left:none; border-top: none;">
 						<table class="table table-striped showCheckboxes no-sorting panel"
-							url="core/api/bulk/update?action_type=DELETE">
+							url="core/api/bulk/update?action_type=DELETE" style="table-layout: auto;">
 							<thead>
 								<tr>
 									<th>Subject</th>
 									<th>Requester</th>
 									<th>Labels</th>
-									<th>Due Date</th>
-									<th>Status</th>
 									<th>Assignee</th>
+									<th>Due Date</th>
+									<th>Priority</th>
+									<th>Status</th>
 								</tr>
 							</thead>
 							<tbody id="ticket-single-row-model-list" class="ticket-single-row-model-list"
-								route="contact/">
+								route="tickets/filter/{{get_current_ticket_filter}}/ticket/">
 							</tbody>
 						</table>	
 					</div>

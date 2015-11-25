@@ -93,19 +93,29 @@
     </label>
   </td>
   <td class="data first-letter-cap" data="{{id}}">
-    {{subject}}
+    <div class="row m-n" style="width: 10em;">{{subject}}</div>
   </td>
   <td class="first-letter-cap">
-    {{requester_name}}
+    <div class="text-ellipsis" style="width: 10em;">
+      <a class="text-cap">{{requester_name}}</a>
+    </div>
   </td>
   <td>
-    <div class="overflow-hidden line-clamp line-clamp-2" style="width:15em;">   
+    {{#unless labels.length}}
+    {{else}}
+      <div class="overflow-hidden line-clamp line-clamp-2" style="width:15em;">   
         {{#each labels}}
           <span class="label bg-light dk text-tiny">{{label}}</span> 
         {{/each}}
+      </div>
+    {{/unless}}
+  </td>
+  <td class="first-letter-cap">
+    <div class="text-ellipsis" style="width: 10em;">
+      <a class="text-cap">{{#if assigneeID}}{{assignee.name}}{{else}}-{{/if}}</a>
     </div>
   </td>  
-  <td class="first-letter-cap">
+  <td>
     {{#if due_time}}
       {{{calculate_due_date due_time}}}
     {{else}}
@@ -117,7 +127,9 @@
       {{priority}}
     </span>
   </td>
-  <td class="first-letter-cap">
-    {{#if assigneeID}}{{assignee.name}}{{else}}-{{/if}}
+  <td>
+    <span class="label bg-light dk text-tiny first-letter-cap inline-block">
+      {{status}}
+    </span>
   </td>
 </script>
