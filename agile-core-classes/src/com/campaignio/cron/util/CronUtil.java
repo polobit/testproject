@@ -272,11 +272,10 @@ public class CronUtil
 			searchMap.put("custom3", custom3);
 
 		List<Cron> cronJobs = dao.listByProperty(searchMap);
-
+		dao.deleteAll(cronJobs);
+		
 		// Execute in another tasklet
 		executeTasklets(cronJobs, Cron.CRON_TYPE_INTERRUPT, interruptData, cronJobs.size());
-
-		dao.deleteAll(cronJobs);
 	}
 
 	/**
