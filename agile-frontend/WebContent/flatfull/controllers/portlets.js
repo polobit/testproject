@@ -170,9 +170,13 @@ function updateImageS3Path(imageUrl){
 
 	if(!imageUrl)
 		  imageUrl = "";
-		
-	if(imageUrl) 
-		  imageUrl = imageUrl.replace("flatfull/", "").replace(/\.{2}/g, '');
+	
+	try{
+		if(imageUrl){
+			imageUrl = imageUrl.replace("flatfull/", "").replace(/\.{2}/g, '');
+	    }	
+	}catch(e){}
+		  
 
 	if(!S3_STATIC_IMAGE_PATH)
 		S3_STATIC_IMAGE_PATH = "//doxhze3l6s7v9.cloudfront.net/beta/static/";
