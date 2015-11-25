@@ -102,11 +102,14 @@ var Ticket_Filters = {
 				//Fetch ticket collection count
 				Tickets_Count.fetchFilterTicketsCount();
 
-				Ticket_Filter_ID =  !Ticket_Filter_ID ? App_Ticket_Module.ticketFiltersList.collection.at(0).id : Ticket_Filter_ID;
+				if(!App_Ticket_Module.ticketFiltersList.collection || 
+					App_Ticket_Module.ticketFiltersList.collection.length ==0){
 
-				//Highlighting choosen li
-				$('a[filter-id="' + Ticket_Filter_ID + '"]').closest('li').addClass('active');
+					$('div.tickets-collection-pane').html(getTemplate('ticket-collection'));
+					return;
+				}
 
+				Ticket_Filter_ID =  App_Ticket_Module.ticketFiltersList.collection.at(0).id;
 				var url = '#tickets/filter/' + Ticket_Filter_ID;
 				Backbone.history.navigate(url, {trigger : false});
 
@@ -121,7 +124,8 @@ var Ticket_Filters = {
 		});
 
 		App_Ticket_Module.ticketFiltersList.collection.fetch();
-		$("#filters-list-container").html(App_Ticket_Module.ticketFiltersList.el);
+		//$("#filters-list-container").html(App_Ticket_Module.ticketFiltersList.el);
+		$("div.filters-drp-down").html(App_Ticket_Module.ticketFiltersList.el);
 	},
 
 	renderFiltersCollection: function(callback){
@@ -131,5 +135,22 @@ var Ticket_Filters = {
 
 		if(callback)
 			callback();
+	},
+
+	updateFilterName: function(){
+
+		var filterJSON = {};
+
+		if(!Ticket_Filter_ID){
+			filterJSON = App_Ticket_Module.ticketFiltersList.collection.at(0).toJSON();
+			Ticket_Filter_ID =  !Ticket_Filter_ID ? filterJSON.id : Ticket_Filter_ID;
+		}else{
+			filterJSON = App_Ticket_Module.ticketFiltersList.collection.get(Ticket_Filter_ID).toJSON();
+		}
+		
+		//Highlighting choosen li
+		$('ul.ticket-types').find('li').removeClass('active');
+		$('.filter-name-btn').text(filterJSON.name);
+		$('a[filter-id="' + Ticket_Filter_ID + '"]').closest('li').addClass('active');
 	}
 };

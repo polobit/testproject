@@ -60,6 +60,8 @@ var Tickets = {
 		var isSingleRowView = (CURRENT_DOMAIN_USER.helpdesk_view && CURRENT_DOMAIN_USER.helpdesk_view == 'double_row')
 								 ? true : false;
 
+		Ticket_Custom_Filters.init();
+
 		App_Ticket_Module.ticketsCollection = new Base_Collection_View({
 			url : '/core/api/tickets/filter?filter_id=' + Ticket_Filter_ID,
 			global_sort_key: Sort_Field,
@@ -81,8 +83,8 @@ var Tickets = {
 					$("time", el).timeago();		
 				});
 
-				$('ul.ticket-types').find('li').removeClass('active');
-				$('a[filter-id="' + Ticket_Filter_ID + '"]').closest('li').addClass('active');
+				
+				Ticket_Filters.updateFilterName();
 
 				//Initializing click event on each ticket li
 				Tickets.initEvents(el);

@@ -374,6 +374,11 @@
     </optgroup>
   {{/each}}  
 </script>
+<script id="ticket-change-group-template" type="text/html">
+  {{#each this}}
+    <option value="{{id}}">{{group_name}}</option>
+  {{/each}}  
+</script>
 <script  id="ticket-deals-list-template" type="text/html">
   {{#unless this.length}}
     No Deals

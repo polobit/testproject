@@ -1,20 +1,30 @@
 <script id="ticket-filters-list-collection-template" type="text/html">
 {{#unless this.length}}
-	<a href="#ticket-filters" class="btn btn-sm btn-default btn-addon">
-		<i class="fa fa-plus fa-fw m-r-xs"></i> Create Filters
-	</a>
+	<button class="btn btn-default btn-sm" data-toggle="dropdown">No filters available 
+		<span class="caret"></span>
+	</button>
+	<ul class="dropdown-menu">
+		<li><a href="/#add-ticket-filter">Create Filter</a></li>
+	</ul>
 {{else}}
-    <ul id="ticket-filters-list-model-list" class="nav nav-pills nav-stacked nav-sm  ticket-types">
+	<button class="btn btn-default btn-sm filter-name-btn m-l-xs p-n b-n" data-toggle="dropdown" 
+		style="font-size: 18px; background-color: #F6F8F8; box-shadow: none;">
+	</button>
+	<button class="btn btn-default btn-sm dropdown-toggle b-n" data-toggle="dropdown" aria-expanded="false" 
+		style="background-color: #F6F8F8; background-color: #F6F8F8; box-shadow: none;">
+		<span class="caret"></span>
+	</button>
+    <ul id="ticket-filters-list-model-list" class="dropdown-menu ticket-types">
 
 	</ul>
 {{/unless}}
 </script>
 <script id="ticket-filters-list-model-template" type="text/html">
 	<a filter-id="{{id}}" href="#tickets/filter/{{id}}">
-		<span filter-id="{{id}}" class="text-ellipsis" style="max-width: 86%; display: inline-block;">
+		<badge class="badge pull-right"></badge>
+		<span filter-id="{{id}}" class="text-ellipsis p-r-lg">
 			{{name}}
 		</span>
-		<badge class="badge pull-right"></badge>
 	</a>
 </script>	
 <script id="ticket-filters-loader-template" type="text/html">
