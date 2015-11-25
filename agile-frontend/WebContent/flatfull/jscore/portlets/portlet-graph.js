@@ -911,9 +911,7 @@ var portlet_graph_utility = {
 																	userIndex = i;
 															}
 															return '<div>'
-																	+ '<div class="p-n" style="color:'
-																	+ this.series.color
-																	+ ';">'
+																	+ '<div class="p-n">'
 																	+ domainUserNamesList[userIndex]
 																	+ ' </div>'
 																	+ '<div class="p-n" style="color:'
