@@ -3596,10 +3596,10 @@ $(function()
 	 */
 	Handlebars.registerHelper('if_greater', function(value, target, options)
 	{
-		if (parseInt(target) > value)
-			return options.inverse(this);
-		else
+		if (parseInt(target) < value)
 			return options.fn(this);
+		else
+			return options.inverse(this);
 	});
 
 	/**
