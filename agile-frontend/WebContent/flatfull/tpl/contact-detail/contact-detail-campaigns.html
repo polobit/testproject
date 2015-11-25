@@ -35,7 +35,7 @@
 	        {{/canEditCurrentContact}}
             <form id="add-to-campaign-form" class="show_campaigns_list" style="display:none;">
             	<div class="control-group form-group">
-                	<div class="controls upload-doc-field">
+                	<div class="controls">
 			        	<select id="campaign-select" class="required form-control w inline-block" name="campaign_id">
                         	<option value="">Select...</option>
                       	</select>
@@ -53,7 +53,7 @@
 		        {{/canEditCurrentContact}}
          	<form id="add-to-campaign-form" class="show_campaigns_list" style="display: none;">
 				<div class="control-group form-group">
-                	<div class="controls upload-doc-field">
+                	<div class="controls">
 			        	<select id="campaign-select" class="required form-control w inline-block" name="campaign_id">
                         	<option value="">Select...</option>
                       	</select>	
@@ -75,7 +75,7 @@
 <div class="clearfix"></div>
 		{{#unless this.length}}
         <div class="wrapper p-t-none">
-            <div class="slate-content mobile-pad-content">
+            <div class="slate-content">
                 <div class="box-left pull-left m-r-md">
                     <img alt="Clipboard" src="{{getS3ImagePath '/img/clipboard.png'}}" />
                 </div>
@@ -107,7 +107,7 @@
 <div class="activity-text-block">
 	<div class="activity-block-owner thumb-xs pull-left m-r-sm b-light b avatar">
 		{{#if log_type}}
-			<img class="user-img r-2x"  alt="" src="{{getS3ImagePath}}/img/campaigns/{{log_type}}.png">
+			<img class="user-img r-2x"  alt="" src="{{getS3ImagePath ''}}/img/campaigns/{{log_type}}.png">
 		{{else}}
 			<img class="user-img r-2x"  src="https://dpm72z3r2fvl4.cloudfront.net/css/images/user-default.png">
 		{{/if}}
