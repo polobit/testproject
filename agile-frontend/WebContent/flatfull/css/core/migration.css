@@ -1798,6 +1798,12 @@ width: 100%!Important;
 .tooltip {
   display: none!important;
 }
+#deal-details-tab > li {
+  float: none;
+}
+#deal-details-tab > li > a {
+  margin-right: 0px;
+}
 }
 
 @media all and (min-width: 768px) {

@@ -21,8 +21,16 @@ var DealsRouter = Backbone.Router.extend({
 		if (readCookie("agile_deal_track"))
 			pipeline_id = readCookie("agile_deal_track");
 		$('#content').html("<div id='opportunity-listners'>&nbsp;</div>");
+		//fix for mobile view showing only list view 
+		var isMobile;
+		if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+			isMobile = false;
+		}
+		else {
+			isMobile = true;
+		}
 		// Depending on cookie shows list or milestone view
-		if (!readCookie("agile_deal_view"))
+		if (!readCookie("agile_deal_view") && isMobile)
 		{
 			template_key = "opportunities-by-milestones";
 
