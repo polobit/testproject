@@ -12,11 +12,11 @@ public class GoalsUtil
 {
 
 	
-	 public JSONObject saveGoal(JSONObject jsonobject)
+	 public static List<Goals> saveGoal(JSONObject jsonobject)
 	    {
 		 return null;
 	    }
-	  public static List<Goals> fetchAllReports()
+	  public static List<Goals> fetchAllGoals()
 	    {
 		return Goals.dao.fetchAll();
 	    }
