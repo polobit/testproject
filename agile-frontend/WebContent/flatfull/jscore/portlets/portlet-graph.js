@@ -876,7 +876,7 @@ var portlet_graph_utility = {
 												},
 												series : series,
 												exporting : {
-													enabled : true
+													enabled : false
 												},
 												tooltip : {
 													borderWidth : 1,
