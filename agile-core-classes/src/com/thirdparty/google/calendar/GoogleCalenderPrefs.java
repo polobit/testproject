@@ -1,7 +1,9 @@
 package com.thirdparty.google.calendar;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import javax.persistence.Id;
 import javax.persistence.PostLoad;
@@ -54,6 +56,9 @@ public class GoogleCalenderPrefs
     // domain user key
     @JsonIgnore
     private Key<DomainUser> domainUserKey = null;
+
+    @NotSaved
+    public List<String> calendarList = new ArrayList<String>();
 
     public static ObjectifyGenericDao<GoogleCalenderPrefs> dao = new ObjectifyGenericDao<GoogleCalenderPrefs>(
 	    GoogleCalenderPrefs.class);
@@ -117,6 +122,7 @@ public class GoogleCalenderPrefs
     @PostLoad
     void postLoad()
     {
+	System.out.println("************************************************************ prefs google *************");
 	if (System.currentTimeMillis() >= expires_at)
 	    try
 	    {
@@ -127,6 +133,12 @@ public class GoogleCalenderPrefs
 		// TODO Auto-generated catch block
 		e.printStackTrace();
 	    }
+
+	calendarList.add("primary");
+	// calendarList.add("ak02hkb2ef10q40ccd1kro94f8@group.calendar.google.com");
+
+	System.out.println("Calendars : " + calendarList);
+
     }
 
     @PrePersist
