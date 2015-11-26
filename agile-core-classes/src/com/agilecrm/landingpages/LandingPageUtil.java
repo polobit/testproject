@@ -1,5 +1,7 @@
 package com.agilecrm.landingpages;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
@@ -36,10 +38,21 @@ public class LandingPageUtil
 	
 	public static LandingPage getLandingPage(HttpServletRequest req)
 	{
+		String protocol = "http://";
 		Map<String, String> reqHeaders = getHeadersInfo(req);
 		String cname = reqHeaders.get("cname");
 		System.out.println(cname);
 			if(cname != null) {
+				String cnameURLWithOutQueryString = "";
+				try {
+					URL landingPageURL = new URL(protocol+cname);
+					cnameURLWithOutQueryString = landingPageURL.getProtocol()+"://"+landingPageURL.getHost()+landingPageURL.getPath();
+					System.out.println("Query String excluded : " + cnameURLWithOutQueryString);
+				} catch (MalformedURLException e) {
+					System.out.println("MalformedURLException");
+					return null;
+				}
+				
 				String oldNameSpace = NamespaceManager.get();
 				NamespaceManager.set("");
 				
@@ -48,7 +61,7 @@ public class LandingPageUtil
 					Query<LandingPageCNames> q = null;
 					ObjectifyGenericDao<LandingPageCNames> dao = new ObjectifyGenericDao<LandingPageCNames>(LandingPageCNames.class);
 					q = dao.ofy().query(LandingPageCNames.class);
-					q.filter("cname", "http://"+cname);
+					q.filter("cname", cnameURLWithOutQueryString);
 					LandingPageCNames lpCNames =  q.get();
 					if(lpCNames == null)
 						return null;
