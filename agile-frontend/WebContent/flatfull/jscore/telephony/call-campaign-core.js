@@ -95,12 +95,7 @@ function stopCallCampaign()
 	// step3:
 	campaignVariableToInitialState();
 	// step4:
-	if (window.location.hash.indexOf("#contacts") != -1)
-	{
-		return;
-	}else{
-		routeToPage("contacts");
-	}
+	routeToPage("contacts");
 
 }
 
@@ -139,6 +134,8 @@ function showSettingPage()
  */
 function routeToPage(url)
 {
+	if(window.location.hash == ("#" + url))
+        return;
 
 	if (window.location.hash.indexOf("#" + url) != -1)
 	{
@@ -511,14 +508,8 @@ function getContact(contactId)
 {
 	console.log("In getContact");
 
-	try
-	{
-		return App_Contacts.contactsListView.collection.where({ id : contactId })[0].toJSON();
+	return App_Contacts.contactsListView.collection.where({ id : contactId })[0].toJSON();
 
-	}catch(err){
-		return App_Contacts.contactsListView.collection.get(contactId).toJSON();
-	}
-	
 	// var json = $.parseJSON($.ajax({ url : '/core/api/contacts/' + contactId,
 	// async : false, dataType : 'json' }).responseText);
 

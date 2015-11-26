@@ -22,31 +22,35 @@ function editTask(taskId, taskListId, taskListOwnerId)
 	taskJson["taskListId"] = taskListId;
 	taskJson["taskListOwnerId"] = taskListOwnerId;
 
-	// Fill form
-	deserializeForm(taskJson, $("#updateTaskForm"));
-	$('.update-task-timepicker').val(fillTimePicker(taskJson.due));
-
 	// Show modal
-	$("#updateTaskModal").modal('show');
-	categories.getCategoriesHtml(taskJson,function(catsHtml){
-		$('#type',$("#updateTaskForm")).html(catsHtml);
-		// Fills owner select element
-		populateUsers("owners-list", $("#updateTaskForm"), taskJson, 'taskOwner', function(data)
-		{
-			$("#updateTaskForm").find("#owners-list").html(data);
-			if (taskJson.taskOwner)
-			{
-				$("#owners-list", $("#updateTaskForm")).find('option[value=' + taskJson['taskOwner'].id + ']').attr("selected", "selected");
-			}
+	$("#updateTaskModal").html(getTemplate("task-update-modal")).modal('show');
 	
-			$("#owners-list", $("#updateTaskForm")).closest('div').find('.loading-img').hide();
+	loadProgressSlider($("#updateTaskForm"), function(el){
+		// Fill form
+		deserializeForm(taskJson, $("#updateTaskForm"));
+		$('.update-task-timepicker').val(fillTimePicker(taskJson.due));
+
+		categories.getCategoriesHtml(taskJson,function(catsHtml){
+			$('#type',$("#updateTaskForm")).html(catsHtml);
+			// Fills owner select element
+			populateUsers("owners-list", $("#updateTaskForm"), taskJson, 'taskOwner', function(data)
+			{
+				$("#updateTaskForm").find("#owners-list").html(data);
+				if (taskJson.taskOwner)
+				{
+					$("#owners-list", $("#updateTaskForm")).find('option[value=' + taskJson['taskOwner'].id + ']').attr("selected", "selected");
+				}
+		
+				$("#owners-list", $("#updateTaskForm")).closest('div').find('.loading-img').hide();
+			});
 		});
+
+		showNoteOnForm("updateTaskForm", taskJson.notes);
+
+		// Creates normal time.
+		displayTimeAgo($(".task-trello-list"));
 	});
 
-	showNoteOnForm("updateTaskForm", taskJson.notes);
-
-	// Creates normal time.
-	displayTimeAgo($(".task-trello-list"));
 }
 
 // Update edited task

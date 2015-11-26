@@ -448,6 +448,8 @@ public class ScribeServlet extends HttpServlet {
 
 		} catch (Exception e) {
 			statusMSG += " : " + e.getMessage();
+			e.printStackTrace();
+			
 			returnURL = "/#add-widget";
 			if (ScribeUtil.closeOpendWindow(returnURL, req, resp)) {
 				return;
