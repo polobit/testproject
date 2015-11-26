@@ -156,17 +156,20 @@ function setupNewDealFilters(callback)
 }
 function setNewDealFilters(data){
 	var filters_list = data.toJSON();
-	var filters_ui = "<li><a href='#deal-filters'>Add/Edit Filter</a></li>";
-	if(filters_list.length>0){
-		filters_ui += "<li class='divider'></li>";
-	}
+	var filters_ui = "<li><a class='default_deal_filter'>All Deals</a></li>" + 
+					 "<li class='divider'></li>" + 
+					 "<li><a href='#deal-filters'>Add/Edit Filter</a></li>" +
+					 "<li class='divider'></li>" +
+					 "<li><a class='deal-filter' id='my-deals'>My Deals</a></li>";
 	$.each(filters_list,function(index, filter){
 		filters_ui += "<li><a class='deal-filter' id='"+filter.id+"'>"+filter.name+"</a></li>"
 	});
 	$('#deal-filter-list-model-list').html(filters_ui);
 	var cookie_filter_id = readCookie("deal-filter-name");
-	if(cookie_filter_id && data.get(cookie_filter_id) && data.get(cookie_filter_id).get('name')){
-		$('#opportunity-listners').find('h3').find('small').after('<div class="inline-block tag btn btn-xs btn-primary m-l-xs"><span class="inline-block m-r-xs v-middle">'+data.get(cookie_filter_id).get("name")+'</span><a class="close default_deal_filter">×</a></div>')
+	if(cookie_filter_id && cookie_filter_id != 'my-deals' && data.get(cookie_filter_id) && data.get(cookie_filter_id).get('name')){
+		$('#opportunity-listners').find('h3').find('small').after('<div class="inline-block tag btn btn-xs btn-primary m-l-xs"><span class="inline-block m-r-xs v-middle">'+data.get(cookie_filter_id).get("name")+'</span><a class="close default_deal_filter">×</a></div>');
+	}else if(cookie_filter_id && cookie_filter_id == 'my-deals'){
+		$('#opportunity-listners').find('h3').find('small').after('<div class="inline-block tag btn btn-xs btn-primary m-l-xs"><span class="inline-block m-r-xs v-middle">My Deals</span><a class="close default_deal_filter">×</a></div>');
 	}else{
 		eraseCookie('deal-filters');
 	}
@@ -264,13 +267,17 @@ function getDealFilters()
 	if (readCookie('deal-filter-name'))
 	{
 		var cookie_filter_id = readCookie('deal-filter-name');
-		var filterModel = App_Deals.deal_filters.collection.get(cookie_filter_id);
-		if(filterModel){
-			filterJSON = filterModel.toJSON();
-		}
-		
-		if(filterJSON){
-			filterJSON.filterOwner = {};
+		if(cookie_filter_id == 'my-deals'){
+			filterJSON = $.parseJSON(readCookie('deal-filters'));
+		}else{
+			var filterModel = App_Deals.deal_filters.collection.get(cookie_filter_id);
+			if(filterModel){
+				filterJSON = filterModel.toJSON();
+			}
+			
+			if(filterJSON){
+				filterJSON.filterOwner = {};
+			}
 		}
 		// Remove the milestone field in the filters if it is milestone view.
 		if (filterJSON && !readCookie("agile_deal_view")){
@@ -773,9 +780,18 @@ $('#opportunity-listners').on('click', '.deals-list-view', function(e) {
     $('#opportunity-listners').off('click', '.deal-filter');
 	$('#opportunity-listners').on('click', '.deal-filter', function(e) {
 		var filter_id = $(this).attr("id");
-		var deal_filter = App_Deals.deal_filters.collection.get(filter_id);
-		var deal_filter_json = deal_filter.toJSON();
-		deal_filter_json.filterOwner = {};
+		var deal_filter;
+		var deal_filter_json = {};
+		if(filter_id == 'my-deals'){
+			deal_filter_json['owner_id'] = CURRENT_DOMAIN_USER.id;
+			deal_filter_json['milestone'] = "";
+			deal_filter_json['archived'] = "all";
+			deal_filter_json['value_filter'] = "equals";
+		}else{
+			deal_filter = App_Deals.deal_filters.collection.get(filter_id);
+			deal_filter_json = deal_filter.toJSON();
+			deal_filter_json.filterOwner = {};
+		}
 		createCookie('deal-filters', JSON.stringify(deal_filter_json));
 		createCookie('deal-filter-name',filter_id);
 		App_Deals.deals();
