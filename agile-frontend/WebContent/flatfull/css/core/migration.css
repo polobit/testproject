@@ -1555,11 +1555,17 @@ a#email-reply{
   position: absolute;
 }*/
 
-.details-mobile-view {
+.details-mobile-view ,.company-details-mobile-view{
   width: 299px;
 }
 
+
+
 @media all and (max-width: 767px) {
+.company-details-mobile-view {
+  width: 97.0vw;
+  }
+
 .details-mobile-view {
   width: 100%;
 }
