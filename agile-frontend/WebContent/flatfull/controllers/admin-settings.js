@@ -992,7 +992,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			individual_tag_name : 'tr', sortKey : "name", postRenderCallback : function(el)
 			{
 				//initializeMilestoneListners(el);
-				$("input.date").datepicker({ format :CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY, autoclose : true });
+				$("input.date").datepicker({ format :"MM yyyy", minViewMode:"months" ,weekStart : CALENDAR_WEEK_START_DAY, autoclose : true });
 			} });
 		this.dealGoalsView.collection.fetch();
 		$('#content').find('#admin-prefs-tabs-content').find('#settings-milestones-tab-content').html(this.dealGoalsView.render().el);

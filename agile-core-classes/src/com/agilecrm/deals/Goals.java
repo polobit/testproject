@@ -27,6 +27,9 @@ public class Goals implements Serializable
 
     @NotSaved(IfDefault.class)
     public Long value = 0L;
+    
+    @NotSaved(IfDefault.class)
+    public Long count = 0L;
 
     //@NotSaved
     public Long domain_user_id;
@@ -43,12 +46,13 @@ public class Goals implements Serializable
 
     }
 
-    public Goals(Long domain_user_id,Long start_time,Long end_time,Long value)
+    public Goals(Long domain_user_id,Long start_time,Long end_time,Long value,Long count)
     {
 	this.domain_user_id = domain_user_id;
 	this.start_time = start_time;
 	this.end_time=end_time;
 	this.value=value;
+	this.count=count;
     }
 
     
@@ -72,7 +76,7 @@ public class Goals implements Serializable
     public String toString()
     {
 	StringBuilder builder = new StringBuilder();
-	builder.append("Id").append(id).append(", value=").append(value).append(", startTime=")
+	builder.append("Id").append(id).append(", value=").append(value).append(", count=").append(count).append(", startTime=")
 	        .append(start_time).append(", endTime=").append(end_time).append(", domain_user_id=").
 	        append(domain_user_id).append("]");
 	return builder.toString();

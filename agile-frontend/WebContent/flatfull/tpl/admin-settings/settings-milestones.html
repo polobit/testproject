@@ -226,18 +226,20 @@
 <div class="panel wrapper">
 <form id="dealSourcesForm_{{id}}" class="form-horizontal m-b-none pipeline" method=post>
 	<div class="w-md pull-right">
+	<label>Duration</label>
 	<span id="RHS">
 				<input type="text" data-date-format="{{dateFormat}}" prev-val="" class="form-control date required" placeholder="{{dateFormat}}">
-			</span>
-			<span id="RHS_NEW"> 
-				<input type="text" data-date-format="{{dateFormat}}" prev-val="" placeholder="{{dateFormat}}" class="form-control date required">
 			</span>
 			</div>
 	<div class="control-group form-group">
 		<div class="col-md-2"></div>
                <div class="controls col-sm-6">
 		<table id="deal-sources-table" class="table  table-bordered agile-table onlySorting m-b-n-xs table-hover">
-			<tbody id="admin-settings-deal-goals-model-list" class="admin-settings-deal-goals-model-list" style="word-break:normal!important;" ></tbody>
+			<tbody id="admin-settings-deal-goals-model-list" class="admin-settings-deal-goals-model-list" style="word-break:normal!important;" >
+				<tr>
+					<th><div></div><div class="pull-right">Amount</div><div class="pull-right">count</div></th>
+				</tr>
+			</tbody>
 		</table>
 				
 			</div><!-- End of controls col-sm-6 -->
@@ -269,7 +271,10 @@
 		
 	</div>
 	<div class="pull-right">
-		<input type="text">
+		<input class="amount" type="text">
+		</div>
+		<div class="pull-right">
+		<input class="count" type="text">
 		</div>
 	</form>
 </td>
