@@ -3598,9 +3598,9 @@ $(function()
 	Handlebars.registerHelper('if_greater', function(value, target, options)
 	{
 		if (parseInt(target) > value)
-			return options.fn(this);
-		else
 			return options.inverse(this);
+		else
+			return options.fn(this);
 	});
 
 	/**
