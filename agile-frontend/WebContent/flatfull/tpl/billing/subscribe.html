@@ -90,7 +90,7 @@
 {{#is_cancelled_user}}
 Choose
 {{else}}
-7 DAY FREE Trial
+7 Day Trial
 {{/is_cancelled_user}}
 {{else}}
 Choose
@@ -127,7 +127,7 @@ Choose
 {{#is_cancelled_user}}
 Choose
 {{else}}
-7 DAY FREE Trial
+7 Day Trial
 {{/is_cancelled_user}}
 {{else}}
 Choose
@@ -319,7 +319,7 @@ Choose
 {{#is_cancelled_user}}
 Proceed to Pay
 {{else}}
-Proceed to Free Trial
+Proceed to Trial
 {{/is_cancelled_user}}
 {{else}}
 Proceed to Pay
@@ -636,7 +636,7 @@ users.
 	{{#check_plan "FREE"}}
 	{{else}}
 	{{#is_trial_exist billingData}}
-	<a href="#"  id="cancel_free_trial" class="pull-right text-lg text-info" style="font-size:12px;">Cancel your Free Trial</a>
+	<a href="#"  id="cancel_free_trial" class="pull-right text-lg text-info" style="font-size:12px;">Cancel your Trial</a>
 	{{else}}
 	<a href="#"  id="cancel-account-request" class="pull-right text-lg text-info" style="font-size:12px;">Cancel Subscription</a>
 	{{/is_trial_exist}}
@@ -757,23 +757,23 @@ users.
 			<h3 class="modal-title">Plan Restrictions</h3>
 		</div>
 		<div class="modal-body help-text">
-			<strong>Sorry, we are unable to cancel your free trial subscription due to the following reasons:</strong><br/><br/>
+			<strong>Sorry, we are unable to cancel your trial subscription due to the following reasons:</strong><br/><br/>
 			
-				{{#if_greater userscount userslimit}}
+				{{#is_greater userscount userslimit}}
 					<div class="p-t-xs"><i class="fa fa-angle-double-right pull-left" style="margin-top:3px;"></i><div class="p-l">Free plan does not allow more than {{userslimit}} users.</div></div>
-				{{/if_greater}}
-				{{#if_greater contactcount contactlimit}}
+				{{/is_greater}}
+				{{#is_greater contactcount contactlimit}}
 					<div class="p-t-xs"><i class="fa fa-angle-double-right pull-left" style="margin-top:3px;"></i><div class="p-l">Free plan does not allow more than {{contactlimit}} contacts.</div></div>
-				{{/if_greater}}
-				{{#if_greater compaigncount compaignlimit}}
-					<div class="p-t-xs"><i class="fa fa-angle-double-right pull-left" style="margin-top:3px;"></i><div class="p-l">Free plan does not allow more than {{compaignlimit}} campaign.</div></div>
-				{{/if_greater}}
-				{{#if_greater webrulecount webrulelimit}}
-					<div class="p-t-xs"><i class="fa fa-angle-double-right pull-left" style="margin-top:3px;"></i><div class="p-l">Free plan does not allow more than {{webrulelimit}} web rules.</div></div>
-				{{/if_greater}}
-				{{#if_greater triggerscount triggerslimit}}
-					<div class="p-t-xs"><i class="fa fa-angle-double-right pull-left" style="margin-top:3px;"></i><div class="p-l">Free plan does not allow more than {{triggerslimit}} triggers.</div></div>
-				{{/if_greater}}
+				{{/is_greater}}
+				{{#is_greater compaigncount compaignlimit}}
+					<div class="p-t-xs"><i class="fa fa-angle-double-right pull-left" style="margin-top:3px;"></i><div class="p-l">Free plan does not allow more than {{compaignlimit}} campaign{{#is_greater compaignlimit 1}}s{{/is_greater}}.</div></div>
+				{{/is_greater}}
+				{{#is_greater webrulecount webrulelimit}}
+					<div class="p-t-xs"><i class="fa fa-angle-double-right pull-left" style="margin-top:3px;"></i><div class="p-l">Free plan does not allow more than {{webrulelimit}} web rule{{#is_greater webrulelimit 1}}s{{/is_greater}}.</div></div>
+				{{/is_greater}}
+				{{#is_greater triggerscount triggerslimit}}
+					<div class="p-t-xs"><i class="fa fa-angle-double-right pull-left" style="margin-top:3px;"></i><div class="p-l">Free plan does not allow more than {{triggerslimit}} trigger{{#is_greater triggerslimit 1}}s{{/is_greater}}.</div></div>
+				{{/is_greater}}
 			
 			<br/>
 			<div class="text-danger">Please reset your account with the help of the above mentioned features and then proceed to cancel your trial subscription</div>

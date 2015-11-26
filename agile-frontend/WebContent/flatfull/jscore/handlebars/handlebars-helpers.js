@@ -3593,10 +3593,11 @@ $(function()
 	/**
 	 * Compares the arguments (value and target) and executes the template based
 	 * on the result (used in contacts typeahead)
+	 * working as greater than or equal to
 	 */
 	Handlebars.registerHelper('if_greater', function(value, target, options)
 	{
-		if (parseInt(target) < value)
+		if (parseInt(target) > value)
 			return options.fn(this);
 		else
 			return options.inverse(this);
@@ -6786,6 +6787,19 @@ Handlebars.registerHelper('getS3ImagePath',function(imageUrl){
 		}else{
 			return options.inverse(this);
 		}
+	});
+
+	/**
+	 * Compares the arguments (value and target) and executes the template based
+	 * on the result (used in contacts typeahead)
+	 * working as greater than but not equal to
+	 */ 
+	Handlebars.registerHelper('is_greater', function(value, target, options)
+	{
+		if (parseInt(target) < value)
+			return options.fn(this);
+		else
+			return options.inverse(this);
 	});
 
 	Handlebars.registerHelper('is_cancelled_user', function(options)

@@ -12,9 +12,15 @@
 <div class="col-md-9">
 <div class="panel panel-default">
 			<div class="panel-heading">Confirm your plan
-
-					<a href="#subscribe" class="pull-right m-r-sm text-info" onclick=
-"_IS_EMAIL_PLAN_ACTIVE = false;">Change Plan</a>
+	{{#check_plan "FREE"}}
+	{{#is_cancelled_user}}
+	<a href="#subscribe" class="pull-right m-r-sm text-info" onclick="_IS_EMAIL_PLAN_ACTIVE = false;">Change Plan</a>
+	{{else}}
+	<a href="#trial-subscribe" class="pull-right m-r-sm text-info" onclick="_IS_EMAIL_PLAN_ACTIVE = false;">Change Plan</a>
+	{{/is_cancelled_user}}
+	{{else}}
+	<a href="#subscribe" class="pull-right m-r-sm text-info" onclick="_IS_EMAIL_PLAN_ACTIVE = false;">Change Plan</a>
+	{{/check_plan}}
 
 			</div>
 		<div class="panel-body">
@@ -123,7 +129,7 @@ Months
 {{#check_plan "FREE"}}
 {{#is_cancelled_user}}
 {{else}}
-{{#if_equals plan "starter"}}{{else}}<p class="m-b-none text-danger col-sm-offset-3 col-sm-9" style="font-size:13px;padding-left:8px;"> Please note that the account will be charged for the selected plan <span style="font-weight: 600;">after the 7day free trial</span> period ends.</p>{{/if_equals}}
+{{#if_equals plan "starter"}}{{else}}<p class="m-b-none text-danger col-sm-offset-3 col-sm-9" style="font-size:13px;padding-left:8px;"> Please note that the account will be charged for the selected plan <span style="font-weight: 600;">after the 7day trial.</span></p>{{/if_equals}}
 {{/is_cancelled_user}}
 {{else}}
 {{/check_plan}}	
@@ -176,7 +182,7 @@ Months
 				{{#check_plan "FREE"}}
 				{{#is_cancelled_user}}
 				{{else}}
-				{{#if_equals plan "starter"}}{{else}}<p class="m-b-none text-danger col-sm-offset-3 col-sm-9" style="font-size:13px;padding-left:8px;"> Please note that the account will be charged for the selected plan <span style="font-weight: 600;">after the 7day free trial</span> period ends.</p>{{/if_equals}}
+				{{#if_equals plan "starter"}}{{else}}<p class="m-b-none text-danger col-sm-offset-3 col-sm-9" style="font-size:13px;padding-left:8px;"> Please note that the account will be charged for the selected plan <span style="font-weight: 600;">after the 7day trial.</span></p>{{/if_equals}}
 				{{/is_cancelled_user}}
 				{{else}}
 				{{/check_plan}}	
@@ -206,7 +212,7 @@ Months
 {{#is_cancelled_user}}
 Pay Now
 {{else}}
-{{#if_equals plan "starter"}}Pay Now{{else}}Start FREE Trial{{/if_equals}}
+{{#if_equals plan "starter"}}Pay Now{{else}}Start Trial{{/if_equals}}
 {{/is_cancelled_user}}
 {{else}}
 Pay Now
@@ -243,7 +249,15 @@ Pay Now
 									or save $<b>{{bi_yearly_discount}}</b> by upgrading to 2 year
 									plan.
 								</p>
-<a href="#subscribe" type="submit" class="btn btn-sm btn-primary">Change Plan</a>
+	{{#check_plan "FREE"}}
+	{{#is_cancelled_user}}
+	<a href="#subscribe" type="submit" class="btn btn-sm btn-primary">Change Plan</a>
+	{{else}}
+	<a href="#trial-subscribe" type="submit" class="btn btn-sm btn-primary">Change Plan</a>
+	{{/is_cancelled_user}}
+	{{else}}
+	<a href="#subscribe" type="submit" class="btn btn-sm btn-primary">Change Plan</a>
+	{{/check_plan}}
 							</div>
 							{{/if_equals}} {{#if_equals "Yearly" cycle}}
 							<div class="panel text-center p-b" style="border: 0;">
@@ -256,7 +270,16 @@ Pay Now
 									You can save $<b>{{bi_yearly_discount}}</b> by upgrading to 2
 									year plan.
 								</p>
+{{#check_plan "FREE"}}
+{{#is_cancelled_user}}
 <a href="#subscribe" type="submit" class="btn btn-sm btn-primary">Change Plan</a>
+{{else}}
+<a href="#trial-subscribe" type="submit" class="btn btn-sm btn-primary">Change Plan</a>
+{{/is_cancelled_user}}
+{{else}}
+<a href="#subscribe" type="submit" class="btn btn-sm btn-primary">Change Plan</a>
+{{/check_plan}}
+
 							</div>
 							</div>
 {{/if_equals}}

@@ -125,7 +125,7 @@ function update_price()
 		if(plan_name == "starter" || IS_CANCELLED_USER)
 			$("#purchase-plan").text("Proceed to Pay");
 		else if(IS_TRIAL)
-			$("#purchase-plan").text("Proceed to Free Trial");
+			$("#purchase-plan").text("Proceed to Trial");
 		else
 			$("#purchase-plan").text("Proceed to Pay");
 	}else
@@ -624,7 +624,7 @@ function initializeSubscriptionListeners()
 
 	$("#subscribe_plan_change").on("click","#cancel_free_trial",function(e){
 		e.preventDefault();
-		if (!confirm("Are you sure you want cancel your free trial?"))
+		if (!confirm("Are you sure you want cancel your trial?"))
 			return;
 		$.ajax({url:'core/api/subscription/cancel/trial',
 			type:'GET',
