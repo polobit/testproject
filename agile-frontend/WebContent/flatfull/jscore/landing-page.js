@@ -1,4 +1,24 @@
+jQuery.validator.addMethod("lpdomain", function(value, element) {
+	if(value == '')
+		return true;
+	return /^[a-zA-Z0-9][a-zA-Z0-9-]{1,61}[a-zA-Z0-9](?:\.[a-zA-Z]{2,})+$/.test(value);
+	 },"Invalid domain.");
+	
+jQuery.validator.addMethod("lpsubdomain", function(value, element) {
+	if(value == '')
+		return true;
+	return /^[a-zA-Z0-9-]+$/.test(value);
+	},"Invalid sub domain.");
+
+jQuery.validator.addMethod("lpdirectorypath", function(value, element) {
+	if(value == '')
+		return true;
+	return /^(\/\w+)+[a-z0-9-.]+$/.test("/"+value);
+	},"Invalid path.");
+
 function initializeLandingPageListeners() {
+
+	var alertBoxMarkup = '<div class="alert alert-success" role="alert">{{}}</div>';
 
 	$('#landingpages-listeners').off();
 	
@@ -27,8 +47,25 @@ function initializeLandingPageListeners() {
 
 	$('#landingpages-listeners').on('click', '#landingPageSettingBtn', function (e) {
 		e.preventDefault();
-		$("#statusMessageHolder").removeClass("text-success text-danger");
-		if (!isValidForm('#landingPageSettingForm')) {
+
+		$('#landingPageSettingForm').validate({
+           rules: {
+               sub_domain: {
+                  required: true,
+                  lpsubdomain: true
+             	}, 
+				domain: {
+                  required: true,
+                  lpdomain: true
+             	},
+			 	directory_path: {
+				  required: false,
+				  lpdirectorypath: true
+             	}
+           }
+       });
+		
+		if (!$('#landingPageSettingForm').valid()) {
 			return;
 		}
 		var $btn = $(this).button('loading');
@@ -44,11 +81,9 @@ function initializeLandingPageListeners() {
       	landingPageModel.url = 'core/api/landingpages';
       	landingPageModel.save(model.toJSON(), { success : function(obj){
       		if(obj.get("isDuplicateCName")) {
-      			$("#statusMessageHolder").addClass("text-danger");
-				$("#statusMessageHolder").html("Custom domain should be unique").show().fadeOut(3000);
+				landingPageShowAlertMessage("Custom domain should be unique","alert-danger");
 			} else {
-				$("#statusMessageHolder").addClass("text-success");
-				$("#statusMessageHolder").html("Custom domain saved successfully").show().fadeOut(3000);
+				landingPageShowAlertMessage("Custom domain saved successfully","alert-success");
 				$("#cname").attr("href",CNAME);
 				$("#landingPageVerifyBtn").show();
 				App_LandingPageRouter.LandingPageCollectionView.collection.get(modelId).set(obj);
@@ -89,20 +124,17 @@ function initializeLandingPageListeners() {
 
 	$('#landingpages-listeners').on('click', '#landingPageVerifyBtn', function (e) {
 		 e.preventDefault();
-		 $("#statusMessageHolder").removeClass("text-success text-danger");
 		 var cnameEL = document.getElementById("cname");
 
 		 if($("#cname").attr("href") != "") {
 		 	$.get("core/api/landingpages/verifycname?domain="+cnameEL.hostname, function(data) {
 		 		if(data.result) {
-		 			$("#statusMessageHolder").addClass("text-success");
-		 			$("#statusMessageHolder").html("CNAME is correct. Found " + data.cnames[0]).show();
+		 			landingPageShowAlertMessage("CNAME is correct. Found " + data.cnames[0],"alert-success");
 		 		} else {
-		 			$("#statusMessageHolder").addClass("text-danger");
-		 			if(typeof data.cnames[0] != "undefined") {
-		 				$("#statusMessageHolder").html("CNAME is incorrect. Found " + data.cnames[0]).show();
+		 			if(typeof data.cnames != "undefined" && typeof data.cnames[0] != "undefined") {
+		 				landingPageShowAlertMessage("CNAME is incorrect. Found " + data.cnames[0],"alert-danger");
 		 			} else {
-		 				$("#statusMessageHolder").html("CNAME is not found.").show();
+		 				landingPageShowAlertMessage("CNAME is not found.","alert-danger");
 		 			}
 		 		}
 		 	});
@@ -113,4 +145,10 @@ function initializeLandingPageListeners() {
 
 function onLandingPageBuilderLoad() {
 	$("#landingPageBuilderMenuNav").show();
+}
+
+function landingPageShowAlertMessage(message, type) {
+	$("#statusMessageHolder").html('<div class="alert '+type+'" role="alert">'
+	+ '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>'
+	+ message + '</div>');
 }

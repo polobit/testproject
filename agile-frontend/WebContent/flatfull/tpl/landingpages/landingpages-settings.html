@@ -26,37 +26,42 @@
 
     <div>
 
-    <div id="cnameSettingsFields">
+<div id="cnameSettingsFields">
+      <p>Enter the domain you want to point to the landing page.</p>
 
-        <div class="form-group">
-            <label for="inpuFname">Enter the domain you want to point to the landing page.</label>
-            <div class="input-group">
-              <span class="input-group-addon">http://</span>
-
-              <input type="text" value="" class="form-control" id="sub_domain" name="sub_domain" placeholder="Sub Domain" required>
-              <span class="input-group-addon" style="border-left: none;border-right: none;">.</span>
-
-              <input type="text" value="" class="form-control" id="domain" name="domain" placeholder="Domain" required>
-              <span class="input-group-addon" style="border-left: none;border-right: none;">/</span>
-
-              <input type="text" value="" class="form-control" id="directory_path" name="directory_path" placeholder="Optional Directory">
+    <div class="form-group">
+      <div class="col-md-12">
+        <div class="form-group row m-b-xs">
+            <label class="col-md-1 form-control input-group-addon" style="min-width:60px;border-right:none;border-radius:0px;">http://</label>
+            <div class="col-md-3 p-n">
+              <input type="text" value="" class="form-control" style="border-radius:0px;" id="sub_domain" name="sub_domain" placeholder="Sub Domain(Eg: page)">
+              <label for="sub_domain" generated="true" class="error" style="display: inline-block;color: #d9534f;"></label>
             </div>
-            <div class="row">
-              <span for="sub_domain" generated="true" class="col-md-5 help-inline"></span>
-              <span for="domain" generated="true" class="col-md-7 help-inline"></span>
+            <label class="col-md-1 form-control input-group-addon" style="border-left:none;border-right:none;border-radius:0px;">.</label>
+            <div class="col-md-3 p-n">
+              <input type="text" value="" class="form-control" style="border-radius:0px;" id="domain" name="domain" placeholder="Domain(Eg: example.com)">
+              <label for="domain" generated="true" class="error" style="display: inline-block;color: #d9534f;"></label>
+            </div>
+            <label class="col-md-1 form-control input-group-addon" style="border-left:none;border-right:none;border-radius:0px;">/</label>
+            <div class="col-md-3 p-n">
+              <input type="text" value="" class="form-control" style="border-radius:0px;" id="directory_path" name="directory_path" placeholder="Optional Directory">
+              <label for="directory_path" generated="true" class="error" style="display: inline-block;color: #d9534f;"></label>
             </div>
         </div>
+      </div>
+    </div>
 
   <p id="cnameInstructionMessage" style="display:none;">Create a CNAME record in your DNS Setting, with Host &quot;<strong id="cnameHostVal"></strong>&quot; and Destination &quot;<strong>landing.agilecrm.com.</strong>&quot;</p>
+</div>
+
+  <div class="row">
+    <div class="col-md-12" id="statusMessageHolder"></div>
+    <div class="col-md-12">
+      <button class="btn btn-sm btn-primary" id="landingPageSettingBtn" data-pageid="{{id}}" data-loading-text="Saving...">Save</button>
+      &nbsp;<a href="#" class="text-info" id="landingPageVerifyBtn" {{#unless cname}} style="display:none;" {{/unless}}>Verify</a>
+    </div>
   </div>
 
-<div class="row">
-<div class="col-md-12">
-<button class="btn btn-sm btn-primary" id="landingPageSettingBtn" data-pageid="{{id}}" data-loading-text="Saving...">Save</button>
-&nbsp;<a href="#" class="text-info" id="landingPageVerifyBtn" {{#unless cname}} style="display:none;" {{/unless}}>Verify</a>
-&nbsp;<span id="statusMessageHolder"></span>
-</div>
-</div>
     </div>
   </div>
 </div>

@@ -93,10 +93,10 @@
 <i class="fa fa-clock-o m-r-xs"></i>
 {{#if updated_time}}
 &nbsp;<span><em>Modified</em>&nbsp;</span>
-<time class="document-created-time" value="{{updated_time}}" datetime="{{epochToHumanDate "" updated_time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" updated_time}}</time>
+<time class="document-created-time" value="{{updated_time}}" datetime="{{epochToHumanDate "" updated_time}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" updated_time}}</time>
 {{else}}
 &nbsp;<span><em>Created</em>&nbsp;</span>
-<time class="document-created-time" value="{{created_time}}" datetime="{{epochToHumanDate "" created_time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" created_time}}</time>
+<time class="document-created-time" value="{{created_time}}" datetime="{{epochToHumanDate "" created_time}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" created_time}}</time>
 {{/if}}
 </td>
 </script>
