@@ -57,8 +57,8 @@ public class StripePluginUtil {
 		}
 
 		// Un comment the apiKey and customerId, to test in local or beta.
-		// apiKey = "sk_test_Bxuat63XsCfeDiktFUjg0VHG";
-		// customerId = "cus_7PspOg540EA4l8";
+		apiKey = "sk_test_Bxuat63XsCfeDiktFUjg0VHG";
+		customerId = "cus_7PspOg540EA4l8";
 
 		/*
 		 * Retrieves Stripe customer based on Stripe customer ID and Stripe
@@ -110,6 +110,9 @@ public class StripePluginUtil {
 		// Un comment the apiKey and customerId, to test in local or beta.
 		String APIKEY = widget.getProperty("access_token");
 
+		APIKEY = "sk_test_Bxuat63XsCfeDiktFUjg0VHG";
+		customerId = "cus_7PspOg540EA4l8";
+		
 		RequestOptionsBuilder builder = new RequestOptionsBuilder();
 		builder.setApiKey(APIKEY);
 		builder.setStripeVersion("2012-09-24");
