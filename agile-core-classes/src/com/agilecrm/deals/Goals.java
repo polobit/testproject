@@ -6,6 +6,8 @@ import javax.persistence.Id;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.agilecrm.user.DomainUser;
+import com.googlecode.objectify.Key;
 import com.googlecode.objectify.annotation.Cached;
 import com.googlecode.objectify.annotation.NotSaved;
 import com.googlecode.objectify.condition.IfDefault;
@@ -26,7 +28,7 @@ public class Goals implements Serializable
 
 
     @NotSaved(IfDefault.class)
-    public Long value = 0L;
+    public Long amount = 0L;
     
     @NotSaved(IfDefault.class)
     public Long count = 0L;
@@ -39,6 +41,13 @@ public class Goals implements Serializable
 
     public Long start_time = 0L;
     public Long end_time = 0L;
+    
+    /**
+     * Key object of DomainUser.
+     */
+    @NotSaved(IfDefault.class)
+    private Key<DomainUser> ownerKey = null;
+
 
 
     public Goals()
@@ -46,13 +55,16 @@ public class Goals implements Serializable
 
     }
 
-    public Goals(Long domain_user_id,Long start_time,Long end_time,Long value,Long count)
+    public Goals(Long domain_user_id,Long start_time,Long end_time,Long amount,Long count)
     {
-	this.domain_user_id = domain_user_id;
+	//this.domain_user_id = domain_user_id;
 	this.start_time = start_time;
 	this.end_time=end_time;
-	this.value=value;
+	this.amount=amount;
 	this.count=count;
+	
+	if (domain_user_id != null)
+	    ownerKey = new Key<DomainUser>(DomainUser.class, domain_user_id);
     }
 
     
@@ -76,7 +88,7 @@ public class Goals implements Serializable
     public String toString()
     {
 	StringBuilder builder = new StringBuilder();
-	builder.append("Id").append(id).append(", value=").append(value).append(", count=").append(count).append(", startTime=")
+	builder.append("Goals [Id=").append(id).append(", amount=").append(amount).append(", count=").append(count).append(", startTime=")
 	        .append(start_time).append(", endTime=").append(end_time).append(", domain_user_id=").
 	        append(domain_user_id).append("]");
 	return builder.toString();

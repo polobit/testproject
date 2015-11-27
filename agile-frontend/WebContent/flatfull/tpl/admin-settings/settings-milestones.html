@@ -224,7 +224,7 @@
 
 <script id="admin-settings-deal-goals-collection-template" type="text/html">
 <div class="panel wrapper">
-<form id="dealSourcesForm_{{id}}" class="form-horizontal m-b-none pipeline" method=post>
+	<div class="form-horizontal">
 	<div class="w-md pull-right">
 	<label>Duration</label>
 	<span id="RHS">
@@ -246,28 +246,23 @@
 	</div> <!-- End of control-group form-group -->
 
 
-	<div class="form-horizontal">
 		<div class="control-group form-group  m-b-none">
 		<div class="col-md-2"></div>
-		
 	<div class="col-sm-2">
             
-                <a href="#" type="submit" class="save btn btn-sm btn-primary">Save Changes</a>
+                <a class="btn btn-sm btn-primary goalSave">Save Changes</a>
            </div>
   <label class="control-label col-sm-2">Total</label>
 		</div>
 	</div>
 	
 
-	
-
-</form> <!-- End of form-horizontal -->
 </div>
 </script>
 
 <script id="admin-settings-deal-goals-model-template" type="text/html">
 <td>
-	<div class="pull-left inline-block v-top text-ellipsis deal_source_name_div text-cap">{{name}}
+	<div id={{id}} class="goal pull-left inline-block v-top text-ellipsis deal_source_name_div text-cap ">{{name}}
 		
 	</div>
 	<div class="pull-right">

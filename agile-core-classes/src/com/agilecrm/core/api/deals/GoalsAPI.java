@@ -1,5 +1,6 @@
 package com.agilecrm.core.api.deals;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
@@ -9,6 +10,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 import com.agilecrm.deals.Goals;
@@ -18,7 +20,7 @@ import com.agilecrm.reports.ReportsUtil;
 
 
 @Path("/api/goals")
-public class GoalsApi
+public class GoalsAPI
 {
 
 	 /**
@@ -42,9 +44,15 @@ public class GoalsApi
     @POST
     @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public List<Goals> createGoal(JSONObject jsonObject)
+    public List<Goals> createGoal(List<Goals> goals)
     {
-    	return GoalsUtil.saveGoal(jsonObject);
+    	List<Goals> goal_new=new ArrayList<Goals>();
+    	for(Goals goal:goals){
+	    if(goal.amount!=null || goal.count!=null)
+	    		goal_new.add(goal);
+    		//System.out.println("goal");
+    	}
+    	return GoalsUtil.saveGoal(goal_new);
     	
     }
 }

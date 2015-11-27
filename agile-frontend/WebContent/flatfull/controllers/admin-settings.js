@@ -991,7 +991,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 		this.dealGoalsView = new Base_Collection_View({ url : '/core/api/users', templateKey : "admin-settings-deal-goals",
 			individual_tag_name : 'tr', sortKey : "name", postRenderCallback : function(el)
 			{
-				//initializeMilestoneListners(el);
+				initializeMilestoneListners(el);
 				$("input.date").datepicker({ format :"MM yyyy", minViewMode:"months" ,weekStart : CALENDAR_WEEK_START_DAY, autoclose : true });
 			} });
 		this.dealGoalsView.collection.fetch();

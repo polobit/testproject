@@ -1180,4 +1180,24 @@ function initializeMilestoneListners(el){
         	}});
 		}
 	});
+
+	$("#milestone-listner").on('click','.goalSave',function(e)
+	{
+			var goals_json=[];
+			$('#deal-sources-table').find('td').each(function(index){
+					var goal_single_user={};
+					goal_single_user.domain_user_id=$(this).find('.goal').attr('id');
+					goal_single_user.amount=$(this).find('.amount').val();
+					goal_single_user.count=$(this).find('.count').val();
+					console.log(goal_single_user)
+					goals_json.push(goal_single_user);
+
+			});
+
+					console.log(goals_json);
+					$.ajax({ type : 'POST', url : '/core/api/goals', data : JSON.stringify(goals_json),
+					contentType : "application/json; charset=utf-8", dataType : 'json' });
+        		console.log("saved");
+        	
+	});
 }
