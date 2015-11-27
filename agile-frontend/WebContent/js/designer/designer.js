@@ -533,37 +533,59 @@ function testMailButton(button){
     	return;
     }
     	 
-    	var margin;
-        var jsonValues = serializeNodeForm();
-        $(button).css('color','gray');
-        $.ajax({
-    		  url: 'core/api/emails/send-test-email',
-    		  type: "POST",
-    		  data:jsonValues,
-    		  async:false,
-    		  success: function (email) {//top": "-44px
-    			 
-    			 $('#errorsdiv').text("sfasd"+email);
-    			 if(button == "#button_email")
-    				 margin = "margin:-6px 24px;";
-    				 else
-    				 margin = "margin:-44px 29px 0px;";
-    		    					 
-    			 $(button).before("<span class='clearfix' id='confirmation-text'style='top: -49px;"+margin+"display: inline-block;text-align: center;float: left;width: 75%; color: red;font-style: italic;'>Email has been sent to "+email+"</span>");
-   			 
-    			  $("#confirmation-text").fadeOut(8000,function(){
-   				
-   				  $("#confirmation-text").remove();
-   				  $(button).removeAttr('disabled', 'disabled');
-   				$(button).css('color','');
-   			  });
-    		},
-    		error: function(Error){
-                console.log(Error);
-                $(button).css('color','');
-            }
-    	});
-       
-        return;
-        
-        }
+    window.parent.workflow_alerts("Send Test Email", "Please observe that the merge fields in test emails would not be replaced. You can however run this campaign on your test contacts." , "workflow-alert-modal"
+
+        ,function(modal){
+
+        var $a = $(modal).find("a");
+
+        $a.off("click");
+
+        $a.on("click", function(e){
+                    e.preventDefault();
+
+                    var margin;
+                    var jsonValues = serializeNodeForm();
+                    $(button).css('color','gray');
+
+                    // Disable and change text
+                    $(this).attr('disabled', 'disabled').text("Sending");
+
+                    $.ajax({
+                          url: 'core/api/emails/send-test-email',
+                          type: "POST",
+                          data:jsonValues,
+                          async:false,
+                          success: function (email) {//top": "-44px
+                             
+                             $('#errorsdiv').text("sfasd"+email);
+                             if(button == "#button_email")
+                                 margin = "margin:-6px 24px;";
+                                 else
+                                 margin = "margin:-44px 29px 0px;";
+                                                 
+                             $(button).before("<span class='clearfix' id='confirmation-text'style='top: -49px;"+margin+"display: inline-block;text-align: center;float: left;width: 75%; color: red;font-style: italic;'>Email has been sent to "+email+"</span>");
+                         
+                              $("#confirmation-text").fadeOut(8000,function(){
+                            
+                              $("#confirmation-text").remove();
+                              $(button).removeAttr('disabled', 'disabled');
+                            $(button).css('color','');
+                          });
+                        },
+                        error: function(Error){
+                            console.log(Error);
+                            $(button).css('color','');
+                        }
+                    });
+
+                });
+
+        // On hidden
+        modal.on('hidden.bs.modal', function (e) {
+
+            $(button).removeAttr('disabled', 'disabled');
+            $(button).css('color','');
+        });
+    }); 
+}
