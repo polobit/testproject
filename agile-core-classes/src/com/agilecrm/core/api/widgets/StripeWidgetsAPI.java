@@ -1,12 +1,17 @@
 package com.agilecrm.core.api.widgets;
 
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import com.agilecrm.social.StripePluginUtil;
+import com.agilecrm.social.XeroUtil;
 import com.agilecrm.widgets.Widget;
 import com.agilecrm.widgets.util.ExceptionUtil;
 import com.agilecrm.widgets.util.WidgetUtil;
@@ -57,4 +62,23 @@ public class StripeWidgetsAPI {
 			throw ExceptionUtil.catchWebException(e);
 		}
 	}
+
+	@Path("credit/{widget-id}/{customerId}/{amount}")
+	@GET
+	@Produces(MediaType.TEXT_PLAIN)
+	public boolean addCredits(@PathParam("widget-id") Long widgetId,
+			@PathParam("customerId") String customerId,
+			@PathParam("amount") int amount) {
+		boolean status = false;
+		try {
+			// Retrieves widget based on its id
+			Widget widget = WidgetUtil.getWidget(widgetId);
+			StripePluginUtil.addCredit(widget, customerId, amount);
+			status = true;
+		} catch (Exception e) {
+			throw ExceptionUtil.catchWebException(e);
+		}
+		return status;
+	}
+
 }

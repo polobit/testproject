@@ -5,6 +5,7 @@
  */
 
 var stripeOBJ = {};
+var customer_id = 0;
 var stripeINVCount = 1;
 var stripePAYCount = 1;
 
@@ -111,7 +112,7 @@ function showStripeProfile(stripe_custom_field_name, contact_id)
 	 * Retrieves the customer id of Stripe related to contact which is saved in
 	 * Stripe custom field
 	 */
-	var customer_id = agile_crm_get_contact_property(stripe_custom_field_name);
+	customer_id = agile_crm_get_contact_property(stripe_custom_field_name);
 	console.log("Stripe customer id " + customer_id);
 
 	// If customer id is undefined, message is shown
@@ -302,6 +303,7 @@ function startStripeWidget(contact_id){
 	stripeOBJ = {};
 	stripeINVCount = 1;
 	stripePAYCount = 1;
+	customer_id = 0;
 
 	// Stripe widget name as a global variable
 	Stripe_PLUGIN_NAME = "Stripe";
@@ -367,11 +369,47 @@ function startStripeWidget(contact_id){
 	});
 
 	$("#widgets").off("click", "#stripe_inv_show_more");
-	$("#widgets").on("click", "#stripe_inv_show_more", function(e)
-	{
+	$("#widgets").on("click", "#stripe_inv_show_more", function(e){
 		e.preventDefault();
 		var offSet = stripeINVCount * 5;
 		loadStripeInvoices(offSet);
 		++stripeINVCount;
 	});
+
+	$("#widgets").off("click", "#add_credits");
+	$("#widgets").on("click", "#add_credits", function(e){
+		$('#stripe_credits_panel').removeClass('hide');
+		$('#add_credits').addClass('hide');
+	});
+
+	$("#widgets").off("click", "#stripe_credits_cancel");
+	$("#widgets").on("click", "#stripe_credits_cancel", function(e){
+		$('#add_credits').removeClass('hide');
+		$('#stripe_credits_panel').addClass('hide');
+	});	 
+
+	$("#widgets").off("click", "#stripe_credits_add");
+	$("#widgets").on("click", "#stripe_credits_add", function(e){
+		var creditAmt = $('#credit_amount').val();
+		if(creditAmt != 0){
+			$("#stripe_credits_panel *").attr("disabled", "disabled");
+			$.get("/core/api/widgets/stripe/credit/" +Stripe_Plugin_Id+ "/" +customer_id+ "/" +creditAmt , function(data){
+				console.log(data);
+				if(data){
+					var balance = $('#balance_credit').text();
+					balance = parseInt(creditAmt) + parseInt(balance);
+					$('#balance_credit').text(balance);					 
+					$('#add_credits').removeClass('hide');
+					$('#stripe_credits_panel').addClass('hide');
+					$('#credit_amount').val(0);
+				}else{
+					showNotyPopUp('warning', 'Error occured while adding credits' , "bottomRight");
+				}
+				$("#stripe_credits_panel *").removeAttr("disabled");
+			});
+		}else{
+			alert('Please enter proper amount');
+		}
+	});	
+	
 }

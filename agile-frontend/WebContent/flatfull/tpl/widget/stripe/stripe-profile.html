@@ -18,8 +18,37 @@
 	{{else}}
 		<a href="https://manage.stripe.com/customers/{{customer.id}}" target="_blank">{{getCurrentContactProperty "first_name"}} {{getCurrentContactProperty "last_name"}}</a>
 	{{/if}}
+	<div class="wrapper-xs">
+		<button class="btn btn-xs btn-default m-t-xs" id="add_credits" style="" name="add_credits">Add Credit</button>
+	</div>
 </div>
-<div class="wrapper-xs">
+<div id="stripe_credits_panel" class="col-md-12 b-t p-t-xs p-b-xs hide">
+		<div class="col-md-6 p-l-none p-r-sm">
+			<div class="input-group">
+				<span class="input-group-addon input-sm">$</span>
+				<input class="form-control input-sm" id="credit_amount" type="number" value="0" name="credit_amount">
+			</div>
+		</div>
+		<div class="col-md-3 p-none">
+			<button href="#" class="btn btn-sm btn-primary" id="stripe_credits_add" style="" name="stripe_credits_add">Add</button>
+		</div>
+		<div class="col-md-3 p-none">
+			<button href="#" class="btn btn-sm btn-default" id="stripe_credits_cancel" style="" name="stripe_credits_cancel">cancel</button>
+		</div>
+</div>
+<div class="clearfix"></div>
+<div class="b-t b-b wrapper-xs">
+	<div class="row">
+		<div class="col-md-5">Credits
+			<div class="pull-right"> :</div>
+		</div>
+		<div class="col-md-7">
+			<span>$ </span>
+			<span id="balance_credit">{{stripeCreditConvertion customer.accountBalance}}</span>
+		</div>
+	</div>
+</div>
+<div class=" wrapper-xs">
 	<span>Subscription Details</span>
 </div>
 <div class="b-t b-b wrapper-sm">

@@ -18,6 +18,17 @@ $(function()
 	});
 
 
+	Handlebars.registerHelper('stripeCreditConvertion', function(amount)
+	{
+		if(amount == 0){
+			return (amount);
+		}else if(amount > 0){
+			return ("-"+amount);
+		}else{
+			return (Math.abs(amount/100));
+		}
+	});
+
 	
 	/**
 	 * displays , in between 2 conatct fields.
