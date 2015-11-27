@@ -32,12 +32,104 @@
 
 .plan-collection-in {
 	/*background: #f1f0ee; 03/26/2015*/
-	padding: 5px 20px;
-	font-family: 'Lato', sans-serif;
-	font-size: 13px;
-	line-height: 21px;
-	position: relative;
-	cursor: pointer;
+  background: #f1f0ee;
+  padding: 5px 20px;
+  font-family: 'Lato', sans-serif;
+  font-size: 13px;
+  line-height: 21px;
+  position: relative;
+  cursor: pointer;
+  margin: 10px 10px;
+}
+
+/*type2  plan and upgrade*/
+.plan-collection-bot {
+/*	background: url(../../img/triangle-lightgrey-bot.png) center bottom
+		repeat-x;*/
+	padding: 0 0 6px 0;
+	/*float: left;*/
+}
+
+.plan-collection-in.selected-plan {
+ border: 1px solid #5fa2dd;
+ box-shadow: 0px 0px 5px #8bc0e0;
+ opacity: 1;
+ margin: 0px 0px;
+ padding-bottom: 20px;
+ transform: scale(1);
+ / you need a scale here to allow it to transition in both directions /
+ transition: 0.15s padding ease-out, 0.15s margin ease-out;
+}
+
+#email-div .help-inline {
+	font-size: 11px;
+	text-align: center;
+}
+
+.selected-plan
+{
+border: 1px solid #5fa2dd;
+box-shadow: 0px 0px 5px #8bc0e0;
+opacity: 1;
+margin: 0px 0px;
+padding-bottom: 20px;
+transform: scale(1);
+transition: 0.15s padding ease-out, 0.15s margin ease-out;
+}
+
+.selected-plan .btn {
+	background:#50c7a7 !important;
+	color: white !important;
+}
+
+.plan-collection-in .plan-details {
+ background: #fff;
+ padding: 10px 8px 12px 8px;
+ margin-top: 15px;
+ border-radius: 5px;
+}
+
+.plan-collection-in.selected-plan .btn-plan {
+ background-color: #48c5a3;
+ border-color: #50c7a7;
+ color: #fff;
+}
+
+.plan-collection-in.selected-plan .btn-plan:hover,.plan-collection-in.selected-plan .btn-plan:active
+ {
+ background-color: #39b392;
+ border-color: #3bb897;
+ color: #fff;
+}
+
+.text-20
+{
+	font-size: 20px
+}
+
+.price-panel{
+background: #fff;
+padding: 8px 8px 8px 8px;
+margin-top: 15px;
+border-radius: 5px;
+}
+
+.email-selected-plan {
+  border: 1px solid #5fa2dd;
+  box-shadow: 0px 0px 5px #8bc0e0;
+  opacity: 1;
+  margin: 0px 0px;
+  padding-bottom: 20px;
+  transform: scale(1);
+  transition: 0.15s padding ease-out, 0.15s margin ease-out;
+  background: #f1f0ee;
+  padding: 5px 20px;
+  font-family: 'Lato', sans-serif;
+  font-size: 13px;
+  line-height: 21px;
+  position: relative;
+  cursor: pointer;
+  margin: 10px 10px;
 }
 
 span.plan-off-ribbon {
@@ -131,6 +223,10 @@ div.plan-collection-in.customplan span.plan-collection-icon {
 div.plan-collection-in.customplan:hover span.plan-collection-icon,.enterprise_selected
 	{
 	background: url(../../img/template.png) 0px 0px no-repeat !important;
+}
+
+#sort-table .headerSortUp::after{
+top:12px!important;
 }#contacts_main, #contacts_recent_added{
 	border: 1px solid #d2d2d2;
     height: 50px;
@@ -799,7 +895,7 @@ border-radius: 2px;
  }
 	
 }
- .highcharts-container
+ .portlet_body .highcharts-container
  {
  	overflow:hidden!important;
  }
@@ -1182,10 +1278,12 @@ font-size:30px;
 	height:100%;
 }
 
-.graph >.highcharts-container
-{
-	height: 100%!important;
-	width : 100%!important;
+
+.portlet_header:hover .portlet_header_icons{
+	visibility: visible!important;
+}
+.portlet_header:hover h4 small{
+	visibility: hidden;
 }
 /* ************* Social Suite CSS ***************** */
 .RTuserlist-modal,.a,.social-app-content>li,.tweet-body>ul,.tweet-body>li,.tweet-actions>ul,.tweet-actions>li,.tweet-footer>ul,.tweet-footer>li
@@ -2992,6 +3090,18 @@ small {
 		50%, white);
 	background: linear-gradient(to right, rgba(255, 255, 255, 0), white 50%,
 		white)
+}.disable-iframe{
+	cursor: no-drop
+}
+.enable-iframe{
+	cursor: default
+	
+}
+.blur{
+	opacity: 0.3
+}
+.anti-blur{
+	opacity: 1
 }@charset "UTF-8";
 /*!
 Animate.css - http://daneden.me/animate

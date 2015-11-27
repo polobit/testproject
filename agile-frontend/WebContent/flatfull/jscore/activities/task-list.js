@@ -145,7 +145,7 @@ $(function(){
 			}
 		});
 		if(checked){
-			$(this).after('<img class="bulk-complete-loading" style="padding-right:5px;margin-bottom:15px" src= "img/21-0.gif"></img>');
+			$(this).after('<img class="bulk-complete-loading" style="padding-right:5px;margin-bottom:15px" src= "'+updateImageS3Path("img/21-0.gif")+'"></img>');
 			bulk_complete_operation('/core/api/tasks/bulk/complete', index_array, table, data_array);
 		}	
 		else
