@@ -76,6 +76,9 @@ var Tickets = {
 			slateKey : 'no-tickets',
 			postRenderCallback: function(el){
 
+				//Initializing click event on each ticket li
+				Tickets.initEvents(el);
+
 				//Initialize tooltips
 				$('[data-toggle="tooltip"]').tooltip();
 
@@ -83,16 +86,14 @@ var Tickets = {
 				{
 					$("time", el).timeago();		
 				});
-
 				
+				///Showing selected filter name on top
 				Ticket_Filters.updateFilterName();
-
-				//Initializing click event on each ticket li
-				Tickets.initEvents(el);
 
 				//Initializing checkbox events
 				Ticket_Bulk_Ops.initEvents();
 
+				//Clear bulk ops selections
 				Ticket_Bulk_Ops.clearSelection();
 			}
 		});

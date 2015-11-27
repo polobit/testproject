@@ -24,9 +24,9 @@
 			<div class="col-md-12 p-n">
 				<select data-placeholder="Choose priority" class="priority-select chosen-select form-control" multiple 
 					class="w-md">
-            		<option value="LOW" {{#containString 'LOW' priority}}selected{{/containString}}>Low</option>
-            		<option value="MEDIUM" {{#containString 'MEDIUM' priority}}selected{{/containString}}>Medium</option>
-            		<option value="HIGH" {{#containString 'HIGH' priority}}selected{{/containString}}>High</option>
+            		<option value="LOW" {{#contains_string 'LOW' priority}}selected{{/contains_string}}>Low</option>
+            		<option value="MEDIUM" {{#contains_string 'MEDIUM' priority}}selected{{/contains_string}}>Medium</option>
+            		<option value="HIGH" {{#contains_string 'HIGH' priority}}selected{{/contains_string}}>High</option>
             	</select>
 			</div>
     	</div>
@@ -39,19 +39,19 @@
 			<div class="col-md-12 p-n">
             	<select data-placeholder="Choose status" class="status-select chosen-select form-control" multiple 
             		class="w-md">
-            		<option value="NEW" {{#containString 'NEW' status}}selected{{/containString}}>New</option>
-            		<option value="OPEN" {{#containString 'OPEN' status}}selected{{/containString}}>Open</option>
-            		<option value="PENDING" {{#containString 'PENDING' status}}selected{{/containString}}>Pending</option>
-            		<option value="CLOSE" {{#containString 'CLOSE' status}}selected{{/containString}}>Close</option>
+            		<option value="NEW" {{#contains_string 'NEW' status}}selected{{/contains_string}}>New</option>
+            		<option value="OPEN" {{#contains_string 'OPEN' status}}selected{{/contains_string}}>Open</option>
+            		<option value="PENDING" {{#contains_string 'PENDING' status}}selected{{/contains_string}}>Pending</option>
+            		<option value="CLOSE" {{#contains_string 'CLOSED' status}}selected{{/contains_string}}>Close</option>
             	</select>
           	</div>
           	<div class="col-md-12 p-n m-t m-b-xs">Type</div>
 			<div class="col-md-12 p-n">
             	<select data-placeholder="Choose type" class="type-select chosen-select form-control" multiple class="w-md">
-            		<option value="INCIDENT" {{#containString 'INCIDENT' type}}selected{{/containString}}>Incident</option>
-            		<option value="PROBLEM" {{#containString 'PROBLEM' type}}selected{{/containString}}>Problem</option>
-            		<option value="TASK" {{#containString 'TASK' type}}selected{{/containString}}>Task</option>
-            		<option value="QUESTION" {{#containString 'QUESTION' type}}selected{{/containString}}>Question</option>
+            		<option value="INCIDENT" {{#contains_string 'INCIDENT' type}}selected{{/contains_string}}>Incident</option>
+            		<option value="PROBLEM" {{#contains_string 'PROBLEM' type}}selected{{/contains_string}}>Problem</option>
+            		<option value="TASK" {{#contains_string 'TASK' type}}selected{{/contains_string}}>Task</option>
+            		<option value="QUESTION" {{#contains_string 'QUESTION' type}}selected{{/contains_string}}>Question</option>
             	</select>
           	</div>
     	</div>
@@ -61,12 +61,12 @@
 
 <script id="ticket-filter-assignee-template" type="text/html">
   {{#all_assignees}}
-    <option value="{{this.id}}" {{#containString  this.id ../selected_assignees}}selected{{/containString}}>{{this.name}}</option>
+    <option value="{{this.id}}" {{#contains_string  this.id ../selected_assignees}}selected{{/contains_string}}>{{this.name}}</option>
   {{/all_assignees}}  
 </script>
 <script id="ticket-filter-group-template" type="text/html">
   {{#all_groups}}
-    <option value="{{this.id}}" {{#containString  this.id ../selected_groups}}selected
-    	{{/containString}}>{{this.group_name}}</option>
+    <option value="{{this.id}}" {{#contains_string  this.id ../selected_groups}}selected
+    	{{/contains_string}}>{{this.group_name}}</option>
   {{/all_groups}}  
 </script>
