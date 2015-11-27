@@ -258,5 +258,33 @@ public class LandingPageUtil
 		
 	}
 	
+	public static boolean hasRightsToAddDomain(String cnameDomain) {
+		//current user domain
+		String oldNameSpace = NamespaceManager.get();
+		NamespaceManager.set("");
+		
+		try
+		{
+			Query<LandingPageCNames> q = null;
+			ObjectifyGenericDao<LandingPageCNames> dao = new ObjectifyGenericDao<LandingPageCNames>(LandingPageCNames.class);
+			q = dao.ofy().query(LandingPageCNames.class);
+			q.filter("cname", cnameDomain);
+			q.filter("domain != ", oldNameSpace);
+			if(q.count() == 0)
+			{
+				return true;			
+			}
+			else
+			{
+				return false;
+			}
+		}
+		finally
+		{
+			NamespaceManager.set(oldNameSpace);
+		}
+		
+	}
+	
 	
 }

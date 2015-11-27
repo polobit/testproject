@@ -26,7 +26,7 @@ import com.agilecrm.util.HTTPUtil;
 public class LandingPagesAPI
 {
 	
-	@Path("verifycname")
+	@Path("/verifycname")
 	@GET
     @Produces(MediaType.APPLICATION_JSON)
 	public String verifyCnameSetup(@QueryParam("domain") String domain)
@@ -44,6 +44,22 @@ public class LandingPagesAPI
 			responseText = res.toString();
 		} catch (Exception e) {
 			e.printStackTrace();
+		}
+		
+		System.out.println(responseText);
+		return responseText;
+	}
+	
+	@Path("/has-rights-to-add-domain")
+	@GET
+    @Produces(MediaType.APPLICATION_JSON)
+	public String hasRightsToAddDomain(@QueryParam("domain") String domain)
+	{
+		System.out.println("hasRightsToAddDomain this "+ domain);
+		String responseText = "{\"result\":false}";
+		
+		if(LandingPageUtil.hasRightsToAddDomain(domain)) {
+			responseText = "{\"result\":true}";
 		}
 		
 		System.out.println(responseText);

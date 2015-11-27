@@ -18,8 +18,6 @@ jQuery.validator.addMethod("lpdirectorypath", function(value, element) {
 
 function initializeLandingPageListeners() {
 
-	var alertBoxMarkup = '<div class="alert alert-success" role="alert">{{}}</div>';
-
 	$('#landingpages-listeners').off();
 	
 	$('#landingpages-listeners').on('click', '.saveLandingPageButton', function(e){
@@ -63,36 +61,28 @@ function initializeLandingPageListeners() {
 				  lpdirectorypath: true
              	}
            }
-       });
+       	});
 		
 		if (!$('#landingPageSettingForm').valid()) {
-			return;
+			return;			
 		}
-		var $btn = $(this).button('loading');
- 
-		var CNAME = "http://"+$("#sub_domain").val()+"."+$("#domain").val()+"/"+$("#directory_path").val();
+	
+		var mainDomain = $("#domain").val();
+		var forPageId = $(this).data("pageid");
 
-		var modelId = $(this).data("pageid");
-		var model = App_LandingPageRouter.LandingPageCollectionView.collection.get(modelId);
-		model.set("cname",CNAME);
-		model.set("requestViaCnameSetup",true);
-		
-		var landingPageModel = new Backbone.Model();
-      	landingPageModel.url = 'core/api/landingpages';
-      	landingPageModel.save(model.toJSON(), { success : function(obj){
-      		if(obj.get("isDuplicateCName")) {
-				landingPageShowAlertMessage("Custom domain should be unique","alert-danger");
+		$.get("core/api/landingpages/has-rights-to-add-domain?domain="+mainDomain, function(data) {
+			if(data.result) {
+				var $btn = $("#landingPageSettingBtn").button('loading');
+				landingPageSaveCnameSettings(forPageId,"http://"+$("#sub_domain").val()+"."+mainDomain+"/"+$("#directory_path").val());
+      			$btn.button('reset');
 			} else {
-				landingPageShowAlertMessage("Custom domain saved successfully","alert-success");
-				$("#cname").attr("href",CNAME);
-				$("#landingPageVerifyBtn").show();
-				App_LandingPageRouter.LandingPageCollectionView.collection.get(modelId).set(obj);
+				landingPageShowAlertMessage("You cannot add this ("+mainDomain+") domain. It is used in other agile CRM account.","alert-danger");
 			}
-      	}});
-      	$btn.button('reset');
+		});
 	});
 
-	$('#landingpages-listeners').on('keyup', '#sub_domain', function (e) {
+	$('#landingpages-listeners').on('keyup', '#sub_domain,#domain', function (e) {
+		$("#landingPageVerifyBtn").hide();
 		if($("#cnameInstructionMessage").is(':hidden')) {
 			$("#cnameInstructionMessage").show();
 		}
@@ -114,7 +104,6 @@ function initializeLandingPageListeners() {
 		}
 		
 		builderIFrame.$(selector).trigger("click");
-
 	});
 
 	$('#landingpages-listeners').on('click', '.lpCodeEditorMenuItem', function(e){
@@ -151,4 +140,23 @@ function landingPageShowAlertMessage(message, type) {
 	$("#statusMessageHolder").html('<div class="alert '+type+'" role="alert">'
 	+ '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>'
 	+ message + '</div>');
+}
+
+function landingPageSaveCnameSettings(modelId,CNAME) {
+	var model = App_LandingPageRouter.LandingPageCollectionView.collection.get(modelId);
+	model.set("cname",CNAME);
+	model.set("requestViaCnameSetup",true);
+	
+	var landingPageModel = new Backbone.Model();
+    landingPageModel.url = 'core/api/landingpages';
+    landingPageModel.save(model.toJSON(), { success : function(obj){
+	    if(obj.get("isDuplicateCName")) {
+			landingPageShowAlertMessage("Custom domain should be unique","alert-danger");
+		} else {
+			landingPageShowAlertMessage("Custom domain saved successfully","alert-success");
+			$("#cname").attr("href",CNAME);
+			$("#landingPageVerifyBtn").show();
+			App_LandingPageRouter.LandingPageCollectionView.collection.get(modelId).set(obj);
+		}
+    }});
 }
