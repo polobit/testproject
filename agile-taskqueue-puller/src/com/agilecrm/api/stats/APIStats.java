@@ -9,8 +9,8 @@ public class APIStats
 
     private static int counter = 0;
     private static boolean isInterrupted = false;
-    private static final int MAX_LIMIT = 5000;
-    private static final int MAX_NUMBER_OF_HOURS = 4;
+    private static final int MAX_LIMIT = 10000;
+    private static final int MAX_NUMBER_OF_HOURS = 1;
     private static final Long START_TIME = System.currentTimeMillis();
 
     public static synchronized void incrementCounter()
@@ -47,7 +47,9 @@ public class APIStats
 
 	try
 	{
-	    AgileAPILogger.getLogger().info("Restarting Current thread : " + thread.getName() + " , " + thread.getId());
+	    AgileAPILogger.getLogger().info(
+		    "Restarting Current thread : " + thread.getName() + " , " + thread.getId() + " at time : "
+			    + System.currentTimeMillis());
 
 	    Mailgun.sendMail("campaigns@agile.com", "Email Observer", "yaswanth@agilecrm.com",
 		    "naresh@agilecrm.com,raja@agilecrm.com", null, "EC2 Error while interrupting thread", null,
