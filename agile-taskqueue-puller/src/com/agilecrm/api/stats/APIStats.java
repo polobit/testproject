@@ -1,5 +1,6 @@
 package com.agilecrm.api.stats;
 
+import com.agilecrm.logger.AgileAPILogger;
 import com.thirdparty.Mailgun;
 
 public class APIStats
@@ -8,7 +9,9 @@ public class APIStats
 
     private static int counter = 0;
     private static boolean isInterrupted = false;
-    private static final int MAX_LIMIT = 20;
+    private static final int MAX_LIMIT = 5000;
+    private static final int MAX_NUMBER_OF_HOURS = 4;
+    private static final Long START_TIME = System.currentTimeMillis();
 
     public static synchronized void incrementCounter()
     {
@@ -44,6 +47,8 @@ public class APIStats
 
 	try
 	{
+	    AgileAPILogger.getLogger().info("Restarting Current thread : " + thread.getName() + " , " + thread.getId());
+
 	    Mailgun.sendMail("campaigns@agile.com", "Email Observer", "yaswanth@agilecrm.com",
 		    "naresh@agilecrm.com,raja@agilecrm.com", null, "EC2 Error while interrupting thread", null,
 		    "Hi Yaswanth " + "EC2 Error while interrupting thread", null);
@@ -59,14 +64,18 @@ public class APIStats
 	return isInterrupted;
     }
 
+    private static int runningSinceDays()
+    {
+	return (int) (System.currentTimeMillis() - START_TIME) / 3600000;
+    }
+
     public static boolean shouldContinue()
     {
-	if (isInterrupted() || counter >= MAX_LIMIT)
+	if (isInterrupted() || counter >= MAX_LIMIT || runningSinceDays() >= MAX_NUMBER_OF_HOURS)
 	{
 	    return false;
 	}
 
 	return true;
     }
-
 }
