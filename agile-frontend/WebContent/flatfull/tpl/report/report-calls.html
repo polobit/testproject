@@ -55,6 +55,8 @@
                 <i class="icon-calendar icon-large"></i>
                 <span id="range">{{date-range "today" "-6"}}</span>
               </div>
+
+                
 			<div style="padding:0px 8px 10px" class="pull-right">
 				<select class="required form-control" name="group-by" id="users">
 					<option value="All" selected="selected">All Users</option>
@@ -100,6 +102,13 @@
                 <span id="range">{{date-range "today" "-6"}}</span>
               </div>
 
+			<div class="pull-right" style="padding:0px 8px 10px">
+				<select name="frequency" id="frequency" class="required form-control" style="width:105px">
+					<option value="daily">Daily</option>
+					<option value="weekly">Weekly</option>
+                    <option value="monthly">Monthly</option>
+                </select>
+			</div> 
 			<div style="padding:0px 8px 10px" class="pull-right">
 				<select class="required form-control" name="group-by" id="users">
 					<option value="All" selected="selected">All Users</option>

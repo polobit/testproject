@@ -498,8 +498,15 @@ var ReportsRouter = Backbone.Router
 						options += ("start-date=" + start_time + "&end-date=" + end_time);
 						
 						var url='core/api/portlets/calls-per-person/' + options;
-						if(reportType == 'timebased')
+						if(reportType == 'timebased'){
+										if ($('#frequency').length > 0)
+									{
+									// Get Frequency
+									var frequency = $("#frequency").val();
+									options += ("&frequency=" + frequency);
+								}
 							url='core/api/reports/calls-time-based/' + options;
+						}
 						graphOn=$("#typeCall option:selected").val();
 					    
 					    var userDropDown=$('#users option:selected').val();

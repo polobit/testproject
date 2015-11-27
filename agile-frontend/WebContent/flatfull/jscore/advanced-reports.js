@@ -67,6 +67,15 @@ function initReportsForCalls(callback){
 
 	callback();
 	
+	if ($('#frequency').length > 0)
+	{
+		// Get Frequency
+		$('#frequency').change(function()
+		{
+			callback();
+		});
+	}
+	
 	$('#typeCall').change(function()
 		{
 			callback();

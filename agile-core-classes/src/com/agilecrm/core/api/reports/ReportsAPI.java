@@ -392,11 +392,12 @@ public class ReportsAPI
 	@Path("/calls-time-based")
 	@GET
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public JSONObject getCallsdatabyTime(@QueryParam("duration") String duration,@QueryParam("start-date") String startDate,@QueryParam("end-date") String endDate,@QueryParam("user") String user)throws Exception {
+	public JSONObject getCallsdatabyTime(@QueryParam("duration") String duration,@QueryParam("start-date") String startDate,@QueryParam("end-date") String endDate,@QueryParam("user") String user,@QueryParam("frequency") String frequency)throws Exception {
 		JSONObject json=new JSONObject();
 		json.put("duration",duration);
 		json.put("startDate", startDate);
 		json.put("endDate", endDate);
+		json.put("frequency", frequency);
 		if(user!=null && !user.equals(""))
 			json.put("user", (net.sf.json.JSONArray)JSONSerializer.toJSON(user));
 		else
