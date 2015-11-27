@@ -325,7 +325,7 @@ function url_visited_select_callback(ele, target_id) {
 	tempObj.remove();
 }
 
-**
+/**
  * Retrieves label objects from labelsAPI. Inserts each label value within label object
  * into an array.
  */
