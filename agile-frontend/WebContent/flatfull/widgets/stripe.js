@@ -390,7 +390,7 @@ function startStripeWidget(contact_id){
 
 	$("#widgets").off("click", "#stripe_credits_add");
 	$("#widgets").on("click", "#stripe_credits_add", function(e){
-		var creditAmt = $('#credit_amount').val();
+		var creditAmt = (parseInt($('#credit_amount').val())*100);
 		if(creditAmt != 0){
 			$("#stripe_credits_panel *").attr("disabled", "disabled");
 			$.get("/core/api/widgets/stripe/credit/" +Stripe_Plugin_Id+ "/" +customer_id+ "/" +creditAmt , function(data){

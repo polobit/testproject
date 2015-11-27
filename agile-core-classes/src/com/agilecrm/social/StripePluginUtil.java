@@ -125,7 +125,7 @@ public class StripePluginUtil {
 
 			System.out.println(StripeUtil.getJSONFromCustomer(customer));
 
-			balance -= (credit * 100);
+			balance -= credit;
 
 			Map<String, Object> updateParams = new HashMap<String, Object>();
 			updateParams.put("account_balance", balance);
