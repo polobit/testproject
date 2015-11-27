@@ -60,7 +60,8 @@ var Tickets = {
 		var isSingleRowView = (CURRENT_DOMAIN_USER.helpdesk_view && CURRENT_DOMAIN_USER.helpdesk_view == 'double_row')
 								 ? true : false;
 
-		Ticket_Custom_Filters.init();
+		//Initialize custom filters
+		Ticket_Custom_Filters.init(Ticket_Custom_Filters.renderLayout);
 
 		App_Ticket_Module.ticketsCollection = new Base_Collection_View({
 			url : '/core/api/tickets/filter?filter_id=' + Ticket_Filter_ID,
@@ -322,36 +323,38 @@ var Tickets = {
 		});
 	},
 
-	initDateTimePicker: function(el){
+	changeSLA: function($input, selected_date){
+
+		$input.attr('disabled', true);
+
+        var slaEpoch = new Date(selected_date).getTime();
+
+        var url = "/core/api/tickets/change-due-date?id=" + Current_Ticket_ID + "&due_time=" + slaEpoch;
+
+        Tickets.updateModel(url, function(model){
+
+			$input.attr('disabled', false).hide();
+
+			var updatedDueDate = new Date(slaEpoch).format('mmm dd, yyyy HH:MM')
+
+			showNotyPopUp('information', 'Ticket due date has been updated to ' + updatedDueDate, 'bottomRight', 3000);
+		}, function(){
+			$input.attr('disabled', false);
+		});
+	},
+
+	initDateTimePicker: function($input, callback){
 
 		head.js('/lib/web-calendar-event/moment.min.js','/lib/bootstrap-datetimepicker.min.js', function()
 		{	
-			var $input = $('#datetimepicker', el);
-			
 			// Enable the datepicker
 			$input.datetimepicker({sideBySide: true});
 				
 			$input.off("dp.hide");
 			$input.on("dp.hide", function (e) {
 	            
-	            $input.attr('disabled', true);
-
-	            var slaEpoch = new Date($input.val()).getTime();
-
-	            var url = "/core/api/tickets/change-due-date?id=" + Current_Ticket_ID + "&due_time=" + slaEpoch;
-
-	            Tickets.updateModel(url, function(model){
-
-					$input.attr('disabled', false).hide();
-
-					var updatedDueDate = new Date(slaEpoch).format('mmm dd, yyyy HH:MM')
-
-					showNotyPopUp('information', 'Due date has been updated to ' + updatedDueDate, 'bottomRight', 3000);
-
-					//Change sla text
-				}, function(){
-					$input.attr('disabled', false);
-				});
+	            if(callback)
+	            	callback($input, $input.val());
 	        });
 		});
 	},

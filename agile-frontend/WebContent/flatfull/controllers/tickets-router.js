@@ -250,13 +250,13 @@ var TicketsUtilRouter = Backbone.Router.extend({
 				//Fetching selected filter ticket collection
 				Tickets.fetchTicketsCollection();
 			});
-
-			Ticket_Labels.fetchCollection(function(collection){
+			
+			/*Ticket_Labels.fetchCollection(function(collection){
 
 				var array = collection.toJSON();
 
 				$('ul.labels-list').html(getTemplate('ticket-label', array));
-			});
+			});*/
 		});
 	},
 
@@ -322,8 +322,8 @@ var TicketsUtilRouter = Backbone.Router.extend({
 				//Load widgets
 				Tickets.loadWidgets(App_Ticket_Module.ticketView.el);
 
-				//Initializing events on CC email field
-				Tickets.initDateTimePicker(el);
+				//Initializing event on SLA date picket
+				Tickets.initDateTimePicker($('#datetimepicker', el), Tickets.changeSLA);
 			}
 		});
 

@@ -43,11 +43,14 @@ public class TicketGroupRest
 	 */
 	@GET
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public List<TicketGroups> getGroups()
+	public List<TicketGroups> getGroups(@QueryParam("only_groups") Boolean onlyGroups)
 	{
 		try
 		{
-			return TicketGroupUtil.getAllGroups();
+			if (onlyGroups == null)
+				return TicketGroupUtil.getAllGroups();
+
+			return TicketGroups.ticketGroupsDao.fetchAll();
 		}
 		catch (Exception e)
 		{
@@ -186,7 +189,7 @@ public class TicketGroupRest
 
 			for (Long agent_key : agents_keys)
 				agents_key_list.add(new Key<DomainUser>(DomainUser.class, agent_key));
-			
+
 			existingGroup.group_name = ticketGroup.group_name;
 			existingGroup.setAgents_key_list(agents_key_list);
 			existingGroup.updated_time = Calendar.getInstance().getTimeInMillis();

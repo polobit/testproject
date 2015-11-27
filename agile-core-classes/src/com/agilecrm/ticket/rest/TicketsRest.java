@@ -27,7 +27,6 @@ import org.jsoup.examples.HtmlToPlainText;
 import org.jsoup.nodes.Document;
 
 import com.agilecrm.contact.Contact;
-import com.agilecrm.contact.Tag;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.search.document.TicketsDocument;
 import com.agilecrm.ticket.entitys.TicketActivity;

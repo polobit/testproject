@@ -36,7 +36,7 @@ public class TicketBulkActionsRest
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<TicketGroups> getGroups()
 	{
-		return new TicketGroupRest().getGroups();
+		return new TicketGroupRest().getGroups(false);
 	}
 
 	@GET

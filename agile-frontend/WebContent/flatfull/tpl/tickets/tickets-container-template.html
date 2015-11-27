@@ -1,79 +1,18 @@
 <script id="tickets-container-template" type="text/html">
 <div id="tickets-container" class="hbox hbox-auto-xs hbox-auto-sm">
-	<div class="col w-md bg-light dk b-r bg-auto">
-		<div class="wrapper b-b bg text-center">
+	<div class="col w-lg bg-light dk b-r bg-auto">
+		<div class="wrapper b-b bg-light text-center">
 			<a class="btn btn-sm btn-danger w-xs new-ticket" href="javascript:void(0);">New</a>
 		</div>
+		<div id="custom-filters-container">
+
+		</div>
+        <!--
 		<div class="wrapper hidden-sm hidden-xs">
-			<div id="extra-filters-container">
-				<div class="assignee-filter">
-					<div class="col-md-12 p-n m-b-xs">Assignee</div>
-					<div class="col-md-12 p-n">
-                      <select id="ticket-assignee-list" class="w-full ticket-group-assignee-list">
-                        
-                      </select>
-                  	</div>
-                  	<div class="col-md-12 p-n m-t m-b-xs">Group</div>
-					<div class="col-md-12 p-n">
-                      <select id="ticket-group-list" class="w-full ticket-group-assignee-list">
-                        
-                      </select>
-                  	</div>
-                  	<div class="col-md-12 p-n m-t m-b-xs">Due Date</div>
-					<div class="col-md-12 p-n">
-                      <input type="text" class="form-control" id="datetimepicker" placeholder="Select date"/>
-                  	</div>
-                  	<div class="col-md-12 p-n m-t m-b-xs">Priority</div>
-					<div class="col-md-12 p-n">
-						<ul class="list-none p-l-none m-b-none">
-							<li>
-	                      		<label class="i-checks i-checks-sm">
-							   		<input type="checkbox" checked><i></i>Low
-							    </label>
-							<li>
-							<li>
-	                      		<label class="i-checks i-checks-sm">
-							   		<input class="each-ticket ticket-checkbox" type="checkbox"><i></i>Medium
-							    </label>
-							<li>
-							<li>
-	                      		<label class="i-checks i-checks-sm">
-							   		<input class="each-ticket ticket-checkbox" type="checkbox"><i></i>High
-							    </label>
-							<li>
-						</ul>	 
-					</div>
-					<div class="col-md-12 p-n m-t-sm m-b-xs">Labels</div>
-					<div class="col-md-12 p-n">
-                    	<select data-placeholder="Select status" class="labels-select form-control" multiple class="w-md">
-                    		<option value="NEW" selected>pro</option>
-                    		<option value="OPEN" selected>lead</option>
-                    	</select>
-                  	</div>
-					<div class="col-md-12 p-n m-t-sm m-b-xs">Status</div>
-					<div class="col-md-12 p-n">
-                    	<select data-placeholder="Select status" class="status-select form-control" multiple class="w-md">
-                    		<option value="NEW">New</option>
-                    		<option value="OPEN" selected>Open</option>
-                    		<option value="PENDING">Pending</option>
-                    		<option value="CLOSE">Close</option>
-                    	</select>
-                  	</div>
-                  	<div class="col-md-12 p-n m-t-sm m-b-xs">Type</div>
-					<div class="col-md-12 p-n">
-                    	<select data-placeholder="Select type" class="type-select form-control" multiple class="w-md">
-                    		<option value="INCIDENT">Incident</option>
-                    		<option value="PROBLEM" selected>Problem</option>
-                    		<option value="TASK">Task</option>
-                    		<option value="QUESTION">Question</option>
-                    	</select>
-                  	</div>
-				</div>
-			</div>
 			<div id="filters-list-container">
 
 			</div>
-			<!--<div class="wrapper">Labels</div>
+			<div class="wrapper">Labels</div>
 			<ul class="nav nav-pills nav-stacked nav-sm labels-list">
 		        
 		    </ul>
@@ -88,8 +27,8 @@
 		            </span>
 		          </div>
 		        </form>
-		    </div>-->
-		</div>   
+		    </div>
+		</div>-->
 		<!--<div class="wrapper hidden-sm hidden-xs" id="filters-list-container"></div>-->
 	</div>
 	<div class="col">
