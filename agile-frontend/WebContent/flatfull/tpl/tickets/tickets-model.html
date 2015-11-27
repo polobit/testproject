@@ -1,12 +1,12 @@
 <script id="ticket-model-template" type="text/html">
-	<li id="{{id}}" class="p-l-xxl list-group-item clearfix b-l {{#if_equals priority 'HIGH'}}b-l-3x {{toLowerCase priority}}-priority{{/if_equals}} data cursor-pointer ticket"  data-id="{{id}}" style="padding-left: 35px; padding-right: 25px;">
+	<li id="{{id}}" class="p-l-xxl list-group-item clearfix b-l {{#if_equals priority 'HIGH'}}b-l-3x {{toLowerCase priority}}-priority{{/if_equals}} data ticket"  data-id="{{id}}" style="padding-left: 35px; padding-right: 25px;">
     <div class="checkbox-st">
       <label class="i-checks i-checks-sm">
         <input class="each-ticket ticket-checkbox" type="checkbox" data-ticket-id="{{id}}">
         <i></i>
       </label>
     </div>
-    <a class="avatar thumb pull-left m-r m-l-sm b b-l" href="javascript:void(0);">
+    <a class="avatar thumb pull-left m-r m-l-sm b b-l cursor-pointer open-ticket" href="javascript:void(0);">
       {{#if contact.properties}}
         <img data-name="{{dataNameAvatar contact.properties 42}}" src="{{gravatarurl contact.properties 24}}">
       {{else}}    
@@ -31,7 +31,7 @@
         </tr>
       </table>
     </div>
-    <div class="pull-right text-sm text-muted text-right m-r-sm">
+    <div class="pull-right cursor-pointer open-ticket text-sm text-muted text-right m-r-sm">
       <time class="time-ago" datetime="{{epochToHumanDate "" last_updated_time}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" last_updated_time}}
       </time>
       {{#if attachments_exists}}
@@ -45,7 +45,7 @@
         {{/if}}
       </div>
     </div>
-    <div class="clear">
+    <div class="clear cursor-pointer open-ticket">
       <div class="subject-row tags-row">
         <a class="text-md" href="javascript:;">
           {{requester_name}} 

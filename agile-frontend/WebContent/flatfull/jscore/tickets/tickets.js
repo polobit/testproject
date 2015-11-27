@@ -145,14 +145,14 @@ var Tickets = {
 		 * Initializing click event on each ticket list item
 		 */
 		$('ul#ticket-model-list', el).off('click');
-		$('ul#ticket-model-list', el).on('click', 'li.ticket', function(e){
+		$('ul#ticket-model-list', el).on('click', 'li > .open-ticket', function(e){
 
 			if($(e.target).hasClass('ticket-checkbox'))
 				return;
 
 			var url = '#tickets/filter/' + Ticket_Filter_ID + '/ticket/';
 
-			Backbone.history.navigate(url + $(this).attr('data-id'), {trigger : true});
+			Backbone.history.navigate(url + $(this).closest('li').attr('data-id'), {trigger : true});
 		});
 
 		/*
