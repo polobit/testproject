@@ -24,6 +24,11 @@
                     "displayname": "Pratt free",
                     "description": "this is sample text"
                 },
+				{
+                    "id": "cloud-soft",
+                    "displayname": "cloud soft",
+                    "description": "this is sample text"
+                },
                 {
                     "id": "freelancer",
                     "displayname": "Freelancer",
@@ -32,6 +37,11 @@
                 {
                     "id": "landing-page",
                     "displayname": "Landing Page",
+                    "description": "this is sample text"
+                },
+				{
+                    "id": "lugada",
+                    "displayname": "Lugada",
                     "description": "this is sample text"
                 },
                 {
