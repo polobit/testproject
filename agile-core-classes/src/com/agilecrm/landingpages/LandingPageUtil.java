@@ -269,13 +269,19 @@ public class LandingPageUtil
 			ObjectifyGenericDao<LandingPageCNames> dao = new ObjectifyGenericDao<LandingPageCNames>(LandingPageCNames.class);
 			q = dao.ofy().query(LandingPageCNames.class);
 			q.filter("cname", cnameDomain);
-			q.filter("domain != ", oldNameSpace);
 			if(q.count() == 0)
 			{
-				return true;			
+				return true;
 			}
 			else
 			{
+				List<LandingPageCNames> lpcnames = q.list();
+				if(lpcnames.size() != 0) {
+					LandingPageCNames lpcname = lpcnames.get(0);
+					if(lpcname.domain.equals(oldNameSpace)) {
+						return true;
+					}
+				}
 				return false;
 			}
 		}

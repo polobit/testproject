@@ -81,12 +81,16 @@ function initializeLandingPageListeners() {
 		});
 	});
 
-	$('#landingpages-listeners').on('keyup', '#sub_domain,#domain', function (e) {
+	$('#landingpages-listeners').on('keyup', '#sub_domain', function (e) {
 		$("#landingPageVerifyBtn").hide();
 		if($("#cnameInstructionMessage").is(':hidden')) {
 			$("#cnameInstructionMessage").show();
 		}
 		$("#cnameHostVal").html($(this).val());
+	});
+	
+	$('#landingpages-listeners').on('keyup', '#domain', function (e) {
+		$("#landingPageVerifyBtn").hide();
 	});
 
 	$('#landingpages-listeners').on('click', '.lpBuilderMenuItem', function(e){
