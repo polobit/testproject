@@ -84,11 +84,15 @@ System.out.println(CLOUDFRONT_TEMPLATE_LIB_PATH);
   
 String CLOUDFRONT_STATIC_FILES_PATH = VersioningUtil.getStaticFilesBaseURL();
 CSS_PATH = CLOUDFRONT_STATIC_FILES_PATH;
+
+//Static images s3 path
+String S3_STATIC_IMAGE_PATH = CLOUDFRONT_STATIC_FILES_PATH.replace("flatfull/", "");
 if(SystemProperty.environment.value() == SystemProperty.Environment.Value.Development)
 {
 	  CLOUDFRONT_STATIC_FILES_PATH = FLAT_FULL_PATH;
 	  CLOUDFRONT_TEMPLATE_LIB_PATH = "";	
 	  CSS_PATH = FLAT_FULL_PATH;
+	  S3_STATIC_IMAGE_PATH = VersioningUtil.getBaseServerURL() + "/beta/static/";
 }
 
 // Users can show their logo on login page. 
@@ -98,7 +102,7 @@ String logo_url = accountPrefs.logo;
 %>
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" style="background:transparent;">
 <head>
 <meta charset="utf-8">
 <meta name="globalsign-domain-verification"
@@ -113,7 +117,7 @@ String logo_url = accountPrefs.logo;
 
 <style>
 body {
-   background-image: url('../flatfull/images/flatfull/agile-login-page-low.jpg');
+   background-image: url('<%=S3_STATIC_IMAGE_PATH%>/images/agile-login-page-low.jpg');
   background-repeat: no-repeat;
   background-position: center center;
   background-size: 100% 100%;
@@ -147,6 +151,12 @@ text-decoration:underline;
 position: fixed;width: 100%;top: 0px;
 }
 
+@media all and (max-width: 767px) {
+	#simple-modal {
+		display: none;
+	}
+}
+
 </style>
 
 <script>
@@ -172,7 +182,7 @@ if(isSafari && isWin)
 <body>
 <div id="openid_btns">
 					   	
-	<div class="app app-header-fixed app-aside-fixed" id="app">
+	<div class="" id="app">
 
 		<div ui-view="" class="fade-in-right-big smooth">
   			<div class="container w-xxl w-auto-xs">
@@ -283,7 +293,7 @@ if(isSafari && isWin)
         newImg.onload = function() {
         $("body").css("background-image","url('"+this.src+"')");
         }
-        newImg.src = 'flatfull/images/flatfull/agile-login-page-high.png';
+        newImg.src = '<%=S3_STATIC_IMAGE_PATH%>/images/agile-login-page-high.png';
 			// Pre load dashlet files when don is active
 			preload_dashlet_libs();
 

@@ -10,13 +10,15 @@
                         <label class="control-label"><b>Name of campaign:</b> <span class="field_req">*</span></label>
                         <div class="controls">
 							<div class="row">
-								<div class="col-md-4 col-sm-4 col-xs-4">
+
+								<div class="col-md-5 col-sm-4">
 									<input name="workflow-name" type="text" id="workflow-name" class="col-md-3 form-control required w-md" placeholder="Name of campaign" />
 								</div>
-								<div class="col-md-5 col-sm-3 col-xs-4">
+								<div class="col-md-3 col-sm-3">
 									<span id="workflow-msg" class="text-center"></span>
 								</div>
-								<div class="col-md-3 col-sm-5 col-xs-4">
+								<div class="col-md-4 col-sm-5">
+
 									<a data-toggle="modal" id="workflow-designer-help" class="right m-t-n-md c-p text-xs text-info" style="clear:both;">Need help? Watch our tutorial.</a>
 									<input type="hidden" id="was-disabled" data = {{was_disabled}}>
 									{{#if is_new}}

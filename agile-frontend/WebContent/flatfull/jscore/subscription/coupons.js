@@ -88,7 +88,7 @@ function getCouponJSON(couponId, callback) {
 		return false;
 
 	// Load image
-	var $load_img = '<img src="img/1-0.gif" height="20px" width="20px" />';
+	var $load_img = '<img src="'+updateImageS3Path("img/1-0.gif")+'" height="20px" width="20px" />';
 	$("#coupon_code_container form i").before($load_img);
 
 	// Rest call to get the amount to discount
@@ -146,7 +146,7 @@ function getCouponJSON(couponId, callback) {
 		return false;
 
 	// Load image
-	var $load_img = '<img src="img/1-0.gif" height="20px" width="20px" />';
+	var $load_img = '<img src="'+updateImageS3Path("img/1-0.gif")+'" height="20px" width="20px" />';
 	$("#coupon_code_container form i").before($load_img);
 
 	// Rest call to get the amount to discount
@@ -171,7 +171,7 @@ function getCouponJSON(couponId, callback) {
 
 function showCouponStatus(couponId) {
 
-	var $load_img = '<img src="img/1-0.gif" height="15px" width="15px" />';
+	var $load_img = '<img src="'+updateImageS3Path("img/1-0.gif")+'" height="15px" width="15px" />';
 	$("#check_valid_coupon").remove($load_img);
 
 }

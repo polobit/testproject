@@ -3,7 +3,7 @@
 	<div class="panel panel-default widget-add"  style="min-height: 250px;">
 	<div class="panel-heading">
 	    <center>
-	    	<img class="m-b-none thumb-xl bg-transparent" style="height:47px;" src="/img/icons/google-contacts-sync.png" />
+	    	<img class="m-b-none thumb-xl bg-transparent" style="height:47px;" src="{{getS3ImagePath '/img/icons/google-contacts-sync.png'}}" />
 	    </center>
     </div>
     <div class="panel-body">
@@ -35,7 +35,7 @@
  	<!-- <legend>Contacts <span class="label label-danger m-b-sm">Beta</span>{{#if id}}<span style="font-size:14px;float:right" title="Sync Contacts" title="Sync Contacts"><a class="icon-refresh save-contact-prefs" href="#" sync = "true" id="google-import-sync"  style="cursor:pointer;text-decoration:none"></a></span>{{/if}}</legend> -->
 	<div class="panel-heading">
 	<span class="label label-danger pull-right m-b-sm">Beta</span>
-   <center> <img class="m-b-none img-responsive thumb-xl bg-transparent" style="height="47px;" src="/img/icons/google-contacts-sync.png" /></center>
+   <center> <img class="m-b-none img-responsive thumb-xl bg-transparent" style="height="47px;" src="{{getS3ImagePath '/img/icons/google-contacts-sync.png'}}" /></center>
 	</div>
 	<div class="panel-body">
 {{#unless id}}
@@ -180,7 +180,7 @@
 <div class="panel panel-default" >
 <div class="panel-heading">
 <span class="label label-danger pull-right m-b">Beta</span>
-<center> <img class="m-b-none img-responsive thumb-xl bg-transparent" style="height:47px;" src="/img/plugins/Stripe.png" /></center>
+<center> <img class="m-b-none img-responsive thumb-xl bg-transparent" style="height:47px;" src="{{getS3ImagePath '/img/plugins/Stripe.png'}}" /></center>
 </div>
 <div class="panel-body">
 {{#unless id}}
@@ -240,7 +240,7 @@
 	<div class="panel panel-default widget-add" style="height:220px;">
 	<div class="panel-heading">
 	    <center>
-	    	<img class="m-b-none thumb-xl bg-transparent" style="height:47px;" src="/img/plugins/Stripe.png" />
+	    	<img class="m-b-none thumb-xl bg-transparent" style="height:47px;" src="{{getS3ImagePath '/img/plugins/Stripe.png'}}" />
 		</center>
 	</div>
 	<div class="panel-body">
@@ -271,7 +271,7 @@
 <div class="panel panel-default" >
 <div class="panel-heading">
 <span class="label label-danger pull-right m-b-sm">Beta</span>
-<center> <img class="m-b-none img-responsive thumb-xl bg-transparent" style="height:47px;" src="img/crm-plugins/shopify.png" /></center>
+<center> <img class="m-b-none img-responsive thumb-xl bg-transparent" style="height:47px;" src="{{getS3ImagePath 'img/crm-plugins/shopify.png'}}" /></center>
 </div>
 <div class="panel-body">
 {{#unless id}}
@@ -345,7 +345,7 @@
 	<div class="panel panel-default widget-add" style="height: 220px;">
 	<div class="panel-heading">
 	    <center>
-	    	<img class="m-b-none thumb-xl bg-transparent" style="height:47px;" src="img/crm-plugins/shopify.png" />
+	    	<img class="m-b-none thumb-xl bg-transparent" style="height:47px;" src="{{getS3ImagePath 'img/crm-plugins/shopify.png'}}" />
 		</center>
 	</div>
 	<div class="panel-body">
@@ -409,7 +409,7 @@
 <div class="panel panel-default" >
 <div class="panel-heading">
 <span class="label label-danger pull-right">Beta</span>
-<center> <img class="m-b-none img-responsive thumb-xl bg-transparent" height="47px;" src="/widgets/QuickBooks210x70.png" /></center>
+<center> <img class="m-b-none img-responsive thumb-xl bg-transparent" height="47px;" src="{{getS3ImagePath '/widgets/QuickBooks210x70.png'}}" /></center>
 </div>
 <div class="panel-body">
 {{#unless id}}
@@ -467,7 +467,7 @@
 	<div class="panel panel-default widget-add" style="height:220px;">
 	 <div class="panel-heading">
 	    <center>
-	    	<img class="thumb-xl m-b-none" style="height:47px;"  src="/widgets/QuickBooks210x70.png"/>
+	    	<img class="thumb-xl m-b-none" style="height:47px;"  src="{{getS3ImagePath '/widgets/QuickBooks210x70.png'}}"/>
 		</center>
 	 </div>
 	 <div class="panel-body">
@@ -500,7 +500,7 @@
 <script id="admin-settings-import-xeroSync-template" type="text/html">
 	<div class="panel wrapper widget-add" >
     <center>
-    <img class="thumbnail"  src="/widgets/xero210x70.png"  style="width:210px; height:80px;" />
+    <img class="thumbnail"  src="{{getS3ImagePath '/widgets/xero210x70.png'}}"  style="width:210px; height:80px;" />
 	</center>
     <br />
     <div class="ellipsis-multiline" style="-webkit-line-clamp: 3;word-break: break-word;width: 220px !important;"  rel="tooltip" >
@@ -531,7 +531,7 @@
 	type="text/html">
 <div class="col-md-4 panel wrapper" >
 <span class="label label-important" style="float:right">Beta</span>
-<center> <img class="thumbnail" src="/widgets/xero210x70.png"  style="width:210px; height:70px;margin-left:40px" /></center>
+<center> <img class="thumbnail" src="{{getS3ImagePath '/widgets/xero210x70.png'}}"  style="width:210px; height:70px;margin-left:40px" /></center>
 <br/>
 {{#unless id}}
     <div class="ellipsis-multiline" style="-webkit-line-clamp: 3;word-break: break-word;width: 220px !important;height: 55px !important;margin-bottom: 20px;"  rel="tooltip" >
@@ -590,7 +590,7 @@
 <div class="col-md-4 col-sm-6 col-xs-12">
 <div class="panel wrapper" >
 <span class="label label-danger pull-right m-b">Beta</span>
-<center> <img class="m-b-none img-responsive thumb-xl bg-transparent" style="height:47px;" src="img/plugins/freshbooks-logo.png"  /></center>
+<center> <img class="m-b-none img-responsive thumb-xl bg-transparent" style="height:47px;" src="{{getS3ImagePath 'img/plugins/freshbooks-logo.png'}}"  /></center>
 {{#unless id}}
     <div class="m-t m-b"  rel="tooltip" >
 		Setup contacts sync with your Freshbooks account.
@@ -677,7 +677,7 @@
 	<div class="panel panel-default widget-add" style="height:220px;">
 	<div class="panel-heading">
 	    <center>
-	    	<img class="m-b-none thumb-xl bg-transparent"  style="height:47px;" src="img/plugins/freshbooks-logo.png" />
+	    	<img class="m-b-none thumb-xl bg-transparent"  style="height:47px;" src="{{getS3ImagePath 'img/plugins/freshbooks-logo.png'}}" />
 	    </center>
 	 </div>
 	 <div class="panel-body">
@@ -711,7 +711,7 @@
 <div class="panel panel-default" >
 <div class="panel-heading">
 <span class="label label-danger pull-right m-b">Beta</span>
-<center> <img class="m-b-none img-responsive thumb-xl bg-transparent" style="height:47px;" src="img/plugins/freshbooks-logo.png" /></center>
+<center> <img class="m-b-none img-responsive thumb-xl bg-transparent" style="height:47px;" {{getS3ImagePath 'img/plugins/freshbooks-logo.png'}}" /></center>
 </div>
 <div class="panel-body">
 {{#unless id}}

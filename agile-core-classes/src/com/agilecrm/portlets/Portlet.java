@@ -125,8 +125,10 @@ public class Portlet {
     }
 
     public void saveAll(DomainUser domainuser){
-    	//if (user == null)
-    		user = new Key<AgileUser>(AgileUser.class, AgileUser.getCurrentAgileUserFromDomainUser(domainuser.id).id);
+    	AgileUser agileUsr =  AgileUser.getCurrentAgileUserFromDomainUser(domainuser.id);
+		if(agileUsr != null){
+    		user = new Key<AgileUser>(AgileUser.class, agileUsr.id);
     	dao.put(this);
+		}
     }
 }

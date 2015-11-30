@@ -326,7 +326,7 @@ $(function()
 		e.preventDefault();
 		var el = $(this).closest("div");
 		$(this).css("display", "none");
-		el.find(".contact-document-select").css("display", "inline");
+		el.find(".contact-document-select").css("display", "block");
 		var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
 		fillSelect('document-select', 'core/api/documents', 'documents', function fillNew()
 		{
