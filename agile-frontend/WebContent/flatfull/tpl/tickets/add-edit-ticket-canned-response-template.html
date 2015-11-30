@@ -14,9 +14,40 @@
 					<div class="control-group form-group">
 						<label class="control-label col-md-3">Message<span class="field_req">*</span></label>
 						<div class="controls col-md-5">
-							<textarea class="form-control" name="message" style="min-height: 100px;">{{message}}</textarea>
+							<textarea id="canned-response-message" class="form-control" name="message" style="min-height: 100px;">{{message}}</textarea>
 						</div>
 					</div>
+					<div class="control-group form-group">
+                      <div class="controls  col-sm-8 ">
+                        <div style="line-height:0px;" class="text-xs pull-right">
+                                <div class="pull-right btn-group dropdown dropup">
+						          <a class="text-info" data-toggle="dropdown" aria-expanded="false">Add a merge field </a>
+						          <ul id="canned-response-merge-fields" class="dropdown-menu">
+						            <li><a href="javascript:void(0);" data-field-val="id">Ticket Id</a></li>
+						            <li><a href="javascript:void(0);" data-field-val="requester_name">Requester Name</a></li>
+						            <li><a href="javascript:void(0);" data-field-val="requester_email">Requester Email</a></li>
+						            <li><a href="javascript:void(0);" data-field-val="status">Status</a></li>
+						            <li><a href="javascript:void(0);" data-field-val="priority">Priority</a></li>
+						            <li><a href="javascript:void(0);" data-field-val="type">Ticket Type</a></li>
+						            <li><a href="javascript:void(0);" data-field-val="subject">Subject</a></li>
+						            <li><a href="javascript:void(0);" data-field-val="created_time">Created Time</a></li>
+						            <li><a href="javascript:void(0);" data-field-val="closed_time">Closed Time</a></li>
+						            <li><a href="javascript:void(0);" data-field-val="last_updated_time">Last Updated Time</a></li>
+						            <li><a href="javascript:void(0);" data-field-val="last_updated_by">Last Updated By</a></li>
+
+						          </ul>
+						        </div>
+                        </div>
+                      </div>
+                    </div>
+					<div class="control-group form-group">
+						<label class="control-label col-md-3">Add Label<span class="field_req">*</span></label>
+						<div class="controls col-sm-4">
+							<select data-placeholder="Labels" name="labels" id="labels" class="chosen-select form-control multiSelect" multiple 
+							   class="w-md"></select>
+						</div>
+					</div>
+
 					<div class="row">
 						<div class="col-md-12">
 							<hr>
