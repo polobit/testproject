@@ -397,7 +397,7 @@ function startStripeWidget(contact_id){
 				console.log(data);
 				if(data){
 					var balance = $('#balance_credit').text();
-					balance = parseInt(creditAmt) + parseInt(balance);
+					balance = parseInt(creditAmt/100) + parseInt(balance);
 					$('#balance_credit').text(balance);					 
 					$('#add_credits').removeClass('hide');
 					$('#stripe_credits_panel').addClass('hide');
