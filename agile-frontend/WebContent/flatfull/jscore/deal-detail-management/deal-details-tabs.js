@@ -116,7 +116,8 @@ $(function(){
 			Backbone.history.navigate("#deals", { trigger : true });
 		}, error : function(response)
 		{
-			alert("some exception occured please try again");
+			//alert("some exception occured please try again");
+			alert(response.responseText);
 		} });
 	});
 

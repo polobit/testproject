@@ -34,6 +34,19 @@ function bindAdminChangeAction(el, data)
 			
 		else
 			$('input[value="CREATE_CONTACT"]', el).removeAttr("disabled");
-	})
+	});
+
+	$('#deals-privilege', el).off('change');
+	$(el).on('change', '#deals-privilege', function(e){
+		if(!$(this).is(':checked')){
+			$('input[value="VIEW_DEALS"]', el).attr("disabled", "disabled");
+			$('input[value="MANAGE_DEALS"]', el).attr("disabled", "disabled");
+		}
+		else
+		{
+			$('input[value="VIEW_DEALS"]', el).removeAttr("disabled");
+			$('input[value="MANAGE_DEALS"]', el).removeAttr("disabled");
+		}
+	});
 	
 }

@@ -31,11 +31,12 @@
 					<a class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" href="#">
 						<span class="caret"></span>
 					</a>
+          {{#hasScope "MANAGE_DEALS"}}
 					<ul class="dropdown-menu pull-right">
 						<li><a href="#import-deals" >Import from CSV</a></li>
 						<li><a href="#" class="deals-export-csv">Export as CSV</a></li>
-					
 					</ul>
+          {{/hasScope}}
 			</div>
 			</div>
 			<div class="clearfix"></div>
@@ -57,7 +58,9 @@
 						<span class="caret"></span>
 					</a>
 					<ul class="dropdown-menu" id="view-actions">
-						<li><a href="#deal_owner_change_modal" data-toggle="modal">Change Owner</a></li>
+						{{#hasScope 'MANAGE_DEALS'}}
+              <li><a href="#deal_owner_change_modal" data-toggle="modal">Change Owner</a></li>
+            {{/hasScope}}
 						<li><a href="#deal_mile_change_modal" data-toggle="modal">Change Milestone/Track</a></li>
 						<li class="divider"></li>
 						<li><a href="#deal_contact_add_tag_modal" data-toggle="modal">Add Tag to related Contacts</a></li>
@@ -379,3 +382,21 @@
 <a id='{{id}}' class="pipeline c-p" data="Default">Default</a>
 {{/if}}
 </script>
+
+<!-- Delete privileges error modal -->
+<div id="deal_delete_privileges_error_modal" class="modal  fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <a href="#" data-dismiss="modal" class="close">×</a>
+        <h3>Delete</h3>
+      </div>
+      <div class="modal-body">You do not have privileges to delete this deal.</div>
+      <div class="modal-footer">
+        <div>
+          <a href="#" class="btn btn-primary" data-dismiss="modal">Cancel</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

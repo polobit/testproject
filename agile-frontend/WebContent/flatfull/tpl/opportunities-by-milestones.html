@@ -37,10 +37,12 @@
 					<a class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" href="#">
 						<span class="caret"></span>
 					</a>
+					{{#hasScope "MANAGE_DEALS"}}
 					<ul class="dropdown-menu pull-right">
 						<li><a href="#import-deals" >Import from CSV</a></li>
 						<li><a href="#" class="deals-export-csv">Export as CSV</a></li>
 					</ul>
+					{{/hasScope}}
 			</div>
 			</div>
         <div class="clearfix"></div>
@@ -50,6 +52,7 @@
 <div class="wrapper-md">
 <div class="row">
     <div class="col-md-12">
+    	<span class="error-status text-danger"></span>
         <div id="new-opportunity-list-paging">
 			 <img class="loading_img p-r-xs"  height="32px" width="32px" src= "img/21-0.gif"></img>
 			<div id="opportunities-by-milestones-model-list">
@@ -75,6 +78,7 @@
 	</div>
   </div>
   <div class="modal-footer">
+  	<span class="error-status text-danger"></span>
 	<button type="button" class="btn btn-sm btn-default" data-dismiss="modal" aria-hidden="true">No</button>
     <a href="#" id="deal-quick-archive" class="btn btn-sm btn-primary">Yes</a>
   </div>

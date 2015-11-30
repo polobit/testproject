@@ -42,6 +42,8 @@ import com.agilecrm.reports.ReportsUtil;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
 import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.access.util.UserAccessControlUtil;
+import com.agilecrm.user.access.util.UserAccessControlUtil.CRUDOperation;
 import com.agilecrm.user.notification.util.DealNotificationPrefsUtil;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.NamespaceUtil;
@@ -172,6 +174,9 @@ public class DealsAPI
     public Opportunity getOpportunity(@PathParam("opportunity-id") Long id)
     {
 	Opportunity opportunity = OpportunityUtil.getOpportunity(id);
+	
+	UserAccessControlUtil.check(Opportunity.class.getSimpleName(), opportunity, CRUDOperation.READ, true);
+	
 	return opportunity;
     }
 
@@ -265,7 +270,7 @@ public class DealsAPI
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     public Opportunity updateOpportunity(Opportunity opportunity)
     {
-
+    UserAccessControlUtil.check("Opportunity", opportunity, CRUDOperation.CREATE, true);
 	if (opportunity.pipeline_id == null || opportunity.pipeline_id == 0L)
 	    opportunity.pipeline_id = MilestoneUtil.getMilestones().id;
 
@@ -292,9 +297,10 @@ public class DealsAPI
     @Path("{opportunity-id}")
     @DELETE
     public void deleteOpportunity(@PathParam("opportunity-id") Long id)
-	    throws com.google.appengine.labs.repackaged.org.json.JSONException, JSONException
+	    throws com.google.appengine.labs.repackaged.org.json.JSONException, JSONException, Exception
     {
-	Opportunity opportunity = OpportunityUtil.getOpportunity(id);
+    Opportunity opportunity = OpportunityUtil.getOpportunity(id);
+    UserAccessControlUtil.checkDeletePrivilege("Opportunity",opportunity);
 	if (opportunity != null)
 	{
 	    ActivitySave.createDealDeleteActivity(opportunity);

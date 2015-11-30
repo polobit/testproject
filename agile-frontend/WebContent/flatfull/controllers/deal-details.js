@@ -38,10 +38,16 @@ var DealDetailsRouter = Backbone.Router.extend({
 			}
 
 		} });
-
-		var ele = this.dealDetailView.render(true).el;
-		$("#deal-detail-page").html(getRandomLoadingImg());
-		$('#deal-detail-page').html(ele);
+		var that = this;
+		this.dealDetailView.model.fetch({success : function(data){
+			var ele = that.dealDetailView.render(true).el;
+			$("#deal-detail-page").html(getRandomLoadingImg());
+			$('#deal-detail-page').html(ele);
+		},error : function(data, response){
+			hideTransitionBar();
+			if(response && response.status == '403')
+				$('#deal-detail-page').html('<h2 class="p-l-md"><strong><i class="fa-exclamation-triangle icon-white"></i>&nbsp;&nbsp; '+response.responseText+'</strong></h2>');
+		} })
 
 	},
 
