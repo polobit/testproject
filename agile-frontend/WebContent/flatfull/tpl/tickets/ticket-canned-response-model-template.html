@@ -13,6 +13,19 @@
 			{{message}}
 		</div>	
 	</td>
+
+	{{#get_ticket_labels_from_ids labels this}}{{/get_ticket_labels_from_ids}}
+
+	{{#if labels}}
+
+	<td class="workflow-triggers"> 
+
+		<div class="table-resp">
+			{{#each labels}}<span class="label" style="background-color: {{color_code}};">{{label}}</span>{{/each}}
+		</div>	
+	</td>
+	{{/if}}
+
    	<td>
         <div class="table-resp">
             <small class="edit-hover text-muted"> 

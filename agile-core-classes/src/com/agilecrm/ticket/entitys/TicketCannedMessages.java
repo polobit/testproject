@@ -1,6 +1,8 @@
 package com.agilecrm.ticket.entitys;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 import javax.persistence.Id;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -43,6 +45,18 @@ public class TicketCannedMessages
 	public String message = "";
 
 	/**
+	 * Stores ticket label keys
+	 */
+	@JsonIgnore
+	private List<Key<TicketLabels>> labels_keys_list = new ArrayList<Key<TicketLabels>>();
+
+	/**
+	 * Stores list of label id's
+	 */
+	@NotSaved
+	public List<Long> labels = new ArrayList<Long>();
+
+	/**
 	 * Stores last updated time
 	 */
 	public Long updated_time = 0L;
@@ -82,12 +96,27 @@ public class TicketCannedMessages
 	{
 		if (owner_key != null)
 			owner_id = owner_key.getId();
+
+		if (labels_keys_list != null)
+		{
+			for (Key<TicketLabels> key : labels_keys_list)
+			{
+				labels.add(key.getId());
+			}
+		}
+
 	}
 
 	@JsonIgnore
 	public void setOwner_key(Key<DomainUser> owner_key)
 	{
 		this.owner_key = owner_key;
+	}
+
+	@JsonIgnore
+	public void set_Labels(List<Key<TicketLabels>> labels_keys_list)
+	{
+		this.labels_keys_list = labels_keys_list;
 	}
 
 	@Override
@@ -103,7 +132,7 @@ public class TicketCannedMessages
 	public boolean equals(Object obj)
 	{
 		TicketCannedMessages other = (TicketCannedMessages) obj;
-		
+
 		if (id == null)
 		{
 			if (other.id != null)
@@ -111,7 +140,7 @@ public class TicketCannedMessages
 		}
 		else if (!id.equals(other.id))
 			return false;
-		
+
 		return true;
 	}
 

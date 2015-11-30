@@ -41,20 +41,20 @@ var Ticket_Labels = {
 		}});
 	},
 
-	showSelectedLabels: function(labels){
+	showSelectedLabels: function(labels, key){
 
 		if(!this.labelsCollection || $.isEmptyObject(this.labelsCollection)){
 			this.fetchCollection(function(){
-				Ticket_Labels.prepareOptionsList(labels);
+				Ticket_Labels.prepareOptionsList(labels, key);
 			});
 
 			return;
 		}
 
-		this.prepareOptionsList(labels);	
+		this.prepareOptionsList(labels, key);	
 	},
 
-	prepareOptionsList: function(labels){
+	prepareOptionsList: function(labels, key){
 
 		if(!this.labelsCollection)
 			return;
@@ -63,20 +63,22 @@ var Ticket_Labels = {
 
 		var labelsJSON = this.labelsCollection.toJSON();
 
+		var key = (!key) ? "label" : key;	
+
 		for(var i =0; i< labelsJSON.length; i++){
 
 			var selected = '';
 
 			for(var j=0; j< labels.length; j++){
 
-				if(labels[j].label == labelsJSON[i].label){
+				if(labels[j] == labelsJSON[i][key]){
 					selected =  'selected';
 					break;
 				}	
 			}
 
 			//var isLabelSelected = labels.
-			optionList += "<option value='"+ labelsJSON[i].label + "' " + selected + ">" + labelsJSON[i].label + "</option>";
+			optionList += "<option value='"+ labelsJSON[i][key] + "' " + selected + ">" + labelsJSON[i].label + "</option>";
 		}
 
 		$(".chosen-select").html(optionList);

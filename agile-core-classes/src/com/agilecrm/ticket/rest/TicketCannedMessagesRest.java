@@ -1,5 +1,6 @@
 package com.agilecrm.ticket.rest;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
@@ -20,6 +21,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.agilecrm.ticket.entitys.TicketCannedMessages;
+import com.agilecrm.ticket.entitys.TicketLabels;
 import com.agilecrm.ticket.utils.TicketCannedMessagesUtil;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
@@ -85,6 +87,18 @@ public class TicketCannedMessagesRest
 			cannedMessage.title = title;
 			cannedMessage.setOwner_key(domainUser);
 
+			List<Long> label_keys = cannedMessage.labels;
+
+			System.out.println("label_keys = " + label_keys);
+
+			List<Key<TicketLabels>> labelsKeysList = new ArrayList<Key<TicketLabels>>();
+			for (Long label_key : label_keys)
+				labelsKeysList.add(new Key<TicketLabels>(TicketLabels.class, label_key));
+
+			System.out.println("labelsKeysList = " + labelsKeysList);
+
+			cannedMessage.set_Labels(labelsKeysList);
+
 			TicketCannedMessages.dao.put(cannedMessage);
 
 			return new JSONObject().put("status", "success").toString();
@@ -128,6 +142,19 @@ public class TicketCannedMessagesRest
 					throw new Exception("Canned Message with same name already exists. Please choose different name.");
 
 			cannedMessage.setOwner_key(DomainUserUtil.getCurentUserKey());
+
+			List<Long> label_keys = cannedMessage.labels;
+
+			System.out.println("label_keys = " + label_keys);
+
+			List<Key<TicketLabels>> labelsKeysList = new ArrayList<Key<TicketLabels>>();
+			for (Long label_key : label_keys)
+				labelsKeysList.add(new Key<TicketLabels>(TicketLabels.class, label_key));
+
+			System.out.println("labelsKeysList = " + labelsKeysList);
+
+			cannedMessage.set_Labels(labelsKeysList);
+
 			TicketCannedMessages.dao.put(cannedMessage);
 
 			return new JSONObject().put("status", "success").toString();
