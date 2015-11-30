@@ -120,7 +120,7 @@ angular.module('builder.wysiwyg', [])
 
 	      		//show on select box edit button click
 	      		$scope.$on('builder.contextBox.editBtn.click', function(event) {
-	      			if (event.target.nodeName !== 'BODY' && $(event.target).text().trim().length) {
+	      			if ($scope.selected.node.nodeName !== 'BODY' && $($scope.selected.node).text().trim().length) {
                         drawWysiwyg(event.pageX, event.pageY, $scope.selected.node);
                     }
 	      		});

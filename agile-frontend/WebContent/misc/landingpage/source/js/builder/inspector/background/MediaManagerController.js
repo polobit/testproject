@@ -13,8 +13,12 @@ angular.module('builder.inspector')
 
           var file = $files[0];
 
+          var uploadedFileName = file.name;
+          var filename = uploadedFileName.replace(/[^a-z0-9]/gi, '_').toLowerCase();
+          filename = filename + "_" + new Date().getTime() + "." + uploadedFileName.split('.').pop();
+
           formData = new FormData();
-          formData.append('key',  "editor/"+file.name);
+          formData.append('key',  "editor/"+window.parent.CURRENT_DOMAIN_USER.domain+"/"+filename);
           formData.append('AWSAccessKeyId', 'AKIAIBK7MQYG5BPFHSRQ');
           formData.append('acl', 'public-read');
           formData.append('content-type', 'image/png');
