@@ -79,7 +79,8 @@ var LandingPageRouter = Backbone.Router.extend({
         getTemplate("landingpages-add", data, undefined, function(ui){
             $("#landingpages-listeners").html($(ui));
         }, "#landingpages-listeners");
-
+	
+	$('html, body').animate({scrollTop: $('body').offset().top}, 500);
         hideTransitionBar();
 
 	},
@@ -96,7 +97,8 @@ var LandingPageRouter = Backbone.Router.extend({
         getTemplate("landingpages-add", data, undefined, function(ui){
             $("#landingpages-listeners").html($(ui));
         }, "#landingpages-listeners");
-
+	
+	$('html, body').animate({scrollTop: $('body').offset().top}, 500);
         hideTransitionBar();
 
     },
