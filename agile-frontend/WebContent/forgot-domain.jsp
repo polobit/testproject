@@ -1,3 +1,4 @@
+<%@page import="com.agilecrm.util.VersioningUtil"%>
 <%@page import="org.apache.commons.lang.StringUtils"%>
 <%@page import="com.agilecrm.user.DomainUser"%>
 <%@page import="com.agilecrm.user.util.DomainUserUtil"%>
@@ -30,6 +31,8 @@ if(!StringUtils.isEmpty(email))
 	
 	System.out.println(error + " " + success);
 }
+//Static images s3 path
+String S3_STATIC_IMAGE_PATH = VersioningUtil.getStaticFilesBaseURL().replace("flatfull/", "");
 
 %>
 <!DOCTYPE html>
@@ -57,7 +60,7 @@ if(!StringUtils.isEmpty(email))
 <style>
 
 body {
-background-image:url('..<%=flatfull_path%>/images/flatfull/buildings.jpg');
+background-image:url('<%=S3_STATIC_IMAGE_PATH%>/images/buildings-low.jpg');
 background-repeat:no-repeat;
 background-position:center center;
 background-size:100% 100%;
@@ -86,8 +89,18 @@ text-decoration:underline;
 .close {
 	  color: #000 !important;
 }
-<!-- 
-@media (min-width: 900px) {
+
+
+@media all and (max-width: 767px) {
+
+body {
+  background-size: cover;
+
+}
+  
+}
+
+<!-- @media (min-width: 900px) {
 body {
 	padding-top: 30px;
 	}
@@ -109,8 +122,8 @@ body {
 
 .alert-success {
 	  color: #3c763d !important;
-}
--->
+} -->
+
 </style> 
 
  <!-- JQUery Core and UI CDN -->
@@ -141,7 +154,7 @@ jQuery.validator.setDefaults({
 	<!-- <div class='navbar navbar-fixed-top'> 
     	<div class='navbar-inner'> 
     		<div class='container'> 
-    			<a class='brand' href='#dashboard'>Agile CRM</a>
+    			<a class='brand' href='#'>Agile CRM</a>
   				<div class="nav-collapse">
 					<ul class="nav pull-right">
 						<li class="">						
@@ -186,7 +199,7 @@ jQuery.validator.setDefaults({
 				
 				<div class="list-group list-group-sm">
 					<div class="list-group-item">
-						<input class="input-xlarge field required email form-control no-border" name='email' maxlength="50" minlength="6" type="email" required placeholder="Email" autocapitalize="off">
+						<input class="input-xlarge  required email form-control no-border" name='email' maxlength="50" minlength="6" type="email" required placeholder="Email" autocapitalize="off">
 					</div>
 				</div>
 					  <input type='submit' value="Submit" class='btn btn-lg btn-primary btn-block forgot_domain_btn'>
@@ -208,6 +221,12 @@ jQuery.validator.setDefaults({
 		<script type="text/javascript">
 		$(document).ready(function() {			
 			
+			var newImg = new Image;
+      	newImg.onload = function() {
+    	$("body").css("background-image","url('"+this.src+"')");
+  		 }
+		newImg.src = '<%=S3_STATIC_IMAGE_PATH%>/images/buildings.jpg';
+		
 		  //form is self submitted
           $("#forgot_domain").validate({
 				 submitHandler: function(form) {

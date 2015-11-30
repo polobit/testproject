@@ -1,29 +1,27 @@
 
 <script id="settings-user-prefs-tab-template" type="text/html">
 	<div class="tab-container m-b-none">
-           <ul class="nav nav-tabs">
-             <li class="prefs-profile"><a href="#user-prefs/profile" class="b-l-none">Profile</a></li>
-             <li class="prefs-reminders"><a href="#user-prefs/reminders">Reminders</a></li>
-			 <li class="prefs-advanced"><a href="#user-prefs/advanced">Advanced</a></li>
-           </ul>
+       <ul class="nav nav-tabs">
+         <li class="prefs-profile"><a href="#settings-user-prefs" data-toggle="tab"  class="b-l-none">Profile</a></li>
+         <li class="prefs-reminders"><a href="#settings-reminders" data-toggle="tab" >Reminders</a></li>
+		 <li class="prefs-advanced"><a href="#settings-advanced" data-toggle="tab" >Advanced</a></li>
+       </ul>
 	</div>
-	<div class="tab-pane active" id="settings-user-prefs-tab-content">
+	<div class="tab-content" id="settings-user-prefs-tab-content">
+		
+	</div>
+	
 </script>
-
-
-
-
 
 <script id="settings-user-prefs-template" type="text/html">
 <!--  Contact View Detail in Detailed mode - when only one contact is shown -->
-
-<div class="panel wrapper">
+	<div class="panel wrapper">
     <form id="userPrefs" class="form-horizontal" role="form">
         <fieldset>
             <input name="id" type="hidden" value="{{id}}" /> 		
             <!-- <legend>Personal Settings</legend> -->
             <div class="row">
-                <div class="col-md-6 col-sm-6 col-xs-6">
+                <div class="col-md-6 col-sm-6 col-xs-12">
                     <div class="control-group form-group">
                         <label class="control-label col-sm-4">Name <span class="field_req">*</span></label>
                         <div class="controls col-sm-8">
@@ -37,6 +35,23 @@
 							<a href="#change-password" class="text-info">Change Password</a>      
                 		</div>
             		</div>
+
+            		<div class="control-group form-group">
+						<label class="control-label col-sm-4">Avatar</label>
+                		<div id="upload-container" class="control-label text-left col-sm-8">
+							<a href="#choose-avatar-modal" data-toggle="modal" class="pull-left">
+								<div class="imgholder thumb-lg thumb-wrapper" style="width:50px;height:50px;">
+                                  {{#if pic}}
+                                    <img class="w-full" src="{{pic}}"  />
+                                  {{else}}
+                                    <img class="w-full"  src="{{getS3ImagePath '/images/pic.png'}}"  />
+                                  {{/if}}
+								</div>
+							</a> 
+							<input type="hidden" id="upload_url" name="pic"/>     
+                		</div>
+            		</div>
+
                     <div class="control-group form-group hidden">
                         <label class="control-label col-sm-4">Color Theme <span class="field_req">*</span></label> 
                         <div class="controls col-sm-8">
@@ -975,28 +990,9 @@
                  </div>
              </div>
                 </div>
-                <div class="col-md-3 col-sm-3 col-xs-3">
-                    
-                        <div id="upload-container" messg="User image has been uploaded">
-                            <div class="clearfix"><a href="#choose-avatar-modal" data-toggle="modal" class="pull-left">
-								<div class="imgholder thumb-lg thumb-wrapper" style="width:75px;">
-                                  {{#if pic}}
-                                    <img class="w-full"  src="{{pic}}"  />
-                                  {{else}}
-                                    <img class="w-full"  src="https://contactuswidget.appspot.com/images/pic.png"  />
-                                  {{/if}}
-								</div></a>												
-                                <div class="m-l-sm pull-left" style="margin-top:55px;">
-									<input type="hidden" id="upload_url" name="pic"/>  
-                                    <!--<input style="margin: 10px 0px 0px;" class="upload_s3 btn" type="button" id="user_prefs_image" value="Upload"/>-->
-									<a href="#choose-avatar-modal" class="text-info" data-toggle="modal">Change Avatar</a>
-                                </div>
-                            </div>
-                        
-                    </div>
-                </div>
+
             </div>
-            <div class="row">
+            <div class="row m-t-sm">
 <div class="col-md-12">
             <div class="control-group form-group">
                 <label class="control-label col-sm-2">Signature</label> 

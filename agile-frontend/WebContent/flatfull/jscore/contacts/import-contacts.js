@@ -4,6 +4,7 @@ function initializeImportEvents(id){
 if(!id)
 	  id = "content";
 
+$('#' + id  + " .upload").off('click');
 $('#' + id).on('click', '.upload', function(e)
 	{
 
@@ -25,28 +26,40 @@ $('#' + id).on('click', '.upload', function(e)
 	// table, still calls
 	// fileUploadInit,
 	// so user can uploadimport-comp again if required
+	$('#' + id  + " #import-cancel").off('click');
 	$('#' + id).on('click', '#import-cancel', function(e){
 
 		// Sends empty JSON to remove
 		// contact uploaded
-		var $firstDiv = $('#content').first();
-		$firstDiv.html(getTemplate("import-contacts", {}));
+		var $firstDiv = $('#content').children().first();
+		getTemplate('import-contacts', {}, undefined, function(template_ui){
+					if(!template_ui)
+						  return;
+					$firstDiv.html($(template_ui));	
+					initializeImportEvents($firstDiv.attr('id'));
 
-		initializeImportEvents($firstDiv.attr('id'));
+				}, $firstDiv);
+		
 	});
 	
 	// cancel option for deals import
+	$('#' + id  + " #deal-cancel").off('click');
 	$('#' + id).on('click', '#deal-cancel', function(e){
 
 				// Sends empty JSON to remove
 				// contact uploaded
-				var $firstDiv = $('#content').first();
-				$firstDiv.html(getTemplate("import-deals", {}));
+				var $firstDiv = $('#content').children().first();
 
-				initializeImportEvents($firstDiv.attr('id'));
+				getTemplate('import-deals', {}, undefined, function(template_ui){
+					if(!template_ui)
+						  return;
+					$firstDiv.html($(template_ui));	
+					initializeImportEvents($firstDiv.attr('id'));
+
+				}, $firstDiv);				
 			});
 
-
+$('#' + id  + " #import-contacts").off('click');
 $('#' + id).on('click', '#import-contacts', function(e)
 					{
 
@@ -97,12 +110,25 @@ $('#' + id).on('click', '#import-contacts', function(e)
 
 						if (fist_name_count == 0)
 						{
-							$("#import-validation-error").html(getTemplate("import-contacts-validation-message", upload_valudation_errors.first_name_missing));
+							getTemplate("import-contacts-validation-message", upload_valudation_errors.first_name_missing, undefined, function(template_ui){
+								if(!template_ui)
+									  return;
+								$("#import-validation-error").html($(template_ui));	
+								initializeImportEvents($firstDiv.attr('id'));
+
+							}, "#import-validation-error");
+							
 							return false;
 						}
 						else if (emails_count == 0)
 						{
-							$("#import-validation-error").html(getTemplate("import-contacts-validation-message", upload_valudation_errors.email_missing));
+							getTemplate("import-contacts-validation-message", upload_valudation_errors.email_missing, undefined, function(template_ui){
+								if(!template_ui)
+									  return;
+
+								$('#import-validation-error').html($(template_ui));	
+							}, "#import-validation-error");
+
 							return false;
 						}
 						/*
@@ -113,23 +139,46 @@ $('#' + id).on('click', '#import-contacts', function(e)
 						 */
 						else if (fist_name_count > 1)
 						{
-							$("#import-validation-error")
-									.html(getTemplate("import-contacts-validation-message", upload_valudation_errors.first_name_duplicate));
+							getTemplate("import-contacts-validation-message", upload_valudation_errors.first_name_duplicate, undefined, function(template_ui){
+								if(!template_ui)
+									  return;
+									
+								$('#import-validation-error').html($(template_ui));	
+							}, "#import-validation-error");
+
 							return false;
 						}
 						else if (last_name_count > 1)
 						{
-							$("#import-validation-error").html(getTemplate("import-contacts-validation-message", upload_valudation_errors.last_name_duplicate));
+							getTemplate("import-contacts-validation-message", upload_valudation_errors.last_name_duplicate, undefined, function(template_ui){
+								if(!template_ui)
+									  return;
+									
+								$('#import-validation-error').html($(template_ui));	
+							}, "#import-validation-error");
+
 							return false;
 						}
 						else if (company_count > 1)
 						{
-							$("#import-validation-error").html(getTemplate("import-contacts-validation-message", upload_valudation_errors.company_duplicate));
+							getTemplate("import-contacts-validation-message", upload_valudation_errors.company_duplicate, undefined, function(template_ui){
+								if(!template_ui)
+									  return;
+									
+								$('#import-validation-error').html($(template_ui));	
+							}, "#import-validation-error");
+
 							return false;
 						}
 						else if (job_title_count > 1)
 						{
-							$("#import-validation-error").html(getTemplate("import-contacts-validation-message", upload_valudation_errors.job_title_duplicate));
+							getTemplate("import-contacts-validation-message", upload_valudation_errors.job_title_duplicate, undefined, function(template_ui){
+								if(!template_ui)
+									  return;
+									
+								$('#import-validation-error').html($(template_ui));	
+							}, "#import-validation-error");
+
 							return false;
 						}
 
@@ -166,7 +215,12 @@ $('#' + id).on('click', '#import-contacts', function(e)
 							});
 						}
 						if(!tags_valid) {
-							$("#import-validation-error").html(getTemplate("import-contacts-validation-message", upload_valudation_errors.invalid_tag));
+							getTemplate("import-contacts-validation-message", upload_valudation_errors.invalid_tag, undefined, function(template_ui){
+								if(!template_ui)
+									  return;
+								$('#import-validation-error').html($(template_ui));	
+							}, "#import-validation-error");
+
 							return false;
 						}
 						
@@ -269,15 +323,19 @@ $('#' + id).on('click', '#import-contacts', function(e)
 								// Sends empty JSON to remove
 								// contact uploaded
 								var $firstDiv = $('#content').first();
-								$firstDiv.html(getTemplate("import-contacts", {}));
-								initializeImportEvents($firstDiv.attr('id'));
 
-								showNotyPopUp('information', "Contacts are now being imported. You will be notified on email when it is done", "top", 5000);
+								getTemplate("import-contacts", {}, undefined, function(template_ui){
+									if(!template_ui)
+										  return;
+									$firstDiv.html($(template_ui));
 
-								addTagAgile(IMPORT_TAG);
-								// Calls vefiryUploadStatus with data returned
-								// from the url i.e., key of the memcache
-								// verifyUploadStatus(data);
+									initializeImportEvents($firstDiv.attr('id'));
+									showNotyPopUp('information', "Contacts are now being imported. You will be notified on email when it is done", "top", 5000);
+									addTagAgile(IMPORT_TAG);
+
+								}, $firstDiv);
+
+								
 							}, });
 
 					})
@@ -286,6 +344,7 @@ $('#' + id).on('click', '#import-contacts', function(e)
 /**
  * validation for csv import companies
  */
+$('#' + id  + " #import-comp").off('click');
 $('#' + id).on('click', '#import-comp', function(e)
 				{
 
@@ -320,13 +379,22 @@ $('#' + id).on('click', '#import-comp', function(e)
 
 					if (company_count == 0)
 					{
-						$("#import-validation-error").html(getTemplate("import-company-validation-message", upload_valudation_errors.company_name_missing));
+						getTemplate("import-company-validation-message", upload_valudation_errors.company_name_missing, undefined, function(template_ui){
+								if(!template_ui)
+									  return;
+								$("#import-validation-error").html($(template_ui));
+						}, "#import-validation-error");						
 						return false;
 					}
 
 					else if (company_count > 1)
 					{
-						$("#import-validation-error").html(getTemplate("import-company-validation-message", upload_valudation_errors.company_name_duplicated));
+						getTemplate("import-company-validation-message", upload_valudation_errors.company_name_duplicated, undefined, function(template_ui){
+								if(!template_ui)
+									  return;
+								$("#import-validation-error").html($(template_ui));
+						}, "#import-validation-error");	
+
 						return false;
 					}
 
@@ -441,15 +509,15 @@ $('#' + id).on('click', '#import-comp', function(e)
 							// Sends empty JSON to remove
 							// contact uploaded
 							var $firstDiv = $('#content').first();
-								$firstDiv.html(getTemplate("import-contacts", {}));
 
-								initializeImportEvents($firstDiv.attr('id'));
+							getTemplate("import-contacts", {}, undefined, function(template_ui){
+									if(!template_ui)
+										  return;
+									$firstDiv.html($(template_ui));
+									initializeImportEvents($firstDiv.attr('id'));
+									showNotyPopUp('information', "Companies are now being imported. You will be notified on email when it is done", "top", 5000);
+							}, $firstDiv);	
 
-							showNotyPopUp('information', "Companies are now being imported. You will be notified on email when it is done", "top", 5000);
-
-							// Calls vefiryUploadStatus with data returned
-							// from the url i.e., key of the memcache
-							// verifyUploadStatus(data);
 						}, });
 
 				});
@@ -457,6 +525,7 @@ $('#' + id).on('click', '#import-comp', function(e)
 /**
  * import deals validations
  */
+$('#' + id  + " #import-deals").off('click');
 $('#' + id).on('click', '#import-deals', function(e)
 				{
 
@@ -464,17 +533,17 @@ $('#' + id).on('click', '#import-deals', function(e)
 						return;
 
 					var upload_valudation_errors = {
-													"deal_name_missing" : { "error_message" : "Deal Name is mandatory. Please select deal name." },
-													"deal_duplicated" : { "error_message" : "Deal Name field is duplicated" },
-													"deal_value_duplicated" : { "error_message" : "Deal value field is duplicated" },
-													"deal_track_duplicated" : { "error_message" : "Deal track field is duplicated" },
-													"deal_milestone_duplicated" : {"error_message" : "Milestone field is duplicated."},
-													"deal_related_contact_duplicated" : {"error_message" : "Deal relatsTo field duplicated" },
-													"deal_probability_duplicated" : {"error_message" : "Deal probability field is duplicated"},
-													"deal_close_date_duplicated" : {"error_message" : "Deal close date field is duplicated"},
-													"deal_note_duplicated" : {"error_message" : "Deal Note field duplicated"},
-													"deal_description_duplicated" : {"error_message":"Deal descriptions field is duplicated"},
-												}
+							"deal_name_missing" : { "error_message" : "Deal Name is mandatory. Please select deal name." },
+							"deal_duplicated" : { "error_message" : "Deal Name field is duplicated" },
+							"deal_value_duplicated" : { "error_message" : "Deal value field is duplicated" },
+							"deal_track_duplicated" : { "error_message" : "Deal track field is duplicated" },
+							"deal_milestone_duplicated" : {"error_message" : "Milestone field is duplicated."},
+							"deal_related_contact_duplicated" : {"error_message" : "Deal relatsTo field duplicated" },
+							"deal_probability_duplicated" : {"error_message" : "Deal probability field is duplicated"},
+							"deal_close_date_duplicated" : {"error_message" : "Deal close date field is duplicated"},
+							"deal_note_duplicated" : {"error_message" : "Deal Note field duplicated"},
+							"deal_description_duplicated" : {"error_message":"Deal descriptions field is duplicated"},
+					}
 					var models = [];
 
 					// Hide the alerts
@@ -516,62 +585,111 @@ $('#' + id).on('click', '#import-deals', function(e)
 
 					if (deal_count == 0)
 					{
-						$("#import-validation-error").html(getTemplate("import-deal-validation-message", upload_valudation_errors.deal_name_missing));
+						getTemplate("import-deal-validation-message", upload_valudation_errors.deal_name_missing, undefined, function(template_ui){
+								if(!template_ui)
+									  return;
+								$("#import-validation-error").html($(template_ui));
+						}, "#import-validation-error");
+
 						return false;
 					}
 			
 
 					else if (deal_count > 1)
 					{
-						$("#import-validation-error").html(getTemplate("import-deal-validation-message", upload_valudation_errors.deal_duplicated));
+						getTemplate("import-deal-validation-message", upload_valudation_errors.deal_duplicated, undefined, function(template_ui){
+								if(!template_ui)
+									  return;
+								$("#import-validation-error").html($(template_ui));
+						}, "#import-validation-error");
 						return false;
 					}
 
 					else if (value_count > 1)
 					{
-						$("#import-validation-error").html(getTemplate("import-deal-validation-message", upload_valudation_errors.deal_value_duplicated));
+						getTemplate("import-deal-validation-message", upload_valudation_errors.deal_value_duplicated, undefined, function(template_ui){
+								if(!template_ui)
+									  return;
+								$("#import-validation-error").html($(template_ui));
+						}, "#import-validation-error");
+
 						return false;
 					}
 
 					else if (track_count > 1)
 					{
-						$("#import-validation-error").html(getTemplate("import-deal-validation-message", upload_valudation_errors.deal_track_duplicated));
+						getTemplate("import-deal-validation-message", upload_valudation_errors.deal_track_duplicated, undefined, function(template_ui){
+								if(!template_ui)
+									  return;
+								$("#import-validation-error").html($(template_ui));
+						}, "#import-validation-error");
+
 						return false;
 					}
 
 					else if (milestone_count > 1)
 					{
-						$("#import-validation-error").html(getTemplate("import-deal-validation-message", upload_valudation_errors.deal_milestone_duplicated));
+						getTemplate("import-deal-validation-message", upload_valudation_errors.deal_milestone_duplicated, undefined, function(template_ui){
+								if(!template_ui)
+									  return;
+								$("#import-validation-error").html($(template_ui));
+						}, "#import-validation-error");
+
 						return false;
 					}
 					
 					else if (related_count > 1)
 					{
-						$("#import-validation-error").html(getTemplate("import-deal-validation-message", upload_valudation_errors.deal_related_contact_duplicated));
+						getTemplate("import-deal-validation-message", upload_valudation_errors.deal_related_contact_duplicated, undefined, function(template_ui){
+								if(!template_ui)
+									  return;
+								$("#import-validation-error").html($(template_ui));
+						}, "#import-validation-error");
+
 						return false;
 					}
 
 					else if (probability_count > 1)
 					{
-						$("#import-validation-error").html(getTemplate("import-deal-validation-message", upload_valudation_errors.deal_probability_duplicated));
+						getTemplate("import-deal-validation-message", upload_valudation_errors.deal_probability_duplicated, undefined, function(template_ui){
+								if(!template_ui)
+									  return;
+								$("#import-validation-error").html($(template_ui));
+						}, "#import-validation-error");
+
 						return false;
 					}
 					
 					else if (close_date_count > 1)
 					{
-						$("#import-validation-error").html(getTemplate("import-deal-validation-message", upload_valudation_errors.deal_close_date_duplicated));
+						getTemplate("import-deal-validation-message", upload_valudation_errors.deal_close_date_duplicated, undefined, function(template_ui){
+								if(!template_ui)
+									  return;
+								$("#import-validation-error").html($(template_ui));
+						}, "#import-validation-error");
+
 						return false;
 					}
 					
 					else if (note_count > 1)
 					{
-						$("#import-validation-error").html(getTemplate("import-deal-validation-message", upload_valudation_errors.deal_note_duplicated));
+						getTemplate("import-deal-validation-message", upload_valudation_errors.deal_note_duplicated, undefined, function(template_ui){
+								if(!template_ui)
+									  return;
+								$("#import-validation-error").html($(template_ui));
+						}, "#import-validation-error");
+
 						return false;
 					}
 					
 					else if (description_count > 1)
 					{
-						$("#import-validation-error").html(getTemplate("import-deal-validation-message", upload_valudation_errors.deal_description_duplicated));
+						getTemplate("import-deal-validation-message", upload_valudation_errors.deal_description_duplicated, undefined, function(template_ui){
+								if(!template_ui)
+									  return;
+								$("#import-validation-error").html($(template_ui));
+						}, "#import-validation-error");
+
 						return false;
 					}
 
@@ -698,25 +816,25 @@ function parseCSV(key, type)
 					 * element) { $(element).html(el); });
 					 */
 					data["custom_fields"] = fields.toJSON();
+					var template_name = "";
+
 					if (type == "contacts")
-					{
-						template = $(getTemplate("import-contacts-2", data));
-					}
-					else if (type == "company")
-					{
-						template = $(getTemplate("import-companies", data));
-					}
-					else if (type == "deals")
-					{
-						template = $(getTemplate("import-deals2", data));
-					}
+						  template_name = "import-contacts-2";
+					else if(type == "company")
+					  	  template_name = "import-companies";
+					else if(type == "deals")
+					  	  template_name = "import-deals2";
 
+					
 					var $firstDiv = $('#content').children().first();
-					$firstDiv.html(template);
-								
-					initializeImportEvents($firstDiv.attr('id'));
+					getTemplate(template_name, data, undefined, function(template_ui){
+						if(!template_ui)
+							  return;
+						$firstDiv.html($(template_ui));
+						initializeImportEvents($firstDiv.attr('id'));
+						setup_tags_typeahead();
 
-					setup_tags_typeahead();
+					}, $firstDiv);					
 				})
 
 			})

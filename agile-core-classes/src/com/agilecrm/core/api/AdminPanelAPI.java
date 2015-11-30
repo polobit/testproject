@@ -573,11 +573,11 @@ public class AdminPanelAPI
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     public String getsubscriptionOfDomainForOur(@QueryParam("d") String domainname) throws StripeException
     {
-	/*if (StringUtils.isEmpty(NamespaceManager.get()) || (!NamespaceManager.get().equals("admin") && !NamespaceManager.get().equals("our")))
+	if (StringUtils.isEmpty(NamespaceManager.get()) || (!NamespaceManager.get().equals("admin") && !NamespaceManager.get().equals("our")))
 	{
 	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
 		    .entity("Sorry you don't have privileges to access this page.").build());
-	}*/
+	}
 	String oldNameSpace = NamespaceManager.get();
 	try{
 		NamespaceManager.set(domainname);

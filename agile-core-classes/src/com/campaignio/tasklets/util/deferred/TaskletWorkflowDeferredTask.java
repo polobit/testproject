@@ -2,7 +2,10 @@ package com.campaignio.tasklets.util.deferred;
 
 import org.json.JSONObject;
 
+import com.agilecrm.workflows.status.CampaignStatus.Status;
+import com.agilecrm.workflows.status.util.CampaignStatusUtil;
 import com.agilecrm.workflows.util.WorkflowUtil;
+import com.campaignio.tasklets.agile.util.AgileTaskletUtil;
 import com.campaignio.tasklets.util.TaskCore;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.taskqueue.DeferredTask;
@@ -18,60 +21,66 @@ import com.google.appengine.api.taskqueue.DeferredTask;
 @SuppressWarnings("serial")
 public class TaskletWorkflowDeferredTask implements DeferredTask
 {
-    String campaignId, subscriberJSONString;
-    public String namespace;
+	String campaignId, subscriberJSONString;
+	public String namespace;
 
-    /**
-     * Constructs a new {@link TaskletWorkflowDeferredTask}.
-     * 
-     * @param campaignId
-     *            CampaignId - to avoid 'Task too large' Exception
-     * @param subscriberJSONString
-     *            contact details.
-     */
-    public TaskletWorkflowDeferredTask(String campaignId, String subscriberJSONString, String namespace)
-    {
-	this.campaignId = campaignId;
-	this.subscriberJSONString = subscriberJSONString;
-	this.namespace = namespace;
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see java.lang.Runnable#run()
-     */
-    @Override
-    public void run()
-    {
-	String oldNamespace = NamespaceManager.get();
-
-	try
+	/**
+	 * Constructs a new {@link TaskletWorkflowDeferredTask}.
+	 * 
+	 * @param campaignId
+	 *            CampaignId - to avoid 'Task too large' Exception
+	 * @param subscriberJSONString
+	 *            contact details.
+	 */
+	public TaskletWorkflowDeferredTask(String campaignId, String subscriberJSONString, String namespace)
 	{
-	    NamespaceManager.set(namespace);
-
-	    System.out.println("Executing tasklet in namespace " + NamespaceManager.get());
-
-	    JSONObject subscriberJSON = new JSONObject(subscriberJSONString);
-
-	    // Fetching campaignJSON within the task, to avoid 'Task too large
-	    // Exception.'
-	    JSONObject campaignJSON = WorkflowUtil.getWorkflowJSON(Long.parseLong(campaignId));
-
-	    // In case workflow is deleted.
-	    if (campaignJSON == null)
-		return;
-
-	    TaskCore.executeWorkflow(campaignJSON, subscriberJSON);
+		this.campaignId = campaignId;
+		this.subscriberJSONString = subscriberJSONString;
+		this.namespace = namespace;
 	}
-	catch (Exception e)
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Runnable#run()
+	 */
+	@Override
+	public void run()
 	{
-	    System.err.println("Exception occured in TaskletUtilDeferredTask " + e.getMessage());
-	    e.printStackTrace();
+		String oldNamespace = NamespaceManager.get();
+
+		try
+		{
+			NamespaceManager.set(namespace);
+
+			System.out.println("Executing tasklet in namespace " + NamespaceManager.get());
+
+			JSONObject subscriberJSON = new JSONObject(subscriberJSONString);
+
+			// Fetching campaignJSON within the task, to avoid 'Task too large
+			// Exception.'
+			JSONObject campaignJSON = WorkflowUtil.getWorkflowJSON(Long.parseLong(campaignId));
+
+			// In case workflow is deleted or disabled.
+			if (campaignJSON == null || campaignJSON.getBoolean("is_disabled"))
+			{
+				System.out.println("Disabled campaign assigned");
+				CampaignStatusUtil.setStatusOfCampaignWithName(AgileTaskletUtil.getId(subscriberJSON),
+						AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getCampaignNameFromJSON(campaignJSON),
+						Status.REMOVED);
+				return;
+			}
+
+			TaskCore.executeWorkflow(campaignJSON, subscriberJSON);
+		}
+		catch (Exception e)
+		{
+			System.err.println("Exception occured in TaskletUtilDeferredTask " + e.getMessage());
+			e.printStackTrace();
+		}
+		finally
+		{
+			NamespaceManager.set(oldNamespace);
+		}
 	}
-	finally
-	{
-	    NamespaceManager.set(oldNamespace);
-	}
-    }
 }

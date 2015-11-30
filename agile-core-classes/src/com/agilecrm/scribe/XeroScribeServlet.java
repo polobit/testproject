@@ -21,8 +21,7 @@ import com.agilecrm.widgets.util.WidgetUtil;
  * exist update that widget data and save.
  */
 @SuppressWarnings("serial")
-public class XeroScribeServlet extends HttpServlet
-{
+public class XeroScribeServlet extends HttpServlet {
 
 	/** static variable for type xero */
 	public static final String SERVICE_TYPE_XERO = "xero";
@@ -35,8 +34,8 @@ public class XeroScribeServlet extends HttpServlet
 	 * saved in widget.
 	 */
 	@Override
-	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException
-	{
+	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
+			throws ServletException, IOException {
 		doGet(req, resp);
 	}
 
@@ -48,33 +47,49 @@ public class XeroScribeServlet extends HttpServlet
 	 * saved in widget.
 	 */
 
-	public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException
-	{
+	public void doGet(HttpServletRequest req, HttpServletResponse resp)
+			throws IOException {
 
+		Long widgetID = null;
 		/**
 		 * data return from xero contains accesstoken,tokensecret etc
 		 */
 		String data = req.getParameter("data");
+		String isForAll = (String) req.getParameter("isForAll");
+		System.out.println("isForAll " + isForAll);
 		System.out.println("data is :" + data);
 
-		if (data != null)
-		{
-			System.out.println(data);
-			saveXeroPrefs(data);
-			String returnURL = (String) req.getSession().getAttribute("return_url");
-			System.out.println("return url " + returnURL);
+		String returnURL = (String) req.getSession().getAttribute("return_url");
+		String resultType = "error";
+		String statusMSG = "Error occurred while saving Xero widget";
 
-			// If return URL is null, redirect to dashboard
-			System.out.println(returnURL);
-			if (returnURL == null)
-				resp.sendRedirect("/#Xero/xero");
-			else
-				resp.sendRedirect(returnURL);
+		if (data != null) {
+			System.out.println(data);
+			try {
+				widgetID = saveXeroPrefs(data, isForAll);
+				if (widgetID != null) {
+					System.out.println("return url " + returnURL);
+					// If return URL is null, redirect to dashboard
+					System.out.println(returnURL);
+					if (returnURL == null) {
+						returnURL = "/#Xero/" + widgetID;
+					}
+					resultType = "success";
+					statusMSG = "Xero widget saved successfully.";
+				} else {
+					returnURL = "/#add-widgets";
+				}
+			} catch (Exception e) {
+				returnURL = "/#add-widgets";
+				statusMSG += " : " + e.getMessage();
+			}
+
+			req.getSession().setAttribute("widgetMsgType", resultType);
+			req.getSession().setAttribute("widgetMsg", statusMSG);
+			resp.sendRedirect(returnURL);
 
 			// Delete return url Attribute
 			req.getSession().removeAttribute("return_url");
-
-			return;
 		}
 	}
 
@@ -87,35 +102,29 @@ public class XeroScribeServlet extends HttpServlet
 	 *            {@link String} code retrieved after OAuth
 	 * @throws IOException
 	 */
-	public static void saveXeroPrefs(String data) throws IOException
-	{
+	public static Long saveXeroPrefs(String data, String isForAll)
+			throws Exception {
+		Long widgetID = null;
 		System.out.println("In Xero save");
 
 		/*
 		 * Make a post request and retrieve tokens
 		 */
 		HashMap<String, String> properties = new ObjectMapper().readValue(data,
-				new TypeReference<HashMap<String, String>>()
-				{
+				new TypeReference<HashMap<String, String>>() {
 				});
-
+		properties.put("isForAll", isForAll);
 		String widgetId = properties.get("widget_id");
-		if (widgetId == null)
-		{
-			ScribeUtil.saveWidgetPrefsByName(SERVICE_TYPE_XERO, properties);
-		}
-		else
-		{
+		if (widgetId == null) {
+			widgetID = ScribeUtil.saveWidgetPrefsByName(SERVICE_TYPE_XERO,
+					properties);
+		} else {
 			Widget widget = WidgetUtil.getWidget(Long.parseLong(widgetId));
-			if (widget == null)
-			{
-
-			}
-			else
-			{
+			if (widget != null) {
 				properties.remove("widget_id");
-				ScribeUtil.saveWidgetPrefs(widget, properties);
+				widgetID = ScribeUtil.saveWidgetPrefs(widget, properties);
 			}
 		}
+		return widgetID;
 	}
 }

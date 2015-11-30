@@ -8,53 +8,15 @@
  * Initializes the date-range-picker. Calls showEmailGraphs based on the date
  * range seleted.
  * 
- * @param campaign_id -
- *            to show charts w.r.t campaign-id.
  * @param callback -
  *            callback method if any.
  */
-function initChartsUI(campaign_id, callback)
+function initChartsUI(callback)
 {
-	head.js(LIB_PATH + 'lib/date-charts.js', LIB_PATH + 'lib/date-range-picker.js', CSS_PATH + "css/misc/date-picker.css", function()
-	{
+	//Loads the date range 
+	initDateRange(callback);
+	callback();
 
-		// Bootstrap date range picker.
-		$('#reportrange').daterangepicker({ ranges : { 'Today' : [
-				'today', 'today'
-		], 'Yesterday' : [
-				'yesterday', 'yesterday'
-		], 'Last 7 Days' : [
-				Date.today().add({ days : -6 }), 'today'
-		], 'Last 30 Days' : [
-				Date.today().add({ days : -29 }), 'today'
-		], 'This Month' : [
-				Date.today().moveToFirstDayOfMonth(), Date.today().moveToLastDayOfMonth()
-		], 'Last Month' : [
-				Date.today().moveToFirstDayOfMonth().add({ months : -1 }), Date.today().moveToFirstDayOfMonth().add({ days : -1 })
-		] }, locale : { applyLabel : 'Apply', cancelLabel : 'Cancel', fromLabel : 'From', toLabel : 'To', customRangeLabel : 'Custom', daysOfWeek : [
-				'Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'
-		], monthNames : [
-				'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'
-		], firstDay : parseInt(CALENDAR_WEEK_START_DAY) } }, function(start, end)
-		{
-			var months_diff = Math.abs(start.getMonth() - end.getMonth() + (12 * (start.getFullYear() - end.getFullYear())));
-			$('#reportrange span').html(start.toString('MMMM d, yyyy') + ' - ' + end.toString('MMMM d, yyyy'));
-			$("#week-range").html(end.add({ days : -6 }).toString('MMMM d, yyyy') + ' - ' + end.add({ days : 6 }).toString('MMMM d, yyyy'));
-
-			// Updates table data
-			get_email_table_reports(campaign_id);
-
-			// Updates bar graphs on date change.
-			showEmailGraphs(campaign_id);
-
-		});
-	});
-
-	// Updates table data
-	get_email_table_reports(campaign_id);
-
-	// shows graphs by default week date range.
-	showEmailGraphs(campaign_id);
 }
 
 /**
@@ -150,7 +112,11 @@ function get_email_table_reports(campaign_id)
 		console.log(data);
 
 		// Load Reports Template
-		$("#email-table-reports").html(getTemplate("campaign-email-table-reports", data));
+		getTemplate("campaign-email-table-reports", data, undefined, function(template_ui){
+			if(!template_ui)
+				  return;
+			$("#email-table-reports").html($(template_ui));	
+		}, "#email-table-reports");
 
 	});
 }

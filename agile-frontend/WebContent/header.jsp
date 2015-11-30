@@ -32,7 +32,7 @@
 					<a class="btn btn-navbar" data-toggle="collapse"
 						data-target=".nav-collapse"> <span class="icon-bar"></span> <span
 						class="icon-bar"></span> <span class="icon-bar"></span>
-					</a> <a class="brand" href="#dashboard"> Agile CRM</a>
+					</a> <a class="brand" href="#"> Agile CRM</a>
 
 					<div class="nav-collapse">
 

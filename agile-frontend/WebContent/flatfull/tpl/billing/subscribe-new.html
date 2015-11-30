@@ -1,3 +1,23 @@
+<script id="cancel-trial-confirmation-modal-template" type="text/html">
+<div class="modal fade" id="cancelTrial">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">x</span></button>
+        <h4 class="modal-title">Cancel Trial</h4>
+      </div>
+      <div class="modal-body">
+        <p>Are you sure you want to cancel your trial and move to free?</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+        <a type="submit" confirm="yes" class="save btn btn-sm btn-primary" href="#cancelTrial">Yes</a>
+        
+      </div>
+    </div>
+  </div>
+</div>
+</script>
 <script id="subscribe-template" type="text/html">
 <div class="custom-animated custom-fadeInUp">
 <div class="bg-light lter b-b wrapper-md">
@@ -11,11 +31,11 @@
 	
 </div>
 </div>
-<div id="show_plan_page" class="wrapper-md">
+<div class="wrapper-md">
 <div class="row">
 	<div class="col-md-7">
 <div class="row">
-		<div class="col-md-5" id="plan-details-pane"></div>
+		<div class="col-md-6" id="plan-details-pane"></div>
 		<div class="col-md-5" id="email-details-pane"></div>
 		</div>
 	</div>
@@ -31,7 +51,7 @@
   <div class="carousel-inner">
   <div class="active item">
 	<div class="pull-left tweet-img-pricing">
-		<img title="Nicolas Woirhaye" src="../../img/testimonial-nicolas.png">
+		<img title="Nicolas Woirhaye" src="{{getS3ImagePath '../../img/testimonial-nicolas.png'}}">
 	</div>
 	<div class="pull-left tweet-txt">
 		<span class="tweet-arrow"></span>
@@ -47,7 +67,7 @@
 
 </div>
  <div class="item">
- <div class="pull-left tweet-img-pricing"><img title="Ron Kaplan" src="../../img/testimonial-ron.png"></div>
+ <div class="pull-left tweet-img-pricing"><img title="Ron Kaplan" src="{{getS3ImagePath '../../img/testimonial-ron.png'}}"></div>
 <div class="pull-left tweet-txt"><span class="tweet-arrow"></span>
 <div class="tweet-head">
 <span class="tweet-authname">Ron Kaplan</span><span class="tweet-authdesc">Sales and Business Development - Espresso Logic</span></div>
@@ -61,7 +81,7 @@
  
  
   <div class="item">
-  <div class="pull-left tweet-img-pricing"><img title="Gary Tramer" src="../../img/testimonial-gary.png"></div>
+  <div class="pull-left tweet-img-pricing"><img title="Gary Tramer" src="{{getS3ImagePath '../../img/testimonial-gary.png'}}"></div>
 <div class="pull-left tweet-txt"><span class="tweet-arrow"></span>
 <div class="tweet-head">
 <span class="tweet-authname">Gary Tramer</span><span class="tweet-authdesc">Head of Strategy - WebReception</span></div>
@@ -73,7 +93,7 @@
     </div>
     
    <div class="item"> 
- <div class="pull-left tweet-img-pricing"><img title="Mark Valles" src="../../img/testimonial-mark.png"></div>
+ <div class="pull-left tweet-img-pricing"><img title="Mark Valles" src="{{getS3ImagePath '../../img/testimonial-mark.png'}}"></div>
 <div class="pull-left tweet-txt"><span class="tweet-arrow"></span>
 <div class="tweet-head">
 <span class="tweet-authname">Mark Valles
@@ -86,7 +106,7 @@ Brilliant! I literally made 3 clicks and I was able to connect and immediately p
 </div>
 </div>
    <div class="item"> 
-   <div class="pull-left tweet-img-pricing"><img title="Paul Singh" src="../../img/testimonial-paulsingh.png"></div>
+   <div class="pull-left tweet-img-pricing"><img title="Paul Singh" src="{{getS3ImagePath '../../img/testimonial-paulsingh.png'}}"></div>
 <div class="pull-left tweet-txt"><span class="tweet-arrow"></span>
 <div class="tweet-head">
 <span class="tweet-authname">Paul Singh
@@ -110,7 +130,7 @@ For a startup that relies a lot on on-line business, Agile CRM has been an inval
 
 </li> -->
 <!-- <li>
-<div class="pull-left tweet-img-pricing"><img title="Ron Kaplan" src="../../img/testimonial-ron.png"></div>
+<div class="pull-left tweet-img-pricing"><img title="Ron Kaplan" src="{{getS3ImagePath '../../img/testimonial-ron.png'}}"></div>
 <div class="pull-left tweet-txt"><span class="tweet-arrow"></span>
 <div class="tweet-head">
 <span class="tweet-authname">Ron Kaplan</span><span class="tweet-authdesc">Sales and Business Development - Espresso Logic</span></div>
@@ -120,7 +140,7 @@ For a startup that relies a lot on on-line business, Agile CRM has been an inval
 <div class="clearfix"></div>
 </li>
 <li>
-<div class="pull-left tweet-img-pricing"><img title="Gary Tramer" src="../../img/testimonial-gary.png"></div>
+<div class="pull-left tweet-img-pricing"><img title="Gary Tramer" src="{{getS3ImagePath '../../img/testimonial-gary.png'}}"></div>
 <div class="pull-left tweet-txt"><span class="tweet-arrow"></span>
 <div class="tweet-head">
 <span class="tweet-authname">Gary Tramer</span><span class="tweet-authdesc">Head of Strategy - WebReception</span></div>
@@ -142,23 +162,26 @@ For a startup that relies a lot on on-line business, Agile CRM has been an inval
 </div>
 	
 </div>
-
+{{#if billingData}}
 <div class="row">
 	<div class="col-md-12">
 		<div class="panel panel-default">
+
 			<div class="panel-heading">Your Credit Card Details
-				{{#if billingData}}
+				
 					<a href="#update-card" id="change-card" class="pull-right m-r-sm text-info">Change Card</a>
-				{{else}}
-					<a href="#update-card" id="change-card" class="pull-right m-r-sm text-info" style="display:none">Change Card</a>
-				{{/if}}
+				
+				
 			</div>
+
 		<div class="panel-body">
 			<div id="customer-details-holder"></div>
 		</div>
+
 		</div>
 	</div>
 </div>
+{{/if}}
 	{{#if billingData}}
 	<div class="row m-t m-b-sm">
 	<div class="col-md-12">
@@ -169,21 +192,20 @@ For a startup that relies a lot on on-line business, Agile CRM has been an inval
 
 			<div id="invoice-details-holder"></div>
 </div>
-	{{/if}}
+	
 </div>
 </div>
+{{/if}}
 </script>
 
 <script id="customer-details-block-template" type="text/html">
 {{#stringToJSON this "billingData"}}{{/stringToJSON}}
 {{#if billingData}}
 	<div class="card-details">
-		Name: {{billingData.cards.data.0.name}} </br>
-		Credit card: **** **** **** {{billingData.cards.data.0.last4}} <br/>
-		Expiration: {{getMonthFromIndex billingData.cards.data.0.expMonth}}, {{billingData.cards.data.0.expYear}}  ({{#if_less_than billingData.cards.data.0.expMonth 9}}0{{billingData.cards.data.0.expMonth}}{{else}}{{billingData.cards.data.0.expMonth}}{{/if_less_than}} / {{billingData.cards.data.0.expYear}})
+		Card: **** {{billingData.cards.data.0.last4}} <br/>
+		Expiration: {{#if_less_than billingData.cards.data.0.expMonth 9}}0{{billingData.cards.data.0.expMonth}}{{else}}{{billingData.cards.data.0.expMonth}}{{/if_less_than}}/{{billingData.cards.data.0.expYear}}  
 	</div>
-	{{else}}
-		No Credit Cards attached. <a href="#attach-card" id="change-card">Attach card</a>
+
 {{/if}}
 </script>
 
@@ -192,11 +214,11 @@ For a startup that relies a lot on on-line business, Agile CRM has been an inval
 	<div class="panel-heading">
 		<div><i class="icon-group m-r-xs"></i>Users</div>
 	</div>
-	<div class="panel-body pos-rlt" style="min-height:200px">
+	<div class="panel-body">
 		
 		
 		
-		
+		{{#stringToJSON this "billingData"}}{{/stringToJSON}}
 		<div class="form-horizontal">
 		{{#getSubscriptionBasedOnPlan billingData plan}}
 			<div class="control-group form-group m-b-none">
@@ -204,7 +226,9 @@ For a startup that relies a lot on on-line business, Agile CRM has been an inval
 				<div class="control-label text-left col-xs-8 p-t-none">
 					{{getAccountPlanName ../plan.plan_type}} ({{getAccountPlanInteval
 					../plan.plan_type}})</div>
-			</div>
+			</div>  
+      
+
 			<div class="control-group form-group m-b-none">
 				<label class="control-label col-xs-4">Users</label>
 				<div class="control-label text-left col-xs-8">{{quantity}}</div>
@@ -227,27 +251,26 @@ For a startup that relies a lot on on-line business, Agile CRM has been an inval
 				<div class="control-label text-left col-xs-8">
 					Free</div>
 			</div>
+
+            <div class="control-group form-group m-b-none">
+				<label class="control-label col-xs-4"></label>
+
+			</div>
+
 			<div class="control-group form-group m-b-none">
 				<label class="control-label col-xs-4">Users</label>
 				<div class="control-label text-left col-xs-8">2</div>
 			</div>
-
+            <br> 
 
 		{{/getSubscriptionBasedOnPlan}}
 		</div> 
-<div class="billingBtnAlign">
-		{{#if billingData}} 
-			{{#check_plan "FREE"}}
-				<a class="btn btn-sm btn-primary" href="#subscribe-plan" id="account_plan_upgrade">
-				Upgrade </a> 
-				{{else}}
-				<a class="btn btn-sm btn-primary" href="#subscribe-plan" id="account_plan_upgrade">
-				Modify </a> 
-			{{/check_plan}}
-			{{else}} 
-				<a class="btn btn-sm btn-primary" href="#" id="attach_card_notification"> Upgrade </a>
-	 	{{/if}}
-</div>
+{{#stringToJSON this "billingData"}}{{/stringToJSON}}
+
+<a class="btn btn-sm btn-primary" href="#subscribe-plan" id="account_plan_upgrade">
+
+				Upgrade </a>
+
 	<!--<a style="margin-top:6px;float:right;cursor:pointer;text-decoration:none" id="user-plan-details-popover"><i class="icon-user"></i> Plan Details</a> -->
 </div>
 </script>
@@ -283,7 +306,7 @@ White Label : {{#if whiteLabelEnabled}} Yes {{else}} No{{/if}}
 <script id="email-plan-details-template" type="text/html">
 	<div class="panel panel-default">
 		<div class="panel-heading"><div><i class="icon-envelope m-r-xs"></i>Emails</div></div>
-		<div class="panel-body pos-rlt" style="min-height:200px">
+		<div class="panel-body">
 
 			<form id="gateway" class="form-horizontal hide">
 				<input type="text" name="gateway" class="hidden form-control" value="Stripe" />
@@ -316,7 +339,7 @@ White Label : {{#if whiteLabelEnabled}} Yes {{else}} No{{/if}}
 				<div><small>(One time free emails powered by Agile CRM)
 				
 <span>
-									<img border="0" src="/img/help.png" class="question-tag m-t-n-xs " rel="popover" data-placement="bottom" data-title="Lead Score" data-content="5000 one time free emails that will contain 'Powered by Agile CRM' at the bottom of the email. To remove this, you may purchase an email package." id="element" data-trigger="hover" data-original-title="">
+									<img border="0" src="{{getS3ImagePath '/img/help.png'}}" class="question-tag m-t-n-xs " rel="popover" data-placement="bottom" data-title="Lead Score" data-content="5000 one time free emails that will contain 'Powered by Agile CRM' at the bottom of the email. To remove this, you may purchase an email package." id="element" data-trigger="hover" data-original-title="">
 								</span>
 			</small></div>
 
@@ -327,8 +350,6 @@ White Label : {{#if whiteLabelEnabled}} Yes {{else}} No{{/if}}
 			{{/getSubscriptionBasedOnPlan}}
 
 			<div class="clearfix"></div>
-      
-           <div class="billingBtnAlign">
 			{{#if billingData}}
 			{{#if emailPlan}}
 					<a class="btn btn-sm btn-primary pricing-btn m-t-md" href="#subscribe" id="account_email_plan_upgrade">Modify </a>
@@ -339,7 +360,7 @@ White Label : {{#if whiteLabelEnabled}} Yes {{else}} No{{/if}}
 				<a class="btn btn-sm btn-primary pricing-btn m-t-md" href="#" id="account_email_attach_card"> Upgrade </a> 
 			{{/if}}
 <!--	<a style="margin-top:6px;float:right;cursor:pointer;text-decoration:none" id="email-plan-details-popover"><i class="icon-info-sign"></i> Usage Details</span> -->
-		</div>
+		
 </div>
 </div>
 </script>
@@ -347,7 +368,7 @@ White Label : {{#if whiteLabelEnabled}} Yes {{else}} No{{/if}}
 <script id="email-plan-form-template" type="text/html">
 <div>
 	<div class="panel p pos-rlt">
-		<div>
+		<div>`
 			<div class="b-b  p-b-xs">
 				<div class="text-lg">Email plan</div>
 			</div>
@@ -412,6 +433,8 @@ White Label : {{#if whiteLabelEnabled}} Yes {{else}} No{{/if}}
 {{/if}}
 	
 	
+
+
 </script>
 <script id="subscribe-custom-admin-stats-template" type="text/html">
 <div class="m-n text-base">

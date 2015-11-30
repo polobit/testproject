@@ -11,8 +11,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.io.IOUtils;
 
 import com.agilecrm.contact.sync.SyncFrequency;
-import com.agilecrm.contact.sync.SyncPrefsBuilder;
-import com.agilecrm.contact.sync.service.SyncService;
+import com.agilecrm.contact.sync.SyncServiceBuilder;
+import com.agilecrm.contact.sync.service.IContactSyncService;
 import com.agilecrm.contact.util.BulkActionUtil;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.subscription.restrictions.db.BillingRestriction;
@@ -298,7 +298,7 @@ public class ContactUtilServlet extends HttpServlet
 		
 	}
 
-	SyncService service = new SyncPrefsBuilder().config(contactPrefs).getService(contactPrefs.type.getClazz());
+	IContactSyncService service = new SyncServiceBuilder().config(contactPrefs).getService(contactPrefs.type.getClazz());
 
 	if (service != null)
 	{

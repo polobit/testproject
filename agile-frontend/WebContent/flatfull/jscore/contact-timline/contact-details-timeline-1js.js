@@ -28,9 +28,12 @@ function add_entity_to_timeline(model)
 
 function update_entity_template(model)
 {
-	$("#" + model.get("id"), $('#timeline', App_Contacts.contactDetailView.el)).html(getTemplate('timeline1', [
-		model.toJSON()
-	]));
+	getTemplate('timeline1', [model.toJSON()], undefined, function(template_ui){
+ 		if(!template_ui)
+    		return;
+		$("#" + model.get("id"), $('#timeline', App_Contacts.contactDetailView.el)).html($(template_ui)); 
+	}, "#" + model.get("id"), $('#timeline', App_Contacts.contactDetailView.el));
+
 }
 
 /**

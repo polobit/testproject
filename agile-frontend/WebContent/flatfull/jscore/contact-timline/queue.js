@@ -36,6 +36,11 @@ var Queue = (function(){
         }
     }
 
+    Queue.prototype.pop = function() {
+
+       this.queue.pop();
+    }
+
     return Queue;
 
 })();

@@ -1,10 +1,10 @@
 
 <script id="task-detail-template" type="text/html">
 <div class="app-content-full  h-full dock-view-fixing">
-<div class="hbox hbox-auto-xs hbox-auto-sm bg-light">
-<div class="col  bg-light lter b-r" style="width:299px;">
-<div class="vbox" style="display:block">
-<div class="row-row" style="display:block">
+<div class="hbox hbox-auto-xs  bg-light">
+<div class="col w-xl bg-light lter b-r" >
+<div class="vbox">
+<div class="row-row">
 <div id="task-detail-lhs" class="wrapper pos-rlt">
 
                   <div> 
@@ -97,7 +97,7 @@
 <div id="task-contact-img">
 {{#if contacts}}        	
 <div class="m-b-xs">
-        	<small class="text-xs text-muted">Related to</small>
+        	<small class="text-xs text-muted">Contacts</small>
 </div>
 {{/if}}
 
@@ -110,7 +110,26 @@
         		{{/if_contact_type}}
         	{{/each}}
 </div>
-</div> 
+</div>
+<div class="m-t-sm">
+
+<div id="task-contact-img">
+{{#if deals}}        	
+<div class="m-b-xs">
+        	<small class="text-xs text-muted">Deals</small>
+</div>
+{{/if}}
+
+{{#each deals}}
+	<div>
+  		<div style="width:60%" class="text-ellipsis pull-left">
+			<a href="#deal/{{id}}" class="activate-link thumb m-b-xs text-cap text-ellipsis" style="width: 100%;">{{name}}</a>
+		</div>
+  		<div style="width:40%" class="pull-left text-ellipsis">({{currencySymbol}}{{numberWithCommas expected_value}}, {{probability}}%)</div>
+	</div>
+{{/each}}
+</div>
+</div>
 </div>
   </div>
 </div>
@@ -123,13 +142,15 @@
 			<ul class="nav nav-tabs bg-light" id="taskDetailsTab">
                 <li  class="active"><a data-toggle="tab" href="#activity">Activity</a></li>
 				<li><a data-toggle="tab" href="#notes">Notes</a></li>
-				<li><a data-toggle="tab" href="#contacts">Related</a></li>
+				<li><a data-toggle="tab" href="#contacts">Contacts</a></li>
+				<li><a data-toggle="tab" href="#deals">Deals</a></li>
 			</ul>
           </div>
 			<div class="tab-content no-tab-cell" id="task_tab_detail">
-                <div class="tab-pane active" id="activity"><img src="img/21-0.gif"></img></div>
-				<div class="tab-pane " id="contacts"><img src="img/21-0.gif"></img></div>
-				<div class="tab-pane" id="notes"><img src="img/21-0.gif"></img></div>
+                <div class="tab-pane active" id="activity"><img src="{{getS3ImagePath 'img/21-0-new.gif'}}"></img></div>
+				<div class="tab-pane " id="contacts"><img src="{{getS3ImagePath 'img/21-0-new.gif'}}"></img></div>
+				<div class="tab-pane" id="notes"><img src="{{getS3ImagePath 'img/21-0-new.gif'}}"></img></div>
+				<div class="tab-pane" id="deals"><img src="{{getS3ImagePath 'img/21-0-new.gif'}}"></img></div>
 			</div>
        </div>
        </div>
@@ -168,7 +189,7 @@
 			<div class="wrapper p-t-none">
             	<div class="slate-content">
                 	<div class="box-left pull-left m-r-md">
-                    	<img alt="Clipboard" src="/img/clipboard.png">
+                    	<img alt="Clipboard" src="{{getS3ImagePath '/img/clipboard.png'}}">
                 	</div>
                 	<div class="box-right pull-left">
                     	<h4 class="m-t-none">Task is not associated with any person/contact. </h4>
@@ -231,7 +252,7 @@
         <div class="wrapper p-t-none">
             <div class="slate-content">
                 <div class="box-left pull-left m-r-md">
-                    <img alt="Clipboard" src="/img/clipboard.png" />
+                    <img alt="Clipboard" src="{{getS3ImagePath '/img/clipboard.png'}}" />
                 </div>
                 <div class="box-right pull-left">
                     <h4 class="m-t-none">No Activity Found.</h4>
@@ -252,15 +273,11 @@
 <div class="activity block pos-rlt">
 
 	<div class="activity-block-owner thumb-xs pull-left m-r-sm b-light b avatar">
-         {{#if user}}
-			{{#if userPic}}
-				<img class="user-img r r-2x"  alt="" src="{{userPic}}" >
+         {{#if this.user}}
+				<img class="user-img ref-roundedimg"  alt="" src="{{this.user.ownerPic}}" title="{{this.user.name}}">
 			{{else}}
-				<img class="user-img r r-2x" alt="" src="{{defaultGravatarurl 40}}" >
+				<img class="user-img ref-roundedimg"  alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
 			{{/if}}
-		{{else}}
-			<img class="user-img r r-2x"  alt="" src="{{#getCurrentUserPrefs}}{{#if pic}}{{pic}}{{else}}{{defaultGravatarurl 40}}{{/if}}{{/getCurrentUserPrefs}}" >
-		{{/if}}
 
      <span class="owner-name hide">{{user.name}}</span>
 
@@ -337,6 +354,93 @@
 </div>
 <div class="clearfix"></div>
 </div>
+</script>
+
+<script id="task-related-deals-collection-template" type="text/html">
+{{#if this.length}}
+	<div class="m-b-md m-t-md m-r-sm" align="right">
+		<a href="#" class="task-add-deal btn btn-sm btn-default">
+			<span><i class="icon-plus-sign"></i></span> Add Deal
+		</a>
+	</div>
+	<br/>
+			<table  class="table table-striped agile-table onlySorting r-5x overflow-scroll m-b-none b " style=" border-collapse: separate;">
+				<!-- <colgroup><col width="10px"><col width="40%"><col width="20%"><col width="25%"><col width="12%"></colgroup> -->
+				<thead>
+					<tr>
+						<th style="width:0.1%;"></th>
+						<th>Opportunity</th>
+                        <!-- <th>Related To</th> -->
+                        <th>Value</th>
+                        <th>Milestone</th>
+                        <th>Close Date</th>
+                        <th>Owner</th>
+					</tr>
+				</thead>
+				<tbody id="task-related-deals-model-list" class="task-related-deals-model-list agile-edit-row overflow-scroll"
+					route="deal/" >
+				</tbody>
+			</table>
+
+		{{else}}
+			<div class="wrapper p-t-none">
+            	<div class="slate-content">
+                	<div class="box-left pull-left m-r-md">
+                    	<img alt="Clipboard" src="{{getS3ImagePath '/img/clipboard.png'}}">
+                	</div>
+                	<div class="box-right pull-left">
+                    	<h4 class="m-t-none">Task is not associated with any deal. </h4>
+                    	<div class="text">
+							All deals which are related to this task are shown here.
+							<br/>
+							<a href="#" class="task-add-deal btn btn-default btn-sm left m-t-xs">
+								<i class="icon-plus-sign"></i> Add Deal
+							</a>
+                    	</div>
+                	</div>
+					<div class="clear-fix">
+					</div>
+            	</div>
+        	</div>
+		{{/if}}
+</script>
+
+<script id="task-related-deals-model-template" type="text/html">
+<td data="{{id}}" class="data"></td>
+<td>
+	<div class="text-ellipsis"> 
+		<a class="text-cap">{{name}}</a>
+	</div>
+</td>
+<!-- <td>
+<div class="text-ellipsis">
+	<div class="inline-block text-ellipsis" style="width:9em">
+	{{#each contacts}}
+       {{#if_contact_type "PERSON"}}
+        	<a href="#contact/{{id}}" class="activate-link hide-popover thumb-sm"><img class="r r-2x img-inital" data-name="{{dataNameAvatar properties 40}}" src="{{gravatarurl properties 40}}"   title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}" /></a>
+       {{/if_contact_type}}
+	   {{#if_contact_type "COMPANY"}}
+        	<a href="#company/{{id}}" class="activate-link hide-popover thumb-sm"><img class="r r-2x" {{getCompanyImage "40" "display:inline;"}} title="{{getPropertyValue properties "name"}}"/></a>
+       {{/if_contact_type}}
+   {{/each}}
+   </div>
+  {{#if_greater this.contacts.length "4"}}<span>...</span>{{/if_greater}}
+</div>
+</td> -->
+<td value="{{expected_value}}"><div class="text-ellipsis" >{{#if expected_value}}{{currencySymbol}}{{numberWithCommas expected_value}}{{else}}-{{/if}}</div></td>
+<td><div class="text-ellipsis">{{milestone}} ({{probability}}%) </div></td>
+<td class="text-muted"><div class="text-ellipsis" style="width:10em">{{#if close_date}}<i class="fa fa-clock-o m-r-xs"></i><time class="deal-close-time" value="{{close_date}}" datetime="{{epochToHumanDate "" close_date}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" close_date}}</time>{{/if}}</div></td>
+<td>
+<div class="text-ellipsis">
+    <div class="thumb-sm avatar">
+       {{#if pic}}
+        <img class="r r-2x" src="{{pic}}"  title="{{owner.name}}" />
+	   {{else}}
+		<img class="r r-2x" src="{{defaultGravatarurl 50}}"  title="{{owner.name}}" />
+       {{/if}}
+    </div>
+</div>
+</td>
 </script>
 
 <!-- New (Note) Modal views -->

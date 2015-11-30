@@ -2,13 +2,15 @@
 	<div>
 		<form  id="helpscout_login_form" name="helpscout_login_form">
 	    	<fieldset>
-				<p >Help Scout is a help desk for teams that insist on a delightful customer experience without exposing to ticket To access, </p>
+				<p >Help Scout is a help desk for teams that insist on a delightful customer experience. </p>
 				
 				<label>Enter your API key</label>
-				<div class="control-group form-group"><div class="controls"><input type="text" id="helpscout_api_key" class="input-medium required form-control" placeholder="API Key" value="" onkeydown="if (event.keyCode == 13) { event.preventDefault(); }"></input></div></div>
+				<div class="control-group form-group"><div class="controls"><input type="text" id="helpscout_api_key" class="input-medium required form-control" placeholder="API Key" value="" name="helpscout_api_key" onkeydown="if (event.keyCode == 13) { event.preventDefault(); }"></input></div></div>
+				<div class="text-center">
 				<a href="#add-widget" class="btn btn-default btn-sm">Cancel</a>
-				<a href="#" id="save_api_key" class="btn btn-sm btn-primary ml_5">Save</a>
+				<a href="#" id="save_api_key" class="save-agile-widget btn btn-sm btn-primary ml_5">Save</a>
 				<p class="p-xs">Don't have an API key? <a href="https://www.helpscout.net" target="_blank" class="text-info"> SignUp </a></p>
+				</div>
      </div>
 			</fieldset>
 	    </form>
@@ -47,12 +49,8 @@
 </script>
 
 <script id="helpscout-conversation-template" type="text/html">
-
-{{#if mailbox}}
-	{{#each mailbox}}
-
-{{#isArray conversations}}
-	{{#each conversations}}
+{{#isArray this}}
+	{{#each this}}
 		<li class="list-group-item r-none b-l-none b-r-none helpscout_ticket_hover"  id="{{id}}">
 			<div class="overflow-elipsis" title="{{subject}}">
 				<div class="text-flow-ellipsis pull-left" style="width:12rem">
@@ -67,15 +65,11 @@
 			<div class="clearfix"></div>
 		</li>
 	{{/each}}
-{{/isArray}}
-
-{{/each}}
 {{else}}
-<div class="widget_content word-break">
-{{message}}
-</div>
-{{/if}}
-
+	<div class="widget_content word-break">
+	{{message}}
+	</div>
+{{/isArray}}
 </script>
 
 <script id="helpscout-message-template" type="text/html">

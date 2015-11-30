@@ -1,5 +1,7 @@
 package com.agilecrm.core.api.contacts;
 
+import java.util.List;
+
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.PUT;
@@ -46,6 +48,17 @@ public class ContactPrefsAPI
 	System.out.println("in contact prefs api");
 	return ContactPrefsUtil.getPrefsByType(Type.GOOGLE);
     }
+    
+    
+    @Path("/allPrefs")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public List<ContactPrefs> getAllContactPrefs()
+    {
+    	
+    	return ContactPrefsUtil.getAllprefs();
+    }
+
 
     @Path("/{type}")
     @PUT
@@ -62,21 +75,29 @@ public class ContactPrefsAPI
 
 	ContactPrefs updatedPrefs = ContactPrefsUtil.mergePrefs(currentPrefs, prefs);
 
-	System.out.println("Sync" + sync);
+	System.out.println("Sync" + sync+" prefs id is not null ");
 
-	updatedPrefs.save();
+	if(updatedPrefs.id==prefs.id){
+	 System.out.println("in update prefs and prefs id are same before saving ");
+		updatedPrefs.save();
+	}
 
 	if (!StringUtils.isEmpty(sync) && !updatedPrefs.inProgress)
 	{
 	    updatedPrefs.inProgress = true;
-	    updatedPrefs.save();
-
+	    System.out.println("syncing before updated prefs and ");
+	    if(updatedPrefs.id==prefs.id){
+	    System.out.println("updated prefs and prefs are same while syncing");
+	    	updatedPrefs.save();
+	    }
 	    ContactsImportUtil.initilaizeImportBackend(updatedPrefs, true);
-
 	    return;
 	}
+	if(updatedPrefs.id==prefs.id){
+		 System.out.println("in update prefs and prefs id are same before saving ");
+			updatedPrefs.save();
+		}
 
-	updatedPrefs.save();
     }
 
     /**
@@ -85,15 +106,50 @@ public class ContactPrefsAPI
      * If count is null fetches all the contacts at once
      * 
      * 
+     * deletes datasync prefs
      * @return {@link ContactPrefs}
      */
     @Path("{type}")
     @DELETE
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public void deleteContactPrefs(@PathParam("type") String type)
+    public void deleteContactPrefs(@PathParam("type") Type type)
     {
 
-	ContactPrefsUtil.delete(Type.GOOGLE);
+    	System.out.println("executing delete request Type"+type);
+    	
+    		if(type==Type.GOOGLE)
+        	ContactPrefsUtil.delete(Type.GOOGLE);
+        	if(type==Type.STRIPE)
+        	ContactPrefsUtil.delete(Type.STRIPE);
+        	if(type==Type.SHOPIFY)
+            	ContactPrefsUtil.delete(Type.SHOPIFY);
+        	if(type==Type.QUICKBOOK)
+            	ContactPrefsUtil.delete(Type.QUICKBOOK);
+        	if(type==Type.FRESHBOOKS)
+            ContactPrefsUtil.delete(Type.FRESHBOOKS);
 
     }
+    
+    @Path("delete/{type}/{sync_widget_id}")
+    @DELETE
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public void deleteContactPrefs(@PathParam("type") Type type,@PathParam("sync_widget_id") Long id)
+    {
+
+    	System.out.println("executing delete request Type"+type);
+    	
+    		if(type==Type.GOOGLE)
+        	ContactPrefsUtil.deleteSyncwidgetById(Type.GOOGLE,id);
+        	if(type==Type.STRIPE)
+        	ContactPrefsUtil.deleteSyncwidgetById(Type.STRIPE,id);
+        	if(type==Type.SHOPIFY)
+            	ContactPrefsUtil.deleteSyncwidgetById(Type.SHOPIFY,id);
+        	if(type==Type.QUICKBOOK)
+            	ContactPrefsUtil.deleteSyncwidgetById(Type.QUICKBOOK,id);
+        	if(type==Type.FRESHBOOKS)
+            ContactPrefsUtil.deleteSyncwidgetById(Type.FRESHBOOKS,id);
+
+    }
+    
+   
 }

@@ -129,6 +129,7 @@ class="c-p text-l-none text-l-none-hover block" style="width:85%;">
 <span class="pull-right m-r-sm">
 		<a id="clear-lhs-contact-filters" class="text-sm text-muted" href="#">
 			 Clear all
+			 </a>
 	</span>
 <div class="clearfix"></div>
 	</h4>
@@ -154,7 +155,7 @@ class="c-p text-l-none text-l-none-hover block" style="width:85%;">
 					</select>
 					<div class="EQUALS NOTEQUALS condition_container m-t-xs">
 						<span id="RHS">
-							<input type="text" placeholder="Value" prev-val="" class="required form-control">
+							<input type="text" placeholder="Value" prev-val="" class="required form-control filters-tags-typeahead" onchange="setTimeout(function(ele){bindChangeEvent(ele)}, 500, this);" />
 						</span>
 					</div>
 					<div class="m-t-xs"><a class="pull-right"><i class="filter-tags-multiple-remove-lhs icon-trash text-l-none-hover c-p"></i></a></div>
@@ -168,7 +169,7 @@ class="c-p text-l-none text-l-none-hover block" style="width:85%;">
 					</select>
 					<div class="EQUALS NOTEQUALS condition_container m-t-xs">
 						<span id="RHS">
-							<input type="text" placeholder="Value" prev-val="" class="required form-control">
+							<input type="text" placeholder="Value" prev-val="" class="required form-control filters-tags-typeahead" onchange="setTimeout(function(ele){bindChangeEvent(ele)}, 500, this);" />
 						</span>
 					</div>
 					<div class="m-t-xs">
@@ -426,7 +427,7 @@ class="c-p text-l-none text-l-none-hover block" style="width:85%;">
 	<h4 class="m-b-md" style="margin-left:22px;">
 		<span class="pull-left"><span>Filter Companies</span>
 		</span>
-<span class="pull-right m-r-sm">
+<span class="pull-right m-r-sm hidden-xs">
 		<a id="clear-lhs-company-filters" class="text-sm text-muted" href="#">
 			 Clear all</i>
 		</a>
@@ -456,7 +457,7 @@ class="c-p text-l-none text-l-none-hover block" style="width:85%;">
 					</select>
 					<div class="EQUALS NOTEQUALS condition_container m-t-xs">
 						<span id="RHS">
-							<input type="text" placeholder="Value" prev-val="" class="required form-control">
+							<input type="text" placeholder="Value" prev-val="" class="required form-control filters-tags-typeahead" onchange="bindChangeEvent(this)">
 						</span>
 					</div>
 					<div class="m-t-xs"><a class="pull-right"><i class="filter-tags-multiple-remove-lhs icon-trash text-l-none-hover c-p"></i></a></div>
@@ -470,7 +471,7 @@ class="c-p text-l-none text-l-none-hover block" style="width:85%;">
 					</select>
 					<div class="EQUALS NOTEQUALS condition_container m-t-xs">
 						<span id="RHS">
-							<input type="text" placeholder="Value" prev-val="" class="required form-control">
+							<input type="text" placeholder="Value" prev-val="" class="required form-control filters-tags-typeahead" onchange="bindChangeEvent(this)">
 						</span>
 					</div>
 					<div class="m-t-xs">

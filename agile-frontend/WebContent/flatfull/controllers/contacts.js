@@ -23,8 +23,11 @@ var ContactsRouter = Backbone.Router.extend({
 		"contact/:id" : "contactDetails",
 		
 		"import" : "importContacts",
-		
+
+		//add contact when customfields are there
 		"contact-edit" : "editContact",
+		
+		"contact-add" : "addContact",
 		
 		"contact-duplicate" : "duplicateContact",
 		
@@ -47,9 +50,10 @@ var ContactsRouter = Backbone.Router.extend({
 		"contacts/call-lead/:first/:last" : "addLead",
 			
 			/* CALL-with mobile number */
-			"contacts/call-lead/:first/:last/:mob" : "addLeadDirectly"
+			"contacts/call-lead/:first/:last/:mob" : "addLeadDirectly",
+			"call-contacts" : "callcontacts"
 	},
-
+	
 	initialize : function()
 	{
 		/*
@@ -64,43 +68,31 @@ var ContactsRouter = Backbone.Router.extend({
 	{
 
 		$(".active").removeClass("active");
-
-		/*var time_int = parseInt($('meta[name="last-login-time"]').attr('content'));
-		var time_date = new Date(time_int * 1000);
-
-		head.js(LIB_PATH + 'lib/jquery.timeago.js', LIB_PATH + 'jscore/handlebars/handlebars-helpers.js', function()
-		{
-			var el = $(getTemplate('dashboard1', { time_sec : (time_date).toString().toLowerCase(), time_format : time_date.getTime()/1000 }));
-			$("#content").html(el);
-			
-			$("#last-login-time").timeago();
-			
-			setup_dashboard(el);
-			// loadDynamicTimeline("my-timeline", el);
-		});*/
 		if(CURRENT_DOMAIN_USER.domain == "admin")
 		{
 			Backbone.history.navigate("domainSearch" , {
                 trigger: true
             });
-			
-		}else{
-			/*head.js(LIB_PATH + 'jscore/handlebars/handlebars-helpers.js'+ _AGILE_VERSION,
-					LIB_PATH + 'lib/jquery.gridster.js',function(){*/
-				var el = $(getTemplate('portlets', {}));
-				$("#content").html(el);
-				$('.dashboart_tooltip').tooltip();
+            return;
+		}
 
+		getTemplate('portlets', {}, undefined, function(template_ui){
+				if(!template_ui)
+					  return;
+
+				var el = $(template_ui);
+				$("#content").html(el);
+
+				$('[data-toggle="tooltip"]').tooltip();
 				if ((navigator.userAgent.toLowerCase().indexOf('chrome') > -1&&navigator.userAgent.toLowerCase().indexOf('opr/') == -1) && !document.getElementById('agilecrm_extension'))
 				{
 					$("#chrome-extension-button").removeClass('hide');
 				}
-				/*if (IS_FLUID){
-					$('#content').find('div.row').removeClass('row').addClass('row-fluid');
-				}*/
+
 				loadPortlets(el);
-			// });
-		}
+
+		}, "#content");
+
 	},
 	
 	/**
@@ -115,6 +107,7 @@ var ContactsRouter = Backbone.Router.extend({
 	 */
 	contacts : function(tag_id, filter_id, grid_view, is_lhs_filter)
 	{
+		
 		if(SCROLL_POSITION)
 		{
 			$('html, body').animate({ scrollTop : SCROLL_POSITION  },1000);
@@ -130,7 +123,8 @@ var ContactsRouter = Backbone.Router.extend({
 		/*if(readData('dynamic_contact_filter') &&readData('dynamic_contact_filter').indexOf('campaign_status') >= 0 ) {
 			eraseData('dynamic_contact_filter');
 		}*/
-
+		//custom scroll element for grid view
+		var custom_scrollable_element=null;
 		var max_contacts_count = 20;
 		var is_company = false;
 		var template_key = "contacts";
@@ -147,6 +141,7 @@ var ContactsRouter = Backbone.Router.extend({
 		{
 			template_key = "contacts-grid";
 			individual_tag_name = "div";
+			custom_scrollable_element="#contacts-grid-model-list";
 		}
 		
 		// Default url for contacts route
@@ -257,12 +252,15 @@ var ContactsRouter = Backbone.Router.extend({
 		} 
 
 		var slateKey = getContactPadcontentKey(url);
+		
 		if(is_lhs_filter) {
 			template_key = "contacts-table";
+			
 			if (grid_view || readCookie("agile_contact_view"))
 			{
 				template_key = "contacts-grid-table";
 				individual_tag_name = "div";
+				custom_scrollable_element="#contacts-grid-table-model-list";
 			}
 		}
 
@@ -270,9 +268,11 @@ var ContactsRouter = Backbone.Router.extend({
 		 * cursor and page_size options are taken to activate
 		 * infiniScroll
 		 */
-		this.contactsListView = new Base_Collection_View({ url : url, sort_collection : false, templateKey : template_key, individual_tag_name : individual_tag_name,
+		this.contactsListView = new Base_Collection_View({ url : url,custom_scrollable_element:custom_scrollable_element, sort_collection : false, templateKey : template_key, individual_tag_name : individual_tag_name,
 			cursor : true, page_size : 25, global_sort_key : sort_key, slateKey : slateKey, request_method : 'POST', post_data: {filterJson: postData}, postRenderCallback : function(el, collection)
 			{
+		
+			$("#contacts-view-options").css( 'pointer-events', 'auto' );
 
 				// Contacts are fetched when the app loads in
 				// the initialize
@@ -287,18 +287,20 @@ var ContactsRouter = Backbone.Router.extend({
 					}
 					var count_message;
 					if (count > 9999 && (readCookie('contact_filter') || readData('dynamic_contact_filter')))
-						count_message = "<small> (" + 10000 + "+ Total) </small>" + '<span style="vertical-align: text-top; margin-left: -5px">' + '<img border="0" src="/img/help.png"' + 'style="height: 10px; vertical-align: middle" rel="popover"' + 'data-placement="bottom" data-title="Lead Score"' + 'data-content="Looks like there are over 10,000 results. Sorry we can\'t give you a precise number in such cases."' + 'id="element" data-trigger="hover">' + '</span>';
+						count_message = "<small> (" + 10000 + "+ Total) </small>" + '<span style="vertical-align: text-top; margin-left: -5px">' + '<img border="0" src="' + updateImageS3Path("/img/help.png") + '"' + 'style="height: 10px; vertical-align: middle" rel="popover"' + 'data-placement="bottom" data-title="Lead Score"' + 'data-content="Looks like there are over 10,000 results. Sorry we can\'t give you a precise number in such cases."' + 'id="element" data-trigger="hover">' + '</span>';
 					else
 						count_message = "<small> (" + count + " Total) </small>";
 					$('#contacts-count').html(count_message);
 					setupViews();
 					setupContactFilterList();
+					//setUpContactView();
 				} else {					
 					setupLhsFilters(cel, is_company);
 					setupViews(cel);
 					setupContactFilterList(cel, tag_id);
+					setUpContactView(cel);
 				}
-				
+				$('[data-toggle="tooltip"]').tooltip();
 				start_tour("contacts", el);
 			} });
 
@@ -316,6 +318,7 @@ var ContactsRouter = Backbone.Router.extend({
 		}
 		$(".active").removeClass("active");
 		$("#contactsmenu").addClass("active");
+		$('[data-toggle="tooltip"]').tooltip();
 	
 
 	},
@@ -436,23 +439,18 @@ var ContactsRouter = Backbone.Router.extend({
 	 */
 	contactDetails : function(id, contact)
 	{
-		//Removed previous contact timeline tags from the isotope, if existed
-		if(App_Contacts.contactDetailView!=undefined && App_Contacts.contactDetailView.model!=undefined && App_Contacts.contactDetailView.model.collection!=undefined){
-			getTemplate("timeline1", App_Contacts.contactDetailView.model.collection.models, undefined, function(result)
-			{
-				try
-				{
-						$("#timeline", $(App_Contacts.contactDetailView.el)).isotope('remove', $(result), function(ele)
-								{
-									timeline_collection_view.queue.running = false;
-									timeline_collection_view.queue.next();
-								});
-				}
-				catch(err)
-				{
-					console.log(err);
-				}
-			});
+		$('[data-toggle="tooltip"]').tooltip();
+
+
+		//If call campaign is running then show the campaign
+		if(CALL_CAMPAIGN.last_clicked == "start-bulk-campaign"){
+			startCallCampaign(CALL_CAMPAIGN.contact_id_list);
+			CALL_CAMPAIGN.last_clicked = "";
+		} 
+		//Removed previous contact timeline nodes from the queue, if existed
+		if(timeline_collection_view && timeline_collection_view.queue)
+		{
+			timeline_collection_view.queue.pop();
 		}
 		
 		//For getting custom fields
@@ -539,7 +537,7 @@ var ContactsRouter = Backbone.Router.extend({
 		this.contactDetailView = new Base_Model_View({ model : contact, isNew : true, template : "contact-detail", postRenderCallback : function(el)
 		{
 			
-			$("#mobile-menu-settings").trigger('click');
+			//$("#mobile-menu-settings").trigger('click');
 			// Clone contact model, to avoid render and post-render fell
 			// in to
 			// loop while changing attributes of contact
@@ -552,7 +550,6 @@ var ContactsRouter = Backbone.Router.extend({
 
 			if (App_Contacts.contactsListView && App_Contacts.contactsListView.collection && App_Contacts.contactsListView.collection.get(id))
 				App_Contacts.contactsListView.collection.get(id).attributes = contact.attributes;
-
 
 			load_contact_tab(el, contact.toJSON());
 
@@ -587,20 +584,38 @@ var ContactsRouter = Backbone.Router.extend({
 			//fill_owners(el, contact.toJSON());
 			start_tour("contact-details", el);
 			
-			// For sip
-			if (Sip_Stack != undefined && Sip_Register_Session != undefined && Sip_Start == true)
-			{
-				$(".contact-make-sip-call",el).show();
-				$(".contact-make-twilio-call",el).hide();
-				$(".contact-make-call",el).hide();
-			}
-			else if(Twilio_Start == true)
-			//else if (Twilio.Device.status() == "ready" || Twilio.Device.status() == "busy")			
-			{
-				$(".contact-make-sip-call",el).hide();
-				$(".contact-make-twilio-call",el).show();
-				$(".contact-make-call",el).hide();
-			}
+
+			// Sequence of calling option 1) BRIA 2) Twilio 3) SIP in contact phone option
+			if(default_call_type == "Bria"){
+				if(callFromBria == true){
+					$(".contact-call-button",el).removeAttr('disabled');
+					$(".contact-make-call",el).removeAttr("href");
+					$(".contact-call-button",el).addClass('contact-make-bria-call');
+					$(".contact-call-button-div",el).tooltip('hide')
+					  .attr('data-original-title', "Call from Bria")
+				    .tooltip('fixTitle');
+					}
+				}else{
+					if(Twilio_Start == true)
+						//else if (Twilio.Device.status() == "ready" || Twilio.Device.status() == "busy")			
+						{
+							$(".contact-call-button",el).removeAttr('disabled');
+							$(".contact-make-call",el).removeAttr("href");
+							$(".contact-call-button",el).addClass('contact-make-twilio-call');
+							$(".contact-call-button-div",el).tooltip('hide')
+							  .attr('data-original-title', "Call from Twilio")
+						    .tooltip('fixTitle');
+
+						}else if (Sip_Stack != undefined && Sip_Register_Session != undefined && Sip_Start == true)
+							{
+								$(".contact-call-button",el).removeAttr('disabled');
+								$(".contact-make-call",el).removeAttr("href");
+								$(".contact-call-button",el).addClass('contact-make-sip-call');
+								$(".contact-call-button-div",el).tooltip('hide')
+								  .attr('data-original-title', "Call from SIP")
+							    .tooltip('fixTitle');
+							}
+				}
 
 			} });
 
@@ -749,8 +764,15 @@ var ContactsRouter = Backbone.Router.extend({
 	 */
 	importContacts : function()
 	{
-		$('#content').html('<div id="import-contacts-event-listener"></div>').find('#import-contacts-event-listener').html(getTemplate("import-contacts", {}));
-        initializeImportEvents('import-contacts-event-listener');
+		$('#content').html('<div id="import-contacts-event-listener"></div>');
+		getTemplate("import-contacts", {}, undefined, function(template_ui){
+			if(!template_ui)
+				  return;
+
+			$('#import-contacts-event-listener').html($(template_ui));	
+			initializeImportEvents('import-contacts-event-listener');
+
+		}, "#import-contacts-event-listener");       
 	},
 	
 
@@ -761,9 +783,17 @@ var ContactsRouter = Backbone.Router.extend({
 	 */
 	addContactToCampaign : function()
 	{
-		$("#content").html(getTemplate("contact-detail-campaign", {}));
 
-		$('body').trigger('fill_campaigns_contact');
+		getTemplate("contact-detail-campaign", {}, undefined, function(template_ui){
+			if(!template_ui)
+				  return;
+
+			$("#content").html($(template_ui));	
+			$('body').trigger('fill_campaigns_contact');
+
+		}, "#content"); 
+
+		
 	},
 
 	/**
@@ -818,119 +848,135 @@ var ContactsRouter = Backbone.Router.extend({
 		// Call setupTypeAhead to get contacts
 		agile_type_ahead("to", el, contacts_typeahead, null, null, "email-search", null, true, null, true);
 
-		agile_type_ahead("email_cc", el, contacts_typeahead, null, null, "email-search", null, true, null, true);
 
-		agile_type_ahead("email_bcc", el, contacts_typeahead, null, null, "email-search", null, true, null, true);
+		$("#content").html('<div id="send-email-listener-container"></div>');
+		var that = this;
+		getTemplate("send-email", model, undefined, function(template_ui){
+			if(!template_ui)
+				  return;
 
-		// To append name to email
-		if (id)
-		{
-			var name;
+			var el = $("#send-email-listener-container").html($(template_ui));
 
-			// For Reply all, id may contains multiple emails. If contains multiple, skip
-			if (model && id.indexOf(',') == -1)
+			// Call setupTypeAhead to get contacts
+			agile_type_ahead("to", el, contacts_typeahead, null, null, "email-search", null, true, null, true);
+
+			agile_type_ahead("email_cc", el, contacts_typeahead, null, null, "email-search", null, true, null, true);
+
+			agile_type_ahead("email_bcc", el, contacts_typeahead, null, null, "email-search", null, true, null, true);
+
+			// To append name to email
+			if (id)
 			{
-				if (model.type == "PERSON")
+				var name;
+
+				// For Reply all, id may contains multiple emails. If contains multiple, skip
+				if (model && id.indexOf(',') == -1)
 				{
-
-					var first_name = getPropertyValue(model.properties, "first_name");
-					var last_name = getPropertyValue(model.properties, "last_name");
-
-					if (first_name || last_name)
+					if (model.type == "PERSON")
 					{
-						name = first_name ? first_name : "";
-						name = (name + " " + (last_name ? last_name : "")).trim();
+
+						var first_name = getPropertyValue(model.properties, "first_name");
+						var last_name = getPropertyValue(model.properties, "last_name");
+
+						if (first_name || last_name)
+						{
+							name = first_name ? first_name : "";
+							name = (name + " " + (last_name ? last_name : "")).trim();
+						}
+					}
+					else
+					{
+						var company_name = getPropertyValue(model.properties, "name");
+						name = (company_name ? company_name : "").trim();
 					}
 				}
-				else
+
+				if (name && name.length)
 				{
-					var company_name = getPropertyValue(model.properties, "name");
-					name = (company_name ? company_name : "").trim();
+					var data = id;
+
+					// If already appended with name, skip
+					if(id.indexOf('<') == -1 && id.indexOf('>') == -1)
+						data = name + ' <' + id.trim() + '>';
+
+					$('#to', el)
+							.closest("div.controls")
+							.find(".tags")
+							.append(
+									'<li class="tag  btn btn-xs btn-primary m-r-xs inline-block" data="' + data + '"><a href="#contact/' + model.id + '">' + name + '</a><a class="close" id="remove_tag">&times</a></li>');
 				}
-			}
-
-			if (name && name.length)
-			{
-				var data = id;
-
-				// If already appended with name, skip
-				if(id.indexOf('<') == -1 && id.indexOf('>') == -1)
-					data = name + ' <' + id.trim() + '>';
-
-				$('#to', el)
-						.closest("div.controls")
-						.find(".tags")
-						.append(
-								'<li class="tag  btn btn-xs btn-primary m-r-xs inline-block" data="' + data + '"><a href="#contact/' + model.id + '">' + name + '</a><a class="close" id="remove_tag">&times</a></li>');
+				else
+					$("#emailForm", el).find('input[name="to"]').val(id);
 			}
 			else
-				$("#emailForm", el).find('input[name="to"]').val(id);
-		}
-		else
-			$("#emailForm", el).find('input[name="to"]').val('');
+				$("#emailForm", el).find('input[name="to"]').val('');
 
-		// Checks Zoomifier tag for contact
-		if (checkTagAgile("Zoomifier") && this.contactDetailView)
-		{
-			// Appends zoomifier link to attach their documents.
-			head.js(LIB_PATH + 'lib/zoomifier.contentpicker.min.js', function()
+			// Checks Zoomifier tag for contact
+			if (checkTagAgile("Zoomifier") && that.contactDetailView)
 			{
-				$("#emailForm", el).find('textarea[name="body"]').closest(".controls")
-						.append('<div><a style="cursor:pointer;" onclick="Javascript:loadZoomifierDocSelector();"><i class="icon-plus-sign"></i> Attach Zoomifier Doc</a></div>');
-			});
-		}
-
-		// Populate from address and templates
-		populate_send_email_details(el);
-		
-		if(subject)
-			$("#emailForm",el).find('input[name="subject"]').val(subject);
-		
-		if(cc)
-		{
-			$("#emailForm",el).find('#email_cc').closest('.control-group').show();
-			$("#emailForm",el).find('input[name="email_cc"]').val(cc);
-		}
-		
-		if(bcc)
-		{
-			$("#emailForm",el).find('#email_bcc').closest('.control-group').show();
-			$("#emailForm",el).find('input[name="email_bcc"]').val(bcc);
-		}
-		
-		// Setup HTML Editor
-		if(id)
-		{		
-			setupTinyMCEEditor('textarea#email-body', false, undefined, function(){
-				
-					if(!body)
-						body = '';
-				
-					// Add tinymce content
-					set_tinymce_content('email-body', body);
-					
-					// Register focus
-					register_focus_on_tinymce('email-body');
-			
+				// Appends zoomifier link to attach their documents.
+				head.js(LIB_PATH + 'lib/zoomifier.contentpicker.min.js', function()
+				{
+					$("#emailForm", el).find('textarea[name="body"]').closest(".controls")
+							.append('<div><a style="cursor:pointer;" onclick="Javascript:loadZoomifierDocSelector();"><i class="icon-plus-sign"></i> Attach Zoomifier Doc</a></div>');
 				});
-		}
-		else
-		{	
-			setupTinyMCEEditor('textarea#email-body', true, undefined, function(){
+			}
 
-					if(!body)
-						body = '';
-				
-					// Add tinymce content
-					set_tinymce_content('email-body', body);
+			// Populate from address and templates
+			populate_send_email_details(el);
+			
+			if(subject)
+				$("#emailForm",el).find('input[name="subject"]').val(subject);
+			
+			if(cc)
+			{
+				$("#emailForm",el).find('#email_cc').closest('.control-group').show();
+				$("#emailForm",el).find('input[name="email_cc"]').val(cc);
+			}
+			
+			if(bcc)
+			{
+				$("#emailForm",el).find('#email_bcc').closest('.control-group').show();
+				$("#emailForm",el).find('input[name="email_bcc"]').val(bcc);
+			}
+			
+			// Setup HTML Editor
+			if(id)
+			{		
+				setupTinyMCEEditor('textarea#email-body', false, undefined, function(){
 					
-					// Register focus
-					register_focus_on_tinymce('email-body')
-			});
-		}
-		
-		initializeSendEmailListeners();
-		sendEmailAttachmentListeners("send-email-listener-container");
+						if(!body)
+							body = '';
+					
+						// Add tinymce content
+						set_tinymce_content('email-body', body);
+						
+						// Register focus
+						register_focus_on_tinymce('email-body');
+				
+					});
+			}
+			else
+			{	
+				setupTinyMCEEditor('textarea#email-body', true, undefined, function(){
+
+						if(!body)
+							body = '';
+					
+						// Add tinymce content
+						set_tinymce_content('email-body', body);
+						
+						// Register focus
+						register_focus_on_tinymce('email-body')
+				});
+			}
+			
+			initializeSendEmailListeners();
+			sendEmailAttachmentListeners("send-email-listener-container");
+			
+			
+		}, "#send-email-listener-container"); 
+	
 	},
 	
 	/**
@@ -948,6 +994,7 @@ var ContactsRouter = Backbone.Router.extend({
 		{
 			url = "core/api/contacts/list";
 		}
+		
 
 		if (CONTACTS_HARD_RELOAD == true)
 		{
@@ -996,10 +1043,10 @@ var ContactsRouter = Backbone.Router.extend({
 		// If defined
 		if (this.contact_custom_view && this.contact_custom_view.collection.url == url)
 		{
-			
 			var el = App_Contacts.contact_custom_view.render(true).el;
 			$('#content').html('<div id="conatcts-listeners-conatainer"></div>');
 			$('#conatcts-listeners-conatainer').html(el);
+			$("#contacts-view-options").css( 'pointer-events', 'auto' );
 
 			contactFiltersListeners();
 
@@ -1010,6 +1057,7 @@ var ContactsRouter = Backbone.Router.extend({
 			//pieTags(el);
 			setupViews(el, view_data.name);
 			setupContactFilterList(el, tag_id);
+			setUpContactView(el);
 
 			$(".active").removeClass("active"); // Activate Contacts
 												// Navbar tab
@@ -1025,6 +1073,16 @@ var ContactsRouter = Backbone.Router.extend({
 			createCookie('sort_by_name', sort_key);
 		}
 		var template_key = "contacts-custom-view";
+		var individual_tag_name='tr';
+		var custom_scrollable_element=null;
+
+		// Checks if user is using custom view. It check for grid view
+		if (readCookie("agile_contact_view"))
+		{
+			template_key = "contacts-grid";
+			individual_tag_name = "div";
+			custom_scrollable_element="#contacts-grid-model-list";
+		}
 		//if directly called the method, i.e on click of custom view link, 
 		//the url will be updated if any filter conditions are selected.
 		if(readData('dynamic_contact_filter')) {
@@ -1033,12 +1091,20 @@ var ContactsRouter = Backbone.Router.extend({
 		}
 		if(is_lhs_filter) {
 			template_key = "contacts-custom-view-table";
+
+			if (readCookie("agile_contact_view"))
+		    {
+			template_key = "contacts-grid-table";
+			individual_tag_name = "div";
+			custom_scrollable_element="#contacts-grid-table-model-list";
+		    }
 		}	
 		
 		this.contact_custom_view = new Base_Collection_View({ url : url, restKey : "contact", modelData : view_data, global_sort_key : sort_key,
-			templateKey : template_key, individual_tag_name : 'tr', slateKey : slateKey, cursor : true, request_method : 'POST', post_data: {'filterJson': postData}, page_size : 25, sort_collection : false,
+			templateKey : template_key,custom_scrollable_element:custom_scrollable_element, individual_tag_name : individual_tag_name, slateKey : slateKey, cursor : true, request_method : 'POST', post_data: {'filterJson': postData}, page_size : 25, sort_collection : false,
 			postRenderCallback : function(el, collection)
 			{
+				
 				App_Contacts.contactsListView = App_Contacts.contact_custom_view;
 
 				// To set chats and view when contacts are fetch by
@@ -1047,9 +1113,15 @@ var ContactsRouter = Backbone.Router.extend({
 
 				//pieTags(el);
 				setupViews(el, view_data.name);
+				$("#contacts-view-options").css( 'pointer-events', 'auto' );
+
 
 				// show list of filters dropdown in contacts list
 				setupContactFilterList(el, App_Contacts.tag_id);
+				if(tag_id)
+				setUpContactView(el,true);
+			    else
+				setUpContactView(el);
 				if(is_lhs_filter) {
 					var count = 0;
 					if(collection.models.length > 0) {
@@ -1057,7 +1129,7 @@ var ContactsRouter = Backbone.Router.extend({
 					}
 					var count_message;
 					if (count > 9999 && (readCookie('contact_filter') || readData('dynamic_contact_filter')))
-						count_message = "<small> (" + 10000 + "+ Total) </small>" + '<span style="vertical-align: text-top; margin-left: -5px">' + '<img border="0" src="/img/help.png"' + 'style="height: 10px; vertical-align: middle" rel="popover"' + 'data-placement="bottom" data-title="Lead Score"' + 'data-content="Looks like there are over 10,000 results. Sorry we can\'t give you a precise number in such cases."' + 'id="element" data-trigger="hover">' + '</span>';
+						count_message = "<small> (" + 10000 + "+ Total) </small>" + '<span style="vertical-align: text-top; margin-left: -5px">' + '<img border="0" src="'+ updateImageS3Path("/img/help.png") +'"' + 'style="height: 10px; vertical-align: middle" rel="popover"' + 'data-placement="bottom" data-title="Lead Score"' + 'data-content="Looks like there are over 10,000 results. Sorry we can\'t give you a precise number in such cases."' + 'id="element" data-trigger="hover">' + '</span>';
 					else
 						count_message = "<small> (" + count + " Total) </small>";
 					$('#contacts-count').html(count_message);
@@ -1070,10 +1142,10 @@ var ContactsRouter = Backbone.Router.extend({
 		$.getJSON("core/api/custom-fields/type/scope?type=DATE&scope=CONTACT", function(customDatefields)
 				{
 					// Defines appendItem for custom view
+					
 					_that.contact_custom_view.appendItem = function(base_model){
 						contactTableView(base_model,customDatefields,this);
 					};
-			
 					// Fetch collection
 					_that.contact_custom_view.collection.fetch();
 					
@@ -1111,6 +1183,77 @@ var ContactsRouter = Backbone.Router.extend({
 			$(this).find("#phone").val(mob);
 		});
 		$("#personModal").modal();
-	}
+	},
+
+	addContact : function(){
+		$.getJSON("core/api/custom-fields/scope?scope=CONTACT", function(data)
+		{
+			if(data.length > 0){
+				var json = {custom_fields:data,properties:[]};
+				getTemplate("continue-contact", json, undefined, function(template_ui){
+					if(!template_ui)
+						  return;
+					$("#content").html($(template_ui));	
+					// Add placeholder and date picker to date custom fields
+					$('.date_input').attr("placeholder", "Select Date");
+
+					$('.date_input').datepicker({ format : CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY});
+
+					// To set typeahead for tags
+					setup_tags_typeahead();
+
+					// Iterates through properties and ui clones
+					
+					var fxn_display_company = function(data, item)
+					{
+						$("#content [name='contact_company_id']")
+								.html(
+										'<li class="inline-block tag btn btn-xs btn-primary m-r-xs m-b-xs" data="' + data + '"><span><a class="text-white m-r-xs" href="#contact/' + data + '">' + item + '</a><a class="close" id="remove_tag">&times</a></span></li>');
+						$("#content #contact_company").hide();
+					}
+					agile_type_ahead("contact_company", $('#content'), contacts_typeahead, fxn_display_company, 'type=COMPANY', '<b>No Results</b> <br/> Will add a new one');
+
+				}, "#content"); 
+
+					
+			}else{
+				Backbone.history.navigate("contacts" , {trigger: true});
+				$("#personModal").modal("show");
+			}		
+					
+		});
+
+	},
 	
+		callcontacts : function()
+	{
+		
+		$(".active").removeClass("active");
+		var total_count = CALL_CAMPAIGN.total_count;
+		var callSetting = {};
+		callSetting['total_count'] = total_count;
+		callSetting['time']=[10,20,30,40,50,60];
+		
+		getTemplate("call-campaign-setting", callSetting, undefined, function(template_ui){
+			if(!template_ui)
+				  return;
+			  
+			$(".butterbar").hide();
+			$("#content").html($(template_ui));	
+			$('[data-toggle="tooltip"]').tooltip();
+
+
+
+
+
+
+
+
+
+		}, "#content"); 
+
+
+
+	}
+		
 	});

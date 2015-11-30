@@ -1,24 +1,28 @@
 <script id="admin-settings-import-google-contacts-template"
 	type="text/html">
-	<div class="panel wrapper widget-add" >
-    <center>
-    <img class="thumbnail m-b-none thumb-xl bg-transparent" src="/img/icons/google-contacts-sync.png" />
-    </center>
-    <div class="m-b-md m-t"  rel="tooltip" >
-		Agile can periodically sync your contacts in your CRM with your Google Contacts.
-	</div>
-    <div>
-			{{#if id}}
-    			<a class="btn btn-sm btn-danger delete"  id="google-import-prefs-delete" >Disable</a>
-				<a href="#sync/contacts" class="btn btn-sm btn-default" id="setting-widget">Settings</a>
-    		{{else}}
-				{{#canSyncContacts}}
-    					<div class="btn btn-sm btn-default inline-block" id="google-import">Enable</div>
-					{{else}}
-						<span class="btn btn-sm btn-primary inline-block" disabled>Enable</span>
-						<span class="m-l-xs"><i>Needs import privilege.</i></span>
-				{{/canSyncContacts}}
-    		{{/if}}
+	<div class="panel panel-default widget-add"  style="min-height: 250px;">
+	<div class="panel-heading">
+	    <center>
+	    	<img class="m-b-none thumb-xl bg-transparent" style="height:47px;" src="{{getS3ImagePath '/img/icons/google-contacts-sync.png'}}" />
+	    </center>
+    </div>
+    <div class="panel-body">
+	    <div style="height:120px"  rel="tooltip" title="Agile can periodically sync your contacts in your CRM with your Google Contacts.">
+			Agile can periodically sync your contacts in your CRM with your Google Contacts.
+		</div>
+	    <div class="text-center">
+				{{#if id}}
+	    			<a class="btn btn-sm btn-danger delete"  id="google-import-prefs-delete" >Disable</a>
+					<a href="#sync/contacts" class="btn btn-sm btn-default" id="setting-widget">Settings</a>
+	    		{{else}}
+					{{#canSyncContacts}}
+	    					<div class="btn btn-sm btn-default inline-block" id="google-import">Enable</div>
+						{{else}}
+							<span class="btn btn-sm btn-primary inline-block" disabled>Enable</span>
+							<span class="m-l-xs"><i>Needs import privilege.</i></span>
+					{{/canSyncContacts}}
+	    		{{/if}}
+		</div>
 	</div>
 </div>
 </script>
@@ -27,12 +31,13 @@
 	type="text/html">
 <div class="row">
 <div class="col-md-4 col-sm-6 col-xs-12">
-	<div class="panel wrapper" >
+	<div class="panel panel-default" >
  	<!-- <legend>Contacts <span class="label label-danger m-b-sm">Beta</span>{{#if id}}<span style="font-size:14px;float:right" title="Sync Contacts" title="Sync Contacts"><a class="icon-refresh save-contact-prefs" href="#" sync = "true" id="google-import-sync"  style="cursor:pointer;text-decoration:none"></a></span>{{/if}}</legend> -->
-
+	<div class="panel-heading">
 	<span class="label label-danger pull-right m-b-sm">Beta</span>
-   <center> <img class="thumbnail m-b-none img-responsive thumb-xl bg-transparent" src="/img/icons/google-contacts-sync.png" /></center>
-	<br />
+   <center> <img class="m-b-none img-responsive thumb-xl bg-transparent" style="height="47px;" src="{{getS3ImagePath '/img/icons/google-contacts-sync.png'}}" /></center>
+	</div>
+	<div class="panel-body">
 {{#unless id}}
     <div class="ellipsis-multiline"  rel="tooltip" >
 		Setup contact sync with your Gmail or Google Apps account.
@@ -149,7 +154,7 @@
 		 <input name="id" type="hidden" value="{{id}}" />
 
 
-      <div class="form-actions">
+      <div class="form-actions text-center">
 <a href="#sync" class="btn btn-default btn-sm ml_5">Cancel</a>
 {{#if inProgress}}
 			<div class="btn btn-primary btn-sm save-contact-prefs inline-block" id="google-import-prefs-save" disabled>Syncing</div>
@@ -161,6 +166,7 @@
 	{{/if}}
         </fieldset>
     </form>
+    </div>
 </div>
 </div>
 </script>
@@ -171,10 +177,12 @@
 	type="text/html">
 <div class="row">
 <div class="col-md-4 col-sm-6 col-xs-12">
-<div class="panel wrapper" >
+<div class="panel panel-default" >
+<div class="panel-heading">
 <span class="label label-danger pull-right m-b">Beta</span>
-<center> <img class="thumbnail m-b-none img-responsive thumb-xl bg-transparent" src="/img/plugins/Stripe.png" /></center>
-
+<center> <img class="m-b-none img-responsive thumb-xl bg-transparent" style="height:47px;" src="{{getS3ImagePath '/img/plugins/Stripe.png'}}" /></center>
+</div>
+<div class="panel-body">
 {{#unless id}}
     <div class="m-t m-b"  rel="tooltip" >
 		Setup contact sync with your Stripe account.
@@ -205,7 +213,7 @@
 					</div>
 		   		</div>
 
-			<div class="form-actions">
+			<div class="form-actions text-center">
 <a href="#sync" class="btn btn-default btn-sm inline-block">Cancel</a>
 {{#if inProgress}}
 			<button class="btn btn-sm btn-primary ml_5" id="stripe_sync_prefs" disabled="disabled">Syncing</button>
@@ -219,9 +227,9 @@
        
     </form>
 {{else}}
-<div class="btn btn-primary btn-sm inline-block" id="stripe_import">Enable</div>
+<div class="btn btn-primary btn-sm inline-block" sync_type="STRIPE" id="data-sync-type">Enable</div>
 {{/if}}
-
+</div>
 </div>
 </div>
 </script>
@@ -229,26 +237,30 @@
 
 <script id="admin-settings-import-stripe-contact-sync-template"
 	type="text/html">
-	<div class="panel wrapper widget-add" >
-    <center>
-    <img class="thumbnail m-b-none thumb-xl bg-transparent" src="/img/plugins/Stripe.png" />
-	</center>
-    <div class="m-t"  rel="tooltip" >
-	Sync customers in Stripe as Contacts in Agile CRM with their subscription & payment data.
+	<div class="panel panel-default widget-add" style="height:220px;">
+	<div class="panel-heading">
+	    <center>
+	    	<img class="m-b-none thumb-xl bg-transparent" style="height:47px;" src="{{getS3ImagePath '/img/plugins/Stripe.png'}}" />
+		</center>
 	</div>
-    <div class="m-t">
-			{{#if id}}
-    			<a class="btn btn-sm btn-danger delete"  id="stripe-import-prefs-delete" >Disable</a>
-				<a href="#sync/stripe-import" class="btn btn-sm btn-default" id="setting-widget">Settings</a>
-    		{{else}}
-				{{#canSyncContacts}}
-    						<div class="btn btn-sm btn-default inline-block" id="stripe_import">Enable</div>
-					{{else}}
-							<span class="btn btn-sm btn-default inline-block"  disabled>Enable</span>
-							<span class="m-l-xs"><i>Needs import privilege.</i></span>
-				{{/canSyncContacts}}
-    		
-    		{{/if}}
+	<div class="panel-body">
+	    <div class="text-flow-ellipsis line-clamp line-clamp-4 widget-text" style="height:85px" rel="tooltip" title="Sync customers in Stripe as Contacts in Agile CRM with their subscription & payment data.">
+	    Sync customers in Stripe as Contacts in Agile CRM with their subscription & payment data.
+	    </div>
+	    <div class="text-center">
+				{{#if id}}
+	    			<a class="btn btn-sm btn-danger delete"  id="stripe-import-prefs-delete" >Disable</a>
+					<a href="#sync/stripe-import" class="btn btn-sm btn-default" id="setting-widget">Settings</a>
+	    		{{else}}
+					{{#canSyncContacts}}
+	    						<div class="btn btn-sm btn-default inline-block" id="stripe_import">Enable</div>
+						{{else}}
+								<span class="btn btn-sm btn-default inline-block"  disabled>Enable</span>
+								<span class="m-l-xs"><i>Needs import privilege.</i></span>
+					{{/canSyncContacts}}
+	    		
+	    		{{/if}}
+		</div>
 	</div>
 </div>
 </script>
@@ -257,10 +269,12 @@
 	type="text/html">
 <div class="row">
 <div class="col-md-6 col-sm-6 col-xs-12">
-<div class="panel wrapper" >
+<div class="panel panel-default" >
+<div class="panel-heading">
 <span class="label label-danger pull-right m-b-sm">Beta</span>
-<center> <img class="thumbnail m-b-none img-responsive thumb-xl bg-transparent" src="img/crm-plugins/shopify.png" /></center>
-<br/>
+<center> <img class="m-b-none img-responsive thumb-xl bg-transparent" style="height:47px;" src="{{getS3ImagePath 'img/crm-plugins/shopify.png'}}" /></center>
+</div>
+<div class="panel-body">
 {{#unless id}}
     <div class="m-b-md"   rel="tooltip" >
 		Setup contact sync with your Shopify account.
@@ -273,8 +287,9 @@
     <span class="input-group-addon">.myshopify.com</span>
     
     </div>
+<div class="text-center">
 <a href ="#" id ="import_shopify" class="btn btn-sm btn-primary m-t">Connect</a>
-
+</div>
   {{/unless}}
 
   
@@ -287,7 +302,7 @@
               <div>
                    Shop : <span>{{othersParams}}</span>
                 
-                       <a class="delete" href="#"  id="shopify-import-prefs-delete" >Change</a>
+                       <div class="text-center"><a class="delete" href="#"  id="shopify-import-prefs-delete" >Change</a></div>
 					</div>
                  
              	<div class="control-group form-group">
@@ -308,7 +323,7 @@
 					</div>
 		   		</div>
 
-			<div class="form-actions">
+			<div class="form-actions text-center">
 <a href="#sync" class="btn btn-default btn-sm inline-block">Cancel</a>
 {{#if inProgress}}
 			<button class="btn btn-sm btn-primary ml_5" id="shopify-setting" disabled="disabled">Syncing</button>
@@ -324,32 +339,37 @@
     </form>
 </div>
 </div>
+</div>
 </script>
 
 
 <script id="admin-settings-import-shopify-contact-syncPrefs-template"
 	type="text/html">
-	<div class="panel wrapper widget-add" >
-    <center>
-    <img class="thumbnail m-b-none thumb-xl bg-transparent"  src="img/crm-plugins/shopify.png" />
-	</center>
-    <div class="ellipsis-multiline m-t-md"   rel="tooltip" >
-		Sync customer data and Agile CRM as contacts along with purchase history.
+	<div class="panel panel-default widget-add" style="height: 220px;">
+	<div class="panel-heading">
+	    <center>
+	    	<img class="m-b-none thumb-xl bg-transparent" style="height:47px;" src="{{getS3ImagePath 'img/crm-plugins/shopify.png'}}" />
+		</center>
 	</div>
-   <div class="m-t-md">
+	<div class="panel-body">
+	    <div class="text-flow-ellipsis line-clamp line-clamp-4 widget-text" style="height:85px" rel="tooltip" title="Sync customer data and Agile CRM as contacts along with purchase history.">
+			Sync customer data and Agile CRM as contacts along with purchase history.
+		</div>
+	   	<div class="text-center">
 			{{#if id}}
-        	   <a class="btn btn-sm btn-danger delete"  id="shopify-import-prefs-delete" >Disable</a>
+	    	   <a class="btn btn-sm btn-danger delete"  id="shopify-import-prefs-delete" >Disable</a>
 				<a href="#sync/shopify" class="btn btn-sm btn-default">Settings</a>
 			{{else}}
 					{{#canSyncContacts}}
-    						   <a href="#sync/shopify"  class="btn btn-sm btn-default inline-block">Enable</a>
+							   <a href="#sync/shopify"  class="btn btn-sm btn-default inline-block">Enable</a>
 						{{else}}
 							   <a class="btn btn-sm btn-default inline-block" disabled>Enable</a>
 								<span class="m-l-xs"><i>Needs import privilege.</i></span>
 					{{/canSyncContacts}}
 			
 			{{/if}}
-</div>
+		</div>
+	</div>
 
 </div>
 
@@ -392,10 +412,12 @@
 	type="text/html">
 <div class="row">
 <div class="col-md-4 col-sm-6 col-xs-12">
-<div class="panel wrapper" >
+<div class="panel panel-default" >
+<div class="panel-heading">
 <span class="label label-danger pull-right">Beta</span>
-<center> <img class="thumbnail m-b-none img-responsive thumb-xl bg-transparent" src="/widgets/QuickBooks210x70.png" /></center>
-<br/>
+<center> <img class="m-b-none img-responsive thumb-xl bg-transparent" height="47px;" src="{{getS3ImagePath '/widgets/QuickBooks210x70.png'}}" /></center>
+</div>
+<div class="panel-body">
 {{#unless id}}
     <div class="ellipsis-multiline m-b-md"   rel="tooltip" >
 		Setup contact sync with your Quickbook account.
@@ -425,7 +447,7 @@
 					</div>
 		   		</div>
 
-			<div class="form-actions m-t-md">
+			<div class="form-actions m-t-md text-center">
 <a href="#sync" class="btn btn-default btn-sm inline-block">Cancel</a>
 {{#if inProgress}}
 			<button class="btn btn-sm btn-primary ml_5" id="quickbook_sync_prefs" disabled="disabled">Syncing</button>
@@ -439,23 +461,26 @@
        
     </form>
 {{else}}
- <a href="/OAuthServlet?service=quickbook-import&return_url=' + encodeURIComponent(window.location.href) + "/quickbooks""  class="btn btn-sm btn-primary inline-block">Enable</a>
+ <a  sync_type="QUICKBOOK" id="data-sync-type"  class="btn btn-sm btn-primary inline-block">Enable</a>
 {{/if}}
-
+</div>
 </div>
 </div>
 </script>
 
 
 <script id="admin-settings-import-quickbook-template" type="text/html">
-	<div class="panel wrapper widget-add" >
-    <center>
-    <img class="thumbnail thumb-xl m-b-none"  src="/widgets/QuickBooks210x70.png"/>
-	</center>
-    <div   rel="tooltip" class="m-t m-b">
+	<div class="panel panel-default widget-add" style="height:220px;">
+	 <div class="panel-heading">
+	    <center>
+	    	<img class="thumb-xl m-b-none" style="height:47px;"  src="{{getS3ImagePath '/widgets/QuickBooks210x70.png'}}"/>
+		</center>
+	 </div>
+	 <div class="panel-body">
+    <div   rel="tooltip" class="text-flow-ellipsis line-clamp line-clamp-4" style="height:85px;" title="Sync customers in Quickbooks as Contacts in Agile CRM along with invoice and payment data.">
 		Sync customers in Quickbooks as Contacts in Agile CRM along with invoice and payment data.
 	</div>
-    
+    	<div class="text-center">
 			{{#if id}}
         	   <a class="btn btn-sm btn-danger delete"  id="quick-book-delete" >Disable</a>
 				<a href="#sync/quickbook" class="btn btn-sm btn-default">Settings</a>
@@ -470,7 +495,8 @@
 					{{/canSyncContacts}}
 
 			{{/if}}
-
+		</div>
+	</div>
 </div>
 
 
@@ -480,7 +506,7 @@
 <script id="admin-settings-import-xeroSync-template" type="text/html">
 	<div class="panel wrapper widget-add" >
     <center>
-    <img class="thumbnail"  src="/widgets/xero210x70.png"  style="width:210px; height:80px;" />
+    <img class="thumbnail"  src="{{getS3ImagePath '/widgets/xero210x70.png'}}"  style="width:210px; height:80px;" />
 	</center>
     <br />
     <div class="ellipsis-multiline" style="-webkit-line-clamp: 3;word-break: break-word;width: 220px !important;"  rel="tooltip" >
@@ -511,7 +537,7 @@
 	type="text/html">
 <div class="col-md-4 panel wrapper" >
 <span class="label label-important" style="float:right">Beta</span>
-<center> <img class="thumbnail" src="/widgets/xero210x70.png"  style="width:210px; height:70px;margin-left:40px" /></center>
+<center> <img class="thumbnail" src="{{getS3ImagePath '/widgets/xero210x70.png'}}"  style="width:210px; height:70px;margin-left:40px" /></center>
 <br/>
 {{#unless id}}
     <div class="ellipsis-multiline" style="-webkit-line-clamp: 3;word-break: break-word;width: 220px !important;height: 55px !important;margin-bottom: 20px;"  rel="tooltip" >
@@ -570,7 +596,7 @@
 <div class="col-md-4 col-sm-6 col-xs-12">
 <div class="panel wrapper" >
 <span class="label label-danger pull-right m-b">Beta</span>
-<center> <img class="thumbnail m-b-none img-responsive thumb-xl bg-transparent" src="img/plugins/freshbooks-logo.png"  /></center>
+<center> <img class="m-b-none img-responsive thumb-xl bg-transparent" style="height:47px;" src="{{getS3ImagePath 'img/plugins/freshbooks-logo.png'}}"  /></center>
 {{#unless id}}
     <div class="m-t m-b"  rel="tooltip" >
 		Setup contacts sync with your Freshbooks account.
@@ -654,27 +680,31 @@
 	type="text/html">
 
 
-	<div class="panel wrapper widget-add" >
-    <center>
-    <img class="thumbnail m-b-none thumb-xl bg-transparent" src="img/plugins/freshbooks-logo.png" />
-    </center>
-    <div class="m-t m-b" rel="tooltip" >
-		Sync Clients from Freshbooks as Contacts in Agile CRM along with purchase history.
-	</div>
-    
+	<div class="panel panel-default widget-add" style="height:220px;">
+	<div class="panel-heading">
+	    <center>
+	    	<img class="m-b-none thumb-xl bg-transparent"  style="height:47px;" src="{{getS3ImagePath 'img/plugins/freshbooks-logo.png'}}" />
+	    </center>
+	 </div>
+	 <div class="panel-body">
+	    <div class="text-flow-ellipsis line-clamp line-clamp-4" style="height:85px;" rel="tooltip" title="Sync Clients from Freshbooks as Contacts in Agile CRM along with purchase history.">
+			Sync Clients from Freshbooks as Contacts in Agile CRM along with purchase history.
+		</div>
+    	<div class="text-center">
 			{{#if id}}
         	   <a class="btn btn-sm btn-danger delete">Disable</a>
 				<a href="#sync/freshbooks/setting" class="btn btn-sm btn-default">Settings</a>
 			{{else}}
 
-	  {{#canSyncContacts}}
+	  	{{#canSyncContacts}}
 	            <a href="#sync/freshbooks" class="btn btn-sm btn-default inline-block">Enable</a>
            {{else}}
 		         <span class="btn btn-sm btn-default inline-block" disabled>Enable</span>
 				 <span class="m-l-xs"><i>Needs import privilege.</i></span>
-	{{/canSyncContacts}}
+		{{/canSyncContacts}}
 			{{/if}}
-
+		</div>
+	</div>
 </div>
 
 </script>
@@ -684,10 +714,12 @@
 	type="text/html">
 <div class="row">
 <div class="col-md-4 col-sm-6 col-xs-12">
-<div class="panel wrapper" >
+<div class="panel panel-default" >
+<div class="panel-heading">
 <span class="label label-danger pull-right m-b">Beta</span>
-<center> <img class="thumbnail m-b-none img-responsive thumb-xl bg-transparent" src="img/plugins/freshbooks-logo.png" /></center>
-
+<center> <img class="m-b-none img-responsive thumb-xl bg-transparent" style="height:47px;" {{getS3ImagePath 'img/plugins/freshbooks-logo.png'}}" /></center>
+</div>
+<div class="panel-body">
 {{#unless id}}
     <div class="m-t m-b"  rel="tooltip" >
 		Setup contacts sync with your Freshbooks account.
@@ -717,10 +749,11 @@
               <input type="text" id="freshbooks_apiKey" class="input-medium form-control"  placeholder="API Token" value="" id="freshbooks_apiKey"></input>
            <div id="apierror" class="hide text-danger">Enter Valid API Token</div>
        </div></div>
-				<div class="m-t-md">
+				<div class="m-t-md text-center">
                <a href ="#" id ="freshbooks" class="btn btn-sm btn-primary">Connect</a>
 				</div>
 	    </form>
+</div>
 </div>
 </div>
 </script>

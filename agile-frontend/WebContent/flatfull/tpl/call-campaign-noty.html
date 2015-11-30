@@ -1,0 +1,262 @@
+<script id="call-campaign-start-template" type="text/html">
+
+<div id="callnoty-container"></div>
+</script>
+
+<script id="call-campaign-body-template" type="text/html">
+<section class="lter call-campaign-body">
+  <div class="p-l-lg p-r-lg p-t-xs">
+	<div class="row m-0 w-915">
+  		<div class="col-sm-4">
+    		<div id="campaign" class="font-weight-600">
+				<div class="pull-left m-r-xs text-sm" style="margin-left:-35px;"><span class="label label-sm bg-danger m-r-xs">Beta</span>Call Campaign</div>
+				
+					{{#if autodial}}
+						<div class="pos-rlt tooltip_info pull-left m-r-xs" style="top:-2px;" data-placement="top" title="Skip & call next contact"> 
+						<span class="noty_twilio_skip c-p font-weight-600"><i class="fa fa-step-forward btn btn-default btn-xs"></i></span>
+						</div>
+					{{else}}
+							{{#if_equals total_count "1"}}		
+								<span class="m-t-xs text-xs font-thin text-info tooltip_info pos-rlt" style="top:-3px;" title="Previous">
+									<i class="fa fa-step-backward btn btn-default btn-xs disabled cam-small-btn"  style="vertical-align:text-top;"></i>
+								</span>
+
+   							{{else}} 
+								{{#if_equals "0" current_count}}
+									<span class="m-t-xs text-xs font-thin text-info tooltip_info pos-rlt" style="top:-3px;" title="Previous">
+										<i class="fa fa-step-backward btn btn-default btn-xs disabled cam-small-btn"  style="vertical-align:text-top;"></i>
+									</span>
+                    			{{else}}
+								<span class="m-t-xs text-xs font-thin text-info tooltip_info pos-rlt" style="top:-3px;" title="Previous">
+									<a class="noty_twilio_previous c-p" href="#" >
+										<i class="fa fa-step-backward btn btn-default btn-xs cam-small-btn"  style="vertical-align:text-top;"></i>
+									</a>
+								</span>
+                    			{{/if_equals}}
+            				{{/if_equals}}
+
+   							{{#if_equals total_count "1"}}
+								<span class="m-t-xs text-xs font-thin text-info tooltip_info pos-rlt" style="top:-3px;" title="Next">
+									<i class="fa fa-step-forward btn btn-default btn-xs disabled cam-small-btn"  style="vertical-align:text-top;"></i>
+								</span>
+   							{{else}} 
+								{{#if_equals total_count temp_count}}        
+									<span class="m-t-xs text-xs font-thin text-info tooltip_info pos-rlt" style="top:-3px;" title="Next">
+										<i class="fa fa-step-forward btn btn-default btn-xs disabled cam-small-btn"  style="vertical-align:text-top;"></i>
+									</span>
+    	        				{{else}} 
+									<span class="m-t-xs text-xs font-thin text-info tooltip_info pos-rlt" style="top:-3px;" title="Next">
+										<a class="noty_twilio_next c-p" href="#" >
+											<i class="fa fa-step-forward btn btn-default btn-xs cam-small-btn"  style="vertical-align:text-top;"></i>
+										</a>
+									</span>
+            					{{/if_equals}}
+    						{{/if_equals}}
+
+					{{/if}}	
+ 
+				<span class="m-t-xs text-xs font-thin text-info tooltip_info pos-rlt" style="top:-3px;" title="Exit from the campaign and will be redirect to contacts list page">
+						<a id="stop" href="#" >
+							<i class="fa fa-power-off btn btn-default btn-xs cam-small-btn" style="vertical-align:text-top;"></i>
+						</a>
+				</span>	
+  				<div class="text-muted block font-normal text-xs"> 
+					<div class="pull-left">
+						{{#getIndexIncrementByOne current_count}}{{/getIndexIncrementByOne}} of {{total_count}} <span id="totalTime" class="text-muted" style="color:#424242;" data-toggle="tooltip" data-placement="top" title="Campaign call duration">({{totalTimeFormat total_time}})</span>
+					</div>		
+					<div id="pauseCallDiv" class="c-p pos-rlt pull-left m-l-xs" style="display:none;top: -2px;"  data-toggle="tooltip" data-placement="top" title="Pause current call">
+						<span id="campaign_pauseCall"><i class='fa fa-pause btn btn-default btn-xs cam-small-btn'></i></span>
+						<span id="campaign_resumeCall" style="display:none;"><i class='fa fa-play btn btn-default btn-xs cam-small-btn'></i></span>
+					</div>
+				</div>
+		   </div>
+		</div>
+<div class="col-sm-1 pos-rlt m-t-xs">
+</div>
+  		<div class="col-sm-7 pos-rlt">
+			<div class="pos-abs pos-r-sm pos-b-xs">
+			</div>
+  			<div class="thumb-sm agile-img m-r-sm pos-rlt" style="top: 2px;">
+
+	           <span class="img-inital r r-2x call_img thumb-xs">
+				<img class='upload_pic imgholder submit w-full img-circle ' 
+				src="{{gravatarurl current_contact.properties 80}}" />
+			   </span>
+
+		    </div>
+        	<div class="text-sm" style="position:relative;top:-3px;">
+		        <div class="text-cap text-xs font-weight-600" style="margin-top: 4px;">
+					{{current_contact_name}}
+				</div>
+				<div class="pull-left text-xs m-r-xs">
+					{{#if_equals current_contact_phonenumber.length "0"}}
+                    	<span class="pull-left" title="Add Phone Number">
+						<a href="#" class="noty_add_phone text-info text-l-none"> Add Phone Number</a>
+                    	</span>
+		   			{{else}} 
+							
+						{{#if_equals current_contact_phonenumber.length "1"}}
+							{{#if current_contact_phonenumber.[0]}}
+								<span class="pull-left">{{current_contact_phonenumber}}</span>
+							{{else}}
+								<span class="pull-left" title="Add Phone Number">
+								<a href="#" class="noty_add_phone text-info text-l-none"> Add Phone Number</a>
+                    			</span>
+							{{/if}}
+
+                    	{{else}}
+									{{#if autodial}}
+											{{current_contact_phonenumber.[0]}}
+									{{else}}
+												{{#if_equals call_status "CONNECTED"}}
+															<select id="call_campaign_contact_number" class="pull-left" disabled>
+												{{else}}
+														{{#if_equals call_status "CALLING"}}
+															<select id="call_campaign_contact_number" class="pull-left" disabled>
+														{{else}}		
+                        									<select id="call_campaign_contact_number" class="pull-left">
+														{{/if_equals}}
+												{{/if_equals}}	
+                              							 <option value="" disabled selected>Select a number</option>
+                              							{{#each current_contact_phonenumber}} <option value="{{this}}">{{this}}</option>{{/each}}
+                         								</select>
+									{{/if}}
+
+                    	{{/if_equals}}    
+           			{{/if_equals}}
+				</div>
+
+
+				<div class="pull-left m-l-xs m-r-xs " >
+						{{#if_equals call_status "CONNECTED"}}	
+							<span id="pauseDiv" class="pos-rlt tooltip_info" style="top:-2px;" data-placement="top" title="Mute your current call">
+							<a id="pause" href="#" class="c-p" data-call_state='pause' >	
+								<span><i class="fa fa-microphone text-sm v-middle btn btn-default btn-xs  w-h-22"></i></span>
+							</a>
+							</span>
+							<span id="resumeDiv" class="pos-rlt tooltip_info" style="display:none;top:-2px;" data-placement="top" title="Unmute current call">
+							<a id="resume" href="#" class="c-p" data-call_state='resume'>	
+								<i class="fa fa-microphone-slash text-sm v-middle btn btn-default btn-xs  w-h-22"></i>
+							</a>
+							</span>
+						{{/if_equals}}
+					</div>
+
+
+					{{#if_equals call_status "CONNECTED"}}						
+						<div id="hangup" class="pull-left c-p w-h-20 text-center v-middle p-t-4 text-white  text-11 m-t-n-xxs m-r-xs" style="background:rgb(240, 120, 120);" data-toggle="tooltip" data-placement="top" title="Hangup">
+							<i class="fa fa-headphones cam-call-icon"></i>
+						</div>
+							<div class="campaign_voicemail_buttons  pull-left pos-rlt m-r-xs" style="top:-2px;"  data-toggle="tooltip" data-placement="top" title="Voicemail"></div>
+							&nbsp;&nbsp;&nbsp;&nbsp;<div id="dialpad" class="c-p pull-left pos-rlt" style="top:-2px;" data-toggle="tooltip" data-placement="top" title="Dialpad"><i class="icon-th cam-dialpad-icon btn btn-default btn-xs"></i></div><span class="campaign_noty_buttons pos-abs pos-t-23"></span>
+							<div id="campaign_wait_image pull-left pos-rlt" style="top:-2px;"></div> 
+					{{else}}
+						{{#if_equals current_contact_phonenumber.length "0"}}
+							<div id="non-start" class="pull-left c-cm w-h-20 text-center v-middle p-t-4 text-white  m-t-n-xxs pos-rlt m-r-xs" style="background:rgb(185, 185, 185);">
+								<i class="fa fa-phone cam-call-icon" style="top:-3px;"></i>	 				
+							</div>
+						{{else}}
+							{{#if_equals current_contact_phonenumber.length "1"}}
+								{{#if current_contact_phonenumber.[0]}}
+									{{#if autodial}}
+											<div id="start" class="pull-left c-p w-h-20 text-center v-middle p-t-4 text-white  text-11 m-t-n-xxs m-r-xs" style="background:rgb(34, 223, 51);display:none;" data-toggle="tooltip" data-placement="top" title="Call">
+												<i class="fa fa-phone cam-call-icon"></i>					
+											</div>
+									{{else}}
+											<div id="start" class="pull-left c-p w-h-20 text-center v-middle p-t-4 text-white  text-11 m-t-n-xxs m-r-xs" style="background:rgb(34, 223, 51);" data-toggle="tooltip" data-placement="top" title="Call">
+												<i class="fa fa-phone cam-call-icon"></i>					
+											</div>
+									{{/if}}
+
+
+								{{else}}
+									<div id="non-start" class="pull-left c-cm w-h-20 text-center v-middle p-t-4 text-white  text-11 m-t-n-xxs m-r-xs" style="background:rgb(185, 185, 185);">
+										<i class="fa fa-phone cam-call-icon"  style="top:-3px;"></i>					
+									</div>
+								{{/if}}
+							{{else}}
+									{{#if autodial}}
+											<div id="start" class="pull-left c-p w-h-20 text-center v-middle p-t-4 text-white  text-11 m-t-n-xxs m-r-xs" style="background:rgb(34, 223, 51);display:none;" data-toggle="tooltip" data-placement="top" title="Call">
+												<i class="fa fa-phone cam-call-icon"></i>					
+											</div>
+									{{else}}
+											<div id="start" class="pull-left c-p w-h-20 text-center v-middle p-t-4 text-white  text-11 m-t-n-xxs m-r-xs" style="background:rgb(34, 223, 51);" data-toggle="tooltip" data-placement="top" title="Call">
+												<i class="fa fa-phone cam-call-icon"></i>					
+											</div>
+									{{/if}}
+							{{/if_equals}}
+						{{/if_equals}}
+
+				{{/if_equals}}
+			</div>
+
+ 			<div class="text-right text-sm pull-right">
+ 				{{#if autodial}}
+
+					<div class="pos-rlt pull-right" style="top:-10px;">
+					<span id="callStartText" class="text-sm text-l-none m-r-xs"></span>
+					<span id="callStartTime" class="text-info"></span>
+					<span id="callPauseText" class="text-info" style="display:none;">(Paused)</span>						
+					</div>
+
+				{{/if}}	
+				<div class="clearfix">
+				</div>
+			</div>
+    	<div class="clearfix">
+		</div>
+	</div>    
+	</div>
+</section>
+
+<script>
+$(document).ready(function(){
+    $('[data-toggle="tooltip"]').tooltip();   
+});
+</script>
+
+</script>
+
+
+
+
+<script id="campaign-dialpad-template" type="text/html">
+<div id="campaign_dialpad_btns" class="campaign_dialpad_btns"    style="position: relative;top:-2px;left:-10px;z-index: 999;"> 
+  <div  class"campaign_dialpad_bg">
+     <div class="campaign_dialpad_row">
+       <div class="campaign_dialpad_cell"><input type="button" value="1" class="button1" id="button1" onclick="twilioSendDTMF('1');"></div>
+       <div class="campaign_dialpad_cell"><input type="button" value="2" class="button2" id="button2" onclick="twilioSendDTMF('2');"></div>
+       <div class="campaign_dialpad_cell"><input type="button" value="3" class="button3" id="button3" onclick="twilioSendDTMF('3');"></div>
+ 	   <div class="campaign_dialpad_cell"><input type="button" value="4" class="button4" id="button4" onclick="twilioSendDTMF('4');"></div>   
+ 	 </div>
+     <div class="campaign_dialpad_row">
+       <div class="campaign_dialpad_cell"><input type="button" value="5" class="button5" id="button5" onclick="twilioSendDTMF('5');"></div>
+       <div class="campaign_dialpad_cell"><input type="button" value="6" class="button6" id="button6" onclick="twilioSendDTMF('6');"></div>
+       <div class="campaign_dialpad_cell"><input type="button" value="7" class="button7" id="button7" onclick="twilioSendDTMF('7');"></div>
+       <div class="campaign_dialpad_cell"><input type="button" value="8" class="button8" id="button8" onclick="twilioSendDTMF('8');"></div>
+	 </div>
+     <div class="campaign_dialpad_row">
+       <div class="campaign_dialpad_cell" ><input type="button" value="9" class="button9" id="button9" onclick="twilioSendDTMF('9');"></div>
+	   <div class="campaign_dialpad_cell"><input type="button" value="0" class="button0" id="button0" onclick="twilioSendDTMF('0');"></div>    
+	   <div class="campaign_dialpad_cell"><input type="button" value="*" class="buttonstar" id="buttonstar" style="width:94%;" onclick="twilioSendDTMF('*');"></div>
+       <div class="campaign_dialpad_cell"><input type="button" value="#" class="buttonpound" id="buttonpound" onclick="twilioSendDTMF('#');"></div> 	
+	 </div>
+  </div>
+</div>
+</script>
+
+<script id="campaign-voicemail-template" type="text/html">
+{{#if this}}
+<div class="btn-group dropdown pull-left">
+<button class="btn btn-xs btn-default" id="noty_twilio_voicemail" data-length="{{length}}" data-src="{{this.0.extension}}" style="padding-left: 2px;padding-right: 2px;padding-bottom: 1px;padding-top: 0px;height: 22px;"><img src="{{getS3ImagePath '/img/voicemail.png'}}" width="17px" height="17px"></img></button>
+{{#ifCond length "greaterthan" 1}}
+<button class="btn btn-xs btn-default dropdown-toggle" data-toggle="dropdown" onclick="voiceMailDropAction()" id="splitButtonVoicemail" style="padding-right:3px;padding-left:3px;padding-bottom:1px;height: 22px;"><span class="caret"></span></button>
+<ul class="dropdown-menu text-left text-base" style="top:20px;">
+{{#each this}}
+<li><a href="#" data-src="{{extension}}" class="voiceMailItem">{{name}}</a></li>
+{{/each}}
+</ul>
+{{/ifCond}}
+</div>
+{{/if}}
+</script>

@@ -1,38 +1,4 @@
 /**
- * widget-model.js manages the widgets, adding/deleting widgets. When user
- * chooses to add/manage widgets from any contact detailed view, list of
- * available widgets are shown to add or delete if already added.
- */
-//var Catalog_Widgets_View1 = null;
-
-// Show when Add widget is selected by user in contact view
-/**
- * pickWidget method is called when add/manage widgets link in contact details
- * is clicked, it creates a view of widget collection showing add/delete based
- * on is_added variable in widget model, which is checked in template using
- * handle bars
- */
-/*function pickWidget()
-{
-	Catalog_Widgets_View = new Base_Collection_View({ url : '/core/api/widgets/default', restKey : "widget", templateKey : "widgets-add",
-		sort_collection : false, individual_tag_name : 'div', postRenderCallback : function(el)
-		{
-			build_custom_widget_form(el);
-		} });
-
-	// Append widgets into view by organizing them
-	Catalog_Widgets_View.appendItem = organize_widgets;
-
-	// Fetch the list of widgets
-	Catalog_Widgets_View.collection.fetch();
-	
-	// Shows available widgets in the content
-	$('#prefs-tabs-content').html(Catalog_Widgets_View.el);
-	$('#PrefsTab .select').removeClass('select');
-    $('.add-widget-prefs-tab').addClass('select');
-}*/
-
-/**
  * Organizes widgets into different categories like (SOCIAL, SUPPORT, EMAIL,
  * CALL, BILLING.. etc) to show in the add widget page, based on the widget_type
  * fetched from Widget object
@@ -50,30 +16,30 @@ function organize_widgets(base_model)
 	 * Appends the model (widget) to its specific div, based on the widget_type
 	 * as div id (div defined in widget_add.html)
 	 */
+	var container = "";
+
 	if (widget_type == "SOCIAL")
-		$('#social', this.el).append($(itemView.render().el).addClass('col-md-4 col-sm-6 col-xs-12'));
-
+		  container = "social";
 	if (widget_type == "SUPPORT")
-		$('#support', this.el).append($(itemView.render().el).addClass('col-md-4 col-sm-6 col-xs-12'));
-
+		  container = "support";
 	if (widget_type == "EMAIL")
-		$('#email', this.el).append($(itemView.render().el).addClass('col-md-4 col-sm-6 col-xs-12'));
-
+		container = "email";
 	if (widget_type == "CALL")
 	{
 	  if( base_model.get('name') == "Twilio" && !base_model.get('is_added'))
 		  console.log("It is old twilio");
 	  else
-	      $('#call', this.el).append($(itemView.render().el).addClass('col-md-4 col-sm-6 col-xs-12'));
+		  container = "call";
 	}	
-
 	if (widget_type == "BILLING")
-		$('#billing', this.el).append($(itemView.render().el).addClass('col-md-4 col-sm-6 col-xs-12'));
+		container = "billing";
 	if (widget_type == "ECOMMERCE")
-				$('#ecommerce', this.el).append($(itemView.render().el).addClass('col-md-4 col-sm-6 col-xs-12'));
-
+		container = "ecommerce";
 	if (widget_type == "CUSTOM")
-		$('#custom', this.el).append($(itemView.render().el).addClass('col-md-4 col-sm-6 col-xs-12'));
+		 container = "custom";
+
+	if(container)
+		$('#' + container, this.el).append($(itemView.render().el).addClass('col-md-4 col-sm-6 col-xs-12'));
 }
 
 /**
@@ -88,6 +54,7 @@ function initializeWidgetSettingsListeners(){
 	 * anchor tag and gets the model from the collection with widget name and
 	 * add widget then navigates back to the contact-details page
 	 */
+	$('#prefs-tabs-content').off();
 	$('#prefs-tabs-content .install-custom-widget').off();
 	$('#prefs-tabs-content, #custom-widget').on('click', '.install-custom-widget', function(e)
 	{
@@ -157,28 +124,58 @@ function initializeWidgetSettingsListeners(){
 		var widget_name = $(this).attr('widget-name');
 
 		// If not confirmed to delete, return
-		if (!confirm("Are you sure to delete " + widget_name))
+		var displayName;
+		
+		if(widget_name == "Rapleaf"){
+			displayName = "Towerdata";
+		}else if(widget_name == "TwilioIO"){
+			displayName = "Twilio";
+		}else{
+			displayName = widget_name;
+		}
+
+		if (!confirm("Are you sure to delete " + displayName))
 			return;
 		
 		delete_widget(widget_name);
+
 		if(widget_name == "Linkedin")
 			$('#Linkedin-container').hide();
 		
 		if(widget_name == "Twilio")
 			$('#Twilio-container').hide();
 
-		});	
+		if(widget_name == "Bria")
+			callFromBria = false;
+			default_call_type = null;
+	});	
+	
+	// Helps to know that widget is for all users.
+	$('#prefs-tabs-content .add_to_all').off();
+	$('#prefs-tabs-content').on('click', '.add_to_all', function(e){
+		isForAll = true;
+	});
 
+	$('#prefs-tabs-content .add-widget').off();
+	$('#prefs-tabs-content').on('click', '.add-widget', function(e){
+		isForAll = false;
+	});
+	
 	$('#prefs-tabs-content #remove-widget').off();
 	$('#prefs-tabs-content').on('click', '#remove-widget', function(e)
 	{
+
 		// Fetch widget name from the widget on which delete is clicked
 		var widget_name = $(this).attr('widget-name');
-
+		
+		
 		// If not confirmed to delete, return
 		if (!confirm("Are you sure to remove " + widget_name))
 			return;
 
+		//Deletes the cutom widget form the widget entity.
+		delete_widget(widget_name);
+		
 		/*
 		 * Sends Delete request with widget name as path parameter, and on
 		 * success fetches the widgets to reflect the changes is_added, to show
@@ -194,15 +191,11 @@ function initializeWidgetSettingsListeners(){
 			App_Widgets.Catalog_Widgets_View.collection.fetch();
 
 		}, dataType : 'json' });
+
 	});
 	
 }
 
-$(function(){
-
-
-
-});
 
 function delete_widget(widget_name)
 {
@@ -216,8 +209,9 @@ function delete_widget(widget_name)
 	success : function(data)
 	{
 
-		App_Widgets.Catalog_Widgets_View.collection.where({ name : widget_name })[0].set('is_added', false);
+		App_Widgets.Catalog_Widgets_View.collection.where({ name : widget_name })[0].set({'is_added': false}, {silent : true}).unset("prefs");
 		update_collection(widget_name);
+		location.reload();
 		
 	}, dataType : 'json' });
 
@@ -234,59 +228,4 @@ function update_collection(widget_name)
 		var model = Widgets_View.collection.where({ name : widget_name });
 		Widgets_View.collection.remove(model);
 	}
-
-	
-}
-
-function build_custom_widget_form(el)
-{
-	var divClone;
-	
-	$('#prefs-tabs-content').on('click', '#add-custom-widget', function(e)
-			{
-				divClone = $("#custom-widget").clone();
-				var widget_custom_view = new Base_Model_View({ url : "/core/api/widgets/custom", template : "add-custom-widget", isNew : true,
-					postRenderCallback : function(el)
-					{
-						console.log('In post render callback');
-						console.log(el);
-                        
-						$('#custom-widget').off('change').on('change', '#script_type', function(e)
-						{
-							var script_type = $('#script_type').val();
-							if (script_type == "script")
-							{
-								$('#script_div').show();
-								$('#url_div').hide();
-								return;
-							}
-
-							if (script_type == "url")
-							{
-								$('#script_div').hide();
-								$('#url_div').show();
-							}
-						});
-
-					}, saveCallback : function(model)
-					{
-						console.log('In save callback');
-
-						console.log(model);
-
-						if (model == null)
-							alert("A widget with this name exists already. Please choose a different name");
-
-						App_Widgets.Catalog_Widgets_View.collection.add(model);
-						$("#custom-widget").replaceWith(divClone);
-					} });
-
-				$('#custom-widget', el).html(widget_custom_view.render(true).el);
-				
-				$('#prefs-tabs-content').on('click', '#cancel_custom_widget', function(e)
-				{
-					// Restore element back to original
-					$("#custom-widget").replaceWith(divClone); 
-				});
-			});
 }

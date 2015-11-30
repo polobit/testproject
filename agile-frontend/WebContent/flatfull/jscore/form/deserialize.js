@@ -83,7 +83,7 @@ function deserializeForm(data, form)
 								 * If type of the field is text of password or
 								 * hidden fills the data
 								 */
-								else if (type == "text" || type == "password" || type == "hidden" || type == "number")
+								else if (type == "text" || type == "password" || type == "hidden" || type == "number" || type == "url")
 								{
 									fel.val(el);
 								}

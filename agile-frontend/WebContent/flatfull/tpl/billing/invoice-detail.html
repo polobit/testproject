@@ -1,95 +1,154 @@
 <script id="invoice-detail-template" type="html/text">
-<div class="col-md-11">
-<input class="print_btn m-b-md btn btn-sm btn-default pull-right" type="button" type="button" value="Print" onclick="window.print()">
-<br><br>
-<div style="border:2px solid #D4D4D4">
-     <div class="row" style="margin: 1% 0% 7% 4%;">
-	<table width="100%"><colgroup><col width="60%"><col width="40%"></colgroup><tbody><tr><td> <img src="img/crm-plugins/formbuilder.png" height="35" width="135"></td><td><h1>Invoice</h1></td></tr></tbody></table>
-	<br>
-		<table width="90%">
-			<tbody>
-				<tr>
-				 <td>
+<div class="col-md-2"></div>
+<div class="col-md-8 p-t">
+   <div class="row" style="background-color: whitesmoke;" id="row-div">
+      <table width="100%" id="sort-table">
+         <colgroup>
+            <col width="60%">
+            <col width="40%">
+         </colgroup>
+        <tbody>
+            <tr style="background: whitesmoke;">
+               <td class="p-l">
+                  <div class="p-t-xs m-t-sm" style="font-size:22px">INVOICE</div>
+               </td>
+               <td class="text-right">
+  			<div class="m-r-md p-t-xs m-t-sm"><img src="{{getS3ImagePath 'img/crm-plugins/formbuilder.png'}}" height="25" width="120"></div></td>
+            </tr>
+         </tbody>
+      </table>
+      <hr>
+      <div class="col-md-12">
+<div class="row">
+<div class="col-md-6">
+<table width="100%%">
+<tbody>
+	<tr>
+		<td class="p-l-sm">
                 <address>
-					<strong>Agile CRM,</strong><br />
-                    440 N Wolfe Road,<br />
-                    Sunnyvale, CA, 94085<br />
+					<strong>Agile CRM,</strong><br>
+                    440 N Wolfe Road,<br>
+                    Sunnyvale, CA, 94085<br>
                 </address>
-				</td>
-				<td align="right">
-				
-                <table class="invoice-head" style="background-color:transparent;">
+		</td>
+	</tr>
+</tbody>
+</table>
+</div>
+				<div class="col-md-6">
+<div class="wrapper-sm bg-white" style="min-height: 94px;">
+                <table class="invoice-head" style="background-color:white;" width="100%">
                     <tbody>
-						<tr>
-                            <td class="pull-right"><strong>Invoice#</strong></td>
-                            <td>{{invoice.id}}</td>
-                        </tr>
-						<tr>
-                            <td class="pull-right"><strong>Date</strong></td>
-                            <td>{{epochToHumanDate "dd-mmm-yyyy" invoice.date}}</td>
-                        </tr>
-						<tr>
-                            <td class="pull-right"><strong>Customer#</strong></td>
-                            <td>{{invoice.customer}}</td>
-                        </tr>
-						{{#if_not_equals company.company_name "My company"}}<tr>
+			 <tr>
+                        <td class="pull-right"><strong>Invoice#</strong></td>
+                        <td>{{invoice.id}}</td>
+                     </tr>
+                     <tr>
+                        <td class="pull-right"><strong>Date</strong></td>
+                        <td>{{epochToHumanDate "mm/dd/yyyy" invoice.date}}</td>
+                     </tr>
+                     <tr>
+                        <td class="pull-right"><strong>Customer#</strong></td>
+                        <td>{{invoice.customer}}</td>
+                     </tr>
+                     {{#if_not_equals company.company_name "My company"}}
+                            <tr>
                             <td class="pull-right"><strong>Company</strong></td>
                             <td>{{company.company_name}}</td></tr>
-                        {{/if_not_equals}}
-                        
-                      </tbody>
+                     {{/if_not_equals}}</tbody>
                 </table>
-				</td></tr></tbody>
-			</table>
-       <div class="col-md-11 p-l-none">
-                <table class="table table-bordered">
-                    <thead>
-                        <tr>
-							<th>S No</th>
-                            <th>Description</th>
-                            <th>Quantity</th>
-                            <th>Amount</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {{#each invoice.lines.data}}
-                        <tr><td>{{numeric_operation @index 1 "+"}}</td>
-                           {{#if_equals type "subscription"}} 
-								<td>{{plan.name}} (${{numeric_operation plan.amount 100 "/"}}/{{plan.interval}}) <br/> for the period {{epochToHumanDate "mm/dd/yyyy" period.start}} - {{epochToHumanDate "mm/dd/yyyy" period.end}}</td>
-                            {{/if_equals}}
-							{{#if_equals type "invoiceitem"}} 
-								<td>{{description}}</td>
-                            {{/if_equals}}
-							<td>{{quantity}}</td>
-                            <td>{{#if_less_than amount 0}}-{{/if_less_than}}${{get_amount_with_possitive amount}}</td>
-                        </tr>
-                        {{/each}}
-                    </tbody>
-                </table>
-				
-					<div class="pull-right">
-					<strong>Total: </strong>${{numeric_operation invoice.total 100 "/"}}
-					</div>
-        </div>
-        <br/><br/><br/>
-		<table width="100%">
-          <tbody>
-			<tr><td>
-                <i class="icon-phone"></i> +1.800.980.0729
-				</td>
-				<td>
-                <i class="icon-envelope"></i> billing@agilecrm.com
-				</td>
-				<td>
-                <i class="icon-globe"></i> https://www.agilecrm.com
-				</td>
-			</tr>
-		</tbody>
-    </table>
-	</div>
-
-
 </div>
-<input class="print_btn m-t-md btn btn-sm btn-default pull-right"type="button" type="button" value="Print" onclick="window.print()">
 </div>
+		
+	
+</div>
+</div>
+      <div class="col-md-12 m-t-md">
+         <div class="panel">
+            <div class="panel-body">
+               <table class="table">
+                  <thead>
+                     <tr>
+                        <th>Plan</th>
+						<th>Description</th>
+                        <th>Amount</th>
+                     </tr>
+                  </thead>
+                  <tbody>
+			{{#each invoice.lines.data}}
+            <tr>
+            {{#if this.plan}} 
+			<td>
+				{{#containString "Email" plan.name}}
+					Emails
+				{{else}}
+					{{plan.name}} (${{numeric_operation plan.amount 100 "/"}}/{{plan.interval}})
+				{{/containString}}
+			</td>
+			<td>
+				{{#containString "Email" plan.name}}
+				{{numeric_operation this.quantity 1000 "*"}} Emails
+				<br>
+       			 <small>(charged @ ${{numeric_operation plan.amount 100 "/"}}/1000)</small>
+        		{{else}}
+				{{#if description}}
+               	 {{invoice_description description}}
+				{{else}}
+				 Changed on {{epochToHumanDate "dd mmm yyyy" period.start}}
+				{{/if}}
+				{{/containString}}
+			</td>
+            {{/if}}
+            <td>{{#if_less_than amount 0}}-{{/if_less_than}}${{get_amount_with_possitive amount}}</td>
+            </tr>
+			{{/each}}
+{{#each lines.data}}
+{{#if_greater amount 0}}
+<td></td>
+<td class="text-right">Total :</td>
+<td data="{{../../id}}">
+${{numeric_operation ../../amountDue 100 "/"}}
+    </td>
+{{/if_greater}}
+{{/each}}
+                  </tbody>
+               </table>
+            </div>
+            <!--end of panel body -->
+         </div>
+         <!--end of panel -->
+      </div> <!-- end of col-md-12 -->
+      <br><br><br>
+      <div class="col-md-12">
+         <div class="panel">
+            <div class="panel-body">
+               <div class="col-md-4">
+                  <i class="fa fa-phone-square"></i> +1.800.980.0729
+               </div>
+               <div class="col-md-4">
+                  <i class="fa fa-envelope"></i> billing@agilecrm.com  
+               </div>
+               <div class="col-md-4">
+                  <i class="fa fa-globe"></i> https://www.agilecrm.com
+               </div>
+            </div><!-- end of panel-body -->
+         </div><!-- end of panel -->
+      </div> <!-- end of col-md-12 -->
+
+	  	<div class="col-md-10 text-center" id="print-div">
+			<div class="m-b-sm" style="height: 35px;">
+					<a class="btn btn-default" href="#invoice-details">Back</a>
+					<input class="print_btn btn btn btn-primary" type="button" value="Print" onclick="printPage()">
+						
+			</div>
+		</div>
+
+   </div><!--end of row -->
+</div> <!-- end of col-md-11 -->
+
+</script>
+<script id="invoice-details-template" type="text/html">
+
+<div id="invoice-details-holder"></div>
+
 </script>

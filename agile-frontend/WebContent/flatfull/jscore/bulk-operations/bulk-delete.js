@@ -49,7 +49,7 @@ $(function(){
 						return;
 					
 					
-					$(this).after('<img class="bulk-delete-loading" style="padding-right:5px;margin-bottom:15px" src= "img/21-0.gif"></img>');
+					$(this).after('<img class="bulk-delete-loading" style="padding-right:5px;margin-bottom:15px" src= "'+updateImageS3Path("img/21-0.gif")+'"></img>');
 					
 					var url = $(table).attr('url');
 					if(SELECT_ALL == true)
@@ -89,7 +89,7 @@ $(function(){
 					return;
 				
 				
-				$(this).after('<img class="bulk-delete-loading" style="padding-right:5px;margin-bottom:15px" src= "img/21-0.gif"></img>');
+				$(this).after('<img class="bulk-delete-loading" style="padding-right:5px;margin-bottom:15px" src= "'+updateImageS3Path("img/21-0.gif")+'"></img>');
 				
 				var url = $(table).attr('url');
 				if(SELECT_ALL && SELECT_ALL == true)
@@ -146,6 +146,10 @@ $(function(){
 					console.log($(element).parent('div').attr('id'));
 					index_array.push(index);
 					console.log(index_array);
+					if($(".grid-view").length!=0){
+						id_array.push($(element).parent().parent().parent('div').attr('id'));
+					}
+					else
 					id_array.push($(element).parent('div').attr('id'));
 					//data_array.push($(element).parent('div').data().toJSON());
 					checked = true;
@@ -247,15 +251,20 @@ function bulk_delete_operation(url, id_array, index_array, table, is_grid_view, 
 		success: function() {
 			
 			if(url=='core/api/tasks/bulk'){
-				var due_task_count=getDueTasksCount();
-				if(due_task_count==0)
-					$(".navbar_due_tasks").css("display", "none");
-				else
-					$(".navbar_due_tasks").css("display", "block");
-				if(due_task_count !=0)
-					$('#due_tasks_count').html(due_task_count);
-				else
-					$('#due_tasks_count').html("");
+				getDueTasksCount(function(count){
+					var due_task_count= count;
+
+					if(due_task_count==0)
+						$(".navbar_due_tasks").css("display", "none");
+					else
+						$(".navbar_due_tasks").css("display", "block");
+					if(due_task_count !=0)
+						$('#due_tasks_count').html(due_task_count);
+					else
+						$('#due_tasks_count').html("");
+				
+				});
+				
 			}
 			
 			$(".bulk-delete-loading").remove();	

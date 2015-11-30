@@ -45,44 +45,49 @@ function setupTinyMCEEditor(selector, noAgileContactFields, plugins, callback)
 	{
 		head.js('/js/designer/tinymce/tinymce.min.js', function()
 		{
-			
-			// If loading src script fails
-			if(typeof (tinymce) === "undefined")
-			{
-				console.log("Reloading script...");
-				
-				// Show confirmation for reload
-				if(confirm("Unable to load editor. Click OK to Reload."))
-				  location.reload();
-				
-				return;
-			}
-			
-			// Show textarea and remove loading img
-			$(selector).css('display', '');
-			$('#loading-editor').html("");
-			
-			tinymce.init({ mode : "exact", selector : selector, plugins : plugins,
-			    menubar : false,
-				toolbar1 : "bold italic underline | alignleft aligncenter alignright alignjustify | link image | formatselect | fontselect | fontsizeselect",
-				toolbar2 : toolbar_2, valid_elements : "*[*]",
-				toolbar_items_size: 'small',
-				browser_spellcheck : true,
-				relative_urls : false,
-				convert_urls : false,
-		        gecko_spellcheck: true,
-		        forced_root_block : false,
-				extended_valid_elements : "*[*]", setup : function(editor)
+			get_custom_fields(function(data){
+
+				// If loading src script fails
+				if(typeof (tinymce) === "undefined")
 				{
-					editor.addButton('merge_fields', { type : 'menubutton', text : 'Agile Contact Fields', icon : false, menu : set_up_merge_fields(editor) });
+					console.log("Reloading script...");
+					
+					// Show confirmation for reload
+					if(confirm("Unable to load editor. Click OK to Reload."))
+					  location.reload();
+					
+					return;
 				}
-				});
+				
+				// Show textarea and remove loading img
+				$(selector).css('display', '');
+				$('#loading-editor').html("");
+				
+				tinymce.init({ mode : "exact", selector : selector, plugins : plugins,
+				    menubar : false,
+					toolbar1 : "bold italic underline | alignleft aligncenter alignright alignjustify | link image | formatselect | fontselect | fontsizeselect",
+					toolbar2 : toolbar_2, valid_elements : "*[*]",
+					toolbar_items_size: 'small',
+					browser_spellcheck : true,
+					relative_urls : false,
+					convert_urls : false,
+			        gecko_spellcheck: true,
+			        forced_root_block : false,
+					extended_valid_elements : "*[*]", setup : function(editor)
+					{
+						editor.addButton('merge_fields', { type : 'menubutton', text : 'Agile Contact Fields', icon : false, menu : set_up_merge_fields(editor) });
+					}
+					});
+				
+				// callback after tinymce initialised
+		    	setTimeout(function(){
+		    		if(callback != undefined && typeof (callback) === "function")
+		    		callback();
+		    		},500);
+
+			});
+
 			
-			// callback after tinymce initialised
-	    	setTimeout(function(){
-	    		if(callback != undefined && typeof (callback) === "function")
-	    		callback();
-	    		},500);
 		});
     	
 		return;
@@ -330,19 +335,30 @@ function get_merge_fields()
 /**
  * Returns custom fields data in JSON
  */
-function get_custom_fields()
+function get_custom_fields(callback)
 {
 	// If already fetched, return
-	if(CONTACT_CUSTOM_FIELDS != undefined)
+	if(CONTACT_CUSTOM_FIELDS != undefined){
+		if(callback)
+			  return callback(CONTACT_CUSTOM_FIELDS)
+
 		return CONTACT_CUSTOM_FIELDS;
+	}
+		
 	
 	// Sends GET request for customfields.
-	var msg = $.ajax({ type : "GET", url : '/core/api/custom-fields/scope?scope=CONTACT', async : false, dataType : 'json' }).responseText;
+	accessUrlUsingAjax('/core/api/custom-fields/scope?scope=CONTACT', function(data){
 
-	// Parse stringify json
-	CONTACT_CUSTOM_FIELDS = JSON.parse(msg);
-	
-	return CONTACT_CUSTOM_FIELDS;
+		// Parse stringify json
+		CONTACT_CUSTOM_FIELDS = data;
+		
+		if(callback)
+			  return callback(CONTACT_CUSTOM_FIELDS)
+
+		return CONTACT_CUSTOM_FIELDS;
+
+	});
+
 }
 
 /**

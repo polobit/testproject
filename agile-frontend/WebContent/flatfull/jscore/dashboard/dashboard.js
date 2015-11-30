@@ -154,8 +154,12 @@ function show_dashboard_subscription_details(el)
 			plandata.plan = "free";
 
 			console.log(plandata);
+			getTemplate('user-billing', plandata, undefined, function(template_ui){
+				if(!template_ui)
+					  return;
+				$("#subscription-stats").html($(template_ui));	
+			}, "#subscription-stats");
 
-			$("#subscription-stats").html(getTemplate('user-billing', plandata));
 		});
 	} })
 }

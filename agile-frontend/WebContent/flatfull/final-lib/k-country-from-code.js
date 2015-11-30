@@ -1,6 +1,3 @@
-/**
- * This script looks up the country origin of hostnames which contain two letter country codes
- */
 function getCode (code) {
 	switch (code.toUpperCase()) {
 	   case "AC": code = "Ascension Island"; break;

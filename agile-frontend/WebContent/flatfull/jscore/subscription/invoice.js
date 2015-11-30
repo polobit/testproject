@@ -22,7 +22,7 @@ function initializeInvoicesListeners()
 		// App_Subscription.invoiceDetails(data);
 	});
 	
-	$('#invoice-details-holder').on('click', '#charge-model-list > tr', function(e)
+	/*$('#invoice-details-holder').on('click', '#charge-model-list > tr', function(e)
 			{
 				e.preventDefault();
 				var invoice_id = $(this).find('.data').attr('data');
@@ -31,5 +31,5 @@ function initializeInvoicesListeners()
 					window.document.location = "#getInvoiceDetails/"+invoice_id;
 				}	
 								
-	});
+	});*/
 }

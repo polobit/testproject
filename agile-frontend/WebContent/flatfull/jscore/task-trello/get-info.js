@@ -54,8 +54,10 @@ function getNewDueDate(newTaskListId)
 		d.setDate(d.getDate() - 1);
 
 	// Today
-	if (newTaskListId == "TODAY")
-		console.log(getGMTTimeFromDate(d) / 1000);
+	if (newTaskListId == "TODAY"){
+		(getGMTTimeFromDate(d) / 1000);
+	}
+		
 
 	// Tomorrow
 	if (newTaskListId == "TOMORROW")
@@ -64,8 +66,6 @@ function getNewDueDate(newTaskListId)
 	// Later Day after tomorrow
 	if (newTaskListId == "LATER")
 		d.setDate(d.getDate() + 2);
-
-	console.log((getGMTTimeFromDate(d) / 1000));
 
 	return (getGMTTimeFromDate(d) / 1000);
 }
@@ -86,7 +86,7 @@ function getNewDueDateBasedOnTime(newTaskListId,duedate)
 
 	// Today
 	if (newTaskListId == "TODAY")
-		console.log(getGMTTimeFromDate(d) / 1000);
+		(getGMTTimeFromDate(d) / 1000);
 
 	// Tomorrow
 	if (newTaskListId == "TOMORROW")
@@ -95,8 +95,6 @@ function getNewDueDateBasedOnTime(newTaskListId,duedate)
 	// Later Day after tomorrow
 	if (newTaskListId == "LATER")
 		d.setDate(d.getDate() + 2);
-
-	console.log((getGMTTimeFromDate(d) / 1000));
 
 	return (getGMTTimeFromDate(d) / 1000)+secs;
 }

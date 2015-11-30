@@ -7,14 +7,21 @@ function onloadProfileImg()
 	// Save button for twitter on addStreamModal is shown.
 	$('#add_twitter_stream').show();
 
-	// Add twitter stream types template.
-	$("#streamDetails").html(getTemplate('twitter-stream-type'), {});
+	getTemplate('twitter-stream-type', {}, undefined, function(template_ui){
+		if(!template_ui)
+			  return;
 
-	// Add profile image to account description.
-	$('#twitter_profile_img').attr("src", document.getElementById("twitter_profile_img_url").src);
+		// Add twitter stream types template.
+		$("#streamDetails").html($(template_ui));
 
-	// Add screen name to label.
-	document.getElementById('account_description_label').innerHTML = '<b>' + $('#twitter_account').val() + '</b>';
+		// Add profile image to account description.
+		$('#twitter_profile_img').attr("src", document.getElementById("twitter_profile_img_url").src);
+
+		// Add screen name to label.
+		document.getElementById('account_description_label').innerHTML = '<b>' + $('#twitter_account').val() + '</b>';
+
+	}, "#streamDetails");
+	
 }
 
 // Add website and select network on continue form in add contact form flow for update page.

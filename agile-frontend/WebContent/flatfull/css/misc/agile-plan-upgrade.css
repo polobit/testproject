@@ -32,12 +32,104 @@
 
 .plan-collection-in {
 	/*background: #f1f0ee; 03/26/2015*/
-	padding: 5px 20px;
-	font-family: 'Lato', sans-serif;
-	font-size: 13px;
-	line-height: 21px;
-	position: relative;
-	cursor: pointer;
+  background: #f1f0ee;
+  padding: 5px 20px;
+  font-family: 'Lato', sans-serif;
+  font-size: 13px;
+  line-height: 21px;
+  position: relative;
+  cursor: pointer;
+  margin: 10px 10px;
+}
+
+/*type2  plan and upgrade*/
+.plan-collection-bot {
+/*	background: url(../../img/triangle-lightgrey-bot.png) center bottom
+		repeat-x;*/
+	padding: 0 0 6px 0;
+	/*float: left;*/
+}
+
+.plan-collection-in.selected-plan {
+ border: 1px solid #5fa2dd;
+ box-shadow: 0px 0px 5px #8bc0e0;
+ opacity: 1;
+ margin: 0px 0px;
+ padding-bottom: 20px;
+ transform: scale(1);
+ / you need a scale here to allow it to transition in both directions /
+ transition: 0.15s padding ease-out, 0.15s margin ease-out;
+}
+
+#email-div .help-inline {
+	font-size: 11px;
+	text-align: center;
+}
+
+.selected-plan
+{
+border: 1px solid #5fa2dd;
+box-shadow: 0px 0px 5px #8bc0e0;
+opacity: 1;
+margin: 0px 0px;
+padding-bottom: 20px;
+transform: scale(1);
+transition: 0.15s padding ease-out, 0.15s margin ease-out;
+}
+
+.selected-plan .btn {
+	background:#50c7a7 !important;
+	color: white !important;
+}
+
+.plan-collection-in .plan-details {
+ background: #fff;
+ padding: 10px 8px 12px 8px;
+ margin-top: 15px;
+ border-radius: 5px;
+}
+
+.plan-collection-in.selected-plan .btn-plan {
+ background-color: #48c5a3;
+ border-color: #50c7a7;
+ color: #fff;
+}
+
+.plan-collection-in.selected-plan .btn-plan:hover,.plan-collection-in.selected-plan .btn-plan:active
+ {
+ background-color: #39b392;
+ border-color: #3bb897;
+ color: #fff;
+}
+
+.text-20
+{
+	font-size: 20px
+}
+
+.price-panel{
+background: #fff;
+padding: 8px 8px 8px 8px;
+margin-top: 15px;
+border-radius: 5px;
+}
+
+.email-selected-plan {
+  border: 1px solid #5fa2dd;
+  box-shadow: 0px 0px 5px #8bc0e0;
+  opacity: 1;
+  margin: 0px 0px;
+  padding-bottom: 20px;
+  transform: scale(1);
+  transition: 0.15s padding ease-out, 0.15s margin ease-out;
+  background: #f1f0ee;
+  padding: 5px 20px;
+  font-family: 'Lato', sans-serif;
+  font-size: 13px;
+  line-height: 21px;
+  position: relative;
+  cursor: pointer;
+  margin: 10px 10px;
 }
 
 span.plan-off-ribbon {
@@ -131,4 +223,8 @@ div.plan-collection-in.customplan span.plan-collection-icon {
 div.plan-collection-in.customplan:hover span.plan-collection-icon,.enterprise_selected
 	{
 	background: url(../../img/template.png) 0px 0px no-repeat !important;
+}
+
+#sort-table .headerSortUp::after{
+top:12px!important;
 }

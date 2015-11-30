@@ -21,6 +21,8 @@ public class EmailGateway implements Serializable
      * API Key
      */
     public String api_key;
+    
+    public String regions;
 
     /**
      * Email API types
@@ -28,7 +30,7 @@ public class EmailGateway implements Serializable
      */
     public enum EMAIL_API
     {
-	SEND_GRID, MANDRILL
+	SEND_GRID, MANDRILL, SES
     };
 
     public EMAIL_API email_api = EMAIL_API.MANDRILL;

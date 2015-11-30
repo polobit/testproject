@@ -67,6 +67,7 @@ $(function()
 	}
 
 	// Deletes LinkedIn profile on click of delete button in template
+    $("body").off("click", '#Linkedin_plugin_delete');
 	$("body").on("click", '#Linkedin_plugin_delete', function(event)
 	{
 		event.preventDefault();
@@ -80,6 +81,7 @@ $(function()
 	});
 
 	// Sends a message to LinkedIn when clicked on send message button
+    $("body").off("click", '#linkedin_message');
 	$("body").on("click", '#linkedin_message', function(e)
 	{
 		e.preventDefault();
@@ -87,6 +89,7 @@ $(function()
 	});
 
 	// Sends an connect request to LinkedIn when clicked on connect button
+    $("body").off("click", '#linkedin_connect');
 	$("body").on("click", '#linkedin_connect', function(e)
 	{
 		e.preventDefault();
@@ -94,6 +97,7 @@ $(function()
 	});
 
 	// ReShares a post in LinkedIn on click of share link
+    $("body").off("click", '.linkedin_share');
 	$("body").on("click", '.linkedin_share', function(e)
 	{
 		e.preventDefault();
@@ -102,6 +106,7 @@ $(function()
 	});
 
 	// Retrieves work positions of a person
+    $("body").off("click", '#linkedin_experience');
 	$("body").on("click", '#linkedin_experience', function(e)
 	{
 		e.preventDefault();
@@ -113,6 +118,7 @@ $(function()
 	});
 
 	// Retrieves shared connections between contact and agile user LinkedIn
+    $("body").off("click", '#linkedin_shared_connections');
 	$("body").on("click", '#linkedin_shared_connections', function(e)
 	{
 		e.preventDefault();
@@ -124,6 +130,7 @@ $(function()
 	});
 
 	// on click of updates tab, retrieves network updates
+    $("body").off("click", '#linkedin_update_tab');
 	$("body").on("click", '#linkedin_update_tab', function(e)
 	{
 		e.preventDefault();
@@ -135,6 +142,7 @@ $(function()
 	});
 
 	// On click of name link in results to modify, shows modify template
+    $("body").off("click", '.linkedin_modify_search');
 	$("body").on("click", '.linkedin_modify_search', function(e)
 	{
 		e.preventDefault();
@@ -145,6 +153,7 @@ $(function()
 	});
 
 	// On click of search button in modify, retrieves matches for search text
+    $("body").off("click", '#linkedin_search_btn');
 	$("body").on("click", '#linkedin_search_btn', function(e)
 	{
 		e.preventDefault();
@@ -153,6 +162,7 @@ $(function()
 	});
 
 	// On click of close button in LinkedIn, show results for past search text
+    $("body").off("click", '#linkedin_search_close');
 	$("body").on("click", '#linkedin_search_close', function(e)
 	{
 		e.preventDefault();
@@ -164,18 +174,21 @@ $(function()
 	});
 
 	// On mouse enter of work position, show link to read more
+    $("body").off("mouseenter", '.experience_li');
 	$("body").on("mouseenter", '.experience_li', function(e)
 	{
 		$(this).find('.show-summary').show();
 	});
 
 	// On mouse leave of work position, hide link to read more
+    $("body").off("mouseleave", '.experience_li');
 	$("body").on("mouseleave", '.experience_li', function(e)
 	{
 		$(this).find('.show-summary').hide();
 	});
 
 	// On click of show more in work position, show whole summary
+    $("body").off("click", '.show-summary');
 	$("body").on("click", '.show-summary', function(e)
 	{
 		e.preventDefault();
@@ -268,6 +281,7 @@ function showLinkedinMatchingProfiles(data)
 	 * Displays LinkedIn profile details on mouse hover of profile, and saves
 	 * profile on click
 	 */
+    $("body").off("mouseover", '.linkedinImage');
 	$("body").on("mouseover", '.linkedinImage', function(e)
 	{
 		// Unique LinkedIn Id from widget
@@ -285,6 +299,7 @@ function showLinkedinMatchingProfiles(data)
 		$(this).popover('show');
 
 		// on click of any profile, save it to the contact
+        $('#' + Linkedin_id).off('click');
 		$('#' + Linkedin_id).on('click', function(e)
 		{
 			e.preventDefault();
@@ -367,7 +382,7 @@ function getLinkedinMatchingProfiles()
 		 * Sends request to url "core/api/widgets/match/" and Calls WidgetsAPI
 		 * with contact id and plugin id as path parameters
 		 */
-		queueGetRequest("widget_queue", "/core/api/widgets/social/match/" + LinkedIn_Plugin_Id + "/" + contact_id, 'json', function(data)
+		queueGetRequest("widget_queue_", "/core/api/widgets/social/match/" + LinkedIn_Plugin_Id + "/" + contact_id, 'json', function(data)
 		{
 			if(islocalStorageHasSpace()){
 				// Store social results in cookie of particular contact
@@ -597,6 +612,7 @@ function registerEventsInLinkedIn(Linkedin_id, linkedin_connected, Stream_Data)
 	 * On click of less button, hides update stream and shows current update by
 	 * toggling
 	 */
+    $("body").off("click", '#linkedin_less');
 	$("body").on("click", '#linkedin_less', function(e)
 	{
 		e.preventDefault();
@@ -629,6 +645,7 @@ function registerEventsInLinkedIn(Linkedin_id, linkedin_connected, Stream_Data)
 	 * On click of refresh icon in the LinkedIn panel, all the new updates are
 	 * shown
 	 */
+    $("body").off("click", '#linkedin_refresh_stream');
 	$("body").on("click", '#linkedin_refresh_stream', function(e)
 	{
 		e.preventDefault();
@@ -851,7 +868,8 @@ function sendLinkedInAddRequest(Linkedin_id)
 
 	// Append the form into the content
 	$('#content').append(message_form_modal);
-
+    
+    $('#linkedin_messageModal').off('shown');
 	$('#linkedin_messageModal').on('shown', function()
 	{
 
@@ -1155,6 +1173,7 @@ function getLinkedInSharedConnections(Linkedin_id)
 		 * Displays LinkedIn profile details on mouse hover and saves profile on
 		 * click
 		 */
+        $("body").off("mouseover", '.linkedinSharedImage');
 		$("body").on("mouseover", '.linkedinSharedImage', function(e)
 		{
 

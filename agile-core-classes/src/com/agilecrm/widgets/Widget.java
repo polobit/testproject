@@ -1,5 +1,7 @@
 package com.agilecrm.widgets;
 
+import java.util.List;
+
 import javax.persistence.Id;
 import javax.persistence.PostLoad;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -10,7 +12,11 @@ import com.agilecrm.core.api.widgets.WidgetsAPI;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.scribe.ScribeServlet;
 import com.agilecrm.user.AgileUser;
+import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.widgets.util.DefaultWidgets;
+import com.agilecrm.widgets.util.WidgetUtil;
+import com.google.appengine.api.NamespaceManager;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.annotation.Cached;
 import com.googlecode.objectify.annotation.Indexed;
@@ -67,6 +73,12 @@ public class Widget
     /** Logo URL of the widget to show it in add widget page */
     public String logo_url = null;
 
+    @NotSaved
+    public boolean isForAll = false; 
+    
+    @NotSaved
+    public boolean custom_isForAll = false;
+    
     // Fav Ico
     public String fav_ico_url = null;
 
@@ -143,7 +155,7 @@ public class Widget
      */
     @Parent
     @Indexed
-    private Key<AgileUser> user;
+	protected Key<AgileUser> user;
 
     /**
      * Stores {@link Boolean} info whether the widget is added
@@ -230,11 +242,36 @@ public class Widget
      * differentiate widgets based on {@link AgileUser}
      */
     public void save()
-    {
-	if (user == null)
-	    user = new Key<AgileUser>(AgileUser.class, AgileUser.getCurrentAgileUser().id);
-
-	dao.put(this);
+    {    	
+		//System.out.println("Is For All : "+ this.isForAll);
+		if(this.isForAll){
+			String domain = NamespaceManager.get();
+			System.out.println("*** domain "+domain);
+			if(domain != null){
+				List<DomainUser> users = DomainUserUtil.getUsers(domain);			
+				for (DomainUser domainUser : users) {
+					System.out.println("*** In For Loop "+domainUser.id);			
+					//System.out.println("widiget data "+ this.name+ " "+  AgileUser.getCurrentAgileUserFromDomainUser(domainUser.id).id );
+					AgileUser agileUsr =  AgileUser.getCurrentAgileUserFromDomainUser(domainUser.id);
+					if(agileUsr != null){
+						System.out.println("agile usr "+agileUsr.id);
+						Widget widget = WidgetUtil.getWidget(this.name,agileUsr.id);
+						if(widget == null){
+							this.id = null;
+							System.out.println("widget is null *****");
+							//System.out.println("user id : "+AgileUser.getCurrentAgileUserFromDomainUser(domainUser.id).id);
+							user = new Key<AgileUser>(AgileUser.class,agileUsr.id);				
+							dao.put(this);
+						}
+					}
+				}	
+			}
+		}else{
+			if (user == null){
+	    		user = new Key<AgileUser>(AgileUser.class, AgileUser.getCurrentAgileUser().id);    		
+	    	}
+			dao.put(this);
+		}    
     }
 
     public void setOwner(Key<AgileUser> user)

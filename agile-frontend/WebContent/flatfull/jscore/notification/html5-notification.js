@@ -26,37 +26,35 @@ function show_desktop_notification(imageURL, title, message, link, tag,timeout) 
 	if(!timeout){
 		timeout=30000;
 	}
-	head.js(LIB_PATH +'lib/desktop-notify-min.js',function(){
 		
-		var notification = notify.createNotification(title, {
-			   body : message,
-			   icon : imageURL,
-			   tag : tag,
-			   onClickCallback : function() {
-					
-				   window.focus();
-					
-				   // Open respective block
-					Backbone.history.navigate(link, {
-						trigger : true
-					});
+	var notification = notify.createNotification(title, {
+		   body : message,
+		   icon : imageURL,
+		   tag : tag,
+		   onClickCallback : function() {
+				
+			   window.focus();
+				
+			   // Open respective block
+				Backbone.history.navigate(link, {
+					trigger : true
+				});
 
-					notification.close();
-				 }
-			  });
+				notification.close();
+			 }
+		  });
+	
+	setTimeout(function() {
+		notification.close();
+	}, timeout);
+	
+	// Show when tab is inactive
+	if (!window.closed)
+	{	
+		if (notification_prefs.notification_sound != 'no_sound')
+			play_sound(notification_prefs.notification_sound);
 		
-		setTimeout(function() {
-			notification.close();
-		}, timeout);
-		
-		// Show when tab is inactive
-		if (!window.closed)
-		{	
-			if (notification_prefs.notification_sound != 'no_sound')
-				play_sound(notification_prefs.notification_sound);
-			
-		}
-	});
+	}
 }
 
 /**
@@ -67,30 +65,25 @@ function show_desktop_notification(imageURL, title, message, link, tag,timeout) 
  */
 function request_notification_permission() {
 	
-	head.js(LIB_PATH +'lib/desktop-notify-min.js',function(){
 		
-		if (notify.permissionLevel() == notify.PERMISSION_DEFAULT) {
-
-            $('body').on('click', '#set-desktop-notification', function(){
-				notify.requestPermission(function() {
-					if(notify.permissionLevel() == notify.PERMISSION_GRANTED)
-					{	
-						$('#set-desktop-notification').css('display', 'none');
-					    $('#desktop-notification-content')
-							.html(
-									"<i>Desktop Notifications are now enabled. <a href=\"#\" id=\"disable-notification\" class=\"text-info\" style=\"text-decoration:underline;\">Disable</a></i>");
-					}
-					else
-					{
-						$('#set-desktop-notification').css('display', 'none');
-			            $('#desktop-notification-content').html(
-							"<i>Desktop Notifications are now disabled. <a href=\"#\" id=\"enable-notification\" class=\"text-info\" style=\"text-decoration:underline;\">Enable</a></i>")
-	                 }	
-				});
-			});
-
-		}
-		
-	});
-
+	if (notify.permissionLevel() != notify.PERMISSION_DEFAULT)
+		  return;
+	 
+    $('body').on('click', '#set-desktop-notification', function(){
+		notify.requestPermission(function() {
+			if(notify.permissionLevel() == notify.PERMISSION_GRANTED)
+			{	
+				$('#set-desktop-notification').css('display', 'none');
+			    $('#desktop-notification-content')
+					.html(
+							"<i>Desktop Notifications are now enabled. <a href=\"#\" id=\"disable-notification\" class=\"text-info\" style=\"text-decoration:underline;\">Disable</a></i>");
+			}
+			else
+			{
+				$('#set-desktop-notification').css('display', 'none');
+	            $('#desktop-notification-content').html(
+					"<i>Desktop Notifications are now disabled. <a href=\"#\" id=\"enable-notification\" class=\"text-info\" style=\"text-decoration:underline;\">Enable</a></i>")
+             }	
+		});
+	});	
 }

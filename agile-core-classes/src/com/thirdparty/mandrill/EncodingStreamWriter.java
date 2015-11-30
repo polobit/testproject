@@ -103,8 +103,12 @@ public class EncodingStreamWriter
 
     private void sendFinalBytes() throws Exception
     {
+    if(previousIndex > 0 && previousIndex <= size)
+    {
 	byte[] temp = Arrays.copyOfRange(encodableBuffer,0, previousIndex-1);
 	encodableBuffer = temp;
+    }	
 	write2Stream();
     }
+    
 }

@@ -96,53 +96,72 @@ $(function(){
 			
 			$("#warning-deletion-feedback").remove();
 			// Shows account stats warning template with stats(data used)
-			var el = getTemplate('warning-feedback', {});
+			getTemplate('warning-feedback', {}, undefined, function(template_ui){
+		 		if(!template_ui)
+		    		return;
+		    	var el = $(template_ui);
+		    	// Appends to content, warning is modal can call show if
+				// appended in content
+				$('#content').append(el);
 
-			// Appends to content, warning is modal can call show if
-			// appended in content
-			$('#content').append(el);
+				// Shows warning modal
+				$("#warning-deletion-feedback").modal('show');
 
-			// Shows warning modal
-			$("#warning-deletion-feedback").modal('show');
-
-			// Undefines delete reason, if use chose not to delete account in delete process
-			$("#warning-deletion-feedback").on('hidden.bs.modal', function(){
-				ACCOUNT_DELETE_REASON_JSON = undefined;
-			});
-			
-			$('#warning-deletion-feedback').on('click', '#warning-feedback-save', function(e) {
-				e.preventDefault();
+				// Undefines delete reason, if use chose not to delete account in delete process
+				$("#warning-deletion-feedback").on('hidden.bs.modal', function(){
+					ACCOUNT_DELETE_REASON_JSON = undefined;
+				});
 				
-				var form = $("#cancelation-feedback-form");
-				
-				if(!isValidForm(form))
-				{
-					return;
-				}
-				
-				var input =  $("input[name=cancellation_reason]:checked");
-			
-				ACCOUNT_DELETE_REASON_JSON = {};
-				ACCOUNT_DELETE_REASON_JSON["reason"] = $(input).val();
-				ACCOUNT_DELETE_REASON_JSON["reason_info"] = $("#account_delete_reason").val();
-				$(".modal-body").html(getRandomLoadingImg());
-				var delete_step1_el = "";
-				if(ACCOUNT_STATS)
-					delete_step1_el = $(getTemplate('warning', ACCOUNT_STATS));
-				else
+				$('#warning-deletion-feedback').on('click', '#warning-feedback-save', function(e) {
+					e.preventDefault();
+					
+					var form = $("#cancelation-feedback-form");
+					
+					if(!isValidForm(form))
 					{
-						set_up_account_stats(el, function(data){
-							delete_step1_el = $(getTemplate('warning', data));
-							$(".modal-body").css("padding", 0 ).html($(".modal-body", $(delete_step1_el)));
-							$(".modal-footer").html($(".modal-footer", $(delete_step1_el)).html());
-						})
 						return;
 					}
-					 
-				$(".modal-body").css("padding", 0 ).html($(".modal-body", $(delete_step1_el)));
-				$(".modal-footer").html($(".modal-footer", $(delete_step1_el)).html());
+					
+					var input =  $("input[name=cancellation_reason]:checked");
 				
-			});
+					ACCOUNT_DELETE_REASON_JSON = {};
+					ACCOUNT_DELETE_REASON_JSON["reason"] = $(input).val();
+					ACCOUNT_DELETE_REASON_JSON["reason_info"] = $("#account_delete_reason").val();
+					$(".modal-body").html(getRandomLoadingImg());
+					var delete_step1_el = "";
+					if(ACCOUNT_STATS){
+						getTemplate('warning', ACCOUNT_STATS, undefined, function(template_ui){
+					 		if(!template_ui)
+					    		return;
+					    	delete_step1_el = $(template_ui);
+							
+						}, null);
+
+					}
+					else
+						{
+							set_up_account_stats(el, function(data){
+								getTemplate('warning', data, undefined, function(template_ui){
+							 		if(!template_ui)
+							    		return;
+							    	delete_step1_el = $(template_ui);
+									$(".modal-body").css("padding", 0 ).html($(".modal-body", $(delete_step1_el)));
+									$(".modal-footer").html($(".modal-footer", $(delete_step1_el)).html());
+								}, null);
+									
+							})
+							return;
+						}
+						 
+					$(".modal-body").css("padding", 0 ).html($(".modal-body", $(delete_step1_el)));
+					$(".modal-footer").html($(".modal-footer", $(delete_step1_el)).html());
+					
+				});
+				
+			}, null);
+
+
+				
 			
 	});
 	

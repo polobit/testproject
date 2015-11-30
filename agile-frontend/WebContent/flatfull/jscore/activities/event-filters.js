@@ -181,9 +181,27 @@ function checkBothCalWhenNoCalSelected()
  */
 function putGoogleCalendarLink()
 {
+	$.ajax({ url : 'core/api/calendar-prefs/get', success : function(response)
+	{
+		if (response)
+		{
+			$("#google_cal").removeClass('hide');
+			$("#google_cal_link").addClass('hide');
+		}
+		else
+		{
+			$("#google_cal").addClass('hide');
+			$("#google_cal_link").removeClass('hide');
+		}
+
+	} });
+}
+
+function putOfficeCalendarLink()
+{
 	var calEnable = false;
 
-	$.ajax({ url : 'core/api/calendar-prefs/get', async : false, success : function(response)
+	$.ajax({ url : 'core/api/officecalendar', async : false, success : function(response)
 	{
 		if (response)
 			calEnable = true;
@@ -192,17 +210,16 @@ function putGoogleCalendarLink()
 
 	if (calEnable)
 	{
-		$("#google_cal").removeClass('hide');
-		$("#google_cal_link").addClass('hide');
+		$("#office_cal").removeClass('hide');
+		$("#office_cal_link").addClass('hide');
 	}
 
 	else
 	{
-		$("#google_cal").addClass('hide');
-		$("#google_cal_link").removeClass('hide');
+		$("#office_cal").addClass('hide');
+		$("#office_cal_link").removeClass('hide');
 	}
 }
-
 
 /**
  * fetches and renders events in full calendar
@@ -223,6 +240,10 @@ function renderFullCalenarEvents(ownerid)
 			data = renderEventBasedOnOwner(data);
 			$('#calendar_event').fullCalendar('renderEvent', data);
 		});
+
+		// Add event
+		//$('#calendar_event').fullCalendar('addEventSource', doc);
+
 		showLoadingOnCalendar(false);
 
 	});
@@ -251,6 +272,7 @@ function removeFullCalendarEvents(ownerid)
 	});
 
 }
+
 
 
 /**

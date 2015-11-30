@@ -4,7 +4,7 @@
 package com.agilecrm.contact.sync.service.impl;
 
 import com.agilecrm.contact.sync.service.OneWaySyncService;
-import com.agilecrm.contact.sync.wrapper.WrapperService;
+import com.agilecrm.contact.sync.wrapper.IContactWrapper;
 
 /**
  * @author jitendra
@@ -26,7 +26,7 @@ public class SalesforceSync extends OneWaySyncService
      * @see com.agilecrm.contact.sync.service.SyncService#getWrapperService()
      */
     @Override
-    public Class<? extends WrapperService> getWrapperService()
+    public Class<? extends IContactWrapper> getWrapperService()
     {
 	// TODO Auto-generated method stub
 	return null;

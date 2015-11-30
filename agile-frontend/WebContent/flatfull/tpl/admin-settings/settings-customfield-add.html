@@ -17,7 +17,7 @@
                         <input type="text" id="label" placeholder="Label" class="required form-control noSpecialChars" value="{{../field_label}}" disabled / >
 						<input name="field_label" type="text" id="label" placeholder="Label" class="required form-control noSpecialChars hide" value="{{../field_label}}" / >
 						{{else}}
-							<input name="field_label" type="text" id="label" placeholder="Label" class="required form-control noSpecialChars" value="{{field_label}}"/>
+							<input name="field_label" type="text" id="label" placeholder="Label" class="required form-control noSpecialChars field_length" max_len="500" value="{{field_label}}"/>
 					{{/if}}
                     </div>
                 </div>
@@ -31,7 +31,7 @@
 							<option value="CHECKBOX">Checkbox</option>
 							<option value="LIST">List</option>
 							<option value="NUMBER">Number</option>
-							<!-- <option value="FORMULA">Formula</option> -->
+							<option value="FORMULA">Formula</option>
 						</select>
                     </div>
                 </div>
@@ -59,32 +59,40 @@
 				<div class="control-group form-group" id="custom-field-formula-data" style="display:none">
                     <label class="control-label col-sm-3">Formula <span class="field_req">*</span></label>
                     <div class="controls col-sm-9"> 
-                        <textarea name="field_data" id="formulaData" placeholder="Ex: \{{number1}}*(\{{number2}}+\{{number3}})" class="formulaData required" style="max-width:420px;" rows="3" />
+                        <textarea name="field_data" id="formulaData" placeholder="Ex: \{{number1}}*(\{{number2}}+\{{number3}})" class="formulaData required" style="width:100%;" rows="3" />
                     </div>
-					<div class="tip">
+					<div class="tip" style="padding-left:27.5%;">
 						<p class="text-muted">
 							<i class="icon-lightbulb text-md"></i> 
-							An arithmetic formula based on number custom fields. <a href="http://mustache.github.io/" target="_blank">Mustache conditions</a> can be used here.
+							An arithmetic formula in following format \{{number1}}*\{{number2}} - works with numerical custom fields only. <a class="text-info" href="http://mustache.github.io/" target="_blank">Mustache conditions</a> can be used here.
 						</p>
 					</div>
                 </div>
                 
-                    <div class="control-group form-group">
-                        <label class="control-label col-sm-3">Required </label>
-                        <div class="controls checkbox col-sm-3">
+
+                    <div class="control-group form-group required-and-searchable">
+                    <div class="row">
+                    <div class="col-sm-offset-3 col-sm-9 col-xs-12">
+                    <div class="col-sm-6 col-xs-6">
+                        <label class="control-label pull-left m-r-sm">Required </label>
+                        <div class="controls checkbox checkbox-mobile-view">
+
 <label class="i-checks i-checks-sm">
                             <input name="is_required" type="checkbox" id="required"  /><i></i>
 </label>
-                        </div>
+        </div>
+        </div>
                     
-                    
-                        <label class="control-label col-sm-3">Searchable </label>
-                        <div class="controls checkbox col-sm-3">
+                    <div class="col-sm-6 col-xs-6">
+                        <label class="control-label pull-left m-r-sm">Searchable </label>
+                        <div class="controls checkbox checkbox-mobile-view">
                             <label class="i-checks i-checks-sm"> 
                             <input name="searchable" type="checkbox" id="searchable" /><i></i>
                             </label>
                         </div>
-                    
+                        </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="control-group form-group">
                     <label class="control-label col-sm-3 hide">Validation Rule <span class="field_req">*</span></label>
@@ -121,7 +129,7 @@
                 <div class="control-group form-group">
                     <label class="control-label col-sm-3">Label <span class="field_req">*</span></label> 
                     <div class="controls">
-                        <input name="field_label" type="text" id="label" placeholder="Label" class="required noSpecialChars form-control" />
+                        <input name="field_label" type="text" id="label" placeholder="Label" class="required noSpecialChars form-control field_length" max_len="500" />
                     </div>
                 </div>
                 <input class="hide form-control" name="field_type" type="text" placeholder="Label" value="TEXT" />
@@ -194,7 +202,7 @@
                 <div class="control-group form-group">
                     <label class="control-label col-sm-3">Label <span class="field_req">*</span></label> 
                     <div class="controls">
-                        <input name="field_label" type="text" id="label" placeholder="Label" class="required noSpecialChars form-control" />
+                        <input name="field_label" type="text" id="label" placeholder="Label" class="required noSpecialChars form-control field_length" max_len="500" />
                     </div>
                 </div>
                 <input class="hide form-control" name="field_type" type="text" placeholder="Label" value="DATE" />
@@ -261,7 +269,7 @@
                 <div class="control-group form-group">
                     <label class="control-label col-sm-3">Label <span class="field_req">*</span></label> 
                     <div class="controls">
-                        <input name="field_label" type="text" id="label" placeholder="Label" class="required form-control noSpecialChars" />
+                        <input name="field_label" type="text" id="label" placeholder="Label" class="required form-control noSpecialChars field_length" max_len="500" />
                     </div>
                 </div>
                 <input class="hide" name="field_type" type="text" placeholder="Label" value="LIST" />
@@ -333,7 +341,7 @@
                 <div class="control-group form-group">
                     <label class="control-label col-sm-3">Label <span class="field_req">*</span></label> 
                     <div class="controls">
-                        <input name="field_label" type="text" id="label" placeholder="Label" class="required noSpecialChars form-control" />
+                        <input name="field_label" type="text" id="label" placeholder="Label" class="required noSpecialChars form-control field_length" max_len="500" />
                     </div>
                 </div>
                 <input class="hide" name="field_type" type="text" placeholder="Label" value="CHECKBOX"  />
@@ -399,7 +407,7 @@
                 <div class="control-group form-group">
                     <label class="control-label col-sm-3">Label <span class="field_req">*</span></label> 
                     <div class="controls">
-                        <input name="field_label" type="text" id="label" placeholder="Label" class="required form-control" />
+                        <input name="field_label" type="text" id="label" placeholder="Label" class="required form-control field_length" max_len="500" />
                     </div>
                 </div>
                 <input class="hide" name="field_type" type="text" placeholder="Label" value="TEXTAREA" />
@@ -472,7 +480,7 @@
                 <div class="control-group form-group">
                     <label class="control-label col-sm-3">Label <span class="field_req">*</span></label> 
                     <div class="controls">
-                        <input name="field_label" type="text" id="label" placeholder="Label" class="required form-control" />
+                        <input name="field_label" type="text" id="label" placeholder="Label" class="required form-control field_length" max_len="500" />
                     </div>
                 </div>
                 <input class="hide" name="field_type" type="text" placeholder="Label" value="LINK" />

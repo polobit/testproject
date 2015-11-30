@@ -12,8 +12,13 @@ var ShopifyRouter = Backbone.Router.extend({
 			success: function(data){
 				if(data){
 					response["installed"] = true;
-					//$("#content").html(getTemplate("shopify", response));
-					$("#content").html(getTemplate("shopifyboxes", response));
+
+					getTemplate("shopifyboxes", response, undefined, function(template_ui){
+						if(!template_ui)
+							  return;
+						$('#content').html($(template_ui));	
+					}, "#content");
+
 					return;
 				}
 				else{
@@ -22,8 +27,12 @@ var ShopifyRouter = Backbone.Router.extend({
 						url : t_url,
 						success: function(data){
 							response["installed"] = false;
-							//$("#content").html(getTemplate("shopify", response));
-							$("#content").html(getTemplate("shopifyboxes", response));
+							getTemplate("shopifyboxes", response, undefined, function(template_ui){
+								if(!template_ui)
+									  return;
+								$('#content').html($(template_ui));	
+							}, "#content");
+
 							return;
 						}
 					});

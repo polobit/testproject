@@ -67,6 +67,9 @@ public class Portlet {
     @NotSaved(IfDefault.class)
     public int size_y = 0;
     
+    @NotSaved(IfDefault.class)
+    public boolean isForAll = false;
+    
     /**
      * Stores {@link Boolean} info whether the portlet is minimized
      */
@@ -121,4 +124,11 @@ public class Portlet {
     	dao.delete(this);
     }
 
+    public void saveAll(DomainUser domainuser){
+    	AgileUser agileUsr =  AgileUser.getCurrentAgileUserFromDomainUser(domainuser.id);
+		if(agileUsr != null){
+    		user = new Key<AgileUser>(AgileUser.class, agileUsr.id);
+    	dao.put(this);
+		}
+    }
 }

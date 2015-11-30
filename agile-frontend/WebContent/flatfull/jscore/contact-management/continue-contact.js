@@ -279,6 +279,8 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
 			}
 		}
 
+		return serialize_contact_properties_and_save(e, form_id, obj, properties, modal_id, continueContact, is_person, saveBtn, tagsSourceId, id, created_time, custom_fields_in_template, template);
+			   
 	}
 	else
 	{
@@ -301,24 +303,39 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
 			}
 			if (!id)
 			{
-				var status = isCompanyExist(companyName);
-				if (status)
-				{
-					show_error(modal_id, form_id, 'duplicate-email', 'Company name already exist.');
+				isCompanyExist(companyName, function(status){
 
-					enable_save_button($(saveBtn));// Remove loading image
-					return;
-				}
-				else
-				{
-					properties.push(property_JSON('name', form_id + ' #company_name'));
-				}
+					if (status)
+					{
+						show_error(modal_id, form_id, 'duplicate-email', 'Company name already exist.');
+
+						enable_save_button($(saveBtn));// Remove loading image
+						return;
+					}
+					else
+					{
+						properties.push(property_JSON('name', form_id + ' #company_name'));
+						return serialize_contact_properties_and_save(e, form_id, obj, properties, modal_id, continueContact, is_person, saveBtn, tagsSourceId, id, created_time, custom_fields_in_template, template);
+					}
+
+				});
+
+				return;
+				
 			}
 			else
 			{
 				properties.push(property_JSON('name', form_id + ' #company_name'));
+				return serialize_contact_properties_and_save(e, form_id, obj, properties, modal_id, continueContact, is_person, saveBtn, tagsSourceId, id, created_time, custom_fields_in_template, template);
 			}
-		}
+		}		
+	}
+
+
+}
+
+function serialize_contact_properties_and_save(e, form_id, obj, properties, modal_id, continueContact, is_person, saveBtn, tagsSourceId, id, created_time, custom_fields_in_template, template){
+
 
 		if (isValidField(form_id + ' #company_url'))
 			properties.push(property_JSON('url', form_id + ' #company_url'));
@@ -380,7 +397,7 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
 				return false;
 			}
 		}
-	}
+	// }
 
 	/*
 	 * Reads the values of multiple-template fields from continue editing form
@@ -541,12 +558,14 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
 
 				// App_Contacts.contactDetails(data.id,data);
 				// App_Contacts.navigate("contact/"+data.id);
+				if(!CALL_CAMPAIGN.start && Current_Route != "contact/" + data.id)
 				App_Contacts.navigate("contact/" + data.id, { trigger : true });
 			} else {
 				// update contacts-details view
 				if (App_Companies.companyDetailView)
 					App_Companies.companyDetailView.model = data;
 
+				if(Current_Route != "company/" + data.id)
 				App_Companies.navigate("company/" + data.id, { trigger : true });
 			}
 		}
@@ -562,6 +581,31 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
 
 		// Removes tags list(remove them from new person modal)
 		$('.tagsinput', $("#" + modal_id)).empty();
+		//added for call campaign - functionality after updating fom call campaign
+			if(CALL_CAMPAIGN.start ){
+				var id = $('#continueform input[name=id]').val();
+				if(CALL_CAMPAIGN.contact_update){
+					CALL_CAMPAIGN.current_count = CALL_CAMPAIGN.current_count - 1;
+					CALL_CAMPAIGN.contact_update = false;
+					dialNextCallAutomatically();
+					Backbone.history.loadUrl("contact/" + id);
+					$( window ).scrollTop( 0 );
+					return;
+				}else{
+					var currentCampaignId = CALL_CAMPAIGN.contact_id_list[CALL_CAMPAIGN.current_count];
+					if(id == currentCampaignId ){
+						CALL_CAMPAIGN.current_count = CALL_CAMPAIGN.current_count-1;
+						dialNextCallAutomatically();
+					}
+					
+				}
+				
+				if(Current_Route != "contact/" + id)
+				Backbone.history.navigate("contact/" + id, { trigger : true });	
+				$( window ).scrollTop( 0 );
+				
+				
+			}
 	}, error : function(model, response)
 	{
 
@@ -608,56 +652,63 @@ function deserialize_contact(contact, template)
 {
 
 	// Loads the form based on template value
-	var form = $("#content").html(getTemplate(template, contact));
+	getTemplate(template, contact, undefined, function(template_ui){
+		if(!template_ui)
+			  return;
+			
+		var form = $('#content').html($(template_ui));	
+		// Add placeholder and date picker to date custom fields
+		$('.date_input').attr("placeholder", "Select Date");
 
+		$('.date_input').datepicker({ format : CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY});
 
-	// Add placeholder and date picker to date custom fields
-	$('.date_input').attr("placeholder", "Select Date");
+		// To set typeahead for tags
+		setup_tags_typeahead();
 
-	$('.date_input').datepicker({ format : CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY});
-
-	// To set typeahead for tags
-	setup_tags_typeahead();
-
-	// Iterates through properties and ui clones
-	$.each(contact.properties, function(index, element)
-	{
-
-		if (element.type == "CUSTOM" && element.name != "website")
-			return;
-		// Removes first input field
-		$($('#' + form.attr('id') + ' div.multiple-template.' + element.name).closest('div.controls.second')).remove();
-		var field_element = $('#' + form.attr('id') + ' div.multiple-template.' + element.name);
-
-		// Generate and populate multiple fields
-		fill_multi_options(field_element, element);
-	});
-
-	var fxn_display_company = function(data, item)
-	{
-		$("#content [name='contact_company_id']")
-				.html(
-						'<li class="inline-block tag btn btn-xs btn-primary m-r-xs m-b-xs" data="' + data + '"><span><a class="text-white m-r-xs" href="#contact/' + data + '">' + item + '</a><a class="close" id="remove_tag">&times</a></span></li>');
-		$("#content #contact_company").hide();
-	}
-	agile_type_ahead("contact_company", $('#content'), contacts_typeahead, fxn_display_company, 'type=COMPANY', '<b>No Results</b> <br/> Will add a new one');
-
-	if (contact.contact_company_id && contact.contact_company_id.length > 0)
-	{
-		for (var i = 0; i < contact.properties.length; ++i)
+		// Iterates through properties and ui clones
+		$.each(contact.properties, function(index, element)
 		{
-			if (contact.properties[i].name == 'company')
+
+			if (element.type == "CUSTOM" && element.name != "website")
+				return;
+			// Removes first input field
+			$($('#' + form.attr('id') + ' div.multiple-template.' + element.name).closest('div.controls.second')).remove();
+			var field_element = $('#' + form.attr('id') + ' div.multiple-template.' + element.name);
+
+			// Generate and populate multiple fields
+			fill_multi_options(field_element, element);
+		});
+
+		var fxn_display_company = function(data, item)
+		{
+			$("#content [name='contact_company_id']")
+					.html(
+							'<li class="inline-block tag btn btn-xs btn-primary m-r-xs m-b-xs" data="' + data + '"><span><a class="text-white m-r-xs" href="#contact/' + data + '">' + item + '</a><a class="close" id="remove_tag">&times</a></span></li>');
+			$("#content #contact_company").hide();
+		}
+		agile_type_ahead("contact_company", $('#content'), contacts_typeahead, fxn_display_company, 'type=COMPANY', '<b>No Results</b> <br/> Will add a new one');
+
+		if (contact.contact_company_id && contact.contact_company_id.length > 0)
+		{
+			for (var i = 0; i < contact.properties.length; ++i)
 			{
-				$("#content #contact_company").hide();
-				$("#content [name='contact_company_id']")
-						.html(
-								'<li class="inline-block tag btn btn-xs btn-primary m-r-xs m-b-xs" data="' + contact.contact_company_id + '"><span><a class="text-white m-r-xs" href="#contact/' + contact.contact_company_id + '">' + contact.properties[i].value + '</a><a class="close" id="remove_tag">&times</a></span></li>');
+				if (contact.properties[i].name == 'company')
+				{
+					$("#content #contact_company").hide();
+					$("#content [name='contact_company_id']")
+							.html(
+									'<li class="inline-block tag btn btn-xs btn-primary m-r-xs m-b-xs" data="' + contact.contact_company_id + '"><span><a class="text-white m-r-xs" href="#contact/' + contact.contact_company_id + '">' + contact.properties[i].value + '</a><a class="close" id="remove_tag">&times</a></span></li>');
+				}
 			}
 		}
-	}
 
-	// If contact is added from social suite, need to add website.
-	// socialsuite_add_website();
+		// If contact is added from social suite, need to add website.
+		// socialsuite_add_website();
+
+	}, "#content");
+
+	
+	
 }
 
 /**
@@ -782,7 +833,7 @@ $(function()
 		e.preventDefault();
 
 		// Clone the template
-		$(this).parents("div.control-group").append($(this).parents().siblings("div.controls:first").clone().removeClass('hide'));
+		$(this).parents("div.control-group").append($(this).parents().siblings("div.controls:first").clone().removeClass('hide').addClass('col-sm-offset-3'));
 	});
 
 	// Removes multiple fields
@@ -811,6 +862,13 @@ $(function()
 	{
 		e.preventDefault();
 		var id = $('#continueform input[name=id]').val();
+		//added for call campaign - functionality after updating fom call campaign
+		if(CALL_CAMPAIGN.start && CALL_CAMPAIGN.contact_update){
+			CALL_CAMPAIGN.contact_update = false;
+			Backbone.history.loadUrl("#contact/" + id);
+			$( window ).scrollTop( 0 );
+			return;
+		}
 		if (id)
 		{
 			Backbone.history.navigate("contact/" + id, { trigger : true });
@@ -902,14 +960,15 @@ function add_model_cursor(app_collection, mdl)
 /**
  * check for duplicated company
  */
-function isCompanyExist(company)
+function isCompanyExist(company, callback)
 {
-	var status = false;
-	$.ajax({ url : 'core/api/contacts/company/validate/' + company, async : false, success : function(response)
-	{
-		if (response === "true")
-			status = true;
+	$.get('core/api/contacts/company/validate/' + company, function(data){
+		   if(data == "true"){
+		   	    callback(true);
+		   		return;
+		   }
 
-	} });
-	return status;
+		   callback(false);
+	});
+
 }

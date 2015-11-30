@@ -22,7 +22,7 @@ import com.agilecrm.Globals;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Note;
 import com.agilecrm.contact.sync.service.OneWaySyncService;
-import com.agilecrm.contact.sync.wrapper.WrapperService;
+import com.agilecrm.contact.sync.wrapper.IContactWrapper;
 
 public class XeroSyncImpl extends OneWaySyncService
 {
@@ -30,7 +30,7 @@ public class XeroSyncImpl extends OneWaySyncService
     private static String BASE_URL = "https://api.xero.com/api.xro/2.0/%s";
 
     @Override
-    public Class<? extends WrapperService> getWrapperService()
+    public Class<? extends IContactWrapper> getWrapperService()
     {
 	return XeroContactWrapperImpl.class;
     }

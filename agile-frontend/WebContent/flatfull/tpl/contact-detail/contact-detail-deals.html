@@ -1,9 +1,9 @@
 <script id="deals-collection-template" type="text/html">
   {{#unless this.length}}
         <div class="wrapper p-t-none">
-            <div class="slate-content">
+            <div class="slate-content mobile-pad-content">
                 <div class="box-left pull-left m-r-md">
-                    <img alt="Clipboard" src="/img/clipboard.png" />
+                    <img alt="Clipboard" src="{{getS3ImagePath '/img/clipboard.png'}}" />
                 </div>
                 <div class="box-right pull-left">
                     <h4 class="m-t-none">{{contactShortName}} is not associated with any deals. </h4>
@@ -68,10 +68,10 @@
 
 					{{else}}
 						{{#if_contact_type "PERSON"}}	
-							<a href="#contact/{{id}}">{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}</a>,
+							<a href="#contact/{{id}}">{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}</a>{{#if @last}}{{else}},{{/if}}
         				{{/if_contact_type}}
 						{{#if_contact_type "COMPANY"}}
-        					<a href="#company/{{id}}">{{getPropertyValue properties "name"}}</a>,
+        					<a href="#company/{{id}}">{{getPropertyValue properties "name"}}</a>{{#if @last}}{{else}},{{/if}}
         				{{/if_contact_type}}
 				{{/isDuplicateContactProperty}}
            		

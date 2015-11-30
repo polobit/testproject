@@ -25,7 +25,7 @@ var Handlebars_Compiled_Templates = {};
  * 
  * @returns compiled html with the context
  */
-function getTemplate(templateName, context, download, callback)
+function getTemplate(templateName, context, download, callback, loading_place_holder)
 {
 	var is_async = callback && typeof (callback) == "function";
 
@@ -85,6 +85,16 @@ function getTemplate(templateName, context, download, callback)
 		console.log("Not found " + templateName);
 		return;
 	}
+
+	// Shows loader icon if there is a loader placeholder
+	if(loading_place_holder)
+	{
+		try{
+			var loaderEl = $(getRandomLoadingImg());
+			$(loading_place_holder).html(loaderEl.css("margin", "10px"));
+		}catch(err){}
+	}
+		   
 
 	// Stores urls of templates to be downloaded.
 	var template_relative_urls = getTemplateUrls(templateName);
@@ -259,11 +269,17 @@ function getTemplateUrls(templateName)
 	}
 	if (templateName.indexOf("socialsuite") == 0)
 	{
-		template_relative_urls.push("socialsuite.js");
+		if(HANDLEBARS_PRECOMPILATION)
+			template_relative_urls.push("socialsuite-all.js");
+		else
+		{
+			template_relative_urls.push("socialsuite.js");
+		}
 
 		if (HANDLEBARS_PRECOMPILATION)
 			template_relative_urls.push("socialsuite.html");
 	}
+
 
 	if (templateName.indexOf("portlet") == 0)
 	{
@@ -280,6 +296,14 @@ function getTemplateUrls(templateName)
 	if (templateName.indexOf("landingpages") == 0)
 	{
 		template_relative_urls.push("landingpages.js");
+	}
+	if (templateName.indexOf("billing-settings") == 0 || templateName.indexOf("creditcard-update") == 0)
+	{
+		template_relative_urls.push("settings.js");
+	}
+	if (templateName.indexOf("bria") == 0)
+	{
+		template_relative_urls.push("bria.js");
 	}
 	return template_relative_urls;
 }
@@ -337,59 +361,6 @@ String.prototype.endsWith = function(suffix)
 	return this.indexOf(suffix, this.length - suffix.length) !== -1;
 };
 
-var TEMPLATE_LIB_PATH = "";
-
-/**
- * Downloads the template synchronously (stops other browsing actions) from the
- * given url and returns it
- * 
- * @param {String}
- *            url location to download the template
- * @returns down-loaded template content
- */
-function downloadTemplate(url, callback)
-{
-
-	var dataType = 'html';
-
-	// If Precompiled is enabled, we change the directory to precompiled. If
-	// pre-compiled flat is set true then template path is sent accordingly
-	if (HANDLEBARS_PRECOMPILATION)
-	{
-		url = "tpl/min/precompiled/" + FLAT_FULL_UI + url;
-	}
-	else
-		url = "tpl/min/" + FLAT_FULL_UI +  url;
-
-	// If JS
-	if (url.endsWith("js") && HANDLEBARS_PRECOMPILATION)
-	{
-		dataType = 'script';
-		url = TEMPLATE_LIB_PATH + url;
-	}
-
-	url += "?_=" + _AGILE_VERSION;
-	
-	console.log(url + " " + dataType);
-
-	// If callback is sent to this method then template is fetched synchronously
-	var is_async = false;
-	if (callback && typeof (callback) === "function")
-		is_async = true;
-
-	jQuery.ajax({ url : url, dataType : dataType, success : function(result)
-	{
-		// If HTMl, add to body
-		if (dataType == 'html')
-			$('body').append((result));
-
-		if (is_async)
-			callback(result);
-	}, async : is_async });
-
-	return "";
-}
-
 /**
  * Iterates the given "items", to find a match with the given "name", if found
  * returns the value of its value attribute
@@ -410,6 +381,84 @@ function getPropertyValue(items, name)
 		if (items[i].name == name)
 			return items[i].value;
 	}
+}
+
+
+/**
+ * appends , between contact fields
+ * @param items
+ * @param name
+ * @returns {String}
+ */
+
+function getPropertyValueByCheckingExistance(items, companyname,jobtitle)
+{
+	if (items == undefined)
+		return;
+
+	var companyExists=false;
+	var jobTitleExists=false;
+	for (var i = 0, l = items.length; i < l; i++)
+	{
+		if (items[i].name == companyname){
+			if(items[i].value){
+				companyExists=true;
+			}
+			
+		}
+		else if (items[i].name == jobtitle){
+			if(items[i].value){
+				jobTitleExists=true;
+			}
+			
+		}
+	}
+	if(companyExists&&jobTitleExists)
+		return ',';
+}
+
+
+
+function getMarginLength(items, companyname)
+{
+	if (items == undefined)
+		return;
+
+	for (var i = 0, l = items.length; i < l; i++)
+	{
+		if (items[i].name == companyname)
+			return '3px';
+	}
+	return '0px';
+}
+
+
+/**
+ * checks the contact properties existance
+ * @param items
+ * @param name
+ * @param name1
+ * @returns {String}
+ */
+function checkPropertyValueExistance(items,name,name1){
+
+	if (items == undefined)
+		return "none";
+
+	var valueExists=false;
+	for (var i = 0, l = items.length; i < l; i++)
+	{
+		if (items[i].name == name || items[i].name == name1){
+			if(items[i].value){
+				valueExists=true;
+			}
+			
+		}
+	}
+	if(valueExists==true)
+		return 'block';
+	else
+		return 'none';
 }
 
 /**
@@ -572,18 +621,18 @@ function get_website_icon(item){
 
 function get_social_icon(name){
 	if (!name)
-	return "icon-globe";
+	return "fa fa-globe";
 
-    var icon_json = { "TWITTER" : "icon-social-tumblr", "LINKEDIN" : "fa fa-linkedin", "URL" : "icon-globe", "GOOGLE-PLUS" : "fa fa-google-plus",
-	"FACEBOOK" : "icon-social-facebook", "GITHUB" : "fa fa-github", "FEED" : "icon-rss", "XING" : "fa fa-xing", "SKYPE" : "icon-skype",
-	"YOUTUBE" : "fa fa-youtube-play", "FLICKR" : "fa fa-flickr" };
+    var icon_json = { "TWITTER" : "fa fa-twitter", "LINKEDIN" : "fa fa-linkedin-square", "URL" : "fa fa-globe", "GOOGLE-PLUS" : "fa fa-google-plus-square",
+	"FACEBOOK" : "fa fa-facebook-square", "GITHUB" : "fa fa-github", "FEED" : "icon-rss", "XING" : "fa fa-xing-square", "SKYPE" : "icon-skype",
+	"YOUTUBE" : "fa fa-youtube-square", "FLICKR" : "fa fa-flickr" };
 
     name = name.trim();
 
     if (icon_json[name])
 	return icon_json[name];
 
-    return "icon-globe";
+    return "fa fa-globe";
 }
 
 function get_subtype(item){

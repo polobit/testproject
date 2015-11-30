@@ -146,7 +146,14 @@
 				var list = '<ul>';
 				for ( var range in this.ranges)
 				{
-					list += '<li>' + range + '</li>';
+					if (range == "Last 7 Days" || range == "Last Month" || range == "Last Quarter" || range == "Last Year")
+					{
+						list += '<li class="b-b" style="padding-bottom:10px!important;">' + range + '</li>';
+					}
+					else
+					{
+						list += '<li>' + range + '</li>';
+					}
 				}
 				list += '<li>' + this.locale.customRangeLabel + '</li>';
 				list += '</ul>';
@@ -485,6 +492,7 @@
 			this.changed = true;
 			this.cleared = true;
 			this.hide();
+			this.container.find('.calendar').hide();
 		},
 
 		updateCalendars : function()

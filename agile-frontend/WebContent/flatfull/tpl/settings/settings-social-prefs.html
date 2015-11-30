@@ -1,12 +1,17 @@
 <script id="settings-social-prefs-model-template" type="text/html">
 <div class="col-md-4 col-sm-6 col-xs-12">
-	<div class="panel wrapper" >
+	<div class="panel panel-default" style="height:225px;">
 		{{#if id}} 
+		  <div class="panel-heading">
 			{{add_tag "Email"}} 
-			<center><img class="thumbnail m-b-none thumb-transparent thumb-xl" src="/img/icons/google-mail-sync.png"></center>
-            <div class="m-t-md">
+
+			<center><img class="m-b-none thumb-transparent thumb-xl" style="height:47px;" src="{{getS3ImagePath '/img/icons/google-mail-sync.png'}}"></center>
+		  </div>
+          <div class="panel-body">
+          <div style="min-height:85px">
+          	<div class="m-b-sm">
 				{{#if picture}} 
-					<i class="media-grid thumb thumb-wrapper"> 
+					<i class="media-grid thumb thumb-wrapper pull-left"> 
 						{{#if_equals picture "https://lh3.googleusercontent.com/-XdUIqdMkCWA/AAAAAAAAAAI/AAAAAAAAAAA/4252rscbv5M/photo.jpg"}}
 							<img  src="{{emailGravatarurl 75 email}}"  /> 
 						{{else}} 
@@ -14,40 +19,52 @@
 						{{/if_equals}}
 					</i>
 				{{else}} 
-					<i class="media-grid"> <img class="thumbnail m-b-none thumb-transparent img-responsive square-thumb" src="{{emailGravatarurl 50 email}}"  /> </i>
+					<i class="media-grid"> <img class="thumbnail m-b-none thumb-transparent img-responsive square-thumb pull-left" src="{{emailGravatarurl 50 email}}"  /> </i>
 			   	{{/if}}
-			   	<label>{{name}}</label> 
-<div class="clearfix"></div>
-<div class="m-t-lg">
+
+			   	<div class="pull-left m-l-xs">
+			   		<span class="block m-t-sm">{{name}}</span>
+                	<span class="block">{{email}}</span>
+                </div> 
+				<div class="clearfix"></div>
+			</div>
+			</div>
+				<div class="text-center">
 			   	<a href="#" class="btn btn-sm btn-danger" id="gmail-prefs-delete" oid={{id}}>Disable</a>
 			   	<a class="btn btn-sm btn-default" href="#gmail/{{id}}">Settings</a>
-         <a href="#sync"><img class="google-apps-icon" src="../flatfull/img/add_to_apps_shadow.png" style="
+         		<a href="#sync"><img class="google-apps-icon m-t-none" src="{{getS3ImagePath '../flatfull/img/add_to_apps_shadow.png'}}" style="
     margin-top: 0px !important;
 "></a>
 </div>
 			</div>
 		{{else}} 
+		  <div class="panel-heading">
            <center>
-			<img class="thumbnail m-b-none thumb-transparent thumb-xl" src="/img/icons/google-mail-sync.png">
+			<img class="m-b-none thumb-transparent thumb-xl" style="height:47px;" src="{{getS3ImagePath '/img/icons/google-mail-sync.png'}}">
 			</center>
-           <!--<div align="center">
-				<br/> <img class="thumbnail" src="img/{{service}}-logo-small.png" />
-			</div>--><br/>
-    		<div class="ellipsis-multiline m-b-sm" rel="tooltip" title="See all emails related to a contact from your Gmail account.">
+		  </div>
+          <div class="panel-body">
+
+          <div class="" style="min-height:85px">
+    		<div class="m-b-sm" rel="tooltip" title="See all emails related to a contact from your Gmail account.">
 				See all emails related to a contact from your Gmail account.
 			</div>
+			</div>
+			<center>
 			{{#has_email_account_limit_reached}}
-			<div> <a class="btn btn-sm btn-default pull-left" disabled="disabled">Enable</a>
-<a href="#sync"><img class="google-apps-icon" src="../flatfull/img/add_to_apps_shadow.png"/></a>
-    </div>
 			{{#if_non_pro_plan}}
-			<div class="pull-left m-l-sm text-xs" style="line-height:13px;width:149px"> Upgrade to Pro plan to add more accounts</div>
+			<div class="p-xs" style="width: 75%;border: 1px solid #E2E29C;background-color: #F7F7D0;"> Please <strong><a class="text-info" href="#subscribe">upgrade</a></strong> to Enterprise plan</div>
 			{{/if_non_pro_plan}}
+			<div> <!--<a class="btn btn-sm btn-default m-t-sm" disabled="disabled">Enable</a> -->
+<a href="#sync"><img class="google-apps-icon" src="{{getS3ImagePath '../flatfull/img/add_to_apps_shadow.png'}}"/></a>
+    </div>
+			
 			{{else}}
-			<div> <a href="/scribe?service={{service}}&amp;return_url={{return_url}}" class="btn btn-sm btn-default m-t">Enable</a>
-<a href="#sync"><img class="google-apps-icon" src="../flatfull/img/add_to_apps_shadow.png"/></a>
-</div>
+			<a href="/scribe?service={{service}}&amp;return_url={{return_url}}" class="btn btn-sm btn-default">Enable</a>
+			<a href="#sync"><img class="google-apps-icon m-t-none" src="{{getS3ImagePath '../flatfull/img/add_to_apps_shadow.png'}}"/></a>
             {{/has_email_account_limit_reached}}
+            </center>
+            </div>
 		{{/if}}
 	</div>
 </div>

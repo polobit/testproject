@@ -8,7 +8,7 @@
 	tight_acl.REPORTS_PER = false;
 	tight_acl.ACTIVITY_PER = false;
 	var obj = {};
-	
+
 	/*
 	 * Initialize the permissions when user changes the route using the menu scopes in the current domain user object.
 	 */
@@ -69,15 +69,14 @@
 			tight_acl.REPORTS_PER = true;
 			App_ACL.notAllowed(obj);
 		}
-	};
+	}
 	
 	/*
 	 * Check the permission based up on the given scope.
 	 */
 	tight_acl.checkPermission = function(scope){
 		return CURRENT_DOMAIN_USER.menu_scopes.indexOf(scope) > -1;
-	};
-	
+	}
 }(window.tight_acl = window.tight_acl || {}, $));
 
 (function(acl_util, $, undefined) {
@@ -144,7 +143,7 @@
 			if(ACCOUNT_PREFS.tagsPermission)
 				$('#new_tag_acl',el).attr('checked','checked');
 		}else {
-			$.ajax({ type : 'GET', url : '/core/api/account-prefs', async : false, dataType : 'json',
+			$.ajax({ type : 'GET', url : '/core/api/account-prefs', dataType : 'json',
 				success: function(data){
 					
 					if(isCheck)

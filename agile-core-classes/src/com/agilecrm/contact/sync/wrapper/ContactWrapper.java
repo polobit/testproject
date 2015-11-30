@@ -19,7 +19,7 @@ import com.thirdparty.google.ContactPrefs;
  * <code>ContactWrapper</code> Abstraction of ContactWapper every third party
  * needs to be extends this wrapper to Construct Contact in agile style format
  */
-public abstract class ContactWrapper implements WrapperService
+public abstract class ContactWrapper implements IContactWrapper
 {
 
     /** Contact Instance */

@@ -43,7 +43,7 @@
 							<label class="control-label">Owner<span class="field_req">*</span></label>
 							<div class="controls" id="event-owners">
 								<select id="event-owners-list" class="required form-control" name="owner_id"></select>
-								<img class="loading-img" src="img/21-0.gif"></img>
+								<img class="loading-img" src="//doxhze3l6s7v9.cloudfront.net/app/static/img/21-0.gif"></img>
 							</div>
 					   </div>
                      </div>
@@ -89,15 +89,32 @@
                     </div>
                     <div class="row">
 	                    <div class="col-md-12 control-group form-group">
-	                        <label class="control-label"><b>Related To</b></label>
-	                        <div>                           
+	                        <!-- <label class="control-label"><a href="#" id="update-event-related-contacts-label"><i class="icon-plus"></i> Add Contacts</a></label> -->
+	                        <label class="control-label update-event-related-contacts-label"><b>Related Contacts</b></label>
+	                        <div class="update-event-related-contacts-input">                           
                                 <div class="pull-left">
                                     <ul name="contacts" class="contacts tags tagsinput p-none"></ul>
                                 </div>
                                 <div class="clearfix"></div>
-                                <input type="text" id="event_related_to" class="typeahead typeahead_contacts form-control" data-provide="typeahead" data-mode="multiple" size="40" />                          
+                                <input type="text" id="event_related_to" class="typeahead typeahead_contacts form-control" placeholder="Related Contacts" data-provide="typeahead" data-mode="multiple" size="40" />                          
 	                        </div>
 	                    </div>
+	                 </div>
+	                 <div class="row">
+	                    <div class="control-group form-group col-md-12">
+							<!-- <label class="control-label"><a href="#" id="update-event-related-deals-label"><i class="icon-plus"></i> Add Deals</a></label> -->
+							<label class="control-label update-event-related-deals-label"><b>Related Deals</b></label>
+							<div class="controls update-event-related-deals-input" id="dealTypeAhead">
+								<div>
+									<div>
+										<ul name="deal_ids" class="deals tagsinput deal_tags p-n"></ul>
+									</div>
+									<input type="text" id="event_relates_to_deals" 
+									placeholder="Related Deals" class="typeahead typeahead_deals form-control"
+									data-provide="typeahead" data-mode="multiple" />
+								</div>
+							</div>
+						</div>
                     </div>
                     
                      <div class="control-group" id="event_desc">

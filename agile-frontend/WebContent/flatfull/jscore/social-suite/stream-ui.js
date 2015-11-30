@@ -82,11 +82,17 @@ function initializeSocialSuite()
 		// Fill elements on form related to stream.
 		fillStreamDetail();
 
-		// Add social network types template
-		$("#streamDetails").html(getTemplate('socialsuite-social-network'), {});
+		getTemplate('socialsuite-social-network', {}, undefined, function(template_ui){
+			if(!template_ui)
+				  return;
+			// Add social network types template
+			$('#streamDetails').html($(template_ui));
 
-		// Show form modal
-		$('#addStreamModal').modal('show');
+			// Show form modal
+			$('#addStreamModal').modal('show');
+
+		}, "#streamDetails");
+		
 	});
 
 	/**
@@ -148,7 +154,7 @@ function initializeSocialSuite()
 							// Display keyword field.
 							if (Stream_Type == "Search")
 							{
-								document.getElementById('search_stream_keyword').innerHTML = '<div class="remove-keyword"><div class="row"><div class="control-group col-md-5"><span class="controls"><input id="keyword" name="keyword" type="text" class="required form-control" required="required" autocapitalize="off" placeholder="Search Keyword..." value="" autofocus></span></div></div></div>';
+								$("#search_stream_keyword").html('<div class="remove-keyword"><div class="row"><div class="control-group col-md-5"><span class="controls"><input id="keyword" name="keyword" type="text" class="required form-control" required="required" autocapitalize="off" placeholder="Search Keyword..." value="" autofocus></span></div></div></div>');
 							}
 							else
 							{
@@ -172,7 +178,7 @@ function initializeSocialSuite()
 					function(e)
 					{
 						// To show stream type description.
-						document.getElementById("stream_description_label").className = 'txt-mute';
+						$("#stream_description_label").addClass("txt-mute");
 
 						// Gets value of selected stream type.
 						mouseoverStream = $(this).attr("value");
@@ -185,41 +191,14 @@ function initializeSocialSuite()
 							$(this).css('background-color', '#EDEDED');
 						}
 
-						switch (mouseoverStream) {
-						case "Search":
-							document.getElementById('stream_description_label').innerHTML = '<i class="icon-search"></i> Relevant Tweets matching a specified Search Keyword.';
-							break;
-						case "Home":
-							document.getElementById('stream_description_label').innerHTML = '<i class="icon-home"></i> Tweets and retweets of user and followers.';
-							break;
-						case "Mentions":
-							document.getElementById('stream_description_label').innerHTML = '<img src="../img/socialsuite/mentions.png" style="width: 15px;height: 15px;"> Mentions (all tweets containing a users\'s @screen_name).';
-							break;
-						case "Retweets":
-							document.getElementById('stream_description_label').innerHTML = '<i class="icon-retweet"></i> User\'s tweets retweeted by others.';
-							break;
-						case "DM_Inbox":
-							document.getElementById('stream_description_label').innerHTML = '<i class="icon-download-alt"></i> Direct messages sent to the user.';
-							break;
-						case "DM_Outbox":
-							document.getElementById('stream_description_label').innerHTML = '<i class="icon-upload-alt"></i> Direct messages sent by the user.';
-							break;
-						case "Favorites":
-							document.getElementById('stream_description_label').innerHTML = '<i class="icon-star"></i> User\'s favorite tweets.';
-							break;
-						case "Sent":
-							document.getElementById('stream_description_label').innerHTML = '<i class="icon-share-alt"></i> Tweets sent by the user.';
-							break;
-						case "Scheduled":
-							document.getElementById('stream_description_label').innerHTML = '<i class="icon-time"></i> Tweets scheduled for sending later.';
-							break;
-						case "All_Updates":
-							document.getElementById('stream_description_label').innerHTML = '<i class="icon-home"></i> Updates and shares from user\'s connections and groups.';
-							break;
-						case "My_Updates":
-							document.getElementById('stream_description_label').innerHTML = '<i class="icon-share-alt"></i> Updates authored by the user.';
-							break;
-						}// switch end
+						getTemplate('socialsuite-hover-helptext', {"item":mouseoverStream}, undefined, function(template_ui){
+							if(!template_ui)
+								  return;
+							$("#stream_description_label").removeClass('description-hidden');
+							$('#stream_description_label').html(template_ui);	
+						}, null);
+
+						
 					});
 
 	/**
@@ -231,7 +210,7 @@ function initializeSocialSuite()
 		$(this).css('background-color', '');
 
 		// To hide stream type description.
-		document.getElementById("stream_description_label").className = 'description-hidden txt-mute';
+		$("#stream_description_label").addClass('description-hidden txt-mute');
 	});
 
 	/**
@@ -256,8 +235,7 @@ function initializeSocialSuite()
 						if (Stream_Type == null || Stream_Type == '')
 						{
 							// To show error description.
-							document.getElementById("stream_description_label").className = 'txt-mute';
-							document.getElementById('stream_description_label').innerHTML = '<span style="color: red;"><i class="icon-exclamation"></i> You have to select your favorite stream type.</span>';
+							$("#stream_description_label").addClass("txt-mute").html('<span style="color: red;"><i class="icon-exclamation"></i> You have to select your favorite stream type.</span>');
 							return;
 						}
 
@@ -373,7 +351,7 @@ function initializeSocialSuite()
 		var streamId = $(this).attr('data');
 
 		// Remove notification of new tweets on stream.
-		document.getElementById(this.id).innerHTML = '';
+		$("#"+this.id).html('');
 
 		if (relation == "add-new-tweet")
 			mergeNewUnreadTweets(streamId);

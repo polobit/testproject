@@ -5,205 +5,166 @@
  */
 var ActivitylogRouter = Backbone.Router.extend({
 
-	routes : {
-	/* Shows page */
-	"activities" : "activities", "contact-activities" : "contactActivities", "contact-activities/:type" : "contactActivities" },
+    routes: {
+        /* Shows page */
+        "activities": "activities",
+        "contact-activities": "contactActivities",
+        "contact-activities/:type": "contactActivities"
+    },
 
-	activities : function(id)
-	{
-		if (!tight_acl.checkPermission('ACTIVITY'))
-			return;
-		DEAL_TRACKS_COUNT = getTracksCount();
-		head.js(LIB_PATH + 'lib/date-charts.js', LIB_PATH + 'lib/date-range-picker.js', CSS_PATH + "css/misc/date-picker.css", function()
-		{
-			 $('#content').html("<div id='activities-listners'>&nbsp;</div>");
-			$('#activities-listners').html(getTemplate("activity-list-header", {}));
-			/*
-			 * if(IS_FLUID){
-			 * $('#activity_header').removeClass('row').addClass('row-fluid'); }
-			 * else{
-			 * $('#activity_header').removeClass('row-fluid').addClass('row'); }
-			 */
+    activities: function(id) {
+        if (!tight_acl.checkPermission('ACTIVITY'))
+            return;
 
-			initActivitiesDateRange();
-			$(".activity-log-button").hide();
-			var selecteduser = readCookie("selecteduser");
-			var selectedentity = readCookie("selectedentity");
+        head.js(LIB_PATH + 'lib/date-charts.js', LIB_PATH + 'lib/date-range-picker.js' + '?_=' + _AGILE_VERSION, function() {
 
-			console.log("values read from activity cookie  selected user " + selecteduser + "  selected entityname " + selectedentity);
+            $('#content').html("<div id='activities-listners'>&nbsp;</div>");
+            getTemplate('activity-list-header', {}, undefined, function(template_ui) {
 
-			var optionsTemplate = "<li><a  href='{{id}}'>{{name}}</li>";
+                if (!template_ui)
+                    return;
 
-			// fill workflows
-			fillSelect('user-select', 'core/api/users', 'domainuser', function fillActivities()
-			{
-				$('#activities-listners').find("#user-select").append("<li><a href=''>All Users</a></li>");
+                getTracksCount(function(count) {
 
-				var selected_start_time = readCookie("selectedStartTime");
-				var selected_end_time = readCookie("selectedEndTime");
+                    DEAL_TRACKS_COUNT = count;
 
-				if (selecteduser || selectedentity || (selected_start_time && selected_end_time))
-				{
+                    $('#activities-listners').html($(template_ui));
 
-					$('ul#user-select li a').closest("ul").data("selected_item", selecteduser);
-					$('ul#entity_type li a').closest("ul").data("selected_item", selectedentity);
-					if (selected_start_time && selected_end_time)
-					{
-						$('#activities_date_range #range').html(selected_start_time + ' - ' + selected_end_time);
-					}
-					console.log("activites function called  " + new Date().getTime() + "  time with milliseconds " + new Date())
-					updateActivty(getParameters());
+                    initActivitiesDateRange();
 
-					console.log("activites function ended rendering  " + new Date().getTime() + "  time with milliseconds " + new Date())
+                    renderActivityView(getActivityFilterParameters(true));
+                    
+                    $(".activity-log-button").css('display','none');
 
-					var username_value = readCookie("selecteduser_value");
-					var entity_value = readCookie("selectedentity_value");
+                    var activityFilters = JSON.parse(readCookie(ACTIVITY_FILTER));
 
-					if (username_value)
-					{
-						$('#selectedusername').html(username_value);
+                    var optionsTemplate = "<li><a  href='{{id}}'>{{name}}</li>";
 
-					}
-					if (entity_value)
-					{
-						$('#selectedentity_type').html(entity_value);
-						$('.activity-sub-heading').html(entity_value);
-					}
-				}
-				else
-				{
+                    // fill workflows
+                    fillSelect('user-select', 'core/api/users', 'domainuser', function fillActivities() {
+                        $('#activities-listners').find("#user-select").append("<li><a href=''>All Users</a></li>");
+                        if (activityFilters && (activityFilters.user || activityFilters.entity)) {
+                            $('ul#user-select li a').closest("ul").data("selected_item", activityFilters.userId);
+                            $('ul#entity_type li a').closest("ul").data("selected_item", activityFilters.entityId);
+                            $('#selectedusername').html(activityFilters.user);
+                            $('#selectedentity_type').html(activityFilters.entity);
+                            $('.activity-sub-heading').html(activityFilters.entity);
 
-					var activitiesview = new Base_Collection_View({ url : '/core/api/activitylog/getAllActivities', sortKey : 'time', descending : true,
-						templateKey : "activity-list-log", cursor : true, scroll_symbol : 'scroll', page_size : 20, individual_tag_name : 'li',
-						postRenderCallback : function(el)
-						{
-							head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
-							{
-								$("time", el).timeago();
+                        }
 
-							});
-							initializeActivitiesListner(el);
-							initializeEventListners(el);
+                        $(".activity-log-button").css('display','inline-block');
 
-						}, appendItemCallback : function(el)
-						{
-							includeTimeAgo(el);
-						} });
 
-					activitiesview.appendItem = append_activity_log;
+                    }, optionsTemplate, true);
 
-					activitiesview.collection.fetch();
-					// Renders data to tasks list page.
-					$('#activity-list-based-condition').html(activitiesview.el);
 
-				}
-				$(".activity-log-button").show();
 
-				/*
-				 * if(IS_FLUID){
-				 * $('#activity_model').removeClass('row').addClass('row-fluid'); }
-				 * else{
-				 * $('#activity_model').removeClass('row-fluid').addClass('row'); }
-				 */
-			}, optionsTemplate, true);
-			$(".active").removeClass("active");
-			$("#activitiesmenu").addClass("active");
-		})
-	},
-	contactActivities : function(id)
-	{ // begin contact activities
+                });
 
-		head.js(LIB_PATH + 'lib/date-charts.js', LIB_PATH + 'lib/date-range-picker.js', CSS_PATH + "css/misc/date-picker.css", function()
-		{
+            }, "#activities-listners");
 
-			var urlPath = "core/api/campaigns/logs/ContactActivities";
+            $(".active").removeClass("active");
+            $("#activitiesmenu").addClass("active");
+        })
+    },
+    contactActivities: function(id) { // begin contact activities
 
-			$('#content').html(getTemplate("contact-activity-header", {}));
+            head.js(LIB_PATH + 'lib/date-charts.js', LIB_PATH + 'lib/date-range-picker.js' + '?_=' + _AGILE_VERSION, CSS_PATH + "css/misc/date-picker.css", function() {
 
-			/*
-			 * if(id==undefined || id=="All Activities")
-			 * $('#log-filter-title').text("All Activities"); else
-			 * $('#log-filter-title').text(id.replace(/_/g," "));
-			 */
 
-			var keyword = "";
-			var uiKeyword = "";
-			switch (id) {
-			case "all":
-				keyword = "?log_type=All_Activities";
-				uiKeyword = "All Activities";
-				break;
-			case "page-views":
-				keyword = "?log_type=Page_Views";
-				uiKeyword = "Page Views";
-				break;
-			case "email-opens":
-				keyword = "?log_type=Email_Opened";
-				uiKeyword = "Email Opens";
-				break;
-			case "email-clicks":
-				keyword = "?log_type=Email_Clicked";
-				uiKeyword = "Email Clicks";
-				break;
-			case "unsubscriptions":
-				keyword = "?log_type=Unsubscribed";
-				uiKeyword = "Unsubscriptions";
-				break;
-			case "spam-reports":
-				keyword = "?log_type=Email_Spam";
-				uiKeyword = "Spam Reports";
-				break;
-			case "hard-bounces":
-				keyword = "?log_type=Email_Hard_Bounced";
-				uiKeyword = "Hard Bounces";
-				break;
-			case "soft-bounces":
-				keyword = "?log_type=Email_Soft_Bounced";
-				uiKeyword = "Soft Bounces";
-				break;
-			default:
-				keyword = "?log_type=All_Activities";
-				uiKeyword = "All Activities";
-			}
+                getTemplate('contact-activity-header', {}, undefined, function(template_ui) {
+                    if (!template_ui)
+                        return;
+                    $('#content').html($(template_ui));
 
-			urlPath = urlPath + keyword;
-			if (id != undefined && id != "all")
-				$('.contact-activity-sub-heading').text(uiKeyword);
-			$('#log-filter-title').text(uiKeyword);
+                    var urlPath = "core/api/campaigns/logs/ContactActivities";
 
-			/*
-			 * if(IS_FLUID){
-			 * $('#contact_activity_header').removeClass('row').addClass('row-fluid');
-			 * $('#contact_activity_model').removeClass('row').addClass('row-fluid'); }
-			 * else{
-			 * $('#contact_activity_header').removeClass('row-fluid').addClass('row');
-			 * $('#contact_activity_model').removeClass('row-fluid').addClass('row'); }
-			 */
-			var collectionList = new Base_Collection_View({ url : urlPath, templateKey : 'contact-activity-list-log', individual_tag_name : 'li',
-				cursor : true, scroll_symbol : 'scroll', page_size : 20, sort_collection : false, postRenderCallback : function(el)
-				{
-					// initDateRangePicker("contact_activities_date_range",el);
-					head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
-					{
-						$("time", el).timeago();
-						console.log(id);
+                    var keyword = "";
+                    var uiKeyword = "";
+                    switch (id) {
+                        case "all":
+                            keyword = "?log_type=All_Activities";
+                            uiKeyword = "All Activities";
+                            break;
+                        case "page-views":
+                            keyword = "?log_type=Page_Views";
+                            uiKeyword = "Page Views";
+                            break;
+                        case "email-opens":
+                            keyword = "?log_type=Email_Opened";
+                            uiKeyword = "Email Opens";
+                            break;
+                        case "email-clicks":
+                            keyword = "?log_type=Email_Clicked";
+                            uiKeyword = "Email Clicks";
+                            break;
+                        case "unsubscriptions":
+                            keyword = "?log_type=Unsubscribed";
+                            uiKeyword = "Unsubscriptions";
+                            break;
+                        case "spam-reports":
+                            keyword = "?log_type=Email_Spam";
+                            uiKeyword = "Spam Reports";
+                            break;
+                        case "hard-bounces":
+                            keyword = "?log_type=Email_Hard_Bounced";
+                            uiKeyword = "Hard Bounces";
+                            break;
+                        case "soft-bounces":
+                            keyword = "?log_type=Email_Soft_Bounced";
+                            uiKeyword = "Soft Bounces";
+                            break;
+                        default:
+                            keyword = "?log_type=All_Activities";
+                            uiKeyword = "All Activities";
+                    }
 
-					});
+                    urlPath = urlPath + keyword;
+                    if (id != undefined && id != "all")
+                        $('.contact-activity-sub-heading').text(uiKeyword);
+                    $('#log-filter-title').text(uiKeyword);
 
-				}, appendItemCallback : function(el)
-				{
-					includeTimeAgo(el);
-				} });
-			collectionList.appendItem = append_contact_activities_log;
-			collectionList.collection.fetch();
+                    /*
+                     * if(IS_FLUID){
+                     * $('#contact_activity_header').removeClass('row').addClass('row-fluid');
+                     * $('#contact_activity_model').removeClass('row').addClass('row-fluid'); }
+                     * else{
+                     * $('#contact_activity_header').removeClass('row-fluid').addClass('row');
+                     * $('#contact_activity_model').removeClass('row-fluid').addClass('row'); }
+                     */
+                    var collectionList = new Base_Collection_View({
+                        url: urlPath,
+                        templateKey: 'contact-activity-list-log',
+                        individual_tag_name: 'li',
+                        cursor: true,
+                        scroll_symbol: 'scroll',
+                        page_size: 20,
+                        sort_collection: false,
+                        postRenderCallback: function(el) {
+                            // initDateRangePicker("contact_activities_date_range",el);
+                            head.js(LIB_PATH + 'lib/jquery.timeago.js', function() {
+                                $("time", el).timeago();
+                                console.log(id);
 
-			$('#contact-activity-list-based-condition').html(collectionList.render().el);
+                            });
 
-			console.log("========contact activities ==========");
-			// console.log(collectionList.render().el);
+                        },
+                        appendItemCallback: function(el) {
+                            includeTimeAgo(el);
+                        }
+                    });
+                    collectionList.appendItem = append_contact_activities_log;
+                    collectionList.collection.fetch();
 
-		});
+                    $('#contact-activity-list-based-condition').html(collectionList.render().el);
 
-	}// end contact activities
+                    console.log("========contact activities ==========");
+
+
+                }, "#content");
+
+            });
+
+        } // end contact activities
 
 });

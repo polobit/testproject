@@ -1,10 +1,10 @@
 
 <script id="deal-detail-template" type="text/html">
 <div class="app-content-full  h-full dock-view-fixing" id="deal-detail-header">
-<div class="hbox hbox-auto-xs hbox-auto-sm bg-light">
-<div class="col  bg-light lter b-r" style="width:299px;">
-<div class="vbox" style="display:block">
-<div class="row-row" style="display:block">
+<div class="hbox hbox-auto-xs  bg-light">
+<div class="col w-xl bg-light lter b-r">
+<div class="vbox">
+<div class="row-row">
 <div class="wrapper pos-rlt" id="deal-detail-actions-dropdown">
 <div class="contact-navigation-view hide"><span class="navigation  contact-switching"></span></div>
 <div class="h3 font-thin custom-color m-b-xs" style="width:85%">{{#if name}}{{name}}{{/if}}</div>
@@ -93,6 +93,25 @@
 {{/if}}
 
 <div>
+{{#if_equals pipeline.won_milestone milestone}}
+  {{#if won_date}}
+    <div class="m-t-sm">
+      <div>
+         <small class="text-xs text-muted">Won Date</small>
+      </div>
+      <div>{{epochToHumanDateInFormat won_date}}</div>
+    </div>
+  {{else}}
+    {{#if milestone_changed_time}}
+      <div class="m-t-sm">
+        <div>
+          <small class="text-xs text-muted">Won Date</small>
+        </div>
+        <div>{{epochToHumanDateInFormat milestone_changed_time}}</div>
+      </div>
+    {{/if}}
+  {{/if}}
+{{/if_equals}}
 
                            
 
@@ -175,13 +194,17 @@
              <li><a href="#dealnotes" data-toggle="tab" >Notes</a></li>
 			 <li><a href="#dealdocs" data-toggle="tab">Documents</a></li>
              <li><a href="#dealrelated" data-toggle="tab">Related</a></li>
+			 <li><a href="#dealtasks" data-toggle="tab">Tasks</a></li>
+			 <li><a href="#dealevents" data-toggle="tab">Events</a></li> 
            </ul>
 	</div>
  	<div class="tab-content panel" id="deal-tab-content">
  		<div class="tab-pane" id="dealactivities"></div>
  		<div class="tab-pane" id="dealnotes"></div>
  		<div class="tab-pane" id="dealdocs"></div>
- 		<div class="tab-pane" id="dealrelated"></div>     
+ 		<div class="tab-pane" id="dealrelated"></div>
+		<div class="tab-pane" id="dealtasks"></div>
+		<div class="tab-pane" id="dealevents"></div>     
  	</div>
 </div>
 </div>

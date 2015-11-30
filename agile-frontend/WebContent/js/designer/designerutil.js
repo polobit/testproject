@@ -35,7 +35,7 @@ function insertSelectedMergeField(ele, target_id)
  *            to add specific fields for specific nodes like unsubscribe link to
  *            SendEmail node
  */
-function getMergeFields(type)
+function getMergeFields(type, callback)
 {
 
 	var options = { "Select Merge Field" : "", "First Name" : "{{first_name}}", "First Name Fix" : "{{first_name_fix}}", "Last Name" : "{{last_name}}", "Last Name Fix" : "{{last_name_fix}}", "Name Fix" : "{{name_fix}}", "Score" : "{{score}}",
@@ -79,6 +79,9 @@ function getMergeFields(type)
 	}
 
 	merged_json["Powered by"] = "{{{powered_by}}}";
+
+	if(callback)
+		return callback(merged_json);
 
 	return merged_json;
 }
@@ -195,19 +198,22 @@ function get_custom_fields(type)
 	// Iterate over data and get field labels of each custom field
 	$.each(data, function(index, obj)
 	{
-		// Iterate over single custom field to get field-label
-		$.each(obj, function(key, value)
+		if (obj['field_type'] != "FORMULA")
 		{
-
-			// Needed only field labels for merge fields
-			if (key == 'field_label')
+			// Iterate over single custom field to get field-label
+			$.each(obj, function(key, value)
 			{
-				if (type == "update_field")
-					customfields[value] = value
-				else
-					customfields[value] = "{{" + value + "}}"
-			}
-		});
+
+				// Needed only field labels for merge fields
+				if (key == 'field_label')
+				{
+					if (type == "update_field")
+						customfields[value] = value
+					else
+						customfields[value] = "{{" + value + "}}"
+				}
+			});
+		}
 	});
 
 	return customfields;

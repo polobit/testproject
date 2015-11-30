@@ -5,7 +5,6 @@
  * API).
  */
 
-
 /*
  * Show Chargify profile
  */
@@ -23,7 +22,7 @@ function showChargifyClient()
 	}
 	console.log(emailArray);
 
-	queueGetRequest("widget_queue", "core/api/widgets/chargify/clients/" + CHARGIFY_PLUGIN_ID + "/" + emailArray, "json", function success(data)
+	queueGetRequest("widget_queue_", "core/api/widgets/chargify/clients/" + CHARGIFY_PLUGIN_ID + "/" + emailArray, "json", function success(data)
 	{
 		console.log(data)
 		// If data is not defined return
@@ -31,11 +30,20 @@ function showChargifyClient()
 		{
 			// Fill Chargify widget template with FreshBooks clients data
 			console.log(data)
-			var template = $('#' + CHARGIFY_PLUGIN_NAME).html(getTemplate('chargify-profile', data));
-			head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
-			{
-				$(".time-ago", template).timeago();
-			});
+			
+			getTemplate('chargify-profile', data, undefined, function(template_ui){
+				if(!template_ui)
+					  return;
+				
+				var template = $('#' + CHARGIFY_PLUGIN_NAME).html($(template_ui));
+				head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
+				{
+					$(".time-ago", template).timeago();
+				});
+
+
+
+			}, "#" + CHARGIFY_PLUGIN_NAME);
 
 		}
 		else
@@ -46,10 +54,17 @@ function showChargifyClient()
 	}, function error(data)
 	{
 		console.log(data.responseText);
-		if (data.responseText == "Customer not found")
-		{
-			$('#' + CHARGIFY_PLUGIN_NAME).html(getTemplate('chargify-profile-addcontact', { message : "agilecrm domain of doesn't contain any customers" }));
-		}
+		if (data.responseText != "Customer not found")
+			  return;
+
+		var json = { message : "agilecrm domain of doesn't contain any customers" };
+		getTemplate('chargify-profile-addcontact', json, undefined, function(template_ui){
+			if(!template_ui)
+				  return;
+			$('#' + CHARGIFY_PLUGIN_NAME).html($(template_ui));	
+		}, "#" + CHARGIFY_PLUGIN_NAME);
+
+		
 
 	});
 }
@@ -73,7 +88,12 @@ function chargifyError(id, message)
 	 * with given id
 	 */
 	console.log('error ');
-	$('#' + id).html(getTemplate('chargify-error', error_json));
+	getTemplate('chargify-error', error_json, undefined, function(template_ui){
+		if(!template_ui)
+			  return;
+		$('#' + id).html($(template_ui));	
+	}, "#" +id);
+
 
 }
 
@@ -136,7 +156,8 @@ $(function()
 			if (last_name == undefined || last_name == null)
 				last_name == ' ';
 			showChargifyClient();
-
+            
+            $("body").off("click", "#chargify_add_contact");
 			$("body").on("click", "#chargify_add_contact", function(e)
 			{
 				e.preventDefault();

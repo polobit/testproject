@@ -15,20 +15,27 @@ function initializeCallScriptListeners(){
 	{
 		e.preventDefault();
 		// To solve chaining issue when cloned
-		var htmlContent = $(getTemplate("callscript-rule", {})).find('tr').clone();
+		var that = this;
+		getTemplate('callscript-rule', {}, undefined, function(template_ui){
+			if(!template_ui)
+				  return;
 
-		scramble_input_names($(htmlContent));
+			var htmlContent = $(template_ui).find('tr').clone();
+			scramble_input_names($(htmlContent));
 
-		// boolean parameter to avoid contacts/not-contacts fields in form
-		chainFilters(htmlContent, function()
-		{
+			// boolean parameter to avoid contacts/not-contacts fields in form
+			chainFilters(htmlContent, function()
+			{
 
-		}, false);
+			}, false);
 
-		// $(this).hide();
-		// var htmlContent = $(this).closest("tr").clone();
-		$(htmlContent).find("i.callscript-multiple-remove").css("display", "inline-block");
-		$(this).siblings("table").find("tbody").append(htmlContent);
+			// $(this).hide();
+			// var htmlContent = $(this).closest("tr").clone();
+			$(htmlContent).find("i.callscript-multiple-remove").css("display", "inline-block");
+			$(that).siblings("table").find("tbody").append(htmlContent);
+
+
+		}, null);
 	});
 
 	// Filter Contacts- Remove Multiple
@@ -85,6 +92,30 @@ function initializeCallScriptListeners(){
 	$('#prefs-tabs-content').on('mouseleave', '.row-callscriptrule', function(e)
 	{
 		$(this).find(".callscriptrule-actions").css("visibility", "hidden");
+	});
+
+	
+	// On click of save button, check input and save details
+	$('#prefs-tabs-content #save_prefs').off('click');
+	$('#prefs-tabs-content').on('click', '#save_prefs', function(e)
+	{	e.preventDefault();
+
+		if ($(this).text() == "Saving..." || $(this).text() == "Loading...") {
+			console.log("Do not hit me again " + $(this).text());
+			return;
+		}
+
+		// Checks whether all input fields are given
+		try {
+			if (!isValidForm($("#callscriptruleForm"))) {
+				return;
+			}
+		} catch (err) {
+			return;
+		}
+
+		// Saves call script preferences in callscript widget object
+		saveCallScriptWidgetPrefs();
 	});
 }
 
@@ -252,7 +283,7 @@ function deleteCallScriptRule(dltRuleIndex)
 			console.log(data);
 		});
 	}
-	
+	initializeCallScriptListeners();
 	makeWidgetTabActive();
 }
 
@@ -271,12 +302,19 @@ function showCallScriptRule()
 	// Add rules to show rules page
 	if (callscriptPrefsJson != null)
 	{
-		$("#prefs-tabs-content").html(getTemplate("callscript-table", callscriptPrefsJson.csrules));
-		initializeSubscriptionListeners();
-		
-		// Apply drag drop (sortable)
-		setup_sortable_callscriptrules();
+		getTemplate("callscript-table", callscriptPrefsJson.csrules, undefined, function(template_ui){
+			if(!template_ui)
+				  return;
+
+			$("#prefs-tabs-content").html($(template_ui));
+			initializeSubscriptionListeners();
+			
+			// Apply drag drop (sortable)
+			setup_sortable_callscriptrules();
+
+		}, null);
 	}
+	initializeCallScriptListeners();
 }
 
 // show add rule page with chaining
@@ -313,6 +351,8 @@ function addCallScriptRule()
 
 	// Shows loading image until data gets ready for displaying
 	$("#prefs-tabs-content").html(LOADING_HTML);
+	initializeCallScriptListeners();
+
 	add_csr.render();
 }
 
@@ -334,32 +374,41 @@ function editCallScriptRule(ruleCount)
 		var csrule = getRule(callscriptPrefsJson,ruleCount);
 
 		$("#prefs-tabs-content").html(LOADING_HTML);
+		initializeCallScriptListeners();
 		
 		head.js(LIB_PATH + 'lib/agile.jquery.chained.min.js', function()
 		{
-			$("#prefs-tabs-content").html(getTemplate("callscript-rule"));
-			$("#prefs-tabs-content").find('#filter-settings').find("#loading-img-for-table").html(LOADING_HTML).show();
-			$("#prefs-tabs-content").find('#filter-settings').find(".chained-table").hide();
-			
-			chainFilters($("#prefs-tabs-content"), csrule, function()
-			{
-				$("#prefs-tabs-content").find('#filter-settings').find("#loading-img-for-table").hide();
-				$("#prefs-tabs-content").find('#filter-settings').find(".chained-table").show();
-				initializeSubscriptionListeners();
+
+			getTemplate('callscript-rule', {}, undefined, function(template_ui){
+				if(!template_ui)
+					  return;
+				$("#prefs-tabs-content").html($(template_ui));
+
+				$("#prefs-tabs-content").find('#filter-settings').find("#loading-img-for-table").html(LOADING_HTML).show();
+				$("#prefs-tabs-content").find('#filter-settings').find(".chained-table").hide();
 				
-				$(".callscript-multiple-remove").show();
-				$(".callscript-multiple-remove")[0].style.display = "none";
-			});
-			scramble_input_names($("#prefs-tabs-content").find('#filter-settings'));
+				chainFilters($("#prefs-tabs-content"), csrule, function()
+				{
+					$("#prefs-tabs-content").find('#filter-settings').find("#loading-img-for-table").hide();
+					$("#prefs-tabs-content").find('#filter-settings').find(".chained-table").show();
+					initializeSubscriptionListeners();
+					
+					$(".callscript-multiple-remove").show();
+					$(".callscript-multiple-remove")[0].style.display = "none";
+				});
+				scramble_input_names($("#prefs-tabs-content").find('#filter-settings'));
 
-			// Change heading
-			$(".addLable").html(" Edit Call Script Rule");
+				// Change heading
+				$(".addLable").html(" Edit Call Script Rule");
 
-			// Fill input tags
-			$("#name").val(csrule.name);
-			$("#displaytext").val(csrule.displaytext);
-			$("#position").val(csrule.position);
-			$("#rulecount").val(csrule.rulecount);			
+				// Fill input tags
+				$("#name").val(csrule.name);
+				$("#displaytext").val(csrule.displaytext);
+				$("#position").val(csrule.position);
+				$("#rulecount").val(csrule.rulecount);
+
+			}, "#prefs-tabs-content");
+
 		});
 	}
 }
@@ -429,6 +478,7 @@ function setup_sortable_callscriptrules()
 		 * This event is called after sorting stops to save new positions of
 		 * rules
 		 */
+		$('.csr-sortable').off("sortstop");
 		$('.csr-sortable').on("sortstop", function(event, ui) {
 					
 			// Get new array of rule
@@ -498,4 +548,110 @@ function makeWidgetTabActive()
 {
 	$('#PrefsTab .select').removeClass('select');
 	$('.add-widget-prefs-tab').addClass('select');	
+}
+
+
+// from widget-util.js
+
+
+
+/**
+ * Calls method in script API (agile_widget.js) to save CallScript preferences
+ * in CallScript widget object
+ */
+function saveCallScriptWidgetPrefs() {
+	$("#save_prefs").text("Saving...");
+	$("#save_prefs").attr("disabled", true);
+
+	// Retrieve and store the Sip preferences entered by the user as
+	// JSON
+	var callscript_prefs = makeRule();
+
+	console.log(callscript_prefs);
+
+	// Saves the preferences into widget with sip widget name
+	save_widget_prefs("CallScript", JSON.stringify(callscript_prefs), function(
+			data) {
+		console.log('In call script save success');
+		console.log(data);
+
+		// Redirect to show call script rules page
+		window.location.href = "#callscript/rules";
+	});
+}
+
+
+
+/**
+ * Shows setup if user adds call script widget for the first time or clicks on
+ * reset icon on call script panel in the UI
+ * 
+ */
+function callscript_save_widget_prefs() {
+	
+}
+
+
+
+function build_custom_widget_form(el)
+{
+	var divClone;
+	
+    $('#prefs-tabs-content').off('click', '#add-custom-widget');
+	$('#prefs-tabs-content').on('click', '#add-custom-widget', function(e)
+	{
+		$('#custom-widget-btn').removeClass('open');
+		divClone = $("#custom-widget").clone();
+		var widget_custom_view = new Base_Model_View({ url : "/core/api/widgets/custom", template : "add-custom-widget", isNew : true,
+			postRenderCallback : function(el)
+			{
+				console.log('In post render callback');
+				console.log(el);
+                
+				$('#custom-widget').off('change').on('change', '#script_type', function(e)
+				{
+					var script_type = $('#script_type').val();
+					if (script_type == "script")
+					{
+						$('#script_div').show();
+						$('#url_div').hide();
+						return;
+					}
+
+					if (script_type == "url")
+					{
+						$('#script_div').hide();
+						$('#url_div').show();
+					}
+				});
+
+			}, saveCallback : function(model)
+			{
+				console.log('In save callback');
+
+				console.log(model);
+
+				if (model == null)
+					alert("A widget with this name exists already. Please choose a different name");
+
+				App_Widgets.Catalog_Widgets_View.collection.add(model);
+				$("#custom-widget").replaceWith(divClone);
+			} });
+
+		$('#custom-widget', el).html(widget_custom_view.render(true).el);
+		
+		// Is Custom widget for all.
+		if(!($(this).hasClass('add_to_all'))){
+			isForAll = false;
+		}
+
+		$('#custom_isForAll').val(isForAll);
+		
+        $('#prefs-tabs-content').off('click', '#cancel_custom_widget');
+		$('#prefs-tabs-content').on('click', '#cancel_custom_widget', function(e)
+		{
+			// Restore element back to original
+			$("#custom-widget").replaceWith(divClone); 
+		});
+	});
 }

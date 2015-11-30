@@ -14,6 +14,21 @@
 </div>
 </script>
 
+<script id="socialsuite-hover-helptext-template" type="text/html">
+    {{#if_equals item "Search"}}<i class="icon-search"></i> Relevant Tweets matching a specified Search Keyword.{{/if_equals}}
+    {{#if_equals item "Home"}}<i class="icon-home"></i> Tweets and retweets of user and followers.{{/if_equals}}
+    {{#if_equals item "Mentions"}}<img src="{{getS3ImagePath '../img/socialsuite/mentions.png'}}" style="width: 15px;height: 15px;"> Mentions (all tweets containing a users's @screen_name). {{/if_equals}}
+    {{#if_equals item "Retweets"}}<i class="icon-retweet"></i> User's tweets retweeted by others. {{/if_equals}}
+    {{#if_equals item "DM_Inbox"}}<i class="icon-download-alt"></i> Direct messages sent to the user. {{/if_equals}}
+    {{#if_equals item "DM_Outbox"}}<i class="icon-upload-alt"></i> Direct messages sent by the user. {{/if_equals}}
+    {{#if_equals item "Favorites"}}<i class="icon-star"></i> User's favorite tweets.{{/if_equals}}
+    {{#if_equals item "Sent"}}<i class="icon-share-alt"></i> Tweets sent by the user.{{/if_equals}}
+    {{#if_equals item "Scheduled"}} <i class="icon-time"></i> Tweets scheduled for sending later.{{/if_equals}}
+    {{#if_equals item "All_Updates"}}<i class="icon-home"></i> Updates and shares from user's connections and groups. {{/if_equals}}
+    {{#if_equals item "My_Updates"}} <i class="icon-share-alt"></i> Updates authored by the user.{{/if_equals}}
+
+</script>
+
 <script id="twitter-stream-type-template" type="text/html">
 <div class="at-center">  
   <div id="account_description" class="row">
@@ -33,44 +48,44 @@
   <div class="social-stream-types">	
    <label class="font15 m-b-sm"><b>Select the Stream</b></label> 
    <div class="row m-b-sm">
-    <div class="col-md-3 col-sm-3 col-xs-3">
+    <div class="col-md-3 col-sm-3 col-xs-12">
      <div class="stream-type" id="home" value="Home" title="Home">
  	  <a> <i class="icon-home icon-3x text-l-none"></i><br>Home </a>
      </div>
     </div><!-- /.col-md-3 -->    
-    <div class="col-md-3 col-sm-3 col-xs-3">
+    <div class="col-md-3 col-sm-3 col-xs-12">
      <div class="stream-type" id="retweets" value="Retweets" title="Retweets">
  	  <a> <i class="icon-retweet icon-3x text-l-none"></i><br>Retweets </a>
      </div>
     </div><!-- /.col-md-3 -->	
-	<div class="col-md-3 col-sm-3 col-xs-3">
+	<div class="col-md-3 col-sm-3 col-xs-12">
      <div class="stream-type" id="sent" value="Sent" title="Sent">
  	  <a> <i class="icon-share-alt icon-3x text-l-none"></i><br>Sent </a>
      </div> 
     </div><!-- /.col-md-3 -->
-    <div class="col-md-3 col-sm-3 col-xs-3">
+    <div class="col-md-3 col-sm-3 col-xs-12">
      <div class="stream-type" id="mentions" value="Mentions" title="Mentions">				
       <a> <span style="font-size:26px">@</span><br>Mentions </a>
 	 </div>				                
     </div><!-- /.col-md-3 -->		
    </div><!-- /row-->
    <div class="row">    
-    <div class="col-md-3 col-sm-3 col-xs-3">
+    <div class="col-md-3 col-sm-3 col-xs-12">
      <div class="stream-type" id="dm_inbox" value="DM_Inbox" title="DM Inbox">				
       <a> <i class="icon-download-alt icon-3x text-l-none"></i><br>DM Inbox </a>
      </div>					                
     </div><!-- /.col-md-3 -->
-    <div class="col-md-3 col-sm-3 col-xs-3">
+    <div class="col-md-3 col-sm-3 col-xs-12">
      <div class="stream-type" id="dm_outbox" value="DM_Outbox" title="DM Outbox"> 
  	  <a> <i class="icon-upload-alt icon-3x text-l-none"></i><br>DM Outbox </a>
      </div>
     </div><!-- /.col-md-3 -->      
-    <div class="col-md-3 col-sm-3 col-xs-3">	
+    <div class="col-md-3 col-sm-3 col-xs-12">	
      <div class="stream-type" id="favorites" value="Favorites" title="Favorites">			
       <a> <i class="icon-star icon-3x text-l-none"></i><br>Favorites </a>
      </div>					                
     </div><!-- /.col-md-3 -->    
-    <div class="col-md-3 col-sm-3 col-xs-3">
+    <div class="col-md-3 col-sm-3 col-xs-12">
      <div class="stream-type" id="search" value="Search" title="Search">		
       <a> <i class="icon-search icon-3x text-l-none"></i><br>Search </a>      
      </div>					                

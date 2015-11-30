@@ -2,6 +2,7 @@
 function initializeActivitiesListner(el){
 
 
+	$("#activities-listners").off();
 	// Click events to agents dropdown and department
 	$("#activities-listners").on("click", "ul#user-select li a, ul#entity_type li a", function(e)
 	{
@@ -12,9 +13,9 @@ function initializeActivitiesListner(el){
 
 		$(this).closest("ul").data("selected_item", id);
 		$(this).closest(".btn-group").find(".selected_name").text(name);
-		var url = getParameters();
+		var url = getActivityFilterParameters();
 
-		updateActivty(url);
+		renderActivityView(url);
 
 	});
 	$("#activities-listners").on("click", "ul#entity_type li a", function(e)
@@ -22,8 +23,8 @@ function initializeActivitiesListner(el){
 		var entitytype = $(this).html();
 
 		var entity_attribute = $(this).attr("href");
-		createCookie("selectedentity", entity_attribute, 90);
-		createCookie("selectedentity_value", entitytype, 90);
+
+		buildActivityFilters(entitytype,entity_attribute,"entityDropDown");
 		$('.activity-sub-heading').html(entitytype);
 
 	});
@@ -32,15 +33,15 @@ function initializeActivitiesListner(el){
 
 		var user = $(this).html();
 		var user_attribute = $(this).attr("href");
-		createCookie("selecteduser", user_attribute, 90);
-		createCookie("selecteduser_value", user, 90);
+
+		buildActivityFilters(user,user_attribute,"userDropDown");
 
 	});
 
 
 
 	$("#activities-listners").on('click', '.activity-event-edit', function(e)
-{
+	{
 	e.preventDefault();
 	var data = $(this).closest('a').attr("data");
 
@@ -59,8 +60,13 @@ function initializeActivitiesListner(el){
 
 	var obj = getActivityObject(data);
 	console.log(obj);
-	var emailinfo = $(getTemplate("infoModal", JSON.parse(obj)));
-	emailinfo.modal('show');
+
+	getTemplate("infoModal", JSON.parse(obj), undefined, function(template_ui){
+		if(!template_ui)
+			  return;
+		var emailinfo = $(template_ui);
+		emailinfo.modal('show');
+	}, null);
 
 });
 
@@ -68,7 +74,7 @@ function initializeActivitiesListner(el){
 function getDealObject(id)
 {
 
-	return $.ajax({ type : "GET", url : 'core/api/opportunity/' + id, async : false }).responseText;
+	return $.ajax({ type : "GET", url : 'core/api/opportunity/' + id, async : true }).responseText;
 
 }
 

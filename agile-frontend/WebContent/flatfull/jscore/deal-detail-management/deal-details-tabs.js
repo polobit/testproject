@@ -58,6 +58,28 @@ $(function(){
 		save_deal_tab_position_in_cookie("dealdocs");
 		deal_details_tab.load_deal_docs();
 	});
+	
+	/**
+	 * Fetches all the tasks related to the deal and shows the docs collection as
+	 * a table in its tab-content, when "Tasks" tab is clicked.
+	 */
+	$('#content').on('click', '#deal-details-tab a[href="#dealtasks"]', function(e)
+	{
+		e.preventDefault();
+		save_deal_tab_position_in_cookie("dealtasks");
+		deal_details_tab.load_deal_tasks();
+	});
+
+	/**
+	 * Fetches all the events related to the deal and shows the docs collection as
+	 * a table in its tab-content, when "Events" tab is clicked.
+	 */
+	$('#content').on('click', '#deal-details-tab a[href="#dealevents"]', function(e)
+	{
+		e.preventDefault();
+		save_deal_tab_position_in_cookie("dealevents");
+		deal_details_tab.load_deal_events();
+	});
 
 
 	$("#content").on('click', "#deal-owner", function(e)
@@ -384,6 +406,307 @@ $('#content').on('click', '.add-deal-document-cancel', function(e){
 	el.find(".add-deal-document-select").css("display", "inline");
 });
 
+	$('#content').on('click', '.deal-add-task', function(e){ 
+    	e.preventDefault();
+
+    	var	el = $("#taskForm");
+		$('#activityTaskModal').modal('show');
+		highlight_task();
+		// Displays contact name, to indicate the task is related to the contact
+		fill_relation_deal_task(el);
+
+		agile_type_ahead("task_related_to", el, contacts_typeahead);
+
+        agile_type_ahead("task_relates_to_deals", el, deals_typeahead, false,null,null,"core/api/search/deals",false, true);
+
+		// Fills owner select element
+		populateUsers("owners-list", $("#taskForm"), undefined, undefined,
+				function(data) {
+					$("#taskForm").find("#owners-list").html(data);
+					$("#owners-list", el).find('option[value='+ CURRENT_DOMAIN_USER.id +']').attr("selected", "selected");
+					$("#owners-list", $("#taskForm")).closest('div').find('.loading-img').hide();					
+		});
+
+       activateSliderAndTimerToTaskModal();
+    });
+
+    $('#content').on('click', '.task-edit-deal-tab', function(e)
+	{
+		e.preventDefault();
+		var id = $(this).attr('data');
+		var value = dealTasksView.collection.get(id).toJSON();
+
+		deserializeForm(value, $("#updateTaskForm"));
+
+		$("#updateTaskModal").modal('show');
+
+		$('.update-task-timepicker').val(fillTimePicker(value.due));
+		// Fills owner select element
+		populateUsers("owners-list", $("#updateTaskForm"), value, 'taskOwner', function(data)
+		{
+			$("#updateTaskForm").find("#owners-list").html(data);
+			if (value.taskOwner)
+				$("#owners-list", $("#updateTaskForm")).find('option[value=' + value['taskOwner'].id + ']').attr("selected", "selected");
+
+			$("#owners-list", $("#updateTaskForm")).closest('div').find('.loading-img').hide();
+		});
+
+		// Add notes in task modal
+		showNoteOnForm("updateTaskForm", value.notes);
+
+		activateSliderAndTimerToTaskModal();
+
+	});
+
+	/**
+	 * Delete functionality for tasks blocks in deal details
+	 */
+	$('#content').on('click', '.deal-task-delete', function(e)
+	{
+		e.preventDefault();
+
+		var model = $(this).parents('li').data();
+
+		if (model && model.toJSON().type != "WEB_APPOINTMENT")
+		{
+			if (!confirm("Are you sure you want to delete?"))
+				return;
+		}
+		else if (model && model.toJSON().type == "WEB_APPOINTMENT" && parseInt(model.toJSON().start) < parseInt(new Date().getTime() / 1000))
+		{
+			if (!confirm("Are you sure you want to delete?"))
+				return;
+		}
+
+		if (model && model.collection)
+		{
+			model.collection.remove(model);
+		}
+
+		// Gets the id of the entity
+		var entity_id = $(this).attr('id');
+
+		if (model && model.toJSON().type == "WEB_APPOINTMENT" && parseInt(model.toJSON().start) > parseInt(new Date().getTime() / 1000))
+		{
+			web_event_title = model.toJSON().title;
+			if (model.toJSON().contacts.length > 0)
+			{
+				var firstname = getPropertyValue(model.toJSON().contacts[0].properties, "first_name");
+				if (firstname == undefined)
+					firstname = "";
+				var lastname = getPropertyValue(model.toJSON().contacts[0].properties, "last_name");
+				if (lastname == undefined)
+					lastname = "";
+				web_event_contact_name = firstname + " " + lastname;
+			}
+			$("#webEventCancelModel").modal('show');
+			$("#cancel_event_title").html("Delete event &#39" + web_event_title + "&#39");
+			$("#event_id_hidden").html("<input type='hidden' name='event_id' id='event_id' value='" + entity_id + "'/>");
+			return;
+		}
+
+		// Gets the url to which delete request is to be sent
+		var entity_url = $(this).attr('url');
+
+		if (!entity_url)
+			return;
+
+		var id_array = [];
+		var id_json = {};
+
+		// Create array with entity id.
+		id_array.push(entity_id);
+
+		// Set entity id array in to json object with key ids,
+		// where ids are read using form param
+		id_json.ids = JSON.stringify(id_array);
+		var that = this;
+
+		// Add loading. Adds loading only if there is no loaded image added
+		// already i.e.,
+		// to avoid multiple loading images on hitting delete multiple times
+		if ($(this).find('.loading').length == 0)
+			$(this).prepend($(LOADING_HTML).addClass('pull-left').css('width', "20px"));
+
+		$.ajax({ url : entity_url, type : 'POST', data : id_json, success : function()
+		{
+			// Removes activity from list
+			$(that).parents(".activity").parent().fadeOut(400, function()
+			{
+				$(this).remove();
+			});
+			if(dealTasksView && dealTasksView.collection.length==0)
+			{
+				$('#dealtasks').html(dealTasksView.render(true).el);
+			}
+		} });
+	});
+
+	$('#content').on('click', '.complete-deal-task', function(e)
+	{
+		e.preventDefault();
+		if ($(this).is(':checked'))
+		{
+			var id = $(this).attr('data');
+			var that = this;
+			complete_task(id, dealTasksView.collection, undefined, function(data)
+			{
+				$(that).parent().siblings(".task-subject").css("text-decoration", "line-through");
+				console.log($(that).parents('.activity-text-block').css("background-color", "#FFFAFA"));
+				$(that).parent().replaceWith('<span style="margin-right:9px;"><i class="fa fa-check"></i></span>');
+				dealTasksView.collection.add(data, { silent : true });
+			});
+		}
+	});
+
+	/**
+	 * Displays activity modal with all event features,  to add a event 
+	 * related to the deal in deal detail view. Also prepends the 
+	 * deal name to related to field of activity modal.
+	 */ 
+    $('#content').on('click', '.deal-add-event', function(e){ 
+    	e.preventDefault();
+
+    	var	el = $("#activityForm");
+		$('#activityModal').modal('show');
+		highlight_event();
+		// Displays contact name, to indicate the task is related to the contact
+		fill_relation_deal_task(el);
+		agile_type_ahead("event_related_to", el, contacts_typeahead);
+        agile_type_ahead("task_relates_to_deals", el, deals_typeahead, false,null,null,"core/api/search/deals",false, true);
+
+    });
+
+    // Event edit in contact details tab
+	$('#content').on('click', '.event-edit-deal-tab', function(e)
+					{
+						e.preventDefault();
+						var id = $(this).attr('data');
+						var value = dealEventsView.collection.get(id).toJSON();
+						deserializeForm(value, $("#updateActivityForm"));
+						$("#updateActivityModal").modal('show');
+
+						$('.update-start-timepicker').val(fillTimePicker(value.start));
+						$('.update-end-timepicker').val(fillTimePicker(value.end));
+
+		if (value.type == "WEB_APPOINTMENT" && parseInt(value.start) > parseInt(new Date().getTime() / 1000))
+		{
+			$("[id='event_delete']").attr("id", "delete_web_event");
+			web_event_title = value.title;
+			if (value.contacts.length > 0)
+			{
+				var firstname = getPropertyValue(value.contacts[0].properties, "first_name");
+				if (firstname == undefined)
+					firstname = "";
+				var lastname = getPropertyValue(value.contacts[0].properties, "last_name");
+				if (lastname == undefined)
+					lastname = "";
+				web_event_contact_name = firstname + " " + lastname;
+			}
+		}
+		else
+		{
+			$("[id='delete_web_event']").attr("id", "event_delete");
+		}
+		if (value.description)
+		{
+			var description = '<label class="control-label"><b>Description </b></label><div class="controls"><textarea id="description" name="description" rows="3" class="input form-control" placeholder="Add Description"></textarea></div>'
+			$("#event_desc").html(description);
+			$("textarea#description").val(value.description);
+		}
+		else
+		{
+			var desc = '<div class="row-fluid">' + '<div class="control-group form-group m-b-none">' + '<a href="#" id="add_event_desctiption"><i class="icon-plus"></i> Add Description </a>' + '<div class="controls event_discription hide">' + '<textarea id="description" name="description" rows="3" class="input form-control w-full col-md-8" placeholder="Add Description"></textarea>' + '</div></div></div>'
+			$("#event_desc").html(desc);
+		}
+		// Fills owner select element
+		populateUsersInUpdateActivityModal(value);
+	});
+
+	/**
+	 * Delete functionality for events blocks in deal details
+	 */
+	$('#content').on('click', '.deal-event-delete', function(e)
+	{
+		e.preventDefault();
+
+		var model = $(this).parents('li').data();
+
+		if (model && model.toJSON().type != "WEB_APPOINTMENT")
+		{
+			if (!confirm("Are you sure you want to delete?"))
+				return;
+		}
+		else if (model && model.toJSON().type == "WEB_APPOINTMENT" && parseInt(model.toJSON().start) < parseInt(new Date().getTime() / 1000))
+		{
+			if (!confirm("Are you sure you want to delete?"))
+				return;
+		}
+
+		if (model && model.collection)
+		{
+			model.collection.remove(model);
+		}
+
+		// Gets the id of the entity
+		var entity_id = $(this).attr('id');
+
+		if (model && model.toJSON().type == "WEB_APPOINTMENT" && parseInt(model.toJSON().start) > parseInt(new Date().getTime() / 1000))
+		{
+			web_event_title = model.toJSON().title;
+			if (model.toJSON().contacts.length > 0)
+			{
+				var firstname = getPropertyValue(model.toJSON().contacts[0].properties, "first_name");
+				if (firstname == undefined)
+					firstname = "";
+				var lastname = getPropertyValue(model.toJSON().contacts[0].properties, "last_name");
+				if (lastname == undefined)
+					lastname = "";
+				web_event_contact_name = firstname + " " + lastname;
+			}
+			$("#webEventCancelModel").modal('show');
+			$("#cancel_event_title").html("Delete event &#39" + web_event_title + "&#39");
+			$("#event_id_hidden").html("<input type='hidden' name='event_id' id='event_id' value='" + entity_id + "'/>");
+			return;
+		}
+
+		// Gets the url to which delete request is to be sent
+		var entity_url = $(this).attr('url');
+
+		if (!entity_url)
+			return;
+
+		var id_array = [];
+		var id_json = {};
+
+		// Create array with entity id.
+		id_array.push(entity_id);
+
+		// Set entity id array in to json object with key ids,
+		// where ids are read using form param
+		id_json.ids = JSON.stringify(id_array);
+		var that = this;
+
+		// Add loading. Adds loading only if there is no loaded image added
+		// already i.e.,
+		// to avoid multiple loading images on hitting delete multiple times
+		if ($(this).find('.loading').length == 0)
+			$(this).prepend($(LOADING_HTML).addClass('pull-left').css('width', "20px"));
+
+		$.ajax({ url : entity_url, type : 'POST', data : id_json, success : function()
+		{
+			// Removes activity from list
+			$(that).parents(".activity").parent().fadeOut(400, function()
+			{
+				$(this).remove();
+			});
+			if(dealEventsView && dealEventsView.collection.length==0)
+			{
+				$('#dealevents').html(dealEventsView.render(true).el);
+			}
+		} });
+	});
+
 });
 
 // }
@@ -428,6 +751,18 @@ function load_deal_tab(el, dealJSON)
 			$('#deal-details-tab a[href="#dealdocs"]', el).tab('show');
 
 			deal_details_tab.load_deal_docs();
+		}
+		else if (position == "dealtasks")
+		{
+			$('#deal-details-tab a[href="#dealtasks"]', el).tab('show');
+
+			deal_details_tab.load_deal_tasks();
+		}
+		else if (position == "dealevents")
+		{
+			$('#deal-details-tab a[href="#dealevents"]', el).tab('show');
+
+			deal_details_tab.load_deal_events();
 		}
 	}
 	else

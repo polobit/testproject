@@ -207,6 +207,7 @@ public class MandrillWebhook extends HttpServlet
 		contact.emailBounceStatus.add(emailBounceStatus);
 	    }
 
+	    contact.updated_time = System.currentTimeMillis()/1000;
 	    contact.update();
 
 		// Execute trigger

@@ -59,6 +59,11 @@ public class AddDeal extends TaskletAdapter
 	public static String OWNER_ID = "owner_id";
 
 	/**
+	 * Deal source
+	 */
+	public static String SOURCE_ID = "deal_source_id";
+
+	/**
 	 * Saves deal and add log
 	 * 
 	 * @param campaignJSON
@@ -81,10 +86,21 @@ public class AddDeal extends TaskletAdapter
 		String milestone = getStringValue(nodeJSON, subscriberJSON, data, MILESTONE);
 		String daysToClose = getStringValue(nodeJSON, subscriberJSON, data, DAYS_TO_CLOSE);
 		String givenOwnerId = getStringValue(nodeJSON, subscriberJSON, data, OWNER_ID);
+		String source_id = getStringValue(nodeJSON, subscriberJSON, data, SOURCE_ID);
 
 		// Add given days value to calendar instance before getting required
 		// epoch time
 		Long epochTime = AgileTaskletUtil.getDateInEpoch(daysToClose);
+
+		Long deal_sorce_id = null;
+		try
+		{
+			deal_sorce_id = Long.parseLong(source_id);
+		}
+		catch (Exception e)
+		{
+			deal_sorce_id = null;
+		}
 
 		// Contact Id
 		String contactId = AgileTaskletUtil.getId(subscriberJSON);
@@ -103,7 +119,7 @@ public class AddDeal extends TaskletAdapter
 				// Add Deal with given values
 				addDeal(dealName, expectedValue, probability, description, milestone,
 						Long.parseLong(milestoneDetails.get("pipelineID")), epochTime, contactId,
-						AgileTaskletUtil.getOwnerId(givenOwnerId, contactOwnerId));
+						AgileTaskletUtil.getOwnerId(givenOwnerId, contactOwnerId), deal_sorce_id);
 
 				// Add log
 				LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON),
@@ -151,13 +167,14 @@ public class AddDeal extends TaskletAdapter
 	 */
 
 	private void addDeal(String name, String value, String probability, String description, String milestone,
-			Long pipelineID, Long closedEpochTime, String contactId, Long ownerId)
+			Long pipelineID, Long closedEpochTime, String contactId, Long ownerId, Long source_id)
 	{
 		Opportunity opportunity = new Opportunity(name, description, Double.parseDouble(value), milestone,
 				Integer.parseInt(probability), null, ownerId == null ? null : ownerId.toString());
 		opportunity.addContactIds(contactId);
 		opportunity.pipeline_id = pipelineID;
 		opportunity.close_date = closedEpochTime;
+		opportunity.deal_source_id = source_id;
 		opportunity.save();
 	}
 }

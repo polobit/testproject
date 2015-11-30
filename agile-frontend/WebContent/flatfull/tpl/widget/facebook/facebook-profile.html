@@ -2,7 +2,7 @@
 <script id="facebook-login-template" type="text/html">
 <div>
 	Facebook is a social utility that connects people with friends and others who work, study and live around them.
-<div class="m-t-md">	
+<div class="m-t-md text-center">	
 <a class="btn btn-sm btn-primary" href="{{url}}">Link Your Facebook</a>
 </div>
 </div>
@@ -62,7 +62,7 @@
 				</div>
 				<input type="submit"  id="facebook_search_btn" class="btn btn-sm btn-primary text-l-none"></input>					
 				<a href="#" id="facebook_search_close" class="btn btn-sm btn-default m-l-xs">Close</a>
-				<span><img src="img/ajax-spinner.gif" id="spinner-facebook-search" style="display:none;"></img></span>
+				<span><img src="{{getS3ImagePath 'img/ajax-spinner.gif'}}" id="spinner-facebook-search" style="display:none;"></img></span>
 			 </fieldset>
 	    </form>
 	</div>
@@ -90,22 +90,21 @@
 </script>
 <script id="facebook-revoke-access-template" type="text/html">
 <div>
-{{#if custom_data.picture.data.url}}
+{{#if profile.picture.data.url}}
 	<div>
 		<div class="pull-left thumb-md thumb-wrapper">
-			<img src="{{custom_data.picture.data.url}}" class="w-full"  alt="" />
+			<img src="{{profile.picture.data.url}}" class="w-full"  alt="" />
 		</div>
 		<div class="pull-left m-l-sm">
-			<p><a href="{{custom_data.link}}" target="_blank" >{{custom_data.name}}</a></p>
-			<p class="m-n">{{custom_data.location.name}}</p>
+			<p><a href="{{profile.link}}" target="_blank" >{{profile.name}}</a></p>
+			<p class="m-n">{{profile.location.name}}</p>
 		</div>
 	</div>
 {{/if}}
-	<div class="clearfix"></div>
-		<div class="m-t-md m-r-none m-b-xs m-l-none">
-			<a class='btn btn-sm btn-danger revoke-widget' widget-name="Facebook">Revoke Access</a>
-			<a href="#add-widget" class='btn btn-default btn-sm m-l-xs' widget-name="Facebook">Cancel</a>
-		</div>
-	
+<div class="clearfix"></div>
+	<div class="m-t-md m-r-none m-b-xs m-l-none text-center">
+		<a class='btn btn-sm btn-danger revoke-widget' widget-name="Facebook">Revoke Access</a>
+		<a href="#add-widget" class='btn btn-default btn-sm m-l-xs' widget-name="Facebook">Cancel</a>
+	</div>
 </div>
 </script>

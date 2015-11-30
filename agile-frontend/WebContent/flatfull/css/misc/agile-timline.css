@@ -52,6 +52,41 @@
 	line-height: 1.3;
 }
 
+
+/*@media (min-width:465px) and (max-width: 645px) {
+	#timeline .post.right .date{
+		/*left: 0px;
+	}
+	#timeline .post.right {
+		width: calc(100% - 150px);
+	}
+}
+
+@media (min-width:300px) and (max-width: 464px) {
+	#timeline .post.right {
+		width: calc(100% - 120px);
+	}
+	#timeline .post.right .inner {
+		margin-left: 0px;
+	}
+	#timeline .item.top {
+		left: -10px!important;
+	}
+	#timeline .year-marker:not(.top) {
+		left: 0px!important;
+	} 
+}*/
+
+
+@media all and (max-width: 767px) {
+	#timeline .post .inner {
+		width:calc(100% - 80px);
+	}
+	#timeline {
+		width: auto;
+	}
+}
+
 #timeline .post .caption {
 	color: #9d9d9d;
 	font-family: Georgia, sans-serif;

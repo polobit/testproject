@@ -26,8 +26,12 @@ function load_gmail_widgets(limit) {
 					"service" : "Gmail",
 					"return_url" : encodeURIComponent(window.location.href)
 				};
-				$('#prefs-tabs-content').find("#social-prefs").append(
-						$(getTemplate("settings-social-prefs-model", data1)));
+
+				getTemplate("settings-social-prefs-model", data1, undefined, function(template_ui){
+					if(!template_ui)
+						  return;
+					$('#prefs-tabs-content').find("#social-prefs").append($(template_ui));
+				}, null);
 			}
 			updateTimeOut();
 		}
@@ -48,8 +52,12 @@ function load_imap_widgets(limit) {
 			if ((imap_count < limit && !HAS_EMAIL_ACCOUNT_LIMIT_REACHED)
 					|| imap_count === 0) {
 				var data1 = {};
-				$('#prefs-tabs-content').find("#imap-prefs").append(
-						$(getTemplate("settings-imap-access-model", data1)));
+
+				getTemplate("settings-imap-access-model", data1, undefined, function(template_ui){
+					if(!template_ui)
+						  return;
+					$('#prefs-tabs-content').find("#imap-prefs").append($(template_ui));
+				}, null);
 			}
 			updateTimeOut();
 		}
@@ -70,8 +78,12 @@ function load_office365_widgets(limit) {
 			if ((office_count < limit && !HAS_EMAIL_ACCOUNT_LIMIT_REACHED)
 					|| office_count === 0) {
 				var data1 = {};
-				$('#prefs-tabs-content').find("#office-prefs").append(
-						$(getTemplate("settings-office-access-model", data1)));
+
+				getTemplate("settings-office-access-model", data1, undefined, function(template_ui){
+					if(!template_ui)
+						  return;
+					$('#prefs-tabs-content').find("#office-prefs").append($(template_ui));
+				}, null);
 			}
 			updateTimeOut();
 		}
@@ -309,6 +321,14 @@ function initializeSettingsListeners(){
 		});
 	});
 
+	$("#prefs-tabs-content .widgets_inner ul li").off("click");
+	$("#prefs-tabs-content").on("click",".widgets_inner ul li",function(){
+		var temp = $(this).find("a").attr("href").split("#");
+		if(islocalStorageHasSpace())
+			localStorage.setItem('widget_tab', temp[1]);
+		Backbone.history.navigate('add-widget', { trigger : true });
+	});
+
 }
 
 function initializeAdminSettingsListeners(){
@@ -333,54 +353,71 @@ function initializeAdminSettingsListeners(){
 			
 			$("#warning-deletion-feedback").remove();
 			// Shows account stats warning template with stats(data used)
-			var el = getTemplate('warning-feedback', {});
-
-			// Appends to content, warning is modal can call show if
-			// appended in content
-			$('#content').append(el);
-
-			// Shows warning modal
-			$("#warning-deletion-feedback").modal('show');
-
-			// Undefines delete reason, if use chose not to delete account in delete process
-			$("#warning-deletion-feedback").on('hidden.bs.modal', function(){
-				ACCOUNT_DELETE_REASON_JSON = undefined;
-			});
 			
-			$('body').on('click', '#warning-feedback-save', function(e) {
-				e.preventDefault();
-				
-				var form = $("#cancelation-feedback-form");
-				
-				if(!isValidForm(form))
-				{
-					return;
-				}
-				
-				var input =  $("input[name=cancellation_reason]:checked");
-			
-				ACCOUNT_DELETE_REASON_JSON = {};
-				ACCOUNT_DELETE_REASON_JSON["reason"] = $(input).val();
-				ACCOUNT_DELETE_REASON_JSON["reason_info"] = $("#account_delete_reason").val();
-				$(".modal-body").html(getRandomLoadingImg());
-				var delete_step1_el = "";
-				if(ACCOUNT_STATS)
-					delete_step1_el = $(getTemplate('warning', ACCOUNT_STATS));
-				else
+			getTemplate("warning-feedback", {}, undefined, function(template_ui){
+				if(!template_ui)
+					  return;
+				var el = $(template_ui);
+
+				// Appends to content, warning is modal can call show if
+				// appended in content
+				$('#content').append(el);
+
+				// Shows warning modal
+				$("#warning-deletion-feedback").modal('show');
+
+				// Undefines delete reason, if use chose not to delete account in delete process
+				$("#warning-deletion-feedback").on('hidden.bs.modal', function(){
+					ACCOUNT_DELETE_REASON_JSON = undefined;
+				});
+
+				$('body').on('click', '#warning-feedback-save', function(e) {
+					e.preventDefault();
+					
+					var form = $("#cancelation-feedback-form");
+					
+					if(!isValidForm(form))
 					{
-						set_up_account_stats(el, function(data){
-							delete_step1_el = $(getTemplate('warning', data));
-							$(".modal-body").css("padding", 0 ).html($(".modal-body", $(delete_step1_el)));
-							$(".modal-footer").html($(".modal-footer", $(delete_step1_el)).html());
-						})
 						return;
 					}
-					 
-				$(".modal-body").css("padding", 0 ).html($(".modal-body", $(delete_step1_el)));
-				$(".modal-footer").html($(".modal-footer", $(delete_step1_el)).html());
+					
+					var input =  $("input[name=cancellation_reason]:checked");
 				
-			});
-			
+					ACCOUNT_DELETE_REASON_JSON = {};
+					ACCOUNT_DELETE_REASON_JSON["reason"] = $(input).val();
+					ACCOUNT_DELETE_REASON_JSON["reason_info"] = $("#account_delete_reason").val();
+					$(".modal-body").html(getRandomLoadingImg());
+					var delete_step1_el = "";
+					if(ACCOUNT_STATS){
+						getTemplate('warning', ACCOUNT_STATS, undefined, function(template_ui1){
+					 		if(!template_ui1)
+					    		return;
+					    	delete_step1_el = $(template_ui1);
+							
+						}, null);
+
+					}
+					else
+						{
+							set_up_account_stats(el, function(data){
+								getTemplate('warning', data, undefined, function(template_ui){
+							 		if(!template_ui)
+							    		return;
+							    	delete_step1_el = $(template_ui);
+									$('#content').html($(template_ui)); 
+									$(".modal-body").css("padding", 0 ).html($(".modal-body", $(delete_step1_el)));
+									$(".modal-footer").html($(".modal-footer", $(delete_step1_el)).html());
+								}, null);
+
+							})
+							return;
+						}
+						 
+					$(".modal-body").css("padding", 0 ).html($(".modal-body", $(delete_step1_el)));
+					$(".modal-footer").html($(".modal-footer", $(delete_step1_el)).html());
+					
+				});
+			}, null);
 	});
 	
 	// Cancellation for paid users
@@ -392,85 +429,73 @@ function initializeAdminSettingsListeners(){
 			$("#send-cancellation").remove();
 			
 			// Shows cancellation modal
-			var el = getTemplate('send-cancellation-request', {});
-			$('#content').append(el);
+			getTemplate('send-cancellation-request', {}, undefined, function(template_ui){
+				if(!template_ui)
+					  return;
+				var el = $(template_ui);	
+				$('#content').append(el);
+				$("#send-cancellation").modal('show');
 			
-			$("#send-cancellation").modal('show');
-			
-			// Undefines delete reason, if use chose not to delete account in delete process
-			$("#send-cancellation").on('hidden.bs.modal', function(){
-				$("#account_cancel_reason").val()
-			});
-			
-			$('body').on('click', '#send-delete-request', function(e) {
-
-				e.preventDefault();
-
-				if($(this).attr('disabled'))
-			   	     return;
-				
-				// If not a valid form return else serialize form data to parse
-				if(!isValidForm($("#cancelation-request-form")))
-					return;
-				
-				// Disables send button and change text to Sending...
-				disable_send_button($(this));
-				
-				var json = serializeForm("cancelation-request-form");
-				
-				var info = json.account_cancel_reason;
-				
-				// Replace \r\n with <br> tags as email is sent as text/html
-				var reason = info.replace(/\r\n/g,"<br/>");
-				
-				// Build url
-				var url =  'core/api/emails/send-email?from=' + encodeURIComponent(CURRENT_DOMAIN_USER.email) + '&to=' + 
-				encodeURIComponent("care@agilecrm.com") + '&subject=' + encodeURIComponent("Cancellation Request") + '&body=' + 
-				encodeURIComponent(reason);
-
-				$.post(url,function(){
-
-					// Reset form fields after sending email
-					$("#cancelation-request-form").each(function () {
-						this.reset();
-					});
-					
-					// Adds "Cancellation Request" tag in "Our" domain
-					add_tag_our_domain("Cancellation Request");
-					
-					// Adds note in "Our" domain
-					var note = {};
-					note.subject = "Cancellation Request";
-					note.description = info;
-					
-					agile_addNote(note,'', CURRENT_DOMAIN_USER.email);
-					
-					/**
-					 * Sends cancel request to cancel subscription
-					 */
-					/*$.ajax({
-						type : "DELETE",
-						url : "core/api/subscription/delete/account",
-						success : function()
-						{
-							// Enables Send Email button.
-						    enable_send_button($('#send-delete-request'));
-						    $("#send-cancellation").modal('hide');	
-						    
-						    // Showing Noty
-						    showNotyPopUp("information", "Cancellation request sent. You should hear back from us in one working day.", "top", 3000);
-						}
-					});*/
-					
-					$("#send-cancellation .modal-title").html($("#send-delete-request-step2 .modal-title").html());		    
-				    $("#send-cancellation .modal-body").html($("#send-delete-request-step2 .modal-body").html());
-					$("#send-cancellation .modal-footer").html($("#send-delete-request-step2 .modal-footer").html());
-					
-					// Enables Send Email button.
-					enable_send_button($('#send-delete-request'));
+				// Undefines delete reason, if use chose not to delete account in delete process
+				$("#send-cancellation").on('hidden.bs.modal', function(){
+					$("#account_cancel_reason").val()
 				});
-				
-			});
+
+				$('body').on('click', '#send-delete-request', function(e) {
+
+						e.preventDefault();
+
+						if($(this).attr('disabled'))
+					   	     return;
+						
+						// If not a valid form return else serialize form data to parse
+						if(!isValidForm($("#cancelation-request-form")))
+							return;
+						
+						// Disables send button and change text to Sending...
+						disable_send_button($(this));
+						
+						var json = serializeForm("cancelation-request-form");
+						
+						var info = json.account_cancel_reason;
+						
+						// Replace \r\n with <br> tags as email is sent as text/html
+						var reason = info.replace(/\r\n/g,"<br/>");
+						
+						// Build url
+						var url =  'core/api/emails/send-email?from=' + encodeURIComponent(CURRENT_DOMAIN_USER.email) + '&to=' + 
+						encodeURIComponent("care@agilecrm.com") + '&subject=' + encodeURIComponent("Cancellation Request") + '&body=' + 
+						encodeURIComponent(reason);
+
+						$.post(url,function(){
+
+							// Reset form fields after sending email
+							$("#cancelation-request-form").each(function () {
+								this.reset();
+							});
+							
+							// Adds "Cancellation Request" tag in "Our" domain
+							add_tag_our_domain("Cancellation Request");
+							
+							// Adds note in "Our" domain
+							var note = {};
+							note.subject = "Cancellation Request";
+							note.description = info;
+							
+							agile_addNote(note,'', CURRENT_DOMAIN_USER.email);
+							
+							$("#send-cancellation .modal-title").html($("#send-delete-request-step2 .modal-title").html());		    
+						    $("#send-cancellation .modal-body").html($("#send-delete-request-step2 .modal-body").html());
+							$("#send-cancellation .modal-footer").html($("#send-delete-request-step2 .modal-footer").html());
+							
+							// Enables Send Email button.
+							enable_send_button($('#send-delete-request'));
+						});
+						
+					});
+
+			}, null);
+
 			
 	});
 

@@ -462,7 +462,6 @@ var Base_Model_View = Backbone.View
 			render : function(isFetched) {
 
 				
-				
 				/**
 				 * Renders and returns the html element of view with model data,
 				 * few conditions are checked render the view according to
@@ -486,7 +485,7 @@ var Base_Model_View = Backbone.View
 				if (!this.model.isNew() || this.options.isNew
 						|| !$.isEmptyObject(this.model.toJSON()) || isFetched) {
 
-					//$(this.el).html(getRandomLoadingImg());
+					$(this.el).html(getRandomLoadingImg());
 					/*
 					 * Uses handlebars js to fill the model data in the template
 					 */
@@ -503,7 +502,7 @@ var Base_Model_View = Backbone.View
 	    				var topPos = 50*sizey;
 	    				if(sizey==2 || sizey==3)
 	    					topPos += 50;
-	        			$(this.el).html("<div class='text-center v-middle opa-half' style='margin-top:"+topPos+"px'><img src='../flatfull/img/ajax-loader-cursor.gif' style='width:12px;height:10px;opacity:0.5;' /></div>");
+	        			$(this.el).html("<div class='text-center v-middle opa-half' style='margin-top:"+topPos+"px'><img src='"+updateImageS3Path('../flatfull/img/ajax-loader-cursor.gif')+"' style='width:12px;height:10px;opacity:0.5;' /></div>");
 					}
 					else
 					{
@@ -524,6 +523,7 @@ var Base_Model_View = Backbone.View
 			}, 
 			buildModelViewUI : function(content)
 			{
+				hideTransitionBar();
 				$(this.el).on('DOMNodeInserted', function(e) {
 					//alert("triggered");
 					//$('form', this).focus_first();
@@ -552,7 +552,7 @@ var Base_Model_View = Backbone.View
 					callback($(this.el),this.model.toJSON());
 				}
 
-				hideTransitionBar();
+				
 				// If isNew is not true, then serialize the form data
 				if (this.options.isNew != true) {
 					// If el have more than 1 form de serialize all forms
@@ -591,10 +591,15 @@ var Base_Model_View = Backbone.View
  */
 function disable_save_button(elem)
 {
+
+	var loadingText = elem.attr("data-loading-text");
+if(!loadingText)
+	   loadingText = "Saving...";
+	
 	elem.css('min-width',elem.width()+'px')
 		.attr('disabled', 'disabled')
 		.attr('data-save-text',elem.html())
-		.text('Saving...');
+		.text(loadingText);
 }
 
 /**
@@ -603,8 +608,14 @@ function disable_save_button(elem)
  */
 function enable_save_button(elem)
 {
-	if(!elem.attr('data-save-text'))
-		 elem.attr('data-save-text', 'save');
-		
 	elem.html(elem.attr('data-save-text')).removeAttr('disabled data-save-text');
 }
+
+/**
+*  Extended View of Base_Model. It combines parent events to extended view events.
+*/
+Base_Model_View.extend = function(child) {
+	var view = Backbone.View.extend.apply(this, arguments);
+	view.prototype.events = _.extend({}, this.prototype.events, child.events);
+	return view;
+};

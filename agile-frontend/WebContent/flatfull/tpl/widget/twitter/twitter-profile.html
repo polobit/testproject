@@ -53,7 +53,7 @@
 		<div class="widget_tab_footer" align="center">
 			<a href="#more" class="twitter_stream text-info" id="twitter_stream" rel="tooltip" title="Click to see more tweets">Show More</a>
 			<a href="#less" data-toggle="collapse" data-target="#twitter_social_stream" id="twitter_less" style="display:none">Show Less..</a>
-			<img src="img/ajax-spinner.gif" id="spinner-tweets" style="display:none;"></img>			
+			<img src="{{getS3ImagePath 'img/ajax-spinner.gif'}}" id="spinner-tweets" style="display:none;"></img>			
 		</div>
 	</div>
 	<div id="followers" class="tab-pane fade">
@@ -64,7 +64,7 @@
 		</div>
 		<div class="widget_tab_footer" align="center">
 			<a href="#more" class="text-info" id="more_followers" rel="tooltip" title="Click to see more persons">Show More</a>
-			<img src="img/ajax-spinner.gif" id="spinner-followers" style="display:none;"></img>
+			<img src="{{getS3ImagePath 'img/ajax-spinner.gif'}}" id="spinner-followers" style="display:none;"></img>
 		</div>
 	</div>
 	<div id="following" class="tab-pane fade">
@@ -75,7 +75,7 @@
 		</div>
 		<div class="widget_tab_footer" align="center">
 			<a href="#more" id="more_following" class="text-info" rel="tooltip" title="Click to see more persons">Show More</a>
-			<img src="img/ajax-spinner.gif" id="spinner-following" style="display:none;"></img>
+			<img src="{{getS3ImagePath 'img/ajax-spinner.gif'}}" id="spinner-following" style="display:none;"></img>
 		</div>
 	</div>
 </div>
@@ -237,7 +237,7 @@
 				<div class="control-group form-group"><div class="controls"><input type="text" id="twitter_keywords" class="input-medium required widget_input_box form-control"  placeholder="Key Words" value="{{keywords}}" name="keywords" onkeydown="if (event.keyCode == 13) { getModifiedTwitterMatchingProfiles({{plugin_id}}); return false; }" maxlength="40"></input></div></div>
 				<a href="#" id="twitter_search_btn" class="btn btn-sm btn-primary text-l-none">Search</a>
 				<a href="#" id="twitter_search_close" class="btn btn-sm btn-default m-l-xs">Close</a>
-				<span><img src="img/ajax-spinner.gif" id="spinner-twitter-search" style="display:none;"></img></span>
+				<span><img src="{{getS3ImagePath 'img/ajax-spinner.gif'}}" id="spinner-twitter-search" style="display:none;"></img></span>
 			 </fieldset>
 	    </form>
 	</div>
@@ -248,7 +248,7 @@
 <div class="m-t">
 	Engage with contacts in real time based on what they tweet.	
 <br>
-		<a class='btn btn-sm btn-primary text-l-none m-t' href="{{url}}">Link Your Twitter</a>	
+		<center><a class='btn btn-sm btn-primary text-l-none m-t' href="{{url}}">Link Your Twitter</a>	</center>
 </div>
 </script>
 
@@ -263,7 +263,7 @@
 			<p class="word-break" style="word-break:normal;">{{show_link_in_statement profile.summary}}</p>
 		</div>
 	<div class="clearfix"></div>
-	<div class="m-t-md">
+	<div class="m-t-md text-center">
 			<a class='btn revoke-widget btn-sm btn-danger text-l-none' widget-name="Twitter">Revoke Access</a>
 			<a href="#add-widget" class='btn btn-default btn-sm ml_5 text-l-none' widget-name="Twitter">Cancel</a>
 	</div>

@@ -14,31 +14,37 @@ import com.googlecode.objectify.ObjectifyService;
  * <code>CustomWidgets</code> class provides static functions to fetch custom
  * widgets saved in agile account
  */
-public class CustomWidgets
-{
+public class CustomWidgets {
 
 	/**
 	 * Fetches all custom widgets for current {@link AgileUser}
 	 * 
 	 * @return {@link List} of {@link Widget}s
 	 */
-	public static List<Widget> getCustomWidgetsForCurrentUser()
-	{
+	public static List<Widget> getCustomWidgetsForCurrentUser() {
 		Objectify ofy = ObjectifyService.begin();
 
 		// Creates Current AgileUser key
-		Key<AgileUser> userKey = new Key<AgileUser>(AgileUser.class, AgileUser.getCurrentAgileUser().id);
+		Key<AgileUser> userKey = new Key<AgileUser>(AgileUser.class,
+				AgileUser.getCurrentAgileUser().id);
 
 		// Fetches list of custom widgets related to AgileUser key
-		return ofy.query(Widget.class).ancestor(userKey).filter("widget_type", WidgetType.CUSTOM).list();
+		return ofy.query(Widget.class).ancestor(userKey)
+				.filter("widget_type", WidgetType.CUSTOM).list();
 	}
 
 	/**
 	 * Fetch all custom widgets in admin account
 	 */
-	public static List<? extends Widget> getAllCustomWidgets()
-	{
+	public static List<? extends Widget> getAllCustomWidgets() {
 		return CustomWidget.dao.fetchAll();
+	}
+
+	/**
+	 * Fetch all custom widgets in admin account
+	 */
+	public static List<? extends Widget> getUserCustomWidgets() {
+		return CustomWidget.getCurrentWidgets();
 	}
 
 	/**
@@ -48,9 +54,12 @@ public class CustomWidgets
 	 *            {@link String}. Name of the widget
 	 * @return {@link CustomWidget}
 	 */
-	public static CustomWidget getCustomWidget(String name)
-	{
+	public static CustomWidget getCustomWidget(String name) {
 		return CustomWidget.dao.getByProperty("name", name);
+	}
+
+	public static void deleteCurrentUserWidget(String name) {
+		CustomWidget.deleteCustomWidget(name);
 	}
 
 	/**
@@ -63,8 +72,7 @@ public class CustomWidgets
 	 *            {@link Object} value of the {@link CustomWidget} property
 	 * @return
 	 */
-	public static int getCount(String propertyName, Object propertyValue)
-	{
+	public static int getCount(String propertyName, Object propertyValue) {
 		return CustomWidget.dao.getCountByProperty(propertyName, propertyValue);
 	}
 }

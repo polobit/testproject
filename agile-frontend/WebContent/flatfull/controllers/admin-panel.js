@@ -46,9 +46,21 @@ var AdminPanelRouter = Backbone.Router.extend({
 
 			var emails = data.emailcount;
 			data.emailcount = JSON.parse(data.emailcount);
-			$(el).find('#account').html(getTemplate("domain-info", data));
-			$(el).find('#emailcount').html(getTemplate("email-stats", JSON.parse(emails)));
-			$(".delete-namespace").attr("data", domainname);
+			getTemplate("domain-info", data, undefined, function(template_ui){
+				if(!template_ui)
+					  return;
+				$(el).find('#account').html($(template_ui));
+
+			}, $(el).find('#account'));
+
+			getTemplate("email-stats", JSON.parse(emails), undefined, function(template_ui){
+				if(!template_ui)
+					  return;
+				$(el).find('#emailcount').html($(template_ui));
+				$(".delete-namespace").attr("data", domainname);
+
+			}, $(el).find('#emailcount'));
+
 		}, error : function(response)
 		{
 
@@ -65,16 +77,25 @@ var AdminPanelRouter = Backbone.Router.extend({
 
 		$.ajax({ url : 'core/api/admin_panel/getcustomer?d=' + domainname, type : 'GET', success : function(data)
 		{
-			$(el).find('#planinfo').html(getTemplate("plan-info", data));
 
-			if (data == null || data == "" || data == undefined)
-			{
+			getTemplate("plan-info", data, undefined, function(template_ui){
+				if(!template_ui)
+					  return;
 
-				$("#login_id").attr("href", "https://" + domainname + ".agilecrm.com/login");
-			}
+				$(el).find('#planinfo').html($(template_ui));
 
-			else
-				that.get_collection_of_charges_for_customer_from_adminpanel(el, data.id);
+				if (data == null || data == "" || data == undefined)
+				{
+
+					$("#login_id").attr("href", "https://" + domainname + ".agilecrm.com/login");
+				}
+
+				else
+					that.get_collection_of_charges_for_customer_from_adminpanel(el, data.id);
+
+			}, $(el).find('#planinfo'));
+
+			
 		} });
 
 	},
@@ -122,7 +143,7 @@ var AdminPanelRouter = Backbone.Router.extend({
 				domainname = mod_collection[0].get('domain');
 				email = mod_collection[0].get('email');
 				self.get_customerobject_for_domain_from_adminpanel(el, domainname);
-				$('#account').html("<img src='img/21-0.gif'>");
+				$('#account').html("<img src='" + updateImageS3Path("img/21-0.gif")+ "'>");
 				self.get_account_stats_for_domain_from_adminpanel(el, domainname);
 
 				initializeAdminpanelListner(el);
@@ -139,67 +160,77 @@ var AdminPanelRouter = Backbone.Router.extend({
 	// used to change password for particular user from admin panel
 	changePasswordadmin : function(id)
 	{
-		$("#content").html(getTemplate("settings"), {});
 
-		$('#content').html(getTemplate("settings-change-password-adminpanel"), {});
+		getTemplate("settings", {}, undefined, function(template_ui){
+			if(!template_ui)
+				  return;
+			$('#content').html($(template_ui));	
 
-		// Save button action of change password form, If it is out of
-		// this router wont navigate properly
-		$("#saveNewPasswordFromAdmin").on(
-				"click",
-				function(e)
-				{
+			getTemplate("settings-change-password-adminpanel", {}, undefined, function(template_ui){
 
-					e.preventDefault();
-					var saveBtn = $(this);
+						$('#content').html($(template_ui));	
 
-					// Returns, if the save button has disabled
-					// attribute
-					if ($(saveBtn).attr('disabled'))
-						return;
+						// Save button action of change password form, If it is out of
+						// this router wont navigate properly
+						$("#saveNewPasswordFromAdmin").on(
+								"click",
+								function(e)
+								{
 
-					// Disables save button to prevent multiple
-					// click
-					// event issues
-					disable_save_button($(saveBtn));
+									e.preventDefault();
+									var saveBtn = $(this);
 
-					var form_id = $(this).closest('form').attr("id");
+									// Returns, if the save button has disabled
+									// attribute
+									if ($(saveBtn).attr('disabled'))
+										return;
 
-					if (!isValidForm('#' + form_id))
-					{
+									// Disables save button to prevent multiple
+									// click
+									// event issues
+									disable_save_button($(saveBtn));
 
-						// Removes disabled attribute of save
-						// button
-						enable_save_button($(saveBtn));
-						return false;
-					}
+									var form_id = $(this).closest('form').attr("id");
 
-					// Show loading symbol until model get saved
-					$('#changePasswordForm').find('span.save-status').html(getRandomLoadingImg());
+									if (!isValidForm('#' + form_id))
+									{
 
-					var json = serializeForm(form_id);
+										// Removes disabled attribute of save
+										// button
+										enable_save_button($(saveBtn));
+										return false;
+									}
 
-					$.ajax({
-						url : '/core/api/admin_panel/changepassword/' + id,
-						type : 'PUT',
-						data : json,
-						success : function()
-						{
-							add_password_change_info_as_note_to_owner(email);
-							Backbone.history.navigate("all-domain-users", { trigger : true });
-							showNotyPopUp("information", "password changed successfully", "top");
-						},
-						error : function(response)
-						{
-							$('#changePasswordForm').find('span.save-status').html("");
-							$('#changePasswordForm').find('input[name="current_pswd"]').closest(".controls").append(
-									"<span style='color:red;margin-left:10px;'>Incorrect Password</span>");
-							$('#changePasswordForm').find('input[name="current_pswd"]').closest(".controls").find("span").fadeOut(5000);
-							$('#changePasswordForm').find('input[name="current_pswd"]').focus();
-							enable_save_button($(saveBtn));
-						} });
+									// Show loading symbol until model get saved
+									$('#changePasswordForm').find('span.save-status').html(getRandomLoadingImg());
 
-				});
+									var json = serializeForm(form_id);
+
+									$.ajax({
+										url : '/core/api/admin_panel/changepassword/' + id,
+										type : 'PUT',
+										data : json,
+										success : function()
+										{
+											add_password_change_info_as_note_to_owner(email);
+											Backbone.history.navigate("all-domain-users", { trigger : true });
+											showNotyPopUp("information", "password changed successfully", "top");
+										},
+										error : function(response)
+										{
+											$('#changePasswordForm').find('span.save-status').html("");
+											$('#changePasswordForm').find('input[name="current_pswd"]').closest(".controls").append(
+													"<span style='color:red;margin-left:10px;'>Incorrect Password</span>");
+											$('#changePasswordForm').find('input[name="current_pswd"]').closest(".controls").find("span").fadeOut(5000);
+											$('#changePasswordForm').find('input[name="current_pswd"]').focus();
+											enable_save_button($(saveBtn));
+										} });
+
+								});
+			});
+
+		}, "#content");
+	
 	},
 
 	/**
@@ -320,9 +351,15 @@ var AdminPanelRouter = Backbone.Router.extend({
 	domainSearch : function()
 	{
 		$("#content").html("<div id='domain-search-listners'></div>");
-		var el = $(getTemplate('all-domain-search', {}));
-		$("#domain-search-listners").html(el);
-		initializeDomainsearchListner();
-		hideTransitionBar();
+		getTemplate('all-domain-search', {}, undefined, function(template_ui){
+			if(!template_ui)
+				  return;
+
+			$("#domain-search-listners").html($(template_ui));
+			initializeDomainsearchListner();
+			hideTransitionBar();
+
+		}, "#domain-search-listners");
+
 	}
 });

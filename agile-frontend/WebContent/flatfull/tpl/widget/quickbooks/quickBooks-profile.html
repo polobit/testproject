@@ -1,7 +1,7 @@
 <script id="quickbooks-login-template" type="text/html">
 <div class="m-t">
 	See the contact's subscriptions history and payments from your quickbooks account.
-	<div class="m-t-md"><a class="btn btn-primary btn-sm" href="{{url}}">Link Your Quickbooks</a>
+	<div class="m-t-md text-center"><a class="btn btn-primary btn-sm" href="{{url}}">Link Your Quickbooks</a>
 </div>
 </div>
 </script>
@@ -25,7 +25,7 @@
 	<div>
 		<div class="title_txt" >
 			<a href="https://sg.qbo.intuit.com/app/customerdetail?nameId={{Customer.Id}}" target="_blank">
-				<h4 class="h4 m-t-none text-cap">	
+				<h4 class="h4 m-t-none text-cap text-base">	
 					 {{Customer.DisplayName}}
 				</h4>
 			</a>
@@ -99,7 +99,7 @@
 							{{/each}}					
 						{{/isArray}}
 					</div>
-				<div class="pull-left"><small class="text-muted"><i class="fa fa-clock-o m-r-xs pull-left m-t-xs"></i><time class="time-ago pull-left" datetime="{{DueDate}}">{{DueDate}}</time></small></div>					
+				<div class="pull-left"><small class="text-muted"><i class="fa fa-clock-o m-r-xs pull-left m-t-xxs"></i><time class="time-ago pull-left" datetime="{{DueDate}}">{{DueDate}}</time></small></div>					
 				<div class="pull-right text-muted"><span class="label dk bg-light">{{qbStatus  Balance}}</span></div><br>
 					
 			</li>
@@ -107,7 +107,7 @@
 	</ul>	
 	{{/isArray}}
 	{{else}}
-		<li class="sub_header_li text-light">
+		<li class="wrapper-sm b-t b-light">
 	    	No invoices	found		
 		</li>
 	{{/if}}
@@ -158,8 +158,8 @@
 	<div>
 <p class="title_txt"><a href="https://go.xero.com/Dashboard/" target="_blank" >{{fetchXeroUser prefs}}</a></p>
 	</div>
-	<div class="m-t-sm m-r-none m-b-xs m-l-none">
-			<a class='btn revoke-widget ml_5 btn-sm btn-danger' widget-name="Xero">Revoke Access</a>
+	<div class="m-t-sm m-r-none m-b-xs m-l-none text-center">
+			<a class='btn revoke-widget ml_5 btn-sm btn-danger revoke-widget' widget-name="Xero">Revoke Access</a>
 			<a href="#add-widget" class='btn btn-default btn-sm ml_5' widget-name="Xero">Cancel</a>
 		
 	</div>

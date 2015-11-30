@@ -145,17 +145,20 @@ $(function(){
 			}
 		});
 		if(checked){
-			$(this).after('<img class="bulk-complete-loading" style="padding-right:5px;margin-bottom:15px" src= "img/21-0.gif"></img>');
+			$(this).after('<img class="bulk-complete-loading" style="padding-right:5px;margin-bottom:15px" src= "'+updateImageS3Path("img/21-0.gif")+'"></img>');
 			bulk_complete_operation('/core/api/tasks/bulk/complete', index_array, table, data_array);
 		}	
 		else
             $('body').find(".select-none").html('<div class="alert alert-danger"><a class="close" data-dismiss="alert" href="#">&times;</a>You have not selected any records to complete. Please select at least one record to continue.</div>').show().delay(3000).hide(1);
 	
-		var due_task_count=getDueTasksCount();
-		if(due_task_count != 0)
-			$('#due_tasks_count').html(due_task_count);
-		else
-			$('#due_tasks_count').html("");
+		getDueTasksCount(function(count){
+
+			var due_task_count= count;
+			if(due_task_count != 0)
+				$('#due_tasks_count').html(due_task_count);
+			else
+				$('#due_tasks_count').html("");
+		});
 		
 	});
 	

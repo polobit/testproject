@@ -1,17 +1,12 @@
 package com.agilecrm.core.api.widgets;
 
-import java.io.IOException;
-import java.net.SocketTimeoutException;
-
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -19,6 +14,7 @@ import org.json.JSONObject;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.social.HelpScoutUtil;
 import com.agilecrm.widgets.Widget;
+import com.agilecrm.widgets.util.ExceptionUtil;
 import com.agilecrm.widgets.util.WidgetUtil;
 
 /**
@@ -57,39 +53,16 @@ public class HelpScoutWidgetsAPI
 	{
 	    // Retrieves widget based on its id
 	    Widget widget = WidgetUtil.getWidget(widgetId);
-
-	    if (widget == null)
-		return null;
-
-	    // Calls Help Scout to retrieve tickets/Mails for contacts email
-	    return HelpScoutUtil.getCustomerByEmail(widget, email);
-	}
-	catch (SocketTimeoutException e)
-	{
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-		    .entity("Request timed out. Refresh and Please try again.").build());
-	}
-	catch (IOException e)
-	{
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-		    .entity("An error occurred. Refresh and Please try again.").build());
-	}
-	catch (RuntimeException e)
-	{
-	    // InvalidApiKeyException is added to the message of runtime
-	    // exception by in helpScout-api.jar instead of raising it as a
-	    // exception.
-	    if (e.getMessage().indexOf("InvalidApiKeyException") > 0)
-		throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-			.entity("Invalid API Key.").build());
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-		    .entity("Request timed out. Refresh and Please try again.").build());
+	    if (widget != null){
+	    	 // Calls Help Scout to retrieve tickets/Mails for contacts email
+		    return HelpScoutUtil.getCustomerByEmail(widget, email);
+	    }
 	}
 	catch (Exception e)
 	{
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
-		    .build());
+	    throw ExceptionUtil.catchWebException(e);
 	}
+	return null;
     }
 
     /**
@@ -111,32 +84,16 @@ public class HelpScoutWidgetsAPI
 	    // Retrieves widget based on its id
 	    Widget widget = WidgetUtil.getWidget(widgetId);
 
-	    if (widget == null)
-		return null;
-
-	    // Calls Help Scout to retrieve tickets/Mails for contacts email
-	    return HelpScoutUtil.getCreateFormData(widget);
-	}
-	catch (SocketTimeoutException e)
-	{
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-		    .entity("Request timed out. Refresh and Please try again.").build());
-	}
-	catch (IOException e)
-	{
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-		    .entity("An error occurred. Refresh and Please try again.").build());
-	}
-	catch (RuntimeException e)
-	{
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-		    .entity("Request timed out. Refresh and Please try again.").build());
+	    if (widget != null){
+	    	// Calls Help Scout to retrieve tickets/Mails for contacts email
+		    return HelpScoutUtil.getCreateFormData(widget);
+	    }
 	}
 	catch (Exception e)
 	{
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
-		    .build());
+	    throw ExceptionUtil.catchWebException(e);
 	}
+	return null;
     }
 
     /**
@@ -160,32 +117,15 @@ public class HelpScoutWidgetsAPI
 	    // Retrieves widget based on its id
 	    Widget widget = WidgetUtil.getWidget(widgetId);
 
-	    if (widget == null)
-		return null;
-
-	    // Calls Help Scout to retrieve tickets/Mails for contacts email
-	    return HelpScoutUtil.getCustomerConversations(widget, customerId);
-	}
-	catch (SocketTimeoutException e)
+	    if (widget != null){
+	    	 // Calls Help Scout to retrieve tickets/Mails for contacts email
+		    return HelpScoutUtil.getCustomerConversations(widget, customerId);
+	    }
+	}catch (Exception e)
 	{
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-		    .entity("Request timed out. Refresh and Please try again.").build());
+	    throw ExceptionUtil.catchWebException(e);
 	}
-	catch (IOException e)
-	{
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-		    .entity("An error occurred. Refresh and Please try again.").build());
-	}
-	catch (RuntimeException e)
-	{
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-		    .entity("Request timed out. Refresh and Please try again.").build());
-	}
-	catch (Exception e)
-	{
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
-		    .build());
-	}
+	return null;
     }
 
     /**
@@ -226,29 +166,18 @@ public class HelpScoutWidgetsAPI
 	    // Retrieves widget based on its id
 	    Widget widget = WidgetUtil.getWidget(widgetId);
 
-	    if (widget == null)
-		return null;
-	    System.out.println(customerId + " " + subject + " " + email + " " + mailbox + " " + description);
-	    // Calls HelpScoutUtil method to create a conversation in HelpScout.
-	    return HelpScoutUtil.addConversation(widget, customerId, email, mailbox, subject, description, type,
-		    assignTo, tags);
-	}
-	catch (SocketTimeoutException e)
-	{
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-		    .entity("Request timed out. Refresh and Please try again.").build());
-	}
-	catch (IOException e)
-	{
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-		    .entity("An error occurred. Refresh and Please try again.").build());
+	    if (widget != null){
+	    	System.out.println(customerId + " " + subject + " " + email + " " + mailbox + " " + description);
+		    // Calls HelpScoutUtil method to create a conversation in HelpScout.
+		    return HelpScoutUtil.addConversation(widget, customerId, email, mailbox, subject, description, type,
+			    assignTo, tags);
+	    }
 	}
 	catch (Exception e)
 	{
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
-		    .build());
+	    throw ExceptionUtil.catchWebException(e);
 	}
-
+	return null;
     }
 
 }

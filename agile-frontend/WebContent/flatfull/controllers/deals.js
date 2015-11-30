@@ -29,18 +29,24 @@ var DealsRouter = Backbone.Router.extend({
 			if (pipeline_id == 1)
 				pipeline_id = 0;
 
-			$('#opportunity-listners').html(getTemplate("new-opportunity-header", {}));
-			// Add row-fluid if user prefs are set to fluid
-			if (IS_FLUID)
-			{
-				$('#opportunity-listners').find('div.row').removeClass('row').addClass('row');
-			}
-			pipeline_count = 0;
-			deal_fetching = false;
-			DEALS_LIST_COLLECTION = null;
-			setupDealsTracksList();
-			setupDealFilters();
-			initializeDealListners();
+			getTemplate("new-opportunity-header", {}, undefined, function(template_ui){
+				if(!template_ui)
+					  return;
+				$('#opportunity-listners').html($(template_ui));
+
+				// Add row-fluid if user prefs are set to fluid
+				if (IS_FLUID)
+				{
+					$('#opportunity-listners').find('div.row').removeClass('row').addClass('row');
+				}
+				pipeline_count = 0;
+				deal_fetching = false;
+				DEALS_LIST_COLLECTION = null;
+				setupDealsTracksList();
+				setupDealFilters();
+				initializeDealListners();
+
+			}, "#opportunity-listners");
 		}
 		else
 		{
@@ -88,6 +94,7 @@ var DealsRouter = Backbone.Router.extend({
 		setTimeout(function()
 		{
 			$('a.deal-notes').tooltip();
+			$('.deal_won_date').tooltip();
 		}, 2000);
 	},
 
@@ -96,8 +103,14 @@ var DealsRouter = Backbone.Router.extend({
 	 */
 	importDeals : function()
 	{
-		$('#content').html("<div id='import-deals-listener'></div>").find("#import-deals-listener").html(getTemplate("import-deals", {}));
-		initializeImportEvents("import-deals-listener");
+		$('#content').html("<div id='import-deals-listener'></div>");
+		getTemplate("import-deals", {}, undefined, function(template_ui){
+			if(!template_ui)
+				  return;
+			$('#import-deals-listener').html($(template_ui));
+			initializeImportEvents("import-deals-listener");	
+		}, "#import-deals-listener");
+		
 	},
 
 });

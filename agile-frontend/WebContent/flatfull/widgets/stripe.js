@@ -4,6 +4,13 @@
  * based on the function provided on agile_widgets.js (Third party API).
  */
 
+var stripeOBJ = {};
+var stripeINVCount = 1;
+var stripePAYCount = 1;
+
+var showMoreStripeINV = '<div class="widget_tab_footer stripe_inv_show_more" align="center"><a class="c-p text-info" id="stripe_inv_show_more" rel="tooltip" title="Click to see more tickets">Show More</a></div>';
+var showMoreStripePAY = '<div class="widget_tab_footer stripe_pay_show_more" align="center"><a class="c-p text-info" id="stripe_pay_show_more" rel="tooltip" title="Click to see more tickets">Show More</a></div>';
+
 /**
  * Shows setup if user adds Stripe widget for the first time. Uses ScribeServlet
  * to create a client and get preferences and save it to the widget.
@@ -27,7 +34,7 @@ function setupStripeOAuth()
 
 	$('#Stripe')
 			.html(
-					'<div class="widget_content" style="border-bottom:none;line-height: 160%;">See the contact\'s subscriptions history and payments from your Stripe account.<p style="margin: 10px 0px 5px 0px;"></p><a class="btn" href=' + url + '>Link Your Stripe</a></div>');
+					'<div class="widget_content" style="border-bottom:none;line-height: 160%;">See the contact\'s subscriptions history and payments from your Stripe account.<p style="margin: 10px 0px 5px 0px;"></p><div class="text-center"><a class="btn" href=' + url + '>Link Your Stripe</a></div></div>');
 
 }
 
@@ -38,7 +45,7 @@ function setupStripeOAuth()
  * @param stripe_widget_prefs
  *            JSON Stripe widget preferences
  */
-function setUpStripeCustomField(stripe_widget_prefs)
+function setUpStripeCustomField(stripe_widget_prefs, contact_id)
 {
 	// Retrieve all custom from Agile account
 	$.get("/core/api/custom-fields/type/scope?scope=CONTACT&type=TEXT", function(data)
@@ -48,7 +55,11 @@ function setUpStripeCustomField(stripe_widget_prefs)
 
 		
 		// Fill template with custom fields and show it in Stripe widget panel
-		$('#Stripe').html(getTemplate('stripe-custom-field', stripe_widget_prefs));
+		getTemplate('stripe-custom-field', stripe_widget_prefs, undefined, function(template_ui){
+	 		if(!template_ui)
+	    		return;
+			$('#Stripe').html($(template_ui)); 
+		}, "#Stripe");
 
 	}, "json").error(function(data)
 	{
@@ -61,7 +72,8 @@ function setUpStripeCustomField(stripe_widget_prefs)
 	 * preferences are saved including stripe_field_name and Stripe profile of
 	 * customer is shown
 	 */
-	$("body").on("click", '#save_stripe_name', function(e)
+    $("#widgets").off("click", '#save_stripe_name');
+	$("#widgets").on("click", '#save_stripe_name', function(e)
 	{
 		e.preventDefault();
 
@@ -77,7 +89,7 @@ function setUpStripeCustomField(stripe_widget_prefs)
 		// preferences are saved and Stripe profile of customer is shown
 		agile_crm_save_widget_prefs(Stripe_PLUGIN_NAME, JSON.stringify(stripe_widget_prefs), function(data)
 		{
-			showStripeProfile(stripe_custom_field_name);
+			showStripeProfile(stripe_custom_field_name, contact_id);
 		});
 
 	});
@@ -90,7 +102,7 @@ function setUpStripeCustomField(stripe_widget_prefs)
  *            Stripe custom field name in which Stripe customer id related to
  *            contact is stored
  */
-function showStripeProfile(stripe_custom_field_name)
+function showStripeProfile(stripe_custom_field_name, contact_id)
 {
 	// Shows loading until the profile is retrieved
 	$('#Stripe').html(STRIPE_PROFILE_LOAD_IMAGE);
@@ -106,7 +118,8 @@ function showStripeProfile(stripe_custom_field_name)
 	if (!customer_id)
 	{
 		
-		 $("body").on("click", '#stripe_contact_id_save', function(e){
+         $("#widgets").off("click", '#stripe_contact_id_save');
+		 $("#widgets").on("click", '#stripe_contact_id_save', function(e){
 			   
 			   e.preventDefault();
 
@@ -117,7 +130,7 @@ function showStripeProfile(stripe_custom_field_name)
 			   
 			   agile_crm_save_contact_property(stripe_custom_field_name, "", customer_id, "CUSTOM");
 			   
-			   showStripeProfile(stripe_custom_field_name);
+			   showStripeProfile(stripe_custom_field_name, contact_id);
 			   return;
 			   
 			  });
@@ -136,18 +149,90 @@ function showStripeProfile(stripe_custom_field_name)
 	getStripeProfile(customer_id, function(data)
 	{
 		// Get and Fill the template with data
-		var stripe_template = $(getTemplate("stripe-profile", data));
+		
 
-		// Load jquery time ago function to show time ago in invoices
-		head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
-		{
-			$(".time-ago", stripe_template).timeago();
-		});
+		getTemplate('stripe-profile', data, undefined, function(template_ui){
+	 		if(!template_ui)
+	    		return;
+	    	
+	    	var stripe_template = $(template_ui);
+	    	// Load jquery time ago function to show time ago in invoices
+			head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
+			{
+				$(".time-ago", stripe_template).timeago();
+			});
 
-		// Show the template in Stripe widget panel
-		$('#Stripe').html(stripe_template);
-	});
+			// Show the template in Stripe widget panel
+			$('#Stripe').html(stripe_template);
 
+			stripeOBJ = {};
+			stripeINVCount = 1;
+			stripePAYCount = 1;
+
+			stripeOBJ.invoice = data.invoice;
+			stripeOBJ.payments = data.payments;
+			loadStripeInvoices(0);
+			loadStripePayments(0);
+			 
+		}, null);
+
+			
+	}, contact_id);
+
+}
+
+function loadStripeInvoices(offSet){
+
+	if(offSet == 0){
+		var result = {};
+		result.invoice = stripeOBJ.invoice.slice(0, 5);
+
+		getTemplate('stripe-invoices', result, undefined, function(template_inv){			
+			$('#invoice_block').append(template_inv);
+		},null);
+
+		if(stripeOBJ.invoice.length > 5){
+			$('#invoice_block').append(showMoreStripeINV);
+		}
+	}else if(offSet > 0  && (offSet+5) < stripeOBJ.invoice.length){
+		var result = {};
+		result.invoice = stripeOBJ.invoice.slice(offSet, (offSet+5));
+		$('.stripe_inv_show_more').remove();
+		$('#invoice_block').apped(getTemplate('stripe-invoices', result));
+		$('#invoice_block').append(showMoreStripeINV);
+	}else{
+		var result = {};
+		result.invoice = stripeOBJ.invoice.slice(offSet, stripeOBJ.invoice.length);
+		$('.stripe_inv_show_more').remove();
+		$('#invoice_block').append(getTemplate('stripe-invoices', result));
+	}
+
+}
+
+function loadStripePayments(offSet){
+	if(offSet == 0){
+		var result = {};
+		result.payments = stripeOBJ.payments.slice(0, 5);
+
+		getTemplate('stripe-payments', result, undefined, function(template_pay){			
+			$('#payments_block').append(template_pay);
+		},null);
+
+		if(stripeOBJ.payments.length > 5){
+			$('#payments_block').append(showMoreStripePAY);
+		}
+	}else if(offSet > 0  && (offSet+5) < stripeOBJ.payments.length){
+		var result = {};
+		result.payments = stripeOBJ.payments.slice(offSet, (offSet+5));
+		$('.stripe_pay_show_more').remove();
+		$('#payments_block').apped(getTemplate('stripe-payments', result));
+		$('#payments_block').append(showMoreStripePAY);
+	}else{
+		var result = {};
+		result.payments = stripeOBJ.payments.slice(offSet, stripeOBJ.payments.length);
+		$('.stripe_pay_show_more').remove();
+		$('#payments_block').append(getTemplate('stripe-payments', result));
+	}
 }
 
 /**
@@ -164,13 +249,13 @@ function showStripeProfile(stripe_custom_field_name)
  * @param callback
  *            Function to be executed on success
  */
-function getStripeProfile(customer_id, callback)
+function getStripeProfile(customer_id, callback, contact_id)
 {
 	/*
 	 * Calls queueGetRequest method in widget_loader.js, with queue name as
 	 * "widget_queue" to retrieve Stripe profile of customer
 	 */
-	queueGetRequest("widget_queue", "/core/api/widgets/stripe/" + Stripe_Plugin_Id + "/" + customer_id, 'json', function success(data)
+	queueGetRequest("widget_queue_"+contact_id, "/core/api/widgets/stripe/" + Stripe_Plugin_Id + "/" + customer_id, 'json', function success(data)
 	{
 		console.log('In Stripe profile');
 		console.log(data);
@@ -204,63 +289,89 @@ function stripeError(id, message)
 	 * Get error template and fill it with error message and show it in the div
 	 * with given id
 	 */
-	$('#' + id).html(getTemplate('stripe-error', error_json));
+	
+	getTemplate('stripe-error', error_json, undefined, function(template_ui){
+ 		if(!template_ui)
+    		return;
+		$('#' + id).html($(template_ui)); 
+	}, '#' + id);
 }
 
-$(function()
-		{
-			// Stripe widget name as a global variable
-			Stripe_PLUGIN_NAME = "Stripe";
+function startStripeWidget(contact_id){
 
-			// Stripe profile loading image declared as global
-			STRIPE_PROFILE_LOAD_IMAGE = '<center><img id="stripe_profile_load" src="img/ajax-loader-cursor.gif" style="margin-top: 10px;margin-bottom: 14px;"></img></center>';
+	stripeOBJ = {};
+	stripeINVCount = 1;
+	stripePAYCount = 1;
 
-			// Retrieves widget which is fetched using script API
-			var stripe_widget = agile_crm_get_widget(Stripe_PLUGIN_NAME);
+	// Stripe widget name as a global variable
+	Stripe_PLUGIN_NAME = "Stripe";
 
-			console.log('In Stripe');
-			console.log(stripe_widget);
+	// Stripe profile loading image declared as global
+	STRIPE_PROFILE_LOAD_IMAGE = '<center><img id="stripe_profile_load" src="img/ajax-loader-cursor.gif" style="margin-top: 10px;margin-bottom: 14px;"></img></center>';
 
-			// ID of the Stripe widget as global variable
-			Stripe_Plugin_Id = stripe_widget.id;
+	// Retrieves widget which is fetched using script API
+	var stripe_widget = agile_crm_get_widget(Stripe_PLUGIN_NAME);
 
-			/*
-			 * Gets Stripe widget preferences, required to check whether to show setup
-			 * button or to fetch details. If undefined - considering first time usage
-			 * of widget, setupStripeOAuth is shown and returned
-			 */
-			if (stripe_widget.prefs == undefined)
-			{
-				setupStripeOAuth();
-				return;
-			}
+	console.log('In Stripe');
+	console.log(stripe_widget);
 
-			// Parse string Stripe widget preferences as JSON
-			var stripe_widget_prefs = JSON.parse(stripe_widget.prefs);
-			
-			console.log(stripe_widget_prefs);
+	// ID of the Stripe widget as global variable
+	Stripe_Plugin_Id = stripe_widget.id;
 
-			/*
-			 * Retrieve name of the custom field in which Stripe customer IDs are
-			 * stored. We store it as "stripe_field_name" in Stripe Widget preferences
-			 */
-			var stripe_custom_field_name = stripe_widget_prefs['stripe_field_name'];
+	/*
+	 * Gets Stripe widget preferences, required to check whether to show setup
+	 * button or to fetch details. If undefined - considering first time usage
+	 * of widget, setupStripeOAuth is shown and returned
+	 */
+	if (stripe_widget.prefs == undefined)
+	{
+		setupStripeOAuth();
+		return;
+	}
 
-			/*
-			 * If stripe_custom_field_name is not defined, call setUpStripeCustomField
-			 * method which asks the user to select the field in which Stripe customer
-			 * IDs are stored from list of custom fields
-			 */
-			if (!stripe_custom_field_name)
-			{
-				setUpStripeCustomField(stripe_widget_prefs);
-				return;
-			}
+	// Parse string Stripe widget preferences as JSON
+	var stripe_widget_prefs = JSON.parse(stripe_widget.prefs);
+	
+	console.log(stripe_widget_prefs);
 
-			/*
-			 * If stripe_custom_field_name is defined, shows customer details and
-			 * invoices from Stripe
-			 */
-			showStripeProfile(stripe_custom_field_name);
+	/*
+	 * Retrieve name of the custom field in which Stripe customer IDs are
+	 * stored. We store it as "stripe_field_name" in Stripe Widget preferences
+	 */
+	var stripe_custom_field_name = stripe_widget_prefs['stripe_field_name'];
 
-		});
+	/*
+	 * If stripe_custom_field_name is not defined, call setUpStripeCustomField
+	 * method which asks the user to select the field in which Stripe customer
+	 * IDs are stored from list of custom fields
+	 */
+	if (!stripe_custom_field_name)
+	{
+		setUpStripeCustomField(stripe_widget_prefs, contact_id);
+		return;
+	}
+
+	/*
+	 * If stripe_custom_field_name is defined, shows customer details and
+	 * invoices from Stripe
+	 */
+	showStripeProfile(stripe_custom_field_name, contact_id);
+
+	$("#widgets").off("click", "#stripe_pay_show_more");
+	$("#widgets").on("click", "#stripe_pay_show_more", function(e)
+	{
+		e.preventDefault();
+		var offSet = stripePAYCount * 5;
+		loadStripePayments(offSet);
+		++stripePAYCount;
+	});
+
+	$("#widgets").off("click", "#stripe_inv_show_more");
+	$("#widgets").on("click", "#stripe_inv_show_more", function(e)
+	{
+		e.preventDefault();
+		var offSet = stripeINVCount * 5;
+		loadStripeInvoices(offSet);
+		++stripeINVCount;
+	});
+}

@@ -19,18 +19,22 @@ var WebreportsRouter = Backbone.Router.extend({
 					{
 						$.ajax({ url : 'core/api/api-key', type : 'GET', dataType : 'json', success : function(data)
 						{
-							$('#content').html(getTemplate("webrule-collection", data));
-							if(ACCOUNT_PREFS.plan.plan_type.split("_")[0] == "PRO")
-							{
-								$("#whitelist-disabled").addClass("hide");
-								$("#whitelist-enabled").removeClass("hide");
-							}
-							prettyPrint();
+							getTemplate("webrule-collection", data, undefined, function(template_ui){
+								if(!template_ui)
+									  return;
+								$('#content').html($(template_ui));	
+								if(ACCOUNT_PREFS.plan.plan_type.split("_")[0] == "PRO")
+								{
+									$("#whitelist-disabled").addClass("hide");
+									$("#whitelist-enabled").removeClass("hide");
+								}
+								prettyPrint();
+
+							}, "#content");
+
+							
 						} });
 
-						/*if($(el).has("#api_track_webrules_code_icon").length != 0){
-							initZeroClipboard("api_track_webrules_code_icon", "api_track_webrules_code");
-						}*/
 					});
 				}
 				else

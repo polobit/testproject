@@ -11,7 +11,7 @@
 	</li>
 	{{#if agileUserName}}
 	<li>
-	<a href="" class="agile-emails" email-server="agile" data-url="core/api/emails/agile-emails?e=" email-server-type={{this}}><i class="icon-cloud" style="margin-right:4px;font-size: 1.2em"></i>Agile</a>
+	<a href="" class="agile-emails" email-server="agile" data-url="core/api/emails/agile-emails?search_email=" email-server-type={{this}}><i class="icon-cloud" style="margin-right:4px;font-size: 1.2em"></i>Agile</a>
 	</li>
 	{{/if}}
 	{{#if gmailUserNames}}
@@ -67,9 +67,9 @@
 <script id="email-social-collection-template" type="text/html">
 {{#unless this.length}}
     <div class="wrapper p-t-none">
-            <div class="slate-content" id="no-email" style="display:none">
+            <div class="slate-content mobile-pad-content" id="no-email" style="display:none">
                 <div class="box-left pull-left m-r-md">
-                    <img alt="Clipboard" src="/img/clipboard.png" />
+                    <img alt="Clipboard" src="{{getS3ImagePath '/img/clipboard.png'}}" />
                 </div>
                 <div class="box-right pull-left">
                     <h4 class="m-t-none">You have no emails for {{contactShortName}}.</h4>
@@ -136,7 +136,7 @@
 </div>
 		<div class="clearfix"></div>	
 
-			<div class="m-b-xs ellipsis-multi-line collapse-{{id}}" style="height:70px">
+			<div class="m-b-xs ellipsis-multi-line collapse-{{id}}" style="height:77px">
 				<div>
 					<div class="email-body">{{{message}}}</div>
 				</div>

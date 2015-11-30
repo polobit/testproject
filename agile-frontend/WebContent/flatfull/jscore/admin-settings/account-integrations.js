@@ -7,8 +7,12 @@ var account_stats_integrations = {
 			type : 'GET',
 			success : function(data) {
 				console.log(data);
-				$(el).find('#account-stats-new').html(
-						getTemplate("account-stats-new", data));
+
+				getTemplate("account-stats-new", data, undefined, function(template_ui){
+					if(!template_ui)
+						  return;
+					$(el).find('#account-stats-new').html($(template_ui));	
+				}, $(el).find('#account-stats-new'));
 			},
 			error : function(response) {
 				console.log("error");
@@ -23,8 +27,11 @@ var account_stats_integrations = {
 			type : 'GET',
 			success : function(data) {
 				console.log(data);
-				$(el).find('#email-stats-new').html(
-						getTemplate("email-stats-new", data));
+				getTemplate("email-stats-new", data, undefined, function(template_ui){
+					if(!template_ui)
+						  return;
+					$(el).find('#email-stats-new').html($(template_ui));	
+				}, $(el).find('#email-stats-new'));
 			},
 			error : function(response) {
 				console.log("error");
@@ -42,8 +49,11 @@ var account_stats_integrations = {
 				if(data){
 					data=JSON.parse(data);
 				}
-				$(el).find('#sms-stats-new').html(
-						getTemplate("sms-stats-new", data));
+				getTemplate("sms-stats-new", data, undefined, function(template_ui){
+					if(!template_ui)
+						  return;
+					$(el).find('#sms-stats-new').html($(template_ui));	
+				}, $(el).find('#sms-stats-new'));				
 			},
 			error : function(response) {
 				console.log("error");

@@ -34,7 +34,7 @@ $(function()
 		{
 			$('#datepick').DatePickerSetDate(current_date_mozilla, true);
 		}
-		$('.checkbox-main-grid').html('<img class="loading-img" src="../../img/21-0.gif" style="width: 40px;margin-left: 216px;"></img>');
+		$('.checkbox-main-grid').html('<img class="loading-img" src="'+updateImageS3Path("../../img/21-0.gif")+'" style="width: 40px;margin-left: 216px;"></img>');
 		if (!selecteddate)
 		{
 			selecteddate = new Date();
@@ -133,11 +133,13 @@ $(function()
 		$(".timezone1").text(SELECTED_TIMEZONE);
 		$('.timezone1').show();
 		$("#hidetimezone").addClass("hide");
+		$('.user_in_visitor_timezone').html(SELECTED_TIMEZONE);
+		updateUserBusinessHoursInVisitorTimezone();
 
 		if (!selecteddate || !Selected_Time)
 			return;
 		$("#current_local_time").html("Current Time: " + getConvertedTimeFromEpoch(new Date().getTime() / 1000));
-		$('.checkbox-main-grid').html('<img class="loading-img" src="../../img/21-0.gif" style="width: 40px;margin-left: 216px;"></img>');
+		$('.checkbox-main-grid').html('<img class="loading-img" src="'+updateImageS3Path("../../img/21-0.gif")+'" style="width: 40px;margin-left: 216px;"></img>');
 		get_slots(selecteddate, Selected_Time);
 	});
 

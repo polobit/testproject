@@ -94,7 +94,7 @@ public class ContactBulkEmailUtil
 						String email = EmailUtil.appendNameToEmail(toEmail, subscriberJSON);
 
 						ContactEmailUtil.saveContactEmail(fromEmail, fromName, email, null, null, replacedSubject,
-								replacedBody, signature, contact.id, openTrackerId, null);
+								replacedBody, signature, contact.id, openTrackerId, null, null, null);
 
 						if (trackClicks)
 							replacedBody = EmailLinksConversion.convertLinksUsingJSOUP(replacedBody,

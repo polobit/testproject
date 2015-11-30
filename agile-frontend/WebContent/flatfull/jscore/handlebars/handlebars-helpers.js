@@ -17,6 +17,35 @@ $(function()
 		return getPropertyValue(items, name);
 	});
 
+
+	
+	/**
+	 * displays , in between 2 conatct fields.
+	 */
+	Handlebars.registerHelper('getPropertyValueExists', function(items, companyname,jobtitle)
+	{
+		return getPropertyValueByCheckingExistance(items, companyname,jobtitle);
+	});
+
+	
+	/**
+	 * checks for the contact property value existance to display div none or block
+	 */
+	Handlebars.registerHelper('checkPropertyValueExistance', function(items, name,name1)
+	{
+		return checkPropertyValueExistance(items, name,name1);
+	});
+	
+	
+	
+	/**
+	 * checks for the contact property value existance to display div none or block
+	 */
+	Handlebars.registerHelper('getMarginLength', function(items, name)
+	{
+		return getMarginLength(items, name);
+	});
+
 	/**
 	 * Helper function to return the checkbox html element with value of a
 	 * property matched with the given name from the array of properties
@@ -656,7 +685,7 @@ $(function()
 										{
 											if (count == 1 && key == "")
 											{
-												html += '<div class="alert-info alert"><div class="slate-content"><div class="box-left pull-left m-r-md"><img alt="Clipboard" src="/img/clipboard.png"></div><div class="box-right pull-left"><h4 class="m-t-none">You have no milestones defined</h4><br><a href="#milestones" class="btn btn-default btn-sm m-t-xs"><i class="icon icon-plus-sign"></i> Add Milestones</a></div><div class="clearfix"></div></div></div>';
+												html += '<div class="alert-info alert"><div class="slate-content"><div class="box-left pull-left m-r-md"><img alt="Clipboard" src="'+updateImageS3Path("/img/clipboard.png")+'"></div><div class="box-right pull-left"><h4 class="m-t-none">You have no milestones defined</h4><br><a href="#milestones" class="btn btn-default btn-sm m-t-xs"><i class="icon icon-plus-sign"></i> Add Milestones</a></div><div class="clearfix"></div></div></div>';
 											}
 											else
 											{
@@ -989,11 +1018,15 @@ $(function()
 		var el = "";
 		$.each(App_Contacts.contactViewModel[item], function(index, element)
 		{
-			if (element.indexOf("custom_") == 0)
-				element = element.split("custom_")[1];
+			
+			if (element.indexOf("CUSTOM_") == 0) {
+				element = element.split("_")[1];
+				el = el.concat('<th class="text-muted">' + ucfirst(element) + '</th>');
+			}
+			else {
 			element = element.replace("_", " ")
-
 			el = el.concat('<th>' + ucfirst(element) + '</th>');
+			}	
 
 		});
 
@@ -1403,50 +1436,7 @@ $(function()
 			}
 		}
 	});
-
-	// To show related to contacts for contacts as well as companies
-	Handlebars.registerHelper('related_to_contacts', function(data, options)
-	{
-		var el = "";
-		var count = data.length;
-		$.each(data, function(key, value)
-		{
-			var html = getTemplate("related-to-contacts", value);
-			if (--count == 0)
-			{
-				el = el.concat(html);
-				return;
-			}
-			el = el.concat(html + ", ");
-		});
-		return new Handlebars.SafeString(el);
-	});
-
-	// To show only one related to contacts or companies in deals
-	Handlebars.registerHelper('related_to_one', function(data, options)
-	{
-		// return "<span>" + getTemplate("related-to-contacts", data[0]) +
-		// "</span>";
-		var el = "";
-		var count = data.length;
-		$.each(data, function(key, value)
-		{
-			if (key <= 3)
-			{
-				var html = getTemplate("related-to-contacts", value);
-				if (--count == 0 || key == 3)
-				{
-					el = el.concat(html);
-					return;
-				}
-				el = el.concat(html + ", ");
-			}
-
-		});
-		return new Handlebars.SafeString(el);
-
-	});
-
+	
 	/**
 	 * To represent a number with commas in deals
 	 */
@@ -1957,10 +1947,10 @@ $(function()
 		{
 			if (i < parseInt(value))
 			{
-				element = element.concat('<li style="display: inline;"><img src="img/star-on.png" alt="' + i + '"></li>');
+				element = element.concat('<li style="display: inline;"><img src="'+updateImageS3Path("img/star-on.png")+'" alt="' + i + '"></li>');
 				continue;
 			}
-			element = element.concat('<li style="display: inline;"><img src="img/star-off.png" alt="' + i + '"></li>');
+			element = element.concat('<li style="display: inline;"><img src="'+updateImageS3Path("img/star-off.png")+'" alt="' + i + '"></li>');
 		}
 		return new Handlebars.SafeString(element);
 	});
@@ -2256,7 +2246,7 @@ $(function()
 			// Iterates inorder to insert each field into json
 			for (var i = 0; i < email_fields.length; i++)
 			{
-				// Splits based on colon. E.g "To: naresh@agilecrm.com "
+				// Splits based on colon. E.g "To: naresh@agilecrm.com   "
 				var arrcolon = email_fields[i].split(":");
 
 				// Inserts LHS of colon as key. E.g., To
@@ -2266,7 +2256,7 @@ $(function()
 				// accessible
 
 				// Inserts RHS of colon as value. E.g.,
-				// naresh@agilecrm.com
+				// naresh@agilecrm.com  
 				var value = arrcolon.slice(1).join(":"); // join the
 				// remaining string
 				// based on colon,
@@ -2290,14 +2280,20 @@ $(function()
 
 	Handlebars.registerHelper('remove_spaces', function(value)
 	{
-		return value.replace(/ +/g, '');
+		if(value)
+			  value = value.replace(/ +/g, '');
+
+		return value;
 
 	});
 
 	Handlebars.registerHelper('replace_spaces', function(value)
 	{
-		return value.replace(/ +/g, '_');
+		if(value)
+			  value = value.replace(/ +/g, '_');
 
+		return value;
+		
 	});
 
 	/***************************************************************************
@@ -2369,37 +2365,6 @@ $(function()
 	});
 
 	/**
-	 * Returns Contact Model from contactDetailView collection.
-	 * 
-	 */
-	Handlebars.registerHelper('contact_model', function(options)
-	{
-
-		if (App_Contacts.contactDetailView && App_Contacts.contactDetailView.model)
-		{
-
-			// To show Active Campaigns list immediately after campaign
-			// assigned.
-			if (CONTACT_ASSIGNED_TO_CAMPAIGN)
-			{
-				CONTACT_ASSIGNED_TO_CAMPAIGN = false;
-
-				// fetches updated contact json
-				var contact_json = $.ajax({ type : 'GET', url : '/core/api/contacts/' + App_Contacts.contactDetailView.model.get('id'), async : false,
-					dataType : 'json' }).responseText;
-
-				// Updates Contact Detail model
-				App_Contacts.contactDetailView.model.set(JSON.parse(contact_json));
-
-				return options.fn(JSON.parse(contact_json));
-			}
-
-			// if simply Campaigns tab clicked, use current collection
-			return options.fn(App_Contacts.contactDetailView.model.toJSON());
-		}
-	});
-
-	/**
 	 * Returns json object of active and done subscribers from contact object's
 	 * campaignStatus.
 	 */
@@ -2415,61 +2380,69 @@ $(function()
 
 		var active_campaigns = [];
 		var completed_campaigns = [];
+		var unsubscribed_campaigns = [];
+		var unsubscribed_campaigns_json = {};
 
 		// campaignStatus object of contact
 		var campaignStatusArray = object[data];
+		var statuses = object["campaignStatus"];
+		var campaign_json = {};
+
+		// To get campaign name for unsubscribed campaigns
+		for (var i = 0, len = statuses.length; i < len; i++)
+		{
+			var status = statuses[i];
+			
+			if(status)
+				campaign_json[status.campaign_id] = status.campaign_name;
+		}
+
 
 		for (var i = 0, len = campaignStatusArray.length; i < len; i++)
 		{
-			// push all active campaigns
-			if (campaignStatusArray[i].status.indexOf('ACTIVE') !== -1)
-				active_campaigns.push(campaignStatusArray[i])
+			if(campaignStatusArray[i].status)
+			{
+				// push all active campaigns
+				if (campaignStatusArray[i].status.indexOf('ACTIVE') !== -1)
+					active_campaigns.push(campaignStatusArray[i])
 
 				// push all done campaigns
-			if (campaignStatusArray[i].status.indexOf('DONE') !== -1)
-				completed_campaigns.push(campaignStatusArray[i]);
+				if (campaignStatusArray[i].status.indexOf('DONE') !== -1)
+					completed_campaigns.push(campaignStatusArray[i]);
+			}
+
+			var isAll = false;
+			// Unsubscribed campaigns list
+			if(campaignStatusArray[i].unsubscribeType)
+			{
+
+				// Global variable set on resubscribe modal shown
+				if(typeof email_workflows_list != 'undefined')
+					campaignStatusArray[i].campaign_name = email_workflows_list[campaignStatusArray[i].campaign_id];
+
+				if(campaignStatusArray[i].unsubscribeType == 'ALL'){
+
+					if(!isAll)
+					{
+						unsubscribed_campaigns_json["isAll"] = true;
+						isAll = true;
+					}
+				}
+
+				unsubscribed_campaigns.push(campaignStatusArray[i]);
+			}
 		}
+
+		if(unsubscribed_campaigns && unsubscribed_campaigns.length > 0)
+			unsubscribed_campaigns_json["unsubscribed_campaigns"] = unsubscribed_campaigns;
 
 		campaigns["active"] = active_campaigns;
 		campaigns["done"] = completed_campaigns;
+		campaigns["unsubscribed"] = unsubscribed_campaigns_json;
 
 		// apply obtained campaigns context within
 		// contact_campaigns block
 		return options.fn(campaigns);
-	});
-
-	/**
-	 * Verifies given urls length and returns options hash based on restricted
-	 * count value.
-	 * 
-	 */
-	Handlebars.registerHelper("if_more_urls", function(url_json, url_json_length, options)
-	{
-		var RESTRICT_URLS_COUNT = 3;
-		var temp_urls_array = [];
-		var context_json = {};
-
-		// If length is less than restricted, compile
-		// else block with given url_json
-		if (url_json_length < RESTRICT_URLS_COUNT)
-			return options.inverse(url_json);
-
-		// Insert urls until restricted count reached
-		for (var i = 0; i < url_json.length; i++)
-		{
-			if (i === RESTRICT_URLS_COUNT)
-				break;
-
-			temp_urls_array.push(url_json[i]);
-		}
-
-		context_json.urls = temp_urls_array;
-
-		// More remained
-		context_json.more = url_json_length - RESTRICT_URLS_COUNT;
-
-		return options.fn(context_json);
-
 	});
 
 	/**
@@ -2483,32 +2456,6 @@ $(function()
 
 		// if '_' exists splits
 		return data.split('_')[0];
-	});
-
-	Handlebars.registerHelper('safe_tweet', function(data)
-	{
-		data = data.trim();
-		return new Handlebars.SafeString(data);
-	});
-	/**
-	 * Get stream icon for social suite streams.
-	 */
-	Handlebars.registerHelper('get_stream_icon', function(name)
-	{
-		if (!name)
-			return;
-
-		var icon_json = { "Home" : "icon-home", "Retweets" : "icon-retweet", "DM_Inbox" : "icon-download-alt", "DM_Outbox" : "icon-upload-alt",
-			"Favorites" : "icon-star", "Sent" : "icon-share-alt", "Search" : "icon-search", "Scheduled" : "icon-time", "All_Updates" : "icon-home",
-			"My_Updates" : "icon-share-alt" };
-
-		name = name.trim();
-
-		if (icon_json[name])
-			return icon_json[name];
-
-		return "icon-globe";
-
 	});
 
 	/**
@@ -2697,15 +2644,14 @@ $(function()
 	 */
 	Handlebars.registerHelper('capFirstLetter', function(data)
 	{
-		if (data === "DEFAULT")
-		{
-			// console.log("return empty");
-			return "";
-		}
-		else
-		{
-			var temp = data.toLowerCase();
-			return temp.charAt(0).toUpperCase() + temp.slice(1);
+		if(data){
+			if (data === "DEFAULT"){
+				// console.log("return empty");
+				return "";
+			}else{
+				var temp = data.toLowerCase();
+				return temp.charAt(0).toUpperCase() + temp.slice(1);
+			}
 		}
 	});
 
@@ -2950,6 +2896,17 @@ $(function()
 		var plan_fragments = plan_name.split("_");
 
 		return ucfirst(plan_fragments[0]);
+
+	});
+
+	Handlebars.registerHelper('getFullAccountPlanName', function(plan_name)
+	{
+		if (!plan_name)
+			return "Free";
+
+		var plan_fragments = plan_name.split("_");
+
+		return ucfirst(plan_fragments[0])+" ("+ucfirst(plan_fragments[1])+")";
 
 	});
 
@@ -3396,7 +3353,7 @@ $(function()
 
 						// default when we can't find image uploaded or url to
 						// fetch from
-						var default_return = "src='img/company.png' style='width:" + full_size + "px; height=" + full_size + "px;" + additional_style + "'";
+						var default_return = "src='"+updateImageS3Path('img/company.png')+"' style='width:" + full_size + "px; height=" + full_size + "px;" + additional_style + "'";
 
 						// when the image from uploaded one or favicon can't be
 						// fetched, then show company.png, adjust CSS ( if style
@@ -3411,7 +3368,7 @@ $(function()
 								// found uploaded image, break, no need to
 								// lookup url
 
-								error_fxn = "this.src='img/company.png'; this.onerror=null;";
+								error_fxn = "this.src='"+updateImageS3Path('img/company.png')+"'; this.onerror=null;";
 								// no need to resize, company.png is of good
 								// quality & can be scaled to this size
 
@@ -3423,7 +3380,7 @@ $(function()
 								// favicon fetch -- Google S2 Service, 32x32,
 								// rest padding added
 
-								error_fxn = "this.src='img/company.png'; " + "$(this).css('width','" + frame_size + "px'); $(this).css('height','" + frame_size + "px');" + "$(this).css('padding','4px'); this.onerror=null;";
+								error_fxn = "this.src='"+updateImageS3Path("img/company.png")+"'; " + "$(this).css('width','" + frame_size + "px'); $(this).css('height','" + frame_size + "px');" + "$(this).css('padding','4px'); this.onerror=null;";
 								// resize needed as favicon is 16x16 & scaled to
 								// just 32x32, company.png is adjusted on error
 							}
@@ -3471,7 +3428,7 @@ $(function()
 						{
 
 							if (this[0].count > 9999 && (readCookie('contact_filter') || readData('dynamic_contact_filter')))
-								count_message = "<small> (" + 10000 + "+ Total) </small>" + '<span style="vertical-align: text-top; margin-left: -5px">' + '<img border="0" src="/img/help.png"' + 'style="height: 10px; vertical-align: middle" rel="popover"' + 'data-placement="bottom" data-title="Lead Score"' + 'data-content="Looks like there are over 10,000 results. Sorry we can\'t give you a precise number in such cases."' + 'id="element" data-trigger="hover">' + '</span>';
+								count_message = "<small> (" + 10000 + "+ Total) </small>" + '<span style="vertical-align: text-top; margin-left: -5px">' + '<img border="0" src="'+updateImageS3Path("/img/help.png")+'"' + 'style="height: 10px; vertical-align: middle" rel="popover"' + 'data-placement="bottom" data-title="Lead Score"' + 'data-content="Looks like there are over 10,000 results. Sorry we can\'t give you a precise number in such cases."' + 'id="element" data-trigger="hover">' + '</span>';
 
 							else
 								count_message = "<small> (" + this[0].count + " Total) </small>";
@@ -4096,10 +4053,10 @@ $(function()
 		{
 			if (i < parseInt(value))
 			{
-				element = element.concat('<li style="display: inline;"><img src="img/star-on.png" alt="' + i + '"></li>');
+				element = element.concat('<li style="display: inline;"><img src="'+updateImageS3Path("img/star-on.png")+'" alt="' + i + '"></li>');
 				continue;
 			}
-			element = element.concat('<li style="display: inline;"><img src="img/star-off.png" alt="' + i + '"></li>');
+			element = element.concat('<li style="display: inline;"><img src="'+updateImageS3Path("img/star-off.png")+'" alt="' + i + '"></li>');
 		}
 		return new Handlebars.SafeString(element);
 	});
@@ -4114,15 +4071,31 @@ $(function()
 		var template;
 		if (type == "contacts")
 		{
-			template = $(getTemplate('csv_upload_options', context));
+			getTemplate('csv_upload_options', context, undefined, function(template_ui){
+		 		if(!template_ui)
+		    		return;
+		    	template = $(template_ui);
+				
+			}, null);
+
 		}
 		else if (type == "company")
 		{
-			template = $(getTemplate('csv_companies_upload_options', context));
+			getTemplate('csv_companies_upload_options', context, undefined, function(template_ui){
+		 		if(!template_ui)
+		    		return;
+		    	template = $(template_ui);
+				
+			}, null);
 		}
 		else if (type == "deals")
 		{
-			template = $(getTemplate('csv_deals_options', context));
+			getTemplate('csv_deals_options', context, undefined, function(template_ui){
+		 		if(!template_ui)
+		    		return;
+		    	template = $(template_ui);
+				
+			}, null);
 		}
 
 		// Replaces _ with spaces
@@ -4395,7 +4368,7 @@ $(function()
 			// Iterates inorder to insert each field into json
 			for (var i = 0; i < email_fields.length; i++)
 			{
-				// Splits based on colon. E.g "To: naresh@agilecrm.com "
+				// Splits based on colon. E.g "To: naresh@agilecrm.com   "
 				var arrcolon = email_fields[i].split(":");
 
 				// Inserts LHS of colon as key. E.g., To
@@ -4403,7 +4376,7 @@ $(function()
 				key = key.trim(); // if key starts with space, it can't
 				// accessible
 
-				// Inserts RHS of colon as value. E.g., naresh@agilecrm.com
+				// Inserts RHS of colon as value. E.g., naresh@agilecrm.com  
 				var value = arrcolon.slice(1).join(":"); // join the
 				// remaining string
 				// based on colon,
@@ -4427,13 +4400,19 @@ $(function()
 
 	Handlebars.registerHelper('remove_spaces', function(value)
 	{
-		return value.replace(/ +/g, '');
+		if(value)
+			  value = value.replace(/ +/g, '');
+
+		return value;
 
 	});
 
 	Handlebars.registerHelper('replace_spaces', function(value)
 	{
-		return value.replace(/ +/g, '_');
+		if(value)
+			  value = value.replace(/ +/g, '_');
+
+		return value;
 
 	});
 
@@ -4535,45 +4514,7 @@ $(function()
 			return options.fn(App_Contacts.contactDetailView.model.toJSON());
 		}
 	});
-
-	/**
-	 * Returns json object of active and done subscribers from contact object's
-	 * campaignStatus.
-	 */
-	Handlebars.registerHelper('contact_campaigns', function(object, data, options)
-	{
-
-		// if campaignStatus is not defined, return
-		if (object === undefined || object[data] === undefined)
-			return;
-
-		// Temporary json to insert active and completed campaigns
-		var campaigns = {};
-
-		var active_campaigns = [];
-		var completed_campaigns = [];
-
-		// campaignStatus object of contact
-		var campaignStatusArray = object[data];
-
-		for (var i = 0, len = campaignStatusArray.length; i < len; i++)
-		{
-			// push all active campaigns
-			if (campaignStatusArray[i].status.indexOf('ACTIVE') !== -1)
-				active_campaigns.push(campaignStatusArray[i])
-
-				// push all done campaigns
-			if (campaignStatusArray[i].status.indexOf('DONE') !== -1)
-				completed_campaigns.push(campaignStatusArray[i]);
-		}
-
-		campaigns["active"] = active_campaigns;
-		campaigns["done"] = completed_campaigns;
-
-		// apply obtained campaigns context within
-		// contact_campaigns block
-		return options.fn(campaigns);
-	});
+	
 
 	/**
 	 * Verifies given urls length and returns options hash based on restricted
@@ -4607,19 +4548,6 @@ $(function()
 
 		return options.fn(context_json);
 
-	});
-
-	/**
-	 * Returns first occurence string from string having underscores E.g,
-	 * mac_os_x to mac
-	 */
-	Handlebars.registerHelper('normalize_os', function(data)
-	{
-		if (data === undefined || data.indexOf('_') === -1)
-			return data;
-
-		// if '_' exists splits
-		return data.split('_')[0];
 	});
 
 	Handlebars.registerHelper('safe_tweet', function(data)
@@ -4851,15 +4779,17 @@ $(function()
 	 */
 	Handlebars.registerHelper('capFirstLetter', function(data)
 	{
-		if (data === "DEFAULT")
-		{
-			// console.log("return empty");
-			return "";
-		}
-		else
-		{
-			var temp = data.toLowerCase();
-			return temp.charAt(0).toUpperCase() + temp.slice(1);
+		if(data){
+			if (data === "DEFAULT")
+			{
+				// console.log("return empty");
+				return "";
+			}
+			else
+			{
+				var temp = data.toLowerCase();
+				return temp.charAt(0).toUpperCase() + temp.slice(1);
+			}
 		}
 	});
 
@@ -5196,6 +5126,14 @@ $(function()
 	Handlebars.registerHelper('get_avatars_template', function(options)
 	{
 		var template = getTemplate("choose-avatar-images-modal", {});
+
+		getTemplate('choose-avatar-images-modal', {}, undefined, function(template_ui){
+	 		if(!template_ui)
+	    		return;
+	    	var template = $(template_ui);
+			 
+		}, null);
+
 		return template;
 	});
 
@@ -5807,34 +5745,7 @@ $(function()
 			icon_name = 'icon-sitemap';
 		return icon_name;
 	});
-	/**
-	 * getting flitered contact portlet header name
-	 */
-	Handlebars.registerHelper('get_flitered_contact_portlet_header', function(filter_name)
-	{
-		var header_name = '';
-		if (filter_name == 'contacts')
-			header_name = "All Contacts";
-		else if (filter_name == 'companies')
-			header_name = "All Companies";
-		else if (filter_name == 'recent')
-			header_name = "Recent Contacts";
-		else if (filter_name == 'myContacts')
-			header_name = "My Contacts";
-		else if (filter_name == 'leads')
-			header_name = "Leads";
-		else
-		{
-			var contactFilter = $.ajax({ type : 'GET', url : '/core/api/filters/' + filter_name, async : false, dataType : 'json', success : function(data)
-			{
-				if (data != null && data != undefined)
-					header_name = "" + data.name;
-			} });
-		}
-		if (header_name == undefined || header_name == "")
-			header_name = "Contact List";
-		return header_name;
-	});
+	
 
 	Handlebars.registerHelper('if_equals_or', function()
 	{
@@ -5874,34 +5785,7 @@ $(function()
 		else
 			return options.inverse(this);
 	});
-	/**
-	 * getting flitered contact portlet header name
-	 */
-	Handlebars.registerHelper('get_deals_funnel_portlet_header', function(track_id)
-	{
-		var header_name = '';
-		App_Portlets.track_length = 0;
-		$.ajax({ type : 'GET', url : '/core/api/milestone/pipelines', async : false, dataType : 'json', success : function(data)
-		{
-			App_Portlets.track_length = data.length;
-			App_Portlets.deal_tracks = data;
-		} });
-		if (App_Portlets.track_length > 1)
-		{
-			if (track_id == 0)
-				header_name = "Default";
-			else
-			{
-				var milestone = $.ajax({ type : 'GET', url : '/core/api/milestone/' + track_id, async : false, dataType : 'json', success : function(data)
-				{
-					if (data != null && data != undefined)
-						header_name = "" + data.name + "";
-				} });
-			}
-		}
-		return header_name;
-	});
-
+	
 	/**
 	 * getting time in AM and PM format for event portlet
 	 */
@@ -6099,10 +5983,9 @@ $(function()
 	 */
 	Handlebars.registerHelper("isTracksEligible", function(options)
 	{
-		var planName = _billing_restriction.currentLimits.planName;
-		if (planName == 'PRO' || planName == 'REGULAR')
-			return options.fn(this);
-
+		if(_billing_restriction.currentLimits.addTracks)
+			   return options.fn(this);
+			
 		return options.inverse(this);
 	});
 
@@ -6458,7 +6341,7 @@ $(function()
 	 * 
 	 */
 	Handlebars.registerHelper('getDefaultImage',function(){
-		return new Handlebars.SafeString(LIB_PATH_FLATFULL + 'images/flatfull/user-default.jpg');
+		return new Handlebars.SafeString(updateImageS3Path(FLAT_FULL_PATH + 'images/flatfull/user-default.jpg'));
 		
 	});
 	
@@ -6471,12 +6354,14 @@ $(function()
 		var el = "";
 		$.each(App_Companies.companyViewModel[item], function(index, element)
 		{
-			if (element.indexOf("custom_") == 0)
-				element = element.split("custom_")[1];
+			if (element.indexOf("CUSTOM_") == 0) {
+				element = element.split("_")[1];
+				el = el.concat('<th class="text-muted">' + ucfirst(element) + '</th>');
+			}
+			else {
 			element = element.replace("_", " ")
-
 			el = el.concat('<th>' + ucfirst(element) + '</th>');
-
+			}	
 		});
 
 		return new Handlebars.SafeString(el);
@@ -6492,7 +6377,7 @@ $(function()
 				{
 
 					if (this[0].count > 9999 && (readCookie('company_filter') || readData('dynamic_company_filter')))
-						count_message = "<small> (" + 10000 + "+ Total) </small>" + '<span style="vertical-align: text-top; margin-left: -5px">' + '<img border="0" src="/img/help.png"' + 'style="height: 10px; vertical-align: middle" rel="popover"' + 'data-placement="bottom" data-title="Lead Score"' + 'data-content="Looks like there are over 10,000 results. Sorry we can\'t give you a precise number in such cases."' + 'id="element" data-trigger="hover">' + '</span>';
+						count_message = "<small> (" + 10000 + "+ Total) </small>" + '<span style="vertical-align: text-top; margin-left: -5px">' + '<img border="0" src="'+updateImageS3Path("/img/help.png")+'"' + 'style="height: 10px; vertical-align: middle" rel="popover"' + 'data-placement="bottom" data-title="Lead Score"' + 'data-content="Looks like there are over 10,000 results. Sorry we can\'t give you a precise number in such cases."' + 'id="element" data-trigger="hover">' + '</span>';
 
 					else
 						count_message = "<small> (" + this[0].count + " Total) </small>";
@@ -6746,29 +6631,15 @@ Handlebars.registerHelper('SALES_CALENDAR_URL', function()
 	       	}
 	    	
 			});
-Handlebars.registerHelper('get_campaign_type_filter', function(filter_name)
-{
-	var campaign_type ='';
-	if(filter_name=='All')
-		campaign_type= 'All Campaigns';
-	else{
-		var filter=$.ajax({ type : 'GET', url : '/core/api/workflows/'+filter_name, async : false, dataType : 'json',
-		success : function(data)
-			{
-				if (data != null && data != undefined)
-					campaign_type = "" + data.name;
-			} });
-	}
-	return campaign_type;
-		
-});
 	
-	Handlebars.registerHelper('toggle_contacts_filter', function(options)
+	
+	Handlebars.registerHelper('toggle_companies_filter', function(options)
 			{	        
-		    if(readCookie(CONTACTS_DYNAMIC_FILTER_COOKIE_STATUS)=="hide"){
-		    	return "none";
-	       	}
+		   return  localStorage.getItem('companiesFilterStatus');
+		    
 			});
+
+	
 
 	Handlebars.registerHelper('totalTimeFormat', function(timeInSec)
 			{
@@ -6818,3 +6689,75 @@ Handlebars.registerHelper('get_campaign_type_filter', function(filter_name)
 			return options.inverse(this);
 		return options.fn(this);
 	});
+	
+	Handlebars.registerHelper('proToEnterprise', function(plan_type, options)
+			{
+		var temp = "Free";
+
+		  if(plan_type.indexOf("PRO") >= 0)
+			plan_type= plan_type.replace("PRO","ENTERPRISE");
+
+		  var fragments = plan_type.split("_");
+
+		  var interval = "Monthly";
+		  if(fragments.length > 1)
+		  {
+		  	 interval = ucfirst(fragments[1]);
+		  	 temp = ucfirst(fragments[0]);
+
+		  	 return temp + " (" + interval+")";
+		  }
+
+		    });
+	Handlebars.registerHelper('invoice_description', function(description) {
+
+		if (!description)
+			return description;
+
+		if (description.indexOf("Unused time on") != -1) {
+			description = "Balance from previous transaction";
+		} else if (description.indexOf("Remaining") != -1) {
+			description = "Changed on " + description.substring(description.indexOf("after") + 5);
+		}
+
+		return description + " ";
+
+	});
+
+	Handlebars.registerHelper("is_unsubscribed_all", function(options){
+               
+               var contact_model = App_Contacts.contactDetailView.model.toJSON();
+
+               // First name
+               var first_name = getPropertyValue(contact_model["properties"], "first_name");
+
+               if(contact_model && contact_model["unsubscribeStatus"] && contact_model["unsubscribeStatus"].length > 0)
+               {
+                       var statuses = contact_model["unsubscribeStatus"];
+
+                       for(var i=0, len = statuses.length; i < len; i++)
+                       {
+                               var status = statuses[i];
+
+                              if(status.unsubscribeType && status.unsubscribeType == "ALL")                                       return options.fn({"first_name": first_name, "campaign_id": status.campaign_id});
+                       }
+               }
+
+               return options.inverse(this);
+        });
+
+Handlebars.registerHelper('is_mobile', function(options)
+	{
+		if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) )
+		return options.fn(this);
+		else
+		return options.inverse(this);
+	});
+
+/**
+ * Returns a S3 image url .
+ * 
+ */
+Handlebars.registerHelper('getS3ImagePath',function(imageUrl){
+	return new Handlebars.SafeString(updateImageS3Path(imageUrl));	
+});

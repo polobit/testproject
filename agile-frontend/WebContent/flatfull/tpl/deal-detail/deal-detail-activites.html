@@ -3,7 +3,7 @@
         <div class="wrapper p-t-none">
             <div class="slate-content">
                 <div class="box-left pull-left m-r-md">
-                    <img alt="Clipboard" src="/img/clipboard.png" />
+                    <img alt="Clipboard" src="{{getS3ImagePath '/img/clipboard.png'}}" />
                 </div>
                 <div class="box-right pull-left">
                     <h4 class="m-t-none">No activity on this deal yet.</h4>
@@ -25,15 +25,12 @@
 <script id="deal-detail-activities-model-template" type="text/html">
 <div  class="activity block pos-rlt">
 <div class="thumb-xs pull-left m-r-sm b-light b avatar">
-		{{#if user}}
-			{{#if userPic}}
-				<img class="user-img r r-2x"  alt="" src="{{userPic}}" >
-			{{else}}
-				<img class="user-img r r-2x"  alt="" src="{{defaultGravatarurl 40}}" >
-			{{/if}}
-		{{else}}
-			<img class="user-img r r-2x"  alt="" src="{{#getCurrentUserPrefs}}{{#if pic}}{{pic}}{{else}}{{defaultGravatarurl 40}}{{/if}}{{/getCurrentUserPrefs}}" >
-		{{/if}}
+
+		    {{#if this.user}}
+                <img class="user-img ref-roundedimg"  alt="" src="{{this.user.ownerPic}}" title="{{this.user.name}}">
+            {{else}}
+                <img class="user-img ref-roundedimg"  alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
+            {{/if}}
 <span class="owner-name hide">{{#if user}} {{user.name}} {{else}} {{#getCurrentUserPrefs}}{{currentDomainUserName}}{{/getCurrentUserPrefs}} {{/if}}</span>
 		
 	</div>

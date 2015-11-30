@@ -20,7 +20,7 @@
 	</div>
 	<ul id="twilio-logs-panel" class="list-group m-b-none text-base">
 		<li class="list-group-item r-none b-l-none b-r-none">
-			<center><img id="logs_load" src="img/ajax-loader-cursor.gif" class="m-t"></img></center>
+			<center><img id="logs_load" src="{{getS3ImagePath 'img/ajax-loader-cursor.gif'}}" class="m-t"></img></center>
 		</li>
 	</ul>
 </script>
@@ -36,7 +36,7 @@
 			  
 				<label><b>Enter your Twilio details </b>
                        <span>         
-       				      <img border="0" src="/img/help.png" class="v-top question-tag" rel="popover" data-trigger="hover" data-placement="right" data-content="Log into your Twilio Account. On the Dashboard, there you will find your Account SID and Auth Token. Copy those values and paste them into the Account SID and Auth Token fields." id="element-title" data-trigger="hover" data-original-title="How to get this?">
+       				      <img border="0" src="{{getS3ImagePath '/img/help.png'}}" class="v-top question-tag" rel="popover" data-trigger="hover" data-placement="right" data-content="Log into your Twilio Account. On the Dashboard, there you will find your Account SID and Auth Token. Copy those values and paste them into the Account SID and Auth Token fields." id="element-title" data-trigger="hover" data-original-title="How to get this?">
         			   </span>
                 </label>                
 				<div class="control-group form-group">
@@ -53,7 +53,7 @@
                 <div class="control-group form-group" id="twilio_numbers" style="display:none;">
 				    <label class="control-label">Twilio Numbers
                           <span class="v-top">         
-       				        <img border="0" src="/img/help.png" class="v-top question-tag"  rel="popover" data-trigger="hover" data-placement="right" data-content="To receive incoming calls in Agile, you need to select a Twilio number. A Twilio number is one that you have purchased through Twilio. This number will also be the caller ID for outgoing calls  (unless you select a different caller ID from the option below)." id="element-title" data-trigger="hover" data-original-title="What is this?">
+       				        <img border="0" src="{{getS3ImagePath '/img/help.png'}}" class="v-top question-tag"  rel="popover" data-trigger="hover" data-placement="right" data-content="To receive incoming calls in Agile, you need to select a Twilio number. A Twilio number is one that you have purchased through Twilio. This number will also be the caller ID for outgoing calls  (unless you select a different caller ID from the option below)." id="element-title" data-trigger="hover" data-original-title="What is this?">
         			      </span>
                     </label>
 				    <div class="controls" id="contactTypeAhead">
@@ -64,7 +64,7 @@
                 <div class="control-group form-group" id="twilio_from_numbers" style="display:none;">
 				    <label class="control-label">Verified Caller IDs
                          <span class="v-top">         
-       				        <img border="0" src="/img/help.png" class="v-top question-tag" rel="popover" data-trigger="hover" data-placement="right" data-content="A verified phone number is one that you can use as your Caller ID when making outbound calls with Twilio. Agile will use this number as the Caller ID. Incoming calls on this number will NOT come to Agile." id="element-title" data-trigger="hover" data-original-title="What is this?">
+       				        <img border="0" src="{{getS3ImagePath '/img/help.png'}}" class="v-top question-tag" rel="popover" data-trigger="hover" data-placement="right" data-content="A verified phone number is one that you can use as your Caller ID when making outbound calls with Twilio. Agile will use this number as the Caller ID. Incoming calls on this number will NOT come to Agile." id="element-title" data-trigger="hover" data-original-title="What is this?">
         			     </span>
                     </label>
 				    <div class="controls" id="contactTypeAhead">
@@ -77,7 +77,7 @@
                 <div class="control-group form-group m-t-sm" id="twilio_twimlet_url_controls" style="display:none;">
 				    <label class="control-label">Redirect Twimlet Url
                         <span class="v-top m-l-n-xs">         
-       				        <img border="0" src="/img/help.png" class="v-top" style="height: 8px;margin: 2px;" rel="popover" data-placement="right" data-content="This Twimlet URL will be called when you are not available. Twimlets allow you to setup Forwarding, Voicemail etc." id="element-title" data-trigger="hover" data-original-title="What is this?">
+       				        <img border="0" src="{{getS3ImagePath '/img/help.png'}}" class="v-top" style="height: 8px;margin: 2px;" rel="popover" data-placement="right" data-content="This Twimlet URL will be called when you are not available. Twimlets allow you to setup Forwarding, Voicemail etc." id="element-title" data-trigger="hover" data-original-title="What is this?">
         			      </span>
                     </label>
 				    <div class="controls">
@@ -96,9 +96,9 @@
                  
               <span id="error-number-not-selected" class="help-inline text-danger" style="display:none;">Please select either Twilio number or Verified Caller ID.</span>
               <span id="note-number-not-available" class="help-inline text-danger" style="display:none;"></span>
-<div class="m-t">
+<div class="m-t text-center">
               <a href="#" id="validate_account" class="btn btn-sm btn-primary">Validate</a>
-			  <a href="#" id="save_prefs" class="btn btn-sm btn-primary" style="display:none;">Save</a>
+			  <a href="#" id="save_prefs" class="save-agile-widget btn btn-sm btn-primary" style="display:none;">Save</a>
 			  <a href="#add-widget" class="btn btn-default btn-sm ml_5">Cancel</a>
 </div>              
 		 </fieldset>

@@ -41,13 +41,13 @@ if(redirectTo  != null)
 <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
 
 <style>
-
 body {
-background-image:url('..<%=flatfull_path%>/images/flatfull/buildings.jpg');
-background-repeat:no-repeat;
-background-position:center center;
-background-size:100% 100%;
-background-attachment:fixed;
+
+  background-image:url('..<%=flatfull_path%>/images/flatfull/buildings-low.jpg');
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: 100% 100%;
+  background-attachment: fixed;
 }
 
 .text-white
@@ -72,6 +72,16 @@ text-decoration:underline;
 .close {
 	  color: #000 !important;
 }
+
+@media all and (max-width: 767px) {
+
+body {
+  background-size: cover;
+
+}
+  
+}
+
 
 /* @media (min-width: 900px) {
 body {
@@ -125,7 +135,7 @@ padding-left:10px!important;
 			<div class="list-group list-group-sm">
 				<div class="list-group-item">
           			<input id='subdomain' type="text" placeholder="Company"
-						   	   name="subdomain" class="input-xlarge field required form-control no-border w pull-left" autocapitalize="off"><div class="inline-block m-t-xs">.agilecrm.com</div><div class="clearfix"></div>
+						   	   name="subdomain" class="input-xlarge  required form-control no-border w pull-left" autocapitalize="off"><div class="inline-block m-t-xs">.agilecrm.com</div><div class="clearfix"></div>
 				</div>
 			</div>
 			<input class="btn btn-lg btn-primary btn-block" type="submit" value="Submit">
@@ -146,6 +156,15 @@ padding-left:10px!important;
 	<script type='text/javascript' src='<%=flatfull_path%>/lib/jquery-new/jquery-2.1.1.min.js'></script>
 	<script type="text/javascript" src="<%=flatfull_path%>/lib/bootstrap.v3.min.js"></script>
 	<script>
+
+	$(document).ready(function(){
+   var newImg = new Image;
+      	newImg.onload = function() {
+    	$("body").css("background-image","url('"+this.src+"')");
+  		 }
+		newImg.src = 'flatfull/images/flatfull/buildings.jpg';
+
+	});
 		//Init
 		var error = "";
 		$(function() {

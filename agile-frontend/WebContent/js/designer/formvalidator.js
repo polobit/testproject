@@ -13,7 +13,8 @@ function initValidator(selector, callback) {
         valid = true;
         
         // Allow email or merge field. For e.g., Validates "abc@gmail.com, {{email}}" as true
-        var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        // var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        var re = /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
 
         for (var i in emails) {
         	value = emails[i];
@@ -52,6 +53,32 @@ function initValidator(selector, callback) {
 	     return true;
 	     
 	  });
+
+	  // Merge Fields validation
+	  $.tools.validator.fn(function(){
+	  		return ($(this).is('input') || $(this).is('textarea'))
+	  }, 
+	  function(input, value){
+
+	     if(!value)
+			value = "";
+
+		 // match works only on strings
+		 if(typeof value !== "string")
+		 	value = String(value);
+		        
+        // Regex to identify merge fields
+        var reg = /{{[a-zA-Z0-9\s_.,&/\\*-]*[a-zA-Z0-9\s]}(?!})|{{{[a-zA-Z0-9\s_.,&/\\*-]*[a-zA-Z0-9\s]}}(?!})/g;
+
+         var merge_fields = value.match(reg);
+
+        for (var i in merge_fields) {
+           return "Parse error. Please correct " + merge_fields[i] + "}.";
+        }
+
+        return true;
+	     
+	  });
 	
     // Adds wall effect to show the the first error
     $.tools.validator.addEffect("wall", function (errors, event) {
@@ -70,6 +97,9 @@ function initValidator(selector, callback) {
               
                //get the name of the field
                var name = error.input.attr("name");
+
+               if(name == "html_email" || name == "text_email")
+                   name = name.replace('_email', '').toUpperCase();
                
                name = ucwords(name);
                

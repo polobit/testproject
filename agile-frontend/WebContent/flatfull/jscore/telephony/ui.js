@@ -13,8 +13,11 @@ $(function()
 		// If noty do not have dialpad then add
 		if ($('.noty_buttons').find('.dialpad_btns').html() == null)
 		{
-			var dialpad = $(getTemplate("dialpad"), {});
-			$(".noty_buttons").prepend(dialpad);
+			getTemplate('dialpad', {}, undefined, function(template_ui){
+				if(!template_ui)
+					  return;
+				$(".noty_buttons").prepend($(template_ui));	
+			},null);
 		}
 		else
 		{

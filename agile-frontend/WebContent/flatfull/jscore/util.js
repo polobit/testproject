@@ -1,7 +1,7 @@
 /**
  * Loading spinner shown while loading
  */
-var LOADING_HTML = '<img class="loading" style="padding-right:5px;opacity:0.5;" src= "/flatfull/img/ajax-loader-cursor.gif"></img>';
+var LOADING_HTML = '<img class="loading" style="padding-left:10px;padding-right:5px;opacity:0.5;" src= "'+updateImageS3Path("/flatfull/img/ajax-loader-cursor.gif")+'"></img>';
 
 /**
  * Set of loading images
@@ -13,13 +13,13 @@ LOADING_HTML_IMAGES = [
 /**
  * Loading images shown which contacts are being fetched on page scroll
  */
-var LOADING_ON_CURSOR = '<img class="loading" style="padding-right:5px" src= "img/ajax-loader-cursor.gif"></img>';
+var LOADING_ON_CURSOR = '<img class="loading" style="padding-left:10px;padding-right:5px" src= "'+updateImageS3Path("img/ajax-loader-cursor.gif")+'"></img>';
 
 /**
  * Default image shown for contacts if image is not available
  */
 
-var DEFAULT_GRAVATAR_url = window.location.origin + "/" + LIB_PATH_FLATFULL + "images/flatfull/user-default.jpg";
+var DEFAULT_GRAVATAR_url = window.location.origin + "/" + FLAT_FULL_PATH + "images/flatfull/user-default.jpg";
 
 var ONBOARDING_SCHEDULE_URL = "https://our.agilecrm.com/calendar/Haaris_Farooqi,Sandeep";
 
@@ -85,7 +85,7 @@ function fillSelect(selectId, url, parseKey, callback, template, isUlDropdown, e
 	});
 
 	// Prepend Loading
-	$loading = '<img class="loading" style="padding-right:5px;opacity:0.5;" src= "../flatfull/img/ajax-loader-cursor.gif"></img>';
+	$loading = '<img class="loading" style="padding-right:5px;opacity:0.5;" src= "'+updateImageS3Path("../flatfull/img/ajax-loader-cursor.gif")+'"></img>';
 	if ($("#" + selectId, el).next().hasClass("select-loading"))
 		$("#" + selectId, el).next().html($loading);
 	else
@@ -130,8 +130,15 @@ function fillSelect(selectId, url, parseKey, callback, template, isUlDropdown, e
 		// populates the template using handlebars
 		$.each(data, function(index, model)
 		{
-			var optionsHTML = modelTemplate(model);
-			$("#" + selectId, el).append(optionsHTML);
+			if (model && model.field_type && model.field_type == "FORMULA")
+			{
+				//If the model is Customfield and if it is formula type we won't add that.
+			}
+			else
+			{
+				var optionsHTML = modelTemplate(model);
+				$("#" + selectId, el).append(optionsHTML);
+			}
 		});
 
 		// If callback is present, it is called to deserialize
@@ -140,7 +147,7 @@ function fillSelect(selectId, url, parseKey, callback, template, isUlDropdown, e
 		{
 			// execute the callback, passing parameters as
 			// necessary
-			callback();
+			callback(collection);
 		}
 	}
 
@@ -416,7 +423,6 @@ function text_gravatar_initials(items)
 	if (name.length == 0)
 		name = "X";
 
-	console.log(name);
 	return name;
 }
 

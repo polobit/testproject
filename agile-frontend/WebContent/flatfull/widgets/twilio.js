@@ -312,6 +312,7 @@ function showTwilioDetails(token, from_number)
 	/*
 	 * On change of number in select box, we retrieve call logs for it and show
 	 */
+    $("body").off("change", '#contact_number');
 	$("body").on("change", '#contact_number', function(e)
 	{
 		var to = $('#contact_number').val();
@@ -355,6 +356,7 @@ function getTwilioLogs(to)
 		/*
 		 * On click of play button in Twilio logs, call conversaion is played
 		 */
+        $("body").off("click", '#record_sound_play');
 		$("body").on("click", '#record_sound_play', function(e)
 		{
 			e.preventDefault();
@@ -391,6 +393,7 @@ function getTwilioLogs(to)
 		});
 		
 		// To stop the audio call when playing
+        $("body").off("click", '.icon-stop');
 		$("body").on("click", '.icon-stop', function(e)
 		{			
 			e.preventDefault();
@@ -605,6 +608,7 @@ function registerClickEvents(from_number)
 	 * On click of Twilio hang up, logs are retrieved again and and all
 	 * connections are disconnected, hangup is hidden and call butoon is shown
 	 */
+    $("body").off("click", '#twilio_hangup');
 	$("body").on("click", '#twilio_hangup', function(e)
 	{
 		e.preventDefault();
@@ -622,6 +626,7 @@ function registerClickEvents(from_number)
 		$("#twilio_call").show();
 	});
 
+    $("body").off("click", '#twilio_dialpad');
 	$("body").on("click", '#twilio_dialpad', function(e)
 	{
 		e.preventDefault();
@@ -632,6 +637,7 @@ function registerClickEvents(from_number)
 	/*
 	 * On click of play button in Twilio logs, call conversaion is played
 	 */
+     $("body").off("click", '#record_sound_play');
 	 $("body").on("click", '#record_sound_play', function(e)
 	{
 		e.preventDefault();
@@ -660,6 +666,7 @@ function registerClickEvents(from_number)
 	 * On click of call in Twilio panel, shows a record modal asking for
 	 * confirmation to make call and whether to record it
 	 */
+    $("body").off("click", '#twilio_call');
 	$("body").on("click", '#twilio_call', function(e)
 	{
 		e.preventDefault();
@@ -691,6 +698,7 @@ function registerClickEvents(from_number)
 	 * On click of button in record modal, calls connect method of Twilio to
 	 * make call
 	 */
+    $("body").off("click", '.enable-call');
 	$("body").on("click", '.enable-call', function(e)
 			{
 				e.preventDefault();
@@ -765,7 +773,7 @@ function twilioError(id, message)
 	 */
 	$('#' + id).html(getTemplate('twilio-error', error_json));
 	//$('#' + id).append('<a href="#add-widget" >widget settings page.</a>');
-	$('#' + id).append('<a class="btn" id="delete-widget" widget-name="Twilio" style="margin-top: 5px;">Delete Widget</a>');
+	$('#' + id).append('<div class="wrapper-sm p-t-none"><a class="btn btn-default" id="delete-widget" widget-name="Twilio" style="margin-top: 5px;">Delete Widget</a></div>');
 }
 
 /**
@@ -798,100 +806,101 @@ function addLogsToTimeLine(logs)
 	}
 }
 
-$(function()
+function startTwilioWidget(contact_id){
+	// Twilio widget name as a global variable
+	Twilio_PLUGIN_NAME = "Twilio";
+
+	// Twilio loading image declared as global
+	TWILIO_LOGS_LOAD_IMAGE = '<center><img id="logs_load" src=\"img/ajax-loader-cursor.gif\" style="margin-top: 10px;margin-bottom: 14px;"></img></center>';
+
+	// Retrieves widget which is fetched using script API
+	var twilio_widget = agile_crm_get_widget(Twilio_PLUGIN_NAME);
+
+	console.log('In Twilio');
+	console.log(twilio_widget);
+
+	// Retrieves list of phone numbers in agile contact
+	Numbers = agile_crm_get_contact_properties_list("phone");
+	console.log(Numbers);
+
+	// ID of the ClickDesk widget as global variable
+	Twilio_Plugin_Id = twilio_widget.id;
+	console.log("Plugin prefs in Twilio: " + twilio_widget.prefs);
+
+	/*
+	 * Gets Twilio widget preferences, required to check whether to show setup
+	 * button or to fetch details. If undefined - considering first time usage
+	 * of widget, setupTwilioOAuth is shown and returned
+	 */
+	if (twilio_widget.prefs == undefined || twilio_widget.prefs == "{}")
+	{
+		setupTwilioOAuth();
+		return;
+	}
+
+	// Parse string preferences as JSON
+	var twilio_prefs = JSON.parse(twilio_widget.prefs);
+	console.log(twilio_prefs);
+
+	// Because of new widget it is deprecated and all functions are commented.
+	twilioError(Twilio_PLUGIN_NAME, 'Please delete this widget and add the new improved Twilio widget from the <a href="#add-widget" >widget settings page</a>.');
+	
+	/*
+	 * Check if Twilio account has registered numbers and shows set up to verify
+	 * if no numbers available, else generates token required to make calls
+	 */
+	//checkTwilioNumbersAndGenerateToken(twilio_prefs);
+
+	/*
+	 * If Twilio account doesn't have numbers, we need to verify numbers in
+	 * Twilio.On click of verify button in Twilio initial template,
+	 * verifyNumberFromTwilio is called to verify a number in Twilio
+	 */
+    $("body").off("click", '#twilio_verify');
+	$("body").on("click", '#twilio_verify', function(e)
+	{
+		e.preventDefault();
+
+		// Checks whether all input fields are given
+		if (!isValidForm($("#twilio_call_form")))
 		{
-			// Twilio widget name as a global variable
-			Twilio_PLUGIN_NAME = "Twilio";
+			return;
+		}
 
-			// Twilio loading image declared as global
-			TWILIO_LOGS_LOAD_IMAGE = '<center><img id="logs_load" src=\"img/ajax-loader-cursor.gif\" style="margin-top: 10px;margin-bottom: 14px;"></img></center>';
+		// From number to make calls as entered by user
+		var from_number = $('#twilio_from').val();
+		console.log("Twilio verify from number: " + from_number);
 
-			// Retrieves widget which is fetched using script API
-			var twilio_widget = agile_crm_get_widget(Twilio_PLUGIN_NAME);
-
-			console.log('In Twilio');
-			console.log(twilio_widget);
-
-			// Retrieves list of phone numbers in agile contact
-			Numbers = agile_crm_get_contact_properties_list("phone");
-			console.log(Numbers);
-
-			// ID of the ClickDesk widget as global variable
-			Twilio_Plugin_Id = twilio_widget.id;
-			console.log("Plugin prefs in Twilio: " + twilio_widget.prefs);
-
-			/*
-			 * Gets Twilio widget preferences, required to check whether to show setup
-			 * button or to fetch details. If undefined - considering first time usage
-			 * of widget, setupTwilioOAuth is shown and returned
-			 */
-			if (twilio_widget.prefs == undefined || twilio_widget.prefs == "{}")
-			{
-				setupTwilioOAuth();
-				return;
-			}
-
-			// Parse string preferences as JSON
-			var twilio_prefs = JSON.parse(twilio_widget.prefs);
-			console.log(twilio_prefs);
-
-			// Because of new widget it is deprecated and all functions are commented.
-			twilioError(Twilio_PLUGIN_NAME, 'Please delete this widget and add the new improved Twilio widget from the <a href="#add-widget" >widget settings page</a>.');
-			
-			/*
-			 * Check if Twilio account has registered numbers and shows set up to verify
-			 * if no numbers available, else generates token required to make calls
-			 */
-			//checkTwilioNumbersAndGenerateToken(twilio_prefs);
-
-			/*
-			 * If Twilio account doesn't have numbers, we need to verify numbers in
-			 * Twilio.On click of verify button in Twilio initial template,
-			 * verifyNumberFromTwilio is called to verify a number in Twilio
-			 */
-			$("body").on("click", '#twilio_verify', function(e)
-			{
-				e.preventDefault();
-
-				// Checks whether all input fields are given
-				if (!isValidForm($("#twilio_call_form")))
-				{
-					return;
-				}
-
-				// From number to make calls as entered by user
-				var from_number = $('#twilio_from').val();
-				console.log("Twilio verify from number: " + from_number);
-
-				/*
-				 * Verifies a number in Twilio and shows verification code in the Twilio
-				 * template with a procced button
-				 */
-				verifyNumberFromTwilio(from_number, function(verified_data)
-				{
-					$('#Twilio').html(getTemplate('twilio-verify', verified_data));
-				});
-			});
-
-			/*
-			 * On click of Twilio proceed button after verifying numbers, we will check
-			 * the verification status of the number and generate token to make calls,
-			 * else set up to verify number is shown again
-			 */
-			$("body").on("click", '#twilio_proceed', function(e)
-			{
-				e.preventDefault();
-
-				// Get preferences of Twilio widget by its name
-				var check_twilio_prefs = agile_crm_get_widget_prefs(Twilio_PLUGIN_NAME);
-				console.log("check_twilio_prefs : " + check_twilio_prefs);
-
-				// check if verification status is success, generate token
-				if (!check_twilio_prefs.verificaton_status || check_twilio_prefs.verificaton_status == "success")
-					checkTwilioNumbersAndGenerateToken(check_twilio_prefs);
-
-				// else if it is failure, show set up to verify
-				else if (check_prefs.verificaton_status == "failure")
-					$('#Twilio').html(getTemplate('twilio-initial', {}));
-			});
+		/*
+		 * Verifies a number in Twilio and shows verification code in the Twilio
+		 * template with a procced button
+		 */
+		verifyNumberFromTwilio(from_number, function(verified_data)
+		{
+			$('#Twilio').html(getTemplate('twilio-verify', verified_data));
 		});
+	});
+
+	/*
+	 * On click of Twilio proceed button after verifying numbers, we will check
+	 * the verification status of the number and generate token to make calls,
+	 * else set up to verify number is shown again
+	 */
+    $("body").off("click", '#twilio_proceed');
+	$("body").on("click", '#twilio_proceed', function(e)
+	{
+		e.preventDefault();
+
+		// Get preferences of Twilio widget by its name
+		var check_twilio_prefs = agile_crm_get_widget_prefs(Twilio_PLUGIN_NAME);
+		console.log("check_twilio_prefs : " + check_twilio_prefs);
+
+		// check if verification status is success, generate token
+		if (!check_twilio_prefs.verificaton_status || check_twilio_prefs.verificaton_status == "success")
+			checkTwilioNumbersAndGenerateToken(check_twilio_prefs);
+
+		// else if it is failure, show set up to verify
+		else if (check_prefs.verificaton_status == "failure")
+			$('#Twilio').html(getTemplate('twilio-initial', {}));
+	});
+}

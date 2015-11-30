@@ -64,13 +64,19 @@
 	/* For toggling help modal popup */
 	$("body").on('click', '#help-page', function(e){
 		
-		var helpModal = $(getTemplate("show-help"),{});
-		helpModal.modal('show');
-	
-		// Hides help only when clicked on close button.
-	    $('.hide-modal', helpModal).click(function(){
-	    		helpModal.modal('hide');
-	    });
+		getTemplate("show-help", {}, undefined, function(template_ui){
+			if(!template_ui)
+				  return;
+
+			var helpModal = $(template_ui);
+			helpModal.modal('show');
+		
+			// Hides help only when clicked on close button.
+		    $('.hide-modal', helpModal).click(function(){
+		    		helpModal.modal('hide');
+		    });
+
+		}, null);
    
 	});
 	
@@ -93,17 +99,20 @@
         {
         	$('#share-by-email').remove();
         }
-				var emailModal = $(getTemplate("share-by-email", CURRENT_DOMAIN_USER));
-				
-				// Replacing text area break lines
-				var description = $(emailModal).find('textarea').val();
-				description = description.replace( /<br\/>/g,"\r\n");
-				$(emailModal).find('textarea').val(description);
-		
-				emailModal.modal('show');
-		
-				// When send button is clicked form is validated
-				$("body").on('click', '#shareMail', function(e){
+
+        getTemplate("share-by-email", CURRENT_DOMAIN_USER, undefined, function(template_ui){
+			if(!template_ui)
+				  return;
+
+			var emailModal = $(template_ui);
+			// Replacing text area break lines
+			var description = $(emailModal).find('textarea').val();
+			description = description.replace( /<br\/>/g,"\r\n");
+			$(emailModal).find('textarea').val(description);
+	
+			emailModal.modal('show');
+			// When send button is clicked form is validated
+			$("body").on('click', '#shareMail', function(e){
 					e.preventDefault();
 					
 					if(!isValidForm($('#sharemailForm')))
@@ -121,7 +130,7 @@
 						 encodeURIComponent(json.body);
 					
 					// Shows message 
-				    $save_info = $('<img src="img/1-0.gif" height="18px" width="18px"></img>&nbsp;&nbsp;<span><p class="text-success" style="color:#008000; font-size:15px; display:inline-block"> <i>Sending mail...</i></p></span>');
+				    $save_info = $('<img src="'+updateImageS3Path("img/1-0.gif")+'" height="18px" width="18px"></img>&nbsp;&nbsp;<span><p class="text-success" style="color:#008000; font-size:15px; display:inline-block"> <i>Sending mail...</i></p></span>');
 				    $("#msg", this.el).append($save_info);
 					$save_info.show().delay(2000).fadeOut("slow");
 					
@@ -129,9 +138,9 @@
 					$.post(url, function(){
 						emailModal.modal('hide');
 					});
-		
-				});
-		
+			});
+
+		}, "#content");
 	});
 	
 })(jQuery);

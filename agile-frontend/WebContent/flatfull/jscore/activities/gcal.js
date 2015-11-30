@@ -5,13 +5,26 @@
  */
 
 // or better
+
+
+function loadUserEventsfromGoogle(users, start, end){
+
+		load_events_from_google(function(data)
+						{
+							if (!data)
+								return;
+
+							return agile_transform_options(data, start, end);
+						});
+}
+
 function isDefined(x)
 {
 	var undefined;
 	return typeof x !== undefined;
 }
 
-function _init_gcal_options()
+function _init_gcal_options(users)
 {
 	var fc = $.fullCalendar;
 	fc.sourceFetchers = [];
@@ -21,29 +34,18 @@ function _init_gcal_options()
 		if (sourceOptions.dataType == 'agile-gcal')
 		{
 
+			if(users){
+
+				loadUserEventsfromGoogle(users, start, end);
+				return;
+
+			}
 			// Check whether to show the google calendar events or not.
 
 			$.getJSON('/core/api/users/agileusers', function(users)
-			{
-				$.each(users, function(i, user)
 				{
-					if (CURRENT_DOMAIN_USER.id == user.domain_user_id)
-					{
-						// Fetches access token. Fetched here to
-						// avoid
-						// unnecessary loading of client.js and
-						// gapi helper
-						// without access token
-						load_events_from_google(function(data)
-						{
-							if (!data)
-								return;
-
-							return agile_transform_options(data, start, end);
-						});
-					}
+					loadUserEventsfromGoogle(users, start, end);
 				});
-			});
 
 		}
 	});
@@ -95,7 +97,7 @@ function _fetchGCAndAddEvents(sourceOptions, start, end)
 
 	request.execute(function(resp)
 	{
-		console.log(resp);
+		var google_events = [];
 		for (var i = 0; i < resp.items.length; i++)
 		{
 			var fc_event = google2fcEvent(resp.items[i]);
@@ -103,7 +105,9 @@ function _fetchGCAndAddEvents(sourceOptions, start, end)
 			if (fc_event)
 				// Add event
 				$('#calendar_event').fullCalendar('renderEvent', fc_event)
+				
 		}
+
 	});
 }
 

@@ -2,13 +2,42 @@
 	<div class="btn-group m-r-sm">
     	<button class="btn btn-default btn-sm custom_view"><i class="icon-list" style="margin-right:3px"></i></button>
     	<button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
+    	{{#is_mobile}}
     	<ul id="contact-view-model-list" class="pull-right dropdown-menu">
+    	<li class="dropdown-submenu"><a data-toggle="dropdown" id="mobile-dropdown-click-sort">Sort By</a>
+    	<li class="divider"></li>
+    		<li><a class="sort" id="sort-by-created_time-desc" data="-created_time" href="#">Newest</a></li>
+					<li><a class="sort" id="sort-by-created_time-asc" data="created_time" href="#">Oldest</a></li>
+					
+					<li><a class="sort" id="sort-by-lead_score-desc" data="-lead_score" href="#">Highest Score</a></li>
+					<li><a class="sort" id="sort-by-lead_score-asc" data="lead_score" href="#">Lowest Score</a></li>
+					
+					<li><a class="sort" id="sort-by-star_value-desc" data="-star_value" href="#">Highest Starred</a></li>
+					<li><a class="sort" id="sort-by-star_value-asc" data="star_value" href="#">Lowest Starred</a></li>
+					
+					<li><a class="sort" id="sort-by-first_name-desc" data="-first_name" href="#">First Name Desc</a></li>
+					<li><a class="sort" id="sort-by-first_name-asc" data="first_name" href="#">First Name Asc</a></li>
+					
+					<li><a class="sort" id="sort-by-last_name-desc" data="-last_name" href="#">Last Name Desc</a></li>
+					<li><a class="sort" id="sort-by-last_name-asc" data="last_name" href="#">Last Name Asc</a></li>
+			
+					<li><a class="sort" id="sort-by-last_contacted-desc" data="-last_contacted" href="#">Contacted Date Desc</a></li>
+					<li><a class="sort" id="sort-by-last_contacted-asc" data="last_contacted" href="#">Contacted Date Asc</a></li>
+						<li class="divider"></li>
+        	<li>
+            	<a href="#contact-view-prefs">Add/Remove Columns</a>
+        	</li>
+    	</ul>
+    	{{else}}
+    	
+    	<ul id="contact-view-model-list" class="pull-right dropdown-menu hidden-xs">
         	<!--<li>
             	<a href="#contacts" class="DefaultView">Default</a>
 				 a href="#contacts" class="GridView">Grid View</a 
         	</li>
 			<li class="divider"></li>-->
-			<li class="dropdown-submenu"><a data-toggle="dropdown" >Sort By</a>
+			<li class="dropdown-submenu"><a data-toggle="dropdown" id="mobile-dropdown-click-sort">Sort By</a>
+
 				<ul class="dropdown-menu" id="contact-sort-views">
 					<li><a class="sort" id="sort-by-created_time-desc" data="-created_time" href="#">Newest</a></li>
 					<li><a class="sort" id="sort-by-created_time-asc" data="created_time" href="#">Oldest</a></li>
@@ -34,9 +63,10 @@
             	<a href="#contact-view-prefs">Add/Remove Columns</a>
         	</li>
     	</ul>
+    	{{/is_mobile}}
 	</div>
     <div class="btn-group">
-        <a href="#personModal" class="btn btn-default btn-sm" data-toggle="modal"><i class="icon-plus-sign"></i> Add Contact</a>
+        <a href="#contacts" onclick="$('.person').click();" class="btn btn-default btn-sm"><i class="icon-plus-sign"></i> Add Contact</a>
         <a class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
 		<ul class="dropdown-menu pull-right">
 			<li><a href="#import">Import from CSV</a></li>
@@ -49,23 +79,48 @@
 	<div class="btn-group m-r-sm">
     	<button class="btn btn-default btn-sm custom_view"><i class="icon-list" style="margin-right:3px"></i></button>
     	<button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
+    	{{#is_mobile}}
     	<ul id="contact-view-model-list" class="pull-right dropdown-menu">
         	<li>
             	<a href="#companies" class="DefaultView">Default</a>
 				<!-- a href="#contacts" class="GridView">Grid View</a -->
         	</li>
 			<li class="divider"></li>
-			<li class="dropdown-submenu"><a data-toggle="dropdown" >Sort By</a>
+			<li class="dropdown-submenu"><a>Sort By</a> </li>
+				
+			<li><a class="sort" id="comp-sort-by-created_time-desc" data="-created_time" href="#">Newest</a></li>
+			<li><a class="sort" id="comp-sort-by-created_time-asc" data="created_time" href="#">Oldest</a></li>
+			
+			
+			<li class="divider"></li>
+        	<li>
+            	<a href="#company-view-prefs">Add/Remove Columns</a>
+        	</li>
+    	</ul>
+
+    	{{else}}
+    	<ul id="contact-view-model-list" class="pull-right dropdown-menu hidden-xs">
+        	<li>
+            	<a href="#companies" class="DefaultView">Default</a>
+				<!-- a href="#contacts" class="GridView">Grid View</a -->
+        	</li>
+			<li class="divider"></li>
+			<li class="dropdown-submenu"><a data-toggle="dropdown" ontouchstart="contactSortTouch(event)">Sort By</a>
 				<ul class="dropdown-menu" id="contact-sort-views">
 					<li><a class="sort" id="comp-sort-by-created_time-desc" data="-created_time" href="#">Newest</a></li>
 					<li><a class="sort" id="comp-sort-by-created_time-asc" data="created_time" href="#">Oldest</a></li>
+					<li class="divider"></li>
+					<li><a class="sort comp-sort-by-name" id="comp-sort-by-name-desc" data="-name" href="#">Name Desc</a></li>
+					<li><a class="sort comp-sort-by-name" id="comp-sort-by-name-asc" data="name" href="#">Name Asc</a></li>
 				</ul>
 			</li>
 			<li class="divider"></li>
         	<li>
             	<a href="#company-view-prefs">Add/Remove Columns</a>
         	</li>
-    	</ul>
+    	</ul>	
+    	{{/is_mobile}}
+    	
 	</div>
     <div class="btn-group">
         <a href="#companyModal" class="btn btn-default btn-sm" data-toggle="modal"><i class="icon-plus-sign"></i> Add Company</a>

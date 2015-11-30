@@ -34,42 +34,58 @@ $(function(){
 	$('body').on('click', '.filter-contacts-multiple-add', function(e)
 	{
 		e.preventDefault();
+		var that = this;
 		// To solve chaining issue when cloned
-		var htmlContent = $($(getTemplate("filter-contacts", {})).find('.chained-table.contact')[0]).find('tr').clone();
-		$(htmlContent).removeClass('hide');
-		scramble_input_names($(htmlContent));
 
-		// boolean parameter to avoid contacts/not-contacts fields in form
-		chainFilters(htmlContent, function(){
-		}, false);
+		getTemplate("filter-contacts", {}, undefined, function(template_ui){
+			if(!template_ui)
+				  return;
+			
+			var htmlContent = $($(template_ui).find('.chained-table.contact')[0]).find('tr').clone();
+			$(htmlContent).removeClass('hide');
+			scramble_input_names($(htmlContent));
 
-//		$(this).hide();
-		// var htmlContent = $(this).closest("tr").clone();
-		$(htmlContent).find("i.filter-contacts-multiple-remove").css("display", "inline-block");
-		//hide camapign status
-		//$(htmlContent).find('#LHS select').find("optgroup[label='Activities']").remove();
-		$(this).prev('table').find("tbody").append(htmlContent);
+			// boolean parameter to avoid contacts/not-contacts fields in form
+			chainFilters(htmlContent, function(){
+			}, false);
+
+	//		$(this).hide();
+			// var htmlContent = $(this).closest("tr").clone();
+			$(htmlContent).find("i.filter-contacts-multiple-remove").css("display", "inline-block");
+			//hide camapign status
+			//$(htmlContent).find('#LHS select').find("optgroup[label='Activities']").remove();
+			$(that).prev('table').find("tbody").append(htmlContent);
+
+		}, null);
 	});
 	
 	// Filter Contacts- Clone Multiple
 	$('body').on('click', '.filter-contacts-multiple-add-or-rules', function(e)
 	{
 		e.preventDefault();
+		var that = this;
 		// To solve chaining issue when cloned
-		var htmlContent = $($(getTemplate("filter-contacts", {})).find('.chained-table.contact')[1]).find('tr').clone();
-		$(htmlContent).removeClass('hide');
-		scramble_input_names($(htmlContent));
+		getTemplate("filter-contacts", {}, undefined, function(template_ui){
+			if(!template_ui)
+				  return;
 
-		// boolean parameter to avoid contacts/not-contacts fields in form
-		chainFilters(htmlContent, function(){
-		}, false);
+			var htmlContent = $($(template_ui).find('.chained-table.contact')[1]).find('tr').clone();
+			$(htmlContent).removeClass('hide');
+			scramble_input_names($(htmlContent));
 
-//		$(this).hide();
-		// var htmlContent = $(this).closest("tr").clone();
-		$(htmlContent).find("i.filter-contacts-multiple-remove").css("display", "inline-block");
-		//hide camapign status
-		//$(htmlContent).find('#LHS select').find("optgroup[label='Activities']").remove()
-		$(this).prev('table').find("tbody").append(htmlContent);
+			// boolean parameter to avoid contacts/not-contacts fields in form
+			chainFilters(htmlContent, function(){
+			}, false);
+
+	//		$(this).hide();
+			// var htmlContent = $(this).closest("tr").clone();
+			$(htmlContent).find("i.filter-contacts-multiple-remove").css("display", "inline-block");
+			//hide camapign status
+			//$(htmlContent).find('#LHS select').find("optgroup[label='Activities']").remove()
+			$(that).prev('table').find("tbody").append(htmlContent);
+
+		}, null);
+		
 	});
 	
 	// Filter Contacts- Clone Multiple
@@ -77,40 +93,55 @@ $(function(){
 	{
 		e.preventDefault();
 		// To solve chaining issue when cloned
-		var htmlContent = $($(getTemplate("filter-contacts", {})).find('.chained-table.company')[0]).find('tr').clone();
-		$(htmlContent).removeClass('hide');
-		scramble_input_names($(htmlContent));
+		var that = this;
+		getTemplate("filter-contacts", {}, undefined, function(template_ui){
+			if(!template_ui)
+				  return;
 
-		// boolean parameter to avoid contacts/not-contacts fields in form
-		chainFilters(htmlContent,undefined, function(){
-		}, false, true);
+			var htmlContent = $($(template_ui).find('.chained-table.company')[0]).find('tr').clone();
+			$(htmlContent).removeClass('hide');
+			scramble_input_names($(htmlContent));
 
-//		$(this).hide();
-		// var htmlContent = $(this).closest("tr").clone();
-		$(htmlContent).find("i.filter-contacts-multiple-remove").css("display", "inline-block");
-		$(this).prev("table").find("tbody").append(htmlContent);
+			// boolean parameter to avoid contacts/not-contacts fields in form
+			chainFilters(htmlContent,undefined, function(){
+			}, false, true);
+
+	//		$(this).hide();
+			// var htmlContent = $(this).closest("tr").clone();
+			$(htmlContent).find("i.filter-contacts-multiple-remove").css("display", "inline-block");
+			$(that).prev("table").find("tbody").append(htmlContent);
+
+		}, null);
+		
 	});
 	
 	// Filter Contacts- Clone Multiple
 	$('body').on('click', '.filter-companies-multiple-add-or-rules', function(e)
 	{
 		e.preventDefault();
+		var that = this;
 		// To solve chaining issue when cloned
-		var htmlContent = $($(getTemplate("filter-contacts", {})).find('.chained-table.company')[1]).find('tr').clone();
-		$(htmlContent).removeClass('hide');
-		scramble_input_names($(htmlContent));
+		getTemplate("filter-contacts", {}, undefined, function(template_ui){
+			if(!template_ui)
+				  return;
 
-		// boolean parameter to avoid contacts/not-contacts fields in form
-		chainFilters(htmlContent,undefined, function(){
-		}, false, true);
+			var htmlContent = $($(template_ui).find('.chained-table.company')[1]).find('tr').clone();
+			$(htmlContent).removeClass('hide');
+			scramble_input_names($(htmlContent));
 
-//		$(this).hide();
-		// var htmlContent = $(this).closest("tr").clone();
-		$(htmlContent).find("i.filter-contacts-multiple-remove").css("display", "inline-block");
-		$(this).prev("table").find("tbody").append(htmlContent);
+			// boolean parameter to avoid contacts/not-contacts fields in form
+			chainFilters(htmlContent,undefined, function(){
+			}, false, true);
+
+	//		$(this).hide();
+			// var htmlContent = $(this).closest("tr").clone();
+			$(htmlContent).find("i.filter-contacts-multiple-remove").css("display", "inline-block");
+			$(that).prev("table").find("tbody").append(htmlContent);
+
+		}, null);
+
+		
 	});
-	
-	
 
 	// Filter Contacts- Remove Multiple
 	$('body').on('click', 'i.filter-contacts-multiple-remove', function(e)
@@ -476,7 +507,7 @@ function show_chained_fields(el, data, forceShow)
  * 
  * @param element
  */
-function addTagsDefaultTypeahead(element)
+function addTagsDefaultTypeahead(element, applyCustomCSS)
 {
 	var tags_array = [];
 
@@ -491,7 +522,7 @@ function addTagsDefaultTypeahead(element)
 		tagsCollection.fetch({ success : function(data)
 		{
 			TAGS = tagsCollection.models;
-			addTagsArrayasTypeaheadSource(tagsCollection.toJSON(), element);
+			addTagsArrayasTypeaheadSource(tagsCollection.toJSON(), element, applyCustomCSS);
 
 		} });
 		return;
@@ -499,11 +530,11 @@ function addTagsDefaultTypeahead(element)
 	
 
 	// Adds typeahead to given element
-	addTagsArrayasTypeaheadSource(tagsCollection.toJSON(), element);
+	addTagsArrayasTypeaheadSource(tagsCollection.toJSON(), element, applyCustomCSS);
 }
 
 // With tags JSON sent type ahead is built on input fields
-function addTagsArrayasTypeaheadSource(tagsJSON, element)
+function addTagsArrayasTypeaheadSource(tagsJSON, element, applyCustomCSS)
 {
 	var tags_array = [];
 
@@ -513,7 +544,10 @@ function addTagsArrayasTypeaheadSource(tagsJSON, element)
 	});
 
 	// $("input", element).attr("data-provide","typeahead");
-	$("input", element).typeahead({ "source" : tags_array }).attr('placeholder', "Enter Tag").width("92%");
+	if(applyCustomCSS)
+		$("input", element).typeahead({ "source" : tags_array }).attr('placeholder', "Enter Tag");
+	else
+		$("input", element).typeahead({ "source" : tags_array }).attr('placeholder', "Enter Tag").width("92%");
 }
 
 
@@ -656,4 +690,18 @@ function showDynamicFilters(el){
 	else{
 		$('#contacts-lhs-filters-toggle').show();
 	}
+}
+
+
+function setUpContactView(cel,tagExists){
+
+	
+	if (readCookie("agile_contact_view"))
+	{
+		$('#contacts-view-options', cel).html("<a data-toggle='tooltip' data-placement='bottom' data-original-title='List View' class='btn btn-default btn-sm contacts-view' data='list'><i class='fa fa-list'  style='margin-right:3px'></i></a>");
+	}
+	else{
+		$('#contacts-view-options', cel).html("<a data-toggle='tooltip' data-placement='bottom' data-original-title='Grid View' class='btn btn-default btn-sm contacts-view' data='grid'><i class='fa fa-th-large' style='margin-right:3px'></i></a>");
+	}
+	
 }

@@ -6,7 +6,7 @@
 	</td>        
 	<td><div class="table-resp">{{triggerType type}}</div></td>
 	<td><div class="table-resp">{{#if custom_score}}{{custom_score}} {{/if}} {{#if custom_tags}}{{custom_tags}}{{/if}} {{#if trigger_deal_milestone}}{{trigger_milestone trigger_deal_milestone}}{{/if}} {{#if trigger_stripe_event}}{{trigger_stripe_event}}{{/if}}{{#if trigger_shopify_event}}{{trigger_shopify_event}}{{/if}} {{#if contactFilter}}{{contactFilter}}{{/if}}{{#if trigger_form_event}}{{getFormNameFromId trigger_form_event}}{{/if}}</div></td>
-	<td><div class="table-resp">{{campaign}}</div></td>
+	<td><div class="table-resp"><div class="pull-left text-ellipsis" style="width: 70%;">{{campaign}}</div>{{#if is_disabled}}<div class="pull-right"><label class="label label-danger m-b-none">Disabled</label></div>{{/if}}</div></td>
 	<br />
 </script>
 <script id="triggers-collection-template" type="text/html">
@@ -34,7 +34,7 @@
         <div class="alert-info alert">
             <div class="slate-content">
                 <div class="box-left pull-left m-r-md">
-                    <img alt="Clipboard" src="/img/clipboard.png">
+                    <img alt="Clipboard" src="{{getS3ImagePath '/img/clipboard.png'}}">
                 </div>
                 <div class="box-right pull-left">
                     <h4 class="h4 m-t-none">You do not have any triggers currently.</h4>
@@ -60,8 +60,8 @@
                         <tr>
                             <th style="width:25%">Name</th>
                             <th style="width:25%">Condition</th>
-                            <th style="width:25%">Value</th>
-                            <th style="width:25%">Campaign</th>
+                            <th style="width:20%">Value</th>
+                            <th style="width:36%">Campaign</th>
                         </tr>
                     </thead>
                     <tbody id="triggers-model-list" route="trigger/"> </tbody>

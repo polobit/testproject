@@ -85,6 +85,7 @@ import com.socialsuite.Stream;
 import com.socialsuite.cron.ScheduledUpdate;
 import com.thirdparty.google.ContactPrefs;
 import com.thirdparty.google.calendar.GoogleCalenderPrefs;
+import com.thirdparty.office365.calendar.Office365CalendarPrefs;
 
 /**
  * <code>ObjectifyGenericDao</code> is a generic class for all the entities,
@@ -207,8 +208,10 @@ public class ObjectifyGenericDao<T> extends DAOBase
 
 	ObjectifyService.register(VerifiedEmails.class);
 	
-	ObjectifyService.register(LandingPage.class);
-	ObjectifyService.register(LandingPageCNames.class);
+	ObjectifyService.register(Office365CalendarPrefs.class);
+
+    ObjectifyService.register(LandingPage.class);
+    ObjectifyService.register(LandingPageCNames.class);
 
     }
 

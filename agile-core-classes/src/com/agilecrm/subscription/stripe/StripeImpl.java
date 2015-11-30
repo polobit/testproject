@@ -1,35 +1,29 @@
 package com.agilecrm.subscription.stripe;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
-import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 
 import com.agilecrm.Globals;
 import com.agilecrm.subscription.AgileBilling;
 import com.agilecrm.subscription.Subscription;
 import com.agilecrm.subscription.SubscriptionUtil;
-import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
 import com.agilecrm.subscription.stripe.webhooks.StripeWebhookServlet;
 import com.agilecrm.subscription.ui.serialize.CreditCard;
 import com.agilecrm.subscription.ui.serialize.Plan;
 import com.google.gson.Gson;
 import com.stripe.Stripe;
-import com.stripe.exception.APIConnectionException;
-import com.stripe.exception.APIException;
-import com.stripe.exception.AuthenticationException;
-import com.stripe.exception.CardException;
-import com.stripe.exception.InvalidRequestException;
 import com.stripe.exception.StripeException;
 import com.stripe.model.Coupon;
 import com.stripe.model.Customer;
 import com.stripe.model.CustomerSubscriptionCollection;
 import com.stripe.model.Invoice;
+import com.stripe.net.RequestOptions;
+import com.stripe.net.RequestOptions.RequestOptionsBuilder;
 
 /**
  * <code>StringImpl</code> is implementation {@link AgileBilling}, This
@@ -56,451 +50,506 @@ import com.stripe.model.Invoice;
  * @see com.agilecrm.subscription.Subscription
  * @see com.agilecrm.subscription.stripe.StripeUtil
  */
-public class StripeImpl implements AgileBilling
-{
+public class StripeImpl implements AgileBilling {
 
-    static
-    {
-	Stripe.apiKey = Globals.STRIPE_API_KEY;
-	Stripe.apiVersion = "2012-09-24";
-    }
-
-    /**
-     * Creates customer in Stripe, adds subscription to the customer to
-     * according to plan chosen and processes the payment.
-     * <p>
-     * If {@link Customer} can not be created due to invalid parameters(credit
-     * card number, cvc, card expiry date), then stripe raises an exception
-     * which is propagated to methods down the stack, so user can be notified
-     * about the payment failure
-     * </p>
-     * 
-     * @param cardDetails
-     *            {@link CreditCard}
-     * @param plan
-     *            {@link Plan}
-     * 
-     * @return {@link Customer} as {@link JSONObject}
-     * 
-     * @throws Exception
-     * 
-     * 
-     */
-    public JSONObject createCustomer(CreditCard cardDetails, Plan plan) throws Exception
-    {
-
-	// Creates customer and add subscription to it
-	Customer customer = Customer.create(StripeUtil.getCustomerParams(cardDetails, plan));
-
-	plan.subscription_id = customer.getSubscription().getId();
-
-	System.out.println(customer);
-	System.out.println(StripeUtil.getJSONFromCustomer(customer));
-	// Return Customer JSON
-	return StripeUtil.getJSONFromCustomer(customer);
-
-    }
-
-    @Override
-    public JSONObject createCustomer(CreditCard cardDetails) throws Exception
-    {
-	// TODO Auto-generated method stub
-	// Creates customer and add subscription to it
-	Customer customer = Customer.create(StripeUtil.getCustomerParams(cardDetails));
-
-	return StripeUtil.getJSONFromCustomer(customer);
-    }
-
-    /**
-     * Updates the plan of the customer based on the customer(on which customer
-     * update needs to be done) and plan object parameters.
-     * <p>
-     * Plan upgrade in Stripe is pro-rated
-     * </p>
-     * 
-     * @param stripeCustomer
-     *            {@link Customer}, as {@link JSONObject},
-     * 
-     * @return {@link Customer} as {@link JSONObject}
-     * @throws Exception
-     *             if
-     */
-    public JSONObject updatePlan(JSONObject stripeCustomer, Plan plan) throws Exception
-    {
-
-	// Gets Customer Object to update its plan
-	Customer customer = StripeUtil.getCustomerFromJson(stripeCustomer);
-
-	// Sets plan changes in a map
-	Map<String, Object> updateParams = new HashMap<String, Object>();
-	updateParams.put("plan", plan.plan_id);
-	updateParams.put("quantity", plan.quantity);
-
-	if (!StringUtils.isEmpty(plan.coupon))
-	    updateParams.put("coupon", plan.coupon);
-	System.out.println(updateParams);
-
-	updateParams.put("prorate", false);
-
-	CustomerSubscriptionCollection subscriptionCollection = customer.getSubscriptions();
-	List<com.stripe.model.Subscription> subscriptionList = subscriptionCollection.getData();
-
-	// Fetches all subscriptions and check if there is an account plan
-	Iterator<com.stripe.model.Subscription> iterator = subscriptionList.iterator();
-	com.stripe.model.Subscription oldSubscription = null;
-	while (iterator.hasNext())
-	{
-	    com.stripe.model.Subscription s = iterator.next();
-	    com.stripe.model.Plan p = s.getPlan();
-	    if (!StringUtils.containsIgnoreCase(p.getId(), "email"))
-	    {
-		oldSubscription = s;
-		break;
-	    }
+	static {
+		Stripe.apiKey = Globals.STRIPE_API_KEY;
+		Stripe.apiVersion = "2012-09-24";
 	}
 
-	com.stripe.model.Plan oldPlan = (oldSubscription == null) ? null : oldSubscription.getPlan();
-	com.stripe.model.Plan newPlan = com.stripe.model.Plan.retrieve(plan.plan_id);
-
-	// Add prorate based on upgrade/downgrade
-	if (oldPlan == null
-		|| (newPlan.getAmount() * plan.quantity) > (oldPlan.getAmount() * oldSubscription.getQuantity()))
-	{
-	    updateParams.put("prorate", "true");
-
-	}
-
-	// Updates customer with changed plan
-	if (oldSubscription != null)
-	{
-	    oldSubscription.update(updateParams);
-	}
-	else
-	{
-	    customer.createSubscription(updateParams);
-
-	    // Returns Customer object as JSONObject
-	    return StripeUtil.getJSONFromCustomer(customer);
-	}
-
-	// Create the invoice and pay immediately
-	if (updateParams.get("prorate").equals("true"))
-	{
-	    Map<String, Object> invoiceItemParams = new HashMap<String, Object>();
-	    Map<String, Object> metaData = new HashMap<String, Object>();
-	    metaData.put("plan", newPlan.getName());
-	    metaData.put("quantity", plan.quantity);
-	    invoiceItemParams.put("metadata", metaData);
-	    invoiceItemParams.put("customer", customer.getId());
-	    try
-	    {
-		Invoice invoice = Invoice.create(invoiceItemParams);
-		if (invoice != null)
-		    invoice.pay();
-	    }
-	    catch (Exception e)
-	    {
-	    }
-	}
-
-	// Returns Customer object as JSONObject
-	return StripeUtil.getJSONFromCustomer(customer);
-    }
-
-    /**
-     * Updates customer credit card details in Stripe. If an exception raised
-     * while updating a customer then it is propagated back the show failure
-     * message to user
-     * 
-     * @param stripeCustomer
-     *            , {@link Customer} , cardDetails {@link CreditCard}
-     * 
-     * @return {@link Customer} as {@link JSONObject}
-     * 
-     * @throws Exception
-     * */
-    public JSONObject updateCreditCard(JSONObject stripeCustomer, CreditCard cardDetails) throws Exception
-    {
-
-	/*
-	 * Gets Customer retrieves from stripe based on customer id, to update
-	 * credit card
+	/**
+	 * Creates customer in Stripe, adds subscription to the customer to
+	 * according to plan chosen and processes the payment.
+	 * <p>
+	 * If {@link Customer} can not be created due to invalid parameters(credit
+	 * card number, cvc, card expiry date), then stripe raises an exception
+	 * which is propagated to methods down the stack, so user can be notified
+	 * about the payment failure
+	 * </p>
+	 * 
+	 * @param cardDetails
+	 *            {@link CreditCard}
+	 * @param plan
+	 *            {@link Plan}
+	 * 
+	 * @return {@link Customer} as {@link JSONObject}
+	 * 
+	 * @throws Exception
+	 * 
+	 * 
 	 */
-	Customer customer = StripeUtil.getCustomerFromJson(stripeCustomer);
+	public JSONObject createCustomer(CreditCard cardDetails, Plan plan)
+			throws Exception {
 
-	Map<String, Object> updateParams = new HashMap<String, Object>();
+		// Creates customer and add subscription to it
+		Customer customer = Customer.create(StripeUtil.getCustomerParams(
+				cardDetails, plan));
 
-	/*
-	 * Gets Map of card parameters to be sent to stripe, to update customer
-	 * card details in stripe
+		plan.subscription_id = customer.getSubscription().getId();
+
+		System.out.println(customer);
+		System.out.println(StripeUtil.getJSONFromCustomer(customer));
+		// Return Customer JSON
+		return StripeUtil.getJSONFromCustomer(customer);
+
+	}
+
+	@Override
+	public JSONObject createCustomer(CreditCard cardDetails) throws Exception {
+		// TODO Auto-generated method stub
+		// Creates customer and add subscription to it
+		Customer customer = Customer.create(StripeUtil
+				.getCustomerParams(cardDetails));
+
+		return StripeUtil.getJSONFromCustomer(customer);
+	}
+
+	/**
+	 * Updates the plan of the customer based on the customer(on which customer
+	 * update needs to be done) and plan object parameters.
+	 * <p>
+	 * Plan upgrade in Stripe is pro-rated
+	 * </p>
+	 * 
+	 * @param stripeCustomer
+	 *            {@link Customer}, as {@link JSONObject},
+	 * 
+	 * @return {@link Customer} as {@link JSONObject}
+	 * @throws Exception
+	 *             if
 	 */
-	Map<String, Object> cardParams = StripeUtil.getCardParams(cardDetails);
+	public JSONObject updatePlan(JSONObject stripeCustomer, Plan plan)
+			throws Exception { // Gets Customer Object to update its plan
+		Customer customer = StripeUtil.getCustomerFromJson(stripeCustomer);
 
-	/*
-	 * Adds changed credit card details to map, which is sent to Stripe as
-	 * to update card details
-	 */
-	updateParams.put("card", cardParams);
+		// Sets plan changes in a map
+		Map<String, Object> updateParams = new HashMap<String, Object>();
+		updateParams.put("plan", plan.plan_id);
+		updateParams.put("quantity", plan.quantity);
 
-	// Updates customer with changed card details
-	customer = customer.update(updateParams);
+		if (!StringUtils.isEmpty(plan.coupon))
+			updateParams.put("coupon", plan.coupon);
+		System.out.println(updateParams);
 
-	return StripeUtil.getJSONFromCustomer(customer);
-    }
+		updateParams.put("prorate", false);
 
-    /**
-     * Gets List of invoices of particular customer(passed as parameter)
-     * 
-     * @param stripeCustomer
-     *            {@link Customer} as JSONObject {@link JSONObject}
-     * 
-     * @return {@link List} of {@link Invoice}
-     * 
-     * @throws StripeException
-     * */
-    public List<Invoice> getInvoices(JSONObject stripeCustomer) throws StripeException
-    {
-	Map<String, Object> invoiceParams = new HashMap<String, Object>();
+		CustomerSubscriptionCollection subscriptionCollection = customer
+				.getSubscriptions();
+		List<com.stripe.model.Subscription> subscriptionList = subscriptionCollection
+				.getData();
 
-	// Sets invoice parameters (Stripe customer id is required to get
-	// invoices of a customer form stripe)
-	invoiceParams.put("customer", StripeUtil.getCustomerFromJson(stripeCustomer).getId());
-	/*
-	 * Fetches all invoices for given stripe customer id and returns
-	 * invoices
-	 */
-	return Invoice.all(invoiceParams).getData();
-    }
-
-    /**
-     * Pay pending invoices immediately
-     * 
-     * @param oldCustomer
-     * @param userId
-     */
-    private void payPendingInvoices(JSONObject stripeCustomer)
-    {
-	try
-	{
-	    /*
-	     * Gets Customer retrieves from stripe based on customer id, to
-	     * update credit card
-	     */
-	    Customer customer = StripeUtil.getCustomerFromJson(stripeCustomer);
-
-	    // Bill any invoices pending
-	    List<Invoice> invoices = getInvoices(stripeCustomer);
-
-	    Iterator iterator = invoices.iterator();
-
-	    while (iterator.hasNext())
-	    {
-		Invoice invoice = (Invoice) iterator.next();
-		if (!invoice.getPaid())
-		    invoice.pay();
-	    }
-	}
-	catch (Exception e)
-	{
-	}
-
-    }
-
-    /**
-     * Deletes customer from Stripe, which raises an webhook to
-     * {@link StripeWebhookServlet}, on processing webhook it deletes
-     * {@link Subscription} object
-     * 
-     * @param stripeCustomer
-     *            {@link Customer} as {@link JSONObject}
-     * 
-     * @throws Exception
-     */
-    public void deleteCustomer(JSONObject stripeCustomer) throws Exception
-    {
-	Customer customer = StripeUtil.getCustomerFromJson(stripeCustomer);
-
-	/*
-	 * Deletes customer from stripe, this operation in stripe raises a
-	 * webhook gets handled and deletes subscription object of the domain
-	 */
-	customer.delete();
-    }
-
-    /**
-     * Cancels customer subscription in Stripe
-     * 
-     * @param stripeCustomer
-     *            {@link Customer} as {@link JSONObject}
-     * 
-     * @throws Exception
-     */
-    public void cancelSubscription(JSONObject stripeCustomer) throws Exception
-    {
-	Customer customer = StripeUtil.getCustomerFromJson(stripeCustomer);
-
-	// Returns if customer is null
-	if(customer == null)
-	    return;
-	
-	// Fetches all subscriptions
-	CustomerSubscriptionCollection subscriptions = customer.getSubscriptions();
-	
-	// If There are not subscriptions it returns
-	if(subscriptions.getTotalCount() == 0)
-	    return;
-	
-	SubscriptionUtil.deleteEmailSubscription();
-	SubscriptionUtil.deleteUserSubscription();
-	
-	// Fetches all subscriptions and cancels from stripe
-	for(com.stripe.model.Subscription s : subscriptions.getData())
-	{
-	    s.cancel(null);
-	}
-    }
-
-    public static JSONObject getCoupon(String couponId) throws Exception
-    {
-
-	try
-	{
-	    // Retrieve coupon from Stripe
-	    Coupon coupon = Coupon.retrieve(couponId);
-
-	    // Convert to JSON
-	    return new JSONObject(new Gson().toJson(coupon));
-
-	}
-	catch (Exception e)
-	{
-	    e.printStackTrace();
-	}
-
-	return new JSONObject();
-    }
-
-    @Override
-    public JSONObject addSubscriptionAddon(Plan newPlan) throws Exception
-    {
-	// Fetches current subscription of domain to check if add on
-	// subscription already exists and it is update request
-	Subscription subscription = SubscriptionUtil.getSubscription();
-
-	// New email plan to subscribe user to
-	String plan_id = SubscriptionUtil.getEmailPlan(newPlan.quantity);
-	
-	newPlan.plan_id = plan_id;
-
-	// Existing email plan in agile subscription object
-	Plan emailPlanInAgile = subscription.emailPlan;
-
-	// Fetches subscription from customer object in stripe
-	Customer customer = StripeUtil.getCustomerFromJson(new JSONObject(subscription.billing_data_json_string));
-
-	// If there exists email plan, then it is updated instead of creating
-	// new subscription
-	try
-	{
-
-	    /**
-	     * Retrieves all subscriptions from customer object. It is used to
-	     * find out the existing subscription object based on the
-	     * subscription id that is saved in embedded Plan object (which is
-	     * saved when ever a new subscription is created) <a>
-	     */
-	    CustomerSubscriptionCollection subscriptionCollection = customer.getSubscriptions();
-	    List<com.stripe.model.Subscription> subscriptionList = subscriptionCollection.getData();
-
-	    // To hold current email package plan object from stripe
-	    com.stripe.model.Plan existingAddonPlan = null;
-	    com.stripe.model.Subscription existingSubscription = null;
-
-	    Iterator<com.stripe.model.Subscription> subscriptionIterator = subscriptionList.iterator();
-
-	    if (emailPlanInAgile != null)
-		// Iterates through all plans and get existing email plan
-		while (subscriptionIterator.hasNext())
-		{
-		    com.stripe.model.Subscription s = subscriptionIterator.next();
-		    com.stripe.model.Plan stripePlan = s.getPlan();
-
-		    // If plan contains email, it holds exiting plan to update
-		    if (StringUtils.equals(s.getId(), emailPlanInAgile.subscription_id))
-		    {
-			existingSubscription = s;
-			existingAddonPlan = stripePlan;
-			break;
-		    }
+		// Fetches all subscriptions and check if there is an account plan
+		Iterator<com.stripe.model.Subscription> iterator = subscriptionList
+				.iterator();
+		com.stripe.model.Subscription oldSubscription = null;
+		boolean is_EmailSubs = false;
+		while (iterator.hasNext()) {
+			com.stripe.model.Subscription s = iterator.next();
+			com.stripe.model.Plan p = s.getPlan();
+			if (!StringUtils.containsIgnoreCase(p.getId(), "email")) {
+				oldSubscription = s;
+				is_EmailSubs = true;
+				break;
+			}
 		}
 
-	    Map<String, Object> newSubscriptionParams = new HashMap<String, Object>();
-	    newSubscriptionParams.put("plan", newPlan.plan_id);
-	    newSubscriptionParams.put("quantity", newPlan.quantity);
-	    newSubscriptionParams.put("prorate", true);
-	    newPlan.count = null;
-	    
-	    com.stripe.model.Subscription newSubscription = null;
-	    // If there is no existing subscription that falls under current
-	    // Category it is considered as new plan subscription
-	    if (existingAddonPlan == null)
-	    {
-		newSubscription = customer.createSubscription(newSubscriptionParams);
-	    }
-	    else
-	    {
-		newSubscription = customer.createSubscription(newSubscriptionParams);
-	    }
+		com.stripe.model.Plan oldPlan = (oldSubscription == null) ? null
+				: oldSubscription.getPlan();
+		com.stripe.model.Plan newPlan = com.stripe.model.Plan
+				.retrieve(plan.plan_id);
 
-	    newPlan.subscription_id = newSubscription.getId();
-	    
-	    Map<String, Object> invoiceItemParams = new HashMap<String, Object>();
-	    invoiceItemParams.put("customer", customer.getId());
-	    invoiceItemParams.put("subscription", newSubscription.getId());
-	    
-	    try
-	    {
-		// Creates invoice for plan upgrade and charges customer
-		// immediately
-		Invoice invoice = Invoice.create(invoiceItemParams);
-		if (invoice != null)
-		{
-		    if (invoice.getSubscription().equals(newSubscription.getId()))
-			invoice.pay();
+		// Add prorate based on upgrade/downgrade
+		if (oldPlan == null
+				|| (newPlan.getAmount() * plan.quantity) > (oldPlan.getAmount() * oldSubscription
+						.getQuantity())) {
+			updateParams.put("prorate", "true");
+
 		}
-	    }
-	    catch (Exception e)
-	    {
-	    }
-	   
-	    subscription.emailPlan = newPlan;
-	    if(existingSubscription != null)
-	    {
-		subscription.save();
-		existingSubscription.cancel(null);
-	    }
-	    Customer customer_new = Customer.retrieve(customer.getId());
-	   // BillingRestrictionUtil.addEmails(newPlan.quantity * 1000, subscription.plan);
-	    return StripeUtil.getJSONFromCustomer(customer_new);
-	    
+
+		Map<String, String> customer_metadata = new HashMap<String, String>();
+		// // 3 day trial for all plans
+		// if (!StringUtils.containsIgnoreCase(plan.plan_id, "email")) {
+		//
+		// // Current epoch to compare trial end
+		// Long currentDateEpoch = (new java.util.Date().getTime()) / 1000;
+		// // Map<String, String> customer_metadata = customer.getMetadata();
+		//
+		// customer_metadata = customer.getMetadata();
+		//
+		// Long trialEnd = null;
+		// if (customer_metadata.containsKey("trial_end")) {
+		//
+		// trialEnd = Long.parseLong(customer.getMetadata().get(
+		// "trial_end"));
+		// updateParams.put("trial_end", trialEnd);
+		// }
+		// // Setting 3 day trial for new customers
+		// if (oldSubscription == null) {
+		// // if (trialEnd != null) {
+		// // if (trialEnd > currentDateEpoch) {
+		// // updateParams.put("trial_end", trialEnd);
+		// // System.out.println(trialEnd);
+		// // }
+		// // } else {
+		// Long newTrailEndEpoch = new DateUtil().addDays(3).getTime()
+		// .getTime() / 1000;
+		// updateParams.put("trial_end", newTrailEndEpoch);
+		// // Setting the trial_end in customer metadata
+		// // customer_metadata.put("trial_end",
+		// // newTrailEndEpoch.toString());
+		// customer_metadata.put("trial_end", newTrailEndEpoch.toString());
+		// customer.setMetadata(customer_metadata);
+		// System.out.println("trialend in cust is:"
+		// + customer.getTrialEnd());
+		// System.out.println(customer);
+		// System.out.println(newTrailEndEpoch);
+		// // }
+		// }
+		//
+		// }
+
+		// Updates customer with changed plan
+		if (oldSubscription != null) {
+			oldSubscription.update(updateParams);
+		} else {
+
+			customer.createSubscription(updateParams);
+
+			if (!customer_metadata.isEmpty()) {
+				Map<String, Object> newMetadata = new HashMap<String, Object>();
+				newMetadata.put("metadata", customer_metadata);
+				customer.update(newMetadata);
+			}
+
+			// Returns Customer object as JSONObject
+			return StripeUtil.getJSONFromCustomer(customer);
+		}
+
+		// Create the invoice and pay immediately
+		if (updateParams.get("prorate").equals("true")) {
+			Map<String, Object> invoiceItemParams = new HashMap<String, Object>();
+			Map<String, Object> metaData = new HashMap<String, Object>();
+			metaData.put("plan", newPlan.getName());
+			metaData.put("quantity", plan.quantity);
+			invoiceItemParams.put("metadata", metaData);
+			invoiceItemParams.put("customer", customer.getId());
+			try {
+				Invoice invoice = Invoice.create(invoiceItemParams);
+				if (invoice != null)
+					invoice.pay();
+			} catch (Exception e) {
+			}
+		}
+
+		// Returns Customer object as JSONObject
+		return StripeUtil.getJSONFromCustomer(customer);
 	}
-	catch (StripeException e)
-	{
-	    // TODO Auto-generated catch block
-	    e.printStackTrace();
-	    return null;
+
+	/**
+	 * Updates customer credit card details in Stripe. If an exception raised
+	 * while updating a customer then it is propagated back the show failure
+	 * message to user
+	 * 
+	 * @param stripeCustomer
+	 *            , {@link Customer} , cardDetails {@link CreditCard}
+	 * 
+	 * @return {@link Customer} as {@link JSONObject}
+	 * 
+	 * @throws Exception
+	 * */
+	public JSONObject updateCreditCard(JSONObject stripeCustomer,
+			CreditCard cardDetails) throws Exception {
+
+		/*
+		 * Gets Customer retrieves from stripe based on customer id, to update
+		 * credit card
+		 */
+		Customer customer = StripeUtil.getCustomerFromJson(stripeCustomer);
+
+		Map<String, Object> updateParams = new HashMap<String, Object>();
+
+		/*
+		 * Gets Map of card parameters to be sent to stripe, to update customer
+		 * card details in stripe
+		 */
+		Map<String, Object> cardParams = StripeUtil.getCardParams(cardDetails);
+
+		/*
+		 * Adds changed credit card details to map, which is sent to Stripe as
+		 * to update card details
+		 */
+		updateParams.put("card", cardParams);
+
+		// Updates customer with changed card details
+		customer = customer.update(updateParams);
+
+		return StripeUtil.getJSONFromCustomer(customer);
 	}
 
-	
-    }
+	/**
+	 * Gets List of invoices of particular customer(passed as parameter)
+	 * 
+	 * @param stripeCustomer
+	 *            {@link Customer} as JSONObject {@link JSONObject}
+	 * 
+	 * @return {@link List} of {@link Invoice}
+	 * 
+	 * @throws StripeException
+	 * */
+	public List<Invoice> getInvoices(JSONObject stripeCustomer)
+			throws StripeException {
 
-    @Override
-    public JSONObject addCreditCard(CreditCard card) throws Exception
-    {
-	Customer customer = Customer.create(StripeUtil.getCustomerParams(card));
+		RequestOptionsBuilder builder = new RequestOptionsBuilder();
+		builder.setStripeVersion("2015-08-07");
+		RequestOptions options = builder.build();
 
-	// Returns Customer object as JSONObject
-	return StripeUtil.getJSONFromCustomer(customer);
-    }
+		Map<String, Object> invoiceParams = new HashMap<String, Object>();
+
+		// Sets invoice parameters (Stripe customer id is required to get
+		// invoices of a customer form stripe)
+		invoiceParams.put("customer",
+				StripeUtil.getCustomerFromJson(stripeCustomer).getId());
+		invoiceParams.put("limit",100);
+		/*
+		 * Fetches all invoices for given stripe customer id and returns
+		 * invoices
+		 */
+		return Invoice.all(invoiceParams, options).getData();
+	}
+
+	/**
+	 * Pay pending invoices immediately
+	 * 
+	 * @param oldCustomer
+	 * @param userId
+	 */
+	private void payPendingInvoices(JSONObject stripeCustomer) {
+		try {
+			/*
+			 * Gets Customer retrieves from stripe based on customer id, to
+			 * update credit card
+			 */
+			Customer customer = StripeUtil.getCustomerFromJson(stripeCustomer);
+
+			// Bill any invoices pending
+			List<Invoice> invoices = getInvoices(stripeCustomer);
+
+			Iterator iterator = invoices.iterator();
+
+			while (iterator.hasNext()) {
+				Invoice invoice = (Invoice) iterator.next();
+				if (!invoice.getPaid())
+					invoice.pay();
+			}
+		} catch (Exception e) {
+		}
+
+	}
+
+	/**
+	 * Deletes customer from Stripe, which raises an webhook to
+	 * {@link StripeWebhookServlet}, on processing webhook it deletes
+	 * {@link Subscription} object
+	 * 
+	 * @param stripeCustomer
+	 *            {@link Customer} as {@link JSONObject}
+	 * 
+	 * @throws Exception
+	 */
+	public void deleteCustomer(JSONObject stripeCustomer) throws Exception {
+		Customer customer = StripeUtil.getCustomerFromJson(stripeCustomer);
+
+		/*
+		 * Deletes customer from stripe, this operation in stripe raises a
+		 * webhook gets handled and deletes subscription object of the domain
+		 */
+		customer.delete();
+	}
+
+	/**
+	 * Cancels customer subscription in Stripe
+	 * 
+	 * @param stripeCustomer
+	 *            {@link Customer} as {@link JSONObject}
+	 * 
+	 * @throws Exception
+	 */
+	public void cancelSubscription(JSONObject stripeCustomer) throws Exception {
+		Customer customer = StripeUtil.getCustomerFromJson(stripeCustomer);
+
+		// Returns if customer is null
+		if (customer == null)
+			return;
+
+		// Fetches all subscriptions
+		CustomerSubscriptionCollection subscriptions = customer
+				.getSubscriptions();
+
+		// If There are not subscriptions it returns
+		if (subscriptions.getTotalCount() == 0)
+			return;
+
+		SubscriptionUtil.deleteEmailSubscription();
+		SubscriptionUtil.deleteUserSubscription();
+
+		// Fetches all subscriptions and cancels from stripe
+		for (com.stripe.model.Subscription s : subscriptions.getData()) {
+			s.cancel(null);
+		}
+	}
+
+	public void cancelSubsFromTrial(JSONObject stripeCustomer) throws Exception {
+		Customer customer = StripeUtil.getCustomerFromJson(stripeCustomer);
+
+		if (customer == null)
+			return;
+
+		CustomerSubscriptionCollection subscriptions = customer
+				.getSubscriptions();
+
+		if (subscriptions.getTotalCount() == 0)
+			return;
+
+		SubscriptionUtil.deleteUserSubscription();
+
+	}
+
+	public static JSONObject getCoupon(String couponId) throws Exception {
+
+		try {
+			// Retrieve coupon from Stripe
+			Coupon coupon = Coupon.retrieve(couponId);
+
+			// Convert to JSON
+			return new JSONObject(new Gson().toJson(coupon));
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return new JSONObject();
+	}
+
+	@Override
+	public JSONObject addSubscriptionAddon(Plan newPlan) throws Exception {
+		// Fetches current subscription of domain to check if add on
+		// subscription already exists and it is update request
+		Subscription subscription = SubscriptionUtil.getSubscription();
+
+		// New email plan to subscribe user to
+		String plan_id = SubscriptionUtil.getEmailPlan(newPlan.quantity);
+
+		newPlan.plan_id = plan_id;
+
+		// Existing email plan in agile subscription object
+		Plan emailPlanInAgile = subscription.emailPlan;
+
+		// Fetches subscription from customer object in stripe
+		Customer customer = StripeUtil.getCustomerFromJson(new JSONObject(
+				subscription.billing_data_json_string));
+
+		// If there exists email plan, then it is updated instead of creating
+		// new subscription
+		try {
+
+			/**
+			 * Retrieves all subscriptions from customer object. It is used to
+			 * find out the existing subscription object based on the
+			 * subscription id that is saved in embedded Plan object (which is
+			 * saved when ever a new subscription is created) <a>
+			 */
+			CustomerSubscriptionCollection subscriptionCollection = customer
+					.getSubscriptions();
+			List<com.stripe.model.Subscription> subscriptionList = subscriptionCollection
+					.getData();
+
+			// To hold current email package plan object from stripe
+			com.stripe.model.Plan existingAddonPlan = null;
+			com.stripe.model.Subscription existingSubscription = null;
+
+			Iterator<com.stripe.model.Subscription> subscriptionIterator = subscriptionList
+					.iterator();
+
+			if (emailPlanInAgile != null)
+				// Iterates through all plans and get existing email plan
+				while (subscriptionIterator.hasNext()) {
+					com.stripe.model.Subscription s = subscriptionIterator
+							.next();
+					com.stripe.model.Plan stripePlan = s.getPlan();
+
+					// If plan contains email, it holds exiting plan to update
+					if (StringUtils.equals(s.getId(),
+							emailPlanInAgile.subscription_id)) {
+						existingSubscription = s;
+						existingAddonPlan = stripePlan;
+						break;
+					}
+				}
+
+			Map<String, Object> newSubscriptionParams = new HashMap<String, Object>();
+			newSubscriptionParams.put("plan", newPlan.plan_id);
+			newSubscriptionParams.put("quantity", newPlan.quantity);
+			newSubscriptionParams.put("prorate", true);
+			newPlan.count = null;
+
+			com.stripe.model.Subscription newSubscription = null;
+			// If there is no existing subscription that falls under current
+			// Category it is considered as new plan subscription
+			if (existingAddonPlan == null) {
+				newSubscription = customer
+						.createSubscription(newSubscriptionParams);
+			} else {
+				newSubscription = customer
+						.createSubscription(newSubscriptionParams);
+			}
+
+			newPlan.subscription_id = newSubscription.getId();
+
+			Map<String, Object> invoiceItemParams = new HashMap<String, Object>();
+			invoiceItemParams.put("customer", customer.getId());
+			invoiceItemParams.put("subscription", newSubscription.getId());
+
+			try {
+				// Creates invoice for plan upgrade and charges customer
+				// immediately
+				Invoice invoice = Invoice.create(invoiceItemParams);
+				if (invoice != null) {
+					if (invoice.getSubscription().equals(
+							newSubscription.getId()))
+						invoice.pay();
+				}
+			} catch (Exception e) {
+			}
+
+			subscription.emailPlan = newPlan;
+			if (existingSubscription != null) {
+				subscription.save();
+				existingSubscription.cancel(null);
+			}
+			Customer customer_new = Customer.retrieve(customer.getId());
+			// BillingRestrictionUtil.addEmails(newPlan.quantity * 1000,
+			// subscription.plan);
+			return StripeUtil.getJSONFromCustomer(customer_new);
+
+		} catch (StripeException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+
+	}
+
+	@Override
+	public JSONObject addCreditCard(CreditCard card) throws Exception {
+		Customer customer = null;
+		try {
+			customer = Customer.create(StripeUtil.getCustomerParams(card));
+		} catch (Exception e) {
+			e.getMessage();
+		}
+
+		// Returns Customer object as JSONObject
+		return StripeUtil.getJSONFromCustomer(customer);
+	}
 
 }

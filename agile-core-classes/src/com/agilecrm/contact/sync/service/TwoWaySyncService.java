@@ -20,7 +20,7 @@ import com.thirdparty.google.contacts.ContactsSynctoGoogle;
  * @author jitendra
  * 
  */
-public abstract class TwoWaySyncService extends ContactSyncService
+public abstract class TwoWaySyncService extends ContactSyncService implements ITwoWaySyncService
 {
     private Long last_synced_to_client = 0l;
 
@@ -70,7 +70,7 @@ public abstract class TwoWaySyncService extends ContactSyncService
 	ContactsSynctoGoogle.updateContacts(prefs);
     }
 
-    private void uploadContactsToClient()
+    public void uploadContactsToClient()
     {
 	uploadNewContactsToClient();
 	uploadUpdatedContactsToClient();
@@ -92,7 +92,7 @@ public abstract class TwoWaySyncService extends ContactSyncService
 	System.out.println("total available new contacts: " + fetcher.getAvailableContacts());
 	while (fetcher.hasNextSet())
 	{
-	    saveContactsToClient(fetcher.nextSet());
+	    saveNewContactsToClient(fetcher.nextSet());
 	}
 
     }
@@ -109,16 +109,18 @@ public abstract class TwoWaySyncService extends ContactSyncService
 
 	ContactFilterResultFetcher fetcher = new ContactFilterResultFetcher(queryMap, "updated_time", 200,
 	        MAX_UPLOAD_LIMIT);
-
+	
 	System.out.println("total available : " + fetcher.getAvailableContacts());
 	while (fetcher.hasNextSet())
 	{
-	    saveContactsToClient(fetcher.nextSet());
+	    saveUpdatedContactsToClient(fetcher.nextSet());
 	}
 
     }
+    
+    public abstract void saveNewContactsToClient(List<Contact> contacts);
 
-    public abstract void saveContactsToClient(List<Contact> contacts);
+    public abstract void saveUpdatedContactsToClient(List<Contact> contacts);
     
     public abstract void syncContactFromClient();
 

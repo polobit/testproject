@@ -36,8 +36,17 @@ var ContactBulkActionRouter = Backbone.Router.extend({
 			Backbone.history.navigate("contacts", { trigger : true });
 		else
 		{
-			$("#content").html(getTemplate("bulk-actions-owner", {}));
-			$('body').trigger('fill_owners');
+			getTemplate("bulk-actions-owner", {}, undefined, function(template_ui){
+				if(!template_ui)
+					  return;
+				$('#content').html($(template_ui));	
+				$('body').trigger('fill_owners');
+
+
+
+
+			}, "#content");
+			
 		}
 	},
 
@@ -55,8 +64,12 @@ var ContactBulkActionRouter = Backbone.Router.extend({
 			Backbone.history.navigate("contacts", { trigger : true });
 		else
 		{
-			$("#content").html(getTemplate("bulk-actions-campaign", {}));
-			$('body').trigger('fill_campaigns');
+			getTemplate("bulk-actions-campaign", {}, undefined, function(template_ui){
+				if(!template_ui)
+					  return;
+				$('#content').html($(template_ui));	
+				$('body').trigger('fill_campaigns');
+			}, "#content");			
 		}
 
 	},
@@ -69,8 +82,16 @@ var ContactBulkActionRouter = Backbone.Router.extend({
 		// On reloading redirecting to contacts list
 		if (!App_Contacts.contactsListView)
 			Backbone.history.navigate("contacts", { trigger : true });
-		else
-			$("#content").html(getTemplate("bulk-actions-tags", {}));
+		else{
+
+			getTemplate("bulk-actions-tags", {}, undefined, function(template_ui){
+				if(!template_ui)
+					  return;
+				$('#content').html($(template_ui));
+			}, "#content");	
+
+		}
+			
 	},
 	/**
 	 * Loads the tags template to add tags to the selected contacts
@@ -81,7 +102,11 @@ var ContactBulkActionRouter = Backbone.Router.extend({
 		if (!App_Contacts.contactsListView)
 			Backbone.history.navigate("contacts", { trigger : true });
 		else
-			$("#content").html(getTemplate("bulk-actions-tags-remove", {}));
+			getTemplate("bulk-actions-tags-remove", {}, undefined, function(template_ui){
+				if(!template_ui)
+					  return;
+				$('#content').html($(template_ui));
+			}, "#content");	
 	},
 
 	/**
@@ -97,12 +122,17 @@ var ContactBulkActionRouter = Backbone.Router.extend({
 			Backbone.history.navigate("contacts", { trigger : true });
 		else
 		{
-			var el = $("#content").html('<div id="send-email-listener-container"></div>').find('#send-email-listener-container').html(getTemplate("send-email", {}));
-			// $("#content").html(getTemplate("send-email", {}));
-			$("#emailForm").find('.add-attachment-select').hide();
-			$('body').trigger('fill_emails');
-			initializeSendEmailListeners();
-			sendEmailAttachmentListeners("send-email-listener-container");
+			$("#content").html('<div id="send-email-listener-container"></div>');
+			getTemplate("send-email", {}, undefined, function(template_ui){
+				if(!template_ui)
+					  return;
+				$('#send-email-listener-container').html($(template_ui));
+				$("#emailForm").find('.add-attachment-select').hide();
+				$('body').trigger('fill_emails');
+				initializeSendEmailListeners();
+				sendEmailAttachmentListeners("send-email-listener-container");
+
+			}, "#send-email-listener-container");			
 		}
 	},
 	
@@ -119,8 +149,12 @@ var ContactBulkActionRouter = Backbone.Router.extend({
 			Backbone.history.navigate("companies", { trigger : true });
 		else
 		{
-			$("#content").html(getTemplate("bulk-actions-company-owner", {}));
-			$('body').trigger('fill_owners');
+			getTemplate("bulk-actions-company-owner", {}, undefined, function(template_ui){
+				if(!template_ui)
+					  return;
+				$('#content').html($(template_ui));	
+				$('body').trigger('fill_owners');
+			}, "#content");
 		}
 	},
 
@@ -137,12 +171,19 @@ var ContactBulkActionRouter = Backbone.Router.extend({
 			Backbone.history.navigate("companies", { trigger : true });
 		else
 		{
-			var el = $("#content").html('<div id="send-email-listener-container"></div>').find('#send-email-listener-container').html(getTemplate("send-email", {}));
-			$("#emailForm").find('.add-attachment-select').hide();
-			$('body').trigger('fill_emails');
-			initializeSendEmailListeners();
-			sendEmailAttachmentListeners("send-email-listener-container");
 
+			$("#content").html('<div id="send-email-listener-container"></div>');
+			getTemplate("send-email-company", {}, undefined, function(template_ui){
+				if(!template_ui)
+					  return;
+					
+				$('#send-email-listener-container').html($(template_ui));	
+				$("#emailForm").find('.add-attachment-select').hide();
+				$('body').trigger('fill_emails');
+				initializeSendEmailListeners();
+				sendEmailAttachmentListeners("send-email-listener-container");
+
+			}, "#send-email-listener-container");
 		}
 	}
 	
