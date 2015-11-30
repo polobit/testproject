@@ -46,9 +46,6 @@ var Ticket_Bulk_Ops = {
 
 	checkAllTickets: function($el){
 
-		//$('.ticket-checkbox', $el).prop('checked', true);
-		$('.bulk-action-btn-grp', $el).show();
-
 		//Iterating through all ticket checkboxes
 		$('.each-ticket.ticket-checkbox').each(function(){
 
@@ -57,10 +54,17 @@ var Ticket_Bulk_Ops = {
 		    
 		    var ticketID = $(this).data('ticket-id');
 
+		    if(!ticketID)
+		    	return false;
+
 		    if(Ticket_Bulk_Ops.selected_ticket_ids.indexOf(ticketID) == -1)
 		    	//Set selected ticket id
 		    	Ticket_Bulk_Ops.selected_ticket_ids.push(ticketID);
 		});
+
+		//Show bulk actions and hide ticket filters dropdown
+		$('.bulk-action-btn').removeClass('display-none');
+		$('.filters-drp-down').hide();
 
 		Ticket_Bulk_Ops.selected_collection_tickets = true;
 		Ticket_Bulk_Ops.showText();
@@ -72,10 +76,12 @@ var Ticket_Bulk_Ops = {
 		$('.ticket-checkbox').prop('checked', false);
 
 		//Hiding bulk action button group
-		$('.bulk-action-btn-grp').hide();
+		$('.bulk-action-btn').addClass('display-none');
+		$('#tickets-bulk-select').html('');
+		$('.filters-drp-down').show();
 
 		//Hiding suggestion text
-		$('#tickets-bulk-select').html('');
+		//$('#tickets-bulk-select').html('');
 
 		//Initializing tickets array to empty
 		Ticket_Bulk_Ops.selected_ticket_ids = [];
@@ -108,9 +114,11 @@ var Ticket_Bulk_Ops = {
 
 			if(selected_tickets_count == 0){
 				
-				$('.bulk-action-btn-grp').hide();
+				$('.bulk-action-btn').addClass('display-none');
+				$('.filters-drp-down').show();
 			}else{
-				$('.bulk-action-btn-grp').show();
+				$('.bulk-action-btn').removeClass('display-none');
+				$('.filters-drp-down').hide();
 			}	
 		}
 	},

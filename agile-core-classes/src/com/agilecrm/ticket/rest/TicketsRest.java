@@ -32,6 +32,7 @@ import com.agilecrm.search.document.TicketsDocument;
 import com.agilecrm.ticket.entitys.TicketActivity;
 import com.agilecrm.ticket.entitys.TicketDocuments;
 import com.agilecrm.ticket.entitys.TicketFilters;
+import com.agilecrm.ticket.entitys.TicketFilters.CONDITION_TYPE;
 import com.agilecrm.ticket.entitys.TicketGroups;
 import com.agilecrm.ticket.entitys.TicketLabels;
 import com.agilecrm.ticket.entitys.TicketNotes.CREATED_BY;
@@ -50,6 +51,7 @@ import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.workflows.Workflow;
 import com.agilecrm.workflows.triggers.util.TicketTriggerUtil;
 import com.agilecrm.workflows.util.WorkflowUtil;
+import com.amazonaws.services.dynamodbv2.model.ConditionalOperator;
 import com.google.appengine.api.NamespaceManager;
 import com.googlecode.objectify.Key;
 
@@ -174,8 +176,11 @@ public class TicketsRest
 
 			TicketFilters filter = TicketFiltersUtil.getFilterById(filterID);
 
-			String queryString = TicketFiltersUtil.getQueryFromConditions(filter.conditions);
-			queryString = queryString.substring(0, queryString.lastIndexOf("AND"));
+			String queryString = "";
+			if (filter.condition != null && filter.condition == CONDITION_TYPE.OR)
+				queryString = TicketFiltersUtil.getORQueryFromConditions(filter.conditions);
+			else
+				queryString = TicketFiltersUtil.getQueryFromConditions(filter.conditions);
 
 			if (StringUtils.isBlank(sortField))
 				sortField = "last_updated_time";
@@ -278,8 +283,11 @@ public class TicketsRest
 		{
 			TicketFilters filter = TicketFiltersUtil.getFilterById(filterID);
 
-			String queryString = TicketFiltersUtil.getQueryFromConditions(filter.conditions);
-			queryString = queryString.substring(0, queryString.lastIndexOf("AND"));
+			String queryString = "";
+			if (filter.condition != null && filter.condition == CONDITION_TYPE.OR)
+				queryString = TicketFiltersUtil.getORQueryFromConditions(filter.conditions);
+			else
+				queryString = TicketFiltersUtil.getQueryFromConditions(filter.conditions);
 
 			System.out.println("queryString: " + queryString);
 

@@ -131,7 +131,7 @@ var Ticket_Filters = {
 	renderFiltersCollection: function(callback){
 
 		//Rendering existing filter tickets drop down view
-		$("#filters-list-container").html(App_Ticket_Module.ticketFiltersList.el);
+		$("div.filters-drp-down").html(App_Ticket_Module.ticketFiltersList.el);
 
 		if(callback)
 			callback();

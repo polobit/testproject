@@ -1,17 +1,17 @@
 <script id="ticket-filters-list-collection-template" type="text/html">
 {{#unless this.length}}
-	<button class="btn btn-default btn-sm" data-toggle="dropdown">No filters available 
-		<span class="caret"></span>
+	<button class="btn btn-default btn-sm" data-toggle="dropdown">
+		No filters available&nbsp;<span class="caret"></span>
 	</button>
 	<ul class="dropdown-menu">
 		<li><a href="/#add-ticket-filter">Create Filter</a></li>
 	</ul>
 {{else}}
 	<button class="btn btn-default btn-sm filter-name-btn m-l-xs p-n b-n" data-toggle="dropdown" 
-		style="font-size: 18px; background-color: #F6F8F8; box-shadow: none;">
+		style="font-size: 18px; background-color: #EDF1F2; box-shadow: none;">
 	</button>
 	<button class="btn btn-default btn-sm dropdown-toggle b-n" data-toggle="dropdown" aria-expanded="false" 
-		style="background-color: #F6F8F8; background-color: #F6F8F8; box-shadow: none;">
+		style="background-color: #EDF1F2; box-shadow: none;">
 		<span class="caret"></span>
 	</button>
     <ul id="ticket-filters-list-model-list" class="dropdown-menu ticket-types">
