@@ -145,7 +145,9 @@ public class TicketsDocument implements BuilderInterface
 
 			StringBuffer labelsString = new StringBuffer();
 
-			for (TicketLabels label : ticket.labels)
+			List<TicketLabels> labels = TicketLabels.dao.fetchAllByKeys(ticket.labels);
+			
+			for (TicketLabels label : labels)
 				labelsString.append(label.label + " ");
 
 			// Set tags

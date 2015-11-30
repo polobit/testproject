@@ -1,6 +1,7 @@
 package com.agilecrm.ticket.utils;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -8,16 +9,15 @@ import java.util.Map;
 import java.util.Set;
 import java.util.regex.Pattern;
 
+import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.agilecrm.Globals;
-import com.agilecrm.ticket.entitys.TicketActivity;
 import com.agilecrm.ticket.entitys.TicketDocuments;
 import com.agilecrm.ticket.entitys.TicketGroups;
 import com.agilecrm.ticket.entitys.TicketNotes;
 import com.agilecrm.ticket.entitys.Tickets;
-import com.agilecrm.ticket.entitys.TicketActivity.TicketActivityType;
 import com.agilecrm.ticket.entitys.TicketNotes.CREATED_BY;
 import com.agilecrm.ticket.entitys.TicketNotes.NOTE_TYPE;
 import com.agilecrm.user.DomainUser;
@@ -25,9 +25,9 @@ import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.DateUtil;
 import com.agilecrm.util.HTTPUtil;
 import com.agilecrm.util.MD5Util;
+import com.agilecrm.util.VersioningUtil;
 import com.agilecrm.util.email.MustacheUtil;
 import com.agilecrm.util.email.SendMail;
-import com.campaignio.urlshortener.util.Base62;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.googlecode.objectify.Key;
@@ -310,11 +310,52 @@ public class TicketNotesUtil
 		return text;
 	}
 
-	public static void main(String[] args) throws Exception
+	public static void updateRequestedViewedTime(String ticketID, String notesID) throws Exception
 	{
-		System.out.println(MustacheUtil
-				.templatize(SendMail.TICKET_REPLY + SendMail.TEMPLATE_HTML_EXT, new JSONObject()));
-		System.out.println(MustacheUtil.templatize("start_event_reminder" + SendMail.TEMPLATE_HTML_EXT,
-				new JSONObject()));
+		if (StringUtils.isBlank(ticketID) || StringUtils.isBlank(notesID))
+			return;
+
+		Tickets ticket = TicketsUtil.getTicketByID(Long.parseLong(ticketID));
+
+		if (ticket == null)
+			return;
+
+		TicketNotes notes = TicketNotes.ticketNotesDao.get(Long.parseLong(notesID));
+
+		if (notes == null)
+			return;
+
+		if (notes.requester_viewed_time != null)
+			return;
+
+		notes.requester_viewed_time = Calendar.getInstance().getTimeInMillis();
+
+		TicketNotes.ticketNotesDao.put(notes);
+	}
+
+	/**
+	 * Appends tracking image for html body
+	 * 
+	 * @param html
+	 *            - html body.
+	 * @param campaignId
+	 *            - CampaignId.
+	 * @param trackerId
+	 *            - TrackerId or SubscriberId.
+	 * @return html string with appended image.
+	 **/
+	public static String appendTrackingImage(String html, String ticketID, String notesID)
+	{
+		String queryParams = "";
+
+		queryParams = "t=" + ticketID;
+		queryParams += "&";
+		queryParams += "n=" + notesID;
+
+		String trackingImage = "<div class=\"ag-img\"><img src="
+				+ VersioningUtil.getHostURLByApp(NamespaceManager.get()) + "/ticket/open?" + queryParams
+				+ " nosend=\"1\" style=\"display:none!important;\" width=\"1\" height=\"1\"></img></div>";
+
+		return html + trackingImage;
 	}
 }

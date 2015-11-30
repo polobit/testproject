@@ -60,6 +60,9 @@ var Tickets = {
 		var isSingleRowView = (CURRENT_DOMAIN_USER.helpdesk_view && CURRENT_DOMAIN_USER.helpdesk_view == 'double_row')
 								 ? true : false;
 
+		///Showing selected filter name on top
+		Ticket_Filters.updateFilterName();
+
 		//Initialize custom filters
 		Ticket_Custom_Filters.init(Ticket_Custom_Filters.renderLayout);
 
@@ -88,9 +91,6 @@ var Tickets = {
 					$("time", el).timeago();		
 				});
 				
-				///Showing selected filter name on top
-				Ticket_Filters.updateFilterName();
-
 				//Initializing checkbox events
 				Ticket_Bulk_Ops.initEvents();
 

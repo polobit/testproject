@@ -185,3 +185,17 @@ div.cc-emails-st{
 .chosen-container-single > a.chosen-single > div > b{
 	margin-top: 3px;
 }
+
+ul#ticket-model-list div li{
+	padding-left: 35px; 
+	padding-right: 25px; 
+	border-bottom: none;
+}
+
+ul#ticket-model-list div li, ul#ticket-model-list div li div table{ 
+	background-color: #FFFFFF; 
+}
+
+ul#ticket-model-list div:nth-child(odd) li, ul#ticket-model-list div:nth-child(odd) li div table{ 
+	background-color: #FBFBFB; 
+}

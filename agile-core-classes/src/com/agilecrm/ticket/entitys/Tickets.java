@@ -260,18 +260,11 @@ public class Tickets extends Cursor
 	public String requester_ip_address = "";
 
 	/**
-	 * Stores ticket tags
-	 */
-	@NotSaved(IfDefault.class)
-	@Embedded
-	public List<Tag> tags = new ArrayList<Tag>();
-
-	/**
 	 * Stores ticket labels
 	 */
 	@NotSaved(IfDefault.class)
 	@Embedded
-	public List<TicketLabels> labels = new ArrayList<TicketLabels>();
+	public List<Key<TicketLabels>> labels = new ArrayList<Key<TicketLabels>>();
 
 	/**
 	 * Util attribute to get html content in new ticket

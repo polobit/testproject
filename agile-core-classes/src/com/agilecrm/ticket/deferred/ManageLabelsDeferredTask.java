@@ -11,10 +11,10 @@ import com.googlecode.objectify.Key;
 public class ManageLabelsDeferredTask extends TicketBulkActionAdaptor
 {
 	private static final long serialVersionUID = 1L;
-	private List<TicketLabels> labels = null;
+	private List<Key<TicketLabels>> labels = null;
 	private String command = "";
 
-	public ManageLabelsDeferredTask(List<TicketLabels> labels, String command, String nameSpace, Long domainUserID)
+	public ManageLabelsDeferredTask(List<Key<TicketLabels>> labels, String command, String nameSpace, Long domainUserID)
 	{
 		super();
 
@@ -29,7 +29,7 @@ public class ManageLabelsDeferredTask extends TicketBulkActionAdaptor
 	{
 		for (Key<Tickets> ticket : ticketsKeySet)
 		{
-			TicketsUtil.addTagsList(ticket.getId(), labels);
+			TicketsUtil.addLabelsList(ticket.getId(), labels);
 		}
 	}
 }

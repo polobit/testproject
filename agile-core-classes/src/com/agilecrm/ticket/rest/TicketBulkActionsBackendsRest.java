@@ -27,6 +27,7 @@ import com.agilecrm.ticket.utils.FilterTicketIdsFetcher;
 import com.agilecrm.ticket.utils.ITicketIdsFetcher;
 import com.agilecrm.ticket.utils.TicketBulkActionUtil;
 import com.google.appengine.api.NamespaceManager;
+import com.googlecode.objectify.Key;
 
 import edu.emory.mathcs.backport.java.util.Arrays;
 
@@ -56,10 +57,10 @@ public class TicketBulkActionsBackendsRest
 
 			String[] labelsArray = dataJSON.getString("tags").split(",");
 
-			List<TicketLabels> labels = new ArrayList<TicketLabels>();
+			List<Key<TicketLabels>> labels = new ArrayList<Key<TicketLabels>>();
 
-			for (String labelString : labelsArray)
-				labels.add(new TicketLabels(labelString));
+			for (String labelID : labelsArray)
+				labels.add(new Key<TicketLabels>(TicketLabels.class, Long.parseLong(labelID)));
 
 			BulkActionUtil.setSessionManager(domainUserID);
 

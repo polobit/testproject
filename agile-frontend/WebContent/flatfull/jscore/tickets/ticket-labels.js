@@ -69,14 +69,14 @@ var Ticket_Labels = {
 
 			for(var j=0; j< labels.length; j++){
 
-				if(labels[j].label == labelsJSON[i].label){
+				if(labels[j].id == labelsJSON[i].id){
 					selected =  'selected';
 					break;
 				}	
 			}
 
 			//var isLabelSelected = labels.
-			optionList += "<option value='"+ labelsJSON[i].label + "' " + selected + ">" + labelsJSON[i].label + "</option>";
+			optionList += "<option value='"+ labelsJSON[i].id + "' " + selected + ">" + labelsJSON[i].label + "</option>";
 		}
 
 		$(".chosen-select").html(optionList);

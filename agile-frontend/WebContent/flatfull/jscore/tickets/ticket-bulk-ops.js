@@ -65,6 +65,7 @@ var Ticket_Bulk_Ops = {
 		//Show bulk actions and hide ticket filters dropdown
 		$('.bulk-action-btn').removeClass('display-none');
 		$('.filters-drp-down').hide();
+		$('.sort-by-div').hide();
 
 		Ticket_Bulk_Ops.selected_collection_tickets = true;
 		Ticket_Bulk_Ops.showText();
@@ -78,7 +79,9 @@ var Ticket_Bulk_Ops = {
 		//Hiding bulk action button group
 		$('.bulk-action-btn').addClass('display-none');
 		$('#tickets-bulk-select').html('');
+
 		$('.filters-drp-down').show();
+		$('.sort-by-div').show();
 
 		//Hiding suggestion text
 		//$('#tickets-bulk-select').html('');
@@ -116,9 +119,11 @@ var Ticket_Bulk_Ops = {
 				
 				$('.bulk-action-btn').addClass('display-none');
 				$('.filters-drp-down').show();
+				$('.sort-by-div').show();
 			}else{
 				$('.bulk-action-btn').removeClass('display-none');
 				$('.filters-drp-down').hide();
+				$('.sort-by-div').hide();
 			}	
 		}
 	},

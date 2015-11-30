@@ -20,6 +20,7 @@ import com.agilecrm.Globals;
 import com.agilecrm.contact.Tag;
 import com.agilecrm.ticket.entitys.TicketDocuments;
 import com.agilecrm.ticket.entitys.TicketGroups;
+import com.agilecrm.ticket.entitys.TicketLabels;
 import com.agilecrm.ticket.entitys.TicketNotes;
 import com.agilecrm.ticket.entitys.Tickets;
 import com.agilecrm.ticket.entitys.TicketNotes.CREATED_BY;
@@ -34,6 +35,7 @@ import com.agilecrm.ticket.utils.TicketNotesUtil;
 import com.agilecrm.ticket.utils.TicketsUtil;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.google.appengine.api.NamespaceManager;
+import com.googlecode.objectify.Key;
 
 /**
  * <code>TicketWebhook</code> is the root class for handling inbound events from
@@ -198,7 +200,7 @@ public class TicketWebhook extends HttpServlet
 						msgJSON.getString("from_email"), msgJSON.getString("subject"), ccEmails,
 						msgJSON.getString("text"), Status.NEW, Type.PROBLEM, Priority.LOW, Source.EMAIL,
 						attachmentExists, msgJSON.getJSONObject("headers").getString("X-Originating-Ip"),
-						new ArrayList<Tag>());
+						new ArrayList<Key<TicketLabels>>());
 			}
 			else
 			{

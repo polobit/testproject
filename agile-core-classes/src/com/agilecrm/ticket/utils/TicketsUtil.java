@@ -156,14 +156,14 @@ public class TicketsUtil
 	 */
 	public static Tickets createTicket(Long group_id, Long assignee_id, String requester_name, String requester_email,
 			String subject, List<String> cc_emails, String plain_text, Status status, Type type, Priority priority,
-			Source source, Boolean attachments, String ipAddress, List<Tag> tags)
+			Source source, Boolean attachments, String ipAddress, List<Key<TicketLabels>> labels)
 	{
 		Tickets ticket = new Tickets();
 
 		try
 		{
 			ticket.group_id = new Key<TicketGroups>(TicketGroups.class, group_id);
-			ticket.tags = tags;
+			ticket.labels = labels;
 			ticket.status = status;
 			ticket.type = type;
 			ticket.priority = priority;
@@ -484,12 +484,12 @@ public class TicketsUtil
 	 * @return
 	 * @throws EntityNotFoundException
 	 */
-	public static Tickets updateLabels(Long ticket_id, TicketLabels label, String command)
+	public static Tickets updateLabels(Long ticket_id, Key<TicketLabels> label, String command)
 			throws EntityNotFoundException
 	{
 		Tickets ticket = TicketsUtil.getTicketByID(ticket_id);
 
-		List<TicketLabels> labels = ticket.labels;
+		List<Key<TicketLabels>> labels = ticket.labels;
 
 		TicketActivityType ticketActivityType = null;
 
@@ -503,14 +503,14 @@ public class TicketsUtil
 			labels.remove(label);
 			ticketActivityType = TicketActivityType.TICKET_LABEL_REMOVE;
 		}
-
+		
 		ticket.labels = labels;
 		Tickets.ticketsDao.put(ticket);
 
 		new TicketsDocument().edit(ticket);
 
 		// Logging activity
-		new TicketActivity(ticketActivityType, ticket.contactID, ticket.id, "", label.label, "labels").save();
+		new TicketActivity(ticketActivityType, ticket.contactID, ticket.id, "", label.getId() + "", "labels").save();
 
 		return ticket;
 	}
@@ -519,7 +519,8 @@ public class TicketsUtil
 	{
 		for (String label : labelsArray)
 		{
-			TicketsUtil.updateLabels(Long.parseLong(ticketId), new TicketLabels(label), type.toLowerCase());
+			TicketsUtil.updateLabels(Long.parseLong(ticketId),
+					new Key<TicketLabels>(TicketLabels.class, Long.parseLong(label)), type.toLowerCase());
 		}
 
 	}
@@ -530,15 +531,15 @@ public class TicketsUtil
 	 * @param ticketId
 	 * @param newTags
 	 */
-	public static void addTagsList(Long ticketId, List<TicketLabels> newLabels)
+	public static void addLabelsList(Long ticketId, List<Key<TicketLabels>> newLabels)
 	{
 		try
 		{
 			Tickets ticket = TicketsUtil.getTicketByID(ticketId);
 
-			List<TicketLabels> labels = ticket.labels;
+			List<Key<TicketLabels>> labels = ticket.labels;
 
-			for (TicketLabels label : newLabels)
+			for (Key<TicketLabels> label : newLabels)
 			{
 				if (labels.contains(label))
 					continue;
@@ -546,8 +547,8 @@ public class TicketsUtil
 				labels.add(label);
 
 				// Logging activity
-				new TicketActivity(TicketActivityType.TICKET_LABEL_ADD, ticket.contactID, ticket.id, "", label.label,
-						"labels").save();
+				new TicketActivity(TicketActivityType.TICKET_LABEL_ADD, ticket.contactID, ticket.id, "", label.getId()
+						+ "", "labels").save();
 			}
 
 			Tickets.ticketsDao.put(ticket);

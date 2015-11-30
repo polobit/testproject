@@ -501,7 +501,7 @@ public class TicketsRest
 			// Creating new Ticket in Ticket table
 			ticket = TicketsUtil.createTicket(groupID, assigneeID, ticket.requester_name, ticket.requester_email,
 					ticket.subject, ticket.cc_emails, plain_text, ticket.status, ticket.type, ticket.priority,
-					ticket.source, attachmentExists, "", ticket.tags);
+					ticket.source, attachmentExists, "", ticket.labels);
 
 			// Creating new Notes in TicketNotes table
 			TicketNotesUtil.createTicketNotes(ticket.id, groupID, assigneeID, CREATED_BY.REQUESTER,
@@ -792,7 +792,7 @@ public class TicketsRest
 	@PUT
 	@Path("/update-labels")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Tickets updateLabels(@QueryParam("command") String command, @QueryParam("label") TicketLabels label,
+	public Tickets updateLabels(@QueryParam("command") String command, @QueryParam("label") Long labelID,
 			@QueryParam("id") Long ticketID)
 	{
 		try
@@ -800,7 +800,7 @@ public class TicketsRest
 			if (ticketID == null)
 				throw new Exception("Required parameter missing.");
 
-			return TicketsUtil.updateLabels(ticketID, label, command);
+			return TicketsUtil.updateLabels(ticketID, new Key<TicketLabels>(TicketLabels.class, labelID), command);
 		}
 		catch (Exception e)
 		{

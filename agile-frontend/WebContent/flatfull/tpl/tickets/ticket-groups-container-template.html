@@ -4,7 +4,7 @@
 	    <div class="btn-toolbar">
 	    	{{#if isSingleRowView}}
 	    	{{else}}
-		    	<label class="i-checks i-checks-sm" style="margin-left: 3px;">
+		    	<label class="i-checks i-checks-sm">
 			   		<input class="ticket-checkbox select-all" type="checkbox" data-ticket-id="{{id}}">
 			   		<i></i>
 			    </label>
@@ -23,13 +23,36 @@
 	            <li><a href="#tickets/bulk-actions/remove-labels">Remove Labels</a></li>
 	          </ul>
 	        </div>  	
-	    	<a class="btn btn-default btn-sm bulk-action-btn display-none" href="#tickets/bulk-actions/change-assignee">Assign</a>
-	    	<a class="btn btn-default btn-sm bulk-action-btn display-none" href="#tickets/bulk-actions/execute-workflows">Workflows</a>
-	    	<a class="btn btn-default btn-sm bulk-ticket-close bulk-action-btn display-none" href="javascript:void(0);">Close</a>
-	    	<a class="btn btn-default btn-sm bulk-ticket-delete bulk-action-btn display-none" href="javascript:void(0);">Delete</a>
+	    	<a class="btn btn-default btn-sm bulk-action-btn display-none" href="#tickets/bulk-actions/change-assignee">
+	    		Assign
+	    	</a>
+	    	<a class="btn btn-default btn-sm bulk-action-btn display-none" href="#tickets/bulk-actions/execute-workflows">Workflows
+	    	</a>
+	    	<a class="btn btn-default btn-sm bulk-ticket-close bulk-action-btn display-none" href="javascript:void(0);">
+	    		Close
+	    	</a>
+	    	<a class="btn btn-default btn-sm bulk-ticket-delete bulk-action-btn display-none" href="javascript:void(0);">
+	    		Delete
+	    	</a>
 	    	<div id="tickets-bulk-select" class="inline-block m-l-sm"></div>
 
-		    <div class="btn-group m-r-sm pull-right">
+			<a href="javascript:void(0);" class="btn btn-sm btn-default refresh-tickets pull-right" 
+	        	data-toggle="tooltip" data-placement="bottom" data-original-title="Refresh">
+	        	<i class="fa fa-refresh"></i>
+	        </a>
+		    <div class="sort-by-div btn-group m-t-xs m-r-sm pull-right txt-small">
+		    	<span>Sorted by:&nbsp;</span>
+		    	<a href="javascript:void(0);" data-sort-key="-last_updated_time" style="color: #337ab7;">
+		    		Updated time
+		    	</a><i class="fa fa-caret-up m-l-xs"></i> &nbsp;&nbsp;|&nbsp;
+		    	<a href="javascript:void(0);" data-sort-key="created_time">
+		    		Created time
+		    	</a>&nbsp;&nbsp;|&nbsp; 
+		    	<a href="javascript:void(0);" data-sort-key="-priority_code">
+		    		Priority
+		    	</a>
+
+		    	<!--
 		    	<button class="btn btn-default btn-sm" data-toggle="tooltip" data-placement="bottom" data-original-title="Sort by">
 		    		<i class="icon-list"></i>
 		    	</button>
@@ -57,12 +80,8 @@
 		        	<li>
 		            	<a href="javascript:void(0);" data-sort-key="priority_code">Priority Low High</a>
 		        	</li>
-		    	</ul>
+		    	</ul>-->
 			</div>
-			<a href="javascript:void(0);" class="btn btn-sm btn-default refresh-tickets pull-right" 
-	        	data-toggle="tooltip" data-placement="bottom" data-original-title="Refresh">
-	        	<i class="fa fa-refresh"></i>
-	        </a>
 	    </div>
 	</div>
 </div>
