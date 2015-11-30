@@ -124,10 +124,15 @@ function generateDynamicSelectUI(uiFieldDefinition, url, keyField, valField)
 	var eventHandler = uiFieldDefinition.eventHandler;
 	var event = uiFieldDefinition.event;
 
-	var selectContainer = $("<select name='" + uiFieldDefinition.name + "' title='" + uiFieldDefinition.title + "'> " + "</select>");
+    var attr = "";
+
+	if(type == "multiselect")
+		attr = "multiple";
+
+	var selectContainer = $("<select "+ attr +" name='" + uiFieldDefinition.name + "' title='" + uiFieldDefinition.title + "'> " + "</select>");
 
 	if(event && eventHandler)
-		selectContainer = $("<select id='"+uiFieldDefinition.id+"' "+getStyleAttribute(uiFieldDefinition.style)+" name='" + uiFieldDefinition.name + "' title='" + uiFieldDefinition.title + "'" + event +"='"+eventHandler+"' type='"+(type == undefined ? 'select' : type)+"'></select>");
+		selectContainer = $("<select "+ attr +" id='"+uiFieldDefinition.id+"' "+getStyleAttribute(uiFieldDefinition.style)+" name='" + uiFieldDefinition.name + "' title='" + uiFieldDefinition.title + "'" + event +"='"+eventHandler+"' type='"+(type == undefined ? 'select' : type)+"'></select>");
 	
 	// For From Email select, options need to rearranged
 	if(uiFieldDefinition.id == "from_email" && uiFieldDefinition.name == "from_email")

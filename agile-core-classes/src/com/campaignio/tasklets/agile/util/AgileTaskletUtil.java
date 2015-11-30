@@ -35,6 +35,7 @@ import com.agilecrm.workflows.unsubscribe.UnsubscribeStatus;
 import com.agilecrm.workflows.unsubscribe.UnsubscribeStatus.UnsubscribeType;
 import com.agilecrm.workflows.unsubscribe.util.UnsubscribeStatusUtil;
 import com.campaignio.reports.DateUtil;
+import com.campaignio.tasklets.TaskletAdapter;
 import com.campaignio.tasklets.util.MergeFieldsUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.common.base.Joiner;
@@ -927,5 +928,55 @@ public class AgileTaskletUtil {
 			return null;
 		}
 		return null;
+	}
+
+	/**
+	 * Returns list of Campaign ids from the select field
+	 * 
+	 * @param nodeJSON
+	 * @param subscriberJSON
+	 * @param subscriberID
+	 * @param campaignJSON
+	 * @return list of campaigns to be unsubscribed
+	 */
+	@SuppressWarnings("unchecked")
+	public static <T> List<T> getListOfCampaignIDs(JSONObject nodeJSON, JSONObject subscriberJSON,
+			JSONObject campaignJSON, String keyName) 
+	{
+		List<T> campaignIDs = new ArrayList<T>();
+		JSONArray jsonArray;
+		try
+		{
+			// This array consists of selected campaigns
+			jsonArray = nodeJSON.getJSONArray(TaskletAdapter.JSON_VALUES);
+	
+			int jsonArrayLength = jsonArray.length();
+	
+			// Iterate through name/value pairs. First one is the select option
+			// ID and multi select ID
+	
+			for (int i = 1; i < jsonArrayLength; i++)
+			{
+				// Get the each JSON data
+	
+				JSONObject json = jsonArray.getJSONObject(i);
+	
+				// For Serialized data from ui - you will get name, value
+				// pairs
+				if (json.has("name"))
+				{
+					
+					if(keyName == null || json.get("name").equals(keyName))
+						campaignIDs.add((T) json.get("value"));
+				}
+	
+			}
+		}
+		catch (JSONException e)
+		{
+			return new ArrayList<T>();
+		}
+	
+		return campaignIDs;
 	}
 }
