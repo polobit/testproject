@@ -2,6 +2,7 @@ var Ticket_Custom_Filters = {
 
 	assignees: [],
 	groups: [],
+	filters: [],
 	init: function(callback){
 
 		if(this.assignees.length == 0 && this.groups.length == 0){
@@ -56,7 +57,7 @@ var Ticket_Custom_Filters = {
 
 	prepareConditions: function(callback){
 
-		var statusArray = ['NEW','OPEN','PENDING', 'CLOSE'], 
+		var statusArray = ['NEW','OPEN','PENDING', 'CLOSED'], 
 			priorityArray = ['LOW', 'MEDIUM','HIGH'], 
 			typeArray = ['PROBLEM','INCIDENT','TASK','QUESTION'], assigneesArray = [], groupsArray = [];
 		

@@ -61,8 +61,17 @@ public class TicketFilters
 	 */
 	@NotSaved
 	public Long owner_id = null;
-	
+
 	public Long updated_time = 0l;
+
+	public Boolean is_default_filter = false;
+
+	public static enum CONDITION_TYPE
+	{
+		AND, OR
+	}
+
+	public CONDITION_TYPE condition = CONDITION_TYPE.AND;
 
 	@JsonIgnore
 	public void setOwner_key(Key<DomainUser> owner_key)
@@ -75,14 +84,14 @@ public class TicketFilters
 	{
 		this.updated_time = Calendar.getInstance().getTimeInMillis();
 	}
-	
+
 	@javax.persistence.PostLoad
 	private void postLoad()
 	{
-		if(owner_key != null)
-		this.owner_id = owner_key.getId();
+		if (owner_key != null)
+			this.owner_id = owner_key.getId();
 	}
-	
+
 	public static ObjectifyGenericDao<TicketFilters> dao = new ObjectifyGenericDao<TicketFilters>(TicketFilters.class);
 
 	public TicketFilters()

@@ -69,6 +69,7 @@ var Tickets = {
 			sort_collection: false,
 			templateKey : isSingleRowView ? 'ticket-single-row' : 'ticket',
 			customLoader: true,
+			custom_scrollable_element: 'ul#ticket-model-list',
 			customLoaderTemplate: 'ticket-notes-loader',
 			individual_tag_name : isSingleRowView ? 'tr' : 'div',
 			cursor : true,
@@ -114,6 +115,9 @@ var Tickets = {
 		}else{
 			this.renderLayout(function(){
 
+				//Initialize custom filters
+				Ticket_Custom_Filters.init(Ticket_Custom_Filters.renderLayout);
+
 				Ticket_Filters.renderFiltersCollection(function(){
 
 					$(".tickets-collection-pane").html(App_Ticket_Module.ticketsCollection.el);
@@ -158,27 +162,40 @@ var Tickets = {
 		/*
 		 * Hover event on ticket subject
 		 */
-		$('ul#ticket-model-list', el).off('mouseover mouseout');
-		$('ul#ticket-model-list', el)
-			.on('mouseover mouseout', 'li.ticket',
+		$(el).off('mouseover mouseout');
+		$(el)
+			.on('mouseover mouseout', '.open-ticket',
 				function(event) {
 					if (event.type == 'mouseover'){
 
-						var top_offset = $('#' + $(this).attr('data-id'))
+						var $closest_li = $(this).closest('li');
+
+						var top_offset = $('#' + $closest_li.attr('data-id'))
 								.offset().top;
 
 						if (window.innerHeight - top_offset >= 210)
-							$(this).find('#ticket-last-notes').css(
+							$closest_li.find('#ticket-last-notes').css(
 									'display', 'block');
 						else
-							$(this).find('#ticket-last-notes').css(
+							$closest_li.find('#ticket-last-notes').css(
 									'display', 'block').css('top','-'
-											+ $(this).find(
+											+ $closest_li.find(
 													'#ticket-last-notes')
 													.height() + 'px');
 					} else {
-						$(this).find('#ticket-last-notes').css('display',
+						$('.ticket-last-notes').css('display',
 								'none').css('top', '60px');
+					}
+				}
+			);
+
+		$(el)
+			.on('mouseover mouseout', 'div.show-caret',
+				function(event) {
+					if (event.type == 'mouseover'){
+						$(this).find('a.dropdown-toggle').addClass('inline-block');
+					} else {
+						$(this).find('a.dropdown-toggle').removeClass('inline-block');
 					}
 				}
 			);

@@ -22,6 +22,7 @@ import com.agilecrm.search.ui.serialize.SearchRule;
 import com.agilecrm.search.ui.serialize.SearchRule.RuleCondition;
 import com.agilecrm.search.ui.serialize.SearchRule.RuleType;
 import com.agilecrm.session.SessionManager;
+import com.agilecrm.ticket.utils.TicketFiltersUtil;
 
 public class Defaults
 {
@@ -33,6 +34,7 @@ public class Defaults
 	saveDefaultDeals();
 	saveDefaultReports();
 	saveDefaultNotes();
+	TicketFiltersUtil.saveDefaultFilters();
     }
 
     /**

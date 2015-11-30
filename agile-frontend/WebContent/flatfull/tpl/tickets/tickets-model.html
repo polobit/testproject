@@ -14,20 +14,56 @@
       {{/if}}  
     </a>
     <div class="pull-right text-sm text-muted p-l-sm b-l" style="min-width: 20%;">
-      <table>
+      <table class="onlySorting">
         <tr>
           <td><span class="text-muted">Assignee: </span></td>
           <td class="p-l-sm">
-            <a href="javascript:void(0);" class="first-letter-cap inline-block">
-              {{#if assigneeID}}{{assignee.name}}{{else}}-{{/if}}
-            </a>
+            <div class="assignee-change pos-rlt show-caret">
+              <a class="btn btn-sm p-n b-n first-letter-cap inline-block m-r-xs txt-small" data-toggle="dropdown">
+                {{#if assigneeID}}{{assignee.name}}{{else}}-{{/if}}
+              </a>
+              <a class="btn btn-sm p-n dropdown-toggle b-n display-none" data-toggle="dropdown" aria-expanded="false">
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu dropdown-menu-right">
+                
+              </ul>
+            </div>
           </td>
         </tr>
         <tr><td><span class="text-muted">Status: </span></td>
-            <td class="p-l-sm"><a href="javascript:void(0);" class="first-letter-cap inline-block">{{status}}</a></div></td>
+            <td class="p-l-sm">
+              <div class="assignee-change pos-rlt show-caret">
+                <a class="btn btn-sm p-n b-n first-letter-cap inline-block txt-small m-r-xs" data-toggle="dropdown">
+                  {{status}}
+                </a>
+                <a class="btn btn-sm p-n dropdown-toggle b-n display-none" data-toggle="dropdown" aria-expanded="false">
+                  <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-right">
+                  <li><a href="javascript:void(0);" value="OPEN">Open</a></li>
+                  <li><a href="javascript:void(0);" value="PENDING">Pending</a></li>
+                  <li><a href="javascript:void(0);" value="CLOSED">Closed</a></li>
+                </ul>
+              </div>
+            </td>
         </tr>
         <tr><td><span class="text-muted">Priority: </span></td>
-            <td class="p-l-sm"><a href="javascript:void(0);" class="first-letter-cap inline-block">{{priority}}</a></div></td>
+            <td class="p-l-sm">
+              <div class="assignee-change pos-rlt show-caret">
+                <a class="btn btn-sm p-n b-n first-letter-cap inline-block txt-small m-r-xs" data-toggle="dropdown">
+                  {{priority}}
+                </a>
+                <a class="btn btn-sm p-n dropdown-toggle b-n display-none" data-toggle="dropdown" aria-expanded="false">
+                  <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-right">
+                  <li><a href="javascript:void(0);" value="LOW">Low</a></li>
+                  <li><a href="javascript:void(0);" value="MEDIUM">Medium</a></li>
+                  <li><a href="javascript:void(0);" value="HIGH">High</a></li>
+                </ul>
+              </div>
+            </td>
         </tr>
       </table>
     </div>
@@ -56,7 +92,7 @@
       </div>
       <div class="text-ellipsis m-t-xs">{{subject}}</div>
     </div>
-    <div id="ticket-last-notes">
+    <div id="ticket-last-notes" class="ticket-last-notes">
       <div class="row m-n mar-btm-md last-notes-drp-dwn p-t">
         <div class="col-md-12 pad-all-sm">
           <span>Last Reply</span>
