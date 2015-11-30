@@ -3,11 +3,11 @@ var Ticket_Labels = {
 
 	labelsCollection : new Object(),
 
-	initChoosenSelect: function(){
+	initChoosenSelect: function(el){
 
 		head.js('/lib/chosen.jquery.min.js', function()
 		{	
-			var $select = $(".chosen-select");
+			var $select = $(".chosen-select", el);
 
 			//Initliazing multi select drop down
 			$select.chosen();
@@ -41,20 +41,20 @@ var Ticket_Labels = {
 		}});
 	},
 
-	showSelectedLabels: function(labels, key){
+	showSelectedLabels: function(labels, key, el){
 
 		if(!this.labelsCollection || $.isEmptyObject(this.labelsCollection)){
 			this.fetchCollection(function(){
-				Ticket_Labels.prepareOptionsList(labels, key);
+				Ticket_Labels.prepareOptionsList(labels, key, el);
 			});
 
 			return;
 		}
 
-		this.prepareOptionsList(labels, key);	
+		this.prepareOptionsList(labels, key, el);	
 	},
 
-	prepareOptionsList: function(labels, key){
+	prepareOptionsList: function(labels, key, el){
 
 		if(!this.labelsCollection)
 			return;
@@ -84,7 +84,7 @@ var Ticket_Labels = {
 		$(".chosen-select").html(optionList);
 
 		//Initializing type ahead for tags
-		this.initChoosenSelect();
+		this.initChoosenSelect(el);
 	},
 
 	updateLabel: function(label, command, callback){

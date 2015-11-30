@@ -311,7 +311,7 @@ $("#right-pane").html(ticketView.render().el);
 				//Initialize tooltips
 				$('[data-toggle="tooltip"]', el).tooltip();
 
-				Ticket_Labels.showSelectedLabels(data.labels);
+				Ticket_Labels.showSelectedLabels(data.labels, "", $(el));
 
 				//Initializing events on CC email field
 				Tickets.initCCEmailsListeners(el);
@@ -840,7 +840,7 @@ $('#content').find('.helpdesk-tab').addClass('select');
 	 				url : '/core/api/tickets/canned-messages',
 	 				postRenderCallback: function(el){
 
-	 					Ticket_Labels.showSelectedLabels([], "id");
+	 					Ticket_Labels.showSelectedLabels([], "id", $(el));
 
 	 					initTicketCannedResponseEvents(el);
 	 				},
@@ -890,7 +890,7 @@ $('#content').find('.helpdesk-tab').addClass('select');
 	 				template : "ticket-canned-response-add-edit",
 	 				postRenderCallback: function(el) {
 	 					console.log(cannedResponse.toJSON().labels);
-	 					Ticket_Labels.showSelectedLabels(cannedResponse.toJSON().labels, "id");
+	 					Ticket_Labels.showSelectedLabels(cannedResponse.toJSON().labels, "id", $(el));
 	 					initTicketCannedResponseEvents(el);
 	 				},
 	 				saveCallback : function(){
