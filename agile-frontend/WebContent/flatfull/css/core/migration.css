@@ -1651,7 +1651,7 @@ a#email-reply{
   }
   #campaign-select,#document-select {
  display: block!important;
- margin: 0 auto; 
+ margin: 0 auto 10px; 
 }
 #add-to-campaign, #cancel-to-add-campaign , .add-document-confirm , .add-document-cancel {
   margin-top: 10px;
@@ -1804,6 +1804,10 @@ width: 100%!Important;
 #deal-details-tab > li > a {
   margin-right: 0px;
 }
+input[type=file] {
+  width: 100%;
+}
+
 }
 
 @media all and (min-width: 768px) {

@@ -11,7 +11,7 @@
     <div class="agile-thumb agile-thumb-view">
         <a class="text-cap custom-link">{{getPropertyValue properties "first_name"}}
         {{getPropertyValue properties "last_name"}} </a>
-        <div><small class="text-muted">{{getPropertyValue properties "name"}}</small></div>
+        <div><small class="text-muted block text-ellipsis">{{getPropertyValue properties "name"}}</small></div>
     </div>
 </td>
 	
@@ -30,9 +30,10 @@
 			<span><i class="icon-plus-sign"></i></span> Add Contact
 		</a>
 	</div>
+
 	
-		
-			<table id="contacts" class="onlySorting  table table-striped  agile-table  b-t b-light m-b-none">
+			<div class="table-resposnive">	
+		<table id="contacts" class="onlySorting  table table-striped  agile-table  b-t b-light m-b-none  panel table-layout-mob-view">
 				
 				<thead>
 					<tr><th></th>
@@ -46,6 +47,7 @@
 					route="contact/" >
 				</tbody>
 			</table>
+			</div>
 
 		{{else}}
 			<div class="wrapper p-t-none">

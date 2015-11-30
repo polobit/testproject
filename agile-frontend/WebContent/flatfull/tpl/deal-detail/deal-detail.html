@@ -2,7 +2,7 @@
 <script id="deal-detail-template" type="text/html">
 <div class="app-content-full  h-full dock-view-fixing" id="deal-detail-header">
 <div class="hbox hbox-auto-xs  bg-light">
-<div class="col w-xl bg-light lter b-r">
+<div class="col w-xl bg-light lter b-r text-center-mobile-view">
 <div class="vbox">
 <div class="row-row">
 <div class="wrapper pos-rlt" id="deal-detail-actions-dropdown">
@@ -161,7 +161,7 @@
         		<a href="#contact/{{id}}" class="activate-link thumb"><img  data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}"   title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}" /></a>
         	{{/if_contact_type}}
 			{{#if_contact_type "COMPANY"}}
-        		<a href="#company/{{id}}" class="activate-link thumb"><img  {{getCompanyImage "40" "display:inline;"}} title="{{getPropertyValue properties "name"}}"/></a>
+        		<a href="#company/{{id}}" class="activate-link thumb"><img  {{getCompanyImage "50" "display:inline;"}} title="{{getPropertyValue properties "name"}}"/></a>
         	{{/if_contact_type}}
         {{/each}}
       </div> 

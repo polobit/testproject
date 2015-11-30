@@ -248,12 +248,13 @@ $(function(){
 		var currentdeal = App_Deal_Details.dealDetailView.model;
 		updateDeal(currentdeal);
 
-		setTimeout(function()
-		{
-			$('#opportunityUpdateForm').find("input[name='relates_to']").focus();
-		}, 800);
-
+		$('#opportunityUpdateModal').addClass('focusRelatedTo');
+		
 	});
+
+
+	
+
 
 	$("#content").on('click', ".deal-detail-edit-deal", function(e)
 	{
@@ -261,6 +262,8 @@ $(function(){
 		console.log(App_Deal_Details.dealDetailView.model.toJSON());
 		var currentdeal = App_Deal_Details.dealDetailView.model;
 		updateDeal(currentdeal);
+
+		$('#opportunityUpdateModal').removeClass('focusRelatedTo');
 
 	});
 
@@ -555,6 +558,7 @@ $('#content').on('click', '.add-deal-document-cancel', function(e){
 				console.log($(that).parents('.activity-text-block').css("background-color", "#FFFAFA"));
 				$(that).parent().replaceWith('<span style="margin-right:9px;"><i class="fa fa-check"></i></span>');
 				dealTasksView.collection.add(data, { silent : true });
+				
 			});
 		}
 	});

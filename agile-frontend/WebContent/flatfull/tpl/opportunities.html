@@ -12,9 +12,12 @@
 			<div class="pull-right">
 			<div class="btn-group  hidden m-r-xs inline-block" id="deals-tracks">
 			</div>
+      {{#is_mobile}}
+      {{else}}
 			<div id="deal-list-filters" class="btn-group m-r-xs inline-block">
 				 <img class="loading_img p-r-xs"  height="32px" width="32px" src= "img/21-0.gif"></img>
 			</div>
+      {{/is_mobile}}
       {{#is_mobile}}
               {{else}}
 			<div class="btn-group m-r-xs inline-block" id="deals-view">
@@ -53,7 +56,10 @@
         <div id="slate">
         </div>
         {{#if this.length}}
+        {{#is_mobile}}
+        {{else}}
         <div id="total-pipeline-chart" class="w-full bg-white" style="height:300px"></div>
+        {{/is_mobile}}
         <br />
 			<div>
 				<div class="btn-group pull-left" id="bulk-actions" style="display: none;">
@@ -78,7 +84,8 @@
 					</ul>
 				</div>
 				<div class="btn-group pull-left m-t-xs" style="display: none;left: 10px;" id="bulk-select"></div>
-				<br><br>
+        <div class="clearfix"></div>
+				<br>
 			</div>
 			<div class="panel panel-default">
 			<div class="panel-heading">Deals</div>
@@ -102,14 +109,19 @@
         
         {{/if}}
         </div>
+        {{#is_mobile}}
+        {{else}}
     <div class="col-md-3">
         <div class="data-block">
+        
+        
             <div class="panel wrapper m-b-none">
                 <header>
                     <h4 class="m-t-none font-thin"><span><i class="icon-flag"></i></span> Milestones</h4>
                 </header>
                 <div id="pie-deals-chart" class="w-full" style="height:400px"></div>
 			</div>
+
 			<div class="m-t-md">
                 <h4 class="m-t-none m-b-sm h4">
                     What are Milestones?
@@ -134,6 +146,7 @@
     </div>
 </div>
 </div>
+{{/is_mobile}}
 </div>
 
 <!-- Deal bulk milestone and pipeline change modal. -->

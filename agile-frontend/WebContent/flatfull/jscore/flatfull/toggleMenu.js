@@ -32,6 +32,12 @@ $('#app-aside-folded').on('click', function(e) {
 	
 $(document).ready(function(){
 
+	$.getJSON('scope?scope=COMPANY' , function(result) {
+		$.each(result,function(i,data){
+			console.log(data);
+		});
+	}); 
+
 	 $("#contact-results li").click(function(){
    $("#mobile-menu-settings").trigger('click');
    });
@@ -51,6 +57,21 @@ $(document).ready(function(){
    	$('body').on('click','#contact-sort-views',function(){
         $(this).css('display','none');
     });	*/
+
+	$('body').on('click','#recent-menu-model-list li',function(e){
+		e.preventDefault();
+		$('#mobile-menu-settings').trigger('click');
+	});
+
+	$('body').on('mousedown','.navi-wrap li a , #navbar li a',function(e){
+		e.preventDefault();
+		$(this).css('opacity','0.5');
+	});
+
+	$('body').on('mouseup','.navi-wrap li a , #navbar li a',function(e){
+		e.preventDefault();
+		$(this).css('opacity','1');
+	});
 
 	$('body').on('touchstart','.magicMenu .i-checks',function(e){
 		e.preventDefault();
