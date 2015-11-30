@@ -1,5 +1,8 @@
 package com.agilecrm.landingpages;
 
+import java.net.MalformedURLException;
+import java.net.URL;
+
 import javax.persistence.Id;
 import javax.persistence.PrePersist;
 
@@ -22,6 +25,8 @@ public class LandingPageCNames
     
     // Unique id to identify the page
     public String cname;
+    
+    public String cname_host;
 
     public static ObjectifyGenericDao<LandingPageCNames> dao = new ObjectifyGenericDao<LandingPageCNames>(LandingPageCNames.class);
 
@@ -32,7 +37,7 @@ public class LandingPageCNames
 	public LandingPageCNames(String domain, Long landing_page_id, String cname) {
 		this.domain = domain;
 		this.landing_page_id = landing_page_id;
-		this.cname = cname;
+		this.cname = cname.toLowerCase();
 	}
 
 	public void save()
@@ -55,7 +60,24 @@ public class LandingPageCNames
 	@PrePersist
 	private void PrePersist()
 	{
-
+		cname = cname.toLowerCase();
+		
+		System.out.println("in prepresist of lpcnames");
+		URL landingPageURL;
+		try {
+			landingPageURL = new URL(cname);
+			String cnameWithSubDomain = landingPageURL.getHost();
+			int indexOfDot = cnameWithSubDomain.indexOf('.');
+			if(-1 != indexOfDot) {
+				cname_host = cnameWithSubDomain.substring(indexOfDot+1);
+			} else {
+				cname_host = cnameWithSubDomain;
+			}
+			
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+			cname_host = "";
+		}
 	}
 	
 

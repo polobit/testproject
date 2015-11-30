@@ -268,7 +268,7 @@ public class LandingPageUtil
 			Query<LandingPageCNames> q = null;
 			ObjectifyGenericDao<LandingPageCNames> dao = new ObjectifyGenericDao<LandingPageCNames>(LandingPageCNames.class);
 			q = dao.ofy().query(LandingPageCNames.class);
-			q.filter("cname", cnameDomain);
+			q.filter("cname_host", cnameDomain);
 			if(q.count() == 0)
 			{
 				return true;
@@ -278,7 +278,7 @@ public class LandingPageUtil
 				List<LandingPageCNames> lpcnames = q.list();
 				if(lpcnames.size() != 0) {
 					LandingPageCNames lpcname = lpcnames.get(0);
-					if(lpcname.domain.equals(oldNameSpace)) {
+					if(lpcname.domain != null && lpcname.domain.equals(oldNameSpace)) {
 						return true;
 					}
 				}

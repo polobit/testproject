@@ -137,6 +137,9 @@ public class LandingPage
 	@PrePersist
 	private void PrePersist()
 	{
+		if(!cname.isEmpty()) {
+			cname = cname.toLowerCase();
+		}
 		// Initializes created Time
 		if (created_time == 0L)
 			created_time = System.currentTimeMillis() / 1000;

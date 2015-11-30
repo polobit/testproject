@@ -70,7 +70,7 @@ function initializeLandingPageListeners() {
 		var mainDomain = $("#domain").val();
 		var forPageId = $(this).data("pageid");
 
-		$.get("core/api/landingpages/has-rights-to-add-domain?domain="+mainDomain, function(data) {
+		$.get("core/api/landingpages/has-rights-to-add-domain?domain="+mainDomain.toLowerCase(), function(data) {
 			if(data.result) {
 				var $btn = $("#landingPageSettingBtn").button('loading');
 				landingPageSaveCnameSettings(forPageId,"http://"+$("#sub_domain").val()+"."+mainDomain+"/"+$("#directory_path").val());
@@ -147,6 +147,7 @@ function landingPageShowAlertMessage(message, type) {
 }
 
 function landingPageSaveCnameSettings(modelId,CNAME) {
+	CNAME = CNAME.toLowerCase();
 	var model = App_LandingPageRouter.LandingPageCollectionView.collection.get(modelId);
 	model.set("cname",CNAME);
 	model.set("requestViaCnameSetup",true);
