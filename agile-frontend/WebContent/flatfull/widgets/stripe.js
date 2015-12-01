@@ -390,14 +390,14 @@ function startStripeWidget(contact_id){
 
 	$("#widgets").off("click", "#stripe_credits_add");
 	$("#widgets").on("click", "#stripe_credits_add", function(e){
-		var creditAmt = (parseInt($('#credit_amount').val())*100);
+		var creditAmt = (parseFloat($('#credit_amount').val())*100);
 		if(creditAmt != 0){
 			$("#stripe_credits_panel *").attr("disabled", "disabled");
 			$.get("/core/api/widgets/stripe/credit/" +Stripe_Plugin_Id+ "/" +customer_id+ "/" +creditAmt , function(data){
 				console.log(data);
 				if(data){
 					var balance = $('#balance_credit').text();
-					balance = parseInt(creditAmt/100) + parseInt(balance);
+					balance = parseFloat(creditAmt/100) + parseFloat(balance);
 					$('#balance_credit').text(balance);					 
 					$('#add_credits').removeClass('hide');
 					$('#stripe_credits_panel').addClass('hide');

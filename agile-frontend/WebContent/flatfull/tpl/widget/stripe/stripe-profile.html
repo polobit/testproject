@@ -19,7 +19,21 @@
 		<a href="https://manage.stripe.com/customers/{{customer.id}}" target="_blank">{{getCurrentContactProperty "first_name"}} {{getCurrentContactProperty "last_name"}}</a>
 	{{/if}}
 </div>
-<div id="stripe_credits_panel" class="col-md-12 b-t p-t-xs p-b-xs hide">
+<div class="b-t b-b wrapper-xs">
+	<div class="row">
+		<div class="col-md-1 p-r-none">
+			<p class="m-b-none c-p" id="add_credits"><i class="icon-plus-sign"></i></p>
+		</div>
+		<div class="col-md-5">
+			Credits<div class="pull-right"> :</div>
+		</div>
+		<div class="col-md-6">
+  			<span>$ </span>
+  			<span id="balance_credit">{{stripeCreditConvertion customer.accountBalance}}</span>
+		</div>
+	</div>
+</div>
+<div id="stripe_credits_panel" class="col-md-12 b-b p-t-xs p-b-xs hide">
 		<div class="col-md-6 p-l-none p-r-sm">
 			<input class="form-control input-sm" id="credit_amount" type="number" value="0" name="credit_amount">
 		</div>
@@ -31,20 +45,6 @@
 		</div>
 </div>
 <div class="clearfix"></div>
-<div class="b-t b-b wrapper-xs">
-	<div class="row">
-		<div class="col-md-1 p-r-none">
-			<p class="m-b-none c-p" id="add_credits"><i class="icon-plus-sign"></i></p>
-		</div>
-		<div class="col-md-5">
-			Credits<div class="pull-right"> :</div>
-		</div>
-		<div class="col-md-6">
-  			<span>$ </span>
-  			<span id="balance_credit"></span>
-		</div>
-	</div>
-</div>
 <div class=" wrapper-xs">
 	<span>Subscription Details</span>
 </div>
