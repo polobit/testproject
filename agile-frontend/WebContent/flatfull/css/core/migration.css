@@ -1555,17 +1555,21 @@ a#email-reply{
   position: absolute;
 }*/
 
-.details-mobile-view {
+.details-mobile-view ,.company-details-mobile-view{
   width: 299px;
 }
 
-@media all and (max-width: 990px) {
+
+
+@media all and (max-width: 767px) {
+.company-details-mobile-view {
+  width: 97.0vw;
+  }
+
 .details-mobile-view {
   width: 100%;
 }
-}
 
-@media all and (max-width: 767px) {
 .custom-animated.custom-fadeInUp > .bg-light .pull-left,.custom-animated.custom-fadeInUp > .bg-light .pull-right:not(.dropdown-menu),.bg-light.lter.b-b.wrapper-md .pull-left,.bg-light.lter.b-b.wrapper-md .pull-right:not(.dropdown-menu),.bg-light.lter.b-b.wrapper-md .right {
    float: none!important;
    text-align: center;

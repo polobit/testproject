@@ -51,6 +51,16 @@ public class GoogleCalenderPrefs
     @NotSaved
     public String access_token = null;
 
+    public enum CALENDAR_TYPE
+    {
+	GOOGLE, OFFICE;
+    }
+
+    public CALENDAR_TYPE calendar_type = CALENDAR_TYPE.GOOGLE;
+
+    @NotSaved(IfDefault.class)
+    public String prefs = null;
+
     // domain user key
     @JsonIgnore
     private Key<DomainUser> domainUserKey = null;
