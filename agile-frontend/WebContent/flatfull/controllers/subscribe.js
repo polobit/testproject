@@ -221,7 +221,7 @@ var SubscribeRouter = Backbone.Router
 			{
 
 				IS_HAVING_MANDRILL = false;
-				if (isRoute("subscribe"))
+				if(window.location.href.split("#")[1] == "subscribe")
             		IS_TRIAL = false;
 				$("#content").html("<div id='subscribe_plan_change'></div>");
 
