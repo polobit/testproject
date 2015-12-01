@@ -314,7 +314,13 @@ public class TicketNotesUtil
 
 		return text;
 	}
-
+	
+	/**
+	 * 
+	 * @param ticketID
+	 * @param notesID
+	 * @throws Exception
+	 */
 	public static void updateRequestedViewedTime(String ticketID, String notesID) throws Exception
 	{
 		if (StringUtils.isBlank(ticketID) || StringUtils.isBlank(notesID))
@@ -329,7 +335,7 @@ public class TicketNotesUtil
 
 		System.out.println("notes id" + notes.id);
 		
-		if (notes.requester_viewed_time != null)
+		if (notes.requester_viewed_time != 0l)
 			return;
 
 		notes.requester_viewed_time = Calendar.getInstance().getTimeInMillis();

@@ -214,13 +214,29 @@ var Tickets = {
 		});
 
 		//Initialization click event on sort filters
-		$('.tickets-toolbar').on('click', 'ul.sort-filters li a', function(e){
+		$('.tickets-toolbar').on('click', 'a.sort-by', function(e){
 			e.preventDefault();
 
-			Sort_Field = $(this).data('sort-key');
+			var sortField = $(this).data('sort-key');
 
-			$('ul.sort-filters').find('li').removeClass('active');
-			$(this).closest('li').addClass('active');
+			if(Sort_Field.indexOf(sortField) >= 0){
+
+				// Minus(-) represents desc order
+				if(Sort_Field.startsWith('-')){
+					Sort_Field = sortField;
+
+					$(this).removeClass('sort-by-desc').addClass('sort-by-asc');
+				}else{
+					Sort_Field = ('-' + sortField);
+					$(this).removeClass('sort-by-asc').addClass('sort-by-desc');
+				}
+			}else{
+
+				Sort_Field = ('-' + sortField);;
+
+				$('a.sort-by').removeClass('sort-link sort-by-desc sort-by-asc');
+				$(this).addClass('sort-link sort-by-desc');
+			}
 
 			App_Ticket_Module.ticketsByFilter(Ticket_Filter_ID);
 		});

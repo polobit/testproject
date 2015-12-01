@@ -12,9 +12,6 @@
   	<div class="clearfix"></div>
     <td>
     	<span id="source-{{id}}" data-clipboard-text="{{group_email}}">{{group_email}}</span>
-    	<a id="grp-{{id}}" class="m-xs a-frwd-email" href="javascript:void(0);" data-toggle="tooltip" data-placement="top" data-copied-text="Email copied to clipboard">
-    			<i class="icon-copy copy_email_clipboard_icon" ></i>
-    	</a>
 	</td>
 	<td>
 		<div class="table-resp" data-toggle="popover" data-placement="top" data-html="true" data-trigger="hover" title="Users list" data-content="{{#each group_users}}<div class='p-xs'><a href='javascript:void(0);' class='avatar thumb-xs m-r-xs'><img src='{{ownerPic}}'></a> {{name}} ({{email}})</div>{{/each}}">
