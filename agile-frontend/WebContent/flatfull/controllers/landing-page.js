@@ -27,6 +27,9 @@ var LandingPageRouter = Backbone.Router.extend({
         this.LandingPageCollectionView.collection.fetch();
 
         $("#landingpages-listeners").html(this.LandingPageCollectionView.render().el);
+        
+        $(".active").removeClass("active");
+	$("#landing-pages-menu").addClass("active");
 
 	},
 
@@ -38,6 +41,9 @@ var LandingPageRouter = Backbone.Router.extend({
             $("#landingpages-listeners").html($(ui));
         }, "#landingpages-listeners");
         
+        $(".active").removeClass("active");
+	$("#landing-pages-menu").addClass("active");
+	
         hideTransitionBar();
 	},
 
@@ -64,6 +70,9 @@ var LandingPageRouter = Backbone.Router.extend({
                 hideTransitionBar();
             });
         });
+        
+        $(".active").removeClass("active");
+	$("#landing-pages-menu").addClass("active");
 
 	},
 
@@ -81,6 +90,8 @@ var LandingPageRouter = Backbone.Router.extend({
         }, "#landingpages-listeners");
 	
 	$('html, body').animate({scrollTop: $('body').offset().top}, 500);
+	$(".active").removeClass("active");
+	$("#landing-pages-menu").addClass("active");
         hideTransitionBar();
 
 	},
@@ -99,6 +110,8 @@ var LandingPageRouter = Backbone.Router.extend({
         }, "#landingpages-listeners");
 	
 	$('html, body').animate({scrollTop: $('body').offset().top}, 500);
+	$(".active").removeClass("active");
+	$("#landing-pages-menu").addClass("active");
         hideTransitionBar();
 
     },
@@ -130,6 +143,8 @@ var LandingPageRouter = Backbone.Router.extend({
             }
         }, "#landingpages-listeners");
         
+        $(".active").removeClass("active");
+	$("#landing-pages-menu").addClass("active");
         hideTransitionBar();
     }
 	
