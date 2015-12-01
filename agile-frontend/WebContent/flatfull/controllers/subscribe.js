@@ -221,6 +221,8 @@ var SubscribeRouter = Backbone.Router
 			{
 
 				IS_HAVING_MANDRILL = false;
+				if (isRoute("subscribe")) {
+            		IS_TRIAL = false;
 				$("#content").html("<div id='subscribe_plan_change'></div>");
 
 				/*// Set it in local machine
