@@ -1,10 +1,10 @@
 
 <script id="task-detail-template" type="text/html">
 <div class="app-content-full  h-full dock-view-fixing">
-<div class="hbox hbox-auto-xs hbox-auto-sm bg-light">
-<div class="col  bg-light lter b-r" style="width:299px;">
-<div class="vbox" style="display:block">
-<div class="row-row" style="display:block">
+<div class="hbox hbox-auto-xs  bg-light">
+<div class="col w-xl bg-light lter b-r" >
+<div class="vbox">
+<div class="row-row">
 <div id="task-detail-lhs" class="wrapper pos-rlt">
 
                   <div> 
@@ -147,10 +147,10 @@
 			</ul>
           </div>
 			<div class="tab-content no-tab-cell" id="task_tab_detail">
-                <div class="tab-pane active" id="activity"><img src="img/21-0.gif"></img></div>
-				<div class="tab-pane " id="contacts"><img src="img/21-0.gif"></img></div>
-				<div class="tab-pane" id="notes"><img src="img/21-0.gif"></img></div>
-				<div class="tab-pane" id="deals"><img src="img/21-0.gif"></img></div>
+                <div class="tab-pane active" id="activity"><img src="{{getS3ImagePath 'img/21-0-new.gif'}}"></img></div>
+				<div class="tab-pane " id="contacts"><img src="{{getS3ImagePath 'img/21-0-new.gif'}}"></img></div>
+				<div class="tab-pane" id="notes"><img src="{{getS3ImagePath 'img/21-0-new.gif'}}"></img></div>
+				<div class="tab-pane" id="deals"><img src="{{getS3ImagePath 'img/21-0-new.gif'}}"></img></div>
 			</div>
        </div>
        </div>
@@ -189,7 +189,7 @@
 			<div class="wrapper p-t-none">
             	<div class="slate-content">
                 	<div class="box-left pull-left m-r-md">
-                    	<img alt="Clipboard" src="/img/clipboard.png">
+                    	<img alt="Clipboard" src="{{getS3ImagePath '/img/clipboard.png'}}">
                 	</div>
                 	<div class="box-right pull-left">
                     	<h4 class="m-t-none">Task is not associated with any person/contact. </h4>
@@ -252,7 +252,7 @@
         <div class="wrapper p-t-none">
             <div class="slate-content">
                 <div class="box-left pull-left m-r-md">
-                    <img alt="Clipboard" src="/img/clipboard.png" />
+                    <img alt="Clipboard" src="{{getS3ImagePath '/img/clipboard.png'}}" />
                 </div>
                 <div class="box-right pull-left">
                     <h4 class="m-t-none">No Activity Found.</h4>
@@ -386,7 +386,7 @@
 			<div class="wrapper p-t-none">
             	<div class="slate-content">
                 	<div class="box-left pull-left m-r-md">
-                    	<img alt="Clipboard" src="/img/clipboard.png">
+                    	<img alt="Clipboard" src="{{getS3ImagePath '/img/clipboard.png'}}">
                 	</div>
                 	<div class="box-right pull-left">
                     	<h4 class="m-t-none">Task is not associated with any deal. </h4>

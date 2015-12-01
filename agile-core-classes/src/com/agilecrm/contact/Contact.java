@@ -568,7 +568,7 @@ public class Contact extends Cursor
 		|| (contact.lead_score != null ? !contact.lead_score.equals(lead_score) : false)
 		|| contact.campaignStatus.size() != campaignStatus.size()
 		|| contact.emailBounceStatus.size() != emailBounceStatus.size()
-		|| !contact.contact_company_key.equals(contact_company_key))
+		|| (contact.contact_company_key != null ? !contact.contact_company_key.equals(contact_company_key) : false))
 
 	    return true;
 

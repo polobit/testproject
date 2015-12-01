@@ -10,7 +10,8 @@
     <div class="table-responsive">
 		<div class="panel panel-default">
 		<div class="panel-heading">Tasks List</div>
-        <table class="table table-striped showCheckboxes no-sorting panel m-b-none agile-table" url="core/api/tasks/bulk" id="task-list">
+        <div class="table-responsive">
+        <table class="table table-striped showCheckboxes no-sorting panel m-b-none agile-table table-layout-mob-view" url="core/api/tasks/bulk" id="task-list">
             <thead>
                 <tr>
 					<th style="width:10%;" class="header">Owner</th>
@@ -24,6 +25,7 @@
             <tbody id="tasks-list-model-list" class="c-p" route="task/">
             </tbody>
         </table>
+        </div>
 		</div>
 		<a href="#" class="btn btn-sm btn-default m-b m-l-md"  style="display:none;" id="bulk-complete">Complete</a>
     </div>

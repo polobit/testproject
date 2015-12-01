@@ -13,10 +13,6 @@
 	
 </script>
 
-
-
-
-
 <script id="settings-user-prefs-template" type="text/html">
 <!--  Contact View Detail in Detailed mode - when only one contact is shown -->
 	<div class="panel wrapper">
@@ -25,7 +21,7 @@
             <input name="id" type="hidden" value="{{id}}" /> 		
             <!-- <legend>Personal Settings</legend> -->
             <div class="row">
-                <div class="col-md-6 col-sm-6 col-xs-6">
+                <div class="col-md-6 col-sm-6 col-xs-12">
                     <div class="control-group form-group">
                         <label class="control-label col-sm-4">Name <span class="field_req">*</span></label>
                         <div class="controls col-sm-8">
@@ -48,7 +44,7 @@
                                   {{#if pic}}
                                     <img class="w-full" src="{{pic}}"  />
                                   {{else}}
-                                    <img class="w-full"  src="https://contactuswidget.appspot.com/images/pic.png"  />
+                                    <img class="w-full"  src="{{getS3ImagePath '/images/pic.png'}}"  />
                                   {{/if}}
 								</div>
 							</a> 
@@ -994,9 +990,9 @@
                  </div>
              </div>
                 </div>
-                
+
             </div>
-            <div class="row">
+            <div class="row m-t-sm">
 <div class="col-md-12">
             <div class="control-group form-group">
                 <label class="control-label col-sm-2">Signature</label> 

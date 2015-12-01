@@ -309,6 +309,7 @@ public class StripeImpl implements AgileBilling {
 		// invoices of a customer form stripe)
 		invoiceParams.put("customer",
 				StripeUtil.getCustomerFromJson(stripeCustomer).getId());
+		invoiceParams.put("limit",100);
 		/*
 		 * Fetches all invoices for given stripe customer id and returns
 		 * invoices

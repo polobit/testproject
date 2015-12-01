@@ -624,6 +624,13 @@ left:0;
 display: block!important;
 }
 
+#fat-menu .avatar img {
+  width: 32px!important;
+  height: 32px!important;
+}
+.checkbox-mobile-view {
+  padding-top: 0px!important;
+}
 }
 
 
@@ -1088,10 +1095,12 @@ font-size:16px;
 .contact-title-dynamic
 {
 	width:calc(100% - 150px);
+  word-break:break-all;
 }
 .contact-desc-dynamic
 {
 	width:calc(100% - 40px);
+  word-break:break-all;
 }
 #contactDetailsTab li a
 {
@@ -1224,9 +1233,21 @@ color:#1f2427!important;
 {
 	 float: none;
   position: relative;
-  top: -2px;
+  top: 0px;
   vertical-align: middle;
+  opacity: 1;
+  color:#fff;
+  font-size: 16px;
+  text-shadow:none;
 }
+
+  #added-tags-ul .close {
+    color:#363f44;
+  }
+
+  .tag.btn-primary .close {
+    color: #fff!important;
+  }
 
 /*hack for same grid */
 /*.custom-grid-view
@@ -1521,3 +1542,275 @@ a#email-reply{
 }
 
 /* end milestone deal sources */
+
+/*starting mobile compatibility V2 */
+
+/*#continueform .single-error {
+  position: relative;
+}*/
+
+/*#continueform span.help-inline[generated|=true] {
+  right: 25px;
+  top: 5px;
+  position: absolute;
+}*/
+
+.details-mobile-view ,.company-details-mobile-view{
+  width: 299px;
+}
+
+
+
+@media all and (max-width: 767px) {
+.company-details-mobile-view {
+  width: 97.0vw;
+  }
+
+.details-mobile-view {
+  width: 100%;
+}
+
+.custom-animated.custom-fadeInUp > .bg-light .pull-left,.custom-animated.custom-fadeInUp > .bg-light .pull-right:not(.dropdown-menu),.bg-light.lter.b-b.wrapper-md .pull-left,.bg-light.lter.b-b.wrapper-md .pull-right:not(.dropdown-menu),.bg-light.lter.b-b.wrapper-md .right {
+   float: none!important;
+   text-align: center;
+   margin-bottom: 7px!important;
+  }
+
+  .wrapper-md .h3 {
+  text-align: center;
+  }
+
+.custom-animated.custom-fadeInUp > .bg-light .row {
+  text-align: center;
+}
+  #workflow-designer-help {
+    margin-top: 0px;
+  }
+  .task-trello-list {
+    display: block;
+    width: 100%;
+  }
+  .mobile-view-btn-billing, .mobile-view-btn-billing > div {
+    padding-left: none!important;
+    text-align: center;
+  }
+  #contacts-lhs-filters-toggle,#companies-lhs-filters-toggle {
+    display: none;
+  }
+  .panel-middle-align-mobile .col-xs-6:first-child {
+  text-align: right;
+  }
+  .panel-middle-align-mobile .col-xs-6:last-child {
+    text-align: left!important;
+  }
+  .text-center-mobile-view {
+    text-align: center;
+    word-break:break-all;
+  }
+  .mobile-pad-content .box-left {
+    display: none;
+  }
+  .mobile-pad-content .box-right {
+    float: none!important;
+    text-align: center;
+  }
+  .mobile-pad-content .box-right h4 {
+    font-weight: normal;
+    font-size: 16px;
+    margin-bottom: 5px;
+  }
+  .mobile-pad-content .box-right .text {
+ color:#98a6ad !important
+  }
+  #contact-filter-list-model-list.pull-right,#company-filter-list-model-list.pull-right {
+    right: auto;
+  }
+  /*
+  #contact-sort-views {
+    top: 2px;
+    left: 0%;
+  }*/
+  .dropdown-submenu>a:after {
+    display: none;
+  }
+  #calendar_container .fc-header {
+    width: 65%;
+  }
+  #navbar 
+  { 
+    max-height: 80vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+  .dropdown-submenu:hover #contact-sort-views {
+    display: none;
+  }
+  #contacts-filter-wrapper .chained-table tr td {
+    display: block;
+    margin-top: 5px;
+  }
+  
+  #contact-view-model-list {
+   left: 0px;
+  }
+  #campaign-select,#document-select {
+ display: block!important;
+ margin: 0 auto; 
+}
+#add-to-campaign, #cancel-to-add-campaign , .add-document-confirm , .add-document-cancel {
+  margin-top: 10px;
+}
+.upload-doc-field {
+display: block;
+text-align: center;
+}
+#clear-lhs-contact-filters {
+  display: none;
+}
+
+.leaderboard_portlet_header ul li {
+  display: none;
+}
+.leaderboard_portlet_header ul li:last-child {
+  display: block;
+}
+.leaderboard-bottom-border-edge:after {
+  width: 100%;
+}
+.leader-board-view li {
+  width: 100%;
+  float: none!important;
+}
+.bigger-font-mobile {
+  font-size: 20px;
+}
+.portlet_header_icons {
+  font-size: 18px;
+}
+.portlet_header_icons i:first-child {
+  margin-right: 15px;
+}
+/*#navbar * {
+  text-align: center;
+}
+#navbar .dropdown-menu a {
+  display: inline-block;
+}
+#searchForm {
+  margin: 0 auto;
+  padding: 10px 35px;
+}
+.navbar-nav li a i+span {
+  display: inline-block!important;
+}
+#due_tasks_count {
+  margin-left: 0px!important;
+  float: none!important;
+}
+#navbar {
+box-shadow: 0 0 10px 0px #bbb;
+}
+#fat-menu .avatar {
+  float: none!Important;
+}
+#fat-menu div {
+  float: none!important;
+  display: inline-block;
+  position: relative;
+  top: 5px;
+  padding-left: 3px;
+}*/
+
+#navbar {
+box-shadow: 0 5px 10px 0px #bbb;
+}
+
+#searchForm {
+  
+  padding: 10px 35px;
+}
+
+.navbar-nav li a i+span {
+  display: inline-block!important;
+  padding-left: 2px;
+}
+#recent-menu .dropdown-menu {
+  width: 100%!important;
+}
+#recent-menu .dropdown-menu .list-group-item {
+  padding:10px 0px;
+  border: none;
+}
+#recent-menu .dropdown-menu li > div {
+  padding: 5px 15px 5px 40px;
+}
+ .nav > li > a {
+   padding: 10px 20px; 
+}
+.recent-view,#recent-menu > ul {
+position: absolute!important;
+width: 100%!Important;
+}
+
+#noty_bottomRight_layout_container {
+  display: none;
+}
+
+.agile-menu .tooltip {
+  display: none!important;
+}
+.agile-menu .fa-history {
+  width: 15px;
+  font-size: 12px;
+  position: relative;
+  left: 2px;
+}
+.portlet_body_calendar {
+  position: relative;
+}
+#calendar_container .fc-header {
+  width: 65%!important;
+}
+.portlet_body_calendar .portlet_header_icons {
+  top: -4px;
+}
+#calendar_container .fc-header .fc-header-left,#calendar_container .fc-header .fc-header-right {
+  width: 25%;
+}
+#navbar li a:active {
+  /*background: #edf1f2;*/
+}
+.contact-right-widgetsview {
+  padding-top: 20px;
+}
+.contact-right-widgetsview > vbox {
+  border-top: 1px solid #ddd;
+}
+.leader-board-view .thumb {
+  width: 40px;
+}
+.leader-board-view .thumb img {
+  width: 40px;
+  height: 40px;
+}
+.leader-board-view .agile-thumb .text-xlg {
+  font-size: 16px;
+}
+.leader-board-text-mobile {
+  width: 60%!important;
+}
+.tooltip {
+  display: none!important;
+}
+}
+
+@media all and (min-width: 768px) {
+  .addField > .col-sm-9:nth-of-type(n+3) {
+  margin-left: 25%;
+  }
+} 
+.tagsinput li {
+  word-break:break-all;
+  white-space: pre-wrap;
+  text-align: left;
+}

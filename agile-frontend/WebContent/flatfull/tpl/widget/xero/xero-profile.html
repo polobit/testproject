@@ -89,16 +89,16 @@
 {{else}}
 		<li class="list-group-item r-none b-l-none b-r-none">
 			<div class="pull-left">
-				<a class="invoices c-p" data-toggle="collapse"  id="getInvoice-lineitems-{{invoice.Invoice.InvoiceID}}"  value="{{invoice.Invoice.InvoiceID}}"  ><i class="icon-plus"></i></a>
-				<a class="c-p" id="xeroinvoicelink" data-toggle="tooltip" data-placement="top" title= "{{xeroTypeToolTip invoice.Invoice.Type}}" href="https://go.xero.com{{#unless xeroOrganisationShortCode}}/organisationlogin/default.aspx?shortcode={{xeroOrganisationShortCode}}&redirecturl={{/unless}}/AccountsReceivable/View.aspx?InvoiceID={{invoice.Invoice.InvoiceID}}" target="_blank">{{invoice.Invoice.InvoiceNumber}} {{xeroType invoice.Invoice.Type}}</a>
+				<a class="invoices c-p" data-toggle="collapse"  id="getInvoice-lineitems-{{invoice.InvoiceID}}"  value="{{invoice.InvoiceID}}"  ><i class="icon-plus"></i></a>
+				<a class="c-p" id="xeroinvoicelink" data-toggle="tooltip" data-placement="top" title= "{{xeroTypeToolTip invoice.Type}}" href="https://go.xero.com{{#unless xeroOrganisationShortCode}}/organisationlogin/default.aspx?shortcode={{xeroOrganisationShortCode}}&redirecturl={{/unless}}/AccountsReceivable/View.aspx?InvoiceID={{invoice.InvoiceID}}" target="_blank">{{invoice.InvoiceNumber}} {{xeroType invoice.Type}}</a>
 			</div>
-			<div class="pull-right">{{invoice.Invoice.CurrencyCode}} {{invoice.Invoice.Total}}</div><br>
+			<div class="pull-right">{{invoice.CurrencyCode}} {{invoice.Total}}</div><br>
 			
-			<div id="collapse-{{invoice.Invoice.InvoiceID}}" class="collapse text-sm" style="color: rgba(0, 0, 0, 0.5);">
+			<div id="collapse-{{invoice.InvoiceID}}" class="collapse text-sm" style="color: rgba(0, 0, 0, 0.5);">
 			</div>		
 			<div>
-				<div class="pull-left"><small>Due <i class="fa fa-clock-o m-r-xs text-muted"></i><time class="time-ago text-muted" datetime="{{invoice.Invoice.DueDate}}">{{invoice.Invoice.DueDate}}</time></small></div>					
-				<div class="pull-right"><span class="label bg-light dk text-tiny">{{capFirstLetter invoice.Invoice.Status}}</span></div><br>
+				<div class="pull-left"><small>Due <i class="fa fa-clock-o m-r-xs text-muted"></i><time class="time-ago text-muted" datetime="{{invoice.DueDate}}">{{invoice.DueDate}}</time></small></div>					
+				<div class="pull-right"><span class="label bg-light dk text-tiny">{{capFirstLetter invoice.Status}}</span></div><br>
 				<div class="clearfix"></div>
 			</div>			
 		</li>	
