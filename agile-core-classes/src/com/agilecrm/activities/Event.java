@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Id;
-import javax.persistence.PostLoad;
 import javax.persistence.PrePersist;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -366,13 +365,6 @@ public class Event extends Cursor
 		this.related_deals.add(new Key<Opportunity>(Opportunity.class, Long.parseLong(deal_id)));
 	    }
 	}
-    }
-
-    @PostLoad
-    private void postLoad()
-    {
-	if (owner != null)
-	    owner_id = String.valueOf(owner.getId());
     }
 
     public String toString()
