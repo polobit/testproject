@@ -58,7 +58,8 @@ $(document).ready(function(){
         $(this).css('display','none');
     });	*/
 
-	$('body').on('click','#recent-menu-model-list li',function(e){
+	$('#recent-menu').off('li');
+	$('#recent-menu').on('click', 'li', function(e){
 		e.preventDefault();
 		$('#mobile-menu-settings').trigger('click');
 	});

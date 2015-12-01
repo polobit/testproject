@@ -338,7 +338,7 @@ $('#content').on('click', '.add-deal-document-select', function(e){
 	e.preventDefault();
 	var el = $(this).closest("div");
 	$(this).css("display", "none");
-	el.find(".deal-document-select").css("display", "inline");
+	el.find(".deal-document-select").css("display", "block");
 	var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
     fillSelect('document-select','core/api/documents', 'documents',  function fillNew()
 	{
