@@ -64,11 +64,11 @@ var Ticket_Labels = {
 		$.each(this.labelsCollection.toJSON(), function(index, eachLabel) {
 
 			if ($.inArray(eachLabel.id, labels) != -1)
-				optionList += "<option value='" + newLabelJSON[value].id
-						+ "' 'selected'>" + labelsJSON[i].label + "</option>";
+				optionList += "<option value='" + eachLabel.id
+						+ "' 'selected'>" + eachLabel.label + "</option>";
 			else
-				optionList += "<option value='" + newLabelJSON[value].id + "'>"
-						+ labelsJSON[i].label + "</option>";
+				optionList += "<option value='" + eachLabel.id + "'>"
+						+ eachLabel.label + "</option>";
 
 		});
 
