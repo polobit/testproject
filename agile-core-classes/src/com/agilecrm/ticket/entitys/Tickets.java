@@ -10,7 +10,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 import org.codehaus.jackson.annotate.JsonIgnore;
 
 import com.agilecrm.contact.Contact;
-import com.agilecrm.contact.Tag;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.cursor.Cursor;
 import com.agilecrm.db.ObjectifyGenericDao;
@@ -264,6 +263,7 @@ public class Tickets extends Cursor
 	 */
 	@NotSaved(IfDefault.class)
 	@Embedded
+	@JsonIgnore
 	public List<Key<TicketLabels>> labels = new ArrayList<Key<TicketLabels>>();
 
 	/**
@@ -284,6 +284,12 @@ public class Tickets extends Cursor
 	@NotSaved
 	public List<TicketDocuments> attachments_list = new ArrayList<TicketDocuments>();
 
+	/**
+	 * Stores ticket labels
+	 */
+	@NotSaved
+	public List<Long> label_ids = new ArrayList<Long>();
+	
 	/**
 	 * Default constructor
 	 */
@@ -311,6 +317,11 @@ public class Tickets extends Cursor
 
 		if (contact_key != null)
 			contactID = contact_key.getId();
+		
+		List<Key<TicketLabels>> labelKeys = this.labels;
+		
+		for(Key<TicketLabels> key : labelKeys)
+			this.label_ids.add(key.getId());
 	}
 
 	/**
