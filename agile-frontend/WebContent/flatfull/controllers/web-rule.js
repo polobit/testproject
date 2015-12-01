@@ -56,7 +56,7 @@ var WebreportsRouter = Backbone.Router.extend({
 		var web_reports_add = new Base_Model_View({ url : 'core/api/webrule', template : "webrules-add", window : "web-rules", isNew : true,
 			postRenderCallback : function(el)
 			{
-				head.js('lib/agile.jquery.chained.min.js', function()
+				head.js(LIB_PATH + 'lib/agile.jquery.chained.min.js', function()
 				{
 
 					chainFilters(el, undefined, function()
@@ -96,7 +96,7 @@ var WebreportsRouter = Backbone.Router.extend({
 			{
 				if (count > 0)
 					return;
-				head.js('lib/agile.jquery.chained.min.js', function()
+				head.js(LIB_PATH + 'lib/agile.jquery.chained.min.js', function()
 				{
 					chainFilters(el, webrule.toJSON(), function()
 					{
