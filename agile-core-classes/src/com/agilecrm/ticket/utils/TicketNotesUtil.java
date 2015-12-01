@@ -95,6 +95,8 @@ public class TicketNotesUtil
 
 		List<TicketNotes> notesList = getTicketNotes(ticket.id, "-created_time");
 
+		System.out.println("notesList size.." + notesList.size());
+		
 		TicketGroups group = TicketGroupUtil.getTicketGroupById(ticket.groupID);
 
 		String groupName = group.group_name;
@@ -105,6 +107,8 @@ public class TicketNotesUtil
 		json.put("agent_name", agentName);
 		json.put("tracking_img", appendTrackingImage(ticket.id, notesList.get(0).id));
 
+		System.out.println("notesList.get(0).id): " + notesList.get(0).id);
+		
 		JSONArray notesArray = new JSONArray();
 
 		// Add all notes
@@ -323,9 +327,8 @@ public class TicketNotesUtil
 
 		TicketNotes notes = TicketNotes.ticketNotesDao.get(Long.parseLong(notesID));
 
-		if (notes == null)
-			return;
-
+		System.out.println("notes id" + notes.id);
+		
 		if (notes.requester_viewed_time != null)
 			return;
 

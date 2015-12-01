@@ -1,7 +1,7 @@
 
 var Ticket_Canned_Response = {
 
-	cannedResponseCollection : new Object(),
+	cannedResponseCollection : undefined,
 
 	fetchCollection: function(callback){
 
