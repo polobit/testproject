@@ -13,7 +13,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.agilecrm.contact.Contact;
-import com.agilecrm.contact.Tag;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.search.document.TicketsDocument;
 import com.agilecrm.ticket.entitys.TicketActivity;
@@ -28,8 +27,8 @@ import com.agilecrm.ticket.entitys.Tickets.Status;
 import com.agilecrm.ticket.entitys.Tickets.Type;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
-import com.agilecrm.workflows.triggers.util.TicketTriggerUtil;
 import com.agilecrm.util.email.SendMail;
+import com.agilecrm.workflows.triggers.util.TicketTriggerUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.googlecode.objectify.Key;
@@ -156,14 +155,14 @@ public class TicketsUtil
 	 */
 	public static Tickets createTicket(Long group_id, Long assignee_id, String requester_name, String requester_email,
 			String subject, List<String> cc_emails, String plain_text, Status status, Type type, Priority priority,
-			Source source, Boolean attachments, String ipAddress, List<Key<TicketLabels>> labels)
+			Source source, Boolean attachments, String ipAddress, List<Key<TicketLabels>> labelsKeysList)
 	{
 		Tickets ticket = new Tickets();
 
 		try
 		{
 			ticket.group_id = new Key<TicketGroups>(TicketGroups.class, group_id);
-			ticket.labels = labels;
+			ticket.labels_keys_list = labelsKeysList;
 			ticket.status = status;
 			ticket.type = type;
 			ticket.priority = priority;
@@ -489,7 +488,7 @@ public class TicketsUtil
 	{
 		Tickets ticket = TicketsUtil.getTicketByID(ticket_id);
 
-		List<Key<TicketLabels>> labels = ticket.labels;
+		List<Key<TicketLabels>> labels = ticket.labels_keys_list;
 
 		TicketActivityType ticketActivityType = null;
 
@@ -503,8 +502,8 @@ public class TicketsUtil
 			labels.remove(label);
 			ticketActivityType = TicketActivityType.TICKET_LABEL_REMOVE;
 		}
-		
-		ticket.labels = labels;
+
+		ticket.labels_keys_list = labels;
 		Tickets.ticketsDao.put(ticket);
 
 		new TicketsDocument().edit(ticket);
@@ -537,7 +536,7 @@ public class TicketsUtil
 		{
 			Tickets ticket = TicketsUtil.getTicketByID(ticketId);
 
-			List<Key<TicketLabels>> labels = ticket.labels;
+			List<Key<TicketLabels>> labels = ticket.labels_keys_list;
 
 			for (Key<TicketLabels> label : newLabels)
 			{

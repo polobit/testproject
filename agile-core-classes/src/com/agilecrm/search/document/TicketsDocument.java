@@ -9,10 +9,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.json.JSONObject;
 
-import com.agilecrm.contact.Tag;
-import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.search.BuilderInterface;
-import com.agilecrm.search.QueryInterface.Type;
 import com.agilecrm.ticket.entitys.TicketLabels;
 import com.agilecrm.ticket.entitys.Tickets;
 import com.agilecrm.ticket.entitys.Tickets.Status;
@@ -145,8 +142,8 @@ public class TicketsDocument implements BuilderInterface
 
 			StringBuffer labelsString = new StringBuffer();
 
-			List<TicketLabels> labels = TicketLabels.dao.fetchAllByKeys(ticket.labels);
-			
+			List<TicketLabels> labels = TicketLabels.dao.fetchAllByKeys(ticket.labels_keys_list);
+
 			for (TicketLabels label : labels)
 				labelsString.append(label.label + " ");
 

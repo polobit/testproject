@@ -40,7 +40,7 @@
 
 #recent-reply-notes {
 	display: -webkit-box;
-	height: 70px;
+	max-height: 70px;
 	margin: 0 auto;
 	line-height: 1.5;
 	-webkit-line-clamp: 3;
@@ -197,4 +197,49 @@ ul#ticket-model-list div li, ul#ticket-model-list div li div table{
 
 ul#ticket-model-list div:nth-child(odd) li, ul#ticket-model-list div:nth-child(odd) li div table{ 
 	background-color: #FBFBFB; 
+}
+
+.sort-link{
+	color: #337ab7 !important;
+	text-decoration: none !important;
+}
+
+.sort-link:HOVER{
+	text-decoration: none;
+}
+
+a.sort-by-desc:after{
+	-webkit-font-smoothing: antialiased;
+	box-sizing: border-box;
+	color: rgb(88, 102, 110);
+	display: inline-block;
+	font-family: FontAwesome;
+	content: "\f0d7";
+	font-size: 12px;
+	font-stretch: normal;
+	font-style: normal;
+	font-variant: normal;
+	font-weight: normal;
+	height: 12px;
+	line-height: 12px;
+	margin-left: 5px;
+	text-rendering: auto;
+}
+
+a.sort-by-asc:after{
+	-webkit-font-smoothing: antialiased;
+	box-sizing: border-box;
+	color: rgb(88, 102, 110);
+	display: inline-block;
+	font-family: FontAwesome;
+	content: "\f0d8";
+	font-size: 12px;
+	font-stretch: normal;
+	font-style: normal;
+	font-variant: normal;
+	font-weight: normal;
+	height: 12px;
+	line-height: 12px;
+	margin-left: 5px;
+	text-rendering: auto;
 }

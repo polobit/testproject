@@ -117,9 +117,6 @@ function serializeForm(form_id) {
 	arr = arr.concat($('#' + form_id + ' .chosen-select').map(function() {
 		var fields_set = [];
 
-		
-		alert("in = "+$(this).val());
-		
 		// The array of selected values are mapped with the field name and
 		// returned as a key value pair
 		return {

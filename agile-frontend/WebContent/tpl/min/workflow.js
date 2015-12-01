@@ -999,6 +999,128 @@
         {{/if_other_active_campaigns}}
 	</div>
 </td>
+</script><script id="workflows-model-template" type="text/html">
+	<td class="hide data" data="{{id}}">{{id}}</td>
+	<td><a style="text-decoration:none;">{{name}}</a></td>
+<!--<td><div style="height:auto;text-overflow:ellipsis;white-space:nowrap;width:5em;overflow:hidden;">
+           {{#if pic}} 
+               <img class="thumbnail" src="{{pic}}" width="40px" height="40px" />
+           {{else}}
+               <img class="thumbnail" src="{{defaultGravatarurl 40}}" width="40px" height="40px" />
+           {{/if}}
+           <b> {{creatorName}}</b>
+        </div>
+    </td>
+    <td>
+        <div>
+			<a href="#workflow/active-contacts/{{id}}" id="active-contacts" class="stop-propagation">active</a>, 
+            <a href="#workflow/completed-contacts/{{id}}" id="done-contacts" class="stop-propagation">completed</a>
+        </div>
+    </td>-->
+    <td class="workflow-triggers" workflow-id={{id}}><a href="#trigger-add/{{id}}" class="stop-propagation"><i class="icon-plus" style="font-size:10px;margin-left:15px"></i> Add</a></td>
+	<!--<td><a href="#workflow/all-subscribers/{{id}}" class="workflow-subscribers stop-propagation">Subscribers</a></td>
+	<td><a href="#workflows/logs/{{id}}"  class="stop-propagation ">Logs</a></td> -->
+    <td><a href="#email-reports/{{id}}" class="stop-propagation">Reports</a></td>
+    <td> 
+        {{#if updated_time}}
+        <div>
+            <small class="edit-hover"> 
+		        <span><em>Modified</em>&nbsp;</span>
+                <time class="campaign-created-time" datetime="{{epochToHumanDate "" updated_time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" updated_time}}</time>
+            </small>
+        </div>
+        {{else}}
+        <div>
+            <small class="edit-hover"> 
+		       <span><em>Created</em>&nbsp;</span>
+               <time class="campaign-created-time" datetime="{{epochToHumanDate "" created_time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" created_time}}</time>
+         	</small>
+        </div>
+        {{/if}}
+    </td>  
+<br />
+</script>
+
+<script id="workflows-collection-template" type="text/html">
+<div class="row">
+    <div class="span12">
+        <div class="page-header">
+            <h1>Campaigns <small>{{#campaigns_heading this}}{{/campaigns_heading}}</small></h1>
+			<div class="btn-group right" style="top:-30px;position:relative">
+            	<a href="#workflow-templates" class="btn" id="addWorkflow"><i class="icon-plus-sign"></i> Add Campaign</a>
+            	<a id="campaign-stats" class="btn dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
+				<ul class="dropdown-menu pull-right">
+					<li><a href="#campaign-stats" id="campaign-stats"><i class="icon-bar-chart"></i> Compare Campaigns</a></li>
+				</ul>
+			</div>
+            <a href="#triggers" class="btn right" id="add-trigger" style="top:-30px;position:relative; margin-right:10px"><i class="icon-cog"></i> Manage Triggers</a>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="span9">
+      <!-- Pending Triggers Content -->
+        <div id="triggers-verification" style="margin-top:-10px;display:none;">
+            <div class="alert danger info-block" style="color: black;background-color: rgb(255,255,204);border: 1px solid rgb(211,211,211);">
+                <div>
+                <i class="icon-warning-sign"></i><strong style="">PENDING TRIGGERS. <!--<a href="#trigger-add" style="float: right;cursor: pointer;font-weight: normal;">How to add trigger?</a>--></strong>
+                <p>You have at least one campaign but no triggers yet. <br/></p>
+                <p>Campaigns can be manually run on contact(s) or you can setup a trigger to run the campaign automatically based on certain conditions. <a href="#trigger-add">Setup a new trigger.</a></p>
+                </div>
+            </div>
+        </div>
+        <!-- End of Pending Triggers Content -->
+
+        {{#unless this.length}}
+        <div id="slate">
+        </div>
+        {{/unless}}
+        {{#if this.length}}
+{{add_tag "Campaigns"}}
+        <div class="data-block">
+            <div class="data-container">
+                <table class="table table-striped showCheckboxes" url="core/api/workflows/bulk" id="workflows-tour-step">
+                    <thead>
+                        <tr>
+                            <th class="hide">Id</th>
+                            <th>Name</th>
+                       <!-- <th>Creator</th> -->
+                       <!-- <th>Subscribers</th> -->
+                            <th>Triggers</th>
+                        </tr>
+                    </thead>
+                    <tbody id="workflows-model-list" style="cursor:pointer;" route="workflow/"> </tbody>
+                </table>
+            </div>
+        </div>
+        {{/if}}
+    </div>
+    <div class="span3" id="learn-workflows">
+        <div class="well">
+            <h3>
+                What is Workflow Automation?
+            </h3>
+            <br />
+            <p>
+                Workflow is an intelligent sales and marketing automation process for sending your contacts relevant information at the right time.Use it to automate most of your follow-up activities.
+            </p>
+            <p>
+                e.g. You can send an email to all users who have signed up on your site. And then based on their behavior in the control panel, you can send them targeted messages periodically.
+            </p>
+            <br />
+            <h3>
+                What are Triggers?
+            </h3>
+            <br />
+            <p>
+                Triggers are pre-defined conditions set up by you. If the condition is satisfied, you can choose an action to follow using workflow automation.
+            </p>
+            <p>
+                e.g. If a user registers on your website, you can automate the workflow to send a welcome email. The user registering on site is the trigger.
+            </p>
+        </div>
+    </div>
+</div>
 </script><script type="text/html" id="workflow-categories-template">
 <div class="row">
     <div class="span12">
@@ -1256,126 +1378,4 @@
 {{!-- Shows triggers of each workflow --}}
 {{#toLinkTrigger triggers}} <a href="#trigger/{{id}}" class="stop-propagation">{{name}}</a>{{/toLinkTrigger}}
 
-</script><script id="workflows-model-template" type="text/html">
-	<td class="hide data" data="{{id}}">{{id}}</td>
-	<td><a style="text-decoration:none;">{{name}}</a></td>
-<!--<td><div style="height:auto;text-overflow:ellipsis;white-space:nowrap;width:5em;overflow:hidden;">
-           {{#if pic}} 
-               <img class="thumbnail" src="{{pic}}" width="40px" height="40px" />
-           {{else}}
-               <img class="thumbnail" src="{{defaultGravatarurl 40}}" width="40px" height="40px" />
-           {{/if}}
-           <b> {{creatorName}}</b>
-        </div>
-    </td>
-    <td>
-        <div>
-			<a href="#workflow/active-contacts/{{id}}" id="active-contacts" class="stop-propagation">active</a>, 
-            <a href="#workflow/completed-contacts/{{id}}" id="done-contacts" class="stop-propagation">completed</a>
-        </div>
-    </td>-->
-    <td class="workflow-triggers" workflow-id={{id}}><a href="#trigger-add/{{id}}" class="stop-propagation"><i class="icon-plus" style="font-size:10px;margin-left:15px"></i> Add</a></td>
-	<!--<td><a href="#workflow/all-subscribers/{{id}}" class="workflow-subscribers stop-propagation">Subscribers</a></td>
-	<td><a href="#workflows/logs/{{id}}"  class="stop-propagation ">Logs</a></td> -->
-    <td><a href="#email-reports/{{id}}" class="stop-propagation">Reports</a></td>
-    <td> 
-        {{#if updated_time}}
-        <div>
-            <small class="edit-hover"> 
-		        <span><em>Modified</em>&nbsp;</span>
-                <time class="campaign-created-time" datetime="{{epochToHumanDate "" updated_time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" updated_time}}</time>
-            </small>
-        </div>
-        {{else}}
-        <div>
-            <small class="edit-hover"> 
-		       <span><em>Created</em>&nbsp;</span>
-               <time class="campaign-created-time" datetime="{{epochToHumanDate "" created_time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" created_time}}</time>
-         	</small>
-        </div>
-        {{/if}}
-    </td>  
-<br />
-</script>
-
-<script id="workflows-collection-template" type="text/html">
-<div class="row">
-    <div class="span12">
-        <div class="page-header">
-            <h1>Campaigns <small>{{#campaigns_heading this}}{{/campaigns_heading}}</small></h1>
-			<div class="btn-group right" style="top:-30px;position:relative">
-            	<a href="#workflow-templates" class="btn" id="addWorkflow"><i class="icon-plus-sign"></i> Add Campaign</a>
-            	<a id="campaign-stats" class="btn dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
-				<ul class="dropdown-menu pull-right">
-					<li><a href="#campaign-stats" id="campaign-stats"><i class="icon-bar-chart"></i> Compare Campaigns</a></li>
-				</ul>
-			</div>
-            <a href="#triggers" class="btn right" id="add-trigger" style="top:-30px;position:relative; margin-right:10px"><i class="icon-cog"></i> Manage Triggers</a>
-        </div>
-    </div>
-</div>
-<div class="row">
-    <div class="span9">
-      <!-- Pending Triggers Content -->
-        <div id="triggers-verification" style="margin-top:-10px;display:none;">
-            <div class="alert danger info-block" style="color: black;background-color: rgb(255,255,204);border: 1px solid rgb(211,211,211);">
-                <div>
-                <i class="icon-warning-sign"></i><strong style="">PENDING TRIGGERS. <!--<a href="#trigger-add" style="float: right;cursor: pointer;font-weight: normal;">How to add trigger?</a>--></strong>
-                <p>You have at least one campaign but no triggers yet. <br/></p>
-                <p>Campaigns can be manually run on contact(s) or you can setup a trigger to run the campaign automatically based on certain conditions. <a href="#trigger-add">Setup a new trigger.</a></p>
-                </div>
-            </div>
-        </div>
-        <!-- End of Pending Triggers Content -->
-
-        {{#unless this.length}}
-        <div id="slate">
-        </div>
-        {{/unless}}
-        {{#if this.length}}
-{{add_tag "Campaigns"}}
-        <div class="data-block">
-            <div class="data-container">
-                <table class="table table-striped showCheckboxes" url="core/api/workflows/bulk" id="workflows-tour-step">
-                    <thead>
-                        <tr>
-                            <th class="hide">Id</th>
-                            <th>Name</th>
-                       <!-- <th>Creator</th> -->
-                       <!-- <th>Subscribers</th> -->
-                            <th>Triggers</th>
-                        </tr>
-                    </thead>
-                    <tbody id="workflows-model-list" style="cursor:pointer;" route="workflow/"> </tbody>
-                </table>
-            </div>
-        </div>
-        {{/if}}
-    </div>
-    <div class="span3" id="learn-workflows">
-        <div class="well">
-            <h3>
-                What is Workflow Automation?
-            </h3>
-            <br />
-            <p>
-                Workflow is an intelligent sales and marketing automation process for sending your contacts relevant information at the right time.Use it to automate most of your follow-up activities.
-            </p>
-            <p>
-                e.g. You can send an email to all users who have signed up on your site. And then based on their behavior in the control panel, you can send them targeted messages periodically.
-            </p>
-            <br />
-            <h3>
-                What are Triggers?
-            </h3>
-            <br />
-            <p>
-                Triggers are pre-defined conditions set up by you. If the condition is satisfied, you can choose an action to follow using workflow automation.
-            </p>
-            <p>
-                e.g. If a user registers on your website, you can automate the workflow to send a welcome email. The user registering on site is the trigger.
-            </p>
-        </div>
-    </div>
-</div>
 </script>

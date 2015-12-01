@@ -165,6 +165,29 @@
                 </div>
               </div>
             </div>
+
+            {{#get_allowed_canned_responses_array labels this}}{{/get_allowed_canned_responses_array}}
+            {{#if allowed_canned_responses}}
+            <div class="panel panel-default m-t-md">
+              <div class="panel-body">
+                <div class="row m-n">
+                <div class="col-md-12 p-n">Matched Canned Responses<hr class="m-t-xs m-b-xs"></div>
+                {{#each allowed_canned_responses}}
+                  <div id="ticket_canned_response" class="col-md-12 p-n cursor-pointer ticket-canned-response">
+                    <div class="edit-hover div-max-width">{{title}}</div>
+                    <div id="message" class="edit-hover text-muted div-max-width" title="{{compile_template message ../this}}">{{compile_template message ../this}}</div>
+
+                    {{#unless @last}} <div class="m-t-xs m-b-xs border-highlight text-muted"></div>{{/unless}}
+                    
+                  </div>
+
+                {{/each}}
+                 
+                </div>
+              </div>
+            </div>
+            {{/if}}
+
             <div class="m-t-sm">
               
             </div>
@@ -331,7 +354,7 @@
         </ul>
       </div>  
     </div>
-    <div class="wrapper" contenteditable="true" data-name="html_text" style="min-height:130px">
+    <div id="reply_textarea" class="wrapper" contenteditable="true" data-name="html_text" style="min-height:130px">
         <br/><br/>{{#getCurrentUserPrefs}}{{{signature}}}{{/getCurrentUserPrefs}}
     </div>
     <div class="panel-footer bg-light lt">

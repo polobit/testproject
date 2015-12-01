@@ -45,6 +45,7 @@ var Ticket_Base_Model = Base_Model_View.extend({
 		"click .discard-reply" : "discardReply",
 		"click .timeline" : "renderTicketTimeline",
 		"click .canned-messages" : "showCannedMessages",
+		"click .ticket-canned-response" : "appendCannedResponseMessage",
 
 		//Bulk actions
 		"click .bulk-manage-labels" : "bulkManageLabels"
@@ -175,6 +176,13 @@ var Ticket_Base_Model = Base_Model_View.extend({
 		
 		Tickets_Notes.repltBtn(e);
 	},
+
+	appendCannedResponseMessage : function(e){
+		e.preventDefault();
+		
+		Tickets_Notes.appendCannedResponseMessage(e);
+	},
+
 	discardReply: function(e){
 		e.preventDefault();
 		

@@ -264,7 +264,7 @@ public class Tickets extends Cursor
 	@NotSaved(IfDefault.class)
 	@Embedded
 	@JsonIgnore
-	public List<Key<TicketLabels>> labels = new ArrayList<Key<TicketLabels>>();
+	public List<Key<TicketLabels>> labels_keys_list = new ArrayList<Key<TicketLabels>>();
 
 	/**
 	 * Util attribute to get html content in new ticket
@@ -288,8 +288,8 @@ public class Tickets extends Cursor
 	 * Stores ticket labels
 	 */
 	@NotSaved
-	public List<Long> label_ids = new ArrayList<Long>();
-	
+	public List<Long> labels = new ArrayList<Long>();
+
 	/**
 	 * Default constructor
 	 */
@@ -317,11 +317,15 @@ public class Tickets extends Cursor
 
 		if (contact_key != null)
 			contactID = contact_key.getId();
-		
-		List<Key<TicketLabels>> labelKeys = this.labels;
-		
-		for(Key<TicketLabels> key : labelKeys)
-			this.label_ids.add(key.getId());
+
+		if (labels_keys_list != null)
+		{
+			for (Key<TicketLabels> key : labels_keys_list)
+			{
+				labels.add(key.getId());
+			}
+		}
+
 	}
 
 	/**

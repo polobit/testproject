@@ -1,6 +1,6 @@
 var Ticket_Labels = {
 
-	labelsCollection : new Object(),
+	labelsCollection : undefined,
 
 	initChoosenSelect : function(el) {
 
@@ -25,6 +25,12 @@ var Ticket_Labels = {
 
 	fetchCollection : function(callback) {
 
+		if(this.labelsCollection && this.labelsCollection.toJSON() && callback){
+			callback(this.labelsCollection.toJSON());
+			return;
+		}
+
+
 		var Labels = Backbone.Collection.extend({
 			url : '/core/api/tickets/labels'
 		});
@@ -43,15 +49,12 @@ var Ticket_Labels = {
 
 	showSelectedLabels : function(labels, key, el) {
 
-		if (!this.labelsCollection || $.isEmptyObject(this.labelsCollection)) {
-			this.fetchCollection(function() {
+		this.fetchCollection(function() {
 				Ticket_Labels.prepareOptionsList(labels, key, el);
 			});
 
 			return;
-		}
 
-		this.prepareOptionsList(labels, key, el);
 	},
 
 	prepareOptionsList : function(labels, key, el) {

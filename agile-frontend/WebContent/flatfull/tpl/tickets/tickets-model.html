@@ -84,10 +84,18 @@
     <div class="clear cursor-pointer open-ticket">
       <div class="subject-row tags-row">
         <a class="text-md" href="javascript:;">
+
           {{requester_name}} 
-          {{#each labels}}
-            <span class="label bg-light m-l-xs font-bold" style="font-size: 10.5px;">{{this.label}}</span>
-          {{/each}}
+
+          {{#get_ticket_labels_from_ids labels this}}{{/get_ticket_labels_from_ids}}
+
+          {{#if labelsJSON}}
+
+              {{#each labelsJSON}}<span class="label bg-light m-l-xs font-bold" style="background-color: {{color_code}};">{{label}}</span>
+              {{/each}}
+          
+          {{/if}}
+
         </a>
       </div>
       <div class="text-ellipsis m-t-xs">{{subject}}</div>

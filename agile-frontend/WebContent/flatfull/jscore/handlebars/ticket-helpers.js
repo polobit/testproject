@@ -68,6 +68,9 @@ Handlebars.registerHelper('contains_string', function(value, target, options) {
 Handlebars.registerHelper('get_ticket_labels_from_ids', function(labels,
 		object, options) {
 
+	if(!Ticket_Labels.labelsCollection || !labels)
+		return;
+
 	var newLabelJSON = {};
 	$.each(Ticket_Labels.labelsCollection.toJSON(), function(index, eachLabel) {
 		newLabelJSON[eachLabel.id] = eachLabel;
@@ -81,28 +84,51 @@ Handlebars.registerHelper('get_ticket_labels_from_ids', function(labels,
 
 	});
 
-	object["labels"] = newLabels;
+	object["labelsJSON"] = newLabels;
 
 	return options.fn(object);
 
 });
 
-Handlebars.registerHelper('get_canned_responses_array', function(object, options) {
+Handlebars.registerHelper('get_allowed_canned_responses_array', function(labels, object, options) {
 
-	object["canned_responses"] = Ticket_Canned_Response.cannedResponseCollection.toJSON();
+	console.log("get_allowed_canned_responses_array");
+	console.log(labels);
+
+	var allowedCannedResponses = [];
+
+	if(!Ticket_Canned_Response.cannedResponseCollection)
+		return;
+
+	$.each(Ticket_Canned_Response.cannedResponseCollection.toJSON(), function(index, eachCannedResponse){
+
+		     cannedResponseLabels = eachCannedResponse.labels;
+
+		     var isAllowed = (cannedResponseLabels.length == 0) ? false : true;
+
+		     for (var i = 0; i < cannedResponseLabels.length; i++) {
+				if($.inArray(cannedResponseLabels[i], labels) == -1){
+		     		isAllowed = false;
+		     		continue;
+		     	}
+			}
+
+		     if(isAllowed)
+		     	allowedCannedResponses.push(eachCannedResponse);
+	});
+
+	object["allowed_canned_responses"] = allowedCannedResponses;
 	return options.fn(object);
 
 });
 
-Handlebars.registerHelper('check_is_allowed_canned_response', function(canned_response_labels, ticket_labels, options) {
+Handlebars.registerHelper('compile_template', function(source, data, options) {
 
-	for (var i = 0; ticket_labels.length > 0; i++) {
-
-		if ($.inArray( ticket_labels[i], canned_response_labels ) != -1)
-		  return options.fn(this);
-	};
-
-	return options.inverse(this);
+	console.log("compile_template");
+	console.log(data);
+	var template = Handlebars.compile(source);
+			
+	return template(data);
 
 });
 
