@@ -666,7 +666,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 				acl_util.initTagACL(el);
 				initializeTagManagementListeners();
 				$(".allow_users_switch").tooltip({
-			        title: "<p>Allow all users to add New Tags</p><p>Disable this option if you don't want users (non-admin) to add new tags on contacts or companies, apart from the tags listed here.</p>",  
+			        title: "<p>Allow all users to add New Tags.</p><p>Disable this option if you don't want users (non-admin) to add new tags on contacts or companies, apart from the tags listed here.</p>",  
 			        html: true,
 			        placement : 'bottom'
 			    }); 
