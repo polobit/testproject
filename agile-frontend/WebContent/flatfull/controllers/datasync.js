@@ -11,6 +11,7 @@ routes : {
 
             "sync": "dataSync",
             "sync/contacts": "google_contacts_sync",
+            "sync/calendar-setup": "google_calendar_setup",
             "sync/stripe-import": "stripe_sync",
             "sync/shopify": "shopify",
             "sync/salesforce": "salesforce",
@@ -113,6 +114,42 @@ google_calendar:function(el){
 	            }, "#content");
 
 	        },
+            google_calendar_setup: function()
+            {
+                getTemplate('settings', {}, undefined, function(template_ui) {
+
+                    $('#content').html($(template_ui));
+                    $('#PrefsTab .select').removeClass('select');
+                    $('.contact-sync-tab').addClass('select');
+
+                getTemplate('data-sync-settings', {}, undefined, function(template_ui1){
+                        if(!template_ui1)
+                            return;
+                        $("#prefs-tabs-content").html(template_ui1);
+                        var dataSynctTab = localStorage.getItem("datasync_tab");
+                        $("#prefs-tabs-content").find('a[href="#'+dataSynctTab+'"]').closest("li").addClass("active");
+                        initializeTabListeners("datasync_tab", "sync");
+                          var calendar_settings_view = new Calendar_Sync_Settings_View({
+                        url : "core/api/calendar-prefs/get",
+                        template : "import-google-calendar-setup",
+                        postRenderCallback: function(el)
+                        {
+                                head.js(LIB_PATH + 'lib/jquery.multi-select.js', function()
+                                    {
+
+                                        $('#multi-select-calendars', el).multiSelect();
+
+                                    });
+                        }
+                    });
+                    $("#data-sync-settings-tab-content").html(calendar_settings_view.render().el);
+                    
+                    }, null);
+                  
+
+
+                }, "#content");
+            },
 
 
         stripe_sync: function() {
