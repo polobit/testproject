@@ -24,6 +24,15 @@ var DealsRouter = Backbone.Router.extend({
 		pipeline_id = 0;
 		if (readCookie("agile_deal_track"))
 			pipeline_id = readCookie("agile_deal_track");
+		var deal_filters = readCookie('deal-filters');
+		if(deal_filters)
+		{
+			var filtersJSON = $.parseJSON(deal_filters);
+			if(filtersJSON && filtersJSON.pipeline_id)
+			{
+				pipeline_id = filtersJSON.pipeline_id;
+			}
+		}
 		$('#content').html("<div id='opportunity-listners'>&nbsp;</div>");
 		// Depending on cookie shows list or milestone view
 		if (!readCookie("agile_deal_view"))
@@ -185,16 +194,17 @@ var DealsRouter = Backbone.Router.extend({
 				populateUsers('owners-list-filters', el, undefined, undefined, function(){
 					populateTracks(el, undefined, undefined, function(){
 						if(deal_filter.get('pipeline_id')){
+							deserializeForm(deal_filter_json, $("#dealsFilterForm"));
 							populateMilestones(el, undefined, deal_filter.get('pipeline_id'), deal_filter_json, function(){
 								$('#owners-list-filters').find('option[value=""]').text('Any');
 								$('#pipeline').find('option[value=""]').text('Any');			
-								$('#milestone').find('option[value=""]').text('Any');
 								$('#pipeline', $('#opportunity-listners')).trigger('change');
-								deserializeForm(deal_filter_json, $("#dealsFilterForm"));
+								$('#value_filter', $('#opportunity-listners')).trigger('change');
 								setTimeout(function(){
 									if(deal_filter.get('milestone')){
 										$('#milestone').find('option[value="'+deal_filter.get("milestone")+'"]').attr("selected","selected");
 									}
+									$('#milestone').find('option[value=""]').text('Any');
 								},500);
 							});
 						}else{

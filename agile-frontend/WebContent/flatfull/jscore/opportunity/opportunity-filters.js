@@ -144,7 +144,7 @@ function setupDealFilters(cel)
 
 function setupNewDealFilters(callback)
 {
-	App_Deals.deal_filters = new Base_Collection_View({url : '/core/api/deal/filters'});
+	App_Deals.deal_filters = new Base_Collection_View({url : '/core/api/deal/filters', sort_collection : false});
 	
 	App_Deals.deal_filters.collection.fetch({
 		success: function(data){
@@ -156,22 +156,39 @@ function setupNewDealFilters(callback)
 }
 function setNewDealFilters(data){
 	var filters_list = data.toJSON();
-	var filters_ui = "<li><a class='default_deal_filter'>All Deals</a></li>" + 
+	var filters_ui = "<li><a class='default_deal_filter'>All</a></li>" +
+					 "<li><a class='deal-filter' id='my-deals'>My</a></li>" + 
 					 "<li class='divider'></li>" + 
-					 "<li><a href='#deal-filters'>Add/Edit Filter</a></li>" +
-					 "<li class='divider'></li>" +
-					 "<li><a class='deal-filter' id='my-deals'>My Deals</a></li>";
+					 "<li><a href='#deal-filters'>Add/Edit Filter</a></li>";
+	if (filters_list && filters_list.length > 0)
+	{
+		filters_ui += "<li class='divider'></li>";
+	}
 	$.each(filters_list,function(index, filter){
 		filters_ui += "<li><a class='deal-filter' id='"+filter.id+"'>"+filter.name+"</a></li>"
 	});
 	$('#deal-filter-list-model-list').html(filters_ui);
 	var cookie_filter_id = readCookie("deal-filter-name");
 	if(cookie_filter_id && cookie_filter_id != 'my-deals' && data.get(cookie_filter_id) && data.get(cookie_filter_id).get('name')){
-		$('#opportunity-listners').find('h3').find('small').after('<div class="inline-block tag btn btn-xs btn-primary m-l-xs"><span class="inline-block m-r-xs v-middle">'+data.get(cookie_filter_id).get("name")+'</span><a class="close default_deal_filter">×</a></div>');
+		$('#opportunity-listners').find('h3').find('small').after('<div class="inline-block tag btn btn-xs btn-primary m-l-xs"><span class="inline-block m-r-xs v-middle pull-left">'+data.get(cookie_filter_id).get("name")+'</span><a class="close default_deal_filter">×</a></div>');
+		var filters = readCookie('deal-filters');
+		if(filters){
+			var filtersJSON = $.parseJSON(filters);
+			if(filtersJSON && filtersJSON.pipeline_id){
+				createCookie('agile_deal_track', filtersJSON.pipeline_id);
+				$('#deals-tracks').find('button').attr('disabled', true);
+			}
+		}
 	}else if(cookie_filter_id && cookie_filter_id == 'my-deals'){
 		$('#opportunity-listners').find('h3').find('small').after('<div class="inline-block tag btn btn-xs btn-primary m-l-xs"><span class="inline-block m-r-xs v-middle">My Deals</span><a class="close default_deal_filter">×</a></div>');
 	}else{
-		eraseCookie('deal-filters');
+		var deal_filter_json = {};
+		deal_filter_json['owner_id'] = "";
+		deal_filter_json['pipeline_id'] = readCookie('agile_deal_track');
+		deal_filter_json['milestone'] = "";
+		deal_filter_json['archived'] = "all";
+		deal_filter_json['value_filter'] = "equals";
+		createCookie('deal-filters', JSON.stringify(deal_filter_json));
 	}
 }
 function updateFilterColor()
@@ -282,8 +299,8 @@ function getDealFilters()
 		// Remove the milestone field in the filters if it is milestone view.
 		if (filterJSON && !readCookie("agile_deal_view")){
 			var json = filterJSON;
-			if (!json.pipeline_id)
-				json.pipeline_id = readCookie('agile_deal_track');
+			/*if (!json.pipeline_id)
+				json.pipeline_id = readCookie('agile_deal_track');*/
 			json.milestone = '';
 			return JSON.stringify(json);
 		}else if (filterJSON && readCookie("agile_deal_view")){
@@ -754,8 +771,8 @@ $('#opportunity-listners').on('click', '.deals-list-view', function(e) {
     	App_Deals.deals();
     });
 
-    $('#opportunity-listners').off('click', '#value_filter');
-	$('#opportunity-listners').on('click', '#value_filter', function(e) {
+    $('#opportunity-listners').off('change', '#value_filter');
+	$('#opportunity-listners').on('change', '#value_filter', function(e) {
 		var that = $(this);
     	that.find('option').each(function(){
     		if($(this).val()==that.val()){
@@ -784,6 +801,7 @@ $('#opportunity-listners').on('click', '.deals-list-view', function(e) {
 		var deal_filter_json = {};
 		if(filter_id == 'my-deals'){
 			deal_filter_json['owner_id'] = CURRENT_DOMAIN_USER.id;
+			deal_filter_json['pipeline_id'] = readCookie('agile_deal_track');
 			deal_filter_json['milestone'] = "";
 			deal_filter_json['archived'] = "all";
 			deal_filter_json['value_filter'] = "equals";

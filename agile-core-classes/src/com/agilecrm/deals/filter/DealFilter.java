@@ -46,13 +46,13 @@ public class DealFilter {
     public String value_filter = null;
     
     @NotSaved(IfDefault.class)
-    public Long value = null;
+    public String value = null;
     
     @NotSaved(IfDefault.class)
-    public Long value_start = null;
+    public String value_start = null;
     
     @NotSaved(IfDefault.class)
-    public Long value_end = null;
+    public String value_end = null;
     
     @NotSaved(IfDefault.class)
     public String archived = null;
@@ -90,7 +90,7 @@ public class DealFilter {
     	this.view_type=view_type;
     }
     
-    public DealFilter(String name, String view_type, Long owner_id, String value_filter, Long value, String archived){
+    public DealFilter(String name, String view_type, Long owner_id, String value_filter, String value, String archived){
     	this.name=name;
     	this.view_type=view_type;
     	this.owner_id=owner_id;
@@ -99,7 +99,7 @@ public class DealFilter {
     	this.archived=archived;
     }
     
-    public DealFilter(String name, String view_type, Long owner_id, Long pipeline_id, String milestone, String value_filter, Long value, Long value_start, Long value_end, String archived){
+    public DealFilter(String name, String view_type, Long owner_id, Long pipeline_id, String milestone, String value_filter, String value, String value_start, String value_end, String archived){
     	this.name=name;
     	this.view_type=view_type;
     	this.owner_id=owner_id;
