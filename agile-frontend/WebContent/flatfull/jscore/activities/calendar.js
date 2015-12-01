@@ -61,7 +61,13 @@ function load_events_from_google(callback)
 //		}
 	}
 
-	// Name of the cookie to store/ calendar prefs. Current user id is set
+	get_google_calendar_prefs(callback);
+
+}
+
+function get_google_calendar_prefs(callback)
+{
+		// Name of the cookie to store/ calendar prefs. Current user id is set
 	// in cookie name to avoid
 	// showing tasks in different users calendar if logged in same browser
 	var google_calendar_cookie_name = "_agile_google_calendar_prefs_" + CURRENT_DOMAIN_USER.id;
