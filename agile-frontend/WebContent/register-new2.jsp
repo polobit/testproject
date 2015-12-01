@@ -18,7 +18,7 @@ String CLOUDFRONT_STATIC_FILES_PATH = VersioningUtil.getStaticFilesBaseURL();
 CSS_PATH = CLOUDFRONT_STATIC_FILES_PATH;
 if(SystemProperty.environment.value() == SystemProperty.Environment.Value.Development)
 {
-	  CLOUDFRONT_STATIC_FILES_PATH = FLAT_FULL_PATH;
+	  CLOUDFRONT_STATIC_FILES_PATH = FLAT_FULL_PATH;pla
 	  CLOUDFRONT_TEMPLATE_LIB_PATH = "";	
 	  CSS_PATH = FLAT_FULL_PATH;
 }
@@ -119,7 +119,7 @@ This is where you and your users will log in to your account
 											<option value="Free">Free</option>
 											<option value="Starter">Starter</option>
 											<option value="Regular">Regular</option>
-											<option value="pro">Pro</option>
+											<option value="pro">Enterprise</option>
 								 	 </select>
 </div>
 </div>
