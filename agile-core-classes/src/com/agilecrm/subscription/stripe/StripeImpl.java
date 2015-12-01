@@ -2,6 +2,7 @@ package com.agilecrm.subscription.stripe;
 
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -9,12 +10,18 @@ import org.apache.commons.lang.StringUtils;
 import org.codehaus.jettison.json.JSONObject;
 
 import com.agilecrm.Globals;
+import com.agilecrm.contact.Contact;
+import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.subscription.AgileBilling;
 import com.agilecrm.subscription.Subscription;
 import com.agilecrm.subscription.SubscriptionUtil;
 import com.agilecrm.subscription.stripe.webhooks.StripeWebhookServlet;
 import com.agilecrm.subscription.ui.serialize.CreditCard;
 import com.agilecrm.subscription.ui.serialize.Plan;
+import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.util.DomainUserUtil;
+import com.agilecrm.util.DateUtil;
+import com.google.appengine.api.NamespaceManager;
 import com.google.gson.Gson;
 import com.stripe.Stripe;
 import com.stripe.exception.StripeException;
@@ -81,12 +88,23 @@ public class StripeImpl implements AgileBilling {
 	public JSONObject createCustomer(CreditCard cardDetails, Plan plan)
 			throws Exception {
 
-		// Creates customer and add subscription to it
+		// Creates customer with card details
 		Customer customer = Customer.create(StripeUtil.getCustomerParams(
-				cardDetails, plan));
+				cardDetails));
 
-		plan.subscription_id = customer.getSubscription().getId();
-
+		//plan.subscription_id = customer.getSubscription().getId();
+		// Free trial for 7 days for new customers
+		Map<String, Object> updateParams = new HashMap<String, Object>();
+		updateParams.put("plan", plan.plan_id);
+		updateParams.put("quantity", plan.quantity);
+		if(!plan.plan_id.contains("email")  && !plan.plan_type.name().contains("STARTER") && plan.trialStatus.equals("apply")){
+			plan.trialStatus = "applied";
+			//updateParams.put("trial_end", new DateUtil().addDays(7).getTime().getTime() / 1000);
+			//For testing just 2 hours to cancel trial
+			updateParams.put("trial_end", new DateUtil().addMinutes(30).getTime().getTime()/1000);
+		}
+		customer.createSubscription(updateParams);
+		
 		System.out.println(customer);
 		System.out.println(StripeUtil.getJSONFromCustomer(customer));
 		// Return Customer JSON
@@ -212,7 +230,37 @@ public class StripeImpl implements AgileBilling {
 		if (oldSubscription != null) {
 			oldSubscription.update(updateParams);
 		} else {
+			boolean isCancelledUser = false;
+			String namespace = NamespaceManager.get();
+			DomainUser user = DomainUserUtil.getCurrentDomainUser();
+			NamespaceManager.set("our");
+			System.out.println("Changed name space to::: "+NamespaceManager.get());
+			try
+			{
+				System.out.println("OUR domain user Email:: "+user.email);
+				// Fetches contact form our domain
+				Contact contact = ContactUtil.searchContactByEmail(user.email);
+				System.out.println("contact in our domain :::"+contact.name);
+				LinkedHashSet<String> tagsList = contact.tags;
+				if(tagsList.contains("Cancellation Request") || tagsList.contains("Cancelled Trial"))
+					isCancelledUser = true;
+			}
+			catch (Exception e)
+			{
+			    e.printStackTrace();
+			    System.err.println("Exception occured while retrieving tags..." + e.getMessage());
+			}
 
+			finally
+			{
+			    NamespaceManager.set(namespace);
+			}
+			if(!isCancelledUser && plan.trialStatus.equals("apply")){
+				plan.trialStatus = "applied";
+				//updateParams.put("trial_end", new DateUtil().addDays(7).getTime().getTime() / 1000);
+				//For testing just 2 hours to cancel trial
+				updateParams.put("trial_end", new DateUtil().addMinutes(30).getTime().getTime()/1000);
+			}
 			customer.createSubscription(updateParams);
 
 			if (!customer_metadata.isEmpty()) {

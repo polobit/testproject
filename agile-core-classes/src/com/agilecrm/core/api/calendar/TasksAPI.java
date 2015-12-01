@@ -1,6 +1,8 @@
 package com.agilecrm.core.api.calendar;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
@@ -13,8 +15,10 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 
+import org.codehaus.jackson.map.ObjectMapper;
 import org.json.JSONArray;
 import org.json.JSONException;
 
@@ -521,7 +525,7 @@ public class TasksAPI
 
 	return task;
     }
-    
+
     /**
      * get all deals related to task
      */
@@ -558,6 +562,86 @@ public class TasksAPI
 	}
 
 	return TaskUtil.getNewTasks(null, null);
+    }
+
+    /**
+     * Updates Task.
+     * 
+     * @param TaskJson
+     *            - Task object that is updated.
+     * @return - updated Task.
+     * @throws JSONException
+     * @throws IOException
+     * @throws JsonMappingException
+     * @throws JsonParseException
+     */
+
+    @Path("/partial-update")
+    @PUT
+    @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    public Task updateTaskForDeveloper(String taskJson) throws JSONException
+    {
+
+	// Get data and check if id is present
+	org.json.JSONObject obj = new org.json.JSONObject(taskJson);
+	List<String> contact_idList = new ArrayList<String>();
+	ObjectMapper mapper = new ObjectMapper();
+
+	if (!obj.has("id"))
+	    return null;
+
+	Task task = TaskUtil.getTask(obj.getLong("id"));
+
+	if (task == null)
+	    return null;
+
+	Iterator<?> keys = obj.keys();
+
+	while (keys.hasNext())
+	{
+	    String key = (String) keys.next();
+
+	    if (key.equals("subject"))
+		task.subject = obj.getString(key);
+
+	    if (key.equals("type"))
+		task.type = obj.getString(key);
+
+	    if (key.equals("due"))
+		task.due = obj.getLong(key);
+
+	    if (key.equals("progress"))
+		task.progress = obj.getInt(key);
+
+	    if (key.equals("contacts"))
+	    {
+
+		// contact_ids = contact_idString.split(",");
+		JSONArray contact_idJSONArray = new JSONArray(obj.getString(key));
+		for (int i = 0; i < contact_idJSONArray.length(); i++)
+		{
+		    contact_idList.add(contact_idJSONArray.getString(i));
+
+		}
+	    }
+	}
+
+	if (contact_idList.size() > 0)
+	{
+	    try
+	    {
+		task.addContactIdsToTask(contact_idList);
+	    }
+	    catch (WebApplicationException e)
+	    {
+		return null;
+	    }
+	}
+	else
+	    task.save();
+
+	return task;
     }
     /***************************************************************************/
 }

@@ -120,6 +120,16 @@ function update_price()
 {
 	// Get the selected plan cost
 	var plan_name = $("#plan_type").val();
+	if(_billing_restriction.currentLimits.planName == "FREE")
+	{
+		if(plan_name == "starter" || IS_CANCELLED_USER)
+			$("#purchase-plan").text("Proceed to Pay");
+		else if(IS_TRIAL)
+			$("#purchase-plan").text("Proceed to Trial");
+		else
+			$("#purchase-plan").text("Proceed to Pay");
+	}else
+		$("#purchase-plan").text("Proceed to Pay");
 	return $("#" + plan_name + "_plan_price").text();
 }
 
@@ -409,6 +419,19 @@ function initializeSubscriptionListeners()
 				}
 
 				var currentDate = new Date();
+
+				if(_billing_restriction.currentLimits.planName == "FREE")
+				{
+					if(plan_name == "starter" || IS_CANCELLED_USER)
+						plan_json.date = currentDate.setMonth(currentDate.getMonth() + months) / 1000;
+					else if(IS_TRIAL)
+						plan_json.date = currentDate.setHours(currentDate.getHours()+168);
+					else
+						plan_json.date = currentDate.setMonth(currentDate.getMonth() + months) / 1000;
+				}else
+					plan_json.date = currentDate.setMonth(currentDate.getMonth() + months) / 1000;
+
+				
 				plan_json.date = currentDate.setMonth(currentDate.getMonth() + months) / 1000;
 				plan_json.new_signup = is_new_signup_payment();
 				plan_json.price = update_price();
@@ -454,6 +477,8 @@ function initializeSubscriptionListeners()
 				plan_json.quantity = quantity;
 				plan_json.current_plan = USER_DETAILS.getCurrentPlanName(USER_BILLING_PREFS);
 				plan_json.domain_name = USER_DETAILS.getDomainName(USER_BILLING_PREFS);
+				if(IS_TRIAL)
+					plan_json.trialStatus = "apply";
 				if (!$.isEmptyObject(USER_CREDIRCARD_DETAILS))
 				{
 
@@ -595,6 +620,34 @@ function initializeSubscriptionListeners()
 
 			return parseInt(value) >= 5;
 		}, " Should purchase a minimum of 5000 emails.");
+	});
+
+	$("#subscribe_plan_change").on("click","#cancel_free_trial",function(e){
+		e.preventDefault();
+		if (!confirm("Are you sure you want cancel your trial?"))
+			return;
+		$.ajax({url:'core/api/subscription/cancel/trial',
+			type:'GET',
+			success:function(data){
+				if(data && JSON.parse(data).is_success)
+				{
+					add_tag_our_domain("Cancelled Trial");
+					document.location.reload();
+				}else if(data)
+				{
+					getTemplate("trial-error-modal",JSON.parse(data) , undefined, function(template_ui){
+						if(!template_ui)
+							  return;
+						$(template_ui).modal('show');
+					}, null);
+				}
+
+
+				
+			},error: function(){
+				alert("Error occured, Please try again");
+			}
+		});
 	});
 
 }
