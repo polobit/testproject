@@ -226,12 +226,17 @@ renders inner sync view and binds all model events to DataSync_Event_Modal_View
 */
 
   function renderInnerSyncView(url,templateName,data,callback){
-
   		 var data_sync = new DataSync_Event_Modal_View({
 			                    url: url,
 			                    template: templateName,
 			                    data:data,
 			                    saveCallback: function(model) {
+			                       if(model){
+		                       		if(model.widgetName == "office365Cal"){
+		                       			App_Datasync.dataSync();		                       	
+		                       			$('#prefs-tabs-content a[href="#office365-tab"]').tab('show');
+		                       		}
+			                       }
 			                       callback(model);
 			                    }
 			                });

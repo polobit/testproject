@@ -17,6 +17,7 @@ public class Office365CalendarPrefs {
 	public String username;
 	public String password;
 	public String serverUrl;
+	public String widgetName = "office365Cal";
 
 	public Office365CalendarPrefs() {
 

@@ -35,7 +35,7 @@
                     <div class="m-b-md"   rel="tooltip" >
                         Configure Your Office 365 Account.
                     </div>
-                    <form id="office365-calendar-form">
+                    <form id="office365-calendar-form">                
                     <div class="form-group">
                         <label for="office365-calendar-usrname">Username</label>
                         <input type="email" required="required" class="form-control" id="office365-calendar-usrname" name="username" placeholder="Email">
@@ -46,13 +46,13 @@
                     </div>
                     <div class="form-group">
                         <label for="office365-calendar-outlook-url">Outlook URL</label>
-                        <input id="office365-calendar-outlook-url" required="required" name="serverUrl" class="form-control"  type="text" placeholder="https://outlook.office365.com">
+                        <input id="office365-calendar-outlook-url" required="required" name="serverUrl" class="form-control isHttpsURL"  type="text" placeholder="https://outlook.office365.com">
                     </div>
                     <a href ="#" id ="office365-calendar-save" class="btn btn-sm btn-primary m-t save">Save</a>
                     </form>
                 {{/unless}}
                  <form id="office365-calendar-form">
-                    <input type ="hidden" value = "{{id}}" name ="id">  
+                    <input type ="hidden" value = "{{id}}" name ="id">                      
                     {{#if id}}
                         <div class="form-group">
                             <label for="office365-calendar-usrname">Username</label>
@@ -64,7 +64,7 @@
                         </div>
                         <div class="form-group">
                             <label for="office365-calendar-outlook-url">Outlook URL</label>
-                            <input id="office365-calendar-outlook-url" required="required" name="serverUrl" class="form-control"  type="text" placeholder="https://outlook.office365.com" value="{{serverUrl}}">
+                            <input id="office365-calendar-outlook-url" required="required" name="serverUrl" class="form-control isHttpsURL"  type="text" placeholder="https://outlook.office365.com" value="{{serverUrl}}">
                         </div>
                         <!-- <a href ="#" id ="office365-calendar-save" class="btn btn-sm btn-primary m-t save">Save</a> -->
                         <div class="form-actions">

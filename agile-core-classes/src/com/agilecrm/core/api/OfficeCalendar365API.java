@@ -55,6 +55,7 @@ public class OfficeCalendar365API {
 	@Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	public Office365CalendarPrefs setOfficeCalendarPrefs(
 			Office365CalendarPrefs officeCalendar) {
+		officeCalendar.widgetName = "office365Cal";
 		officeCalendar.save();
 		return officeCalendar;
 	}

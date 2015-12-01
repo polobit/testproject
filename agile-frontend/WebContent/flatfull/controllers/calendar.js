@@ -710,18 +710,22 @@ function loadOfficeEvents(calStartDateObj, calEndDateObj){
 
 	var url = "core/api/officecalendar/office365-appointments?startDate="+ calStartDateObj.getTime() +"&endDate="+ calEndDateObj.getTime();
 	$.getJSON(url, function(response){
-		var jsonArray = [];
-		for (var i=0; i<response.length; i++){			
-			var obj = response[i];
-			//Start Date
-			var startDate = Math.round((new Date(obj.start).getTime()) / 1000);
-			obj.start = startDate;
-			//End Date
-			var endDate = Math.round((new Date(obj.end).getTime()) / 1000);
-			obj.end = endDate;
-			jsonArray.push(obj);		
-		}	
-		addEventSourceToCalendar('office', jsonArray);
-		showLoadingOnCalendar(false);	
+		if(response){
+			var jsonArray = [];
+			for (var i=0; i<response.length; i++){		
+				var obj = response[i];
+				//Start Date
+				var startDate = Math.round((new Date(obj.start).getTime()) / 1000);
+				obj.start = startDate;
+				//End Date
+				var endDate = Math.round((new Date(obj.end).getTime()) / 1000);
+				obj.end = endDate;
+				jsonArray.push(obj);		
+			}	
+			addEventSourceToCalendar('office', jsonArray);
+			showLoadingOnCalendar(false);	
+		}else{
+			// else case need to apply
+		}
 	});	
 }
