@@ -39,8 +39,8 @@
    <center> <img class="m-b-none thumb-xl bg-transparent" style="height:47px;" src="/img/icons/google-calendar-sync.png" /></center>
 	</div>
 	<div class="panel-body">
-
-    <form id="google-contacts-import-form">
+	<form name="test" id="dummy"></form>
+    <form id="google-contacts-import-form" name="prefs">
         <fieldset>
             <div class="control-group form-group">
 				<label class="control-label">Select Calendars To Display</label> 
@@ -48,19 +48,19 @@
 
         	<div class="control-group form-group" id="sync_from_group_controlgroup">
            <div class="controls">
-				<select multiple id="multi-select-calendars" name="fields"> 
+				<select multiple id="multi-select-calendars" name="fields" class="multi-select"> 
         			<option value=Primary>Primary</option>
         			<option value=Sales>Sales</option>
         			<option value=Tasks>Tasks</option>
         		</select>
 			</div>
 		</div>
-   <div class="form-actions text-center">
-		<a href="#sync" class="btn btn-default btn-sm ml_5">Cancel</a>
-		<div class="btn btn-sm btn-primary save-contact-prefs inline-block" id="google-import-prefs-save">Sync</div>
-	</div>
         </fieldset>
     </form>
+      <div class="form-actions text-center">
+		<a href="#sync" class="btn btn-default btn-sm ml_5">Cancel</a>
+		<div class="btn btn-sm btn-primary save inline-block">Save</div>
+	</div>
     </div>
 </div>
 </div>
