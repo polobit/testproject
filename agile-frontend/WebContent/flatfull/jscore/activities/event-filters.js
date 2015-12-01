@@ -233,7 +233,9 @@ function renderFullCalenarEvents(ownerid)
 
 	eventsURL += '&owner_id=' + ownerid;
 	console.log('-----------------', eventsURL);
-	$.getJSON(eventsURL, function(doc)
+	addEventsToCalendar(eventsURL)
+
+/*	$.getJSON(eventsURL, function(doc)
 	{
 		$.each(doc, function(index, data)
 		{
@@ -246,31 +248,133 @@ function renderFullCalenarEvents(ownerid)
 
 		showLoadingOnCalendar(false);
 
-	});
+	});*/
 
+}
+
+var functions = {};
+function addEventsToCalendar(eventsURL)
+{
+		var resultMap = {};
+		if(!eventsURL)
+			return;
+		showLoadingOnCalendar(true);
+		$.getJSON(eventsURL, function(doc)
+									{
+
+										if(doc && doc.length > 0)
+										$.each(doc, function(index, data)
+										{
+											// decides the color of event based
+											// on owner id
+											console.log(data);
+											if(!resultMap[data.owner.id])
+											{
+												var array = [];
+												resultMap[data.owner.id] = array;
+											}
+
+												data = renderEventBasedOnOwner(data);
+												resultMap[data.owner.id].push(data);
+
+										});
+
+										console.log(resultMap);
+										$.each(resultMap, function(index, eventArray){
+												console.log(index);
+												addEventSourceToCalendar(index, eventArray);
+										});
+
+										showLoadingOnCalendar(false)
+							});
+}
+
+function addEventSourceToCalendar(key, eventArray)
+{
+			$('#calendar_event').fullCalendar('removeEventSource', functions["event_" + key]);
+
+			functions["event_" + key] = function(start, end, callback)
+			{
+				console.log(this);
+				console.log("function : " +  "event_" + functions["event_" + key])
+				callback(eventArray);
+			}
+
+			
+			//if(addScource)
+			$('#calendar_event').fullCalendar('addEventSource', functions["event_" + key]);
+
+			eventArray = [];
+}
+
+function removeEventSource(key)
+{
+	//if(addScource)
+	$('#calendar_event').fullCalendar('removeEventSource', functions["event_" + key]);
+}
+
+function addGoogleCalendarEvents()
+{
+	addAsyncCalendarEvents(loadUserEventsfromGoogle);
+//	$('#calendar_event').fullCalendar('removeEventSource', tempFunction);
+
+}
+
+function addAsyncCalendarEvents(asyncCallbackFunction)
+{
+	if(!asyncCallbackFunction || typeof asyncCallbackFunction != 'function')
+	{
+		return;
+	}
+	var tempFunction = function(start, end, callback)
+	{
+		asyncCallbackFunction(start, end);
+		callback({});
+		$('#calendar_event').fullCalendar('removeEventSource', tempFunction);
+		return;
+	}
+
+	$('#calendar_event').fullCalendar('addEventSource', tempFunction);
 }
 
 /**
  * removed full calendar events based on ids
  * @param ownerid
  */
-function removeFullCalendarEvents(ownerid)
+function removeFullCalendarEvents(domain_user_id)
 {
-	var start_end_time = JSON.parse(readCookie('fullcalendar_start_end_time'));
+	if(!domain_user_id)
+		return;
 
-	var eventsURL = '/core/api/events?start=' + start_end_time.startTime + "&end=" + start_end_time.endTime;
+	showLoadingOnCalendar(true);
+	removeEventSource(domain_user_id);
 
-	eventsURL += '&owner_id=' + ownerid;
-	console.log('-----------------', eventsURL);
-	$.getJSON(eventsURL, function(doc)
+	// Removes all events at once
+	$('#calendar_event').fullCalendar('removeEvents', function(value, index) {
+		if(value && value.owner && value.owner.id)
+			return value.owner.id == domain_user_id;
+		else
+			return false;
+	});
+
+	showLoadingOnCalendar(false);
+
+
+/*	$.getJSON(eventsURL, function(doc)
 	{
 		$.each(doc, function(index, data)
 		{
-			$('#calendar_event').fullCalendar('removeEvents', data.id);
+			if(data.id)
+				ids.push(data.id);	
 		});
-		showLoadingOnCalendar(false);
-	});
 
+		// Removes all events at once
+		$('#calendar_event').fullCalendar('removeEvents', function(value, index) {
+			return $.inArray(value, ids) < 0;
+		});
+
+		
+	});*/
 }
 
 
@@ -305,7 +409,6 @@ function getOwnerIdsFromCookie(uncheckedagile)
 	}
 	return agile_event_owners;
 }
-
 
 /**
  * fetches google events
@@ -472,6 +575,21 @@ function revertEventColorBasedOnPriority(event)
 
 }
 
+
+var loadingCounter = 0;
+function pushLoading()
+{
+	if(loadingCounter < 0)
+		loadingCounter = 0;
+	loadingCounter ++ ;
+	return loadingCounter;
+}
+
+function popLoading()
+{
+	loadingCounter--;
+	return loadingCounter;
+}
 /**
  * shows loading symbol while fetching events
  * @param loading
@@ -480,13 +598,15 @@ function showLoadingOnCalendar(loading)
 {
 	if (loading)
 	{
+		pushLoading();
+
 		$("#loading_calendar_events").remove();
 		$('.fc-header-left').append(
 				'<span id="loading_calendar_events" style="margin-left:5px;vertical-align:middle;padding-top: 5px;position: absolute;">loading...</span>')
 				.show();
 		$('.fc-header-left').show();
 	}
-	else
+	else if(popLoading() <= 0)
 	{
 		$("#loading_calendar_events").hide();
 	}
