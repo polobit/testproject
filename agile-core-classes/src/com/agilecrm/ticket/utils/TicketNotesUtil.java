@@ -103,6 +103,7 @@ public class TicketNotesUtil
 		json.put("ticket_id", ticket.id);
 		json.put("group_name", groupName);
 		json.put("agent_name", agentName);
+		json.put("tracking_img", appendTrackingImage(ticket.id, notesList.get(0).id));
 
 		JSONArray notesArray = new JSONArray();
 
@@ -344,7 +345,7 @@ public class TicketNotesUtil
 	 *            - TrackerId or SubscriberId.
 	 * @return html string with appended image.
 	 **/
-	public static String appendTrackingImage(String html, String ticketID, String notesID)
+	public static String appendTrackingImage(Long ticketID, Long notesID)
 	{
 		String queryParams = "";
 
@@ -354,8 +355,8 @@ public class TicketNotesUtil
 
 		String trackingImage = "<div class=\"ag-img\"><img src="
 				+ VersioningUtil.getHostURLByApp(NamespaceManager.get()) + "/ticket/open?" + queryParams
-				+ " nosend=\"1\" style=\"display:none!important;\" width=\"1\" height=\"1\"></img></div>";
+				+ " nosend=\"1\" style=\"display:none !important;\" width=\"1\" height=\"1\"></img></div>";
 
-		return html + trackingImage;
+		return trackingImage;
 	}
 }

@@ -92,7 +92,8 @@
       </div>
       <div class="text-ellipsis m-t-xs">{{subject}}</div>
     </div>
-    <div id="ticket-last-notes" class="ticket-last-notes">
+    <div id="ticket-last-notes" class="ticket-last-notes" 
+      style="min-height: {{#if_equals status 'NEW'}}130px;{{else}}230px;{{/if_equals}}">
       <div class="row m-n mar-btm-md last-notes-drp-dwn p-t">
         <div class="col-md-12 pad-all-sm">
           <span>Last Reply</span>
@@ -107,18 +108,21 @@
           {{{last_reply_text}}}  
         </div>
       </div>
-      <div class="row m-n mar-btm-md last-notes-drp-dwn">  
-        <div class="col-md-12 pad-all-sm">
-          <hr class="m-t m-b">
-          <span>First Reply</span>
-          <span class="text-light txt-small pull-right">
-            {{epochToHumanDate "mmm dd, yyyy HH:MM" created_time}}&nbsp;
-          </span>
+      {{#if_equals status 'NEW'}}
+      {{else}}
+        <div class="row m-n mar-btm-md last-notes-drp-dwn">  
+          <div class="col-md-12 pad-all-sm">
+            <hr class="m-t m-b">
+            <span>First Reply</span>
+            <span class="text-light txt-small pull-right">
+              {{epochToHumanDate "mmm dd, yyyy HH:MM" created_time}}&nbsp;
+            </span>
+          </div>
+          <div id="recent-reply-notes" class="col-md-12 p-t-sm p-b recent-reply-notes">
+            {{{first_notes_text}}}
+          </div>
         </div>
-        <div id="recent-reply-notes" class="col-md-12 p-t-sm p-b recent-reply-notes">
-          {{{first_notes_text}}}
-        </div>
-      </div>
+      {{/if_equals}}
     </div>
   </li>
 </script>

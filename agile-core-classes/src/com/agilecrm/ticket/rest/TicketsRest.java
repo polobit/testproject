@@ -51,7 +51,6 @@ import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.workflows.Workflow;
 import com.agilecrm.workflows.triggers.util.TicketTriggerUtil;
 import com.agilecrm.workflows.util.WorkflowUtil;
-import com.amazonaws.services.dynamodbv2.model.ConditionalOperator;
 import com.google.appengine.api.NamespaceManager;
 import com.googlecode.objectify.Key;
 

@@ -122,9 +122,9 @@
 				}
 			});
 
-$('#modal-body').html(ticketView.render().el);
-});	
-},
+			$('#modal-body').html(ticketView.render().el);
+		});	
+	},
 
 	/**
 	 * Renders new ticket form and initializes required events

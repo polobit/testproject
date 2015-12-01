@@ -164,7 +164,7 @@
                 <input type="hidden" id="requester_name" name="requester_name">
                 <input type="hidden" id="contact_id" name="contact_id">
                 <input type="text" id="requester_email" name="requester_email" class="form-control nt-reqester_email required" style="display: none;">
-                <input type="text" id="requester_email_typeahead" placeholder="Email" class="required typeahead typeahead_contacts form-control email" data-provide="typeahead">
+                <input type="text" id="requester_email_typeahead" placeholder="Search contact" class="required typeahead typeahead_contacts form-control email" data-provide="typeahead">
               </span>
             </div>
             <div class="control-group col-md-6">
@@ -267,7 +267,7 @@
               <label class="control-label"><b>Message</b></label>
               <span class="controls">
                 <div ui-jq="wysiwyg" class="form-control h-auto required html_text required" placeholder="Type your message here" data-name="html_text" style="min-height: 150px;" contenteditable="true">
-                  <br><br><br><br>{{#getCurrentUserPrefs}}{{{signature}}}{{/getCurrentUserPrefs}}
+                  <br><br>{{#getCurrentUserPrefs}}{{{signature}}}{{/getCurrentUserPrefs}}
                 </div>
               </span>
             </div>

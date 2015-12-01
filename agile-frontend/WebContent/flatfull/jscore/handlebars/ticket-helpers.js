@@ -98,7 +98,7 @@ Handlebars.registerHelper('check_is_allowed_canned_response', function(canned_re
 
 	for (var i = 0; ticket_labels.length > 0; i++) {
 
-		if (.inArray( ticket_labels[i], canned_response_labels ) != -1)
+		if ($.inArray( ticket_labels[i], canned_response_labels ) != -1)
 		  return options.fn(this);
 	};
 
