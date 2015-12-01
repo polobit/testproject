@@ -3593,6 +3593,7 @@ $(function()
 	/**
 	 * Compares the arguments (value and target) and executes the template based
 	 * on the result (used in contacts typeahead)
+	 * working as greater than or equal to
 	 */
 	Handlebars.registerHelper('if_greater', function(value, target, options)
 	{
@@ -6764,3 +6765,50 @@ Handlebars.registerHelper('is_mobile', function(options)
 Handlebars.registerHelper('getS3ImagePath',function(imageUrl){
 	return new Handlebars.SafeString(updateImageS3Path(imageUrl));	
 });
+	Handlebars.registerHelper('is_trial_exist', function(billingData, options)
+	{
+		if (billingData && billingData.subscriptions){
+			var is_trial_exist = false;
+			$.each(billingData.subscriptions.data, function( index, value ) {
+			  if(!value.plan.id.indexOf("email") > -1 && value.trialStart && value.trialEnd && value.trialEnd >= (new Date().getTime()/1000))
+			  {
+			  	var trial_start = value.trialStart;
+			  	var trial_end = value.trialEnd;
+			  	if(trial_end - trial_start <= 864000){
+			  		is_trial_exist = true;
+			  		return false;
+			  	}
+			  }
+			});
+			if(is_trial_exist)
+				return options.fn(this);
+			else
+				return options.inverse(this);
+		}else{
+			return options.inverse(this);
+		}
+	});
+
+	/**
+	 * Compares the arguments (value and target) and executes the template based
+	 * on the result (used in contacts typeahead)
+	 * working as greater than but not equal to
+	 */ 
+	Handlebars.registerHelper('is_greater', function(value, target, options)
+	{
+		if (parseInt(target) < value)
+			return options.fn(this);
+		else
+			return options.inverse(this);
+	});
+
+	Handlebars.registerHelper('is_cancelled_user', function(options)
+	{
+		if(IS_CANCELLED_USER)
+			return options.fn(this);
+		else if(IS_TRIAL)
+			return options.inverse(this);
+		else
+			return options.fn(this);
+	});
+
