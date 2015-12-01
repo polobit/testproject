@@ -272,19 +272,26 @@ $("#right-pane").html(ticketView.render().el);
 	 	if(App_Ticket_Module.ticketsCollection && App_Ticket_Module.ticketsCollection.collection)
 	 		ticketModal = App_Ticket_Module.ticketsCollection.collection.get(id);
 
-		//Verifying ticket exists in collection or not
-		if(!ticketModal)
-		{	
-			//Rendering the whole layout
-			Tickets.renderLayout(function(){
 
-				App_Ticket_Module.ticketDetails(id);		
-			});
-		}else{
-			
-			//If model exists renders the view directly
-			App_Ticket_Module.ticketDetails(id);
-		}
+	 	Ticket_Canned_Response.fetchCollection(function(){
+
+	 		//Verifying ticket exists in collection or not
+			if(!ticketModal)
+			{	
+				//Rendering the whole layout
+				Tickets.renderLayout(function(){
+
+					App_Ticket_Module.ticketDetails(id);		
+				});
+			}else{
+				
+				//If model exists renders the view directly
+				App_Ticket_Module.ticketDetails(id);
+			}
+	 		
+	 	});
+
+		
 	},
 
 	/**

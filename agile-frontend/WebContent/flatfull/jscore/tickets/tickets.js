@@ -66,46 +66,53 @@ var Tickets = {
 		//Initialize custom filters
 		Ticket_Custom_Filters.init(Ticket_Custom_Filters.renderLayout);
 
-		App_Ticket_Module.ticketsCollection = new Base_Collection_View({
-			url : '/core/api/tickets/filter?filter_id=' + Ticket_Filter_ID,
-			global_sort_key: Sort_Field,
-			sort_collection: false,
-			templateKey : isSingleRowView ? 'ticket-single-row' : 'ticket',
-			customLoader: true,
-			custom_scrollable_element: 'ul#ticket-model-list',
-			customLoaderTemplate: 'ticket-notes-loader',
-			individual_tag_name : isSingleRowView ? 'tr' : 'div',
-			cursor : true,
-			page_size : 20,
-			slateKey : 'no-tickets',
-			postRenderCallback: function(el){
 
-				//Initializing click event on each ticket li
-				Tickets.initEvents(el);
+		Ticket_Labels.fetchCollection(function() {
 
-				//Initialize tooltips
-				$('[data-toggle="tooltip"]').tooltip();
+				App_Ticket_Module.ticketsCollection = new Base_Collection_View({
+				url : '/core/api/tickets/filter?filter_id=' + Ticket_Filter_ID,
+				global_sort_key: Sort_Field,
+				sort_collection: false,
+				templateKey : isSingleRowView ? 'ticket-single-row' : 'ticket',
+				customLoader: true,
+				custom_scrollable_element: 'ul#ticket-model-list',
+				customLoaderTemplate: 'ticket-notes-loader',
+				individual_tag_name : isSingleRowView ? 'tr' : 'div',
+				cursor : true,
+				page_size : 20,
+				slateKey : 'no-tickets',
+				postRenderCallback: function(el){
 
-				head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
-				{
-					$("time", el).timeago();		
-				});
-				
-				//Initializing checkbox events
-				Ticket_Bulk_Ops.initEvents();
+					//Initializing click event on each ticket li
+					Tickets.initEvents(el);
 
-				//Clear bulk ops selections
-				Ticket_Bulk_Ops.clearSelection();
-			}
+					//Initialize tooltips
+					$('[data-toggle="tooltip"]').tooltip();
+
+					head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
+					{
+						$("time", el).timeago();		
+					});
+					
+					//Initializing checkbox events
+					Ticket_Bulk_Ops.initEvents();
+
+					//Clear bulk ops selections
+					Ticket_Bulk_Ops.clearSelection();
+				}
+			});
+
+			//Activating main menu
+			$('nav').find(".active").removeClass("active");
+			$("#tickets").addClass("active");
+
+			App_Ticket_Module.ticketsCollection.collection.fetch();
+
+			$(".tickets-collection-pane").html(App_Ticket_Module.ticketsCollection.el);
+
 		});
 
-		//Activating main menu
-		$('nav').find(".active").removeClass("active");
-		$("#tickets").addClass("active");
-
-		App_Ticket_Module.ticketsCollection.collection.fetch();
-
-		$(".tickets-collection-pane").html(App_Ticket_Module.ticketsCollection.el);
+		
 	},
 
 	renderExistingCollection: function(){
