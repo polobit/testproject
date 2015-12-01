@@ -90,7 +90,7 @@
 			<div class="panel panel-default">
 			<div class="panel-heading">Deals</div>
 			<div class="table-responsive">
-                <table class="table table-striped showCheckboxes m-b-none agile-table panel" url="core/api/opportunity/delete" id="deal-list" style="table-layout: auto;">
+                <table class="table table-striped showCheckboxes m-b-none no-sorting agile-table panel table-layout-mob-view" url="core/api/opportunity/delete" id="deal-list">
 					<thead>
                         <tr>
                             <th>Opportunity</th>
@@ -109,11 +109,11 @@
         
         {{/if}}
         </div>
-        {{#is_mobile}}
-        {{else}}
+        
     <div class="col-md-3">
         <div class="data-block">
-        
+        {{#is_mobile}}
+        {{else}}
         
             <div class="panel wrapper m-b-none">
                 <header>
@@ -121,6 +121,7 @@
                 </header>
                 <div id="pie-deals-chart" class="w-full" style="height:400px"></div>
 			</div>
+      {{/is_mobile}}
 
 			<div class="m-t-md">
                 <h4 class="m-t-none m-b-sm h4">
@@ -146,7 +147,7 @@
     </div>
 </div>
 </div>
-{{/is_mobile}}
+
 </div>
 
 <!-- Deal bulk milestone and pipeline change modal. -->
