@@ -2975,9 +2975,7 @@ width: 915px;
  word-wrap:break- all;
  white-space:normal!important;
  } 
-.custom_popover.left > .arrow:after{
-	border-left-color: #f6f6f6;
-}
+
 .custom_popover .popover-content{
 	padding-top: 5px;
 	padding-bottom:5px;
