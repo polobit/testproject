@@ -60,6 +60,7 @@ var Ticket_Labels = {
 			return;
 
 		var newLabelJSON = {};
+		var optionList = "";
 		$.each(this.labelsCollection.toJSON(), function(index, eachLabel) {
 
 			if ($.inArray(eachLabel.id, labels) != -1)
