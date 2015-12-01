@@ -599,6 +599,7 @@ function showLoadingOnCalendar(loading)
 
 		$("#loading_calendar_events").remove();
 		$("#user_calendars *").attr('disabled','disabled');
+		$("#user_cal_sub *").attr('disabled','disabled');
 		$('.fc-header-left').append(
 				'<span id="loading_calendar_events" style="margin-left:5px;vertical-align:middle;padding-top: 5px;position: absolute;">loading...</span>')
 				.show();
@@ -606,7 +607,8 @@ function showLoadingOnCalendar(loading)
 	}
 	else if(popLoading() <= 0)
 	{
-		$("#loading_calendar_events").hide();
+		$("#loading_calendar_events").hide();		
 		$("#user_calendars *").removeAttr('disabled');
+		$("user_cal_sub *").removeAttr('disabled');
 	}
 }
