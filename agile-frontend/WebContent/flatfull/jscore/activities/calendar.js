@@ -609,8 +609,11 @@ function showCalendar(users)
 								_contacts.push(jsoncontacts[i].id);
 
 							}
+							if(event.owner)
+							event.owner_id = event.owner.id;
 							delete event.contacts;
 							delete event.owner;
+							event
 							event.contacts = _contacts;
 							var eventModel = new Backbone.Model();
 							eventModel.url = 'core/api/events';
