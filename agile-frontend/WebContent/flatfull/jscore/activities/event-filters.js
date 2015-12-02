@@ -179,11 +179,9 @@ function checkBothCalWhenNoCalSelected()
  * 
  * if google calendar sync is enabled then disappears link addtocalednar in lhs filters
  */
-function putGoogleCalendarLink()
+function putGoogleCalendarLink(calEnable)
 {
-	$.ajax({ url : 'core/api/calendar-prefs/get', success : function(response)
-	{
-		if (response)
+		if (calEnable)
 		{
 			$("#google_cal").removeClass('hide');
 			$("#google_cal_link").addClass('hide');
@@ -193,20 +191,27 @@ function putGoogleCalendarLink()
 			$("#google_cal").addClass('hide');
 			$("#google_cal_link").removeClass('hide');
 		}
-
-	} });
 }
 
-function putOfficeCalendarLink()
+function put_thirdparty_calendar_links()
+{
+	putOfficeCalendarLink(false)
+	putGoogleCalendarLink(false)
+	$.getJSON('core/api/calendar-prefs/list', function(data){
+		console.log(data);
+		$.each(data, function(index, preference){
+			console.log(preference);
+			if(preference.calendar_type == 'GOOGLE')
+				putGoogleCalendarLink(true);
+			else if(preference.calendar_type == 'OFFICE')
+				putOfficeCalendarLink(true)
+		});
+	})
+}
+
+function putOfficeCalendarLink(calEnable)
 {
 	var calEnable = false;
-
-	$.ajax({ url : 'core/api/officecalendar', async : false, success : function(response)
-	{
-		if (response)
-			calEnable = true;
-
-	} });
 
 	if (calEnable)
 	{

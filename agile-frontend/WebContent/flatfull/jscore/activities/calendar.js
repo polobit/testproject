@@ -136,8 +136,7 @@ function showCalendar(users)
 {
 
 	_init_gcal_options(users);
-	putGoogleCalendarLink();
-	putOfficeCalendarLink();
+	put_thirdparty_calendar_links();
 	
 	var calendarView = (!readCookie('calendarDefaultView')) ? 'month' : readCookie('calendarDefaultView');
 	$('#' + calendarView).addClass('bg-light');

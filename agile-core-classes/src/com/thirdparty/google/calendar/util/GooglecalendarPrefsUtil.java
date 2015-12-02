@@ -1,12 +1,14 @@
 package com.thirdparty.google.calendar.util;
 
 import java.io.IOException;
+import java.util.List;
 
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.user.DomainUser;
 import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.googlecode.objectify.Key;
 import com.thirdparty.google.calendar.GoogleCalenderPrefs;
+import com.thirdparty.google.calendar.GoogleCalenderPrefs.CALENDAR_TYPE;
 
 public class GooglecalendarPrefsUtil
 {
@@ -48,11 +50,30 @@ public class GooglecalendarPrefsUtil
      */
     public static GoogleCalenderPrefs getCalendarPref()
     {
-	GoogleCalenderPrefs prefs = GoogleCalenderPrefs.dao.getByProperty("domainUserKey", new Key<DomainUser>(DomainUser.class, SessionManager.get()
-		.getDomainId()));
+	GoogleCalenderPrefs prefs = GoogleCalenderPrefs.dao.getByProperty("domainUserKey", new Key<DomainUser>(
+		DomainUser.class, SessionManager.get().getDomainId()));
 
 	return prefs;
 
+    }
+
+    /**
+     * Fethes calendar preferences for based on current domain user key
+     * 
+     * @return
+     */
+    public static List<GoogleCalenderPrefs> getCalendarPrefList()
+    {
+	List<GoogleCalenderPrefs> prefs = GoogleCalenderPrefs.dao.listByProperty("domainUserKey", new Key<DomainUser>(
+		DomainUser.class, SessionManager.get().getDomainId()));
+
+	return prefs;
+    }
+
+    public static GoogleCalenderPrefs getCalendarPrefsByType(CALENDAR_TYPE calendar_type)
+    {
+	GoogleCalenderPrefs prefs = GoogleCalenderPrefs.dao.getByProperty("calendar_type", calendar_type);
+	return prefs;
     }
 
     /**

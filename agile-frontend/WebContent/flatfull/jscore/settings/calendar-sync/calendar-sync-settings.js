@@ -6,12 +6,17 @@ var Calendar_Sync_Settings_View = Base_Model_View.extend({
 	save_calendar_prefs : function (e)
 	{
 		e.preventDefault();
-		alert("saving");
 		this.options.prePersist = this.prePersist;
+
 		this.save(e);
 	},
 	prePersist : function(data)
 	{
+		if(this.model && this.model.get("id"))
+		{
+			data.id = this.model.get("id");
+		}
+
 		if(!data || !data.prefs)
 			return;
 
