@@ -223,22 +223,14 @@
 </script>
 
 <script id="admin-settings-deal-goals-collection-template" type="text/html">
-<div class="panel wrapper">
-	<div class="form-horizontal">
-	<div class="w-md pull-right">
-	<label>Duration</label>
-	<span id="RHS">
-				<input type="text" data-date-format="{{dateFormat}}" prev-val="" class="form-control date required" placeholder="{{dateFormat}}">
-			</span>
-			</div>
 	<div class="control-group form-group">
 		<div class="col-md-2"></div>
                <div class="controls col-sm-6">
 		<table id="deal-sources-table" class="table  table-bordered agile-table onlySorting m-b-n-xs table-hover">
-			<tbody id="admin-settings-deal-goals-model-list" class="admin-settings-deal-goals-model-list" style="word-break:normal!important;" >
-				<tr>
+				<thead class="panel-heading"><tr>
 					<th><div></div><div class="pull-right">Amount</div><div class="pull-right">count</div></th>
-				</tr>
+				</tr></thead>
+				<tbody id="admin-settings-deal-goals-model-list" class="admin-settings-deal-goals-model-list" style="word-break:normal!important;" >
 			</tbody>
 		</table>
 				
@@ -250,13 +242,13 @@
 		<div class="col-md-2"></div>
 	<div class="col-sm-2">
             
-                <a class="btn btn-sm btn-primary goalSave">Save Changes</a>
+                <a class="btn btn-sm btn-primary goalSave ">Save Changes</a>
+                <div class="Goals_message"></div>
            </div>
-  <label class="control-label col-sm-2">Total</label>
-		</div>
+  <label>Total</label>
+  		<label class="Count_goal width-goal text-center m-r-xxl" value=0>0</label>
+  		<span>{{currencySymbol}}</span><label class="Amount_goal width-goal text-center" value=0>0</label>
 	</div>
-	
-
 </div>
 </script>
 
@@ -265,12 +257,26 @@
 	<div id={{id}} class="goal pull-left inline-block v-top text-ellipsis deal_source_name_div text-cap ">{{name}}
 		
 	</div>
-	<div class="pull-right">
-		<input class="amount" type="text">
+	<div class="pull-right input-group">
+		<span class="input-group-addon" style="display:inline padding:"5px 3px 1px">{{currencySymbol}}</span><input class="amount width-goal" type="text">
 		</div>
-		<div class="pull-right">
-		<input class="count" type="text">
+		<div class="pull-right m-r-lg input-group">
+		<input class="count width-goal" type="text">
 		</div>
 	</form>
 </td>
+</script>
+
+<script id="admin-settings-deal-goals-main-template" type="text/html">
+<div class="panel wrapper">
+	<div class="form-horizontal">
+	<div class="w-md pull-right">
+	<label>Duration</label>
+	<span id="goal_duration">
+				<input type="text" data-date-format="{{dateFormat}}" prev-val="" class="form-control date required" placeholder="{{dateFormat}}">
+			</span>
+			</div>
+			<div class="Goal_period"></div> 
+</div>
+</div>
 </script>

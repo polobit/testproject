@@ -1183,12 +1183,23 @@ function initializeMilestoneListners(el){
 
 	$("#milestone-listner").on('click','.goalSave',function(e)
 	{
+			$(this).attr("disabled","disabled");
+			var that=$(this);
 			var goals_json=[];
+				var d=$('#goal_duration input').val();
+				d=new Date(d);
+				var start=getUTCMidNightEpochFromDate(d);
+				var end=getUTCMidNightEpochFromDate(new Date(d.getFullYear(), d.getMonth()+1, d.getDate()-1,23,59,59));
+					
 			$('#deal-sources-table').find('td').each(function(index){
-					var goal_single_user={};
+			var goal_single_user={};
+					if($(this).attr('id')!=null)
+						goal_single_user.id=$(this).attr('id');
 					goal_single_user.domain_user_id=$(this).find('.goal').attr('id');
 					goal_single_user.amount=$(this).find('.amount').val();
 					goal_single_user.count=$(this).find('.count').val();
+					goal_single_user.start_time=start/1000;
+					goal_single_user.end_time=end/1000;
 					console.log(goal_single_user)
 					goals_json.push(goal_single_user);
 
@@ -1196,8 +1207,42 @@ function initializeMilestoneListners(el){
 
 					console.log(goals_json);
 					$.ajax({ type : 'POST', url : '/core/api/goals', data : JSON.stringify(goals_json),
-					contentType : "application/json; charset=utf-8", dataType : 'json' });
-        		console.log("saved");
-        	
+					contentType : "application/json; charset=utf-8", dataType : 'json' ,
+					success : function(e)
+					{
+						console.log(e);
+						$('#deal-sources-table').find('td').each(function(index){
+								var that=$(this);
+								$.each(e,function(index,jsond){
+									console.log(jsond);
+									if(jsond.domain_user_id==that.find('div').attr('id')){
+										that.attr('id',jsond.id);
+
+					}
+				});
+							});
+						$save_info = $('<div style="display:inline-block"><small><p class="text-info"><i>Changes Saved</i></p></small></div>');
+
+											$('.Goals_message').html($save_info);
+
+											$save_info.show();
+
+											setTimeout(function()
+											{
+												$('.Goals_message').empty();
+												that.removeAttr("disabled");
+											}, 500);
+        		
+        	}
 	});
+});
+$("#milestone-listner").on('change','.count',function(e)
+	{
+			$('.Count_goal').text(parseInt($('.Count_goal').text())+parseInt($(this).val()));
+	});	
+
+$("#milestone-listner").on('change','.amount',function(e)
+	{
+			$('.Amount_goal').text(parseInt($('.Amount_goal').text())+parseInt($(this).val()));
+	});	
 }

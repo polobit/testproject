@@ -6,6 +6,7 @@ import javax.persistence.Id;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.agilecrm.deals.util.GoalsUtil;
 import com.agilecrm.user.DomainUser;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.annotation.Cached;
@@ -62,10 +63,8 @@ public class Goals implements Serializable
 	this.end_time=end_time;
 	this.amount=amount;
 	this.count=count;
-	
-	if (domain_user_id != null)
-	    ownerKey = new Key<DomainUser>(DomainUser.class, domain_user_id);
     }
+
 
     
 
@@ -76,6 +75,17 @@ public class Goals implements Serializable
      */
     public void save()
     {
+    	Long id=this.id;
+    	if(id!=null)
+		{
+			Goals new_goal=getGoal(id);
+			new_goal.amount=this.amount;
+			new_goal.count=this.count;
+			
+		}
+    	if (domain_user_id != null)
+    	    ownerKey = new Key<DomainUser>(DomainUser.class, domain_user_id);
+        
 	dao.put(this);
     }
 
@@ -92,6 +102,19 @@ public class Goals implements Serializable
 	        .append(start_time).append(", endTime=").append(end_time).append(", domain_user_id=").
 	        append(domain_user_id).append("]");
 	return builder.toString();
+    }
+    
+    public static Goals getGoal(Long id)
+    {
+	try
+	{
+	    return dao.get(id);
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    return null;
+	}
     }
 
 }

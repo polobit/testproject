@@ -988,14 +988,53 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			$("#milestone-listner").html(getTemplate("admin-settings"), {});
 		$('#milestone-listner').find('#admin-prefs-tabs-content').html(getTemplate("settings-milestones-tab"), {});
 		
+		getTemplate("admin-settings-deal-goals-main", {}, undefined, function(template_ui){
+						if(!template_ui)
+							  return;
+						$('#settings-milestones-tab-content').html($(template_ui));	
+						initQuota(function(){
 		this.dealGoalsView = new Base_Collection_View({ url : '/core/api/users', templateKey : "admin-settings-deal-goals",
 			individual_tag_name : 'tr', sortKey : "name", postRenderCallback : function(el)
 			{
 				initializeMilestoneListners(el);
-				$("input.date").datepicker({ format :"MM yyyy", minViewMode:"months" ,weekStart : CALENDAR_WEEK_START_DAY, autoclose : true });
+				
+
+						var d=$('#goal_duration input').val();
+				d=new Date(d);
+				var start=getUTCMidNightEpochFromDate(d);
+				var end=getUTCMidNightEpochFromDate(new Date(d.getFullYear(), d.getMonth()+1, d.getDate()-1,23,59,59));
+					
+					$.ajax({ type : 'GET', url : '/core/api/goals?start_time='+start/1000+'&end_time='+end/1000, 
+					contentType : "application/json; charset=utf-8", dataType : 'json' ,
+						success:function(data)
+						{
+							console.log(data);
+							$('#deal-sources-table').find('td').each(function(index){
+								var that=$(this);
+								that.find('.count').val("");
+										that.find('.amount').val("");
+								$.each(data,function(index,jsond){
+									console.log(jsond);
+									if(jsond.domain_user_id==that.find('div').attr('id')){
+										that.find('.count').val(jsond.count);
+										that.find('.amount').val(jsond.amount);
+										that.attr('id',jsond.id);
+										//flag=true;
+									}
+
+							});
+								if(that.find('.count').val()!="")
+									$('.Count_goal').text(parseInt($('.Count_goal').text())+parseInt(that.find('.count').val()));
+								if(that.find('.amount').val()!="")
+									$('.Amount_goal').text(parseInt($('.Amount_goal').text())+parseInt(that.find('.amount').val()));
+							});
+						}
+				});
+				
+				
 			} });
 		this.dealGoalsView.collection.fetch();
-		$('#content').find('#admin-prefs-tabs-content').find('#settings-milestones-tab-content').html(this.dealGoalsView.render().el);
+		$('#content').find('#admin-prefs-tabs-content').find('#settings-milestones-tab-content').find('.Goal_period').html(this.dealGoalsView.render().el);
 		/*getTemplate('admin-settings-deal-goals-model', {}, undefined, function(template_ui)
 				{
 					if (!template_ui)
@@ -1006,6 +1045,8 @@ var AdminSettingsRouter = Backbone.Router.extend({
 
 
 				}, "#settings-milestones-tab-content");*/
+		});	
+});
 		$('#content').find('#AdminPrefsTab .select').removeClass('select');
 		$('#content').find('.milestones-tab').addClass('select');
 		$(".active").removeClass("active");
@@ -1015,3 +1056,18 @@ var AdminSettingsRouter = Backbone.Router.extend({
 	}
 
 });
+
+
+function initQuota(callback)
+{
+	$("#goal_duration input.date").datepicker({ format :"MM yyyy", minViewMode:"months",weekStart : CALENDAR_WEEK_START_DAY, autoclose : true ,
+						
+				}).on('changeMonth',function(e) {
+       						/// alert(e);
+       						$("#goal_duration input").val( e.date.format("mmmm yyyy"));
+       						 callback();
+
+       						}).datepicker("setDate", new Date());
+
+				callback();
+}

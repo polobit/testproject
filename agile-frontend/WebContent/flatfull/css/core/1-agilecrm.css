@@ -2969,3 +2969,8 @@ width: 915px;
  word-wrap:break- all;
  white-space:normal!important;
  } 
+
+.width-goal
+{
+width : 100px;
+}
