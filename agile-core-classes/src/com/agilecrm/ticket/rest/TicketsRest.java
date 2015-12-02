@@ -32,7 +32,6 @@ import com.agilecrm.search.document.TicketsDocument;
 import com.agilecrm.ticket.entitys.TicketActivity;
 import com.agilecrm.ticket.entitys.TicketDocuments;
 import com.agilecrm.ticket.entitys.TicketFilters;
-import com.agilecrm.ticket.entitys.TicketFilters.CONDITION_TYPE;
 import com.agilecrm.ticket.entitys.TicketGroups;
 import com.agilecrm.ticket.entitys.TicketLabels;
 import com.agilecrm.ticket.entitys.TicketNotes.CREATED_BY;
@@ -165,8 +164,8 @@ public class TicketsRest
 	@Path("/filter")
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	public List<Tickets> getFilteredTickets(@QueryParam("filter_id") Long filterID,
-			@QueryParam("cursor") String cursor, @QueryParam("page_size") Integer pageSize,
-			@QueryParam("global_sort_key") String sortField)
+			@QueryParam("custom_filters") String customFilters, @QueryParam("cursor") String cursor,
+			@QueryParam("page_size") Integer pageSize, @QueryParam("global_sort_key") String sortField)
 	{
 		try
 		{
@@ -175,11 +174,20 @@ public class TicketsRest
 
 			TicketFilters filter = TicketFiltersUtil.getFilterById(filterID);
 
-			String queryString = "";
-			if (filter.condition != null && filter.condition == CONDITION_TYPE.OR)
-				queryString = TicketFiltersUtil.getORQueryFromConditions(filter.conditions);
-			else
-				queryString = TicketFiltersUtil.getQueryFromConditions(filter.conditions);
+			JSONObject customFilterJSON = null;
+
+			try
+			{
+				customFilterJSON = new JSONObject(customFilters);
+			}
+			catch (Exception e)
+			{
+				e.printStackTrace();
+			}
+
+			String queryString = (customFilterJSON == null || customFilterJSON.length() == 0) ? TicketFiltersUtil
+					.getQueryFromConditions(filter.conditions) : TicketFiltersUtil.getCustomFilterQuery(
+					filter.conditions, customFilterJSON);
 
 			if (StringUtils.isBlank(sortField))
 				sortField = "last_updated_time";
@@ -282,11 +290,7 @@ public class TicketsRest
 		{
 			TicketFilters filter = TicketFiltersUtil.getFilterById(filterID);
 
-			String queryString = "";
-			if (filter.condition != null && filter.condition == CONDITION_TYPE.OR)
-				queryString = TicketFiltersUtil.getORQueryFromConditions(filter.conditions);
-			else
-				queryString = TicketFiltersUtil.getQueryFromConditions(filter.conditions);
+			String queryString = TicketFiltersUtil.getQueryFromConditions(filter.conditions);
 
 			System.out.println("queryString: " + queryString);
 
@@ -345,7 +349,9 @@ public class TicketsRest
 	@GET
 	@Path("/activity")
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<TicketActivity> listTicketActivitys(@QueryParam("id") Long ticketID)
+	public List<TicketActivity> listTicketActivitys(
+
+	@QueryParam("id") Long ticketID)
 	{
 		try
 		{
@@ -497,10 +503,15 @@ public class TicketsRest
 			if (attachmentsList != null && attachmentsList.size() > 0)
 				attachmentExists = true;
 
+			List<Key<TicketLabels>> labels_keys_list = new ArrayList<Key<TicketLabels>>();
+
+			for (Long labelID : ticket.labels)
+				labels_keys_list.add(new Key<TicketLabels>(TicketLabels.class, labelID));
+
 			// Creating new Ticket in Ticket table
 			ticket = TicketsUtil.createTicket(groupID, assigneeID, ticket.requester_name, ticket.requester_email,
 					ticket.subject, ticket.cc_emails, plain_text, ticket.status, ticket.type, ticket.priority,
-					ticket.source, attachmentExists, "", ticket.labels_keys_list);
+					ticket.source, attachmentExists, "", labels_keys_list);
 
 			// Creating new Notes in TicketNotes table
 			TicketNotesUtil.createTicketNotes(ticket.id, groupID, assigneeID, CREATED_BY.REQUESTER,

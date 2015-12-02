@@ -3,6 +3,7 @@ var Ticket_Custom_Filters = {
 	assignees: [],
 	groups: [],
 	filters: [],
+	customFilters: {},
 	init: function(callback){
 
 		if(this.assignees.length == 0 && this.groups.length == 0){
@@ -37,7 +38,9 @@ var Ticket_Custom_Filters = {
 				if(!template_ui)
 			  		return;
 
-			  	$('#custom-filters-container').html($(template_ui));
+			  	var $container = $('#custom-filters-container');
+
+			  	$container.html($(template_ui));
 			  	Tickets.initDateTimePicker($('#datetimepicker'), function(){});
 
 			  	head.js('/lib/chosen.jquery.min.js', function()
@@ -48,8 +51,36 @@ var Ticket_Custom_Filters = {
 					var tempAssignees = {all_assignees: Ticket_Custom_Filters.assignees, selected_assignees: dataJSON.assignees};
 					var tempGroups = {all_groups: Ticket_Custom_Filters.groups, selected_groups: dataJSON.groups};
 
-					$('#ticket-assignee-list').html(getTemplate('ticket-filter-assignee', tempAssignees)).chosen();
-					$('#ticket-group-list').html(getTemplate('ticket-filter-group', tempGroups)).chosen();
+					$('.assignee-select').html(getTemplate('ticket-filter-assignee', tempAssignees)).chosen();
+					$('.group-select').html(getTemplate('ticket-filter-group', tempGroups)).chosen();
+
+					//Initializing on change events on all select dropdowns in custom filters
+					$('select', $container).off('change');
+					$('select', $container).on('change', function(evt, params) {
+
+						var attributeName = $(evt.target).data('name');
+
+						var valueArray = new Array();
+
+						if(Ticket_Custom_Filters.customFilters[attributeName])
+							valueArray = Ticket_Custom_Filters.customFilters[attributeName];
+
+						//Remove value from custom json if value is deselected
+						if (params && params.deselected) {
+							
+							var index = valueArray.indexOf(params.deselected);
+
+							if (index > -1)
+								valueArray.splice(index, 1);
+						}else{
+							valueArray.push(params.selected);
+						}
+
+						Ticket_Custom_Filters.customFilters[attributeName] = valueArray;
+
+						//Re-render collection with customized filters
+						App_Ticket_Module.ticketsByFilter(Ticket_Filter_ID);
+					});
 				});
 			});
 		});	

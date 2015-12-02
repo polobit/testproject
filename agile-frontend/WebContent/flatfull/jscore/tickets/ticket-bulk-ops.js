@@ -159,32 +159,30 @@ var Ticket_Bulk_Ops = {
 			case 'add-labels':{
 
 				var view = new Ticket_Base_Model({
-					isNew : false, 
+					isNew : true, 
 					template : "ticket-bulk-actions-add-labels",
-					url : "/core/api/tickets/new-ticket",
-					postRenderCallback : function(){
+					url : "/core/api/tickets/bulk-actions/manage-labels?command=add",
+					postRenderCallback : function(el){
 
-						//Initializing type ahead for tags
-						Ticket_Tags.showTagsField();
+						Ticket_Labels.showSelectedLabels(new Array(), "", $(el));
 					}
 				});
 
-				$('#content').html(view.render().el);
+				$('#content').html(view.render(true).el);
 				break;
 			}
 			case 'remove-labels':
 				var view = new Ticket_Base_Model({
 					isNew : false, 
 					template : "ticket-bulk-actions-remove-labels",
-					url : "/core/api/tickets/new-ticket",
-					postRenderCallback : function(){
+					url : "/core/api/tickets/bulk-actions/manage-labels",
+					postRenderCallback : function(el){
 
-						//Initializing type ahead for tags
-						Ticket_Tags.showTagsField();
+						Ticket_Labels.showSelectedLabels(new Array(), "", $(el));
 					}
 				});
 
-				$('#content').html(view.render().el);
+				$('#content').html(view.render(true).el);
 				break;
 			case 'change-assignee':{
 

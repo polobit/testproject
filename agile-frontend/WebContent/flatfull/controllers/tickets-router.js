@@ -95,10 +95,10 @@
 						var RHS = $("#assignee_id", el);
 
 						RHS.chained(LHS);
-					});
 
-					//Initializing type ahead for tags
-					Ticket_Tags.initTagsTypeahead('.ticket-tags-typeahead');
+						//Initializing type ahead for tags
+						Ticket_Labels.showSelectedLabels(new Array(), "", $(el));
+					});
 					
 					//Initializing click on CC email field
 					Tickets.initCCEmailsListeners(el);
@@ -246,6 +246,12 @@ $("#right-pane").html(ticketView.render().el);
 
 			//Fetching filters collection
 			Ticket_Filters.fetchFiltersCollection(function(){
+
+				//Showing selected filter name on top
+				Ticket_Filters.updateFilterName();
+
+				//Initialize custom filters and render layout with filter conditions selected
+				Ticket_Custom_Filters.init(Ticket_Custom_Filters.renderLayout);
 
 				//Fetching selected filter ticket collection
 				Tickets.fetchTicketsCollection();

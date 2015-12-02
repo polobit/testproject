@@ -239,24 +239,10 @@
               </span>
             </div>
             <div class="control-group col-md-6">
-                <label class="control-label block"><b>Tags</b></label>
+                <label class="control-label block"><b>Labels</b></label>
                 <span class="controls">
-                  <div class="inline-block">
-                    <ul id="ticket-tags-ul" name="tags" class="inline v-top m-b-sm p-n tags">
-                    </ul>
-                  </div>                    
-                  <div class="inline-block">
-                    <div class="add-tags-form" class="m-b-none" style="display: none;">
-                      <div class="control-group m-b-none">
-                        <input type="text" class="ticket-tags-typeahead ignore-comma-keydown form-control inline-block" style="width: 60%" placeholder="Enter tag">
-                      </div>
-                    </div>
-                    <a href="javascript:void(0);" id="show-tags-field" rel="tooltip" data-original-title="addtag" 
-                    data-placement="top" class="text-xs text-muted show-tags-field" style="vertical-align: -webkit-baseline-middle;">
-                      <i class="icon-plus"></i>
-                      <span>Add</span>
-                    </a>
-                  </div>  
+                  <select name="labels" data-placeholder="Labels" class="chosen-select form-control" multiple class="w-md">
+                  </select>
                 </span>
             </div>
         </div>

@@ -6,16 +6,16 @@ import com.agilecrm.ticket.entitys.TicketLabels;
 import com.agilecrm.ticket.entitys.Tickets;
 import com.agilecrm.ticket.utils.TicketsUtil;
 import com.agilecrm.user.DomainUser;
+import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.googlecode.objectify.Key;
 
-public class ManageLabelsDeferredTask extends TicketBulkActionAdaptor
-{
+public class ManageLabelsDeferredTask extends TicketBulkActionAdaptor {
 	private static final long serialVersionUID = 1L;
 	private List<Key<TicketLabels>> labels = null;
 	private String command = "";
 
-	public ManageLabelsDeferredTask(List<Key<TicketLabels>> labels, String command, String nameSpace, Long domainUserID)
-	{
+	public ManageLabelsDeferredTask(List<Key<TicketLabels>> labels,
+			String command, String nameSpace, Long domainUserID) {
 		super();
 
 		this.namespace = nameSpace;
@@ -25,11 +25,15 @@ public class ManageLabelsDeferredTask extends TicketBulkActionAdaptor
 	}
 
 	@Override
-	protected void performAction()
-	{
-		for (Key<Tickets> ticket : ticketsKeySet)
-		{
-			TicketsUtil.addLabelsList(ticket.getId(), labels);
+	protected void performAction() {
+		for (Key<Tickets> ticket : ticketsKeySet) {
+			for (Key<TicketLabels> labelKey : labels) {
+				try {
+					TicketsUtil.updateLabels(ticket.getId(), labelKey, command);
+				} catch (EntityNotFoundException e) {
+					e.printStackTrace();
+				}
+			}
 		}
 	}
 }

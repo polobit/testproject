@@ -60,17 +60,10 @@ var Tickets = {
 		var isSingleRowView = (CURRENT_DOMAIN_USER.helpdesk_view && CURRENT_DOMAIN_USER.helpdesk_view == 'double_row')
 								 ? true : false;
 
-		///Showing selected filter name on top
-		Ticket_Filters.updateFilterName();
-
-		//Initialize custom filters
-		Ticket_Custom_Filters.init(Ticket_Custom_Filters.renderLayout);
-
-
 		Ticket_Labels.fetchCollection(function() {
 
 				App_Ticket_Module.ticketsCollection = new Base_Collection_View({
-				url : '/core/api/tickets/filter?filter_id=' + Ticket_Filter_ID,
+				url : '/core/api/tickets/filter?filter_id=' + Ticket_Filter_ID + '&custom_filters=' + encodeURI(JSON.stringify(Ticket_Custom_Filters.customFilters)),
 				global_sort_key: Sort_Field,
 				sort_collection: false,
 				templateKey : isSingleRowView ? 'ticket-single-row' : 'ticket',
@@ -109,10 +102,7 @@ var Tickets = {
 			App_Ticket_Module.ticketsCollection.collection.fetch();
 
 			$(".tickets-collection-pane").html(App_Ticket_Module.ticketsCollection.el);
-
 		});
-
-		
 	},
 
 	renderExistingCollection: function(){

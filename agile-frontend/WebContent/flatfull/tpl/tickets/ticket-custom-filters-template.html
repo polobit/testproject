@@ -1,15 +1,15 @@
 <script id="ticket-custom-filters-template" type="text/html">
-<div class="wrapper bg-light hidden-sm hidden-xs p-b-xs">
+<div class="wrapper bg-light hidden-sm hidden-xs p-b-xs p-t">
 	<div class="panel panel-default m-b-none">
     	<div class="panel-body">
    			<div class="col-md-12 p-n m-b-xs">Assignee</div>
-			<div class="col-md-12 p-n">
-              <select id="ticket-assignee-list" data-placeholder="Choose Assignees" multiple class="w-full"></select>
+			      <div class="col-md-12 p-n">
+              <select data-placeholder="Choose Assignees" multiple class="w-full assignee-select" data-name="assignee_id"></select>
           	</div>
           	<div class="col-md-12 p-n m-t m-b-xs">Group</div>
-			<div class="col-md-12 p-n">
-              <select id="ticket-group-list" data-placeholder="Choose Groups" multiple class="w-full"></select>
-          	</div>
+  			    <div class="col-md-12 p-n">
+              <select data-placeholder="Choose Groups" multiple class="w-full group-select" data-name="group_id"></select>
+            </div>
     	</div>
     </div>
 </div>
@@ -22,8 +22,7 @@
           	</div>
           	<div class="col-md-12 p-n m-t m-b-xs">Priority</div>
 			<div class="col-md-12 p-n">
-				<select data-placeholder="Choose priority" class="priority-select chosen-select form-control" multiple 
-					class="w-md">
+				<select data-placeholder="Choose priority" class="priority-select chosen-select w-full"  data-name="priority" multiple class="w-md">
             		<option value="LOW" {{#contains_string 'LOW' priority}}selected{{/contains_string}}>Low</option>
             		<option value="MEDIUM" {{#contains_string 'MEDIUM' priority}}selected{{/contains_string}}>Medium</option>
             		<option value="HIGH" {{#contains_string 'HIGH' priority}}selected{{/contains_string}}>High</option>
@@ -37,8 +36,7 @@
     	<div class="panel-body">
 			<div class="col-md-12 p-n m-b-xs">Status</div>
 			<div class="col-md-12 p-n">
-            	<select data-placeholder="Choose status" class="status-select chosen-select form-control" multiple 
-            		class="w-md">
+            	<select data-placeholder="Choose status" class="status-select chosen-select w-full" data-name="status" multiple class="w-md">
             		<option value="NEW" {{#contains_string 'NEW' status}}selected{{/contains_string}}>New</option>
             		<option value="OPEN" {{#contains_string 'OPEN' status}}selected{{/contains_string}}>Open</option>
             		<option value="PENDING" {{#contains_string 'PENDING' status}}selected{{/contains_string}}>Pending</option>
@@ -47,7 +45,7 @@
           	</div>
           	<div class="col-md-12 p-n m-t m-b-xs">Type</div>
 			<div class="col-md-12 p-n">
-            	<select data-placeholder="Choose type" class="type-select chosen-select form-control" multiple class="w-md">
+            	<select data-placeholder="Choose type" class="type-select chosen-select form-control" data-name="type"  multiple class="w-md">
             		<option value="INCIDENT" {{#contains_string 'INCIDENT' type}}selected{{/contains_string}}>Incident</option>
             		<option value="PROBLEM" {{#contains_string 'PROBLEM' type}}selected{{/contains_string}}>Problem</option>
             		<option value="TASK" {{#contains_string 'TASK' type}}selected{{/contains_string}}>Task</option>

@@ -3,13 +3,16 @@ package com.agilecrm.ticket.utils;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import com.agilecrm.search.ui.serialize.SearchRule;
 import com.agilecrm.search.ui.serialize.SearchRule.RuleCondition;
 import com.agilecrm.ticket.entitys.TicketFilters;
-import com.agilecrm.ticket.entitys.TicketFilters.CONDITION_TYPE;
 import com.agilecrm.ticket.entitys.Tickets.Status;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
@@ -66,9 +69,23 @@ public class TicketFiltersUtil
 	 */
 	public static String getQueryFromConditions(List<SearchRule> conditions)
 	{
+		return getQueryFromConditionsMap(getGroupedConditions(conditions));
+	}
+
+	/**
+	 * 
+	 * @param conditionsMap
+	 * @return
+	 */
+	public static String getQueryFromConditionsMap(Map<String, List<SearchRule>> conditionsMap)
+	{
 		StringBuffer query = new StringBuffer();
+
+		// Mapping conditions to table field names
 		Map<String, String> fieldsMap = new HashMap<String, String>()
 		{
+			private static final long serialVersionUID = 1L;
+
 			{
 				put("hrs_since_created", "created_time");
 				put("hrs_since_opened", "first_replied_time");
@@ -81,165 +98,191 @@ public class TicketFiltersUtil
 			}
 		};
 
-		for (SearchRule condition : conditions)
+		for (Map.Entry<String, List<SearchRule>> entry : conditionsMap.entrySet())
 		{
-			String LHS = condition.LHS.toString(), operator = String.valueOf(condition.CONDITION).toLowerCase(), RHS = (condition.RHS == null ? ""
-					: condition.RHS).toString();
+			List<SearchRule> groupedConditions = entry.getValue();
 
-			switch (LHS)
+			for (SearchRule condition : groupedConditions)
 			{
-			case "status":
-			case "type":
-			case "priority":
-			case "source":
-			case "tags":
-			case "assignee_id":
-			case "group_id":
-			{
-				if (operator != null && operator.contains("not"))
-					query.append("NOT " + LHS + " = " + RHS);
-				else
-					query.append(LHS + " = " + RHS);
+				String LHS = condition.LHS.toString(), operator = String.valueOf(condition.CONDITION).toLowerCase(), RHS = (condition.RHS == null ? ""
+						: condition.RHS).toString();
 
-				break;
+				switch (LHS)
+				{
+				case "status":
+				case "type":
+				case "priority":
+				case "source":
+				case "tags":
+				case "assignee_id":
+				case "group_id":
+				{
+					if (operator != null && operator.contains("not"))
+						query.append("NOT " + LHS + " = " + RHS);
+					else
+						query.append(LHS + " = " + RHS);
+
+					break;
+				}
+				case "ticket_last_updated_by":
+				{
+					query.append("last_updated_by = "
+							+ (operator.equalsIgnoreCase("LAST_UPDATED_BY_AGENT") ? "AGENT" : "REQUESTER"));
+					break;
+				}
+				case "subject":
+				case "notes":
+				{
+					if (operator != null && operator.contains("not"))
+						query.append("NOT " + condition.LHS + " = (" + condition.RHS + ")");
+					else
+						query.append(LHS + " = " + RHS);
+
+					break;
+				}
+				case "hrs_since_created":
+				case "hrs_since_opened":
+				case "hrs_since_closed":
+				case "hrs_since_assigned":
+				case "hrs_since_requester_update":
+				case "hrs_since_assignee_update":
+				case "hrs_since_due_date":
+				case "hrs_untill_due_date":
+				{
+					Long currentEpoch = Calendar.getInstance().getTimeInMillis();
+
+					Long millis = Long.parseLong(RHS) * 60 * 60 * 1000;
+					Long rhsEpoch = (currentEpoch - millis) / 1000;
+
+					if (operator != null && operator.equalsIgnoreCase("IS_GREATER_THAN"))
+						query.append(fieldsMap.get(LHS) + " <= " + rhsEpoch);
+					else
+						query.append(fieldsMap.get(LHS) + " >= " + rhsEpoch + " AND " + fieldsMap.get(LHS) + " <= "
+								+ currentEpoch / 1000);
+
+					break;
+				}
+				}
+
+				query.append(" OR ");
 			}
-			case "ticket_last_updated_by":
-			{
-				query.append("last_updated_by = "
-						+ (operator.equalsIgnoreCase("LAST_UPDATED_BY_AGENT") ? "AGENT" : "REQUESTER"));
-				break;
-			}
-			case "subject":
-			case "notes":
-			{
-				if (operator != null && operator.contains("not"))
-					query.append("NOT " + condition.LHS + " = (" + condition.RHS + ")");
-				else
-					query.append(LHS + " = " + RHS);
 
-				break;
-			}
-			case "hrs_since_created":
-			case "hrs_since_opened":
-			case "hrs_since_closed":
-			case "hrs_since_assigned":
-			case "hrs_since_requester_update":
-			case "hrs_since_assignee_update":
-			case "hrs_since_due_date":
-			case "hrs_untill_due_date":
-			{
-				Long currentEpoch = Calendar.getInstance().getTimeInMillis();
-
-				Long millis = Long.parseLong(RHS) * 60 * 60 * 1000;
-				Long rhsEpoch = (currentEpoch - millis) / 1000;
-
-				if (operator != null && operator.equalsIgnoreCase("IS_GREATER_THAN"))
-					query.append(fieldsMap.get(LHS) + " <= " + rhsEpoch);
-				else
-					query.append(fieldsMap.get(LHS) + " >= " + rhsEpoch + " AND " + fieldsMap.get(LHS) + " <= "
-							+ currentEpoch / 1000);
-
-				break;
-			}
-			}
-
+			query = new StringBuffer(query.substring(0, query.lastIndexOf("OR")));
 			query.append(" AND ");
 		}
 
 		return query.substring(0, query.lastIndexOf("AND"));
 	}
-	
+
 	/**
-	 * Prepares and returns query string for the given filter conditions
+	 * 
+	 * @param conditions
+	 */
+	public static String getCustomFilterQuery(List<SearchRule> conditions, JSONObject rulesJSON)
+	{
+		Map<String, List<SearchRule>> conditionsMap = getGroupedConditions(conditions);
+		Map<String, List<SearchRule>> customFilterConditionsMap = getGroupedConditions(convertStringToConditions(rulesJSON));
+
+		for (Map.Entry<String, List<SearchRule>> mapEntry : customFilterConditionsMap.entrySet())
+		{
+			String key = mapEntry.getKey();
+
+			// if (conditionsMap.containsKey(key))
+			conditionsMap.put(key, customFilterConditionsMap.get(key));
+		}
+
+		return getQueryFromConditionsMap(conditionsMap);
+	}
+
+	/**
+	 * Converts custom filters String to list of search rule conditions
+	 * 
+	 * @param rulesString
+	 * @return
+	 */
+	public static List<SearchRule> convertStringToConditions(JSONObject rulesJSON)
+	{
+		List<SearchRule> conditions = new ArrayList<SearchRule>();
+
+		try
+		{
+			Iterator<String> iterator = rulesJSON.keys();
+
+			while (iterator.hasNext())
+			{
+				String key = iterator.next();
+				JSONArray array = rulesJSON.getJSONArray(key);
+
+				for (int i = 0; i < array.length(); i++)
+				{
+					SearchRule rule = new SearchRule();
+					rule.LHS = key;
+					rule.RHS = array.getString(i);
+
+					switch (key)
+					{
+					case "assignee_id":
+					case "group_id":
+						rule.CONDITION = RuleCondition.EQUALS;
+						break;
+					case "priority":
+						rule.CONDITION = RuleCondition.TICKET_PRIORITY_IS;
+						break;
+					case "status":
+						rule.CONDITION = RuleCondition.TICKET_STATUS_IS;
+						break;
+					case "type":
+						rule.CONDITION = RuleCondition.TICKET_TYPE_IS;
+						break;
+
+					default:
+						break;
+					}
+
+					conditions.add(rule);
+				}
+			}
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+
+		return conditions;
+	}
+
+	/**
+	 * Grouping same operations to query them with OR operator
 	 * 
 	 * @param conditions
 	 * @return
 	 */
-	public static String getORQueryFromConditions(List<SearchRule> conditions)
+	public static Map<String, List<SearchRule>> getGroupedConditions(List<SearchRule> conditions)
 	{
-		StringBuffer query = new StringBuffer();
-		Map<String, String> fieldsMap = new HashMap<String, String>()
-		{
-			{
-				put("hrs_since_created", "created_time");
-				put("hrs_since_opened", "first_replied_time");
-				put("hrs_since_closed", "closed_time");
-				put("hrs_since_assigned", "assigned_time");
-				put("hrs_since_requester_update", "last_customer_replied_time");
-				put("hrs_since_assignee_update", "last_agent_replied_time");
-				put("hrs_since_due_date", "due_date");
-				put("hrs_untill_due_date", "due_date");
-			}
-		};
+
+		Map<String, List<SearchRule>> conditionsMap = new HashMap<String, List<SearchRule>>();
 
 		for (SearchRule condition : conditions)
 		{
-			String LHS = condition.LHS.toString(), operator = String.valueOf(condition.CONDITION).toLowerCase(), RHS = (condition.RHS == null ? ""
-					: condition.RHS).toString();
 
-			switch (LHS)
-			{
-			case "status":
-			case "type":
-			case "priority":
-			case "source":
-			case "tags":
-			case "assignee_id":
-			case "group_id":
-			{
-				if (operator != null && operator.contains("not"))
-					query.append("NOT " + LHS + " = " + RHS);
-				else
-					query.append(LHS + " = " + RHS);
+			String LHS = condition.LHS.toString();
 
-				break;
-			}
-			case "ticket_last_updated_by":
-			{
-				query.append("last_updated_by = "
-						+ (operator.equalsIgnoreCase("LAST_UPDATED_BY_AGENT") ? "AGENT" : "REQUESTER"));
-				break;
-			}
-			case "subject":
-			case "notes":
-			{
-				if (operator != null && operator.contains("not"))
-					query.append("NOT " + condition.LHS + " = (" + condition.RHS + ")");
-				else
-					query.append(LHS + " = " + RHS);
+			List<SearchRule> groupedConditions = new ArrayList<SearchRule>();
 
-				break;
-			}
-			case "hrs_since_created":
-			case "hrs_since_opened":
-			case "hrs_since_closed":
-			case "hrs_since_assigned":
-			case "hrs_since_requester_update":
-			case "hrs_since_assignee_update":
-			case "hrs_since_due_date":
-			case "hrs_untill_due_date":
-			{
-				Long currentEpoch = Calendar.getInstance().getTimeInMillis();
+			if (conditionsMap.containsKey(LHS))
+				groupedConditions = conditionsMap.get(LHS);
 
-				Long millis = Long.parseLong(RHS) * 60 * 60 * 1000;
-				Long rhsEpoch = (currentEpoch - millis) / 1000;
+			groupedConditions.add(condition);
 
-				if (operator != null && operator.equalsIgnoreCase("IS_GREATER_THAN"))
-					query.append(fieldsMap.get(LHS) + " <= " + rhsEpoch);
-				else
-					query.append(fieldsMap.get(LHS) + " >= " + rhsEpoch + " OR " + fieldsMap.get(LHS) + " <= "
-							+ currentEpoch / 1000);
-
-				break;
-			}
-			}
-
-			query.append(" OR ");
+			conditionsMap.put(LHS, groupedConditions);
 		}
 
-		return query.substring(0, query.lastIndexOf("OR"));
+		return conditionsMap;
 	}
 
+	/**
+	 * Default filters
+	 */
 	public static void saveDefaultFilters()
 	{
 		TicketFilters newTickets = new TicketFilters();
@@ -255,7 +298,6 @@ public class TicketFiltersUtil
 
 		newTickets.name = "New Tickets";
 		newTickets.is_default_filter = true;
-		newTickets.condition = CONDITION_TYPE.OR;
 		newTickets.conditions = conditions;
 		newTickets.setOwner_key(DomainUserUtil.getCurentUserKey());
 
@@ -269,31 +311,30 @@ public class TicketFiltersUtil
 		searchRule.CONDITION = RuleCondition.TICKET_STATUS_IS;
 		searchRule.RHS = String.valueOf(Status.NEW);
 		conditions.add(searchRule);
-		
+
 		searchRule = new SearchRule();
 		searchRule.LHS = "status";
 		searchRule.LHS = "status";
 		searchRule.CONDITION = RuleCondition.TICKET_STATUS_IS;
 		searchRule.RHS = String.valueOf(Status.OPEN);
 		conditions.add(searchRule);
-		
+
 		searchRule = new SearchRule();
 		searchRule.LHS = "status";
 		searchRule.LHS = "status";
 		searchRule.CONDITION = RuleCondition.TICKET_STATUS_IS;
 		searchRule.RHS = String.valueOf(Status.PENDING);
 		conditions.add(searchRule);
-		
+
 		searchRule = new SearchRule();
 		searchRule.LHS = "status";
 		searchRule.LHS = "status";
 		searchRule.CONDITION = RuleCondition.TICKET_STATUS_IS;
 		searchRule.RHS = String.valueOf(Status.CLOSED);
 		conditions.add(searchRule);
-		
+
 		allTickets.name = "All Tickets";
 		allTickets.is_default_filter = true;
-		allTickets.condition = CONDITION_TYPE.OR;
 		allTickets.conditions = conditions;
 		allTickets.setOwner_key(DomainUserUtil.getCurentUserKey());
 

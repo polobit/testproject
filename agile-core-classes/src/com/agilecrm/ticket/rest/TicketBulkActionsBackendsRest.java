@@ -40,7 +40,7 @@ import edu.emory.mathcs.backport.java.util.Arrays;
 public class TicketBulkActionsBackendsRest
 {
 	@POST
-	@Path("/add-tags/{domain_user_id}")
+	@Path("/manage-labels/{domain_user_id}")
 	@Produces(MediaType.APPLICATION_FORM_URLENCODED)
 	public void manageTags(@PathParam("domain_user_id") Long domainUserID, @FormParam("filter_id") Long filterID,
 			@FormParam("ticket_ids") String ticketIds, @FormParam("data") String dataString,
@@ -80,7 +80,7 @@ public class TicketBulkActionsBackendsRest
 
 			TicketBulkActionUtil.executeBulkAction(idsFetcher, task);
 
-			BulkActionNotifications.publishNotification("Bulk label adding started");
+			BulkActionNotifications.publishNotification("Bulk manage labels task started");
 		}
 		catch (Exception e)
 		{
@@ -125,7 +125,7 @@ public class TicketBulkActionsBackendsRest
 
 			TicketBulkActionUtil.executeBulkAction(idsFetcher, task);
 
-			BulkActionNotifications.publishNotification("Bulk label adding started");
+			BulkActionNotifications.publishNotification("Bulk change assignee started");
 		}
 		catch (Exception e)
 		{
@@ -169,7 +169,7 @@ public class TicketBulkActionsBackendsRest
 
 			TicketBulkActionUtil.executeBulkAction(idsFetcher, task);
 
-			BulkActionNotifications.publishNotification("Bulk label adding started");
+			BulkActionNotifications.publishNotification("Executing workflows on tickets");
 		}
 		catch (Exception e)
 		{
@@ -205,7 +205,7 @@ public class TicketBulkActionsBackendsRest
 
 			TicketBulkActionUtil.executeBulkAction(idsFetcher, task);
 
-			BulkActionNotifications.publishNotification("Bulk label adding started");
+			BulkActionNotifications.publishNotification("Closing ticket task started");
 		}
 		catch (Exception e)
 		{
@@ -241,7 +241,7 @@ public class TicketBulkActionsBackendsRest
 
 			TicketBulkActionUtil.executeBulkAction(idsFetcher, task);
 
-			BulkActionNotifications.publishNotification("Bulk label adding started");
+			BulkActionNotifications.publishNotification("Tickets bulk deletion started");
 		}
 		catch (Exception e)
 		{

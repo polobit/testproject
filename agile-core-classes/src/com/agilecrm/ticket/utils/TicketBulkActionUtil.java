@@ -24,8 +24,8 @@ public class TicketBulkActionUtil
 {
 	public static enum TicketBulkActionType
 	{
-		ADD_TAGS("/core/api/bulk-actions/tickets/add-tags", AgileQueues.TICKET_BULK_ACTIONS_QUEUE), REMOVE_TAGS(
-				"/core/api/bulk-actions/tickets/manage-tags", AgileQueues.TICKET_BULK_ACTIONS_QUEUE), CHANGE_ASSIGNEE(
+		ADD_TAGS("/core/api/bulk-actions/tickets/manage-labels", AgileQueues.TICKET_BULK_ACTIONS_QUEUE), REMOVE_TAGS(
+				"/core/api/bulk-actions/tickets/manage-labels", AgileQueues.TICKET_BULK_ACTIONS_QUEUE), CHANGE_ASSIGNEE(
 				"/core/api/bulk-actions/tickets/change-assignee", AgileQueues.TICKET_BULK_ACTIONS_QUEUE), EXECUTE_WORKFLOW(
 				"/core/api/bulk-actions/tickets/execute-workflow", AgileQueues.TICKET_BULK_ACTIONS_QUEUE), CLOSE_TICKET(
 				"/core/api/bulk-actions/tickets/close-tickets", AgileQueues.TICKET_BULK_ACTIONS_QUEUE), DELETE(

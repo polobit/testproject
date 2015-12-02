@@ -45,10 +45,7 @@ var Ticket_Base_Model = Base_Model_View.extend({
 		"click .discard-reply" : "discardReply",
 		"click .timeline" : "renderTicketTimeline",
 		"click .canned-messages" : "showCannedMessages",
-		"click .ticket-canned-response" : "appendCannedResponseMessage",
-
-		//Bulk actions
-		"click .bulk-manage-labels" : "bulkManageLabels"
+		"click .ticket-canned-response" : "appendCannedResponseMessage"
 	},
 
 	changeStatus: function(e){
@@ -293,11 +290,5 @@ var Ticket_Base_Model = Base_Model_View.extend({
 		e.preventDefault();
 
 		Ticket_Attachments.removeAttachment(e);
-	},
-
-	bulkManageLabels: function(e){
-		console.log(e);
-
-		Ticket_Bulk_Ops.bulkManageLabels();
 	}
 });

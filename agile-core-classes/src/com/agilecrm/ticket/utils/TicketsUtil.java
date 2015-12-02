@@ -525,42 +525,6 @@ public class TicketsUtil
 	}
 
 	/**
-	 * Tags add Bulk operation
-	 * 
-	 * @param ticketId
-	 * @param newTags
-	 */
-	public static void addLabelsList(Long ticketId, List<Key<TicketLabels>> newLabels)
-	{
-		try
-		{
-			Tickets ticket = TicketsUtil.getTicketByID(ticketId);
-
-			List<Key<TicketLabels>> labels = ticket.labels_keys_list;
-
-			for (Key<TicketLabels> label : newLabels)
-			{
-				if (labels.contains(label))
-					continue;
-
-				labels.add(label);
-
-				// Logging activity
-				new TicketActivity(TicketActivityType.TICKET_LABEL_ADD, ticket.contactID, ticket.id, "", label.getId()
-						+ "", "labels").save();
-			}
-
-			Tickets.ticketsDao.put(ticket);
-
-			new TicketsDocument().edit(ticket);
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-		}
-	}
-
-	/**
 	 * 
 	 * @param tickets
 	 * @return

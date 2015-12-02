@@ -48,7 +48,7 @@ public class TicketBulkActionsRest
 	}
 
 	@POST
-	@Path("/manage-tags")
+	@Path("/manage-labels")
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	public void addTags(@FormParam("action_type") TicketBulkActionType action_type, @FormParam("tags") List<Tag> tags,
 			@FormParam("filter_id") Long filterID, @FormParam("ticket_ids") String ticketIDs,

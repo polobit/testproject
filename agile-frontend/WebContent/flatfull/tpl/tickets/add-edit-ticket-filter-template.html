@@ -1,7 +1,7 @@
 <script id="ticket-filter-add-edit-template" type="text/html">
 <div class="wrapper">
     <div class="row">
-    	<div class="col-md-10">
+    	<div class="col-md-11">
         	<div class="panel panel-default">
         		<div class="panel-heading">
         			{{#if id}}Edit{{else}}Add{{/if}} Ticket View</h4>
@@ -21,7 +21,7 @@
                         </div>
                         <div class="control-group form-group">
                             <label class="control-label col-md-3" for="name">Conditions <span class="field_req">*</span></label> 
-                            <div class="col-md-8">
+                            <div class="col-md-9">
                                 <div class="controls">
                                     <table class="bg-transparent ticket-filter-conditions-table chained-table">
                                         <tbody>
@@ -40,7 +40,7 @@
                                                             <option value="priority">Priority</option>
                                                         <!--<option value="requester">Requester</option>-->
                                                         <!--<option value="company">Company</option>-->
-                                                            <option value="tags">Tag</option>
+                                                            <option value="labels">Labels</option>
                                                             <option value="assignee_id">Assignee</option>
                                                             <option value="group_id">Group</option>
                                                             <option value="source">Source</option>
@@ -76,10 +76,10 @@
                                                             <option value="IS_NOT" class="requester company tags">isn&#39;t</option>
 
                                                             <option value="EQUALS" class="assignee_id" related="RHS" url="core/api/users" parse_key="id" parse_value="name">is</option>
-                                                            <option value="NOTEQUALS" class="assignee_id" related="RHS" url="core/api/users" parse_key="id" parse_value="name">isnn&#39;t</option>
+                                                            <option value="NOTEQUALS" class="assignee_id" related="RHS" url="core/api/users" parse_key="id" parse_value="name">isn&#39;t</option>
 
                                                             <option value="EQUALS" class="group_id" related="RHS" url="core/api/tickets/groups" parse_key="id" parse_value="group_name">is</option>
-                                                            <option value="NOTEQUALS" class="group_id" related="RHS" url="core/api/tickets/groups" parse_key="id" parse_value="group_name">isnn&#39;t</option>
+                                                            <option value="NOTEQUALS" class="group_id" related="RHS" url="core/api/tickets/groups" parse_key="id" parse_value="group_name">isn&#39;t</option>
 
                                                             <option value="CONTAINS" class="subject notes">Contains</option>
                                                             <option value="NOT_CONTAINS" class="subject notes">Not Contains</option>

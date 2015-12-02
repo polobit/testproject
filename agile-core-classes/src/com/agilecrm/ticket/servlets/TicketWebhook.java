@@ -17,14 +17,14 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.agilecrm.Globals;
-import com.agilecrm.contact.Tag;
+import com.agilecrm.contact.util.bulk.BulkActionNotifications;
 import com.agilecrm.ticket.entitys.TicketDocuments;
 import com.agilecrm.ticket.entitys.TicketGroups;
 import com.agilecrm.ticket.entitys.TicketLabels;
 import com.agilecrm.ticket.entitys.TicketNotes;
-import com.agilecrm.ticket.entitys.Tickets;
 import com.agilecrm.ticket.entitys.TicketNotes.CREATED_BY;
 import com.agilecrm.ticket.entitys.TicketNotes.NOTE_TYPE;
+import com.agilecrm.ticket.entitys.Tickets;
 import com.agilecrm.ticket.entitys.Tickets.LAST_UPDATED_BY;
 import com.agilecrm.ticket.entitys.Tickets.Priority;
 import com.agilecrm.ticket.entitys.Tickets.Source;
@@ -201,6 +201,8 @@ public class TicketWebhook extends HttpServlet
 						msgJSON.getString("text"), Status.NEW, Type.PROBLEM, Priority.LOW, Source.EMAIL,
 						attachmentExists, msgJSON.getJSONObject("headers").getString("X-Originating-Ip"),
 						new ArrayList<Key<TicketLabels>>());
+
+				BulkActionNotifications.publishNotification("New Ticket#" + ticket + " has been received");
 			}
 			else
 			{
@@ -219,8 +221,10 @@ public class TicketWebhook extends HttpServlet
 				Long ticketUpdatedTime = Calendar.getInstance().getTimeInMillis();
 
 				// Updating existing ticket
-				TicketsUtil.updateTicket(ticketID, ccEmails, msgJSON.getString("text"),
-						LAST_UPDATED_BY.REQUESTER, ticketUpdatedTime, ticketUpdatedTime, null, attachmentExists);
+				TicketsUtil.updateTicket(ticketID, ccEmails, msgJSON.getString("text"), LAST_UPDATED_BY.REQUESTER,
+						ticketUpdatedTime, ticketUpdatedTime, null, attachmentExists);
+
+				BulkActionNotifications.publishNotification(ticket.requester_name + " replied to ticket#" + ticket.id);
 			}
 
 			// Creating new Notes in TicketNotes table

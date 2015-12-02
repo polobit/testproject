@@ -66,13 +66,6 @@ public class TicketFilters
 
 	public Boolean is_default_filter = false;
 
-	public static enum CONDITION_TYPE
-	{
-		AND, OR
-	}
-
-	public CONDITION_TYPE condition = CONDITION_TYPE.AND;
-
 	@JsonIgnore
 	public void setOwner_key(Key<DomainUser> owner_key)
 	{

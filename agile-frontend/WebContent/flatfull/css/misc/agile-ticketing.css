@@ -185,7 +185,7 @@ div.cc-emails-st{
 	margin-top: 3px;
 }
 
-ul#ticket-model-list div li{
+ul#ticket-model-list > div > li{
 	padding-left: 35px; 
 	padding-right: 25px; 
 	border-bottom: none;

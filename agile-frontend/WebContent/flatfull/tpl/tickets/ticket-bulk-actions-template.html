@@ -11,18 +11,9 @@
                                     <label class="control-label col-sm-2 m-t-xs">
                                         Add labels <span class="field_req">*</span>
                                     </label>
-                                    <div class="controls col-sm-10">
-                                        <div class="contact-tags m-b-xs m-t-xs">
-                                          <ul id="ticket-tags-ul" name="tags" class="inline v-top m-b-sm p-n tags"></ul>
-                                          <div class="inline-block m-t-xs">
-                                            <div class="add-tags-form" class="m-b-none">
-                                              <div class="control-group m-b-none">
-                                                <input type="text" class="input-sm ticket-tags-typeahead ignore-comma-keydown form-control inline-block" placeholder="Enter label">
-                                                <span>
-                                              </div>
-                                            </div>
-                                          </div>
-                                        </div>
+                                    <div class="controls col-sm-7">
+                                        <select name="labels" data-placeholder="Labels" class="chosen-select form-control" multiple class="w-md">
+                                        </select>
                                         <span class="error-tags display-none" style="color: red;">
                                             This field is required.
                                         </span>  
@@ -34,7 +25,7 @@
                                         <div class="form-actions">       
                                             <a href="#tickets" class="btn btn-default btn-sm">Close</a>   
                                             <a href="javascript:void(0);"
-                                                class="btn btn-primary btn-sm bulk-manage-labels bulk-add-labels">
+                                                class="btn btn-primary btn-sm save m-l-xs">
                                                     Add Labels
                                             </a> 
                                             <span class="save-status"></span>
@@ -64,17 +55,8 @@
                                         Remove labels <span class="field_req">*</span>
                                     </label>
                                     <div class="controls col-sm-9">
-                                        <div class="contact-tags m-b-xs m-t-xs">
-                                          <ul id="ticket-tags-ul" name="tags" class="inline v-top m-b-sm p-n tags"></ul>
-                                          <div class="inline-block m-t-xs">
-                                            <div class="add-tags-form" class="m-b-none">
-                                              <div class="control-group m-b-none">
-                                                <input type="text" class="input-sm ticket-tags-typeahead ignore-comma-keydown form-control inline-block" placeholder="Enter label">
-                                                <span>
-                                              </div>
-                                            </div>
-                                          </div>
-                                        </div>
+                                        <select name="labels" data-placeholder="Labels" class="chosen-select form-control" multiple class="w-md">
+                                        </select>
                                         <span class="error-tags display-none" style="color: red;">
                                             This field is required.
                                         </span>  
@@ -86,7 +68,7 @@
                                         <div class="form-actions">       
                                             <a href="#tickets" class="btn btn-default btn-sm">Close</a>   
                                             <a href="javascript:void(0);"
-                                                class="btn btn-primary btn-sm bulk-manage-labels">Remove Labels</a> 
+                                                class="btn btn-primary btn-sm bulk-manage-labels m-l-xs">Remove Labels</a> 
                                             <span class="save-status"></span>
                                         </div>
                                     </div>
@@ -134,7 +116,7 @@
                                         <div class="form-actions">       
                                             <a href="#tickets" class="btn btn-default btn-sm">Close</a>   
                                             <a href="javascript:void(0);"
-                                                class="btn btn-primary btn-sm save">Change Assignee</a> 
+                                                class="btn btn-primary btn-sm save m-l-xs">Change Assignee</a> 
                                             <span class="save-status"></span>
                                         </div>
                                     </div>
@@ -175,7 +157,7 @@
                                         <div class="form-actions">       
                                             <a href="#tickets" class="btn btn-default btn-sm">Close</a>   
                                             <a href="javascript:void(0);"
-                                                class="btn btn-primary btn-sm save">Execute workflow</a> 
+                                                class="btn btn-primary btn-sm save m-l-xs">Execute workflow</a> 
                                             <span class="save-status"></span>
                                         </div>
                                     </div>
@@ -198,13 +180,13 @@
                 <h3 class="modal-title"><i class="icon icon-copyright"></i> Close Tickets</h3>
             </div>
             <div class="modal-body">
-                <form id='executeWorkFlowForm' name="executeWorkFlowForm" class="form-horizontal">
+                <form name="closeTicketsForm" class="form-horizontal">
                     Are you sure, you want to close selected tickets?<br/><br/>
                 </form>
             </div>
             <div class="modal-footer">
                 <a href="javascript:void(0);" data-dismiss="modal" class="btn btn-sm btn-default">Close</a>
-                <a href="javascript:void(0);" data-loading-text="Close Tickets" class="save btn btn-sm btn-primary">
+                <a href="javascript:void(0);" data-loading-text="Close Tickets" class="save btn btn-sm btn-primary m-l-xs">
                     Close Tickets
                 </a>
                 &nbsp;&nbsp;<span id="msg"></span>
