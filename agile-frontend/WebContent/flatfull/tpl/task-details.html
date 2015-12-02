@@ -2,13 +2,13 @@
 <script id="task-detail-template" type="text/html">
 <div class="app-content-full  h-full dock-view-fixing">
 <div class="hbox hbox-auto-xs  bg-light">
-<div class="col w-xl bg-light lter b-r" >
+<div class="col w-xl bg-light lter b-r text-center-mobile-view" >
 <div class="vbox">
 <div class="row-row">
 <div id="task-detail-lhs" class="wrapper pos-rlt">
 
                   <div> 
-                    <div class="text-cap h3 font-thin custom-color" style="width:85%">{{#is_link subject}}<span class="activate-link">{{else}}<span class="m-r-sm">{{/is_link}}{{safe_string subject}}</span><span class="label bg-light dk inline-block m-r-sm text-xs pos-rlt pos-t-n-xs text-ellipsis" style="width:30%;vertical-align:bottom;">{{task_property type}}</span>                  
+                    <div class="text-cap h3 font-thin custom-color w-full">{{#is_link subject}}<span class="activate-link">{{else}}<span class="block" style="margin-right:7px;">{{/is_link}}{{safe_string subject}}</span><span class="label bg-light dk inline-block m-r-sm text-xs pos-rlt pos-t-n-xs text-ellipsis" style="width:30%;vertical-align:bottom;">{{task_property type}}</span>                  
                     {{#if_not_equals priority_type "NORMAL" }}
                    <span class="label label-{{task_label_color priority_type}} inline-block  text-xs pos-rlt pos-t-n-xs">{{ucfirst priority_type}}</span>
                          {{/if_not_equals}}</div>
@@ -16,7 +16,7 @@
 					
                  	<!--  starting rating,edit,owner -->
                    
-					<div class="pos-abs pos-r pos-t">
+					<div class="pos-abs pos-r-xs pos-t">
 					   
                         <a class="dropdown-toggle" data-toggle="dropdown"><span class="fa fa-angle-down text-lg"></span></a>
                     	
@@ -170,21 +170,22 @@
 		</a>
 	</div>
 	<br/>
-			<table  class="table table-striped agile-table onlySorting r-5x overflow-scroll m-b-none b " style=" border-collapse: separate;">
-				<colgroup><col width="10px"><col width="40%"><col width="20%"><col width="25%"><col width="12%"></colgroup>
+	<div class="table-responsive">
+			<table  class="table table-striped agile-table onlySorting r-5x overflow-scroll m-b-none b showCheckboxes m-b-none  panel table-layout-mob-view" style=" border-collapse: separate;">
+				
 				<thead>
 					<tr><th></th>
-						<th>Name</th>
-						<th>Work</th>
-						<th>Tags</th>
-						<th>Lead Score</th>
+						<th style="width:30%;">Name</th>
+						<th style="width:25%;">Work</th>
+						<th style="width:25%;">Tags</th>
+						<th style="width:20%;">Lead Score</th>
 					</tr>
 				</thead>
 				<tbody id="task-related-model-list" class="task-related-model-list agile-edit-row overflow-scroll"
 					route="contact/" >
 				</tbody>
 			</table>
-
+			</div>
 		{{else}}
 			<div class="wrapper p-t-none">
             	<div class="slate-content">
@@ -284,7 +285,7 @@
 	</div>
 	
 <div class="pull-left rightThumbView pos-rlt">
-<div class="pull-left contact-title-dynamic">	
+<div class="pull-left contact-title-dynamic text-ellipsis">	
 	<a class="text-md text-cap custom-color">{{get_normal_activity_type activity_type}}</a>
 </div>
 <div class="pull-right">
@@ -364,7 +365,8 @@
 		</a>
 	</div>
 	<br/>
-			<table  class="table table-striped agile-table onlySorting r-5x overflow-scroll m-b-none b " style=" border-collapse: separate;">
+	<div class="agile-responsive">
+			<table  class="table table-striped agile-table onlySorting r-5x overflow-scroll m-b-none b    m-b-none agile-table panel table-layout-mob-view" style=" border-collapse: separate;">
 				<!-- <colgroup><col width="10px"><col width="40%"><col width="20%"><col width="25%"><col width="12%"></colgroup> -->
 				<thead>
 					<tr>
@@ -381,7 +383,7 @@
 					route="deal/" >
 				</tbody>
 			</table>
-
+		</div>
 		{{else}}
 			<div class="wrapper p-t-none">
             	<div class="slate-content">
