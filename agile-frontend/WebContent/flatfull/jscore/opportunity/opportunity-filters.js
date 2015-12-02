@@ -171,14 +171,14 @@ function setNewDealFilters(data){
 	var cookie_filter_id = readCookie("deal-filter-name");
 	if(cookie_filter_id && cookie_filter_id != 'my-deals' && data.get(cookie_filter_id) && data.get(cookie_filter_id).get('name')){
 		$('#opportunity-listners').find('h3').find('small').after('<div class="inline-block tag btn btn-xs btn-primary m-l-xs"><span class="inline-block m-r-xs v-middle pull-left">'+data.get(cookie_filter_id).get("name")+'</span><a class="close default_deal_filter">×</a></div>');
-		var filters = readCookie('deal-filters');
+		/*var filters = readCookie('deal-filters');
 		if(filters){
 			var filtersJSON = $.parseJSON(filters);
 			if(filtersJSON && filtersJSON.pipeline_id){
 				createCookie('agile_deal_track', filtersJSON.pipeline_id);
 				$('#deals-tracks').find('button').attr('disabled', true);
 			}
-		}
+		}*/
 	}else if(cookie_filter_id && cookie_filter_id == 'my-deals'){
 		$('#opportunity-listners').find('h3').find('small').after('<div class="inline-block tag btn btn-xs btn-primary m-l-xs"><span class="inline-block m-r-xs v-middle">My Deals</span><a class="close default_deal_filter">×</a></div>');
 	}else{
@@ -299,8 +299,8 @@ function getDealFilters()
 		// Remove the milestone field in the filters if it is milestone view.
 		if (filterJSON && !readCookie("agile_deal_view")){
 			var json = filterJSON;
-			/*if (!json.pipeline_id)
-				json.pipeline_id = readCookie('agile_deal_track');*/
+			//if (!json.pipeline_id)
+			json.pipeline_id = readCookie('agile_deal_track');
 			json.milestone = '';
 			return JSON.stringify(json);
 		}else if (filterJSON && readCookie("agile_deal_view")){
@@ -385,6 +385,12 @@ $('#opportunity-listners').on('click', '.deals-list-view', function(e) {
 			$("#milestone", el).html(data);
 			$("#milestone", el).closest('div').find('.loading-img').hide();
 		});
+		if(el && $(el).attr('id') == "dealsFilterForm")
+		{
+			setTimeout(function(){
+				$('#milestone',el).find('option[value=""]').text("Any");
+			},500);
+		}
 	});
 	/**
 	 * If Pipelined View is selected, deals are loaded with pipelined view and 

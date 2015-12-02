@@ -24,7 +24,7 @@ var DealsRouter = Backbone.Router.extend({
 		pipeline_id = 0;
 		if (readCookie("agile_deal_track"))
 			pipeline_id = readCookie("agile_deal_track");
-		var deal_filters = readCookie('deal-filters');
+		/*var deal_filters = readCookie('deal-filters');
 		if(deal_filters)
 		{
 			var filtersJSON = $.parseJSON(deal_filters);
@@ -32,7 +32,7 @@ var DealsRouter = Backbone.Router.extend({
 			{
 				pipeline_id = filtersJSON.pipeline_id;
 			}
-		}
+		}*/
 		$('#content').html("<div id='opportunity-listners'>&nbsp;</div>");
 		// Depending on cookie shows list or milestone view
 		if (!readCookie("agile_deal_view"))
