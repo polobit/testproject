@@ -273,6 +273,7 @@ function showBar(url, selector, name, yaxis_name, stacked)
 			        }
 			    },
 			    yAxis: {
+			    	allowDecimals: false,
 			        min: 0,
 			        title: {
 			            text: yaxis_name
@@ -299,8 +300,14 @@ function showBar(url, selector, name, yaxis_name, stacked)
 			    },
 			    tooltip: {
 			        formatter: function(){
-			            return'<b>'+this.x+'</b><br/>'+this.series.name+': '+this.y;
-			        }
+			        	if(selector=='calls-chart'){
+			        		return'<b>'+this.x+'</b><br/><font color='+this.series.color+'>'+this.series.name+'</font>: '+this.y;
+			        		
+			        	}
+			        	else
+			            	return'<b>'+this.x+'</b><br/>'+this.series.name+': '+this.y;
+			        },
+			        useHTML : true,
 			    },
 			    plotOptions: {
 			        column: {
