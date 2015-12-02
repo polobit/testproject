@@ -61,19 +61,26 @@ function load_events_from_google(callback)
 //		}
 	}
 
-	// Name of the cookie to store/ calendar prefs. Current user id is set
+	get_google_calendar_prefs(callback);
+
+}
+
+function get_google_calendar_prefs(callback)
+{
+		// Name of the cookie to store/ calendar prefs. Current user id is set
 	// in cookie name to avoid
 	// showing tasks in different users calendar if logged in same browser
 	var google_calendar_cookie_name = "_agile_google_calendar_prefs_" + CURRENT_DOMAIN_USER.id;
 
 	// Reads existing cookie
-	var _agile_calendar_prefs_cookie = readCookie(google_calendar_cookie_name);
+	var _agile_calendar_prefs_cookie = readData(google_calendar_cookie_name);
 
 	// If cookie is not null, then it check it token is still valid; checks
 	// based on expiry time.
 	if (_agile_calendar_prefs_cookie && _agile_calendar_prefs_cookie != "null")
 	{
 		var prefs = JSON.parse(_agile_calendar_prefs_cookie);
+
 
 		// Checks if token expired. It considers expire before 2 minutes window
 		// of actual expiry time.
@@ -98,7 +105,7 @@ function load_events_from_google(callback)
 			return;
 
 		// Creates cookie
-		createCookie(google_calendar_cookie_name, JSON.stringify(prefs));
+		storeData(google_calendar_cookie_name, JSON.stringify(prefs));
 		return get_google_calendar_event_source(prefs, callback);
 	});
 }
@@ -117,7 +124,7 @@ function get_google_calendar_event_source(data, callback)
 {
 
 	if (callback && typeof (callback) === "function")
-		callback({ token : data.access_token, dataType : 'agile-gcal', className : "agile-gcal" });
+		callback({ token : data.access_token, dataType : 'agile-gcal', className : "agile-gcal", calendarIds : data.calendarList });
 	return true;
 }
 
@@ -129,8 +136,7 @@ function showCalendar(users)
 {
 
 	_init_gcal_options(users);
-	putGoogleCalendarLink();
-	putOfficeCalendarLink();
+	put_thirdparty_calendar_links();
 	
 	var calendarView = (!readCookie('calendarDefaultView')) ? 'month' : readCookie('calendarDefaultView');
 	$('#' + calendarView).addClass('bg-light');
