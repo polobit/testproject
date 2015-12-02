@@ -51,46 +51,46 @@
 <div class="b-t b-b wrapper-sm">
 	{{#if customer.subscription}}
 		<div class="row">	
-			<div class="col-md-5">Start Date
+			<div class="col-md-5 p-r-none">Start Date
 				<div class="pull-right"> :</div>
 			</div>
-			<div class="col-md-7 text-muted">
+			<div class="col-md-7 text-muted p-r-none">
 				<i class="fa fa-clock-o m-r-xs"></i>
 				<time class="time-ago" datetime="{{epochToHumanDate "" customer.subscription.start}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" customer.subscription.start}}</time>
 			</div>
 		</div>
 		{{#if customer.subscription.currentPeriodEnd}}
 		<div class="row">	
-			<div class="col-md-5">End Date
+			<div class="col-md-5 p-r-none">End Date
 				<div class="pull-right">:</div>
 			</div>
-			<div class="col-md-7 text-muted">
+			<div class="col-md-7 text-muted p-r-none">
 				<i class="fa fa-clock-o m-r-xs"></i>
 				<time class="time-ago" datetime="{{epochToHumanDate "" customer.subscription.currentPeriodEnd}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" customer.subscription.currentPeriodEnd}}</time>
 			</div>
 		</div>
 		{{/if}}
 		<div class="row">	
-			<div class="col-md-5">Current Plan
+			<div class="col-md-5 p-r-none">Current Plan
 				<div class="pull-right">:</div>
 			</div>							
-			<div class="col-md-7">
+			<div class="col-md-7 p-r-none word-break">
 				{{customer.subscription.plan.id}}
 			</div>
 		</div>
 		<div class="row">	
-			<div class="col-md-5">Interval
+			<div class="col-md-5 p-r-none">Interval
 				<div class="pull-right">:</div>
 			</div>							
-			<div class="col-md-7">
+			<div class="col-md-7 p-r-none">
 				{{customer.subscription.plan.interval}}
 			</div>
 		</div>
 		<div class="row">	
-			<div class="col-md-5">Amount
+			<div class="col-md-5 p-r-none">Amount
 				<div class="pull-right">:</div>
 			</div>							
-			<div class="col-md-7">
+			<div class="col-md-7 p-r-none">
 				{{numeric_operation customer.subscription.plan.amount 100 "/"}} {{toUpperCase customer.subscription.plan.currency}}
 			</div>
 		</div>
