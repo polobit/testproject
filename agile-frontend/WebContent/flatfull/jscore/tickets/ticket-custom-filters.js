@@ -107,6 +107,15 @@ var Ticket_Custom_Filters = {
 
 			var condition = filterJSON.conditions[i];
 
+			var valueArray = new Array();
+
+			if(Ticket_Custom_Filters.customFilters[condition.LHS])
+				valueArray = Ticket_Custom_Filters.customFilters[condition.LHS];
+
+			valueArray.push(condition.RHS);
+
+			Ticket_Custom_Filters.customFilters[condition.LHS] = valueArray;
+
 			switch(condition.LHS){
 				case 'status':{
 

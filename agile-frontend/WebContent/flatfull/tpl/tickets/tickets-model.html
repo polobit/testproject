@@ -19,13 +19,13 @@
           <td><span class="text-muted">Assignee: </span></td>
           <td class="p-l-sm">
             <div class="assignee-change pos-rlt show-caret">
-              <a class="btn btn-sm p-n b-n first-letter-cap inline-block m-r-xs txt-small" data-toggle="dropdown">
+              <a class="btn btn-sm p-n b-n first-letter-cap inline-block m-r-xs txt-small assignee" data-toggle="dropdown">
                 {{#if assigneeID}}{{assignee.name}}{{else}}-{{/if}}
               </a>
               <a class="btn btn-sm p-n dropdown-toggle b-n display-none" data-toggle="dropdown" aria-expanded="false">
                 <span class="caret"></span>
               </a>
-              <ul class="dropdown-menu dropdown-menu-right">
+              <ul class="dropdown-menu dropdown-menu-right ul-select ul-select-assignee" data-ticket-id="{{id}}">
                 
               </ul>
             </div>
@@ -34,16 +34,16 @@
         <tr><td><span class="text-muted">Status: </span></td>
             <td class="p-l-sm">
               <div class="assignee-change pos-rlt show-caret">
-                <a class="btn btn-sm p-n b-n first-letter-cap inline-block txt-small m-r-xs" data-toggle="dropdown">
+                <a class="btn btn-sm p-n b-n first-letter-cap inline-block txt-small m-r-xs status" data-toggle="dropdown">
                   {{status}}
                 </a>
                 <a class="btn btn-sm p-n dropdown-toggle b-n display-none" data-toggle="dropdown" aria-expanded="false">
                   <span class="caret"></span>
                 </a>
-                <ul class="dropdown-menu dropdown-menu-right">
-                  <li><a href="javascript:void(0);" value="OPEN">Open</a></li>
-                  <li><a href="javascript:void(0);" value="PENDING">Pending</a></li>
-                  <li><a href="javascript:void(0);" value="CLOSED">Closed</a></li>
+                <ul class="dropdown-menu dropdown-menu-right ul-select" data-ticket-id="{{id}}">
+                  <li><a href="javascript:void(0);" value="OPEN" data-field="status">Open</a></li>
+                  <li><a href="javascript:void(0);" value="PENDING" data-field="status">Pending</a></li>
+                  <li><a href="javascript:void(0);" value="CLOSED" data-field="status">Closed</a></li>
                 </ul>
               </div>
             </td>
@@ -51,16 +51,16 @@
         <tr><td><span class="text-muted">Priority: </span></td>
             <td class="p-l-sm">
               <div class="assignee-change pos-rlt show-caret">
-                <a class="btn btn-sm p-n b-n first-letter-cap inline-block txt-small m-r-xs" data-toggle="dropdown">
+                <a class="btn btn-sm p-n b-n first-letter-cap inline-block txt-small m-r-xs priority" data-toggle="dropdown">
                   {{priority}}
                 </a>
                 <a class="btn btn-sm p-n dropdown-toggle b-n display-none" data-toggle="dropdown" aria-expanded="false">
                   <span class="caret"></span>
                 </a>
-                <ul class="dropdown-menu dropdown-menu-right">
-                  <li><a href="javascript:void(0);" value="LOW">Low</a></li>
-                  <li><a href="javascript:void(0);" value="MEDIUM">Medium</a></li>
-                  <li><a href="javascript:void(0);" value="HIGH">High</a></li>
+                <ul class="dropdown-menu dropdown-menu-right ul-select" data-ticket-id="{{id}}">
+                  <li><a href="javascript:void(0);" value="LOW" data-field="priority">Low</a></li>
+                  <li><a href="javascript:void(0);" value="MEDIUM" data-field="priority">Medium</a></li>
+                  <li><a href="javascript:void(0);" value="HIGH" data-field="priority">High</a></li>
                 </ul>
               </div>
             </td>
@@ -180,4 +180,15 @@
       {{status}}
     </span>
   </td>
+</script>
+<script  id="ticket-model-change-assignee-template" type="text/html">
+  {{#each this}}
+    {{#group_users}}
+      <li>
+        <a href="javascript:void(0);" data-group-name="{{../group_name}}" data-group-id="{{../id}}" value="{{id}}">
+          {{../group_name}}/{{name}}
+        </a>
+      </li>
+    {{/group_users}}
+  {{/each}}  
 </script>

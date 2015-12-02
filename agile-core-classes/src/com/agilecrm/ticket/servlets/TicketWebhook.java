@@ -202,7 +202,7 @@ public class TicketWebhook extends HttpServlet
 						attachmentExists, msgJSON.getJSONObject("headers").getString("X-Originating-Ip"),
 						new ArrayList<Key<TicketLabels>>());
 
-				BulkActionNotifications.publishNotification("New Ticket#" + ticket + " has been received");
+				BulkActionNotifications.publishNotification("New ticket(#" + ticket.id + ") has been received");
 			}
 			else
 			{
@@ -224,7 +224,8 @@ public class TicketWebhook extends HttpServlet
 				TicketsUtil.updateTicket(ticketID, ccEmails, msgJSON.getString("text"), LAST_UPDATED_BY.REQUESTER,
 						ticketUpdatedTime, ticketUpdatedTime, null, attachmentExists);
 
-				BulkActionNotifications.publishNotification(ticket.requester_name + " replied to ticket#" + ticket.id);
+				BulkActionNotifications.publishNotification(ticket.requester_name + " replied to ticket(#" + ticket.id
+						+ ")");
 			}
 
 			// Creating new Notes in TicketNotes table

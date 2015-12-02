@@ -92,6 +92,12 @@ var Tickets = {
 
 					//Clear bulk ops selections
 					Ticket_Bulk_Ops.clearSelection();
+
+					var Groups = Backbone.Collection.extend({url: '/core/api/tickets/groups'});
+					new Groups().fetch({success: function(model, response, options){
+						
+						$('ul.ul-select-assignee').html(getTemplate('ticket-model-change-assignee', model.toJSON()))
+					}});
 				}
 			});
 
@@ -130,6 +136,44 @@ var Tickets = {
 
 	initEvents: function(el){
 		
+		/**
+		 * Initializing click event on ul lists in ticket collection
+		 */
+		$('ul.ul-select', el).off('click'); 
+		$('ul.ul-select', el).on('click', "li a", function(e){
+			e.stopPropagation();
+			e.preventDefault();
+
+			var $that = $(this);
+			var action_type = $that.data('field'), action_value = $that.attr('value');
+			var ticket_id = $that.closest('ul').data('ticket-id'), url = '/core/api/tickets', message = '';
+
+			switch(action_type){
+
+				case 'status':
+					url += "/change-status?id=" + ticket_id + "&status=" + action_value;
+					message = 'Status has been updated to ' + action_value;
+					break;
+				case 'priority':
+					url += "/change-priority?id=" + ticket_id + "&priority=" + action_value;
+					message = 'Priority has been updated to ' + action_value;
+					break;
+				case 'assignee':
+				    url += "/assign-ticket?ticket_id=" + ticket_id + "&assignee_id=" + action_value + 
+		                     '&group_id=' + $(this).data('group-id');
+					message = 'Assignee has been changed to ' + action_value;		                     
+					break;		
+			}
+
+			Tickets.updateModel(url, function(){
+
+				showNotyPopUp('information', message, 'bottomRight', 3000);
+				$that.closest('tr').find('a.' + action_type).html(action_value);
+				$that.closest('div').removeClass('open');
+
+			}, null, ticket_id);
+		});
+
 		/**
 		 * Initializing click event on ticket checkboxes
 		 */
@@ -390,14 +434,18 @@ var Tickets = {
 		});
 	},
 
-	updateModel: function(url, success_cbk, err_cbk){
+	updateModel: function(url, success_cbk, err_cbk, ticket_id){
 		var newTicketModel = new BaseModel();
 		newTicketModel.url = url;
 		
-		newTicketModel.save(App_Ticket_Module.ticketView.model.toJSON(), 
+		ticket_id = !ticket_id ? Current_Ticket_ID : ticket_id;
+
+		newTicketModel.save({id: ticket_id}, 
 			{
 				success: function(model){
-				App_Ticket_Module.ticketView.model.set(model, {silent: true});
+
+				if(App_Ticket_Module.ticketView)
+					App_Ticket_Module.ticketView.model.set(model, {silent: true});
 
 				if(success_cbk)
 					success_cbk(model);
