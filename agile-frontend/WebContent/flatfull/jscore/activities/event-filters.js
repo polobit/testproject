@@ -203,7 +203,7 @@ function put_thirdparty_calendar_links()
 			console.log(preference);
 			if(preference.calendar_type == 'GOOGLE')
 				putGoogleCalendarLink(true);
-			else if(preference.calendar_type == 'OFFICE')
+			else if(preference.calendar_type == 'OFFICE365')
 				putOfficeCalendarLink(true)
 		});
 	})

@@ -55,7 +55,7 @@ public class GoogleCalenderPrefs
 
     public enum CALENDAR_TYPE
     {
-	GOOGLE, OFFICE;
+		GOOGLE, OFFICE365;
     }
 
     public CALENDAR_TYPE calendar_type;
