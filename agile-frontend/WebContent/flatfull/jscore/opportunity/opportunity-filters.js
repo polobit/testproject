@@ -1206,6 +1206,8 @@ function initializeMilestoneListners(el){
 			});
 
 					console.log(goals_json);
+					$('.Count_goal').text(0);
+					$('.Amount_goal').text(0);
 					$.ajax({ type : 'POST', url : '/core/api/goals', data : JSON.stringify(goals_json),
 					contentType : "application/json; charset=utf-8", dataType : 'json' ,
 					success : function(e)
@@ -1220,6 +1222,11 @@ function initializeMilestoneListners(el){
 
 					}
 				});
+								if(that.find('.count').val()!="")
+									$('.Count_goal').text(parseInt($('.Count_goal').text())+parseInt(that.find('.count').val()));
+								if(that.find('.amount').val()!="")
+									$('.Amount_goal').text(parseInt($('.Amount_goal').text())+parseInt(that.find('.amount').val()));
+							
 							});
 						$save_info = $('<div style="display:inline-block"><small><p class="text-info"><i>Changes Saved</i></p></small></div>');
 
@@ -1236,13 +1243,16 @@ function initializeMilestoneListners(el){
         	}
 	});
 });
-$("#milestone-listner").on('change','.count',function(e)
+/*$("#milestone-listner").on('change','.count',function(e)
 	{
+		if($(this).val()!="")
 			$('.Count_goal').text(parseInt($('.Count_goal').text())+parseInt($(this).val()));
+		else
+
 	});	
 
 $("#milestone-listner").on('change','.amount',function(e)
 	{
 			$('.Amount_goal').text(parseInt($('.Amount_goal').text())+parseInt($(this).val()));
-	});	
+	});	*/
 }

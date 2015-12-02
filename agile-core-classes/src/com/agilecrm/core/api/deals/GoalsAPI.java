@@ -50,6 +50,8 @@ public class GoalsAPI
     {
     	List<Goals> goal_new=new ArrayList<Goals>();
     	for(Goals goal:goals){
+    		if(goal.id!=null)
+    			goal_new.add(goal);
 	    if(goal.amount!=null || goal.count!=null)
 	    		goal_new.add(goal);
     		//System.out.println("goal");
