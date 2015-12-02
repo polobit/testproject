@@ -54,7 +54,7 @@
 			<div class="col-md-5 p-r-none">Start Date
 				<div class="pull-right"> :</div>
 			</div>
-			<div class="col-md-7 text-muted p-r-none">
+			<div class="col-md-7 text-muted p-r-none p-l-xxs">
 				<i class="fa fa-clock-o m-r-xs"></i>
 				<time class="time-ago" datetime="{{epochToHumanDate "" customer.subscription.start}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" customer.subscription.start}}</time>
 			</div>
@@ -64,7 +64,7 @@
 			<div class="col-md-5 p-r-none">End Date
 				<div class="pull-right">:</div>
 			</div>
-			<div class="col-md-7 text-muted p-r-none">
+			<div class="col-md-7 text-muted p-r-none p-l-xxs">
 				<i class="fa fa-clock-o m-r-xs"></i>
 				<time class="time-ago" datetime="{{epochToHumanDate "" customer.subscription.currentPeriodEnd}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" customer.subscription.currentPeriodEnd}}</time>
 			</div>
@@ -74,7 +74,7 @@
 			<div class="col-md-5 p-r-none">Current Plan
 				<div class="pull-right">:</div>
 			</div>							
-			<div class="col-md-7 p-r-none word-break">
+			<div class="col-md-7 p-r-none word-break p-l-xxs">
 				{{customer.subscription.plan.id}}
 			</div>
 		</div>
@@ -82,7 +82,7 @@
 			<div class="col-md-5 p-r-none">Interval
 				<div class="pull-right">:</div>
 			</div>							
-			<div class="col-md-7 p-r-none">
+			<div class="col-md-7 p-r-none p-l-xxs">
 				{{customer.subscription.plan.interval}}
 			</div>
 		</div>
@@ -90,7 +90,7 @@
 			<div class="col-md-5 p-r-none">Amount
 				<div class="pull-right">:</div>
 			</div>							
-			<div class="col-md-7 p-r-none">
+			<div class="col-md-7 p-r-none p-l-xxs">
 				{{numeric_operation customer.subscription.plan.amount 100 "/"}} {{toUpperCase customer.subscription.plan.currency}}
 			</div>
 		</div>
