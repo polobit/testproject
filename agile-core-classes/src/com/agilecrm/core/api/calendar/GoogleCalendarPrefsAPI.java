@@ -7,6 +7,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import com.thirdparty.google.calendar.GoogleCalenderPrefs;
@@ -75,10 +76,10 @@ public class GoogleCalendarPrefsAPI
 
     @DELETE
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public void deleteContactPrefs()
+    public void deleteContactPrefs(@QueryParam("type") CALENDAR_TYPE calendar_type)
     {
 	System.out.println("delete");
-	GoogleCalenderPrefs prefs = GooglecalendarPrefsUtil.getCalendarPref();
+	GoogleCalenderPrefs prefs = GooglecalendarPrefsUtil.getCalendarPrefsByType(calendar_type);
 	if (prefs != null)
 	    prefs.delete();
     }

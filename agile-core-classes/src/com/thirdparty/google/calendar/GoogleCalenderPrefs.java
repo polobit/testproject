@@ -132,7 +132,6 @@ public class GoogleCalenderPrefs
     @PostLoad
     void postLoad()
     {
-	System.out.println("************************************************************ prefs google *************");
 	if (System.currentTimeMillis() >= expires_at)
 	    try
 	    {
