@@ -189,6 +189,12 @@ function showBar(url, selector, name, yaxis_name, stacked)
 			// Names on X-axis
 			var categories = [];
 			var tempcategories = [];
+			var colors=[];
+
+			if(selector!='calls-chart')
+				colors=['#23b7e5','#27c24c','#7266ba','#fad733'];
+			else
+				colors=['#27c24c','#23b7e5','#f05050','#7266ba'];
 			var dataLength = 0;
 				var frequency= $("#frequency:visible").val();
 			// Data to map with X-axis and Y-axis.
@@ -242,12 +248,7 @@ function showBar(url, selector, name, yaxis_name, stacked)
 			        renderTo: selector,
 			        type: 'column'
 			    },
-			   /* colors: [
-			        '#4365AD',
-			        '#D52A3E',
-			        'gray',
-			        '#1E995C'
-			    ],*/
+			    colors: colors,
 			    title: {
 			        text: name
 			    },
