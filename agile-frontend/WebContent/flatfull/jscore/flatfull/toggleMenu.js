@@ -64,6 +64,8 @@ $(document).ready(function(){
 		$('#mobile-menu-settings').trigger('click');
 	});
 
+
+	
 	$('body').on('mousedown','.navi-wrap li a , #navbar li a',function(e){
 		e.preventDefault();
 		$(this).css('opacity','0.5');

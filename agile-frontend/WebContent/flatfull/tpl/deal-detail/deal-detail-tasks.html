@@ -42,14 +42,14 @@
 	</div>
 <span class="hidden">{{taskOwner.name}}</span>
 <div class="pull-left rightThumbView">
-<div class="pull-left  text-md text-cap">
+<div class="pull-left  text-md text-cap w-full">
     {{#if is_complete}}
-			<div><span><i class="fa fa-check"></i></span><div class="task-subject inline text-l-t" style="margin-left:9px"><a  href="#task/{{id}}" class="inline-block text-ellipsis contact-title-dynamic pos-rlt pos-t-xs">{{subject}}</a></div>{{#if_equals priority_type "NORMAL"}}{{else}}
+			<div><span><i class="fa fa-check"></i></span><div class="task-subject text-ellipsis pos-rlt pos-t-xs inline-block" style="max-width:74%;margin-left:9px"><a  href="#task/{{id}}" class="inline-block text-ellipsis  pos-rlt pos-t-xs w-full">{{subject}}</a></div>{{#if_equals priority_type "NORMAL"}}{{else}}
 					<span class="label hidden label-{{task_label_color priority_type}}">{{ucfirst priority_type}}</span>{{/if_equals}}
                    <span><label class="label bg-light text-tiny"><!-- <i class="fa {{icons type}} hide"></i>&nbsp; -->{{ucfirst type}}</label></span>
 				</div>
 		{{else}}
-			<div><label class="i-checks i-checks-sm"><input data="{{id}}" class="complete-deal-task form-control" type="checkbox"/><i></i></label><div class="task-subject inline"><a class="inline-block text-ellipsis contact-title-dynamic pos-rlt pos-t-xs"  href="#task/{{id}}">{{subject}}</a></div>{{#if_equals priority_type "NORMAL"}}{{else}}
+			<div><label class="i-checks i-checks-sm"><input data="{{id}}" class="complete-deal-task form-control" type="checkbox"/><i></i></label><div class="task-subject text-ellipsis pos-rlt pos-t-xs inline-block" style="max-width:74%"><a class="inline-block text-ellipsis  pos-rlt pos-t-xs w-full"  href="#task/{{id}}">{{subject}}</a></div>{{#if_equals priority_type "NORMAL"}}{{else}}
 					<span class="label hidden label-{{task_label_color priority_type}}">{{ucfirst priority_type}}</span>{{/if_equals}}
                     <span><label class="label bg-light text-tiny"><!-- <i class="fa {{icons type}}"></i>&nbsp; -->{{ucfirst type}}</label></span>
 				</div>

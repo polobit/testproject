@@ -1807,6 +1807,9 @@ width: 100%!Important;
 input[type=file] {
   width: 100%;
 }
+#aside li a:active {
+  opacity: 0.5;
+}
 
 }
 
