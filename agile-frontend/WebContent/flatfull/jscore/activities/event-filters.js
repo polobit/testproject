@@ -195,8 +195,8 @@ function putGoogleCalendarLink(calEnable)
 
 function put_thirdparty_calendar_links()
 {
-	putOfficeCalendarLink(false)
-	putGoogleCalendarLink(false)
+	putOfficeCalendarLink(false);
+	putGoogleCalendarLink(false);
 	$.getJSON('core/api/calendar-prefs/list', function(data){
 		console.log(data);
 		$.each(data, function(index, preference){
