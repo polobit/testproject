@@ -545,17 +545,7 @@ function check_merge_fields_and_send(button)
     var text_body = $("#text_email").val();
     var html_body = $("#tinyMCEhtml_email").val();
 
-    var value = "";
-
-    // For Text email
-    if(button == "#button_email")
-       value = text_body;
-
-    // For HTML email
-    if(button == "#button_email_html")
-        value = html_body;
-
-    if((subject && subject.indexOf('{{') != -1) || (value && value.indexOf('{{') != -1))
+    if((subject && subject.indexOf('{{') != -1) || (text_body && text_body.indexOf('{{') != -1) || (html_body && html_body.indexOf('{{') != -1))
         show_test_email_alert(button);
     else
         send_test_email(button);
