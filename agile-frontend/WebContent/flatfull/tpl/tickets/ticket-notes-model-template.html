@@ -1,49 +1,49 @@
 <script id="ticket-notes-model-template" type="text/html">
-	{{#if_equals note_type 'PUBLIC'}}
-		<div class="wrapper b-b b-t" style="{{#if_equals created_by 'REQUESTER'}}background-color: #F6F8F8{{/if_equals}}">
-		    {{#if_equals created_by 'REQUESTER'}}
-		    	<div class="thumb-xs pull-left m-r-sm b-light b avatar">
-					<img class="user-img r r-2x" alt="" src="{{emailGravatarurl 34 requester_email}}">
-				</div>
-		    	<div class="inline-block">
-		    		<a href="javascript:void(0);">{{requester_name}} ({{requester_email}})</a>
-		    		<div>
-		    			<span class="txt-small text-xs text-muted">
+
+{{#if_equals note_type 'PUBLIC'}}
+		
+<div class="m">
+
+	 {{#if_equals created_by 'REQUESTER'}}
+	 	<a href="" class="{{#if_equals created_by 'REQUESTER'}}pull-right{{else}}pull-left{{/if_equals}} thumb-sm avatar">
+	 	<img src="{{emailGravatarurl 34 requester_email}}" class="img-circle" alt="...">
+	    </a>
+	   {{else}}
+	 	<a href="" class="{{#if_equals created_by 'REQUESTER'}}pull-right{{else}}pull-left{{/if_equals}} thumb-sm avatar">
+	 	<img src="{{domain_user.ownerPic}}" class="img-circle" alt="...">
+	 	</a>
+	 {{/if_equals}}
+
+    
+
+    <div class="{{#if_equals created_by 'REQUESTER'}}m-r-xxl{{else}}m-l-xxl {{/if_equals}}">
+
+      <div class="pos-rlt panel b-light {{#if_equals created_by 'REQUESTER'}}bg-light {{else}} {{/if_equals}} r r-2x">
+
+      	<div class="panel-heading pos-rlt {{#if_equals created_by 'REQUESTER'}}b-b {{else}}b-light{{/if_equals}}">
+              <span class="arrow {{#if_equals created_by 'REQUESTER'}}right arrow-light{{else}}left{{/if_equals}} pull-up "></span>
+
+            {{#if_equals created_by 'REQUESTER'}}
+
+              	<a href="javascript:void(0);">{{requester_name}} ({{requester_email}})</a>
+              	<span class="txt-small text-xs text-muted pull-right">
 		   					Received on {{epochToHumanDate "mmm dd yyyy HH:MM" created_time}}
 		   				</span>
-		   			</div>
-		    	</div>
+             
 		   	{{else}}
-		   		<div class="thumb-xs pull-left m-r-sm b-light b avatar">
-					<img class="user-img r r-2x" alt="" src="{{domain_user.ownerPic}}">
-				</div>
-		   		<div class="inline-block">
-		   			<a href="javascript:void(0);">
-		   				{{domain_user.name}} ({{domain_user.email}})
-		   			</a>
-		   			<div>
-		   				<span class="txt-small text-xs text-muted">
+		   		<a href="javascript:void(0);">{{domain_user.name}} ({{domain_user.email}})</a>
+              	<span class="txt-small text-xs text-muted pull-right">
 		   					Replied on {{epochToHumanDate "mmm dd yyyy HH:MM" created_time}}
-	   					</span>
-		   			</div>
-		   		</div>
+		   		</span>
 		   	{{/if_equals}}
-		   	<!-- <div class="dropdown pull-right">
-			  <button class="btn btn-default btn-xs dropdown-toggle" type="button" data-toggle="dropdown"> 
-			  	<i class="fa fa-cog"></i>
-			  	<span class="caret"></span>
-			  </button>
-			  <ul class="dropdown-menu dropdown-menu-right">
-			    <li><a href="javascript:void(0);" class="show-plain-text-notes">Show plain text</a></li>
-			    <li><a href="javascript:void(0);" class="show-original-text">Show original text</a></li>
-			  </ul>
-			</div> -->
-		</div>
-		<div class="wrapper" style="{{#if_equals created_by 'REQUESTER'}}background-color:#F6F8F8{{/if_equals}}">
-	    	{{{html_text}}}
-	  	</div>
-	  	{{#if attachments_list}}
-	  		<div class="wrapper" style="{{#if_equals created_by 'REQUESTER'}}background-color: #F6F8F8{{/if_equals}}">
+             
+        </div>
+        <div class="panel-body">
+              <div>{{{html_text}}}</div>
+        </div>
+
+        {{#if attachments_list}}
+	  		<div class="wrapper">
 	  			<h5>Attachments</h5>
 	  			 <ul class="inline v-top m-b-sm p-n attachments-list">
 	  			 	{{#each attachments_list}}
@@ -57,8 +57,15 @@
 	        	</ul>
 	  		</div>
 	  	{{/if}}	
-	{{else}}
-		<div class="wrapper b-b b-t m-t-xs" style="background-color:#FBFBFB">
+
+      </div>
+      
+    </div>
+
+</div>
+
+{{else}}
+		<div class="wrapper b-t m-t-xs">
 		    <img class="m-r-sm v-inherit" src="{{domain_user.ownerPic}}"  width="34px" height="34px">
 		    <div class="inline-block">
 		   		<a href="javascript:void(0);">
@@ -73,7 +80,7 @@
 	   			</div>
 		   	</div>
 		</div>
-		<div class="wrapper" style="background-color:#FBFBFB">
+		<div class="wrapper">
 	    	{{{html_text}}}
 	  	</div>
 	{{/if_equals}}  	

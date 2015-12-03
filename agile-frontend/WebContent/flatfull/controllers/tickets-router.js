@@ -97,7 +97,7 @@
 						RHS.chained(LHS);
 
 						//Initializing type ahead for tags
-						Ticket_Labels.showSelectedLabels(new Array(), "", $(el));
+						Ticket_Labels.showSelectedLabels(new Array(), $(el));
 					});
 					
 					//Initializing click on CC email field
@@ -305,26 +305,47 @@ $("#right-pane").html(ticketView.render().el);
 	 **/
 	 ticketDetails: function(id){
 
-	 	var ticketModal = null;
+	 	var ticketModel = null;
 
-	 	if(App_Ticket_Module.ticketsCollection && App_Ticket_Module.ticketsCollection.collection){
-
-	 		ticketModal = App_Ticket_Module.ticketsCollection.collection.get(id);
-	 	}	
-
+	 	if (App_Ticket_Module.ticketsCollection && App_Ticket_Module.ticketsCollection.collection)
+	 	   ticketModel = App_Ticket_Module.ticketsCollection.collection.get(id);
+	 
 	 	Current_Ticket_ID = id;
 
-	 	App_Ticket_Module.ticketView = new Ticket_Base_Model({
-	 		model : ticketModal, 
-	 		isNew : (ticketModal) ? true : false,
+	 	// Get ticket models
+	 	if(!ticketModel){
+
+	 		// Fetch ticket details
+	 		Tickets.fetchTicketModel( id, function(model){
+	 			App_Ticket_Module.getTicketModelView(model);
+	 		});
+
+	 		return;
+	 	}
+
+	 	App_Ticket_Module.getTicketModelView(ticketModel);
+	 	return;
+
+	},
+
+	getTicketModelView: function(model){
+
+		if(!model || !model.toJSON().id)
+			return;
+
+	    var id = model.toJSON().id;
+
+		App_Ticket_Module.ticketView = new Ticket_Base_Model({
+	 		model : model, 
+	 		isNew : true,
 	 		template : "ticket-details",
 	 		url : "/core/api/tickets/" + id,
 	 		postRenderCallback : function(el, data) {
 
-				//Initialize tooltips
+	 			//Initialize tooltips
 				$('[data-toggle="tooltip"]', el).tooltip();
 
-				Ticket_Labels.showSelectedLabels(data.labels, "", $(el));
+				Ticket_Labels.showSelectedLabels(data.labels, $(el));
 
 				//Initializing events on CC email field
 				Tickets.initCCEmailsListeners(el);
@@ -342,6 +363,7 @@ $("#right-pane").html(ticketView.render().el);
 
 		//$(".tickets-collection-pane").html('');
 		$('#content').html(App_Ticket_Module.ticketView.render().el);
+		
 	},
 
 	ticketsBulkActions: function(action_type){
@@ -780,7 +802,7 @@ $('#content').find('.helpdesk-tab').addClass('select');
  				url : '/core/api/tickets/canned-messages',
  				postRenderCallback: function(el){
 
- 					Ticket_Labels.showSelectedLabels([], "id", $(el));
+ 					Ticket_Labels.showSelectedLabels([], $(el));
 
  					initTicketCannedResponseEvents(el);
  				},
@@ -821,8 +843,8 @@ $('#content').find('.helpdesk-tab').addClass('select');
  				url : '/core/api/tickets/canned-messages',
  				template : "ticket-canned-response-add-edit",
  				postRenderCallback: function(el) {
- 					console.log(cannedResponse.toJSON().labels);
- 					Ticket_Labels.showSelectedLabels(cannedResponse.toJSON().labels, "id", $(el));
+ 					
+ 					Ticket_Labels.showSelectedLabels(cannedResponse.toJSON().labels, $(el));
  					initTicketCannedResponseEvents(el);
  				},
  				saveCallback : function(){
