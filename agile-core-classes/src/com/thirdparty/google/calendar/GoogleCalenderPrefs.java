@@ -1,7 +1,9 @@
 package com.thirdparty.google.calendar;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import javax.persistence.Id;
 import javax.persistence.PostLoad;
@@ -56,7 +58,7 @@ public class GoogleCalenderPrefs
 	GOOGLE, OFFICE;
     }
 
-    public CALENDAR_TYPE calendar_type = CALENDAR_TYPE.GOOGLE;
+    public CALENDAR_TYPE calendar_type;
 
     @NotSaved(IfDefault.class)
     public String prefs = null;
@@ -64,6 +66,9 @@ public class GoogleCalenderPrefs
     // domain user key
     @JsonIgnore
     private Key<DomainUser> domainUserKey = null;
+
+    @NotSaved
+    public List<String> calendarList = new ArrayList<String>();
 
     public static ObjectifyGenericDao<GoogleCalenderPrefs> dao = new ObjectifyGenericDao<GoogleCalenderPrefs>(
 	    GoogleCalenderPrefs.class);
@@ -137,6 +142,18 @@ public class GoogleCalenderPrefs
 		// TODO Auto-generated catch block
 		e.printStackTrace();
 	    }
+
+	if (calendar_type == null)
+	{
+	    calendar_type = CALENDAR_TYPE.GOOGLE;
+	    this.save();
+	}
+
+	calendarList.add("primary");
+	// calendarList.add("ak02hkb2ef10q40ccd1kro94f8@group.calendar.google.com");
+
+	System.out.println("Calendars : " + calendarList);
+
     }
 
     @PrePersist
