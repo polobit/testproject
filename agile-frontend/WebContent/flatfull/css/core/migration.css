@@ -1798,6 +1798,9 @@ width: 100%!Important;
 .tooltip {
   display: none!important;
 }
+.task-progress-center-mobile {
+  margin:0 auto;
+}
 }
 
 @media all and (min-width: 768px) {

@@ -5,7 +5,7 @@
 <div class="col w-xl bg-light lter b-r text-center-mobile-view" >
 <div class="vbox">
 <div class="row-row">
-<div id="task-detail-lhs" class="wrapper pos-rlt">
+<div id="task-detail-lhs" class="wrapper pos-rlt details-mobile-view">
 
                   <div> 
                     <div class="text-cap h3 font-thin custom-color w-full">{{#is_link subject}}<span class="activate-link">{{else}}<span class="block" style="margin-right:7px;">{{/is_link}}{{safe_string subject}}</span><span class="label bg-light dk inline-block m-r-sm text-xs pos-rlt pos-t-n-xs text-ellipsis" style="width:30%;vertical-align:bottom;">{{task_property type}}</span>                  
@@ -26,7 +26,7 @@
                                    <li class="divider"></li>
 									<li><a href="#new-task-modal"  data-toggle="modal"><i class="icon-file"></i> Add Note</a></li>
                                     
-									<li><a href='javascript:void(0)'  data="{{id}}" class ="delete_task"><i	class="icon-trash"></i> Delete</a></li>
+									<li><a href='javascript:void(0)'  data="{{id}}" class ="delete_task"><i	class="fa fa-trash"></i> Delete</a></li>
 								</ul>
 					 </div>
 					
@@ -36,7 +36,7 @@
 
 <div class="m-t-sm">
 {{#if_equals "IN_PROGRESS" status}}
-<div class="w-md">
+<div class="w-md task-progress-center-mobile">
 <div class="m-b-xs">{{displayTaskStatus status}} - {{progress}}%</div>
 <div style="height:5px;" class="progress  w-full m-b-none">
           <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="{{progress}}" aria-valuemin="0" aria-valuemax="100" style="width: {{progress}}%;"></div>
@@ -213,11 +213,12 @@
 	<td></td>
 
 	<td class="data no-wrap" data="{{id}}" {{#if_equals type "PERSON"}}route="contact/"{{else}}route="company/"{{/if_equals}}>
+	<div class="table-resp">
           {{#if_contact_type "PERSON"}}
 			<div class="thumb-sm agile-img m-r-sm">
         		<img class="img-inital r r-2x" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}"  title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}" />
 			</div>
-            <div>
+            <div class="agile-thumb-sm text-ellipsis">
         		<a class="">{{getPropertyValue properties "first_name"}}
         		{{getPropertyValue properties "last_name"}} </a>
         		<br />
@@ -228,12 +229,13 @@
 			<div class="thumb-sm agile-img m-r-sm">
         	 <img class="thumbnail m-b-none" {{getCompanyImage "40" "display:inline;"}} title="{{getPropertyValue properties "name"}}"/>
 			</div>
-           	<div>
+           	<div class="agile-thumb-sm text-ellipsis">
         		<b>{{getPropertyValue properties "name"}}        	
     		</div>
-          {{/if_contact_type}}    	 	
+          {{/if_contact_type}} 
+          </div>   	 	
 	</td>
-	<td><div class="h-auto inline-block v-top text-ellipsis" style="width:8em;">{{getPropertyValue properties "title"}}<br />
+	<td><div class="h-auto inline-block v-top text-ellipsis table-resp">{{getPropertyValue properties "title"}}<br />
     	{{getPropertyValue properties "company"}}</div>
 	</td>
 	<td> 
@@ -243,7 +245,7 @@
     {{/each}}
 </div>
 	</td>
-	<td style="width:6em;"><div>{{lead_score}}</div></td>
+	<td><div class="table-resp">{{lead_score}}</div></td>
 </script>
 
 
@@ -365,7 +367,7 @@
 		</a>
 	</div>
 	<br/>
-	<div class="agile-responsive">
+	<div class="table-responsive">
 			<table  class="table table-striped agile-table onlySorting r-5x overflow-scroll m-b-none b    m-b-none agile-table panel table-layout-mob-view" style=" border-collapse: separate;">
 				<!-- <colgroup><col width="10px"><col width="40%"><col width="20%"><col width="25%"><col width="12%"></colgroup> -->
 				<thead>
@@ -410,7 +412,7 @@
 <script id="task-related-deals-model-template" type="text/html">
 <td data="{{id}}" class="data"></td>
 <td>
-	<div class="text-ellipsis"> 
+	<div class="table-resp"> 
 		<a class="text-cap">{{name}}</a>
 	</div>
 </td>
@@ -430,7 +432,7 @@
 </div>
 </td> -->
 <td value="{{expected_value}}"><div class="text-ellipsis" >{{#if expected_value}}{{currencySymbol}}{{numberWithCommas expected_value}}{{else}}-{{/if}}</div></td>
-<td><div class="text-ellipsis">{{milestone}} ({{probability}}%) </div></td>
+<td><div class="table-resp">{{milestone}} ({{probability}}%) </div></td>
 <td class="text-muted"><div class="text-ellipsis" style="width:10em">{{#if close_date}}<i class="fa fa-clock-o m-r-xs"></i><time class="deal-close-time" value="{{close_date}}" datetime="{{epochToHumanDate "" close_date}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" close_date}}</time>{{/if}}</div></td>
 <td>
 <div class="text-ellipsis">
