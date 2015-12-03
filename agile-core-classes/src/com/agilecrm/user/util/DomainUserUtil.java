@@ -162,7 +162,7 @@ public class DomainUserUtil
 	    {
 		public int compare(DomainUser one, DomainUser other)
 		{
-		    return one.name.compareTo(other.name);
+		    return one.name.toLowerCase().compareTo(other.name.toLowerCase());
 		}
 	    });
 
