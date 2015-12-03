@@ -23,9 +23,9 @@ $(function()
 		if(amount == 0){
 			return (amount);
 		}else if(amount > 0){
-			return ("-"+amount);
+			return ("-"+ parseFloat(amount/100));
 		}else{
-			return (Math.abs(amount/100));
+			return (Math.abs(parseFloat(amount/100)));
 		}
 	});
 
