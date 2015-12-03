@@ -1,0 +1,102 @@
+<script id="landingpages-collection-template" type="text/html">
+<div class="custom-animated custom-fadeInUp">
+<div class="wrapper-md lter bg-light b-b">
+<div class="row">
+    <div class="col-sm-12 col-md-12">
+        
+            	<h3 class="pull-left font-thin h3">Landing Pages <small><span class="label label-sm bg-danger">Beta</span></small></h3>
+			
+			<div class="pull-right">
+				<div class="btn-group right pos-rlt pull-right">
+            		<a href="#landing-page-templates" class="btn btn-default btn-sm" id="addLandingPage"><i class="icon-plus-sign"></i> Add Landing Page</a>
+				</div>
+            	
+			</div>
+			<div class="clearfix"></div>
+        
+    </div>
+</div>
+</div>
+<div class="wrapper-md">
+<div class="row">
+<div class="col-md-9 col-sm-9">
+{{#unless this.length}}
+        <div class="alert-info alert">
+            <div class="slate-content">
+                <div class="box-left pull-left m-r-md">
+                    <img alt="Clipboard" src="/img/clipboard.png" />
+                </div>
+                <div class="box-right pull-left">
+                    <h4 class="m-t-none">There are no Landing Pages.</h4>
+                    <div class="text">
+                        You can add Landing Pages by clicking the button below or the one on the right side of the page.
+                    </div>
+                    <a href="#landing-page-templates" class="m-t-xs btn btn-default btn-sm"><i class="icon-plus-sign"></i>  Add Landing Page</a>
+                </div>
+                <div class="clearfix">
+                </div>
+            </div>
+        </div>
+{{/unless}}
+{{#if this.length}}
+        <div class="panel panel-default">
+            <div class="panel-heading">Landing Pages List</div>
+            <div class="table-responsive">                
+                <table class="table table-striped showCheckboxes m-b-none agile-table panel" url="core/api/landingpages/bulk" id="landingpages-list" style="table-layout:auto;">
+                    <thead>
+                        <tr>
+                            <th style="width:45%">Name</th>
+                            <th style="width:10%"></th>
+                            <th style="width:10%"></th>
+                            <th style="width:30%"></th>
+                        </tr>
+                    </thead>
+                    <tbody id="landingpages-model-list" route="landing-page/">
+                    </tbody>
+                </table>                
+            </div>
+        </div>
+{{/if}}
+</div>
+
+    
+    <div class="col-md-3 col-sm-3" id="learn-workflows">
+        
+            <h4 class="m-t-none h4 m-b-sm">
+                How to use Landing Pages?
+            </h4>
+            
+            <p>
+            Landing page is your lead magnet - a web page created to gather leads online. Create a landing page in Agile and link it from your website, email messages or online ads. Add a Form to your landing page to gather visitor details, create Contacts in Agile automatically and nature them using Campaigns.
+            </p>
+            <br>
+        
+    </div>
+</div>
+</div>
+</div>
+</script>
+
+<script id="landingpages-model-template" type="text/html">
+<td data="{{id}}" class="data">
+<div>{{name}}</div>
+</td>
+<td>
+<div class="table-resp">
+<a href="/landing/{{id}}" class="stop-propagation" target="_blank">View</a></div>
+</td>
+<td>
+<div class="table-resp">
+<a href="#landing-page-settings/{{id}}" class="stop-propagation">Publish</a></div>
+</td>
+<td class="text-muted">
+<i class="fa fa-clock-o m-r-xs"></i>
+{{#if updated_time}}
+&nbsp;<span><em>Modified</em>&nbsp;</span>
+<time class="document-created-time" value="{{updated_time}}" datetime="{{epochToHumanDate "" updated_time}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" updated_time}}</time>
+{{else}}
+&nbsp;<span><em>Created</em>&nbsp;</span>
+<time class="document-created-time" value="{{created_time}}" datetime="{{epochToHumanDate "" created_time}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" created_time}}</time>
+{{/if}}
+</td>
+</script>

@@ -6,7 +6,9 @@
  * @author Yaswanth
  */
 var _data = null;
+var IS_TRIAL = false;
 _IS_EMAIL_PLAN_ACTIVE = false;
+var IS_CANCELLED_USER = false;
 var SubscribeRouter = Backbone.Router
 		.extend({
 
@@ -15,6 +17,8 @@ var SubscribeRouter = Backbone.Router
 			/* Subscription page */
 
 			"subscribe" : "subscribe",
+
+			"trial-subscribe" : "trialSubscribe",
 
 			"subscribe/:id/:plan" : "subscribe",
 
@@ -217,6 +221,8 @@ var SubscribeRouter = Backbone.Router
 			{
 
 				IS_HAVING_MANDRILL = false;
+				if(window.location.href.split("#")[1] == "subscribe")
+            		IS_TRIAL = false;
 				$("#content").html("<div id='subscribe_plan_change'></div>");
 
 				/*// Set it in local machine
@@ -526,6 +532,7 @@ var SubscribeRouter = Backbone.Router
 								// Discount
 								showCouponDiscountAmount(plan_json, el);
 								card_expiry(el);
+								
 							},
 							saveCallback : function(data)
 							{
@@ -664,6 +671,36 @@ var SubscribeRouter = Backbone.Router
 				$("#invoice-details-holder").html(this.invoice.render().el);
 
 			},
+
+			trialSubscribe: function()
+			{
+				IS_TRIAL = true;
+				var that = this;
+				if(!IS_CANCELLED_USER)
+				{
+					$.ajax({ url : "core/api/subscription/agileTags?email="+CURRENT_DOMAIN_USER.email,
+					 type : "GET",
+					 dataType: "json",
+					 contentType : "application/json; charset=utf-8",
+					 success : function(data)
+						{
+							console.log(data);
+							if(data && data.tags)
+							{
+								if ( $.inArray('Cancellation Request', data.tags) > -1 || $.inArray('Cancelled Trial', data.tags) > -1) {
+								    IS_CANCELLED_USER = true;
+								}
+							}
+							that.subscribe();
+						},error : function(){
+							alert("Error occured. Please Reload the page.")
+						}
+					});	
+				}
+				else{
+					that.subscribe();
+				}
+			}
 
 		});
 

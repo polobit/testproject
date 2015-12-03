@@ -7,15 +7,24 @@
 // or better
 
 
-function loadUserEventsfromGoogle(users, start, end){
+function loadUserEventsfromGoogle(start, end, callback){
 
-		load_events_from_google(function(data)
+	showLoadingOnCalendar(true);
+		var isConfigured = load_events_from_google(function(data)
 						{
 							if (!data)
+							{
+
 								return;
+							}
 
 							return agile_transform_options(data, start, end);
 						});
+
+		if(!isConfigured)
+			showLoadingOnCalendar(false);
+
+	//	return;
 }
 
 function isDefined(x)
@@ -29,27 +38,39 @@ function _init_gcal_options(users)
 	var fc = $.fullCalendar;
 	fc.sourceFetchers = [];
 	// Transforms the event sources to Google Calendar Events
-	fc.sourceFetchers.push(function(sourceOptions, start, end)
-	{
-		if (sourceOptions.dataType == 'agile-gcal')
+	fc.sourceFetchers.push(_googleEventFetcher);
+}
+
+function _googleEventFetcher(sourceOptions, start, end, callback)
+{	
+	if (sourceOptions.dataType == 'agile-gcal')
 		{
+			
+				loadUserEventsfromGoogle(start, end);
 
-			if(users){
+			return	{};
 
-				loadUserEventsfromGoogle(users, start, end);
-				return;
+			//	callback([]);
+		}
+	else if (sourceOptions.dataType == "agile-events")
+		{
+			addEventsToCalendar(sourceOptions.events(start, end, function(test){}));
 
-			}
-			// Check whether to show the google calendar events or not.
-
-			$.getJSON('/core/api/users/agileusers', function(users)
-				{
-					loadUserEventsfromGoogle(users, start, end);
-				});
+			return {};
+			//return true;
+		//	callback([]);
 
 		}
-	});
 
+		console.log("--------------- Events -----------------------");
+		console.log(sourceOptions.className)
+		if($.isFunction(sourceOptions.events))
+		{
+			//	return sourceOptions.events(start, end, callback);
+		//	sourceOptions.events(start, end, callback);
+				return;
+		}		
+		return;
 }
 
 // Tranform agile
@@ -103,11 +124,20 @@ function _fetchGCAndAddEvents(sourceOptions, start, end)
 			var fc_event = google2fcEvent(resp.items[i]);
 
 			if (fc_event)
-				// Add event
-				$('#calendar_event').fullCalendar('renderEvent', fc_event)
-				
+				google_events.push(fc_event);
+			renderEventBasedOnOwner(fc_event);
+			//$('#calendar_event').fullCalendar('renderEvent', fc_event);		
 		}
 
+
+		//$('#calendar_event').fullCalendar('renderEvents', google_events);
+		addEventSourceToCalendar("google", google_events);
+		showLoadingOnCalendar(false);
+
+		
+		//$('#calendar_event').fullCalendar('removeEvents', function(value, i) {return false;});
+		// Add event
+		//$('#calendar_event').fullCalendar('renderEvents', google_events);
 	});
 }
 
@@ -142,14 +172,14 @@ function google2fcEvent(google)
 		if (fc.end.length > 10)
 		{
 			end = $.fullCalendar.parseDate(fc.end);
-			fc.end = $.fullCalendar.formatDate(end, 'yyyy-MM-dd');
+			fc.end = $.fullCalendar.formatDate(end, 'yyyy-mm-dd');
 		}
 		else
 		{
 			end = new Date(fc.end);
 		}
 		end.setDate(end.getDate() - 1);
-		fc.end = end.format('yyyy-MM-dd');
+		fc.end = end.format('yyyy-mm-dd');
 
 	}
 	return fc;

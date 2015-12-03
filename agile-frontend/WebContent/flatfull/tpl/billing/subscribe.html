@@ -85,7 +85,17 @@
                         </div>
 
 
-<button class="btn btn-block btn-default btn-plan btn-lg  m-b-md" id="choose-regular">Choose</button>
+<button class="btn btn-block btn-default btn-plan btn-lg  m-b-md" id="choose-regular">
+{{#check_plan "FREE"}}
+{{#is_cancelled_user}}
+Choose
+{{else}}
+7 Day Trial
+{{/is_cancelled_user}}
+{{else}}
+Choose
+{{/check_plan}}
+</button>
 
                      </div>
                   </div>
@@ -112,7 +122,17 @@
                            Best choice for businesses trying to scale, with process-centric sales & marketing automation.
                         </div>
 
-<button class="btn btn-block btn-default btn-plan btn-lg  m-b-md" id="choose-pro">Choose</button>
+<button class="btn btn-block btn-default btn-plan btn-lg  m-b-md" id="choose-pro">
+{{#check_plan "FREE"}}
+{{#is_cancelled_user}}
+Choose
+{{else}}
+7 Day Trial
+{{/is_cancelled_user}}
+{{else}}
+Choose
+{{/check_plan}}
+</button>
                   </div>
                   </div>
                   <!-- End of pro-->
@@ -294,7 +314,17 @@
 	<div class="row p-l-xxl p-t-sm">
 		<div class="col-sm-offset-4 col-sm-8 p-l-xxl">
 
-<a href="#purchase-plan" id="purchase-plan"	class="btn btn-large btn-primary">Proceed to Pay</a>
+<a href="#purchase-plan" id="purchase-plan"	class="btn btn-large btn-primary">
+{{#check_plan "FREE"}}
+{{#is_cancelled_user}}
+Proceed to Pay
+{{else}}
+Proceed to Trial
+{{/is_cancelled_user}}
+{{else}}
+Proceed to Pay
+{{/check_plan}}
+</a>
 
 
 			
@@ -605,9 +635,11 @@ users.
 		</div>
 	{{#check_plan "FREE"}}
 	{{else}}
-	<div>
+	{{#is_trial_exist billingData}}
+	<a href="#"  id="cancel_free_trial" class="pull-right text-lg text-info" style="font-size:12px;">Cancel your Trial</a>
+	{{else}}
 	<a href="#"  id="cancel-account-request" class="pull-right text-lg text-info" style="font-size:12px;">Cancel Subscription</a>
-	</div>
+	{{/is_trial_exist}}
 	{{/check_plan}}
 	</div>  <!-- End of col-md-3 -->
 {{/if}}
@@ -706,6 +738,45 @@ users.
 			{{/if}}
 			<br/>
 			<div class="text-danger">Please adjust your current plan accordingly and proceed to process your new subscription.</div>
+			
+		</div>
+		<div class="modal-footer">
+			<a href="#" data-dismiss="modal" class="btn btn-sm btn-danger">Close</a>
+		</div>
+	</div>
+</div>
+</div>
+</script>
+
+<script id="trial-error-modal-template" type="text/html">
+	<div class="modal" data-backdrop="static">
+<div class="modal-dialog">
+    <div class="modal-content">
+		<div class="modal-header">
+            <button class="close" data-dismiss="modal">x</button>
+			<h3 class="modal-title">Plan Restrictions</h3>
+		</div>
+		<div class="modal-body help-text">
+			<strong>Sorry, we are unable to cancel your trial subscription due to the following reasons:</strong><br/><br/>
+			
+				{{#is_greater userscount userslimit}}
+					<div class="p-t-xs"><i class="fa fa-angle-double-right pull-left" style="margin-top:3px;"></i><div class="p-l">Free plan does not allow more than {{userslimit}} users.</div></div>
+				{{/is_greater}}
+				{{#is_greater contactcount contactlimit}}
+					<div class="p-t-xs"><i class="fa fa-angle-double-right pull-left" style="margin-top:3px;"></i><div class="p-l">Free plan does not allow more than {{contactlimit}} contacts.</div></div>
+				{{/is_greater}}
+				{{#is_greater compaigncount compaignlimit}}
+					<div class="p-t-xs"><i class="fa fa-angle-double-right pull-left" style="margin-top:3px;"></i><div class="p-l">Free plan does not allow more than {{compaignlimit}} campaign{{#is_greater compaignlimit 1}}s{{/is_greater}}.</div></div>
+				{{/is_greater}}
+				{{#is_greater webrulecount webrulelimit}}
+					<div class="p-t-xs"><i class="fa fa-angle-double-right pull-left" style="margin-top:3px;"></i><div class="p-l">Free plan does not allow more than {{webrulelimit}} web rule{{#is_greater webrulelimit 1}}s{{/is_greater}}.</div></div>
+				{{/is_greater}}
+				{{#is_greater triggerscount triggerslimit}}
+					<div class="p-t-xs"><i class="fa fa-angle-double-right pull-left" style="margin-top:3px;"></i><div class="p-l">Free plan does not allow more than {{triggerslimit}} trigger{{#is_greater triggerslimit 1}}s{{/is_greater}}.</div></div>
+				{{/is_greater}}
+			
+			<br/>
+			<div class="text-danger">Please reset your account with the help of the above mentioned features and then proceed to cancel your trial subscription</div>
 			
 		</div>
 		<div class="modal-footer">

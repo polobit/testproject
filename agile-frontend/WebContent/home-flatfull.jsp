@@ -253,12 +253,12 @@ if(currentUserPrefs.menuPosition.equals("top")){
       <span>Web Rules</span>
     </a>
   </li>
-  <!-- <li id="web-pages-menu">
-    <a href="#webpages">
+  <li id="landing-pages-menu">
+    <a href="#landing-pages">
       <i class="fa fa-file-code-o"></i>
-      <span>Web Pages</span>
+      <span>Landing Pages</span>
     </a>
-  </li> -->
+  </li>
     <li id="activitiesmenu">
     <a  href="#activities">
       <i class="icon-cogs icon-white"></i>

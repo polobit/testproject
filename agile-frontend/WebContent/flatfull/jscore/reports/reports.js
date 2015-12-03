@@ -91,6 +91,15 @@ function initializeReportsListeners(){
 		var el = $("#report_advanced span i");
 		el.toggleClass("fa-minus").toggleClass("fa-plus");
 			});
+
+		$('.col-md-3')
+			.on(
+					"mouseenter",
+					'.show_screenshot',
+					function(e) {
+
+						$('.show_screenshot').popover();
+					});
 }
 
 function reportsContactTableView(base_model, customDatefields, view)

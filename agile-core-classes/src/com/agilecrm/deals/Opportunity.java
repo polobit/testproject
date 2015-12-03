@@ -497,8 +497,9 @@ public class Opportunity extends Cursor implements Serializable
 	// cache old data to compare new and old in triggers
 	if (id != null)
 	    oldOpportunity = OpportunityUtil.getOpportunity(id);
-	if(oldOpportunity==null){
-		 // If the deal is won, change the probability to 100.
+	if (oldOpportunity == null)
+	{
+	    // If the deal is won, change the probability to 100.
 	    if (this.milestone.equalsIgnoreCase(wonMilestone))
 		this.probability = 100;
 
@@ -750,6 +751,59 @@ public class Opportunity extends Cursor implements Serializable
 	 * if (milestone_changed_time == 0L) milestone_changed_time =
 	 * System.currentTimeMillis() / 1000;
 	 */
+
+    }
+
+    public void addCustomData(CustomFieldData field)
+    {
+	System.out.println("Custom filed received is = " + field);
+	addCustomDataWithoutSaving(field);
+	save();
+
+    }
+
+    public CustomFieldData addCustomDataWithoutSaving(CustomFieldData dealField)
+    {
+	CustomFieldData field = this.getContactFieldByName(dealField.name);
+	String fieldName = field == null ? dealField.name : field.name;
+
+	if (field == null)
+	{
+	    this.custom_data.add(dealField);
+	}
+	else
+	{
+	    field.updateField(dealField);
+	}
+	return field;
+
+    }
+
+    public CustomFieldData getContactFieldByName(String fieldName)
+    {
+	// Iterates through all the properties and returns matching property
+	for (CustomFieldData field : custom_data)
+	{
+	    if (fieldName.equals(field.name))
+		return field;
+	}
+	return null;
+    }
+
+    public void addContactIdsToDeal(List<String> contact_idsList)
+    {
+	List<String> al = new ArrayList<String>();
+	for (String contact_id : contact_idsList)
+	{
+
+	    if (!this.getContact_ids().contains(contact_id))
+	    {
+		al.add(contact_id);
+	    }
+	}
+
+	contact_ids = al;
+	save();
 
     }
 

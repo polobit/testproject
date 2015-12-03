@@ -552,5 +552,26 @@ public class Task extends Cursor
 	}
     }
 
+    public void addContactIdsToTask(List<String> contact_idList)
+    {
+	List<String> al = new ArrayList<String>();
+	for (String contact_id : contact_idList)
+	{
+
+	    /*
+	     * if (!this.get.contains(contact_id)) { al.add(contact_id); }
+	     */
+	    for (Contact c : getContacts())
+	    {
+		if (!c.id.equals(contact_id))
+		    al.add(contact_id);
+	    }
+	}
+
+	contacts = al;
+	save();
+
+    }
+
     /***************************************************************************/
 }
