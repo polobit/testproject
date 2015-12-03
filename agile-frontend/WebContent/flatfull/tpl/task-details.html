@@ -121,7 +121,7 @@
 {{/if}}
 
 {{#each deals}}
-	<div>
+	<div class="task-deals-mobile-view">
   		<div style="width:60%" class="text-ellipsis pull-left">
 			<a href="#deal/{{id}}" class="activate-link thumb m-b-xs text-cap text-ellipsis" style="width: 100%;">{{name}}</a>
 		</div>
@@ -239,9 +239,9 @@
     	{{getPropertyValue properties "company"}}</div>
 	</td>
 	<td> 
-<div class="ellipsis-multiline l-h word-break-keep">
+<div class="table-resp">
 	{{#each tags}}
-    	<span class="label  bg-light  text-tiny">{{this}}</span>
+    	<span class="label  bg-light  text-tiny m-r-xs">{{this}}</span>
     {{/each}}
 </div>
 	</td>

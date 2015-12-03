@@ -1801,6 +1801,10 @@ width: 100%!Important;
 .task-progress-center-mobile {
   margin:0 auto;
 }
+.task-deals-mobile-view {
+  width: 80vw;
+  margin:0 auto;
+}
 }
 
 @media all and (min-width: 768px) {
