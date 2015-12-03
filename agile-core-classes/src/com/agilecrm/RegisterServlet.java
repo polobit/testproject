@@ -227,8 +227,6 @@ public class RegisterServlet extends HttpServlet
 	    // Creates contact in our domain if it is not yopmail
 		if(!StringUtils.equalsIgnoreCase("yopmail", emailType));
 	    	createUserInOurDomain(request, domainUser);
-	    // Creates contact in our domain
-	    createUserInOurDomain(request, domainUser);
 	}
 	catch (Exception e)
 	{
