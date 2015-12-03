@@ -129,17 +129,35 @@ google_calendar:function(el){
                         var dataSynctTab = localStorage.getItem("datasync_tab");
                         $("#prefs-tabs-content").find('a[href="#'+dataSynctTab+'"]').closest("li").addClass("active");
                         initializeTabListeners("datasync_tab", "sync");
-                          var calendar_settings_view = new Calendar_Sync_Settings_View({
-                        url : "core/api/calendar-prefs/get",
+
+                    var calendar_settings_view = new Calendar_Sync_Settings_View({
+                        url : "core/api/calendar-prefs/type/GOOGLE",
                         template : "import-google-calendar-setup",
                         postRenderCallback: function(el)
                         {
-                                head.js(LIB_PATH + 'lib/jquery.multi-select.js', function()
-                                    {
+                            var model = calendar_settings_view.model;
+                            
+                            var prefs = model.get('prefs');
+                            if(prefs)
+                            {
+                                model.set("prefs", JSON.parse(model.get('prefs')));
+                            }
+                            
+                            console.log(model);
+                            $("#multi-select-calendars-container", el).html(getRandomLoadingImg());
+                            _fetchGoogleCalendarList(function(data) {
+                                getTemplate('dynamic-multi-calendar', data, 'no',  function(template_ui){
+                                    
 
-                                        $('#multi-select-calendars', el).multiSelect();
-
-                                    });
+                                        head.js(LIB_PATH + 'lib/jquery.multi-select.js', function()
+                                        {
+                                            $("#multi-select-calendars-container", el).html(template_ui);
+                                             $('#multi-select-calendars', el).multiSelect();
+                                        });
+                                });
+                                
+        
+                            });
                         }
                     });
                     $("#data-sync-settings-tab-content").html(calendar_settings_view.render().el);

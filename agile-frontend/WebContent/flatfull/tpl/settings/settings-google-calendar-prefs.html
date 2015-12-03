@@ -39,7 +39,12 @@
    <center> <img class="m-b-none thumb-xl bg-transparent" style="height:47px;" src="/img/icons/google-calendar-sync.png" /></center>
 	</div>
 	<div class="panel-body">
-	<form name="test" id="dummy"></form>
+	<form id="dummy">
+		{{#if id}}
+				<input class="hide" name="id" value={{id}}></input>
+		{{/if}}
+		
+	</form>
     <form id="google-contacts-import-form" name="prefs">
         <fieldset>
             <div class="control-group form-group">
@@ -47,12 +52,9 @@
 			</div>
 
         	<div class="control-group form-group" id="sync_from_group_controlgroup">
-           <div class="controls">
-				<select multiple id="multi-select-calendars" name="fields" class="multi-select"> 
-        			<option value=Primary>Primary</option>
-        			<option value=Sales>Sales</option>
-        			<option value=Tasks>Tasks</option>
-        		</select>
+           <div class="controls" id="multi-select-calendars-container">
+				
+        		
 			</div>
 		</div>
         </fieldset>
@@ -64,4 +66,12 @@
     </div>
 </div>
 </div>
+</script>
+
+<script id="dynamic-multi-calendar-template" type="text/html">
+<select multiple id="multi-select-calendars" name="fields" class="multi-select required"> 
+	{{#each items}}
+		<option value={{id}}>{{summary}}</option>
+	{{/each}}
+</select>
 </script>

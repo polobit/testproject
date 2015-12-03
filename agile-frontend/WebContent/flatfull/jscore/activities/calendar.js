@@ -124,7 +124,14 @@ function get_google_calendar_event_source(data, callback)
 {
 
 	if (callback && typeof (callback) === "function")
-		callback({ token : data.access_token, dataType : 'agile-gcal', className : "agile-gcal", calendarIds : data.calendarList });
+	{
+		var calendar_ids = ["primary"];
+
+		if(data.prefs && data.prefs.calendarIds)
+			calendar_ids = JSON.parse(data.prefs.fields)
+
+		callback({ token : data.access_token, dataType : 'agile-gcal', className : "agile-gcal", calendarIds : calendar_ids});
+	}
 	return true;
 }
 
