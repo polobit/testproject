@@ -106,4 +106,32 @@ public class GooglecalendarPrefsUtil
 	}
 
     }
+
+    public static void updatePrefs(GoogleCalenderPrefs prefs)
+    {
+	if (prefs == null || prefs.id == null)
+	    return;
+
+	if (prefs.calendar_type == null || prefs.calendar_type == CALENDAR_TYPE.GOOGLE)
+	{
+	    GoogleCalenderPrefs oldPrefs = getCalendarPrefsByType(CALENDAR_TYPE.GOOGLE);
+	    if (oldPrefs != null)
+	    {
+		oldPrefs.prefs = prefs.prefs;
+		prefs = oldPrefs;
+	    }
+	}
+
+	prefs.save();
+    }
+
+    public static void deletePrefs(CALENDAR_TYPE calendar_type)
+    {
+	GoogleCalenderPrefs prefs = getCalendarPrefsByType(calendar_type);
+	if (prefs == null)
+	    return;
+
+	prefs.delete();
+    }
+
 }
