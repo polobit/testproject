@@ -203,7 +203,7 @@ function put_thirdparty_calendar_links()
 			console.log(preference);
 			if(preference.calendar_type == 'GOOGLE')
 				putGoogleCalendarLink(true);
-			else if(preference.calendar_type == 'OFFICE')
+			else if(preference.calendar_type == 'OFFICE365')
 				putOfficeCalendarLink(true)
 		});
 	})
@@ -213,12 +213,12 @@ function put_thirdparty_calendar_links()
 function putOfficeCalendarLink(calEnable)
 {
 	if (calEnable){
-			$("#office_cal").removeClass('hide');
-			$("#office_cal_link").addClass('hide');
-		} else {
-			$("#office_cal").addClass('hide');
-			$("#office_cal_link").removeClass('hide');
-		}
+		$("#office_cal").removeClass('hide');
+		$("#office_cal_link").addClass('hide');
+	} else {
+		$("#office_cal").addClass('hide');
+		$("#office_cal_link").removeClass('hide');
+	}
 }
 
 /**
