@@ -650,33 +650,17 @@ function initializeSubscriptionListeners()
 		});
 	});
 
-	$('#subscribe_plan_change').on('mouseenter', '.plan-collection-in:not(.btn)', function(e)
-	{
-		e.preventDefault();
-		$(this).find(".plan_features").css("display","block");
-		
-	});
-	$('#subscribe_plan_change').on('mouseleave', '.plan-collection-in', function(e)
-	{
-		e.preventDefault();
-		$(this).find(".plan_features").css("display","none");
-		
-		
-	});
-	$('#subscribe_plan_change').on('mouseleave', '.plan-collection-in .btn', function(e)
+	$('#subscribe_plan_change').on('mouseenter', '.show_limits', function(e)
 	{
 		e.preventDefault();
 		$(this).closest(".plan-collection-in").find(".plan_features").css("display","block");
 		
-		
 	});
-	$('#subscribe_plan_change').on('mouseenter', '.plan-collection-in .btn', function(e)
+	$('#subscribe_plan_change').on('mouseleave', '.show_limits', function(e)
 	{
 		e.preventDefault();
 		$(this).closest(".plan-collection-in").find(".plan_features").css("display","none");
-		
 	});
-
 }
 
 function is_new_signup_payment()
