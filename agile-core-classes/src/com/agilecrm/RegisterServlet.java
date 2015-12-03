@@ -222,6 +222,11 @@ public class RegisterServlet extends HttpServlet
 	request.getSession().setAttribute("account_timezone", timezone);
 	try
 	{
+		String emailType = (email.split("@")[1]).split("\\.")[0];
+		System.out.println("email:: "+email+" and emailType :: "+emailType);
+	    // Creates contact in our domain if it is not yopmail
+		if(!StringUtils.equalsIgnoreCase("yopmail", emailType));
+	    	createUserInOurDomain(request, domainUser);
 	    // Creates contact in our domain
 	    createUserInOurDomain(request, domainUser);
 	}
