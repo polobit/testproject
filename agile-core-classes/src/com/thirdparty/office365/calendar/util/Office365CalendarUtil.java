@@ -11,8 +11,8 @@ import java.util.Locale;
 import java.util.TimeZone;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
-import org.mortbay.util.ajax.JSON;
 
 import com.agilecrm.account.util.AccountPrefsUtil;
 import com.agilecrm.util.HTTPUtil;
@@ -33,19 +33,34 @@ public class Office365CalendarUtil {
 	private static String serveltName = "appointment";
 
 	public static String getOfficeURL(String startDate, String endDate) {
+
+		String appointments = null;
 		// Get Office Exchange Prefs
-		Objectify ofy = ObjectifyService.begin();
 		GoogleCalenderPrefs calendarPrefs = GooglecalendarPrefsUtil
 				.getCalendarPrefsByType(GoogleCalenderPrefs.CALENDAR_TYPE.OFFICE365);
+		if (calendarPrefs != null) {
+			try {
+				Office365CalendarPrefs officeCalendarPrefs = new Office365CalendarPrefs();
+				JSONObject propertyJSON = new JSONObject(
+						calendarPrefs.getPrefs());
+				System.out.println();
 
-		Office365CalendarPrefs officeCalendarPrefs = new Office365CalendarPrefs();
-		JSON.parse(calendarPrefs.getPrefs());
+				officeCalendarPrefs.setUsername(propertyJSON.get("username")
+						.toString());
+				officeCalendarPrefs.setPassword(propertyJSON.get("password")
+						.toString());
+				officeCalendarPrefs.setServerUrl(propertyJSON.get("serverUrl")
+						.toString());
 
-		if (calendarPrefs == null)
-			return null;
+				appointments = Office365CalendarUtil.getOfficeURLCalendarPrefs(
+						officeCalendarPrefs, startDate, endDate);
 
-		return Office365CalendarUtil.getOfficeURLCalendarPrefs(
-				officeCalendarPrefs, startDate, endDate);
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return appointments;
 	}
 
 	/**
