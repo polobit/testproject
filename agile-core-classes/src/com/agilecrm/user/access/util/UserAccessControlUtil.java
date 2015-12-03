@@ -112,9 +112,7 @@ public class UserAccessControlUtil
 	System.out.println(userAccess.getCurrentUserScopes());
 	if (!userAccess.canRead())
 	{
-	    if (className.equals("Contact"))
-		userAccess.modifyQuery(q);
-	    else if (className.equals("Opportunity"))
+	    if (className.equals("Contact") || className.equals("Opportunity"))
 		userAccess.modifyQuery(q);
 	    else
 		CRUDOperation.READ.throwException(className);
@@ -172,24 +170,6 @@ public class UserAccessControlUtil
     public static boolean hasScope(UserAccessScopes scope)
     {
 	return getCurrentUserScopes().contains(scope);
-    }
-    
-    public static <T> void checkDeletePrivilege(String className, Opportunity opportunity)
-    {
-	System.out.println("class name " + className);
-
-	UserAccessControl userAccess = UserAccessControl.getAccessControl(className, opportunity, null);
-
-	System.out.println("access : " + userAccess);
-
-	if (userAccess == null)
-	    return;
-
-	System.out.println(userAccess.getCurrentUserScopes());
-	if (!userAccess.canDelete())
-	{
-	    CRUDOperation.DELETE.throwException(className);
-	}
     }
 
 }

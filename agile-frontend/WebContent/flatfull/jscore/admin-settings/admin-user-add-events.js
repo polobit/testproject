@@ -5,7 +5,7 @@ function bindAdminChangeAction(el, data)
 	if(is_admin == false)
 		$("input[type=checkbox]", $('div[name="newscopes"]', el)).removeAttr("disabled");
 	else
-		$("input[type=checkbox]", $('div[name="newscopes"]', el)).attr("checked", "checked" ).attr("disabled", "disabled");
+		$("input[type=checkbox]", $('div[name="newscopes"]', el)).prop("checked", "checked" ).attr("disabled", "disabled");
 	})
 	
 	$("input[type=checkbox]", $('div[name="newscopes"]', el)).on('change', function(e){
@@ -38,14 +38,17 @@ function bindAdminChangeAction(el, data)
 
 	$('#deals-privilege', el).off('change');
 	$(el).on('change', '#deals-privilege', function(e){
-		if(!$(this).is(':checked')){
-			$('input[value="VIEW_DEALS"]', el).attr("disabled", "disabled");
-			$('input[value="MANAGE_DEALS"]', el).attr("disabled", "disabled");
-		}
-		else
+		if(!$('input[name="is_admin"]', el).is(':checked'))
 		{
-			$('input[value="VIEW_DEALS"]', el).removeAttr("disabled");
-			$('input[value="MANAGE_DEALS"]', el).removeAttr("disabled");
+			if(!$(this).is(':checked')){
+				$('input[value="VIEW_DEALS"]', el).attr("disabled", "disabled");
+				$('input[value="MANAGE_DEALS"]', el).attr("disabled", "disabled");
+			}
+			else
+			{
+				$('input[value="VIEW_DEALS"]', el).removeAttr("disabled");
+				$('input[value="MANAGE_DEALS"]', el).removeAttr("disabled");
+			}
 		}
 	});
 	

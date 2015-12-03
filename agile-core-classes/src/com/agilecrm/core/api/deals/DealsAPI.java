@@ -270,7 +270,7 @@ public class DealsAPI
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     public Opportunity updateOpportunity(Opportunity opportunity)
     {
-    UserAccessControlUtil.check("Opportunity", opportunity, CRUDOperation.CREATE, true);
+    UserAccessControlUtil.check(Opportunity.class.getSimpleName(), opportunity, CRUDOperation.CREATE, true);
 	if (opportunity.pipeline_id == null || opportunity.pipeline_id == 0L)
 	    opportunity.pipeline_id = MilestoneUtil.getMilestones().id;
 
@@ -300,7 +300,7 @@ public class DealsAPI
 	    throws com.google.appengine.labs.repackaged.org.json.JSONException, JSONException, Exception
     {
     Opportunity opportunity = OpportunityUtil.getOpportunity(id);
-    UserAccessControlUtil.checkDeletePrivilege("Opportunity",opportunity);
+    UserAccessControlUtil.check(Opportunity.class.getSimpleName(), opportunity, CRUDOperation.DELETE, true);
 	if (opportunity != null)
 	{
 	    ActivitySave.createDealDeleteActivity(opportunity);
