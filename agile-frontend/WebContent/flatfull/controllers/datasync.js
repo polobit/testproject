@@ -83,14 +83,12 @@ dataSync : function()
     },
 
     office_calendar: function(){
-        $.getJSON("core/api/officecalendar").success(function(data) { 
-            console.log(data);  
-            getTemplate("admin-settings-import-office365-sync-details", data, undefined, function(data_el){
-                $('#office365').html(data_el);
-            });      
-        }).error(function(data) { 
-            console.log(data);
-        });  
+
+         var calendar_settings_view = new Calendar_Sync_Settings_View({
+                        url : "core/api/calendar-prefs/type/OFFICE365",
+                        template : "admin-settings-import-office365-sync-details"
+                    });
+$('#office365').html(calendar_settings_view.render().el);
     },
 
 	 google_contacts_sync: function() {
@@ -210,13 +208,41 @@ dataSync : function()
                         var dataSynctTab = localStorage.getItem("datasync_tab");
                         $("#prefs-tabs-content").find('a[href="#'+dataSynctTab+'"]').closest("li").addClass("active");
                         initializeTabListeners("datasync_tab", "sync");
-                       getSyncModelFromName("officeCalendar", function(model){
-                            var url= 'core/api/officecalendar',
-                            template= 'admin-settings-import-office365-calendar-prefs';
-                            renderInnerSyncView(url,template,model,function(model){
-                                showNotyPopUp("information", "Office 365 calendar saved successfully", "top", 1000);
-                            });                       
+
+                        var calendar_settings_view = new Calendar_Sync_Settings_View({
+                            url : "core/api/calendar-prefs/type/OFFICE365",
+                            template : "admin-settings-import-office365-calendar-prefs",
+                            postRenderCallback: function(el){
+                               var model = calendar_settings_view.model;
+                               if(model && model.get("prefs"))
+                               {
+                                    try
+                                    {
+                                        var prefs = model.get("prefs");
+                                        if(typeof prefs != 'object')
+                                            model.set('prefs', JSON.parse(prefs), {silent: true});
+                                    }
+                                    catch (err)
+                                    {
+                                        console.log(err)
+                                    }
+                               }
+                            },
+                            saveCallback: function() {
+                                showNotyPopUp("information", "Office365 calendar saved successfully", "top", 1000);
+                            }
                         });
+                        $("#data-sync-settings-tab-content").html(calendar_settings_view.render().el);
+
+
+                       // getSyncModelFromName("officeCalendar", function(model){
+                       //      var url= '',
+                       //      template= '';
+                       //      renderInnerSyncView(url,template,model,function(model){
+                       //          showNotyPopUp("information", "Office 365 calendar saved successfully", "top", 1000);
+                       //      });                       
+                       //  });
+
                 }, null);
              }, "#content");
 

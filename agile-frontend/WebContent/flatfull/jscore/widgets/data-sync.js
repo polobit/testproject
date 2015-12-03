@@ -31,30 +31,7 @@ function organize_sync_widgets(base_model)
 
 single click for all data sync collection events
 */
-function initializeDataSyncListners(){
-
-	// Office calendar delete button.
-	$("#prefs-tabs-content").off("click", "#office-calendar-sync-delete");
-	$("#prefs-tabs-content").on("click", "#office-calendar-sync-delete", function(){
-
-		$.ajax({ type : 'DELETE', 
-			url : 'core/api/officecalendar', 
-			contentType : "application/json; charset=utf-8",
-			success : function(data){
-				 $.getJSON("core/api/officecalendar").success(function(data) { 
-		            console.log(data);  
-		            getTemplate("admin-settings-import-office365-sync-details", data, undefined, function(data_el){
-		                $('#office365').html(data_el);
-		            });      
-		        }).error(function(data) { 
-		            console.log(data);
-		        });
-			} 
-		});   
-
-	});
-	   
-
+function initializeDataSyncListners(){	   
 
 	$('#prefs-tabs-content #data-sync-type').off();
     $('#prefs-tabs-content').on('click', '#data-sync-type', function(e){
@@ -230,13 +207,7 @@ renders inner sync view and binds all model events to DataSync_Event_Modal_View
 			                    url: url,
 			                    template: templateName,
 			                    data:data,
-			                    saveCallback: function(model) {
-			                       if(model){
-		                       		if(model.widgetName == "office365Cal"){
-		                       			App_Datasync.dataSync();		                       	
-		                       			$('#prefs-tabs-content a[href="#office365-tab"]').tab('show');
-		                       		}
-			                       }
+			                    saveCallback: function(model) {			                      
 			                       callback(model);
 			                    }
 			                });
