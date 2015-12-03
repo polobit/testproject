@@ -909,7 +909,7 @@ display: block!important;
   text-align:center;
   padding-top:25%;
 }
-.app-aside-folded:not(.app-aside-dock) .navi > ul > li#web-rules-menu a span,.app-aside-folded:not(.app-aside-dock) .navi > ul > li#planView a span{
+.app-aside-folded:not(.app-aside-dock) .navi > ul > li#landing-pages-menu a span,.app-aside-folded:not(.app-aside-dock) .navi > ul > li#web-rules-menu a span,.app-aside-folded:not(.app-aside-dock) .navi > ul > li#planView a span{
   padding-top:10%;
 }
 
