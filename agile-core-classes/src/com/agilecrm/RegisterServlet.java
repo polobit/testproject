@@ -225,7 +225,7 @@ public class RegisterServlet extends HttpServlet
 		String emailType = (email.split("@")[1]).split("\\.")[0];
 		System.out.println("email:: "+email+" and emailType :: "+emailType);
 	    // Creates contact in our domain if it is not yopmail
-		if(!StringUtils.equalsIgnoreCase("yopmail", emailType));
+		if(!StringUtils.equalsIgnoreCase("yopmail", emailType))
 	    	createUserInOurDomain(request, domainUser);
 	}
 	catch (Exception e)
