@@ -211,7 +211,6 @@ function put_thirdparty_calendar_links()
 
 function putOfficeCalendarLink(calEnable)
 {
-	var calEnable = false;
 
 	if (calEnable)
 	{
