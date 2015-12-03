@@ -205,6 +205,7 @@ var DealsRouter = Backbone.Router.extend({
 										$('#milestone').find('option[value="'+deal_filter.get("milestone")+'"]').attr("selected","selected");
 									}
 									$('#milestone').find('option[value=""]').text('Any');
+									$('input[name=name]').trigger('focus');
 								},500);
 							});
 						}else{
