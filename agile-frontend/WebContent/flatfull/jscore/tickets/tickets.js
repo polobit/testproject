@@ -1,4 +1,5 @@
 var Group_ID = null, Current_Ticket_ID = null, Ticket_Filter_ID = null, Tickets_Util = {}, Sort_Field = '-last_updated_time';
+var popoverFunction = undefined;
 
 $("body").bind('click', function(ev) {
 	/*Tickets.hideDropDowns(ev);
@@ -207,6 +208,8 @@ var Tickets = {
 		$(el)
 			.on('mouseover mouseout', '.open-ticket',
 				function(event) {
+
+					clearTimeout(popoverFunction);
 					if (event.type == 'mouseover'){
 
 						var $closest_li = $(this).closest('li');
@@ -215,15 +218,23 @@ var Tickets = {
 								.offset().top;
 
 						if (window.innerHeight - top_offset >= 210)
-							$closest_li.find('#ticket-last-notes').css(
+
+							popoverFunction = setTimeout(function(){
+
+								$closest_li.find('#ticket-last-notes').css(
 									'display', 'block');
+							},1000);
 						else
-							$closest_li.find('#ticket-last-notes').css(
-									'display', 'block').css('top','-'
-											+ $closest_li.find(
-													'#ticket-last-notes')
-													.height() + 'px');
+							popoverFunction = setTimeout(function(){
+
+								$closest_li.find('#ticket-last-notes').css(
+										'display', 'block').css('top','-'
+												+ $closest_li.find(
+														'#ticket-last-notes')
+														.height() + 'px');
+								},1000);
 					} else {
+						
 						$('.ticket-last-notes').css('display',
 								'none').css('top', '60px');
 					}
