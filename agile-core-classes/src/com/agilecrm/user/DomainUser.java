@@ -547,7 +547,7 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 				sendNotification();
 			}
 
-			sendPasswordChangedNotification(domainUser.encrypted_password);
+			//sendPasswordChangedNotification(domainUser.encrypted_password);
 		}
 		else if (id != null && !is_account_owner)
 		{
