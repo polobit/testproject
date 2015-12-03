@@ -5,7 +5,7 @@ function bindAdminChangeAction(el, data)
 	if(is_admin == false)
 		$("input[type=checkbox]", $('div[name="newscopes"]', el)).removeAttr("disabled");
 	else
-		$("input[type=checkbox]", $('div[name="newscopes"]', el)).attr("checked", "checked" ).attr("disabled", "disabled");
+		$("input[type=checkbox]", $('div[name="newscopes"]', el)).prop("checked", "checked" ).attr("disabled", "disabled");
 	})
 	
 	$("input[type=checkbox]", $('div[name="newscopes"]', el)).on('change', function(e){
@@ -34,6 +34,21 @@ function bindAdminChangeAction(el, data)
 			
 		else
 			$('input[value="CREATE_CONTACT"]', el).removeAttr("disabled");
-	})
+	});
+
+	$('#calendar-privilege', el).off('change');
+	$(el).on('change', '#calendar-privilege', function(e){
+		if(!$('input[name="is_admin"]', el).is(':checked'))
+		{
+			if(!$(this).is(':checked')){
+				$('input[value="VIEW_CALENDAR"]', el).attr("disabled", "disabled");
+				$('input[value="MANAGE_CALENDAR"]', el).attr("disabled", "disabled");
+			}
+			else{
+				$('input[value="VIEW_CALENDAR"]', el).removeAttr("disabled");
+				$('input[value="MANAGE_CALENDAR"]', el).removeAttr("disabled");
+			}
+		}
+	});
 	
 }

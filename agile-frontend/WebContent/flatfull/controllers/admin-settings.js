@@ -290,6 +290,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			{
 
 				bindAdminChangeAction(el, view.model.toJSON());
+				$('#calendar-privilege', el).trigger('change');
 			} });
 
 			$('#content').find('#admin-prefs-tabs-content').html(view.render().el);

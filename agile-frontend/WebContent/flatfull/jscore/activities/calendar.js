@@ -693,6 +693,8 @@ function showCalendar(users)
 							}
 							// Show edit modal for the event
 							$("#updateActivityModal").modal('show');
+
+							App_Calendar.current_event = event;
 							
 							agile_type_ahead("event_relates_to_deals", $('#updateActivityModal'), deals_typeahead, false,null,null,"core/api/search/deals",false, true);
 
@@ -835,7 +837,9 @@ function getCalendarUsersDetails(callback)
 				json_user.id = user.id;
 				json_user.name = user.domainUser.name;
 				json_user.domain_user_id = user.domainUser.id;
-				json_users.push(json_user);
+				if(hasScope("VIEW_CALENDAR")){
+					json_users.push(json_user);
+				}
 			}
 		});
 		return callback(json_users);

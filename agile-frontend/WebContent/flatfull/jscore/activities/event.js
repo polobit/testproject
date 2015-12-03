@@ -55,11 +55,22 @@ $("#updateActivityModal").on('click', '#delete_web_event', function(e)
 	{
 		e.preventDefault();
 
-		var event_id = $('#updateActivityForm input[name=id]').val();
-		$("#updateActivityModal").modal('hide');
-		$("#webEventCancelModel").modal('show');
-		$("#cancel_event_title").html("Delete event &#39" + web_event_title + "&#39?");
-		$("#event_id_hidden").html("<input type='hidden' name='event_id' id='event_id' value='" + event_id + "'/>");
+		if(hasScope("MANAGE_CALENDAR") || (CURRENT_DOMAIN_USER.id == App_Calendar.current_event.owner.id))
+		{
+			var event_id = $('#updateActivityForm input[name=id]').val();
+			$("#updateActivityModal").modal('hide');
+			$("#webEventCancelModel").modal('show');
+			$("#cancel_event_title").html("Delete event &#39" + web_event_title + "&#39?");
+			$("#event_id_hidden").html("<input type='hidden' name='event_id' id='event_id' value='" + event_id + "'/>");
+		}
+		else
+		{
+			$("#updateActivityModal").find('span.error-status').html("You do not have permission to delete this Event.");
+			setTimeout(function()
+			{
+				$("#updateActivityModal").find('span.error-status').html('');
+			}, 2000);
+		}
 
 	});
 
@@ -134,6 +145,15 @@ $("#updateActivityModal").on(
 
 										var eventId = $('#updateActivityModal').find("input[type='hidden']").val();
 										$('#calendar_event').fullCalendar('removeEvents', eventId);
+									}, error : function(err)
+									{
+										enable_save_button(save_button);
+										$('#updateActivityModal').find('span.error-status').html(err.responseText);
+										setTimeout(function()
+										{
+											$('#updateActivityModal').find('span.error-status').html('');
+										}, 2000);
+										console.log('-----------------', err.responseText);
 									} });
 						if (readCookie("agile_calendar_view"))
 						{
@@ -961,12 +981,6 @@ function save_event(formId, modalName, isUpdate, saveBtn, callback)
 	var endarray = (json.end_time).split(":");
 	json.end = new Date(json.end * 1000).setHours(endarray[0], endarray[1]) / 1000.0;
 
-	$('#' + modalName).modal('hide');
-
-	$('#' + formId).each(function()
-	{
-		this.reset();
-	});
 
 	// Deleting start_time and end_time from json
 	delete json.start_time;
@@ -1122,6 +1136,15 @@ function save_event(formId, modalName, isUpdate, saveBtn, callback)
 
 						if (callback && typeof callback === 'function')
 							callback(data);
+					}, error : function(model, err)
+					{
+						enable_save_button($(saveBtn));
+						$('#' + modalName).find('span.error-status').html(err.responseText);
+						setTimeout(function()
+						{
+							$('#' + modalName).find('span.error-status').html('');
+						}, 2000);
+						console.log('-----------------', err.responseText);
 					} });
 }
 
