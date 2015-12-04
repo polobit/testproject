@@ -47,6 +47,13 @@ var Tickets = {
 				if(callback)
 					callback();
 			}else{
+
+				//Showing selected filter name on top
+				Ticket_Filters.updateFilterName();
+
+				//Reset custom filters
+				Ticket_Custom_Filters.reset();
+
 				//Fetching selected filter ticket collection
 				Tickets.fetchTicketsCollection();
 			}	

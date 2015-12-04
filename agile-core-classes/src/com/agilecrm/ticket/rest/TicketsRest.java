@@ -505,8 +505,9 @@ public class TicketsRest
 
 			List<Key<TicketLabels>> labels_keys_list = new ArrayList<Key<TicketLabels>>();
 
-			for (Long labelID : ticket.labels)
-				labels_keys_list.add(new Key<TicketLabels>(TicketLabels.class, labelID));
+			if (ticket.labels != null)
+				for (Long labelID : ticket.labels)
+					labels_keys_list.add(new Key<TicketLabels>(TicketLabels.class, labelID));
 
 			// Creating new Ticket in Ticket table
 			ticket = TicketsUtil.createTicket(groupID, assigneeID, ticket.requester_name, ticket.requester_email,
@@ -597,8 +598,9 @@ public class TicketsRest
 
 			Tickets ticket = TicketsUtil.changeStatus(ticketID, status);
 
-			// Execute closed ticket trigger
-			if (Status.CLOSED == status)
+			// Execute closed ticket trigger. Do not execute trigger if updated
+			// status and current status is same.
+			if (Status.CLOSED == status && ticket.status != status)
 				TicketTriggerUtil.executeTriggerForClosedTicket(ticket);
 
 			return ticket;

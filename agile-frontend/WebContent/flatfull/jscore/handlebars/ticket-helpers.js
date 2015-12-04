@@ -35,9 +35,20 @@ Handlebars.registerHelper('get_ticket_id', function(action_type, options) {
 	return Tickets.get_next_prev_ticket_id(action_type);
 });
 
+Handlebars.registerHelper('calculate_due_date', function(options) {
+	var currentEpoch = new Date().getTime();
+
+	if (due_date < currentEpoch) {
+
+		return 'Overdue by '+ Ticket_Utils.dateDiff(currentEpoch, due_date);
+	}
+
+	return 'Due in ' + Ticket_Utils.dateDiff(currentEpoch, due_date);
+});
+
 Handlebars
 		.registerHelper(
-				'calculate_due_date',
+				'get_due_date_badge',
 				function(due_date, options) {
 
 					var currentEpoch = new Date().getTime();

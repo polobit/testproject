@@ -1,5 +1,5 @@
 <script id="ticket-custom-filters-template" type="text/html">
-<div class="wrapper bg-light hidden-sm hidden-xs p-b-xs p-t">
+<div class="wrapper bg-light hidden-sm hidden-xs p-b-xs p-md">
 	<div class="panel panel-default m-b-none">
     	<div class="panel-body">
    			<div class="col-md-12 p-n m-b-xs">Assignee</div>
@@ -16,17 +16,37 @@
 <div class="wrapper bg-light hidden-sm hidden-xs p-b-xs">
 	<div class="panel panel-default m-b-none">
     	<div class="panel-body">
-    		<div class="col-md-12 p-n m-b-xs">Due Date</div>
-			<div class="col-md-12 p-n">
-              <input type="text" class="form-control" id="datetimepicker" placeholder="Select date"/>
-          	</div>
-          	<div class="col-md-12 p-n m-t m-b-xs">Priority</div>
+    		 <div class="col-md-12 p-n m-b-xs">Due Date</div>
+  	     <div class="col-md-12 p-n">
+          <div>
+            <label class="i-checks i-checks-sm">
+              <input class="each-ticket ticket-checkbox" type="checkbox">
+              <i></i>
+            </label> Overdue
+          </div>
+          <div>
+            <label class="i-checks i-checks-sm">
+              <input class="each-ticket ticket-checkbox" type="checkbox">
+              <i></i>
+            </label> Today
+          </div>
+          <div>
+            <label class="i-checks i-checks-sm">
+              <input class="each-ticket ticket-checkbox" type="checkbox">
+              <i></i>
+            </label> Tomorrow
+          </div>
+          <div>
+            <input type="text" class="form-control" id="datetimepicker" placeholder="Choose range"/>
+          </div>
+    	   </div>
+      	<div class="col-md-12 p-n m-t m-b-xs">Priority</div>
 			<div class="col-md-12 p-n">
 				<select data-placeholder="Choose priority" class="priority-select chosen-select w-full"  data-name="priority" multiple class="w-md">
-            		<option value="LOW" {{#contains_string 'LOW' priority}}selected{{/contains_string}}>Low</option>
-            		<option value="MEDIUM" {{#contains_string 'MEDIUM' priority}}selected{{/contains_string}}>Medium</option>
-            		<option value="HIGH" {{#contains_string 'HIGH' priority}}selected{{/contains_string}}>High</option>
-            	</select>
+      		<option value="LOW" {{#contains_string 'LOW' priority}}selected{{/contains_string}}>Low</option>
+      		<option value="MEDIUM" {{#contains_string 'MEDIUM' priority}}selected{{/contains_string}}>Medium</option>
+      		<option value="HIGH" {{#contains_string 'HIGH' priority}}selected{{/contains_string}}>High</option>
+      	</select>
 			</div>
     	</div>
     </div>

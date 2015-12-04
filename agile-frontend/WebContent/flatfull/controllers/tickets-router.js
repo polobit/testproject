@@ -247,6 +247,9 @@ $("#right-pane").html(ticketView.render().el);
 			//Fetching filters collection
 			Ticket_Filters.fetchFiltersCollection(function(){
 
+				//Reset custom filters
+				Ticket_Custom_Filters.reset();
+				
 				//Showing selected filter name on top
 				Ticket_Filters.updateFilterName();
 
@@ -534,16 +537,7 @@ $('#content').find('.helpdesk-tab').addClass('select');
  				},
  				postRenderCallback : function(el, data) {
 
- 					head.js("/lib/jquery.minicolors.min.js", function() {
- 						$('[data-input="colorpicker"]', el).each(function() {
- 							var $this = $(this);
-
- 							$this.minicolors({
- 								control : $(this).attr('data-control') || 'hue',
- 								theme : 'bootstrap'
- 							});
- 						});
- 					});
+ 					Ticket_Labels.loadColorPicker(data.color_code);
  				}
  			});
 
@@ -583,16 +577,7 @@ $('#content').find('.helpdesk-tab').addClass('select');
  				url : "/core/api/tickets/labels",
  				postRenderCallback : function(el, data) {
 
- 					head.js("/lib/jquery.minicolors.min.js", function() {
- 						$('[data-input="colorpicker"]', el).each(function() {
- 							var $this = $(this);
-
- 							$this.minicolors({
- 								control : $(this).attr('data-control') || 'hue',
- 								theme : 'bootstrap'
- 							});
- 						});
- 					});
+ 					Ticket_Labels.loadColorPicker(data.color_code);
  				}
  			});
 
