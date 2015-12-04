@@ -50,7 +50,7 @@ public class ScribeServlet extends HttpServlet {
 	public static final String SERVICE_TYPE_ZOHO = "zoho_import";
 
 	// Scopes
-	public static final String STRIPE_SCOPE = "read_only";
+	public static final String STRIPE_SCOPE = "read_write";
 	public static final String GOOGLE_CONTACTS_SCOPE = "https://www.google.com/m8/feeds/";
 	public static final String GOOGLE_CALENDAR_SCOPE = "https://www.googleapis.com/auth/calendar";
 	public static final String GOOGLE_DRIVE_SCOPE = "https://www.googleapis.com/auth/drive.readonly";
