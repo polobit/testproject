@@ -59,6 +59,7 @@ public class GoogleCalendarPrefsAPI
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public void saveCalendarPrefsBasedOnType(@PathParam("type") CALENDAR_TYPE calendar_type, GoogleCalenderPrefs prefs)
     {
+	prefs.calendar_type = calendar_type;
 	prefs.save();
     }
 
