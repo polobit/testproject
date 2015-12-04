@@ -1805,6 +1805,14 @@ width: 100%!Important;
   width: 80vw;
   margin:0 auto;
 }
+table td thumb {
+  width: 32px;
+  
+}
+table td thumb img {
+  width: 32px;
+  height: 34px;
+}
 }
 
 @media all and (min-width: 768px) {

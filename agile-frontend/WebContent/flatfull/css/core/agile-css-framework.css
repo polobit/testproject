@@ -663,6 +663,17 @@
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+.image-ellipsis-3 {
+  float: left;
+}
+.image-ellipsis-3 a:nth-of-type(3) {
+  display: none;
+}
+.image-ellipsis-3 + span {
+  margin-top: 15px;
+  margin-left: 5px;
+  display: inline-block;
+}
 .no-wrap
 {
 	white-space:nowrap;
@@ -1308,3 +1319,5 @@ border-collapse: separate;
 .text-head-black{
 	color:#333;
 }
+
+

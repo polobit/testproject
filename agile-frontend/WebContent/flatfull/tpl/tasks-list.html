@@ -63,7 +63,7 @@
 	<td><div class="text-muted"><i class="fa fa-clock-o m-r-xs"></i><time class="task-due-time" value="{{due}}" datetime="{{epochToHumanDate "" due}}">{{epochToHumanDate "ddd mmm dd yyyy" due}}</time></div></td>
 {{/if}}
 	<td>
-		<div>
+		<div class="image-ellipsis-3">
         	{{#each contacts}}
         		{{#if_contact_type "PERSON"}}
         				<a href="#contact/{{id}}" class="activate-link thumb">
