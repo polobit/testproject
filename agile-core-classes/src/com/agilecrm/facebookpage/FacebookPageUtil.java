@@ -114,6 +114,13 @@ public class FacebookPageUtil
 
 	return listOfpages;
     }
+    
+    public static JSONObject getUserInfo(String accessToken) throws JSONException
+    {
+	String response = HttpRequest(FB_END_POINT + FB_API_VERSION + "/me?access_token=" + accessToken);
+	JSONObject userInfo = new JSONObject(response);
+	return userInfo;
+    }
 
     public static boolean linkOurFacebookTab(String pageID, String accessToken, String formName) throws JSONException, UnsupportedEncodingException
     {

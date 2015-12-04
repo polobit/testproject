@@ -28,7 +28,7 @@ public class FacebookPageCallbackServlet extends HttpServlet
 	currentSession.setAttribute("fbpage_user_accesstoken", FacebookPageUtil.getAccessToken(request.getParameter("code")));
 	currentSession.setAttribute("fbpage_logged_in", true);
 	System.out.println(currentSession.getAttribute("fbpage_user_accesstoken"));
-	response.sendRedirect("/#fbpagetab");
+	response.sendRedirect("/#facebook-integration");
     }
 
 }
