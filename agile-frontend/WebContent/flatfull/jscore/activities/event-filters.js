@@ -308,6 +308,17 @@ function addEventSourceToCalendar(key, eventArray)
 			eventArray = [];
 }
 
+function removeGoogleEventSource()
+{
+	$.each(functions, function(key, value){
+		if(key.indexOf('event_google') == 0)
+		{
+			//if(addScource)
+			$('#calendar_event').fullCalendar('removeEventSource', functions[key]);
+		}
+	})	
+}
+
 function removeEventSource(key)
 {
 	//if(addScource)

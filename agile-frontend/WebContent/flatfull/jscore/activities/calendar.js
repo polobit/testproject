@@ -117,6 +117,39 @@ function erase_google_calendar_prefs_cookie()
 {
 	var google_calendar_cookie_name = "_agile_google_calendar_prefs_" + CURRENT_DOMAIN_USER.id;
 	eraseCookie(google_calendar_cookie_name);
+	eraseData(google_calendar_cookie_name);
+}
+
+function get_calendar_ids_form_prefs(data)
+{
+
+		if(!data)
+			return;
+
+		var calendar_ids = ["primary"];
+
+		if(data.prefs)
+		{
+			
+
+			try
+			{
+				var prefs;
+				if(typeof data.prefs != 'object')
+					prefs = JSON.parse(data.prefs);
+				else
+					prefs = data.prefs;
+
+				if(prefs.fields != null)
+				calendar_ids = prefs.fields;		
+			}
+			catch (err)
+			{
+				console.log(err);
+			}
+		}
+
+		return calendar_ids;
 }
 
 // Returns token in to gcal callback in specified format
@@ -125,12 +158,7 @@ function get_google_calendar_event_source(data, callback)
 
 	if (callback && typeof (callback) === "function")
 	{
-		var calendar_ids = ["primary"];
-
-		if(data.prefs && data.prefs.calendarIds)
-			calendar_ids = JSON.parse(data.prefs.fields)
-
-		callback({ token : data.access_token, dataType : 'agile-gcal', className : "agile-gcal", calendarIds : calendar_ids});
+		callback({ token : data.access_token, dataType : 'agile-gcal', className : "agile-gcal", calendarIds : get_calendar_ids_form_prefs(data)});
 	}
 	return true;
 }

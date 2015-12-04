@@ -1,7 +1,9 @@
 package com.thirdparty.google.calendar.util;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.user.DomainUser;
@@ -72,7 +74,11 @@ public class GooglecalendarPrefsUtil
 
     public static GoogleCalenderPrefs getCalendarPrefsByType(CALENDAR_TYPE calendar_type)
     {
-	GoogleCalenderPrefs prefs = GoogleCalenderPrefs.dao.getByProperty("calendar_type", calendar_type);
+	Map<String, Object> queryMap = new HashMap<String, Object>();
+	queryMap.put("calendar_type", calendar_type);
+	queryMap.put("domainUserKey", new Key<DomainUser>(DomainUser.class, SessionManager.get().getDomainId()));
+
+	GoogleCalenderPrefs prefs = GoogleCalenderPrefs.dao.getByProperty(queryMap);
 	return prefs;
     }
 

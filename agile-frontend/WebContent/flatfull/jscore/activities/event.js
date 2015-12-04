@@ -377,7 +377,7 @@ $("#calendar-listers").on('click', '.agendaDayWeekMonth', function()
 			else
 			{
 				
-				removeEventSource('google');
+				removeGoogleEventSource();
 			}
 		}	
 	});

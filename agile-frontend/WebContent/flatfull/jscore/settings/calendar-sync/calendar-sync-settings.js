@@ -21,7 +21,7 @@ var Calendar_Sync_Settings_View = Base_Model_View.extend({
 		if(!data || !data.get("prefs"))
 			return;
 
-		data.set("prefs", JSON.stringify(data.get("prefs")));
+		data.set("prefs", JSON.stringify(data.get("prefs")), {silent: true});
 		console.log(data);
 	},
 	show_loading : function(el)

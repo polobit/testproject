@@ -133,14 +133,22 @@ google_calendar:function(el){
                     var calendar_settings_view = new Calendar_Sync_Settings_View({
                         url : "core/api/calendar-prefs/type/GOOGLE",
                         template : "import-google-calendar-setup",
+                        saveCallback: function(data)
+                        {
+                            erase_google_calendar_prefs_cookie();
+                        },
                         postRenderCallback: function(el)
                         {
                             var model = calendar_settings_view.model;
                             
-                            var prefs = model.get('prefs');
+                            prefs = model.get('prefs');
                             if(prefs)
                             {
-                                model.set("prefs", JSON.parse(model.get('prefs')));
+                                if(typeof prefs != 'object')
+                                {
+                                    prefs = JSON.parse(model.get('prefs'));
+                                    model.set("prefs", prefs, {silent : true});
+                                }
                             }
                             
                             console.log(model);
@@ -152,7 +160,12 @@ google_calendar:function(el){
                                         head.js(LIB_PATH + 'lib/jquery.multi-select.js', function()
                                         {
                                             $("#multi-select-calendars-container", el).html(template_ui);
-                                             $('#multi-select-calendars', el).multiSelect();
+                                            deserialize_multiselect(model.toJSON(), el);
+                                            var select_field = $('#multi-select-calendars', el)
+                                             select_field.multiSelect();
+                                                $.each(get_calendar_ids_form_prefs(model.toJSON()), function(index, field){
+                                                    select_field.multiSelect('select', field);     
+                                                });
                                         });
                                 });
                                 

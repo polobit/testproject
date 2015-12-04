@@ -155,8 +155,12 @@ function _fetchGoogleCalendarList(callback, retryCount)
 				{
 					if(retryCount < 2)
 					{
-						gapi = undefined;
-						return _fetchGoogleCalendarList(callback, ++retryCount);
+						gapi.auth.setToken(undefined);
+						_set_token_from_session(function(){
+							_fetchGoogleCalendarList(callback, retryCount)
+						});
+						return;
+						//return _fetchGoogleCalendarList(callback, ++retryCount);
 					}
 				}
 				else
@@ -168,10 +172,11 @@ function _fetchGoogleCalendarList(callback, retryCount)
 	}
 	catch(err)
 	{
+	/*	console.log(err);
 				if(retryCount > 2)
 			return;
 
-		return _fetchGoogleCalendarList(callback, ++retryCount);
+		return _fetchGoogleCalendarList(callback, ++retryCount);*/
 	}
 }
 
