@@ -31,7 +31,11 @@ import com.agilecrm.util.email.SendMail;
 import com.agilecrm.workflows.triggers.util.TicketTriggerUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.datastore.EntityNotFoundException;
+import com.google.appengine.api.datastore.KeyFactory;
+import com.google.appengine.api.datastore.Query.SortDirection;
 import com.googlecode.objectify.Key;
+import com.googlecode.objectify.KeyRange;
+import com.googlecode.objectify.Query;
 
 /**
  * <code>TicketUtil</code> is a utility class to provide CRUD operations on
@@ -61,6 +65,21 @@ public class TicketsUtil
 		searchMap.put("group_id", new Key<TicketGroups>(TicketGroups.class, groupID));
 
 		return Tickets.ticketsDao.fetchAllByOrder(Integer.parseInt(pageSize), cursor, searchMap, false, true, sortKey);
+	}
+
+	/**
+	 * Returns list of tickets by type
+	 * 
+	 * @param groupID
+	 * @param status
+	 * @param cursor
+	 * @param pageSize
+	 * @param sortKey
+	 * @return
+	 */
+	public static Tickets getLastCreatedTicket()
+	{
+		return null;
 	}
 
 	public static List<Tickets> getTicketsBulk(List<Long> idsArray)
@@ -284,9 +303,15 @@ public class TicketsUtil
 	{
 		Tickets ticket = TicketsUtil.getTicketByID(ticket_id);
 
+		if(ticket.status == status)
+			return ticket;
+		
 		Status oldStatus = ticket.status;
 		ticket.status = status;
-
+		
+		if(status == Status.CLOSED)
+			ticket.closed_time = Calendar.getInstance().getTimeInMillis();
+		
 		Tickets.ticketsDao.put(ticket);
 
 		// Updating search document
