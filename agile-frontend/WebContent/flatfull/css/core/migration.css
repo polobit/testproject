@@ -1798,18 +1798,16 @@ width: 100%!Important;
 .tooltip {
   display: none!important;
 }
-.task-progress-center-mobile {
-  margin:0 auto;
-}
+
 .task-deals-mobile-view {
   width: 80vw;
   margin:0 auto;
 }
-table td thumb {
+table td .thumb {
   width: 32px;
   
 }
-table td thumb img {
+table td .thumb img {
   width: 32px;
   height: 34px;
 }

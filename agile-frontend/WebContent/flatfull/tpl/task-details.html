@@ -33,7 +33,8 @@
                 
              <!--------- task status ---------------->
 
-
+{{#is_mobile}}
+{{else}}
 <div class="m-t-sm">
 {{#if_equals "IN_PROGRESS" status}}
 <div class="w-md task-progress-center-mobile">
@@ -62,7 +63,7 @@
 </span>
 {{/if_equals}}
 </div>
-
+{{/is_mobile}}
 
 <div class="contact-owner-position m-t-sm">
 <div class="change-owner-succes"></div>
@@ -478,7 +479,7 @@
 					<div class="control-group form-group">
 						<label class="control-label"><b>Description</b></label>
 						<div class="controls">
-							<textarea rows="3" class="w-half form-control" placeholder="Detailed Note"
+							<textarea rows="3" class=" form-control" placeholder="Detailed Note"
 								name="description" id="description"></textarea>
 						</div>
 					</div>
