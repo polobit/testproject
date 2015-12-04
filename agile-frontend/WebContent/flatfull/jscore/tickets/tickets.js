@@ -62,6 +62,22 @@ var Tickets = {
 		Current_Ticket_ID = null;
 	},
 
+	fetchTicketModel : function(ticket_id, callback){
+
+		var ticket = Backbone.Model.extend({
+			url : "/core/api/tickets/" + ticket_id
+		});
+
+		new ticket().fetch({
+			success : function(ticketModel) {
+
+				if (callback)
+					callback(ticketModel);
+			}
+		});
+
+	},
+
 	//Fetches new ticket collection
 	fetchTicketsCollection: function(){
 

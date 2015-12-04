@@ -47,17 +47,17 @@ var Ticket_Labels = {
 		});
 	},
 
-	showSelectedLabels : function(labels, key, el) {
+	showSelectedLabels : function(labels, el) {
 
 		this.fetchCollection(function() {
-				Ticket_Labels.prepareOptionsList(labels, key, el);
+				Ticket_Labels.prepareOptionsList(labels, el);
 			});
 
 			return;
 
 	},
 
-	prepareOptionsList : function(labels, key, el) {
+	prepareOptionsList : function(labels, el) {
 
 		if (!this.labelsCollection)
 			return;
@@ -68,14 +68,14 @@ var Ticket_Labels = {
 
 			if ($.inArray(eachLabel.id, labels) != -1)
 				optionList += "<option value='" + eachLabel.id
-						+ "' 'selected'>" + eachLabel.label + "</option>";
+						+ "' selected='selected'>" + eachLabel.label + "</option>";
 			else
 				optionList += "<option value='" + eachLabel.id + "'>"
 						+ eachLabel.label + "</option>";
 
 		});
 
-		$(".chosen-select").html(optionList);
+		$(".chosen-select", el).html(optionList);
 
 		// Initializing type ahead for tags
 		this.initChoosenSelect(el);
