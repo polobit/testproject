@@ -398,7 +398,7 @@ function hidePortletSettingsAfterSave(modal_id){
 /** Initializes and fetched latest feeds from AgileCRM blosspot.**/
 function initBlogPortletSync(el)
 {
-	/*head.js(LIB_PATH + 'lib/jquery.feeds.min.js',
+	head.js(LIB_PATH + 'lib/jquery.feeds.min.js',
 		function()
 		{
 
@@ -417,10 +417,7 @@ function initBlogPortletSync(el)
 							$('#portlet_blog_sync_container',el).append('<span class="pull-right"><a href="https://www.agilecrm.com/blog" target="_blank">Agile CRM Blog</a></span>');
 							}
 						});
-		});*/
-	$('#portlet_blog_sync_container',el).html('<div class="feed-container"><a href="https://www.agilecrm.com/blog/new-landing-page-builder/" title="Try Our New Landing Page Builder!" target="_blank">Try Our New Landing Page Builder!</a><div style="color:#999;font-size:11px;line-height: 13px;margin-bottom:5px">Dec 2, 2015</div><p style="padding-top:5px;margin-bottom:15px">What’s better than a CRM&nbsp;that includes both sales and marketing automation? A full-service SaaS ...</p><a href="https://www.agilecrm.com/blog/new-sales-reports-win-loss-analysis/" title="New Sales Reports for Win/Loss Analysis" target="_blank">New Sales Reports for Win/Loss Analysis</a><div style="color:#999;font-size:11px;line-height: 13px;margin-bottom:5px">Nov 19, 2015</div><p style="padding-top:5px;margin-bottom:15px">A majority of business chatter these days is about&nbsp;24/7 social marketing and making constant SEO improvements. So much ...</p><a href="https://www.agilecrm.com/blog/landing-page-builder-coming-soon/" title="Landing Page Builder Coming Soon!" target="_blank">Landing Page Builder Coming Soon!</a><div style="color:#999;font-size:11px;line-height: 13px;margin-bottom:5px">Nov 17, 2015</div><p style="padding-top:5px;margin-bottom:15px">Furthering our goal of being the most&nbsp;complete sales and marketing app for small businesses, we’re excited to ...</p></div>');
-	$('#portlet_blog_sync_container',el).append('<span class="pull-right"><a href="https://www.agilecrm.com/blog" target="_blank">Agile CRM Blog</a></span>');
-
+		});
 }
 
 $('body').on('click', '.onboarding-skip', function(e) {
