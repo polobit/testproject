@@ -666,7 +666,7 @@
 .image-ellipsis-3 {
   float: left;
 }
-.image-ellipsis-3 a:nth-of-type(3) {
+.image-ellipsis-3 a:nth-of-type(n+4) {
   display: none;
 }
 .image-ellipsis-3 + span {
