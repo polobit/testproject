@@ -35,7 +35,7 @@ Handlebars.registerHelper('get_ticket_id', function(action_type, options) {
 	return Tickets.get_next_prev_ticket_id(action_type);
 });
 
-Handlebars.registerHelper('calculate_due_date', function(options) {
+Handlebars.registerHelper('calculate_due_date', function(due_date, options) {
 	var currentEpoch = new Date().getTime();
 
 	if (due_date < currentEpoch) {
