@@ -17,6 +17,7 @@ import com.agilecrm.subscription.limits.PlanLimits.PlanClasses;
 import com.agilecrm.subscription.restrictions.db.BillingRestriction;
 import com.agilecrm.subscription.restrictions.exception.PlanRestrictedException;
 import com.agilecrm.subscription.ui.serialize.Plan;
+import com.agilecrm.util.DateUtil;
 import com.google.appengine.api.NamespaceManager;
 
 @XmlRootElement
@@ -83,8 +84,7 @@ public class BillingRestrictionUtil {
 
 	public static BillingRestriction getBillingRestrictionFromDB() {
 		System.out.println(NamespaceManager.get());
-		BillingRestriction restriction = BillingRestriction.dao.ofy()
-				.query(BillingRestriction.class).get();
+		BillingRestriction restriction = getRestrictionFromDB();
 
 		// Gets respective PlanLimits class based on plan.
 		restriction.planDetails = PlanLimits
@@ -97,8 +97,7 @@ public class BillingRestrictionUtil {
 	}
 
 	public static BillingRestriction getBillingRestrictionFromDbWithoutSubscription() {
-		BillingRestriction restriction = BillingRestriction.dao.ofy()
-				.query(BillingRestriction.class).get();
+		BillingRestriction restriction = getRestrictionFromDB();
 
 		if (restriction == null) {
 			restriction = BillingRestriction.getInstance(null, null);
@@ -107,6 +106,26 @@ public class BillingRestrictionUtil {
 
 		}
 
+		return restriction;
+	}
+	
+	
+	public static BillingRestriction getRestrictionFromDB(){
+		BillingRestriction restriction = BillingRestriction.dao.ofy().query(BillingRestriction.class).get();
+		if(restriction.max_emails_count == null || restriction.max_emails_count == 0){
+			if(restriction.last_renewal_time == null){
+				restriction.last_renewal_time = restriction.created_time/1000;
+			}
+			Long currentDate = new DateUtil().getTime().getTime()/1000;
+			if(currentDate - restriction.last_renewal_time >= 7200){
+				System.out.println("Updating free 5000 emails");
+				System.out.println("last renewal time is:: "+restriction.last_renewal_time);
+				restriction.one_time_emails_count = 0;
+				restriction.last_renewal_time = System.currentTimeMillis()/1000;
+				restriction.save();
+			}
+		}
+			
 		return restriction;
 	}
 
