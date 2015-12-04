@@ -3589,6 +3589,25 @@ $(function()
 		else
 			return options.inverse(this);
 	});
+
+	/**
+	 * Compares the arguments (value and target) and executes the template based
+	 * on the result (used in contacts typeahead)
+	 */
+	Handlebars.registerHelper('if_domain', function(value, options)
+	{
+
+		if ((typeof value === "undefined") || value != null)
+			return options.inverse(this);
+
+		var domainName = "our";
+
+		if (value.toString().trim().toLowerCase() == domainName)
+			return options.fn(this);
+		else
+			return options.inverse(this);
+	});
+
 	Handlebars.registerHelper('if_not_equals', function(value, target, options)
 	{
 
