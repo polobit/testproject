@@ -4,6 +4,9 @@ var Ticket_Custom_Filters = {
 	groups: [],
 	filters: [],
 	customFilters: {},
+	reset: function(){
+		customFilters = {};
+	},
 	init: function(callback){
 
 		if(this.assignees.length == 0 && this.groups.length == 0){

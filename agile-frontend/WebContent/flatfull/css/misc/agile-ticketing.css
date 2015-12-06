@@ -187,7 +187,7 @@ div.cc-emails-st{
 
 ul#ticket-model-list > div > li{
 	padding-left: 35px; 
-	padding-right: 25px; 
+	/*padding-right: 25px;*/
 	border-bottom: none;
 }
 

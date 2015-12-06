@@ -229,7 +229,7 @@
     </div>
 
     <!-- second column in details view -->
-    <div class="col bg-white">
+    <div class="col bg-light lter">
       <div class="vbox">
         <div class="row-row">
 
@@ -258,10 +258,11 @@
           <!-- End of ticket toolbar -->
 
           <!-- Start of ticket notes -->
-          <div class="wrapper bg-light p-t-sm p-b-sm pos-rlt">
-            <h2 class="font-thin m-t-none m-b-none inline-block" style="width: 88%;">
-              {{subject}}
+          <div class="wrapper bg-light p-t-sm p-b-sm pos-rlt b-b">
+            <h3 class="font-thin m-t-none m-b-none inline-block" style="width: 88%;">
+              {{subject}} 
               <div class="inline-block m-l-sm text-sm">
+                <span class="badge bg-info">#5471169859813376</span>
                 <span class="label bg-light dk text-tiny first-letter-cap inline-block">
                   {{status}}
                 </span>&nbsp;
@@ -269,10 +270,8 @@
                   {{priority}}
                 </span>
               </div>
-            </h2>
-            <div class="ticket-number">
-              <small class="text-muted"># {{short_id}}</small>
-            </div>  
+            </h3>
+             
             <div class="pos-abs" style="right: 15px; top: 10px;">
               <div class="btn-group">
                 <a onclick="clearContactWidetQueues({{contactID}})" href="{{#is_filtered_ticket}}
@@ -291,21 +290,23 @@
           <div id="notes-collection-container">
             
           </div>
-          <div class="wrapper">
-              <div class="panel b-a">
+
+           <div class="clearfix m-b-lg m-md">
+            <a class="pull-left thumb-sm avatar"><img src="{{gravatarurl contact.properties 24}}" alt="User Image"></a>
+            <div class="m-l-xxl b-a bg-white">
                 <div id="send-reply-container" class="panel-heading" aria-hidden="false">
-                  <div class="m-b-lg">
-                    Click here to 
-                    <a href="javascript:void(0);" class="text-u-l reply-btn" tabindex="0">Reply</a>
-                    <!-- or <a href="javascript:void(0);" class="text-u-l" tabindex="0">Forward</a> -->
+                    <div class="m-b-lg">
+                      Click here to 
+                      <a href="javascript:void(0);" class="text-u-l reply-btn" tabindex="0">Reply</a>
+                      <!-- or <a href="javascript:void(0);" class="text-u-l" tabindex="0">Forward</a> -->
+                    </div>
                   </div>
-                </div>
-                <div id="reply-editor">
-                    
-                </div>
-              </div>  
-          </div>
-          <!-- End of ticket notes -->
+                  <div id="reply-editor">
+                      
+                  </div>
+             </div>
+        </div>
+        <!-- End of ticket notes -->
 
         </div><!-- End of row-row-->
       </div><!-- End of vbox-->

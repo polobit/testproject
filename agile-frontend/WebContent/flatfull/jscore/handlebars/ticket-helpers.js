@@ -35,9 +35,20 @@ Handlebars.registerHelper('get_ticket_id', function(action_type, options) {
 	return Tickets.get_next_prev_ticket_id(action_type);
 });
 
+Handlebars.registerHelper('calculate_due_date', function(due_date, options) {
+	var currentEpoch = new Date().getTime();
+
+	if (due_date < currentEpoch) {
+
+		return 'Overdue by '+ Ticket_Utils.dateDiff(currentEpoch, due_date);
+	}
+
+	return 'Due in ' + Ticket_Utils.dateDiff(currentEpoch, due_date);
+});
+
 Handlebars
 		.registerHelper(
-				'calculate_due_date',
+				'get_due_date_badge',
 				function(due_date, options) {
 
 					var currentEpoch = new Date().getTime();
@@ -109,7 +120,7 @@ Handlebars.registerHelper('get_allowed_canned_responses_array', function(labels,
 		     for (var i = 0; i < cannedResponseLabels.length; i++) {
 				if($.inArray(cannedResponseLabels[i], labels) == -1){
 		     		isAllowed = false;
-		     		continue;
+		     		break;
 		     	}
 			}
 
@@ -122,14 +133,29 @@ Handlebars.registerHelper('get_allowed_canned_responses_array', function(labels,
 
 });
 
+Handlebars.registerHelper('get_label_from_label_id', function(id, options) {
+
+	if(!Ticket_Labels.labelsCollection || !id)
+		return;
+
+	for (var i = 0; i < Ticket_Labels.labelsCollection.toJSON().length; i++) {
+		var eachLabel = Ticket_Labels.labelsCollection.toJSON()[i];
+		if([eachLabel.id] == id)
+		  return eachLabel.label;
+	};
+
+	 return;
+	
+});
+
 Handlebars.registerHelper('compile_template', function(source, data, options) {
 
-	console.log("compile_template");
-	console.log(data);
 	var template = Handlebars.compile(source);
 			
 	return template(data);
 
 });
+
+
 
 /** End of ticketing handlebars* */

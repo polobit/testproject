@@ -47,12 +47,35 @@ var Tickets = {
 				if(callback)
 					callback();
 			}else{
+
+				//Showing selected filter name on top
+				Ticket_Filters.updateFilterName();
+
+				//Reset custom filters
+				Ticket_Custom_Filters.reset();
+
 				//Fetching selected filter ticket collection
 				Tickets.fetchTicketsCollection();
 			}	
 		}
 
 		Current_Ticket_ID = null;
+	},
+
+	fetchTicketModel : function(ticket_id, callback){
+
+		var ticket = Backbone.Model.extend({
+			url : "/core/api/tickets/" + ticket_id
+		});
+
+		new ticket().fetch({
+			success : function(ticketModel) {
+
+				if (callback)
+					callback(ticketModel);
+			}
+		});
+
 	},
 
 	//Fetches new ticket collection

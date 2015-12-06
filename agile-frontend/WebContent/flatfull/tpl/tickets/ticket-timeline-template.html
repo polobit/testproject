@@ -1,26 +1,38 @@
 <script id="ticket-timeline-template" type="text/html">
-<div class="ticket-timeline-container padder p-l-none bd-t">      
-    <div class="streamline b-l b-info m-l-lg m-b padder-v">
+<div class="ticket-timeline-container bg-light lter m-md">      
+    <div class="m-b b-l m-l-md streamline">
+
     	{{#each this}}  
-	      <div class="timeline_entity">
-	        <a class="pull-left thumb-sm avatar m-l-n">
+
+	      <div class="{{#if_equals ticket_activity_type 'TICKET_REQUESTER_REPLIED'}}m-l-lg{{/if_equals}} {{#if_equals ticket_activity_type 'TICKET_CREATED'}}m-l-lg{{/if_equals}}">
+
+	        <a class="pull-left thumb-sm avatar m-l-n-md">
 	        	{{#if_equals ticket_activity_type 'TICKET_CREATED'}}
-	        		<img class="img-inital inline" src="{{gravatarurl contact.properties 30}}" data-toggle="tooltip" data-placement="top" data-original-title="{{getPropertyValue contact.properties "first_name"}} {{getPropertyValue contact.properties "last_name"}}"/>
+	        		<img class="img-inital img-circle" src="{{gravatarurl contact.properties 30}}" data-toggle="tooltip" data-placement="top" data-original-title="{{getPropertyValue contact.properties "first_name"}} {{getPropertyValue contact.properties "last_name"}}"/>
 	        	{{else}}
 	        		{{#if_equals ticket_activity_type 'TICKET_REQUESTER_REPLIED'}}
-	        			<img class="img-inital inline" src="{{gravatarurl contact.properties 30}}" data-toggle="tooltip" data-placement="top" data-original-title="{{getPropertyValue contact.properties "first_name"}} {{getPropertyValue contact.properties "last_name"}}"/>
+	        			<img class="img-inital img-circle" src="{{gravatarurl contact.properties 30}}" data-toggle="tooltip" data-placement="top" data-original-title="{{getPropertyValue contact.properties "first_name"}} {{getPropertyValue contact.properties "last_name"}}"/>
 	        		{{else}}
-	        			<img src="{{#if user.name}}{{user.ownerPic}}{{else}}flatfull/images/flatfull/user-default.jpg{{/if}}" data-toggle="tooltip" data-placement="top" 
+	        			<img class="img-circle" src="{{#if user.name}}{{user.ownerPic}}{{else}}flatfull/images/flatfull/user-default.jpg{{/if}}" data-toggle="tooltip" data-placement="top" 
 		        				data-original-title="{{user.name}}"/>
 		        	{{/if_equals}}
 	        	{{/if_equals}}
 	        </a>          
 	        <div class="m-l-lg panel b-a">
-	          <div class="panel-heading pos-rlt b-b b-light p-t-xs p-b-xs p-r-sm p-l-sm">
+	          <div class="panel-heading pos-rlt b-b b-light">
 	            <span class="arrow left"></span>
-	            <a href="javascript:;" class="txt-small">{{activity_title}}</a>
+	            <a href="javascript:;">{{activity_title}}</a>
+	            <span class="text-muted m-l-sm pull-right">
+	                <i class="fa fa-clock-o"></i>
+	            	<time class="b-b-dotted" datetime="{{epochToHumanDate "" created_time}}">
+	              		{{epochToHumanDate "ddd mmm dd yyyy HH:MM" created_time}}
+	              	</time>
+	            </span>
 	          </div>
-	          <div class="panel-body p-t-xs p-b-xs p-r-sm p-l-sm txt-small">
+	          <div class="panel-body">
+
+	          	<div>
+
 				{{#if_equals ticket_activity_type 'TICKET_CREATED'}}
 				    Ticket (#{{ticket_id}}) Created
 				{{else}}
@@ -45,10 +57,10 @@
 				                            Type changed to <span class="first-letter-cap">{{new_data}}</span>
 				                        {{else}}
 				                            {{#if_equals ticket_activity_type 'TICKET_LABEL_ADD'}}
-				                                Label added - {{new_data}}
+				                                Label added - <label class="label bg-success m-l-xs">{{get_label_from_label_id new_data}}</label>
 				                            {{else}}
 				                                {{#if_equals ticket_activity_type 'TICKET_LABEL_REMOVE'}}
-				                                    Label removed - {{new_data}}
+				                                    Label removed - <label class="label bg-info m-l-xs">{{get_label_from_label_id new_data}}</label>
 				                                {{else}}
 				                                    {{#if_equals ticket_activity_type 'TICKET_ASSIGNEE_REPLIED'}}
 				                                    	<span class="first-letter-cap inline-block">{{user.name}}</span> replied to ticket
@@ -79,14 +91,9 @@
 				        {{/if_equals}}
 				    {{/if_equals}}
 				{{/if_equals}}
-				<div class="m-t-xs">
-					<span class="text-muted txt-11 pull-right">
-						<i class="fa fa-clock-o"></i>
-		            	<time class="b-b-dotted" datetime="{{epochToHumanDate "" created_time}}">
-		              		{{epochToHumanDate "ddd mmm dd yyyy HH:MM" created_time}}
-		              	</time>
-		            </span>
-		        </div>    
+
+				</div>
+				 
 	          </div>
 	        </div>
 	      </div>
