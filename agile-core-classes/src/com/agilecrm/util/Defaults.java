@@ -23,6 +23,8 @@ import com.agilecrm.search.ui.serialize.SearchRule.RuleCondition;
 import com.agilecrm.search.ui.serialize.SearchRule.RuleType;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.ticket.utils.TicketFiltersUtil;
+import com.agilecrm.workflows.Workflow;
+import com.agilecrm.workflows.triggers.Trigger;
 
 public class Defaults
 {
@@ -35,9 +37,10 @@ public class Defaults
 	saveDefaultReports();
 	saveDefaultNotes();
 	TicketFiltersUtil.saveDefaultFilters();
+	saveDefaultWorkflowsAndTriggers();
     }
 
-    /**
+	/**
      * Creates default Contacts.
      */
     private void saveDefaultContacts()
@@ -272,4 +275,22 @@ public class Defaults
 	note1.addContactIds(String.valueOf(ContactUtil.searchContactByEmail("homer@simpson.com").id));
 	note1.save();
     }
+    
+    /**
+     * 
+     */
+    private void saveDefaultWorkflowsAndTriggers()
+   	{
+    	Workflow setSLAWorkflow = new Workflow("New ticket set SLA", FileStreamUtil.readResource("misc/campaign-templates/tickets/ticket_set_sla.js"));
+    	setSLAWorkflow.save();
+    	
+    	Trigger setSLATrigger = new Trigger("New ticket set SLA", Trigger.Type.NEW_TICKET_IS_ADDED, setSLAWorkflow.id);
+    	setSLATrigger.save();
+    	
+    	Workflow newTicketWorkflow = new Workflow("New ticket notification", FileStreamUtil.readResource("misc/campaign-templates/tickets/new_ticket_acknowledgement.js"));
+    	newTicketWorkflow.save();
+    	
+    	Trigger newTicketTrigger = new Trigger("New ticket added", Trigger.Type.NEW_TICKET_IS_ADDED, newTicketWorkflow.id);
+    	newTicketTrigger.save();
+   	}
 }
