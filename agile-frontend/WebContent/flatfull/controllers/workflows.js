@@ -75,9 +75,11 @@ var WorkflowsRouter = Backbone.Router
 
 				$("#content").html('<div id="workflows-listener-container"></div>').find('#workflows-listener-container').html(this.workflow_list_view.el);
 				initializeWorkflowsListeners();
-
+				
 				$(".active").removeClass("active");
 				$("#workflowsmenu").addClass("active");
+
+				
 			},
 
 			/**
@@ -203,12 +205,7 @@ var WorkflowsRouter = Backbone.Router
 			 */
 			workflowTemplates : function()
 			{
-				if (!this.workflow_list_view || !this.workflow_list_view.collection)
-				{
-					this.navigate("workflows", { trigger : true });
-					return;
-				}
-
+				
 				$("#content").html('<div id="workflows-listener-container"></div>');
 				getTemplate('workflow-categories', {}, undefined, function(template_ui)
 				{
@@ -216,6 +213,25 @@ var WorkflowsRouter = Backbone.Router
 						return;
 					$('#workflows-listener-container').html($(template_ui));
 					initializeWorkflowsListeners();
+					
+					$("#workflows-tab-container").on("click",".tab-container ul li",function(){
+						var temp = $(this).find("a").attr("href").split("#");
+						if(islocalStorageHasSpace())
+							localStorage.setItem('workflows_tab', temp[1]);
+					});
+					var activetab = localStorage.getItem("workflows_tab");
+					if(!activetab || activetab == null) {
+						if(islocalStorageHasSpace())
+							localStorage.setItem('workflows_tab', "general");
+						activetab = "general";
+					}
+					$('#workflows-tab-container a[href="#'+activetab+'"]').tab('show');
+					if (!this.workflow_list_view || !this.workflow_list_view.collection)
+					{
+						this.navigate("workflows", { trigger : true });
+						return;
+					}
+					
 				}, "#workflows-listener-container");
 			},
 
@@ -507,6 +523,19 @@ var WorkflowsRouter = Backbone.Router
 						$('#campaign-id').val(campaign_id);
 
 						initializeTriggerEventListners(campaign_id);
+						$("#triggers-tab-container").on("click",".tab-container ul li",function(){
+							var temp = $(this).find("a").attr("href").split("#");
+							if(islocalStorageHasSpace())
+								localStorage.setItem('triggers_tab', temp[1]);
+						});
+						var activetab = localStorage.getItem("triggers_tab");
+						
+						if(!activetab || activetab == null) {
+							if(islocalStorageHasSpace())
+								localStorage.setItem('triggers_tab', "contact");
+							activetab = "contact";
+						}
+						$('#triggers-tab-container a[href="#'+activetab+'"]').tab('show');
 					}
 				
 				});
