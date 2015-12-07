@@ -212,6 +212,7 @@ var DealsRouter = Backbone.Router.extend({
 							$('#owners-list-filters').find('option[value=""]').text('Any');
 							$('#pipeline').find('option[value=""]').text('Any');			
 							$('#milestone').find('option[value=""]').text('Any');
+							$('#value_filter', $('#opportunity-listners')).trigger('change');
 							deserializeForm(deal_filter_json, $("#dealsFilterForm"));
 						}
 					});

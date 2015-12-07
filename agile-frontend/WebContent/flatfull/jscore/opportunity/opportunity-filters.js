@@ -180,7 +180,7 @@ function setNewDealFilters(data){
 			}
 		}*/
 	}else if(cookie_filter_id && cookie_filter_id == 'my-deals'){
-		$('#opportunity-listners').find('h3').find('small').after('<div class="inline-block tag btn btn-xs btn-primary m-l-xs"><span class="inline-block m-r-xs v-middle">My Deals</span><a class="close default_deal_filter">×</a></div>');
+		$('#opportunity-listners').find('h3').find('small').after('<div class="inline-block tag btn btn-xs btn-primary m-l-xs"><span class="inline-block m-r-xs v-middle pull-left">My Deals</span><a class="close default_deal_filter">×</a></div>');
 	}else{
 		var deal_filter_json = {};
 		deal_filter_json['owner_id'] = "";

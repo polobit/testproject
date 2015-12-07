@@ -174,7 +174,7 @@ function isValidForm(form) {
 		{
 			return false;
 		}
-		if(!isNaN(value) && parseFloat(value) > 0)
+		if(!isNaN(value) && parseFloat(value) >= 0)
 		{
 			return true;
 		}
