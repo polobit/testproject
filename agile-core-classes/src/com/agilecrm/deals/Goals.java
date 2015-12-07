@@ -15,7 +15,7 @@ import com.googlecode.objectify.condition.IfDefault;
 
 /**
  * 
- * @author nidhi
+ * @author Nidhi
  * 
  */
 @SuppressWarnings("serial")
@@ -29,7 +29,7 @@ public class Goals implements Serializable
 
 
     @NotSaved(IfDefault.class)
-    public Long amount = 0L;
+    public Double amount = 0.0;
     
     @NotSaved(IfDefault.class)
     public Long count = 0L;
@@ -41,7 +41,7 @@ public class Goals implements Serializable
     		Goals.class);
 
     public Long start_time = 0L;
-    public Long end_time = 0L;
+   //public Long end_time = 0L;
     
     /**
      * Key object of DomainUser.
@@ -56,11 +56,11 @@ public class Goals implements Serializable
 
     }
 
-    public Goals(Long domain_user_id,Long start_time,Long end_time,Long amount,Long count)
+    public Goals(Long domain_user_id,Long start_time,Double amount,Long count)
     {
 	//this.domain_user_id = domain_user_id;
 	this.start_time = start_time;
-	this.end_time=end_time;
+	//this.end_time=end_time;
 	this.amount=amount;
 	this.count=count;
     }
@@ -99,7 +99,7 @@ public class Goals implements Serializable
     {
 	StringBuilder builder = new StringBuilder();
 	builder.append("Goals [Id=").append(id).append(", amount=").append(amount).append(", count=").append(count).append(", startTime=")
-	        .append(start_time).append(", endTime=").append(end_time).append(", domain_user_id=").
+	        .append(start_time).append(", domain_user_id=").
 	        append(domain_user_id).append("]");
 	return builder.toString();
     }

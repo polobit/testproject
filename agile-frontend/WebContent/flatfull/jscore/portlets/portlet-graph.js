@@ -1383,4 +1383,79 @@ var portlet_graph_utility = {
 						});
 	},
 
+	dealGoalsPieGraph : function(selector, data1,data2,colors)
+	{
+			var series = [];
+							series.push([ "Emails Sent",
+									data2 - data1 ]);
+							series.push([ "Emails Opened", data1 ]);
+							//portlet_graph_utility.emailsOpenedPieChart(selector,series,data1,data2);
+							head
+				.js(
+						LIB_PATH + 'lib/flot/highcharts-3.js',
+						LIB_PATH + 'lib/flot/no-data-to-display.js',
+						function() {
+
+							$('#' + selector)
+									.highcharts(
+											{
+												chart : {
+													type : 'pie',
+													backgroundColor:'transparent',
+
+												},
+												colors : colors,
+												title : {
+													text : ''
+												},
+												tooltip : {
+													
+													enabled : true,
+													formatter:  function(){
+													return  '<div class="p-n"> <b><font color='+this.point.color+'>'+Math.round(this.point.percentage).toString()+'%</font></b></div>';
+					                        
+												},
+												useHTML : true,
+												},
+												legend : {
+													enabled:false
+												},
+												plotOptions : {
+													series : {
+														borderWidth : 0,
+														states : {
+															hover : {
+																enabled : false
+															}
+														}
+													},
+													pie : {
+														borderWidth : 0,
+														//innerSize : 50,
+														dataLabels : {
+															enabled : false,
+															
+														},
+														showInLegend : true,
+														//enableMouseTracking : false,
+														point : {
+															events : {
+																legendItemClick : function() {
+																	return false;
+																}
+															}
+														}
+													}
+												},
+												series : [ {
+													name : 'Goal',
+													data : series
+												} ],
+												exporting : {
+													enabled : false
+												}
+											});
+						});
+	},
+
 };

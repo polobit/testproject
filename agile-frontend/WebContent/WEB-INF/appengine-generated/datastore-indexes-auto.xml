@@ -471,5 +471,15 @@
         <property name="contact_id" direction="asc"/>
         <property name="date_secs" direction="desc"/>
     </datastore-index>
-
+    
+    <datastore-index kind="Goals" ancestor="false" source="manual">
+        <property name="start_time" direction="asc"/>
+        <property name="end_time" direction="desc"/>
+	</datastore-index>
+	
+	  <datastore-index kind="Goals" ancestor="false" source="manual">
+        <property name="start_time" direction="asc"/>
+        <property name="end_time" direction="asc"/>
+        <property name="ownerKey" direction="asc"/>
+	</datastore-index>
 </datastore-indexes>

@@ -17,9 +17,23 @@ import net.sf.json.JSONObject;
 
 import com.agilecrm.deals.Goals;
 import com.agilecrm.deals.util.GoalsUtil;
+import com.agilecrm.portlets.Portlet;
+import com.agilecrm.portlets.util.PortletUtil;
 import com.agilecrm.reports.Reports;
 import com.agilecrm.reports.ReportsUtil;
 
+
+/**
+ * <code>GoalsAPI</code> includes REST calls to interact with
+ * {@link Goals class to initiate Goals CRUD operations.
+ * <p>
+ * It is called from client side to create, update, fetch the
+ * portlets. It also interacts with {@link GoalsUtil} class
+ * </p>
+ * 
+ * @author Nidhi
+ * 
+ */
 
 @Path("/api/goals")
 public class GoalsAPI
@@ -32,9 +46,9 @@ public class GoalsAPI
      */
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public List<Goals> getListOfReports(@QueryParam("start_time") Long start_time,@QueryParam("end_time")Long end_time)
+    public List<Goals> getListOfGoals(@QueryParam("start_time") Long start_time)
     {
-	return GoalsUtil.fetchAllGoals(start_time,end_time);
+	return GoalsUtil.fetchAllGoals(start_time);
     }
     
     /**
@@ -58,5 +72,12 @@ public class GoalsAPI
     	}
     	return GoalsUtil.saveGoal(goal_new);
     	
+    }
+    @Path("{owner-id}")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public List<Goals> getGoalsForUser(@PathParam("owner-id") Long owner_id,@QueryParam("start_time") Long start_time,@QueryParam("end_time") Long end_time)
+    {
+    	return GoalsUtil.getAllGoalsForUser(owner_id, start_time, end_time);
     }
 }

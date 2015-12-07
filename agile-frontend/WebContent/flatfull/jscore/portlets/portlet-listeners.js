@@ -209,6 +209,8 @@ function initializePortletsListeners() {
 				}
 			});
 
+	
+
 	$('.portlet_body').off("change").on(
 			'change',
 			'.onboarding-check',
@@ -835,6 +837,17 @@ function initializePortletsListeners() {
 
 		portlet_utility.showPortletSettings(this.id);
 	});
+
+	$('.gridster-portlets').on(
+			'mouseover',
+			'.goals_portlet_body',
+			function(e) {
+				if ($('.goals_portlet_body').parent().find(
+						'.gs-resize-handle')) {
+					$('.goals_portlet_body').parent().find(
+							'.gs-resize-handle').remove();
+				}
+			});
 
 }
 

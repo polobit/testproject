@@ -35,7 +35,7 @@ function loadPortlets(el){
 	App_Portlets.activity=new Array();
 	App_Portlets.activitiesView= new Array();
 	App_Portlets.campaignstats = new Array();
-
+	App_Portlets.dealGoals=new Array();
 	App_Portlets.adminPortlets = new Array();
 
 	/*

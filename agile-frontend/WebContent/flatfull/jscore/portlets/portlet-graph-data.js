@@ -875,4 +875,36 @@ var portlet_graph_data_utility = {
 							portlet_utility.addWidgetToGridster(base_model);
 						});
 	},
+	dealGoalsGraphData : function(selector,data,column_position,row_position)
+	{
+					var colors1=[ '#ffffff', '#27C24C' ];
+					var colors2= ['#ffffff','#fad733'];
+			
+					var deal_graph_el=$('#'+selector).find('.dealGraph');
+					deal_graph_el.attr('id','dealGraph-'+column_position + '-' + row_position);
+					var graphSelector1=$('#'+selector).find('.dealGraph').attr('id');
+					var revenue_graph_el=$('#'+selector).find('.revenueGraph');
+					revenue_graph_el.attr('id','revenueGraph-'+column_position + '-' + row_position);
+						var graphSelector2=$('#'+selector).find('.revenueGraph').attr('id');
+					if(data["goalCount"]==0)
+					{
+						$('#' + graphSelector1)
+										.html(
+												'<div class="portlet-error-message" style="padding:30px 15px">No Deals Goals set </div>');
+								
+					}
+					else
+						portlet_graph_utility.dealGoalsPieGraph(graphSelector1,data["dealcount"],data["goalCount"],colors1);
+
+					if(data["goalAmount"]==0)
+					{
+						$('#' + graphSelector2)
+										.html(
+												'<div class="portlet-error-message" style="padding:30px 15px">No Revenue Goals set</div>');
+								
+					}
+					 else
+					portlet_graph_utility.dealGoalsPieGraph(graphSelector2,data["dealAmount"],data["goalAmount"],colors2);
+					
+	}
 };

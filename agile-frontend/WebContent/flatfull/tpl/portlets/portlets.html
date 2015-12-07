@@ -2264,3 +2264,45 @@ Deleted  {{custom1}} Campaigns<br/>
      <div class="column_position" style="display:none">{{column_position}}</div>
      <div class="row_position" style="display:none">{{row_position}}</div>	
 </script>
+<script id="portlets-deal-goals-model-template" type="text/html">
+
+<!--<div class="portlet_header portlet_edit_icons panel-heading">
+			<h4 class="h4 text-ellipsis">
+				<span class="pull-left inline-block text-ellipsis deal_goals_header" style="width:70%;">Deal Goals</span>
+				 <small class="pull-right text-right p-t-xs portlet-header-small-text text-ellipsis" style="width: 30%;">
+					{{get_portlet_duration settings.duration}}
+				</small> 
+			</h4>
+			<div class="portlet_header_icons pull-right clear-fix text-muted p-t-xs pos-abs pos-r-0 pos-t-xs vis-hide">
+				<i id="{{id}}-settings" class="portlet-settings icon-wrench p-r-xs c-p"></i>
+				<i id="{{id}}-close" class="c-p icon-close {{remove_spaces name}}-close p-r-sm" onclick="deletePortlet(this);"></i>
+			</div>
+		</div>-->
+        <div class="goals_portlet_body" style="cursor:move" id="goals_portlets">	
+
+        <div class="r bg-light hbox no-border padder-v p-t-none stats-report-settings">
+           <div class="portlet_header_icons pull-right clear-fix text-muted p-t-xs pos-abs pos-r-0 pos-t-0">
+				<i id="{{id}}-settings" class="portlet-settings icon-wrench p-r-xs c-p"></i>
+				<i id="{{id}}-close" class="c-p icon-close StatsReport-close p-r-sm" onclick="deletePortlet(this);"></i>
+			</div>
+        		<div class=" v-middle hidden-md bg-light dker portlet-panel dealGraph"  style="height:100%;cursor:auto;">
+                </div>
+                <div class="col dk padder-v r-r  portlet-panel" style="cursor:auto;">
+             
+                <div class="text-primary-dk font-thin h1 text-center deal_count"></div>
+                <span class="text-muted text-xs text-center block goal_count"></span>
+                </div>
+        	</div>
+        	<div class="r bg-light hbox no-border padder-v p-t-none ">
+        	<div class="v-middle hidden-md bg-light dker portlet-panel revenueGraph" style="cursor:auto;height:100%">
+                </div>
+                <div class="col dk padder-v r-r portlet-panel" style="cursor:auto;">
+                 <div class="text-primary-dk font-thin h1 text-center deal_amount"></div>
+                <span class="text-muted text-xs text-center block goal_amount"></span>
+                </div>
+        	</div>
+        </div>
+        <div class="portlets" id="{{id}}">&nbsp;</div>
+     <div class="column_position" style="display:none">{{column_position}}</div>
+     <div class="row_position" style="display:none">{{row_position}}</div>	
+</script>

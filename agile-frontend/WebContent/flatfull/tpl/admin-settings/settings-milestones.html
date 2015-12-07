@@ -4,7 +4,7 @@
              <li class="settings-milestones"><a href="#milestones" class="b-l-none">Tracks and Milestones</a></li>
              <li class="settings-lost-reasons"><a href="#lost-reasons">Loss Reasons</a></li>
 			 <li class="settings-deal-sources"><a href="#deal-sources">Sources</a></li>
-			 <li class="settings-deal-goal"><a href="#deal-goal">Goals</a></li>
+			 <li class="settings-deal-goal"><a href="#goals">Goals</a></li>
            </ul>
 	</div>
 	<div class="tab-pane active" id="settings-milestones-tab-content">
@@ -228,7 +228,7 @@
                <div class="controls col-sm-6">
 		<table id="deal-sources-table" class="table  table-bordered agile-table onlySorting m-b-n-xs table-hover">
 				<thead class="panel-heading"><tr>
-					<th><div></div><div class="pull-right">Amount</div><div class="pull-right">count</div></th>
+					<th><div></div><div class="pull-right width-goal text-center m-r-lg">Amount</div><div class="pull-right width-goal text-center" style="margin-right:80px">Count</div></th>
 				</tr></thead>
 				<tbody id="admin-settings-deal-goals-model-list" class="admin-settings-deal-goals-model-list" style="word-break:normal!important;" >
 			</tbody>
@@ -240,28 +240,35 @@
 
 		<div class="control-group form-group  m-b-none">
 		<div class="col-md-2"></div>
-	<div class="col-sm-2">
+	
+                  <div class="col-xs-offset-1"><label style="margin-right:3.33% ;padding-left:20px">Total</label>
+  		
+  		<label class="Count_goal width-goal text-center m-r-xxl col-xs-offset-1" value=0>0</label>
+  		<span class="width-goal text-center" style="margin-left:3.33%">{{currencySymbol}} <label class="Amount_goal" value=0>0</label></span>
+  		</div>
+  		<div class="col-sm-offset-4 col-sm-8 col-xs-offset-4 col-xs-8">
             
                 <a class="btn btn-sm btn-primary goalSave ">Save Changes</a>
                 <div class="Goals_message"></div>
+          
            </div>
-  <label>Total</label>
-  		<label class="Count_goal width-goal text-center m-r-xxl" value=0>0</label>
-  		<span>{{currencySymbol}}</span><label class="Amount_goal width-goal text-center" value=0>0</label>
-	</div>
+	
+ </div>
 </div>
 </script>
 
 <script id="admin-settings-deal-goals-model-template" type="text/html">
 <td>
-	<div id={{id}} class="goal pull-left inline-block v-top text-ellipsis deal_source_name_div text-cap ">{{name}}
+	<div id={{id}} class="goal pull-left inline-block v-top text-ellipsis text-cap ">{{name}}
 		
 	</div>
-	<div class="pull-right input-group">
-		<span class="input-group-addon" style="display:inline; padding:5px 3px 1px">{{currencySymbol}}</span><input class="amount width-goal" type="text">
+	<div class="pull-right input-group" style="width:130px margin-right:10px">
+		<span class="input-group-addon" style="display:inline; padding:5px 3px 1px;">{{currencySymbol}}</span><input class="amount width-goal" type="text"><small class="amount_percent m-l-xs thumb-tiny"></small>
+		<span id="goal_amount_error"  generated="true" class="help-inline width-goal" style="display:none;">Please enter a valid number.</span>
 		</div>
-		<div class="pull-right m-r-lg input-group">
-		<input class="count width-goal" type="text">
+		<div class="pull-right m-r-lg input-group style="width:130px">
+		<input class="count width-goal" type="text"><small class="count_percent m-l-xs thumb-tiny"></small>
+		<span id="goal_count_error"  generated="true" class="help-inline width-goal" style="display:none;">Please enter a valid number.</span>
 		</div>
 	</form>
 </td>
@@ -272,9 +279,10 @@
 	<div class="form-horizontal">
 	<div class="w-md pull-right">
 	<label>Duration</label>
-	<span id="goal_duration">
-				<input type="text" data-date-format="{{dateFormat}}" prev-val="" class="form-control date required" placeholder="{{dateFormat}}">
-			</span>
+	<div id="goal_duration">
+				<!--<input type="text" data-date-format="{{dateFormat}}" prev-val="" class="form-control date required" placeholder="{{dateFormat}}">-->
+				<span data-date-format="{{dateFormat}}" prev-val="" class="form-control date required" placeholder="{{dateFormat}}">{{currentDateInFormat 'mmmm yyyy'}}</span>
+			</div>
 			</div>
 			<div class="Goal_period"></div> 
 </div>

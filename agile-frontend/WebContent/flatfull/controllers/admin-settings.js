@@ -49,7 +49,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 
 	"deal-sources" : "dealSources",
 	
-	"deal-goal": "dealGoal",
+	"goals": "dealGoal",
 
 
 	},
@@ -999,16 +999,16 @@ var AdminSettingsRouter = Backbone.Router.extend({
 				initializeMilestoneListners(el);
 				
 
-						var d=$('#goal_duration input').val();
+						var d=$('#goal_duration span').html();
 				d=new Date(d);
 				var start=getUTCMidNightEpochFromDate(d);
-				var end=getUTCMidNightEpochFromDate(new Date(d.getFullYear(), d.getMonth()+1, d.getDate()-1,23,59,59));
-					
-					$.ajax({ type : 'GET', url : '/core/api/goals?start_time='+start/1000+'&end_time='+end/1000, 
+
+					$.ajax({ type : 'GET', url : '/core/api/goals?start_time='+start/1000, 
 					contentType : "application/json; charset=utf-8", dataType : 'json' ,
 						success:function(data)
 						{
 							console.log(data);
+							var count=0,amount=0;
 							$('#deal-sources-table').find('td').each(function(index){
 								var that=$(this);
 								that.find('.count').val("");
@@ -1024,10 +1024,13 @@ var AdminSettingsRouter = Backbone.Router.extend({
 
 							});
 								if(that.find('.count').val()!="")
-									$('.Count_goal').text(parseInt($('.Count_goal').text())+parseInt(that.find('.count').val()));
+								count=count+parseInt(that.find('.count').val());
 								if(that.find('.amount').val()!="")
-									$('.Amount_goal').text(parseInt($('.Amount_goal').text())+parseInt(that.find('.amount').val()));
+									amount=amount+parseFloat(that.find('.amount').val());
 							});
+
+							
+							percentCountAndAmount(count,amount);
 						}
 				});
 				
@@ -1035,16 +1038,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			} });
 		this.dealGoalsView.collection.fetch();
 		$('#content').find('#admin-prefs-tabs-content').find('#settings-milestones-tab-content').find('.Goal_period').html(this.dealGoalsView.render().el);
-		/*getTemplate('admin-settings-deal-goals-model', {}, undefined, function(template_ui)
-				{
-					if (!template_ui)
-						return;
-					$('#settings-milestones-tab-content').html($(template_ui));
-
-					$("input.date").datepicker({ format :CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY, autoclose : true });
-
-
-				}, "#settings-milestones-tab-content");*/
+		
 		});	
 });
 		$('#content').find('#AdminPrefsTab .select').removeClass('select');
@@ -1060,11 +1054,11 @@ var AdminSettingsRouter = Backbone.Router.extend({
 
 function initQuota(callback)
 {
-	$("#goal_duration input.date").datepicker({ format :"MM yyyy", minViewMode:"months",weekStart : CALENDAR_WEEK_START_DAY, autoclose : true ,
+	$("#goal_duration span.date").datepicker({ format :"MM yyyy", minViewMode:"months",weekStart : CALENDAR_WEEK_START_DAY, autoclose : true ,
 						
 				}).on('changeMonth',function(e) {
        						/// alert(e);
-       						$("#goal_duration input").val( e.date.format("mmmm yyyy"));
+       						$("#goal_duration span").html( e.date.format("mmmm yyyy"));
        						 callback();
 
        						}).datepicker("setDate", new Date());
