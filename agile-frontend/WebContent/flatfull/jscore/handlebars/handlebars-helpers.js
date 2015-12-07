@@ -3597,15 +3597,20 @@ $(function()
 	Handlebars.registerHelper('if_domain', function(value, options)
 	{
 
-		if (typeof value === "undefined")
+		if (typeof value == "undefined")
 			return options.inverse(this);
 
-		var domainName = "our";
+		var domainName = CURRENT_DOMAIN_USER.domain;
 
-		if (value.toString().trim().toLowerCase() == domainName)
-			return options.fn(this);
-		else
+		if(domainName){
+			if (value.toString().trim().toLowerCase() == domainName.toLowerCase()){
+				return options.fn(this);
+			}else{
+				return options.inverse(this);
+			}
+		}else{
 			return options.inverse(this);
+		}
 	});
 
 	Handlebars.registerHelper('if_not_equals', function(value, target, options)
