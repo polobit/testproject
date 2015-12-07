@@ -333,12 +333,11 @@ binds all click events  for google calendar model
 		$(ele).attr("disabled", "disabled");
 
 		$(ele).after(getRandomLoadingImg());
-		App_Datasync.calendar_sync_google.model.url = "/core/api/calendar-prefs"
+		App_Datasync.calendar_sync_google.model.url = "/core/api/calendar-prefs/type/GOOGLE"
 		App_Datasync.calendar_sync_google.model.destroy({ success : function()
 		{
 
 			App_Datasync.calendar_sync_google.model.clear();
-			App_Datasync.calendar_sync_google.model.url = "/core/api/calendar-prefs/get"
 			App_Datasync.calendar_sync_google.render(true);
 			erase_google_calendar_prefs_cookie();
 
