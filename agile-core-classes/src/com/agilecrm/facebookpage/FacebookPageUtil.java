@@ -83,7 +83,11 @@ public class FacebookPageUtil
 	for (String pair : pairs)
 	{
 	    int idx = pair.indexOf("=");
-	    queryPairs.put(URLDecoder.decode(pair.substring(0, idx), "UTF-8"), URLDecoder.decode(pair.substring(idx + 1), "UTF-8"));
+	    try {
+	    	queryPairs.put(URLDecoder.decode(pair.substring(0, idx), "UTF-8"), URLDecoder.decode(pair.substring(idx + 1), "UTF-8"));
+		} catch (StringIndexOutOfBoundsException e) {
+			return "";
+		}
 	}
 
 	return queryPairs.get("access_token").trim();

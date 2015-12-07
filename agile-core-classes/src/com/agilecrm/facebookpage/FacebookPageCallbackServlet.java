@@ -25,9 +25,12 @@ public class FacebookPageCallbackServlet extends HttpServlet
     {
 	HttpSession currentSession = request.getSession();	
 	response.setContentType("text/plain");
-	currentSession.setAttribute("fbpage_user_accesstoken", FacebookPageUtil.getAccessToken(request.getParameter("code")));
-	currentSession.setAttribute("fbpage_logged_in", true);
-	System.out.println(currentSession.getAttribute("fbpage_user_accesstoken"));
+	String fbAccessToken = FacebookPageUtil.getAccessToken(request.getParameter("code"));
+	if(!fbAccessToken.isEmpty()) {
+		currentSession.setAttribute("fbpage_user_accesstoken", fbAccessToken);
+		currentSession.setAttribute("fbpage_logged_in", true);
+		System.out.println(currentSession.getAttribute("fbpage_user_accesstoken"));
+	}
 	response.sendRedirect("/#facebook-integration");
     }
 

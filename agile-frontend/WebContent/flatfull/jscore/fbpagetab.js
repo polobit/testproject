@@ -56,7 +56,8 @@ function initializeFbPageTabListners(el){
 
 		    	   var sucMessage = "Form "+statusMessageNote+" <a target=\"_blank\" class=\"text-info\" href=\"https://www.facebook.com/pages/null/"+facebookPageId+"?sk=app_"+AgileFacebookAppId+"\">your Facebook page.</a><br>";
 		    	   $("#statusMessageHolder").html(sucMessage).show().fadeOut(10000);
-		    	   $("#facebookFormAddHolder").toggle();
+		    	   $("#facebookFormAddHolder").hide();
+		    	   $("#addFacebookFormLink").show();
 
 		       } else {
 		    	   $("#statusMessageHolder").html("Something went wrong, please try again.");
@@ -114,7 +115,8 @@ function initializeFbPageTabListners(el){
 
 	$("#fbPageTab-listners").on('click', '#addFacebookFormLink', function(e){
 		e.preventDefault();
-		$("#facebookFormAddHolder").toggle();
+		$("#facebookFormAddHolder").show();
+		$(this).hide();
 	});
 
 	$("#fbPageTab-listners").on('click', '#unlinkFacebookAccount', function(e) {

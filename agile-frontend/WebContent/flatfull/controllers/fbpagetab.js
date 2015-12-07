@@ -31,13 +31,13 @@ var FacebookPageTabRouter = Backbone.Router.extend({
 						    		return;
 								$('#admin-settings-integrations-tab-content').html($(template_ui2));
 								initializeFbPageTabListners();
-							}, null);
+							}, "#admin-settings-integrations-tab-content");
 					});
 				});
 				
 				initializeIntegrationsTabListeners("integrations_tab", "integrations");
 				$('#content').find('.integrations-tab').addClass('select');
-			}, "#admin-settings-integrations-tab-content");
+			}, null);
 
 		},null);
 
