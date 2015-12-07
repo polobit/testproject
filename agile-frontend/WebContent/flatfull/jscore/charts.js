@@ -136,7 +136,7 @@ function pie(url, selector, name)
 										], exporting : { enabled : false } }, function(chart)
 									{ // on complete
 
-										chart.renderer.image('img/donut-tooltip-frame.png', 14, 5, 200, 80).add();
+										chart.renderer.image(updateImageS3Path('img/donut-tooltip-frame.png'), 14, 5, 200, 80).add();
 										chart.renderer.text(this.options.tooltip.message, 50, 40).attr("class", 'tooltip-default-message').add();
 
 									});
@@ -175,7 +175,7 @@ function showBar(url, selector, name, yaxis_name, stacked)
 	var chart;
 
 	// Shows loading image
-	$('#' + selector).html(getRandomLoadingImg());
+	$('#' + selector).html("<div class='text-center v-middle opa-half'><img src='../flatfull/img/ajax-loader-cursor.gif' style='width:12px;height:10px;opacity:0.5;' /></div>");
 
 
 	// Builds graph with the obtained json data.
@@ -381,7 +381,7 @@ function showLine(url, selector, name, yaxis_name, show_loading)
 		// Old calls were not showing loading image..
 	}
 	else
-		$('#' + selector).html(getRandomLoadingImg());
+		$('#' + selector).html("<div class='text-center v-middle opa-half'><img src='../flatfull/img/ajax-loader-cursor.gif' style='width:12px;height:10px;opacity:0.5;' /></div>");
 	
 	
 	var chart;
@@ -643,8 +643,7 @@ function showFunnel(url, selector, name, show_loading)
 		// Old calls were not showing loading image..
 	}
 	else
-		$('#' + selector).html(getRandomLoadingImg());
-
+		$('#' + selector).html("<div class='text-center v-middle opa-half'><img src='../flatfull/img/ajax-loader-cursor.gif' style='width:12px;height:10px;opacity:0.5;' /></div>");
 	var chart;
 
 	// Loads Highcharts plugin using setupCharts and sets up line chart in the
@@ -849,7 +848,7 @@ function showAreaSpline(url, selector, name, yaxis_name, show_loading)
 		// Old calls were not showing loading image..
 	}
 	else
-		$('#' + selector).html(getRandomLoadingImg());
+		$('#' + selector).html("<div class='text-center v-middle opa-half'><img src='../flatfull/img/ajax-loader-cursor.gif' style='width:12px;height:10px;opacity:0.5;' /></div>");
 	
 	
 	var chart;
@@ -1114,7 +1113,7 @@ function showDealAreaSpline(url, selector, name, yaxis_name, show_loading,freque
 		// Old calls were not showing loading image..
 	}
 	else
-		$('#' + selector).html(getRandomLoadingImg());
+		$('#' + selector).html("<div class='text-center v-middle opa-half'><img src='../flatfull/img/ajax-loader-cursor.gif' style='width:12px;height:10px;opacity:0.5;' /></div>");
 	
 	
 	var chart;
@@ -1485,7 +1484,7 @@ function showDealsGrowthgraph(url, selector, name, yaxis_name, show_loading)
         // Old calls were not showing loading image..
     }
     else
-        $('#' + selector).html(getRandomLoadingImg());
+        $('#' + selector).html("<div class='text-center v-middle opa-half'><img src='../flatfull/img/ajax-loader-cursor.gif' style='width:12px;height:10px;opacity:0.5;' /></div>");
     
     
     var chart;
@@ -1712,7 +1711,7 @@ function pieforReports(url, selector, name,show_loading)
         // Old calls were not showing loading image..
     }
     else
-        $('#' + selector).html(getRandomLoadingImg());
+        $('#' + selector).html("<div class='text-center v-middle opa-half'><img src='../flatfull/img/ajax-loader-cursor.gif' style='width:12px;height:10px;opacity:0.5;' /></div>");
 
 	var chart;
 	var AllData=[];

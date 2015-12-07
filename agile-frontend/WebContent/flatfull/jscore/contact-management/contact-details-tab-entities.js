@@ -371,7 +371,7 @@ function loadMailTabView(contact_details_tab_scope,email_server,mail_server_url,
  */
 function fetchMails(contact_details_tab_scope,has_email_configured,mail_server_url,email_server,email)
 {	
-	$('#mail', App_Contacts.contactDetailView.el).append('<span id="mails-span"> <img class="mails-loading p-r-xs m-b m-l-sm pull-left"  src= "/img/ajax-loader-cursor.gif"></img></span>');
+	$('#mail', App_Contacts.contactDetailView.el).append('<span id="mails-span"> <img class="mails-loading p-r-xs m-b m-l-sm pull-left"  src= "'+updateImageS3Path("/img/ajax-loader-cursor.gif")+'"></img></span>');
 	this.configured_sync_email = "";
 	var cursor = true;
 
@@ -439,7 +439,7 @@ function fetchMailsFromAllAccounts(contact_details_tab_scope,has_email_configure
 	{
 		if(fetch_urls.length > 0)
 		{
-			$('#mail-account-types', App_Contacts.contactDetailView.el).prepend('<span id="mails-span"> <img class="all-mails-loading p-r-xs m-b m-l-sm pull-left"  src= "/img/ajax-loader-cursor.gif"></img></span>');
+			$('#mail-account-types', App_Contacts.contactDetailView.el).prepend('<span id="mails-span"> <img class="all-mails-loading p-r-xs m-b m-l-sm pull-left"  src= "'+updateImageS3Path("/img/ajax-loader-cursor.gif")+'"></img></span>');
 			$('#mail-account-types', App_Contacts.contactDetailView.el).find('.all-mails-loading').css("display","block");
 		}
 		for(var i=0;i<fetch_urls.length;i++)
@@ -706,14 +706,14 @@ function contact_detail_page_infi_scroll(element_id, targetCollection)
 			console.log('in fetch');
 			// Add loading icon
 			$(targetCollection.infiniScroll.options.target).append(
-					'<div class="scroll-loading"> <img src="/img/ajax-loader-cursor.gif" style="margin-left: 44%;"> </div>');
+					'<div class="scroll-loading"> <img src="'+updateImageS3Path("/img/ajax-loader-cursor.gif") +'" style="margin-left: 44%;"> </div>');
 		}
 		});
 }
 function showMailsInfoMessages()
 {
 	showMailsErrorMessages();
-	if(mailsView.collection.length > 0)
+	if(mailsView.collection.length > 20)
 	{
 		if(($('#all-emails-info',App_Contacts.contactDetailView.el).length === 0))
 		{

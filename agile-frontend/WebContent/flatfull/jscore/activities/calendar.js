@@ -45,7 +45,7 @@ function load_events_from_google(callback)
 				if(inArray >= 0){
 					//continue
 				}else{
-					return
+					return;
 				}
 			}
 			else{
@@ -61,13 +61,19 @@ function load_events_from_google(callback)
 //		}
 	}
 
-	// Name of the cookie to store/ calendar prefs. Current user id is set
+	get_google_calendar_prefs(callback);
+
+}
+
+function get_google_calendar_prefs(callback)
+{
+		// Name of the cookie to store/ calendar prefs. Current user id is set
 	// in cookie name to avoid
 	// showing tasks in different users calendar if logged in same browser
 	var google_calendar_cookie_name = "_agile_google_calendar_prefs_" + CURRENT_DOMAIN_USER.id;
 
 	// Reads existing cookie
-	var _agile_calendar_prefs_cookie = readCookie(google_calendar_cookie_name);
+	var _agile_calendar_prefs_cookie = readData(google_calendar_cookie_name);
 
 	// If cookie is not null, then it check it token is still valid; checks
 	// based on expiry time.
@@ -75,13 +81,14 @@ function load_events_from_google(callback)
 	{
 		var prefs = JSON.parse(_agile_calendar_prefs_cookie);
 
+
 		// Checks if token expired. It considers expire before 2 minutes window
 		// of actual expiry time.
 		if (prefs.expires_at - (2 * 60 * 1000) >= new Date().getTime())
 		{
 			// Returns token to the callback accoring to specification of gcal
-			get_google_calendar_event_source(prefs, callback);
-			return;
+			return get_google_calendar_event_source(prefs, callback);
+			
 		}
 
 		// Erases cookie if token is expired and sends request to backend to
@@ -98,8 +105,8 @@ function load_events_from_google(callback)
 			return;
 
 		// Creates cookie
-		createCookie(google_calendar_cookie_name, JSON.stringify(prefs));
-		get_google_calendar_event_source(prefs, callback);
+		storeData(google_calendar_cookie_name, JSON.stringify(prefs));
+		return get_google_calendar_event_source(prefs, callback);
 	});
 }
 
@@ -110,6 +117,39 @@ function erase_google_calendar_prefs_cookie()
 {
 	var google_calendar_cookie_name = "_agile_google_calendar_prefs_" + CURRENT_DOMAIN_USER.id;
 	eraseCookie(google_calendar_cookie_name);
+	eraseData(google_calendar_cookie_name);
+}
+
+function get_calendar_ids_form_prefs(data)
+{
+
+		if(!data)
+			return;
+
+		var calendar_ids = ["primary"];
+
+		if(data.prefs)
+		{
+			
+
+			try
+			{
+				var prefs;
+				if(typeof data.prefs != 'object')
+					prefs = JSON.parse(data.prefs);
+				else
+					prefs = data.prefs;
+
+				if(prefs.fields != null)
+				calendar_ids = prefs.fields;		
+			}
+			catch (err)
+			{
+				console.log(err);
+			}
+		}
+
+		return calendar_ids;
 }
 
 // Returns token in to gcal callback in specified format
@@ -117,7 +157,10 @@ function get_google_calendar_event_source(data, callback)
 {
 
 	if (callback && typeof (callback) === "function")
-		callback({ token : data.access_token, dataType : 'agile-gcal', className : "agile-gcal" });
+	{
+		callback({ token : data.access_token, dataType : 'agile-gcal', className : "agile-gcal", calendarIds : get_calendar_ids_form_prefs(data)});
+	}
+	return true;
 }
 
 /**
@@ -128,8 +171,7 @@ function showCalendar(users)
 {
 
 	_init_gcal_options(users);
-	putGoogleCalendarLink();
-	putOfficeCalendarLink();
+	put_thirdparty_calendar_links();
 	
 	var calendarView = (!readCookie('calendarDefaultView')) ? 'month' : readCookie('calendarDefaultView');
 	$('#' + calendarView).addClass('bg-light');
@@ -160,9 +202,9 @@ function showCalendar(users)
 						 */
 
 						eventSources : [
-								{ events : function(start, end, callback)
+								{ 	
+									events : function(start, end, callback)
 								{
-
 									var eventFilters = JSON.parse(readCookie('event-lhs-filters'));
 									var agile_event_owners = '';
 									if (eventFilters)
@@ -201,17 +243,18 @@ function showCalendar(users)
 												loadOfficeEvents(start.getTime(), end.getTime());
 											}
 											
-											$("#loading_calendar_events").hide();
-											
 											//Agile
 											var inArray = type_of_cal.indexOf("agile");
-											if(inArray >= 0){
+											if(inArray >= 0 ||( owners && owners.length > 0)){
 												//continue
 											}else{
+												callback([]);
 												return;
 											}
 										}
 										
+										
+
 //										if ((type_of_cal.length == 1 && type_of_cal[0] == 'google' && owners.length == 1 && owners[0] == CURRENT_AGILE_USER.id) || type_of_cal.length == 0 && owners.length == 0)
 //										{
 //											$("#loading_calendar_events").hide();
@@ -233,32 +276,24 @@ function showCalendar(users)
 
 									var eventsURL = '/core/api/events?start=' + start.getTime() / 1000 + "&end=" + end.getTime() / 1000;
 									
+
 									eventsURL += '&owner_id=' + agile_event_owners;
 									console.log('-----------------', eventsURL);
+									//callback([]);
+									return eventsURL
+
+								//		return true;
+
+								},
+								dataType: 'agile-events'
+
+								},
+								{
+									dataType : 'agile-gcal',
 									
-									$.getJSON(eventsURL, function(doc)
-									{
-										try{
-										$.each(doc, function(index, data)
-										{
-											// decides the color of event based
-											// on owner id
-											console.log(data);
-											data = renderEventBasedOnOwner(data);
-										});
-
-										if (doc)
-										{
-
-											callback(doc);
-
-										}
-										}
-										catch(err){
-												$("#loading_calendar_events").hide();
-										}
-									});
-								} }, { dataType : 'agile-gcal' }
+								},
+								
+							
 						],
 						header : { left : 'prev', center : 'title', right : 'next' },
 						defaultView : calendarView,
@@ -272,7 +307,7 @@ function showCalendar(users)
 						{
 							if (bool)
 							{
-
+								pushLoading();
 								$("#loading_calendar_events").remove();
 								$('.fc-header-left')
 										.append(
@@ -283,9 +318,13 @@ function showCalendar(users)
 							}
 							else
 							{
-								// $('#loading').hide();
-								$("#loading_calendar_events").hide();
-								start_tour('calendar');
+								if(popLoading() <= 0)
+								{
+									// $('#loading').hide();
+									$("#loading_calendar_events").hide();
+									start_tour('calendar');	
+								}
+								
 							}
 							$(".fc-agenda-axis").addClass('bg-light lter');
 							$(".ui-resizable-handle").hide();
@@ -611,8 +650,11 @@ function showCalendar(users)
 								_contacts.push(jsoncontacts[i].id);
 
 							}
+							if(event.owner)
+							event.owner_id = event.owner.id;
 							delete event.contacts;
 							delete event.owner;
+							event
 							event.contacts = _contacts;
 							var eventModel = new Backbone.Model();
 							eventModel.url = 'core/api/events';

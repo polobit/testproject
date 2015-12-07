@@ -558,13 +558,14 @@ function serialize_contact_properties_and_save(e, form_id, obj, properties, moda
 
 				// App_Contacts.contactDetails(data.id,data);
 				// App_Contacts.navigate("contact/"+data.id);
-				if(!CALL_CAMPAIGN.start)
+				if(!CALL_CAMPAIGN.start && Current_Route != "contact/" + data.id)
 				App_Contacts.navigate("contact/" + data.id, { trigger : true });
 			} else {
 				// update contacts-details view
 				if (App_Companies.companyDetailView)
 					App_Companies.companyDetailView.model = data;
 
+				if(Current_Route != "company/" + data.id)
 				App_Companies.navigate("company/" + data.id, { trigger : true });
 			}
 		}
@@ -599,6 +600,7 @@ function serialize_contact_properties_and_save(e, form_id, obj, properties, moda
 					
 				}
 				
+				if(Current_Route != "contact/" + id)
 				Backbone.history.navigate("contact/" + id, { trigger : true });	
 				$( window ).scrollTop( 0 );
 				
@@ -831,7 +833,7 @@ $(function()
 		e.preventDefault();
 
 		// Clone the template
-		$(this).parents("div.control-group").append($(this).parents().siblings("div.controls:first").clone().removeClass('hide'));
+		$(this).parents("div.control-group").append($(this).parents().siblings("div.controls:first").clone().removeClass('hide').addClass('col-sm-offset-3'));
 	});
 
 	// Removes multiple fields

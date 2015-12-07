@@ -57,4 +57,24 @@ public class StripeWidgetsAPI {
 			throw ExceptionUtil.catchWebException(e);
 		}
 	}
+
+	@Path("credit/{widget-id}/{customerId}/{amount}")
+	@GET
+	@Produces(MediaType.TEXT_PLAIN)
+	public boolean addCredits(@PathParam("widget-id") Long widgetId,
+			@PathParam("customerId") String customerId,
+			@PathParam("amount") int amount) {
+		boolean status = false;
+		try {
+			// Retrieves widget based on its id
+			Widget widget = WidgetUtil.getWidget(widgetId);
+			StripePluginUtil.addCredit(widget, customerId, amount);
+			status = true;
+		} catch (Exception e) {
+			status = false;
+			throw ExceptionUtil.catchWebException(e);
+		}
+		return status;
+	}
+
 }

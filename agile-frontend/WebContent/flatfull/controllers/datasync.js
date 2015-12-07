@@ -11,6 +11,7 @@ routes : {
 
             "sync": "dataSync",
             "sync/contacts": "google_contacts_sync",
+            "sync/calendar-setup": "google_calendar_setup",
             "sync/stripe-import": "stripe_sync",
             "sync/shopify": "shopify",
             "sync/salesforce": "salesforce",
@@ -113,6 +114,73 @@ google_calendar:function(el){
 	            }, "#content");
 
 	        },
+            google_calendar_setup: function()
+            {
+                getTemplate('settings', {}, undefined, function(template_ui) {
+
+                    $('#content').html($(template_ui));
+                    $('#PrefsTab .select').removeClass('select');
+                    $('.contact-sync-tab').addClass('select');
+
+                getTemplate('data-sync-settings', {}, undefined, function(template_ui1){
+                        if(!template_ui1)
+                            return;
+                        $("#prefs-tabs-content").html(template_ui1);
+                        var dataSynctTab = localStorage.getItem("datasync_tab");
+                        $("#prefs-tabs-content").find('a[href="#'+dataSynctTab+'"]').closest("li").addClass("active");
+                        initializeTabListeners("datasync_tab", "sync");
+
+                    var calendar_settings_view = new Calendar_Sync_Settings_View({
+                        url : "core/api/calendar-prefs/type/GOOGLE",
+                        template : "import-google-calendar-setup",
+                        saveCallback: function(data)
+                        {
+                            erase_google_calendar_prefs_cookie();
+                        },
+                        postRenderCallback: function(el)
+                        {
+                            var model = calendar_settings_view.model;
+                            
+                            prefs = model.get('prefs');
+                            if(prefs)
+                            {
+                                if(typeof prefs != 'object')
+                                {
+                                    prefs = JSON.parse(model.get('prefs'));
+                                    model.set("prefs", prefs, {silent : true});
+                                }
+                            }
+                            
+                            console.log(model);
+                            $("#multi-select-calendars-container", el).html(getRandomLoadingImg());
+                            _fetchGoogleCalendarList(function(data) {
+                                getTemplate('dynamic-multi-calendar', data, 'no',  function(template_ui){
+                                    
+
+                                        head.js(LIB_PATH + 'lib/jquery.multi-select.js', function()
+                                        {
+                                            $("#multi-select-calendars-container", el).html(template_ui);
+                                            deserialize_multiselect(model.toJSON(), el);
+                                            var select_field = $('#multi-select-calendars', el)
+                                             select_field.multiSelect();
+                                                $.each(get_calendar_ids_form_prefs(model.toJSON()), function(index, field){
+                                                    select_field.multiSelect('select', field);     
+                                                });
+                                        });
+                                });
+                                
+        
+                            });
+                        }
+                    });
+                    $("#data-sync-settings-tab-content").html(calendar_settings_view.render().el);
+                    
+                    }, null);
+                  
+
+
+                }, "#content");
+            },
 
 
         stripe_sync: function() {

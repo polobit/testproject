@@ -5,7 +5,7 @@ function startGettingDeals(criteria, pending)
 	var milestoneString = trackListView.collection.get(pipeline_id).toJSON().milestones;
 	if (milestoneString.trim().length == 0)
 	{
-		var html = '<div class="slate" style="margin:0px;"><div class="slate-content"><div class="box-left"><img alt="Clipboard" src="/img/clipboard.png"></div><div class="box-right"><h3>You have no milestones defined</h3><br><a href="#milestones" class="btn"><i class="icon icon-plus-sign"></i> Add Milestones</a></div></div></div>';
+		var html = '<div class="slate" style="margin:0px;"><div class="slate-content"><div class="box-left"><img alt="Clipboard" src="'+updateImageS3Path("/img/clipboard.png")+'"></div><div class="box-right"><h3>You have no milestones defined</h3><br><a href="#milestones" class="btn"><i class="icon icon-plus-sign"></i> Add Milestones</a></div></div></div>';
 		$('#new-opportunity-list-paging').html(html);
 		return;
 	}
@@ -224,6 +224,6 @@ function deal_infi_scroll(element_id, targetCollection)
 
 			// Add loading icon
 			$(targetCollection.infiniScroll.options.target).append(
-					'<div class="scroll-loading"> <img src="/img/ajax-loader-cursor.gif" style="margin-left: 44%;"> </div>');
+					'<div class="scroll-loading"> <img src="'+updateImageS3Path("/img/ajax-loader-cursor.gif")+'" style="margin-left: 44%;"> </div>');
 		} });
 }

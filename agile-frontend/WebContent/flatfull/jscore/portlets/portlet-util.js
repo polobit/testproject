@@ -697,7 +697,7 @@ var portlet_utility = {
 							that
 									.find('#emails-sent-count')
 									.html(
-											"<img src='../flatfull/img/ajax-loader-cursor.gif' style='width:12px;height:10px;opacity:0.5;' />");
+											"<img src='"+updateImageS3Path('../flatfull/img/ajax-loader-cursor.gif')+"' style='width:12px;height:10px;opacity:0.5;' />");
 					}, 1000);
 
 			portlet_graph_data_utility
@@ -925,7 +925,7 @@ var portlet_utility = {
 							that
 									.find('#new-contacts-count')
 									.html(
-											"<img src='../flatfull/img/ajax-loader-cursor.gif' style='width:12px;height:10px;opacity:0.5;' />");
+											"<img src='"+updateImageS3Path('../flatfull/img/ajax-loader-cursor.gif')+"' style='width:12px;height:10px;opacity:0.5;' />");
 					}, 1000);
 			portlet_graph_data_utility
 					.fetchPortletsGraphData(
@@ -953,7 +953,7 @@ var portlet_utility = {
 							that
 									.find('#won-deal-value')
 									.html(
-											"<img src='../flatfull/img/ajax-loader-cursor.gif' style='width:12px;height:10px;opacity:0.5;' />");
+											"<img src='"+updateImageS3Path('../flatfull/img/ajax-loader-cursor.gif')+"' style='width:12px;height:10px;opacity:0.5;' />");
 					}, 1000);
 			portlet_graph_data_utility
 					.fetchPortletsGraphData(
@@ -989,7 +989,7 @@ var portlet_utility = {
 							that
 									.find('#new-deal-value')
 									.html(
-											"<img src='../flatfull/img/ajax-loader-cursor.gif' style='width:12px;height:10px;opacity:0.5;' />");
+											"<img src='"+updateImageS3Path('../flatfull/img/ajax-loader-cursor.gif')+"' style='width:12px;height:10px;opacity:0.5;' />");
 					}, 1000);
 			portlet_graph_data_utility
 					.fetchPortletsGraphData(
@@ -1025,7 +1025,7 @@ var portlet_utility = {
 							that
 									.find('#emails-sent-count')
 									.html(
-											"<img src='../flatfull/img/ajax-loader-cursor.gif' style='width:12px;height:10px;opacity:0.5;' />");
+											"<img src='"+updateImageS3Path('../flatfull/img/ajax-loader-cursor.gif')+"' style='width:12px;height:10px;opacity:0.5;' />");
 					}, 1000);
 			portlet_graph_data_utility
 					.fetchPortletsGraphData(

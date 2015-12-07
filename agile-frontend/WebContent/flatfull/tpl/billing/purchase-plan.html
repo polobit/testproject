@@ -12,9 +12,15 @@
 <div class="col-md-9">
 <div class="panel panel-default">
 			<div class="panel-heading">Confirm your plan
-
-					<a href="#subscribe" class="pull-right m-r-sm text-info" onclick=
-"_IS_EMAIL_PLAN_ACTIVE = false;">Change Plan</a>
+	{{#check_plan "FREE"}}
+	{{#is_cancelled_user}}
+	<a href="#subscribe" class="pull-right m-r-sm text-info" onclick="_IS_EMAIL_PLAN_ACTIVE = false;">Change Plan</a>
+	{{else}}
+	<a href="#trial-subscribe" class="pull-right m-r-sm text-info" onclick="_IS_EMAIL_PLAN_ACTIVE = false;">Change Plan</a>
+	{{/is_cancelled_user}}
+	{{else}}
+	<a href="#subscribe" class="pull-right m-r-sm text-info" onclick="_IS_EMAIL_PLAN_ACTIVE = false;">Change Plan</a>
+	{{/check_plan}}
 
 			</div>
 		<div class="panel-body">
@@ -65,9 +71,7 @@
 						</div>
 
 					</div>
-
-
-						
+					<input type="hidden" name="trialStatus" value="{{trialStatus}}">
           <div class="row">
 			<div class="col-md-12">
 							<div class="control-group form-group m-b-xs">
@@ -121,7 +125,16 @@ Months
 
 								</div>
 							</div>
- 					  
+{{#if billingData}}
+{{#check_plan "FREE"}}
+{{#is_cancelled_user}}
+{{else}}
+{{#if_equals plan "starter"}}{{else}}<p class="m-b-none text-danger col-sm-offset-3 col-sm-9" style="font-size:13px;padding-left:8px;"> Please note that the account will be charged for the selected plan <span style="font-weight: 600;">after the 7day trial.</span></p>{{/if_equals}}
+{{/is_cancelled_user}}
+{{else}}
+{{/check_plan}}	
+{{/if}}		  
+
 </div>
 						
 						</div>
@@ -164,9 +177,15 @@ Months
 							placeholder="Card Security Code" />
 
 					</div>
- <img src="/flatfull/img/cvc.png" style="width: 60px;">
+ <img src="{{getS3ImagePath '/flatfull/img/cvc.png'}}" style="width: 60px;">
 				</div>
-					
+				{{#check_plan "FREE"}}
+				{{#is_cancelled_user}}
+				{{else}}
+				{{#if_equals plan "starter"}}{{else}}<p class="m-b-none text-danger col-sm-offset-3 col-sm-9" style="font-size:13px;padding-left:8px;"> Please note that the account will be charged for the selected plan <span style="font-weight: 600;">after the 7day trial.</span></p>{{/if_equals}}
+				{{/is_cancelled_user}}
+				{{else}}
+				{{/check_plan}}	
 				<!-- <div class="control-group form-group">	
                     <label class="control-label">Gateway<span class="field_req">*</span></label>
                     <div class="controls">
@@ -188,9 +207,19 @@ Months
 <div class="row">
             <div class="col-sm-offset-3 col-sm-9">
 
-<a href="#" type="submit" id="updatecard" data-loading-text="Proceeding..." class="save btn btn-sm btn-primary" >Pay Now</a>
+<a href="#" type="submit" id="updatecard" data-loading-text="Proceeding..." class="save btn btn-sm btn-primary" >
+{{#check_plan "FREE"}}
+{{#is_cancelled_user}}
+Pay Now
+{{else}}
+{{#if_equals plan "starter"}}Pay Now{{else}}Start Trial{{/if_equals}}
+{{/is_cancelled_user}}
+{{else}}
+Pay Now
+{{/check_plan}}
+</a>
 <div class="pull-right">
-<img src="/flatfull/img/credit-cards.png" style="width: 188px;opacity: 0.5;">
+<img src="{{getS3ImagePath '/flatfull/img/credit-cards.png'}}" style="width: 188px;opacity: 0.5;">
 </div>
 	<small class="help-block" id="subscribe_plan_tooltext">
 		<i class="fa fa-lock"></i> All transactions are secure and encrypted, and we never store your credit card information
@@ -211,7 +240,7 @@ Months
 {{#if_equals "Monthly" cycle}}
 							<div class="panel text-center p-b" style="border: 0;">
 <div class="panel-body" style="background-color: #E0E0E0;">
-                           <img src="/flatfull/img/save-doller1.png" height="110" width="132">
+                           <img src="{{getS3ImagePath '/flatfull/img/save-doller1.png'}}" height="110" width="132">
   <h4>UPGRADE</h4>
                         </div>
 								
@@ -220,12 +249,20 @@ Months
 									or save $<b>{{bi_yearly_discount}}</b> by upgrading to 2 year
 									plan.
 								</p>
-<a href="#subscribe" type="submit" class="btn btn-sm btn-primary">Change Plan</a>
+	{{#check_plan "FREE"}}
+	{{#is_cancelled_user}}
+	<a href="#subscribe" type="submit" class="btn btn-sm btn-primary">Change Plan</a>
+	{{else}}
+	<a href="#trial-subscribe" type="submit" class="btn btn-sm btn-primary">Change Plan</a>
+	{{/is_cancelled_user}}
+	{{else}}
+	<a href="#subscribe" type="submit" class="btn btn-sm btn-primary">Change Plan</a>
+	{{/check_plan}}
 							</div>
 							{{/if_equals}} {{#if_equals "Yearly" cycle}}
 							<div class="panel text-center p-b" style="border: 0;">
 <div class="panel-body" style="background-color: #E0E0E0;">
-                           <img src="/flatfull/img/save-doller1.png" height="110" width="132">
+                           <img src="{{getS3ImagePath '/flatfull/img/save-doller1.png'}}" height="110" width="132">
   <h4>UPGRADE</h4>
                         </div>
 								
@@ -233,7 +270,16 @@ Months
 									You can save $<b>{{bi_yearly_discount}}</b> by upgrading to 2
 									year plan.
 								</p>
+{{#check_plan "FREE"}}
+{{#is_cancelled_user}}
 <a href="#subscribe" type="submit" class="btn btn-sm btn-primary">Change Plan</a>
+{{else}}
+<a href="#trial-subscribe" type="submit" class="btn btn-sm btn-primary">Change Plan</a>
+{{/is_cancelled_user}}
+{{else}}
+<a href="#subscribe" type="submit" class="btn btn-sm btn-primary">Change Plan</a>
+{{/check_plan}}
+
 							</div>
 							</div>
 {{/if_equals}}

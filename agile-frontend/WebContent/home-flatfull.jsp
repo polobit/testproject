@@ -99,6 +99,10 @@ content="<%=domainUser.getInfo(DomainUser.LAST_LOGGED_IN_TIME)%>" />
   String CLOUDFRONT_STATIC_FILES_PATH = VersioningUtil.getStaticFilesBaseURL();
 
   CSS_PATH = CLOUDFRONT_STATIC_FILES_PATH;
+  
+  // Static images s3 path
+  String S3_STATIC_IMAGE_PATH = CLOUDFRONT_STATIC_FILES_PATH.replace("flatfull/", "");
+  
   if(SystemProperty.environment.value() == SystemProperty.Environment.Value.Development)
   {
 	  CLOUDFRONT_STATIC_FILES_PATH = FLAT_FULL_PATH;
@@ -249,12 +253,12 @@ if(currentUserPrefs.menuPosition.equals("top")){
       <span>Web Rules</span>
     </a>
   </li>
-  <!-- <li id="web-pages-menu">
-    <a href="#webpages">
+  <li id="landing-pages-menu">
+    <a href="#landing-pages">
       <i class="fa fa-file-code-o"></i>
-      <span>Web Pages</span>
+      <span>Landing Pages</span>
     </a>
-  </li> -->
+  </li>
     <li id="activitiesmenu">
     <a  href="#activities">
       <i class="icon-cogs icon-white"></i>
@@ -321,6 +325,7 @@ if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Produ
 <script src='//cdnjs.cloudflare.com/ajax/libs/headjs/1.0.3/head.min.js'></script>
 <script>
 
+var S3_STATIC_IMAGE_PATH = '<%=S3_STATIC_IMAGE_PATH%>';
 //var LIB_PATH = "//-dpm72z3r2fvl4.cloudfront.net/js/";
 //var LIB_PATH = "//cdnapp.agilecrm.com/";
 var LIB_PATH = '<%=CLOUDFRONT_STATIC_FILES_PATH%>';

@@ -268,7 +268,22 @@ function set_up_portlets(el, portlets_el){
 						$(el).find('.fc-day-number').css('top',top);
 
         			}
-        		
+        			else if(tempModel.get("name")=="Calls Per Person")
+        			{
+
+        				var pos = '' + this.$resized_widget.attr('data-col')+''+this.$resized_widget.attr('data-row');
+        				var height = this.$resized_widget.find('.portlet_body').height();
+        				var width=this.$resized_widget.find('.portlet_body').width()
+        				callschart[parseInt(pos)].setSize(width,callschart[parseInt(pos)].xAxis[0].categories.length*30+(height-30),false);
+        			}
+        			else if(tempModel.get("name")=="Task Report")
+        			{
+
+        				var pos = '' + this.$resized_widget.attr('data-col')+''+this.$resized_widget.attr('data-row');
+        				var height = this.$resized_widget.find('.portlet_body').height();
+        				var width=this.$resized_widget.find('.portlet_body').width()
+        				taskReport[parseInt(pos)].setSize(width,taskReport[parseInt(pos)].xAxis[0].categories.length*30+(height-30),false);
+        			}
 
 				var models = [];
 
@@ -313,6 +328,14 @@ function set_up_portlets(el, portlets_el){
     	if($(window).width()<768 && gridster!=undefined){
     		gridster.disable();
     		gridster.disable_resize();
+    		if($('.portlet_body_calendar').is(':visible'))
+    		{
+    			$('.portlet_body_calendar').each(function(){
+					var that=$(this);
+					if($("#calendar_container").find('.fc-widget-header').length!=0)
+					$('#calendar_container').fullCalendar('option','aspectRatio',getaspectratio(that));
+				});
+    		}
     	}
     	else if(gridster!=undefined)
     	{
@@ -324,6 +347,9 @@ function set_up_portlets(el, portlets_el){
 		if($(window).width()<975 && $(window).width()>768 && $('.portlet_body_calendar').is(':visible'))
 		{
 				$('.portlet_body_calendar').each(function(){
+					var that=$(this);
+					if($("#calendar_container").find('.fc-widget-header').length!=0)
+					$('#calendar_container').fullCalendar('option','aspectRatio',getaspectratio(that));
 				$(this).find('#calendar_container').find('.fc-widget-header').each(function(){
 				$(this).text($(this).text().substring(0, 1));
 				});
@@ -333,6 +359,9 @@ function set_up_portlets(el, portlets_el){
 		{
 				$('.portlet_body_calendar').each(function()
 				{
+					var that=$(this);
+					if($("#calendar_container").find('.fc-widget-header').length!=0)
+					$('#calendar_container').fullCalendar('option','aspectRatio',getaspectratio(that));
 					var weeksArray = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 					$(this).find('#calendar_container').find('.fc-widget-header').each(function(index)
 					{
@@ -389,7 +418,6 @@ function initBlogPortletSync(el)
 							}
 						});
 		});
-
 }
 
 $('body').on('click', '.onboarding-skip', function(e) {

@@ -17,16 +17,16 @@
             "category": "Settings",
             "name": "owner_id",
             "id": "owner_id",
-            "title": "Select owner from the list.",
+            "title": "Select owner from the list. For Round Robin, select multiple to assign.",
             "url": "/core/api/users",
             "dynamicName": "email",
             "dynamicValue": "id",
             "appendToDynamicName": "name",
             "options": {
-            	"Assign Round Robin": "round_robin"
+            	"Assign all in Round Robin": "ALL"
             },
             "fieldType": "dynamicselect",
-            "type": "select"
+            "type": "multiselect"
         },
         {
             "label": "Change the owner of the contact.<br/><br/>An example use case for this could be - If the contact clicks a link in email, set the owner to a sales guy so that the contact shows up in his My Contacts list.",

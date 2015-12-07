@@ -119,7 +119,7 @@ This is where you and your users will log in to your account
 											<option value="Free">Free</option>
 											<option value="Starter">Starter</option>
 											<option value="Regular">Regular</option>
-											<option value="pro">Pro</option>
+											<option value="pro">Enterprise</option>
 								 	 </select>
 </div>
 </div>

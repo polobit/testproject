@@ -115,7 +115,7 @@ $(function(){
     		{
     			$(this).css('display','none');
     			
-    			$('.show_campaigns_list').css('display','inline-block');
+    			$('.show_campaigns_list').css('display','block');
     			
     			var optionsTemplate = "<option value='{{id}}'{{#if is_disabled}}disabled=disabled>{{name}} (Disabled){{else}}>{{name}}{{/if}}</option>";
                 

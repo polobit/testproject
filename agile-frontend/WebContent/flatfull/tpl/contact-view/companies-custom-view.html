@@ -26,7 +26,7 @@
     <div>
       <div>
  <h1 class="m-n font-thin h3 pull-left"><span id="contact-heading">Companies</span><span id="contacts-count" class="m-l-xs">{{companies_count}}</span></h1>
-            <div class="pull-left"> <div class="btn-group m-l-lg m-r-sm" id="bulk-actions"
+            <div class="pull-left"> <div class="btn-group m-l-lg m-r-sm pull-left" id="bulk-actions"
 				style="display: none;">
 
 					<div class="btn btn-sm btn-default">Bulk Actions</div>
@@ -43,7 +43,7 @@
 						<li><a href="#" class="delete-checked-contacts">Delete</a></li>
 					</ul>
 			</div>
-			<div  class="btn-group inline-block" style="display: none;" id="bulk-select"></div>
+			<div  class="btn-group inline-block pull-left m-t-xs" style="display: none;" id="bulk-select"></div>
 			</div>
 			<div class="pull-right">
 			<div class="btn-group inline-block m-r-xs" id="filter-list"></div>
@@ -56,7 +56,7 @@
 </div>
 
     <div class="hbox hbox-auto-xs hbox-auto-sm">
-    <div class="col w-md b-r ">
+    <div class="col w-md b-r" id="companies-lhs-filters-toggle" style="{{ toggle_companies_filter }}">
 		<div class="data-block">
 			<div  id="lhs_filters_conatiner">
 				
@@ -71,7 +71,11 @@
 			<div id="slate"></div>
 		{{else}}
         <div class="data">
-         <div class="panel-heading" style="background:#f6f8f8;">Companies List</div>
+         <div class="panel-heading" style="background:#f6f8f8;">Companies List 
+         <a id="companies-left-filters-toggle" class="m-l-xs" data-toggle="tooltip" data-placement="right" title="" data-original-title="Filters">
+			<i class="fa fa-bars icon-white"></i>
+		</a>
+         </div>
             <div class="dta-contatiner table-responsive">
 				<div class="panel panel-default" style="overflow-x:auto;border-left:none;">
 			    

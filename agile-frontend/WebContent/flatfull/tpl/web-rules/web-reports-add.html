@@ -1,5 +1,5 @@
 <Script id="campaign-options-template" type="text/html">
-	<option value="{{this.name}}" id="{{id}}" {{#if is_disabled}}disabled="disabled" >{{this.name}} (Disabled) {{else}}>{{this.name}}{{/if}}</option>
+	<option value="{{id}}" id="{{id}}" {{#if is_disabled}}disabled="disabled" >{{this.name}} (Disabled) {{else}}>{{this.name}}{{/if}}</option>
  </Script> 
 
 <Script id="webrules-add-template" type="text/html">
@@ -21,7 +21,7 @@
 <div class="row">
 <div class="col-md-9">
 	<div class="panel wrapper">
-		<form id="reportsForm1" class="form-horizontal m-l-n-md">
+		<form id="reportsForm1" class="form-horizontal">
 			<div name="rules" class="formsection chainedSelect">
 				
 				<fieldset>

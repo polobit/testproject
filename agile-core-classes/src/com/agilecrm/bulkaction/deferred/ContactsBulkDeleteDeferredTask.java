@@ -45,6 +45,11 @@ public class ContactsBulkDeleteDeferredTask extends BulkActionAdaptor
 
 	ContactUtil.deleteContacts(contacts);
 
+	if (contacts.get(0).type == Contact.Type.COMPANY)
+	{
+	    ContactUtil.removeCompanyReferenceFromBulk(contacts);
+	}
+
 	ContactUtil.eraseContactsCountCache();
     }
 

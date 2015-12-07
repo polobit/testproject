@@ -9,19 +9,19 @@
 
 <script id="googleplus-revoke-access-template" type="text/html">
 <div>
-{{#if custom_data.image.url}}	
+{{#if profile.image.url}}	
 <div class="m-t">
 		<div class="pull-left thumb-md thumb-wrapper">
-			<img src="{{custom_data.image.url}}&sz=70" alt="" class="w-full"/>
+			<img src="{{profile.image.url}}&sz=70" alt="" class="w-full"/>
 		</div>
 		<div class="pull-left m-l-sm">
-			<p><a href="{{custom_data.url}}" target="_blank" >{{custom_data.displayName}}</a></p>
+			<p><a href="{{profile.url}}" target="_blank" >{{profile.displayName}}</a></p>
 		</div>
 <div class="clearfix"></div>
 	</div>
 	{{else}}
 			<div class="wrapper-xs">
-				Invalid credentials. Please revoke the widget.
+				It seems that your Google+ access token has been expired. Please revoke the access.
 			</div>
 {{/if}}
 	
@@ -71,7 +71,7 @@
 				<div class="control-group form-group"><div class="controls"><input type="text" id="searchkeywords" class="input-medium required widget_input_box form-control"  placeholder="Key Words" value="{{keywords}}" name="keywords" maxlength="40" required></input></div></div>
 				<a href="#" id="gpsearchbtn" class="btn btn-sm btn-primary text-l-none">Search</a>				
 				<a href="#" id="gpsearchclose" class="btn btn-sm m-l-xs btn-default">Close</a>
-				<span><img src="img/ajax-spinner.gif" id="spinner-search" style="display:none;"></img></span>
+				<span><img src="{{getS3ImagePath 'img/ajax-spinner.gif'}}" id="spinner-search" style="display:none;"></img></span>
 			 </fieldset>
 	    </form>
 	</div>
@@ -158,7 +158,7 @@
 {{else}}
 		<div class="widget_tab_footer" align="center">
 			<a href="#" class="gplus_stream text-info" id="gplusstreammore" rel="tooltip" ntoken="{{nextPageToken}}" title="Click to see more posts">Show More</a>
-			<span id="spinnerspan" style="display:none;"><img src="img/ajax-spinner.gif" id="spinner-gplus"></img><span>
+			<span id="spinnerspan" style="display:none;"><img src="{{getS3ImagePath 'img/ajax-spinner.gif'}}" id="spinner-gplus"></img><span>
 		</div>
 {{/if_equals}}
 	</div>
