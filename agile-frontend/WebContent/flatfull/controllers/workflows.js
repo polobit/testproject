@@ -206,6 +206,11 @@ var WorkflowsRouter = Backbone.Router
 			workflowTemplates : function()
 			{
 				
+				if (!this.workflow_list_view || !this.workflow_list_view.collection)
+					{
+						this.navigate("workflows", { trigger : true });
+						return;
+					}
 				$("#content").html('<div id="workflows-listener-container"></div>');
 				getTemplate('workflow-categories', {}, undefined, function(template_ui)
 				{
@@ -226,11 +231,7 @@ var WorkflowsRouter = Backbone.Router
 						activetab = "general";
 					}
 					$('#workflows-tab-container a[href="#'+activetab+'"]').tab('show');
-					if (!this.workflow_list_view || !this.workflow_list_view.collection)
-					{
-						this.navigate("workflows", { trigger : true });
-						return;
-					}
+					
 					
 				}, "#workflows-listener-container");
 			},
