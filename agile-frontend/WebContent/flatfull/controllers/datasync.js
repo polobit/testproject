@@ -163,6 +163,18 @@ google_calendar:function(el){
                                             deserialize_multiselect(model.toJSON(), el);
                                             var select_field = $('#multi-select-calendars', el)
                                              select_field.multiSelect();
+                                             var calendars = get_calendar_ids_form_prefs(model.toJSON());
+                                             if(calendars && calendars.length == 1 && calendars[0] == 'primary')
+                                             {
+                                                if(data && data.items)
+                                                $.each(data.items, function(index, field){
+                                                    if(field.primary)
+                                                    {
+                                                        select_field.multiSelect('select', field.summary); 
+                                                    }
+                                                });                                      
+                                             }
+                                             else
                                                 $.each(get_calendar_ids_form_prefs(model.toJSON()), function(index, field){
                                                     select_field.multiSelect('select', field);     
                                                 });

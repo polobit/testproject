@@ -73,7 +73,14 @@
 <script id="dynamic-multi-calendar-template" type="text/html">
 <select multiple id="multi-select-calendars" name="fields" class="multi-select required"> 
 	{{#each items}}
-		<option value={{id}}>{{summary}}</option>
+		{{#if primary}}
+				<option value={{id}}>Primary</option>	
+			{{else}}
+				<option value={{id}}>{{summary}}</option>			
+		{{/if}}
+
+
+		
 	{{/each}}
 </select>
 </script>
