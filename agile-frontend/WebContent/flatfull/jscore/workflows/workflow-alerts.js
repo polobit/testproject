@@ -57,7 +57,6 @@ function workflow_alerts(title, message , template, callback){
 	}, null);
 }
 
-function send_verify_email()
 function send_verify_email(el)
 {
 	// On Enter Key
