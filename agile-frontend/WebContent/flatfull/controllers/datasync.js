@@ -88,7 +88,7 @@ dataSync : function()
                         url : "core/api/calendar-prefs/type/OFFICE365",
                         template : "admin-settings-import-office365-sync-details"
                     });
-$('#office365').html(calendar_settings_view.render().el);
+        $('#office365').html(calendar_settings_view.render().el);
     },
 
 	 google_contacts_sync: function() {
@@ -229,6 +229,7 @@ $('#office365').html(calendar_settings_view.render().el);
                                }
                             },
                             saveCallback: function() {
+                                App_Datasync.dataSync();
                                 showNotyPopUp("information", "Office365 calendar saved successfully", "top", 1000);
                             }
                         });

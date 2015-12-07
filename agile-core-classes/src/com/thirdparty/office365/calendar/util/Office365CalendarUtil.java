@@ -43,13 +43,13 @@ public class Office365CalendarUtil {
 				Office365CalendarPrefs officeCalendarPrefs = new Office365CalendarPrefs();
 				JSONObject propertyJSON = new JSONObject(
 						calendarPrefs.getPrefs());
-				System.out.println();
-
-				officeCalendarPrefs.setUsername(propertyJSON.get("username")
+				
+				officeCalendarPrefs.setUsername(propertyJSON.get("office365-calendar-usrname")
+						
 						.toString());
-				officeCalendarPrefs.setPassword(propertyJSON.get("password")
+				officeCalendarPrefs.setPassword(propertyJSON.get("office365-calendar-pwd")
 						.toString());
-				officeCalendarPrefs.setServerUrl(propertyJSON.get("serverUrl")
+				officeCalendarPrefs.setServerUrl(propertyJSON.get("office365-calendar-outlook-url")
 						.toString());
 
 				appointments = Office365CalendarUtil.getOfficeURLCalendarPrefs(

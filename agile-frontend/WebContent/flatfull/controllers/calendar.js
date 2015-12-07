@@ -724,8 +724,8 @@ function loadOfficeEvents(calStartDateObj, calEndDateObj){
 			}	
 			addEventSourceToCalendar('office', jsonArray);
 			showLoadingOnCalendar(false);	
-		}else{
-			// else case need to apply
+		}else{			
+			showLoadingOnCalendar(false);	
 		}
 	});	
 }

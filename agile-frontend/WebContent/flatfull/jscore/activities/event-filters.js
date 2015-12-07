@@ -616,6 +616,6 @@ function showLoadingOnCalendar(loading)
 	{
 		$("#loading_calendar_events").hide();		
 		$("#user_calendars *").removeAttr('disabled');
-		$("user_cal_sub *").removeAttr('disabled');
+		$("#user_cal_sub *").removeAttr('disabled');
 	}
 }
