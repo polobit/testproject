@@ -1,5 +1,6 @@
 package com.campaignio.tasklets.agile;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
@@ -18,6 +19,8 @@ import com.campaignio.tasklets.agile.util.AgileTaskletUtil;
 import com.campaignio.tasklets.util.TaskletUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.googlecode.objectify.Key;
+
+import java.util.Collections;
 
 /**
  * <code>SetOwner</code> class represents Set Owner node of campaigns. It sets
@@ -52,10 +55,15 @@ public class SetOwner extends TaskletAdapter
 	try
 	{
 
+		 List<String> ownerIds = AgileTaskletUtil.getListOfCampaignIDs(nodeJSON, subscriberJSON, campaignJSON, OWNER_ID); 
+		  
+		 if(ownerIds.size() > 1 || ownerIds.contains("ALL"))
+			 ownerId = getNextOwnerUsingRoundRobin(AgileTaskletUtil.getId(campaignJSON), ownerIds, ownerIds.contains("ALL"));
+			 
 	    // If Round Robin Assignment
 	    if (StringUtils.equals(ownerId, "round_robin"))
-		ownerId = getNextOwnerUsingRoundRobin(AgileTaskletUtil.getId(campaignJSON));
-
+	    	ownerId = getNextOwnerUsingRoundRobin(AgileTaskletUtil.getId(campaignJSON), null, true);
+	    
 	    // Execute Next One in Loop
 	    if(ownerId == null)
 	    {
@@ -106,10 +114,15 @@ public class SetOwner extends TaskletAdapter
      * @return
      * 
      */
-    private String getNextOwnerUsingRoundRobin(String campaignId)
+    private String getNextOwnerUsingRoundRobin(String campaignId, List<String> ownerIds, boolean isAll)
     {
 	// Fetch keys by default in keys order
-	List<Key<DomainUser>> userKeys = DomainUserUtil.getDomainUserKeys(NamespaceManager.get());
+	List<Key<DomainUser>> userKeys = null;
+	
+	if(isAll)
+		userKeys = DomainUserUtil.getDomainUserKeys(NamespaceManager.get());
+	else
+		userKeys = getKeysFromIds(ownerIds);
 
 	// Get previous Owner key assigned
 	Workflow workflow = WorkflowUtil.getWorkflow(Long.parseLong(campaignId));
@@ -179,5 +192,20 @@ public class SetOwner extends TaskletAdapter
 	contact.save();
 
 	return contact;
+    }
+    
+    private static List<Key<DomainUser>> getKeysFromIds(List<String> ids)
+    {
+    	List<Key<DomainUser>> keys = new ArrayList<Key<DomainUser>>();
+    	
+    	for(String id: ids)
+    	{
+    	    Key<DomainUser> key = new Key<DomainUser>(DomainUser.class, Long.valueOf(id));	
+    	    keys.add(key);
+    	}
+    	
+    	Collections.sort(keys);
+    	
+    	return keys;
     }
 }

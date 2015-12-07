@@ -256,10 +256,13 @@ var functions = {};
 function addEventsToCalendar(eventsURL)
 {
 		var resultMap = {};
+		if(!eventsURL)
+			return;
 		showLoadingOnCalendar(true);
 		$.getJSON(eventsURL, function(doc)
 									{
 
+										if(doc && doc.length > 0)
 										$.each(doc, function(index, data)
 										{
 											// decides the color of event based

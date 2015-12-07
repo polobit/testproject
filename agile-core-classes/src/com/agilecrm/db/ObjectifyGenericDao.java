@@ -40,6 +40,8 @@ import com.agilecrm.deals.Opportunity;
 import com.agilecrm.document.Document;
 import com.agilecrm.facebookpage.FacebookPage;
 import com.agilecrm.forms.Form;
+import com.agilecrm.landingpages.LandingPage;
+import com.agilecrm.landingpages.LandingPageCNames;
 import com.agilecrm.portlets.Portlet;
 import com.agilecrm.reports.ActivityReports;
 import com.agilecrm.reports.Reports;
@@ -61,7 +63,6 @@ import com.agilecrm.user.access.util.UserAccessControlUtil.CRUDOperation;
 import com.agilecrm.user.notification.NotificationPrefs;
 import com.agilecrm.util.CacheUtil;
 import com.agilecrm.voicemail.VoiceMail;
-// import com.agilecrm.webpages.WebPage;
 import com.agilecrm.webrules.WebRule;
 import com.agilecrm.widgets.CustomWidget;
 import com.agilecrm.widgets.Widget;
@@ -206,11 +207,11 @@ public class ObjectifyGenericDao<T> extends DAOBase
 	ObjectifyService.register(FacebookPage.class);
 
 	ObjectifyService.register(VerifiedEmails.class);
-
-	// For page builder
-	// ObjectifyService.register(WebPage.class);
 	
 	ObjectifyService.register(Office365CalendarPrefs.class);
+
+    ObjectifyService.register(LandingPage.class);
+    ObjectifyService.register(LandingPageCNames.class);
 
     }
 
