@@ -403,7 +403,7 @@ function startStripeWidget(contact_id){
 					$('#stripe_credits_panel').addClass('hide');
 					$('#credit_amount').val(0);
 				}else{
-					showNotyPopUp('warning', 'Error occured while adding credits' , "bottomRight");
+					showNotyPopUp('warning', 'Stripe : Error occured while adding credits' , "bottomRight");
 				}
 				$("#stripe_credits_panel *").removeAttr("disabled");
 			});

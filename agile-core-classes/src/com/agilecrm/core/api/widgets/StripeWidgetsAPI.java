@@ -71,6 +71,7 @@ public class StripeWidgetsAPI {
 			StripePluginUtil.addCredit(widget, customerId, amount);
 			status = true;
 		} catch (Exception e) {
+			status = false;
 			throw ExceptionUtil.catchWebException(e);
 		}
 		return status;
