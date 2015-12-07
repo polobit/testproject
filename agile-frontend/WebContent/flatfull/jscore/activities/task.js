@@ -24,6 +24,17 @@ $( document ).ready(function() {
 	});
 
 	/**
+	 * When clicked on update button of task-update-modal, the task will get
+	 * updated by calling save_task function
+	 */
+	$('#updateTaskModal #update_task_validate').off('click');
+	$("#updateTaskModal").on("click", '#update_task_validate', function(e)
+	{
+		e.preventDefault();
+		save_task('updateTaskForm', 'updateTaskModal', true, this);
+	});	
+
+	/**
 	 * Shows activity modal with all the task create fields.
 	 */
 	$("body").on("click", '.add-task', function(e)
@@ -33,9 +44,8 @@ $( document ).ready(function() {
 		// Show task modal with owners list.
 		showTaskModal(this);
 	});
-	/**
-	 * Show event of update task modal Activates typeahead for task-update-modal
-	 */
+	
+
 	$('#updateTaskModal').on('shown.bs.modal', function()
 	{
 
@@ -44,84 +54,33 @@ $( document ).ready(function() {
 
 		agile_type_ahead("update_task_relates_to_deals", el, deals_typeahead, false,null,null,"core/api/search/deals",false, true);
 
+		$('.update-task-timepicker').timepicker({ defaultTime : get_hh_mm(true), showMeridian : false });
+		$('.update-task-timepicker').timepicker().on('show.timepicker', function(e)
+		{
+			if ($('.update-task-timepicker').prop('value') != "" && $('.update-task-timepicker').prop('value') != undefined)
+			{
+				if ($('.update-task-timepicker').prop('value').split(":")[0] != undefined)
+					e.time.hours = $('.update-task-timepicker').prop('value').split(":")[0];
+				if ($('.update-task-timepicker').prop('value').split(":")[0] != undefined)
+					e.time.minutes = $('.update-task-timepicker').prop('value').split(":")[1];
+			}
+			$('.bootstrap-timepicker-hour').val(e.time.hours);
+			$('.bootstrap-timepicker-minute').val(e.time.minutes);
+		});
+
 		// Fill details in form
 		setForm(el);
-
-		/*if($('#updateTaskModal').find('.update-task-related-contacts-input').find('ul').find('li').length>0 
-			|| (Current_Route.indexOf("task")==0 && readCookie("task_tab_position")=="contacts"))
-		{
-			$('#updateTaskModal').find('#update-task-related-contacts-label').parent().addClass('hide');
-			$('#updateTaskModal').find('.update-task-related-contacts-input').removeClass('hide');
-			$('#updateTaskModal').find('.update-task-related-contacts-label').removeClass('hide');
-		}
-		else
-		{
-			$('#updateTaskModal').find('#update-task-related-contacts-label').parent().removeClass('hide');
-			$('#updateTaskModal').find('.update-task-related-contacts-input').addClass('hide');
-			$('#updateTaskModal').find('.update-task-related-contacts-label').addClass('hide');
-		}
-		if($('#updateTaskModal').find('.update-task-related-deals-input').find('ul').find('li').length>0 
-			|| (Current_Route.indexOf("task")==0 && readCookie("task_tab_position")=="deals"))
-		{
-			$('#updateTaskModal').find('#update-task-related-deals-label').parent().addClass('hide');
-			$('#updateTaskModal').find('.update-task-related-deals-input').removeClass('hide');
-			$('#updateTaskModal').find('.update-task-related-deals-label').removeClass('hide');
-		}
-		else
-		{
-			$('#updateTaskModal').find('#update-task-related-deals-label').parent().removeClass('hide');
-			$('#updateTaskModal').find('.update-task-related-deals-input').addClass('hide');
-			$('#updateTaskModal').find('.update-task-related-deals-label').addClass('hide');
-		}*/
-
 	});
 
-	/*$('#activityTaskModal').on('click', '#new-task-related-contacts-label', function(e){
-		e.preventDefault();
-		$(this).parent().parent().find('.new-task-related-contacts-input').removeClass('hide');
-		$(this).parent().parent().find('.new-task-related-contacts-label').removeClass('hide');
-		$(this).parent().addClass('hide');
-	});
-
-	$('#activityTaskModal').on('click', '#new-task-related-deals-label', function(e){
-		e.preventDefault();
-		$(this).parent().parent().find('.new-task-related-deals-input').removeClass('hide');
-		$(this).parent().parent().find('.new-task-related-deals-label').removeClass('hide');
-		$(this).parent().addClass('hide');
-	});
-
-	$('#updateTaskModal').on('click', '#update-task-related-contacts-label', function(e){
-		e.preventDefault();
-		$(this).parent().parent().find('.update-task-related-contacts-input').removeClass('hide');
-		$(this).parent().parent().find('.update-task-related-contacts-label').removeClass('hide');
-		$(this).parent().addClass('hide');
-	});
-
-	$('#updateTaskModal').on('click', '#update-task-related-deals-label', function(e){
-		e.preventDefault();
-		$(this).parent().parent().find('.update-task-related-deals-input').removeClass('hide');
-		$(this).parent().parent().find('.update-task-related-deals-label').removeClass('hide');
-		$(this).parent().addClass('hide');
-	});*/
+	
 
 });
 
 
-function activateSliderAndTimerToTaskModal(){
+function activateSliderAndTimerToTaskModal(el){
 
-	$('.update-task-timepicker').timepicker({ defaultTime : get_hh_mm(true), showMeridian : false });
-	$('.update-task-timepicker').timepicker().on('show.timepicker', function(e)
-	{
-		if ($('.update-task-timepicker').prop('value') != "" && $('.update-task-timepicker').prop('value') != undefined)
-		{
-			if ($('.update-task-timepicker').prop('value').split(":")[0] != undefined)
-				e.time.hours = $('.update-task-timepicker').prop('value').split(":")[0];
-			if ($('.update-task-timepicker').prop('value').split(":")[0] != undefined)
-				e.time.minutes = $('.update-task-timepicker').prop('value').split(":")[1];
-		}
-		$('.bootstrap-timepicker-hour').val(e.time.hours);
-		$('.bootstrap-timepicker-minute').val(e.time.minutes);
-	});
+	console.log("activateSliderAndTimerToTaskModal");
+	
 	$('.new-task-timepicker').timepicker({ defaultTime : '12:00', showMeridian : false });
 	$('.new-task-timepicker').timepicker().on('show.timepicker', function(e)
 	{
@@ -136,6 +95,8 @@ function activateSliderAndTimerToTaskModal(){
 		$('.bootstrap-timepicker-minute').val(e.time.minutes);
 	});
 
+	console.log("loadProgressSlider");
+
 	// Loads progress slider in add task / update modal.
 	loadProgressSlider($("#taskForm"));
 	loadProgressSlider($("#updateTaskForm"));
@@ -144,7 +105,7 @@ function activateSliderAndTimerToTaskModal(){
 	 * Date Picker Activates datepicker for task due element
 	 */
 
-	$('#task-date-1').datepicker({ format : CURRENT_USER_PREFS.dateFormat , weekStart : CALENDAR_WEEK_START_DAY});
+	// $('#task-date-1').datepicker({ format : CURRENT_USER_PREFS.dateFormat , weekStart : CALENDAR_WEEK_START_DAY});
 	$('#update-task-date-1').datepicker({ format : CURRENT_USER_PREFS.dateFormat , weekStart : CALENDAR_WEEK_START_DAY});
 
 
@@ -157,30 +118,7 @@ function activateSliderAndTimerToTaskModal(){
 	{
 		e.preventDefault();
 		save_task('updateTaskForm', 'updateTaskModal', true, this);
-	});
-
-	/**
-	 * initialises task time picker
-	 */
-	$('#updateTaskModal').off('hidden.bs.modal');
-	$('#updateTaskModal').on('hidden.bs.modal', function()
-	{
-
-		if ($(this).hasClass('in'))
-		{
-			return;
-		}
-
-		$("#updateTaskForm").find("li").remove();
-
-		resetForm($("#updateTaskForm"));
-
-		// Removes note from from task form
-		$('#updateTaskForm #forNoteForm').html("");
-
-		// Hide + Add note link
-		$(".task-add-note", $("#updateTaskForm")).show();
-	});
+	});	
 
 }
 
@@ -291,7 +229,8 @@ function highlight_task()
 				$("#activityForm").find("#event_related_to").closest(".controls").find("ul").children());
 
 	// Date().format('mm/dd/yyyy'));
-	$('input.date').val(getDateInFormat(new Date())).datepicker('update');
+	$('input.date').val(getDateInFormat(new Date()));
+	// datepicker('update');
 }
 
 /**
@@ -811,12 +750,15 @@ function getDueTasksCount(callback)
  */
 function showTaskModal(forAddTask)
 {
+
+	$('#activityTaskModal').html(getTemplate("new-task-modal")).modal('show');
+
 	var el = $("#taskForm");
 
 	agile_type_ahead("task_related_to", el, contacts_typeahead);
 	// Deals type-ahead
 	agile_type_ahead("task_relates_to_deals", el, deals_typeahead, false,null,null,"core/api/search/deals",false, true);
-	$('#activityTaskModal').modal('show');
+	
 	highlight_task();
 	categories.getCategoriesHtml(undefined,function(catsHtml){
 		$('#type',el).html(catsHtml);

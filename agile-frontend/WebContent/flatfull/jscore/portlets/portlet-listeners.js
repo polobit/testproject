@@ -675,6 +675,8 @@ function initializePortletsListeners() {
 							if (isNaN(id))
 								return;
 
+							$("#updateActivityModal").html(getTemplate("update-activity-modal"));
+       
 							// Deserialize
 							deserializeForm(model.toJSON(),
 									$("#updateActivityForm"));

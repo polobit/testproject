@@ -21,7 +21,7 @@ var DealDetailsRouter = Backbone.Router.extend({
 			App_Deals.customFieldsList.collection.fetch();
 		}
 
-		this.dealDetailView = new Base_Model_View({ url : '/core/api/opportunity/' + id, template : "deal-detail", postRenderCallback : function(el)
+		this.dealDetailView = new Deal_Modal_Event_View({ url : '/core/api/opportunity/' + id, template : "deal-detail", postRenderCallback : function(el)
 		{
 			/**
 			 * gets the tracks count when user comes to deals page and stores in
@@ -241,8 +241,6 @@ function initializeDealTabWithCount(id, el){
 
 	if (deal_collection != null && readCookie("agile_deal_view"))
 		deal_detail_view_navigation(id, deal_collection, el);
-
-	initializeDealDetailsListners(el);
 
 }
 

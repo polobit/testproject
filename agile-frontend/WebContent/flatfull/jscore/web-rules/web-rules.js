@@ -56,10 +56,21 @@ function chainWebRules(el, data, isNew, actions)
 	scramble_input_names($(".reports-condition-table", element_clone))
 }
 
-$(function()
-		{
+/**
+*  WebRules event view
+*/
+var Web_Rules_Event_View = Base_Model_View.extend({
+		    events: {
+		 		'click .web-rule-multiple-add' : 'ruleMultipleAdd',
+		 		'click i.webrule-multiple-remove' : 'ruleMultipleRemove',
+		 		'click i.filter-contacts-web-rule-multiple-add' : 'webruleMultipleAdd',
+		 		'click i.filter-contacts-web-rule-multiple-remove' : 'webruleMultipleRemove',
+		 		'click .web-rule-preview' : 'webrulePreview',
+		 		'click #tiny_mce_webrules_link' : 'tinymceWebruleLink',
+		    },
+
 			// Filter Contacts- Clone Multiple
-			$('body').on('click', '.web-rule-multiple-add', function(e)
+			ruleMultipleAdd: function(e)
 			{
 				e.preventDefault();
 
@@ -76,19 +87,19 @@ $(function()
 
 				}, null);
 
-			});
+			},
 			
 			// Filter Contacts- Remove Multiple
-			$('body').on('click', 'i.webrule-multiple-remove', function(e)
+			ruleMultipleRemove: function(e)
 			{
-				$(this).closest(".chained-table > div").remove();
-			});
+				$(e.currentTarget).closest(".chained-table > div").remove();
+			},
 			
 			// Filter Contacts- Clone Multiple
-			$('body').on('click', 'i.filter-contacts-web-rule-multiple-add', function(e)
+			webruleMultipleAdd: function(e)
 			{
 				// To solve chaining issue when cloned
-				var that = this;
+				var that = $(e.currentTarget);
 				getTemplate('webrules-add', {}, undefined, function(template_ui){
 					if(!template_ui)
 						  return;
@@ -98,25 +109,23 @@ $(function()
 
 					chainFilters(htmlContent, undefined, undefined, true);
 
-					// var htmlContent = $(this).closest("tr").clone();
 					$(htmlContent).find("i.filter-contacts-multiple-remove").css("display", "inline-block");
 					$(that).parents("tbody").append(htmlContent);
 
 				}, null);
 				
-			});
-			
-			
-			/*$("#noty-type > select").live('change', function(){
-				console.log($(this).attr('class'));
-				var isHtml = $(this).val() ? $(this).val() == 'custom_html' : false;
-				if(isHtml)
-					setupHTMLEditor($("#noty-message > textarea"));
-			})*/
-			
-			$('body').on('click', '.web-rule-preview', function(e){
+			},
+
+			// Filter Contacts- Remove Multiple
+			webruleMultipleRemove: function(e)
+			{
+				var targetEl = $(e.currentTarget);
+				$(targetEl).closest("tr").remove();
+			},
+
+			webrulePreview: function(e){
 				e.preventDefault();
-				var that = this;
+				var that = $(e.currentTarget);
 				_agile_require_js("https://s3.amazonaws.com/agilewebgrabbers/scripts/agile-webrules-min.js", function(){
 
 					// Serializes webrule action to show preview
@@ -129,7 +138,32 @@ $(function()
 					
 						_agile_execute_action(action);
 					});
-			});
+			},
+
+			tinymceWebruleLink: function(e){
+				e.preventDefault();
+
+				// If not empty, redirect to tinymce
+				if($('#tinyMCEhtml_email').val() !== "")
+				{
+					if($('.custom_html').length > 1){
+						alert("Only one popup is allowed per webrule. You have already set a popup action for this webrule.");
+						$($(e.currentTarget)).closest(".alert").remove();
+						return;
+					}
+					loadTinyMCE("tinyMCEhtml_email");
+					return;
+				}
+				var strWindowFeatures = "height=650, width=800,menubar=no,location=yes,resizable=yes,scrollbars=yes,status=yes";
+				var new_window = window.open('templates.jsp?id=tinyMCEhtml_email&t=web_rules', 'name', strWindowFeatures);
+				
+				if(window.focus)
+					{
+						new_window.focus();
+					}
+				return false;
+			},
+
 		});
 
 
@@ -144,30 +178,6 @@ function loadTinyMCE(name)
 	return false;
 	
 }
-
-$('body').on('click', '#tiny_mce_webrules_link', function(e){
-	e.preventDefault();
-
-	// If not empty, redirect to tinymce
-	if($('#tinyMCEhtml_email').val() !== "")
-	{
-		if($('.custom_html').length > 1){
-			alert("Only one popup is allowed per webrule. You have already set a popup action for this webrule.");
-			$(this).closest(".alert").remove();
-			return;
-		}
-		loadTinyMCE("tinyMCEhtml_email");
-		return;
-	}
-	var strWindowFeatures = "height=650, width=800,menubar=no,location=yes,resizable=yes,scrollbars=yes,status=yes";
-	var new_window = window.open('templates.jsp?id=tinyMCEhtml_email&t=web_rules', 'name', strWindowFeatures);
-	
-	if(window.focus)
-		{
-			new_window.focus();
-		}
-	return false;
-});
 
 function tinyMCECallBack(name, htmlVal)
 {
