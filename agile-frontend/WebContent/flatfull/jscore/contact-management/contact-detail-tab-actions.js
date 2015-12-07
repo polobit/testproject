@@ -316,90 +316,23 @@ var contact_details_documentandtasks_actions = {
 			}
 			else if (document_id == "new")
 			{
-				$('#uploadDocumentModal').html(getTemplate("upload-document-modal", {})).modal('show');
 				var el = $("#uploadDocumentForm");
-				
+				$("#uploadDocumentModal").modal('show');
+
 				// Contacts type-ahead
 				agile_type_ahead("document_relates_to_contacts", el, contacts_typeahead);
 
 				// Deals type-ahead
 				agile_type_ahead("document_relates_to_deals", el, deals_typeahead, false, null, null, "core/api/search/deals", false, true);
 
-		// Removes the contact id from related to contacts
-		json.contact_ids.splice(json.contact_ids.indexOf(contact_id), 1);
-
-		// Updates the document object and hides
-		var newDocument = new Backbone.Model();
-		newDocument.url = 'core/api/documents';
-		newDocument.save(json, { success : function(data)
-		{
-			documentsView.collection.remove(json);
-			documentsView.render(true);
-		} });
-	});
-
-	/**
-	 * For showing new/existing documents
-	 */
-	$('body').on('click', '.add-document-select', function(e)
-	{
-		e.preventDefault();
-		var el = $(this).closest("div");
-		$(this).css("display", "none");
-		el.find(".contact-document-select").css("display", "block");
-		var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
-		fillSelect('document-select', 'core/api/documents', 'documents', function fillNew()
-		{
-			el.find("#document-select").append("<option value='new'>Add New Doc</option>");
-
-		}, optionsTemplate, false, el);
-	});
-
-	/**
-	 * To cancel the add documents request
-	 */
-	$('body').on('click', '.add-document-cancel', function(e)
-	{
-		e.preventDefault();
-		var el = $("#documents");
-		el.find(".contact-document-select").css("display", "none");
-		el.find(".add-document-select").css("display", "inline-block");
-	});
-
-	/**
-	 * For adding existing document to current contact
-	 */
-	$('body').on('click', '.add-document-confirm', function(e)
-	{
-		e.preventDefault();
-
-		var document_id = $(this).closest(".contact-document-select").find("#document-select").val();
-
-		var saveBtn = $(this);
-
-		// To check whether the document is selected or not
-		if (document_id == "")
-		{
-			saveBtn.closest("span").find(".save-status").html("<span style='color:red;margin-left:10px;'>This field is required.</span>");
-			saveBtn.closest("span").find('span.save-status').find("span").fadeOut(5000);
-			return;
-		}
-		else if (document_id == "new")
-		{
-			var el = $("#uploadDocumentForm");
-			$("#uploadDocumentModal").modal('show');
-
-			// Contacts type-ahead
-			agile_type_ahead("document_relates_to_contacts", el, contacts_typeahead);
-
-			// Deals type-ahead
-			agile_type_ahead("document_relates_to_deals", el, deals_typeahead, false, null, null, "core/api/search/deals", false, true);
-
-			var json = null;
-			if(company_util.isCompany()){
-				json = App_Companies.companyDetailView.model.toJSON();
-			} else {
-				json = App_Contacts.contactDetailView.model.toJSON();
+				var json = null;
+				if(company_util.isCompany()){
+					json = App_Companies.companyDetailView.model.toJSON();
+				} else {
+					json = App_Contacts.contactDetailView.model.toJSON();
+				}
+				var contact_name = getContactName(json);
+				$('.tags', el).append('<li class="tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block" data="' + json.id + '">' + contact_name + '</li>');
 			}
 			else if (document_id != undefined && document_id != null)
 			{
@@ -414,9 +347,7 @@ var contact_details_documentandtasks_actions = {
 				else
 					existing_document_attach(document_id, saveBtn);
 			}
-
-       },
-
+		},
 };
 
 /**
