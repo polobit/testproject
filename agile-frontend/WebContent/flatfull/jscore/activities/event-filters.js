@@ -607,6 +607,10 @@ function showLoadingOnCalendar(loading)
 		$("#loading_calendar_events").remove();
 		$("#user_calendars *").attr('disabled','disabled');
 		$("#user_cal_sub *").attr('disabled','disabled');
+
+		$("#user_calendars *").addClass('disable-cp');
+		$("#user_cal_sub *").addClass('disable-cp');
+
 		$('.fc-header-left').append(
 				'<span id="loading_calendar_events" style="margin-left:5px;vertical-align:middle;padding-top: 5px;position: absolute;">loading...</span>')
 				.show();
@@ -617,5 +621,8 @@ function showLoadingOnCalendar(loading)
 		$("#loading_calendar_events").hide();		
 		$("#user_calendars *").removeAttr('disabled');
 		$("#user_cal_sub *").removeAttr('disabled');
+
+		$("#user_calendars *").removeClass('disable-cp');
+		$("#user_cal_sub *").removeClass('disable-cp');
 	}
 }
