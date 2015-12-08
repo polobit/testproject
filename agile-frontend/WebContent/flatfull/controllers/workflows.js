@@ -530,12 +530,10 @@ var WorkflowsRouter = Backbone.Router
 							if(islocalStorageHasSpace())
 								localStorage.setItem('triggers_tab', "contact");
 						}
-						$("#triggers-tab-container",el).on("click",".tab-container ul li",function(){
+						$("#triggers-tab-container").on("click",".tab-container ul li",function(){
 							var temp = $(this).find("a").attr("href").split("#");
 							if(islocalStorageHasSpace())
 								localStorage.setItem('triggers_tab', temp[1]);
-							activetab = localStorage.getItem("triggers_tab");
-							$('#triggers-tab-container a[href="#'+activetab+'"]').tab('show');
 						});
 						activetab = localStorage.getItem("triggers_tab");
 						$('#triggers-tab-container a[href="#'+activetab+'"]').tab('show');
