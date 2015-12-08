@@ -1858,3 +1858,6 @@ a.lpt_fancybox:hover{
 .widget-minimize {
     margin-top: 5px;
 }
+.icon-widget-move {
+  cursor: move;
+}
