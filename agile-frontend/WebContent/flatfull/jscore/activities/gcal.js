@@ -126,7 +126,7 @@ function _set_token_from_session(callback)
 	// Set the access token
 	var token = gapi.auth.getToken();
 
-	if(token == null)
+	if(token == null || token.access_token == null)
 	{
 		get_google_calendar_prefs(function(sourceOptions){
 			// Set the access token
