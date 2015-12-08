@@ -25,7 +25,7 @@ color:red;
 	<tr id="connectedFormHolder_{{page_id}}">
 		<td colspan="3" style="padding-left:0px;"><a target="_blank" href="/form.jsp?id={{form_id}}" class="text-info">{{form_name}}</a> form has been added to<br>
 		<a target="_blank" href="https://www.facebook.com/pages/null/{{page_id}}?sk=app_{{../app_id}}" class="text-info">{{page_name}}</a> page</td>
-		<td style="padding-top:18px;"><a href="#" data-pageid="{{page_id}}" id="connectedForm_{{form_id}}" class="deleteFacebookLinkedpage"><i class="icon-trash"></i></a></td>
+		<td style="padding-top:18px;"><a href="#" data-pageid="{{page_id}}" id="connectedForm_{{form_id}}" class="deleteFacebookLinkedpage" title="To delete the Form from Facebook Page"><i class="icon-trash"></i></a></td>
 	</tr>
 {{/each}}
 </tbody>
@@ -43,12 +43,12 @@ color:red;
 {{/if}}
 
 {{#if_equals is_authenticated "true"}}
-<p id="{{userInfo.id}}">Your Facebook - {{userInfo.first_name}} {{userInfo.last_name}} (<a href="#" id="unlinkFacebookAccount" class="text-info">Unlink</a>)</p>
+<p id="{{userInfo.id}}">Your Facebook - {{userInfo.first_name}} {{userInfo.last_name}} (<a href="#" id="unlinkFacebookAccount" class="text-info" title="To link a new Facebook account, first you need to unlink your already linked account. Unlinking old account will not delete added forms in your Facebook page.">Unlink</a>)</p>
+<hr class="m-xs">
 <p><a class="btn btn-sm btn-default" href="#" id="addFacebookFormLink"><i class="icon-plus-sign"></i> Add Form</a></p>
 <div id="statusMessageHolder"></div>
 <div id="facebookFormAddHolder" style="display:none;">
 <p>Select form to be added (You can manage your forms here) to your Facebook Page.</p>
-<hr class="m-xs">
 <form id="facebookPageTabSettingForm">
   <fieldset>
 	<input type="hidden" id="AgileFacebookAppId" value="{{app_id}}">
