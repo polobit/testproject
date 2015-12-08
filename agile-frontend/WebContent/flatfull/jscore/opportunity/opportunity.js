@@ -372,7 +372,9 @@ function setupDealsTracksList(cel){
 		if (readCookie("agile_deal_view"))
 			$('#deals-tracks .dropdown-menu').append('<li><a id="1" class="pipeline" data="All" style="cursor: pointer;">All</a></li>');
 		else{
-			startGettingDeals();
+			setupNewDealFilters(function(){
+				startGettingDeals();
+			});
 		}
 		// Hide the track list if there is only one pipeline.
 		if(tracksArray.length<=1)

@@ -163,6 +163,24 @@ function isValidForm(form) {
 		  return 'Maximum length is ' + $(element).attr("max_len") + ' chars only.'
 		}
 	);
+
+	//Positive Number validation
+	jQuery.validator.addMethod("positive_number", function(value, element){
+		
+		if(value=="")
+			return true;
+
+		if(isNaN(value))
+		{
+			return false;
+		}
+		if(!isNaN(value) && parseFloat(value) >= 0)
+		{
+			return true;
+		}
+
+	}," Please enter a value greater than or equal to 0.");
+
 	$(form).validate({
 		rules : {
 			atleastThreeMonths : true,

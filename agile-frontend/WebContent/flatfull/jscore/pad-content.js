@@ -174,7 +174,15 @@ var CONTENT_JSON = {
 		"button_text" : "Add Webpage",
 		"route" : "#webpage-add",
 		"image" : updateImageS3Path("/img/clipboard.png")
-	}
+	},
+	"deal-filters" : {
+		"title" : "You do not have any filters currently.",
+		"description" : "Filters are used to sort deals with a specific criteria to find patterns.",
+		//"learn_more" : "click here to learn more",
+		"button_text" : "Add Filter",
+		"route" : "#deal-filter-add",
+		"image" : updateImageS3Path("/img/clipboard.png")
+	},
 	/*"web-rules" : {/All_Activities
 		
 		"title" : "Engage visitors on website",
