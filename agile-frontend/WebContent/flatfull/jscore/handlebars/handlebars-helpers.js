@@ -6787,11 +6787,12 @@ Handlebars.registerHelper('SALES_CALENDAR_URL', function()
 
 Handlebars.registerHelper('is_mobile', function(options)
 	{
-		if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) )
+		if(agile_is_mobile_browser())
 		return options.fn(this);
 		else
 		return options.inverse(this);
 	});
+
 
 /**
  * Returns a S3 image url .
@@ -6846,3 +6847,9 @@ Handlebars.registerHelper('getS3ImagePath',function(imageUrl){
 		else
 			return options.fn(this);
 	});
+
+function agile_is_mobile_browser(){
+    return (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent));
+
+}
+

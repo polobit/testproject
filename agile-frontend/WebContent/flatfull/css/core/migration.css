@@ -1802,6 +1802,19 @@ width: 100%!Important;
 .tooltip {
   display: none!important;
 }
+
+.task-deals-mobile-view {
+  width: 80vw;
+  margin:0 auto;
+}
+table td .thumb {
+  width: 32px;
+  
+}
+table td .thumb img {
+  width: 32px;
+  height: 34px;
+}
 }
 
 @media all and (min-width: 768px) {
@@ -1814,6 +1827,7 @@ width: 100%!Important;
   white-space: pre-wrap;
   text-align: left;
 }
+
 
 a.lpt_fancybox:hover{
   opacity: 0.6;
@@ -1829,3 +1843,8 @@ a.lpt_fancybox:hover{
   background-color: #f6f8f8;
   border-bottom-color: #f6f8f8 !important;
 }
+
+#task-detail-lhs .dropdown-menu>li>a {
+  color: #727272;
+} 
+
