@@ -1823,6 +1823,7 @@ table td .thumb img {
   white-space: pre-wrap;
   text-align: left;
 }
-#task-detail-lhs .dropdown-menu>li>a {
+#task-detail-lhs .dropdown-menu>li>a , .contactView .dropdown-menu > li > a{
   color: #727272;
+  font-size: 13px;
 } 
