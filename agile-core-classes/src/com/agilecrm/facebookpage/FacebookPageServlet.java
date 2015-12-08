@@ -23,7 +23,7 @@ public class FacebookPageServlet extends HttpServlet
 
     private static enum ACTIONS
     {
-	GET_DETAILS, SAVE_DETAILS, DELETE_TAB
+	GET_DETAILS, SAVE_DETAILS, DELETE_TAB, UNLINK_ACCOUNT
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
@@ -51,6 +51,11 @@ public class FacebookPageServlet extends HttpServlet
 		    e.printStackTrace();
 		}
 		break;
+	    case UNLINK_ACCOUNT:
+	    	HttpSession currentSession = request.getSession();
+	    	currentSession.setAttribute("fbpage_logged_in", false);
+	    	response.sendRedirect("/#facebook-integration");
+	    break;
 	    case DELETE_TAB:
 		response.setContentType("text/plain");
 		String fbPageID = request.getParameter("facebookPageID");
@@ -86,6 +91,7 @@ public class FacebookPageServlet extends HttpServlet
 			{
 			    facebookPage.form_id = formID;
 			    facebookPage.form_name = formName;
+			    facebookPage.domain = NamespaceManager.get();
 			    facebookPage.save();
 			    out.print("true");
 			}
@@ -130,6 +136,7 @@ public class FacebookPageServlet extends HttpServlet
 	    if (accessToken != null)
 	    {
 		data.put("pages", FacebookPageUtil.getUserPages(accessToken));
+		data.put("userInfo", FacebookPageUtil.getUserInfo(accessToken));
 	    }
 	}
 	else

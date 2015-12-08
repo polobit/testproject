@@ -70,8 +70,8 @@ public class FacebookPageUtil
     {
 	if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Production)
 	{
-		state = "https://" + NamespaceManager.get() +  ".agilecrm.com/fbpagecallback";		
-		//state = "https://" + NamespaceManager.get() + "-dot-sandbox-dot-agilecrmbeta.appspot.com/fbpagecallback";
+		//state = "https://" + NamespaceManager.get() +  ".agilecrm.com/fbpagecallback";		
+		state = "https://" + NamespaceManager.get() + "-dot-17-7-dot-agile-crm-cloud.appspot.com/fbpagecallback";
 	}
     }
 
@@ -83,7 +83,11 @@ public class FacebookPageUtil
 	for (String pair : pairs)
 	{
 	    int idx = pair.indexOf("=");
-	    queryPairs.put(URLDecoder.decode(pair.substring(0, idx), "UTF-8"), URLDecoder.decode(pair.substring(idx + 1), "UTF-8"));
+	    try {
+	    	queryPairs.put(URLDecoder.decode(pair.substring(0, idx), "UTF-8"), URLDecoder.decode(pair.substring(idx + 1), "UTF-8"));
+		} catch (StringIndexOutOfBoundsException e) {
+			return "";
+		}
 	}
 
 	return queryPairs.get("access_token").trim();
@@ -113,6 +117,13 @@ public class FacebookPageUtil
 	}
 
 	return listOfpages;
+    }
+    
+    public static JSONObject getUserInfo(String accessToken) throws JSONException
+    {
+	String response = HttpRequest(FB_END_POINT + FB_API_VERSION + "/me?access_token=" + accessToken);
+	JSONObject userInfo = new JSONObject(response);
+	return userInfo;
     }
 
     public static boolean linkOurFacebookTab(String pageID, String accessToken, String formName) throws JSONException, UnsupportedEncodingException
