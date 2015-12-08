@@ -8,7 +8,7 @@
 <div id="task-detail-lhs" class="wrapper pos-rlt details-mobile-view">
 
                   <div> 
-                    <div class="text-cap h3 font-thin custom-color w-full">{{#is_link subject}}<span class="activate-link">{{else}}<span class="block" style="margin-right:7px;">{{/is_link}}{{safe_string subject}}</span><span class="label bg-light dk inline-block m-r-sm text-xs pos-rlt pos-t-n-xs text-ellipsis" style="width:30%;vertical-align:bottom;">{{task_property type}}</span>                  
+                    <div class="text-cap h3 font-thin custom-color w-full">{{#is_link subject}}<span class="activate-link">{{else}}<span class="block" style="margin-right:7px;">{{/is_link}}{{safe_string subject}}</span><span class="label bg-light dk inline-block m-r-sm text-xs pos-rlt pos-t-n-xs text-ellipsis" style="width:200px;vertical-align:bottom;">{{task_property type}}</span>                  
                     {{#if_not_equals priority_type "NORMAL" }}
                    <span class="label label-{{task_label_color priority_type}} inline-block  text-xs pos-rlt pos-t-n-xs">{{ucfirst priority_type}}</span>
                          {{/if_not_equals}}</div>
@@ -22,11 +22,11 @@
                     	
 								<ul class="dropdown-menu pull-right" role="menu">
 
-                                   <li><a  href="javascript:void(0)" data="{{id}}" id="task_edit" ><i class="fa fa-pencil-square"></i> Edit</a></li>
+                                   <li><a  href="javascript:void(0)" data="{{id}}" id="task_edit" ><i class="fa fa-pencil-square" style="margin-right:2px"></i> Edit</a></li>
                                    <li class="divider"></li>
-									<li><a href="#new-task-modal"  data-toggle="modal"><i class="fa fa-file-text"></i> Add Note</a></li>
+									<li><a href="#new-task-modal"  data-toggle="modal"><i class="fa fa-file-text" style="margin-right:2px"></i> Add Note</a></li>
                                     
-									<li><a href='javascript:void(0)'  data="{{id}}" class ="delete_task"><i	class="fa fa-trash"></i> Delete</a></li>
+									<li><a href='javascript:void(0)'  data="{{id}}" class ="delete_task"><i	class="fa fa-trash" style="margin-right:2px"></i> Delete</a></li>
 								</ul>
 					 </div>
 					
