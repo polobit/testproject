@@ -259,6 +259,12 @@ function addWidgetProfile(widgetId, widgetName, template, url) {
 						return;
 						// Loading Stripe profile
 					} else if (widgetName == "Stripe") {
+						console.log('stripe add widget');
+						console.log(model);
+					
+						if(model)
+						model["prefs"] = JSON.parse(model["prefs"]);
+
 						$.getJSON("core/api/custom-fields/type/scope?scope=CONTACT&type=TEXT", function(data) {
 							model["custom_data"] = data;
 
