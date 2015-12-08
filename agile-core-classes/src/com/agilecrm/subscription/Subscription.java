@@ -410,6 +410,15 @@ public class Subscription {
 	public void cancelSubscription() throws Exception {
 		getAgileBilling().cancelSubscription(billing_data);
 	}
+	
+	/**
+	 * Cancels the email subscription in its respective gateway
+	 * 
+	 * @throws Exception
+	 */
+	public void cancelEmailSubscription() throws Exception {
+		getAgileBilling().cancelEmailSubscription(billing_data);
+	}
 
 	/**
 	 * Delete customer from its gateway

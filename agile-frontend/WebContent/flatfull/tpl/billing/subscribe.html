@@ -717,7 +717,12 @@ users.
 <div class="text-center m-t-lg m-b-xs">
 <a id="purchase-email-plan" class="btn pricing-btn text-center w-full  b-n btn-lg btn-primary" href="#purchase-email"> Proceed to Pay </a>
 
-</div>                    
+</div> 
+<div class="text-center m-b">
+{{#getSubscriptionBasedOnPlan billingData emailPlan}}
+	<a href="#" class="text-info" id="cancel_email_plan" style="font-size:11px;">Cancel Email Subscription</a> 
+{{/getSubscriptionBasedOnPlan}}    
+</div>             
 </div>
 </form>
 </script>

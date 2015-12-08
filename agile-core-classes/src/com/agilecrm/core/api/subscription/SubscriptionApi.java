@@ -353,6 +353,25 @@ public class SubscriptionApi {
 	}
 	
 	/**
+	 * Cancels subscription from gateway but never delete {@link Subscription}
+	 * entity
+	 */
+	@Path("/cancel/email")
+	@GET
+	public void cancelEmailSubscription() {
+		try {
+			Subscription subscription = SubscriptionUtil.getSubscription();
+			subscription.cancelEmailSubscription();
+			System.out.println("Cancelled Email Subscription");
+			SubscriptionUtil.deleteEmailSubscription();
+		} catch (Exception e) {
+			throw new WebApplicationException(Response
+					.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+					.build());
+		}
+	}
+	
+	/**
 	 * Cancels trial from gateway
 	 */
 	@Path("/cancel/trial")

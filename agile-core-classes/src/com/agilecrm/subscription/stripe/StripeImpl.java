@@ -599,5 +599,22 @@ public class StripeImpl implements AgileBilling {
 		// Returns Customer object as JSONObject
 		return StripeUtil.getJSONFromCustomer(customer);
 	}
+	
+	@Override
+	public void cancelEmailSubscription(JSONObject cust){
+		try {
+			Customer customer = StripeUtil.getCustomerFromJson(cust);
+			List<com.stripe.model.Subscription> subscriptions = customer.getSubscriptions().getData();
+			for(com.stripe.model.Subscription subscription : subscriptions){
+				if(subscription != null && subscription.getPlan().getId().contains("email")){
+					subscription.cancel(null);
+					return;
+				}
+			}
+		} catch (StripeException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 
 }

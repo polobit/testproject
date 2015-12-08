@@ -661,6 +661,20 @@ function initializeSubscriptionListeners()
 		e.preventDefault();
 		$(this).closest(".plan-collection-in").find(".plan_features").css("display","none");
 	});
+
+	$("#subscribe_plan_change").on("click","#cancel_email_plan",function(e){
+		e.preventDefault();
+		if (!confirm("Are you sure you want cancel your Email Subscription?"))
+			return;
+		$.ajax({url:'core/api/subscription/cancel/email',
+			type:'GET',
+			success:function(data){
+				document.location.reload();				
+			},error: function(){
+				alert("Error occured, Please try again");
+			}
+		});
+	});
 }
 
 function is_new_signup_payment()
