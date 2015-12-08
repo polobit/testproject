@@ -48,6 +48,7 @@ var ReportsRouter = Backbone.Router
 							'flatfull/img/reports_images/contact.png',
 							'flatfull/img/reports_images/user-activities.png',
 							'flatfull/img/reports_images/Daily-reports.png',
+							'flatfull/img/reports_images/Call_Report_Time.png',
 							]);
 				initializeReportsListeners();
 				hideTransitionBar();
@@ -506,6 +507,8 @@ var ReportsRouter = Backbone.Router
 						templateId=templateId+"-piechart";
 						
 					}
+					if(reportType == 'timebased')
+						templateId=templateId+"-timeGraph";
 					
 					getTemplate(templateId, {}, undefined, function(template_ui){
 						if(!template_ui)
@@ -543,7 +546,15 @@ var ReportsRouter = Backbone.Router
 						options += ("start-date=" + start_time + "&end-date=" + end_time);
 						
 						var url='core/api/portlets/calls-per-person/' + options;
-						
+						if(reportType == 'timebased'){
+										if ($('#frequency').length > 0)
+									{
+									// Get Frequency
+									var frequency = $("#frequency").val();
+									options += ("&frequency=" + frequency);
+								}
+							url='core/api/reports/calls-time-based/' + options;
+						}
 						graphOn=$("#typeCall option:selected").val();
 					    
 					    var userDropDown=$('#users option:selected').val();

@@ -18,13 +18,17 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import net.sf.json.JSONException;
+import net.sf.json.JSONObject;
+import net.sf.json.JSONSerializer;
 
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
-import org.json.JSONObject;
+//import org.json.JSONObject;
+
 
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.filter.ContactFilter;
+import com.agilecrm.portlets.util.PortletUtil;
 import com.agilecrm.reports.Reports;
 import com.agilecrm.reports.ReportsUtil;
 import com.agilecrm.search.ui.serialize.SearchRule;
@@ -266,7 +270,7 @@ public class ReportsAPI
 	    }
 	    if(count!=0)
 	    	flag=true;
-		tagsJSONArray.put(new JSONObject().put(tag, count));
+		tagsJSONArray.put(new org.json.JSONObject().put(tag, count));
 		i++;
 	    }
 	    if(!flag)
@@ -379,4 +383,26 @@ public class ReportsAPI
 	// Get Cohorts Monthly
 	return TagSearchUtil.getRatioTagCount(filter, tag1, tag2, String.valueOf(Long.parseLong(startTime)-(Long.parseLong(timeZone)*60*1000)), String.valueOf(Long.parseLong(endTime)-(Long.parseLong(timeZone)*60*1000)), type).toString();
     }
+    
+	/**
+	 * Gets Calls data with time
+	 * 
+	 * @return {@Link JSONObject}
+	 */
+	@Path("/calls-time-based")
+	@GET
+	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	public JSONObject getCallsdatabyTime(@QueryParam("duration") String duration,@QueryParam("start-date") String startDate,@QueryParam("end-date") String endDate,@QueryParam("user") String user,@QueryParam("frequency") String frequency)throws Exception {
+		JSONObject json=new JSONObject();
+		json.put("duration",duration);
+		json.put("startDate", startDate);
+		json.put("endDate", endDate);
+		json.put("frequency", frequency);
+		if(user!=null && !user.equals(""))
+			json.put("user", (net.sf.json.JSONArray)JSONSerializer.toJSON(user));
+		else
+			json.put("user", null);
+		PortletUtil.checkPrivilegesForPortlets("ACTIVITY");
+		return ReportsUtil.getCallByTime(json);
+	}
 }
