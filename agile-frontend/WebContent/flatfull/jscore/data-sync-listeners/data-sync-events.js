@@ -341,7 +341,7 @@ binds all click events  for google calendar model
 			App_Datasync.calendar_sync_google.model.clear();
 			App_Datasync.calendar_sync_google.render(true);
 			erase_google_calendar_prefs_cookie();
-
+            _resetGAPI();
 		} });
 
     }

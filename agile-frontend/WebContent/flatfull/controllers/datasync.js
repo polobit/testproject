@@ -73,7 +73,7 @@ google_calendar:function(el){
 
 
 	 this.calendar_sync_google = new GoogleCalendar_Event_Modal_View({
-                            url: 'core/api/calendar-prefs/GOOGLE',
+                            url: 'core/api/calendar-prefs/type/GOOGLE',
                             template: 'import-google-calendar',
                             postRenderCallback: function(el) {
                                 initializeImportListeners();
@@ -133,6 +133,7 @@ google_calendar:function(el){
                     var calendar_settings_view = new Calendar_Sync_Settings_View({
                         url : "core/api/calendar-prefs/type/GOOGLE",
                         template : "import-google-calendar-setup",
+                        change : false,
                         saveCallback: function(data)
                         {
                             erase_google_calendar_prefs_cookie();
@@ -147,8 +148,9 @@ google_calendar:function(el){
                             {
                                 if(typeof prefs != 'object')
                                 {
-                                    prefs = JSON.parse(model.get('prefs'));
-                                    model.set("prefs", prefs, {silent : true});
+                                    JSON.parse(model.get('prefs'));
+                                    model.set("prefs", JSON.parse(model.get('prefs')), {silent : true});
+                                        prefs = model.get('prefs');
                                 }
                             }
                             

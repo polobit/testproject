@@ -142,6 +142,13 @@ function _set_token_from_session(callback)
 	return callback(gapi.auth.getToken());
 }
 
+function _resetGAPI()
+{
+	if(typeof gapi != 'undefined')
+	{
+		gapi.auth.setToken(undefined);
+	}
+}
 function _fetchGoogleCalendarList(callback, retryCount)
 {
 	if(!retryCount)
