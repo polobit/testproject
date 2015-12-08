@@ -8,6 +8,8 @@ import org.apache.log4j.Level;
 
 import com.Globals;
 import com.agilecrm.api.stats.APIStats;
+import com.agilecrm.contact.Contact;
+import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.logger.AgileAPILogger;
 import com.agilecrm.queues.PullScheduler;
 import com.agilecrm.threads.TaskExcecutorThreadPool;
@@ -17,6 +19,7 @@ import com.google.api.services.taskqueue.Taskqueue.Tasks.Lease;
 import com.google.api.services.taskqueue.model.Task;
 import com.google.api.services.taskqueue.model.TaskQueue;
 import com.google.api.services.taskqueue.model.TaskQueue.Stats;
+import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.tools.remoteapi.RemoteApiInstaller;
 import com.google.appengine.tools.remoteapi.RemoteApiOptions;
 import com.google.apphosting.api.ApiProxy;
@@ -225,7 +228,8 @@ public class TaskQueueStatsDaemon extends Thread
     {
 
 	RemoteApiOptions options = new RemoteApiOptions().server(Globals.APPLICATION_ID + ".appspot.com", 443)
-		.credentials(Globals.USER_ID, Globals.PASSWORD);
+		.useApplicationDefaultCredential();
+
 	installer.install(options);
 
 	threadLocalDelegate = ApiProxy.getDelegate();
@@ -439,5 +443,32 @@ public class TaskQueueStatsDaemon extends Thread
     private void closeResources() throws Exception
     {
 	uninstall();
+    }
+
+    public static void main(String[] args)
+    {
+	System.out.println("Initializing project");
+	for (int i = 10; i < 20; i++)
+	{
+
+	    TaskQueueStatsDaemon demo = new TaskQueueStatsDaemon("demo");
+	    try
+	    {
+		demo.setRemoteAPI();
+		System.out.println("setting namespace Local" + i);
+	    }
+	    catch (IOException e)
+	    {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+		return;
+	    }
+
+	    NamespaceManager.set("local");
+	    List<Contact> contacts = ContactUtil.getAll(10, null);
+	    System.out.println("Contact list : " + contacts);
+	    demo.uninstall();
+	}
+
     }
 }
