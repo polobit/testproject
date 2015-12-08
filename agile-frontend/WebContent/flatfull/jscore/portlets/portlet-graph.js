@@ -1409,7 +1409,12 @@ var portlet_graph_utility = {
 													text : ''
 												},
 												tooltip : {
-													
+													backgroundColor : '#313030',
+													borderColor : '#000',
+													borderRadius : 3,
+													/*style : {
+														color : '#EFEFEF'
+													},*/
 													enabled : true,
 													formatter:  function(){
 													return  '<div class="p-n"> <b><font color='+this.point.color+'>'+Math.round(this.point.percentage).toString()+'%</font></b></div>';

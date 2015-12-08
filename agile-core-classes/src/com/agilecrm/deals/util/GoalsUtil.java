@@ -1,5 +1,6 @@
 package com.agilecrm.deals.util;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -47,12 +48,17 @@ public class GoalsUtil
 	public static List<Goals> getAllGoalsForUser(Long onwner_id,Long start_time,Long end_time){
 		
 		Map<String, Object> conditionsMap = new HashMap<String, Object>();
+		List<Goals> user_goals = new ArrayList<Goals>();
 		conditionsMap.put("ownerKey", new Key<DomainUser>(DomainUser.class, onwner_id));
-		if(start_time!=null)
-			conditionsMap.put("start_time >=",start_time);
-		if(end_time!=null)
-			conditionsMap.put("start_time <",end_time);
-		return Goals.dao.listByProperty(conditionsMap);
+		List<Goals> goals= Goals.dao.listByProperty(conditionsMap);
+		if(goals!=null && goals.size()!=0){
+		for(Goals goal:goals)
+		{
+			if(goal.start_time>=start_time && goal.start_time<end_time)
+				user_goals.add(goal);
+		}
+		}
+		return user_goals;
 	}
 	
 }
