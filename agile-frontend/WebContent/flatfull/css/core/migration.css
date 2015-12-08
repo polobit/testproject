@@ -1812,7 +1812,7 @@ width: 100%!Important;
         top: -50px;
   } 
   #choose-avatar-modal .modal-dialog {
-  width: 900px;
+  width: 858px;
   }
     .companyIcon {
     font-size: 25px;
@@ -1849,6 +1849,12 @@ a.lpt_fancybox:hover{
     margin: 2px;
     border:1px solid #e9e9e9;
 }
-.choose-avatars > div {
-  float: left;
+.choose-avatars > div div {
+    float: left;
+}
+.company-star-view {
+  width: auto!important;
+}
+.widget-minimize {
+    margin-top: 5px;
 }

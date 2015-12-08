@@ -3367,8 +3367,7 @@ $(function()
 
 						// default when we can't find image uploaded or url to
 						// fetch from
-						//var default_return = "src='"+updateImageS3Path('img/company.png')+"' style='width:" + full_size + "px; height=" + full_size + "px;" + additional_style + "'";
-						var default_return = "<i class='fa fa-building companyIcon'></i>";	
+						var default_return = "src='"+updateImageS3Path('img/company.png')+"' style='width:" + full_size + "px; height=" + full_size + "px;" + additional_style + "'";
 
 						// when the image from uploaded one or favicon can't be
 						// fetched, then show company.png, adjust CSS ( if style
@@ -3383,8 +3382,7 @@ $(function()
 								// found uploaded image, break, no need to
 								// lookup url
 
-								//error_fxn = "this.src='"+updateImageS3Path('img/company.png')+"'; this.onerror=null;";
-								error_fxn = "<i class='fa fa-building companyIcon'></i> ; this.onerror=null;";
+								error_fxn = "this.src='"+updateImageS3Path('img/company.png')+"'; this.onerror=null;";
 								// no need to resize, company.png is of good
 								// quality & can be scaled to this size
 
@@ -3396,8 +3394,7 @@ $(function()
 								// favicon fetch -- Google S2 Service, 32x32,
 								// rest padding added
 
-								//error_fxn = "this.src='"+updateImageS3Path("img/company.png")+"'; " + "$(this).css('width','" + frame_size + "px'); $(this).css('height','" + frame_size + "px');" + "$(this).css('padding','4px'); this.onerror=null;";
-								error_fxn = "<i class='fa fa-building companyIcon'></i> ; this.onerror=null;";
+								error_fxn = "this.src='"+updateImageS3Path("img/company.png")+"'; " + "$(this).css('width','" + frame_size + "px'); $(this).css('height','" + frame_size + "px');" + "$(this).css('padding','4px'); this.onerror=null;";
 								// resize needed as favicon is 16x16 & scaled to
 								// just 32x32, company.png is adjusted on error
 							}
@@ -3600,15 +3597,20 @@ $(function()
 	Handlebars.registerHelper('if_domain', function(value, options)
 	{
 
-		if ((typeof value === "undefined") || value != null)
+		if (typeof value == "undefined")
 			return options.inverse(this);
 
-		var domainName = "our";
+		var domainName = CURRENT_DOMAIN_USER.domain;
 
-		if (value.toString().trim().toLowerCase() == domainName)
-			return options.fn(this);
-		else
+		if(domainName){
+			if (value.toString().trim().toLowerCase() == domainName.toLowerCase()){
+				return options.fn(this);
+			}else{
+				return options.inverse(this);
+			}
+		}else{
 			return options.inverse(this);
+		}
 	});
 
 	Handlebars.registerHelper('if_not_equals', function(value, target, options)
@@ -6844,4 +6846,3 @@ Handlebars.registerHelper('getS3ImagePath',function(imageUrl){
 		else
 			return options.fn(this);
 	});
-
