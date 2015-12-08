@@ -491,7 +491,7 @@ $(function()
 		
 		agile_type_ahead("event_relates_to_deals", el, deals_typeahead, false,null,null,"core/api/search/deals",false, true);
 
-		if ($('#updateActivityModal #allDay', el).is(':checked'))
+		if ($('#allDay', el).is(':checked'))
 		{
 			$('#update-event-time-1', el).closest('.control-group').hide();
 			$('#update-event-date-2', el).closest('.row').hide();
