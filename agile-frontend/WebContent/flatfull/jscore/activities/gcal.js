@@ -155,9 +155,11 @@ function _fetchGoogleCalendarList(callback, retryCount)
 				{
 					if(retryCount < 2)
 					{
+						erase_google_calendar_prefs_cookie();
 						gapi.auth.setToken(undefined);
+						
 						_set_token_from_session(function(){
-							_fetchGoogleCalendarList(callback, retryCount)
+							_fetchGoogleCalendarList(callback, ++retryCount)
 						});
 						return;
 						//return _fetchGoogleCalendarList(callback, ++retryCount);

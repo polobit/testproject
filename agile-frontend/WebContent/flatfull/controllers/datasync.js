@@ -73,7 +73,7 @@ google_calendar:function(el){
 
 
 	 this.calendar_sync_google = new GoogleCalendar_Event_Modal_View({
-                            url: 'core/api/calendar-prefs/get',
+                            url: 'core/api/calendar-prefs/GOOGLE',
                             template: 'import-google-calendar',
                             postRenderCallback: function(el) {
                                 initializeImportListeners();
@@ -136,6 +136,7 @@ google_calendar:function(el){
                         saveCallback: function(data)
                         {
                             erase_google_calendar_prefs_cookie();
+                            showNotyPopUp("information", "Google calendar preferences saved successfully", "top", 1000);
                         },
                         postRenderCallback: function(el)
                         {
