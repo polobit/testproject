@@ -25,26 +25,26 @@
         {{/if_equals}}
 			<div class="widget_header_icons pull-right text-base" style="display:none;">
 				<ul class="customWidgets text-base">
-					<li class="m-t-xs"><i id="{{remove_spaces name}}-move" class="text-muted c-p icon-cursor-move {{remove_spaces name}}-move"></i></li>
+					<li class="m-t-xs m-r-sm"><i id="{{remove_spaces name}}-move" class="text-muted c-p fa fa-arrows text-xs {{remove_spaces name}}-move"></i></li>
 					{{#if is_minimized}}
-						<li class="m-t-xs"><a><i widget="{{remove_spaces name}}" class="widget-maximize fa fa-plus text-muted c-p"></i></a></li>
+						<li class="m-t-xs m-r-sm"><a><i widget="{{remove_spaces name}}" class="widget-maximize fa fa-plus text-muted c-p"></i></a></li>
 					{{else}}
-						<li class="m-t-xs"><a><i widget="{{remove_spaces name}}" class="widget-minimize text-muted fa fa-minus c-p"></i></a></li>
+						<li class="m-t-xs m-r-sm"><a><i widget="{{remove_spaces name}}" class="widget-minimize text-muted fa fa-minus c-p"></i></a></li>
 					{{/if}}
-					<li class="m-t-xs">
+					<li class="m-t-xs m-r-sm">
 					{{#if_equals name "Linkedin"}}
-						<a id="{{remove_spaces name}}_plugin_delete" rel="tooltip" title="Reset settings"><i class="text-muted icon-wrench c-p"></i></a>
+	<a id="{{remove_spaces name}}_plugin_delete" rel="tooltip" title="Reset settings"><i class="text-muted fa fa-wrench c-p"></i></a>
 					{{else}}
 						{{#if_equals name "Twitter"}}
-							<a id="{{remove_spaces name}}_plugin_delete" rel="tooltip" title="Reset settings"><i class="text-muted icon-wrench c-p"></i></a>
+							<a id="{{remove_spaces name}}_plugin_delete" rel="tooltip" title="Reset settings"><i class="text-muted fa fa-wrench c-p"></i></a>
 						{{else}}
 							{{#if_equals name "Facebook"}}
-								<a id="{{remove_spaces name}}_plugin_delete" rel="tooltip" title="Reset settings"><i class="text-muted icon-wrench c-p"></i></a>
+								<a id="{{remove_spaces name}}_plugin_delete" rel="tooltip" title="Reset settings"><i class="text-muted fa-wrench fa c-p"></i></a>
 							{{else}}
 							{{#if_equals name "GooglePlus"}}
-								<a id="{{remove_spaces name}}_plugin_delete" rel="tooltip" title="Reset settings"><i class="text-muted icon-wrench c-p"></i></a>
+								<a id="{{remove_spaces name}}_plugin_delete" rel="tooltip" title="Reset settings"><i class="text-muted fa-wrench fa c-p"></i></a>
 							{{else}}
-								<a href="#add-widget" rel="tooltip" title="Reset settings"><i class="text-muted icon-wrench c-p"></i></a>
+								<a href="#add-widget" rel="tooltip" title="Reset settings"><i class="text-muted fa fa-wrench c-p"></i></a>
 							{{/if_equals}}
 						{{/if_equals}}
 					{{/if_equals}}
