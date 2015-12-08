@@ -71,7 +71,7 @@ public class FacebookPageUtil
 	if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Production)
 	{
 		//state = "https://" + NamespaceManager.get() +  ".agilecrm.com/fbpagecallback";		
-		state = "https://" + NamespaceManager.get() + "-dot-async-dot-agilecrmbeta.appspot.com/fbpagecallback";
+		state = "https://" + NamespaceManager.get() + "-dot-17-7-dot-agile-crm-cloud.appspot.com/fbpagecallback";
 	}
     }
 
