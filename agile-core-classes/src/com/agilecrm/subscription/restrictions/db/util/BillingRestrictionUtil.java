@@ -112,12 +112,13 @@ public class BillingRestrictionUtil {
 	
 	public static BillingRestriction getRestrictionFromDB(){
 		BillingRestriction restriction = BillingRestriction.dao.ofy().query(BillingRestriction.class).get();
+		// Set one_time_emails_count to '0' per every 30 days for free users(Free 5000 emails)
 		if(restriction.max_emails_count == null || restriction.max_emails_count == 0){
 			if(restriction.last_renewal_time == null){
 				restriction.last_renewal_time = restriction.created_time/1000;
 			}
 			Long currentDate = new DateUtil().getTime().getTime()/1000;
-			if(currentDate - restriction.last_renewal_time >= 7200){
+			if(currentDate - restriction.last_renewal_time >= 2592000){
 				System.out.println("Updating free 5000 emails");
 				System.out.println("last renewal time is:: "+restriction.last_renewal_time);
 				restriction.one_time_emails_count = 0;
