@@ -1880,6 +1880,7 @@ a.lpt_fancybox:hover{
 .widget-minimize {
     margin-top: 5px;
 }
+<<<<<<< HEAD
 
 
 #task-detail-lhs .dropdown-menu>li>a , .contactView .dropdown-menu > li > a{
@@ -1887,3 +1888,8 @@ a.lpt_fancybox:hover{
   font-size: 13px;
 } 
 
+=======
+.icon-widget-move {
+  cursor: move;
+}
+>>>>>>> minor-app-fixes
