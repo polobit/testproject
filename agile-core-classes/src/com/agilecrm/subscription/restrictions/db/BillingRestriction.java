@@ -73,6 +73,12 @@ public class BillingRestriction
     public Integer companies_count;
 
     public Long created_time = null;
+    
+    /**
+     * Last renewal time of emails for free users.
+     */
+    @NotSaved(IfDefault.class)
+    public Long last_renewal_time = null;
 
     /**
      * New limits
@@ -215,7 +221,7 @@ public class BillingRestriction
 	if (one_time_emails_count != null && one_time_emails_count > 0)
 	    return true;
 
-	return true;
+	return false;
     }
 
     public boolean isEmailPlanPaid()
