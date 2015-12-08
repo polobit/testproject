@@ -20,7 +20,7 @@
 	{{/if}}
 </div>
 
-{{#if_domain CURRENT_DOMAIN_USER.domain}}
+{{#if_domain "our"}}
 	<div class="b-t b-b wrapper-xs">
 		<div class="row">
 			<div class="col-md-1 p-r-none">
@@ -35,7 +35,7 @@
 			</div>
 		</div>
 	</div>
-	<div id="stripe_credits_panel" class="col-md-12 b-b p-t-xs p-b-xs hide">
+	<div id="stripe_credits_panel" class="col-md-12 p-t-xs p-b-xs hide">
 		<div class="col-md-6 p-l-none p-r-sm">
 			<input class="form-control input-sm" id="credit_amount" type="number" value="0" name="credit_amount">
 		</div>
@@ -48,9 +48,10 @@
 	</div>
 	<div class="clearfix"></div>
 {{/if_domain}}
-
-<div class=" wrapper-xs">
-	<span>Subscription Details</span>
+<div class="b-t">
+	<div class=" wrapper-xs">
+		<span>Subscription Details</span>
+	</div>
 </div>
 <div class="b-t b-b wrapper-sm">
 	{{#if customer.subscription}}
