@@ -117,7 +117,11 @@ function _set_token_from_session(callback)
 	{
 		_load_gapi(function()
 		{
-			_set_token_from_session(callback)
+			get_google_calendar_prefs(function(sourceOptions){
+				// Set the access token
+				gapi.auth.setToken({ access_token : sourceOptions.token, state : "https://www.googleapis.com/auth/calendar" });
+					callback();
+				});
 		});
 
 		return;
@@ -135,11 +139,7 @@ function _set_token_from_session(callback)
 		});
 		return;
 	}
-
-	
-
 	return callback(gapi.auth.getToken());
-
 }
 
 function _fetchGoogleCalendarList(callback, retryCount)
