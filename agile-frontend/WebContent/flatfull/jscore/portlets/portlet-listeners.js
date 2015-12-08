@@ -360,6 +360,9 @@ function initializePortletsListeners() {
 													model.color = "#36C";
 												else
 													model.color = "green";
+
+												$("#updateActivityModal").html(getTemplate("update-activity-modal"));
+												
 												// Deserialize
 												deserializeForm(
 														model,
@@ -490,7 +493,7 @@ function initializePortletsListeners() {
 								.trim();
 				App_Portlets.currentPortletName = 'Mini Calendar';
 				var start = new Date(parseInt($(this).attr('id')));
-				$('#activityModal').modal('show');
+				$('#activityModal').html(getTemplate("new-event-modal")).modal('show');
 				highlight_event();
 
 				// Set Date for Event

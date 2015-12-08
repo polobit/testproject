@@ -430,8 +430,9 @@ $(function()
 	  $("body").on('click', '#show-activity', function(e) { 
 	  		e.preventDefault();
 
-	 		highlight_event();
 	  		$('#activityModal').html(getTemplate("new-event-modal")).modal('show');
+	 		highlight_event();
+	  		
 	  });
 
 	/**
