@@ -1841,6 +1841,7 @@ table td .thumb img {
 }
 
 
+
 a.lpt_fancybox:hover{
   opacity: 0.6;
 }
@@ -1879,4 +1880,10 @@ a.lpt_fancybox:hover{
 .widget-minimize {
     margin-top: 5px;
 }
+
+
+#task-detail-lhs .dropdown-menu>li>a , .contactView .dropdown-menu > li > a{
+  color: #727272;
+  font-size: 13px;
+} 
 
