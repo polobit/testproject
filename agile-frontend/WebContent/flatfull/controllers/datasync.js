@@ -153,6 +153,7 @@ google_calendar:function(el){
                             
                             console.log(model);
                             $("#multi-select-calendars-container", el).html(getRandomLoadingImg());
+                            erase_google_calendar_prefs_cookie();
                             _fetchGoogleCalendarList(function(data) {
                                 getTemplate('dynamic-multi-calendar', data, 'no',  function(template_ui){
                                     
