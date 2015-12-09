@@ -77,6 +77,13 @@ function serializeForm(form_id) {
 
 	}).get());
 
+	// Serialize sortable widget data
+	arr = arr.concat($('#' + form_id + ' .selected_columns').map(function() {
+
+	    return { name: $(this).attr('name'), value: $(this).sortable("toArray") };
+
+	}).get());
+
 	//Serialize attachments list
 	arr = arr.concat(Ticket_Attachments.serializeList(form_id));
 

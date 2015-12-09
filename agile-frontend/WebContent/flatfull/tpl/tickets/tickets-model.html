@@ -1,12 +1,12 @@
 <script id="ticket-model-template" type="text/html">
-	<li id="{{id}}" class="p-l-xxl list-group-item clearfix b-l {{#if_equals priority 'HIGH'}}b-l-3x {{toLowerCase priority}}-priority{{/if_equals}} data ticket"  data-id="{{id}}" style="padding-bottom: 10px;">
+	<li id="{{id}}" class="p-l-xxl list-group-item clearfix b-l {{#if_equals priority 'HIGH'}}b-l-3x {{toLowerCase priority}}-priority{{/if_equals}} data ticket"  data-id="{{id}}" style="padding-bottom: 7px; padding-top: 7px;">
     <div class="checkbox-st">
       <label class="i-checks i-checks-sm">
         <input class="each-ticket ticket-checkbox" type="checkbox" data-ticket-id="{{id}}">
         <i></i>
       </label>
     </div>
-    <a class="avatar thumb pull-left m-r m-l-sm b b-l cursor-pointer open-ticket" href="javascript:void(0);">
+    <a class="avatar thumb pull-left m-r-sm m-l-sm b b-l cursor-pointer open-ticket" href="javascript:void(0);" style="margin-top: 3px;">
       {{#if contact.properties}}
         <img data-name="{{dataNameAvatar contact.properties 42}}" src="{{gravatarurl contact.properties 24}}">
       {{else}}    
@@ -14,7 +14,7 @@
       {{/if}}  
     </a>
     <div class="pull-right text-sm text-muted p-l-sm b-l" style="min-width: 20%;">
-      <table class="onlySorting">
+      <table class="onlySorting txt-small">
         <tr>
           <td><span class="text-muted">Assignee: </span></td>
           <td class="p-l-sm">
@@ -67,51 +67,59 @@
       </table>
     </div>
     <div class="pull-right cursor-pointer open-ticket text-sm text-muted text-right m-r-sm">
-      <div class="time-text">
-        {{#if_equals status 'NEW'}}
-          Created: 
-          <time class="time-ago" datetime="{{epochToHumanDate "" created_time}}">
-            {{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" created_time}}
-          </time>
-        {{else}}
-          {{#if_equals status 'CLOSED'}}
-            Closed: 
-            <time class="time-ago" datetime="{{epochToHumanDate "" closed_time}}">
-              {{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" closed_time}}
-            </time>
-          {{else}}
-            {{#if_equals last_updated_by 'AGENT'}}
-              Assignee replied: 
+      <table class="onlySorting txt-small">
+        <tr>
+          <td style="height: 19px;">
+            {{#if_equals status 'NEW'}}
+              Created: 
+              <time class="time-ago" datetime="{{epochToHumanDate "" created_time}}">
+                {{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" created_time}}
+              </time>
             {{else}}
-              Customer responded: 
+              {{#if_equals status 'CLOSED'}}
+                Closed: 
+                <time class="time-ago" datetime="{{epochToHumanDate "" closed_time}}">
+                  {{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" closed_time}}
+                </time>
+              {{else}}
+                {{#if_equals last_updated_by 'AGENT'}}
+                  Assignee replied: 
+                {{else}}
+                  Customer responded: 
+                {{/if_equals}}
+                <time class="time-ago" datetime="{{epochToHumanDate "" last_updated_time}}">
+                  {{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" last_updated_time}}
+                </time>
+              {{/if_equals}}
             {{/if_equals}}
-            <time class="time-ago" datetime="{{epochToHumanDate "" last_updated_time}}">
-              {{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" last_updated_time}}
-            </time>
-          {{/if_equals}}
-        {{/if_equals}}
-        {{#if attachments_exists}}
-          <i class="fa fa-paperclip m-l-sm" aria-hidden="false"></i>
-        {{/if}}
-      </div>
-      <div class="due-text txt-small">
-        {{#if_equals status 'CLOSED'}}
-        {{else}}
-          {{#if due_time}}
-            {{calculate_due_date due_time}}
-          {{else}}
-            Due in 5 days
-          {{/if}}
-        {{/if_equals}}
-      </div>
-      <div class="group-text">
-        <span class="label bg-primary first-letter-cap font-bold inline-block">{{group.group_name}}</span>
-      </div>
+            {{#if attachments_exists}}
+              <i class="fa fa-paperclip m-l-sm" aria-hidden="false"></i>
+            {{/if}}
+          </td>
+        </tr>
+        <tr>
+          <td class="due-text txt-small" style="height: 19px;">
+            {{#if_equals status 'CLOSED'}}
+            {{else}}
+              {{#if due_time}}
+                {{calculate_due_date due_time}}
+              {{else}}
+                Due in 5 days
+              {{/if}}
+            {{/if_equals}}
+          </td>
+        </tr>
+        <tr>
+          <td class="group-text" style="height: 19px;">
+            <span class="label bg-primary first-letter-cap font-bold inline-block" style="padding-bottom: 4px;">{{group.group_name}}</span>
+          </td>
+        </tr>
+      </table>
     </div>
     <div class="clear cursor-pointer open-ticket">
-      <div class="subject-row text-ellipsis">{{requester_name}}</div>
-      <div class="text-ellipsis text-md">#{{id}}, <span class="text-info">{{subject}}</span></div>
-      <div class="text-ellipsis m-t-xs">
+      <div class="text-ellipsis text-sm">#{{id}}, <span class="text-muted">{{subject}}</span></div>
+      <div class="subject-row text-ellipsis text-sm">{{requester_name}}</div>
+      <div class="text-ellipsis">
         {{#get_ticket_labels_from_ids labels this}}{{/get_ticket_labels_from_ids}}
         {{#if labelsJSON}}
             {{#each labelsJSON}}<span class="label bg-light m-r-xs font-bold" style="background-color: {{color_code}}; color: white; border-bottom-left-radius: 4px; border-bottom-right-radius: 4px;">{{label}}</span>
@@ -154,51 +162,44 @@
   </li>
 </script>
 <script id="ticket-single-row-model-template" type="text/html">
-  <td  class="select_checkbox c-p">
+  <td class="data select_checkbox c-p pos-rlt" data="{{id}}">
     <label class="i-checks i-checks-sm">
       <input type="checkbox" class="tbody_check"><i></i>                
     </label>
-  </td>
-  <td class="data first-letter-cap" data="{{id}}">
-    <div class="row m-n" style="width: 10em;">{{subject}}</div>
-  </td>
-  <td class="first-letter-cap">
-    <div class="text-ellipsis" style="width: 10em;">
-      <a class="text-cap">{{requester_name}}</a>
-    </div>
-  </td>
-  <td>
-    {{#unless labels.length}}
-    {{else}}
-      <div class="overflow-hidden line-clamp line-clamp-2" style="width:15em;">   
-        {{#each labels}}
-          <span class="label bg-light dk text-tiny">{{label}}</span> 
-        {{/each}}
+    <div id="ticket-last-notes" class="ticket-last-notes" 
+      style="min-height: {{#if_equals status 'NEW'}}130px;{{else}}230px;{{/if_equals}}; left: 45%;">
+      <div class="row m-n mar-btm-md last-notes-drp-dwn p-t">
+        <div class="col-md-12 pad-all-sm">
+          <span>Last Reply</span>
+          <span class="text-light txt-small pull-right">
+            {{epochToHumanDate "mmm dd, yyyy HH:MM" last_updated_time}}&nbsp;
+            <!--<span class="label label-primary first-letter-cap inline-block {{toLowerCase priority}}-priority-bg">
+              {{priority}}
+            </span>-->
+          </span>
+        </div>
+        <div id="recent-reply-notes" class="col-md-12 p-t-sm p-b recent-reply-notes">
+          {{{last_reply_text}}}  
+        </div>
       </div>
-    {{/unless}}
-  </td>
-  <td class="first-letter-cap">
-    <div class="text-ellipsis" style="width: 10em;">
-      <a class="text-cap">{{#if assigneeID}}{{assignee.name}}{{else}}-{{/if}}</a>
+      {{#if_equals status 'NEW'}}
+      {{else}}
+        <div class="row m-n mar-btm-md last-notes-drp-dwn">  
+          <div class="col-md-12 pad-all-sm">
+            <hr class="m-t m-b">
+            <span>First Reply</span>
+            <span class="text-light txt-small pull-right">
+              {{epochToHumanDate "mmm dd, yyyy HH:MM" created_time}}&nbsp;
+            </span>
+          </div>
+          <div id="recent-reply-notes" class="col-md-12 p-t-sm p-b recent-reply-notes">
+            {{{first_notes_text}}}
+          </div>
+        </div>
+      {{/if_equals}}
     </div>
-  </td>  
-  <td>
-    {{#if due_time}}
-      {{{calculate_due_date due_time}}}
-    {{else}}
-      -
-    {{/if}}
   </td>
-  <td>
-    <span class="label {{toLowerCase priority}}-priority-bg first-letter-cap text-tiny inline-block">
-      {{priority}}
-    </span>
-  </td>
-  <td>
-    <span class="label bg-light dk text-tiny first-letter-cap inline-block">
-      {{status}}
-    </span>
-  </td>
+  {{{get_ticket_rows this}}}
 </script>
 <script  id="ticket-model-change-assignee-template" type="text/html">
   {{#each this}}

@@ -22,7 +22,7 @@ var Tickets = {
 
 				$('#content').html($(template_ui));	
 
-				var isSingleRowView = (CURRENT_DOMAIN_USER.helpdesk_view && CURRENT_DOMAIN_USER.helpdesk_view == 'double_row')
+				var isSingleRowView = (CURRENT_DOMAIN_USER.helpdeskSettings && CURRENT_DOMAIN_USER.helpdeskSettings.ticket_view_type == 'SINGLELINE')
 								 ? true : false;
 
 				//Fetching ticket toolbar template
@@ -81,9 +81,10 @@ var Tickets = {
 	//Fetches new ticket collection
 	fetchTicketsCollection: function(){
 
-		var isSingleRowView = (CURRENT_DOMAIN_USER.helpdesk_view && CURRENT_DOMAIN_USER.helpdesk_view == 'double_row')
+		var isSingleRowView = (CURRENT_DOMAIN_USER.helpdeskSettings && CURRENT_DOMAIN_USER.helpdeskSettings.ticket_view_type == 'SINGLELINE')
 								 ? true : false;
 
+		$('a.refresh-tickets').addClass('fa-spin');
 		Ticket_Labels.fetchCollection(function() {
 
 				App_Ticket_Module.ticketsCollection = new Base_Collection_View({
@@ -122,6 +123,8 @@ var Tickets = {
 						
 						$('ul.ul-select-assignee').html(getTemplate('ticket-model-change-assignee', model.toJSON()))
 					}});
+
+					$('a.refresh-tickets').removeClass('fa-spin');
 				}
 			});
 
@@ -263,6 +266,37 @@ var Tickets = {
 					}
 				}
 			);
+
+		/*
+		 * Hover event on ticket subject
+		 */
+		$(el)
+			.on('mouseover mouseout', 'tbody.ticket-single-row-model-list > tr',
+				function(event) {
+
+					clearTimeout(popoverFunction);
+					if (event.type == 'mouseover'){
+
+						var $tr = $(this), $table = $tr.closest('table')
+
+						if (window.innerHeight - $tr.offset().top >= 210)
+
+							popoverFunction = setTimeout(function(){
+
+								$tr.find('td.data').find('#ticket-last-notes').css(
+									'display', 'block').css('top', '50px').css('left', '335%');
+							},1000);
+						else
+							popoverFunction = setTimeout(function(){
+
+								$tr.find('td.data').find('#ticket-last-notes').css(
+									'display', 'block').css('top', ($tr.offset().top - $tr.find('td.data').find('#ticket-last-notes').height() - 40) + 'px').css('left', '335%');
+							},1000);
+					} else {
+						
+						$('.ticket-last-notes').css('display','none');
+					}
+			});
 
 		$(el)
 			.on('mouseover mouseout', 'div.show-caret',
@@ -454,17 +488,26 @@ var Tickets = {
 
 	initDateTimePicker: function($input, callback){
 
-		head.js('/lib/web-calendar-event/moment.min.js','/lib/bootstrap-datetimepicker.min.js', function()
-		{	
-			// Enable the datepicker
-			$input.datetimepicker({sideBySide: true});
-				
-			$input.off("dp.hide");
-			$input.on("dp.hide", function (e) {
-	            
-	            if(callback)
-	            	callback($input, $input.val());
-	        });
+		head.load(LIB_PATH + 'lib/date-charts.js', LIB_PATH + 'lib/date-range-picker.js', "/flatfull/css/final-lib/date-picker.css",  function()
+		{
+			$('.daterangepicker').remove();
+
+			$('#reportrange').daterangepicker({
+			    "timePicker": true,
+			    "startDate": "12/03/2015",
+			    "endDate": "12/09/2015",
+			    "drops": "up"
+			}, function(start, end, label) {
+			  	callback();
+			});
+			
+			$('.daterangepicker > .ranges > ul').on("click", "li", function(e)
+			{
+				$('.daterangepicker > .ranges > ul > li').each(function(){
+					$(this).removeClass("active");
+				});
+				$(this).addClass("active");
+			});
 		});
 	},
 
