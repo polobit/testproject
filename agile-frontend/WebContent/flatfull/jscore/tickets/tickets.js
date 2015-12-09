@@ -599,6 +599,24 @@ var Tickets = {
 		return ticket_collection.at(current_ticket_index).id;
 	},
 
+	closeTicket : function(e){
+
+		var url = "/core/api/tickets/change-status?status=CLOSED&id=" + Current_Ticket_ID;
+
+		Tickets.updateModel(url, function(){
+
+				showNotyPopUp('information', "Ticket has been closed", 'bottomRight', 3000);
+
+				var url = '#tickets/group/'+ (!Group_ID ? DEFAULT_GROUP_ID : Group_ID) + 
+					'/' + (Ticket_Status ? Ticket_Status : 'new');
+
+				Backbone.history.navigate(url, {trigger : true});
+
+			}, null, Current_Ticket_ID);
+
+		
+	},
+
 	deleteTicket: function(e){
 
 		var deleteTicketView = new Base_Model_View({

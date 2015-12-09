@@ -9,6 +9,7 @@ var Ticket_Base_Model = Base_Model_View.extend({
 		"change .ticket_type" : "changeTicketType",
 		"change .ticket_priority" : "changeTicketPriority",
 		"click .delete-ticket" : "deleteTicket",
+		"click .close-ticket" : "closeTicket",
 		"click .show-workflows" : "workflows",
 		"click .toggle-timeline" : "toggleTimeline",
 		"click #change-sla" : "changeSla",
@@ -250,6 +251,12 @@ var Ticket_Base_Model = Base_Model_View.extend({
 		e.preventDefault();
 		
 		Tickets.deleteTicket();
+	},
+
+	closeTicket : function(e){
+		e.preventDefault();
+		
+		Tickets.closeTicket();
 	},
 
 	workflows: function(e){
