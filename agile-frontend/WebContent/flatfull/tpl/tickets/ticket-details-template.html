@@ -240,12 +240,16 @@
             <div class="btn-group pull-right m-l-xs">
               <button class="btn btn-sm btn-default w-xxs w-auto-xs dropdown-toggle toggle-timeline" data-toggle="tooltip" data-placement="bottom" data-original-title="Timeline"><i class="fa fa-th-large"></i></button>
               <button class="btn btn-sm btn-default w-xxs w-auto-xs delete-ticket" data-toggle="tooltip" data-placement="bottom" data-original-title="Delete Ticket"><i class="fa fa-trash-o"></i></button>
+
+              <button class="btn btn-sm btn-default w-xxs w-auto-xs close-ticket" data-toggle="tooltip" data-placement="bottom" data-original-title="Close Ticket"><i class="fa fa-folder"></i></button>
             </div>  
 
             <div class="btn-group pos-stc">
-              <button class="btn btn-sm btn-default w-xxs w-auto-xs dropdown-toggle" data-toggle="tooltip" data-placement="bottom" data-original-title="Reply"><i class="fa fa-mail-reply"></i></button>
-               <button class="btn btn-sm btn-default w-xxs w-auto-xs dropdown-toggle" data-toggle="tooltip" data-placement="bottom" data-original-title="Forward"><i class="fa fa-mail-forward"></i></button>
-                <button class="btn btn-sm btn-default w-xxs w-auto-xs dropdown-toggle" data-toggle="tooltip" data-placement="bottom" data-original-title="Add Notes"><i class="fa fa-file-text"></i></button>
+              <button class="btn btn-sm btn-default w-xxs w-auto-xs dropdown-toggle reply-btn" rel="reply" data-toggle="tooltip" data-placement="bottom" data-original-title="Reply"><i class="fa fa-mail-reply"></i></button>
+
+               <button class="btn btn-sm btn-default w-xxs w-auto-xs dropdown-toggle reply-btn" rel="comment" data-toggle="tooltip" data-placement="bottom" data-original-title="Forward"><i class="fa fa-mail-forward"></i></button>
+
+                <button class="btn btn-sm btn-default w-xxs w-auto-xs dropdown-toggle reply-btn" rel="forward" data-toggle="tooltip" data-placement="bottom" data-original-title="Add Notes"><i class="fa fa-file-text"></i></button>
             </div>
 
             <button class="btn btn-sm btn-default w-xxs w-auto-xs dropdown-toggle show-workflows" data-toggle="tooltip" data-placement="bottom" data-original-title="Workflows"><i class="fa fa-sitemap"></i></button>
@@ -297,8 +301,9 @@
                 <div id="send-reply-container" class="panel-heading" aria-hidden="false">
                     <div class="m-b-lg">
                       Click here to 
-                      <a href="javascript:void(0);" class="text-u-l reply-btn" tabindex="0">Reply</a>
-                      <!-- or <a href="javascript:void(0);" class="text-u-l" tabindex="0">Forward</a> -->
+                      <a href="javascript:void(0);" class="text-u-l reply-btn" rel="reply" tabindex="0">Reply</a> /
+                      <a href="javascript:void(0);" class="text-u-l reply-btn" rel="comment" tabindex="0">Comment</a> /
+                      <a href="javascript:void(0);" class="text-u-l reply-btn" rel="forward" tabindex="0">Forward</a> 
                     </div>
                   </div>
                   <div id="reply-editor">
@@ -331,11 +336,16 @@
     <input type="hidden" name="ticket_id" value="{{id}}">
     <input type="hidden" name="attachment_urls" value=",">
 
-    <div class="panel-heading b-b b-light to-emails">
-      {{requester_email}}{{#if cc_emails}},{{cc_emails}}{{/if}}
+    <div class="panel-heading b-b b-light to-emails height-min-50">
+      {{#if_equals reply_type "forward"}} 
+
+      {{else}}
+        {{requester_email}}{{#if cc_emails}},{{cc_emails}}{{/if}}
+      {{/if_equals}}
+      
     </div>
     <div class="panel-heading ticket-email p-b-none" style="display: none;">
-      <span class="text-muted">To</span>&nbsp;&nbsp; {{requester_email}}
+      <span class="text-muted">To</span>&nbsp;&nbsp;  {{#if_equals reply_type "forward"}} {{else}}{{requester_email}}{{/if_equals}}
     </div>
     <div class="panel-heading ticket-email b-b b-light p-t-xs p-b-xs" style="display: none;">
       <div class="text-muted inline-block v-top">Cc</div>&nbsp;&nbsp;
@@ -356,15 +366,37 @@
       </div>  
     </div>
     <div id="reply_textarea" class="wrapper" contenteditable="true" data-name="html_text" style="min-height:130px">
-        <br/><br/>{{#getCurrentUserPrefs}}{{{signature}}}{{/getCurrentUserPrefs}}
+        <br/><br/>{{#if_equals reply_type "forward"}} {{{notes}}} {{/if_equals}}{{#getCurrentUserPrefs}}{{{signature}}}{{/getCurrentUserPrefs}}
     </div>
     <div class="panel-footer bg-light lt">
       <a href="javascript:void(0);" class="btn btn-link pull-right discard-reply">
         <i  data-toggle="tooltip" data-placement="top" data-original-title="Discard" 
           class="fa fa-trash-o"></i>
       </a>
-      <a href="javascript:void(0);" class="btn btn-info btn-sm send-reply" data-loading-text='Send Reply'>Send Reply</a>
-      <a href="javascript:void(0);" class="btn btn-primary btn-sm m-l-xs send-reply private" data-loading-text='Add Note'>Add Note</a>
+
+      {{#if_equals reply_type "forward"}} 
+
+        <button class="btn btn-info send-reply forward">Forward</button>
+
+      {{else}}
+     
+      <div class="btn-group dropdown dropup">
+          <button class="btn btn-info send-reply">Send Reply</button>
+          <button class="btn btn-info" data-toggle="dropdown" aria-expanded="false"><span class="caret"></span></button>
+          <ul class="dropdown-menu">
+            <li><a href="javascript:void(0);" class="send-reply close-ticket">Send Reply & Close Ticket</a></li>
+          </ul>
+        </div>
+
+        <div class="btn-group dropdown dropup">
+          <button class="btn btn-primary send-reply private">Add Note</button>
+          <button class="btn btn-primary" data-toggle="dropdown" aria-expanded="false"><span class="caret"></span></button>
+          <ul class="dropdown-menu">
+            <li><a href="javascript:void(0);" class="send-reply private close-ticket">Add Note & Close Ticket</a></li>
+          </ul>
+        </div>
+        {{/if_equals}}
+
       <a href="javascript:void(0);" class="btn btn-default btn-sm m-l-xs">
         <i class="fa fa-paperclip" data-toggle="tooltip" data-placement="top" data-original-title="Attachments"></i>
       </a>
