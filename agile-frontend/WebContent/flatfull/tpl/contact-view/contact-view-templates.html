@@ -248,3 +248,50 @@
        </div>
 	</td>
 </script>
+
+<script id = "contacts-custom-view-addData-template" type="text/html">
+	<td class='data' data='{{id}}'>
+       <div class="text-ellipsis" style="width:15em;">
+	   
+
+	   	  
+	   	  <div class="unselectable m-t-n-xs pull-left" id="score" unselectable="on" onselectstart="return false">
+							<div  class="text-lg score-view">
+								<img src="{{getS3ImagePath '../../img/flame.png'}}" style="width:13px;"> 
+								
+							
+								<span class="inline-block v-middle">
+									{{#if lead_score}} <span id="lead-score">{{lead_score}}</span>&nbsp;
+									{{else}} <span id="lead-score">0</span>&nbsp;
+									{{/if}}
+								</span>
+							{{#canEditContact owner.id}}
+								<span class="contact-score-control m-l-xs">
+									<ul class="inline-block list-none m-n p-n">
+										<li style="height: 9px"><i class="icon-sort-up c-p" id="add"
+											style="height: 10px;"></i></li>
+										<li><i class="icon-sort-down c-p" id="minus"
+											style="height: 10px;"></i></li>
+									</ul>
+								</span>
+							{{/canEditContact}}
+							</div>
+						</div>
+
+       		  {{#checkProperties properties "phone"}} 
+	   	  		<i class="icon-call-end"></i>
+	   	  		{{/checkProperties}}
+
+	   	   {{#checkProperties properties "email"}}
+	   	 
+	   	  		<a href='#send-email/{{getPropertyValue properties "email"}}'>
+	   	  		 	<i class="icon-envelope m-l-md"></i></a> 
+	   	  	
+	   	   {{/checkProperties}}
+       <br> <span>Add Deal</span>
+	   	   <span>Add Note</span>
+
+	   	          </div>
+	</td>
+</script>
+

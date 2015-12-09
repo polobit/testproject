@@ -50,6 +50,13 @@ function contactTableView(base_model,customDatefields,view) {
 		
 		// Iterates through, each field name and appends the field according to
 		// order of the fields
+		
+		getTemplate('contacts-custom-view-addData', contact, undefined, function(template_ui){
+			if(!template_ui)
+				  return;
+			$(el).append($(template_ui));
+		}, null);
+		
 		$.each(fields, function(index, field_name) {
 			if(field_name.indexOf("CUSTOM_") != -1)
 			{

@@ -1027,6 +1027,7 @@ $(function()
 	{
 
 		var el = "";
+		el=el.concat('<th></th>');
 		$.each(App_Contacts.contactViewModel[item], function(index, element)
 		{
 			
@@ -6853,4 +6854,15 @@ function agile_is_mobile_browser(){
     return (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent));
 
 }
+
+Handlebars.registerHelper('checkProperties', function(properties,type,options)
+{
+	var name=getPropertyValue(properties,type);
+
+	if(name)
+		return options.fn(this);
+	else
+		return options.inverse(this);
+
+});
 
