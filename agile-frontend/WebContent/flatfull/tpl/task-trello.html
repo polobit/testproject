@@ -14,6 +14,8 @@
 	            <ul class="dropdown-menu" id="new-owner-tasks">   		 
 	            </ul>
 	        </div> 	
+          {{#is_mobile}}
+          {{else}}
 			<div class="btn-group type-task-button c-p pull-right">
 		        <button class="btn btn-default btn-sm selected_name">Due</button>
 		        <a class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" href="#">
@@ -34,7 +36,7 @@
 		           <li><a href="GroupView" class="group-view" style="display:none;">Group View</a></li>                     
 		        </ul>
 		    </div>
-	        		
+	        {{/is_mobile}}		
 		</div>
 		<div class="clearfix"></div>
 		
