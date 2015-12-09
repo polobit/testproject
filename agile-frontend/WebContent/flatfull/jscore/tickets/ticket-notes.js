@@ -4,13 +4,16 @@ var Tickets_Notes = {
 
 		e.preventDefault();
 
-		var $save_btn = $('.send-reply');
+		var $save_btn = $(e.target);
 		disable_save_button($save_btn);
 
 		var json = serializeForm("send-reply");
 
 		var note_type = $(e.target).hasClass('private') ? 'PRIVATE' : 'PUBLIC';
 		json.note_type = note_type;
+
+		if($(e.target).hasClass('close-ticket'))
+			json.close_ticket="true";
 
 		var newTicketNotesModel = new BaseModel();
 		newTicketNotesModel.url = '/core/api/tickets/notes';
@@ -47,9 +50,17 @@ var Tickets_Notes = {
 	repltBtn : function(e) {
 
 		var ticketModel = App_Ticket_Module.ticketView.model;
+		var data = ticketModel.toJSON();
+
+		var $this = $(e.target);
+
+		data.reply_type = $this.attr('rel');
+
+		if(data.reply_type && data.reply_type == 'forward')
+			data.notes = this.constructTextComments(App_Ticket_Module.notesCollection.collection.toJSON());
 
 		$('#reply-editor').html(
-				getTemplate('create-ticket-notes', ticketModel.toJSON()));
+				getTemplate('create-ticket-notes', data));
 		$('#send-reply-container').hide();
 
 		// Scroll to bottom of page
@@ -57,6 +68,23 @@ var Tickets_Notes = {
 
 		// Initialize tooltips
 		$('[data-toggle="tooltip"]', $('#reply-editor')).tooltip();
+	},
+
+	constructTextComments : function(notesCollection) {
+
+		var notesText = "";
+
+		if(!notesCollection || notesCollection.length == 0)
+			return notesText;
+
+		$.each(notesCollection, function(index, note){
+			notesText += note.original_html_text + "<br><br>-----------------------------------------<br><br>";
+		})
+
+		console.log("notesText = " + notesText);
+
+		return notesText;
+
 	},
 
 	appendCannedResponseMessage : function(e) {
