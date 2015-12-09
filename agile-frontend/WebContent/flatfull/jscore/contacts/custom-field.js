@@ -135,6 +135,7 @@ function showCustomFieldModel(data)
 			}
 
 			$("#custom-field-add-modal").modal('hide');
+			$("body").removeClass("modal-open");
 		}
 	});
 
