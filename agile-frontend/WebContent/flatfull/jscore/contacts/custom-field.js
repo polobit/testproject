@@ -57,6 +57,7 @@ function initializeCustomFieldsListeners(){
 
 function showCustomFieldModel(data)
 {
+	var modelViewCount = 0;
 	var isNew = false;
 	isNew = !data.id;
 	// Creating model for bootstrap-modal
@@ -72,7 +73,10 @@ function showCustomFieldModel(data)
 			console.log($("#custom-field-add-modal", el));
 			//This code will scroll to top to see the modal.
 			
-			$("#custom-field-add-modal", el).modal('show');
+			if(!modelViewCount){
+				modelViewCount++;	
+				$("#custom-field-add-modal", el).modal('show');
+			}
 			
 			//Customizing the style to display the custom field modal in center for screen.
 			var modalWidth = $('#custom-field-add-modal').width();
@@ -129,8 +133,9 @@ function showCustomFieldModel(data)
 				if(App_Admin_Settings.customFieldsListView.collection.length == 1)
 					App_Admin_Settings.customFieldsListView.render(true);*/
 			}
+
 			$("#custom-field-add-modal").modal('hide');
-			$("#custom-field-add-modal").modal('hide');
+			$("body").removeClass("modal-open");
 		}
 	});
 
