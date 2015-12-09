@@ -327,7 +327,7 @@ public class BillingRestriction
 	if (created_time != null && created_time > 0)
 	    return;
 
-	DomainUser user = DomainUserUtil.getCurrentDomainUser();
+	DomainUser user = DomainUserUtil.getDomainOwner(NamespaceManager.get());
 
 	if (user == null)
 	{
@@ -396,6 +396,7 @@ public class BillingRestriction
 
     public void save()
     {
+    setCreatedTime();
 	dao.put(this);
     }
 
