@@ -99,22 +99,24 @@ public class BillingRestrictionUtil {
 	public static BillingRestriction getBillingRestrictionFromDbWithoutSubscription() {
 		BillingRestriction restriction = getRestrictionFromDB();
 
-		if (restriction == null) {
-			restriction = BillingRestriction.getInstance(null, null);
-			restriction.refresh(true);
-			restriction.save();
-
-		}
-
 		return restriction;
 	}
 	
 	
 	public static BillingRestriction getRestrictionFromDB(){
 		BillingRestriction restriction = BillingRestriction.dao.ofy().query(BillingRestriction.class).get();
+		if (restriction == null) {
+			restriction = BillingRestriction.getInstance(null, null);
+			restriction.refresh(true);
+			restriction.save();
+			return restriction;
+		}
 		// Set one_time_emails_count to '0' per every 30 days for free users(Free 5000 emails)
 		if(restriction.max_emails_count == null || restriction.max_emails_count == 0){
 			if(restriction.last_renewal_time == null){
+				if(restriction.created_time == null){
+					restriction.save();
+				}
 				restriction.last_renewal_time = restriction.created_time/1000;
 			}
 			Long currentDate = new DateUtil().getTime().getTime()/1000;
