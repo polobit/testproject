@@ -109,6 +109,8 @@ var Email_Template_Events = Base_Model_View.extend({
 		    	$('#emailForm').find(".attachment-document-select").css('display','none');
 		    	$('#emailForm').find('#eattachment_key').attr('name',"document_key");
 		    	$('#emailForm').find('#eattachment_key').attr('value',document_id);
+		    	$("#emailForm").find("#agile_attachment_name").attr("value", docName);
+                $("#emailForm").find("#agile_attachment_url").attr("value", $("#attachment-select option:selected").attr("url"))
 		    }
 	    }
 		$('#enable_tracking').css("margin-top", "-47px");
@@ -140,6 +142,8 @@ var Email_Template_Events = Base_Model_View.extend({
 		$('#emailForm').find(".add-attachment-select").css("display", "inline");
 		$('#emailForm').find('#eattachment_key').attr("name","name");
     	$('#emailForm').find('#eattachment_key').attr("value","value");
+    	$("#emailForm").find("#agile_attachment_name").attr("value", "");
+        $("#emailForm").find("#agile_attachment_url").attr("value", "")
     	$('#enable_tracking').css("margin-top", "-7px");
 
 	},
