@@ -73,7 +73,7 @@ google_calendar:function(el){
 
 
 	 this.calendar_sync_google = new GoogleCalendar_Event_Modal_View({
-                            url: 'core/api/calendar-prefs/get',
+                            url: 'core/api/calendar-prefs/type/GOOGLE',
                             template: 'import-google-calendar',
                             postRenderCallback: function(el) {
                                 initializeImportListeners();
@@ -133,9 +133,11 @@ google_calendar:function(el){
                     var calendar_settings_view = new Calendar_Sync_Settings_View({
                         url : "core/api/calendar-prefs/type/GOOGLE",
                         template : "import-google-calendar-setup",
+                        change : false,
                         saveCallback: function(data)
                         {
                             erase_google_calendar_prefs_cookie();
+                            showNotyPopUp("information", "Google calendar preferences saved successfully", "top", 1000);
                         },
                         postRenderCallback: function(el)
                         {
@@ -146,13 +148,15 @@ google_calendar:function(el){
                             {
                                 if(typeof prefs != 'object')
                                 {
-                                    prefs = JSON.parse(model.get('prefs'));
-                                    model.set("prefs", prefs, {silent : true});
+                                    JSON.parse(model.get('prefs'));
+                                    model.set("prefs", JSON.parse(model.get('prefs')), {silent : true});
+                                        prefs = model.get('prefs');
                                 }
                             }
                             
                             console.log(model);
                             $("#multi-select-calendars-container", el).html(getRandomLoadingImg());
+                            erase_google_calendar_prefs_cookie();
                             _fetchGoogleCalendarList(function(data) {
                                 getTemplate('dynamic-multi-calendar', data, 'no',  function(template_ui){
                                     
@@ -162,7 +166,23 @@ google_calendar:function(el){
                                             $("#multi-select-calendars-container", el).html(template_ui);
                                             deserialize_multiselect(model.toJSON(), el);
                                             var select_field = $('#multi-select-calendars', el)
-                                             select_field.multiSelect();
+                                             select_field.multiSelect(/*{
+                                                  selectableHeader: '<label class="control-label"><b>Google</b></label>',
+                                                  selectedHeader: '<label class="control-label"><b>Agile</b></label>'
+                                             }*/);
+
+                                             var calendars = get_calendar_ids_form_prefs(model.toJSON());
+                                             if(calendars && calendars.length == 1 && calendars[0] == 'primary')
+                                             {
+                                                if(data && data.items)
+                                                $.each(data.items, function(index, field){
+                                                    if(field.primary)
+                                                    {
+                                                        select_field.multiSelect('select', field.summary); 
+                                                    }
+                                                });                                      
+                                             }
+                                             else
                                                 $.each(get_calendar_ids_form_prefs(model.toJSON()), function(index, field){
                                                     select_field.multiSelect('select', field);     
                                                 });

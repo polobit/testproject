@@ -38,7 +38,7 @@
 	<div class="panel-heading">
    <center> <img class="m-b-none thumb-xl bg-transparent" style="height:47px;" src="/img/icons/google-calendar-sync.png" /></center>
 	</div>
-	<div class="panel-body">
+	<div class="panel-body" style="margin:0 auto; width:85%">
 	<form id="dummy">
 		{{#if id}}
 				<input class="hide" name="id" value={{id}}></input>
@@ -58,7 +58,7 @@
 			</div>
 		</div>
         </fieldset>
-          <div class="form-actions col-md-7 text-right">
+          <div class="form-actions col-md-12 col-sm-6 col-xs-10 text-center" >
 			<a href="#sync" class="btn btn-default btn-sm ml_5 m-r-xs">Cancel</a>
 			<div class="btn btn-sm btn-primary save inline-block">Save</div>
 		</div>
@@ -73,7 +73,14 @@
 <script id="dynamic-multi-calendar-template" type="text/html">
 <select multiple id="multi-select-calendars" name="fields" class="multi-select required"> 
 	{{#each items}}
-		<option value={{id}}>{{summary}}</option>
+		{{#if primary}}
+				<option value={{id}}>Primary</option>	
+			{{else}}
+				<option value={{id}}>{{summary}}</option>			
+		{{/if}}
+
+
+		
 	{{/each}}
 </select>
 </script>
