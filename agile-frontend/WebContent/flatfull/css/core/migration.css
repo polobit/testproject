@@ -1813,8 +1813,12 @@ input[type=file] {
 #aside li a:active {
   opacity: 0.5;
 }
-.pos-abs.pos-r.pos-t > ul > li > a 
+.pos-abs.pos-r.pos-t > ul > li > a {
 color:#727272;
+}
+#opportunities-model-list tr td:first-child,#deal-tasks-model-list li .i-checks  {
+  display: none;
+}
 }
 
 @media all and (min-width: 768px) {
