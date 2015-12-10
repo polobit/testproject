@@ -125,6 +125,7 @@ var portlet_utility = {
 		}
 	},
 
+
 	/**
 	 * getting default portlet settings for all portlets
 	 */
@@ -181,6 +182,9 @@ var portlet_utility = {
 		} else if (portlet_type == "USERACTIVITY" && p_name == "Campaign stats") {
 			json['duration'] = "yesterday";
 			json['campaign_type'] = "All";
+		}
+		else if (portlet_type == "DEALS" && p_name == "Deal Goals") {
+			json['duration'] = "this-month";
 		}
 		return json;
 	},
@@ -299,7 +303,8 @@ var portlet_utility = {
 			"Account Details" : "portlets-account",
 			"Mini Calendar" : "portlets-minicalendar",
 			"User Activities" : "portlets-activites",
-			"Campaign stats" : "portlets-campaign-stats-report"
+			"Campaign stats" : "portlets-campaign-stats-report",
+			"Deal Goals" : "portlets-deal-goals",
 		};
 		var templateKey = templates_json[base_model.get('name')];
 		if (CURRENT_DOMAIN_USER.is_admin
@@ -380,6 +385,12 @@ var portlet_utility = {
 					header_name) {
 				$(el).find(".campaign_stats_header").html(header_name);
 			});
+			break;
+		}
+
+		case "Deal Goals": {
+			$(el).find('.portlet_body').parent().css('background',
+					'#f0f3f4');
 			break;
 		}
 		case "Stats Report": {
@@ -1077,6 +1088,61 @@ var portlet_utility = {
 			break;
 		}
 
+		case "Deal Goals" : {
+
+			/*App_Portlets.dealGoals[parseInt(pos)] = new Base_Model_View({
+				url : '/core/api/portlets/goals/'+CURRENT_DOMAIN_USER.id
+						+ '?start_time='
+								+ portlet_utility
+										.getStartAndEndDatesOnDue(start_date_str)
+								+ '&end_time='
+								+ portlet_utility
+										.getStartAndEndDatesOnDue(end_date_str),
+				template : "portlets-dealGoals-body-model",
+				postRenderCallback : function(p_el) {
+
+					data=App_Portlets.dealGoals[parseInt(pos)].model.toJSON();
+					portlet_graph_data_utility.dealGoalsGraphData(selector,data);
+					portlet_utility.addWidgetToGridster(base_model);
+				}
+			});
+			portlet_ele.html(getRandomLoadingImg());
+			portlet_ele
+					.html($(App_Portlets.dealGoals[parseInt(pos)].render().el));*/
+
+					portlet_ele = $('#ui-id-' + column_position + '-' + row_position,
+					el).find('.goals_portlet_body');
+					portlet_ele
+						.attr('id', 'p-body-' + column_position + '-' + row_position);
+					var that=portlet_ele;
+			   selector= portlet_ele.attr('id');
+			var url = '/core/api/portlets/goals/'+CURRENT_DOMAIN_USER.id
+						+ '?start_time='
+								+ portlet_utility
+										.getStartAndEndDatesOnDue(start_date_str)
+								+ '&end_time='
+								+ portlet_utility
+										.getStartAndEndDatesOnDue(end_date_str);
+			portlet_graph_data_utility
+					.fetchPortletsGraphData(
+							url,
+							function(data) {
+								that.find('.deal_count').html(
+									portlet_utility.getNumberWithCommasForPortlets(data["dealcount"]));
+								that.find('.goal_count').html('from '+
+									portlet_utility.getNumberWithCommasForPortlets(data["goalCount"])+'<br>Won Deals');
+								that.find('.deal_amount').html(portlet_utility.getPortletsCurrencySymbol()+
+									'' +
+									portlet_utility.getNumberWithCommasForPortlets(data["dealAmount"]));
+								that.find('.goal_amount').html('from '+portlet_utility.getPortletsCurrencySymbol()+
+									'' +
+									portlet_utility.getNumberWithCommasForPortlets(data["goalAmount"])+' <br> Revenue');
+									portlet_graph_data_utility.dealGoalsGraphData(selector,data,column_position,row_position);
+							});
+			setPortletContentHeight(base_model);
+			break;
+		}
+
 		}
 	},
 
@@ -1504,6 +1570,18 @@ var portlet_utility = {
 					$('.loading-img').hide();
 				}
 			});
+			break;
+		}
+
+		case "Deal Goals": {
+			that.addPortletSettingsModalContent(base_model,
+					"portletsGoalsSettingsModal");
+			elData = $('#portletsGoalsSettingsModal');
+			$("#duration", elData)
+					.find(
+							'option[value='
+									+ base_model.get("settings").duration + ']')
+					.attr("selected", "selected");
 			break;
 		}
 		}

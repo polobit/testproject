@@ -1318,4 +1318,146 @@ function initializeMilestoneListners(el){
         	}});
 		}
 	});
+
+	$("#milestone-listner").on('click','.goalSave',function(e)
+	{
+		var flag=true;
+			
+			var that=$(this);
+			var goals_json=[];
+				var d=$('#goal_duration span').html();
+				d=new Date(d);
+				var start=getUTCMidNightEpochFromDate(d);
+				//var end=(new Date(d.getFullYear(), d.getMonth()+1, d.getDate()-1,23,59,59)).getTime();
+					
+			$('#deal-sources-table').find('td').each(function(index){
+				if(($(this).find('.amount').val().trim())!="" && !(/^-?(?:\d+|\d{1,3}(?:,\d{3})+)(?:\.\d+)?$/).test($(this).find('.amount').val().trim())){
+					$(this).find('#goal_amount_error').show();
+					flag=false;
+					return false;
+				}
+				if(!(/^[0-9-_ ]*$/).test($(this).find('.count').val().trim())){
+					$(this).find('#goal_count_error').show();
+					flag=false;
+					return false;
+				}
+				if($(this).find("#goal_amount_error").is(':visible'))
+					$(this).find('#goal_amount_error').hide();
+				if($(this).find("#goal_count_error").is(':visible'))
+					$(this).find('#goal_count_error').hide();
+			var goal_single_user={};
+					if($(this).attr('id')!=null)
+						goal_single_user.id=$(this).attr('id');
+					goal_single_user.domain_user_id=$(this).find('.goal').attr('id');
+					goal_single_user.amount=$(this).find('.amount').val();
+					goal_single_user.count=$(this).find('.count').val();
+					goal_single_user.start_time=start/1000;
+					//goal_single_user.end_time=end/1000;
+					goals_json.push(goal_single_user);
+
+			});
+					if(flag){
+					$(this).attr("disabled","disabled");
+					$('.Count_goal').text(0);
+					$('.Amount_goal').text(0);
+					$.ajax({ type : 'POST', url : '/core/api/goals', data : JSON.stringify(goals_json),
+					contentType : "application/json; charset=utf-8", dataType : 'json' ,
+					success : function(e)
+					{
+						console.log(e);
+						var count=0;
+						var amount=0;
+						$('#deal-sources-table').find('td').each(function(index){
+								var that=$(this);
+								$.each(e,function(index,jsond){
+									if(jsond.domain_user_id==that.find('div').attr('id')){
+										that.attr('id',jsond.id);
+
+					}
+				});
+								if(that.find('.count').val()!="")
+									count=count+parseInt(that.find('.count').val());
+								if(that.find('.amount').val()!="")
+									amount=amount+parseFloat(that.find('.amount').val());
+							
+							});
+									percentCountAndAmount(count,amount);
+						$save_info = $('<div style="display:inline-block"><small><p class="text-info"><i>Changes Saved</i></p></small></div>');
+
+											$('.Goals_message').html($save_info);
+
+											$save_info.show();
+
+											setTimeout(function()
+											{
+												$('.Goals_message').empty();
+												that.removeAttr("disabled");
+											}, 500);
+        		
+        	}
+	});
+			}
+});
+/*$("#milestone-listner").on('change','.count',function(e)
+	{
+		if($(this).val()!="")
+			$('.Count_goal').text(parseInt($('.Count_goal').text())+parseInt($(this).val()));
+		else
+
+	});	
+
+$("#milestone-listner").on('change','.amount',function(e)
+	{
+			$('.Amount_goal').text(parseInt($('.Amount_goal').text())+parseInt($(this).val()));
+	});	*/
+
+	$("#milestone-listner").on('keypress', '.count', function(e){
+		$(this).siblings('#goal_count_error').hide();
+	});
+
+	$("#milestone-listner").on('keypress', '.amount', function(e){
+		$(this).siblings('#goal_amount_error').hide();
+	});
+}
+
+function percentCountAndAmount(total_count,total_amount)
+{
+	$('.Count_goal').text(getNumberWithCommasForCharts(total_count));
+	$('.Amount_goal').text(numberWithCommasAsDouble(total_amount));
+	var user_Percent;
+	$('#deal-sources-table').find('td').each(function(index){
+			var count=$(this).find('.count').val();
+			var amount=$(this).find('.amount').val();
+
+			if(count!="" && count!=0)
+			{
+				user_Percent=Math.round((parseInt(count)*100)/(parseInt(total_count)));
+				$(this).find('.count_percent').html(user_Percent+'%');
+			}
+			else{
+				if($(this).find('.count_percent').html()!="")
+					$(this).find('.count_percent').html("");
+			}
+			if(amount!="" && amount!=0)
+			{
+				user_Percent=Math.round((parseInt(amount)*100)/(parseInt(total_amount)));
+				$(this).find('.amount_percent').html(user_Percent+'%');
+			}
+			else{
+				if($(this).find('.amount_percent').html()!="")
+					$(this).find('.amount_percent').html("");
+			}
+	});
+
+}
+
+function numberWithCommasAsDouble(value)
+{
+	if (value == 0)
+			return value;
+
+		if (value)
+		{
+			return value.toFixed(2).toString().replace(/\B(?=(?:\d{3})+(?!\d))/g, ",").replace('.00', '');
+		}
 }

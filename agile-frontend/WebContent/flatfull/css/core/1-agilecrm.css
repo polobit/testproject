@@ -3018,3 +3018,18 @@ width: 915px;
 	max-width: none;
 	
 }
+.width-goal
+{
+width : 100px;
+}
+
+.padder-portlet
+{
+	padding-top: 9px;
+	padding-bottom:9px;
+}
+
+#portlets-add-listener #deals > div:nth-of-type(4)
+{
+	height: 241px;
+}
