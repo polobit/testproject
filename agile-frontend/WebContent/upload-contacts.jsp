@@ -138,7 +138,7 @@ function isValid(){
   	display: inline-block;
   }
   .mobile-popup input[type='file']{
-    width: 100%;
+    max-width: 100%;
   }
 }
 </style>
