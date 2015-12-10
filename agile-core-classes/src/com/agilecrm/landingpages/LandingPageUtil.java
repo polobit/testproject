@@ -53,7 +53,7 @@ public class LandingPageUtil
 					return null;
 				}
 				
-				String oldNameSpace = NamespaceManager.get();
+				// String oldNameSpace = NamespaceManager.get();
 				NamespaceManager.set("");
 				
 				try
@@ -71,7 +71,7 @@ public class LandingPageUtil
 				}
 				finally
 				{
-					NamespaceManager.set(oldNameSpace);
+					// NamespaceManager.set(oldNameSpace);
 				}
 				
 				
