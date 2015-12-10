@@ -133,12 +133,14 @@ function isValid(){
   .mobile-popup * {
     text-align: center;
     font-size: 20px;
+    margin:0 auto;
   }
   .mobile-popup input {
   	display: inline-block;
   }
   .mobile-popup input[type='file']{
     max-width: 100%;
+    
   }
 }
 </style>
