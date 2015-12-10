@@ -61,10 +61,10 @@ function setupDealFilters(cel)
 			  return;
 
 		$('#deal-list-filters').html($(template_ui));
-		var el = $('#filter_options');
+		var el = $('#opportunity-listners');
 
 		// Fills owner select element
-		populateUsers("owners-list-filters", el, undefined, undefined, function(data)
+		populateUsers("owners-list-bulk", el, undefined, undefined, function(data)
 		{
 
 			$("#deals-filter").find("#owners-list-filters").html(data);
@@ -157,7 +157,7 @@ function setupNewDealFilters(callback)
 function setNewDealFilters(data){
 	var filters_list = data.toJSON();
 	var filters_ui = "<li><a class='default_deal_filter'>All</a></li>" +
-					 "<li><a class='deal-filter' id='my-deals'>My</a></li>" + 
+					 "<li><a class='deal-filter' id='my-deals'>My Deals</a></li>" + 
 					 "<li class='divider'></li>" + 
 					 "<li><a href='#deal-filters'>Add/Edit Filter</a></li>";
 	if (filters_list && filters_list.length > 0)

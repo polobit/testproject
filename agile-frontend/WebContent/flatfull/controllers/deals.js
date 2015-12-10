@@ -166,6 +166,10 @@ var DealsRouter = Backbone.Router.extend({
 						$('#owners-list-filters').find('option[value=""]').attr("selected","selected").text('Any');
 						$('#pipeline').find('option[value=""]').text('Any');			
 						$('#milestone').find('option[value=""]').text('Any');
+						if($('#pipeline').find('option').length <= 2)
+						{
+							$('#pipeline').find('option[value=""]').attr("selected","selected")
+						}
 					});
 				});	
 			} });
