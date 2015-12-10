@@ -24,6 +24,9 @@ public class DataSyncUrlConstants
 	
 	public static String STRIPE_IMAGE_URL="/img/plugins/Stripe.png";
 	public static String STRIPE_CONTENT="Sync customers in Stripe as Contacts in Agile CRM with their subscription & payment data.";
+	
+	public static String OFFICE365_IMAGE_URL="/img/plugins/office356-calendar.png";
+	public static String OFFICE365_CONTENT="By configuring access to your Office365 Calendar, we'll automatically sync your events in your Office365 Calendar with Agile calendar.";
 			
 	
 	
@@ -43,6 +46,7 @@ public class DataSyncUrlConstants
 		dataSyncTypes.add("SHOPIFY");
 		dataSyncTypes.add("QUICKBOOK");
 		dataSyncTypes.add("FRESHBOOKS");
+		dataSyncTypes.add("OFFICE365");
 		return dataSyncTypes;
 	}
 	
@@ -83,6 +87,11 @@ public class DataSyncUrlConstants
         	  contactPrefs.type=Type.FRESHBOOKS;
         	  contactPrefs.imageUrl=FRESHBOOKS_IMAGE_URL;
         	  contactPrefs.content=FRESHBOOKS_CONTENT;
+                   break;
+          case "OFFICE365":
+        	  contactPrefs.type=Type.OFFICE365;
+        	  contactPrefs.imageUrl=OFFICE365_IMAGE_URL;
+        	  contactPrefs.content=OFFICE365_CONTENT; 
                    break;
       }
 		 return contactPrefs;

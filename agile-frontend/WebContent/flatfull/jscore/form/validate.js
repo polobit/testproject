@@ -139,6 +139,11 @@ function isValidForm(form) {
 			return !/Invalid|NaN/.test(new Date(value));
 	}," Please enter a valid date.");
 
+	jQuery.validator.addMethod("isHttpsURL", function(value, element){
+		var urlregex = new RegExp("^(https:\/\/){1}([0-9A-Za-z]+\.)");
+  		return urlregex.test(value);		
+	}," Please enter a valid https URL");
+
 	jQuery.validator.addMethod("date_input", function(value, element){
 		if(value=="")
 			return true;
