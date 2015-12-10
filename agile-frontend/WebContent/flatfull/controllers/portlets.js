@@ -131,6 +131,13 @@ function deletePortlet(el) {
 	else if (model.get("name") == "Mini Calendar")
 		deleteWarnHTML = "Are you sure you want to delete Dashlet - Mini Calendar?";
 
+	else if (model.get("name") == "Deal Goals")
+		deleteWarnHTML = "Are you sure you want to delete Dashlet - Deal Goals "
+				+ portlet_utility.getDurationForPortlets(
+						model.get("settings").duration, function(duration) {
+							return duration;
+						}) + "?";
+
 	else
 		deleteWarnHTML = "Are you sure you want to delete Dashlet - Activity Overview "
 				+ portlet_utility.getDurationForPortlets(

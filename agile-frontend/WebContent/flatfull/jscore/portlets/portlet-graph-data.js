@@ -893,8 +893,12 @@ var portlet_graph_data_utility = {
 												'<div class="portlet-error-message" style="padding:30px 15px">No Deals Goals set </div>');
 								
 					}
-					else
+					else{
+						if(data["dealcount"]>=data["goalCount"])
+							$('#'+selector).find('.goal_count_success').show();
 						portlet_graph_utility.dealGoalsPieGraph(graphSelector1,data["dealcount"],data["goalCount"],colors1);
+					}
+						
 
 					if(data["goalAmount"]==0)
 					{
@@ -903,8 +907,10 @@ var portlet_graph_data_utility = {
 												'<div class="portlet-error-message" style="padding:30px 15px">No Revenue Goals set</div>');
 								
 					}
-					 else
+					 else{
+					 	if(data["dealAmount"]>=data["goalAmount"])
+							$('#'+selector).find('.goal_amount_success').show();
 					portlet_graph_utility.dealGoalsPieGraph(graphSelector2,data["dealAmount"],data["goalAmount"],colors2);
-					
+					}
 	}
 };

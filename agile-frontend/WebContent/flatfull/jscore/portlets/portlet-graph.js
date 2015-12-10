@@ -1386,9 +1386,9 @@ var portlet_graph_utility = {
 	dealGoalsPieGraph : function(selector, data1,data2,colors)
 	{
 			var series = [];
-							series.push([ "Emails Sent",
+							series.push([ "count",
 									data2 - data1 ]);
-							series.push([ "Emails Opened", data1 ]);
+							series.push([ "Goal", data1 ]);
 							//portlet_graph_utility.emailsOpenedPieChart(selector,series,data1,data2);
 							head
 				.js(
@@ -1423,7 +1423,26 @@ var portlet_graph_utility = {
 												useHTML : true,
 												},
 												legend : {
-													enabled:false
+													itemStyle : {
+														fontSize : '10px',
+														color : '#98a6ad'
+													},
+													borderWidth : 0,
+													layout : 'vertical',
+													floating : true,
+													align : 'right',
+													verticalAlign : 'top',
+													symbolHeight: 0,
+													symbolWidth: 0,
+													symbolRadius: 0,
+																	labelFormatter : function()
+											{
+												if(this.name=="Goal"){
+												var s = '<div> ' + (this.percentage)
+														.toFixed(2) + '%<b></div>';
+												return s;
+											}
+											}, 
 												},
 												plotOptions : {
 													series : {
